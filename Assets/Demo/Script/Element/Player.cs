@@ -16,12 +16,6 @@ public class Player : FightUnit
     [SerializeField] private GameplayEffectAsset GEBuffStaminaRecover;
     private DemoController _inputActionReference;
 
-    protected override string MoveName => GAbilityLib.Move.Name;
-    protected override string JumpName => GAbilityLib.Jump.Name;
-    protected override string AttackName => GAbilityLib.Attack.Name;
-    protected override string DefendName => GAbilityLib.Defend.Name;
-    protected override string DodgeName => GAbilityLib.DodgeStep.Name;
-    protected override string DieName => GAbilityLib.Die.Name;
 
     protected override void Awake()
     {
@@ -58,9 +52,6 @@ public class Player : FightUnit
     protected override void OnEnable()
     {
         base.OnEnable();
-        ASC.AttrSet<AS_Fight>().STAMINA.RegisterPreBaseValueChange(OnStaminaChangePre);
-        ASC.AttrSet<AS_Fight>().STAMINA.RegisterPostBaseValueChange(OnStaminaChangePost);
-
         ASC.AttrSet<AS_Fight>().HP.RegisterPreBaseValueChange(OnHpChangePre);
         ASC.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChangePost);
         
@@ -71,9 +62,6 @@ public class Player : FightUnit
     protected override void OnDisable()
     {
         base.OnDisable();
-        ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPostBaseValueChange(OnStaminaChangePost);
-        ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPreBaseValueChange(OnStaminaChangePre);
-
         ASC.AttrSet<AS_Fight>().HP.UnregisterPreBaseValueChange(OnHpChangePre);
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChangePost);
         
@@ -85,7 +73,6 @@ public class Player : FightUnit
     {
         ASC.AttrSet<AS_Fight>().InitHP(HpMax);
         ASC.AttrSet<AS_Fight>().InitMP(MpMax);
-        ASC.AttrSet<AS_Fight>().InitSTAMINA(StaminaMax);
         ASC.AttrSet<AS_Fight>().InitPOSTURE(0);
         ASC.AttrSet<AS_Fight>().InitATK(ATK);
         ASC.AttrSet<AS_Fight>().InitSPEED(Speed);

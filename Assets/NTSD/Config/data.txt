@@ -1,0 +1,163 @@
+<object>
+
+id: 50 type: 0 file: chars\pein.dat
+id: 52 type: 0 file: chars\kyubi.dat
+id: 38 type: 0 file: chars\sasuke_cs2.dat
+id: 58 type: 0 file: chars\deidara_bird.dat
+id: 51 type: 0 file: chars\sasori.dat
+id: 56 type: 0 file: chars\reaper.dat
+id: 57 type: 0 file: chars\nckakuzu.dat
+id: 39 type: 0 file: chars\sand_creature.dat
+id: 37 type: 0 file: chars\jiroubou.dat
+id: 36 type: 0 file: chars\tayuya.dat
+id: 35 type: 0 file: chars\sakon.dat
+id: 34 type: 0 file: chars\kidomaru.dat
+id: 33 type: 0 file: Assets/NTSD/Config/FrameConfig/naruto_clone.dat
+id: 55 type: 0 file: chars\puppet_sasori.dat
+id: 32 type: 0 file: chars\hunter.dat
+id: 31 type: 0 file: chars\sound_nin2.dat
+id: 30 type: 0 file: chars\sound_nin.dat
+id: 2 type: 0 file: Assets/NTSD/Config/AnimationConfig/Mingren/naruto.dat
+id: 1 type: 0 file: Assets/NTSD/Config/AnimationConfig/XiaoYing/sakura.dat
+id: 3 type: 0 file: Assets/NTSD/Config/AnimationConfig/Kakashi/kakashi.dat
+id: 4 type: 0 file: chars\sai.dat
+id: 11 type: 0 file: Assets/NTSD/Config/AnimationConfig/ZuoZhu/sasuke.dat
+id: 13 type: 0 file: chars\yamato.dat
+id: 16 type: 0 file: chars\gaara.dat
+id: 7 type: 0 file: chars\rock_lee.dat
+id: 18 type: 0 file: chars\neji.dat
+id: 22 type: 0 file: chars\shikamaru.dat
+id: 19 type: 0 file: chars\tenten.dat
+id: 12 type: 0 file: chars\kiba.dat
+id: 5 type: 0 file: chars\shino.dat
+id: 8 type: 0 file: chars\chiyo.dat
+id: 14 type: 0 file: chars\kankuro.dat
+id: 15 type: 0 file: chars\temari.dat
+id: 6 type: 0 file: chars\Hsasori.dat
+id: 17 type: 0 file: chars\kisame.dat
+id: 9 type: 0 file: chars\itachi.dat
+id: 10 type: 0 file: chars\deidara.dat
+id: 24 type: 0 file: chars\hidan.dat
+id: 25 type: 0 file: chars\kakuzu.dat
+id: 23 type: 0 file: chars\kabuto.dat
+id: 20 type: 0 file: chars\orochimaru.dat
+id: 21 type: 0 file: chars\jiraiya.dat
+
+id: 100 type: 4 file: chars\weapon6.dat #heal_scroll
+id: 101 type: 4 file: chars\weapon2.dat #ex_tag
+id: 120 type: 1 file: chars\weapon4.dat #kunai
+id: 121 type: 4 file: Assets/NTSD/Config/FrameConfig/weapon5.dat #shuriken
+id: 122 type: 6 file: chars\weapon3.dat #healing
+id: 150 type: 2 file: chars\weapon1.dat #stone
+id: 151 type: 2 file: chars\log.dat #log
+id: 123 type: 6 file: Assets/NTSD/Config/FrameConfig/weapon8.dat #beer
+id: 124 type: 4 file: chars\weapon9.dat #<
+id: 217 type: 2 file: chars\weapon10.dat #louis_armour
+id: 218 type: 2 file: chars\weapon11.dat #louis_armour
+id: 300 type: 5 file: chars\criminal.dat #criminal
+id: 230 type: 3 file: chars\karasu.dat #karasu
+id: 500 type: 1 file: chars\heart.dat #heart1
+id: 501 type: 1 file: chars\heart2.dat #heart2
+id: 502 type: 1 file: chars\heart3.dat #heart3
+id: 503 type: 1 file: chars\blood.dat #blood1
+id: 504 type: 1 file: chars\blood2.dat #blood2
+id: 505 type: 1 file: chars\blood3.dat #blood3
+id: 506 type: 1 file: chars\heart0.dat #heartuseless
+
+id: 200 type: 3 file: chars\sakura_ball.dat
+id: 201 type: 3 file: Assets/NTSD/Config/FrameConfig/death.dat
+id: 203 type: 3 file: Assets/NTSD/Config/FrameConfig/charge.dat
+id: 204 type: 3 file: Assets/NTSD/Config/FrameConfig/wind.dat
+id: 205 type: 3 file: Assets/NTSD/Config/FrameConfig/position.dat
+id: 206 type: 3 file: chars\clay_bird2.dat
+id: 207 type: 3 file: chars\ink.dat
+id: 208 type: 3 file: Assets/NTSD/Config/FrameConfig/sword.dat
+id: 209 type: 3 file: chars\area.dat
+id: 210 type: 3 file: chars\katon_ball.dat
+id: 211 type: 3 file: chars\firen_flame.dat
+id: 212 type: 3 file: chars\freeze_column.dat
+id: 213 type: 3 file: chars\puppet.dat
+id: 214 type: 3 file: Assets/NTSD/Config/FrameConfig/flash.dat
+id: 215 type: 3 file: chars\frog.dat
+id: 216 type: 3 file: Assets/NTSD/Config/FrameConfig/doggy.dat
+id: 219 type: 3 file: chars\jan_chaseh.dat
+id: 220 type: 3 file: chars\crow_2.dat
+id: 221 type: 3 file: chars\big_boom.dat
+id: 222 type: 3 file: chars\ironsand.dat
+id: 223 type: 3 file: chars\mega_ex.dat
+id: 224 type: 3 file: chars\snake.dat
+id: 225 type: 3 file: chars\clay_bird.dat
+id: 226 type: 3 file: chars\coffin.dat
+id: 228 type: 3 file: chars\bugs.dat
+id: 229 type: 3 file: Assets/NTSD/Config/FrameConfig/rasenshuriken.dat
+id: 231 type: 3 file: chars\sanshouo.dat 
+id: 235 type: 3 file: chars\criminal2.dat #criminal2 
+id: 401 type: 3 file: chars\summon.dat 
+id: 400 type: 3 file: chars\dragon.dat
+id: 417 type: 3 file: chars\tree.dat
+id: 407 type: 3 file: chars\clay_worm.dat
+id: 408 type: 3 file: chars\katon_big.dat
+id: 410 type: 3 file: chars\sand_shield.dat
+id: 411 type: 3 file: chars\sand.dat
+id: 412 type: 3 file: chars\sand_2.dat
+id: 413 type: 3 file: chars\sand_blast.dat
+id: 416 type: 3 file: chars\water.dat
+id: 418 type: 3 file: chars\mother_puppet.dat
+id: 419 type: 3 file: chars\chiyo_kunais.dat
+id: 420 type: 3 file: chars\father_puppet.dat
+id: 421 type: 3 file: chars\bugs2.dat
+id: 422 type: 4 file: chars\ex_ball.dat #exball
+id: 433 type: 3 file: chars\itachi_kunai.dat
+id: 434 type: 1 file: Assets/NTSD/Config/FrameConfig/rasengan_ball.dat #rasengan
+id: 435 type: 3 file: chars\drunken.dat
+id: 436 type: 3 file: chars\wave.dat
+id: 437 type: 1 file: chars\chakra.dat
+id: 438 type: 3 file: chars\spider.dat
+id: 439 type: 3 file: chars\monster.dat
+id: 440 type: 3 file: Assets/NTSD/Config/FrameConfig/chidori.dat
+id: 441 type: 3 file: chars\wood.dat
+id: 442 type: 1 file: chars\gate.dat
+id: 444 type: 1 file: chars\byakugan.dat #byakugan
+id: 445 type: 1 file: chars\shield.dat
+id: 446 type: 3 file: chars\4TK_ball.dat
+id: 447 type: 1 file: chars\die.dat
+id: 448 type: 1 file: chars\flash_weap.dat
+id: 449 type: 1 file: chars\jiroubou_rock.dat
+id: 450 type: 3 file: chars\air_creature.dat
+id: 507 type: 1 file: chars\air_creature_die.dat
+id: 451 type: 3 file: chars\thunder_creature.dat
+id: 452 type: 3 file: chars\fire_creature.dat
+id: 453 type: 3 file: chars\earth_creature.dat
+id: 462 type: 3 file: chars\shadow.dat
+id: 499 type: 3 file: chars\nckakuzuarm.dat
+id: 510 type: 3 file: chars\100_puppets.dat
+id: 511 type: 3 file: chars\100_puppets_b.dat
+id: 512 type: 3 file: chars\100_puppets_c.dat
+id: 513 type: 3 file: chars\lee_counter.dat
+id: 514 type: 3 file: chars\katon_kakuzu.dat
+id: 515 type: 4 file: chars\needle.dat #needle
+id: 516 type: 3 file: chars\mirror.dat 
+
+id: 998 type: 5 file: jsona\etc.dat
+id: 999 type: 5 file: jsona\broken_weapon.dat
+<object_end>
+
+<background>
+id: 0 file: bg\sys\District\bg.dat
+id: 1 file: bg\sys\SandCountry\bg.dat
+id: 4 file: bg\sys\Cave\bg.dat
+id: 2 file: bg\sys\Deep\bg.dat
+id: 3 file: bg\sys\Hideout\bg.dat
+id: 5 file: bg\sys\Rain\bg.dat
+id: 6 file: bg\sys\SnowCountry\bg.dat
+id: 7 file: bg\sys\River\bg.dat
+id: 8 file: bg\sys\Forest\bg.dat
+id: 9 file: bg\sys\Arena\bg.dat
+id: 10 file: bg\sys\RamenPlace\bg.dat
+id: 11 file: bg\sys\Springs\bg.dat
+id: 12 file: bg\sys\Academy\bg.dat
+id: 13 file: bg\sys\CastleRoof\bg.dat
+id: 14 file: bg\sys\Valley\bg.dat
+id: 15 file: bg\sys\Grassland\bg.dat
+id: 16 file: bg\sys\Path\bg.dat
+<background_end>

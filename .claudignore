@@ -1,0 +1,96 @@
+# ==========================================
+# CLAUDE CODE UNITY C# 专注模式配置
+# ==========================================
+
+# 1. 屏蔽 Unity 系统生成的巨大缓存文件夹 (必须屏蔽)
+Library/
+Temp/
+Logs/
+obj/
+Build/
+Builds/
+UserSettings/
+MemoryCaptures/
+Recordings/
+Wiki/
+
+# 2. 屏蔽 IDE 和编辑器生成的文件
+.vs/
+.vscode/
+.idea/
+.gradle/
+*.csproj
+.vscode
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svnlite
+*.svnwk
+.DS_Store
+
+# 3. 屏蔽 Unity 元数据 (对 C# 分析毫无用处的噪音)
+*.meta
+
+# 4. 屏蔽所有二进制媒体资源 (AI 读不懂，且极占空间)
+*.png
+*.jpg
+*.jpeg
+*.tga
+*.psd
+*.bmp
+*.tif
+*.tiff
+*.gif
+*.mp3
+*.wav
+*.ogg
+*.aiff
+*.mp4
+*.mov
+*.webm
+*.fbx
+*.obj
+*.blend
+*.glb
+*.gltf
+*.ttf
+*.otf
+
+# 5. 屏蔽 Unity 序列化资产 (除非您让 AI 改场景，否则这些 YAML 极其消耗 Token)
+*.unity
+*.prefab
+*.mat
+*.anim
+*.controller
+*.overrideController
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.cubemap
+*.flare
+*.fontsettings
+*.guiskin
+*.mixer
+*.renderTexture
+*.shader
+*.cginc
+*.hlsl
+*.asset
+*.terraindata
+
+# 6. 屏蔽外部包 (通常您只改 Assets 下的脚本，不改 Packages 源码)
+Packages/
+
+# 7. 屏蔽文档和其他杂项
+*.pdf
+*.doc
+*.docx
+*.xml
+*.csv
+
+# ==========================================
+# 这样配置后，AI 眼里基本上只剩下 .cs 文件了
+# ==========================================

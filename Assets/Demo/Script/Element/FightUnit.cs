@@ -107,45 +107,37 @@ public abstract class FightUnit : MonoBehaviour
 
     public void ActivateMove(float direction)
     {
-        ASC.TryActivateAbility(MoveName, new Move.Args(direction));
     }
 
     public void DeactivateMove()
     {
-        ASC.TryEndAbility(MoveName);
     }
 
     public void Jump()
     {
-        if (Grounded || DoubleJumpValid)
-            ASC.TryActivateAbility(JumpName, new Jump.Args(_rb));
     }
 
     public bool Attack()
     {
-        return ASC.TryActivateAbility(AttackName);
+        return false;
     }
 
     public void ActivateDefend()
     {
-        ASC.TryActivateAbility(DefendName);
     }
 
     public void DeactivateDefend()
     {
-        ASC.TryEndAbility(DefendName);
         // 移除防御Buff
         ASC.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(new GameplayTagSet(GTagLib.State_Buff_DefendBuff));
     }
 
     public void Dodge()
     {
-        ASC.TryActivateAbility(DodgeName);
     }
 
     public void Die()
     {
-        ASC.TryActivateAbility(DieName);
     }
 
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
@@ -183,15 +175,4 @@ public abstract class FightUnit : MonoBehaviour
         var distance = deltaVector3.magnitude;
         return distance < 3;
     }
-
-    #region AbilityName
-
-    protected abstract string MoveName { get; }
-    protected abstract string JumpName { get; }
-    protected abstract string AttackName { get; }
-    protected abstract string DefendName { get; }
-    protected abstract string DodgeName { get; }
-    protected abstract string DieName { get; }
-
-    #endregion
 }

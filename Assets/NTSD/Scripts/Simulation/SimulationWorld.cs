@@ -1,0 +1,271 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace NTSD.Simulation
+{
+    /// <summary>
+    /// 模拟世界 - 管理所有 ISimObject 的生命周期和执行顺序
+    ///
+    /// 职责：
+    /// - 注册/反注册 ISimObject
+    /// - 按确定性顺序执行所有对象的 SimTick/SimLateTick
+    /// - 提供 SimContext 依赖注入
+    ///
+    /// 架构原则（Plan B）：
+    /// - 确定性排序：SimOrder（第一优先级）→ StableId（第二优先级）
+    /// - Lazy sorting：只在 bucket 变脏时排序，避免每帧开销
+    /// - 纯 C# 实现：不依赖 Unity 生命周期（MonoBehaviour）
+    /// </summary>
+    public class SimulationWorld
+    {
+        // ==================== 内部数据结构 ====================
+
+        /// <summary>
+        /// Bucket - 存储相同 SimOrder 的对象
+        /// </summary>
+        private class Bucket
+        {
+            /// <summary>
+            /// 对象列表（可能无序）
+            /// </summary>
+            public List<ISimObject> items = new List<ISimObject>();
+
+            /// <summary>
+            /// 是否需要重新排序（当有对象添加/移除时设置为 true）
+            /// </summary>
+            public bool dirty = false;
+
+            /// <summary>
+            /// Lazy sort: 只在需要时按 StableId 排序
+            /// </summary>
+            public void EnsureSorted()
+            {
+                if (dirty)
+                {
+                    items = items.OrderBy(obj => obj.StableId).ToList();
+                    dirty = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 按 SimOrder 组织的 bucket 字典
+        /// SortedDictionary 保证按 key (SimOrder) 升序遍历
+        /// </summary>
+        private SortedDictionary<int, Bucket> _buckets = new SortedDictionary<int, Bucket>();
+
+        /// <summary>
+        /// 模拟上下文（提供给所有 ISimObject）
+        /// </summary>
+        private SimContext _context;
+
+        /// <summary>
+        /// 下一个自动分配的 StableId（用于本地 AI 等没有网络 ID 的对象）
+        /// 单机模式：从 100 开始自动递增
+        /// 多人模式：服务器会显式设置 StableId
+        /// </summary>
+        private int _nextAutoStableId = 100;
+
+        // ==================== 初始化 ====================
+
+        /// <summary>
+        /// 创建 SimulationWorld
+        /// </summary>
+        public SimulationWorld()
+        {
+            _context = new SimContext(this);
+        }
+
+        // ==================== 公共 API ====================
+
+        /// <summary>
+        /// 注册对象到世界
+        ///
+        /// 调用时机：
+        /// - Character Hub 的 OnEnable()
+        /// - 动态创建的 sim 对象初始化时
+        ///
+        /// 线程安全：仅在主线程调用（Unity 约束）
+        /// </summary>
+        /// <param name="obj">要注册的对象</param>
+        public void Register(ISimObject obj)
+        {
+            if (obj == null)
+            {
+                Debug.LogError("[SimulationWorld] Cannot register null object");
+                return;
+            }
+
+            // 获取或创建对应的 bucket
+            int simOrder = obj.SimOrder;
+            if (!_buckets.TryGetValue(simOrder, out Bucket bucket))
+            {
+                bucket = new Bucket();
+                _buckets[simOrder] = bucket;
+            }
+
+            // 检查是否已注册（避免重复）
+            if (bucket.items.Contains(obj))
+            {
+                Debug.LogWarning($"[SimulationWorld] Object already registered: SimOrder={simOrder}, StableId={obj.StableId}");
+                return;
+            }
+
+            // 添加到 bucket
+            bucket.items.Add(obj);
+            bucket.dirty = true;  // 标记为需要重新排序
+
+            // 调用对象的 OnAdded 生命周期方法
+            obj.OnAdded(_context);
+
+            Debug.Log($"[SimulationWorld] Registered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
+        }
+
+        /// <summary>
+        /// 从世界移除对象
+        ///
+        /// 调用时机：
+        /// - Character Hub 的 OnDisable()
+        /// - 对象销毁时
+        ///
+        /// 线程安全：仅在主线程调用（Unity 约束）
+        /// </summary>
+        /// <param name="obj">要移除的对象</param>
+        public void Unregister(ISimObject obj)
+        {
+            if (obj == null)
+            {
+                Debug.LogError("[SimulationWorld] Cannot unregister null object");
+                return;
+            }
+
+            int simOrder = obj.SimOrder;
+            if (!_buckets.TryGetValue(simOrder, out Bucket bucket))
+            {
+                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: SimOrder={simOrder}");
+                return;
+            }
+
+            // 从 bucket 移除
+            bool removed = bucket.items.Remove(obj);
+            if (!removed)
+            {
+                Debug.LogWarning($"[SimulationWorld] Object not found in bucket: SimOrder={simOrder}, StableId={obj.StableId}");
+                return;
+            }
+
+            bucket.dirty = true;  // 标记为需要重新排序（虽然移除不一定需要，但保持一致）
+
+            // 调用对象的 OnRemoved 生命周期方法
+            obj.OnRemoved(_context);
+
+            // 如果 bucket 空了，可以考虑移除（可选优化）
+            if (bucket.items.Count == 0)
+            {
+                _buckets.Remove(simOrder);
+            }
+
+            Debug.Log($"[SimulationWorld] Unregistered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
+        }
+
+        /// <summary>
+        /// 执行一次 Tick（主要逻辑）
+        ///
+        /// 执行顺序：
+        /// 1. 遍历所有 bucket（按 SimOrder 升序）
+        /// 2. 每个 bucket 确保按 StableId 排序
+        /// 3. 依次调用每个对象的 SimTick(tickIndex)
+        ///
+        /// 对应 FLF: match.TU_trans() 中的主循环
+        /// </summary>
+        /// <param name="tickIndex">当前 Tick 索引</param>
+        public void Tick(int tickIndex)
+        {
+            foreach (var kvp in _buckets)
+            {
+                int simOrder = kvp.Key;
+                Bucket bucket = kvp.Value;
+
+                // Lazy sort: 只在 dirty 时排序
+                bucket.EnsureSorted();
+
+                // 执行所有对象的 SimTick
+                foreach (var obj in bucket.items)
+                {
+                    if (obj == null)
+                    {
+                        Debug.LogWarning($"[SimulationWorld] Null object in bucket SimOrder={simOrder}, skipping");
+                        continue;
+                    }
+
+                    obj.SimTick(tickIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 执行一次 LateTick（后期处理）
+        ///
+        /// 调用时机：所有对象的 Tick 完成后
+        /// 用途：视图更新、调试绘制、延迟清理
+        ///
+        /// 执行顺序：与 Tick 相同（SimOrder → StableId）
+        /// </summary>
+        /// <param name="tickIndex">当前 Tick 索引</param>
+        public void LateTick(int tickIndex)
+        {
+            foreach (var kvp in _buckets)
+            {
+                int simOrder = kvp.Key;
+                Bucket bucket = kvp.Value;
+
+                // 使用相同的排序（bucket 已在 Tick 中排序）
+                foreach (var obj in bucket.items)
+                {
+                    if (obj == null)
+                    {
+                        Debug.LogWarning($"[SimulationWorld] Null object in bucket SimOrder={simOrder}, skipping");
+                        continue;
+                    }
+
+                    obj.SimLateTick(tickIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 为对象分配自动 StableId（用于本地 AI 等没有网络 ID 的对象）
+        ///
+        /// 注意：
+        /// - 单机模式：可以使用
+        /// - 多人模式：应由服务器分配，不应调用此方法
+        /// </summary>
+        /// <returns>新分配的 StableId</returns>
+        public int AllocateStableId()
+        {
+            return _nextAutoStableId++;
+        }
+
+        /// <summary>
+        /// 获取当前注册的对象总数（调试用）
+        /// </summary>
+        public int ObjectCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var bucket in _buckets.Values)
+                {
+                    count += bucket.items.Count;
+                }
+                return count;
+            }
+        }
+
+        /// <summary>
+        /// 获取模拟上下文（只读）
+        /// </summary>
+        public SimContext Context => _context;
+    }
+}
