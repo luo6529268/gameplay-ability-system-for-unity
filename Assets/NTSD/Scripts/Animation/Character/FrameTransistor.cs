@@ -24,7 +24,6 @@ namespace NTSD.Animation
         public int Next => next;
         public int Wait => wait;
 
-
         /// <summary>
         /// 对应 FLF frame(F, au) = set_next + set_wait(0)
         /// </summary>

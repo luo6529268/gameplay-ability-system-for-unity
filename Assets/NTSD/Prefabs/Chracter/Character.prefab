@@ -209,7 +209,9 @@ MonoBehaviour:
       rowing_distance: 20
       frames: []
   _debugDrawBodyVolumes: 0
+  _debugDrawItrVolumes: 0
   _debugCollisionLog: 0
+  _debugComboLog: 1
   playbackSpeed: 0.5
 --- !u!1 &9143204340180286646
 GameObject:

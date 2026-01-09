@@ -1,5 +1,6 @@
 using MoreMountains.TopDownEngine;
 using NTSD.Simulation;
+using NTSD.Tools;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,10 +38,10 @@ namespace NTSD.Input
             }
         }
 
-        public int timeoutFrames = 60;
-        public int combooutFrames = 10;
+        public int timeoutFrames = 0;
+        public int combooutFrames = 0;
         public bool clearOnCombo = true;
-        public bool debugLog = false;
+        public bool debugLog = true;
 
         private readonly List<KeyInput> _sequence = new List<KeyInput>();
         private readonly Dictionary<FuncKeyMask, bool> _keyState = new Dictionary<FuncKeyMask, bool>();
@@ -100,7 +101,7 @@ namespace NTSD.Input
             }
 
             // 2) time management + insert interrupt + clear
-            Frame_Update();
+            Frame_Update(tickIndex);
         }
 
         public void SimLateTick(int tickIndex) { }
@@ -126,7 +127,7 @@ namespace NTSD.Input
 
             if (debugLog)
             {
-                Debug.Log($"[ActionSequenceDetectorModule] Sequence cleared at time {_time}");
+                Log.Info($"[ActionSequenceDetectorModule] Sequence cleared at time {_time}");
             }
         }
 
@@ -139,7 +140,7 @@ namespace NTSD.Input
                 push = false;
                 if (debugLog)
                 {
-                    Debug.Log($"[ActionSequenceDetectorModule] Key {key} is already pressed, ignoring");
+                    Log.Info($"[ActionSequenceDetectorModule] Key {key} is already pressed, ignoring");
                 }
             }
 
@@ -160,30 +161,46 @@ namespace NTSD.Input
 
                 if (debugLog)
                 {
-                    Debug.Log($"[ActionSequenceDetectorModule] Key pressed: {key}, Time: {_time}, Sequence: {GetSequenceString()}");
+                    Log.Info($"[ActionSequenceDetectorModule] Key pressed: {key}, Time: {_time}, Sequence: {GetSequenceString()}");
                 }
             }
 
             if (_comboCandidates.Count > 0 && push)
             {
-                if (TryFindBestMatch(out var bestCombo))
+                foreach (var candidate in _comboCandidates)
                 {
-                    if (debugLog)
+                    bool detected = true;
+                    int j = _sequence.Count - candidate.combo.sequence.Length;
+                    if (j < 0) detected = false;
+                    else
                     {
-                        Debug.Log($"[ActionSequenceDetectorModule] Combo detected: {bestCombo.name}");
+                        // 逐个检查按键序列和时间间隔
+                        for (int k = 0; j < _sequence.Count; j++, k++)
+                        {
+                            if (candidate.combo.sequence[k] != _sequence[j].key ||
+                              (_sequence[_sequence.Count - 1].time - _sequence[j].time > candidate.combo.maxTimeFrames))
+                            {
+                                detected = false;
+                                break;
+                            }
+                        }
                     }
 
-                    OnComboDetected?.Invoke(bestCombo);
-
-                    if (bestCombo.clearOnCombo && clearOnCombo)
+                    // 如果检测到连招
+                    if (detected)
                     {
-                        ClearSequence();
+                        OnComboDetected?.Invoke(candidate.combo);
+
+                        if (candidate.combo.clearOnCombo && clearOnCombo)
+                        {
+                            ClearSequence();
+                        }
                     }
                 }
             }
         }
 
-        private void Frame_Update()
+        private void Frame_Update(int tickIndex)
         {
             if (_time == _timeout)
             {
@@ -200,96 +217,11 @@ namespace NTSD.Input
 
                 if (debugLog)
                 {
-                    Debug.Log($"[ActionSequenceDetectorModule] Combo interrupt inserted at time {_time}");
+                    Log.Info($"[ActionSequenceDetectorModule] Combo interrupt inserted at time {_time}");
                 }
             }
 
-            _time++;
-        }
-
-        private bool TryFindBestMatch(out ComboConfig.ComboDefinition best)
-        {
-            bool hasBest = false;
-            best = default;
-
-            int bestLen = -1;
-            int bestSourcePriority = -1;
-            int bestOriginalIndex = int.MaxValue;
-
-            for (int i = 0; i < _comboCandidates.Count; i++)
-            {
-                var candidate = _comboCandidates[i];
-                var combo = candidate.combo;
-
-                if (!MatchCombo(combo))
-                {
-                    continue;
-                }
-
-                int len = combo.sequence == null ? 0 : combo.sequence.Length;
-                if (len > bestLen)
-                {
-                    hasBest = true;
-                    best = combo;
-                    bestLen = len;
-                    bestSourcePriority = candidate.sourcePriority;
-                    bestOriginalIndex = candidate.originalIndex;
-                    continue;
-                }
-
-                if (len == bestLen)
-                {
-                    if (candidate.sourcePriority > bestSourcePriority)
-                    {
-                        hasBest = true;
-                        best = combo;
-                        bestLen = len;
-                        bestSourcePriority = candidate.sourcePriority;
-                        bestOriginalIndex = candidate.originalIndex;
-                        continue;
-                    }
-
-                    if (candidate.sourcePriority == bestSourcePriority && candidate.originalIndex < bestOriginalIndex)
-                    {
-                        hasBest = true;
-                        best = combo;
-                        bestLen = len;
-                        bestSourcePriority = candidate.sourcePriority;
-                        bestOriginalIndex = candidate.originalIndex;
-                    }
-                }
-            }
-
-            return hasBest;
-        }
-
-        private bool MatchCombo(ComboConfig.ComboDefinition combo)
-        {
-            if (combo.sequence == null || combo.sequence.Length == 0) return false;
-
-            int startIndex = _sequence.Count - combo.sequence.Length;
-            if (startIndex < 0) return false;
-
-            for (int i = 0; i < combo.sequence.Length; i++)
-            {
-                int seqIndex = startIndex + i;
-
-                if (_sequence[seqIndex].key != combo.sequence[i])
-                {
-                    return false;
-                }
-
-                if (combo.maxTimeFrames > 0)
-                {
-                    int lastIndex = _sequence.Count - 1;
-                    if (_sequence[lastIndex].time - _sequence[seqIndex].time > combo.maxTimeFrames)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+            _time = tickIndex;
         }
 
         private string GetSequenceString()

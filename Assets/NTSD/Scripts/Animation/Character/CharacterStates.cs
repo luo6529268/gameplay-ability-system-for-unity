@@ -1,6 +1,7 @@
 using BeatEmUpTemplate2D;
 using GAS.Runtime;
 using MoreMountains.Tools;
+using NTSD.Tools;
 using System.Collections.Generic;
 using UnityEditor.U2D.Animation;
 using UnityEngine;
@@ -182,26 +183,46 @@ namespace NTSD.Animation
         /// <param name="eventType">事件名称</param>
         /// <param name="eventData">事件数据</param>
         /// <returns>是否已处理</returns>
-        public bool HandleStateEvent(LF2CharacterAnimator character, string eventType, object eventData = null)
+        public bool HandleStateEvent(LF2CharacterAnimator character, string eventType, object eventData = null, bool isComboUpdate = false)
         {
             if (character == null || character.CurrentFrame == null) return false;
 
             int currentState = character.CurrentFrame.state;
             bool handled = false;
+            bool handled1 = false;
+            StateHandler specificHandler = null;
 
-            // 1. 优先调用当前状态的特定处理逻辑
-            if (stateHandlers.TryGetValue(currentState, out StateHandler specificHandler))
+            if (!isComboUpdate) 
             {
-                handled = specificHandler(character, eventType, eventData);
+                if (genericHandler != null)
+                    handled = genericHandler(character, eventType, eventData);
+
+                if (stateHandlers.TryGetValue(currentState, out specificHandler))
+                {
+                    handled1 = specificHandler(character, eventType, eventData);
+                }
+
+                return handled || handled1;
+            }
+            else
+            {
+                // Combo Update 特例：先调用 specific，再调用 generic
+                // 1. 优先调用当前状态的特定处理逻辑
+                if (stateHandlers.TryGetValue(currentState, out specificHandler))
+                {
+                    handled = specificHandler(character, eventType, eventData);
+                }
+
+                // 2. 通用处理：
+                // - 默认：只有在 specific 未处理时才调用 generic（原有优先级规则）
+                // - 对齐 FLF：transit 阶段必须始终执行 mech.dynamics()（不应被状态处理器“拦截”）
+                if (!handled && genericHandler != null)
+                {
+                    handled = genericHandler(character, eventType, eventData);
+                }
             }
 
-            // 2. 通用处理：
-            // - 默认：只有在 specific 未处理时才调用 generic（原有优先级规则）
-            // - 对齐 FLF：transit 阶段必须始终执行 mech.dynamics()（不应被状态处理器“拦截”）
-            if (!handled && genericHandler != null)
-            {
-                handled = genericHandler(character, eventType, eventData);
-            }
+            
 
             return handled;
         }
@@ -437,10 +458,38 @@ namespace NTSD.Animation
             // TODO: 需要 MP 系统
 
             // 7. 状态恢复 (FLF:170-171)
-            // TODO: 需要 fall/bdefend 系统 (如防御值随时间恢复)
+            if (character.ps.y == 0 && character.ps.vy == 0 && character.FrameAniInfo.next == LF2StandardFrames.JumpingAir && character.FrameAniInfo.preNext != LF2StandardFrames.JumpingUp)
+            {
+                character.TransitionToFrame(999);
+            }
+            else if (character.ps.y == 0 && character.ps.vy > 0) //处理角色落地的情况
+            {
+                character.ps.vy = 0;
+            }
+            else if ((character.ps.y + character.ps.vy) >= 0 && character.ps.vy > 0)  // 预测即将落地的情况
+            {
+                if (character.FrameAniInfo.frameData.state == LF2States.Frozen)
+                {
+                    // 冰冻状态
+                }
+                else if (character.FrameAniInfo.next == LF2StandardFrames.JumpingAir) // 跳跃状态
+                {
+                    // 转换到下蹲帧
+                    character.TransitionToFrame(LF2StandardFrames.Crouch, 15);
+                }
+                else
+                {
+                    // 转换到下蹲2帧
+                    character.TransitionToFrame(LF2StandardFrames.Crouch2, 15);
+                }
 
-            // 8. 连击缓冲系统 (FLF:174-182)
-            // TODO: 需要连击缓冲系统
+            }
+                // TODO: 需要 fall/bdefend 系统 (如防御值随时间恢复)
+
+                // 8. 连击缓冲系统 (FLF:174-182)
+                // TODO: 需要连击缓冲系统
+
+                character.OnReduceComboBufferTimeout();
 
             return false;
         }
@@ -618,27 +667,6 @@ namespace NTSD.Animation
 
         // ==================== 辅助方法 ====================
 
-        private void LogStateEvent(LF2CharacterAnimator character, int state, string stateName, string eventType, object eventData = null)
-        {
-            string comboKey = eventData as string;
-            string logMsg = $"[State {state}:{stateName}] Event={eventType}";
-            if (!string.IsNullOrEmpty(comboKey)) logMsg += $", Key={comboKey}";
-            logMsg += $", CurrentFrame={character.CurrentFrameId}";
-            Debug.Log(logMsg);
-        }
-
-        private void LogBranch(int state, string stateName, string branchDescription)
-        {
-            Debug.Log($"[State {state}:{stateName}] -> Branch: {branchDescription}");
-        }
-
-        private void LogTransition(int state, string stateName, int targetFrame, string reason = "")
-        {
-            string logMsg = $"[State {state}:{stateName}] -> TransitionTo: Frame {targetFrame}";
-            if (!string.IsNullOrEmpty(reason)) logMsg += $" ({reason})";
-            Debug.Log(logMsg);
-        }
-
         /// <summary>
         /// 获取移动输入 (对应 FLF character.js:345-350)
         /// 用于 WalkingStateHandler 在函数开头计算 dx, dz
@@ -671,7 +699,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 0, "Standing", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 0, "Standing", eventType, character.CurrentFrameId);
                     // 检查是否持有重型武器，若是则切换到持重物站立帧 (Frame 12)
                     // TODO: 需要武器系统
                     return false;
@@ -679,8 +707,7 @@ namespace NTSD.Animation
                 case "combo":
                     // 站立状态的输入响应 (对应 FLF Line 250-338)
                     string comboKey = eventData as string;
-                    LogStateEvent(character, 0, "Standing", eventType, comboKey);
-                    LogBranch(0, "Standing", $" comboKey={comboKey}");
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, CurrentFrame={4}", 0, "Standing", eventType, comboKey, character.CurrentFrameId);
                     // === 方向键与跳跃键处理 (FLF Line 253-272) ===
                     switch (comboKey)
                     {
@@ -689,22 +716,19 @@ namespace NTSD.Animation
                         case "up":
                         case "down":
                         case "jump":
+                        case "":
+                        case null:
                             // 检查是否有实际方向输入
-                            if (character._Character?._CharacterInput != null &&
-                                character._Character._AbilitySystemComponent != null &&
-                                character.unitActions != null)
                             {
                                 var (dx, dz) = GetMoveInput(character);
                                 bool hasDx = dx != 0;
                                 bool hasDz = dz != 0;
                                 if (hasDx || hasDz)
                                 {
-                                    LogBranch(0, "Standing", $"方向键输入检测 dx={dx}, dz={dz}");
-
                                     // 除非按下的是跳跃键，否则切换到行走状态
                                     if (comboKey != "jump")
                                     {
-                                        LogTransition(0, "Standing", LF2StandardFrames.WalkingStart, "方向键按下 -> 行走");
+                                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.WalkingStart, "方向键按下 -> 行走");
                                         character.TransitionToFrame(LF2StandardFrames.WalkingStart, 5);
                                     }
 
@@ -717,7 +741,6 @@ namespace NTSD.Animation
                                     if (hasDx) ps.vx = (int)dir * characterData.walking_speed;
                                     ps.vz = dz * characterData.walking_speedz;
 
-                                    LogBranch(0, "Standing", $"设置速度 ps.vx={ps.vx:F2}, ps.vz={ps.vz:F2}");
                                     return true;
                                 }
                             }
@@ -729,33 +752,22 @@ namespace NTSD.Animation
                     {
                         case "left-left":
                         case "right-right":
-                            // FLF/原版一致：双击方向键开始奔跑时，方向应当以输入为准（否则会出现“按 right-right 仍朝 left 奔跑”）
-                            //if (character.unitActions != null)
-                            //{
-                            //    bool toRight = comboKey.StartsWith("right");
-                            //    DIRECTION targetDir = toRight ? DIRECTION.RIGHT : DIRECTION.LEFT;
-                            //    character.unitActions.TurnToDir(targetDir);
-                            //    if (character.ps != null)
-                            //    {
-                            //        character.ps.dir = toRight ? "right" : "left";
-                            //    }
-                            //}
-                            LogTransition(0, "Standing", LF2StandardFrames.RunningStart, "双击方向键 -> 奔跑");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.RunningStart, "双击方向键 -> 奔跑");
                             character.TransitionToFrame(LF2StandardFrames.RunningStart, LF2StateConstants.ComboTransitionWait);
                             return true;
 
                         case "def":
-                            LogTransition(0, "Standing", LF2StandardFrames.Defend, "防御键 -> 防御");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Defend, "防御键 -> 防御");
                             character.TransitionToFrame(LF2StandardFrames.Defend, LF2StateConstants.ComboTransitionWait);
                             return true;
 
                         case "jump":
-                            LogTransition(0, "Standing", LF2StandardFrames.Jumping, "跳跃键 -> 跳跃");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Jumping, "跳跃键 -> 跳跃");
                             character.TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
                             return true;
 
                         case "att":
-                            LogTransition(0, "Standing", LF2StandardFrames.Punch, "攻击键 -> 挥拳");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Punch, "攻击键 -> 挥拳");
                             // TODO: 武器逻辑 (轻重武器判定、投掷判定)
 
                             // 随机选择挥拳动画 (60 或 65)
@@ -895,7 +907,7 @@ namespace NTSD.Animation
 
                             if (inputDir != character.ps.dir)
                             {
-                                LogTransition(2, "Running", LF2StandardFrames.StopRunning, "反向输入 -> 急停");
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.StopRunning, "反向输入 -> 急停");
                                 character.TransitionToFrame(LF2StandardFrames.StopRunning, 10);
                                 return true;
                             }
@@ -903,21 +915,21 @@ namespace NTSD.Animation
                         // 2. 奔跑防御
                         else if (comboKey == "def")
                         {
-                            LogTransition(2, "Running", 102, "防御 -> 奔跑防御");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", 102, "防御 -> 奔跑防御");
                             character.TransitionToFrame(102, 10);
                             return true;
                         }
                         // 3. 奔跑跳跃 -> 冲刺 (Dash)
                         else if (comboKey == "jump")
                         {
-                            LogTransition(2, "Running", LF2StandardFrames.DashForward, "跳跃 -> 冲刺");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.DashForward, "跳跃 -> 冲刺");
                             character.TransitionToFrame(LF2StandardFrames.DashForward, 10);
                             return true;
                         }
                         // 4. 奔跑攻击
                         else if (comboKey == "att")
                         {
-                            LogTransition(2, "Running", LF2StandardFrames.RunAttack, "攻击 -> 奔跑攻击");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.RunAttack, "攻击 -> 奔跑攻击");
                             character.TransitionToFrame(LF2StandardFrames.RunAttack, 10);
                             return true;
                         }
@@ -943,7 +955,7 @@ namespace NTSD.Animation
                     var frameData = character.CurrentFrame;
                     if (frameData.next == LF2StandardFrames.LoopToStart && character.unitActions.yForce < 0)
                     {
-                        LogTransition(3, "Attack", LF2StandardFrames.JumpingAir, "空中攻击结束 -> 返回跳跃");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 3, "Attack", LF2StandardFrames.JumpingAir, "空中攻击结束 -> 返回跳跃");
                         character.trans.SetNext(LF2StandardFrames.JumpingAir);
                     }
                     return false;
@@ -1041,7 +1053,7 @@ namespace NTSD.Animation
                             // 检查攻击锁定
                             if (!character.StateMem.ContainsKey("attlock") || (int)character.StateMem["attlock"] <= 0)
                             {
-                                LogTransition(4, "Jump", LF2StandardFrames.JumpAttack, "跳跃攻击");
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 4, "Jump", LF2StandardFrames.JumpAttack, "跳跃攻击");
                                 character.TransitionToFrame(LF2StandardFrames.JumpAttack, 10);
                                 character.StateMem["attlock"] = 10;
                                 return true;
@@ -1077,7 +1089,7 @@ namespace NTSD.Animation
                     // 1. 冲刺攻击
                     if (comboKey == "att")
                     {
-                        LogTransition(5, "Dash", LF2StandardFrames.DashAttack, "冲刺攻击");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 5, "Dash", LF2StandardFrames.DashAttack, "冲刺攻击");
                         character.TransitionToFrame(LF2StandardFrames.DashAttack, 10);
                         return true;
                     }
@@ -1106,13 +1118,13 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 7, "Defending", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 7, "Defending", eventType, character.CurrentFrameId);
 
                     // ✓ 防御等待时间延长（对应 FLF Line 688-693）
                     // 给予视觉反馈，让玩家感知到成功防御
                     if (character.CurrentFrameId == LF2StandardFrames.Defend1)  // 111: 防御成功帧
                     {
-                        LogBranch(7, "Defending", "防御成功 → 延长等待时间");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 7, "Defending", "防御成功 → 延长等待时间");
                         // 增加4帧等待时间（延长防御状态）
                         character.trans.SetWait(character.trans.Wait + LF2StateConstants.DefendSuccessWaitBonus);
                         return true;
@@ -1185,14 +1197,14 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 12, "Falling", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 12, "Falling", eventType, character.CurrentFrameId);
 
                     // 倒地动画状态机（FLF:969-1020）
                     // TODO: 实现基于垂直速度的动画序列切换（需要effect.dvy系统）
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 12, "Falling", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 12, "Falling", eventType, character.CurrentFrameId);
 
                     // fall值减少和倒地无敌时间（FLF:1038-1057）
                     // TODO: 实现fall值减少系统（需要health.fall系统）
@@ -1201,7 +1213,7 @@ namespace NTSD.Animation
                 case "combo":
                     // ✓ 按连招键起身（对应 FLF Line 1059-1066）
                     string comboKey = eventData as string;
-                    LogStateEvent(character, 12, "Falling", eventType, comboKey);
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, CurrentFrame={4}", 12, "Falling", eventType, comboKey, character.CurrentFrameId);
 
                     int frameId = character.CurrentFrameId;
 
@@ -1210,7 +1222,7 @@ namespace NTSD.Animation
                     {
                         if (comboKey == "jump")
                         {
-                            LogBranch(12, "Falling", $"Frame {frameId} jump getup");
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", $"Frame {frameId} jump getup");
                             // TODO: 检查fall值和HP（需要health系统）
                             // if (character.health.fall < GC.fall.KO && character.health.hp > 0)
 
@@ -1219,7 +1231,7 @@ namespace NTSD.Animation
                                 ? LF2StandardFrames.Rowing       // 100: 正面起身
                                 : LF2StandardFrames.RowingBack;  // 108: 背面起身
 
-                            LogTransition(12, "Falling", rowingFrame, "起身 → 爬起");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 12, "Falling", rowingFrame, "起身 → 爬起");
                             character.TransitionToFrame(rowingFrame, 10);
 
                             // TODO: 设置起身最小速度（需要velocity系统）
@@ -1232,11 +1244,11 @@ namespace NTSD.Animation
                     }
 
                     // 倒地期间屏蔽所有其他输入（FLF Line 1159）
-                    LogBranch(12, "Falling", "倒地期间屏蔽输入");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "倒地期间屏蔽输入");
                     return true;
 
                 case "transit":
-                    LogStateEvent(character, 12, "Falling", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 12, "Falling", eventType, character.CurrentFrameId);
 
                     // 爬起逻辑（FLF:1068-1082）
                     // TODO: 实现爬起逻辑（需要速度系统）
@@ -1244,10 +1256,10 @@ namespace NTSD.Animation
 
                 case "fell_onto_ground":
                 case "fall_onto_ground":
-                    LogStateEvent(character, 12, "Falling", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 12, "Falling", eventType, character.CurrentFrameId);
 
                     // 落地处理（FLF:1022-1036）
-                    LogBranch(12, "Falling", "落地 → 爬起/躺地判定");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "落地 → 爬起/躺地判定");
                     // TODO: 实现爬起/躺地判定系统（需要velocity和throw_injury系统）
                     return false;
 
@@ -1327,7 +1339,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "TU":
-                    LogStateEvent(character, 6, "Rowing", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 6, "Rowing", eventType, character.CurrentFrameId);
 
                     // ✓ 垂直速度重置（对应 FLF Line 660-664）
                     // 特定帧的重置垂直速度，使角色停止在空中
@@ -1336,7 +1348,7 @@ namespace NTSD.Animation
                     {
                         if (character.unitActions != null)
                         {
-                            LogBranch(6, "Rowing", $"爬起暂停 Frame={character.CurrentFrameId}");
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", $"爬起暂停 Frame={character.CurrentFrameId}");
                             // 停止垂直移动（悬停效果）
                             character.unitActions.yForce = 0;
                         }
@@ -1344,29 +1356,29 @@ namespace NTSD.Animation
                     return false;
 
                 case "frame":
-                    LogStateEvent(character, 6, "Rowing", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 6, "Rowing", eventType, character.CurrentFrameId);
 
                     // ✓ 等待时间设置（对应 FLF Line 667-671）
                     // 延长爬起动作的持续时间
                     if (character.CurrentFrameId == LF2StandardFrames.Rowing ||      // 100
                         character.CurrentFrameId == LF2StandardFrames.RowingBack)    // 108
                     {
-                        LogBranch(6, "Rowing", "设置爬起等待时间");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", "设置爬起等待时间");
                         character.trans.SetWait(LF2StateConstants.RowingWaitTime);  // 1 帧
                         return true;
                     }
                     return false;
 
                 case "fall_onto_ground":
-                    LogStateEvent(character, 6, "Rowing", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 6, "Rowing", eventType, character.CurrentFrameId);
 
                     // ✓ 落地处理（对应 FLF Line 674-679）
                     // 落地时的状态转换：爬起结束 → 蹲姿
                     if (character.CurrentFrameId == LF2StandardFrames.Rowing1 ||     // 101: 正面爬起结束
                         character.CurrentFrameId == LF2StandardFrames.RowingBack1)   // 109: 背面爬起结束
                     {
-                        LogBranch(6, "Rowing", "爬起结束落地");
-                        LogTransition(6, "Rowing", LF2StandardFrames.Crouch, "落地 → 蹲姿");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", "爬起结束落地");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 6, "Rowing", LF2StandardFrames.Crouch, "落地 → 蹲姿");
                         character.TransitionToFrame(LF2StandardFrames.Crouch, 0);  // 215: 蹲姿帧
                         return true;
                     }
@@ -1393,14 +1405,14 @@ namespace NTSD.Animation
             {
                 case "frame_force":
                 case "TU_force":
-                    LogStateEvent(character, 8, "BrokenDefend", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 8, "BrokenDefend", eventType, character.CurrentFrameId);
 
                     // ✓ 强制移动方向修正（对应 FLF Line 702-717）
 
                     var frameData = character.CurrentFrame;
                     if (frameData.dvx != 0)
                     {
-                        LogBranch(8, "BrokenDefend", $"防御被破 dvx={frameData.dvx} → 修正移动方向");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 8, "BrokenDefend", $"防御被破 dvx={frameData.dvx} → 修正移动方向");
 
                         // Step D8: TODO 改为使用 PhysicsState (ps)
                         // 完整逻辑（对应 FLF Line 704-717）：
@@ -1455,27 +1467,27 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "state_entry":
-                    LogStateEvent(character, 9, "Catching", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9, "Catching", eventType, character.CurrentFrameId);
 
                     // ✓ 初始化抓取状态（对应 FLF Line 570-573）
                     character.StateMem["stateTU"] = true;
                     character.StateMem["counter"] = 43;    // 初始计数43帧
                     character.StateMem["attacks"] = 0;     // 攻击次数计数
-                    LogBranch(9, "Catching", "初始化抓取状态 counter=43, attacks=0");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "初始化抓取状态 counter=43, attacks=0");
                     return false;
 
                 case "state_exit":
-                    LogStateEvent(character, 9, "Catching", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9, "Catching", eventType, character.CurrentFrameId);
 
                     // ✓ 清理抓取状态（对应 FLF Line 577-580）
-                    LogBranch(9, "Catching", "Clear catching state");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "Clear catching state");
                     // TODO: 需要实现抓取系统
                     // character.Catching = null;    // 清空抓取目标
                     // character.Ps.Zz = 0;          // 重置Z轴覆盖
                     return false;
 
                 case "frame":
-                    LogStateEvent(character, 9, "Catching", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9, "Catching", eventType, character.CurrentFrameId);
 
                     // ✓ 抓取帧处理（对应 FLF Line 584-614）
                     int frameId = character.CurrentFrameId;
@@ -1486,7 +1498,7 @@ namespace NTSD.Animation
                     // 帧123（成功攻击）：增加attacks计数器，延长抓取时间3帧
                     if (frameId == 123)
                     {
-                        LogBranch(9, "Catching", "帧123 成功攻击 → 延长抓取时间");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "帧123 成功攻击 → 延长抓取时间");
                         // TODO: 需要实现抓取系统后取消注释
                         // character.StateMem["attacks"] = (int)character.StateMem["attacks"] + 1;  // 攻击次数+1
                         // character.StateMem["counter"] = (int)character.StateMem["counter"] + 3;  // 延长3帧
@@ -1497,7 +1509,7 @@ namespace NTSD.Animation
                     // 帧233/234：减少等待时间（1帧）
                     if (frameId == 233 || frameId == 234)
                     {
-                        LogBranch(9, "Catching", $"Frame {frameId} -> decrease wait");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", $"Frame {frameId} -> decrease wait");
                         // TODO: 需要实现抓取系统后取消注释
                         // character.trans.SetWait(character.trans.Wait() - 1);
                         // return true;
@@ -1506,7 +1518,7 @@ namespace NTSD.Animation
                     // 帧240：Rudolf特殊变身
                     if (frameId == 240)
                     {
-                        LogBranch(9, "Catching", "帧240 Rudolf特殊变身");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "帧240 Rudolf特殊变身");
                         // TODO: 需要实现id_update机制
                         // character.CallIdUpdate("rudolf_transform");
                         // return true;
@@ -1536,7 +1548,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 9, "Catching", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9, "Catching", eventType, character.CurrentFrameId);
 
                     // ✓ 抓取伤害与覆盖处理（对应 FLF Line 622-657）
 
@@ -1606,7 +1618,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "post_combo":
-                    LogStateEvent(character, 9, "Catching", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9, "Catching", eventType, character.CurrentFrameId);
 
                     // 抓取计数器减少（FLF:669-685）
                     // TODO: 实现抓取计数器递减和释放逻辑
@@ -1615,7 +1627,7 @@ namespace NTSD.Animation
                 case "combo":
                     // ✓ 抓取中的攻击与连招（对应 FLF Line 692-747）
                     string comboKey = eventData as string;
-                    LogStateEvent(character, 9, "Catching", eventType, comboKey);
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, CurrentFrame={4}", 9, "Catching", eventType, comboKey, character.CurrentFrameId);
 
                     if (string.IsNullOrEmpty(comboKey))
                         return false;
@@ -1623,7 +1635,7 @@ namespace NTSD.Animation
                     // ==================== 攻击键处理 ====================
                     if (comboKey == "att")
                     {
-                        LogBranch(9, "Catching", "抓取中攻击 → 投掷/攻击动作");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "抓取中攻击 → 投掷/攻击动作");
                         // 投掷/攻击动作处理（FLF:696-725）
                         // TODO: 实现 cpoint.taction/aaction 投掷和攻击逻辑
                         return true;
@@ -1632,7 +1644,7 @@ namespace NTSD.Animation
                     // ==================== 跳跃键处理 ====================
                     if (comboKey == "jump")
                     {
-                        LogBranch(9, "Catching", "抓取中跳跃 → 跳跃动作");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "抓取中跳跃 → 跳跃动作");
                         // 抓取跳跃动作（FLF:740-746）
                         // TODO: 实现 cpoint.jaction 跳跃动作
                     }
@@ -1662,24 +1674,24 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "state_exit":
-                    LogStateEvent(character, 10, "BeingCaught", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 10, "BeingCaught", eventType, character.CurrentFrameId);
 
-                    LogBranch(10, "BeingCaught", "Clear being-caught state");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "Clear being-caught state");
                     // 清理被抓状态（FLF:781-787）
                     // TODO: 实现抓取系统（清空抓取者引用、抓点数据、方向数据）
                     return false;
 
                 case "frame":
-                    LogStateEvent(character, 10, "BeingCaught", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 10, "BeingCaught", eventType, character.CurrentFrameId);
 
                     // ✓ 被抓帧处理（对应 FLF Line 792-794）
-                    LogBranch(10, "BeingCaught", "设置长时间等待（由抓取者控制）");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "设置长时间等待（由抓取者控制）");
                     character.StateMem["frameTU"] = true;
                     character.trans.SetWait(99);  // 长时间等待（由抓取者控制）
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 10, "BeingCaught", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 10, "BeingCaught", eventType, character.CurrentFrameId);
 
                     // ✓ 被抓时的处理（对应 FLF Line 803-880）
 
@@ -1689,7 +1701,7 @@ namespace NTSD.Animation
                     {
                         if (character.unitActions != null)
                         {
-                            LogBranch(10, "BeingCaught", "帧135 暂停（消除重力）");
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "帧135 暂停（消除重力）");
                             character.unitActions.yForce = 0;  // 暂停
                         }
                     }
@@ -1727,9 +1739,9 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "state_exit":
-                    LogStateEvent(character, 13, "Frozen", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 13, "Frozen", eventType, character.CurrentFrameId);
 
-                    LogBranch(13, "Frozen", "冰冻结束 → 创建碎裂效果");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 13, "Frozen", "冰冻结束 → 创建碎裂效果");
                     // 创建冰块碎裂效果（FLF:1101-1104）
                     // TODO: 实现特效系统（ID 212 碎裂效果，音效 1/066）
                     return false;
@@ -1769,17 +1781,17 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "state_entry":
-                    LogStateEvent(character, 14, "Lying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 14, "Lying", eventType, character.CurrentFrameId);
 
-                    LogBranch(14, "Lying", "Reset state & death check");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Reset state & death check");
                     // 重置状态与死亡检测（FLF:1117-1129）
                     // TODO: 实现角色属性系统（重置 fall/bdefend、死亡判定、NPC 死亡闪烁）
                     return false;
 
                 case "state_exit":
-                    LogStateEvent(character, 14, "Lying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 14, "Lying", eventType, character.CurrentFrameId);
 
-                    LogBranch(14, "Lying", "Getup -> 30 frames invincible");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Getup -> 30 frames invincible");
                     // 爬起无敌效果（FLF:1130-1137）
                     // TODO: 实现特效系统（30帧无敌、闪烁效果、super 状态）
                     return false;
@@ -1825,7 +1837,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 15, "Mixed", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 15, "Mixed", eventType, character.CurrentFrameId);
 
                     // 多帧特殊处理（FLF:1149-1188）
                     int frameId = character.NextFrameId;
@@ -1833,7 +1845,7 @@ namespace NTSD.Animation
                     // 帧215: 蹲下 → 减少等待时间
                     if (frameId == LF2StandardFrames.Crouch)  // 215
                     {
-                        LogBranch(15, "Mixed", "帧215 蹲下 → 减少等待时间");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧215 蹲下 → 减少等待时间");
                         character.trans.IncWait(-1);
                         return false;
                     }
@@ -1847,8 +1859,8 @@ namespace NTSD.Animation
                         if (frameData.next == LF2StandardFrames.LoopToStart &&
                             character.ps.y < 0)
                         {
-                            LogBranch(15, "Mixed", "帧54 空中轻武器投掷结束 → 返回跳跃");
-                            LogTransition(15, "Mixed", LF2StandardFrames.JumpingAir, "空中投掷完成");
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧54 空中轻武器投掷结束 → 返回跳跃");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.JumpingAir, "空中投掷完成");
                             character.trans.SetNext(LF2StandardFrames.JumpingAir);  // 212
                             return false;
                         }
@@ -1862,7 +1874,7 @@ namespace NTSD.Animation
                 case "combo":
                     // ✓ 蹲下二段跳（对应 FLF Line 1190-1221）
                     string comboKey = eventData as string;
-                    LogStateEvent(character, 15, "Mixed", eventType, comboKey);
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, CurrentFrame={4}", 15, "Mixed", eventType, comboKey, character.CurrentFrameId);
 
                     // 只在蹲下帧215响应
                     if (character.NextFrameId == LF2StandardFrames.Crouch)  // 215
@@ -1873,8 +1885,8 @@ namespace NTSD.Animation
                         // 防御键 → 奔跑防御
                         if (comboKey == "def")
                         {
-                            LogBranch(15, "Mixed", "蹲下 + 防御 → 奔跑防御");
-                            LogTransition(15, "Mixed", 102, "奔跑防御");
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "蹲下 + 防御 → 奔跑防御");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", 102, "奔跑防御");
                             character.TransitionToFrame(LF2StandardFrames.Rowing2, 10);
                             return true;
                         }
@@ -1887,8 +1899,8 @@ namespace NTSD.Animation
                                 // 1. 有方向输入 → 该方向跳跃
                                 if (dx != 0)
                                 {
-                                    LogBranch(15, "Mixed", $"蹲下二段跳 dx={dx} → 方向跳跃");
-                                    LogTransition(15, "Mixed", LF2StandardFrames.DashForward, "方向跳跃");
+                                    Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", $"蹲下二段跳 dx={dx} → 方向跳跃");
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward, "方向跳跃");
                                     character.TransitionToFrame(LF2StandardFrames.DashForward, 10);  // 213
                                     character.SetDirection(dx == 1 ? DIRECTION.RIGHT : DIRECTION.LEFT);
                                     return true;
@@ -1906,8 +1918,8 @@ namespace NTSD.Animation
                                 }
                                 else
                                 {
-                                    LogBranch(15, "Mixed", "蹲下二段跳 → 前冲刺2");
-                                    LogTransition(15, "Mixed", LF2StandardFrames.DashForward2, "前冲刺2");
+                                    Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "蹲下二段跳 → 前冲刺2");
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward2, "前冲刺2");
                                     // 检查角色是否静止（无水平速度）
                                     // 简化实现：直接跳到垂直跳跃
                                     character.trans.SetNext(LF2StandardFrames.DashForward2);  // 210
@@ -1968,25 +1980,25 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 18, "Burning", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 18, "Burning", eventType, character.CurrentFrameId);
 
-                    LogBranch(18, "Burning", "持续燃烧 → 每帧创建燃烧特效");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "持续燃烧 → 每帧创建燃烧特效");
                     // 每帧创建燃烧特效（FLF:1246-1249）
                     // TODO: 实现特效系统（ID 302，持续模式）
                     return false;
 
                 case "fall_onto_ground":
-                    LogStateEvent(character, 18, "Burning", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 18, "Burning", eventType, character.CurrentFrameId);
 
-                    LogBranch(18, "Burning", "燃烧落地 → 创建落地燃烧特效");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧落地 → 创建落地燃烧特效");
                     // 落地时创建燃烧特效（FLF:1250-1252）
                     // TODO: 实现特效系统（ID 302，一次性模式）
                     return false;
 
                 case "fell_onto_ground":
-                    LogStateEvent(character, 18, "Burning", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 18, "Burning", eventType, character.CurrentFrameId);
 
-                    LogBranch(18, "Burning", "燃烧倒地 → 复用State 12落地逻辑");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧倒地 → 复用State 12落地逻辑");
                     // 复用State 12落地逻辑（FLF:1253-1256）
                     return FallingStateHandler(character, "fell_onto_ground", eventData);
 
@@ -2019,9 +2031,9 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "TU":
-                    LogStateEvent(character, 19, "FirenSpecific", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 19, "FirenSpecific", eventType, character.CurrentFrameId);
 
-                    LogBranch(19, "FirenSpecific", "Firen特殊状态 → 强制Z轴奔跑速度");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 19, "FirenSpecific", "Firen特殊状态 → 强制Z轴奔跑速度");
                     // 强制设置Z轴速度为奔跑速度（FLF:1269-1272）
                     // TODO: 实现深度移动系统（vz = dirv() * running_speedz）
                     return false;
@@ -2043,23 +2055,23 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "state_entry":
-                    LogStateEvent(character, 17, "Charging", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 17, "Charging", eventType, character.CurrentFrameId);
 
                     // ✓ 初始化蓄力状态
                     character.StateMem["chargeTime"] = 0;
                     character.StateMem["maxChargeTime"] = 60;  // 60帧 = 2秒（30fps）
-                    LogBranch(17, "Charging", "初始化蓄力 chargeTime=0, maxChargeTime=60");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", "初始化蓄力 chargeTime=0, maxChargeTime=60");
                     return false;
 
                 case "frame":
-                    LogStateEvent(character, 17, "Charging", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 17, "Charging", eventType, character.CurrentFrameId);
 
                     // ✓ 蓄力状态的帧处理
                     // 蓄力等级判定和特效播放由外部系统处理
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 17, "Charging", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 17, "Charging", eventType, character.CurrentFrameId);
 
                     // ✓ 蓄力时间更新
                     if (character.StateMem.ContainsKey("chargeTime"))
@@ -2073,7 +2085,7 @@ namespace NTSD.Animation
                             character.StateMem["chargeTime"] = chargeTime + 1;
                             if (chargeTime % 10 == 0)  // 每10帧输出一次日志
                             {
-                                LogBranch(17, "Charging", $"蓄力中 chargeTime={chargeTime}/{maxChargeTime}");
+                                Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", $"蓄力中 chargeTime={chargeTime}/{maxChargeTime}");
                             }
                         }
                     }
@@ -2082,15 +2094,15 @@ namespace NTSD.Animation
                 case "combo":
                     // ✓ 蓄力中的输入处理
                     string comboKey = eventData as string;
-                    LogStateEvent(character, 17, "Charging", eventType, comboKey);
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, CurrentFrame={4}", 17, "Charging", eventType, comboKey, character.CurrentFrameId);
 
                     // 任何按键输入都会结束蓄力状态
                     // 具体的技能释放逻辑由技能系统处理
                     if (!string.IsNullOrEmpty(comboKey))
                     {
                         int chargeTime = character.StateMem.ContainsKey("chargeTime") ? (int)character.StateMem["chargeTime"] : 0;
-                        LogBranch(17, "Charging", $"蓄力中断 按键={comboKey}, 蓄力时间={chargeTime}");
-                        LogTransition(17, "Charging", LF2StandardFrames.Standing, "蓄力中断");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", $"蓄力中断 按键={comboKey}, 蓄力时间={chargeTime}");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 17, "Charging", LF2StandardFrames.Standing, "蓄力中断");
                         // 返回站立状态，让技能系统接管
                         character.TransitionToFrame(LF2StandardFrames.Standing, 10);
                         return true;
@@ -2098,10 +2110,10 @@ namespace NTSD.Animation
                     return false;
 
                 case "state_exit":
-                    LogStateEvent(character, 17, "Charging", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 17, "Charging", eventType, character.CurrentFrameId);
 
                     // ✓ 清理蓄力状态内存
-                    LogBranch(17, "Charging", "Clear charging state mem");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", "Clear charging state mem");
                     character.StateMem.Remove("chargeTime");
                     character.StateMem.Remove("maxChargeTime");
                     return false;
@@ -2124,12 +2136,12 @@ namespace NTSD.Animation
                 case "frame":
                     var frameData = character.CurrentFrame;
                     int currentState = frameData.state;
-                    LogStateEvent(character, currentState, "Weapon", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", currentState, "Weapon", eventType, character.CurrentFrameId);
 
                     // ✓ 根据具体状态处理
                     if (currentState == LF2States.WeaponInSky)
                     {
-                        LogBranch(currentState, "Weapon", "Weapon flying");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Weapon", "Weapon flying");
                         // TODO: 武器在空中旋进
                         // - 应用飞行速度
                         // - 碰撞检测
@@ -2137,21 +2149,21 @@ namespace NTSD.Animation
                     }
                     else if (currentState == LF2States.WeaponOnHand)
                     {
-                        LogBranch(currentState, "Weapon", "Weapon on hand");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Weapon", "Weapon on hand");
                         // TODO: 武器在手中
                         // - 跟随角色移动
                         // - 等待投掷指令
                     }
                     else if (currentState == LF2States.WeaponThrowing)
                     {
-                        LogBranch(currentState, "Weapon", "Weapon throwing");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Weapon", "Weapon throwing");
                         // TODO: 武器投掷中
                         // - 设置初始速度
                         // - 转换到旋进状态
                     }
                     else if (currentState == LF2States.WeaponJustOnGround || currentState == LF2States.WeaponOnGround)
                     {
-                        LogBranch(currentState, "Weapon", "武器落地");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Weapon", "武器落地");
                         // TODO: 武器落地
                         // - 播放落地音效
                         // - 允许拾取
@@ -2159,7 +2171,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, character.CurrentFrame.state, "Weapon", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", character.CurrentFrame.state, "Weapon", eventType, character.CurrentFrameId);
 
                     // ✓ 武器物理更新
                     // TODO: 实现武器物理
@@ -2185,12 +2197,12 @@ namespace NTSD.Animation
                 case "frame":
                     var frameData = character.CurrentFrame;
                     int currentState = frameData.state;
-                    LogStateEvent(character, currentState, "Projectile", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", currentState, "Projectile", eventType, character.CurrentFrameId);
 
                     // ✓ 根据具体状态处理
                     if (currentState == LF2States.ProjectileFlying)
                     {
-                        LogBranch(currentState, "Projectile", "投射物飞行中");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Projectile", "投射物飞行中");
                         // TODO: 投射物飞行（如千鸟、冰剑）
                         // - 应用飞行速度（通常较快）
                         // - 飞行轨迹计算
@@ -2198,7 +2210,7 @@ namespace NTSD.Animation
                     }
                     else if (currentState == LF2States.ProjectileHiting)
                     {
-                        LogBranch(currentState, "Projectile", "投射物命中中");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Projectile", "投射物命中中");
                         // TODO: 投射物命中中
                         // - 播放命中动画
                         // - 应用伤害
@@ -2206,14 +2218,14 @@ namespace NTSD.Animation
                     }
                     else if (currentState == LF2States.ProjectileHit)
                     {
-                        LogBranch(currentState, "Projectile", "投射物命中后");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Projectile", "投射物命中后");
                         // TODO: 投射物命中后
                         // - 播放爆炸/消失效果
                         // - 销毁投射物
                     }
                     else if (currentState == LF2States.ProjectileTeleport)
                     {
-                        LogBranch(currentState, "Projectile", "Projectile teleport");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", currentState, "Projectile", "Projectile teleport");
                         // TODO: 投射物瞬移（如天遁）
                         // - 瞬移到目标位置
                         // - 播放瞬移效果
@@ -2222,7 +2234,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, character.CurrentFrame.state, "Projectile", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", character.CurrentFrame.state, "Projectile", eventType, character.CurrentFrameId);
 
                     // ✓ 投射物物理更新
                     // TODO: 实现投射物物理
@@ -2247,10 +2259,10 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 3005, "ObjectFlying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3005, "ObjectFlying", eventType, character.CurrentFrameId);
 
                     // ✓ 对象飞行帧处理
-                    LogBranch(3005, "ObjectFlying", "ObjectFlying frame update");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "ObjectFlying frame update");
                     // TODO: 实现对象飞行逻辑
                     // - 投掷物：对象向目标位置旋进
                     // - 召唤物：对象跟随主人移动
@@ -2260,22 +2272,22 @@ namespace NTSD.Animation
                     // ✓ TODO: 处理 ITR（伤害判定）- 飞行对象可能有攻击判定
                     if (frameData.itrs != null && frameData.itrs.Count > 0)
                     {
-                        LogBranch(3005, "ObjectFlying", "处理飞行对象攻击判定");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "处理飞行对象攻击判定");
                         // ITRProcessor.ProcessITR(itr, character);
                     }
 
                     // ✓ TODO: 处理 OPoint（投掷物/召唤）
                     if (frameData.opoint != null)
                     {
-                        LogBranch(3005, "ObjectFlying", "Process object spawn point");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "Process object spawn point");
                         // OPointProcessor.ProcessOPoint(frameData.opoint, character);
                     }
 
                     // ✓ 检查对象是否结束旋进 (next = 999)
                     if (frameData.next == LF2StandardFrames.LoopToStart)
                     {
-                        LogBranch(3005, "ObjectFlying", "对象飞行结束");
-                        LogTransition(3005, "ObjectFlying", LF2StandardFrames.Standing, "飞行结束");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "对象飞行结束");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 3005, "ObjectFlying", LF2StandardFrames.Standing, "飞行结束");
                         // 对象飞行结束，返回站姿或消失
                         character.PlayFrameByID(LF2StandardFrames.Standing);
                         return true;
@@ -2283,7 +2295,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 3005, "ObjectFlying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3005, "ObjectFlying", eventType, character.CurrentFrameId);
 
                     // ✓ 对象飞行物理更新
                     // TODO: 实现对象飞行物理
@@ -2293,9 +2305,9 @@ namespace NTSD.Animation
                     return false;
 
                 case "state_entry":
-                    LogStateEvent(character, 3005, "ObjectFlying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3005, "ObjectFlying", eventType, character.CurrentFrameId);
 
-                    LogBranch(3005, "ObjectFlying", "Enter ObjectFlying");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "Enter ObjectFlying");
                     // ✓ 进入对象飞行状态
                     // TODO: 初始化旋进参数
                     // - 设置初始速度
@@ -2304,9 +2316,9 @@ namespace NTSD.Animation
                     return false;
 
                 case "state_exit":
-                    LogStateEvent(character, 3005, "ObjectFlying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3005, "ObjectFlying", eventType, character.CurrentFrameId);
 
-                    LogBranch(3005, "ObjectFlying", "Exit ObjectFlying");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 3005, "ObjectFlying", "Exit ObjectFlying");
                     // ✓ 退出对象旋进状态
                     // TODO: 清理飞行状态
                     // - 清除飞行特效
@@ -2328,7 +2340,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 3006, "ObjectExpanding", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3006, "ObjectExpanding", eventType, character.CurrentFrameId);
 
                     // ✓ 对象扩散帧处理
                     var frameData = character.CurrentFrame;
@@ -2336,7 +2348,7 @@ namespace NTSD.Animation
                     // ✓ TODO: 处理扩散范围伤害
                     if (frameData.itrs != null && frameData.itrs.Count > 0)
                     {
-                        LogBranch(3006, "ObjectExpanding", "处理扩散范围伤害");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 3006, "ObjectExpanding", "处理扩散范围伤害");
                         // 扩散效果通常有持续伤害或范围伤害
                         // ITRProcessor.ProcessITR(itr, character);
                     }
@@ -2349,7 +2361,7 @@ namespace NTSD.Animation
                     // ✓ 检查包裹是否结束 (next = 999)
                     if (frameData.next == LF2StandardFrames.LoopToStart)
                     {
-                        LogBranch(3006, "ObjectExpanding", "ObjectExpanding done -> destroy");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 3006, "ObjectExpanding", "ObjectExpanding done -> destroy");
                         // 扩散结束，销毁对象
                         // character.Destroy();
                         return true;
@@ -2357,7 +2369,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 3006, "ObjectExpanding", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3006, "ObjectExpanding", eventType, character.CurrentFrameId);
 
                     // ✓ 对象扩散更新
                     // TODO: 实现扩散动画
@@ -2367,9 +2379,9 @@ namespace NTSD.Animation
                     return false;
 
                 case "state_entry":
-                    LogStateEvent(character, 3006, "ObjectExpanding", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 3006, "ObjectExpanding", eventType, character.CurrentFrameId);
 
-                    LogBranch(3006, "ObjectExpanding", "Enter ObjectExpanding");
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 3006, "ObjectExpanding", "Enter ObjectExpanding");
                     // ✓ 进入对象扩散状态
                     // TODO: 初始化包裹参数
                     // - 设置初始缩放
@@ -2392,7 +2404,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 9997, "EffectPlaying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9997, "EffectPlaying", eventType, character.CurrentFrameId);
 
                     // ✓ 特效播放帧处理
                     var frameData = character.CurrentFrame;
@@ -2405,7 +2417,7 @@ namespace NTSD.Animation
                     // ✓ 检查特效是否结束 (next = 999)
                     if (frameData.next == LF2StandardFrames.LoopToStart)
                     {
-                        LogBranch(9997, "EffectPlaying", "EffectPlaying done -> destroy");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9997, "EffectPlaying", "EffectPlaying done -> destroy");
                         // 特效播放结束，销毁对象
                         // character.Destroy();
                         return true;
@@ -2413,7 +2425,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 9997, "EffectPlaying", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 9997, "EffectPlaying", eventType, character.CurrentFrameId);
 
                     // ✓ 特效更新
                     // TODO: 实现特效动画
@@ -2437,7 +2449,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    LogStateEvent(character, 30005, "SpecialEffect", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 30005, "SpecialEffect", eventType, character.CurrentFrameId);
 
                     // ✓ 特殊效果帧处理
                     var frameData = character.CurrentFrame;
@@ -2449,14 +2461,14 @@ namespace NTSD.Animation
                     // ✓ TODO: 处理 ITR（伤害判定）
                     if (frameData.itrs != null && frameData.itrs.Count > 0)
                     {
-                        LogBranch(30005, "SpecialEffect", "处理特殊效果伤害判定");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 30005, "SpecialEffect", "处理特殊效果伤害判定");
                         // ITRProcessor.ProcessITR(itr, character);
                     }
 
                     // ✓ 检查效果是否结束 (next = 999)
                     if (frameData.next == LF2StandardFrames.LoopToStart)
                     {
-                        LogBranch(30005, "SpecialEffect", "SpecialEffect done -> destroy");
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 30005, "SpecialEffect", "SpecialEffect done -> destroy");
                         // 特殊效果结束，销毁对象
                         // character.Destroy();
                         return true;
@@ -2464,7 +2476,7 @@ namespace NTSD.Animation
                     return false;
 
                 case "TU":
-                    LogStateEvent(character, 30005, "SpecialEffect", eventType);
+                    Log.Info("[State {0}:{1}] Event={2}, CurrentFrame={3}", 30005, "SpecialEffect", eventType, character.CurrentFrameId);
 
                     // ✓ 特殊效果更新
                     // TODO: 实现特殊效果逻辑

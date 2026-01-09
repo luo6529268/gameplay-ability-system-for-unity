@@ -5,10 +5,12 @@ using NTSD.Help;
 using NTSD.Input;
 using NTSD.LevelEditor;
 using NTSD.Simulation;
+using NTSD.Tools;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Pool;
+using static NTSD.Simulation.NTSDGlobal;
 
 namespace NTSD.Animation
 {
@@ -135,6 +137,10 @@ namespace NTSD.Animation
         [SerializeField]
         private bool _debugCollisionLog = false;
 
+        [Header("Debug / Combo")]
+        [SerializeField]
+        private bool _debugComboLog = false;
+
         // ==================== 帧转换器（对应 LF2 的 trans）====================
         public FrameTransistor trans { get; private set; }
 
@@ -198,6 +204,8 @@ namespace NTSD.Animation
             ps.vx = 0;  // 初始速度为 0
             ps.vy = 0;
             ps.vz = 0;
+
+            _AllowSwitchDir = true;
 
             // Scheme C: StableId 统一来源为 Character.StableIdRuntime
             if (_hub != null && _hub.StableIdRuntime > 0)
@@ -406,7 +414,7 @@ namespace NTSD.Animation
             // 对应 FLF character.js:1819-1826
 
             // 1. 当前状态优先处理
-            bool res1 = CharacterStates.Instance.HandleStateEvent(this, "combo", K);
+            bool res1 = CharacterStates.Instance.HandleStateEvent(this, "combo", K, true);
 
             // 注意：CharacterStates.HandleStateEvent 内部已经实现了优先级逻辑
             // （当前状态 → 通用状态）
@@ -463,7 +471,14 @@ namespace NTSD.Animation
         {
             if (FrameAniInfo.frameData == null) return;
 
-            Debug.Log($"[LF2CharacterAnimator] Combo detected: {combo.name}");
+            if (_debugComboLog)
+            {
+                Debug.Log(
+                    $"[NTSD][ComboDetected] StableId={StableId} detected={combo.name} state={FrameAniInfo.frameData.state} frame={CurrentFrameId} pre={PreviousFrameId} " +
+                    $"bufBefore={_comboBuffer.combo ?? "null"} allowSwitchDir={_AllowSwitchDir} ps.dir={ps?.dir ?? "null"} ua.dir={unitActions?.dir.ToString() ?? "null"} " +
+                    $"IsLeft={_Character?._CharacterInput?.IsLeft} IsRight={_Character?._CharacterInput?.IsRight}"
+                );
+            }
 
             // ==================== combo_event 逻辑 ====================
             // 对应 FLF character.js:1684-1700
@@ -475,7 +490,7 @@ namespace NTSD.Animation
             {
                 case "left":
                 case "right":
-                    // if (allow_switch_dir) { SwitchDirection(K); }
+                    if (_AllowSwitchDir) { SetDirectionByString(K); }
                     break;
             }
 
@@ -483,9 +498,17 @@ namespace NTSD.Animation
             // 同一帧内的连击冲突，优先级高的生效
             // TODO: 实现优先级系统（需要 priority 映射）
 
+            if (_comboBuffer.timeout == NTSDGlobal.Combo.Timeout && ComboConfig.GetComboPriority(K) < ComboConfig.GetComboPriority(_comboBuffer.combo))
+                return;
+
             // 3. 设置到缓冲区（不立即播放！）
             _comboBuffer.combo = K;
-            _comboBuffer.timeout = 60;  // TODO: 从配置读取
+            _comboBuffer.timeout = NTSDGlobal.Combo.Timeout;  // TODO: 从配置读取
+
+            if (_debugComboLog)
+            {
+                Debug.Log($"[NTSD][ComboDetected] StableId={StableId} bufAfter={_comboBuffer.combo ?? "null"}");
+            }
         }
 
         /// <summary>
@@ -661,6 +684,14 @@ namespace NTSD.Animation
             bool _IsTrans = FrameAniInfo.frameData.state != _frames[targetFrameId].state;
             if(_IsTrans)
             {
+                if (_debugComboLog)
+                {
+                    Debug.Log(
+                        $"[NTSD][FrameTransit:StateExit] StableId={StableId} oldState={FrameAniInfo.frameData.state} oldFrame={CurrentFrameId} " +
+                        $"toFrame={targetFrameId} toState={_frames[targetFrameId]?.state} bufCombo={_comboBuffer.combo ?? "null"}"
+                    );
+                }
+
                 // 保留 state_exit 事件分发（给状态机做额外清理）；当前不需要传参
                 CharacterStates.Instance.HandleStateEvent(this, "state_exit", _comboBuffer.combo);
             }
@@ -687,6 +718,15 @@ namespace NTSD.Animation
 
                 CharacterStates.Instance.HandleStateEvent(this, "state_entry", null);
                 OnStateChanged?.Invoke(CurrentState);
+
+                if (_debugComboLog)
+                {
+                    Debug.Log(
+                        $"[NTSD][FrameTransit:StateEnter] StableId={StableId} newState={FrameAniInfo.frameData.state} newFrame={CurrentFrameId} " +
+                        $"allowSwitchDir {oldSwitchDir}->{_AllowSwitchDir} bufCombo={_comboBuffer.combo ?? "null"} " +
+                        $"IsLeft={_Character?._CharacterInput?.IsLeft} IsRight={_Character?._CharacterInput?.IsRight}"
+                    );
+                }
 
                 if (!switchDirAfterTrans) 
                 {
@@ -723,6 +763,28 @@ namespace NTSD.Animation
                     _comboBuffer.combo = null;
                     break;
             }
+        }
+
+        public void OnReduceComboBufferTimeout()
+        {
+            if (_comboBuffer.timeout <= 0)
+                return;
+
+            _comboBuffer.timeout--;
+            if (_comboBuffer.timeout == 0)
+            {
+                switch (_comboBuffer.combo)
+                {
+                    case "def":
+                    case "jump":
+                    case "att":
+                    case "left-left":
+                    case "right-right":
+                        _comboBuffer.combo = null;
+                        break;
+                }
+            }
+            
         }
 
         public void SetDirection(DIRECTION direction)

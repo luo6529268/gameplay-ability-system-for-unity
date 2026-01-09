@@ -103,7 +103,7 @@ namespace MoreMountains.TopDownEngine
 			// Debug: 每 30 ticks 打印一次心跳（1秒）
 			if (tickIndex % 30 == 0)
 			{
-				Debug.Log($"[CharacterSim] SimTick {tickIndex}: {_hub.gameObject.name} (StableId={StableId})");
+				//Debug.Log($"[CharacterSim] SimTick {tickIndex}: {_hub.gameObject.name} (StableId={StableId})");
 			}
 		}
 

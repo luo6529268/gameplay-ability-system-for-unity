@@ -89,7 +89,7 @@ namespace NTSD.Simulation
 			events.Add(evt);
 
 			// Debug: 记录输入写入（可选）
-			// Debug.Log($"[SimInputBuffer] Enqueued: {evt}");
+			//Debug.LogError($"[SimInputBuffer] Enqueued: {evt}");
 		}
 
 		/// <summary>

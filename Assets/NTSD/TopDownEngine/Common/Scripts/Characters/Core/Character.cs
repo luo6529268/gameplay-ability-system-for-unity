@@ -266,7 +266,6 @@ namespace MoreMountains.TopDownEngine
 
 			// Bind stable id into input/combos (deterministic ordering)
 			_ActionSequenceDetector?.SetStableId(StableIdRuntime);
-            _CharacterInput?.SetStableId(StableIdRuntime);
 
             // Step D9R: Create CharacterIdUpdate module (id_update 机制)
             // Hub 注入规则：由 Character 统一缓存依赖并注入
@@ -560,7 +559,6 @@ namespace MoreMountains.TopDownEngine
 			if (_ActionSequenceDetector != null && SimulationTickDriver.Instance != null)
 			{
 				SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
-                SimulationTickDriver.Instance.World.Register(_CharacterInput);
             }
 		}
 
@@ -587,7 +585,6 @@ namespace MoreMountains.TopDownEngine
 			if (_ActionSequenceDetector != null && SimulationTickDriver.Instance != null)
 			{
 				SimulationTickDriver.Instance.World.Unregister(_ActionSequenceDetector);
-                SimulationTickDriver.Instance.World.Unregister(_CharacterInput);
             }
 		}
 

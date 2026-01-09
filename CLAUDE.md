@@ -175,6 +175,25 @@
 
 ---
 
+---
+
+## Core Authority Principle（最高优先级原则）
+
+NTSD 复刻工程必须 **严格以 FLF 源码（Little Fighter 2 Engine Source）为最终权威依据**：
+
+1. 不得自行改写或创造新逻辑；任何功能，无论已实现或预留占位，**其逻辑来源必须以 FLF 源码为准**。
+2. 若 Unity（C# / 引擎架构）与 FLF（JavaScript / 原引擎）存在实现差异：
+   - 允许进行必要的实现方式适配；
+   - 但适配后的行为必须 **在语义与效果上保持与 FLF 源码“等价”**；
+   - 目标是“**行为一致，表现一致，实现方式可适配**”。
+3. 若 FLF 源码、LF2_19 脚本与 NTSD 反汇编结果存在冲突：
+   - **以 NTSD 反汇编为结果校验层**
+   - 但仍需保证其行为不偏离 FLF 的基础物理与系统意图。
+
+若无法确认逻辑来源或存在不确定性，**必须暂停实现并请求源码片段进行确认**，不得猜测或创造逻辑。
+
+---
+
 ## 🐛 Debugging & Refactoring Protocol (Strict Source-Alignment)
 
 **Trigger:** When the user reports a bug, glitch, or requests a logic modification.

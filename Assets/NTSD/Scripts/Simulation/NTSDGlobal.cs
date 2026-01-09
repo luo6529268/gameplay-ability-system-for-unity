@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 
 namespace NTSD.Simulation
 {
@@ -86,6 +87,11 @@ namespace NTSD.Simulation
                 // FLF: GC.default.machanics.mass
                 public const float Mass = 1f;
             }
+        }
+
+        public static class Combo 
+        {
+           public const int Timeout = 10; // 连招超时时间（时间单位）
         }
 
         /// <summary>

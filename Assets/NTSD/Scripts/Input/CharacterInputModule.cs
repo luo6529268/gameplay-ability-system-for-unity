@@ -17,7 +17,7 @@ namespace NTSD.Game
     ///
     /// 参考：原 CharacterInput.cs（MonoBehaviour 版本）
     /// </summary>
-    public sealed class CharacterInputModule : ICharacterModule, ISimObject
+    public sealed class CharacterInputModule : ICharacterModule
     {
         private Character _hub;
         private bool _inputBound;
@@ -47,11 +47,6 @@ namespace NTSD.Game
         public bool IsRight => _rightPressed;
 
         public int ModuleOrder => CharacterModuleOrder.Input;
-
-        public int SimOrder => 40;
-
-        public int StableId { get; private set; }
-        public void SetStableId(int stableId) => StableId = stableId;
 
         public void ModuleSetup(Character character)
         {
@@ -156,7 +151,6 @@ namespace NTSD.Game
             {
                 Vector2 value = context.ReadValue<Vector2>();
                 _currentMoveInput = value;
-                Debug.LogError($"[CharacterInput] MoveAction comboKey: value={value}");
                 FuncKeyMask newDirectionMask = FuncKeyMask.None;
 
                 if (value.x < -DIRECTION_DEADZONE)
@@ -244,7 +238,6 @@ namespace NTSD.Game
                 if ((_lastDirectionMask & FuncKeyMask.Down) != 0) InputBuffer?.EnqueueForNextTick(FuncKeyMask.Down, down: false);
 
                 _currentMoveInput = Vector2.zero;
-                Debug.LogError("_currentMoveInput:" + _currentMoveInput);
                 _lastDirectionMask = FuncKeyMask.None;
             }
         }
@@ -256,73 +249,14 @@ namespace NTSD.Game
 
             if (!wasPressed && isPressed)
             {
-                Debug.LogError("down: true:         " + direction);
-
                 InputBuffer?.EnqueueForNextTick(direction, down: true);
             }
             else if (wasPressed && !isPressed)
             {
-                Debug.LogError("down: false");
-
                 InputBuffer?.EnqueueForNextTick(direction, down: false);
             }
         }
 
-        public void OnAdded(SimContext ctx)
-        {
-        }
-
-        public void OnRemoved(SimContext ctx)
-        {
-        }
-
-        public void SimTick(int tickIndex)
-        {
-            if (InputBuffer == null) return;
-
-            Debug.LogErrorFormat("MoveAction.IsPressed() : {0}", MoveAction.IsPressed());
-            Debug.LogErrorFormat("MoveAction.IsInProgress() : {0}", MoveAction.IsInProgress());
-            if (MoveAction.IsPressed() && !_currentMoveInput.Equals(Vector2.zero)) 
-            {
-                FuncKeyMask newDirectionMask = FuncKeyMask.None;
-                if (_currentMoveInput.x < -DIRECTION_DEADZONE)
-                {
-                    newDirectionMask |= FuncKeyMask.Left;
-                    _leftPressed = true;
-                }
-                if (_currentMoveInput.x > DIRECTION_DEADZONE)
-                {
-                    _rightPressed = true;
-                    newDirectionMask |= FuncKeyMask.Right;
-                }
-                if (_currentMoveInput.y > DIRECTION_DEADZONE) newDirectionMask |= FuncKeyMask.Up;
-                if (_currentMoveInput.y < -DIRECTION_DEADZONE) newDirectionMask |= FuncKeyMask.Down;
-
-                if (InputBuffer.BufferedTickCount <= 0)
-                {
-                    _lastDirectionMask = FuncKeyMask.None;
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Left, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Right, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Up, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Down, _lastDirectionMask, newDirectionMask);
-                    _lastDirectionMask = newDirectionMask;
-                }
-            }
-            if (AttackAction.IsPressed()) 
-            {
-            
-            }
-
-            if (JumpAction.IsPressed()) 
-            {
-            
-            }
-
-            if (DefendAction.IsPressed()) 
-            {
-            
-            }
-        }
     }
 }
 

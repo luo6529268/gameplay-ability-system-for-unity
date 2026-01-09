@@ -65,6 +65,23 @@ namespace NTSD.Input
             new ComboDefinition("DJA", new[] { FuncKeyMask.Defend, FuncKeyMask.Jump, FuncKeyMask.Attack }, clearOnCombo: true),
         };
 
+        public static int GetComboPriority(string comboName)
+        {
+            int priority = -1;
+
+            if (string.IsNullOrEmpty(comboName))
+                return priority;
+
+            foreach (var item in ComboList)
+            {
+                priority++;
+                if (item.name == comboName)
+                    return priority;
+            }
+
+            return priority;
+        }
+
         /// <summary>
         /// global.js: combo_tag (name -&gt; frame tag)
         /// </summary>
