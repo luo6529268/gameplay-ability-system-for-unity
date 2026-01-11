@@ -139,6 +139,12 @@ namespace NTSD.Animation
             sz = z;
         }
 
+        // 获取水平方向
+        public int Dirh()
+        {
+            return (dir == "left" ? -1 : 1);
+        }
+
         /// <summary>
         /// FLF scene.query 所需的 volume 格式（见 LF/scene.js）。
         /// 注意：volume 的实际矩形为 (x+vx, y+vy, w, h)，深度区间为 [z-zwidth, z+zwidth]。

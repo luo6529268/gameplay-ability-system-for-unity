@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MoreMountains.TopDownEngine;
+using NTSD.Tools;
 using UnityEngine;
 
 namespace NTSD.Animation
@@ -183,12 +184,14 @@ namespace NTSD.Animation
             }
             catch (System.Exception ex)
             {
-                Debug.LogError($"[CharacterIdUpdate] Exception in handler (characterId={_hub.CharacterID}, {hookName}): {ex}");
+                Log.Error($"[CharacterIdUpdate] Exception in handler (characterId={_hub.CharacterID}, {hookName}): {ex}");
                 return false;  // 异常时不阻止默认逻辑
             }
         }
 
         // ==================== 便捷重载（避免每次手动构造 context）====================
+
+
 
         /// <summary>
         /// generic_combo hook 的便捷调用

@@ -27,6 +27,11 @@ namespace NTSD.Animation
         public const string StateEntry = "state_entry";
 
         /// <summary>
+        /// 蹲下
+        /// </summary>
+        public const string State15_Crouch = "state15_crouch";
+
+        /// <summary>
         /// 状态退出 hook
         /// 对应 FLF: id_updates[characterId].state_exit
         /// 调用时机：退出当前状态时

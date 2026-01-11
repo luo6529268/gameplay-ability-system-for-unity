@@ -261,3 +261,216 @@ match.TU_trans()
 **UPDATE（2026-01-03）**
 - 已确认采用 FLF 风格的 2.5D 映射：地面平面使用 `ps.x/ps.z`，而跳跃/击飞高度使用 `ps.y` 但只做“子节点（Sprite/Model）视觉偏移”。
 - 因此不再需要“天花板/垂直边界”与“上方特殊层”方案；边界系统简化为单一 Walkable 多边形并集，仅约束地面平面（X/Z）。
+
+---
+
+## 7. Mechanics 对齐清单 V2（FLF `mechanics.js` -> Unity）
+
+> 目的：把 FLF 的 `I:\C++Test\NTSD\F.LF-master\LF\mechanics.js` 中“适合数据层/运动学层”的职责，明确映射到 Unity 工程的脚本位置，避免把碰撞/渲染/状态机逻辑塞进 `CharacterMechanics`。
+
+### 7.1 设计原则（必须遵守）
+- `CharacterMechanics`：只做 `PhysicsState(ps)` 的运算（位置/速度/摩擦/重力/边界解算），不直接触发状态事件，不直接写 Unity Transform。
+- `LF2CharacterAnimator`：负责每 Tick 调用 mech，负责把结果写回 Unity（Transform/UnitActions），并在需要时触发 `CharacterStates` 事件。
+- 日志统一使用 `NTSD.Tools.Log`（禁止 `Debug.Log*`），并由外层 debug 开关控制是否输出。
+- Tick 热路径禁止分配：`ApplyDynamics()` 不能每 Tick new lambda/delegate；`Context/Result` 用 struct；委托必须缓存。
+
+### 7.2 映射表（按 FLF 函数维度）
+| FLF `mechanics.js` | 用途 | Unity 对应位置（建议） | 状态 |
+|---|---|---|---|
+| `create_metric()` | 创建/初始化 `ps`（位置/速度/dir/fric…） | `Assets/NTSD/Scripts/Animation/Character/PhysicsState.cs` | 已有（ps 数据结构已建立） |
+| `reset()` | 重置 `ps` 到初始值 | `PhysicsState` 增加 `Reset()`（或等价方法） | 可选（按需要补） |
+| `set_pos(x,y,z)` | 直接放置脚底点 + 边界 clamp | `CharacterMechanics.SetPos(...)`（内部调用边界规则） | TODO |
+| `dynamics()` | 主动力学：位移/边界/重力/摩擦/落地修正 | `CharacterMechanics.Step()` + `LF2CharacterAnimator.ApplyDynamics()` 写回 | 已有（但需去掉 Tick 分配 + 换 Log） |
+| `unit_friction()` | 单位摩擦（每 tick -1 的简化摩擦） | `CharacterMechanics.UnitFriction(ps)` | TODO |
+| `linear_friction(x,z)` | 指定摩擦量（用于落地/倒地等特殊刹车） | `CharacterMechanics.LinearFriction(ps, x, z)` | TODO |
+| `speed()` | 速度标量（FLF 默认只算 vx/vy） | `CharacterMechanics.SpeedXY(ps)`（明确不含 vz） | TODO |
+| `blocking_xz()` | 基于 itr:14（障碍）判定前方阻挡 | 未来：`LF2CollisionSystem` / 场景查询系统；不是 WalkableArea | 暂不做（除非要对齐 itr:14） |
+| `project()` | Sprite 投影到屏幕坐标 + z 排序 | Unity：Animator/渲染写回（Transform/Sorting） | 不放 mech |
+| `body()/volume()/body_body()` | 构造 bdy/itr 的体积数据（碰撞/判定） | Unity：`PhysicsState` 的 volume/rect/volume builder + `LF2CollisionSystem` | 不放 mech（保持分层） |
+| `make_point()/coincideXZ()/coincideXY()` | 抓取/武器跟随/点对齐（依赖 sprite.w/centerx/centery） | 建议新增 `AttachmentKinematics`（或放 Animator/Weapon 系统） | 视后续抓取/武器对齐需求决定 |
+
+### 7.3 映射表（按“职责”维度，方便 Claude 拆分）
+- **运动学/动力学（进入 `CharacterMechanics`）**：位移、边界解算、落地修正、地面摩擦、空中重力、`unit_friction/linear_friction/speed`。
+- **Unity 写回（留在 `LF2CharacterAnimator`）**：Transform 更新、UnitActions 赋值、视觉偏移、落地事件触发（`fell_onto_ground`）。
+- **碰撞/体积（不要放进 `CharacterMechanics`）**：bdy/itr 体积生成、scene query、受击/击飞结算（`LF2CollisionSystem` 等）。
+- **投影/排序（不要放进 `CharacterMechanics`）**：渲染排序、阴影、sprite 相关。
+
+### 7.4 当前实现需要立即补齐的点（给 Claude 的行动清单）
+1) `LF2CharacterAnimator.ApplyDynamics()` 热路径去分配：缓存 `isPointWalkable` 委托；日志委托用静态 method-group；不允许每 Tick new lambda。
+2) `LF2CharacterAnimator` 与 `CharacterMechanics` 的所有日志改为 `NTSD.Tools.Log`。
+3) 在 `CharacterMechanics` 中补齐可复用 helper：`UnitFriction`、`LinearFriction`、`SpeedXY`、（可选）`SetPos`。
+4) `blocking_xz()` 暂不对齐：当前 Unity 的 WalkableArea/BoundaryWall 不是 FLF itr:14 机制；除非后续要实现 itr:14 障碍物，再另开任务。
+
+> 备注：`NTSD.Tools.Log.Warn(string, params object[])` 不能直接作为 `Action<string>` 缓存（delegate 签名不匹配），需要写一个 wrapper，例如 `static void Warn1(string msg) => Log.Warn(msg);` 再把 `Warn1` 缓存为 `Action<string>`。
+
+---
+
+## 8. StateUpdateFrame 设计与实现说明（FLF `state_update` 对齐）
+
+> 目标：在 Unity 的 `CharacterStates` 中实现一个“可返回 frameId 的 state_update 通道”，用于 `fell_onto_ground` / `fall_onto_ground` 两个事件，严格对齐 FLF `livingobject.state_update` 的顺序与返回策略。
+>
+> FLF 参考：`I:\C++Test\NTSD\F.LF-master\LF\livingobject.js:292-305`
+> - 顺序：先 `states.generic(...)`，再 `states[currentState](...)`
+> - 返回：`res1 || res2`（generic 的 truthy 返回优先）
+
+### 8.1 为什么不能直接用 `HandleStateEvent`
+- `HandleStateEvent` 是“事件分发 + bool handled”语义，并且会触发 generic TU/Frame/Combo 等整套流程。
+- FLF 的 `state_update('fall_onto_ground')` 仅用于“generic + specific 的一次性可覆盖判定”，并且需要返回 frameId（或表示已接管）。
+- 所以必须新增一个**专用的** state_update-return-frame 通道，且只用于 `fell_onto_ground/fall_onto_ground`。
+
+### 8.2 新增结果类型：支持 frameId 或 handled
+在 `Assets/NTSD/Scripts/Animation/Character/CharacterStates.cs` 中新增：
+
+```csharp
+public readonly struct StateUpdateFrameResult
+{
+    public readonly bool handled;
+    public readonly int? frameId;
+
+    public StateUpdateFrameResult(bool handled, int? frameId)
+    {
+        this.handled = handled;
+        this.frameId = frameId;
+    }
+
+    public static readonly StateUpdateFrameResult None = new StateUpdateFrameResult(false, null);
+}
+```
+
+### 8.3 新增 `StateUpdateFrame(...)`：严格按 FLF 顺序 generic→specific，并按 `res1 || res2` 合并
+约束：**不要复用 `HandleStateEvent`**，避免把 generic TU/Frame 的逻辑混进去。
+
+```csharp
+private StateUpdateFrameResult StateUpdateFrame(LF2CharacterAnimator character, string eventType)
+{
+    if (character == null || character.CurrentFrame == null) return StateUpdateFrameResult.None;
+
+    // 只允许这两个事件走该通道
+    if (eventType != "fell_onto_ground" && eventType != "fall_onto_ground")
+        return StateUpdateFrameResult.None;
+
+    // 1) generic 先执行
+    var res1 = InvokeGenericStateUpdateFrame(character, eventType);
+
+    // 2) specific 再执行
+    var res2 = InvokeSpecificStateUpdateFrame(character, eventType);
+
+    // 3) 返回策略对齐 FLF：res1 || res2
+    int? frameId = res1.frameId ?? res2.frameId; // generic 优先
+    bool handled = res1.handled || res2.handled;
+
+    return new StateUpdateFrameResult(handled, frameId);
+}
+```
+
+其中 `InvokeGenericStateUpdateFrame/InvokeSpecificStateUpdateFrame` 的实现方式建议参考你现有 `GetNextFrameId()` 的思路（用一个 eventData 容器让 handler 写回 frameId）：
+
+```csharp
+private sealed class StateUpdateFrameData
+{
+    public int? frameId;
+    public bool handled;
+}
+
+private StateUpdateFrameResult InvokeGenericStateUpdateFrame(LF2CharacterAnimator character, string eventType)
+{
+    // 只做 generic 对该 eventType 的处理；默认返回 None。
+    // 注意：不要调用 GenericStateHandler 的 TU/frame/combo 分支，只在 generic 中单独加这两个 eventType 的分支。
+    return StateUpdateFrameResult.None;
+}
+
+private StateUpdateFrameResult InvokeSpecificStateUpdateFrame(LF2CharacterAnimator character, string eventType)
+{
+    // 只调用当前 state 的 handler；handler 可以：
+    // - 设置 data.frameId 来请求 generic TU 统一 TransitionToFrame(frameId, 15)
+    // - 或者直接在 handler 内调用 TransitionToFrame 并设置 handled=true
+    return StateUpdateFrameResult.None;
+}
+```
+
+### 8.4 改造 generic TU 的 3 段落地逻辑：用 `StateUpdateFrame(...)` 替代 `state_update(...)`
+修改位置：`Assets/NTSD/Scripts/Animation/Character/CharacterStates.cs` 的 `HandleGenericTU()` 落地相关分支。
+
+#### A) `fell_onto_ground`（ps.y==0 && ps.vy>0）
+结构对齐 FLF：
+- 先 `res = StateUpdateFrame(character, "fell_onto_ground")`
+- `res.frameId.HasValue` → `TransitionToFrame(res.frameId.Value, 15)`
+- `else if (res.handled)` → do nothing（表示已接管，不走默认）
+- `else` → 默认：`ps.vy=0` + 落地瞬间摩擦：
+  - `fricX = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.FrictionFell, ps.vx)`
+  - `fricZ = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.FrictionFell, ps.vz)`
+  - `CharacterMechanics.LinearFriction(ps, fricX, fricZ, NTSDGlobal.Gameplay.MinSpeed)`
+
+#### B) `fall_onto_ground`（ps.y+ps.vy>=0 && ps.vy>0）
+结构对齐 FLF：
+- 先 `res = StateUpdateFrame(character, "fall_onto_ground")`
+- `res.frameId.HasValue` → `TransitionToFrame(res.frameId.Value, 15)`
+- `else if (res.handled)` → do nothing
+- `else` → 默认：Frozen 不动；JumpingAir→Crouch(215,15)；其它→Crouch2(219,15)
+
+### 8.5 实施约束（必须遵守）
+- 新通道只用于 `fell_onto_ground/fall_onto_ground`，其它事件不要改。
+- 不要新增 `Debug.Log*`；如需日志只用 `NTSD.Tools.Log`，但本任务不要求加日志。
+- 允许不同 state 返回不同 frameId（不得写死到 generic TU 里）。
+- 通过 `res1.frameId ?? res2.frameId` 实现 generic 优先（对齐 FLF `res1 || res2`）。
+
+
+---
+
+## 9. 通用 StateUpdate（对齐 FLF `state_update`）改造要求
+
+> 背景：当前 `StateUpdateFrame` 仅覆盖 `fell_onto_ground/fall_onto_ground`。但 FLF 的 `state_update(event, ...)` 是 **对所有事件通用** 的（不同状态内会在多处用不同 eventType 调用），因此 Unity 侧也必须提供一个通用入口，支持未来扩展。
+>
+> FLF 参考：`I:\C++Test\NTSD\F.LF-master\LF\livingobject.js:292-305`
+> - 执行顺序：先 `states.generic(...)`，再 `states[currentState](...)`
+> - 返回策略：`res1 || res2`（generic 的 truthy 返回优先）
+
+### 9.1 目标
+在 `Assets/NTSD/Scripts/Animation/Character/CharacterStates.cs` 中实现一个**通用**的 `StateUpdate(...)`（或等价命名），可在任意逻辑处（generic TU / specific state handler / 其它）调用，语义对齐 FLF：
+- 支持任意 `eventType`（字符串）
+- 先执行 generic，再执行 specific
+- 返回策略对齐 `res1 || res2`（generic 优先）
+- 能携带“返回帧（frameId）”能力，用于落地等场景
+
+### 9.2 设计约束（必须遵守）
+- 不能复用 `HandleStateEvent(...)` 来实现 `StateUpdate(...)`（避免把 generic TU/frame/combo 等整套逻辑混入 state_update 语义）。
+- 必须使用 **引用类型容器（class）** 传递返回结果（禁止 `readonly struct`），否则 handler 无法写回。
+- generic 与 specific 都需要被调用（对齐 FLF），但最终返回值合并必须保持 generic 优先。
+- 不新增 `Debug.Log*`；如需日志只用 `NTSD.Tools.Log`（本改造不强制加日志）。
+- `CharacterStates.cs` 是运行时代码：移除或 `#if UNITY_EDITOR` 包裹 `UnityEditor.*` 引用，避免运行时/打包编译失败。
+
+### 9.3 推荐实现方式（最稳，严格对齐 FLF）
+新增一个结果容器：
+
+```csharp
+public sealed class StateUpdateData
+{
+    public bool handled;
+    public int? frameId;
+}
+```
+
+新增一个通用入口（示意）：
+- 创建 `genericData` 与 `specificData` 两份（避免互相覆盖）
+- 分别调用 generic handler 与 specific handler（顺序必须是 generic→specific）
+- 最终合并：
+  - `frameId = genericData.frameId ?? specificData.frameId`（generic 优先）
+  - `handled = genericData.handled || specificData.handled`
+
+```csharp
+private StateUpdateFrameResult StateUpdate(LF2CharacterAnimator character, string eventType, object eventData = null)
+{
+    // 1) generic
+    // 2) specific
+    // 3) merge: generic-first
+}
+```
+
+> 注：返回类型可以继续用现有的 `StateUpdateFrameResult`（handled + frameId），但 eventData 写回必须用 class。
+
+### 9.4 落地逻辑的使用方式（保持现有功能）
+`HandleGenericTU()` 中 `fell_onto_ground/fall_onto_ground` 的逻辑继续使用通用 `StateUpdate(...)`：
+- 若返回 `frameId`：统一 `TransitionToFrame(frameId, 15)`
+- 若 `handled==true`：不走默认
+- 否则走默认（包括落地瞬间摩擦：`LookupAbs(FrictionFell)` + `CharacterMechanics.LinearFriction`）
+

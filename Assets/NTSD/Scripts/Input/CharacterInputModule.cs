@@ -1,5 +1,4 @@
 using BeatEmUpTemplate2D;
-using Loxodon.Framework.Localizations;
 using MoreMountains.TopDownEngine;
 using NTSD.Input;
 using NTSD.Simulation;
@@ -31,10 +30,6 @@ namespace NTSD.Game
         public InputAction JumpAction { get; private set; }
         public InputAction DefendAction { get; private set; }
 
-        // 按键状态（用于 CharacterStates 查询）
-        private bool _isDefending;
-        private bool _isAttacking;
-        private bool _isJumping;
         private Vector2 _currentMoveInput = Vector2.zero;
         public Vector2 CurrentMoveInput => _currentMoveInput;
 
@@ -43,10 +38,34 @@ namespace NTSD.Game
         private const float DIRECTION_DEADZONE = 0.3f;
         private bool _leftPressed;
         private bool _rightPressed;
+        private bool _downPressed;
+        private bool _topPressed;
+
+        // 按键状态（用于 CharacterStates 查询）
+        private bool _isDefending;
+        private bool _isAttacking;
+        private bool _isJumping;
+
         public bool IsLeft => _leftPressed;
         public bool IsRight => _rightPressed;
+        public bool IsDown => _downPressed;
+        public bool IsTop => _topPressed;
+        public bool IsDef => _isDefending;
+        public bool IsAtt => _isAttacking;
+        public bool IsJump => _isJumping;
 
         public int ModuleOrder => CharacterModuleOrder.Input;
+
+        public int Dirv 
+        {
+            get
+            {
+                int dz = 0;
+                if (_topPressed) dz += 1;
+                if (_downPressed) dz -= 1;
+                return dz;
+            }
+        }
 
         public void ModuleSetup(Character character)
         {
@@ -74,6 +93,12 @@ namespace NTSD.Game
             if (!_inputBound) return;
             UnbindInputEvents();
             _inputBound = false;
+            _currentMoveInput = Vector2.zero;
+            _lastDirectionMask = FuncKeyMask.None;
+            _leftPressed = false;
+            _rightPressed = false;
+            _topPressed = false;
+            _downPressed = false;
         }
 
         private void BindActionMap()
@@ -156,15 +181,24 @@ namespace NTSD.Game
                 if (value.x < -DIRECTION_DEADZONE)
                 {
                     newDirectionMask |= FuncKeyMask.Left;
-                    _leftPressed = true;
                 }
                 if (value.x > DIRECTION_DEADZONE)
                 {
-                    _rightPressed = true;
                     newDirectionMask |= FuncKeyMask.Right;
                 }
-                if (value.y > DIRECTION_DEADZONE) newDirectionMask |= FuncKeyMask.Up;
-                if (value.y < -DIRECTION_DEADZONE) newDirectionMask |= FuncKeyMask.Down;
+                if (value.y > DIRECTION_DEADZONE)
+                {
+                    newDirectionMask |= FuncKeyMask.Up;
+                }
+                if (value.y < -DIRECTION_DEADZONE)
+                {
+                    newDirectionMask |= FuncKeyMask.Down;
+                }
+
+                _leftPressed = (newDirectionMask & FuncKeyMask.Left) != 0;
+                _rightPressed = (newDirectionMask & FuncKeyMask.Right) != 0;
+                _topPressed = (newDirectionMask & FuncKeyMask.Up) != 0;
+                _downPressed = (newDirectionMask & FuncKeyMask.Down) != 0;
 
                 if (newDirectionMask != _lastDirectionMask)
                 {
@@ -234,8 +268,16 @@ namespace NTSD.Game
                     InputBuffer?.EnqueueForNextTick(FuncKeyMask.Right, down: false);
                     _rightPressed = false;
                 }
-                if ((_lastDirectionMask & FuncKeyMask.Up) != 0) InputBuffer?.EnqueueForNextTick(FuncKeyMask.Up, down: false);
-                if ((_lastDirectionMask & FuncKeyMask.Down) != 0) InputBuffer?.EnqueueForNextTick(FuncKeyMask.Down, down: false);
+                if ((_lastDirectionMask & FuncKeyMask.Up) != 0)
+                {
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Up, down: false);
+                    _topPressed = false;
+                }
+                if ((_lastDirectionMask & FuncKeyMask.Down) != 0)
+                {
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Down, down: false);
+                    _downPressed = false;
+                }
 
                 _currentMoveInput = Vector2.zero;
                 _lastDirectionMask = FuncKeyMask.None;

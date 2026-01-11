@@ -58,7 +58,7 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("如果这是一个高级AI，与此角色相关联的大脑。默认情况下，引擎会在此对象上选择一个，但如果你想的话，可以附加另一个")]
 		public AIBrain CharacterBrain;
 
-        [HideInInspector] public TimeWheel m_TimeWheel;
+        public TimeWheel m_TimeWheel { get; set; }
 
         public MMStateMachine<CharacterStates.CharacterConditions> ConditionState;
 
@@ -66,26 +66,26 @@ namespace MoreMountains.TopDownEngine
 		/// Plan B: 纯 C# 游戏逻辑模块（不继承 MonoBehaviour）
 		/// 由 SimulationWorld 在 30Hz 驱动
 		/// </summary>
-		[HideInInspector] public CharacterSim _CharacterSim;
+		public CharacterSim _CharacterSim { get; set; }
 
-		/// <summary>
-		/// 输入/连招检测模块（纯 C#）
-		/// </summary>
-		[HideInInspector] public NTSD.Game.CharacterInputModule _CharacterInput;
-		[HideInInspector] public NTSD.Input.ActionSequenceDetectorModule _ActionSequenceDetector;
+        /// <summary>
+        /// 输入/连招检测模块（纯 C#）
+        /// </summary>
+        public NTSD.Game.CharacterInputModule _CharacterInput { get; set; }
+        public NTSD.Input.ActionSequenceDetectorModule _ActionSequenceDetector { get; set; }
 
-		/// <summary>
-		/// Step D9: id_update 管理器（角色特定逻辑扩展点）
-		/// 对应 FLF 的 $.id_update(...) 方法
-		/// </summary>
-		[HideInInspector] public CharacterIdUpdate _IdUpdate;
+        /// <summary>
+        /// Step D9: id_update 管理器（角色特定逻辑扩展点）
+        /// 对应 FLF 的 $.id_update(...) 方法
+        /// </summary>
+        public CharacterIdUpdate _IdUpdate { get; set; }
 
-		[HideInInspector] public AbilitySystemComponent _AbilitySystemComponent;
-		[HideInInspector] public UnitSettings _UnitSetting;
-		[HideInInspector] public StateMachine _StateMachine;
-		[HideInInspector] public CapsuleCollider2D col2D; // 2D碰撞体组件
-		[HideInInspector] public LF2CharacterAnimator _LF2CharacterAnimator;
-        [HideInInspector] public Rigidbody2D _Rigidbody2D; //刚体组件
+		public AbilitySystemComponent _AbilitySystemComponent { get; set; }
+        public UnitSettings _UnitSetting { get; set; }
+        public StateMachine _StateMachine { get; set; }
+        public CapsuleCollider2D col2D; // 2D碰撞体组件
+		public LF2CharacterAnimator _LF2CharacterAnimator { get; set; }
+        public Rigidbody2D _Rigidbody2D { get; set; } //刚体组件
 
         public DIRECTION _CharacterDirection;
 

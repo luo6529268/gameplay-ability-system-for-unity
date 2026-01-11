@@ -103,18 +103,15 @@ namespace NTSD.Simulation
         public static float LookupAbs(IReadOnlyDictionary<int, float> table, float x)
         {
             if (table == null || table.Count == 0)
-            {
                 return 0f;
-            }
-
+            
             if (x < 0f) x = -x;
 
-            // keys 很少，直接排序扫描即可（避免引入额外结构）。
             int? lastKey = null;
-            foreach (var kv in SortedByKey(table))
+            foreach (var kv in table) 
             {
                 lastKey = kv.Key;
-                if (x <= kv.Key)
+                if (x <= kv.Key) 
                 {
                     return kv.Value;
                 }
@@ -123,15 +120,6 @@ namespace NTSD.Simulation
             return lastKey.HasValue ? table[lastKey.Value] : 0f;
         }
 
-        private static IEnumerable<KeyValuePair<int, float>> SortedByKey(IReadOnlyDictionary<int, float> table)
-        {
-            var keys = new List<int>(table.Keys);
-            keys.Sort();
-            foreach (var k in keys)
-            {
-                yield return new KeyValuePair<int, float>(k, table[k]);
-            }
-        }
     }
 }
 

@@ -6,6 +6,7 @@ using NTSD.Input;
 using NTSD.LevelEditor;
 using NTSD.Simulation;
 using NTSD.Tools;
+using System;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -162,7 +163,7 @@ namespace NTSD.Animation
         [SerializeField] [Range(0.1f, 3f)] private float playbackSpeed = 1.0f;
 
         private LF2AnimationInfo _animationInfo;
-        private bool _AllowSwitchDir;
+        public bool _AllowSwitchDir { get; set; }
 
         // ⭐ 播放速度倍率（1.0 = 原速，0.5 = 半速，2.0 = 2倍速）
 
@@ -175,6 +176,17 @@ namespace NTSD.Animation
 
         // FLF mechanics.js: this.mass (from spec or global default)
         private float _mass = NTSDGlobal.Default.Machanics.Mass;
+
+        // FLF mech 体系：物理计算层（不继承 Mono，只处理数据/运算）
+        private CharacterMechanics _mech;
+
+        // ==================== 缓存委托（避免 per-tick 分配）====================
+        // 日志 wrapper：Log.Warn(string, params object[]) 不能直接赋值给 Action<string>
+        private static void LogWarnWrapper(string msg) => Tools.Log.Warn(msg);
+        private static readonly Action<string> s_logWarn = LogWarnWrapper;
+        
+        // 边界检测委托缓存（在 ModuleInitialize 中初始化）
+        private Func<Vector2, bool> _cachedIsPointWalkable;
 
         public int ModuleOrder => CharacterModuleOrder.Animator;
 
@@ -196,6 +208,13 @@ namespace NTSD.Animation
 
             // 初始化帧转换器
             trans = new FrameTransistor(this);
+
+            // 初始化物理计算层（对应 FLF 的 mech 体系）
+            _mech = new CharacterMechanics();
+            
+            // 缓存边界检测委托（避免 per-tick 分配）
+            var boundaryMgr = BoundaryWallManager.Instance;
+            _cachedIsPointWalkable = boundaryMgr != null ? boundaryMgr.IsPointWalkable : null;
 
             // 初始化物理状态对象（对应 FLF 的 $.ps）
             ps = new PhysicsState();
@@ -264,7 +283,7 @@ namespace NTSD.Animation
             }
             else
             {
-                Debug.LogWarning("[LF2CharacterAnimator] ActionSequenceDetectorModule not found on Character hub!");
+                Tools.Log.Warn("[LF2CharacterAnimator] ActionSequenceDetectorModule not found on Character hub!");
             }
         }
 
@@ -473,10 +492,13 @@ namespace NTSD.Animation
 
             if (_debugComboLog)
             {
-                Debug.Log(
-                    $"[NTSD][ComboDetected] StableId={StableId} detected={combo.name} state={FrameAniInfo.frameData.state} frame={CurrentFrameId} pre={PreviousFrameId} " +
-                    $"bufBefore={_comboBuffer.combo ?? "null"} allowSwitchDir={_AllowSwitchDir} ps.dir={ps?.dir ?? "null"} ua.dir={unitActions?.dir.ToString() ?? "null"} " +
-                    $"IsLeft={_Character?._CharacterInput?.IsLeft} IsRight={_Character?._CharacterInput?.IsRight}"
+                Tools.Log.Info(
+                    "[NTSD][ComboDetected] StableId={0} detected={1} state={2} frame={3} pre={4} " +
+                    "bufBefore={5} allowSwitchDir={6} ps.dir={7} ua.dir={8} " +
+                    "IsLeft={9} IsRight={10}",
+                    StableId, combo.name, FrameAniInfo.frameData.state, CurrentFrameId, PreviousFrameId,
+                    _comboBuffer.combo ?? "null", _AllowSwitchDir, ps?.dir ?? "null", unitActions?.dir.ToString() ?? "null",
+                    _Character?._CharacterInput?.IsLeft, _Character?._CharacterInput?.IsRight
                 );
             }
 
@@ -507,148 +529,61 @@ namespace NTSD.Animation
 
             if (_debugComboLog)
             {
-                Debug.Log($"[NTSD][ComboDetected] StableId={StableId} bufAfter={_comboBuffer.combo ?? "null"}");
+                Tools.Log.Info("[NTSD][ComboDetected] StableId={0} bufAfter={1}", StableId, _comboBuffer.combo ?? "null");
             }
         }
 
         /// <summary>
-        /// 应用物理 - 完全对齐 FLF 的 mech.dynamics()
+        /// 应用物理 - 调用 CharacterMechanics.Step() + Unity 写回
         ///
-        /// 职责（严格按 FLF 顺序）：
-        /// 1. 应用速度到位置：ps.x += ps.vx
-        /// 2. 边界检测与修正
-        /// 3. 更新 Unity 组件位置（Rigidbody2D.velocity, transform.position）
-        /// 4. 应用摩擦力（只在地面）
-        /// 5. 应用重力（只在空中）
+        /// 职责：
+        /// 1. 构造 CharacterMechanicsContext
+        /// 2. 调用 _mech.Step() 执行物理计算
+        /// 3. 将结果写回 Unity 组件（Transform, UnitActions）
+        /// 4. 触发落地事件（如果发生）
         ///
         /// 对应 FLF mechanics.js:319-377
         /// </summary>
         private void ApplyDynamics()
         {
-            // Physics Plan A Step P2: 移除 Rigidbody2D 依赖检查
-            // ps 是唯一的物理真值，不需要 Rigidbody2D
-            if (unitActions == null || ps == null) return;
+            if (unitActions == null || ps == null || _mech == null) return;
 
-            // ==================== 1. P3: 确定性位移解算（blocking_xz + BoundaryWall）====================
-            // 对应 FLF Line 326-327: if (!this.blocking_xz()) { ps.x += ps.vx; ps.z += ps.vz; }
-            // P3 实现：candidate full → X-only → Z-only → stop
+            // 1. 构造输入上下文（使用缓存委托，避免 per-tick 分配）
+            var ctx = new CharacterMechanicsContext(
+                ps: ps,
+                mass: _mass,
+                minSpeed: NTSDGlobal.Gameplay.MinSpeed,
+                gravity: NTSDGlobal.Gameplay.Gravity,
+                isPointWalkable: _cachedIsPointWalkable,
+                logWarning: _debugCollisionLog ? s_logWarn : null
+            );
 
-            // 保存旧位置（用于回退）
-            float oldX = ps.x;
-            float oldZ = ps.z;
+            // 2. 执行物理计算
+            var result = _mech.Step(ctx);
 
-            // 尝试 full 移动
-            ps.x += ps.vx;
-            ps.z += ps.vz;
-
-            // P3: 检测是否越出边界
-            // FLF 一致性说明：
-            // - FLF 的舞台边界只用脚底点 (ps.x/ps.z) 与 bg.width / bg.zboundary 约束（clamp）
-            // - 不使用 bdy/footprint Rect 来约束舞台边界（否则会造成可行走区域被碰撞盒“缩小”）
-            // - 因此这里用脚底点检测 BoundaryWall（Unity X/Y 平面 = ps.x/ps.z）
+            // 3. 输出边界解算日志（结构化）
+            if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
             {
-                Vector2 footPoint = ps.GetGroundPoint2D();
-
-                // 单层边界：Walkable union（ps.y 为视觉高度，不参与边界）
-                if (!BoundaryWallManager.Instance.IsPointWalkable(footPoint))
-                {
-                    // Full 移动越界，尝试 X-only
-                    if (_debugCollisionLog) Debug.LogWarning("[Boundary] Full 越界，尝试 X-only");
-                    ps.x = oldX + ps.vx;
-                    ps.z = oldZ;
-
-                    footPoint = ps.GetGroundPoint2D();
-                    if (!BoundaryWallManager.Instance.IsPointWalkable(footPoint))
-                    {
-                        // X-only 也越界，尝试 Z-only
-                        if (_debugCollisionLog) Debug.LogWarning("[Boundary] X-only 越界，尝试 Z-only");
-                        ps.x = oldX;
-                        ps.z = oldZ + ps.vz;
-
-                        footPoint = ps.GetGroundPoint2D();
-                        if (!BoundaryWallManager.Instance.IsPointWalkable(footPoint))
-                        {
-                            // Z-only 也越界，stop（回退到原位置，速度归零）
-                            if (_debugCollisionLog) Debug.LogWarning("[Boundary] Z-only 越界，Stop");
-                            ps.x = oldX;
-                            ps.z = oldZ;
-                            ps.vx = 0;
-                            ps.vz = 0;
-                        }
-                    }
-                }
+                Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
             }
 
-            // ==================== 3. 应用垂直速度（FLF Line 347）====================
-            ps.y += ps.vy;
-
-            // ==================== 4. 地面修正（FLF Line 350-354）====================
-            if (ps.y > 0)  // 不允许低于地面
-            {
-                ps.y = 0;
-                // 触发落地事件（对应 FLF character.js:117 fell_onto_ground）
-                if (ps.vy > 0)  // 只在向下运动时触发
-                {
-                    ps.vy = 0;
-                    CharacterStates.Instance.HandleStateEvent(this, "fell_onto_ground", null);
-                }
-            }
-
-            // ==================== 5. 更新 Unity 组件位置 ====================
-            // P2: 使用 PhysicsState.ToUnityPosition() 应用新坐标映射
-            // 新映射：Unity X/Y = FLF x/z（地面平面），ps.y 仅作为子节点视觉偏移（不影响排序/边界）
-            Vector3 newPos = ps.ToUnityPosition();
-
-            // 1) 地面平面位置：写到 UnitActions/父节点（权威位置）
+            // 4. 更新 Unity 组件位置
             Transform groundTransform = GetGroundTransform();
-            newPos.z = groundTransform.position.z;
+            Vector3 newPos = new Vector3(result.groundPlanePos.x, result.groundPlanePos.y, groundTransform.position.z);
             groundTransform.position = newPos;
 
-            // 2) 视觉高度：ps.y（像素，向上为负）映射到子节点 localPosition.y（向上为正）
-            float visualYOffset = (-ps.y) / SimulationConstants.PIXELS_PER_UNIT;
-            transform.localPosition = _baseLocalPosition + new Vector3(0f, visualYOffset, 0f);
+            // 视觉高度偏移
+            transform.localPosition = _baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
 
-            // 3) 保留 isGrounded / groundPos 供 BeatEmUp 排序与影子使用
-            unitActions.yForce = 0f;                        // 弃用：跳跃高度已转为子节点视觉偏移
-            unitActions.isGrounded = (ps.y == 0);
+            // 保留 isGrounded / groundPos 供 BeatEmUp 排序与影子使用
+            unitActions.yForce = 0f;
+            unitActions.isGrounded = result.grounded;
             unitActions.groundPos = groundTransform.position.y;
 
-            // Physics Plan A Step P2: 移除 Rigidbody2D.velocity 写入
-            // ps 是唯一的物理真值，transform.position 已在上方更新
-            // 不再需要通过 Rigidbody2D 驱动移动
-
-            // ==================== 6. 应用摩擦力（FLF Line 368-375）====================
-            // 只在地面时应用
-            if (ps.y == 0 && _mass > 0f)  // 对应 FLF: if (ps.y === 0 && this.mass > 0)
+            // 5. 触发落地事件
+            if (result.landedThisTick)
             {
-                // Step D8: 30Hz SimTick 直接对应 FLF 数据，不再需要缩放
-                // FLF: ps.vx += sign(vx) * ps.fric; min_speed = GC.min_speed
-                float minSpeed = NTSDGlobal.Gameplay.MinSpeed;
-
-                // 应用线性摩擦力（X轴）
-                if (ps.vx != 0)
-                {
-                    ps.vx += (ps.vx > 0 ? -1 : 1) * ps.fric;
-                    // 最小速度截断
-                    if (Mathf.Abs(ps.vx) < minSpeed) ps.vx = 0;
-                }
-
-                // 应用线性摩擦力（Z轴）
-                if (ps.vz != 0)
-                {
-                    ps.vz += (ps.vz > 0 ? -1 : 1) * ps.fric;
-                    // 最小速度截断
-                    if (Mathf.Abs(ps.vz) < minSpeed) ps.vz = 0;
-                }
-            }
-
-            // ==================== 7. 应用重力（FLF Line 377）====================
-            // 只在空中时应用
-            if (ps.y < 0)  // 对应 FLF: if (ps.y < 0)
-            {
-                // Step D8: 30Hz SimTick 直接对应 FLF 数据，不再需要缩放
-                // FLF: ps.vy += this.mass * GC.gravity
-                ps.vy += _mass * NTSDGlobal.Gameplay.Gravity;
+                CharacterStates.Instance.HandleStateEvent(this, "fell_onto_ground", null);
             }
         }
 
@@ -686,9 +621,11 @@ namespace NTSD.Animation
             {
                 if (_debugComboLog)
                 {
-                    Debug.Log(
-                        $"[NTSD][FrameTransit:StateExit] StableId={StableId} oldState={FrameAniInfo.frameData.state} oldFrame={CurrentFrameId} " +
-                        $"toFrame={targetFrameId} toState={_frames[targetFrameId]?.state} bufCombo={_comboBuffer.combo ?? "null"}"
+                    Tools.Log.Info(
+                        "[NTSD][FrameTransit:StateExit] StableId={0} oldState={1} oldFrame={2} " +
+                        "toFrame={3} toState={4} bufCombo={5}",
+                        StableId, FrameAniInfo.frameData.state, CurrentFrameId,
+                        targetFrameId, _frames[targetFrameId]?.state, _comboBuffer.combo ?? "null"
                     );
                 }
 
@@ -702,7 +639,7 @@ namespace NTSD.Animation
             }
             else
             {
-                Debug.LogWarning($"[LF2CharacterAnimator] Invalid frame ID: {targetFrameId}");
+                Tools.Log.Warn("[LF2CharacterAnimator] Invalid frame ID: {0}", targetFrameId);
                 return;
             }
 
@@ -721,10 +658,13 @@ namespace NTSD.Animation
 
                 if (_debugComboLog)
                 {
-                    Debug.Log(
-                        $"[NTSD][FrameTransit:StateEnter] StableId={StableId} newState={FrameAniInfo.frameData.state} newFrame={CurrentFrameId} " +
-                        $"allowSwitchDir {oldSwitchDir}->{_AllowSwitchDir} bufCombo={_comboBuffer.combo ?? "null"} " +
-                        $"IsLeft={_Character?._CharacterInput?.IsLeft} IsRight={_Character?._CharacterInput?.IsRight}"
+                    Tools.Log.Info(
+                        "[NTSD][FrameTransit:StateEnter] StableId={0} newState={1} newFrame={2} " +
+                        "allowSwitchDir {3}->{4} bufCombo={5} " +
+                        "IsLeft={6} IsRight={7}",
+                        StableId, FrameAniInfo.frameData.state, CurrentFrameId,
+                        oldSwitchDir, _AllowSwitchDir, _comboBuffer.combo ?? "null",
+                        _Character?._CharacterInput?.IsLeft, _Character?._CharacterInput?.IsRight
                     );
                 }
 
@@ -849,40 +789,24 @@ namespace NTSD.Animation
             // dvx: 水平速度（需要考虑角色朝向）
             if (FrameAniInfo.frameData.dvx != 0)
             {
-                if (FrameAniInfo.frameData.dvx == 550)
-                {
-                    // 550 是 LF2 的特殊值，表示停止水平移动
-                    // Physics Plan A Step P2: 修改 ps.vx 而非 Rigidbody2D.velocity
-                    ps.vx = 0;
-                }
-                else
-                {
-                    // Physics Plan A Step P2: FLF 语义 - dvx 是 delta velocity（像素/帧）
-                    // 直接应用到 ps.vx（已经是像素/帧单位）
-                    float directionH = (ps != null && ps.dir == "left") ? -1f : 1f;
-                    ps.vx += directionH * FrameAniInfo.frameData.dvx;
-                }
+                float avx = ps.vx > 0 ? ps.vx : -ps.vx;
+                if (ps.y < 0 || avx < FrameAniInfo.frameData.dvx)
+                    ps.vx = ps.Dirh() * FrameAniInfo.frameData.dvx; // 加速
+                if (FrameAniInfo.frameData.dvx < 0)
+                    ps.vx = ps.vx - ps.Dirh(); // 减速
             }
 
-            // dvy: 垂直速度（跳跃）
+            if (FrameAniInfo.frameData.dvz != 0)
+                ps.vz = _Character._CharacterInput.Dirv * FrameAniInfo.frameData.dvz;
             if (FrameAniInfo.frameData.dvy != 0)
-            {
-                if (FrameAniInfo.frameData.dvy == 550)
-                {
-                    // 550 表示停止跳跃
-                    // Physics Plan A Step P2: 修改 ps.vy 而非 unitActions.yForce
-                    ps.vy = 0;
-                }
-                else
-                {
-                    // Physics Plan A Step P2: FLF 语义 - dvy 是 delta velocity（像素/帧）
-                    // 注意：FLF 的 Y 轴向下为正，所以负号表示向上跳跃
-                    ps.vy += -FrameAniInfo.frameData.dvy;  // 负号：FLF Y轴约定
-                }
-            }
+                ps.vy += FrameAniInfo.frameData.dvy;
 
-            // 注意：LF2 的 dvz（深度移动）在 BeatEmUp 中通过 groundPos 处理
-            // 这里可能不需要处理，或者由 Character 脚本处理
+            if (FrameAniInfo.frameData.dvx == 550)
+                ps.vx = 0;
+            if (FrameAniInfo.frameData.dvy == 550)
+                ps.vy = 0;
+            if (FrameAniInfo.frameData.dvz == 550)
+                ps.vz = 0;
         }
 
         /// <summary>
@@ -986,7 +910,7 @@ namespace NTSD.Animation
         {
             if (!_framesByName.TryGetValue(stateName, out List<LF2FrameData> frameDataList))
             {
-                Debug.LogWarning($"[LF2CharacterAnimator] State '{stateName}' not found in character data!");
+                Tools.Log.Warn("[LF2CharacterAnimator] State '{0}' not found in character data!", stateName);
                 return;
             }
 
@@ -1006,7 +930,7 @@ namespace NTSD.Animation
         {
             if (frameid >= _frames.Length || frameid < 0)
             {
-                Debug.LogError("Frame ID out of range");
+                Tools.Log.Error("Frame ID out of range");
                 return;
             }
 
@@ -1041,6 +965,23 @@ namespace NTSD.Animation
             trans.SetNext(frameId, authority);
         }
 
+        public bool GetStateMemory<T>(string key, out T value)
+        {
+            if (StateMem.TryGetValue(key, out object obj) && obj is T t)
+            {
+                value = t;
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public void SetStateMemory<T>(string key, T value)
+        {
+            StateMem[key] = value;
+        }
+
         /// <summary>
         /// 通过State值获取第一帧ID
         /// 用于 GAS Ability 通过状态值激活技能
@@ -1057,7 +998,7 @@ namespace NTSD.Animation
                 }
             }
 
-            Debug.LogWarning($"[LF2CharacterAnimator] State {targetState} not found in character data!");
+            Tools.Log.Warn("[LF2CharacterAnimator] State {0} not found in character data!", targetState);
             return -1;
         }
 
