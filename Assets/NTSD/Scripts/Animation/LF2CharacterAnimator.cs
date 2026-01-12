@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.Pool;
 using static NTSD.Simulation.NTSDGlobal;
 
 namespace NTSD.Animation
@@ -60,6 +59,10 @@ namespace NTSD.Animation
         // ==================== 公共属性 ====================
         public int CurrentFrameId => FrameAniInfo.frameData.frameId;
         public LF2FrameData CurrentFrame => FrameAniInfo.frameData;
+
+        // Back-compat: some state logic still reads character._FrameDataWrapper.characterData.* (frame rates etc.)
+        // Keep it as a property mapping to FrameCache.Wrapper so we can continue refactoring without breaking callers.
+        public LF2CharacterDataWrapper _FrameDataWrapper => FrameCache.Wrapper;
         public Character _Character => GetComponentInParent<Character>();
 
         // ==================== 物理状态对象（对应 FLF 的 $.ps）====================
@@ -94,31 +97,14 @@ namespace NTSD.Animation
         public Dictionary<string, object> StateMem { get; private set; } = new Dictionary<string, object>();
 
         // ==================== 连招缓冲区（对应 LF2 的 combo_buffer）====================
-        /// <summary>
-        /// 连招缓冲区
-        /// 对应 FLF 的 $.combo_buffer
-        /// </summary>
-        private class ComboBuffer
-        {
-            public string combo;      // 当前连招名称
-            public int timeout;       // 超时时间
-        }
-        private ComboBuffer _comboBuffer = new ComboBuffer();
+        public LF2ComboBufferModule ComboBuffer { get; } = new LF2ComboBufferModule();
 
-        [MMReadOnly] public LF2CharacterDataWrapper _FrameDataWrapper;
+        // ==================== OPoint / WPoint（剥离为纯数据模块 + factory 注入）====================
+        public LF2ObjectPointModule ObjectPointModule { get; } = new LF2ObjectPointModule();
+        public LF2WeaponPointModule WeaponPointModule { get; } = new LF2WeaponPointModule();
 
-        // ==================== 帧数据缓存 ====================
-        /// <summary>
-        /// 主数据结构：按 frameId 索引的帧数组（运行时高频访问，O(1)）
-        /// frameId 范围：0-399（999等特殊值单独处理）
-        /// </summary>
-        private readonly LF2FrameData[] _frames = new LF2FrameData[400];
-
-        /// <summary>
-        /// 辅助数据结构：按 frameName 分组的字典（初始化/状态切换时使用，低频）
-        /// 用于 PlayFrame(stateName) 等方法
-        /// </summary>
-        private readonly Dictionary<string, List<LF2FrameData>> _framesByName = new Dictionary<string, List<LF2FrameData>>();
+        // ==================== 帧数据缓存（剥离为独立模块）====================
+        public LF2FrameCache FrameCache { get; } = new LF2FrameCache();
 
         // ==================== 组件缓存 ====================
         private List<Sprite> mergedSprites => CharacterAnimtorManager.Instance.GetCharacterSpriteByID(_Character.CharacterID);
@@ -127,13 +113,6 @@ namespace NTSD.Animation
 
         // 视觉偏移：ps.y（跳跃/击飞高度）只影响子节点（Model）的本地 Y，不影响地面平面位置与排序。
         private Vector3 _baseLocalPosition;
-
-        [Header("Debug / Collision Volumes")]
-        [SerializeField]
-        private bool _debugDrawBodyVolumes = false;
-
-        [SerializeField]
-        private bool _debugDrawItrVolumes = false;
 
         [SerializeField]
         private bool _debugCollisionLog = false;
@@ -146,15 +125,6 @@ namespace NTSD.Animation
         public FrameTransistor trans { get; private set; }
 
         // ==================== 当前状态 ====================
-
-
-        // ⭐ LF2 帧率控制（对应 FLF global.js:94 GC.framerate = 30）
-        // ⚠️ Step 2 变更：不再使用内部时钟，由外部 SimulationTickDriver 驱动
-        private const float LF2_FRAME_RATE = 60f;  // 保留常量（未来 Step 4 将改为 30）
-        private const float LF2_FRAME_TIME = 1f / LF2_FRAME_RATE;
-
-        // ⚠️ 已废弃：不再使用内部 accumulator（由 SimulationTickDriver 控制）
-        // private float _frameAccumulator = 0f;
 
         /// <summary>
         /// 播放速度倍率（仅调试用，默认 1.0）
@@ -242,6 +212,9 @@ namespace NTSD.Animation
             ReloadCharacterFrameData();
             OnInitFrameData();
             InitializeDate();
+            ComboBuffer.Reset();
+            ItrRest.Reset();
+            HitCounters.Reset();
 
             // Bind FLF spec/properties (mass etc.)
             if (_hub != null)
@@ -253,12 +226,7 @@ namespace NTSD.Animation
         public void ModuleUnbind()
         {
             // Keep ps/trans/subscriptions; only release CharacterID-driven caches.
-            _FrameDataWrapper = null;
-            for (int i = 0; i < _frames.Length; i++)
-            {
-                _frames[i] = null;
-            }
-            _framesByName.Clear();
+            FrameCache.Clear();
         }
 
         /// <summary>
@@ -291,7 +259,7 @@ namespace NTSD.Animation
         {
             _animationInfo.frameIndex = 0;
             _animationInfo.IsUp = true;
-            FrameAniInfo.frameData = _frames[0];
+            FrameAniInfo.frameData = FrameCache.GetFrameDataById(0);
             FrameAniInfo.preNext = 0;
             FrameAniInfo.next = 0;
         }
@@ -311,9 +279,7 @@ namespace NTSD.Animation
 
         private void LoadCharacterFrameData()
         {
-            _FrameDataWrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(_Character.CharacterID);
-
-            OnInitFrameDataList();
+            FrameCache.Load(CharacterAnimtorManager.Instance.GetCharacterConfig(_Character.CharacterID));
         }
 
         /// <summary>
@@ -324,44 +290,12 @@ namespace NTSD.Animation
         {
             if (_Character == null) return;
 
-            // 清空缓存
-            for (int i = 0; i < _frames.Length; i++)
-            {
-                _frames[i] = null;
-            }
-            _framesByName.Clear();
-
             LoadCharacterFrameData();
 
             // 重置到第一帧（避免引用旧 wrapper 的 frameData）
-            FrameAniInfo.frameData = _frames[0];
+            FrameAniInfo.frameData = FrameCache.GetFrameDataById(0);
             FrameAniInfo.preNext = 0;
             FrameAniInfo.next = 0;
-        }
-
-        private void OnInitFrameDataList()
-        {
-            foreach (var frameData in _FrameDataWrapper.characterData.frames)
-            {
-                // 1. 填充主数组（按 frameId 索引，运行时高频访问）
-                // frameId 范围：0-399，超出范围的（如999）跳过
-                if (frameData.frameId >= 0 && frameData.frameId < _frames.Length)
-                {
-                    _frames[frameData.frameId] = frameData;
-                }
-
-                // 2. 填充辅助字典（按 frameName 分组，低频访问）
-                if (_framesByName.TryGetValue(frameData.frameName, out List<LF2FrameData> frameDataList))
-                {
-                    frameDataList.Add(frameData);
-                }
-                else
-                {
-                    frameDataList = new List<LF2FrameData>(5);
-                    frameDataList.Add(frameData);
-                    _framesByName.Add(frameData.frameName, frameDataList);
-                }
-            }
         }
 
         // ==================== Physics Plan A Step P6: ISimTickable 已移除 ====================
@@ -390,7 +324,7 @@ namespace NTSD.Animation
             LF2CollisionSystem.DebugLog = _debugCollisionLog;
 
             // 对齐 FLF: 每个 TU 递减 arest/vrest（最小实现放在 Transit 入口处执行）
-            TickItrRest();
+            ItrRest.Tick();
 
             // 1. 处理输入和连招识别
             Combo_Update();
@@ -423,11 +357,12 @@ namespace NTSD.Animation
         {
             // ==================== 从缓冲区读取连招 ====================
             // 对应 FLF character.js:1813-1817
-            string K = _comboBuffer.combo;
+            string rawCombo = ComboBuffer.Combo;
+            string K = rawCombo;
             if (string.IsNullOrEmpty(K)) { K = null; }
 
             // 特殊处理：跳跃攻击组合
-            if (_comboBuffer.combo == "jump-att") { K = "jump"; }
+            if (rawCombo == "jump-att") { K = "jump"; }
 
             // ==================== 触发状态机的 'combo' 事件 ====================
             // 对应 FLF character.js:1819-1826
@@ -449,24 +384,7 @@ namespace NTSD.Animation
             // ==================== 清除缓冲区 ====================
             // 对应 FLF character.js:1832-1845
 
-            if (_comboBuffer.combo == "jump-att")
-            {
-                // 特殊处理跳跃攻击
-                if (res1)
-                {
-                    _comboBuffer.combo = "att";  // 降级为普通攻击
-                }
-            }
-            else
-            {
-                // 清理缓冲区的条件：
-                // 1. 连招事件被处理（res1 或 res2 为 true）
-                // 2. 或者是方向键（不持久化）
-                if (res1 ||K == "left" || K == "right" || K == "up" || K == "down")
-                {
-                    _comboBuffer.combo = null;
-                }
-            }
+            ComboBuffer.AfterComboUpdate(handledByState: res1, rawCombo: rawCombo, mappedCombo: K);
         }
 
         /// <summary>
@@ -497,40 +415,19 @@ namespace NTSD.Animation
                     "bufBefore={5} allowSwitchDir={6} ps.dir={7} ua.dir={8} " +
                     "IsLeft={9} IsRight={10}",
                     StableId, combo.name, FrameAniInfo.frameData.state, CurrentFrameId, PreviousFrameId,
-                    _comboBuffer.combo ?? "null", _AllowSwitchDir, ps?.dir ?? "null", unitActions?.dir.ToString() ?? "null",
+                    ComboBuffer.Combo ?? "null", _AllowSwitchDir, ps?.dir ?? "null", unitActions?.dir.ToString() ?? "null",
                     _Character?._CharacterInput?.IsLeft, _Character?._CharacterInput?.IsRight
                 );
             }
 
-            // ==================== combo_event 逻辑 ====================
-            // 对应 FLF character.js:1684-1700
-
-            string K = combo.name;
-
-            // 1. 处理方向键切换（对应 FLF character.js:1687-1692）
-            switch (K)
-            {
-                case "left":
-                case "right":
-                    if (_AllowSwitchDir) { SetDirectionByString(K); }
-                    break;
-            }
-
-            // 2. 处理连招优先级冲突（对应 FLF character.js:1694-1699）
-            // 同一帧内的连击冲突，优先级高的生效
-            // TODO: 实现优先级系统（需要 priority 映射）
-
-            if (_comboBuffer.timeout == NTSDGlobal.Combo.Timeout && ComboConfig.GetComboPriority(K) < ComboConfig.GetComboPriority(_comboBuffer.combo))
-                return;
-
-            // 3. 设置到缓冲区（不立即播放！）
-            _comboBuffer.combo = K;
-            _comboBuffer.timeout = NTSDGlobal.Combo.Timeout;  // TODO: 从配置读取
-
-            if (_debugComboLog)
-            {
-                Tools.Log.Info("[NTSD][ComboDetected] StableId={0} bufAfter={1}", StableId, _comboBuffer.combo ?? "null");
-            }
+            ComboBuffer.OnComboDetected(
+                combo: combo,
+                allowSwitchDir: _AllowSwitchDir,
+                setDirectionByString: SetDirectionByString,
+                timeoutFrames: NTSDGlobal.Combo.Timeout,
+                debugLog: _debugComboLog,
+                stableId: StableId
+            );
         }
 
         /// <summary>
@@ -540,51 +437,24 @@ namespace NTSD.Animation
         /// 1. 构造 CharacterMechanicsContext
         /// 2. 调用 _mech.Step() 执行物理计算
         /// 3. 将结果写回 Unity 组件（Transform, UnitActions）
-        /// 4. 触发落地事件（如果发生）
+        /// 4. 不处理 TU/落地事件（fell/fall_onto_ground 属于 TU_Update 阶段）
         ///
-        /// 对应 FLF mechanics.js:319-377
+        /// 对齐 FLF：
+        /// - mechanics.js: mech.dynamics()
+        /// - mechanics.js: mech.blocking_xz()（blocked -> move * 0.1）
         /// </summary>
         private void ApplyDynamics()
         {
-            if (unitActions == null || ps == null || _mech == null) return;
-
-            // 1. 构造输入上下文（使用缓存委托，避免 per-tick 分配）
-            var ctx = new CharacterMechanicsContext(
-                ps: ps,
+            LF2DynamicsApplier.Apply(
+                animator: this,
+                mechanics: _mech,
                 mass: _mass,
-                minSpeed: NTSDGlobal.Gameplay.MinSpeed,
-                gravity: NTSDGlobal.Gameplay.Gravity,
                 isPointWalkable: _cachedIsPointWalkable,
-                logWarning: _debugCollisionLog ? s_logWarn : null
+                logWarning: _debugCollisionLog ? s_logWarn : null,
+                debugCollisionLog: _debugCollisionLog,
+                groundTransform: GetGroundTransform(),
+                baseLocalPosition: _baseLocalPosition
             );
-
-            // 2. 执行物理计算
-            var result = _mech.Step(ctx);
-
-            // 3. 输出边界解算日志（结构化）
-            if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
-            {
-                Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
-            }
-
-            // 4. 更新 Unity 组件位置
-            Transform groundTransform = GetGroundTransform();
-            Vector3 newPos = new Vector3(result.groundPlanePos.x, result.groundPlanePos.y, groundTransform.position.z);
-            groundTransform.position = newPos;
-
-            // 视觉高度偏移
-            transform.localPosition = _baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
-
-            // 保留 isGrounded / groundPos 供 BeatEmUp 排序与影子使用
-            unitActions.yForce = 0f;
-            unitActions.isGrounded = result.grounded;
-            unitActions.groundPos = groundTransform.position.y;
-
-            // 5. 触发落地事件
-            if (result.landedThisTick)
-            {
-                CharacterStates.Instance.HandleStateEvent(this, "fell_onto_ground", null);
-            }
         }
 
         /// <summary>
@@ -615,8 +485,14 @@ namespace NTSD.Animation
             FrameAniInfo.preNext = FrameAniInfo.next;
             FrameAniInfo.next = targetFrameId;
 
+            LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
+            if (targetFrame == null)
+            {
+                Tools.Log.Warn("[LF2CharacterAnimator] Invalid frame ID: {0}", targetFrameId);
+                return;
+            }
 
-            bool _IsTrans = FrameAniInfo.frameData.state != _frames[targetFrameId].state;
+            bool _IsTrans = FrameAniInfo.frameData.state != targetFrame.state;
             if(_IsTrans)
             {
                 if (_debugComboLog)
@@ -625,23 +501,15 @@ namespace NTSD.Animation
                         "[NTSD][FrameTransit:StateExit] StableId={0} oldState={1} oldFrame={2} " +
                         "toFrame={3} toState={4} bufCombo={5}",
                         StableId, FrameAniInfo.frameData.state, CurrentFrameId,
-                        targetFrameId, _frames[targetFrameId]?.state, _comboBuffer.combo ?? "null"
+                        targetFrameId, targetFrame.state, ComboBuffer.Combo ?? "null"
                     );
                 }
 
                 // 保留 state_exit 事件分发（给状态机做额外清理）；当前不需要传参
-                CharacterStates.Instance.HandleStateEvent(this, "state_exit", _comboBuffer.combo);
+                CharacterStates.Instance.HandleStateEvent(this, "state_exit", ComboBuffer.Combo);
             }
 
-            if (targetFrameId >= 0 && targetFrameId < _frames.Length)
-            {
-                FrameAniInfo.frameData = _frames[targetFrameId];
-            }
-            else
-            {
-                Tools.Log.Warn("[LF2CharacterAnimator] Invalid frame ID: {0}", targetFrameId);
-                return;
-            }
+            FrameAniInfo.frameData = targetFrame;
 
             // 帧变化事件
             OnFrameChanged?.Invoke(FrameAniInfo.frameData.frameId);
@@ -663,7 +531,7 @@ namespace NTSD.Animation
                         "allowSwitchDir {3}->{4} bufCombo={5} " +
                         "IsLeft={6} IsRight={7}",
                         StableId, FrameAniInfo.frameData.state, CurrentFrameId,
-                        oldSwitchDir, _AllowSwitchDir, _comboBuffer.combo ?? "null",
+                        oldSwitchDir, _AllowSwitchDir, ComboBuffer.Combo ?? "null",
                         _Character?._CharacterInput?.IsLeft, _Character?._CharacterInput?.IsRight
                     );
                 }
@@ -687,44 +555,6 @@ namespace NTSD.Animation
                 SetDirection(unitActions.dir == DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT);
             
             FrameUpdate();
-        }
-
-        /// <summary>
-        /// 状态退出时清理连招缓冲。
-        /// FLF 规则：双击方向键（left-left/right-right）不能跨状态保留，否则会在切状态后误触发奔跑。
-        /// 对应 FLF character.js:221-228
-        /// </summary>
-        public void ClearComboBufferOnStateExit()
-        {
-            switch (_comboBuffer.combo)
-            {
-                case "left-left":
-                case "right-right":
-                    _comboBuffer.combo = null;
-                    break;
-            }
-        }
-
-        public void OnReduceComboBufferTimeout()
-        {
-            if (_comboBuffer.timeout <= 0)
-                return;
-
-            _comboBuffer.timeout--;
-            if (_comboBuffer.timeout == 0)
-            {
-                switch (_comboBuffer.combo)
-                {
-                    case "def":
-                    case "jump":
-                    case "att":
-                    case "left-left":
-                    case "right-right":
-                        _comboBuffer.combo = null;
-                        break;
-                }
-            }
-            
         }
 
         public void SetDirection(DIRECTION direction)
@@ -785,28 +615,8 @@ namespace NTSD.Animation
         private void Frame_Force()
         {
             if (FrameAniInfo.frameData == null) return;
-
-            // dvx: 水平速度（需要考虑角色朝向）
-            if (FrameAniInfo.frameData.dvx != 0)
-            {
-                float avx = ps.vx > 0 ? ps.vx : -ps.vx;
-                if (ps.y < 0 || avx < FrameAniInfo.frameData.dvx)
-                    ps.vx = ps.Dirh() * FrameAniInfo.frameData.dvx; // 加速
-                if (FrameAniInfo.frameData.dvx < 0)
-                    ps.vx = ps.vx - ps.Dirh(); // 减速
-            }
-
-            if (FrameAniInfo.frameData.dvz != 0)
-                ps.vz = _Character._CharacterInput.Dirv * FrameAniInfo.frameData.dvz;
-            if (FrameAniInfo.frameData.dvy != 0)
-                ps.vy += FrameAniInfo.frameData.dvy;
-
-            if (FrameAniInfo.frameData.dvx == 550)
-                ps.vx = 0;
-            if (FrameAniInfo.frameData.dvy == 550)
-                ps.vy = 0;
-            if (FrameAniInfo.frameData.dvz == 550)
-                ps.vz = 0;
+            int dirv = _Character != null && _Character._CharacterInput != null ? _Character._CharacterInput.Dirv : 0;
+            LF2FrameForceApplier.Apply(ps, FrameAniInfo.frameData, dirv);
         }
 
         /// <summary>
@@ -817,23 +627,7 @@ namespace NTSD.Animation
         /// </summary>
         private void WPoint_Update()
         {
-            // TODO: 实现武器点逻辑
-            // 当前简化实现，后续可以扩展
-
-            // 示例逻辑（需要根据实际项目调整）：
-            // if (currentHoldWeapon != null && _CurrentFrameData.wpoints.Count > 0)
-            // {
-            //     var wpoint = _CurrentFrameData.wpoints[0];
-            //
-            //     // 计算武器位置
-            //     Vector3 weaponPos = transform.position;
-            //     float directionH = transform.localScale.x > 0 ? 1f : -1f;
-            //     weaponPos.x += directionH * wpoint.x * GlobalConfig.PIXEL_TO_UNIT;
-            //     weaponPos.y += wpoint.y * GlobalConfig.PIXEL_TO_UNIT;
-            //
-            //     // 更新武器位置
-            //     currentHoldWeapon.transform.position = weaponPos;
-            // }
+            WeaponPointModule.ProcessTransit(this);
         }
 
         /// <summary>
@@ -844,26 +638,7 @@ namespace NTSD.Animation
         /// </summary>
         private void OPoint_Process()
         {
-            if (FrameAniInfo.frameData.opoint == null) return;
-
-            var op = FrameAniInfo.frameData.opoint;
-
-            // TODO: 实现对象点逻辑
-            // 当前简化实现，后续可以扩展
-
-            // 示例逻辑（需要根据实际项目调整）：
-            // switch (op.kind)
-            // {
-            //     case 1:  // 生成投射物
-            //         SpawnProjectile(op);
-            //         break;
-            //     case 2:  // 生成特效
-            //         SpawnEffect(op);
-            //         break;
-            //     case 3:  // 生成其他对象
-            //         // ...
-            //         break;
-            // }
+            ObjectPointModule.ProcessFrame(this);
         }
 
         // ==================== 帧播放策略方法 ====================
@@ -908,7 +683,7 @@ namespace NTSD.Animation
         /// <param name="stateName">状态名称（如 "standing", "walking" 等）</param>
         public void PlayFrame(string stateName, bool immediate = false)
         {
-            if (!_framesByName.TryGetValue(stateName, out List<LF2FrameData> frameDataList))
+            if (!FrameCache.TryGetFramesByName(stateName, out List<LF2FrameData> frameDataList))
             {
                 Tools.Log.Warn("[LF2CharacterAnimator] State '{0}' not found in character data!", stateName);
                 return;
@@ -928,7 +703,7 @@ namespace NTSD.Animation
 
         public void PlayFrameByID(int frameid, bool immediate = false)
         {
-            if (frameid >= _frames.Length || frameid < 0)
+            if (frameid >= LF2FrameCache.MaxFrameIdExclusive || frameid < 0)
             {
                 Tools.Log.Error("Frame ID out of range");
                 return;
@@ -990,22 +765,17 @@ namespace NTSD.Animation
         /// <returns>该状态的第一帧ID，未找到返回-1</returns>
         public int GetFirstFrameByState(int targetState)
         {
-            for (int i = 0; i < _frames.Length; i++)
+            int id = FrameCache.GetFirstFrameByState(targetState);
+            if (id < 0)
             {
-                if (_frames[i] != null && _frames[i].state == targetState)
-                {
-                    return i;
-                }
+                Tools.Log.Warn("[LF2CharacterAnimator] State {0} not found in character data!", targetState);
             }
-
-            Tools.Log.Warn("[LF2CharacterAnimator] State {0} not found in character data!", targetState);
-            return -1;
+            return id;
         }
 
         public LF2FrameData GetFrameDataById(int frameId)
         {
-            if (frameId < 0 || frameId >= _frames.Length) return null;
-            return _frames[frameId];
+            return FrameCache.GetFrameDataById(frameId);
         }
 
         private float GetCurrentSpriteWidthPx()
@@ -1022,168 +792,17 @@ namespace NTSD.Animation
         // ==================== FLF ITR Rest（arest/vrest）====================
         // 对齐 FLF: livingobject.js itr_arest_update / itr_vrest_update / TU_update 递减
 
-        private const int FLF_DEFAULT_CHARACTER_AREST = 7; // FLF global.js: GC.default.character.arest
-        private int _itrARest = 0;
-        private readonly Dictionary<int, int> _itrVRestByAttacker = new Dictionary<int, int>();
+        public LF2ItrRestTracker ItrRest { get; } = new LF2ItrRestTracker();
 
-        public bool ItrArestTest()
-        {
-            return _itrARest <= 0;
-        }
-
-        public bool ItrVrestTest(int attackerStableId)
-        {
-            return !_itrVRestByAttacker.TryGetValue(attackerStableId, out int v) || v <= 0;
-        }
-
-        public void ItrArestUpdate(InteractionArea itr)
-        {
-            // FLF: if (ITR && ITR.arest) arest=ITR.arest; else if (!ITR || !ITR.vrest) arest=default
-            if (itr != null && itr.arest > 0)
-            {
-                _itrARest = itr.arest;
-            }
-            else if (itr == null || itr.vrest <= 0)
-            {
-                _itrARest = FLF_DEFAULT_CHARACTER_AREST;
-            }
-        }
-
-        public void ItrVrestUpdate(int attackerStableId, InteractionArea itr)
-        {
-            // FLF: if (ITR && ITR.vrest) vrest[uid]=ITR.vrest
-            if (itr != null && itr.vrest > 0)
-            {
-                _itrVRestByAttacker[attackerStableId] = itr.vrest;
-            }
-        }
-
-        private void TickItrRest()
-        {
-            // 对齐 FLF livingobject.js: 每 TU 递减 vrest/arest
-            if (_itrARest > 0) _itrARest--;
-
-            if (_itrVRestByAttacker.Count == 0) return;
-            var keys = ListPool<int>.Get();
-            keys.AddRange(_itrVRestByAttacker.Keys);
-            for (int i = 0; i < keys.Count; i++)
-            {
-                int k = keys[i];
-                if (_itrVRestByAttacker[k] > 0) _itrVRestByAttacker[k]--;
-            }
-            ListPool<int>.Release(keys);
-        }
-
-        // ==================== Phase 1: fall / bdefend / boundary flags ====================
-
+        // ==================== Phase 1: hit counters ====================
         // 对齐 FLF: character.js hit() 中的 health.fall / health.bdefend（Phase 1 仅用于动画/边界）
-        private int _fall = 0;
-        private int _bdefend = 0;
-
-        public int Fall => _fall;
-        public int Bdefend => _bdefend;
-
-        public void AddFall(int amount)
-        {
-            _fall += Mathf.Abs(amount);
-        }
-
-        public void ResetFall()
-        {
-            _fall = 0;
-        }
-
-        public void AddBdefend(int amount)
-        {
-            _bdefend += Mathf.Abs(amount);
-        }
-
-        public void ResetBdefend()
-        {
-            _bdefend = 0;
-        }
+        public LF2HitCountersModule HitCounters { get; } = new LF2HitCountersModule();
 
         private Transform GetGroundTransform()
         {
             if (unitActions != null) return unitActions.transform;
             if (transform.parent != null) return transform.parent;
             return transform;
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (!_debugDrawBodyVolumes && !_debugDrawItrVolumes) return;
-            if (ps == null) return;
-            if (FrameAniInfo?.frameData == null) return;
-
-            float spriteWidthPx = GetCurrentSpriteWidthPx();
-            if (spriteWidthPx <= 0f) return;
-
-            // 说明：
-            // - 这里绘制的是 FLF 语义的“真实体积”（bdy/itr 的 volume：x/y/z + vx/vy + w/h + zwidth）
-            // - 但为了在 Unity 的 2.5D 显示坐标中直观对齐角色，采用与运行时一致的投影方式：
-            //   Unity 世界 (X,Y) = 地面平面 (ps.x/ps.z)，并在 Y 上叠加竖直像素偏移（topPx）
-            //   => centerY = (ps.z - pixelY) / PPU
-            // - Z 轴用于“厚度”表现，不参与地面移动
-            float ppu = SimulationConstants.PIXELS_PER_UNIT;
-            float planeZ = GetGroundTransform().position.z;
-
-            if (_debugDrawBodyVolumes)
-            {
-                var bodyVolumes = ps.GetBodyVolumes(
-                    FrameAniInfo.frameData.bodies,
-                    FrameAniInfo.frameData.centerx,
-                    FrameAniInfo.frameData.centery,
-                    spriteWidthPx
-                );
-
-                Gizmos.color = Color.yellow;
-                foreach (var v in bodyVolumes)
-                {
-                    float leftPx = v.x + v.vx;
-                    float topPx = v.y + v.vy;
-                    float wPx = v.w;
-                    float hPx = v.h;
-
-                    float centerX = (leftPx + wPx * 0.5f) / ppu;
-                    float centerY = (ps.z - (topPx + hPx * 0.5f)) / ppu;
-
-                    float sizeX = Mathf.Max(0.001f, wPx / ppu);
-                    float sizeY = Mathf.Max(0.001f, hPx / ppu);
-                    float sizeZ = Mathf.Max(0.001f, (v.zwidth * 2f) / ppu);
-
-                    Gizmos.DrawWireCube(new Vector3(centerX, centerY, planeZ), new Vector3(sizeX, sizeY, sizeZ));
-                }
-            }
-
-            if (_debugDrawItrVolumes)
-            {
-                var itrVolumes = ps.GetItrVolumes(
-                    FrameAniInfo.frameData.itrs,
-                    FrameAniInfo.frameData.centerx,
-                    FrameAniInfo.frameData.centery,
-                    spriteWidthPx,
-                    itrZWidthPx: 0f
-                );
-
-                Gizmos.color = Color.red;
-                foreach (var v in itrVolumes)
-                {
-                    float leftPx = v.x + v.vx;
-                    float topPx = v.y + v.vy;
-                    float wPx = v.w;
-                    float hPx = v.h;
-
-                    float centerX = (leftPx + wPx * 0.5f) / ppu;
-                    float centerY = (ps.z - (topPx + hPx * 0.5f)) / ppu;
-
-                    float sizeX = Mathf.Max(0.001f, wPx / ppu);
-                    float sizeY = Mathf.Max(0.001f, hPx / ppu);
-                    float sizeZ = Mathf.Max(0.001f, (v.zwidth * 2f) / ppu);
-
-                    Gizmos.DrawWireCube(new Vector3(centerX, centerY, planeZ), new Vector3(sizeX, sizeY, sizeZ));
-                }
-            }
         }
     }
 }

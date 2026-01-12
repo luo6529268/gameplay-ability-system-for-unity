@@ -222,6 +222,56 @@ namespace NTSD.Animation
         }
 
         /// <summary>
+        /// 无分配版本：将 bdy volumes 写入到外部 List（避免每 tick new List）。
+        /// 仅用于查询（例如 FLF blocking_xz）。
+        /// </summary>
+        public void FillBodyVolumes(
+            System.Collections.Generic.List<FlfVolume> dst,
+            System.Collections.Generic.List<BodyBox> bodies,
+            int centerx,
+            int centery,
+            float spriteWidthPx,
+            float zwidthPx,
+            float offsetX = 0f,
+            float offsetY = 0f,
+            float offsetZ = 0f)
+        {
+            if (dst == null) return;
+            dst.Clear();
+
+            UpdateSpriteOrigin(centerx, centery, spriteWidthPx);
+            float originX = sx + offsetX;
+            float originY = sy + offsetY;
+            float originZ = sz + offsetZ;
+
+            if (bodies == null || bodies.Count == 0)
+            {
+                dst.Add(new FlfVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
+                return;
+            }
+
+            bool facingLeft = dir == "left";
+            for (int i = 0; i < bodies.Count; i++)
+            {
+                var body = bodies[i];
+                if (body == null) continue;
+
+                float localX = body.x;
+                if (facingLeft)
+                {
+                    localX = spriteWidthPx - body.x - body.w;
+                }
+
+                dst.Add(new FlfVolume(
+                    originX, originY, originZ,
+                    localX, body.y,
+                    body.w, body.h,
+                    zwidthPx
+                ));
+            }
+        }
+
+        /// <summary>
         /// 生成当前帧的 itr 体积列表（严格对齐 FLF mechanics.js: mech.volume + character.js pre/post_interaction 用法）。
         /// - itrs 缺失时返回空列表（与 FLF 一致：没有 itr 就不会产生交互）
         /// - 朝左时按 sp.w 镜像 x：vx = sp.w - O.x - O.w

@@ -248,24 +248,6 @@ namespace NTSD.Animation
             return handled;
         }
 
-
-        private bool TryCallSpecificStateHandler(LF2CharacterAnimator character, string eventType, object eventData = null) 
-        {
-            int currentState = character.CurrentFrame.state;
-            bool handled = false;
-            bool handled1 = false;
-
-            if (genericHandler != null)
-                handled = genericHandler(character, eventType, eventData);
-
-            if (stateHandlers.TryGetValue(currentState, out var specificHandler))
-            {
-                handled1 = specificHandler(character, eventType, eventData);
-            }
-
-            return handled || handled1;
-        }
-
         // ==================== 通用状态处理器 (Generic Handler) ====================
 
         /// <summary>
@@ -359,7 +341,7 @@ namespace NTSD.Animation
             if (target.CurrentFrame.state == LF2States.Defending && attackedFromFront)
             {
                 if (itr.bdefend != 0)
-                    target.AddBdefend(Mathf.Abs(itr.bdefend));
+                    target.HitCounters.AddBdefend(Mathf.Abs(itr.bdefend));
 
                 // 简单的防御后退与吸收逻辑 (参照 FLF GC.defend.absorb)
                 if (!Mathf.Approximately(efDvx, 0f))
@@ -371,7 +353,7 @@ namespace NTSD.Animation
                 efDvy = 0f;
 
                 // 判断是否防御崩坏 (Broken Defend)
-                int defendFrame = target.Bdefend > FLF_DEFEND_BREAK_LIMIT
+                int defendFrame = target.HitCounters.Bdefend > FLF_DEFEND_BREAK_LIMIT
                     ? LF2StandardFrames.DefendBroken
                     : LF2StandardFrames.Defend1;
 
@@ -381,13 +363,13 @@ namespace NTSD.Animation
 
             // === 受伤累积与状态选择 ===
             int addFall = itr.fall != 0 ? itr.fall : FLF_DEFAULT_FALL_VALUE;
-            target.AddFall(addFall);
+            target.HitCounters.AddFall(addFall);
 
             // 判定是否进入击飞/跌倒状态 (Falling)
             // 条件：在空中、有垂直速度、或 Fall 值超过 KO 阈值
-            if (target.ps.y < 0f || target.ps.vy < 0f || target.Fall > FLF_FALL_KO)
+            if (target.ps.y < 0f || target.ps.vy < 0f || target.HitCounters.Fall > FLF_FALL_KO)
             {
-                target.ResetFall();
+                target.HitCounters.ResetFall();
                 // FLF 规则: 进入 Falling 时重置 vy
                 target.ps.vy = 0f;
                 // 根据攻击方向选择向前跌倒还是向后跌倒
@@ -396,7 +378,7 @@ namespace NTSD.Animation
             }
 
             // 否则进入普通受伤状态 (Injured)，根据 Fall 值选择不同程度的受伤帧
-            int fall = target.Fall;
+            int fall = target.HitCounters.Fall;
             int injuredFrame;
             if (fall > 0 && fall <= 20) injuredFrame = LF2StandardFrames.Injured;
             else if (fall > 20 && fall <= 30) injuredFrame = LF2StandardFrames.Injured2;
@@ -405,7 +387,7 @@ namespace NTSD.Animation
             else
             {
                 // Fall 过高，强制跌倒
-                target.ResetFall();
+                target.HitCounters.ResetFall();
                 target.ps.vy = 0f;
                 target.trans.Frame(attackedFromFront ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack, 21);
                 return true;
@@ -574,7 +556,7 @@ namespace NTSD.Animation
                 // 8. 连击缓冲系统 (FLF:174-182)
                 // TODO: 需要连击缓冲系统
 
-                character.OnReduceComboBufferTimeout();
+                character.ComboBuffer?.ReduceTimeout();
 
             return false;
         }
@@ -608,7 +590,7 @@ namespace NTSD.Animation
             {
                 case "left-left":
                 case "right-right":
-                    character.ClearComboBufferOnStateExit();
+                    character.ComboBuffer?.ClearOnStateExit(combo);
                     break;
             }
             return false;
@@ -818,7 +800,8 @@ namespace NTSD.Animation
 
                                     // 设置速度 (对应 FLF Line 265-270)
                                     // 注意: FLF 在 Standing 状态不使用 xFactor (斜向减速)，只有 Walking 状态使用
-                                    var characterData = character._FrameDataWrapper.characterData;
+                                    var characterData = character._FrameDataWrapper?.characterData;
+                                    if (characterData == null) return false;
                                     var ps = character.ps;
 
                                     if (hasDx) ps.vx = ps.Dirh() * characterData.walking_speed;
@@ -885,6 +868,7 @@ namespace NTSD.Animation
                 case "frame":
                     // 循环播放行走动画 (5 -> 8 -> 5)
                     character.FrameAniOscillate(LF2StandardFrames.WalkingStart, LF2StandardFrames.WalkingEnd);
+                    if (character._FrameDataWrapper?.characterData == null) return false;
                     character.trans.SetWait(character._FrameDataWrapper.characterData.walking_frame_rate - 1);
                     return true;
 
@@ -892,7 +876,8 @@ namespace NTSD.Animation
                     // 移动速度应用 (对应 FLF Line 367-382)
                     if (character.unitActions != null && character._Character != null)
                     {
-                        var characterData = character._FrameDataWrapper.characterData;
+                        var characterData = character._FrameDataWrapper?.characterData;
+                        if (characterData == null) return false;
                         var characterInput = character._Character._CharacterInput;
                         var ps = character.ps;
 
@@ -957,6 +942,7 @@ namespace NTSD.Animation
                 case "frame":
                     // 循环播放奔跑动画
                     character.FrameAniOscillate(LF2StandardFrames.RunningStart, LF2StandardFrames.RunningEnd);
+                    if (character._FrameDataWrapper?.characterData == null) return false;
                     character.trans.SetWait(character._FrameDataWrapper.characterData.running_frame_rate);
                     // ⚠️ 注意: 模拟 switch fallthrough，继续执行 TU
                     goto case "TU";
@@ -967,7 +953,8 @@ namespace NTSD.Animation
                     {
                         var characterInput = character._Character._CharacterInput;
                         var xfactor = 1 - (characterInput.Dirv != 0 ? 1 : 0) * (1f / 7f);
-                        var characterData = character._FrameDataWrapper.characterData;
+                        var characterData = character._FrameDataWrapper?.characterData;
+                        if (characterData == null) return false;
                         var ps = character.ps;
 
                         ps.vx = xfactor * ps.Dirh() * characterData.running_speed;
@@ -1101,7 +1088,8 @@ namespace NTSD.Animation
                             character.PreviousFrameId == LF2StandardFrames.JumpingUp)
                         {
                             var (dx, dz) = GetMoveInput(character);
-                            var characterData = character._FrameDataWrapper.characterData;
+                            var characterData = character._FrameDataWrapper?.characterData;
+                            if (characterData == null) return false;
                             var characterInput = character._Character._CharacterInput;
                             var ps = character.ps;
 
@@ -1167,7 +1155,8 @@ namespace NTSD.Animation
                         character.PreviousFrameId == LF2StandardFrames.Crouch)
                     {
                         var ps = character.ps;
-                        var characterData = character._FrameDataWrapper.characterData;
+                        var characterData = character._FrameDataWrapper?.characterData;
+                        if (characterData == null) return false;
                         var characterInput = character._Character._CharacterInput;
 
                         ps.vx = ps.Dirh() * (characterData.dash_distance - 1) * (character.NextFrameId == LF2StandardFrames.DashForward ? 1 : -1);

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using MoreMountains.Tools;
+using NTSD.Animation;
+using NTSD.Simulation;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -33,7 +35,7 @@ namespace NTSD.LevelEditor
     /// - 所有坐标都是 X/Y 平面（不是 X/Z）
     /// - Rect 参数的 x/y 与 transform.position 单位一致
     /// </summary>
-    public class BoundaryWallManager : MMSingleton<BoundaryWallManager>
+    public class BoundaryWallManager : MMSingleton<BoundaryWallManager>, ILF2StageBoundsProvider
     {
         // ==================== 序列化字段（Inspector 可配置）====================
 
@@ -51,6 +53,11 @@ namespace NTSD.LevelEditor
         [Tooltip("调试模式（输出详细日志）")]
         private bool _debugMode = false;
 
+        [Header("FLF Dynamics Bounds")]
+        [SerializeField]
+        [Tooltip("对齐 FLF mechanics.js: floor_xbound；开启后会对 X 进行 clamp（Z 仍然永远 clamp）。")]
+        private bool _flfFloorXBound = true;
+
         // ==================== 私有字段 ====================
 
         /// <summary>
@@ -62,6 +69,9 @@ namespace NTSD.LevelEditor
         /// 是否已初始化
         /// </summary>
         private bool _initialized = false;
+
+        private bool _boundsCacheValid = false;
+        private LF2StageBoundsPx _boundsCachePx;
 
         // ==================== Unity 生命周期 ====================
 
@@ -150,12 +160,14 @@ namespace NTSD.LevelEditor
         public void RefreshBoundaries()
         {
             _boundaries.Clear();
+            _boundsCacheValid = false;
 
             // 查找场景中所有 BoundaryWall
             BoundaryWall[] foundBoundaries = FindObjectsOfType<BoundaryWall>();
             _boundaries.AddRange(foundBoundaries);
 
             _initialized = true;
+            RebuildBoundsCache();
 
             if (_debugMode)
             {
@@ -168,6 +180,87 @@ namespace NTSD.LevelEditor
         /// </summary>
         /// <param name="rectXY">世界坐标矩形（X/Y 平面）</param>
         /// <returns>true = Rect 完全在边界内，可移动</returns>
+        /// <summary>
+        /// 运行时 API：提供对齐 FLF dynamics 的关卡边界（像素坐标）。
+        /// 数据来源：BoundaryWallEditor 维护的多边形集合；这里取其 AABB 作为 FLF 的 bg.width / zboundary 等价输入。
+        /// </summary>
+        public bool TryGetStageBoundsPx(out LF2StageBoundsPx bounds)
+        {
+            if (!_initialized)
+            {
+                RefreshBoundaries();
+            }
+
+            if (!_boundsCacheValid)
+            {
+                RebuildBoundsCache();
+            }
+
+            bounds = _boundsCachePx;
+            return _boundsCacheValid;
+        }
+
+        private void RebuildBoundsCache()
+        {
+            _boundsCacheValid = false;
+            _boundsCachePx = default;
+
+            if (_boundaries == null || _boundaries.Count == 0) return;
+
+            bool hasAnyVertex = false;
+            float minX = 0f, maxX = 0f, minY = 0f, maxY = 0f;
+
+            for (int b = 0; b < _boundaries.Count; b++)
+            {
+                var boundary = _boundaries[b];
+                if (boundary == null || !boundary.IsEnabled) continue;
+
+                var polygons = boundary.Polygons;
+                if (polygons == null) continue;
+
+                for (int p = 0; p < polygons.Count; p++)
+                {
+                    var poly = polygons[p];
+                    if (poly == null || poly.vertices == null || poly.vertices.Count < 3) continue;
+
+                    for (int i = 0; i < poly.vertices.Count; i++)
+                    {
+                        Vector2 v = poly.vertices[i];
+                        Vector3 world = boundary.transform.TransformPoint(new Vector3(v.x, v.y, 0f));
+                        float x = world.x;
+                        float y = world.y;
+
+                        if (!hasAnyVertex)
+                        {
+                            hasAnyVertex = true;
+                            minX = maxX = x;
+                            minY = maxY = y;
+                        }
+                        else
+                        {
+                            if (x < minX) minX = x;
+                            if (x > maxX) maxX = x;
+                            if (y < minY) minY = y;
+                            if (y > maxY) maxY = y;
+                        }
+                    }
+                }
+            }
+
+            if (!hasAnyVertex) return;
+
+            float xMinPx = minX * SimulationConstants.PIXELS_PER_UNIT;
+            float xMaxPx = maxX * SimulationConstants.PIXELS_PER_UNIT;
+            float zMinPx = minY * SimulationConstants.PIXELS_PER_UNIT;
+            float zMaxPx = maxY * SimulationConstants.PIXELS_PER_UNIT;
+
+            _boundsCachePx = new LF2StageBoundsPx(_flfFloorXBound, xMinPx, xMaxPx, zMinPx, zMaxPx);
+            _boundsCacheValid = true;
+        }
+
+        /// <summary>
+        /// 检测 Rect 是否完全在边界内（X/Y 平面）。
+        /// </summary>
         public bool IsRectInsideBoundary(Rect rectXY)
         {
             if (!_initialized)

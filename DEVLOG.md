@@ -474,3 +474,64 @@ private StateUpdateFrameResult StateUpdate(LF2CharacterAnimator character, strin
 - 若 `handled==true`：不走默认
 - 否则走默认（包括落地瞬间摩擦：`LookupAbs(FrictionFell)` + `CharacterMechanics.LinearFriction`）
 
+
+---
+
+## 10. FLF `blocking_xz`（itr:kind:14）阻挡体：真实数据从哪里来（计划）
+> 目标：保持与 FLF 一致的阻挡语义（kind:14 + blocking_xz），同时保持项目不依赖 Unity Collider，便于后续 ECS/大规模实体。
+> 参考：`I:\C++Test\NTSD\F.LF-master\LF\mechanics.js` 的 `mech.prototype.blocking_xz()` 与 `mech.prototype.dynamics()`。
+
+### 10.1 最终目标（行为一致）
+- 阻挡数据来自 DAT 解析后的 `LF2FrameData.itrs`，并筛选 `InteractionArea.kind == 14`。
+- 阻挡判定对齐 FLF：
+  - 用“当前帧 bdy 体积 + offset(vx,vz)”预测下一步位置（等价 FLF `body(..., offset)`）
+  - blocking 查询时将 body 的 `zwidth = 0`（等价 FLF `body[i].zwidth = 0`）
+  - 若与任意 `itr:14` 相交，则 `blocking_xz == true`
+  - dynamics 中被阻挡时：只移动 `vx/vz` 的 `0.1`（速度不变，靠摩擦衰减）
+
+### 10.2 当前项目对齐点（后续接入时不要破坏）
+- `CharacterSim.SimTick()` 顺序为 `Transit()` -> `TU_Update()`（与 FLF 分阶段一致）。
+- `LF2CharacterAnimator.ApplyDynamics()` 负责计算 `blockedMoveScale` 并传入 `CharacterMechanicsContext`（dynamics 层只做位移/摩擦/重力）。
+- `LF2CollisionSystem.BlockingXZ(...)` 是 blocking_xz 的唯一入口（必须保持无 per-tick 分配）。
+
+### 10.3 “真实数据来源”接入：推荐结构（与当前架构兼容）
+障碍物/可生成物体的阻挡体（itr:14）需要的最小输入：
+- `datKey`：该物体对应的 DAT（或 objectId -> datKey 的映射）
+- `frameKey`：具体使用哪一帧作为阻挡帧（建议优先使用 `frameId`；必要时支持 `frameName/state` 解析）
+- `spriteWidthPx`：用于 facingLeft 的镜像公式（FLF：`localX = sp.w - itr.x - itr.w`）
+- `facingLeft`：是否需要镜像（静态障碍物通常固定为 false，但接口上必须可扩展）
+
+为了不把“解析/IO/资源读取”塞进 collision/mechanics 层，建议新增 Provider/Repository：
+- `ILF2FrameDataProvider`：`TryGetFrame(datKey, frameId, out LF2FrameData frame)`
+- `ILF2SpriteMetricsProvider`：`TryGetSpriteWidthPx(spriteKey, out float widthPx)`（或 `sp.w`）
+- `LF2FrameDataRepository`：缓存所有 dat->frame，关卡加载/启动时构建，运行时只读
+
+注意事项（必须遵守）：
+- Provider 必须只读缓存/引用：禁止在 `BlockingXZ` / `ApplyDynamics` / `Step` 内做解析/磁盘 IO/反序列化。
+- `spriteWidthPx` 的定义必须与角色一致（角色当前用 `SpriteRenderer.sprite.textureRect.width`），否则 facingLeft 镜像将产生偏差。
+- 日志统一使用 `NTSD.Tools.Log`，不要 `Debug.Log`。
+
+### 10.4 接入流程（把重活放到初始化/加载阶段）
+推荐流程（后续真正改时按这个做）：
+1) 关卡加载阶段：通过 `LF2FrameDataRepository` 预加载并缓存所需 DAT（按关卡引用清单）。
+2) 障碍物实例化后：阻挡体组件仅持有 key（datKey/frameId/spriteKey/facingLeft）。
+3) `RefreshFromProviders()`：
+   - 从 Provider 获取 `LF2FrameData`（包含 `centerx/centery/itrs`）
+   - 从 Provider 获取 `spriteWidthPx`
+   - 缓存到本地字段（仅一次），并在缺失时 `Log.Warn`（只打印一次，避免刷屏）
+   - 动态生成对象：实例化后应尽快调用 `LF2BlockingObstacle.Configure(frameData, spriteWidthPx, facingLeft)`（或等价的 Set* 接口）完成赋值
+4) 运行时 tick：`LF2CollisionSystem.BlockingXZ` 只做：
+   - `actor.ps` 生成预测 body volumes（offset=(vx,vz)）并令 `zwidth=0`
+   - 遍历障碍物的 `itr:14` volumes（由组件把 kind14 itrs 转成 `FlfVolume` 写入复用 list）
+   - 用 `Intersect(body, itr14)` 判断是否阻挡
+
+### 10.5 关键实现细节（对齐 FLF 的计算规则）
+- 坐标系：Unity ground plane (X/Y) ↔ FLF (x/z)，转换使用 `SimulationConstants.PIXELS_PER_UNIT`。
+- `sx/sy/sz` 的 origin 计算需与 `PhysicsState.UpdateSpriteOrigin(...)` 的语义一致：
+  - right：`sx = x - centerx`
+  - left ：`sx = x + centerx - spriteWidthPx`
+- `FlfVolume` 的矩形定义：`(x+vx, y+vy, w, h)`，深度区间：`[z-zwidth, z+zwidth]`。
+
+### 10.6 ECS 方向注意点（提前约束）
+- 阻挡体数据应可烘焙为纯数据（frameId/center/itrs(kind14)/spriteWidth），运行时查询不依赖 Mono/Unity 组件。
+- `LF2CollisionSystem` 的 registry 未来可替换为 ECS 世界的空间索引，但 `BlockingXZ` 的语义不变。

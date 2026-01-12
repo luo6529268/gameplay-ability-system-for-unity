@@ -1,4 +1,4 @@
-﻿using BeatEmUpTemplate2D;
+using BeatEmUpTemplate2D;
 using GAS.Runtime;
 using MoreMountains.Tools;
 using NTSD.Animation;
@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 namespace MoreMountains.TopDownEngine
@@ -82,7 +83,6 @@ namespace MoreMountains.TopDownEngine
 
 		public AbilitySystemComponent _AbilitySystemComponent { get; set; }
         public UnitSettings _UnitSetting { get; set; }
-        public StateMachine _StateMachine { get; set; }
         public CapsuleCollider2D col2D; // 2D碰撞体组件
 		public LF2CharacterAnimator _LF2CharacterAnimator { get; set; }
         public Rigidbody2D _Rigidbody2D { get; set; } //刚体组件
@@ -199,7 +199,6 @@ namespace MoreMountains.TopDownEngine
 
 
 			_controller = this.gameObject.GetComponent<TopDownController>();
-			_StateMachine = this.gameObject.GetComponent<StateMachine>();
 			// _CharacterInput / _ActionSequenceDetector are pure C# modules (created in BootstrapModules)
 			_LF2CharacterAnimator = this.gameObject.GetComponentInChildren<LF2CharacterAnimator>();
 
@@ -269,8 +268,7 @@ namespace MoreMountains.TopDownEngine
 
             // Step D9R: Create CharacterIdUpdate module (id_update 机制)
             // Hub 注入规则：由 Character 统一缓存依赖并注入
-            var unitActions = this.GetComponent<BeatEmUpTemplate2D.UnitActions>();
-			_IdUpdate = new CharacterIdUpdate(this, unitActions);
+			_IdUpdate = new CharacterIdUpdate(this);
 
 			// instantiate camera target
 			if (CameraTarget == null)

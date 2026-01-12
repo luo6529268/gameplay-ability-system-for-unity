@@ -56,11 +56,6 @@ namespace NTSD.Animation
         /// </summary>
         private readonly PhysicsState _ps;
 
-        /// <summary>
-        /// 缓存的 UnitActions（避免每次 TryInvoke 都查找）
-        /// </summary>
-        private readonly BeatEmUpTemplate2D.UnitActions _unitActions;
-
         // ==================== 实例字典（Step D9R: 替代静态 Registry）====================
 
         /// <summary>
@@ -78,14 +73,13 @@ namespace NTSD.Animation
         /// </summary>
         /// <param name="hub">Character Hub</param>
         /// <param name="unitActions">UnitActions 引用（由 Hub 注入）</param>
-        public CharacterIdUpdate(Character hub, BeatEmUpTemplate2D.UnitActions unitActions)
+        public CharacterIdUpdate(Character hub)
         {
             _hub = hub;
 
             // 缓存常用引用（Hub 注入规则：由 Character 统一缓存后注入）
             _animator = hub._LF2CharacterAnimator;
             _ps = _animator?.ps;
-            _unitActions = unitActions;  // Step D9R: Hub 注入，不再 GetComponent
 
             if (_animator == null)
             {
@@ -202,7 +196,6 @@ namespace NTSD.Animation
                 _hub,
                 _animator,
                 _ps,
-                _unitActions,
                 comboKey,
                 comboTag,
                 targetFrame,
@@ -220,7 +213,6 @@ namespace NTSD.Animation
                 _hub,
                 _animator,
                 _ps,
-                _unitActions,
                 state,
                 tickIndex
             );
@@ -236,7 +228,6 @@ namespace NTSD.Animation
                 _hub,
                 _animator,
                 _ps,
-                _unitActions,
                 state,
                 tickIndex
             );
@@ -252,7 +243,6 @@ namespace NTSD.Animation
                 _hub,
                 _animator,
                 _ps,
-                _unitActions,
                 tickIndex
             );
             return TryInvoke(hookName, in ctx);

@@ -24,24 +24,39 @@ namespace NTSD.Animation
     public readonly struct CharacterMechanicsContext
     {
         public readonly PhysicsState ps;
+        public readonly LF2FrameData frameData;
+        public readonly float spriteWidthPx;
+        public readonly bool hasStageBounds;
+        public readonly LF2StageBoundsPx stageBoundsPx;
         public readonly float mass;
         public readonly float minSpeed;
         public readonly float gravity;
+        public readonly float blockedMoveScale;
         public readonly Func<Vector2, bool> isPointWalkable;
         public readonly Action<string> logWarning;
 
         public CharacterMechanicsContext(
             PhysicsState ps,
+            LF2FrameData frameData,
+            float spriteWidthPx,
+            bool hasStageBounds,
+            LF2StageBoundsPx stageBoundsPx,
             float mass,
             float minSpeed,
             float gravity,
+            float blockedMoveScale,
             Func<Vector2, bool> isPointWalkable,
             Action<string> logWarning = null)
         {
             this.ps = ps;
+            this.frameData = frameData;
+            this.spriteWidthPx = spriteWidthPx;
+            this.hasStageBounds = hasStageBounds;
+            this.stageBoundsPx = stageBoundsPx;
             this.mass = mass;
             this.minSpeed = minSpeed;
             this.gravity = gravity;
+            this.blockedMoveScale = blockedMoveScale;
             this.isPointWalkable = isPointWalkable;
             this.logWarning = logWarning;
         }
@@ -52,20 +67,17 @@ namespace NTSD.Animation
     /// </summary>
     public readonly struct MechanicsStepResult
     {
-        public readonly bool landedThisTick;
         public readonly bool grounded;
         public readonly Vector2 groundPlanePos;
         public readonly float visualYOffset;
         public readonly BoundaryResolveMode boundaryMode;
 
         public MechanicsStepResult(
-            bool landedThisTick,
             bool grounded,
             Vector2 groundPlanePos,
             float visualYOffset,
             BoundaryResolveMode boundaryMode)
         {
-            this.landedThisTick = landedThisTick;
             this.grounded = grounded;
             this.groundPlanePos = groundPlanePos;
             this.visualYOffset = visualYOffset;
@@ -81,13 +93,51 @@ namespace NTSD.Animation
     /// 
     /// 职责（严格按 FLF 顺序）：
     /// 1. 应用速度到位置：ps.x += ps.vx, ps.z += ps.vz
-    /// 2. 边界检测与修正（P3 full → X-only → Z-only → stop）
+    /// 2. 边界/阻挡处理（对齐 FLF 的“blocking_xz -> *0.1 位移”风格）
     /// 3. 垂直位移 + 地面修正 + 落地判定
     /// 4. 应用摩擦力（只在地面）
     /// 5. 应用重力（只在空中）
     /// </summary>
     public sealed class CharacterMechanics
     {
+        private static float GetDefaultFootRadiusWorld()
+        {
+            // FLF 默认 itr.zwidth = 12 像素（global.js: GC.default.itr.zwidth）。
+            // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
+            // FLF 默认 itr.zwidth = 12 像素（global.js: GC.default.itr.zwidth）
+            // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
+            return (PhysicsState.FLF_DEFAULT_ITR_ZWIDTH / SimulationConstants.PIXELS_PER_UNIT) * 0.5f;
+        }
+
+        /// <summary>
+        /// 使用“多点采样”近似 FLF blocking_xz() 的体积阻挡判定。
+        /// 数据来源仍然是项目的可视化可走区（isPointWalkable），但阻挡判定方式更接近 FLF 的“体积查询”。
+        /// </summary>
+        private static bool IsFootprintWalkable(
+            Func<Vector2, bool> isPointWalkable,
+            Vector2 center,
+            float radiusWorld,
+            Vector2 moveDirWorld)
+        {
+            if (isPointWalkable == null) return true;
+            if (radiusWorld <= 0f) return isPointWalkable(center);
+
+            // 基础 5 点采样：中心 + 十字
+            if (!isPointWalkable(center)) return false;
+            if (!isPointWalkable(new Vector2(center.x + radiusWorld, center.y))) return false;
+            if (!isPointWalkable(new Vector2(center.x - radiusWorld, center.y))) return false;
+            if (!isPointWalkable(new Vector2(center.x, center.y + radiusWorld))) return false;
+            if (!isPointWalkable(new Vector2(center.x, center.y - radiusWorld))) return false;
+
+            // 按移动方向前探一点，减少边界处“单点通过、体积穿出”的漏判
+            if (moveDirWorld.sqrMagnitude > 1e-6f)
+            {
+                moveDirWorld.Normalize();
+                if (!isPointWalkable(center + moveDirWorld * radiusWorld)) return false;
+            }
+
+            return true;
+        }
         // ==================== 可复用 Helper（对齐 FLF mechanics.js）====================
 
         /// <summary>
@@ -150,7 +200,8 @@ namespace NTSD.Animation
             if (isPointWalkable != null)
             {
                 Vector2 footPoint = ps.GetGroundPoint2D();
-                if (!isPointWalkable(footPoint))
+                float footprintRadiusWorld = GetDefaultFootRadiusWorld();
+                if (!IsFootprintWalkable(isPointWalkable, footPoint, footprintRadiusWorld, Vector2.zero))
                 {
                     ps.x = oldX;
                     ps.y = oldY;
@@ -169,50 +220,71 @@ namespace NTSD.Animation
             var ps = ctx.ps;
             if (ps == null)
             {
-                return new MechanicsStepResult(false, true, Vector2.zero, 0f, BoundaryResolveMode.None);
+                return new MechanicsStepResult(true, Vector2.zero, 0f, BoundaryResolveMode.None);
             }
 
             BoundaryResolveMode boundaryMode = BoundaryResolveMode.None;
-            bool landedThisTick = false;
+            float footprintRadiusWorld = GetDefaultFootRadiusWorld();
+            Vector2 moveDirWorld = new Vector2(ps.vx, ps.vz) / SimulationConstants.PIXELS_PER_UNIT;
 
             // ==================== 1. 水平位移 + 边界回退（FLF Line 326-327）====================
             float oldX = ps.x;
             float oldZ = ps.z;
 
             // 尝试 full 移动
-            ps.x += ps.vx;
-            ps.z += ps.vz;
+            ps.x += ps.vx * ctx.blockedMoveScale;
+            ps.z += ps.vz * ctx.blockedMoveScale;
+
+            // 对齐 FLF mechanics.js dynamics(): x/z clamp（非回滚）
+            if (ctx.hasStageBounds)
+            {
+                var b = ctx.stageBoundsPx;
+                bool clampedX = false;
+                bool clampedZ = false;
+
+                if (b.floorXBound)
+                {
+                    if (ps.x < b.xMinPx) { ps.x = b.xMinPx; clampedX = true; }
+                    else if (ps.x > b.xMaxPx) { ps.x = b.xMaxPx; clampedX = true; }
+                }
+
+                if (ps.z < b.zMinPx) { ps.z = b.zMinPx; clampedZ = true; }
+                else if (ps.z > b.zMaxPx) { ps.z = b.zMaxPx; clampedZ = true; }
+
+                if (clampedX && clampedZ) boundaryMode = BoundaryResolveMode.Stop;
+                else if (clampedX) boundaryMode = BoundaryResolveMode.XOnly;
+                else if (clampedZ) boundaryMode = BoundaryResolveMode.ZOnly;
+            }
 
             // P3: 检测是否越出边界
-            if (ctx.isPointWalkable != null)
+            else if (ctx.isPointWalkable != null)
             {
                 Vector2 footPoint = ps.GetGroundPoint2D();
 
-                if (!ctx.isPointWalkable(footPoint))
+                if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
                 {
-                    // Full 移动越界，尝试 X-only
-                    ctx.logWarning?.Invoke("[Boundary] Full 越界，尝试 X-only");
-                    ps.x = oldX + ps.vx;
+                    // Full 移动不可走：对齐 FLF 的阻挡处理，改为缩小位移（*0.1）
+                    ctx.logWarning?.Invoke("[Boundary] Out of walkable area, keep position");
+                    ps.x = oldX;
                     ps.z = oldZ;
+                    boundaryMode = BoundaryResolveMode.Stop;
 
                     footPoint = ps.GetGroundPoint2D();
-                    if (!ctx.isPointWalkable(footPoint))
+                    if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
                     {
-                        // X-only 也越界，尝试 Z-only
-                        ctx.logWarning?.Invoke("[Boundary] X-only 越界，尝试 Z-only");
+                        // 缩小位移后仍不可走：本帧保持原位（不清 vx/vz）
+                        ctx.logWarning?.Invoke("[Boundary] Out of walkable area, keep position");
                         ps.x = oldX;
-                        ps.z = oldZ + ps.vz;
-                        boundaryMode = BoundaryResolveMode.ZOnly;
+                        ps.z = oldZ;
+                        boundaryMode = BoundaryResolveMode.Stop;
 
                         footPoint = ps.GetGroundPoint2D();
-                        if (!ctx.isPointWalkable(footPoint))
+                        if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
                         {
-                            // Z-only 也越界，stop
-                            ctx.logWarning?.Invoke("[Boundary] Z-only 越界，Stop");
+                            // 保留旧的“二次确认”分支：保持原位
+                            ctx.logWarning?.Invoke("[Boundary] Blocked: keep position");
                             ps.x = oldX;
                             ps.z = oldZ;
-                            ps.vx = 0;
-                            ps.vz = 0;
                             boundaryMode = BoundaryResolveMode.Stop;
                         }
                     }
@@ -226,32 +298,34 @@ namespace NTSD.Animation
             // ==================== 2. 垂直位移 + 地面修正（FLF Line 347-354）====================
             ps.y += ps.vy;
 
+            // ps.sx/ps.sy/ps.sz 由 UpdateSpriteOrigin() 统一计算（对齐 FLF mechanics.js:349-351）
+
             if (ps.y > 0)  // 不允许低于地面
             {
                 ps.y = 0;
-                if (ps.vy > 0)  // 只在向下运动时触发落地
-                {
-                    ps.vy = 0;
-                    landedThisTick = true;
-                }
+                // ps.sy 将在 UpdateSpriteOrigin() 中统一计算
             }
 
             // ==================== 3. 地面摩擦（FLF Line 368-375）====================
+            if (ctx.frameData != null && ctx.spriteWidthPx > 0f)
+            {
+                ps.UpdateSpriteOrigin(ctx.frameData.centerx, ctx.frameData.centery, ctx.spriteWidthPx);
+            }
+
             if (ps.y == 0 && ctx.mass > 0f)
             {
                 // X轴摩擦
                 if (ps.vx != 0)
-                {
                     ps.vx += (ps.vx > 0 ? -1 : 1) * ps.fric;
-                    if (Mathf.Abs(ps.vx) < ctx.minSpeed) ps.vx = 0;
-                }
-
+                
                 // Z轴摩擦
                 if (ps.vz != 0)
-                {
                     ps.vz += (ps.vz > 0 ? -1 : 1) * ps.fric;
-                    if (Mathf.Abs(ps.vz) < ctx.minSpeed) ps.vz = 0;
-                }
+                
+                if(ps.vx != 0 && ps.vx > -NTSDGlobal.Gameplay.MinSpeed && ps.vx < NTSDGlobal.Gameplay.MinSpeed)
+                    ps.vx = 0;
+                if (ps.vz != 0 && ps.vz > -NTSDGlobal.Gameplay.MinSpeed && ps.vz < NTSDGlobal.Gameplay.MinSpeed)
+                    ps.vz = 0;
             }
 
             // ==================== 4. 空中重力（FLF Line 377）====================
@@ -261,12 +335,13 @@ namespace NTSD.Animation
             }
 
             // ==================== 5. 计算输出结果 ====================
+
+
             Vector2 groundPlanePos = ps.GetGroundPoint2D();
             float visualYOffset = (-ps.y) / SimulationConstants.PIXELS_PER_UNIT;
             bool grounded = (ps.y == 0);
 
             return new MechanicsStepResult(
-                landedThisTick,
                 grounded,
                 groundPlanePos,
                 visualYOffset,

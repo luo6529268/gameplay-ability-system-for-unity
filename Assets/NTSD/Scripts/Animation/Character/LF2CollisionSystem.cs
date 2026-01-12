@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NTSD.Simulation;
+using NTSD.Tools;
 using UnityEngine;
 
 namespace NTSD.Animation
@@ -20,6 +21,90 @@ namespace NTSD.Animation
         private static int _lastPreProcessedTick = int.MinValue;
 
         public static bool DebugLog { get; set; } = false;
+
+        // ======== blocking_xz（对齐 FLF mechanics.js）========
+        private static readonly List<LF2BlockingObstacle> s_blockingObstacles = new List<LF2BlockingObstacle>(64);
+
+        internal static void RegisterBlockingObstacle(LF2BlockingObstacle obstacle)
+        {
+            if (obstacle == null) return;
+            if (!s_blockingObstacles.Contains(obstacle)) s_blockingObstacles.Add(obstacle);
+        }
+
+        internal static void UnregisterBlockingObstacle(LF2BlockingObstacle obstacle)
+        {
+            if (obstacle == null) return;
+            s_blockingObstacles.Remove(obstacle);
+        }
+
+        /// <summary>
+        /// 对齐 FLF mech.blocking_xz()：预测下一步（ps.vx/ps.vz）是否会被 kind:14 阻挡。
+        /// 注意：这里使用 Unity ground plane（X/Y）上的阻挡体（LF2BlockingObstacle），属于方案 1 的“显式障碍物”。
+        /// </summary>
+        public static bool BlockingXZ(LF2CharacterAnimator actor)
+        {
+            if (actor == null || actor.ps == null) return false;
+            return BlockingXZ(actor, actor.ps.vx, actor.ps.vz);
+        }
+
+        private static readonly List<PhysicsState.FlfVolume> s_tmpActorBodies = new List<PhysicsState.FlfVolume>(8);
+        private static readonly List<PhysicsState.FlfVolume> s_tmpItr14 = new List<PhysicsState.FlfVolume>(8);
+
+        public static bool BlockingXZ(LF2CharacterAnimator actor, float vxPx, float vzPx)
+        {
+            if (actor == null || actor.ps == null) return false;
+            if (s_blockingObstacles.Count == 0) return false;
+
+            var frame = actor.CurrentFrame;
+            if (frame == null) return false;
+
+            float spriteWidthPx = actor.GetSpriteWidthPxForCollision();
+            if (spriteWidthPx <= 0f) return false;
+
+            // 对齐 FLF mech.blocking_xz():
+            // - 用当前 frame 的 body 体积，带 offset(vx,vz) 预测下一步位置
+            // - 并将 body.zwidth 置为 0（FLF: body[i].zwidth = 0）
+            actor.ps.FillBodyVolumes(
+                s_tmpActorBodies,
+                frame.bodies,
+                frame.centerx,
+                frame.centery,
+                spriteWidthPx,
+                zwidthPx: 0f,
+                offsetX: vxPx,
+                offsetY: 0f,
+                offsetZ: vzPx
+            );
+
+            if (s_tmpActorBodies.Count == 0) return false;
+
+            for (int i = s_blockingObstacles.Count - 1; i >= 0; i--)
+            {
+                var obs = s_blockingObstacles[i];
+                if (obs == null || !obs.isActiveAndEnabled)
+                {
+                    s_blockingObstacles.RemoveAt(i);
+                    continue;
+                }
+
+                int count = obs.FillItr14Volumes(s_tmpItr14);
+                if (count <= 0) continue;
+
+                for (int b = 0; b < s_tmpActorBodies.Count; b++)
+                {
+                    var body = s_tmpActorBodies[b];
+                    for (int k = 0; k < s_tmpItr14.Count; k++)
+                    {
+                        if (Intersect(body, s_tmpItr14[k]))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
 
         // FLF default: GC.default.itr.hit_stop = 3
         // Source: I:\C++Test\NTSD\F.LF-master\LF\global.js:131
@@ -65,7 +150,7 @@ namespace NTSD.Animation
                 LF2CharacterAnimator actor = animators[a];
                 if (actor == null || actor.ps == null) continue;
                 if (actor.CurrentFrame == null) continue;
-                if (!actor.ItrArestTest()) continue;
+                if (!actor.ItrRest.ArestTest()) continue;
 
                 bool triggered = false;
 
@@ -114,7 +199,7 @@ namespace NTSD.Animation
                             if (Intersect(vol, targetBodyVolumes[b]))
                             {
                                 // FLF: pre_interaction 成功会触发 itr_arest_update(ITR)
-                                actor.ItrArestUpdate(itr);
+                                actor.ItrRest.ArestUpdate(itr);
 
                                 var evt = new PreInteractionEvent
                                 {
@@ -126,7 +211,7 @@ namespace NTSD.Animation
 
                                 if (DebugLog)
                                 {
-                                    Debug.Log($"[LF2CollisionSystem] PRE_INTERACTION tick={tickIndex} kind={itr.kind} actor={actor.name} target={target.name}");
+                                    Log.Info("[LF2CollisionSystem] PRE_INTERACTION tick={0} kind={1} actor={2} target={3}", tickIndex, itr.kind, actor.name, target.name);
                                 }
 
                                 OnPreInteraction?.Invoke(evt);
@@ -192,8 +277,8 @@ namespace NTSD.Animation
                     if (target.CurrentFrame == null) continue;
 
                     // vrest on target (per attacker), arest on attacker
-                    if (!attacker.ItrArestTest()) continue;
-                    if (!target.ItrVrestTest(attacker.StableId)) continue;
+                    if (!attacker.ItrRest.ArestTest()) continue;
+                    if (!target.ItrRest.VrestTest(attacker.StableId)) continue;
 
                     float targetSpriteWidthPx = target.GetSpriteWidthPxForCollision();
                     if (targetSpriteWidthPx <= 0f) continue;
@@ -218,14 +303,14 @@ namespace NTSD.Animation
                             {
                                 if (DebugLog)
                                 {
-                                    Debug.Log($"[LF2CollisionSystem] HIT tick={tickIndex} kind={itr.kind} attacker={attacker.name} target={target.name}");
+                                    Log.Info("[LF2CollisionSystem] HIT tick={0} kind={1} attacker={2} target={3}", tickIndex, itr.kind, attacker.name, target.name);
                                 }
 
                                 // Update rests (FLF):
                                 // - attacker: itr_arest_update(ITR)
                                 // - target: itr_vrest_update(att.uid, ITR)
-                                attacker.ItrArestUpdate(itr);
-                                target.ItrVrestUpdate(attacker.StableId, itr);
+                                attacker.ItrRest.ArestUpdate(itr);
+                                target.ItrRest.VrestUpdate(attacker.StableId, itr);
 
                                 // Phase 1: emit events that later map to FLF hit/hit_others hooks
                                 var evt = new HitEvent

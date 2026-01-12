@@ -40,12 +40,6 @@ namespace NTSD.Animation
         /// </summary>
         public readonly PhysicsState Ps;
 
-        /// <summary>
-        /// Unity 动作控制器（UnitActions）
-        /// handler 可以调用 TurnToDir/TransitionToFrame 等方法
-        /// </summary>
-        public readonly UnitActions UnitActions;
-
         // ==================== Hook 特定参数（可选）====================
 
         /// <summary>
@@ -90,7 +84,6 @@ namespace NTSD.Animation
             Character hub,
             LF2CharacterAnimator animator,
             PhysicsState ps,
-            UnitActions unitActions,
             string comboKey,
             string comboTag,
             int targetFrame,
@@ -99,7 +92,6 @@ namespace NTSD.Animation
             Hub = hub;
             Animator = animator;
             Ps = ps;
-            UnitActions = unitActions;
             ComboKey = comboKey;
             ComboTag = comboTag;
             TargetFrame = targetFrame;
@@ -114,14 +106,12 @@ namespace NTSD.Animation
             Character hub,
             LF2CharacterAnimator animator,
             PhysicsState ps,
-            UnitActions unitActions,
             int state,
             int tickIndex = 0)
         {
             Hub = hub;
             Animator = animator;
             Ps = ps;
-            UnitActions = unitActions;
             ComboKey = null;
             ComboTag = null;
             TargetFrame = 0;
@@ -136,13 +126,11 @@ namespace NTSD.Animation
             Character hub,
             LF2CharacterAnimator animator,
             PhysicsState ps,
-            UnitActions unitActions,
             int tickIndex = 0)
         {
             Hub = hub;
             Animator = animator;
             Ps = ps;
-            UnitActions = unitActions;
             ComboKey = null;
             ComboTag = null;
             TargetFrame = 0;
