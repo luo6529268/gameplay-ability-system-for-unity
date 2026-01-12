@@ -31,38 +31,38 @@ namespace NTSD.Input
         public static readonly ComboDefinition[] ComboList =
         {
             // single-key "combos"
-            new ComboDefinition("left", new[] { FuncKeyMask.Left }, clearOnCombo: false),
-            new ComboDefinition("right", new[] { FuncKeyMask.Right }, clearOnCombo: false),
-            new ComboDefinition("up", new[] { FuncKeyMask.Up }, clearOnCombo: false),
-            new ComboDefinition("down", new[] { FuncKeyMask.Down }, clearOnCombo: false),
-            new ComboDefinition("def", new[] { FuncKeyMask.Defend }, clearOnCombo: false),
-            new ComboDefinition("jump", new[] { FuncKeyMask.Jump }, clearOnCombo: false),
-            new ComboDefinition("att", new[] { FuncKeyMask.Attack }, clearOnCombo: false),
+            new ComboDefinition("left", new[] { FuncKeyMask.left }, clearOnCombo: false),
+            new ComboDefinition("right", new[] { FuncKeyMask.right }, clearOnCombo: false),
+            new ComboDefinition("up", new[] { FuncKeyMask.up }, clearOnCombo: false),
+            new ComboDefinition("down", new[] { FuncKeyMask.down }, clearOnCombo: false),
+            new ComboDefinition("def", new[] { FuncKeyMask.def }, clearOnCombo: false),
+            new ComboDefinition("jump", new[] { FuncKeyMask.jump }, clearOnCombo: false),
+            new ComboDefinition("att", new[] { FuncKeyMask.att }, clearOnCombo: false),
 
             // double-tap (LF2 maxtime = 9 frames)
-            new ComboDefinition("left-left", new[] { FuncKeyMask.Left, FuncKeyMask.Left }, clearOnCombo: true, maxTimeFrames: 9),
-            new ComboDefinition("right-right", new[] { FuncKeyMask.Right, FuncKeyMask.Right }, clearOnCombo: true, maxTimeFrames: 9),
+            new ComboDefinition("left-left", new[] { FuncKeyMask.left, FuncKeyMask.left }, clearOnCombo: true, maxTimeFrames: 9),
+            new ComboDefinition("right-right", new[] { FuncKeyMask.right, FuncKeyMask.right }, clearOnCombo: true, maxTimeFrames: 9),
 
             // 2-key
-            new ComboDefinition("jump-att", new[] { FuncKeyMask.Jump, FuncKeyMask.Attack }, clearOnCombo: false),
+            new ComboDefinition("jump-att", new[] { FuncKeyMask.jump, FuncKeyMask.def }, clearOnCombo: false),
 
             // 3-key combos (FLF global.js combo_list)
-            new ComboDefinition("D<A", new[] { FuncKeyMask.Defend, FuncKeyMask.Left, FuncKeyMask.Attack }, clearOnCombo: false),
-            new ComboDefinition("D>A", new[] { FuncKeyMask.Defend, FuncKeyMask.Right, FuncKeyMask.Attack }, clearOnCombo: false),
-            new ComboDefinition("DvA", new[] { FuncKeyMask.Defend, FuncKeyMask.Down, FuncKeyMask.Attack }, clearOnCombo: true),
-            new ComboDefinition("D^A", new[] { FuncKeyMask.Defend, FuncKeyMask.Up, FuncKeyMask.Attack }, clearOnCombo: true),
+            new ComboDefinition("D<A", new[] { FuncKeyMask.def, FuncKeyMask.left, FuncKeyMask.att }, clearOnCombo: false),
+            new ComboDefinition("D>A", new[] { FuncKeyMask.def, FuncKeyMask.right, FuncKeyMask.att }, clearOnCombo: false),
+            new ComboDefinition("DvA", new[] { FuncKeyMask.def, FuncKeyMask.down, FuncKeyMask.att }, clearOnCombo: true),
+            new ComboDefinition("D^A", new[] { FuncKeyMask.def, FuncKeyMask.up, FuncKeyMask.att }, clearOnCombo: true),
 
-            new ComboDefinition("D<J", new[] { FuncKeyMask.Defend, FuncKeyMask.Left, FuncKeyMask.Jump }, clearOnCombo: true),
-            new ComboDefinition("D>J", new[] { FuncKeyMask.Defend, FuncKeyMask.Right, FuncKeyMask.Jump }, clearOnCombo: true),
-            new ComboDefinition("DvJ", new[] { FuncKeyMask.Defend, FuncKeyMask.Down, FuncKeyMask.Jump }, clearOnCombo: true),
-            new ComboDefinition("D^J", new[] { FuncKeyMask.Defend, FuncKeyMask.Up, FuncKeyMask.Jump }, clearOnCombo: true),
+            new ComboDefinition("D<J", new[] { FuncKeyMask.def, FuncKeyMask.left, FuncKeyMask.jump }, clearOnCombo: true),
+            new ComboDefinition("D>J", new[] { FuncKeyMask.def, FuncKeyMask.right, FuncKeyMask.jump }, clearOnCombo: true),
+            new ComboDefinition("DvJ", new[] { FuncKeyMask.def, FuncKeyMask.down, FuncKeyMask.jump }, clearOnCombo: true),
+            new ComboDefinition("D^J", new[] { FuncKeyMask.def, FuncKeyMask.up, FuncKeyMask.jump }, clearOnCombo: true),
 
             // 4-key combos
-            new ComboDefinition("D<AJ", new[] { FuncKeyMask.Defend, FuncKeyMask.Left, FuncKeyMask.Attack, FuncKeyMask.Jump }, clearOnCombo: true),
-            new ComboDefinition("D>AJ", new[] { FuncKeyMask.Defend, FuncKeyMask.Right, FuncKeyMask.Attack, FuncKeyMask.Jump }, clearOnCombo: true),
+            new ComboDefinition("D<AJ", new[] { FuncKeyMask.def, FuncKeyMask.left, FuncKeyMask.att, FuncKeyMask.jump }, clearOnCombo: true),
+            new ComboDefinition("D>AJ", new[] { FuncKeyMask.def, FuncKeyMask.right, FuncKeyMask.att, FuncKeyMask.jump }, clearOnCombo: true),
 
             // 3-key variant
-            new ComboDefinition("DJA", new[] { FuncKeyMask.Defend, FuncKeyMask.Jump, FuncKeyMask.Attack }, clearOnCombo: true),
+            new ComboDefinition("DJA", new[] { FuncKeyMask.def, FuncKeyMask.jump, FuncKeyMask.att }, clearOnCombo: true),
         };
 
         public static int GetComboPriority(string comboName)

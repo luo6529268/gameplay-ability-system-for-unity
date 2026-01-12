@@ -38,7 +38,7 @@ namespace NTSD.Input
             }
         }
 
-        public int timeoutFrames = 0;
+        public int timeoutFrames = 1800;
         public int combooutFrames = 0;
         public bool clearOnCombo = true;
         public bool debugLog = true;
@@ -178,7 +178,7 @@ namespace NTSD.Input
                         for (int k = 0; j < _sequence.Count; j++, k++)
                         {
                             if (candidate.combo.sequence[k] != _sequence[j].key ||
-                              (_sequence[_sequence.Count - 1].time - _sequence[j].time > candidate.combo.maxTimeFrames))
+                              (candidate.combo.maxTimeFrames != 0 && _sequence[_sequence.Count - 1].time - _sequence[j].time > candidate.combo.maxTimeFrames))
                             {
                                 detected = false;
                                 break;

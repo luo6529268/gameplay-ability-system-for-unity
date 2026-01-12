@@ -691,7 +691,7 @@ namespace NTSD.Animation
         /// <param name="from">起始帧</param>
         /// <param name="to">结束帧</param>
         /// <param name="au">权限等级（默认50，高于默认的99）</param>
-        public void FrameAniOscillate(int from, int to, int au = 50)
+        public void FrameAniOscillate(int from, int to)
         {
             if (_animationInfo.frameIndex < from || _animationInfo.frameIndex > to)
             {
@@ -700,9 +700,9 @@ namespace NTSD.Animation
             }
 
             if (_animationInfo.frameIndex < to && _animationInfo.IsUp)
-                trans.SetNext(_animationInfo.frameIndex++, au);
+                trans.SetNext(_animationInfo.frameIndex++);
             else if(_animationInfo.frameIndex > from && !_animationInfo.IsUp)
-                trans.SetNext(_animationInfo.frameIndex--, au);
+                trans.SetNext(_animationInfo.frameIndex--);
 
             if(_animationInfo.frameIndex == to)
                 _animationInfo.IsUp = false;

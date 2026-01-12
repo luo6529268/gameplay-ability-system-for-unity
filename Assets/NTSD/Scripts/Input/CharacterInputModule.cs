@@ -180,32 +180,32 @@ namespace NTSD.Game
 
                 if (value.x < -DIRECTION_DEADZONE)
                 {
-                    newDirectionMask |= FuncKeyMask.Left;
+                    newDirectionMask |= FuncKeyMask.left;
                 }
                 if (value.x > DIRECTION_DEADZONE)
                 {
-                    newDirectionMask |= FuncKeyMask.Right;
+                    newDirectionMask |= FuncKeyMask.right;
                 }
                 if (value.y > DIRECTION_DEADZONE)
                 {
-                    newDirectionMask |= FuncKeyMask.Up;
+                    newDirectionMask |= FuncKeyMask.up;
                 }
                 if (value.y < -DIRECTION_DEADZONE)
                 {
-                    newDirectionMask |= FuncKeyMask.Down;
+                    newDirectionMask |= FuncKeyMask.down;
                 }
 
-                _leftPressed = (newDirectionMask & FuncKeyMask.Left) != 0;
-                _rightPressed = (newDirectionMask & FuncKeyMask.Right) != 0;
-                _topPressed = (newDirectionMask & FuncKeyMask.Up) != 0;
-                _downPressed = (newDirectionMask & FuncKeyMask.Down) != 0;
+                _leftPressed = (newDirectionMask & FuncKeyMask.left) != 0;
+                _rightPressed = (newDirectionMask & FuncKeyMask.right) != 0;
+                _topPressed = (newDirectionMask & FuncKeyMask.up) != 0;
+                _downPressed = (newDirectionMask & FuncKeyMask.down) != 0;
 
                 if (newDirectionMask != _lastDirectionMask)
                 {
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Left, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Right, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Up, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.Down, _lastDirectionMask, newDirectionMask);
+                    CheckAndEnqueueDirectionChange(FuncKeyMask.left, _lastDirectionMask, newDirectionMask);
+                    CheckAndEnqueueDirectionChange(FuncKeyMask.right, _lastDirectionMask, newDirectionMask);
+                    CheckAndEnqueueDirectionChange(FuncKeyMask.up, _lastDirectionMask, newDirectionMask);
+                    CheckAndEnqueueDirectionChange(FuncKeyMask.down, _lastDirectionMask, newDirectionMask);
                     _lastDirectionMask = newDirectionMask;
                 }
 
@@ -215,21 +215,21 @@ namespace NTSD.Game
             if (context.action == AttackAction)
             {
                 _isAttacking = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Attack, down: true);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, down: true);
                 return;
             }
 
             if (context.action == JumpAction)
             {
                 _isJumping = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Jump, down: true);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, down: true);
                 return;
             }
 
             if (context.action == DefendAction)
             {
                 _isDefending = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Defend, down: true);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, down: true);
             }
         }
 
@@ -238,44 +238,44 @@ namespace NTSD.Game
             if (context.action == AttackAction)
             {
                 _isAttacking = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Attack, down: false);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, down: false);
                 return;
             }
 
             if (context.action == JumpAction)
             {
                 _isJumping = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Jump, down: false);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, down: false);
                 return;
             }
 
             if (context.action == DefendAction)
             {
                 _isDefending = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.Defend, down: false);
+                InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, down: false);
                 return;
             }
 
             if (context.action == MoveAction)
             {
-                if ((_lastDirectionMask & FuncKeyMask.Left) != 0)
+                if ((_lastDirectionMask & FuncKeyMask.left) != 0)
                 {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Left, down: false);
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.left, down: false);
                     _leftPressed = false;
                 }
-                if ((_lastDirectionMask & FuncKeyMask.Right) != 0)
+                if ((_lastDirectionMask & FuncKeyMask.right) != 0)
                 {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Right, down: false);
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.right, down: false);
                     _rightPressed = false;
                 }
-                if ((_lastDirectionMask & FuncKeyMask.Up) != 0)
+                if ((_lastDirectionMask & FuncKeyMask.up) != 0)
                 {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Up, down: false);
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.up, down: false);
                     _topPressed = false;
                 }
-                if ((_lastDirectionMask & FuncKeyMask.Down) != 0)
+                if ((_lastDirectionMask & FuncKeyMask.down) != 0)
                 {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.Down, down: false);
+                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.down, down: false);
                     _downPressed = false;
                 }
 
