@@ -1,4 +1,5 @@
 using System;
+using MoreMountains.TopDownEngine;
 using NTSD.Simulation;
 using NTSD.Tools;
 using UnityEngine;
@@ -9,8 +10,10 @@ namespace NTSD.Animation
     /// 物理运算桥接器：对齐 FLF 的 mech.dynamics() + blocking_xz()，并将结果写回 Unity 组件。
     ///
     /// 设计目标：
-    /// - 将“物理运算相关逻辑”从 LF2CharacterAnimator 中剥离（便于后续扩展/替换实现）。
+    /// - 将"物理运算相关逻辑"从 LF2CharacterAnimator 中剥离（便于后续扩展/替换实现）。
     /// - 保持每 tick 无额外分配（复用已有委托/缓存）。
+    ///
+    /// Step 3: 移除对 UnitActions 的依赖，改为通过 Character.SetGrounding 写回地面状态。
     /// </summary>
     public static class LF2DynamicsApplier
     {
@@ -25,7 +28,8 @@ namespace NTSD.Animation
             Vector3 baseLocalPosition)
         {
             if (animator == null) return;
-            if (animator.unitActions == null || animator.ps == null || mechanics == null) return;
+            // Step 3: 不再检查 unitActions，只检查必要项
+            if (animator.ps == null || mechanics == null) return;
             if (groundTransform == null) return;
 
             float blockedMoveScale = LF2CollisionSystem.BlockingXZ(animator) ? 0.1f : 1f;
@@ -69,10 +73,12 @@ namespace NTSD.Animation
             // 视觉高度偏移（Unity local Y）
             animator.transform.localPosition = baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
 
-            // BeatEmUp / 排序 / 影子用数据
-            animator.unitActions.yForce = 0f;
-            animator.unitActions.isGrounded = result.grounded;
-            animator.unitActions.groundPos = groundTransform.position.y;
+            // Step 3: 通过 Character hub 写回地面状态（替代 unitActions）
+            Character character = animator._Character;
+            if (character != null)
+            {
+                character.SetGrounding(groundTransform.position.y, result.grounded);
+            }
         }
     }
 }

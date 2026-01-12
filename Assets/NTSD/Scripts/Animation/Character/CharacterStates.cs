@@ -766,7 +766,7 @@ namespace NTSD.Animation
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}", 0, "Standing", eventType);
+                    Log.Info("[State {0}] Event={1}", "Standing", eventType);
                     // 检查是否持有重型武器，若是则切换到持重物站立帧 (Frame 12)
                     // TODO: 需要武器系统
                     return false;
@@ -774,7 +774,7 @@ namespace NTSD.Animation
                 case "combo":
                     // 站立状态的输入响应 (对应 FLF Line 250-338)
                     string comboKey = eventData as string;
-                    Log.Info("[State {0}:{1}] Event={2}, Key={3}", 0, "Standing", eventType, comboKey);
+                    Log.Info("[State {0}] Event={1}", "Standing", eventType);
                     // === 方向键与跳跃键处理 (FLF Line 253-272) ===
                     switch (comboKey)
                     {
@@ -807,7 +807,6 @@ namespace NTSD.Animation
                                     if (hasDx) ps.vx = ps.Dirh() * characterData.walking_speed;
                                     ps.vz = character._Character._CharacterInput.Dirv * characterData.walking_speedz;
 
-                                    return true;
                                 }
                             }
                             break;
@@ -841,11 +840,10 @@ namespace NTSD.Animation
                             character.TransitionToFrame(punchFrame, LF2StateConstants.ComboTransitionWait);
                             return true;
                     }
-                    return false;
 
-                default:
-                    return false;
+                    break;
             }
+            return false;
         }
 
         /// <summary>
@@ -874,7 +872,7 @@ namespace NTSD.Animation
 
                 case "TU":
                     // 移动速度应用 (对应 FLF Line 367-382)
-                    if (character.unitActions != null && character._Character != null)
+                    if (character._Character != null)
                     {
                         var characterData = character._FrameDataWrapper?.characterData;
                         if (characterData == null) return false;
@@ -915,7 +913,7 @@ namespace NTSD.Animation
                     if (dx == 0 && dz == 0 && !character.StateMem.ContainsKey("released"))
                     {
                         character.StateMem["released"] = true;
-                        character.unitActions?.ApplyUnitFriction();
+                        // Step 2: 移除 unitActions.ApplyUnitFriction，摩擦力由 ps 系统处理
                     }
 
                     // 3. 按键处理委托给 StandingStateHandler (如跳跃、攻击逻辑相同)
@@ -949,7 +947,7 @@ namespace NTSD.Animation
 
                 case "TU":
                     // 维持奔跑速度
-                    if (character.unitActions != null && character._Character != null)
+                    if (character._Character != null)
                     {
                         var characterInput = character._Character._CharacterInput;
                         var xfactor = 1 - (characterInput.Dirv != 0 ? 1 : 0) * (1f / 7f);
@@ -965,7 +963,7 @@ namespace NTSD.Animation
                 case "combo":
                     string comboKey = eventData as string;
 
-                    if (character.unitActions != null && !string.IsNullOrEmpty(comboKey))
+                    if (!string.IsNullOrEmpty(comboKey))
                     {
                         // 1. 反向输入检测 -> 停止奔跑 (急停)
                         if (comboKey == "left" || comboKey == "right" || comboKey == "left-left" || comboKey == "right-right")
@@ -1020,7 +1018,7 @@ namespace NTSD.Animation
                 case "frame":
                     // 空中攻击保持逻辑: 如果攻击结束时还在空中，强制切回跳跃状态
                     var frameData = character.CurrentFrame;
-                    if (frameData.next == LF2StandardFrames.LoopToStart && character.unitActions.yForce < 0)
+                    if (frameData.next == LF2StandardFrames.LoopToStart && character.ps.vy < 0)
                     {
                         Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 3, "Attack", LF2StandardFrames.JumpingAir, "空中攻击结束 -> 返回跳跃");
                         character.trans.SetNext(LF2StandardFrames.JumpingAir);
@@ -1797,11 +1795,9 @@ namespace NTSD.Animation
                     // 对应 FLF Line 804-807
                     if (character.CurrentFrameId == 135)
                     {
-                        if (character.unitActions != null)
-                        {
-                            Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "帧135 暂停（消除重力）");
-                            character.unitActions.yForce = 0;  // 暂停
-                        }
+                        // Step 2: 使用 ps.vy 替代 unitActions.yForce
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "帧135 暂停（消除重力）");
+                        character.ps.vy = 0;  // 暂停
                     }
 
                     // 被投掷：位置同步处理（FLF:809-880）

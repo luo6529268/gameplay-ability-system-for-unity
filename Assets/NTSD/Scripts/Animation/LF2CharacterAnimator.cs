@@ -1,4 +1,4 @@
-﻿using BeatEmUpTemplate2D;
+using BeatEmUpTemplate2D;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using NTSD.Help;
@@ -109,7 +109,49 @@ namespace NTSD.Animation
         // ==================== 组件缓存 ====================
         private List<Sprite> mergedSprites => CharacterAnimtorManager.Instance.GetCharacterSpriteByID(_Character.CharacterID);
         private SpriteRenderer spriteRenderer;
-        public UnitActions unitActions { get; private set; }  // 改为公共属性，供 CharacterStates 访问
+
+        // ==================== Step 2: 朝向权威（替代 UnitActions.dir / TurnToDir）====================
+        /// <summary>
+        /// 当前朝向（表现层权威）
+        /// 主要从 ps.dir 推导，兜底用 transform.localRotation
+        /// </summary>
+        public DIRECTION FacingDir
+        {
+            get
+            {
+                if (ps != null && !string.IsNullOrEmpty(ps.dir))
+                {
+                    return ps.dir == "left" ? DIRECTION.LEFT : DIRECTION.RIGHT;
+                }
+                // 兜底：从 transform 推导
+                return transform.parent != null && transform.parent.localRotation == Quaternion.Euler(0, 180, 0)
+                    ? DIRECTION.LEFT
+                    : DIRECTION.RIGHT;
+            }
+        }
+
+        /// <summary>
+        /// 设置朝向（表现层 + 数据层同步）
+        /// </summary>
+        /// <param name="dir">目标朝向</param>
+        /// <param name="syncPs">是否同步写回 ps.dir（默认 true）</param>
+        public void SetFacingDir(DIRECTION dir, bool syncPs = true)
+        {
+            // 表现层：翻转角色（通过 Character hub 的 transform）
+            var groundTransform = GetGroundTransform();
+            if (groundTransform != null)
+            {
+                groundTransform.localRotation = (dir == DIRECTION.LEFT)
+                    ? Quaternion.Euler(0, 180, 0)
+                    : Quaternion.identity;
+            }
+
+            // 数据层：同步 ps.dir
+            if (syncPs && ps != null)
+            {
+                ps.dir = (dir == DIRECTION.LEFT) ? "left" : "right";
+            }
+        }
 
         // 视觉偏移：ps.y（跳跃/击飞高度）只影响子节点（Model）的本地 Y，不影响地面平面位置与排序。
         private Vector3 _baseLocalPosition;
@@ -173,7 +215,6 @@ namespace NTSD.Animation
                 spriteRenderer = this.GetComponent<SpriteRenderer>();
             }
 
-            unitActions = GetComponentInParent<UnitActions>();
             _baseLocalPosition = transform.localPosition;
 
             // 初始化帧转换器
@@ -188,7 +229,7 @@ namespace NTSD.Animation
 
             // 初始化物理状态对象（对应 FLF 的 $.ps）
             ps = new PhysicsState();
-            ps.FromUnityPosition(GetGroundTransform().position);  // 从地面平面位置初始化（父节点/UnitActions）
+            ps.FromUnityPosition(GetGroundTransform().position);  // 从地面平面位置初始化（Character hub transform）
             ps.y = 0;   // 初始在地面
             ps.vx = 0;  // 初始速度为 0
             ps.vy = 0;
@@ -412,10 +453,10 @@ namespace NTSD.Animation
             {
                 Tools.Log.Info(
                     "[NTSD][ComboDetected] StableId={0} detected={1} state={2} frame={3} pre={4} " +
-                    "bufBefore={5} allowSwitchDir={6} ps.dir={7} ua.dir={8} " +
+                    "bufBefore={5} allowSwitchDir={6} ps.dir={7} FacingDir={8} " +
                     "IsLeft={9} IsRight={10}",
                     StableId, combo.name, FrameAniInfo.frameData.state, CurrentFrameId, PreviousFrameId,
-                    ComboBuffer.Combo ?? "null", _AllowSwitchDir, ps?.dir ?? "null", unitActions?.dir.ToString() ?? "null",
+                    ComboBuffer.Combo ?? "null", _AllowSwitchDir, ps?.dir ?? "null", FacingDir.ToString(),
                     _Character?._CharacterInput?.IsLeft, _Character?._CharacterInput?.IsRight
                 );
             }
@@ -436,7 +477,7 @@ namespace NTSD.Animation
         /// 职责：
         /// 1. 构造 CharacterMechanicsContext
         /// 2. 调用 _mech.Step() 执行物理计算
-        /// 3. 将结果写回 Unity 组件（Transform, UnitActions）
+        /// 3. 将结果写回 Unity 组件（Transform, Character hub）
         /// 4. 不处理 TU/落地事件（fell/fall_onto_ground 属于 TU_Update 阶段）
         ///
         /// 对齐 FLF：
@@ -552,20 +593,14 @@ namespace NTSD.Animation
             }
 
             if (switchDirAfterTrans) 
-                SetDirection(unitActions.dir == DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT);
+                SetDirection(FacingDir == DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT);
             
             FrameUpdate();
         }
 
         public void SetDirection(DIRECTION direction)
         {
-            if (unitActions == null) return;
-            unitActions.TurnToDir(direction);
-
-            if (ps != null)
-            {
-                ps.dir = (direction == DIRECTION.LEFT) ? "left" : "right";
-            }
+            SetFacingDir(direction, true);
         }
 
         public void SetDirectionByString(string dir) 
@@ -800,7 +835,8 @@ namespace NTSD.Animation
 
         private Transform GetGroundTransform()
         {
-            if (unitActions != null) return unitActions.transform;
+            // Step 2: 优先使用 Character hub 的 transform（不再依赖 unitActions）
+            if (_Character != null) return _Character.transform;
             if (transform.parent != null) return transform.parent;
             return transform;
         }

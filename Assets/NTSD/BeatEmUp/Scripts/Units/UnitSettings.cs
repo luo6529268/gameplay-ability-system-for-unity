@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using MoreMountains.TopDownEngine;
+using NTSD.Animation;
+using UnityEngine.Rendering;
 
 namespace BeatEmUpTemplate2D {
 
@@ -119,15 +121,14 @@ namespace BeatEmUpTemplate2D {
         public bool showFOVCone;                      // 是否在Unity编辑器中显示视野锥形
         [ReadOnlyProperty] public bool targetInSight; // 目标是否在视野范围内（只读属性）
 
-        private UnitActions unitActions => GetComponent<UnitActions>();
-
-        private Character _hub;
+        // Step 4: 缓存 Character hub（替代 UnitActions）
+        private Character _character;
 
         public int ModuleOrder => CharacterModuleOrder.UnitSettings;
 
         public void ModuleSetup(Character character)
         {
-            _hub = character;
+            _character = character;
         }
 
         public void ModuleInitialize()
@@ -182,21 +183,93 @@ namespace BeatEmUpTemplate2D {
             // 使用红色矩形绘制当前单位的碰撞框边界，便于在场景视图中观察和调试
             if(hitBox && hitBox.gameObject.activeSelf) MathUtilities.DrawRectGizmo(hitBox.bounds.center, hitBox.bounds.size, Color.red, Time.deltaTime);
         
-            // 控制阴影跟随单位移动
-            // 如果存在阴影对象，将其位置设置为单位的正下方，并确保阴影的渲染层级在单位之后
+            // Step 4: 控制阴影跟随单位移动（使用 Character.GroundWorldY 替代 unitActions.groundPos）
             if(shadow){
-                shadow.transform.position = new Vector3(transform.position.x, unitActions.groundPos, 0);
-                if(spriteRenderer) shadow.GetComponent<SpriteRenderer>().sortingOrder = spriteRenderer.sortingOrder-1; // 将阴影的渲染顺序设置为比单位低一级，使其显示在单位身后
+                float groundY = _character != null ? _character.GroundWorldY : transform.position.y;
+                shadow.transform.position = new Vector3(transform.position.x, groundY, 0);
+                
+                // Step 4: 优先使用 SortingGroup，fallback 到 spriteRenderer
+                int baseSortingOrder = 0;
+                if (_character != null)
+                {
+                    var sortingGroup = _character.GetComponent<SortingGroup>();
+                    if (sortingGroup != null)
+                    {
+                        baseSortingOrder = sortingGroup.sortingOrder;
+                    }
+                    else if (spriteRenderer != null)
+                    {
+                        baseSortingOrder = spriteRenderer.sortingOrder;
+                    }
+                }
+                else if (spriteRenderer != null)
+                {
+                    baseSortingOrder = spriteRenderer.sortingOrder;
+                }
+                
+                var shadowSr = shadow.GetComponent<SpriteRenderer>();
+                if (shadowSr != null)
+                {
+                    shadowSr.sortingOrder = baseSortingOrder - 1;
+                }
             }
         
-            // 设置单位的渲染层级
-            // 根据单位的位置确定其在场景中的渲染顺序，如果存在unitActions则使用其地面高度，否则使用transform的y坐标
-            ObjectSorting.Sort(spriteRenderer, new Vector2(transform.position.x, unitActions? unitActions.groundPos : transform.position.y));
+            // Step 4: 移除 ObjectSorting.Sort（排序由 LF2 dynamics 的 SortingGroup 负责）
+            // ObjectSorting.Sort(spriteRenderer, new Vector2(transform.position.x, ...));
 
-            // 检查目标是否在视野范围内
-            // 通过unitActions组件判断是否有目标单位在当前单位的视野范围内
-            targetInSight = unitActions != null? unitActions.targetInSight() : false;
+            // Step 4: 检查目标是否在视野范围内（使用迁移后的 TargetInSight 方法）
+            targetInSight = (_character != null) ? TargetInSight(_character.Target) : false;
 
+        }
+
+        /// <summary>
+        /// Step 4: 迁移自 UnitActions.targetInSight()
+        /// 检查目标是否在视野内
+        /// </summary>
+        private bool TargetInSight(GameObject target)
+        {
+            if (target == null) return false;
+            if (!enableFOV) return true;
+
+            // 获取朝向（从 animator.FacingDir）
+            DIRECTION facingDir = DIRECTION.RIGHT;
+            if (_character != null && _character._LF2CharacterAnimator != null)
+            {
+                facingDir = _character._LF2CharacterAnimator.FacingDir;
+            }
+
+            // viewOffset 的 x 方向需乘以朝向
+            Vector2 adjustedViewOffset = new Vector2(viewPosOffset.x * (int)facingDir, viewPosOffset.y);
+
+            Vector2 directionToTarget = target.transform.position - transform.position + (Vector3)adjustedViewOffset;
+            float distanceToTarget = directionToTarget.magnitude;
+            if (distanceToTarget > viewDistance) return false;
+
+            SpriteRenderer sr = target.GetComponent<SpriteRenderer>();
+            if (sr == null) return false;
+
+            Bounds spriteBounds = sr.bounds;
+            Vector3[] corners = {
+                spriteBounds.min,
+                spriteBounds.max,
+                new Vector3(spriteBounds.min.x, spriteBounds.max.y),
+                new Vector3(spriteBounds.max.x, spriteBounds.min.y)
+            };
+
+            foreach (Vector3 corner in corners)
+            {
+                Vector2 directionToCorner = corner - (transform.position + (Vector3)adjustedViewOffset);
+                float distanceToCorner = directionToCorner.magnitude;
+                if (distanceToCorner <= viewDistance)
+                {
+                    float angleToCorner = Vector2.Angle(transform.right, directionToCorner);
+                    if (angleToCorner <= viewAngle / 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>

@@ -14,6 +14,8 @@ using Random = UnityEngine.Random;
 
 namespace MoreMountains.TopDownEngine
 {
+	// ==================== Step 1: UnitActions 依赖拆分 ====================
+	// Target / Grounding 数据承接（替代 UnitActions.target / groundPos / isGrounded）
 	/// <summary>
 	/// 这个类将控制你角色的TopDownController组件。
 	/// 这是你将实现所有角色游戏规则的地方，比如跳跃、冲刺、射击等。
@@ -88,6 +90,34 @@ namespace MoreMountains.TopDownEngine
         public Rigidbody2D _Rigidbody2D { get; set; } //刚体组件
 
         public DIRECTION _CharacterDirection;
+
+		// ==================== Step 1: Target / Grounding 数据承接 ====================
+		/// <summary>
+		/// 当前目标对象（替代 UnitActions.target）
+		/// UnitSettings/AI 从这里读取 target
+		/// </summary>
+		public GameObject Target { get; set; }
+
+		/// <summary>
+		/// 地面世界 Y 坐标（替代 UnitActions.groundPos）
+		/// 由 LF2DynamicsApplier 通过 SetGrounding 写入
+		/// </summary>
+		public float GroundWorldY { get; private set; }
+
+		/// <summary>
+		/// 是否在地面上（替代 UnitActions.isGrounded）
+		/// 由 LF2DynamicsApplier 通过 SetGrounding 写入
+		/// </summary>
+		public bool IsGrounded { get; private set; } = true;
+
+		/// <summary>
+		/// 设置地面状态（由 LF2DynamicsApplier 调用）
+		/// </summary>
+		public void SetGrounding(float groundWorldY, bool isGrounded)
+		{
+			GroundWorldY = groundWorldY;
+			IsGrounded = isGrounded;
+		}
 
         /// an object to use as the camera's point of focus and follow target
         public virtual GameObject CameraTarget { get; set; }

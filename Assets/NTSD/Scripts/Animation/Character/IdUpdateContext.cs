@@ -11,7 +11,7 @@ namespace NTSD.Animation
     /// - 使用 struct 避免 GC 分配
     /// - 所有字段 readonly，保证确定性
     /// - 只提供必要的只读引用（不允许修改 Hub/Animator 等外部状态）
-    /// - handler 只能通过 ps/unitActions 等暴露的 API 修改游戏状态
+    /// - handler 只能通过 ctx.Ps（数据层）与 ctx.Animator（表现层 API，例如 SetFacingDir）以及 ctx.Hub（Target/Grounding/SortingGroup 等接口）来实现
     ///
     /// 对应 FLF character.js 的 id_update 调用：
     /// - this.id_update('generic_combo', comboKey, comboTag)

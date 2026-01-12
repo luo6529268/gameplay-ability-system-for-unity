@@ -72,7 +72,6 @@ namespace NTSD.Animation
         /// Step D9R: 所有依赖通过 Hub 注入，禁止 GetComponent
         /// </summary>
         /// <param name="hub">Character Hub</param>
-        /// <param name="unitActions">UnitActions 引用（由 Hub 注入）</param>
         public CharacterIdUpdate(Character hub)
         {
             _hub = hub;
