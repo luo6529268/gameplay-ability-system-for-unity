@@ -417,6 +417,15 @@ namespace NTSD.Animation
             // 对应 FLF character.js:52
             if (frameData.opoint != null)
             {
+                if (frameData.opoint.oid == 5) 
+                {
+                    float number_of_character = Mathf.Floor(Mathf.Abs(frameData.opoint.facing) / 10);
+                    for (int i = 0; i < number_of_character; i++) 
+                    {
+                    
+                    }
+                }
+
                 // TODO: 待对象生成系统完善后启用
             }
 

@@ -38,7 +38,7 @@ namespace NTSD.Input
             }
         }
 
-        public int timeoutFrames = 1800;
+        public int timeoutFrames = 0;
         public int combooutFrames = 0;
         public bool clearOnCombo = true;
         public bool debugLog = true;
