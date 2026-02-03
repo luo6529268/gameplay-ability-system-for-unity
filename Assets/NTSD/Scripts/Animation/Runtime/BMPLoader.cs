@@ -9,6 +9,13 @@ namespace NTSD.Animation
     /// </summary>
     public static class BMPLoader
     {
+        public sealed class BmpData
+        {
+            public int Width;
+            public int Height;
+            public Color[] Pixels;
+        }
+
         /// <summary>
         /// 加载 BMP 文件为 Texture2D
         /// 自动尝试多种加载方式
@@ -47,6 +54,37 @@ namespace NTSD.Animation
             return null;
         }
 
+        public static BmpData LoadBmpData(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                Debug.LogError($"[BMPLoader] 文件不存在: {filePath}");
+                return null;
+            }
+
+            FileInfo fileInfo = new FileInfo(filePath);
+            Debug.Log($"[BMPLoader] 开始加载: {Path.GetFileName(filePath)} (大小: {fileInfo.Length / 1024f:F2} KB)");
+
+            byte[] fileData = File.ReadAllBytes(filePath);
+            var data = TryLoadWithUnityData(fileData, filePath);
+            if (data != null)
+            {
+                Debug.Log($"<color=green>[BMPLoader] ✅ Unity LoadImage 成功</color>");
+                return data;
+            }
+
+            Debug.Log($"<color=yellow>[BMPLoader] Unity LoadImage 失败，尝试手动解析 BMP...</color>");
+            data = LoadBmpDataManual(fileData);
+            if (data != null)
+            {
+                Debug.Log($"<color=green>[BMPLoader] ✅ 手动解析 BMP 成功</color>");
+                return data;
+            }
+
+            Debug.LogError($"<color=red>[BMPLoader] ❌ 所有加载方法失败: {filePath}</color>");
+            return null;
+        }
+
         /// <summary>
         /// 尝试使用 Unity 的 LoadImage
         /// </summary>
@@ -79,6 +117,34 @@ namespace NTSD.Animation
                              $"[0]={pixels[0]}, [1]={pixels[1]}, [2]={pixels[2]}</color>");
                     return texture;
                 }
+                Object.DestroyImmediate(texture);
+                return null;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[BMPLoader] Unity LoadImage 异常: {e.Message}");
+                return null;
+            }
+        }
+
+        private static BmpData TryLoadWithUnityData(byte[] fileData, string filePath)
+        {
+            try
+            {
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                if (texture.LoadImage(fileData))
+                {
+                    Color[] pixels = texture.GetPixels();
+                    var data = new BmpData
+                    {
+                        Width = texture.width,
+                        Height = texture.height,
+                        Pixels = pixels
+                    };
+                    Object.DestroyImmediate(texture);
+                    return data;
+                }
+
                 Object.DestroyImmediate(texture);
                 return null;
             }
@@ -189,6 +255,74 @@ namespace NTSD.Animation
                 Debug.Log($"<color=green>[BMPLoader] BMP 解析成功: {width}x{absHeight}, 像素样本: " +
                          $"[0]={pixels[0]}, [1]={pixels[1]}, [2]={pixels[2]}</color>");
                 return texture;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[BMPLoader] 手动解析 BMP 失败: {e.Message}\n{e.StackTrace}");
+                return null;
+            }
+        }
+
+        private static BmpData LoadBmpDataManual(byte[] fileData)
+        {
+            try
+            {
+                if (fileData.Length < 54 || fileData[0] != 'B' || fileData[1] != 'M')
+                {
+                    Debug.LogError("[BMPLoader] 不是有效的 BMP 文件（缺少 'BM' 标识）");
+                    return null;
+                }
+
+                int pixelDataOffset = System.BitConverter.ToInt32(fileData, 10);
+                int width = System.BitConverter.ToInt32(fileData, 18);
+                int height = System.BitConverter.ToInt32(fileData, 22);
+                int bitsPerPixel = System.BitConverter.ToInt16(fileData, 28);
+                int compression = System.BitConverter.ToInt32(fileData, 30);
+                int colorsUsed = System.BitConverter.ToInt32(fileData, 46);
+
+                if (compression != 0)
+                {
+                    Debug.LogError($"[BMPLoader] 不支持压缩的 BMP 文件（压缩类型: {compression}）");
+                    return null;
+                }
+
+                if (bitsPerPixel != 4 && bitsPerPixel != 8 && bitsPerPixel != 24 && bitsPerPixel != 32)
+                {
+                    Debug.LogError($"[BMPLoader] 只支持 4位、8位、24位 或 32位 BMP（当前: {bitsPerPixel}位）");
+                    return null;
+                }
+
+                Color[] palette = null;
+                if (bitsPerPixel <= 8)
+                {
+                    palette = LoadPalette(fileData, bitsPerPixel, colorsUsed);
+                    if (palette == null)
+                    {
+                        Debug.LogError("[BMPLoader] 调色板加载失败");
+                        return null;
+                    }
+                }
+
+                int absHeight = Mathf.Abs(height);
+                Color[] pixels = new Color[width * absHeight];
+                int rowSize = ((width * bitsPerPixel + 31) / 32) * 4;
+                bool isBottomUp = height > 0;
+
+                if (bitsPerPixel <= 8)
+                {
+                    ParseIndexedPixels(fileData, pixelDataOffset, width, absHeight, bitsPerPixel, rowSize, isBottomUp, palette, pixels);
+                }
+                else
+                {
+                    ParseDirectPixels(fileData, pixelDataOffset, width, absHeight, bitsPerPixel, rowSize, isBottomUp, pixels);
+                }
+
+                return new BmpData
+                {
+                    Width = width,
+                    Height = absHeight,
+                    Pixels = pixels
+                };
             }
             catch (System.Exception e)
             {

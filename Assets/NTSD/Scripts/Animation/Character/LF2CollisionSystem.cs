@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Tools;
 using UnityEngine;
@@ -38,24 +39,24 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 对齐 FLF mech.blocking_xz()：预测下一步（ps.vx/ps.vz）是否会被 kind:14 阻挡。
+        /// 对齐 FLF mech.blocking_xz()：预测下一步（PS.vx/PS.vz）是否会被 kind:14 阻挡。
         /// 注意：这里使用 Unity ground plane（X/Y）上的阻挡体（LF2BlockingObstacle），属于方案 1 的“显式障碍物”。
         /// </summary>
-        public static bool BlockingXZ(LF2CharacterAnimator actor)
+        public static bool BlockingXZ(ILF2LivingObject actor)
         {
-            if (actor == null || actor.ps == null) return false;
-            return BlockingXZ(actor, actor.ps.vx, actor.ps.vz);
+            if (actor == null || actor.PS == null) return false;
+            return BlockingXZ(actor, actor.PS.vx, actor.PS.vz);
         }
 
         private static readonly List<PhysicsState.FlfVolume> s_tmpActorBodies = new List<PhysicsState.FlfVolume>(8);
         private static readonly List<PhysicsState.FlfVolume> s_tmpItr14 = new List<PhysicsState.FlfVolume>(8);
 
-        public static bool BlockingXZ(LF2CharacterAnimator actor, float vxPx, float vzPx)
+        public static bool BlockingXZ(ILF2LivingObject actor, float vxPx, float vzPx)
         {
-            if (actor == null || actor.ps == null) return false;
+            if (actor == null || actor.PS == null) return false;
             if (s_blockingObstacles.Count == 0) return false;
 
-            var frame = actor.CurrentFrame;
+            var frame = actor.Frame.D;
             if (frame == null) return false;
 
             float spriteWidthPx = actor.GetSpriteWidthPxForCollision();
@@ -64,7 +65,7 @@ namespace NTSD.Animation
             // 对齐 FLF mech.blocking_xz():
             // - 用当前 frame 的 body 体积，带 offset(vx,vz) 预测下一步位置
             // - 并将 body.zwidth 置为 0（FLF: body[i].zwidth = 0）
-            actor.ps.FillBodyVolumes(
+            actor.PS.FillBodyVolumes(
                 s_tmpActorBodies,
                 frame.bodies,
                 frame.centerx,
@@ -113,8 +114,8 @@ namespace NTSD.Animation
         public struct HitEvent
         {
             public int tickIndex;
-            public LF2CharacterAnimator attacker;
-            public LF2CharacterAnimator target;
+            public ILF2LivingObject attacker;
+            public ILF2LivingObject target;
             public InteractionArea itr;
         }
 
@@ -123,8 +124,8 @@ namespace NTSD.Animation
         public struct PreInteractionEvent
         {
             public int tickIndex;
-            public LF2CharacterAnimator actor;
-            public LF2CharacterAnimator target;
+            public ILF2LivingObject actor;
+            public ILF2LivingObject target;
             public InteractionArea itr;
         }
 
@@ -136,7 +137,9 @@ namespace NTSD.Animation
             if (_lastPreProcessedTick == tickIndex) return;
             _lastPreProcessedTick = tickIndex;
 
-            LF2CharacterAnimator[] animators = Object.FindObjectsByType<LF2CharacterAnimator>(FindObjectsSortMode.None);
+            //ILF2LivingObject[] animators = Object.FindObjectsByType<ILF2LivingObject>(FindObjectsSortMode.None);
+
+            ILF2LivingObject[] animators = new ILF2LivingObject[10];
             System.Array.Sort(animators, (a, b) =>
             {
                 if (a == null && b == null) return 0;
@@ -147,21 +150,21 @@ namespace NTSD.Animation
 
             for (int a = 0; a < animators.Length; a++)
             {
-                LF2CharacterAnimator actor = animators[a];
-                if (actor == null || actor.ps == null) continue;
-                if (actor.CurrentFrame == null) continue;
+                ILF2LivingObject actor = animators[a];
+                if (actor == null || actor.PS == null) continue;
+                if (actor.Frame.D == null) continue;
                 if (!actor.ItrRest.ArestTest()) continue;
 
                 bool triggered = false;
 
-                int nextFrameId = actor.trans.NextFrameResolved();
+                int nextFrameId = actor.Trans.NextFrameResolved();
                 LF2FrameData nextFrame = actor.GetFrameDataById(nextFrameId);
                 if (nextFrame == null || nextFrame.itrs == null || nextFrame.itrs.Count == 0) continue;
 
                 float actorSpriteWidthPx = actor.GetSpriteWidthPxForCollision();
                 if (actorSpriteWidthPx <= 0f) continue;
 
-                List<PhysicsState.FlfVolume> actorItrVolumes = actor.ps.GetItrVolumes(
+                List<PhysicsState.FlfVolume> actorItrVolumes = actor.PS.GetItrVolumes(
                     nextFrame.itrs,
                     nextFrame.centerx,
                     nextFrame.centery,
@@ -172,19 +175,19 @@ namespace NTSD.Animation
                 for (int t = 0; t < animators.Length; t++)
                 {
                     if (t == a) continue;
-                    LF2CharacterAnimator target = animators[t];
-                    if (target == null || target.ps == null) continue;
-                    if (target.CurrentFrame == null) continue;
+                    ILF2LivingObject target = animators[t];
+                    if (target == null || target.PS == null) continue;
+                    if (target.Frame.D == null) continue;
 
                     // pre_interaction 的 body 查询没有 vrest gating，但仍受 arest 限制（actor 自身）
 
                     float targetSpriteWidthPx = target.GetSpriteWidthPxForCollision();
                     if (targetSpriteWidthPx <= 0f) continue;
 
-                    List<PhysicsState.FlfVolume> targetBodyVolumes = target.ps.GetBodyVolumes(
-                        target.CurrentFrame.bodies,
-                        target.CurrentFrame.centerx,
-                        target.CurrentFrame.centery,
+                    List<PhysicsState.FlfVolume> targetBodyVolumes = target.PS.GetBodyVolumes(
+                        target.Frame.D.bodies,
+                        target.Frame.D.centerx,
+                        target.Frame.D.centery,
                         targetSpriteWidthPx
                     );
 
@@ -211,7 +214,7 @@ namespace NTSD.Animation
 
                                 if (DebugLog)
                                 {
-                                    Log.Info("[LF2CollisionSystem] PRE_INTERACTION tick={0} kind={1} actor={2} target={3}", tickIndex, itr.kind, actor.name, target.name);
+                                    Log.Info("[LF2CollisionSystem] PRE_INTERACTION tick={0} kind={1} actor={2} target={3}", tickIndex, itr.kind, actor.Name, target.Name);
                                 }
 
                                 OnPreInteraction?.Invoke(evt);
@@ -239,7 +242,8 @@ namespace NTSD.Animation
 
             // 最小实现：从场景收集所有角色 Animator
             // 后续如要严格 determinism，应改为 SimulationWorld 的确定性列表。
-            LF2CharacterAnimator[] animators = Object.FindObjectsByType<LF2CharacterAnimator>(FindObjectsSortMode.None);
+            //ILF2LivingObject[] animators = Object.FindObjectsByType<ILF2LivingObject>(FindObjectsSortMode.None);
+            ILF2LivingObject[] animators = new ILF2LivingObject[10];
             System.Array.Sort(animators, (a, b) =>
             {
                 if (a == null && b == null) return 0;
@@ -250,21 +254,21 @@ namespace NTSD.Animation
 
             for (int a = 0; a < animators.Length; a++)
             {
-                LF2CharacterAnimator attacker = animators[a];
-                if (attacker == null || attacker.ps == null) continue;
-                if (attacker.CurrentFrame == null) continue;
+                ILF2LivingObject attacker = animators[a];
+                if (attacker == null || attacker.PS == null) continue;
+                if (attacker.Frame.D == null) continue;
 
                 // 只处理攻击类 ITR（先做最小闭环）
-                var itrs = attacker.CurrentFrame.itrs;
+                var itrs = attacker.Frame.D.itrs;
                 if (itrs == null || itrs.Count == 0) continue;
 
                 float attackerSpriteWidthPx = attacker.GetSpriteWidthPxForCollision();
                 if (attackerSpriteWidthPx <= 0f) continue;
 
-                List<PhysicsState.FlfVolume> attackerItrVolumes = attacker.ps.GetItrVolumes(
+                List<PhysicsState.FlfVolume> attackerItrVolumes = attacker.PS.GetItrVolumes(
                     itrs,
-                    attacker.CurrentFrame.centerx,
-                    attacker.CurrentFrame.centery,
+                    attacker.Frame.D.centerx,
+                    attacker.Frame.D.centery,
                     attackerSpriteWidthPx,
                     itrZWidthPx: 0f
                 );
@@ -272,9 +276,9 @@ namespace NTSD.Animation
                 for (int t = 0; t < animators.Length; t++)
                 {
                     if (t == a) continue;
-                    LF2CharacterAnimator target = animators[t];
-                    if (target == null || target.ps == null) continue;
-                    if (target.CurrentFrame == null) continue;
+                    ILF2LivingObject target = animators[t];
+                    if (target == null || target.PS == null) continue;
+                    if (target.Frame.D == null) continue;
 
                     // vrest on target (per attacker), arest on attacker
                     if (!attacker.ItrRest.ArestTest()) continue;
@@ -283,10 +287,10 @@ namespace NTSD.Animation
                     float targetSpriteWidthPx = target.GetSpriteWidthPxForCollision();
                     if (targetSpriteWidthPx <= 0f) continue;
 
-                    List<PhysicsState.FlfVolume> targetBodyVolumes = target.ps.GetBodyVolumes(
-                        target.CurrentFrame.bodies,
-                        target.CurrentFrame.centerx,
-                        target.CurrentFrame.centery,
+                    List<PhysicsState.FlfVolume> targetBodyVolumes = target.PS.GetBodyVolumes(
+                        target.Frame.D.bodies,
+                        target.Frame.D.centerx,
+                        target.Frame.D.centery,
                         targetSpriteWidthPx
                     );
 
@@ -303,7 +307,7 @@ namespace NTSD.Animation
                             {
                                 if (DebugLog)
                                 {
-                                    Log.Info("[LF2CollisionSystem] HIT tick={0} kind={1} attacker={2} target={3}", tickIndex, itr.kind, attacker.name, target.name);
+                                    Log.Info("[LF2CollisionSystem] HIT tick={0} kind={1} attacker={2} target={3}", tickIndex, itr.kind, attacker.Name, target.Name);
                                 }
 
                                 // Update rests (FLF):
@@ -332,7 +336,7 @@ namespace NTSD.Animation
                                 {
                                     // FLF: if no state_update('hit_stop'), apply default hit_stop wait increase
                                     // (FLF also creates effect_stuck; we only do the timing part here)
-                                    attacker.trans.IncWait(FLF_DEFAULT_ITR_HIT_STOP, 10);
+                                    attacker.Trans.IncWait(FLF_DEFAULT_ITR_HIT_STOP, 10);
                                 }
 
                                 // FLF arest 是 attacker 全局冷却：一旦命中，后续目标无需继续检测
@@ -392,7 +396,7 @@ namespace NTSD.Animation
         private static int GetCurrentTickIndexFallback()
         {
             // 优先使用 SimulationTickDriver 的确定性 tickIndex；否则 fallback 到 Time.frameCount
-            return SimulationTickDriver.Instance.CurrentTickIndex;
+            return SimulationTickDriver.Instance != null ? SimulationTickDriver.Instance.CurrentTickIndex : Time.frameCount;
         }
     }
 }

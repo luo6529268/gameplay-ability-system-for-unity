@@ -31,6 +31,30 @@ namespace NTSD.Simulation
                 { 13, 7f },
                 { 25, 9f },
             };
+
+            // FLF: GC.weapon.bounceup
+            public const float WeaponBounceupLimit = 8f;
+            public const float WeaponBounceupSpeedX = 3f;
+            public const float WeaponBounceupSpeedY = -6f;
+            public const float WeaponBounceupSpeedZ = 1f;
+
+            // FLF: GC.weapon.hit
+            public const float WeaponHitVx = 3f;
+            public const float WeaponHitVy = -3f;
+
+            // FLF: GC.weapon.reverse.factor
+            public const float WeaponReverseFactorVx = -0.4f;
+            public const float WeaponReverseFactorVy = 0.8f;
+            public const float WeaponReverseFactorVz = 0.8f;
+
+            // FLF: GC.weapon.soft_bounceup
+            public const float WeaponSoftBounceupSpeedY = -3f;
+
+            // FLF: GC.defend.break_limit
+            public const int DefendBreakLimit = 60;
+
+            // FLF: GC.fall.KO
+            public const int FallKO = 70;
         }
 
         public static class Default

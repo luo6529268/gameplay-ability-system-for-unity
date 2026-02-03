@@ -2,15 +2,16 @@ using BeatEmUpTemplate2D;
 using GAS.Runtime;
 using MoreMountains.Tools;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Extensions;
 using NTSD.Game;
 using NTSD.TimeWheel;
-using NTSD.Simulation;  // Plan B: SimulationWorld integration
+using NTSD.Simulation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Random = UnityEngine.Random;
+using NTSD.Input;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -38,8 +39,6 @@ namespace MoreMountains.TopDownEngine
 
 		public CharacterTypes CharacterType = CharacterTypes.AI;
 
-		public virtual CharacterStates CharacterState { get; protected set; }
-
         public int CharacterID;
 
 		[Header("Input")]
@@ -61,7 +60,7 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("如果这是一个高级AI，与此角色相关联的大脑。默认情况下，引擎会在此对象上选择一个，但如果你想的话，可以附加另一个")]
 		public AIBrain CharacterBrain;
 
-        public TimeWheel m_TimeWheel { get; set; }
+        public TimeWheel m_TimeWheel { get; private set; }
 
         public MMStateMachine<CharacterStates.CharacterConditions> ConditionState;
 
@@ -69,34 +68,39 @@ namespace MoreMountains.TopDownEngine
 		/// Plan B: 纯 C# 游戏逻辑模块（不继承 MonoBehaviour）
 		/// 由 SimulationWorld 在 30Hz 驱动
 		/// </summary>
-		public CharacterSim _CharacterSim { get; set; }
+		public CharacterSim _CharacterSim { get; private set; }
 
         /// <summary>
         /// 输入/连招检测模块（纯 C#）
         /// </summary>
-        public NTSD.Game.CharacterInputModule _CharacterInput { get; set; }
-        public NTSD.Input.ActionSequenceDetectorModule _ActionSequenceDetector { get; set; }
+        public CharacterInputModule _CharacterInput { get; private set; }
+        public ActionSequenceDetectorModule _ActionSequenceDetector { get; private set; }
 
         /// <summary>
         /// Step D9: id_update 管理器（角色特定逻辑扩展点）
         /// 对应 FLF 的 $.id_update(...) 方法
         /// </summary>
-        public CharacterIdUpdate _IdUpdate { get; set; }
+        public CharacterIdUpdate _IdUpdate { get; private set; }
 
-		public AbilitySystemComponent _AbilitySystemComponent { get; set; }
-        public UnitSettings _UnitSetting { get; set; }
-        public CapsuleCollider2D col2D; // 2D碰撞体组件
-		public LF2CharacterAnimator _LF2CharacterAnimator { get; set; }
-        public Rigidbody2D _Rigidbody2D { get; set; } //刚体组件
+		public AbilitySystemComponent _AbilitySystemComponent { get; private set; }
+        public UnitSettings _UnitSetting { get; private set; }
+		public SpriteRenderer _SpriteRenderer { get; private set; }
+        /// <summary>
+        /// 角色专用逻辑模块（纯 C#，对应 FLF character.js）
+        /// </summary>
+        public LF2Character _LF2Character { get; private set; }
 
-        public DIRECTION _CharacterDirection;
+		/// <summary>
+		/// 精灵动画模块（纯 C#，对应 FLF sprite.js）
+		/// </summary>
+		public LF2Sprite _LF2Sprite { get; private set; }
 
 		// ==================== Step 1: Target / Grounding 数据承接 ====================
 		/// <summary>
 		/// 当前目标对象（替代 UnitActions.target）
 		/// UnitSettings/AI 从这里读取 target
 		/// </summary>
-		public GameObject Target { get; set; }
+		public GameObject Target { get; private set; }
 
 		/// <summary>
 		/// 地面世界 Y 坐标（替代 UnitActions.groundPos）
@@ -125,14 +129,7 @@ namespace MoreMountains.TopDownEngine
 		public virtual Vector3 CameraDirection { get; protected set; }
 
 
-		protected bool _abilitiesCachedOnce = false;
 		protected TopDownController _controller;
-
-		protected bool _animatorInitialized = false;
-		protected bool _onReviveRegistered;
-		protected Coroutine _conditionChangeCoroutine;
-		protected CharacterStates.CharacterConditions _lastState;
-		// Step D3: _transformVelocity 和 _thisPositionLastFrame 已移除（FixedUpdate 旁路已删除）
 
 		// ==================== Scheme C: Module Lifecycle ====================
 		protected readonly List<ICharacterModule> _modules = new List<ICharacterModule>(16);
@@ -148,69 +145,63 @@ namespace MoreMountains.TopDownEngine
 		{
 			if (_modulesCollected) return;
 			_modulesCollected = true;
-
 			_modules.Clear();
 
-			// Pure C# runtime modules (no prefab component required)
-			_CharacterInput = new NTSD.Game.CharacterInputModule();
-			_ActionSequenceDetector = new NTSD.Input.ActionSequenceDetectorModule();
-			_modules.Add(_CharacterInput);
-			_modules.Add(_ActionSequenceDetector);
 
-			MonoBehaviour[] behaviours = GetComponentsInChildren<MonoBehaviour>(true);
-			for (int i = 0; i < behaviours.Length; i++)
-			{
-				MonoBehaviour behaviour = behaviours[i];
-				if (behaviour == null) continue;
-				if (ReferenceEquals(behaviour, this)) continue;
-				if (behaviour is ICharacterModule module)
-				{
-					_modules.Add(module);
-				}
-			}
+			_CharacterInput = new CharacterInputModule();
+			_ActionSequenceDetector = new ActionSequenceDetectorModule();
 
-			_modules.Sort((a, b) => a.ModuleOrder.CompareTo(b.ModuleOrder));
+			// 初始化纯 C# 模块
+			_LF2Character = new LF2Character(this);
+			_LF2Sprite = new LF2Sprite();
 
-			for (int i = 0; i < _modules.Count; i++)
-			{
-				try
-				{
-					_modules[i].ModuleSetup(this);
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[Character] ModuleSetup failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
-				}
-			}
-		}
+            HandleInitModulesInternal();
+        }
+
+		private void HandleInitModulesInternal() 
+		{
+            _modules.Add(_CharacterInput);
+            _modules.Add(_ActionSequenceDetector);
 
 
-		/// <summary>
-		/// Initializes this instance of the character
-		/// </summary>
-		protected virtual void Awake()
+            for (int i = 0; i < _modules.Count; i++)
+            {
+                try
+                {
+                    _modules[i].ModuleSetup(this);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[Character] ModuleSetup failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Initializes this instance of the character
+        /// </summary>
+        protected virtual void Awake()
 		{
 			BootstrapModules();
-			EnsureModulesInitialized();
 		}
 
 		protected virtual void InitAttribute()
 		{
 			//_AbilitySystemComponent.AttrSet<AS_Fight>().InitHP(HpMax);
 			//_AbilitySystemComponent.AttrSet<AS_Fight>().InitMP(MpMax);
-			_AbilitySystemComponent.AttrSet<AS_Fight>().InitPOSTURE(0);
+			//_AbilitySystemComponent.AttrSet<AS_Fight>().InitPOSTURE(0);
 			//_AbilitySystemComponent.AttrSet<AS_Fight>().InitATK(ATK);
-			// ✅ 从 LF2CharacterData 读取初始速度（默认使用 walking_speed）
-			if (_LF2CharacterAnimator != null && _LF2CharacterAnimator._FrameDataWrapper != null)
-			{
-				var characterData = _LF2CharacterAnimator._FrameDataWrapper.characterData;
-				_AbilitySystemComponent.AttrSet<AS_Fight>().InitSPEED(characterData.walking_speed);
-			}
-			else
-			{
-				// 如果没有 LF2CharacterData，使用默认值
-				_AbilitySystemComponent.AttrSet<AS_Fight>().InitSPEED(_UnitSetting.moveSpeed);
-			}
+			//if (_LF2CharacterAnimator != null && _LF2CharacterAnimator._FrameDataWrapper != null)
+			//{
+			//	var characterData = _LF2CharacterAnimator._FrameDataWrapper.characterData;
+			//	_AbilitySystemComponent.AttrSet<AS_Fight>().InitSPEED(characterData.walking_speed);
+			//}
+			//else
+			//{
+			//	// 如果没有 LF2CharacterData，使用默认值
+			//	_AbilitySystemComponent.AttrSet<AS_Fight>().InitSPEED(_UnitSetting.moveSpeed);
+			//}
 		}
 
 		/// <summary>
@@ -220,37 +211,15 @@ namespace MoreMountains.TopDownEngine
 		{
 			if (_modulesInitialized) return;
 
-			// we store our components for further use 
-			CharacterState = new CharacterStates();
-
 			_UnitSetting = this.GetComponent<UnitSettings>();
 			_AbilitySystemComponent = this.gameObject.GetComponent<AbilitySystemComponent>();
-			_AbilitySystemComponent.InitWithPreset(1);
-
-
 			_controller = this.gameObject.GetComponent<TopDownController>();
-			// _CharacterInput / _ActionSequenceDetector are pure C# modules (created in BootstrapModules)
-			_LF2CharacterAnimator = this.gameObject.GetComponentInChildren<LF2CharacterAnimator>();
+            _SpriteRenderer = this.gameObject.GetComponentInChildren<SpriteRenderer>();
 
-			_CharacterDirection = DIRECTION.RIGHT;
 
-			if(m_TimeWheel == null)
-                m_TimeWheel = TimeWheel.CreateSharedInstance();
+            _AbilitySystemComponent.InitWithPreset(1);
 
-            if (CharacterHealth == null)
-			{
-				CharacterHealth = this.gameObject.GetComponent<Health>();
-			}
-
-			if (CharacterBrain == null)
-			{
-				CharacterBrain = this.gameObject.GetComponent<AIBrain>();
-			}
-
-			if (CharacterBrain != null)
-			{
-				CharacterBrain.Owner = this.gameObject;
-			}
+			m_TimeWheel = TimeWheel.CreateSharedInstance();
 
 			// Step D1: 强制 StableId 在注册前稳定分配（禁止 fallback）
 			if (HasStableIdOverride)
@@ -289,6 +258,18 @@ namespace MoreMountains.TopDownEngine
 				}
 			}
 
+			// 初始化 LF2Character 模块（在 ICharacterModule 之后）
+			if (_LF2Character != null)
+			{
+				var sprites = CharacterAnimtorManager.Instance?.GetCharacterSpriteByID(CharacterID);
+				_LF2Character.ModuleInitialize(
+					spriteRenderer: _SpriteRenderer,
+					sprites: sprites,
+					groundTransform: this.transform,
+					baseLocalPosition: _SpriteRenderer.transform.localPosition
+				);
+			}
+
 			// Step D1: 只有在成功分配 StableId 后才创建 Sim 模块
 			// Plan B: Create CharacterSim module (pure C# gameplay logic)
 			_CharacterSim = new CharacterSim(this);
@@ -314,8 +295,6 @@ namespace MoreMountains.TopDownEngine
 
 		protected virtual void Start()
 		{
-			// Default flow: bind CharacterID-driven data on Start (single player / non-custom spawners).
-			// Multiplayer spawners can call ApplyCharacterID + EnsureCharacterDataBound() earlier.
 			EnsureCharacterDataBound();
         }
 
@@ -355,6 +334,22 @@ namespace MoreMountains.TopDownEngine
 				{
 					Debug.LogError($"[Character] ModuleBind failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
 				}
+			}
+
+			// 绑定 LF2Character 模块（在 ICharacterModule.ModuleBind 之后）
+			if (_LF2Character != null)
+			{
+                var frameDataWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(CharacterID);
+                if (frameDataWrapper != null)
+				{
+					_LF2Character.ModuleBind(frameDataWrapper, CharacterID);
+				}
+			}
+
+			// 初始化 LF2Character 模块（在 ModuleBind 之后，确保 LF2CharacterAnimator 已绑定）
+			if (_LF2Character != null)
+			{
+				_LF2Character.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
 			}
 
 			// Step D9R: 注册默认 handlers（对应 FLF character.js 的 id_updates 初始化）
@@ -409,58 +404,6 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// 临时改变角色状态并在指定时间后恢复原状态的方法。
-		/// 也可以用于临时禁用重力，并可选择是否重置作用力。
-		/// </summary>
-		/// <param name="newCondition">要设置的新状态</param>
-		/// <param name="duration">状态持续的时间</param>
-		/// <param name="resetControllerForces">是否重置控制器作用力</param>
-		/// <param name="disableGravity">是否禁用重力</param>
-		public virtual void ChangeCharacterConditionTemporarily(CharacterStates.CharacterConditions newCondition,
-			float duration, bool resetControllerForces, bool disableGravity)
-		{
-			// 如果已有状态改变协程在运行，先停止它
-			if (_conditionChangeCoroutine != null)
-			{
-				StopCoroutine(_conditionChangeCoroutine);
-			}
-			// 启动新的状态改变协程
-			_conditionChangeCoroutine = StartCoroutine(ChangeCharacterConditionTemporarilyCo(newCondition, duration, resetControllerForces, disableGravity));
-		}
-
-		/// <summary>
-		/// 处理临时状态改变的协程方法
-		/// </summary>
-		/// <param name="newCondition">新的角色状态</param>
-		/// <param name="duration">状态持续时间</param>
-		/// <param name="resetControllerForces">是否重置控制器作用力</param>
-		/// <param name="disableGravity">是否禁用重力</param>
-		/// <returns>协程迭代器</returns>
-		protected virtual IEnumerator ChangeCharacterConditionTemporarilyCo(
-			CharacterStates.CharacterConditions newCondition,
-			float duration, bool resetControllerForces, bool disableGravity)
-		{
-			// 保存当前状态（如果新状态与当前状态不同）
-			if (_lastState != newCondition) if ((_lastState != newCondition) && (this.ConditionState.CurrentState != newCondition))
-				{
-					_lastState = this.ConditionState.CurrentState;
-				}
-
-			// 改变到新状态
-			this.ConditionState.ChangeState(newCondition);
-			// 根据参数重置控制器作用力
-			if (resetControllerForces) { _controller?.SetMovement(Vector2.zero); }
-			// 根据参数禁用重力
-			if (disableGravity && (_controller != null)) { _controller.GravityActive = false; }
-			// 等待指定持续时间
-			yield return MMCoroutine.WaitFor(duration);
-			// 恢复到之前的状态
-			this.ConditionState.ChangeState(_lastState);
-			// 如果之前禁用了重力，重新启用
-			if (disableGravity && (_controller != null)) { _controller.GravityActive = true; }
-		}
-
-		/// <summary>
 		/// 存储相关的相机方向
 		/// </summary>
 		/// <param name="direction">相机方向向量</param>
@@ -510,73 +453,10 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// 当角色死亡时调用。
-		/// 调用所有能力的Reset()方法，以便在需要时将设置恢复到原始值
-		/// </summary>
-		public virtual void Reset()
-		{
-
-		}
-
-		/// <summary>
-		/// 角色复活时，强制设置生成方向
-		/// </summary>
-		protected virtual void OnRevive()
-		{
-			// 如果角色大脑组件存在
-			if (CharacterBrain != null)
-			{
-				// 启用大脑组件
-				CharacterBrain.enabled = true;
-				// 重置大脑状态
-				CharacterBrain.ResetBrain();
-			}
-		}
-
-		/// <summary>
-		/// 角色死亡时的处理方法
-		/// </summary>
-		protected virtual void OnDeath()
-		{
-			// 如果角色大脑组件存在
-			if (CharacterBrain != null)
-			{
-				// 清空大脑状态
-				CharacterBrain.TransitionToState("");
-				// 禁用大脑组件
-				CharacterBrain.enabled = false;
-			}
-		}
-
-		/// <summary>
-		/// 角色受到伤害时的处理方法
-		/// </summary>
-		protected virtual void OnHit()
-		{
-
-		}
-
-		/// <summary>
 		/// 对象启用时，注册复活事件
 		/// </summary>
 		protected virtual void OnEnable()
 		{
-			// 如果角色生命值组件存在
-			if (CharacterHealth != null)
-			{
-				// 如果复活事件还未注册
-				if (!_onReviveRegistered)
-				{
-					// 注册复活事件
-					CharacterHealth.OnRevive += OnRevive;
-					_onReviveRegistered = true;
-				}
-				// 注册死亡事件
-				CharacterHealth.OnDeath += OnDeath;
-				// 注册受伤事件
-				CharacterHealth.OnHit += OnHit;
-			}
-
 			// Plan B: Register CharacterSim to SimulationWorld
 			if (_CharacterSim != null && SimulationTickDriver.Instance != null)
 			{
@@ -595,15 +475,6 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		protected virtual void OnDisable()
 		{
-			// 如果角色生命值组件存在
-			if (CharacterHealth != null)
-			{
-				// 取消注册死亡事件
-				CharacterHealth.OnDeath -= OnDeath;
-				// 取消注册受伤事件
-				CharacterHealth.OnHit -= OnHit;
-			}
-
 			// Plan B: Unregister CharacterSim from SimulationWorld
 			if (_CharacterSim != null && SimulationTickDriver.Instance != null)
 			{

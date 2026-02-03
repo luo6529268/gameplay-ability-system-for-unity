@@ -321,7 +321,6 @@ namespace BeatEmUpTemplate2D
             const float PIXELS_PER_UNIT = 100f;        // Unity PPU 设置
             const float SPEED_CONVERSION = FLF_FRAMERATE / PIXELS_PER_UNIT;  // = 0.3
 
-            if (_Character?._Rigidbody2D == null) return;
             if (isGrounded) groundPos = transform.position.y;
 
             // 如果未指定 speedZ，默认为 speedX 的 70%（FLF 原版常见比例）
@@ -345,22 +344,12 @@ namespace BeatEmUpTemplate2D
             // ✅ 转换为 Unity 速度（单位/秒）
             float vx_unity = vx_flf * SPEED_CONVERSION;
             float vz_unity = vz_flf * SPEED_CONVERSION;
-
-            _Character._Rigidbody2D.velocity = new Vector2(vx_unity, vz_unity);
-
-            // ✅ 日志输出：显示速度转换过程
-            Debug.Log($"[MoveToVector] " +
-                      $"输入 moveDir={moveDir}, speedX={speedX}, speedZ={speedZ} | " +
-                      $"离散方向 dx={dx}, dz={dz}, xFactor={xFactor:F3} | " +
-                      $"FLF速度 vx={vx_flf:F2}px/f, vz={vz_flf:F2}px/f | " +
-                      $"Unity速度 vx={vx_unity:F3}u/s, vz={vz_unity:F3}u/s | " +
-                      $"最终velocity={_Character._Rigidbody2D.velocity}");
-
+          
             // 更新朝向
             if (dx != 0)
             {
                 TurnToDir((moveDir.x > 0) ? DIRECTION.RIGHT : DIRECTION.LEFT);
-                _Character._CharacterDirection = (moveDir.x > 0) ? DIRECTION.RIGHT : DIRECTION.LEFT;
+                //_Character._CharacterDirection = (moveDir.x > 0) ? DIRECTION.RIGHT : DIRECTION.LEFT;
             }
         }
 
@@ -423,7 +412,7 @@ namespace BeatEmUpTemplate2D
             moveVector.x = transform.position.x + (inputVectorX * settings.moveSpeedAir * Time.fixedDeltaTime);
 
             bool CheckWall = false;
-            Vector2 wallDistanceCheck = _Character.col2D ? (_Character.col2D.size / 1.6f) * 1.1f : Vector2.one * .3f; // 除以1.6是为了使检测距离略大于碰撞体，否则无法检测到墙壁
+            Vector2 wallDistanceCheck = Vector2.one * .3f; // 除以1.6是为了使检测距离略大于碰撞体，否则无法检测到墙壁
             CheckWall = WallDetected(inputVector * wallDistanceCheck);
 
             // 添加垂直移动控制
@@ -442,9 +431,6 @@ namespace BeatEmUpTemplate2D
             moveVector.y += yForce * Time.fixedDeltaTime * settings.jumpSpeed;
             yForce -= settings.jumpGravity * Time.fixedDeltaTime * settings.jumpSpeed;
 
-            if (_Character.col2D)
-                _Character.col2D.offset = new Vector2(_Character.col2D.offset.x, -(moveVector.y - groundPos));
-
             transform.position = moveVector;
         }
 
@@ -459,73 +445,11 @@ namespace BeatEmUpTemplate2D
 
             if (stopInstantly)
             {
-                _Character._Rigidbody2D.velocity = Vector2.zero;
                 currentSpeed = 0;
                 return;
             }
 
-            Vector2 moveDir = _Character._Rigidbody2D.velocity.normalized;
-            currentSpeed = Mathf.Max(currentSpeed - settings.moveDeceleration * Time.fixedDeltaTime, 0f);
-            _Character._Rigidbody2D.velocity = moveDir * currentSpeed;
-        }
-
-        /**
-         * ApplyUnitFriction - 一次性减速（对应 FLF 的 unit_friction）
-         * 对应 FLF mechanics.js:379-386 的 unit_friction() 函数
-         *
-         * FLF 原版逻辑：
-         * - 一次性减速 1 像素/TU（不受 ps.fric 影响）
-         * - 只在地面时应用
-         * - 用于特定事件（如 Walking 状态松开方向键时）
-         *
-         * 单位换算：
-         * - FLF: 减速 1 像素/TU
-         * - Unity: 减速 (1 像素/TU) / 100 PPU * 30 TU/秒 = 0.3 单位/秒
-         * - 但这是一次性减速，所以实际上是减少 velocity 的值，而不是每帧持续减速
-         *
-         * ⚠️ 注意：
-         * - 这是一次性减速，不是持续的摩擦力
-         * - 通常配合状态标记（如 StateMem["released"]）使用，防止重复调用
-         */
-        public void ApplyUnitFriction()
-        {
-            if (_Character?._Rigidbody2D == null) return;
-            if (!isGrounded) return;  // 只在地面时应用
-
-            // FLF 常量
-            const float FLF_UNIT_FRICTION = 1f;         // 固定减速 1 像素/TU
-            float FLF_FRAMERATE = SimulationConstants.SIM_TICK_RATE; // FLF 运行在 30fps
-            float PIXELS_PER_UNIT = SimulationConstants.PIXELS_PER_UNIT; // Unity PPU 设置
-
-            // ✅ 单位转换
-            // FLF: 一次性减速 1 像素/TU
-            // Unity: 一次性减速多少 单位/秒？
-            // 计算：(1 像素/TU) / 100 PPU * 30 TU/秒 = 0.3 单位/秒
-            float friction_reduction = (FLF_UNIT_FRICTION / PIXELS_PER_UNIT) * FLF_FRAMERATE;  // = 0.3 单位/秒
-
-            Vector2 vel = _Character._Rigidbody2D.velocity;
-
-            // 应用一次性减速（X轴）
-            if (vel.x != 0)
-            {
-                float sign = Mathf.Sign(vel.x);
-                vel.x -= sign * friction_reduction;
-
-                // 防止方向反转
-                if (Mathf.Sign(vel.x) != sign) vel.x = 0;
-            }
-
-            // 应用一次性减速（Z轴 / Y轴）
-            if (vel.y != 0)
-            {
-                float sign = Mathf.Sign(vel.y);
-                vel.y -= sign * friction_reduction;
-
-                // 防止方向反转
-                if (Mathf.Sign(vel.y) != sign) vel.y = 0;
-            }
-
-            _Character._Rigidbody2D.velocity = vel;
+           
         }
 
         /**
@@ -535,16 +459,6 @@ namespace BeatEmUpTemplate2D
          */
         public bool IsDefending(DIRECTION attackDir)
         {
-            if (isEnemy && settings.defendChance > 0)
-            {
-
-            }
-
-
-
-
-
-
             if (settings.rearDefenseEnabled) return true;
             if (dir == attackDir) return true;
             return false;

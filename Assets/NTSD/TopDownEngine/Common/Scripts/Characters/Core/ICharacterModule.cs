@@ -11,12 +11,6 @@ namespace MoreMountains.TopDownEngine
     public interface ICharacterModule
     {
         /// <summary>
-        /// 决定模块的调用顺序（数值越小越早执行）
-        /// 用于表达模块之间的依赖关系
-        /// </summary>
-        int ModuleOrder { get; }
-
-        /// <summary>
         /// 当Character收集模块时调用一次（通常在Character.Awake中）
         /// 应该只用于缓存引用和设置轻量级的不变量
         /// </summary>
@@ -40,24 +34,5 @@ namespace MoreMountains.TopDownEngine
         /// </summary>
         void ModuleUnbind();
     }
-
-    /// <summary>
-    /// 角色模块执行顺序的常量定义
-    /// 数值越小，执行越早
-    /// </summary>
-    public static class CharacterModuleOrder
-    {
-        // 输入模块的执行顺序
-        public const int Input = 100;
-        // 连招检测模块的执行顺序
-        public const int ComboDetector = 200;
-        // 动画器模块的执行顺序
-        public const int Animator = 300;
-        // 单位设置模块的执行顺序
-        public const int UnitSettings = 400;
-        // 状态机模块的执行顺序
-        public const int StateMachine = 500;
-    }
-
 }
 

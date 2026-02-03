@@ -225,6 +225,7 @@ namespace NTSD.Animation
                     frame.opoint.y = GetIntValue(opointContent, "y:");
                     frame.opoint.dvx = GetIntValue(opointContent, "dvx:");
                     frame.opoint.dvy = GetIntValue(opointContent, "dvy:");
+                    frame.opoint.dvz = GetIntValue(opointContent, "dvz:");  // P3: 解析 dvz
                     frame.opoint.oid = GetIntValue(opointContent, "oid:");
                     frame.opoint.facing = GetIntValue(opointContent, "facing:");
                 }

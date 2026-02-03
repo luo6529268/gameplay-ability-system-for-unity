@@ -14,6 +14,8 @@ namespace NTSD.Input
     /// - 输入来源：CharacterInputModule.InputBuffer（按 tick 对齐）
     /// - 中断符号：使用 FuncKeyMask.None 对应 FLF combodec.js 的 '_' 标记
     /// - best-match：优先匹配更长 sequence，其次 custom > basic
+    ///
+    /// SimOrder=5 (Input): 输入检测在角色逻辑之前执行
     /// </summary>
     public sealed class ActionSequenceDetectorModule : ISimObject, ICharacterModule
     {
@@ -52,15 +54,13 @@ namespace NTSD.Input
         private int _timeout = -1;
         private int _comboout = -1;
 
-        private Character _hub;
+        private Character _Character;
 
         public event Action<ComboConfig.ComboDefinition> OnComboDetected;
 
-        public int ModuleOrder => CharacterModuleOrder.ComboDetector;
-
         public void ModuleSetup(Character character)
         {
-            _hub = character;
+            _Character = character;
         }
 
         public void ModuleInitialize()
@@ -71,7 +71,7 @@ namespace NTSD.Input
         public void ModuleBind() { }
         public void ModuleUnbind() { }
 
-        public int SimOrder => 50;
+        public int SimOrder => SimOrderConstants.Input;
         public int StableId { get; private set; }
 
         public void SetStableId(int stableId) => StableId = stableId;
@@ -79,30 +79,25 @@ namespace NTSD.Input
         public void OnAdded(SimContext ctx) { }
         public void OnRemoved(SimContext ctx) { }
 
-        public void SimTick(int tickIndex)
+        public void SimTransit(int tickIndex)
         {
-            // 1) consume buffered input events for this tick
-            if (_hub?._CharacterInput != null && _hub._CharacterInput.InputBuffer != null)
+            if (_Character?._CharacterInput != null && _Character._CharacterInput.InputBuffer != null)
             {
-                if (_hub._CharacterInput.InputBuffer.TryDequeueAll(tickIndex, out var events))
+                if (_Character._CharacterInput.InputBuffer.TryDequeueAll(tickIndex, out var events))
                 {
                     foreach (var evt in events)
                     {
                         if (evt.down)
-                        {
                             RecordAction(evt.key);
-                        }
                         else
-                        {
                             OnKeyUp(evt.key);
-                        }
                     }
                 }
             }
-
-            // 2) time management + insert interrupt + clear
             Frame_Update(tickIndex);
         }
+
+        public void SimTU(int tickIndex) { }
 
         public void SimLateTick(int tickIndex) { }
 
@@ -174,7 +169,6 @@ namespace NTSD.Input
                     if (j < 0) detected = false;
                     else
                     {
-                        // 逐个检查按键序列和时间间隔
                         for (int k = 0; j < _sequence.Count; j++, k++)
                         {
                             if (candidate.combo.sequence[k] != _sequence[j].key ||
@@ -186,7 +180,6 @@ namespace NTSD.Input
                         }
                     }
 
-                    // 如果检测到连招
                     if (detected)
                     {
                         OnComboDetected?.Invoke(candidate.combo);
@@ -240,7 +233,6 @@ namespace NTSD.Input
             _comboCandidates.Clear();
             int index = 0;
 
-            // Global combos (hardcoded in ComboConfig)
             for (int i = 0; i < ComboConfig.ComboList.Length; i++)
             {
                 _comboCandidates.Add(new ComboCandidate(ComboConfig.ComboList[i], sourcePriority: 1, originalIndex: index++));

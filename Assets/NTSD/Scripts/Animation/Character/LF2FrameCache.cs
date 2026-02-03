@@ -13,13 +13,13 @@ namespace NTSD.Animation
 
         public LF2CharacterDataWrapper Wrapper { get; private set; }
 
-        private readonly LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
+        private List<LF2FrameData> _frames = new List<LF2FrameData>();
         private readonly Dictionary<string, List<LF2FrameData>> _framesByName = new Dictionary<string, List<LF2FrameData>>();
 
         public void Clear()
         {
             Wrapper = null;
-            Array.Clear(_frames, 0, _frames.Length);
+            _frames.Clear();
             _framesByName.Clear();
         }
 
@@ -31,14 +31,12 @@ namespace NTSD.Animation
             var frames = wrapper?.characterData?.frames;
             if (frames == null) return;
 
+            if (_frames.Count == 0)
+                _frames.AddRange(frames);
+             
             foreach (var frameData in frames)
             {
                 if (frameData == null) continue;
-
-                if (frameData.frameId >= 0 && frameData.frameId < _frames.Length)
-                {
-                    _frames[frameData.frameId] = frameData;
-                }
 
                 if (_framesByName.TryGetValue(frameData.frameName, out List<LF2FrameData> list))
                 {
@@ -54,7 +52,7 @@ namespace NTSD.Animation
 
         public LF2FrameData GetFrameDataById(int frameId)
         {
-            if ((uint)frameId >= (uint)_frames.Length) return null;
+            if ((uint)frameId >= (uint)_frames.Count) return null;
             return _frames[frameId];
         }
 
@@ -65,7 +63,7 @@ namespace NTSD.Animation
 
         public int GetFirstFrameByState(int targetState)
         {
-            for (int i = 0; i < _frames.Length; i++)
+            for (int i = 0; i < _frames.Count; i++)
             {
                 if (_frames[i] != null && _frames[i].state == targetState)
                 {

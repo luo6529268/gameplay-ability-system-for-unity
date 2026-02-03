@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd6905f1c6dbaa4a91769c14bc8b041, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  TeamOptions:
+  - Independent
+  - Team 1
+  - Team 2
+  - Team 3
+  - Team 4
+  JoinIcon1: {fileID: 21300000, guid: ff4153710d4407841b05383b6249b016, type: 3}
+  JoinIcon2: {fileID: 21300000, guid: 34379c25a465836419338c80151ebc54, type: 3}
+  IdlePlayerText: Join?
+  IdleFighterText: 
+  IdleTeamText: 
+  IdleFlashInterval: 0.1
+  IdleFlashColor1: {r: 1, g: 1, b: 1, a: 1}
+  IdleFlashColor2: {r: 0.45098042, g: 0.627451, b: 1, a: 1}
+  SelectedColor: {r: 0.8000001, g: 0, b: 0, a: 1}
+  ConfirmedColor: {r: 1, g: 1, b: 1, a: 1}
+  RandomDisplayName: Random
+  RandomIcon: {fileID: 21300000, guid: 4d48d81e81179994c8ccf7daa5a7c546, type: 3}
+  CountdownSprites:
+  - {fileID: 21300000, guid: 35cd00159b4153043a4a48e6352b774d, type: 3}
+  - {fileID: 21300000, guid: c7a961c17b9914b49ace060d7ffcb760, type: 3}
+  - {fileID: 21300000, guid: 19d9ef467b8763a44a4da81f90213797, type: 3}
+  - {fileID: 21300000, guid: ef8eb47a03a80a744860eab01dfc7f91, type: 3}
+  - {fileID: 21300000, guid: 6b6f073c4220d7446adc6c3b20e874f7, type: 3}
+  CountdownDuration: 5
+  CountdownAcceleration: 2

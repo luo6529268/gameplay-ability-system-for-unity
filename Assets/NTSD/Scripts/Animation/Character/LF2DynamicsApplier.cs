@@ -1,5 +1,6 @@
 using System;
 using MoreMountains.TopDownEngine;
+using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Tools;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace NTSD.Animation
     /// 物理运算桥接器：对齐 FLF 的 mech.dynamics() + blocking_xz()，并将结果写回 Unity 组件。
     ///
     /// 设计目标：
-    /// - 将"物理运算相关逻辑"从 LF2CharacterAnimator 中剥离（便于后续扩展/替换实现）。
+    /// - 将"物理运算相关逻辑"从 LF2Character_character 中剥离（便于后续扩展/替换实现）。
     /// - 保持每 tick 无额外分配（复用已有委托/缓存）。
     ///
     /// Step 3: 移除对 UnitActions 的依赖，改为通过 Character.SetGrounding 写回地面状态。
@@ -18,7 +19,7 @@ namespace NTSD.Animation
     public static class LF2DynamicsApplier
     {
         public static void Apply(
-            LF2CharacterAnimator animator,
+            Character _character,
             CharacterMechanics mechanics,
             float mass,
             Func<Vector2, bool> isPointWalkable,
@@ -27,12 +28,12 @@ namespace NTSD.Animation
             Transform groundTransform,
             Vector3 baseLocalPosition)
         {
-            if (animator == null) return;
+            if (_character == null) return;
             // Step 3: 不再检查 unitActions，只检查必要项
-            if (animator.ps == null || mechanics == null) return;
+            if (_character._LF2Character.PS == null || mechanics == null) return;
             if (groundTransform == null) return;
 
-            float blockedMoveScale = LF2CollisionSystem.BlockingXZ(animator) ? 0.1f : 1f;
+            float blockedMoveScale = LF2CollisionSystem.BlockingXZ(_character._LF2Character) ? 0.1f : 1f;
 
             bool hasStageBounds = false;
             LF2StageBoundsPx stageBoundsPx = default;
@@ -43,9 +44,9 @@ namespace NTSD.Animation
             }
 
             var ctx = new CharacterMechanicsContext(
-                ps: animator.ps,
-                frameData: animator.CurrentFrame,
-                spriteWidthPx: animator.GetSpriteWidthPxForCollision(),
+                ps: _character._LF2Character.PS,
+                frameData: _character._LF2Character.Frame.D,
+                spriteWidthPx: _character._LF2Character.GetSpriteWidthPxForCollision(),
                 hasStageBounds: hasStageBounds,
                 stageBoundsPx: stageBoundsPx,
                 mass: mass,
@@ -71,14 +72,9 @@ namespace NTSD.Animation
             );
 
             // 视觉高度偏移（Unity local Y）
-            animator.transform.localPosition = baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
+            _character.transform.localPosition = baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
 
-            // Step 3: 通过 Character hub 写回地面状态（替代 unitActions）
-            Character character = animator._Character;
-            if (character != null)
-            {
-                character.SetGrounding(groundTransform.position.y, result.grounded);
-            }
+            _character.SetGrounding(groundTransform.position.y, result.grounded);
         }
     }
 }

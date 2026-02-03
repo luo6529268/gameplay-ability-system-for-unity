@@ -74,7 +74,7 @@ namespace BeatEmUpTemplate2D
                 Vector2 dirToPos = (idealPos - (Vector2)unit.transform.position).normalized; //获取到攻击位置的方向向量
 
                 //如果前方有墙壁，进入待机状态
-                Vector2 wallDistanceCheck = unit._Character.col2D ? (unit._Character.col2D.size / 1.6f) * 1.1f : Vector2.one * .3f; //除以1.8f是因为距离检测需要比碰撞体稍大（否则我们永远不会遇到墙壁）
+                Vector2 wallDistanceCheck = Vector2.one * .3f; //除以1.8f是因为距离检测需要比碰撞体稍大（否则我们永远不会遇到墙壁）
                 if (unit.WallDetected(dirToPos * wallDistanceCheck))
                 {
                     unit.stateMachine.SetState(new EnemyIdle());

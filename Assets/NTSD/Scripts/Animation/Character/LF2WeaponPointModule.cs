@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Animation
 {
@@ -8,7 +9,7 @@ namespace NTSD.Animation
         /// 更新/同步 wpoint（武器跟随、weaponact、攻击状态等）。
         /// 由外部系统实现（武器实体/装备系统/网络同步等）。
         /// </summary>
-        void UpdateWeaponPoints(LF2CharacterAnimator animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
+        void UpdateWeaponPoints(ILF2LivingObject animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
     }
 
     /// <summary>
@@ -24,11 +25,11 @@ namespace NTSD.Animation
             Factory = factory;
         }
 
-        public void ProcessTransit(LF2CharacterAnimator animator)
+        public void ProcessTransit(ILF2LivingObject animator)
         {
             if (animator == null) return;
 
-            LF2FrameData frame = animator.CurrentFrame;
+            LF2FrameData frame = animator.Frame.D;
             if (frame == null) return;
 
             var wpoints = frame.wpoints;

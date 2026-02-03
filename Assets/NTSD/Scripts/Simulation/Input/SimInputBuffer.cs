@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using NTSD.Game;
 using NTSD.Input;
 
 namespace NTSD.Simulation
@@ -123,9 +122,6 @@ namespace NTSD.Simulation
 				// 从 buffer 移除（已消费）
 				_buffer.Remove(tickIndex);
 
-				// Debug: 记录输入消费（可选）
-				// Debug.Log($"[SimInputBuffer] Dequeued {events.Count} events for tick {tickIndex}");
-
 				// 清理旧数据
 				CleanupOldData(tickIndex);
 
@@ -168,9 +164,6 @@ namespace NTSD.Simulation
 			foreach (int key in keysToRemove)
 			{
 				_buffer.Remove(key);
-
-				// Debug: 记录清理（可选）
-				// Debug.LogWarning($"[SimInputBuffer] Cleaned up old data for tick {key} (current tick: {currentTick})");
 			}
 		}
 

@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using MoreMountains.Tools;
 using NTSD.Define;
+using NTSD.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +10,6 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using NTSD.DatParser;
-using System.Threading.Tasks;
 
 
 #if UNITY_EDITOR
@@ -23,6 +24,9 @@ namespace NTSD.Animation
     /// </summary>
     public class CharacterAnimtorManager : MMSingleton<CharacterAnimtorManager>
     {
+        public bool IsPrewarmCompleted { get; private set; }
+        public event System.Action PrewarmCompleted;
+
         const string TotalCharacterFrameConfigPath = "Assets/NTSD/Config/AnimationConfig";
 
         #region 数据存储
@@ -107,8 +111,6 @@ namespace NTSD.Animation
         {
             TotalCharacterFrameConfig.Clear();
             MergedSprites.Clear();
-            OnLoadCharacterFrameConfig();
-            OnLoadCharacterSprite().Forget();
         }
 
         [HorizontalGroup("Actions/Row1")]
@@ -182,12 +184,14 @@ namespace NTSD.Animation
         [PropertyOrder(12)]
         private void ClearAllData()
         {
+#if UNITY_EDITOR
             if (EditorUtility.DisplayDialog("确认清空", "确定要清空所有已加载的数据吗？", "确定", "取消"))
             {
                 TotalCharacterFrameConfig.Clear();
                 MergedSprites.Clear();
                 Debug.Log("所有数据已清空");
             }
+#endif
         }
 
         #endregion
@@ -351,107 +355,129 @@ namespace NTSD.Animation
 
         #region 原有功能
 
-        protected override async void InitializeSingleton()
+        protected override void InitializeSingleton()
         {
             base.InitializeSingleton();
+        }
 
-            OnLoadCharacterFrameConfig();
-            await OnLoadCharacterSprite();
+        public void ApplyLoadedCharacterConfigs(Dictionary<int, LF2CharacterDataWrapper> configs)
+        {
+            if (configs == null || configs.Count == 0)
+            {
+                return;
+            }
+
+            TotalCharacterFrameConfig.Clear();
+            foreach (var kvp in configs)
+            {
+                TotalCharacterFrameConfig[kvp.Key] = kvp.Value;
+            }
         }
 
         /// <summary>
         /// 加载所有角色帧配置
         /// </summary>
-        private void OnLoadCharacterFrameConfig()
+        public Dictionary<int, LF2CharacterDataWrapper> ParseCharacterFrameConfigs(Action<string> onProgressText = null)
         {
-            // 1. 先解析 data.txt，获取 ID 到文件名的映射
             string dataFilePath = Path.Combine(TotalCharacterFrameConfigPath, "../data.txt");
             string fullDataPath = Path.GetFullPath(dataFilePath);
 
             if (!File.Exists(fullDataPath))
             {
-                Debug.LogError($"<color=red>❌ data.txt 文件不存在: {fullDataPath}</color>");
-                Debug.LogError($"<color=red>   请确保 data.txt 在 {Path.GetDirectoryName(fullDataPath)} 目录下</color>");
-                return;
+                Debug.LogError($"<color=red>data.txt 文件不存在: {fullDataPath}</color>");
+                return null;
             }
 
-            // 解析 data.txt
+            onProgressText?.Invoke("data.txt");
+
             Dictionary<int, DataFileParser.ObjectData> dataObjectMap = DataFileParser.ParseDataFile(fullDataPath);
 
             if (dataObjectMap == null || dataObjectMap.Count == 0)
             {
-                Debug.LogError("<color=red>❌ data.txt 解析失败或没有对象定义</color>");
-                return;
+                Debug.LogError("<color=red>data.txt 解析失败或没有对象定义</color>");
+                return null;
             }
 
-            Debug.Log($"<color=cyan>开始加载角色配置，data.txt 中共 {dataObjectMap.Count} 个对象定义</color>");
+            int characterCount = 0;
+            foreach (var kvp in dataObjectMap)
+            {
+                if (kvp.Value.type == 0) characterCount++;
+            }
+            Debug.Log($"<color=cyan>开始加载角色配置，data.txt 中共 {dataObjectMap.Count} 个对象定义，其中 {characterCount} 个角色 (type==0)</color>");
 
-            // 2. 遍历 data.txt 中的对象定义，加载对应的 DAT 文件
             int loadedCount = 0;
+            var result = new Dictionary<int, LF2CharacterDataWrapper>(characterCount);
             foreach (var kvp in dataObjectMap)
             {
                 int characterId = kvp.Key;
                 DataFileParser.ObjectData objectData = kvp.Value;
 
+                if (objectData.type != 0)
+                {
+                    continue;
+                }
+
                 try
                 {
-                    // 将 data.txt 中的相对路径转换为 DAT 文件路径
                     string configDir = Path.GetDirectoryName(fullDataPath);
                     string datFilePath = DataFileParser.ResolveObjectFilePath(configDir, objectData.file);
-
-                    // 将扩展名改为 .dat（如果 data.txt 中写的是 .json）
                     datFilePath = Path.ChangeExtension(datFilePath, ".dat");
+
+                    onProgressText?.Invoke(Path.GetFileName(datFilePath));
 
                     if (!File.Exists(datFilePath))
                     {
-                        Debug.LogWarning($"<color=yellow>⚠️ DAT文件不存在: ID={characterId}, 文件={datFilePath}</color>");
+                        Debug.LogWarning($"<color=yellow>DAT文件不存在: ID={characterId}, 文件={datFilePath}</color>");
                         continue;
                     }
 
-                    // 解密 dat 文件
                     string datText = Lf2DatDecryptor.DecryptFile(datFilePath, "odBearBecauseHeIsVeryGoodSiuHungIsAGo");
 
                     if (string.IsNullOrEmpty(datText))
                     {
-                        Debug.LogWarning($"<color=yellow>⚠️ DAT文件解密返回空: ID={characterId}, 文件={Path.GetFileName(datFilePath)}</color>");
+                        Debug.LogWarning($"<color=yellow>DAT文件解密返回空: ID={characterId}, 文件={Path.GetFileName(datFilePath)}</color>");
                         continue;
                     }
 
-                    // 解析 dat 文件
                     Lf2DatParserV2 parser = new Lf2DatParserV2();
                     Lf2DatFile datFile = parser.Parse(datText, datFilePath);
 
                     if (datFile == null || datFile.Frames.Count == 0)
                     {
-                        Debug.LogWarning($"<color=yellow>⚠️ DAT文件解析失败或无帧数据: ID={characterId}, 文件={Path.GetFileName(datFilePath)}</color>");
+                        Debug.LogWarning($"<color=yellow>DAT文件解析失败或无帧数据: ID={characterId}, 文件={Path.GetFileName(datFilePath)}</color>");
                         continue;
                     }
 
-                    // 构建角色数据（使用 data.txt 中的 ID，并传入 DAT 文件所在目录用于路径解析）
                     string datFileDirectory = Path.GetDirectoryName(datFilePath);
                     LF2CharacterData characterData = BuildCharacterDataFromDat(datFile, datFileDirectory);
 
-                    // 创建 wrapper 并存储
                     LF2CharacterDataWrapper wrapper = new LF2CharacterDataWrapper(characterId, characterData);
 
                     if (wrapper != null && wrapper.characterData != null)
                     {
-                        TotalCharacterFrameConfig[characterId] = wrapper;
+                        result[characterId] = wrapper;
                         loadedCount++;
-                        Debug.Log($"<color=green>✅ 加载角色: ID={characterId}, 名称={characterData.name}, 帧数={characterData.frames.Count}, 文件={objectData.file}</color>");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"<color=yellow>⚠️ DAT数据转换返回null: ID={characterId}</color>");
+                        Debug.Log($"<color=green>加载角色: ID={characterId}, 名称={characterData.name}, 帧数={characterData.frames.Count}</color>");
                     }
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"<color=red>❌ 加载失败: ID={characterId}, 文件={objectData.file}\n错误: {e.Message}\n{e.StackTrace}</color>");
+                    Debug.LogError($"<color=red>加载失败: ID={characterId}, 文件={objectData.file}\n错误: {e.Message}</color>");
                 }
             }
 
             Debug.Log($"<color=cyan>配置加载完成，成功加载 {loadedCount}/{dataObjectMap.Count} 个角色</color>");
+            return result;
+        }
+
+        public void SetCharacterSprites(int characterId, List<Sprite> sprites)
+        {
+            if (sprites == null)
+            {
+                return;
+            }
+
+            MergedSprites[characterId] = sprites;
         }
 
         /// <summary>
@@ -479,6 +505,10 @@ namespace NTSD.Animation
             {
                 // 设置角色名称
                 characterData.name = datFile.Bmp.Name ?? "Unknown";
+
+                // ⬇️ 需要添加这两行 ⬇️
+                characterData.head = datFile.Bmp.Head ?? "";
+                characterData.small = datFile.Bmp.Small ?? "";
 
                 // 转换精灵文件信息
                 characterData.files = new List<SpriteFileInfo>();
@@ -556,46 +586,126 @@ namespace NTSD.Animation
         /// </summary>
         private void ApplyMovementProperty(string key, string value, LF2CharacterData characterData)
         {
-            float floatValue;
-            if (!float.TryParse(value, out floatValue))
+            // 尝试解析为浮点数
+            if (!float.TryParse(value, out float floatValue))
             {
+                // 尝试解析为整数（用于 frame_rate 等）
+                if (!int.TryParse(value, out int intValue))
+                {
+                    return;
+                }
+
+                // 处理整数类型的参数
+                switch (key.ToLower())
+                {
+                    case "walking_frame_rate":
+                        characterData.walking_frame_rate = intValue;
+                        break;
+                    case "running_frame_rate":
+                        characterData.running_frame_rate = intValue;
+                        break;
+                }
                 return;
             }
 
+            // 处理浮点数类型的参数
             switch (key.ToLower())
             {
+                // 行走参数
                 case "walking_speed":
                     characterData.walking_speed = floatValue;
                     break;
+                case "walking_speedz":
+                    characterData.walking_speedz = floatValue;
+                    break;
+
+                // 奔跑参数
                 case "running_speed":
                     characterData.running_speed = floatValue;
                     break;
-                case "walking_speedz":
-                    // 可以添加其他参数的处理
-                    break;
                 case "running_speedz":
-                    // 可以添加其他参数的处理
+                    characterData.running_speedz = floatValue;
                     break;
+
+                // 负重行走参数
+                case "heavy_walking_speed":
+                    characterData.heavy_walking_speed = floatValue;
+                    break;
+                case "heavy_walking_speedz":
+                    characterData.heavy_walking_speedz = floatValue;
+                    break;
+
+                // 负重奔跑参数
+                case "heavy_running_speed":
+                    characterData.heavy_running_speed = floatValue;
+                    break;
+                case "heavy_running_speedz":
+                    characterData.heavy_running_speedz = floatValue;
+                    break;
+
+                // 跳跃参数
                 case "jump_height":
-                    // 可以添加其他参数的处理
+                    characterData.jump_height = floatValue;
                     break;
                 case "jump_distance":
-                    // 可以添加其他参数的处理
+                    characterData.jump_distance = floatValue;
+                    break;
+                case "jump_distancez":
+                    characterData.jump_distancez = floatValue;
+                    break;
+
+                // 冲刺参数
+                case "dash_height":
+                    characterData.dash_height = floatValue;
+                    break;
+                case "dash_distance":
+                    characterData.dash_distance = floatValue;
+                    break;
+                case "dash_distancez":
+                    characterData.dash_distancez = floatValue;
+                    break;
+
+                // 翻滚参数
+                case "rowing_height":
+                    characterData.rowing_height = floatValue;
+                    break;
+                case "rowing_distance":
+                    characterData.rowing_distance = floatValue;
                     break;
             }
         }
 
         /// <summary>
-        /// 预加载所有角色精灵
-        /// 根据配置文件中的 files 字段的 filePath 加载 BMP 精灵
-        /// 自动处理黑色透明并按配置切割精灵
+        /// 解析精灵图路径
+        /// 支持Unity项目相对路径（Assets/开头）和dat文件相对路径
         /// </summary>
-        private async UniTask OnLoadCharacterSprite()
+        /// <param name="pathInDat">dat文件中的路径</param>
+        /// <param name="datFileDirectory">dat文件所在目录</param>
+        /// <returns>绝对路径</returns>
+        private string ResolveSpritePath(string pathInDat, string datFileDirectory)
+        {
+            string normalizedPath = pathInDat.Replace("\\", "/");
+
+            // 检查是否为Unity项目相对路径（以Assets/开头）
+            if (normalizedPath.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
+            {
+                string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+                return Path.GetFullPath(Path.Combine(projectRoot, normalizedPath));
+            }
+
+            // 相对于dat文件所在目录
+            return Path.GetFullPath(Path.Combine(datFileDirectory, normalizedPath));
+        }
+
+        /// <summary>
+        /// 预加载所有角色精灵
+        /// 使用并行后台线程处理所有文件的像素数据
+        /// </summary>
+        public async UniTask LoadCharacterSpritesAsync(Action<string> onProgressText)
         {
             Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {TotalCharacterFrameConfig.Count}</color>");
 
-            // 创建透明处理配置（黑色变透明）
-           TransparentColorData transparentData = new TransparentColorData
+            TransparentColorData transparentData = new TransparentColorData
             {
                 targetColor = new Color(0f, 0f, 0f),
                 colorTolerance = 0.031f,
@@ -609,172 +719,278 @@ namespace NTSD.Animation
                 edgeThreshold = 0.5f
             };
 
-            int frameIndex = 0;
+            var allFileInfos = new List<(int characterId, SpriteFileInfo fileInfo)>();
+
             foreach (var config in TotalCharacterFrameConfig.Values)
             {
-                try
+                int characterId = config.characterId;
+                int totalSpriteCount = 0;
+                if (config.characterData.files.Count > 0)
                 {
-                    int characterId = config.characterId;
-
-                    // 计算精灵列表总大小（基于最后一个文件的 endFrame）
-                    int totalSpriteCount = 0;
-                    if (config.characterData.files.Count > 0)
-                    {
-                        var lastFile = config.characterData.files[config.characterData.files.Count - 1];
-                        totalSpriteCount = lastFile.endFrame + 1;
-                    }
-
-                    // 预分配精灵列表（填充 null）
-                    List<Sprite> allSprites = new List<Sprite>(new Sprite[totalSpriteCount]);
-                    Debug.Log($"<color=cyan>[精灵预分配] 角色ID={characterId}, 预分配大小={totalSpriteCount}</color>");
-
-                    // 遍历角色的所有精灵文件
-                    foreach (var fileInfo in config.characterData.files)
-                    {
-                        frameIndex++;
-
-                        string filePath = fileInfo.filePath;
-
-                        if (frameIndex % 5 == 0)
-                            await UniTask.NextFrame();
-
-                        // 加载 BMP 文件
-                        Texture2D originalTexture = LoadBMPTexture(filePath);
-                        if (originalTexture == null)
-                        {
-                            Debug.LogWarning($"<color=yellow>⚠️ 无法加载图片: {filePath}</color>");
-                            continue;
-                        }
-
-                        Debug.Log($"<color=cyan>[精灵裁剪] 文件={Path.GetFileName(filePath)}, 纹理尺寸={originalTexture.width}x{originalTexture.height}, " +
-                                 $"配置={fileInfo.row}行x{fileInfo.col}列, 格子={fileInfo.width}x{fileInfo.height}, " +
-                                 $"帧范围=[{fileInfo.startFrame}-{fileInfo.endFrame}]</color>");
-
-                        // 检查纹理尺寸是否匹配配置（允许±1像素容差，因为最后一行/列可能没有完整绿框）
-                        int expectedWidth = fileInfo.col * (fileInfo.width + 1);
-                        int expectedHeight = fileInfo.row * (fileInfo.height + 1);
-
-                        int actualRow = fileInfo.row;
-                        int actualCol = fileInfo.col;
-
-                        // 辅助函数：检查尺寸是否接近匹配（允许±1像素误差）
-                        bool SizeMatches(int actual, int expected)
-                        {
-                            return Mathf.Abs(actual - expected) <= 1;
-                        }
-
-                        // 如果尺寸不匹配，尝试交换 row 和 col
-                        if (!SizeMatches(originalTexture.width, expectedWidth) || !SizeMatches(originalTexture.height, expectedHeight))
-                        {
-                            Debug.LogWarning($"<color=yellow>[精灵裁剪] 纹理尺寸不匹配！期望={expectedWidth}x{expectedHeight}, 实际={originalTexture.width}x{originalTexture.height}</color>");
-
-                            // 尝试交换 row 和 col
-                            int swappedExpectedWidth = fileInfo.row * (fileInfo.width + 1);
-                            int swappedExpectedHeight = fileInfo.col * (fileInfo.height + 1);
-
-                            if (SizeMatches(originalTexture.width, swappedExpectedWidth) && SizeMatches(originalTexture.height, swappedExpectedHeight))
-                            {
-                                Debug.LogWarning($"<color=orange>[精灵裁剪] 检测到 row/col 可能反了，自动交换：{fileInfo.row}行x{fileInfo.col}列 → {fileInfo.col}行x{fileInfo.row}列</color>");
-                                actualRow = fileInfo.col;
-                                actualCol = fileInfo.row;
-                            }
-                            else
-                            {
-                                Debug.LogWarning($"<color=yellow>[精灵裁剪] 尺寸略有差异，继续处理。交换期望={swappedExpectedWidth}x{swappedExpectedHeight}</color>");
-                            }
-                        }
-
-                        // 先切割精灵（此时还包含绿框）
-                        List<Sprite> sprites = RuntimeSpriteProcessor.SliceTextureFromTopLeft(
-                            originalTexture,
-                            fileInfo.width,
-                            fileInfo.height,
-                            actualRow,
-                            actualCol
-                        );
-
-                        Debug.Log($"<color=yellow>[精灵裁剪] 裁剪完成，得到 {sprites.Count} 个精灵</color>");
-
-                        // 对每个精灵单独处理透明（避免绿框颜色渗透）
-                        for (int i = 0; i < sprites.Count; i++)
-                        {
-                            Sprite sprite = sprites[i];
-
-                            // ✅ 记录原始精灵的尺寸（应该是统一的，如 79×79）
-                            int originalWidth = (int)sprite.rect.width;
-                            int originalHeight = (int)sprite.rect.height;
-
-                            // 获取精灵的纹理区域
-                            Texture2D spriteTexture = GetSpriteTexture(sprite);
-
-                            // 处理黑色透明
-                            Texture2D processedTexture = RuntimeSpriteProcessor.MakeColorTransparent_Debleeding_AvoidBorder(
-                                spriteTexture,
-                                transparentData
-                            );
-
-                            // ✅ 验证处理后的纹理尺寸是否与原始一致
-                            if (processedTexture.width != originalWidth || processedTexture.height != originalHeight)
-                            {
-                                Debug.LogWarning($"<color=yellow>[透明处理] 纹理尺寸变化：原始={originalWidth}x{originalHeight}, " +
-                                                $"处理后={processedTexture.width}x{processedTexture.height}, 精灵={sprite.name}</color>");
-                            }
-
-                            // 创建新的精灵（使用处理后的纹理）
-                            // ✅ 设置锚点为底部中心（0.5, 0），防止序列帧播放时上下漂移
-                            // ✅ 强制使用原始尺寸，确保所有帧统一
-                            Sprite newSprite = Sprite.Create(
-                                processedTexture,
-                                new Rect(0, 0, originalWidth, originalHeight),  // 使用固定的原始尺寸
-                                new Vector2(0.5f, 0f),
-                                100f
-                            );
-                            newSprite.name = sprite.name;
-
-                            sprites[i] = newSprite;
-                        }
-
-                        // 将精灵放置到指定索引位置（而不是顺序添加）
-                        int placedCount = 0;
-                        for (int i = 0; i < sprites.Count; i++)
-                        {
-                            int targetIndex = fileInfo.startFrame + i;
-                            if (targetIndex >= 0 && targetIndex < totalSpriteCount && targetIndex <= fileInfo.endFrame)
-                            {
-                                allSprites[targetIndex] = sprites[i];
-                                placedCount++;
-                            }
-                            else
-                            {
-                                Debug.LogWarning($"<color=yellow>[精灵放置] 索引超出范围: targetIndex={targetIndex}, 总大小={totalSpriteCount}, endFrame={fileInfo.endFrame}</color>");
-                            }
-                        }
-
-                        Debug.Log($"<color=green>✅ 加载精灵文件: 角色ID={characterId}, 文件={Path.GetFileName(filePath)}, " +
-                                 $"切割={fileInfo.row}x{fileInfo.col}, 数量={sprites.Count}, 已放置={placedCount}, 帧范围=[{fileInfo.startFrame}-{fileInfo.endFrame}]</color>");
-                    }
-
-                    // 存储到字典中，使用 characterId 作为 key
-                    MergedSprites[characterId] = allSprites;
-
-                    Debug.Log($"<color=cyan>角色 {characterId} ({config.characterData.name}) 精灵加载完成，总数量={allSprites.Count}</color>");
+                    var lastFile = config.characterData.files[config.characterData.files.Count - 1];
+                    totalSpriteCount = lastFile.endFrame + 1;
                 }
-                catch (System.Exception e)
+                MergedSprites[characterId] = new List<Sprite>(new Sprite[totalSpriteCount]);
+
+                foreach (var fileInfo in config.characterData.files)
                 {
-                    Debug.LogError($"<color=red>❌ 加载角色精灵失败: 角色ID={config.characterId}\n{e.Message}\n{e.StackTrace}</color>");
+                    allFileInfos.Add((characterId, fileInfo));
                 }
             }
 
-            Debug.Log($"<color=cyan>精灵加载完成，共 {MergedSprites.Count} 个角色</color>");
+            Debug.Log($"<color=cyan>共 {allFileInfos.Count} 个文件需要处理</color>");
+
+            int totalCreated = 0;
+            int concurrentLimit = System.Environment.ProcessorCount;
+            var semaphore = new System.Threading.SemaphoreSlim(concurrentLimit);
+            var pendingTasks = new List<UniTask>();
+
+            foreach (var (characterId, fileInfo) in allFileInfos)
+            {
+                await semaphore.WaitAsync();
+
+                var task = ProcessAndCreateSpritesAsync(characterId, fileInfo, transparentData, onProgressText, semaphore)
+                    .ContinueWith(count => { totalCreated += count; });
+                pendingTasks.Add(task);
+            }
+
+            await UniTask.WhenAll(pendingTasks);
+
+            Debug.Log($"<color=cyan>精灵加载完成，共创建 {totalCreated} 个精灵</color>");
+
+            // 加载所有角色的UI精灵（head和small）
+            await LoadAllCharacterUISpritesAsync();
+
+            IsPrewarmCompleted = true;
+            PrewarmCompleted?.Invoke();
+        }
+
+        /// <summary>
+        /// 异步加载所有角色的UI精灵（head和small）
+        /// 在后台线程读取BMP像素数据，在主线程创建Sprite
+        /// </summary>
+        private async UniTask LoadAllCharacterUISpritesAsync()
+        {
+            if (CharacterUIResourceManager.Instance == null)
+            {
+                Debug.LogWarning("<color=yellow>CharacterUIResourceManager.Instance 为空，跳过UI精灵加载</color>");
+                return;
+            }
+
+            int loadedCount = 0;
+
+            foreach (var config in TotalCharacterFrameConfig.Values)
+            {
+                int characterId = config.characterId;
+                var characterData = config.characterData;
+
+                Sprite headSprite = null;
+                Sprite smallSprite = null;
+
+                // 异步加载head精灵
+                if (!string.IsNullOrEmpty(characterData.head))
+                {
+                    string headPath = ResolveSpritePath(characterData.head, GetDatFileDirectory(characterId));
+                    headSprite = await LoadBMPAsSpriteAsync(headPath, $"{characterData.name}_head");
+                }
+
+                // 异步加载small精灵
+                if (!string.IsNullOrEmpty(characterData.small))
+                {
+                    string smallPath = ResolveSpritePath(characterData.small, GetDatFileDirectory(characterId));
+                    smallSprite = await LoadBMPAsSpriteAsync(smallPath, $"{characterData.name}_small");
+                }
+
+                // 存入CharacterUIResourceManager
+                if (headSprite != null || smallSprite != null)
+                {
+                    CharacterUIResourceManager.Instance.SetCharacterUISprites(characterId, headSprite, smallSprite);
+                    loadedCount++;
+                }
+            }
+
+            Debug.Log($"<color=cyan>UI精灵加载完成，共加载 {loadedCount} 个角色的头像</color>");
+        }
+
+        /// <summary>
+        /// 获取角色dat文件所在目录
+        /// 用于解析head/small的相对路径
+        /// </summary>
+        private string GetDatFileDirectory(int characterId)
+        {
+            // 默认使用配置目录，因为head/small路径通常是Assets/开头的绝对路径
+            return TotalCharacterFrameConfigPath;
+        }
+
+        /// <summary>
+        /// 异步加载BMP文件为Sprite
+        /// 在后台线程读取像素数据，在主线程创建Texture2D和Sprite
+        /// </summary>
+        /// <param name="filePath">BMP文件路径</param>
+        /// <param name="spriteName">精灵名称</param>
+        /// <returns>加载的Sprite，失败返回null</returns>
+        private async UniTask<Sprite> LoadBMPAsSpriteAsync(string filePath, string spriteName)
+        {
+            if (!File.Exists(filePath))
+            {
+                Debug.LogWarning($"<color=yellow>UI精灵文件不存在: {filePath}</color>");
+                return null;
+            }
+
+            try
+            {
+                // 在后台线程读取BMP像素数据
+                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
+                if (bmpData == null || bmpData.Pixels == null)
+                {
+                    Debug.LogWarning($"<color=yellow>加载BMP数据失败: {filePath}</color>");
+                    return null;
+                }
+
+                // 切换到主线程创建Texture2D和Sprite
+                await UniTask.SwitchToMainThread();
+
+                Texture2D texture = new Texture2D(bmpData.Width, bmpData.Height, TextureFormat.RGBA32, false);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels(bmpData.Pixels);
+                texture.Apply();
+
+                Sprite sprite = Sprite.Create(
+                    texture,
+                    new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f
+                );
+                sprite.name = spriteName;
+
+                return sprite;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"<color=red>异步加载UI精灵异常: {filePath}\n{e.Message}</color>");
+                return null;
+            }
+        }
+
+        private async UniTask<int> ProcessAndCreateSpritesAsync(int characterId, SpriteFileInfo fileInfo,
+            TransparentColorData transparentData, Action<string> onProgressText, System.Threading.SemaphoreSlim semaphore)
+        {
+            int created = 0;
+            try
+            {
+                string filePath = fileInfo.filePath;
+                onProgressText?.Invoke(FormatLoadingResourcePath(filePath));
+
+                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
+                if (bmpData == null || bmpData.Pixels == null)
+                {
+                    return 0;
+                }
+
+                int textureWidth = bmpData.Width;
+                int textureHeight = bmpData.Height;
+                Color[] sourcePixels = bmpData.Pixels;
+
+                int expectedWidth = fileInfo.col * (fileInfo.width + 1);
+                int expectedHeight = fileInfo.row * (fileInfo.height + 1);
+                int actualRow = fileInfo.row;
+                int actualCol = fileInfo.col;
+
+                bool SizeMatches(int actual, int expected) => Mathf.Abs(actual - expected) <= 1;
+
+                if (!SizeMatches(textureWidth, expectedWidth) || !SizeMatches(textureHeight, expectedHeight))
+                {
+                    int swappedExpectedWidth = fileInfo.row * (fileInfo.width + 1);
+                    int swappedExpectedHeight = fileInfo.col * (fileInfo.height + 1);
+
+                    if (SizeMatches(textureWidth, swappedExpectedWidth) && SizeMatches(textureHeight, swappedExpectedHeight))
+                    {
+                        actualRow = fileInfo.col;
+                        actualCol = fileInfo.row;
+                    }
+                }
+
+                int spriteWidth = fileInfo.width;
+                int spriteHeight = fileInfo.height;
+                int row = actualRow;
+                int col = actualCol;
+
+                var processedSlices = await UniTask.RunOnThreadPool(() =>
+                    RuntimeSpriteProcessor.SliceAndProcessPixels(
+                        sourcePixels, textureWidth, textureHeight,
+                        spriteWidth, spriteHeight, row, col, transparentData));
+
+                if (processedSlices == null || processedSlices.Count == 0)
+                {
+                    return 0;
+                }
+
+                await UniTask.SwitchToMainThread();
+
+                var allSprites = MergedSprites[characterId];
+                for (int i = 0; i < processedSlices.Count; i++)
+                {
+                    var slice = processedSlices[i];
+                    var texture = new Texture2D(slice.Width, slice.Height, TextureFormat.RGBA32, false);
+                    texture.filterMode = FilterMode.Point;
+                    texture.wrapMode = TextureWrapMode.Clamp;
+                    texture.SetPixels(slice.Pixels);
+                    texture.Apply();
+
+                    Sprite sprite = Sprite.Create(
+                        texture,
+                        new Rect(0, 0, slice.Width, slice.Height),
+                        new Vector2(0.5f, 0f),
+                        100f
+                    );
+                    sprite.name = slice.Name;
+
+                    int targetIndex = fileInfo.startFrame + i;
+                    if (targetIndex >= 0 && targetIndex < allSprites.Count && targetIndex <= fileInfo.endFrame)
+                    {
+                        allSprites[targetIndex] = sprite;
+                        created++;
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"<color=red>处理文件失败: {fileInfo.filePath}\n{e.Message}</color>");
+            }
+            finally
+            {
+                semaphore.Release();
+            }
+
+            return created;
         }
 
         /// <summary>
         /// 加载 BMP 文件为 Texture2D
         /// 使用增强的 BMP 加载器，支持详细诊断和手动解析
         /// </summary>
-        private Texture2D LoadBMPTexture(string filePath)
+        public Texture2D LoadBMPTexture(string filePath)
         {
             return BMPLoader.LoadBMP(filePath);
+        }
+
+        private static string FormatLoadingResourcePath(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return string.Empty;
+            }
+
+            var normalized = filePath.Replace("\\", "/");
+            const string marker = "/Sprite/Character/";
+            var index = normalized.IndexOf(marker, System.StringComparison.OrdinalIgnoreCase);
+            if (index >= 0)
+            {
+                return normalized.Substring(index + marker.Length);
+            }
+
+            return System.IO.Path.GetFileName(normalized);
         }
 
         /// <summary>

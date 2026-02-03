@@ -1,5 +1,35 @@
 # DEVLOG: Unity Project Progress
 
+## 0. OPoint / Tick 顺序：以“效果一致”为目标的补齐项（Claude 修改清单）
+
+> 背景：当前项目已经完成“全体 Transit → FlushTasks → 全体 TU”的分阶段 Tick，并把 OPoint 入口统一到 `CharacterStates.HandleGenericFrame()`，同时补齐了 `opoint.dvz` 解析与 `make_point` 使用 `ps.sx/sy/sz`。  
+> 下面两项仍可能导致“观感不一致”，优先修复。
+
+### 0.1 多生成（create_multiple_objects）散射：vx 偏置必须基于“新对象最终 dir”
+
+- 目标效果（对齐 FLF `match.process_task('create_multiple_objects')` 的观感）：
+  - 对每个 `vz`：新对象的 `ps.vz = vz`
+  - `ps.vx` 需要按 `abs(vz)` 做偏置，且偏置方向取决于 **新对象最终方向**（由 `CalculateDirection(op.facing, parentDir)` 决定），不是 parent 的 `dir`。
+- 修改要求：
+  - 在 `Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs` 的 `InitializeObjectMultiple(...)` 内：
+    - 先算 `dir = CalculateDirection(opoint.facing, parentDir)`
+    - 再按 `dir` 决定偏置：
+      - `dir == "left"`：`ps.vx += abs(vz)`
+      - `dir == "right"`：`ps.vx -= abs(vz)`
+  - 不要在 `ProcessCreateMultipleObjects(...)` 外部提前用 parentDir 计算 `dirH` 并传入（会在 `facing` 反向时出错）。
+- 验收点：
+  - 当 `opoint.facing` 让新对象方向与 parent 不一致时，多生成散射左右仍正确（不被 parentDir 影响）。
+
+### 0.2 FlushTasks 后 TU 阶段的排序稳定性（避免同 tick 新对象 TU 顺序漂移）
+
+- 背景：
+  - `TransitTickAll()` 会 `bucket.EnsureSorted()`；但 FlushTasks 期间可能会 `Register()` 新对象/新 bucket。
+  - 如果 `TUTickAll()` 不重新 `EnsureSorted()`，可能出现同 tick 新对象 TU 的执行顺序不稳定（影响观感/确定性）。
+- 修改要求：
+  - 在 `Assets/NTSD/Scripts/Simulation/SimulationWorld.cs` 的 `TUTickAll(...)` 内也调用 `bucket.EnsureSorted()`（或仅对 dirty bucket 排序）。
+- 验收点：
+  - 同一输入回放/同一 StableId 集合下，Flush 后新生成对象在 TU 的执行顺序稳定（不会偶发变化）。
+
 > **Last Updated**: 2026-01-08
 > **Current Status**: ✅ P2+P3 Phase 1 已完成 - 等待 PlayMode 测试验证
 
@@ -535,3 +565,138 @@ private StateUpdateFrameResult StateUpdate(LF2CharacterAnimator character, strin
 ### 10.6 ECS 方向注意点（提前约束）
 - 阻挡体数据应可烘焙为纯数据（frameId/center/itrs(kind14)/spriteWidth），运行时查询不依赖 Mono/Unity 组件。
 - `LF2CollisionSystem` 的 registry 未来可替换为 ECS 世界的空间索引，但 `BlockingXZ` 的语义不变。
+
+---
+
+## 11. 待实现功能清单 (TODO Features)
+
+### 11.1 ✅ 对象池父节点管理（已完成）
+**完成日期**: 2026-01-18
+
+**需求描述**：
+LF2ObjectPool 在预热实例化时，应该将对象放到一个未激活状态的父节点下；取出使用时，再调整父节点为激活状态的父节点下。
+
+**实现方案**：
+1. 添加两个父节点配置：
+   - `_poolRoot`: 未激活对象的父节点（预热/归还时）
+   - `_activeRoot`: 激活对象的父节点（使用时）
+
+2. 修改 `Get()` 方法：
+   - 移到 `_activeRoot` 父节点
+   - 然后激活对象
+
+3. 修改 `Release()` 方法：
+   - 重置状态（会 `SetActive(false)`）
+   - 移回 `_poolRoot` 父节点
+
+**修改文件**：
+- `Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs`
+
+**验收标准**：
+- ✅ 预热时对象在 `_poolRoot` 下且未激活
+- ✅ 取出时对象移到 `_activeRoot` 下且已激活
+- ✅ 归还时对象移回 `_poolRoot` 下且未激活
+
+---
+
+### 11.2 ⏳ FLF match_event 事件系统（待实现）
+**计划日期**: TBD
+
+**需求背景**：
+FLF 项目在每帧 Transit/TU 阶段开始前会触发 `match_event` 全局事件，用于游戏模式/关卡逻辑的全局条件判定。
+
+**FLF 源码参考**：
+```javascript
+// I:\C++Test\NTSD\F.LF-master\LF\match.js
+
+// 发送事件到整个系统
+match.prototype.emit_event = function (E) {
+  const $ = this
+  $.match_event(E)    // 1. 匹配层（Match）处理事件
+  $.for_all(E)        // 2. 遍历所有对象处理事件
+}
+
+// 匹配层事件处理（全局/游戏模式层）
+match.prototype.match_event = function (E) {
+  const $ = this
+  if ($.state && $.state.event) $.state.event.call(this, E)
+}
+
+// 调用位置
+match.prototype.TU_trans = function () {
+  const $ = this
+  $.emit_event('transit')    // Transit 阶段开始前
+  $.process_tasks()
+  $.emit_event('TU')         // TU 阶段开始前
+  // ...
+}
+
+// 游戏开始时
+if ($.time.t === 0) {
+  $.match_event('start')
+}
+```
+
+**当前项目对应实现**：
+- ✅ `for_all(E)` → 对应我们的 `TransitTickAll()`、`TUTickAll()`、`LateTick()`
+- ❌ `match_event(E)` → **目前项目中没有对应的机制**
+
+**用途分析**：
+1. **游戏模式扩展性** - 允许不同游戏模式（生存模式、对战模式、闯关模式）监听每帧的事件
+2. **关卡逻辑** - 关卡系统可以在 'start'、'transit'、'TU' 事件中执行特定逻辑
+3. **全局条件判定** - 比如胜利条件、失败条件、时间限制等
+
+**建议实现方案**：
+在 `SimulationWorld` 或 `SimulationTickDriver` 中添加事件委托：
+
+```csharp
+public class SimulationWorld
+{
+    // 匹配层事件委托
+    public event System.Action<string> OnMatchEvent;
+
+    /// <summary>
+    /// 发送事件到整个系统
+    /// 对应 FLF match.prototype.emit_event
+    /// </summary>
+    public void EmitEvent(string eventName)
+    {
+        // 1. 匹配层处理事件（全局/游戏模式层）
+        OnMatchEvent?.Invoke(eventName);
+
+        // 2. 遍历所有对象处理事件
+        switch (eventName)
+        {
+            case "transit":
+                TransitTickAll(currentTick);
+                break;
+            case "TU":
+                TUTickAll(currentTick);
+                break;
+            // ...
+        }
+    }
+}
+```
+
+**实现时机**：
+- **当前阶段**：不是必需功能，可以暂不实现
+- **后续需求**：当需要以下功能时再添加
+  - 不同游戏模式（生存、闯关、对战）
+  - 关卡条件判定
+  - 全局事件响应系统
+
+**参考文件**：
+- FLF 源码：`I:\C++Test\NTSD\F.LF-master\LF\match.js` (Lines 303-313)
+- 项目对应：`Assets/NTSD/Scripts/Simulation/SimulationWorld.cs`
+- 项目对应：`Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs`
+
+**注意事项**：
+- 保持与 FLF 的事件名称一致（'start', 'transit', 'TU'）
+- 确保事件触发时机与 FLF 一致（Transit/TU 阶段**开始前**）
+- 避免在事件回调中做耗时操作（确定性 Tick 系统）
+
+---
+
+> **Last Updated**: 2026-01-18
+> **Section Added By**: Claude (Architecture Refactoring Session)

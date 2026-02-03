@@ -1,4 +1,3 @@
-using NTSD.Game;
 using NTSD.Input;
 
 namespace NTSD.Simulation
@@ -47,15 +46,6 @@ namespace NTSD.Simulation
 			this.tickIndex = tickIndex;
 			this.key = key;
 			this.down = down;
-		}
-
-		/// <summary>
-		/// 调试用字符串表示
-		/// </summary>
-		public override string ToString()
-		{
-			string action = down ? "DOWN" : "UP";
-			return $"[Tick {tickIndex}] {key} {action}";
 		}
 	}
 }

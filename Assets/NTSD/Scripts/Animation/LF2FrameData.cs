@@ -228,6 +228,7 @@ namespace NTSD.Animation
         public int y = 0;
         public int dvx = 0;
         public int dvy = 0;
+        public int dvz = 0;
         public int oid = 0;
         public int facing = 0;
     }

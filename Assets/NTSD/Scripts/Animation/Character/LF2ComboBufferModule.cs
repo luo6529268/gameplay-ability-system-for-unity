@@ -1,5 +1,6 @@
 using NTSD.Input;
 using NTSD.Tools;
+using System;
 
 namespace NTSD.Animation
 {
@@ -26,13 +27,12 @@ namespace NTSD.Animation
         public void OnComboDetected(
             ComboConfig.ComboDefinition combo,
             bool allowSwitchDir,
-            System.Action<string> setDirectionByString,
+            Action<string> setDirectionByString,
             int timeoutFrames,
             bool debugLog,
             int stableId)
         {
             string K = combo.name;
-            if (string.IsNullOrEmpty(K)) return;
 
             // 1) 方向键切换（FLF character.js combo_event: left/right 且 allowSwitchDir）
             if (allowSwitchDir && (K == "left" || K == "right"))
@@ -50,24 +50,6 @@ namespace NTSD.Animation
             // 3) 写入 buffer
             _combo = K;
             _timeout = timeoutFrames;
-
-            if (debugLog)
-            {
-                Log.Info("[NTSD][ComboDetected] StableId={0} bufAfter={1}", stableId, _combo ?? "null");
-            }
-        }
-
-        /// <summary>
-        /// 对齐 FLF: state_exit 时清理不能跨状态传递的双击指令。
-        /// 对应 FLF character.js:221-228
-        /// </summary>
-        public void ClearOnStateExit(string comboAtExit)
-        {
-            string combo = string.IsNullOrEmpty(comboAtExit) ? _combo : comboAtExit;
-            if (combo == "left-left" || combo == "right-right")
-            {
-                _combo = null;
-            }
         }
 
         /// <summary>

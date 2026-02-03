@@ -14,7 +14,6 @@ namespace NTSD.Game
     /// - 只负责把 Unity InputSystem 的事件写入到 SimInputBuffer（按 tick 对齐）
     /// - 不直接驱动动画/状态，所有帧播放仍由 OnComboDetected → LF2CharacterAnimator 处理
     ///
-    /// 参考：原 CharacterInput.cs（MonoBehaviour 版本）
     /// </summary>
     public sealed class CharacterInputModule : ICharacterModule
     {
@@ -53,8 +52,6 @@ namespace NTSD.Game
         public bool IsDef => _isDefending;
         public bool IsAtt => _isAttacking;
         public bool IsJump => _isJumping;
-
-        public int ModuleOrder => CharacterModuleOrder.Input;
 
         public int Dirv 
         {

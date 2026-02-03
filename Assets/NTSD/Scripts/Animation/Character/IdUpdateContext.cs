@@ -1,6 +1,7 @@
 using BeatEmUpTemplate2D;
 using MoreMountains.TopDownEngine;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Animation
 {
@@ -27,12 +28,6 @@ namespace NTSD.Animation
         /// handler 可以通过这个访问所有组件，但不应直接修改 Hub 状态
         /// </summary>
         public readonly Character Hub;
-
-        /// <summary>
-        /// LF2 角色动画器（对应 FLF 的 $ 对象）
-        /// handler 可以读取帧数据、状态等，但不应直接修改 Animator 内部状态
-        /// </summary>
-        public readonly LF2CharacterAnimator Animator;
 
         /// <summary>
         /// 物理状态（对应 FLF 的 $.ps）
@@ -82,7 +77,6 @@ namespace NTSD.Animation
         /// </summary>
         public IdUpdateContext(
             Character hub,
-            LF2CharacterAnimator animator,
             PhysicsState ps,
             string comboKey,
             string comboTag,
@@ -90,7 +84,6 @@ namespace NTSD.Animation
             int tickIndex = 0)
         {
             Hub = hub;
-            Animator = animator;
             Ps = ps;
             ComboKey = comboKey;
             ComboTag = comboTag;
@@ -104,13 +97,11 @@ namespace NTSD.Animation
         /// </summary>
         public IdUpdateContext(
             Character hub,
-            LF2CharacterAnimator animator,
             PhysicsState ps,
             int state,
             int tickIndex = 0)
         {
             Hub = hub;
-            Animator = animator;
             Ps = ps;
             ComboKey = null;
             ComboTag = null;
@@ -124,12 +115,10 @@ namespace NTSD.Animation
         /// </summary>
         public IdUpdateContext(
             Character hub,
-            LF2CharacterAnimator animator,
             PhysicsState ps,
             int tickIndex = 0)
         {
             Hub = hub;
-            Animator = animator;
             Ps = ps;
             ComboKey = null;
             ComboTag = null;

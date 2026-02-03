@@ -170,36 +170,58 @@ namespace NTSD.Simulation
         }
 
         /// <summary>
-        /// 执行一次 Tick（主要逻辑）
+        /// 分配一个新的 StableId
+        /// 对应 FLF scene.add() 中的 this.uid++
         ///
-        /// 执行顺序：
-        /// 1. 遍历所有 bucket（按 SimOrder 升序）
-        /// 2. 每个 bucket 确保按 StableId 排序
-        /// 3. 依次调用每个对象的 SimTick(tickIndex)
+        /// StableId 分配规则：
+        /// - 从 100 开始自动递增（避免与玩家角色 1-99 冲突）
+        /// - 全局递增，与对象类型无关
+        /// - 用于确定性排序（同一 SimOrder 内按 StableId 升序执行）
         ///
-        /// 对应 FLF: match.TU_trans() 中的主循环
+        /// 调用时机：
+        /// - LF2 逻辑对象初始化时（LF2LivingObject.AllocateStableId()）
         /// </summary>
-        /// <param name="tickIndex">当前 Tick 索引</param>
-        public void Tick(int tickIndex)
+        /// <returns>新分配的 StableId</returns>
+        public int AllocateStableId()
+        {
+            return _nextAutoStableId++;
+        }
+
+        /// <summary>
+        /// Transit 阶段 - 所有对象执行 Transit
+        /// 对应 FLF match.TU_trans 中的 emit_event('transit') 循环
+        /// </summary>
+        public void TransitTickAll(int tickIndex)
         {
             foreach (var kvp in _buckets)
             {
-                int simOrder = kvp.Key;
                 Bucket bucket = kvp.Value;
-
-                // Lazy sort: 只在 dirty 时排序
                 bucket.EnsureSorted();
 
-                // 执行所有对象的 SimTick
                 foreach (var obj in bucket.items)
                 {
-                    if (obj == null)
-                    {
-                        Debug.LogWarning($"[SimulationWorld] Null object in bucket SimOrder={simOrder}, skipping");
-                        continue;
-                    }
+                    if (obj == null) continue;
+                    obj.SimTransit(tickIndex);
+                }
+            }
+        }
 
-                    obj.SimTick(tickIndex);
+        /// <summary>
+        /// TU 阶段 - 所有对象执行 TU
+        /// 对应 FLF match.TU_trans 中的 emit_event('TU') 循环
+        /// </summary>
+        public void TUTickAll(int tickIndex)
+        {
+            foreach (var kvp in _buckets)
+            {
+                Bucket bucket = kvp.Value;
+                // 0.2: FlushTasks 后可能有新对象注册，需重新排序确保稳定性
+                bucket.EnsureSorted();
+
+                foreach (var obj in bucket.items)
+                {
+                    if (obj == null) continue;
+                    obj.SimTU(tickIndex);
                 }
             }
         }
@@ -232,19 +254,6 @@ namespace NTSD.Simulation
                     obj.SimLateTick(tickIndex);
                 }
             }
-        }
-
-        /// <summary>
-        /// 为对象分配自动 StableId（用于本地 AI 等没有网络 ID 的对象）
-        ///
-        /// 注意：
-        /// - 单机模式：可以使用
-        /// - 多人模式：应由服务器分配，不应调用此方法
-        /// </summary>
-        /// <returns>新分配的 StableId</returns>
-        public int AllocateStableId()
-        {
-            return _nextAutoStableId++;
         }
 
         /// <summary>

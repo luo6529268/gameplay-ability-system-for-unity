@@ -686,7 +686,6 @@ namespace MoreMountains.TopDownEngine
 							}
 						}
 					}
-					_character.ChangeCharacterConditionTemporarily(typedDamage.ForcedCondition, typedDamage.ForcedConditionDuration, typedDamage.ResetControllerForces, typedDamage.DisableGravity);	
 				}
 			}
 			
@@ -774,7 +773,6 @@ namespace MoreMountains.TopDownEngine
 			{
 				// we set its dead state to true
 				_character.ConditionState.ChangeState(CharacterStates.CharacterConditions.Dead);
-				_character.Reset();
 
 				if (_character.CharacterType == Character.CharacterTypes.Player)
 				{

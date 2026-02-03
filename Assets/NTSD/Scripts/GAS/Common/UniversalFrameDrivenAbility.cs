@@ -1,5 +1,6 @@
 using GAS.Runtime;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 using UnityEngine;
 using System;
 using MoreMountains.TopDownEngine;
@@ -42,7 +43,7 @@ namespace NTSD.GAS
         /// <summary>
         /// LF2角色动画播放器
         /// </summary>
-        protected LF2CharacterAnimator Animator { get; private set; }
+        protected ILF2LivingObject Animator { get; private set; }
 
         /// <summary>
         /// 技能对应的状态值（301-999）
@@ -124,11 +125,14 @@ namespace NTSD.GAS
 
             AbilityState = abilityState;
 
-            // 获取 LF2CharacterAnimator
-            Animator = owner.GetComponent<LF2CharacterAnimator>();
+            // 获取 ILF2LivingObject（优先从 Character Hub 获取）
+            var character = owner.GetComponent<Character>();
+            if (character?._LF2Character != null)
+                Animator = character._LF2Character;
+            
             if (Animator == null)
             {
-                Debug.LogError($"[UniversalFrameDrivenAbility] LF2CharacterAnimator not found on {owner.name}!");
+                Debug.LogError($"[UniversalFrameDrivenAbility] ILF2LivingObject not found on {owner.name}!");
                 return;
             }
 
@@ -164,16 +168,12 @@ namespace NTSD.GAS
             // 1. 播放技能起始帧
             Animator.PlayFrameByID(StartFrameId);
 
-            // 2. 监听事件（关键！对应 FLF 的事件绑定）
-            Animator.OnStateChanged += OnStateChanged;
-            Animator.OnFrameChanged += OnFrameChanged;  // ← 新增：监听帧变化！
-
             // 3. 触发 state_entry 事件
             DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.StateEntry,
                 state = AbilityState,
-                frameData = Animator.CurrentFrame
+                frameData = Animator.Frame.D
             });
 
             // 4. 应用消耗和冷却
@@ -194,20 +194,20 @@ namespace NTSD.GAS
             DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.TU_Force,
-                state = Animator.CurrentState,
-                frameData = Animator.CurrentFrame
+                state = Animator.Frame.D.state,
+                frameData = Animator.Frame.D
             });
 
             // 2. 触发 TU (Time Update) 事件（对应 FLF 的 TU）
             DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.TU,
-                state = Animator.CurrentState,
-                frameData = Animator.CurrentFrame
+                state = Animator.Frame.D.state,
+                frameData = Animator.Frame.D
             });
 
             // 3. 检查是否返回到非技能状态（自动结束技能）
-            int currentState = Animator.CurrentState;
+            int currentState = Animator.Frame.D.state;
             if (!LF2States.IsAbilityState(currentState))
             {
                 TryEndAbility();
@@ -221,10 +221,6 @@ namespace NTSD.GAS
         {
             if (Animator != null)
             {
-                // 移除事件监听（关键！防止内存泄漏）
-                Animator.OnStateChanged -= OnStateChanged;
-                Animator.OnFrameChanged -= OnFrameChanged;  // ← 新增：解绑帧变化监听
-
                 // 强制返回站立状态
                 Animator.PlayFrameByID(LF2StandardFrames.Standing);
             }
@@ -234,7 +230,7 @@ namespace NTSD.GAS
             {
                 type = AbilityEventType.StateExit,
                 state = AbilityState,
-                frameData = Animator?.CurrentFrame
+                frameData = Animator?.Frame.D
             });
         }
 
@@ -243,19 +239,12 @@ namespace NTSD.GAS
         /// </summary>
         public override void EndAbility()
         {
-            if (Animator != null)
-            {
-                // 移除事件监听（关键！防止内存泄漏）
-                Animator.OnStateChanged -= OnStateChanged;
-                Animator.OnFrameChanged -= OnFrameChanged;  // ← 新增：解绑帧变化监听
-            }
-
             // 触发 state_exit 事件
             DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.StateExit,
                 state = AbilityState,
-                frameData = Animator?.CurrentFrame
+                frameData = Animator?.Frame.D
             });
         }
 
@@ -271,14 +260,14 @@ namespace NTSD.GAS
             if (Animator == null) return;
 
             // 获取当前帧数据
-            var frameData = Animator.CurrentFrame;
+            var frameData = Animator.Frame.D;
             if (frameData == null) return;
 
             // 1. 触发 Frame_Force 事件（对应 FLF 的 frame_force，用于强制应用帧力）
             bool frameForceHandled = DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.Frame_Force,
-                state = Animator.CurrentState,
+                state = Animator.Frame.D.state,
                 frameData = frameData
             });
 
@@ -292,7 +281,7 @@ namespace NTSD.GAS
             DispatchEvent(new AbilityEvent
             {
                 type = AbilityEventType.Frame,
-                state = Animator.CurrentState,
+                state = Animator.Frame.D.state,
                 frameData = frameData
             });
         }
@@ -322,13 +311,14 @@ namespace NTSD.GAS
 
             // 获取角色朝向（1 = 右，-1 = 左）
             var character = Owner.GetComponent<Character>();
-            int dirH = character?._CharacterDirection == DIRECTION.RIGHT ? 1 : -1;
+            //int dirH = character?._CharacterDirection == DIRECTION.RIGHT ? 1 : -1;
+            int dirH = -1;
 
-            // Step D7: 优先使用 LF2CharacterAnimator.ps（Plan A）
-            var animator = character?._LF2CharacterAnimator;
-            if (animator != null && animator.ps != null)
+            // Step D7: 优先使用 LF2Character.ps（Plan B）
+            ILF2LivingObject animator = character._LF2Character;
+            if (animator != null && animator.PS != null)
             {
-                var ps = animator.ps;
+                var ps = animator.PS;
 
                 // ==================== 应用 dvx（水平速度）====================
                 // 对应 FLF livingobject.js:135-142

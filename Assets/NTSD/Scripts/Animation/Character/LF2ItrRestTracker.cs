@@ -15,6 +15,15 @@ namespace NTSD.Animation
         private int _arest = 0;
         private readonly Dictionary<int, int> _vrestByAttacker = new Dictionary<int, int>();
 
+        /// <summary>
+        /// 攻击休息时间（对应 FLF $.itr.arest）
+        /// </summary>
+        public int Arest
+        {
+            get => _arest;
+            set => _arest = value;
+        }
+
         public void Reset()
         {
             _arest = 0;
@@ -26,6 +35,22 @@ namespace NTSD.Animation
         public bool VrestTest(int attackerStableId)
         {
             return !_vrestByAttacker.TryGetValue(attackerStableId, out int v) || v <= 0;
+        }
+
+        /// <summary>
+        /// 检查是否有受击休息（对应 FLF $.itr.vrest[uid]）
+        /// </summary>
+        public bool HasVrest(int attackerStableId)
+        {
+            return _vrestByAttacker.TryGetValue(attackerStableId, out int v) && v > 0;
+        }
+
+        /// <summary>
+        /// 设置受击休息（对应 FLF $.itr.vrest[uid] = value）
+        /// </summary>
+        public void SetVrest(int attackerStableId, int value)
+        {
+            _vrestByAttacker[attackerStableId] = value;
         }
 
         public void ArestUpdate(InteractionArea itr)

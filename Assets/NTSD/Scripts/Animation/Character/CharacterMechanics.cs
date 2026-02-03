@@ -348,5 +348,47 @@ namespace NTSD.Animation
                 boundaryMode
             );
         }
+
+        /// <summary>
+        /// 简化版物理动力学（用于武器/特效等非角色对象）
+        /// 对齐 FLF mechanics.js dynamics() 的核心逻辑
+        /// </summary>
+        public static void Dynamics(PhysicsState ps, float mass = 1f)
+        {
+            if (ps == null) return;
+
+            // 1. 水平位移
+            ps.x += ps.vx;
+            ps.z += ps.vz;
+
+            // 2. 垂直位移
+            ps.y += ps.vy;
+
+            // 3. 地面修正
+            if (ps.y > 0)
+            {
+                ps.y = 0;
+            }
+
+            // 4. 地面摩擦
+            if (ps.y == 0 && mass > 0f)
+            {
+                if (ps.vx != 0)
+                    ps.vx += (ps.vx > 0 ? -1 : 1) * ps.fric;
+                if (ps.vz != 0)
+                    ps.vz += (ps.vz > 0 ? -1 : 1) * ps.fric;
+
+                if (ps.vx != 0 && ps.vx > -NTSDGlobal.Gameplay.MinSpeed && ps.vx < NTSDGlobal.Gameplay.MinSpeed)
+                    ps.vx = 0;
+                if (ps.vz != 0 && ps.vz > -NTSDGlobal.Gameplay.MinSpeed && ps.vz < NTSDGlobal.Gameplay.MinSpeed)
+                    ps.vz = 0;
+            }
+
+            // 5. 空中重力
+            if (ps.y < 0)
+            {
+                ps.vy += mass * NTSDGlobal.Gameplay.Gravity;
+            }
+        }
     }
 }

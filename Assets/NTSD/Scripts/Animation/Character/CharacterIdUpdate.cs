@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MoreMountains.TopDownEngine;
+using NTSD.Animation.LF2Objects;
 using NTSD.Tools;
 using UnityEngine;
 
@@ -47,11 +48,6 @@ namespace NTSD.Animation
         private readonly Character _hub;
 
         /// <summary>
-        /// 缓存的 LF2CharacterAnimator（避免每次 TryInvoke 都查找）
-        /// </summary>
-        private readonly LF2CharacterAnimator _animator;
-
-        /// <summary>
         /// 缓存的 PhysicsState（避免每次 TryInvoke 都查找）
         /// </summary>
         private readonly PhysicsState _ps;
@@ -75,15 +71,8 @@ namespace NTSD.Animation
         public CharacterIdUpdate(Character hub)
         {
             _hub = hub;
+            _ps = hub._LF2Character.PS;
 
-            // 缓存常用引用（Hub 注入规则：由 Character 统一缓存后注入）
-            _animator = hub._LF2CharacterAnimator;
-            _ps = _animator?.ps;
-
-            if (_animator == null)
-            {
-                Debug.LogWarning($"[CharacterIdUpdate] Character {hub.name} has no LF2CharacterAnimator! id_update will always return false.");
-            }
         }
 
         // ==================== RegisterDefaultHandlers（Step D9R 核心）====================
@@ -156,7 +145,7 @@ namespace NTSD.Animation
         public bool TryInvoke(string hookName, in IdUpdateContext ctx)
         {
             // 1. 验证基本条件
-            if (_hub == null || _animator == null)
+            if (_hub == null)
             {
                 // 无效状态，不调用任何 handler
                 return false;
@@ -193,7 +182,6 @@ namespace NTSD.Animation
         {
             var ctx = new IdUpdateContext(
                 _hub,
-                _animator,
                 _ps,
                 comboKey,
                 comboTag,
@@ -210,7 +198,6 @@ namespace NTSD.Animation
         {
             var ctx = new IdUpdateContext(
                 _hub,
-                _animator,
                 _ps,
                 state,
                 tickIndex
@@ -225,7 +212,6 @@ namespace NTSD.Animation
         {
             var ctx = new IdUpdateContext(
                 _hub,
-                _animator,
                 _ps,
                 state,
                 tickIndex
@@ -240,7 +226,6 @@ namespace NTSD.Animation
         {
             var ctx = new IdUpdateContext(
                 _hub,
-                _animator,
                 _ps,
                 tickIndex
             );

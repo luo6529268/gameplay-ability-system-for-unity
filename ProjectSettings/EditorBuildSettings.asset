@@ -6,6 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Demo/Scene/Demo.unity
-    guid: dc6e5a68790b0e042853f4f8387dceed
-  m_configObjects: {}
+    path: Assets/NTSD/Scene/NTSD_Menu.unity
+    guid: 132c934aff207b048833ab33c1961278
+  - enabled: 1
+    path: Assets/NTSD/Scene/NTSD_Battle.unity
+    guid: 9a044b4462e171548a6466aaa64f92e5
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: dc7819059b86fdd4f9e92d1ce4759a0b, type: 2}

@@ -8,28 +8,6 @@ using UnityEngine.SceneManagement;
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// A simple yet powerful sound manager, that will let you play sounds with an event based approach and performance in mind.
-	/// 
-	/// Features :
-	/// 
-	/// - Play/stop/pause/resume/free sounds
-	/// - Full control : loop, volume, pitch, pan, spatial blend, bypasses, priority, reverb, doppler level, spread, rolloff mode, distance
-	/// - 2D & 3D spatial support
-	/// - Built-in pooling, automatically recycle a set of audio sources for maximum performance
-	/// - Built in audio mixer and groups, with ready-made tracks (Master, Music, SFX, UI), and options to play on more groups if needed
-	/// - Stop/pause/resume/free entire tracks
-	/// - Stop/pause/resume/free all sounds at once
-	/// - Mute / set volume entire tracks
-	/// - Save and load settings, with auto save / auto load mechanics built-in
-	/// - Fade in/out sounds
-	/// - Fade in/out tracks
-	/// - Solo mode : play a sound with one or all tracks muted, then unmute them automatically afterwards
-	/// - PlayOptions struct
-	/// - Option to have sounds persist across scene loads and from scene to scene
-	/// - Inspector controls for tracks (volume, mute, unmute, play, pause, stop, resume, free, number of sounds)
-	/// - MMSfxEvents
-	/// - MMSoundManagerEvents : mute track, control track, save, load, reset, stop persistent sounds 
-	/// 
 	/// 这是一个简单但功能强大的声音管理器，它允许你以事件驱动的方式播放声音，并考虑到性能。
 	/// 特点：
 	/// -播放/停止/暂停/恢复/释放声音

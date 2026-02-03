@@ -38,8 +38,7 @@ namespace BeatEmUpTemplate2D
             Vector2 moveDir = (destination - unitPos).normalized;
 
             // 检测墙壁碰撞距离
-            Vector2 wallDistanceCheck = unit._Character.col2D ?
-                (unit._Character.col2D.size / 1.8f) * 1.1f :
+            Vector2 wallDistanceCheck =
                 Vector2.one * .3f;
             /* 
              * 墙壁检测距离计算说明：
@@ -55,7 +54,6 @@ namespace BeatEmUpTemplate2D
             }
 
             // 执行移动并播放跑步动画
-            unit.MoveToVector(moveDir, unit.settings.moveSpeed);
             unit.animator.Play(animationName);
 
             // 如果到达目标位置（距离小于0.1），切换到空闲状态

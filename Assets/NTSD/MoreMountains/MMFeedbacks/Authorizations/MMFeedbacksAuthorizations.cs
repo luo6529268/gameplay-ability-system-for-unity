@@ -556,14 +556,6 @@ namespace MoreMountains.Feedbacks
 			MMF_Vignette_HDRP.FeedbackTypeAuthorized = Vignette;
 			#endif
 			
-			#if MM_URP
-			MMF_Bloom_URP.FeedbackTypeAuthorized = Bloom;
-			MMF_ChromaticAberration_URP.FeedbackTypeAuthorized = ChromaticAberration;
-			MMF_LensDistortion_URP.FeedbackTypeAuthorized = LensDistortion;
-			MMF_ColorAdjustments_URP.FeedbackTypeAuthorized = ColorGrading;
-			MMF_LensDistortion_URP.FeedbackTypeAuthorized = LensDistortion;
-			MMF_Vignette_URP.FeedbackTypeAuthorized = Vignette;
-			#endif
 			
 			#if (MM_TEXTMESHPRO || MM_UGUI2)
 			MMF_TMPAlpha.FeedbackTypeAuthorized = TMPAlpha;

@@ -30,6 +30,14 @@ namespace NTSD.Animation
     /// </summary>
     public static class RuntimeSpriteProcessor
     {
+        public sealed class SpritePixelData
+        {
+            public int Width;
+            public int Height;
+            public Color[] Pixels;
+            public string Name;
+        }
+
         /// <summary>
         /// 基础透明处理
         /// </summary>
@@ -362,6 +370,230 @@ namespace NTSD.Animation
 
             Debug.Log($"精灵切割完成：从 {row}x{col} 网格（每格 {cellWidth}x{cellHeight}）切割出 {sprites.Count} 个精灵（每个 {width}x{height}）");
             return sprites;
+        }
+
+        public static List<SpritePixelData> SliceAndProcessPixels(Color[] sourcePixels, int textureWidth, int textureHeight,
+            int width, int height, int row, int col, TransparentColorData data)
+        {
+            var slices = SliceTextureFromTopLeftPixels(sourcePixels, textureWidth, textureHeight, width, height, row, col);
+            for (int i = 0; i < slices.Count; i++)
+            {
+                var slice = slices[i];
+                slice.Pixels = MakeColorTransparent_Debleeding_AvoidBorderPixels(slice.Pixels, slice.Width, slice.Height, data);
+            }
+
+            return slices;
+        }
+
+        public static List<SpritePixelData> SliceTextureFromTopLeftPixels(Color[] sourcePixels, int textureWidth, int textureHeight,
+            int width, int height, int row, int col)
+        {
+            List<SpritePixelData> sprites = new List<SpritePixelData>();
+            if (sourcePixels == null || sourcePixels.Length == 0)
+            {
+                return sprites;
+            }
+
+            int cellWidth = width + 1;
+            int cellHeight = height + 1;
+
+            for (int r = 0; r < row; r++)
+            {
+                for (int c = 0; c < col; c++)
+                {
+                    int x = c * cellWidth;
+                    int y = textureHeight - (r + 1) * cellHeight;
+                    y += 1;
+
+                    if (x < 0 || y < 0)
+                    {
+                        continue;
+                    }
+
+                    if (x + width > textureWidth || y + height > textureHeight)
+                    {
+                        continue;
+                    }
+
+                    var pixels = new Color[width * height];
+                    for (int yy = 0; yy < height; yy++)
+                    {
+                        int srcY = y + yy;
+                        int srcRow = srcY * textureWidth;
+                        int dstRow = yy * width;
+                        for (int xx = 0; xx < width; xx++)
+                        {
+                            pixels[dstRow + xx] = sourcePixels[srcRow + x + xx];
+                        }
+                    }
+
+                    sprites.Add(new SpritePixelData
+                    {
+                        Width = width,
+                        Height = height,
+                        Pixels = pixels,
+                        Name = $"sprite_{r}_{c}"
+                    });
+                }
+            }
+
+            return sprites;
+        }
+
+        public static Color[] MakeColorTransparent_Debleeding_AvoidBorderPixels(Color[] src, int w, int h, TransparentColorData data)
+        {
+            if (src == null || src.Length == 0)
+            {
+                return src;
+            }
+
+            Color[] dst = new Color[src.Length];
+            System.Array.Copy(src, dst, src.Length);
+            bool[] isTransparent = new bool[src.Length];
+
+            bool IsEdgePixel(int x, int y)
+            {
+                if (!data.useEdgeDetection) return false;
+
+                int radius = data.edgeDetectionRadius;
+                int nonBlackCount = 0;
+                int totalCount = 0;
+
+                for (int dy = -radius; dy <= radius; dy++)
+                {
+                    for (int dx = -radius; dx <= radius; dx++)
+                    {
+                        if (dx == 0 && dy == 0) continue;
+
+                        int nx = x + dx;
+                        int ny = y + dy;
+                        if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+
+                        totalCount++;
+                        int nIdx = ny * w + nx;
+                        Color neighbor = src[nIdx];
+
+                        float nDiff = Mathf.Abs(neighbor.r - data.targetColor.r) +
+                                      Mathf.Abs(neighbor.g - data.targetColor.g) +
+                                      Mathf.Abs(neighbor.b - data.targetColor.b);
+
+                        if (nDiff > data.colorTolerance)
+                        {
+                            nonBlackCount++;
+                        }
+                    }
+                }
+
+                if (totalCount > 0)
+                {
+                    float ratio = (float)nonBlackCount / totalCount;
+                    return ratio >= data.edgeThreshold;
+                }
+
+                return false;
+            }
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    int i = y * w + x;
+                    Color p = src[i];
+                    float diff = Mathf.Abs(p.r - data.targetColor.r) +
+                                 Mathf.Abs(p.g - data.targetColor.g) +
+                                 Mathf.Abs(p.b - data.targetColor.b);
+
+                    if (diff <= data.colorTolerance)
+                    {
+                        if (IsEdgePixel(x, y))
+                        {
+                            continue;
+                        }
+
+                        isTransparent[i] = true;
+                        dst[i].a = 0f;
+                    }
+                }
+            }
+
+            bool IsBorderColor(Color c)
+            {
+                float d = Mathf.Abs(c.r - data.borderColor.r) +
+                          Mathf.Abs(c.g - data.borderColor.g) +
+                          Mathf.Abs(c.b - data.borderColor.b);
+                return d <= data.borderTolerance;
+            }
+
+            int maxRadius = Mathf.Max(1, data.searchRadius);
+            List<(int dx, int dy)> neighborOffsets = new List<(int, int)>();
+            for (int r = 1; r <= maxRadius; r++)
+            {
+                for (int yy = -r; yy <= r; yy++)
+                {
+                    for (int xx = -r; xx <= r; xx++)
+                    {
+                        if (Mathf.Abs(xx) == r || Mathf.Abs(yy) == r)
+                            neighborOffsets.Add((xx, yy));
+                    }
+                }
+            }
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    int idx = y * w + x;
+                    if (!isTransparent[idx]) continue;
+
+                    Color chosen = new Color(0, 0, 0, 0);
+                    bool found = false;
+
+                    foreach (var off in neighborOffsets)
+                    {
+                        int nx = x + off.dx;
+                        int ny = y + off.dy;
+                        if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                        int nIdx = ny * w + nx;
+                        if (!isTransparent[nIdx] && !IsBorderColor(src[nIdx]))
+                        {
+                            chosen = src[nIdx];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        foreach (var off in neighborOffsets)
+                        {
+                            int nx = x + off.dx;
+                            int ny = y + off.dy;
+                            if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                            int nIdx = ny * w + nx;
+                            if (!isTransparent[nIdx])
+                            {
+                                chosen = src[nIdx];
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (found)
+                    {
+                        dst[idx].r = chosen.r;
+                        dst[idx].g = chosen.g;
+                        dst[idx].b = chosen.b;
+                        dst[idx].a = 0f;
+                    }
+                    else
+                    {
+                        dst[idx] = new Color(data.targetColor.r, data.targetColor.g, data.targetColor.b, 0f);
+                    }
+                }
+            }
+
+            return dst;
         }
     }
 }

@@ -181,6 +181,7 @@ namespace MoreMountains.TopDownEngine
         protected Collider _collider;
         protected Collider2D _collider2D;
         protected Vector3 _initialSpawnPointPosition;
+        protected bool _levelStarted = false;
 
         // 静态初始化，支持进入播放模式
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -197,10 +198,16 @@ namespace MoreMountains.TopDownEngine
             _collider2D = this.GetComponent<Collider2D>();
         }
 
-        // 开始初始化
-        protected virtual async void Start()
+        protected virtual void Start()
         {
-            await InitializationCoroutine();
+        }
+
+        public virtual void StartLevel()
+        {
+            if (_levelStarted) return;
+            _levelStarted = true;
+            
+            InitializationCoroutine().Forget();
         }
 
         // 初始化协程

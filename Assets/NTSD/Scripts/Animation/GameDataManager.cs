@@ -39,7 +39,7 @@ namespace NTSD.Animation
                 cachedConfig = ParseDataFile(content);
 
                 // 构建查找表
-                objectLookup = new Dictionary<int, ObjectDefinition>();
+                objectLookup = new Dictionary<int, ObjectDefinition>(cachedConfig.objects.Count);
                 foreach (var obj in cachedConfig.objects)
                 {
                     objectLookup[obj.id] = obj;

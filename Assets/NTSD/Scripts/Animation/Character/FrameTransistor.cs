@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace NTSD.Animation
@@ -7,8 +8,6 @@ namespace NTSD.Animation
     /// </summary>
     public class FrameTransistor
     {
-        private readonly LF2CharacterAnimator animator;
-
         // FLF 初始值：wait=1, next=999, lock=0, lockout=1
         private int wait = 1;
         private int next = 999;
@@ -16,9 +15,22 @@ namespace NTSD.Animation
         private int lockout = 1;
         private bool switchDirAfterTrans;
 
-        public FrameTransistor(LF2CharacterAnimator animator)
+        // 帧转换回调（替代对 LF2CharacterAnimator 的直接依赖）
+        private Action<int, bool, int> _onFrameTransit;
+
+        /// <summary>
+        /// 无参构造函数（用于 LF2LivingObject）
+        /// </summary>
+        public FrameTransistor()
         {
-            this.animator = animator;
+        }
+
+        /// <summary>
+        /// 设置帧转换回调
+        /// </summary>
+        public void SetFrameTransitCallback(Action<int, bool, int> callback)
+        {
+            _onFrameTransit = callback;
         }
 
         public int Next => next;
@@ -133,14 +145,27 @@ namespace NTSD.Animation
                 next = 0;
             }
 
-            animator.FrameTransitInternal(next, switchDirAfterTrans, oldLock);
+            // 调用帧转换回调
+            _onFrameTransit?.Invoke(next, switchDirAfterTrans, oldLock);
             switchDirAfterTrans = false;
 
             // FLF 特例：oldlock 为 10 或 11 时，wait>0 额外减 1
             if ((oldLock == 10 || oldLock == 11) && wait > 0)
             {
-                wait --;
+                wait--;
             }
+        }
+
+        /// <summary>
+        /// 重置状态
+        /// </summary>
+        public void Reset()
+        {
+            wait = 1;
+            next = 999;
+            lockLevel = 0;
+            lockout = 1;
+            switchDirAfterTrans = false;
         }
     }
 }

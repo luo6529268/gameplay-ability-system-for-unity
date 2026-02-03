@@ -124,8 +124,6 @@ namespace BeatEmUpTemplate2D {
         // Step 4: 缓存 Character hub（替代 UnitActions）
         private Character _character;
 
-        public int ModuleOrder => CharacterModuleOrder.UnitSettings;
-
         public void ModuleSetup(Character character)
         {
             _character = character;
@@ -214,62 +212,6 @@ namespace BeatEmUpTemplate2D {
                 }
             }
         
-            // Step 4: 移除 ObjectSorting.Sort（排序由 LF2 dynamics 的 SortingGroup 负责）
-            // ObjectSorting.Sort(spriteRenderer, new Vector2(transform.position.x, ...));
-
-            // Step 4: 检查目标是否在视野范围内（使用迁移后的 TargetInSight 方法）
-            targetInSight = (_character != null) ? TargetInSight(_character.Target) : false;
-
-        }
-
-        /// <summary>
-        /// Step 4: 迁移自 UnitActions.targetInSight()
-        /// 检查目标是否在视野内
-        /// </summary>
-        private bool TargetInSight(GameObject target)
-        {
-            if (target == null) return false;
-            if (!enableFOV) return true;
-
-            // 获取朝向（从 animator.FacingDir）
-            DIRECTION facingDir = DIRECTION.RIGHT;
-            if (_character != null && _character._LF2CharacterAnimator != null)
-            {
-                facingDir = _character._LF2CharacterAnimator.FacingDir;
-            }
-
-            // viewOffset 的 x 方向需乘以朝向
-            Vector2 adjustedViewOffset = new Vector2(viewPosOffset.x * (int)facingDir, viewPosOffset.y);
-
-            Vector2 directionToTarget = target.transform.position - transform.position + (Vector3)adjustedViewOffset;
-            float distanceToTarget = directionToTarget.magnitude;
-            if (distanceToTarget > viewDistance) return false;
-
-            SpriteRenderer sr = target.GetComponent<SpriteRenderer>();
-            if (sr == null) return false;
-
-            Bounds spriteBounds = sr.bounds;
-            Vector3[] corners = {
-                spriteBounds.min,
-                spriteBounds.max,
-                new Vector3(spriteBounds.min.x, spriteBounds.max.y),
-                new Vector3(spriteBounds.max.x, spriteBounds.min.y)
-            };
-
-            foreach (Vector3 corner in corners)
-            {
-                Vector2 directionToCorner = corner - (transform.position + (Vector3)adjustedViewOffset);
-                float distanceToCorner = directionToCorner.magnitude;
-                if (distanceToCorner <= viewDistance)
-                {
-                    float angleToCorner = Vector2.Angle(transform.right, directionToCorner);
-                    if (angleToCorner <= viewAngle / 2)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>

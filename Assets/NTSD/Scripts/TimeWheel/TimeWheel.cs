@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -70,18 +70,25 @@ namespace NTSD.TimeWheel
 
         #region Public Interface
 
-        // 共享实例
         public static TimeWheel SharedInstance { get; private set; } = null!;
 
-        // 创建共享实例
         public static TimeWheel CreateSharedInstance(bool shouldSortBeforeExecution = true)
         {
             if (SharedInstance != null)
             {
-                throw new Exception("SharedInstance already created");
+                return SharedInstance;
             }
 
             return SharedInstance = new(shouldSortBeforeExecution);
+        }
+
+        public static void DestroySharedInstance()
+        {
+            if (SharedInstance != null)
+            {
+                SharedInstance.Dispose();
+                SharedInstance = null!;
+            }
         }
 
         // 构造函数
