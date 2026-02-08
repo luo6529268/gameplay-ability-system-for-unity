@@ -42,7 +42,7 @@ namespace NTSD.Animation
         /// 对齐 FLF mech.blocking_xz()：预测下一步（PS.vx/PS.vz）是否会被 kind:14 阻挡。
         /// 注意：这里使用 Unity ground plane（X/Y）上的阻挡体（LF2BlockingObstacle），属于方案 1 的“显式障碍物”。
         /// </summary>
-        public static bool BlockingXZ(ILF2LivingObject actor)
+        public static bool BlockingXZ(LF2LivingObject actor)
         {
             if (actor == null || actor.PS == null) return false;
             return BlockingXZ(actor, actor.PS.vx, actor.PS.vz);
@@ -51,7 +51,7 @@ namespace NTSD.Animation
         private static readonly List<PhysicsState.FlfVolume> s_tmpActorBodies = new List<PhysicsState.FlfVolume>(8);
         private static readonly List<PhysicsState.FlfVolume> s_tmpItr14 = new List<PhysicsState.FlfVolume>(8);
 
-        public static bool BlockingXZ(ILF2LivingObject actor, float vxPx, float vzPx)
+        public static bool BlockingXZ(LF2LivingObject actor, float vxPx, float vzPx)
         {
             if (actor == null || actor.PS == null) return false;
             if (s_blockingObstacles.Count == 0) return false;
@@ -114,8 +114,8 @@ namespace NTSD.Animation
         public struct HitEvent
         {
             public int tickIndex;
-            public ILF2LivingObject attacker;
-            public ILF2LivingObject target;
+            public LF2LivingObject attacker;
+            public LF2LivingObject target;
             public InteractionArea itr;
         }
 
@@ -124,8 +124,8 @@ namespace NTSD.Animation
         public struct PreInteractionEvent
         {
             public int tickIndex;
-            public ILF2LivingObject actor;
-            public ILF2LivingObject target;
+            public LF2LivingObject actor;
+            public LF2LivingObject target;
             public InteractionArea itr;
         }
 
@@ -137,9 +137,9 @@ namespace NTSD.Animation
             if (_lastPreProcessedTick == tickIndex) return;
             _lastPreProcessedTick = tickIndex;
 
-            //ILF2LivingObject[] animators = Object.FindObjectsByType<ILF2LivingObject>(FindObjectsSortMode.None);
+            //LF2LivingObject[] animators = Object.FindObjectsByType<LF2LivingObject>(FindObjectsSortMode.None);
 
-            ILF2LivingObject[] animators = new ILF2LivingObject[10];
+            LF2LivingObject[] animators = new LF2LivingObject[10];
             System.Array.Sort(animators, (a, b) =>
             {
                 if (a == null && b == null) return 0;
@@ -150,7 +150,7 @@ namespace NTSD.Animation
 
             for (int a = 0; a < animators.Length; a++)
             {
-                ILF2LivingObject actor = animators[a];
+                LF2LivingObject actor = animators[a];
                 if (actor == null || actor.PS == null) continue;
                 if (actor.Frame.D == null) continue;
                 if (!actor.ItrRest.ArestTest()) continue;
@@ -175,7 +175,7 @@ namespace NTSD.Animation
                 for (int t = 0; t < animators.Length; t++)
                 {
                     if (t == a) continue;
-                    ILF2LivingObject target = animators[t];
+                    LF2LivingObject target = animators[t];
                     if (target == null || target.PS == null) continue;
                     if (target.Frame.D == null) continue;
 
@@ -242,8 +242,8 @@ namespace NTSD.Animation
 
             // 最小实现：从场景收集所有角色 Animator
             // 后续如要严格 determinism，应改为 SimulationWorld 的确定性列表。
-            //ILF2LivingObject[] animators = Object.FindObjectsByType<ILF2LivingObject>(FindObjectsSortMode.None);
-            ILF2LivingObject[] animators = new ILF2LivingObject[10];
+            //LF2LivingObject[] animators = Object.FindObjectsByType<LF2LivingObject>(FindObjectsSortMode.None);
+            LF2LivingObject[] animators = new LF2LivingObject[10];
             System.Array.Sort(animators, (a, b) =>
             {
                 if (a == null && b == null) return 0;
@@ -254,7 +254,7 @@ namespace NTSD.Animation
 
             for (int a = 0; a < animators.Length; a++)
             {
-                ILF2LivingObject attacker = animators[a];
+                LF2LivingObject attacker = animators[a];
                 if (attacker == null || attacker.PS == null) continue;
                 if (attacker.Frame.D == null) continue;
 
@@ -276,7 +276,7 @@ namespace NTSD.Animation
                 for (int t = 0; t < animators.Length; t++)
                 {
                     if (t == a) continue;
-                    ILF2LivingObject target = animators[t];
+                    LF2LivingObject target = animators[t];
                     if (target == null || target.PS == null) continue;
                     if (target.Frame.D == null) continue;
 

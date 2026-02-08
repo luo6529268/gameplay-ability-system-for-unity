@@ -18,17 +18,17 @@ namespace NTSD.Animation.LF2Objects
     {
         // ========== 配置字段 ==========
         private int _objectId;
-        private ILF2LivingObject _parent;
+        private LF2LivingObject _parent;
         private int _lastState = -1;
 
         // ========== 状态机字段 ==========
         public bool NoBounce { get; set; }
 
         // ========== 追踪系统 ==========
-        private ILF2LivingObject _chasingTarget;
+        private LF2LivingObject _chasingTarget;
 
         // ========== 公开属性 ==========
-        public ILF2LivingObject Parent => _parent;
+        public LF2LivingObject Parent => _parent;
 
         // ========== ILF2Object 实现 ==========
         public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.SpecialAttack;
@@ -36,7 +36,6 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            _renderer = renderer;
             AllocateStableId();
 
             // 初始化基类字段
@@ -49,6 +48,9 @@ namespace NTSD.Animation.LF2Objects
 
             // 设置帧转换回调
             Trans.SetFrameTransitCallback(OnFrameTransit);
+
+            // 初始化状态处理器
+            InitializeStates();
 
             if (!(taskBase is OPointCreateTask task))
             {
@@ -66,13 +68,252 @@ namespace NTSD.Animation.LF2Objects
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
+        protected override void InitializeStates()
+        {
+            _states[15] = State_15;
+            _states[1002] = State_1002;
+            _states[LF2States.ProjectileFlying] = State_3000;
+            _states[LF2States.ProjectileHiting] = State_3001;
+            _states[LF2States.ProjectileHit] = State_3002;
+            _states[LF2States.ProjectileTeleport] = State_3003;
+            _states[LF2States.ObjectFlying] = State_3005;
+            _states[LF2States.ObjectExpanding] = State_3006;
+        }
+
+        protected override bool OnGenericStateEvent(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "TU":
+                    Generic_TU();
+                    return false;
+                case "frame":
+                    Generic_Frame();
+                    return false;
+                case "frame_force":
+                case "TU_force":
+                    Generic_Force();
+                    return true;
+                case "leaving":
+                    Generic_Leaving();
+                    return false;
+                case "die":
+                    Generic_Die();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        #region Generic State Handlers
+
+        private void Generic_TU()
+        {
+            Interaction();
+            CharacterMechanics.Dynamics(PS);
+
+            var frame = Frame.D;
+            if (frame != null && frame.hit_a != 0)
+            {
+                Health.HP -= frame.hit_a;
+            }
+        }
+
+        private void Generic_Frame()
+        {
+            var frame = Frame.D;
+            if (frame == null) return;
+
+            if (frame.opoint != null && frame.opoint.oid > 0)
+            {
+                CreateObject(frame.opoint);
+            }
+
+            if (!string.IsNullOrEmpty(frame.sound))
+            {
+                PlaySound(frame.sound);
+            }
+
+            if (Frame.N == 15)
+            {
+                Trans.Frame(1000, 0);
+            }
+        }
+
+        private void Generic_Force()
+        {
+            var frame = Frame.D;
+            if (frame == null) return;
+
+            if (frame.hit_j != 0)
+            {
+                float dvz = frame.hit_j - 50;
+                PS.vz = dvz;
+            }
+        }
+
+        private void Generic_Leaving()
+        {
+            if (IsLeavingBoundary(200))
+            {
+                Trans.Frame(1000, 0);
+            }
+        }
+
+        private void Generic_Die()
+        {
+            var frame = Frame.D;
+            if (frame != null && frame.hit_d != 0)
+            {
+                Trans.Frame(frame.hit_d, 0);
+            }
+        }
+
+        #endregion
+
+        #region Specific State Handlers
+
+        private bool State_15(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                var frame = Frame.D;
+                if (frame != null && frame.dvx != 0)
+                {
+                    PS.vx = Dirh() * frame.dvx;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_1002(string eventType, object eventData)
+        {
+            if (eventType == "state_entry")
+            {
+                NoBounce = (Parent?.PS?.y ?? 0) == 0;
+                return true;
+            }
+            if (eventType == "TU")
+            {
+                if (PS.y == 0 && PS.vy > 0)
+                {
+                    if (NoBounce)
+                    {
+                        Trans.Frame(1000, 0);
+                    }
+                    else if (GetSpeed() > NTSDGlobal.Gameplay.WeaponBounceupLimit)
+                    {
+                        Trans.Frame(10, 0);
+                        PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
+                        if (PS.vx != 0) PS.vx = Mathf.Sign(PS.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
+                        if (PS.vz != 0) PS.vz = Mathf.Sign(PS.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_3000(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                ProcessChaseLogic();
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_3001(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                ProcessChaseLogic();
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_3002(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        private bool State_3003(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                ProcessChaseLogic();
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_3005(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                ProcessChaseLogic();
+                return true;
+            }
+            return false;
+        }
+
+        private bool State_3006(string eventType, object eventData)
+        {
+            if (eventType == "TU")
+            {
+                ProcessChaseLogic();
+                return true;
+            }
+            return false;
+        }
+
+        private void ProcessChaseLogic()
+        {
+            var frame = Frame.D;
+            if (frame == null) return;
+
+            if (frame.hit_Fa == 1 || frame.hit_Fa == 2)
+            {
+                if (Health.HP > 0)
+                {
+                    var target = ChaseTarget();
+                    if (target != null)
+                    {
+                        float dx = target.PS.x - PS.x;
+                        float dz = target.PS.z - PS.z;
+
+                        if (PS.vx * Mathf.Sign(dx) < 14)
+                        {
+                            PS.vx += Mathf.Sign(dx) * 0.7f;
+                        }
+                        if (PS.vz * Mathf.Sign(dz) < 2.2f)
+                        {
+                            PS.vz += Mathf.Sign(dz) * 0.4f;
+                        }
+
+                        SwitchDir(PS.vx >= 0 ? "right" : "left");
+                    }
+                }
+            }
+
+            if (frame.hit_Fa == 10)
+            {
+                PS.vx = Mathf.Sign(PS.vx) * 17;
+                PS.vz = 0;
+            }
+        }
+
+        #endregion
+
         public override void Reset()
         {
             SimulationTickDriver.Instance?.World?.Unregister(this);
 
             _parent = null;
             _objectId = 0;
-            _renderer = null;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
@@ -84,7 +325,7 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Destroy()
         {
-            LF2SpecialAttackStates.State3000_Exit(this);
+            CreateBrokenEffect();
         }
 
         // ========== 帧转换回调 ==========
@@ -127,52 +368,19 @@ namespace NTSD.Animation.LF2Objects
         {
             int currentState = GetState();
 
-            // 状态进入事件
             if (currentState != _lastState)
             {
-                OnStateEntry(currentState);
+                StateUpdate("state_entry", null);
                 _lastState = currentState;
             }
 
-            // Generic TU（所有状态共享）
-            LF2SpecialAttackStates.Generic_TU(this);
+            StateUpdate("TU", null);
 
-            // 特定状态 TU
-            switch (currentState)
-            {
-                case 15:
-                    LF2SpecialAttackStates.State15_TU(this);
-                    break;
-                case 1002:
-                    LF2SpecialAttackStates.State1002_TU(this);
-                    break;
-            }
-
-            // State 300X 追踪逻辑（适用于多个状态）
-            if (Frame.D != null && (Frame.D.hit_Fa == 1 || Frame.D.hit_Fa == 2 || Frame.D.hit_Fa == 10))
-            {
-                LF2SpecialAttackStates.State300X_TU(this);
-            }
-
-            // ItrRest 递减
             ItrRest?.Tick();
 
-            // 检查死亡
             if (Health.HP <= 0)
             {
-                LF2SpecialAttackStates.Generic_Die(this);
-            }
-        }
-
-        // ========== 状态机方法 ==========
-
-        private void OnStateEntry(int state)
-        {
-            switch (state)
-            {
-                case 1002:
-                    LF2SpecialAttackStates.State1002_Entry(this);
-                    break;
+                StateUpdate("die", null);
             }
         }
 
@@ -190,19 +398,130 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF specialattack.prototype.hit (specialattack.js:398-410)
         /// </summary>
-        public bool Hit(InteractionArea itr, ILF2LivingObject attacker)
+        public bool Hit(InteractionArea itr, LF2LivingObject attacker)
         {
             int state = GetState();
 
             switch (state)
             {
-                case 3000:
-                    return LF2SpecialAttackStates.State3000_Hit(this, attacker, itr);
-                case 3006:
-                    return LF2SpecialAttackStates.State3006_Hit(this, attacker, itr);
+                case LF2States.ProjectileFlying:
+                    return Hit_State3000(attacker, itr);
+                case LF2States.ObjectExpanding:
+                    return Hit_State3006(attacker, itr);
             }
 
             return false;
+        }
+
+        private bool Hit_State3000(LF2LivingObject attacker, InteractionArea itr)
+        {
+            var frame = Frame.D;
+
+            if (itr.kind == 14)
+            {
+                Trans.SetWait(0, 20);
+                return true;
+            }
+
+            if (attacker != null)
+            {
+                if (Team == attacker.Team && PS.dir == attacker.PS?.dir)
+                {
+                    return false;
+                }
+            }
+
+            var frameItr = GetFirstItr(frame);
+            if (frameItr != null && frameItr.effect == 3)
+            {
+                var attackerSA = attacker as LF2SpecialAttack;
+                if (attackerSA != null && attackerSA.GetState() == LF2States.ProjectileFlying &&
+                    itr.effect != 3 && itr.effect != 2)
+                {
+                    return true;
+                }
+            }
+
+            var attackerSpecial = attacker as LF2SpecialAttack;
+            if (attackerSpecial != null)
+            {
+                if (frameItr != null && frameItr.effect != 3 && frameItr.effect != 2 && itr.effect == 3)
+                {
+                    PS.vx = 0;
+                    Trans.Frame(1000, 0);
+                    CreateObjectAt(209, attackerSpecial);
+                    return true;
+                }
+
+                if (itr.kind == 0)
+                {
+                    PS.vx = 0;
+                    Trans.Frame(20, 0);
+                    return true;
+                }
+            }
+
+            if (itr.kind == 0 || itr.kind == 9)
+            {
+                PS.vx = 0;
+                Team = attacker?.Team ?? 0;
+                Trans.Frame(30, 0);
+                Trans.Trans();
+                TUUpdate();
+                Trans.Trans();
+                TUUpdate();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool Hit_State3006(LF2LivingObject attacker, InteractionArea itr)
+        {
+            if (itr.kind == 9)
+            {
+                PS.vx *= -1;
+                PS.z += 0.3f;
+                return true;
+            }
+
+            var attackerSA = attacker as LF2SpecialAttack;
+            if (attackerSA != null)
+            {
+                int attackerState = attackerSA.GetState();
+
+                if (attackerState == LF2States.ObjectFlying || attackerState == LF2States.ObjectExpanding)
+                {
+                    Trans.Frame(20, 0);
+                    PS.vx = 0;
+                    PS.vz = 0;
+                    return true;
+                }
+
+                if (attackerState == LF2States.ProjectileFlying)
+                {
+                    PS.vx = (PS.vx > 0 ? -1 : 1) * 7;
+                    return true;
+                }
+            }
+
+            if (itr.kind == 0)
+            {
+                PS.vx = (PS.vx > 0 ? -1 : 1) * 1;
+                if (itr.bdefend > NTSDGlobal.Gameplay.DefendBreakLimit)
+                {
+                    Health.HP = 0;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        private static InteractionArea GetFirstItr(LF2FrameData frame)
+        {
+            if (frame?.itrs == null || frame.itrs.Count == 0) return null;
+            return frame.itrs[0];
         }
 
         // ========== 追踪系统 ==========
@@ -210,7 +529,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF specialattack.prototype.chase_target (specialattack.js:424-453)
         /// </summary>
-        public ILF2LivingObject ChaseTarget()
+        public LF2LivingObject ChaseTarget()
         {
             // TODO: 实现目标选择逻辑
             return _chasingTarget;

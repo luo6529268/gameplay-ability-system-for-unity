@@ -57,8 +57,8 @@ namespace NTSD.Extensions
         public static DamageResult CalculateDamage(
             int baseInjury, 
             DamageType damageType, 
-            ILF2LivingObject attacker, 
-            ILF2LivingObject target)
+            LF2LivingObject attacker, 
+            LF2LivingObject target)
         {
             var result = new DamageResult
             {
@@ -118,7 +118,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 简化版伤害计算 (无属性系统)
         /// </summary>
-        public static int CalculateSimpleDamage(int baseInjury, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static int CalculateSimpleDamage(int baseInjury, LF2LivingObject attacker, LF2LivingObject target)
         {
             var result = CalculateDamage(baseInjury, DamageType.Physical, attacker, target);
             return result.finalDamage;
@@ -178,7 +178,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 应用伤害到目标
         /// </summary>
-        public static void ApplyDamage(ILF2LivingObject target, int damage)
+        public static void ApplyDamage(LF2LivingObject target, int damage)
         {
             if (target == null || target.CharacterStats == null) return;
             
@@ -191,8 +191,8 @@ namespace NTSD.Extensions
         /// </summary>
         public static DamageResult ProcessDamage(
             InteractionArea itr,
-            ILF2LivingObject attacker,
-            ILF2LivingObject target)
+            LF2LivingObject attacker,
+            LF2LivingObject target)
         {
             // 1. 计算伤害
             var result = CalculateDamage(itr.injury, DamageType.Physical, attacker, target);

@@ -19,8 +19,8 @@ namespace NTSD.Animation.LF2Objects
         protected int _lastState = -1;
 
         // ========== 持有者信息 ==========
-        protected ILF2LivingObject _holdObj;
-        protected ILF2LivingObject _holdPre;
+        protected LF2LivingObject _holdObj;
+        protected LF2LivingObject _holdPre;
 
         // ========== VRest 系统 ==========
         protected Dictionary<int, int> _vrest = new Dictionary<int, int>();
@@ -32,8 +32,8 @@ namespace NTSD.Animation.LF2Objects
         public string WeaponHitSound { get; set; } = "";
 
         // ========== 公开属性 ==========
-        public ILF2LivingObject HoldObj => _holdObj;
-        public ILF2LivingObject HoldPre => _holdPre;
+        public LF2LivingObject HoldObj => _holdObj;
+        public LF2LivingObject HoldPre => _holdPre;
 
         public abstract bool IsLight { get; }
         public abstract bool IsHeavy { get; }
@@ -41,7 +41,6 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            _renderer = renderer;
             AllocateStableId();
 
             // 初始化基类字段
@@ -54,6 +53,9 @@ namespace NTSD.Animation.LF2Objects
 
             // 设置帧转换回调
             Trans.SetFrameTransitCallback(OnFrameTransit);
+
+            // 初始化状态处理器
+            InitializeStates();
 
             if (!(taskBase is OPointCreateTask task))
             {
@@ -76,12 +78,125 @@ namespace NTSD.Animation.LF2Objects
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
+        protected override void InitializeStates()
+        {
+            _states[LF2States.WeaponInSky] = State_WeaponInSky;
+            _states[LF2States.WeaponOnHand] = State_WeaponOnHand;
+            _states[LF2States.WeaponThrowing] = State_WeaponThrowing;
+            _states[LF2States.WeaponJustOnGround] = State_WeaponJustOnGround;
+            _states[LF2States.WeaponOnGround] = State_WeaponOnGround;
+        }
+
+        protected override bool OnGenericStateEvent(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "TU":
+                    Generic_TU();
+                    return false;
+                case "die":
+                    Generic_Die();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        #region Generic State Handlers
+
+        private void Generic_TU()
+        {
+            Interaction();
+
+            int state = GetState();
+            switch (state)
+            {
+                case 1001:
+                case 2001:
+                    break;
+                default:
+                    CharacterMechanics.Dynamics(PS);
+                    break;
+            }
+
+            if (PS.y == 0 && PS.vy > 0)
+            {
+                if (GetSpeed() > NTSDGlobal.Gameplay.WeaponBounceupLimit)
+                {
+                    if (IsLight)
+                    {
+                        PS.vy = 0;
+                        Trans.Frame(70, 0);
+                    }
+                    if (IsHeavy)
+                    {
+                        PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
+                    }
+                    if (PS.vx != 0) PS.vx = Mathf.Sign(PS.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
+                    if (PS.vz != 0) PS.vz = Mathf.Sign(PS.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
+
+                    Health.HP -= WeaponDropHurt;
+                }
+                else
+                {
+                    Team = 0;
+                    PS.vy = 0;
+                    if (IsLight)
+                    {
+                        Trans.Frame(70, 0);
+                    }
+                    if (IsHeavy)
+                    {
+                        Trans.Frame(21, 0);
+                    }
+                }
+                PS.zz = 0;
+            }
+        }
+
+        private void Generic_Die()
+        {
+            Trans.Frame(1000, 0);
+            PlaySound(WeaponBrokenSound);
+            CreateBrokenEffect();
+        }
+
+        #endregion
+
+        #region Specific State Handlers
+
+        protected virtual bool State_WeaponInSky(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        protected virtual bool State_WeaponOnHand(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        protected virtual bool State_WeaponThrowing(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        protected virtual bool State_WeaponJustOnGround(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        protected virtual bool State_WeaponOnGround(string eventType, object eventData)
+        {
+            return false;
+        }
+
+        #endregion
+
         public override void Reset()
         {
             SimulationTickDriver.Instance?.World?.Unregister(this);
 
             _objectId = 0;
-            _renderer = null;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
@@ -94,7 +209,7 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Destroy()
         {
-            LF2WeaponStates.Generic_Die(this);
+            Generic_Die();
         }
 
         // ========== 帧转换回调 ==========
@@ -130,37 +245,22 @@ namespace NTSD.Animation.LF2Objects
         {
             int currentState = GetState();
 
-            // 状态进入事件
             if (currentState != _lastState)
             {
-                OnStateEntry(currentState);
+                StateUpdate("state_entry", null);
                 _lastState = currentState;
             }
 
-            // Generic TU
-            LF2WeaponStates.Generic_TU(this);
+            StateUpdate("TU", null);
 
-            // 特定状态处理
-            OnStateTU(currentState);
-
-            // VRest 递减
             UpdateVRest();
-
-            // ItrRest 递减
             ItrRest?.Tick();
 
-            // 检查死亡
             if (Health.HP <= 0)
             {
-                LF2WeaponStates.Generic_Die(this);
+                StateUpdate("die", null);
             }
         }
-
-        // ========== 状态机方法 ==========
-
-        protected virtual void OnStateEntry(int state) { }
-
-        protected virtual void OnStateTU(int state) { }
 
         // ========== 交互方法 ==========
 
@@ -176,12 +276,12 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF weapon.prototype.hit (weapon.js:275-365)
         /// </summary>
-        public abstract bool Hit(InteractionArea itr, ILF2LivingObject attacker);
+        public abstract bool Hit(InteractionArea itr, LF2LivingObject attacker);
 
         /// <summary>
         /// 对应 FLF weapon.prototype.act (weapon.js:367-465)
         /// </summary>
-        public virtual WeaponActResult Act(ILF2LivingObject holder, WeaponPoint wpoint, Vector3 holdpoint)
+        public virtual WeaponActResult Act(LF2LivingObject holder, WeaponPoint wpoint, Vector3 holdpoint)
         {
             var result = new WeaponActResult();
             if (Frame.D == null) return result;
@@ -264,7 +364,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF weapon.prototype.pick (weapon.js:484-498)
         /// </summary>
-        public virtual bool Pick(ILF2LivingObject holder)
+        public virtual bool Pick(LF2LivingObject holder)
         {
             if (_holdObj != null) return false;
 
@@ -278,13 +378,13 @@ namespace NTSD.Animation.LF2Objects
         // ========== VRest 系统 ==========
         private List<int> _vrestKeysCache = new List<int>();
 
-        public bool IsVRest(ILF2LivingObject obj)
+        public bool IsVRest(LF2LivingObject obj)
         {
             if (obj == null) return false;
             return _vrest.ContainsKey(obj.StableId) && _vrest[obj.StableId] > 0;
         }
 
-        public void SetVRest(ILF2LivingObject obj, int value)
+        public void SetVRest(LF2LivingObject obj, int value)
         {
             if (obj == null) return;
             _vrest[obj.StableId] = value;
@@ -337,7 +437,7 @@ namespace NTSD.Animation.LF2Objects
             // TODO: 实现笛子效果
         }
 
-        protected virtual WeaponAttackResult ProcessAttack(ILF2LivingObject holder, WeaponPoint wpoint, LF2FrameData frame)
+        protected virtual WeaponAttackResult ProcessAttack(LF2LivingObject holder, WeaponPoint wpoint, LF2FrameData frame)
         {
             // TODO: 实现攻击处理
             return new WeaponAttackResult();

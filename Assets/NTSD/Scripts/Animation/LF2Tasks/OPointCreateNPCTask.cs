@@ -13,7 +13,7 @@ namespace NTSD.Animation.LF2Tasks
         public override LF2TaskType TaskType => LF2TaskType.CreateNPCCharacters;
 
         // ========== 任务数据 ==========
-        public ILF2LivingObject parent;
+        public LF2LivingObject parent;
         public int team;
         public int characterId;
         public int number;

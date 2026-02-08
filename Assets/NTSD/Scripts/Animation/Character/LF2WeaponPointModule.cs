@@ -9,7 +9,7 @@ namespace NTSD.Animation
         /// 更新/同步 wpoint（武器跟随、weaponact、攻击状态等）。
         /// 由外部系统实现（武器实体/装备系统/网络同步等）。
         /// </summary>
-        void UpdateWeaponPoints(ILF2LivingObject animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
+        void UpdateWeaponPoints(LF2LivingObject animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
     }
 
     /// <summary>
@@ -25,7 +25,7 @@ namespace NTSD.Animation
             Factory = factory;
         }
 
-        public void ProcessTransit(ILF2LivingObject animator)
+        public void ProcessTransit(LF2LivingObject animator)
         {
             if (animator == null) return;
 

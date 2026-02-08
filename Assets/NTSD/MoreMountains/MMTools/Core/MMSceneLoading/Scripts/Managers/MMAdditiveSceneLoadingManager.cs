@@ -11,172 +11,176 @@ namespace MoreMountains.Tools
 	public class ProgressEvent : UnityEvent<float>{}
 
 	/// <summary>
-	/// A simple class used to store additive loading settings
+	/// 用于存储叠加式场景加载设置的简单类
 	/// </summary>
 	[Serializable]
 	public class MMAdditiveSceneLoadingManagerSettings
 	{
-		/// the possible ways to unload scenes
+		/// 卸载场景的可选方式
 		public enum UnloadMethods { None, ActiveScene, AllScenes };
-		/// the name of the MMSceneLoadingManager scene you want to use when in additive mode
-		[Tooltip("the name of the MMSceneLoadingManager scene you want to use when in additive mode")]
+		/// 叠加模式下要使用的 MMSceneLoadingManager 场景名称
+		[Tooltip("叠加模式下要使用的 MMSceneLoadingManager 场景名称")]
 		public string LoadingSceneName = "MMAdditiveLoadingScreen";
-		/// when in additive loading mode, the thread priority to apply to the loading
-		[Tooltip("when in additive loading mode, the thread priority to apply to the loading")]
+		/// 叠加加载模式下，应用于加载的线程优先级
+		[Tooltip("叠加加载模式下，应用于加载的线程优先级")]
 		public ThreadPriority ThreadPriority = ThreadPriority.High;
-		/// whether or not to make additional sanity checks (better leave this to true)
-		[Tooltip("whether or not to make additional sanity checks (better leave this to true)")]
+		/// 是否进行额外的安全检查（建议保持为 true）
+		[Tooltip("是否进行额外的安全检查（建议保持为 true）")]
 		public bool SecureLoad = true;
-		/// when in additive loading mode, whether or not to interpolate the progress bar's progress
-		[Tooltip("when in additive loading mode, whether or not to interpolate the progress bar's progress")]
+		/// 叠加加载模式下，是否对进度条的进度进行插值平滑
+		[Tooltip("叠加加载模式下，是否对进度条的进度进行插值平滑")]
 		public bool InterpolateProgress = true;
-		/// when in additive loading mode, when in additive loading mode, the duration (in seconds) of the delay before the entry fade
-		[Tooltip("when in additive loading mode, when in additive loading mode, the duration (in seconds) of the delay before the entry fade")]
+		/// 叠加加载模式下，进入淡入淡出之前的延迟时长（秒）
+		[Tooltip("叠加加载模式下，进入淡入淡出之前的延迟时长（秒）")]
 		public float BeforeEntryFadeDelay = 0f;
-		/// when in additive loading mode, the duration (in seconds) of the entry fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the entry fade")]
+		/// 叠加加载模式下，进入淡入淡出的持续时长（秒）
+		[Tooltip("叠加加载模式下，进入淡入淡出的持续时长（秒）")]
 		public float EntryFadeDuration = 0.25f;
-		/// when in additive loading mode, the duration (in seconds) of the delay before the entry fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the delay before the entry fade")]
+		/// 叠加加载模式下，进入淡入淡出之后的延迟时长（秒）
+		[Tooltip("叠加加载模式下，进入淡入淡出之后的延迟时长（秒）")]
 		public float AfterEntryFadeDelay = 0.1f;
-		/// when in additive loading mode, the duration (in seconds) of the delay before the exit fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the delay before the exit fade")]
+		/// 叠加加载模式下，退出淡入淡出之前的延迟时长（秒）
+		[Tooltip("叠加加载模式下，退出淡入淡出之前的延迟时长（秒）")]
 		public float BeforeExitFadeDelay = 0.25f;
-		/// when in additive loading mode, the duration (in seconds) of the exit fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the exit fade")]
+		/// 叠加加载模式下，退出淡入淡出的持续时长（秒）
+		[Tooltip("叠加加载模式下，退出淡入淡出的持续时长（秒）")]
 		public float ExitFadeDuration = 0.2f;
-		/// when in additive loading mode, when in additive loading mode, the tween to use to fade on entry
-		[Tooltip("when in additive loading mode, when in additive loading mode, the tween to use to fade on entry")]
+		/// 叠加加载模式下，进入时使用的缓动曲线
+		[Tooltip("叠加加载模式下，进入时使用的缓动曲线")]
 		public MMTweenType EntryFadeTween = null;
-		/// when in additive loading mode, the tween to use to fade on exit
-		[Tooltip("when in additive loading mode, the tween to use to fade on exit")]
+		/// 叠加加载模式下，退出时使用的缓动曲线
+		[Tooltip("叠加加载模式下，退出时使用的缓动曲线")]
 		public MMTweenType ExitFadeTween = null;
-		/// when in additive loading mode, the speed at which the loader's progress bar should move
-		[Tooltip("when in additive loading mode, the speed at which the loader's progress bar should move")]
+		/// 叠加加载模式下，加载器进度条的移动速度
+		[Tooltip("叠加加载模式下，加载器进度条的移动速度")]
 		public float ProgressBarSpeed = 5f;
-		/// a list of progress intervals (values should be between 0 and 1) and their associated speeds, letting you have the bar progress less linearly
-		[Tooltip("a list of progress intervals (values should be between 0 and 1) and their associated speeds, letting you have the bar progress less linearly")]
+		/// 进度区间列表（值应在 0 到 1 之间）及其对应速度，使进度条的推进更加非线性
+		[Tooltip("进度区间列表（值应在 0 到 1 之间）及其对应速度，使进度条的推进更加非线性")]
 		public List<MMSceneLoadingSpeedInterval> SpeedIntervals;
-		/// when in additive loading mode, the selective additive fade mode
-		[Tooltip("when in additive loading mode, the selective additive fade mode")]
+		/// 叠加加载模式下，选择性叠加淡入淡出模式
+		[Tooltip("叠加加载模式下，选择性叠加淡入淡出模式")]
 		public MMAdditiveSceneLoadingManager.FadeModes FadeMode = MMAdditiveSceneLoadingManager.FadeModes.FadeInThenOut;
-		/// the chosen way to unload scenes (none, only the active scene, all loaded scenes)
-		[Tooltip("the chosen way to unload scenes (none, only the active scene, all loaded scenes)")]
+		/// 选择的场景卸载方式（不卸载、仅卸载活动场景、卸载所有已加载场景）
+		[Tooltip("选择的场景卸载方式（不卸载、仅卸载活动场景、卸载所有已加载场景）")]
 		public UnloadMethods UnloadMethod = UnloadMethods.AllScenes;
-		/// the name of the anti spill scene to use when loading additively.
-		/// If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.
-		[Tooltip("the name of the anti spill scene to use when loading additively." +
-		         "If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.")]
+		/// 叠加加载时使用的防溢出场景名称。
+		/// 如果留空，将自动创建该场景；你也可以指定任意场景用于此目的。
+		/// 通常你会希望防溢出场景是一个空场景，但你可以自定义其光照设置等。
+		[Tooltip("叠加加载时使用的防溢出场景名称。" +
+		         "如果留空，将自动创建该场景；你也可以指定任意场景用于此目的。通常你会希望防溢出场景是一个空场景，但你可以自定义其光照设置等。")]
 		public string AntiSpillSceneName = "";
 	}
 
 	/// <summary>
-	/// A class used to define different interpolation speeds for specific progress intervals
+	/// 用于为特定进度区间定义不同插值速度的类
 	/// </summary>
 	[Serializable]
 	public class MMSceneLoadingSpeedInterval
 	{
-		/// The progress interval (between 0 and 1) 
+		/// 进度区间（值在 0 到 1 之间）
 		public MMInterval<float> Interval;
-		/// the speed at which the bar should move on that interval
+		/// 在该区间内进度条的移动速度
 		public float Speed = 1f;
 	}
 	
 	/// <summary>
-	/// A class to load scenes using a loading screen instead of just the default API
-	/// This is a new version of the classic LoadingSceneManager (now renamed to MMSceneLoadingManager for consistency)
+	/// 使用加载画面来加载场景的类，替代默认的场景加载 API。
+	/// 这是经典 LoadingSceneManager 的新版本（为保持一致性已重命名为 MMSceneLoadingManager）。
 	/// </summary>
 	public class MMAdditiveSceneLoadingManager : MMMonoBehaviour 
 	{
-		/// The possible orders in which to play fades (depends on the fade you've set in your loading screen
+		/// 淡入淡出的播放顺序（取决于你在加载画面中设置的淡入淡出方式）
 		public enum FadeModes { FadeInThenOut, FadeOutThenIn }
 		
 		[MMInspectorGroup("Audio Listener", true, 3)]
 		public AudioListener LoadingAudioListener;
 		
 		[MMInspectorGroup("Settings", true, 10)]
-		/// the ID on which to trigger a fade, has to match the ID on the fader in your scene
-		[Tooltip("the ID on which to trigger a fade, has to match the ID on the fader in your scene")]
+		/// 触发淡入淡出的 ID，必须与场景中 Fader 上的 ID 匹配
+		[Tooltip("触发淡入淡出的 ID，必须与场景中 Fader 上的 ID 匹配")]
 		public int FaderID = 500;
-		/// whether or not to output debug messages to the console
-		[Tooltip("whether or not to output debug messages to the console")]
+		/// 是否将调试信息输出到控制台
+		[Tooltip("是否将调试信息输出到控制台")]
 		public bool DebugMode = false;
 
 		[MMInspectorGroup("Progress Events", true, 11)]
-		/// an event used to update progress 
-		[Tooltip("an event used to update progress")]
+		/// 用于更新实时进度的事件
+		[Tooltip("用于更新实时进度的事件")]
 		public ProgressEvent SetRealtimeProgressValue;
-		/// an event used to update progress with interpolation
-		[Tooltip("an event used to update progress with interpolation")]
+		/// 用于更新插值平滑进度的事件
+		[Tooltip("用于更新插值平滑进度的事件")]
 		public ProgressEvent SetInterpolatedProgressValue;
 
 		[MMInspectorGroup("StateNode Events", true, 12)]
-		/// an event that will be invoked when the load starts
-		[Tooltip("an event that will be invoked when the load starts")]
+		/// 加载开始时触发的事件
+		[Tooltip("加载开始时触发的事件")]
 		public UnityEvent OnLoadStarted;
-		/// an event that will be invoked when the delay before the entry fade starts
-		[Tooltip("an event that will be invoked when the delay before the entry fade starts")]
+		/// 进入淡入淡出之前的延迟开始时触发的事件
+		[Tooltip("进入淡入淡出之前的延迟开始时触发的事件")]
 		public UnityEvent OnBeforeEntryFade;
-		/// an event that will be invoked when the entry fade starts
-		[Tooltip("an event that will be invoked when the entry fade starts")]
+		/// 进入淡入淡出开始时触发的事件
+		[Tooltip("进入淡入淡出开始时触发的事件")]
 		public UnityEvent OnEntryFade;
-		/// an event that will be invoked when the delay after the entry fade starts
-		[Tooltip("an event that will be invoked when the delay after the entry fade starts")]
+		/// 进入淡入淡出之后的延迟开始时触发的事件
+		[Tooltip("进入淡入淡出之后的延迟开始时触发的事件")]
 		public UnityEvent OnAfterEntryFade;
-		/// an event that will be invoked when the origin scene gets unloaded
-		[Tooltip("an event that will be invoked when the origin scene gets unloaded")]
+		/// 原始场景被卸载时触发的事件
+		[Tooltip("原始场景被卸载时触发的事件")]
 		public UnityEvent OnUnloadOriginScene;
-		/// an event that will be invoked when the destination scene starts loading
-		[Tooltip("an event that will be invoked when the destination scene starts loading")]
+		/// 目标场景开始加载时触发的事件
+		[Tooltip("目标场景开始加载时触发的事件")]
 		public UnityEvent OnLoadDestinationScene;
-		/// an event that will be invoked when the load of the destination scene is complete
-		[Tooltip("an event that will be invoked when the load of the destination scene is complete")]
+		/// 目标场景加载完成时触发的事件
+		[Tooltip("目标场景加载完成时触发的事件")]
 		public UnityEvent OnLoadProgressComplete;
-		/// an event that will be invoked when the interpolated load of the destination scene is complete
-		[Tooltip("an event that will be invoked when the interpolated load of the destination scene is complete")]
+		/// 目标场景插值加载完成时触发的事件
+		[Tooltip("目标场景插值加载完成时触发的事件")]
 		public UnityEvent OnInterpolatedLoadProgressComplete;
-		/// an event that will be invoked when the delay before the exit fade starts
-		[Tooltip("an event that will be invoked when the delay before the exit fade starts")]
+		/// 退出淡入淡出之前的延迟开始时触发的事件
+		[Tooltip("退出淡入淡出之前的延迟开始时触发的事件")]
 		public UnityEvent OnBeforeExitFade;
-		/// an event that will be invoked when the exit fade starts
-		[Tooltip("an event that will be invoked when the exit fade starts")]
+		/// 退出淡入淡出开始时触发的事件
+		[Tooltip("退出淡入淡出开始时触发的事件")]
 		public UnityEvent OnExitFade;
-		/// an event that will be invoked when the destination scene gets activated
-		[Tooltip("an event that will be invoked when the destination scene gets activated")]
+		/// 目标场景被激活时触发的事件
+		[Tooltip("目标场景被激活时触发的事件")]
 		public UnityEvent OnDestinationSceneActivation;
-		/// an event that will be invoked when the scene loader gets unloaded
-		[Tooltip("an event that will be invoked when the scene loader gets unloaded")]
+		/// 场景加载器被卸载时触发的事件
+		[Tooltip("场景加载器被卸载时触发的事件")]
 		public UnityEvent OnUnloadSceneLoader;
 
-		protected static bool _interpolateProgress;
-		protected static float _progressInterpolationSpeed;
-		protected static List<MMSceneLoadingSpeedInterval> _speedIntervals;
-		protected static float _beforeEntryFadeDelay;
-		protected static MMTweenType _entryFadeTween;
-		protected static float _entryFadeDuration;
-		protected static float _afterEntryFadeDelay;
-		protected static float _beforeExitFadeDelay;
-		protected static MMTweenType _exitFadeTween;
-		protected static float _exitFadeDuration;
-		protected static FadeModes _fadeMode;
-		protected static string _sceneToLoadName = "";
-		protected static string _loadingScreenSceneName;
-		protected static List<string> _scenesInBuild;
-		protected static Scene[] _initialScenes;
-		protected float _loadProgress = 0f;
-		protected float _interpolatedLoadProgress;
-		protected static bool _loadingInProgress = false;
-		protected AsyncOperation _unloadOriginAsyncOperation;
-		protected AsyncOperation _loadDestinationAsyncOperation;
-		protected AsyncOperation _unloadLoadingAsyncOperation;
-		protected bool _setRealtimeProgressValueIsNull;
-		protected bool _setInterpolatedProgressValueIsNull;
-		protected const float _asyncProgressLimit = 0.9f;
-		protected MMSceneLoadingAntiSpill _antiSpill = new MMSceneLoadingAntiSpill();
-		protected static string _antiSpillSceneName = "";
+		// ==================== 静态配置字段（跨实例共享） ====================
+		protected static bool _interpolateProgress;                          // 是否启用进度插值
+		protected static float _progressInterpolationSpeed;                  // 进度插值速度
+		protected static List<MMSceneLoadingSpeedInterval> _speedIntervals;  // 速度区间列表
+		protected static float _beforeEntryFadeDelay;                        // 进入淡入淡出前的延迟
+		protected static MMTweenType _entryFadeTween;                        // 进入淡入淡出的缓动曲线
+		protected static float _entryFadeDuration;                           // 进入淡入淡出的持续时长
+		protected static float _afterEntryFadeDelay;                         // 进入淡入淡出后的延迟
+		protected static float _beforeExitFadeDelay;                         // 退出淡入淡出前的延迟
+		protected static MMTweenType _exitFadeTween;                         // 退出淡入淡出的缓动曲线
+		protected static float _exitFadeDuration;                            // 退出淡入淡出的持续时长
+		protected static FadeModes _fadeMode;                                // 淡入淡出模式
+		protected static string _sceneToLoadName = "";                       // 要加载的目标场景名称
+		protected static string _loadingScreenSceneName;                     // 加载画面场景名称
+		protected static List<string> _scenesInBuild;                        // 构建设置中的场景列表
+		protected static Scene[] _initialScenes;                             // 需要卸载的初始场景数组
+
+		// ==================== 实例字段 ====================
+		protected float _loadProgress = 0f;                                  // 实际加载进度（0~1）
+		protected float _interpolatedLoadProgress;                           // 插值平滑后的加载进度
+		protected static bool _loadingInProgress = false;                    // 是否正在加载中（防止重复加载）
+		protected AsyncOperation _unloadOriginAsyncOperation;                // 卸载原始场景的异步操作
+		protected AsyncOperation _loadDestinationAsyncOperation;             // 加载目标场景的异步操作
+		protected AsyncOperation _unloadLoadingAsyncOperation;               // 卸载加载画面的异步操作
+		protected bool _setRealtimeProgressValueIsNull;                      // 实时进度事件是否为空的缓存
+		protected bool _setInterpolatedProgressValueIsNull;                  // 插值进度事件是否为空的缓存
+		protected const float _asyncProgressLimit = 0.9f;                    // 异步加载进度上限（Unity 异步加载最大到 0.9）
+		protected MMSceneLoadingAntiSpill _antiSpill = new MMSceneLoadingAntiSpill(); // 防溢出场景管理器
+		protected static string _antiSpillSceneName = "";                    // 防溢出场景名称
 		
 		/// <summary>
-		/// Statics initialization to support enter play modes
+		/// 静态字段初始化，用于支持 Unity 的 Enter Play Mode 设置（域重载）
 		/// </summary>
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		protected static void InitializeStatics()
@@ -200,10 +204,10 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Call this static method to load a scene from anywhere (packed settings signature)
+		/// 从任意位置调用此静态方法来加载场景（使用打包的设置参数）
 		/// </summary>
-		/// <param name="sceneToLoadName"></param>
-		/// <param name="settings"></param>
+		/// <param name="sceneToLoadName">要加载的目标场景名称</param>
+		/// <param name="settings">叠加加载设置</param>
 		public static void LoadScene(string sceneToLoadName, MMAdditiveSceneLoadingManagerSettings settings)
 		{
 			LoadScene(sceneToLoadName, settings.LoadingSceneName, settings.ThreadPriority, settings.SecureLoad, settings.InterpolateProgress,
@@ -213,9 +217,10 @@ namespace MoreMountains.Tools
 		}
         
 		/// <summary>
-		/// Call this static method to load a scene from anywhere
+		/// 从任意位置调用此静态方法来加载场景（完整参数签名）。
+		/// 该方法会验证场景是否存在于构建设置中，设置加载参数，然后以叠加模式加载加载画面场景。
 		/// </summary>
-		/// <param name="sceneToLoadName">Level name.</param>
+		/// <param name="sceneToLoadName">要加载的目标场景名称</param>
 		public static void LoadScene(string sceneToLoadName, string loadingSceneName = "MMAdditiveLoadingScreen", 
 			ThreadPriority threadPriority = ThreadPriority.High, bool secureLoad = true,
 			bool interpolateProgress = true,
@@ -233,7 +238,7 @@ namespace MoreMountains.Tools
 		{
 			if (_loadingInProgress)
 			{
-				Debug.LogError("MMLoadingSceneManagerAdditive : a request to load a new scene was emitted while a scene load was already in progress");  
+				Debug.LogError("MMLoadingSceneManagerAdditive : 在场景加载进行中时收到了新的加载请求");  
 				return;
 			}
 
@@ -249,26 +254,31 @@ namespace MoreMountains.Tools
 
 			if (secureLoad)
 			{
+				// 安全加载模式：检查目标场景和加载画面场景是否存在于构建设置中
 				_scenesInBuild = MMScene.GetScenesInBuild();
 	            
 				if (!_scenesInBuild.Contains(sceneToLoadName))
 				{
-					Debug.LogError("MMLoadingSceneManagerAdditive : impossible to load the '"+sceneToLoadName+"' scene, " +
-					               "there is no such scene in the project's build settings.");
+					Debug.LogError("MMLoadingSceneManagerAdditive : 无法加载场景 '"+sceneToLoadName+"'，" +
+					               "该场景不存在于项目的构建设置中。");
 					return;
 				}
 				if (!_scenesInBuild.Contains(loadingSceneName))
 				{
-					Debug.LogError("MMLoadingSceneManagerAdditive : impossible to load the '" + loadingSceneName + "' scene, " +
-								   "there is no such scene in the project's build settings.");
+					Debug.LogError("MMLoadingSceneManagerAdditive : 无法加载场景 '" + loadingSceneName + "'，" +
+								   "该场景不存在于项目的构建设置中。");
 					return;
 				}
 			}
 
+			// 标记加载进行中，防止重复加载
 			_loadingInProgress = true;
+			// 获取需要卸载的场景列表
 			_initialScenes = GetScenesToUnload(unloadMethod);
 
+			// 设置后台加载线程优先级
 			Application.backgroundLoadingPriority = threadPriority;
+			// 缓存所有加载参数到静态字段
 			_sceneToLoadName = sceneToLoadName;					
 			_loadingScreenSceneName = loadingSceneName;
 			_beforeEntryFadeDelay = beforeEntryFadeDelay;
@@ -284,9 +294,13 @@ namespace MoreMountains.Tools
 			_antiSpillSceneName = antiSpillSceneName;
 			_speedIntervals = speedIntervals;
 
+			// 以叠加模式加载加载画面场景，加载画面场景中的 Awake 会启动完整的加载流程
 			SceneManager.LoadScene(_loadingScreenSceneName, LoadSceneMode.Additive);
 		}
         
+		/// <summary>
+		/// 根据卸载方式获取需要卸载的场景数组
+		/// </summary>
 		private static Scene[] GetScenesToUnload(MMAdditiveSceneLoadingManagerSettings.UnloadMethods unloaded)
 		{
 	        
@@ -307,7 +321,7 @@ namespace MoreMountains.Tools
 
 
 		/// <summary>
-		/// Starts loading the new level asynchronously
+		/// 开始异步加载新关卡
 		/// </summary>
 		protected virtual void Awake()
 		{
@@ -315,7 +329,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Initializes timescale, computes null checks, and starts the load sequence
+		/// 初始化时间缩放、计算空值检查，并启动加载序列
 		/// </summary>
 		protected virtual void Initialization()
 		{
@@ -342,7 +356,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Every frame, we fill the bar smoothly according to loading progress
+		/// 每帧根据加载进度平滑填充进度条
 		/// </summary>
 		protected virtual void Update()
 		{
@@ -350,7 +364,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sends progress value via UnityEvents
+		/// 通过 UnityEvent 发送进度值（实时进度和插值平滑进度）
 		/// </summary>
 		protected virtual void UpdateProgress()
 		{
@@ -374,10 +388,11 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Computes the interpolation speed to apply for a specific progress time 
+		/// 计算特定进度时间点应使用的插值速度。
+		/// 如果当前进度落在某个速度区间内，则使用该区间的速度；否则使用默认插值速度。
 		/// </summary>
-		/// <param name="t"></param>
-		/// <returns></returns>
+		/// <param name="t">当前进度值（0~1）</param>
+		/// <returns>对应的插值速度</returns>
 		public static float ComputeInterpolationSpeed(float t) 
 		{
 			if ((_speedIntervals != null) && (_speedIntervals.Count > 0))
@@ -395,7 +410,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Loads the scene to load asynchronously.
+		/// 异步加载场景的完整流程协程。
+		/// 按顺序执行：防溢出准备 -> 初始化 -> 进入前延迟 -> 进入淡入淡出 -> 进入后延迟
+		/// -> 卸载原始场景 -> 加载目标场景 -> 退出前延迟 -> 激活目标场景 -> 退出淡入淡出 -> 卸载加载器
 		/// </summary>
 		protected virtual IEnumerator LoadSequence()
 		{
@@ -413,7 +430,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Initializes counters and timescale
+		/// 初始化计数器和时间缩放，关闭音频监听器，触发加载开始事件
 		/// </summary>
 		protected virtual void InitiateLoad()
 		{
@@ -427,9 +444,8 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Waits for the specified BeforeEntryFadeDelay duration
+		/// 等待指定的 BeforeEntryFadeDelay 时长
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator ProcessDelayBeforeEntryFade()
 		{
 			if (_beforeEntryFadeDelay > 0f)
@@ -443,9 +459,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Calls a fader on entry
+		/// 执行进入时的淡入淡出效果。
+		/// 根据 FadeMode 决定是先淡入还是先淡出。
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator EntryFade()
 		{
 			if (_entryFadeDuration > 0f)
@@ -470,9 +486,8 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Waits for the specified AfterEntryFadeDelay
+		/// 等待指定的 AfterEntryFadeDelay 时长
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator ProcessDelayAfterEntryFade()
 		{
 			if (_afterEntryFadeDelay > 0f)
@@ -486,9 +501,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Unloads the original scene(s) and waits for the unload to complete
+		/// 卸载原始场景并等待卸载完成。
+		/// 遍历所有初始场景，逐个异步卸载，跳过无效或未加载的场景。
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator UnloadOriginScenes()
 		{
 			foreach (Scene scene in _initialScenes)
@@ -499,7 +514,7 @@ namespace MoreMountains.Tools
 				
 				if (!scene.IsValid() || !scene.isLoaded)
 				{
-					Debug.LogWarning("MMLoadingSceneManagerAdditive : invalid scene : " + scene.name);
+					Debug.LogWarning("MMLoadingSceneManagerAdditive : 无效的场景 : " + scene.name);
 					continue;
 				}
 				
@@ -513,9 +528,10 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Loads the destination scene
+		/// 异步加载目标场景。
+		/// 先禁止场景自动激活，等待加载进度到达上限后设置进度为100%，
+		/// 然后等待插值进度条视觉上填满后继续。
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator LoadDestinationScene()
 		{
 			MMLoadingSceneDebug("MMLoadingSceneManagerAdditive : load destination scene");
@@ -537,10 +553,10 @@ namespace MoreMountains.Tools
 			MMSceneLoadingManager.LoadingSceneEvent.Trigger(_sceneToLoadName, MMSceneLoadingManager.LoadingStatus.LoadProgressComplete);
 			OnLoadProgressComplete?.Invoke();
 
-			// when the load is close to the end (it'll never reach it), we set it to 100%
+			// 当加载接近完成时（Unity 异步加载永远不会到达 1.0），将进度设为 100%
 			_loadProgress = 1f;
 
-			// we wait for the bar to be visually filled to continue
+			// 等待进度条在视觉上完全填满后再继续
 			if (_interpolateProgress)
 			{
 				while (_interpolatedLoadProgress < 1f)
@@ -555,9 +571,8 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Waits for BeforeExitFadeDelay seconds
+		/// 等待 BeforeExitFadeDelay 秒
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator ProcessDelayBeforeExitFade()
 		{
 			if (_beforeExitFadeDelay > 0f)
@@ -571,9 +586,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Requests a fade on exit
+		/// 执行退出时的淡入淡出效果。
+		/// 根据 FadeMode 决定是淡入还是淡出。
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator ExitFade()
 		{
 			SetAudioListener(false);
@@ -596,7 +611,8 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Activates the destination scene
+		/// 激活目标场景。
+		/// 允许场景激活后等待加载进度到达 1.0，然后触发激活事件。
 		/// </summary>
 		protected virtual IEnumerator DestinationSceneActivation()
 		{
@@ -612,9 +628,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// A method triggered when the async operation completes
+		/// 异步操作完成时的回调方法，将目标场景设为活动场景
 		/// </summary>
-		/// <param name="obj"></param>
+		/// <param name="obj">已完成的异步操作</param>
 		protected virtual void OnLoadOperationComplete(AsyncOperation obj)
 		{
 			SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToLoadName));
@@ -623,16 +639,15 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Unloads the scene loader
+		/// 卸载加载画面场景
 		/// </summary>
-		/// <returns></returns>
 		protected virtual IEnumerator UnloadSceneLoader()
 		{
 			MMLoadingSceneDebug("MMLoadingSceneManagerAdditive : unloading scene loader");
 			MMSceneLoadingManager.LoadingSceneEvent.Trigger(_sceneToLoadName, MMSceneLoadingManager.LoadingStatus.UnloadSceneLoader);
 			OnUnloadSceneLoader?.Invoke();
 			
-			yield return null; // mandatory yield to avoid an unjustified warning
+			yield return null; // 必须的 yield，避免产生不合理的警告
 			_unloadLoadingAsyncOperation = SceneManager.UnloadSceneAsync(_loadingScreenSceneName);
 			while (_unloadLoadingAsyncOperation.progress < _asyncProgressLimit)
 			{
@@ -641,9 +656,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Turns the loading audio listener on or off
+		/// 开启或关闭加载画面的音频监听器
 		/// </summary>
-		/// <param name="state"></param>
+		/// <param name="state">true 为开启，false 为关闭</param>
 		protected virtual void SetAudioListener(bool state)
 		{
 			if (LoadingAudioListener != null)
@@ -653,7 +668,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// On Destroy we reset our state
+		/// 销毁时重置加载状态标志
 		/// </summary>
 		protected virtual void OnDestroy()
 		{
@@ -661,9 +676,9 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// A debug method used to output console messages, for this class only
+		/// 调试方法，仅在 DebugMode 开启时向控制台输出带有帧号和时间戳的调试信息
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param name="message">要输出的调试信息</param>
 		protected virtual void MMLoadingSceneDebug(string message)
 		{
 			if (!DebugMode)

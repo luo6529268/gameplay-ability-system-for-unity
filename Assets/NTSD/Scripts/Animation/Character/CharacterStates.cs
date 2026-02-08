@@ -5,28 +5,13 @@ using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Tools;
 using Sirenix.OdinInspector.Editor.Validation;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NTSD.Animation
 {
-    //    /// <summary>
-    //    /// 角色状态处理器 - 对应 LF2 原版代码中 character.js 的 states 对象
-    //    /// 
-    //    /// <para>设计理念：</para>
-    //    /// <list type="bullet">
-    //    /// <item>1. 单例模式 (Singleton)：所有角色共享同一个 CharacterStates 实例，避免重复创建逻辑类。</item>
-    //    /// <item>2. 核心逻辑：只包含 LF2 通用的基础状态逻辑（State 0-19）以及部分 NTSD 扩展状态。</item>
-    //    /// <item>3. 事件驱动：通过 HandleStateEvent 分发 'frame', 'TU', 'combo' 等事件。</item>
-    //    /// <item>4. 数据驱动：复杂的帧数据（Frame Data）通过配置读取，而非硬编码。</item>
-    //    /// </list>
-    //    /// 
-    //    /// <para>对应关系：</para>
-    //    /// <list type="bullet">
-    //    /// <item>LF2: character.js 的 states 对象</item>
-    //    /// <item>Unity: CharacterStates 类</item>
-    //    /// </list>
-    //    /// </summary>
+    [Obsolete("CharacterStates is deprecated. State handling should be moved into LF2Character.InitializeStates() and OnGenericStateEvent().")]
     public class CharacterStates : MMSingleton<CharacterStates>
     {
         // 状态处理器字典，Key 为状态 ID (State ID)，Value 为对应的处理函数委托
@@ -67,7 +52,7 @@ namespace NTSD.Animation
         /// <param name="eventType">事件类型 (如: "frame", "combo", "TU", "transit", "hit")</param>
         /// <param name="eventData">事件附带的数据 (如按键键名、碰撞信息等)</param>
         /// <returns>返回 true 表示事件已被处理，不需要继续传递</returns>
-        public delegate bool StateHandler(ILF2LivingObject character, string eventType, object eventData);
+        public delegate bool StateHandler(LF2LivingObject character, string eventType, object eventData);
 
         //        private CharacterStates()
         //        {
@@ -205,7 +190,7 @@ namespace NTSD.Animation
         /// <param name="eventType">事件名称</param>
         /// <param name="eventData">事件数据</param>
         /// <returns>是否已处理</returns>
-        public bool HandleStateEvent(ILF2LivingObject character, string eventType, object eventData = null, bool isComboUpdate = false)
+        public bool HandleStateEvent(LF2LivingObject character, string eventType, object eventData = null, bool isComboUpdate = false)
         {
             if (character == null || character.Frame.D == null) return false;
 
@@ -256,7 +241,7 @@ namespace NTSD.Animation
         //        /// 对应 LF2 源码的 states.generic
         //        /// 处理所有状态共享的逻辑，如物理更新、输入缓冲、全局受击判定等
         //        /// </summary>
-        //        private bool GenericStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool GenericStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -307,7 +292,7 @@ namespace NTSD.Animation
         //        /// 通用受击处理
         //        /// 处理角色被攻击时的反应：扣血、增加击倒值(Fall)、进入受伤或击飞状态
         //        /// </summary>
-        //        private bool HandleGenericHit(ILF2LivingObject target, object eventData)
+        //        private bool HandleGenericHit(LF2LivingObject target, object eventData)
         //        {
         //            if (target == null || target.PS == null || target.Frame.D == null) return false;
         //            if (eventData is not LF2CollisionSystem.HitEvent evt) return false;
@@ -318,7 +303,7 @@ namespace NTSD.Animation
         //            if (target.Frame.D.state == LF2States.Lying) return false;
 
         //            InteractionArea itr = evt.itr;
-        //            ILF2LivingObject attacker = evt.attacker;
+        //            LF2LivingObject attacker = evt.attacker;
 
         //            // Phase 1: 仅处理通用的攻击类型 (0:普通, 4:防御无视?, 9, 15, 16)
         //            if (!(itr.kind == 0 || itr.kind == 4 || itr.kind == 9 || itr.kind == 15 || itr.kind == 16))
@@ -402,7 +387,7 @@ namespace NTSD.Animation
         //        /// 通用帧逻辑 (Frame)
         //        /// 对应 FLF character.js:14-52
         //        /// </summary>
-        //        private bool HandleGenericFrame(ILF2LivingObject character)
+        //        private bool HandleGenericFrame(LF2LivingObject character)
         //        {
         //            var D = character.Frame.D;
         //            if (D == null) return false;
@@ -440,7 +425,7 @@ namespace NTSD.Animation
         //        /// 通用入口，支持任意 eventType
         //        /// 顺序：先 generic，再 specific；返回策略：res1 || res2（generic 优先）
         //        /// </summary>
-        //        private StateUpdateData StateUpdate(ILF2LivingObject character, string eventType, object eventData = null)
+        //        private StateUpdateData StateUpdate(LF2LivingObject character, string eventType, object eventData = null)
         //        {
         //            // 重置缓存的容器
         //            _genericUpdateData.Reset();
@@ -468,7 +453,7 @@ namespace NTSD.Animation
         //        /// Generic 层的 state_update 处理
         //        /// 当前默认不覆盖，由调用方的默认分支处理
         //        /// </summary>
-        //        private void InvokeGenericStateUpdate(ILF2LivingObject character, string eventType, StateUpdateData data)
+        //        private void InvokeGenericStateUpdate(LF2LivingObject character, string eventType, StateUpdateData data)
         //        {
         //            // Generic 层目前不覆盖逻辑，保持 data 为默认值
         //            // 未来可在此添加 generic 层对特定 eventType 的处理
@@ -478,7 +463,7 @@ namespace NTSD.Animation
         //        /// Specific 层的 state_update 处理
         //        /// 调用当前 state 的 handler，允许写回 frameId 或 handled
         //        /// </summary>
-        //        private void InvokeSpecificStateUpdate(ILF2LivingObject character, string eventType, StateUpdateData data)
+        //        private void InvokeSpecificStateUpdate(LF2LivingObject character, string eventType, StateUpdateData data)
         //        {
         //            int currentState = character.Frame.D.state;
         //            if (!stateHandlers.TryGetValue(currentState, out var handler))
@@ -494,7 +479,7 @@ namespace NTSD.Animation
         //        /// 对应 FLF character.js:54-183
         //        /// 负责处理周期性的逻辑，如 Buff 消失、状态恢复、物理 Tick
         //        /// </summary>
-        //        private bool HandleGenericTU(ILF2LivingObject character)
+        //        private bool HandleGenericTU(LF2LivingObject character)
         //        {
         //            // 1. 消失效果状态机 (FLF:56-82)
         //            // TODO: 需要特效系统
@@ -575,7 +560,7 @@ namespace NTSD.Animation
         //        /// 通用物理转换 (Transit)
         //        /// 对应 FLF character.js:185-190
         //        /// </summary>
-        //        private bool HandleGenericTransit(ILF2LivingObject character)
+        //        private bool HandleGenericTransit(LF2LivingObject character)
         //        {
         //            // 对齐 FLF character.js:185-190
         //            // case 'transit':
@@ -592,7 +577,7 @@ namespace NTSD.Animation
         //        /// 通用状态退出清理
         //        /// 对应 FLF character.js:221-228
         //        /// </summary>
-        //        private bool HandleGenericStateExit(ILF2LivingObject character, string combo)
+        //        private bool HandleGenericStateExit(LF2LivingObject character, string combo)
         //        {
         //            // 清除双击指令缓存 (防止状态切换后误触发跑动)
         //            // 对应 FLF:222-227
@@ -619,7 +604,7 @@ namespace NTSD.Animation
         //        /// <item>5. 执行跳转：根据 Frame Data 中的 Tag 跳转到目标帧。</item>
         //        /// </list>
         //        /// </summary>
-        //        private bool HandleGenericCombo(ILF2LivingObject character, string combo)
+        //        private bool HandleGenericCombo(LF2LivingObject character, string combo)
         //        {
         //            if (string.IsNullOrEmpty(combo))
         //                return false;
@@ -749,7 +734,7 @@ namespace NTSD.Animation
         //        /// 用于 WalkingStateHandler 在函数开头计算 dx, dz
         //        /// </summary>
         //        /// <returns>(dx, dz) - 方向输入值 (-1/0/1)</returns>
-        //        private (int dx, int dz) GetMoveInput(ILF2LivingObject character)
+        //        private (int dx, int dz) GetMoveInput(LF2LivingObject character)
         //        {
         //            int dx = 0, dz = 0;
         //            if (character._Character?._CharacterInput != null)
@@ -771,7 +756,7 @@ namespace NTSD.Animation
         //        /// 对应 FLF character.js:244-338
         //        /// 处理角色的静止、基础按键响应
         //        /// </summary>
-        //        private bool StandingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool StandingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -867,7 +852,7 @@ namespace NTSD.Animation
         //        /// <item>Combo 事件处理转向和停止。</item>
         //        /// </list>
         //        /// </summary>
-        //        private bool WalkingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool WalkingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            var (dx, dz) = GetMoveInput(character);
 
@@ -943,7 +928,7 @@ namespace NTSD.Animation
         //        /// 对应 FLF character.js:403-486
         //        /// <para>注意：Frame 事件没有 break，会穿透执行 TU 逻辑 (模拟 switch fallthrough)。</para>
         //        /// </summary>
-        //        private bool RunningStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool RunningStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1021,7 +1006,7 @@ namespace NTSD.Animation
         //        /// 对应 FLF character.js:489-549
         //        /// 处理所有攻击动作 (普通、跳跃、冲刺攻击) 的通用逻辑
         //        /// </summary>
-        //        private bool AttackStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool AttackStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1071,7 +1056,7 @@ namespace NTSD.Animation
         //        /// 跳跃状态处理器 (State 4)
         //        /// 对应 FLF character.js:552-602
         //        /// </summary>
-        //        private bool JumpStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool JumpStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1152,7 +1137,7 @@ namespace NTSD.Animation
         //        /// 冲刺状态处理器 (State 5)
         //        /// 对应 FLF character.js:605-651
         //        /// </summary>
-        //        private bool DashStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool DashStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1242,7 +1227,7 @@ namespace NTSD.Animation
         //        /// - 111: 防御成功（受击时转入）
         //        /// - 112: 防御被破（defend超过上限时转入）
         //        /// </summary>
-        //        private bool DefendingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool DefendingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1273,7 +1258,7 @@ namespace NTSD.Animation
         //        /// 2. 受伤等级帧自动返回站姿
         //        /// 3. 受伤等级：220/221（轻度）、222/223（中度）、224/225（重度）、226（超重）
         //        /// </summary>
-        //        private bool InjuredStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool InjuredStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1318,7 +1303,7 @@ namespace NTSD.Animation
         //        /// - 背面：186 → 187 → 188 → 189 / 191（上浮/下落）
         //        /// - 爬起/躺地判定在 fell_onto_ground 事件
         //        /// </summary>
-        //        private bool FallingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool FallingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1402,7 +1387,7 @@ namespace NTSD.Animation
         //        /// 自动处理 ITR、OPoint、next 等帧数据
         //        /// 所有技能共用这个处理器
         //        /// </summary>
-        //        private bool AbilityStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool AbilityStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1460,7 +1445,7 @@ namespace NTSD.Animation
         //        /// - 108: 背面爬起暂停
         //        /// - 109: 背面爬起结束
         //        /// </summary>
-        //        private bool RowingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool RowingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1521,7 +1506,7 @@ namespace NTSD.Animation
         //        /// 问题：防御被破时，角色被击退方向可能与朝向方向相反
         //        /// 解决：在空中或速度不足时，强制按帧定义的dvx设置速度
         //        /// </summary>
-        //        private bool BrokenDefendStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool BrokenDefendStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1568,7 +1553,7 @@ namespace NTSD.Animation
         //        /// 6. 方向控制（dircontrol参数）
         //        /// 7. 投掷/攻击/跳跃动作（taction/aaction/jaction）
         //        /// </summary>
-        //        private bool CatchingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool CatchingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1775,7 +1760,7 @@ namespace NTSD.Animation
         //        /// 4. 投掷伤害记录（落地时生效）
         //        /// 5. 抓取状态验证（双向检查）
         //        /// </summary>
-        //        private bool BeingCaughtStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool BeingCaughtStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1838,7 +1823,7 @@ namespace NTSD.Animation
         //        /// - 已冰冻 → 碎裂倒地（转到帧182）
         //        /// - 强制丢弃武器
         //        /// </summary>
-        //        private bool FrozenStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool FrozenStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1880,7 +1865,7 @@ namespace NTSD.Animation
         //        ///   3. count >= 30: 关闭闪烁，隐藏精灵和影子
         //        ///   4. count = -1: 销毁对象
         //        /// </summary>
-        //        private bool LyingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool LyingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -1936,7 +1921,7 @@ namespace NTSD.Animation
         //        /// - 空中轻武器投掷（sky_lgt_wp_thw） 帧54
         //        /// - 消失（disappear） 帧257（Rudolf 特有）
         //        /// </summary>
-        //        private bool MixedStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool MixedStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2074,7 +2059,7 @@ namespace NTSD.Animation
         //        /// - 或某些特殊受击动作的状态标记
         //        /// - FLF 中也是空实现，表示所有逻辑都在帧数据中
         //        /// </summary>
-        //        private bool Injured2StateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool Injured2StateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            // ✓ 无特殊事件处理（对应 FLF Line 1230-1235）
         //            // FLF 中也是空实现，所有逻辑由帧数据驱动
@@ -2100,7 +2085,7 @@ namespace NTSD.Animation
         //        /// - 燃烧状态防止急火击中（effectnum=20/21）
         //        /// - 燃烧状态21/22不会伤害队友
         //        /// </summary>
-        //        private bool BurningStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool BurningStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2151,7 +2136,7 @@ namespace NTSD.Animation
         //        /// - 未明确定义进入/退出逻辑
         //        /// - 可能由Firen特定技能触发
         //        /// </summary>
-        //        private bool FirenSpecificStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool FirenSpecificStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2175,7 +2160,7 @@ namespace NTSD.Animation
         //        /// 用途：角色进行技能蓄力时的状态
         //        /// 出现次数：16
         //        /// </summary>
-        //        private bool ChargingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool ChargingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2254,7 +2239,7 @@ namespace NTSD.Animation
         //        /// 用途：处理武器的各种状态（飞行、持有、落地等）
         //        /// 出现次数：128（合计）
         //        /// </summary>
-        //        private bool WeaponStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool WeaponStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2315,7 +2300,7 @@ namespace NTSD.Animation
         //        /// 用途：处理投射物的飞行、命中等待状态
         //        /// 出现次数：190（合计）
         //        /// </summary>
-        //        private bool ProjectileStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool ProjectileStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2379,7 +2364,7 @@ namespace NTSD.Animation
         //        /// 用途：通用对象飞行状态，也用于变身术
         //        /// 这是使用最频繁的状态之一（307次）
         //        /// </summary>
-        //        private bool ObjectFlyingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool ObjectFlyingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2460,7 +2445,7 @@ namespace NTSD.Animation
         //        /// 用途：技能特效包裹或爆炸动画（如爆炸效果）
         //        /// 出现次数：152
         //        /// </summary>
-        //        private bool ObjectExpandingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool ObjectExpandingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2524,7 +2509,7 @@ namespace NTSD.Animation
         //        /// 用途：视觉特效播放（如能量波特效）
         //        /// 出现次数：47
         //        /// </summary>
-        //        private bool EffectPlayingStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool EffectPlayingStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {
@@ -2569,7 +2554,7 @@ namespace NTSD.Animation
         //        /// 用途：特殊效果（如旋风手里剑的特殊效果）
         //        /// 出现次数：2
         //        /// </summary>
-        //        private bool SpecialEffectStateHandler(ILF2LivingObject character, string eventType, object eventData)
+        //        private bool SpecialEffectStateHandler(LF2LivingObject character, string eventType, object eventData)
         //        {
         //            switch (eventType)
         //            {

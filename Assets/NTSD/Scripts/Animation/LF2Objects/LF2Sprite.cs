@@ -19,6 +19,9 @@ namespace NTSD.Animation.LF2Objects
         private List<Sprite> _sprites;
         private string _dir = "right";
 
+        private SpriteRenderer _shadowRenderer;
+        private bool _hasShadow;
+
         /// <summary>
         /// 当前方向
         /// </summary>
@@ -35,6 +38,17 @@ namespace NTSD.Animation.LF2Objects
             _sprites = sprites;
             _dir = "right";
         }
+
+        /// <summary>
+        /// 初始化阴影（对应 FLF livingobject 构造函数中的 shadow 创建）
+        /// </summary>
+        public void InitializeShadow(SpriteRenderer shadowRenderer)
+        {
+            _shadowRenderer = shadowRenderer;
+            _hasShadow = shadowRenderer != null;
+        }
+
+        public bool HasShadow => _hasShadow;
 
         /// <summary>
         /// 更新精灵列表（用于运行时切换角色）
@@ -109,6 +123,44 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_renderer != null)
                 _renderer.enabled = false;
+        }
+
+        /// <summary>
+        /// 显示阴影
+        /// </summary>
+        public void ShowShadow()
+        {
+            if (_shadowRenderer != null)
+                _shadowRenderer.enabled = true;
+        }
+
+        /// <summary>
+        /// 隐藏阴影
+        /// </summary>
+        public void HideShadow()
+        {
+            if (_shadowRenderer != null)
+                _shadowRenderer.enabled = false;
+        }
+
+        /// <summary>
+        /// 更新阴影位置（阴影始终在地面）
+        /// </summary>
+        public void UpdateShadowPosition(float groundX, float groundZ)
+        {
+            if (_shadowRenderer == null) return;
+            var t = _shadowRenderer.transform;
+            t.localPosition = new Vector3(groundX, groundZ, t.localPosition.z);
+        }
+
+        /// <summary>
+        /// 销毁精灵（对应 FLF sp.destroy + shadow.remove）
+        /// 参考：FLF livingobject.js:89-94
+        /// </summary>
+        public void Destroy()
+        {
+            Hide();
+            HideShadow();
         }
 
         /// <summary>

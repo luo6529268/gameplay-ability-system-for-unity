@@ -55,6 +55,9 @@ namespace NTSD.Simulation
 
             // FLF: GC.fall.KO
             public const int FallKO = 70;
+
+            // FLF: GC.effect.num_to_id
+            public const int EffectNumToId = 300;
         }
 
         public static class Default

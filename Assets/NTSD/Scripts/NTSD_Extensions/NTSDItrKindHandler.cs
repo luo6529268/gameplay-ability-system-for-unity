@@ -80,7 +80,7 @@ namespace NTSD.Extensions
         /// <param name="attacker">攻击者</param>
         /// <param name="target">目标</param>
         /// <returns>true 表示应该命中</returns>
-        public static bool ShouldHitTarget(int kind, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
             if (attacker == null || target == null) return false;
             
@@ -126,10 +126,10 @@ namespace NTSD.Extensions
         /// 根据 StableId 获取 LivingObject
         /// TODO: 使用对象注册表替代 FindObjectsByType
         /// </summary>
-        private static ILF2LivingObject GetAnimatorById(int stableId)
+        private static LF2LivingObject GetAnimatorById(int stableId)
         {
             // 暂时使用 FindObjectsByType，后续应改为对象注册表
-            //var animators = Object.FindObjectsByType<ILF2LivingObject>(FindObjectsSortMode.None);
+            //var animators = Object.FindObjectsByType<LF2LivingObject>(FindObjectsSortMode.None);
             //foreach (var animator in animators)
             //{
             //    if (animator != null && animator.StableId == stableId)
@@ -145,7 +145,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 处理 Kind 100099: 随机移动
         /// </summary>
-        public static void ProcessRandomMove(ILF2LivingObject actor, InteractionArea itr)
+        public static void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr)
         {
             if (actor == null || actor.PS == null || itr == null) return;
             
@@ -175,7 +175,7 @@ namespace NTSD.Extensions
         /// 处理 Kind 100100: 输入控制跳帧
         /// 根据玩家输入跳转到不同帧
         /// </summary>
-        public static int? ProcessInputControl(ILF2LivingObject actor, InteractionArea itr)
+        public static int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr)
         {
             //if (actor == null || actor._Character == null) return null;
             

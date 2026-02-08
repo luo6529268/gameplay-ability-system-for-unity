@@ -5,42 +5,42 @@ using MoreMountains.Tools;
 namespace MoreMountains.TopDownEngine
 {
 	/// <summary>
-	/// Add this script to a platform and it'll fall down when walked upon by a playable character
-	/// Add an AutoRespawn component to your platform and it'll get reset when your character dies
+	/// 将此脚本添加到平台上，当可操控角色踩上去时平台会掉落。
+	/// 为平台添加 AutoRespawn 组件，角色死亡时平台会自动重置。
 	/// </summary>
 	[AddComponentMenu("TopDown Engine/Environment/Falling Platform 2D")]
 	public class FallingPlatform2D : TopDownMonoBehaviour 
 	{
-		/// the possible states for the falling platform
+		/// 掉落平台的可能状态
 		public enum FallingPlatformStates { Idle, Shaking, Falling, ColliderOff }
 
-		/// the current state of the falling platform
+		/// 掉落平台的当前状态
 		[MMReadOnly]
-		[Tooltip("the current state of the falling platform")]
+		[Tooltip("掉落平台的当前状态")]
 		public FallingPlatformStates StateNode;
 
-		/// if this is true, the platform will fall inevitably once touched
-		[Tooltip("if this is true, the platform will fall inevitably once touched")]
+		/// 如果为 true，平台一旦被触碰就会不可避免地掉落
+		[Tooltip("如果为 true，平台一旦被触碰就会不可避免地掉落")]
 		public bool InevitableFall = false;
-		/// the time (in seconds) before the fall of the platform
-		[Tooltip("the time (in seconds) before the fall of the platform")]
+		/// 平台掉落前的等待时间（秒）
+		[Tooltip("平台掉落前的等待时间（秒）")]
 		public float TimeBeforeFall = 2f;
-		/// the time (in seconds) before the collider turns itself off once the fall has started
-		[Tooltip("the time (in seconds) before the collider turns itself off once the fall has started")]
+		/// 平台开始掉落后，碰撞体关闭前的延迟时间（秒）
+		[Tooltip("平台开始掉落后，碰撞体关闭前的延迟时间（秒）")]
 		public float DelayBetweenFallAndColliderOff = 0.5f;
 
-		// private stuff
-		protected Animator _animator;
-		protected Vector2 _newPosition;
-		protected Bounds _bounds;
-		protected Collider2D _collider;
-		protected Vector3 _initialPosition;
-		protected float _timeLeftBeforeFall;
-		protected float _fallStartedAt;
-		protected bool _contact = false;
+		// 私有变量
+		protected Animator _animator;                  // 动画控制器
+		protected Vector2 _newPosition;                // 新位置
+		protected Bounds _bounds;                      // 边界
+		protected Collider2D _collider;                // 2D 碰撞体
+		protected Vector3 _initialPosition;            // 初始位置
+		protected float _timeLeftBeforeFall;           // 掉落前剩余时间
+		protected float _fallStartedAt;                // 掉落开始的时间点
+		protected bool _contact = false;               // 是否与角色接触
 
 		/// <summary>
-		/// Initialization
+		/// 初始化入口
 		/// </summary>
 		protected virtual void Start()
 		{
@@ -48,27 +48,26 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Grabs components and saves initial position and timer
+		/// 获取组件引用，保存初始位置和计时器
 		/// </summary>
 		protected virtual void Initialization()
 		{
-			// we get the animator
+			// 获取动画控制器
 			StateNode = FallingPlatformStates.Idle;
 			_animator = GetComponent<Animator>();
 			_collider = GetComponent<Collider2D> ();
 			_collider.enabled = true;
-			_bounds =LevelManager.Instance.LevelBounds;
 			_initialPosition = this.transform.position;
 			_timeLeftBeforeFall = TimeBeforeFall;
 
 		}
 
 		/// <summary>
-		/// This is called every frame.
+		/// 每帧调用（固定更新）
 		/// </summary>
 		protected virtual void FixedUpdate()
 		{		
-			// we send our various states to the animator.		
+			// 将各种状态发送给动画控制器		
 			UpdateAnimator ();	
 
 			if (_contact)
@@ -95,7 +94,7 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Disables the falling platform. We're not destroying it, so we can revive it on respawn
+		/// 禁用掉落平台。不销毁它，以便在重生时可以恢复。
 		/// </summary>
 		protected virtual void DisableFallingPlatform()
 		{
@@ -106,7 +105,7 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Updates the block's animator.
+		/// 更新平台的动画控制器状态
 		/// </summary>
 		protected virtual void UpdateAnimator()
 		{				
@@ -119,9 +118,9 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Triggered when a TopDownController touches the platform
+		/// 当 TopDownController 停留在平台上时触发
 		/// </summary>
-		/// <param name="controller">The TopDown controller that collides with the platform.</param>		
+		/// <param name="collider">与平台碰撞的碰撞体</param>
 		public virtual void OnTriggerStay2D(Collider2D collider)
 		{
 			TopDownController2D controller = collider.gameObject.MMGetComponentNoAlloc<TopDownController2D>();
@@ -150,9 +149,9 @@ namespace MoreMountains.TopDownEngine
 			}
 		}
 		/// <summary>
-		/// Triggered when a TopDownController exits the platform
+		/// 当 TopDownController 离开平台时触发
 		/// </summary>
-		/// <param name="controller">The TopDown controller that collides with the platform.</param>
+		/// <param name="collider">与平台碰撞的碰撞体</param>
 		protected virtual void OnTriggerExit2D(Collider2D collider)
 		{
 			if (InevitableFall)
@@ -172,7 +171,7 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// On Revive, we restore this platform's state
+		/// 重生时恢复平台的状态
 		/// </summary>
 		protected virtual void OnRevive()
 		{

@@ -30,14 +30,7 @@ namespace MoreMountains.TopDownEngine
         // 场景中已存在的角色设置
         [Header("Characters already in the scene")]
         [MMInformation("建议让 LevelManager 实例化您的角色，但如果您希望它们已经出现在场景中，只需在下面的列表中绑定它们即可。", MMInformationAttribute.InformationType.Info, false)]
-        
-        /// <summary>
-        /// 场景中已存在的角色列表
-        /// 如果此列表不为空，将忽略PlayerPrefabs中的预制体
-        /// </summary>
-        [Tooltip("在 runtime 之前场景中已存在的 Character 列表。如果此列表已填充，则将忽略 PlayerPrefabs")]
-        public List<Character> SceneCharacters;
-
+      
         // 检查点相关设置
         [Header("Checkpoints")]
         
@@ -110,16 +103,6 @@ namespace MoreMountains.TopDownEngine
         /// </summary>
         [Tooltip("玩家死亡后显示死亡屏幕之前的延迟（以秒为单位）")]
         public float DelayBeforeDeathScreen = 1f;
-
-        // 关卡边界相关设置
-        [Header("Bounds")]
-        
-        /// <summary>
-        /// 是否使用关卡边界
-        /// 如果使用房间系统，应设置为false
-        /// </summary>
-        [Tooltip("如果为 true，则此 Level 将使用在此 LevelManager 上定义的 Level Bounds。在使用 Rooms 系统时将其设置为 false。")]
-        public bool UseLevelBounds = true;
         
         // 场景加载相关设置
         [Header("Scene Loading")]
@@ -144,27 +127,10 @@ namespace MoreMountains.TopDownEngine
         [MMEnumCondition("LoadingSceneMode", (int)MMLoadScene.LoadingSceneModes.MMAdditiveSceneLoadingManager)]
         public MMAdditiveSceneLoadingManagerSettings AdditiveLoadingSettings; 
         
-        // 反馈相关设置
-        [Header("Feedbacks")] 
-        
-        /// <summary>
-        /// 是否将玩家设置为反馈范围中心
-        /// </summary>
-        [Tooltip("如果为 true，则将在 Player 实例化时触发一个事件，以设置所有反馈的 Range Target")]
-        public bool SetPlayerAsFeedbackRangeCenter = false;
-
         // 关卡信息
         [Header("关卡")]
         [MMReadOnly]
         public int CurrentLevel;
-        
-        // 关卡边界属性
-        /// <summary>
-        /// 关卡边界，相机和玩家不会超出这个范围
-        /// </summary>
-        public virtual Bounds LevelBounds {  get { return (_collider==null)? new Bounds(): _collider.bounds; } }
-        public virtual Collider BoundsCollider { get; protected set; }
-        public virtual Collider2D BoundsCollider2D { get; protected set; }
 
         // 运行时间属性
         /// <summary>
@@ -177,9 +143,6 @@ namespace MoreMountains.TopDownEngine
         public virtual List<Character> Players { get; protected set; }
 
         protected DateTime _started;
-        protected int _savedPoints;
-        protected Collider _collider;
-        protected Collider2D _collider2D;
         protected Vector3 _initialSpawnPointPosition;
         protected bool _levelStarted = false;
 
@@ -194,8 +157,6 @@ namespace MoreMountains.TopDownEngine
         protected override void Awake()
         {
             base.Awake();
-            _collider = this.GetComponent<Collider>();
-            _collider2D = this.GetComponent<Collider2D>();
         }
 
         protected virtual void Start()
@@ -214,20 +175,10 @@ namespace MoreMountains.TopDownEngine
         protected virtual async UniTask InitializationCoroutine()
         {
             await UniTask.WaitForSeconds(SpawnDelay);
-
-            // 设置边界碰撞器
-            BoundsCollider = _collider;
-            BoundsCollider2D = _collider2D;
             
             // 实例化可玩角色
             InstantiatePlayableCharacters();
 
-            // 如果使用关卡边界，设置相机限制
-            if (UseLevelBounds)
-            {
-                MMCameraEvent.Trigger(MMCameraEventTypes.SetConfiner, null, BoundsCollider, BoundsCollider2D);
-            }            
-            
             // 如果没有玩家，直接返回
             if (Players == null || Players.Count == 0) { return; }
 
@@ -247,21 +198,12 @@ namespace MoreMountains.TopDownEngine
                 SpawnMultipleCharacters();
             }
 
-            // 分配检查点
-            CheckpointAssignment();
-
             // 触发淡入效果
             MMFadeOutEvent.Trigger(IntroFadeDuration, FadeCurve, FaderID);
 
             // 触发关卡开始事件
             TopDownEngineEvent.Trigger(TopDownEngineEventTypes.LevelStart, null);
             MMGameEvent.Trigger("Load");
-
-            // 如果需要，将玩家设置为反馈范围中心
-            if (SetPlayerAsFeedbackRangeCenter)
-            {
-                MMSetFeedbackRangeCenterEvent.Trigger(Players[0].transform);
-            }
 
             // 设置相机目标和开始跟随
             MMCameraEvent.Trigger(MMCameraEventTypes.SetTargetCharacter, Players[0]);
@@ -283,31 +225,6 @@ namespace MoreMountains.TopDownEngine
             
             Players = new List<Character> ();
 
-            // 如果有持久化角色，使用它
-            if (GameManager.Instance.PersistentCharacter != null)
-            {
-                Players.Add(GameManager.Instance.PersistentCharacter);
-                return;
-            }
-            
-            // 如果有存储的角色，使用它
-            if (GameManager.Instance.StoredCharacter != null)
-            {
-                Character newPlayer = Instantiate(GameManager.Instance.StoredCharacter, _initialSpawnPointPosition, Quaternion.identity);
-                newPlayer.name = GameManager.Instance.StoredCharacter.name;
-                Players.Add(newPlayer);
-                return;
-            }
-
-            // 如果场景中有角色，使用它们
-            if ((SceneCharacters != null) && (SceneCharacters.Count > 0))
-            {
-                foreach (Character character in SceneCharacters)
-                {
-                    Players.Add(character);
-                }
-                return;
-            }
 
             // 如果没有玩家预制体，直接返回
             if (PlayerPrefabs == null) { return; }
@@ -320,60 +237,16 @@ namespace MoreMountains.TopDownEngine
                     Character newPlayer = Instantiate (playerPrefab, _initialSpawnPointPosition, Quaternion.identity);
                     newPlayer.name = playerPrefab.name;
                     Players.Add(newPlayer);
-
-                    // 如果预制体不是玩家类型，发出警告
-                    if (playerPrefab.CharacterType != Character.CharacterTypes.Player)
-                    {
-                        Debug.LogWarning ("LevelManager : The Character you've set in the LevelManager isn't a Player, which means it's probably not going to move. You can change that in the Character component of your prefab.");
-                    }
                 }
             }
         }
 
-        // 分配检查点
-        protected virtual void CheckpointAssignment()
-        {
-            // 获取所有可重生对象并分配到对应的检查点
-            IEnumerable<Respawnable> listeners = FindObjectsOfType<MonoBehaviour>(true).OfType<Respawnable>();
-            AutoRespawn autoRespawn;
-            foreach (Respawnable listener in listeners)
-            {
-                for (int i = Checkpoints.Count - 1; i >= 0; i--)
-                {
-                    autoRespawn = (listener as MonoBehaviour).GetComponent<AutoRespawn>();
-                    if (autoRespawn == null)
-                    {
-                        Checkpoints[i].AssignObjectToCheckPoint(listener);
-                        continue;
-                    }
-                    else
-                    {
-                        if (autoRespawn.IgnoreCheckpointsAlwaysRespawn)
-                        {
-                            Checkpoints[i].AssignObjectToCheckPoint(listener);
-                            continue;
-                        }
-                        else
-                        {
-                            if (autoRespawn.AssociatedCheckpoints.Contains(Checkpoints[i]))
-                            {
-                                Checkpoints[i].AssignObjectToCheckPoint(listener);
-                                continue;
-                            }
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
-
+       
         // 初始化关卡
         protected virtual void Initialization()
         {
             // 获取所有检查点并排序
             Checkpoints = FindObjectsOfType<CheckPoint>().OrderBy(o => o.CheckPointOrder).ToList();
-            // 保存当前分数
-            _savedPoints = GameManager.Instance.Points;
             // 记录开始时间
             _started = DateTime.UtcNow;
         }
@@ -455,21 +328,6 @@ namespace MoreMountains.TopDownEngine
             }
         }
 
-        // 处理玩家死亡
-        public virtual void PlayerDead(Character playerCharacter)
-        {
-            if (Players.Count < 2)
-            {
-                StartCoroutine(PlayerDeadCo());
-            }
-        }
-
-        // 显示死亡画面协程
-        protected virtual IEnumerator PlayerDeadCo()
-        {
-            yield return new WaitForSeconds(DelayBeforeDeathScreen);
-            GUIManager.Instance.SetDeathScreen(true);
-        }
 
         // 开始复活
         protected virtual void Respawn()
@@ -484,7 +342,7 @@ namespace MoreMountains.TopDownEngine
         protected virtual IEnumerator SoloModeRestart()
         {
             // 如果没有玩家预制体和场景角色，直接返回
-            if ((PlayerPrefabs.Length <= 0) && (SceneCharacters.Count <= 0))
+            if ((PlayerPrefabs.Length <= 0))
             {
                 yield break;
             }
@@ -512,10 +370,6 @@ namespace MoreMountains.TopDownEngine
 
             // 等待复活延迟
             yield return new WaitForSeconds(RespawnDelay);
-            
-            // 隐藏死亡画面
-            GUIManager.Instance.SetPauseScreen(false);
-            GUIManager.Instance.SetDeathScreen(false);
             
             // 触发淡出效果
             MMFadeOutEvent.Trigger(OutroFadeDuration, FadeCurve, FaderID, true, Players[0].transform.position);
@@ -554,24 +408,6 @@ namespace MoreMountains.TopDownEngine
             yield break;
         }
 
-        // 冻结所有角色
-        public virtual void FreezeCharacters()
-        {
-            foreach (Character player in Players)
-            {
-                player.Freeze();
-            }
-        }
-
-        // 解冻所有角色
-        public virtual void UnFreezeCharacters()
-        {
-            foreach (Character player in Players)
-            {
-                player.UnFreeze();
-            }
-        }
-
         // 设置当前检查点
         public virtual void SetCurrentCheckpoint(CheckPoint newCheckPoint)
         {
@@ -601,9 +437,6 @@ namespace MoreMountains.TopDownEngine
         {
             switch (engineEvent.EventType)
             {
-                case TopDownEngineEventTypes.PlayerDeath:
-                    PlayerDead(engineEvent.OriginCharacter);
-                    break;
                 case TopDownEngineEventTypes.RespawnStarted:
                     Respawn();
                     break;

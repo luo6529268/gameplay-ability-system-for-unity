@@ -54,7 +54,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断 ITR 是否应该命中目标 (考虑 NTSD 扩展 Kind)
         /// </summary>
-        public bool ShouldItrHitTarget(int kind, ILF2LivingObject attacker, ILF2LivingObject target)
+        public bool ShouldItrHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
             // 先检查 NTSD 扩展 Kind
             if (NTSDItrKindHandler.IsNTSDAttackKind(kind))
@@ -69,7 +69,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 处理 NTSD 高级控制 ITR (100099-100103)
         /// </summary>
-        public void ProcessControlItr(ILF2LivingObject actor, InteractionArea itr)
+        public void ProcessControlItr(LF2LivingObject actor, InteractionArea itr)
         {
             if (!NTSDItrKindHandler.IsNTSDControlKind(itr.kind)) return;
             
@@ -96,7 +96,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 处理 ITR Effect (包括 NTSD 扩展)
         /// </summary>
-        public void ProcessEffect(InteractionArea itr, int damage, ILF2LivingObject attacker, ILF2LivingObject target)
+        public void ProcessEffect(InteractionArea itr, int damage, LF2LivingObject attacker, LF2LivingObject target)
         {
             if (NTSDEffectHandler.IsNTSDEffect(itr.effect))
             {
@@ -113,7 +113,7 @@ namespace NTSD.Extensions
         /// 处理扩展 State
         /// </summary>
         /// <returns>(是否处理, 目标帧)</returns>
-        public (bool handled, int? targetFrame) ProcessExtendedState(ILF2LivingObject character, int state)
+        public (bool handled, int? targetFrame) ProcessExtendedState(LF2LivingObject character, int state)
         {
             return NTSDStateHandler.ProcessExtendedState(character, state);
         }
@@ -121,7 +121,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 检查 State 9xxx 受击跳帧
         /// </summary>
-        public int? CheckHitGotoState(ILF2LivingObject character)
+        public int? CheckHitGotoState(LF2LivingObject character)
         {
             if (character?.Frame.D == null) return null;
             
@@ -142,8 +142,8 @@ namespace NTSD.Extensions
         /// </summary>
         public NTSDDamageCalculator.DamageResult ProcessDamage(
             InteractionArea itr,
-            ILF2LivingObject attacker,
-            ILF2LivingObject target)
+            LF2LivingObject attacker,
+            LF2LivingObject target)
         {
             return NTSDDamageCalculator.ProcessDamage(itr, attacker, target);
         }
@@ -155,7 +155,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 检查对象是否应该被时停冻结
         /// </summary>
-        public bool ShouldFreeze(ILF2LivingObject obj)
+        public bool ShouldFreeze(LF2LivingObject obj)
         {
             return _timeStopSystem != null && _timeStopSystem.ShouldFreeze(obj);
         }

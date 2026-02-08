@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"omc install --force --force-hooks 2>&1\",\"timeout\":120000}",
+  "error": "Exit code 1\nerror: unknown option '--force-hooks'",
+  "timestamp": "2026-02-06T15:06:59.419Z",
+  "retry_count": 1
+}

@@ -286,7 +286,6 @@ namespace MoreMountains.TopDownEngine
         public virtual void AddPoints(int pointsToAdd)
         {
             Points += pointsToAdd;
-            GUIManager.Instance.RefreshPoints();
         }
 
         /// <summary>
@@ -296,7 +295,6 @@ namespace MoreMountains.TopDownEngine
         public virtual void SetPoints(int points)
         {
             Points = points;
-            GUIManager.Instance.RefreshPoints();
         }
 
         /// <summary>
@@ -332,14 +330,6 @@ namespace MoreMountains.TopDownEngine
                 MMTimeScaleEvent.Trigger(MMTimeScaleMethods.For, 0f, 0f, false, 0f, true);
                 Instance.Paused = true;
                 
-                // 如果使用暂停菜单方法，显示暂停菜单
-                if ((GUIManager.HasInstance) && (pauseMethod == PauseMethods.PauseMenu))
-                {
-                    GUIManager.Instance.SetPauseScreen(true);
-                    _pauseMenuOpen = true;
-                    SetActiveInventoryInputManager(false);
-                }
-                
                 // 如果使用无菜单方法，标记库存为打开状态
                 if (pauseMethod == PauseMethods.NoPauseMenu)
                 {
@@ -362,14 +352,6 @@ namespace MoreMountains.TopDownEngine
             // 触发时间缩放事件，恢复游戏
             MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Unfreeze, 1f, 0f, false, 0f, false);
             Instance.Paused = false;
-            
-            // 如果使用暂停菜单方法，隐藏暂停菜单
-            if ((GUIManager.HasInstance) && (pauseMethod == PauseMethods.PauseMenu))
-            {
-                GUIManager.Instance.SetPauseScreen(false);
-                _pauseMenuOpen = false;
-                SetActiveInventoryInputManager(true);
-            }
             
             // 重置库存打开状态
             if (_inventoryOpen)

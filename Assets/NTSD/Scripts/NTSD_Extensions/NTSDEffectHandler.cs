@@ -103,7 +103,7 @@ namespace NTSD.Extensions
         /// <param name="attacker">攻击者</param>
         /// <param name="target">目标</param>
         /// <returns>Effect 处理结果</returns>
-        public static EffectResult ProcessEffect(int effect, int damage, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static EffectResult ProcessEffect(int effect, int damage, LF2LivingObject attacker, LF2LivingObject target)
         {
             var result = new EffectResult { handled = false };
             
@@ -159,7 +159,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 应用 Effect 结果到角色
         /// </summary>
-        public static void ApplyEffectResult(EffectResult result, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static void ApplyEffectResult(EffectResult result, LF2LivingObject attacker, LF2LivingObject target)
         {
             if (!result.handled) return;
             

@@ -51,7 +51,6 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		protected virtual void Awake()
 		{	
-			GUIManager.Instance.SetHUDActive (false);
 			MMFadeOutEvent.Trigger(FadeInDuration, Tween);
 			Cursor.visible = true;
 			if (AutoSkipDelay > 1f)

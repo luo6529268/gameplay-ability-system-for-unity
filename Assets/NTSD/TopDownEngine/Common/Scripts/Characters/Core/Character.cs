@@ -84,7 +84,6 @@ namespace MoreMountains.TopDownEngine
 
 		public AbilitySystemComponent _AbilitySystemComponent { get; private set; }
         public UnitSettings _UnitSetting { get; private set; }
-		public SpriteRenderer _SpriteRenderer { get; private set; }
         /// <summary>
         /// 角色专用逻辑模块（纯 C#，对应 FLF character.js）
         /// </summary>
@@ -262,7 +261,8 @@ namespace MoreMountains.TopDownEngine
 			if (_LF2Character != null)
 			{
 				var sprites = CharacterAnimtorManager.Instance?.GetCharacterSpriteByID(CharacterID);
-				_LF2Character.ModuleInitialize(
+                SpriteRenderer _SpriteRenderer = this.gameObject.GetComponentInChildren<SpriteRenderer>();
+                _LF2Character.ModuleInitialize(
 					spriteRenderer: _SpriteRenderer,
 					sprites: sprites,
 					groundTransform: this.transform,
@@ -457,17 +457,25 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		protected virtual void OnEnable()
 		{
+			if (SimulationTickDriver.Instance == null)
+				return;
+
 			// Plan B: Register CharacterSim to SimulationWorld
-			if (_CharacterSim != null && SimulationTickDriver.Instance != null)
+			if (_CharacterSim != null)
 			{
 				SimulationTickDriver.Instance.World.Register(_CharacterSim);
 			}
 
 			// Register combo detector (input consumer) to SimulationWorld
-			if (_ActionSequenceDetector != null && SimulationTickDriver.Instance != null)
+			if (_ActionSequenceDetector != null)
 			{
 				SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
             }
+
+			if (_LF2Character != null) 
+			{
+				SimulationTickDriver.Instance.World.Register(_LF2Character);
+			}
 		}
 
 		/// <summary>

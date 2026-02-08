@@ -77,21 +77,21 @@ namespace NTSD.Animation
         /// <summary>
         /// combo_update 结束后的清理规则（对齐现有实现，源自 FLF character.js:1832-1845）。
         /// </summary>
-        public void AfterComboUpdate(bool handledByState, string rawCombo, string mappedCombo)
+        public void AfterComboUpdate(bool curStateResult, bool generResult, string rawCombo, string mappedCombo)
         {
             if (rawCombo == "jump-att")
             {
-                if (handledByState)
+                if (curStateResult|| generResult)
                 {
                     _combo = "att";
                 }
-                return;
             }
-
-            if (handledByState ||
-                mappedCombo == "left" || mappedCombo == "right" || mappedCombo == "up" || mappedCombo == "down")
+            else
             {
-                _combo = null;
+                if (curStateResult || generResult ||mappedCombo == "left" || mappedCombo == "right" || mappedCombo == "up" || mappedCombo == "down")
+                {
+                    _combo = null;
+                }
             }
         }
     }

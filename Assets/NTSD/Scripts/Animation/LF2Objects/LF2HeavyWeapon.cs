@@ -5,50 +5,142 @@ using NTSD.Simulation;
 
 namespace NTSD.Animation.LF2Objects
 {
-    /// <summary>
-    /// 重武器对象
-    /// 严格对齐 FLF weapon.js（heavyweapon）
-    ///
-    /// 参考：
-    /// - FLF typeweapon.prototype.init (weapon.js:204-213)
-    /// - FLF states.2000, states.2004 (weapon.js:130-161)
-    /// </summary>
     public class LF2HeavyWeapon : LF2WeaponBase
     {
-        // ========== ILF2Object 实现 ==========
         public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.HeavyWeapon;
         public override bool IsLight => false;
         public override bool IsHeavy => true;
 
-        // ========== 状态机 ==========
+        private const int State_HeavyWeaponInSky = 2000;
+        private const int State_HeavyWeaponOnGround = 2004;
 
-        protected override void OnStateTU(int state)
+        protected override void InitializeStates()
         {
-            switch (state)
+            base.InitializeStates();
+            _states[State_HeavyWeaponInSky] = State_2000;
+            _states[State_HeavyWeaponOnGround] = State_2004;
+        }
+
+        private bool State_2000(string eventType, object eventData)
+        {
+            if (eventType == "frame")
             {
-                case 2000:
-                    LF2WeaponStates.State2000_Frame(this);
-                    break;
-                case 2004:
-                    LF2WeaponStates.State2004_Frame(this);
-                    break;
+                if (Frame.N == 21)
+                {
+                    Trans.SetNext(20);
+                    var frame = Frame.D;
+                    if (frame == null || string.IsNullOrEmpty(frame.sound))
+                    {
+                        PlaySound(WeaponDropSound);
+                    }
+                }
+                return true;
             }
+            return false;
         }
 
-        // ========== Hit 处理 ==========
-
-        public override bool Hit(InteractionArea itr, ILF2LivingObject attacker)
+        private bool State_2004(string eventType, object eventData)
         {
-            return LF2WeaponStates.HeavyWeapon_Hit(this, itr, attacker);
+            if (eventType == "frame")
+            {
+                if (Frame.N == 20)
+                {
+                    Team = 0;
+                }
+                return true;
+            }
+            return false;
         }
 
-        // ========== 交互方法 ==========
+        public override bool Hit(InteractionArea itr, LF2LivingObject attacker)
+        {
+            if (HoldObj != null) return false;
+            if (IsVRest(attacker)) return false;
+
+            if (itr.kind == 15)
+            {
+                WhirlwindForce(itr);
+                return true;
+            }
+            if (itr.kind == 10 || itr.kind == 11)
+            {
+                FluteForce();
+                return true;
+            }
+
+            bool accept = false;
+            int state = GetState();
+
+            int fall = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
+
+            if (state == State_HeavyWeaponOnGround)
+            {
+                accept = true;
+                if (fall < 30)
+                {
+                    CreateEffect(0);
+                }
+                else if (fall < NTSDGlobal.Gameplay.FallKO)
+                {
+                    PS.vy = NTSDGlobal.Gameplay.WeaponSoftBounceupSpeedY;
+                }
+                else
+                {
+                    PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
+                    var attackerPs = attacker?.PS;
+                    if (attackerPs != null)
+                    {
+                        if (attackerPs.vx != 0)
+                            PS.vx = Mathf.Sign(attackerPs.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
+                        if (attackerPs.vz != 0)
+                            PS.vz = Mathf.Sign(attackerPs.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
+                    }
+                    Trans.Frame(999, 0);
+                }
+            }
+            else if (state == State_HeavyWeaponInSky)
+            {
+                if (fall >= NTSDGlobal.Gameplay.FallKO)
+                {
+                    accept = true;
+                    var attackerPs = attacker?.PS;
+                    if (attackerPs != null)
+                    {
+                        if ((attackerPs.Dirh() > 0) != (PS.vx > 0))
+                        {
+                            PS.vx *= NTSDGlobal.Gameplay.WeaponReverseFactorVx;
+                        }
+                    }
+                    PS.vy *= NTSDGlobal.Gameplay.WeaponReverseFactorVy;
+                    PS.vz *= NTSDGlobal.Gameplay.WeaponReverseFactorVz;
+                    Team = attacker?.Team ?? 0;
+                }
+            }
+
+            if (accept)
+            {
+                ApplyHitEffects(itr, attacker);
+            }
+
+            return accept;
+        }
+
+        private void ApplyHitEffects(InteractionArea itr, LF2LivingObject attacker)
+        {
+            if (itr.vrest > 0)
+            {
+                SetVRest(attacker, itr.vrest);
+            }
+            if (itr.injury > 0)
+            {
+                Health.HP -= itr.injury;
+            }
+            PlaySound(WeaponHitSound);
+        }
 
         public override void Interaction()
         {
             if (Team == 0) return;
-            // 重武器任何时候都可以交互
-            // TODO: 实现碰撞检测
         }
     }
 }

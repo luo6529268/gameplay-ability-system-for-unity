@@ -117,6 +117,45 @@ namespace NTSD.Simulation
 
         public static SpecEntry Get(int objectId) => ById.TryGetValue(objectId, out var entry) ? entry : new SpecEntry();
 
+        /// <summary>
+        /// 对应 FLF livingobject.prototype.proper(id, prop)
+        /// 从 spec 配置表读取对象属性，返回 null 表示未定义
+        /// 参考：FLF livingobject.js:540-549
+        /// </summary>
+        public static object Proper(int objectId, string prop)
+        {
+            if (!ById.TryGetValue(objectId, out var entry))
+                return null;
+
+            switch (prop)
+            {
+                case "mass": return entry.Mass;
+                case "zwidth": return entry.ZWidth;
+                case "no_shadow": return entry.NoShadow;
+                case "oscillate": return entry.Oscillate;
+                case "attackable": return entry.Attackable;
+                case "run_throw": return entry.RunThrow;
+                case "jump_throw": return entry.JumpThrow;
+                case "dash_throw": return entry.DashThrow;
+                case "stand_throw": return entry.StandThrow;
+                case "just_throw": return entry.JustThrow;
+                case "dash_back_attack": return entry.DashBackAttack;
+                case "heavy_weapon_dash": return entry.HeavyWeaponDash;
+                case "heavy_weapon_jump": return entry.HeavyWeaponJump;
+                default: return null;
+            }
+        }
+
+        /// <summary>
+        /// 泛型版本的 Proper，带类型转换
+        /// </summary>
+        public static T Proper<T>(int objectId, string prop, T defaultValue = default)
+        {
+            var value = Proper(objectId, prop);
+            if (value is T typed) return typed;
+            return defaultValue;
+        }
+
         public static float GetMassOrDefault(int objectId)
         {
             var entry = Get(objectId);

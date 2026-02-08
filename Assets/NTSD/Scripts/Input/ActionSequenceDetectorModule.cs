@@ -56,8 +56,6 @@ namespace NTSD.Input
 
         private Character _Character;
 
-        public event Action<ComboConfig.ComboDefinition> OnComboDetected;
-
         public void ModuleSetup(Character character)
         {
             _Character = character;
@@ -182,8 +180,7 @@ namespace NTSD.Input
 
                     if (detected)
                     {
-                        OnComboDetected?.Invoke(candidate.combo);
-
+                        _Character?._LF2Character?.OnComboDetected(candidate.combo);
                         if (candidate.combo.clearOnCombo && clearOnCombo)
                         {
                             ClearSequence();

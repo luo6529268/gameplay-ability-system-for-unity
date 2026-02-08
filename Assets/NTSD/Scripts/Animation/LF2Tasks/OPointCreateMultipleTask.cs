@@ -14,7 +14,7 @@ namespace NTSD.Animation.LF2Tasks
 
         // ========== 任务数据 ==========
         public ObjectPoint opoint;
-        public ILF2LivingObject parent;
+        public LF2LivingObject parent;
         public int team;
         public Vector3 pos;      // 世界坐标 (make_point 结果)
         public float z;          // parent.ps.z

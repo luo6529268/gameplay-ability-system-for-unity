@@ -117,7 +117,7 @@ namespace NTSD.Extensions
         /// 处理 State 2xxxyyy: MP消耗跳帧
         /// </summary>
         /// <returns>成功跳转的目标帧，失败返回 null</returns>
-        public static int? ProcessMPCostState(ILF2LivingObject character, int mpCost, int targetFrame)
+        public static int? ProcessMPCostState(LF2LivingObject character, int mpCost, int targetFrame)
         {
             if (character == null || character.CharacterStats == null) return null;
             
@@ -136,7 +136,7 @@ namespace NTSD.Extensions
         /// 处理 State 3xxxyyy: 时停触发
         /// </summary>
         /// <returns>跳转的目标帧</returns>
-        public static int ProcessTimeStopState(ILF2LivingObject character, int duration, int targetFrame)
+        public static int ProcessTimeStopState(LF2LivingObject character, int duration, int targetFrame)
         {
             // 激活时停系统
             if (NTSDTimeStopSystem.Instance != null)
@@ -170,7 +170,7 @@ namespace NTSD.Extensions
         /// 统一处理扩展 State
         /// </summary>
         /// <returns>处理结果: (是否处理, 目标帧)</returns>
-        public static (bool handled, int? targetFrame) ProcessExtendedState(ILF2LivingObject character, int state)
+        public static (bool handled, int? targetFrame) ProcessExtendedState(LF2LivingObject character, int state)
         {
             var parsed = ParseState(state);
             if (!parsed.isExtended) return (false, null);

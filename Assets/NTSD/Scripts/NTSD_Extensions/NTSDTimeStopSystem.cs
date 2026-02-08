@@ -92,7 +92,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断对象是否应该被冻结
         /// </summary>
-        public bool ShouldFreeze(ILF2LivingObject obj)
+        public bool ShouldFreeze(LF2LivingObject obj)
         {
             if (obj == null) return false;
             if (_timer <= 0) return false;
@@ -128,7 +128,7 @@ namespace NTSD.Extensions
         /// 处理对象的时停逻辑
         /// </summary>
         /// <returns>true 表示对象被冻结，应跳过更新</returns>
-        public bool ProcessObject(ILF2LivingObject obj)
+        public bool ProcessObject(LF2LivingObject obj)
         {
             if (obj == null) return false;
             if (!ShouldFreeze(obj)) return false;

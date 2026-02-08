@@ -43,7 +43,7 @@ namespace NTSD.GAS
         /// <summary>
         /// LF2角色动画播放器
         /// </summary>
-        protected ILF2LivingObject Animator { get; private set; }
+        protected LF2LivingObject Animator { get; private set; }
 
         /// <summary>
         /// 技能对应的状态值（301-999）
@@ -125,14 +125,14 @@ namespace NTSD.GAS
 
             AbilityState = abilityState;
 
-            // 获取 ILF2LivingObject（优先从 Character Hub 获取）
+            // 获取 LF2LivingObject（优先从 Character Hub 获取）
             var character = owner.GetComponent<Character>();
             if (character?._LF2Character != null)
                 Animator = character._LF2Character;
             
             if (Animator == null)
             {
-                Debug.LogError($"[UniversalFrameDrivenAbility] ILF2LivingObject not found on {owner.name}!");
+                Debug.LogError($"[UniversalFrameDrivenAbility] LF2LivingObject not found on {owner.name}!");
                 return;
             }
 
@@ -315,7 +315,7 @@ namespace NTSD.GAS
             int dirH = -1;
 
             // Step D7: 优先使用 LF2Character.ps（Plan B）
-            ILF2LivingObject animator = character._LF2Character;
+            LF2LivingObject animator = character._LF2Character;
             if (animator != null && animator.PS != null)
             {
                 var ps = animator.PS;

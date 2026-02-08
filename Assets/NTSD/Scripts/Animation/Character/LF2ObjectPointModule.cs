@@ -48,7 +48,7 @@ namespace NTSD.Animation
         /// 处理当前帧的 OPoint - 只入队，不立即创建
         /// 对应 FLF character.prototype.opoint()
         /// </summary>
-        public void ProcessFrame(ILF2LivingObject animator)
+        public void ProcessFrame(LF2LivingObject animator)
         {
             if (animator == null) return;
             if (Factory == null) return;
@@ -82,7 +82,7 @@ namespace NTSD.Animation
             EnqueueSingleTask(animator, op);
         }
 
-        private void EnqueueNPCTask(ILF2LivingObject animator, ObjectPoint op)
+        private void EnqueueNPCTask(LF2LivingObject animator, ObjectPoint op)
         {
             int numberOfCharacters = Mathf.FloorToInt(Mathf.Abs(op.facing) / 10f);
             if (numberOfCharacters <= 0) return;
@@ -99,7 +99,7 @@ namespace NTSD.Animation
             Factory.EnqueueCreateNPCCharacters(task);
         }
 
-        private void EnqueueSingleTask(ILF2LivingObject animator, ObjectPoint op)
+        private void EnqueueSingleTask(LF2LivingObject animator, ObjectPoint op)
         {
             Vector3 pos = MakePoint(animator, op);
 
@@ -117,7 +117,7 @@ namespace NTSD.Animation
             Factory.EnqueueCreateObject(task);
         }
 
-        private void EnqueueMultipleTask(ILF2LivingObject animator, ObjectPoint op, int number, float vz)
+        private void EnqueueMultipleTask(LF2LivingObject animator, ObjectPoint op, int number, float vz)
         {
             Vector3 pos = MakePoint(animator, op);
 
@@ -142,7 +142,7 @@ namespace NTSD.Animation
         /// P2 对齐 FLF mechanics.js mech.prototype.make_point()
         /// 使用 PS.sx/sy/sz（sprite origin）而非 PS.x/y/z
         /// </summary>
-        private Vector3 MakePoint(ILF2LivingObject animator, ObjectPoint op, string prefix = "")
+        private Vector3 MakePoint(LF2LivingObject animator, ObjectPoint op, string prefix = "")
         {
             var PS = animator.PS;
             var frame = animator.Frame.D;

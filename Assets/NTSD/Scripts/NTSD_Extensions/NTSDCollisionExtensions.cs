@@ -30,7 +30,7 @@ namespace NTSD.Extensions
         /// 判断 ITR 是否应该命中目标 (考虑 NTSD 扩展 Kind 的目标过滤)
         /// 在 LF2CollisionSystem.ProcessPostInteractionTick 的 Intersect 检测后调用
         /// </summary>
-        public static bool ShouldHitTarget(int kind, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
             // 原版 Kind 不做过滤
             if (!NTSDItrKindHandler.IsNTSDAttackKind(kind))
@@ -43,7 +43,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 处理命中事件 (包含 NTSD 扩展效果)
         /// </summary>
-        public static void ProcessHit(InteractionArea itr, ILF2LivingObject attacker, ILF2LivingObject target)
+        public static void ProcessHit(InteractionArea itr, LF2LivingObject attacker, LF2LivingObject target)
         {
             // 1. 计算伤害
             var damageResult = NTSDDamageCalculator.ProcessDamage(itr, attacker, target);
@@ -70,7 +70,7 @@ namespace NTSD.Extensions
         /// 处理控制类 ITR (100099-100103)
         /// 在帧更新时调用
         /// </summary>
-        public static void ProcessControlItrs(ILF2LivingObject actor)
+        public static void ProcessControlItrs(LF2LivingObject actor)
         {
             if (actor == null || actor.Frame.D == null) return;
             
