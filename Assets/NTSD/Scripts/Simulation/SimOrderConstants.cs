@@ -68,15 +68,11 @@ namespace NTSD.Simulation
                 case LF2ObjectType.SpecialAttack:
                     return SpecialAttack;
 
-                case LF2ObjectType.Baseball:
-                case LF2ObjectType.Miscellaneous:
-                case LF2ObjectType.Drink:
-                    // 待实现的类型，暂时归入特效组
-                    return Effect;
-
-                case LF2ObjectType.Effect:
-                    return Effect;
-
+                //case LF2ObjectType.Baseball:
+                //case LF2ObjectType.Miscellaneous:
+                //case LF2ObjectType.Drink:
+                //    // 待实现的类型，暂时归入特效组
+                //    return Effect;
                 default:
                     Debug.LogWarning($"[SimOrderConstants] Unknown object type: {objectType}, fallback to Character");
                     return Character;

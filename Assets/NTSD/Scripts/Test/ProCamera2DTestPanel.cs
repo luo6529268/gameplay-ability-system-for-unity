@@ -37,11 +37,17 @@ namespace NTSD.Test
         CinemachineVirtualCamera _vcam;
         CinemachineConfiner2D    _confiner;
         Transform                _followTarget;
+        PolygonCollider2D        _boundaryCollider;
 
         // Dynamic zoom state
         float _maxOrthoSize;
         float _currentOrthoSize;
         float _sizeVelocity;
+        float _screenAspect; // cached screen aspect ratio (unaffected by viewport rect)
+
+        // Boundary visuals (rebuilt on change)
+        Transform _boundaryLinesParent;
+        float _prevBL, _prevBR, _prevBT, _prevBB;
 
         // Shake
         bool  _enableShake = true;
@@ -84,10 +90,13 @@ namespace NTSD.Test
             BuildBackgroundGrid();
             BuildBoundaryLines();
 
+            _screenAspect = (float)Screen.width / Screen.height;
             float boundsW = BoundaryRight - BoundaryLeft;
             float boundsH = BoundaryTop - BoundaryBottom;
-            _maxOrthoSize = (boundsW * 0.5f) / _cam.aspect;
+            _maxOrthoSize = (boundsW * 0.5f) / _screenAspect;
             _currentOrthoSize = boundsH * 0.5f;
+            _prevBL = BoundaryLeft; _prevBR = BoundaryRight;
+            _prevBT = BoundaryTop;  _prevBB = BoundaryBottom;
         }
 
         void OnEnable()
@@ -121,6 +130,7 @@ namespace NTSD.Test
             HandleDash();
             HandleHitSimulation();
             UpdateFollowTargetPosition();
+            RefreshBoundaries();
         }
 
         void LateUpdate()
@@ -139,7 +149,7 @@ namespace NTSD.Test
         void UpdateViewportRect()
         {
             float camH = _currentOrthoSize * 2f;
-            float camW = camH * _cam.aspect;
+            float camW = camH * _screenAspect;
             float bgW = BoundaryRight - BoundaryLeft;
             float bgH = BoundaryTop - BoundaryBottom;
 
@@ -261,16 +271,53 @@ namespace NTSD.Test
         {
             var go = new GameObject("CameraBounds");
             go.layer = LayerMask.NameToLayer("Ignore Raycast");
-            var col = go.AddComponent<PolygonCollider2D>();
-            col.isTrigger = true;
-            col.points = new Vector2[]
+            _boundaryCollider = go.AddComponent<PolygonCollider2D>();
+            _boundaryCollider.isTrigger = true;
+            _boundaryCollider.points = new Vector2[]
             {
                 new Vector2(BoundaryLeft,  BoundaryBottom),
                 new Vector2(BoundaryRight, BoundaryBottom),
                 new Vector2(BoundaryRight, BoundaryTop),
                 new Vector2(BoundaryLeft,  BoundaryTop),
             };
-            return col;
+            return _boundaryCollider;
+        }
+
+        void RefreshBoundaries()
+        {
+            if (_prevBL == BoundaryLeft && _prevBR == BoundaryRight &&
+                _prevBT == BoundaryTop && _prevBB == BoundaryBottom)
+                return;
+
+            _prevBL = BoundaryLeft; _prevBR = BoundaryRight;
+            _prevBT = BoundaryTop;  _prevBB = BoundaryBottom;
+
+            // Update max ortho size
+            float boundsW = BoundaryRight - BoundaryLeft;
+            _maxOrthoSize = (boundsW * 0.5f) / _screenAspect;
+
+            // Update confiner collider
+            if (_boundaryCollider != null)
+            {
+                _boundaryCollider.points = new Vector2[]
+                {
+                    new Vector2(BoundaryLeft,  BoundaryBottom),
+                    new Vector2(BoundaryRight, BoundaryBottom),
+                    new Vector2(BoundaryRight, BoundaryTop),
+                    new Vector2(BoundaryLeft,  BoundaryTop),
+                };
+            }
+            if (_confiner != null)
+            {
+                _confiner.InvalidateCache();
+                float boundsH = BoundaryTop - BoundaryBottom;
+                _confiner.m_MaxWindowSize = (boundsW * 0.5f) / _screenAspect;
+            }
+
+            // Rebuild boundary lines
+            if (_boundaryLinesParent != null)
+                Destroy(_boundaryLinesParent.gameObject);
+            BuildBoundaryLines();
         }
 
         // ================================================================
@@ -301,7 +348,7 @@ namespace NTSD.Test
             _followTarget.position = new Vector3(cx, cy, 0f);
 
             // Pre-compute required size
-            float aspect = _cam.aspect;
+            float aspect = _screenAspect;
             float spanX = (maxX - minX) + FramingPadding * 2f;
             float spanY = (maxY - minY) + FramingPadding * 2f;
             float sizeForW = (spanX * 0.5f) / aspect;
@@ -495,6 +542,7 @@ namespace NTSD.Test
             Color c = new Color(1f, 0.3f, 0.3f, 0.8f);
             float w = 0.08f;
             var parent = new GameObject("Boundaries").transform;
+            _boundaryLinesParent = parent;
             CreateLine("BoundTop",    parent, c, w, new Vector3(BoundaryLeft, BoundaryTop, 0.5f),    new Vector3(BoundaryRight, BoundaryTop, 0.5f));
             CreateLine("BoundBottom", parent, c, w, new Vector3(BoundaryLeft, BoundaryBottom, 0.5f), new Vector3(BoundaryRight, BoundaryBottom, 0.5f));
             CreateLine("BoundLeft",   parent, c, w, new Vector3(BoundaryLeft, BoundaryBottom, 0.5f), new Vector3(BoundaryLeft, BoundaryTop, 0.5f));
@@ -617,7 +665,7 @@ namespace NTSD.Test
             if (!_showPanel) return;
 
             float panelW = 320f;
-            float panelH = 480f;
+            float panelH = 680f;
             float panelX = Screen.width - panelW - 10f;
             float panelY = 10f;
 
@@ -630,6 +678,19 @@ namespace NTSD.Test
             headerStyle.normal.textColor = Color.cyan;
             GUILayout.Label("多目标摄像机控制", headerStyle);
             GUILayout.Space(6);
+
+            // ── Boundaries ──
+            GUILayout.Label("可活动区域 (运行时可调)", headerStyle);
+            GUILayout.Label($"  左: {BoundaryLeft:F1}");
+            BoundaryLeft = GUILayout.HorizontalSlider(BoundaryLeft, -40f, 0f);
+            GUILayout.Label($"  右: {BoundaryRight:F1}");
+            BoundaryRight = GUILayout.HorizontalSlider(BoundaryRight, 0f, 40f);
+            GUILayout.Label($"  上: {BoundaryTop:F1}");
+            BoundaryTop = GUILayout.HorizontalSlider(BoundaryTop, 0f, 20f);
+            GUILayout.Label($"  下: {BoundaryBottom:F1}");
+            BoundaryBottom = GUILayout.HorizontalSlider(BoundaryBottom, -20f, 0f);
+            GUILayout.Label($"  最大视野: {_maxOrthoSize:F1}");
+            GUILayout.Space(4);
 
             // ── Multi-target framing ──
             GUILayout.Label("多目标适配", headerStyle);

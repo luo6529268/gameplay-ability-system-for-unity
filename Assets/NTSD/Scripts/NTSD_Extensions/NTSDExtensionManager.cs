@@ -56,10 +56,12 @@ namespace NTSD.Extensions
         /// </summary>
         public bool ShouldItrHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
+            var kindService = ResolveKindService(attacker);
+
             // 先检查 NTSD 扩展 Kind
-            if (NTSDItrKindHandler.IsNTSDAttackKind(kind))
+            if (kindService.IsNTSDAttackKind(kind))
             {
-                return NTSDItrKindHandler.ShouldHitTarget(kind, attacker, target);
+                return kindService.ShouldHitTarget(kind, attacker, target);
             }
             
             // 默认: 可以命中
@@ -71,16 +73,17 @@ namespace NTSD.Extensions
         /// </summary>
         public void ProcessControlItr(LF2LivingObject actor, InteractionArea itr)
         {
-            if (!NTSDItrKindHandler.IsNTSDControlKind(itr.kind)) return;
+            var kindService = ResolveKindService(actor);
+            if (!kindService.IsNTSDControlKind(itr.kind)) return;
             
             switch (itr.kind)
             {
                 case NTSDConstants.ITR_KIND_RANDOM_MOVE:
-                    NTSDItrKindHandler.ProcessRandomMove(actor, itr);
+                    kindService.ProcessRandomMove(actor, itr);
                     break;
                     
                 case NTSDConstants.ITR_KIND_INPUT_CONTROL:
-                    var targetFrame = NTSDItrKindHandler.ProcessInputControl(actor, itr);
+                    var targetFrame = kindService.ProcessInputControl(actor, itr);
                     if (targetFrame.HasValue)
                     {
                         actor.TransitionToFrame(targetFrame.Value, 0);
@@ -166,6 +169,11 @@ namespace NTSD.Extensions
         public void ActivateTimeStop(int duration, int exemptTeam = 0, int stopType = 0)
         {
             _timeStopSystem?.Activate(duration, exemptTeam, stopType);
+        }
+
+        private static INTSDItrKindService ResolveKindService(LF2LivingObject context)
+        {
+            return context?.Match?.ItrKindService;
         }
         
         #endregion

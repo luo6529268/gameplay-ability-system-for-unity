@@ -4,7 +4,9 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.Simulation;
+using NTSD.Tools;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
@@ -113,6 +115,7 @@ namespace NTSD.Animation.LF2Objects
         bool IsJump { get; }
         bool IsDefend { get; }
         int Dirv();
+        (int dx, int dz) GetMoveInput();
     }
 
     /// <summary>
@@ -137,9 +140,6 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>对象ID（对应 FLF $.id = thisID）</summary>
         public int ObjectId { get; set; }
 
-        /// <summary>对象数据引用（对应 FLF $.data）</summary>
-        public LF2CharacterDataWrapper Data { get; protected set; }
-
         /// <summary>队伍 ID（对应 FLF $.team）</summary>
         public int Team { get; set; }
 
@@ -147,7 +147,7 @@ namespace NTSD.Animation.LF2Objects
         public int OwnerId { get; set; } = -1;
 
         /// <summary>对象类型字符串（对应 FLF livingobject.prototype.type）</summary>
-        public virtual string Type => "livingobject";
+        public virtual LF2ObjectType Type => (LF2ObjectType)GameDataManager.Instance?.GetObjectById(ObjectId)?.type;
 
         /// <summary>
         /// 每个状态是否允许切换方向（对应 FLF livingobject.prototype.states_switch_dir）
@@ -351,15 +351,15 @@ namespace NTSD.Animation.LF2Objects
 
             switch (Type)
             {
-                case "lightweapon":
-                    if (Frame.N >= 55) Trans?.Frame(40, 20);
+                case LF2ObjectType.Character:
+                    if (Frame.N >= 55) TransitionToFrame(40, 20);
                     break;
-                case "heavyweapon":
-                    if (Frame.N >= 5) Trans?.Frame(1, 20);
+                case LF2ObjectType.HeavyWeapon:
+                    if (Frame.N >= 5) TransitionToFrame(1, 20);
                     break;
-                case "character":
-                    Trans?.Frame(PS.vy > 0 ? 181 : 182, 20);
-                    break;
+                //case "character":
+                //    Trans?.Frame(PS.vy > 0 ? 181 : 182, 20);
+                //    break;
             }
         }
 
@@ -391,34 +391,6 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         #region 功能逻辑 - 帧系统
-
-        /// <summary>
-        /// 帧更新（对应 FLF livingobject.prototype.frame_update）
-        /// 参考：FLF livingobject.js:106-130
-        /// </summary>
-        public virtual void FrameUpdate()
-        {
-            if (Frame.D == null) return;
-
-            Sprite?.ShowPic(Frame.D.pic);
-
-            if (PS != null) PS.fric = 1;
-
-            if (!StateUpdate("frame_force"))
-            {
-                FrameForce();
-            }
-
-            Trans?.SetWait(Frame.D.wait, 99);
-            Trans?.SetNext(Frame.D.next, 99);
-
-            StateUpdate("frame");
-
-            if (!string.IsNullOrEmpty(Frame.D.sound))
-            {
-                // TODO: 播放声音
-            }
-        }
 
         /// <summary>
         /// 应用帧力（对应 FLF livingobject.prototype.frame_force）
@@ -500,14 +472,100 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
+        public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock) 
+        {
+            Frame.PN = Frame.N;
+            Frame.N = targetFrameId;
+
+            LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
+            if (targetFrame == null)
+            {
+                Log.Warn("[LF2Character] Invalid frame ID: {0}", targetFrameId);
+                return;
+            }
+
+            bool isStateTrans = Frame.D?.state != targetFrame.state;
+            if (isStateTrans)
+            {
+                // 状态退出事件
+                StateUpdate("state_exit");
+            }
+
+            Frame.D = targetFrame;
+
+            if (isStateTrans)
+            {
+                StateMem.Clear();
+
+                bool oldSwitchDir = AllowSwitchDir;
+                AllowSwitchDir = GetStatesSwitchDir(Frame.D.state);
+
+                StateUpdate("state_entry");
+
+                if (!switchDirAfterTrans)
+                {
+                    if (AllowSwitchDir && !oldSwitchDir)
+                    {
+                        if (Controller.IsLeft)
+                            SwitchDir(DIRECTION.LEFT);
+                        if (Controller.IsRight)
+                            SwitchDir(DIRECTION.RIGHT);
+                    }
+                }
+            }
+
+            if (switchDirAfterTrans)
+            {
+                SwitchDir(PS.dir == "right"?"left":"right");
+            }
+
+            FrameUpdateInternal();
+        }
+
+        /// <summary>
+        /// 帧更新（内部）
+        /// 对应 FLF frame_update()
+        /// </summary>
+        private void FrameUpdateInternal()
+        {
+            // 更新精灵
+            if (Frame.D != null && Frame.D.pic >= 0)
+            {
+                Sprite.ShowPic(Frame.D.pic);
+            }
+
+            // 应用帧力
+            if (!StateUpdate("frame_force"))
+            {
+                FrameForce();
+            }
+
+            Trans.SetWait(Frame.D.wait, 99);
+            Trans.SetNext(Frame.D.next, 99);
+
+            // 状态 frame 事件
+            StateUpdate("frame");
+
+            // 播放音效
+            if (Frame.D != null && !string.IsNullOrEmpty(Frame.D.sound))
+            {
+                // TODO: 播放音效
+            }
+        }
+
+        public virtual bool GetStatesSwitchDir(int stateId) 
+        {
+            return false;
+        }
+
         #endregion
 
         #region 功能逻辑 - Tick 循环
 
-        /// <summary>
-        /// Transit 阶段（对应 FLF livingobject.prototype.transit）
-        /// 参考：FLF livingobject.js:319-340
-        /// </summary>
+            /// <summary>
+            /// Transit 阶段（对应 FLF livingobject.prototype.transit）
+            /// 参考：FLF livingobject.js:319-340
+            /// </summary>
         public virtual void Transit()
         {
             ComboUpdate();
@@ -566,13 +624,6 @@ namespace NTSD.Animation.LF2Objects
 
 
             ItrRest?.Tick();
-        }
-
-        /// <summary>
-        /// Transit 阶段的物理和武器点处理（子类可重写）
-        /// </summary>
-        public virtual void Transit_DynamicsAndWPoint()
-        {
         }
 
         /// <summary>
@@ -739,6 +790,11 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
+        public virtual void SwitchDir(DIRECTION rection) 
+        {
+            SwitchDir(rection == DIRECTION.LEFT ? "left" : "right");
+        }
+
         /// <summary>
         /// 获取水平方向（对应 FLF livingobject.prototype.dirh）
         /// </summary>
@@ -753,22 +809,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public virtual int Dirv()
         {
-            int d = 0;
-            if (Controller != null)
-            {
-                if (Controller.IsUp) d -= 1;
-                if (Controller.IsDown) d += 1;
-            }
-            return d;
+            return Controller.Dirv();
         }
-
-        /// <summary>设置朝向方向</summary>
-        public virtual void SetDirection(DIRECTION direction)
-        {
-            if (PS != null)
-                PS.dir = direction == DIRECTION.RIGHT ? "right" : "left";
-        }
-
+        
         #endregion
 
         #region 功能逻辑 - 交互冷却系统
@@ -849,7 +892,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>获取精灵宽度用于碰撞检测（子类可重写）</summary>
         public virtual float GetSpriteWidthPxForCollision()
         {
-            return Sprite?.GetCurrentSpriteWidthPx() ?? 0f;
+            return _FrameDataWrapper.characterData.files[0].width + 1;
         }
 
         #endregion

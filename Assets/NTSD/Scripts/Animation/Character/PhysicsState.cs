@@ -16,12 +16,6 @@ namespace NTSD.Animation
     /// </summary>
     public class PhysicsState
     {
-        /// <summary>
-        /// FLF 默认攻击框 Z 轴宽度（像素）
-        /// 对应 I:\C++Test\NTSD\F.LF-master\LF\global.js:130 (GC.default.itr.zwidth = 12)
-        /// </summary>
-        public static readonly float FLF_DEFAULT_ITR_ZWIDTH = NTSDGlobal.Default.Itr.ZWidth;
-
         // ==================== 位置（FLF 世界坐标，像素）====================
         /// <summary>
         /// 水平位置（对应 Unity transform.position.x）
@@ -139,12 +133,6 @@ namespace NTSD.Animation
             sz = z;
         }
 
-        // 获取水平方向
-        public int Dirh()
-        {
-            return (dir == "left" ? -1 : 1);
-        }
-
         /// <summary>
         /// FLF scene.query 所需的 volume 格式（见 LF/scene.js）。
         /// 注意：volume 的实际矩形为 (x+vx, y+vy, w, h)，深度区间为 [z-zwidth, z+zwidth]。
@@ -188,7 +176,6 @@ namespace NTSD.Animation
             float offsetY = 0f,
             float offsetZ = 0f)
         {
-            UpdateSpriteOrigin(centerx, centery, spriteWidthPx);
             float originX = sx + offsetX;
             float originY = sy + offsetY;
             float originZ = sz + offsetZ;
@@ -214,7 +201,7 @@ namespace NTSD.Animation
                     originX, originY, originZ,
                     localX, body.y,
                     body.w, body.h,
-                    FLF_DEFAULT_ITR_ZWIDTH
+                    NTSDGlobal.Default.Itr.ZWidth
                 ));
             }
 
@@ -239,7 +226,6 @@ namespace NTSD.Animation
             if (dst == null) return;
             dst.Clear();
 
-            UpdateSpriteOrigin(centerx, centery, spriteWidthPx);
             float originX = sx + offsetX;
             float originY = sy + offsetY;
             float originZ = sz + offsetZ;
@@ -287,7 +273,6 @@ namespace NTSD.Animation
             float offsetY = 0f,
             float offsetZ = 0f)
         {
-            UpdateSpriteOrigin(centerx, centery, spriteWidthPx);
             float originX = sx + offsetX;
             float originY = sy + offsetY;
             float originZ = sz + offsetZ;
@@ -309,7 +294,7 @@ namespace NTSD.Animation
                     originX, originY, originZ,
                     localX, itr.y,
                     itr.w, itr.h,
-                    itrZWidthPx
+                    itr.zwidth != 0 ? itr.zwidth : itrZWidthPx
                 ));
             }
 

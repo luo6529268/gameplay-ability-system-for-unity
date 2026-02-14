@@ -119,6 +119,7 @@ namespace NTSD.Simulation
         public static class Combo 
         {
            public const int Timeout = 10; // 连招超时时间（时间单位）
+
         }
 
         /// <summary>

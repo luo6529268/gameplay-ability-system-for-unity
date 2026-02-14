@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Extensions;
 using UnityEngine;
 
 namespace NTSD.Simulation
@@ -67,6 +70,16 @@ namespace NTSD.Simulation
         /// </summary>
         private int _nextAutoStableId = 100;
 
+        /// <summary>
+        /// 场景查询服务（当前为暴力遍历实现，后续可替换为四叉树实现）
+        /// </summary>
+        public ILF2SceneQuery SceneQuery { get; private set; }
+
+        /// <summary>
+        /// ITR kind 语义服务（业务规则层，可替换）
+        /// </summary>
+        public INTSDItrKindService ItrKindService { get; private set; }
+
         // ==================== 初始化 ====================
 
         /// <summary>
@@ -75,6 +88,8 @@ namespace NTSD.Simulation
         public SimulationWorld()
         {
             _context = new SimContext(this);
+            ItrKindService = new NTSDItrKindService();
+            SceneQuery = new BruteForceSceneQuery(this);
         }
 
         // ==================== 公共 API ====================
@@ -252,6 +267,29 @@ namespace NTSD.Simulation
                     }
 
                     obj.SimLateTick(tickIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 收集当前世界中的所有 LF2LivingObject（按 SimOrder → StableId 顺序）
+        /// </summary>
+        public void GetAllLivingObjects(List<LF2LivingObject> dst)
+        {
+            if (dst == null) return;
+            dst.Clear();
+
+            foreach (var kvp in _buckets)
+            {
+                Bucket bucket = kvp.Value;
+                bucket.EnsureSorted();
+
+                for (int i = 0; i < bucket.items.Count; i++)
+                {
+                    if (bucket.items[i] is LF2LivingObject living)
+                    {
+                        dst.Add(living);
+                    }
                 }
             }
         }

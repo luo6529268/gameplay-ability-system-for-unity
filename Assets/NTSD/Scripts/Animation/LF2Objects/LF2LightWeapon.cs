@@ -66,7 +66,7 @@ namespace NTSD.Animation.LF2Objects
                 var attackerPs = attacker?.PS;
                 if (attackerPs != null)
                 {
-                    if ((attackerPs.Dirh() > 0) != (PS.vx > 0))
+                    if ((Dirh() > 0) != (PS.vx > 0))
                     {
                         PS.vx *= NTSDGlobal.Gameplay.WeaponReverseFactorVx;
                     }

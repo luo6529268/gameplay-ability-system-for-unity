@@ -389,23 +389,7 @@ namespace NTSD.Animation
         private ILF2Object CreateLogicObject(int objectType, int oid)
         {
             // 将 int type 映射到 LF2ObjectType 枚举
-            LF2ObjectType objTypeEnum;
-            switch (objectType)
-            {
-                case 1:
-                    objTypeEnum = LF2ObjectType.LightWeapon;
-                    break;
-                case 2:
-                    objTypeEnum = LF2ObjectType.HeavyWeapon;
-                    break;
-                case 3:
-                    objTypeEnum = LF2ObjectType.SpecialAttack;
-                    break;
-                default:
-                    Log.Error($"[Factory] Unsupported object type: {objectType}");
-                    return null;
-            }
-
+            LF2ObjectType objTypeEnum = (LF2ObjectType)objectType;
             // 从逻辑对象池获取对象（池会自动处理 ObjectId 赋值）
             return LF2ObjectLogicPool.Instance.Get(objTypeEnum, oid);
         }

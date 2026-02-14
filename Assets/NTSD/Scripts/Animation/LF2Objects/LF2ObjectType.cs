@@ -2,36 +2,32 @@ namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
     /// LF2 对象类型枚举
-    /// 对应 FLF factories.js 的类型定义
-    ///
+    /// 
     /// 参考：
-    /// - FLF AI.js:20 (type: 0=character, 1=lightweapon, 2=heavyweapon, 3=specialattack, 4=baseball, 5=criminal, 6=drink)
-    /// - FLF factories.js:14-23 (factory object keys)
+    /// - LF-Empire 官方文档: https://lf-empire.de/lf2-empire/data-changing/types
+    /// - LF2 data.txt 格式: id: X type: Y file: Z
     /// </summary>
     public enum LF2ObjectType
     {
-        /// <summary>角色 - 对应 FLF character</summary>
+        /// <summary>角色 (type: 0) - 对应 LF2 "Type 0 - Characters"</summary>
         Character = 0,
 
-        /// <summary>轻武器 - 对应 FLF lightweapon</summary>
+        /// <summary>轻武器 (type: 1) - 对应 LF2 "Type 1 - Light Weapons"</summary>
         LightWeapon = 1,
 
-        /// <summary>重武器 - 对应 FLF heavyweapon</summary>
+        /// <summary>重武器 (type: 2) - 对应 LF2 "Type 2 - Heavy Weapons"</summary>
         HeavyWeapon = 2,
 
-        /// <summary>特殊攻击（投射物、能量球等） - 对应 FLF specialattack</summary>
+        /// <summary>攻击/投射物 (type: 3) - 对应 LF2 "Type 3 - Attacks"</summary>
         SpecialAttack = 3,
 
-        /// <summary>棒球（待实现） - 对应 FLF baseball</summary>
-        Baseball = 4,
+        /// <summary>投掷武器 (type: 4) - 对应 LF2 "Type 4 - Throw Weapons"</summary>
+        ThrowWeapon = 4,
 
-        /// <summary>杂物（待实现） - 对应 FLF miscell</summary>
-        Miscellaneous = 5,
+        /// <summary>其他/杂物 (type: 5) - 对应 LF2 "Type 5 - Other"</summary>
+        Other = 5,
 
-        /// <summary>饮料（待实现） - 对应 FLF drinks</summary>
-        Drink = 6,
-
-        /// <summary>特效 - 对应 FLF effect</summary>
-        Effect = 7
+        /// <summary>饮料/回复物 (type: 6) - 对应 LF2 "Type 6 - Drinks"</summary>
+        Drink = 6
     }
 }

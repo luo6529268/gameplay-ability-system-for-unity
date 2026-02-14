@@ -192,7 +192,9 @@ namespace NTSD.Animation
     [System.Serializable]
     public class InteractionArea
     {
+        //itr 类型（0=普通攻击, 1=抓取, 2=被抓, 8=治疗, 14=阻挡...）
         public int kind = 0;
+        //碰撞框位置和尺寸（相对于 centerx/centery）
         public int x = 0;
         public int y = 0;
         public int w = 0;
@@ -205,10 +207,15 @@ namespace NTSD.Animation
         public int dvy = 0;
         public int dvz = 0;
 
+        //伤害值
         public int injury = 0;
         public int fall = 0;
+        //攻击者休息帧数
+        //攻击者打中人之后，自己要等几帧才能再次打人。 这是 LF2 的攻击频率限制机制
         public int arest = 0;
+        //受害者休息帧数
         public int vrest = 0;
+        //击中效果
         public int effect = 0;
 
         // LF2/FLF: 防御破坏（可选字段；用于 defend/broken_defend 判定）

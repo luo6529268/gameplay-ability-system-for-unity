@@ -1,6 +1,7 @@
 using UnityEngine;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Extensions;
 using NTSD.Tools;
 using NTSD.Simulation;
 
@@ -40,14 +41,11 @@ namespace NTSD.Animation.LF2Objects
 
             // 初始化基类字段
             PS = new PhysicsState();
-            Trans = new FrameTransistor();
+            Trans = new FrameTransistor(this);
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
             ItrRest = new LF2ItrRestTracker();
             Sprite = new LF2Sprite();
-
-            // 设置帧转换回调
-            Trans.SetFrameTransitCallback(OnFrameTransit);
 
             // 初始化状态处理器
             InitializeStates();
@@ -328,28 +326,6 @@ namespace NTSD.Animation.LF2Objects
             CreateBrokenEffect();
         }
 
-        // ========== 帧转换回调 ==========
-
-        protected virtual void OnFrameTransit(int frameId, bool switchDir, int oldLock)
-        {
-            // 更新帧信息
-            Frame.PN = Frame.N;
-            Frame.N = frameId;
-            
-            // 从缓存获取帧数据
-            Frame.D = FrameCache?.GetFrameDataById(frameId);
-
-            // 切换方向
-            if (switchDir)
-            {
-                string newDir = (PS.dir == "left") ? "right" : "left";
-                SwitchDir(newDir);
-            }
-
-            // 调用帧更新
-            FrameUpdate();
-        }
-
         // ========== ISimObject 生命周期 ==========
 
         /// <summary>
@@ -392,7 +368,120 @@ namespace NTSD.Animation.LF2Objects
         public void Interaction()
         {
             if (Team == 0) return;
-            // TODO: 实现碰撞检测逻辑
+
+            var frame = Frame?.D;
+            var sceneQuery = Match?.SceneQuery;
+            var kindService = Match?.ItrKindService;
+            if (frame == null || sceneQuery == null) return;
+            if (PS == null) return;
+
+            var itrs = frame.itrs;
+            if (itrs == null || itrs.Count == 0) return;
+
+            float spriteWidthPx = GetSpriteWidthPxForCollision();
+            if (spriteWidthPx <= 0f) return;
+
+            var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
+            int count = Mathf.Min(itrs.Count, itrVolumes.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                var itr = itrs[i];
+                if (itr == null) continue;
+
+                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
+                if (candidates == null || candidates.Count == 0) continue;
+
+                for (int c = 0; c < candidates.Count; c++)
+                {
+                    var target = candidates[c];
+                    if (!CanInteractTarget(itr, target)) continue;
+
+                    if (!DispatchInteractionByKind(kindService, itr, target)) continue;
+
+                    ItrArestUpdate(itr);
+                    target.ItrVrestUpdate(StableId, itr);
+                    return;
+                }
+            }
+        }
+
+        private bool CanInteractTarget(InteractionArea itr, LF2LivingObject target)
+        {
+            if (itr == null || target == null) return false;
+            if (target == this) return false;
+            if (target.PS == null || target.Frame?.D == null) return false;
+            if (target.Health != null && target.Health.HP <= 0) return false;
+            if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
+            if (!target.ItrVrestTest(StableId)) return false;
+            var kindService = Match?.ItrKindService;
+            if (!kindService.ShouldHitTarget(itr.kind, this, target)) return false;
+
+            return true;
+        }
+
+        private bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        {
+            if (kindService != null && kindService.IsAttackKind(itr.kind))
+            {
+                return TryApplyHit(itr, target);
+            }
+
+            switch (itr.kind)
+            {
+                case 1:
+                    return HandlePreInteractionKind1(itr, target);
+                case 2:
+                    return HandlePreInteractionKind2(itr, target);
+                case 3:
+                    return HandlePreInteractionKind3(itr, target);
+                case 7:
+                    return HandlePreInteractionKind7(itr, target);
+                default:
+                    return false;
+            }
+        }
+
+        private bool TryApplyHit(InteractionArea itr, LF2LivingObject target)
+        {
+            if (!ItrArestTest()) return false;
+
+            if (target is LF2WeaponBase weapon)
+            {
+                return weapon.Hit(itr, this);
+            }
+
+            if (target is LF2SpecialAttack specialAttack)
+            {
+                return specialAttack.Hit(itr, this);
+            }
+
+            // TODO: character hit path placeholder
+            return false;
+        }
+
+        private bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 1 placeholder
+            return false;
+        }
+
+        private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 2 placeholder
+            return false;
+        }
+
+        private bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 3 placeholder
+            return false;
+        }
+
+        private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 7 placeholder
+            return false;
         }
 
         /// <summary>

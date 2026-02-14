@@ -106,7 +106,7 @@ namespace NTSD.Animation
             // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
             // FLF 默认 itr.zwidth = 12 像素（global.js: GC.default.itr.zwidth）
             // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
-            return (PhysicsState.FLF_DEFAULT_ITR_ZWIDTH / SimulationConstants.PIXELS_PER_UNIT) * 0.5f;
+            return (NTSDGlobal.Default.Itr.ZWidth / SimulationConstants.PIXELS_PER_UNIT) * 0.5f;
         }
 
         /// <summary>

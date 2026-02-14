@@ -4,18 +4,41 @@ using UnityEngine;
 
 namespace NTSD.Extensions
 {
+    public interface INTSDItrKindService
+    {
+        bool IsAttackKind(int kind);
+        bool IsPreInteractionKind(int kind);
+        bool IsNTSDAttackKind(int kind);
+        bool IsNTSDControlKind(int kind);
+        bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target);
+        void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr);
+        int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr);
+    }
+
     /// <summary>
-    /// NTSD ITR Kind 扩展处理器
-    /// 处理 kind 800-896 和 100099-100103 的特殊逻辑
+    /// NTSD ITR Kind 语义服务（业务规则层）
     /// </summary>
-    public static class NTSDItrKindHandler
+    public class NTSDItrKindService : INTSDItrKindService
     {
         #region Kind 分类判断
+
+        public bool IsAttackKind(int kind)
+        {
+            if (kind == 0 || kind == 4 || kind == 9 || kind == 15 || kind == 16)
+                return true;
+
+            return IsNTSDAttackKind(kind);
+        }
+
+        public bool IsPreInteractionKind(int kind)
+        {
+            return kind == 1 || kind == 2 || kind == 3 || kind == 7;
+        }
         
         /// <summary>
         /// 判断是否为 NTSD 扩展的攻击类 Kind
         /// </summary>
-        public static bool IsNTSDAttackKind(int kind)
+        public bool IsNTSDAttackKind(int kind)
         {
             // 800-896: 治疗/所有者相关
             if (kind >= 800 && kind <= 896) return true;
@@ -26,7 +49,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断是否为 NTSD 高级控制 Kind (100099-100103)
         /// </summary>
-        public static bool IsNTSDControlKind(int kind)
+        public bool IsNTSDControlKind(int kind)
         {
             return kind >= NTSDConstants.ITR_KIND_RANDOM_MOVE && 
                    kind <= NTSDConstants.ITR_KIND_CONTROLLABLE_MARKER;
@@ -35,7 +58,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断是否为治疗队友 Kind (800-806)
         /// </summary>
-        public static bool IsHealTeammateKind(int kind)
+        public bool IsHealTeammateKind(int kind)
         {
             return kind >= NTSDConstants.ITR_KIND_HEAL_TEAMMATE_START && 
                    kind <= NTSDConstants.ITR_KIND_HEAL_TEAMMATE_END;
@@ -44,7 +67,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断是否为治疗敌人 Kind (810-816)
         /// </summary>
-        public static bool IsHealEnemyKind(int kind)
+        public bool IsHealEnemyKind(int kind)
         {
             return kind >= NTSDConstants.ITR_KIND_HEAL_ENEMY_START && 
                    kind <= NTSDConstants.ITR_KIND_HEAL_ENEMY_END;
@@ -53,7 +76,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断是否为所有者专属 Kind (880-886)
         /// </summary>
-        public static bool IsOwnerOnlyKind(int kind)
+        public bool IsOwnerOnlyKind(int kind)
         {
             return kind >= NTSDConstants.ITR_KIND_OWNER_ONLY_START && 
                    kind <= NTSDConstants.ITR_KIND_OWNER_ONLY_END;
@@ -62,7 +85,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 判断是否为所有者队伍 Kind (890-896)
         /// </summary>
-        public static bool IsOwnerTeamKind(int kind)
+        public bool IsOwnerTeamKind(int kind)
         {
             return kind >= NTSDConstants.ITR_KIND_OWNER_TEAM_START && 
                    kind <= NTSDConstants.ITR_KIND_OWNER_TEAM_END;
@@ -80,7 +103,7 @@ namespace NTSD.Extensions
         /// <param name="attacker">攻击者</param>
         /// <param name="target">目标</param>
         /// <returns>true 表示应该命中</returns>
-        public static bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
+        public bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
             if (attacker == null || target == null) return false;
             
@@ -126,7 +149,7 @@ namespace NTSD.Extensions
         /// 根据 StableId 获取 LivingObject
         /// TODO: 使用对象注册表替代 FindObjectsByType
         /// </summary>
-        private static LF2LivingObject GetAnimatorById(int stableId)
+        private LF2LivingObject GetAnimatorById(int stableId)
         {
             // 暂时使用 FindObjectsByType，后续应改为对象注册表
             //var animators = Object.FindObjectsByType<LF2LivingObject>(FindObjectsSortMode.None);
@@ -145,7 +168,7 @@ namespace NTSD.Extensions
         /// <summary>
         /// 处理 Kind 100099: 随机移动
         /// </summary>
-        public static void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr)
+        public void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr)
         {
             if (actor == null || actor.PS == null || itr == null) return;
             
@@ -175,7 +198,7 @@ namespace NTSD.Extensions
         /// 处理 Kind 100100: 输入控制跳帧
         /// 根据玩家输入跳转到不同帧
         /// </summary>
-        public static int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr)
+        public int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr)
         {
             //if (actor == null || actor._Character == null) return null;
             

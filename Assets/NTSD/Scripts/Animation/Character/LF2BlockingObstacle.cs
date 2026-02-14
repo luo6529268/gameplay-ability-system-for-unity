@@ -42,12 +42,12 @@ namespace NTSD.Animation
 
         private void OnEnable()
         {
-            LF2CollisionSystem.RegisterBlockingObstacle(this);
+            SimulationTickDriver.Instance?.World?.SceneQuery?.RegisterBlockingObstacle(this);
         }
 
         private void OnDisable()
         {
-            LF2CollisionSystem.UnregisterBlockingObstacle(this);
+            SimulationTickDriver.Instance?.World?.SceneQuery?.UnregisterBlockingObstacle(this);
         }
 
         internal bool IsValidForBlocking()

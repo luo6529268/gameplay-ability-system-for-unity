@@ -1,5 +1,6 @@
 using BeatEmUpTemplate2D;
 using MoreMountains.TopDownEngine;
+using NTSD.Animation.LF2Objects;
 using NTSD.Input;
 using NTSD.Simulation;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace NTSD.Game
     /// - 不直接驱动动画/状态，所有帧播放仍由 OnComboDetected → LF2CharacterAnimator 处理
     ///
     /// </summary>
-    public sealed class CharacterInputModule : ICharacterModule
+    public sealed class CharacterInputModule : ICharacterModule, ILF2Controller
     {
         private Character _hub;
         private bool _inputBound;
@@ -45,24 +46,19 @@ namespace NTSD.Game
         private bool _isAttacking;
         private bool _isJumping;
 
-        public bool IsLeft => _leftPressed;
-        public bool IsRight => _rightPressed;
-        public bool IsDown => _downPressed;
-        public bool IsTop => _topPressed;
-        public bool IsDef => _isDefending;
-        public bool IsAtt => _isAttacking;
-        public bool IsJump => _isJumping;
+        bool ILF2Controller.IsUp => _topPressed;
 
-        public int Dirv 
-        {
-            get
-            {
-                int dz = 0;
-                if (_topPressed) dz += 1;
-                if (_downPressed) dz -= 1;
-                return dz;
-            }
-        }
+        bool ILF2Controller.IsDown => _downPressed;
+
+        bool ILF2Controller.IsLeft => _leftPressed;
+
+        bool ILF2Controller.IsRight => _rightPressed;
+
+        bool ILF2Controller.IsAttack => _isAttacking;
+
+        bool ILF2Controller.IsJump => _isJumping;
+
+        bool ILF2Controller.IsDefend => _isDefending;
 
         public void ModuleSetup(Character character)
         {
@@ -296,6 +292,25 @@ namespace NTSD.Game
             }
         }
 
+        int ILF2Controller.Dirv()
+        {
+            int dz = 0;
+            if (_topPressed) dz += 1;
+            if (_downPressed) dz -= 1;
+            return dz;
+        }
+
+        (int dx, int dz) ILF2Controller.GetMoveInput()
+        {
+            int dx = 0, dz = 0;
+            {
+                if (CurrentMoveInput.x < -0.1f) dx -= 1;
+                if (CurrentMoveInput.x > 0.1f) dx += 1;
+                if (CurrentMoveInput.y < -0.1f) dz -= 1;
+                if (CurrentMoveInput.y > 0.1f) dz += 1;
+            }
+            return (dx, dz);
+        }
     }
 }
 

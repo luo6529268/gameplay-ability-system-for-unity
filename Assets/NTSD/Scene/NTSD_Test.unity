@@ -221,11 +221,10 @@ MonoBehaviour:
   DashSpeed: 24
   DashDuration: 0.15
   ExtraTargetCount: 3
-  FollowDampX: 5
-  FollowDampY: 3
-  ZoomPadding: 2
-  MinOrthoSize: 3
-  ZoomInSmooth: 0.4
+  FramingPadding: 2
+  MinOrthoSize: 2
+  ZoomOutSpeed: 20
+  ZoomInSpeed: 0.4
 --- !u!1 &1061911125
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,6 +775,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3739123081986728076, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3739123081986728076, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_Size.x
       value: 0.24

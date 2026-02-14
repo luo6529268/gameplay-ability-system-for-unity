@@ -52,6 +52,8 @@ namespace NTSD.Animation
             _timeout = timeoutFrames;
         }
 
+        public void OnClearCombo() => _combo = null;
+
         /// <summary>
         /// 对齐 FLF: 每 TU 递减 combo_buffer.timeout；归零后清理部分指令。
         /// </summary>

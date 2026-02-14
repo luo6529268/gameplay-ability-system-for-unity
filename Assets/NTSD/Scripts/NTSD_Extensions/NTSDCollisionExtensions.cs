@@ -1,43 +1,37 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
-using UnityEngine;
 
 namespace NTSD.Extensions
 {
     /// <summary>
     /// NTSD 碰撞系统扩展
-    /// 提供与 LF2CollisionSystem 集成的辅助方法
+    /// 提供碰撞流程的辅助方法
     /// </summary>
     public static class NTSDCollisionExtensions
     {
         /// <summary>
         /// 判断 ITR 是否为攻击类 Kind (包含 NTSD 扩展)
         /// </summary>
-        public static bool IsAttackKindExtended(int kind)
+        public static bool IsAttackKindExtended(int kind, LF2LivingObject context = null)
         {
-            // 原版 FLF kind
-            if (kind == 0 || kind == 4 || kind == 9 || kind == 15 || kind == 16)
-                return true;
-            
-            // NTSD 扩展: kind 800-896 (治疗/所有者相关)
-            if (NTSDItrKindHandler.IsNTSDAttackKind(kind))
-                return true;
-            
-            return false;
+            var kindService = ResolveKindService(context);
+            return kindService.IsAttackKind(kind);
         }
         
         /// <summary>
         /// 判断 ITR 是否应该命中目标 (考虑 NTSD 扩展 Kind 的目标过滤)
-        /// 在 LF2CollisionSystem.ProcessPostInteractionTick 的 Intersect 检测后调用
+        /// 在命中判定阶段的 overlap 检测后调用
         /// </summary>
         public static bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
         {
+            var kindService = ResolveKindService(attacker);
+
             // 原版 Kind 不做过滤
-            if (!NTSDItrKindHandler.IsNTSDAttackKind(kind))
+            if (!kindService.IsNTSDAttackKind(kind))
                 return true;
             
             // NTSD 扩展 Kind 需要目标过滤
-            return NTSDItrKindHandler.ShouldHitTarget(kind, attacker, target);
+            return kindService.ShouldHitTarget(kind, attacker, target);
         }
         
         /// <summary>
@@ -73,22 +67,23 @@ namespace NTSD.Extensions
         public static void ProcessControlItrs(LF2LivingObject actor)
         {
             if (actor == null || actor.Frame.D == null) return;
+            var kindService = ResolveKindService(actor);
             
             var itrs = actor.Frame.D.itrs;
             if (itrs == null || itrs.Count == 0) return;
             
             foreach (var itr in itrs)
             {
-                if (!NTSDItrKindHandler.IsNTSDControlKind(itr.kind)) continue;
+                if (!kindService.IsNTSDControlKind(itr.kind)) continue;
                 
                 switch (itr.kind)
                 {
                     case NTSDConstants.ITR_KIND_RANDOM_MOVE:
-                        NTSDItrKindHandler.ProcessRandomMove(actor, itr);
+                        kindService.ProcessRandomMove(actor, itr);
                         break;
                         
                     case NTSDConstants.ITR_KIND_INPUT_CONTROL:
-                        var targetFrame = NTSDItrKindHandler.ProcessInputControl(actor, itr);
+                        var targetFrame = kindService.ProcessInputControl(actor, itr);
                         if (targetFrame.HasValue)
                         {
                             actor.TransitionToFrame(targetFrame.Value, 0);
@@ -96,6 +91,11 @@ namespace NTSD.Extensions
                         break;
                 }
             }
+        }
+
+        private static INTSDItrKindService ResolveKindService(LF2LivingObject context)
+        {
+            return context?.Match?.ItrKindService;
         }
     }
 }

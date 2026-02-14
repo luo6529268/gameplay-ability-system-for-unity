@@ -81,7 +81,7 @@ namespace MoreMountains.TopDownEngine
         /// 对应 FLF 的 $.id_update(...) 方法
         /// </summary>
         public CharacterIdUpdate _IdUpdate { get; private set; }
-
+		public Transform _ModeTrans { get; private set; }
 		public AbilitySystemComponent _AbilitySystemComponent { get; private set; }
         public UnitSettings _UnitSetting { get; private set; }
         /// <summary>
@@ -213,8 +213,7 @@ namespace MoreMountains.TopDownEngine
 			_UnitSetting = this.GetComponent<UnitSettings>();
 			_AbilitySystemComponent = this.gameObject.GetComponent<AbilitySystemComponent>();
 			_controller = this.gameObject.GetComponent<TopDownController>();
-            _SpriteRenderer = this.gameObject.GetComponentInChildren<SpriteRenderer>();
-
+            _ModeTrans = this.gameObject.GetComponentInChildren<SpriteRenderer>().transform;
 
             _AbilitySystemComponent.InitWithPreset(1);
 
@@ -265,7 +264,6 @@ namespace MoreMountains.TopDownEngine
                 _LF2Character.ModuleInitialize(
 					spriteRenderer: _SpriteRenderer,
 					sprites: sprites,
-					groundTransform: this.transform,
 					baseLocalPosition: _SpriteRenderer.transform.localPosition
 				);
 			}

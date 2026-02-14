@@ -1,4 +1,6 @@
 using BeatEmUpTemplate2D;
+using Cysharp.Threading.Tasks;
+using FairyGUI;
 using MoreMountains.TopDownEngine;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
@@ -9,7 +11,9 @@ using NTSD.Simulation;
 using NTSD.Tools;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -65,8 +69,6 @@ namespace NTSD.Animation.LF2Objects
         private LF2ObjectRenderer _heldWeapon;
 
         // ========== Unity 组件引用 ==========
-        private List<Sprite> _sprites;
-        private Transform _groundTransform;
         private Vector3 _baseLocalPosition;
 
         // ========== 物理计算 ==========
@@ -96,17 +98,109 @@ namespace NTSD.Animation.LF2Objects
             // 基类字段初始化
             ItrRest = new LF2ItrRestTracker();
             PS = new PhysicsState();
-            Trans = new FrameTransistor();
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
             Health = new LF2Health();
             Sprite = new LF2Sprite();
-
-            // 设置帧转换回调
-            Trans.SetFrameTransitCallback(OnFrameTransit);
+            Trans = new FrameTransistor(this);
 
             // 初始化状态处理器
             InitializeStates();
+        }
+
+        // ========== ILF2Object 抽象方法实现 ==========
+
+        public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
+        {
+            // 角色通过 Character Hub 初始化，不使用此方法
+        }
+
+        public override void Reset()
+        {
+            ComboBuffer?.Reset();
+            _hitCounters?.Reset();
+            ItrRest?.Reset();
+            _heldWeapon = null;
+        }
+
+        public override void Destroy()
+        {
+            Reset();
+        }
+
+        // ========== 初始化（由 Character Hub 调用）==========
+
+        /// <summary>
+        /// 模块初始化（对应 LF2CharacterAnimator.ModuleInitialize）
+        /// </summary>
+        public void ModuleInitialize(SpriteRenderer spriteRenderer,List<Sprite> sprites,Vector3 baseLocalPosition)
+        {
+            _baseLocalPosition = baseLocalPosition;
+
+            // 初始化物理计算层
+            _mech = new CharacterMechanics();
+            Controller = _CharacterHub._CharacterInput;
+            _cachedIsPointWalkable = BoundaryWallManager.Instance != null ? BoundaryWallManager.Instance.IsPointWalkable : null;
+
+            // 初始化物理状态
+            PS.FromUnityPosition(_CharacterHub.transform.position);
+            PS.vx = 0;
+            PS.vy = 0;
+            PS.vz = 0;
+
+            // 初始化精灵模块
+            Sprite.Initialize(spriteRenderer, sprites);
+            AllowSwitchDir = true;
+
+        }
+
+        /// <summary>
+        /// 模块绑定（对应 LF2CharacterAnimator.ModuleBind）
+        /// </summary>
+        public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)
+        {
+            // 加载帧数据
+            FrameCache.Load(frameDataWrapper);
+
+            // 初始化帧信息
+            Frame.D = FrameCache.GetFrameDataById(0);
+            Frame.PN = 0;
+            Frame.N = 0;
+
+            // 重置模块
+            ComboBuffer?.Reset();
+            ItrRest?.Reset();
+            _hitCounters?.Reset();
+
+            // 绑定 mass
+            _mass = NTSDSpec.GetMassOrDefault(characterId);
+
+            // 绑定 OPoint Factory
+            if (ObjectPointModule != null && ObjectPointModule.Factory == null && LF2ObjectPointFactory.Instance != null)
+            {
+                ObjectPointModule.SetFactory(LF2ObjectPointFactory.Instance);
+            }
+        }
+
+        /// <summary>
+        /// 初始化角色属性
+        /// </summary>
+        public void Initialize(int maxHp, int maxMp)
+        {
+            CharacterStats.Initialize(maxHp, maxMp);
+            Health.HP = maxHp;
+            Health.MP = maxMp;
+            ComboBuffer.Reset();
+            HitCounters.Reset();
+            ItrRest.Reset();
+        }
+
+        /// <summary>
+        /// 绑定 OPoint Factory
+        /// </summary>
+        public void BindOPointFactory(LF2ObjectPointFactory factory)
+        {
+            ObjectPointModule.SetFactory(factory);
         }
 
         // ========== 状态机初始化 ==========
@@ -135,29 +229,12 @@ namespace NTSD.Animation.LF2Objects
             _states[LF2States.Burning] = State_Burning;
         }
 
-        protected override bool OnGenericStateEvent(string eventType, object eventData = null)
-        {
-            switch (eventType)
-            {
-                case "TU":
-                    return Generic_TU();
-                case "transit":
-                    return Generic_Transit();
-                case "frame":
-                    return Generic_Frame();
-                case "combo":
-                    return Generic_Combo(eventData as string);
-                default:
-                    return false;
-            }
-        }
-
         /// <summary>
         /// 通用状态处理器
         /// 对应 LF2 源码的 states.generic
         /// 处理所有状态共享的逻辑，如物理更新、输入缓冲、全局受击判定等
         /// </summary>
-        private bool GenericStateHandler(string eventType, object eventData)
+        protected override bool OnGenericStateEvent(string eventType, object eventData = null)
         {
             switch (eventType)
             {
@@ -179,24 +256,20 @@ namespace NTSD.Animation.LF2Objects
 
                 case "combo":
                     // 🎮 通用输入处理 (多键连招映射, 方向键处理) (对应 FLF character.js:191-215)
-                    return Generic_Combo( eventData as string);
+                    return Generic_Combo(eventData as string);
 
                 case "post_combo":
                     // 🛑 连招后处理 (清理缓存等) (对应 FLF character.js:217-220)
                     // TODO: 实现 pre_interaction() - 预处理交互 (武器拾取, 对象交互)
+                    Generic_PreInteraction();
                     return false;
 
                 case "state_exit":
                     // 🚪 状态退出清理 (清理连招缓冲) (对应 FLF character.js:221-228)
-                    return HandleGenericStateExit(character, eventData as string);
-
-                case "get_next_frame":
-                    // 获取下一帧，默认返回 null 让系统使用配置文件中的 next
-                    return false;
-
-                default:
-                    return false;
+                    return Generic_StateExit();
             }
+
+            return false;
         }
 
 
@@ -329,7 +402,7 @@ namespace NTSD.Animation.LF2Objects
             // A) fell_onto_ground（PS.y==0 && PS.vy>0）- 对齐 FLF js:115-126
             else if (PS.y == 0 && PS.vy > 0)
             {
-                var res = StateUpdate("fell_onto_ground",out int frameId);
+                var res = StateUpdate("fell_onto_ground", out int frameId);
                 if (res && frameId > 0)
                 {
                     TransitionToFrame(frameId, 15);
@@ -378,273 +451,1709 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
+        /// <summary>
+        /// 通用物理转换 (Transit)
+        /// 对应 FLF character.js:185-190
+        /// </summary>
         private bool Generic_Transit()
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, "transit", null);
+            // dynamics: position, friction, gravity
+            // 更新动态物理效果（位置、摩擦力、重力）
+            // 任何位置变更将在下一个时间单位(TU)更新到屏幕
+            // 更新武器位置，使其跟随角色移动
+            ApplyDynamics();
+            WPointUpdate();
+            return false;
         }
 
+        /// <summary>
+        /// 通用帧逻辑 (Frame)
+        /// 对应 FLF character.js:14-52
+        /// </summary>
         private bool Generic_Frame()
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, "frame", null);
+
+            // 处理生命值减少的逻辑
+            if (Frame.D.mp != 0)
+            {
+                // 检查当前帧是否有MP变化值
+                // 检查当前帧是否由前一帧的next属性触发
+
+                if (FrameCache.GetFrameDataById(Frame.PN).next == Frame.N)
+                {
+                    // 如果MP变化值为负数（消耗MP）
+                    if (Frame.D.mp <= 0)
+                    {
+                        // 如果不在F6模式（非特殊模式）
+
+                        // 记录MP使用量
+                        // 如果MP值小于0
+                        // 将MP值设为0
+                        // 触发受击动画帧
+
+                    }
+                }
+                else
+                {
+                    // 计算MP变化值（取模1000得到实际MP变化）
+                    int dmp = Frame.D.mp & 1000;
+                    float dhp = Mathf.Floor(Frame.D.mp / 1000) * 10;
+                    // 如果不在F6模式
+
+                    // 记录MP使用量
+                    // 处理伤害
+                }
+            }
+
+            // 2. OPoint (Object Point) 处理 - 用于生成武器、投射物
+            // 对应 FLF character.js:52
+            //ObjectPointModule.ProcessTransit(this);
+            return false;
         }
 
+        /// <summary>
+        /// 通用连招处理器 (Generic Combo)
+        /// 对应 FLF character.js line 191-215 的 generic case 'combo'
+        /// 
+        /// <para>工作流程：</para>
+        /// <list type="number">
+        /// <item>1. 处理单键输入 (硬编码)：如 left, right, jump 等基础移动逻辑。</item>
+        /// <item>2. 处理多键连招：通过 Tag 映射 (如 D>A 映射到 Tag "Fa")。</item>
+        /// <item>3. 调用 id_update：允许角色脚本覆盖通用逻辑 (id_update('generic_combo'))。</item>
+        /// <item>4. 处理方向切换：如输入 D>A 强制角色转向右侧。</item>
+        /// <item>5. 执行跳转：根据 Frame Data 中的 Tag 跳转到目标帧。</item>
+        /// </list>
+        /// </summary>
         private bool Generic_Combo(string combo)
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, "combo", combo);
+            if (string.IsNullOrEmpty(combo))
+                return false;
+
+            // === 1. 处理单键连招 (硬编码逻辑) ===
+            // 对应 FLF character.js:239-338 State 0 的 case 'combo' 部分逻辑
+            switch (combo)
+            {
+                case "left":
+                case "right":
+                case "left-left":
+                case "right-right":
+                    // 这些基础移动指令通常由 Standing/Walking 状态自行处理，通用逻辑直接返回
+                    return false;
+
+                default:
+                    // 特殊处理: Rudolf 的 DJA 变身
+                    if (combo == "DJA")
+                    {
+                        // TODO: Rudolf 变身检查逻辑
+                        // if (character.transform_character != null && character.transform_character.is_rudolf_transform) { ... }
+                    }
+                    break;
+            }
+
+            // === 2. 处理多键连招 (Tag 映射机制) ===
+            // 对应 FLF character.js:191-215
+
+            // Step 1: 将输入序列 (如 "D>A") 映射为内部 Tag (如 "Fa")
+            string tag = ComboConfig.GetComboTag(combo);
+            if (string.IsNullOrEmpty(tag))
+                return false;
+
+            // Step 2: 检查当前帧的数据中是否定义了该 Tag 的跳转目标 (hit_Fa: 123)
+            int targetFrame = Frame.D.Hit[tag];
+            if (targetFrame < 0)
+                return false;
+
+            // 检查连招是否有效
+            // Step 3: 尝试调用角色特定逻辑 (id_update) 进行拦截
+            // 对应 FLF: if (!$.id_update('generic_combo', K, tag))
+            //if (character._Character != null && character._Character._IdUpdate != null)
+            //{
+            //    if (character._Character._IdUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
+            //    {
+            //        return true;  // 角色特定逻辑已处理，不再执行默认跳转
+            //    }
+            //}
+
+            // 如果不是通用连招
+            // 获取连招方向
+            // Step 4: 处理连招的方向要求 (如 D>A 要求必须朝右)
+            string dir = ComboConfig.GetComboDirection(combo);
+            if (!string.IsNullOrEmpty(dir))
+            {
+                // 切换方向
+                SwitchDir(dir);
+            }
+
+            // 执行连招动画
+            // 返回成功状态
+            TransitionToFrame(targetFrame, LF2StateConstants.GenericComboWait);
+            StateReturnFrame = 1;
+            return true;
         }
 
+        private bool Generic_PreInteraction() 
+        {
+            LF2FrameData frame = FrameCache.GetFrameDataById(Frame.N);
+            var sceneQuery = Match?.SceneQuery;
+            var kindService = Match?.ItrKindService;
+            if (frame == null || sceneQuery == null) return false;
+            if (PS == null) return false;
+
+            var itrs = frame.itrs;
+            if (itrs == null || itrs.Count == 0) return false;
+
+            float spriteWidthPx = GetSpriteWidthPxForCollision();
+            if (spriteWidthPx <= 0f) return false;
+
+            var preItrs = ListPool<InteractionArea>.Get();
+            preItrs.Capacity = 4;
+
+            for (int i = 0; i < itrs.Count; i++)
+            {
+                var itr = itrs[i];
+                if (itr == null) continue;
+                if (!kindService.IsPreInteractionKind(itr.kind)) continue;
+                preItrs.Add(itr);
+            }
+
+            if (preItrs.Count == 0)
+            {
+                ListPool<InteractionArea>.Release(preItrs);
+                return false;
+            }
+
+
+            var itrVolumes = PS.GetItrVolumes(preItrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: NTSDGlobal.Default.Itr.ZWidth);
+            int count = Mathf.Min(preItrs.Count, itrVolumes.Count);
+            for (int i = 0; i < count; i++)
+            {
+                var itr = preItrs[i];
+                var vol = itrVolumes[i];
+
+                var candidates = sceneQuery.QueryBodies(vol, this);
+                if (candidates == null || candidates.Count == 0) continue;
+
+                for (int c = 0; c < candidates.Count; c++)
+                {
+                    var target = candidates[c];
+                    if (!CanPreInteractTarget(kindService, itr, target)) continue;
+
+                    if (!DispatchPreInteractionByKind(kindService, itr, target)) continue;
+
+                    ItrArestUpdate(itr);
+                    //target.ItrVrestUpdate(StableId, itr);
+                    ListPool<InteractionArea>.Release(preItrs);
+                    return true;
+                }
+            }
+
+            ListPool<InteractionArea>.Release(preItrs);
+            return false;
+        }
+
+        private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        {
+            if (itr == null || target == null) return false;
+            if (target == this) return false;
+            if (target.PS == null || target.Frame?.D == null) return false;
+            if (target.Health != null && target.Health.HP <= 0) return false;
+            if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
+            if (kindService == null) return false;
+
+            return true;
+        }
+
+        private bool DispatchPreInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        {
+            if (kindService == null) return false;
+
+            switch (itr.kind)
+            {
+                case 1:
+                case 3:
+                    return HandlePreInteractionKind(itr, target);
+                case 2:
+                    return HandlePreInteractionKind2(itr, target);
+                case 7:
+                    return HandlePreInteractionKind7(itr, target);
+                default:
+                    return false;
+            }
+        }
+
+        private bool HandlePreInteractionKind(InteractionArea itr, LF2LivingObject target)
+        {
+            if (target.Type != LF2ObjectType.Character)
+                return false;
+
+            if (itr.kind == 1 && target.GetState() == LF2States.Injured2 || itr.kind == 3) 
+            {
+                if (itr.arest != 0) 
+                {
+                
+                }
+            }
+
+
+            return false;
+        }
+
+        private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 2 placeholder
+            return false;
+        }
+
+        private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
+        {
+            // TODO: pre_interaction kind 7 placeholder
+            return false;
+        }
+
+        /// <summary>
+        /// 通用状态退出清理
+        /// 对应 FLF character.js:221-228
+        /// </summary>
+        private bool Generic_StateExit()
+        {
+            // 清除双击指令缓存 (防止状态切换后误触发跑动)
+            // 对应 FLF:222-227
+            switch (ComboBuffer?.Combo)
+            {
+                case "left-left":
+                case "right-right":
+                    ComboBuffer?.OnClearCombo();
+                    break;
+            }
+            return false;
+        }
         #endregion
 
         #region Specific State Handlers
 
-        // 状态 0: 站立
+        public override bool GetStatesSwitchDir(int stateId)
+        {
+            switch (stateId)
+            {
+                case LF2States.Standing:       // 站立：允许转身
+                case LF2States.Walking:        // 行走：允许转身
+                case LF2States.Jump:         // 跳跃：允许空中转身 (LF2机制)
+                case LF2States.Defending:     // 防御：允许转身
+                    return true;
+
+                case LF2States.Attack: // 攻击：锁定方向
+                case LF2States.Running: // 奔跑：锁定方向
+                case LF2States.Dash:// 冲刺：锁定方向
+                case LF2States.Rowing: // 划船：锁定方向
+                case LF2States.BrokenDefend:  // 防破：锁定方向
+                case LF2States.Catching:  // 抓人：锁定方向
+                case LF2States.BeingCaught:  // 被抓：锁定方向
+                case LF2States.Injured: // 受伤：锁定方向
+                case LF2States.Falling: // 跌倒：锁定方向
+                case LF2States.Frozen:// 冰冻：锁定方向
+                case LF2States.Lying: // 倒地：锁定方向
+                case LF2States.StopRunning: // 停跑：锁定方向
+                case LF2States.Injured2: // 受伤2：锁定方向
+                    break;
+
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// 站立状态处理器 (State 0)
+        /// 对应 FLF character.js:244-338
+        /// 处理角色的静止、基础按键响应
+        /// </summary>
         private bool State_Standing(string eventType, object eventData)
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
+            {
+                switch (eventType)
+                {
+                    case "frame":
+                        Log.Info("[State {0}] Event={1}", "Standing", eventType);
+                        // 检查是否持有重型武器，若是则切换到持重物站立帧 (Frame 12)
+                        // TODO: 需要武器系统
+                        return false;
+
+                    case "combo":
+                        // 站立状态的输入响应 (对应 FLF Line 250-338)
+                        string comboKey = eventData as string;
+                        Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "Standing", eventType,comboKey);
+                        // === 方向键与跳跃键处理 (FLF Line 253-272) ===
+                        switch (comboKey)
+                        {
+                            case "left":
+                            case "right":
+                            case "up":
+                            case "down":
+                            case "jump":
+                            case "":
+                            case null:
+                                // 检查是否有实际方向输入
+                                {
+                                    bool hasDx = Controller.IsLeft != Controller.IsRight;
+                                    bool hasDz = Controller.IsUp != Controller.IsDown;
+                                    if (hasDx || hasDz)
+                                    {
+                                        // 除非按下的是跳跃键，否则切换到行走状态
+                                        if (comboKey != "jump")
+                                        {
+                                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.WalkingStart, "方向键按下 -> 行走");
+                                            TransitionToFrame(LF2StandardFrames.WalkingStart, 5);
+                                        }
+
+                                        // 设置速度 (对应 FLF Line 265-270)
+                                        // 注意: FLF 在 Standing 状态不使用 xFactor (斜向减速)，只有 Walking 状态使用
+                                        var characterData = _FrameDataWrapper?.characterData;
+                                        if (characterData == null) return false;
+
+                                        if (hasDx) PS.vx = Dirh() * characterData.walking_speed;
+                                        PS.vz = Dirv() * characterData.walking_speedz;
+
+                                    }
+                                }
+                                break;
+                        }
+
+                        // === 动作键处理 ===
+                        switch (comboKey)
+                        {
+                            case "left-left":
+                            case "right-right":
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.RunningStart, "双击方向键 -> 奔跑");
+                                TransitionToFrame(LF2StandardFrames.RunningStart, LF2StateConstants.ComboTransitionWait);
+                                return true;
+
+                            case "def":
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Defend, "防御键 -> 防御");
+                                TransitionToFrame(LF2StandardFrames.Defend, LF2StateConstants.ComboTransitionWait);
+                                return true;
+
+                            case "jump":
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Jumping, "跳跃键 -> 跳跃");
+                                TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
+                                return true;
+
+                            case "att":
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Punch, "攻击键 -> 挥拳");
+                                // TODO: 武器逻辑 (轻重武器判定、投掷判定)
+
+                                // 随机选择挥拳动画 (60 或 65)
+                                int punchFrame = UnityEngine.Random.value < 0.5f ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
+                                TransitionToFrame(punchFrame, LF2StateConstants.ComboTransitionWait);
+                                return true;
+                        }
+
+                        break;
+                }
+                return false;
+            }
         }
 
-        // 状态 1: 行走
+
+        /// <summary>
+        /// 行走状态处理器 (State 1)
+        /// 对应 FLF character.js:341-400
+        /// 
+        /// <para>特性：</para>
+        /// <list type="bullet">
+        /// <item>在函数开头计算输入 (dx, dz)。</item>
+        /// <item>TU 事件中更新速度，包含斜向移动减速 (xFactor)。</item>
+        /// <item>Combo 事件处理转向和停止。</item>
+        /// </list>
+        /// </summary>
         private bool State_Walking(string eventType, object eventData)
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
+
+             (int dx, int dz) = Controller.GetMoveInput();
+
+            switch (eventType)
+            {
+                case "frame":
+                    // 循环播放行走动画 (5 -> 8 -> 5)
+                    Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "walking", eventType, eventData is string);
+                    FrameAniOscillate(LF2StandardFrames.WalkingStart, LF2StandardFrames.WalkingEnd);
+                    Trans.SetWait(_FrameDataWrapper.characterData.walking_frame_rate - 1);
+                    return false;
+
+                case "TU":
+                    // 移动速度应用 (对应 FLF Line 367-382)
+                    {
+                        var characterData = _FrameDataWrapper?.characterData;
+                        if (characterData == null) return false;
+
+                        // 斜向移动时的速度补偿系数 (约 0.7)
+                        var xfactor = 1 - (Dirv() != 0 ? 1 : 0) * (2f / 7f);
+
+                        if (dx != 0) PS.vx = Dirh() * characterData.walking_speed * xfactor;
+                        PS.vz = Dirv() * characterData.walking_speedz;
+
+                        // 如果完全停止且动画不在循环起点，重置回循环起点
+                        if (dx == 0 && dz == 0 && Trans.Next != LF2StandardFrames.LoopToStart)
+                        {
+                            Trans.SetNext(LF2StandardFrames.LoopToStart);
+                            Trans.SetWait(1, 1, 2);
+                        }
+                    }
+                    return false;
+
+                case "state_entry":
+                    Trans.SetWait(0);
+                    return false;
+
+                case "combo":
+                    // 行走中的输入处理
+                    string comboKey = eventData as string;
+
+                    // 1. 处理转向
+                    if (dx != 0 && dx != Dirh())
+                    {
+                        SwitchDir(PS.dir == "right" ? "left" : "right");
+                    }
+
+                    // 2. 停止移动时应用一次性减速 (Friction)
+                    if (dx == 0 && dz == 0 && !StateMem.ContainsKey("released"))
+                    {
+                        StateMem["released"] = true;
+                        // Step 2: 移除 unitActions.ApplyUnitFriction，摩擦力由 PS 系统处理
+                    }
+
+                    // 3. 按键处理委托给 StandingStateHandler (如跳跃、攻击逻辑相同)
+                    if (!string.IsNullOrEmpty(comboKey))
+                    {
+                        return State_Standing("combo", comboKey);
+                    }
+                    return false;
+
+                default:
+                    return false;
+            }
         }
 
-        // 状态 2: 奔跑
+        //        /// <summary>
+        //        /// 奔跑状态处理器 (State 2)
+        //        /// 对应 FLF character.js:403-486
+        //        /// <para>注意：Frame 事件没有 break，会穿透执行 TU 逻辑 (模拟 switch fallthrough)。</para>
+        //        /// </summary>
         private bool State_Running(string eventType, object eventData)
         {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 3: 攻击
-        private bool State_Attack(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 4: 跳跃
-        private bool State_Jump(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 5: 冲刺
-        private bool State_Dash(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 6: 划船
-        private bool State_Rowing(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 7: 防御
-        private bool State_Defending(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 8: 防御崩坏
-        private bool State_BrokenDefend(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 9: 抓取
-        private bool State_Catching(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 10: 被抓取
-        private bool State_BeingCaught(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 11: 受伤
-        private bool State_Injured(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 12: 跌倒
-        private bool State_Falling(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 13: 冰冻
-        private bool State_Frozen(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 14: 躺地
-        private bool State_Lying(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 15: 停止奔跑/混合状态
-        private bool State_StopRunning(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 16: 受伤2 (Dance of Pain)
-        private bool State_Injured2(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 17: 蓄力
-        private bool State_Charging(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        // 状态 18: 燃烧
-        private bool State_Burning(string eventType, object eventData)
-        {
-            // 桥接到 CharacterStates（渐进式迁移）
-            return CharacterStates.Instance.HandleStateEvent(this, eventType, eventData);
-        }
-
-        #endregion
-
-        // ========== ILF2Object 抽象方法实现 ==========
-
-        public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
-        {
-            // 角色通过 Character Hub 初始化，不使用此方法
-        }
-
-        public override void Reset()
-        {
-            ComboBuffer?.Reset();
-            _hitCounters?.Reset();
-            ItrRest?.Reset();
-            _heldWeapon = null;
-        }
-
-        public override void Destroy()
-        {
-            Reset();
-        }
-
-        // ========== 初始化（由 Character Hub 调用）==========
-
-        /// <summary>
-        /// 模块初始化（对应 LF2CharacterAnimator.ModuleInitialize）
-        /// </summary>
-        public void ModuleInitialize(SpriteRenderer spriteRenderer,List<Sprite> sprites,Transform groundTransform,Vector3 baseLocalPosition)
-        {
-            _sprites = sprites;
-            _groundTransform = groundTransform;
-            _baseLocalPosition = baseLocalPosition;
-
-            // 初始化物理计算层
-            _mech = new CharacterMechanics();
-            _cachedIsPointWalkable = BoundaryWallManager.Instance != null ? BoundaryWallManager.Instance.IsPointWalkable : null;
-
-            // 初始化物理状态
-            PS.FromUnityPosition(groundTransform.position);
-            PS.vx = 0;
-            PS.vy = 0;
-            PS.vz = 0;
-
-            // 初始化精灵模块
-            Sprite.Initialize(spriteRenderer, sprites);
-
-            AllowSwitchDir = true;
-        }
-
-        /// <summary>
-        /// 模块绑定（对应 LF2CharacterAnimator.ModuleBind）
-        /// </summary>
-        public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)
-        {
-            // 加载帧数据
-            FrameCache.Load(frameDataWrapper);
-
-            // 初始化帧信息
-            Frame.D = FrameCache.GetFrameDataById(0);
-            Frame.PN = 0;
-            Frame.N = 0;
-
-            // 重置模块
-            ComboBuffer?.Reset();
-            ItrRest?.Reset();
-            _hitCounters?.Reset();
-
-            // 绑定 mass
-            _mass = NTSDSpec.GetMassOrDefault(characterId);
-
-            // 绑定 OPoint Factory
-            if (ObjectPointModule != null && ObjectPointModule.Factory == null && LF2ObjectPointFactory.Instance != null)
             {
-                ObjectPointModule.SetFactory(LF2ObjectPointFactory.Instance);
+                switch (eventType)
+                {
+                    case "frame":
+                        Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "running", eventType, eventData is string);
+                        // 循环播放奔跑动画
+                        FrameAniOscillate(LF2StandardFrames.RunningStart, LF2StandardFrames.RunningEnd);
+                        if (_FrameDataWrapper?.characterData == null) return false;
+                        Trans.SetWait(_FrameDataWrapper.characterData.running_frame_rate);
+                        // ⚠️ 注意: 模拟 switch fallthrough，继续执行 TU
+                        goto case "TU";
+
+                    case "TU":
+                        // 维持奔跑速度
+                        {
+                            var xfactor = 1 - (Dirv() != 0 ? 1 : 0) * (1f / 7f);
+                            var characterData = _FrameDataWrapper?.characterData;
+                            if (characterData == null) return false;
+
+                            PS.vx = xfactor * Dirh() * characterData.running_speed;
+                            PS.vz = Dirv() * characterData.running_speedz;
+                        }
+                        return false;
+
+                    case "combo":
+                        string comboKey = eventData as string;
+
+                        if (!string.IsNullOrEmpty(comboKey))
+                        {
+                            // 1. 反向输入检测 -> 停止奔跑 (急停)
+                            if (comboKey == "left" || comboKey == "right" || comboKey == "left-left" || comboKey == "right-right")
+                            {
+                                string inputDir = comboKey.Split('-')[0];
+
+                                if (inputDir != PS.dir)
+                                {
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.StopRunning, "反向输入 -> 急停");
+                                    TransitionToFrame(LF2StandardFrames.StopRunning, 10);
+                                    return true;
+                                }
+                            }
+                            // 2. 奔跑防御
+                            else if (comboKey == "def")
+                            {
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", 102, "防御 -> 奔跑防御");
+                                TransitionToFrame(102, 10);
+                                return true;
+                            }
+                            // 3. 奔跑跳跃 -> 冲刺 (Dash)
+                            else if (comboKey == "jump")
+                            {
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.DashForward, "跳跃 -> 冲刺");
+                                TransitionToFrame(LF2StandardFrames.DashForward, 10);
+                                return true;
+                            }
+                            // 4. 奔跑攻击
+                            else if (comboKey == "att")
+                            {
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.RunAttack, "攻击 -> 奔跑攻击");
+                                TransitionToFrame(LF2StandardFrames.RunAttack, 10);
+                                return true;
+                            }
+                        }
+                        return false;
+
+                    default:
+                        return false;
+                }
             }
         }
 
         /// <summary>
-        /// 初始化角色属性
+        /// 攻击状态处理器 (State 3)
+        /// 对应 FLF character.js:489-549
+        /// 处理所有攻击动作 (普通、跳跃、冲刺攻击) 的通用逻辑
         /// </summary>
-        public void Initialize(int maxHp, int maxMp)
+        // 状态 3: 攻击
+        private bool State_Attack(string eventType, object eventData)
         {
-            CharacterStats.Initialize(maxHp, maxMp);
-            Health.HP = maxHp;
-            Health.MP = maxMp;
-            ComboBuffer.Reset();
-            HitCounters.Reset();
-            ItrRest.Reset();
+
+            switch (eventType)
+            {
+                case "frame":
+                    // 空中攻击保持逻辑: 如果攻击结束时还在空中，强制切回跳跃状态
+                    var D = Frame.D;
+                    if (D.next == LF2StandardFrames.LoopToStart && PS.vy < 0)
+                    {
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 3, "Attack", LF2StandardFrames.JumpingAir, "空中攻击结束 -> 返回跳跃");
+                        Trans.SetNext(LF2StandardFrames.JumpingAir);
+                    }
+                    return false;
+
+                case "hit_stop":
+                    // 命中停顿 (卡肉) 效果
+                    // 部分攻击帧 (如 86, 87, 91) 在命中时会延长当前帧时间
+                    if (CurrentFrameId == 86 || CurrentFrameId == 87 || CurrentFrameId == 91)
+                    {
+                        Trans.IncWait(1, 10);
+                        return true;
+                    }
+                    return false;
+
+                case "TU":
+                    // 范围攻击/骰子攻击 (Kind 10/11) 的特殊检测逻辑
+                    // 对应 FLF:511-547
+                    var frameDataTU = Frame.D;
+                    if (frameDataTU.itrs != null)
+                    {
+                        foreach (var itr in frameDataTU.itrs)
+                        {
+                            if ((itr.kind == 10 || itr.kind == 11) && Time.frameCount % 2 == 0)
+                            {
+                                // TODO: 实现场景查询系统，对范围内敌人应用 Frame 251 的 ITR
+                                break;
+                            }
+                        }
+                    }
+                    return false;
+
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
-        /// 绑定 OPoint Factory
+        /// 跳跃状态处理器 (State 4)
+        /// 对应 FLF js:552-602
         /// </summary>
-        public void BindOPointFactory(LF2ObjectPointFactory factory)
+        private bool State_Jump(string eventType, object eventData)
         {
-            ObjectPointModule.SetFactory(factory);
+            switch (eventType)
+            {
+                case "frame":
+                    // 标记 frameTU，用于 TU 事件中处理起跳物理
+                    SetStateMemory("frameTU", true);
+
+                    // 攻击锁定: 防止连续跳跃攻击 (Jump Attack 后有 2 帧锁定)
+                    if (Frame.PN == LF2StandardFrames.JumpAttack ||
+                        Frame.PN == LF2StandardFrames.JumpAttack + 1)
+                    {
+                        SetStateMemory("attlock", 2);
+                    }
+                    return false;
+
+                case "TU":
+                    // 1. 起跳速度设置 (Frame 211 -> 212)
+                    if (GetStateMemory("frameTU", out bool frameTUValue) && frameTUValue)
+                    {
+                        SetStateMemory("frameTU", false);
+                        if (Frame.N == LF2StandardFrames.JumpingAir &&
+                            Frame.PN == LF2StandardFrames.JumpingUp)
+                        {
+                            var (dx, dz) = Controller.GetMoveInput();
+                            var characterData = _FrameDataWrapper?.characterData;
+                            if (characterData == null) return false;
+
+                            // 应用跳跃速度
+                            PS.vx = dx * (characterData.jump_distance - 1);
+                            PS.vz = Dirv() * (characterData.jump_distancez - 1);
+                            PS.vy = characterData.jump_height;
+                        }
+                    }
+
+                    // 2. 更新攻击锁定计时器
+                    if (GetStateMemory("attlock", out int lockVal))
+                    {
+                        StateMem["attlock"] = lockVal - 1;
+                    }
+                    return false;
+
+                case "combo":
+                    string comboKey = eventData as string;
+                    // 跳跃攻击逻辑
+                    if ((comboKey == "att" || Controller.IsAttack) && !GetStateMemory("attlock", out int attlockValue))
+                    {
+                        if (Frame.N == LF2StandardFrames.JumpingAir)
+                        {
+                            if (false)
+                            {
+                                //持有武器的对象
+                                bool Hasdx = Controller.IsLeft != Controller.IsRight;
+                                if (Hasdx)
+                                {
+                                    // 空中投掷轻型武器
+                                }
+                                else if (false)
+                                {
+                                    // 轻型武器攻击
+                                }
+                            }
+                            else
+                            {
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 4, "Jump", LF2StandardFrames.JumpAttack, "跳跃攻击");
+                                TransitionToFrame(LF2StandardFrames.JumpAttack, 10);
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+            }
+            return false;
+
         }
+
+        /// <summary>
+        /// 冲刺状态处理器 (State 5)
+        /// 对应 FLF js:605-651
+        /// </summary>
+        private bool State_Dash(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_entry":
+                    // 从奔跑或蹲下进入冲刺时，设置初始冲刺速度
+                    if ((Frame.PN >= LF2StandardFrames.RunningStart &&
+                         Frame.PN <= LF2StandardFrames.RunningEnd) ||
+                        Frame.PN == LF2StandardFrames.Crouch)
+                    {
+                        var characterData = _FrameDataWrapper?.characterData;
+                        if (characterData == null) return false;
+
+                        PS.vx = Dirh() * (characterData.dash_distance - 1) * (Frame.N == LF2StandardFrames.DashForward ? 1 : -1);
+                        PS.vz = Dirv() * (characterData.dash_distancez - 1);
+                        PS.vy = characterData.dash_height;
+                    }
+                    return false;
+
+                case "combo":
+                    string comboKey = eventData as string;
+                    // 1. 冲刺攻击
+                    if (comboKey == "att" || Controller.IsAttack)
+                    {
+                        // 背后攻击
+                        if (false || Dirh() == (PS.vx > 0 ? 1 : -1)) // 非背向冲刺
+                        {
+                            //持有武器的对象
+                            if (false)
+                            {
+                                TransitionToFrame(LF2StandardFrames.DashWeaponAtck, 10);
+                            }
+                            else
+                            {
+                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 5, "Dash", LF2StandardFrames.DashAttack, "冲刺攻击");
+                                TransitionToFrame(LF2StandardFrames.DashAttack, 10);
+                            }
+                        }
+                        AllowSwitchDir = false;
+                        if (comboKey == "att")
+                            return true;
+                    }
+                    // 2. 冲刺转身
+                    if (comboKey == "left" || comboKey == "right")
+                    {
+                        if (comboKey != PS.dir)
+                        {
+                            if (Dirh() == (PS.vx > 0 ? 1 : -1))
+                            {
+                                // 转身
+                                if (Frame.N == LF2StandardFrames.DashForward)
+                                    TransitionToFrame(LF2StandardFrames.DashForward2, 0);
+
+                                if (Frame.N == LF2StandardFrames.DashBack)
+                                    TransitionToFrame(LF2StandardFrames.DashBack2, 0);
+
+                                SwitchDir(comboKey);
+                            }
+                            else
+                            {
+                                // 转向
+                                if (Frame.N == LF2StandardFrames.DashForward2)
+                                    TransitionToFrame(LF2StandardFrames.DashForward, 0);
+
+                                if (Frame.N == LF2StandardFrames.DashBack2)
+                                    TransitionToFrame(LF2StandardFrames.DashBack, 0);
+
+                                SwitchDir(comboKey);
+                            }
+                            return true;
+                        }
+
+                    }
+                    break;
+            }
+            return false;
+
+        }
+
+        /// <summary>
+        /// 爬起状态处理器 (state = 6)
+        /// 对应 FLF js:656-681
+        ///
+        /// 功能：处理被击飞后的爬起动作（减速下落）
+        /// 关键帧：
+        /// - 100: 正面爬起暂停
+        /// - 101: 正面爬起结束
+        /// - 108: 背面爬起暂停
+        /// - 109: 背面爬起结束
+        /// </summary>
+        private bool State_Rowing(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "TU":
+                    Log.Info("[State {0}:TU] ", eventType);
+
+                    // ✓ 垂直速度重置（对应 FLF Line 660-664）
+                    // 特定帧的重置垂直速度，使角色停止在空中
+                    if (CurrentFrameId == LF2StandardFrames.Rowing ||      // 100: 正面爬起
+                        CurrentFrameId == LF2StandardFrames.RowingBack)    // 108: 背面爬起
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", $"爬起暂停 Frame={CurrentFrameId}");
+                        PS.vy = 0;
+                    }
+                    return false;
+
+                case "frame":
+                    Log.Info("[State {0}:frame] ", eventType);
+
+                    // ✓ 等待时间设置（对应 FLF Line 667-671）
+                    // 延长爬起动作的持续时间
+                    if (CurrentFrameId == LF2StandardFrames.Rowing ||      // 100
+                        CurrentFrameId == LF2StandardFrames.RowingBack)    // 108
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", "设置爬起等待时间");
+                        Trans.SetWait(LF2StateConstants.RowingWaitTime);  // 1 帧
+                        return true;
+                    }
+                    return false;
+
+                case "fall_onto_ground":
+                    Log.Info("[State {0}:fall_onto_ground] ", eventType);
+
+                    // ✓ 落地处理（对应 FLF Line 674-679）
+                    // 落地时的状态转换：爬起结束 → 蹲姿
+                    if (CurrentFrameId == LF2StandardFrames.Rowing1 ||     // 101: 正面爬起结束
+                        CurrentFrameId == LF2StandardFrames.RowingBack1)   // 109: 背面爬起结束
+                    {
+                        Log.Info("爬起结束落地");
+                        Log.Info("TransitionTo: Frame {0} ({1})", LF2StandardFrames.Crouch, "落地 → 蹲姿");
+                        TransitionToFrame(LF2StandardFrames.Crouch, 0);  // 215: 蹲姿帧
+                        return true;
+                    }
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 防御状态处理器 (state = 7)
+        /// 对应 FLF js:684-695
+        /// 
+        /// 功能：处理防御相关逻辑
+        /// 关键帧：
+        /// - 110: 防御起始帧
+        /// - 111: 防御成功（受击时转入）
+        /// - 112: 防御被破（defend超过上限时转入）
+        /// </summary>
+        private bool State_Defending(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}", 7, "Defending", eventType);
+
+                    // ✓ 防御等待时间延长（对应 FLF Line 688-693）
+                    // 给予视觉反馈，让玩家感知到成功防御
+                    if (Frame.N == LF2StandardFrames.Defend1)  // 111: 防御成功帧
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 7, "Defending", "防御成功 → 延长等待时间");
+                        // 增加4帧等待时间（延长防御状态）
+                        Trans.IncWait(LF2StateConstants.DefendSuccessWaitBonus);
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// 防御被破状态处理器 (state = 8)
+        /// 对应 FLF js:698-719
+        ///
+        /// 功能：处理防御被破后的特殊移动逻辑
+        /// 关键机制：修复弱击倒移动时的方向问题
+        /// 问题：防御被破时，角色被击退方向可能与朝向方向相反
+        /// 解决：在空中或速度不足时，强制按帧定义的dvx设置速度
+        /// </summary>
+        private bool State_BrokenDefend(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "frame_force":
+                case "TU_force":
+                    Log.Info("[State {0}:{1}] Event={2}", 8, "BrokenDefend", eventType);
+
+                    // ✓ 强制移动方向修正（对应 FLF Line 702-717）
+
+                    var D = Frame.D;
+                    if (D.dvx != 0)
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 8, "BrokenDefend", $"防御被破 dvx={D.dvx} → 修正移动方向");
+                        if ((PS.vx > 0 ? 1 : -1) != Dirh())
+                        {
+                            float avx = PS.vx > 0 ? PS.vx : -PS.vx;
+                            float dirx = 2 * (PS.vx > 0 ? 1 : -1);
+                            if (PS.y < 0 || avx < D.dvx)
+                                PS.vx = dirx * D.dvx;
+
+                            if (D.dvx < 0)
+                                PS.vx -= dirx;
+
+                        }
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// 抓取状态处理器 (state = 9)
+        /// 对应 FLF js:722-853
+        ///
+        /// 功能：处理抓取敌人和投掷动作
+        /// 关键特性：
+        /// 1. 抓取计数器系统（counter 从43递减到0）
+        /// 2. 攻击次数记录（每次成功攻击延长抓取时间）
+        /// 3. 位置同步（每帧更新被抓对象位置到cpoint）
+        /// 4. 伤害处理（通过cpoint.injury）
+        /// 5. Z轴层级控制（cover参数）
+        /// 6. 方向控制（dircontrol参数）
+        /// 7. 投掷/攻击/跳跃动作（taction/aaction/jaction）
+        /// </summary>
+        private bool State_Catching(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_entry":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+
+                    // ✓ 初始化抓取状态（对应 FLF Line 570-573）
+                    StateMem["stateTU"] = true;
+                    StateMem["counter"] = 43;    // 初始计数43帧
+                    StateMem["attacks"] = 0;     // 攻击次数计数
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "初始化抓取状态 counter=43, attacks=0");
+                    return false;
+
+                case "state_exit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+
+                    // ✓ 清理抓取状态（对应 FLF Line 577-580）
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "Clear catching state");
+                    // TODO: 需要实现抓取系统
+                    // Catching = null;    // 清空抓取目标
+                    // Ps.Zz = 0;          // 重置Z轴覆盖
+                    return false;
+
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+
+                    // ✓ 抓取帧处理（对应 FLF Line 584-614）
+                    int frameId = CurrentFrameId;
+                    var D = Frame.D;
+
+                    // ==================== 特殊帧处理 ====================
+
+                    // 帧123（成功攻击）：增加attacks计数器，延长抓取时间3帧
+                    if (frameId == 123)
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "帧123 成功攻击 → 延长抓取时间");
+                        // TODO: 需要实现抓取系统后取消注释
+                        // StateMem["attacks"] = (int)StateMem["attacks"] + 1;  // 攻击次数+1
+                        // StateMem["counter"] = (int)StateMem["counter"] + 3;  // 延长3帧
+                        // Trans.SetWait(Trans.Wait() + 1);  // 增加等待1帧
+                        // return true;
+                    }
+
+                    // 帧233/234：减少等待时间（1帧）
+                    if (frameId == 233 || frameId == 234)
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", $"Frame {frameId} -> decrease wait");
+                        // TODO: 需要实现抓取系统后取消注释
+                        // Trans.SetWait(Trans.Wait() - 1);
+                        // return true;
+                    }
+
+                    // 帧240：Rudolf特殊变身
+                    if (frameId == 240)
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "帧240 Rudolf特殊变身");
+                        // TODO: 需要实现id_update机制
+                        // CallIdUpdate("rudolf_transform");
+                        // return true;
+                    }
+
+                    // ==================== 位置同步 ====================
+                    // 更新被抓取对象的位置到cpoint定义的相对位置
+                    // 对应 FLF Line 605-613
+
+                    // TODO: 需要实现抓取系统后取消注释
+                    // if (Catching != null && D.cpoint != null)
+                    // {
+                    //     // 计算抓点世界坐标
+                    //     Vector3 cpointWorldPos = transform.TransformPoint(
+                    //         new Vector3(D.cpoint.x, D.cpoint.y, D.cpoint.z)
+                    //     );
+                    //
+                    //     // 通知被抓对象更新位置
+                    //     Catching.caught_b(
+                    //         cpointWorldPos,           // 抓点世界坐标
+                    //         D.cpoint,         // cpoint数据
+                    //         unitActions.dir == DIRECTION.RIGHT ? "right" : "left",  // 朝向方向
+                    //         /* dirv() */              // 垂直方向（需要实现）
+                    //     );
+                    // }
+
+                    return false;
+
+                case "TU":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+
+                    // ✓ 抓取伤害与覆盖处理（对应 FLF Line 622-657）
+
+                    // TODO: 需要实现抓取系统后取消注释
+                    //
+                    // 完整逻辑（对应 FLF Line 622-657）：
+                    //
+                    // // 检查抓取状态有效性（双向验证）
+                    // if (Catching != null &&
+                    //     caught_cpointkind() == 1 &&           // 自身是抓取者
+                    //     Catching.caught_cpointkind() == 2)    // 对方是被抓者
+                    // {
+                    //     if ((bool)StateMem["stateTU"])
+                    //     {
+                    //         StateMem["stateTU"] = false;
+                    //
+                    //         var cpoint = Frame.D.cpoint;
+                    //
+                    //         // ==================== 处理伤害 ====================
+                    //         // 对应 FLF Line 632-637
+                    //         if (cpoint.injury != 0)
+                    //         {
+                    //             // 对被抓取对象造成伤害
+                    //             if (Catching.TakeDamage(cpoint.injury))
+                    //             {
+                    //                 // 延长等待时间（击中反馈）
+                    //                 Trans.SetWait(
+                    //                     Mathf.Min(Trans.Wait() + 1, 99)
+                    //                 );
+                    //             }
+                    //         }
+                    //
+                    //         // ==================== 处理覆盖（Z轴层级）====================
+                    //         // 对应 FLF Line 639-649
+                    //         int cover = 0;  // 默认值
+                    //         if (cpoint.cover != 0)
+                    //         {
+                    //             cover = cpoint.cover;
+                    //         }
+                    //
+                    //         if (cover == 0 || cover == 10)
+                    //         {
+                    //             Ps.Zz = 1;   // 在被抓者前面
+                    //         }
+                    //         else
+                    //         {
+                    //             Ps.Zz = -1;  // 在被抓者后面
+                    //         }
+                    //
+                    //         // ==================== 方向控制 ====================
+                    //         // 对应 FLF Line 651-655
+                    //         if (cpoint.dircontrol == 1)
+                    //         {
+                    //             // 允许玩家改变朝向
+                    //             if (_Character._CharacterInput.CurrentMoveInput.x < -0.1f)
+                    //             {
+                    //                 unitActions.TurnToDir(DIRECTION.LEFT);
+                    //             }
+                    //             else if (_Character._CharacterInput.CurrentMoveInput.x > 0.1f)
+                    //             {
+                    //                 unitActions.TurnToDir(DIRECTION.RIGHT);
+                    //             }
+                    //         }
+                    //     }
+                    // }
+
+                    return false;
+
+                case "post_combo":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+
+                    // 抓取计数器减少（FLF:669-685）
+                    // TODO: 实现抓取计数器递减和释放逻辑
+                    return false;
+
+                case "combo":
+                    // ✓ 抓取中的攻击与连招（对应 FLF Line 692-747）
+                    string comboKey = eventData as string;
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, Frame.D={4}", 9, "Catching", eventType, comboKey, CurrentFrameId);
+
+                    if (string.IsNullOrEmpty(comboKey))
+                        return false;
+
+                    // ==================== 攻击键处理 ====================
+                    if (comboKey == "att")
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "抓取中攻击 → 投掷/攻击动作");
+                        // 投掷/攻击动作处理（FLF:696-725）
+                        // TODO: 实现 cpoint.taction/aaction 投掷和攻击逻辑
+                        return true;
+                    }
+
+                    // ==================== 跳跃键处理 ====================
+                    if (comboKey == "jump")
+                    {
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "抓取中跳跃 → 跳跃动作");
+                        // 抓取跳跃动作（FLF:740-746）
+                        // TODO: 实现 cpoint.jaction 跳跃动作
+                    }
+
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 被抓取状态处理器 (state = 10)
+        /// 对应 FLF js:856-939
+        ///
+        /// 功能：处理被敌人抓取时的表现
+        /// 关键特性：
+        /// 1. 位置同步到抓取者的 cpoint
+        /// 2. 被投掷时的速度设置（throwvx/vy/vz）
+        /// 3. 方向处理（cover 参数控制）
+        /// 4. 投掷伤害记录（落地时生效）
+        /// 5. 抓取状态验证（双向检查）
+        /// </summary>
+        private bool State_BeingCaught(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_exit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "Clear being-caught state");
+                    // 清理被抓状态（FLF:781-787）
+                    // TODO: 实现抓取系统（清空抓取者引用、抓点数据、方向数据）
+                    return false;
+
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, CurrentFrameId);
+
+                    // ✓ 被抓帧处理（对应 FLF Line 792-794）
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "设置长时间等待（由抓取者控制）");
+                    StateMem["frameTU"] = true;
+                    Trans.SetWait(99);  // 长时间等待（由抓取者控制）
+                    return false;
+
+                case "TU":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, CurrentFrameId);
+
+                    // ✓ 被抓时的处理（对应 FLF Line 803-880）
+
+                    // ==================== 帧135时消除重力 ====================
+                    // 对应 FLF Line 804-807
+                    if (CurrentFrameId == 135)
+                    {
+                        // Step 2: 使用 PS.vy 替代 unitActions.yForce
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "帧135 暂停（消除重力）");
+                        PS.vy = 0;  // 暂停
+                    }
+
+                    // 被投掷：位置同步处理（FLF:809-880）
+                    // TODO: 实现抓取系统（双向验证、速度设置、位置同步、状态失效处理）
+
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 受伤状态处理器 (state = 11)
+        /// 对应 FLF js:942-960
+        /// 
+        /// 功能：处理硬直受伤的表现（不倒地）
+        /// 关键特性：
+        /// 1. 延长受伤动作的持续时间（给予视觉反馈）
+        /// 2. 受伤等级帧自动返回站姿
+        /// 3. 受伤等级：220/221（轻度）、222/223（中度）、224/225（重度）、226（超重）
+        /// </summary>
+        private bool State_Injured(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_entry":
+                    // ✓ 增加等待时间（对应 FLF Line 946-948）
+                    int currentWait = Trans.Wait;
+                    Trans.SetWait(Mathf.Min(currentWait + 1, 20));  // 上限20帧
+                    return false;
+
+                case "frame":
+                    // ✓ 受伤动画结束处理（对应 FLF Line 949-958）
+                    // 受伤结束帧（奇数帧 221/223/225）返回站姿
+                    int frameId = CurrentFrameId;
+                    if (frameId == LF2StandardFrames.Injured1 ||       // 221
+                        frameId == LF2StandardFrames.Injured3 ||       // 223
+                        frameId == LF2StandardFrames.Injured5)         // 225
+                    {
+                        Trans.SetNext(LF2StandardFrames.LoopToStart);  // 999
+                        return true;
+                    }
+
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 倒地状态处理器 (state = 12)
+        /// 对应 FLF js:963-1089
+        /// 
+        /// 这是一个高优先级状态，包含复杂的倒地逻辑：
+        /// 1. 基于垂直速度的动画状态机（上浮/下落不同帧序列）
+        /// 2. 爬起/直接躺地的判定（基于总速度）
+        /// 3. 倒地无敌时间管理（fall值减少）
+        /// 4. 按键起身逻辑（帧182/188 + fall<KO + hp>0）
+        /// 5. 摔落伤害结算（落地时生效）
+        /// 
+        /// 关键帧序列：
+        /// - 正面：180 → 181 → 182 → 183 / 185（上浮/下落）
+        /// - 背面：186 → 187 → 188 → 189 / 191（上浮/下落）
+        /// - 爬起/躺地判定在 fell_onto_ground 事件
+        /// </summary>
+        private bool State_Falling(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
+
+                    // 倒地动画状态机（FLF:969-1020）
+                    // TODO: 实现基于垂直速度的动画序列切换（需要effect.dvy系统）
+                    return false;
+
+                case "TU":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
+
+                    // fall值减少和倒地无敌时间（FLF:1038-1057）
+                    // TODO: 实现fall值减少系统（需要health.fall系统）
+                    return false;
+
+                case "combo":
+                    // ✓ 按连招键起身（对应 FLF Line 1059-1066）
+                    string comboKey = eventData as string;
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, Frame.D={4}", 12, "Falling", eventType, comboKey, CurrentFrameId);
+
+                    int frameId = CurrentFrameId;
+
+                    // 只在帧182/188（转折点）响应
+                    if (frameId == 182 || frameId == 188)
+                    {
+                        if (comboKey == "jump")
+                        {
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", $"Frame {frameId} jump getup");
+                            // TODO: 检查fall值和HP（需要health系统）
+                            // if (health.fall < GC.fall.KO && health.hp > 0)
+
+                            // 选择起身帧（正面/背面区别）
+                            int rowingFrame = (frameId == 182)
+                                ? LF2StandardFrames.Rowing       // 100: 正面起身
+                                : LF2StandardFrames.RowingBack;  // 108: 背面起身
+
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 12, "Falling", rowingFrame, "起身 → 爬起");
+                            TransitionToFrame(rowingFrame, 10);
+
+                            // TODO: 设置起身最小速度（需要velocity系统）
+                            // if (PS.vx != 0) PS.vx = 5 * sign(vx)
+                            // if (PS.vy == 0) PS.vy = 5 * sign(vy)
+                            // if (PS.vz != 0) PS.vz = 2 * sign(vz)
+
+                            return true;
+                        }
+                    }
+
+                    // 倒地期间屏蔽所有其他输入（FLF Line 1159）
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "倒地期间屏蔽输入");
+                    return true;
+
+                case "transit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
+
+                    // 爬起逻辑（FLF:1068-1082）
+                    // TODO: 实现爬起逻辑（需要速度系统）
+                    return false;
+
+                case "fell_onto_ground":
+                case "fall_onto_ground":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
+
+                    // 落地处理（FLF:1022-1036）
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "落地 → 爬起/躺地判定");
+                    // TODO: 实现爬起/躺地判定系统（需要velocity和throw_injury系统）
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 冰冻状态处理器 (state = 13)
+        /// 对应 FLF js:1097-1106
+        ///
+        /// 功能：处理冰冻效果
+        /// 关键特性：
+        /// 1. 离开冰冻状态时创建冰块碎裂效果
+        /// 2. 冰冻状态期间：
+        ///    - 角色完全停止（无法移动、攻击、连招）
+        ///    - 受到攻击时会碎裂（转入倒地状态）
+        /// 3. 关键帧：200（冰冻帧）
+        ///
+        /// 冰冻机制（来自 hit 函数）：
+        /// - effectnum = 3/30: 冰冻攻击
+        /// - 未冰冻 → 转到帧200（冰冻）
+        /// - 已冰冻 → 碎裂倒地（转到帧182）
+        /// - 强制丢弃武器
+        /// </summary>
+        private bool State_Frozen(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_exit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 13, "Frozen", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 13, "Frozen", "冰冻结束 → 创建碎裂效果");
+                    // 创建冰块碎裂效果（FLF:1101-1104）
+                    // TODO: 实现特效系统（ID 212 碎裂效果，音效 1/066）
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 躺地状态处理器 (state = 14)
+        /// 对应 FLF js:1113-1138
+        ///
+        /// 功能：处理落地后的躺地状态和死亡判定
+        /// 关键特性：
+        /// 1. state_entry：
+        ///    - 重置 fall 和 bdefend 值（清空临时状态）
+        ///    - 检测死亡（hp ≤ 0）并触发 die()
+        ///    - NPC 死亡时启动玩家闪烁计数（30帧后销毁）
+        /// 2. state_exit：
+        ///    - 爬起后获得 30 帧无敌时间
+        ///    - 启用透明效果提示玩家无敌状态
+        ///    - 设置 super 状态（超级护甲）
+        /// 3. 关键帧：
+        ///    - 230: 正面躺地
+        ///    - 231: 背面躺地
+        ///
+        /// 死亡流程（来自 generic 状态 TU 事件）：
+        /// - 死亡闪烁到 4 阶段：
+        ///   1. dead_blink_count = 0: 开启闪烁
+        ///   2. 0 < count < 30: 持续闪烁
+        ///   3. count >= 30: 关闭闪烁，隐藏精灵和影子
+        ///   4. count = -1: 销毁对象
+        /// </summary>
+        private bool State_Lying(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_entry":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 14, "Lying", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Reset state & death check");
+                    // 重置状态与死亡检测（FLF:1117-1129）
+                    // TODO: 实现角色属性系统（重置 fall/bdefend、死亡判定、NPC 死亡闪烁）
+                    return false;
+
+                case "state_exit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 14, "Lying", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Getup -> 30 frames invincible");
+                    // 爬起无敌效果（FLF:1130-1137）
+                    // TODO: 实现特效系统（30帧无敌、闪烁效果、super 状态）
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 综合状态处理器 (state = 15)
+        /// 对应 FLF js:1145-1223
+        ///
+        /// 功能：处理多种复杂状态（停止奔跑、蹲下、冲刺攻击、武器投掷等）
+        /// 关键特性：
+        /// 1. frame 事件：处理多种帧的特殊逻辑
+        ///    - 帧9: 重武器停止奔跑 → 检查重武器，转到帧12
+        ///    - 帧215: 蹲下 → 减少等待时间 1 帧
+        ///    - 帧219: 蹲下 → 调用 id_update 或根据前帧应用冲刺力
+        ///    - 帧54: 空中轻武器投掷结束 → 在空中时返回跳跃状态
+        ///    - 帧257: Rudolf 消失帧 → 调用变身逻辑
+        /// 2. combo 事件：蹲下二段跳（仅帧215）：
+        ///    - 防御键 → 转到帧102（奔跑防御）
+        ///    - 跳跃键 → 根据方向和速度决定跳跃类型：
+        ///      * 有方向输入 → 该方向跳跃（帧213）
+        ///      * 静止不动 → 垂直跳跃（帧210）
+        ///      * 有速度同向 → 前冲刺（帧213）
+        ///      * 有速度反向 → 后冲刺（帧214）
+        ///
+        /// 覆盖的状态类型：
+        /// - 停止奔跑（stop_running）
+        /// - 蹲下（crouch） 帧215
+        /// - 蹲下2（crouch2） 帧219
+        /// - 冲刺攻击（dash_attack）
+        /// - 轻武器投掷（light_weapon_thw）
+        /// - 重武器投掷（heavy_weapon_thw）
+        /// - 重武器停止奔跑（heavy_stop_run） 帧9
+        /// - 空中轻武器投掷（sky_lgt_wp_thw） 帧54
+        /// - 消失（disappear） 帧257（Rudolf 特有）
+        /// </summary>
+        private bool State_StopRunning(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}", 15, "Mixed", eventType);
+                    // 多帧特殊处理（FLF:1149-1188）
+                    int frameId = Frame.N;
+
+                    if (frameId == LF2StandardFrames.TreeJump2)
+                    {
+                        // 重武器停止奔跑
+                        // 检查是否持有重武器
+                    }
+                    else if (frameId == LF2StandardFrames.Crouch)  // 215
+                    {
+                        // 帧215: 蹲下 → 减少等待时间
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧215 蹲下 → 减少等待时间");
+                        Trans.IncWait(-1);
+                        return false;
+                    }
+                    else if (frameId == LF2StandardFrames.Crouch2)
+                    {
+                        // 蹲下
+                        if (!_CharacterHub._IdUpdate.TryInvokeGeneric(IdUpdateHooks.State15_Crouch))
+                        {
+                            switch (Frame.PN) // 上一帧编号
+                            {
+                                case LF2StandardFrames.Rowing5:
+                                    // 划船后
+                                    // 应用摩擦力
+                                    CharacterMechanics.UnitFriction(PS);
+                                    break;
+
+                                case LF2StandardFrames.DashBack: // 冲刺后
+                                case LF2StandardFrames.DashAttack:
+                                case LF2StandardFrames.DashAttack + 1:
+                                case LF2StandardFrames.DashAttack + 2: // 冲刺攻击
+                                                                       // 减少等待时间
+                                    Trans.IncWait(-1);
+                                    break;
+                            }
+                        }
+                    }
+                    else if (frameId == LF2StandardFrames.SkyLgtWpThw3)
+                    {
+                        // 帧54: 空中轻武器投掷结束 → 在空中时返回跳跃状态
+                        var D = Frame.D;
+                        if (D.next == LF2StandardFrames.LoopToStart && PS.y < 0)
+                        {
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧54 空中轻武器投掷结束 → 返回跳跃");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.JumpingAir, "空中投掷完成");
+                            Trans.SetNext(LF2StandardFrames.JumpingAir);  // 212
+                        }
+                    }
+                    else if (frameId == LF2StandardFrames.Disappear)
+                    {
+                        // 帧257: Rudolf 消失帧 → 调用变身逻辑
+
+                        // 其他特殊帧需要武器系统
+                    }
+                    break;
+                case "combo":
+                    // ✓ 蹲下二段跳（对应 FLF Line 1190-1221）
+                    string comboKey = eventData as string;
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}", 15, "Mixed", eventType, comboKey);
+
+                    // 只在蹲下帧215响应
+                    if (Frame.N == LF2StandardFrames.Crouch)  // 215
+                    {
+                        if (string.IsNullOrEmpty(comboKey))
+                            break;
+
+                        // 防御键 → 奔跑防御
+                        if (comboKey == "def")
+                        {
+                            Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "蹲下 + 防御 → 奔跑防御");
+                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", 102, "奔跑防御");
+                            TransitionToFrame(LF2StandardFrames.Rowing2, 10);
+                            return true;
+                        }
+
+                        // 跳跃键 → 4种跳跃类型
+                        if (comboKey == "jump")
+                        {
+                            var (dx, dz) = Controller.GetMoveInput();
+                            {
+                                // 1. 有方向输入 → 该方向跳跃
+                                if (dx != 0)
+                                {
+                                    Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", $"蹲下二段跳 dx={dx} → 方向跳跃");
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward, "方向跳跃");
+                                    TransitionToFrame(LF2StandardFrames.DashForward, 10);  // 213
+                                    SwitchDir(dx == 1 ? DIRECTION.RIGHT : DIRECTION.LEFT);
+                                }
+                                else if (PS.vx == 0)
+                                {
+                                    Trans.IncWait(2, 10, 99);
+                                    Trans.SetNext(LF2StandardFrames.Jumping, 10);
+                                }
+                                else if ((PS.vx > 0 ? 1 : -1) == Dirh())
+                                {
+                                    TransitionToFrame(LF2StandardFrames.DashForward, 10);  // 213
+                                }
+                                else
+                                {
+                                    Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "蹲下二段跳 → 前冲刺2");
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward2, "前冲刺2");
+                                    // 检查角色是否静止（无水平速度）
+                                    // 简化实现：直接跳到垂直跳跃
+                                    TransitionToFrame(LF2StandardFrames.DashForward2, 10);  // 214
+                                }
+                            }
+
+                            return true;
+                        }
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 受伤2状态处理器 (state = 16)
+        /// 对应 FLF js:1230-1235
+        ///
+        /// 功能：痛苦之舞（Dance of Pain）状态
+        /// 关键特性：
+        /// 1. 空实现：无任何特殊逻辑
+        /// 2. 所有行为由帧数据驱动（动画自动播放）
+        /// 3. 可能是预留状态或由角色特定逻辑覆盖
+        ///
+        /// 推测用途：
+        /// - 被抓取前的准备状态
+        /// - 或某些特殊受击动作的状态标记
+        /// - FLF 中也是空实现，表示所有逻辑都在帧数据中
+        /// </summary>
+        private bool State_Injured2(string eventType, object eventData)
+        {
+            // ✓ 无特殊事件处理（对应 FLF Line 1230-1235）
+            // FLF 中也是空实现，所有逻辑由帧数据驱动
+            return false;
+        }
+
+        /// <summary>
+        /// 蓄力状态处理器 (state = 17)
+        /// 用途：角色进行技能蓄力时的状态
+        /// 出现次数：16
+        /// </summary>
+        private bool State_Charging(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "state_entry":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 17, "Charging", eventType, CurrentFrameId);
+
+                    // ✓ 初始化蓄力状态
+                    StateMem["chargeTime"] = 0;
+                    StateMem["maxChargeTime"] = 60;  // 60帧 = 2秒（30fps）
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", "初始化蓄力 chargeTime=0, maxChargeTime=60");
+                    return false;
+
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 17, "Charging", eventType, CurrentFrameId);
+
+                    // ✓ 蓄力状态的帧处理
+                    // 蓄力等级判定和特效播放由外部系统处理
+                    return false;
+
+                case "TU":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 17, "Charging", eventType, CurrentFrameId);
+
+                    // ✓ 蓄力时间更新
+                    if (StateMem.ContainsKey("chargeTime"))
+                    {
+                        int chargeTime = (int)StateMem["chargeTime"];
+                        int maxChargeTime = (int)StateMem["maxChargeTime"];
+
+                        // 递增蓄力时间，但不超过上限
+                        if (chargeTime < maxChargeTime)
+                        {
+                            StateMem["chargeTime"] = chargeTime + 1;
+                            if (chargeTime % 10 == 0)  // 每10帧输出一次日志
+                            {
+                                Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", $"蓄力中 chargeTime={chargeTime}/{maxChargeTime}");
+                            }
+                        }
+                    }
+                    return false;
+
+                case "combo":
+                    // ✓ 蓄力中的输入处理
+                    string comboKey = eventData as string;
+                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, Frame.D={4}", 17, "Charging", eventType, comboKey, CurrentFrameId);
+
+                    // 任何按键输入都会结束蓄力状态
+                    // 具体的技能释放逻辑由技能系统处理
+                    if (!string.IsNullOrEmpty(comboKey))
+                    {
+                        int chargeTime = StateMem.ContainsKey("chargeTime") ? (int)StateMem["chargeTime"] : 0;
+                        Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", $"蓄力中断 按键={comboKey}, 蓄力时间={chargeTime}");
+                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 17, "Charging", LF2StandardFrames.Standing, "蓄力中断");
+                        // 返回站立状态，让技能系统接管
+                        TransitionToFrame(LF2StandardFrames.Standing, 10);
+                        return true;
+                    }
+                    return false;
+
+                case "state_exit":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 17, "Charging", eventType, CurrentFrameId);
+
+                    // ✓ 清理蓄力状态内存
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", "Clear charging state mem");
+                    StateMem.Remove("chargeTime");
+                    StateMem.Remove("maxChargeTime");
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 燃烧状态处理器 (state = 18)
+        /// 对应 FLF js:1242-1258
+        ///
+        /// 功能：处理燃烧效果
+        /// 关键特性：
+        /// 1. frame 事件：每帧创建燃烧特效（持续燃烧视觉效果）
+        /// 2. fall_onto_ground 事件：落地瞬间创建燃烧效果
+        /// 3. fell_onto_ground 事件：复用 State 12 的落地逻辑（弹起/躺地判定）
+        /// 4. 关键帧：203-206（燃烧落地帧）
+        ///
+        /// 燃烧机制（来自 hit 函数）：
+        /// - effectnum = 2/20/21/22/23: 火焰攻击
+        /// - 转到帧203（燃烧状态）
+        /// - 高级火焰（21/22/23）弱化投掷判定器
+        /// - 燃烧状态防止急火击中（effectnum=20/21）
+        /// - 燃烧状态21/22不会伤害队友
+        /// </summary>
+        private bool State_Burning(string eventType, object eventData)
+        {
+            switch (eventType)
+            {
+                case "frame":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "持续燃烧 → 每帧创建燃烧特效");
+                    // 每帧创建燃烧特效（FLF:1246-1249）
+                    // TODO: 实现特效系统（ID 302，持续模式）
+                    return false;
+
+                case "fall_onto_ground":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧落地 → 创建落地燃烧特效");
+                    // 落地时创建燃烧特效（FLF:1250-1252）
+                    // TODO: 实现特效系统（ID 302，一次性模式）
+                    return false;
+
+                case "fell_onto_ground":
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
+
+                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧倒地 → 复用State 12落地逻辑");
+                    // 复用State 12落地逻辑（FLF:1253-1256）
+                    return State_Falling("fell_onto_ground", eventData);
+
+                default:
+                    return false;
+            }
+        }
+
+        #endregion
+
 
         // ========== 核心生命周期（对应 FLF livingobject/character）==========
-
-        /// <summary>
-        /// TU Update - 每个时间单位的主循环
-        /// 对应 FLF livingobject.TU_update()
-        /// </summary>
-        public override void TUUpdate()
-        {
-            // 重置摩擦力
-            PS?.ResetFriction();
-
-            // TU 事件
-            CharacterStates.Instance.HandleStateEvent(this, "TU", null);
-        }
 
         /// <summary>
         /// 连招更新 - 对应 FLF character.combo_update()
@@ -675,38 +2184,52 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 物理+武器点更新
-        /// 对应 FLF transit 阶段的 mech.dynamics() + wpoint()
-        /// </summary>
-        public void TransitDynamicsAndWPoint()
-        {
-            ApplyDynamics();
-            WPointUpdate();
-        }
-
-        /// <summary>
-        /// Transit 阶段的物理和武器点处理（兼容 LF2CharacterAnimator）
-        /// </summary>
-        public override void Transit_DynamicsAndWPoint()
-        {
-            TransitDynamicsAndWPoint();
-        }
-
-        /// <summary>
         /// 应用物理动力学
         /// </summary>
         public void ApplyDynamics()
         {
-            LF2DynamicsApplier.Apply(
-                _character: _CharacterHub,
-                mechanics: _mech,
-                mass: _mass,
-                isPointWalkable: _cachedIsPointWalkable,
-                logWarning: _debugCollisionLog ? s => Log.Warn(s) : (Action<string>)null,
-                debugCollisionLog: _debugCollisionLog,
-                groundTransform: _groundTransform,
-                baseLocalPosition: _baseLocalPosition
+            float blockedMoveScale = Match?.SceneQuery?.TestBlockingXZ(this, PS.vx, PS.vz) == true ? 0.1f : 1f;
+
+            bool hasStageBounds = false;
+            LF2StageBoundsPx stageBoundsPx = default;
+            var boundsProvider = NTSD.LevelEditor.BoundaryWallManager.Instance;
+            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))
+            {
+                hasStageBounds = true;
+            }
+
+            var ctx = new CharacterMechanicsContext(
+                PS,
+                Frame.D,
+                GetSpriteWidthPxForCollision(),
+                hasStageBounds,
+                stageBoundsPx,
+                _mass,
+                 NTSDGlobal.Gameplay.MinSpeed,
+                NTSDGlobal.Gameplay.Gravity,
+                blockedMoveScale,
+                _cachedIsPointWalkable
             );
+
+            var result = _mech.Step(ctx);
+
+            if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
+            {
+                Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
+            }
+
+            // ground plane（Unity X/Y）写回
+            _CharacterHub.transform.position = new Vector3(
+                result.groundPlanePos.x,
+                result.groundPlanePos.y,
+                _CharacterHub.transform.position.z
+            );
+
+            //// 视觉高度偏移（Unity local Y）
+            _CharacterHub._ModeTrans.localPosition = _baseLocalPosition + new Vector3(0f, result.visualYOffset, 0f);
+
+            _CharacterHub.SetGrounding(_CharacterHub.transform.position.y, result.grounded);
+
         }
 
         /// <summary>
@@ -718,146 +2241,7 @@ namespace NTSD.Animation.LF2Objects
             WeaponPointModule?.ProcessTransit(this);
         }
 
-        // ========== 帧转换回调 ==========
-
-        /// <summary>
-        /// 帧转换回调（由 FrameTransistor 调用）
-        /// 对应 FLF trans.trans() 中的切帧逻辑
-        /// </summary>
-        private void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
-        {
-            Frame.PN = Frame.N;
-            Frame.N = targetFrameId;
-
-            LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
-            if (targetFrame == null)
-            {
-                Log.Warn("[LF2Character] Invalid frame ID: {0}", targetFrameId);
-                return;
-            }
-
-            bool isStateTrans = Frame.D?.state != targetFrame.state;
-            if (isStateTrans)
-            {
-                // 状态退出事件
-                CharacterStates.Instance.HandleStateEvent(this, "state_exit", ComboBuffer?.Combo);
-            }
-
-            Frame.D = targetFrame;
-
-            if (isStateTrans)
-            {
-                StateMem.Clear();
-
-                bool oldSwitchDir = AllowSwitchDir;
-                AllowSwitchDir = CharacterStates.Instance.GetStatesSwitchDir(Frame.D.state);
-
-                CharacterStates.Instance.HandleStateEvent(this, "state_entry", null);
-
-                if (!switchDirAfterTrans)
-                {
-                    if (AllowSwitchDir && !oldSwitchDir)
-                    {
-                        var input = _CharacterHub?._CharacterInput;
-                        if (input != null)
-                        {
-                            if (input.IsLeft)
-                                SetDirection(DIRECTION.LEFT);
-                            if (input.IsRight)
-                                SetDirection(DIRECTION.RIGHT);
-                        }
-                    }
-                }
-            }
-
-            if (switchDirAfterTrans)
-            {
-                DIRECTION currentDir = PS.dir == "left" ? DIRECTION.LEFT : DIRECTION.RIGHT;
-                SetDirection(currentDir == DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT);
-            }
-
-            FrameUpdateInternal();
-        }
-
-        /// <summary>
-        /// 帧更新（内部）
-        /// 对应 FLF frame_update()
-        /// </summary>
-        private void FrameUpdateInternal()
-        {
-            // 更新精灵
-            if (_sprites != null && Frame.D != null)
-            {
-                int picIndex = Frame.D.pic;
-                if (picIndex >= 0 && picIndex < _sprites.Count)
-                {
-                    Sprite.ShowPic(picIndex);
-                }
-            }
-
-            // 应用帧力
-            if (!CharacterStates.Instance.HandleStateEvent(this, "frame_force", null))
-            {
-                FrameForceInternal();
-            }
-
-            // 设置等待和下一帧
-            Trans.SetWait(Frame.D?.wait ?? 1, 99);
-            Trans.SetNext(Frame.D?.next ?? 0, 99);
-
-            // 状态 frame 事件
-            CharacterStates.Instance.HandleStateEvent(this, "frame", null);
-
-            // 播放音效
-            if (Frame.D != null && !string.IsNullOrEmpty(Frame.D.sound))
-            {
-                // TODO: 播放音效
-            }
-        }
-
-        /// <summary>
-        /// 帧力应用（内部）
-        /// 对应 FLF frame_force()
-        /// </summary>
-        private void FrameForceInternal()
-        {
-            if (Frame.D == null) return;
-            int dirv = _CharacterHub?._CharacterInput?.Dirv ?? 0;
-            LF2FrameForceApplier.Apply(PS, Frame.D, dirv);
-        }
-
         // ========== 方向控制 ==========
-
-        /// <summary>
-        /// 设置方向
-        /// </summary>
-        public override void SetDirection(DIRECTION direction)
-        {
-            // 表现层：翻转角色
-            if (_groundTransform != null)
-            {
-                _groundTransform.localRotation = (direction == DIRECTION.LEFT)
-                    ? Quaternion.Euler(0, 180, 0)
-                    : Quaternion.identity;
-            }
-
-            base.SetDirection(direction);
-        }
-
-        /// <summary>
-        /// 获取当前朝向
-        /// </summary>
-        public DIRECTION FacingDir
-        {
-            get
-            {
-                if (PS != null && !string.IsNullOrEmpty(PS.dir))
-                {
-                    return PS.dir == "left" ? DIRECTION.LEFT : DIRECTION.RIGHT;
-                }
-                return DIRECTION.RIGHT;
-            }
-        }
 
         // ========== 连招处理 ==========
 
@@ -1016,37 +2400,5 @@ namespace NTSD.Animation.LF2Objects
             Frame.PN = 0;
             Frame.N = 0;
         }
-
-        /// <summary>
-        /// 帧动画振荡（在指定帧范围内来回播放）
-        /// </summary>
-        public void FrameAniOscillate(int from, int to)
-        {
-            if (_animationInfo.frameIndex < from || _animationInfo.frameIndex > to)
-            {
-                _animationInfo.IsUp = true;
-                _animationInfo.frameIndex = from + 1;
-            }
-
-            if (_animationInfo.frameIndex < to && _animationInfo.IsUp)
-                Trans.SetNext(_animationInfo.frameIndex++);
-            else if (_animationInfo.frameIndex > from && !_animationInfo.IsUp)
-                Trans.SetNext(_animationInfo.frameIndex--);
-
-            if (_animationInfo.frameIndex == to)
-                _animationInfo.IsUp = false;
-            if (_animationInfo.frameIndex == from)
-                _animationInfo.IsUp = true;
-        }
-
-        /// <summary>
-        /// 动画信息（用于振荡动画）
-        /// </summary>
-        private struct AnimationInfo
-        {
-            public int frameIndex;
-            public bool IsUp;
-        }
-        private AnimationInfo _animationInfo;
     }
 }

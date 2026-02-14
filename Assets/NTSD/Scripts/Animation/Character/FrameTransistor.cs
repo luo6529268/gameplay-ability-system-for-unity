@@ -1,3 +1,4 @@
+using NTSD.Animation.LF2Objects;
 using System;
 using UnityEngine;
 
@@ -15,22 +16,13 @@ namespace NTSD.Animation
         private int lockout = 1;
         private bool switchDirAfterTrans;
 
-        // 帧转换回调（替代对 LF2CharacterAnimator 的直接依赖）
-        private Action<int, bool, int> _onFrameTransit;
-
+        LF2LivingObject _lF2LivingObject;
         /// <summary>
         /// 无参构造函数（用于 LF2LivingObject）
         /// </summary>
-        public FrameTransistor()
+        public FrameTransistor(LF2LivingObject lF2LivingObject)
         {
-        }
-
-        /// <summary>
-        /// 设置帧转换回调
-        /// </summary>
-        public void SetFrameTransitCallback(Action<int, bool, int> callback)
-        {
-            _onFrameTransit = callback;
+            _lF2LivingObject = lF2LivingObject;
         }
 
         public int Next => next;
@@ -146,7 +138,7 @@ namespace NTSD.Animation
             }
 
             // 调用帧转换回调
-            _onFrameTransit?.Invoke(next, switchDirAfterTrans, oldLock);
+            _lF2LivingObject?.OnFrameTransit(next, switchDirAfterTrans, oldLock);
             switchDirAfterTrans = false;
 
             // FLF 特例：oldlock 为 10 或 11 时，wait>0 额外减 1
