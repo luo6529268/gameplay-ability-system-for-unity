@@ -210,6 +210,7 @@ namespace NTSD.Animation
         //伤害值
         public int injury = 0;
         public int fall = 0;
+        public int vaction = 0;
         //攻击者休息帧数
         //攻击者打中人之后，自己要等几帧才能再次打人。 这是 LF2 的攻击频率限制机制
         public int arest = 0;
@@ -266,5 +267,15 @@ namespace NTSD.Animation
         public int hurtable = 0;
         public int throwinjury = 0;
         public int decrease = 0;
+        // NTSD 2.4 反汇编确认的额外字段
+        public int injury = 0;      // 抓取伤害
+        public int cover = 0;       // Z轴层级
+        public int aaction = 0;     // 攻击动作帧
+        public int jaction = 0;     // 跳跃动作帧
+        public int taction = 0;     // 投掷动作帧
+        public int daction = 0;     // 防御动作帧
+        public int throwvx = 0;     // 投掷X速度
+        public int throwvy = 0;     // 投掷Y速度
+        public int dircontrol = 0;  // 方向控制
     }
 }

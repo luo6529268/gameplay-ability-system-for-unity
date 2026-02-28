@@ -162,6 +162,9 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>匹配/世界句柄（对应 FLF $.match）</summary>
         public SimulationWorld Match => SimulationTickDriver.Instance?.World;
 
+        /// <summary>关联的渲染器（由子类 Init 时赋值，用于 logic→renderer 反向查找）</summary>
+        public LF2ObjectRenderer Renderer { get; protected set; }
+
         #endregion
 
         #region 声明字段 - 核心模块
@@ -201,7 +204,7 @@ namespace NTSD.Animation.LF2Objects
         public Dictionary<string, object> StateMem { get; protected set; } = new Dictionary<string, object>();
 
         /// <summary>抓取状态（对应 FLF $.catching）</summary>
-        public int Catching { get; set; } = 0;
+        public LF2LivingObject Catching { get; set; } = null;
 
         /// <summary>允许切换方向（对应 FLF $.allow_switch_dir）</summary>
         public bool AllowSwitchDir { get; set; } = true;
@@ -862,10 +865,37 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
+        /// <summary>
+        /// 受击处理（对应 FLF livingobject.prototype.hit）
+        /// 检查 vrest 冷却，触发受击状态更新
+        /// </summary>
+        public virtual bool Hit(InteractionArea itr, LF2LivingObject attacker, UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
+        {
+            // TODO: 完整的受击处理逻辑
+            // 1. 检查 vrest 冷却
+            // 2. 设置 vrest
+            // 3. 触发 state_update('hit', ...)
+            if (!ItrVrestTest(attacker.StableId)) return false;
+            ItrVrestUpdate(attacker.StableId, itr);
+            return true;
+        }
+
+        /// <summary>
+        /// 确认受击（对应 FLF livingobject.prototype.attacked）
+        /// 应用伤害和击退效果
+        /// </summary>
+        public virtual bool Attacked(InteractionArea itr, LF2LivingObject attacker)
+        {
+            // TODO: 完整的受击确认逻辑
+            // 1. 应用伤害
+            // 2. 应用击退速度 (dvx, dvy)
+            // 3. 切换受伤帧
+            return true;
+        }
+
         #endregion
 
         #region 功能逻辑 - 位置与数据查询
-
         /// <summary>
         /// 设置位置（对应 FLF livingobject.prototype.set_pos）
         /// </summary>

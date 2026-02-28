@@ -165,6 +165,16 @@ namespace NTSD.DatParser
                     case "hurtable": cpoint.hurtable = ParseInt(prop.Value); break;
                     case "throwinjury": cpoint.throwinjury = ParseInt(prop.Value); break;
                     case "decrease": cpoint.decrease = ParseInt(prop.Value); break;
+                    // NTSD 2.4 反汇编确认的额外字段
+                    case "injury": cpoint.injury = ParseInt(prop.Value); break;
+                    case "cover": cpoint.cover = ParseInt(prop.Value); break;
+                    case "aaction": cpoint.aaction = ParseInt(prop.Value); break;
+                    case "jaction": cpoint.jaction = ParseInt(prop.Value); break;
+                    case "taction": cpoint.taction = ParseInt(prop.Value); break;
+                    case "daction": cpoint.daction = ParseInt(prop.Value); break;
+                    case "throwvx": cpoint.throwvx = ParseInt(prop.Value); break;
+                    case "throwvy": cpoint.throwvy = ParseInt(prop.Value); break;
+                    case "dircontrol": cpoint.dircontrol = ParseInt(prop.Value); break;
                 }
             }
 

@@ -114,6 +114,8 @@ namespace NTSD.Animation.LF2Objects
 
             int state = GetState();
             if (state != LF2States.WeaponThrowing) return;
+
+            base.Interaction();
         }
     }
 }

@@ -141,6 +141,11 @@ namespace NTSD.Animation.LF2Objects
         public override void Interaction()
         {
             if (Team == 0) return;
+
+            int state = GetState();
+            if (state != State_HeavyWeaponInSky) return;
+
+            base.Interaction();
         }
     }
 }

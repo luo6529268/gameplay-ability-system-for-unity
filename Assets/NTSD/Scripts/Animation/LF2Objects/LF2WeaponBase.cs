@@ -73,6 +73,7 @@ namespace NTSD.Animation.LF2Objects
                 Pick(task.parent);
             }
 
+            Renderer = renderer;
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
@@ -336,20 +337,36 @@ namespace NTSD.Animation.LF2Objects
                 return specialAttack.Hit(itr, this);
             }
 
-            // TODO: character hit path placeholder
+            if (target is LF2Character character)
+            {
+                if (PS != null)
+                {
+                    var attackerPos = new Vector3(PS.x, PS.y, PS.z);
+                    return character.Hit(itr, this, attackerPos, default);
+                }
+            }
+
             return false;
         }
 
         protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 1 placeholder
-            return false;
+            if (HoldObj != null) return false;
+            if (!ItrArestTest()) return false;
+            if (Renderer == null) return false;
+            if (target is not LF2Character character) return false;
+            if (character.GetHeldWeapon() != null) return false;
+
+            Pick(target);
+            character.HoldWeapon(Renderer);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
         }
 
         protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 2 placeholder
-            return false;
+            return HandlePreInteractionKind1(itr, target);
         }
 
         protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)

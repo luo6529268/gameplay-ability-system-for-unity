@@ -16,6 +16,7 @@ namespace NTSD.Animation
 
         // 复用列表，减少 GC
         private readonly List<LF2LivingObject> _tmpResult = new List<LF2LivingObject>(16);
+        private readonly List<LF2LivingObject> _tmpItrResult = new List<LF2LivingObject>(16);
         private readonly List<LF2LivingObject> _tmpAllObjects = new List<LF2LivingObject>(32);
         private readonly List<PhysicsState.FlfVolume> _tmpActorBodies = new List<PhysicsState.FlfVolume>(8);
         private readonly List<PhysicsState.FlfVolume> _tmpItr14 = new List<PhysicsState.FlfVolume>(8);
@@ -62,6 +63,76 @@ namespace NTSD.Animation
             }
 
             return _tmpResult;
+        }
+
+        public List<LF2LivingObject> QueryItrs(in PhysicsState.FlfVolume vol, LF2LivingObject exclude, int itrKind, int excludeTeam = 0)
+        {
+            _tmpItrResult.Clear();
+            _world.GetAllLivingObjects(_tmpAllObjects);
+
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2LivingObject target = _tmpAllObjects[i];
+                if (target == exclude) continue;
+                if (target.PS == null || target.Frame?.D == null) continue;
+                if (excludeTeam != 0 && target.Team == excludeTeam) continue;
+
+                var itrs = target.Frame.D.itrs;
+                if (itrs == null || itrs.Count == 0) continue;
+
+                float spriteWidthPx = target.GetSpriteWidthPxForCollision();
+                if (spriteWidthPx <= 0f) continue;
+
+                bool matched = false;
+                for (int j = 0; j < itrs.Count; j++)
+                {
+                    if (!MatchItrKind(itrs[j].kind, itrKind)) continue;
+
+                    var itrVol = target.PS.GetItrVolume(itrs[j], target.Frame.D.centerx, target.Frame.D.centery, spriteWidthPx);
+                    if (CollisionUtil.Intersect(vol, itrVol))
+                    {
+                        _tmpItrResult.Add(target);
+                        matched = true;
+                        break;
+                    }
+                }
+            }
+
+            return _tmpItrResult;
+        }
+
+        // 对应 FLF global.js GC.match_itr_kind
+        private static readonly Dictionary<int, int[]> ItrTypeMap = new Dictionary<int, int[]>
+        {
+            { 2,  new[] { 2, 1, 4, 21, 5 } },
+            { 1,  new[] { 1, 21, 17 } },
+            { 4,  new[] { 4, 10, 19 } },
+            { 5,  new[] { 5, 19 } },
+            { 6,  new[] { 6, 18 } },
+            { 7,  new[] { 7, 4, 10 } },
+            { 9,  new[] { 9, 2 } },
+            { 10, new[] { 10, 1 } },
+            { 32, new[] { 32, 19 } },
+            { 33, new[] { 33, 19, 16 } },
+            { 34, new[] { 34, 10, 5, 14 } },
+            { 36, new[] { 36, 16 } },
+            { 39, new[] { 39, 10 } },
+            { 50, new[] { 50, 4, 18, 7, 21, 5, 14, 17 } },
+            { 51, new[] { 51, 2, 18, 7 } },
+            { 52, new[] { 52, 1, 2, 21 } },
+        };
+
+        private static bool MatchItrKind(int itrKind, int targetKind)
+        {
+            if (ItrTypeMap.TryGetValue(targetKind, out var types))
+            {
+                for (int i = 0; i < types.Length; i++)
+                {
+                    if (types[i] == itrKind) return true;
+                }
+                return false;
+            }
+            return itrKind == targetKind;
         }
 
         public bool TestBlockingXZ(LF2LivingObject actor, float vxPx, float vzPx)

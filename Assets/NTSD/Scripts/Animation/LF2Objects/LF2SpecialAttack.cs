@@ -63,6 +63,7 @@ namespace NTSD.Animation.LF2Objects
             InitializeVelocity(task);
             InitializeHealth();
 
+            Renderer = renderer;
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
@@ -456,7 +457,15 @@ namespace NTSD.Animation.LF2Objects
                 return specialAttack.Hit(itr, this);
             }
 
-            // TODO: character hit path placeholder
+            if (target is LF2Character character)
+            {
+                if (PS != null)
+                {
+                    var attackerPos = new Vector3(PS.x, PS.y, PS.z);
+                    return character.Hit(itr, this, attackerPos, default);
+                }
+            }
+
             return false;
         }
 

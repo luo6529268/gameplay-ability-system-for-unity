@@ -302,6 +302,31 @@ namespace NTSD.Animation
         }
 
         /// <summary>
+        /// 生成单个 itr 的体积（对应 FLF mech.volume(itr)）
+        /// </summary>
+        public FlfVolume GetItrVolume(
+            InteractionArea itr,
+            int centerx,
+            int centery,
+            float spriteWidthPx,
+            float itrZWidthPx = 0f)
+        {
+            bool facingLeft = dir == "left";
+            float localX = itr.x;
+            if (facingLeft)
+            {
+                localX = spriteWidthPx - itr.x - itr.w;
+            }
+
+            return new FlfVolume(
+                sx, sy, sz,
+                localX, itr.y,
+                itr.w, itr.h,
+                itr.zwidth != 0 ? itr.zwidth : itrZWidthPx
+            );
+        }
+
+        /// <summary>
         /// 重置摩擦力（每个 TU 开始时调用）
         /// 对应 FLF livingobject.js:114
         /// </summary>
