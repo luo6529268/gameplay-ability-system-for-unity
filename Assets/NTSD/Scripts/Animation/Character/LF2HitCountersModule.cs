@@ -36,6 +36,12 @@ namespace NTSD.Animation
         {
             Bdefend = 0;
         }
+
+        /// <summary>直接赋值（对应 FLF: $.health.bdefend = value）</summary>
+        public void SetBdefend(int value)
+        {
+            Bdefend = value;
+        }
     }
 }
 

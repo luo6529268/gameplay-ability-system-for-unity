@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "t": {
+      "command": "node",
+      "args": ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/mcp-server.cjs"]
+    },
+    "x": {
+      "command": "node",
+      "args": ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/codex-server.cjs"]
+    },
+    "g": {
+      "command": "node",
+      "args": ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/gemini-server.cjs"]
+    }
+  }
+}

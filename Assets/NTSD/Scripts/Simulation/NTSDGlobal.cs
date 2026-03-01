@@ -53,6 +53,18 @@ namespace NTSD.Simulation
             // FLF: GC.defend.break_limit
             public const int DefendBreakLimit = 60;
 
+            // FLF: GC.defend.injury.factor
+            public const float DefendInjuryFactor = 0.5f;
+
+            // FLF: GC.defend.absorb — lookup_abs 表，key=|ef_dvx| 阈值，value=吸收量
+            public static readonly IReadOnlyDictionary<int, float> DefendAbsorb = new Dictionary<int, float>
+            {
+                { 15, 5f },
+            };
+
+            // FLF: GC.effect.duration — 效果默认持续帧数
+            public const int EffectDuration = 20;
+
             // FLF: GC.fall.KO
             public const int FallKO = 70;
 

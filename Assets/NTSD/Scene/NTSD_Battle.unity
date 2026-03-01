@@ -1639,6 +1639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefabs:
   - {fileID: 4429830070162037901, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
+  - {fileID: 620192945}
   InitialSpawnPoint: {fileID: 1103227592}
   CurrentCheckpoint: {fileID: 0}
   PointsOfEntry: []
@@ -1985,6 +1986,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592756338}
   m_CullTransparentMesh: 1
+--- !u!114 &620192945 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4429830070162037901, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
+  m_PrefabInstance: {fileID: 1875297659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe81ad80cb743b408fa90b048ad597f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &629766207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2245,10 +2257,10 @@ MonoBehaviour:
   _polygons:
   - name: "\u591A\u8FB9\u5F62 1"
     vertices:
-    - {x: -14.556591, y: -9.448836}
-    - {x: 14.396268, y: -9.350985}
-    - {x: 14.358658, y: -2.6545281}
-    - {x: -14.535767, y: -2.6453733}
+    - {x: -14.360508, y: -9.301775}
+    - {x: 14.200186, y: -9.285624}
+    - {x: 14.179759, y: -2.7903104}
+    - {x: -14.356868, y: -2.882371}
     color: {r: 0, g: 1, b: 0, a: 0.3}
   _activePolygonIndex: 0
   _boundaryName: "\u5173\u5361\u8FB9\u754C"
@@ -5103,6 +5115,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4429830070162037901, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
+      propertyPath: InputID
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7092306386123694062, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_SortAtRoot
       value: 1
@@ -5165,11 +5181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8430560742145960417, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9
+      value: -16.94
       objectReference: {fileID: 0}
     - target: {fileID: 8430560742145960417, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.95
+      value: -5.21
       objectReference: {fileID: 0}
     - target: {fileID: 8430560742145960417, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5209,7 +5225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9143204340180286646, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6040,6 +6056,8 @@ GameObject:
   - component: {fileID: 2051450407}
   - component: {fileID: 2051450406}
   - component: {fileID: 2051450409}
+  - component: {fileID: 2051450411}
+  - component: {fileID: 2051450410}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: UICamera
@@ -6166,6 +6184,67 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &2051450410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051450405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64dadbb535084d4baa946f92cd947a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapMode: 1
+  smoothTime: 0.05
+  maxFollowSpeed: 60
+  padding: {x: 3, y: 3}
+  minZoom: 5
+  fixedViewport: 1
+  enableBoundsClamping: 1
+  mapBoundsWorld:
+    serializedVersion: 2
+    x: -14.4
+    y: -12.5
+    width: 28.7
+    height: 18.6
+  pixelsPerUnit: 100
+  manualTargets: []
+  appendManualTargets: 0
+--- !u!114 &2051450411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051450405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a81eaff0417ac44f985d42b65aff4fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fitCamera: {fileID: 2051450407}
+  padding: {x: 0, y: 0}
+  orientation: 2
+  enableFocus: 0
+  focusType: 0
+  focusPosition: {x: 0, y: 0, z: 0}
+  focusObject: {fileID: 0}
+  enableRectFit: 0
+  fitAreaCanvas: {fileID: 0}
+  fitArea: {fileID: 0}
+  fitPositions: []
+  fitPivots: []
+  fitMeshes: []
+  enableDebug: 1
+  drawFitFrustum: 1
+  fitFrustumColor: {r: 0, g: 1, b: 0, a: 1}
+  drawFitFrustumCenterLine: 1
+  centerLineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  drawClipPlane: 0
+  clipPlaneColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  clipPlanePercent: 1
 --- !u!1 &2075847264
 GameObject:
   m_ObjectHideFlags: 0

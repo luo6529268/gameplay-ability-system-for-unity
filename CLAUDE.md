@@ -336,3 +336,27 @@ Translate the *behavioral logic* and *physics math* from the reference source (F
   - 工作目录：确保 cd 参数指向正确且存在的目录
   - 错误处理：检查返回值的 success 字段，处理可能的错误
 
+---
+
+## Agent Routing（子代理路由规则）
+
+在本项目中，不同任务类型对应不同的子代理，**必须按以下规则路由**：
+
+| 任务类型 | 使用代理 | 说明 |
+|----------|----------|------|
+| 快速文件查找、定位 | `explore` | 单一目标搜索 |
+| FLF/LF2 源码分析、NTSD 模块探索 | `explore-medium` | 需要理解上下文的代码分析 |
+| 跨多个来源的深度对照分析 | `explore-high` | FLF vs LF2_19 vs NTSD 对照 |
+| C# 单文件或小范围实现 | `executor` | 标准功能实现 |
+| 复杂游戏逻辑重构、多文件改动 | `executor-high` | 状态机、物理系统等大型重构 |
+| Bug 分析、状态机追踪、逻辑溯源 | `architect-medium` | 调试与架构分析 |
+| 系统级架构决策、跨模块影响评估 | `architect` | 大型设计决策 |
+| Unity 编译错误、类型错误修复 | `build-fixer` | 构建问题快速修复 |
+| 代码改动后的快速质量检查 | `code-reviewer-low` | 编码完成后立即执行 |
+| UI / 菜单相关工作 | `designer` | 界面与交互 |
+
+**强制规则：**
+- 任何涉及 FLF 源码分析的任务，**必须**使用 `explore-medium` 或以上级别
+- 编码完成后，**必须**立即调用 `code-reviewer-low` 或使用 Codex review
+- 多文件联动改动（如新增 partial class、跨模块接口变更），**必须**使用 `executor-high`
+

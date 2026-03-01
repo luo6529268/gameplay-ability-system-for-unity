@@ -20,7 +20,30 @@
       "Bash(omc install --force --force-hooks)",
       "Bash(omc install --help)",
       "Bash(omc install --force)",
-      "Bash(omc --help)"
+      "Bash(omc --help)",
+      "WebSearch",
+      "Bash(claude mcp:*)",
+      "Bash(codex:*)",
+      "Bash(node:*)",
+      "Bash(claude.cmd mcp:*)",
+      "Bash(omc:*)",
+      "mcp__t__lsp_servers",
+      "mcp__t__state_list_active",
+      "mcp__t__notepad_read",
+      "mcp__x__list_jobs",
+      "mcp__g__list_jobs",
+      "Bash(python3:*)",
+      "Bash(py:*)",
+      "mcp__x__ask_codex",
+      "mcp__t__lsp_diagnostics_directory",
+      "mcp__t__lsp_diagnostics",
+      "mcp__t__python_repl",
+      "Bash(python:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "t",
+    "x",
+    "g"
+  ]
 }

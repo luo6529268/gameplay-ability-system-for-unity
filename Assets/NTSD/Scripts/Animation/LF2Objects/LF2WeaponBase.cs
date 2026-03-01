@@ -358,7 +358,7 @@ namespace NTSD.Animation.LF2Objects
             if (character.GetHeldWeapon() != null) return false;
 
             Pick(target);
-            character.HoldWeapon(Renderer);
+            character.HoldWeapon(this);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
             return true;

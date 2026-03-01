@@ -171,26 +171,70 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
             ""id"": ""3e025744-5390-4da3-9474-5e63b01d5d4b"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
                     ""id"": ""8ed810ba-af90-4a14-ac5f-70760bf71094"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""f39dd101-0e63-4b78-926f-9dd7b6eb44db"",
-                    ""path"": """",
+                    ""name"": ""UDLR"",
+                    ""id"": ""032ceaf3-2f5e-483f-b5bb-a9b13900b802"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
-                    ""isComposite"": false,
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""4db86c70-8317-4d48-b761-14700153dfaf"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""77d629a0-f828-42b0-a179-f7c714ecf42b"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5fb5f107-e4cb-4b0e-9fd2-bfb06b2495cc"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""15cf247e-1279-48b4-a60e-74ac584af82b"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -211,7 +255,7 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
         m_Player_1_Defend = m_Player_1.FindAction("Defend", throwIfNotFound: true);
         // Player_2
         m_Player_2 = asset.FindActionMap("Player_2", throwIfNotFound: true);
-        m_Player_2_Newaction = m_Player_2.FindAction("New action", throwIfNotFound: true);
+        m_Player_2_Move = m_Player_2.FindAction("Move", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -343,12 +387,12 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
     // Player_2
     private readonly InputActionMap m_Player_2;
     private List<IPlayer_2Actions> m_Player_2ActionsCallbackInterfaces = new List<IPlayer_2Actions>();
-    private readonly InputAction m_Player_2_Newaction;
+    private readonly InputAction m_Player_2_Move;
     public struct Player_2Actions
     {
         private @NTSDInputConfig m_Wrapper;
         public Player_2Actions(@NTSDInputConfig wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Player_2_Newaction;
+        public InputAction @Move => m_Wrapper.m_Player_2_Move;
         public InputActionMap Get() { return m_Wrapper.m_Player_2; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -358,16 +402,16 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_Player_2ActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_Player_2ActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
         }
 
         private void UnregisterCallbacks(IPlayer_2Actions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
         }
 
         public void RemoveCallbacks(IPlayer_2Actions instance)
@@ -403,6 +447,6 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
     }
     public interface IPlayer_2Actions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
     }
 }

@@ -100,6 +100,12 @@ namespace NTSD.Animation.LF2Objects
     {
         public int HP { get; set; } = 100;
         public int MP { get; set; } = 100;
+
+        /// <summary>累计受到的总伤害（对应 FLF $.health.hp_lost）</summary>
+        public int HPLost { get; set; } = 0;
+
+        /// <summary>HP 结算上限（对应 FLF $.health.hp_bound，随受伤递减）</summary>
+        public int HPBound { get; set; } = 100;
     }
 
     /// <summary>
@@ -214,6 +220,9 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>是否死亡（对应 FLF $.dead）</summary>
         public bool Dead { get; set; } = false;
+
+        /// <summary>最近一次造成受击的攻击者（对应 FLF $.itr.attacker）</summary>
+        public LF2LivingObject Attacker { get; set; } = null;
 
         #endregion
 
@@ -866,32 +875,81 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 受击处理（对应 FLF livingobject.prototype.hit）
-        /// 检查 vrest 冷却，触发受击状态更新
+        /// 受击处理（对应 FLF character.prototype.hit）
+        /// 基类仅执行 vrest 前置冷却检查（对应 FLF hit() 第一行 itr_vrest_test）。
+        /// 完整的受击逻辑（fall 累加、防御判定、状态切换、vrest 写回）全部在子类 override 中实现。
+        /// 注意：FLF 的 hit() 是独立的 prototype 方法，不经过 state_update 分发。
         /// </summary>
         public virtual bool Hit(InteractionArea itr, LF2LivingObject attacker, UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
-            // TODO: 完整的受击处理逻辑
-            // 1. 检查 vrest 冷却
-            // 2. 设置 vrest
-            // 3. 触发 state_update('hit', ...)
+            // 前置 vrest 冷却检查：对应 FLF character.js:1896 if (!$.itr_vrest_test(att.uid)) return false
+            // vrest 的实际写回（itr_vrest_update）由子类在确认 accepthit=true 后执行
             if (!ItrVrestTest(attacker.StableId)) return false;
-            ItrVrestUpdate(attacker.StableId, itr);
             return true;
         }
 
         /// <summary>
-        /// 确认受击（对应 FLF livingobject.prototype.attacked）
-        /// 应用伤害和击退效果
+        /// 攻击统计记录（对应 FLF character.prototype.attacked）
+        /// FLF 中 attacked() 仅做 stat.attack 统计，不含任何伤害/速度/帧切换逻辑。
+        /// 所有实际受击逻辑（伤害、击退、帧切换）均在 Hit() 内部完成。
+        /// 调用方式：target.Attacked(itr, attacker) 在 Hit() 返回 true 后调用。
         /// </summary>
         public virtual bool Attacked(InteractionArea itr, LF2LivingObject attacker)
         {
-            // TODO: 完整的受击确认逻辑
-            // 1. 应用伤害
-            // 2. 应用击退速度 (dvx, dvy)
-            // 3. 切换受伤帧
+            // 对应 FLF character.js:2161 - 仅记录攻击统计
+            // 子类可 override 以扩展统计逻辑（如 NPC 攻击归属）
             return true;
         }
+
+        /// <summary>
+        /// 伤害结算（对应 FLF character.prototype.injury）
+        /// 子类可 override（如 NPC 需要回调攻击者的 offset_attack）
+        /// </summary>
+        protected virtual void Injury(int inj)
+        {
+            if (inj <= 0 || Health == null) return;
+            Health.HP -= inj;
+            Health.HPLost += inj;
+            Health.HPBound -= Mathf.CeilToInt(inj / 3f);
+        }
+
+        /// <summary>
+        /// ITR kind 类型匹配（对应 FLF global.js GC.match_itr_kind）
+        /// 与 BruteForceSceneQuery.MatchItrKind 共享相同逻辑和查找表。
+        /// </summary>
+        public bool MatchItrKind(int itrKind, int targetKind)
+        {
+            if (s_itrTypeMap.TryGetValue(targetKind, out int[] types))
+            {
+                for (int i = 0; i < types.Length; i++)
+                {
+                    if (types[i] == itrKind) return true;
+                }
+                return false;
+            }
+            return itrKind == targetKind;
+        }
+
+        // 对应 FLF global.js GC.match_itr_kind 查找表（与 BruteForceSceneQuery 保持同步）
+        private static readonly Dictionary<int, int[]> s_itrTypeMap = new Dictionary<int, int[]>
+        {
+            { 2,  new[] { 2, 1, 4, 21, 5 } },
+            { 1,  new[] { 1, 21, 17 } },
+            { 4,  new[] { 4, 10, 19 } },
+            { 5,  new[] { 5, 19 } },
+            { 6,  new[] { 6, 18 } },
+            { 7,  new[] { 7, 4, 10 } },
+            { 9,  new[] { 9, 2 } },
+            { 10, new[] { 10, 1 } },
+            { 32, new[] { 32, 19 } },
+            { 33, new[] { 33, 19, 16 } },
+            { 34, new[] { 34, 10, 5, 14 } },
+            { 36, new[] { 36, 16 } },
+            { 39, new[] { 39, 10 } },
+            { 50, new[] { 50, 4, 18, 7, 21, 5, 14, 17 } },
+            { 51, new[] { 51, 2, 18, 7 } },
+            { 52, new[] { 52, 1, 2, 21 } },
+        };
 
         #endregion
 
