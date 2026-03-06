@@ -74,6 +74,8 @@ namespace NTSD.Animation
             if (au == 99) au = lockLevel;
             if (au >= lockLevel)
             {
+                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Lock",
+                    $"SetNext({value}) OK: lock {lockLevel}→{au}");
                 lockLevel = au;
                 lockout = outCount == 99 ? wait : outCount;
                 if (value < 0)
@@ -82,6 +84,12 @@ namespace NTSD.Animation
                     switchDirAfterTrans = true;
                 }
                 next = value;
+            }
+            else
+            {
+                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Lock",
+                    $"SetNext({value}) BLOCKED: au={au} < lock={lockLevel}",
+                    NTSD.Tools.Log.StateLogLevel.Warn);
             }
         }
 
@@ -113,6 +121,8 @@ namespace NTSD.Animation
         /// </summary>
         public void Trans()
         {
+            NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Trans", $"wait={wait} next={next} lock={lockLevel}");
+
             var oldLock = lockLevel;
             lockout--;
             if (lockout == 0) lockLevel = 0;
@@ -123,7 +133,11 @@ namespace NTSD.Animation
                 return;
             }
 
-            if (next == 0) return;
+            if (next == 0)
+            {
+                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Trans", "STUCK: next==0", NTSD.Tools.Log.StateLogLevel.Error);
+                return;
+            }
 
             if (next == 1000)
             {

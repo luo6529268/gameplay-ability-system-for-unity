@@ -143,6 +143,9 @@ namespace NTSD.Animation.LF2Objects
         {
             _baseLocalPosition = baseLocalPosition;
 
+            // 用 GameObject 名作为日志标识（可在 Inspector 改名来区分多角色）
+            Name = _CharacterHub?.gameObject.name ?? "Character";
+
             // 初始化物理计算层
             _mech = new CharacterMechanics();
             Controller = _CharacterHub._CharacterInput;
@@ -185,6 +188,12 @@ namespace NTSD.Animation.LF2Objects
             if (ObjectPointModule != null && ObjectPointModule.Factory == null && LF2ObjectPointFactory.Instance != null)
             {
                 ObjectPointModule.SetFactory(LF2ObjectPointFactory.Instance);
+            }
+
+            // 绑定 WPoint Factory
+            if (WeaponPointModule != null && WeaponPointModule.Factory == null && LF2WeaponPointFactory.Instance != null)
+            {
+                WeaponPointModule.SetFactory(LF2WeaponPointFactory.Instance);
             }
         }
 
@@ -287,6 +296,8 @@ namespace NTSD.Animation.LF2Objects
             string K = rawCombo;
             if (string.IsNullOrEmpty(K)) { K = null; }
 
+            Log.LogState(Name, "Combo", $"tick: buffer='{rawCombo}' state={Frame.D?.state} frame={Frame.N}");
+
             // 特殊处理：跳跃攻击组合
             if (rawCombo == "jump-att") { K = "jump"; }
 
@@ -294,9 +305,7 @@ namespace NTSD.Animation.LF2Objects
 
             bool CurStateResult = CurStateHandler?.Invoke("combo", K) ?? false;
             bool generalResult = false;
-            if (!CurStateResult)
-            {
-                generalResult = OnGenericStateEvent("combo", K);
+            if (!CurStateResult)            {                generalResult = OnGenericStateEvent("combo", K);
             }
 
             CurStateHandler?.Invoke("post_combo");
@@ -315,11 +324,8 @@ namespace NTSD.Animation.LF2Objects
             bool hasStageBounds = false;
             LF2StageBoundsPx stageBoundsPx = default;
             var boundsProvider = NTSD.LevelEditor.BoundaryWallManager.Instance;
-            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))
-            {
-                hasStageBounds = true;
+            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))            {                hasStageBounds = true;
             }
-
             var ctx = new CharacterMechanicsContext(
                 PS,
                 Frame.D,

@@ -38,7 +38,8 @@
       "mcp__t__lsp_diagnostics_directory",
       "mcp__t__lsp_diagnostics",
       "mcp__t__python_repl",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(mkdir:*)"
     ]
   },
   "enabledMcpjsonServers": [

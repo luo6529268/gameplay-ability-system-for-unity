@@ -428,6 +428,7 @@ namespace NTSD.Animation.LF2Objects
                     Trans.Trans();
 
                     _holdObj = null;
+                    (holder as LF2Character)?.HoldWeapon(null);  // 同步清空角色侧持有引用
                     result.Thrown = true;
                 }
 

@@ -144,14 +144,16 @@ namespace NTSD.Animation.LF2Objects
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Jumping, "跳跃键 -> 跳跃");
                                 if (IsHeavyWeapon())
                                 {
-                                    //                                return true;
-
-                                }
-                                else
-                                {
-                                    //TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
-                                    //                                return true;
-
+                                    if ((bool)Proper("heavy_weapon_jump"))
+                                    {
+                                        StateReturnFrame = 1;
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        TransitionToFrame((int)Proper("heavy_weapon_jump"), LF2StateConstants.ComboTransitionWait);
+                                        return true;
+                                    }
                                 }
 
                                 TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
@@ -253,6 +255,7 @@ namespace NTSD.Animation.LF2Objects
                     }
                     else
                         FrameAniOscillate(LF2StandardFrames.WalkingStart, LF2StandardFrames.WalkingEnd);
+
                     Trans.SetWait(_FrameDataWrapper.characterData.walking_frame_rate - 1);
                     return false;
 
@@ -315,11 +318,11 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        //        /// <summary>
-        //        /// 奔跑状态处理器 (State 2)
-        //        /// 对应 FLF character.js:403-486
-        //        /// <para>注意：Frame 事件没有 break，会穿透执行 TU 逻辑 (模拟 switch fallthrough)。</para>
-        //        /// </summary>
+        /// <summary>
+        /// 奔跑状态处理器 (State 2)
+        /// 对应 FLF character.js:403-486
+        /// <para>注意：Frame 事件没有 break，会穿透执行 TU 逻辑 (模拟 switch fallthrough)。</para>
+        /// </summary>
         private bool State_Running(string eventType, object eventData)
         {
             {
@@ -654,7 +657,7 @@ namespace NTSD.Animation.LF2Objects
                     // 1. 冲刺攻击
                     if (comboKey == "att" || Controller.IsAttack)
                     {
-                        if ((bool)Proper("dash_backattack") || Dirh() == (PS.vx > 0 ? 1 : -1))
+                        if (Dirh() == (PS.vx > 0 ? 1 : -1))
                         {
                             if (_heldWeapon != null && (bool)Proper(_heldWeapon.ObjectId, "attackable"))
                             {

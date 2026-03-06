@@ -154,7 +154,7 @@ namespace NTSD.Animation.LF2Objects
 
             // 2. OPoint (Object Point) 处理 - 用于生成武器、投射物
             // 对应 FLF character.js:52
-            //ObjectPointModule.ProcessTransit(this);
+            ObjectPointModule?.ProcessFrame(this);
             return false;
         }
 
@@ -207,8 +207,13 @@ namespace NTSD.Animation.LF2Objects
 
             // Step 2: 检查当前帧的数据中是否定义了该 Tag 的跳转目标 (hit_Fa: 123)
             int targetFrame = Frame.D.Hit[tag];
-            if (targetFrame < 0)
+            Log.LogState(Name, "Combo", $"combo='{combo}' → tag='{tag}' → Hit['{tag}']={targetFrame}");
+
+            if (targetFrame <= 0)   // 0 是缺省值（未定义），与 FLF JS 的 falsy 判断对齐
+            {
+                Log.LogState(Name, "Combo", $"BLOCKED: Hit['{tag}']={targetFrame} ≤ 0", Log.StateLogLevel.Warn);
                 return false;
+            }
 
             // 检查连招是否有效
             // Step 3: 尝试调用角色特定逻辑 (id_update) 进行拦截
@@ -233,6 +238,7 @@ namespace NTSD.Animation.LF2Objects
 
             // 执行连招动画
             // 返回成功状态
+            Log.LogState(Name, "Combo", $"→ TransitionToFrame({targetFrame})");
             TransitionToFrame(targetFrame, LF2StateConstants.GenericComboWait);
             StateReturnFrame = 1;
             return true;

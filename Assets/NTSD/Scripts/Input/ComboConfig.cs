@@ -89,20 +89,20 @@ namespace NTSD.Input
         {
             switch (comboName)
             {
-                case "def": return "hit_d";
-                case "jump": return "hit_j";
-                case "att": return "hit_a";
-                case "D<A": return "hit_Fa";
-                case "D>A": return "hit_Fa";
-                case "DvA": return "hit_Da";
-                case "D^A": return "hit_Ua";
-                case "D<J": return "hit_Fj";
-                case "D>J": return "hit_Fj";
-                case "DvJ": return "hit_Dj";
-                case "D^J": return "hit_Uj";
-                case "D<AJ": return "hit_Fj";
-                case "D>AJ": return "hit_Fj";
-                case "DJA": return "hit_ja";
+                 case "def": return "hit_d";
+                 case "jump": return "hit_j";
+                 case "att": return "hit_a";
+                 case "D<A": return "hit_Fa";
+                 case "D>A": return "hit_Fa";
+                 case "DvA": return "hit_Da";
+                 case "D^A": return "hit_Ua";
+                 case "D<J": return "hit_Fj";
+                 case "D>J": return "hit_Fj";
+                 case "DvJ": return "hit_Dj";
+                 case "D^J": return "hit_Uj";
+                 case "D<AJ": return "hit_Fj";
+                 case "D>AJ": return "hit_Fj";
+                 case "DJA": return "hit_ja";
                 default: return null;
             }
         }

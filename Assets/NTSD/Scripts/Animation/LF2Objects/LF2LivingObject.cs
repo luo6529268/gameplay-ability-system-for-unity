@@ -484,8 +484,9 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock) 
+        public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
         {
+            Log.LogState(Name, "Frame", $"{Frame.N} → {targetFrameId}");
             Frame.PN = Frame.N;
             Frame.N = targetFrameId;
 
@@ -554,7 +555,7 @@ namespace NTSD.Animation.LF2Objects
 
             Trans.SetWait(Frame.D.wait, 99);
             Trans.SetNext(Frame.D.next, 99);
-
+            Log.Info("下一帧：{0}", Frame.D.next);
             // 状态 frame 事件
             StateUpdate("frame");
 

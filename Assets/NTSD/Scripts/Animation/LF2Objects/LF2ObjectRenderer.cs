@@ -21,7 +21,8 @@ namespace NTSD.Animation.LF2Objects
         private SpriteRenderer _spriteRenderer;
 
         // ========== 逻辑层引用 ==========
-        private ILF2Object _logicObject;
+        // 所有实际对象都继承 LF2LivingObject，用其作为字段类型以访问 PS/Frame/Sprite
+        private LF2LivingObject _logicObject;
 
         // ========== 公开属性 ==========
         public ILF2Object LogicObject => _logicObject;
@@ -74,8 +75,11 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
-            _logicObject = logicObject;
+            _logicObject = logicObject as LF2LivingObject;
             _logicObject?.Init(task, this);
+            // Wire SpriteRenderer into the Sprite module so direction flips work.
+            // Sprites list is null until a sprite-loading system is built; ShowPic() will no-op.
+            _logicObject?.Sprite?.Initialize(_spriteRenderer, null);
         }
 
         /// <summary>
@@ -89,23 +93,35 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 更新 sprite（从 CurrentFrame.pic）
+        /// 更新 sprite（从 CurrentFrame.pic 和 PS.dir）
+        /// 对应 FLF sp.show_pic / sp.switch_lr
         /// </summary>
         private void UpdateSprite()
         {
-            //if (_animator?.CurrentFrame == null) return;
-            // TODO: 根据 CurrentFrame.pic 从资源加载 sprite 并设置到 _spriteRenderer
-            // 具体实现取决于资源管理系统
+            if (_logicObject == null) return;
+            var frame = _logicObject.Frame?.D;
+            if (frame == null) return;
+
+            _logicObject.Sprite?.ShowPic(frame.pic);
+            var ps = _logicObject.PS;
+            if (ps != null)
+                _logicObject.Sprite?.SwitchLR(ps.dir);
         }
 
         /// <summary>
-        /// 同步位置（从 Animator.ps 到 Transform）
+        /// 同步 Transform 位置（从 PS 像素坐标转换到 Unity 世界坐标）
+        /// FLF 坐标系：x → Unity X，z(深度) → Unity Y（地面），y(跳跃，负数向上) → Unity Y 偏移
         /// </summary>
         private void UpdatePosition()
         {
-            //if (_animator?.ps == null) return;
-            //var ps = _animator.ps;
-            //transform.position = new Vector3(ps.x, -ps.y, ps.z);
+            if (_logicObject == null) return;
+            var ps = _logicObject.PS;
+            if (ps == null) return;
+
+            const float ppu = 100f;
+            float worldX = ps.x / ppu;
+            float worldY = ps.z / ppu - ps.y / ppu;  // FLF y 为负时对象在空中，偏移为正
+            transform.position = new Vector3(worldX, worldY, transform.position.z);
         }
 
         // ========== 辅助方法 ==========
