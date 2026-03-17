@@ -23,25 +23,10 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         private bool Generic_TU()
         {
-            // 1. 消失效果状态机 (FLF:56-82)
-            // TODO: 需要特效系统
+            int tickIndex = SimulationTickDriver.Instance != null
+                ? SimulationTickDriver.Instance.CurrentTickIndex
+                : 0;
 
-            // 2. 死亡闪烁效果 (FLF:84-102)
-            // TODO: 需要特效系统
-
-            // 3. 状态更新与物理处理 (FLF:104-141)
-            // TODO: post_interaction, 落地检测等
-
-            // 4. 生命值自然恢复 (每12帧) (FLF:145-149)
-            // TODO: 需要 HP 系统
-
-            // 5. 治疗效果处理 (每8帧) (FLF:152-160)
-            // TODO: 需要效果系统
-
-            // 6. 魔法值自然恢复 (每?帧) (FLF:163-167)
-            // TODO: 需要 MP 系统
-
-            // 7. 状态恢复 (FLF:170-171)
             if (PS.y == 0 && PS.vy == 0 && Frame.N == LF2StandardFrames.JumpingAir && Frame.PN != LF2StandardFrames.JumpingUp)
             {
                 TransitionToFrame(999);
@@ -88,10 +73,46 @@ namespace NTSD.Animation.LF2Objects
                     }
                 }
             }
-            // TODO: 需要 fall/bdefend 系统 (如防御值随时间恢复)
 
-            // 8. 连击缓冲系统 (FLF:174-182)
-            // TODO: 需要连击缓冲系统
+            if (tickIndex % 12 == 0 && Health.HP >= 0 && Health.HP < Health.HPBound)
+            {
+                Health.HP++;
+                if (CharacterStats != null)
+                {
+                    CharacterStats.CurrentHP = Health.HP;
+                }
+            }
+
+            if (Health.HP >= 0 && Effect.Heal is int healAmount && healAmount > 0 && tickIndex % 8 == 0)
+            {
+                const int healSpeed = 8;
+                int appliedHeal = Mathf.Min(healSpeed, healAmount);
+                Health.HP = Mathf.Min(Health.HP + appliedHeal, Health.HPBound);
+                Effect.Heal = healAmount - appliedHeal;
+                if (CharacterStats != null)
+                {
+                    CharacterStats.CurrentHP = Health.HP;
+                }
+            }
+
+            int maxMp = CharacterStats != null && CharacterStats.MaxMP > 0
+                ? CharacterStats.MaxMP
+                : NTSDGlobal.Default.Health.MpFull;
+            if (tickIndex % 3 == 0 && Health.MP < maxMp)
+            {
+                int clampedHp = CharacterStats != null && CharacterStats.MaxHP > 0
+                    ? Mathf.Min(Health.HP, CharacterStats.MaxHP)
+                    : Mathf.Min(Health.HP, NTSDGlobal.Default.Health.HpFull);
+                int hpFull = CharacterStats != null && CharacterStats.MaxHP > 0
+                    ? CharacterStats.MaxHP
+                    : NTSDGlobal.Default.Health.HpFull;
+                int mpRecover = 1 + Mathf.FloorToInt((hpFull - clampedHp) / 100f);
+                Health.MP = Mathf.Min(Health.MP + mpRecover, maxMp);
+                if (CharacterStats != null)
+                {
+                    CharacterStats.CurrentMP = Health.MP;
+                }
+            }
 
             ComboBuffer?.ReduceTimeout();
 
@@ -119,41 +140,56 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         private bool Generic_Frame()
         {
-
-            // 处理生命值减少的逻辑
             if (Frame.D.mp != 0)
             {
-                // 检查当前帧是否有MP变化值
-                // 检查当前帧是否由前一帧的next属性触发
+                LF2FrameData previousFrame = FrameCache.GetFrameDataById(Frame.PN);
+                bool isNextTriggered = previousFrame != null && previousFrame.next == Frame.N;
 
-                if (FrameCache.GetFrameDataById(Frame.PN).next == Frame.N)
+                if (isNextTriggered)
                 {
-                    // 如果MP变化值为负数（消耗MP）
-                    if (Frame.D.mp <= 0)
+                    if (Frame.D.mp < 0)
                     {
-                        // 如果不在F6模式（非特殊模式）
+                        Health.MP += Frame.D.mp;
+                        if (CharacterStats != null)
+                        {
+                            CharacterStats.CurrentMP = Health.MP;
+                        }
 
-                        // 记录MP使用量
-                        // 如果MP值小于0
-                        // 将MP值设为0
-                        // 触发受击动画帧
+                        if (Health.MP < 0)
+                        {
+                            Health.MP = 0;
+                            if (CharacterStats != null)
+                            {
+                                CharacterStats.CurrentMP = 0;
+                            }
 
+                            if (Frame.D.hit_d > 0)
+                            {
+                                TransitionToFrame(Frame.D.hit_d);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    // 计算MP变化值（取模1000得到实际MP变化）
-                    int dmp = Frame.D.mp & 1000;
-                    float dhp = Mathf.Floor(Frame.D.mp / 1000) * 10;
-                    // 如果不在F6模式
+                    int dmp = Frame.D.mp % 1000;
+                    int dhp = Mathf.FloorToInt(Frame.D.mp / 1000f) * 10;
 
-                    // 记录MP使用量
-                    // 处理伤害
+                    Health.MP -= dmp;
+                    if (Health.MP < 0)
+                    {
+                        Health.MP = 0;
+                    }
+
+                    if (CharacterStats != null)
+                    {
+                        CharacterStats.CurrentMP = Health.MP;
+                    }
+
+                    Injury(dhp);
                 }
             }
 
-            // 2. OPoint (Object Point) 处理 - 用于生成武器、投射物
-            // 对应 FLF character.js:52
             ObjectPointModule?.ProcessFrame(this);
             return false;
         }

@@ -8,25 +8,24 @@ namespace NTSD.Animation
 {
     /// <summary>
     /// LF2 对象池（MonoBehaviour 单例）
-    /// 管理通用 LF2Object Prefab 的预实例化和复用
-    ///
-    /// 参考：FLF 游戏中除了 character 用特殊 prefab，特效和武器都用同一个 prefab
+    /// 管理 LF2ObjectRenderer 的复用，不依赖预设 Prefab。
+    /// 若 Inspector 中指定了 _lf2ObjectPrefab 则使用它，否则运行时动态创建 GameObject。
     /// </summary>
     public class LF2ObjectPool : MMSingleton<LF2ObjectPool>
     {
         // ========== 配置 ==========
         [Header("对象池配置")]
-        [SerializeField] private GameObject _lf2ObjectPrefab;  // 通用 Prefab
-        [SerializeField] private int _initialPoolSize = 50;    // 初始池大小
-        [SerializeField] private int _maxPoolSize = 200;       // 最大池大小
+        [SerializeField] private GameObject _lf2ObjectPrefab;  // 可选：自定义 Prefab，不填则运行时动态创建
+        [SerializeField] private int _initialPoolSize = 0;     // 初始预热数量，0 表示完全懒加载
+        [SerializeField] private int _maxPoolSize = 200;
 
         [Header("超时卸载配置")]
-        [SerializeField] private float _expireTimeSeconds = 120f;   // 超时时间：120 秒
-        [SerializeField] private float _checkIntervalSeconds = 10f; // 检查频率：每 10 秒
+        [SerializeField] private float _expireTimeSeconds = 120f;
+        [SerializeField] private float _checkIntervalSeconds = 10f;
 
         [Header("父节点配置")]
-        [SerializeField] private Transform _poolRoot;          // 未激活对象的父节点（预热/归还时）
-        [SerializeField] private Transform _activeRoot;        // 激活对象的父节点（使用时）
+        [SerializeField] private Transform _poolRoot;
+        [SerializeField] private Transform _activeRoot;
 
         // ========== 池数据结构 ==========
         private LinkedList<LF2ObjectRenderer> _availableObjects;
@@ -44,113 +43,101 @@ namespace NTSD.Animation
             _activeObjects = new HashSet<LF2ObjectRenderer>();
             _releaseTimeMap = new Dictionary<LF2ObjectRenderer, float>();
 
-            PrewarmPool();
+            for (int i = 0; i < _initialPoolSize; i++)
+                CreateNewObject();
         }
 
         // ========== 核心方法 ==========
 
         /// <summary>
-        /// 预热对象池（启动时调用）
-        /// </summary>
-        private void PrewarmPool()
-        {
-            for (int i = 0; i < _initialPoolSize; i++)
-            {
-                CreateNewObject();
-            }
-        }
-
-        /// <summary>
-        /// 创建新对象并加入池
+        /// 创建新对象：优先使用 Prefab，否则动态创建最小 GameObject。
         /// </summary>
         private LF2ObjectRenderer CreateNewObject()
         {
-            GameObject obj = Instantiate(_lf2ObjectPrefab, _poolRoot);
-            obj.SetActive(false);
-
-            var renderer = obj.GetComponent<LF2ObjectRenderer>();
-            if (renderer == null)
+            GameObject go;
+            if (_lf2ObjectPrefab != null)
             {
-                Log.Error("[LF2ObjectPool] Prefab missing LF2ObjectRenderer component");
-                Destroy(obj);
+                go = Instantiate(_lf2ObjectPrefab, _poolRoot);
+            }
+            else
+            {
+                go = new GameObject("LF2Object");
+                go.AddComponent<SpriteRenderer>();
+                go.AddComponent<LF2ObjectRenderer>();
+                if (_poolRoot != null)
+                    go.transform.SetParent(_poolRoot, false);
+            }
+
+            go.SetActive(false);
+
+            var r = go.GetComponent<LF2ObjectRenderer>();
+            if (r == null)
+            {
+                Log.Error("[LF2ObjectPool] GameObject missing LF2ObjectRenderer");
+                Destroy(go);
                 return null;
             }
 
-            _availableObjects.AddLast(renderer);
-            return renderer;
+            _availableObjects.AddLast(r);
+            return r;
         }
 
-        /// <summary>
-        /// 从池中获取对象
-        /// </summary>
+        /// <summary>从池中获取对象（懒加载）</summary>
         public LF2ObjectRenderer Get()
         {
-            LF2ObjectRenderer renderer;
+            LF2ObjectRenderer r;
 
-            // 如果池为空，创建新对象（如果未达上限）
             if (_availableObjects.Count == 0)
             {
                 if (_activeObjects.Count >= _maxPoolSize)
                 {
-                    Log.Warn("[LF2ObjectPool] Pool limit reached, cannot create more objects");
+                    Log.Warn("[LF2ObjectPool] Pool limit reached ({0})", _maxPoolSize);
                     return null;
                 }
-                renderer = CreateNewObject();
+                r = CreateNewObject();
             }
             else
             {
-                // 从链表头取出
-                renderer = _availableObjects.First.Value;
+                r = _availableObjects.First.Value;
                 _availableObjects.RemoveFirst();
             }
 
-            // 移到激活父节点并激活对象
-            if (_activeRoot != null)
-            {
-                renderer.transform.SetParent(_activeRoot, false);
-            }
-            renderer.gameObject.SetActive(true);
-            _activeObjects.Add(renderer);
+            if (r == null) return null;
 
-            return renderer;
+            if (_activeRoot != null)
+                r.transform.SetParent(_activeRoot, false);
+
+            r.gameObject.SetActive(true);
+            _activeObjects.Add(r);
+            return r;
         }
 
-        /// <summary>
-        /// 归还对象到池
-        /// </summary>
-        public void Release(LF2ObjectRenderer renderer)
+        /// <summary>归还对象到池</summary>
+        public void Release(LF2ObjectRenderer r)
         {
-            if (renderer == null) return;
+            if (r == null) return;
 
-            renderer.ResetState();
+            r.ResetState();
 
             if (_poolRoot != null)
-            {
-                renderer.transform.SetParent(_poolRoot, false);
-            }
+                r.transform.SetParent(_poolRoot, false);
 
-            _activeObjects.Remove(renderer);
-            _availableObjects.AddLast(renderer);
-            _releaseTimeMap[renderer] = Time.time;
+            _activeObjects.Remove(r);
+            _availableObjects.AddLast(r);
+            _releaseTimeMap[r] = Time.time;
         }
 
-        // ========== 调试信息 ==========
+        // ========== 超时卸载 ==========
 
         private void Update()
         {
             if (_availableObjects.Count <= _initialPoolSize)
             {
-                if (_releaseTimeMap.Count > 0)
-                {
-                    _releaseTimeMap.Clear();
-                }
+                _releaseTimeMap.Clear();
                 return;
             }
 
-            if (Time.time - _lastCheckTime < _checkIntervalSeconds)
-            {
-                return;
-            }
+            if (Time.time - _lastCheckTime < _checkIntervalSeconds) return;
             _lastCheckTime = Time.time;
 
             var node = _availableObjects.First;
@@ -159,19 +146,17 @@ namespace NTSD.Animation
                 var next = node.Next;
                 var obj = node.Value;
 
-                if (_releaseTimeMap.TryGetValue(obj, out float releaseTime))
+                if (_releaseTimeMap.TryGetValue(obj, out float t) &&
+                    Time.time - t >= _expireTimeSeconds)
                 {
-                    if (Time.time - releaseTime >= _expireTimeSeconds)
-                    {
-                        _availableObjects.Remove(node);
-                        _releaseTimeMap.Remove(obj);
-                        Destroy(obj.gameObject);
+                    _availableObjects.Remove(node);
+                    _releaseTimeMap.Remove(obj);
+                    Destroy(obj.gameObject);
 
-                        if (_availableObjects.Count <= _initialPoolSize)
-                        {
-                            _releaseTimeMap.Clear();
-                            break;
-                        }
+                    if (_availableObjects.Count <= _initialPoolSize)
+                    {
+                        _releaseTimeMap.Clear();
+                        break;
                     }
                 }
 
@@ -179,12 +164,7 @@ namespace NTSD.Animation
             }
         }
 
-        /// <summary>
-        /// 获取池状态（调试用）
-        /// </summary>
-        public string GetPoolStatus()
-        {
-            return $"Available: {_availableObjects.Count}, Active: {_activeObjects.Count}";
-        }
+        public string GetPoolStatus() =>
+            $"Available: {_availableObjects.Count}, Active: {_activeObjects.Count}";
     }
 }
