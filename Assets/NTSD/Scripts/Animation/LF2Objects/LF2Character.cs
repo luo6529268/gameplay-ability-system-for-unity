@@ -83,6 +83,10 @@ namespace NTSD.Animation.LF2Objects
         protected int? caught_throwinjury;
         protected int caught_decrease_counter;  // 抓取递减计数器（被抓者按键时递减，归零释放）
 
+        // ========== 死亡闪烁计数器（对应 FLF $.counter.dead_blink_count）==========
+        // -1 = 不执行；0 = 开始；1~29 = 持续；>=30 = 结束销毁
+        private int _deadBlinkCount = -1;
+
         // ========== 调试 ==========
 
         private bool _debugCollisionLog = false;

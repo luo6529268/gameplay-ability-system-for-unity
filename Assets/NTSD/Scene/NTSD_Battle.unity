@@ -6233,7 +6233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64dadbb535084d4baa946f92cd947a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableCameraFit: 0
+  enableCameraFit: 1
   snapMode: 1
   smoothTime: 0.05
   maxFollowSpeed: 60

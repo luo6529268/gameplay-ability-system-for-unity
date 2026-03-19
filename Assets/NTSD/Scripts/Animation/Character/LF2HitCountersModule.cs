@@ -19,7 +19,7 @@ namespace NTSD.Animation
 
         public void AddFall(int amount)
         {
-            Fall += Mathf.Abs(amount);
+            Fall = Mathf.Max(0, Fall + amount);
         }
 
         public void ResetFall()
@@ -29,7 +29,7 @@ namespace NTSD.Animation
 
         public void AddBdefend(int amount)
         {
-            Bdefend += Mathf.Abs(amount);
+            Bdefend = Mathf.Max(0, Bdefend + amount);
         }
 
         public void ResetBdefend()

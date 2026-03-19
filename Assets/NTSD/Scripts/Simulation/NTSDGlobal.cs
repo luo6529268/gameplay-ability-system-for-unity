@@ -65,8 +65,33 @@ namespace NTSD.Simulation
             // FLF: GC.effect.duration — 效果默认持续帧数
             public const int EffectDuration = 20;
 
-            // FLF: GC.fall.KO
-            public const int FallKO = 70;
+            // FLF global.js:217  GC.fall.KO = 60
+            public const int FallKO = 60;
+
+            // FLF global.js:218-226  GC.fall.wait180 = { 7:1, 9:2, 11:3, 13:4 }
+            // 用于 State 12 frame 事件：lookup_abs(GC.fall.wait180, effect.dvy) → 帧180的等待时间
+            public static readonly IReadOnlyDictionary<int, float> FallWait180 = new Dictionary<int, float>
+            {
+                { 7,  1f },
+                { 9,  2f },
+                { 11, 3f },
+                { 13, 4f },
+            };
+
+            // FLF global.js:192-200  GC.character.bounceup
+            // limit.xy=9.9, limit.y=11, y=8.5
+            // absorb = { 9:1, 14:4, 20:10, 40:20, 60:30 }
+            public const float CharBounceupLimitXY = 9.9f;
+            public const float CharBounceupLimitY  = 11f;
+            public const float CharBounceupY       = 8.5f;
+            public static readonly IReadOnlyDictionary<int, float> CharBounceupAbsorb = new Dictionary<int, float>
+            {
+                { 9,  1f  },
+                { 14, 4f  },
+                { 20, 10f },
+                { 40, 20f },
+                { 60, 30f },
+            };
 
             // FLF: GC.effect.num_to_id
             public const int EffectNumToId = 300;

@@ -186,7 +186,8 @@ namespace NTSD.Animation.LF2Objects
                                     }
                                     else if ((bool)Proper(_heldWeapon.ObjectId, "attackable"))
                                     {
-                                        int NormalWeaponAtck = UnityEngine.Random.value < 0.5f ? LF2StandardFrames.NormalWeaponAtck : LF2StandardFrames.NormalWeaponAtck2;
+                                        // FLF character.js:303 — $.match.random() < 0.5 选择武器攻击帧
+                                        int NormalWeaponAtck = Match.Rng.Next() < 0.5f ? LF2StandardFrames.NormalWeaponAtck : LF2StandardFrames.NormalWeaponAtck2;
                                         TransitionToFrame(NormalWeaponAtck, LF2StateConstants.ComboTransitionWait);
                                         StateReturnFrame = 1;
                                         return true;
@@ -213,8 +214,8 @@ namespace NTSD.Animation.LF2Objects
                                     }
                                 }
 
-                                // 随机选择挥拳动画 (60 或 65)
-                                int punchFrame = UnityEngine.Random.value < 0.5f ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
+                                // FLF character.js:361 — $.match.random() < 0.5 选择挥拳帧 (60 或 65)
+                                int punchFrame = Match.Rng.Next() < 0.5f ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
                                 TransitionToFrame(punchFrame, LF2StateConstants.ComboTransitionWait);
                                 return true;
                         }
@@ -489,12 +490,19 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "TU":
+                    // FLF character.js:516-548
+                    // if (frame.D.itr && (kind==10||11) && match.time.t % 2 === 0)
+                    //   椭圆范围 x²+4z²<150² 内所有目标执行 hit(frame[251].itr[0])
+                    //   target.ps.y<0 || type=='character' || random()<0.15 才攻击
+                    int tickTU = SimulationTickDriver.Instance != null
+                        ? SimulationTickDriver.Instance.CurrentTickIndex
+                        : 0;
                     var frameDataTU = Frame.D;
                     if (frameDataTU.itrs != null)
                     {
                         foreach (var itr in frameDataTU.itrs)
                         {
-                            if ((itr.kind == 10 || itr.kind == 11) && Time.frameCount % 2 == 0)
+                            if ((itr.kind == 10 || itr.kind == 11) && tickTU % 2 == 0)
                             {
                                 var sceneQueryTU = Match?.SceneQuery;
                                 if (sceneQueryTU == null) break;
@@ -517,17 +525,16 @@ namespace NTSD.Animation.LF2Objects
 
                                     float zDiff = Mathf.Abs(target.PS.z - PS.z);
                                     float xDiff = Mathf.Abs(target.PS.x - PS.x);
-                                    // 椭圆范围检测（150像素半径）
                                     if (xDiff * xDiff + 4 * zDiff * zDiff < 150 * 150)
                                     {
+                                        // FLF character.js:556 — $.match.random() < 0.15 随机攻击地面对象
+                                        bool randHit = Match.Rng.Next() < 0.15f;
                                         if (target.PS.y < 0 ||
                                             target.Type == LF2ObjectType.Character ||
-                                            (target.PS.y >= 0 && UnityEngine.Random.value < 0.15f))
+                                            (target.PS.y >= 0 && randHit))
                                         {
                                             if (target is LF2Character targetChar && targetChar.GetHeldWeapon() != null)
-                                            {
                                                 targetChar.DropWeapon(0, 0);
-                                            }
 
                                             if (target.Hit(itr251, this, new Vector3(PS.x, PS.y, PS.z), vol251))
                                             {
@@ -1244,70 +1251,128 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
-
-                    // 倒地动画状态机（FLF:969-1020）
-                    // TODO: 实现基于垂直速度的动画序列切换（需要effect.dvy系统）
+                    // FLF character.js:969-1020
+                    // if ($.effect.dvy <= 0) {
+                    //   case 180: $.trans.set_next(181); $.trans.set_wait(lookup_abs(GC.fall.wait180, $.effect.dvy))
+                    //   case 181: $.trans.set_next(182); vy=abs(ps.vy)||5; wait= vy<=4?2 : vy<7?3 : 4
+                    //   case 182: $.trans.set_next(183)
+                    //   case 186: ps.vy||=5; $.trans.set_next(187)
+                    //   case 187: $.trans.set_next(188)
+                    //   case 188: $.trans.set_next(189)
+                    // } else {
+                    //   case 180: $.trans.set_next(185); $.trans.set_wait(1)
+                    //   case 186: $.trans.set_next(191)
+                    // }
+                    int fn = Frame.N;
+                    if (Effect.Dvy <= 0f)
+                    {
+                        switch (fn)
+                        {
+                            case LF2StandardFrames.FallingFront:
+                                Trans.SetNext(LF2StandardFrames.FallingFront1);
+                                Trans.SetWait((int)NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.FallWait180, Effect.Dvy));
+                                break;
+                            case LF2StandardFrames.FallingFront1:
+                                Trans.SetNext(LF2StandardFrames.FallingFront2);
+                                float vy181 = PS.vy == 0f ? 5f : Mathf.Abs(PS.vy);
+                                if (PS.vy == 0f) PS.vy = 5f;
+                                if      (vy181 <= 4f) Trans.SetWait(2);
+                                else if (vy181 <  7f) Trans.SetWait(3);
+                                else                  Trans.SetWait(4);
+                                break;
+                            case LF2StandardFrames.FallingFront2: Trans.SetNext(LF2StandardFrames.FallingFront3); break;
+                            case LF2StandardFrames.FallingBack:
+                                if (PS.vy == 0f) PS.vy = 5f;
+                                Trans.SetNext(LF2StandardFrames.FallingBack1);
+                                break;
+                            case LF2StandardFrames.FallingBack1: Trans.SetNext(LF2StandardFrames.FallingBack2); break;
+                            case LF2StandardFrames.FallingBack2: Trans.SetNext(LF2StandardFrames.FallingBack3); break;
+                        }
+                    }
+                    else
+                    {
+                        switch (fn)
+                        {
+                            case LF2StandardFrames.FallingFront: Trans.SetNext(LF2StandardFrames.FallingFront5); Trans.SetWait(1); break;
+                            case LF2StandardFrames.FallingBack: Trans.SetNext(LF2StandardFrames.FallingBack5); break;
+                        }
+                    }
                     return false;
 
                 case "TU":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
-
-                    // fall值减少和倒地无敌时间（FLF:1038-1057）
-                    // TODO: 实现fall值减少系统（需要health.fall系统）
+                    // FLF character.js:1038-1057
+                    // $.health.fall > 0 → $.health.fall--
+                    if (HitCounters.Fall > 0)
+                        HitCounters.AddFall(-1);
                     return false;
 
                 case "combo":
-                    // ✓ 按连招键起身（对应 FLF Line 1059-1066）
+                    // FLF character.js:1059-1082
+                    // if (frame.N===182||188) && K==='jump'
+                    //   if (health.fall < GC.fall.KO && health.hp > 0)
+                    //     trans.frame(182→100, 188→108)
+                    //     if ps.vx: ps.vx = 5*sign(vx)
+                    //     if ps.vy==0: ps.vy = 5
+                    //     if ps.vz: ps.vz = 2*sign(vz)
+                    // return 1  (屏蔽所有输入)
                     string comboKey = eventData as string;
-                    Log.Info("[State {0}:{1}] Event={2}, Key={3}, Frame.D={4}", 12, "Falling", eventType, comboKey, CurrentFrameId);
-
-                    int frameId = CurrentFrameId;
-
-                    // 只在帧182/188（转折点）响应
-                    if (frameId == 182 || frameId == 188)
+                    int frameId = Frame.N;
+                    if ((frameId == LF2StandardFrames.FallingFront2 || frameId == LF2StandardFrames.FallingBack2) && comboKey == "jump")
                     {
-                        if (comboKey == "jump")
+                        if (HitCounters.Fall < NTSDGlobal.Gameplay.FallKO && Health.HP > 0)
                         {
-                            Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", $"Frame {frameId} jump getup");
-                            // TODO: 检查fall值和HP（需要health系统）
-                            // if (health.fall < GC.fall.KO && health.hp > 0)
-
-                            // 选择起身帧（正面/背面区别）
-                            int rowingFrame = (frameId == 182)
-                                ? LF2StandardFrames.Rowing       // 100: 正面起身
-                                : LF2StandardFrames.RowingBack;  // 108: 背面起身
-
-                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 12, "Falling", rowingFrame, "起身 → 爬起");
+                            int rowingFrame = (frameId == LF2StandardFrames.FallingFront2)
+                                ? LF2StandardFrames.Rowing
+                                : LF2StandardFrames.RowingBack;
                             TransitionToFrame(rowingFrame, 10);
 
-                            // TODO: 设置起身最小速度（需要velocity系统）
-                            // if (PS.vx != 0) PS.vx = 5 * sign(vx)
-                            // if (PS.vy == 0) PS.vy = 5 * sign(vy)
-                            // if (PS.vz != 0) PS.vz = 2 * sign(vz)
+                            if (PS.vx != 0f) PS.vx = 5f * (PS.vx > 0f ? 1f : -1f);
+                            if (PS.vy == 0f) PS.vy = 5f;
+                            if (PS.vz != 0f) PS.vz = 2f * (PS.vz > 0f ? 1f : -1f);
 
                             return true;
                         }
                     }
-
-                    // 倒地期间屏蔽所有其他输入（FLF Line 1159）
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "倒地期间屏蔽输入");
                     return true;
-
-                case "transit":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
-
-                    // 爬起逻辑（FLF:1068-1082）
-                    // TODO: 实现爬起逻辑（需要速度系统）
-                    return false;
 
                 case "fell_onto_ground":
                 case "fall_onto_ground":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 12, "Falling", eventType, CurrentFrameId);
+                    // FLF character.js:1022-1036
+                    // if (caught_throwinjury > 0) injury(caught_throwinjury); caught_throwinjury=null
+                    // sound.play('1/016')
+                    // if (mech.speed() > GC.character.bounceup.limit.xy || ps.vy > GC.character.bounceup.limit.y)
+                    //   mech.linear_friction(lookup_abs(bounceup.absorb,vx), lookup_abs(bounceup.absorb,vz))
+                    //   ps.vy = -GC.character.bounceup.y
+                    //   203-206→185, 180-185→185, 186-191→191
+                    // else
+                    //   203-206→230, 180-185→230, 186-191→231
+                    if (caught_throwinjury.HasValue && caught_throwinjury.Value > 0)
+                    {
+                        Injury(caught_throwinjury.Value);
+                        caught_throwinjury = null;
+                    }
 
-                    // 落地处理（FLF:1022-1036）
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 12, "Falling", "落地 → 爬起/躺地判定");
-                    // TODO: 实现爬起/躺地判定系统（需要velocity和throw_injury系统）
+                    float speed = CharacterMechanics.SpeedXY(PS);
+                    int curFn = Frame.N;
+
+                    if (speed > NTSDGlobal.Gameplay.CharBounceupLimitXY ||
+                        PS.vy > NTSDGlobal.Gameplay.CharBounceupLimitY)
+                    {
+                        float absorbX = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.CharBounceupAbsorb, PS.vx);
+                        float absorbZ = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.CharBounceupAbsorb, PS.vz);
+                        CharacterMechanics.LinearFriction(PS, absorbX, absorbZ);
+                        PS.vy = -NTSDGlobal.Gameplay.CharBounceupY;
+
+                        if (curFn >= LF2StandardFrames.Fire && curFn <= LF2StandardFrames.Fire3) { StateReturnFrame = LF2StandardFrames.FallingFront5; return true; }
+                        if (curFn >= LF2StandardFrames.FallingFront && curFn <= LF2StandardFrames.FallingFront5) { StateReturnFrame = LF2StandardFrames.FallingFront5; return true; }
+                        if (curFn >= LF2StandardFrames.FallingBack && curFn <= LF2StandardFrames.FallingBack5) { StateReturnFrame = LF2StandardFrames.FallingBack5; return true; }
+                    }
+                    else
+                    {
+                        if (curFn >= LF2StandardFrames.Fire && curFn <= LF2StandardFrames.Fire3) { StateReturnFrame = LF2StandardFrames.Lying; return true; }
+                        if (curFn >= LF2StandardFrames.FallingFront && curFn <= LF2StandardFrames.FallingFront5) { StateReturnFrame = LF2StandardFrames.Lying; return true; }
+                        if (curFn >= LF2StandardFrames.FallingBack && curFn <= LF2StandardFrames.FallingBack5) { StateReturnFrame = LF2StandardFrames.LyingBack; return true; }
+                    }
                     return false;
 
                 default:
@@ -1380,19 +1445,33 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_entry":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 14, "Lying", eventType, CurrentFrameId);
+                    // FLF character.js:1117-1128
+                    // $.health.fall = 0
+                    // $.health.bdefend = 0
+                    // if ($.health.hp <= 0)
+                    //   $.die()
+                    //   if ($.is_npc) $.counter.dead_blink_count = 0
+                    HitCounters.ResetFall();
+                    HitCounters.ResetBdefend();
 
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Reset state & death check");
-                    // 重置状态与死亡检测（FLF:1117-1129）
-                    // TODO: 实现角色属性系统（重置 fall/bdefend、死亡判定、NPC 死亡闪烁）
+                    if (Health.HP <= 0)
+                    {
+                        Dead = true;
+                        if (_deadBlinkCount < 0)
+                            _deadBlinkCount = 0;
+                    }
                     return false;
 
                 case "state_exit":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 14, "Lying", eventType, CurrentFrameId);
-
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 14, "Lying", "Getup -> 30 frames invincible");
-                    // 爬起无敌效果（FLF:1130-1137）
-                    // TODO: 实现特效系统（30帧无敌、闪烁效果、super 状态）
+                    // FLF character.js:1130-1137
+                    // $.effect.timein = 0
+                    // $.effect.timeout = 30
+                    // $.effect.blink = true
+                    // $.effect.super = true
+                    Effect.TimeIn  = 0;
+                    Effect.TimeOut = 30;
+                    Effect.Blink   = true;
+                    Effect.Super   = true;
                     return false;
 
                 default:

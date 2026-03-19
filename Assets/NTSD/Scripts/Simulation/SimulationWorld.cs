@@ -83,13 +83,20 @@ namespace NTSD.Simulation
         // ==================== 初始化 ====================
 
         /// <summary>
-        /// 创建 SimulationWorld
+        /// 确定性随机数生成器（对应 FLF match.js:787-795 $.randomseed）
         /// </summary>
+        public DeterministicRng Rng { get; private set; }
+
         public SimulationWorld()
         {
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this);
+
+            // FLF manager.js:229-230  randomseed.seed(824163532)
+            // FLF match.js:787-789    rand.seed(this.manager.random())
+            var managerRng = new DeterministicRng(824163532);
+            Rng = new DeterministicRng((int)(managerRng.Next() * int.MaxValue));
         }
 
         // ==================== 公共 API ====================

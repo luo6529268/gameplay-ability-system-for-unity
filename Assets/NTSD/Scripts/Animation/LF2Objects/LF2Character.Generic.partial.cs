@@ -116,6 +116,30 @@ namespace NTSD.Animation.LF2Objects
 
             ComboBuffer?.ReduceTimeout();
 
+            // FLF character.js:104-122
+            // switch(true) {
+            //   case dead_blink_count < 0: break  (不执行)
+            //   case dead_blink_count == 0: effect.blink=true; count++
+            //   case count>0 && count<30: count++
+            //   case count>=30: effect.blink=false; sp.hide(); shadow.hide(); count=-1; match.destroy_object($)
+            // }
+            if (_deadBlinkCount == 0)
+            {
+                Effect.Blink = true;
+                _deadBlinkCount = 1;
+            }
+            else if (_deadBlinkCount > 0 && _deadBlinkCount < 30)
+            {
+                _deadBlinkCount++;
+            }
+            else if (_deadBlinkCount >= 30)
+            {
+                Effect.Blink = false;
+                Sprite?.Hide();
+                _deadBlinkCount = -1;
+                Match?.Unregister(this);
+            }
+
             return false;
         }
 
