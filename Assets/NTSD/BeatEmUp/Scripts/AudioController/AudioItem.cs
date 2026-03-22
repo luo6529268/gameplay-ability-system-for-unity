@@ -13,6 +13,7 @@ namespace BeatEmUpTemplate2D {
         public float minTimeBetweenCall = .1f;
         public float range = 0f; //use a value of 0 to disable distance-based attenuation and always play a sfx
 	    public bool loop;
+	    public string streamingFolder;
 	    public AudioClip[] clip;
 	    [HideInInspector] public float lastTimePlayed = 0;
     }
