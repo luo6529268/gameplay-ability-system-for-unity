@@ -23,8 +23,10 @@ namespace NTSD.Animation.LF2Objects
         private SpriteRenderer _spriteRenderer;
 
         // ========== 逻辑层引用 ==========
-        // 所有实际对象都继承 LF2LivingObject，用其作为字段类型以访问 PS/Frame/Sprite
         private LF2LivingObject _logicObject;
+
+        // 渲染帧计数器（对应反汇编 dword_449098，每渲染帧递增）
+        private int _renderFrameCount = 0;
 
         // ========== 公开属性 ==========
         public ILF2Object LogicObject => _logicObject;
@@ -68,18 +70,10 @@ namespace NTSD.Animation.LF2Objects
 
         private void LateUpdate()
         {
-            if (_logicObject == null)
-            {
-                UnityEngine.Debug.Log("[Renderer] LateUpdate: _logicObject is null");
-                return;
-            }
-            int prevPic = _logicObject?.Frame?.D?.pic ?? -1;
+            if (_logicObject == null) return;
             UpdateSprite();
             UpdatePosition();
             ApplyVisualShake();
-            int newPic = _logicObject?.Frame?.D?.pic ?? -1;
-            if (newPic != prevPic)
-                UnityEngine.Debug.Log($"[Renderer] pic changed: {prevPic} → {newPic} frame={_logicObject?.Frame?.N}");
         }
 
         // ========== 核心方法 ==========
@@ -148,17 +142,20 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyVisualShake()
         {
+            _renderFrameCount++;
             if (_logicObject == null) return;
-            int shake = _logicObject.VisualShakeAmount;
-            if (shake <= 0) return;
+
+            // 对应反汇编 sub_413E10 0x413E19：[entity+0B4h] < 0（FrameDelay < 0）时产生 x 偏移
+            // dword_449098 每渲染帧在 0/1 交替（0x41DB8F: eax = 1 - ecx）
+            // x_offset = toggle*6-3 → 每帧在 -3 和 +3 之间交替（像素单位）
+            if (_logicObject.FrameDelay >= 0) return;
 
             const float ppu = 100f;
-            float shakeRange = shake / ppu;
+            int toggle = _renderFrameCount & 1;
+            float xOffset = (toggle * 6 - 3) / ppu;
             var pos = transform.position;
-            pos.x += UnityEngine.Random.Range(-shakeRange, shakeRange);
-            pos.y += UnityEngine.Random.Range(-shakeRange * 0.5f, shakeRange * 0.5f);
+            pos.x += xOffset;
             transform.position = pos;
-            _logicObject.SetVisualShake(shake - 1);
         }
 
         // ========== 辅助方法 ==========

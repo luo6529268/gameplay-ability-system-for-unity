@@ -373,15 +373,15 @@ namespace NTSD.Animation.LF2Objects
                     if (!CanPostInteractTarget(itr, target)) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
+                    CurrentItrIndex = i;
                     bool hit = target.Hit(itr, this, attackerPos, itrVolumes[i]);
                     if (!hit) continue;
 
-                    Debug.Log($"[PostInteract] HIT! attacker={Name} frame={Frame?.D?.frameId} itr.kind={itr.kind} itr.vrest={itr.vrest} itr.arest={itr.arest} arest_before={ItrRest?.Arest} AttackExempt={HitCounters?.AttackExempt}");
                     ItrArestUpdate(itr);
-                    Debug.Log($"[PostInteract] arest_after={ItrRest?.Arest}");
                     StateUpdate("hit_stop", out _);
 
                     if (itr.arest > 0) return;
+                    break;
                 }
             }
 
@@ -416,7 +416,6 @@ namespace NTSD.Animation.LF2Objects
             if (target.PS == null || target.Frame?.D == null) return false;
             if (target.Health != null && target.Health.HP <= 0) return false;
             if (!target.ItrVrestTest(StableId)) return false;
-
             // effect 0/1：同队角色不可命中（FLF:2302-2306）
             if ((itr.effect == 0 || itr.effect == 1) &&
                 target is LF2Character && Team != 0 && target.Team == Team)

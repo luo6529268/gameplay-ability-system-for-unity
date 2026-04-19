@@ -10,37 +10,25 @@ namespace NTSD.Animation
     ///
     /// 对应 NTSD 反汇编 PostRender（0x41D6E5～0x41D7F8）的 SPARK blit 逻辑。
     ///
-    /// SPARK.bmp 布局（反汇编 0x004287BD–0x004288FF 初始化数据严格验证）：
-    ///   大 spark：src_y=0, w=102, h=80，初始化 fidx=1..4（src_x=102,204,306,408）
-    ///   小 spark：src_y=80, w=61,  h=48，初始化 fidx=6..9（src_x=61,122,183,244）
-    ///
-    ///   注意：src_x=0 的帧（第1帧）从未被初始化写入 fidx 数组，因此从不渲染。
-    ///
-    /// timer → fidx 映射（反汇编严格对齐）：
-    ///   timer 0      → fidx=0（未初始化）→ blank
-    ///   timer 1-4    → fidx=1..4 → 大spark，src_x=102,204,306,408
-    ///   timer 5-9    → 无渲染
-    ///   timer 10     → fidx=5（未初始化）→ blank
-    ///   timer 11-14  → fidx=6..9 → 小spark，src_x=61,122,183,244
-    ///   timer 15-19  → 无渲染
-    ///   timer 20-28  → fidx=(timer-20)/2+10（10..14，超出已初始化范围）→ blank
-    ///   timer 30-38  → fidx=(timer-30)/2+15（15..19，超出已初始化范围）→ blank
-    ///   timer >= 39  → 到期，slot 释放
+    /// timer 递增规则（反汇编严格对齐）：
+    ///   timer 在渲染时递增（渲染和递增绑定），不在渲染窗口内时直接移除 slot。
+    ///   timer 0      → blank，timer++
+    ///   timer 1-4    → 大spark 渲染，timer++
+    ///   timer 5-9    → 直接移除（不递增）
+    ///   timer 10     → blank，timer++
+    ///   timer 11-14  → 小spark 渲染，timer++
+    ///   timer >= 15  → 直接移除（不递增）
     ///
     /// timer 初始值：
-    ///   itr.fall > 60  → attacking*20（大spark起点，timer=0~4可见）
-    ///   itr.fall <= 60 → attacking*4+10（小spark起点，timer=10~14可见）
+    ///   itr.fall > 60  → itrIdx*20（大spark）
+    ///   itr.fall <= 60 → itrIdx*4+10（小spark）
     /// </summary>
     public class SparkRenderer : MonoBehaviour
     {
         // ========== 常量（对应反汇编 timer 边界）==========
         private const int BigEnd     = 5;   // timer 0-4   大spark渲染段
         private const int SmallStart = 10;  // timer 10    小spark起点
-        private const int SmallEnd   = 15;  // timer 10-14 小spark段结束
-        private const int Fade1Start = 20;  // timer 20-28 渐隐段1
-        private const int Fade1End   = 29;
-        private const int Fade2Start = 30;  // timer 30-38 渐隐段2
-        private const int Fade2End   = 39;  // timer >= 39 到期
+        private const int SmallEnd   = 15;  // timer 10-14 小spark段结束，timer>=15 移除
 
         // 大/小 spark 的 BMP 帧尺寸
         // 反汇编确认：初始化 fidx=1..4（大）和 fidx=6..9（小），src_x=0 的第1帧从不渲染
@@ -142,23 +130,16 @@ namespace NTSD.Animation
             for (int j = 0; j < slotCount; j++)
             {
                 int timer = obj.GetSparkTimer(j);
-                Sprite sprite = GetSpriteForTimer(timer, out bool isExpired);
+                Sprite sprite = GetSpriteForTimer(timer);
+                if (sprite == null) continue;
 
-                if (isExpired)
-                    continue;
-
-                if (sprite == null)
-                    continue;
+                var (wx, wy, wz) = obj.GetSparkWorldPos(j);
+                const float ppu = 100f;
+                float unityX = wx / ppu;
+                float unityY = wz / ppu - wy / ppu;
 
                 if (pool != null)
                 {
-                    // 存储约定：x=spark PS.x, y=edi(jump-height偏移,负数向上), z=attacker.PS.z(深度)
-                    // Unity worldY = z/100 - y/100（与 LF2ObjectRenderer 公式一致：深度减跳跃高度）
-                    var (wx, wy, wz) = obj.GetSparkWorldPos(j);
-                    const float ppu = 100f;
-                    float unityX = wx / ppu;
-                    float unityY = wz / ppu - wy / ppu;
-
                     SpriteRenderer sr = pool.GetSprite();
                     if (sr != null)
                     {
@@ -172,47 +153,19 @@ namespace NTSD.Animation
             }
         }
 
-        private Sprite GetSpriteForTimer(int timer, out bool isExpired)
+        private Sprite GetSpriteForTimer(int timer)
         {
-            isExpired = false;
-
-            // timer 0: blank（fidx=0 未初始化，反汇编严格对齐）
-            // timer 1-4: fidx=1..4 → _bigSprites[0..3]（src_x=102,204,306,408）
             if (timer < BigEnd)
             {
                 if (timer == 0) return null;
-                return GetBig(timer - 1); // fidx=1..4 → index 0..3
+                return GetBig(timer - 1);
             }
-
-            // timer 5-9: blank
-            if (timer < SmallStart)
-                return null;
-
-            // timer 10: blank（fidx=5 未初始化，反汇编严格对齐）
-            // timer 11-14: fidx=6..9 → _smallSprites[0..3]（src_x=61,122,183,244）
+            if (timer < SmallStart) return null;
             if (timer < SmallEnd)
             {
                 if (timer == SmallStart) return null;
-                return GetSmall(timer - SmallStart - 1); // timer=11→idx=0, ..., timer=14→idx=3
+                return GetSmall(timer - SmallStart - 1);
             }
-
-            // timer 15-19: blank
-            if (timer < Fade1Start)
-                return null;
-
-            // timer 20-28: fidx=(timer-20)/2+10（10..14），超出已初始化范围 → blank
-            if (timer < Fade1End)
-                return null;
-
-            // timer 29: blank
-            if (timer < Fade2Start)
-                return null;
-
-            // timer 30-38: fidx=(timer-30)/2+15（15..19），超出已初始化范围 → blank
-            if (timer < Fade2End)
-                return null;
-
-            isExpired = true;
             return null;
         }
         

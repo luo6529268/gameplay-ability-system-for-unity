@@ -260,24 +260,15 @@ namespace NTSD.Animation.LF2Objects
 
                 // 反汇编 0x0042D218/0x0042D17A/0x0042D0B6：entity+0B0h 值决定屏幕震动强度
                 // sub_419C40 写入 slot channel，渲染层消费产生视觉抖动
-                // 轻伤(0B0h=20) → channel 0Bh+0 → amount=11
-                // 中伤(0B0h=60) → channel 0+其他   → amount=12
-                // 倒地(0B0h=80) → channel 0Ch+2    → amount=14
-                if (isKnockdown)
-                    SetVisualShake(14);
-                else if (HitCounters.Fall > 20)
-                    SetVisualShake(12);
-                else
-                    SetVisualShake(11);
+                // TODO: 实现屏幕震动（sub_419C40），当前暂不实现
 
                 // 反汇编 0x0042D676：cmp [eax+0B0h], 50h; jnz loc_42D77A
                 // fall != 80 同样跳到 loc_42D77A（FrameDelay 设置处），所有命中路径都设 FrameDelay
-                // loc_42D77A: attacker.FrameDelay=3（若当前>=0）; victim.FrameDelay=-3
-                // 击飞路径（isKnockdown）: victim.FrameDelay=-5
+                // loc_42D77A: attacker.FrameDelay=3（若当前>=0）; victim.FrameDelay=-3（击飞）或-5（普通受伤）
+                // 反汇编 0x42D796: fall>60路径 victim=-3；0x42E2FD: fall<=60路径 victim=-5
                 if (attacker.FrameDelay >= 0)
                     attacker.FrameDelay = 3;
-                FrameDelay = isKnockdown ? -5 : -3;
-                Debug.Log($"[HIT] victim={Name} attacker={attacker.Name} isKnockdown={isKnockdown} victim.FrameDelay={FrameDelay} attacker.FrameDelay={attacker.FrameDelay} fall={HitCounters.Fall}");
+                FrameDelay = isKnockdown ? -3 : -5;
 
                 // 反汇编 0x0042E314–0x0042E328：地面上 HitStateCount >= 30 且 itr.kind == 7 → frame 112
                 if (!isKnockdown && PS.vy == 0f &&
@@ -322,7 +313,9 @@ namespace NTSD.Animation.LF2Objects
 
             // 反汇编 0x0042F7A8–0x0042F9A1：kind=0 且 effect ∉ {6,23} 时生成 spark
             if (acceptHit && itr.kind == 0 && effectNum != 6 && effectNum != 23)
+            {
                 SpawnSpark(itr, attacker, attackerPos, vol);
+            }
 
             return acceptHit;
         }
@@ -514,15 +507,16 @@ namespace NTSD.Animation.LF2Objects
                                 Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
             // timer 初始值（反汇编 0x0042F81B–0x0042F837）
+            // var_5C = itr index（0-based），对应反汇编 [edx+esi+2D0h]
             // fall > 60 路径：
-            //   lea edx,[edx+edx*4] → attacking*5；shl edx,2 → attacking*20
+            //   lea edx,[edx+edx*4] → var_5C*5；shl edx,2 → var_5C*20
             // fall <= 60 路径：
-            //   lea edx,ds:0Ah[edx*4] → attacking*4 + 10
-            int fall      = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
-            int attacking = itr.attacking;
+            //   lea edx,ds:0Ah[edx*4] → var_5C*4 + 10
+            int fall   = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
+            int v_5C   = attacker?.CurrentItrIndex ?? 0;
             int timerInitial = fall > 60
-                ? attacking * 20
-                : attacking * 4 + 10;
+                ? v_5C * 20
+                : v_5C * 4 + 10;
 
             // spark_x（反汇编 0x0042F84F–0x0042F8EF）
             // spark_y（反汇编 0x0042F8F7–0x0042F954）

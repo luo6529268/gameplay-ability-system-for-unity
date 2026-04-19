@@ -153,6 +153,13 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>唯一ID，由场景分配（对应 FLF $.uid）</summary>
         public int StableId { get; protected set; }
 
+        /// <summary>
+        /// 当前正在处理的 itr 在帧 itr 列表中的 index（0-based）。
+        /// 对应反汇编 var_5C = [edx+esi+2D0h]（itr array index）。
+        /// 由 Generic_PostInteraction 在调用 Hit() 前写入，SpawnSpark 读取用于 timer 计算。
+        /// </summary>
+        public int CurrentItrIndex { get; set; }
+
         /// <summary>对象ID（对应 FLF $.id = thisID）</summary>
         public int ObjectId { get; set; }
 
@@ -349,7 +356,6 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void AddSparkSlot(int timerInitial, float worldX, float worldY, float worldZ)
         {
-            Debug.Log($"[AddSparkSlot] owner={Name} slot={SparkSlotCount} timer={timerInitial} pos=({worldX:F1},{worldY:F1},{worldZ:F1}) frame={Frame?.D?.frameId}");
             if (SparkSlotCount >= MaxSparkSlots) return;
             int slot = SparkSlotCount;
             _sparkTimers[slot] = timerInitial;
@@ -397,16 +403,22 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 每游戏逻辑帧（30Hz）递增所有 spark slot 的 timer，并移除过期 slot。
-        /// 由 SimulationWorld.TickSparkTimers() 在 sim tick 内调用。
+        /// 对应反汇编 0x41D70E–0x41D7C2 渲染循环中的 timer inc + slot 移除逻辑：
+        ///   timer 0-4:   big spark 渲染，不移除
+        ///   timer 5-9:   blank，移除（5 < 10 → jl 41D76A → jl 41D786 → jl 41D7C2 → remove）
+        ///   timer 10-14: small spark 渲染，不移除
+        ///   timer 15-29: blank，移除
+        ///   timer 30-38: fade 渲染，不移除
+        ///   timer >= 39: 移除
         /// </summary>
         public void TickAllSparkTimers()
         {
-            const int ExpiredThreshold = 39;
-            // 倒序遍历，保证移除时不影响前面 slot 的索引
             for (int i = SparkSlotCount - 1; i >= 0; i--)
             {
                 _sparkTimers[i]++;
-                if (_sparkTimers[i] >= ExpiredThreshold)
+                int t = _sparkTimers[i];
+                bool remove = (t >= 5 && t < 10) || (t >= 15 && t < 30) || (t >= 39);
+                if (remove)
                     RemoveSparkSlot(i);
             }
         }
@@ -416,21 +428,6 @@ namespace NTSD.Animation.LF2Objects
         // ---- 受击屏幕震动（对应反汇编 sub_419C40 / dword_44AE74 slot 机制）----
 
         /// <summary>
-        /// 当前视觉震动强度（0~100）。Hit() 时设置，渲染层每帧衰减并施加随机偏移。
-        /// 对应反汇编：命中后写入 slot 数组，渲染时消费并清零。
-        /// </summary>
-        public int VisualShakeAmount { get; private set; } = 0;
-
-        /// <summary>
-        /// 命中时设置屏幕震动强度。
-        /// entity+0B0h=20(轻伤)→amount=11，=60(中伤)→amount=12，=80(倒地)→amount=14
-        /// （对应反汇编 channel 参数：0Bh/0Ch/0Eh，最大取两路之和 capped at 100）
-        /// </summary>
-        public void SetVisualShake(int amount)
-        {
-            VisualShakeAmount = amount;
-        }
-
         #region 声明字段 - 状态处理器
 
         /// <summary>
@@ -799,7 +796,7 @@ namespace NTSD.Animation.LF2Objects
             else if (FrameDelay < 0) FrameDelay++;
 
             if (prevDelay != 0)
-                Debug.Log($"[FRAMEDELAY] {Name} frame={Frame.N} FrameDelay {prevDelay}→{FrameDelay} x={PS?.x:F0} vx={PS?.vx:F1}");
+                return;
 
             // 原版：prevDelay != 0 时一律 return（包括 -1→0 和 1→0 的那帧）
             if (prevDelay != 0) return;
@@ -1091,16 +1088,19 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 更新受击休息（对应 FLF livingobject.prototype.itr_vrest_update）
+        /// 更新受击休息（对应反汇编 0x42DA00/0x42DA1F/0x42DA77：
+        ///   基于 itr.injury 决定 vrest 持续 tick 数，与 itr.vrest 字段无关：
+        ///     itr.injury >  40  → vrest = 19 tick (0x13)
+        ///     itr.injury <= 40  → vrest = 3 tick  (0x03)
+        /// 写入位置：[victim + attackerIdx*4 + 0xF0] = vrest byte，
+        /// 每 tick 在 0x41BE6B 处 dec，归零后可再次命中。
         /// </summary>
         public void ItrVrestUpdate(int attackerUid, InteractionArea itr)
         {
             if (ItrRest == null || itr == null) return;
 
-            if (itr.vrest > 0)
-            {
-                ItrRest.SetVrest(attackerUid, itr.vrest);
-            }
+            int vrest = (itr.injury > 40) ? 19 : 3;
+            ItrRest.SetVrest(attackerUid, vrest);
         }
 
         /// <summary>
@@ -1491,7 +1491,6 @@ namespace NTSD.Animation.LF2Objects
         protected void ResetSpark()
         {
             SparkSlotCount = 0;
-            VisualShakeAmount = 0;
         }
 
         /// <summary>

@@ -98,6 +98,8 @@ namespace NTSD.Animation.LF2Objects
         {
             _CharacterHub = hub;
 
+            AllocateStableId();
+
             // 创建角色专用模块
             ComboBuffer = new LF2ComboBufferModule();
             ObjectPointModule = new LF2ObjectPointModule();

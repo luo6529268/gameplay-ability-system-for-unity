@@ -73,7 +73,6 @@ namespace NTSD.Simulation
 
         private void LateUpdate()
         {
-            // 优先从 AppManager 获取 SparkRenderer；如果 AppManager 不存在（测试场景），则 lazy-init 一个
             if (_sparkRenderer == null)
             {
                 _sparkRenderer = AppManager.Instance?.SparkRenderer;
