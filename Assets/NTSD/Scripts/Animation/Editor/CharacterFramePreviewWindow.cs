@@ -31,7 +31,6 @@ namespace NTSD.Animation.Editor
         #region 数据成员
 
         // data.txt 对象定义缓存
-        private Dictionary<int, DataFileParser.ObjectData> dataObjectMap = null;
         private Dictionary<int, LF2CharacterDataWrapper> objectDataCache = new Dictionary<int, LF2CharacterDataWrapper>();
 
         // 对象精灵缓存 (oid -> sprites)
@@ -1034,7 +1033,7 @@ namespace NTSD.Animation.Editor
                 return;
             }
 
-            dataObjectMap = DataFileParser.ParseDataFile(fullPath);
+            GameDataManager.Instance?.LoadDataFile(fullPath);
         }
 
         #endregion

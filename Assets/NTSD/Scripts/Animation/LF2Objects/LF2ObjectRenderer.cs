@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
 
@@ -41,6 +43,7 @@ namespace NTSD.Animation.LF2Objects
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            UnityEngine.Debug.Log($"[Renderer] Awake: {gameObject.name}");
         }
 
         private void OnEnable()
@@ -61,10 +64,22 @@ namespace NTSD.Animation.LF2Objects
 
         public void SimTU(int tickIndex) { }
 
-        public void SimLateTick(int tickIndex)
+        public void SimLateTick(int tickIndex) { }
+
+        private void LateUpdate()
         {
+            if (_logicObject == null)
+            {
+                UnityEngine.Debug.Log("[Renderer] LateUpdate: _logicObject is null");
+                return;
+            }
+            int prevPic = _logicObject?.Frame?.D?.pic ?? -1;
             UpdateSprite();
             UpdatePosition();
+            ApplyVisualShake();
+            int newPic = _logicObject?.Frame?.D?.pic ?? -1;
+            if (newPic != prevPic)
+                UnityEngine.Debug.Log($"[Renderer] pic changed: {prevPic} → {newPic} frame={_logicObject?.Frame?.N}");
         }
 
         // ========== 核心方法 ==========
@@ -77,9 +92,14 @@ namespace NTSD.Animation.LF2Objects
         {
             _logicObject = logicObject as LF2LivingObject;
             _logicObject?.Init(task, this);
-            // Wire SpriteRenderer into the Sprite module so direction flips work.
-            // Sprites list is null until a sprite-loading system is built; ShowPic() will no-op.
-            _logicObject?.Sprite?.Initialize(_spriteRenderer, null);
+
+            // 从 CharacterAnimtorManager 获取该对象 ID 对应的 sprites（武器/SA/Effect 统一通过 oid 查表）
+            // 若未加载（如武器图集尚未实现）则静默传 null，ShowPic() 不会崩溃
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            List<Sprite> sprites = null;
+            if (_logicObject != null)
+                CharacterAnimtorManager.Instance?.TryGetSprites(_logicObject.ObjectId, out sprites);
+            _logicObject?.Sprite?.Initialize(sr, sprites);
         }
 
         /// <summary>
@@ -120,8 +140,25 @@ namespace NTSD.Animation.LF2Objects
 
             const float ppu = 100f;
             float worldX = ps.x / ppu;
-            float worldY = ps.z / ppu - ps.y / ppu;  // FLF y 为负时对象在空中，偏移为正
+            float worldY = ps.z / ppu - ps.y / ppu;
             transform.position = new Vector3(worldX, worldY, transform.position.z);
+
+            _logicObject.Sprite?.SetZ(ps.z + ps.zz);
+        }
+
+        private void ApplyVisualShake()
+        {
+            if (_logicObject == null) return;
+            int shake = _logicObject.VisualShakeAmount;
+            if (shake <= 0) return;
+
+            const float ppu = 100f;
+            float shakeRange = shake / ppu;
+            var pos = transform.position;
+            pos.x += UnityEngine.Random.Range(-shakeRange, shakeRange);
+            pos.y += UnityEngine.Random.Range(-shakeRange * 0.5f, shakeRange * 0.5f);
+            transform.position = pos;
+            _logicObject.SetVisualShake(shake - 1);
         }
 
         // ========== 辅助方法 ==========

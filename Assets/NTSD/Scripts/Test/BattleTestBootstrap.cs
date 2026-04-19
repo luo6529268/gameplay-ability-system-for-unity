@@ -6,6 +6,7 @@ using NTSD.Simulation;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Tools;
+using NTSD.App;
 using Cysharp.Threading.Tasks;
 
 namespace NTSD.Test
@@ -57,9 +58,12 @@ namespace NTSD.Test
 
             Debug.Log("[BattleTestBootstrap] No AppManager detected, running test bootstrap...");
 
-            // 等待指定帧数，让场景内的单例完成 Awake
+            // 创建 AppManager（含 NTSDSoundPlayer、SparkRenderer、EventSystem）
+            EnsureAppManager();
+
             for (int i = 0; i < delayFrames; i++)
                 await UniTask.Yield();
+            if (this == null) return;
 
             // 1. 初始化 TimeWheel
             TimeWheel.TimeWheel.CreateSharedInstance();
@@ -80,8 +84,9 @@ namespace NTSD.Test
                 }
             }
 
-            // 3. 加载角色数据（对应 LoadingPrewarmController 的工作）
+            // 3. 加载角色数据
             await LoadCharacterDataAsync();
+            if (this == null) return;
 
             // 4. 启用 BattleBootstrap 表现层
             var bootstrap = FindObjectOfType<App.BattleBootstrap>(true);
@@ -128,6 +133,7 @@ namespace NTSD.Test
             if (autoResume)
             {
                 await UniTask.Yield();
+                if (this == null) return;
 
                 if (SimulationTickDriver.Instance != null)
                 {
@@ -247,8 +253,9 @@ namespace NTSD.Test
             }
 
             Debug.Log("[BattleTestBootstrap] Loading character configs...");
+            var dataManager = GameDataManager.Instance;
             var configs = await UniTask.RunOnThreadPool(() =>
-                mgr.ParseCharacterFrameConfigs(text =>
+                mgr.ParseCharacterFrameConfigs(dataManager, text =>
                     Debug.Log($"[BattleTestBootstrap] Parsing: {text}"))
             );
             mgr.ApplyLoadedCharacterConfigs(configs);
@@ -266,6 +273,16 @@ namespace NTSD.Test
 
             TimeWheel.TimeWheel.DestroySharedInstance();
             Debug.Log("[BattleTestBootstrap] TimeWheel destroyed (test cleanup).");
+        }
+
+        private static void EnsureAppManager()
+        {
+            if (AppManager.Instance != null) return;
+
+            var go = new GameObject("AppManager [TestBootstrap]");
+            DontDestroyOnLoad(go);
+            go.AddComponent<AppManager>();
+            Debug.Log("[BattleTestBootstrap] AppManager created.");
         }
     }
 }

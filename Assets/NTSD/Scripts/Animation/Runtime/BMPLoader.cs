@@ -62,27 +62,16 @@ namespace NTSD.Animation
                 return null;
             }
 
-            FileInfo fileInfo = new FileInfo(filePath);
-            Debug.Log($"[BMPLoader] 开始加载: {Path.GetFileName(filePath)} (大小: {fileInfo.Length / 1024f:F2} KB)");
-
             byte[] fileData = File.ReadAllBytes(filePath);
+
+            // TryLoadWithUnityData 依赖 Texture2D（主线程 API），后台线程直接走手动解析
+            if (System.Threading.Thread.CurrentThread.ManagedThreadId != 1)
+                return LoadBmpDataManual(fileData);
+
             var data = TryLoadWithUnityData(fileData, filePath);
-            if (data != null)
-            {
-                Debug.Log($"<color=green>[BMPLoader] ✅ Unity LoadImage 成功</color>");
-                return data;
-            }
+            if (data != null) return data;
 
-            Debug.Log($"<color=yellow>[BMPLoader] Unity LoadImage 失败，尝试手动解析 BMP...</color>");
-            data = LoadBmpDataManual(fileData);
-            if (data != null)
-            {
-                Debug.Log($"<color=green>[BMPLoader] ✅ 手动解析 BMP 成功</color>");
-                return data;
-            }
-
-            Debug.LogError($"<color=red>[BMPLoader] ❌ 所有加载方法失败: {filePath}</color>");
-            return null;
+            return LoadBmpDataManual(fileData);
         }
 
         /// <summary>
@@ -280,9 +269,9 @@ namespace NTSD.Animation
                 int compression = System.BitConverter.ToInt32(fileData, 30);
                 int colorsUsed = System.BitConverter.ToInt32(fileData, 46);
 
-                if (compression != 0)
+                if (compression != 0 && compression != 1)
                 {
-                    Debug.LogError($"[BMPLoader] 不支持压缩的 BMP 文件（压缩类型: {compression}）");
+                    Debug.LogError($"[BMPLoader] 不支持压缩类型: {compression}（仅支持 0=无压缩, 1=RLE8）");
                     return null;
                 }
 
@@ -305,15 +294,20 @@ namespace NTSD.Animation
 
                 int absHeight = Mathf.Abs(height);
                 Color[] pixels = new Color[width * absHeight];
-                int rowSize = ((width * bitsPerPixel + 31) / 32) * 4;
                 bool isBottomUp = height > 0;
 
-                if (bitsPerPixel <= 8)
+                if (compression == 1) // RLE8
                 {
+                    DecodeRle8(fileData, pixelDataOffset, width, absHeight, isBottomUp, palette, pixels);
+                }
+                else if (bitsPerPixel <= 8)
+                {
+                    int rowSize = ((width * bitsPerPixel + 31) / 32) * 4;
                     ParseIndexedPixels(fileData, pixelDataOffset, width, absHeight, bitsPerPixel, rowSize, isBottomUp, palette, pixels);
                 }
                 else
                 {
+                    int rowSize = ((width * bitsPerPixel + 31) / 32) * 4;
                     ParseDirectPixels(fileData, pixelDataOffset, width, absHeight, bitsPerPixel, rowSize, isBottomUp, pixels);
                 }
 
@@ -334,6 +328,63 @@ namespace NTSD.Animation
         /// <summary>
         /// 加载调色板（对于 4位 和 8位 BMP）
         /// </summary>
+        private static void DecodeRle8(byte[] data, int offset, int width, int height,
+                                        bool isBottomUp, Color[] palette, Color[] pixels)
+        {
+            int x = 0;
+            int y = isBottomUp ? height - 1 : 0;
+            int i = offset;
+            int yDir = isBottomUp ? -1 : 1;
+
+            while (i < data.Length)
+            {
+                byte b0 = data[i++];
+                if (b0 == 0) // 转义序列
+                {
+                    if (i >= data.Length) break;
+                    byte b1 = data[i++];
+                    if (b1 == 0) // 行结束
+                    {
+                        x = 0;
+                        y += yDir;
+                    }
+                    else if (b1 == 1) // 位图结束
+                    {
+                        break;
+                    }
+                    else if (b1 == 2) // 增量
+                    {
+                        if (i + 1 >= data.Length) break;
+                        x += data[i++];
+                        y += data[i++] * yDir;
+                    }
+                    else // 绝对模式：b1 个像素直接写入
+                    {
+                        for (int k = 0; k < b1 && i < data.Length; k++, x++)
+                        {
+                            byte idx = data[i++];
+                            int px = y * width + x;
+                            if (px >= 0 && px < pixels.Length && idx < palette.Length)
+                                pixels[px] = palette[idx];
+                        }
+                        if (b1 % 2 == 1 && i < data.Length) i++; // 对齐到偶数字节
+                    }
+                }
+                else // 编码模式：重复 b0 次颜色索引 data[i]
+                {
+                    if (i >= data.Length) break;
+                    byte idx = data[i++];
+                    Color c = idx < palette.Length ? palette[idx] : Color.black;
+                    for (int k = 0; k < b0 && x < width; k++, x++)
+                    {
+                        int px = y * width + x;
+                        if (px >= 0 && px < pixels.Length)
+                            pixels[px] = c;
+                    }
+                }
+            }
+        }
+
         private static Color[] LoadPalette(byte[] fileData, int bitsPerPixel, int colorsUsed)
         {
             try

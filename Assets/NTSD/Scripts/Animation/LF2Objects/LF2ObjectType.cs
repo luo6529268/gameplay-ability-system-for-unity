@@ -28,6 +28,6 @@ namespace NTSD.Animation.LF2Objects
         Other = 5,
 
         /// <summary>饮料/回复物 (type: 6) - 对应 LF2 "Type 6 - Drinks"</summary>
-        Drink = 6
+        Drink = 6,
     }
 }

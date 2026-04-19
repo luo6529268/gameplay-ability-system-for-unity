@@ -141,8 +141,7 @@ namespace NTSD.Animation
 
             if (next == 1000)
             {
-                // 特例：生命值归零，切换到死亡状态
-                // 生命周期由上层处理
+                _lF2LivingObject?.OnTransitDestroy();
                 return;
             }
 

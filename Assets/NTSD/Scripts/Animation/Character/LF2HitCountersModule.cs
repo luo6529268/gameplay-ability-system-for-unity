@@ -16,17 +16,42 @@ namespace NTSD.Animation
         private float _fallAccum;
         private float _bdefendAccum;
 
+        /// <summary>
+        /// 攻击方碰撞豁免（对应反汇编 entity+0ECh）。
+        /// 命中时由攻击方设为 6，每帧 -1；> 0 时跳过整体碰撞检测（反汇编 0x419E3B）。
+        /// </summary>
+        public int AttackExempt { get; private set; } = 0;
+
+        /// <summary>
+        /// 受击状态计数（对应反汇编 entity+0B8h）。
+        /// 被打中时设为 45，每帧 -1；sub_419DE0 检查 >= 15 走重击飞出分支。
+        /// </summary>
+        public int HitStateCount { get; private set; } = 0;
+
+        public void SetAttackExempt(int value) => AttackExempt = value;
+        public void SetHitStateCount(int value) => HitStateCount = value;
+        /// <summary>累加受击状态计数（对应反汇编 0x0042E2DC: add [eax+0B8h], ecx）</summary>
+        public void AddHitStateCount(int amount) => HitStateCount += amount;
+
         public void Reset()
         {
             Fall = 0;
             Bdefend = 0;
             _fallAccum = 0f;
             _bdefendAccum = 0f;
+            AttackExempt = 0;
+            HitStateCount = 0;
         }
 
         public void AddFall(int amount)
         {
             Fall = Mathf.Max(0, Fall + amount);
+        }
+
+        /// <summary>直接设置 fall 值（钳制到档位上限时使用）</summary>
+        public void SetFall(int value)
+        {
+            Fall = value;
         }
 
         public void ResetFall()

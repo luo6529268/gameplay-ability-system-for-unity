@@ -111,6 +111,30 @@ namespace NTSD.Animation
         /// </summary>
         public float zz = 0f;
 
+        /// <summary>
+        /// Z 轴正方向边界锁定（vz > 0 时阻止 z 移动）
+        /// 对应反汇编 Entity_FrameAdvance [esi+3ECh]，每帧执行后清零
+        /// </summary>
+        public bool zBoundPositive;
+
+        /// <summary>
+        /// Z 轴负方向边界锁定（vz < 0 时阻止 z 移动）
+        /// 对应反汇编 [esi+3E8h]，每帧执行后清零
+        /// </summary>
+        public bool zBoundNegative;
+
+        /// <summary>
+        /// X 轴正方向边界锁定（vx > 0 时阻止 x 移动）
+        /// 对应反汇编 [esi+3F4h]，每帧执行后清零
+        /// </summary>
+        public bool xBoundPositive;
+
+        /// <summary>
+        /// X 轴负方向边界锁定（vx < 0 时阻止 x 移动）
+        /// 对应反汇编 [esi+3F0h]，每帧执行后清零
+        /// </summary>
+        public bool xBoundNegative;
+
         // ==================== 常量统一来源（Step D8）====================
         // ⚠️ 所有常量现在统一引用 SimulationConstants
         // - SIM_TICK_RATE = 30Hz（FLF 帧率）

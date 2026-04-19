@@ -55,6 +55,25 @@ namespace NTSD.Simulation
         void SimTU(int tickIndex);
 
         /// <summary>
+        /// PostInteraction 阶段 - 对应 NTSD 反汇编 GameMode_Process (sub_41BDA0) 碰撞双层循环
+        ///
+        /// 职责：kind=0/4（普通攻击）的碰撞判定
+        /// 调用时机：所有对象 SerialTickAll 完成后统一执行一次全局 pass
+        /// 反汇编依据：GameMode_Process 在所有实体 sub_4063B0 执行完毕后，
+        ///             才执行双层 for 循环做 itr/body 碰撞检测
+        /// </summary>
+        void SimPostInteraction(int tickIndex) { }
+
+        /// <summary>
+        /// PreInteraction 阶段 - 对应 NTSD 反汇编 GameMode_Process (sub_41BDA0)
+        ///
+        /// 职责：kind=1/2/3/7（抓取、拾取）的碰撞判定
+        /// 调用时机：所有对象 SerialTickAll 完成后、LateTick 之前统一执行一次全局 pass
+        /// 目的：保证联机帧同步一致性（不依赖 StableId 顺序）
+        /// </summary>
+        void SimPreInteraction(int tickIndex) { }
+
+        /// <summary>
         /// 每个模拟 Tick 的后期处理（可选）
         /// </summary>
         void SimLateTick(int tickIndex) { }

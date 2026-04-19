@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using System.Threading;
 
@@ -37,6 +38,38 @@ namespace NTSD.Simulation
             public const float WeaponBounceupSpeedX = 3f;
             public const float WeaponBounceupSpeedY = -6f;
             public const float WeaponBounceupSpeedZ = 1f;
+
+            // 反汇编 Entity_FrameAdvance 常量（从 .rdata 段确认，weapon_issues_report_v2.txt）
+            // ---- state=1002 投射物重力分级（按 chardata.type_sub / [+6F4h]） ----
+            public const float WeaponGravityTypeSub7C  = 0.17f;    // dbl_4433B0: type_sub=0x7C（极轻，气球）
+            public const float WeaponGravityTypeSub78  = 0.425f;   // dbl_4433A8: type_sub=0x78（轻，苦无）
+            public const float WeaponGravityTypeSub65  = 1.1333f;  // dbl_4433B8: type_sub=0x65（中等）
+            public const float WeaponGravityDefault1002 = 0.5667f; // dbl_4433A0: state=1002 默认重力
+            public const float WeaponGravityDefault    = 1.7f;     // dbl_443398: 非 state=1002 默认重力
+
+            // ---- type=4 / type_sub=0x78 额外速度加成系数 ----
+            public const float WeaponExtraVxFactor = 0.2f;         // dbl_4433E0: x_pos += vx * 0.2
+
+            // ---- 落地弹射（Entity_FrameAdvance 0x416A35-0x416D0E） ----
+            // type=1 大弹阈值及反弹
+            public const float WeaponType1BigBounceThreshold = 9.9f;  // dbl_443368
+            public const float WeaponType1BigBounceVy = -8.0f;        // 0xC0200000
+            public const float WeaponType1VxFactor    = 0.5f;         // dbl_443360
+            // type=2 大弹阈值及反弹
+            public const float WeaponType2BigBounceThreshold = 9.0f;  // dbl_4433C8
+            public const float WeaponType2BigBounceVy = -5.0f;        // 0xC0140000
+            public const float WeaponType2VxFactor    = 0.5f;         // dbl_443360
+            // type=4/6 大弹阈值及反弹
+            public const float WeaponType46BigBounceThreshold = 8.5f; // dbl_443358
+            public const float WeaponType46BigBounceVyFactor  = -0.7f; // dbl_443348: vy *= -0.7 反弹
+            public const float WeaponType46BigBounceVyClamp   = -10.0f; // 0xC0240000
+            public const float WeaponType46VxFactor  = 0.7f;          // dbl_443288
+            // vx 上下限 clamp（回旋镖）
+            public const float WeaponBoomerangVxMax  = 9.0f;          // dbl_4433C8
+            public const float WeaponBoomerangVxMin  = -9.0f;         // dbl_4433C0
+
+            // 反汇编 AI_Process2 0x41ACF3/0x41ACFB：饮料/食物恢复 PP 上限（0x1F4 = 500）
+            public const int DrinkPPCap = 500; // [holder+308h] 上限
 
             // FLF: GC.weapon.hit
             public const float WeaponHitVx = 3f;
@@ -95,6 +128,20 @@ namespace NTSD.Simulation
 
             // FLF: GC.effect.num_to_id
             public const int EffectNumToId = 300;
+
+            // FLF global.js:177-178  GC.recover
+            // fall/bdefend 每 TU 自然恢复量（负数 = 减少）
+            public const float RecoverFall    = -0.45f;
+            public const float RecoverBdefend = -0.5f;
+
+            // 反汇编 Entity_FrameLogic dbl_4432D8：角色互碰时 vx 推开量
+            public const float CharCollisionVxPush = 0.85f;
+            // 反汇编 Entity_FrameLogic dbl_4432C8：角色互碰时 vz 衰减系数
+            public const float CharCollisionVzDecay = 5f / 7f;
+
+
+
+
         }
 
         public static class Default
@@ -138,7 +185,8 @@ namespace NTSD.Simulation
 
             public static class Weapon
             {
-                public const int VRest = 9;
+                // 反汇编 GameMode_Process 0x0042266F: mov byte ptr [+0F0h], 0Ah（正常命中 10 帧）
+                public const int VRest = 10;
             }
 
             public static class Character
@@ -156,7 +204,18 @@ namespace NTSD.Simulation
         public static class Combo 
         {
            public const int Timeout = 10; // 连招超时时间（时间单位）
+        }
 
+        public static class Sound
+        {
+            public const string DefendGuard = "Battle/Defend/Guard";
+            public const string FireBurn    = "Battle/Fire/Burn";
+            public const string IceFreeze   = "Battle/Ice/Freeze";
+            public const string IceShatter  = "Battle/Ice/Shatter";
+            public const string FallLand    = "Battle/Fall/Land";
+            // asm sub_42C8C0: slot 0=001.wav normal hit, slot 2=006.wav knockdown hit
+            public const string HitNormal    = "Battle/Hit/Normal";    // 001.wav
+            public const string HitKnockdown = "Battle/Hit/Knockdown"; // 006.wav
         }
 
         /// <summary>

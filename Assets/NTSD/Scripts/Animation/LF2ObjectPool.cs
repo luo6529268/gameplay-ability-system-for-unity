@@ -26,12 +26,16 @@ namespace NTSD.Animation
         [Header("父节点配置")]
         [SerializeField] private Transform _poolRoot;
         [SerializeField] private Transform _activeRoot;
+        [SerializeField] private Transform _spriteRoot;  // Bucket B SpriteRenderer 挂载根节点（null 时挂在 LF2ObjectPool 自身）
 
         // ========== 池数据结构 ==========
         private LinkedList<LF2ObjectRenderer> _availableObjects;
         private HashSet<LF2ObjectRenderer> _activeObjects;
         private Dictionary<LF2ObjectRenderer, float> _releaseTimeMap;
         private float _lastCheckTime;
+
+        // Bucket B：轻量 SpriteRenderer 桶（供 SparkRenderer 使用，懒加载，无超时卸载）
+        private Stack<SpriteRenderer> _spritePool;
 
         // ========== 生命周期 ==========
 
@@ -42,6 +46,7 @@ namespace NTSD.Animation
             _availableObjects = new LinkedList<LF2ObjectRenderer>();
             _activeObjects = new HashSet<LF2ObjectRenderer>();
             _releaseTimeMap = new Dictionary<LF2ObjectRenderer, float>();
+            _spritePool = new Stack<SpriteRenderer>(32);
 
             for (int i = 0; i < _initialPoolSize; i++)
                 CreateNewObject();
@@ -62,7 +67,7 @@ namespace NTSD.Animation
             else
             {
                 go = new GameObject("LF2Object");
-                go.AddComponent<SpriteRenderer>();
+                SpriteRenderer spriteRenderer = go.MMGetOrAddComponent<SpriteRenderer>();
                 go.AddComponent<LF2ObjectRenderer>();
                 if (_poolRoot != null)
                     go.transform.SetParent(_poolRoot, false);
@@ -162,6 +167,48 @@ namespace NTSD.Animation
 
                 node = next;
             }
+        }
+
+        // ========== Bucket B：SpriteRenderer 桶 ==========
+
+        /// <summary>
+        /// 从轻量 SpriteRenderer 桶取出一个 SpriteRenderer（懒加载）。
+        /// 池空时创建新 GameObject 并挂载 SpriteRenderer，统一挂在 _spriteRoot 下（Inspector 指定，null 时挂在本对象上）。
+        /// 取出后 SetActive(true)，不注册 SimulationWorld。
+        /// </summary>
+        public SpriteRenderer GetSprite()
+        {
+            SpriteRenderer sr;
+            if (_spritePool.Count > 0)
+            {
+                sr = _spritePool.Pop();
+            }
+            else
+            {
+                var go = new GameObject("Spark");
+                // 挂到场景根节点，避免父节点 inactive 导致无法显示
+                Transform parent = _spriteRoot != null ? _spriteRoot : null;
+                if (parent != null)
+                    go.transform.SetParent(parent, false);
+                sr = go.AddComponent<SpriteRenderer>();
+                sr.sortingLayerName = "Object";
+            }
+
+            sr.gameObject.SetActive(true);
+            return sr;
+        }
+
+        /// <summary>
+        /// 归还 SpriteRenderer 到轻量桶：清空 sprite，SetActive(false)，压栈。
+        /// 防重复归还：已处于非激活状态则直接跳过。
+        /// </summary>
+        public void ReleaseSprite(SpriteRenderer sr)
+        {
+            if (sr == null) return;
+            if (!sr.gameObject.activeSelf) return;  // 已归还过，防重复压栈
+            sr.sprite = null;
+            sr.gameObject.SetActive(false);
+            _spritePool.Push(sr);
         }
 
         public string GetPoolStatus() =>

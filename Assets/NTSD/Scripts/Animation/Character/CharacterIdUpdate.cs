@@ -102,25 +102,33 @@ namespace NTSD.Animation
             // 按角色ID分发注册（对应 FLF 的 id_updates[characterId] 结构）
             switch (characterId)
             {
-                case CharacterIds.Deep:  // id_updates[1]: Deep
-                    // Future Phase 2: 迁移 Deep 的特殊连招逻辑
-                    // _handlers[IdUpdateHooks.GenericCombo] = DeepGenericComboHandler;
+                case CharacterIds.Deep:  // id_updates[1]
+                    _handlers[IdUpdateHooks.State3Frame]    = DeepState3FrameHandler;
+                    _handlers[IdUpdateHooks.State15_Crouch] = DeepState15CrouchHandler;
+                    _handlers[IdUpdateHooks.GenericCombo]   = DeepGenericComboHandler;
                     break;
 
-                case CharacterIds.Davis:  // id_updates[5]: Davis
-                    // Future Phase 2: 迁移 Davis 的 TU handler
-                    // _handlers[IdUpdateHooks.TU] = DavisTUHandler;
+                case CharacterIds.Rudolf:  // id_updates[5]
+                    _handlers[IdUpdateHooks.State3Frame]        = RudolfState3FrameHandler;
+                    _handlers[IdUpdateHooks.RudolfTransform]    = RudolfTransformHandler;
+                    _handlers[IdUpdateHooks.RevertTransform]    = RudolfRevertTransformHandler;
+                    _handlers[IdUpdateHooks.State1280Disappear] = RudolfState1280DisappearHandler;
                     break;
 
-                case CharacterIds.Rudolf:  // id_updates[11]: Rudolf
-                    // Future Phase 2: 迁移 Rudolf 的变身逻辑
-                    // _handlers[IdUpdateHooks.GenericCombo] = RudolfGenericComboHandler;
-                    // _handlers["revert_transform"] = RudolfRevertTransformHandler;
+                case CharacterIds.Louis:  // id_updates[6]
+                    _handlers[IdUpdateHooks.GenericCombo] = LouisGenericComboHandler;
+                    break;
+
+                case CharacterIds.Woody:  // id_updates[10]
+                    _handlers[IdUpdateHooks.State3FlyCrash] = WoodyState3FlyCrashHandler;
+                    break;
+
+                case CharacterIds.Davis:  // id_updates[11]
+                    _handlers[IdUpdateHooks.State3HitStop]    = DavisState3HitStopHandler;
+                    _handlers[IdUpdateHooks.State3FrameForce] = DavisState3FrameForceHandler;
                     break;
 
                 default:
-                    // FLF 语义：其余角色没有任何 id_update handler
-                    // _handlers 保持为空，TryInvoke 直接返回 false
                     break;
             }
 
@@ -232,27 +240,131 @@ namespace NTSD.Animation
             return TryInvoke(hookName, in ctx);
         }
 
-        // ==================== 角色特定 Handlers（Future Phase 2+）====================
-        //
-        // 说明：
-        // - 只有特定角色需要覆盖默认行为时，才在此添加对应的 handler 方法
-        // - 大多数角色不需要任何 handler（_handlers 保持为空）
-        // - 示例结构（未来迁移时使用）：
-        //
-        // private bool DeepGenericComboHandler(in IdUpdateContext ctx)
-        // {
-        //     if (ctx.ComboKey == "D>A")
-        //     {
-        //         // Deep 的 D>A 特殊处理
-        //         return true;  // 拦截默认逻辑
-        //     }
-        //     return false;  // 其他连招使用默认逻辑
-        // }
-        //
-        // private bool DavisTUHandler(in IdUpdateContext ctx)
-        // {
-        //     // Davis 的每帧特殊逻辑
-        //     return false;
-        // }
+        // ==================== 角色特定 Handlers ====================
+
+        // ---- Deep（FLF id_updates[1]）----
+
+        // FLF character.js:1483-1488: 帧267 vy += 1
+        private bool DeepState3FrameHandler(in IdUpdateContext ctx)
+        {
+            if (ctx.State == 267)
+            {
+                ctx.Ps.vy += 1f;
+                return true;
+            }
+            return false;
+        }
+
+        // FLF character.js:1489-1492: 帧267-272 前一帧时 dec_wait(-1)
+        private bool DeepState15CrouchHandler(in IdUpdateContext ctx)
+        {
+            var lf2 = ctx.Hub._LF2Character;
+            if (lf2.Frame.PN >= 267 && lf2.Frame.PN <= 272)
+            {
+                lf2.Trans.IncWait(-1);
+            }
+            return false;
+        }
+
+        // FLF character.js:1493-1501: hit_Fj 时强制方向
+        private bool DeepGenericComboHandler(in IdUpdateContext ctx)
+        {
+            if (ctx.ComboTag == "hit_Fj")
+            {
+                var lf2 = ctx.Hub._LF2Character;
+                if (ctx.ComboKey == "D>J" || ctx.ComboKey == "D>AJ")
+                    lf2.SwitchDir("right");
+                else
+                    lf2.SwitchDir("left");
+            }
+            return false;
+        }
+
+        // ---- Rudolf（FLF id_updates[5]）----
+
+        // FLF character.js:1510-1513: 帧273-276 vy = -6.8
+        private bool RudolfState3FrameHandler(in IdUpdateContext ctx)
+        {
+            if (ctx.State >= 273 && ctx.State <= 276)
+            {
+                ctx.Ps.vy = -6.8f;
+            }
+            return false;
+        }
+
+        // FLF character.js:1557-1562: 帧257 消失
+        private bool RudolfState1280DisappearHandler(in IdUpdateContext ctx)
+        {
+            if (ctx.State == 257)
+            {
+                var lf2 = ctx.Hub._LF2Character;
+                lf2.Effect.Super = true;
+                // shadow/sprite hide 由渲染层处理
+            }
+            return false;
+        }
+
+        private bool RudolfTransformHandler(in IdUpdateContext ctx)
+        {
+            var rudolf = ctx.Hub._LF2Character;
+            if (rudolf.Catching == null) return false;
+            Log.Info("[Rudolf] rudolf_transform triggered, target uid={0} (transform system pending)", rudolf.Catching.StableId);
+            return false;
+        }
+
+        private bool RudolfRevertTransformHandler(in IdUpdateContext ctx)
+        {
+            Log.Info("[Rudolf] revert_transform triggered (transform system pending)");
+            return false;
+        }
+
+        // ---- Louis（FLF id_updates[6]）----
+
+        // FLF character.js:1573-1577: hit_ja 禁用跳跃攻击变身
+        private bool LouisGenericComboHandler(in IdUpdateContext ctx)
+        {
+            if (ctx.ComboTag == "hit_ja")
+                return true; // 拦截，禁用该连招
+            return false;
+        }
+
+        // ---- Woody（FLF id_updates[10]）----
+
+        // FLF character.js:1580-1582: state3_fly_crash → set_wait(0)
+        private bool WoodyState3FlyCrashHandler(in IdUpdateContext ctx)
+        {
+            ctx.Hub._LF2Character.Trans.SetWait(0);
+            return true;
+        }
+
+        // ---- Davis（FLF id_updates[11]）----
+
+        // FLF character.js:1585-1599: hit_stop 特定帧 effect_stuck
+        private bool DavisState3HitStopHandler(in IdUpdateContext ctx)
+        {
+            var lf2 = ctx.Hub._LF2Character;
+            switch (ctx.State)
+            {
+                case 271: case 276: case 280:
+                    lf2.EffectStuck(1, 2);
+                    lf2.Trans.IncWait(1);
+                    return true;
+                case 273:
+                    lf2.EffectStuck(0, 2);
+                    return true;
+            }
+            return false;
+        }
+
+        // FLF character.js:1600-1605: frame_force 特定帧禁用预更新
+        private bool DavisState3FrameForceHandler(in IdUpdateContext ctx)
+        {
+            switch (ctx.State)
+            {
+                case 275: case 278: case 279:
+                    return true; // 禁用默认 frame_force 预更新
+            }
+            return false;
+        }
     }
 }

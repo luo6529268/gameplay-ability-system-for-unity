@@ -1,66 +1,60 @@
-using NTSD.Simulation;
 using UnityEngine;
+using NTSD.App;
+using NTSD.Simulation;
 
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
     /// LF2Character 受击系统
-    /// 对应 FLF character.prototype.hit (character.js:1893-2130)
-    /// 以及 character.prototype.injury (character.js:2136-2145)
+    /// 权威来源：反汇编 Entity_AI_Update (sub_42C8C0) + FLF character.prototype.hit
     ///
-    /// 调用链（对齐 FLF）：
-    ///   target.Attacked(target.Hit(itr, attacker, pos, vol))
-    ///
-    /// Hit() 是 prototype 方法，与 state_update 完全无关。
-    /// 内部局部辅助（对应 JS 闭包局部函数）：
-    ///   HitFall()       → fall()
-    ///   HitFallDown()   → falldown()
-    ///   HitPostEffect() → posteffect()
+    /// 关键对齐点（反汇编 vs 旧C#的差距修复）：
+    ///   1. efDvx/efDvy 现在真正写入 PS.vx/PS.vy
+    ///   2. fall==80 时倒地方向判断：基于被击者自身 vx 方向（反汇编逻辑）
+    ///   3. fall==80 时 vy 处理：dvy!=0 则 vy+=dvy 再钳制；dvy==0 则 vy-=7
+    ///   4. 攻击者 state==1002 命中后：攻击者速度反弹（vx=-victim.vx*0.5, vy=-3.5）
+    ///   5. FrameDelay：所有命中路径都设 attacker=3/victim=-3；击飞路径 victim=-5
+    ///   6. dvx 默认兜底：fall==80 且 dvx==0 时，被击者 vx += ±5.0
+    ///   7. 空中升级条件：vy < 0（速度向上），非 y < 0（高度）
+    ///   8. HitStateCount：+= itr.fall 累加，非直接赋 45
+    ///   9. HitStateCount >= 30 + kind=7 + 地面 → frame 112（防御破碎）
     /// </summary>
     public partial class LF2Character : LF2LivingObject
     {
         // ─────────────────────────────────────────────────────────────────
-        // 主方法：character.prototype.hit
+        // 主方法
         // ─────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// 受击处理（完整实现）
-        /// 对应 FLF character.js:1893-2130 character.prototype.hit
-        /// </summary>
         public override bool Hit(InteractionArea itr, LF2LivingObject attacker,
                                  UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
-            // FLF:1896 — vrest 冷却检查（基类已实现）
             if (!base.Hit(itr, attacker, attackerPos, vol)) return false;
 
-            bool acceptHit = false;
-            bool defended  = false;
-            float efDvx    = 0f;
-            float efDvy    = 0f;
-            int inj        = 0;
+            bool acceptHit  = false;
+            bool defended    = false;
+            bool isKnockdown = false;
+            float efDvx      = 0f;
+            float efDvy      = 0f;
+            int inj          = 0;
+            int effectNum    = 0;
 
             int myState = GetState();
 
-            // ──────────────────────────────────────────
-            // FLF:1900-1938  State 10: being caught
-            // ──────────────────────────────────────────
+            // ── State 10: being caught ──
             if (myState == LF2States.BeingCaught)
             {
-                // FLF 保证 state 10 时 $.catching 非空，C# 中若为 null 视为不可伤（无效状态）
                 var catcherChar = Catching as LF2Character;
                 bool cHurtable  = catcherChar != null && catcherChar.caught_cpointhurtable();
 
-                // FLF:1901-1904  catcher cpoint 允许被伤：触发 fall()
                 if (cHurtable)
                 {
                     acceptHit = true;
-                    HitFall(inj, ref efDvy, itr, attackerPos);
+                    isKnockdown |= HitFall(inj, ref efDvy, itr, attackerPos);
                 }
 
-                // FLF:1905-1938  伤害应用判断
                 if (!cHurtable && Catching != attacker)
                 {
-                    // 不可伤且攻击者不是抓取者 → 跳过
+                    // skip
                 }
                 else
                 {
@@ -69,10 +63,8 @@ namespace NTSD.Animation.LF2Objects
 
                     if (itr.injury > 0)
                     {
-                        // FLF:1912  创建受击效果
                         EffectCreate(0, NTSDGlobal.Gameplay.EffectDuration);
 
-                        // FLF:1913-1920  目标帧：vaction 优先，否则正面/背面 cpoint hurtact
                         int tar;
                         if (itr.vaction != 0)
                         {
@@ -86,31 +78,25 @@ namespace NTSD.Animation.LF2Objects
                                 ? (myCpoint?.fronthurtact ?? 0)
                                 : (myCpoint?.backhurtact  ?? 0);
                         }
-                        if (tar != 0) Trans.Frame(tar, 20);
+                        if (tar != 0) ImmediateFrame(tar);
                     }
                 }
             }
 
-            // ──────────────────────────────────────────
-            // FLF:1940  State 14: lying — 躺地无敌
-            // ──────────────────────────────────────────
+            // ── State 14: lying — 躺地无敌 ──
             else if (myState == LF2States.Lying)
             {
-                // 躺地期间免疫所有伤害，直接不处理
+                // 躺地期间免疫所有伤害
             }
 
-            // ──────────────────────────────────────────
-            // FLF:1941  State 19 + 攻击者 state 3000 → fire-run 免疫
-            // ──────────────────────────────────────────
+            // ── State 19 + 攻击者 state 3000 → fire-run 免疫 ──
             else if (myState == LF2States.FirenSpecific &&
                      attacker.GetState() == LF2States.ProjectileFlying)
             {
                 return false;
             }
 
-            // ──────────────────────────────────────────
-            // FLF:1943-1949  NTSD M01: kind 5000-5999 直接扣 HP
-            // ──────────────────────────────────────────
+            // ── kind 5000-5999 直接扣 HP ──
             else if (itr.kind >= 5000 && itr.kind < 6000)
             {
                 acceptHit = true;
@@ -118,65 +104,48 @@ namespace NTSD.Animation.LF2Objects
                 Health.HP = Mathf.Max(0, Health.HP - damage);
             }
 
-            // ──────────────────────────────────────────
-            // FLF:1950-1955  NTSD M02: kind 6000-6999 帧跳转
-            // ──────────────────────────────────────────
+            // ── kind 6000-6999 帧跳转 ──
             else if (itr.kind >= 6000 && itr.kind < 7000)
             {
                 acceptHit = true;
                 int targetFrame = itr.kind - 6000;
                 if (FrameCache.GetFrameDataById(targetFrame) != null)
-                    Trans.Frame(targetFrame, 0);
+                    ImmediateFrame(targetFrame);
             }
 
-            // ──────────────────────────────────────────
-            // FLF:1956-2038  主流程：kind 0 / kind-4系 / kind-9系
-            // 等价：ITR.kind === undefined || GC.match_itr_kind(kind, 0|4|9)
-            // ──────────────────────────────────────────
+            // ── 主流程：kind 0 / kind-4系 / kind-9系 ──
             else if (itr.kind == 0 ||
                      MatchItrKind(itr.kind, 4) ||
                      MatchItrKind(itr.kind, 9))
             {
                 acceptHit = true;
 
-                // FLF:1961  地面补偿（站地面 compen=1，空中 compen=0）
-                int compen = (PS.y == 0) ? 1 : 0;
-
-                // FLF:1962  攻击方向：优先取攻击者 vx 符号，否则取朝向
-                float attVx = attacker.PS?.vx ?? 0f;
-                int attDir  = (attVx == 0f) ? attacker.Dirh() : (attVx > 0f ? 1 : -1);
-
-                efDvx = (itr.dvx != 0) ? attDir * (float)(itr.dvx - compen) : 0f;
+                // 攻击方向：取攻击者朝向（反汇编 0x42D35B: [eax+80h] = facing byte → 1-2*facing = Dirh()）
+                int attDir = attacker.Dirh();
+                // 注：反汇编 0x42D384-0x42D42A dvx 直接应用，无 -1 补偿，compen 已删除
+                efDvx = (itr.dvx != 0) ? attDir * (float)itr.dvx : 0f;
                 efDvy = (itr.dvy != 0) ? (float)itr.dvy : 0f;
 
-                // FLF:1964  效果编号（0 为默认，GC.default.effect.num=0）
-                int effectNum = itr.effect;
+                effectNum = itr.effect;
 
-                // FLF:1966  冰冻状态免疫弱冰效果
                 if (myState == LF2States.Frozen && effectNum == 30) return false;
-
-                // FLF:1967  燃烧状态免疫弱火效果
                 if ((myState == LF2States.Burning || myState == LF2States.FirenSpecific) &&
                     (effectNum == 20 || effectNum == 21)) return false;
 
                 // ── 防御分支 ──
-                // FLF:1969  state 7 且正面受击
                 if (myState == LF2States.Defending &&
                     (attackerPos.x > PS.x) == (PS.dir == "right"))
                 {
-                    // FLF:1971  防御减伤
                     if (itr.injury != 0)
                         inj += Mathf.RoundToInt(NTSDGlobal.Gameplay.DefendInjuryFactor * itr.injury);
 
-                    // FLF:1972  bdefend 累加 → 可能破防
                     if (itr.bdefend != 0) HitCounters.AddBdefend(itr.bdefend);
 
                     if (HitCounters.Bdefend > NTSDGlobal.Gameplay.DefendBreakLimit)
-                        Trans.Frame(LF2StandardFrames.DefendBroken, 20);
+                        ImmediateFrame(LF2StandardFrames.DefendBroken);
                     else
-                        Trans.Frame(LF2StandardFrames.Defend1, 20);
+                        ImmediateFrame(LF2StandardFrames.Defend1);
 
-                    // FLF:1978  防御吸收击退速度
                     if (efDvx != 0f)
                     {
                         float absorbed = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.DefendAbsorb, efDvx);
@@ -184,47 +153,81 @@ namespace NTSD.Animation.LF2Objects
                     }
                     efDvy = 0f;
 
-                    // FLF:1980  HP 耗尽 → 强制倒地；否则标记防御成功
                     if (Health.HP - inj <= 0)
-                        HitFallDown(ref efDvy, itr, attackerPos);
+                        isKnockdown |= HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
                     else
                         defended = true;
                 }
                 // ── 非防御分支 ──
                 else
                 {
-                    // FLF:1983  持重武器则丢弃
-                    if (GetHeldWeapon() is LF2HeavyWeapon)
+                    if ((GetHeldWeapon() as LF2WeaponBase)?.IsHeavy == true)
                         DropWeapon(0f, 0f);
 
-                    // FLF:1984  伤害累加
                     if (itr.injury != 0) inj += itr.injury;
 
-                    // FLF:1985  重置防御值（立即失去防御资格）
                     HitCounters.SetBdefend(45);
 
-                    // FLF:1986  fall() 局部函数
-                    HitFall(inj, ref efDvy, itr, attackerPos);
+                    // 对应反汇编 entity+0B8h: add [eax+0B8h], ecx（累加，不是赋值）
+                    HitCounters.AddHitStateCount(itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value);
+
+                    isKnockdown |= HitFall(inj, ref efDvx, ref efDvy, itr, attackerPos);
                 }
-
-                // FLF:1989-1991  计算效果持续帧数（防御时缩短）
-                int vanish    = NTSDGlobal.Gameplay.EffectDuration - 1;
-                int nextFrame = Trans.Next;
-                if      (nextFrame == LF2StandardFrames.Defend1)      vanish = 3;
-                else if (nextFrame == LF2StandardFrames.DefendBroken) vanish = 4;
-
-                EffectCreate(effectNum, vanish, efDvx, efDvy);
-                HitPostEffect(effectNum, vol, efDvx, efDvy, defended, attackerPos, myState);
             }
 
-            // ──────────────────────────────────────────
-            // FLF:2039-2043  Kind 10/11: 笛子效果
-            // GC.match_itr_kind(kind, 10) → {10, 1}
-            // ──────────────────────────────────────────
+            // ── Kind 6: 命中确认标记（EXE 0x0042E6F4）──
+            // victim 受伤硬直帧（226~229）携带 kind=6 itr 向外发出
+            // 攻击者 body 碰到该 itr：this=攻击者，attacker=受伤的 victim
+            // this.HitConfirmEa=3，攻击者回到 standing 按 att 跳 frame 70
+            else if (itr.kind == 6)
+            {
+                HitConfirmEa = 3;
+                return true;   // 不扣血，不触发 vrest，直接返回
+            }
+
+            // ── Kind 8: 传送 + 回血（EXE 0x0042EC85–0x0042ECC7）──
+            // victim 传送到 attacker 位置；victim.frame = itr.dvx；heal_timer = throwvz + 1000
+            else if (itr.kind == 8)
+            {
+                if (PS != null && attacker?.PS != null)
+                {
+                    PS.x = attacker.PS.x;
+                    PS.z = attacker.PS.z + 1f;
+                }
+                if (itr.dvx > 0)
+                    ImmediateFrame(itr.dvx);
+                // 用 Effect.Heal 承载回血总量（heal_timer = throwvz + 1000，每8帧回8HP）
+                Effect.Heal = itr.throwvz + 1000;
+                FrameDelay  = -3;
+                if (attacker.FrameDelay >= 0)
+                    attacker.FrameDelay = 3;
+                return true;
+            }
+
+            // ── Kind 14: 方向阻挡（EXE 0x0042F079–0x0042F16A）──
+            // 根据 attacker 相对 victim 位置设置方向阻挡标志，当帧物理层阻止对应轴移动
+            else if (itr.kind == 14)
+            {
+                if (PS != null && attacker?.PS != null)
+                {
+                    float aix = attacker.PS.x;
+                    float aiz = attacker.PS.z;
+                    float vix = PS.x;
+                    float viz = PS.z;
+
+                    if (aix > vix + 5f && PS.vx > 0f) PS.xBoundPositive = true;
+                    else if (aix < vix - 5f && PS.vx < 0f) PS.xBoundNegative = true;
+
+                    if (aiz > viz + 2f && PS.vz > 0f) PS.zBoundPositive = true;
+                    else if (aiz < viz - 2f && PS.vz < 0f) PS.zBoundNegative = true;
+                }
+                return false;   // 不触发 vrest，每帧持续可激活
+            }
+
+            // ── Kind 10/11: 笛子效果 ──
             else if (MatchItrKind(itr.kind, 10) || itr.kind == 11)
             {
                 FluteForce();
-                // FLF:2041  倒地时笛子伤害翻倍
                 if (myState == LF2States.Falling)
                 {
                     inj = itr.injury * 2;
@@ -232,34 +235,95 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // ──────────────────────────────────────────
-            // FLF:2044-2046  Kind 15: 旋风效果
-            // ──────────────────────────────────────────
+            // ── Kind 15: 旋风效果 ──
             else if (itr.kind == 15)
             {
                 WhirlwindForce(vol);
             }
 
-            // ──────────────────────────────────────────
-            // FLF:2047-2050  Kind 16: 冰冻
-            // ──────────────────────────────────────────
+            // ── Kind 16: 冰冻 ──
             else if (itr.kind == 16)
             {
-                Trans.Frame(LF2StandardFrames.MpDrain, 38);   // FLF: frame 200 (frozen pose)
+                ImmediateFrame(LF2StandardFrames.MpDrain);
                 inj = itr.injury;
                 acceptHit = true;
             }
 
-            // ──────────────────────────────────────────
-            // FLF:2122-2126  结算
-            // ──────────────────────────────────────────
+            // ── 结算 ──
             if (acceptHit)
             {
-                Attacker = attacker;                            // FLF: $.itr.attacker = att
-                ItrVrestUpdate(attacker.StableId, itr);        // FLF: itr_vrest_update(att.uid, ITR)
+                Attacker = attacker;
+                ItrVrestUpdate(attacker.StableId, itr);
+
+                // 攻击方碰撞豁免（对应反汇编 entity+0ECh）：命中后 6 帧内攻击方跳过碰撞检测
+                attacker.HitCounters?.SetAttackExempt(6);
+
+                // 反汇编 0x0042D218/0x0042D17A/0x0042D0B6：entity+0B0h 值决定屏幕震动强度
+                // sub_419C40 写入 slot channel，渲染层消费产生视觉抖动
+                // 轻伤(0B0h=20) → channel 0Bh+0 → amount=11
+                // 中伤(0B0h=60) → channel 0+其他   → amount=12
+                // 倒地(0B0h=80) → channel 0Ch+2    → amount=14
+                if (isKnockdown)
+                    SetVisualShake(14);
+                else if (HitCounters.Fall > 20)
+                    SetVisualShake(12);
+                else
+                    SetVisualShake(11);
+
+                // 反汇编 0x0042D676：cmp [eax+0B0h], 50h; jnz loc_42D77A
+                // fall != 80 同样跳到 loc_42D77A（FrameDelay 设置处），所有命中路径都设 FrameDelay
+                // loc_42D77A: attacker.FrameDelay=3（若当前>=0）; victim.FrameDelay=-3
+                // 击飞路径（isKnockdown）: victim.FrameDelay=-5
+                if (attacker.FrameDelay >= 0)
+                    attacker.FrameDelay = 3;
+                FrameDelay = isKnockdown ? -5 : -3;
+                Debug.Log($"[HIT] victim={Name} attacker={attacker.Name} isKnockdown={isKnockdown} victim.FrameDelay={FrameDelay} attacker.FrameDelay={attacker.FrameDelay} fall={HitCounters.Fall}");
+
+                // 反汇编 0x0042E314–0x0042E328：地面上 HitStateCount >= 30 且 itr.kind == 7 → frame 112
+                if (!isKnockdown && PS.vy == 0f &&
+                    HitCounters.HitStateCount >= 30 && itr.kind == 7)
+                {
+                    ImmediateFrame(LF2StandardFrames.DefendBroken);
+                }
+
+                // 反汇编 sub_42C8C0：attacker state==1002 命中后的速度反弹
+                // attacker.vx = -(victim.vx * 0.5)；attacker.vy = -3.5（向上弹起）
+                if (attacker.GetState() == LF2States.WeaponThrowing) // 1002
+                {
+                    var aps = attacker.PS;
+                    if (aps != null)
+                    {
+                        aps.vx = -(PS.vx * 0.5f);
+                        aps.vy = -3.5f; // 0xC00C000000000000 = -3.5
+                    }
+                }
+
+                // 反汇编：非击飞路径的 dvx 写入 knockback_vx（entity+28h），不直接写 PS.vx
+                // PS.vx 由 FramePostProcessAll 统一写入；HitCount++ 使写入条件成立
+                if (!defended && efDvx != 0f)
+                {
+                    KnockbackVx += efDvx;
+                    HitCount++;
+                }
             }
 
-            Injury(inj);   // FLF: $.injury(inj) — 无论 acceptHit 与否都调用（inj 可能为 0）
+            if (acceptHit)
+                Injury(inj);
+
+            // 反汇编 sub_42C8C0 loc_42D11A：击中音效
+            // slot 2=006.wav(knockdown), slot 0=001.wav(普通/重击) → PlaySfx
+            if (acceptHit && itr.kind == 0)
+            {
+                string hitSfx = isKnockdown
+                    ? NTSDGlobal.Sound.HitKnockdown
+                    : NTSDGlobal.Sound.HitNormal;
+                AppManager.Instance?.SoundPlayer?.PlaySfx(hitSfx);
+            }
+
+            // 反汇编 0x0042F7A8–0x0042F9A1：kind=0 且 effect ∉ {6,23} 时生成 spark
+            if (acceptHit && itr.kind == 0 && effectNum != 6 && effectNum != 23)
+                SpawnSpark(itr, attacker, attackerPos, vol);
+
             return acceptHit;
         }
 
@@ -267,82 +331,267 @@ namespace NTSD.Animation.LF2Objects
         // character.prototype.injury
         // ─────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// 伤害结算（override，NPC 扩展入口）
-        /// 对应 FLF character.js:2136-2145 character.prototype.injury
-        /// </summary>
         protected override void Injury(int inj)
         {
             base.Injury(inj);
-            // FLF:2143  if (this.is_npc && this.itr.attacker) this.itr.attacker.offset_attack(inj)
-            // TODO: NPC offset_attack 回调（需要 IsNpc 标志位与 offset_attack 接口）
+            // TODO: NPC offset_attack 回调
         }
 
         // ─────────────────────────────────────────────────────────────────
-        // 局部辅助方法（对应 hit() 内的 JS 闭包局部函数）
+        // 局部辅助：HitFall
+        // 对应反汇编 Entity_AI_Update 中 fall 累加 + 帧切换逻辑
         // ─────────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// 倒地积累计数，决定受伤帧或 falldown
-        /// 对应 FLF character.js:2024-2040 局部函数 fall()
-        /// 注意：currentInj 只读（对应 JS 闭包读取外部 inj 变量）
+        /// 反汇编 0x0042C8C0 LABEL_79：fall 累加 + 帧选择。
+        ///   强制击飞条件（HP耗尽 / Falling / Frozen）必须在 AddFall 之前判断。
+        ///   fall > 60 → HitFallDown；fall > 40 → frame 226；fall > 20 → frame 222/224。
+        ///   空中（PS.y < 0）在中/重伤档时升级为击飞。
+        ///   每档命中后将 fall 钳制到对应档位上限，防止下次命中从累加值越界。
         /// </summary>
-        private void HitFall(int currentInj, ref float efDvy, InteractionArea itr, Vector3 attackerPos)
+        private bool HitFall(int currentInj, ref float efDvx, ref float efDvy,
+                             InteractionArea itr, Vector3 attackerPos)
         {
-            // FLF:2025  fall 值累加
             int fallInc = (itr.fall != 0) ? itr.fall : NTSDGlobal.Default.Fall.Value;
+            int state   = GetState();
+
+            // 反汇编 0x0042C8C0 LABEL_79：强制击飞判断在 fall 累加之前
+            bool forceKnockback = (Health.HP - currentInj <= 0)
+                                  || (state == LF2States.Falling)
+                                  || (state == LF2States.Frozen);
+
+            if (forceKnockback)
+            {
+                HitCounters.AddFall(fallInc);
+                return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+            }
+
             HitCounters.AddFall(fallInc);
             int fall = HitCounters.Fall;
 
-            int state = GetState();
-            if      (state == LF2States.Frozen)                               HitFallDown(ref efDvy, itr, attackerPos);
-            else if (PS.y < 0f || PS.vy < 0f)                                HitFallDown(ref efDvy, itr, attackerPos);
-            else if (Health.HP - currentInj <= 0)                            HitFallDown(ref efDvy, itr, attackerPos);
-            else if (fall > 0  && fall <= 20) Trans.Frame(LF2StandardFrames.Injured,  20);
-            else if (fall > 20 && fall <= 30) Trans.Frame(LF2StandardFrames.Injured2, 20);
-            else if (fall > 30 && fall <= 40) Trans.Frame(LF2StandardFrames.Injured4, 20);
-            else if (fall > 40 && fall <= 60) Trans.Frame(LF2StandardFrames.Injured6, 20);
-            else if (NTSDGlobal.Gameplay.FallKO < fall)                      HitFallDown(ref efDvy, itr, attackerPos);
+            // fall > 60 → 直接击飞（反汇编 50113: cmp ecx,3Ch; jle→轻/中/重伤分支）
+            if (fall > 60)
+                return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+
+            // fall > 40 → 重伤帧 226；空中（vy < 0，速度向上）升级为击飞
+            if (fall > 40)
+            {
+                ImmediateFrame(LF2StandardFrames.Injured6);
+                if (PS.vy < 0)
+                    return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                return false;
+            }
+
+            // fall > 20 → 中伤帧 222/224；空中（vy < 0）升级为击飞
+            if (fall > 20)
+            {
+                bool sameDir = attacker_dir_matches_victim(attackerPos);
+                ImmediateFrame(sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
+                if (PS.vy < 0)
+                    return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                return false;
+            }
+
+            // fall > 0 → 轻伤帧 220；空中（vy < 0）升级至中伤帧（不击飞）
+            if (fall > 0)
+            {
+                ImmediateFrame(LF2StandardFrames.Injured);
+                if (PS.vy < 0)
+                {
+                    bool sameDir = attacker_dir_matches_victim(attackerPos);
+                    ImmediateFrame(sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
+                }
+            }
+            return false;
         }
 
-        /// <summary>
-        /// 进入倒地状态
-        /// 对应 FLF character.js:2042-2050 局部函数 falldown()
-        /// </summary>
-        private void HitFallDown(ref float efDvy, InteractionArea itr, Vector3 attackerPos)
+        // 兼容签名：BeingCaught 路径只传 efDvy
+        private bool HitFall(int currentInj, ref float efDvy,
+                             InteractionArea itr, Vector3 attackerPos)
         {
-            // FLF:2043  未定义 dvy 时使用默认下落速度（itr.dvy==0 视为"未设置"）
-            if (itr.dvy == 0) efDvy = NTSDGlobal.Default.Fall.Dvy;
+            float efDvxDummy = 0f;
+            return HitFall(currentInj, ref efDvxDummy, ref efDvy, itr, attackerPos);
+        }
 
+        // ─────────────────────────────────────────────────────────────────
+        // 局部辅助：HitFallDown
+        // 对应反汇编 fall==80 时的倒地处理
+        // ─────────────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// 反汇编 0x0042D730 fall==80 倒地处理：
+        ///   帧选择依据 knockback_vx（+0x28h）和 facing（+0x80h），不用 PS.vx。
+        ///     (facing==right && kb>0) || (facing==left && kb<0) → 186（背面飞）
+        ///     否则 → 180（正面飞）
+        ///   vy 处理（反汇编 0x0042D6B0–0x0042D6D2）：
+        ///     dvy != 0 → vy += dvy；若 y+vy > 0 则钳制 vy = -12.0（反汇编值）
+        ///     dvy == 0 → vy -= 7.0
+        ///   KnockbackVx 累加，PS.vx 由 Generic_Transit 每帧重算，此处不写。
+        /// </summary>
+        private bool HitFallDown(ref float efDvx, ref float efDvy,
+                                 InteractionArea itr, Vector3 attackerPos)
+        {
             HitCounters.ResetFall();
-            PS.vy = 0f;
 
-            bool front = (attackerPos.x > PS.x) == (PS.dir == "right");
+            // 反汇编 0x0042D730：帧号由 knockback_vx（+0x28h）和 facing（+0x80h）决定
+            bool facingRight = PS.dir == "right";
+            float kb = KnockbackVx;
+            bool flyingBack = (facingRight && kb > 0f) || (!facingRight && kb < 0f);
+            int fallFrame = flyingBack ? LF2StandardFrames.FallingBack   // 186
+                                       : LF2StandardFrames.FallingFront; // 180
+            ImmediateFrame(fallFrame);
 
-            // FLF:2048-2050  正面特例：dvx<0 且 bdefend>=60 → 强制背面倒地
-            if (front && itr.dvx < 0 && itr.bdefend >= 60)
-                Trans.Frame(LF2StandardFrames.FallingBack,  21);
-            else if (front)
-                Trans.Frame(LF2StandardFrames.FallingFront, 21);
+            // dvx 兜底：dvx==0 时补充 ±5.0（按攻击者方向）
+            if (itr.dvx == 0 && efDvx == 0f)
+            {
+                int attackerDir = (attackerPos.x > PS.x) ? 1 : -1;
+                efDvx = attackerDir * 5.0f;
+            }
+
+            // vy 处理（反汇编 0x0042D6B0–0x0042D6D2）
+            // 反汇编：写 KnockbackVy(entity+30h)，不直接写 PS.vy(entity+48h)
+            // PS.vy 由 Frame_PostProcess 统一写入
+            if (itr.dvy != 0)
+            {
+                KnockbackVy += itr.dvy;
+                // y + KnockbackVy > 0 → 钳制为 -12.0（反汇编 40280000h = 12.0f，存负号）
+                if ((int)PS.y + (int)KnockbackVy > 0)
+                    KnockbackVy = -12.0f;
+                efDvy = itr.dvy;
+            }
             else
-                Trans.Frame(LF2StandardFrames.FallingBack,  21);
+            {
+                KnockbackVy -= 7.0f;
+                efDvy = -7.0f;
+            }
+
+            // KnockbackVx/Vy 累加（反汇编 entity+28h/30h）；PS.vx/vy 由 FramePostProcessAll 写入
+            KnockbackVx += efDvx;
+            HitCount++;
+
+            efDvx = 0f;
+            return true;
+        }
+
+        // 兼容签名：防御路径只有 efDvy
+        private bool HitFallDown(ref float efDvy, InteractionArea itr, Vector3 attackerPos)
+        {
+            float efDvxDummy = 0f;
+            return HitFallDown(ref efDvxDummy, ref efDvy, itr, attackerPos);
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // 辅助：判断攻击者方向与被击者朝向是否相同
+        // ─────────────────────────────────────────────────────────────────
+
+        private bool attacker_dir_matches_victim(Vector3 attackerPos)
+        {
+            // 反汇编：*(_BYTE *)(v61 + 128) == *(_BYTE *)(v50 + 128) → dir 字节相等
+            // v61 = victim, v50 = attacker entity
+            // C# 中：攻击者相对位置判断
+            bool attackerFacingRight = attackerPos.x > PS.x;
+            bool victimFacingRight   = PS.dir == "right";
+            return attackerFacingRight == victimFacingRight;
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // 视觉效果
+        // ─────────────────────────────────────────────────────────────────
+
+        public override void VisualEffectCreate(int num, PhysicsState.FlfVolume rect,
+                                                bool righttip = false, int variant = 0,
+                                                bool withSound = false)
+        {
+            // 保留基类虚方法，spark 生成已移至 SpawnSpark
         }
 
         /// <summary>
-        /// 效果后处理（音效、特效、武器掉落、状态帧切换）
-        /// 对应 FLF character.js:2052-2120 局部函数 posteffect()
+        /// 生成命中 spark（对应反汇编 0x0042F7A8–0x0042F9A1）。
+        /// timer 初始值：itr.fall > 60 → attacking*20（大spark）；否则 → attacking*4+10（小spark）
+        /// 坐标：基于攻击者 itr box 与被击者位置计算，含随机偏移
         /// </summary>
+        private void SpawnSpark(InteractionArea itr, LF2LivingObject attacker,
+                                Vector3 attackerPos, PhysicsState.FlfVolume vol)
+        {
+            // timer 初始值（反汇编 0x0042F81B–0x0042F837）
+            // fall > 60 路径：
+            //   lea edx,[edx+edx*4] → attacking*5；shl edx,2 → attacking*20
+            // fall <= 60 路径：
+            //   lea edx,ds:0Ah[edx*4] → attacking*4 + 10
+            int fall      = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
+            int attacking = itr.attacking;
+            int timerInitial = fall > 60
+                ? attacking * 20
+                : attacking * 4 + 10;
+
+            // spark_x（反汇编 0x0042F84F–0x0042F8EF）
+            // spark_y（反汇编 0x0042F8F7–0x0042F954）
+            // 原版：spark_y_stored = attacker.z + edi + Random(9) - 4
+            //       edi = clamp((itr.y - centery)/2 + attacker.y + itr.h - centery, ...)
+            //       worldY_unity = spark_y_stored / 100 = (attacker.z + edi) / 100
+            // 故存储：sz = attacker.z（深度），sy = edi（跳跃高度域偏移）
+            // SparkRenderer 用 (sz + sy) / 100 作为 Unity worldY
+            float sx;
+            float sy;
+            float sz;
+
+            if (attacker?.PS != null)
+            {
+                var atk     = attacker.PS;
+                int centerx = attacker.Frame.D?.centerx ?? 0;
+                int centery = attacker.Frame.D?.centery ?? 0;
+                float itrW  = vol.w;
+                float itrX  = itr.x;   // dat 原始 itr.x（反汇编 [idi+4]）
+                float itrY  = itr.y;   // dat 原始 itr.y（反汇编 [idi+10h]）
+
+                // spark_x（反汇编：facing right → atk.x - centerx + itr.w + itr.x）
+                //                  facing left  → atk.x + centerx - itr.w - itr.x）
+                if (attacker.Dirh() > 0) // facing right
+                {
+                    sx = atk.x - centerx + itrW + itrX;
+                    if (sx > PS.x) sx = PS.x;
+                }
+                else
+                {
+                    sx = atk.x + centerx - itrW - itrX;
+                    if (sx < PS.x) sx = PS.x;
+                }
+
+                // spark_y（反汇编 [idi+10h] = itr.y，[idi+8] = itr.h）
+                float baseY = atk.y + (vol.h * 0.5f) + itrY - centery;
+                float lower = PS.y - centery;
+                float upper = PS.y;
+                if (baseY < lower)       baseY = (lower + baseY) * 0.5f;
+                else if (baseY > upper)  baseY = (upper + baseY) * 0.5f;
+
+                // 随机偏移（反汇编 Random_Int(9) 两次，各 0-8，偏移 -4）
+                float rand1 = UnityEngine.Random.Range(0, 9);
+                float rand2 = UnityEngine.Random.Range(0, 9);
+                sy = baseY + rand1 - 4f;   // edi（跳跃高度偏移，PS.y 域）
+                sx += rand2 - 4f;
+                sz = atk.z;                // attacker.PS.z（深度）
+            }
+            else
+            {
+                sx = PS.x;
+                sy = PS.y - 4f;
+                sz = PS.z;
+            }
+
+            AddSparkSlot(timerInitial, sx, sy, sz);
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // 局部辅助：HitPostEffect（武器掉落 + 冰火效果）
+        // ─────────────────────────────────────────────────────────────────
+
         private void HitPostEffect(int effectNum, PhysicsState.FlfVolume rect,
                                    float efDvx, float efDvy, bool defended,
                                    Vector3 attackerPos, int myState)
         {
-            // FLF:2053-2059  防御时仅播放格挡音效，不触发后续效果
             if (defended)
             {
-                if (effectNum == 0 || effectNum == 1)
-                {
-                    // TODO: sound.play('1/002') — 格挡音效
-                }
+                // TODO: sound.play('1/002') — 格挡音效
                 return;
             }
 
@@ -350,7 +599,6 @@ namespace NTSD.Animation.LF2Objects
 
             switch (effectNum)
             {
-                // FLF:2060-2064  普通/强力击中
                 case 0:
                 case 1:
                     if (nextFrame == LF2StandardFrames.FallingFront ||
@@ -358,14 +606,8 @@ namespace NTSD.Animation.LF2Objects
                     {
                         DropWeapon(efDvx, efDvy);
                     }
-                    // righttip: 攻击者在右侧时视觉特效显示在右端
-                    VisualEffectCreate(effectNum, rect,
-                        attackerPos.x < PS.x,
-                        HitCounters.Fall > 0 ? 0 : 1,
-                        true);
                     break;
 
-                // FLF:2065-2069  火系效果（带 fallthrough 到 case 20）
                 case 2:
                 case 21:
                 case 22:
@@ -373,29 +615,26 @@ namespace NTSD.Animation.LF2Objects
                     DropWeapon(efDvx, efDvy);
                     goto case 20;
 
-                // FLF:2070-2071  燃烧
                 case 20:
-                    Trans.Frame(LF2StandardFrames.Fire, 36);  // FLF: frame 203
-                    // TODO: sound.play('1/070') — 燃烧音效
+                    ImmediateFrame(LF2StandardFrames.Fire);
+                    // TODO: sound.play('1/070')
                     break;
 
-                // FLF:2072-2077  冰系效果
                 case 3:
                 case 30:
                     DropWeapon(efDvx, efDvy);
                     if (myState != LF2States.Frozen)
                     {
-                        Trans.Frame(LF2StandardFrames.MpDrain, 38);       // FLF: frame 200 (冰冻)
-                        // TODO: sound.play('1/065') — 冰冻音效
+                        ImmediateFrame(LF2StandardFrames.MpDrain);
+                        // TODO: sound.play('1/065')
                     }
                     else
                     {
-                        Trans.Frame(LF2StandardFrames.FallingFront2, 21); // FLF: frame 182 (冰块碎裂)
-                        // TODO: sound.play('1/066') — 碎裂音效
+                        ImmediateFrame(LF2StandardFrames.FallingFront2);
+                        // TODO: sound.play('1/066')
                     }
                     break;
 
-                // FLF:2078-2079  击退（仅掉武器）
                 case 4:
                     DropWeapon(efDvx, efDvy);
                     break;

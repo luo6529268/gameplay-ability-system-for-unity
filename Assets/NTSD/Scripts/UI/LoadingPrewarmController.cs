@@ -179,7 +179,8 @@ namespace NTSD.UI
                 CacheKey = "NTSD.CharacterConfig",
                 Execute = async (task, _) =>
                 {
-                    var configs = await UniTask.RunOnThreadPool(() => manager.ParseCharacterFrameConfigs(text =>
+                    var dataManager = GameDataManager.Instance;
+                    var configs = await UniTask.RunOnThreadPool(() => manager.ParseCharacterFrameConfigs(dataManager, text =>
                     {
                         var formatted = progressTextFormatter != null ? progressTextFormatter(text) : text;
                         onProgressText?.Invoke(formatted);

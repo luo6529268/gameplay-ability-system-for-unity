@@ -1,4 +1,5 @@
 using UnityEngine;
+using NTSD.App;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
@@ -27,6 +28,8 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== 追踪系统 ==========
         private LF2LivingObject _chasingTarget;
+        private readonly System.Collections.Generic.Dictionary<int, int> _chasedCounts
+            = new System.Collections.Generic.Dictionary<int, int>();
 
         // ========== 公开属性 ==========
         public LF2LivingObject Parent => _parent;
@@ -317,8 +320,10 @@ namespace NTSD.Animation.LF2Objects
             Health.HP = 0;
             _lastState = -1;
             _chasingTarget = null;
+            _chasedCounts.Clear();
             NoBounce = false;
-
+            ShotCount = 0;
+            ResetSpark();
             ResetStableId();
         }
 
@@ -402,6 +407,15 @@ namespace NTSD.Animation.LF2Objects
 
                     ItrArestUpdate(itr);
                     target.ItrVrestUpdate(StableId, itr);
+
+                    // 反汇编 Game_FrameUpdate 0x422667/0x42267F：
+                    // state 3003（瞬移）命中时 attacker 也设 vrest=10（双向冷却）
+                    if (GetState() == LF2States.ProjectileTeleport)
+                    {
+                        int vrest = itr.vrest > 0 ? itr.vrest : NTSDGlobal.Default.Weapon.VRest;
+                        ItrVrestUpdate(target.StableId, new InteractionArea { vrest = vrest });
+                    }
+
                     return;
                 }
             }
@@ -471,25 +485,22 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 1 placeholder
+            // FLF specialattack.js 中无 pre_interaction 逻辑，直接返回 false
             return false;
         }
 
         private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 2 placeholder
             return false;
         }
 
         private bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 3 placeholder
             return false;
         }
 
         private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
         {
-            // TODO: pre_interaction kind 7 placeholder
             return false;
         }
 
@@ -625,11 +636,52 @@ namespace NTSD.Animation.LF2Objects
         // ========== 追踪系统 ==========
 
         /// <summary>
+        /// 从场景查询敌方角色，按距离+重复惩罚排序，选取最近目标。
         /// 对应 FLF specialattack.prototype.chase_target (specialattack.js:424-453)
         /// </summary>
         public LF2LivingObject ChaseTarget()
         {
-            // TODO: 实现目标选择逻辑
+            var sceneQuery = Match?.SceneQuery;
+            if (sceneQuery == null || PS == null) return _chasingTarget;
+
+            var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
+            Match.GetAllLivingObjects(allObjects);
+
+            LF2LivingObject best = null;
+            float bestScore = float.MaxValue;
+
+            for (int i = 0; i < allObjects.Count; i++)
+            {
+                var obj = allObjects[i];
+                if (obj == null || obj.PS == null) continue;
+                if (obj.Team == Team) continue;
+                if (obj.Type != LF2ObjectType.Character) continue;
+                if (obj.Health != null && obj.Health.HP <= 0) continue;
+
+                float dx = obj.PS.x - PS.x;
+                float dz = obj.PS.z - PS.z;
+                float score = UnityEngine.Mathf.Sqrt(dx * dx + dz * dz);
+
+                int chaseCount;
+                if (_chasedCounts.TryGetValue(obj.StableId, out chaseCount))
+                    score += 500f * chaseCount;
+
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    best = obj;
+                }
+            }
+
+            if (best != null)
+            {
+                _chasingTarget = best;
+                if (!_chasedCounts.ContainsKey(best.StableId))
+                    _chasedCounts[best.StableId] = 1;
+                else
+                    _chasedCounts[best.StableId]++;
+            }
+
             return _chasingTarget;
         }
 
@@ -642,8 +694,28 @@ namespace NTSD.Animation.LF2Objects
 
         public bool IsLeavingBoundary(float margin)
         {
-            // TODO: 实现边界检测
+            if (PS == null) return false;
+            float nx = PS.sx + PS.vx;
+            float ny = PS.sy + PS.vy;
+            float spriteW = Sprite?.GetWidthPx() ?? 0f;
+
+            // FLF background.prototype.leaving: nx+width < -xt || nx > bgWidth+xt || ny < -600 || ny > 100
+            if (ny < -600f || ny > 100f) return true;
+            if (nx + spriteW < -margin) return true;
+
+            float bgWidth = 1500f; // FLF 默认背景宽度
+            var bwm = NTSD.LevelEditor.BoundaryWallManager.Instance;
+            if (bwm != null && bwm.TryGetStageBoundsPx(out var bounds))
+                bgWidth = bounds.xMaxPx - bounds.xMinPx;
+
+            if (nx > bgWidth + margin) return true;
             return false;
+        }
+
+        public void CreateBrokenEffect()
+        {
+            // 对应 FLF state_exit: if ($.match.broken_list[$.id]) $.brokeneffect_create($.id)
+            BrokenEffectCreate(_objectId);
         }
 
         public void CreateObject(ObjectPoint op)
@@ -678,14 +750,10 @@ namespace NTSD.Animation.LF2Objects
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
         }
 
-        public void CreateBrokenEffect()
-        {
-            // TODO: 实现破碎效果
-        }
-
         public void PlaySound(string soundId)
         {
-            // TODO: 实现音效播放
+            if (string.IsNullOrEmpty(soundId)) return;
+            AppManager.Instance?.SoundPlayer?.PlaySfx(soundId);
         }
 
         // ========== 初始化子步骤 ==========
@@ -716,6 +784,10 @@ namespace NTSD.Animation.LF2Objects
         private void InitializeFrame(OPointCreateTask task)
         {
             int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
+            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(_objectId);
+            FrameCache.Load(wrapper);
+            Frame.D = FrameCache.GetFrameDataById(action);
+            UnityEngine.Debug.Log($"[LF2SpecialAttack] InitializeFrame: oid={_objectId}, action={action}, wrapper={(wrapper == null ? "NULL" : wrapper.characterData?.frames?.Count.ToString())}, Frame.D={Frame.D?.frameId}");
             Trans.Frame(action, 0);
         }
 

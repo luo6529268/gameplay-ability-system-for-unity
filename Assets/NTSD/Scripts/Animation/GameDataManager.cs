@@ -122,6 +122,18 @@ namespace NTSD.Animation
             return cachedConfig != null;
         }
 
+        /// <summary>
+        /// 将 data.txt 中的相对路径解析为完整路径
+        /// 对应原 DataFileParser.ResolveObjectFilePath
+        /// </summary>
+        public static string ResolveObjectFilePath(string dataFileDirectory, string relativePath)
+        {
+            if (relativePath.StartsWith("Assets"))
+                return relativePath;
+            string normalizedPath = relativePath.Replace("\\", "/");
+            return Path.Combine(dataFileDirectory, normalizedPath);
+        }
+
         #region 解析逻辑（与 DataTxtToJsonConverter 相同）
 
         private GameDataConfig ParseDataFile(string content)

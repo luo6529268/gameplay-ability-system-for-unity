@@ -72,13 +72,15 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		protected override void SpawnMultipleCharacters()
 		{
-			// 遍历所有玩家并在对应的生成点生成
 			for (int i = 0; i < Players.Count; i++)
 			{
+				if (i >= SpawnPoints.Count)
+				{
+					Debug.LogWarning($"[MultiplayerLevelManager] SpawnPoints 数量({SpawnPoints.Count})不足以生成所有玩家({Players.Count})，跳过玩家 {i}");
+					break;
+				}
 				SpawnPoints[i].SpawnPlayer(Players[i]);
-				             
 			}
-			// 触发生成完成事件
 			TopDownEngineEvent.Trigger(TopDownEngineEventTypes.SpawnComplete, null);
 		}
 

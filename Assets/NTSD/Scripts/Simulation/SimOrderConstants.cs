@@ -65,6 +65,10 @@ namespace NTSD.Simulation
                 case LF2ObjectType.HeavyWeapon:
                     return HeavyWeapon;
 
+                case LF2ObjectType.ThrowWeapon:
+                case LF2ObjectType.Drink:
+                    return LightWeapon;
+
                 case LF2ObjectType.SpecialAttack:
                     return SpecialAttack;
 

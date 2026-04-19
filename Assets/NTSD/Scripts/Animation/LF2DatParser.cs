@@ -107,7 +107,7 @@ namespace NTSD.Animation
             // 使用正则表达式匹配参数
             frame.pic = GetIntValue(content, "pic:");
             frame.state = GetIntValue(content, "state:");
-            frame.wait = GetIntValue(content, "wait:");
+            frame.wait = GetIntValue(content, "wait:", defaultValue: 1);
             frame.next = GetIntValue(content, "next:");
             frame.dvx = GetIntValue(content, "dvx:");
             frame.dvy = GetIntValue(content, "dvy:");
@@ -202,6 +202,11 @@ namespace NTSD.Animation
                 itr.arest = GetIntValue(itrContent, "arest:");
                 itr.vrest = GetIntValue(itrContent, "vrest:");
                 itr.effect = GetIntValue(itrContent, "effect:");
+                itr.kill   = GetIntValue(itrContent, "kill:");
+                itr.catchingact = GetIntArrayValue(itrContent, "catchingact:");
+                itr.caughtact = GetIntArrayValue(itrContent, "caughtact:");
+                itr.attacking = GetIntValue(itrContent, "attacking:");
+                itr.throwvz = GetIntValue(itrContent, "throwvz:");
 
                 frame.itrs.Add(itr);
             }
@@ -225,7 +230,6 @@ namespace NTSD.Animation
                     frame.opoint.y = GetIntValue(opointContent, "y:");
                     frame.opoint.dvx = GetIntValue(opointContent, "dvx:");
                     frame.opoint.dvy = GetIntValue(opointContent, "dvy:");
-                    frame.opoint.dvz = GetIntValue(opointContent, "dvz:");  // P3: 解析 dvz
                     frame.opoint.oid = GetIntValue(opointContent, "oid:");
                     frame.opoint.facing = GetIntValue(opointContent, "facing:");
                 }
@@ -293,14 +297,27 @@ namespace NTSD.Animation
         /// <summary>
         /// 从字符串中提取整数值
         /// </summary>
-        private static int GetIntValue(string content, string key)
+        private static int GetIntValue(string content, string key, int defaultValue = 0)
         {
             Match match = Regex.Match(content, key + @"\s*(-?\d+)");
             if (match.Success && int.TryParse(match.Groups[1].Value, out int result))
             {
                 return result;
             }
-            return 0;
+            return defaultValue;
+        }
+
+        // 解析 "key: [a, b]" 格式的整数数组（对应 FLF catchingact/caughtact）
+        private static int[] GetIntArrayValue(string content, string key)
+        {
+            Match match = Regex.Match(content, Regex.Escape(key) + @"\s*\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]");
+            if (match.Success &&
+                int.TryParse(match.Groups[1].Value, out int v0) &&
+                int.TryParse(match.Groups[2].Value, out int v1))
+            {
+                return new int[] { v0, v1 };
+            }
+            return null;
         }
 
         /// <summary>

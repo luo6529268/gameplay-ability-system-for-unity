@@ -390,5 +390,71 @@ namespace NTSD.Animation
                 ps.vy += mass * NTSDGlobal.Gameplay.Gravity;
             }
         }
+
+        /// <summary>
+        /// 武器专用物理，严格对齐反汇编 Entity_FrameAdvance 0x4162EB-0x4164BD 执行顺序：
+        ///   1. x += vx（边界锁定）
+        ///   2. z += vz（边界锁定）
+        ///   3. 边界标志清零
+        ///   4. 地面摩擦（y+=vy 之前，用旧 y 判断，反汇编 0x4163A1: cmp [esi+14h],0; jl skip）
+        ///   5. y += vy；钳制 y <= 0
+        ///   6. 若新 y < -0.0001（仍在空中）：vy += gravityToAdd（反汇编 0x4164BD: test ah,1; jz landed）
+        /// gravityToAdd 由调用方按 type/type_sub 计算并传入（type=3 传 0）。
+        /// </summary>
+        public static void WeaponDynamics(PhysicsState ps, float gravityToAdd)
+        {
+            if (ps == null) return;
+
+            // x 位移（[+3F0h]/[+3F4h] 边界锁定）
+            if (ps.vx > 0 && !ps.xBoundPositive)
+                ps.x += ps.vx;
+            else if (ps.vx < 0 && !ps.xBoundNegative)
+                ps.x += ps.vx;
+
+            // z 位移（[+3E8h]/[+3ECh] 边界锁定）
+            if (ps.vz > 0 && !ps.zBoundPositive)
+                ps.z += ps.vz;
+            else if (ps.vz < 0 && !ps.zBoundNegative)
+                ps.z += ps.vz;
+
+            // 清零边界锁定标志（反汇编 0x416365-0x416377）
+            ps.zBoundPositive = false;
+            ps.zBoundNegative = false;
+            ps.xBoundPositive = false;
+            ps.xBoundNegative = false;
+
+            // 地面摩擦：用旧 y（y+=vy 之前）判断（反汇编 0x4163A1: cmp [esi+14h],ebp; jl skip）
+            if (ps.y >= 0)
+            {
+                if (ps.vx > 0.0001f)
+                {
+                    ps.vx -= ps.fric;
+                    if (ps.vx < 0.0001f) ps.vx = 0f;
+                }
+                else if (ps.vx < -0.0001f)
+                {
+                    ps.vx += ps.fric;
+                    if (ps.vx > -0.0001f) ps.vx = 0f;
+                }
+                if (ps.vz > 0.0001f)
+                {
+                    ps.vz -= ps.fric;
+                    if (ps.vz < 0.0001f) ps.vz = 0f;
+                }
+                else if (ps.vz < -0.0001f)
+                {
+                    ps.vz += ps.fric;
+                    if (ps.vz > -0.0001f) ps.vz = 0f;
+                }
+            }
+
+            // y 位移（反汇编 0x4164AC-0x4164B5）
+            ps.y += ps.vy;
+            if (ps.y > 0) ps.y = 0;
+
+            // 重力：仅在新 y < -0.0001（仍在空中）时累加（反汇编 0x4164BD: test ah,1; jz loc_4166CE）
+            if (ps.y < -0.0001f)
+                ps.vy += gravityToAdd;
+        }
     }
 }

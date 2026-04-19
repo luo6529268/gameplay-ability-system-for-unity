@@ -29,6 +29,12 @@ namespace NTSD.DatParser
             if (buffer.Length == 0)
                 return string.Empty;
 
+            // 检测是否已是明文（与 LF2.IDE IsPlaintext 逻辑一致）
+            int plainStart = (buffer.Length >= 3 && buffer[0] == 0xEF && buffer[1] == 0xBB && buffer[2] == 0xBF) ? 3 : 0;
+            string plainHead = Encoding.ASCII.GetString(buffer, plainStart, Math.Min(64, buffer.Length - plainStart));
+            if (plainHead.TrimStart().StartsWith("<bmp_begin>") || plainHead.TrimStart().StartsWith("<frame>"))
+                return Encoding.UTF8.GetString(buffer, plainStart, buffer.Length - plainStart);
+
             // 按照 LF2.IDE 的逻辑：如果提供了密钥就解密，否则直接返回
             if (string.IsNullOrEmpty(encryptionKey))
             {

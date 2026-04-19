@@ -54,5 +54,24 @@ namespace NTSD.Animation
 
         // Future: 根据 FLF character.js 逐步补充其他 hooks
         // 例如：hit_stop, revert_transform 等
+
+        /// <summary>
+        /// Rudolf 变身 hook（对应 FLF id_updates[5].rudolf_transform）
+        /// 调用时机：state_9 帧240 / state_501 帧298
+        /// </summary>
+        public const string RudolfTransform = "rudolf_transform";
+
+        /// <summary>
+        /// Rudolf 解除变身 hook（对应 FLF default.revert_transform）
+        /// 调用时机：Generic_Combo DJA 且处于变身状态
+        /// </summary>
+        public const string RevertTransform = "revert_transform";
+
+        // state_3 专用 hooks（对应 FLF character.js id_updates 各角色分支）
+        public const string State3Frame        = "state3_frame";        // 每帧触发（frame 事件）
+        public const string State3FlyCrash     = "state3_fly_crash";    // 帧253：飞行碰撞
+        public const string State3HitStop      = "state3_hit_stop";     // hit_stop 事件
+        public const string State3FrameForce   = "state3_frame_force";  // frame_force 事件
+        public const string State1280Disappear = "state1280_disappear"; // 帧257：消失
     }
 }

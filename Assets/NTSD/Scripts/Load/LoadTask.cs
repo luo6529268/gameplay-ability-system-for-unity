@@ -7,6 +7,7 @@ namespace NTSD.Load
     {
         LoadConfig,
         LoadSprites,
+        LoadAudio,
         Warmup,
         Other
     }
@@ -15,6 +16,7 @@ namespace NTSD.Load
     {
         Character,
         UI,
+        Audio,
         Effect,
         Scene,
         Other

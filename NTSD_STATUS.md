@@ -1,6 +1,6 @@
 # NTSD 复刻项目 — 当前状态总览
 
-> 最后更新：2026-03-01
+> 最后更新：2026-03-24
 > 分支：`NTSD_GAS`
 
 ---
@@ -202,6 +202,74 @@ LF2Character.Injury(inj)  ← HP 扣减 + hp_lost 记录（待实现）
 | `Generic_Frame` | MP 消耗空分支 | 中 |
 | `LF2CharacterStateModule` | 纯占位符，实际功能未接入 | 低 |
 | `Injury()` | 补充 hp_lost / hp_bound 字段 | 中 |
+
+---
+
+## 六-B、C# vs FLF 差距分析（2026-03-24）
+
+> 目标：先让基础战斗流程跑通，再对照 NTSD2.4 pseudoC 替换细节。
+
+### 差距一：角色攻击命中判定（post_interaction）— 完全缺失
+
+FLF 中角色拳脚命中走 `character.prototype.post_interaction`（character.js:2291），在每帧 `combo` 事件后触发：
+```
+post_combo → pre_interaction（拾取/抓取）
+           → post_interaction（itr kind=0/4 命中判定 → hit()）
+```
+
+C# 中：
+- `Generic_PreInteraction()` 已实现（拾取/抓取），由 `post_combo` 触发 ✅
+- **`post_interaction` 对应实现完全不存在** ❌ — 角色出拳/出脚没有任何命中判定
+
+**结果：角色攻击永远打不到人。**
+
+---
+
+### 差距二：武器命中判定（weapon.post_interaction）— 有框架但未接通
+
+FLF weapon.js:246 在武器自己的 `post_interaction` 里调用 `victim.hit(ITR, $, ...)`。
+
+C# 中：
+- `LF2WeaponBase.TryApplyHit()` 已实现，调用 `character.Hit()` ✅
+- 但 **武器的 post_interaction 在哪里被调用？** 需要确认武器帧推进时是否触发了碰撞检测 ⚠️
+
+---
+
+### 差距三：character.Hit() 实现状态
+
+`LF2Character.Hit.partial.cs` 中 `Hit()` 主方法已实现（FLF 对齐），包含：
+- vrest 检查 ✅
+- BeingCaught/Lying/FirenSpecific 前置分流 ✅
+- kind 5000~6000 NTSD 特殊段 ✅
+- kind 0 主流程（防御/非防御）✅
+- `HitFall()` / `HitFallDown()` ✅（但阈值为 FLF 版，非 NTSD2.4 EXE 版）
+- `HitPostEffect()` ✅（框架完整）
+
+**但它从未被调用到**，因为差距一/二导致调用链断裂。
+
+---
+
+### 差距四：State 12（Falling）落地后转换 — 部分缺失
+
+`State_Falling` 的 `frame` 事件已实现动画帧序列，但：
+- `fell_onto_ground` 事件处理：框架有，但落地后选择爬起(state 11)还是躺地(state 14)的判定逻辑未完整实现 ⚠️
+- State 14 `state_entry`/`state_exit`：TODO 占位 ❌
+
+---
+
+### 跑通战斗的最小路径
+
+```
+① 实现角色的 post_interaction（角色 itr kind=0 命中判定）
+   → 在 Generic_Frame 或 post_combo 后调用，scene.query 找到碰撞目标后调 victim.Hit()
+
+② 确认武器 post_interaction 调用链是否已接通
+
+③ 以上接通后，Hit() → HitFall() → frame=220/222/226 就能看到受击帧
+   （State_Injured 的 frame 事件已实现，能正常播放受击动画）
+
+④ 再补 State 14 state_entry（落地后躺倒），战斗基本闭环
+```
 
 ---
 

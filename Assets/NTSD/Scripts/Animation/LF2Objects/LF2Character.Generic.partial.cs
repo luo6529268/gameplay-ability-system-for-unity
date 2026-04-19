@@ -7,7 +7,6 @@ using NTSD.Simulation;
 using NTSD.Tools;
 using System;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -27,6 +26,9 @@ namespace NTSD.Animation.LF2Objects
                 ? SimulationTickDriver.Instance.CurrentTickIndex
                 : 0;
 
+            // post_interaction 已移至 SimPostInteraction 阶段（对齐反汇编 GameMode_Process 碰撞循环）
+            // 原位置：Generic_TU 开头；新位置：所有对象 SerialTickAll 完成后统一执行
+
             if (PS.y == 0 && PS.vy == 0 && Frame.N == LF2StandardFrames.JumpingAir && Frame.PN != LF2StandardFrames.JumpingUp)
             {
                 TransitionToFrame(999);
@@ -39,7 +41,7 @@ namespace NTSD.Animation.LF2Objects
                 {
                     TransitionToFrame(frameId, 15);
                 }
-                else
+                else if (!res)
                 {
                     // 默认分支：PS.vy=0 + 落地瞬间摩擦
                     PS.vy = 0;
@@ -56,7 +58,7 @@ namespace NTSD.Animation.LF2Objects
                 {
                     TransitionToFrame(frameId, 15);
                 }
-                else
+                else if (!res)
                 {
                     // 默认分支：Frozen 不动；JumpingAir→Crouch；其它→Crouch2
                     if (Frame.D.state == LF2States.Frozen)
@@ -74,15 +76,7 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            if (tickIndex % 12 == 0 && Health.HP >= 0 && Health.HP < Health.HPBound)
-            {
-                Health.HP++;
-                if (CharacterStats != null)
-                {
-                    CharacterStats.CurrentHP = Health.HP;
-                }
-            }
-
+            // kind=8 分帧回血（反汇编验证存在：heal_timer = throwvz + 1000，每8帧回8HP）
             if (Health.HP >= 0 && Effect.Heal is int healAmount && healAmount > 0 && tickIndex % 8 == 0)
             {
                 const int healSpeed = 8;
@@ -90,29 +84,9 @@ namespace NTSD.Animation.LF2Objects
                 Health.HP = Mathf.Min(Health.HP + appliedHeal, Health.HPBound);
                 Effect.Heal = healAmount - appliedHeal;
                 if (CharacterStats != null)
-                {
                     CharacterStats.CurrentHP = Health.HP;
-                }
             }
-
-            int maxMp = CharacterStats != null && CharacterStats.MaxMP > 0
-                ? CharacterStats.MaxMP
-                : NTSDGlobal.Default.Health.MpFull;
-            if (tickIndex % 3 == 0 && Health.MP < maxMp)
-            {
-                int clampedHp = CharacterStats != null && CharacterStats.MaxHP > 0
-                    ? Mathf.Min(Health.HP, CharacterStats.MaxHP)
-                    : Mathf.Min(Health.HP, NTSDGlobal.Default.Health.HpFull);
-                int hpFull = CharacterStats != null && CharacterStats.MaxHP > 0
-                    ? CharacterStats.MaxHP
-                    : NTSDGlobal.Default.Health.HpFull;
-                int mpRecover = 1 + Mathf.FloorToInt((hpFull - clampedHp) / 100f);
-                Health.MP = Mathf.Min(Health.MP + mpRecover, maxMp);
-                if (CharacterStats != null)
-                {
-                    CharacterStats.CurrentMP = Health.MP;
-                }
-            }
+            // 注：反汇编验证无 HP/MP 自然恢复，已移除 tickIndex%12 HP++ 和 tickIndex%3 MP++ 逻辑
 
             ComboBuffer?.ReduceTimeout();
 
@@ -140,6 +114,10 @@ namespace NTSD.Animation.LF2Objects
                 Match?.Unregister(this);
             }
 
+            // FLF character.js:174-175  fall/bdefend 自然恢复（每 TU）
+            HitCounters.RecoverFall(NTSDGlobal.Gameplay.RecoverFall);
+            HitCounters.RecoverBdefend(NTSDGlobal.Gameplay.RecoverBdefend);
+
             return false;
         }
 
@@ -149,10 +127,27 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         private bool Generic_Transit()
         {
+            // 反汇编 0x416254-0x41627C：FrameDelay 非零时跳过物理（hit_stop 冻结）
+            // FrameDelay 衰减已在 base.Transit() 中完成，此处为衰减后的值
+            if (FrameDelay != 0) return false;
+
+            // Frame_PostProcess（反汇编 0x0041BF00）的 Knockback→vx/vy/vz 逻辑
+            // 不在此处执行——反汇编中该函数在所有 entity SerialTick 完成后才调用，
+            // 对应 SimulationTickDriver 中 SerialTickAll 之后的独立 pass。
+            // 见 SimulationWorld.FramePostProcessAll()
+
+            // kind=14 方向阻挡（反汇编 entity+3F0h/3F4h/3E8h/3ECh 边界标志）
+            // xBound/zBound 由 Hit() kind=14 分支每帧写入，此处在位移前强制阻止对应方向移动
+            if (PS.xBoundPositive && PS.vx > 0f) PS.vx = 0f;
+            if (PS.xBoundNegative && PS.vx < 0f) PS.vx = 0f;
+            if (PS.zBoundPositive && PS.vz > 0f) PS.vz = 0f;
+            if (PS.zBoundNegative && PS.vz < 0f) PS.vz = 0f;
+            // 边界标志由 CharacterMechanics.WeaponDynamics 清零；
+            // 字符物理走 Step() 路径，这里手动清零
+            PS.xBoundPositive = PS.xBoundNegative = false;
+            PS.zBoundPositive = PS.zBoundNegative = false;
+
             // dynamics: position, friction, gravity
-            // 更新动态物理效果（位置、摩擦力、重力）
-            // 任何位置变更将在下一个时间单位(TU)更新到屏幕
-            // 更新武器位置，使其跟随角色移动
             ApplyDynamics();
             WPointUpdate();
             return false;
@@ -166,51 +161,27 @@ namespace NTSD.Animation.LF2Objects
         {
             if (Frame.D.mp != 0)
             {
-                LF2FrameData previousFrame = FrameCache.GetFrameDataById(Frame.PN);
-                bool isNextTriggered = previousFrame != null && previousFrame.next == Frame.N;
+                // 对齐 NTSD 2.4 反汇编 sub_414C30 @ 0x00414C85
+                // dmp = mp % 1000, dhp = (mp / 1000) * 10（整数截断除法）
+                int mp  = Frame.D.mp;
+                int dmp = mp % 1000;
+                int dhp = (mp / 1000) * 10;
 
-                if (isNextTriggered)
+                // 0x00414C99: jl loc_414D6D — MP 不足则跳过整段
+                if (Health.MP >= dmp)
                 {
-                    if (Frame.D.mp < 0)
+                    // 0x00414CC3: jle loc_414D6D — HP 不足则跳过整段
+                    if (Health.HP > dhp)
                     {
-                        Health.MP += Frame.D.mp;
+                        Health.HP -= dhp;
+                        Health.MP -= dmp;
+
                         if (CharacterStats != null)
                         {
+                            CharacterStats.CurrentHP = Health.HP;
                             CharacterStats.CurrentMP = Health.MP;
                         }
-
-                        if (Health.MP < 0)
-                        {
-                            Health.MP = 0;
-                            if (CharacterStats != null)
-                            {
-                                CharacterStats.CurrentMP = 0;
-                            }
-
-                            if (Frame.D.hit_d > 0)
-                            {
-                                TransitionToFrame(Frame.D.hit_d);
-                            }
-                        }
                     }
-                }
-                else
-                {
-                    int dmp = Frame.D.mp % 1000;
-                    int dhp = Mathf.FloorToInt(Frame.D.mp / 1000f) * 10;
-
-                    Health.MP -= dmp;
-                    if (Health.MP < 0)
-                    {
-                        Health.MP = 0;
-                    }
-
-                    if (CharacterStats != null)
-                    {
-                        CharacterStats.CurrentMP = Health.MP;
-                    }
-
-                    Injury(dhp);
                 }
             }
 
@@ -248,11 +219,12 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 default:
-                    // 特殊处理: Rudolf 的 DJA 变身
-                    if (combo == "DJA")
+                    // 对应 FLF character.js:226-228: DJA + transform_character.is_rudolf_transform → revert_transform
+                    if (combo == "DJA" && _CharacterHub?._IdUpdate != null)
                     {
-                        // TODO: Rudolf 变身检查逻辑
-                        // if (character.transform_character != null && character.transform_character.is_rudolf_transform) { ... }
+                        var ctx = new IdUpdateContext(_CharacterHub, _CharacterHub._LF2Character.PS, combo, null, 0, 0);
+                        if (_CharacterHub._IdUpdate.TryInvoke(IdUpdateHooks.RevertTransform, in ctx))
+                            return true;
                     }
                     break;
             }
@@ -275,16 +247,13 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            // 检查连招是否有效
-            // Step 3: 尝试调用角色特定逻辑 (id_update) 进行拦截
-            // 对应 FLF: if (!$.id_update('generic_combo', K, tag))
-            //if (character._Character != null && character._Character._IdUpdate != null)
-            //{
-            //    if (character._Character._IdUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
-            //    {
-            //        return true;  // 角色特定逻辑已处理，不再执行默认跳转
-            //    }
-            //}
+            // Step 3: 调用角色特定逻辑 id_update('generic_combo', K, tag)
+            // 对应 FLF character.js:233: if (!$.id_update('generic_combo', K, tag))
+            if (_CharacterHub?._IdUpdate != null)
+            {
+                if (_CharacterHub._IdUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
+                    return true;  // 角色特定逻辑已处理，阻止默认跳转
+            }
 
             // 如果不是通用连招
             // 获取连招方向
@@ -363,6 +332,115 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
+        /// <summary>
+        /// 角色拳脚攻击命中判定
+        /// 对应 FLF character.js:2291-2360 character.prototype.post_interaction
+        /// 处理 itr kind=0（普通攻击）和 kind=4（倒地攻击）
+        /// </summary>
+        private void Generic_PostInteraction()
+        {
+            var frame = Frame?.D;
+            var sceneQuery = Match?.SceneQuery;
+            if (frame == null || sceneQuery == null) return;
+            if (PS == null) return;
+
+            var itrs = frame.itrs;
+            if (itrs == null || itrs.Count == 0) return;
+
+            if (!ItrArestTest()) return;
+
+            // 攻击方碰撞豁免守卫（对应反汇编 0x419E3B：[esi+0ECh] > 0 跳过整体碰撞检测）
+            if (HitCounters?.AttackExempt > 0) return;
+
+            float spriteWidthPx = GetSpriteWidthPxForCollision();
+            if (spriteWidthPx <= 0f) return;
+
+            // FLF: vol.zwidth = 0（由目标 bdy 自身的 zwidth 决定范围）
+            var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
+
+            for (int i = 0; i < Mathf.Min(itrs.Count, itrVolumes.Count); i++)
+            {
+                var itr = itrs[i];
+                if (itr == null) continue;
+                if (itr.kind != 0 && itr.kind != 4) continue;
+
+                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
+                if (candidates == null || candidates.Count == 0) continue;
+
+                for (int c = 0; c < candidates.Count; c++)
+                {
+                    var target = candidates[c];
+                    if (!CanPostInteractTarget(itr, target)) continue;
+
+                    var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
+                    bool hit = target.Hit(itr, this, attackerPos, itrVolumes[i]);
+                    if (!hit) continue;
+
+                    Debug.Log($"[PostInteract] HIT! attacker={Name} frame={Frame?.D?.frameId} itr.kind={itr.kind} itr.vrest={itr.vrest} itr.arest={itr.arest} arest_before={ItrRest?.Arest} AttackExempt={HitCounters?.AttackExempt}");
+                    ItrArestUpdate(itr);
+                    Debug.Log($"[PostInteract] arest_after={ItrRest?.Arest}");
+                    StateUpdate("hit_stop", out _);
+
+                    if (itr.arest > 0) return;
+                }
+            }
+
+            // kind=6：受伤硬直帧向外发出命中确认标记
+            // 对应反汇编 EXE 0x0042E6F4：[victim+0EAh] = 3
+            // 自身 itr kind=6 碰到附近角色 body → 目标.HitConfirmEa = 3
+            for (int i = 0; i < Mathf.Min(itrs.Count, itrVolumes.Count); i++)
+            {
+                var itr = itrs[i];
+                if (itr == null || itr.kind != 6) continue;
+
+                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
+                if (candidates == null || candidates.Count == 0) continue;
+
+                for (int c = 0; c < candidates.Count; c++)
+                {
+                    var target = candidates[c];
+                    if (target == null || target == this) continue;
+                    if (target.PS == null) continue;
+                    if (Team != 0 && target.Team == Team) continue;
+                    if (!target.ItrVrestTest(StableId)) continue;
+
+                    var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
+                    target.Hit(itr, this, attackerPos, itrVolumes[i]);
+                }
+            }
+        }
+
+        private bool CanPostInteractTarget(InteractionArea itr, LF2LivingObject target)
+        {
+            if (target == null || target == this) return false;
+            if (target.PS == null || target.Frame?.D == null) return false;
+            if (target.Health != null && target.Health.HP <= 0) return false;
+            if (!target.ItrVrestTest(StableId)) return false;
+
+            // effect 0/1：同队角色不可命中（FLF:2302-2306）
+            if ((itr.effect == 0 || itr.effect == 1) &&
+                target is LF2Character && Team != 0 && target.Team == Team)
+                return false;
+
+            // effect 4：只命中非角色且 state==3000（FLF:2307-2310）
+            if (itr.effect == 4)
+            {
+                if (target is LF2Character) return false;
+                if (target.GetState() != LF2States.ProjectileFlying) return false;
+            }
+
+            // effect 20/21/22：只命中角色（FLF:2311-2320）
+            if (itr.effect == 20 || itr.effect == 21 || itr.effect == 22)
+            {
+                if (target is not LF2Character) return false;
+            }
+
+            // kind=4：不能命中自己的 attacker（FLF:2322-2330）
+            if (itr.kind == 4 && Attacker == target) return false;
+
+            return true;
+        }
+
         private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
         {
             if (itr == null || target == null) return false;
@@ -425,21 +503,45 @@ namespace NTSD.Animation.LF2Objects
             // 抓取成功，更新 itr arest
             ItrArestUpdate(itr);
 
-            // 原版 LF2：抓取者固定切换到帧 120（正面/背面相同）
-            TransitionToFrame(LF2StandardFrames.Catching, 10);
+            // 对应 FLF character.js:2234-2237: 根据 dir 选择 catchingact[0](正面) 或 catchingact[1](背面)
+            int catchFrame;
+            if (itr.catchingact != null && itr.catchingact.Length >= 2)
+                catchFrame = (dir == "front") ? itr.catchingact[0] : itr.catchingact[1];
+            else
+                catchFrame = LF2StandardFrames.Catching;
+            TransitionToFrame(catchFrame, 10);
 
             // 设置抓取目标
             Catching = target;
+
+            // 对应反汇编 0x0042D786/0x0042D796：抓取成功时抓取者 FrameDelay=3，被抓者 FrameDelay=-3
+            FrameDelay = 3;
+            targetChar.FrameDelay = -3;
 
             return true;
         }
 
         private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
         {
+            return PickupWeapon(itr, target, playAnimation: true);
+        }
+
+        // 对应 FLF character.js:2250-2270 武器拾取共享逻辑
+        // playAnimation: kind=2 时播放拾取帧; kind=7 时不播
+        private bool PickupWeapon(InteractionArea itr, LF2LivingObject target, bool playAnimation)
+        {
             if (_heldWeapon != null)
                 return false;
 
-            if (target.Type != LF2ObjectType.LightWeapon && target.Type != LF2ObjectType.HeavyWeapon)
+            if (target.Type != LF2ObjectType.LightWeapon && target.Type != LF2ObjectType.HeavyWeapon && target.Type != LF2ObjectType.ThrowWeapon && target.Type != LF2ObjectType.Drink)
+                return false;
+
+            // 只允许拾取地面上的武器（FLF: light=1004/1003, heavy=2004）
+            int wstate = target.GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.WeaponJustOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround)
                 return false;
 
             var weapon = target as LF2WeaponBase;
@@ -448,10 +550,13 @@ namespace NTSD.Animation.LF2Objects
 
             ItrArestUpdate(itr);
 
-            if (target.Type == LF2ObjectType.LightWeapon)
-                TransitionToFrame(LF2StandardFrames.PickingLight, 10);
-            else if (target.Type == LF2ObjectType.HeavyWeapon)
-                TransitionToFrame(LF2StandardFrames.PickingHeavy, 10);
+            if (playAnimation)
+            {
+                if (target.Type == LF2ObjectType.LightWeapon || target.Type == LF2ObjectType.ThrowWeapon || target.Type == LF2ObjectType.Drink)
+                    TransitionToFrame(LF2StandardFrames.PickingLight, 10);
+                else if (target.Type == LF2ObjectType.HeavyWeapon)
+                    TransitionToFrame(LF2StandardFrames.PickingHeavy, 10);
+            }
 
             HoldWeapon(weapon);
             return true;
@@ -459,12 +564,18 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
         {
-            // 检查是否处于攻击状态
+            // 对应 FLF character.js:2247-2249: kind=7 需要 att 键按下才触发，否则跳出
+            // FLF: if (!$.con.state.att) { break }
             if (Controller == null || !Controller.IsAttack)
-            {
                 return false;
-            }
-            return false;
+
+            // att 已按下：fall-through 到 kind=2 武器拾取逻辑
+            // 注意：kind=7 不切换拾取动画帧（FLF 原文 kind==2 才切帧）
+            // kind=7 也不允许拾取重型武器（FLF: if (!(ITR.kind===7 && hit[t].type==='heavyweapon'))）
+            if (target.Type == LF2ObjectType.HeavyWeapon)
+                return false;
+
+            return PickupWeapon(itr, target, playAnimation: false);
         }
 
         /// <summary>
@@ -516,6 +627,16 @@ namespace NTSD.Animation.LF2Objects
             DropWeapon();
 
             return isFront ? "front" : "back";
+        }
+
+        /// <summary>
+        /// PostInteraction 阶段（对应反汇编 GameMode_Process 碰撞双层循环）
+        /// 在所有对象 SerialTickAll 完成后统一执行，处理 kind=0/4 普通攻击碰撞。
+        /// </summary>
+        public override void SimPostInteraction(int tickIndex)
+        {
+            if (!StateUpdate("post_interaction", out _))
+                Generic_PostInteraction();
         }
 
         #endregion

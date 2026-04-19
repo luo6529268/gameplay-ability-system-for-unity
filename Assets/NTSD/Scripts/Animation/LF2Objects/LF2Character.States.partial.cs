@@ -1,4 +1,5 @@
-using BeatEmUpTemplate2D;
+﻿using BeatEmUpTemplate2D;
+using NTSD.App;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.Input;
@@ -144,7 +145,7 @@ namespace NTSD.Animation.LF2Objects
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Jumping, "跳跃键 -> 跳跃");
                                 if (IsHeavyWeapon())
                                 {
-                                    if ((bool)Proper("heavy_weapon_jump"))
+                                    if (Proper("heavy_weapon_jump") is bool hwj && hwj)
                                     {
                                         StateReturnFrame = 1;
                                         return true;
@@ -162,6 +163,17 @@ namespace NTSD.Animation.LF2Objects
 
                             case "att":
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Punch, "攻击键 -> 挥拳");
+
+                                // 命中确认窗口（反汇编 entity+0EAh > 0 时跳 frame 70）
+                                // kind=6 命中后 3 帧内按攻击键触发连击
+                                if (HitConfirmEa > 0 && FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch) != null)
+                                {
+                                    HitConfirmEa = 0;
+                                    TransitionToFrame(LF2StandardFrames.SuperPunch, LF2StateConstants.ComboTransitionWait);
+                                    StateReturnFrame = 1;
+                                    return true;
+                                }
+
                                 if (_heldWeapon != null)
                                 {
                                     bool hasDx = Controller.IsLeft != Controller.IsRight;
@@ -172,19 +184,19 @@ namespace NTSD.Animation.LF2Objects
                                         StateReturnFrame = 1;
                                         return true;
                                     }
-                                    else if ((bool)Proper(_heldWeapon.ObjectId, "just_throw")) 
+                                    else if (Proper(_heldWeapon.ObjectId, "just_throw") is bool jt && jt)
                                     {
                                         TransitionToFrame(LF2StandardFrames.LightWeaponThw, LF2StateConstants.ComboTransitionWait);
                                         StateReturnFrame = 1;
                                         return true;
                                     }
-                                    else if ((bool)Proper(_heldWeapon.ObjectId, "stand_throw"))
+                                    else if (Proper(_heldWeapon.ObjectId, "stand_throw") is bool st && st)
                                     {
                                         TransitionToFrame(LF2StandardFrames.LightWeaponThw, LF2StateConstants.ComboTransitionWait);
                                         StateReturnFrame = 1;
                                         return true;
                                     }
-                                    else if ((bool)Proper(_heldWeapon.ObjectId, "attackable"))
+                                    else if (Proper(_heldWeapon.ObjectId, "attackable") is bool atk1 && atk1)
                                     {
                                         // FLF character.js:303 — $.match.random() < 0.5 选择武器攻击帧
                                         int NormalWeaponAtck = Match.Rng.Next() < 0.5f ? LF2StandardFrames.NormalWeaponAtck : LF2StandardFrames.NormalWeaponAtck2;
@@ -194,25 +206,8 @@ namespace NTSD.Animation.LF2Objects
                                     }
                                 }
 
-                                // 重拳检测：用帧72/73的itr范围检测前方是否有近身敌人（itr kind:6）
-                                var sceneQuery = Match?.SceneQuery;
-                                if (sceneQuery != null)
-                                {
-                                    var superPunchFrame = FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch2)
-                                                       ?? FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch2 + 1);
-                                    if (superPunchFrame?.itrs != null && superPunchFrame.itrs.Count > 0)
-                                    {
-                                        float spriteW = GetSpriteWidthPxForCollision();
-                                        var itrVol = PS.GetItrVolume(superPunchFrame.itrs[0], superPunchFrame.centerx, superPunchFrame.centery, spriteW);
-                                        var hits = sceneQuery.QueryItrs(itrVol, this, 6, Team);
-                                        if (hits != null && hits.Count > 0)
-                                        {
-                                            TransitionToFrame(LF2StandardFrames.SuperPunch, LF2StateConstants.ComboTransitionWait);
-                                            StateReturnFrame = 1;
-                                            return true;
-                                        }
-                                    }
-                                }
+                                // 注：反汇编 0x004153C2-0x004153D3 确认 SuperPunch 仅由 HitConfirmEa 触发
+                                // 无近战范围检测（原 QueryItrs kind=6 块已删除）
 
                                 // FLF character.js:361 — $.match.random() < 0.5 选择挥拳帧 (60 或 65)
                                 int punchFrame = Match.Rng.Next() < 0.5f ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
@@ -398,7 +393,7 @@ namespace NTSD.Animation.LF2Objects
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.DashForward, "跳跃 -> 冲刺");
                                 if (IsHeavyWeapon())
                                 {
-                                    if ((bool)Proper("heavy_weapon_dash"))
+                                    if (Proper("heavy_weapon_dash") is bool hwd && hwd)
                                     {
                                         StateReturnFrame = 1;
                                         return true;
@@ -421,7 +416,7 @@ namespace NTSD.Animation.LF2Objects
                                 if (_heldWeapon != null)
                                 {
 
-                                    if (_heldWeapon is LF2HeavyWeapon)
+                                    if (_heldWeapon != null && (_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
                                     {
                                         TransitionToFrame(LF2StandardFrames.HeavyWeaponThw, 10);
                                         StateReturnFrame = 1;
@@ -430,13 +425,13 @@ namespace NTSD.Animation.LF2Objects
                                     else
                                     {
                                         bool hasDx = Controller.IsLeft != Controller.IsRight;
-                                        if (hasDx && (bool)Proper(_heldWeapon.ObjectId, "run_throw"))
+                                        if (hasDx && Proper(_heldWeapon.ObjectId, "run_throw") is bool rt && rt)
                                         {
                                             TransitionToFrame(LF2StandardFrames.LightWeaponThw, 10);
                                             StateReturnFrame = 1;
                                             return true;
                                         }
-                                        else if ((bool)Proper(_heldWeapon.ObjectId, "attackable"))
+                                        else if (Proper(_heldWeapon.ObjectId, "attackable") is bool atk2 && atk2)
                                         {
                                             TransitionToFrame(LF2StandardFrames.RunWeaponAtck, 10);
                                             StateReturnFrame = 1;
@@ -470,6 +465,24 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
+                    // 角色特定帧逻辑（对应 FLF id_updates[id].state3_frame）
+                    if (Frame.N == LF2StandardFrames.FlyingCrash)
+                    {
+                        var ctx253 = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
+                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3FlyCrash, in ctx253);
+                    }
+                    {
+                        var ctx3f = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
+                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3Frame, in ctx3f);
+                    }
+
+                    // 帧257：Rudolf 消失
+                    if (Frame.N == 257)
+                    {
+                        var ctx257 = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
+                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State1280Disappear, in ctx257);
+                    }
+
                     // 空中攻击保持逻辑: 如果攻击结束时还在空中，强制切回跳跃状态
                     var D = Frame.D;
                     if (D.next == LF2StandardFrames.LoopToStart && PS.vy < 0)
@@ -479,9 +492,21 @@ namespace NTSD.Animation.LF2Objects
                     }
                     return false;
 
+                case "frame_force":
+                    // 对应 FLF id_updates[id].state3_frame_force（Davis 禁用特定帧的 force 预更新）
+                    {
+                        var ctxFF = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
+                        return _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3FrameForce, in ctxFF) ?? false;
+                    }
+
                 case "hit_stop":
-                    // 命中停顿 (卡肉) 效果
-                    // 部分攻击帧 (如 86, 87, 91) 在命中时会延长当前帧时间
+                    // 角色特定 hit_stop 逻辑（对应 FLF id_updates[id].state3_hit_stop）
+                    {
+                        var ctxHS = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
+                        if (_CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3HitStop, in ctxHS) == true)
+                            return true;
+                    }
+                    // 通用命中停顿 (卡肉) 效果
                     if (CurrentFrameId == 86 || CurrentFrameId == 87 || CurrentFrameId == 91)
                     {
                         Trans.IncWait(1, 10);
@@ -588,8 +613,8 @@ namespace NTSD.Animation.LF2Objects
                             if (characterData == null) return false;
 
                             // 应用跳跃速度
-                            PS.vx = dx * (characterData.jump_distance - 1);
-                            PS.vz = Dirv() * (characterData.jump_distancez - 1);
+                            PS.vx = dx * characterData.jump_distance;
+                            PS.vz = Dirv() * characterData.jump_distancez;
                             PS.vy = characterData.jump_height;
                         }
                     }
@@ -610,12 +635,13 @@ namespace NTSD.Animation.LF2Objects
                             if (_heldWeapon != null)
                             {
                                 bool Hasdx = Controller.IsLeft != Controller.IsRight;
-                                if (Hasdx && (bool)Proper(_heldWeapon.ObjectId, "attackable"))
+                                bool attackable = Proper(_heldWeapon.ObjectId, "attackable") is bool b && b;
+                                if (Hasdx && attackable)
                                 {
                                     TransitionToFrame(LF2StandardFrames.SkyLgtWpThw, 10);
                                     // 空中投掷轻型武器
                                 }
-                                else if ((bool)(Proper(_heldWeapon.ObjectId, "attackable")))
+                                else if (attackable)
                                 {
                                     TransitionToFrame(LF2StandardFrames.JumpWeaponAtck, 10);
                                 }
@@ -653,8 +679,8 @@ namespace NTSD.Animation.LF2Objects
                         var characterData = _FrameDataWrapper?.characterData;
                         if (characterData == null) return false;
 
-                        PS.vx = Dirh() * (characterData.dash_distance - 1) * (Frame.N == LF2StandardFrames.DashForward ? 1 : -1);
-                        PS.vz = Dirv() * (characterData.dash_distancez - 1);
+                        PS.vx = Dirh() * characterData.dash_distance * (Frame.N == LF2StandardFrames.DashForward ? 1 : -1);
+                        PS.vz = Dirv() * characterData.dash_distancez;
                         PS.vy = characterData.dash_height;
                     }
                     return false;
@@ -666,7 +692,7 @@ namespace NTSD.Animation.LF2Objects
                     {
                         if (Dirh() == (PS.vx > 0 ? 1 : -1))
                         {
-                            if (_heldWeapon != null && (bool)Proper(_heldWeapon.ObjectId, "attackable"))
+                            if (_heldWeapon != null && Proper(_heldWeapon.ObjectId, "attackable") is bool atk3 && atk3)
                             {
                                 TransitionToFrame(LF2StandardFrames.DashWeaponAtck, 10);
                             }
@@ -919,13 +945,11 @@ namespace NTSD.Animation.LF2Objects
                         return true;
                     }
 
-                    // 帧240：Rudolf特殊变身
+                    // 帧240：Rudolf特殊变身（对应 FLF character.js:784-785）
                     if (frameId == 240)
                     {
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "帧240 Rudolf特殊变身");
-                        // TODO: 需要实现id_update机制
-                        // CallIdUpdate("rudolf_transform");
-                        // return true;
+                        var ctx = new IdUpdateContext(_CharacterHub, PS, 0, 0);
+                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.RudolfTransform, in ctx);
                     }
 
                     // 位置同步
@@ -1206,9 +1230,8 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_entry":
-                    // ✓ 增加等待时间（对应 FLF Line 946-948）
-                    int currentWait = Trans.Wait;
-                    Trans.SetWait(Mathf.Min(currentWait + 1, 20));  // 上限20帧
+                    // ✓ 对齐 FLF inc_wait(0, 20)：不改变 wait 值，au=20 防止被 dat.wait 覆盖
+                    Trans.IncWait(0, 20);
                     return false;
 
                 case "frame":
@@ -1337,43 +1360,82 @@ namespace NTSD.Animation.LF2Objects
 
                 case "fell_onto_ground":
                 case "fall_onto_ground":
-                    // FLF character.js:1022-1036
-                    // if (caught_throwinjury > 0) injury(caught_throwinjury); caught_throwinjury=null
-                    // sound.play('1/016')
-                    // if (mech.speed() > GC.character.bounceup.limit.xy || ps.vy > GC.character.bounceup.limit.y)
-                    //   mech.linear_friction(lookup_abs(bounceup.absorb,vx), lookup_abs(bounceup.absorb,vz))
-                    //   ps.vy = -GC.character.bounceup.y
-                    //   203-206→185, 180-185→185, 186-191→191
-                    // else
-                    //   203-206→230, 180-185→230, 186-191→231
-                    if (caught_throwinjury.HasValue && caught_throwinjury.Value > 0)
+                {
+                    AppManager.Instance?.SoundPlayer?.PlaySfx(NTSDGlobal.Sound.FallLand);
+
+                    PS.y  = 0f;
+                    PS.vy = 0f;
+                    PS.vz = 0f;
+
+                    // 路径A：击飞落地（state 12/18）
+                    // 反汇编伪C：vy>11 or |vx|>9 or state==18 → 弹起(185/191)；否则 → 滑行(230/231)
+                    // 反汇编不重置 HitCount/KnockbackVx，直接操作 PS.vx
+                    int curState = GetState();
+                    if (curState == LF2States.Falling || curState == LF2States.Burning)
                     {
-                        Injury(caught_throwinjury.Value);
-                        caught_throwinjury = null;
-                    }
+                        KnockbackVx = 0f;
+                        KnockbackVy = 0f;
+                        HitCount    = 0;
 
-                    float speed = CharacterMechanics.SpeedXY(PS);
-                    int curFn = Frame.N;
+                        bool bounce = PS.vy > 11.0f || PS.vx > 9.0f || PS.vx < -9.0f
+                                      || curState == LF2States.Burning;
 
-                    if (speed > NTSDGlobal.Gameplay.CharBounceupLimitXY ||
-                        PS.vy > NTSDGlobal.Gameplay.CharBounceupLimitY)
-                    {
-                        float absorbX = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.CharBounceupAbsorb, PS.vx);
-                        float absorbZ = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.CharBounceupAbsorb, PS.vz);
-                        CharacterMechanics.LinearFriction(PS, absorbX, absorbZ);
-                        PS.vy = -NTSDGlobal.Gameplay.CharBounceupY;
-
-                        if (curFn >= LF2StandardFrames.Fire && curFn <= LF2StandardFrames.Fire3) { StateReturnFrame = LF2StandardFrames.FallingFront5; return true; }
-                        if (curFn >= LF2StandardFrames.FallingFront && curFn <= LF2StandardFrames.FallingFront5) { StateReturnFrame = LF2StandardFrames.FallingFront5; return true; }
-                        if (curFn >= LF2StandardFrames.FallingBack && curFn <= LF2StandardFrames.FallingBack5) { StateReturnFrame = LF2StandardFrames.FallingBack5; return true; }
+                        if (bounce)
+                        {
+                            // 高速落地/燃烧 → 弹起
+                            // 反汇编：vy = -7.0 (0xC01C000000000000)；vx 钳制 ±7
+                            PS.vy = -7.0f;
+                            PS.vz = 0f;
+                            if (PS.vx > 7f)  PS.vx = 7f;
+                            if (PS.vx < -7f) PS.vx = -7f;
+                            // frame < 186 or state==18 → 185；否则 → 191
+                            int bounceFrame = (Frame.N < LF2StandardFrames.FallingBack || curState == LF2States.Burning)
+                                ? LF2StandardFrames.FallingFront5   // 185
+                                : LF2StandardFrames.FallingBack5;   // 191
+                            TransitionToFrame(bounceFrame, 15);
+                        }
+                        else
+                        {
+                            // 低速落地 → 滑行
+                            PS.vx *= (1f / 3f);
+                            PS.vy = 0f;
+                            PS.vz = 0f;
+                            int landFrame = (Frame.N >= LF2StandardFrames.FallingBack)
+                                ? LF2StandardFrames.LyingBack  // 231
+                                : LF2StandardFrames.Lying;     // 230
+                            TransitionToFrame(landFrame, 15);
+                        }
                     }
                     else
                     {
-                        if (curFn >= LF2StandardFrames.Fire && curFn <= LF2StandardFrames.Fire3) { StateReturnFrame = LF2StandardFrames.Lying; return true; }
-                        if (curFn >= LF2StandardFrames.FallingFront && curFn <= LF2StandardFrames.FallingFront5) { StateReturnFrame = LF2StandardFrames.Lying; return true; }
-                        if (curFn >= LF2StandardFrames.FallingBack && curFn <= LF2StandardFrames.FallingBack5) { StateReturnFrame = LF2StandardFrames.LyingBack; return true; }
+                        // 路径B：普通落地
+                        // 反汇编 0x4167E2-0x41682D
+                        PS.vx = 0f;
+                        KnockbackVx = 0f;
+                        KnockbackVy = 0f;
+                        HitCount    = 0;
+
+                        if (caught_throwinjury.HasValue && caught_throwinjury.Value > 0)
+                        {
+                            Injury(caught_throwinjury.Value);
+                            caught_throwinjury = 0;
+                        }
+
+                        // 反汇编 v26 = state of current frame; v23 = current frame number
+                        // v26==100 → 94; v23==212 or v26==6 → 215; else → 219
+                        int landFrame;
+                        int curFrameState = GetState();
+                        if (curFrameState == LF2States.CustomSkill1)
+                            landFrame = 94;
+                        else if (Frame.N == LF2StandardFrames.JumpingAir || curFrameState == LF2States.Rowing)
+                            landFrame = LF2StandardFrames.Crouch;   // 215
+                        else
+                            landFrame = LF2StandardFrames.Crouch2;  // 219
+
+                        TransitionToFrame(landFrame, 15);
                     }
-                    return false;
+                    return true;
+                }
 
                 default:
                     return false;
@@ -1403,11 +1465,9 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_exit":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 13, "Frozen", eventType, CurrentFrameId);
-
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 13, "Frozen", "冰冻结束 → 创建碎裂效果");
-                    // 创建冰块碎裂效果（FLF:1101-1104）
-                    // TODO: 实现特效系统（ID 212 碎裂效果，音效 1/066）
+                    // FLF character.js:1101-1104  brokeneffect_create(212) + 音效 1/066
+                    BrokenEffectCreate(212);
+                    AppManager.Instance?.SoundPlayer?.PlaySfx(NTSDGlobal.Sound.IceShatter);
                     return false;
 
                 default:
@@ -1456,6 +1516,9 @@ namespace NTSD.Animation.LF2Objects
 
                     if (Health.HP <= 0)
                     {
+                        // FLF character.js:2193-2196 die()
+                        if (!IsNpc && Attacker != null)
+                            Attacker.Killed();
                         Dead = true;
                         if (_deadBlinkCount < 0)
                             _deadBlinkCount = 0;
@@ -1757,26 +1820,18 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
-
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "持续燃烧 → 每帧创建燃烧特效");
-                    // 每帧创建燃烧特效（FLF:1246-1249）
-                    // TODO: 实现特效系统（ID 302，持续模式）
+                    // FLF character.js:1281 $.brokeneffect_create(302, 1) — 每帧燃烧碎片（num=1）
+                    BrokenEffectCreate(302, 1);
                     return false;
 
                 case "fall_onto_ground":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
-
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧落地 → 创建落地燃烧特效");
-                    // 落地时创建燃烧特效（FLF:1250-1252）
-                    // TODO: 实现特效系统（ID 302，一次性模式）
-                    return false;
+                    // FLF character.js:1283 $.brokeneffect_create(302) — 落地燃烧（num=8默认）
+                    BrokenEffectCreate(302);
+                    // fallthrough → fell_onto_ground（对应 FLF 无 break）
+                    goto case "fell_onto_ground";
 
                 case "fell_onto_ground":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 18, "Burning", eventType, CurrentFrameId);
-
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 18, "Burning", "燃烧倒地 → 复用State 12落地逻辑");
-                    // 复用State 12落地逻辑（FLF:1253-1256）
+                    // FLF character.js:1285 复用 State 12 落地逻辑
                     return State_Falling("fell_onto_ground", eventData);
 
                 default:

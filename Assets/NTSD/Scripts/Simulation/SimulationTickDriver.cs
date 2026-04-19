@@ -1,7 +1,7 @@
 using UnityEngine;
 using MoreMountains.Tools;
+using NTSD.App;
 using NTSD.Tools;
-using NTSD.Animation;
 
 namespace NTSD.Simulation
 {
@@ -36,6 +36,7 @@ namespace NTSD.Simulation
         private int _tickIndex = 0;
 
         private SimulationWorld _world;
+        private NTSD.Animation.SparkRenderer _sparkRenderer;
 
         protected override void OnSingletonAwake()
         {
@@ -70,46 +71,65 @@ namespace NTSD.Simulation
             objectCount = _world.ObjectCount;
         }
 
+        private void LateUpdate()
+        {
+            // 优先从 AppManager 获取 SparkRenderer；如果 AppManager 不存在（测试场景），则 lazy-init 一个
+            if (_sparkRenderer == null)
+            {
+                _sparkRenderer = AppManager.Instance?.SparkRenderer;
+                if (_sparkRenderer == null)
+                    _sparkRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.SparkRenderer>();
+            }
+            _sparkRenderer.RenderAll(_world);
+        }
+
         private void RunOneSimTick(int tickIndex)
         {
             if (debugLogPerTick)
-            {
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
+
+            if (_world != null)
+            {
+                // vrest/arest 全局递减 pass：对应反汇编 GameMode_Process 循环1（伪C 15440-15468）
+                // 反汇编中 vrest/arest 递减在 kind=1/2/3/7 碰撞判定同一循环，发生在 TU/kind=0 碰撞之前
+                _world.VrestTickAll(tickIndex);
             }
 
             if (_world != null)
             {
-                if (debugLogPerTick)
-                {
-                    Log.Info($"[SimulationTickDriver] World.TransitTickAll({tickIndex}) - {_world.ObjectCount} objects");
-                }
-                _world.TransitTickAll(tickIndex);
-            }
-
-            LF2ObjectPointFactory.Instance.FlushTasks();
-
-            if (_world != null)
-            {
-                if (debugLogPerTick)
-                {
-                    Log.Info($"[SimulationTickDriver] World.TUTickAll({tickIndex})");
-                }
-                _world.TUTickAll(tickIndex);
+                // PreInteraction pass：对应反汇编 GameMode_Process kind=1/2/3/7 抓取/拾取
+                // 在 SerialTickAll 之前执行，与反汇编循环1（vrest递减 + 抓取碰撞）顺序一致
+                _world.PreInteractionTickAll(tickIndex);
             }
 
             if (_world != null)
             {
-                if (debugLogPerTick)
-                {
-                    Log.Info($"[SimulationTickDriver] World.LateTick({tickIndex})");
-                }
+                // 串行执行：对齐反汇编 sub_416240 循环1，所有 entity 先全部推进帧
+                _world.SerialTickAll(tickIndex);
+            }
+
+            if (_world != null)
+            {
+                // PostInteraction pass：对齐反汇编 sub_42C8C0 循环2
+                // 所有 entity 帧推进完成后统一做碰撞检测，消除帧推进顺序影响
+                _world.PostInteractionTickAll(tickIndex);
+            }
+
+            if (_world != null)
+            {
+                // Frame_PostProcess pass：对应反汇编 Frame_PostProcess（0x0041BF00）
+                // Knockback 累加器 → PS.vx/vy，完成后清零，在 SerialTickAll 之后立即执行
+                _world.FramePostProcessAll();
+            }
+
+            if (_world != null)
                 _world.LateTick(tickIndex);
-            }
+
+            if (_world != null)
+                _world.TickSparkTimers();
 
             if (debugLogPerTick)
-            {
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
-            }
         }
 
         public SimulationWorld World => _world;

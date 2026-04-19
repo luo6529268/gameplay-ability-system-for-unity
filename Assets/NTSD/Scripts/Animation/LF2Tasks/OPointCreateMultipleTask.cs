@@ -19,8 +19,7 @@ namespace NTSD.Animation.LF2Tasks
         public Vector3 pos;      // 世界坐标 (make_point 结果)
         public float z;          // parent.ps.z
         public string dir;       // parent.ps.dir
-        public float dvz;        // parent.dirv() * 2
+        public float dvz;        // 单对象初始 dvz（反汇编：0，由 Factory 展开时按索引覆盖）
         public int number;       // 生成数量
-        public float vz;         // Z 轴间距速度
     }
 }

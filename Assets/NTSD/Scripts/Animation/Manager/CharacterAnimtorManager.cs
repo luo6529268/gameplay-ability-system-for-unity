@@ -111,6 +111,26 @@ namespace NTSD.Animation
         {
             TotalCharacterFrameConfig.Clear();
             MergedSprites.Clear();
+#if UNITY_EDITOR
+            EditorApplication.delayCall += async () =>
+            {
+                try
+                {
+                    var dataManager = GameDataManager.Instance;
+                    if (dataManager == null) { Debug.LogError("GameDataManager.Instance is null"); return; }
+                    Debug.Log("<color=cyan>[Editor] start loading configs...</color>");
+                    var configs = ParseCharacterFrameConfigs(dataManager, t => Debug.Log($"[Editor] {t}"));
+                    ApplyLoadedCharacterConfigs(configs);
+                    Debug.Log("<color=cyan>[Editor] configs loaded, loading sprites...</color>");
+                    await LoadCharacterSpritesAsync(t => Debug.Log($"[Editor] {t}"));
+                    Debug.Log("<color=cyan>[Editor] all data loaded</color>");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"[Editor] load failed: {e.Message}\n{e.StackTrace}");
+                }
+            };
+#endif
         }
 
         [HorizontalGroup("Actions/Row1")]
@@ -377,7 +397,7 @@ namespace NTSD.Animation
         /// <summary>
         /// 加载所有角色帧配置
         /// </summary>
-        public Dictionary<int, LF2CharacterDataWrapper> ParseCharacterFrameConfigs(Action<string> onProgressText = null)
+        public Dictionary<int, LF2CharacterDataWrapper> ParseCharacterFrameConfigs(GameDataManager dataManager, Action<string> onProgressText = null)
         {
             string dataFilePath = Path.Combine(TotalCharacterFrameConfigPath, "../data.txt");
             string fullDataPath = Path.GetFullPath(dataFilePath);
@@ -390,7 +410,12 @@ namespace NTSD.Animation
 
             onProgressText?.Invoke("data.txt");
 
-            Dictionary<int, DataFileParser.ObjectData> dataObjectMap = DataFileParser.ParseDataFile(fullDataPath);
+            Dictionary<int, ObjectDefinition> dataObjectMap = new Dictionary<int, ObjectDefinition>();
+            dataManager?.LoadDataFile(fullDataPath);
+            var allObjects = dataManager?.GetAllObjects();
+            if (allObjects != null)
+                foreach (var obj in allObjects)
+                    dataObjectMap[obj.id] = obj;
 
             if (dataObjectMap == null || dataObjectMap.Count == 0)
             {
@@ -406,21 +431,16 @@ namespace NTSD.Animation
             Debug.Log($"<color=cyan>开始加载角色配置，data.txt 中共 {dataObjectMap.Count} 个对象定义，其中 {characterCount} 个角色 (type==0)</color>");
 
             int loadedCount = 0;
-            var result = new Dictionary<int, LF2CharacterDataWrapper>(characterCount);
+            var result = new Dictionary<int, LF2CharacterDataWrapper>(dataObjectMap.Count);
             foreach (var kvp in dataObjectMap)
             {
                 int characterId = kvp.Key;
-                DataFileParser.ObjectData objectData = kvp.Value;
-
-                if (objectData.type != 0)
-                {
-                    continue;
-                }
+                ObjectDefinition objectData = kvp.Value;
 
                 try
                 {
                     string configDir = Path.GetDirectoryName(fullDataPath);
-                    string datFilePath = DataFileParser.ResolveObjectFilePath(configDir, objectData.file);
+                    string datFilePath = GameDataManager.ResolveObjectFilePath(configDir, objectData.file);
                     datFilePath = Path.ChangeExtension(datFilePath, ".dat");
 
                     onProgressText?.Invoke(Path.GetFileName(datFilePath));
@@ -557,7 +577,82 @@ namespace NTSD.Animation
             // 3. 提取移动参数（从根级别的 Properties 或 Blocks 中）
             ExtractMovementParameters(datFile, characterData);
 
+            // 4. 提取武器专用参数（weapon_hp, weapon_strength_list 等）
+            ExtractWeaponParameters(datFile, characterData);
+
             return characterData;
+        }
+
+        /// <summary>
+        /// 提取武器专用顶层参数（weapon_hp, weapon_drop_hurt, weapon_strength_list 等）
+        /// </summary>
+        private void ExtractWeaponParameters(Lf2DatFile datFile, LF2CharacterData characterData)
+        {
+            // 从根属性读取 weapon_hp / weapon_drop_hurt / sound 路径
+            foreach (var prop in datFile.Properties)
+            {
+                ApplyWeaponProperty(prop.Key, prop.Value, characterData);
+            }
+            foreach (var block in datFile.Blocks)
+            {
+                foreach (var prop in block.Properties)
+                {
+                    ApplyWeaponProperty(prop.Key, prop.Value, characterData);
+                }
+            }
+
+            // 解析 weapon_strength_list 块（如果存在）
+            var wslBlock = datFile.Blocks.Find(b =>
+                string.Equals(b.Name, "weapon_strength_list", StringComparison.OrdinalIgnoreCase));
+            if (wslBlock == null) return;
+
+            WeaponStrengthEntry current = null;
+            foreach (var prop in wslBlock.Properties)
+            {
+                string k = prop.Key.ToLower();
+                string v = prop.Value ?? "";
+
+                if (k == "entry")
+                {
+                    current = new WeaponStrengthEntry();
+                    int.TryParse(v, out current.index);
+                    characterData.weapon_strength_list.Add(current);
+                    continue;
+                }
+
+                if (current == null) continue;
+
+                int intVal = 0;
+                int.TryParse(v, out intVal);
+                switch (k)
+                {
+                    case "dvx": current.dvx = intVal; break;
+                    case "dvy": current.dvy = intVal; break;
+                    case "fall": current.fall = intVal; break;
+                    case "vrest": current.vrest = intVal; break;
+                    case "arest": current.arest = intVal; break;
+                    case "bdefend": current.bdefend = intVal; break;
+                    case "injury": current.injury = intVal; break;
+                    case "effect": current.effect = intVal; break;
+                }
+            }
+        }
+
+        private void ApplyWeaponProperty(string key, string value, LF2CharacterData data)
+        {
+            switch (key.ToLower())
+            {
+                case "weapon_hp":
+                    int.TryParse(value, out data.weapon_hp); break;
+                case "weapon_drop_hurt":
+                    int.TryParse(value, out data.weapon_drop_hurt); break;
+                case "weapon_hit_sound":
+                    data.weapon_hit_sound = value; break;
+                case "weapon_drop_sound":
+                    data.weapon_drop_sound = value; break;
+                case "weapon_broken_sound":
+                    data.weapon_broken_sound = value; break;
+            }
         }
 
         /// <summary>
@@ -759,6 +854,7 @@ namespace NTSD.Animation
             Debug.Log($"<color=cyan>精灵加载完成，共创建 {totalCreated} 个精灵</color>");
 
             // 加载所有角色的UI精灵（head和small）
+            await UniTask.SwitchToMainThread();
             await LoadAllCharacterUISpritesAsync();
 
             IsPrewarmCompleted = true;
@@ -1115,12 +1211,16 @@ namespace NTSD.Animation
             return GetCharacterData(id)?.name ?? "Unknown";
         }
 
-        public List<Sprite> GetCharacterSpriteByID(int id)
+                public List<Sprite> GetCharacterSpriteByID(int id)
         {
             MergedSprites.TryGetValue(id, out List<Sprite> sprites);
-            if(sprites == null)
-                Debug.LogError($"未找到ID为{id}的精灵");
             return sprites;
+        }
+
+        /// <summary>静默查询，不打 LogError，供武器/SA 等可能未加载精灵的对象使用</summary>
+        public bool TryGetSprites(int id, out List<Sprite> sprites)
+        {
+            return MergedSprites.TryGetValue(id, out sprites);
         }
 
         public bool IsCharacterLoaded(int id)

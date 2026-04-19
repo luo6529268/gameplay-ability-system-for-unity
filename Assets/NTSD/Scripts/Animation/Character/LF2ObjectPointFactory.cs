@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.LF2Objects;
+using NTSD.App;
 using NTSD.Tools;
 using MoreMountains.Tools;
 using UnityEngine.Pool;
@@ -46,8 +47,6 @@ namespace NTSD.Animation
         // 对应 FLF match.tasks 数组
         private readonly LinkedList<LF2TaskBase> _taskQueue = new LinkedList<LF2TaskBase>();
 
-        private int _lastFlushTick = -1;
-
         protected override void Awake()
         {
             base.Awake();
@@ -78,31 +77,21 @@ namespace NTSD.Animation
             _taskQueue.AddLast(task);
         }
 
-        public void EnqueueCreateNPCCharacters(OPointCreateNPCTask task)
-        {
-            _taskQueue.AddLast(task);
-        }
-
         // ========== FlushTasks（处理队列） ==========
         /// <summary>
-        /// 处理所有任务并清空队列
-        /// 对应 FLF match.js process_tasks()
+        /// 处理所有待处理任务并清空队列。
+        /// 对应 FLF match.js process_tasks()。
+        /// 在串行 Tick 模式下每个对象 Transit 后均会调用；队列为空时无操作。
         /// </summary>
         public void FlushTasks()
         {
-            int tick = NTSD.Simulation.SimulationTickDriver.Instance?.CurrentTickIndex ?? Time.frameCount;
-            if (_lastFlushTick == tick) return;
-            _lastFlushTick = tick;
-
-            // 遍历链表并处理
+            Debug.Log($"[OPointFactory] FlushTasks: queue count={_taskQueue.Count}");
             var node = _taskQueue.First;
             while (node != null)
             {
                 ProcessTask(node.Value);
                 node = node.Next;
             }
-
-            // 清空队列
             _taskQueue.Clear();
         }
 
@@ -121,10 +110,6 @@ namespace NTSD.Animation
 
                 case LF2TaskType.CreateMultipleObjects:
                     ProcessCreateMultipleObjects((OPointCreateMultipleTask)task);
-                    break;
-
-                case LF2TaskType.CreateNPCCharacters:
-                    ProcessCreateNPCCharacters((OPointCreateNPCTask)task);
                     break;
 
                 default:
@@ -179,8 +164,35 @@ namespace NTSD.Animation
                 return;
             }
 
+            // 5.1 武器对象注入 weapon_strength_list
+            if (logicObject is LF2WeaponBase weaponBase)
+            {
+                var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+                if (charData?.weapon_strength_list?.Count > 0)
+                    weaponBase.SetWeaponStrengthList(charData.weapon_strength_list);
+            }
+
             // 6. 设置逻辑对象并初始化
             renderer.SetLogicObject(logicObject, task);
+
+            if (logicObject is LF2LivingObject living)
+            {
+                // 7. 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
+                int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
+                var frameData = living.GetFrameDataById(action);
+                Debug.Log($"[OPointFactory] ProcessCreateObject: oid={oid}, action={action}, frameData={frameData?.frameId}, pic={frameData?.pic}, wait={frameData?.wait}, next={frameData?.next}, sound={frameData?.sound}");
+                if (frameData != null && frameData.pic == 999 && frameData.wait == 0 && frameData.next == 1000)
+                {
+                    Debug.Log($"[OPointFactory] Pure sound frame detected, playing sound: {frameData.sound}");
+                    if (!string.IsNullOrEmpty(frameData.sound))
+                        AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
+                    LF2ObjectPool.Instance?.Release(renderer);
+                    LF2ObjectLogicPool.Instance?.Release(logicObject);
+                    return;
+                }
+
+                PostInitLiving(living, task.parent, task.opoint, objType, 0f);
+            }
         }
 
         // ========== 多对象创建 ==========
@@ -203,26 +215,24 @@ namespace NTSD.Animation
 
             int objType = def.type;
 
-            // type==0 (character) 跳过
             if (objType == 0)
             {
                 Log.Warn($"[Factory] Character creation via opoint not supported, oid={oid}");
                 return;
             }
 
-            // 计算 vz 数组（对齐 FLF）
+            // 对应反汇编 0x004225B6：dvz_i = i * 10.0 / (count-1) - 5.0，固定范围 [-5, +5]
             List<float> vzArray = ListPool<float>.Get();
-            int maxNum = Mathf.FloorToInt(task.number / 2f);
-            if (task.number % 2 == 1)
+            if (task.number == 1)
             {
-                for (int i = -maxNum; i <= maxNum; i++) vzArray.Add(i * task.vz);
+                vzArray.Add(0f);
             }
             else
             {
-                for (int i = -maxNum; i <= maxNum; i++) if (i != 0) vzArray.Add(i * task.vz);
+                for (int i = 0; i < task.number; i++)
+                    vzArray.Add(i * 10f / (task.number - 1) - 5f);
             }
 
-            // 为每个 vz 创建对象
             foreach (float vz in vzArray)
             {
                 var renderer = LF2ObjectPool.Instance.Get();
@@ -235,123 +245,103 @@ namespace NTSD.Animation
                     continue;
                 }
 
-                // 创建修改后的 task（vz 不同）
+                if (logicObject is LF2WeaponBase wb)
+                {
+                    var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+                    if (charData?.weapon_strength_list?.Count > 0)
+                        wb.SetWeaponStrengthList(charData.weapon_strength_list);
+                }
+
                 var singleTask = new OPointCreateTask
                 {
                     opoint = task.opoint,
                     parent = task.parent,
-                    team = task.team,
-                    pos = task.pos,
-                    z = task.z,
-                    dir = task.dir,
-                    dvz = vz  // ← 使用计算的 vz
+                    team   = task.team,
+                    pos    = task.pos,
+                    z      = task.z,
+                    dir    = task.dir,
+                    dvz    = vz,
                 };
 
                 renderer.SetLogicObject(logicObject, singleTask);
+
+                if (logicObject is LF2LivingObject living)
+                {
+                    // 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
+                    int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
+                    var frameData = living.GetFrameDataById(action);
+                    if (frameData != null && frameData.pic == 999 && frameData.wait == 0 && frameData.next == 1000)
+                    {
+                        if (!string.IsNullOrEmpty(frameData.sound))
+                            AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
+                        LF2ObjectPool.Instance?.Release(renderer);
+                        LF2ObjectLogicPool.Instance?.Release(logicObject);
+                        continue;
+                    }
+
+                    PostInitLiving(living, task.parent, task.opoint, objType, vz);
+                }
             }
 
             ListPool<float>.Release(vzArray);
         }
 
-        private void ProcessCreateNPCCharacters(OPointCreateNPCTask task)
-        {
-            Log.Warn("[OPointFactory] NPC spawn not implemented: {0} NPCs for team {1}", task.number, task.team);
-        }
-
-
-        #region Initialize Object
-        //private void InitializeObject(GameObject obj, OPointCreateTask task, int objType)
-        //{
-        //    var animator = obj.GetComponentInChildren<LF2CharacterAnimator>();
-        //    if (animator == null) { obj.transform.position = new Vector3(task.pos.x, -task.pos.y, task.pos.z); return; }
-
-        //    animator.Team = task.team;
-        //    animator.ObjectType = objType;
-        //    if (task.parent != null) animator.OwnerId = task.parent.StableId;
-
-        //    // P4: 确保初始化顺序 - 先设置方向和帧，再计算位置
-        //    string dir = CalculateDirection(task.opoint.facing, task.dir);
-        //    if (animator.ps != null) animator.ps.dir = dir;
-
-        //    // 先切换到目标帧，确保 CurrentFrame 有效
-        //    int action = task.opoint.action == 0 ? 999 : task.opoint.action;
-        //    animator.TransitionToFrame(action, 20);
-
-        //    // 现在 CurrentFrame 已就绪，可以计算位置
-        //    float dirH = (dir == "right") ? 1f : -1f;
-        //    if (animator.ps != null)
-        //    {
-        //        if (objType == 3)
-        //        {
-        //            InitSpecialAttackPosition(animator, task, dir);
-        //        }
-        //        else
-        //        {
-        //            animator.ps.x = task.pos.x;
-        //            animator.ps.y = task.pos.y;
-        //            animator.ps.z = task.z;
-        //        }
-        //        animator.ps.vx = dirH * task.opoint.dvx;
-        //        animator.ps.vy = task.opoint.dvy;
-        //        animator.ps.vz = (task.opoint.dvx != 0) ? task.dvz : 0f;
-        //    }
-        //}
-
-        //private void InitializeObjectMultiple(GameObject obj, OPointCreateTask task, int objType, float vz)
-        //{
-        //    var animator = obj.GetComponentInChildren<LF2CharacterAnimator>();
-        //    if (animator == null) { obj.transform.position = new Vector3(task.pos.x, -task.pos.y, task.z + vz); return; }
-
-        //    animator.Team = task.team;
-        //    animator.ObjectType = objType;
-        //    if (task.parent != null) animator.OwnerId = task.parent.StableId;
-
-        //    // P4: 确保初始化顺序
-        //    // 0.1: 基于新对象最终 dir 计算偏置，不用 parentDir
-        //    string dir = CalculateDirection(task.opoint.facing, task.dir);
-        //    if (animator.ps != null) animator.ps.dir = dir;
-
-        //    int action = task.opoint.action == 0 ? 999 : task.opoint.action;
-        //    animator.TransitionToFrame(action, 20);
-
-        //    if (animator.ps != null)
-        //    {
-        //        if (objType == 3)
-        //        {
-        //            InitSpecialAttackPosition(animator, task, dir);
-        //        }
-        //        else
-        //        {
-        //            animator.ps.x = task.pos.x;
-        //            animator.ps.y = task.pos.y;
-        //            animator.ps.z = task.z;
-        //        }
-        //        // 0.1: vx 偏置基于新对象最终 dir
-        //        // FLF: dir=="left" → vx += abs(vz); dir=="right" → vx -= abs(vz)
-        //        float baseVx = ((dir == "right") ? 1f : -1f) * task.opoint.dvx;
-        //        float vzOffset = (dir == "left") ? Mathf.Abs(vz) : -Mathf.Abs(vz);
-        //        animator.ps.vx = baseVx + vzOffset;
-        //        animator.ps.vy = task.opoint.dvy;
-        //        animator.ps.vz = vz;
-        //    }
-        //}
-
         /// <summary>
-        /// FLF specialattack.init: set_pos(0,0,z) then coincideXY(pos, make_point(frame.D,'center'))
+        /// SetLogicObject 之后的统一后处理
+        /// 对应反汇编 opoint 创建后初始化序列（0x004223B5-0x0042277E）
         /// </summary>
-        //private void InitSpecialAttackPosition(LF2CharacterAnimator animator, OPointCreateTask task, string dir)
-        //{
-        //    animator.ps.z = task.z;
-        //    // coincideXY: 将 opoint 位置与对象 center 对齐
-        //    var frame = animator.CurrentFrame;
-        //    float centerX = frame?.centerx ?? 0;
-        //    float centerY = frame?.centery ?? 0;
-        //    float spriteW = animator.GetSpriteWidthPxForCollision();
+        private void PostInitLiving(LF2LivingObject living, LF2LivingObject parent, ObjectPoint op, int objType, float dvz)
+        {
+            // z_float +1（对应反汇编 0x004223DD：new.z_float = parent.z_float + 1.0）
+            living.PS.z += 1f;
 
-        //    float offsetX = (dir == "right") ? centerX : (spriteW - centerX);
-        //    animator.ps.x = task.pos.x - offsetX;
-        //    animator.ps.y = task.pos.y - centerY;
-        //}
+            if (parent != null)
+            {
+                // team_side 继承（对应反汇编 0x0042251F：new.team_side = parent.team_side）
+                living.TeamSide = parent.TeamSide;
+
+                // owner_id 继承链（对应反汇编 0x004224F8-0x0042250B）
+                living.OwnerId = parent.OwnerId > -1 ? parent.OwnerId : parent.StableId;
+            }
+
+            // type==5 或 52 特殊 HP 初始化（对应反汇编 0x00422687-0x004226C3）
+            if (objType == 5 || objType == 52)
+            {
+                living.Health.HP     = 10;
+                living.Health.MP     = 10;
+                living.Health.HPBound = 10;
+            }
+
+            // type==3 且 parent 处于 state 3003(teleport) 时互设 itr_rest（对应反汇编 0x0042262A-0x0042267F）
+            if (parent != null && objType == 3 && parent.Frame?.D?.state == 3003)
+            {
+                parent.ItrRest?.SetVrest(living.StableId, 10);
+                living.ItrRest?.SetVrest(parent.StableId, 10);
+            }
+
+            // kind==2 追踪绑定（对应反汇编 0x00422729-0x0042277E，仅限 type=3 specialattack）
+            if (op.kind == 2 && parent != null && objType == 3)
+            {
+                parent.TrackerFlag  = 1;
+                living.TrackerFlag  = -1;
+                parent.TrackerChild = living;
+                living.TrackerParent = parent;
+            }
+
+            // 多对象 dvz 侧偏 vx（对应反汇编 0x004225E8-0x00422627）
+            // dvz 影响 vx 方向：向左扩散时 vx 减小，向右扩散时 vx 增大
+            if (dvz != 0f)
+            {
+                float absDvz = Mathf.Abs(dvz);
+                // dir 与 dvz 同向 → 扩散 → vx 加 absDvz；反向 → 收拢 → vx 减 absDvz
+                float vxSign = living.PS.vx >= 0f ? 1f : -1f;
+                float dvzSign = dvz >= 0f ? 1f : -1f;
+                if (vxSign == dvzSign)
+                    living.PS.vx += absDvz;
+                else
+                    living.PS.vx -= absDvz;
+            }
+        }
 
         private string CalculateDirection(int facing, string parentDir)
         {
@@ -361,13 +351,6 @@ namespace NTSD.Animation
             if (face >= 2 && face <= 10) return "right";
             if (face >= 11 && face <= 19) return "left";
             return parentDir;
-        }
-
-        private GameObject GetPrefab(int oid, int objType)
-        {
-            if (_oidPrefabMap.TryGetValue(oid, out var p1)) return p1;
-            if (_typePrefabMap.TryGetValue(objType, out var p2)) return p2;
-            return null;
         }
 
         public void RegisterOidPrefab(int oid, GameObject prefab)
@@ -393,6 +376,5 @@ namespace NTSD.Animation
             // 从逻辑对象池获取对象（池会自动处理 ObjectId 赋值）
             return LF2ObjectLogicPool.Instance.Get(objTypeEnum, oid);
         }
-        #endregion
     }
 }

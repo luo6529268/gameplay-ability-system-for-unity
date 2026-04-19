@@ -356,6 +356,14 @@ namespace MoreMountains.TopDownEngine
 				_IdUpdate.RegisterDefaultHandlers(CharacterID);
 			}
 
+			// 在此处注册到 SimulationWorld（时序确定：SimulationTickDriver.Awake 先于 StartLevel）
+			if (SimulationTickDriver.Instance != null)
+			{
+				if (_ActionSequenceDetector != null)
+					SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
+				// _LF2Character 已在 ModuleBind 内部注册
+			}
+
 			// Bind-time attribute init (depends on CharacterID-driven data, e.g. LF2CharacterData)
 			if (_AbilitySystemComponent != null)
 			{
@@ -455,25 +463,19 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		protected virtual void OnEnable()
 		{
-			if (SimulationTickDriver.Instance == null)
-				return;
+			// 补充注册：角色被重新激活时（首次激活已由 Initialization 的 ModuleBind 阶段处理）
+			if (SimulationTickDriver.Instance == null) return;
 
 			// Plan B: Register CharacterSim to SimulationWorld
 			if (_CharacterSim != null)
-			{
 				SimulationTickDriver.Instance.World.Register(_CharacterSim);
-			}
 
 			// Register combo detector (input consumer) to SimulationWorld
 			if (_ActionSequenceDetector != null)
-			{
 				SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
-            }
 
-			if (_LF2Character != null) 
-			{
+			if (_LF2Character != null)
 				SimulationTickDriver.Instance.World.Register(_LF2Character);
-			}
 		}
 
 		/// <summary>
@@ -491,6 +493,11 @@ namespace MoreMountains.TopDownEngine
 			{
 				SimulationTickDriver.Instance.World.Unregister(_ActionSequenceDetector);
             }
+
+			if (_LF2Character != null && SimulationTickDriver.Instance != null)
+			{
+				SimulationTickDriver.Instance.World.Unregister(_LF2Character);
+			}
 		}
 
 	}

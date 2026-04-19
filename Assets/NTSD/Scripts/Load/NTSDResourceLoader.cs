@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using NTSD.Tools;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace NTSD.Load
 {
@@ -85,6 +88,98 @@ namespace NTSD.Load
 
             tasks.AddLast(task);
             AddToBucket(task);
+        }
+
+        public async UniTask<T> EnqueueTaskAsync<T>(NTSD_LoadTask task)
+        {
+            if (task == null)
+            {
+                return default;
+            }
+
+            var completionSource = new UniTaskCompletionSource<T>();
+            Action<NTSD_LoadTask> originalCompleted = task.OnCompleted;
+            Action<NTSD_LoadTask, Exception> originalFailed = task.OnFailed;
+
+            task.OnCompleted = completedTask =>
+            {
+                originalCompleted?.Invoke(completedTask);
+
+                if (completedTask.Result == null)
+                {
+                    completionSource.TrySetResult(default);
+                    return;
+                }
+
+                if (completedTask.Result is T result)
+                {
+                    completionSource.TrySetResult(result);
+                    return;
+                }
+
+                completionSource.TrySetException(new InvalidCastException($"Unable to cast load result of type '{completedTask.Result.GetType().FullName}' to '{typeof(T).FullName}'."));
+            };
+
+            task.OnFailed = (failedTask, exception) =>
+            {
+                originalFailed?.Invoke(failedTask, exception);
+                completionSource.TrySetException(exception);
+            };
+
+            AddTask(task);
+
+            if (!isRunning)
+            {
+                await ProcessFrame();
+            }
+
+            return await completionSource.Task;
+        }
+
+        public async UniTask<AudioClip> LoadSingleAudioClipAsync(string cacheKey, string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(cacheKey) && TryGetCache(cacheKey, out object cached) && cached is AudioClip cachedClip)
+                return cachedClip;
+
+            AudioClip clip = await LoadAudioClipFromFileAsync(filePath);
+            if (clip != null && !string.IsNullOrWhiteSpace(cacheKey))
+                CacheResult(cacheKey, clip);
+
+            return clip;
+        }
+
+        public async UniTask<AudioClip[]> LoadAudioClipsAsync(string cacheKey, string directoryPath, int priority = 0)
+        {
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                return Array.Empty<AudioClip>();
+            }
+
+            if (!string.IsNullOrWhiteSpace(cacheKey) && TryGetCache(cacheKey, out object cachedResult) && cachedResult is AudioClip[] cachedClips)
+            {
+                return cachedClips;
+            }
+
+            var task = new NTSD_LoadTask
+            {
+                Name = $"Load Audio Clips: {directoryPath}",
+                Type = NTSD_LoadTaskType.LoadAudio,
+                Domain = NTSD_ResourceDomain.Audio,
+                Priority = priority,
+                CacheKey = cacheKey,
+                SourceType = NTSD_LoadSourceType.FilePath,
+                SourcePath = directoryPath,
+                Execute = async (loadTask, _) =>
+                {
+                    loadTask.Result = await LoadAudioClipsFromDirectoryAsync(directoryPath, loadTask);
+                }
+            };
+
+            AudioClip[] clips = await EnqueueTaskAsync<AudioClip[]>(task);
+            return clips ?? Array.Empty<AudioClip>();
         }
 
 
@@ -345,8 +440,10 @@ namespace NTSD.Load
         {
             task.OnCompleted = request.NotifyCompleted;
             task.OnFailed = request.NotifyFailed;
-            task.OnProgress = request.NotifyProgress;
-            task.OnProgressText = request.NotifyProgressText;
+            // OnProgress / OnProgressText 不绑定：
+            // request.NotifyXxx 会遍历所有 task 调用各自的 OnProgressXxx，
+            // 若绑定则形成无限递归 → 栈溢出崩溃。
+            // 音频加载无需 progress 回调，调用方忽略即可。
         }
 
         public void CancelTask(NTSD_LoadTask task)
@@ -420,6 +517,114 @@ namespace NTSD.Load
             await UniTask.SwitchToMainThread();
             var textAsset = Resources.Load<TextAsset>(resourcesPath);
             return textAsset != null ? textAsset.bytes : null;
+        }
+
+        private async UniTask<AudioClip[]> LoadAudioClipsFromDirectoryAsync(string directoryPath, NTSD_LoadTask task)
+        {
+            string normalizedDirectory = NormalizeDirectoryPath(directoryPath);
+            if (!Directory.Exists(normalizedDirectory))
+            {
+                Log.Warn($"[NTSD_ResourceLoader] Audio directory not found: {normalizedDirectory}");
+                return Array.Empty<AudioClip>();
+            }
+
+            string[] audioFiles = Directory
+                .EnumerateFiles(normalizedDirectory)
+                .Where(IsSupportedAudioFile)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            if (audioFiles.Length == 0)
+            {
+                Log.Warn($"[NTSD_ResourceLoader] No audio files found in directory: {normalizedDirectory}");
+                return Array.Empty<AudioClip>();
+            }
+
+            var clips = new List<AudioClip>(audioFiles.Length);
+
+            for (int i = 0; i < audioFiles.Length; i++)
+            {
+                string audioFile = audioFiles[i];
+                task?.OnProgressText?.Invoke(audioFile);
+                task?.OnProgress?.Invoke((float)i / audioFiles.Length);
+
+                AudioClip clip = await LoadAudioClipFromFileAsync(audioFile);
+                if (clip != null)
+                {
+                    clips.Add(clip);
+                }
+            }
+
+            task?.OnProgress?.Invoke(1f);
+            return clips.ToArray();
+        }
+
+        private async UniTask<AudioClip> LoadAudioClipFromFileAsync(string filePath)
+        {
+            AudioType audioType = GetAudioType(filePath);
+            if (audioType == AudioType.UNKNOWN)
+            {
+                return null;
+            }
+
+            string uri = new Uri(filePath).AbsoluteUri;
+            using var request = UnityWebRequestMultimedia.GetAudioClip(uri, audioType);
+            request.disposeDownloadHandlerOnDispose = true;
+
+            await request.SendWebRequest().ToUniTask();
+
+#if UNITY_2020_2_OR_NEWER
+            if (request.result != UnityWebRequest.Result.Success)
+#else
+            if (request.isHttpError || request.isNetworkError)
+#endif
+            {
+                Log.Warn($"[NTSD_ResourceLoader] Failed to load audio clip: {filePath}, error: {request.error}");
+                return null;
+            }
+
+            var clip = DownloadHandlerAudioClip.GetContent(request);
+            if (clip != null)
+            {
+                clip.name = Path.GetFileNameWithoutExtension(filePath);
+            }
+
+            return clip;
+        }
+
+        private bool IsSupportedAudioFile(string filePath)
+        {
+            string extension = Path.GetExtension(filePath);
+            return string.Equals(extension, ".wav", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(extension, ".ogg", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(extension, ".mp3", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private AudioType GetAudioType(string filePath)
+        {
+            string extension = Path.GetExtension(filePath);
+
+            if (string.Equals(extension, ".wav", StringComparison.OrdinalIgnoreCase))
+            {
+                return AudioType.WAV;
+            }
+
+            if (string.Equals(extension, ".ogg", StringComparison.OrdinalIgnoreCase))
+            {
+                return AudioType.OGGVORBIS;
+            }
+
+            if (string.Equals(extension, ".mp3", StringComparison.OrdinalIgnoreCase))
+            {
+                return AudioType.MPEG;
+            }
+
+            return AudioType.UNKNOWN;
+        }
+
+        private string NormalizeDirectoryPath(string directoryPath)
+        {
+            return Path.GetFullPath(directoryPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar));
         }
 
         private DomainStats GetOrCreateDomainStats(NTSD_ResourceDomain domain)

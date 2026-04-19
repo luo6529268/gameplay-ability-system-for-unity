@@ -218,9 +218,22 @@ namespace NTSD.Animation
         public int vrest = 0;
         //击中效果
         public int effect = 0;
+        // 反汇编 Entity_AI_Update v265[16]：kill==100 时强制武器耐久=-1（秒毁）
+        public int kill = 0;
 
         // LF2/FLF: 防御破坏（可选字段；用于 defend/broken_defend 判定）
         public int bdefend = 0;
+
+        // FLF: 抓取成功后抓取者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）
+        // 对应 FLF character.js:2235-2237: trans.frame(ITR.catchingact[0/1], 10)
+        public int[] catchingact = null;
+
+        // FLF: 被抓者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）
+        public int[] caughtact = null;
+        // 反汇编 0x41A0C9：itr.attacking 目标过滤（4=仅角色, 20=角色且非抓取态, 21=非抓取态, 30=非特定帧）
+        public int attacking = 0;
+        // 反汇编 0x0042EC85：itr.kind=8 爆炸传送时的 heal_timer 偏移量
+        public int throwvz = 0;
     }
 
     /// <summary>
@@ -236,7 +249,6 @@ namespace NTSD.Animation
         public int y = 0;
         public int dvx = 0;
         public int dvy = 0;
-        public int dvz = 0;
         public int oid = 0;
         public int facing = 0;
     }
@@ -277,5 +289,19 @@ namespace NTSD.Animation
         public int throwvx = 0;     // 投掷X速度
         public int throwvy = 0;     // 投掷Y速度
         public int dircontrol = 0;  // 方向控制
+    }
+
+    [System.Serializable]
+    public class WeaponStrengthEntry
+    {
+        public int index = 0;
+        public int dvx = 0;
+        public int dvy = 0;
+        public int fall = 0;
+        public int vrest = 0;
+        public int arest = 0;
+        public int bdefend = 0;
+        public int injury = 0;
+        public int effect = 0;
     }
 }

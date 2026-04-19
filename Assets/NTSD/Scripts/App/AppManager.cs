@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using NTSD.Animation;
 using NTSD.Tools;
 using NTSD.UI;
 using NTSD.Simulation;
 using MoreMountains.TopDownEngine;
 using System.Collections;
+using MoreMountains.Tools;
 
 namespace NTSD.App
 {
@@ -35,19 +37,39 @@ namespace NTSD.App
         [Header("Global Config")]
         [SerializeField] private GameConfig gameConfig;
 
+        private NTSDSoundPlayer soundPlayer;
+        private SparkRenderer sparkRenderer;
+
         [Header("Runtime")]
         [SerializeField] private AppFlowState state = AppFlowState.MenuMain;
 
         public AppFlowState State => state;
         public MatchConfig CurrentMatchConfig { get; private set; }
+        public NTSDSoundPlayer SoundPlayer => soundPlayer;
+        public SparkRenderer SparkRenderer => sparkRenderer;
 
         protected override bool PersistAcrossScenes => true;
 
         protected override void OnSingletonAwake()
         {
             InitializeGameConfig();
+            EnsureRuntimeModules();
             EnsureSingleEventSystem();
             SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void EnsureRuntimeModules()
+        {
+            if (soundPlayer == null)
+            {
+                soundPlayer = gameObject.MMGetOrAddComponent<NTSDSoundPlayer>();
+            }
+
+            if (sparkRenderer == null)
+            {
+                sparkRenderer = gameObject.MMGetOrAddComponent<SparkRenderer>();
+            }
+
         }
 
         private void InitializeGameConfig()

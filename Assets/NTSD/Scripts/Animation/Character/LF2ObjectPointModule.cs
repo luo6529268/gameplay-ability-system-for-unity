@@ -1,6 +1,6 @@
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
-using NTSD.Tools;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Animation
@@ -16,9 +16,6 @@ namespace NTSD.Animation
 
         /// <summary>入队多对象创建任务</summary>
         void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task);
-
-        /// <summary>入队 NPC 创建任务</summary>
-        void EnqueueCreateNPCCharacters(OPointCreateNPCTask task);
 
         /// <summary>
         /// 处理所有队列中的任务并清空
@@ -51,7 +48,11 @@ namespace NTSD.Animation
         public void ProcessFrame(LF2LivingObject animator)
         {
             if (animator == null) return;
-            if (Factory == null) return;
+            if (Factory == null)
+            {
+                Debug.LogWarning($"[OPointModule] Factory is null for {animator?.Name}");
+                return;
+            }
 
             LF2FrameData frame = animator.Frame.D;
             if (frame == null) return;
@@ -60,43 +61,49 @@ namespace NTSD.Animation
             if (op == null) return;
             if (op.oid <= 0) return;
 
-            // === FLF character.js opoint() 逻辑 ===
+            Debug.Log($"[OPointModule] ProcessFrame: char={animator.Name}, frame={frame.frameId}, oid={op.oid}, action={op.action}, facing={op.facing}");
 
-            // 1. oid=5: 生成 NPC 分身角色
-            if (op.oid == 5)
+            // 对应反汇编 0x0042216F：被击中锁定期间不生成 opoint
+            if (animator.HitStun != 0) return;
+
+            // 对应反汇编 0x0042217D：帧延迟不为 0 且实体有类型时跳过 opoint
+            if (animator.FrameDelay != 0 && animator.ObjectType != 0) return;
+
+            // 对应反汇编 0x00421F11：自身是子对象（OwnerId != -1）且 ShotCount >= 150 → skip
+            if (animator.OwnerId != -1 && animator.ShotCount >= 150) return;
+
+            // 对应反汇编 0x00421F2A：ShotCount >= 500 → skip
+            if (animator.ShotCount >= 500) return;
+
+            // 对应反汇编 0x00421F57-F84：场景实体总数上限 500，type==3/4 时上限减半为 250
+            var world = SimulationTickDriver.Instance?.World;
+            if (world != null)
             {
-                EnqueueNPCTask(animator, op);
+                int objectCount = world.ObjectCount;
+                int def = GameDataManager.Instance?.GetObjectById(op.oid)?.type ?? -1;
+                int limit = (def == 3 || def == 4) ? 250 : 500;
+                if (objectCount >= limit) return;
+            }
+
+            // 对应反汇编 0x00421F9C-FA6：ShotCount 递增
+            // step = (500 - min(ShotCount,500)) / 30；对 type3/4 先将 count 减半
+            {
+                int count = animator.ShotCount < 500 ? animator.ShotCount : 500;
+                if (animator.ObjectType == 3 || animator.ObjectType == 4) count >>= 1;
+                int step = (500 - count) / 30;
+                animator.ShotCount += step + 1;
+            }
+
+            // facing > 10: 批量生成（对应反汇编 0x0042219D: cmp ecx,0Ah; jle — 有符号比较，负值不进入）
+            if (op.facing > 10)
+            {
+                int number = op.facing / 10;
+                EnqueueMultipleTask(animator, op, number);
                 return;
             }
 
-            // 2. facing > 10: 批量生成多个对象
-            if (Mathf.Abs(op.facing) > 10)
-            {
-                int number = Mathf.FloorToInt(Mathf.Abs(op.facing) / 10f);
-                float vz = op.dvz != 0 ? op.dvz : 3f;
-                EnqueueMultipleTask(animator, op, number, vz);
-                return;
-            }
-
-            // 3. 普通: 单个对象生成
+            // 普通：单个对象生成
             EnqueueSingleTask(animator, op);
-        }
-
-        private void EnqueueNPCTask(LF2LivingObject animator, ObjectPoint op)
-        {
-            int numberOfCharacters = Mathf.FloorToInt(Mathf.Abs(op.facing) / 10f);
-            if (numberOfCharacters <= 0) return;
-
-            var task = new OPointCreateNPCTask
-            {
-                parent = animator,
-                team = animator.Team,
-                characterId = animator.ObjectId,
-                number = numberOfCharacters,
-                basePos = new Vector3(animator.PS.x, animator.PS.y, animator.PS.z)
-            };
-
-            Factory.EnqueueCreateNPCCharacters(task);
         }
 
         private void EnqueueSingleTask(LF2LivingObject animator, ObjectPoint op)
@@ -105,33 +112,33 @@ namespace NTSD.Animation
 
             var task = new OPointCreateTask
             {
-                opoint = op,
-                parent = animator,
-                team = animator.Team,
-                pos = pos,
-                z = animator.PS.z,
-                dir = animator.PS.dir,
-                dvz = animator.Controller.Dirv() * 2f
+                opoint  = op,
+                parent  = animator,
+                team    = animator.Team,
+                pos     = pos,
+                z       = animator.PS.z,
+                dir     = animator.PS.dir,
+                dvz     = 0f,
             };
 
+            Debug.Log($"[OPointModule] EnqueueSingleTask: oid={op.oid}, action={op.action}, pos={pos}");
             Factory.EnqueueCreateObject(task);
         }
 
-        private void EnqueueMultipleTask(LF2LivingObject animator, ObjectPoint op, int number, float vz)
+        private void EnqueueMultipleTask(LF2LivingObject animator, ObjectPoint op, int number)
         {
             Vector3 pos = MakePoint(animator, op);
 
             var task = new OPointCreateMultipleTask
             {
-                opoint = op,
-                parent = animator,
-                team = animator.Team,
-                pos = pos,
-                z = animator.PS.z,
-                dir = animator.PS.dir,
-                dvz = animator.Controller.Dirv() * 2f,
-                number = number,
-                vz = vz
+                opoint  = op,
+                parent  = animator,
+                team    = animator.Team,
+                pos     = pos,
+                z       = animator.PS.z,
+                dir     = animator.PS.dir,
+                dvz     = 0f,
+                number  = number,
             };
 
             Factory.EnqueueCreateMultipleObjects(task);
@@ -142,38 +149,18 @@ namespace NTSD.Animation
         /// P2 对齐 FLF mechanics.js mech.prototype.make_point()
         /// 使用 PS.sx/sy/sz（sprite origin）而非 PS.x/y/z
         /// </summary>
-        private Vector3 MakePoint(LF2LivingObject animator, ObjectPoint op, string prefix = "")
+        private Vector3 MakePoint(LF2LivingObject animator, ObjectPoint op)
         {
             var PS = animator.PS;
-            var frame = animator.Frame.D;
             float spriteWidth = animator.GetSpriteWidthPxForCollision();
 
-            if (op == null) 
-            {
-                Log.Info("mechanics: make point failed'");
-                return new Vector3(PS.sx, PS.sy, PS.sz);
-            }
-
             Vector3 objectPoint = Vector3.zero;
-            if (!string.IsNullOrEmpty(prefix))
-            {
-                // 确保 sx/sy/sz 已更新
-                int centerx = frame?.centerx ?? 0;
-                int centery = frame?.centery ?? 0;
-                objectPoint.x = (PS.dir == "right") ?
-                    PS.sx + centerx : PS.sx + spriteWidth - centerx;
-                objectPoint.y = PS.sy + centery;
-                objectPoint.z = PS.sz + centery;
-            }
-            else
-            {
-                objectPoint.x = (PS.dir == "right")
-                    ? PS.sx + op.x
-                    : PS.sx + spriteWidth - op.x;
+            objectPoint.x = (PS.dir == "right")
+                ? PS.sx + op.x
+                : PS.sx + spriteWidth - op.x;
 
-                objectPoint.y = PS.sy + op.y;
-                objectPoint.z = PS.sz + op.y;
-            }
+            objectPoint.y = PS.sy + op.y;
+            objectPoint.z = PS.sz + op.y;
 
             return objectPoint;
         }

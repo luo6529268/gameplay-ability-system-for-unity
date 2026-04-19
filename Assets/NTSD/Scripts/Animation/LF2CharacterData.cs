@@ -49,6 +49,21 @@ namespace NTSD.Animation
 
         [Header("帧数据")]
         public List<LF2FrameData> frames = new List<LF2FrameData>();
+
+        [Header("武器参数（仅武器 DAT 有效）")]
+        public int weapon_hp = 0;
+        public int weapon_drop_hurt = 0;
+        public string weapon_hit_sound = "";
+        public string weapon_drop_sound = "";
+        public string weapon_broken_sound = "";
+        public List<WeaponStrengthEntry> weapon_strength_list = new List<WeaponStrengthEntry>();
+        /// <summary>
+        /// 武器/投射物子类型，对应反汇编 [+6F4h]
+        /// 决定 state=1002 时的重力分级：
+        ///   0x7C(124) = 极轻（气球），0x78(120) = 轻（苦无），0x65(101) = 中等
+        ///   0x3E7(999) = 特殊落地（frame=101），其余走默认重力 0.5667
+        /// </summary>
+        public int type_sub = 0;
     }
 
     /// <summary>

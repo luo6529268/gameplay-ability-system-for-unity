@@ -1,4 +1,4 @@
-using BeatEmUpTemplate2D;
+﻿using BeatEmUpTemplate2D;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.Input;
@@ -131,11 +131,27 @@ namespace NTSD.Animation.LF2Objects
             _hitCounters?.Reset();
             ItrRest?.Reset();
             _heldWeapon = null;
+            // 对应反汇编 0x00421185/0x00421191：spawn/reset 时清零
+            HitStun = 0;
+            FrameDelay = 10;
+            ShotCount = 0;
+            ResetSpark();
+            // 角色重置时从 SimulationWorld 移除，避免死亡/复用后残留在碰撞查询列表中
+            SimulationTickDriver.Instance?.World?.Unregister(this);
         }
 
         public override void Destroy()
         {
             Reset();
+        }
+
+        /// <summary>
+        /// 角色不回收到对象池，只执行 destroy 逻辑
+        /// </summary>
+        public override void OnTransitDestroy()
+        {
+            StateUpdate("destroy");
+            Destroy();
         }
 
         // ========== 初始化（由 Character Hub 调用）==========
@@ -162,7 +178,8 @@ namespace NTSD.Animation.LF2Objects
             PS.vz = 0;
 
             // 初始化精灵模块
-            Sprite.Initialize(spriteRenderer, sprites);
+            Sprite.Initialize(spriteRenderer, sprites);
+
             AllowSwitchDir = true;
 
         }
@@ -194,6 +211,9 @@ namespace NTSD.Animation.LF2Objects
                 ObjectPointModule.SetFactory(LF2ObjectPointFactory.Instance);
             }
 
+            // 注册到 SimulationWorld（ModuleBind 时序确定，SimulationTickDriver 已完成 Awake）
+            SimulationTickDriver.Instance?.World?.Register(this);
+
             // 绑定 WPoint Factory
             if (WeaponPointModule != null && WeaponPointModule.Factory == null && LF2WeaponPointFactory.Instance != null)
             {
@@ -220,10 +240,14 @@ namespace NTSD.Animation.LF2Objects
         public void BindOPointFactory(LF2ObjectPointFactory factory)
         {
             ObjectPointModule.SetFactory(factory);
-        }
-
-        // ========== 状态机初始化 ==========
-
+        }
+
+
+
+        // ========== 状态机初始化 ==========
+
+
+
         protected override void InitializeStates()
         {
             // 注册基础状态处理器 (0-17)
@@ -246,55 +270,95 @@ namespace NTSD.Animation.LF2Objects
             _states[LF2States.Injured2] = State_Injured2;
             _states[LF2States.Charging] = State_Charging;
             _states[LF2States.Burning] = State_Burning;
-        }
-
-        /// <summary>
-        /// 通用状态处理器
-        /// 对应 LF2 源码的 states.generic
-        /// 处理所有状态共享的逻辑，如物理更新、输入缓冲、全局受击判定等
-        /// </summary>
-        protected override bool OnGenericStateEvent(string eventType, object eventData = null)
-        {
-            switch (eventType)
-            {
-                case "frame":
-                    // 🖼️ 每帧执行的通用逻辑 (MP/HP恢复, OPoint生成等) (对应 FLF character.js:14-52)
-                    return Generic_Frame();
-
-                case "TU":
-                    // ⏱️ 时间单元(Time Unit)更新 (状态机, buff更新, 物理重置) (对应 FLF character.js:54-183)
-                    return Generic_TU();
-
-                case "transit":
-                    // 🚀 动态物理更新 (摩擦力, 位置更新) (对应 FLF character.js:185-190)
-                    return Generic_Transit();
-
-                case "combo":
-                    // 🎮 通用输入处理 (多键连招映射, 方向键处理) (对应 FLF character.js:191-215)
-                    return Generic_Combo(eventData as string);
-
-                case "post_combo":
-                    // 🛑 连招后处理 (清理缓存等) (对应 FLF character.js:217-220)
-                    // TODO: 实现 pre_interaction() - 预处理交互 (武器拾取, 对象交互)
-                    Generic_PreInteraction();
-                    return false;
-
-                case "state_exit":
-                    // 🚪 状态退出清理 (清理连招缓冲) (对应 FLF character.js:221-228)
-                    return Generic_StateExit();
-            }
-
-            return false;
-        }
-
-
+        }
+
+
+
+        /// <summary>
+
+        /// 通用状态处理器
+
+        /// 对应 LF2 源码的 states.generic
+
+        /// 处理所有状态共享的逻辑，如物理更新、输入缓冲、全局受击判定等
+
+        /// </summary>
+
+        protected override bool OnGenericStateEvent(string eventType, object eventData = null)
+
+        {
+
+            switch (eventType)
+
+            {
+
+                case "frame":
+
+                    // 🖼️ 每帧执行的通用逻辑 (MP/HP恢复, OPoint生成等) (对应 FLF character.js:14-52)
+
+                    return Generic_Frame();
+
+
+
+                case "TU":
+
+                    // ⏱️ 时间单元(Time Unit)更新 (状态机, buff更新, 物理重置) (对应 FLF character.js:54-183)
+
+                    return Generic_TU();
+
+
+
+                case "transit":
+
+                    // 🚀 动态物理更新 (摩擦力, 位置更新) (对应 FLF character.js:185-190)
+
+                    return Generic_Transit();
+
+
+
+                case "combo":
+
+                    // 🎮 通用输入处理 (多键连招映射, 方向键处理) (对应 FLF character.js:191-215)
+
+                    return Generic_Combo(eventData as string);
+
+
+
+                case "post_combo":
+
+                    // 🛑 连招后处理 (清理缓存等) (对应 FLF character.js:217-220)
+                    // Generic_PreInteraction 已迁移至 SimPreInteraction（PreInteractionTickAll 全局 pass）
+
+                    return false;
+
+
+
+                case "state_exit":
+
+                    // 🚪 状态退出清理 (清理连招缓冲) (对应 FLF character.js:221-228)
+
+                    return Generic_StateExit();
+
+            }
+
+
+
+            return false;
+
+        }
+
+
+
+
+
         // ========== 核心生命周期（对应 FLF livingobject/character）==========
 
         /// <summary>
         /// 连招更新 - 对应 FLF character.combo_update()
         /// 参考：FLF character.js:1800-1846
         /// </summary>
-        protected override void ComboUpdate()
+        protected override void ComboUpdate()
+
         {
             string rawCombo = ComboBuffer?.Combo;
             string K = rawCombo;
@@ -309,7 +373,9 @@ namespace NTSD.Animation.LF2Objects
 
             bool CurStateResult = CurStateHandler?.Invoke("combo", K) ?? false;
             bool generalResult = false;
-            if (!CurStateResult)            {                generalResult = OnGenericStateEvent("combo", K);
+            if (!CurStateResult)
+            {
+                generalResult = OnGenericStateEvent("combo", K);
             }
 
             CurStateHandler?.Invoke("post_combo");
@@ -322,46 +388,87 @@ namespace NTSD.Animation.LF2Objects
         /// 应用物理动力学
         /// </summary>
         public void ApplyDynamics()
-        {
-            float blockedMoveScale = Match?.SceneQuery?.TestBlockingXZ(this, PS.vx, PS.vz) == true ? 0.1f : 1f;
-
-            bool hasStageBounds = false;
-            LF2StageBoundsPx stageBoundsPx = default;
-            var boundsProvider = NTSD.LevelEditor.BoundaryWallManager.Instance;
-            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))            {                hasStageBounds = true;
-            }
-            var ctx = new CharacterMechanicsContext(
-                PS,
-                Frame.D,
-                GetSpriteWidthPxForCollision(),
-                hasStageBounds,
-                stageBoundsPx,
-                _mass,
-                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity,
-                blockedMoveScale,
-                _cachedIsPointWalkable
-            );
-
-            var result = _mech.Step(ctx);
-
-            if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
-            {
-                Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
-            }
-
-            // ground plane（Unity X/Y）写回
-            const float ppu = 100f;
-            _CharacterHub.transform.position = new Vector3(
-                Mathf.Round(result.groundPlanePos.x * ppu) / ppu,
-                Mathf.Round(result.groundPlanePos.y * ppu) / ppu,
-                _CharacterHub.transform.position.z
-            );
-
-            // 视觉高度偏移（Unity local Y），同样对齐像素网格
-            float snappedVisualY = Mathf.Round(result.visualYOffset * ppu) / ppu;
-            _CharacterHub._ModeTrans.localPosition = _baseLocalPosition + new Vector3(0f, snappedVisualY, 0f);
-
+        {
+
+            float blockedMoveScale = Match?.SceneQuery?.TestBlockingXZ(this, PS.vx, PS.vz) == true ? 0.1f : 1f;
+
+
+
+            bool hasStageBounds = false;
+
+            LF2StageBoundsPx stageBoundsPx = default;
+
+            var boundsProvider = NTSD.LevelEditor.BoundaryWallManager.Instance;
+
+            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))
+            {
+                hasStageBounds = true;
+            }
+
+            var ctx = new CharacterMechanicsContext(
+
+                PS,
+
+                Frame.D,
+
+                GetSpriteWidthPxForCollision(),
+
+                hasStageBounds,
+
+                stageBoundsPx,
+
+                _mass,
+
+                 NTSDGlobal.Gameplay.MinSpeed,
+
+                NTSDGlobal.Gameplay.Gravity,
+
+                blockedMoveScale,
+
+                _cachedIsPointWalkable
+
+            );
+
+
+
+            var result = _mech.Step(ctx);
+
+
+
+            if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
+
+            {
+
+                Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
+
+            }
+
+
+
+            // ground plane（Unity X/Y）写回
+
+            const float ppu = 100f;
+
+            _CharacterHub.transform.position = new Vector3(
+
+                Mathf.Round(result.groundPlanePos.x * ppu) / ppu,
+
+                Mathf.Round(result.groundPlanePos.y * ppu) / ppu,
+
+                _CharacterHub.transform.position.z
+
+            );
+
+
+
+            // 视觉高度偏移（Unity local Y），同样对齐像素网格
+
+            float snappedVisualY = Mathf.Round(result.visualYOffset * ppu) / ppu;
+
+            _CharacterHub._ModeTrans.localPosition = _baseLocalPosition + new Vector3(0f, snappedVisualY, 0f);
+
+
+
             _CharacterHub.SetGrounding(_CharacterHub.transform.position.y, result.grounded);
 
         }
@@ -415,15 +522,19 @@ namespace NTSD.Animation.LF2Objects
             return _heldWeapon;
         }
 
-        /// <summary>
-        /// 重型武器
-        /// </summary>
+        /// <summary>
+
+        /// 重型武器
+
+        /// </summary>
+
         /// <returns></returns>
         public bool IsHeavyWeapon() 
         {
             if(_heldWeapon == null)
-                return false;
-            return _heldWeapon is LF2HeavyWeapon;
+                return false;
+
+            return (_heldWeapon as LF2WeaponBase)?.IsHeavy == true;
         }
 
         /// <summary>
@@ -431,14 +542,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void DropWeapon(float dvx = 0, float dvy = 0)
         {
-            if (_heldWeapon is LF2LightWeapon lightWeapon)
-            {
-                lightWeapon.Drop(dvx, dvy);
-            }
-            else if (_heldWeapon is LF2HeavyWeapon heavyWeapon)
-            {
-                heavyWeapon.Drop(dvx, dvy);
-            }
+            (_heldWeapon as LF2WeaponBase)?.Drop(dvx, dvy);
 
             _heldWeapon = null;
         }
@@ -520,13 +624,15 @@ namespace NTSD.Animation.LF2Objects
         {
             if (cpoint.vaction != 0)
             {
-                TransitionToFrame(cpoint.vaction, 22);
+                ImmediateFrame(cpoint.vaction);
             }
             else
             {
-                TransitionToFrame(LF2StandardFrames.JumpingAir, 22);
+                ImmediateFrame(LF2StandardFrames.JumpingAir);
             }
             caught_throwz = vdir;
+            // 对应反汇编 0x0042E2FD：被投掷时 FrameDelay=-5
+            FrameDelay = -5;
         }
 
         /// <summary>
@@ -536,11 +642,13 @@ namespace NTSD.Animation.LF2Objects
         public void caught_release()
         {
             Catching = null;
-            TransitionToFrame(181, 22);
+            ImmediateFrame(181);
             Effect.Dvx = 3;
             Effect.Dvy = -3;
             Effect.TimeIn = -1;
             Effect.TimeOut = 0;
+            // 对应反汇编 0x0042D796：被释放时 FrameDelay=-3
+            FrameDelay = -3;
         }
 
 
@@ -552,6 +660,15 @@ namespace NTSD.Animation.LF2Objects
         public int CurrentState => Frame.D?.state ?? 0;
 
         // ========== 额外方法 ==========
+
+        /// <summary>
+        /// PreInteraction 全局 pass（对应 NTSD 反汇编 GameMode_Process sub_41BDA0）
+        /// 由 SimulationWorld.PreInteractionTickAll 在所有对象 SerialTickAll 完成后统一调用。
+        /// </summary>
+        public override void SimPreInteraction(int tickIndex)
+        {
+            Generic_PreInteraction();
+        }
 
         /// <summary>
         /// 重新加载角色帧数据

@@ -254,6 +254,21 @@ namespace NTSD.Animation
         /// </summary>
         public const int WeaponOnGround = 1004;
 
+        // ==================== 重武器状态 (2000-2999) ====================
+        // 反汇编依据: ntsd24_full_disasm.txt sub_4063B0 0x407378, Entity_AI_Update 0x42CC54
+
+        /// <summary>
+        /// 状态 2000: 重武器在空中（飞行中）
+        /// 反汇编: [+7ACh] == 7D0h
+        /// </summary>
+        public const int HeavyWeaponInSky = 2000;
+
+        /// <summary>
+        /// 状态 2004: 重武器在地面
+        /// 反汇编: [+7ACh] == 7D4h，sub_4063B0 0x407380 确认地面重武器才能击打角色
+        /// </summary>
+        public const int HeavyWeaponOnGround = 2004;
+
         // ==================== 投射物/对象状态 (3000-3999) ====================
 
         /// <summary>

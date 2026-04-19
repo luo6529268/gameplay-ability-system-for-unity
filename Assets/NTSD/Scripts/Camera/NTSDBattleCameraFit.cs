@@ -65,6 +65,14 @@ namespace NTSD.Battle
         [Tooltip("地图世界坐标矩形（X=左边, Y=下边, Width=宽, Height=高）。")]
         [SerializeField] private Rect mapBoundsWorld = new Rect(-20f, -15f, 40f, 30f);
 
+        // ─── 死区设置 ────────────────────────────────────────────────────────
+        [Header("Dead Zone（安全区域）")]
+        [Tooltip("水平死区半宽（世界单位）。角色在此范围内水平移动，摄像机不会跟随。")]
+        [SerializeField] private float deadZoneX = 2f;
+
+        [Tooltip("垂直死区半高（世界单位）。角色在此范围内垂直移动，摄像机不会跟随。跳跃时防止相机抖动。")]
+        [SerializeField] private float deadZoneY = 1.5f;
+
         // ─── 像素对齐 ────────────────────────────────────────────────────────
         [Header("Pixel Snap")]
         [Tooltip("像素每单位，与精灵导入设置一致（通常 100）。0 = 不启用像素对齐。")]
@@ -122,9 +130,12 @@ namespace NTSD.Battle
             }
             else
             {
+                // ── 死区：仅当目标超出安全区域时才推动摄像机位置 ──
+                Vector3 deadZoneTarget = ApplyDeadZone(prevPos, fitPos);
+
                 // ── 正常模式：SmoothDamp 平滑跟随 ──
                 Vector3 newPos = Vector3.SmoothDamp(
-                    prevPos, fitPos, ref _posVelocity, smoothTime, maxFollowSpeed);
+                    prevPos, deadZoneTarget, ref _posVelocity, smoothTime, maxFollowSpeed);
                 newPos.z = prevPos.z;
                 cam.transform.position = newPos;
 
@@ -147,6 +158,31 @@ namespace NTSD.Battle
         }
 
         // ─── 核心：非对称取景计算 ─────────────────────────────────────────────
+
+        /// <summary>
+        /// 死区过滤：仅当 fitPos 偏离当前相机位置超过死区时，才将目标位置推出死区边界。
+        /// 角色在死区内的轻微移动（如跳跃）不会驱动摄像机。
+        /// </summary>
+        private Vector3 ApplyDeadZone(Vector3 camPos, Vector3 fitPos)
+        {
+            float tx = fitPos.x;
+            float ty = fitPos.y;
+
+            float dx = tx - camPos.x;
+            float dy = ty - camPos.y;
+
+            // X轴：超出死区才推动，推到死区边界
+            float targetX = camPos.x;
+            if (dx > deadZoneX)       targetX = tx - deadZoneX;
+            else if (dx < -deadZoneX) targetX = tx + deadZoneX;
+
+            // Y轴：超出死区才推动
+            float targetY = camPos.y;
+            if (dy > deadZoneY)       targetY = ty - deadZoneY;
+            else if (dy < -deadZoneY) targetY = ty + deadZoneY;
+
+            return new Vector3(targetX, targetY, fitPos.z);
+        }
 
         /// <summary>
         /// 根据所有 pivot 的 bounding box 和非对称留白，计算目标相机位置与 orthographicSize。
@@ -290,7 +326,8 @@ namespace NTSD.Battle
 
         private static Transform ResolvePivot(LF2LivingObject obj)
         {
-            if (obj == null) return null;
+            // 只跟踪角色，武器/特效不参与取景计算
+            if (obj is not LF2Character) return null;
             if (obj._CharacterHub != null && obj._CharacterHub.isActiveAndEnabled)
                 return obj._CharacterHub.transform;
             if (obj.Renderer != null && obj.Renderer.isActiveAndEnabled)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -22,6 +23,9 @@ namespace NTSD.Animation.LF2Objects
         private SpriteRenderer _shadowRenderer;
         private bool _hasShadow;
 
+        // SortingGroup 用于角色根节点，优先控制层级；武器/SA 无 SortingGroup 则回退到 SpriteRenderer.sortingOrder
+        private SortingGroup _sortingGroup;
+
         /// <summary>
         /// 当前方向
         /// </summary>
@@ -37,6 +41,16 @@ namespace NTSD.Animation.LF2Objects
             _renderer = renderer;
             _sprites = sprites;
             _dir = "right";
+
+            // 从根节点查找 SortingGroup（角色有，武器/SA 无）
+            _sortingGroup = renderer != null
+                ? renderer.GetComponentInParent<SortingGroup>()
+                : null;
+
+            if (_renderer != null)
+                _renderer.sortingLayerName = "Object";
+            if(_sortingGroup != null)
+                _sortingGroup.sortingLayerName = "Object";
         }
 
         /// <summary>
@@ -97,12 +111,16 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 设置 Z 排序（对应 FLF sp.set_z）
-        /// 参考：FLF sprite.js:159-162
+        /// 参考：FLF sprite.js:159-162 / mechanics.js:389
+        /// 角色有 SortingGroup → 改 SortingGroup.sortingOrder（控制整个角色层级）
+        /// 武器/SA 无 SortingGroup → 回退改 SpriteRenderer.sortingOrder
         /// </summary>
         public void SetZ(float z)
         {
-            if (_renderer == null) return;
-            _renderer.sortingOrder = (int)z;
+            if (_sortingGroup != null)
+                _sortingGroup.sortingOrder = Mathf.Abs((int)z);
+            else if (_renderer != null)
+                _renderer.sortingOrder = Mathf.Abs((int)z);
         }
 
         /// <summary>
