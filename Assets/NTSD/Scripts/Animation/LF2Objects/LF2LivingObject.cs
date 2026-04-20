@@ -344,6 +344,7 @@ namespace NTSD.Animation.LF2Objects
         private readonly float[] _sparkWorldX = new float[MaxSparkSlots];
 
         /// <summary>spark slot 世界 y 坐标（高度，对应 obj[0x398+slot*4]）</summary>
+        private readonly int[] _sparkLastTickFrame = new int[MaxSparkSlots];
         private readonly float[] _sparkWorldY = new float[MaxSparkSlots];
 
         /// <summary>spark slot z 深度（渲染排序用）</summary>
@@ -354,11 +355,12 @@ namespace NTSD.Animation.LF2Objects
         /// timer 初始值：itr.fall > 60 → attacking*20（大spark）；否则 → attacking*4+10（小spark）
         /// 反汇编 0x0042F81B–0x0042F837：cmp edx,3Ch; jle small; shl 2 → *20 / lea *4+10
         /// </summary>
-        public void AddSparkSlot(int timerInitial, float worldX, float worldY, float worldZ)
+        public void AddSparkSlot(int timerInitial, float worldX, float worldY, float worldZ, int currentRenderFrame = -1)
         {
             if (SparkSlotCount >= MaxSparkSlots) return;
             int slot = SparkSlotCount;
             _sparkTimers[slot] = timerInitial;
+            _sparkLastTickFrame[slot] = currentRenderFrame;
             _sparkWorldX[slot] = worldX;
             _sparkWorldY[slot] = worldY;
             _sparkWorldZ[slot] = worldZ;
@@ -411,10 +413,13 @@ namespace NTSD.Animation.LF2Objects
         ///   timer 30-38: fade 渲染，不移除
         ///   timer >= 39: 移除
         /// </summary>
-        public void TickAllSparkTimers()
+        public void TickAllSparkTimers(int renderFrame)
         {
             for (int i = SparkSlotCount - 1; i >= 0; i--)
             {
+                // 每个 timer 值至少渲染 2 个渲染帧（对齐原版 30Hz：每 timer 值持续 1/30s = 2 个 60Hz 帧）
+                if (renderFrame - _sparkLastTickFrame[i] < 2) continue;
+                _sparkLastTickFrame[i] = renderFrame;
                 _sparkTimers[i]++;
                 int t = _sparkTimers[i];
                 bool remove = (t >= 5 && t < 10) || (t >= 15 && t < 30) || (t >= 39);

@@ -508,14 +508,14 @@ namespace NTSD.Simulation
         /// <summary>
         /// 推进所有 LF2LivingObject 的 spark timer（30Hz sim tick 内调用）。
         /// </summary>
-        public void TickSparkTimers()
+        public void TickSparkTimers(int renderFrame)
         {
             foreach (var kvp in _buckets)
             {
                 foreach (var obj in kvp.Value.items)
                 {
                     if (obj is LF2LivingObject living && living.SparkSlotCount > 0)
-                        living.TickAllSparkTimers();
+                        living.TickAllSparkTimers(renderFrame);
                 }
             }
         }

@@ -27,6 +27,7 @@ namespace NTSD.Animation
         [SerializeField] private Transform _poolRoot;
         [SerializeField] private Transform _activeRoot;
         [SerializeField] private Transform _spriteRoot;  // Bucket B SpriteRenderer 挂载根节点（null 时挂在 LF2ObjectPool 自身）
+        [SerializeField] private int _initialSpritePoolSize = 16; // 预热 SpriteRenderer 数量
 
         // ========== 池数据结构 ==========
         private LinkedList<LF2ObjectRenderer> _availableObjects;
@@ -50,6 +51,17 @@ namespace NTSD.Animation
 
             for (int i = 0; i < _initialPoolSize; i++)
                 CreateNewObject();
+
+            for (int i = 0; i < _initialSpritePoolSize; i++)
+            {
+                var go = new GameObject("Spark");
+                Transform parent = _spriteRoot != null ? _spriteRoot : transform;
+                go.transform.SetParent(parent, false);
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sortingLayerName = "Object";
+                sr.gameObject.SetActive(false);
+                _spritePool.Push(sr);
+            }
         }
 
         // ========== 核心方法 ==========

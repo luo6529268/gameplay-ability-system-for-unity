@@ -145,10 +145,13 @@ namespace NTSD.Animation.LF2Objects
             _renderFrameCount++;
             if (_logicObject == null) return;
 
-            // 对应反汇编 sub_413E10 0x413E19：[entity+0B4h] < 0（FrameDelay < 0）时产生 x 偏移
-            // dword_449098 每渲染帧在 0/1 交替（0x41DB8F: eax = 1 - ecx）
-            // x_offset = toggle*6-3 → 每帧在 -3 和 +3 之间交替（像素单位）
+            // 反汇编 0x41D272: TimeIn > -25 才调用 sub_413E10
+            // 反汇编 sub_413E10 0x413E19: FrameDelay < 0 时产生 x 偏移
+            // dword_449098 每渲染帧在 0/1 交替，x_offset = toggle*6-3（±3 像素）
+            if (_logicObject.Effect.TimeIn <= -25) return;
             if (_logicObject.FrameDelay >= 0) return;
+
+            Debug.Log($"[SHAKE] frame={_renderFrameCount} TimeIn={_logicObject.Effect.TimeIn} FrameDelay={_logicObject.FrameDelay}");
 
             const float ppu = 100f;
             int toggle = _renderFrameCount & 1;

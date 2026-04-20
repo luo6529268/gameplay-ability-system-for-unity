@@ -71,6 +71,8 @@ namespace NTSD.Simulation
             objectCount = _world.ObjectCount;
         }
 
+        private int _sparkRenderFrame = 0;
+
         private void LateUpdate()
         {
             if (_sparkRenderer == null)
@@ -79,6 +81,7 @@ namespace NTSD.Simulation
                 if (_sparkRenderer == null)
                     _sparkRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.SparkRenderer>();
             }
+            _sparkRenderFrame++;
             _sparkRenderer.RenderAll(_world);
         }
 
@@ -125,14 +128,14 @@ namespace NTSD.Simulation
                 _world.LateTick(tickIndex);
 
             if (_world != null)
-                _world.TickSparkTimers();
+                _world.TickSparkTimers(_sparkRenderFrame);
 
             if (debugLogPerTick)
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
         }
 
         public SimulationWorld World => _world;
-
+        public int SparkRenderFrame => _sparkRenderFrame;
         public int CurrentTickIndex => _tickIndex;
 
         public float RemainingAccumulatorTime => _timeAccumulator;

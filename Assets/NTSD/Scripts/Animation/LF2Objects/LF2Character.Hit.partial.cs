@@ -572,7 +572,8 @@ namespace NTSD.Animation.LF2Objects
                 sz = PS.z;
             }
 
-            AddSparkSlot(timerInitial, sx, sy, sz);
+            int currentRenderFrame = SimulationTickDriver.Instance?.SparkRenderFrame ?? -1;
+            AddSparkSlot(timerInitial, sx, sy, sz, currentRenderFrame);
         }
 
         // ─────────────────────────────────────────────────────────────────
