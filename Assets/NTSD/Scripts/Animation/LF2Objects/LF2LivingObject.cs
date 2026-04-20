@@ -309,6 +309,13 @@ namespace NTSD.Animation.LF2Objects
         public int FrameDelay { get; set; } = 0;
 
         /// <summary>
+        /// 抖动计时器（对应反汇编 entity+8h）
+        /// Entity_Collision 每帧向 0 收敛：正数递减，负数递增。
+        /// RenderDispatch shake 条件：ShakeTimer > -25。
+        /// </summary>
+        public int ShakeTimer { get; set; } = 0;
+
+        /// <summary>
         /// 发射计数器（对应反汇编 entity+308h）
         /// 每次触发 opoint 时按公式递增：ShotCount += (500 - min(ShotCount,500)) / 30 + 1
         /// ProcessFrame 守卫：ShotCount >= 500 跳过；OwnerId != -1 且 ShotCount >= 150 跳过。
@@ -844,6 +851,10 @@ namespace NTSD.Animation.LF2Objects
                 if (HitCounters.HitStateCount > 0) HitCounters.SetHitStateCount(HitCounters.HitStateCount - 1);
             }
             if (HitConfirmEa > 0) HitConfirmEa--;
+
+            // 反汇编 Entity_Collision 0x413909-0x413918：this+8 向 0 收敛
+            if (ShakeTimer > 0) ShakeTimer--;
+            else if (ShakeTimer < 0) ShakeTimer++;
 
             // 反汇编 0x416254-0x41627C：FrameDelay 非零时跳过状态机 TU（hit_stop 冻结）
             if (FrameDelay != 0) return;

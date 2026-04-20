@@ -1,7 +1,9 @@
-using UnityEngine;
+using System.Collections.Generic;
 using MoreMountains.Tools;
+using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Tools;
+using UnityEngine;
 
 namespace NTSD.Simulation
 {
@@ -72,6 +74,7 @@ namespace NTSD.Simulation
         }
 
         private int _sparkRenderFrame = 0;
+        private readonly List<LF2LivingObject> _shakeObjects = new List<LF2LivingObject>(8);
 
         private void LateUpdate()
         {
@@ -83,6 +86,31 @@ namespace NTSD.Simulation
             }
             _sparkRenderFrame++;
             _sparkRenderer.RenderAll(_world);
+            ApplyVisualShakeAll();
+        }
+
+        // 反汇编 0x41D272: ShakeTimer(this+8) > -25 才调用 sub_413E10
+        // 反汇编 sub_413E10 0x413E19: FrameDelay < 0 时 x_offset = toggle*6-3（±3 像素）
+        // dword_449098 每渲染帧 0/1 交替 → 对应 _sparkRenderFrame & 1
+        private void ApplyVisualShakeAll()
+        {
+            if (_world == null) return;
+            _world.GetAllLivingObjects(_shakeObjects);
+            if (_shakeObjects.Count == 0) return;
+            int toggle = _sparkRenderFrame & 1;
+            const float ppu = 100f;
+            float xOffset = (toggle * 6 - 3) / ppu;
+            for (int i = 0; i < _shakeObjects.Count; i++)
+            {
+                var obj = _shakeObjects[i];
+                if (obj.ShakeTimer <= -25) continue;
+                if (obj.FrameDelay >= 0) continue;
+                var hub = obj._CharacterHub;
+                if (hub == null) continue;
+                var pos = hub.transform.position;
+                pos.x += xOffset;
+                hub.transform.position = pos;
+            }
         }
 
         private void RunOneSimTick(int tickIndex)
