@@ -626,7 +626,10 @@ namespace NTSD.Animation.LF2Objects
         {
             if (Frame.D == null || PS == null) return;
 
-            if (Frame.D.dvx != 0)
+            // 反汇编：entity+0x28h (vx/knockback_vx) 只在 hit 处理里写入，dvx 不写该字段。
+            // Falling 状态下 PS.vx 由击飞速度驱动，dvx 不得覆盖。
+            bool isFalling = GetState() == LF2States.Falling;
+            if (Frame.D.dvx != 0 && !isFalling)
             {
                 float avx = Mathf.Abs(PS.vx);
                 if (PS.y < 0 || avx < Frame.D.dvx)
@@ -641,7 +644,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (Frame.D.dvz != 0) PS.vz = Dirv() * Frame.D.dvz;
             if (Frame.D.dvy != 0) PS.vy += Frame.D.dvy;
-            if (Frame.D.dvx == 550) PS.vx = 0;
+            if (!isFalling && Frame.D.dvx == 550) PS.vx = 0;
             if (Frame.D.dvy == 550) PS.vy = 0;
             if (Frame.D.dvz == 550) PS.vz = 0;
         }
@@ -700,6 +703,7 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
         {
+            int prevFn = Frame.N;
             Log.LogState(Name, "Frame", $"{Frame.N} → {targetFrameId}");
             Frame.PN = Frame.N;
             Frame.N = targetFrameId;

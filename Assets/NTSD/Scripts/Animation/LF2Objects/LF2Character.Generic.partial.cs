@@ -352,6 +352,10 @@ namespace NTSD.Animation.LF2Objects
             // 攻击方碰撞豁免守卫（对应反汇编 0x419E3B：[esi+0ECh] > 0 跳过整体碰撞检测）
             if (HitCounters?.AttackExempt > 0) return;
 
+            // Falling 状态下不执行 kind=0 攻击判定
+            // 反汇编中 Falling 帧（180-183）实际无 itr，等价于此过滤
+            if (GetState() == LF2States.Falling) return;
+
             float spriteWidthPx = GetSpriteWidthPxForCollision();
             if (spriteWidthPx <= 0f) return;
 

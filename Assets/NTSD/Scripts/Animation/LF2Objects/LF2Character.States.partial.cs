@@ -1327,6 +1327,37 @@ namespace NTSD.Animation.LF2Objects
                     // $.health.fall > 0 → $.health.fall--
                     if (HitCounters.Fall > 0)
                         HitCounters.AddFall(-1);
+
+                    // 反汇编 Entity_FrameAdvance 0x416583-0x41662A：
+                    // state==12 时每帧根据 vy 覆写飞行帧号（正常战斗模式 v3[446]==0 恒成立）
+                    // 前置条件：y+vy < dbl_4433D0(-0.0001)，对应 0x4164AF fcom dbl_4433D0
+                    // 额外条件：y < 0，确保 fell_onto_ground（将 y 清零）后不执行 override
+                    if (PS.y < 0f && PS.y + PS.vy < -0.0001f)
+                    {
+                        int curFn = Frame.N;
+                        if (curFn < LF2StandardFrames.FallingFront5) // < 185，正面飞行帧组
+                        {
+                            int newFn;
+                            if      (PS.vy < -8f) newFn = LF2StandardFrames.FallingFront;  // 180
+                            else if (PS.vy <  1f) newFn = LF2StandardFrames.FallingFront1; // 181
+                            else if (PS.vy <  8f) newFn = LF2StandardFrames.FallingFront2; // 182
+                            else                  newFn = LF2StandardFrames.FallingFront3;  // 183
+                            if (newFn != curFn) ImmediateFrame(newFn);
+                        }
+                        else if (curFn > LF2StandardFrames.FallingFront5 &&
+                                 curFn < LF2StandardFrames.FallingBack5)  // 185 < fn < 191，背面飞行帧组
+                        {
+                            int newFn;
+                            if      (PS.vy < -8f) newFn = LF2StandardFrames.FallingBack;   // 186
+                            else if (PS.vy <  1f) newFn = LF2StandardFrames.FallingBack1;  // 187
+                            else if (PS.vy <  8f) newFn = LF2StandardFrames.FallingBack2;  // 188
+                            else                  newFn = LF2StandardFrames.FallingBack3;   // 189
+                            if (newFn != curFn) ImmediateFrame(newFn);
+                        }
+                    }
+                    else
+                    {
+                    }
                     return false;
 
                 case "combo":
@@ -1363,13 +1394,12 @@ namespace NTSD.Animation.LF2Objects
                 {
                     AppManager.Instance?.SoundPlayer?.PlaySfx(NTSDGlobal.Sound.FallLand);
 
+                    // bounce 판정을 위해 vy를 먼저 저장
+                    float vyBeforeLand = PS.vy;
                     PS.y  = 0f;
                     PS.vy = 0f;
                     PS.vz = 0f;
 
-                    // 路径A：击飞落地（state 12/18）
-                    // 反汇编伪C：vy>11 or |vx|>9 or state==18 → 弹起(185/191)；否则 → 滑行(230/231)
-                    // 反汇编不重置 HitCount/KnockbackVx，直接操作 PS.vx
                     int curState = GetState();
                     if (curState == LF2States.Falling || curState == LF2States.Burning)
                     {
@@ -1377,29 +1407,30 @@ namespace NTSD.Animation.LF2Objects
                         KnockbackVy = 0f;
                         HitCount    = 0;
 
-                        bool bounce = PS.vy > 11.0f || PS.vx > 9.0f || PS.vx < -9.0f
-                                      || curState == LF2States.Burning;
+                        // 反汇编 0x416936-0x416A30：
+                        // vy > 11 OR |vx| > 9 → 高速 → 弹起(185/191)，vy=-3.5，vx 钳制 ±7
+                        // 否则 → 低速 → Lying(230/231)，vx *= 1/3
+                        bool highSpeed = vyBeforeLand > 11.0f || PS.vx > 9.0f || PS.vx < -9.0f
+                                         || curState == LF2States.Burning;
 
-                        if (bounce)
+                        if (highSpeed)
                         {
-                            // 高速落地/燃烧 → 弹起
-                            // 反汇编：vy = -7.0 (0xC01C000000000000)；vx 钳制 ±7
-                            PS.vy = -7.0f;
-                            PS.vz = 0f;
+                            // 高速落地 → 弹起
+                            // 反汇编 0x4169B7: vy=-3.5，vx 钳制 ±7，frame=185/191
+                            PS.vy = -3.5f;
+                            // 反汇编 0x4169D5: vx>7 → vx=7；0x4169EF: vx<-7 → vx=-7
                             if (PS.vx > 7f)  PS.vx = 7f;
                             if (PS.vx < -7f) PS.vx = -7f;
-                            // frame < 186 or state==18 → 185；否则 → 191
-                            int bounceFrame = (Frame.N < LF2StandardFrames.FallingBack || curState == LF2States.Burning)
-                                ? LF2StandardFrames.FallingFront5   // 185
-                                : LF2StandardFrames.FallingBack5;   // 191
+                            int bounceFrame = (Frame.N >= LF2StandardFrames.FallingBack)
+                                ? LF2StandardFrames.FallingBack5   // 191
+                                : LF2StandardFrames.FallingFront5; // 185
                             TransitionToFrame(bounceFrame, 15);
                         }
                         else
                         {
-                            // 低速落地 → 滑行
+                            // 低速落地 → Lying 滑行
+                            // 反汇编 0x416966: vx *= 0.333，frame=230/231
                             PS.vx *= (1f / 3f);
-                            PS.vy = 0f;
-                            PS.vz = 0f;
                             int landFrame = (Frame.N >= LF2StandardFrames.FallingBack)
                                 ? LF2StandardFrames.LyingBack  // 231
                                 : LF2StandardFrames.Lying;     // 230
