@@ -346,12 +346,9 @@ namespace NTSD.Simulation
                     if (living.HitCount > 0)
                     {
                         float newVx = living.KnockbackVx * 2f / (living.HitCount + 1);
-                        UnityEngine.Debug.LogError($"[FPP] {living.GetType().Name} fd={living.FrameDelay} HitCount={living.HitCount} KnockbackVx={living.KnockbackVx:F2} oldVx={living.PS.vx:F2} newVx={newVx:F2}");
                         living.PS.vx = newVx;
                         living.PS.vy = living.KnockbackVy * 2f / (living.HitCount + 1);
                     }
-                    if (living.HitCount == 0 && (living.KnockbackVx != 0f || living.KnockbackVy != 0f))
-                        UnityEngine.Debug.LogError($"[FPP-CLEAR] {living.GetType().Name} clearing KnockbackVx={living.KnockbackVx:F2} KnockbackVy={living.KnockbackVy:F2} without applying (HitCount=0)");
                     living.KnockbackVx = 0f;
                     living.KnockbackVy = 0f;
                     living.KnockbackVz = 0f;
