@@ -424,26 +424,27 @@ namespace NTSD.Animation
             ps.xBoundNegative = false;
 
             // 地面摩擦：用旧 y（y+=vy 之前）判断（反汇编 0x4163A1: cmp [esi+14h],ebp; jl skip）
+            // 反汇编 0x4163BD: fsub dbl_4432B0=1.0，固定减 1.0，不用 ps.fric
             if (ps.y >= 0)
             {
                 if (ps.vx > 0.0001f)
                 {
-                    ps.vx -= ps.fric;
+                    ps.vx -= 1.0f;
                     if (ps.vx < 0.0001f) ps.vx = 0f;
                 }
                 else if (ps.vx < -0.0001f)
                 {
-                    ps.vx += ps.fric;
+                    ps.vx += 1.0f;
                     if (ps.vx > -0.0001f) ps.vx = 0f;
                 }
                 if (ps.vz > 0.0001f)
                 {
-                    ps.vz -= ps.fric;
+                    ps.vz -= 1.0f;
                     if (ps.vz < 0.0001f) ps.vz = 0f;
                 }
                 else if (ps.vz < -0.0001f)
                 {
-                    ps.vz += ps.fric;
+                    ps.vz += 1.0f;
                     if (ps.vz > -0.0001f) ps.vz = 0f;
                 }
             }

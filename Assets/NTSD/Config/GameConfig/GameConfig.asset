@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd6905f1c6dbaa4a91769c14bc8b041, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
+  ShadowPrefab: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+  LF2ObjectPrefab: {fileID: 8065137006895327203, guid: 9c107ede7c04d83469572b66618c3680, type: 3}
+  PoolInitialSize: 10
+  PoolMaxSize: 200
+  PoolExpireTimeSeconds: 120
+  PoolCheckIntervalSeconds: 10
+  PoolInitialSpritePoolSize: 16
   TeamOptions:
   - Independent
   - Team 1

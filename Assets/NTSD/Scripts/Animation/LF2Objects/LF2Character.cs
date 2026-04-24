@@ -161,29 +161,24 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 模块初始化（对应 LF2CharacterAnimator.ModuleInitialize）
         /// </summary>
-        public void ModuleInitialize(SpriteRenderer spriteRenderer,List<Sprite> sprites,Vector3 baseLocalPosition)
+        public void ModuleInitialize(SpriteRenderer spriteRenderer, List<Sprite> sprites, Vector3 baseLocalPosition)
         {
             _baseLocalPosition = baseLocalPosition;
 
-            // 用 GameObject 名作为日志标识（可在 Inspector 改名来区分多角色）
             Name = _CharacterHub?.gameObject.name ?? "Character";
 
-            // 初始化物理计算层
             _mech = new CharacterMechanics();
             Controller = _CharacterHub._CharacterInput;
             _cachedIsPointWalkable = BoundaryWallManager.Instance != null ? BoundaryWallManager.Instance.IsPointWalkable : null;
 
-            // 初始化物理状态
             PS.FromUnityPosition(_CharacterHub.transform.position);
             PS.vx = 0;
             PS.vy = 0;
             PS.vz = 0;
 
-            // 初始化精灵模块
             Sprite.Initialize(spriteRenderer, sprites);
 
             AllowSwitchDir = true;
-
         }
 
         /// <summary>

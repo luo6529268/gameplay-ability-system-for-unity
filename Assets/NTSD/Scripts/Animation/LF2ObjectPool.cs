@@ -1,33 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using MoreMountains.Tools;
 using NTSD.Animation.LF2Objects;
 using NTSD.Tools;
+using NTSD.App;
 
 namespace NTSD.Animation
 {
     /// <summary>
     /// LF2 对象池（MonoBehaviour 单例）
-    /// 管理 LF2ObjectRenderer 的复用，不依赖预设 Prefab。
-    /// 若 Inspector 中指定了 _lf2ObjectPrefab 则使用它，否则运行时动态创建 GameObject。
+    /// 配置数据从 GameConfig.Instance 读取。
     /// </summary>
     public class LF2ObjectPool : MMSingleton<LF2ObjectPool>
     {
-        // ========== 配置 ==========
-        [Header("对象池配置")]
-        [SerializeField] private GameObject _lf2ObjectPrefab;  // 可选：自定义 Prefab，不填则运行时动态创建
-        [SerializeField] private int _initialPoolSize = 0;     // 初始预热数量，0 表示完全懒加载
-        [SerializeField] private int _maxPoolSize = 200;
-
-        [Header("超时卸载配置")]
-        [SerializeField] private float _expireTimeSeconds = 120f;
-        [SerializeField] private float _checkIntervalSeconds = 10f;
-
         [Header("父节点配置")]
         [SerializeField] private Transform _poolRoot;
         [SerializeField] private Transform _activeRoot;
-        [SerializeField] private Transform _spriteRoot;  // Bucket B SpriteRenderer 挂载根节点（null 时挂在 LF2ObjectPool 自身）
-        [SerializeField] private int _initialSpritePoolSize = 16; // 预热 SpriteRenderer 数量
+        [SerializeField] private Transform _spriteRoot;
 
         // ========== 池数据结构 ==========
         private LinkedList<LF2ObjectRenderer> _availableObjects;
@@ -35,8 +25,10 @@ namespace NTSD.Animation
         private Dictionary<LF2ObjectRenderer, float> _releaseTimeMap;
         private float _lastCheckTime;
 
-        // Bucket B：轻量 SpriteRenderer 桶（供 SparkRenderer 使用，懒加载，无超时卸载）
         private Stack<SpriteRenderer> _spritePool;
+
+        // ========== 配置快捷访问 ==========
+        private static GameConfig Cfg => GameConfig.Instance;
 
         // ========== 生命周期 ==========
 
@@ -49,10 +41,11 @@ namespace NTSD.Animation
             _releaseTimeMap = new Dictionary<LF2ObjectRenderer, float>();
             _spritePool = new Stack<SpriteRenderer>(32);
 
-            for (int i = 0; i < _initialPoolSize; i++)
+            for (int i = 0; i < (Cfg?.PoolInitialSize ?? 0); i++)
                 CreateNewObject();
 
-            for (int i = 0; i < _initialSpritePoolSize; i++)
+            int spritePoolSize = Cfg?.PoolInitialSpritePoolSize ?? 16;
+            for (int i = 0; i < spritePoolSize; i++)
             {
                 var go = new GameObject("Spark");
                 Transform parent = _spriteRoot != null ? _spriteRoot : transform;
@@ -72,17 +65,28 @@ namespace NTSD.Animation
         private LF2ObjectRenderer CreateNewObject()
         {
             GameObject go;
-            if (_lf2ObjectPrefab != null)
+            var lf2ObjectPrefab = NTSD.App.GameConfig.Instance?.LF2ObjectPrefab;
+            if (lf2ObjectPrefab != null)
             {
-                go = Instantiate(_lf2ObjectPrefab, _poolRoot);
+                go = Instantiate(lf2ObjectPrefab, _poolRoot);
             }
             else
             {
                 go = new GameObject("LF2Object");
-                SpriteRenderer spriteRenderer = go.MMGetOrAddComponent<SpriteRenderer>();
+                go.MMGetOrAddComponent<SpriteRenderer>();
                 go.AddComponent<LF2ObjectRenderer>();
                 if (_poolRoot != null)
                     go.transform.SetParent(_poolRoot, false);
+            }
+
+            // 创建 shadow 子节点
+            SpriteRenderer shadowRenderer = null;
+            var shadowPrefab = NTSD.App.GameConfig.Instance?.ShadowPrefab;
+            if (shadowPrefab != null)
+            {
+                var shadowGo = Instantiate(shadowPrefab, go.transform);
+                shadowGo.transform.localPosition = Vector3.zero;
+                shadowRenderer = shadowGo.GetComponent<SpriteRenderer>();
             }
 
             go.SetActive(false);
@@ -95,6 +99,8 @@ namespace NTSD.Animation
                 return null;
             }
 
+            r.SetShadowRenderer(shadowRenderer);
+
             _availableObjects.AddLast(r);
             return r;
         }
@@ -103,12 +109,13 @@ namespace NTSD.Animation
         public LF2ObjectRenderer Get()
         {
             LF2ObjectRenderer r;
+            int maxPoolSize = Cfg?.PoolMaxSize ?? 200;
 
             if (_availableObjects.Count == 0)
             {
-                if (_activeObjects.Count >= _maxPoolSize)
+                if (_activeObjects.Count >= maxPoolSize)
                 {
-                    Log.Warn("[LF2ObjectPool] Pool limit reached ({0})", _maxPoolSize);
+                    Log.Warn("[LF2ObjectPool] Pool limit reached ({0})", maxPoolSize);
                     return null;
                 }
                 r = CreateNewObject();
@@ -148,13 +155,17 @@ namespace NTSD.Animation
 
         private void Update()
         {
-            if (_availableObjects.Count <= _initialPoolSize)
+            int initialSize = Cfg?.PoolInitialSize ?? 0;
+            float expireTime = Cfg?.PoolExpireTimeSeconds ?? 120f;
+            float checkInterval = Cfg?.PoolCheckIntervalSeconds ?? 10f;
+
+            if (_availableObjects.Count <= initialSize)
             {
                 _releaseTimeMap.Clear();
                 return;
             }
 
-            if (Time.time - _lastCheckTime < _checkIntervalSeconds) return;
+            if (Time.time - _lastCheckTime < checkInterval) return;
             _lastCheckTime = Time.time;
 
             var node = _availableObjects.First;
@@ -164,13 +175,13 @@ namespace NTSD.Animation
                 var obj = node.Value;
 
                 if (_releaseTimeMap.TryGetValue(obj, out float t) &&
-                    Time.time - t >= _expireTimeSeconds)
+                    Time.time - t >= expireTime)
                 {
                     _availableObjects.Remove(node);
                     _releaseTimeMap.Remove(obj);
                     Destroy(obj.gameObject);
 
-                    if (_availableObjects.Count <= _initialPoolSize)
+                    if (_availableObjects.Count <= initialSize)
                     {
                         _releaseTimeMap.Clear();
                         break;

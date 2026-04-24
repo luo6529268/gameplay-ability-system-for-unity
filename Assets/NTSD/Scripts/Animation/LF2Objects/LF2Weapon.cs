@@ -34,11 +34,11 @@ namespace NTSD.Animation.LF2Objects
         protected override int FluteWeight { get => _fluteWeight; set => _fluteWeight = value; }
         private int _fluteWeight;
 
-        public override LF2ObjectType ObjectTypeEnum => _weaponType == 1
+        public override LF2ObjectType ObjectTypeEnum => _weaponType == 2
             ? LF2ObjectType.HeavyWeapon
             : (_weaponType == 4 ? LF2ObjectType.ThrowWeapon : LF2ObjectType.LightWeapon);
-        public override bool IsLight => _weaponType != 1;
-        public override bool IsHeavy => _weaponType == 1;
+        public override bool IsLight => _weaponType != 2;
+        public override bool IsHeavy => _weaponType == 2;
         public override int WeaponType => _weaponType;
 
         // ========== 初始化 ==========
@@ -60,6 +60,15 @@ namespace NTSD.Animation.LF2Objects
             // 反汇编 Entity_Spawn 0x402A74：_flightCounter 初始值 = weapon_hp
             _flightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
         }
+
+        // 反汇编 0x004228A0: type=1/2/4/6 才检查 flightCounter
+        protected override bool IsWeaponDestroyable()
+        {
+            int wt = WeaponType;
+            return wt == 1 || wt == 2 || wt == 4 || wt == 6;
+        }
+
+        protected override int GetFlightCounter() => _flightCounter;
 
         protected override void OnDrinkConsumed()
         {
@@ -300,7 +309,7 @@ namespace NTSD.Animation.LF2Objects
             // ── type=3：落地时跳过弹射（反汇编 0x4164CE: jz loc_416577）──
             if (wt == 3) return;
 
-            // ── type=1（重武器）落地（伪C Entity_FrameAdvance case 1）──
+            // ── type=1（轻武器，苦无）落地（反汇编 Entity_FrameAdvance case 1, 0x416A35）──
             if (wt == 1)
             {
                 // 无论大弹/小弹都先扣耐久，vz 清零
@@ -342,7 +351,7 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // ── type=2（轻特殊）落地（反汇编 0x416B34-0x416BDB）──
+            // ── type=2（重武器，原木）落地（反汇编 0x416B34-0x416BDB）──
             if (wt == 2)
             {
                 // 反汇编：进入 case 2 后立即统一 _flightCounter -= 1（v44 = v43 - 1）
@@ -381,21 +390,24 @@ namespace NTSD.Animation.LF2Objects
 
                 PS.vz = 0f;
 
-                // 大弹/小弹判断：vy > 8.5 或 |vx| > 10，且 frame.state 为飞行态
-                // 伪C: (vy > 8.5 || vx < -10.0 || vx > 10.0) && (state==1002 || state==1000)
+                // 大弹/小弹判断（反汇编 0x416C7E-0x416CAF）：
+                // 弹起条件：vy > 8.5 AND vx > -10.0 AND vx < 10.0（即 |vx| < 10）
+                // 不弹起：vy <= 8.5 OR |vx| >= 10
                 int fstate46 = Frame?.D?.state ?? -1;
                 bool isFlyState46 = fstate46 == LF2States.WeaponThrowing || fstate46 == LF2States.WeaponInSky;
-                bool bigBounce46 = (PS.vy > NTSDGlobal.Gameplay.WeaponType46BigBounceThreshold // 8.5 (strict)
-                                    || PS.vx > 10f || PS.vx < -10f)
+                bool bigBounce46 = PS.vy > 8.5f          // dbl_443358 = 8.5
+                                   && PS.vx > -10f        // dbl_443350 = -10.0
+                                   && PS.vx < 10f         // dbl_4432C0 = 10.0
                                    && isFlyState46;
 
                 if (bigBounce46)
                 {
-                    // 大弹：vx*=0.7，frame始终=0，vy*=-0.7 clamp
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
+                    // 大弹：vy*=-0.7，clamp vy >= -2.5（反汇编 0x416D11-0x416D2D）
+                    // frame=0，vx*=0.7
+                    PS.vy = PS.vy * -0.7f;
+                    if (PS.vy < -2.5f) PS.vy = -2.5f;    // dbl_443348=-0.7, 0xC0240000=-2.5
                     Trans.Frame(0, 0);
-                    PS.vy = Mathf.Max(PS.vy * NTSDGlobal.Gameplay.WeaponType46BigBounceVyFactor,
-                                      NTSDGlobal.Gameplay.WeaponType46BigBounceVyClamp); // clamp -10
+                    PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
                 }
                 else
                 {
@@ -410,108 +422,18 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // ── type=0 落地（反汇编 Entity_FrameAdvance case 0 / default）──
+            // ── type=0 落地（反汇编 0x416BE0-0x416D5A）──
+            // entity_type=0 时：仅 type_sub=999(0x3E7) 有特殊处理，其余直接跳过（loc_416D5A）
+            // 反汇编 0x416BE0: cmp [edi+6F4h], 3E7h; jnz loc_416D5A
             var cd = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
-
-            // type_sub=999 特殊：立即静止 frame=101（反汇编 default case: v3[445]==999）
             if (cd?.type_sub == 0x3E7)
             {
+                // type_sub=999：立即静止 frame=101（反汇编 0x416C13: mov [esi+70h], 65h）
                 PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
                 Trans.Frame(0x65, 0); // 101
                 HitStun = 0;
-                return;
             }
-
-            // 反汇编 case 0 落地主逻辑
-            // v11 = vz_float + vy（速度合量，> 0.0001 表示"有向上/侧向速度"）
-            // 此处 OnLanded() 在 y>=0 AND vy>0 时被调用，vy 已确保 > 0
-            int   fstate0  = Frame?.D?.state ?? -1;
-            int   fnum0    = Frame?.N        ?? -1;
-            int   maxHp0   = cd?.weapon_hp   ?? 0;
-            float speedSum = PS.vz + PS.vy; // v11
-
-            // ── 条件A：有横纵速度 AND frame.state==13(Frozen) ──
-            // 反汇编 0x41184x：v11>0.0001 && vy>0.0001 && v18[491]==13
-            if (speedSum > 0.0001f && PS.vy > 0.0001f && fstate0 == LF2States.Frozen)
-            {
-                if (PS.vy > 17.0f || PS.vx > 9.0f || PS.vx < -9.0f)
-                {
-                    // 高速撞墙：扣HP，速度钳制，frame=185
-                    Health.HP -= maxHp0 > 0 ? 1000 / maxHp0 : 10;
-                    PS.vz = 0f;
-                    PS.vy = -3.5f; // -1072955392 double hi
-                    if (PS.vx >  7.0f) PS.vx =  7.0f; // 1075576832
-                    if (PS.vx < -7.0f) PS.vx = -7.0f; // -1071906816
-                    Trans.Frame(185, 0);
-                }
-                else
-                {
-                    // 低速：减速停止
-                    PS.vx *= 0.3333333333333333f;
-                    PS.vz = 0f;
-                    PS.vy = 0f;
-                }
-                return;
-            }
-
-            // ── 条件B：vz>0.0001 AND vy>0.0001 AND frame.state==12/18 ──
-            // 反汇编：v27==12||v27==18 分支（弹跳扣HP）
-            if (PS.vz > 0.0001f && PS.vy > 0.0001f
-                && (fstate0 == LF2States.Falling || fstate0 == LF2States.Burning))
-            {
-                PlaySound(WeaponDropSound); // sub_419C40(x,6)
-
-                // 反汇编 HP 扣减公式：v30 = abs(this+800); if maxHp>0: v30=100*v30/maxHp; HP-=v30
-                // this+800 = _fluteWeight（笛子命中累积器）
-                if (_fluteWeight != 0)
-                {
-                    int absWeight = _fluteWeight < 0 ? -_fluteWeight : _fluteWeight;
-                    int dmg = maxHp0 > 0 ? 100 * absWeight / maxHp0 : absWeight;
-                    Health.HP -= dmg;
-                    _fluteWeight = 0;
-                }
-
-                if (PS.vy > 11.0f || PS.vx > 9.0f || PS.vx < -9.0f || fstate0 == LF2States.Burning)
-                {
-                    // 高速弹
-                    PS.vz = 0f;
-                    PS.vy = -3.5f;
-                    if (PS.vx >  7.0f) PS.vx =  7.0f;
-                    if (PS.vx < -7.0f) PS.vx = -7.0f;
-                    Trans.Frame(fnum0 < 186 || fstate0 == LF2States.Burning ? 185 : 191, 0);
-                }
-                else
-                {
-                    // 低速弹
-                    PS.vx *= 0.3333333333333333f;
-                    PS.vz = 0f;
-                    PS.vy = 0f;
-                    Trans.Frame(fnum0 >= 186 ? 231 : 230, 0);
-                    HitStun = 0; // 反汇编 this+136=0
-                }
-                return;
-            }
-
-            // ── 条件C：完全静止（无有效速度或非弹跳帧状态）──
-            // 反汇编：vx*=0.333，按当前帧 state 决定停止帧，各分支 this+136=0
-            PS.vx *= 0.3333333333333333f;
-            PS.vz = 0f;
-            PS.vy = 0f;
-            if (fstate0 == 100)
-            {
-                Trans.Frame(94, 0);
-                HitStun = 0;
-            }
-            else if (fnum0 == 212 || fstate0 == 6)
-            {
-                Trans.Frame(215, 0);
-                HitStun = 0;
-            }
-            else
-            {
-                Trans.Frame(219, 0);
-                HitStun = 0;
-            }
+            // 其他 type=0 武器落地：不做任何帧切换（反汇编 jnz loc_416D5A → fstp st → 末尾）
         }
 
         // ========== Interaction ==========

@@ -10,7 +10,7 @@ namespace NTSD.Animation.LF2Objects
     /// - ILF2Object: 组合接口，继承两者
     ///
     /// 使用场景：
-    /// - LF2ObjectLogicPool 使用此接口管理对象池
+    /// - LF2ReferencePool 使用此接口管理对象池
     /// - 对象池只关心 ObjectTypeEnum、ObjectId、Reset()
     /// </summary>
     public interface ILF2Poolable

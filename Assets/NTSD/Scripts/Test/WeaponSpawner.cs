@@ -5,6 +5,7 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
+using NTSD.LevelEditor;
 
 namespace NTSD.Test
 {
@@ -37,8 +38,17 @@ namespace NTSD.Test
         private void Update()
         {
             var kb = Keyboard.current;
-            if (kb != null && kb.f1Key.wasPressedThisFrame)
+            if (kb == null)
+            {
+                Debug.LogWarning("[WeaponSpawner] Keyboard.current is null");
+                return;
+            }
+
+            if (kb.f1Key.wasPressedThisFrame)
                 SpawnNextWeapon();
+
+            if (kb[Key.F9].isPressed)
+                DropWeaponFromSky();
         }
 
         private void SpawnNextWeapon()
@@ -112,6 +122,98 @@ namespace NTSD.Test
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
 
             Debug.Log($"[WeaponSpawner] F1 → {wname} (oid={oid}, frame={groundFrame}, lf2X={lf2X:F0}, lf2Z={lf2Z:F0})");
+        }
+
+        // 反汇编 Game_FrameUpdate 0x004237B3：
+        // dword_449020==1 时，对每个 type 100-199 的武器调用 sub_424630(weapon, 0, x, -500, z)。
+        // x/z 在地图边界内随机（边距 30），y=-500（高空落下）。
+        private void DropWeaponFromSky()
+        {
+            // 1. 随机选武器（oid 100-199，排除 122 除非随机通过，对齐反汇编）
+            var (oid, _) = _f1Weapons[Random.Range(0, _f1Weapons.Length)];
+            if (oid == 122 && Random.Range(0, 2) != 0)
+                return;
+
+            if (GameDataManager.Instance == null)
+            {
+                Debug.LogWarning("[WeaponSpawner] F8: GameDataManager.Instance is null");
+                return;
+            }
+            if (GameDataManager.Instance.GetObjectById(oid) == null)
+            {
+                Debug.LogWarning($"[WeaponSpawner] F8: oid={oid} not found in GameDataManager");
+                return;
+            }
+
+            // 2. 获取地图边界（像素坐标）
+            float xMin = 30f, xMax = 700f, zMin = 240f, zMax = 320f;
+            if (BoundaryWallManager.Instance != null &&
+                BoundaryWallManager.Instance.TryGetStageBoundsPx(out var bounds))
+            {
+                xMin = bounds.xMinPx + 30f;
+                xMax = bounds.xMaxPx - 30f;
+                zMin = bounds.zMinPx + 30f;
+                zMax = bounds.zMaxPx - 30f;
+            }
+            else
+            {
+                Debug.Log("[WeaponSpawner] F8: BoundaryWallManager not found, using fallback bounds");
+            }
+
+            // 3. 随机位置，y=-500（高空，对齐 sub_424630 arg_C=-500）
+            float lf2X = Random.Range(xMin, xMax);
+            float lf2Z = Random.Range(zMin, zMax);
+            const float lf2Y = -500f;
+
+            // 4. 找飞行帧（state=1000/1002/2000，fallback 最小非零帧）
+            // 注意：action=0 会被 InitializeFrame 替换为 999（音效帧），必须传有效帧号
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+            int flyFrame = -1;
+            int minFrame = int.MaxValue;
+            if (charData?.frames != null)
+            {
+                foreach (var f in charData.frames)
+                {
+                    if (f == null) continue;
+                    if (f.frameId > 0 && f.frameId < minFrame) minFrame = f.frameId;
+                    if (flyFrame < 0 && (
+                        f.state == LF2States.WeaponInSky ||
+                        f.state == LF2States.WeaponThrowing ||
+                        f.state == LF2States.HeavyWeaponInSky))
+                        flyFrame = f.frameId;
+                }
+            }
+            if (flyFrame < 0) flyFrame = minFrame != int.MaxValue ? minFrame : 1;
+
+            if (LF2ObjectPointFactory.Instance == null)
+            {
+                Debug.LogWarning("[WeaponSpawner] F8: LF2ObjectPointFactory.Instance is null");
+                return;
+            }
+
+            // 5. 构造任务，入队
+            var task = new OPointCreateTask
+            {
+                opoint = new ObjectPoint
+                {
+                    oid    = oid,
+                    kind   = 1,
+                    action = flyFrame,
+                    x      = Mathf.RoundToInt(lf2X),
+                    y      = Mathf.RoundToInt(lf2Y),
+                    dvx    = 0,
+                    dvy    = 0,
+                    facing = 0,
+                },
+                parent = null,
+                team   = 0,
+                pos    = new Vector3(lf2X, lf2Y, 0f),
+                z      = lf2Z,
+                dir    = "right",
+                dvz    = 0f,
+            };
+
+            LF2ObjectPointFactory.Instance.EnqueueCreateObject(task);
         }
     }
 }

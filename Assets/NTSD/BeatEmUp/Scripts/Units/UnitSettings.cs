@@ -152,8 +152,14 @@ namespace BeatEmUpTemplate2D {
             // 创建阴影对象
             // 检查阴影对象不存在且阴影预制体存在
             if(!shadow && shadowPrefab) 
-                // 实例化阴影预制体，并将其作为当前对象的同级对象
+            {
                 shadow = GameObject.Instantiate(shadowPrefab, transform.parent) as GameObject;
+                Debug.Log($"[UnitSettings] Shadow created: {shadow?.name}, parent={transform.parent?.name}");
+            }
+            else
+            {
+                Debug.Log($"[UnitSettings] Shadow skip: shadow={shadow != null}, shadowPrefab={shadowPrefab != null}");
+            }
 
             // 在开始时隐藏碰撞箱
             if(hitBox) 

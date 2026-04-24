@@ -172,7 +172,10 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>所有者 ID（对应反汇编 entity+2F4h）。飞行道具溯源到最顶层角色，默认 -1。</summary>
         public int OwnerId { get; set; } = -1;
 
-        /// <summary>追踪标记（对应反汇编 entity+98h）。1=持有追踪子弹的角色，-1=追踪子弹本身，0=普通。</summary>
+        /// <summary>持有状态（对应反汇编 entity+98h grabbed_by）。0=无武器/轻武器, 2=重武器, 4=回旋镖, 6=饮料(hp>0), 101=特殊武器。武器侧为负值（-grabbed_by）。</summary>
+        public int GrabbedBy { get; set; }
+
+        /// <summary>追踪标志（kind==2 时 parent=1, child=-1）</summary>
         public int TrackerFlag { get; set; }
 
         /// <summary>追踪子对象（对应反汇编 entity+9Ch，kind==2 时由 parent 指向 new）</summary>
@@ -299,6 +302,13 @@ namespace NTSD.Animation.LF2Objects
         /// kind=6 命中时设为 3，每帧 -1；Standing 状态按攻击键且 > 0 时跳转 frame 70。
         /// </summary>
         public int HitConfirmEa { get; set; } = 0;
+
+        /// <summary>
+        /// HP 恢复计时器（对应反汇编 entity+0E4h）。
+        /// 回旋镖捕获时设为 100，每帧递减；counter % 8 == 0 时 HP+1（上限 MaxHP）；HP 达到 MaxHP 后清零。
+        /// 反汇编 0x004051FC（设值）、0x00423B0C-0x00423B71（消耗逻辑）。
+        /// </summary>
+        public int HealTimer { get; set; } = 0;
 
         /// <summary>
         /// 帧延迟计数器（对应反汇编 entity+0B4h）
@@ -856,6 +866,25 @@ namespace NTSD.Animation.LF2Objects
             }
             if (HitConfirmEa > 0) HitConfirmEa--;
 
+            // 反汇编 0x00423B0C-0x00423B71：HealTimer [+0E4h] 每帧递减，counter%8==0 时 HP+8（上限 HPBound）
+            if (HealTimer > 0 && Health?.HP > 0)
+            {
+                HealTimer--;
+                if ((HealTimer & 7) == 0)
+                {
+                    int newHp = Health.HP + 8;
+                    if (newHp >= Health.HPBound)
+                    {
+                        Health.HP = Health.HPBound;
+                        HealTimer = 0;
+                    }
+                    else
+                    {
+                        Health.HP = newHp;
+                    }
+                }
+            }
+
             // 反汇编 Entity_Collision 0x413909-0x413918：this+8 向 0 收敛
             if (ShakeTimer > 0) ShakeTimer--;
             else if (ShakeTimer < 0) ShakeTimer++;
@@ -1378,7 +1407,7 @@ namespace NTSD.Animation.LF2Objects
                 LF2ObjectPool.Instance?.Release(Renderer);
                 Renderer = null;
             }
-            LF2ObjectLogicPool.Instance?.Release(this);
+            LF2ReferencePool.Instance?.Release(this);
         }
 
         #endregion

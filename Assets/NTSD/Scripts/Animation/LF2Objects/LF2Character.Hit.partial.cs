@@ -599,7 +599,8 @@ namespace NTSD.Animation.LF2Objects
                     if (nextFrame == LF2StandardFrames.FallingFront ||
                         nextFrame == LF2StandardFrames.FallingBack)
                     {
-                        DropWeapon(efDvx, efDvy);
+                        // 反汇编 AI_Process2 0x41B035: vx=holder.vx*1/3, vy=holder.vy
+                        DropWeapon(PS.vx, PS.vy);
                     }
                     break;
 
@@ -607,7 +608,7 @@ namespace NTSD.Animation.LF2Objects
                 case 21:
                 case 22:
                 case 23:
-                    DropWeapon(efDvx, efDvy);
+                    DropWeapon(PS.vx, PS.vy);
                     goto case 20;
 
                 case 20:
@@ -617,7 +618,7 @@ namespace NTSD.Animation.LF2Objects
 
                 case 3:
                 case 30:
-                    DropWeapon(efDvx, efDvy);
+                    DropWeapon(PS.vx, PS.vy);
                     if (myState != LF2States.Frozen)
                     {
                         ImmediateFrame(LF2StandardFrames.MpDrain);
@@ -631,7 +632,7 @@ namespace NTSD.Animation.LF2Objects
                     break;
 
                 case 4:
-                    DropWeapon(efDvx, efDvy);
+                    DropWeapon(PS.vx, PS.vy);
                     break;
             }
         }

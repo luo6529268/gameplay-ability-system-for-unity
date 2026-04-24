@@ -203,7 +203,10 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 反汇编 EXE 0x00405132：回旋镖（type=4）捕获检测。
-        /// 飞行中距投掷者 |dx|&lt;30, |dz|&lt;80, |dy|&lt;10 时回收：frame=60, vx/vy/vz=0
+        /// x：|dx| &lt; 30（对称）
+        /// z：thrower.z - 80 &lt; weapon.z &lt; thrower.z（单向，武器必须在投掷者前方区间内）
+        /// y：|dy| &lt; 10（对称）
+        /// 满足条件：frame=60, vx/vy/vz=0
         /// </summary>
         private void CheckBoomerangCatch()
         {
@@ -220,15 +223,18 @@ namespace NTSD.Animation.LF2Objects
             if (thrower == null || thrower.Health?.HP <= 0) return;
 
             float dx = Mathf.Abs(PS.x - thrower.PS.x);
-            float dz = Mathf.Abs(PS.z - thrower.PS.z);
+            // 反汇编 0x405187-0x405196：z 为单向检测
+            // weapon.z <= thrower.z-80 OR weapon.z >= thrower.z → 跳过
             float dy = Mathf.Abs(PS.y - thrower.PS.y);
-            if (dx >= 30f || dz >= 80f || dy >= 10f) return;
+            if (dx >= 30f || PS.z <= thrower.PS.z - 80f || PS.z >= thrower.PS.z || dy >= 10f) return;
 
             PS.vx = 0f;
             PS.vy = 0f;
             PS.vz = 0f;
             Trans.Frame(60, 0);
             Trans.Trans();
+            // 反汇编 0x004051FC：捕获后设置 thrower.[+0E4h] = 100（HP 恢复计时器）
+            thrower.HealTimer = 100;
         }
 
         /// <summary>
@@ -345,11 +351,25 @@ namespace NTSD.Animation.LF2Objects
             UpdateVRest();
             ItrRest?.Tick();
 
+            // 反汇编 Entity_AI_Update 0x004228B8-0x004228C6：
+            // type=1/2/4/6 武器，_flightCounter < 0 → 武器消失
+            if (_holdObj == null && IsWeaponDestroyable() && GetFlightCounter() < 0)
+            {
+                StateUpdate("die", null);
+                return;
+            }
+
             if (Health.HP <= 0)
             {
                 StateUpdate("die", null);
             }
         }
+
+        /// <summary>反汇编 0x004228A0: type=1/2/4/6 才检查 flightCounter</summary>
+        protected virtual bool IsWeaponDestroyable() => false;
+
+        /// <summary>供基类 SimTU 读取 _flightCounter</summary>
+        protected virtual int GetFlightCounter() => 0;
 
         // ========== 交互方法 ==========
 
@@ -545,6 +565,42 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
+        // 反汇编 0x42E984/0x42EA81：按 weapon.entity_type(+6F8h) 设置 grabbed_by
+        // disasm: 0=light→0, 2=heavy→2, 4=boomerang→4, 6=drink→6/4, 0x78/0x7C→101
+        // C# WeaponType mapping: 2=light(disasm 0), 1=heavy(disasm 2), 4=boomerang, 6=drink
+        private void ApplyPickupGrabbedBy(LF2Character character)
+        {
+            int pickerLink;
+            // 反汇编 0x0042E9F0-0x0042E9FC：type_sub=0x78 或 0x7C → grabbed_by=101（优先检查）
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            int typeSub = charData?.type_sub ?? 0;
+            if (typeSub == 0x78 || typeSub == 0x7C)
+                pickerLink = 101;
+            else if (IsHeavy)           // C# type=1 = disasm entity_type=2
+                pickerLink = 2;
+            else if (WeaponType == 4)
+                pickerLink = 4;
+            else if (WeaponType == 6)
+                pickerLink = Health.HP > 0 ? 6 : 4;
+            else
+                pickerLink = 0;    // light weapon
+
+            character.GrabbedBy = pickerLink;
+            GrabbedBy = -pickerLink;
+        }
+
+        // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后帧跳转
+        // 重武器(entity_type==2)→frame116，其他→frame115
+        private void ApplyPickupFrameJump(LF2Character character)
+        {
+            int jumpFrame = IsHeavy ? 116 : 115;
+            if (character.GetFrameDataById(jumpFrame) != null)
+            {
+                character.Trans?.Frame(jumpFrame, 0);
+                character.Trans?.Trans();
+            }
+        }
+
         protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
         {
             if (HoldObj != null) return false;
@@ -553,15 +609,15 @@ namespace NTSD.Animation.LF2Objects
             if (target is not LF2Character character) return false;
             if (character.GetHeldWeapon() != null) return false;
 
-            // 只有地面武器才能被拾取（FLF: light=1004/1003, heavy=2004）
+            // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
             int wstate = GetState();
             bool isOnGround = wstate == LF2States.WeaponOnGround
-                           || wstate == LF2States.WeaponJustOnGround
                            || wstate == LF2States.HeavyWeaponOnGround;
             if (!isOnGround) return false;
 
             Pick(target);
             character.HoldWeapon(this);
+            ApplyPickupGrabbedBy(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
             return true;
@@ -569,7 +625,26 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
         {
-            return HandlePreInteractionKind1(itr, target);
+            if (HoldObj != null) return false;
+            if (!ItrArestTest()) return false;
+            if (Renderer == null) return false;
+            if (target is not LF2Character character) return false;
+            if (character.GetHeldWeapon() != null) return false;
+
+            // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
+            int wstate = GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround) return false;
+
+            Pick(target);
+            character.HoldWeapon(this);
+            ApplyPickupGrabbedBy(character);
+            // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
+            ApplyPickupFrameJump(character);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
         }
 
         protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)
@@ -582,8 +657,8 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
         {
-            // 反汇编 sub_419F80：kind=7 走普通命中路径（无特殊过滤）
-            return TryApplyHit(itr, target);
+            // 反汇编 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
+            return HandlePreInteractionKind1(itr, target);
         }
 
         /// <summary>
@@ -611,26 +686,29 @@ namespace NTSD.Animation.LF2Objects
 
                 Trans.Frame(UnityEngine.Random.Range(0, 16), 0);
 
-                // 反汇编 0x41B035-0x41B06D：按 holder.CharType 选速度来源
-                // CharType==1：vx=holder.KnockbackVx, vy=holder.KnockbackVy, vz=holder.vz（[+28h]）
-                // CharType!=1：vx=holder.vx([+48h]), vy=holder.vy([+4Ch]), vz=holder.vx([+40h])
-                // 最终 vx *= 1/3（dbl_443380），vz 如果 > 0 则清零（向前方向不保留）
+                // 反汇编 0x41B035-0x41B075：按 holder.CharType 选速度来源
+                // CharType==1：vx = holder.KnockbackVx * 1/3（[holder+28h]），vy = holder.KnockbackVy（直接复制）
+                // CharType!=1：vx = holder.vx * 1/3，vy = holder.vy（直接复制）
+                // vz 不设置（反汇编无 vz 赋值）
                 const float kVelFactor = 1f / 3f;
                 if (holder.CharType == 1)
                 {
-                    PS.vx = holder.KnockbackVx * kVelFactor;
-                    PS.vy = holder.KnockbackVy * kVelFactor;
-                    PS.vz = holder.PS.vz * kVelFactor; // [holder+28h] = holder.vz
+                    PS.vx = holder.KnockbackVx * kVelFactor;  // [holder+28h] = KnockbackVx
+                    PS.vy = holder.KnockbackVy;                // 直接复制，不乘1/3
                 }
                 else
                 {
                     PS.vx = holder.PS.vx * kVelFactor;
-                    PS.vy = holder.PS.vy * kVelFactor;
-                    PS.vz = holder.PS.vx * kVelFactor; // [holder+40h] = holder.vx（反汇编用的是 vx 不是 vz）
+                    PS.vy = holder.PS.vy;                // 直接复制，不乘1/3
                 }
 
-                // 反汇编 0x41B07D：vz > 0（向正方向）清零
-                if (PS.vz > 0f) PS.vz = 0f;
+                // 反汇编 0x41B07A-0x41B08D：if weapon.y_float > -2.0 → y_float = -2.0
+                // 确保武器脱落时至少在地面以上2单位
+                if (PS.y > -2.0f) PS.y = -2.0f;
+
+                // 反汇编 0x41B011：character.grabbed_by=0, weapon.grabbed_by=0
+                GrabbedBy = 0;
+                if (holder is LF2Character ch2) ch2.GrabbedBy = 0;
 
                 _holdObj = null;
                 (holder as LF2Character)?.HoldWeapon(null);
@@ -688,7 +766,8 @@ namespace NTSD.Animation.LF2Objects
                         Trans.Trans();
                         UnityEngine.Debug.Log($"[Weapon Throw] id={_objectId} frame40 exists={GetFrameDataById(40) != null} Frame.N={Frame.N} Frame.D={Frame.D?.state}");
                         PS.vx = Dirh() * wpoint.dvx;
-                        if (wpoint.dvy != 0) PS.vy = wpoint.dvy;
+                        // 反汇编 0x41B0F7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
+                        PS.vy = wpoint.dvy;
                         if (wpoint.dvz != 0)
                         {
                             bool keyUp   = holder.Controller?.IsUp   ?? false;
@@ -712,7 +791,8 @@ namespace NTSD.Animation.LF2Objects
                         Trans.Frame(UnityEngine.Random.Range(0, 6), 0);
                         Trans.Trans();
                         PS.vx = Dirh() * wpoint.dvx;
-                        if (wpoint.dvy != 0) PS.vy = wpoint.dvy;
+                        // 反汇编 0x41B1B7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
+                        PS.vy = wpoint.dvy;
                         if (wpoint.dvz != 0)
                         {
                             bool keyUp   = holder.Controller?.IsUp   ?? false;
@@ -777,18 +857,29 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 对应 FLF weapon.prototype.drop (weapon.js:468-481)
+        /// 反汇编 AI_Process2 0x41B011-0x41B08D：角色被打（state=12/10）时武器强制脱落。
+        ///   weapon.frame = Random(16)
+        ///   vx = holder.vx * 1/3（dvx 传入 holder.vx）
+        ///   vy = holder.vy（dvy 传入 holder.vy，直接复制不乘系数）
+        ///   if weapon.y > -2.0 → weapon.y = -2.0
         /// </summary>
         public virtual void Drop(float dvx, float dvy)
         {
             Team = 0;
             _holdObj = null;
+            GrabbedBy = 0;
 
-            if (dvx != 0) PS.vx = dvx * 0.5f;
-            if (dvy != 0) PS.vy = dvy * 0.2f;
+            // 反汇编 0x41B019: weapon.frame = Random(16)
+            Trans.Frame(UnityEngine.Random.Range(0, 16), 0);
+
+            // 反汇编 0x41B035-0x41B075: vx = holder.vx * 1/3, vy = holder.vy（直接复制）
+            PS.vx = dvx * (1f / 3f);
+            PS.vy = dvy;
+
+            // 反汇编 0x41B07A: if weapon.y > -2.0 → weapon.y = -2.0
+            if (PS.y > -2.0f) PS.y = -2.0f;
+
             PS.zz = 0;
-
-            Trans.Frame(999, 0);
         }
 
         /// <summary>
@@ -939,28 +1030,25 @@ namespace NTSD.Animation.LF2Objects
             // 0x41AD10 / 0x41AE07: weapon.hp <= 0 → 消耗完毕，脱落武器
             if (Health.HP > 0) return;
 
-            // 0x41AD1B: holder.held_by = 0
-            // 0x41AD23: weapon.held_by = 0
-            // 0x41AD30: holder.slot_idx = 0
-            // 0x41AD38: weapon.holder_idx = 0
+            // 0x41AD1B: holder.grabbed_by [+98h] = 0  ← 先清 holder
+            // 0x41AD23: weapon.grabbed_by [+98h] = 0  ← 再清 weapon
+            // 0x41AD30: holder.slot_idx [+9Ch] = 0  → HoldWeapon(null) 处理
+            // 0x41AD38: weapon.holder_idx [+0A0h] = 0 → _holdObj=null 处理
             // 0x41AD40: weapon.frame = 0
-            // 0x41AD45: weapon.vx = 0（[+48h]）
-            // 0x41AD48: weapon.vy_low=0, vy_high = 0xC0200000 = -2.5f
+            // 0x41AD45: weapon.vx = 0（[+40h]）
+            // 0x41AD48: weapon.vy = -8.0（double: low=0, high=0xC0200000 → -8.0）
             // 0x41AD4F: call Random_Int(7); vx = Random(7) - 3
             // 0x41AD6E: holder.frame = 0
             // 0x41AD73: weapon.[+31Ch]（_flightCounter）= 0
-            ItrRest.Arest = 0;
-            holder.ItrRest.Arest = 0;
+            if (holder is LF2Character holderChar) holderChar.GrabbedBy = 0;
+            GrabbedBy = 0;
             Trans.Frame(0, 0);
             PS.vx = UnityEngine.Random.Range(0, 7) - 3f;
-            PS.vy = -2.5f;  // 0xC0200000（IEEE 754）
+            PS.vy = -8.0f;  // double 0xC020000000000000 = -8.0
             PS.vz = 0f;
             PS.zz = 0;
             Team = 0;
-            // holder.frame = 0（清除持有者当前帧，让其回到 idle）
             holder.Trans?.Frame(0, 0);
-            // weapon._flightCounter = 0（[weapon+31Ch]，不是 holder.PP）
-            // 通过 OnHealthInitialized 的 _flightCounter 无法在 base 访问，用子类钩子
             OnDrinkConsumed();
             _holdObj = null;
             (holder as LF2Character)?.HoldWeapon(null);
@@ -981,11 +1069,10 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 将武器与持有者的 wpoint 对齐。
-        /// 反汇编 AI_Process2 0x41AEDF-0x41AF64：
-        ///   holdpoint（来自 CalcHoldPoint）已是世界坐标。
-        ///   dir=right: weapon.x = holdpoint.x - weapon_frame.centerx
-        ///   dir=left:  weapon.x = holdpoint.x + weapon_frame.centerx - weapon_spriteWidth
-        ///   weapon.y   = holdpoint.y - weapon_frame.centery（两方向相同）
+        /// 反汇编 AI_Process2 0x41AEDF-0x41AF8F：
+        ///   dir=right: weapon.x = holdpoint.x + weapon_frame.centerx - weapon_spriteWidth
+        ///   dir=left:  weapon.x = holdpoint.x + weapon_spriteWidth - weapon_frame.centerx
+        ///   weapon.y   = holdpoint.y + weapon_frame.centery - weapon_wpoint.y
         /// </summary>
         protected void CoincideXYWithWPoint(Vector3 holdpoint, WeaponPoint wpoint)
         {
@@ -993,13 +1080,14 @@ namespace NTSD.Animation.LF2Objects
             int wcx = weapFD?.centerx ?? 0;
             int wcy = weapFD?.centery ?? 0;
             float wSpriteW = Sprite?.GetWidthPx() ?? 0f;
+            int wpy = wpoint?.y ?? 0;
 
             if (PS.dir == "right")
-                PS.x = holdpoint.x - wcx;
-            else
                 PS.x = holdpoint.x + wcx - wSpriteW;
+            else
+                PS.x = holdpoint.x + wSpriteW - wcx;
 
-            PS.y = holdpoint.y - wcy;
+            PS.y = holdpoint.y + wcy - wpy;
         }
 
         // ========== 初始化子步骤 ==========
@@ -1018,7 +1106,7 @@ namespace NTSD.Animation.LF2Objects
             if (task.parent == null)
             {
                 PS.x = task.pos.x;
-                PS.y = 0f;
+                PS.y = task.pos.y;
             }
         }
 

@@ -32,6 +32,26 @@ namespace NTSD.App
 
         #endregion
 
+        #region 对象池配置
+
+        [Header("对象池配置")]
+        [Tooltip("阴影 Prefab（挂载 SpriteRenderer，所有对象生成时自动添加阴影子节点）")]
+        public GameObject ShadowPrefab;
+        [Tooltip("LF2Object Prefab（可选，不填则运行时动态创建 GameObject）")]
+        public GameObject LF2ObjectPrefab;
+        [Tooltip("对象池预热数量（0=完全懒加载）")]
+        public int PoolInitialSize = 0;
+        [Tooltip("对象池最大容量")]
+        public int PoolMaxSize = 200;
+        [Tooltip("空闲对象超时销毁时间（秒）")]
+        public float PoolExpireTimeSeconds = 120f;
+        [Tooltip("超时检查间隔（秒）")]
+        public float PoolCheckIntervalSeconds = 10f;
+        [Tooltip("Spark SpriteRenderer 桶预热数量")]
+        public int PoolInitialSpritePoolSize = 16;
+
+        #endregion
+
         #region 队伍配置
 
         /// <summary>

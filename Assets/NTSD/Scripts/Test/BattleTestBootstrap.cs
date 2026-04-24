@@ -26,6 +26,9 @@ namespace NTSD.Test
         [Tooltip("如果为空，则使用 MultiplayerLevelManager 上已配置的 PlayerPrefabs")]
         [SerializeField] private Character[] overridePlayerPrefabs;
 
+        [Tooltip("游戏全局配置（直接拖入 GameConfig.asset）")]
+        [SerializeField] private App.GameConfig gameConfig;
+
         [Tooltip("覆盖角色ID列表（按玩家索引），-1 表示不覆盖")]
         [SerializeField] private int[] overrideCharacterIds;
 

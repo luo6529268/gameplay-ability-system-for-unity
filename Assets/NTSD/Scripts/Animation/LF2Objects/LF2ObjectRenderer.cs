@@ -21,6 +21,7 @@ namespace NTSD.Animation.LF2Objects
     {
         // ========== 组件引用 ==========
         private SpriteRenderer _spriteRenderer;
+        private SpriteRenderer _shadowRenderer;
 
         // ========== 逻辑层引用 ==========
         private LF2LivingObject _logicObject;
@@ -87,13 +88,18 @@ namespace NTSD.Animation.LF2Objects
             _logicObject = logicObject as LF2LivingObject;
             _logicObject?.Init(task, this);
 
-            // 从 CharacterAnimtorManager 获取该对象 ID 对应的 sprites（武器/SA/Effect 统一通过 oid 查表）
-            // 若未加载（如武器图集尚未实现）则静默传 null，ShowPic() 不会崩溃
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             List<Sprite> sprites = null;
             if (_logicObject != null)
                 CharacterAnimtorManager.Instance?.TryGetSprites(_logicObject.ObjectId, out sprites);
             _logicObject?.Sprite?.Initialize(sr, sprites);
+            _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
+        }
+
+        public void SetShadowRenderer(SpriteRenderer shadowRenderer)
+        {
+            _shadowRenderer = shadowRenderer;
+            _logicObject?.Sprite?.InitializeShadow(shadowRenderer);
         }
 
         /// <summary>
@@ -120,6 +126,16 @@ namespace NTSD.Animation.LF2Objects
             var ps = _logicObject.PS;
             if (ps != null)
                 _logicObject.Sprite?.SwitchLR(ps.dir);
+
+            // 阴影显隐：对齐反汇编 0x0041D1A1
+            // 排除 pic=3005/9997，blink 时隐藏（对齐 abs(z)%4<2 闪烁逻辑）
+            if (_shadowRenderer != null)
+            {
+                bool hideShadow = frame.pic == 3005
+                                || frame.pic == 9997
+                                || (_logicObject.Effect?.Blink == true && (_renderFrameCount % 4) >= 2);
+                _shadowRenderer.enabled = !hideShadow;
+            }
         }
 
         /// <summary>
@@ -133,11 +149,26 @@ namespace NTSD.Animation.LF2Objects
             if (ps == null) return;
 
             const float ppu = 100f;
-            float worldX = ps.x / ppu;
-            float worldY = ps.z / ppu - ps.y / ppu;
+
+            // 反汇编 RenderDispatch：
+            // screen_x = entity.x - frame.centerx（sprite 左上角）
+            // screen_y = entity.z + entity.y - frame.centery（地面深度 + 跳跃高度，ps.y 负数向上）
+            var frame = _logicObject.Frame?.D;
+            float cx = frame?.centerx ?? 0f;
+            float cy = frame?.centery ?? 0f;
+
+            float worldX = (ps.x - cx) / ppu;
+            float worldY = (ps.z - ps.y - cy) / ppu;
             transform.position = new Vector3(worldX, worldY, transform.position.z);
 
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);
+
+            // 阴影固定在地面（只用 ps.x/ps.z，不含跳跃 y 和 center 偏移）
+            if (_shadowRenderer != null)
+            {
+                var st = _shadowRenderer.transform;
+                st.position = new Vector3(ps.x / ppu, ps.z / ppu, st.position.z);
+            }
         }
 
         private void ApplyVisualShake()

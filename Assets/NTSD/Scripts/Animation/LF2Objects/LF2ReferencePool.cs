@@ -12,9 +12,9 @@ namespace NTSD.Animation.LF2Objects
     ///
     /// 与 LF2ObjectPool 的区别：
     /// - LF2ObjectPool: 管理 GameObject（LF2ObjectRenderer，实例对象池）
-    /// - LF2ObjectLogicPool: 管理纯 C# 对象（ILF2Object，引用池）
+    /// - LF2ReferencePool: 管理纯 C# 对象（ILF2Object，引用池）
     /// </summary>
-    public class LF2ObjectLogicPool : MMSingleton<LF2ObjectLogicPool>
+    public class LF2ReferencePool : MMSingleton<LF2ReferencePool>
     {
         // ========== 配置 ==========
 
@@ -55,7 +55,7 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < _initialPoolSize / 6; i++)
                 AddToPool(LF2ObjectType.ThrowWeapon);
 
-            Log.Info("[LF2ObjectLogicPool] Prewarmed: {0} logic objects", _initialPoolSize);
+            Log.Info("[LF2ReferencePool] Prewarmed: {0} logic objects", _initialPoolSize);
         }
 
         private void AddToPool(LF2ObjectType objectType)
@@ -71,11 +71,11 @@ namespace NTSD.Animation.LF2Objects
             {
                 case LF2ObjectType.LightWeapon:
                     var lightWeapon = new LF2Weapon();
-                    lightWeapon.SetWeaponType(2);
+                    lightWeapon.SetWeaponType(1); // data.txt type=1 = 轻武器
                     return lightWeapon;
                 case LF2ObjectType.HeavyWeapon:
                     var heavyWeapon = new LF2Weapon();
-                    heavyWeapon.SetWeaponType(1);
+                    heavyWeapon.SetWeaponType(2); // data.txt type=2 = 重武器
                     return heavyWeapon;
                 case LF2ObjectType.ThrowWeapon:
                     var throwWeapon = new LF2Weapon();
@@ -88,7 +88,7 @@ namespace NTSD.Animation.LF2Objects
                     drinkWeapon.SetWeaponType(6);
                     return drinkWeapon;
                 default:
-                    Log.Error("[LF2ObjectLogicPool] Unsupported object type: {0}", objectType);
+                    Log.Error("[LF2ReferencePool] Unsupported object type: {0}", objectType);
                     return null;
             }
         }

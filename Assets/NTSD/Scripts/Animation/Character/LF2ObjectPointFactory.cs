@@ -187,7 +187,7 @@ namespace NTSD.Animation
                     if (!string.IsNullOrEmpty(frameData.sound))
                         AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
                     LF2ObjectPool.Instance?.Release(renderer);
-                    LF2ObjectLogicPool.Instance?.Release(logicObject);
+                    LF2ReferencePool.Instance?.Release(logicObject);
                     return;
                 }
 
@@ -275,7 +275,7 @@ namespace NTSD.Animation
                         if (!string.IsNullOrEmpty(frameData.sound))
                             AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
                         LF2ObjectPool.Instance?.Release(renderer);
-                        LF2ObjectLogicPool.Instance?.Release(logicObject);
+                        LF2ReferencePool.Instance?.Release(logicObject);
                         continue;
                     }
 
@@ -374,7 +374,7 @@ namespace NTSD.Animation
             // 将 int type 映射到 LF2ObjectType 枚举
             LF2ObjectType objTypeEnum = (LF2ObjectType)objectType;
             // 从逻辑对象池获取对象（池会自动处理 ObjectId 赋值）
-            return LF2ObjectLogicPool.Instance.Get(objTypeEnum, oid);
+            return LF2ReferencePool.Instance.Get(objTypeEnum, oid);
         }
     }
 }

@@ -162,6 +162,14 @@ namespace MoreMountains.TopDownEngine
             _modules.Add(_CharacterInput);
             _modules.Add(_ActionSequenceDetector);
 
+            // 收集 GameObject 上的 ICharacterModule 组件（如 UnitSettings）
+            var componentModules = GetComponentsInChildren<ICharacterModule>();
+            foreach (var m in componentModules)
+            {
+                if (!_modules.Contains(m))
+                    _modules.Add(m);
+            }
+
 
             for (int i = 0; i < _modules.Count; i++)
             {

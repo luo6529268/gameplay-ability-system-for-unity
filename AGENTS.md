@@ -120,24 +120,53 @@ Run EditMode tests:
 - Spark slot 系统（10 slots，timer 驱动）— **已实现**
 - opoint 纯音效帧（pic=999）— **已实现**
 - LF2SpecialAttack FrameCache 加载 — **已修复**
+- 武器系统全模块（Python → C#）迁移 — **已完成**（详见下方武器系统章节）
 
-### P0 待处理
-| 缺口 | 说明 |
-|------|------|
-| 重武器 Interaction 状态过滤错误 | 应为 state 2004，非 2000 |
-| ProcessAttack() 空 stub | weapon_strength_list 未解析 |
-| State 14 (Lying) state_entry/exit 未实现 | 倒地后无落地动画和无敌时间 |
 
-### 已确认需修复的 Bug
 
-**BUG-1：`HitInvincible` 字段是错误实现，必须完整移除**
+---
 
-反汇编依据：`+0xB0h` 偏移是 fall 分档阈值（20/40/80），不是无敌帧计数器。受击保护只靠 `vrest`/`arest`。
+## 武器系统迁移（Python → C#）
 
-需修改的文件：
-1. `Assets/NTSD/Scripts/Animation/Character/LF2HitCountersModule.cs` — 删除 `HitInvincible` 属性及 `SetHitInvincible()`
-2. `Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs` — 删除 `TUUpdate()` 中的 HitInvincible 递减
-3. `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Hit.partial.cs` — 删除 `Hit()` 中的 HitInvincible 检查和赋值
+**参考源文件**：
+- `J:\QQFile\NTSD_beta1.8\NTSD_EXE_FLOW\battle_entity\weapon_system.py`
+- `J:\QQFile\NTSD_beta1.8\NTSD_EXE_FLOW\battle_entity\effect_entity.py`
+
+### 模块迁移状态（11/11 完成）
+
+| # | Python 函数 | C# 对应位置 | 状态 |
+|---|---|---|---|
+| 1 | `update_weapon_pickup` | `HandlePreInteractionKind1/2/7`, `ApplyPickupGrabbedBy`, `ApplyPickupFrameJump` | ✅ |
+| 2 | `sync_held_weapon` | `LF2WeaponBase.Act()` | ✅ |
+| 3 | `release_held_weapon` | `LF2WeaponBase.Act()` force-drop 路径 | ✅ |
+| 4 | `draw_wpoint_weapon` | 纯渲染，不迁移 | ⏭️ |
+| 5 | `check_held_weapon_collision` | `LF2Weapon.ProcessAttack()` via weapon_strength_list | ✅ |
+| 6 | `apply_weapon_collision` | `LF2Weapon.ApplyAttackerResponse()` | ✅ |
+| 7 | `process_held_weapon_durability` | `LF2WeaponBase.ProcessDrinkConsumption()` | ✅ |
+| 8 | `scatter_held_weapon_7A` | `ProcessDrinkConsumption()` HP≤0 路径（内联） | ✅ |
+| 9 | `scatter_held_weapon_7B` | `ProcessDrinkConsumption()` HP≤0 路径（内联） | ✅ |
+| 10 | `update_boomerang_catch` | `LF2WeaponBase.CheckBoomerangCatch()` | ✅ |
+| 11 | `update_frame_advance_effect` | `FrameTransistor.Trans()` + `LF2LivingObject.OnTransitDestroy()` | ✅ |
+| 12 | `update_physics_effect` | `LF2Weapon.WeaponFlightPhysics()` + `CharacterMechanics.WeaponDynamics()` + `LF2Weapon.OnLanded()` | ✅ |
+
+### 历次 Bug 修复汇总
+
+| Bug | 修复内容 |
+|-----|---------|
+| BUG1&2: OnLanded 条件变量错误 | `PS.y > 0.0001f` |
+| BUG3: 投掷 vy 零值守卫 | 无条件赋值 |
+| BUG4: force drop vz=0 错误 | 移除 vz 赋值 |
+| BUG5: 回旋镖 dz 对称判断 | 改为单向检测（对齐反汇编 0x405187） |
+| kind=7 错误走 TryApplyHit | 改为近身拾取逻辑 |
+| GrabbedBy 分流缺失 | 添加 `ApplyPickupGrabbedBy()` |
+| kind=2 帧跳转缺失 | 添加 `ApplyPickupFrameJump()` |
+| Force drop vy 乘1/3 错误 | 改为直接复制 |
+| CharType==1 vx 来源错误 | 改为 `holder.vz * 1/3` |
+| 多余的 force drop vz 赋值 | 删除 |
+| y_float clamp 缺失 | 添加 `if PS.y > -2.0f → PS.y = -2.0f` |
+
+### 遗留项
+- **`state=9998` 即死逻辑**：对应反汇编 EXE 0x00421060，武器不受影响，需在 `LF2SpecialAttack` 帧推进路径中实现
 
 ---
 
