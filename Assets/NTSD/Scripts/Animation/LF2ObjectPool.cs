@@ -30,6 +30,10 @@ namespace NTSD.Animation
         // ========== 配置快捷访问 ==========
         private static GameConfig Cfg => GameConfig.Instance;
 
+        // 缓存 prefab 引用，避免懒加载时 GameConfig.Instance 为 null
+        private GameObject _cachedLF2ObjectPrefab;
+        private GameObject _cachedShadowPrefab;
+
         // ========== 生命周期 ==========
 
         protected override void Awake()
@@ -40,6 +44,10 @@ namespace NTSD.Animation
             _activeObjects = new HashSet<LF2ObjectRenderer>();
             _releaseTimeMap = new Dictionary<LF2ObjectRenderer, float>();
             _spritePool = new Stack<SpriteRenderer>(32);
+
+            // 缓存 prefab 引用 - 延迟到 CreateNewObject 时再获取
+            _cachedLF2ObjectPrefab = null;
+            _cachedShadowPrefab = null;
 
             for (int i = 0; i < (Cfg?.PoolInitialSize ?? 0); i++)
                 CreateNewObject();
@@ -64,11 +72,14 @@ namespace NTSD.Animation
         /// </summary>
         private LF2ObjectRenderer CreateNewObject()
         {
+            // 懒加载缓存 prefab（Awake 时 GameConfig 可能未初始化）
+            if (_cachedLF2ObjectPrefab == null) _cachedLF2ObjectPrefab = Cfg?.LF2ObjectPrefab;
+            if (_cachedShadowPrefab == null)    _cachedShadowPrefab    = Cfg?.ShadowPrefab;
+
             GameObject go;
-            var lf2ObjectPrefab = NTSD.App.GameConfig.Instance?.LF2ObjectPrefab;
-            if (lf2ObjectPrefab != null)
+            if (_cachedLF2ObjectPrefab != null)
             {
-                go = Instantiate(lf2ObjectPrefab, _poolRoot);
+                go = Instantiate(_cachedLF2ObjectPrefab, _poolRoot);
             }
             else
             {
@@ -81,10 +92,9 @@ namespace NTSD.Animation
 
             // 创建 shadow 子节点
             SpriteRenderer shadowRenderer = null;
-            var shadowPrefab = NTSD.App.GameConfig.Instance?.ShadowPrefab;
-            if (shadowPrefab != null)
+            if (_cachedShadowPrefab != null)
             {
-                var shadowGo = Instantiate(shadowPrefab, go.transform);
+                var shadowGo = Instantiate(_cachedShadowPrefab, go.transform);
                 shadowGo.transform.localPosition = Vector3.zero;
                 shadowRenderer = shadowGo.GetComponent<SpriteRenderer>();
             }

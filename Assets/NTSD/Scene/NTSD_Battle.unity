@@ -3875,6 +3875,7 @@ MonoBehaviour:
   overridePlayerPrefabs:
   - {fileID: 620192945}
   - {fileID: 4429830070162037901, guid: 03b393f9c8b2701438d787bb13d794d4, type: 3}
+  gameConfig: {fileID: 11400000, guid: 513170c32731baa449d4d0e9abf8c827, type: 2}
   overrideCharacterIds: 
   autoResume: 1
   delayFrames: 1

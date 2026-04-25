@@ -127,12 +127,14 @@ namespace NTSD.Animation.LF2Objects
             if (ps != null)
                 _logicObject.Sprite?.SwitchLR(ps.dir);
 
-            // 阴影显隐：对齐反汇编 0x0041D1A1
-            // 排除 pic=3005/9997，blink 时隐藏（对齐 abs(z)%4<2 闪烁逻辑）
+            // 阴影显隐：对齐反汇编 RenderDispatch 0x0041D1C9-0x0041D20B
+            // 条件：state != 3005 && state != 9997 && entity_type != 223/224 && y > -70 && renderFrame%4 < 2
             if (_shadowRenderer != null)
             {
-                bool hideShadow = frame.pic == 3005
-                                || frame.pic == 9997
+                var ps2 = _logicObject.PS;
+                bool hideShadow = frame.state == 3005
+                                || frame.state == 9997
+                                || (ps2 != null && ps2.y < -70f)
                                 || (_logicObject.Effect?.Blink == true && (_renderFrameCount % 4) >= 2);
                 _shadowRenderer.enabled = !hideShadow;
             }
@@ -163,11 +165,14 @@ namespace NTSD.Animation.LF2Objects
 
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);
 
-            // 阴影固定在地面（只用 ps.x/ps.z，不含跳跃 y 和 center 偏移）
             if (_shadowRenderer != null)
             {
                 var st = _shadowRenderer.transform;
-                st.position = new Vector3(ps.x / ppu, ps.z / ppu, st.position.z);
+                // shadow pivot=(0.5,0.5)，sprite pivot=(0.5,0)
+                // shadow 中心对齐 sprite 底部中心 = (worldX + cx/ppu, worldY)
+                float shadowWorldX = worldX + cx / ppu;
+                float shadowWorldY = worldY;
+                st.position = new Vector3(shadowWorldX, shadowWorldY, st.position.z);
             }
         }
 
