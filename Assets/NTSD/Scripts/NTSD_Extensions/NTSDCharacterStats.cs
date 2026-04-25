@@ -129,38 +129,14 @@ namespace NTSD.Extensions
         public int MPRegenCooldown { get => _mpRegenCooldown; set => _mpRegenCooldown = Mathf.Max(1, value); }
         
         #endregion
-        
-        #region 装备槽
-        
-        [Header("装备")]
-        [SerializeField] private NTSDEquipmentSlot[] _equipment = new NTSDEquipmentSlot[NTSDConstants.EQUIPMENT_SLOT_COUNT];
-        
-        public NTSDEquipmentSlot[] Equipment => _equipment;
-        
-        #endregion
-        
-        #region Buff槽
-        
-        [Header("Buff")]
-        [SerializeField] private NTSDBuffSlot[] _buffs = new NTSDBuffSlot[NTSDConstants.BUFF_SLOT_COUNT];
-        
-        public NTSDBuffSlot[] Buffs => _buffs;
-        
-        #endregion
-        
+       
         #region 初始化
         
         public NTSDCharacterStats()
         {
             _stats = new int[NTSDConstants.STAT_COUNT];
             _resists = new int[NTSDConstants.RESIST_COUNT];
-            _equipment = new NTSDEquipmentSlot[NTSDConstants.EQUIPMENT_SLOT_COUNT];
-            _buffs = new NTSDBuffSlot[NTSDConstants.BUFF_SLOT_COUNT];
-            
-            for (int i = 0; i < _equipment.Length; i++)
-                _equipment[i] = new NTSDEquipmentSlot();
-            for (int i = 0; i < _buffs.Length; i++)
-                _buffs[i] = new NTSDBuffSlot();
+           
         }
         
         public void Initialize(int maxHP, int maxMP)
@@ -185,32 +161,6 @@ namespace NTSD.Extensions
             // 1. 清空当前属性
             Array.Clear(_stats, 0, _stats.Length);
             Array.Clear(_resists, 0, _resists.Length);
-            
-            // 2. 累加装备属性
-            for (int i = 0; i < _equipment.Length; i++)
-            {
-                var equip = _equipment[i];
-                if (equip == null || equip.ItemId <= 0) continue;
-                
-                for (int s = 0; s < NTSDConstants.STAT_COUNT; s++)
-                {
-                    _stats[s] += equip.GetStat(s);
-                    _resists[s] += equip.GetResist(s);
-                }
-            }
-            
-            // 3. 累加Buff属性
-            for (int i = 0; i < _buffs.Length; i++)
-            {
-                var buff = _buffs[i];
-                if (buff == null || !buff.IsActive) continue;
-                
-                for (int s = 0; s < NTSDConstants.STAT_COUNT; s++)
-                {
-                    _stats[s] += buff.GetStat(s);
-                    _resists[s] += buff.GetResist(s);
-                }
-            }
             
             // 4. 加上角色基础属性
             if (baseStats != null)
@@ -292,52 +242,6 @@ namespace NTSD.Extensions
         
         #endregion
         
-        #region Buff 管理
-        
-        /// <summary>
-        /// 更新所有Buff的持续时间
-        /// </summary>
-        public void TickBuffs()
-        {
-            for (int i = 0; i < _buffs.Length; i++)
-            {
-                if (_buffs[i] != null && _buffs[i].IsActive)
-                {
-                    _buffs[i].Tick();
-                }
-            }
-        }
-        
-        /// <summary>
-        /// 添加Buff
-        /// </summary>
-        public bool AddBuff(NTSDBuffSlot buff)
-        {
-            for (int i = 0; i < _buffs.Length; i++)
-            {
-                if (_buffs[i] == null || !_buffs[i].IsActive)
-                {
-                    _buffs[i] = buff;
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        /// <summary>
-        /// 移除指定ID的Buff
-        /// </summary>
-        public void RemoveBuff(int buffId)
-        {
-            for (int i = 0; i < _buffs.Length; i++)
-            {
-                if (_buffs[i] != null && _buffs[i].BuffId == buffId)
-                {
-                    _buffs[i].Clear();
-                }
-            }
-        }
-        
-        #endregion
+       
     }
 }

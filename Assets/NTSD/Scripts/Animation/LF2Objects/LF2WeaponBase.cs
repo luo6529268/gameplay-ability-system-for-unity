@@ -15,8 +15,21 @@ namespace NTSD.Animation.LF2Objects
     /// 
     /// 参考：I:\C++Test\NTSD\F.LF-master\LF\weapon.js
     /// </summary>
-    public abstract class LF2WeaponBase : LF2LivingObject
+    public abstract class LF2WeaponBase : LF2Entity
     {
+        // ========== 武器专属字段（不在 LF2Entity 的） ==========
+
+        /// <summary>交互冷却（武器也有 itr 碰撞冷却）</summary>
+        public LF2ItrRestTracker ItrRest { get; protected set; }
+
+        /// <summary>生命值（武器耐久度等）</summary>
+        public LF2Health Health { get; protected set; } = new LF2Health();
+
+        /// <summary>控制器（武器由持有者间接控制）</summary>
+        public ILF2Controller Controller { get; set; }
+
+        /// <summary>HP 恢复计时器（回旋镖捕获等）</summary>
+        public int HealTimer { get; set; } = 0;
         // ========== 配置字段 ==========
         protected int _objectId;
         protected int _lastState = -1;

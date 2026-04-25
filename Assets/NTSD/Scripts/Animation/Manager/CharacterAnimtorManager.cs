@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using MoreMountains.Tools;
-using NTSD.Define;
 using NTSD.UI;
 using System;
 using System.Collections.Generic;

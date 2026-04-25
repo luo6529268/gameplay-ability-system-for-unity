@@ -134,6 +134,12 @@ namespace NTSD.Animation.LF2Objects
         (int dx, int dz) GetMoveInput();
     }
 
+    public enum DIRECTION 
+    {
+        RIGHT = 1,
+        LEFT = -1,
+    }
+
     /// <summary>
     /// LF2 所有活动对象的基类（纯 C# 类，不继承 MonoBehaviour）
     /// 实现 ILF2Object（包含 ISimObject）
@@ -143,15 +149,9 @@ namespace NTSD.Animation.LF2Objects
     ///
     /// 参考：I:\C++Test\NTSD\F.LF-master\LF\livingobject.js
     /// </summary>
-    public abstract class LF2LivingObject : ILF2Object
+    public abstract class LF2LivingObject : LF2Entity
     {
-        #region 声明字段 - 身份标识
-
-        /// <summary>对象名称（对应 FLF $.name = data.bmp.name）</summary>
-        public string Name { get; set; }
-
-        /// <summary>唯一ID，由场景分配（对应 FLF $.uid）</summary>
-        public int StableId { get; protected set; }
+        #region 声明字段 - 身份标识（角色专属）
 
         /// <summary>
         /// 当前正在处理的 itr 在帧 itr 列表中的 index（0-based）。
@@ -160,83 +160,30 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public int CurrentItrIndex { get; set; }
 
-        /// <summary>对象ID（对应 FLF $.id = thisID）</summary>
-        public int ObjectId { get; set; }
-
-        /// <summary>队伍 ID（对应 FLF $.team）</summary>
-        public int Team { get; set; }
-
-        /// <summary>阵营标记（对应反汇编 entity+8h）。0=左方/1=右方，决定敌我判定。</summary>
-        public int TeamSide { get; set; }
-
-        /// <summary>所有者 ID（对应反汇编 entity+2F4h）。飞行道具溯源到最顶层角色，默认 -1。</summary>
-        public int OwnerId { get; set; } = -1;
-
-        /// <summary>持有状态（对应反汇编 entity+98h grabbed_by）。0=无武器/轻武器, 2=重武器, 4=回旋镖, 6=饮料(hp>0), 101=特殊武器。武器侧为负值（-grabbed_by）。</summary>
-        public int GrabbedBy { get; set; }
-
-        /// <summary>追踪标志（kind==2 时 parent=1, child=-1）</summary>
-        public int TrackerFlag { get; set; }
-
-        /// <summary>追踪子对象（对应反汇编 entity+9Ch，kind==2 时由 parent 指向 new）</summary>
-        public LF2LivingObject TrackerChild { get; set; }
-
-        /// <summary>追踪父对象（对应反汇编 entity+0A0h，kind==2 时由 new 指向 parent）</summary>
-        public LF2LivingObject TrackerParent { get; set; }
-
-        /// <summary>对象类型（对应 FLF livingobject.prototype.type）。由子类 ObjectTypeEnum 决定，不走 GameDataManager 查表。</summary>
+        /// <summary>对象类型（对应 FLF livingobject.prototype.type）</summary>
         public virtual LF2ObjectType Type => ObjectTypeEnum;
 
         /// <summary>
         /// 每个状态是否允许切换方向（对应 FLF livingobject.prototype.states_switch_dir）
         /// 子类通过 InitializeStatesSwitchDir() 填充
         /// </summary>
-        protected Dictionary<int, bool> _statesSwitchDir;
 
         #endregion
 
-        #region 声明字段 - 世界句柄
-
-        /// <summary>匹配/世界句柄（对应 FLF $.match）</summary>
-        public SimulationWorld Match => SimulationTickDriver.Instance?.World;
-
-        /// <summary>关联的渲染器（由子类 Init 时赋值，用于 logic→renderer 反向查找）</summary>
-        public LF2ObjectRenderer Renderer { get; protected set; }
-
-        #endregion
-
-        #region 声明字段 - 核心模块
-
-        /// <summary>精灵模块（对应 FLF $.sp）</summary>
-        public LF2Sprite Sprite { get; protected set; }
+        #region 声明字段 - 核心模块（角色专属）
 
         /// <summary>生命值（对应 FLF $.health）</summary>
         public LF2Health Health { get; protected set; } = new LF2Health();
 
-        /// <summary>帧信息（对应 FLF $.frame）</summary>
-        public LF2FrameInfo Frame { get; protected set; } = new LF2FrameInfo();
-
         /// <summary>物理系统（对应 FLF $.mech）</summary>
         public CharacterMechanics Mech { get; protected set; }
-
-        /// <summary>物理状态（对应 FLF $.ps = $.mech.create_metric()）</summary>
-        public PhysicsState PS { get; protected set; }
-
-        /// <summary>帧转换器（对应 FLF $.trans）</summary>
-        public FrameTransistor Trans { get; protected set; }
 
         /// <summary>交互冷却（对应 FLF $.itr）</summary>
         public LF2ItrRestTracker ItrRest { get; protected set; }
 
-        /// <summary>效果状态（对应 FLF $.effect）</summary>
-        public LF2EffectState Effect { get; protected set; } = new LF2EffectState();
-
-        /// <summary>帧数据缓存</summary>
-        public LF2FrameCache FrameCache { get; protected set; } = new LF2FrameCache();
-
         #endregion
 
-        #region 声明字段 - 状态字段
+        #region 声明字段 - 状态字段（角色专属）
 
         /// <summary>状态内存，状态切换时自动清空（对应 FLF $.statemem）</summary>
         public Dictionary<string, object> StateMem { get; protected set; } = new Dictionary<string, object>();
@@ -260,40 +207,8 @@ namespace NTSD.Animation.LF2Objects
         public bool IsNpc { get; set; } = false;
 
         /// <summary>
-        /// 被击中锁定标志（对应反汇编 entity+88h）
-        /// 被击中时由攻击者设为 1，帧切换时归零。
-        /// ProcessFrame 检查此标志：为 1 时跳过 opoint 生成。
-        /// </summary>
-        public int HitStun { get; set; } = 0;
-
-        /// <summary>
-        /// 角色种类（对应反汇编 entity+20h），用于区分特殊角色行为。
-        /// type==1：使用 KnockbackVx/Vy 速度路径（ForceDrop 时）。
-        /// </summary>
-        public int CharType { get; set; } = 0;
-
-        /// <summary>
-        /// 击退累加器 X（对应反汇编 entity+28h knockback_vx）。
-        /// 每次击飞命中时累加（不替换），物理层每帧按公式写入 PS.vx：
-        ///   PS.vx = KnockbackVx * 2 / (HitCount + 1)
-        /// 落地时清零；在 type==1 角色 ForceDrop 时同时作为武器脱落速度来源。
-        /// </summary>
-        public float KnockbackVx { get; set; } = 0f;
-
-        /// <summary>
-        /// 受击推力 Y（对应反汇编 entity+30h knockback_vy）。
-        /// </summary>
-        public float KnockbackVy { get; set; } = 0f;
-
-        /// <summary>
-        /// 受击推力 Z（对应反汇编 entity+38h knockback_vz）。
-        /// </summary>
-        public float KnockbackVz { get; set; } = 0f;
-
-        /// <summary>
         /// 连续击飞命中计数（对应反汇编 entity+20h hit_count）。
         /// 每次击飞命中时递增，落地时重置为 1。
-        /// 用于击飞速度衰减公式：vx = KnockbackVx * 2 / (HitCount + 1)。
         /// </summary>
         public int HitCount { get; set; } = 1;
 
@@ -305,168 +220,14 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// HP 恢复计时器（对应反汇编 entity+0E4h）。
-        /// 回旋镖捕获时设为 100，每帧递减；counter % 8 == 0 时 HP+1（上限 MaxHP）；HP 达到 MaxHP 后清零。
-        /// 反汇编 0x004051FC（设值）、0x00423B0C-0x00423B71（消耗逻辑）。
         /// </summary>
         public int HealTimer { get; set; } = 0;
-
-        /// <summary>
-        /// 帧延迟计数器（对应反汇编 entity+0B4h）
-        /// 正值每帧 -1，负值每帧 +1，归零后恢复正常。
-        /// 写入点：被击中 attacker+2 / target-3；spawn+10；抓取+3/-3/-5。
-        /// ProcessFrame 检查：不为 0 且 ObjectType != 0 时跳过 opoint 生成。
-        /// </summary>
-        public int FrameDelay { get; set; } = 0;
-
-        /// <summary>
-        /// 抖动计时器（对应反汇编 entity+8h）
-        /// Entity_Collision 每帧向 0 收敛：正数递减，负数递增。
-        /// RenderDispatch shake 条件：ShakeTimer > -25。
-        /// </summary>
-        public int ShakeTimer { get; set; } = 0;
-
-        /// <summary>
-        /// 发射计数器（对应反汇编 entity+308h）
-        /// 每次触发 opoint 时按公式递增：ShotCount += (500 - min(ShotCount,500)) / 30 + 1
-        /// ProcessFrame 守卫：ShotCount >= 500 跳过；OwnerId != -1 且 ShotCount >= 150 跳过。
-        /// </summary>
-        public int ShotCount { get; set; } = 0;
 
         /// <summary>NPC的控制者/父对象（对应 FLF $.parent，NPC stat 归属到 parent）</summary>
         public LF2LivingObject Parent { get; set; } = null;
 
         /// <summary>战斗统计（对应 FLF $.stat）</summary>
         public LF2BattleStat Stat { get; private set; } = new LF2BattleStat();
-
-        // ---- SPARK slot 数组（对应反汇编 obj[0x36C] 和 obj[0x3C0]～） ----
-
-        /// <summary>
-        /// 当前活跃 spark slot 数量（对应 obj[0x36C]）。
-        /// 0 表示无 spark；多次命中可叠加多个 slot，各自独立计时。
-        /// </summary>
-        public int SparkSlotCount { get; private set; } = 0;
-
-        /// <summary>
-        /// 最大 spark slot 数量（反汇编 cmp ecx, 0Ah → 上限 10）。
-        /// </summary>
-        public const int MaxSparkSlots = 10;
-
-        /// <summary>
-        /// 各 spark slot 的独立计时器（对应 obj[0x3C0]，初始值由 itr.fall/attacking 决定）。
-        /// index 0～SparkSlotCount-1 为有效 slot，timer 每帧 +1 直到到期。
-        /// </summary>
-        private readonly int[] _sparkTimers = new int[MaxSparkSlots];
-
-        /// <summary>spark slot 世界 x 坐标（对应 obj[0x370+slot*4]）</summary>
-        private readonly float[] _sparkWorldX = new float[MaxSparkSlots];
-
-        /// <summary>spark slot 世界 y 坐标（高度，对应 obj[0x398+slot*4]）</summary>
-        private readonly int[] _sparkLastTickFrame = new int[MaxSparkSlots];
-        private readonly float[] _sparkWorldY = new float[MaxSparkSlots];
-
-        /// <summary>spark slot z 深度（渲染排序用）</summary>
-        private readonly float[] _sparkWorldZ = new float[MaxSparkSlots];
-
-        /// <summary>
-        /// 命中时追加一个新 spark slot。
-        /// timer 初始值：itr.fall > 60 → attacking*20（大spark）；否则 → attacking*4+10（小spark）
-        /// 反汇编 0x0042F81B–0x0042F837：cmp edx,3Ch; jle small; shl 2 → *20 / lea *4+10
-        /// </summary>
-        public void AddSparkSlot(int timerInitial, float worldX, float worldY, float worldZ, int currentRenderFrame = -1)
-        {
-            if (SparkSlotCount >= MaxSparkSlots) return;
-            int slot = SparkSlotCount;
-            _sparkTimers[slot] = timerInitial;
-            _sparkLastTickFrame[slot] = currentRenderFrame;
-            _sparkWorldX[slot] = worldX;
-            _sparkWorldY[slot] = worldY;
-            _sparkWorldZ[slot] = worldZ;
-            SparkSlotCount++;
-        }
-
-        /// <summary>读取指定 slot 的 timer 值（供 SparkRenderer 遍历）</summary>
-        public int GetSparkTimer(int slotIndex) => _sparkTimers[slotIndex];
-
-        /// <summary>读取指定 slot 的世界坐标</summary>
-        public (float x, float y, float z) GetSparkWorldPos(int slotIndex)
-            => (_sparkWorldX[slotIndex], _sparkWorldY[slotIndex], _sparkWorldZ[slotIndex]);
-
-        /// <summary>推进指定 slot 的 timer（已废弃：请使用 TickAllSparkTimers()）</summary>
-        public void IncrementSparkTimer(int slotIndex)
-        {
-            if (slotIndex >= 0 && slotIndex < SparkSlotCount)
-                _sparkTimers[slotIndex]++;
-        }
-
-        /// <summary>移除最后一个 slot（slot 到期时自然衰减，对应反汇编 obj[36Ch]--）</summary>
-        public void RemoveLastSparkSlot()
-        {
-            if (SparkSlotCount > 0)
-                SparkSlotCount--;
-        }
-
-        /// <summary>紧凑移除任意 slot（将后续 slot 前移），用于 TickAllSparkTimers 内部</summary>
-        private void RemoveSparkSlot(int slotIndex)
-        {
-            if (slotIndex < 0 || slotIndex >= SparkSlotCount) return;
-            int tail = SparkSlotCount - 1;
-            if (slotIndex < tail)
-            {
-                System.Array.Copy(_sparkTimers, slotIndex + 1, _sparkTimers, slotIndex, tail - slotIndex);
-                System.Array.Copy(_sparkWorldX, slotIndex + 1, _sparkWorldX, slotIndex, tail - slotIndex);
-                System.Array.Copy(_sparkWorldY, slotIndex + 1, _sparkWorldY, slotIndex, tail - slotIndex);
-                System.Array.Copy(_sparkWorldZ, slotIndex + 1, _sparkWorldZ, slotIndex, tail - slotIndex);
-            }
-            SparkSlotCount--;
-        }
-
-        /// <summary>
-        /// 每游戏逻辑帧（30Hz）递增所有 spark slot 的 timer，并移除过期 slot。
-        /// 对应反汇编 0x41D70E–0x41D7C2 渲染循环中的 timer inc + slot 移除逻辑：
-        ///   timer 0-4:   big spark 渲染，不移除
-        ///   timer 5-9:   blank，移除（5 < 10 → jl 41D76A → jl 41D786 → jl 41D7C2 → remove）
-        ///   timer 10-14: small spark 渲染，不移除
-        ///   timer 15-29: blank，移除
-        ///   timer 30-38: fade 渲染，不移除
-        ///   timer >= 39: 移除
-        /// </summary>
-        public void TickAllSparkTimers(int renderFrame)
-        {
-            for (int i = SparkSlotCount - 1; i >= 0; i--)
-            {
-                // 每个 timer 值至少渲染 2 个渲染帧（对齐原版 30Hz：每 timer 值持续 1/30s = 2 个 60Hz 帧）
-                if (renderFrame - _sparkLastTickFrame[i] < 2) continue;
-                _sparkLastTickFrame[i] = renderFrame;
-                _sparkTimers[i]++;
-                int t = _sparkTimers[i];
-                bool remove = (t >= 5 && t < 10) || (t >= 15 && t < 30) || (t >= 39);
-                if (remove)
-                    RemoveSparkSlot(i);
-            }
-        }
-
-        #endregion
-
-        // ---- 受击屏幕震动（对应反汇编 sub_419C40 / dword_44AE74 slot 机制）----
-
-        /// <summary>
-        #region 声明字段 - 状态处理器
-
-        /// <summary>
-        /// 状态处理器委托（对应 FLF states[N] = function(event, K) {}）
-        /// </summary>
-        protected delegate bool StateHandler(string eventType, object eventData = null);
-
-        /// <summary>
-        /// 状态处理器字典 - 子类通过 InitializeStates() 注册
-        /// </summary>
-        protected Dictionary<int, StateHandler> _states = new Dictionary<int, StateHandler>(20);
-
-        /// <summary>
-        /// 状态处理器的帧号返回通道（对齐 FLF state_update 可返回 int 的特性）
-        /// handler 写入 > 0 的值表示要跳转的帧号，调用方读完后必须清零
-        /// </summary>
-        public int StateReturnFrame { get; protected set; } = 0;
 
         #endregion
 
@@ -481,11 +242,6 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         #region 初始化函数
-
-        /// <summary>
-        /// 初始化状态处理器 - 子类必须实现
-        /// </summary>
-        protected abstract void InitializeStates();
 
         /// <summary>
         /// 初始化设置（对应 FLF livingobject.prototype.setup）
@@ -711,7 +467,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
+        public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
         {
             int prevFn = Frame.N;
             Log.LogState(Name, "Frame", $"{Frame.N} → {targetFrameId}");
@@ -797,7 +553,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public virtual bool GetStatesSwitchDir(int stateId) 
+        public override bool GetStatesSwitchDir(int stateId) 
         {
             return false;
         }
@@ -934,7 +690,7 @@ namespace NTSD.Animation.LF2Objects
         /// 顺序：先执行 generic，再执行当前状态的 specific 处理器
         /// 参考：FLF livingobject.js:286-301
         /// </summary>
-        public virtual bool StateUpdate(string eventType, object eventData = null)
+        public override bool StateUpdate(string eventType, object eventData = null)
         {
             bool res1 = OnGenericStateEvent(eventType, eventData);
 
@@ -948,7 +704,7 @@ namespace NTSD.Animation.LF2Objects
             return res1 || res2;
         }
 
-        public virtual bool StateUpdate(string eventType, out int frameId, object eventData = null) 
+        public override bool StateUpdate(string eventType, out int frameId, object eventData = null) 
         {
             frameId = 0;
             // 调用 handler，handler 通过写 _stateReturnFrame 传帧号
@@ -964,7 +720,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 通用状态事件处理 - 所有状态共享的逻辑（子类重写）
         /// </summary>
-        protected virtual bool OnGenericStateEvent(string eventType, object eventData) => false;
+        protected override bool OnGenericStateEvent(string eventType, object eventData) => false;
 
         /// <summary>获取当前状态（对应 FLF livingobject.prototype.state）</summary>
         public int GetState()
@@ -1061,7 +817,7 @@ namespace NTSD.Animation.LF2Objects
         /// 切换方向（对应 FLF livingobject.prototype.switch_dir）
         /// 参考：FLF livingobject.js:510-520
         /// </summary>
-        public virtual void SwitchDir(string dir)
+        public override void SwitchDir(string dir)
         {
             if (PS == null) return;
 
@@ -1077,7 +833,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public virtual void SwitchDir(DIRECTION rection) 
+        public override void SwitchDir(DIRECTION rection) 
         {
             SwitchDir(rection == DIRECTION.LEFT ? "left" : "right");
         }
@@ -1372,23 +1128,17 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region 接口实现 - ILF2Poolable
+        #region 接口实现 - ILF2Poolable / ILF2Object
 
-        public abstract LF2ObjectType ObjectTypeEnum { get; }
-        public int ObjectType => (int)ObjectTypeEnum;
-        public abstract void Reset();
-
-        #endregion
-
-        #region 接口实现 - ILF2Object
-
-        public abstract void Init(LF2TaskBase task, LF2ObjectRenderer renderer);
+        public abstract override LF2ObjectType ObjectTypeEnum { get; }
+        public abstract override void Reset();
+        public abstract override void Init(LF2TaskBase task, LF2ObjectRenderer renderer);
 
         /// <summary>
         /// 销毁对象（对应 FLF livingobject.prototype.destroy）
         /// 参考：FLF livingobject.js:89-94
         /// </summary>
-        public virtual void Destroy()
+        public override void Destroy()
         {
             Sprite?.Hide();
         }
@@ -1397,7 +1147,7 @@ namespace NTSD.Animation.LF2Objects
         /// 当 FrameTransistor 检测到 next=1000 时调用
         /// 对应 FLF livingobject.js:655-658: state_update('destroy') + match.destroy_object($)
         /// </summary>
-        public virtual void OnTransitDestroy()
+        public override void OnTransitDestroy()
         {
             StateUpdate("destroy");
             Destroy();
@@ -1412,43 +1162,17 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region 接口实现 - ISimObject
+        #region 接口实现 - ISimObject（重写 LF2Entity 默认实现）
 
-        public int SimOrder => SimOrderConstants.GetSimOrderByObjectType(ObjectTypeEnum);
-
-        public virtual void OnAdded(SimContext ctx) { }
-        public virtual void OnRemoved(SimContext ctx) { }
-
-        public virtual void SimTransit(int tickIndex)
-        {
-            Transit();
-        }
-
-        public virtual void SimTU(int tickIndex)
-        {
-            TUUpdate();
-        }
-
-        public virtual void SimPostInteraction(int tickIndex) { }
+        public override void SimTransit(int tickIndex) => Transit();
+        public override void SimTU(int tickIndex) => TUUpdate();
 
         /// <summary>
         /// PreInteraction 阶段（对应 NTSD 反汇编 GameMode_Process sub_41BDA0）
         /// 处理 kind=1/2/3/7 抓取/拾取碰撞，在所有对象 SerialTickAll 后统一执行。
         /// 子类（LF2Character）负责 override 并调用 Generic_PreInteraction()。
         /// </summary>
-        public virtual void SimPreInteraction(int tickIndex) { }
-
-        /// <summary>
-        /// SimLateTick：每帧渲染后处理
-        /// 对应 FLF mechanics.js:389 sp.set_z(ps.sz + ps.zz)
-        /// Z 越大（越靠下）→ sortingOrder 越高 → 渲染在上层
-        /// </summary>
-        public virtual void SimLateTick(int tickIndex)
-        {
-            // Z 轴排序：对齐 FLF mechanics.js sp.set_z(ps.sz + ps.zz)
-            if (PS != null)
-                Sprite?.SetZ(PS.z + PS.zz);
-        }
+        public override void SimPreInteraction(int tickIndex) { }
 
         #endregion
 
@@ -1522,26 +1246,6 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>分配 StableId</summary>
-        protected void AllocateStableId()
-        {
-            StableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
-        }
-
-        /// <summary>重置 StableId</summary>
-        protected void ResetStableId()
-        {
-            StableId = 0;
-        }
-
-        /// <summary>
-        /// 重置命中闪光状态（对应反汇编 spawn/reset 时 slotCount=0）。
-        /// 子类 Reset() 末尾调用。
-        /// </summary>
-        protected void ResetSpark()
-        {
-            SparkSlotCount = 0;
-        }
-
         /// <summary>
         /// 计算方向（对应 FLF facing 逻辑）
         /// </summary>

@@ -133,7 +133,10 @@ namespace NTSD.Animation
                 Sprite sprite = GetSpriteForTimer(timer);
                 if (sprite == null) continue;
 
-                var (wx, wy, wz) = obj.GetSparkWorldPos(j);
+                Vector3 wpos = obj.GetSparkWorldPos(j);
+                float wx = wpos.x;
+                float wy = wpos.y;
+                float wz = wpos.z;
                 const float ppu = 100f;
                 float unityX = wx / ppu;
                 float unityY = wz / ppu - wy / ppu;

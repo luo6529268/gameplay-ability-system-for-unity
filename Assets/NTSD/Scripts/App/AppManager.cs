@@ -39,6 +39,7 @@ namespace NTSD.App
 
         private NTSDSoundPlayer soundPlayer;
         private SparkRenderer sparkRenderer;
+        private InputModule inputModule;
 
         [Header("Runtime")]
         [SerializeField] private AppFlowState state = AppFlowState.MenuMain;
@@ -47,6 +48,7 @@ namespace NTSD.App
         public MatchConfig CurrentMatchConfig { get; private set; }
         public NTSDSoundPlayer SoundPlayer => soundPlayer;
         public SparkRenderer SparkRenderer => sparkRenderer;
+        public InputModule InputModule => inputModule;
 
         protected override bool PersistAcrossScenes => true;
 
@@ -60,16 +62,9 @@ namespace NTSD.App
 
         private void EnsureRuntimeModules()
         {
-            if (soundPlayer == null)
-            {
-                soundPlayer = gameObject.MMGetOrAddComponent<NTSDSoundPlayer>();
-            }
-
-            if (sparkRenderer == null)
-            {
-                sparkRenderer = gameObject.MMGetOrAddComponent<SparkRenderer>();
-            }
-
+            soundPlayer = gameObject.MMGetOrAddComponent<NTSDSoundPlayer>();
+            sparkRenderer = gameObject.MMGetOrAddComponent<SparkRenderer>();
+            inputModule = new InputModule();
         }
 
         private void InitializeGameConfig()

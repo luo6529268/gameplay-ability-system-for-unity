@@ -262,7 +262,7 @@ namespace NTSD.UI
         {
             if (countdownInputBound) return;
 
-            player1ActionMap = InputManager.Instance.GetActionMapByPlayerID(1);
+            player1ActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(1);
             if (player1ActionMap == null) return;
 
             player1ActionMap.Enable();

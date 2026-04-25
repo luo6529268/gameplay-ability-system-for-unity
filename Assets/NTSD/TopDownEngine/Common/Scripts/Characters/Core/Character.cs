@@ -83,7 +83,6 @@ namespace MoreMountains.TopDownEngine
         public CharacterIdUpdate _IdUpdate { get; private set; }
 		public Transform _ModeTrans { get; private set; }
 		public AbilitySystemComponent _AbilitySystemComponent { get; private set; }
-        public UnitSettings _UnitSetting { get; private set; }
         /// <summary>
         /// 角色专用逻辑模块（纯 C#，对应 FLF character.js）
         /// </summary>
@@ -218,12 +217,9 @@ namespace MoreMountains.TopDownEngine
 		{
 			if (_modulesInitialized) return;
 
-			_UnitSetting = this.GetComponent<UnitSettings>();
 			_AbilitySystemComponent = this.gameObject.GetComponent<AbilitySystemComponent>();
 			_controller = this.gameObject.GetComponent<TopDownController>();
             _ModeTrans = this.gameObject.GetComponentInChildren<SpriteRenderer>().transform;
-
-            _AbilitySystemComponent.InitWithPreset(1);
 
 			m_TimeWheel = TimeWheel.CreateSharedInstance();
 

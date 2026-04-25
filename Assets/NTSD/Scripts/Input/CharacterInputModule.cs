@@ -1,6 +1,7 @@
 using BeatEmUpTemplate2D;
 using MoreMountains.TopDownEngine;
 using NTSD.Animation.LF2Objects;
+using NTSD.App;
 using NTSD.Input;
 using NTSD.Simulation;
 using UnityEngine;
@@ -97,7 +98,7 @@ namespace NTSD.Game
         private void BindActionMap()
         {
             int inputId = _hub != null ? _hub.InputID : 0;
-            _inputActionMap = InputManager.Instance.GetActionMapByPlayerID(inputId);
+            _inputActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(inputId);
             _inputActionMap?.Enable();
 
             MoveAction = _inputActionMap?.FindAction("Move");

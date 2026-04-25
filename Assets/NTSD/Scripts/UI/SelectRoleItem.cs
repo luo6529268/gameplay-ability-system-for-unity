@@ -150,10 +150,9 @@ namespace NTSD.UI
         private void BindInput()
         {
             if (inputBound) return;
-            if (InputManager.Instance == null) return;
             if (itemIndex + 1 != playerId) return;  // 只绑定对应玩家的输入
 
-            inputActionMap = InputManager.Instance.GetActionMapByPlayerID(playerId);
+            inputActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(playerId);
             if (inputActionMap == null) return;
 
             inputActionMap.Enable();

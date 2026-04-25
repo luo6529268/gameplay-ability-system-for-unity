@@ -16,8 +16,15 @@ namespace NTSD.Animation.LF2Objects
     /// - FLF specialattack.prototype.init (specialattack.js:303-339)
     /// - FLF specialattack states (specialattack.js:15-254)
     /// </summary>
-    public class LF2SpecialAttack : LF2LivingObject
+    public class LF2SpecialAttack : LF2Entity
     {
+        // ========== 技能专属字段（不在 LF2Entity 的） ==========
+
+        /// <summary>交互冷却（技能也有 itr 碰撞冷却）</summary>
+        public LF2ItrRestTracker ItrRest { get; protected set; }
+
+        /// <summary>生命值（技能耐久/存活帧数等）</summary>
+        public LF2Health Health { get; protected set; } = new LF2Health();
         // ========== 配置字段 ==========
         private int _objectId;
         private LF2LivingObject _parent;

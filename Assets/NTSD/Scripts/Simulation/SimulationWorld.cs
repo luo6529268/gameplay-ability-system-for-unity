@@ -468,7 +468,7 @@ namespace NTSD.Simulation
         }
 
         /// <summary>
-        /// 收集当前世界中的所有 LF2LivingObject（按 SimOrder → StableId 顺序）
+        /// 收集当前世界中的所有 LF2Entity（按 SimOrder → StableId 顺序）
         /// </summary>
         public void GetAllLivingObjects(List<LF2LivingObject> dst)
         {
@@ -485,6 +485,29 @@ namespace NTSD.Simulation
                     if (bucket.items[i] is LF2LivingObject living)
                     {
                         dst.Add(living);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 收集当前世界中的所有 LF2Entity（角色 + 武器 + 技能）
+        /// </summary>
+        public void GetAllEntities(List<LF2Entity> dst)
+        {
+            if (dst == null) return;
+            dst.Clear();
+
+            foreach (var kvp in _buckets)
+            {
+                Bucket bucket = kvp.Value;
+                bucket.EnsureSorted();
+
+                for (int i = 0; i < bucket.items.Count; i++)
+                {
+                    if (bucket.items[i] is LF2Entity entity)
+                    {
+                        dst.Add(entity);
                     }
                 }
             }

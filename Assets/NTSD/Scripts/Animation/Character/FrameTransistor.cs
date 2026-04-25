@@ -16,11 +16,11 @@ namespace NTSD.Animation
         private int lockout = 1;
         private bool switchDirAfterTrans;
 
-        LF2LivingObject _lF2LivingObject;
+        LF2Entity _lF2LivingObject;
         /// <summary>
-        /// 无参构造函数（用于 LF2LivingObject）
+        /// 构造函数（接受所有 LF2Entity 子类）
         /// </summary>
-        public FrameTransistor(LF2LivingObject lF2LivingObject)
+        public FrameTransistor(LF2Entity lF2LivingObject)
         {
             _lF2LivingObject = lF2LivingObject;
         }
