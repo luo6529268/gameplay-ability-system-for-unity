@@ -105,7 +105,7 @@ namespace NTSD.Animation.LF2Objects
         /// 更新阴影位置（对应反汇编 RenderDispatch shadow 公式）
         /// shadow_x = px, shadow_y = pz（只用地面深度，不含 py）
         /// </summary>
-        void UpdateShadow();
+        void UpdateShadow(int renderFrame = 0);
 
         // ── Spark 系统（PostRender 共用，所有 entity 共用 slot）──────────
 

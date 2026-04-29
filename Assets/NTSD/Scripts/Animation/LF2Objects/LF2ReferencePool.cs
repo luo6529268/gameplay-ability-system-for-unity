@@ -40,6 +40,8 @@ namespace NTSD.Animation.LF2Objects
             _availablePools[LF2ObjectType.SpecialAttack] = new LinkedList<ILF2Object>();
             _availablePools[LF2ObjectType.ThrowWeapon] = new LinkedList<ILF2Object>();
             _availablePools[LF2ObjectType.Drink] = new LinkedList<ILF2Object>();
+            _availablePools[LF2ObjectType.Character] = new LinkedList<ILF2Object>();
+            _availablePools[LF2ObjectType.Other] = new LinkedList<ILF2Object>();
 
             PrewarmPool();
         }
@@ -54,8 +56,12 @@ namespace NTSD.Animation.LF2Objects
                 AddToPool(LF2ObjectType.SpecialAttack);
             for (int i = 0; i < _initialPoolSize / 6; i++)
                 AddToPool(LF2ObjectType.ThrowWeapon);
+            
+            // Step 4.1: 测试预热角色
+            for (int i = 0; i < 10; i++)
+                AddToPool(LF2ObjectType.Character);
 
-            Log.Info("[LF2ReferencePool] Prewarmed: {0} logic objects", _initialPoolSize);
+            Log.Info("[LF2ReferencePool] Prewarmed: {0} logic objects", _initialPoolSize + 10);
         }
 
         private void AddToPool(LF2ObjectType objectType)
@@ -87,6 +93,10 @@ namespace NTSD.Animation.LF2Objects
                     var drinkWeapon = new LF2Weapon();
                     drinkWeapon.SetWeaponType(6);
                     return drinkWeapon;
+                case LF2ObjectType.Character:
+                    return new LF2Character();
+                case LF2ObjectType.Other:
+                    return null; // 暂不实现 Type 5 逻辑类，仅预留池位
                 default:
                     Log.Error("[LF2ReferencePool] Unsupported object type: {0}", objectType);
                     return null;
@@ -113,6 +123,7 @@ namespace NTSD.Animation.LF2Objects
             if (obj != null)
             {
                 obj.ObjectId = oid;
+                obj.Reset();
                 _activeObjects.Add(obj);
             }
 
@@ -124,11 +135,23 @@ namespace NTSD.Animation.LF2Objects
         {
             if (obj == null) return;
 
-            // Reset 已由调用方（OnTransitDestroy → ResetState）执行，此处只做池管理
+            // Reset 已由调用方（OnTransitDestroy -> ResetState）执行，此处只做池 management
             _activeObjects.Remove(obj);
 
             if (_availablePools.TryGetValue(obj.ObjectTypeEnum, out var pool))
                 pool.AddLast(obj);
+        }
+
+        /// <summary>
+        /// 批量预热接口（Step 4.2: 由 Loading 界面调用）
+        /// </summary>
+        public void Prewarm(LF2ObjectType type, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                AddToPool(type);
+            }
+            Log.Info("[LF2ReferencePool] Bulk Prewarm: {0} x {1}", type, count);
         }
 
         // ========== 查询 ==========

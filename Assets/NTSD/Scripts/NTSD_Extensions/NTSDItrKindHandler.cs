@@ -10,7 +10,7 @@ namespace NTSD.Extensions
         bool IsPreInteractionKind(int kind);
         bool IsNTSDAttackKind(int kind);
         bool IsNTSDControlKind(int kind);
-        bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target);
+        bool ShouldHitTarget(int kind, LF2Entity attacker, LF2LivingObject target);
         void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr);
         int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr);
     }
@@ -103,7 +103,7 @@ namespace NTSD.Extensions
         /// <param name="attacker">攻击者</param>
         /// <param name="target">目标</param>
         /// <returns>true 表示应该命中</returns>
-        public bool ShouldHitTarget(int kind, LF2LivingObject attacker, LF2LivingObject target)
+        public bool ShouldHitTarget(int kind, LF2Entity attacker, LF2LivingObject target)
         {
             if (attacker == null || target == null) return false;
             

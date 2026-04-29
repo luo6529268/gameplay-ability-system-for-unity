@@ -21,10 +21,10 @@ namespace NTSD.Animation.LF2Objects
         // ========== 技能专属字段（不在 LF2Entity 的） ==========
 
         /// <summary>交互冷却（技能也有 itr 碰撞冷却）</summary>
-        public LF2ItrRestTracker ItrRest { get; protected set; }
+        public override LF2ItrRestTracker ItrRest { get; protected set; }
 
         /// <summary>生命值（技能耐久/存活帧数等）</summary>
-        public LF2Health Health { get; protected set; } = new LF2Health();
+        public override LF2Health Health { get; protected set; } = new LF2Health();
         // ========== 配置字段 ==========
         private int _objectId;
         private LF2LivingObject _parent;
@@ -428,7 +428,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private bool CanInteractTarget(InteractionArea itr, LF2LivingObject target)
+        private bool CanInteractTarget(InteractionArea itr, LF2Entity target)
         {
             if (itr == null || target == null) return false;
             if (target == this) return false;
@@ -437,12 +437,12 @@ namespace NTSD.Animation.LF2Objects
             if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
             if (!target.ItrVrestTest(StableId)) return false;
             var kindService = Match?.ItrKindService;
-            if (!kindService.ShouldHitTarget(itr.kind, this, target)) return false;
+            if (target is not LF2LivingObject livingTarget || !kindService.ShouldHitTarget(itr.kind, this, livingTarget)) return false;
 
             return true;
         }
 
-        private bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        private bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
@@ -464,7 +464,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private bool TryApplyHit(InteractionArea itr, LF2LivingObject target)
+        private bool TryApplyHit(InteractionArea itr, LF2Entity target)
         {
             if (!ItrArestTest()) return false;
 
@@ -490,23 +490,23 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
         {
             // FLF specialattack.js 中无 pre_interaction 逻辑，直接返回 false
             return false;
         }
 
-        private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
         {
             return false;
         }
 
-        private bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
         {
             return false;
         }
 
-        private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
             return false;
         }
@@ -514,7 +514,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF specialattack.prototype.hit (specialattack.js:398-410)
         /// </summary>
-        public bool Hit(InteractionArea itr, LF2LivingObject attacker)
+        public bool Hit(InteractionArea itr, LF2Entity attacker)
         {
             int state = GetState();
 
@@ -529,7 +529,7 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool Hit_State3000(LF2LivingObject attacker, InteractionArea itr)
+        private bool Hit_State3000(LF2Entity attacker, InteractionArea itr)
         {
             var frame = Frame.D;
 
@@ -592,7 +592,7 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool Hit_State3006(LF2LivingObject attacker, InteractionArea itr)
+        private bool Hit_State3006(LF2Entity attacker, InteractionArea itr)
         {
             if (itr.kind == 9)
             {

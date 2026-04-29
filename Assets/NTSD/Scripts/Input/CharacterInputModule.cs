@@ -1,30 +1,27 @@
-using BeatEmUpTemplate2D;
 using MoreMountains.TopDownEngine;
-using NTSD.Animation.LF2Objects;
 using NTSD.App;
-using NTSD.Input;
 using NTSD.Simulation;
 using UnityEngine;
+using NTSD.Input;
+using NTSD.Animation.LF2Objects;
 using UnityEngine.InputSystem;
 
 namespace NTSD.Game
 {
     /// <summary>
-    /// è§’è‰²è¾“å…¥æ¨¡å—ï¼ˆçº¯ C#ï¼Œä¸å†éœ€è¦æŒ‚è½½åˆ°é¢„åˆ¶ä½“ä¸Šï¼‰ã€‚
+    /// ½ÇÉ«ÊäÈëÄ£¿é£¨´¿ C#£¬²»ÔÙĞèÒª¹ÒÔØµ½Ô¤ÖÆÌåÉÏ£©¡£
     ///
-    /// è®¾è®¡ç›®æ ‡ï¼š
-    /// - åªè´Ÿè´£æŠŠ Unity InputSystem çš„äº‹ä»¶å†™å…¥åˆ° SimInputBufferï¼ˆæŒ‰ tick å¯¹é½ï¼‰
-    /// - ä¸ç›´æ¥é©±åŠ¨åŠ¨ç”»/çŠ¶æ€ï¼Œæ‰€æœ‰å¸§æ’­æ”¾ä»ç”± OnComboDetected â†’ LF2CharacterAnimator å¤„ç†
+    /// Éè¼ÆÄ¿±ê£º
+    /// - Ö»¸ºÔğ°Ñ Unity InputSystem µÄÊÂ¼şĞ´Èëµ½ SimInputBuffer£¨°´ tick ¶ÔÆë£©
+    /// - ²»Ö±½ÓÇı¶¯¶¯»­/×´Ì¬£¬ËùÓĞÖ¡²¥·ÅÈÔÓÉ OnComboDetected ¡ú LF2CharacterAnimator ´¦Àí
     ///
     /// </summary>
-    public sealed class CharacterInputModule : ICharacterModule, ILF2Controller
+    public sealed class CharacterInputModule: ILF2Controller
     {
-        private Character _hub;
+        private int _explicitInputId = -1;
         private bool _inputBound;
 
         private InputActionMap _inputActionMap;
-
-        public SimInputBuffer InputBuffer { get; private set; }
 
         public InputAction MoveAction { get; private set; }
         public InputAction AttackAction { get; private set; }
@@ -34,7 +31,7 @@ namespace NTSD.Game
         private Vector2 _currentMoveInput = Vector2.zero;
         public Vector2 CurrentMoveInput => _currentMoveInput;
 
-        // Step D5: æ–¹å‘é”®è¿½è¸ªï¼ˆæ”¯æŒåŒå¸§å¤šæ–¹å‘ï¼‰
+        // Step D5: ·½Ïò¼ü×·×Ù£¨Ö§³ÖÍ¬Ö¡¶à·½Ïò£©
         private FuncKeyMask _lastDirectionMask = FuncKeyMask.None;
         private const float DIRECTION_DEADZONE = 0.3f;
         private bool _leftPressed;
@@ -42,7 +39,7 @@ namespace NTSD.Game
         private bool _downPressed;
         private bool _topPressed;
 
-        // æŒ‰é”®çŠ¶æ€ï¼ˆç”¨äº CharacterStates æŸ¥è¯¢ï¼‰
+        // °´¼ü×´Ì¬£¨ÓÃÓÚ CharacterStates ²éÑ¯£©
         private bool _isDefending;
         private bool _isAttacking;
         private bool _isJumping;
@@ -61,20 +58,25 @@ namespace NTSD.Game
 
         bool ILF2Controller.IsDefend => _isDefending;
 
-        public void ModuleSetup(Character character)
-        {
-            _hub = character;
-        }
+        public SimInputBuffer InputBuffer { get ; set; }
 
-        public void ModuleInitialize()
+        public CharacterInputModule() 
         {
             InputBuffer ??= new SimInputBuffer();
         }
 
+        /// <summary>
+        ///ÉèÖÃÏÔÊ½ÊäÈëID£¨ÓÃÓÚ³Ø»¯¶ÔÏó£¬ÍÑÀë Character Hub
+        /// /// </summary>
+        public void SetInputID(int inputId)
+        {
+            _explicitInputId = inputId;
+            ModuleBind();
+        }
+
         public void ModuleBind()
         {
-            // Player-onlyï¼ˆAI æœªæ¥ä¼šæœ‰ç‹¬ç«‹è¾“å…¥æº/è¡Œä¸ºæ ‘ç­‰ï¼‰
-            if (_hub != null && _hub.CharacterType != Character.CharacterTypes.Player) return;
+            // Èç¹ûÃ»ÓĞ Hub£¬ÔòÈÏÎªÊÇ³Ø»¯¿ØÖÆÄ£Ê½£¬Ö±½Ó·ÅĞĞ
             if (_inputBound) return;
 
             BindActionMap();
@@ -97,7 +99,7 @@ namespace NTSD.Game
 
         private void BindActionMap()
         {
-            int inputId = _hub != null ? _hub.InputID : 0;
+            int inputId = _explicitInputId >= 0 ? _explicitInputId : 1;
             _inputActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(inputId);
             _inputActionMap?.Enable();
 
@@ -311,7 +313,5 @@ namespace NTSD.Game
                 if (CurrentMoveInput.y > 0.1f) dz += 1;
             }
             return (dx, dz);
-        }
-    }
+        }    }
 }
-

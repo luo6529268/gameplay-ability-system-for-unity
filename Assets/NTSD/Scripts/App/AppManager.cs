@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Game;
 using NTSD.Tools;
 using NTSD.UI;
 using NTSD.Simulation;
@@ -107,7 +109,8 @@ namespace NTSD.App
 
             SceneManager.SetActiveScene(scene);
 
-            MultiplayerLevelManager.Instance?.StartLevel();
+            // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
+            SetupBattleCharacters();
 
             SimulationTickDriver.Instance?.SetPaused(false);
 
@@ -156,6 +159,42 @@ namespace NTSD.App
             }
 
             eventSystem.gameObject.SetActive(true);
+        }
+
+        private void SetupBattleCharacters()
+        {
+            if (CurrentMatchConfig == null) return;
+
+            var levelMgr = FindObjectOfType<MultiplayerLevelManager>();
+            if (levelMgr == null) return;
+
+            var spawnPoints = levelMgr.SpawnPoints;
+
+            for (int i = 0; i < CurrentMatchConfig.players.Count; i++)
+            {
+                var slot = CurrentMatchConfig.players[i];
+                if (!slot.use) continue;
+
+                var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
+                var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, slot.characterId) as LF2Character;
+
+                lf2.Controller.SetInputID(slot.inputId);
+
+                lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{slot.inputId}");
+
+                EntityModel.SetLogicObject(lf2, null);
+
+                var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(slot.characterId);
+                lf2.ModuleBind(frameData, slot.characterId);
+
+                Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
+                    ? spawnPoints[i].transform.position: Vector3.zero;
+                
+                float ppu = SimulationConstants.PIXELS_PER_UNIT;
+                lf2.PS.x = spawnPos.x * ppu;
+                lf2.PS.z = spawnPos.y * ppu; 
+                lf2.PS.y = 0;
+            }
         }
 
         public void SetMatchConfig(MatchConfig config)

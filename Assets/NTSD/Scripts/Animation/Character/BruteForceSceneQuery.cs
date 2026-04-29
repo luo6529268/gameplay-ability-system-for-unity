@@ -6,8 +6,8 @@ namespace NTSD.Animation
 {
     /// <summary>
     /// 暴力遍历场景查询实现
-    /// 遍历 SimulationWorld 中所有 LF2LivingObject 做碰撞检测
-    /// 后续可替换为四叉树等空间分区实现
+    /// 遍历 SimulationWorld 中所有 LF2Entity（角色+武器+技能）做碰撞检测
+    /// 对应反汇编：entity_array 统一存储所有 entity，pre/post interaction 均遍历同一数组
     /// </summary>
     public class BruteForceSceneQuery : ILF2SceneQuery
     {
@@ -15,12 +15,14 @@ namespace NTSD.Animation
         private readonly List<LF2BlockingObstacle> _blockingObstacles = new List<LF2BlockingObstacle>(64);
 
         // 复用列表，减少 GC
-        private readonly List<LF2LivingObject> _tmpResult = new List<LF2LivingObject>(16);
-        private readonly List<LF2LivingObject> _tmpItrResult = new List<LF2LivingObject>(16);
-        private readonly List<LF2LivingObject> _tmpAllObjects = new List<LF2LivingObject>(32);
-        private readonly List<PhysicsState.FlfVolume> _tmpActorBodies = new List<PhysicsState.FlfVolume>(8);
-        private readonly List<PhysicsState.FlfVolume> _tmpItr14 = new List<PhysicsState.FlfVolume>(8);
+        private readonly List<LF2Entity> _tmpResult    = new List<LF2Entity>(16);
+        private readonly List<LF2Entity> _tmpItrResult = new List<LF2Entity>(16);
+        private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
+        private readonly List<PhysicsState.FlfVolume> _tmpActorBodies  = new List<PhysicsState.FlfVolume>(8);
+        private readonly List<PhysicsState.FlfVolume> _tmpItr14        = new List<PhysicsState.FlfVolume>(8);
         private readonly List<PhysicsState.FlfVolume> _tmpTargetBodies = new List<PhysicsState.FlfVolume>(8);
+        // for TestBlockingXZ which still needs LF2LivingObject list
+        private readonly List<LF2LivingObject> _tmpLivingObjects = new List<LF2LivingObject>(32);
 
         public BruteForceSceneQuery(SimulationWorld world)
         {
@@ -29,16 +31,16 @@ namespace NTSD.Animation
 
         // ==================== ILF2SceneQuery ====================
 
-        public List<LF2LivingObject> QueryBodies(in PhysicsState.FlfVolume vol, LF2LivingObject exclude)
+        public List<LF2Entity> QueryBodies(in PhysicsState.FlfVolume vol, LF2Entity exclude)
         {
             _tmpResult.Clear();
-            _world.GetAllLivingObjects(_tmpAllObjects);
+            _world.GetAllEntities(_tmpAllObjects);
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
-                LF2LivingObject target = _tmpAllObjects[i];
+                LF2Entity target = _tmpAllObjects[i];
                 if (target == exclude) continue;
-                if (target.PS == null || target.Frame.D == null) continue;
+                if (target.PS == null || target.Frame?.D == null) continue;
 
                 float spriteWidthPx = target.GetSpriteWidthPxForCollision();
                 if (spriteWidthPx <= 0f) continue;
@@ -57,7 +59,7 @@ namespace NTSD.Animation
                     if (CollisionUtil.Intersect(vol, _tmpTargetBodies[b]))
                     {
                         _tmpResult.Add(target);
-                        break; // 同一个 target 只加一次
+                        break;
                     }
                 }
             }
@@ -65,14 +67,14 @@ namespace NTSD.Animation
             return _tmpResult;
         }
 
-        public List<LF2LivingObject> QueryItrs(in PhysicsState.FlfVolume vol, LF2LivingObject exclude, int itrKind, int excludeTeam = 0)
+        public List<LF2Entity> QueryItrs(in PhysicsState.FlfVolume vol, LF2Entity exclude, int itrKind, int excludeTeam = 0)
         {
             _tmpItrResult.Clear();
-            _world.GetAllLivingObjects(_tmpAllObjects);
+            _world.GetAllEntities(_tmpAllObjects);
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
-                LF2LivingObject target = _tmpAllObjects[i];
+                LF2Entity target = _tmpAllObjects[i];
                 if (target == exclude) continue;
                 if (target.PS == null || target.Frame?.D == null) continue;
                 if (excludeTeam != 0 && target.Team == excludeTeam) continue;
@@ -83,7 +85,6 @@ namespace NTSD.Animation
                 float spriteWidthPx = target.GetSpriteWidthPxForCollision();
                 if (spriteWidthPx <= 0f) continue;
 
-                bool matched = false;
                 for (int j = 0; j < itrs.Count; j++)
                 {
                     if (!MatchItrKind(itrs[j].kind, itrKind)) continue;
@@ -92,7 +93,6 @@ namespace NTSD.Animation
                     if (CollisionUtil.Intersect(vol, itrVol))
                     {
                         _tmpItrResult.Add(target);
-                        matched = true;
                         break;
                     }
                 }

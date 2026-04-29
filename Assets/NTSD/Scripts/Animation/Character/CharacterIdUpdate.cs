@@ -43,9 +43,9 @@ namespace NTSD.Animation
         // ==================== 依赖注入（Hub 注入规则）====================
 
         /// <summary>
-        /// 宿主 Character Hub（只读引用）
+        /// 宿主逻辑实体（只读引用）
         /// </summary>
-        private readonly Character _hub;
+        private readonly LF2Character _lf2;
 
         /// <summary>
         /// 缓存的 PhysicsState（避免每次 TryInvoke 都查找）
@@ -64,15 +64,14 @@ namespace NTSD.Animation
         // ==================== 构造函数 ====================
 
         /// <summary>
-        /// 构造函数（由 Character.Initialization() 调用）
-        /// Step D9R: 所有依赖通过 Hub 注入，禁止 GetComponent
+        /// 构造函数（由 LF2Character 内部创建）
+        /// Step D9R: 所有依赖通过 LF2Character 注入
         /// </summary>
-        /// <param name="hub">Character Hub</param>
-        public CharacterIdUpdate(Character hub)
+        /// <param name="lf2">LF2Character 实例</param>
+        public CharacterIdUpdate(LF2Character lf2)
         {
-            _hub = hub;
-            _ps = hub._LF2Character.PS;
-
+            _lf2 = lf2;
+            _ps = lf2.PS;
         }
 
         // ==================== RegisterDefaultHandlers（Step D9R 核心）====================
@@ -153,7 +152,7 @@ namespace NTSD.Animation
         public bool TryInvoke(string hookName, in IdUpdateContext ctx)
         {
             // 1. 验证基本条件
-            if (_hub == null)
+            if (_lf2 == null)
             {
                 // 无效状态，不调用任何 handler
                 return false;
@@ -174,7 +173,7 @@ namespace NTSD.Animation
             }
             catch (System.Exception ex)
             {
-                Log.Error($"[CharacterIdUpdate] Exception in handler (characterId={_hub.CharacterID}, {hookName}): {ex}");
+                Log.Error($"[CharacterIdUpdate] Exception in handler (characterId={_lf2.ObjectId}, {hookName}): {ex}");
                 return false;  // 异常时不阻止默认逻辑
             }
         }
@@ -189,7 +188,7 @@ namespace NTSD.Animation
         public bool TryInvokeGenericCombo(string comboKey, string comboTag, int targetFrame, int tickIndex = 0)
         {
             var ctx = new IdUpdateContext(
-                _hub,
+                _lf2,
                 _ps,
                 comboKey,
                 comboTag,
@@ -205,7 +204,7 @@ namespace NTSD.Animation
         public bool TryInvokeStateEntry(int state, int tickIndex = 0)
         {
             var ctx = new IdUpdateContext(
-                _hub,
+                _lf2,
                 _ps,
                 state,
                 tickIndex
@@ -219,7 +218,7 @@ namespace NTSD.Animation
         public bool TryInvokeStateExit(int state, int tickIndex = 0)
         {
             var ctx = new IdUpdateContext(
-                _hub,
+                _lf2,
                 _ps,
                 state,
                 tickIndex
@@ -233,7 +232,7 @@ namespace NTSD.Animation
         public bool TryInvokeGeneric(string hookName, int tickIndex = 0)
         {
             var ctx = new IdUpdateContext(
-                _hub,
+                _lf2,
                 _ps,
                 tickIndex
             );
@@ -258,7 +257,7 @@ namespace NTSD.Animation
         // FLF character.js:1489-1492: 帧267-272 前一帧时 dec_wait(-1)
         private bool DeepState15CrouchHandler(in IdUpdateContext ctx)
         {
-            var lf2 = ctx.Hub._LF2Character;
+            var lf2 = ctx.Lf2;
             if (lf2.Frame.PN >= 267 && lf2.Frame.PN <= 272)
             {
                 lf2.Trans.IncWait(-1);
@@ -271,7 +270,7 @@ namespace NTSD.Animation
         {
             if (ctx.ComboTag == "hit_Fj")
             {
-                var lf2 = ctx.Hub._LF2Character;
+                var lf2 = ctx.Lf2;
                 if (ctx.ComboKey == "D>J" || ctx.ComboKey == "D>AJ")
                     lf2.SwitchDir("right");
                 else
@@ -297,7 +296,7 @@ namespace NTSD.Animation
         {
             if (ctx.State == 257)
             {
-                var lf2 = ctx.Hub._LF2Character;
+                var lf2 = ctx.Lf2;
                 lf2.Effect.Super = true;
                 // shadow/sprite hide 由渲染层处理
             }
@@ -306,7 +305,7 @@ namespace NTSD.Animation
 
         private bool RudolfTransformHandler(in IdUpdateContext ctx)
         {
-            var rudolf = ctx.Hub._LF2Character;
+            var rudolf = ctx.Lf2;
             if (rudolf.Catching == null) return false;
             Log.Info("[Rudolf] rudolf_transform triggered, target uid={0} (transform system pending)", rudolf.Catching.StableId);
             return false;
@@ -333,7 +332,7 @@ namespace NTSD.Animation
         // FLF character.js:1580-1582: state3_fly_crash → set_wait(0)
         private bool WoodyState3FlyCrashHandler(in IdUpdateContext ctx)
         {
-            ctx.Hub._LF2Character.Trans.SetWait(0);
+            ctx.Lf2.Trans.SetWait(0);
             return true;
         }
 
@@ -342,7 +341,7 @@ namespace NTSD.Animation
         // FLF character.js:1585-1599: hit_stop 特定帧 effect_stuck
         private bool DavisState3HitStopHandler(in IdUpdateContext ctx)
         {
-            var lf2 = ctx.Hub._LF2Character;
+            var lf2 = ctx.Lf2;
             switch (ctx.State)
             {
                 case 271: case 276: case 280:

@@ -43,11 +43,18 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else if (!res)
                 {
-                    // 默认分支：PS.vy=0 + 落地瞬间摩擦
+                    // 默认分支：PS.vy=0 + 落地瞬间摩擦 + 着地帧跳转（对齐 Case B 逻辑）
                     PS.vy = 0;
                     float fricX = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.FrictionFell, PS.vx);
                     float fricZ = NTSDGlobal.LookupAbs(NTSDGlobal.Gameplay.FrictionFell, PS.vz);
                     CharacterMechanics.LinearFriction(PS, fricX, fricZ);
+                    //if (Frame.D.state != LF2States.Frozen)
+                    //{
+                    //    if (Frame.N == LF2StandardFrames.JumpingAir)
+                    //        TransitionToFrame(LF2StandardFrames.Crouch, 15);
+                    //    else
+                    //        TransitionToFrame(LF2StandardFrames.Crouch2, 15);
+                    //}
                 }
             }
             // B) fall_onto_ground（PS.y+PS.vy>=0 && PS.vy>0）- 对齐 FLF js:127-141
@@ -220,10 +227,10 @@ namespace NTSD.Animation.LF2Objects
 
                 default:
                     // 对应 FLF character.js:226-228: DJA + transform_character.is_rudolf_transform → revert_transform
-                    if (combo == "DJA" && _CharacterHub?._IdUpdate != null)
+                    if (combo == "DJA" && _idUpdate != null)
                     {
-                        var ctx = new IdUpdateContext(_CharacterHub, _CharacterHub._LF2Character.PS, combo, null, 0, 0);
-                        if (_CharacterHub._IdUpdate.TryInvoke(IdUpdateHooks.RevertTransform, in ctx))
+                        var ctx = new IdUpdateContext(this, PS, combo, null, 0, 0);
+                        if (_idUpdate.TryInvoke(IdUpdateHooks.RevertTransform, in ctx))
                             return true;
                     }
                     break;
@@ -249,9 +256,9 @@ namespace NTSD.Animation.LF2Objects
 
             // Step 3: 调用角色特定逻辑 id_update('generic_combo', K, tag)
             // 对应 FLF character.js:233: if (!$.id_update('generic_combo', K, tag))
-            if (_CharacterHub?._IdUpdate != null)
+            if (_idUpdate != null)
             {
-                if (_CharacterHub._IdUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
+                if (_idUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
                     return true;  // 角色特定逻辑已处理，阻止默认跳转
             }
 
@@ -375,10 +382,11 @@ namespace NTSD.Animation.LF2Objects
                 {
                     var target = candidates[c];
                     if (!CanPostInteractTarget(itr, target)) continue;
+                    if (target is not LF2LivingObject living) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
                     CurrentItrIndex = i;
-                    bool hit = target.Hit(itr, this, attackerPos, itrVolumes[i]);
+                    bool hit = living.Hit(itr, this, attackerPos, itrVolumes[i]);
                     if (!hit) continue;
 
                     ItrArestUpdate(itr);
@@ -407,14 +415,15 @@ namespace NTSD.Animation.LF2Objects
                     if (target.PS == null) continue;
                     if (Team != 0 && target.Team == Team) continue;
                     if (!target.ItrVrestTest(StableId)) continue;
+                    if (target is not LF2LivingObject living6) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
-                    target.Hit(itr, this, attackerPos, itrVolumes[i]);
+                    living6.Hit(itr, this, attackerPos, itrVolumes[i]);
                 }
             }
         }
 
-        private bool CanPostInteractTarget(InteractionArea itr, LF2LivingObject target)
+        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target)
         {
             if (target == null || target == this) return false;
             if (target.PS == null || target.Frame?.D == null) return false;
@@ -444,7 +453,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
             if (itr == null || target == null) return false;
             if (target == this) return false;
@@ -456,7 +465,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool DispatchPreInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        private bool DispatchPreInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
             if (kindService == null) return false;
 
@@ -464,7 +473,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 case 1:
                 case 3:
-                    return HandlePreInteractionKind(itr, target);
+                    return target is LF2LivingObject lo1 && HandlePreInteractionKind(itr, lo1);
                 case 2:
                     return HandlePreInteractionKind2(itr, target);
                 case 7:
@@ -524,14 +533,14 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
         {
             return PickupWeapon(itr, target, playAnimation: true);
         }
 
         // 对应 FLF character.js:2250-2270 武器拾取共享逻辑
         // playAnimation: kind=2 时播放拾取帧; kind=7 时不播
-        private bool PickupWeapon(InteractionArea itr, LF2LivingObject target, bool playAnimation)
+        private bool PickupWeapon(InteractionArea itr, LF2Entity target, bool playAnimation)
         {
             if (_heldWeapon != null)
                 return false;
@@ -565,7 +574,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
+        private bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
             // 对应 FLF character.js:2247-2249: kind=7 需要 att 键按下才触发，否则跳出
             // FLF: if (!$.con.state.att) { break }

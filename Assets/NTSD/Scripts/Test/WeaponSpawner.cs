@@ -33,7 +33,7 @@ namespace NTSD.Test
         };
 
         private int _f1Index = 0;
-        private readonly List<LF2LivingObject> _queryBuf = new List<LF2LivingObject>(32);
+        private readonly List<LF2Entity> _queryBuf = new List<LF2Entity>(32);
 
         private void Update()
         {
@@ -67,7 +67,7 @@ namespace NTSD.Test
             var world = SimulationTickDriver.Instance?.World;
             if (world != null)
             {
-                world.GetAllLivingObjects(_queryBuf);
+                world.GetAllEntities(_queryBuf);
                 foreach (var obj in _queryBuf)
                 {
                     if (obj is LF2WeaponBase w && w.HoldObj == null)

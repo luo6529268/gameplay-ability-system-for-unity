@@ -24,10 +24,9 @@ namespace NTSD.Animation
         // ==================== 核心引用（只读）====================
 
         /// <summary>
-        /// Character Hub（宿主）
-        /// handler 可以通过这个访问所有组件，但不应直接修改 Hub 状态
+        /// 逻辑实体引用
         /// </summary>
-        public readonly Character Hub;
+        public readonly LF2Character Lf2;
 
         /// <summary>
         /// 物理状态（对应 FLF 的 $.ps）
@@ -76,14 +75,14 @@ namespace NTSD.Animation
         /// 创建 generic_combo hook 上下文
         /// </summary>
         public IdUpdateContext(
-            Character hub,
+            LF2Character lf2,
             PhysicsState ps,
             string comboKey,
             string comboTag,
             int targetFrame,
             int tickIndex = 0)
         {
-            Hub = hub;
+            Lf2 = lf2;
             Ps = ps;
             ComboKey = comboKey;
             ComboTag = comboTag;
@@ -96,12 +95,12 @@ namespace NTSD.Animation
         /// 创建 state_entry/state_exit hook 上下文
         /// </summary>
         public IdUpdateContext(
-            Character hub,
+            LF2Character lf2,
             PhysicsState ps,
             int state,
             int tickIndex = 0)
         {
-            Hub = hub;
+            Lf2 = lf2;
             Ps = ps;
             ComboKey = null;
             ComboTag = null;
@@ -114,11 +113,11 @@ namespace NTSD.Animation
         /// 创建通用 hook 上下文（frame_force/TU/hit_stop 等）
         /// </summary>
         public IdUpdateContext(
-            Character hub,
+            LF2Character lf2,
             PhysicsState ps,
             int tickIndex = 0)
         {
-            Hub = hub;
+            Lf2 = lf2;
             Ps = ps;
             ComboKey = null;
             ComboTag = null;

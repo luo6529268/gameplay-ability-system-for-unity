@@ -1,6 +1,9 @@
 ﻿using BeatEmUpTemplate2D;
+using FairyGUI;
+using MoreMountains.Tools;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
+using NTSD.Game;
 using NTSD.Input;
 using NTSD.LevelEditor;
 using NTSD.Simulation;
@@ -57,6 +60,8 @@ namespace NTSD.Animation.LF2Objects
         private readonly NTSDCharacterStats _characterStats;
         public override NTSDCharacterStats CharacterStats => _characterStats;
 
+        public ActionSequenceDetectorModule _ActionSequenceDetector { get; private set; }
+
         // ========== 武器持有（对应 FLF $.hold）==========
 
         /// <summary>
@@ -65,6 +70,9 @@ namespace NTSD.Animation.LF2Objects
         private ILF2Object _heldWeapon;
 
         // ========== Unity 组件引用 ==========
+        public Transform EntityTransform { get; private set; }
+        public Transform VisualTransform { get; private set; }
+        private CharacterIdUpdate _idUpdate;
         private Vector3 _baseLocalPosition;
 
         // ========== 物理计算 ==========
@@ -94,10 +102,8 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== 构造函数 ==========
 
-        public LF2Character(MoreMountains.TopDownEngine.Character hub)
+        public LF2Character() : base()
         {
-            _CharacterHub = hub;
-
             AllocateStableId();
 
             // 创建角色专用模块
@@ -106,6 +112,7 @@ namespace NTSD.Animation.LF2Objects
             WeaponPointModule = new LF2WeaponPointModule();
             _hitCounters = new LF2HitCountersModule();
             _characterStats = new NTSDCharacterStats();
+            _idUpdate = new CharacterIdUpdate(this);
             
             // 基类字段初始化
             ItrRest = new LF2ItrRestTracker();
@@ -115,16 +122,46 @@ namespace NTSD.Animation.LF2Objects
             Health = new LF2Health();
             Sprite = new LF2Sprite();
             Trans = new FrameTransistor(this);
+            Controller = new CharacterInputModule();
+            _ActionSequenceDetector = new ActionSequenceDetectorModule();
 
             // 初始化状态处理器
             InitializeStates();
+        }
+
+        public void InjectDependencies(
+            Transform entityTransform,
+            Transform visualTransform,
+            string name)
+        {
+            EntityTransform = entityTransform;
+            VisualTransform = visualTransform;
+            Name = name;
+        }
+
+        /// <summary>
+        /// 池化路径专用初始化（无参版本）。
+        /// InjectDependencies 之后、ModuleBind 之前调用。
+        /// 不依赖旧 Character Hub，只初始化物理和状态机运行所需的基础字段。
+        /// </summary>
+        public void ModuleInitialize()
+        {
+            _mech = new CharacterMechanics();
+            _cachedIsPointWalkable = BoundaryWallManager.Instance != null
+                ? BoundaryWallManager.Instance.IsPointWalkable
+                : null;
+
+            PS.x = 0; PS.y = 0; PS.z = 0;
+            PS.vx = 0; PS.vy = 0; PS.vz = 0;
+
+            AllowSwitchDir = true;
         }
 
         // ========== ILF2Object 抽象方法实现 ==========
 
         public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
         {
-            // 角色通过 Character Hub 初始化，不使用此方法
+            Renderer = renderer;
         }
 
         public override void Reset()
@@ -132,6 +169,9 @@ namespace NTSD.Animation.LF2Objects
             ComboBuffer?.Reset();
             _hitCounters?.Reset();
             ItrRest?.Reset();
+            PS?.Reset();
+            ObjectPointModule?.Reset();
+            WeaponPointModule?.Reset();
             _heldWeapon = null;
             // 对应反汇编 0x00421185/0x00421191：spawn/reset 时清零
             HitStun = 0;
@@ -140,6 +180,7 @@ namespace NTSD.Animation.LF2Objects
             ResetSpark();
             // 角色重置时从 SimulationWorld 移除，避免死亡/复用后残留在碰撞查询列表中
             SimulationTickDriver.Instance?.World?.Unregister(this);
+            SimulationTickDriver.Instance?.World?.Unregister(_ActionSequenceDetector);
         }
 
         public override void Destroy()
@@ -159,29 +200,6 @@ namespace NTSD.Animation.LF2Objects
         // ========== 初始化（由 Character Hub 调用）==========
 
         /// <summary>
-        /// 模块初始化（对应 LF2CharacterAnimator.ModuleInitialize）
-        /// </summary>
-        public void ModuleInitialize(SpriteRenderer spriteRenderer, List<Sprite> sprites, Vector3 baseLocalPosition)
-        {
-            _baseLocalPosition = baseLocalPosition;
-
-            Name = _CharacterHub?.gameObject.name ?? "Character";
-
-            _mech = new CharacterMechanics();
-            Controller = _CharacterHub._CharacterInput;
-            _cachedIsPointWalkable = BoundaryWallManager.Instance != null ? BoundaryWallManager.Instance.IsPointWalkable : null;
-
-            PS.FromUnityPosition(_CharacterHub.transform.position);
-            PS.vx = 0;
-            PS.vy = 0;
-            PS.vz = 0;
-
-            Sprite.Initialize(spriteRenderer, sprites);
-
-            AllowSwitchDir = true;
-        }
-
-        /// <summary>
         /// 模块绑定（对应 LF2CharacterAnimator.ModuleBind）
         /// </summary>
         public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)
@@ -198,6 +216,9 @@ namespace NTSD.Animation.LF2Objects
             ComboBuffer?.Reset();
             ItrRest?.Reset();
             _hitCounters?.Reset();
+
+            // 注册 ID Handlers
+            _idUpdate?.RegisterDefaultHandlers(characterId);
 
             // 绑定 mass
             _mass = NTSDSpec.GetMassOrDefault(characterId);
@@ -216,6 +237,10 @@ namespace NTSD.Animation.LF2Objects
             {
                 WeaponPointModule.SetFactory(LF2WeaponPointFactory.Instance);
             }
+
+            // 初始化并注册 ActionSequenceDetector
+            _ActionSequenceDetector.Initialize(Controller.InputBuffer, this);
+            SimulationTickDriver.Instance?.World?.Register(_ActionSequenceDetector);
         }
 
         /// <summary>
@@ -430,44 +455,21 @@ namespace NTSD.Animation.LF2Objects
 
             var result = _mech.Step(ctx);
 
-
-
             if (_debugCollisionLog && result.boundaryMode != BoundaryResolveMode.None)
-
             {
-
                 Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
-
             }
 
-
-
             // ground plane（Unity X/Y）写回
-
-            const float ppu = 100f;
-
-            _CharacterHub.transform.position = new Vector3(
-
-                Mathf.Round(result.groundPlanePos.x * ppu) / ppu,
-
-                Mathf.Round(result.groundPlanePos.y * ppu) / ppu,
-
-                _CharacterHub.transform.position.z
-
+            EntityTransform.position = new Vector3(
+                Mathf.Round(result.groundPlanePos.x * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
+                Mathf.Round(result.groundPlanePos.y * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
+                EntityTransform.position.z
             );
 
-
-
             // 视觉高度偏移（Unity local Y），同样对齐像素网格
-
-            float snappedVisualY = Mathf.Round(result.visualYOffset * ppu) / ppu;
-
-            _CharacterHub._ModeTrans.localPosition = _baseLocalPosition + new Vector3(0f, snappedVisualY, 0f);
-
-
-
-            _CharacterHub.SetGrounding(_CharacterHub.transform.position.y, result.grounded);
-
+            float snappedVisualY = Mathf.Round(result.visualYOffset * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT;
+            VisualTransform.localPosition = _baseLocalPosition + new Vector3(0f, snappedVisualY, 0f);
         }
 
         /// <summary>
@@ -672,8 +674,6 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ReloadCharacterFrameData()
         {
-            if (_CharacterHub == null) return;
-
             // 重新绑定帧数据
             if (_FrameDataWrapper != null)
             {

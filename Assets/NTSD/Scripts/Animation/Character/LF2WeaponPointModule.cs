@@ -25,6 +25,11 @@ namespace NTSD.Animation
             Factory = factory;
         }
 
+        public void Reset()
+        {
+            Factory = null;
+        }
+
         public void ProcessTransit(LF2LivingObject animator)
         {
             if (animator == null) return;

@@ -148,8 +148,8 @@ namespace NTSD.Animation
             }
 
             // 4. 从对象池获取对象
-            var renderer = LF2ObjectPool.Instance.Get();
-            if (renderer == null)
+            var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
+            if (EntityModel == null)
             {
                 Log.Error("[Factory] Failed to get object from pool");
                 return;
@@ -160,7 +160,7 @@ namespace NTSD.Animation
             if (logicObject == null)
             {
                 Log.Error($"[Factory] Failed to get logic object from pool, type={objType}, oid={oid}");
-                LF2ObjectPool.Instance.Release(renderer);
+                LF2ObjectPool.Instance.Release(EntityModel);
                 return;
             }
 
@@ -173,7 +173,7 @@ namespace NTSD.Animation
             }
 
             // 6. 设置逻辑对象并初始化
-            renderer.SetLogicObject(logicObject, task);
+            EntityModel.SetLogicObject(logicObject, task);
 
             if (logicObject is LF2LivingObject living)
             {
@@ -186,7 +186,7 @@ namespace NTSD.Animation
                     Debug.Log($"[OPointFactory] Pure sound frame detected, playing sound: {frameData.sound}");
                     if (!string.IsNullOrEmpty(frameData.sound))
                         AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
-                    LF2ObjectPool.Instance?.Release(renderer);
+                    LF2ObjectPool.Instance?.Release(EntityModel);
                     LF2ReferencePool.Instance?.Release(logicObject);
                     return;
                 }
@@ -235,13 +235,13 @@ namespace NTSD.Animation
 
             foreach (float vz in vzArray)
             {
-                var renderer = LF2ObjectPool.Instance.Get();
-                if (renderer == null) break;
+                var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
+                if (EntityModel == null) break;
 
                 ILF2Object logicObject = CreateLogicObject(objType, oid);
                 if (logicObject == null)
                 {
-                    LF2ObjectPool.Instance.Release(renderer);
+                    LF2ObjectPool.Instance.Release(EntityModel);
                     continue;
                 }
 
@@ -263,7 +263,7 @@ namespace NTSD.Animation
                     dvz    = vz,
                 };
 
-                renderer.SetLogicObject(logicObject, singleTask);
+                EntityModel.SetLogicObject(logicObject, singleTask);
 
                 if (logicObject is LF2LivingObject living)
                 {
@@ -274,7 +274,7 @@ namespace NTSD.Animation
                     {
                         if (!string.IsNullOrEmpty(frameData.sound))
                             AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
-                        LF2ObjectPool.Instance?.Release(renderer);
+                        LF2ObjectPool.Instance?.Release(EntityModel);
                         LF2ReferencePool.Instance?.Release(logicObject);
                         continue;
                     }

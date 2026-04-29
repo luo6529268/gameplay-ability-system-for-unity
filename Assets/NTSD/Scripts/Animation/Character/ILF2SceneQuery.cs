@@ -15,13 +15,13 @@ namespace NTSD.Animation
         /// 查询与 vol 碰撞的所有 LivingObject 的 body 体积（排除 exclude 自身）
         /// 对应 FLF scene.query(vol, $, {tag:'body'})
         /// </summary>
-        List<LF2LivingObject> QueryBodies(in PhysicsState.FlfVolume vol, LF2LivingObject exclude);
+        List<LF2Entity> QueryBodies(in PhysicsState.FlfVolume vol, LF2Entity exclude);
 
         /// <summary>
         /// 查询与 vol 碰撞的所有 LivingObject 的 itr 体积（匹配指定 kind）
         /// 对应 FLF scene.query(vol, $, {tag:'itr:N', not_team:$.team})
         /// </summary>
-        List<LF2LivingObject> QueryItrs(in PhysicsState.FlfVolume vol, LF2LivingObject exclude, int itrKind, int excludeTeam = 0);
+        List<LF2Entity> QueryItrs(in PhysicsState.FlfVolume vol, LF2Entity exclude, int itrKind, int excludeTeam = 0);
 
         /// <summary>
         /// BlockingXZ 检测（对齐 FLF mech.blocking_xz）

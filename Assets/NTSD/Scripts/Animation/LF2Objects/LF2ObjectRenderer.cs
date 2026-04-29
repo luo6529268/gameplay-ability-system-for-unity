@@ -22,9 +22,10 @@ namespace NTSD.Animation.LF2Objects
         // ========== 组件引用 ==========
         private SpriteRenderer _spriteRenderer;
         private SpriteRenderer _shadowRenderer;
+        private Transform _visualTransform;
 
         // ========== 逻辑层引用 ==========
-        private LF2LivingObject _logicObject;
+        private LF2Entity _logicObject;
 
         // 渲染帧计数器（对应反汇编 dword_449098，每渲染帧递增）
         private int _renderFrameCount = 0;
@@ -46,6 +47,7 @@ namespace NTSD.Animation.LF2Objects
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            _visualTransform = transform.Find("EntityModel");
             UnityEngine.Debug.Log($"[Renderer] Awake: {gameObject.name}");
         }
 
@@ -85,21 +87,25 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
-            _logicObject = logicObject as LF2LivingObject;
+            _logicObject = logicObject as LF2Entity;
             _logicObject?.Init(task, this);
 
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             List<Sprite> sprites = null;
             if (_logicObject != null)
                 CharacterAnimtorManager.Instance?.TryGetSprites(_logicObject.ObjectId, out sprites);
-            _logicObject?.Sprite?.Initialize(sr, sprites);
+            // sprites 为 null 时跳过，避免覆盖 ModuleInitialize 已正确初始化的 sprites
+            if (sprites != null)
+                _logicObject?.Sprite?.Initialize(sr, sprites);
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
+            _logicObject?.SetShadowRenderer(_shadowRenderer);
         }
 
         public void SetShadowRenderer(SpriteRenderer shadowRenderer)
         {
             _shadowRenderer = shadowRenderer;
             _logicObject?.Sprite?.InitializeShadow(shadowRenderer);
+            _logicObject?.SetShadowRenderer(shadowRenderer);
         }
 
         /// <summary>
@@ -126,23 +132,13 @@ namespace NTSD.Animation.LF2Objects
             var ps = _logicObject.PS;
             if (ps != null)
                 _logicObject.Sprite?.SwitchLR(ps.dir);
-
-            // 阴影显隐：对齐反汇编 RenderDispatch 0x0041D1C9-0x0041D20B
-            // 条件：state != 3005 && state != 9997 && entity_type != 223/224 && y > -70 && renderFrame%4 < 2
-            if (_shadowRenderer != null)
-            {
-                var ps2 = _logicObject.PS;
-                bool hideShadow = frame.state == 3005
-                                || frame.state == 9997
-                                || (ps2 != null && ps2.y < -70f)
-                                || (_logicObject.Effect?.Blink == true && (_renderFrameCount % 4) >= 2);
-                _shadowRenderer.enabled = !hideShadow;
-            }
         }
 
         /// <summary>
         /// 同步 Transform 位置（从 PS 像素坐标转换到 Unity 世界坐标）
-        /// FLF 坐标系：x → Unity X，z(深度) → Unity Y（地面），y(跳跃，负数向上) → Unity Y 偏移
+        /// 严格对齐 Sibling 结构：
+        /// 1. Root (EntityObject): 负责地面坐标 px, pz
+        /// 2. Model (EntityModel): 负责视觉高度 py 和中心点偏移 cx, cy
         /// </summary>
         private void UpdatePosition()
         {
@@ -152,28 +148,25 @@ namespace NTSD.Animation.LF2Objects
 
             const float ppu = 100f;
 
-            // 反汇编 RenderDispatch：
-            // screen_x = entity.x - frame.centerx（sprite 左上角）
-            // screen_y = entity.z + entity.y - frame.centery（地面深度 + 跳跃高度，ps.y 负数向上）
             var frame = _logicObject.Frame?.D;
             float cx = frame?.centerx ?? 0f;
             float cy = frame?.centery ?? 0f;
 
-            float worldX = (ps.x - cx) / ppu;
-            float worldY = (ps.z - ps.y - cy) / ppu;
+            // 1. Root 节点始终保持在地面 (px, pz)
+            float worldX = ps.x / ppu;
+            float worldY = ps.z / ppu;
             transform.position = new Vector3(worldX, worldY, transform.position.z);
+
+            // 2. Model 节点处理视觉高度和中心点偏移
+            if (_visualTransform != null)
+            {
+                _visualTransform.localPosition = new Vector3(-cx / ppu, (ps.y - cy) / ppu, 0);
+            }
 
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);
 
-            if (_shadowRenderer != null)
-            {
-                var st = _shadowRenderer.transform;
-                // shadow pivot=(0.5,0.5)，sprite pivot=(0.5,0)
-                // shadow 中心对齐 sprite 底部中心 = (worldX + cx/ppu, worldY)
-                float shadowWorldX = worldX + cx / ppu;
-                float shadowWorldY = worldY;
-                st.position = new Vector3(shadowWorldX, shadowWorldY, st.position.z);
-            }
+            // 阴影由 LF2Entity.UpdateShadow() 处理（保持在 Root 的本地零点）
+            _logicObject.UpdateShadow(_renderFrameCount);
         }
 
         private void ApplyVisualShake()

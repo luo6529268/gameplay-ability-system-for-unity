@@ -464,7 +464,7 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== Hit ==========
 
-        public override bool Hit(InteractionArea itr, LF2LivingObject attacker)
+        public override bool Hit(InteractionArea itr, LF2Entity attacker)
         {
             if (HoldObj != null) return false;
             if (IsVRest(attacker)) return false;
@@ -486,7 +486,7 @@ namespace NTSD.Animation.LF2Objects
             return accept;
         }
 
-        private bool HitAsLight(InteractionArea itr, LF2LivingObject attacker, int state)
+        private bool HitAsLight(InteractionArea itr, LF2Entity attacker, int state)
         {
             if (state == LF2States.WeaponThrowing) // 1002
             {
@@ -509,7 +509,7 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool HitAsHeavy(InteractionArea itr, LF2LivingObject attacker, int state)
+        private bool HitAsHeavy(InteractionArea itr, LF2Entity attacker, int state)
         {
             // 反汇编 Entity_AI_Update 26344~26351：
             // type==1/2/4/6 被命中时 fall 强制=80，直接进飞出流程（LABEL_129→LABEL_130→LABEL_131）
@@ -523,7 +523,7 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private void ApplyHitEffects(InteractionArea itr, LF2LivingObject attacker)
+        private void ApplyHitEffects(InteractionArea itr, LF2Entity attacker)
         {
             if (itr.vrest > 0) SetVRest(attacker, itr.vrest);
 
@@ -554,7 +554,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 反汇编 0x42E5DE-0x42E6E8：飞行武器命中角色后对武器自身的三步骤处理。
         /// </summary>
-        private void ApplyAttackerResponse(LF2LivingObject victim)
+        private void ApplyAttackerResponse(LF2Entity victim)
         {
             // 步骤1: state=1002 → 反弹（0x42E5F1-0x42E63A）
             int curState = Frame?.D?.state ?? -1;

@@ -41,6 +41,11 @@ namespace NTSD.Animation
             Factory = factory;
         }
 
+        public void Reset()
+        {
+            Factory = null;
+        }
+
         /// <summary>
         /// 处理当前帧的 OPoint - 只入队，不立即创建
         /// 对应 FLF character.prototype.opoint()

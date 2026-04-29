@@ -1,5 +1,4 @@
 using BeatEmUpTemplate2D;
-using MoreMountains.TopDownEngine;
 using NTSD.App;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
@@ -130,8 +129,11 @@ namespace NTSD.Animation.LF2Objects
         bool IsAttack { get; }
         bool IsJump { get; }
         bool IsDefend { get; }
+        public SimInputBuffer InputBuffer { get; set; }
         int Dirv();
         (int dx, int dz) GetMoveInput();
+        void SetInputID(int inputId);
+
     }
 
     public enum DIRECTION 
@@ -154,16 +156,6 @@ namespace NTSD.Animation.LF2Objects
         #region 声明字段 - 身份标识（角色专属）
 
         /// <summary>
-        /// 当前正在处理的 itr 在帧 itr 列表中的 index（0-based）。
-        /// 对应反汇编 var_5C = [edx+esi+2D0h]（itr array index）。
-        /// 由 Generic_PostInteraction 在调用 Hit() 前写入，SpawnSpark 读取用于 timer 计算。
-        /// </summary>
-        public int CurrentItrIndex { get; set; }
-
-        /// <summary>对象类型（对应 FLF livingobject.prototype.type）</summary>
-        public virtual LF2ObjectType Type => ObjectTypeEnum;
-
-        /// <summary>
         /// 每个状态是否允许切换方向（对应 FLF livingobject.prototype.states_switch_dir）
         /// 子类通过 InitializeStatesSwitchDir() 填充
         /// </summary>
@@ -173,13 +165,13 @@ namespace NTSD.Animation.LF2Objects
         #region 声明字段 - 核心模块（角色专属）
 
         /// <summary>生命值（对应 FLF $.health）</summary>
-        public LF2Health Health { get; protected set; } = new LF2Health();
+        public override LF2Health Health { get; protected set; } = new LF2Health();
 
         /// <summary>物理系统（对应 FLF $.mech）</summary>
         public CharacterMechanics Mech { get; protected set; }
 
         /// <summary>交互冷却（对应 FLF $.itr）</summary>
-        public LF2ItrRestTracker ItrRest { get; protected set; }
+        public override LF2ItrRestTracker ItrRest { get; protected set; }
 
         #endregion
 
@@ -221,7 +213,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// HP 恢复计时器（对应反汇编 entity+0E4h）。
         /// </summary>
-        public int HealTimer { get; set; } = 0;
+        public override int HealTimer { get; set; } = 0;
 
         /// <summary>NPC的控制者/父对象（对应 FLF $.parent，NPC stat 归属到 parent）</summary>
         public LF2LivingObject Parent { get; set; } = null;
@@ -232,9 +224,6 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         #region 声明字段 - Unity 架构适配
-
-        /// <summary>Character Hub 引用（子类可重写）</summary>
-        public Character _CharacterHub { get; protected set; }
 
         /// <summary>帧数据包装器</summary>
         public LF2CharacterDataWrapper _FrameDataWrapper => FrameCache?.Wrapper;
@@ -315,7 +304,7 @@ namespace NTSD.Animation.LF2Objects
         /// 笛子力（对应 FLF livingobject.prototype.flute_force）
         /// 参考：FLF livingobject.js flute_force
         /// </summary>
-        public virtual void FluteForce()
+        public override void FluteForce()
         {
             if (PS == null) return;
             float mass = NTSDSpec.GetMassOrDefault(ObjectId);
@@ -608,7 +597,7 @@ namespace NTSD.Animation.LF2Objects
         /// TU 更新（对应 FLF livingobject.prototype.TU_update）
         /// 参考：FLF livingobject.js:199-284
         /// </summary>
-        public virtual void TUUpdate()
+        public override void TUUpdate()
         {
             // 对应反汇编 Entity_Collision (0x4138F0) 帧推进开头的计数器递减序列：
             //   0x0041391A: [esi+0ECh] AttackExempt（最先）
@@ -860,61 +849,12 @@ namespace NTSD.Animation.LF2Objects
         #region 功能逻辑 - 交互冷却系统
 
         /// <summary>
-        /// 测试攻击休息（对应 FLF livingobject.prototype.itr_arest_test）
-        /// </summary>
-        public bool ItrArestTest()
-        {
-            return ItrRest == null || ItrRest.Arest <= 0;
-        }
-
-        /// <summary>
-        /// 更新攻击休息（对应 FLF livingobject.prototype.itr_arest_update）
-        /// </summary>
-        public void ItrArestUpdate(InteractionArea itr)
-        {
-            if (ItrRest == null) return;
-
-            if (itr != null && itr.arest > 0)
-            {
-                ItrRest.Arest = itr.arest;
-            }
-            else if (itr == null || itr.vrest <= 0)
-            {
-                ItrRest.Arest = NTSDGlobal.Default.Character.ARest;
-            }
-        }
-
-        /// <summary>
-        /// 测试受击休息（对应 FLF livingobject.prototype.itr_vrest_test）
-        /// </summary>
-        public bool ItrVrestTest(int uid)
-        {
-            return ItrRest == null || !ItrRest.HasVrest(uid);
-        }
-
-        /// <summary>
-        /// 更新受击休息（对应反汇编 0x42DA00/0x42DA1F/0x42DA77：
-        ///   基于 itr.injury 决定 vrest 持续 tick 数，与 itr.vrest 字段无关：
-        ///     itr.injury >  40  → vrest = 19 tick (0x13)
-        ///     itr.injury <= 40  → vrest = 3 tick  (0x03)
-        /// 写入位置：[victim + attackerIdx*4 + 0xF0] = vrest byte，
-        /// 每 tick 在 0x41BE6B 处 dec，归零后可再次命中。
-        /// </summary>
-        public void ItrVrestUpdate(int attackerUid, InteractionArea itr)
-        {
-            if (ItrRest == null || itr == null) return;
-
-            int vrest = (itr.injury > 40) ? 19 : 3;
-            ItrRest.SetVrest(attackerUid, vrest);
-        }
-
-        /// <summary>
         /// 受击处理（对应 FLF character.prototype.hit）
         /// 基类仅执行 vrest 前置冷却检查（对应 FLF hit() 第一行 itr_vrest_test）。
         /// 完整的受击逻辑（fall 累加、防御判定、状态切换、vrest 写回）全部在子类 override 中实现。
         /// 注意：FLF 的 hit() 是独立的 prototype 方法，不经过 state_update 分发。
         /// </summary>
-        public virtual bool Hit(InteractionArea itr, LF2LivingObject attacker, UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
+        public virtual bool Hit(InteractionArea itr, LF2Entity attacker, UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
             // 前置 vrest 冷却检查：对应 FLF character.js:1896 if (!$.itr_vrest_test(att.uid)) return false
             // vrest 的实际写回（itr_vrest_update）由子类在确认 accepthit=true 后执行
@@ -1037,6 +977,8 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>获取精灵宽度用于碰撞检测（子类可重写）</summary>
         public virtual float GetSpriteWidthPxForCollision()
         {
+            if (_FrameDataWrapper?.characterData?.files == null || _FrameDataWrapper.characterData.files.Count == 0)
+                return 0f;
             return _FrameDataWrapper.characterData.files[0].width + 1;
         }
 
@@ -1087,7 +1029,7 @@ namespace NTSD.Animation.LF2Objects
         /// 用于命中受击帧：反汇编命中时直接写帧号，不清零 wait，FrameDelay 冻结后续推进。
         /// 注意：只切帧和触发 state_entry/frame_update，不执行 frame 事件（frame 事件在下一个 TU 执行）
         /// </summary>
-        public virtual void ImmediateFrame(int frameId)
+        public override void ImmediateFrame(int frameId)
         {
             if (Frame == null || Trans == null) return;
 
@@ -1121,7 +1063,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>播放指定帧</summary>
-        public virtual void PlayFrameByID(int frameId)
+        public override void PlayFrameByID(int frameId)
         {
             Trans?.Frame(frameId, 0);
         }
@@ -1199,7 +1141,7 @@ namespace NTSD.Animation.LF2Objects
             if (Effect.Oscillate != 0)
             {
                 Effect.OscillateDirection = Effect.OscillateDirection == 1 ? -1 : 1;
-                Sprite?.SetXY(PS.sx + Effect.Oscillate * Effect.OscillateDirection, PS.sy + PS.sz);
+                Sprite?.SetXY(PS.sx + Effect.Oscillate * Effect.OscillateDirection, PS.sy);
             }
             else if (Effect.Blink)
             {
@@ -1224,7 +1166,7 @@ namespace NTSD.Animation.LF2Objects
                 if (Effect.Oscillate != 0)
                 {
                     Effect.Oscillate = 0;
-                    Sprite?.SetXY(PS.sx, PS.sy + PS.sz);
+                    Sprite?.SetXY(PS.sx, PS.sy);
                 }
                 if (Effect.Blink)
                 {

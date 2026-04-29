@@ -1,23 +1,22 @@
-using MoreMountains.TopDownEngine;
+using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Tools;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace NTSD.Input
 {
     /// <summary>
-    /// åŠ¨ä½œåºåˆ—æ£€æµ‹å™¨ï¼ˆçº¯ C#ï¼Œä¸å†éœ€è¦æŒ‚è½½åˆ°é¢„åˆ¶ä½“ä¸Šï¼‰ã€‚
+    /// ¶¯×÷ĞòÁĞ¼ì²âÆ÷£¨´¿ C#£¬²»ÔÙĞèÒª¹ÒÔØµ½Ô¤ÖÆÌåÉÏ£©¡£
     ///
-    /// è¯­ä¹‰ä¸¥æ ¼å¯¹é½æ—§å®ç°ï¼ˆActionSequenceDetector.csï¼‰ï¼š
-    /// - è¾“å…¥æ¥æºï¼šCharacterInputModule.InputBufferï¼ˆæŒ‰ tick å¯¹é½ï¼‰
-    /// - ä¸­æ–­ç¬¦å·ï¼šä½¿ç”¨ FuncKeyMask.None å¯¹åº” FLF combodec.js çš„ '_' æ ‡è®°
-    /// - best-matchï¼šä¼˜å…ˆåŒ¹é…æ›´é•¿ sequenceï¼Œå…¶æ¬¡ custom > basic
+    /// ÓïÒåÑÏ¸ñ¶ÔÆë¾ÉÊµÏÖ£¨ActionSequenceDetector.cs£©£º
+    /// - ÊäÈëÀ´Ô´£ºCharacterInputModule.InputBuffer£¨°´ tick ¶ÔÆë£©
+    /// - ÖĞ¶Ï·ûºÅ£ºÊ¹ÓÃ FuncKeyMask.None ¶ÔÓ¦ FLF combodec.js µÄ '_' ±ê¼Ç
+    /// - best-match£ºÓÅÏÈÆ¥Åä¸ü³¤ sequence£¬Æä´Î custom > basic
     ///
-    /// SimOrder=5 (Input): è¾“å…¥æ£€æµ‹åœ¨è§’è‰²é€»è¾‘ä¹‹å‰æ‰§è¡Œ
+    /// SimOrder=5 (Input): ÊäÈë¼ì²âÔÚ½ÇÉ«Âß¼­Ö®Ç°Ö´ĞĞ
     /// </summary>
-    public sealed class ActionSequenceDetectorModule : ISimObject, ICharacterModule
+    public sealed class ActionSequenceDetectorModule : ISimObject
     {
         [Serializable]
         public struct KeyInput
@@ -54,20 +53,15 @@ namespace NTSD.Input
         private int _timeout = -1;
         private int _comboout = -1;
 
-        private Character _Character;
+        private SimInputBuffer _inputBuffer;
+        private LF2Character _lf2Character;
 
-        public void ModuleSetup(Character character)
+        public void Initialize(SimInputBuffer buffer, LF2Character lf2Character)
         {
-            _Character = character;
-        }
-
-        public void ModuleInitialize()
-        {
+            _inputBuffer = buffer;
+            _lf2Character = lf2Character;
             InitializeCombos();
         }
-
-        public void ModuleBind() { }
-        public void ModuleUnbind() { }
 
         public int SimOrder => SimOrderConstants.Input;
         public int StableId { get; private set; }
@@ -79,17 +73,12 @@ namespace NTSD.Input
 
         public void SimTransit(int tickIndex)
         {
-            if (_Character?._CharacterInput != null && _Character._CharacterInput.InputBuffer != null)
+            if (_inputBuffer != null && _inputBuffer.TryDequeueAll(tickIndex, out var events))
             {
-                if (_Character._CharacterInput.InputBuffer.TryDequeueAll(tickIndex, out var events))
+                foreach (var evt in events)
                 {
-                    foreach (var evt in events)
-                    {
-                        if (evt.down)
-                            RecordAction(evt.key);
-                        else
-                            OnKeyUp(evt.key);
-                    }
+                    if (evt.down) RecordAction(evt.key);
+                    else OnKeyUp(evt.key);
                 }
             }
             Frame_Update(tickIndex);
@@ -180,7 +169,7 @@ namespace NTSD.Input
 
                     if (detected)
                     {
-                        _Character?._LF2Character?.OnComboDetected(candidate.combo);
+                        _lf2Character?.OnComboDetected(candidate.combo);
                         if (candidate.combo.clearOnCombo && clearOnCombo)
                         {
                             ClearSequence();

@@ -80,7 +80,6 @@ namespace MoreMountains.TopDownEngine
         /// Step D9: id_update 管理器（角色特定逻辑扩展点）
         /// 对应 FLF 的 $.id_update(...) 方法
         /// </summary>
-        public CharacterIdUpdate _IdUpdate { get; private set; }
 		public Transform _ModeTrans { get; private set; }
 		public AbilitySystemComponent _AbilitySystemComponent { get; private set; }
         /// <summary>
@@ -130,7 +129,6 @@ namespace MoreMountains.TopDownEngine
 		protected TopDownController _controller;
 
 		// ==================== Scheme C: Module Lifecycle ====================
-		protected readonly List<ICharacterModule> _modules = new List<ICharacterModule>(16);
 		protected bool _modulesCollected = false;
 		protected bool _modulesInitialized = false;
 		protected bool _characterDataBound = false;
@@ -143,14 +141,12 @@ namespace MoreMountains.TopDownEngine
 		{
 			if (_modulesCollected) return;
 			_modulesCollected = true;
-			_modules.Clear();
-
 
 			_CharacterInput = new CharacterInputModule();
-			_ActionSequenceDetector = new ActionSequenceDetectorModule();
+			//_ActionSequenceDetector = new ActionSequenceDetectorModule();
 
 			// 初始化纯 C# 模块
-			_LF2Character = new LF2Character(this);
+			_LF2Character = new LF2Character();
 			_LF2Sprite = new LF2Sprite();
 
             HandleInitModulesInternal();
@@ -158,29 +154,10 @@ namespace MoreMountains.TopDownEngine
 
 		private void HandleInitModulesInternal() 
 		{
-            _modules.Add(_CharacterInput);
-            _modules.Add(_ActionSequenceDetector);
+           //_modules.Add(_CharacterInput);
+           //_modules.Add(_ActionSequenceDetector);
 
             // 收集 GameObject 上的 ICharacterModule 组件（如 UnitSettings）
-            var componentModules = GetComponentsInChildren<ICharacterModule>();
-            foreach (var m in componentModules)
-            {
-                if (!_modules.Contains(m))
-                    _modules.Add(m);
-            }
-
-
-            for (int i = 0; i < _modules.Count; i++)
-            {
-                try
-                {
-                    _modules[i].ModuleSetup(this);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"[Character] ModuleSetup failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
-                }
-            }
         }
 
 
@@ -247,41 +224,14 @@ namespace MoreMountains.TopDownEngine
 				StableIdRuntime = SimulationTickDriver.Instance.World.AllocateStableId();
 			}
 
-			// Scheme C: initialize all modules (must not read CharacterID-driven data)
-			for (int i = 0; i < _modules.Count; i++)
-			{
-				try
-				{
-					_modules[i].ModuleInitialize();
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[Character] ModuleInitialize failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
-				}
-			}
-
 			// 初始化 LF2Character 模块（在 ICharacterModule 之后）
 			if (_LF2Character != null)
 			{
+				//_LF2Character.InjectDependencies(this.transform, _ModeTrans, _CharacterInput, gameObject.name);
 				var sprites = CharacterAnimtorManager.Instance?.GetCharacterSpriteByID(CharacterID);
-                SpriteRenderer _SpriteRenderer = this.gameObject.GetComponentInChildren<SpriteRenderer>();
-                _LF2Character.ModuleInitialize(
-					spriteRenderer: _SpriteRenderer,
-					sprites: sprites,
-					baseLocalPosition: _SpriteRenderer.transform.localPosition
-				);
+				SpriteRenderer _SpriteRenderer = this.gameObject.GetComponentInChildren<SpriteRenderer>();
+				
 			}
-
-			// Step D1: 只有在成功分配 StableId 后才创建 Sim 模块
-			// Plan B: Create CharacterSim module (pure C# gameplay logic)
-			_CharacterSim = new CharacterSim(this);
-
-			// Bind stable id into input/combos (deterministic ordering)
-			_ActionSequenceDetector?.SetStableId(StableIdRuntime);
-
-            // Step D9R: Create CharacterIdUpdate module (id_update 机制)
-            // Hub 注入规则：由 Character 统一缓存依赖并注入
-			_IdUpdate = new CharacterIdUpdate(this);
 
 			// instantiate camera target
 			if (CameraTarget == null)
@@ -310,41 +260,13 @@ namespace MoreMountains.TopDownEngine
 
 			if (_characterDataBound && _boundCharacterId == CharacterID) return;
 
-			// Rebind flow
-			if (_characterDataBound)
-			{
-				for (int i = _modules.Count - 1; i >= 0; i--)
-				{
-					try
-					{
-						_modules[i].ModuleUnbind();
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"[Character] ModuleUnbind failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
-					}
-				}
-			}
-
-			for (int i = 0; i < _modules.Count; i++)
-			{
-				try
-				{
-					_modules[i].ModuleBind();
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[Character] ModuleBind failed: {_modules[i].GetType().Name} on {name}\n{e}", this);
-				}
-			}
-
 			// 绑定 LF2Character 模块（在 ICharacterModule.ModuleBind 之后）
 			if (_LF2Character != null)
 			{
                 var frameDataWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(CharacterID);
                 if (frameDataWrapper != null)
 				{
-					_LF2Character.ModuleBind(frameDataWrapper, CharacterID);
+					//_LF2Character.ModuleBind(frameDataWrapper, CharacterID);
 				}
 			}
 
@@ -352,12 +274,6 @@ namespace MoreMountains.TopDownEngine
 			if (_LF2Character != null)
 			{
 				_LF2Character.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
-			}
-
-			// Step D9R: 注册默认 handlers（对应 FLF character.js 的 id_updates 初始化）
-			if (_IdUpdate != null)
-			{
-				_IdUpdate.RegisterDefaultHandlers(CharacterID);
 			}
 
 			// 在此处注册到 SimulationWorld（时序确定：SimulationTickDriver.Awake 先于 StartLevel）

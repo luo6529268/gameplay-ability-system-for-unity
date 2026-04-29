@@ -57,11 +57,17 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>kind==2 tracker 父对象引用（entity+0A0h）</summary>
         public ILF2Entity TrackerParent { get; set; }
 
+        /// <summary>当前命中时使用的 itr slot 索引（用于 spark 计时器计算）</summary>
+        public int CurrentItrIndex { get; set; }
+
         /// <summary>对象类型（int，由子类 ObjectTypeEnum 决定）</summary>
         public int ObjectType => (int)ObjectTypeEnum;
 
         /// <summary>对象类型枚举（子类实现）</summary>
         public abstract LF2ObjectType ObjectTypeEnum { get; }
+
+        /// <summary>对象类型别名（等同 ObjectTypeEnum，兼容旧代码）</summary>
+        public LF2ObjectType Type => ObjectTypeEnum;
 
         /// <summary>每个状态是否允许切换方向</summary>
         protected Dictionary<int, bool> _statesSwitchDir;
@@ -124,6 +130,15 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>弹射计数（entity+308h）</summary>
         public int ShotCount { get; set; } = 0;
 
+        // ItrRest / Health / HealTimer 在各子类中定义具体字段；
+        // 此处提供虚属性，让 LF2Entity 的公共方法（ItrArestTest 等）能统一访问。
+        /// <summary>itr 攻击冷却追踪器（子类提供具体实例）</summary>
+        public virtual LF2ItrRestTracker ItrRest { get; protected set; } = null;
+        /// <summary>生命值（子类提供具体实例）</summary>
+        public virtual LF2Health Health { get; protected set; } = null;
+        /// <summary>HP 恢复计时器</summary>
+        public virtual int HealTimer { get; set; } = 0;
+
         #endregion
 
         // ─────────────────────────────────────────────────────────────────
@@ -141,16 +156,17 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 更新阴影位置（对应反汇编 RenderDispatch shadow 公式）
         /// shadow_x = px / ppu, shadow_y = pz / ppu（只用地面深度，不含 py）
-        /// 隐藏条件：state==3005, state==9997, py &lt; -70
+        /// 隐藏条件：state==3005, state==9997, py &lt; -70, blink 且 renderFrame%4 >= 2
         /// </summary>
-        public void UpdateShadow()
+        public void UpdateShadow(int renderFrame = 0)
         {
             if (ShadowRenderer == null || PS == null) return;
 
             int state = Frame?.D?.state ?? -1;
             bool hide = state == 3005
                      || state == 9997
-                     || PS.y < -70f;
+                     || PS.y < -70f
+                     || (Effect?.Blink == true && (renderFrame % 4) >= 2);
 
             ShadowRenderer.enabled = !hide;
             if (!hide)
@@ -333,6 +349,46 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         // ─────────────────────────────────────────────────────────────────
+        #region 笛子/风暴受力（kind=10/11，所有 entity 共用）
+
+        /// <summary>
+        /// 受到 itr kind=10/11 时的受力处理（角色、武器均适用）
+        /// 对应反汇编 entity_flute_force 逻辑
+        /// </summary>
+        public virtual void FluteForce()
+        {
+            if (PS == null) return;
+            float mass = NTSDSpec.GetMassOrDefault(ObjectId);
+
+            const float lowLevel  = -140f;
+            const float midLevel  = -160f;
+            const float highLevel = -180f;
+
+            Effect.Super = true;
+            PS.vx = 0;
+            PS.vz = 0;
+
+            if (PS.y > lowLevel)
+                PS.vy = (PS.vy <= 0) ? -7.5f : -PS.vy / 2f;
+            else if (PS.y <= lowLevel && PS.y > midLevel)
+                PS.vy -= mass / 2f;
+            else if (PS.y <= midLevel && PS.y > highLevel)
+                PS.vy += mass / 2f;
+
+            switch (ObjectTypeEnum)
+            {
+                case LF2ObjectType.Character:
+                    if (Frame.N >= 55) TransitionToFrame(40, 20);
+                    break;
+                case LF2ObjectType.HeavyWeapon:
+                    if (Frame.N >= 5) TransitionToFrame(1, 20);
+                    break;
+            }
+        }
+
+        #endregion
+
+        // ─────────────────────────────────────────────────────────────────
         #region 位置与数据工具
 
         public void SetPos(float x, float y, float z)
@@ -348,9 +404,61 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void PlayFrameByID(int frameId) => Trans?.Frame(frameId, 0);
 
-        #endregion
-
+        
         // ─────────────────────────────────────────────────────────────────
+        // 以下方法在所有 entity 中均需可调用（角色/武器/技能均有 ItrRest）
+        // 对应反汇编 itr_arest / itr_vrest 公共逻辑
+
+        /// <summary>检查 itr 攻击冷却（arest）是否可攻击</summary>
+        public bool ItrArestTest() => ItrRest == null || ItrRest.Arest <= 0;
+
+        /// <summary>命中后更新 arest 冷却</summary>
+        public void ItrArestUpdate(InteractionArea itr)
+        {
+            if (ItrRest == null) return;
+            if (itr != null && itr.arest > 0)
+                ItrRest.Arest = itr.arest;
+            else if (itr == null || itr.vrest <= 0)
+                ItrRest.Arest = NTSDGlobal.Default.Character.ARest;
+        }
+
+        /// <summary>检查对指定攻击者的 vrest 冷却是否结束</summary>
+        public bool ItrVrestTest(int uid) => ItrRest == null || !ItrRest.HasVrest(uid);
+
+        /// <summary>更新对指定攻击者的 vrest 冷却</summary>
+        public void ItrVrestUpdate(int attackerUid, InteractionArea itr)
+        {
+            if (ItrRest == null || itr == null) return;
+            int vrest = (itr.injury > 40) ? 19 : 3;
+            ItrRest.SetVrest(attackerUid, vrest);
+        }
+
+        /// <summary>
+        /// 直接切换到指定帧（绕过 Trans.wait，立即生效）
+        /// 对应反汇编 frame_update 中的直接写帧逻辑
+        /// </summary>
+        public virtual void ImmediateFrame(int frameId)
+        {
+            if (Frame == null || Trans == null) return;
+            LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);
+            if (targetFrame == null) return;
+
+            Frame.PN = Frame.N;
+            Frame.N  = frameId;
+            Frame.D  = targetFrame;
+
+            if (Frame.D != null && Frame.D.pic >= 0)
+                Sprite?.ShowPic(Frame.D.pic);
+
+            Trans.SetWait(Frame.D.wait, 99);
+            Trans.SetNext(Frame.D.next, 99);
+        }
+
+        /// <summary>
+        /// 每帧时间更新（TU = time-unit update）
+        /// 各子类在此处 override 实现各自的帧内计时逻辑
+        /// </summary>
+        public virtual void TUUpdate() { }
 
         /// <summary>按帧 ID 获取帧数据</summary>
         public virtual LF2FrameData GetFrameDataById(int frameId)

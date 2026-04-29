@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 using TMPro;
 using System.Collections.Generic;
 using NTSD.Load;
@@ -123,14 +124,16 @@ namespace NTSD.UI
 
             var configTask = CreateCharacterConfigTask(mgr, FormatLoadingResourcePath, OnPrewarmLoadingResourceChanged);
             var spriteTask = CreateCharacterSpriteTask(mgr, FormatLoadingResourcePath, OnPrewarmLoadingResourceChanged);
+            var poolTask = CreatePoolPrewarmTask(OnPrewarmLoadingResourceChanged);
 
-            spriteTask.OnCompleted += _ =>
+            poolTask.OnCompleted += _ =>
             {
                 IsPrewarmed = true;
             };
 
             resourceLoader.AddTask(configTask);
             resourceLoader.AddTask(spriteTask);
+            resourceLoader.AddTask(poolTask);
 
             while (!resourceLoader.IsIdle())
             {
@@ -165,6 +168,26 @@ namespace NTSD.UI
             }
 
             return System.IO.Path.GetFileName(normalized);
+        }
+
+        private NTSD_LoadTask CreatePoolPrewarmTask(System.Action<string> onProgressText)
+        {
+            return new NTSD_LoadTask
+            {
+                Name = "PoolPrewarm",
+                Type = NTSD_LoadTaskType.Warmup,
+                Domain = NTSD_ResourceDomain.Other,
+                Priority = 80,
+                Execute = async (task, _) =>
+                {
+                    onProgressText?.Invoke("Prewarming Entity Slots...");
+                    // 对齐反汇编 SceneManager_Init: 预分配 400 个实体逻辑对象
+                    LF2ReferencePool.Instance.Prewarm(LF2ObjectType.Character, 400);
+                    // 同时异步预分配 400 个实体 GameObject 实例
+                    await LF2ObjectPool.Instance.PrewarmAsync(400);
+                    task.Result = true;
+                }
+            };
         }
 
         private NTSD_LoadTask CreateCharacterConfigTask(CharacterAnimtorManager manager,

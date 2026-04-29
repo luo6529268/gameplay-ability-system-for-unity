@@ -1,10 +1,10 @@
-using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Tools;
 using NTSD.Animation.LF2Objects;
 using NTSD.Tools;
 using NTSD.App;
+using Cysharp.Threading.Tasks;
 
 namespace NTSD.Animation
 {
@@ -20,9 +20,9 @@ namespace NTSD.Animation
         [SerializeField] private Transform _spriteRoot;
 
         // ========== 池数据结构 ==========
-        private LinkedList<LF2ObjectRenderer> _availableObjects;
-        private HashSet<LF2ObjectRenderer> _activeObjects;
-        private Dictionary<LF2ObjectRenderer, float> _releaseTimeMap;
+        private LinkedList<GameObject> _availableObjects;
+        private HashSet<GameObject> _activeObjects;
+        private Dictionary<GameObject, float> _releaseTimeMap;
         private float _lastCheckTime;
 
         private Stack<SpriteRenderer> _spritePool;
@@ -32,7 +32,6 @@ namespace NTSD.Animation
 
         // 缓存 prefab 引用，避免懒加载时 GameConfig.Instance 为 null
         private GameObject _cachedLF2ObjectPrefab;
-        private GameObject _cachedShadowPrefab;
 
         // ========== 生命周期 ==========
 
@@ -40,14 +39,13 @@ namespace NTSD.Animation
         {
             base.Awake();
 
-            _availableObjects = new LinkedList<LF2ObjectRenderer>();
-            _activeObjects = new HashSet<LF2ObjectRenderer>();
-            _releaseTimeMap = new Dictionary<LF2ObjectRenderer, float>();
+            _availableObjects = new LinkedList<GameObject>();
+            _activeObjects = new HashSet<GameObject>();
+            _releaseTimeMap = new Dictionary<GameObject, float>();
             _spritePool = new Stack<SpriteRenderer>(32);
 
             // 缓存 prefab 引用 - 延迟到 CreateNewObject 时再获取
             _cachedLF2ObjectPrefab = null;
-            _cachedShadowPrefab = null;
 
             for (int i = 0; i < (Cfg?.PoolInitialSize ?? 0); i++)
                 CreateNewObject();
@@ -72,55 +70,52 @@ namespace NTSD.Animation
         /// </summary>
         private LF2ObjectRenderer CreateNewObject()
         {
-            // 懒加载缓存 prefab（Awake 时 GameConfig 可能未初始化）
             if (_cachedLF2ObjectPrefab == null) _cachedLF2ObjectPrefab = Cfg?.LF2ObjectPrefab;
-            if (_cachedShadowPrefab == null)    _cachedShadowPrefab    = Cfg?.ShadowPrefab;
 
             GameObject go;
             if (_cachedLF2ObjectPrefab != null)
             {
-                go = Instantiate(_cachedLF2ObjectPrefab, _poolRoot);
+                go = Instantiate(_cachedLF2ObjectPrefab,this.transform);
             }
             else
             {
                 go = new GameObject("LF2Object");
-                go.MMGetOrAddComponent<SpriteRenderer>();
-                go.AddComponent<LF2ObjectRenderer>();
-                if (_poolRoot != null)
-                    go.transform.SetParent(_poolRoot, false);
-            }
-
-            // 创建 shadow 子节点
-            SpriteRenderer shadowRenderer = null;
-            if (_cachedShadowPrefab != null)
-            {
-                var shadowGo = Instantiate(_cachedShadowPrefab, go.transform);
-                shadowGo.transform.localPosition = Vector3.zero;
-                shadowRenderer = shadowGo.GetComponent<SpriteRenderer>();
+                var entityModel = new GameObject("EntityModel");
+                entityModel.transform.SetParent(go.transform, false);
+                entityModel.AddComponent<SpriteRenderer>();
+                entityModel.AddComponent<LF2ObjectRenderer>();
             }
 
             go.SetActive(false);
 
-            var r = go.GetComponent<LF2ObjectRenderer>();
+            // LF2ObjectRenderer 挂在子节点 EntityModel 上，不在根节点
+            var r = go.GetComponentInChildren<LF2ObjectRenderer>(true);
             if (r == null)
             {
-                Log.Error("[LF2ObjectPool] GameObject missing LF2ObjectRenderer");
+                Log.Error("[LF2ObjectPool] EntityModel missing LF2ObjectRenderer");
                 Destroy(go);
                 return null;
             }
 
+            // Shadow 已内嵌在 prefab 中，查找名为 Shadow 的子节点
+            SpriteRenderer shadowRenderer = null;
+            var shadowTransform = go.transform.Find("Shadow");
+            if (shadowTransform != null)
+                shadowRenderer = shadowTransform.GetComponent<SpriteRenderer>();
+
             r.SetShadowRenderer(shadowRenderer);
 
-            _availableObjects.AddLast(r);
+            _availableObjects.AddLast(go);
             return r;
         }
 
         /// <summary>从池中获取对象（懒加载）</summary>
-        public LF2ObjectRenderer Get()
+        public GameObject Get(out LF2ObjectRenderer EntityModel)
         {
-            LF2ObjectRenderer r;
             int maxPoolSize = Cfg?.PoolMaxSize ?? 200;
 
+            GameObject go;
+            EntityModel = null;
             if (_availableObjects.Count == 0)
             {
                 if (_activeObjects.Count >= maxPoolSize)
@@ -128,22 +123,34 @@ namespace NTSD.Animation
                     Log.Warn("[LF2ObjectPool] Pool limit reached ({0})", maxPoolSize);
                     return null;
                 }
-                r = CreateNewObject();
+                CreateNewObject();
+                if (_availableObjects.Count == 0) return null;
             }
-            else
+
+            go = _availableObjects.First.Value;
+            _availableObjects.RemoveFirst();
+
+            //if (_activeRoot != null)
+            go.transform.SetParent(this.transform, false);
+
+            go.SetActive(true);
+            _activeObjects.Add(go);
+            EntityModel = go.GetComponentInChildren<LF2ObjectRenderer>(true);
+            return go;
+        }
+
+        /// <summary>
+        /// 批量预热接口（对齐反汇编 SceneManager_Init: 预分配 400 个实体实例）
+        /// </summary>
+        public async UniTask PrewarmAsync(int count)
+        {
+            for (int i = 0; i < count; i++)
             {
-                r = _availableObjects.First.Value;
-                _availableObjects.RemoveFirst();
+                CreateNewObject();
+                // 每实例化 5 个对象让出一帧，确保 Loading 动画不卡顿
+                if (i % 5 == 0) await UniTask.Yield();
             }
-
-            if (r == null) return null;
-
-            if (_activeRoot != null)
-                r.transform.SetParent(_activeRoot, false);
-
-            r.gameObject.SetActive(true);
-            _activeObjects.Add(r);
-            return r;
+            Log.Info("[LF2ObjectPool] Bulk Prewarm: {0} GameObjects", count);
         }
 
         /// <summary>归还对象到池</summary>
@@ -153,12 +160,15 @@ namespace NTSD.Animation
 
             r.ResetState();
 
-            if (_poolRoot != null)
-                r.transform.SetParent(_poolRoot, false);
+            var go = r.transform.parent.gameObject;
 
-            _activeObjects.Remove(r);
-            _availableObjects.AddLast(r);
-            _releaseTimeMap[r] = Time.time;
+            if (_poolRoot != null)
+                go.transform.SetParent(_poolRoot, false);
+
+            go.SetActive(false);
+            _activeObjects.Remove(go);
+            _availableObjects.AddLast(go);
+            _releaseTimeMap[go] = Time.time;
         }
 
         // ========== 超时卸载 ==========
@@ -189,7 +199,7 @@ namespace NTSD.Animation
                 {
                     _availableObjects.Remove(node);
                     _releaseTimeMap.Remove(obj);
-                    Destroy(obj.gameObject);
+                    Destroy(obj);
 
                     if (_availableObjects.Count <= initialSize)
                     {

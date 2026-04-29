@@ -468,19 +468,19 @@ namespace NTSD.Animation.LF2Objects
                     // 角色特定帧逻辑（对应 FLF id_updates[id].state3_frame）
                     if (Frame.N == LF2StandardFrames.FlyingCrash)
                     {
-                        var ctx253 = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
-                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3FlyCrash, in ctx253);
+                        var ctx253 = new IdUpdateContext(this, PS, Frame.N, 0);
+                        _idUpdate?.TryInvoke(IdUpdateHooks.State3FlyCrash, in ctx253);
                     }
                     {
-                        var ctx3f = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
-                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3Frame, in ctx3f);
+                        var ctx3f = new IdUpdateContext(this, PS, Frame.N, 0);
+                        _idUpdate?.TryInvoke(IdUpdateHooks.State3Frame, in ctx3f);
                     }
 
                     // 帧257：Rudolf 消失
                     if (Frame.N == 257)
                     {
-                        var ctx257 = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
-                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State1280Disappear, in ctx257);
+                        var ctx257 = new IdUpdateContext(this, PS, Frame.N, 0);
+                        _idUpdate?.TryInvoke(IdUpdateHooks.State1280Disappear, in ctx257);
                     }
 
                     // 空中攻击保持逻辑: 如果攻击结束时还在空中，强制切回跳跃状态
@@ -495,15 +495,15 @@ namespace NTSD.Animation.LF2Objects
                 case "frame_force":
                     // 对应 FLF id_updates[id].state3_frame_force（Davis 禁用特定帧的 force 预更新）
                     {
-                        var ctxFF = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
-                        return _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3FrameForce, in ctxFF) ?? false;
+                        var ctxFF = new IdUpdateContext(this, PS, Frame.N, 0);
+                        return _idUpdate?.TryInvoke(IdUpdateHooks.State3FrameForce, in ctxFF) ?? false;
                     }
 
                 case "hit_stop":
                     // 角色特定 hit_stop 逻辑（对应 FLF id_updates[id].state3_hit_stop）
                     {
-                        var ctxHS = new IdUpdateContext(_CharacterHub, PS, Frame.N, 0);
-                        if (_CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.State3HitStop, in ctxHS) == true)
+                        var ctxHS = new IdUpdateContext(this, PS, Frame.N, 0);
+                        if (_idUpdate?.TryInvoke(IdUpdateHooks.State3HitStop, in ctxHS) == true)
                             return true;
                     }
                     // 通用命中停顿 (卡肉) 效果
@@ -612,7 +612,7 @@ namespace NTSD.Animation.LF2Objects
                             var characterData = _FrameDataWrapper?.characterData;
                             if (characterData == null) return false;
 
-                            // 应用跳跃速度
+                            // 应用跳跃速度（y<0为空中，vy需为负值向上）
                             PS.vx = dx * characterData.jump_distance;
                             PS.vz = Dirv() * characterData.jump_distancez;
                             PS.vy = characterData.jump_height;
@@ -948,8 +948,8 @@ namespace NTSD.Animation.LF2Objects
                     // 帧240：Rudolf特殊变身（对应 FLF character.js:784-785）
                     if (frameId == 240)
                     {
-                        var ctx = new IdUpdateContext(_CharacterHub, PS, 0, 0);
-                        _CharacterHub?._IdUpdate?.TryInvoke(IdUpdateHooks.RudolfTransform, in ctx);
+                        var ctx = new IdUpdateContext(this, PS, 0, 0);
+                        _idUpdate?.TryInvoke(IdUpdateHooks.RudolfTransform, in ctx);
                     }
 
                     // 位置同步
@@ -1629,7 +1629,7 @@ namespace NTSD.Animation.LF2Objects
                     else if (frameId == LF2StandardFrames.Crouch2)
                     {
                         // 蹲下
-                        if (!_CharacterHub._IdUpdate.TryInvokeGeneric(IdUpdateHooks.State15_Crouch))
+                        if (!(_idUpdate?.TryInvokeGeneric(IdUpdateHooks.State15_Crouch) ?? false))
                         {
                             switch (Frame.PN) // 上一帧编号
                             {

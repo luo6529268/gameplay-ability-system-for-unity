@@ -327,9 +327,11 @@ namespace NTSD.Battle
         private static Transform ResolvePivot(LF2LivingObject obj)
         {
             // 只跟踪角色，武器/特效不参与取景计算
-            if (obj is not LF2Character) return null;
-            if (obj._CharacterHub != null && obj._CharacterHub.isActiveAndEnabled)
-                return obj._CharacterHub.transform;
+            if (obj is not LF2Character character) return null;
+            
+            if (character.EntityTransform != null && character.EntityTransform.gameObject.activeInHierarchy)
+                return character.EntityTransform;
+                
             if (obj.Renderer != null && obj.Renderer.isActiveAndEnabled)
                 return obj.Renderer.transform;
             return null;

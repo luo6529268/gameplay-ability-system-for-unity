@@ -105,11 +105,13 @@ namespace NTSD.Simulation
                 var obj = _shakeObjects[i];
                 if (obj.ShakeTimer <= -25) continue;
                 if (obj.FrameDelay >= 0) continue;
-                var hub = obj._CharacterHub;
-                if (hub == null) continue;
-                var pos = hub.transform.position;
+                
+                var root = (obj as LF2Character)?.EntityTransform ?? obj.Renderer?.transform;
+                if (root == null) continue;
+                
+                var pos = root.position;
                 pos.x += xOffset;
-                hub.transform.position = pos;
+                root.position = pos;
             }
         }
 

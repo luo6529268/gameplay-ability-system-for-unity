@@ -5,8 +5,10 @@ using MoreMountains.TopDownEngine;
 using NTSD.Simulation;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Extensions;
 using NTSD.Tools;
 using NTSD.App;
+using NTSD.Game;
 using Cysharp.Threading.Tasks;
 
 namespace NTSD.Test
@@ -17,15 +19,12 @@ namespace NTSD.Test
     /// 
     /// 使用方法：
     /// 1. 将此脚本挂到 NTSD_Battle 场景中任意 GameObject 上
-    /// 2. 在 Inspector 中配置 PlayerPrefabs（可选，不配则使用 LevelManager 自带的）
+    /// 2. 在 Inspector 中配置 overrideCharacterIds（可选）
     /// 3. 直接 Play NTSD_Battle 场景即可
     /// </summary>
     public class BattleTestBootstrap : MonoBehaviour
     {
         [Header("仅在没有 AppManager 时生效（直接打开战斗场景）")]
-        [Tooltip("如果为空，则使用 MultiplayerLevelManager 上已配置的 PlayerPrefabs")]
-        [SerializeField] private Character[] overridePlayerPrefabs;
-
         [Tooltip("游戏全局配置（直接拖入 GameConfig.asset）")]
         [SerializeField] private App.GameConfig gameConfig;
 
@@ -48,7 +47,6 @@ namespace NTSD.Test
         [Tooltip("是否打印状态切换日志")]
         [SerializeField] private bool logForceStateToggle = true;
 
-        private Character firstPlayer;
         private LF2Character firstPlayerLf2;
 
         private async void Start()
@@ -61,7 +59,7 @@ namespace NTSD.Test
 
             Debug.Log("[BattleTestBootstrap] No AppManager detected, running test bootstrap...");
 
-            // 创建 AppManager（含 NTSDSoundPlayer、SparkRenderer、EventSystem）
+            // 创建 AppManager（含 NTSDSoundPlayer, SparkRenderer, EventSystem）
             EnsureAppManager();
 
             for (int i = 0; i < delayFrames; i++)
@@ -106,26 +104,8 @@ namespace NTSD.Test
             var levelMgr = FindObjectOfType<MultiplayerLevelManager>(true);
             if (levelMgr != null)
             {
-                if (overridePlayerPrefabs != null && overridePlayerPrefabs.Length > 0)
-                {
-                    levelMgr.PlayerPrefabs = overridePlayerPrefabs;
-                    Debug.Log($"[BattleTestBootstrap] Overriding PlayerPrefabs: {overridePlayerPrefabs.Length} characters.");
-                }
-
-                if (overrideCharacterIds != null && overrideCharacterIds.Length > 0)
-                {
-                    levelMgr.CharacterIdSelectionMode =
-                        MultiplayerLevelManager.CharacterIdSelectionModes.OverrideByPlayerIndex;
-                    levelMgr.OverrideCharacterIdsByPlayerIndex =
-                        new System.Collections.Generic.List<int>(overrideCharacterIds);
-                    Debug.Log($"[BattleTestBootstrap] Overriding CharacterIds: [{string.Join(", ", overrideCharacterIds)}]");
-                }
-
-                levelMgr.StartLevel();
-                Debug.Log("[BattleTestBootstrap] LevelManager.StartLevel() called.");
-
-                CacheFirstPlayer(levelMgr);
-                EnsureForceModesExclusive();
+                SetupTestCharacters(levelMgr);
+                Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
             }
             else
             {
@@ -200,29 +180,53 @@ namespace NTSD.Test
             }
         }
 
-        private void CacheFirstPlayer(MultiplayerLevelManager levelMgr)
+        private void SetupTestCharacters(MultiplayerLevelManager levelMgr)
         {
-            if (firstPlayerLf2 != null) return;
-            if (levelMgr == null || levelMgr.Players == null || levelMgr.Players.Count == 0) return;
+            var spawnPoints = levelMgr.SpawnPoints;
+            int count = overrideCharacterIds != null ? overrideCharacterIds.Length : 1;
 
-            firstPlayer = levelMgr.Players[0];
-            firstPlayerLf2 = firstPlayer?._LF2Character;
-
-            if (firstPlayer != null && firstPlayerLf2 != null && logForceStateToggle)
+            for (int i = 0; i < count; i++)
             {
-                Log.Info("[BattleTestBootstrap] First player cached: {0}", firstPlayer.name);
+                int characterId = (overrideCharacterIds != null && i < overrideCharacterIds.Length)
+                    ? overrideCharacterIds[i]
+                    : 0;
+
+                if (characterId < 0) continue;
+
+                var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
+                var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, characterId) as LF2Character;
+
+                lf2.Controller.SetInputID(i + 1); // Test mode: player index as input id
+
+                lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"TestPlayer_{i}");
+                lf2.ModuleInitialize();
+
+                EntityModel.SetLogicObject(lf2, null);
+
+                var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(characterId);
+                lf2.ModuleBind(frameData, characterId);
+                lf2.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+
+                Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
+                    ? spawnPoints[i].transform.position
+                    : Vector3.zero;
+
+                float ppu = SimulationConstants.PIXELS_PER_UNIT;
+                lf2.PS.x = spawnPos.x * ppu;
+                lf2.PS.z = spawnPos.y * ppu;
+                lf2.PS.y = 0;
+
+                if (i == 0)
+                {
+                    firstPlayerLf2 = lf2;
+                }
             }
         }
 
         private void ApplyForcedMovementState()
         {
             if (!forceWalkingMode && !forceRunningMode) return;
-
-            if (firstPlayerLf2 == null)
-            {
-                CacheFirstPlayer(FindObjectOfType<MultiplayerLevelManager>(true));
-                if (firstPlayerLf2 == null) return;
-            }
+            if (firstPlayerLf2 == null) return;
 
             if (forceWalkingMode)
             {
@@ -273,7 +277,6 @@ namespace NTSD.Test
         private void OnDestroy()
         {
             if (App.AppManager.Instance != null) return;
-
             TimeWheel.TimeWheel.DestroySharedInstance();
             Debug.Log("[BattleTestBootstrap] TimeWheel destroyed (test cleanup).");
         }
@@ -281,7 +284,6 @@ namespace NTSD.Test
         private static void EnsureAppManager()
         {
             if (AppManager.Instance != null) return;
-
             var go = new GameObject("AppManager [TestBootstrap]");
             DontDestroyOnLoad(go);
             go.AddComponent<AppManager>();

@@ -144,6 +144,30 @@ namespace NTSD.Animation
         // ==================== 公共方法 ====================
 
         /// <summary>
+        /// 重置物理状态（用于对象池复用）
+        /// </summary>
+        public void Reset()
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+            groundY = 0;
+            vx = 0;
+            vy = 0;
+            vz = 0;
+            sx = 0;
+            sy = 0;
+            sz = 0;
+            dir = "right";
+            fric = 1f;
+            zz = 0;
+            zBoundPositive = false;
+            zBoundNegative = false;
+            xBoundPositive = false;
+            xBoundNegative = false;
+        }
+
+        /// <summary>
         /// 更新 Sprite 原点（屏幕坐标系）
         /// 对齐 FLF mechanics.js: ps.sx/ps.sy/ps.sz 的计算。
         /// </summary>
@@ -153,7 +177,7 @@ namespace NTSD.Animation
                 ? (x - centerx)
                 : (x + centerx - spriteWidthPx);
 
-            sy = y - centery;
+            sy = y + z - centery;
             sz = z;
         }
 

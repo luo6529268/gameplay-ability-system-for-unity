@@ -25,7 +25,7 @@ namespace NTSD.Animation.LF2Objects
         // 主方法
         // ─────────────────────────────────────────────────────────────────
 
-        public override bool Hit(InteractionArea itr, LF2LivingObject attacker,
+        public override bool Hit(InteractionArea itr, LF2Entity attacker,
                                  UnityEngine.Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
             if (!base.Hit(itr, attacker, attackerPos, vol)) return false;
@@ -252,11 +252,12 @@ namespace NTSD.Animation.LF2Objects
             // ── 结算 ──
             if (acceptHit)
             {
-                Attacker = attacker;
+                var attackerLiving = attacker as LF2LivingObject;
+                if (attackerLiving != null) Attacker = attackerLiving;
                 ItrVrestUpdate(attacker.StableId, itr);
 
                 // 攻击方碰撞豁免（对应反汇编 entity+0ECh）：命中后 6 帧内攻击方跳过碰撞检测
-                attacker.HitCounters?.SetAttackExempt(6);
+                attackerLiving?.HitCounters?.SetAttackExempt(6);
 
                 // 反汇编 0x0042D218/0x0042D17A/0x0042D0B6：entity+0B0h 值决定屏幕震动强度
                 // sub_419C40 写入 slot channel，渲染层消费产生视觉抖动
@@ -503,7 +504,7 @@ namespace NTSD.Animation.LF2Objects
         /// timer 初始值：itr.fall > 60 → attacking*20（大spark）；否则 → attacking*4+10（小spark）
         /// 坐标：基于攻击者 itr box 与被击者位置计算，含随机偏移
         /// </summary>
-        private void SpawnSpark(InteractionArea itr, LF2LivingObject attacker,
+        private void SpawnSpark(InteractionArea itr, LF2Entity attacker,
                                 Vector3 attackerPos, PhysicsState.FlfVolume vol)
         {
             // timer 初始值（反汇编 0x0042F81B–0x0042F837）

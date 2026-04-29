@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Input
@@ -96,8 +97,16 @@ namespace NTSD.Input
         public bool IsAttack => _inner.IsAttack;
         public bool IsJump   => _inner.IsJump;
         public bool IsDefend => _inner.IsDefend;
+
+        public SimInputBuffer InputBuffer { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
         public int Dirv()                     => _inner.Dirv();
         public (int dx, int dz) GetMoveInput() => _inner.GetMoveInput();
+
+        public void SetInputID(int inputId)
+        {
+            throw new System.NotImplementedException();
+        }
 
         /// <summary>
         /// 每 SimTick 调用一次：检测按键边沿并录制，然后推进录制器时钟。

@@ -20,16 +20,16 @@ namespace NTSD.Animation.LF2Objects
         // ========== 武器专属字段（不在 LF2Entity 的） ==========
 
         /// <summary>交互冷却（武器也有 itr 碰撞冷却）</summary>
-        public LF2ItrRestTracker ItrRest { get; protected set; }
+        public override LF2ItrRestTracker ItrRest { get; protected set; }
 
         /// <summary>生命值（武器耐久度等）</summary>
-        public LF2Health Health { get; protected set; } = new LF2Health();
+        public override LF2Health Health { get; protected set; } = new LF2Health();
 
         /// <summary>控制器（武器由持有者间接控制）</summary>
         public ILF2Controller Controller { get; set; }
 
         /// <summary>HP 恢复计时器（回旋镖捕获等）</summary>
-        public int HealTimer { get; set; } = 0;
+        public override int HealTimer { get; set; } = 0;
         // ========== 配置字段 ==========
         protected int _objectId;
         protected int _lastState = -1;
@@ -432,7 +432,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        protected virtual bool CanInteractTarget(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool CanInteractTarget(InteractionArea itr, LF2Entity target)
         {
             if (itr == null || target == null) return false;
             if (target == this) return false;
@@ -441,7 +441,7 @@ namespace NTSD.Animation.LF2Objects
             if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
             if (!target.ItrVrestTest(StableId)) return false;
             var kindService = Match?.ItrKindService;
-            if (!kindService.ShouldHitTarget(itr.kind, this, target)) return false;
+            if (target is not LF2LivingObject livingTarget || !kindService.ShouldHitTarget(itr.kind, this, livingTarget)) return false;
 
             // 反汇编 0x41A0C9-0x41A20B：itr.attacking 目标过滤
             int targetState = target.GetState();
@@ -468,7 +468,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        protected virtual bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2LivingObject target)
+        protected virtual bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
@@ -496,7 +496,7 @@ namespace NTSD.Animation.LF2Objects
         /// 反汇编 0x42EC85：itr.kind=3 飞行武器粘附。
         /// catchingact[0] → 武器帧，caughtact[0] → 目标帧。
         /// </summary>
-        protected virtual bool HandleWeaponKind3Stick(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandleWeaponKind3Stick(InteractionArea itr, LF2Entity target)
         {
             if (target is LF2WeaponBase) return false;
             if (!ItrArestTest()) return false;
@@ -520,7 +520,7 @@ namespace NTSD.Animation.LF2Objects
         /// state=1002 时粘附（vx/vy/vz=0，切爆炸帧）；
         /// state=3002 时爆炸传送（victim 传送到武器位置，heal_timer=throwvz+1000）。
         /// </summary>
-        protected virtual bool HandleWeaponKind8Attach(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandleWeaponKind8Attach(InteractionArea itr, LF2Entity target)
         {
             if (target is not LF2Character victim) return false;
             if (!ItrArestTest()) return false;
@@ -552,7 +552,7 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        protected virtual bool TryApplyHit(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool TryApplyHit(InteractionArea itr, LF2Entity target)
         {
             if (!ItrArestTest()) return false;
 
@@ -614,7 +614,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
         {
             if (HoldObj != null) return false;
             if (!ItrArestTest()) return false;
@@ -628,7 +628,7 @@ namespace NTSD.Animation.LF2Objects
                            || wstate == LF2States.HeavyWeaponOnGround;
             if (!isOnGround) return false;
 
-            Pick(target);
+            Pick(character);
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
             ItrArestUpdate(itr);
@@ -636,7 +636,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
         {
             if (HoldObj != null) return false;
             if (!ItrArestTest()) return false;
@@ -650,7 +650,7 @@ namespace NTSD.Animation.LF2Objects
                            || wstate == LF2States.HeavyWeaponOnGround;
             if (!isOnGround) return false;
 
-            Pick(target);
+            Pick(character);
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
             // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
@@ -660,7 +660,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
         {
             // 反汇编 sub_419F80：kind=3 时若 target.charData.type != 0（即目标是武器）则跳过
             // 否则走普通命中路径，与 kind=0 相同
@@ -668,7 +668,7 @@ namespace NTSD.Animation.LF2Objects
             return TryApplyHit(itr, target);
         }
 
-        protected virtual bool HandlePreInteractionKind7(InteractionArea itr, LF2LivingObject target)
+        protected virtual bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
             // 反汇编 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
             return HandlePreInteractionKind1(itr, target);
@@ -677,7 +677,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 对应 FLF weapon.prototype.hit (weapon.js:275-365)
         /// </summary>
-        public abstract bool Hit(InteractionArea itr, LF2LivingObject attacker);
+        public abstract bool Hit(InteractionArea itr, LF2Entity attacker);
 
         /// <summary>
         /// 对应 FLF weapon.prototype.act (weapon.js:367-465)
@@ -913,13 +913,13 @@ namespace NTSD.Animation.LF2Objects
         private List<int> _vrestKeysCache = new List<int>();
         private List<LF2LivingObject> _boomerangQueryCache = new List<LF2LivingObject>(8);
 
-        public bool IsVRest(LF2LivingObject obj)
+        public bool IsVRest(LF2Entity obj)
         {
             if (obj == null) return false;
             return _vrest.ContainsKey(obj.StableId) && _vrest[obj.StableId] > 0;
         }
 
-        public void SetVRest(LF2LivingObject obj, int value)
+        public void SetVRest(LF2Entity obj, int value)
         {
             if (obj == null) return;
             _vrest[obj.StableId] = value;
