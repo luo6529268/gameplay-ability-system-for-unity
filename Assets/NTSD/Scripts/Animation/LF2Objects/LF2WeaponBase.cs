@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
@@ -53,17 +53,6 @@ namespace NTSD.Animation.LF2Objects
 
         // weapon_strength_list（由 CharacterAnimtorManager 在加载时注入）
         protected List<WeaponStrengthEntry> _weaponStrengthList;
-
-        public void SetWeaponStrengthList(List<WeaponStrengthEntry> list)
-        {
-            _weaponStrengthList = list;
-        }
-
-        protected WeaponStrengthEntry GetStrengthEntry(int attackingIndex)
-        {
-            if (_weaponStrengthList == null || attackingIndex <= 0) return null;
-            return _weaponStrengthList.Find(e => e.index == attackingIndex);
-        }
         public string WeaponDropSound { get; set; } = "";
         public string WeaponBrokenSound { get; set; } = "";
         public string WeaponHitSound { get; set; } = "";
@@ -79,6 +68,8 @@ namespace NTSD.Animation.LF2Objects
         // 反汇编 this+800：笛子命中累积器，子类实现存储
         protected virtual int FluteWeight { get => 0; set { } }
         // ========== 初始化方法 ==========
+
+        #region 生命周期（Init → InitializeStates → Reset → Destroy → 初始化子步骤）
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
@@ -129,6 +120,128 @@ namespace NTSD.Animation.LF2Objects
             _states[LF2States.WeaponOnGround] = State_WeaponOnGround;
         }
 
+        public override void Reset()
+        {
+            SimulationTickDriver.Instance?.World?.Unregister(this);
+            FrameCache.Clear();
+            _objectId = 0;
+            Team = 0;
+            Health.HP = 0;
+            _lastState = -1;
+            _holdObj = null;
+            _holdPre = null;
+            _vrest.Clear();
+            ShotCount = 0;
+            PickerStableId = -1;
+            ResetSpark();
+            ResetStableId();
+        }
+
+        public override void Destroy()
+        {
+            Generic_Die();
+        }
+
+        // ========== 初始化子步骤 ==========
+
+        protected void InitializeParent(OPointCreateTask task)
+        {
+            _objectId = task.opoint.oid;
+            Team = task.team;
+        }
+
+        protected void InitializePosition(OPointCreateTask task)
+        {
+            PS.z = task.z;
+            // parent==null 时（如测试直接生成），用 task.pos 作为初始世界坐标
+            // 正常 opoint 路径 parent!=null，x/y 由 Act() 的 CoincideXY 对齐
+            if (task.parent == null)
+            {
+                PS.x = task.pos.x;
+                PS.y = task.pos.y;
+            }
+        }
+
+        protected void InitializeDirection(OPointCreateTask task)
+        {
+            string dir = CalculateDirection(task.opoint.facing, task.dir);
+            SwitchDir(dir);
+        }
+
+        protected void InitializeFrame(OPointCreateTask task)
+        {
+            int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
+            // 加载帧数据
+            var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(_objectId);
+            FrameCache.Load(wrapper);
+            Frame.D = FrameCache.GetFrameDataById(action);
+            Trans.Frame(action, 0);
+        }
+
+        protected void InitializeHealth()
+        {
+            // 从 DAT 数据读取 weapon_hp / weapon_drop_hurt（反汇编 ParseCharData 0x0040D8F0）
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            if (charData != null && charData.weapon_hp > 0)
+            {
+                Health.HP = charData.weapon_hp;
+                WeaponDropHurt = charData.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
+            }
+            else
+            {
+                Health.HP = 100;
+            }
+            // 反汇编 Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
+            OnHealthInitialized(charData);
+        }
+
+        /// <summary>
+        /// InitializeHealth 完成后回调，供子类初始化 _flightCounter 等依赖 weapon_hp 的字段。
+        /// </summary>
+        protected virtual void OnHealthInitialized(LF2CharacterData charData) { }
+
+        #endregion
+
+        #region 每帧驱动接口（SimTransit → SimTU → IsWeaponDestroyable → GetFlightCounter）
+
+        public override void SimTransit(int tickIndex)
+        {
+            Trans?.Trans();
+        }
+
+        public override void SimTU(int tickIndex)
+        {
+            int currentState = GetState();
+
+            if (currentState != _lastState)
+            {
+                StateUpdate("state_entry", null);
+                _lastState = currentState;
+            }
+
+            StateUpdate("TU", null);
+
+            UpdateVRest();
+            ItrRest?.Tick();
+
+            // 反汇编 Entity_AI_Update 0x004228B8-0x004228C6：
+            // type=1/2/4/6 武器，_flightCounter < 0 → 武器消失
+            if (_holdObj == null && IsWeaponDestroyable() && GetFlightCounter() < 0)
+            {
+                StateUpdate("die", null);
+                return;
+            }
+
+            if (Health.HP <= 0)
+            {
+                StateUpdate("die", null);
+            }
+        }
+
+        #endregion
+
+        #region 帧事件回调（OnGenericStateEvent → OnInFlightFrameUpdate → OnLanded → WeaponFlightPhysics → OnThrown）
+
         protected override bool OnGenericStateEvent(string eventType, object eventData)
         {
             switch (eventType)
@@ -144,7 +257,33 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        #region Generic State Handlers
+        protected virtual void OnInFlightFrameUpdate() { }
+
+        /// <summary>
+        /// 飞行武器落地后的弹射与停止处理
+        /// 对应反汇编 Entity_FrameAdvance 0x4164A9-0x416577（y>=0 路径）
+        /// 子类按 WeaponType 重写以实现差异化落地行为
+        /// </summary>
+        protected virtual void OnLanded()
+        {
+            // 基类不做任何清零——所有 type 分支由 LF2Weapon.OnLanded() 完整覆盖并 return。
+        }
+
+        /// <summary>
+        /// 飞行武器每帧的特化物理（在 Dynamics 之前执行）
+        /// 对应反汇编 Entity_FrameAdvance 0x416240-0x416577（在空中时的 type 分流）
+        /// 子类按 WeaponType 重写
+        /// </summary>
+        protected virtual void WeaponFlightPhysics() { }
+
+        /// <summary>
+        /// 投掷成功后的初始化回调（子类用于初始化 _flightCounter 等）
+        /// </summary>
+        protected virtual void OnThrown() { }
+
+        #endregion
+
+        #region 通用状态处理（Generic_TU → CheckBoomerangCatch → Generic_Die）
 
         private void Generic_TU()
         {
@@ -220,7 +359,7 @@ namespace NTSD.Animation.LF2Objects
         /// z：thrower.z - 80 &lt; weapon.z &lt; thrower.z（单向，武器必须在投掷者前方区间内）
         /// y：|dy| &lt; 10（对称）
         /// 满足条件：frame=60, vx/vy/vz=0
-        /// </summary>
+
         private void CheckBoomerangCatch()
         {
             var world = SimulationTickDriver.Instance?.World;
@@ -254,30 +393,6 @@ namespace NTSD.Animation.LF2Objects
         /// 飞行武器在空中（新y&lt;0）时的帧动态更新。
         /// 对应反汇编 Entity_FrameAdvance 0x416577-0x4166CE（type==0 的 Falling/Burning 帧切换）。
         /// 子类按 WeaponType 重写。
-        /// </summary>
-        protected virtual void OnInFlightFrameUpdate() { }
-
-        /// <summary>
-        /// 飞行武器落地后的弹射与停止处理
-        /// 对应反汇编 Entity_FrameAdvance 0x4164A9-0x416577（y>=0 路径）
-        /// 子类按 WeaponType 重写以实现差异化落地行为
-        /// </summary>
-        protected virtual void OnLanded()
-        {
-            // 基类不做任何清零——所有 type 分支由 LF2Weapon.OnLanded() 完整覆盖并 return。
-        }
-
-        /// <summary>
-        /// 飞行武器每帧的特化物理（在 Dynamics 之前执行）
-        /// 对应反汇编 Entity_FrameAdvance 0x416240-0x416577（在空中时的 type 分流）
-        /// 子类按 WeaponType 重写
-        /// </summary>
-        protected virtual void WeaponFlightPhysics() { }
-
-        /// <summary>
-        /// 投掷成功后的初始化回调（子类用于初始化 _flightCounter 等）
-        /// </summary>
-        protected virtual void OnThrown() { }
 
         private void Generic_Die()
         {
@@ -289,7 +404,7 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region Specific State Handlers
+        #region 具体状态处理（State_WeaponInSky / OnHand / Throwing / JustOnGround / OnGround 虚方法）
 
         protected virtual bool State_WeaponInSky(string eventType, object eventData)
         {
@@ -318,77 +433,8 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        public override void Reset()
-        {
-            SimulationTickDriver.Instance?.World?.Unregister(this);
-            FrameCache.Clear();
-            _objectId = 0;
-            Team = 0;
-            Health.HP = 0;
-            _lastState = -1;
-            _holdObj = null;
-            _holdPre = null;
-            _vrest.Clear();
-            ShotCount = 0;
-            PickerStableId = -1;
-            ResetSpark();
-            ResetStableId();
-        }
+        #region 交互系统（Interaction → CanInteractTarget → DispatchInteractionByKind → Kind3Stick → Kind8Attach → TryApplyHit → ApplyPickupGrabbedBy → ApplyPickupFrameJump → Kind1 → Kind2 → Kind3 → Kind7）
 
-        public override void Destroy()
-        {
-            Generic_Die();
-        }
-
-        // ========== 帧转换回调 ==========
-
-        // ========== ISimObject 生命周期 ==========
-
-        public override void SimTransit(int tickIndex)
-        {
-            Trans?.Trans();
-        }
-
-        public override void SimTU(int tickIndex)
-        {
-            int currentState = GetState();
-
-            if (currentState != _lastState)
-            {
-                StateUpdate("state_entry", null);
-                _lastState = currentState;
-            }
-
-            StateUpdate("TU", null);
-
-            UpdateVRest();
-            ItrRest?.Tick();
-
-            // 反汇编 Entity_AI_Update 0x004228B8-0x004228C6：
-            // type=1/2/4/6 武器，_flightCounter < 0 → 武器消失
-            if (_holdObj == null && IsWeaponDestroyable() && GetFlightCounter() < 0)
-            {
-                StateUpdate("die", null);
-                return;
-            }
-
-            if (Health.HP <= 0)
-            {
-                StateUpdate("die", null);
-            }
-        }
-
-        /// <summary>反汇编 0x004228A0: type=1/2/4/6 才检查 flightCounter</summary>
-        protected virtual bool IsWeaponDestroyable() => false;
-
-        /// <summary>供基类 SimTU 读取 _flightCounter</summary>
-        protected virtual int GetFlightCounter() => 0;
-
-        // ========== 交互方法 ==========
-
-        /// <summary>
-        /// 对应 FLF weapon.prototype.interaction (weapon.js:216-273)
-        /// </summary>
         public virtual void Interaction()
         {
             if (Team == 0) return;
@@ -492,10 +538,6 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        /// <summary>
-        /// 反汇编 0x42EC85：itr.kind=3 飞行武器粘附。
-        /// catchingact[0] → 武器帧，caughtact[0] → 目标帧。
-        /// </summary>
         protected virtual bool HandleWeaponKind3Stick(InteractionArea itr, LF2Entity target)
         {
             if (target is LF2WeaponBase) return false;
@@ -519,7 +561,7 @@ namespace NTSD.Animation.LF2Objects
         /// 反汇编 0x42EC85：itr.kind=8 爆符粘附/爆炸。
         /// state=1002 时粘附（vx/vy/vz=0，切爆炸帧）；
         /// state=3002 时爆炸传送（victim 传送到武器位置，heal_timer=throwvz+1000）。
-        /// </summary>
+
         protected virtual bool HandleWeaponKind8Attach(InteractionArea itr, LF2Entity target)
         {
             if (target is not LF2Character victim) return false;
@@ -576,11 +618,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return false;
-        }
 
-        // 反汇编 0x42E984/0x42EA81：按 weapon.entity_type(+6F8h) 设置 grabbed_by
-        // disasm: 0=light→0, 2=heavy→2, 4=boomerang→4, 6=drink→6/4, 0x78/0x7C→101
-        // C# WeaponType mapping: 2=light(disasm 0), 1=heavy(disasm 2), 4=boomerang, 6=drink
         private void ApplyPickupGrabbedBy(LF2Character character)
         {
             int pickerLink;
@@ -602,8 +640,6 @@ namespace NTSD.Animation.LF2Objects
             GrabbedBy = -pickerLink;
         }
 
-        // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后帧跳转
-        // 重武器(entity_type==2)→frame116，其他→frame115
         private void ApplyPickupFrameJump(LF2Character character)
         {
             int jumpFrame = IsHeavy ? 116 : 115;
@@ -673,6 +709,10 @@ namespace NTSD.Animation.LF2Objects
             // 反汇编 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
             return HandlePreInteractionKind1(itr, target);
         }
+
+        #endregion
+
+        #region 战斗（Hit → Act → ForceClearHolder → Drop → Pick → ProcessDrinkConsumption → OnDrinkConsumed → ProcessAttack → SetWeaponStrengthList → GetStrengthEntry）
 
         /// <summary>
         /// 对应 FLF weapon.prototype.hit (weapon.js:275-365)
@@ -909,69 +949,6 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        // ========== VRest 系统 ==========
-        private List<int> _vrestKeysCache = new List<int>();
-        private List<LF2LivingObject> _boomerangQueryCache = new List<LF2LivingObject>(8);
-
-        public bool IsVRest(LF2Entity obj)
-        {
-            if (obj == null) return false;
-            return _vrest.ContainsKey(obj.StableId) && _vrest[obj.StableId] > 0;
-        }
-
-        public void SetVRest(LF2Entity obj, int value)
-        {
-            if (obj == null) return;
-            _vrest[obj.StableId] = value;
-        }
-
-        private void UpdateVRest()
-        {
-            _vrestKeysCache.Clear();
-            foreach (var key in _vrest.Keys)
-            {
-                _vrestKeysCache.Add(key);
-            }
-            foreach (var key in _vrestKeysCache)
-            {
-                if (_vrest[key] > 0)
-                    _vrest[key]--;
-            }
-        }
-
-        // ========== 辅助方法 ==========
-
-        public float GetSpeed()
-        {
-            return Mathf.Sqrt(PS.vx * PS.vx + PS.vy * PS.vy);
-        }
-
-        public void PlaySound(string soundId)
-        {
-            if (string.IsNullOrEmpty(soundId)) return;
-            AppManager.Instance?.SoundPlayer?.PlaySfx(soundId);
-        }
-
-        public void CreateBrokenEffect()
-        {
-            // TODO: 实现破碎效果
-        }
-
-        public void CreateEffect(int type)
-        {
-            // TODO: 实现特效
-        }
-
-        public void WhirlwindForce(InteractionArea itr)
-        {
-            // TODO: 实现龙卷风效果
-        }
-
-        public override void FluteForce()
-        {
-            // 反汇编 Entity_AI_Update line 1535：kind=10/11 命中时 this+800 = -20
-            FluteWeight = -20;
-        }
 
         /// <summary>
         /// 饮料消耗处理（反汇编 AI_Process2 0x41ABF2-0x41AE73）。
@@ -1080,6 +1057,30 @@ namespace NTSD.Animation.LF2Objects
             return new WeaponAttackResult();
         }
 
+        public void SetWeaponStrengthList(List<WeaponStrengthEntry> list)
+        {
+            _weaponStrengthList = list;
+        }
+
+        protected WeaponStrengthEntry GetStrengthEntry(int attackingIndex)
+        {
+            if (_weaponStrengthList == null || attackingIndex <= 0) return null;
+            return _weaponStrengthList.Find(e => e.index == attackingIndex);
+        }
+
+        #endregion
+
+        #region 辅助方法（WhirlwindForce → FluteForce → CoincideXYWithWPoint → GetSpeed → PlaySound → CreateBrokenEffect → CreateEffect → MakePointCenter → CoincideXYForInit）
+
+        public void WhirlwindForce(InteractionArea itr)
+        {
+            // TODO: 实现龙卷风效果
+        }
+
+        public override void FluteForce()
+        {
+            // 反汇编 Entity_AI_Update line 1535：kind=10/11 命中时 this+800 = -20
+
         /// <summary>
         /// 将武器与持有者的 wpoint 对齐。
         /// 反汇编 AI_Process2 0x41AEDF-0x41AF8F：
@@ -1103,63 +1104,26 @@ namespace NTSD.Animation.LF2Objects
             PS.y = holdpoint.y + wcy - wpy;
         }
 
-        // ========== 初始化子步骤 ==========
-
-        protected void InitializeParent(OPointCreateTask task)
+        public float GetSpeed()
         {
-            _objectId = task.opoint.oid;
-            Team = task.team;
+            return Mathf.Sqrt(PS.vx * PS.vx + PS.vy * PS.vy);
         }
 
-        protected void InitializePosition(OPointCreateTask task)
+        public void PlaySound(string soundId)
         {
-            PS.z = task.z;
-            // parent==null 时（如测试直接生成），用 task.pos 作为初始世界坐标
-            // 正常 opoint 路径 parent!=null，x/y 由 Act() 的 CoincideXY 对齐
-            if (task.parent == null)
-            {
-                PS.x = task.pos.x;
-                PS.y = task.pos.y;
-            }
+            if (string.IsNullOrEmpty(soundId)) return;
+            AppManager.Instance?.SoundPlayer?.PlaySfx(soundId);
         }
 
-        protected void InitializeDirection(OPointCreateTask task)
+        public void CreateBrokenEffect()
         {
-            string dir = CalculateDirection(task.opoint.facing, task.dir);
-            SwitchDir(dir);
+            // TODO: 实现破碎效果
         }
 
-        protected void InitializeFrame(OPointCreateTask task)
+        public void CreateEffect(int type)
         {
-            int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
-            // 加载帧数据
-            var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(_objectId);
-            FrameCache.Load(wrapper);
-            Frame.D = FrameCache.GetFrameDataById(action);
-            Trans.Frame(action, 0);
+            // TODO: 实现特效
         }
-
-        protected void InitializeHealth()
-        {
-            // 从 DAT 数据读取 weapon_hp / weapon_drop_hurt（反汇编 ParseCharData 0x0040D8F0）
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
-            if (charData != null && charData.weapon_hp > 0)
-            {
-                Health.HP = charData.weapon_hp;
-                WeaponDropHurt = charData.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
-            }
-            else
-            {
-                Health.HP = 100;
-            }
-            // 反汇编 Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
-            OnHealthInitialized(charData);
-        }
-
-        /// <summary>
-        /// InitializeHealth 完成后回调，供子类初始化 _flightCounter 等依赖 weapon_hp 的字段。
-        /// </summary>
-        protected virtual void OnHealthInitialized(LF2CharacterData charData) { }
 
         protected Vector3 MakePointCenter(LF2FrameData frame)
         {
@@ -1185,6 +1149,45 @@ namespace NTSD.Animation.LF2Objects
             PS.x += vx;
             PS.z += vz;
         }
+
+        #endregion
+
+        #region VRest 系统（IsVRest / SetVRest / UpdateVRest）
+
+        // ========== VRest 系统 ==========
+        private List<int> _vrestKeysCache = new List<int>();
+        private List<LF2LivingObject> _boomerangQueryCache = new List<LF2LivingObject>(8);
+
+        public bool IsVRest(LF2Entity obj)
+        {
+            if (obj == null) return false;
+            return _vrest.ContainsKey(obj.StableId) && _vrest[obj.StableId] > 0;
+        }
+
+        public void SetVRest(LF2Entity obj, int value)
+        {
+            if (obj == null) return;
+            _vrest[obj.StableId] = value;
+        }
+
+        private void UpdateVRest()
+        {
+            _vrestKeysCache.Clear();
+            foreach (var key in _vrest.Keys)
+            {
+                _vrestKeysCache.Add(key);
+            }
+            foreach (var key in _vrestKeysCache)
+            {
+                if (_vrest[key] > 0)
+                    _vrest[key]--;
+            }
+        }
+
+        // ========== 辅助方法 ==========
+
+        #endregion
+
     }
 
     // ========== 结果类 ==========
