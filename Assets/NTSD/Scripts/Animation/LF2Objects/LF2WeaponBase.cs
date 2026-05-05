@@ -618,6 +618,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return false;
+        }
 
         private void ApplyPickupGrabbedBy(LF2Character character)
         {
@@ -1080,6 +1081,7 @@ namespace NTSD.Animation.LF2Objects
         public override void FluteForce()
         {
             // 反汇编 Entity_AI_Update line 1535：kind=10/11 命中时 this+800 = -20
+        }
 
         /// <summary>
         /// 将武器与持有者的 wpoint 对齐。
