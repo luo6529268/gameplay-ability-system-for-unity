@@ -66,7 +66,7 @@ namespace NTSD.Animation.LF2Objects
         // 反汇编 [weapon+368h+6F8h]：0=普通轻武器, 1=重武器, 2=轻特殊, 4=特殊重武器, 6=饮料类
         public abstract int WeaponType { get; }
         // 反汇编 this+800：笛子命中累积器，子类实现存储
-        protected virtual int FluteWeight { get => 0; set { } }
+        public virtual int FluteWeight { get => 0; set { } }
         // ========== 初始化方法 ==========
 
         #region 生命周期（Init → InitializeStates → Reset → Destroy → 初始化子步骤）
@@ -237,6 +237,12 @@ namespace NTSD.Animation.LF2Objects
                 StateUpdate("die", null);
             }
         }
+
+        /// <summary>反汇编 0x004228A0: type=1/2/4/6 才检查 flightCounter</summary>
+        protected virtual bool IsWeaponDestroyable() => false;
+
+        /// <summary>供基类 SimTU 读取 _flightCounter</summary>
+        protected virtual int GetFlightCounter() => 0;
 
         #endregion
 
