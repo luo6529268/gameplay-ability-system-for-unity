@@ -101,7 +101,7 @@ namespace NTSD.Animation.LF2Objects
             // FLF: if (T.opoint.kind === 2) 被角色持有
             if (task.opoint.kind == 2 && task.parent != null)
             {
-                Pick(task.parent);
+                Pick(task.parent as LF2LivingObject);
                 // 反汇编：opoint kind=2 生成武器时，角色持有关系双向绑定
                 // weapon.Pick(parent) 设置武器侧；还需告知角色侧持有此武器
                 (task.parent as LF2Character)?.HoldWeapon(this);
@@ -1079,7 +1079,7 @@ namespace NTSD.Animation.LF2Objects
 
         #region 辅助方法（WhirlwindForce → FluteForce → CoincideXYWithWPoint → GetSpeed → PlaySound → CreateBrokenEffect → CreateEffect → MakePointCenter → CoincideXYForInit）
 
-        public void WhirlwindForce(InteractionArea itr)
+        public void WhirlwindForce(InteractionArea itr, LF2Entity attacker)
         {
             // TODO: 实现龙卷风效果
         }
