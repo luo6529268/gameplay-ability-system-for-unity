@@ -115,6 +115,8 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>HP 结算上限（对应 FLF $.health.hp_bound，随受伤递减）</summary>
         public int HPBound { get; set; } = 100;
+        /// <summary>MP 上限，对应反汇编 entity+340h。用于 kind=0/16 伤害 MP% 缩放：damage = throwvx * 100 / MaxMP。</summary>
+        public int MaxMP { get; set; } = 0;
     }
 
     /// <summary>
@@ -381,27 +383,46 @@ namespace NTSD.Animation.LF2Objects
         {
             if (Frame.D == null || PS == null) return;
 
-            // 反汇编：entity+0x28h (vx/knockback_vx) 只在 hit 处理里写入，dvx 不写该字段。
-            // Falling 状态下 PS.vx 由击飞速度驱动，dvx 不得覆盖。
+            // 反汇编 Entity_InputProcess 末尾 dvx/dvy/dvz 处理
             bool isFalling = GetState() == LF2States.Falling;
-            if (Frame.D.dvx != 0 && !isFalling)
+            float dvx = Frame.D.dvx;
+            float dvy = Frame.D.dvy;
+            float dvz = Frame.D.dvz;
+
+            if (dvx != 0 && !isFalling)
             {
-                float avx = Mathf.Abs(PS.vx);
-                if (PS.y < 0 || avx < Frame.D.dvx)
+                if (dvx > 500f)
                 {
-                    PS.vx = Dirh() * Frame.D.dvx;
+                    // 反汇编: dvx>500 → vx = dvx-550（绝对值，不乘 facing）
+                    PS.vx = dvx - 550f;
                 }
-                if (Frame.D.dvx < 0)
+                else if (dvx > 0f)
                 {
-                    PS.vx = PS.vx - Dirh();
+                    float avx = Mathf.Abs(PS.vx);
+                    if (PS.y < 0 || avx < dvx)
+                        PS.vx = Dirh() * dvx;
+                }
+                else // dvx < 0
+                {
+                    PS.vx -= Dirh();
                 }
             }
 
-            if (Frame.D.dvz != 0) PS.vz = Dirv() * Frame.D.dvz;
-            if (Frame.D.dvy != 0) PS.vy += Frame.D.dvy;
-            if (!isFalling && Frame.D.dvx == 550) PS.vx = 0;
-            if (Frame.D.dvy == 550) PS.vy = 0;
-            if (Frame.D.dvz == 550) PS.vz = 0;
+            if (dvz != 0f)
+            {
+                if (dvz > 500f)
+                    PS.vz = dvz - 550f;
+                else
+                    PS.vz = Dirv() * dvz;
+            }
+
+            if (dvy != 0f)
+            {
+                if (dvy > 500f)
+                    PS.vy = dvy - 550f;
+                else
+                    PS.vy += dvy;
+            }
         }
 
         /// <summary>
@@ -568,9 +589,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (prevDelay != 0)
                 return;
-
-            // 原版：prevDelay != 0 时一律 return（包括 -1→0 和 1→0 的那帧）
-            if (prevDelay != 0) return;
 
             if (Effect.TimeIn < 0 && Effect.Stuck)
             {
@@ -1091,6 +1109,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void OnTransitDestroy()
         {
+            UnityEngine.Debug.LogWarning($"[Weapon] OnTransitDestroy: oid={ObjectId} Frame.N={Frame?.N} Frame.D.next={Frame?.D?.next}");
             StateUpdate("destroy");
             Destroy();
             // Release renderer (calls ResetState -> Reset -> Unregister)

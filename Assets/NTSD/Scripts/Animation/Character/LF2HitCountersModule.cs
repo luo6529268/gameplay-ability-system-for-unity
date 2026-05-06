@@ -56,7 +56,8 @@ namespace NTSD.Animation
 
         public void ResetFall()
         {
-            Fall = 0;
+            // 反汇编 0x0042D0E4/0x0042D1E6：击飞时 [+0B0h]=80，不是清零
+            Fall = 80;
             _fallAccum = 0f;
         }
 

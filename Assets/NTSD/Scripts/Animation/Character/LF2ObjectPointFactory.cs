@@ -4,6 +4,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Tools;
+using NTSD.Extensions;
 using MoreMountains.Tools;
 using UnityEngine.Pool;
 
@@ -85,7 +86,6 @@ namespace NTSD.Animation
         /// </summary>
         public void FlushTasks()
         {
-            Debug.Log($"[OPointFactory] FlushTasks: queue count={_taskQueue.Count}");
             var node = _taskQueue.First;
             while (node != null)
             {
@@ -116,6 +116,9 @@ namespace NTSD.Animation
                     Log.Warn($"[LF2ObjectPointFactory] Unknown task type: {task.TaskType}");
                     break;
             }
+
+            if (task is ILF2Recyclable recyclable)
+                LF2ReferencePool.Instance?.Recycle(recyclable);
         }
 
         // ========== 单对象创建 ==========
@@ -139,13 +142,6 @@ namespace NTSD.Animation
             }
 
             int objType = def.type;
-
-            // 3. 跳过 type==0 (character)
-            if (objType == 0)
-            {
-                Log.Warn($"[Factory] Character creation via opoint not supported, oid={oid}");
-                return;
-            }
 
             // 4. 从对象池获取对象
             var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
@@ -172,18 +168,29 @@ namespace NTSD.Animation
                     weaponBase.SetWeaponStrengthList(charData.weapon_strength_list);
             }
 
+            // 5.2 角色对象初始化（ModuleInitialize 在 SetLogicObject 之前，ModuleBind 在之后，不绑定输入）
+            var spawnedChar = logicObject as LF2Character;
+            spawnedChar?.ModuleInitialize();
+
             // 6. 设置逻辑对象并初始化
             EntityModel.SetLogicObject(logicObject, task);
 
-            if (logicObject is LF2LivingObject living)
+            if (spawnedChar != null)
+            {
+                var charFrameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+                if (charFrameData != null)
+                    spawnedChar.ModuleBind(charFrameData, oid);
+                spawnedChar.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+            }
+
+            // 所有 LF2Entity（角色、武器、特效）的通用后处理
+            if (logicObject is LF2Entity living)
             {
                 // 7. 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
                 int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
                 var frameData = living.GetFrameDataById(action);
-                Debug.Log($"[OPointFactory] ProcessCreateObject: oid={oid}, action={action}, frameData={frameData?.frameId}, pic={frameData?.pic}, wait={frameData?.wait}, next={frameData?.next}, sound={frameData?.sound}");
                 if (frameData != null && frameData.pic == 999 && frameData.wait == 0 && frameData.next == 1000)
                 {
-                    Debug.Log($"[OPointFactory] Pure sound frame detected, playing sound: {frameData.sound}");
                     if (!string.IsNullOrEmpty(frameData.sound))
                         AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
                     LF2ObjectPool.Instance?.Release(EntityModel);
@@ -192,6 +199,13 @@ namespace NTSD.Animation
                 }
 
                 PostInitLiving(living, task.parent, task.opoint, objType, 0f);
+
+                if (task.frameDelay > 0)
+                    living.FrameDelay = task.frameDelay;
+
+                // 生成后写入 OwnerEntityIndex（对应反汇编 hit_Fa=5/6/8/9 case 直接写 [+1016]）
+                if (task.ownerEntityIndex >= 0)
+                    living.OwnerEntityIndex = task.ownerEntityIndex;
             }
         }
 
@@ -214,12 +228,6 @@ namespace NTSD.Animation
             }
 
             int objType = def.type;
-
-            if (objType == 0)
-            {
-                Log.Warn($"[Factory] Character creation via opoint not supported, oid={oid}");
-                return;
-            }
 
             // 对应反汇编 0x004225B6：dvz_i = i * 10.0 / (count-1) - 5.0，固定范围 [-5, +5]
             List<float> vzArray = ListPool<float>.Get();
@@ -252,20 +260,31 @@ namespace NTSD.Animation
                         wb.SetWeaponStrengthList(charData.weapon_strength_list);
                 }
 
-                var singleTask = new OPointCreateTask
-                {
-                    opoint = task.opoint,
-                    parent = task.parent,
-                    team   = task.team,
-                    pos    = task.pos,
-                    z      = task.z,
-                    dir    = task.dir,
-                    dvz    = vz,
-                };
+                var spawnedChar = logicObject as LF2Character;
+                spawnedChar?.ModuleInitialize();
+
+                var singleTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                singleTask.opoint = task.opoint;
+                singleTask.parent = task.parent;
+                singleTask.team   = task.team;
+                singleTask.pos    = task.pos;
+                singleTask.z      = task.z;
+                singleTask.dir    = task.dir;
+                singleTask.dvz    = vz;
 
                 EntityModel.SetLogicObject(logicObject, singleTask);
+                LF2ReferencePool.Instance?.Recycle(singleTask);
 
-                if (logicObject is LF2LivingObject living)
+                if (spawnedChar != null)
+                {
+                    var charFrameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+                    if (charFrameData != null)
+                        spawnedChar.ModuleBind(charFrameData, oid);
+                    spawnedChar.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+                }
+
+                // 所有 LF2Entity（角色、武器、特效）的通用后处理
+                if (logicObject is LF2Entity living)
                 {
                     // 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
                     int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
@@ -290,22 +309,22 @@ namespace NTSD.Animation
         /// SetLogicObject 之后的统一后处理
         /// 对应反汇编 opoint 创建后初始化序列（0x004223B5-0x0042277E）
         /// </summary>
-        private void PostInitLiving(LF2LivingObject living, LF2LivingObject parent, ObjectPoint op, int objType, float dvz)
+        private void PostInitLiving(LF2Entity living, LF2Entity parent, ObjectPoint op, int objType, float dvz)
         {
             // z_float +1（对应反汇编 0x004223DD：new.z_float = parent.z_float + 1.0）
             living.PS.z += 1f;
 
             if (parent != null)
             {
-                // team_side 继承（对应反汇编 0x0042251F：new.team_side = parent.team_side）
-                living.TeamSide = parent.TeamSide;
+                // team 继承（对应反汇编 0x004223C3-0x004223C9：new[+364h] = parent[+364h]）
+                living.Team = parent.Team;
 
                 // owner_id 继承链（对应反汇编 0x004224F8-0x0042250B）
                 living.OwnerId = parent.OwnerId > -1 ? parent.OwnerId : parent.StableId;
             }
 
-            // type==5 或 52 特殊 HP 初始化（对应反汇编 0x00422687-0x004226C3）
-            if (objType == 5 || objType == 52)
+            // oid==5 或 52 特殊 HP 初始化（对应反汇编 0x00422694：cmp ecx, 5 / cmp ecx, 34h，检查 data.oid 不是 type）
+            if (op.oid == 5 || op.oid == 52)
             {
                 living.Health.HP     = 10;
                 living.Health.MP     = 10;
@@ -319,19 +338,23 @@ namespace NTSD.Animation
                 living.ItrRest?.SetVrest(parent.StableId, 10);
             }
 
-            // kind==2 追踪绑定（对应反汇编 0x00422729-0x0042277E，仅限 type=3 specialattack）
-            if (op.kind == 2 && parent != null && objType == 3)
+            // kind==2 追踪绑定（对应反汇编 0x00422729-0x0042277E，无 entity_type 守卫）
+            if (op.kind == 2 && parent != null)
             {
                 parent.TrackerFlag  = 1;
                 living.TrackerFlag  = -1;
                 parent.TrackerChild = living;
                 living.TrackerParent = parent;
+                // 反汇编 0x00422778-0x0042277E：spawned[+364h] = parent[+364h]（team 再次同步）
+                living.Team = parent.Team;
             }
 
-            // 多对象 dvz 侧偏 vx（对应反汇编 0x004225E8-0x00422627）
+            // 多对象 dvz 侧偏 vx/vz（对应反汇编 0x004225DB/0x004225E8-0x00422627）
+            // dvz 直接加到 vz（0x004225DB: entity.vz += dvz_i）
             // dvz 影响 vx 方向：向左扩散时 vx 减小，向右扩散时 vx 增大
             if (dvz != 0f)
             {
+                living.PS.vz += dvz;
                 float absDvz = Mathf.Abs(dvz);
                 // dir 与 dvz 同向 → 扩散 → vx 加 absDvz；反向 → 收拢 → vx 减 absDvz
                 float vxSign = living.PS.vx >= 0f ? 1f : -1f;

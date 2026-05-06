@@ -528,10 +528,10 @@ namespace NTSD.Animation.Editor
 
                             // ⭐ 检查新帧是否有 opoint，如果有则创建子 opoint 对象（递归生成）
                             // 这样就能实现 opoint → 子 opoint → 孙 opoint 的多层嵌套
-                            if (nextFrame.opoint != null && nextFrame.opoint.oid > 0)
+                            if (nextFrame.opoint.HasValue && nextFrame.opoint.Value.oid > 0)
                             {
-                                CreateOpointObject(nextFrame.opoint);
-                                Debug.Log($"<color=magenta>[opoint 递归创建] 父 oid={opointState.oid} 在帧 {nextFrameId} 创建了子 opoint oid={nextFrame.opoint.oid}</color>");
+                                CreateOpointObject(nextFrame.opoint.Value);
+                                Debug.Log($"<color=magenta>[opoint 递归创建] 父 oid={opointState.oid} 在帧 {nextFrameId} 创建了子 opoint oid={nextFrame.opoint.Value.oid}</color>");
                             }
                         }
                         else
@@ -692,8 +692,8 @@ namespace NTSD.Animation.Editor
             GUIStyle infoStyle = new GUIStyle(EditorStyles.miniLabel);
             infoStyle.normal.textColor = Color.white;
 
-            bool hasOpoint = frameData.opoint != null && frameData.opoint.oid > 0;
-            string opointInfo = hasOpoint ? $"oid:{frameData.opoint.oid}" : "无";
+            bool hasOpoint = frameData.opoint.HasValue && frameData.opoint.Value.oid > 0;
+            string opointInfo = hasOpoint ? $"oid:{frameData.opoint.Value.oid}" : "无";
 
             string info = $"精灵: {sprite.name} | 尺寸: {sprite.rect.width}x{sprite.rect.height} | " +
                          $"帧: {frameData.frameId} | opoint: {opointInfo}";
@@ -902,8 +902,8 @@ namespace NTSD.Animation.Editor
         [FoldoutGroup("Main/📊 帧信息/🎯 对象点 (opoint)", expanded: true)]
         [ShowInInspector, ReadOnly]
         [LabelText("对象点数据")]
-        [HideIf("@GetCurrentFrameData()?.opoint == null")]
-        private ObjectPoint FrameOpoint => GetCurrentFrameData()?.opoint;
+        [HideIf("@!(GetCurrentFrameData()?.opoint.HasValue ?? false)")]
+        private ObjectPoint? FrameOpoint => GetCurrentFrameData()?.opoint;
 
         [FoldoutGroup("Main/📊 帧信息/🎯 对象点 (opoint)")]
         [ShowInInspector, ReadOnly]
@@ -1086,13 +1086,13 @@ namespace NTSD.Animation.Editor
 
                 // 检查新帧是否有 opoint，如果有则创建新的 opoint 对象
                 // 与自动播放保持一致（FrameUpdate 中的逻辑）
-                if (newFrame != null && newFrame.opoint != null && newFrame.opoint.oid > 0)
+                if (newFrame != null && newFrame.opoint.HasValue && newFrame.opoint.Value.oid > 0)
                 {
-                    CreateOpointObject(newFrame.opoint);
+                    CreateOpointObject(newFrame.opoint.Value);
                 }
             }
 
-            // 更新所有 opoint 对象的帧（与自动播放保持一致）
+
             UpdateOpointFrame();
 
             Repaint();
@@ -1215,9 +1215,9 @@ namespace NTSD.Animation.Editor
 
                 // 检查新帧是否有 opoint，如果有则创建新的 opoint 对象
                 // 基于 FLF 源码：character.prototype.opoint (LF/character.js:2339-2380)
-                if (newFrame != null && newFrame.opoint != null && newFrame.opoint.oid > 0)
+                if (newFrame != null && newFrame.opoint.HasValue && newFrame.opoint.Value.oid > 0)
                 {
-                    CreateOpointObject(newFrame.opoint);
+                    CreateOpointObject(newFrame.opoint.Value);
                 }
             }
         }

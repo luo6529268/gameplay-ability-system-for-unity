@@ -164,5 +164,32 @@ namespace NTSD.Animation.LF2Objects
                 return pool.Count;
             return 0;
         }
+
+        // ========== 通用引用池（ILF2Recyclable，按 Type 自动分桶）==========
+
+        private Dictionary<System.Type, Stack<ILF2Recyclable>> _genericPool = new();
+
+        public T Fetch<T>() where T : class, ILF2Recyclable, new()
+        {
+            var type = typeof(T);
+            if (_genericPool.TryGetValue(type, out var stack) && stack.Count > 0)
+            {
+                var obj = (T)stack.Pop();
+                obj.IsFromPool = true;
+                return obj;
+            }
+            return new T { IsFromPool = true };
+        }
+
+        public void Recycle(ILF2Recyclable obj)
+        {
+            if (obj == null || !obj.IsFromPool) return;
+            obj.IsFromPool = false;
+            obj.Clear();
+            var type = obj.GetType();
+            if (!_genericPool.TryGetValue(type, out var stack))
+                _genericPool[type] = stack = new Stack<ILF2Recyclable>();
+            stack.Push(obj);
+        }
     }
 }

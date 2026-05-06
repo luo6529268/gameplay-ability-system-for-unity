@@ -128,15 +128,12 @@ namespace NTSD.DatParser
                             fileDef.Path = tokens[i];
                         }
 
-                        // 读取后续属性 w: h: row: col:
+                        // 读取后续属性 w: h: row: col:（仅这4个，避免吞掉后续的 weapon_hp: 等属性）
                         while (i + 2 < tokens.Length && tokens[i + 1].EndsWith(":"))
                         {
-                            // ⚠️ 检查下一个 token 是否是新的 file() 定义
-                            // 如果是，跳出循环，让外层处理
-                            if (tokens[i + 1].StartsWith("file("))
-                            {
+                            string nextKey = tokens[i + 1].TrimEnd(':').ToLowerInvariant();
+                            if (nextKey != "w" && nextKey != "h" && nextKey != "row" && nextKey != "col")
                                 break;
-                            }
 
                             i++;
                             string attrKey = tokens[i].TrimEnd(':');

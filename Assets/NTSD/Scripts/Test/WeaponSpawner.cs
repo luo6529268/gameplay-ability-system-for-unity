@@ -24,7 +24,7 @@ namespace NTSD.Test
         private static readonly (int oid, string name)[] _f1Weapons =
         {
             (121, "手里剑 shuriken"),
-            (100, "铁球 iron-ball"),
+            (100, "治疗卷轴 heal-scroll"),
             (101, "爆炸标签 ex-tag"),
             (120, "苦无 kunai"),
             (124, "重型武器9 weapon9"),
@@ -84,13 +84,13 @@ namespace NTSD.Test
                 foreach (var f in charData.frames)
                 {
                     if (f == null) continue;
-                    if (f.frameId < minFrame) minFrame = f.frameId;
-                    if (groundFrame < 0 &&
+                    if (f.frameId > 0 && f.frameId < minFrame) minFrame = f.frameId;
+                    if (groundFrame < 0 && f.frameId > 0 &&
                         (f.state == LF2States.WeaponOnGround || f.state == LF2States.HeavyWeaponOnGround))
                         groundFrame = f.frameId;
                 }
             }
-            if (groundFrame < 0) groundFrame = minFrame >= 0 ? minFrame : 0;
+            if (groundFrame < 0) groundFrame = minFrame != int.MaxValue ? minFrame : 0;
 
             // 3. 计算 LF2 坐标（ppu=100，LF2 纵深 z 映射到 Unity Y 轴）
             Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
@@ -98,26 +98,21 @@ namespace NTSD.Test
             float lf2Z = spawnPoint != null ? pos.y * 100f : spawnZ;
 
             // 4. 构造任务，入队（FlushTasks 由 SimulationTickDriver 自动调用）
-            var task = new OPointCreateTask
+            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            task.opoint = new ObjectPoint
             {
-                opoint = new ObjectPoint
-                {
-                    oid    = oid,
-                    kind   = 1,
-                    action = groundFrame,
-                    x      = Mathf.RoundToInt(lf2X),
-                    y      = 666,
-                    dvx    = 0,
-                    dvy    = 0,
-                    facing = 0,
-                },
-                parent = null,
-                team   = 0,
-                pos    = new Vector3(lf2X, 0f, 0f),
-                z      = lf2Z,
-                dir    = "right",
-                dvz    = 0f,
+                oid    = oid,
+                kind   = 0,
+                action = groundFrame,
+                x      = Mathf.RoundToInt(lf2X),
+                y      = 666,
+                dvx    = 0,
+                dvy    = 0,
+                facing = 0,
             };
+            task.parent = null; task.team = 0;
+            task.pos = new Vector3(lf2X, 0f, 0f);
+            task.z = lf2Z; task.dir = "right"; task.dvz = 0f;
 
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
 
@@ -131,8 +126,6 @@ namespace NTSD.Test
         {
             // 1. 随机选武器（oid 100-199，排除 122 除非随机通过，对齐反汇编）
             var (oid, _) = _f1Weapons[Random.Range(0, _f1Weapons.Length)];
-            if (oid == 122 && Random.Range(0, 2) != 0)
-                return;
 
             if (GameDataManager.Instance == null)
             {
@@ -147,13 +140,13 @@ namespace NTSD.Test
 
             // 2. 获取地图边界（像素坐标）
             float xMin = 30f, xMax = 700f, zMin = 240f, zMax = 320f;
-            if (BoundaryWallManager.Instance != null &&
-                BoundaryWallManager.Instance.TryGetStageBoundsPx(out var bounds))
+            if (BoundaryWallManager.Instance.TryGetStageBoundsPx(out var bounds))
             {
                 xMin = bounds.xMinPx + 30f;
                 xMax = bounds.xMaxPx - 30f;
                 zMin = bounds.zMinPx + 30f;
                 zMax = bounds.zMaxPx - 30f;
+                Debug.Log($"[WeaponSpawner] bounds: xMin={bounds.xMinPx} xMax={bounds.xMaxPx} zMin={bounds.zMinPx} zMax={bounds.zMaxPx}");
             }
             else
             {
@@ -176,42 +169,32 @@ namespace NTSD.Test
                 {
                     if (f == null) continue;
                     if (f.frameId > 0 && f.frameId < minFrame) minFrame = f.frameId;
-                    if (flyFrame < 0 && (
+                    if (flyFrame < 0 && f.frameId > 0 && (
                         f.state == LF2States.WeaponInSky ||
                         f.state == LF2States.WeaponThrowing ||
                         f.state == LF2States.HeavyWeaponInSky))
                         flyFrame = f.frameId;
                 }
             }
-            if (flyFrame < 0) flyFrame = minFrame != int.MaxValue ? minFrame : 1;
-
-            if (LF2ObjectPointFactory.Instance == null)
-            {
-                Debug.LogWarning("[WeaponSpawner] F8: LF2ObjectPointFactory.Instance is null");
-                return;
-            }
+            if (flyFrame < 0) flyFrame = minFrame != int.MaxValue ? minFrame : 0;
 
             // 5. 构造任务，入队
-            var task = new OPointCreateTask
+            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            task.opoint = new ObjectPoint
             {
-                opoint = new ObjectPoint
-                {
-                    oid    = oid,
-                    kind   = 1,
-                    action = flyFrame,
-                    x      = Mathf.RoundToInt(lf2X),
-                    y      = Mathf.RoundToInt(lf2Y),
-                    dvx    = 0,
-                    dvy    = 0,
-                    facing = 0,
-                },
-                parent = null,
-                team   = 0,
-                pos    = new Vector3(lf2X, lf2Y, 0f),
-                z      = lf2Z,
-                dir    = "right",
-                dvz    = 0f,
+                oid    = oid,
+                kind   = 0,
+                action = flyFrame,
+                x      = Mathf.RoundToInt(lf2X),
+                y      = Mathf.RoundToInt(lf2Y),
+                dvx    = 0,
+                dvy    = 0,
+                facing = 0,
             };
+            task.parent = null; task.team = 0;
+            task.pos = new Vector3(lf2X, lf2Y, 0f);
+            task.z = lf2Z; task.dir = "right"; task.dvz = 0f;
+            task.frameDelay = 99;
 
             LF2ObjectPointFactory.Instance.EnqueueCreateObject(task);
         }

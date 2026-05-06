@@ -97,6 +97,26 @@ namespace NTSD.Animation.LF2Objects
 
             ComboBuffer?.ReduceTimeout();
 
+            // 反汇编 Entity_InputProcess 0x41507E-0x415114:
+            // state==301 (DeepSpecific) 或 state==19 (FirenSpecific) 时，根据左右输入更新 vz
+            // 条件：(int)PS.z == 0（整数 z 坐标为 0，即在地面中心线）
+            {
+                int curStateForVz = Frame.D?.state ?? -1;
+                if (curStateForVz == LF2States.DeepSpecific || curStateForVz == LF2States.FirenSpecific)
+                {
+                    bool isLeft  = Controller?.IsLeft  ?? false;
+                    bool isRight = Controller?.IsRight ?? false;
+                    float dvz = Frame.D?.dvz ?? 0f;
+                    if (dvz != 0f && (int)PS.z == 0)
+                    {
+                        if (isLeft && !isRight)
+                            PS.vz = -dvz;
+                        else if (isRight && !isLeft)
+                            PS.vz = dvz;
+                    }
+                }
+            }
+
             // FLF character.js:104-122
             // switch(true) {
             //   case dead_blink_count < 0: break  (不执行)
@@ -174,20 +194,21 @@ namespace NTSD.Animation.LF2Objects
                 int dmp = mp % 1000;
                 int dhp = (mp / 1000) * 10;
 
-                // 0x00414C99: jl loc_414D6D — MP 不足则跳过整段
-                if (Health.MP >= dmp)
+                // 0x00414C99: jl loc_414D6D — MP 不足则不触发（跳到 next 帧退出）
+                // 0x00414CC3: jle loc_414D6D — HP 不足则不触发
+                if (Health.MP < dmp || Health.HP <= dhp)
                 {
-                    // 0x00414CC3: jle loc_414D6D — HP 不足则跳过整段
-                    if (Health.HP > dhp)
-                    {
-                        Health.HP -= dhp;
-                        Health.MP -= dmp;
+                    Trans.Frame(Frame.D.next, 0);
+                }
+                else
+                {
+                    Health.HP -= dhp;
+                    Health.MP -= dmp;
 
-                        if (CharacterStats != null)
-                        {
-                            CharacterStats.CurrentHP = Health.HP;
-                            CharacterStats.CurrentMP = Health.MP;
-                        }
+                    if (CharacterStats != null)
+                    {
+                        CharacterStats.CurrentHP = Health.HP;
+                        CharacterStats.CurrentMP = Health.MP;
                     }
                 }
             }
@@ -226,13 +247,6 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 default:
-                    // 对应 FLF character.js:226-228: DJA + transform_character.is_rudolf_transform → revert_transform
-                    if (combo == "DJA" && _idUpdate != null)
-                    {
-                        var ctx = new IdUpdateContext(this, PS, combo, null, 0, 0);
-                        if (_idUpdate.TryInvoke(IdUpdateHooks.RevertTransform, in ctx))
-                            return true;
-                    }
                     break;
             }
 
@@ -252,14 +266,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 Log.LogState(Name, "Combo", $"BLOCKED: Hit['{tag}']={targetFrame} ≤ 0", Log.StateLogLevel.Warn);
                 return false;
-            }
-
-            // Step 3: 调用角色特定逻辑 id_update('generic_combo', K, tag)
-            // 对应 FLF character.js:233: if (!$.id_update('generic_combo', K, tag))
-            if (_idUpdate != null)
-            {
-                if (_idUpdate.TryInvokeGenericCombo(combo, tag, targetFrame))
-                    return true;  // 角色特定逻辑已处理，阻止默认跳转
             }
 
             // 如果不是通用连招
@@ -540,7 +546,7 @@ namespace NTSD.Animation.LF2Objects
 
         // 对应 FLF character.js:2250-2270 武器拾取共享逻辑
         // playAnimation: kind=2 时播放拾取帧; kind=7 时不播
-        private bool PickupWeapon(InteractionArea itr, LF2Entity target, bool playAnimation)
+        private bool PickupWeapon(InteractionArea itr, LF2Entity target, bool playAnimation, bool skipGroundCheck = false)
         {
             if (_heldWeapon != null)
                 return false;
@@ -548,13 +554,17 @@ namespace NTSD.Animation.LF2Objects
             if (target.Type != LF2ObjectType.LightWeapon && target.Type != LF2ObjectType.HeavyWeapon && target.Type != LF2ObjectType.ThrowWeapon && target.Type != LF2ObjectType.Drink)
                 return false;
 
-            // 只允许拾取地面上的武器（FLF: light=1004/1003, heavy=2004）
-            int wstate = target.GetState();
-            bool isOnGround = wstate == LF2States.WeaponOnGround
-                           || wstate == LF2States.WeaponJustOnGround
-                           || wstate == LF2States.HeavyWeaponOnGround;
-            if (!isOnGround)
-                return false;
+            // kind=2 只允许拾取地面上的武器（FLF: light=1004/1003, heavy=2004）
+            // kind=7 反汇编只检查 picker==0，不检查地面状态
+            if (!skipGroundCheck)
+            {
+                int wstate = target.GetState();
+                bool isOnGround = wstate == LF2States.WeaponOnGround
+                               || wstate == LF2States.WeaponJustOnGround
+                               || wstate == LF2States.HeavyWeaponOnGround;
+                if (!isOnGround)
+                    return false;
+            }
 
             var weapon = target as LF2WeaponBase;
             if (weapon == null || !weapon.Pick(this))
@@ -576,18 +586,10 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
-            // 对应 FLF character.js:2247-2249: kind=7 需要 att 键按下才触发，否则跳出
-            // FLF: if (!$.con.state.att) { break }
-            if (Controller == null || !Controller.IsAttack)
-                return false;
-
-            // att 已按下：fall-through 到 kind=2 武器拾取逻辑
-            // 注意：kind=7 不切换拾取动画帧（FLF 原文 kind==2 才切帧）
-            // kind=7 也不允许拾取重型武器（FLF: if (!(ITR.kind===7 && hit[t].type==='heavyweapon'))）
-            if (target.Type == LF2ObjectType.HeavyWeapon)
-                return false;
-
-            return PickupWeapon(itr, target, playAnimation: false);
+            // 反汇编 0x0042E97B/0x0042E984：kind=7 近身拾取
+            // 条件：target.picker==0（武器未被持有），无 att 键守卫，无重武器排除
+            // 与 kind=2 相同逻辑，但不播放拾取动画帧
+            return PickupWeapon(itr, target, playAnimation: false, skipGroundCheck: true);
         }
 
         /// <summary>
@@ -624,6 +626,7 @@ namespace NTSD.Animation.LF2Objects
 
             // FLF:2459 - 判断正面/背面
             bool isFront = (attackerPos.x > PS.x) == (PS.dir == "right");
+            _caughtFront = isFront;
 
             // 原版 LF2：被抓者固定切换到帧 130（PickedCaught）
             // 正面/背面的区分由 cpoint 的 fronthurtact/backhurtact 控制

@@ -3,22 +3,34 @@ using UnityEngine;
 
 namespace NTSD.Animation.LF2Tasks
 {
-    /// <summary>
-    /// 单对象创建任务
-    /// 对应 FLF match.js case 'create_object'
-    /// 参考：I:\C++Test\NTSD\F.LF-master\LF\match.js:338-354
-    /// </summary>
-    public class OPointCreateTask : LF2TaskBase
+    public class OPointCreateTask : LF2TaskBase, ILF2Recyclable
     {
         public override LF2TaskType TaskType => LF2TaskType.CreateObject;
 
-        // ========== 任务数据 ==========
         public ObjectPoint opoint;
-        public LF2LivingObject parent;
+        public LF2Entity parent;
         public int team;
-        public Vector3 pos;      // 世界坐标 (make_point 结果)
-        public float z;          // parent.ps.z
-        public string dir;       // parent.ps.dir
-        public float dvz;        // parent.dirv() * 2
+        public Vector3 pos;
+        public float z;
+        public string dir;
+        public float dvz;
+
+        public bool useDirectVelocity;
+        public float directVx;
+        public float directVy;
+        public float directVz;
+
+        public int ownerEntityIndex = -1;
+        public int frameDelay = 0;
+
+        public bool IsFromPool { get; set; }
+        public void Clear()
+        {
+            opoint = default; parent = null; team = 0;
+            pos = Vector3.zero; z = 0f; dir = null; dvz = 0f;
+            useDirectVelocity = false; directVx = 0f; directVy = 0f; directVz = 0f;
+            ownerEntityIndex = -1;
+            frameDelay = 0;
+        }
     }
 }

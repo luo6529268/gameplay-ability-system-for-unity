@@ -131,6 +131,8 @@ namespace NTSD.Animation.LF2Objects
 
                             case "def":
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Defend, "防御键 -> 防御");
+                                // 反汇编 Entity_InputProcess 0x415309: cmp [esi+0C1h],0 → jnz skip
+                                if (_ks193 > 0) break;
                                 if (IsHeavyWeapon()) 
                                 {
                                     StateReturnFrame = 1;
@@ -163,6 +165,10 @@ namespace NTSD.Animation.LF2Objects
 
                             case "att":
                                 Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Punch, "攻击键 -> 挥拳");
+
+                                // 反汇编 Entity_InputProcess 0x415329: cmp [esi+0C1h],0 → jnz skip
+                                // _ks193 > 0 时（frame 110/114 后 3 帧冷却），禁止触发 att
+                                if (_ks193 > 0) break;
 
                                 // 命中确认窗口（反汇编 entity+0EAh > 0 时跳 frame 70）
                                 // kind=6 命中后 3 帧内按攻击键触发连击
@@ -378,13 +384,21 @@ namespace NTSD.Animation.LF2Objects
                             // 2. 奔跑防御
                             else if (comboKey == "def")
                             {
-                                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", 102, "防御 -> 奔跑防御");
                                 if (IsHeavyWeapon())
                                 {
                                     StateReturnFrame = 1;
                                     return true;
                                 }
-                                TransitionToFrame(102, 10);
+                                // 反汇编 Entity_InputProcess: state==2 + caught==4 → frame 45，caught==6 → frame 55
+                                if (Catching != null && GetState() == LF2States.BeingCaught)
+                                {
+                                    TransitionToFrame(_caughtFront ? 45 : 55, 10);
+                                }
+                                else
+                                {
+                                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", 102, "防御 -> 奔跑防御");
+                                    TransitionToFrame(102, 10);
+                                }
                                 return true;
                             }
                             // 3. 奔跑跳跃 -> 冲刺 (Dash)
@@ -465,24 +479,6 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    // 角色特定帧逻辑（对应 FLF id_updates[id].state3_frame）
-                    if (Frame.N == LF2StandardFrames.FlyingCrash)
-                    {
-                        var ctx253 = new IdUpdateContext(this, PS, Frame.N, 0);
-                        _idUpdate?.TryInvoke(IdUpdateHooks.State3FlyCrash, in ctx253);
-                    }
-                    {
-                        var ctx3f = new IdUpdateContext(this, PS, Frame.N, 0);
-                        _idUpdate?.TryInvoke(IdUpdateHooks.State3Frame, in ctx3f);
-                    }
-
-                    // 帧257：Rudolf 消失
-                    if (Frame.N == 257)
-                    {
-                        var ctx257 = new IdUpdateContext(this, PS, Frame.N, 0);
-                        _idUpdate?.TryInvoke(IdUpdateHooks.State1280Disappear, in ctx257);
-                    }
-
                     // 空中攻击保持逻辑: 如果攻击结束时还在空中，强制切回跳跃状态
                     var D = Frame.D;
                     if (D.next == LF2StandardFrames.LoopToStart && PS.vy < 0)
@@ -493,19 +489,9 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "frame_force":
-                    // 对应 FLF id_updates[id].state3_frame_force（Davis 禁用特定帧的 force 预更新）
-                    {
-                        var ctxFF = new IdUpdateContext(this, PS, Frame.N, 0);
-                        return _idUpdate?.TryInvoke(IdUpdateHooks.State3FrameForce, in ctxFF) ?? false;
-                    }
+                    return false;
 
                 case "hit_stop":
-                    // 角色特定 hit_stop 逻辑（对应 FLF id_updates[id].state3_hit_stop）
-                    {
-                        var ctxHS = new IdUpdateContext(this, PS, Frame.N, 0);
-                        if (_idUpdate?.TryInvoke(IdUpdateHooks.State3HitStop, in ctxHS) == true)
-                            return true;
-                    }
                     // 通用命中停顿 (卡肉) 效果
                     if (CurrentFrameId == 86 || CurrentFrameId == 87 || CurrentFrameId == 91)
                     {
@@ -628,6 +614,23 @@ namespace NTSD.Animation.LF2Objects
 
                 case "combo":
                     string comboKey = eventData as string;
+                    // 反汇编 Entity_InputProcess 0x4157AE: state==4 + def → frame 80 (JumpAttack)
+                    // 若被抓中：caught==4(front)→frame 30，caught==6(back)→frame 52
+                    if (comboKey == "def")
+                    {
+                        if (Catching != null && GetState() == LF2States.BeingCaught)
+                        {
+                            // G2: 空中被抓 + def
+                            TransitionToFrame(_caughtFront ? 30 : 52, 10);
+                        }
+                        else
+                        {
+                            // G1: 空中 + def → frame 80
+                            TransitionToFrame(LF2StandardFrames.JumpAttack, 10);
+                        }
+                        StateReturnFrame = 1;
+                        return true;
+                    }
                     if ((comboKey == "att" || Controller.IsAttack) && !GetStateMemory("attlock", out int attlockValue))
                     {
                         if (Frame.N == LF2StandardFrames.JumpingAir)
@@ -708,7 +711,27 @@ namespace NTSD.Animation.LF2Objects
                             return true;
                         }
                     }
-                    // 2. 冲刺转身
+                    // 2. 冲刺防御 → frame 90 (DashAttack/DashDefend)
+                    // 反汇编 Entity_InputProcess 0x415EC7: state==5 + def → frame 0x5A(90)
+                    if (comboKey == "def")
+                    {
+                        TransitionToFrame(LF2StandardFrames.DashAttack, 10);
+                        StateReturnFrame = 1;
+                        return true;
+                    }
+                    // 3. 冲刺 + up → frame 213/214
+                    // 反汇编 Entity_InputProcess: state==5 + up → frame 213/214
+                    if (comboKey == "up" || comboKey == "jump")
+                    {
+                        var (dx, _) = Controller.GetMoveInput();
+                        int upFrame = (dx != 0 && (dx > 0 ? 1 : -1) == Dirh())
+                            ? LF2StandardFrames.DashForward
+                            : LF2StandardFrames.DashForward2;
+                        TransitionToFrame(upFrame, 10);
+                        StateReturnFrame = 1;
+                        return true;
+                    }
+                    // 4. 冲刺转身
                     if (comboKey == "left" || comboKey == "right")
                     {
                         if (comboKey != PS.dir)
@@ -829,8 +852,17 @@ namespace NTSD.Animation.LF2Objects
                     if (Frame.N == LF2StandardFrames.Defend1)  // 111: 防御成功帧
                     {
                         Log.Info("[State {0}:{1}] -> Branch: {2}", 7, "Defending", "防御成功 → 延长等待时间");
-                        // 增加4帧等待时间（延长防御状态）
                         Trans.IncWait(LF2StateConstants.DefendSuccessWaitBonus);
+                    }
+                    break;
+
+                case "combo":
+                    // 反汇编 Entity_InputProcess 0x41503C: frame==110 + left/right → 改变朝向
+                    if (Frame.N == LF2StandardFrames.Defend)
+                    {
+                        string comboKey = eventData as string;
+                        if (comboKey == "left") SwitchDir("left");
+                        else if (comboKey == "right") SwitchDir("right");
                     }
                     break;
             }
@@ -945,13 +977,6 @@ namespace NTSD.Animation.LF2Objects
                         return true;
                     }
 
-                    // 帧240：Rudolf特殊变身（对应 FLF character.js:784-785）
-                    if (frameId == 240)
-                    {
-                        var ctx = new IdUpdateContext(this, PS, 0, 0);
-                        _idUpdate?.TryInvoke(IdUpdateHooks.RudolfTransform, in ctx);
-                    }
-
                     // 位置同步
                     if (Catching is LF2Character caughtChar && D.cpoint != null)
                     {
@@ -986,19 +1011,14 @@ namespace NTSD.Animation.LF2Objects
 
                             var cpoint = Frame.D.cpoint;
 
-                            if (cpoint.injury != 0)
+                            // 反汇编 Collision_Check2 Block3：injury != 0 && !catcher.FrameDelay
+                            if (cpoint.injury != 0 && FrameDelay == 0)
                             {
                                 NTSDDamageCalculator.ApplyDamage(Catching, cpoint.injury);
-                            }
-
-                            int cover = cpoint.cover;
-                            if (cover == 0 || cover == 10)
-                            {
-                                PS.zz = 1;
-                            }
-                            else
-                            {
-                                PS.zz = -1;
+                                // 反汇编 0x41B484/0x41B495：catcher.FrameDelay=2，caught.FrameDelay=-3
+                                FrameDelay = 2;
+                                if (Catching is LF2Character caughtCh)
+                                    caughtCh.FrameDelay = -3;
                             }
 
                             if (cpoint.dircontrol == 1 && Controller != null)
@@ -1135,6 +1155,11 @@ namespace NTSD.Animation.LF2Objects
         {
             switch (eventType)
             {
+                case "state_entry":
+                    // 反汇编 Entity_AI_Update 0x0042E95C/0x0042F05E: kind=3 命中时设 caught[+94h] = 0x12C = 300
+                    _caughtDecayAccum = 300;
+                    return false;
+
                 case "state_exit":
                     Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, CurrentFrameId);
 
@@ -1157,61 +1182,187 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "TU":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, CurrentFrameId);
+                    // 反汇编 Collision_Check2 (sub_41B2C0)：被抓者每帧位置同步
+                    ApplyCollisionCheck2PositionSync();
 
-                    // ✓ 被抓时的处理（对应 FLF Line 803-880）
-
-                    // ==================== 帧135时消除重力 ====================
-                    // 对应 FLF Line 804-807
-                    if (CurrentFrameId == 135)
-                    {
-                        // Step 2: 使用 PS.vy 替代 unitActions.yForce
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 10, "BeingCaught", "帧135 暂停（消除重力）");
-                        PS.vy = 0;  // 暂停
-                    }
-
-                    // NTSD 2.4 速度处理（基于反汇编 loc_404E78）
-                    
-                    // vx 摩擦（向0靠近）
-                    if (PS.vx < 0)
-                        PS.vx += 1.1f;
-                    else if (PS.vx > 0)
-                        PS.vx -= 1.1f;
-
-                    // vx 边界（±30）
-                    PS.vx = Mathf.Clamp(PS.vx, -30f, 30f);
-
-                    // 位置追踪
-                    if (Catching != null)
-                    {
-                        if (Catching.PS.x > PS.x)
-                            PS.vx += 0.85f;
-                        else if (Catching.PS.x < PS.x)
-                            PS.vx -= 0.85f;
-
-                        if (Catching.PS.z > PS.z + 7)
-                            PS.vz += 0.3f;
-                        else if (Catching.PS.z < PS.z - 7)
-                            PS.vz -= 0.3f;
-
-                        PS.vy *= 0.714f;
-                    }
-
-                    // vx 边界（±13）
-                    PS.vx = Mathf.Clamp(PS.vx, -13f, 13f);
-                    // vz 边界（±2）
-                    PS.vz = Mathf.Clamp(PS.vz, -2f, 2f);
-
-                    // 根据 vx 设置朝向
-                    if (PS.vx > 0)
-                        PS.dir = "right";
-                    else if (PS.vx < 0)
-                        PS.dir = "left";
+                    // N-17/N-19/N-20 反汇编 Collision_Check1 (sub_41B740)：
+                    // 被抓者 cpoint.kind==1 且抓取者 cpoint.kind==2 时每 tick 执行
+                    ApplyCollisionCheck1CaughtLogic();
 
                     return false;
 
                 default:
                     return false;
+            }
+        }
+
+        /// <summary>
+        /// 反汇编 Collision_Check2 (sub_41B2C0) 被抓者每帧位置同步逻辑
+        /// 条件：抓取者 cpoint.kind==1，被抓者 cpoint.kind==2
+        /// 执行：位置直接同步到抓取者 cpoint 位置，cover 控制 y/z 微调和朝向
+        /// </summary>
+        private void ApplyCollisionCheck2PositionSync()
+        {
+            if (Catching == null) return;
+            var catcher = Catching as LF2Character;
+            if (catcher == null) return;
+
+            var catcherCpoint = catcher.Frame?.D?.cpoint;
+            if (catcherCpoint == null || catcherCpoint.kind != 1) return;
+
+            var selfCpoint = Frame?.D?.cpoint;
+            if (selfCpoint == null || selfCpoint.kind != 2) return;
+
+            // 帧赋值：caught.frame = catcher.cpoint.vaction（若 vaction != 0）
+            // 反汇编 0x0041B2C0 Block1：!caught.HitStun && dircontrol==1 || !dircontrol
+            int vaction = catcherCpoint.vaction;
+            if (vaction != 0)
+            {
+                bool shouldSetFrame = (HitStun == 0 && catcherCpoint.dircontrol == 1) || catcherCpoint.dircontrol == 0;
+                if (shouldSetFrame)
+                {
+                    int targetFrame = vaction;
+                    if (targetFrame < 0)
+                    {
+                        // 负帧号：翻转朝向，取绝对值
+                        PS.dir = (PS.dir == "right") ? "left" : "right";
+                        targetFrame = -targetFrame;
+                    }
+                    Trans.Frame(targetFrame, 0);
+                }
+            }
+
+            // 位置同步：直接设置 x/y/z（反汇编 0x0041B683-0x0041B717）
+            int catcherAdir = (catcher.PS.dir == "right") ? 1 : -1;
+            var catcherFrame = catcher.Frame?.D;
+            var selfFrame    = Frame?.D;
+            float catcherCenterX = catcherFrame?.centerx ?? 0f;
+            float catcherCenterY = catcherFrame?.centery ?? 0f;
+            float selfCenterX    = selfFrame?.centerx ?? 0f;
+            float selfCenterY    = selfFrame?.centery ?? 0f;
+
+            // 反汇编 0x0041B4F2-0x0041B5E7:
+            // caught.x = catcher.x + (cpoint.x - catcher.centerx + caught.centerx) * adir
+            PS.x = catcher.PS.x + (catcherCpoint.x - catcherCenterX + selfCenterX) * catcherAdir;
+            // caught.z = catcher.z + cpoint.y - catcher.centery + caught.centery
+            PS.z = catcher.PS.z + catcherCpoint.y - catcherCenterY + selfCenterY;
+            // caught.y = catcher.y
+            PS.y = catcher.PS.y;
+
+            // cover % 10 微调（反汇编 0x0041B683-0x0041B6AA）
+            int cover = catcherCpoint.cover;
+            if (cover % 10 != 0)
+            {
+                PS.y += 1f;
+                PS.z -= 1f;
+            }
+            else
+            {
+                PS.y -= 1f;
+                PS.z += 1f;
+            }
+
+            // cover / 10 朝向控制（反汇编 0x0041B6AD-0x0041B6F3）
+            int coverDir = cover / 10;
+            if (coverDir == 1)
+            {
+                PS.dir = catcher.PS.dir;
+            }
+            else if (coverDir == 2)
+            {
+                PS.dir = (catcher.PS.dir == "right") ? "left" : "right";
+            }
+            // else: 不改变朝向
+        }
+
+        /// <summary>
+        /// N-17/N-19/N-20 反汇编 sub_41B740 Collision_Check1 被抓者逻辑
+        /// 条件：自身 cpoint.kind==1，抓取者 cpoint.kind==2
+        /// </summary>
+        private void ApplyCollisionCheck1CaughtLogic()
+        {
+            if (Catching == null) return;
+            var catcher = Catching as LF2Character;
+            if (catcher == null) return;
+
+            var selfCpoint = Frame?.D?.cpoint;
+            if (selfCpoint == null || selfCpoint.kind != 1) return;
+
+            var catcherCpoint = catcher.Frame?.D?.cpoint;
+            if (catcherCpoint == null || catcherCpoint.kind != 2) return;
+
+            // N-17: cpoint.decrease 每帧处理
+            // decrease > 0: _caughtDecayAccum -= decrease（每 tick 被动消耗）
+            // decrease < 0: _caughtDecayAccum += decrease（累加负值），归零时逃脱
+            int decrease = selfCpoint.decrease;
+            if (decrease > 0)
+            {
+                _caughtDecayAccum -= decrease;
+            }
+            else if (decrease < 0)
+            {
+                _caughtDecayAccum += decrease;
+                if (_caughtDecayAccum < 0)
+                {
+                    // 逃脱：反汇编 sub_41B740 逃脱分支
+                    // caught.frame=0, catcher.frame=0
+                    // catcher.vx=0, catcher.vy=±2.25（根据相对 x）, caught.vy=-2.125
+                    // catcher.frame=181
+                    Trans.Frame(0, 0);
+                    catcher.Trans.Frame(0, 0);
+                    catcher.PS.vx = 0f;
+                    catcher.PS.vy = (PS.x <= catcher.PS.x) ? 2.25f : -2.25f;
+                    PS.vx = 0f;
+                    PS.vy = -2.125f;
+                    catcher.Trans.Frame(181, 0);
+                    catcher.Catching = null;
+                    Catching = null;
+                    _caughtDecayAccum = 0;
+                    return;
+                }
+            }
+
+            // N-20: cpoint.dircontrol 方向修正
+            // 仅当 Trans.Wait == 2 时执行（反汇编 entity[+136]==2）
+            int dircontrol = selfCpoint.dircontrol;
+            if (dircontrol != 0 && Trans.Wait == 2 && Controller != null)
+            {
+                bool pressingRight = Controller.IsRight;
+                bool pressingLeft  = Controller.IsLeft;
+                if (dircontrol == 1)
+                {
+                    if (pressingRight && !pressingLeft)  PS.dir = "right";
+                    if (!pressingRight && pressingLeft)  PS.dir = "left";
+                }
+                else if (dircontrol == -1)
+                {
+                    if (pressingRight && !pressingLeft)  PS.dir = "left";
+                    if (!pressingRight && pressingLeft)  PS.dir = "right";
+                }
+            }
+
+            // N-19: cpoint.throwinjury > 0 写入抓取者 HealTimer（反汇编 catcher[+800]）
+            // 仅当 cpoint.throwvx != 0 时到达（v6[9] != 0）
+            if (selfCpoint.throwvx != 0)
+            {
+                int throwinjury = selfCpoint.throwinjury;
+                if (throwinjury > 0)
+                {
+                    catcher.HealTimer = throwinjury;
+                }
+                // N-18: throwinjury == -1 → data 替换（caught.data = catcher.data）
+                // 在 C# 中等同于替换 FrameCache
+                else if (throwinjury == -1)
+                {
+                    var catcherConfig = CharacterAnimtorManager.Instance?.GetCharacterConfig(catcher.ObjectId);
+                    if (catcherConfig != null)
+                    {
+                        FrameCache.Load(catcherConfig);
+                        Trans.Frame(0, 0);
+                    }
+                    Catching = null;
+                    catcher.Catching = null;
+                }
             }
         }
 
@@ -1373,7 +1524,9 @@ namespace NTSD.Animation.LF2Objects
                     int frameId = Frame.N;
                     if ((frameId == LF2StandardFrames.FallingFront2 || frameId == LF2StandardFrames.FallingBack2) && comboKey == "jump")
                     {
-                        if (HitCounters.Fall < NTSDGlobal.Gameplay.FallKO && Health.HP > 0)
+                        // 反汇编 Entity_InputProcess: cmp [+320h],0 → jl skip; cmp [+2FCh],0 → jle skip
+                        // 条件：fall >= 0 && HP > 0
+                        if (HitCounters.Fall >= 0 && Health.HP > 0)
                         {
                             int rowingFrame = (frameId == LF2StandardFrames.FallingFront2)
                                 ? LF2StandardFrames.Rowing
@@ -1440,8 +1593,8 @@ namespace NTSD.Animation.LF2Objects
                     else
                     {
                         // 路径B：普通落地
-                        // 反汇编 0x4167E2-0x41682D
-                        PS.vx = 0f;
+                        // 反汇编 0x41682D: fld vx; fmul 0.7; fstp vx（不是清零）
+                        PS.vx *= 0.7f;
                         KnockbackVx = 0f;
                         KnockbackVy = 0f;
                         HitCount    = 0;
@@ -1629,7 +1782,6 @@ namespace NTSD.Animation.LF2Objects
                     else if (frameId == LF2StandardFrames.Crouch2)
                     {
                         // 蹲下
-                        if (!(_idUpdate?.TryInvokeGeneric(IdUpdateHooks.State15_Crouch) ?? false))
                         {
                             switch (Frame.PN) // 上一帧编号
                             {
@@ -1677,6 +1829,13 @@ namespace NTSD.Animation.LF2Objects
                     {
                         if (string.IsNullOrEmpty(comboKey))
                             break;
+
+                        // 反汇编 Entity_InputProcess: frame==215 + att → frame 102 (Rowing2)
+                        if (comboKey == "att")
+                        {
+                            TransitionToFrame(LF2StandardFrames.Rowing2, 10);
+                            return true;
+                        }
 
                         // 防御键 → 奔跑防御
                         if (comboKey == "def")

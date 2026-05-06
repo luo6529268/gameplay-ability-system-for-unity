@@ -7,14 +7,14 @@ using System.Collections.Generic;
 namespace NTSD.Input
 {
     /// <summary>
-    /// ¶¯×÷ĞòÁĞ¼ì²âÆ÷£¨´¿ C#£¬²»ÔÙĞèÒª¹ÒÔØµ½Ô¤ÖÆÌåÉÏ£©¡£
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ C#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Øµï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½
     ///
-    /// ÓïÒåÑÏ¸ñ¶ÔÆë¾ÉÊµÏÖ£¨ActionSequenceDetector.cs£©£º
-    /// - ÊäÈëÀ´Ô´£ºCharacterInputModule.InputBuffer£¨°´ tick ¶ÔÆë£©
-    /// - ÖĞ¶Ï·ûºÅ£ºÊ¹ÓÃ FuncKeyMask.None ¶ÔÓ¦ FLF combodec.js µÄ '_' ±ê¼Ç
-    /// - best-match£ºÓÅÏÈÆ¥Åä¸ü³¤ sequence£¬Æä´Î custom > basic
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö£ï¿½ActionSequenceDetector.csï¿½ï¿½ï¿½ï¿½
+    /// - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½CharacterInputModule.InputBufferï¿½ï¿½ï¿½ï¿½ tick ï¿½ï¿½ï¿½ë£©
+    /// - ï¿½Ğ¶Ï·ï¿½ï¿½Å£ï¿½Ê¹ï¿½ï¿½ FuncKeyMask.None ï¿½ï¿½Ó¦ FLF combodec.js ï¿½ï¿½ '_' ï¿½ï¿½ï¿½
+    /// - best-matchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ sequenceï¿½ï¿½ï¿½ï¿½ï¿½ custom > basic
     ///
-    /// SimOrder=5 (Input): ÊäÈë¼ì²âÔÚ½ÇÉ«Âß¼­Ö®Ç°Ö´ĞĞ
+    /// SimOrder=5 (Input): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½É«ï¿½ß¼ï¿½Ö®Ç°Ö´ï¿½ï¿½
     /// </summary>
     public sealed class ActionSequenceDetectorModule : ISimObject
     {
@@ -90,6 +90,8 @@ namespace NTSD.Input
 
         public void RecordAction(FuncKeyMask key)
         {
+            // åæ±‡ç¼– sub_414D80: æ¯æ¬¡æŒ‰é”®æ—¶æ¨å…¥ NTSD ç¼–ç åˆ°è¾“å…¥åºåˆ—
+            _lf2Character?.RecordInputKey(FuncKeyMaskToNtsdCode(key));
             ProcessKeyDown(key);
         }
 
@@ -110,6 +112,25 @@ namespace NTSD.Input
             if (debugLog)
             {
                 Log.Info($"[ActionSequenceDetectorModule] Sequence cleared at time {_time}");
+            }
+        }
+
+        /// <summary>
+        /// å°† FuncKeyMask è½¬æ¢ä¸º NTSD è¾“å…¥åºåˆ—ç¼–ç ï¼ˆå¯¹åº”åæ±‡ç¼– sub_414D80 è°ƒç”¨å‚æ•°ï¼‰
+        /// attâ†’9, jumpâ†’6, downâ†’5, defâ†’0, leftâ†’8, rightâ†’2, upâ†’4
+        /// </summary>
+        private static int FuncKeyMaskToNtsdCode(FuncKeyMask key)
+        {
+            switch (key)
+            {
+                case FuncKeyMask.att:   return 9;
+                case FuncKeyMask.jump:  return 6;
+                case FuncKeyMask.down:  return 5;
+                case FuncKeyMask.def:   return 0;
+                case FuncKeyMask.left:  return 8;
+                case FuncKeyMask.right: return 2;
+                case FuncKeyMask.up:    return 4;
+                default:                return -1;
             }
         }
 

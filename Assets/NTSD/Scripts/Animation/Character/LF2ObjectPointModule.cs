@@ -62,8 +62,8 @@ namespace NTSD.Animation
             LF2FrameData frame = animator.Frame.D;
             if (frame == null) return;
 
-            ObjectPoint op = frame.opoint;
-            if (op == null) return;
+            if (!frame.opoint.HasValue) return;
+            ObjectPoint op = frame.opoint.Value;
             if (op.oid <= 0) return;
 
             Debug.Log($"[OPointModule] ProcessFrame: char={animator.Name}, frame={frame.frameId}, oid={op.oid}, action={op.action}, facing={op.facing}");
@@ -115,18 +115,15 @@ namespace NTSD.Animation
         {
             Vector3 pos = MakePoint(animator, op);
 
-            var task = new OPointCreateTask
-            {
-                opoint  = op,
-                parent  = animator,
-                team    = animator.Team,
-                pos     = pos,
-                z       = animator.PS.z,
-                dir     = animator.PS.dir,
-                dvz     = 0f,
-            };
+            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            task.opoint  = op;
+            task.parent  = animator;
+            task.team    = animator.Team;
+            task.pos     = pos;
+            task.z       = animator.PS.z;
+            task.dir     = animator.PS.dir;
+            task.dvz     = 0f;
 
-            Debug.Log($"[OPointModule] EnqueueSingleTask: oid={op.oid}, action={op.action}, pos={pos}");
             Factory.EnqueueCreateObject(task);
         }
 
@@ -134,17 +131,15 @@ namespace NTSD.Animation
         {
             Vector3 pos = MakePoint(animator, op);
 
-            var task = new OPointCreateMultipleTask
-            {
-                opoint  = op,
-                parent  = animator,
-                team    = animator.Team,
-                pos     = pos,
-                z       = animator.PS.z,
-                dir     = animator.PS.dir,
-                dvz     = 0f,
-                number  = number,
-            };
+            var task = LF2ReferencePool.Instance.Fetch<OPointCreateMultipleTask>();
+            task.opoint  = op;
+            task.parent  = animator;
+            task.team    = animator.Team;
+            task.pos     = pos;
+            task.z       = animator.PS.z;
+            task.dir     = animator.PS.dir;
+            task.dvz     = 0f;
+            task.number  = number;
 
             Factory.EnqueueCreateMultipleObjects(task);
         }

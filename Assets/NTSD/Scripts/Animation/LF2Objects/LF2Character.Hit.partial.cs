@@ -30,6 +30,51 @@ namespace NTSD.Animation.LF2Objects
         {
             if (!base.Hit(itr, attacker, attackerPos, vol)) return false;
 
+            // ── Kind 5: 委托攻击 itr 替换（反汇编 0x0042CA30~0x0042CADC）──
+            // 条件：itr.kind==5 AND victim.GrabbedBy<0 AND TrackerParent.TrackerFlag==attacker.StableId
+            //       AND TrackerParent.wpoint.attacking>0 AND TrackerParent!=this
+            if (itr.kind == 5 && GrabbedBy < 0 && TrackerParent != null)
+            {
+                var tp = TrackerParent as LF2Entity;
+                if (tp != null && tp.TrackerFlag == attacker.StableId && tp != this)
+                {
+                    var tpFrame = tp.GetFrameDataById(tp.Frame.N);
+                    var wp = (tpFrame?.wpoints?.Count > 0) ? tpFrame.wpoints[0] : null;
+                    if (wp != null && wp.attacking > 0)
+                    {
+                        // 从 attacker 的 wpoints[wp.attacking] 获取伤害数据
+                        var attackerFrame = attacker.GetFrameDataById(attacker.Frame.N);
+                        int wpIdx = wp.attacking;
+                        var srcWp = (attackerFrame?.wpoints != null && wpIdx < attackerFrame.wpoints.Count)
+                            ? attackerFrame.wpoints[wpIdx] : null;
+                        if (srcWp != null)
+                        {
+                            // 保留原始 itr 的碰撞框（x/y/w/h），替换伤害字段，kind 强制为 0
+                            itr = new InteractionArea
+                            {
+                                kind    = 0,
+                                x       = itr.x,
+                                y       = itr.y,
+                                w       = itr.w,
+                                h       = itr.h,
+                                zwidth  = srcWp.cover,
+                                dvx     = srcWp.dvx,
+                                dvy     = srcWp.dvy,
+                                dvz     = srcWp.dvz,
+                                injury  = srcWp.injury,
+                                fall    = srcWp.fall,
+                                vaction = srcWp.vaction,
+                                arest   = srcWp.arest,
+                                vrest   = srcWp.vrest,
+                                effect  = srcWp.effect,
+                                kill    = srcWp.kill,
+                                bdefend = srcWp.bdefend,
+                            };
+                        }
+                    }
+                }
+            }
+
             bool acceptHit  = false;
             bool defended    = false;
             bool isKnockdown = false;
@@ -123,8 +168,22 @@ namespace NTSD.Animation.LF2Objects
                 // 攻击方向：取攻击者朝向（反汇编 0x42D35B: [eax+80h] = facing byte → 1-2*facing = Dirh()）
                 int attDir = attacker.Dirh();
                 // 注：反汇编 0x42D384-0x42D42A dvx 直接应用，无 -1 补偿，compen 已删除
-                efDvx = (itr.dvx != 0) ? attDir * (float)itr.dvx : 0f;
+                // 反汇编 0x0042CAEC：attacker.NoBounce > 0 AND itr.kind == 4 → dvx 取反
+                bool attackerNoBounce = (attacker as LF2SpecialAttack)?.NoBounce == true;
+                int dvxSign = (attackerNoBounce && itr.kind == 4) ? -1 : 1;
+                efDvx = (itr.dvx != 0) ? attDir * dvxSign * (float)itr.dvx : 0f;
                 efDvy = (itr.dvy != 0) ? (float)itr.dvy : 0f;
+
+                // 反汇编 0x0042CBF8~0x0042CC1D：重武器（entity_type==2）被命中时 dvx/dvy/injury/fall 减半
+                // 0x42CC01: sar [itr.injury], 1；0x42CC12: sar [itr.fall], 1
+                if (attacker is LF2WeaponBase wb && wb.WeaponType == 2)
+                {
+                    efDvx *= 0.5f;
+                    efDvy *= 0.5f;
+                    itr = itr.ShallowCopy();
+                    itr.injury >>= 1;
+                    itr.fall >>= 1;
+                }
 
                 effectNum = itr.effect;
 
@@ -133,8 +192,21 @@ namespace NTSD.Animation.LF2Objects
                     (effectNum == 20 || effectNum == 21)) return false;
 
                 // ── 防御分支 ──
-                if (myState == LF2States.Defending &&
-                    (attackerPos.x > PS.x) == (PS.dir == "right"))
+                // 反汇编 0x42CE30: frame.state==7（防御状态）
+                // 反汇编 0x42CE36: itr.injury <= 60 才能防御（超过60伤害无法防御）
+                // 反汇编 0x42CE45: attacker.facing != victim.facing（面向攻击者）
+                // 反汇编 0x42CE5A: victim.oid in {124,220,221,222} → 直接防御成功
+                // 反汇编 0x42CE80: attacker.HP > 0 → 防御成功；attacker.HP <= 0 → 正常命中
+                int victimOid = _FrameDataWrapper?.characterData?.type_sub ?? 0;
+                bool isSpecialDefendOid = (victimOid == 124 || victimOid == 220 || victimOid == 221 || victimOid == 222);
+                bool canDefend = myState == LF2States.Defending
+                                 && itr.injury <= 60
+                                 && (attackerPos.x > PS.x) == (PS.dir == "right");
+                var attackerLivingForDefend = attacker as LF2LivingObject;
+                bool defenderWins = canDefend
+                                    && (isSpecialDefendOid || (attackerLivingForDefend?.Health?.HP ?? 1) > 0);
+
+                if (defenderWins)
                 {
                     if (itr.injury != 0)
                         inj += Mathf.RoundToInt(NTSDGlobal.Gameplay.DefendInjuryFactor * itr.injury);
@@ -164,14 +236,45 @@ namespace NTSD.Animation.LF2Objects
                     if ((GetHeldWeapon() as LF2WeaponBase)?.IsHeavy == true)
                         DropWeapon(0f, 0f);
 
-                    if (itr.injury != 0) inj += itr.injury;
+                    // 反汇编 0x0042CCDE~0x0042CE28：type_sub 免疫系统
+                    int victimTypeSub = victimOid; // victimOid 已在防御判定处计算
+                    int attackerTypeSub = (attacker as LF2LivingObject)?._FrameDataWrapper?.characterData?.type_sub ?? 0;
+                    int effectDiv10 = itr.effect / 10;
+                    bool attackerIsSpecial = (attackerTypeSub == 0xD6 || attackerTypeSub == 0xD0);
+                    bool effectAllowed = (effectDiv10 == 2 || effectDiv10 == 3);
 
-                    HitCounters.SetBdefend(45);
+                    if (victimTypeSub == 0x25 && HitCounters.HitStateCount <= 15) // type_sub=37
+                    {
+                        if (!effectAllowed && !attackerIsSpecial) return false;
+                    }
+                    else if (victimTypeSub == 6 && HitCounters.HitStateCount <= 1) // type_sub=6 (Sasuke)
+                    {
+                        if (!effectAllowed && !attackerIsSpecial)
+                        {
+                            // 反汇编 0x0042CD56：victim.frame < 20 → skip；frame.state ∈ {5,4,7} → skip
+                            if (Frame.N < 20) return false;
+                            int fstate = Frame?.D?.state ?? -1;
+                            if (fstate == 5 || fstate == 4 || fstate == 7) return false;
+                        }
+                    }
+                    else if (victimTypeSub == 0x34 && HitCounters.HitStateCount <= 15) // type_sub=52
+                    {
+                        if (!attackerIsSpecial) return false;
+                    }
 
-                    // 对应反汇编 entity+0B8h: add [eax+0B8h], ecx（累加，不是赋值）
-                    HitCounters.AddHitStateCount(itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value);
+                    // 反汇编 0x0042E12F–0x0042E148：damage = injury * 100 / MaxMP（MaxMP > 0 时）
+                    // entity[0x340] = MaxMP；itr[0x44] = injury
+                    int mpDmg = (Health.MaxMP > 0) ? itr.injury * 100 / Health.MaxMP : itr.injury;
+                    if (mpDmg != 0) inj += mpDmg;
+
+                    // 反汇编 0x0042CE90: mov [ecx+0B8h], 2Dh → HitStateCount = 45（固定赋值）
+                    HitCounters.SetHitStateCount(45);
 
                     isKnockdown |= HitFall(inj, ref efDvx, ref efDvy, itr, attackerPos);
+
+                    // 反汇编 0x0042E2D1~0x0042E2DC：非击飞路径才执行 HitStateCount += bdefend
+                    if (!isKnockdown)
+                        HitCounters.AddHitStateCount(itr.bdefend);
                 }
             }
 
@@ -186,21 +289,20 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // ── Kind 8: 传送 + 回血（EXE 0x0042EC85–0x0042ECC7）──
-            // victim 传送到 attacker 位置；victim.frame = itr.dvx；heal_timer = throwvz + 1000
+            // victim 传送到 attacker 位置；victim.frame = itr.dvx
+            // 反汇编 0x0042EC85：heal_timer 写入 attacker（[esi+0E0h]），无 HP 扣减，无 FrameDelay
             else if (itr.kind == 8)
             {
                 if (PS != null && attacker?.PS != null)
                 {
                     PS.x = attacker.PS.x;
                     PS.z = attacker.PS.z + 1f;
+                    // 反汇编 0x0042ECBE: fadd dbl_4432B0(1.0) → victim.y += 1.0
+                    PS.y += 1f;
                 }
                 if (itr.dvx > 0)
                     ImmediateFrame(itr.dvx);
-                // 用 Effect.Heal 承载回血总量（heal_timer = throwvz + 1000，每8帧回8HP）
-                Effect.Heal = itr.throwvz + 1000;
-                FrameDelay  = -3;
-                if (attacker.FrameDelay >= 0)
-                    attacker.FrameDelay = 3;
+                attacker.HealTimer = itr.throwvz + 1000;
                 return true;
             }
 
@@ -236,16 +338,24 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // ── Kind 15: 旋风效果 ──
+            // 反汇编 0x0042F38F~0x0042F3FB：vx ±1.0（基于 x 位置差），vz ±0.5（基于 z 位置差）
             else if (itr.kind == 15)
             {
-                WhirlwindForce(vol);
+                if (PS != null && attacker?.PS != null)
+                {
+                    PS.vx += (attacker.PS.x >= PS.x) ? 1f : -1f;
+                    PS.vz += (attacker.PS.z >= PS.z) ? 0.5f : -0.5f;
+                }
             }
 
             // ── Kind 16: 冰冻 ──
             else if (itr.kind == 16)
             {
                 ImmediateFrame(LF2StandardFrames.MpDrain);
-                inj = itr.injury;
+                // 反汇编 0x0042E12F：damage = injury * 100 / MaxMP（同 kind=0 公式）
+                // entity[0x340] = MaxMP；itr[0x44] = injury
+                inj = (Health.MaxMP > 0) ? itr.injury * 100 / Health.MaxMP : itr.injury;
+                // 反汇编 0x0042E12F 后无音效调用；sub_419C40(x,0x0E) 为屏幕震动，暂不实现
                 acceptHit = true;
             }
 
@@ -254,10 +364,17 @@ namespace NTSD.Animation.LF2Objects
             {
                 var attackerLiving = attacker as LF2LivingObject;
                 if (attackerLiving != null) Attacker = attackerLiving;
-                ItrVrestUpdate(attacker.StableId, itr);
 
-                // 攻击方碰撞豁免（对应反汇编 entity+0ECh）：命中后 6 帧内攻击方跳过碰撞检测
-                attackerLiving?.HitCounters?.SetAttackExempt(6);
+                // 反汇编 0x0042D762/0x0042D7C5：击飞路径写 45，非击飞路径写 itr.arest（若>0）
+                if (isKnockdown)
+                    ItrVrestUpdateKnockdown(attacker.StableId, itr);
+                else
+                    ItrVrestUpdate(attacker.StableId, itr);
+
+                // 攻击方碰撞豁免（反汇编 0x0042D7A0~0x0042D7BF）：
+                // (itr.vrest >= 4 OR itr.arest != 0) ? itr.vrest : 4
+                int exemptVal = (itr.vrest >= 4 || itr.arest != 0) ? itr.vrest : 4;
+                attackerLiving?.HitCounters?.SetAttackExempt(exemptVal);
 
                 // 反汇编 0x0042D218/0x0042D17A/0x0042D0B6：entity+0B0h 值决定屏幕震动强度
                 // sub_419C40 写入 slot channel，渲染层消费产生视觉抖动
@@ -270,6 +387,14 @@ namespace NTSD.Animation.LF2Objects
                 if (attacker.FrameDelay >= 0)
                     attacker.FrameDelay = 3;
                 FrameDelay = isKnockdown ? -3 : -5;
+
+                // 反汇编 0x0042D864~0x0042D88B：attacker.GrabbedBy < 0 时传播 FrameDelay 给 TrackerParent
+                if (attacker.GrabbedBy < 0 && attacker.TrackerParent != null)
+                    attacker.TrackerParent.FrameDelay = FrameDelay;
+
+                // 反汇编 0x0042E2C5：非击飞路径 HitStun = 0
+                if (!isKnockdown)
+                    HitStun = 0;
 
                 // 反汇编 0x0042E314–0x0042E328：地面上 HitStateCount >= 30 且 itr.kind == 7 → frame 112
                 if (!isKnockdown && PS.vy == 0f &&
@@ -328,6 +453,9 @@ namespace NTSD.Animation.LF2Objects
         protected override void Injury(int inj)
         {
             base.Injury(inj);
+            // 反汇编 0x0042CF3F~0x0042CF6B：victim.PP += injury/3（钳制到 MaxPP）
+            if (inj > 0)
+                Health.PP = System.Math.Min(Health.PP + inj / 3, Health.MaxPP);
             // TODO: NPC offset_attack 回调
         }
 
@@ -352,7 +480,8 @@ namespace NTSD.Animation.LF2Objects
             // 反汇编 0x0042C8C0 LABEL_79：强制击飞判断在 fall 累加之前
             bool forceKnockback = (Health.HP - currentInj <= 0)
                                   || (state == LF2States.Falling)
-                                  || (state == LF2States.Frozen);
+                                  || (state == LF2States.Frozen)
+                                  || (itr.fall == 100); // 反汇编 0x0042CC88：itr.fall==100 强制击飞
 
             if (forceKnockback)
             {
@@ -370,6 +499,7 @@ namespace NTSD.Animation.LF2Objects
             // fall > 40 → 重伤帧 226；空中（vy < 0，速度向上）升级为击飞
             if (fall > 40)
             {
+                HitCounters.SetFall(60); // 反汇编 0x0042D159：钳制到档位上限 60
                 ImmediateFrame(LF2StandardFrames.Injured6);
                 if (PS.vy < 0)
                     return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
@@ -379,6 +509,7 @@ namespace NTSD.Animation.LF2Objects
             // fall > 20 → 中伤帧 222/224；空中（vy < 0）升级为击飞
             if (fall > 20)
             {
+                HitCounters.SetFall(40); // 反汇编 0x0042D218：钳制到档位上限 40
                 bool sameDir = attacker_dir_matches_victim(attackerPos);
                 ImmediateFrame(sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
                 if (PS.vy < 0)
@@ -389,6 +520,7 @@ namespace NTSD.Animation.LF2Objects
             // fall > 0 → 轻伤帧 220；空中（vy < 0）升级至中伤帧（不击飞）
             if (fall > 0)
             {
+                HitCounters.SetFall(20); // 反汇编 0x0042D218：钳制到档位上限 20
                 ImmediateFrame(LF2StandardFrames.Injured);
                 if (PS.vy < 0)
                 {
@@ -587,7 +719,7 @@ namespace NTSD.Animation.LF2Objects
         {
             if (defended)
             {
-                // TODO: sound.play('1/002') — 格挡音效
+                // 反汇编 0x0042D20F：格挡后 frame=0xDC，无独立音效调用（sub_419C40 为屏幕震动）
                 return;
             }
 
@@ -614,7 +746,7 @@ namespace NTSD.Animation.LF2Objects
 
                 case 20:
                     ImmediateFrame(LF2StandardFrames.Fire);
-                    // TODO: sound.play('1/070')
+                    // 反汇编 0x0042DCC3：frame=0x1E，无音效调用
                     break;
 
                 case 3:
@@ -623,12 +755,12 @@ namespace NTSD.Animation.LF2Objects
                     if (myState != LF2States.Frozen)
                     {
                         ImmediateFrame(LF2StandardFrames.MpDrain);
-                        // TODO: sound.play('1/065')
+                        // 反汇编 0x0042DFCA：frame=0xC8，sub_419C40(x,0x0E) 为屏幕震动，无独立音效
                     }
                     else
                     {
                         ImmediateFrame(LF2StandardFrames.FallingFront2);
-                        // TODO: sound.play('1/066')
+                        // 反汇编 0x0042E033：frame=0xCB，sub_419C40(x,0x10) 为屏幕震动，无独立音效
                     }
                     break;
 

@@ -33,6 +33,9 @@ namespace NTSD.Animation
                 return;
             }
 
+            if (objectLookup?.Count > 0)
+                return;
+
             try
             {
                 string content = File.ReadAllText(filePath, Encoding.UTF8);

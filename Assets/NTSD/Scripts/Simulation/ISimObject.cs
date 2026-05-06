@@ -74,6 +74,14 @@ namespace NTSD.Simulation
         void SimPreInteraction(int tickIndex) { }
 
         /// <summary>
+        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0)
+        ///
+        /// 职责：武器地面/边界碰撞、state/type 特殊分支（N-1~N-5）
+        /// 调用时机：FramePostProcessAll 之后（反汇编 0x00421FBB 在 Frame_PostProcess 0x004219CB 之后）
+        /// </summary>
+        void SimEntityCollision(int tickIndex) { }
+
+        /// <summary>
         /// 每个模拟 Tick 的后期处理（可选）
         /// </summary>
         void SimLateTick(int tickIndex) { }

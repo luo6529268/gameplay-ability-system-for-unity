@@ -119,12 +119,13 @@ namespace NTSD.Animation
             if (_availableObjects.Count == 0)
             {
                 if (_activeObjects.Count >= maxPoolSize)
+                    Log.Warn("[LF2ObjectPool] Pool over limit: active={0}/{1}, expanding.", _activeObjects.Count, maxPoolSize);
+                CreateNewObject();
+                if (_availableObjects.Count == 0)
                 {
-                    Log.Warn("[LF2ObjectPool] Pool limit reached ({0})", maxPoolSize);
+                    Log.Error("[LF2ObjectPool] CreateNewObject failed (active={0})", _activeObjects.Count);
                     return null;
                 }
-                CreateNewObject();
-                if (_availableObjects.Count == 0) return null;
             }
 
             go = _availableObjects.First.Value;

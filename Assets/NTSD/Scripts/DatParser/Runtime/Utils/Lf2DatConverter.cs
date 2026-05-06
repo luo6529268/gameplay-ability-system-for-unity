@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NTSD.Animation;
 using UnityEngine;
@@ -28,6 +28,8 @@ namespace NTSD.DatParser
             // 转换基本属性
             foreach (var prop in frameBlock.Properties)
             {
+                frameData.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "pic": frameData.pic = ParseInt(prop.Value); break;
@@ -62,7 +64,12 @@ namespace NTSD.DatParser
                 switch (subName)
                 {
                     case "opoint":
-                        frameData.opoint = ConvertToObjectPoint(subBlock);
+                        ObjectPoint objectPoint = ConvertToObjectPoint(subBlock);
+                        frameData.opoints.Add(objectPoint);
+                        if (!frameData.opoint.HasValue)
+                        {
+                            frameData.opoint = objectPoint;
+                        }
                         break;
 
                     case "bpoint":
@@ -93,7 +100,7 @@ namespace NTSD.DatParser
                 UnityEngine.Debug.Log($"<color=cyan>[Converter] 帧 {frameBlock.FrameIndex} ({frameBlock.FrameName}): " +
                     $"pic={frameData.pic}, state={frameData.state}, wait={frameData.wait}, next={frameData.next}, " +
                     $"bodies={frameData.bodies.Count}, itrs={frameData.itrs.Count}, wpoints={frameData.wpoints.Count}, " +
-                    $"opoint={(frameData.opoint != null ? "有" : "无")}, 属性数={frameBlock.Properties.Count}</color>");
+                    $"opoint={(frameData.opoint.HasValue ? "有" : "无")}, 属性数={frameBlock.Properties.Count}</color>");
             }
 
             return frameData;
@@ -117,6 +124,7 @@ namespace NTSD.DatParser
                     case "y": opoint.y = ParseInt(prop.Value); break;
                     case "dvx": opoint.dvx = ParseInt(prop.Value); break;
                     case "dvy": opoint.dvy = ParseInt(prop.Value); break;
+                    case "dvz": opoint.dvz = ParseInt(prop.Value); break;
                     case "oid": opoint.oid = ParseInt(prop.Value); break;
                     case "facing": opoint.facing = ParseInt(prop.Value); break;
                 }
@@ -134,6 +142,8 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                bpoint.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "x": bpoint.x = ParseInt(prop.Value); break;
@@ -153,6 +163,8 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                cpoint.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "kind": cpoint.kind = ParseInt(prop.Value); break;
@@ -190,6 +202,8 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                wpoint.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "kind": wpoint.kind = ParseInt(prop.Value); break;
@@ -201,6 +215,15 @@ namespace NTSD.DatParser
                     case "dvx": wpoint.dvx = ParseInt(prop.Value); break;
                     case "dvy": wpoint.dvy = ParseInt(prop.Value); break;
                     case "dvz": wpoint.dvz = ParseInt(prop.Value); break;
+                    // 反汇编 0x0042CA9F：wpoint[9..16] 对应 itr 的伤害字段
+                    case "injury": wpoint.injury = ParseInt(prop.Value); break;
+                    case "fall": wpoint.fall = ParseInt(prop.Value); break;
+                    case "vaction": wpoint.vaction = ParseInt(prop.Value); break;
+                    case "arest": wpoint.arest = ParseInt(prop.Value); break;
+                    case "vrest": wpoint.vrest = ParseInt(prop.Value); break;
+                    case "effect": wpoint.effect = ParseInt(prop.Value); break;
+                    case "kill": wpoint.kill = ParseInt(prop.Value); break;
+                    case "bdefend": wpoint.bdefend = ParseInt(prop.Value); break;
                 }
             }
 
@@ -216,6 +239,8 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                body.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "kind": body.kind = ParseInt(prop.Value); break;
@@ -238,6 +263,8 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                itr.rawProperties[prop.Key] = prop.Value;
+
                 switch (prop.Key.ToLower())
                 {
                     case "kind": itr.kind = ParseInt(prop.Value); break;
@@ -251,10 +278,16 @@ namespace NTSD.DatParser
                     case "dvz": itr.dvz = ParseInt(prop.Value); break;
                     case "injury": itr.injury = ParseInt(prop.Value); break;
                     case "fall": itr.fall = ParseInt(prop.Value); break;
+                    case "vaction": itr.vaction = ParseInt(prop.Value); break;
                     case "arest": itr.arest = ParseInt(prop.Value); break;
                     case "vrest": itr.vrest = ParseInt(prop.Value); break;
                     case "effect": itr.effect = ParseInt(prop.Value); break;
+                    case "kill": itr.kill = ParseInt(prop.Value); break;
                     case "bdefend": itr.bdefend = ParseInt(prop.Value); break;
+                    case "attacking": itr.attacking = ParseInt(prop.Value); break;
+                    case "throwvz": itr.throwvz = ParseInt(prop.Value); break;
+                    case "catchingact": itr.catchingact = ParseIntPair(prop.Value); break;
+                    case "caughtact": itr.caughtact = ParseIntPair(prop.Value); break;
                 }
             }
 
@@ -274,6 +307,23 @@ namespace NTSD.DatParser
                 return result;
 
             return 0;
+        }
+
+        /// <summary>
+        /// 解析两个整数
+        /// </summary>
+        private static int[] ParseIntPair(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            string[] parts = value.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+                return null;
+
+            int first = ParseInt(parts[0]);
+            int second = parts.Length > 1 ? ParseInt(parts[1]) : first;
+            return new[] { first, second };
         }
 
         /// <summary>

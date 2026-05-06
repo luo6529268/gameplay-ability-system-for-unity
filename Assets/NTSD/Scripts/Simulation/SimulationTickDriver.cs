@@ -142,6 +142,12 @@ namespace NTSD.Simulation
 
             if (_world != null)
             {
+                // N-6: 随机场景掉落武器全局 pass（反汇编 0x004215FA，在 Entity_AI_Update 1st 循环之后）
+                _world.RandomWeaponDropTickAll(tickIndex);
+            }
+
+            if (_world != null)
+            {
                 // PostInteraction pass：对齐反汇编 sub_42C8C0 循环2
                 // 所有 entity 帧推进完成后统一做碰撞检测，消除帧推进顺序影响
                 _world.PostInteractionTickAll(tickIndex);
@@ -152,6 +158,13 @@ namespace NTSD.Simulation
                 // Frame_PostProcess pass：对应反汇编 Frame_PostProcess（0x0041BF00）
                 // Knockback 累加器 → PS.vx/vy，完成后清零，在 SerialTickAll 之后立即执行
                 _world.FramePostProcessAll();
+            }
+
+            if (_world != null)
+            {
+                // EntityCollision pass：对应反汇编 Entity_Collision (sub_4138F0) 0x00421FBB
+                // 武器地面/边界碰撞及 N-1~N-5 特殊分支，在 Frame_PostProcess 之后执行
+                _world.EntityCollisionTickAll(_tickIndex);
             }
 
             if (_world != null)

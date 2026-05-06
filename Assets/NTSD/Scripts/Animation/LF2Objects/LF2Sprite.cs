@@ -31,15 +31,19 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public string Dir => _dir;
 
+        private int _startFrame;
+
         /// <summary>
         /// 初始化精灵模块
         /// </summary>
         /// <param name="renderer">SpriteRenderer 组件引用</param>
         /// <param name="sprites">精灵列表</param>
-        public void Initialize(SpriteRenderer renderer, List<Sprite> sprites)
+        /// <param name="startFrame">精灵列表中的起始偏移（对应 SpriteFileInfo.startFrame）</param>
+        public void Initialize(SpriteRenderer renderer, List<Sprite> sprites, int startFrame = 0)
         {
             _renderer = renderer;
             _sprites = sprites;
+            _startFrame = startFrame;
             _dir = "right";
 
             // 从根节点查找 SortingGroup（角色有，武器/SA 无）
@@ -77,11 +81,15 @@ namespace NTSD.Animation.LF2Objects
         /// 参考：FLF sprite.js:111-131
         /// </summary>
         /// <param name="picIndex">图片索引</param>
+        public bool HasRenderer => _renderer != null;
+
         public void ShowPic(int picIndex)
         {
             if (_renderer == null || _sprites == null) return;
-            if (picIndex < 0 || picIndex >= _sprites.Count) return;
-            _renderer.sprite = _sprites[picIndex];
+            int actualIndex = _startFrame + picIndex;
+            if (actualIndex < 0 || actualIndex >= _sprites.Count) return;
+            if (_sprites[actualIndex] == null) return;
+            _renderer.sprite = _sprites[actualIndex];
         }
 
         /// <summary>

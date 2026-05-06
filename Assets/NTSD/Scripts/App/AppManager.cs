@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Extensions;
 using NTSD.Game;
 using NTSD.Tools;
 using NTSD.UI;
@@ -181,11 +182,13 @@ namespace NTSD.App
                 lf2.Controller.SetInputID(slot.inputId);
 
                 lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{slot.inputId}");
+                lf2.ModuleInitialize();
 
                 EntityModel.SetLogicObject(lf2, null);
 
                 var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(slot.characterId);
                 lf2.ModuleBind(frameData, slot.characterId);
+                lf2.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
 
                 Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
                     ? spawnPoints[i].transform.position: Vector3.zero;

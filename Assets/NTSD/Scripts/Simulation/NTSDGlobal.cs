@@ -206,6 +206,12 @@ namespace NTSD.Simulation
            public const int Timeout = 10; // 连招超时时间（时间单位）
         }
 
+        /// <summary>
+        /// 全局 MP 消耗开关（对应反汇编 dword_446970，初始值 1，可被游戏模式切换）。
+        /// true = MP 消耗启用（默认）；false = 跳过 MP 扣除逻辑。
+        /// </summary>
+        public static bool MPEnabled = true;
+
         public static class Sound
         {
             public const string DefendGuard = "Battle/Defend/Guard";

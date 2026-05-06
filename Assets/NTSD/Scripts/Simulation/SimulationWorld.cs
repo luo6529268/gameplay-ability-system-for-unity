@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using UnityEngine;
 
@@ -345,9 +346,11 @@ namespace NTSD.Simulation
 
                     if (living.HitCount > 0)
                     {
-                        float newVx = living.KnockbackVx * 2f / (living.HitCount + 1);
-                        living.PS.vx = newVx;
-                        living.PS.vy = living.KnockbackVy * 2f / (living.HitCount + 1);
+                        float denom = living.HitCount + 1;
+                        living.PS.vx = living.KnockbackVx * 2f / denom;
+                        living.PS.vy = living.KnockbackVy * 2f / denom;
+                        // 反汇编 0x41BF5B-0x41BF6B：[+38h](KnockbackVz) 同样写入 [+50h](vz)
+                        living.PS.vz = living.KnockbackVz * 2f / denom;
                     }
                     living.KnockbackVx = 0f;
                     living.KnockbackVy = 0f;
@@ -548,5 +551,100 @@ namespace NTSD.Simulation
         /// 获取模拟上下文（只读）
         /// </summary>
         public SimContext Context => _context;
+
+        /// <summary>
+        /// EntityCollision pass（对应反汇编 Entity_Collision sub_4138F0 0x00421FBB）
+        ///
+        /// 在 FramePostProcessAll 之后执行，处理武器地面/边界碰撞及 N-1~N-5 特殊分支。
+        /// 反汇编中此循环紧跟 Frame_PostProcess（0x004219CB）之后。
+        /// </summary>
+        public void EntityCollisionTickAll(int tickIndex)
+        {
+            foreach (var kvp in _buckets)
+            {
+                var snapshot = kvp.Value.items.Count > 0
+                    ? new List<ISimObject>(kvp.Value.items)
+                    : null;
+                if (snapshot == null) continue;
+                foreach (var obj in snapshot)
+                {
+                    if (obj == null) continue;
+                    obj.SimEntityCollision(tickIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// N-6: 随机场景掉落武器全局 pass（反汇编 0x004215FA 区域）
+        /// 在 SerialTickAll 之后调用一次：场上武器/特效实体数 &lt; 4 且 rand(200)==0 时随机生成武器
+        /// </summary>
+        public void RandomWeaponDropTickAll(int tickIndex)
+        {
+            // 反汇编 0x4215BA-0x4215CE：仅统计 entity_type==1/2/4/6 的实体（不含 type=0 特效和 type=3 粘附武器）
+            int weaponCount = 0;
+            foreach (var kvp in _buckets)
+            {
+                foreach (var obj in kvp.Value.items)
+                {
+                    if (obj is LF2WeaponBase wb)
+                    {
+                        int wt = wb.WeaponType;
+                        if (wt == 1 || wt == 2 || wt == 4 || wt == 6)
+                            weaponCount++;
+                    }
+                }
+            }
+            if (weaponCount >= 4) return;
+            if (UnityEngine.Random.Range(0, 200) != 0) return;
+
+            var manager = CharacterAnimtorManager.Instance;
+            if (manager == null) return;
+
+            var candidates = new System.Collections.Generic.List<int>();
+            for (int oid = 0x64; oid < 0xC8; oid++)
+            {
+                var wrapper = manager.GetCharacterConfig(oid);
+                if (wrapper == null) continue;
+                if (oid == 0x7A || oid == 0x7B)
+                {
+                    if (UnityEngine.Random.Range(0, 2) == 0) continue;
+                }
+                candidates.Add(oid);
+            }
+            if (candidates.Count == 0) return;
+
+            int selectedOid = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+
+            var factory = LF2ObjectPointFactory.Instance;
+            if (factory == null) return;
+
+            // Find a reference position from the first active character
+            float spawnX = 400f, spawnZ = 0f;
+            foreach (var kvp in _buckets)
+            {
+                foreach (var obj in kvp.Value.items)
+                {
+                    if (obj is LF2Character ch && ch.Team > 0)
+                    {
+                        spawnX = ch.PS.x + UnityEngine.Random.Range(-30, 31);
+                        spawnZ = ch.PS.z + UnityEngine.Random.Range(-10, 11);
+                        goto spawnReady;
+                    }
+                }
+            }
+            spawnReady:
+
+            var op = new ObjectPoint
+            {
+                oid = selectedOid, kind = 0, action = 0,
+                dvx = 0, dvy = -500, dvz = 0,
+                x = 0, y = 0, facing = 0
+            };
+            var spawnTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            spawnTask.opoint = op; spawnTask.parent = null; spawnTask.team = 0;
+            spawnTask.pos = new UnityEngine.Vector3(spawnX, 0, spawnZ);
+            spawnTask.z = spawnZ; spawnTask.dir = "right"; spawnTask.dvz = 0;
+            factory.EnqueueCreateObject(spawnTask);
+        }
     }
 }

@@ -41,8 +41,8 @@ namespace NTSD.App
         public GameObject LF2ObjectPrefab;
         [Tooltip("对象池预热数量（0=完全懒加载）")]
         public int PoolInitialSize = 0;
-        [Tooltip("对象池最大容量")]
-        public int PoolMaxSize = 200;
+        [Tooltip("对象池最大容量（对齐反汇编 SceneManager_Init 预分配 400 实体）")]
+        public int PoolMaxSize = 400;
         [Tooltip("空闲对象超时销毁时间（秒）")]
         public float PoolExpireTimeSeconds = 120f;
         [Tooltip("超时检查间隔（秒）")]

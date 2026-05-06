@@ -27,7 +27,7 @@ namespace NTSD.Animation
         [Tooltip("对象ID")]
         public int id;
 
-        [Tooltip("对象类型\n0=角色\n1=?\n2=?\n3=技能特效\n4=武器\n5=?\n6=?")]
+        [Tooltip("对象类型\n0=角色\n1=轻武器/小道具\n2=重武器\n3=技能特效\n4=投掷武器(大弹)\n5=特殊实体(NPC/碎片)\n6=饮料/食物")]
         public int type;
 
         [Tooltip("JSON 文件路径")]

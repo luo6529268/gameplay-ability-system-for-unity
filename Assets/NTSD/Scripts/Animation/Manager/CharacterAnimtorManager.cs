@@ -470,6 +470,11 @@ namespace NTSD.Animation
                     string datFileDirectory = Path.GetDirectoryName(datFilePath);
                     LF2CharacterData characterData = BuildCharacterDataFromDat(datFile, datFileDirectory);
 
+                    // 反汇编 [+6F4h] = oid（由调用方传入，不在 dat 文件内容里）
+                    // type_sub 字段直接等于 characterId（oid），dat 文件里不存在此字段
+                    if (characterData.type_sub == 0)
+                        characterData.type_sub = characterId;
+
                     LF2CharacterDataWrapper wrapper = new LF2CharacterDataWrapper(characterId, characterData);
 
                     if (wrapper != null && wrapper.characterData != null)
@@ -591,6 +596,14 @@ namespace NTSD.Animation
             foreach (var prop in datFile.Properties)
             {
                 ApplyWeaponProperty(prop.Key, prop.Value, characterData);
+            }
+            // weapon_hp 等字段在 <bmp_begin>...<bmp_end> 内，存储在 datFile.Bmp.Properties
+            if (datFile.Bmp != null)
+            {
+                foreach (var prop in datFile.Bmp.Properties)
+                {
+                    ApplyWeaponProperty(prop.Key, prop.Value, characterData);
+                }
             }
             foreach (var block in datFile.Blocks)
             {
@@ -1217,6 +1230,12 @@ namespace NTSD.Animation
         }
 
         /// <summary>静默查询，不打 LogError，供武器/SA 等可能未加载精灵的对象使用</summary>
+        public int GetStartFrame(int id)
+        {
+            var files = GetCharacterData(id)?.files;
+            return (files != null && files.Count > 0) ? files[0].startFrame : 0;
+        }
+
         public bool TryGetSprites(int id, out List<Sprite> sprites)
         {
             return MergedSprites.TryGetValue(id, out sprites);

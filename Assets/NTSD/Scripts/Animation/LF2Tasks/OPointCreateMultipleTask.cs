@@ -3,23 +3,24 @@ using UnityEngine;
 
 namespace NTSD.Animation.LF2Tasks
 {
-    /// <summary>
-    /// 多对象创建任务
-    /// 对应 FLF match.js case 'create_multiple_objects'
-    /// 参考：I:\C++Test\NTSD\F.LF-master\LF\match.js:355-392
-    /// </summary>
-    public class OPointCreateMultipleTask : LF2TaskBase
+    public class OPointCreateMultipleTask : LF2TaskBase, ILF2Recyclable
     {
         public override LF2TaskType TaskType => LF2TaskType.CreateMultipleObjects;
 
-        // ========== 任务数据 ==========
         public ObjectPoint opoint;
-        public LF2LivingObject parent;
+        public LF2Entity parent;
         public int team;
-        public Vector3 pos;      // 世界坐标 (make_point 结果)
-        public float z;          // parent.ps.z
-        public string dir;       // parent.ps.dir
-        public float dvz;        // 单对象初始 dvz（反汇编：0，由 Factory 展开时按索引覆盖）
-        public int number;       // 生成数量
+        public Vector3 pos;
+        public float z;
+        public string dir;
+        public float dvz;
+        public int number;
+
+        public bool IsFromPool { get; set; }
+        public void Clear()
+        {
+            opoint = default; parent = null; team = 0;
+            pos = Vector3.zero; z = 0f; dir = null; dvz = 0f; number = 0;
+        }
     }
 }
