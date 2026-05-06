@@ -203,6 +203,35 @@ namespace NTSD.Animation.LF2Objects
 
         #region 每帧驱动接口（SimTransit → SimTU → IsWeaponDestroyable → GetFlightCounter）
 
+        public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
+        {
+            Frame.PN = Frame.N;
+            Frame.N = targetFrameId;
+
+            LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
+            if (targetFrame == null) return;
+
+            bool isStateTrans = Frame.D?.state != targetFrame.state;
+            if (isStateTrans)
+                StateUpdate("state_exit");
+
+            Frame.D = targetFrame;
+
+            if (isStateTrans)
+            {
+                HitStun = 0;
+                StateUpdate("state_entry");
+                _lastState = Frame.D.state;
+            }
+
+            Trans.SetWait(Frame.D.wait, 99);
+            Trans.SetNext(Frame.D.next, 99);
+            StateUpdate("frame");
+
+            if (!string.IsNullOrEmpty(Frame.D.sound))
+                PlaySound(Frame.D.sound);
+        }
+
         public override void SimTransit(int tickIndex)
         {
             Trans?.Trans();
