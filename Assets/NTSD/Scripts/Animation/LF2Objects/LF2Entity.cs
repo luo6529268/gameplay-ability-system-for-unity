@@ -36,7 +36,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>对象 ID（对应 entity ObjectId）</summary>
         public int ObjectId { get; set; }
 
-        /// <summary>队伍 ID（entity+2FCh）</summary>
+        /// <summary>队伍 ID（entity+364h，值 1~5 对应不同队伍）</summary>
         public int Team { get; set; }
 
         /// <summary>阵营标记（entity+8h，0=右/1=左）</summary>
@@ -126,6 +126,9 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>震屏计时器（entity+8h shake_timer）</summary>
         public int ShakeTimer { get; set; } = 0;
+
+        /// <summary>所有者实体索引（entity+756=0x2F4h），初始值 -1；opoint 生成时设为生成者索引。P1-6</summary>
+        public int OwnerEntityIndex { get; set; } = -1;
 
         /// <summary>弹射计数（entity+308h）</summary>
         public int ShotCount { get; set; } = 0;
@@ -429,8 +432,17 @@ namespace NTSD.Animation.LF2Objects
         public void ItrVrestUpdate(int attackerUid, InteractionArea itr)
         {
             if (ItrRest == null || itr == null) return;
-            int vrest = (itr.injury > 40) ? 19 : 3;
+            // 反汇编 0x0042D7C5：itr.arest > 0 → vrest = itr.arest；否则 vrest = itr.vrest
+            int vrest = (itr.arest > 0) ? itr.arest : itr.vrest;
             ItrRest.SetVrest(attackerUid, vrest);
+        }
+
+        /// <summary>更新对指定攻击者的 vrest 冷却（击飞路径，固定值 45）</summary>
+        public void ItrVrestUpdateKnockdown(int attackerUid, InteractionArea itr)
+        {
+            if (ItrRest == null || itr == null) return;
+            // 反汇编 0x0042D762：击飞路径固定写 45
+            ItrRest.SetVrest(attackerUid, 45);
         }
 
         /// <summary>
@@ -478,6 +490,11 @@ namespace NTSD.Animation.LF2Objects
 
         public abstract void Reset();
         public abstract void Init(LF2TaskBase task, LF2ObjectRenderer renderer);
+        /// <summary>从 SimulationWorld 注销自身（及关联对象）。仅由 ResetState() 调用，不在 Reset() 里调用。</summary>
+        public virtual void UnregisterFromWorld()
+        {
+            SimulationTickDriver.Instance?.World?.Unregister(this);
+        }
 
         public virtual void Destroy()
         {
@@ -513,6 +530,7 @@ namespace NTSD.Animation.LF2Objects
         public virtual void SimTU(int tickIndex) { }
         public virtual void SimPostInteraction(int tickIndex) { }
         public virtual void SimPreInteraction(int tickIndex) { }
+        public virtual void SimEntityCollision(int tickIndex) { }
         public virtual void SimLateTick(int tickIndex)
         {
             if (PS != null) Sprite?.SetZ(PS.z + PS.zz);

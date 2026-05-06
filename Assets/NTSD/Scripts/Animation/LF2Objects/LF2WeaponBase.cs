@@ -122,7 +122,6 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Reset()
         {
-            SimulationTickDriver.Instance?.World?.Unregister(this);
             FrameCache.Clear();
             _objectId = 0;
             Team = 0;

@@ -30,6 +30,9 @@ namespace NTSD.Animation.LF2Objects
         // 渲染帧计数器（对应反汇编 dword_449098，每渲染帧递增）
         private int _renderFrameCount = 0;
 
+        // 缓存稳定ID（AllocateStableId 只调用一次）
+        private int _stableId = 0;
+
         // ========== 公开属性 ==========
         public ILF2Object LogicObject => _logicObject;
 
@@ -40,15 +43,25 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public int SimOrder => SimOrderConstants.Renderer;
 
-        public int StableId => SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
+        public int StableId
+        {
+            get
+            {
+                if (_stableId == 0)
+                {
+                    _stableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? GetInstanceID();
+                }
+
+                return _stableId;
+            }
+        }
 
         // ========== 生命周期 ==========
 
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _visualTransform = transform.Find("EntityModel");
-            UnityEngine.Debug.Log($"[Renderer] Awake: {gameObject.name}");
+            _visualTransform = this.transform;
         }
 
         private void OnEnable()
@@ -69,11 +82,11 @@ namespace NTSD.Animation.LF2Objects
 
         public void SimTU(int tickIndex) { }
 
-        public void SimLateTick(int tickIndex) { }
-
-        private void LateUpdate()
+        public void SimLateTick(int tickIndex)
         {
             if (_logicObject == null) return;
+            if (!(_logicObject is LF2Character) && _renderFrameCount < 3)
+                UnityEngine.Debug.Log($"[SimLateTick] oid={_logicObject.ObjectId} tick={tickIndex}");
             UpdateSprite();
             UpdatePosition();
             ApplyVisualShake();
@@ -88,15 +101,18 @@ namespace NTSD.Animation.LF2Objects
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
             _logicObject = logicObject as LF2Entity;
+            _renderFrameCount = 0;
             _logicObject?.Init(task, this);
 
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
             List<Sprite> sprites = null;
+            int startFrame = 0;
             if (_logicObject != null)
+            {
                 CharacterAnimtorManager.Instance?.TryGetSprites(_logicObject.ObjectId, out sprites);
-            // sprites 为 null 时跳过，避免覆盖 ModuleInitialize 已正确初始化的 sprites
+                startFrame = CharacterAnimtorManager.Instance?.GetStartFrame(_logicObject.ObjectId) ?? 0;
+            }
             if (sprites != null)
-                _logicObject?.Sprite?.Initialize(sr, sprites);
+                _logicObject?.Sprite?.Initialize(_spriteRenderer, sprites, startFrame);
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
         }
@@ -113,6 +129,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ResetState()
         {
+            _logicObject?.UnregisterFromWorld();
             _logicObject?.Reset();
             _logicObject = null;
             gameObject.SetActive(false);
@@ -127,11 +144,12 @@ namespace NTSD.Animation.LF2Objects
             if (_logicObject == null) return;
             var frame = _logicObject.Frame?.D;
             if (frame == null) return;
-
-            _logicObject.Sprite?.ShowPic(frame.pic);
+            if (_logicObject.Sprite == null) return;
+            if (!_logicObject.Sprite.HasRenderer) return;
+            _logicObject.Sprite.ShowPic(frame.pic);
             var ps = _logicObject.PS;
             if (ps != null)
-                _logicObject.Sprite?.SwitchLR(ps.dir);
+                _logicObject.Sprite.SwitchLR(ps.dir);
         }
 
         /// <summary>
@@ -153,16 +171,44 @@ namespace NTSD.Animation.LF2Objects
             float cy = frame?.centery ?? 0f;
 
             // 1. Root 节点始终保持在地面 (px, pz)
-            float worldX = ps.x / ppu;
-            float worldY = ps.z / ppu;
-            transform.position = new Vector3(worldX, worldY, transform.position.z);
-
-            // 2. Model 节点处理视觉高度和中心点偏移
-            if (_visualTransform != null)
+            Transform rootTransform = transform.parent != null ? transform.parent : transform;
+            if (_logicObject is LF2Character)
             {
-                _visualTransform.localPosition = new Vector3(-cx / ppu, (ps.y - cy) / ppu, 0);
-            }
+                Vector2 groundPlanePos = ps.GetGroundPoint2D();
+                rootTransform.position = new Vector3(
+                    Mathf.Round(groundPlanePos.x * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
+                    Mathf.Round(groundPlanePos.y * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
+                    rootTransform.position.z
+                );
 
+                float visualYOffset = -ps.y / SimulationConstants.PIXELS_PER_UNIT;
+                float snappedVisualY = Mathf.Round(visualYOffset * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT;
+                if (_visualTransform != null)
+                {
+                    _visualTransform.localPosition = new Vector3(0f, snappedVisualY, 0f);
+                }
+
+                if (_renderFrameCount < 2)
+                    UnityEngine.Debug.Log($"[Char] px={ps.x:F0} pz={ps.z:F0} worldX={groundPlanePos.x:F2} worldY={groundPlanePos.y:F2} localY={snappedVisualY:F2} finalY={groundPlanePos.y + snappedVisualY:F2}");
+            }
+            else
+            {
+                float worldX = ps.x / ppu;
+                float worldY = (ps.z - ps.y) / ppu;
+                rootTransform.position = new Vector3(worldX, worldY, rootTransform.position.z);
+
+                if (_visualTransform != null)
+                {
+                    _visualTransform.localPosition = new Vector3(-cx / ppu, -cy / ppu, 0);
+                }
+
+                if (_renderFrameCount < 2)
+                {
+                    string pname = transform.parent != null ? transform.parent.name : "null";
+                    string gpname = (transform.parent != null && transform.parent.parent != null) ? transform.parent.parent.name : "null";
+                    UnityEngine.Debug.Log($"[Pos] oid={_logicObject.ObjectId} px={ps.x:F0} py={ps.y:F0} pz={ps.z:F0} rootY={worldY:F2} localY={(-cy/ppu):F2} finalY={worldY + (-cy/ppu):F2}");
+                }
+            }
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);
 
             // 阴影由 LF2Entity.UpdateShadow() 处理（保持在 Root 的本地零点）

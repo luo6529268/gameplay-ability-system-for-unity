@@ -2,6 +2,7 @@
 using FairyGUI;
 using MoreMountains.Tools;
 using NTSD.Animation.LF2Tasks;
+using NTSD.App;
 using NTSD.Extensions;
 using NTSD.Game;
 using NTSD.Input;
@@ -72,7 +73,6 @@ namespace NTSD.Animation.LF2Objects
         // ========== Unity 组件引用 ==========
         public Transform EntityTransform { get; private set; }
         public Transform VisualTransform { get; private set; }
-        private CharacterIdUpdate _idUpdate;
         private Vector3 _baseLocalPosition;
 
         // ========== 物理计算 ==========
@@ -90,15 +90,52 @@ namespace NTSD.Animation.LF2Objects
         protected int? caught_throwz;
         protected int? caught_throwinjury;
         protected int caught_decrease_counter;  // 抓取递减计数器（被抓者按键时递减，归零释放）
+        // N-17: 对应反汇编 entity[+94h]（0x94h=148），被抓时由 Entity_AI_Update kind=3 命中设为 300（0x12C），每 tick 由 selfCpoint.decrease 驱动
+        protected int _caughtDecayAccum = 0;
+        // 被抓方向：true=正面(front,对应反汇编[+98h]==4)，false=背面(back,[+98h]==6)
+        protected bool _caughtFront = true;
 
         // ========== 死亡闪烁计数器（对应 FLF $.counter.dead_blink_count）==========
         // -1 = 不执行；0 = 开始；1~29 = 持续；>=30 = 结束销毁
         private int _deadBlinkCount = -1;
 
+        // ========== N-25 合体/拆分字段（对应反汇编 sub_402340）==========
+        // [+328h] 合体标志：0=未合体，1=已合体，-1=拆分冷却
+        private int _mergeFlag = 0;
+        // [+32Ch] 伙伴 slot 索引
+        private int _partnerSlotIndex = 0;
+        // [+330h] 合体前自身 oid
+        private int _savedOidSelf = 0;
+        // [+334h] 合体前伙伴 oid
+        private int _savedOidPartner = 0;
+        // [+338h] 合体/拆分冷却计时器
+        private int _mergeTimer = 0;
+
+        // ========== N-30 复活触发字段（对应反汇编 0x421085）==========
+        // [+314h] 复活触发计数（>0 时允许死亡复活）
+        private int _respawnTriggerCount = 0;
+        // [+30Ch] 复活倒计时（>= 2 时每帧递减，< 2 时触发复活）
+        private int _respawnCountdown = 0;
+
+        // ========== N-30 输入序列字段（对应反汇编 0x422FCC）==========
+        // [+408h~418h] 输入历史（5 个 int，每帧移位）
+        private readonly int[] _inputSeq = new int[5];
+
+        // 反汇编 entity[+318h]：角色专属字段，用于 N-27/N-30 数据变换后的状态标记
+        private int _field318 = 0;
+
         // ========== 调试 ==========
 
         private bool _debugCollisionLog = false;
         private bool _debugComboLog = false;
+
+        // ========== 变换连招状态机（对应反汇编 sub_414AE0 / sub_4149F0）==========
+
+        /// <summary>角色ID，ModuleBind 时赋值</summary>
+        private int _characterId;
+
+        // def-guard-cooldown (0xC1h): 反汇编 frame 110/114 时置3，每帧递减，阻止 def 技能触发
+        internal byte _ks193;
 
         // ========== 构造函数 ==========
 
@@ -112,8 +149,7 @@ namespace NTSD.Animation.LF2Objects
             WeaponPointModule = new LF2WeaponPointModule();
             _hitCounters = new LF2HitCountersModule();
             _characterStats = new NTSDCharacterStats();
-            _idUpdate = new CharacterIdUpdate(this);
-            
+
             // 基类字段初始化
             ItrRest = new LF2ItrRestTracker();
             PS = new PhysicsState();
@@ -178,14 +214,23 @@ namespace NTSD.Animation.LF2Objects
             FrameDelay = 10;
             ShotCount = 0;
             ResetSpark();
-            // 角色重置时从 SimulationWorld 移除，避免死亡/复用后残留在碰撞查询列表中
-            SimulationTickDriver.Instance?.World?.Unregister(this);
-            SimulationTickDriver.Instance?.World?.Unregister(_ActionSequenceDetector);
+            _ks193 = 0;
+            // N-25/N-30/N-7 字段重置
+            _mergeFlag = 0; _partnerSlotIndex = 0; _savedOidSelf = 0; _savedOidPartner = 0; _mergeTimer = 0;
+            _respawnTriggerCount = 0; _respawnCountdown = 0;
+            System.Array.Clear(_inputSeq, 0, _inputSeq.Length);
+            _field318 = 0;
         }
 
         public override void Destroy()
         {
             Reset();
+        }
+
+        public override void UnregisterFromWorld()
+        {
+            SimulationTickDriver.Instance?.World?.Unregister(this);
+            SimulationTickDriver.Instance?.World?.Unregister(_ActionSequenceDetector);
         }
 
         /// <summary>
@@ -204,6 +249,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)
         {
+            _characterId = characterId;
+
             // 加载帧数据
             FrameCache.Load(frameDataWrapper);
 
@@ -216,9 +263,6 @@ namespace NTSD.Animation.LF2Objects
             ComboBuffer?.Reset();
             ItrRest?.Reset();
             _hitCounters?.Reset();
-
-            // 注册 ID Handlers
-            _idUpdate?.RegisterDefaultHandlers(characterId);
 
             // 绑定 mass
             _mass = NTSDSpec.GetMassOrDefault(characterId);
@@ -251,6 +295,8 @@ namespace NTSD.Animation.LF2Objects
             CharacterStats.Initialize(maxHp, maxMp);
             Health.HP = maxHp;
             Health.MP = maxMp;
+            // 反汇编 entity+340h = MaxMP，用于 kind=0/16 伤害 MP% 缩放
+            Health.MaxMP = maxMp;
             ComboBuffer.Reset();
             HitCounters.Reset();
             ItrRest.Reset();
@@ -459,17 +505,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 Tools.Log.Info("[Boundary] ResolveMode={0}", result.boundaryMode);
             }
-
-            // ground plane（Unity X/Y）写回
-            EntityTransform.position = new Vector3(
-                Mathf.Round(result.groundPlanePos.x * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
-                Mathf.Round(result.groundPlanePos.y * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
-                EntityTransform.position.z
-            );
-
-            // 视觉高度偏移（Unity local Y），同样对齐像素网格
-            float snappedVisualY = Mathf.Round(result.visualYOffset * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT;
-            VisualTransform.localPosition = _baseLocalPosition + new Vector3(0f, snappedVisualY, 0f);
         }
 
         /// <summary>
@@ -667,6 +702,495 @@ namespace NTSD.Animation.LF2Objects
         public override void SimPreInteraction(int tickIndex)
         {
             Generic_PreInteraction();
+        }
+
+        /// <summary>
+        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0) 角色专属分支
+        /// 反汇编 0x00413BC0-0x00413C49：
+        /// 前一帧 state==14（被抓取）且当前帧 state!=13（非冰冻）时，
+        /// 在游戏模式 1/4 下对非豁免实体设 ShakeTimer=15（[esi+8h]=15）
+        /// 豁免条件：oid ∈ [30,39] 且 oid != 38
+        /// 注：ShakeTimer 双向趋零已在 TUUpdate() 中处理
+        /// </summary>
+        public override void SimEntityCollision(int tickIndex)
+        {
+            var fD = Frame?.D;
+            if (fD == null) return;
+
+            // 反汇编 0x413957: cmp frame.state, 2; jz → return（Jumping 跳过）
+            if (fD.state == 2) return;
+
+            // 反汇编 0x413BC0-0x413C49：prev_frame.state==2（Jumping）→ ShakeTimer=15
+            // 条件：prev_frame.state==2 && frame.state!=13 && gameMode==1||4 && oid 豁免
+            var prevFD = FrameCache.GetFrameDataById(Frame.PN);
+            if (prevFD != null && prevFD.state == 2 && fD.state != 13)
+            {
+                int oid = FrameCache?.Wrapper?.characterId ?? -1;
+                if (!(oid / 10 == 3 && oid != 38))
+                    ShakeTimer = 15;
+            }
+
+            // 反汇编 0x413D0C-0x413D69: frame.mp < 0 && dword_446970 → MP cost
+            // +308h(PP) += mp (mp<0, so PP decreases); if PP < mp (signed, only if PP already negative) → frame=next
+            if (fD.mp < 0 && NTSDGlobal.MPEnabled && Health != null)
+            {
+                Health.PP += fD.mp; // PP -= |mp|
+                if (Health.PP < fD.mp) // signed: only triggers if PP was already negative
+                    Trans.Frame(fD.next, 0);
+            }
+
+            // 反汇编 0x413DDA: cmp frame, 0x6E(110); 0x72(114) → [esi+0C1h]=3 (_ks193=3)
+            // 阻止 def 相关技能触发 3 帧
+            int frameN = Frame.N;
+            if (frameN == 110 || frameN == 114)
+                _ks193 = 3;
+
+            // 反汇编 0x413DEB: cmp frame, 0xCA(202) → ShakeTimer=20
+            if (frameN == 202)
+                ShakeTimer = 20;
+        }
+
+        public override void SimTransit(int tickIndex)
+        {
+            Transit();
+
+            // N-26 反汇编 0x004219F1 test edx,edx + jnz：仅 entity_type==0（角色）的 state==9995
+            // data 替换为 oid=50, frame=0
+            var fD = Frame?.D;
+            if (fD != null && fD.state == 9995)
+            {
+                var wrapper50 = CharacterAnimtorManager.Instance?.GetCharacterConfig(50);
+                if (wrapper50 != null)
+                {
+                    FrameCache.Load(wrapper50);
+                    Trans.Frame(0, 0);
+                }
+            }
+
+            // N-27 反汇编 0x421B05 test eax,eax + jnz：仅 entity_type==0（角色）的 state==9996
+            // facing==1（right）时生成5个碎片（oid=217×4，oid=218×1），HitStun=6
+            if (fD != null && fD.state == 9996 && PS.dir == "right")
+                SpawnFragments9996Character();
+
+            // N-31 反汇编 Game_FrameUpdate pseudoC pos~623462：
+            // 进入 state=13(Frozen)/frame=200 时（上一帧不是该状态）播放 sound 15 + 生成 15 个 oid=999（frame 120/125/130/135）
+            // 进入/持续 state=18(Burning)/19(FirenSpecific) 时：进入时 7 个，持续时 1/4 概率 1 个；frame=140
+            ApplyFrozenBurningParticles();
+
+            // N-25 合体/拆分（对应反汇编 sub_402340）
+            if (_mergeTimer > 0) _mergeTimer--;
+            ApplyMergeLogic();
+
+            // N-30 死亡复活 + 输入序列触发
+            ApplyDeathRespawn();
+            ApplyInputSequenceRespawn();
+        }
+
+        private void ApplyFrozenBurningParticles()
+        {
+            var fD = Frame?.D;
+            if (fD == null) return;
+            var prevFD = FrameCache.GetFrameDataById(Frame.PN);
+            int curState = fD.state;
+            int prevState = prevFD?.state ?? curState;
+
+            // N-31 Frozen/MpDrain transition: state==13 or frame==200, previous was not
+            bool entersFrozenOrCut = (curState == LF2States.Frozen || Frame.N == 200)
+                                   && !(prevState == LF2States.Frozen || Frame.PN == 200);
+            if (entersFrozenOrCut)
+            {
+                PlaySound("15");
+                SpawnOid999Particles(15, new int[] { 120, 125, 130, 135 });
+            }
+
+            // N-31 Burning/FirenSpecific: entering = 7 particles; ongoing = 25% chance 1 particle
+            bool isBurning = (curState == LF2States.Burning || curState == LF2States.FirenSpecific);
+            bool wasBurning = (prevState == LF2States.Burning || prevState == LF2States.FirenSpecific);
+            if (isBurning)
+            {
+                int count = (!wasBurning) ? 7 : (UnityEngine.Random.Range(0, 4) == 0 ? 1 : 0);
+                if (count > 0)
+                    SpawnOid999Particles(count, new int[] { 140 });
+            }
+        }
+
+        private void PlaySound(string soundId)
+        {
+            if (string.IsNullOrEmpty(soundId)) return;
+            AppManager.Instance?.SoundPlayer?.PlaySfx(soundId);
+        }
+
+        private void SpawnOid999Particles(int count, int[] framePicks)
+        {
+            var factory = LF2ObjectPointFactory.Instance;
+            if (factory == null) return;
+            for (int i = 0; i < count; i++)
+            {
+                int frame = framePicks[i < framePicks.Length ? i : (i % framePicks.Length)];
+                var op = new ObjectPoint
+                {
+                    oid = 999, kind = 0, action = frame,
+                    dvx = UnityEngine.Random.Range(0, 11) - 5,
+                    dvy = -(UnityEngine.Random.Range(0, 20) + 8),  // approx: -Random(29) offset from entity.z
+                    dvz = UnityEngine.Random.Range(0, 11) - 5,
+                    x = UnityEngine.Random.Range(0, 29) - 14,
+                    y = -(UnityEngine.Random.Range(0, 39) - 19),
+                    facing = UnityEngine.Random.Range(0, 2)
+                };
+                factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
+                {
+                    opoint = op, parent = null, team = Team,
+                    pos = new UnityEngine.Vector3(PS.x + op.x, PS.y + op.y, PS.z),
+                    z = PS.z, dir = PS.dir, dvz = op.dvz
+                });
+            }
+        }
+
+        private void SpawnFragments9996Character()
+        {
+            var factory = LF2ObjectPointFactory.Instance;
+            if (factory == null) return;
+            for (int i = 0; i < 5; i++)
+            {
+                int oid = (i < 4) ? 217 : 218;
+                float vy = -(UnityEngine.Random.Range(0, 15) / 2f + 5f);
+                float vx, vz;
+                int rnd2 = UnityEngine.Random.Range(0, 2);
+                int rnd3 = UnityEngine.Random.Range(0, 3);
+                if (i < 2)       { vx = (i == 0 ? 1 : -1) * (rnd3 + 10f); vz = (i == 0 ? 1 : -1) * (rnd2 + 3f); }
+                else if (i < 4)  { vx = UnityEngine.Random.Range(0, 7) - 3f; vz = (i % 2 == 0 ? 1 : -1) * (rnd2 + 3f); }
+                else             { vx = UnityEngine.Random.Range(0, 7) - 3f; vz = (UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1) * (rnd3 + 10f); }
+                int frame = UnityEngine.Random.Range(0, 4);
+                string dir = UnityEngine.Random.Range(0, 2) == 0 ? "left" : "right";
+                var syntheticOpoint = new ObjectPoint
+                {
+                    oid = oid, kind = 0, action = frame,
+                    dvx = (int)vx, dvy = (int)vy, dvz = (int)vz,
+                    x = UnityEngine.Random.Range(0, 7) - 3,
+                    y = UnityEngine.Random.Range(0, 7) - 9,
+                    facing = (dir == "right") ? 0 : 1
+                };
+                factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
+                {
+                    opoint = syntheticOpoint, parent = null, team = Team,
+                    pos = new UnityEngine.Vector3(PS.x + syntheticOpoint.x, PS.y + syntheticOpoint.y, PS.z + 1),
+                    z = PS.z + 1, dir = dir, dvz = vz
+                });
+            }
+            HitStun = 6;
+        }
+
+        /// <summary>
+        /// N-25: oid=7/8 合体 / oid=51 拆分逻辑（对应反汇编 sub_402340）
+        /// 合体条件：oid=7/8, HP>0, _mergeTimer==0, frame.state==2, HP&lt;177 OR dword_44F224==1
+        /// 拆分条件：oid=51, _mergeFlag==1, (frame&lt;9 OR frame>260), _mergeTimer&lt;=0
+        /// </summary>
+        private void ApplyMergeLogic()
+        {
+            if (FrameCache?.Wrapper == null) return;
+            int oid = FrameCache.Wrapper.characterId;
+
+            // ── 合体路径 ──
+            if ((oid == 7 || oid == 8) && Health.HP > 0 && _mergeTimer == 0
+                && Frame.D?.state == 2 && Health.HP < 177)
+            {
+                int partnerOid = 15 - oid; // oid=7→partner=8, oid=8→partner=7
+                var allObjs = ListPool<LF2LivingObject>.Get();
+                Match?.GetAllLivingObjects(allObjs);
+
+                LF2Character partner = null;
+                int candidateCount = 0;
+                for (int i = 0; i < allObjs.Count && candidateCount < 10; i++)
+                {
+                    if (!(allObjs[i] is LF2Character ch)) continue;
+                    if (ch == this) continue;
+                    if (ch.FrameCache?.Wrapper?.characterId != partnerOid) continue;
+                    if (ch.Team != Team) continue;
+                    if (ch.Health.HP <= 0) continue;
+                    if (ch._mergeTimer != 0) continue;
+                    int pState = ch.Frame.D?.state ?? -1;
+                    bool stateOk = pState == 2 || (pState != 0x0E && ch._mergeTimer == 0 && candidateCount > 9);
+                    if (!stateOk) continue;
+                    float dx = PS.x - ch.PS.x;
+                    float dz = PS.z - ch.PS.z;
+                    if (System.Math.Abs(dx) >= 50f || System.Math.Abs(dz) >= 8f) continue;
+                    if (PS.x <= ch.PS.x && candidateCount <= 9) continue;
+                    candidateCount++;
+                    partner = ch;
+                }
+                ListPool<LF2LivingObject>.Release(allObjs);
+
+                if (partner == null) return;
+
+                // Find oid=0x33 (51) data
+                var wrapper51 = CharacterAnimtorManager.Instance?.GetCharacterConfig(0x33);
+                if (wrapper51 == null) return;
+
+                // Sum HP/PP (clamp to max)
+                int newHp = System.Math.Min(Health.HP + partner.Health.HP, Health.HPBound);
+                int newPp = System.Math.Min(Health.PP + partner.Health.PP, Health.PPBound);
+
+                // Save original oids
+                _savedOidSelf = oid;
+                _savedOidPartner = partnerOid;
+                _partnerSlotIndex = partner.StableId;
+
+                // Average position
+                PS.x = (PS.x + partner.PS.x) * 0.5f;
+                PS.z = (PS.z + partner.PS.z) * 0.5f;
+                partner.PS.x = PS.x;
+                partner.PS.z = PS.z;
+
+                // Apply merge
+                FrameCache.Load(wrapper51);
+                Frame.N = 0x7A; // 122
+                Frame.D = FrameCache.GetFrameDataById(0x7A);
+                _mergeFlag = 1;
+                PS.vx = 0; PS.vy = 0; PS.vz = 0;
+                Health.HP = newHp;
+                Health.PP = newPp;
+                ShotCount = 500; // [+308h]=0x1F4
+                _mergeTimer = 4500; // 0x1194
+
+                // Deactivate partner
+                partner._mergeFlag = -1;
+                partner._mergeTimer = 4500;
+                partner.Health.HP = 0;
+                return;
+            }
+
+            // ── 拆分路径 ──
+            if (oid == 0x33 && _mergeFlag == 1 && _mergeTimer <= 0
+                && (Frame.N < 9 || Frame.N > 0x104))
+            {
+                // Restore self oid
+                var wrapperSelf = CharacterAnimtorManager.Instance?.GetCharacterConfig(_savedOidSelf);
+                if (wrapperSelf == null) return;
+
+                int halfHp = Health.HP / 2;
+                int halfPp = Health.PP / 2;
+
+                FrameCache.Load(wrapperSelf);
+                _mergeFlag = -1;
+                _mergeTimer = 900; // 0x384
+                Health.HP = halfHp;
+                Health.PP = halfPp;
+                PS.vx = 0; PS.vy = 0; PS.vz = 0;
+
+                // Restore partner
+                var allObjs = ListPool<LF2LivingObject>.Get();
+                Match?.GetAllLivingObjects(allObjs);
+                for (int i = 0; i < allObjs.Count; i++)
+                {
+                    if (!(allObjs[i] is LF2Character ch)) continue;
+                    if (ch.StableId != _partnerSlotIndex) continue;
+                    var wrapperPartner = CharacterAnimtorManager.Instance?.GetCharacterConfig(_savedOidPartner);
+                    if (wrapperPartner == null) break;
+                    ch.FrameCache.Load(wrapperPartner);
+                    ch._mergeFlag = -1;
+                    ch._mergeTimer = 900;
+                    ch.Health.HP = halfHp;
+                    ch.Health.PP = halfPp;
+                    ch.PS.x = PS.x;
+                    ch.PS.z = PS.z;
+                    ch.Team = Team;
+                    ch.Frame.N = 0x70; // 112
+                    ch.Frame.D = ch.FrameCache.GetFrameDataById(0x70);
+                    // facing = 1 - self_facing
+                    ch.PS.dir = PS.dir == "right" ? "left" : "right";
+                    // velocities from disasm: 0x40822000=4.066, 0xC0690000=-3.5625, 0x4072C000=3.671875
+                    ch.PS.vx = 4.066f;
+                    ch.PS.vy = -3.5625f;
+                    ch.PS.vz = 3.671875f;
+                    break;
+                }
+                ListPool<LF2LivingObject>.Release(allObjs);
+            }
+        }
+
+        /// <summary>
+        /// N-30 死亡时复活触发（对应反汇编 0x421085）
+        /// 条件：frame.state==0x0E, HP&lt;=0, (_respawnTriggerCount>0 OR team==5), entity_type==0, [+8]∈(0,5)
+        /// </summary>
+        private void ApplyDeathRespawn()
+        {
+            if (Frame.D?.state != 0x0E) return;
+            if (Health.HP > 0) return;
+            // [+2F4h] < 0 OR team==5 check (OwnerEntityIndex < 0 OR Team==5)
+            if (OwnerEntityIndex >= 0 && Team != 5) return;
+            // esi >= 0x14 check: esi is slot index; we use StableId as proxy
+            if (StableId < 0x14 && OwnerEntityIndex >= 0 && Team != 5) return;
+            // [+8] > 0 && [+8] < 5: ShakeTimer in (0,5)
+            if (ShakeTimer <= 0 || ShakeTimer >= 5) return;
+
+            if (_respawnTriggerCount > 0)
+            {
+                // HP chain copy: [+310h]→[+30Ch], [+314h]→[+304h]→[+300h]→[+2FCh]
+                _respawnCountdown = ShotCount; // [+30Ch] = [+310h] (ShotCount maps to +308h, use _respawnCountdown)
+                // Actually: [+30Ch]=_respawnCountdown, [+310h]=ShotCount (per summary)
+                // Disasm: [+30Ch]=[+310h], [+314h]→[+304h]→[+300h]→[+2FCh]
+                // We map: _respawnCountdown=[+30Ch], ShotCount=[+308h], _respawnTriggerCount=[+314h]
+                // [+304h] and [+300h] are intermediate; final HP=[+314h]
+                Health.HP = _respawnTriggerCount;
+                _respawnTriggerCount = 0;
+                ShotCount = 0; // [+310h]=0
+
+                Team = 1;
+                Frame.N = 0xDB; // 219
+                Frame.D = FrameCache.GetFrameDataById(0xDB);
+                HitStun = 0;
+                FrameDelay = 10;
+
+                // oid in [0x1E, 0x24] → set [+318h]=0x8C
+                int selfOid = FrameCache.Wrapper?.characterId ?? -1;
+                if (selfOid >= 0x1E && selfOid <= 0x24)
+                    _field318 = 0x8C;
+
+                // Spawn oid=0x3E6 (998)
+                {
+                    var factory = LF2ObjectPointFactory.Instance;
+                    if (factory != null)
+                    {
+                        var op = new ObjectPoint { oid = 0x3E6, kind = 0, action = 6, dvx = 0, dvy = 0, dvz = 0, x = 0, y = 0, facing = 0 };
+                        factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
+                        {
+                            opoint = op, parent = null, team = Team,
+                            pos = new UnityEngine.Vector3(PS.x, PS.y, PS.z),
+                            z = PS.z, dir = PS.dir, dvz = 0
+                        });
+                    }
+                }
+
+                // Post-spawn ally propagation: same team, HP>0, entity_type==0
+                var allObjs = ListPool<LF2LivingObject>.Get();
+                Match?.GetAllLivingObjects(allObjs);
+                for (int i = 0; i < allObjs.Count; i++)
+                {
+                    if (!(allObjs[i] is LF2Character ch)) continue;
+                    if (ch == this) continue;
+                    if (ch.Team != Team) continue;
+                    if (ch.Health.HP <= 0) continue;
+                    ch.FrameCache.Load(FrameCache.Wrapper);
+                    int chVy = (int)ch.PS.vy;
+                    ch.Frame.N = chVy != 0 ? 0xD4 : 0;
+                    ch.Frame.D = ch.FrameCache.GetFrameDataById(ch.Frame.N);
+                }
+                ListPool<LF2LivingObject>.Release(allObjs);
+            }
+            else
+            {
+                // [+314h]<=0: check [+30Ch]>=2 → dec; else deactivate + respawn
+                if (_respawnCountdown >= 2)
+                {
+                    _respawnCountdown--;
+                }
+                else
+                {
+                    // Deactivate slot
+                    Health.HP = 0;
+                    // Respawn: average position of same-team allies
+                    var allObjs = ListPool<LF2LivingObject>.Get();
+                    Match?.GetAllLivingObjects(allObjs);
+                    float sumX = 0, sumZ = 0;
+                    int count = 0;
+                    for (int i = 0; i < allObjs.Count; i++)
+                    {
+                        if (!(allObjs[i] is LF2Character ch)) continue;
+                        if (ch == this) continue;
+                        if (ch.Team != Team) continue;
+                        if (ch.Health.HP <= 0) continue;
+                        sumX += ch.PS.x;
+                        sumZ += ch.PS.z;
+                        count++;
+                    }
+                    ListPool<LF2LivingObject>.Release(allObjs);
+                    if (count > 0)
+                    {
+                        PS.x = sumX / count + 31f;
+                        PS.z = sumZ / count + 31f;
+                        ShotCount = 500; // [+308h]=0x1F4
+                        Health.HP = _respawnCountdown; // restore from [+304h]→[+300h]→[+2FCh]
+                        Frame.N = 0xD4; // 212
+                        Frame.D = FrameCache.GetFrameDataById(0xD4);
+                        PS.vx = (int)PS.vx; // copy float→int
+                        PS.vy = 0;
+                        PS.vz = 0;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// N-30 输入序列触发 oid=998 团队效果（对应反汇编 0x422FCC）
+        /// 输入序列 9,0,9,0 → frame=0; 9,9,9,9 → frame=2; 9,5,9,5 → frame=4
+        /// </summary>
+        private void ApplyInputSequenceRespawn()
+        {
+            // Only low-index active characters trigger this
+            if (StableId >= 0x32) return;
+            if (Health.HP <= 0) return;
+
+            // 反汇编 0x421085: v239[259]==9 (gate=att), check v239[260..262]
+            // _inputSeq[0]=this[258](oldest), [1]=this[259](gate), [2]=this[260], [3]=this[261], [4]=this[262](newest)
+            // key codes: 9=att, 6=jump, 5=down, 0=def, 8=left, 2=right, 4=up
+            if (_inputSeq[1] != 9) return;
+            int spawnFrame = -1;
+            // (0,9,0) → frame 100
+            if (_inputSeq[2] == 0 && _inputSeq[3] == 9 && _inputSeq[4] == 0) spawnFrame = 100;
+            // (9,9,9) → frame 102
+            else if (_inputSeq[2] == 9 && _inputSeq[3] == 9 && _inputSeq[4] == 9) spawnFrame = 102;
+            // (5,9,5) → frame 104
+            else if (_inputSeq[2] == 5 && _inputSeq[3] == 9 && _inputSeq[4] == 5) spawnFrame = 104;
+            if (spawnFrame < 0) return;
+
+            // Clear input history
+            System.Array.Clear(_inputSeq, 0, _inputSeq.Length);
+
+            // 反汇编: frame = v424 - 100 (v424=100→frame=0, v424=102→frame=2, v424=104→frame=4)
+            {
+                int spawnAction = spawnFrame - 100;
+                var factory = LF2ObjectPointFactory.Instance;
+                if (factory != null)
+                {
+                    var op = new ObjectPoint { oid = 0x3E6, kind = 0, action = spawnAction, dvx = 0, dvy = 0, dvz = 0, x = 0, y = 0, facing = 0 };
+                    factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
+                    {
+                        opoint = op, parent = null, team = Team,
+                        pos = new UnityEngine.Vector3(PS.x, PS.y, PS.z),
+                        z = PS.z, dir = PS.dir, dvz = 0
+                    });
+                }
+            }
+
+            // Post-spawn ally propagation
+            var allObjs = ListPool<LF2LivingObject>.Get();
+            Match?.GetAllLivingObjects(allObjs);
+            for (int i = 0; i < allObjs.Count; i++)
+            {
+                if (!(allObjs[i] is LF2Character ch)) continue;
+                if (ch == this) continue;
+                if (ch.Team != Team) continue;
+                if (ch.Health.HP <= 0) continue;
+                ch.FrameCache.Load(FrameCache.Wrapper);
+                int chVy = (int)ch.PS.vy;
+                ch.Frame.N = chVy != 0 ? 0xD4 : 0;
+                ch.Frame.D = ch.FrameCache.GetFrameDataById(ch.Frame.N);
+            }
+            ListPool<LF2LivingObject>.Release(allObjs);
+        }
+
+        /// <summary>
+        /// 记录一次按键到输入序列（对应反汇编 sub_414D80 at 0x00414D80）
+        /// 移位：[0]←[1]←[2]←[3]←[4]←ntsdCode
+        /// key codes: 9=att, 6=jump, 5=down, 0=def, 8=left, 2=right, 4=up
+        /// </summary>
+        internal void RecordInputKey(int ntsdCode)
+        {
+            _inputSeq[0] = _inputSeq[1];
+            _inputSeq[1] = _inputSeq[2];
+            _inputSeq[2] = _inputSeq[3];
+            _inputSeq[3] = _inputSeq[4];
+            _inputSeq[4] = ntsdCode;
         }
 
         /// <summary>
