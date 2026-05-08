@@ -1112,6 +1112,9 @@ namespace NTSD.Animation.LF2Objects
         {
             var fD = Frame?.D;
 
+            // 反汇编 0x41391A: [esi+0ECh] AttackExempt > 0 → dec
+            if (AttackExempt > 0) AttackExempt--;
+
             // 反汇编 0x41392B: GrabbedBy < 0 → return（被持有时跳过）
             if (GrabbedBy < 0) return;
 

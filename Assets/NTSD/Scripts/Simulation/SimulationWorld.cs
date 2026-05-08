@@ -1,9 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
+using NTSD.LevelEditor;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace NTSD.Simulation
@@ -234,45 +236,6 @@ namespace NTSD.Simulation
         public int AllocateStableId()
         {
             return _nextAutoStableId++;
-        }
-
-        /// <summary>
-        /// Transit 阶段 - 所有对象执行 Transit
-        /// 对应 FLF match.TU_trans 中的 emit_event('transit') 循环
-        /// </summary>
-        public void TransitTickAll(int tickIndex)
-        {
-            foreach (var kvp in _buckets)
-            {
-                Bucket bucket = kvp.Value;
-                bucket.EnsureSorted();
-
-                foreach (var obj in bucket.items)
-                {
-                    if (obj == null) continue;
-                    obj.SimTransit(tickIndex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// TU 阶段 - 所有对象执行 TU
-        /// 对应 FLF match.TU_trans 中的 emit_event('TU') 循环
-        /// </summary>
-        public void TUTickAll(int tickIndex)
-        {
-            foreach (var kvp in _buckets)
-            {
-                Bucket bucket = kvp.Value;
-                // 0.2: FlushTasks 后可能有新对象注册，需重新排序确保稳定性
-                bucket.EnsureSorted();
-
-                foreach (var obj in bucket.items)
-                {
-                    if (obj == null) continue;
-                    obj.SimTU(tickIndex);
-                }
-            }
         }
 
         /// <summary>
@@ -601,11 +564,11 @@ namespace NTSD.Simulation
             if (manager == null) return;
 
             var candidates = new System.Collections.Generic.List<int>();
-            for (int oid = 0x64; oid < 0xC8; oid++)
+            for (int oid = 100; oid < 200; oid++)
             {
                 var wrapper = manager.GetCharacterConfig(oid);
                 if (wrapper == null) continue;
-                if (oid == 0x7A || oid == 0x7B)
+                if (oid == 122 || oid == 123)
                 {
                     if (UnityEngine.Random.Range(0, 2) == 0) continue;
                 }
@@ -618,32 +581,61 @@ namespace NTSD.Simulation
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // Find a reference position from the first active character
-            float spawnX = 400f, spawnZ = 0f;
-            foreach (var kvp in _buckets)
+            // 反汇编 0x004216B5~0x0042178C：位置基于背景边界随机，不读角色坐标
+            // spawnX ∈ [xMin+30, xMax-30]，spawnZ ∈ [zMin+30, zMax-30]
+            // 2. 获取地图边界（像素坐标）
+            float xMin = 30f, xMax = 700f, zMin = 240f, zMax = 320f;
+            if (BoundaryWallManager.Instance.TryGetStageBoundsPx(out var bounds))
             {
-                foreach (var obj in kvp.Value.items)
+                xMin = bounds.xMinPx + 30f*3f;
+                xMax = bounds.xMaxPx - 30f*3f;
+                zMin = bounds.zMinPx + 30f*3f;
+                zMax = bounds.zMaxPx - 30f*3f;
+                Debug.Log($"[WeaponSpawner] bounds: xMin={bounds.xMinPx} xMax={bounds.xMaxPx} zMin={bounds.zMinPx} zMax={bounds.zMaxPx}");
+            }
+            else
+            {
+                Debug.Log("[WeaponSpawner] F8: BoundaryWallManager not found, using fallback bounds");
+            }
+
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(selectedOid);
+            int flyFrame = -1;
+            int minFrame = int.MaxValue;
+            if (charData?.frames != null)
+            {
+                foreach (var f in charData.frames)
                 {
-                    if (obj is LF2Character ch && ch.Team > 0)
-                    {
-                        spawnX = ch.PS.x + UnityEngine.Random.Range(-30, 31);
-                        spawnZ = ch.PS.z + UnityEngine.Random.Range(-10, 11);
-                        goto spawnReady;
-                    }
+                    if (f == null) continue;
+                    if (f.frameId > 0 && f.frameId < minFrame) minFrame = f.frameId;
+                    if (flyFrame < 0 && f.frameId > 0 && (
+                        f.state == LF2States.WeaponInSky ||
+                        f.state == LF2States.WeaponThrowing ||
+                        f.state == LF2States.HeavyWeaponInSky))
+                        flyFrame = f.frameId;
                 }
             }
-            spawnReady:
+            if (flyFrame < 0) flyFrame = minFrame != int.MaxValue ? minFrame : 0;
 
-            var op = new ObjectPoint
-            {
-                oid = selectedOid, kind = 0, action = 0,
-                dvx = 0, dvy = -500, dvz = 0,
-                x = 0, y = 0, facing = 0
-            };
+            float lf2X = Random.Range(xMin, xMax);
+            float lf2Z = Random.Range(zMin, zMax);
+            const float lf2Y = -500f;
+
             var spawnTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
-            spawnTask.opoint = op; spawnTask.parent = null; spawnTask.team = 0;
-            spawnTask.pos = new UnityEngine.Vector3(spawnX, 0, spawnZ);
-            spawnTask.z = spawnZ; spawnTask.dir = "right"; spawnTask.dvz = 0;
+
+            spawnTask.opoint = new ObjectPoint
+            {
+                    oid = selectedOid,
+                    kind = 0,
+                    action = flyFrame,
+                    x = Mathf.RoundToInt(lf2X),
+                    y = Mathf.RoundToInt(lf2Y),
+                    dvx = 0,
+                    dvy = 0,
+                    facing = 0,
+            };
+            spawnTask.parent = null; spawnTask.team = 0;
+            spawnTask.pos = new UnityEngine.Vector3(lf2X, lf2Y, 0);
+            spawnTask.z = lf2Z; spawnTask.dir = "right"; spawnTask.dvz = 0;
             factory.EnqueueCreateObject(spawnTask);
         }
     }

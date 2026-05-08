@@ -237,6 +237,144 @@ namespace NTSD.Animation.LF2Objects
             Trans?.Trans();
         }
 
+        /// <summary>
+        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0)
+        /// 武器专属路径：N-1~N-5 + ShakeTimer 趋零 + wait/next 推进 + Frame.PN 更新
+        /// </summary>
+        public override void SimEntityCollision(int tickIndex)
+        {
+            var fD = Frame?.D;
+            if (fD == null) return;
+
+            // 0x4138F9: FrameDelay != 0 && entity_type != 3 → return
+            if (FrameDelay != 0 && WeaponType != 3) return;
+
+            // 0x41391A: AttackExempt > 0 → dec
+            if (AttackExempt > 0) AttackExempt--;
+
+            // 0x41392B: GrabbedBy < 0 → return（被持有时跳过）
+            if (GrabbedBy < 0) return;
+
+            // 0x413937: cpoint.kind == 2 → return
+            if (fD.cpoint != null && fD.cpoint.kind == 2) return;
+
+            // N-1（0x41395F）: entity_type==3 && frame.mp > 0 → HP -= mp；HP<=0 → HP=0, frame=hit_a
+            if (WeaponType == 3 && fD.mp > 0 && Health != null)
+            {
+                Health.HP -= fD.mp;
+                if (Health.HP <= 0)
+                {
+                    Health.HP = 0;
+                    SetFrameDirect(fD.hit_a);
+                    fD = Frame.D;
+                    if (fD == null) return;
+                }
+            }
+
+            // 0x4139A0: ShakeTimer 双向趋零
+            if (ShakeTimer > 0) ShakeTimer--;
+            else if (ShakeTimer < 0) ShakeTimer++;
+
+            // 0x413A14: 帧号变化时重置 HitStun；0x413A1A: 无条件 ++
+            if (Frame.N != Frame.PN)
+                HitStun = 0;
+            HitStun++;
+
+            // N-2（0x413A27）: entity_type>=0 && frame.state==0 && y<0 → frame=212
+            if (WeaponType >= 0 && fD.state == 0 && PS.y < 0)
+            {
+                SetFrameDirect(212);
+                fD = Frame.D;
+                if (fD == null) return;
+            }
+
+            // N-3（0x413A55）: entity_type==2 && frame.state==2000 && y==0 && |vx|<0.1 → frame=20
+            if (WeaponType == 2 && fD.state == 2000 && PS.y >= 0 && Mathf.Abs(PS.vx) < 0.1f)
+            {
+                SetFrameDirect(20);
+                fD = Frame.D;
+                if (fD == null) return;
+            }
+
+            // N-4（0x413AB7）: frame.state==14 && HP<=0 → 条件满足时 ShakeTimer=30, HitStun=0
+            if (fD.state == 14 && Health != null && Health.HP <= 0)
+            {
+                // 0x413AC8: OwnerEntityIndex < 0 && Team != 5 → 若 ShakeTimer<=0 → ShakeTimer=30
+                if (OwnerEntityIndex < 0 && Team != 5)
+                {
+                    if (ShakeTimer <= 0)
+                        ShakeTimer = 30;
+                }
+                HitStun = 0;
+            }
+
+            // N-4 facing（0x413AFC）: frame.state==2000 → vx==0→facing=left; vx!=0→facing=right
+            if (fD.state == 2000)
+            {
+                if (PS.vx == 0f) SwitchDir("left");
+                else SwitchDir("right");
+            }
+
+            // wait/next 推进（0x413B2F）: HitStun > wait → HitStun=0, frame=next
+            if (HitStun > fD.wait)
+            {
+                HitStun = 0;
+                int nextFrame = fD.next;
+                if (nextFrame != 0)
+                {
+                    // 0x413B65: next < 0 → flip facing, frame = -next
+                    if (nextFrame < 0)
+                    {
+                        bool wasRight = PS.dir == "right";
+                        SwitchDir(wasRight ? "left" : "right");
+                        nextFrame = -nextFrame;
+                    }
+                    SetFrameDirect(nextFrame);
+                    fD = Frame.D;
+                    if (fD == null) return;
+                }
+            }
+
+            // N-5（0x413B84）: frame.next==999 → y<0 && entity_type==0 → frame=212; else → frame=0
+            bool isN5 = false;
+            if (fD.next == 999)
+            {
+                if (PS.y < 0 && WeaponType == 0)
+                {
+                    isN5 = true;
+                    SetFrameDirect(212);
+                }
+                else
+                {
+                    SetFrameDirect(0);
+                }
+                fD = Frame.D;
+                if (fD == null) return;
+            }
+
+            // 0x413BAC: frame < 0 || frame >= 400 → return
+            if (Frame.N < 0 || Frame.N >= 400) return;
+
+            // frame==212 && !isN5 → TODO: 同步背景速度（字段不存在，占位）
+            // 0x413C49: frame==0xD4 && ebp==0 → sync bg velocity [ecx+50h]/[ecx+54h]
+
+            // 0x413DEB: frame==0xCAh=202 → ShakeTimer=20
+            if (Frame.N == 202)
+                ShakeTimer = 20;
+
+            // 0x413DFB: Frame.PN = Frame.N
+            Frame.PN = Frame.N;
+        }
+
+        /// <summary>
+        /// 直接设置帧编号（对应反汇编直接写 [esi+70h]），不触发 OnFrameTransit 回调。
+        /// </summary>
+        private void SetFrameDirect(int frameId)
+        {
+            Frame.N = frameId;
+            Frame.D = FrameCache.GetFrameDataById(frameId);
+        }
+
         public override void SimTU(int tickIndex)
         {
             int currentState = GetState();

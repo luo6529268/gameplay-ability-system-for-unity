@@ -127,6 +127,9 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>震屏计时器（entity+8h shake_timer）</summary>
         public int ShakeTimer { get; set; } = 0;
 
+        /// <summary>攻击豁免计数器（entity+0ECh attack_exempt）。命中后设 6，每帧 -1；LF2LivingObject 重写为 HitCounters.AttackExempt。</summary>
+        public virtual int AttackExempt { get; set; } = 0;
+
         /// <summary>所有者实体索引（entity+756=0x2F4h），初始值 -1；opoint 生成时设为生成者索引。P1-6</summary>
         public int OwnerEntityIndex { get; set; } = -1;
 
@@ -166,17 +169,18 @@ namespace NTSD.Animation.LF2Objects
             if (ShadowRenderer == null || PS == null) return;
 
             int state = Frame?.D?.state ?? -1;
+            int oid = ObjectId;
+            // 反汇编 0x0041D1C9~0x0041D20B：state==3005/9997, oid==223/224, y<=-70, abs(y)&3>=2
             bool hide = state == 3005
                      || state == 9997
-                     || PS.y < -70f
-                     || (Effect?.Blink == true && (renderFrame % 4) >= 2);
+                     || oid == 223
+                     || oid == 224;
 
             ShadowRenderer.enabled = !hide;
             if (!hide)
             {
-                const float ppu = 100f;
                 var t = ShadowRenderer.transform;
-                t.position = new Vector3(PS.x / ppu, PS.z / ppu, t.position.z);
+                t.position = new Vector3(PS.x / SimulationConstants.PIXELS_PER_UNIT, PS.z / SimulationConstants.PIXELS_PER_UNIT, t.position.z);
             }
         }
 

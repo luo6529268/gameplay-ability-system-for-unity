@@ -552,7 +552,7 @@ namespace NTSD.Animation.LF2Objects
 
             Trans.SetWait(Frame.D.wait, 99);
             Trans.SetNext(Frame.D.next, 99);
-            Log.Info("下一帧：{0}", Frame.D.next);
+            //Log.Info("下一帧：{0}", Frame.D.next);
             // 状态 frame 事件
             StateUpdate("frame");
 
@@ -618,13 +618,12 @@ namespace NTSD.Animation.LF2Objects
         public override void TUUpdate()
         {
             // 对应反汇编 Entity_Collision (0x4138F0) 帧推进开头的计数器递减序列：
-            //   0x0041391A: [esi+0ECh] AttackExempt（最先）
             //   0x004139C7: [esi+0B8h] HitStateCount
             //   0x004139D8: [esi+0EAh] HitConfirmEa
+            // 注：[esi+0ECh] AttackExempt 递减已移至 SimEntityCollision（反汇编 0x41391A 在 Entity_Collision 里）
             // 注：[esi+0B0h] 是 fall 累加器（HitCounters.Fall），由 RecoverFall() 处理
             if (HitCounters != null)
             {
-                if (HitCounters.AttackExempt > 0) HitCounters.SetAttackExempt(HitCounters.AttackExempt - 1);
                 if (HitCounters.HitStateCount > 0) HitCounters.SetHitStateCount(HitCounters.HitStateCount - 1);
             }
             if (HitConfirmEa > 0) HitConfirmEa--;
@@ -1144,6 +1143,13 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>击中计数器（子类可重写）</summary>
         public virtual LF2HitCountersModule HitCounters => null;
+
+        /// <summary>代理到 HitCounters.AttackExempt（entity+0ECh）</summary>
+        public override int AttackExempt
+        {
+            get => HitCounters?.AttackExempt ?? 0;
+            set => HitCounters?.SetAttackExempt(value);
+        }
 
         #endregion
 

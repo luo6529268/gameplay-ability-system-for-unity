@@ -717,6 +717,9 @@ namespace NTSD.Animation.LF2Objects
             var fD = Frame?.D;
             if (fD == null) return;
 
+            // 反汇编 0x41391A: [esi+0ECh] AttackExempt > 0 → dec
+            if (AttackExempt > 0) AttackExempt--;
+
             // 反汇编 0x413957: cmp frame.state, 2; jz → return（Jumping 跳过）
             if (fD.state == 2) return;
 
