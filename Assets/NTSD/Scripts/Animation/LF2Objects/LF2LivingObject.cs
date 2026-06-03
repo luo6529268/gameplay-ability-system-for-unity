@@ -968,31 +968,14 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         #region 功能逻辑 - 位置与数据查询
-        /// <summary>
-        /// 设置位置（对应 FLF livingobject.prototype.set_pos）
-        /// </summary>
-        public void SetPos(float x, float y, float z)
-        {
-            if (PS == null) return;
-            PS.x = x;
-            PS.y = y;
-            PS.z = z;
-        }
-
         /// <summary>根据帧ID获取帧数据</summary>
-        public virtual LF2FrameData GetFrameDataById(int frameId)
+        public override LF2FrameData GetFrameDataById(int frameId)
         {
             return FrameCache?.GetFrameDataById(frameId);
         }
 
-        /// <summary>根据状态获取第一个帧ID</summary>
-        public virtual int GetFirstFrameByState(int state)
-        {
-            return FrameCache?.GetFirstFrameByState(state) ?? -1;
-        }
-
         /// <summary>获取精灵宽度用于碰撞检测（子类可重写）</summary>
-        public virtual float GetSpriteWidthPxForCollision()
+        public override float GetSpriteWidthPxForCollision()
         {
             if (_FrameDataWrapper?.characterData?.files == null || _FrameDataWrapper.characterData.files.Count == 0)
                 return 0f;

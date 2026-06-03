@@ -26,6 +26,13 @@ namespace NTSD.Animation.LF2Objects
                 ? SimulationTickDriver.Instance.CurrentTickIndex
                 : 0;
 
+            bool attackPressed = Controller?.IsAttack ?? false;
+            if (attackPressed && !_attackTracePrevAttackPressed)
+            {
+                _attackTraceArmed = true;
+            }
+            _attackTracePrevAttackPressed = attackPressed;
+
             // post_interaction 已移至 SimPostInteraction 阶段（对齐反汇编 GameMode_Process 碰撞循环）
             // 原位置：Generic_TU 开头；新位置：所有对象 SerialTickAll 完成后统一执行
 
@@ -146,6 +153,92 @@ namespace NTSD.Animation.LF2Objects
             HitCounters.RecoverBdefend(NTSDGlobal.Gameplay.RecoverBdefend);
 
             return false;
+        }
+
+        private void TryTracePickupAttempt()
+        {
+            if (PS == null) return;
+            if (_heldWeapon != null) return;
+
+            var world = Match;
+            if (world == null) return;
+
+            bool armedPickupTrace = false;
+            LF2WeaponBase nearestGroundWeapon = null;
+            float nearestGroundMetric = float.MaxValue;
+            var entities = ListPool<LF2Entity>.Get();
+            try
+            {
+                world.GetAllEntities(entities);
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var entity = entities[i];
+                    if (entity == null || entity == this) continue;
+                    if (entity is not LF2WeaponBase weapon) continue;
+                    if (weapon.PS == null || weapon.Frame?.D == null) continue;
+
+                    float dx = weapon.PS.x - PS.x;
+                    float dz = weapon.PS.z - PS.z;
+                    if (Mathf.Abs(dx) > 140f || Mathf.Abs(dz) > 60f) continue;
+
+                    if (!armedPickupTrace)
+                    {
+                        LF2WeaponBase.BeginPickupTrace(StableId);
+                        armedPickupTrace = true;
+                    }
+
+                    LF2WeaponBase.AddPickupTraceWeapon(weapon.StableId);
+
+                    Debug.LogError($"[PickupTrace][AttackPressNearWeapon] picker={StableId} weapon={weapon.StableId} weaponType={weapon.Type} weaponState={weapon.GetState()} pickerFrame={Frame?.N ?? -1} pickerState={GetState()} pickerPos=({PS.x},{PS.y},{PS.z}) weaponPos=({weapon.PS.x},{weapon.PS.y},{weapon.PS.z}) dx={dx} dz={dz}");
+
+                    int weaponState = weapon.GetState();
+                    bool isGroundWeapon = weapon.HoldObj == null
+                        && (weaponState == LF2States.WeaponOnGround || weaponState == LF2States.HeavyWeaponOnGround);
+                    if (!isGroundWeapon) continue;
+
+                    float pickupMetric = Mathf.Abs(dx) + Mathf.Abs(dz);
+                    if (pickupMetric < nearestGroundMetric)
+                    {
+                        nearestGroundMetric = pickupMetric;
+                        nearestGroundWeapon = weapon;
+                    }
+                }
+            }
+            finally
+            {
+                ListPool<LF2Entity>.Release(entities);
+            }
+
+            if (!armedPickupTrace)
+            {
+                LF2WeaponBase.ClearPickupTrace();
+                return;
+            }
+
+            if (nearestGroundWeapon != null)
+            {
+                var pickupItr = new InteractionArea
+                {
+                    kind = 2,
+                };
+
+                bool picked = PickupWeapon(pickupItr, nearestGroundWeapon, playAnimation: true);
+                Debug.LogError($"[PickupTrace][DirectPickupAttempt] picker={StableId} weapon={nearestGroundWeapon.StableId} picked={picked} weaponState={nearestGroundWeapon.GetState()} metric={nearestGroundMetric}");
+                if (picked)
+                {
+                    LF2WeaponBase.ClearPickupTrace();
+                }
+            }
+        }
+
+        private void UpdatePickupTraceInPreInteraction()
+        {
+            bool attackPressed = Controller?.IsAttack ?? false;
+            if (attackPressed && !_pickupTracePrevAttackPressed)
+            {
+                TryTracePickupAttempt();
+            }
+            _pickupTracePrevAttackPressed = attackPressed;
         }
 
         /// <summary>
@@ -297,6 +390,11 @@ namespace NTSD.Animation.LF2Objects
             var itrs = frame.itrs;
             if (itrs == null || itrs.Count == 0) return false;
 
+            if (LF2WeaponBase.PickupTraceEnabled)
+            {
+                Debug.LogError($"[PickupTrace][CharacterPreInteractionEnter] picker={StableId} frame={Frame?.N ?? -1} state={GetState()} pic={frame.pic} itrCount={itrs.Count}");
+            }
+
             float spriteWidthPx = GetSpriteWidthPxForCollision();
             if (spriteWidthPx <= 0f) return false;
 
@@ -313,6 +411,10 @@ namespace NTSD.Animation.LF2Objects
 
             if (preItrs.Count == 0)
             {
+                if (LF2WeaponBase.PickupTraceEnabled)
+                {
+                    Debug.LogError($"[PickupTrace][CharacterSkipNoPreItr] picker={StableId} frame={Frame?.N ?? -1} state={GetState()}");
+                }
                 ListPool<InteractionArea>.Release(preItrs);
                 return false;
             }
@@ -357,20 +459,78 @@ namespace NTSD.Animation.LF2Objects
             if (frame == null || sceneQuery == null) return;
             if (PS == null) return;
 
-            var itrs = frame.itrs;
-            if (itrs == null || itrs.Count == 0) return;
+            bool traceThisAttack = _attackTraceArmed;
+            if (traceThisAttack)
+            {
+                NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = true;
+                NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = StableId;
+                Debug.LogError($"[AttackTrace][PostInteractionEnter] tick={SimulationTickDriver.Instance?.CurrentTickIndex ?? -1} attacker={StableId} team={Team} frame={Frame?.N ?? -1} state={frame.state} pic={frame.pic} arest={ItrRest?.Arest ?? -1} attackExempt={HitCounters?.AttackExempt ?? -1} pos=({PS.x},{PS.y},{PS.z})");
+            }
 
-            if (!ItrArestTest()) return;
+            var itrs = frame.itrs;
+            if (itrs == null || itrs.Count == 0)
+            {
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][NoItr] attacker={StableId} frame={Frame?.N ?? -1}");
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                }
+                return;
+            }
+
+            if (!ItrArestTest())
+            {
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][BlockedByArest] attacker={StableId} arest={ItrRest?.Arest ?? -1} frame={Frame?.N ?? -1}");
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                }
+                return;
+            }
 
             // 攻击方碰撞豁免守卫（对应反汇编 0x419E3B：[esi+0ECh] > 0 跳过整体碰撞检测）
-            if (HitCounters?.AttackExempt > 0) return;
+            if (HitCounters?.AttackExempt > 0)
+            {
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][BlockedByAttackExempt] attacker={StableId} attackExempt={HitCounters.AttackExempt} frame={Frame?.N ?? -1}");
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                }
+                return;
+            }
 
             // Falling 状态下不执行 kind=0 攻击判定
             // 反汇编中 Falling 帧（180-183）实际无 itr，等价于此过滤
-            if (GetState() == LF2States.Falling) return;
+            if (GetState() == LF2States.Falling)
+            {
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][BlockedByFallingState] attacker={StableId} state={GetState()} frame={Frame?.N ?? -1}");
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                }
+                return;
+            }
 
             float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return;
+            if (spriteWidthPx <= 0f)
+            {
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][BadSpriteWidth] attacker={StableId} frame={Frame?.N ?? -1} pic={frame.pic} width={spriteWidthPx}");
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                }
+                return;
+            }
 
             // FLF: vol.zwidth = 0（由目标 bdy 自身的 zwidth 决定范围）
             var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
@@ -382,25 +542,55 @@ namespace NTSD.Animation.LF2Objects
                 if (itr.kind != 0 && itr.kind != 4) continue;
 
                 var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
+                if (traceThisAttack)
+                {
+                    Debug.LogError($"[AttackTrace][ItrQuery] attacker={StableId} itrIndex={i} kind={itr.kind} frame={Frame?.N ?? -1} pic={frame.pic} spriteWidth={spriteWidthPx} itrVol=({itrVolumes[i].x},{itrVolumes[i].y},{itrVolumes[i].z}; vx={itrVolumes[i].vx},vy={itrVolumes[i].vy},w={itrVolumes[i].w},h={itrVolumes[i].h},zw={itrVolumes[i].zwidth}) candidates={(candidates == null ? -1 : candidates.Count)}");
+                    if (candidates == null || candidates.Count == 0)
+                    {
+                        TraceNearbyTargetsOnMiss(itrVolumes[i]);
+                    }
+                }
                 if (candidates == null || candidates.Count == 0) continue;
 
                 for (int c = 0; c < candidates.Count; c++)
                 {
                     var target = candidates[c];
-                    if (!CanPostInteractTarget(itr, target)) continue;
+                    if (traceThisAttack && target != null)
+                    {
+                        Debug.LogError($"[AttackTrace][Candidate] attacker={StableId} target={target.StableId} targetTeam={target.Team} targetFrame={target.Frame?.N ?? -1} targetState={target.Frame?.D?.state ?? -1} targetPos=({target.PS?.x ?? 0f},{target.PS?.y ?? 0f},{target.PS?.z ?? 0f})");
+                    }
+                    if (!CanPostInteractTarget(itr, target, traceThisAttack)) continue;
                     if (target is not LF2LivingObject living) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
                     CurrentItrIndex = i;
                     bool hit = living.Hit(itr, this, attackerPos, itrVolumes[i]);
+                    if (traceThisAttack)
+                    {
+                        Debug.LogError($"[AttackTrace][HitCallResult] attacker={StableId} target={target.StableId} itrIndex={i} hit={hit}");
+                    }
                     if (!hit) continue;
 
                     ItrArestUpdate(itr);
                     StateUpdate("hit_stop", out _);
+                    if (traceThisAttack)
+                    {
+                        Debug.LogError($"[AttackTrace][HitAccepted] attacker={StableId} target={target.StableId} arestNow={ItrRest?.Arest ?? -1}");
+                    }
+                    _attackTraceArmed = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
 
                     if (itr.arest > 0) return;
                     break;
                 }
+            }
+
+            if (traceThisAttack)
+            {
+                _attackTraceArmed = false;
+                NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
+                NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
             }
 
             // kind=6：受伤硬直帧向外发出命中确认标记
@@ -429,34 +619,114 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target)
+        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target, bool traceThisAttack)
         {
-            if (target == null || target == this) return false;
-            if (target.PS == null || target.Frame?.D == null) return false;
-            if (target.Health != null && target.Health.HP <= 0) return false;
-            if (!target.ItrVrestTest(StableId)) return false;
+            if (target == null || target == this)
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetSelfOrNull] attacker={StableId}");
+                return false;
+            }
+            if (target.PS == null || target.Frame?.D == null)
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetNoPSOrFrame] attacker={StableId} target={target.StableId}");
+                return false;
+            }
+            if (target.Health != null && target.Health.HP <= 0)
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetDead] attacker={StableId} target={target.StableId} hp={target.Health.HP}");
+                return false;
+            }
+            if (!target.ItrVrestTest(StableId))
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetVrest] attacker={StableId} target={target.StableId}");
+                return false;
+            }
             // effect 0/1：同队角色不可命中（FLF:2302-2306）
             if ((itr.effect == 0 || itr.effect == 1) &&
                 target is LF2Character && Team != 0 && target.Team == Team)
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectSameTeam] attacker={StableId} target={target.StableId} team={Team} effect={itr.effect}");
                 return false;
+            }
 
             // effect 4：只命中非角色且 state==3000（FLF:2307-2310）
             if (itr.effect == 4)
             {
-                if (target is LF2Character) return false;
-                if (target.GetState() != LF2States.ProjectileFlying) return false;
+                if (target is LF2Character)
+                {
+                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffect4Character] attacker={StableId} target={target.StableId}");
+                    return false;
+                }
+                if (target.GetState() != LF2States.ProjectileFlying)
+                {
+                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffect4State] attacker={StableId} target={target.StableId} state={target.GetState()}");
+                    return false;
+                }
             }
 
             // effect 20/21/22：只命中角色（FLF:2311-2320）
             if (itr.effect == 20 || itr.effect == 21 || itr.effect == 22)
             {
-                if (target is not LF2Character) return false;
+                if (target is not LF2Character)
+                {
+                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffectCharacterOnly] attacker={StableId} target={target.StableId} effect={itr.effect}");
+                    return false;
+                }
             }
 
             // kind=4：不能命中自己的 attacker（FLF:2322-2330）
-            if (itr.kind == 4 && Attacker == target) return false;
+            if (itr.kind == 4 && Attacker == target)
+            {
+                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectKind4OriginalAttacker] attacker={StableId} target={target.StableId}");
+                return false;
+            }
 
             return true;
+        }
+
+        private void TraceNearbyTargetsOnMiss(PhysicsState.FlfVolume itrVolume)
+        {
+            var world = Match;
+            if (world == null) return;
+
+            var allEntities = ListPool<LF2Entity>.Get();
+            try
+            {
+                world.GetAllEntities(allEntities);
+                for (int i = 0; i < allEntities.Count; i++)
+                {
+                    var entity = allEntities[i];
+                    if (entity == null || entity == this) continue;
+                    if (entity is not LF2LivingObject living) continue;
+                    if (living.PS == null || living.Frame?.D == null) continue;
+
+                    float dx = living.PS.x - PS.x;
+                    float dz = living.PS.z - PS.z;
+                    if (Mathf.Abs(dx) > 220f || Mathf.Abs(dz) > 120f) continue;
+
+                    float targetSpriteWidth = living.GetSpriteWidthPxForCollision();
+                    if (targetSpriteWidth <= 0f)
+                    {
+                        Debug.LogError($"[AttackTrace][NearbyTargetNoWidth] attacker={StableId} target={living.StableId} frame={living.Frame?.N ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z})");
+                        continue;
+                    }
+
+                    var bodyVolumes = living.PS.GetBodyVolumes(living.Frame.D.bodies, living.Frame.D.centerx, living.Frame.D.centery, targetSpriteWidth);
+                    if (bodyVolumes == null || bodyVolumes.Count == 0)
+                    {
+                        Debug.LogError($"[AttackTrace][NearbyTargetNoBody] attacker={StableId} target={living.StableId} frame={living.Frame?.N ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z})");
+                        continue;
+                    }
+
+                    var body = bodyVolumes[0];
+                    bool intersects = NTSD.Animation.CollisionUtil.Intersect(itrVolume, body);
+                    Debug.LogError($"[AttackTrace][NearbyTargetBody] attacker={StableId} target={living.StableId} team={living.Team} frame={living.Frame?.N ?? -1} state={living.Frame?.D?.state ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z}) dx={dx} dz={dz} bodyVol=({body.x},{body.y},{body.z}; vx={body.vx},vy={body.vy},w={body.w},h={body.h},zw={body.zwidth}) intersects={intersects}");
+                }
+            }
+            finally
+            {
+                ListPool<LF2Entity>.Release(allEntities);
+            }
         }
 
         private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
@@ -581,6 +851,8 @@ namespace NTSD.Animation.LF2Objects
             }
 
             HoldWeapon(weapon);
+            LF2WeaponBase.BeginHeldTrace(StableId, weapon.StableId);
+            Debug.LogError($"[PickupTrace][PickupStateAfterHold] picker={StableId} weapon={weapon.StableId} charFrame={Frame?.N ?? -1} charState={GetState()} heldWeapon={(GetHeldWeapon() as LF2WeaponBase)?.StableId ?? -1} weaponFrame={weapon.Frame?.N ?? -1} weaponState={weapon.GetState()} weaponHolder={weapon.HoldObj?.StableId ?? -1}");
             return true;
         }
 

@@ -138,24 +138,17 @@ namespace NTSD.Test
                 return;
             }
 
-            // 2. 获取地图边界（像素坐标）
-            float xMin = 30f, xMax = 700f, zMin = 240f, zMax = 320f;
-            if (BoundaryWallManager.Instance.TryGetStageBoundsPx(out var bounds))
+            // 2. 在可走区域随机采样落点，保留向内收缩边距
+            var boundaryManager = BoundaryWallManager.Instance;
+            if (boundaryManager == null || !boundaryManager.TryGetRandomWalkablePoint(out var walkablePoint, insetWorld: 0.9f))
             {
-                xMin = bounds.xMinPx + 30f;
-                xMax = bounds.xMaxPx - 30f;
-                zMin = bounds.zMinPx + 30f;
-                zMax = bounds.zMaxPx - 30f;
-                Debug.Log($"[WeaponSpawner] bounds: xMin={bounds.xMinPx} xMax={bounds.xMaxPx} zMin={bounds.zMinPx} zMax={bounds.zMaxPx}");
-            }
-            else
-            {
-                Debug.Log("[WeaponSpawner] F8: BoundaryWallManager not found, using fallback bounds");
+                Debug.LogWarning("[WeaponSpawner] F8: no walkable point found");
+                return;
             }
 
             // 3. 随机位置，y=-500（高空，对齐 sub_424630 arg_C=-500）
-            float lf2X = Random.Range(xMin, xMax);
-            float lf2Z = Random.Range(zMin, zMax);
+            float lf2X = walkablePoint.x * 100f;
+            float lf2Z = walkablePoint.y * 100f;
             const float lf2Y = -500f;
 
             // 4. 找飞行帧（state=1000/1002/2000，fallback 最小非零帧）

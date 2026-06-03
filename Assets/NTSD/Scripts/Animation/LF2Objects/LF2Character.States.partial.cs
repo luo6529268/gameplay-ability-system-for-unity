@@ -70,7 +70,7 @@ namespace NTSD.Animation.LF2Objects
                     case "combo":
                         // 站立状态的输入响应 (对应 FLF Line 250-338)
                         string comboKey = eventData as string;
-                        Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "Standing", eventType,comboKey);
+                        //Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "Standing", eventType,comboKey);
                         // === 方向键与跳跃键处理 (FLF Line 253-272) ===
                         switch (comboKey)
                         {

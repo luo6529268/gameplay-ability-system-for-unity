@@ -86,6 +86,8 @@ namespace NTSD.LevelEditor
         [SerializeField]
         private bool _isEnabled = true;
 
+        private readonly List<Vector2> _worldVertexBuffer = new List<Vector2>(32);
+
         // ==================== 公共属性 ====================
 
         public string BoundaryName
@@ -256,33 +258,36 @@ namespace NTSD.LevelEditor
 
             foreach (var polygon in _polygons)
             {
-                if (ContainsPoint(worldPoint, polygon))
-                    return true; // 在任意一个多边形内即可
+                if (IsPolygonSimple(polygon) && ContainsPoint(worldPoint, polygon))
+                    return true;
             }
 
             return false;
         }
 
-        /// <summary>
-        /// 检测点是否在指定多边形内（Ray Casting 算法）
-        /// </summary>
         private bool ContainsPoint(Vector2 worldPoint, BoundaryPolygon polygon)
         {
             if (polygon == null || polygon.vertices.Count < 3) return false;
 
-            // 世界坐标转局部坐标（X/Y 平面）
             Vector3 localPos = transform.InverseTransformPoint(new Vector3(worldPoint.x, worldPoint.y, transform.position.z));
             Vector2 localPoint = new Vector2(localPos.x, localPos.y);
+            IReadOnlyList<Vector2> vertices = polygon.vertices;
 
-            // Ray Casting 算法
-            bool inside = false;
-            int vertexCount = polygon.vertices.Count;
-
+            const float edgeEpsilon = 0.12f;
+            int vertexCount = vertices.Count;
             for (int i = 0, j = vertexCount - 1; i < vertexCount; j = i++)
             {
-                Vector2 vi = polygon.vertices[i];
-                Vector2 vj = polygon.vertices[j];
+                Vector2 vi = vertices[i];
+                Vector2 vj = vertices[j];
+                if (IsPointOnSegment(localPoint, vj, vi, edgeEpsilon))
+                    return true;
+            }
 
+            bool inside = false;
+            for (int i = 0, j = vertexCount - 1; i < vertexCount; j = i++)
+            {
+                Vector2 vi = vertices[i];
+                Vector2 vj = vertices[j];
                 if (((vi.y > localPoint.y) != (vj.y > localPoint.y)) &&
                     (localPoint.x < (vj.x - vi.x) * (localPoint.y - vi.y) / (vj.y - vi.y) + vi.x))
                 {
@@ -291,6 +296,43 @@ namespace NTSD.LevelEditor
             }
 
             return inside;
+        }
+
+        public bool TryGetWorldVertices(BoundaryPolygon polygon, List<Vector2> worldVertices)
+        {
+            if (polygon == null || worldVertices == null || polygon.vertices == null || polygon.vertices.Count < 3)
+                return false;
+
+            worldVertices.Clear();
+            for (int i = 0; i < polygon.vertices.Count; i++)
+            {
+                Vector3 world = transform.TransformPoint(new Vector3(polygon.vertices[i].x, polygon.vertices[i].y, 0f));
+                worldVertices.Add(new Vector2(world.x, world.y));
+            }
+
+            return worldVertices.Count >= 3;
+        }
+
+        private static bool IsPointOnSegment(Vector2 p, Vector2 a, Vector2 b, float epsilon)
+        {
+            float abx = b.x - a.x;
+            float aby = b.y - a.y;
+            float apx = p.x - a.x;
+            float apy = p.y - a.y;
+
+            float abLenSq = abx * abx + aby * aby;
+            if (abLenSq <= Mathf.Epsilon)
+                return Vector2.SqrMagnitude(p - a) <= epsilon * epsilon;
+
+            float cross = abx * apy - aby * apx;
+            if (Mathf.Abs(cross) > epsilon * Mathf.Sqrt(abLenSq))
+                return false;
+
+            float dot = apx * abx + apy * aby;
+            if (dot < -epsilon || dot > abLenSq + epsilon)
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -310,6 +352,7 @@ namespace NTSD.LevelEditor
             foreach (var polygon in _polygons)
             {
                 if (polygon == null) continue;
+                if (!IsPolygonSimple(polygon)) continue;
                 if (RectFullyInsidePolygon(worldRect, polygon))
                     return true;
             }
@@ -334,11 +377,17 @@ namespace NTSD.LevelEditor
             foreach (var polygon in _polygons)
             {
                 if (polygon == null) continue;
+                if (!IsPolygonSimple(polygon)) continue;
                 if (ContainsPoint(worldPoint, polygon))
                     return true;
             }
             return false;
         }
+
+        /// <summary>
+        /// 外部校验：当前多边形是否为简单多边形（无自相交）。
+        /// </summary>
+        public bool IsPolygonSimple(BoundaryPolygon polygon) => IsSimplePolygon(polygon);
 
         /// <summary>
         /// 严谨检测：Rect 是否完全在多边形内
@@ -347,7 +396,7 @@ namespace NTSD.LevelEditor
         /// </summary>
         private bool RectFullyInsidePolygon(Rect worldRect, BoundaryPolygon polygon)
         {
-            if (polygon == null || polygon.vertices.Count < 3) return false;
+            if (!IsSimplePolygon(polygon)) return false;
 
             // Rect 四个顶点
             Vector2[] rectCorners = new Vector2[4]
@@ -372,20 +421,15 @@ namespace NTSD.LevelEditor
                 rectCorners[2], rectCorners[3]  // 上边（逆序用于闭合）
             };
 
-            // 获取多边形世界坐标顶点
-            List<Vector2> worldPolygonVertices = new List<Vector2>();
-            foreach (var localVertex in polygon.vertices)
-            {
-                Vector3 worldPos = transform.TransformPoint(new Vector3(localVertex.x, localVertex.y, 0f));
-                worldPolygonVertices.Add(new Vector2(worldPos.x, worldPos.y));
-            }
+            if (!TryGetWorldVertices(polygon, _worldVertexBuffer))
+                return false;
 
             // 检测多边形每条边与 Rect 每条边是否相交
-            for (int i = 0; i < worldPolygonVertices.Count; i++)
+            for (int i = 0; i < _worldVertexBuffer.Count; i++)
             {
-                int nextIndex = (i + 1) % worldPolygonVertices.Count;
-                Vector2 polyEdgeStart = worldPolygonVertices[i];
-                Vector2 polyEdgeEnd = worldPolygonVertices[nextIndex];
+                int nextIndex = (i + 1) % _worldVertexBuffer.Count;
+                Vector2 polyEdgeStart = _worldVertexBuffer[i];
+                Vector2 polyEdgeEnd = _worldVertexBuffer[nextIndex];
 
                 // Rect 的四条边
                 if (SegmentIntersect(polyEdgeStart, polyEdgeEnd, rectCorners[0], rectCorners[1])) return false; // 下边
@@ -399,7 +443,7 @@ namespace NTSD.LevelEditor
 
         private bool PolygonOverlapsRect(Rect worldRect, BoundaryPolygon polygon)
         {
-            if (polygon == null || polygon.vertices == null || polygon.vertices.Count < 3) return false;
+            if (!IsSimplePolygon(polygon)) return false;
 
             Vector2[] rectCorners = new Vector2[4]
             {
@@ -417,26 +461,21 @@ namespace NTSD.LevelEditor
             }
 
             // B) 任意多边形顶点在 Rect 内 => overlap
-            for (int i = 0; i < polygon.vertices.Count; i++)
+            if (!TryGetWorldVertices(polygon, _worldVertexBuffer))
+                return false;
+
+            for (int i = 0; i < _worldVertexBuffer.Count; i++)
             {
-                Vector3 worldPos = transform.TransformPoint(new Vector3(polygon.vertices[i].x, polygon.vertices[i].y, 0f));
-                if (worldRect.Contains(new Vector2(worldPos.x, worldPos.y)))
+                if (worldRect.Contains(_worldVertexBuffer[i]))
                     return true;
             }
 
             // C) 任意边相交 => overlap
-            List<Vector2> worldPolygonVertices = new List<Vector2>(polygon.vertices.Count);
-            foreach (var localVertex in polygon.vertices)
+            for (int i = 0; i < _worldVertexBuffer.Count; i++)
             {
-                Vector3 worldPos = transform.TransformPoint(new Vector3(localVertex.x, localVertex.y, 0f));
-                worldPolygonVertices.Add(new Vector2(worldPos.x, worldPos.y));
-            }
-
-            for (int i = 0; i < worldPolygonVertices.Count; i++)
-            {
-                int next = (i + 1) % worldPolygonVertices.Count;
-                Vector2 a1 = worldPolygonVertices[i];
-                Vector2 a2 = worldPolygonVertices[next];
+                int next = (i + 1) % _worldVertexBuffer.Count;
+                Vector2 a1 = _worldVertexBuffer[i];
+                Vector2 a2 = _worldVertexBuffer[next];
 
                 if (SegmentIntersect(a1, a2, rectCorners[0], rectCorners[1])) return true;
                 if (SegmentIntersect(a1, a2, rectCorners[1], rectCorners[2])) return true;
@@ -468,6 +507,118 @@ namespace NTSD.LevelEditor
             return a.x * b.y - a.y * b.x;
         }
 
+        private bool IsSimplePolygon(BoundaryPolygon polygon)
+        {
+            if (polygon == null || polygon.vertices == null || polygon.vertices.Count < 3)
+                return false;
+
+            int count = polygon.vertices.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 a1 = polygon.vertices[i];
+                Vector2 a2 = polygon.vertices[(i + 1) % count];
+
+                for (int j = i + 1; j < count; j++)
+                {
+                    int nextJ = (j + 1) % count;
+                    if (i == j || (i + 1) % count == j || i == nextJ)
+                        continue;
+
+                    Vector2 b1 = polygon.vertices[j];
+                    Vector2 b2 = polygon.vertices[nextJ];
+                    if (SegmentsIntersect(a1, a2, b1, b2))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool SegmentsIntersect(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
+        {
+            float d1 = Direction(p3, p4, p1);
+            float d2 = Direction(p3, p4, p2);
+            float d3 = Direction(p1, p2, p3);
+            float d4 = Direction(p1, p2, p4);
+
+            if (((d1 > 0f && d2 < 0f) || (d1 < 0f && d2 > 0f)) &&
+                ((d3 > 0f && d4 < 0f) || (d3 < 0f && d4 > 0f)))
+            {
+                return true;
+            }
+
+            if (Mathf.Approximately(d1, 0f) && OnSegment(p3, p4, p1)) return true;
+            if (Mathf.Approximately(d2, 0f) && OnSegment(p3, p4, p2)) return true;
+            if (Mathf.Approximately(d3, 0f) && OnSegment(p1, p2, p3)) return true;
+            if (Mathf.Approximately(d4, 0f) && OnSegment(p1, p2, p4)) return true;
+            return false;
+        }
+
+        private static float Direction(Vector2 a, Vector2 b, Vector2 c)
+        {
+            return CrossProductStatic(c - a, b - a);
+        }
+
+        private static bool OnSegment(Vector2 a, Vector2 b, Vector2 p)
+        {
+            return p.x >= Mathf.Min(a.x, b.x) - 0.0001f && p.x <= Mathf.Max(a.x, b.x) + 0.0001f &&
+                   p.y >= Mathf.Min(a.y, b.y) - 0.0001f && p.y <= Mathf.Max(a.y, b.y) + 0.0001f;
+        }
+
+        private static float CrossProductStatic(Vector2 a, Vector2 b)
+        {
+            return a.x * b.y - a.y * b.x;
+        }
+
+        /// <summary>
+        /// 检测世界坐标点是否在某个凹角顶点的 radius 范围内。
+        /// 凹角（reflex vertex）：内角 > 180°，即多边形在该顶点处向内凹陷。
+        /// </summary>
+        public bool IsNearConcaveVertex(Vector2 worldPoint, float radius)
+        {
+            float radiusSq = radius * radius;
+            foreach (var polygon in _polygons)
+            {
+                if (polygon == null || polygon.vertices.Count < 3) continue;
+                if (!IsPolygonSimple(polygon)) continue;
+
+                var verts = polygon.vertices;
+                int count = verts.Count;
+
+                // 计算有符号面积确定绕向（正=CCW，负=CW）
+                float area = 0f;
+                for (int i = 0; i < count; i++)
+                {
+                    int j = (i + 1) % count;
+                    area += verts[i].x * verts[j].y - verts[j].x * verts[i].y;
+                }
+                float orientation = area > 0f ? 1f : -1f;
+
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 prev = verts[(i - 1 + count) % count];
+                    Vector2 curr = verts[i];
+                    Vector2 next = verts[(i + 1) % count];
+
+                    // 叉积：(curr-prev) × (next-curr)
+                    Vector2 d1 = curr - prev;
+                    Vector2 d2 = next - curr;
+                    float cross = d1.x * d2.y - d1.y * d2.x;
+
+                    // 凹角：叉积与绕向符号相反
+                    if (cross * orientation >= 0f) continue;
+
+                    // 转换到世界坐标
+                    Vector3 worldV = transform.TransformPoint(new Vector3(curr.x, curr.y, 0f));
+                    Vector2 worldVertex = new Vector2(worldV.x, worldV.y);
+
+                    if ((worldPoint - worldVertex).sqrMagnitude <= radiusSq)
+                        return true;
+                }
+            }
+            return false;
+        }
+
         // ==================== Unity 生命周期 ====================
 
         private void OnValidate()
@@ -475,6 +626,15 @@ namespace NTSD.LevelEditor
             if (_polygons.Count == 0)
             {
                 Debug.LogWarning("[BoundaryWall] 至少需要一个多边形");
+            }
+
+            for (int i = 0; i < _polygons.Count; i++)
+            {
+                var polygon = _polygons[i];
+                if (polygon != null && !IsSimplePolygon(polygon))
+                {
+                    Debug.LogWarning($"[BoundaryWall] 多边形 '{polygon.name}' 存在自相交或顺序错误，预览填充与运行时判定会失真。");
+                }
             }
 
             _activePolygonIndex = Mathf.Clamp(_activePolygonIndex, 0, Mathf.Max(0, _polygons.Count - 1));
@@ -498,30 +658,140 @@ namespace NTSD.LevelEditor
                     Vector3 worldEnd = transform.TransformPoint(new Vector3(polygon.vertices[nextIndex].x, polygon.vertices[nextIndex].y, 0f));
                     Gizmos.DrawLine(worldStart, worldEnd);
                 }
+
             }
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (_polygons.Count == 0) return;
 
 #if UNITY_EDITOR
-            foreach (var polygon in _polygons)
+        private static void DrawFilledPolygon(Vector3[] worldVertices)
+        {
+            if (worldVertices == null || worldVertices.Length < 3)
+                return;
+
+            List<Vector2> points = new List<Vector2>(worldVertices.Length);
+            for (int i = 0; i < worldVertices.Length; i++)
+                points.Add(new Vector2(worldVertices[i].x, worldVertices[i].y));
+
+            if (!TryTriangulate(points, out var indices))
+                return;
+
+            for (int i = 0; i < indices.Count; i += 3)
             {
-                if (polygon.vertices.Count < 3) continue;
-
-                UnityEditor.Handles.color = polygon.color;
-
-                Vector3[] worldVertices = new Vector3[polygon.vertices.Count];
-                for (int i = 0; i < polygon.vertices.Count; i++)
+                Vector3[] tri = new Vector3[3]
                 {
-                    worldVertices[i] = transform.TransformPoint(new Vector3(polygon.vertices[i].x, polygon.vertices[i].y, 0f));
+                    worldVertices[indices[i]],
+                    worldVertices[indices[i + 1]],
+                    worldVertices[indices[i + 2]]
+                };
+                UnityEditor.Handles.DrawAAConvexPolygon(tri);
+            }
+        }
+
+        private static bool TryTriangulate(IReadOnlyList<Vector2> points, out List<int> indices)
+        {
+            indices = new List<int>();
+            if (points == null || points.Count < 3)
+                return false;
+
+            List<int> polygon = new List<int>(points.Count);
+            float area = SignedArea(points);
+            if (Mathf.Approximately(area, 0f))
+                return false;
+
+            if (area > 0f)
+            {
+                for (int i = 0; i < points.Count; i++) polygon.Add(i);
+            }
+            else
+            {
+                for (int i = points.Count - 1; i >= 0; i--) polygon.Add(i);
+            }
+
+            int guard = 0;
+            while (polygon.Count > 3 && guard++ < 2048)
+            {
+                bool earFound = false;
+                for (int i = 0; i < polygon.Count; i++)
+                {
+                    int prevIndex = polygon[(i - 1 + polygon.Count) % polygon.Count];
+                    int currIndex = polygon[i];
+                    int nextIndex = polygon[(i + 1) % polygon.Count];
+
+                    Vector2 a = points[prevIndex];
+                    Vector2 b = points[currIndex];
+                    Vector2 c = points[nextIndex];
+
+                    if (!IsConvex(a, b, c))
+                        continue;
+
+                    bool hasPointInside = false;
+                    for (int j = 0; j < polygon.Count; j++)
+                    {
+                        int testIndex = polygon[j];
+                        if (testIndex == prevIndex || testIndex == currIndex || testIndex == nextIndex)
+                            continue;
+
+                        if (PointInTriangle(points[testIndex], a, b, c))
+                        {
+                            hasPointInside = true;
+                            break;
+                        }
+                    }
+
+                    if (hasPointInside)
+                        continue;
+
+                    indices.Add(prevIndex);
+                    indices.Add(currIndex);
+                    indices.Add(nextIndex);
+                    polygon.RemoveAt(i);
+                    earFound = true;
+                    break;
                 }
 
-                UnityEditor.Handles.DrawAAConvexPolygon(worldVertices);
+                if (!earFound)
+                    return false;
             }
-#endif
+
+            if (polygon.Count == 3)
+            {
+                indices.Add(polygon[0]);
+                indices.Add(polygon[1]);
+                indices.Add(polygon[2]);
+                return true;
+            }
+
+            return false;
         }
+
+        private static float SignedArea(IReadOnlyList<Vector2> points)
+        {
+            float area = 0f;
+            for (int i = 0; i < points.Count; i++)
+            {
+                int j = (i + 1) % points.Count;
+                area += points[i].x * points[j].y - points[j].x * points[i].y;
+            }
+            return area * 0.5f;
+        }
+
+        private static bool IsConvex(Vector2 a, Vector2 b, Vector2 c)
+        {
+            return CrossProductStatic(b - a, c - b) >= -0.0001f;
+        }
+
+        private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        {
+            float d1 = CrossProductStatic(p - a, b - a);
+            float d2 = CrossProductStatic(p - b, c - b);
+            float d3 = CrossProductStatic(p - c, a - c);
+
+            bool hasNeg = (d1 < -0.0001f) || (d2 < -0.0001f) || (d3 < -0.0001f);
+            bool hasPos = (d1 > 0.0001f) || (d2 > 0.0001f) || (d3 > 0.0001f);
+            return !(hasNeg && hasPos);
+        }
+#endif
+
     }
 
     // ==================== 数据结构 ====================

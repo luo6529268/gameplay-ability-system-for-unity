@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
+using MoreMountains.Tools;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -31,7 +32,7 @@ namespace NTSD.Animation.LF2Objects
         private int _renderFrameCount = 0;
 
         // 缓存稳定ID（AllocateStableId 只调用一次）
-        private int _stableId = 0;
+        [SerializeField][MMReadOnly]private int _stableId = 0;
 
         // ========== 公开属性 ==========
         public ILF2Object LogicObject => _logicObject;
@@ -85,8 +86,6 @@ namespace NTSD.Animation.LF2Objects
         public void SimLateTick(int tickIndex)
         {
             if (_logicObject == null) return;
-            if (!(_logicObject is LF2Character) && _renderFrameCount < 3)
-                UnityEngine.Debug.Log($"[SimLateTick] oid={_logicObject.ObjectId} tick={tickIndex}");
             UpdateSprite();
             UpdatePosition();
             ApplyVisualShake();
@@ -163,50 +162,61 @@ namespace NTSD.Animation.LF2Objects
             if (_logicObject == null) return;
             var ps = _logicObject.PS;
             if (ps == null) return;
-
-            const float ppu = 100f;
+            var tracedWeapon = _logicObject as LF2WeaponBase;
+            bool traceHeld = tracedWeapon != null && LF2WeaponBase.ShouldTraceHeldWeapon(tracedWeapon.StableId);
 
             var frame = _logicObject.Frame?.D;
             float cx = frame?.centerx ?? 0f;
             float cy = frame?.centery ?? 0f;
+            const float ppu = SimulationConstants.PIXELS_PER_UNIT;
 
-            // 1. Root 节点始终保持在地面 (px, pz)
             Transform rootTransform = transform.parent != null ? transform.parent : transform;
+            float parentScaleY = rootTransform.localScale.y;
+            if (Mathf.Approximately(parentScaleY, 0f)) parentScaleY = 1f;
+
             if (_logicObject is LF2Character)
             {
+                float spriteHeight = _spriteRenderer.sprite?.rect.height ?? 0f;
+                float localPosY = -ps.y / (ppu * parentScaleY)
+                                  - (spriteHeight - cy) / ppu;
                 Vector2 groundPlanePos = ps.GetGroundPoint2D();
                 rootTransform.position = new Vector3(
-                    Mathf.Round(groundPlanePos.x * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
-                    Mathf.Round(groundPlanePos.y * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT,
+                    Mathf.Round(groundPlanePos.x * ppu) / ppu,
+                    Mathf.Round(groundPlanePos.y * ppu) / ppu,
                     rootTransform.position.z
                 );
 
-                float visualYOffset = -ps.y / SimulationConstants.PIXELS_PER_UNIT;
-                float snappedVisualY = Mathf.Round(visualYOffset * SimulationConstants.PIXELS_PER_UNIT) / SimulationConstants.PIXELS_PER_UNIT;
                 if (_visualTransform != null)
                 {
-                    _visualTransform.localPosition = new Vector3(0f, snappedVisualY, 0f);
+                    float snappedLocalY = Mathf.Round(localPosY * ppu) / ppu;
+                    _visualTransform.localPosition = new Vector3(0f, snappedLocalY, 0f);
                 }
-
-                if (_renderFrameCount < 2)
-                    UnityEngine.Debug.Log($"[Char] px={ps.x:F0} pz={ps.z:F0} worldX={groundPlanePos.x:F2} worldY={groundPlanePos.y:F2} localY={snappedVisualY:F2} finalY={groundPlanePos.y + snappedVisualY:F2}");
             }
             else
             {
-                float worldX = ps.x / ppu;
-                float worldY = (ps.z - ps.y) / ppu;
-                rootTransform.position = new Vector3(worldX, worldY, rootTransform.position.z);
+                float spriteWidth = _spriteRenderer.sprite?.rect.width ?? 0f;
+                float spriteHeight = _spriteRenderer.sprite?.rect.height ?? 0f;
+                float rootWorldX = Mathf.Round((ps.x / ppu) * ppu) / ppu;
+                float rootWorldY = Mathf.Round(((ps.z - ps.y) / ppu) * ppu) / ppu;
+                rootTransform.position = new Vector3(
+                    rootWorldX,
+                    rootWorldY,
+                    rootTransform.position.z
+                );
 
                 if (_visualTransform != null)
                 {
-                    _visualTransform.localPosition = new Vector3(-cx / ppu, -cy / ppu, 0);
-                }
-
-                if (_renderFrameCount < 2)
-                {
-                    string pname = transform.parent != null ? transform.parent.name : "null";
-                    string gpname = (transform.parent != null && transform.parent.parent != null) ? transform.parent.parent.name : "null";
-                    UnityEngine.Debug.Log($"[Pos] oid={_logicObject.ObjectId} px={ps.x:F0} py={ps.y:F0} pz={ps.z:F0} rootY={worldY:F2} localY={(-cy/ppu):F2} finalY={worldY + (-cy/ppu):F2}");
+                    float localPosX = (ps.dir == "left")
+                        ? (cx - spriteWidth * 0.5f) / ppu
+                        : (spriteWidth * 0.5f - cx) / ppu;
+                    float localPosY = -(spriteHeight - cy) / ppu;
+                    float snappedLocalX = Mathf.Round(localPosX * ppu) / ppu;
+                    float snappedLocalY = Mathf.Round(localPosY * ppu) / ppu;
+                    _visualTransform.localPosition = new Vector3(snappedLocalX, snappedLocalY, 0f);
+                    if (traceHeld)
+                    {
+                        Debug.LogError($"[PickupTrace][RendererWeaponPos] picker={LF2WeaponBase.HeldTracePickerId} weapon={tracedWeapon.StableId} frame={tracedWeapon.Frame?.N ?? -1} state={tracedWeapon.GetState()} rootPos=({rootTransform.position.x},{rootTransform.position.y},{rootTransform.position.z}) localPos=({_visualTransform.localPosition.x},{_visualTransform.localPosition.y},{_visualTransform.localPosition.z}) dir={ps.dir} zz={ps.zz}");
+                    }
                 }
             }
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);

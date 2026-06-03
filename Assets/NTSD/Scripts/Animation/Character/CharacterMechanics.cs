@@ -26,38 +26,35 @@ namespace NTSD.Animation
         public readonly PhysicsState ps;
         public readonly LF2FrameData frameData;
         public readonly float spriteWidthPx;
-        public readonly bool hasStageBounds;
-        public readonly LF2StageBoundsPx stageBoundsPx;
         public readonly float mass;
         public readonly float minSpeed;
         public readonly float gravity;
         public readonly float blockedMoveScale;
         public readonly Func<Vector2, bool> isPointWalkable;
+        public readonly Func<Vector2, float, bool> isNearConcaveVertex;
         public readonly Action<string> logWarning;
 
         public CharacterMechanicsContext(
             PhysicsState ps,
             LF2FrameData frameData,
             float spriteWidthPx,
-            bool hasStageBounds,
-            LF2StageBoundsPx stageBoundsPx,
             float mass,
             float minSpeed,
             float gravity,
             float blockedMoveScale,
             Func<Vector2, bool> isPointWalkable,
+            Func<Vector2, float, bool> isNearConcaveVertex = null,
             Action<string> logWarning = null)
         {
             this.ps = ps;
             this.frameData = frameData;
             this.spriteWidthPx = spriteWidthPx;
-            this.hasStageBounds = hasStageBounds;
-            this.stageBoundsPx = stageBoundsPx;
             this.mass = mass;
             this.minSpeed = minSpeed;
             this.gravity = gravity;
             this.blockedMoveScale = blockedMoveScale;
             this.isPointWalkable = isPointWalkable;
+            this.isNearConcaveVertex = isNearConcaveVertex;
             this.logWarning = logWarning;
         }
     }
@@ -100,43 +97,16 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class CharacterMechanics
     {
-        private static float GetDefaultFootRadiusWorld()
-        {
-            // FLF 默认 itr.zwidth = 12 像素（global.js: GC.default.itr.zwidth）。
-            // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
-            // FLF 默认 itr.zwidth = 12 像素（global.js: GC.default.itr.zwidth）
-            // 这里取半宽作为“近似体积”采样半径，并转换到 Unity ground plane 的 world 单位。
-            return (NTSDGlobal.Default.Itr.ZWidth / SimulationConstants.PIXELS_PER_UNIT) * 0.5f;
-        }
-
         /// <summary>
-        /// 使用“多点采样”近似 FLF blocking_xz() 的体积阻挡判定。
-        /// 数据来源仍然是项目的可视化可走区（isPointWalkable），但阻挡判定方式更接近 FLF 的“体积查询”。
+        /// 使用脚底中心点做可走性判断。
+        /// 边缘容差由 BoundaryWall 统一处理，避免顶点处前探点落到边界外导致卡住。
         /// </summary>
-        private static bool IsFootprintWalkable(
+        private static bool IsMovementWalkable(
             Func<Vector2, bool> isPointWalkable,
-            Vector2 center,
-            float radiusWorld,
-            Vector2 moveDirWorld)
+            Vector2 center)
         {
             if (isPointWalkable == null) return true;
-            if (radiusWorld <= 0f) return isPointWalkable(center);
-
-            // 基础 5 点采样：中心 + 十字
-            if (!isPointWalkable(center)) return false;
-            if (!isPointWalkable(new Vector2(center.x + radiusWorld, center.y))) return false;
-            if (!isPointWalkable(new Vector2(center.x - radiusWorld, center.y))) return false;
-            if (!isPointWalkable(new Vector2(center.x, center.y + radiusWorld))) return false;
-            if (!isPointWalkable(new Vector2(center.x, center.y - radiusWorld))) return false;
-
-            // 按移动方向前探一点，减少边界处“单点通过、体积穿出”的漏判
-            if (moveDirWorld.sqrMagnitude > 1e-6f)
-            {
-                moveDirWorld.Normalize();
-                if (!isPointWalkable(center + moveDirWorld * radiusWorld)) return false;
-            }
-
-            return true;
+            return isPointWalkable(center);
         }
         // ==================== 可复用 Helper（对齐 FLF mechanics.js）====================
 
@@ -200,8 +170,7 @@ namespace NTSD.Animation
             if (isPointWalkable != null)
             {
                 Vector2 footPoint = ps.GetGroundPoint2D();
-                float footprintRadiusWorld = GetDefaultFootRadiusWorld();
-                if (!IsFootprintWalkable(isPointWalkable, footPoint, footprintRadiusWorld, Vector2.zero))
+                if (!IsMovementWalkable(isPointWalkable, footPoint))
                 {
                     ps.x = oldX;
                     ps.y = oldY;
@@ -224,73 +193,122 @@ namespace NTSD.Animation
             }
 
             BoundaryResolveMode boundaryMode = BoundaryResolveMode.None;
-            float footprintRadiusWorld = GetDefaultFootRadiusWorld();
-            Vector2 moveDirWorld = new Vector2(ps.vx, ps.vz) / SimulationConstants.PIXELS_PER_UNIT;
-
             // ==================== 1. 水平位移 + 边界回退（FLF Line 326-327）====================
             float oldX = ps.x;
             float oldZ = ps.z;
 
             // 尝试 full 移动
-            ps.x += ps.vx * ctx.blockedMoveScale;
-            ps.z += ps.vz * ctx.blockedMoveScale;
-
-            // 对齐 FLF mechanics.js dynamics(): x/z clamp（非回滚）
-            if (ctx.hasStageBounds)
-            {
-                var b = ctx.stageBoundsPx;
-                bool clampedX = false;
-                bool clampedZ = false;
-
-                if (b.floorXBound)
-                {
-                    if (ps.x < b.xMinPx) { ps.x = b.xMinPx; clampedX = true; }
-                    else if (ps.x > b.xMaxPx) { ps.x = b.xMaxPx; clampedX = true; }
-                }
-
-                if (ps.z < b.zMinPx) { ps.z = b.zMinPx; clampedZ = true; }
-                else if (ps.z > b.zMaxPx) { ps.z = b.zMaxPx; clampedZ = true; }
-
-                if (clampedX && clampedZ) boundaryMode = BoundaryResolveMode.Stop;
-                else if (clampedX) boundaryMode = BoundaryResolveMode.XOnly;
-                else if (clampedZ) boundaryMode = BoundaryResolveMode.ZOnly;
-            }
+            float moveScale = ctx.blockedMoveScale;
+            ps.x += ps.vx * moveScale;
+            ps.z += ps.vz * moveScale;
 
             // P3: 检测是否越出边界
-            else if (ctx.isPointWalkable != null)
+            if (ctx.isPointWalkable != null)
             {
                 Vector2 footPoint = ps.GetGroundPoint2D();
 
-                if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
+                if (!IsMovementWalkable(ctx.isPointWalkable, footPoint))
                 {
-                    // Full 移动不可走：对齐 FLF 的阻挡处理，改为缩小位移（*0.1）
-                    ctx.logWarning?.Invoke("[Boundary] Out of walkable area, keep position");
-                    ps.x = oldX;
-                    ps.z = oldZ;
-                    boundaryMode = BoundaryResolveMode.Stop;
+                    // Full 移动被拦截：尝试 wall sliding（分轴移动）
+                    bool slid = false;
 
-                    footPoint = ps.GetGroundPoint2D();
-                    if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
+                    // 尝试只移动 X
+                    if (!slid && ps.vx != 0)
                     {
-                        // 缩小位移后仍不可走：本帧保持原位（不清 vx/vz）
-                        ctx.logWarning?.Invoke("[Boundary] Out of walkable area, keep position");
+                        ps.x = oldX + ps.vx * moveScale;
+                        ps.z = oldZ;
+                        footPoint = ps.GetGroundPoint2D();
+                        if (IsMovementWalkable(ctx.isPointWalkable, footPoint))
+                        {
+                            boundaryMode = BoundaryResolveMode.XOnly;
+                            slid = true;
+                        }
+                    }
+
+                    // 尝试只移动 Z
+                    if (!slid && ps.vz != 0)
+                    {
+                        ps.x = oldX;
+                        ps.z = oldZ + ps.vz * moveScale;
+                        footPoint = ps.GetGroundPoint2D();
+                        if (IsMovementWalkable(ctx.isPointWalkable, footPoint))
+                        {
+                            boundaryMode = BoundaryResolveMode.XOnly;
+                            slid = true;
+                        }
+                    }
+
+                    // 凹角绕行：只在凹角顶点附近才做 nudge，直边/垂直边直接停住
+                    // 用当前位置检测（角色靠近凹角时触发），半径 1.0 世界单位
+                    bool nearConcaveVertex = false;
+                    if (ctx.isNearConcaveVertex != null)
+                    {
+                        Vector2 currentFoot = new Vector2(
+                            oldX / SimulationConstants.PIXELS_PER_UNIT,
+                            oldZ / SimulationConstants.PIXELS_PER_UNIT);
+                        nearConcaveVertex = ctx.isNearConcaveVertex(currentFoot, 1.0f);
+                    }
+
+                    if (!slid && ps.vx != 0 && nearConcaveVertex)
+                    {
+                        // 先尝试 X + Z 偏移
+                        float[] nudges = { 10f, -10f, 20f, -20f, 30f, -30f };
+                        foreach (float nz in nudges)
+                        {
+                            ps.x = oldX + ps.vx * moveScale;
+                            ps.z = oldZ + nz;
+                            footPoint = ps.GetGroundPoint2D();
+                            if (IsMovementWalkable(ctx.isPointWalkable, footPoint))
+                            {
+                                boundaryMode = BoundaryResolveMode.XOnly;
+                                slid = true;
+                                break;
+                            }
+                        }
+
+                        // 若 X+nudge 全部失败，尝试纯 Z 移动让角色先绕开凹角
+                        if (!slid)
+                        {
+                            float[] zOnly = { 10f, -10f, 20f, -20f };
+                            foreach (float nz in zOnly)
+                            {
+                                ps.x = oldX;
+                                ps.z = oldZ + nz;
+                                footPoint = ps.GetGroundPoint2D();
+                                if (IsMovementWalkable(ctx.isPointWalkable, footPoint))
+                                {
+                                    boundaryMode = BoundaryResolveMode.XOnly;
+                                    slid = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Z 方向有速度但被拦截时，尝试加小幅 X 偏移绕过凹角
+                    if (!slid && ps.vz != 0 && nearConcaveVertex)
+                    {
+                        float[] nudges = { 10f, -10f, 20f, -20f, 30f, -30f };
+                        foreach (float nx in nudges)
+                        {
+                            ps.x = oldX + nx;
+                            ps.z = oldZ + ps.vz * moveScale;
+                            footPoint = ps.GetGroundPoint2D();
+                            if (IsMovementWalkable(ctx.isPointWalkable, footPoint))
+                            {
+                                boundaryMode = BoundaryResolveMode.XOnly;
+                                slid = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!slid)
+                    {
+                        // 所有方向都被拦截：保持原位
                         ps.x = oldX;
                         ps.z = oldZ;
                         boundaryMode = BoundaryResolveMode.Stop;
-
-                        footPoint = ps.GetGroundPoint2D();
-                        if (!IsFootprintWalkable(ctx.isPointWalkable, footPoint, footprintRadiusWorld, moveDirWorld))
-                        {
-                            // 保留旧的“二次确认”分支：保持原位
-                            ctx.logWarning?.Invoke("[Boundary] Blocked: keep position");
-                            ps.x = oldX;
-                            ps.z = oldZ;
-                            boundaryMode = BoundaryResolveMode.Stop;
-                        }
-                    }
-                    else
-                    {
-                        boundaryMode = BoundaryResolveMode.XOnly;
                     }
                 }
             }

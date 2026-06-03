@@ -1124,13 +1124,13 @@ namespace NTSD.Animation.LF2Objects
             if (ShakeTimer > 0) ShakeTimer--;
             else if (ShakeTimer < 0) ShakeTimer++;
 
-            // 反汇编 0x413D0C-0x413D69: frame.mp < 0 && MPEnabled → MP cost
-            // +308h(PP) += mp (mp<0, so PP decreases); if PP < mp (signed, only if PP already negative) → frame=next
-            if (fD != null && fD.mp < 0 && NTSDGlobal.MPEnabled && Health != null)
+            // 反汇编 0x413D0C: [frame+7F0h]=hit_Uj < 0 && MPEnabled → cmp PP, hit_Uj; jl→frame=hit_a; else PP+=hit_Uj
+            if (fD != null && fD.hit_Uj < 0 && NTSDGlobal.MPEnabled && Health != null)
             {
-                Health.PP += fD.mp; // PP -= |mp|
-                if (Health.PP < fD.mp) // signed: only triggers if PP was already negative
-                    Trans.Frame(fD.next, 0);
+                if (Health.PP < fD.hit_Uj)
+                    Trans.Frame(fD.hit_a, 0);
+                else
+                    Health.PP += fD.hit_Uj;
             }
 
             // 反汇编 0x413DEB: frame==202 → ShakeTimer=20
@@ -1611,12 +1611,15 @@ namespace NTSD.Animation.LF2Objects
             if (ny < -600f || ny > 100f) return true;
             if (nx + spriteW < -margin) return true;
 
-            float bgWidth = 1500f; // FLF 默认背景宽度
             var bwm = NTSD.LevelEditor.BoundaryWallManager.Instance;
-            if (bwm != null && bwm.TryGetStageBoundsPx(out var bounds))
-                bgWidth = bounds.xMaxPx - bounds.xMinPx;
+            if (bwm != null)
+            {
+                Vector2 nextPoint = new Vector2((PS.x + PS.vx) / 100f, (PS.z + PS.vz) / 100f);
+                if (!bwm.IsPointWalkable(nextPoint))
+                    return true;
+            }
 
-            if (nx > bgWidth + margin) return true;
+            if (nx > 1500f + margin) return true;
             return false;
         }
 

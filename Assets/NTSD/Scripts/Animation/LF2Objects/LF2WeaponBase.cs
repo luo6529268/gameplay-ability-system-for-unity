@@ -17,6 +17,71 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public abstract class LF2WeaponBase : LF2Entity
     {
+        public static bool PickupTraceEnabled;
+        public static int PickupTracePickerId = -1;
+        private static readonly HashSet<int> s_pickupTraceWeaponIds = new HashSet<int>();
+        public static int HeldTracePickerId = -1;
+        public static int HeldTraceWeaponId = -1;
+        private static int s_heldTraceBudget;
+
+        public static void BeginPickupTrace(int pickerId)
+        {
+            PickupTraceEnabled = true;
+            PickupTracePickerId = pickerId;
+            s_pickupTraceWeaponIds.Clear();
+        }
+
+        public static void AddPickupTraceWeapon(int weaponId)
+        {
+            if (!PickupTraceEnabled) return;
+            s_pickupTraceWeaponIds.Add(weaponId);
+        }
+
+        public static bool ShouldTracePickupWeapon(int weaponId)
+        {
+            return PickupTraceEnabled && PickupTracePickerId >= 0 && s_pickupTraceWeaponIds.Contains(weaponId);
+        }
+
+        public static void ConsumePickupTraceWeapon(int weaponId)
+        {
+            if (!s_pickupTraceWeaponIds.Remove(weaponId)) return;
+
+            if (s_pickupTraceWeaponIds.Count == 0)
+            {
+                ClearPickupTrace();
+            }
+        }
+
+        public static void ClearPickupTrace()
+        {
+            PickupTraceEnabled = false;
+            PickupTracePickerId = -1;
+            s_pickupTraceWeaponIds.Clear();
+        }
+
+        public static void BeginHeldTrace(int pickerId, int weaponId, int budget = 6)
+        {
+            HeldTracePickerId = pickerId;
+            HeldTraceWeaponId = weaponId;
+            s_heldTraceBudget = budget;
+        }
+
+        public static bool ShouldTraceHeldWeapon(int weaponId)
+        {
+            return HeldTraceWeaponId == weaponId && s_heldTraceBudget > 0;
+        }
+
+        public static void ConsumeHeldTrace()
+        {
+            if (s_heldTraceBudget <= 0) return;
+
+            s_heldTraceBudget--;
+            if (s_heldTraceBudget > 0) return;
+
+            HeldTracePickerId = -1;
+            HeldTraceWeaponId = -1;
+        }
+
         // ========== 武器专属字段（不在 LF2Entity 的） ==========
 
         /// <summary>交互冷却（武器也有 itr 碰撞冷却）</summary>
@@ -238,6 +303,167 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
+        /// PreInteraction 阶段 - 对应反汇编 sub_419F80 武器 wpoint→itr 拾取检测
+        /// 把当前帧的 wpoint（kind=1/2/7）当作临时 itr，检测周围角色 bdy，触发拾取。
+        /// </summary>
+        public override void SimPreInteraction(int tickIndex)
+        {
+            bool traceThisPickup = ShouldTracePickupWeapon(StableId);
+
+            try
+            {
+                if (HoldObj != null)
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipHeld] picker={PickupTracePickerId} weapon={StableId} holder={HoldObj.StableId}");
+                    return;
+                }
+                if (!ItrArestTest())
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipArest] picker={PickupTracePickerId} weapon={StableId} arest={ItrRest?.Arest ?? -1}");
+                    return;
+                }
+
+                var fD = Frame?.D;
+                if (fD == null)
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipNoFrame] picker={PickupTracePickerId} weapon={StableId}");
+                    return;
+                }
+                if (traceThisPickup)
+                {
+                    Debug.LogError($"[PickupTrace][WeaponEnter] picker={PickupTracePickerId} weapon={StableId} frame={Frame?.N ?? -1} state={GetState()} pic={fD.pic} bodyCount={fD.bodies?.Count ?? 0} itrCount={fD.itrs?.Count ?? 0} wpointCount={fD.wpoints?.Count ?? 0}");
+                }
+                if (fD.wpoints == null || fD.wpoints.Count == 0)
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipNoWPoint] picker={PickupTracePickerId} weapon={StableId} frame={Frame?.N ?? -1} state={GetState()}");
+                    return;
+                }
+
+                var sceneQuery = Match?.SceneQuery;
+                if (sceneQuery == null)
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipNoSceneQuery] picker={PickupTracePickerId} weapon={StableId}");
+                    return;
+                }
+
+                float spriteW = GetSpriteWidthPxForCollision();
+                if (traceThisPickup)
+                {
+                    Debug.LogError($"[PickupTrace][WeaponSpriteWidth] picker={PickupTracePickerId} weapon={StableId} width={spriteW}");
+                }
+                if (spriteW <= 0f)
+                {
+                    if (traceThisPickup)
+                        Debug.LogError($"[PickupTrace][WeaponSkipWidth] picker={PickupTracePickerId} weapon={StableId} width={spriteW}");
+                    return;
+                }
+
+                bool facingLeft = PS.dir == "left";
+
+                foreach (var wp in fD.wpoints)
+                {
+                    if (wp == null) continue;
+                    if (wp.kind != 1 && wp.kind != 2 && wp.kind != 7) continue;
+                    if (wp.w <= 0 || wp.h <= 0) continue;
+
+                    float localX = facingLeft ? (spriteW - wp.x - wp.w) : wp.x;
+                    var vol = new PhysicsState.FlfVolume(
+                        PS.sx, PS.sy, PS.sz,
+                        localX, wp.y,
+                        wp.w, wp.h,
+                        NTSDGlobal.Default.Itr.ZWidth
+                    );
+
+                    var candidates = sceneQuery.QueryBodies(vol, this);
+                    if (traceThisPickup)
+                    {
+                        Debug.LogError($"[PickupTrace][WeaponQuery] picker={PickupTracePickerId} weapon={StableId} wpKind={wp.kind} frame={Frame?.N ?? -1} state={GetState()} vol=({vol.x},{vol.y},{vol.z}; vx={vol.vx},vy={vol.vy},w={vol.w},h={vol.h},zw={vol.zwidth}) candidates={(candidates == null ? -1 : candidates.Count)}");
+                    }
+                    if (candidates == null || candidates.Count == 0) continue;
+
+                    // 构造临时 itr 用于传入拾取处理
+                    var tmpItr = new InteractionArea
+                    {
+                        kind = wp.kind,
+                        x = wp.x,
+                        y = wp.y,
+                        w = wp.w,
+                        h = wp.h,
+                        injury = wp.injury,
+                        fall = wp.fall,
+                        vaction = wp.vaction,
+                        arest = wp.arest,
+                        vrest = wp.vrest,
+                        effect = wp.effect,
+                        kill = wp.kill,
+                        bdefend = wp.bdefend,
+                    };
+
+                    for (int c = 0; c < candidates.Count; c++)
+                    {
+                        var target = candidates[c];
+                        if (traceThisPickup)
+                        {
+                            Debug.LogError($"[PickupTrace][WeaponCandidate] picker={PickupTracePickerId} weapon={StableId} target={target?.StableId ?? -1} targetType={target?.Type} targetFrame={target?.Frame?.N ?? -1} targetState={target?.GetState() ?? -1}");
+                        }
+                        if (target == null || target == this)
+                        {
+                            if (traceThisPickup)
+                                Debug.LogError($"[PickupTrace][RejectSelfOrNull] picker={PickupTracePickerId} weapon={StableId}");
+                            continue;
+                        }
+                        if (target.Health != null && target.Health.HP <= 0)
+                        {
+                            if (traceThisPickup)
+                                Debug.LogError($"[PickupTrace][RejectDeadCandidate] picker={PickupTracePickerId} weapon={StableId} target={target.StableId} hp={target.Health.HP}");
+                            continue;
+                        }
+                        if (!target.ItrVrestTest(StableId))
+                        {
+                            if (traceThisPickup)
+                                Debug.LogError($"[PickupTrace][RejectCandidateVrest] picker={PickupTracePickerId} weapon={StableId} target={target.StableId}");
+                            continue;
+                        }
+                        if (traceThisPickup && target.StableId != PickupTracePickerId)
+                        {
+                            Debug.LogError($"[PickupTrace][RejectDifferentPicker] picker={PickupTracePickerId} weapon={StableId} target={target.StableId}");
+                            continue;
+                        }
+
+                        bool picked = false;
+                        if (wp.kind == 1 || wp.kind == 7)
+                            picked = HandlePreInteractionKind1(tmpItr, target);
+                        else if (wp.kind == 2)
+                            picked = HandlePreInteractionKind2(tmpItr, target);
+
+                        if (traceThisPickup)
+                        {
+                            Debug.LogError($"[PickupTrace][PickupHandlerResult] picker={PickupTracePickerId} weapon={StableId} target={target.StableId} wpKind={wp.kind} picked={picked}");
+                        }
+
+                        if (picked)
+                        {
+                            ClearPickupTrace();
+                            return;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (traceThisPickup)
+                {
+                    ConsumePickupTraceWeapon(StableId);
+                }
+            }
+        }
+
+        /// <summary>
         /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0)
         /// 武器专属路径：N-1~N-5 + ShakeTimer 趋零 + wait/next 推进 + Frame.PN 更新
         /// </summary>
@@ -373,6 +599,11 @@ namespace NTSD.Animation.LF2Objects
         {
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);
+            //if (Frame.D != null)
+            //{
+            //    Trans.SetWait(Frame.D.wait, 99);
+            //    Trans.SetNext(Frame.D.next, 99);
+            //}
         }
 
         public override void SimTU(int tickIndex)
@@ -825,47 +1056,107 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
         {
-            if (HoldObj != null) return false;
-            if (!ItrArestTest()) return false;
-            if (Renderer == null) return false;
-            if (target is not LF2Character character) return false;
-            if (character.GetHeldWeapon() != null) return false;
+            if (HoldObj != null)
+            {
+                TracePickupReject("RejectHeldByOther", target, null);
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                TracePickupReject("RejectArest", target, null);
+                return false;
+            }
+            if (Renderer == null)
+            {
+                TracePickupReject("RejectNoRenderer", target, null);
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                TracePickupReject("RejectNonCharacter", target, null);
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                TracePickupReject("RejectPickerHasWeapon", target, character);
+                return false;
+            }
 
             // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
             int wstate = GetState();
             bool isOnGround = wstate == LF2States.WeaponOnGround
                            || wstate == LF2States.HeavyWeaponOnGround;
-            if (!isOnGround) return false;
+            if (!isOnGround)
+            {
+                TracePickupReject("RejectWeaponNotOnGround", target, character);
+                return false;
+            }
 
-            Pick(character);
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                TracePickupReject("RejectPickCallFailed", target, character);
+                return false;
+            }
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
+            TracePickupSuccess(itr, character, playAnimation: false);
             return true;
         }
 
         protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
         {
-            if (HoldObj != null) return false;
-            if (!ItrArestTest()) return false;
-            if (Renderer == null) return false;
-            if (target is not LF2Character character) return false;
-            if (character.GetHeldWeapon() != null) return false;
+            if (HoldObj != null)
+            {
+                TracePickupReject("RejectHeldByOther", target, null);
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                TracePickupReject("RejectArest", target, null);
+                return false;
+            }
+            if (Renderer == null)
+            {
+                TracePickupReject("RejectNoRenderer", target, null);
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                TracePickupReject("RejectNonCharacter", target, null);
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                TracePickupReject("RejectPickerHasWeapon", target, character);
+                return false;
+            }
 
             // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
             int wstate = GetState();
             bool isOnGround = wstate == LF2States.WeaponOnGround
                            || wstate == LF2States.HeavyWeaponOnGround;
-            if (!isOnGround) return false;
+            if (!isOnGround)
+            {
+                TracePickupReject("RejectWeaponNotOnGround", target, character);
+                return false;
+            }
 
-            Pick(character);
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                TracePickupReject("RejectPickCallFailed", target, character);
+                return false;
+            }
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
             // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
             ApplyPickupFrameJump(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
+            TracePickupSuccess(itr, character, playAnimation: true);
             return true;
         }
 
@@ -881,6 +1172,30 @@ namespace NTSD.Animation.LF2Objects
         {
             // 反汇编 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
             return HandlePreInteractionKind1(itr, target);
+        }
+
+        public override float GetSpriteWidthPxForCollision()
+        {
+            var wrapper = FrameCache?.Wrapper;
+            var files = wrapper?.characterData?.files;
+            if (files == null || files.Count == 0)
+                return 0f;
+
+            return files[0].width + 1;
+        }
+
+        private void TracePickupReject(string reason, LF2Entity target, LF2Character picker)
+        {
+            if (!ShouldTracePickupWeapon(StableId)) return;
+
+            Debug.LogError($"[PickupTrace][{reason}] picker={PickupTracePickerId} weaponTarget={target?.StableId ?? -1} pickerFrame={picker?.Frame?.N ?? -1} pickerState={picker?.GetState() ?? -1}");
+        }
+
+        private void TracePickupSuccess(InteractionArea itr, LF2Character picker, bool playAnimation)
+        {
+            if (!ShouldTracePickupWeapon(StableId)) return;
+
+            Debug.LogError($"[PickupTrace][PickupSuccess] picker={PickupTracePickerId} weapon={StableId} kind={itr?.kind ?? -1} playAnimation={playAnimation} pickerFrame={picker?.Frame?.N ?? -1} pickerState={picker?.GetState() ?? -1} weaponState={GetState()}");
         }
 
         #endregion
@@ -900,6 +1215,11 @@ namespace NTSD.Animation.LF2Objects
         {
             var result = new WeaponActResult();
             if (Frame.D == null) return result;
+            bool traceHeld = ShouldTraceHeldWeapon(StableId);
+            if (traceHeld)
+            {
+                Debug.LogError($"[PickupTrace][WeaponActEnter] picker={HeldTracePickerId} weapon={StableId} holder={holder?.StableId ?? -1} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} holderFrame={holder?.Frame?.N ?? -1} holderState={holder?.GetState() ?? -1} holdpoint=({holdpoint.x},{holdpoint.y},{holdpoint.z})");
+            }
 
             // 反汇编 AI_Process2 0x0041AFFC：
             // 持有者处于 Falling(12) 或 BeingCaught(10) 时强制脱落武器
@@ -1054,12 +1374,20 @@ namespace NTSD.Animation.LF2Objects
 
                     // coincideXY
                     CoincideXYWithWPoint(holdpoint, fwpoint);
+                    if (traceHeld)
+                    {
+                        Debug.LogError($"[PickupTrace][WeaponActCoincide] picker={HeldTracePickerId} weapon={StableId} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} weaponPos=({PS.x},{PS.y},{PS.z}) dir={PS.dir} zz={PS.zz} fwpointKind={fwpoint.kind} fwpointY={fwpoint.y}");
+                    }
 
                     // 反汇编 AI_Process2 0x41AFA7-0x41AFCC：
                     // cover==0 → z+=1, y-=1（武器在角色前面，稍偏前/上）
                     // cover!=0 → z-=1, y+=1（武器在角色后面，稍偏后/下）
                     if (cover == 0) { PS.z += 1f; PS.y -= 1f; }
                     else            { PS.z -= 1f; PS.y += 1f; }
+                    if (traceHeld)
+                    {
+                        Debug.LogError($"[PickupTrace][WeaponActFinal] picker={HeldTracePickerId} weapon={StableId} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} weaponPos=({PS.x},{PS.y},{PS.z}) cover={cover} zz={PS.zz}");
+                    }
                 }
             }
 
@@ -1267,7 +1595,7 @@ namespace NTSD.Animation.LF2Objects
             var weapFD = Frame?.D;
             int wcx = weapFD?.centerx ?? 0;
             int wcy = weapFD?.centery ?? 0;
-            float wSpriteW = Sprite?.GetWidthPx() ?? 0f;
+            float wSpriteW = GetSpriteWidthPxForCollision();
             int wpy = wpoint?.y ?? 0;
 
             if (PS.dir == "right")
@@ -1275,7 +1603,7 @@ namespace NTSD.Animation.LF2Objects
             else
                 PS.x = holdpoint.x + wSpriteW - wcx;
 
-            PS.y = holdpoint.y + wcy - wpy;
+            PS.y = (holdpoint.y - holdpoint.z) + wcy - wpy;
         }
 
         public float GetSpeed()

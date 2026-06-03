@@ -54,6 +54,7 @@ namespace NTSD.Animation
             for (int i = 0; i < spritePoolSize; i++)
             {
                 var go = new GameObject("Spark");
+                go.layer = LayerMask.NameToLayer("Battle");
                 Transform parent = _spriteRoot != null ? _spriteRoot : transform;
                 go.transform.SetParent(parent, false);
                 var sr = go.AddComponent<SpriteRenderer>();
@@ -76,11 +77,14 @@ namespace NTSD.Animation
             if (_cachedLF2ObjectPrefab != null)
             {
                 go = Instantiate(_cachedLF2ObjectPrefab,this.transform);
+                go.layer = LayerMask.NameToLayer("Battle");
             }
             else
             {
                 go = new GameObject("LF2Object");
+                go.layer = LayerMask.NameToLayer("Battle");
                 var entityModel = new GameObject("EntityModel");
+                entityModel.layer = LayerMask.NameToLayer("Battle");
                 entityModel.transform.SetParent(go.transform, false);
                 entityModel.AddComponent<SpriteRenderer>();
                 entityModel.AddComponent<LF2ObjectRenderer>();
@@ -230,6 +234,7 @@ namespace NTSD.Animation
             else
             {
                 var go = new GameObject("Spark");
+                go.layer = LayerMask.NameToLayer("Battle");
                 // 挂到场景根节点，避免父节点 inactive 导致无法显示
                 Transform parent = _spriteRoot != null ? _spriteRoot : null;
                 if (parent != null)

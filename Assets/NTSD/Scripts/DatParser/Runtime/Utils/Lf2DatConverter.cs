@@ -209,6 +209,8 @@ namespace NTSD.DatParser
                     case "kind": wpoint.kind = ParseInt(prop.Value); break;
                     case "x": wpoint.x = ParseInt(prop.Value); break;
                     case "y": wpoint.y = ParseInt(prop.Value); break;
+                    case "w": wpoint.w = ParseInt(prop.Value); break;
+                    case "h": wpoint.h = ParseInt(prop.Value); break;
                     case "weaponact": wpoint.weaponact = ParseInt(prop.Value); break;
                     case "attacking": wpoint.attacking = ParseInt(prop.Value); break;
                     case "cover": wpoint.cover = ParseInt(prop.Value); break;

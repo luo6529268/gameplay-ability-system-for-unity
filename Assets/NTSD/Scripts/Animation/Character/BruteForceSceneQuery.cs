@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+using UnityEngine;
 
 namespace NTSD.Animation
 {
@@ -11,6 +12,9 @@ namespace NTSD.Animation
     /// </summary>
     public class BruteForceSceneQuery : ILF2SceneQuery
     {
+        public static bool AttackTraceEnabled;
+        public static int AttackTraceAttackerId = -1;
+
         private readonly SimulationWorld _world;
         private readonly List<LF2BlockingObstacle> _blockingObstacles = new List<LF2BlockingObstacle>(64);
 
@@ -35,6 +39,7 @@ namespace NTSD.Animation
         {
             _tmpResult.Clear();
             _world.GetAllEntities(_tmpAllObjects);
+            bool traceThisQuery = AttackTraceEnabled && exclude != null && exclude.StableId == AttackTraceAttackerId;
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
@@ -42,22 +47,41 @@ namespace NTSD.Animation
                 if (target == exclude) continue;
                 if (target.PS == null || target.Frame?.D == null) continue;
 
-                float spriteWidthPx = target.GetSpriteWidthPxForCollision();
-                if (spriteWidthPx <= 0f) continue;
+                float dx = (exclude?.PS != null && target.PS != null) ? (target.PS.x - exclude.PS.x) : 0f;
+                float dz = (exclude?.PS != null && target.PS != null) ? (target.PS.z - exclude.PS.z) : 0f;
+                bool traceTarget = traceThisQuery && Mathf.Abs(dx) <= 220f && Mathf.Abs(dz) <= 120f;
 
-                target.PS.FillBodyVolumes(
-                    _tmpTargetBodies,
+                float spriteWidthPx = target.GetSpriteWidthPxForCollision();
+                if (spriteWidthPx <= 0f)
+                {
+                    if (traceTarget)
+                        Debug.LogError($"[AttackTrace][QueryBodiesSkipWidth] attacker={exclude.StableId} target={target.StableId} width={spriteWidthPx}");
+                    continue;
+                }
+
+                var bodyVolumes = target.PS.GetBodyVolumes(
                     target.Frame.D.bodies,
                     target.Frame.D.centerx,
                     target.Frame.D.centery,
-                    spriteWidthPx,
-                    NTSDGlobal.Default.Itr.ZWidth
+                    spriteWidthPx
                 );
 
-                for (int b = 0; b < _tmpTargetBodies.Count; b++)
+                if (traceTarget)
                 {
-                    if (CollisionUtil.Intersect(vol, _tmpTargetBodies[b]))
+                    Debug.LogError($"[AttackTrace][QueryBodiesTarget] attacker={exclude.StableId} target={target.StableId} frame={target.Frame.N} state={target.Frame.D.state} pic={target.Frame.D.pic} dx={dx} dz={dz} bodyCount={bodyVolumes.Count}");
+                }
+
+                for (int b = 0; b < bodyVolumes.Count; b++)
+                {
+                    bool intersects = CollisionUtil.Intersect(vol, bodyVolumes[b]);
+                    if (traceTarget)
                     {
+                        Debug.LogError($"[AttackTrace][QueryBodiesIntersect] attacker={exclude.StableId} target={target.StableId} bodyIndex={b} intersects={intersects} itrVol=({vol.x},{vol.y},{vol.z}; vx={vol.vx},vy={vol.vy},w={vol.w},h={vol.h},zw={vol.zwidth}) bodyVol=({bodyVolumes[b].x},{bodyVolumes[b].y},{bodyVolumes[b].z}; vx={bodyVolumes[b].vx},vy={bodyVolumes[b].vy},w={bodyVolumes[b].w},h={bodyVolumes[b].h},zw={bodyVolumes[b].zwidth})");
+                    }
+                    if (intersects)
+                    {
+                        if (traceTarget)
+                            Debug.LogError($"[AttackTrace][QueryBodiesAdd] attacker={exclude.StableId} target={target.StableId}");
                         _tmpResult.Add(target);
                         break;
                     }

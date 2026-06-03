@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4375954692436726479}
   - component: {fileID: 6735300204818604430}
   - component: {fileID: 1779265269098125534}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: EntityModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9157438655571176221}
   m_RootOrder: -1
@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9157438655571176221}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: EntityObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,8 +122,8 @@ Transform:
   m_GameObject: {fileID: 8065137006895327203}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4375954692436726479}
   - {fileID: 6930704505366425943}
@@ -141,6 +141,18 @@ PrefabInstance:
     - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
       propertyPath: m_RootOrder
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -182,9 +194,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1163054124082191367, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
       propertyPath: m_Name
       value: Shadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

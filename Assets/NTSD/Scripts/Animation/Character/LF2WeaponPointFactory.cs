@@ -53,7 +53,16 @@ namespace NTSD.Animation
             if (weapon == null) return;
 
             Vector3 holdpoint = CalcHoldPoint(character, wpoint);
+            if (LF2WeaponBase.ShouldTraceHeldWeapon(weapon.StableId))
+            {
+                Debug.LogError($"[PickupTrace][HoldPointEnter] picker={character.StableId} weapon={weapon.StableId} charFrame={character.Frame?.N ?? -1} charState={character.GetState()} weaponFrame={weapon.Frame?.N ?? -1} weaponState={weapon.GetState()} holdpoint=({holdpoint.x},{holdpoint.y},{holdpoint.z}) wpointKind={wpoint.kind} wpointWeaponAct={wpoint.weaponact} wpointAttack={wpoint.attacking} cover={wpoint.cover}");
+            }
             var actResult = weapon.Act(character, wpoint, holdpoint);
+            if (LF2WeaponBase.ShouldTraceHeldWeapon(weapon.StableId))
+            {
+                Debug.LogError($"[PickupTrace][HoldPointResult] picker={character.StableId} weapon={weapon.StableId} weaponFrame={weapon.Frame?.N ?? -1} weaponState={weapon.GetState()} weaponPos=({weapon.PS?.x ?? 0f},{weapon.PS?.y ?? 0f},{weapon.PS?.z ?? 0f}) thrown={actResult.Thrown} forceDrop={actResult.ForceDrop} needsKind3Drop={actResult.NeedsKind3Drop}");
+                LF2WeaponBase.ConsumeHeldTrace();
+            }
 
             // 反汇编 AI_Process2 0x41B155~0x41B16D：
             // type=0 武器且 dvx≠0 时，weapon.Act() 不投掷（NeedsKind3Drop=true），
@@ -117,7 +126,7 @@ namespace NTSD.Animation
         /// </summary>
         private static Vector3 CalcHoldPoint(LF2LivingObject animator, WeaponPoint wpoint)
         {
-            float spriteWidth = animator.Sprite?.GetWidthPx() ?? 0f;
+            float spriteWidth = animator.GetSpriteWidthPxForCollision();
 
             float holdX = (animator.PS.dir == "right")
                 ? animator.PS.sx + wpoint.x

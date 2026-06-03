@@ -255,9 +255,17 @@ namespace NTSD.LevelEditor.Editor
                 "- Shift+Click an edge to insert a vertex\n" +
                 "- Ctrl+Click a vertex to delete\n" +
                 "\n" +
-                "Rule: every polygon is walkable; runtime uses union (inside any polygon = allowed).",
+                "Rule: every polygon is walkable; runtime uses union (inside any polygon = allowed).\n" +
+                "Walkable Area Inset Control: 1 hides the red preview; values below 1 shrink by equal edge distance and show the runtime area in red.",
                 MessageType.Info
             );
+
+            if (_target.ActivePolygon != null && !_target.IsPolygonSimple(_target.ActivePolygon))
+            {
+                EditorGUILayout.HelpBox(
+                    "当前多边形存在自相交或顶点顺序错误。请调整顶点顺序，使多边形保持简单闭合，否则预览填充与运行时判定会失真。",
+                    MessageType.Warning);
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Active Polygon", EditorStyles.boldLabel);

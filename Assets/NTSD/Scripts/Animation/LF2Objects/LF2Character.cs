@@ -80,6 +80,7 @@ namespace NTSD.Animation.LF2Objects
         private CharacterMechanics _mech;
         private float _mass = NTSDGlobal.Default.Machanics.Mass;
         private Func<Vector2, bool> _cachedIsPointWalkable;
+        private Func<Vector2, float, bool> _cachedIsNearConcaveVertex;
 
         // ========== 抓取系统字段（Catching System Fields）==========
 
@@ -116,6 +117,10 @@ namespace NTSD.Animation.LF2Objects
         private int _respawnTriggerCount = 0;
         // [+30Ch] 复活倒计时（>= 2 时每帧递减，< 2 时触发复活）
         private int _respawnCountdown = 0;
+
+        private bool _attackTracePrevAttackPressed = false;
+        private bool _attackTraceArmed = false;
+        private bool _pickupTracePrevAttackPressed = false;
 
         // ========== N-30 输入序列字段（对应反汇编 0x422FCC）==========
         // [+408h~418h] 输入历史（5 个 int，每帧移位）
@@ -185,6 +190,9 @@ namespace NTSD.Animation.LF2Objects
             _mech = new CharacterMechanics();
             _cachedIsPointWalkable = BoundaryWallManager.Instance != null
                 ? BoundaryWallManager.Instance.IsPointWalkable
+                : null;
+            _cachedIsNearConcaveVertex = BoundaryWallManager.Instance != null
+                ? BoundaryWallManager.Instance.IsNearConcaveVertex
                 : null;
 
             PS.x = 0; PS.y = 0; PS.z = 0;
@@ -462,17 +470,6 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-            bool hasStageBounds = false;
-
-            LF2StageBoundsPx stageBoundsPx = default;
-
-            var boundsProvider = NTSD.LevelEditor.BoundaryWallManager.Instance;
-
-            if (boundsProvider != null && boundsProvider.TryGetStageBoundsPx(out stageBoundsPx))
-            {
-                hasStageBounds = true;
-            }
-
             var ctx = new CharacterMechanicsContext(
 
                 PS,
@@ -480,10 +477,6 @@ namespace NTSD.Animation.LF2Objects
                 Frame.D,
 
                 GetSpriteWidthPxForCollision(),
-
-                hasStageBounds,
-
-                stageBoundsPx,
 
                 _mass,
 
@@ -493,7 +486,9 @@ namespace NTSD.Animation.LF2Objects
 
                 blockedMoveScale,
 
-                _cachedIsPointWalkable
+                _cachedIsPointWalkable,
+
+                _cachedIsNearConcaveVertex
 
             );
 
@@ -701,6 +696,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimPreInteraction(int tickIndex)
         {
+            UpdatePickupTraceInPreInteraction();
             Generic_PreInteraction();
         }
 
@@ -733,13 +729,13 @@ namespace NTSD.Animation.LF2Objects
                     ShakeTimer = 15;
             }
 
-            // 反汇编 0x413D0C-0x413D69: frame.mp < 0 && dword_446970 → MP cost
-            // +308h(PP) += mp (mp<0, so PP decreases); if PP < mp (signed, only if PP already negative) → frame=next
-            if (fD.mp < 0 && NTSDGlobal.MPEnabled && Health != null)
+            // 反汇编 0x413D0C: [frame+7F0h]=hit_Uj < 0 && MPEnabled → cmp PP, hit_Uj; jl→frame=hit_a; else PP+=hit_Uj
+            if (fD.hit_Uj < 0 && NTSDGlobal.MPEnabled && Health != null)
             {
-                Health.PP += fD.mp; // PP -= |mp|
-                if (Health.PP < fD.mp) // signed: only triggers if PP was already negative
-                    Trans.Frame(fD.next, 0);
+                if (Health.PP < fD.hit_Uj)
+                    Trans.Frame(fD.hit_a, 0);
+                else
+                    Health.PP += fD.hit_Uj;
             }
 
             // 反汇编 0x413DDA: cmp frame, 0x6E(110); 0x72(114) → [esi+0C1h]=3 (_ks193=3)
