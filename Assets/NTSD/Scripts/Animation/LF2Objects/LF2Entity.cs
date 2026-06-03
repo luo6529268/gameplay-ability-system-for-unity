@@ -1,4 +1,4 @@
-using NTSD.Animation.LF2Tasks;
+﻿using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,31 +31,59 @@ namespace NTSD.Animation.LF2Objects
         public string Name { get; set; }
 
         /// <summary>唯一 ID（对应反汇编 entity StableId）</summary>
-        public int StableId { get; protected set; }
+        public int StableId
+        {
+            get => Runtime.StableId;
+            protected set => Runtime.StableId = value;
+        }
 
         /// <summary>对象 ID（对应 entity ObjectId）</summary>
-        public int ObjectId { get; set; }
+        public int ObjectId
+        {
+            get => Runtime.ObjectId;
+            set => Runtime.ObjectId = value;
+        }
 
         /// <summary>队伍 ID（entity+364h，值 1~5 对应不同队伍）</summary>
-        public int Team { get; set; }
+        public int Team
+        {
+            get => Runtime.Team;
+            set => Runtime.Team = value;
+        }
 
         /// <summary>阵营标记（entity+8h，0=右/1=左）</summary>
-        public int TeamSide { get; set; }
+        public int TeamSide
+        {
+            get => Runtime.TeamSide;
+            set => Runtime.TeamSide = value;
+        }
 
         /// <summary>所有者 entity slot index（entity+2F4h），-1 表示无</summary>
-        public int OwnerId { get; set; } = -1;
+        public int OwnerId
+        {
+            get => Runtime.OwnerStableId;
+            set => Runtime.OwnerStableId = value;
+        }
 
         /// <summary>被抓取状态（entity+98h grabbed_by）</summary>
-        public int GrabbedBy { get; set; }
+        public int GrabbedBy
+        {
+            get => Runtime.GrabbedBy;
+            set => Runtime.GrabbedBy = value;
+        }
 
         /// <summary>kind==2 tracker 标志（parent=1, child=-1）</summary>
-        public int TrackerFlag { get; set; }
+        public int TrackerFlag
+        {
+            get => Runtime.TrackerFlag;
+            set => Runtime.TrackerFlag = value;
+        }
 
         /// <summary>kind==2 tracker 子对象引用（entity+9Ch）</summary>
-        public ILF2Entity TrackerChild { get; set; }
+        public LF2Entity TrackerChild { get; set; }
 
         /// <summary>kind==2 tracker 父对象引用（entity+0A0h）</summary>
-        public ILF2Entity TrackerParent { get; set; }
+        public LF2Entity TrackerParent { get; set; }
 
         /// <summary>当前命中时使用的 itr slot 索引（用于 spark 计时器计算）</summary>
         public int CurrentItrIndex { get; set; }
@@ -66,13 +94,12 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>对象类型枚举（子类实现）</summary>
         public abstract LF2ObjectType ObjectTypeEnum { get; }
 
+        public NTSDEntityRuntime Runtime { get; } = new NTSDEntityRuntime();
+
+        public virtual int ReleaseEntityType => ObjectType;
+
         /// <summary>对象类型别名（等同 ObjectTypeEnum，兼容旧代码）</summary>
         public LF2ObjectType Type => ObjectTypeEnum;
-
-        /// <summary>每个状态是否允许切换方向</summary>
-        protected Dictionary<int, bool> _statesSwitchDir;
-
-        #endregion
 
         // ─────────────────────────────────────────────────────────────────
         #region 核心模块字段
@@ -107,34 +134,74 @@ namespace NTSD.Animation.LF2Objects
         #region 战斗字段
 
         /// <summary>帧延迟计数器（entity+0B4h）</summary>
-        public int FrameDelay { get; set; } = 0;
+        public int FrameDelay
+        {
+            get => Runtime.FrameDelay;
+            set => Runtime.FrameDelay = value;
+        }
 
         /// <summary>命中锁定标志（entity+88h hit_stun）</summary>
-        public int HitStun { get; set; } = 0;
+        public int HitStun
+        {
+            get => Runtime.HitStop;
+            set => Runtime.HitStop = value;
+        }
 
         /// <summary>累积击退 X 速度（entity+28h knockback_vx）</summary>
-        public float KnockbackVx { get; set; } = 0f;
+        public float KnockbackVx
+        {
+            get => Runtime.KnockbackVx;
+            set => Runtime.KnockbackVx = value;
+        }
 
         /// <summary>累积击退 Y 速度（entity+30h knockback_vy）</summary>
-        public float KnockbackVy { get; set; } = 0f;
+        public float KnockbackVy
+        {
+            get => Runtime.KnockbackVy;
+            set => Runtime.KnockbackVy = value;
+        }
 
         /// <summary>累积击退 Z 速度（entity+38h knockback_vz）</summary>
-        public float KnockbackVz { get; set; } = 0f;
+        public float KnockbackVz
+        {
+            get => Runtime.KnockbackVz;
+            set => Runtime.KnockbackVz = value;
+        }
 
         /// <summary>角色类型（entity+20h char_type）</summary>
-        public int CharType { get; set; } = 0;
+        public int CharType
+        {
+            get => Runtime.CharType;
+            set => Runtime.CharType = value;
+        }
 
         /// <summary>震屏计时器（entity+8h shake_timer）</summary>
-        public int ShakeTimer { get; set; } = 0;
+        public int ShakeTimer
+        {
+            get => Runtime.ShakeTimer;
+            set => Runtime.ShakeTimer = value;
+        }
 
         /// <summary>攻击豁免计数器（entity+0ECh attack_exempt）。命中后设 6，每帧 -1；LF2LivingObject 重写为 HitCounters.AttackExempt。</summary>
-        public virtual int AttackExempt { get; set; } = 0;
+        public virtual int AttackExempt
+        {
+            get => Runtime.AttackExempt;
+            set => Runtime.AttackExempt = value;
+        }
 
         /// <summary>所有者实体索引（entity+756=0x2F4h），初始值 -1；opoint 生成时设为生成者索引。P1-6</summary>
-        public int OwnerEntityIndex { get; set; } = -1;
+        public int OwnerEntityIndex
+        {
+            get => Runtime.OwnerSlotIndex;
+            set => Runtime.OwnerSlotIndex = value;
+        }
 
         /// <summary>弹射计数（entity+308h）</summary>
-        public int ShotCount { get; set; } = 0;
+        public int ShotCount
+        {
+            get => Runtime.ShotCount;
+            set => Runtime.ShotCount = value;
+        }
 
         // ItrRest / Health / HealTimer 在各子类中定义具体字段；
         // 此处提供虚属性，让 LF2Entity 的公共方法（ItrArestTest 等）能统一访问。
@@ -265,26 +332,11 @@ namespace NTSD.Animation.LF2Objects
                 if (remove) RemoveSparkSlot(i);
             }
         }
-
-        /// <summary>重置所有 spark slot（子类 Reset() 末尾调用）</summary>
         protected void ResetSpark() => SparkSlotCount = 0;
 
         #endregion
-
-        // ─────────────────────────────────────────────────────────────────
-        #region 状态处理器
-
-        /// <summary>状态处理器委托</summary>
-        protected delegate bool StateHandler(string eventType, object eventData = null);
-
-        /// <summary>状态处理器字典，子类通过 InitializeStates() 注册</summary>
-        protected Dictionary<int, StateHandler> _states = new Dictionary<int, StateHandler>(20);
-
         /// <summary>状态处理器帧号返回通道</summary>
         public int StateReturnFrame { get; protected set; } = 0;
-
-        /// <summary>初始化状态处理器（子类必须实现）</summary>
-        protected abstract void InitializeStates();
 
         #endregion
 
@@ -294,35 +346,25 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 状态更新分发（对应 FLF livingobject.prototype.state_update）
         /// </summary>
-        public virtual bool StateUpdate(string eventType, object eventData = null)
-        {
-            bool res1 = OnGenericStateEvent(eventType, eventData);
-            bool res2 = false;
-            int currentState = Frame.D?.state ?? -1;
-            if (currentState >= 0 && _states.TryGetValue(currentState, out var handler))
-                res2 = handler(eventType, eventData);
-            return res1 || res2;
-        }
-
-        public virtual bool StateUpdate(string eventType, out int frameId, object eventData = null)
-        {
-            frameId = 0;
-            bool handled = StateUpdate(eventType, eventData);
-            if (StateReturnFrame > 0)
-            {
-                frameId = StateReturnFrame;
-                StateReturnFrame = 0;
-            }
-            return handled;
-        }
-
         /// <summary>通用状态事件处理（子类重写）</summary>
-        protected virtual bool OnGenericStateEvent(string eventType, object eventData) => false;
+        protected virtual bool StateExitEvent() => false;
+        protected virtual bool StateEntryEvent() => false;
+        protected virtual bool FrameForceEvent() => false;
+        protected virtual bool FrameEvent() => false;
+        protected virtual bool TransitEvent() => false;
+        protected virtual bool TUForceEvent() => false;
+        protected virtual bool TUEvent() => false;
+        protected virtual bool DieEvent() => false;
+        protected virtual bool DestroyEvent() => false;
+        protected virtual bool ComboEvent(string combo) => false;
+        protected virtual void PostComboEvent() { }
+        protected virtual bool FellOntoGroundEvent(out int frameId) { frameId = 0; return false; }
+        protected virtual bool FallOntoGroundEvent(out int frameId) { frameId = 0; return false; }
+        protected virtual bool HitStopEvent(out int frameId) { frameId = 0; return false; }
+        protected virtual bool PostInteractionEvent(out int frameId) { frameId = 0; return false; }
 
         /// <summary>获取当前状态</summary>
-        public int GetState() => Frame.D?.state ?? 0;
-
-        public virtual bool GetStatesSwitchDir(int stateId) => false;
+        public virtual int GetState() => Frame.D?.state ?? 0;
 
         #endregion
 
@@ -339,11 +381,11 @@ namespace NTSD.Animation.LF2Objects
         public virtual void SwitchDir(DIRECTION direction)
             => SwitchDir(direction == DIRECTION.LEFT ? "left" : "right");
 
-        public int Dirh() => PS?.dir == "left" ? -1 : 1;
+        public virtual int Dirh() => PS?.dir == "left" ? -1 : 1;
 
         public virtual int Dirv() => 1;
 
-        protected string CalculateDirection(int facing, string parentDir)
+        protected virtual string CalculateDirection(int facing, string parentDir)
         {
             int face = facing >= 20 ? facing % 10 : facing;
             if (face == 0) return parentDir;
@@ -508,7 +550,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>当 FrameTransistor 检测到 next=1000 时调用（子类实现销毁逻辑）</summary>
         public virtual void OnTransitDestroy()
         {
-            StateUpdate("destroy");
+            DestroyEvent();
             Destroy();
             if (Renderer != null)
             {
@@ -528,8 +570,14 @@ namespace NTSD.Animation.LF2Objects
 
         public int SimOrder => SimOrderConstants.GetSimOrderByObjectType(ObjectTypeEnum);
 
-        public virtual void OnAdded(SimContext ctx) { }
-        public virtual void OnRemoved(SimContext ctx) { }
+        public virtual void OnAdded(SimContext ctx)
+        {
+            RefreshRuntimeSnapshot();
+        }
+        public virtual void OnRemoved(SimContext ctx)
+        {
+            Runtime.SlotIndex = -1;
+        }
         public virtual void SimTransit(int tickIndex) { }
         public virtual void SimTU(int tickIndex) { }
         public virtual void SimPostInteraction(int tickIndex) { }
@@ -546,9 +594,50 @@ namespace NTSD.Animation.LF2Objects
         #region 保护工具方法
 
         protected void AllocateStableId()
-            => StableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
+        {
+            StableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
+            Runtime.StableId = StableId;
+        }
 
-        protected void ResetStableId() => StableId = 0;
+        protected void ResetStableId()
+        {
+            StableId = 0;
+            Runtime.StableId = 0;
+        }
+
+        public void SetRuntimeSlotIndex(int slotIndex)
+        {
+            Runtime.SlotIndex = slotIndex;
+        }
+
+        public void RefreshRuntimeSnapshot()
+        {
+            RefreshRuntimeFromEntity();
+        }
+
+        protected virtual void RefreshRuntimeFromEntity()
+        {
+            Runtime.StableId = StableId;
+            Runtime.ObjectId = ObjectId;
+            Runtime.ObjType = ObjectType;
+            Runtime.EntityType = ReleaseEntityType;
+            Runtime.Team = Team;
+            Runtime.TeamSide = TeamSide;
+            Runtime.OwnerSlotIndex = OwnerEntityIndex;
+            Runtime.OwnerStableId = OwnerId;
+            Runtime.GrabbedBy = GrabbedBy;
+            Runtime.TrackerFlag = TrackerFlag;
+            Runtime.TrackerChildStableId = TrackerChild?.StableId ?? -1;
+            Runtime.TrackerParentStableId = TrackerParent?.StableId ?? -1;
+            Runtime.Frame = Frame?.N ?? 0;
+            Runtime.PrevFrame = Frame?.PN ?? 0;
+            Runtime.WaitCounter = Trans?.WaitCounter ?? 0;
+            Runtime.NextFrame = Trans?.Next ?? 0;
+            Runtime.FrameDelay = FrameDelay;
+            Runtime.HitStop = HitStun;
+            Runtime.AttackExempt = AttackExempt;
+            Runtime.ShotCount = ShotCount;
+        }
 
         #endregion
     }

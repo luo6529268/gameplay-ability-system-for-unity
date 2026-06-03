@@ -9,11 +9,11 @@ using UnityEngine.InputSystem;
 namespace NTSD.Game
 {
     /// <summary>
-    /// ½ÇÉ«ÊäÈëÄ£¿é£¨´¿ C#£¬²»ÔÙĞèÒª¹ÒÔØµ½Ô¤ÖÆÌåÉÏ£©¡£
+    /// è§’è‰²è¾“å…¥æ¨¡å—ï¼ˆçº¯ C#ï¼Œä¸å†éœ€è¦æŒ‚è½½åˆ°é¢„åˆ¶ä½“ä¸Šï¼‰ã€‚
     ///
-    /// Éè¼ÆÄ¿±ê£º
-    /// - Ö»¸ºÔğ°Ñ Unity InputSystem µÄÊÂ¼şĞ´Èëµ½ SimInputBuffer£¨°´ tick ¶ÔÆë£©
-    /// - ²»Ö±½ÓÇı¶¯¶¯»­/×´Ì¬£¬ËùÓĞÖ¡²¥·ÅÈÔÓÉ OnComboDetected ¡ú LF2CharacterAnimator ´¦Àí
+    /// è®¾è®¡ç›®æ ‡ï¼š
+    /// - åªè´Ÿè´£æŠŠ Unity InputSystem çš„äº‹ä»¶å†™å…¥åˆ° SimInputBufferï¼ˆæŒ‰ tick å¯¹é½ï¼‰
+    /// - ä¸ç›´æ¥é©±åŠ¨åŠ¨ä½œã€çŠ¶æ€æˆ–å¸§åˆ‡æ¢ï¼Œè¿æ‹›å’Œå¸§æ’­æ”¾ç”±è§’è‰²é€»è¾‘å¤„ç†ã€‚
     ///
     /// </summary>
     public sealed class CharacterInputModule: ILF2Controller
@@ -31,7 +31,7 @@ namespace NTSD.Game
         private Vector2 _currentMoveInput = Vector2.zero;
         public Vector2 CurrentMoveInput => _currentMoveInput;
 
-        // Step D5: ·½Ïò¼ü×·×Ù£¨Ö§³ÖÍ¬Ö¡¶à·½Ïò£©
+        // Step D5: æ–¹å‘é”®è¿½è¸ªï¼ˆæ”¯æŒåŒå¸§å¤šæ–¹å‘ï¼‰
         private FuncKeyMask _lastDirectionMask = FuncKeyMask.None;
         private const float DIRECTION_DEADZONE = 0.3f;
         private bool _leftPressed;
@@ -39,7 +39,7 @@ namespace NTSD.Game
         private bool _downPressed;
         private bool _topPressed;
 
-        // °´¼ü×´Ì¬£¨ÓÃÓÚ CharacterStates ²éÑ¯£©
+        // æŒ‰é”®çŠ¶æ€ï¼ˆç”¨äº CharacterStates æŸ¥è¯¢ï¼‰
         private bool _isDefending;
         private bool _isAttacking;
         private bool _isJumping;
@@ -66,7 +66,7 @@ namespace NTSD.Game
         }
 
         /// <summary>
-        ///ÉèÖÃÏÔÊ½ÊäÈëID£¨ÓÃÓÚ³Ø»¯¶ÔÏó£¬ÍÑÀë Character Hub
+        ///è®¾ç½®æ˜¾å¼è¾“å…¥IDï¼ˆç”¨äºæ± åŒ–å¯¹è±¡ï¼Œè„±ç¦» Character Hub
         /// /// </summary>
         public void SetInputID(int inputId)
         {
@@ -76,7 +76,7 @@ namespace NTSD.Game
 
         public void ModuleBind()
         {
-            // Èç¹ûÃ»ÓĞ Hub£¬ÔòÈÏÎªÊÇ³Ø»¯¿ØÖÆÄ£Ê½£¬Ö±½Ó·ÅĞĞ
+            // å·²ç»‘å®šæ—¶ç›´æ¥è¿”å›ï¼Œé¿å…é‡å¤æ³¨å†Œè¾“å…¥å›è°ƒã€‚
             if (_inputBound) return;
 
             BindActionMap();

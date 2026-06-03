@@ -1,4 +1,4 @@
-using BeatEmUpTemplate2D;
+﻿using BeatEmUpTemplate2D;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.Input;
@@ -26,13 +26,6 @@ namespace NTSD.Animation.LF2Objects
                 ? SimulationTickDriver.Instance.CurrentTickIndex
                 : 0;
 
-            bool attackPressed = Controller?.IsAttack ?? false;
-            if (attackPressed && !_attackTracePrevAttackPressed)
-            {
-                _attackTraceArmed = true;
-            }
-            _attackTracePrevAttackPressed = attackPressed;
-
             // post_interaction 已移至 SimPostInteraction 阶段（对齐反汇编 GameMode_Process 碰撞循环）
             // 原位置：Generic_TU 开头；新位置：所有对象 SerialTickAll 完成后统一执行
 
@@ -43,7 +36,7 @@ namespace NTSD.Animation.LF2Objects
             // A) fell_onto_ground（PS.y==0 && PS.vy>0）- 对齐 FLF js:115-126
             else if (PS.y == 0 && PS.vy > 0)
             {
-                var res = StateUpdate("fell_onto_ground", out int frameId);
+                var res = FellOntoGroundEvent(out int frameId);
                 if (res && frameId > 0)
                 {
                     TransitionToFrame(frameId, 15);
@@ -67,7 +60,7 @@ namespace NTSD.Animation.LF2Objects
             // B) fall_onto_ground（PS.y+PS.vy>=0 && PS.vy>0）- 对齐 FLF js:127-141
             else if ((PS.y + PS.vy) >= 0 && PS.vy > 0)
             {
-                var res = StateUpdate("fall_onto_ground", out int frameId);
+                var res = FallOntoGroundEvent(out int frameId);
                 if (res && frameId > 0)
                 {
                     TransitionToFrame(frameId, 15);
@@ -101,8 +94,6 @@ namespace NTSD.Animation.LF2Objects
                     CharacterStats.CurrentHP = Health.HP;
             }
             // 注：反汇编验证无 HP/MP 自然恢复，已移除 tickIndex%12 HP++ 和 tickIndex%3 MP++ 逻辑
-
-            ComboBuffer?.ReduceTimeout();
 
             // 反汇编 Entity_InputProcess 0x41507E-0x415114:
             // state==301 (DeepSpecific) 或 state==19 (FirenSpecific) 时，根据左右输入更新 vz
@@ -155,92 +146,6 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private void TryTracePickupAttempt()
-        {
-            if (PS == null) return;
-            if (_heldWeapon != null) return;
-
-            var world = Match;
-            if (world == null) return;
-
-            bool armedPickupTrace = false;
-            LF2WeaponBase nearestGroundWeapon = null;
-            float nearestGroundMetric = float.MaxValue;
-            var entities = ListPool<LF2Entity>.Get();
-            try
-            {
-                world.GetAllEntities(entities);
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var entity = entities[i];
-                    if (entity == null || entity == this) continue;
-                    if (entity is not LF2WeaponBase weapon) continue;
-                    if (weapon.PS == null || weapon.Frame?.D == null) continue;
-
-                    float dx = weapon.PS.x - PS.x;
-                    float dz = weapon.PS.z - PS.z;
-                    if (Mathf.Abs(dx) > 140f || Mathf.Abs(dz) > 60f) continue;
-
-                    if (!armedPickupTrace)
-                    {
-                        LF2WeaponBase.BeginPickupTrace(StableId);
-                        armedPickupTrace = true;
-                    }
-
-                    LF2WeaponBase.AddPickupTraceWeapon(weapon.StableId);
-
-                    Debug.LogError($"[PickupTrace][AttackPressNearWeapon] picker={StableId} weapon={weapon.StableId} weaponType={weapon.Type} weaponState={weapon.GetState()} pickerFrame={Frame?.N ?? -1} pickerState={GetState()} pickerPos=({PS.x},{PS.y},{PS.z}) weaponPos=({weapon.PS.x},{weapon.PS.y},{weapon.PS.z}) dx={dx} dz={dz}");
-
-                    int weaponState = weapon.GetState();
-                    bool isGroundWeapon = weapon.HoldObj == null
-                        && (weaponState == LF2States.WeaponOnGround || weaponState == LF2States.HeavyWeaponOnGround);
-                    if (!isGroundWeapon) continue;
-
-                    float pickupMetric = Mathf.Abs(dx) + Mathf.Abs(dz);
-                    if (pickupMetric < nearestGroundMetric)
-                    {
-                        nearestGroundMetric = pickupMetric;
-                        nearestGroundWeapon = weapon;
-                    }
-                }
-            }
-            finally
-            {
-                ListPool<LF2Entity>.Release(entities);
-            }
-
-            if (!armedPickupTrace)
-            {
-                LF2WeaponBase.ClearPickupTrace();
-                return;
-            }
-
-            if (nearestGroundWeapon != null)
-            {
-                var pickupItr = new InteractionArea
-                {
-                    kind = 2,
-                };
-
-                bool picked = PickupWeapon(pickupItr, nearestGroundWeapon, playAnimation: true);
-                Debug.LogError($"[PickupTrace][DirectPickupAttempt] picker={StableId} weapon={nearestGroundWeapon.StableId} picked={picked} weaponState={nearestGroundWeapon.GetState()} metric={nearestGroundMetric}");
-                if (picked)
-                {
-                    LF2WeaponBase.ClearPickupTrace();
-                }
-            }
-        }
-
-        private void UpdatePickupTraceInPreInteraction()
-        {
-            bool attackPressed = Controller?.IsAttack ?? false;
-            if (attackPressed && !_pickupTracePrevAttackPressed)
-            {
-                TryTracePickupAttempt();
-            }
-            _pickupTracePrevAttackPressed = attackPressed;
-        }
-
         /// <summary>
         /// 通用物理转换 (Transit)
         /// 对应 FLF character.js:185-190
@@ -256,16 +161,8 @@ namespace NTSD.Animation.LF2Objects
             // 对应 SimulationTickDriver 中 SerialTickAll 之后的独立 pass。
             // 见 SimulationWorld.FramePostProcessAll()
 
-            // kind=14 方向阻挡（反汇编 entity+3F0h/3F4h/3E8h/3ECh 边界标志）
-            // xBound/zBound 由 Hit() kind=14 分支每帧写入，此处在位移前强制阻止对应方向移动
-            if (PS.xBoundPositive && PS.vx > 0f) PS.vx = 0f;
-            if (PS.xBoundNegative && PS.vx < 0f) PS.vx = 0f;
-            if (PS.zBoundPositive && PS.vz > 0f) PS.vz = 0f;
-            if (PS.zBoundNegative && PS.vz < 0f) PS.vz = 0f;
-            // 边界标志由 CharacterMechanics.WeaponDynamics 清零；
-            // 字符物理走 Step() 路径，这里手动清零
-            PS.xBoundPositive = PS.xBoundNegative = false;
-            PS.zBoundPositive = PS.zBoundNegative = false;
+            // kind=14 direction block flags are consumed by CharacterMechanics.Step().
+            // Release physics skips the blocked-axis movement for this tick and keeps vx/vz.
 
             // dynamics: position, friction, gravity
             ApplyDynamics();
@@ -311,75 +208,9 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 通用连招处理器 (Generic Combo)
-        /// 对应 FLF character.js line 191-215 的 generic case 'combo'
-        /// 
-        /// <para>工作流程：</para>
-        /// <list type="number">
-        /// <item>1. 处理单键输入 (硬编码)：如 left, right, jump 等基础移动逻辑。</item>
-        /// <item>2. 处理多键连招：通过 Tag 映射 (如 D>A 映射到 Tag "Fa")。</item>
-        /// <item>3. 调用 id_update：允许角色脚本覆盖通用逻辑 (id_update('generic_combo'))。</item>
-        /// <item>4. 处理方向切换：如输入 D>A 强制角色转向右侧。</item>
-        /// <item>5. 执行跳转：根据 Frame Data 中的 Tag 跳转到目标帧。</item>
-        /// </list>
+        /// PreInteraction 阶段。
         /// </summary>
-        private bool Generic_Combo(string combo)
-        {
-            if (string.IsNullOrEmpty(combo))
-                return false;
-
-            // === 1. 处理单键连招 (硬编码逻辑) ===
-            // 对应 FLF character.js:239-338 State 0 的 case 'combo' 部分逻辑
-            switch (combo)
-            {
-                case "left":
-                case "right":
-                case "left-left":
-                case "right-right":
-                    // 这些基础移动指令通常由 Standing/Walking 状态自行处理，通用逻辑直接返回
-                    return false;
-
-                default:
-                    break;
-            }
-
-            // === 2. 处理多键连招 (Tag 映射机制) ===
-            // 对应 FLF character.js:191-215
-
-            // Step 1: 将输入序列 (如 "D>A") 映射为内部 Tag (如 "Fa")
-            string tag = ComboConfig.GetComboTag(combo);
-            if (string.IsNullOrEmpty(tag))
-                return false;
-
-            // Step 2: 检查当前帧的数据中是否定义了该 Tag 的跳转目标 (hit_Fa: 123)
-            int targetFrame = Frame.D.Hit[tag];
-            Log.LogState(Name, "Combo", $"combo='{combo}' → tag='{tag}' → Hit['{tag}']={targetFrame}");
-
-            if (targetFrame <= 0)   // 0 是缺省值（未定义），与 FLF JS 的 falsy 判断对齐
-            {
-                Log.LogState(Name, "Combo", $"BLOCKED: Hit['{tag}']={targetFrame} ≤ 0", Log.StateLogLevel.Warn);
-                return false;
-            }
-
-            // 如果不是通用连招
-            // 获取连招方向
-            // Step 4: 处理连招的方向要求 (如 D>A 要求必须朝右)
-            string dir = ComboConfig.GetComboDirection(combo);
-            if (!string.IsNullOrEmpty(dir))
-            {
-                // 切换方向
-                SwitchDir(dir);
-            }
-
-            // 执行连招动画
-            // 返回成功状态
-            Log.LogState(Name, "Combo", $"→ TransitionToFrame({targetFrame})");
-            TransitionToFrame(targetFrame, LF2StateConstants.GenericComboWait);
-            StateReturnFrame = 1;
-            return true;
-        }
-
-        private bool Generic_PreInteraction() 
+        private bool Generic_PreInteraction()
         {
             LF2FrameData frame = FrameCache.GetFrameDataById(Frame.N);
             var sceneQuery = Match?.SceneQuery;
@@ -389,11 +220,6 @@ namespace NTSD.Animation.LF2Objects
 
             var itrs = frame.itrs;
             if (itrs == null || itrs.Count == 0) return false;
-
-            if (LF2WeaponBase.PickupTraceEnabled)
-            {
-                Debug.LogError($"[PickupTrace][CharacterPreInteractionEnter] picker={StableId} frame={Frame?.N ?? -1} state={GetState()} pic={frame.pic} itrCount={itrs.Count}");
-            }
 
             float spriteWidthPx = GetSpriteWidthPxForCollision();
             if (spriteWidthPx <= 0f) return false;
@@ -411,10 +237,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (preItrs.Count == 0)
             {
-                if (LF2WeaponBase.PickupTraceEnabled)
-                {
-                    Debug.LogError($"[PickupTrace][CharacterSkipNoPreItr] picker={StableId} frame={Frame?.N ?? -1} state={GetState()}");
-                }
                 ListPool<InteractionArea>.Release(preItrs);
                 return false;
             }
@@ -459,78 +281,20 @@ namespace NTSD.Animation.LF2Objects
             if (frame == null || sceneQuery == null) return;
             if (PS == null) return;
 
-            bool traceThisAttack = _attackTraceArmed;
-            if (traceThisAttack)
-            {
-                NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = true;
-                NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = StableId;
-                Debug.LogError($"[AttackTrace][PostInteractionEnter] tick={SimulationTickDriver.Instance?.CurrentTickIndex ?? -1} attacker={StableId} team={Team} frame={Frame?.N ?? -1} state={frame.state} pic={frame.pic} arest={ItrRest?.Arest ?? -1} attackExempt={HitCounters?.AttackExempt ?? -1} pos=({PS.x},{PS.y},{PS.z})");
-            }
-
             var itrs = frame.itrs;
-            if (itrs == null || itrs.Count == 0)
-            {
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][NoItr] attacker={StableId} frame={Frame?.N ?? -1}");
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
-                }
-                return;
-            }
+            if (itrs == null || itrs.Count == 0) return;
 
-            if (!ItrArestTest())
-            {
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][BlockedByArest] attacker={StableId} arest={ItrRest?.Arest ?? -1} frame={Frame?.N ?? -1}");
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
-                }
-                return;
-            }
+            if (!ItrArestTest()) return;
 
             // 攻击方碰撞豁免守卫（对应反汇编 0x419E3B：[esi+0ECh] > 0 跳过整体碰撞检测）
-            if (HitCounters?.AttackExempt > 0)
-            {
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][BlockedByAttackExempt] attacker={StableId} attackExempt={HitCounters.AttackExempt} frame={Frame?.N ?? -1}");
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
-                }
-                return;
-            }
+            if (HitCounters?.AttackExempt > 0) return;
 
             // Falling 状态下不执行 kind=0 攻击判定
             // 反汇编中 Falling 帧（180-183）实际无 itr，等价于此过滤
-            if (GetState() == LF2States.Falling)
-            {
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][BlockedByFallingState] attacker={StableId} state={GetState()} frame={Frame?.N ?? -1}");
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
-                }
-                return;
-            }
+            if (GetState() == LF2States.Falling) return;
 
             float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f)
-            {
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][BadSpriteWidth] attacker={StableId} frame={Frame?.N ?? -1} pic={frame.pic} width={spriteWidthPx}");
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
-                }
-                return;
-            }
+            if (spriteWidthPx <= 0f) return;
 
             // FLF: vol.zwidth = 0（由目标 bdy 自身的 zwidth 决定范围）
             var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
@@ -542,55 +306,25 @@ namespace NTSD.Animation.LF2Objects
                 if (itr.kind != 0 && itr.kind != 4) continue;
 
                 var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
-                if (traceThisAttack)
-                {
-                    Debug.LogError($"[AttackTrace][ItrQuery] attacker={StableId} itrIndex={i} kind={itr.kind} frame={Frame?.N ?? -1} pic={frame.pic} spriteWidth={spriteWidthPx} itrVol=({itrVolumes[i].x},{itrVolumes[i].y},{itrVolumes[i].z}; vx={itrVolumes[i].vx},vy={itrVolumes[i].vy},w={itrVolumes[i].w},h={itrVolumes[i].h},zw={itrVolumes[i].zwidth}) candidates={(candidates == null ? -1 : candidates.Count)}");
-                    if (candidates == null || candidates.Count == 0)
-                    {
-                        TraceNearbyTargetsOnMiss(itrVolumes[i]);
-                    }
-                }
                 if (candidates == null || candidates.Count == 0) continue;
 
                 for (int c = 0; c < candidates.Count; c++)
                 {
                     var target = candidates[c];
-                    if (traceThisAttack && target != null)
-                    {
-                        Debug.LogError($"[AttackTrace][Candidate] attacker={StableId} target={target.StableId} targetTeam={target.Team} targetFrame={target.Frame?.N ?? -1} targetState={target.Frame?.D?.state ?? -1} targetPos=({target.PS?.x ?? 0f},{target.PS?.y ?? 0f},{target.PS?.z ?? 0f})");
-                    }
-                    if (!CanPostInteractTarget(itr, target, traceThisAttack)) continue;
+                    if (!CanPostInteractTarget(itr, target)) continue;
                     if (target is not LF2LivingObject living) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
                     CurrentItrIndex = i;
                     bool hit = living.Hit(itr, this, attackerPos, itrVolumes[i]);
-                    if (traceThisAttack)
-                    {
-                        Debug.LogError($"[AttackTrace][HitCallResult] attacker={StableId} target={target.StableId} itrIndex={i} hit={hit}");
-                    }
                     if (!hit) continue;
 
                     ItrArestUpdate(itr);
-                    StateUpdate("hit_stop", out _);
-                    if (traceThisAttack)
-                    {
-                        Debug.LogError($"[AttackTrace][HitAccepted] attacker={StableId} target={target.StableId} arestNow={ItrRest?.Arest ?? -1}");
-                    }
-                    _attackTraceArmed = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                    NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
+                    HitStopEvent(out _);
 
                     if (itr.arest > 0) return;
                     break;
                 }
-            }
-
-            if (traceThisAttack)
-            {
-                _attackTraceArmed = false;
-                NTSD.Animation.BruteForceSceneQuery.AttackTraceEnabled = false;
-                NTSD.Animation.BruteForceSceneQuery.AttackTraceAttackerId = -1;
             }
 
             // kind=6：受伤硬直帧向外发出命中确认标记
@@ -619,33 +353,28 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target, bool traceThisAttack)
+        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target)
         {
             if (target == null || target == this)
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetSelfOrNull] attacker={StableId}");
                 return false;
             }
             if (target.PS == null || target.Frame?.D == null)
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetNoPSOrFrame] attacker={StableId} target={target.StableId}");
                 return false;
             }
             if (target.Health != null && target.Health.HP <= 0)
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetDead] attacker={StableId} target={target.StableId} hp={target.Health.HP}");
                 return false;
             }
             if (!target.ItrVrestTest(StableId))
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectTargetVrest] attacker={StableId} target={target.StableId}");
                 return false;
             }
             // effect 0/1：同队角色不可命中（FLF:2302-2306）
             if ((itr.effect == 0 || itr.effect == 1) &&
                 target is LF2Character && Team != 0 && target.Team == Team)
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectSameTeam] attacker={StableId} target={target.StableId} team={Team} effect={itr.effect}");
                 return false;
             }
 
@@ -654,12 +383,10 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (target is LF2Character)
                 {
-                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffect4Character] attacker={StableId} target={target.StableId}");
                     return false;
                 }
                 if (target.GetState() != LF2States.ProjectileFlying)
                 {
-                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffect4State] attacker={StableId} target={target.StableId} state={target.GetState()}");
                     return false;
                 }
             }
@@ -669,7 +396,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (target is not LF2Character)
                 {
-                    if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectEffectCharacterOnly] attacker={StableId} target={target.StableId} effect={itr.effect}");
                     return false;
                 }
             }
@@ -677,56 +403,10 @@ namespace NTSD.Animation.LF2Objects
             // kind=4：不能命中自己的 attacker（FLF:2322-2330）
             if (itr.kind == 4 && Attacker == target)
             {
-                if (traceThisAttack) Debug.LogError($"[AttackTrace][RejectKind4OriginalAttacker] attacker={StableId} target={target.StableId}");
                 return false;
             }
 
             return true;
-        }
-
-        private void TraceNearbyTargetsOnMiss(PhysicsState.FlfVolume itrVolume)
-        {
-            var world = Match;
-            if (world == null) return;
-
-            var allEntities = ListPool<LF2Entity>.Get();
-            try
-            {
-                world.GetAllEntities(allEntities);
-                for (int i = 0; i < allEntities.Count; i++)
-                {
-                    var entity = allEntities[i];
-                    if (entity == null || entity == this) continue;
-                    if (entity is not LF2LivingObject living) continue;
-                    if (living.PS == null || living.Frame?.D == null) continue;
-
-                    float dx = living.PS.x - PS.x;
-                    float dz = living.PS.z - PS.z;
-                    if (Mathf.Abs(dx) > 220f || Mathf.Abs(dz) > 120f) continue;
-
-                    float targetSpriteWidth = living.GetSpriteWidthPxForCollision();
-                    if (targetSpriteWidth <= 0f)
-                    {
-                        Debug.LogError($"[AttackTrace][NearbyTargetNoWidth] attacker={StableId} target={living.StableId} frame={living.Frame?.N ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z})");
-                        continue;
-                    }
-
-                    var bodyVolumes = living.PS.GetBodyVolumes(living.Frame.D.bodies, living.Frame.D.centerx, living.Frame.D.centery, targetSpriteWidth);
-                    if (bodyVolumes == null || bodyVolumes.Count == 0)
-                    {
-                        Debug.LogError($"[AttackTrace][NearbyTargetNoBody] attacker={StableId} target={living.StableId} frame={living.Frame?.N ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z})");
-                        continue;
-                    }
-
-                    var body = bodyVolumes[0];
-                    bool intersects = NTSD.Animation.CollisionUtil.Intersect(itrVolume, body);
-                    Debug.LogError($"[AttackTrace][NearbyTargetBody] attacker={StableId} target={living.StableId} team={living.Team} frame={living.Frame?.N ?? -1} state={living.Frame?.D?.state ?? -1} pic={living.Frame?.D?.pic ?? -1} pos=({living.PS.x},{living.PS.y},{living.PS.z}) dx={dx} dz={dz} bodyVol=({body.x},{body.y},{body.z}; vx={body.vx},vy={body.vy},w={body.w},h={body.h},zw={body.zwidth}) intersects={intersects}");
-                }
-            }
-            finally
-            {
-                ListPool<LF2Entity>.Release(allEntities);
-            }
         }
 
         private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
@@ -851,8 +531,6 @@ namespace NTSD.Animation.LF2Objects
             }
 
             HoldWeapon(weapon);
-            LF2WeaponBase.BeginHeldTrace(StableId, weapon.StableId);
-            Debug.LogError($"[PickupTrace][PickupStateAfterHold] picker={StableId} weapon={weapon.StableId} charFrame={Frame?.N ?? -1} charState={GetState()} heldWeapon={(GetHeldWeapon() as LF2WeaponBase)?.StableId ?? -1} weaponFrame={weapon.Frame?.N ?? -1} weaponState={weapon.GetState()} weaponHolder={weapon.HoldObj?.StableId ?? -1}");
             return true;
         }
 
@@ -870,15 +548,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         private bool Generic_StateExit()
         {
-            // 清除双击指令缓存 (防止状态切换后误触发跑动)
-            // 对应 FLF:222-227
-            switch (ComboBuffer?.Combo)
-            {
-                case "left-left":
-                case "right-right":
-                    ComboBuffer?.OnClearCombo();
-                    break;
-            }
+            InputState?.OnStateExit();
             return false;
         }
 
@@ -922,7 +592,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimPostInteraction(int tickIndex)
         {
-            if (!StateUpdate("post_interaction", out _))
+            if (!PostInteractionEvent(out _))
                 Generic_PostInteraction();
         }
 

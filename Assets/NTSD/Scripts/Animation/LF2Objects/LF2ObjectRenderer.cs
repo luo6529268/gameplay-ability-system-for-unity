@@ -162,8 +162,6 @@ namespace NTSD.Animation.LF2Objects
             if (_logicObject == null) return;
             var ps = _logicObject.PS;
             if (ps == null) return;
-            var tracedWeapon = _logicObject as LF2WeaponBase;
-            bool traceHeld = tracedWeapon != null && LF2WeaponBase.ShouldTraceHeldWeapon(tracedWeapon.StableId);
 
             var frame = _logicObject.Frame?.D;
             float cx = frame?.centerx ?? 0f;
@@ -213,10 +211,6 @@ namespace NTSD.Animation.LF2Objects
                     float snappedLocalX = Mathf.Round(localPosX * ppu) / ppu;
                     float snappedLocalY = Mathf.Round(localPosY * ppu) / ppu;
                     _visualTransform.localPosition = new Vector3(snappedLocalX, snappedLocalY, 0f);
-                    if (traceHeld)
-                    {
-                        Debug.LogError($"[PickupTrace][RendererWeaponPos] picker={LF2WeaponBase.HeldTracePickerId} weapon={tracedWeapon.StableId} frame={tracedWeapon.Frame?.N ?? -1} state={tracedWeapon.GetState()} rootPos=({rootTransform.position.x},{rootTransform.position.y},{rootTransform.position.z}) localPos=({_visualTransform.localPosition.x},{_visualTransform.localPosition.y},{_visualTransform.localPosition.z}) dir={ps.dir} zz={ps.zz}");
-                    }
                 }
             }
             _logicObject.Sprite?.SetZ(ps.z + ps.zz);

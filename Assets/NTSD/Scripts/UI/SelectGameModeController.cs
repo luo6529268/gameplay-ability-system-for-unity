@@ -42,10 +42,10 @@ namespace NTSD.UI
         
         }
 
-        private void OnStageMode() { /* 加载关卡模式 */ }
-        private void OnBattleMode() { /* 加载乱斗模式 */ }
-        private void OnTrainingMode() { /* 加载训练模式 */ }
-        private void OnOptions() { /* 打开设置 */ }
+        private void OnStageMode() { /* 鍔犺浇鍏冲崱妯″紡 */ }
+        private void OnBattleMode() { /* 鍔犺浇涔辨枟妯″紡 */ }
+        private void OnTrainingMode() { /* 鍔犺浇璁粌妯″紡 */ }
+        private void OnOptions() { /* 鎵撳紑璁剧疆 */ }
         private void OnExit() { Application.Quit(); }
     }
 }

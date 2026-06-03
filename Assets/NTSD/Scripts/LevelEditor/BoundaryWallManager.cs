@@ -123,7 +123,7 @@ namespace NTSD.LevelEditor
         }
 
         /// <summary>
-        /// å•å±‚è¾¹ç•Œï¼špoint åœ¨ä»»æ„?polygon å†…å³å…è®¸ï¼ˆå¹¶é›†ï¼‰
+        /// 单层边界检测：点位于任意启用的 polygon 内就视为可走。
         /// </summary>
         public bool IsPointWalkable(Vector2 pointXY)
         {

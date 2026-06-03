@@ -1,5 +1,16 @@
 # Agent Guide (Unity / NTSD)
 
+## Current Unity NTSD Authority Override
+
+For current Unity NTSD reconstruction work, use the formal C++ release project as the gameplay authority:
+
+- Primary source: `J:\QQFile\NTSD2.4\ntsd_release`
+- Do not use disassembly documents as the active reference for Unity gameplay behavior unless the user explicitly asks for a historical comparison.
+- Do not import or preserve debug macro, debug trace, debug shortcut, or debug-only behavior as formal gameplay logic.
+- The C++ project is both the NTSD2.4 EXE reconstruction target and the intermediate baseline for the Unity project.
+- Keep rendering, pooling, and MonoBehaviour integration Unity-native, but converge combat objects toward the C++ release model of unified entity data plus central battle tick/collision/hit systems.
+- Older notes below that name disassembly or FLF as the authority are historical records only; for current Unity gameplay reconstruction, consult the C++ release implementation first.
+
 This repository is a Unity project replicating **NTSD (Naruto The Setting Dawn)** game logic, built on top of EX Gameplay Ability System (EX-GAS).
 
 Unity version: `2022.3.4f1c1`

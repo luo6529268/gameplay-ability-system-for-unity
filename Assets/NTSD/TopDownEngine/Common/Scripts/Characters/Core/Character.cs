@@ -74,7 +74,6 @@ namespace MoreMountains.TopDownEngine
         /// 输入/连招检测模块（纯 C#）
         /// </summary>
         public CharacterInputModule _CharacterInput { get; private set; }
-        public ActionSequenceDetectorModule _ActionSequenceDetector { get; private set; }
 
         /// <summary>
         /// Step D9: id_update 管理器（角色特定逻辑扩展点）
@@ -143,7 +142,6 @@ namespace MoreMountains.TopDownEngine
 			_modulesCollected = true;
 
 			_CharacterInput = new CharacterInputModule();
-			//_ActionSequenceDetector = new ActionSequenceDetectorModule();
 
 			// 初始化纯 C# 模块
 			_LF2Character = new LF2Character();
@@ -155,7 +153,6 @@ namespace MoreMountains.TopDownEngine
 		private void HandleInitModulesInternal() 
 		{
            //_modules.Add(_CharacterInput);
-           //_modules.Add(_ActionSequenceDetector);
 
             // 收集 GameObject 上的 ICharacterModule 组件（如 UnitSettings）
         }
@@ -279,8 +276,6 @@ namespace MoreMountains.TopDownEngine
 			// 在此处注册到 SimulationWorld（时序确定：SimulationTickDriver.Awake 先于 StartLevel）
 			if (SimulationTickDriver.Instance != null)
 			{
-				if (_ActionSequenceDetector != null)
-					SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
 				// _LF2Character 已在 ModuleBind 内部注册
 			}
 
@@ -391,8 +386,6 @@ namespace MoreMountains.TopDownEngine
 				SimulationTickDriver.Instance.World.Register(_CharacterSim);
 
 			// Register combo detector (input consumer) to SimulationWorld
-			if (_ActionSequenceDetector != null)
-				SimulationTickDriver.Instance.World.Register(_ActionSequenceDetector);
 
 			if (_LF2Character != null)
 				SimulationTickDriver.Instance.World.Register(_LF2Character);
@@ -409,10 +402,6 @@ namespace MoreMountains.TopDownEngine
 				SimulationTickDriver.Instance.World.Unregister(_CharacterSim);
 			}
 
-			if (_ActionSequenceDetector != null && SimulationTickDriver.Instance != null)
-			{
-				SimulationTickDriver.Instance.World.Unregister(_ActionSequenceDetector);
-            }
 
 			if (_LF2Character != null && SimulationTickDriver.Instance != null)
 			{

@@ -20,13 +20,11 @@ namespace NTSD.Animation.LF2Objects
     {
         // ========== 技能专属字段（不在 LF2Entity 的） ==========
 
-        /// <summary>交互冷却（技能也有 itr 碰撞冷却）</summary>
         public override LF2ItrRestTracker ItrRest { get; protected set; }
 
         /// <summary>生命值（技能耐久/存活帧数等）</summary>
         public override LF2Health Health { get; protected set; } = new LF2Health();
         // ========== 配置字段 ==========
-        private int _objectId;
         private LF2LivingObject _parent;
         private int _lastState = -1;
 
@@ -39,27 +37,26 @@ namespace NTSD.Animation.LF2Objects
             = new System.Collections.Generic.Dictionary<int, int>();
         private bool _hitFaFired;
 
-        // ========== 公开属性 ==========
         public LF2LivingObject Parent => _parent;
+
+        private static bool IsWeaponEntity(LF2Entity entity)
+        {
+            return entity is LF2WeaponBase;
+        }
 
         // ========== ILF2Object 实现 ==========
         public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.SpecialAttack;
-        // ========== 初始化方法 ==========
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
             AllocateStableId();
 
-            // 初始化基类字段
             PS = new PhysicsState();
             Trans = new FrameTransistor(this);
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
             ItrRest = new LF2ItrRestTracker();
             Sprite = new LF2Sprite();
-
-            // 初始化状态处理器
-            InitializeStates();
 
             if (!(taskBase is OPointCreateTask task))
             {
@@ -78,44 +75,45 @@ namespace NTSD.Animation.LF2Objects
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
-        protected override void InitializeStates()
+        protected override bool StateEntryEvent() => DispatchCurrentStateEvent("state_entry");
+
+        protected override bool FrameForceEvent()
         {
-            _states[15] = State_15;
-            _states[1002] = State_1002;
-            _states[LF2States.ProjectileFlying] = State_3000;
-            _states[LF2States.ProjectileHiting] = State_3001;
-            _states[LF2States.ProjectileHit] = State_3002;
-            _states[LF2States.ProjectileTeleport] = State_3003;
-            _states[LF2States.ObjectFlying] = State_3005;
-            _states[LF2States.ObjectExpanding] = State_3006;
+            Generic_Force();
+            return true;
         }
 
-        protected override bool OnGenericStateEvent(string eventType, object eventData)
+        protected override bool FrameEvent()
         {
-            switch (eventType)
-            {
-                case "TU":
-                    Generic_TU();
-                    return false;
-                case "frame":
-                    Generic_Frame();
-                    return false;
-                case "frame_force":
-                case "TU_force":
-                    Generic_Force();
-                    return true;
-                case "leaving":
-                    Generic_Leaving();
-                    return false;
-                case "die":
-                    Generic_Die();
-                    return true;
-                default:
-                    return false;
-            }
+            Generic_Frame();
+            return DispatchCurrentStateEvent("frame");
         }
 
-        #region Generic State Handlers
+        protected override bool TUForceEvent()
+        {
+            Generic_Force();
+            return true;
+        }
+
+        protected override bool TUEvent()
+        {
+            Generic_TU();
+            return DispatchCurrentStateEvent("TU");
+        }
+
+        protected override bool DieEvent()
+        {
+            Generic_Die();
+            return true;
+        }
+
+        private bool LeavingEvent()
+        {
+            Generic_Leaving();
+            return DispatchCurrentStateEvent("leaving");
+        }
+
+        #region 通用状态处理
 
         private void Generic_TU()
         {
@@ -181,68 +179,35 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region Specific State Handlers
+        #region 特定状态处理
 
         private bool State_15(string eventType, object eventData)
         {
             if (eventType == "TU")
-            {
-                var frame = Frame.D;
-                if (frame != null && frame.dvx != 0)
-                {
-                    PS.vx = Dirh() * frame.dvx;
-                }
-                return true;
-            }
+                return ProcessState15TU();
+
             return false;
         }
 
         private bool State_1002(string eventType, object eventData)
         {
             if (eventType == "state_entry")
-            {
-                NoBounce = (Parent?.PS?.y ?? 0) == 0;
-                return true;
-            }
+                return ProcessState1002Entry();
+
             if (eventType == "TU")
-            {
-                if (PS.y == 0 && PS.vy > 0)
-                {
-                    if (NoBounce)
-                    {
-                        Trans.Frame(1000, 0);
-                    }
-                    else if (GetSpeed() > NTSDGlobal.Gameplay.WeaponBounceupLimit)
-                    {
-                        Trans.Frame(10, 0);
-                        PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
-                        if (PS.vx != 0) PS.vx = Mathf.Sign(PS.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
-                        if (PS.vz != 0) PS.vz = Mathf.Sign(PS.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
-                    }
-                }
-                return true;
-            }
+                return ProcessState1002TU();
+
             return false;
         }
 
         private bool State_3000(string eventType, object eventData)
         {
-            if (eventType == "TU")
-            {
-                ProcessChaseLogic();
-                return true;
-            }
-            return false;
+            return ProcessChaseStateEvent(eventType);
         }
 
         private bool State_3001(string eventType, object eventData)
         {
-            if (eventType == "TU")
-            {
-                ProcessChaseLogic();
-                return true;
-            }
-            return false;
+            return ProcessChaseStateEvent(eventType);
         }
 
         private bool State_3002(string eventType, object eventData)
@@ -252,32 +217,79 @@ namespace NTSD.Animation.LF2Objects
 
         private bool State_3003(string eventType, object eventData)
         {
-            if (eventType == "TU")
-            {
-                ProcessChaseLogic();
-                return true;
-            }
-            return false;
+            return ProcessChaseStateEvent(eventType);
         }
 
         private bool State_3005(string eventType, object eventData)
         {
-            if (eventType == "TU")
-            {
-                ProcessChaseLogic();
-                return true;
-            }
-            return false;
+            return ProcessChaseStateEvent(eventType);
         }
 
         private bool State_3006(string eventType, object eventData)
         {
-            if (eventType == "TU")
+            return ProcessChaseStateEvent(eventType);
+        }
+
+        private bool DispatchCurrentStateEvent(string eventType, object eventData = null)
+        {
+            return GetState() switch
             {
-                ProcessChaseLogic();
-                return true;
+                15 => State_15(eventType, eventData),
+                1002 => State_1002(eventType, eventData),
+                LF2States.ProjectileFlying => State_3000(eventType, eventData),
+                LF2States.ProjectileHiting => State_3001(eventType, eventData),
+                LF2States.ProjectileHit => State_3002(eventType, eventData),
+                LF2States.ProjectileTeleport => State_3003(eventType, eventData),
+                LF2States.ObjectFlying => State_3005(eventType, eventData),
+                LF2States.ObjectExpanding => State_3006(eventType, eventData),
+                _ => false,
+            };
+        }
+
+        private bool ProcessState15TU()
+        {
+            var frame = Frame.D;
+            if (frame != null && frame.dvx != 0)
+            {
+                PS.vx = Dirh() * frame.dvx;
             }
-            return false;
+
+            return true;
+        }
+
+        private bool ProcessState1002Entry()
+        {
+            NoBounce = (Parent?.PS?.y ?? 0) == 0;
+            return true;
+        }
+
+        private bool ProcessState1002TU()
+        {
+            if (PS.y == 0 && PS.vy > 0)
+            {
+                if (NoBounce)
+                {
+                    Trans.Frame(1000, 0);
+                }
+                else if (GetSpeed() > NTSDGlobal.Gameplay.WeaponBounceupLimit)
+                {
+                    Trans.Frame(10, 0);
+                    PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
+                    if (PS.vx != 0) PS.vx = Mathf.Sign(PS.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
+                    if (PS.vz != 0) PS.vz = Mathf.Sign(PS.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
+                }
+            }
+
+            return true;
+        }
+
+        private bool ProcessChaseStateEvent(string eventType)
+        {
+            if (eventType != "TU")
+                return false;
+
+            ProcessChaseLogic();
+            return true;
         }
 
         private void ProcessChaseLogic()
@@ -287,8 +299,6 @@ namespace NTSD.Animation.LF2Objects
 
             int hitFa = frame.hit_Fa;
 
-            // hit_Fa=10: 反汇编 0x404E78
-            // vx < 0 → vx -= 1.1; vx >= 0 → vx += 1.1; clamp vx to [-30, 30]; if y <= 3 → y = 3
             if (hitFa == 10)
             {
                 if (PS.vx < 0f) PS.vx -= 1.1f;
@@ -299,23 +309,18 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // N-11: hit_Fa=11 — one-shot spawn + nearest-enemy search, then tracking
-            // 反汇编 Entity_FrameLogic case 11 (0x004030C0)
             if (hitFa == 11 && !_hitFaFired)
             {
                 _hitFaFired = true;
                 ApplyHitFa11Spawn();
-                // After spawn: find nearest enemy, write to OwnerEntityIndex
-                // If no target found → HP=0 (self-destruct)
+                // 生成后查找最近敌人，并写入 OwnerEntityIndex。
                 if (!ApplyHitFa11FindTarget())
                 {
                     Health.HP = 0;
                     return;
                 }
-                // Fall through to tracking (loc_404F13 → case 11 path → loc_405623 → loc_405784)
             }
 
-            // N-13: hit_Fa=13 — one-shot enemy-seeking entity spawn on frame entry
             if (hitFa == 13 && !_hitFaFired)
             {
                 _hitFaFired = true;
@@ -323,8 +328,6 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // hit_Fa=8 — one-shot homing scatter spawn (oid=225)
-            // 反汇编 Entity_FrameLogic case 8 (0x004030C0)
             if (hitFa == 8 && !_hitFaFired)
             {
                 _hitFaFired = true;
@@ -332,8 +335,6 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // hit_Fa=5 — one-shot ally heal spawn (oid=219)
-            // 反汇编 Entity_FrameLogic case 5 (0x004030C0)
             if (hitFa == 5 && !_hitFaFired)
             {
                 _hitFaFired = true;
@@ -341,9 +342,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // hit_Fa=6/9 — shared path (反汇编 Entity_FrameLogic case 6/9, 0x004030C0)
-            // case 6: oid=220, v221(cap)=0(no outer loop), v217(max)=7
-            // case 9: oid=rand(2)+221, v221(cap)=4, v217(max)=10
+            // 分支 6：oid=220，v221 上限为 0（无外层循环），v217 最大值为 7。
+            // 分支 9：oid=rand(2)+221，v221 上限为 4，v217 最大值为 10。
             if ((hitFa == 6 || hitFa == 9) && !_hitFaFired)
             {
                 _hitFaFired = true;
@@ -351,9 +351,6 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // hit_Fa=3 — per-frame nearest-enemy search + case 1 tracking
-            // 反汇编 loc_40356E: cmp eax, 4/5/6/7 全不匹配 → loc_403649 nearest-enemy search
-            // 搜索后 OwnerEntityIndex != -1 → loc_404F13 (case 1 tracking)；否则 HP=0
             if (hitFa == 3)
             {
                 if (!ApplyHitFa11FindTarget())
@@ -365,22 +362,19 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // Dispatch tracking by hit_Fa
-            // 反汇编 loc_404F13: cmp eax, 1
+            // 根据 hit_Fa 分发逐帧追踪逻辑。
             if (hitFa == 1)
             {
                 ApplyHitFa1Tracking();
                 return;
             }
 
-            // 反汇编 loc_405132: case 4/14/12/2/7
             if (hitFa == 2 || hitFa == 4 || hitFa == 7 || hitFa == 12 || hitFa == 14)
             {
                 ApplyHitFa2_14Tracking(hitFa);
                 return;
             }
 
-            // 反汇编 loc_405623: case 11 fallthrough (HP/active check + vx±2.0 tracking)
             if (hitFa == 11)
             {
                 ApplyHitFa11Tracking();
@@ -388,7 +382,6 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // ========== N-11: hit_Fa=11 爆炸生成 ==========
-        // 反汇编 Entity_FrameLogic case 11 (0x004030C0)
         private void ApplyHitFa11Spawn()
         {
             float x = PS.x, y = PS.y, z = PS.z;
@@ -396,7 +389,6 @@ namespace NTSD.Animation.LF2Objects
             bool facingRight = PS.dir == "right";
             int facing = facingRight ? 0 : 1;
 
-            // 反汇编 0x403102~0x40379E: 14次 sub_402C00 调用
             // 参数映射: arg_10=[ecx+10h]=z, arg_14=[ecx+14h]=y, arg_18=[ecx+18h]=x
             // 1. oid=211, frame=109, pos=self, vel=self, facing=self
             SpawnEntityDirect(211, 109, x, y, z, vx, vy, vz, facing);
@@ -428,15 +420,8 @@ namespace NTSD.Animation.LF2Objects
             SpawnEntityDirect(211, 50, x + 6, y - 1, z, vx, vy, vz, 0);
         }
 
-        // ========== N-11: hit_Fa=11 寻找最近敌方目标 ==========
-        // 反汇编 Entity_FrameLogic loc_403649 (0x004030C0)
-        // hit_Fa=11 one-shot 和 hit_Fa=3 per-frame 共用
-        // 遍历所有实体，找最近敌方（active, HP>0, 非武器, 不同data, abs(z_diff)<=2）
-        // 写入 OwnerEntityIndex；若无目标返回 false
         private bool ApplyHitFa11FindTarget()
         {
-            // 检查 [ecx+2F8h] (HealTimer index) 是否有效，取其 data 作为 saved_data
-            // saved_data 用于排除与 HealTimer 指向实体相同 data 的目标
             LF2CharacterDataWrapper savedWrapper = null;
             if (HealTimer >= 0)
             {
@@ -452,7 +437,6 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // 检查已有 OwnerEntityIndex 是否仍然有效
             if (OwnerEntityIndex >= 0)
             {
                 var allObjs = new System.Collections.Generic.List<LF2LivingObject>(16);
@@ -463,22 +447,17 @@ namespace NTSD.Animation.LF2Objects
                     if (obj.StableId != OwnerEntityIndex) continue;
                     if (obj.Dead) break;
                     if (obj.Health == null || obj.Health.HP <= 0) break;
-                    // 反汇编 0x403600: cmp [ecx+edx*8+7ACh], 0Eh — 躺地状态排除
                     if (obj.GetState() == LF2States.Lying) break;
                     var objFrame = obj.Frame?.D;
                     if (objFrame != null && objFrame.hit_Fa == 14) break;
                     float zDiff = obj.PS.z - PS.z;
                     if (Mathf.Abs(zDiff) > 2) break;
-                    // 同 data（同角色类型）→ 排除
                     if (obj.FrameCache?.Wrapper == FrameCache?.Wrapper) break;
                     if (savedWrapper != null && obj.FrameCache?.Wrapper == savedWrapper) break;
-                    // 目标仍然有效，直接进入追踪
                     return true;
                 }
             }
 
-            // 遍历所有实体寻找最近敌方目标
-            // 反汇编 loc_403649: 遍历 0~399，跳过 self/inactive/武器/同data/savedData/hit_Fa==14/abs(z)>2
             var candidates = new System.Collections.Generic.List<LF2LivingObject>(16);
             Match?.GetAllLivingObjects(candidates);
 
@@ -492,10 +471,8 @@ namespace NTSD.Animation.LF2Objects
                 if (ReferenceEquals(obj, this)) continue;
                 if (obj.Dead) continue;
                 if (obj.Health == null || obj.Health.HP <= 0) continue;
-                if (obj is LF2WeaponBase) continue;  // [+6F8h] != 0 → 武器
-                // 反汇编 0x403600: cmp [ecx+edx*8+7ACh], 0Eh — 躺地状态排除
+                if (IsWeaponEntity(obj)) continue;
                 if (obj.GetState() == LF2States.Lying) continue;
-                // 同 data（同角色类型）→ 排除
                 if (obj.FrameCache?.Wrapper == FrameCache?.Wrapper) continue;
                 if (savedWrapper != null && obj.FrameCache?.Wrapper == savedWrapper) continue;
                 var objFrame = obj.Frame?.D;
@@ -519,12 +496,10 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // ========== hit_Fa=3 per-frame 追踪逻辑 ==========
-        // 反汇编 0x405656 (Entity_FrameLogic)
-        // 无 HP/active 检查；vx ±= 0.7（x 方向追踪），vz ±= 0.17（z 方向追踪，±10 死区），vx clamp ±16，vz clamp ±2.4
         private void ApplyHitFa3Tracking()
         {
             LF2LivingObject target = FindOwnerTarget();
-            if (target == null) return;  // 反汇编无 HP/active 检查，但 target 必须存在
+            if (target == null) return;
 
             // x 方向追踪: dbl_443288=0.7
             if (target.PS.x > PS.x)
@@ -538,57 +513,47 @@ namespace NTSD.Animation.LF2Objects
             else if (target.PS.z < PS.z - 10)
                 PS.vz -= 0.17f;
 
-            // vx clamp ±16.0: dbl_443220=16.0, 40300000h=16.0
+            // vx 钳制到 ±16.0：dbl_443220=16.0，40300000h=16.0。
             if (PS.vx > 16.0f) PS.vx = 16.0f;
             else if (PS.vx < -16.0f) PS.vx = -16.0f;
 
-            // vz clamp ±2.4: dbl_443210=2.4, dbl_443208=-2.4
+            // vz 钳制到 ±2.4：dbl_443210=2.4，dbl_443208=-2.4。
             if (PS.vz > 2.4f) PS.vz = 2.4f;
             else if (PS.vz < -2.4f) PS.vz = -2.4f;
 
-            // facing update
+            // 根据 vx 更新朝向。
             SwitchDir(PS.vx >= 0 ? "right" : "left");
         }
 
         // ========== N-11: hit_Fa=11 per-frame 追踪逻辑 ==========
-        // 反汇编 loc_405623 → loc_405784 (0x004030C0)
-        // HP/active 检查：if HP > 0 AND target active → return（不追踪）
-        // else → 执行追踪：vx ±= 2.0（基于 vx 符号），vx clamp ±17.0，facing
         private void ApplyHitFa11Tracking()
         {
             LF2LivingObject target = FindOwnerTarget();
 
-            // 反汇编 loc_405640:
-            // cmp [ecx+2FCh](HP), 0; jle → 0x405784（HP<=0 → 执行追踪）
-            // cmp [edi+esi+4](target active), 0; jz → 0x405784（target 不活跃 → 执行追踪）
-            // if HP > 0 AND target active → return（不执行追踪）
             bool targetActive = target != null && !target.Dead;
             bool selfHpPositive = Health != null && Health.HP > 0;
             if (selfHpPositive && targetActive)
                 return;
 
-            // 反汇编 loc_405784: vx ±= 2.0（基于 vx 符号），dbl_443298=2.0
             if (PS.vx < 0)
                 PS.vx -= 2.0f;
             else
                 PS.vx += 2.0f;
 
-            // vx clamp ±17.0 (dbl_443200=17.0, dbl_4431F8=-17.0)
+            // vx 钳制到 ±17.0（dbl_443200=17.0，dbl_4431F8=-17.0）。
             if (PS.vx > 17.0f) PS.vx = 17.0f;
             else if (PS.vx < -17.0f) PS.vx = -17.0f;
 
-            // facing update
+            // 根据 vx 更新朝向。
             SwitchDir(PS.vx >= 0 ? "right" : "left");
         }
 
         // ========== N-13: hit_Fa=13 敌方追踪实体生成 ==========
-        // 反汇编 Entity_FrameLogic case 13 (0x004030C0)
         private void ApplyHitFa13Spawn()
         {
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // 收集敌方存活非武器目标列表
             var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
             Match?.GetAllLivingObjects(allObjects);
             var enemies = new System.Collections.Generic.List<int>(8);
@@ -599,16 +564,14 @@ namespace NTSD.Animation.LF2Objects
                 if (obj.Dead) continue;
                 if (obj.Health != null && obj.Health.HP <= 0) continue;
                 if (obj.Team == Team) continue;
-                if (obj is LF2WeaponBase) continue;
+                if (IsWeaponEntity(obj)) continue;
                 enemies.Add(obj.StableId);
             }
 
-            // 选择随机目标（无敌方时用自身 StableId）
             int targetStableId = (enemies.Count > 0)
                 ? enemies[UnityEngine.Random.Range(0, enemies.Count)]
                 : StableId;
 
-            // 生成 oid=228，继承 pos/vel/team/facing，y += rand(7)-3
             float spawnY = PS.y + UnityEngine.Random.Range(0, 7) - 3;
             int facing = PS.dir == "right" ? 0 : 1;
             var op = new ObjectPoint
@@ -624,21 +587,16 @@ namespace NTSD.Animation.LF2Objects
             factory.EnqueueCreateObject(t620);
 
             // 注：OwnerEntityIndex 通过 OPointCreateTask.ownerEntityIndex 传递给工厂
-            // 工厂在 PostInitLiving 后写入 living.OwnerEntityIndex
-            StateUpdate("die", null);
+            DieEvent();
         }
 
         // ========== hit_Fa=8: oid=225 散射追踪生成 ==========
-        // 反汇编 Entity_FrameLogic case 8 (0x004030C0)
-        // 扫描敌方（不同team, HP>0, 非武器）→ count=max(3,(n-3)/2+3) if n>4 else 3
         // 每次生成 oid=225，vx=rand(21)-11, vy=3.0-rand(24)*0.25, vz=3.0-rand(24)*0.25
-        // OwnerEntityIndex = 随机敌方 StableId；自身失活
         private void ApplyHitFa8Spawn()
         {
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // 收集敌方存活非武器目标列表
             var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
             Match?.GetAllLivingObjects(allObjects);
             var enemies = new System.Collections.Generic.List<int>(8);
@@ -648,12 +606,11 @@ namespace NTSD.Animation.LF2Objects
                 if (obj == null || obj.Dead) continue;
                 if (obj.Health == null || obj.Health.HP <= 0) continue;
                 if (obj.Team == Team) continue;
-                if (obj is LF2WeaponBase) continue;
+                if (IsWeaponEntity(obj)) continue;
                 enemies.Add(obj.StableId);
             }
 
             // count = (enemyCount > 4) ? (enemyCount-3)/2+3 : 3
-            // 反汇编: v29 = 3; if (v189 > 4) v29 = (v189-3)/2+3
             int enemyCount = enemies.Count;
             int count = 3;
             if (enemyCount > 4)
@@ -663,13 +620,11 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < count; i++)
             {
                 // vx = rand(21)-11, vy = 3.0-rand(24)*0.25, vz = 3.0-rand(24)*0.25
-                // 反汇编: vx=[+64]=sub_419D40(21)-11; vy=[+72]=3.0-rand(24)*0.25; vz=[+80]=3.0-rand(24)*0.25
                 float vx = UnityEngine.Random.Range(0, 21) - 11;
                 float vy = 3.0f - UnityEngine.Random.Range(0, 24) * 0.25f;
                 float vz = 3.0f - UnityEngine.Random.Range(0, 24) * 0.25f;
 
                 // OwnerEntityIndex = 随机敌方 StableId（若无敌方则用自身）
-                // 反汇编: if (v189) [+1016]=v226[rand(v189)]; else [+1016]=a2
                 int ownerIdx = (enemyCount > 0)
                     ? enemies[UnityEngine.Random.Range(0, enemyCount)]
                     : StableId;
@@ -689,21 +644,16 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // 自身失活
-            // 反汇编: *((_BYTE *)this + v2 + 4) = 0; (deactivate self)
-            StateUpdate("die", null);
+            DieEvent();
         }
 
         // ========== hit_Fa=5: oid=219 友方治疗生成 ==========
-        // 反汇编 Entity_FrameLogic case 5 (0x004030C0)
-        // 扫描友方（同team, HP>0, 非武器）→ 每个友方生成 oid=219
         // vx=(ally.x-self.x)/50, vy=0, vz=0, dir=right
-        // OwnerEntityIndex = ally.StableId；自身失活
         private void ApplyHitFa5Spawn()
         {
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // 收集友方存活非武器目标列表
             var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
             Match?.GetAllLivingObjects(allObjects);
             var allies = new System.Collections.Generic.List<LF2LivingObject>(8);
@@ -713,12 +663,10 @@ namespace NTSD.Animation.LF2Objects
                 if (obj == null || obj.Dead) continue;
                 if (obj.Health == null || obj.Health.HP <= 0) continue;
                 if (obj.Team != Team) continue;
-                if (obj is LF2WeaponBase) continue;
+                if (IsWeaponEntity(obj)) continue;
                 allies.Add(obj);
             }
 
-            // 为每个友方生成 oid=219
-            // 反汇编 case 5: 遍历友方，vx=(ally.x-self.x)/50, vy=0, vz=0, dir=right
             for (int i = 0; i < allies.Count; i++)
             {
                 var ally = allies[i];
@@ -739,23 +687,19 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // 自身失活
-            StateUpdate("die", null);
+            DieEvent();
         }
 
-        // ========== hit_Fa=6: oid=220 敌方追踪生成（最多7个）==========
-        // ========== hit_Fa=6/9: 共享路径（反汇编 Entity_FrameLogic case 6/9, 0x004030C0）==========
-        // case 6: oid=220, v221(cap)=0(外层循环不执行), v217(max)=7
-        //         vx=(enemy.x-self.x)/50, vy=-(4+rand(4))
-        // case 9: oid=rand(2)+221, v221(cap)=4, v217(max)=10
-        //         vx=rand(21)-11, vy=-2.0-rand(40)*0.1667
-        // OwnerEntityIndex = enemy.StableId
+        // 分支 6：vx=(enemy.x-self.x)/50，vy=-(4+rand(4))。
+        // 分支 9：oid=rand(2)+221，v221 上限为 4，v217 最大值为 10。
+        // 分支 9：vx=rand(21)-11，vy=-2.0-rand(40)*0.1667。
+        // OwnerEntityIndex 写入 enemy.StableId。
         private void ApplyHitFa6Or9Spawn(int hitFa)
         {
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // 反汇编差异参数
-            int cap = (hitFa == 9) ? 4 : 0;   // v221: case6=0(无外层限制), case9=4
+            int cap = (hitFa == 9) ? 4 : 0;
             int max = (hitFa == 9) ? 10 : 7;  // v217: case6=7, case9=10
 
             var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
@@ -768,8 +712,7 @@ namespace NTSD.Animation.LF2Objects
                 if (obj == null || obj.Dead) continue;
                 if (obj.Health == null || obj.Health.HP <= 0) continue;
                 if (obj.Team == Team) continue;
-                if (obj is LF2WeaponBase) continue;
-                // cap>0: 外层循环限制（case 9 最多 cap 个）
+                if (IsWeaponEntity(obj)) continue;
                 if (cap > 0 && spawnCount >= cap) break;
 
                 int oid;
@@ -805,36 +748,26 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // ========== hit_Fa=1 per-frame 追踪逻辑 ==========
-        // 反汇编 Entity_FrameLogic loc_404F13 case 1 (0x004030C0)
-        // 无 HP/active 检查；vx±0.85, vz±0.3(±7死区), vy*=0.7142857, y dead zone y+10→±1.2, vx clamp ±13, vz clamp ±2.0, y clamp ±1.0
         private void ApplyHitFa1Tracking()
         {
             LF2LivingObject target = FindOwnerTarget();
-            if (target == null) return;  // 反汇编无 HP/active 检查，但 target 必须存在
+            if (target == null) return;
 
-            // vx: target.x > self.x → vx += 0.85; target.x < self.x → vx -= 0.85
-            // 反汇编 0x404F31: cmp [ecx+10h](x整数), [eax+10h](target.x); fadd/fsub dbl_4432D8(0.85)
             if (target.PS.x > PS.x)
                 PS.vx += 0.85f;
             else if (target.PS.x < PS.x)
                 PS.vx -= 0.85f;
 
-            // vz: ±7 dead zone, step 0.3
-            // 反汇编 0x404F79: cmp [ecx+18h](z整数)+7, [eax+18h](target.z); fadd/fsub dbl_4432D0(0.3)
+            // vz 使用 ±7 死区，每次调整 0.3。
             if (target.PS.z > PS.z + 7)
                 PS.vz += 0.3f;
             else if (target.PS.z < PS.z - 7)
                 PS.vz -= 0.3f;
 
             // vy *= 0.7142857
-            // 反汇编 0x404FC8: fld [eax+48h](vy); fmul dbl_4432C8(0.7142857); fstp [eax+48h]
             PS.vy *= 0.7142857f;
 
-            // y 方向追踪（直接修改 y 坐标，不通过 vy）
-            // 反汇编 0x404FF0: fld [ecx+60h](self.y); fadd 10.0; fcomp [eax+60h](target.y)
-            // if self.y+10 < target.y → self.y += 1.2（self 比 target 高，向下移动）
-            // if self.y+10 > target.y → self.y -= 1.2（self 比 target 低，向上移动）
-            bool targetIsWeapon = target is LF2WeaponBase;
+            bool targetIsWeapon = IsWeaponEntity(target);
             if (!targetIsWeapon)
             {
                 if (PS.y + 10.0f < target.PS.y)
@@ -844,54 +777,39 @@ namespace NTSD.Animation.LF2Objects
             }
             else
             {
-                // target is weapon: if y > 0 → y += 1.0
-                // 反汇编 0x40503B: fld 0.0; fcomp [ecx+60h](self.y); test ah,1; jz; fadd dbl_4432B0(1.0)
-                // C0=1 if 0.0 < self.y (i.e., self.y > 0) → self.y += 1.0
                 if (PS.y > 0)
                     PS.y += 1.0f;
             }
 
-            // vx clamp ±13.0
-            // 反汇编 0x405061: fcomp dbl_4432A8(13.0); mov [ecx+44h],402A0000h(13.0); fcomp dbl_4432A0(-13.0)
+            // vx 钳制到 ±13.0。
             if (PS.vx > 13.0f) PS.vx = 13.0f;
             else if (PS.vx < -13.0f) PS.vx = -13.0f;
 
-            // vz clamp ±2.0
-            // 反汇编 0x4050A0: fld [ecx+50h](vz); fcomp dbl_443298(2.0); mov [ecx+54h],40000000h(2.0); fcomp dbl_443290(-2.0)
+            // vz 钳制到 ±2.0。
             if (PS.vz > 2.0f) PS.vz = 2.0f;
             else if (PS.vz < -2.0f) PS.vz = -2.0f;
 
-            // y clamp ±1.0（直接修改 y 坐标）
-            // 反汇编 0x4050E5: fcomp dbl_4432B0(1.0); fstp [ecx+64h](y hi); fcomp dbl_443328(-1.0)
             if (PS.y > 1.0f) PS.y = 1.0f;
             else if (PS.y < -1.0f) PS.y = -1.0f;
 
-            // facing update
+            // 根据 vx 更新朝向。
             SwitchDir(PS.vx >= 0 ? "right" : "left");
         }
 
         // ========== hit_Fa=2/4/7/12/14 per-frame 追踪逻辑 ==========
-        // 反汇编 Entity_FrameLogic loc_405132 (0x004030C0)
-        // vx±0.7, case7双次, vz±0.4(±5死区), vy*=0.7142857(2/4/12/14), y dead zone 40→±1.0
-        // vx clamp ±14, y clamp ≤1.4, case14 vz clamp ±1.5, case12/4/2 vz clamp ±2.2
         private void ApplyHitFa2_14Tracking(int hitFa)
         {
             LF2LivingObject target = FindOwnerTarget();
-            // 反汇编 0x40522D: cmp [ecx+2FCh](self.HP), 0; jle → 跳出
-            // 反汇编 0x405239: cmp [edi+esi+4](target active), 0; jnz → 跳出
             if (Health == null || Health.HP <= 0) return;
             bool targetActive = target != null && !target.Dead;
             if (!targetActive) return;
 
-            // vx: target.x > self.x → vx += 0.7; target.x < self.x → vx -= 0.7
-            // 反汇编 loc_405132: cmp [ecx+10h],[eax+10h]; jle/jge; fadd/fsub dbl_443288(0.7)
             if (target.PS.x > PS.x)
                 PS.vx += 0.7f;
             else if (target.PS.x < PS.x)
                 PS.vx -= 0.7f;
 
-            // case 7: double vx adjustment
-            // 反汇编 0x00405281: cmp [esp+680h+var_660], 7; jnz; second vx adjust
+            // 分支 7：vx 调整量翻倍。
             if (hitFa == 7)
             {
                 if (target.PS.x > PS.x)
@@ -900,25 +818,17 @@ namespace NTSD.Animation.LF2Objects
                     PS.vx -= 0.7f;
             }
 
-            // vz: ±5 dead zone, step 0.4
-            // 反汇编: add eax,5 / sub eax,5; fadd/fsub dbl_443280(0.4)
+            // vz 使用 ±5 死区，每次调整 0.4。
             if (target.PS.z > PS.z + 5)
                 PS.vz += 0.4f;
             else if (target.PS.z < PS.z - 5)
                 PS.vz -= 0.4f;
 
-            // case 2/4/12/14: vy *= 0.7142857
-            // 反汇编 loc_4053C5: cmp eax,2/4/0Ch; jz; fmul dbl_4432C8; [+48h]=vy
-            // case 7 不走此路径（jnz loc_40545B）
+            // 分支 2/4/12/14：vy *= 0.7142857。
             if (hitFa == 2 || hitFa == 4 || hitFa == 12 || hitFa == 14)
                 PS.vy *= 0.7142857f;
 
-            // y 方向追踪（直接修改 y 坐标）: if target is non-weapon
-            // 反汇编 loc_4053C5: cmp [ecx+6F8h],ebx; jnz; fld [ecx+60h](self.y); fadd dbl_443270(40.0); fcomp [eax+60h](target.y)
-            // → if self.y+40 < target.y → self.y += 1.0（self 比 target 高，向下）
-            // → if self.y+40 > target.y → self.y -= 1.0（self 比 target 低，向上）
-            // if target is weapon: if y > 0 → y += 1.0（反汇编 0x40543F: fld 0.0; fcomp [ecx+60h]; if 0.0 < y → y += 1.0）
-            bool targetIsWeapon = target is LF2WeaponBase;
+            bool targetIsWeapon = IsWeaponEntity(target);
             if (!targetIsWeapon)
             {
                 if (PS.y + 40.0f < target.PS.y)
@@ -932,39 +842,30 @@ namespace NTSD.Animation.LF2Objects
                     PS.y += 1.0f;
             }
 
-            // case 7: proximity check → frame=60, clear vel
-            // 反汇编 0x00405348: cmp eax,7; jnz loc_40545B; fld [ecx+48h](vy); fcomp dbl_443278(4.0)
-            // → if vy < 4.0 → vy += 0.4; y += vy; if y > -25 → frame=60, clear vel, target.HealTimer=100
             if (hitFa == 7)
             {
                 if (PS.vy < 4.0f)
                     PS.vy += 0.4f;
-                // 反汇编 0x405368: fld [eax+48h](vy); fadd [eax+60h](y); fstp [eax+60h] — y += vy
                 PS.y += PS.vy;
-                // 反汇编 0x40537F: cmp [eax+14h](y整数), 0FFFFFFE7h (-25); jle; frame=60, clear vel
                 if (PS.y > -25)
                 {
                     Trans.Frame(60, 0);
                     PS.vx = 0; PS.vy = 0; PS.vz = 0;
-                    // 反汇编 0x4053AE: mov [edx+0E4h], 64h — target.HealTimer = 100
                     var ownerTarget = FindOwnerTarget();
                     if (ownerTarget != null) ownerTarget.HealTimer = 100;
                     return;
                 }
             }
 
-            // vx clamp ±14.0
-            // 反汇编 0x00405465: fcomp dbl_443268(14.0); mov [ecx+44h],402C0000h; fcomp dbl_443260(-14.0); mov [ecx+44h],C02C0000h
+            // vx 钳制到 ±14.0。
             if (PS.vx > 14.0f) PS.vx = 14.0f;
             else if (PS.vx < -14.0f) PS.vx = -14.0f;
 
             // y 上限钳制（只有上限，无下限）
-            // 反汇编 0x4054A4: fcomp dbl_443258(1.4); test ah,41h; jnz; mov [ecx+60h]=1.4
             if (PS.y > 1.4f) PS.y = 1.4f;
 
-            // case 14: vz clamp ±1.5
-            // 反汇编 0x004054D5: fcomp dbl_443250(1.5); mov [ecx+54h],3FF80000h; fcomp dbl_443248(-1.5); mov [ecx+54h],BFF80000h
-            // [ecx+50h/54h] = vz (double)
+            // 分支 14：vz 钳制到 ±1.5。
+            // [ecx+50h/54h] 对应 double 类型的 vz。
             if (hitFa == 14)
             {
                 if (PS.vz > 1.5f) PS.vz = 1.5f;
@@ -972,8 +873,7 @@ namespace NTSD.Animation.LF2Objects
             }
             else
             {
-                // case 2/4/12: vz secondary clamp ±2.2
-                // 反汇编 0x0040550F: fcomp dbl_443240(2.2); mov [ecx+50h],9999999Ah/40019999h; fcomp dbl_443238(-2.2)
+                // 分支 2/4/12：vz 二次钳制到 ±2.2。
                 if (hitFa == 2 || hitFa == 4 || hitFa == 12)
                 {
                     if (PS.vz > 2.2f) PS.vz = 2.2f;
@@ -981,14 +881,9 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // facing update
-            // 反汇编 0x40554F: fcomp 0.0; test ah,41h; jnz; facing=0(left); else facing=1(right)
-            // vx > 0 → right; vx <= 0 → left
+            // 根据 vx 更新朝向。
             SwitchDir(PS.vx > 0 ? "right" : "left");
 
-            // hit_Fa=2: 速度驱动帧切换
-            // 反汇编 0x4058FD: cmp edx,2; jnz 0x406030
-            // |vx| > 14 → frame=5（不是5/6）; |vx| > 7 → frame=3（不是3/4）
             if (hitFa == 2)
             {
                 float absVx = System.Math.Abs(PS.vx);
@@ -1006,7 +901,6 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        // ========== 辅助：通过 OwnerEntityIndex 找追踪目标 ==========
         private LF2LivingObject FindOwnerTarget()
         {
             if (OwnerEntityIndex < 0) return null;
@@ -1046,7 +940,7 @@ namespace NTSD.Animation.LF2Objects
         public override void Reset()
         {
             _parent = null;
-            _objectId = 0;
+            ObjectId = 0;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
@@ -1056,6 +950,7 @@ namespace NTSD.Animation.LF2Objects
             NoBounce = false;
             ShotCount = 0;
             ResetSpark();
+            Runtime.Reset();
             ResetStableId();
         }
 
@@ -1076,20 +971,20 @@ namespace NTSD.Animation.LF2Objects
 
             bool isStateTrans = Frame.D?.state != targetFrame.state;
             if (isStateTrans)
-                StateUpdate("state_exit");
+                StateExitEvent();
 
             Frame.D = targetFrame;
 
             if (isStateTrans)
             {
                 HitStun = 0;
-                StateUpdate("state_entry");
+                StateEntryEvent();
                 _lastState = Frame.D.state;
             }
 
             Trans.SetWait(Frame.D.wait, 99);
             Trans.SetNext(Frame.D.next, 99);
-            StateUpdate("frame");
+            FrameEvent();
 
             if (!string.IsNullOrEmpty(Frame.D.sound))
                 PlaySound(Frame.D.sound);
@@ -1104,27 +999,21 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0) 共用路径
-        /// 技能无 HitStateCount/HitConfirmEa/Fall 字段，仅处理 ShakeTimer（+8h）双向趋零
-        /// 反汇编 0x004139A0-0x004139B3
+        /// EntityCollision 阶段：处理攻击豁免递减和技能对象碰撞副作用。
         /// </summary>
         public override void SimEntityCollision(int tickIndex)
         {
             var fD = Frame?.D;
 
-            // 反汇编 0x41391A: [esi+0ECh] AttackExempt > 0 → dec
             if (AttackExempt > 0) AttackExempt--;
 
-            // 反汇编 0x41392B: GrabbedBy < 0 → return（被持有时跳过）
             if (GrabbedBy < 0) return;
 
-            // 反汇编 0x413957: frame.state==2 → return（Jumping 跳过）
             if (fD != null && fD.state == 2) return;
 
             if (ShakeTimer > 0) ShakeTimer--;
             else if (ShakeTimer < 0) ShakeTimer++;
 
-            // 反汇编 0x413D0C: [frame+7F0h]=hit_Uj < 0 && MPEnabled → cmp PP, hit_Uj; jl→frame=hit_a; else PP+=hit_Uj
             if (fD != null && fD.hit_Uj < 0 && NTSDGlobal.MPEnabled && Health != null)
             {
                 if (Health.PP < fD.hit_Uj)
@@ -1133,7 +1022,6 @@ namespace NTSD.Animation.LF2Objects
                     Health.PP += fD.hit_Uj;
             }
 
-            // 反汇编 0x413DEB: frame==202 → ShakeTimer=20
             if (Frame?.N == 202)
                 ShakeTimer = 20;
         }
@@ -1149,17 +1037,17 @@ namespace NTSD.Animation.LF2Objects
             if (currentState != _lastState)
             {
                 _hitFaFired = false;
-                StateUpdate("state_entry", null);
+                StateEntryEvent();
                 _lastState = currentState;
             }
 
-            StateUpdate("TU", null);
+            TUEvent();
 
             ItrRest?.Tick();
 
             if (Health.HP <= 0)
             {
-                StateUpdate("die", null);
+                DieEvent();
             }
         }
 
@@ -1205,8 +1093,6 @@ namespace NTSD.Animation.LF2Objects
                     ItrArestUpdate(itr);
                     target.ItrVrestUpdate(StableId, itr);
 
-                    // 反汇编 Game_FrameUpdate 0x422667/0x42267F：
-                    // state 3003（瞬移）命中时 attacker 也设 vrest=10（双向冷却）
                     if (GetState() == LF2States.ProjectileTeleport)
                     {
                         int vrest = itr.vrest > 0 ? itr.vrest : NTSDGlobal.Default.Weapon.VRest;
@@ -1227,7 +1113,6 @@ namespace NTSD.Animation.LF2Objects
             if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
             if (!target.ItrVrestTest(StableId)) return false;
             var kindService = Match?.ItrKindService;
-            // 反汇编 0x0041A0C9：kind=8/14 可命中武器（绕过 LF2LivingObject 过滤）
             if (itr.kind != 8 && itr.kind != 14)
             {
                 if (target is not LF2LivingObject livingTarget || !kindService.ShouldHitTarget(itr.kind, this, livingTarget)) return false;
@@ -1286,7 +1171,6 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
         {
-            // FLF specialattack.js 中无 pre_interaction 逻辑，直接返回 false
             return false;
         }
 
@@ -1310,12 +1194,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public bool Hit(InteractionArea itr, LF2Entity attacker)
         {
-            // N-10 反汇编 Entity_AI_Update case 9 (entity_type==3 分支)：
-            // kind=9 命中 type=3 实体时：播放 broken sound，attacker.FrameDelay=-3；
-            // 目标 state==3005 → frame=40；否则 → frame=30、清速度、同步 owner
             if (itr.kind == 9)
             {
-                var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+                var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
                 if (!string.IsNullOrEmpty(charData?.weapon_broken_sound))
                     PlaySound(charData.weapon_broken_sound);
 
@@ -1324,19 +1205,18 @@ namespace NTSD.Animation.LF2Objects
                 int curState = GetState();
                 if (curState == LF2States.ObjectFlying) // 3005
                 {
-                    NoBounce = true; // 反汇编 0x42D92A: byte[+0xEB]=1
+                    NoBounce = true;
                     Trans.Frame(40, 0);
                 }
                 else
                 {
-                    // 反汇编 0x0042ED3C: victim.data = attacker.data（data 替换）
                     // 0x0042ED50: victim.owner_slot = attacker.owner_slot
                     var attackerSpecial = attacker as LF2SpecialAttack;
                     if (attackerSpecial?.FrameCache?.Wrapper != null)
                         FrameCache.Load(attackerSpecial.FrameCache.Wrapper);
                     Team = attacker.Team;
                     OwnerEntityIndex = attacker.OwnerEntityIndex >= 0 ? attacker.OwnerEntityIndex : attacker.StableId;
-                    NoBounce = true; // 反汇编 0x42DBCF: byte[+0xEB]=1
+                    NoBounce = true;
                     Trans.Frame(30, 0);
                     HitStun = 0;
                     PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
@@ -1357,7 +1237,6 @@ namespace NTSD.Animation.LF2Objects
                     break;
             }
 
-            // N-8 反汇编 0x0042DAAC-0x0042DB06：命中后 victim 根据 oid 自毁
             if (result)
                 ApplyPostHitSelfDestruct(attacker);
 
@@ -1365,21 +1244,17 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 反汇编 Entity_AI_Update 0x0042DAAC-0x0042DB06：N-8
-        /// 被命中后根据自身 oid 自毁：
-        ///   oid=201(death) && entity_type==0 → deactivate self
-        ///   oid=214(flash) && entity_type==0 → self HP=0
         /// entity_type==0 对应 attacker 是非武器（角色）目标
         /// </summary>
         private void ApplyPostHitSelfDestruct(LF2Entity attacker)
         {
-            // entity_type of attacker: weapon types are 1/2/3/4/6; characters are 0
+            // attacker 的 entity_type：武器类型为 1/2/3/4/6，角色为 0。
             bool attackerIsChar = attacker is LF2Character;
             if (!attackerIsChar) return;
 
-            if (_objectId == 201)
-                StateUpdate("die", null);
-            else if (_objectId == 214)
+            if (ObjectId == 201)
+                DieEvent();
+            else if (ObjectId == 214)
                 Health.HP = 0;
         }
 
@@ -1418,16 +1293,13 @@ namespace NTSD.Animation.LF2Objects
                 if (frameItr != null && frameItr.effect != 3 && frameItr.effect != 2 && itr.effect == 3)
                 {
                     PS.vx = 0;
-                    // N-9 反汇编 Entity_AI_Update 0x0042DBF8 / 0x0042DD94：
                     // 忍偶系变身逻辑
-                    int selfOid = _objectId;
+                    int selfOid = ObjectId;
                     bool isValidTarget = selfOid == 200 || selfOid == 203 || selfOid == 205
                         || selfOid == 206 || selfOid == 207 || selfOid == 215 || selfOid == 216;
 
-                    if (attackerSpecial._objectId == 209 && isValidTarget)
+                    if (attackerSpecial.ObjectId == 209 && isValidTarget)
                     {
-                        // Block2: attacker.oid==209 → target.data=karasu, frame=40
-                        // 反汇编 0x0042DC4D: target.team=attacker.team, target.[+354h]=attacker.[+354h]
                         // 0x0042DC73: target.data=attacker.data
                         // 0x0042DC80: target.[+70h/74h/78h]=40
                         var karasuWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(209);
@@ -1438,17 +1310,13 @@ namespace NTSD.Animation.LF2Objects
                             FrameCache.Load(karasuWrapper);
                             Trans.Frame(40, 0);
                             Frame.PN = 40;
-                            // [+78h] 备用帧=40（项目无独立字段，PN 已覆盖主要用途）
                         }
                         return true;
                     }
 
-                    if (attackerSpecial._objectId == 213 && isValidTarget)
+                    if (attackerSpecial.ObjectId == 213 && isValidTarget)
                     {
-                        // Block3: attacker.oid==213 → 在 data 列表里找 oid=209 的 data
-                        // 反汇编 0x0042DE03: 遍历 world data 列表找 oid=0xD1(209)
-                        // 找到后: target.data=karasu_data, target.[+70h/74h/78h]=target.[+70h]（保持当前帧）
-                        // target.team=attacker.TrackerParent.team, target.[+354h]=attacker.TrackerParent.[+354h]
+                        // target.team 和 target.[+354h] 继承 attacker.TrackerParent 的对应值。
                         var karasuWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(209);
                         if (karasuWrapper != null)
                         {
@@ -1457,7 +1325,6 @@ namespace NTSD.Animation.LF2Objects
                             Trans.Frame(savedFrame, 0);
                             Frame.PN = savedFrame;
                         }
-                        // team/owner 来自 attacker 的 TrackerParent
                         var parent = attackerSpecial.TrackerParent as LF2SpecialAttack;
                         if (parent != null)
                         {
@@ -1544,7 +1411,6 @@ namespace NTSD.Animation.LF2Objects
         // ========== 追踪系统 ==========
 
         /// <summary>
-        /// 从场景查询敌方角色，按距离+重复惩罚排序，选取最近目标。
         /// 对应 FLF specialattack.prototype.chase_target (specialattack.js:424-453)
         /// </summary>
         public LF2LivingObject ChaseTarget()
@@ -1607,7 +1473,7 @@ namespace NTSD.Animation.LF2Objects
             float ny = PS.sy + PS.vy;
             float spriteW = Sprite?.GetWidthPx() ?? 0f;
 
-            // FLF background.prototype.leaving: nx+width < -xt || nx > bgWidth+xt || ny < -600 || ny > 100
+            // 边界离场条件：nx+width < -xt、nx > bgWidth+xt、ny < -600 或 ny > 100。
             if (ny < -600f || ny > 100f) return true;
             if (nx + spriteW < -margin) return true;
 
@@ -1626,7 +1492,7 @@ namespace NTSD.Animation.LF2Objects
         public void CreateBrokenEffect()
         {
             // 对应 FLF state_exit: if ($.match.broken_list[$.id]) $.brokeneffect_create($.id)
-            BrokenEffectCreate(_objectId);
+            BrokenEffectCreate(ObjectId);
         }
 
         public void CreateObject(ObjectPoint op)
@@ -1668,7 +1534,6 @@ namespace NTSD.Animation.LF2Objects
         private void InitializeParent(OPointCreateTask task)
         {
             _parent = task.parent as LF2LivingObject;
-            _objectId = task.opoint.oid;
             ObjectId = task.opoint.oid;
             Team = task.team;
         }
@@ -1691,7 +1556,7 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializeFrame(OPointCreateTask task)
         {
-            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(_objectId);
+            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
             int action = task.opoint.action;
             if (action == 0 && FrameCache.GetFrameDataById(0) == null)
@@ -1707,7 +1572,6 @@ namespace NTSD.Animation.LF2Objects
         {
             if (task.useDirectVelocity)
             {
-                // sub_402C00 直接赋值路径：vx/vy/vz 不经过 Dirh() 乘法
                 PS.vx = task.directVx;
                 PS.vy = task.directVy;
                 PS.vz = task.directVz;

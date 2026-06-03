@@ -1,151 +1,67 @@
 using UnityEngine;
-using NTSD.Simulation;  // Step D8: 引用 SimulationConstants
+using NTSD.Simulation;
 
 namespace NTSD.Animation
 {
     /// <summary>
-    /// 物理状态对象 - 对应 FLF 的 $.ps
-    ///
-    /// 这个类是 FLF (Little Fighter 2) 物理系统的核心数据结构。
-    /// 对应 FLF mechanics.js:272-288 的 mech.prototype.create_metric()
-    ///
-    /// **关键概念**：
-    /// - 这是"意图速度"存储，不是立即应用的位置变化
-    /// - 速度在 ApplyDynamics() 中被应用到位置：ps.x += ps.vx
-    /// - 摩擦力和重力也在 ApplyDynamics() 中应用
+    /// NTSD 对象的正式版物理状态。
+    /// 坐标和速度使用 NTSD 像素单位；y == 0 表示地面，y &lt; 0 表示空中，z 表示地面深度轴。
     /// </summary>
     public class PhysicsState
     {
-        // ==================== 位置（FLF 世界坐标，像素）====================
-        /// <summary>
-        /// 水平位置（对应 Unity transform.position.x）
-        /// 单位：像素
-        /// </summary>
+        /// <summary>地面平面 X 坐标，单位为 NTSD 像素。</summary>
         public float x;
 
-        /// <summary>
-        /// 垂直位置（跳跃高度）
-        /// P2: 现在表示相对 groundY 的跳跃位移（像素）
-        /// - 0 = 地面（与 groundY 相同高度）
-        /// - 负值 = 在空中（向上为负，对应 FLF 的 y < 0）
-        /// 实际 worldY = groundY + ps.y / PIXELS_PER_UNIT
-        /// 单位：像素
-        /// </summary>
+        /// <summary>垂直偏移，单位为 NTSD 像素；负数表示在空中。</summary>
         public float y;
 
-        /// <summary>
-        /// 地面参考高度（Unity world space Y 坐标，单位：Unity 单位）
-        /// P2: 起跳前记录的 transform.position.y
-        /// 落地判定：ps.y <= 0 时落地（worldY 回到 groundY）
-        /// 注意：这是绝对世界坐标，与 ps.y（相对位移）不同
-        /// </summary>
+        /// <summary>Unity 世界空间中的地面参考高度。</summary>
         public float groundY = 0f;
 
-        /// <summary>
-        /// 深度位置（对应 Unity transform.position.y）
-        /// 单位：像素
-        /// </summary>
+        /// <summary>地面平面深度坐标，单位为 NTSD 像素。</summary>
         public float z;
 
-        // ==================== 速度（像素/帧，30fps）====================
-        /// <summary>
-        /// 水平速度
-        /// 单位：像素/帧（30fps）
-        /// </summary>
+        /// <summary>X 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
         public float vx;
 
-        /// <summary>
-        /// 垂直速度（跳跃）
-        /// - 负值 = 向上
-        /// - 正值 = 向下（重力加速）
-        /// 单位：像素/帧（30fps）
-        /// </summary>
+        /// <summary>垂直速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
         public float vy;
 
-        /// <summary>
-        /// 深度速度
-        /// 单位：像素/帧（30fps）
-        /// </summary>
+        /// <summary>Z 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
         public float vz;
 
-        // ==================== 屏幕坐标（只读，用于渲染）====================
-        /// <summary>
-        /// 屏幕 X 坐标（Sprite 左上角）
-        /// 对应 FLF mechanics.js:340
-        /// 计算公式：ps.dir === 'right' ? (ps.x - fD.centerx) : (ps.x + fD.centerx - sp.w)
-        /// </summary>
+        // ==================== 渲染空间缓存坐标 ====================
+        /// <summary>缓存的精灵原点 X，单位为 NTSD 像素。</summary>
         public float sx;
 
-        /// <summary>
-        /// 屏幕 Y 坐标（Sprite 左上角）
-        /// 对应 FLF mechanics.js:341
-        /// 计算公式：ps.y - fD.centery
-        /// </summary>
+        /// <summary>缓存的精灵原点 Y，单位为 NTSD 像素。</summary>
         public float sy;
 
-        /// <summary>
-        /// 屏幕 Z 坐标（用于排序）
-        /// 对应 FLF mechanics.js:342
-        /// 计算公式：ps.z
-        /// </summary>
+        /// <summary>缓存的精灵排序/深度值，单位为 NTSD 像素。</summary>
         public float sz;
 
-        // ==================== 其他状态 ====================
-        /// <summary>
-        /// 朝向
-        /// - "left" = 向左
-        /// - "right" = 向右
-        /// </summary>
+        /// <summary>朝向，当前使用 "right" 或 "left"。</summary>
         public string dir = "right";
 
-        /// <summary>
-        /// 摩擦系数（每帧重置为 1）
-        /// 对应 FLF livingobject.js:114
-        /// 在 TU_Update 开始时调用 ResetFriction()
-        /// </summary>
+        /// <summary>每 tick 的地面摩擦系数，TU 逻辑前会重置为 1。</summary>
         public float fric = 1f;
 
-        /// <summary>
-        /// Z 轴偏移（用于渲染层级调整）
-        /// 例如：抓取其他角色时，调整被抓者的渲染层级
-        /// </summary>
+        /// <summary>额外深度偏移，用于抓取和渲染层级调整。</summary>
         public float zz = 0f;
 
-        /// <summary>
-        /// Z 轴正方向边界锁定（vz > 0 时阻止 z 移动）
-        /// 对应反汇编 Entity_FrameAdvance [esi+3ECh]，每帧执行后清零
-        /// </summary>
+        /// <summary>当前物理 tick 内阻止正 Z 方向移动。</summary>
         public bool zBoundPositive;
 
-        /// <summary>
-        /// Z 轴负方向边界锁定（vz < 0 时阻止 z 移动）
-        /// 对应反汇编 [esi+3E8h]，每帧执行后清零
-        /// </summary>
+        /// <summary>当前物理 tick 内阻止负 Z 方向移动。</summary>
         public bool zBoundNegative;
 
-        /// <summary>
-        /// X 轴正方向边界锁定（vx > 0 时阻止 x 移动）
-        /// 对应反汇编 [esi+3F4h]，每帧执行后清零
-        /// </summary>
+        /// <summary>当前物理 tick 内阻止正 X 方向移动。</summary>
         public bool xBoundPositive;
 
-        /// <summary>
-        /// X 轴负方向边界锁定（vx < 0 时阻止 x 移动）
-        /// 对应反汇编 [esi+3F0h]，每帧执行后清零
-        /// </summary>
+        /// <summary>当前物理 tick 内阻止负 X 方向移动。</summary>
         public bool xBoundNegative;
 
-        // ==================== 常量统一来源（Step D8）====================
-        // ⚠️ 所有常量现在统一引用 SimulationConstants
-        // - SIM_TICK_RATE = 30Hz（FLF 帧率）
-        // - PIXELS_PER_UNIT = 100（Unity PPU 设置）
-        // - 不再需要 FRAMERATE_SCALE（30/30 = 1.0，FLF 数据直接使用）
-
-        // ==================== 公共方法 ====================
-
-        /// <summary>
-        /// 重置物理状态（用于对象池复用）
-        /// </summary>
+        /// <summary>将所有可变物理状态重置为对象池复用时的默认值。</summary>
         public void Reset()
         {
             x = 0;
@@ -168,8 +84,8 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 更新 Sprite 原点（屏幕坐标系）
-        /// 对齐 FLF mechanics.js: ps.sx/ps.sy/ps.sz 的计算。
+        /// 根据 DAT 帧中心点更新精灵空间原点缓存。
+        /// 朝左时会按精灵宽度镜像本地 X 原点。
         /// </summary>
         public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)
         {
@@ -182,10 +98,10 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// FLF scene.query 所需的 volume 格式（见 LF/scene.js）。
-        /// 注意：volume 的实际矩形为 (x+vx, y+vy, w, h)，深度区间为 [z-zwidth, z+zwidth]。
+        /// NTSD 像素空间中的碰撞体积。
+        /// x/y/z 是帧原点，vx/vy 是本地盒子偏移，w/h/zwidth 是盒子尺寸和深度。
         /// </summary>
-        public readonly struct FlfVolume
+        public readonly struct BattleVolume
         {
             public readonly float x;
             public readonly float y;
@@ -196,7 +112,7 @@ namespace NTSD.Animation
             public readonly float h;
             public readonly float zwidth;
 
-            public FlfVolume(float x, float y, float z, float vx, float vy, float w, float h, float zwidth)
+            public BattleVolume(float x, float y, float z, float vx, float vy, float w, float h, float zwidth)
             {
                 this.x = x;
                 this.y = y;
@@ -210,12 +126,10 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 生成当前帧的 bdy 体积列表（严格对齐 FLF mechanics.js: mech.body_body()）。
-        /// - bodies 缺失时返回 1 个 (w/h=0,zwidth=0) 的点体积（与 FLF 一致）
-        /// - 朝左时按 sp.w 镜像 x：vx = sp.w - O.x - O.w
-        /// - offset 用于预测体积（对齐 FLF mech.body(offset) 的行为：偏移加在 sprite origin 上）
+        /// 根据当前帧的 bdy 盒子生成身体碰撞体积。
+        /// 如果没有 bdy，则返回位于原点的零尺寸点体积。
         /// </summary>
-        public System.Collections.Generic.List<FlfVolume> GetBodyVolumes(
+        public System.Collections.Generic.List<BattleVolume> GetBodyVolumes(
             System.Collections.Generic.List<BodyBox> bodies,
             int centerx,
             int centery,
@@ -228,11 +142,11 @@ namespace NTSD.Animation
             float originY = sy + offsetY;
             float originZ = sz + offsetZ;
 
-            var result = new System.Collections.Generic.List<FlfVolume>();
+            var result = new System.Collections.Generic.List<BattleVolume>();
 
             if (bodies == null || bodies.Count == 0)
             {
-                result.Add(new FlfVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
+                result.Add(new BattleVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
                 return result;
             }
 
@@ -245,7 +159,7 @@ namespace NTSD.Animation
                     localX = spriteWidthPx - body.x - body.w;
                 }
 
-                result.Add(new FlfVolume(
+                result.Add(new BattleVolume(
                     originX, originY, originZ,
                     localX, body.y,
                     body.w, body.h,
@@ -257,11 +171,10 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 无分配版本：将 bdy volumes 写入到外部 List（避免每 tick new List）。
-        /// 仅用于查询（例如 FLF blocking_xz）。
+        /// 将身体碰撞体积写入调用方提供的列表，避免高频碰撞路径中每 tick 分配内存。
         /// </summary>
         public void FillBodyVolumes(
-            System.Collections.Generic.List<FlfVolume> dst,
+            System.Collections.Generic.List<BattleVolume> dst,
             System.Collections.Generic.List<BodyBox> bodies,
             int centerx,
             int centery,
@@ -280,7 +193,7 @@ namespace NTSD.Animation
 
             if (bodies == null || bodies.Count == 0)
             {
-                dst.Add(new FlfVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
+                dst.Add(new BattleVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
                 return;
             }
 
@@ -296,7 +209,7 @@ namespace NTSD.Animation
                     localX = spriteWidthPx - body.x - body.w;
                 }
 
-                dst.Add(new FlfVolume(
+                dst.Add(new BattleVolume(
                     originX, originY, originZ,
                     localX, body.y,
                     body.w, body.h,
@@ -306,12 +219,10 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 生成当前帧的 itr 体积列表（严格对齐 FLF mechanics.js: mech.volume + character.js pre/post_interaction 用法）。
-        /// - itrs 缺失时返回空列表（与 FLF 一致：没有 itr 就不会产生交互）
-        /// - 朝左时按 sp.w 镜像 x：vx = sp.w - O.x - O.w
-        /// - zwidth：FLF 在 character.js pre/post_interaction 中会把 vol.zwidth 设为 0（表示只看目标 body 的 zwidth 容差）
+        /// 根据当前帧 itr 盒子生成攻击/交互体积。
+        /// 没有 itr 数据时返回空列表。
         /// </summary>
-        public System.Collections.Generic.List<FlfVolume> GetItrVolumes(
+        public System.Collections.Generic.List<BattleVolume> GetItrVolumes(
             System.Collections.Generic.List<InteractionArea> itrs,
             int centerx,
             int centery,
@@ -325,7 +236,7 @@ namespace NTSD.Animation
             float originY = sy + offsetY;
             float originZ = sz + offsetZ;
 
-            var result = new System.Collections.Generic.List<FlfVolume>();
+            var result = new System.Collections.Generic.List<BattleVolume>();
             if (itrs == null || itrs.Count == 0)
                 return result;
 
@@ -338,7 +249,7 @@ namespace NTSD.Animation
                     localX = spriteWidthPx - itr.x - itr.w;
                 }
 
-                result.Add(new FlfVolume(
+                result.Add(new BattleVolume(
                     originX, originY, originZ,
                     localX, itr.y,
                     itr.w, itr.h,
@@ -349,10 +260,8 @@ namespace NTSD.Animation
             return result;
         }
 
-        /// <summary>
-        /// 生成单个 itr 的体积（对应 FLF mech.volume(itr)）
-        /// </summary>
-        public FlfVolume GetItrVolume(
+        /// <summary>根据单个 itr 盒子生成一个交互体积。</summary>
+        public BattleVolume GetItrVolume(
             InteractionArea itr,
             int centerx,
             int centery,
@@ -366,7 +275,7 @@ namespace NTSD.Animation
                 localX = spriteWidthPx - itr.x - itr.w;
             }
 
-            return new FlfVolume(
+            return new BattleVolume(
                 sx, sy, sz,
                 localX, itr.y,
                 itr.w, itr.h,
@@ -374,58 +283,30 @@ namespace NTSD.Animation
             );
         }
 
-        /// <summary>
-        /// 重置摩擦力（每个 TU 开始时调用）
-        /// 对应 FLF livingobject.js:114
-        /// </summary>
+        /// <summary>恢复默认摩擦系数，供下一次 TU 物理流程使用。</summary>
         public void ResetFriction()
         {
             fric = 1f;
         }
 
-        /// <summary>
-        /// 将 FLF 速度（像素/帧）转换为 Unity 速度（单位/秒）
-        ///
-        /// Step D8: 使用 SimulationConstants 统一常量
-        /// - 速度值 vx/vz 直接来自 FLF 数据（30fps 语义）
-        /// - 不再需要 FRAMERATE_SCALE（30Hz SimTick = FLF 帧率）
-        ///
-        /// 转换公式：
-        /// - ps.vx = 4 像素/TU（30fps）
-        /// - Unity: vx * (30Hz / 100 PPU) = 4 * 0.3 = 1.2 单位/秒
-        /// - 转换系数 = SIM_TICK_RATE / PIXELS_PER_UNIT = 30 / 100 = 0.3
-        /// </summary>
+        /// <summary>将 NTSD tick 速度转换为 Unity 地面平面上的每秒单位速度。</summary>
         public Vector2 ToUnityVelocity()
         {
             float conversion = SimulationConstants.SIM_TICK_RATE / SimulationConstants.PIXELS_PER_UNIT;  // = 0.3
             return new Vector2(vx * conversion, vz * conversion);
         }
 
-        /// <summary>
-        /// 从 Unity 速度（单位/秒）设置 FLF 速度（像素/帧）
-        ///
-        /// Step D8: 使用 SimulationConstants 统一常量
-        ///
-        /// 转换公式：
-        /// - Unity: velocity = 1.2 单位/秒
-        /// - FLF: vx = 1.2 × (100 PPU / 30Hz) = 4 像素/TU
-        /// - 转换系数 = PIXELS_PER_UNIT / SIM_TICK_RATE = 100 / 30 ≈ 3.333
-        /// </summary>
+        /// <summary>将 Unity 每秒单位速度转换回 NTSD tick 速度。</summary>
         public void FromUnityVelocity(Vector2 unityVel)
         {
-            float conversion = SimulationConstants.PIXELS_PER_UNIT / SimulationConstants.SIM_TICK_RATE;  // ≈ 3.333
+            float conversion = SimulationConstants.PIXELS_PER_UNIT / SimulationConstants.SIM_TICK_RATE;
             vx = unityVel.x * conversion;
             vz = unityVel.y * conversion;
         }
 
-        /// <summary>
-        /// 将 FLF 位置（像素）转换为 Unity 位置（单位）
-        /// Step D8: 使用 SimulationConstants.PIXELS_PER_UNIT
-        /// P2: 新坐标映射 - 从 2D 改为 3D（X/Z 地面平面，Y 跳跃高度）
-        /// </summary>
+        /// <summary>将 NTSD 地面平面位置转换为 Unity X/Y 坐标。</summary>
         public Vector3 ToUnityPosition()
         {
-            // P2: 新坐标映射（地面平面 = X/Z，跳跃高度 = Y）
             return new Vector3(
                 x / SimulationConstants.PIXELS_PER_UNIT,
                 z / SimulationConstants.PIXELS_PER_UNIT,
@@ -433,25 +314,16 @@ namespace NTSD.Animation
             );
         }
 
-        /// <summary>
-        /// 从 Unity 位置（单位）设置 FLF 位置（像素）
-        /// Step D8: 使用 SimulationConstants.PIXELS_PER_UNIT
-        /// P2: 新坐标映射 - Unity Z 对应 FLF z，Unity Y 用于跳跃高度
-        /// </summary>
+        /// <summary>根据 Unity 位置初始化 NTSD 地面平面位置。</summary>
         public void FromUnityPosition(Vector3 unityPos)
         {
-            x = unityPos.x * SimulationConstants.PIXELS_PER_UNIT;          // Unity X → FLF x
+            x = unityPos.x * SimulationConstants.PIXELS_PER_UNIT;
             z = unityPos.y * SimulationConstants.PIXELS_PER_UNIT;
             groundY = 0f;
-            y = 0;                                                          // P2: 初始化为地面（相对位移为 0）
-            // 注意：跳跃位移 y 由物理系统管理，这里只记录 groundY 参考
+            y = 0;
         }
 
-        // ==================== P3: 地面 Footprint 支持 ====================
-
-        /// <summary>
-        /// 地面平面坐标（Unity X/Y）：用于边界与排序。
-        /// </summary>
+        /// <summary>返回用于场景边界检测的 Unity 空间地面平面点。</summary>
         public Vector2 GetGroundPoint2D()
         {
             return new Vector2(
@@ -460,53 +332,37 @@ namespace NTSD.Animation
             );
         }
 
+        /// <summary>朝左返回 -1，朝右返回 1。</summary>
         public int GetDir() 
         {
             return dir == "left" ? -1 : 1;
         }
 
         /// <summary>
-        /// 获取角色在地面平面的 footprint Rect（用于边界检测）
-        /// P3: 从 BodyBox 计算 Unity world space 的 X/Y 平面矩形
-        ///
-        /// 参数说明：
-        /// - bodies: 当前帧的 BodyBox 列表（来自 LF2FrameData.bodies）
-        /// - centerx/centery: 当前帧的中心点偏移（来自 LF2FrameData）
-        ///
-        /// 返回值：Unity world space Rect (x=世界X, y=世界Y, width, height)
-        /// ⚠️ 项目规范：Rect.x = worldX, Rect.y = worldY（地面 Y 坐标，不是跳跃高度）
-        /// ⚠️ ps.z 映射到 world Y（地面平面），ps.y 用于跳跃高度
+        /// 根据第一个 body box 计算 Unity 空间中的脚底占用矩形。
+        /// 该矩形用于简单可走边界检测，不用于战斗重叠检测。
         /// </summary>
         public Rect GetFootprintRect(System.Collections.Generic.List<BodyBox> bodies, int centerx, int centery)
         {
             if (bodies == null || bodies.Count == 0)
             {
-                // FLF: no bdy -> w/h=0 点体积（不要自造默认矩形）
                 float worldX = x / SimulationConstants.PIXELS_PER_UNIT;
-                float worldY = z / SimulationConstants.PIXELS_PER_UNIT; // ⚠️ ps.z → world Y
+                float worldY = z / SimulationConstants.PIXELS_PER_UNIT;
                 return new Rect(worldX, worldY, 0f, 0f);
             }
 
-            // P3 Phase 1: 使用第一个 BodyBox 作为 footprint（简化实现）
-            // 未来可以扩展：kind=0 表示地面碰撞盒，kind=1/2 表示攻击判定
             var body = bodies[0];
 
-            // BodyBox 坐标系：相对于角色 centerx/centery 的偏移（像素）
-            // 需要转换为 Unity world space (X/Y 平面)
-            // ⚠️ 项目规范：ps.x → world X, ps.z → world Y
-            // FLF 镜像规则：朝左时 body.x 需要按帧宽度镜像；在 world left 公式里 sp.w 会抵消，等价写法：
-            // right: left = ps.x - centerx + body.x
-            // left : left = ps.x + centerx - body.x - body.w
+            // 朝右：left = ps.x - centerx + body.x
+            // 朝左：left = ps.x + centerx - body.x - body.w
             float bodyLeftPx = dir == "left"
                 ? (x + centerx - body.x - body.w)
                 : (x - centerx + body.x);
             float bodyWorldX = bodyLeftPx / SimulationConstants.PIXELS_PER_UNIT;
-            float bodyWorldY = (z + body.y - centery) / SimulationConstants.PIXELS_PER_UNIT; // ⚠️ ps.z → world Y
+            float bodyWorldY = (z + body.y - centery) / SimulationConstants.PIXELS_PER_UNIT;
             float bodyWidth = body.w / SimulationConstants.PIXELS_PER_UNIT;
             float bodyHeight = body.h / SimulationConstants.PIXELS_PER_UNIT;
 
-            // Unity Rect: (x, y) 是左下角坐标
-            // ⚠️ Rect.x = worldX, Rect.y = worldY（地面 Y 坐标，不是跳跃高度）
             return new Rect(bodyWorldX, bodyWorldY, bodyWidth, bodyHeight);
         }
     }

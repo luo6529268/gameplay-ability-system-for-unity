@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
@@ -83,35 +83,32 @@ namespace NTSD.Animation.LF2Objects
             _flightCounter = 0;
         }
 
-        protected override void InitializeStates()
-        {
-            base.InitializeStates();
-
-            if (IsHeavy)
-            {
-                _states[LF2States.HeavyWeaponInSky]    = State_HeavyInSky;
-                _states[LF2States.HeavyWeaponOnGround] = State_HeavyOnGround;
-            }
-        }
-
         #endregion
 
         #region 状态处理
+
+        protected override bool DispatchCurrentStateEvent(string eventType, object eventData = null)
+        {
+            if (IsHeavy)
+            {
+                switch (GetState())
+                {
+                    case LF2States.HeavyWeaponInSky:
+                        return State_HeavyInSky(eventType, eventData);
+                    case LF2States.HeavyWeaponOnGround:
+                        return State_HeavyOnGround(eventType, eventData);
+                }
+            }
+
+            return base.DispatchCurrentStateEvent(eventType, eventData);
+        }
 
         /// <summary>重武器在空中（state 2000）</summary>
         private bool State_HeavyInSky(string eventType, object eventData)
         {
             if (eventType == "frame")
-            {
-                if (Frame.N == 21)
-                {
-                    Trans.SetNext(20);
-                    var frame = Frame.D;
-                    if (frame == null || string.IsNullOrEmpty(frame.sound))
-                        PlaySound(WeaponDropSound);
-                }
-                return true;
-            }
+                return ProcessHeavyInSkyFrame();
+
             return false;
         }
 
@@ -119,12 +116,30 @@ namespace NTSD.Animation.LF2Objects
         private bool State_HeavyOnGround(string eventType, object eventData)
         {
             if (eventType == "frame")
-            {
-                if (Frame.N == 20)
-                    Team = 0;
-                return true;
-            }
+                return ProcessHeavyOnGroundFrame();
+
             return false;
+        }
+
+        private bool ProcessHeavyInSkyFrame()
+        {
+            if (Frame.N == 21)
+            {
+                Trans.SetNext(20);
+                var frame = Frame.D;
+                if (frame == null || string.IsNullOrEmpty(frame.sound))
+                    PlaySound(WeaponDropSound);
+            }
+
+            return true;
+        }
+
+        private bool ProcessHeavyOnGroundFrame()
+        {
+            if (Frame.N == 20)
+                Team = 0;
+
+            return true;
         }
 
         /// <summary>轻武器刚落地（state 1003）</summary>
@@ -169,7 +184,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         protected override void OnThrown()
         {
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             _flightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
         }
 
@@ -184,7 +199,7 @@ namespace NTSD.Animation.LF2Objects
             if (PS == null) return;
 
             int wt = WeaponType;
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
@@ -316,7 +331,7 @@ namespace NTSD.Animation.LF2Objects
         protected override void OnLanded()
         {
             int wt = WeaponType;
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int dropHurt = charData?.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
 
             // ── type=3：落地时跳过弹射（反汇编 0x4164CE: jz loc_416577）──
@@ -443,7 +458,7 @@ namespace NTSD.Animation.LF2Objects
             // ── type=0 落地（反汇编 0x416BE0-0x416D5A）──
             // entity_type=0 时：仅 type_sub=999(0x3E7) 有特殊处理，其余直接跳过（loc_416D5A）
             // 反汇编 0x416BE0: cmp [edi+6F4h], 3E7h; jnz loc_416D5A
-            var cd = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var cd = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
 
             // 反汇编 sub_416240 case 0 (0x416840-0x416877)：P2-4
             // 反汇编 0x4166FA~0x4167E2：type=0 落地，y>0.0001 AND vy>0.0001 才进入弹射逻辑
@@ -580,7 +595,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 // N-24 反汇编 0x0042F42E-0x0042F43C：kind=10/11 命中 entity_type==1/4/6 武器时
                 // oid=201(0xC9) 或 oid=202(0xCA) 跳过武器物理效果
-                if (_objectId == 201 || _objectId == 202)
+                if (ObjectId == 201 || ObjectId == 202)
                     return false;
 
                 // P1-10/11: 反汇编 0x0042D384/0x0042D450 — kind=10/11 命中武器时的物理效果

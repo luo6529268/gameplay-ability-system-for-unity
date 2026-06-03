@@ -5,28 +5,35 @@ using UnityEngine;
 namespace NTSD.Animation
 {
     /// <summary>
-    /// 帧转换器 - 对齐 FLF 的 lock/lockout 机制
+    /// Frame transition request wrapper.
+    /// Unity still keeps request arbitration here, but the public state is synchronized to
+    /// the C++ release entity fields: current frame, next frame, and wait counter.
     /// </summary>
     public class FrameTransistor
     {
-        // FLF 初始值：wait=1, next=999, lock=0, lockout=1
+        // C++ release frame advancement uses entity.wait_counter against frame.wait.
+        // The current Unity call graph stores the requested frame wait as a remaining wait value;
+        // waitCounter mirrors how many Trans() ticks have elapsed since the current frame request.
         private int wait = 1;
+        private int waitCounter = 0;
         private int next = 999;
-        private int lockLevel = 0;
-        private int lockout = 1;
+        private int requestPriority = 0;
+        private int priorityRelease = 1;
         private bool switchDirAfterTrans;
 
-        LF2Entity _lF2LivingObject;
+        LF2Entity _entity;
         /// <summary>
         /// 构造函数（接受所有 LF2Entity 子类）
         /// </summary>
-        public FrameTransistor(LF2Entity lF2LivingObject)
+        public FrameTransistor(LF2Entity entity)
         {
-            _lF2LivingObject = lF2LivingObject;
+            _entity = entity;
+            SyncRuntime();
         }
 
         public int Next => next;
         public int Wait => wait;
+        public int WaitCounter => waitCounter;
 
         /// <summary>
         /// 对应 FLF frame(F, au) = set_next + set_wait(0)
@@ -42,12 +49,14 @@ namespace NTSD.Animation
         /// </summary>
         public void SetWait(int value, int au = 0, int outCount = 1)
         {
-            if (au == 99) au = lockLevel;
-            if (au >= lockLevel)
+            if (au == 99) au = requestPriority;
+            if (au >= requestPriority)
             {
-                lockLevel = au;
-                lockout = outCount == 99 ? wait : outCount;
+                requestPriority = au;
+                priorityRelease = outCount == 99 ? wait : outCount;
                 wait = value < 0 ? 0 : value;
+                waitCounter = 0;
+                SyncRuntime();
             }
         }
 
@@ -56,13 +65,14 @@ namespace NTSD.Animation
         /// </summary>
         public void IncWait(int inc, int au = 0, int outCount = 1)
         {
-            if (au == 99) au = lockLevel;
-            if (au >= lockLevel)
+            if (au == 99) au = requestPriority;
+            if (au >= requestPriority)
             {
-                lockLevel = au;
-                lockout = outCount == 99 ? wait : outCount;
+                requestPriority = au;
+                priorityRelease = outCount == 99 ? wait : outCount;
                 wait += inc;
                 if (wait < 0) wait = 0;
+                SyncRuntime();
             }
         }
 
@@ -71,43 +81,45 @@ namespace NTSD.Animation
         /// </summary>
         public void SetNext(int value, int au = 0, int outCount = 1)
         {
-            if (au == 99) au = lockLevel;
-            if (au >= lockLevel)
+            if (au == 99) au = requestPriority;
+            if (au >= requestPriority)
             {
-                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Lock",
-                    $"SetNext({value}) OK: lock {lockLevel}→{au}");
-                lockLevel = au;
-                lockout = outCount == 99 ? wait : outCount;
+                NTSD.Tools.Log.LogState(_entity?.Name, "FrameRequest",
+                    $"SetNext({value}) OK: priority {requestPriority}->{au}");
+                requestPriority = au;
+                priorityRelease = outCount == 99 ? wait : outCount;
                 if (value < 0)
                 {
                     value = -value;
                     switchDirAfterTrans = true;
                 }
                 next = value;
+                SyncRuntime();
             }
             else
             {
-                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Lock",
-                    $"SetNext({value}) BLOCKED: au={au} < lock={lockLevel}",
+                NTSD.Tools.Log.LogState(_entity?.Name, "FrameRequest",
+                    $"SetNext({value}) BLOCKED: priority={au} < active={requestPriority}",
                     NTSD.Tools.Log.StateLogLevel.Warn);
             }
         }
 
 
         /// <summary>
-        /// 对应 FLF reset_lock
+        /// Releases a temporary high-priority frame request gate.
         /// </summary>
         public void ResetLock(int au = 0)
         {
-            if (au == 99) au = lockLevel;
-            if (au >= lockLevel)
+            if (au == 99) au = requestPriority;
+            if (au >= requestPriority)
             {
-                lockLevel = 0;
+                requestPriority = 0;
+                SyncRuntime();
             }
         }
 
         /// <summary>
-        /// FLF 的 next_frame_D 语义：把 999/1280 映射为 0
+        /// C++ release next-frame sentinel semantics: 999 and 1280 resolve to frame 0.
         /// </summary>
         public int NextFrameResolved()
         {
@@ -117,31 +129,35 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 对应 FLF trans.trans()
+        /// Advances the pending frame request for one simulation tick.
         /// </summary>
         public void Trans()
         {
-            NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Trans", $"wait={wait} next={next} lock={lockLevel}");
+            NTSD.Tools.Log.LogState(_entity?.Name, "Trans", $"wait={wait} waitCounter={waitCounter} next={next} priority={requestPriority}");
 
-            var oldLock = lockLevel;
-            lockout--;
-            if (lockout == 0) lockLevel = 0;
+            var oldPriority = requestPriority;
+            priorityRelease--;
+            if (priorityRelease == 0) requestPriority = 0;
 
             if (wait > 0)
             {
                 wait--;
+                waitCounter++;
+                SyncRuntime();
                 return;
             }
 
             if (next == 0)
             {
-                NTSD.Tools.Log.LogState(_lF2LivingObject?.Name, "Trans", "STUCK: next==0", NTSD.Tools.Log.StateLogLevel.Error);
+                NTSD.Tools.Log.LogState(_entity?.Name, "Trans", "STUCK: next==0", NTSD.Tools.Log.StateLogLevel.Error);
+                SyncRuntime();
                 return;
             }
 
             if (next == 1000)
             {
-                _lF2LivingObject?.OnTransitDestroy();
+                _entity?.OnTransitDestroy();
+                SyncRuntime();
                 return;
             }
 
@@ -150,14 +166,17 @@ namespace NTSD.Animation
                 next = 0;
             }
 
-            // 调用帧转换回调
-            _lF2LivingObject?.OnFrameTransit(next, switchDirAfterTrans, oldLock);
+            waitCounter = 0;
+            _entity?.OnFrameTransit(next, switchDirAfterTrans, oldPriority);
             switchDirAfterTrans = false;
+            SyncRuntime();
 
-            // FLF 特例：oldlock 为 10 或 11 时，wait>0 额外减 1
-            if ((oldLock == 10 || oldLock == 11) && wait > 0)
+            // Existing Unity high-priority hit/jump requests consume one extra wait tick.
+            if ((oldPriority == 10 || oldPriority == 11) && wait > 0)
             {
                 wait--;
+                waitCounter++;
+                SyncRuntime();
             }
         }
 
@@ -167,10 +186,19 @@ namespace NTSD.Animation
         public void Reset()
         {
             wait = 1;
+            waitCounter = 0;
             next = 999;
-            lockLevel = 0;
-            lockout = 1;
+            requestPriority = 0;
+            priorityRelease = 1;
             switchDirAfterTrans = false;
+            SyncRuntime();
+        }
+
+        private void SyncRuntime()
+        {
+            if (_entity == null) return;
+            _entity.Runtime.WaitCounter = waitCounter;
+            _entity.Runtime.NextFrame = next;
         }
     }
 }

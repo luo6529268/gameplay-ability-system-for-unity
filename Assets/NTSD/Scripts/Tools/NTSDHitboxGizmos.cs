@@ -116,7 +116,7 @@ namespace NTSD.Tools
                 if (wp.w <= 0 || wp.h <= 0) continue;
 
                 float localX = facingLeft ? (spriteW - wp.x - wp.w) : wp.x;
-                var vol = new PhysicsState.FlfVolume(
+                var vol = new PhysicsState.BattleVolume(
                     weapon.PS.sx, weapon.PS.sy, weapon.PS.sz,
                     localX, wp.y,
                     wp.w, wp.h,
@@ -128,7 +128,7 @@ namespace NTSD.Tools
         }
 
         /// <summary>
-        /// 将 FlfVolume（像素坐标）转换为 Unity world space 并绘制。
+        /// 将 BattleVolume（像素坐标）转换为 Unity world space 并绘制。
         ///
         /// 坐标系映射（本项目）：
         ///   FLF ps.x  → Unity world X = ps.x / ppu
@@ -136,7 +136,7 @@ namespace NTSD.Tools
         ///   FLF ps.y  → 视觉偏移 localY = -ps.y / ppu （跳跃高度，不影响 root 位置）
         ///   Unity Z   = 0（不用于角色位置）
         ///
-        /// FlfVolume 字段：
+        /// BattleVolume 字段：
         ///   vol.x = sx = ps.x ± centerx  （精灵原点屏幕 X）
         ///   vol.y = sy = ps.y + ps.z - centery  （精灵原点屏幕 Y，向下为正）
         ///   vol.z = sz = ps.z  （深度像素）
@@ -147,7 +147,7 @@ namespace NTSD.Tools
         ///   因为 ps.y - centery = vol.y - vol.z，代入得：
         ///   center_Y = (2*vol.z - vol.y - vol.vy - vol.h/2) / ppu
         /// </summary>
-        private static void DrawVolume(PhysicsState.FlfVolume vol, Color fill, Color wire)
+        private static void DrawVolume(PhysicsState.BattleVolume vol, Color fill, Color wire)
         {
             float ppu = SimulationConstants.PIXELS_PER_UNIT;
 

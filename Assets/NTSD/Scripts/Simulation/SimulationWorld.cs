@@ -5,100 +5,65 @@ using NTSD.Extensions;
 using NTSD.LevelEditor;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// 模拟世界 - 管理所�?ISimObject 的生命周期和执行顺序
-    ///
-    /// 职责�?
-    /// - 注册/反注�?ISimObject
-    /// - 按确定性顺序执行所有对象的 SimTick/SimLateTick
-    /// - 提供 SimContext 依赖注入
-    ///
-    /// 架构原则（Plan B）：
-    /// - 确定性排序：SimOrder（第一优先级）�?StableId（第二优先级�?
-    /// - Lazy sorting：只�?bucket 变脏时排序，避免每帧开销
-    /// - �?C# 实现：不依赖 Unity 生命周期（MonoBehaviour�?
+    /// NTSD 对象的确定性模拟调度器。
+    /// 对象按 SimOrder 分桶，并按运行时 StableId 排序，从而保证每帧执行顺序稳定。
     /// </summary>
     public class SimulationWorld
     {
-        // ==================== 内部数据结构 ====================
 
-        /// <summary>
-        /// Bucket - 存储相同 SimOrder 的对�?
-        /// </summary>
+        /// <summary>同一 SimOrder 的对象桶；只有桶内容变化后才延迟重新排序。</summary>
         private class Bucket
         {
-            /// <summary>
-            /// 对象列表（可能无序）
-            /// </summary>
             public List<ISimObject> items = new List<ISimObject>();
 
-            /// <summary>
-            /// 是否需要重新排序（当有对象添加/移除时设置为 true�?
-            /// </summary>
             public bool dirty = false;
 
-            /// <summary>
-            /// Lazy sort: 只在需要时�?StableId 排序
-            /// </summary>
             public void EnsureSorted()
             {
                 if (dirty)
                 {
-                    items = items.OrderBy(obj => obj.StableId).ToList();
+                    items = items.OrderBy(GetRuntimeStableId).ToList();
                     dirty = false;
                 }
             }
         }
 
-        /// <summary>
-        /// �?SimOrder 组织�?bucket 字典
-        /// SortedDictionary 保证�?key (SimOrder) 升序遍历
-        /// </summary>
+        /// <summary>按 SimOrder 建立的模拟桶；SortedDictionary 保证 pass 顺序。</summary>
         private SortedDictionary<int, Bucket> _buckets = new SortedDictionary<int, Bucket>();
 
-        /// <summary>
-        /// 模拟上下文（提供给所�?ISimObject�?
-        /// </summary>
+        /// <summary>注册对象时注入的模拟上下文。</summary>
         private SimContext _context;
 
-        /// <summary>
-        /// 下一个自动分配的 StableId（用于本�?AI 等没有网�?ID 的对象）
-        /// 单机模式：从 100 开始自动递增
-        /// 多人模式：服务器会显式设�?StableId
-        /// </summary>
+        /// <summary>给没有显式运行时 ID 的对象自动分配 StableId。</summary>
         private int _nextAutoStableId = 100;
 
-        /// <summary>
-        /// 延迟注销队列：Tick 期间调用 Unregister() 的对象先入队，Tick 结束后统一移除�?
-        /// 防止在遍�?_buckets 期间修改字典结构导致 InvalidOperationException�?
-        /// </summary>
+        /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
 
-        /// <summary>
-        /// 是否正在执行 Tick（SerialTickAll 等遍历期间为 true�?
-        /// </summary>
+        /// <summary>世界正在遍历模拟对象时为 true。</summary>
         private bool _ticking = false;
 
-        /// <summary>
-        /// 场景查询服务（当前为暴力遍历实现，后续可替换为四叉树实现�?
-        /// </summary>
+        private static int GetRuntimeStableId(ISimObject obj)
+        {
+            return obj is LF2Entity entity ? entity.Runtime.StableId : obj.StableId;
+        }
+
+        private static void RefreshRuntimeSnapshot(ISimObject obj)
+        {
+            if (obj is LF2Entity entity)
+                entity.RefreshRuntimeSnapshot();
+        }
+
         public ILF2SceneQuery SceneQuery { get; private set; }
 
-        /// <summary>
-        /// ITR kind 语义服务（业务规则层，可替换�?
-        /// </summary>
         public INTSDItrKindService ItrKindService { get; private set; }
 
-        // ==================== 初始�?====================
-
-        /// <summary>
-        /// 确定性随机数生成器（对应 FLF match.js:787-795 $.randomseed�?
-        /// </summary>
+        /// <summary>对齐正式版 ntsd_rand() 行为的确定性随机数生成器。</summary>
         public DeterministicRng Rng { get; private set; }
 
         public SimulationWorld()
@@ -107,24 +72,12 @@ namespace NTSD.Simulation
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this);
 
-            // FLF manager.js:229-230  randomseed.seed(824163532)
-            // FLF match.js:787-789    rand.seed(this.manager.random())
-            var managerRng = new DeterministicRng(824163532);
-            Rng = new DeterministicRng((int)(managerRng.Next() * int.MaxValue));
+            // C++ 正式版通过 ntsd_srand() 初始化全局战斗随机数。
+            // Unity 暂时使用固定种子，后续由菜单或战斗启动流程接管播种。
+            Rng = new DeterministicRng(0x4E545344u);
         }
 
-        // ==================== 公共 API ====================
-
-        /// <summary>
-        /// 注册对象到世�?
-        ///
-        /// 调用时机�?
-        /// - Character Hub �?OnEnable()
-        /// - 动态创建的 sim 对象初始化时
-        ///
-        /// 线程安全：仅在主线程调用（Unity 约束�?
-        /// </summary>
-        /// <param name="obj">要注册的对象</param>
+        /// <summary>将对象注册到对应 SimOrder 桶，并调用 OnAdded 生命周期钩子。</summary>
         public void Register(ISimObject obj)
         {
             if (obj == null)
@@ -133,7 +86,6 @@ namespace NTSD.Simulation
                 return;
             }
 
-            // 获取或创建对应的 bucket
             int simOrder = obj.SimOrder;
             if (!_buckets.TryGetValue(simOrder, out Bucket bucket))
             {
@@ -141,33 +93,26 @@ namespace NTSD.Simulation
                 _buckets[simOrder] = bucket;
             }
 
-            // 检查是否已注册（避免重复）
             if (bucket.items.Contains(obj))
             {
                 Debug.LogWarning($"[SimulationWorld] Object already registered: SimOrder={simOrder}, StableId={obj.StableId}");
                 return;
             }
 
-            // 添加�?bucket
             bucket.items.Add(obj);
-            bucket.dirty = true;  // 标记为需要重新排�?
+            if (obj is LF2Entity registeredEntity)
+            {
+                registeredEntity.SetRuntimeSlotIndex(obj.StableId);
+                registeredEntity.RefreshRuntimeSnapshot();
+            }
+            bucket.dirty = true;
 
-            // 调用对象�?OnAdded 生命周期方法
             obj.OnAdded(_context);
 
             Debug.Log($"[SimulationWorld] Registered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
         }
 
-        /// <summary>
-        /// 从世界移除对�?
-        ///
-        /// 调用时机�?
-        /// - Character Hub �?OnDisable()
-        /// - 对象销毁时
-        ///
-        /// 线程安全：仅在主线程调用（Unity 约束�?
-        /// </summary>
-        /// <param name="obj">要移除的对象</param>
+        /// <summary>注销对象；如果当前正在 tick 遍历，则延迟到本轮 pass 结束后移除。</summary>
         public void Unregister(ISimObject obj)
         {
             if (obj == null)
@@ -176,7 +121,6 @@ namespace NTSD.Simulation
                 return;
             }
 
-            // Tick 期间延迟注销，防止在遍历 _buckets 时修改字典结�?
             if (_ticking)
             {
                 if (!_pendingUnregister.Contains(obj))
@@ -187,6 +131,7 @@ namespace NTSD.Simulation
             UnregisterImmediate(obj);
         }
 
+        /// <summary>从桶中立即移除对象，并调用 OnRemoved 生命周期钩子。</summary>
         private void UnregisterImmediate(ISimObject obj)
         {
             int simOrder = obj.SimOrder;
@@ -220,36 +165,21 @@ namespace NTSD.Simulation
             _pendingUnregister.Clear();
         }
 
-        /// <summary>
-        /// 分配一个新�?StableId
-        /// 对应 FLF scene.add() 中的 this.uid++
-        ///
-        /// StableId 分配规则�?
-        /// - �?100 开始自动递增（避免与玩家角色 1-99 冲突�?
-        /// - 全局递增，与对象类型无关
-        /// - 用于确定性排序（同一 SimOrder 内按 StableId 升序执行�?
-        ///
-        /// 调用时机�?
-        /// - LF2 逻辑对象初始化时（LF2LivingObject.AllocateStableId()�?
-        /// </summary>
-        /// <returns>新分配的 StableId</returns>
+        /// <summary>为动态创建对象分配确定性的 StableId。</summary>
         public int AllocateStableId()
         {
             return _nextAutoStableId++;
         }
 
         /// <summary>
-        /// 串行执行所有对象的完整 Tick（Transit �?FlushTasks �?TU�?
-        /// 对应 NTSD 反汇�?GameMode_Process�?x41BDA0）的对象串行处理顺序�?
-        ///   对象 A 完整执行后才开始对�?B，而非分层执行�?
-        /// 效果：低 StableId 对象优先命中；opoint 在当前对�?TU 前已注册到世界�?
+        /// 执行逐对象串行 tick：Transit、opoint 任务刷新、TU。
+        /// opoint 创建出的对象可以进入同一帧后续 pass。
         /// </summary>
         public void SerialTickAll(int tickIndex)
         {
             _ticking = true;
             try
             {
-                // 快照 _buckets �?key 列表，防�?FlushTasks 触发 Register() �?SortedDictionary 添加�?key
                 var bucketKeys = new List<int>(_buckets.Keys);
 
                 foreach (var key in bucketKeys)
@@ -257,7 +187,6 @@ namespace NTSD.Simulation
                     if (!_buckets.TryGetValue(key, out Bucket bucket)) continue;
                     bucket.EnsureSorted();
 
-                    // 快照当前 items，防�?FlushTasks 触发新对象注册时修改集合
                     var snapshot = bucket.items.Count > 0
                         ? new List<ISimObject>(bucket.items)
                         : null;
@@ -267,10 +196,8 @@ namespace NTSD.Simulation
                     foreach (var obj in snapshot)
                     {
                         if (obj == null) continue;
-                        // 对齐反汇�?sub_416240 串行顺序（循�?）：
-                        //   Entity_FrameAdvance（帧推进/物理�?
-                        // 碰撞检测（PostInteraction）在所�?entity SerialTickAll 完成后统一执行（循�?�?
                         obj.SimTransit(tickIndex);
+                        RefreshRuntimeSnapshot(obj);
                         var factory = NTSD.Animation.LF2ObjectPointFactory.Instance;
                         if (factory != null)
                         {
@@ -281,6 +208,7 @@ namespace NTSD.Simulation
                             UnityEngine.Debug.LogWarning("[SimWorld] LF2ObjectPointFactory.Instance is null");
                         }
                         obj.SimTU(tickIndex);
+                        RefreshRuntimeSnapshot(obj);
                     }
                 }
             }
@@ -292,11 +220,7 @@ namespace NTSD.Simulation
         }
 
         /// <summary>
-        /// Knockback 累加器写入物理速度 pass（对应反汇编 Frame_PostProcess 0x0041BF00�?
-        ///
-        /// �?SerialTickAll 完成后立即调用，�?state 限制，对所有激�?entity 执行�?
-        ///   if (FrameDelay==0 && HitCount>0): vx = KnockbackVx*2/(HitCount+1); vy 同理
-        ///   清零 KnockbackVx/Vy/Vz �?HitCount（HitCount==0 时也清零 Knockback�?
+        /// 将累计击退写入 living object 速度，并清空本帧击退累计器。
         /// </summary>
         public void FramePostProcessAll()
         {
@@ -312,7 +236,6 @@ namespace NTSD.Simulation
                         float denom = living.HitCount + 1;
                         living.PS.vx = living.KnockbackVx * 2f / denom;
                         living.PS.vy = living.KnockbackVy * 2f / denom;
-                        // 反汇�?0x41BF5B-0x41BF6B：[+38h](KnockbackVz) 同样写入 [+50h](vz)
                         living.PS.vz = living.KnockbackVz * 2f / denom;
                     }
                     living.KnockbackVx = 0f;
@@ -323,19 +246,13 @@ namespace NTSD.Simulation
             }
         }
 
-        /// <summary>
-        /// vrest/arest 全局递减 pass（对�?NTSD 反汇�?GameMode_Process sub_41BDA0 碰撞判定前循环）
-        ///
-        /// �?SerialTickAll 完成后、PreInteractionTickAll 之前统一执行一次，
-        /// 对所有对象递减 vrest/arest，与反汇�?先递减 �?再判�?顺序对齐�?
-        /// </summary>
+        /// <summary>在交互 pass 前推进 vrest/arest 冷却计数。</summary>
         public void VrestTickAll(int tickIndex)
         {
             foreach (var kvp in _buckets)
             {
                 Bucket bucket = kvp.Value;
 
-                // 快照防止 Tick 触发新对象注册时修改集合（同 PreInteractionTickAll�?
                 var snapshot = bucket.items.Count > 0
                     ? new List<ISimObject>(bucket.items)
                     : null;
@@ -346,16 +263,12 @@ namespace NTSD.Simulation
                 {
                     if (obj is LF2LivingObject living)
                         living.ItrRest?.Tick();
+                    RefreshRuntimeSnapshot(obj);
                 }
             }
         }
 
-        /// <summary>
-        /// PostInteraction 全局 pass（对�?NTSD 反汇�?sub_42C8C0 循环2�?
-        ///
-        /// �?SerialTickAll（循�?，所�?entity 帧推进）完成后统一执行，处�?kind=0/4 碰撞判定�?
-        /// 对齐原版：所�?entity 先全部推进帧，再统一�?hit 检测�?
-        /// </summary>
+        /// <summary>执行用于命中和攻击碰撞逻辑的 post-interaction pass。</summary>
         public void PostInteractionTickAll(int tickIndex)
         {
             foreach (var kvp in _buckets)
@@ -372,23 +285,18 @@ namespace NTSD.Simulation
                 {
                     if (obj == null) continue;
                     obj.SimPostInteraction(tickIndex);
+                    RefreshRuntimeSnapshot(obj);
                 }
             }
         }
 
-        /// <summary>
-        /// PreInteraction 全局 pass（对�?NTSD 反汇�?GameMode_Process sub_41BDA0�?
-        ///
-        /// �?SerialTickAll 完成后执行，处理 kind=1/2/3/7（抓取、拾取）的碰撞判定�?
-        /// 先推进帧再判定，与原版帧推进后碰撞检测顺序对齐�?
-        /// </summary>
+        /// <summary>执行用于抓取、拾取等早期检测的 pre-interaction pass。</summary>
         public void PreInteractionTickAll(int tickIndex)
         {
             foreach (var kvp in _buckets)
             {
                 Bucket bucket = kvp.Value;
 
-                // 快照防止 PreInteraction 触发新对象注册时修改集合（同 SerialTickAll�?
                 var snapshot = bucket.items.Count > 0
                     ? new List<ISimObject>(bucket.items)
                     : null;
@@ -399,19 +307,12 @@ namespace NTSD.Simulation
                 {
                     if (obj == null) continue;
                     obj.SimPreInteraction(tickIndex);
+                    RefreshRuntimeSnapshot(obj);
                 }
             }
         }
 
-        /// <summary>
-        /// 执行一�?LateTick（后期处理）
-        ///
-        /// 调用时机：所有对象的 Tick 完成�?
-        /// 用途：视图更新、调试绘制、延迟清�?
-        ///
-        /// 执行顺序：与 Tick 相同（SimOrder �?StableId�?
-        /// </summary>
-        /// <param name="tickIndex">当前 Tick 索引</param>
+        /// <summary>按确定性的 SimOrder/StableId 顺序执行对象后期更新。</summary>
         public void LateTick(int tickIndex)
         {
             foreach (var kvp in _buckets)
@@ -419,7 +320,6 @@ namespace NTSD.Simulation
                 int simOrder = kvp.Key;
                 Bucket bucket = kvp.Value;
 
-                // 使用相同的排序（bucket 已在 Tick 中排序）
                 foreach (var obj in bucket.items)
                 {
                     if (obj == null)
@@ -429,13 +329,12 @@ namespace NTSD.Simulation
                     }
 
                     obj.SimLateTick(tickIndex);
+                    RefreshRuntimeSnapshot(obj);
                 }
             }
         }
 
-        /// <summary>
-        /// 收集当前世界中的所�?LF2Entity（按 SimOrder �?StableId 顺序�?
-        /// </summary>
+        /// <summary>按确定性桶顺序收集 living object。</summary>
         public void GetAllLivingObjects(List<LF2LivingObject> dst)
         {
             if (dst == null) return;
@@ -456,9 +355,7 @@ namespace NTSD.Simulation
             }
         }
 
-        /// <summary>
-        /// 收集当前世界中的所�?LF2Entity（角�?+ 武器 + 技能）
-        /// </summary>
+        /// <summary>按确定性桶顺序收集所有 LF2 entity。</summary>
         public void GetAllEntities(List<LF2Entity> dst)
         {
             if (dst == null) return;
@@ -479,9 +376,6 @@ namespace NTSD.Simulation
             }
         }
 
-        /// <summary>
-        /// 获取当前注册的对象总数（调试用�?
-        /// </summary>
         public int ObjectCount
         {
             get
@@ -495,9 +389,7 @@ namespace NTSD.Simulation
             }
         }
 
-        /// <summary>
-        /// 推进所�?LF2LivingObject �?spark timer�?0Hz sim tick 内调用）�?
-        /// </summary>
+        /// <summary>按模拟 tick 节奏推进对象的 spark timer。</summary>
         public void TickSparkTimers(int renderFrame)
         {
             foreach (var kvp in _buckets)
@@ -510,17 +402,9 @@ namespace NTSD.Simulation
             }
         }
 
-        /// <summary>
-        /// 获取模拟上下文（只读�?
-        /// </summary>
         public SimContext Context => _context;
 
-        /// <summary>
-        /// EntityCollision pass（对应反汇编 Entity_Collision sub_4138F0 0x00421FBB�?
-        ///
-        /// �?FramePostProcessAll 之后执行，处理武器地�?边界碰撞�?N-1~N-5 特殊分支�?
-        /// 反汇编中此循环紧�?Frame_PostProcess�?x004219CB）之后�?
-        /// </summary>
+        /// <summary>执行 entity-collision pass，用于处理身体/对象碰撞副作用。</summary>
         public void EntityCollisionTickAll(int tickIndex)
         {
             foreach (var kvp in _buckets)
@@ -533,17 +417,17 @@ namespace NTSD.Simulation
                 {
                     if (obj == null) continue;
                     obj.SimEntityCollision(tickIndex);
+                    RefreshRuntimeSnapshot(obj);
                 }
             }
         }
 
         /// <summary>
-        /// N-6: 随机场景掉落武器全局 pass（反汇编 0x004215FA 区域�?
-        /// �?SerialTickAll 之后调用一次：场上武器/特效实体�?&lt; 4 �?rand(200)==0 时随机生成武�?
+        /// 当场上武器数量低于正式版阈值时随机生成场景武器。
+        /// 生成位置从可走边界区域中采样。
         /// </summary>
         public void RandomWeaponDropTickAll(int tickIndex)
         {
-            // 反汇�?0x4215BA-0x4215CE：仅统计 entity_type==1/2/4/6 的实体（不含 type=0 特效�?type=3 粘附武器�?
             int weaponCount = 0;
             foreach (var kvp in _buckets)
             {
@@ -581,7 +465,6 @@ namespace NTSD.Simulation
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
 
-            // 反汇�?0x004216B5~0x0042178C：位置基于可走区域随机，不读角色坐标
             var boundaryManager = BoundaryWallManager.Instance;
             if (boundaryManager == null || !boundaryManager.TryGetRandomWalkablePoint(out var walkablePoint, insetWorld: 0.9f))
                 return;

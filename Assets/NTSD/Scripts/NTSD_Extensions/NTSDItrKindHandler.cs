@@ -1,5 +1,6 @@
-using NTSD.Animation;
+﻿using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NTSD.Extensions
@@ -10,6 +11,7 @@ namespace NTSD.Extensions
         bool IsPreInteractionKind(int kind);
         bool IsNTSDAttackKind(int kind);
         bool IsNTSDControlKind(int kind);
+        bool MatchesKindAlias(int kind, int targetKind);
         bool ShouldHitTarget(int kind, LF2Entity attacker, LF2LivingObject target);
         void ProcessRandomMove(LF2LivingObject actor, InteractionArea itr);
         int? ProcessInputControl(LF2LivingObject actor, InteractionArea itr);
@@ -20,6 +22,39 @@ namespace NTSD.Extensions
     /// </summary>
     public class NTSDItrKindService : INTSDItrKindService
     {
+        private static readonly Dictionary<int, int[]> s_kindAliases = new Dictionary<int, int[]>
+        {
+            { 2,  new[] { 2, 1, 4, 21, 5 } },
+            { 1,  new[] { 1, 21, 17 } },
+            { 4,  new[] { 4, 10, 19 } },
+            { 5,  new[] { 5, 19 } },
+            { 6,  new[] { 6, 18 } },
+            { 7,  new[] { 7, 4, 10 } },
+            { 9,  new[] { 9, 2 } },
+            { 10, new[] { 10, 1 } },
+            { 32, new[] { 32, 19 } },
+            { 33, new[] { 33, 19, 16 } },
+            { 34, new[] { 34, 10, 5, 14 } },
+            { 36, new[] { 36, 16 } },
+            { 39, new[] { 39, 10 } },
+            { 50, new[] { 50, 4, 18, 7, 21, 5, 14, 17 } },
+            { 51, new[] { 51, 2, 18, 7 } },
+            { 52, new[] { 52, 1, 2, 21 } },
+        };
+
+        public static bool MatchesKindAliasValue(int kind, int targetKind)
+        {
+            if (s_kindAliases.TryGetValue(targetKind, out int[] aliases))
+            {
+                for (int i = 0; i < aliases.Length; i++)
+                {
+                    if (aliases[i] == kind) return true;
+                }
+                return false;
+            }
+
+            return kind == targetKind;
+        }
         #region Kind 分类判断
 
         public bool IsAttackKind(int kind)
@@ -34,7 +69,12 @@ namespace NTSD.Extensions
         {
             return kind == 1 || kind == 2 || kind == 3 || kind == 7;
         }
-        
+
+        public bool MatchesKindAlias(int kind, int targetKind)
+        {
+            return MatchesKindAliasValue(kind, targetKind);
+        }
+
         /// <summary>
         /// 判断是否为 NTSD 扩展的攻击类 Kind
         /// </summary>
@@ -249,3 +289,5 @@ namespace NTSD.Extensions
         #endregion
     }
 }
+
+

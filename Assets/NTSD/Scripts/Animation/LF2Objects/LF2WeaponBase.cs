@@ -10,78 +10,10 @@ using NTSD.App;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 武器抽象基类
-    /// 严格对齐 FLF weapon.js typeweapon
-    /// 
-    /// 参考：I:\C++Test\NTSD\F.LF-master\LF\weapon.js
+    /// Release-aligned weapon base class.
     /// </summary>
     public abstract class LF2WeaponBase : LF2Entity
     {
-        public static bool PickupTraceEnabled;
-        public static int PickupTracePickerId = -1;
-        private static readonly HashSet<int> s_pickupTraceWeaponIds = new HashSet<int>();
-        public static int HeldTracePickerId = -1;
-        public static int HeldTraceWeaponId = -1;
-        private static int s_heldTraceBudget;
-
-        public static void BeginPickupTrace(int pickerId)
-        {
-            PickupTraceEnabled = true;
-            PickupTracePickerId = pickerId;
-            s_pickupTraceWeaponIds.Clear();
-        }
-
-        public static void AddPickupTraceWeapon(int weaponId)
-        {
-            if (!PickupTraceEnabled) return;
-            s_pickupTraceWeaponIds.Add(weaponId);
-        }
-
-        public static bool ShouldTracePickupWeapon(int weaponId)
-        {
-            return PickupTraceEnabled && PickupTracePickerId >= 0 && s_pickupTraceWeaponIds.Contains(weaponId);
-        }
-
-        public static void ConsumePickupTraceWeapon(int weaponId)
-        {
-            if (!s_pickupTraceWeaponIds.Remove(weaponId)) return;
-
-            if (s_pickupTraceWeaponIds.Count == 0)
-            {
-                ClearPickupTrace();
-            }
-        }
-
-        public static void ClearPickupTrace()
-        {
-            PickupTraceEnabled = false;
-            PickupTracePickerId = -1;
-            s_pickupTraceWeaponIds.Clear();
-        }
-
-        public static void BeginHeldTrace(int pickerId, int weaponId, int budget = 6)
-        {
-            HeldTracePickerId = pickerId;
-            HeldTraceWeaponId = weaponId;
-            s_heldTraceBudget = budget;
-        }
-
-        public static bool ShouldTraceHeldWeapon(int weaponId)
-        {
-            return HeldTraceWeaponId == weaponId && s_heldTraceBudget > 0;
-        }
-
-        public static void ConsumeHeldTrace()
-        {
-            if (s_heldTraceBudget <= 0) return;
-
-            s_heldTraceBudget--;
-            if (s_heldTraceBudget > 0) return;
-
-            HeldTracePickerId = -1;
-            HeldTraceWeaponId = -1;
-        }
-
         // ========== 武器专属字段（不在 LF2Entity 的） ==========
 
         /// <summary>交互冷却（武器也有 itr 碰撞冷却）</summary>
@@ -96,12 +28,10 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>HP 恢复计时器（回旋镖捕获等）</summary>
         public override int HealTimer { get; set; } = 0;
         // ========== 配置字段 ==========
-        protected int _objectId;
         protected int _lastState = -1;
 
         // ========== 持有者信息 ==========
         protected LF2LivingObject _holdObj;
-        protected LF2LivingObject _holdPre;
 
         // 反汇编 [entity+3F8h]：投掷者 StableId，投掷后保留（不随投掷清零），用于回旋镖捕获检测
         public int PickerStableId { get; set; } = -1;
@@ -124,17 +54,17 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== 公开属性 ==========
         public LF2LivingObject HoldObj => _holdObj;
-        public LF2LivingObject HoldPre => _holdPre;
 
         public abstract bool IsLight { get; }
         public abstract bool IsHeavy { get; }
         // 反汇编 [weapon+368h+6F8h]：0=普通轻武器, 1=重武器, 2=轻特殊, 4=特殊重武器, 6=饮料类
         public abstract int WeaponType { get; }
+        public override int ReleaseEntityType => WeaponType;
         // 反汇编 this+800：笛子命中累积器，子类实现存储
         public virtual int FluteWeight { get => 0; set { } }
         // ========== 初始化方法 ==========
 
-        #region 生命周期（Init → InitializeStates → Reset → Destroy → 初始化子步骤）
+        #region 生命周期（Init → Reset → Destroy → 初始化子步骤）
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
@@ -147,9 +77,6 @@ namespace NTSD.Animation.LF2Objects
             Effect = new LF2EffectState();
             ItrRest = new LF2ItrRestTracker();
             Sprite = new LF2Sprite();
-
-            // 初始化状态处理器
-            InitializeStates();
 
             if (!(taskBase is OPointCreateTask task))
             {
@@ -176,28 +103,19 @@ namespace NTSD.Animation.LF2Objects
             SimulationTickDriver.Instance?.World?.Register(this);
         }
 
-        protected override void InitializeStates()
-        {
-            _states[LF2States.WeaponInSky] = State_WeaponInSky;
-            _states[LF2States.WeaponOnHand] = State_WeaponOnHand;
-            _states[LF2States.WeaponThrowing] = State_WeaponThrowing;
-            _states[LF2States.WeaponJustOnGround] = State_WeaponJustOnGround;
-            _states[LF2States.WeaponOnGround] = State_WeaponOnGround;
-        }
-
         public override void Reset()
         {
             FrameCache.Clear();
-            _objectId = 0;
+            ObjectId = 0;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
             _holdObj = null;
-            _holdPre = null;
             _vrest.Clear();
             ShotCount = 0;
             PickerStableId = -1;
             ResetSpark();
+            Runtime.Reset();
             ResetStableId();
         }
 
@@ -210,7 +128,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected void InitializeParent(OPointCreateTask task)
         {
-            _objectId = task.opoint.oid;
+            ObjectId = task.opoint.oid;
             Team = task.team;
         }
 
@@ -236,7 +154,7 @@ namespace NTSD.Animation.LF2Objects
         {
             int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
             // 加载帧数据
-            var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(_objectId);
+            var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
             Frame.D = FrameCache.GetFrameDataById(action);
             Trans.Frame(action, 0);
@@ -245,7 +163,7 @@ namespace NTSD.Animation.LF2Objects
         protected void InitializeHealth()
         {
             // 从 DAT 数据读取 weapon_hp / weapon_drop_hurt（反汇编 ParseCharData 0x0040D8F0）
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             if (charData != null && charData.weapon_hp > 0)
             {
                 Health.HP = charData.weapon_hp;
@@ -278,20 +196,20 @@ namespace NTSD.Animation.LF2Objects
 
             bool isStateTrans = Frame.D?.state != targetFrame.state;
             if (isStateTrans)
-                StateUpdate("state_exit");
+                StateExitEvent();
 
             Frame.D = targetFrame;
 
             if (isStateTrans)
             {
                 HitStun = 0;
-                StateUpdate("state_entry");
+                StateEntryEvent();
                 _lastState = Frame.D.state;
             }
 
             Trans.SetWait(Frame.D.wait, 99);
             Trans.SetNext(Frame.D.next, 99);
-            StateUpdate("frame");
+            FrameEvent();
 
             if (!string.IsNullOrEmpty(Frame.D.sound))
                 PlaySound(Frame.D.sound);
@@ -308,157 +226,72 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimPreInteraction(int tickIndex)
         {
-            bool traceThisPickup = ShouldTracePickupWeapon(StableId);
+            if (HoldObj != null) return;
+            if (!ItrArestTest()) return;
 
-            try
+            var fD = Frame?.D;
+            if (fD == null) return;
+            if (fD.wpoints == null || fD.wpoints.Count == 0) return;
+
+            var sceneQuery = Match?.SceneQuery;
+            if (sceneQuery == null) return;
+
+            float spriteW = GetSpriteWidthPxForCollision();
+            if (spriteW <= 0f) return;
+
+            bool facingLeft = PS.dir == "left";
+
+            foreach (var wp in fD.wpoints)
             {
-                if (HoldObj != null)
-                {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipHeld] picker={PickupTracePickerId} weapon={StableId} holder={HoldObj.StableId}");
-                    return;
-                }
-                if (!ItrArestTest())
-                {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipArest] picker={PickupTracePickerId} weapon={StableId} arest={ItrRest?.Arest ?? -1}");
-                    return;
-                }
+                if (wp == null) continue;
+                if (wp.kind != 1 && wp.kind != 2 && wp.kind != 7) continue;
+                if (wp.w <= 0 || wp.h <= 0) continue;
 
-                var fD = Frame?.D;
-                if (fD == null)
-                {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipNoFrame] picker={PickupTracePickerId} weapon={StableId}");
-                    return;
-                }
-                if (traceThisPickup)
-                {
-                    Debug.LogError($"[PickupTrace][WeaponEnter] picker={PickupTracePickerId} weapon={StableId} frame={Frame?.N ?? -1} state={GetState()} pic={fD.pic} bodyCount={fD.bodies?.Count ?? 0} itrCount={fD.itrs?.Count ?? 0} wpointCount={fD.wpoints?.Count ?? 0}");
-                }
-                if (fD.wpoints == null || fD.wpoints.Count == 0)
-                {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipNoWPoint] picker={PickupTracePickerId} weapon={StableId} frame={Frame?.N ?? -1} state={GetState()}");
-                    return;
-                }
+                float localX = facingLeft ? (spriteW - wp.x - wp.w) : wp.x;
+                var vol = new PhysicsState.BattleVolume(
+                    PS.sx, PS.sy, PS.sz,
+                    localX, wp.y,
+                    wp.w, wp.h,
+                    NTSDGlobal.Default.Itr.ZWidth
+                );
 
-                var sceneQuery = Match?.SceneQuery;
-                if (sceneQuery == null)
+                var candidates = sceneQuery.QueryBodies(vol, this);
+                if (candidates == null || candidates.Count == 0) continue;
+
+                var tmpItr = new InteractionArea
                 {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipNoSceneQuery] picker={PickupTracePickerId} weapon={StableId}");
-                    return;
-                }
+                    kind = wp.kind,
+                    x = wp.x,
+                    y = wp.y,
+                    w = wp.w,
+                    h = wp.h,
+                    injury = wp.injury,
+                    fall = wp.fall,
+                    vaction = wp.vaction,
+                    arest = wp.arest,
+                    vrest = wp.vrest,
+                    effect = wp.effect,
+                    kill = wp.kill,
+                    bdefend = wp.bdefend,
+                };
 
-                float spriteW = GetSpriteWidthPxForCollision();
-                if (traceThisPickup)
+                for (int c = 0; c < candidates.Count; c++)
                 {
-                    Debug.LogError($"[PickupTrace][WeaponSpriteWidth] picker={PickupTracePickerId} weapon={StableId} width={spriteW}");
-                }
-                if (spriteW <= 0f)
-                {
-                    if (traceThisPickup)
-                        Debug.LogError($"[PickupTrace][WeaponSkipWidth] picker={PickupTracePickerId} weapon={StableId} width={spriteW}");
-                    return;
-                }
+                    var target = candidates[c];
+                    if (target == null || target == this) continue;
+                    if (target.Health != null && target.Health.HP <= 0) continue;
+                    if (!target.ItrVrestTest(StableId)) continue;
 
-                bool facingLeft = PS.dir == "left";
+                    bool picked = false;
+                    if (wp.kind == 1 || wp.kind == 7)
+                        picked = HandlePreInteractionKind1(tmpItr, target);
+                    else if (wp.kind == 2)
+                        picked = HandlePreInteractionKind2(tmpItr, target);
 
-                foreach (var wp in fD.wpoints)
-                {
-                    if (wp == null) continue;
-                    if (wp.kind != 1 && wp.kind != 2 && wp.kind != 7) continue;
-                    if (wp.w <= 0 || wp.h <= 0) continue;
-
-                    float localX = facingLeft ? (spriteW - wp.x - wp.w) : wp.x;
-                    var vol = new PhysicsState.FlfVolume(
-                        PS.sx, PS.sy, PS.sz,
-                        localX, wp.y,
-                        wp.w, wp.h,
-                        NTSDGlobal.Default.Itr.ZWidth
-                    );
-
-                    var candidates = sceneQuery.QueryBodies(vol, this);
-                    if (traceThisPickup)
+                    if (picked)
                     {
-                        Debug.LogError($"[PickupTrace][WeaponQuery] picker={PickupTracePickerId} weapon={StableId} wpKind={wp.kind} frame={Frame?.N ?? -1} state={GetState()} vol=({vol.x},{vol.y},{vol.z}; vx={vol.vx},vy={vol.vy},w={vol.w},h={vol.h},zw={vol.zwidth}) candidates={(candidates == null ? -1 : candidates.Count)}");
+                        return;
                     }
-                    if (candidates == null || candidates.Count == 0) continue;
-
-                    // 构造临时 itr 用于传入拾取处理
-                    var tmpItr = new InteractionArea
-                    {
-                        kind = wp.kind,
-                        x = wp.x,
-                        y = wp.y,
-                        w = wp.w,
-                        h = wp.h,
-                        injury = wp.injury,
-                        fall = wp.fall,
-                        vaction = wp.vaction,
-                        arest = wp.arest,
-                        vrest = wp.vrest,
-                        effect = wp.effect,
-                        kill = wp.kill,
-                        bdefend = wp.bdefend,
-                    };
-
-                    for (int c = 0; c < candidates.Count; c++)
-                    {
-                        var target = candidates[c];
-                        if (traceThisPickup)
-                        {
-                            Debug.LogError($"[PickupTrace][WeaponCandidate] picker={PickupTracePickerId} weapon={StableId} target={target?.StableId ?? -1} targetType={target?.Type} targetFrame={target?.Frame?.N ?? -1} targetState={target?.GetState() ?? -1}");
-                        }
-                        if (target == null || target == this)
-                        {
-                            if (traceThisPickup)
-                                Debug.LogError($"[PickupTrace][RejectSelfOrNull] picker={PickupTracePickerId} weapon={StableId}");
-                            continue;
-                        }
-                        if (target.Health != null && target.Health.HP <= 0)
-                        {
-                            if (traceThisPickup)
-                                Debug.LogError($"[PickupTrace][RejectDeadCandidate] picker={PickupTracePickerId} weapon={StableId} target={target.StableId} hp={target.Health.HP}");
-                            continue;
-                        }
-                        if (!target.ItrVrestTest(StableId))
-                        {
-                            if (traceThisPickup)
-                                Debug.LogError($"[PickupTrace][RejectCandidateVrest] picker={PickupTracePickerId} weapon={StableId} target={target.StableId}");
-                            continue;
-                        }
-                        if (traceThisPickup && target.StableId != PickupTracePickerId)
-                        {
-                            Debug.LogError($"[PickupTrace][RejectDifferentPicker] picker={PickupTracePickerId} weapon={StableId} target={target.StableId}");
-                            continue;
-                        }
-
-                        bool picked = false;
-                        if (wp.kind == 1 || wp.kind == 7)
-                            picked = HandlePreInteractionKind1(tmpItr, target);
-                        else if (wp.kind == 2)
-                            picked = HandlePreInteractionKind2(tmpItr, target);
-
-                        if (traceThisPickup)
-                        {
-                            Debug.LogError($"[PickupTrace][PickupHandlerResult] picker={PickupTracePickerId} weapon={StableId} target={target.StableId} wpKind={wp.kind} picked={picked}");
-                        }
-
-                        if (picked)
-                        {
-                            ClearPickupTrace();
-                            return;
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                if (traceThisPickup)
-                {
-                    ConsumePickupTraceWeapon(StableId);
                 }
             }
         }
@@ -562,12 +395,10 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // N-5（0x413B84）: frame.next==999 → y<0 && entity_type==0 → frame=212; else → frame=0
-            bool isN5 = false;
             if (fD.next == 999)
             {
                 if (PS.y < 0 && WeaponType == 0)
                 {
-                    isN5 = true;
                     SetFrameDirect(212);
                 }
                 else
@@ -581,7 +412,7 @@ namespace NTSD.Animation.LF2Objects
             // 0x413BAC: frame < 0 || frame >= 400 → return
             if (Frame.N < 0 || Frame.N >= 400) return;
 
-            // frame==212 && !isN5 → TODO: 同步背景速度（字段不存在，占位）
+            // frame==212 after normal frame advance → TODO: 同步背景速度（字段不存在，占位）
             // 0x413C49: frame==0xD4 && ebp==0 → sync bg velocity [ecx+50h]/[ecx+54h]
 
             // 0x413DEB: frame==0xCAh=202 → ShakeTimer=20
@@ -612,11 +443,11 @@ namespace NTSD.Animation.LF2Objects
 
             if (currentState != _lastState)
             {
-                StateUpdate("state_entry", null);
+                StateEntryEvent();
                 _lastState = currentState;
             }
 
-            StateUpdate("TU", null);
+            TUEvent();
 
             UpdateVRest();
             ItrRest?.Tick();
@@ -625,13 +456,13 @@ namespace NTSD.Animation.LF2Objects
             // type=1/2/4/6 武器，_flightCounter < 0 → 武器消失
             if (_holdObj == null && IsWeaponDestroyable() && GetFlightCounter() < 0)
             {
-                StateUpdate("die", null);
+                DieEvent();
                 return;
             }
 
             if (Health.HP <= 0)
             {
-                StateUpdate("die", null);
+                DieEvent();
             }
         }
 
@@ -643,21 +474,35 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region 帧事件回调（OnGenericStateEvent → OnInFlightFrameUpdate → OnLanded → WeaponFlightPhysics → OnThrown）
+        #region 帧事件回调（typed event dispatch → OnInFlightFrameUpdate → OnLanded → WeaponFlightPhysics → OnThrown）
 
-        protected override bool OnGenericStateEvent(string eventType, object eventData)
+        protected override bool StateEntryEvent() => DispatchCurrentStateEvent("state_entry");
+
+        protected override bool FrameEvent() => DispatchCurrentStateEvent("frame");
+
+        protected override bool TUEvent()
         {
-            switch (eventType)
+            Generic_TU();
+            return DispatchCurrentStateEvent("TU");
+        }
+
+        protected override bool DieEvent()
+        {
+            Generic_Die();
+            return true;
+        }
+
+        protected virtual bool DispatchCurrentStateEvent(string eventType, object eventData = null)
+        {
+            return GetState() switch
             {
-                case "TU":
-                    Generic_TU();
-                    return false;
-                case "die":
-                    Generic_Die();
-                    return true;
-                default:
-                    return false;
-            }
+                LF2States.WeaponInSky => State_WeaponInSky(eventType, eventData),
+                LF2States.WeaponOnHand => State_WeaponOnHand(eventType, eventData),
+                LF2States.WeaponThrowing => State_WeaponThrowing(eventType, eventData),
+                LF2States.WeaponJustOnGround => State_WeaponJustOnGround(eventType, eventData),
+                LF2States.WeaponOnGround => State_WeaponOnGround(eventType, eventData),
+                _ => false,
+            };
         }
 
         protected virtual void OnInFlightFrameUpdate() { }
@@ -1027,7 +872,7 @@ namespace NTSD.Animation.LF2Objects
         {
             int pickerLink;
             // 反汇编 0x0042E9F0-0x0042E9FC：type_sub=0x78 或 0x7C → grabbed_by=101（优先检查）
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
             if (typeSub == 0x78 || typeSub == 0x7C)
                 pickerLink = 101;
@@ -1058,27 +903,22 @@ namespace NTSD.Animation.LF2Objects
         {
             if (HoldObj != null)
             {
-                TracePickupReject("RejectHeldByOther", target, null);
                 return false;
             }
             if (!ItrArestTest())
             {
-                TracePickupReject("RejectArest", target, null);
                 return false;
             }
             if (Renderer == null)
             {
-                TracePickupReject("RejectNoRenderer", target, null);
                 return false;
             }
             if (target is not LF2Character character)
             {
-                TracePickupReject("RejectNonCharacter", target, null);
                 return false;
             }
             if (character.GetHeldWeapon() != null)
             {
-                TracePickupReject("RejectPickerHasWeapon", target, character);
                 return false;
             }
 
@@ -1088,21 +928,18 @@ namespace NTSD.Animation.LF2Objects
                            || wstate == LF2States.HeavyWeaponOnGround;
             if (!isOnGround)
             {
-                TracePickupReject("RejectWeaponNotOnGround", target, character);
                 return false;
             }
 
             bool pickOk = Pick(character);
             if (!pickOk)
             {
-                TracePickupReject("RejectPickCallFailed", target, character);
                 return false;
             }
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
-            TracePickupSuccess(itr, character, playAnimation: false);
             return true;
         }
 
@@ -1110,27 +947,22 @@ namespace NTSD.Animation.LF2Objects
         {
             if (HoldObj != null)
             {
-                TracePickupReject("RejectHeldByOther", target, null);
                 return false;
             }
             if (!ItrArestTest())
             {
-                TracePickupReject("RejectArest", target, null);
                 return false;
             }
             if (Renderer == null)
             {
-                TracePickupReject("RejectNoRenderer", target, null);
                 return false;
             }
             if (target is not LF2Character character)
             {
-                TracePickupReject("RejectNonCharacter", target, null);
                 return false;
             }
             if (character.GetHeldWeapon() != null)
             {
-                TracePickupReject("RejectPickerHasWeapon", target, character);
                 return false;
             }
 
@@ -1140,14 +972,12 @@ namespace NTSD.Animation.LF2Objects
                            || wstate == LF2States.HeavyWeaponOnGround;
             if (!isOnGround)
             {
-                TracePickupReject("RejectWeaponNotOnGround", target, character);
                 return false;
             }
 
             bool pickOk = Pick(character);
             if (!pickOk)
             {
-                TracePickupReject("RejectPickCallFailed", target, character);
                 return false;
             }
             character.HoldWeapon(this);
@@ -1156,7 +986,6 @@ namespace NTSD.Animation.LF2Objects
             ApplyPickupFrameJump(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
-            TracePickupSuccess(itr, character, playAnimation: true);
             return true;
         }
 
@@ -1184,42 +1013,22 @@ namespace NTSD.Animation.LF2Objects
             return files[0].width + 1;
         }
 
-        private void TracePickupReject(string reason, LF2Entity target, LF2Character picker)
-        {
-            if (!ShouldTracePickupWeapon(StableId)) return;
-
-            Debug.LogError($"[PickupTrace][{reason}] picker={PickupTracePickerId} weaponTarget={target?.StableId ?? -1} pickerFrame={picker?.Frame?.N ?? -1} pickerState={picker?.GetState() ?? -1}");
-        }
-
-        private void TracePickupSuccess(InteractionArea itr, LF2Character picker, bool playAnimation)
-        {
-            if (!ShouldTracePickupWeapon(StableId)) return;
-
-            Debug.LogError($"[PickupTrace][PickupSuccess] picker={PickupTracePickerId} weapon={StableId} kind={itr?.kind ?? -1} playAnimation={playAnimation} pickerFrame={picker?.Frame?.N ?? -1} pickerState={picker?.GetState() ?? -1} weaponState={GetState()}");
-        }
-
         #endregion
 
         #region 战斗（Hit → Act → ForceClearHolder → Drop → Pick → ProcessDrinkConsumption → OnDrinkConsumed → ProcessAttack → SetWeaponStrengthList → GetStrengthEntry）
 
         /// <summary>
-        /// 对应 FLF weapon.prototype.hit (weapon.js:275-365)
+        /// Release weapon hit hook.
         /// </summary>
         public abstract bool Hit(InteractionArea itr, LF2Entity attacker);
 
         /// <summary>
-        /// 对应 FLF weapon.prototype.act (weapon.js:367-465)
-        /// 反汇编 AI_Process2 (0x0041AAC0)
+        /// Release held-weapon action hook.
         /// </summary>
         public virtual WeaponActResult Act(LF2LivingObject holder, WeaponPoint wpoint, Vector3 holdpoint)
         {
             var result = new WeaponActResult();
             if (Frame.D == null) return result;
-            bool traceHeld = ShouldTraceHeldWeapon(StableId);
-            if (traceHeld)
-            {
-                Debug.LogError($"[PickupTrace][WeaponActEnter] picker={HeldTracePickerId} weapon={StableId} holder={holder?.StableId ?? -1} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} holderFrame={holder?.Frame?.N ?? -1} holderState={holder?.GetState() ?? -1} holdpoint=({holdpoint.x},{holdpoint.y},{holdpoint.z})");
-            }
 
             // 反汇编 AI_Process2 0x0041AFFC：
             // 持有者处于 Falling(12) 或 BeingCaught(10) 时强制脱落武器
@@ -1291,7 +1100,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (wpoint.dvx != 0)
                 {
-                    UnityEngine.Debug.Log($"[Weapon Act] id={_objectId} wt={WeaponType} fwpoint.kind={fwpoint.kind} wpoint.dvx={wpoint.dvx}");
                     // 反汇编 AI_Process2 0x41B094~0x41B21D：
                     // 按 weapon.type 分流投掷路径：
                     //   type=1/4/6 → heavy throw：frame固定40，双方arest归零
@@ -1310,7 +1118,6 @@ namespace NTSD.Animation.LF2Objects
                         //   其他 → vz 不变
                         Trans.Frame(40, 0);
                         Trans.Trans();
-                        UnityEngine.Debug.Log($"[Weapon Throw] id={_objectId} frame40 exists={GetFrameDataById(40) != null} Frame.N={Frame.N} Frame.D={Frame.D?.state}");
                         PS.vx = Dirh() * wpoint.dvx;
                         // 反汇编 0x41B0F7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
                         PS.vy = wpoint.dvy;
@@ -1374,20 +1181,12 @@ namespace NTSD.Animation.LF2Objects
 
                     // coincideXY
                     CoincideXYWithWPoint(holdpoint, fwpoint);
-                    if (traceHeld)
-                    {
-                        Debug.LogError($"[PickupTrace][WeaponActCoincide] picker={HeldTracePickerId} weapon={StableId} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} weaponPos=({PS.x},{PS.y},{PS.z}) dir={PS.dir} zz={PS.zz} fwpointKind={fwpoint.kind} fwpointY={fwpoint.y}");
-                    }
 
                     // 反汇编 AI_Process2 0x41AFA7-0x41AFCC：
                     // cover==0 → z+=1, y-=1（武器在角色前面，稍偏前/上）
                     // cover!=0 → z-=1, y+=1（武器在角色后面，稍偏后/下）
                     if (cover == 0) { PS.z += 1f; PS.y -= 1f; }
                     else            { PS.z -= 1f; PS.y += 1f; }
-                    if (traceHeld)
-                    {
-                        Debug.LogError($"[PickupTrace][WeaponActFinal] picker={HeldTracePickerId} weapon={StableId} weaponFrame={Frame?.N ?? -1} weaponState={GetState()} weaponPos=({PS.x},{PS.y},{PS.z}) cover={cover} zz={PS.zz}");
-                    }
                 }
             }
 
@@ -1437,14 +1236,13 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 对应 FLF weapon.prototype.pick (weapon.js:484-498)
+        /// Release weapon pickup hook.
         /// </summary>
         public virtual bool Pick(LF2LivingObject holder)
         {
             if (_holdObj != null) return false;
 
             _holdObj = holder;
-            _holdPre = holder;
             Team = holder.Team;
 
             return true;
@@ -1464,7 +1262,7 @@ namespace NTSD.Animation.LF2Objects
         {
             if (holder?.Health == null) return;
 
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(_objectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
 
             // 反汇编 0x41AC21：type_sub == 0x7A → 饮料（liquid）路径
@@ -1575,7 +1373,46 @@ namespace NTSD.Animation.LF2Objects
 
         public void WhirlwindForce(InteractionArea itr, LF2Entity attacker)
         {
-            // TODO: 实现龙卷风效果
+            if (attacker?.PS == null || PS == null) return;
+
+            int state = GetState();
+            bool lightLike = WeaponType == 1 || WeaponType == 4 || WeaponType == 6;
+            bool heavyLike = WeaponType == 2;
+
+            if (lightLike)
+            {
+                if (ObjectId == 201 || ObjectId == 202) return;
+                if (state != LF2States.WeaponInSky)
+                    Trans.Frame(0, 0);
+                ApplyWhirlwindVelocity(attacker, 3f);
+            }
+            else if (heavyLike)
+            {
+                if (state != LF2States.HeavyWeaponInSky)
+                    Trans.Frame(0, 0);
+                ApplyWhirlwindVelocity(attacker, 2.3f);
+            }
+        }
+
+        private void ApplyWhirlwindVelocity(LF2Entity attacker, float vyDelta)
+        {
+            KnockbackVx = PS.vx + ((PS.x > attacker.PS.x) ? -1f : 1f);
+            PS.vx = KnockbackVx;
+
+            KnockbackVz = PS.vz + ((PS.z > attacker.PS.z) ? -0.5f : 0.5f);
+            PS.vz = KnockbackVz;
+
+            if (PS.y >= -2f)
+            {
+                PS.y = -2f;
+                PS.vy = -6f;
+            }
+
+            if (PS.vy > -6f)
+            {
+                PS.vy -= vyDelta;
+                KnockbackVy = PS.vy;
+            }
         }
 
         public override void FluteForce()
@@ -1709,3 +1546,4 @@ namespace NTSD.Animation.LF2Objects
         public int HitUid;
     }
 }
+
