@@ -58,7 +58,7 @@ namespace NTSD.Animation
         public string weapon_broken_sound = "";
         public List<WeaponStrengthEntry> weapon_strength_list = new List<WeaponStrengthEntry>();
         /// <summary>
-        /// 武器/投射物子类型，对应反汇编 [+6F4h]
+        /// 武器/投射物子类型，对应 C++ release 实体的 oid/type_sub 运行时语义。
         /// 决定 state=1002 时的重力分级：
         ///   0x7C(124) = 极轻（气球），0x78(120) = 轻（苦无），0x65(101) = 中等
         ///   0x3E7(999) = 特殊落地（frame=101），其余走默认重力 0.5667

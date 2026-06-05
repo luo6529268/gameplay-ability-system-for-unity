@@ -19,9 +19,12 @@ namespace NTSD.Animation.LF2Tasks
         public float directVx;
         public float directVy;
         public float directVz;
+        public bool preserveActionZero;
 
         public int ownerEntityIndex = -1;
         public int frameDelay = 0;
+        public int attackExempt = 0;
+        public bool releaseOpointSpawn;
 
         public bool IsFromPool { get; set; }
         public void Clear()
@@ -29,8 +32,11 @@ namespace NTSD.Animation.LF2Tasks
             opoint = default; parent = null; team = 0;
             pos = Vector3.zero; z = 0f; dir = null; dvz = 0f;
             useDirectVelocity = false; directVx = 0f; directVy = 0f; directVz = 0f;
+            preserveActionZero = false;
             ownerEntityIndex = -1;
             frameDelay = 0;
+            attackExempt = 0;
+            releaseOpointSpawn = false;
         }
     }
 }

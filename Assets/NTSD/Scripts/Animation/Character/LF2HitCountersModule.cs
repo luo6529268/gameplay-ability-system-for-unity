@@ -1,114 +1,145 @@
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Animation
 {
     /// <summary>
-    /// FLF 对齐：hit() 相关的计数器（fall / bdefend）。
-    /// 纯数据层，不依赖 Animator/Mono。
+    /// 角色受击相关计数器。
+    /// fall、bdefend、AttackExempt、HitStateCount 都绑定到正式版实体 Runtime 字段。
     /// </summary>
     public sealed class LF2HitCountersModule
     {
-        public int Fall { get; private set; }
-        public int Bdefend { get; private set; }
+        private NTSDEntityRuntime _runtime;
+        private int _fall;
+        private int _bdefend;
+        private int _attackExempt;
+        private int _hitStateCount;
 
-        // 浮点累加器：FLF 的 fall/bdefend 恢复值是小数（-0.45/-0.5 每 TU）
-        // 累加到整数阈值后才真正扣减，避免精度丢失
+        // fall/bdefend 的自然恢复是小数步进，累积到整数阈值后再写回正式字段。
         private float _fallAccum;
         private float _bdefendAccum;
 
-        /// <summary>
-        /// 攻击方碰撞豁免（对应反汇编 entity+0ECh）。
-        /// 命中时由攻击方设为 6，每帧 -1；> 0 时跳过整体碰撞检测（反汇编 0x419E3B）。
-        /// </summary>
-        public int AttackExempt { get; private set; } = 0;
+        public int Fall => _runtime?.Fall ?? _fall;
+        public int Bdefend => _runtime?.Bdefend ?? _bdefend;
 
         /// <summary>
-        /// 受击状态计数（对应反汇编 entity+0B8h）。
-        /// 被打中时设为 45，每帧 -1；sub_419DE0 检查 >= 15 走重击飞出分支。
+        /// 攻击方碰撞豁免计数。命中后通常设为 6，每帧递减，用于跳过重复碰撞。
         /// </summary>
-        public int HitStateCount { get; private set; } = 0;
+        public int AttackExempt => _runtime?.AttackExempt ?? _attackExempt;
 
-        public void SetAttackExempt(int value) => AttackExempt = value;
-        public void SetHitStateCount(int value) => HitStateCount = value;
-        /// <summary>累加受击状态计数（对应反汇编 0x0042E2DC: add [eax+0B8h], ecx）</summary>
-        public void AddHitStateCount(int amount) => HitStateCount += amount;
+        /// <summary>
+        /// 受击状态计数。命中时通常设为 45，每帧递减，用于重击飞等分支判断。
+        /// </summary>
+        public int HitStateCount => _runtime?.HitStateCount ?? _hitStateCount;
+
+        /// <summary>
+        /// 绑定正式版实体运行时字段。绑定后计数器读写都落到 Runtime。
+        /// </summary>
+        public void BindRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null) return;
+
+            runtime.Fall = Fall;
+            runtime.Bdefend = Bdefend;
+            runtime.AttackExempt = AttackExempt;
+            runtime.HitStateCount = HitStateCount;
+            _runtime = runtime;
+        }
+
+        public void SetAttackExempt(int value)
+        {
+            if (_runtime != null) _runtime.AttackExempt = value;
+            else _attackExempt = value;
+        }
+
+        public void SetHitStateCount(int value)
+        {
+            if (_runtime != null) _runtime.HitStateCount = value;
+            else _hitStateCount = value;
+        }
+
+        public void AddHitStateCount(int amount)
+        {
+            SetHitStateCount(HitStateCount + amount);
+        }
 
         public void Reset()
         {
-            Fall = 0;
-            Bdefend = 0;
+            SetFall(0);
+            SetBdefend(0);
+            SetAttackExempt(0);
+            SetHitStateCount(0);
             _fallAccum = 0f;
             _bdefendAccum = 0f;
-            AttackExempt = 0;
-            HitStateCount = 0;
         }
 
         public void AddFall(int amount)
         {
-            Fall = Mathf.Max(0, Fall + amount);
+            SetFall(Mathf.Max(0, Fall + amount));
         }
 
-        /// <summary>直接设置 fall 值（钳制到档位上限时使用）</summary>
+        /// <summary>直接设置 fall 值，用于受击档位钳制。</summary>
         public void SetFall(int value)
         {
-            Fall = value;
+            if (_runtime != null) _runtime.Fall = value;
+            else _fall = value;
         }
 
         public void ResetFall()
         {
-            // 反汇编 0x0042D0E4/0x0042D1E6：击飞时 [+0B0h]=80，不是清零
-            Fall = 80;
+            // 正式版击飞时写入 80，不是清零。
+            SetFall(80);
             _fallAccum = 0f;
         }
 
         public void AddBdefend(int amount)
         {
-            Bdefend = Mathf.Max(0, Bdefend + amount);
+            SetBdefend(Mathf.Max(0, Bdefend + amount));
         }
 
         public void ResetBdefend()
         {
-            Bdefend = 0;
+            SetBdefend(0);
             _bdefendAccum = 0f;
         }
 
-        /// <summary>直接赋值（对应 FLF: $.health.bdefend = value）</summary>
+        /// <summary>直接设置 bdefend 值。</summary>
         public void SetBdefend(int value)
         {
-            Bdefend = value;
+            if (_runtime != null) _runtime.Bdefend = value;
+            else _bdefend = value;
         }
 
         /// <summary>
-        /// fall 自然恢复（对应 FLF: if (fall > 0) fall += GC.recover.fall）
-        /// amount 传入 NTSDGlobal.Gameplay.RecoverFall（负数）
+        /// fall 自然恢复。amount 通常为负数，累积到 -1 后扣减整数值。
         /// </summary>
         public void RecoverFall(float amount)
         {
             if (Fall <= 0) return;
+
             _fallAccum += amount;
             if (_fallAccum <= -1f)
             {
                 int decrement = Mathf.FloorToInt(-_fallAccum);
-                Fall = Mathf.Max(0, Fall - decrement);
+                SetFall(Mathf.Max(0, Fall - decrement));
                 _fallAccum += decrement;
             }
         }
 
         /// <summary>
-        /// bdefend 自然恢复（对应 FLF: if (bdefend > 0) bdefend += GC.recover.bdefend）
-        /// amount 传入 NTSDGlobal.Gameplay.RecoverBdefend（负数）
+        /// bdefend 自然恢复。amount 通常为负数，累积到 -1 后扣减整数值。
         /// </summary>
         public void RecoverBdefend(float amount)
         {
             if (Bdefend <= 0) return;
+
             _bdefendAccum += amount;
             if (_bdefendAccum <= -1f)
             {
                 int decrement = Mathf.FloorToInt(-_bdefendAccum);
-                Bdefend = Mathf.Max(0, Bdefend - decrement);
+                SetBdefend(Mathf.Max(0, Bdefend - decrement));
                 _bdefendAccum += decrement;
             }
         }
     }
 }
-

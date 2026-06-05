@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// FLF/LF2 对象属性表（spec/properties.js）- 直接死写数值（不走 JSON/ScriptableObject）。
+    /// 对象属性表。运行时复刻以 C++ release 为准；这里仅保存 Unity 侧仍需查询的静态属性。
     /// Key: ObjectId（在本项目中等同于 CharacterID）。
     ///
     /// 来源参考：

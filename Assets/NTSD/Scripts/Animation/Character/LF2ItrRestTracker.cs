@@ -5,7 +5,8 @@ using UnityEngine.Pool;
 namespace NTSD.Animation
 {
     /// <summary>
-    /// Tracks release battle hit cooldowns for arest and per-attacker vrest.
+    /// 记录正式战斗流程中的 arest 和按攻击者区分的 vrest 冷却。
+    /// 冷却递减由 SimulationWorld.VrestTickAll() 在每个 tick 开头统一驱动。
     /// </summary>
     public sealed class LF2ItrRestTracker
     {
@@ -13,7 +14,7 @@ namespace NTSD.Animation
         private readonly Dictionary<int, int> _vrestByAttacker = new Dictionary<int, int>();
 
         /// <summary>
-        /// Attacker cooldown before this entity may apply another arest-gated hit.
+        /// 攻击者自身的命中冷却；大于 0 时不能再次执行 arest 门控的命中。
         /// </summary>
         public int Arest
         {
@@ -35,7 +36,7 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// Checks whether the specified attacker is still under victim-side rest.
+        /// 检查指定攻击者是否仍在受击者侧的 vrest 冷却中。
         /// </summary>
         public bool HasVrest(int attackerStableId)
         {
@@ -43,7 +44,7 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// Sets victim-side rest for the specified attacker.
+        /// 为指定攻击者设置受击者侧 vrest 冷却。
         /// </summary>
         public void SetVrest(int attackerStableId, int value)
         {

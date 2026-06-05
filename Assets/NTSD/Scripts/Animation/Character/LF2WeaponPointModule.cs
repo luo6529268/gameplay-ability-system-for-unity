@@ -6,15 +6,14 @@ namespace NTSD.Animation
     public interface ILF2WeaponPointFactory
     {
         /// <summary>
-        /// 更新/同步 wpoint（武器跟随、weaponact、攻击状态等）。
-        /// 由外部系统实现（武器实体/装备系统/网络同步等）。
+        /// 更新/同步 wpoint。具体的武器跟随、weaponact、攻击状态由外部工厂实现。
         /// </summary>
         void UpdateWeaponPoints(LF2LivingObject animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
     }
 
     /// <summary>
-    /// FLF 对齐：character.wpoint() 的驱动入口（纯数据层，不继承 Mono）。
-    /// 模块职责：在 transit 阶段读取当前帧的 wpoints 并委托给外部注入的 factory。
+    /// 读取当前帧的 wpoints，并在 transit 阶段委托给工厂处理。
+    /// 行为以 C++ release 的持有武器同步和投掷逻辑为基准。
     /// </summary>
     public sealed class LF2WeaponPointModule
     {
@@ -44,4 +43,3 @@ namespace NTSD.Animation
         }
     }
 }
-

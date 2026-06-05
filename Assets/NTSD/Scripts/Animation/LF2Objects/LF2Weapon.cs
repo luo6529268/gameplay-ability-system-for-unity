@@ -8,9 +8,9 @@ using NTSD.Simulation;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 武器实体（对应反汇编 weapon 结构体，[+6F8h] 字段区分类型）。
+    /// 武器实体（C++ release 对齐 weapon 结构体，[+6F8h] 字段区分类型）。
     ///
-    /// 反汇编已确认的武器类型（ParseCharData 0x0040CBDA）：
+    /// C++ release 确认的武器类型（ParseCharData 0x0040CBDA）：
     ///   type=0 轻武器 / type=1 重武器 / type=2 特殊武器
     ///   type=3 投掷武器 / type=4 回旋镖 / type=6 道具
     /// </summary>
@@ -18,30 +18,33 @@ namespace NTSD.Animation.LF2Objects
     {
         #region 字段与属性
 
-        /// <summary>武器类型（反汇编 [+6F8h]，DAT 解析时写入）</summary>
-        private int _weaponType;
+        /// <summary>对象池创建时确定的武器类型，用于 Reset 后恢复 C++ release entity_type。</summary>
+        private int _poolWeaponType;
 
         /// <summary>
-        /// 飞行计数器（反汇编 [+31Ch]）。
+        /// 飞行计数器（C++ release unk_31C）。
         /// 控制 type=1/2/4/6 的反弹/停止节奏；初始值 = weapon_hp。
         /// Entity_FrameAdvance 0x416A6C / 0x416B51 / 0x416C50 均读写此字段。
         /// </summary>
-        private int _flightCounter;
+        private int FlightCounter
+        {
+            get => Runtime.WeaponFlightCounter;
+            set => Runtime.WeaponFlightCounter = value;
+        }
 
         /// <summary>
-        /// 笛子命中累积器（反汇编 [+320h] = this+800）。
+        /// 笛子命中累积器（C++ release weapon_count）。
         /// kind=10/11 命中时设为 -20；每帧末 frame.state!=12 时清零。
         /// 用于 type=0 空中帧切换判断和 CondB HP 扣减公式。
         /// </summary>
-        public override int FluteWeight { get => _fluteWeight; set => _fluteWeight = value; }
-        private int _fluteWeight;
+        public override int FluteWeight { get => Runtime.WeaponCount; set => Runtime.WeaponCount = value; }
 
-        public override LF2ObjectType ObjectTypeEnum => _weaponType == 2
+        public override LF2ObjectType ObjectTypeEnum => WeaponType == 2
             ? LF2ObjectType.HeavyWeapon
-            : (_weaponType == 4 ? LF2ObjectType.ThrowWeapon : LF2ObjectType.LightWeapon);
-        public override bool IsLight => _weaponType != 2;
-        public override bool IsHeavy => _weaponType == 2;
-        public override int WeaponType => _weaponType;
+            : (WeaponType == 4 ? LF2ObjectType.ThrowWeapon : LF2ObjectType.LightWeapon);
+        public override bool IsLight => WeaponType != 2;
+        public override bool IsHeavy => WeaponType == 2;
+        public override int WeaponType => Runtime.EntityType;
 
         #endregion
 
@@ -50,37 +53,48 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>设置武器类型（DAT 解析时调用）</summary>
         public void SetWeaponType(int weaponType)
         {
-            _weaponType = weaponType;
+            _poolWeaponType = weaponType;
+            Runtime.EntityType = weaponType;
         }
 
         public override void Reset()
         {
             base.Reset();
-            _flightCounter = 0;
-            _fluteWeight = 0;
+            Runtime.EntityType = _poolWeaponType;
+            FlightCounter = 0;
+            FluteWeight = 0;
         }
 
         /// <summary>
-        /// 反汇编 Entity_Spawn 0x402A74：_flightCounter 初始值 = weapon_hp。
+        /// C++ release Entity_Spawn：WeaponFlightCounter 初始值 = weapon_hp。
         /// </summary>
         protected override void OnHealthInitialized(LF2CharacterData charData)
         {
-            _flightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
+            FlightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
         }
 
-        /// <summary>反汇编 0x004228A0：type=1/2/4/6 才检查 flightCounter。</summary>
+        /// <summary>C++ release 0x004228A0：type=1/2/4/6 才检查 flightCounter。</summary>
         protected override bool IsWeaponDestroyable()
         {
             int wt = WeaponType;
             return wt == 1 || wt == 2 || wt == 4 || wt == 6;
         }
 
-        protected override int GetFlightCounter() => _flightCounter;
+        protected override int GetFlightCounter() => FlightCounter;
 
-        /// <summary>反汇编 AI_Process2 0x41AD73：weapon.[+31Ch] = 0。</summary>
+        /// <summary>C++ release AI_Process2 0x41AD73：weapon.[+31Ch] = 0。</summary>
         protected override void OnDrinkConsumed()
         {
-            _flightCounter = 0;
+            FlightCounter = 0;
+        }
+
+        /// <summary>
+        /// 武器物理路径直接写 frame。
+        /// C++ release Entity_FrameAdvance/physics_update 多处直接写 e.frame，不走帧请求队列。
+        /// </summary>
+        private void SetPhysicsFrameDirect(int frameId)
+        {
+            ImmediateFrame(frameId);
         }
 
         #endregion
@@ -179,20 +193,20 @@ namespace NTSD.Animation.LF2Objects
         #region 飞行物理（OnThrown / WeaponFlightPhysics / OnInFlightFrameUpdate / OnLanded）
 
         /// <summary>
-        /// 反汇编 Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
-        /// 投掷时 _flightCounter 初始化为武器的 weapon_hp（耐久/飞行计数）
+        /// C++ release Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
+        /// 投掷时 WeaponFlightCounter 初始化为武器的 weapon_hp（耐久/飞行计数）。
         /// </summary>
         protected override void OnThrown()
         {
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
-            _flightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
+            FlightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
         }
 
         /// <summary>
-        /// 反汇编 Entity_FrameAdvance 0x4162EB-0x4164A2：
+        /// C++ release Entity_FrameAdvance 0x4162EB-0x4164A2：
         /// 计算本帧的额外水平加速、重力、追踪 vz、回旋镖翻转。
         /// 重力值写入 _gravityToAdd，由 WeaponDynamics 在 y+=vy 后（新y<0时）应用，
-        /// 严格对齐反汇编 0x4164BD 的执行顺序。
+        /// 严格对齐 C++ release 0x4164BD 的执行顺序。
         /// </summary>
         protected override void WeaponFlightPhysics()
         {
@@ -204,7 +218,7 @@ namespace NTSD.Animation.LF2Objects
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
 
-            // ── 1. 额外水平速度加成（反汇编 0x4162EB-0x416327）──
+            // ── 1. 额外水平速度加成（C++ release 0x4162EB-0x416327）──
             if (wt == 4 || typeSub == 0x78)
                 PS.x += PS.vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
             else if (typeSub == 0x65)
@@ -237,23 +251,23 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // ── 3. type=3 追踪 vz（反汇编 0x41637D-0x4163A1）──
+            // ── 3. type=3 当前帧深度修正（C++ release 0x41637D-0x4163A1）──
             if (wt == 3 && fD != null && fD.hit_j > 0)
-                PS.vz += fD.hit_j - 50;
+                PS.z += fD.hit_j - 50;
 
-            // ── 4. type=4/6 回旋镖（反汇编 0x416466-0x4164A2）──
+            // ── 4. type=4/6 回旋镖（C++ release 0x416466-0x4164A2）──
             if ((wt == 4 || wt == 6) && frameState == LF2States.WeaponInSky)
             {
                 if (PS.vx > NTSDGlobal.Gameplay.WeaponBoomerangVxMax ||
                     PS.vx < NTSDGlobal.Gameplay.WeaponBoomerangVxMin)
                 {
-                    Trans.Frame(40, 0);
+                    SetPhysicsFrameDirect(40);
                 }
             }
         }
 
         /// <summary>
-        /// 反汇编 Entity_FrameAdvance 0x416577-0x41668A：
+        /// C++ release Entity_FrameAdvance 0x416577-0x41668A：
         /// type=0 空中（新y&lt;0）时，根据 frame.state 和 vy 动态切换帧号。
         /// Falling(state=12)：帧 180~189
         /// Burning(state=18)：帧 205
@@ -266,25 +280,25 @@ namespace NTSD.Animation.LF2Objects
             int fnum = Frame?.N ?? -1;
             int fstate = Frame?.D?.state ?? -1;
 
-            // 反汇编 0x416583~0x41662A：frame.state == 12 (Falling)
-            // 反汇编用 fcomp（IEEE 比较语义），伪C已转写为 if/else 梯级
+            // C++ release 0x416583~0x41662A：frame.state == 12 (Falling)
+            // 按正式版 fcomp 比较语义展开为 if/else 梯级。
             if (fstate == LF2States.Falling)
             {
                 if (fnum >= 185)
                 {
                     // 0x41662A: fnum >= 0xBF(191) → 跳过
                     // 0x4165A1: fnum >= 0xB9(185) 进入此分支
-                    // 0x4165A7: 条件 fnum > 185 && fnum < 191（伪C: v16 < 191 && v16 > 185）
+                    // 0x4165A7: 条件 fnum > 185 && fnum < 191。
                     if (fnum > 185 && fnum < 191)
                     {
                         // 与 fnum<185 分支相同的 vy 梯级，但帧号 +6
                         // 0x4165AA: fcomp dbl_443390(-8.0); test ah,1; jz→vy >= -8.0
                         // 0x4165CD: fcomp dbl_4432B0(1.0);  test ah,1; jz→vy >= 1.0
                         // 0x4165E2: fcomp dbl_443230(8.0);   test ah,1; jz→vy >= 8.0
-                        if      (vy < -8.0) Trans.Frame(186, 0); // 0xB4 → 0xB4
-                        else if (vy < 1.0)  Trans.Frame(187, 0); // 0xB5
-                        else if (vy < 8.0)  Trans.Frame(188, 0); // 0xB6
-                        else                Trans.Frame(189, 0); // 0xB7
+                        if      (vy < -8.0) SetPhysicsFrameDirect(186); // 0xBA
+                        else if (vy < 1.0)  SetPhysicsFrameDirect(187); // 0xBB
+                        else if (vy < 8.0)  SetPhysicsFrameDirect(188); // 0xBC
+                        else                SetPhysicsFrameDirect(189); // 0xBD
                     }
                     // fnum==185 或 fnum>=191：不切换帧
                 }
@@ -295,13 +309,13 @@ namespace NTSD.Animation.LF2Objects
                     //   test ah,1; jz = "跳转如果 C0==0" = "跳转如果 ST(0) >= dbl"
                     //   所以 jz(0x4165CA) 表示 vy >= -8.0
                     //   不跳转则 vy < -8.0 → frame=0xB4(180)
-                    if      (vy < -8.0) Trans.Frame(180, 0);
-                    else if (vy < 1.0)  Trans.Frame(181, 0);
-                    else if (vy < 8.0)  Trans.Frame(182, 0);
-                    else                Trans.Frame(183, 0);
+                    if      (vy < -8.0) SetPhysicsFrameDirect(180);
+                    else if (vy < 1.0)  SetPhysicsFrameDirect(181);
+                    else if (vy < 8.0)  SetPhysicsFrameDirect(182);
+                    else                SetPhysicsFrameDirect(183);
 
-                    // 反汇编 0x4165FB~0x416628：[esi+320h] < 0 时覆盖帧
-                    if (_fluteWeight < 0)
+                    // C++ release 0x4165FB~0x416628：[esi+320h] < 0 时覆盖帧
+                    if (FluteWeight < 0)
                     {
                         // 0x416607: fcomp dbl_443388(12.0); test ah,1; jz→下级
                         // jz = vy >= 12.0 → 0x416617: cmp dword_449038, 6; jl→下级
@@ -310,23 +324,23 @@ namespace NTSD.Animation.LF2Objects
                         // dword_449038 = (dword_449038+1)%12，对应全局 tick mod 12（P1-4）
                         int globalTick12 = (SimulationTickDriver.Instance?.CurrentTickIndex ?? 0) % 12;
                         if (vy >= 12.0 || globalTick12 < 6)
-                            Trans.Frame(181, 0);
+                            SetPhysicsFrameDirect(181);
                         else
-                            Trans.Frame(182, 0);
+                            SetPhysicsFrameDirect(182);
                     }
                 }
             }
 
-            // 反汇编 0x41668A~0x4166C9：
+            // C++ release 0x41668A~0x4166C9：
             // frame.state == 18(Burning) 且 fnum < 205(0xCD) 且 vy > 1.0 → frame=205
             int fnum2 = Frame?.N ?? fnum;
             int fstate2 = Frame?.D?.state ?? fstate;
             if (fstate2 == LF2States.Burning && fnum2 < 205 && vy > 1.0)
-                Trans.Frame(205, 0);
+                SetPhysicsFrameDirect(205);
         }
 
         /// <summary>
-        /// 反汇编 Entity_FrameAdvance 0x4164A9-0x416DA4：按 type 分流落地逻辑
+        /// C++ release Entity_FrameAdvance 0x4164A9-0x416DA4：按 type 分流落地逻辑
         /// </summary>
         protected override void OnLanded()
         {
@@ -334,15 +348,15 @@ namespace NTSD.Animation.LF2Objects
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int dropHurt = charData?.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
 
-            // ── type=3：落地时跳过弹射（反汇编 0x4164CE: jz loc_416577）──
+            // ── type=3：落地时跳过弹射（C++ release 0x4164CE: jz loc_416577）──
             if (wt == 3) return;
 
-            // ── type=1（轻武器，苦无）落地（反汇编 Entity_FrameAdvance case 1, 0x416A35）──
+            // ── type=1（轻武器，苦无）落地（C++ release Entity_FrameAdvance case 1, 0x416A35）──
             if (wt == 1)
             {
                 // 无论大弹/小弹都先扣耐久，vz 清零
-                // 反汇编：v37 = this+796 - v3[37]（直接减 dropHurt，无 clamp）
-                _flightCounter -= dropHurt;
+                // C++ release：v37 = this+796 - v3[37]（直接减 dropHurt，无 clamp）
+                FlightCounter -= dropHurt;
                 PS.vz = 0f;
 
                 int frameState1 = Frame?.D?.state ?? -1;
@@ -354,7 +368,7 @@ namespace NTSD.Animation.LF2Objects
                         // 大弹：vx*=0.5, 反转方向, frame=7, vy=-8
                         PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                         PS.dir = PS.dir == "right" ? "left" : "right";
-                        Trans.Frame(7, 0);
+                        SetPhysicsFrameDirect(7);
                         PS.vy = NTSDGlobal.Gameplay.WeaponType1BigBounceVy; // -8
                         PlaySound(WeaponDropSound);
                     }
@@ -362,8 +376,8 @@ namespace NTSD.Animation.LF2Objects
                     {
                         // 非1002大弹 → 小弹路径（frame=60，via LABEL_148）
                         PS.vy = 0f;
-                        Trans.Frame(0x3C, 0); // frame=60
-                        HitStun = 0;          // 反汇编 LABEL_148: this+136=0
+                        SetPhysicsFrameDirect(0x3C); // frame=60
+                        AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
                         PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                     }
                 }
@@ -371,57 +385,57 @@ namespace NTSD.Animation.LF2Objects
                 {
                     // vy <= 9.9 → 小弹（via LABEL_148）
                     PS.vy = 0f;
-                    Trans.Frame(frameState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C, 0);
-                    HitStun = 0; // 反汇编 LABEL_148: this+136=0
+                    SetPhysicsFrameDirect(frameState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                 }
-                // 反汇编 type=1 无 clamp，直接 return
+                // C++ release type=1 无 clamp，直接 return
                 return;
             }
 
-            // ── type=2（重武器，原木）落地（反汇编 0x416B34-0x416BDB）──
+            // ── type=2（重武器，原木）落地（C++ release 0x416B34-0x416BDB）──
             if (wt == 2)
             {
-                // 反汇编：进入 case 2 后立即统一 _flightCounter -= 1（v44 = v43 - 1）
-                _flightCounter--;
+                // C++ release：进入 case 2 后立即统一 WeaponFlightCounter -= 1。
+                FlightCounter--;
 
                 if (PS.vy > NTSDGlobal.Gameplay.WeaponType2BigBounceThreshold) // 9.0
                 {
                     // 大弹：vx*=0.5，facing 反转，vy=-5，不设 frame
-                    // 反汇编：_flightCounter 已在入口扣了 1，大弹不再额外扣
+                    // WeaponFlightCounter 已在入口扣了 1，大弹不再额外扣。
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
                     PS.dir = PS.dir == "right" ? "left" : "right";
                     PS.vy = NTSDGlobal.Gameplay.WeaponType2BigBounceVy; // -5
-                    // 反汇编 case 2 大弹 0x416B74：v45 = v3[42]; if (v45 > -1) sub_419B40(...) P2-10
+                    // C++ release case 2 大弹 0x416B74：v45 = v3[42]; if (v45 > -1) sub_419B40(...) P2-10
                     PlaySound(WeaponDropSound);
                 }
                 else
                 {
                     // 小弹：再额外 -= dropHurt（clamp >=0），vy=0，frame=20，vx*=0.5（LABEL_148 一次）
-                    // 反汇编 v48 = v44 - dropHurt; if v48<0: v48=0
-                    _flightCounter -= dropHurt;
-                    if (_flightCounter < 0) _flightCounter = 0;
+                    // C++ release v48 = v44 - dropHurt; if v48<0: v48=0
+                    FlightCounter -= dropHurt;
+                    if (FlightCounter < 0) FlightCounter = 0;
                     PS.vy = 0f;
-                    Trans.Frame(20, 0);
-                    // 反汇编 LABEL_148：vx*=0.5（仅此一次）
+                    SetPhysicsFrameDirect(20);
+                    // C++ release LABEL_148：vx*=0.5（仅此一次）
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
-                    HitStun = 0; // 反汇编 LABEL_148 → [esi+88h]=0
+                    AttackingCounter = 0; // C++ release LABEL_148 → Entity::attacking=0
                 }
                 return;
             }
 
-            // ── type=4/6（特殊重/道具）落地（反汇编 0x416C25-0x416D0E）──
+            // ── type=4/6（特殊重/道具）落地（C++ release 0x416C25-0x416D0E）──
             if (wt == 4 || wt == 6)
             {
-                // 耐久衰减（反汇编 0x416C4A-0x416C7B）
-                _flightCounter -= dropHurt;
-                // type=6 且 weapon.hp <= 0 时强制耐久=-1（反汇编 0x416C64）
+                // 耐久衰减（C++ release 0x416C4A-0x416C7B）
+                FlightCounter -= dropHurt;
+                // type=6 且 weapon.hp <= 0 时强制耐久=-1（C++ release 0x416C64）
                 if (wt == 6 && Health.HP <= 0)
-                    _flightCounter = -1;
+                    FlightCounter = -1;
 
                 PS.vz = 0f;
 
-                // 大弹/小弹判断（反汇编 0x416C7E-0x416CAF）：
+                // 大弹/小弹判断（C++ release 0x416C7E-0x416CAF）：
                 // 弹起条件：vy > 8.5 AND vx > -10.0 AND vx < 10.0（即 |vx| < 10）
                 // 不弹起：vy <= 8.5 OR |vx| >= 10
                 int fstate46 = Frame?.D?.state ?? -1;
@@ -433,13 +447,13 @@ namespace NTSD.Animation.LF2Objects
 
                 if (bigBounce46)
                 {
-                    // 大弹：vy*=-0.7，clamp vy >= -10.0（反汇编 0x416D11-0x416D2D）P1-1
+                    // 大弹：vy*=-0.7，clamp vy >= -10.0（C++ release 0x416D11-0x416D2D）P1-1
                     // frame=0，vx*=0.7
                     PS.vy = PS.vy * -0.7f;
-                    if (PS.vy < -10.0f) PS.vy = -10.0f;  // 反汇编确认 -10.0，原误写为 -2.5
-                    Trans.Frame(0, 0);
+                    if (PS.vy < -10.0f) PS.vy = -10.0f;  // C++ release 确认 -10.0，原误写为 -2.5
+                    SetPhysicsFrameDirect(0);
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
-                    // 反汇编 case 4/6 大弹 0x416D39：v54 = v3[42]; if (v54 > -1) sub_419B40(...) P2-10
+                    // C++ release case 4/6 大弹 0x416D39：v54 = v3[42]; if (v54 > -1) sub_419B40(...) P2-10
                     PlaySound(WeaponDropSound);
                 }
                 else
@@ -448,27 +462,27 @@ namespace NTSD.Animation.LF2Objects
                     PS.vy = 0f;
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
                     PS.zz = 0;
-                    Trans.Frame(fstate46 == LF2States.WeaponThrowing ? 0x46 : 0x3C, 0);
-                    HitStun = 0; // 反汇编 type=4/6 小弹: this+136=0
+                    SetPhysicsFrameDirect(fstate46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    AttackingCounter = 0; // C++ release type=4/6 小弹：Entity::attacking=0
                 }
-                // 反汇编 type=4/6 无 clamp
+                // C++ release type=4/6 无 clamp
                 return;
             }
 
-            // ── type=0 落地（反汇编 0x416BE0-0x416D5A）──
+            // ── type=0 落地（C++ release 0x416BE0-0x416D5A）──
             // entity_type=0 时：仅 type_sub=999(0x3E7) 有特殊处理，其余直接跳过（loc_416D5A）
-            // 反汇编 0x416BE0: cmp [edi+6F4h], 3E7h; jnz loc_416D5A
+            // C++ release 0x416BE0: cmp [edi+6F4h], 3E7h; jnz loc_416D5A
             var cd = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
 
-            // 反汇编 sub_416240 case 0 (0x416840-0x416877)：P2-4
-            // 反汇编 0x4166FA~0x4167E2：type=0 落地，y>0.0001 AND vy>0.0001 才进入弹射逻辑
+            // C++ release sub_416240 case 0 (0x416840-0x416877)：P2-4
+            // C++ release 0x4166FA~0x4167E2：type=0 落地，y>0.0001 AND vy>0.0001 才进入弹射逻辑
             // 注：y/vy 已由 WeaponDynamics 钳制，此处 epsilon 守卫实际等价
             int fstateLand = Frame?.D?.state ?? -1;
             int fnumLand = Frame?.N ?? 0;
 
             if (fstateLand == LF2States.Burning)
             {
-                // 反汇编 0x41672C~0x416774：Burning 大弹（vy>17 OR |vx|>9）
+                // C++ release 0x41672C~0x416774：Burning 大弹（vy>17 OR |vx|>9）
                 if (PS.vy > 17.0f || PS.vx > 9.0f || PS.vx < -9.0f)
                 {
                     // 0x416780: weapon_strength[+340h]==0 → HP-=10；否则 HP += (-1000/weapon_strength)
@@ -476,15 +490,15 @@ namespace NTSD.Animation.LF2Objects
                     int ws = WeaponDropHurt;
                     Health.HP += ws != 0 ? (-1000 / ws) : -10;
 
-                    // 速度钳制（反汇编 0x41679A~0x4167D4）
+                    // 速度钳制（C++ release 0x41679A~0x4167D4）
                     PS.y = 0f; PS.vy = -3.5f; // 0xC00C0000 hi-word → -3.5
                     PS.vz = 0f;
                     // vx 比较 dbl_443310（17.0）后决定方向，再钳制 [-7, 7]
                     if (PS.vx > 7.0f) PS.vx = 7.0f;
                     else if (PS.vx < -7.0f) PS.vx = -7.0f;
 
-                    // frame=185（反汇编 0x4167DB: mov dword ptr [esi+70h], 0B9h）
-                    Trans.Frame(185, 0);
+                    // frame=185（C++ release 0x4167DB: mov dword ptr [esi+70h], 0B9h）
+                    SetPhysicsFrameDirect(185);
 
                     // 对周围角色造成伤害
                     var sceneQuery = Match?.SceneQuery;
@@ -516,8 +530,8 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else
                 {
-                    // 反汇编 0x41675C~0x416774：Burning 小弹（vy<=17 AND |vx|<=9）
-                    // vx*=0.333，y=0，vy=0（无帧切换，无 HitStun 重置）
+                    // C++ release 0x41675C~0x416774：Burning 小弹（vy<=17 AND |vx|<=9）
+                    // vx*=0.333，y=0，vy=0（无帧切换，无 attacking 重置）
                     PS.vx *= 0.333f;
                     PS.y = 0f;
                     PS.vy = 0f;
@@ -525,7 +539,7 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // 反汇编 0x4167E2~0x41688E：通用小弹（state!=12 AND state!=18）
+            // C++ release 0x4167E2~0x41688E：通用小弹（state!=12 AND state!=18）
             // y>0.0001 AND vy>0.0001（epsilon 守卫，实际等价）
             if (fstateLand != LF2States.Falling && fstateLand != LF2States.Burning)
             {
@@ -534,26 +548,26 @@ namespace NTSD.Animation.LF2Objects
                 PS.y = 0f;
                 PS.vy = 0f;
 
-                // 帧切换（反汇编 0x416847~0x416889）
+                // 帧切换（C++ release 0x416847~0x416889）
                 if (fstateLand == 100)          // state==0x64
-                    Trans.Frame(94, 0);         // 0x5E
+                    SetPhysicsFrameDirect(94);  // 0x5E
                 else if (fnumLand == 212 || fstateLand == 6)
-                    Trans.Frame(215, 0);        // 0xD7
+                    SetPhysicsFrameDirect(215); // 0xD7
                 else
-                    Trans.Frame(219, 0);        // 0xDB
+                    SetPhysicsFrameDirect(219); // 0xDB
 
-                HitStun = 0;                    // [esi+88h]=0
+                AttackingCounter = 0;           // Entity::attacking=0
                 return;
             }
 
             if (cd?.type_sub == 0x3E7)
             {
-                // type_sub=999：立即静止 frame=101（反汇编 0x416C13: mov [esi+70h], 65h）
+                // type_sub=999：立即静止 frame=101（C++ release 0x416C13: mov [esi+70h], 65h）
                 PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
-                Trans.Frame(0x65, 0); // 101
-                HitStun = 0;
+                SetPhysicsFrameDirect(0x65); // 101
+                AttackingCounter = 0;
             }
-            // 其他 type=0 武器落地：不做任何帧切换（反汇编 jnz loc_416D5A → fstp st → 末尾）
+            // 其他 type=0 武器落地：不做任何帧切换（C++ release jnz loc_416D5A → fstp st → 末尾）
         }
 
         #endregion
@@ -561,9 +575,9 @@ namespace NTSD.Animation.LF2Objects
         #region 交互与命中（Interaction / Hit / HitAsLight / HitAsHeavy / ApplyHitEffects / ApplyAttackerResponse）
 
         /// <summary>
-        /// 反汇编 sub_4063B0 (0x00407378)：
+        /// C++ release sub_4063B0 (0x00407378)：
         ///   地面武器（state 1004/2004）才对角色造成碰撞伤害。
-        ///   飞行武器（state 1002/2000）的碰撞在 Entity_FrameAdvance 另行处理（待实现）。
+        ///   飞行武器（state 1002/2000）的碰撞在 Entity_FrameAdvance 对应路径处理。
         /// </summary>
         public override void Interaction()
         {
@@ -587,18 +601,18 @@ namespace NTSD.Animation.LF2Objects
         public override bool Hit(InteractionArea itr, LF2Entity attacker)
         {
             if (HoldObj != null) return false;
-            if (IsVRest(attacker)) return false;
+            if (attacker != null && ItrRest != null && ItrRest.HasVrest(attacker.StableId)) return false;
 
-            // 反汇编 0x0042F419-0x0042F45F：轻武器 kind=15/16 跳到同一 vx/vz 物理段
+            // C++ release 0x0042F419-0x0042F45F：轻武器 kind=15/16 跳到同一 vx/vz 物理段
             if (itr.kind == 15 || itr.kind == 16) { WhirlwindForce(itr, attacker); return true; }
             if (itr.kind == 10 || itr.kind == 11)
             {
-                // N-24 反汇编 0x0042F42E-0x0042F43C：kind=10/11 命中 entity_type==1/4/6 武器时
+                // N-24 C++ release 0x0042F42E-0x0042F43C：kind=10/11 命中 entity_type==1/4/6 武器时
                 // oid=201(0xC9) 或 oid=202(0xCA) 跳过武器物理效果
                 if (ObjectId == 201 || ObjectId == 202)
                     return false;
 
-                // P1-10/11: 反汇编 0x0042D384/0x0042D450 — kind=10/11 命中武器时的物理效果
+                // P1-10/11: C++ release 0x0042D384/0x0042D450 — kind=10/11 命中武器时的物理效果
                 // 轻武器(type=1/4/6): state!=1000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=3
                 // 重武器(type=2):     state!=2000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=2.3
                 const float kFluteVxzFactor = 0.9345f;
@@ -606,7 +620,7 @@ namespace NTSD.Animation.LF2Objects
                 bool isLight = IsLight; // type=1/4/6
                 int inSkyState = isLight ? LF2States.WeaponInSky : LF2States.HeavyWeaponInSky;
                 if (curState != inSkyState)
-                    Trans.Frame(0, 0);
+                    SetPhysicsFrameDirect(0);
                 PS.vx *= kFluteVxzFactor;
                 PS.vz *= kFluteVxzFactor;
                 PS.y = -2f;
@@ -626,7 +640,7 @@ namespace NTSD.Animation.LF2Objects
             if (accept)
             {
                 ApplyHitEffects(itr, attacker);
-                // 反汇编 0x0042D449~0x0042D464：entity_type=4/6（大弹/特效）被命中时 vx *= 0.55
+                // C++ release 0x0042D449~0x0042D464：entity_type=4/6（大弹/特效）被命中时 vx *= 0.55
                 if (WeaponType == 4 || WeaponType == 6)
                     PS.vx *= 0.55f;
             }
@@ -638,7 +652,7 @@ namespace NTSD.Animation.LF2Objects
         {
             if (state == LF2States.WeaponThrowing) // 1002
             {
-                // 反汇编：被角色打中时只设 fall=80（由 Entity_AI_Update LABEL_129 处理）
+                // C++ release：被角色打中时只设 fall=80（由 Entity_AI_Update LABEL_129 处理）
                 // 无速度反转；vrest 由 ApplyHitEffects 统一处理
                 return true;
             }
@@ -659,7 +673,7 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HitAsHeavy(InteractionArea itr, LF2Entity attacker, int state)
         {
-            // 反汇编 Entity_AI_Update 26344~26351：
+            // C++ release Entity_AI_Update 26344~26351：
             // type==1/2/4/6 被命中时 fall 强制=80，直接进飞出流程（LABEL_129→LABEL_130→LABEL_131）
             // 不做任何 vy/frame 设置——武器弹跳帧由 OnLanded() 分支处理
             if (state == LF2States.HeavyWeaponOnGround   // 2004
@@ -673,25 +687,25 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyHitEffects(InteractionArea itr, LF2Entity attacker)
         {
-            if (itr.vrest > 0) SetVRest(attacker, itr.vrest);
+            if (itr.vrest > 0 && attacker != null) ItrRest?.SetVrest(attacker.StableId, itr.vrest);
 
-            // 反汇编 Entity_AI_Update 26312：[+764h] -= injury（所有 type 均扣 HP）
+            // C++ release Entity_AI_Update 26312：[+764h] -= injury（所有 type 均扣 HP）
             if (itr.injury > 0) Health.HP -= itr.injury;
 
-            // 反汇编 0x0042E287-0x0042E29C：type==1/2/4/6 时 _flightCounter（耐久）-= itr[0x44]=injury
+            // C++ release：type==1/2/4/6 时 WeaponFlightCounter（耐久）-= injury。
             // itr[0x40]=bdefend==100 时强制置 -1（秒毁）
             int wt = WeaponType;
             if (wt == 1 || wt == 2 || wt == 4 || wt == 6)
             {
                 if (itr.bdefend == 100)
-                    _flightCounter = -1;
+                    FlightCounter = -1;
                 else
-                    _flightCounter -= itr.injury;
+                    FlightCounter -= itr.injury;
             }
 
             PlaySound(WeaponHitSound);
 
-            // 反汇编 0x42E5DE-0x42E6E8：飞行武器命中角色后的攻击者反弹三步骤
+            // C++ release 0x42E5DE-0x42E6E8：飞行武器命中角色后的攻击者反弹三步骤
             // 步骤1: state=1002(WeaponThrowing) → 反弹
             // 步骤2: state=2000(HeavyWeaponInSky) → 飞向victim时减速
             // 步骤3: state=3000 → 停止
@@ -700,7 +714,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 反汇编 0x42E5DE-0x42E6E8：飞行武器命中角色后对武器自身的三步骤处理。
+        /// C++ release 0x42E5DE-0x42E6E8：飞行武器命中角色后对武器自身的三步骤处理。
         /// </summary>
         private void ApplyAttackerResponse(LF2Entity victim)
         {
@@ -708,8 +722,7 @@ namespace NTSD.Animation.LF2Objects
             int curState = Frame?.D?.state ?? -1;
             if (curState == LF2States.WeaponThrowing) // 1002
             {
-                Trans.Frame(UnityEngine.Random.Range(0, 16), 0);
-                Trans.Trans();
+                SetPhysicsFrameDirect(RandInt(0, 16));
                 float knockbackVx = victim?.KnockbackVx ?? 0f;
                 PS.vx = -(knockbackVx * 0.5f);
                 PS.vy = -4f;
@@ -733,8 +746,7 @@ namespace NTSD.Animation.LF2Objects
             curState = Frame?.D?.state ?? -1;
             if (curState == 3000)
             {
-                Trans.Frame(10, 0);
-                Trans.Trans();
+                SetPhysicsFrameDirect(10);
                 PS.vx = 0f;
             }
         }
@@ -744,7 +756,7 @@ namespace NTSD.Animation.LF2Objects
         #region 持有攻击（ProcessAttack）
 
         /// <summary>
-        /// 持有攻击处理（反汇编 Entity_AI_Update 0x42CAB1）。
+        /// 持有攻击处理（C++ release Entity_AI_Update 0x42CAB1）。
         /// wpoint.attacking 对应 weapon_strength_list 的 entry 编号，
         /// 用 entry 参数向周围角色发起 ITR 碰撞。
         /// </summary>
@@ -793,7 +805,7 @@ namespace NTSD.Animation.LF2Objects
                     if (target == holder) continue;
                     if (target.Team == Team) continue;
                     if (target is not LF2Character character) continue;
-                    if (IsVRest(target)) continue;
+                    if (ItrRest != null && ItrRest.HasVrest(target.StableId)) continue;
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
                     bool hit = character.Hit(itr, this, attackerPos, default);
@@ -803,7 +815,7 @@ namespace NTSD.Animation.LF2Objects
                         result.VRest = itr.vrest;
                         result.ARest = itr.arest;
                         ItrArestUpdate(itr);
-                        SetVRest(target, itr.vrest);
+                        ItrRest?.SetVrest(target.StableId, itr.vrest);
                         return result;
                     }
                 }

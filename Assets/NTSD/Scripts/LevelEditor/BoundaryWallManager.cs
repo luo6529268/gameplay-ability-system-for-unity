@@ -191,7 +191,54 @@ namespace NTSD.LevelEditor
             return false;
         }
 
-        private bool TryGetWalkableBounds(out Rect bounds, float insetWorld)
+        /// <summary>
+        /// 在当前可走区域内用战斗确定性随机数采样一个点。
+        /// 用于正式战斗逻辑，避免 UnityEngine.Random 影响 C++ release 复现。
+        /// </summary>
+        public bool TryGetRandomWalkablePoint(DeterministicRng rng, out Vector2 pointXY, float insetWorld = 0f, int maxAttempts = 256)
+        {
+            pointXY = default;
+
+            if (rng == null)
+                return TryGetRandomWalkablePoint(out pointXY, insetWorld, maxAttempts);
+
+            if (!_initialized)
+            {
+                RefreshBoundaries();
+            }
+
+            if (!TryGetWalkableBounds(out var bounds, insetWorld))
+                return false;
+
+            int attempts = Mathf.Max(1, maxAttempts);
+            int xMin = Mathf.RoundToInt(bounds.xMin * SimulationConstants.PIXELS_PER_UNIT);
+            int xMax = Mathf.RoundToInt(bounds.xMax * SimulationConstants.PIXELS_PER_UNIT);
+            int yMin = Mathf.RoundToInt(bounds.yMin * SimulationConstants.PIXELS_PER_UNIT);
+            int yMax = Mathf.RoundToInt(bounds.yMax * SimulationConstants.PIXELS_PER_UNIT);
+
+            if (xMax <= xMin || yMax <= yMin)
+                return false;
+
+            for (int i = 0; i < attempts; i++)
+            {
+                float x = rng.NextInt(xMin, xMax) / SimulationConstants.PIXELS_PER_UNIT;
+                float y = rng.NextInt(yMin, yMax) / SimulationConstants.PIXELS_PER_UNIT;
+                Vector2 candidate = new Vector2(x, y);
+                if (IsPointWalkable(candidate))
+                {
+                    pointXY = candidate;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 获取当前启用可走区域的外接矩形。
+        /// 战斗运行时用它换算 C++ release 的 bg.width 与 zboundary 范围。
+        /// </summary>
+        public bool TryGetWalkableBounds(out Rect bounds, float insetWorld = 0f)
         {
             bounds = default;
 

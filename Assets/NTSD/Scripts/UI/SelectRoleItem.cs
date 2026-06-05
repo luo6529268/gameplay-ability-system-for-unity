@@ -657,17 +657,18 @@ namespace NTSD.UI
 
         /// <summary>
         /// 获取最终确定的队伍ID
-        /// 如果选择了最后一个选项（Independent），返回 TeamIndependent
+        /// C++ release 的队伍字段从 1 开始，0 表示没有有效队伍。
+        /// 如果选择了最后一个选项（Independent），返回 TeamIndependent。
         /// </summary>
         public int GetFinalTeam()
         {
             var config = GameConfig.Instance;
-            if (config == null) return 0;
+            if (config == null) return selectedTeamIndex + 1;
 
             if (selectedTeamIndex == config.TeamOptions.Length - 1)
                 return GameConfig.TeamIndependent;
 
-            return selectedTeamIndex;
+            return selectedTeamIndex + 1;
         }
 
         #endregion

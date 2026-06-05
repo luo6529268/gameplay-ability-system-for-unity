@@ -1,9 +1,8 @@
 namespace NTSD.Animation.LF2Tasks
 {
     /// <summary>
-    /// LF2 任务基类
-    /// 对应 FLF match.js tasks 数组中的任务对象
-    /// 参考：I:\C++Test\NTSD\F.LF-master\LF\match.js:194
+    /// LF2 任务基类。
+    /// 当前主要用于承载 C++ release opoint 创建请求在 Unity 模拟阶段之间的延迟执行。
     /// </summary>
     public abstract class LF2TaskBase
     {
@@ -15,8 +14,7 @@ namespace NTSD.Animation.LF2Tasks
     }
 
     /// <summary>
-    /// 任务类型枚举
-    /// 对应 FLF match.js process_task 的 case 分支
+    /// 任务类型枚举。
     /// </summary>
     public enum LF2TaskType
     {

@@ -6,31 +6,23 @@ using UnityEngine;
 namespace NTSD.Animation
 {
     /// <summary>
-    /// OPoint 工厂接口 - Enqueue + Flush 模式
-    /// 对应 FLF match.js tasks 队列机制
+    /// OPoint 工厂接口。Unity 侧使用 Enqueue + Flush，把生成请求延迟到统一阶段处理。
     /// </summary>
     public interface ILF2ObjectPointFactory
     {
-        /// <summary>入队单个对象创建任务</summary>
+        /// <summary>入队单个对象创建任务。</summary>
         void EnqueueCreateObject(OPointCreateTask task);
 
-        /// <summary>入队多对象创建任务</summary>
+        /// <summary>入队多个对象创建任务。</summary>
         void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task);
 
-        /// <summary>
-        /// 处理所有队列中的任务并清空
-        /// 对应 FLF match.js process_tasks() + tasks.length = 0
-        /// </summary>
+        /// <summary>处理队列中的所有任务并清空。</summary>
         void FlushTasks();
     }
 
     /// <summary>
-    /// FLF 对齐：character.prototype.opoint() 的完整实现
-    /// 只负责 enqueue，不负责实际创建
-    /// 
-    /// 参考：
-    /// - I:\C++Test\NTSD\F.LF-master\LF\character.js:2341 (character.prototype.opoint)
-    /// - I:\C++Test\NTSD\F.LF-master\LF\match.js:194 (create_object/create_multiple_objects)
+    /// 处理当前帧的 opoint。模块只负责生成请求入队，实际创建由工厂统一执行。
+    /// 行为以 C++ release 的 Entity_FrameLogic/opoint 分支为基准。
     /// </summary>
     public sealed class LF2ObjectPointModule
     {
@@ -46,10 +38,7 @@ namespace NTSD.Animation
             Factory = null;
         }
 
-        /// <summary>
-        /// 处理当前帧的 OPoint - 只入队，不立即创建
-        /// 对应 FLF character.prototype.opoint()
-        /// </summary>
+        /// <summary>处理当前帧 opoint，只入队，不立即创建。</summary>
         public void ProcessFrame(LF2LivingObject animator)
         {
             if (animator == null) return;
@@ -62,25 +51,39 @@ namespace NTSD.Animation
             LF2FrameData frame = animator.Frame.D;
             if (frame == null) return;
 
-            if (!frame.opoint.HasValue) return;
-            ObjectPoint op = frame.opoint.Value;
-            if (op.oid <= 0) return;
+            bool hasList = frame.opoints != null && frame.opoints.Count > 0;
+            if (!hasList && !frame.opoint.HasValue) return;
 
-            Debug.Log($"[OPointModule] ProcessFrame: char={animator.Name}, frame={frame.frameId}, oid={op.oid}, action={op.action}, facing={op.facing}");
+            ObjectPoint firstOp = hasList ? frame.opoints[0] : frame.opoint.Value;
+            if (firstOp.kind <= 0 || animator.AttackingCounter != 0) return;
 
-            // 对应反汇编 0x0042216F：被击中锁定期间不生成 opoint
+            // 被命中锁定期间不生成 opoint。
             if (animator.HitStun != 0) return;
 
-            // 对应反汇编 0x0042217D：帧延迟不为 0 且实体有类型时跳过 opoint
-            if (animator.FrameDelay != 0 && animator.ObjectType != 0) return;
+            // C++ release：角色在 frame_delay 非零时跳过 opoint；非角色仍可生成。
+            if (animator.FrameDelay != 0 && animator.ObjectType == 0) return;
 
-            // 对应反汇编 0x00421F11：自身是子对象（OwnerId != -1）且 ShotCount >= 150 → skip
+            // 子对象达到较高 ShotCount 后跳过生成，避免无限扩散。
             if (animator.OwnerId != -1 && animator.ShotCount >= 150) return;
 
-            // 对应反汇编 0x00421F2A：ShotCount >= 500 → skip
             if (animator.ShotCount >= 500) return;
 
-            // 对应反汇编 0x00421F57-F84：场景实体总数上限 500，type==3/4 时上限减半为 250
+            if (hasList)
+            {
+                for (int i = 0; i < frame.opoints.Count; i++)
+                    ProcessOneOpoint(animator, frame.opoints[i]);
+            }
+            else
+            {
+                ProcessOneOpoint(animator, frame.opoint.Value);
+            }
+        }
+
+        private void ProcessOneOpoint(LF2LivingObject animator, ObjectPoint op)
+        {
+            if (op.oid <= 0 || op.kind <= 0) return;
+
+            // 场景实体总数上限：普通对象 500，type 3/4 对象 250。
             var world = SimulationTickDriver.Instance?.World;
             if (world != null)
             {
@@ -90,8 +93,7 @@ namespace NTSD.Animation
                 if (objectCount >= limit) return;
             }
 
-            // 对应反汇编 0x00421F9C-FA6：ShotCount 递增
-            // step = (500 - min(ShotCount,500)) / 30；对 type3/4 先将 count 减半
+            // ShotCount 按正式版节奏递增；type 3/4 先减半计算。
             {
                 int count = animator.ShotCount < 500 ? animator.ShotCount : 500;
                 if (animator.ObjectType == 3 || animator.ObjectType == 4) count >>= 1;
@@ -99,7 +101,7 @@ namespace NTSD.Animation
                 animator.ShotCount += step + 1;
             }
 
-            // facing > 10: 批量生成（对应反汇编 0x0042219D: cmp ecx,0Ah; jle — 有符号比较，负值不进入）
+            // facing > 10 表示批量生成；负值不进入该分支。
             if (op.facing > 10)
             {
                 int number = op.facing / 10;
@@ -107,7 +109,6 @@ namespace NTSD.Animation
                 return;
             }
 
-            // 普通：单个对象生成
             EnqueueSingleTask(animator, op);
         }
 
@@ -116,13 +117,13 @@ namespace NTSD.Animation
             Vector3 pos = MakePoint(animator, op);
 
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
-            task.opoint  = op;
-            task.parent  = animator;
-            task.team    = animator.Team;
-            task.pos     = pos;
-            task.z       = animator.PS.z;
-            task.dir     = animator.PS.dir;
-            task.dvz     = 0f;
+            task.opoint = op;
+            task.parent = animator;
+            task.team = animator.Team;
+            task.pos = pos;
+            task.z = animator.PS.z;
+            task.dir = animator.PS.dir;
+            task.dvz = 0f;
 
             Factory.EnqueueCreateObject(task);
         }
@@ -132,37 +133,37 @@ namespace NTSD.Animation
             Vector3 pos = MakePoint(animator, op);
 
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateMultipleTask>();
-            task.opoint  = op;
-            task.parent  = animator;
-            task.team    = animator.Team;
-            task.pos     = pos;
-            task.z       = animator.PS.z;
-            task.dir     = animator.PS.dir;
-            task.dvz     = 0f;
-            task.number  = number;
+            task.opoint = op;
+            task.parent = animator;
+            task.team = animator.Team;
+            task.pos = pos;
+            task.z = animator.PS.z;
+            task.dir = animator.PS.dir;
+            task.dvz = 0f;
+            task.number = number;
 
             Factory.EnqueueCreateMultipleObjects(task);
         }
 
         /// <summary>
-        /// 计算 OPoint 的世界坐标
-        /// P2 对齐 FLF mechanics.js mech.prototype.make_point()
-        /// 使用 PS.sx/sy/sz（sprite origin）而非 PS.x/y/z
+        /// 计算 opoint 生成点。C++ release 使用实体逻辑坐标和当前帧 center，不依赖渲染原点缓存。
+        /// task.pos.y 仍按现有初始化约定传递 screenY（逻辑 y + z），初始化时会再减 task.z。
         /// </summary>
         private Vector3 MakePoint(LF2LivingObject animator, ObjectPoint op)
         {
-            var PS = animator.PS;
-            float spriteWidth = animator.GetSpriteWidthPxForCollision();
+            var ps = animator.PS;
+            var frame = animator.Frame?.D;
+            if (ps == null || frame == null)
+                return Vector3.zero;
 
-            Vector3 objectPoint = Vector3.zero;
-            objectPoint.x = (PS.dir == "right")
-                ? PS.sx + op.x
-                : PS.sx + spriteWidth - op.x;
+            float x = ps.dir == "right"
+                ? ps.x - frame.centerx + op.x
+                : ps.x + frame.centerx - op.x;
 
-            objectPoint.y = PS.sy + op.y;
-            objectPoint.z = PS.sz + op.y;
+            float logicalY = ps.y - frame.centery + op.y;
+            float screenY = logicalY + ps.z;
 
-            return objectPoint;
+            return new Vector3(x, screenY, ps.z);
         }
     }
 }

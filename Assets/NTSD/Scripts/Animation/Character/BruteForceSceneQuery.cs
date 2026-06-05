@@ -1,22 +1,16 @@
 ﻿using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
-using NTSD.Extensions;
 using NTSD.Simulation;
-using UnityEngine;
 
 namespace NTSD.Animation
 {
     /// <summary>
-    /// Brute-force scene query over all runtime entities.
+    /// 遍历全部运行时实体的战斗场景查询器。
     /// </summary>
     public class BruteForceSceneQuery : ILF2SceneQuery
     {
-        public static bool AttackTraceEnabled;
-        public static int AttackTraceAttackerId = -1;
-
         private readonly SimulationWorld _world;
         private readonly List<LF2Entity> _tmpResult = new List<LF2Entity>(16);
-        private readonly List<LF2Entity> _tmpItrResult = new List<LF2Entity>(16);
         private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
 
         public BruteForceSceneQuery(SimulationWorld world)
@@ -28,7 +22,6 @@ namespace NTSD.Animation
         {
             _tmpResult.Clear();
             _world.GetAllEntities(_tmpAllObjects);
-            bool traceThisQuery = AttackTraceEnabled && exclude != null && exclude.StableId == AttackTraceAttackerId;
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
@@ -36,15 +29,9 @@ namespace NTSD.Animation
                 if (target == exclude) continue;
                 if (target.PS == null || target.Frame?.D == null) continue;
 
-                float dx = (exclude?.PS != null && target.PS != null) ? (target.PS.x - exclude.PS.x) : 0f;
-                float dz = (exclude?.PS != null && target.PS != null) ? (target.PS.z - exclude.PS.z) : 0f;
-                bool traceTarget = traceThisQuery && Mathf.Abs(dx) <= 220f && Mathf.Abs(dz) <= 120f;
-
                 float spriteWidthPx = target.GetSpriteWidthPxForCollision();
                 if (spriteWidthPx <= 0f)
                 {
-                    if (traceTarget)
-                        Debug.LogError($"[AttackTrace][QueryBodiesSkipWidth] attacker={exclude.StableId} target={target.StableId} width={spriteWidthPx}");
                     continue;
                 }
 
@@ -55,22 +42,11 @@ namespace NTSD.Animation
                     spriteWidthPx
                 );
 
-                if (traceTarget)
-                {
-                    Debug.LogError($"[AttackTrace][QueryBodiesTarget] attacker={exclude.StableId} target={target.StableId} frame={target.Frame.N} state={target.Frame.D.state} pic={target.Frame.D.pic} dx={dx} dz={dz} bodyCount={bodyVolumes.Count}");
-                }
-
                 for (int b = 0; b < bodyVolumes.Count; b++)
                 {
                     bool intersects = CollisionUtil.Intersect(vol, bodyVolumes[b]);
-                    if (traceTarget)
-                    {
-                        Debug.LogError($"[AttackTrace][QueryBodiesIntersect] attacker={exclude.StableId} target={target.StableId} bodyIndex={b} intersects={intersects} itrVol=({vol.x},{vol.y},{vol.z}; vx={vol.vx},vy={vol.vy},w={vol.w},h={vol.h},zw={vol.zwidth}) bodyVol=({bodyVolumes[b].x},{bodyVolumes[b].y},{bodyVolumes[b].z}; vx={bodyVolumes[b].vx},vy={bodyVolumes[b].vy},w={bodyVolumes[b].w},h={bodyVolumes[b].h},zw={bodyVolumes[b].zwidth})");
-                    }
                     if (intersects)
                     {
-                        if (traceTarget)
-                            Debug.LogError($"[AttackTrace][QueryBodiesAdd] attacker={exclude.StableId} target={target.StableId}");
                         _tmpResult.Add(target);
                         break;
                     }
@@ -80,50 +56,10 @@ namespace NTSD.Animation
             return _tmpResult;
         }
 
-        public List<LF2Entity> QueryItrs(in PhysicsState.BattleVolume vol, LF2Entity exclude, int itrKind, int excludeTeam = 0)
-        {
-            _tmpItrResult.Clear();
-            _world.GetAllEntities(_tmpAllObjects);
-
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
-            {
-                LF2Entity target = _tmpAllObjects[i];
-                if (target == exclude) continue;
-                if (target.PS == null || target.Frame?.D == null) continue;
-                if (excludeTeam != 0 && target.Team == excludeTeam) continue;
-
-                var itrs = target.Frame.D.itrs;
-                if (itrs == null || itrs.Count == 0) continue;
-
-                float spriteWidthPx = target.GetSpriteWidthPxForCollision();
-                if (spriteWidthPx <= 0f) continue;
-
-                for (int j = 0; j < itrs.Count; j++)
-                {
-                    if (!MatchesKindAlias(itrs[j].kind, itrKind)) continue;
-
-                    var itrVol = target.PS.GetItrVolume(itrs[j], target.Frame.D.centerx, target.Frame.D.centery, spriteWidthPx);
-                    if (CollisionUtil.Intersect(vol, itrVol))
-                    {
-                        _tmpItrResult.Add(target);
-                        break;
-                    }
-                }
-            }
-
-            return _tmpItrResult;
-        }
-
-        private bool MatchesKindAlias(int kind, int targetKind)
-        {
-            return _world?.ItrKindService?.MatchesKindAlias(kind, targetKind)
-                   ?? NTSDItrKindService.MatchesKindAliasValue(kind, targetKind);
-        }
-
     }
 
     /// <summary>
-    /// Collision utility methods with no gameplay ownership.
+    /// 纯碰撞工具函数，不持有战斗逻辑状态。
     /// </summary>
     public static class CollisionUtil
     {

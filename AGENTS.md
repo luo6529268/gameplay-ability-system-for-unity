@@ -9,7 +9,49 @@ For current Unity NTSD reconstruction work, use the formal C++ release project a
 - Do not import or preserve debug macro, debug trace, debug shortcut, or debug-only behavior as formal gameplay logic.
 - The C++ project is both the NTSD2.4 EXE reconstruction target and the intermediate baseline for the Unity project.
 - Keep rendering, pooling, and MonoBehaviour integration Unity-native, but converge combat objects toward the C++ release model of unified entity data plus central battle tick/collision/hit systems.
+- Current Unity scope is battle scene/runtime replication only. Ignore menu, character select, loading, result/HUD UI, editor preview, and broader app flow unless a piece directly affects battle simulation.
 - Older notes below that name disassembly or FLF as the authority are historical records only; for current Unity gameplay reconstruction, consult the C++ release implementation first.
+
+## 帧同步底层与后续联机预留
+
+当前战斗底层以 `SimulationTickDriver` 作为逻辑帧时钟入口，但它不能依赖 Unity `FixedUpdate` 作为规则来源。Unity 的 `Update/LateUpdate/FixedUpdate` 只属于外层引擎回调；战斗逻辑帧必须由项目自己维护固定 tick。
+
+当前已采用的原则：
+
+- 战斗逻辑帧固定为 C++/NTSD 对齐需要的 30Hz，即 `SimulationConstants.SIM_DT = 1 / 30`。
+- `SimulationTickDriver.Update()` 使用本地时间累积器驱动逻辑帧，默认使用 `Time.unscaledDeltaTime` 作为外层时钟输入。
+- 单个逻辑 tick 内部不得使用 `Time.deltaTime`、`Time.fixedDeltaTime`、Unity Physics、Animator 状态或 Transform 作为逻辑真相。
+- `FixedUpdate()` 不再推进战斗逻辑。
+- `LateUpdate()` 只做表现层刷新，例如 Spark 渲染、视觉抖动、后续插值表现；表现层不能反向修改逻辑真相。
+- `SparkRenderFrame` 当前应跟随逻辑 tick，而不是跟随 Unity 渲染帧自增。
+
+当前已预留但尚未完整实现的联机帧同步边界：
+
+- `LockstepSimulationSettings`：由 `AppManager.battleLockstepSettings` 暴露，运行前可在 Inspector 修改。
+- `SimulationDriveMode.LocalFreeRun`：当前单机默认模式，按本地逻辑时钟推进。
+- `SimulationDriveMode.LockstepBuffered`：后续联机模式，推进前需要目标逻辑帧输入准备好。
+- `SimulationDriveMode.Manual`：后续回放、调试、自动化对齐测试使用，只通过 `StepOneTick()` 推进。
+- `ISimulationFrameInputProvider`：后续接入联机输入收齐、预测输入、托管输入、回滚重放和输入流回放。
+- `enableFrameChecksum`：后续在 tick 结束后计算世界状态 checksum，用于联机 desync 检测和 C++ 对齐验证。
+
+后续需要按以下顺序调整，不要一次性混在战斗逻辑修复里：
+
+1. 输入帧模型：定义 `FrameInputSet`，每个逻辑帧包含所有玩家的离散输入。当前角色自己的 `SimInputBuffer` 暂时保留，后续应逐步迁移到统一帧输入源。
+2. 本地输入提供者：实现单机 `LocalFrameInputProvider`，把本地输入写入目标 tick。单机可保持 `inputDelayTicks = 0`，但接口要与联机一致。
+3. 联机输入缓冲：实现 `LockstepFrameInputProvider`，按 tick 保存远端输入；`IsFrameInputReady(tick)` 决定是否能推进该帧。
+4. 输入延迟策略：联机默认从 `inputDelayTicks = 2~3` 起步，具体值根据网络质量调整；不要把输入直接套到当前正在执行的 tick。
+5. 过载处理：保持固定逻辑步长，不因卡顿改变 dt；通过 `maxCatchUpTicksPerFrame` 和 `maxBacklogTicks` 控制追帧与积压。
+6. 回放入口：实现 `ResetWorld(seed)`、输入流重放、`StepOneTick(frameInput)`，用于复现 bug 和 C++ 行为对齐。
+7. checksum：每 N 帧计算逻辑世界关键状态 hash，至少包含实体数量、stable id、oid、frame、位置、速度、hp、team、link/holder/target 等核心字段。
+8. 回滚预留：在 checksum 或远端输入不一致时，后续可基于快照和输入流回放恢复；当前阶段只保留边界，不实现完整回滚。
+9. 表现插值：后续如需平滑渲染，只能使用 `SimulationTickDriver.RenderAlpha` 或逻辑快照插值，不得改变 `SimulationWorld` 真值。
+10. 网络层：后续只同步输入和校验数据，不同步角色 Transform、Animator 或最终位置作为主要逻辑结果。
+
+处理战斗 bug 时的注意事项：
+
+- 如果问题是烟雾、武器、分身、hit spark 时序，优先检查 `NTSDBattleTickSystem` 与 `SimulationWorld` 的 C++ pass 顺序，而不是修改底层时钟。
+- 如果问题是输入响应、联机预留、回放或卡顿追帧，再回到 `SimulationTickDriver` 和输入提供者。
+- 不要为了临时修复视觉问题，把表现层状态写回逻辑层。
 
 This repository is a Unity project replicating **NTSD (Naruto The Setting Dawn)** game logic, built on top of EX Gameplay Ability System (EX-GAS).
 

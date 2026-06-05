@@ -56,8 +56,10 @@ namespace NTSD.Animation.LF2Objects
                 AddToPool(LF2ObjectType.SpecialAttack);
             for (int i = 0; i < _initialPoolSize / 6; i++)
                 AddToPool(LF2ObjectType.ThrowWeapon);
+            for (int i = 0; i < _initialPoolSize / 6; i++)
+                AddToPool(LF2ObjectType.Other);
             
-            // Step 4.1: 测试预热角色
+            // 角色逻辑对象也走同一引用池，便于战斗场景复用。
             for (int i = 0; i < 10; i++)
                 AddToPool(LF2ObjectType.Character);
 
@@ -96,7 +98,7 @@ namespace NTSD.Animation.LF2Objects
                 case LF2ObjectType.Character:
                     return new LF2Character();
                 case LF2ObjectType.Other:
-                    return null; // 暂不实现 Type 5 逻辑类，仅预留池位
+                    return new LF2OtherObject();
                 default:
                     Log.Error("[LF2ReferencePool] Unsupported object type: {0}", objectType);
                     return null;
@@ -143,7 +145,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 批量预热接口（Step 4.2: 由 Loading 界面调用）
+        /// 批量预热接口，由战斗加载流程按需要调用。
         /// </summary>
         public void Prewarm(LF2ObjectType type, int count)
         {

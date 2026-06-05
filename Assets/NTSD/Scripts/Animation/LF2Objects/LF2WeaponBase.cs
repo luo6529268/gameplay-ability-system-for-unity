@@ -10,7 +10,7 @@ using NTSD.App;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// Release-aligned weapon base class.
+    /// 对齐 C++ release 的武器基类。
     /// </summary>
     public abstract class LF2WeaponBase : LF2Entity
     {
@@ -25,26 +25,29 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>控制器（武器由持有者间接控制）</summary>
         public ILF2Controller Controller { get; set; }
 
-        /// <summary>HP 恢复计时器（回旋镖捕获等）</summary>
-        public override int HealTimer { get; set; } = 0;
         // ========== 配置字段 ==========
         protected int _lastState = -1;
 
         // ========== 持有者信息 ==========
         protected LF2LivingObject _holdObj;
 
-        // 反汇编 [entity+3F8h]：投掷者 StableId，投掷后保留（不随投掷清零），用于回旋镖捕获检测
-        public int PickerStableId { get; set; } = -1;
+        // C++ release [entity+3F8h]：投掷者 StableId，投掷后保留，用于回旋镖捕获检测。
+        public int PickerStableId
+        {
+            get => Runtime.PickerStableId;
+            set => Runtime.PickerStableId = value;
+        }
 
         // 本帧重力累加量，由 WeaponFlightPhysics 计算，WeaponDynamics 在 y+=vy 后使用
-        // 对齐反汇编 0x4164BD：gravity 在 y 更新后、新 y<0 时才加入 vy
+        // 对齐 C++ release 0x4164BD：gravity 在 y 更新后、新 y<0 时才加入 vy
         protected float _gravityToAdd;
 
-        // ========== VRest 系统 ==========
-        protected Dictionary<int, int> _vrest = new Dictionary<int, int>();
-
         // ========== 武器数据 ==========
-        public int WeaponDropHurt { get; set; } = 10;
+        public int WeaponDropHurt
+        {
+            get => Runtime.WeaponDropHurt > 0 ? Runtime.WeaponDropHurt : 10;
+            set => Runtime.WeaponDropHurt = value;
+        }
 
         // weapon_strength_list（由 CharacterAnimtorManager 在加载时注入）
         protected List<WeaponStrengthEntry> _weaponStrengthList;
@@ -57,10 +60,10 @@ namespace NTSD.Animation.LF2Objects
 
         public abstract bool IsLight { get; }
         public abstract bool IsHeavy { get; }
-        // 反汇编 [weapon+368h+6F8h]：0=普通轻武器, 1=重武器, 2=轻特殊, 4=特殊重武器, 6=饮料类
+        // C++ release [weapon+368h+6F8h]：0=普通轻武器, 1=重武器, 2=轻特殊, 4=特殊重武器, 6=饮料类
         public abstract int WeaponType { get; }
         public override int ReleaseEntityType => WeaponType;
-        // 反汇编 this+800：笛子命中累积器，子类实现存储
+        // C++ release weapon_count：笛子命中累积器，子类实现存储。
         public virtual int FluteWeight { get => 0; set { } }
         // ========== 初始化方法 ==========
 
@@ -72,6 +75,8 @@ namespace NTSD.Animation.LF2Objects
 
             // 初始化基类字段
             PS = new PhysicsState();
+            PS.BindRuntime(Runtime);
+            Health.BindRuntime(Runtime);
             Trans = new FrameTransistor(this);
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
@@ -88,15 +93,15 @@ namespace NTSD.Animation.LF2Objects
             InitializePosition(task);
             InitializeDirection(task);
             InitializeFrame(task);
+            InitializeVelocity(task);
             InitializeHealth();
 
-            // FLF: if (T.opoint.kind === 2) 被角色持有
+            // opoint kind=2：生成后立即由父角色持有。
             if (task.opoint.kind == 2 && task.parent != null)
             {
                 Pick(task.parent as LF2LivingObject);
-                // 反汇编：opoint kind=2 生成武器时，角色持有关系双向绑定
-                // weapon.Pick(parent) 设置武器侧；还需告知角色侧持有此武器
-                (task.parent as LF2Character)?.HoldWeapon(this);
+                // C++ release：opoint kind=2 生成武器时，角色和被持有对象双向绑定。
+                (task.parent as LF2Character)?.AttachOpointHeldObject(this);
             }
 
             Renderer = renderer;
@@ -106,16 +111,16 @@ namespace NTSD.Animation.LF2Objects
         public override void Reset()
         {
             FrameCache.Clear();
+            Runtime.Reset();
             ObjectId = 0;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
             _holdObj = null;
-            _vrest.Clear();
             ShotCount = 0;
             PickerStableId = -1;
+            Runtime.HolderStableId = -1;
             ResetSpark();
-            Runtime.Reset();
             ResetStableId();
         }
 
@@ -130,6 +135,7 @@ namespace NTSD.Animation.LF2Objects
         {
             ObjectId = task.opoint.oid;
             Team = task.team;
+            Runtime.OwnerStableId = task.parent?.StableId ?? -1;
         }
 
         protected void InitializePosition(OPointCreateTask task)
@@ -152,17 +158,27 @@ namespace NTSD.Animation.LF2Objects
 
         protected void InitializeFrame(OPointCreateTask task)
         {
-            int action = (task.opoint.action == 0) ? 999 : task.opoint.action;
+            int action = (task.opoint.action == 0 && !task.preserveActionZero) ? 999 : task.opoint.action;
             // 加载帧数据
             var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
             Frame.D = FrameCache.GetFrameDataById(action);
-            Trans.Frame(action, 0);
+            SetFrameDirect(action);
+        }
+
+        protected void InitializeVelocity(OPointCreateTask task)
+        {
+            if (task.useDirectVelocity)
+            {
+                PS.vx = task.directVx;
+                PS.vy = task.directVy;
+                PS.vz = task.directVz;
+            }
         }
 
         protected void InitializeHealth()
         {
-            // 从 DAT 数据读取 weapon_hp / weapon_drop_hurt（反汇编 ParseCharData 0x0040D8F0）
+            // 从 DAT 数据读取 weapon_hp / weapon_drop_hurt（C++ release ParseCharData 0x0040D8F0）
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             if (charData != null && charData.weapon_hp > 0)
             {
@@ -173,12 +189,12 @@ namespace NTSD.Animation.LF2Objects
             {
                 Health.HP = 100;
             }
-            // 反汇编 Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
+            // C++ release Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
             OnHealthInitialized(charData);
         }
 
         /// <summary>
-        /// InitializeHealth 完成后回调，供子类初始化 _flightCounter 等依赖 weapon_hp 的字段。
+        /// InitializeHealth 完成后回调，供子类初始化 WeaponFlightCounter 等依赖 weapon_hp 的字段。
         /// </summary>
         protected virtual void OnHealthInitialized(LF2CharacterData charData) { }
 
@@ -202,13 +218,12 @@ namespace NTSD.Animation.LF2Objects
 
             if (isStateTrans)
             {
-                HitStun = 0;
+                AttackingCounter = 0;
                 StateEntryEvent();
                 _lastState = Frame.D.state;
             }
 
-            Trans.SetWait(Frame.D.wait, 99);
-            Trans.SetNext(Frame.D.next, 99);
+            Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
             FrameEvent();
 
             if (!string.IsNullOrEmpty(Frame.D.sound))
@@ -221,7 +236,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// PreInteraction 阶段 - 对应反汇编 sub_419F80 武器 wpoint→itr 拾取检测
+        /// PreInteraction 阶段 - C++ release 对齐 sub_419F80 武器 wpoint→itr 拾取检测
         /// 把当前帧的 wpoint（kind=1/2/7）当作临时 itr，检测周围角色 bdy，触发拾取。
         /// </summary>
         public override void SimPreInteraction(int tickIndex)
@@ -297,7 +312,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0)
+        /// EntityCollision 阶段 - C++ release 对齐 Entity_Collision (sub_4138F0)
         /// 武器专属路径：N-1~N-5 + ShakeTimer 趋零 + wait/next 推进 + Frame.PN 更新
         /// </summary>
         public override void SimEntityCollision(int tickIndex)
@@ -317,14 +332,14 @@ namespace NTSD.Animation.LF2Objects
             // 0x413937: cpoint.kind == 2 → return
             if (fD.cpoint != null && fD.cpoint.kind == 2) return;
 
-            // N-1（0x41395F）: entity_type==3 && frame.mp > 0 → HP -= mp；HP<=0 → HP=0, frame=hit_a
-            if (WeaponType == 3 && fD.mp > 0 && Health != null)
+            // N-1（0x41395F）: entity_type==3 && frame.hit_a > 0 → HP -= hit_a；HP<=0 → frame=hit_d
+            if (WeaponType == 3 && fD.hit_a > 0 && Health != null)
             {
-                Health.HP -= fD.mp;
+                Health.HP -= fD.hit_a;
                 if (Health.HP <= 0)
                 {
                     Health.HP = 0;
-                    SetFrameDirect(fD.hit_a);
+                    SetFrameDirect(fD.hit_d);
                     fD = Frame.D;
                     if (fD == null) return;
                 }
@@ -334,10 +349,10 @@ namespace NTSD.Animation.LF2Objects
             if (ShakeTimer > 0) ShakeTimer--;
             else if (ShakeTimer < 0) ShakeTimer++;
 
-            // 0x413A14: 帧号变化时重置 HitStun；0x413A1A: 无条件 ++
+            // 0x413A14: 帧号变化时重置 Entity::attacking；0x413A1A: 无条件 ++
             if (Frame.N != Frame.PN)
-                HitStun = 0;
-            HitStun++;
+                AttackingCounter = 0;
+            AttackingCounter++;
 
             // N-2（0x413A27）: entity_type>=0 && frame.state==0 && y<0 → frame=212
             if (WeaponType >= 0 && fD.state == 0 && PS.y < 0)
@@ -355,7 +370,7 @@ namespace NTSD.Animation.LF2Objects
                 if (fD == null) return;
             }
 
-            // N-4（0x413AB7）: frame.state==14 && HP<=0 → 条件满足时 ShakeTimer=30, HitStun=0
+            // N-4（0x413AB7）: frame.state==14 && HP<=0 → 条件满足时 ShakeTimer=30, attacking=0
             if (fD.state == 14 && Health != null && Health.HP <= 0)
             {
                 // 0x413AC8: OwnerEntityIndex < 0 && Team != 5 → 若 ShakeTimer<=0 → ShakeTimer=30
@@ -364,7 +379,7 @@ namespace NTSD.Animation.LF2Objects
                     if (ShakeTimer <= 0)
                         ShakeTimer = 30;
                 }
-                HitStun = 0;
+                AttackingCounter = 0;
             }
 
             // N-4 facing（0x413AFC）: frame.state==2000 → vx==0→facing=left; vx!=0→facing=right
@@ -374,10 +389,10 @@ namespace NTSD.Animation.LF2Objects
                 else SwitchDir("right");
             }
 
-            // wait/next 推进（0x413B2F）: HitStun > wait → HitStun=0, frame=next
-            if (HitStun > fD.wait)
+            // wait/next 推进（0x413B2F）: Entity::attacking > wait → attacking=0, frame=next
+            if (AttackingCounter > fD.wait)
             {
-                HitStun = 0;
+                AttackingCounter = 0;
                 int nextFrame = fD.next;
                 if (nextFrame != 0)
                 {
@@ -412,8 +427,8 @@ namespace NTSD.Animation.LF2Objects
             // 0x413BAC: frame < 0 || frame >= 400 → return
             if (Frame.N < 0 || Frame.N >= 400) return;
 
-            // frame==212 after normal frame advance → TODO: 同步背景速度（字段不存在，占位）
-            // 0x413C49: frame==0xD4 && ebp==0 → sync bg velocity [ecx+50h]/[ecx+54h]
+            // frame==212 after normal frame advance：C++ release 会同步背景速度。
+            // Unity 战斗场景当前由关卡/相机系统维护背景速度，这里不直接写实体字段。
 
             // 0x413DEB: frame==0xCAh=202 → ShakeTimer=20
             if (Frame.N == 202)
@@ -424,17 +439,17 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 直接设置帧编号（对应反汇编直接写 [esi+70h]），不触发 OnFrameTransit 回调。
+        /// 直接设置帧编号（C++ release 对齐直接写 [esi+70h]），不触发 OnFrameTransit 回调。
         /// </summary>
-        private void SetFrameDirect(int frameId)
+        protected internal void SetFrameDirect(int frameId)
         {
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);
-            //if (Frame.D != null)
-            //{
-            //    Trans.SetWait(Frame.D.wait, 99);
-            //    Trans.SetNext(Frame.D.next, 99);
-            //}
+            AttackingCounter = 0;
+            if (Frame.D != null && Trans != null)
+            {
+                Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
+            }
         }
 
         public override void SimTU(int tickIndex)
@@ -449,11 +464,8 @@ namespace NTSD.Animation.LF2Objects
 
             TUEvent();
 
-            UpdateVRest();
-            ItrRest?.Tick();
-
-            // 反汇编 Entity_AI_Update 0x004228B8-0x004228C6：
-            // type=1/2/4/6 武器，_flightCounter < 0 → 武器消失
+            // C++ release Entity_AI_Update 0x004228B8-0x004228C6：
+            // type=1/2/4/6 武器，WeaponFlightCounter < 0 → 武器消失。
             if (_holdObj == null && IsWeaponDestroyable() && GetFlightCounter() < 0)
             {
                 DieEvent();
@@ -466,10 +478,10 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        /// <summary>反汇编 0x004228A0: type=1/2/4/6 才检查 flightCounter</summary>
+        /// <summary>C++ release 0x004228A0: type=1/2/4/6 才检查 flightCounter</summary>
         protected virtual bool IsWeaponDestroyable() => false;
 
-        /// <summary>供基类 SimTU 读取 _flightCounter</summary>
+        /// <summary>供基类 SimTU 读取 WeaponFlightCounter。</summary>
         protected virtual int GetFlightCounter() => 0;
 
         #endregion
@@ -496,9 +508,6 @@ namespace NTSD.Animation.LF2Objects
         {
             return GetState() switch
             {
-                LF2States.WeaponInSky => State_WeaponInSky(eventType, eventData),
-                LF2States.WeaponOnHand => State_WeaponOnHand(eventType, eventData),
-                LF2States.WeaponThrowing => State_WeaponThrowing(eventType, eventData),
                 LF2States.WeaponJustOnGround => State_WeaponJustOnGround(eventType, eventData),
                 LF2States.WeaponOnGround => State_WeaponOnGround(eventType, eventData),
                 _ => false,
@@ -509,7 +518,7 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 飞行武器落地后的弹射与停止处理
-        /// 对应反汇编 Entity_FrameAdvance 0x4164A9-0x416577（y>=0 路径）
+        /// C++ release 对齐 Entity_FrameAdvance 0x4164A9-0x416577（y>=0 路径）
         /// 子类按 WeaponType 重写以实现差异化落地行为
         /// </summary>
         protected virtual void OnLanded()
@@ -519,13 +528,13 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 飞行武器每帧的特化物理（在 Dynamics 之前执行）
-        /// 对应反汇编 Entity_FrameAdvance 0x416240-0x416577（在空中时的 type 分流）
+        /// C++ release 对齐 Entity_FrameAdvance 0x416240-0x416577（在空中时的 type 分流）
         /// 子类按 WeaponType 重写
         /// </summary>
         protected virtual void WeaponFlightPhysics() { }
 
         /// <summary>
-        /// 投掷成功后的初始化回调（子类用于初始化 _flightCounter 等）
+        /// 投掷成功后的初始化回调（子类用于初始化 WeaponFlightCounter 等）。
         /// </summary>
         protected virtual void OnThrown() { }
 
@@ -535,7 +544,7 @@ namespace NTSD.Animation.LF2Objects
 
         private void Generic_TU()
         {
-            // ── 反汇编 Entity_FrameAdvance 0x416240 入口守卫 ──────────────────────
+            // ── C++ release Entity_FrameAdvance 0x416240 入口守卫 ──────────────────────
             // 1. FrameDelay [+0B4h] 递减/递增并无条件提前退出
             //    > 0 → dec → 无条件返回（0x416258-0x41627C: dec; 无论新值是否==0都retn）
             //    < 0 → inc → 无条件返回（0x41626F-0x41627C: inc; retn，不检查新值）
@@ -551,11 +560,11 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            // 2. held_by [+98h]：被持有时 >= 0，跳过全部飞行物理（反汇编 0x41627D: jl loc_416D9E）
+            // 2. held_by [+98h]：被持有时 >= 0，跳过全部飞行物理（C++ release 0x41627D: jl loc_416D9E）
             if (_holdObj != null) return;
 
-            // 3. frame.state == 2（freeze/被抓）时跳过（反汇编 0x4162A1: jz loc_416D9E）
-            if (Frame?.D?.state == 2) return;
+            // 3. cpoint.kind == 2 时跳过（C++ release 0x4162A7: cmp cpoint.kind,2; jz loc_416D9E）
+            if (Frame?.D?.cpoint != null && Frame.D.cpoint.kind == 2) return;
             // ────────────────────────────────────────────────────────────────────
 
             Interaction();
@@ -567,7 +576,7 @@ namespace NTSD.Animation.LF2Objects
                 case 2001:
                     break;
                 default:
-                    // 严格对齐反汇编 Entity_FrameAdvance 0x4162EB-0x416DA4 的执行顺序：
+                    // 严格对齐 C++ release Entity_FrameAdvance 0x4162EB-0x416DA4 的执行顺序：
                     // 1. x += vx（边界）
                     // 2. type=4/typeSub=78: x += vx*0.2；typeSub=65: x -= vx*0.2
                     // 3. z += vz（边界）
@@ -582,31 +591,32 @@ namespace NTSD.Animation.LF2Objects
                     WeaponFlightPhysics();
                     CharacterMechanics.WeaponDynamics(PS, _gravityToAdd);
 
-                    // 反汇编 0x416577~0x4166CE：type=0 空中（新y<0）时的帧动态切换
+                    // C++ release 0x416577~0x4166CE：type=0 空中（新y<0）时的帧动态切换
                     if (PS.y < -0.0001f)
                         OnInFlightFrameUpdate();
                     break;
             }
 
-            // 反汇编 0x4164A9：新y >= -0.0001 且旧y < 0 表示本帧落地
+            // C++ release 0x4164A9：新y >= -0.0001 且旧y < 0 表示本帧落地
             if (PS.y >= 0 && PS.vy > 0)
                 OnLanded();
 
-            // 反汇编 LABEL_182 末尾：if (frame.state != 12) this+800 = 0
+            // C++ release LABEL_182 末尾：if (frame.state != 12) this+800 = 0
             if ((Frame?.D?.state ?? -1) != LF2States.Falling)
                 FluteWeight = 0;
 
-            // 反汇编 0x00405132：type=4 回旋镖飞行中，距投掷者够近时自动回收
+            // C++ release 0x00405132：type=4 回旋镖飞行中，距投掷者够近时自动回收
             if (WeaponType == 4 && _holdObj == null && PickerStableId >= 0)
                 CheckBoomerangCatch();
         }
 
         /// <summary>
-        /// 反汇编 EXE 0x00405132：回旋镖（type=4）捕获检测。
+        /// C++ release EXE 0x00405132：回旋镖（type=4）捕获检测。
         /// x：|dx| &lt; 30（对称）
         /// z：thrower.z - 80 &lt; weapon.z &lt; thrower.z（单向，武器必须在投掷者前方区间内）
         /// y：|dy| &lt; 10（对称）
         /// 满足条件：frame=60, vx/vy/vz=0
+        /// </summary>
 
         private void CheckBoomerangCatch()
         {
@@ -623,7 +633,7 @@ namespace NTSD.Animation.LF2Objects
             if (thrower == null || thrower.Health?.HP <= 0) return;
 
             float dx = Mathf.Abs(PS.x - thrower.PS.x);
-            // 反汇编 0x405187-0x405196：z 为单向检测
+            // C++ release 0x405187-0x405196：z 为单向检测
             // weapon.z <= thrower.z-80 OR weapon.z >= thrower.z → 跳过
             float dy = Mathf.Abs(PS.y - thrower.PS.y);
             if (dx >= 30f || PS.z <= thrower.PS.z - 80f || PS.z >= thrower.PS.z || dy >= 10f) return;
@@ -631,43 +641,28 @@ namespace NTSD.Animation.LF2Objects
             PS.vx = 0f;
             PS.vy = 0f;
             PS.vz = 0f;
-            Trans.Frame(60, 0);
-            Trans.Trans();
-            // 反汇编 0x004051FC：捕获后设置 thrower.[+0E4h] = 100（HP 恢复计时器）
+            SetFrameDirect(60);
+            // C++ release 0x004051FC：捕获后设置 thrower.[+0E4h] = 100（HP 恢复计时器）
             thrower.HealTimer = 100;
         }
 
         /// <summary>
         /// 飞行武器在空中（新y&lt;0）时的帧动态更新。
-        /// 对应反汇编 Entity_FrameAdvance 0x416577-0x4166CE（type==0 的 Falling/Burning 帧切换）。
+        /// C++ release 对齐 Entity_FrameAdvance 0x416577-0x4166CE（type==0 的 Falling/Burning 帧切换）。
         /// 子类按 WeaponType 重写。
+        /// </summary>
 
         private void Generic_Die()
         {
-            // 反汇编：武器 HP 耗尽后，EXE 由 GameMode 层负责生成 broken_weapon 对象并回收武器 entity（当前框架未实现）。
-            // 此处播放破碎音效，broken_weapon 生成留作 GameMode 框架完善后实现。
+            // C++ release 中武器 HP 耗尽后由 GameMode 层生成 broken_weapon 碎片并回收武器实体。
+            // Unity 侧在这里播放破碎音效并请求战斗世界生成碎片。
             PlaySound(WeaponBrokenSound);
             CreateBrokenEffect();
         }
 
         #endregion
 
-        #region 具体状态处理（State_WeaponInSky / OnHand / Throwing / JustOnGround / OnGround 虚方法）
-
-        protected virtual bool State_WeaponInSky(string eventType, object eventData)
-        {
-            return false;
-        }
-
-        protected virtual bool State_WeaponOnHand(string eventType, object eventData)
-        {
-            return false;
-        }
-
-        protected virtual bool State_WeaponThrowing(string eventType, object eventData)
-        {
-            return false;
-        }
+        #region 具体状态处理（JustOnGround / OnGround 虚方法）
 
         protected virtual bool State_WeaponJustOnGround(string eventType, object eventData)
         {
@@ -702,7 +697,7 @@ namespace NTSD.Animation.LF2Objects
             var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
             int count = Mathf.Min(itrs.Count, itrVolumes.Count);
 
-            // 反汇编 sub_419F80：外层遍历所有 itr，命中后 goto LABEL_184（继续下一个 itr）
+            // C++ release sub_419F80：外层遍历所有 itr，命中后 goto LABEL_184（继续下一个 itr）
             // 不是命中即 return，每个 itr 都独立检查所有候选目标
             for (int i = 0; i < count; i++)
             {
@@ -721,7 +716,7 @@ namespace NTSD.Animation.LF2Objects
 
                     ItrArestUpdate(itr);
                     target.ItrVrestUpdate(StableId, itr);
-                    break; // 每个 itr 只命中一个目标（反汇编内层 bdy 循环命中即跳到下一个 itr）
+                    break; // 每个 itr 只命中一个目标（C++ release内层 bdy 循环命中即跳到下一个 itr）
                 }
             }
         }
@@ -734,10 +729,9 @@ namespace NTSD.Animation.LF2Objects
             if (target.Health != null && target.Health.HP <= 0) return false;
             if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
             if (!target.ItrVrestTest(StableId)) return false;
-            var kindService = Match?.ItrKindService;
-            if (target is not LF2LivingObject livingTarget || !kindService.ShouldHitTarget(itr.kind, this, livingTarget)) return false;
+            if (target is not LF2LivingObject) return false;
 
-            // 反汇编 0x41A0C9-0x41A20B：itr.attacking 目标过滤
+            // C++ release 0x41A0C9-0x41A20B：itr.attacking 目标过滤
             int targetState = target.GetState();
             int targetFrame = target.Frame?.N ?? -1;
             // EXE sub_419F80 0x0041A6A4：itr.kind=5 且 attacking!=0 → 拾取路径，跳过伤害
@@ -764,6 +758,13 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
+            if (itr.kind == 8)
+            {
+                if (target is not LF2Character) return false;
+                if (DeferState3005Kind8LeadIn()) return false;
+                return TryApplyHit(itr, target);
+            }
+
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
                 return TryApplyHit(itr, target);
@@ -779,11 +780,34 @@ namespace NTSD.Animation.LF2Objects
                     return HandleWeaponKind3Stick(itr, target);
                 case 7:
                     return HandlePreInteractionKind7(itr, target);
-                case 8:
-                    return HandleWeaponKind8Attach(itr, target);
                 default:
                     return false;
             }
+        }
+
+        private bool DeferState3005Kind8LeadIn()
+        {
+            var activeFrame = Frame?.D;
+            if (activeFrame == null || activeFrame.state != LF2States.ObjectFlying)
+            {
+                return false;
+            }
+
+            // C++ release defer_state3005_kind8_lead_in：
+            // state=3005 且当前/下一帧带 hit_Fa 或 opoint 时，延后 kind=8 命中。
+            if (activeFrame.hit_Fa > 0 || (activeFrame.opoints != null && activeFrame.opoints.Count > 0))
+            {
+                return true;
+            }
+
+            if (activeFrame.next <= 0 || activeFrame.next == Frame.N)
+            {
+                return false;
+            }
+
+            var nextFrame = GetFrameDataById(activeFrame.next);
+            return nextFrame != null
+                && (nextFrame.hit_Fa > 0 || (nextFrame.opoints != null && nextFrame.opoints.Count > 0));
         }
 
         protected virtual bool HandleWeaponKind3Stick(InteractionArea itr, LF2Entity target)
@@ -796,50 +820,12 @@ namespace NTSD.Animation.LF2Objects
             if (catchingFrame <= 0 && caughtFrame <= 0)
                 return HandlePreInteractionKind3(itr, target); // 无粘附帧 → 普通攻击
 
-            if (catchingFrame > 0) Trans.Frame(catchingFrame, 0);
+            if (catchingFrame > 0) SetFrameDirect(catchingFrame);
             if (caughtFrame > 0 && target is LF2Character ch)
             {
-                ch.Trans?.Frame(caughtFrame, 0);
-                ch.Trans?.Trans();
+                ch.ImmediateFrame(caughtFrame);
             }
             return true;
-        }
-
-        /// <summary>
-        /// 反汇编 0x42EC85：itr.kind=8 爆符粘附/爆炸。
-        /// state=1002 时粘附（vx/vy/vz=0，切爆炸帧）；
-        /// state=3002 时爆炸传送（victim 传送到武器位置，heal_timer=throwvz+1000）。
-
-        protected virtual bool HandleWeaponKind8Attach(InteractionArea itr, LF2Entity target)
-        {
-            if (target is not LF2Character victim) return false;
-            if (!ItrArestTest()) return false;
-
-            int curState = Frame?.D?.state ?? -1;
-
-            if (curState == LF2States.WeaponThrowing) // 1002：粘附阶段
-            {
-                PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
-                // 切到爆炸帧：优先 frame=80，否则 frame=70
-                int explodeFrame = GetFrameDataById(80) != null ? 80
-                                 : GetFrameDataById(70) != null ? 70 : -1;
-                if (explodeFrame >= 0) { Trans.Frame(explodeFrame, 0); Trans.Trans(); }
-                return true;
-            }
-
-            if (curState == 3002) // 爆炸阶段：传送 victim
-            {
-                victim.Health.HP -= itr.injury;
-                victim.Effect.Heal = itr.throwvz + 1000;
-                if (itr.dvx > 0) { victim.Trans?.Frame(itr.dvx, 0); victim.Trans?.Trans(); }
-                victim.PS.x = PS.x;
-                victim.PS.z = PS.z + 1f;
-                FrameDelay = 3;
-                victim.FrameDelay = -3;
-                return true;
-            }
-
-            return false;
         }
 
         protected virtual bool TryApplyHit(InteractionArea itr, LF2Entity target)
@@ -871,19 +857,19 @@ namespace NTSD.Animation.LF2Objects
         private void ApplyPickupGrabbedBy(LF2Character character)
         {
             int pickerLink;
-            // 反汇编 0x0042E9F0-0x0042E9FC：type_sub=0x78 或 0x7C → grabbed_by=101（优先检查）
+            // C++ release 0x0042E9F0-0x0042E9FC：type_sub=0x78 或 0x7C → grabbed_by=101（优先检查）
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
             if (typeSub == 0x78 || typeSub == 0x7C)
                 pickerLink = 101;
-            else if (IsHeavy)           // C# type=1 = disasm entity_type=2
+            else if (IsHeavy)           // 重武器拾取标记
                 pickerLink = 2;
             else if (WeaponType == 4)
                 pickerLink = 4;
             else if (WeaponType == 6)
                 pickerLink = Health.HP > 0 ? 6 : 4;
             else
-                pickerLink = 0;    // light weapon
+                pickerLink = 0;    // 轻武器
 
             character.GrabbedBy = pickerLink;
             GrabbedBy = -pickerLink;
@@ -894,8 +880,7 @@ namespace NTSD.Animation.LF2Objects
             int jumpFrame = IsHeavy ? 116 : 115;
             if (character.GetFrameDataById(jumpFrame) != null)
             {
-                character.Trans?.Frame(jumpFrame, 0);
-                character.Trans?.Trans();
+                character.ImmediateFrame(jumpFrame);
             }
         }
 
@@ -922,7 +907,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
             int wstate = GetState();
             bool isOnGround = wstate == LF2States.WeaponOnGround
                            || wstate == LF2States.HeavyWeaponOnGround;
@@ -966,7 +951,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            // 只有地面武器才能被拾取（反汇编 0x00407378：仅检查 state=1004 和 2004）
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
             int wstate = GetState();
             bool isOnGround = wstate == LF2States.WeaponOnGround
                            || wstate == LF2States.HeavyWeaponOnGround;
@@ -982,7 +967,7 @@ namespace NTSD.Animation.LF2Objects
             }
             character.HoldWeapon(this);
             ApplyPickupGrabbedBy(character);
-            // 反汇编 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
+            // C++ release 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
             ApplyPickupFrameJump(character);
             ItrArestUpdate(itr);
             target.ItrVrestUpdate(StableId, itr);
@@ -991,7 +976,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
         {
-            // 反汇编 sub_419F80：kind=3 时若 target.charData.type != 0（即目标是武器）则跳过
+            // C++ release sub_419F80：kind=3 时若 target.charData.type != 0（即目标是武器）则跳过
             // 否则走普通命中路径，与 kind=0 相同
             if (target is LF2WeaponBase) return false;
             return TryApplyHit(itr, target);
@@ -999,7 +984,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
-            // 反汇编 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
+            // C++ release 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
             return HandlePreInteractionKind1(itr, target);
         }
 
@@ -1018,19 +1003,19 @@ namespace NTSD.Animation.LF2Objects
         #region 战斗（Hit → Act → ForceClearHolder → Drop → Pick → ProcessDrinkConsumption → OnDrinkConsumed → ProcessAttack → SetWeaponStrengthList → GetStrengthEntry）
 
         /// <summary>
-        /// Release weapon hit hook.
+        /// C++ release 语义下的武器受击入口。
         /// </summary>
         public abstract bool Hit(InteractionArea itr, LF2Entity attacker);
 
         /// <summary>
-        /// Release held-weapon action hook.
+        /// C++ release 语义下的持有武器动作入口。
         /// </summary>
         public virtual WeaponActResult Act(LF2LivingObject holder, WeaponPoint wpoint, Vector3 holdpoint)
         {
             var result = new WeaponActResult();
             if (Frame.D == null) return result;
 
-            // 反汇编 AI_Process2 0x0041AFFC：
+            // C++ release AI_Process2 0x0041AFFC：
             // 持有者处于 Falling(12) 或 BeingCaught(10) 时强制脱落武器
             // → 双方 arest=0，武器随机帧[0,15]，速度继承持有者速度 * 1/3
             int holderState = holder?.GetState() ?? -1;
@@ -1039,44 +1024,46 @@ namespace NTSD.Animation.LF2Objects
                 ItrRest.Arest = 0;
                 holder.ItrRest.Arest = 0;
 
-                Trans.Frame(UnityEngine.Random.Range(0, 16), 0);
+                ImmediateFrame(RandInt(0, 16));
 
-                // 反汇编 0x41B035-0x41B075：按 holder.CharType 选速度来源
-                // CharType==1：vx = holder.KnockbackVx * 1/3（[holder+28h]），vy = holder.KnockbackVy（直接复制）
-                // CharType!=1：vx = holder.vx * 1/3，vy = holder.vy（直接复制）
-                // vz 不设置（反汇编无 vz 赋值）
+                // C++ release 0x41B035-0x41B075：按 holder.hit_count 选速度来源。
+                // hit_count==1：vx = holder.KnockbackVx * 1/3，vy = holder.KnockbackVy。
+                // hit_count!=1：vx = holder.vx * 1/3，vy = holder.vy。
+                // vz 不设置（C++ release无 vz 赋值）
                 const float kVelFactor = 1f / 3f;
-                if (holder.CharType == 1)
+                if (holder.HitCount == 1)
                 {
-                    PS.vx = holder.KnockbackVx * kVelFactor;  // [holder+28h] = KnockbackVx
-                    PS.vy = holder.KnockbackVy;                // 直接复制，不乘1/3
+                    PS.vx = holder.KnockbackVx * kVelFactor;
+                    PS.vy = holder.KnockbackVy;
                 }
                 else
                 {
                     PS.vx = holder.PS.vx * kVelFactor;
-                    PS.vy = holder.PS.vy;                // 直接复制，不乘1/3
+                    PS.vy = holder.PS.vy;
                 }
 
-                // 反汇编 0x41B07A-0x41B08D：if weapon.y_float > -2.0 → y_float = -2.0
+                // C++ release 0x41B07A-0x41B08D：if weapon.y_float > -2.0 → y_float = -2.0
                 // 确保武器脱落时至少在地面以上2单位
                 if (PS.y > -2.0f) PS.y = -2.0f;
 
-                // 反汇编 0x41B011：character.grabbed_by=0, weapon.grabbed_by=0
+                // C++ release 0x41B011：character.grabbed_by=0, weapon.grabbed_by=0
                 GrabbedBy = 0;
                 if (holder is LF2Character ch2) ch2.GrabbedBy = 0;
 
                 _holdObj = null;
                 (holder as LF2Character)?.HoldWeapon(null);
+                Runtime.LinkState = 0;
+                Runtime.HolderStableId = -1;
                 result.ForceDrop = true;
                 return result;
             }
 
-            // 反汇编 0x41AEAD：weapon.[+0B4h] = holder.[+0B4h]
+            // C++ release 0x41AEAD：weapon.[+0B4h] = holder.[+0B4h]
             // [+0B4h] = FrameDelay（帧延迟计数器），武器与持有者同步
             FrameDelay = holder.FrameDelay;
 
             // 切换到武器动作帧
-            // 反汇编 0x41AE98：直接写 weapon.frame = holder_wpoint.action，不触发帧事件
+            // C++ release 0x41AE98：直接写 weapon.frame = holder_wpoint.action，不触发帧事件
             if (wpoint.weaponact > 0)
             {
                 ImmediateFrame(wpoint.weaponact);
@@ -1087,7 +1074,7 @@ namespace NTSD.Animation.LF2Objects
 
             var fwpoint = fD.wpoints[0];
 
-            // 反汇编 AI_Process2 0x41ABF2：触发条件是 holder 当前帧的 frame.state == 17（0x11）
+            // C++ release AI_Process2 0x41ABF2：触发条件是 holder 当前帧的 frame.state == 17（0x11）
             // [ecx+edx*8+7ACh] = charData.frames[frame].state，7ACh-7A4h=8=state偏移
             // 不是 wpoint.kind，是 holder 帧的 state 字段
             if (holder?.Frame?.D?.state == 17)
@@ -1096,101 +1083,102 @@ namespace NTSD.Animation.LF2Objects
                 return result;
             }
 
-            if (fwpoint.kind == 2) // 可投掷
+            if (wpoint.dvx != 0)
             {
-                if (wpoint.dvx != 0)
-                {
-                    // 反汇编 AI_Process2 0x41B094~0x41B21D：
-                    // 按 weapon.type 分流投掷路径：
-                    //   type=1/4/6 → heavy throw：frame固定40，双方arest归零
-                    //   type=2     → light throw：Random_Int(6)帧，双方arest归零
-                    //   type=0     → 无投掷路径，dvx有值时仍走kind=3（ProcessForceDropPoint）
-                    int wt = WeaponType;
-                    bool isHeavyThrow = wt == 1 || wt == 4 || wt == 6;
-                    bool isLightThrow = wt == 2;
+                // C++ release AI_Process2 0x41B094~0x41B21D：
+                // 按 weapon.type 分流投掷路径：
+                //   type=1/4/6 → heavy throw：frame固定40，双方arest归零
+                //   type=2     → light throw：Random_Int(6)帧，双方arest归零
+                //   type=0     → 无投掷路径，dvx有值时仍走kind=3（ProcessForceDropPoint）
+                int wt = WeaponType;
+                bool isHeavyThrow = wt == 1 || wt == 4 || wt == 6;
+                bool isLightThrow = wt == 2;
 
-                    if (isHeavyThrow)
+                if (isHeavyThrow)
+                {
+                    // C++ release 0x41B0C2-0x41B155：frame=40，vx按facing，vy=dvy
+                    // dvz 由 holder.key_up/key_down 控制（0x41B114-0x41B155）：
+                    //   key_up!=0 && key_down==0 → vz = -dvz
+                    //   key_up==0 && key_down!=0 → vz = +dvz
+                    //   其他 → vz 不变
+                    ImmediateFrame(40);
+                    PS.vx = Dirh() * wpoint.dvx;
+                    // C++ release 0x41B0F7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
+                    PS.vy = wpoint.dvy;
+                    if (wpoint.dvz != 0)
                     {
-                        // 反汇编 0x41B0C2-0x41B155：frame=40，vx按facing，vy=dvy
-                        // dvz 由 holder.key_up/key_down 控制（0x41B114-0x41B155）：
-                        //   key_up!=0 && key_down==0 → vz = -dvz
-                        //   key_up==0 && key_down!=0 → vz = +dvz
-                        //   其他 → vz 不变
-                        Trans.Frame(40, 0);
-                        Trans.Trans();
-                        PS.vx = Dirh() * wpoint.dvx;
-                        // 反汇编 0x41B0F7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
-                        PS.vy = wpoint.dvy;
-                        if (wpoint.dvz != 0)
-                        {
-                            bool keyUp   = holder.Controller?.IsUp   ?? false;
-                            bool keyDown = holder.Controller?.IsDown  ?? false;
-                            if (keyUp && !keyDown)       PS.vz = -wpoint.dvz;
-                            else if (!keyUp && keyDown)  PS.vz =  wpoint.dvz;
-                        }
-                        ItrRest.Arest = 0;
-                        holder.ItrRest.Arest = 0;
-                        PS.zz = 1;
-                        _holdObj = null;
-                        (holder as LF2Character)?.HoldWeapon(null);
-                        PickerStableId = holder?.StableId ?? -1;
-                        OnThrown();
-                        result.Thrown = true;
+                        bool keyUp   = holder.Controller?.IsUp   ?? false;
+                        bool keyDown = holder.Controller?.IsDown  ?? false;
+                        if (keyUp && !keyDown)       PS.vz = -wpoint.dvz;
+                        else if (!keyUp && keyDown)  PS.vz =  wpoint.dvz;
                     }
-                    else if (isLightThrow)
-                    {
-                        // 反汇编 0x41B173-0x41B219：Random(6)帧，vx按facing，vy=dvy
-                        // dvz 控制逻辑同上（0x41B1DB-0x41B216）
-                        Trans.Frame(UnityEngine.Random.Range(0, 6), 0);
-                        Trans.Trans();
-                        PS.vx = Dirh() * wpoint.dvx;
-                        // 反汇编 0x41B1B7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
-                        PS.vy = wpoint.dvy;
-                        if (wpoint.dvz != 0)
-                        {
-                            bool keyUp   = holder.Controller?.IsUp   ?? false;
-                            bool keyDown = holder.Controller?.IsDown  ?? false;
-                            if (keyUp && !keyDown)       PS.vz = -wpoint.dvz;
-                            else if (!keyUp && keyDown)  PS.vz =  wpoint.dvz;
-                        }
-                        ItrRest.Arest = 0;
-                        holder.ItrRest.Arest = 0;
-                        PS.zz = 1;
-                        _holdObj = null;
-                        (holder as LF2Character)?.HoldWeapon(null);
-                        PickerStableId = holder?.StableId ?? -1;
-                        OnThrown();
-                        result.Thrown = true;
-                    }
-                    // type=0：dvx非零也不投掷，转kind=3强制丢弃（反汇编 0x41B155→0x41B16D→0x41B21D）
-                    else
-                    {
-                        result.NeedsKind3Drop = true;
-                        return result;
-                    }
+                    ItrRest.Arest = 0;
+                    holder.ItrRest.Arest = 0;
+                    PS.zz = 1;
+                    _holdObj = null;
+                    (holder as LF2Character)?.HoldWeapon(null);
+                    GrabbedBy = 0;
+                    Runtime.LinkState = 0;
+                    Runtime.HolderStableId = -1;
+                    PickerStableId = holder?.StableId ?? -1;
+                    OnThrown();
+                    result.Thrown = true;
                 }
-
-                if (!result.Thrown)
+                else if (isLightThrow)
                 {
-                    // 继续被持有
-                    int cover = wpoint.cover != 0 ? wpoint.cover : NTSDGlobal.Default.WPoint.Cover;
-                    PS.zz = (cover == 1) ? -1 : 1;
-
-                    SwitchDir(holder.PS.dir);
-                    PS.sz = PS.z = holder.PS.z;
-
-                    // coincideXY
-                    CoincideXYWithWPoint(holdpoint, fwpoint);
-
-                    // 反汇编 AI_Process2 0x41AFA7-0x41AFCC：
-                    // cover==0 → z+=1, y-=1（武器在角色前面，稍偏前/上）
-                    // cover!=0 → z-=1, y+=1（武器在角色后面，稍偏后/下）
-                    if (cover == 0) { PS.z += 1f; PS.y -= 1f; }
-                    else            { PS.z -= 1f; PS.y += 1f; }
+                    // C++ release 0x41B173-0x41B219：Random(6)帧，vx按facing，vy=dvy
+                    // dvz 控制逻辑同上（0x41B1DB-0x41B216）
+                    ImmediateFrame(RandInt(0, 6));
+                    PS.vx = Dirh() * wpoint.dvx;
+                    // C++ release 0x41B1B7: fild [edx+1Ch] -> weapon.vy = dvy（无条件赋值，无零值守卫）
+                    PS.vy = wpoint.dvy;
+                    if (wpoint.dvz != 0)
+                    {
+                        bool keyUp   = holder.Controller?.IsUp   ?? false;
+                        bool keyDown = holder.Controller?.IsDown  ?? false;
+                        if (keyUp && !keyDown)       PS.vz = -wpoint.dvz;
+                        else if (!keyUp && keyDown)  PS.vz =  wpoint.dvz;
+                    }
+                    ItrRest.Arest = 0;
+                    holder.ItrRest.Arest = 0;
+                    PS.zz = 1;
+                    _holdObj = null;
+                    (holder as LF2Character)?.HoldWeapon(null);
+                    GrabbedBy = 0;
+                    Runtime.LinkState = 0;
+                    Runtime.HolderStableId = -1;
+                    PickerStableId = holder?.StableId ?? -1;
+                    OnThrown();
+                    result.Thrown = true;
+                }
+                // type=0：dvx非零也不投掷，转kind=3强制丢弃（C++ release 0x41B155→0x41B16D→0x41B21D）
+                else
+                {
+                    result.NeedsKind3Drop = true;
+                    return result;
                 }
             }
 
-            // 反汇编 GameMode_Process 0x0041BDDF：武器 state==1001（持有中）且持有者 wpoint.attacking>0 才攻击
+            if (!result.Thrown)
+            {
+                // 继续被持有
+                int cover = wpoint.cover != 0 ? wpoint.cover : NTSDGlobal.Default.WPoint.Cover;
+                PS.zz = (cover == 1) ? -1 : 1;
+
+                SwitchDir(holder.PS.dir);
+                PS.sz = PS.z = holder.PS.z;
+
+                // 按 wpoint 对齐武器位置。
+                CoincideXYWithWPoint(holdpoint, fwpoint);
+
+                // C++ release AI_Process2 0x41AFA7-0x41AFCC：
+                // cover==0 → z+=1, y-=1（武器在角色前面，稍偏前/上）
+                // cover!=0 → z-=1, y+=1（武器在角色后面，稍偏后/下）
+                if (cover == 0) { PS.z += 1f; PS.y -= 1f; }
+                else            { PS.z -= 1f; PS.y += 1f; }
+            }
+
+            // C++ release GameMode_Process 0x0041BDDF：武器 state==1001（持有中）且持有者 wpoint.attacking>0 才攻击
             // attacking 读自持有者角色的 wpoint（本 wpoint 参数），不受 fwpoint.kind 约束
             if (GetState() == LF2States.WeaponOnHand && IsLight && wpoint.attacking > 0)
             {
@@ -1207,10 +1195,13 @@ namespace NTSD.Animation.LF2Objects
         public void ForceClearHolder()
         {
             _holdObj = null;
+            GrabbedBy = 0;
+            Runtime.LinkState = 0;
+            Runtime.HolderStableId = -1;
         }
 
         /// <summary>
-        /// 反汇编 AI_Process2 0x41B011-0x41B08D：角色被打（state=12/10）时武器强制脱落。
+        /// C++ release AI_Process2 0x41B011-0x41B08D：角色被打（state=12/10）时武器强制脱落。
         ///   weapon.frame = Random(16)
         ///   vx = holder.vx * 1/3（dvx 传入 holder.vx）
         ///   vy = holder.vy（dvy 传入 holder.vy，直接复制不乘系数）
@@ -1220,29 +1211,32 @@ namespace NTSD.Animation.LF2Objects
         {
             Team = 0;
             _holdObj = null;
+            Runtime.HolderStableId = -1;
+            Runtime.LinkState = 0;
             GrabbedBy = 0;
 
-            // 反汇编 0x41B019: weapon.frame = Random(16)
-            Trans.Frame(UnityEngine.Random.Range(0, 16), 0);
+            // C++ release 0x41B019: weapon.frame = Random(16)
+            ImmediateFrame(RandInt(0, 16));
 
-            // 反汇编 0x41B035-0x41B075: vx = holder.vx * 1/3, vy = holder.vy（直接复制）
+            // C++ release 0x41B035-0x41B075: vx = holder.vx * 1/3, vy = holder.vy（直接复制）
             PS.vx = dvx * (1f / 3f);
             PS.vy = dvy;
 
-            // 反汇编 0x41B07A: if weapon.y > -2.0 → weapon.y = -2.0
+            // C++ release 0x41B07A: if weapon.y > -2.0 → weapon.y = -2.0
             if (PS.y > -2.0f) PS.y = -2.0f;
 
             PS.zz = 0;
         }
 
         /// <summary>
-        /// Release weapon pickup hook.
+        /// C++ release 语义下的武器拾取入口。
         /// </summary>
         public virtual bool Pick(LF2LivingObject holder)
         {
             if (_holdObj != null) return false;
 
             _holdObj = holder;
+            Runtime.HolderStableId = holder?.StableId ?? -1;
             Team = holder.Team;
 
             return true;
@@ -1250,7 +1244,7 @@ namespace NTSD.Animation.LF2Objects
 
 
         /// <summary>
-        /// 饮料消耗处理（反汇编 AI_Process2 0x41ABF2-0x41AE73）。
+        /// 饮料消耗处理（C++ release AI_Process2 0x41ABF2-0x41AE73）。
         /// 触发条件：holder 帧的 wpoint.kind == 17（0x11）。
         ///
         /// 逻辑：
@@ -1265,7 +1259,7 @@ namespace NTSD.Animation.LF2Objects
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
 
-            // 反汇编 0x41AC21：type_sub == 0x7A → 饮料（liquid）路径
+            // C++ release 0x41AC21：type_sub == 0x7A → 饮料（liquid）路径
             if (typeSub == 0x7A)
             {
                 // 0x41AC2E: weapon.hp [+2FCh] > 0 才执行
@@ -1307,8 +1301,7 @@ namespace NTSD.Animation.LF2Objects
                 // 0x41ADCA: clamp PP <= 500
                 newPP = Mathf.Min(newPP, NTSDGlobal.Gameplay.DrinkPPCap); // 0x1F4
 
-                // 0x41ADDA: 如果 weapon.[+2F4h]（_flightCounter 别字段?）> -1 且 PP > 150(0x96)
-                // → clamp PP <= 150。[+2F4h] 是另一个计数器字段，暂时忽略此细节
+                // C++ release 还有额外 PP 上限分支，当前战斗复刻先保留通用 500 上限。
                 holder.Health.PP = newPP;
             }
             else
@@ -1328,31 +1321,42 @@ namespace NTSD.Animation.LF2Objects
             // 0x41AD48: weapon.vy = -8.0（double: low=0, high=0xC0200000 → -8.0）
             // 0x41AD4F: call Random_Int(7); vx = Random(7) - 3
             // 0x41AD6E: holder.frame = 0
-            // 0x41AD73: weapon.[+31Ch]（_flightCounter）= 0
+            // 0x41AD73: weapon.[+31Ch]（WeaponFlightCounter）= 0。
             if (holder is LF2Character holderChar) holderChar.GrabbedBy = 0;
             GrabbedBy = 0;
-            Trans.Frame(0, 0);
-            PS.vx = UnityEngine.Random.Range(0, 7) - 3f;
+            ImmediateFrame(0);
+            PS.vx = RandInt(0, 7) - 3f;
             PS.vy = -8.0f;  // double 0xC020000000000000 = -8.0
             PS.vz = 0f;
             PS.zz = 0;
             Team = 0;
-            holder.Trans?.Frame(0, 0);
+            holder.ImmediateFrame(0);
             OnDrinkConsumed();
             _holdObj = null;
             (holder as LF2Character)?.HoldWeapon(null);
+            Runtime.LinkState = 0;
+            Runtime.HolderStableId = -1;
             result.ForceDrop = true;
         }
 
+        protected override void RefreshRuntimeFromEntity()
+        {
+            base.RefreshRuntimeFromEntity();
+            Runtime.HolderStableId = _holdObj?.StableId ?? -1;
+            Runtime.PickerStableId = PickerStableId;
+            Runtime.WeaponState = GetState();
+            Runtime.WeaponDropHurt = WeaponDropHurt;
+        }
+
         /// <summary>
-        /// 饮料消耗完毕后的子类钩子，用于重置 _flightCounter 等字段。
-        /// 反汇编 0x41AD73: weapon.[+31Ch] = 0
+        /// 饮料消耗完毕后的子类钩子，用于重置 WeaponFlightCounter 等字段。
+        /// C++ release 0x41AD73: weapon.[+31Ch] = 0
         /// </summary>
         protected virtual void OnDrinkConsumed() { }
 
         protected virtual WeaponAttackResult ProcessAttack(LF2LivingObject holder, WeaponPoint wpoint, LF2FrameData frame)
         {
-            // TODO: 实现攻击处理
+            // 基类不处理具体攻击；正式武器命中逻辑由 LF2Weapon 覆盖实现。
             return new WeaponAttackResult();
         }
 
@@ -1369,7 +1373,7 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region 辅助方法（WhirlwindForce → FluteForce → CoincideXYWithWPoint → GetSpeed → PlaySound → CreateBrokenEffect → CreateEffect → MakePointCenter → CoincideXYForInit）
+        #region 辅助方法（WhirlwindForce → FluteForce → CoincideXYWithWPoint → PlaySound → CreateBrokenEffect → MakePointCenter → CoincideXYForInit）
 
         public void WhirlwindForce(InteractionArea itr, LF2Entity attacker)
         {
@@ -1383,13 +1387,13 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (ObjectId == 201 || ObjectId == 202) return;
                 if (state != LF2States.WeaponInSky)
-                    Trans.Frame(0, 0);
+                    SetFrameDirect(0);
                 ApplyWhirlwindVelocity(attacker, 3f);
             }
             else if (heavyLike)
             {
                 if (state != LF2States.HeavyWeaponInSky)
-                    Trans.Frame(0, 0);
+                    SetFrameDirect(0);
                 ApplyWhirlwindVelocity(attacker, 2.3f);
             }
         }
@@ -1417,14 +1421,14 @@ namespace NTSD.Animation.LF2Objects
 
         public override void FluteForce()
         {
-            // 反汇编 Entity_AI_Update line 1535：kind=10/11 命中时 this+800 = -20
+            // C++ release Entity_AI_Update line 1535：kind=10/11 命中时 this+800 = -20
         }
 
         /// <summary>
         /// 将武器与持有者的 wpoint 对齐。
-        /// 反汇编 AI_Process2 0x41AEDF-0x41AF8F：
-        ///   dir=right: weapon.x = holdpoint.x + weapon_frame.centerx - weapon_spriteWidth
-        ///   dir=left:  weapon.x = holdpoint.x + weapon_spriteWidth - weapon_frame.centerx
+        /// C++ release AI_Process2 0x41AEDF-0x41AF8F：
+        ///   dir=right: weapon.x = holdpoint.x + weapon_frame.centerx - weapon_wpoint.x
+        ///   dir=left:  weapon.x = holdpoint.x + weapon_wpoint.x - weapon_frame.centerx
         ///   weapon.y   = holdpoint.y + weapon_frame.centery - weapon_wpoint.y
         /// </summary>
         protected void CoincideXYWithWPoint(Vector3 holdpoint, WeaponPoint wpoint)
@@ -1432,20 +1436,15 @@ namespace NTSD.Animation.LF2Objects
             var weapFD = Frame?.D;
             int wcx = weapFD?.centerx ?? 0;
             int wcy = weapFD?.centery ?? 0;
-            float wSpriteW = GetSpriteWidthPxForCollision();
+            int wpx = wpoint?.x ?? 0;
             int wpy = wpoint?.y ?? 0;
 
             if (PS.dir == "right")
-                PS.x = holdpoint.x + wcx - wSpriteW;
+                PS.x = holdpoint.x + wcx - wpx;
             else
-                PS.x = holdpoint.x + wSpriteW - wcx;
+                PS.x = holdpoint.x + wpx - wcx;
 
-            PS.y = (holdpoint.y - holdpoint.z) + wcy - wpy;
-        }
-
-        public float GetSpeed()
-        {
-            return Mathf.Sqrt(PS.vx * PS.vx + PS.vy * PS.vy);
+            PS.y = holdpoint.y + wcy - wpy;
         }
 
         public void PlaySound(string soundId)
@@ -1456,12 +1455,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void CreateBrokenEffect()
         {
-            // TODO: 实现破碎效果
-        }
-
-        public void CreateEffect(int type)
-        {
-            // TODO: 实现特效
+            SpawnBrokenWeaponFragments(ObjectId);
         }
 
         protected Vector3 MakePointCenter(LF2FrameData frame)
@@ -1491,39 +1485,9 @@ namespace NTSD.Animation.LF2Objects
 
         #endregion
 
-        #region VRest 系统（IsVRest / SetVRest / UpdateVRest）
+        #region 回旋镖查询缓存
 
-        // ========== VRest 系统 ==========
-        private List<int> _vrestKeysCache = new List<int>();
         private List<LF2LivingObject> _boomerangQueryCache = new List<LF2LivingObject>(8);
-
-        public bool IsVRest(LF2Entity obj)
-        {
-            if (obj == null) return false;
-            return _vrest.ContainsKey(obj.StableId) && _vrest[obj.StableId] > 0;
-        }
-
-        public void SetVRest(LF2Entity obj, int value)
-        {
-            if (obj == null) return;
-            _vrest[obj.StableId] = value;
-        }
-
-        private void UpdateVRest()
-        {
-            _vrestKeysCache.Clear();
-            foreach (var key in _vrest.Keys)
-            {
-                _vrestKeysCache.Add(key);
-            }
-            foreach (var key in _vrestKeysCache)
-            {
-                if (_vrest[key] > 0)
-                    _vrest[key]--;
-            }
-        }
-
-        // ========== 辅助方法 ==========
 
         #endregion
 
@@ -1534,8 +1498,8 @@ namespace NTSD.Animation.LF2Objects
     public class WeaponActResult
     {
         public bool Thrown;
-        public bool ForceDrop;       // 反汇编 AI_Process2 0x41AFFC：持有者 Falling/BeingCaught 时强制脱落
-        public bool NeedsKind3Drop;  // 反汇编 0x41B155~0x41B16D：type=0武器dvx≠0时转kind=3强制丢弃
+        public bool ForceDrop;       // C++ release AI_Process2 0x41AFFC：持有者 Falling/BeingCaught 时强制脱落
+        public bool NeedsKind3Drop;  // C++ release 0x41B155~0x41B16D：type=0武器dvx≠0时转kind=3强制丢弃
         public WeaponAttackResult AttackResult;
     }
 

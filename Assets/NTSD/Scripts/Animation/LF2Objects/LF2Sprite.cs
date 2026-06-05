@@ -5,14 +5,8 @@ using UnityEngine.Rendering;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 精灵动画模块（纯 C# 类，对应 FLF sprite.js）
-    /// 封装 SpriteRenderer 操作，被 Character Hub 持有
-    /// 
-    /// 渐进式迁移策略：
-    /// - 当前阶段：可以独立使用，也可以从 LF2CharacterAnimator 获取 SpriteRenderer
-    /// - 后续阶段：完全接管精灵动画逻辑
-    /// 
-    /// 参考：I:\C++Test\NTSD\F.LF-master\LF\sprite.js
+    /// 精灵动画模块，封装 Unity SpriteRenderer 操作。
+    /// 当前模块只负责 Unity 渲染适配，不作为战斗逻辑复刻依据。
     /// </summary>
     public class LF2Sprite
     {
@@ -52,13 +46,17 @@ namespace NTSD.Animation.LF2Objects
                 : null;
 
             if (_renderer != null)
+            {
                 _renderer.sortingLayerName = "Object";
+                _renderer.enabled = true;
+                _renderer.color = Color.white;
+            }
             if(_sortingGroup != null)
                 _sortingGroup.sortingLayerName = "Object";
         }
 
         /// <summary>
-        /// 初始化阴影（对应 FLF livingobject 构造函数中的 shadow 创建）
+        /// 初始化阴影渲染器。
         /// </summary>
         public void InitializeShadow(SpriteRenderer shadowRenderer)
         {
@@ -77,8 +75,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 显示指定图片（对应 FLF sp.show_pic）
-        /// 参考：FLF sprite.js:111-131
+        /// 显示指定图片。
         /// </summary>
         /// <param name="picIndex">图片索引</param>
         public bool HasRenderer => _renderer != null;
@@ -86,15 +83,30 @@ namespace NTSD.Animation.LF2Objects
         public void ShowPic(int picIndex)
         {
             if (_renderer == null || _sprites == null) return;
+            if (picIndex == 999)
+            {
+                _renderer.enabled = false;
+                return;
+            }
+
             int actualIndex = _startFrame + picIndex;
-            if (actualIndex < 0 || actualIndex >= _sprites.Count) return;
-            if (_sprites[actualIndex] == null) return;
+            if (actualIndex < 0 || actualIndex >= _sprites.Count)
+            {
+                _renderer.enabled = false;
+                return;
+            }
+            if (_sprites[actualIndex] == null)
+            {
+                _renderer.enabled = false;
+                return;
+            }
+
+            _renderer.enabled = true;
             _renderer.sprite = _sprites[actualIndex];
         }
 
         /// <summary>
-        /// 切换左右方向（对应 FLF sp.switch_lr）
-        /// 参考：FLF sprite.js:137-144
+        /// 切换左右方向。
         /// </summary>
         /// <param name="dir">"left" 或 "right"</param>
         public void SwitchLR(string dir)
@@ -108,8 +120,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 设置位置（对应 FLF sp.set_x_y）
-        /// 参考：FLF sprite.js:150-153
+        /// 设置本地显示位置。
         /// </summary>
         public void SetXY(float x, float y)
         {
@@ -118,8 +129,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 设置 Z 排序（对应 FLF sp.set_z）
-        /// 参考：FLF sprite.js:159-162 / mechanics.js:389
+        /// 设置 Z 排序。
         /// 角色有 SortingGroup → 改 SortingGroup.sortingOrder（控制整个角色层级）
         /// 武器/SA 无 SortingGroup → 回退改 SpriteRenderer.sortingOrder
         /// </summary>
@@ -132,8 +142,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 显示精灵（对应 FLF sp.show）
-        /// 参考：FLF sprite.js:167-170
+        /// 显示精灵。
         /// </summary>
         public void Show()
         {
@@ -142,8 +151,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 隐藏精灵（对应 FLF sp.hide）
-        /// 参考：FLF sprite.js:175-178
+        /// 隐藏精灵。
         /// </summary>
         public void Hide()
         {
@@ -180,8 +188,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 销毁精灵（对应 FLF sp.destroy + shadow.remove）
-        /// 参考：FLF livingobject.js:89-94
+        /// 隐藏精灵和阴影。
         /// </summary>
         public void Destroy()
         {

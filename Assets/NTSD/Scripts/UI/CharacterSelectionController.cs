@@ -567,6 +567,7 @@ namespace NTSD.UI
                     isHuman = true,
                     characterId = slot.GetFinalCharacterId(),
                     team = slot.GetFinalTeam(),
+                    inputId = slot.PlayerId,
                     aiId = -1
                 });
             }

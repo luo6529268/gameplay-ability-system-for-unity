@@ -57,17 +57,23 @@ namespace NTSD.Animation
         public readonly Vector2 groundPlanePos;
         public readonly float visualYOffset;
         public readonly BoundaryResolveMode boundaryMode;
+        public readonly bool landed;
+        public readonly float verticalVelocityBeforeLanding;
 
         public MechanicsStepResult(
             bool grounded,
             Vector2 groundPlanePos,
             float visualYOffset,
-            BoundaryResolveMode boundaryMode)
+            BoundaryResolveMode boundaryMode,
+            bool landed = false,
+            float verticalVelocityBeforeLanding = 0f)
         {
             this.grounded = grounded;
             this.groundPlanePos = groundPlanePos;
             this.visualYOffset = visualYOffset;
             this.boundaryMode = boundaryMode;
+            this.landed = landed;
+            this.verticalVelocityBeforeLanding = verticalVelocityBeforeLanding;
         }
     }
 
@@ -111,7 +117,7 @@ namespace NTSD.Animation
                 ps.vz += (ps.vz > 0 ? -fricZ : fricZ);
         }
 
-        /// <summary>返回旧动画分支使用的 x/y 速度标量。</summary>
+        /// <summary>返回 x/y 速度标量。</summary>
         public static float SpeedXY(PhysicsState ps)
         {
             if (ps == null) return 0f;
@@ -182,8 +188,10 @@ namespace NTSD.Animation
             }
 
             // 垂直轴：y == 0 表示地面，y < 0 表示空中。
+            float vyBeforeVerticalMove = ps.vy;
             ps.y += ps.vy;
 
+            bool landed = ps.y > 0.0001f && vyBeforeVerticalMove > 0.0001f;
 
             if (ps.y > 0)
             {
@@ -195,8 +203,8 @@ namespace NTSD.Animation
                 ps.UpdateSpriteOrigin(ctx.frameData.centerx, ctx.frameData.centery, ctx.spriteWidthPx);
             }
 
-            // 地面摩擦在位移之后、空中重力之前应用。
-            if (ps.y == 0 && ctx.mass > 0f)
+            // 正式落地分支由 LF2Character 接管，避免在同 tick 里先套一遍通用摩擦。
+            if (!landed && ps.y == 0 && ctx.mass > 0f)
             {
                 if (ps.vx != 0)
                     ps.vx += (ps.vx > 0 ? -1 : 1) * ps.fric;
@@ -225,7 +233,9 @@ namespace NTSD.Animation
                 grounded,
                 groundPlanePos,
                 visualYOffset,
-                boundaryMode
+                boundaryMode,
+                landed,
+                vyBeforeVerticalMove
             );
         }
 

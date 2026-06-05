@@ -1,9 +1,9 @@
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// Release-aligned pseudo-random number generator.
-    /// C++ release uses ntsd_rand(): seed = seed * 0x343FD + 0x269EC3,
-    /// result = (seed >> 16) & 0x7FFF.
+    /// 对齐 C++ release ntsd_rand() 的伪随机数生成器。
+    /// 公式：seed = seed * 0x343FD + 0x269EC3，
+    /// 返回值：(seed >> 16) & 0x7FFF。
     /// </summary>
     public sealed class DeterministicRng
     {

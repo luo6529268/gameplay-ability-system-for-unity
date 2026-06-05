@@ -5,17 +5,17 @@ using NTSD.Input;
 namespace NTSD.Simulation
 {
 	/// <summary>
-	/// 模拟输入缓冲区（Plan B: Tick-Aligned Input）
+	/// 模拟输入缓冲区。
 	///
 	/// 职责：
 	/// - 存储按 tickIndex 组织的输入事件
 	/// - Unity InputSystem 回调写入，SimTick 消费
-	/// - 避免输入时机依赖 Unity 帧率/回调时序
+	/// - 避免输入时机依赖 Unity 帧率或回调时序
 	///
 	/// 架构原则：
 	/// - "next tick" 语义：输入写入到下一个 tick，避免同帧竞态
-	/// - 单机模式：使用 EnqueueForNextTick
-	/// - 多人模式：服务器使用 EnqueueForTick 注入（带 tickIndex）
+	/// - 战斗运行时使用 EnqueueForNextTick
+	/// - EnqueueForTick 用于确定性回放或测试注入
 	/// - 自动清理旧数据（防止内存泄漏）
 	/// </summary>
 	public class SimInputBuffer
@@ -24,8 +24,8 @@ namespace NTSD.Simulation
 
 		/// <summary>
 		/// 按 tickIndex 组织的输入事件队列
-		/// Key: tickIndex
-		/// Value: 该 tick 的所有输入事件
+		/// 键：tickIndex
+		/// 值：该 tick 的所有输入事件
 		/// </summary>
 		private Dictionary<int, List<SimInputEvent>> _buffer = new Dictionary<int, List<SimInputEvent>>();
 
@@ -37,15 +37,14 @@ namespace NTSD.Simulation
 
 		/// <summary>
 		/// 历史清理阈值（保留最近 N 个 tick 的数据）
-		/// 单机模式：30 ticks (1秒) 足够
-		/// 多人模式：可能需要更大（网络延迟 + 回滚窗口）
+		/// 60 ticks 保留约 2 秒输入历史。
 		/// </summary>
 		private const int CLEANUP_THRESHOLD = 60;  // 2秒历史
 
 		// ==================== 公共 API ====================
 
 		/// <summary>
-		/// 写入输入事件到下一个 Tick（单机模式）
+		/// 写入输入事件到下一个 Tick。
 		///
 		/// 用途：
 		/// - Unity InputSystem 回调中调用
@@ -64,12 +63,11 @@ namespace NTSD.Simulation
 		}
 
 		/// <summary>
-		/// 写入输入事件到指定 Tick（多人模式/调试）
+		/// 写入输入事件到指定 Tick。
 		///
 		/// 用途：
-		/// - 服务器注入输入（lockstep）
 		/// - 录制/回放系统
-		/// - 单元测试
+		/// - 测试注入
 		/// </summary>
 		/// <param name="tickIndex">目标 Tick 索引</param>
 		/// <param name="key">按键类型</param>
@@ -87,8 +85,7 @@ namespace NTSD.Simulation
 			SimInputEvent evt = new SimInputEvent(tickIndex, key, down);
 			events.Add(evt);
 
-			// Debug: 记录输入写入（可选）
-			//Debug.LogError($"[SimInputBuffer] Enqueued: {evt}");
+			// 需要排查输入时可在这里记录诊断事件。
 		}
 
 		/// <summary>
@@ -141,8 +138,8 @@ namespace NTSD.Simulation
 		/// - 删除更早的数据
 		///
 		/// 为什么需要清理：
-		/// - 单机模式：输入可能写入到未来很远的 tick（例如玩家暂停游戏）
-		/// - 多人模式：需要保留回滚窗口的数据
+		/// - 输入可能写入到未来 tick，例如暂停或帧率波动期间
+		/// - 旧 tick 数据不再参与战斗模拟
 		/// </summary>
 		/// <param name="currentTick">当前 Tick 索引</param>
 		private void CleanupOldData(int currentTick)
@@ -178,12 +175,12 @@ namespace NTSD.Simulation
 		}
 
 		/// <summary>
-		/// 获取当前缓冲的 tick 数量（调试用）
+		/// 获取当前缓冲的 tick 数量。
 		/// </summary>
 		public int BufferedTickCount => _buffer.Count;
 
 		/// <summary>
-		/// 获取当前 tick 索引（调试用）
+		/// 获取当前 tick 索引。
 		/// </summary>
 		public int CurrentTickIndex => _currentTickIndex;
 	}

@@ -3,8 +3,8 @@ using NTSD.Simulation;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// Minimal battle-entity contract. Runtime gameplay state lives in NTSDEntityRuntime;
-    /// LF2Entity exposes compatibility properties for existing Unity callers.
+    /// 战斗实体最小接口。
+    /// 运行时真相状态存放在 NTSDEntityRuntime；LF2Entity 只暴露 Unity 调用侧仍需要的访问入口。
     /// </summary>
     public interface ILF2Entity : ILF2Object
     {

@@ -470,7 +470,7 @@ namespace NTSD.Animation
                     string datFileDirectory = Path.GetDirectoryName(datFilePath);
                     LF2CharacterData characterData = BuildCharacterDataFromDat(datFile, datFileDirectory);
 
-                    // 反汇编 [+6F4h] = oid（由调用方传入，不在 dat 文件内容里）
+                    // C++ release：oid 由调用方传入，不在 dat 文件内容里。
                     // type_sub 字段直接等于 characterId（oid），dat 文件里不存在此字段
                     if (characterData.type_sub == 0)
                         characterData.type_sub = characterId;

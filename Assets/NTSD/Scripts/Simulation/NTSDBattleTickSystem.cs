@@ -1,9 +1,9 @@
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// Formal battle tick coordinator for the Unity NTSD runtime.
-    /// The pass order is based on the C++ release project and keeps entity-specific behavior in
-    /// LF2Entity subclasses while centralizing when those passes execute.
+    /// Unity NTSD 战斗 tick 调度器。
+    /// pass 顺序以 C++ release 工程为基准；实体专属行为留在 LF2Entity 子类中，
+    /// 本类只负责集中维护这些 pass 的执行时机。
     /// </summary>
     public sealed class NTSDBattleTickSystem
     {
@@ -19,19 +19,24 @@ namespace NTSD.Simulation
             if (world == null) return;
 
             TickCooldowns(tickIndex);
-            ResolvePreInteractions(tickIndex);
+            ProcessHeldObjects(tickIndex);
             FrameAdvanceAll(tickIndex);
-            RandomWeaponDrop(tickIndex);
             ResolvePostInteractions(tickIndex);
+            RandomWeaponDrop(tickIndex);
+            ResolvePreInteractions(tickIndex);
+            ProcessHeldObjects(tickIndex);
             FramePostProcess();
-            EntityCollision(tickIndex);
             LateEntityUpdate(tickIndex);
-            TickSparkTimers(sparkRenderFrame);
         }
 
         private void TickCooldowns(int tickIndex)
         {
             world.VrestTickAll(tickIndex);
+        }
+
+        private void ProcessHeldObjects(int tickIndex)
+        {
+            world.HeldObjectProcessAll(tickIndex);
         }
 
         private void ResolvePreInteractions(int tickIndex)
@@ -59,19 +64,10 @@ namespace NTSD.Simulation
             world.FramePostProcessAll();
         }
 
-        private void EntityCollision(int tickIndex)
-        {
-            world.EntityCollisionTickAll(tickIndex);
-        }
-
         private void LateEntityUpdate(int tickIndex)
         {
-            world.LateTick(tickIndex);
+            world.LateEntityUpdateAll(tickIndex);
         }
 
-        private void TickSparkTimers(int sparkRenderFrame)
-        {
-            world.TickSparkTimers(sparkRenderFrame);
-        }
     }
 }

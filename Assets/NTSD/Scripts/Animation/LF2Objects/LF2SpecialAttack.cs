@@ -9,12 +9,9 @@ using NTSD.Simulation;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 特殊攻击对象（投射物、能量球等）
-    /// 严格对齐 FLF specialattack.js
-    ///
-    /// 参考：
-    /// - FLF specialattack.prototype.init (specialattack.js:303-339)
-    /// - FLF specialattack states (specialattack.js:15-254)
+    /// 特殊攻击对象（投射物、能量球、技能生成物等）。
+    /// 复刻基准是 C++ release 工程中的 Entity_FrameLogic、Entity_AI_Update 和 opoint 生成流程；
+    /// Unity 这里只保留对象池、渲染引用和分层调度适配。
     /// </summary>
     public class LF2SpecialAttack : LF2Entity
     {
@@ -31,13 +28,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== 状态机字段 ==========
         public bool NoBounce { get; set; }
 
-        // ========== 追踪系统 ==========
-        private LF2LivingObject _chasingTarget;
-        private readonly System.Collections.Generic.Dictionary<int, int> _chasedCounts
-            = new System.Collections.Generic.Dictionary<int, int>();
         private bool _hitFaFired;
-
-        public LF2LivingObject Parent => _parent;
 
         private static bool IsWeaponEntity(LF2Entity entity)
         {
@@ -52,6 +43,8 @@ namespace NTSD.Animation.LF2Objects
             AllocateStableId();
 
             PS = new PhysicsState();
+            PS.BindRuntime(Runtime);
+            Health.BindRuntime(Runtime);
             Trans = new FrameTransistor(this);
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
@@ -65,9 +58,9 @@ namespace NTSD.Animation.LF2Objects
             }
 
             InitializeParent(task);
-            InitializePosition(task);
             InitializeDirection(task);
             InitializeFrame(task);
+            InitializePosition(task);
             InitializeVelocity(task);
             InitializeHealth();
 
@@ -77,22 +70,10 @@ namespace NTSD.Animation.LF2Objects
 
         protected override bool StateEntryEvent() => DispatchCurrentStateEvent("state_entry");
 
-        protected override bool FrameForceEvent()
-        {
-            Generic_Force();
-            return true;
-        }
-
         protected override bool FrameEvent()
         {
             Generic_Frame();
             return DispatchCurrentStateEvent("frame");
-        }
-
-        protected override bool TUForceEvent()
-        {
-            Generic_Force();
-            return true;
         }
 
         protected override bool TUEvent()
@@ -107,35 +88,18 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool LeavingEvent()
-        {
-            Generic_Leaving();
-            return DispatchCurrentStateEvent("leaving");
-        }
-
         #region 通用状态处理
 
         private void Generic_TU()
         {
             Interaction();
-            CharacterMechanics.Dynamics(PS);
-
-            var frame = Frame.D;
-            if (frame != null && frame.hit_a != 0)
-            {
-                Health.HP -= frame.hit_a;
-            }
+            SpecialAttackDynamics();
         }
 
         private void Generic_Frame()
         {
             var frame = Frame.D;
             if (frame == null) return;
-
-            if (frame.opoint.HasValue && frame.opoint.Value.oid > 0)
-            {
-                CreateObject(frame.opoint.Value);
-            }
 
             if (!string.IsNullOrEmpty(frame.sound))
             {
@@ -144,28 +108,63 @@ namespace NTSD.Animation.LF2Objects
 
             if (Frame.N == 15)
             {
-                Trans.Frame(1000, 0);
+                SetFrameDirect(1000);
             }
         }
 
-        private void Generic_Force()
+        private void SpecialAttackDynamics()
         {
+            if (PS == null) return;
+
+            if (PS.vx > 0 && !PS.xBoundPositive)
+                PS.x += PS.vx;
+            else if (PS.vx < 0 && !PS.xBoundNegative)
+                PS.x += PS.vx;
+
+            if (PS.vz > 0 && !PS.zBoundPositive)
+                PS.z += PS.vz;
+            else if (PS.vz < 0 && !PS.zBoundNegative)
+                PS.z += PS.vz;
+
+            PS.xBoundPositive = false;
+            PS.xBoundNegative = false;
+            PS.zBoundPositive = false;
+            PS.zBoundNegative = false;
+
             var frame = Frame.D;
-            if (frame == null) return;
-
-            if (frame.hit_j != 0)
+            if (frame != null && frame.hit_j > 0)
             {
-                float dvz = frame.hit_j - 50;
-                PS.vz = dvz;
+                PS.z += frame.hit_j - 50;
             }
-        }
 
-        private void Generic_Leaving()
-        {
-            if (IsLeavingBoundary(200))
+            if (PS.y >= 0)
             {
-                Trans.Frame(1000, 0);
+                if (PS.vx > 0.0001f)
+                {
+                    PS.vx -= 1.0f;
+                    if (PS.vx < 0.0001f) PS.vx = 0f;
+                }
+                else if (PS.vx < -0.0001f)
+                {
+                    PS.vx += 1.0f;
+                    if (PS.vx > -0.0001f) PS.vx = 0f;
+                }
+
+                if (PS.vz > 0.0001f)
+                {
+                    PS.vz -= 1.0f;
+                    if (PS.vz < 0.0001f) PS.vz = 0f;
+                }
+                else if (PS.vz < -0.0001f)
+                {
+                    PS.vz += 1.0f;
+                    if (PS.vz > -0.0001f) PS.vz = 0f;
+                }
             }
+
+            PS.y += PS.vy;
+            if (PS.y > 0f) PS.y = 0f;
+            // C++ release：entity_type/type=3 的特殊攻击对象不追加重力。
         }
 
         private void Generic_Die()
@@ -173,7 +172,7 @@ namespace NTSD.Animation.LF2Objects
             var frame = Frame.D;
             if (frame != null && frame.hit_d != 0)
             {
-                Trans.Frame(frame.hit_d, 0);
+                SetFrameDirect(frame.hit_d);
             }
         }
 
@@ -189,17 +188,6 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool State_1002(string eventType, object eventData)
-        {
-            if (eventType == "state_entry")
-                return ProcessState1002Entry();
-
-            if (eventType == "TU")
-                return ProcessState1002TU();
-
-            return false;
-        }
-
         private bool State_3000(string eventType, object eventData)
         {
             return ProcessChaseStateEvent(eventType);
@@ -208,11 +196,6 @@ namespace NTSD.Animation.LF2Objects
         private bool State_3001(string eventType, object eventData)
         {
             return ProcessChaseStateEvent(eventType);
-        }
-
-        private bool State_3002(string eventType, object eventData)
-        {
-            return false;
         }
 
         private bool State_3003(string eventType, object eventData)
@@ -235,10 +218,8 @@ namespace NTSD.Animation.LF2Objects
             return GetState() switch
             {
                 15 => State_15(eventType, eventData),
-                1002 => State_1002(eventType, eventData),
                 LF2States.ProjectileFlying => State_3000(eventType, eventData),
                 LF2States.ProjectileHiting => State_3001(eventType, eventData),
-                LF2States.ProjectileHit => State_3002(eventType, eventData),
                 LF2States.ProjectileTeleport => State_3003(eventType, eventData),
                 LF2States.ObjectFlying => State_3005(eventType, eventData),
                 LF2States.ObjectExpanding => State_3006(eventType, eventData),
@@ -252,32 +233,6 @@ namespace NTSD.Animation.LF2Objects
             if (frame != null && frame.dvx != 0)
             {
                 PS.vx = Dirh() * frame.dvx;
-            }
-
-            return true;
-        }
-
-        private bool ProcessState1002Entry()
-        {
-            NoBounce = (Parent?.PS?.y ?? 0) == 0;
-            return true;
-        }
-
-        private bool ProcessState1002TU()
-        {
-            if (PS.y == 0 && PS.vy > 0)
-            {
-                if (NoBounce)
-                {
-                    Trans.Frame(1000, 0);
-                }
-                else if (GetSpeed() > NTSDGlobal.Gameplay.WeaponBounceupLimit)
-                {
-                    Trans.Frame(10, 0);
-                    PS.vy = NTSDGlobal.Gameplay.WeaponBounceupSpeedY;
-                    if (PS.vx != 0) PS.vx = Mathf.Sign(PS.vx) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
-                    if (PS.vz != 0) PS.vz = Mathf.Sign(PS.vz) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
-                }
             }
 
             return true;
@@ -569,10 +524,10 @@ namespace NTSD.Animation.LF2Objects
             }
 
             int targetStableId = (enemies.Count > 0)
-                ? enemies[UnityEngine.Random.Range(0, enemies.Count)]
+                ? enemies[RandInt(0, enemies.Count)]
                 : StableId;
 
-            float spawnY = PS.y + UnityEngine.Random.Range(0, 7) - 3;
+            float spawnY = PS.y + RandInt(0, 7) - 3;
             int facing = PS.dir == "right" ? 0 : 1;
             var op = new ObjectPoint
             {
@@ -620,13 +575,13 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < count; i++)
             {
                 // vx = rand(21)-11, vy = 3.0-rand(24)*0.25, vz = 3.0-rand(24)*0.25
-                float vx = UnityEngine.Random.Range(0, 21) - 11;
-                float vy = 3.0f - UnityEngine.Random.Range(0, 24) * 0.25f;
-                float vz = 3.0f - UnityEngine.Random.Range(0, 24) * 0.25f;
+                float vx = RandInt(0, 21) - 11;
+                float vy = 3.0f - RandInt(0, 24) * 0.25f;
+                float vz = 3.0f - RandInt(0, 24) * 0.25f;
 
                 // OwnerEntityIndex = 随机敌方 StableId（若无敌方则用自身）
                 int ownerIdx = (enemyCount > 0)
-                    ? enemies[UnityEngine.Random.Range(0, enemyCount)]
+                    ? enemies[RandInt(0, enemyCount)]
                     : StableId;
 
                 var op = new ObjectPoint
@@ -721,13 +676,13 @@ namespace NTSD.Animation.LF2Objects
                 {
                     oid = 220;
                     vx = (obj.PS.x - PS.x) / 50.0f;
-                    vy = -(4 + UnityEngine.Random.Range(0, 4));
+                    vy = -(4 + RandInt(0, 4));
                 }
                 else
                 {
-                    oid = UnityEngine.Random.Range(0, 2) + 221;
-                    vx = UnityEngine.Random.Range(0, 21) - 11;
-                    vy = -2.0f - UnityEngine.Random.Range(0, 40) * 0.1667f;
+                    oid = RandInt(0, 2) + 221;
+                    vx = RandInt(0, 21) - 11;
+                    vy = -2.0f - RandInt(0, 40) * 0.1667f;
                 }
 
                 int facing = PS.dir == "right" ? 0 : 1;
@@ -849,7 +804,7 @@ namespace NTSD.Animation.LF2Objects
                 PS.y += PS.vy;
                 if (PS.y > -25)
                 {
-                    Trans.Frame(60, 0);
+                    SetFrameDirect(60);
                     PS.vx = 0; PS.vy = 0; PS.vz = 0;
                     var ownerTarget = FindOwnerTarget();
                     if (ownerTarget != null) ownerTarget.HealTimer = 100;
@@ -891,12 +846,12 @@ namespace NTSD.Animation.LF2Objects
                 if (absVx > 14.0f)
                 {
                     if (curFrame != 5 && curFrame != 6)
-                        Trans.Frame(5, 0);
+                        SetFrameDirect(5);
                 }
                 else if (absVx > 7.0f)
                 {
                     if (curFrame != 3 && curFrame != 4)
-                        Trans.Frame(3, 0);
+                        SetFrameDirect(3);
                 }
             }
         }
@@ -940,17 +895,15 @@ namespace NTSD.Animation.LF2Objects
         public override void Reset()
         {
             _parent = null;
+            Runtime.Reset();
             ObjectId = 0;
             Team = 0;
             Health.HP = 0;
             _lastState = -1;
             _hitFaFired = false;
-            _chasingTarget = null;
-            _chasedCounts.Clear();
             NoBounce = false;
             ShotCount = 0;
             ResetSpark();
-            Runtime.Reset();
             ResetStableId();
         }
 
@@ -977,13 +930,12 @@ namespace NTSD.Animation.LF2Objects
 
             if (isStateTrans)
             {
-                HitStun = 0;
+                AttackingCounter = 0;
                 StateEntryEvent();
                 _lastState = Frame.D.state;
             }
 
-            Trans.SetWait(Frame.D.wait, 99);
-            Trans.SetNext(Frame.D.next, 99);
+            Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
             FrameEvent();
 
             if (!string.IsNullOrEmpty(Frame.D.sound))
@@ -991,7 +943,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// Transit 阶段 - 对应 FLF livingobject.transit()
+        /// Transit 阶段：推进当前帧请求，语义对齐 C++ release 的 frame/wait/next 字段。
         /// </summary>
         public override void SimTransit(int tickIndex)
         {
@@ -1009,7 +961,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (GrabbedBy < 0) return;
 
-            if (fD != null && fD.state == 2) return;
+            if (fD != null && fD.cpoint != null && fD.cpoint.kind == 2) return;
 
             if (ShakeTimer > 0) ShakeTimer--;
             else if (ShakeTimer < 0) ShakeTimer++;
@@ -1017,18 +969,41 @@ namespace NTSD.Animation.LF2Objects
             if (fD != null && fD.hit_Uj < 0 && NTSDGlobal.MPEnabled && Health != null)
             {
                 if (Health.PP < fD.hit_Uj)
-                    Trans.Frame(fD.hit_a, 0);
+                    SetFrameDirect(fD.hit_a);
                 else
                     Health.PP += fD.hit_Uj;
             }
 
             if (Frame?.N == 202)
                 ShakeTimer = 20;
+
+            if (fD != null && fD.hit_a > 0 && Health != null)
+            {
+                Health.HP -= fD.hit_a;
+                if (Health.HP <= 0)
+                {
+                    Health.HP = 0;
+                    SetFrameDirect(fD.hit_d);
+                }
+            }
         }
 
         /// <summary>
-        /// TU 阶段 - 对应 FLF livingobject.TU()
-        /// 严格对齐 FLF specialattack.js states
+        /// 直接写入当前帧，用于 C++ release Entity_Collision / frame_tick 中不触发帧事件的跳帧。
+        /// </summary>
+        private void SetFrameDirect(int frameId, int waitCounter = int.MinValue)
+        {
+            Frame.N = frameId;
+            Frame.D = FrameCache.GetFrameDataById(frameId);
+            AttackingCounter = 0;
+            if (Frame.D != null && Trans != null)
+            {
+                Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next, waitCounter);
+            }
+        }
+
+        /// <summary>
+        /// TU 阶段：执行技能对象的逐 tick 逻辑、物理和状态分支。
         /// </summary>
         public override void SimTU(int tickIndex)
         {
@@ -1043,8 +1018,6 @@ namespace NTSD.Animation.LF2Objects
 
             TUEvent();
 
-            ItrRest?.Tick();
-
             if (Health.HP <= 0)
             {
                 DieEvent();
@@ -1054,7 +1027,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== 交互方法 ==========
 
         /// <summary>
-        /// 对应 FLF specialattack.prototype.interaction (specialattack.js:342-395)
+        /// 技能对象命中检测入口，对齐 C++ release 的 Entity_AI_Update 技能/投射物交互流程。
         /// </summary>
         public void Interaction()
         {
@@ -1115,7 +1088,7 @@ namespace NTSD.Animation.LF2Objects
             var kindService = Match?.ItrKindService;
             if (itr.kind != 8 && itr.kind != 14)
             {
-                if (target is not LF2LivingObject livingTarget || !kindService.ShouldHitTarget(itr.kind, this, livingTarget)) return false;
+                if (target is not LF2LivingObject) return false;
             }
 
             return true;
@@ -1123,6 +1096,13 @@ namespace NTSD.Animation.LF2Objects
 
         private bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
+            if (itr.kind == 8)
+            {
+                if (target is not LF2Character) return false;
+                if (DeferState3005Kind8LeadIn()) return false;
+                return TryApplyHit(itr, target);
+            }
+
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
                 return TryApplyHit(itr, target);
@@ -1130,17 +1110,34 @@ namespace NTSD.Animation.LF2Objects
 
             switch (itr.kind)
             {
-                case 1:
-                    return HandlePreInteractionKind1(itr, target);
-                case 2:
-                    return HandlePreInteractionKind2(itr, target);
-                case 3:
-                    return HandlePreInteractionKind3(itr, target);
-                case 7:
-                    return HandlePreInteractionKind7(itr, target);
                 default:
                     return false;
             }
+        }
+
+        private bool DeferState3005Kind8LeadIn()
+        {
+            var activeFrame = Frame?.D;
+            if (activeFrame == null || activeFrame.state != LF2States.ObjectFlying)
+            {
+                return false;
+            }
+
+            // C++ release defer_state3005_kind8_lead_in：
+            // state=3005 且当前/下一帧带 hit_Fa 或 opoint 时，延后 kind=8 命中。
+            if (activeFrame.hit_Fa > 0 || (activeFrame.opoints != null && activeFrame.opoints.Count > 0))
+            {
+                return true;
+            }
+
+            if (activeFrame.next <= 0 || activeFrame.next == Frame.N)
+            {
+                return false;
+            }
+
+            var nextFrame = GetFrameDataById(activeFrame.next);
+            return nextFrame != null
+                && (nextFrame.hit_Fa > 0 || (nextFrame.opoints != null && nextFrame.opoints.Count > 0));
         }
 
         private bool TryApplyHit(InteractionArea itr, LF2Entity target)
@@ -1169,28 +1166,8 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        private bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
-        {
-            return false;
-        }
-
-        private bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
-        {
-            return false;
-        }
-
-        private bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
-        {
-            return false;
-        }
-
-        private bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
-        {
-            return false;
-        }
-
         /// <summary>
-        /// 对应 FLF specialattack.prototype.hit (specialattack.js:398-410)
+        /// 技能对象被命中入口，对齐 C++ release 的 Entity_AI_Update hurt pipeline。
         /// </summary>
         public bool Hit(InteractionArea itr, LF2Entity attacker)
         {
@@ -1206,7 +1183,7 @@ namespace NTSD.Animation.LF2Objects
                 if (curState == LF2States.ObjectFlying) // 3005
                 {
                     NoBounce = true;
-                    Trans.Frame(40, 0);
+                    SetFrameDirect(40);
                 }
                 else
                 {
@@ -1217,8 +1194,7 @@ namespace NTSD.Animation.LF2Objects
                     Team = attacker.Team;
                     OwnerEntityIndex = attacker.OwnerEntityIndex >= 0 ? attacker.OwnerEntityIndex : attacker.StableId;
                     NoBounce = true;
-                    Trans.Frame(30, 0);
-                    HitStun = 0;
+                    SetFrameDirect(30);
                     PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
                 }
                 return true;
@@ -1308,7 +1284,7 @@ namespace NTSD.Animation.LF2Objects
                             Team = attackerSpecial.Team;
                             OwnerId = attackerSpecial.OwnerId;
                             FrameCache.Load(karasuWrapper);
-                            Trans.Frame(40, 0);
+                            SetFrameDirect(40, 40);
                             Frame.PN = 40;
                         }
                         return true;
@@ -1322,7 +1298,7 @@ namespace NTSD.Animation.LF2Objects
                         {
                             int savedFrame = Frame.N;
                             FrameCache.Load(karasuWrapper);
-                            Trans.Frame(savedFrame, 0);
+                            SetFrameDirect(savedFrame);
                             Frame.PN = savedFrame;
                         }
                         var parent = attackerSpecial.TrackerParent as LF2SpecialAttack;
@@ -1339,7 +1315,7 @@ namespace NTSD.Animation.LF2Objects
                         return true;
                     }
 
-                    Trans.Frame(1000, 0);
+                    SetFrameDirect(1000);
                     CreateObjectAt(209, attackerSpecial);
                     return true;
                 }
@@ -1347,7 +1323,7 @@ namespace NTSD.Animation.LF2Objects
                 if (itr.kind == 0)
                 {
                     PS.vx = 0;
-                    Trans.Frame(20, 0);
+                    SetFrameDirect(20);
                     return true;
                 }
             }
@@ -1356,11 +1332,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 PS.vx = 0;
                 Team = attacker?.Team ?? 0;
-                Trans.Frame(30, 0);
-                Trans.Trans();
-                TUUpdate();
-                Trans.Trans();
-                TUUpdate();
+                SetFrameDirect(30);
                 return true;
             }
 
@@ -1376,7 +1348,7 @@ namespace NTSD.Animation.LF2Objects
 
                 if (attackerState == LF2States.ObjectFlying || attackerState == LF2States.ObjectExpanding)
                 {
-                    Trans.Frame(20, 0);
+                    SetFrameDirect(20);
                     PS.vx = 0;
                     PS.vz = 0;
                     return true;
@@ -1408,90 +1380,11 @@ namespace NTSD.Animation.LF2Objects
             return frame.itrs[0];
         }
 
-        // ========== 追踪系统 ==========
-
-        /// <summary>
-        /// 对应 FLF specialattack.prototype.chase_target (specialattack.js:424-453)
-        /// </summary>
-        public LF2LivingObject ChaseTarget()
-        {
-            var sceneQuery = Match?.SceneQuery;
-            if (sceneQuery == null || PS == null) return _chasingTarget;
-
-            var allObjects = new System.Collections.Generic.List<LF2LivingObject>(16);
-            Match.GetAllLivingObjects(allObjects);
-
-            LF2LivingObject best = null;
-            float bestScore = float.MaxValue;
-
-            for (int i = 0; i < allObjects.Count; i++)
-            {
-                var obj = allObjects[i];
-                if (obj == null || obj.PS == null) continue;
-                if (obj.Team == Team) continue;
-                if (obj.Type != LF2ObjectType.Character) continue;
-                if (obj.Health != null && obj.Health.HP <= 0) continue;
-
-                float dx = obj.PS.x - PS.x;
-                float dz = obj.PS.z - PS.z;
-                float score = UnityEngine.Mathf.Sqrt(dx * dx + dz * dz);
-
-                int chaseCount;
-                if (_chasedCounts.TryGetValue(obj.StableId, out chaseCount))
-                    score += 500f * chaseCount;
-
-                if (score < bestScore)
-                {
-                    bestScore = score;
-                    best = obj;
-                }
-            }
-
-            if (best != null)
-            {
-                _chasingTarget = best;
-                if (!_chasedCounts.ContainsKey(best.StableId))
-                    _chasedCounts[best.StableId] = 1;
-                else
-                    _chasedCounts[best.StableId]++;
-            }
-
-            return _chasingTarget;
-        }
-
         // ========== 辅助方法 ==========
-
-        public float GetSpeed()
-        {
-            return Mathf.Sqrt(PS.vx * PS.vx + PS.vy * PS.vy);
-        }
-
-        public bool IsLeavingBoundary(float margin)
-        {
-            if (PS == null) return false;
-            float nx = PS.sx + PS.vx;
-            float ny = PS.sy + PS.vy;
-            float spriteW = Sprite?.GetWidthPx() ?? 0f;
-
-            // 边界离场条件：nx+width < -xt、nx > bgWidth+xt、ny < -600 或 ny > 100。
-            if (ny < -600f || ny > 100f) return true;
-            if (nx + spriteW < -margin) return true;
-
-            var bwm = NTSD.LevelEditor.BoundaryWallManager.Instance;
-            if (bwm != null)
-            {
-                Vector2 nextPoint = new Vector2((PS.x + PS.vx) / 100f, (PS.z + PS.vz) / 100f);
-                if (!bwm.IsPointWalkable(nextPoint))
-                    return true;
-            }
-
-            if (nx > 1500f + margin) return true;
-            return false;
-        }
 
         public void CreateBrokenEffect()
         {
-            // 对应 FLF state_exit: if ($.match.broken_list[$.id]) $.brokeneffect_create($.id)
+            // C++ release 中 broken/effect 生成由 GameMode 层处理；这里先保留统一入口。
             BrokenEffectCreate(ObjectId);
         }
 
@@ -1500,9 +1393,9 @@ namespace NTSD.Animation.LF2Objects
             if (op.oid <= 0) return;
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
             task.opoint = op;
-            task.parent = _parent;
+            task.parent = this;
             task.team = Team;
-            task.pos = new Vector3(PS.x, PS.y, PS.z);
+            task.pos = MakeObjectPoint(op);
             task.z = PS.z;
             task.dir = PS.dir;
             task.dvz = 0;
@@ -1514,13 +1407,27 @@ namespace NTSD.Animation.LF2Objects
             var op = new ObjectPoint { oid = oid, action = 0, facing = 0 };
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
             task.opoint = op;
-            task.parent = source?._parent;
+            task.parent = source;
             task.team = source?.Team ?? 0;
             task.pos = new Vector3(source?.PS?.x ?? 0, source?.PS?.y ?? 0, source?.PS?.z ?? 0);
             task.z = source?.PS?.z ?? 0;
             task.dir = source?.PS?.dir ?? "right";
             task.dvz = 0;
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
+        }
+
+        private Vector3 MakeObjectPoint(ObjectPoint op)
+        {
+            var frame = Frame?.D;
+            if (PS == null || frame == null)
+                return new Vector3(PS?.x ?? 0f, PS?.y ?? 0f, PS?.z ?? 0f);
+
+            float x = PS.dir == "right"
+                ? PS.x - frame.centerx + op.x
+                : PS.x + frame.centerx - op.x;
+            float y = PS.y + PS.z - frame.centery + op.y;
+            float z = PS.z + op.y;
+            return new Vector3(x, y, z);
         }
 
         public void PlaySound(string soundId)
@@ -1540,12 +1447,9 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializePosition(OPointCreateTask task)
         {
-            SetPos(0, 0, task.z);
-
-            if (Frame.D == null) return;
-
-            Vector3 centerPoint = MakePointCenter(Frame.D);
-            CoincideXYForInit(task.pos, centerPoint);
+            PS.x = task.pos.x;
+            PS.y = task.parent != null ? task.pos.y - task.z : task.pos.y;
+            PS.z = task.z;
         }
 
         private void InitializeDirection(OPointCreateTask task)
@@ -1562,10 +1466,7 @@ namespace NTSD.Animation.LF2Objects
             if (action == 0 && FrameCache.GetFrameDataById(0) == null)
                 action = 999;
             Frame.D = FrameCache.GetFrameDataById(action);
-            if (action == 0)
-                Trans.SetWait(0);
-            else
-                Trans.Frame(action, 0);
+            SetFrameDirect(action);
         }
 
         private void InitializeVelocity(OPointCreateTask task)

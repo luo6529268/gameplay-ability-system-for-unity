@@ -1,20 +1,13 @@
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// 可被 SimulationWorld 管理的模拟对象接口
+    /// 可被 SimulationWorld 管理的战斗模拟对象接口。
+    /// 纯 C# 逻辑对象由 SimulationWorld 按 SimOrder 和 StableId 稳定驱动，
+    /// MonoBehaviour 只负责渲染、输入桥接和对象池装配。
     ///
-    /// 与 ISimTickable 的区别：
-    /// - ISimTickable: MonoBehaviour 组件，由 SimulationTickDriver 直接发现和驱动（Plan A）
-    /// - ISimObject: 纯 C# 对象，由 SimulationWorld 管理，支持 StableId 确定性排序（Plan B）
-    ///
-    /// Plan B 架构：
-    /// - 所有 gameplay 真相由 ISimObject 实现（纯 C# sim 模块）
-    /// - MonoBehaviour 仅作为 "Hub"（组件缓存、注册/反注册）或 "View"（渲染、调试）
-    /// - SimulationWorld 负责按确定性顺序（SimOrder → StableId）驱动所有 ISimObject
-    ///
-    /// FLF 对齐 (P0):
-    /// - 每个 tick 分为两个阶段: Transit (all objects) → TU (all objects)
-    /// - FlushTasks 在 Transit 和 TU 之间执行一次
+    /// C++ release 战斗对齐目标：
+    /// - 每个对象按 frame/wait/next 推进，再执行对象自身的逐 tick 逻辑
+    /// - opoint 创建请求在确定的模拟阶段刷新，保证生成顺序可复现
     /// </summary>
     public interface ISimObject
     {
@@ -39,50 +32,49 @@ namespace NTSD.Simulation
         void OnRemoved(SimContext ctx);
 
         /// <summary>
-        /// Transit 阶段 - 对应 FLF livingobject.transit()
+        /// Transit 阶段：处理帧推进、帧请求和物理前置状态。
         /// 
         /// 职责：输入处理、帧转换、物理
-        /// 调用时机：所有对象的 Transit 先执行完，再执行 FlushTasks，再执行所有对象的 TU
+        /// 调用时机：SimulationWorld.SerialTickAll 按对象顺序执行 Transit -> FlushTasks -> TU。
         /// </summary>
         void SimTransit(int tickIndex);
 
         /// <summary>
-        /// TU 阶段 - 对应 FLF livingobject.TU()
+        /// TU 阶段：处理对象逐 tick 状态逻辑。
         /// 
         /// 职责：状态更新、武器点
-        /// 调用时机：FlushTasks 之后
+        /// 调用时机：当前对象的 FlushTasks 之后。
         /// </summary>
         void SimTU(int tickIndex);
 
         /// <summary>
-        /// PostInteraction 阶段 - 对应 NTSD 反汇编 GameMode_Process (sub_41BDA0) 碰撞双层循环
+        /// PostInteraction 阶段 - 对齐 C++ release 角色攻击碰撞路径。
         ///
         /// 职责：kind=0/4（普通攻击）的碰撞判定
         /// 调用时机：所有对象 SerialTickAll 完成后统一执行一次全局 pass
-        /// 反汇编依据：GameMode_Process 在所有实体 sub_4063B0 执行完毕后，
-        ///             才执行双层 for 循环做 itr/body 碰撞检测
+        /// C++ release 依据：帧推进完成后先执行角色侧 itr/body 碰撞检测，再进入随机武器掉落。
         /// </summary>
         void SimPostInteraction(int tickIndex) { }
 
         /// <summary>
-        /// PreInteraction 阶段 - 对应 NTSD 反汇编 GameMode_Process (sub_41BDA0)
+        /// PreInteraction 阶段 - 对齐 C++ release 随机武器掉落后的抓取/拾取/cpoint 类碰撞路径
         ///
         /// 职责：kind=1/2/3/7（抓取、拾取）的碰撞判定
-        /// 调用时机：所有对象 SerialTickAll 完成后、LateTick 之前统一执行一次全局 pass
-        /// 目的：保证联机帧同步一致性（不依赖 StableId 顺序）
+        /// 调用时机：PostInteraction 与 RandomWeaponDrop 完成后、FramePostProcess 之前统一执行一次全局 pass
+        /// 目的：让抓取/拾取结果由固定全局 pass 决定。
         /// </summary>
         void SimPreInteraction(int tickIndex) { }
 
         /// <summary>
-        /// EntityCollision 阶段 - 对应反汇编 Entity_Collision (sub_4138F0)
+        /// EntityCollision 阶段 - 对齐 C++ release 的实体碰撞路径
         ///
         /// 职责：武器地面/边界碰撞、state/type 特殊分支（N-1~N-5）
-        /// 调用时机：FramePostProcessAll 之后（反汇编 0x00421FBB 在 Frame_PostProcess 0x004219CB 之后）
+        /// 调用时机：FramePostProcessAll 之后，在 LateEntityUpdateAll 中按实体顺序执行
         /// </summary>
         void SimEntityCollision(int tickIndex) { }
 
         /// <summary>
-        /// 每个模拟 Tick 的后期处理（可选）
+        /// 每个模拟 Tick 的后期处理（可选），在同一实体的 SimEntityCollision 后立即执行。
         /// </summary>
         void SimLateTick(int tickIndex) { }
     }

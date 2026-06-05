@@ -28,7 +28,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== 逻辑层引用 ==========
         private LF2Entity _logicObject;
 
-        // 渲染帧计数器（对应反汇编 dword_449098，每渲染帧递增）
+        // 渲染帧计数器（C++ release 对齐 dword_449098，每渲染帧递增）
         private int _renderFrameCount = 0;
 
         // 缓存稳定ID（AllocateStableId 只调用一次）
@@ -99,6 +99,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
+            RestorePooledVisualState();
             _logicObject = logicObject as LF2Entity;
             _renderFrameCount = 0;
             _logicObject?.Init(task, this);
@@ -114,6 +115,29 @@ namespace NTSD.Animation.LF2Objects
                 _logicObject?.Sprite?.Initialize(_spriteRenderer, sprites, startFrame);
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
+
+            var frame = _logicObject?.Frame?.D;
+            if (frame != null && _logicObject.Sprite != null)
+                _logicObject.Sprite.ShowPic(frame.pic);
+        }
+
+        /// <summary>
+        /// 对象池复用时恢复 Unity 渲染组件状态，避免上一轮 Reset/Hide 留下不可见状态。
+        /// </summary>
+        public void RestorePooledVisualState()
+        {
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+
+            if (_spriteRenderer == null)
+                _spriteRenderer = GetComponent<SpriteRenderer>();
+
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.enabled = true;
+                _spriteRenderer.color = Color.white;
+                _spriteRenderer.flipX = false;
+            }
         }
 
         public void SetShadowRenderer(SpriteRenderer shadowRenderer)
@@ -136,7 +160,7 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 更新 sprite（从 CurrentFrame.pic 和 PS.dir）
-        /// 对应 FLF sp.show_pic / sp.switch_lr
+        /// 按当前帧 pic 和运行时方向刷新 Unity SpriteRenderer。
         /// </summary>
         private void UpdateSprite()
         {
@@ -195,7 +219,8 @@ namespace NTSD.Animation.LF2Objects
                 float spriteWidth = _spriteRenderer.sprite?.rect.width ?? 0f;
                 float spriteHeight = _spriteRenderer.sprite?.rect.height ?? 0f;
                 float rootWorldX = Mathf.Round((ps.x / ppu) * ppu) / ppu;
-                float rootWorldY = Mathf.Round(((ps.z - ps.y) / ppu) * ppu) / ppu;
+                // C++ release 渲染非角色对象时使用 screenY = z + y。
+                float rootWorldY = Mathf.Round(PhysicsState.ScreenYToUnityY(ps.z + ps.y) * ppu) / ppu;
                 rootTransform.position = new Vector3(
                     rootWorldX,
                     rootWorldY,

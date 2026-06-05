@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using NTSD.Animation.LF2Objects;
-using UnityEngine;
 
 namespace NTSD.Animation
 {
@@ -22,7 +21,7 @@ namespace NTSD.Animation
                         ProcessHoldPoint(character, wpoint);
                         break;
                     case 3:
-                        ProcessForceDropPoint(character, wpoint);
+                        ProcessDropPoint(character, wpoint);
                         break;
                 }
             }
@@ -30,21 +29,26 @@ namespace NTSD.Animation
 
         private static void ProcessHoldPoint(LF2Character character, WeaponPoint wpoint)
         {
-            var weapon = character.GetHeldWeapon() as LF2WeaponBase;
-            if (weapon == null) return;
-
-            Vector3 holdpoint = CalcHoldPoint(character, wpoint);
-            var actResult = weapon.Act(character, wpoint, holdpoint);
+            if (!character.ReleaseHeldObjectByWPoint(wpoint, out var actResult))
+                return;
 
             if (actResult.NeedsKind3Drop)
-                ProcessForceDropPoint(character, wpoint);
+                ProcessDropPoint(character, wpoint);
 
             var ar = actResult.AttackResult;
             if (ar != null && ar.HitUid != 0 && ar.ARest > 0)
                 character.ItrRest.Arest = ar.ARest;
         }
 
-        private static void ProcessForceDropPoint(LF2Character character, WeaponPoint wpoint)
+        private static void ProcessDropPoint(LF2Character character, WeaponPoint wpoint)
+        {
+            if (character.ReleaseHeldObjectByWPoint(wpoint, out _))
+                return;
+
+            ProcessWeaponFallbackDrop(character);
+        }
+
+        private static void ProcessWeaponFallbackDrop(LF2Character character)
         {
             var weapon = character.GetHeldWeapon() as LF2WeaponBase;
             if (weapon == null) return;
@@ -52,31 +56,14 @@ namespace NTSD.Animation
             character.ItrRest.Arest = 0;
             weapon.ItrRest.Arest = 0;
 
-            weapon.Trans.Frame(UnityEngine.Random.Range(0, 6), 0);
-
-            float dirH = weapon.Dirh();
-            weapon.PS.vx = dirH * (UnityEngine.Random.Range(0, 7) - 3);
-            weapon.PS.vy = -UnityEngine.Random.Range(0, 4);
-            weapon.PS.vz = (UnityEngine.Random.Range(0, 5) - 2) * 0.2f;
-
+            weapon.SetFrameDirect(weapon.BattleRandInt(0, 6));
+            weapon.PS.vx = weapon.BattleRandInt(0, 7) - 3;
+            weapon.PS.vy = -weapon.BattleRandInt(0, 4);
+            weapon.PS.vz = (weapon.BattleRandInt(0, 5) - 2) * 0.2f;
             weapon.PS.zz = 0;
             weapon.Team = 0;
             weapon.ForceClearHolder();
             character.HoldWeapon(null);
-        }
-
-        private static Vector3 CalcHoldPoint(LF2LivingObject animator, WeaponPoint wpoint)
-        {
-            float spriteWidth = animator.GetSpriteWidthPxForCollision();
-
-            float holdX = animator.PS.dir == "right"
-                ? animator.PS.sx + wpoint.x
-                : animator.PS.sx + spriteWidth - wpoint.x;
-
-            float holdY = animator.PS.sy + wpoint.y;
-            float holdZ = animator.PS.sz;
-
-            return new Vector3(holdX, holdY, holdZ);
         }
     }
 }

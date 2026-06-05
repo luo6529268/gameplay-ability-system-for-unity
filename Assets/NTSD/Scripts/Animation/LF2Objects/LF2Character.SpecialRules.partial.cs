@@ -25,7 +25,7 @@ namespace NTSD.Animation.LF2Objects
             bool wasBurning = (prevState == LF2States.Burning || prevState == LF2States.FirenSpecific);
             if (isBurning)
             {
-                int count = (!wasBurning) ? 7 : (UnityEngine.Random.Range(0, 4) == 0 ? 1 : 0);
+                int count = (!wasBurning) ? 7 : (RandInt(0, 4) == 0 ? 1 : 0);
                 if (count > 0)
                     SpawnOid999Particles(count, new int[] { 140 });
             }
@@ -47,12 +47,12 @@ namespace NTSD.Animation.LF2Objects
                 var op = new ObjectPoint
                 {
                     oid = 999, kind = 0, action = frame,
-                    dvx = UnityEngine.Random.Range(0, 11) - 5,
-                    dvy = -(UnityEngine.Random.Range(0, 20) + 8),
-                    dvz = UnityEngine.Random.Range(0, 11) - 5,
-                    x = UnityEngine.Random.Range(0, 29) - 14,
-                    y = -(UnityEngine.Random.Range(0, 39) - 19),
-                    facing = UnityEngine.Random.Range(0, 2)
+                    dvx = RandInt(0, 11) - 5,
+                    dvy = -(RandInt(0, 20) + 8),
+                    dvz = RandInt(0, 11) - 5,
+                    x = RandInt(0, 29) - 14,
+                    y = -(RandInt(0, 39) - 19),
+                    facing = RandInt(0, 2)
                 };
                 factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
                 {
@@ -70,31 +70,47 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < 5; i++)
             {
                 int oid = (i < 4) ? 217 : 218;
-                float vy = -(UnityEngine.Random.Range(0, 15) / 2f + 5f);
-                float vx, vz;
-                int rnd2 = UnityEngine.Random.Range(0, 2);
-                int rnd3 = UnityEngine.Random.Range(0, 3);
-                if (i < 2)       { vx = (i == 0 ? 1 : -1) * (rnd3 + 10f); vz = (i == 0 ? 1 : -1) * (rnd2 + 3f); }
-                else if (i < 4)  { vx = UnityEngine.Random.Range(0, 7) - 3f; vz = (i % 2 == 0 ? 1 : -1) * (rnd2 + 3f); }
-                else             { vx = UnityEngine.Random.Range(0, 7) - 3f; vz = (UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1) * (rnd3 + 10f); }
-                int frame = UnityEngine.Random.Range(0, 4);
-                string dir = UnityEngine.Random.Range(0, 2) == 0 ? "left" : "right";
+                float vy = -(RandInt(0, 15) / 2f) - 5f;
+                float vz = 0f;
+                if (i == 1 || i == 3)
+                    vz = -3f - RandInt(0, 2);
+                else if (i == 4)
+                    vz = 1f;
+                else
+                    vz = RandInt(0, 2) + 3f;
+
+                float vx;
+                if (i >= 4)
+                    vx = RandInt(0, 7) - 3f;
+                else if (i >= 2)
+                    vx = RandInt(0, 3) + 10f;
+                else
+                    vx = -10f - RandInt(0, 3);
+
+                int frame = RandInt(0, 4);
+                string dir = RandInt(0, 2) == 0 ? "left" : "right";
                 var syntheticOpoint = new ObjectPoint
                 {
                     oid = oid, kind = 0, action = frame,
                     dvx = (int)vx, dvy = (int)vy, dvz = (int)vz,
-                    x = UnityEngine.Random.Range(0, 7) - 3,
-                    y = UnityEngine.Random.Range(0, 7) - 9,
+                    x = RandInt(0, 7) - 3,
+                    y = RandInt(0, 7) - 9,
                     facing = (dir == "right") ? 0 : 1
                 };
                 factory.EnqueueCreateObject(new LF2Tasks.OPointCreateTask
                 {
                     opoint = syntheticOpoint, parent = null, team = Team,
-                    pos = new UnityEngine.Vector3(PS.x + syntheticOpoint.x, PS.y + syntheticOpoint.y, PS.z + 1),
-                    z = PS.z + 1, dir = dir, dvz = vz
+                    // 工厂 PostInitLiving 会统一执行 z += 1，对应 C++ release ne.z_int = parent.z_int + 1。
+                    pos = new UnityEngine.Vector3(PS.x + syntheticOpoint.x, PS.y + syntheticOpoint.y, PS.z),
+                    z = PS.z, dir = dir, dvz = 0f,
+                    useDirectVelocity = true,
+                    directVx = vx,
+                    directVy = vy,
+                    directVz = vz,
+                    preserveActionZero = true,
+                    attackExempt = 6
                 });
             }
-            HitStun = 6;
         }
 
         private void ApplyMergeLogic()
@@ -226,7 +242,7 @@ namespace NTSD.Animation.LF2Objects
                 Team = 1;
                 Frame.N = 0xDB;
                 Frame.D = FrameCache.GetFrameDataById(0xDB);
-                HitStun = 0;
+                AttackingCounter = 0;
                 FrameDelay = 10;
 
                 var factory = LF2ObjectPointFactory.Instance;

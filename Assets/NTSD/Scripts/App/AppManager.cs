@@ -40,6 +40,10 @@ namespace NTSD.App
         [Header("Global Config")]
         [SerializeField] private GameConfig gameConfig;
 
+        [Header("Battle Lockstep")]
+        [Tooltip("战斗帧同步底层配置。进入战斗前应用到 SimulationTickDriver。")]
+        public LockstepSimulationSettings battleLockstepSettings = new LockstepSimulationSettings();
+
         private NTSDSoundPlayer soundPlayer;
         private SparkRenderer sparkRenderer;
         private InputModule inputModule;
@@ -113,7 +117,11 @@ namespace NTSD.App
             // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
             SetupBattleCharacters();
 
-            SimulationTickDriver.Instance?.SetPaused(false);
+            if (SimulationTickDriver.Instance != null)
+            {
+                SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
+                SimulationTickDriver.Instance.SetPaused(false);
+            }
 
             state = AppFlowState.BattleRunning;
             EnsureSingleEventSystem();
@@ -179,23 +187,29 @@ namespace NTSD.App
                 var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
                 var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, slot.characterId) as LF2Character;
 
-                lf2.Controller.SetInputID(slot.inputId);
+                int inputId = slot.inputId > 0 ? slot.inputId : i + 1;
+                int team = slot.team == GameConfig.TeamIndependent
+                    ? 10 + i
+                    : (slot.team > 0 ? slot.team : i + 1);
 
-                lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{slot.inputId}");
+                lf2.Controller.SetInputID(inputId);
+
+                lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{inputId}");
                 lf2.ModuleInitialize();
 
                 EntityModel.SetLogicObject(lf2, null);
 
                 var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(slot.characterId);
                 lf2.ModuleBind(frameData, slot.characterId);
-                lf2.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+                lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
+                lf2.Team = team;
 
                 Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
                     ? spawnPoints[i].transform.position: Vector3.zero;
                 
                 float ppu = SimulationConstants.PIXELS_PER_UNIT;
                 lf2.PS.x = spawnPos.x * ppu;
-                lf2.PS.z = spawnPos.y * ppu; 
+                lf2.PS.z = PhysicsState.UnityYToDepth(spawnPos.y);
                 lf2.PS.y = 0;
             }
         }

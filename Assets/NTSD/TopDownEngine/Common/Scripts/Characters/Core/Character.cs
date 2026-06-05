@@ -270,7 +270,7 @@ namespace MoreMountains.TopDownEngine
 			// 初始化 LF2Character 模块（在 ModuleBind 之后，确保 LF2CharacterAnimator 已绑定）
 			if (_LF2Character != null)
 			{
-				_LF2Character.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+				_LF2Character.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
 			}
 
 			// 在此处注册到 SimulationWorld（时序确定：SimulationTickDriver.Awake 先于 StartLevel）

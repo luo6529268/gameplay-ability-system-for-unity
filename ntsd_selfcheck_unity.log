@@ -1,0 +1,882 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to the License Client on channel: "LicenseClient-Logan"
+[Licensing::Client] Error: Code 10 while verifying Licensing Client signature (process Id: 15760, path: "D:/UnityHub/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] Error: LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.0+aa6cfba
+  Session Id:              badd6b72a73148deabadf6aba8b636d1
+  Correlation Id:          1ed40a46c903e1f637cc4e673756d79b
+  External correlation Id: 3776357499889445272
+  Machine Id:              YnCgJ/3eXfqj/pKKnk6cl38u0EY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Logan" (connect: 0.00s, validation: 0.01s, handshake: 0.06s)
+[Licensing::IpcConnector] Successfully connected to the License Notification on channel: "LicenseClient-Logan-notifications"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+Built from '2022.3/china_unity/release' branch; Version is '2022.3.4f1c1 (dae07de86df3) revision 14344317'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'zh' Physical Memory: 65349 MB
+[Licensing::Client] Successfully resolved entitlements
+[Licensing::Module] Serial number assigned to: "ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+D:\Unity\HubEditor\2022.3.4f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+-executeMethod
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunForBatchmode
+-logFile
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\ntsd_selfcheck_unity.log
+Successfully changed project path to: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [85744] Host "[IP] 192.168.31.76 [Port] 55496 [Flags] 2 [Guid] 1424410694 [EditorId] 1424410694 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [85744] Host "[IP] 192.168.31.76 [Port] 55496 [Flags] 2 [Guid] 1424410694 [EditorId] 1424410694 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-79192" after 0.3 seconds.
+[Licensing::Client] Successfully resolved entitlements
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 71 packages:
+  Packages from [https://packages.unity.cn]:
+    com.unity.cinemachine@2.9.7 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.cinemachine@2.9.7)
+    com.unity.collab-proxy@2.2.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.collab-proxy@2.2.0)
+    com.unity.ide.rider@3.0.27 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.rider@3.0.27)
+    com.unity.inputsystem@1.7.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.inputsystem@1.7.0)
+    com.unity.mathematics@1.2.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.mathematics@1.2.6)
+    com.unity.textmeshpro@3.0.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.textmeshpro@3.0.6)
+    com.unity.timeline@1.7.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.timeline@1.7.6)
+    com.unity.visualscripting@1.9.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.visualscripting@1.9.1)
+    com.unity.burst@1.8.7 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.burst@1.8.7)
+    com.unity.ext.nunit@1.0.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ext.nunit@1.0.6)
+    com.unity.ide.visualstudio@2.0.18 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.visualstudio@2.0.18)
+    com.unity.ide.vscode@1.2.5 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.vscode@1.2.5)
+    com.unity.editorcoroutines@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.editorcoroutines@1.0.0)
+    com.unity.performance.profile-analyzer@1.2.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.performance.profile-analyzer@1.2.2)
+    com.unity.test-framework@1.1.33 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.test-framework@1.1.33)
+    com.unity.testtools.codecoverage@1.2.4 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4)
+    com.unity.2d.animation@9.0.3 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.animation@9.0.3)
+    com.unity.2d.pixel-perfect@5.0.3 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.pixel-perfect@5.0.3)
+    com.unity.2d.psdimporter@8.0.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.psdimporter@8.0.2)
+    com.unity.2d.spriteshape@9.0.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.spriteshape@9.0.2)
+    com.unity.2d.tilemap.extras@3.1.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.tilemap.extras@3.1.0)
+    com.unity.2d.aseprite@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.aseprite@1.0.0)
+    com.unity.nuget.newtonsoft-json@3.2.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1)
+    com.unity.searcher@4.9.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.searcher@4.9.2)
+    com.unity.settings-manager@2.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.settings-manager@2.0.1)
+    com.unity.2d.common@8.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.common@8.0.1)
+    com.unity.collections@1.2.4 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.collections@1.2.4)
+  Built-in packages:
+    com.unity.feature.2d@2.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.feature.2d@2.0.0)
+    com.unity.feature.development@1.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.feature.development@1.0.1)
+    com.unity.render-pipelines.universal@14.0.8 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.render-pipelines.universal@14.0.8)
+    com.unity.ugui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ugui@1.0.0)
+    com.unity.modules.ai@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.ai@1.0.0)
+    com.unity.modules.androidjni@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.androidjni@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.animation@1.0.0)
+    com.unity.modules.assetbundle@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.assetbundle@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.audio@1.0.0)
+    com.unity.modules.cloth@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.cloth@1.0.0)
+    com.unity.modules.director@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.director@1.0.0)
+    com.unity.modules.imageconversion@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.imageconversion@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.particlesystem@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.particlesystem@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.physics@1.0.0)
+    com.unity.modules.physics2d@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.physics2d@1.0.0)
+    com.unity.modules.screencapture@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.screencapture@1.0.0)
+    com.unity.modules.terrain@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.terrain@1.0.0)
+    com.unity.modules.terrainphysics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.terrainphysics@1.0.0)
+    com.unity.modules.tilemap@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.tilemap@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.uielements@1.0.0)
+    com.unity.modules.umbra@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.umbra@1.0.0)
+    com.unity.modules.unityanalytics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unityanalytics@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequest@1.0.0)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle@1.0.0)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestaudio@1.0.0)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequesttexture@1.0.0)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestwww@1.0.0)
+    com.unity.modules.vehicles@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.vehicles@1.0.0)
+    com.unity.modules.video@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.video@1.0.0)
+    com.unity.modules.vr@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.vr@1.0.0)
+    com.unity.modules.wind@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.wind@1.0.0)
+    com.unity.modules.xr@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.xr@1.0.0)
+    com.unity.modules.subsystems@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.subsystems@1.0.0)
+    com.unity.render-pipelines.core@14.0.8 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.render-pipelines.core@14.0.8)
+    com.unity.shadergraph@14.0.8 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.shadergraph@14.0.8)
+    com.unity.2d.sprite@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.sprite@1.0.0)
+    com.unity.2d.tilemap@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.tilemap@1.0.0)
+  Local packages:
+    com.coplaydev.unity-mcp@file:I:\GitHub\Unity_GAS\unity-mcp\MCPForUnity (location: I:\GitHub\Unity_GAS\unity-mcp\MCPForUnity)
+  Git packages:
+    com.cysharp.unitask@https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.cysharp.unitask@5cc97c7f00)
+    com.exhard.exmaidforui@https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.exhard.exmaidforui@b469ae66a3)
+    com.vovgou.loxodon-framework@https://github.com/vovgou/loxodon-framework.git?path=Loxodon.Framework/Assets/LoxodonFramework (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.vovgou.loxodon-framework@2fab55f00c)
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 0.09 seconds
+Refreshing native plugins compatible for Editor in 218.68 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2022.3.4f1c1 (dae07de86df3)
+[Subsystems] Discovering subsystems at path D:/Unity/HubEditor/2022.3.4f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 4070 (ID=0x2786)
+    Vendor:   NVIDIA
+    VRAM:     12010 MB
+    Driver:   32.0.15.9649
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+[Licensing::Client] Successfully resolved entitlements
+Initialize mono
+Mono path[0] = 'D:/Unity/HubEditor/2022.3.4f1/Editor/Data/Managed'
+Mono path[1] = 'D:/Unity/HubEditor/2022.3.4f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'D:/Unity/HubEditor/2022.3.4f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56192
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: D:/Unity/HubEditor/2022.3.4f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.010825 seconds.
+- Loaded All Assemblies, in  0.268 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.205 seconds
+Domain Reload Profiling: 464ms
+	BeginReloadAssembly (82ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (20ms)
+	RebuildNativeTypeToScriptingClass (6ms)
+	initialDomainReloadingComplete (59ms)
+	LoadAllAssembliesAndSetupDomain (93ms)
+		LoadAssemblies (73ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (76ms)
+			TypeCache.Refresh (75ms)
+				TypeCache.ScanAssembly (68ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (205ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (169ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (6ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (1ms)
+			ProcessInitializeOnLoadAttributes (103ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlements
+[Licensing::Client] Successfully resolved entitlements
+Application.AssetDatabase Initial Refresh Start
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/Editor/MoreMountains.TopDownEngine.Cinemachine.Editor.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsPostProcessing/MoreMountains.TopDownEngine.PostProcessing.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/MoreMountains.TopDownEngine.Cinemachine.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/Editor/MoreMountains.TopDownEngine.Cinemachine.Editor.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsPostProcessing/MoreMountains.TopDownEngine.PostProcessing.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/MoreMountains.TopDownEngine.Cinemachine.asmref has no target assembly definition
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:80
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 33.4410ms
+Starting: D:\Unity\HubEditor\2022.3.4f1\Editor\Data\bee_backend.exe --dont-print-to-structured-log --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.runtime.interopservices.windowsruntime has duplicate hint path. Ignoring "D:\Unity\HubEditor\2022.3.4f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Runtime.InteropServices.WindowsRuntime.dll" in favor of "D:\Unity\HubEditor\2022.3.4f1\Editor\Data\NetStandard\Extensions\2.0.0\System.Runtime.InteropServices.WindowsRuntime.dll"
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.componentmodel.composition has duplicate hint path. Ignoring "D:\Unity\HubEditor\2022.3.4f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\System.ComponentModel.Composition.dll" in favor of "D:\Unity\HubEditor\2022.3.4f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.ComponentModel.Composition.dll"
+DisplayProgressbar: Compiling Scripts
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library\PackageCache\com.unity.burst@1.8.7\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc - - 200 - application/grpc 658.3653ms
+ExitCode: 4 Duration: 1s797ms
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/1900b0aEDbg-inputdata.json
+[ 919/1225  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[ 920/1225  1s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll (+2 others)
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(101,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,44): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,117): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(234,45): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(248,49): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(309,55): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(405,53): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(54,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(55,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(56,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(57,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(58,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(66,41): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,33): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(36,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(40,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(41,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(156,34): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(236,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(241,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(311,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(331,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(76,22): warning CS0414: The field 'SettingBattleBgController.isActive' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\CMCRootController.cs(53,40): warning CS0414: The field 'CMCRootController.navigationCooldown' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(69,38): warning CS0414: The field 'SettingBattleBgController.selectedIndex' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\CMCRootController.cs(52,38): warning CS0414: The field 'CMCRootController.controlPlayerId' is assigned but its value is never used
+
+Assets\NTSD\Scripts\App\AppManager.cs(31,41): warning CS0414: The field 'AppManager.menuSceneName' is assigned but its value is never used
+*** Tundra requires additional run (1.74 seconds), 2 items updated, 918 evaluated
+Starting: D:\Unity\HubEditor\2022.3.4f1\Editor\Data\Tools\netcorerun\netcorerun.exe "D:\Unity\HubEditor\2022.3.4f1\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aEDbg.dag.json" "Library/Bee/1900b0aEDbg-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+ExitCode: 0 Duration: 2s38ms
+Starting: D:\Unity\HubEditor\2022.3.4f1\Editor\Data\bee_backend.exe --dont-print-to-structured-log --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aEDbg.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Current configuration matches the requested one, skipping
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc - - 200 - application/grpc 1.9857ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll, with 133 defines and 314 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library\PackageCache\com.unity.burst@1.8.7\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 454.1031ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll, with 131 defines and 336 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 18.7086ms
+ExitCode: 0 Duration: 2s468ms
+Finished compiling graph: 1229 nodes, 20008 flattened edges (15414 ToBuild, 214 ToUse), maximum node priority 1287
+[ 556/1225  0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.rsp
+[ 568/1225  0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.rsp
+[ 919/1225  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[1217/1225  1s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll (+2 others)
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(101,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,44): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,117): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(234,45): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(248,49): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(309,55): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(405,53): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(54,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(55,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(56,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(57,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(58,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(66,41): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,33): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(36,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(40,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(41,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(156,34): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(236,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(241,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(311,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(331,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\App\AppManager.cs(31,41): warning CS0414: The field 'AppManager.menuSceneName' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(69,38): warning CS0414: The field 'SettingBattleBgController.selectedIndex' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(76,22): warning CS0414: The field 'SettingBattleBgController.isActive' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\CMCRootController.cs(52,38): warning CS0414: The field 'CMCRootController.controlPlayerId' is assigned but its value is never used
+
+Assets\NTSD\Scripts\UI\CMCRootController.cs(53,40): warning CS0414: The field 'CMCRootController.navigationCooldown' is assigned but its value is never used
+[1218/1225  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll (+2 others)
+Assets\NTSD\Editor\ClassFactoryWindow.cs(870,24): warning CS0219: The variable 'message' is assigned but its value is never used
+
+Assets\NTSD\Editor\ClassFactoryWindow.cs(972,38): warning CS0168: The variable 'ex' is declared but never used
+[1219/1225  0s] ILPostProcess Library/Bee/artifacts/1900b0aEDbg.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll, with 133 defines and 314 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1220/1225  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[1221/1225  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[1222/1225  0s] ILPostProcess Library/Bee/artifacts/1900b0aEDbg.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll, with 131 defines and 336 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1223/1225  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[1224/1225  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (2.44 seconds), 11 items updated, 1225 evaluated
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(101,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,44): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,117): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(234,45): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(248,49): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(309,55): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(405,53): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(54,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(55,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(56,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(57,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(58,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(66,41): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,33): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(36,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(40,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(41,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(156,34): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(236,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(241,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(311,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(331,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\App\AppManager.cs(31,41): warning CS0414: The field 'AppManager.menuSceneName' is assigned but its value is never used
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(69,38): warning CS0414: The field 'SettingBattleBgController.selectedIndex' is assigned but its value is never used
+Assets\NTSD\Scripts\UI\SettingBattleBgController.cs(76,22): warning CS0414: The field 'SettingBattleBgController.isActive' is assigned but its value is never used
+Assets\NTSD\Scripts\UI\CMCRootController.cs(52,38): warning CS0414: The field 'CMCRootController.controlPlayerId' is assigned but its value is never used
+Assets\NTSD\Scripts\UI\CMCRootController.cs(53,40): warning CS0414: The field 'CMCRootController.navigationCooldown' is assigned but its value is never used
+Assets\NTSD\Editor\ClassFactoryWindow.cs(870,24): warning CS0219: The variable 'message' is assigned but its value is never used
+Assets\NTSD\Editor\ClassFactoryWindow.cs(972,38): warning CS0168: The variable 'ex' is declared but never used
+AssetDatabase: script compilation time: 6.882937s
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/Editor/MoreMountains.TopDownEngine.Cinemachine.Editor.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsPostProcessing/MoreMountains.TopDownEngine.PostProcessing.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/MoreMountains.TopDownEngine.Cinemachine.asmref has no target assembly definition
+Begin MonoManager ReloadAssembly
+Total cache size 268169201
+Total cache size after purge 268169201
+Symbol file data-00000159F6E02240 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Reflection.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000015A05708BF0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-00000159EB031E60 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.Config.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000015A05758640 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000015A0592C0B0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000015A059548C0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000015A059C2040 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.026 seconds
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/Editor/MoreMountains.TopDownEngine.Cinemachine.Editor.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsPostProcessing/MoreMountains.TopDownEngine.PostProcessing.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/MoreMountains.TopDownEngine.Cinemachine.asmref has no target assembly definition
+Refreshing native plugins compatible for Editor in 21.15 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Start importing Assets/NTSD/Scripts/Test/Editor using Guid(196fe158fe16410cafb0a58fa07ff657) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'b9a43027053b59575028770827bf721b') in 0.019312 seconds
+Start importing Assets/NTSD/Scripts/Animation/Character/ILF2SceneQuery.cs using Guid(a0d3d9ef090b0444f90a7d896afdb828) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '4de21daaddb2627670e3e8de9809fdfa') in 0.002590 seconds
+Start importing Assets/NTSD/Scripts/NTSD_Extensions/NTSDItrKindHandler.cs using Guid(a086dbc63078a6c44b59180131d1736a) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '5722bc64c1cf6cfa45da3533541028a1') in 0.001904 seconds
+Start importing Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheckCore.cs using Guid(73d4fc71bca24d9d88b8424a67228f65) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '56941cd4bd8b058c0eda8888a52ab62b') in 0.001978 seconds
+Start importing Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs using Guid(e6befb80f9574aad9c7276272e0df48f) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '778b0dc56896c0f6ae9f16a2ffb62847') in 0.001837 seconds
+Start importing Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Hit.partial.cs using Guid(f716c32a3dd733848a5412020ee3a4a0) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '1e590fb0d15023ff2c6f34b380c90a34') in 0.001842 seconds
+Start importing Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Input.partial.cs using Guid(79c7cbfe534448a7ab5401f8aca25803) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '75aa344e8894c2bc562d18197bdf4016') in 0.001746 seconds
+Start importing Assets/NTSD/Scripts/Input/NTSDInputStateModule.cs using Guid(fb90a90abc674f640826ab537ad04eeb) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'f7f4449feaa147477b5798661cfc0e17') in 0.001757 seconds
+Start importing Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs using Guid(4da426f3fee044ebb6b1f8dc7f3ffc8d) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'b30c62b05efecafd828e5d894e40d6e1') in 0.002198 seconds
+Start importing Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs using Guid(4d7986652828a8d42ba2bab32054b859) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'a4b7c18bccab7a117b194307e65e8b2d') in 0.001898 seconds
+Start importing Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs using Guid(bd56afc6be3a446b838080c2799e85ee) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '2d6d4f993fe0e4c058c7632edc31a6fc') in 0.001863 seconds
+Start importing Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs using Guid(dd0dd56479d392b4c821d82292bfee66) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'cd6317bf82057cc55bd8b0cd64002535') in 0.002248 seconds
+Start importing Assets/NTSD/Scripts/Test/WeaponSpawner.cs using Guid(6f58d3ab023dc214d9795759187ae0eb) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '18e7c7f79be17752c6bd44b678a38b32') in 0.001986 seconds
+Refreshing native plugins compatible for Editor in 20.52 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/Editor/MoreMountains.TopDownEngine.Cinemachine.Editor.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsPostProcessing/MoreMountains.TopDownEngine.PostProcessing.asmref has no target assembly definition
+Assembly reference Assets/NTSD/TopDownEngine/Common/ScriptsCinemachine/MoreMountains.TopDownEngine.Cinemachine.asmref has no target assembly definition
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  9.204 seconds
+Domain Reload Profiling: 10205ms
+	BeginReloadAssembly (115ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (15ms)
+	RebuildCommonClasses (20ms)
+	RebuildNativeTypeToScriptingClass (6ms)
+	initialDomainReloadingComplete (54ms)
+	LoadAllAssembliesAndSetupDomain (806ms)
+		LoadAssemblies (533ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (298ms)
+			TypeCache.Refresh (257ms)
+				TypeCache.ScanAssembly (247ms)
+			ScanForSourceGeneratedMonoScriptInfo (28ms)
+			ResolveRequiredComponents (12ms)
+	FinalizeReload (9204ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (7580ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (133ms)
+			ProcessInitializeOnLoadAttributes (7025ms)
+			ProcessInitializeOnLoadMethodAttributes (393ms)
+			AfterProcessingInitializeOnLoad (18ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Start importing Assets/NTSD/Docs/BATTLE_RUNTIME_VERIFICATION.md using Guid(dc1bf7ee193e6b14aa382274e98ed441) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '2015dc56589fb032e44ccc2098746a0d') in 0.003053 seconds
+Refreshing native plugins compatible for Editor in 20.35 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=21797505d78b7db43b4a2e44f0c9ab3e): Total: 21.974 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=49 (actual=13, local cache=36, cache server=0)
+		Asset DB Process Time: managed=4 ms, native=4184 ms
+		Asset DB Callback time: managed=295 ms, native=31 ms
+		Scripting: domain reloads=1, domain reload time=10437 ms, compile time=6883 ms, other=136 ms
+		Project Asset Count: scripts=11307, non-scripts=4971
+		Asset File Changes: new=4, changed=14, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 2.106ms
+	ApplyChangesToAssetFolders: 0.047ms
+	Scan: 148.006ms
+	OnSourceAssetsModified: 1.937ms
+	GetAllGuidsForCategorization: 1.667ms
+	CategorizeAssets: 225.886ms
+	ImportOutOfDateAssets: 9396.952ms (2376.318ms without children)
+		ImportManagerImport: 90.301ms (16.380ms without children)
+			ImportInProcess: 73.915ms
+			UpdateCategorizedAssets: 0.006ms
+		CompileScripts: 6883.017ms
+		ReloadNativeAssets: 0.031ms
+		UnloadImportedAssets: 41.567ms
+		ReloadImportedAssets: 0.001ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 4.103ms
+		InitializingProgressBar: 0.006ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 1.607ms
+	PostProcessAllAssets: 297.236ms
+	Hotreload: 26.207ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.000ms
+	UnloadStreamsBegin: 1.276ms
+	PersistCurrentRevisions: 0.572ms
+	UnloadStreamsEnd: 0.035ms
+	GenerateScriptTypeHashes: 4.232ms
+	Untracked: 11872.477ms
+Application.AssetDatabase Initial Refresh End
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Scanning for USB devices : 3.787ms
+Initializing Unity extensions:
+[Licensing::Client] Successfully resolved entitlements
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-NTSD
+ProgressiveSceneManager::Cancel()
+Unloading 7 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 146 unused Assets / (0.9 MB). Loaded Objects now: 9897.
+Memory consumption went from 301.6 MB to 300.7 MB.
+Total: 15.122500 ms (FindLiveObjects: 0.446100 ms CreateObjectMapping: 0.188400 ms MarkObjects: 14.171900 ms  DeleteObjects: 0.314800 ms)
+
+[NTSD] [State 9:Catching] Event=TU, Frame.D=100
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.Tools.Log:Info (string,object[]) (at Assets/NTSD/Scripts/Tools/Log.cs:36)
+NTSD.Animation.LF2Objects.LF2Character:ProcessCatchingTU () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:77)
+NTSD.Animation.LF2Objects.LF2Character:State_Catching (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:62)
+NTSD.Animation.LF2Objects.LF2Character:DispatchCurrentStateEvent (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:289)
+NTSD.Animation.LF2Objects.LF2Character:TUEvent () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:260)
+NTSD.Animation.LF2Objects.LF2LivingObject:TUUpdate () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs:412)
+NTSD.Test.BattleRuntimeSelfCheck:CheckCatchingAttackAction () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:80)
+NTSD.Test.BattleRuntimeSelfCheck:RunAllChecksStatic () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:49)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:58)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Tools/Log.cs Line: 36)
+
+[NTSD] [State 9:Catching] Event=TU, Frame.D=110
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.Tools.Log:Info (string,object[]) (at Assets/NTSD/Scripts/Tools/Log.cs:36)
+NTSD.Animation.LF2Objects.LF2Character:ProcessCatchingTU () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:77)
+NTSD.Animation.LF2Objects.LF2Character:State_Catching (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:62)
+NTSD.Animation.LF2Objects.LF2Character:DispatchCurrentStateEvent (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:289)
+NTSD.Animation.LF2Objects.LF2Character:TUEvent () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:260)
+NTSD.Animation.LF2Objects.LF2LivingObject:TUUpdate () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs:412)
+NTSD.Test.BattleRuntimeSelfCheck:CheckCatchingThrow () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:107)
+NTSD.Test.BattleRuntimeSelfCheck:RunAllChecksStatic () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:50)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:58)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Tools/Log.cs Line: 36)
+
+[NTSD] [State 9:Catching] Event=TU, Frame.D=140
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.Tools.Log:Info (string,object[]) (at Assets/NTSD/Scripts/Tools/Log.cs:36)
+NTSD.Animation.LF2Objects.LF2Character:ProcessCatchingTU () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:77)
+NTSD.Animation.LF2Objects.LF2Character:State_Catching (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:62)
+NTSD.Animation.LF2Objects.LF2Character:DispatchCurrentStateEvent (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:289)
+NTSD.Animation.LF2Objects.LF2Character:TUEvent () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:260)
+NTSD.Animation.LF2Objects.LF2LivingObject:TUUpdate () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs:412)
+NTSD.Test.BattleRuntimeSelfCheck:CheckCpointDecreaseEscape () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:157)
+NTSD.Test.BattleRuntimeSelfCheck:RunAllChecksStatic () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:52)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:58)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Tools/Log.cs Line: 36)
+
+[NTSD] [State 9:Catching] -> Branch: cpoint.decrease 触发逃脱
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.Tools.Log:Info (string,object[]) (at Assets/NTSD/Scripts/Tools/Log.cs:36)
+NTSD.Animation.LF2Objects.LF2Character:ProcessCpointDecrease (NTSD.Animation.LF2Objects.LF2Character) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:139)
+NTSD.Animation.LF2Objects.LF2Character:ProcessCatchingTU () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:102)
+NTSD.Animation.LF2Objects.LF2Character:State_Catching (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Catch.partial.cs:62)
+NTSD.Animation.LF2Objects.LF2Character:DispatchCurrentStateEvent (string,object) (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:289)
+NTSD.Animation.LF2Objects.LF2Character:TUEvent () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:260)
+NTSD.Animation.LF2Objects.LF2LivingObject:TUUpdate () (at Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs:412)
+NTSD.Test.BattleRuntimeSelfCheck:CheckCpointDecreaseEscape () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:157)
+NTSD.Test.BattleRuntimeSelfCheck:RunAllChecksStatic () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:52)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:58)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Tools/Log.cs Line: 36)
+
+[BattleRuntimeSelfCheck] 战斗运行时自检通过。
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.Test.BattleRuntimeSelfCheck:RunAllChecksStatic () (at Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs:53)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:58)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs Line: 53)
+
+[BattleRuntimeSelfCheckEditor] 自检完成。
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:60)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs Line: 60)
+
+Curl error 42: Callback aborted
+Curl error 42: Callback aborted
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: No process found listening on port 8080
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Services.ServerManagementService:StopLocalHttpServerInternal (bool,System.Nullable`1<int>,bool) (at I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Services/ServerManagementService.cs:712)
+MCPForUnity.Editor.Services.ServerManagementService:StopLocalHttpServer () (at I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Services/ServerManagementService.cs:349)
+MCPForUnity.Editor.Services.McpEditorShutdownCleanup:OnEditorQuitting () (at I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Services/McpEditorShutdownCleanup.cs:60)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit ()
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunAndWriteResult (bool) (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:71)
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor:RunForBatchmode () (at Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs:33)
+
+(Filename: I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Start importing ProjectSettings/ProjectSettings.asset using Guid(00000000000000004000000000000000) Importer(-1,00000000000000000000000000000000)  -> (artifact id: '578fa3f2e96387486823d25326b5d396') in 0.003690 seconds
+Refreshing native plugins compatible for Editor in 24.85 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=3a256db4c2126cc44a89a5d7e588a413): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+[Licensing::IpcConnector] License Notification channel disconnected successfully.
+[Licensing::IpcConnector] License Client channel disconnected successfully.
+Curl error 42: Callback aborted
+Assertion failed on expression: 'gBackgroundJobQueue != NULL'
+Crash!!!
+SymInit: Symbol-SearchPath: 'D:/Unity/HubEditor/2022.3.4f1/Editor/Data/Mono;.;I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity;I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\BurstCache\JIT;D:\Unity\HubEditor\2022.3.4f1\Editor;C:\WINDOWS;C:\WINDOWS\system32;', symOptions: 534, UserName: 'Logan'
+OS-Version: 10.0.0
+D:\Unity\HubEditor\2022.3.4f1\Editor\Unity.exe:Unity.exe (00007FF698800000), size: 89493504 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2022.3.4.57469
+C:\WINDOWS\SYSTEM32\ntdll.dll:ntdll.dll (00007FFAC8190000), size: 2064384 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\KERNEL32.DLL:KERNEL32.DLL (00007FFAC75C0000), size: 794624 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5915
+C:\WINDOWS\System32\KERNELBASE.dll:KERNELBASE.dll (00007FFAC5820000), size: 3104768 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6280
+C:\WINDOWS\System32\user32.dll:user32.dll (00007FFAC7690000), size: 1708032 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\win32u.dll:win32u.dll (00007FFAC5E90000), size: 139264 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\GDI32.dll:GDI32.dll (00007FFAC6E00000), size: 176128 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\System32\gdi32full.dll:gdi32full.dll (00007FFAC6010000), size: 1150976 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\System32\msvcp_win.dll:msvcp_win.dll (00007FFAC5D60000), size: 643072 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\ucrtbase.dll:ucrtbase.dll (00007FFAC5F10000), size: 1048576 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\advapi32.dll:advapi32.dll (00007FFAC7FF0000), size: 724992 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6328
+C:\WINDOWS\System32\msvcrt.dll:msvcrt.dll (00007FFAC6BC0000), size: 647168 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 7.0.19041.3636
+C:\WINDOWS\System32\sechost.dll:sechost.dll (00007FFAC6B20000), size: 651264 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6328
+Cleanup mono
+C:\WINDOWS\System32\RPCRT4.dll:RPCRT4.dll (00007FFAC69F0000), size: 1179648 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6280
+C:\WINDOWS\System32\bcrypt.dll:bcrypt.dll (00007FFAC5D30000), size: 159744 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5369
+C:\WINDOWS\System32\shell32.dll:shell32.dll (00007FFAC6E30000), size: 7798784 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\setupapi.dll:setupapi.dll (00007FFAC6580000), size: 4653056 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\System32\cfgmgr32.dll:cfgmgr32.dll (00007FFAC5EC0000), size: 319488 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3996
+C:\WINDOWS\System32\psapi.dll:psapi.dll (00007FFAC6B10000), size: 32768 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\WS2_32.dll:WS2_32.dll (00007FFAC6D90000), size: 438272 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\WINTRUST.dll:WINTRUST.dll (00007FFAC6130000), size: 471040 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\OLEAUT32.dll:OLEAUT32.dll (00007FFAC6C60000), size: 839680 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\combase.dll:combase.dll (00007FFAC7BE0000), size: 3489792 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\SYSTEM32\iphlpapi.dll:iphlpapi.dll (00007FFAC4BC0000), size: 241664 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\IMM32.dll:IMM32.dll (00007FFAC8120000), size: 192512 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\System32\ole32.dll:ole32.dll (00007FFAC6450000), size: 1224704 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5915
+C:\WINDOWS\SYSTEM32\dhcpcsvc.dll:dhcpcsvc.dll (00007FFABFD40000), size: 118784 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\SHLWAPI.dll:SHLWAPI.dll (00007FFAC6D30000), size: 372736 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6392
+C:\WINDOWS\SYSTEM32\hid.dll:hid.dll (00007FFAC3FC0000), size: 53248 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\CRYPT32.dll:CRYPT32.dll (00007FFAC5B20000), size: 1429504 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\SYSTEM32\dhcpcsvc6.dll:dhcpcsvc6.dll (00007FFABFED0000), size: 94208 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\wsock32.dll:wsock32.dll (00007FFAB6D20000), size: 36864 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.1
+D:\Unity\HubEditor\2022.3.4f1\Editor\s3tcompress.dll:s3tcompress.dll (00007FFAA3970000), size: 180224 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\ispc_texcomp.dll:ispc_texcomp.dll (00007FF9C2090000), size: 1740800 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\etccompress.dll:etccompress.dll (00007FF9BC120000), size: 5066752 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\libfbxsdk.dll:libfbxsdk.dll (00007FF9B9960000), size: 10067968 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2020.3.3.0
+D:\Unity\HubEditor\2022.3.4f1\Editor\compress_bc7e.dll:compress_bc7e.dll (00007FF9C3C00000), size: 1441792 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\WinPixEventRuntime.dll:WinPixEventRuntime.dll (00007FFABF0F0000), size: 45056 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 1.0.1812.6001
+D:\Unity\HubEditor\2022.3.4f1\Editor\FreeImage.dll:FreeImage.dll (0000000180000000), size: 6582272 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 3.18.0.0
+D:\Unity\HubEditor\2022.3.4f1\Editor\umbraoptimizer64.dll:umbraoptimizer64.dll (00007FF9C4980000), size: 1187840 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\SketchUpAPI.dll:SketchUpAPI.dll (00007FF9B90C0000), size: 8990720 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 23.0.0.0
+C:\WINDOWS\SYSTEM32\WINMM.dll:WINMM.dll (00007FFAB45D0000), size: 159744 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\VERSION.dll:VERSION.dll (00007FFAC12A0000), size: 40960 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\dwmapi.dll:dwmapi.dll (00007FFAC3320000), size: 188416 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\SYSTEM32\WINHTTP.dll:WINHTTP.dll (00007FFABE770000), size: 1089536 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\GLU32.dll:GLU32.dll (00007FFA9BF00000), size: 180224 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\OPENGL32.dll:OPENGL32.dll (00007FFA52980000), size: 1212416 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\MSVCP140.dll:MSVCP140.dll (00007FFAB7490000), size: 561152 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 14.44.35211.0
+D:\Unity\HubEditor\2022.3.4f1\Editor\SketchUpCommonPreferences.dll:SketchUpCommonPreferences.dll (00007FFA4FA40000), size: 499712 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 23.0.0.0
+C:\WINDOWS\SYSTEM32\VCRUNTIME140.dll:VCRUNTIME140.dll (00007FFAB7470000), size: 122880 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 14.44.35211.0
+C:\WINDOWS\SYSTEM32\VCRUNTIME140_1.dll:VCRUNTIME140_1.dll (00007FFAB7460000), size: 49152 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 14.44.35211.0
+C:\WINDOWS\SYSTEM32\Secur32.dll:Secur32.dll (00007FFAAE200000), size: 49152 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+D:\Unity\HubEditor\2022.3.4f1\Editor\OpenRL.dll:OpenRL.dll (0000015812E20000), size: 12779520 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 1.5.0.2907
+D:\Unity\HubEditor\2022.3.4f1\Editor\embree.dll:embree.dll (00007FF9B80D0000), size: 16711680 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2.14.0.0
+C:\WINDOWS\SYSTEM32\MSVCP100.dll:MSVCP100.dll (0000000072E90000), size: 622592 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.40219.325
+C:\WINDOWS\SYSTEM32\MSVCR100.dll:MSVCR100.dll (0000000072DB0000), size: 860160 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.40219.325
+C:\WINDOWS\SYSTEM32\SSPICLI.DLL:SSPICLI.DLL (00007FFAC56C0000), size: 204800 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6328
+D:\Unity\HubEditor\2022.3.4f1\Editor\tbb.dll:tbb.dll (00007FFA14870000), size: 413696 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2017.0.2016.1004
+C:\WINDOWS\SYSTEM32\MSVCP120.dll:MSVCP120.dll (00007FF9C4810000), size: 679936 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 12.0.40664.0
+C:\WINDOWS\SYSTEM32\MSVCR120.dll:MSVCR120.dll (00007FF9C1E50000), size: 978944 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 12.0.40664.0
+D:\Unity\HubEditor\2022.3.4f1\Editor\OpenRL_pthread.dll:OpenRL_pthread.dll (0000015812B60000), size: 61440 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2.9.0.0
+C:\WINDOWS\SYSTEM32\MSASN1.dll:MSASN1.dll (00007FFAC53A0000), size: 73728 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\CRYPTSP.dll:CRYPTSP.dll (00007FFAC5170000), size: 98304 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5856
+C:\WINDOWS\system32\rsaenh.dll:rsaenh.dll (00007FFAC47E0000), size: 229376 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6093
+C:\WINDOWS\SYSTEM32\CRYPTBASE.dll:CRYPTBASE.dll (00007FFAC50A0000), size: 49152 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\bcryptPrimitives.dll:bcryptPrimitives.dll (00007FFAC5E00000), size: 532480 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5007
+C:\WINDOWS\SYSTEM32\MSWSOCK.DLL:MSWSOCK.DLL (00007FFAC4F10000), size: 434176 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5915
+C:\WINDOWS\SYSTEM32\kernel.appcore.dll:kernel.appcore.dll (00007FFAC3670000), size: 73728 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3758
+C:\WINDOWS\system32\uxtheme.dll:uxtheme.dll (00007FFAC2220000), size: 647168 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\windows.storage.dll:windows.storage.dll (00007FFAC3810000), size: 8015872 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\SYSTEM32\Wldp.dll:Wldp.dll (00007FFAC5130000), size: 176128 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\System32\SHCORE.dll:SHCORE.dll (00007FFAC7840000), size: 708608 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\profapi.dll:profapi.dll (00007FFAC5710000), size: 147456 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6033
+C:\WINDOWS\System32\imagehlp.dll:imagehlp.dll (00007FFAC75A0000), size: 118784 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\gpapi.dll:gpapi.dll (00007FFAC3FD0000), size: 143360 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4355
+C:\Windows\System32\cryptnet.dll:cryptnet.dll (00007FFABC8D0000), size: 200704 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\WINNSI.DLL:WINNSI.DLL (00007FFAC1AB0000), size: 45056 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\NSI.dll:NSI.dll (00007FFAC63C0000), size: 32768 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\system32\IconCodecService.dll:IconCodecService.dll (00007FFAB9030000), size: 36864 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.1
+C:\WINDOWS\SYSTEM32\WindowsCodecs.dll:WindowsCodecs.dll (00007FFAC2030000), size: 1794048 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\clbcatq.dll:clbcatq.dll (00007FFAC7F40000), size: 692224 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 2001.12.10941.16384
+C:\WINDOWS\System32\netprofm.dll:netprofm.dll (00007FFAC1150000), size: 258048 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4355
+C:\WINDOWS\System32\npmproxy.dll:npmproxy.dll (00007FFABE490000), size: 65536 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4239
+C:\WINDOWS\SYSTEM32\DNSAPI.dll:DNSAPI.dll (00007FFAC4C10000), size: 827392 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5369
+C:\Program Files (x86)\Sangfor\SSL\ClientComponent\SangforNspX64.dll:SangforNspX64.dll (00007FFAB9B40000), size: 208896 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 7.6.6.301
+C:\WINDOWS\system32\napinsp.dll:napinsp.dll (00007FFABAEB0000), size: 94208 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\system32\pnrpnsp.dll:pnrpnsp.dll (00007FFABAE90000), size: 110592 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\system32\wshbth.dll:wshbth.dll (00007FFABAE70000), size: 118784 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5848
+C:\WINDOWS\system32\NLAapi.dll:NLAapi.dll (00007FFABFD20000), size: 118784 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\winrnr.dll:winrnr.dll (00007FFABAE50000), size: 73728 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\System32\fwpuclnt.dll:fwpuclnt.dll (00007FFABC850000), size: 524288 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6328
+C:\Windows\System32\rasadhlp.dll:rasadhlp.dll (00007FFABDF80000), size: 40960 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6328
+D:\Unity\HubEditor\2022.3.4f1\Editor\NVUnityPlugin.DLL:NVUnityPlugin.DLL (00007FF9C0F40000), size: 1519616 (result: 0), SymType: '-deferred-', PDB: ''
+D:\Unity\HubEditor\2022.3.4f1\Editor\Data\Tools\astcenc-avx2.dll:astcenc-avx2.dll (00007FF9C2000000), size: 540672 (result: 0), SymType: '-deferred-', PDB: ''
+C:\WINDOWS\SYSTEM32\mfplat.dll:mfplat.dll (00007FFA98290000), size: 1818624 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6280
+C:\WINDOWS\SYSTEM32\RTWorkQ.DLL:RTWorkQ.DLL (00007FFAA5CC0000), size: 212992 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4842
+C:\WINDOWS\SYSTEM32\mfreadwrite.dll:mfreadwrite.dll (00007FFA513A0000), size: 1085440 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6033
+C:\WINDOWS\SYSTEM32\Mf.dll:Mf.dll (00007FFA98E30000), size: 544768 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6033
+C:\WINDOWS\SYSTEM32\MFCORE.DLL:MFCORE.DLL (00007FFA15F30000), size: 4775936 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\SYSTEM32\powrprof.dll:powrprof.dll (00007FFAC4D30000), size: 307200 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\ksuser.dll:ksuser.dll (00007FFAA4630000), size: 36864 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.1
+C:\WINDOWS\SYSTEM32\UMPDC.dll:UMPDC.dll (00007FFAC4BA0000), size: 73728 (result: 0), SymType: '-deferred-', PDB: ''
+C:\WINDOWS\SYSTEM32\CompPkgSup.DLL:CompPkgSup.DLL (00007FFAB8E00000), size: 225280 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4355
+C:\Windows\System32\Windows.Media.dll:Windows.Media.dll (00007FFA76990000), size: 7495680 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\Windows\System32\Windows.ApplicationModel.dll:Windows.ApplicationModel.dll (00007FFA9F3E0000), size: 954368 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6216
+C:\Windows\System32\twinapi.appcore.dll:twinapi.appcore.dll (00007FFABF430000), size: 2109440 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5848
+C:\Windows\System32\Windows.StateRepositoryPS.dll:Windows.StateRepositoryPS.dll (00007FFAA00B0000), size: 1335296 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\Windows\System32\AppXDeploymentClient.dll:AppXDeploymentClient.dll (00007FFABC740000), size: 1073152 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\Windows\System32\WinTypes.dll:WinTypes.dll (00007FFAC02D0000), size: 1404928 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6456
+C:\WINDOWS\System32\MMDevApi.dll:MMDevApi.dll (00007FFABCE30000), size: 544768 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5915
+C:\WINDOWS\System32\DEVOBJ.dll:DEVOBJ.dll (00007FFAC5590000), size: 208896 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\AUDIOSES.DLL:AUDIOSES.DLL (00007FFABCEC0000), size: 1576960 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\resourcepolicyclient.dll:resourcepolicyclient.dll (00007FFAC3220000), size: 81920 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4355
+C:\WINDOWS\SYSTEM32\d3d11.dll:d3d11.dll (00007FFAC2F70000), size: 2506752 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\dxgi.dll:dxgi.dll (00007FFAC4020000), size: 1007616 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\nvldumdx.dll:nvldumdx.dll (00007FFABBE20000), size: 806912 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 32.0.15.9649
+C:\WINDOWS\SYSTEM32\drvstore.dll:drvstore.dll (00007FFABC5F0000), size: 1339392 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\nvgpucomp64.dll:nvgpucomp64.dll (00007FFAAE630000), size: 83193856 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 32.0.15.9649
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\Display.NvContainer\NvMessageBus.dll:NvMessageBus.dll (00007FFAADE70000), size: 3551232 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 3.15.3538.9611
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\NvMemMapStoragex.dll:NvMemMapStoragex.dll (00007FFABB070000), size: 1290240 (result: 0), SymType: '-deferred-', PDB: ''
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\nvwgf2umx.dll:nvwgf2umx.dll (00007FFAA87F0000), size: 87724032 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 32.0.15.9649
+C:\WINDOWS\system32\nvspcap64.dll:nvspcap64.dll (00007FFABAF00000), size: 1339392 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 11.0.7.247
+C:\WINDOWS\SYSTEM32\ntmarta.dll:ntmarta.dll (00007FFAC4A30000), size: 208896 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.3636
+C:\WINDOWS\SYSTEM32\dxcore.dll:dxcore.dll (00007FFAC11B0000), size: 241664 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_b7cca8360c0d57e9\nvppex.dll:nvppex.dll (00007FFABA700000), size: 7491584 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 32.0.15.9649
+C:\WINDOWS\system32\wbem\wbemprox.dll:wbemprox.dll (00007FFABB050000), size: 69632 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4474
+C:\WINDOWS\SYSTEM32\wbemcomn.dll:wbemcomn.dll (00007FFABB1E0000), size: 589824 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\system32\wbem\wbemsvc.dll:wbemsvc.dll (00007FFAB9DF0000), size: 81920 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4474
+C:\WINDOWS\system32\wbem\fastprox.dll:fastprox.dll (00007FFAB9E10000), size: 1097728 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5794
+C:\WINDOWS\SYSTEM32\amsi.dll:amsi.dll (00007FFAB9D50000), size: 126976 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.4355
+D:\Unity\HubEditor\2022.3.4f1\Editor\Data\MonoBleedingEdge\EmbedRuntime\mono-2.0-bdwgc.dll:mono-2.0-bdwgc.dll (00007FF9B6B10000), size: 10682368 (result: 0), SymType: '-deferred-', PDB: ''
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.burst@1.8.7\.Runtime\burst-llvm-15.dll:burst-llvm-15.dll (00007FF9AB9E0000), size: 54779904 (result: 0), SymType: '-deferred-', PDB: ''
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.burst@1.8.7\.Runtime\MonoDebuggerHandling.dll:MonoDebuggerHandling.dll (00007FF9B1610000), size: 393216 (result: 0), SymType: '-deferred-', PDB: ''
+C:\WINDOWS\system32\apphelp.dll:apphelp.dll (00007FFAC1CF0000), size: 606208 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.6157
+C:\WINDOWS\SYSTEM32\dbghelp.dll:dbghelp.dll (00007FFAC2D60000), size: 2101248 (result: 0), SymType: '-deferred-', PDB: '', fileVersion: 10.0.19041.5848
+
+========== OUTPUTTING STACK TRACE ==================
+
+0x00007FF69950A923 (Unity) BackgroundJobQueue::ScheduleJobInternal
+0x00007FF699E8F1E0 (Unity) UnityWebRequestProto<UnityWebRequestTransport,AtomicRefCounter,RedirectHelper,ResponseHelper,DownloadHandler,UploadHandler,CertificateHandler,HeaderHelper,AsyncOperation>::Begin
+0x00007FF69AEB8257 (Unity) UnityEditor::CoreBusinessMetrics::MetricsCache::TrySendPostDataCN
+0x00007FF69AEB7E7D (Unity) UnityEditor::CoreBusinessMetrics::MetricsCache::TrySendPostData
+0x00007FF69AEB7911 (Unity) UnityEditor::CoreBusinessMetrics::MetricsCache::TrySendNowInternal
+0x00007FF69AEB711D (Unity) UnityEditor::CoreBusinessMetrics::ThreadFunc
+0x00007FF6997460E7 (Unity) Thread::RunThreadWrapper
+0x00007FFAC75D7374 (KERNEL32) BaseThreadInitThunk
+0x00007FFAC81DCC91 (ntdll) RtlUserThreadStart
+
+========== END OF STACKTRACE ===========
+
+A crash has been intercepted by the crash handler. For call stack and other details, see the latest crash report generated in:
+ * C:/Users/Logan/AppData/Local/Temp/Unity/Editor/Crashes

@@ -95,7 +95,7 @@ namespace NTSD.Test
             // 3. 计算 LF2 坐标（ppu=100，LF2 纵深 z 映射到 Unity Y 轴）
             Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
             float lf2X = pos.x * 100f;
-            float lf2Z = spawnPoint != null ? pos.y * 100f : spawnZ;
+            float lf2Z = spawnPoint != null ? PhysicsState.UnityYToDepth(pos.y) : spawnZ;
 
             // 4. 构造任务，入队（FlushTasks 由 SimulationTickDriver 自动调用）
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
@@ -119,12 +119,12 @@ namespace NTSD.Test
             Debug.Log($"[WeaponSpawner] F1 → {wname} (oid={oid}, frame={groundFrame}, lf2X={lf2X:F0}, lf2Z={lf2Z:F0})");
         }
 
-        // 反汇编 Game_FrameUpdate 0x004237B3：
+        // C++ release 随机掉落分支：
         // dword_449020==1 时，对每个 type 100-199 的武器调用 sub_424630(weapon, 0, x, -500, z)。
         // x/z 在地图边界内随机（边距 30），y=-500（高空落下）。
         private void DropWeaponFromSky()
         {
-            // 1. 随机选武器（oid 100-199，排除 122 除非随机通过，对齐反汇编）
+            // 1. 随机选武器（oid 100-199，排除 122 除非随机通过，对齐 C++ release）
             var (oid, _) = _f1Weapons[Random.Range(0, _f1Weapons.Length)];
 
             if (GameDataManager.Instance == null)

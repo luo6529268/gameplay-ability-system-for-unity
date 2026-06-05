@@ -177,7 +177,7 @@ namespace NTSD.DatParser
                     case "hurtable": cpoint.hurtable = ParseInt(prop.Value); break;
                     case "throwinjury": cpoint.throwinjury = ParseInt(prop.Value); break;
                     case "decrease": cpoint.decrease = ParseInt(prop.Value); break;
-                    // NTSD 2.4 反汇编确认的额外字段
+                    // C++ release 确认的额外字段
                     case "injury": cpoint.injury = ParseInt(prop.Value); break;
                     case "cover": cpoint.cover = ParseInt(prop.Value); break;
                     case "aaction": cpoint.aaction = ParseInt(prop.Value); break;
@@ -217,7 +217,7 @@ namespace NTSD.DatParser
                     case "dvx": wpoint.dvx = ParseInt(prop.Value); break;
                     case "dvy": wpoint.dvy = ParseInt(prop.Value); break;
                     case "dvz": wpoint.dvz = ParseInt(prop.Value); break;
-                    // 反汇编 0x0042CA9F：wpoint[9..16] 对应 itr 的伤害字段
+                    // C++ release 0x0042CA9F：wpoint[9..16] 对应 itr 的伤害字段
                     case "injury": wpoint.injury = ParseInt(prop.Value); break;
                     case "fall": wpoint.fall = ParseInt(prop.Value); break;
                     case "vaction": wpoint.vaction = ParseInt(prop.Value); break;

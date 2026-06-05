@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using NTSD.Simulation;
 
 namespace NTSD.Animation
@@ -9,36 +9,66 @@ namespace NTSD.Animation
     /// </summary>
     public class PhysicsState
     {
+        private NTSDEntityRuntime _runtime;
+        private float _x;
+        private float _y;
+        private float _z;
+        private float _vx;
+        private float _vy;
+        private float _vz;
+        private float _sx;
+        private float _sy;
+        private float _sz;
+
+        /// <summary>
+        /// 绑定 C++ release 风格的运行时状态。绑定后公开属性读写 Runtime，避免多份状态互相漂移。
+        /// </summary>
+        public void BindRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null) return;
+
+            runtime.X = x;
+            runtime.Y = y;
+            runtime.Z = z;
+            runtime.Vx = vx;
+            runtime.Vy = vy;
+            runtime.Vz = vz;
+            runtime.SpriteX = sx;
+            runtime.SpriteY = sy;
+            runtime.SpriteZ = sz;
+            _runtime = runtime;
+        }
+
         /// <summary>地面平面 X 坐标，单位为 NTSD 像素。</summary>
-        public float x;
+        public float x { get => _runtime?.X ?? _x; set { if (_runtime != null) _runtime.X = value; else _x = value; } }
 
         /// <summary>垂直偏移，单位为 NTSD 像素；负数表示在空中。</summary>
-        public float y;
+        public float y { get => _runtime?.Y ?? _y; set { if (_runtime != null) _runtime.Y = value; else _y = value; } }
 
         /// <summary>Unity 世界空间中的地面参考高度。</summary>
         public float groundY = 0f;
 
         /// <summary>地面平面深度坐标，单位为 NTSD 像素。</summary>
-        public float z;
+        public float z { get => _runtime?.Z ?? _z; set { if (_runtime != null) _runtime.Z = value; else _z = value; } }
 
         /// <summary>X 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vx;
+        public float vx { get => _runtime?.Vx ?? _vx; set { if (_runtime != null) _runtime.Vx = value; else _vx = value; } }
 
         /// <summary>垂直速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vy;
+        public float vy { get => _runtime?.Vy ?? _vy; set { if (_runtime != null) _runtime.Vy = value; else _vy = value; } }
 
         /// <summary>Z 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vz;
+        public float vz { get => _runtime?.Vz ?? _vz; set { if (_runtime != null) _runtime.Vz = value; else _vz = value; } }
 
         // ==================== 渲染空间缓存坐标 ====================
         /// <summary>缓存的精灵原点 X，单位为 NTSD 像素。</summary>
-        public float sx;
+        public float sx { get => _runtime?.SpriteX ?? _sx; set { if (_runtime != null) _runtime.SpriteX = value; else _sx = value; } }
 
         /// <summary>缓存的精灵原点 Y，单位为 NTSD 像素。</summary>
-        public float sy;
+        public float sy { get => _runtime?.SpriteY ?? _sy; set { if (_runtime != null) _runtime.SpriteY = value; else _sy = value; } }
 
         /// <summary>缓存的精灵排序/深度值，单位为 NTSD 像素。</summary>
-        public float sz;
+        public float sz { get => _runtime?.SpriteZ ?? _sz; set { if (_runtime != null) _runtime.SpriteZ = value; else _sz = value; } }
 
         /// <summary>朝向，当前使用 "right" 或 "left"。</summary>
         public string dir = "right";
@@ -289,11 +319,38 @@ namespace NTSD.Animation
             fric = 1f;
         }
 
+        /// <summary>将 NTSD 深度 z 转换为 Unity 屏幕 Y；NTSD z 越大表示越靠屏幕下方。</summary>
+        public static float DepthToUnityY(float depthZ)
+        {
+            return -depthZ / SimulationConstants.PIXELS_PER_UNIT;
+        }
+
+        /// <summary>将 Unity 屏幕 Y 转换回 NTSD 深度 z。</summary>
+        public static float UnityYToDepth(float unityY)
+        {
+            return -unityY * SimulationConstants.PIXELS_PER_UNIT;
+        }
+
+        /// <summary>将 NTSD 地面点转换为 Unity X/Y 坐标。</summary>
+        public static Vector2 ToUnityGroundPoint(float ntsdX, float ntsdZ)
+        {
+            return new Vector2(
+                ntsdX / SimulationConstants.PIXELS_PER_UNIT,
+                DepthToUnityY(ntsdZ)
+            );
+        }
+
+        /// <summary>将 NTSD 屏幕像素 Y 转换为 Unity 屏幕 Y。</summary>
+        public static float ScreenYToUnityY(float screenY)
+        {
+            return -screenY / SimulationConstants.PIXELS_PER_UNIT;
+        }
+
         /// <summary>将 NTSD tick 速度转换为 Unity 地面平面上的每秒单位速度。</summary>
         public Vector2 ToUnityVelocity()
         {
             float conversion = SimulationConstants.SIM_TICK_RATE / SimulationConstants.PIXELS_PER_UNIT;  // = 0.3
-            return new Vector2(vx * conversion, vz * conversion);
+            return new Vector2(vx * conversion, -vz * conversion);
         }
 
         /// <summary>将 Unity 每秒单位速度转换回 NTSD tick 速度。</summary>
@@ -301,7 +358,7 @@ namespace NTSD.Animation
         {
             float conversion = SimulationConstants.PIXELS_PER_UNIT / SimulationConstants.SIM_TICK_RATE;
             vx = unityVel.x * conversion;
-            vz = unityVel.y * conversion;
+            vz = -unityVel.y * conversion;
         }
 
         /// <summary>将 NTSD 地面平面位置转换为 Unity X/Y 坐标。</summary>
@@ -309,7 +366,7 @@ namespace NTSD.Animation
         {
             return new Vector3(
                 x / SimulationConstants.PIXELS_PER_UNIT,
-                z / SimulationConstants.PIXELS_PER_UNIT,
+                DepthToUnityY(z),
                 0f
             );
         }
@@ -318,7 +375,7 @@ namespace NTSD.Animation
         public void FromUnityPosition(Vector3 unityPos)
         {
             x = unityPos.x * SimulationConstants.PIXELS_PER_UNIT;
-            z = unityPos.y * SimulationConstants.PIXELS_PER_UNIT;
+            z = UnityYToDepth(unityPos.y);
             groundY = 0f;
             y = 0;
         }
@@ -326,10 +383,7 @@ namespace NTSD.Animation
         /// <summary>返回用于场景边界检测的 Unity 空间地面平面点。</summary>
         public Vector2 GetGroundPoint2D()
         {
-            return new Vector2(
-                x / SimulationConstants.PIXELS_PER_UNIT,
-                z / SimulationConstants.PIXELS_PER_UNIT
-            );
+            return ToUnityGroundPoint(x, z);
         }
 
         /// <summary>朝左返回 -1，朝右返回 1。</summary>
@@ -347,7 +401,7 @@ namespace NTSD.Animation
             if (bodies == null || bodies.Count == 0)
             {
                 float worldX = x / SimulationConstants.PIXELS_PER_UNIT;
-                float worldY = z / SimulationConstants.PIXELS_PER_UNIT;
+                float worldY = DepthToUnityY(z);
                 return new Rect(worldX, worldY, 0f, 0f);
             }
 
@@ -359,7 +413,7 @@ namespace NTSD.Animation
                 ? (x + centerx - body.x - body.w)
                 : (x - centerx + body.x);
             float bodyWorldX = bodyLeftPx / SimulationConstants.PIXELS_PER_UNIT;
-            float bodyWorldY = (z + body.y - centery) / SimulationConstants.PIXELS_PER_UNIT;
+            float bodyWorldY = ScreenYToUnityY(z + body.y - centery);
             float bodyWidth = body.w / SimulationConstants.PIXELS_PER_UNIT;
             float bodyHeight = body.h / SimulationConstants.PIXELS_PER_UNIT;
 

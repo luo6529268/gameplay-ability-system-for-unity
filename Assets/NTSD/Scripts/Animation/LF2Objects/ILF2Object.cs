@@ -12,20 +12,18 @@ namespace NTSD.Animation.LF2Objects
     /// - ISimObject: 模拟系统参与（SimTransit, SimTU, StableId）
     /// - ILF2Object: 完整对象接口（Init, Destroy, ObjectType）
     ///
-    /// 参考：
-    /// - FLF specialattack.prototype.init (specialattack.js:303)
-    /// - FLF typeweapon.prototype.init (weapon.js:204)
+    /// 复刻基准是 C++ release 的实体创建、初始化和模拟生命周期。
     /// </summary>
     public interface ILF2Object : ILF2Poolable, ISimObject
     {
         /// <summary>
-        /// 对象类型（int，向后兼容）
+        /// 对象类型整型值。
         /// 0: character, 1: lightweapon, 2: heavyweapon, 3: specialattack, 4: baseball, 5: criminal, 6: drink
         /// </summary>
         int ObjectType { get; }
 
         /// <summary>
-        /// 初始化方法（对应 FLF 的 obj.init(T)）
+        /// 初始化方法。
         /// 负责：
         /// 1. 分配 StableId
         /// 2. 初始化位置、速度、方向、帧
@@ -36,7 +34,7 @@ namespace NTSD.Animation.LF2Objects
         void Init(LF2TaskBase task, LF2ObjectRenderer renderer);
 
         /// <summary>
-        /// 销毁逻辑（对应 FLF destroy）
+        /// 销毁逻辑。
         /// </summary>
         void Destroy();
     }

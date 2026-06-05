@@ -4,20 +4,6 @@ using NTSD.Simulation;
 
 namespace NTSD.Input
 {
-    public enum NTSDInputCommand
-    {
-        None,
-        Left,
-        Right,
-        Up,
-        Down,
-        Defend,
-        Jump,
-        Attack,
-        RunLeft,
-        RunRight,
-    }
-
     public sealed class NTSDInputStateModule
     {
         private bool _right;
@@ -55,10 +41,6 @@ namespace NTSD.Input
         private byte _comboDDJ;
         private byte _comboDJA;
 
-        private FuncKeyMask _lastDirectionTap;
-        private int _lastDirectionTapTick = -1;
-        private NTSDInputCommand _pendingCommand;
-
         public bool Right => _right;
         public bool Left => _left;
         public bool Up => _up;
@@ -66,6 +48,15 @@ namespace NTSD.Input
         public bool Attack => _attack;
         public bool Jump => _jump;
         public bool Defend => _defend;
+        public bool PreviousRight => _prevRight;
+        public bool PreviousLeft => _prevLeft;
+        public int RightCooldown => _cdRight;
+        public int LeftCooldown => _cdLeft;
+        public int UpCooldown => _cdUp;
+        public int DownCooldown => _cdDown;
+        public int AttackCooldown => _cdAttack;
+        public int JumpCooldown => _cdJump;
+        public int DefendCooldown => _cdDefend;
         public bool DefendLockActive => _cdDefendLock > 0;
 
         public void Reset()
@@ -78,9 +69,6 @@ namespace NTSD.Input
             _cdAttack = _cdJump = _cdDefend = _cdDefendLock = 0;
             _comboDRA = _comboDLA = _comboDUA = _comboDDA = 0;
             _comboDRJ = _comboDLJ = _comboDUJ = _comboDDJ = _comboDJA = 0;
-            _lastDirectionTap = FuncKeyMask.None;
-            _lastDirectionTapTick = -1;
-            _pendingCommand = NTSDInputCommand.None;
         }
 
         public void UpdateFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Character owner)
@@ -92,7 +80,6 @@ namespace NTSD.Input
             _prevAttack = _attack;
             _prevJump = _jump;
             _prevDefend = _defend;
-            _pendingCommand = NTSDInputCommand.None;
 
             DecrementCooldowns();
 
@@ -107,7 +94,6 @@ namespace NTSD.Input
 
                 owner?.RecordInputKey(FuncKeyMaskToNtsdCode(evt.key));
                 SetEdgeCooldown(evt.key);
-                UpdatePendingCommand(evt.key, tickIndex);
             }
         }
 
@@ -117,25 +103,13 @@ namespace NTSD.Input
                 return false;
 
             bool result = ApplyComboFrameInput(character);
-            if (!result)
-            {
-                var command = ConsumeDirectFrameCommand(character, out bool handledByFrameHit);
-                if (handledByFrameHit)
-                {
-                    result = true;
-                }
-                else if (command != NTSDInputCommand.None)
-                {
-                    result = character.ProcessReleaseInputCommand(command);
-                }
-            }
-
+            result |= ApplyDirectFrameInput(character);
+            result |= character.ProcessReleaseInput();
             return result;
         }
 
         public void OnStateExit()
         {
-            _pendingCommand = NTSDInputCommand.None;
         }
 
         public void SetDefendLock(byte value)
@@ -183,38 +157,6 @@ namespace NTSD.Input
             }
         }
 
-        private void UpdatePendingCommand(FuncKeyMask key, int tickIndex)
-        {
-            switch (key)
-            {
-                case FuncKeyMask.left:
-                case FuncKeyMask.right:
-                    var runCommand = key == FuncKeyMask.left ? NTSDInputCommand.RunLeft : NTSDInputCommand.RunRight;
-                    var walkCommand = key == FuncKeyMask.left ? NTSDInputCommand.Left : NTSDInputCommand.Right;
-                    _pendingCommand = _lastDirectionTap == key && tickIndex - _lastDirectionTapTick <= 9
-                        ? runCommand
-                        : walkCommand;
-                    _lastDirectionTap = key;
-                    _lastDirectionTapTick = tickIndex;
-                    break;
-                case FuncKeyMask.up:
-                    _pendingCommand = NTSDInputCommand.Up;
-                    break;
-                case FuncKeyMask.down:
-                    _pendingCommand = NTSDInputCommand.Down;
-                    break;
-                case FuncKeyMask.att:
-                    _pendingCommand = NTSDInputCommand.Attack;
-                    break;
-                case FuncKeyMask.jump:
-                    _pendingCommand = NTSDInputCommand.Jump;
-                    break;
-                case FuncKeyMask.def:
-                    _pendingCommand = NTSDInputCommand.Defend;
-                    break;
-            }
-        }
-
         private bool ApplyComboFrameInput(LF2Character character)
         {
             bool result = false;
@@ -246,13 +188,13 @@ namespace NTSD.Input
             AdvanceCombo(ref comboState, step2Cooldown, step2Mode, step3Cooldown, ref advanced);
             if (comboState != 3) return false;
 
-            if (targetFrame != 0 && character.CanTriggerReleaseInputFrame())
+            if (targetFrame != 0 && character.Runtime.LinkState != 2)
             {
+                bool jumped = character.TryInputFrameJump(targetFrame);
                 if (!string.IsNullOrEmpty(facing))
                     character.SwitchDir(facing);
-                character.TransitionToFrame(targetFrame, 10);
-                character.MarkInputFrameConsumed();
                 comboState = 0;
+                if (jumped) ClearActionAndDirectionCooldowns();
                 return true;
             }
 
@@ -268,11 +210,11 @@ namespace NTSD.Input
             if (_comboDJA != 3) return false;
 
             int targetFrame = character.Frame.D.hit_ja;
-            if (targetFrame != 0 && character.CanTriggerReleaseInputFrame())
+            if (targetFrame != 0)
             {
-                character.TransitionToFrame(targetFrame, 10);
-                character.MarkInputFrameConsumed();
+                bool jumped = character.TryInputFrameJump(targetFrame);
                 _comboDJA = 0;
+                if (jumped) ClearActionAndDirectionCooldowns();
                 return true;
             }
 
@@ -317,47 +259,36 @@ namespace NTSD.Input
             }
         }
 
-        private NTSDInputCommand ConsumeDirectFrameCommand(LF2Character character, out bool handledByFrameHit)
+        private bool ApplyDirectFrameInput(LF2Character character)
         {
-            handledByFrameHit = false;
             if (character.Frame?.D == null)
-                return ConsumePendingCommand();
+                return false;
 
             if (character.Frame.D.hit_a != 0 && _cdAttack > _cdDefend && _cdAttack > _cdJump)
             {
+                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_a);
+                if (jumped) ClearActionAndDirectionCooldowns();
                 _cdAttack = 0;
-                character.TransitionToFrame(character.Frame.D.hit_a, 10);
-                character.MarkInputFrameConsumed();
-                handledByFrameHit = true;
-                return NTSDInputCommand.None;
+                return true;
             }
 
             if (character.Frame.D.hit_d != 0 && _cdDefend > _cdAttack && _cdDefend > _cdJump)
             {
+                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_d);
+                if (jumped) ClearActionAndDirectionCooldowns();
                 _cdDefend = 0;
-                character.TransitionToFrame(character.Frame.D.hit_d, 10);
-                character.MarkInputFrameConsumed();
-                handledByFrameHit = true;
-                return NTSDInputCommand.None;
+                return true;
             }
 
             if (character.Frame.D.hit_j != 0 && _cdJump > _cdAttack && _cdJump > _cdDefend)
             {
+                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_j);
+                if (jumped) ClearActionAndDirectionCooldowns();
                 _cdJump = 0;
-                character.TransitionToFrame(character.Frame.D.hit_j, 10);
-                character.MarkInputFrameConsumed();
-                handledByFrameHit = true;
-                return NTSDInputCommand.None;
+                return true;
             }
 
-            return ConsumePendingCommand();
-        }
-
-        private NTSDInputCommand ConsumePendingCommand()
-        {
-            var command = _pendingCommand;
-            _pendingCommand = NTSDInputCommand.None;
-            return command;
+            return false;
         }
 
         private bool ComboInterrupted(ComboMode mode, bool advancedThisWrapper)
@@ -383,17 +314,24 @@ namespace NTSD.Input
         private bool IsFreshAttackOrJumpOrDefend() => _cdAttack == 5 || _cdJump == 5 || _cdDefend == 5;
         private bool IsFreshDirection() => _cdLeft == 5 || _cdUp == 5 || _cdDown == 5 || _cdRight == 5;
 
+        private void ClearActionAndDirectionCooldowns()
+        {
+            _cdRight = _cdLeft = _cdUp = _cdDown = 0;
+            _cdAttack = _cdJump = _cdDefend = 0;
+        }
+
         private static int FuncKeyMaskToNtsdCode(FuncKeyMask key)
         {
             return key switch
             {
+                // C++ release input_history 编码：right=6,left=4,up=8,down=2,attack=9,defend=0,jump=5。
                 FuncKeyMask.att => 9,
-                FuncKeyMask.jump => 6,
-                FuncKeyMask.down => 5,
+                FuncKeyMask.jump => 5,
+                FuncKeyMask.down => 2,
                 FuncKeyMask.def => 0,
-                FuncKeyMask.left => 8,
-                FuncKeyMask.right => 2,
-                FuncKeyMask.up => 4,
+                FuncKeyMask.left => 4,
+                FuncKeyMask.right => 6,
+                FuncKeyMask.up => 8,
                 _ => -1,
             };
         }

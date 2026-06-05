@@ -205,7 +205,8 @@ namespace NTSD.Test
 
                 var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(characterId);
                 lf2.ModuleBind(frameData, characterId);
-                lf2.Initialize(NTSDConstants.DEFAULT_MAX_HP, NTSDConstants.DEFAULT_MAX_MP);
+                lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
+                lf2.Team = i + 1;
 
                 Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
                     ? spawnPoints[i].transform.position
@@ -213,7 +214,7 @@ namespace NTSD.Test
 
                 float ppu = SimulationConstants.PIXELS_PER_UNIT;
                 lf2.PS.x = spawnPos.x * ppu;
-                lf2.PS.z = spawnPos.y * ppu;
+                lf2.PS.z = PhysicsState.UnityYToDepth(spawnPos.y);
                 lf2.PS.y = 0;
 
                 if (i == 0)

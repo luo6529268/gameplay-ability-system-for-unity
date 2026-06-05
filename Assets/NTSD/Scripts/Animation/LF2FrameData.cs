@@ -176,7 +176,7 @@ namespace NTSD.Animation
         public int dvx = 0;
         public int dvy = 0;
         public int dvz = 0;
-        // 反汇编 0x0042CA9F：wpoint[9..16] 对应 itr 的 injury/fall/vaction/arest/vrest/effect/kill/bdefend
+        // C++ release 数据布局：wpoint[9..16] 对应 itr 的 injury/fall/vaction/arest/vrest/effect/kill/bdefend。
         public int injury = 0;
         public int fall = 0;
         public int vaction = 0;
@@ -217,8 +217,7 @@ namespace NTSD.Animation
         public int h = 0;
         public int zwidth = 0;
 
-        // LF2/FLF: 击退速度（可选字段；缺失时默认 0）
-        // 参考：I:\C++Test\NTSD\F.LF-master\LF\character.js:1879-1883 (ef_dvx/ef_dvy 由 ITR.dvx/ITR.dvy 推导)
+        // 击退速度字段；DAT 缺失时默认 0。
         public int dvx = 0;
         public int dvy = 0;
         public int dvz = 0;
@@ -237,19 +236,18 @@ namespace NTSD.Animation
         // 死字段：kill: 从未出现在任何 dat 文件中，始终为 0，不影响任何逻辑
         public int kill = 0;
 
-        // LF2/FLF: 防御破坏（可选字段；用于 defend/broken_defend 判定）
+        // 防御破坏值，用于 defend/broken_defend 判定。
         public int bdefend = 0;
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
 
-        // FLF: 抓取成功后抓取者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）
-        // 对应 FLF character.js:2235-2237: trans.frame(ITR.catchingact[0/1], 10)
+        // 抓取成功后抓取者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）。
         public int[] catchingact = null;
 
-        // FLF: 被抓者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）
+        // 被抓者切换的帧 [正面帧, 背面帧]（仅 kind=1/3 有效）。
         public int[] caughtact = null;
-        // 反汇编 0x41A0C9：itr.attacking 目标过滤（4=仅角色, 20=角色且非抓取态, 21=非抓取态, 30=非特定帧）
+        // C++ release 目标过滤：4=仅角色，20=角色且非抓取态，21=非抓取态，30=非特定帧。
         public int attacking = 0;
-        // 反汇编 0x0042EC85：itr.kind=8 爆炸传送时的 heal_timer 偏移量
+        // C++ release：itr.kind=8 爆炸传送时的 heal_timer 偏移量。
         public int throwvz = 0;
 
         public InteractionArea ShallowCopy() => (InteractionArea)MemberwiseClone();
@@ -299,7 +297,7 @@ namespace NTSD.Animation
         public int hurtable = 0;
         public int throwinjury = 0;
         public int decrease = 0;
-        // NTSD 2.4 反汇编确认的额外字段
+        // C++ release cpoint 流程使用的额外字段。
         public int injury = 0;      // 抓取伤害
         public int cover = 0;       // Z轴层级
         public int aaction = 0;     // 攻击动作帧

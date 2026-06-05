@@ -2382,12 +2382,11 @@ MonoBehaviour:
     - {x: 7.9899807, y: -5.435941}
     - {x: -11.836031, y: -5.403208}
     - {x: -11.762667, y: -8.684941}
-    - {x: -10.881903, y: -8.633507}
+    - {x: -10.776422, y: -8.804111}
     color: {r: 0, g: 1, b: 0, a: 0.3}
   _activePolygonIndex: 0
   _boundaryName: "\u5173\u5361\u8FB9\u754C"
   _isEnabled: 1
-  _walkableAreaScale: 0.6
 --- !u!4 &719159762
 Transform:
   m_ObjectHideFlags: 0

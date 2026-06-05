@@ -141,11 +141,17 @@ namespace NTSD.Animation
             go.SetActive(true);
             _activeObjects.Add(go);
             EntityModel = go.GetComponentInChildren<LF2ObjectRenderer>(true);
+            if (EntityModel != null)
+            {
+                // 回收时 EntityModel 子节点会被 ResetState 关闭，取出时必须显式恢复。
+                EntityModel.gameObject.SetActive(true);
+                EntityModel.RestorePooledVisualState();
+            }
             return go;
         }
 
         /// <summary>
-        /// 批量预热接口（对齐反汇编 SceneManager_Init: 预分配 400 个实体实例）
+        /// 批量预热接口（对齐 C++ release SceneManager_Init 的 400 个实体实例预分配）。
         /// </summary>
         public async UniTask PrewarmAsync(int count)
         {

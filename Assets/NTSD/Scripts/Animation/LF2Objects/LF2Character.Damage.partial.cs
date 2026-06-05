@@ -8,8 +8,7 @@ namespace NTSD.Animation.LF2Objects
     public partial class LF2Character
     {
         /// <summary>
-        /// 爬起状态处理器 (state = 6)
-        /// 对应 FLF js:656-681
+        /// 划行/爬起状态处理（state=6）。
         /// </summary>
         private bool State_Rowing(string eventType, object eventData)
         {
@@ -45,8 +44,8 @@ namespace NTSD.Animation.LF2Objects
                         CurrentFrameId == LF2StandardFrames.RowingBack1)
                     {
                         Log.Info("爬起结束落地");
-                        Log.Info("TransitionTo: Frame {0} ({1})", LF2StandardFrames.Crouch, "落地 → 蹲姿");
-                        TransitionToFrame(LF2StandardFrames.Crouch, 0);
+                        Log.Info("ImmediateFrame: Frame {0} ({1})", LF2StandardFrames.Crouch, "落地到蹲伏");
+                        ImmediateFrame(LF2StandardFrames.Crouch);
                         return true;
                     }
                     return false;
@@ -57,41 +56,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 防御被破状态处理器 (state = 8)
-        /// 对应 FLF js:698-719
-        /// </summary>
-        private bool State_BrokenDefend(string eventType, object eventData)
-        {
-            switch (eventType)
-            {
-                case "frame_force":
-                case "TU_force":
-                    Log.Info("[State {0}:{1}] Event={2}", 8, "BrokenDefend", eventType);
-
-                    var D = Frame.D;
-                    if (D.dvx != 0)
-                    {
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 8, "BrokenDefend", $"防御被破 dvx={D.dvx} → 修正移动方向");
-                        if ((PS.vx > 0 ? 1 : -1) != Dirh())
-                        {
-                            float avx = PS.vx > 0 ? PS.vx : -PS.vx;
-                            float dirx = 2 * (PS.vx > 0 ? 1 : -1);
-                            if (PS.y < 0 || avx < D.dvx)
-                                PS.vx = dirx * D.dvx;
-
-                            if (D.dvx < 0)
-                                PS.vx -= dirx;
-                        }
-                    }
-                    break;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 受伤状态处理器 (state = 11)
-        /// 对应 FLF js:942-960
+        /// 受伤状态处理（state=11）。
         /// </summary>
         private bool State_Injured(string eventType, object eventData)
         {
@@ -119,12 +84,76 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 受伤2状态处理器 (state = 16)
-        /// 对应 FLF js:1230-1235
+        /// 正式落地处理入口。CharacterMechanics 只负责检测本 tick 是否落地；
+        /// 具体帧切换、声音、弹起和武器落地伤害在这里对齐 C++ release 分支。
         /// </summary>
-        private bool State_Injured2(string eventType, object eventData)
+        private void HandleLandingEvent(float vyBeforeLand)
         {
-            return false;
+            var cpoint = Frame?.D?.cpoint;
+            if (cpoint != null && cpoint.kind == 2)
+                return;
+
+            int curState = GetState();
+            if (curState == LF2States.Frozen)
+            {
+                ApplyFrozenLanding(vyBeforeLand);
+                return;
+            }
+
+            if (curState == LF2States.Burning)
+            {
+                BrokenEffectCreate(302);
+                State_Falling("fell_onto_ground", vyBeforeLand);
+                return;
+            }
+
+            if (curState == LF2States.Rowing &&
+                State_Rowing("fall_onto_ground", vyBeforeLand))
+            {
+                return;
+            }
+
+            State_Falling("fall_onto_ground", vyBeforeLand);
+        }
+
+        private void ApplyFrozenLanding(float vyBeforeLand)
+        {
+            PS.y = 0f;
+
+            // C++ release state==13 落地：低速直接贴地，高速扣血并弹起。
+            if (vyBeforeLand <= 17f && PS.vx <= 9f && PS.vx >= -9f)
+            {
+                PS.vx *= 1f / 3f;
+                PS.vy = 0f;
+            }
+            else
+            {
+                int injury = FallDamageDiv > 0 ? 1000 / FallDamageDiv : 10;
+                Health.HP -= injury;
+                Health.HPBound -= injury / NTSDGlobal.Gameplay.NegativeWeaponCountHpBoundDivisor;
+                if (Health.HP < 0) Health.HP = 0;
+                if (Health.HPBound < 0) Health.HPBound = 0;
+
+                PS.vy = -3.5f;
+                if (PS.vx > 7f) PS.vx = 7f;
+                if (PS.vx < -7f) PS.vx = -7f;
+                ImmediateFrame(LF2StandardFrames.FallingFront5);
+            }
+        }
+
+        private void ApplyLandingWeaponCountDamage()
+        {
+            if (WeaponCount == 0 || Health == null) return;
+
+            int damage = WeaponCount < 0 ? -WeaponCount : WeaponCount;
+            if (FallDamageDiv > 0)
+                damage = damage * 100 / FallDamageDiv;
+
+            Health.HP -= damage;
+            Health.HPBound -= damage;
+            if (Health.HP < 0) Health.HP = 0;
+            if (Health.HPBound < 0) Health.HPBound = 0;
+            WeaponCount = 0;
         }
 
         private bool State_Falling(string eventType, object eventData)
@@ -208,22 +237,19 @@ namespace NTSD.Animation.LF2Objects
                     }
                     return false;
 
-                case "combo":
-                    return ProcessFallingInputCommand(eventData as string);
-
                 case "fell_onto_ground":
                 case "fall_onto_ground":
                 {
                     AppManager.Instance?.SoundPlayer?.PlaySfx(NTSDGlobal.Sound.FallLand);
 
-                    float vyBeforeLand = PS.vy;
+                    float vyBeforeLand = eventData is float vy ? vy : PS.vy;
                     PS.y  = 0f;
                     PS.vy = 0f;
-                    PS.vz = 0f;
-
+                    // C++ release 落地分支不清零 vz，只处理 y/vy 和 vx。
                     int curState = GetState();
                     if (curState == LF2States.Falling || curState == LF2States.Burning)
                     {
+                        ApplyLandingWeaponCountDamage();
                         KnockbackVx = 0f;
                         KnockbackVy = 0f;
                         HitCount    = 0;
@@ -239,7 +265,7 @@ namespace NTSD.Animation.LF2Objects
                             int bounceFrame = (Frame.N >= LF2StandardFrames.FallingBack)
                                 ? LF2StandardFrames.FallingBack5
                                 : LF2StandardFrames.FallingFront5;
-                            TransitionToFrame(bounceFrame, 15);
+                            ImmediateFrame(bounceFrame);
                         }
                         else
                         {
@@ -247,7 +273,7 @@ namespace NTSD.Animation.LF2Objects
                             int landFrame = (Frame.N >= LF2StandardFrames.FallingBack)
                                 ? LF2StandardFrames.LyingBack
                                 : LF2StandardFrames.Lying;
-                            TransitionToFrame(landFrame, 15);
+                            ImmediateFrame(landFrame);
                         }
                     }
                     else
@@ -256,12 +282,6 @@ namespace NTSD.Animation.LF2Objects
                         KnockbackVx = 0f;
                         KnockbackVy = 0f;
                         HitCount    = 0;
-
-                        if (caught_throwinjury.HasValue && caught_throwinjury.Value > 0)
-                        {
-                            Injury(caught_throwinjury.Value);
-                            caught_throwinjury = 0;
-                        }
 
                         int landFrame;
                         int curFrameState = GetState();
@@ -272,7 +292,7 @@ namespace NTSD.Animation.LF2Objects
                         else
                             landFrame = LF2StandardFrames.Crouch2;
 
-                        TransitionToFrame(landFrame, 15);
+                        ImmediateFrame(landFrame);
                     }
                     return true;
                 }
@@ -306,8 +326,6 @@ namespace NTSD.Animation.LF2Objects
 
                     if (Health.HP <= 0)
                     {
-                        if (!IsNpc && Attacker != null)
-                            Attacker.Killed();
                         Dead = true;
                         if (_deadBlinkCount < 0)
                             _deadBlinkCount = 0;

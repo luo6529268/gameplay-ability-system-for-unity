@@ -3,14 +3,14 @@ namespace NTSD.Simulation
     /// <summary>
     /// 模拟系统常量 - 定义游戏逻辑的时间基准
     ///
-    /// 对应 FLF 的 30Hz TU (Time Unit) 系统
-    /// 所有游戏逻辑（状态机、连招、物理）都基于这个频率运行
+    /// 对应 C++ release 的 30Hz 战斗逻辑时间基准。
+    /// 所有游戏逻辑（状态机、连招、物理）都基于这个频率运行。
     /// </summary>
     public static class SimulationConstants
     {
         /// <summary>
         /// 模拟 Tick 频率（Hz）
-        /// 对应 FLF 的帧率：30 TU/秒
+        /// 对应 C++ release 的战斗逻辑帧率：30 tick/秒。
         ///
         /// ⚠️ 这是游戏逻辑的"真相频率"，不是渲染帧率
         /// Unity 可以在 60Hz 或更高频率渲染，但游戏逻辑必须在 30Hz 运行

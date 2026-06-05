@@ -8,16 +8,13 @@ namespace NTSD.Animation
     /// 2. frameName 只是描述性字符串，每个角色可能不同
     /// 3. 使用 state 值绑定 Handler，而不是 frameName
     ///
-    /// 参考来源：
-    /// - LF2 源码: I:\C++Test\NTSD\F.LF-master\LF\character.js (line 238-1405)
-    /// - NTSD DAT 分析: I:\C++Test\NTSD\NTSD_DAT状态分析报告_增强版.md
-    /// - 分析日期: 2025-12-20
-    /// - 总计发现的唯一状态数: 36
+    /// 状态值来自 NTSD DAT 和当前 C++ release 工程的运行时语义。
+    /// 描述性名称只用于阅读代码，不作为复刻基准。
     /// </summary>
     public static class LF2States
     {
         // ==================== 基础状态 (0-17) ====================
-        // 参考: character.js line 239-1405
+        // 基础角色状态。
 
         /// <summary>
         /// 状态 0: 站立
@@ -255,17 +252,17 @@ namespace NTSD.Animation
         public const int WeaponOnGround = 1004;
 
         // ==================== 重武器状态 (2000-2999) ====================
-        // 反汇编依据: ntsd24_full_disasm.txt sub_4063B0 0x407378, Entity_AI_Update 0x42CC54
+        // C++ release 依据：重武器 AI 与命中逻辑按这些状态区分。
 
         /// <summary>
         /// 状态 2000: 重武器在空中（飞行中）
-        /// 反汇编: [+7ACh] == 7D0h
+        /// C++ release：重武器状态值 2000。
         /// </summary>
         public const int HeavyWeaponInSky = 2000;
 
         /// <summary>
         /// 状态 2004: 重武器在地面
-        /// 反汇编: [+7ACh] == 7D4h，sub_4063B0 0x407380 确认地面重武器才能击打角色
+        /// C++ release：重武器状态值 2004，地面重武器才能击打角色。
         /// </summary>
         public const int HeavyWeaponOnGround = 2004;
 

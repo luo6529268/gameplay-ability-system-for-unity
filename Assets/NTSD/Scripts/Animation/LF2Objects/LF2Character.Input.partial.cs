@@ -1,588 +1,524 @@
 using NTSD.Animation;
 using NTSD.Input;
 using NTSD.Simulation;
-using NTSD.Tools;
 
 namespace NTSD.Animation.LF2Objects
 {
     public partial class LF2Character : LF2LivingObject
     {
-        internal bool ProcessReleaseInputCommand(NTSDInputCommand command)
+        internal bool ProcessReleaseInput()
         {
-            int state = Frame?.D?.state ?? LF2States.Standing;
+            if (Frame?.D == null || Controller == null || PS == null)
+                return false;
+
+            if (Frame.N == LF2StandardFrames.Defend)
+            {
+                if (Controller.IsRight) SwitchDir("right");
+                if (Controller.IsLeft) SwitchDir("left");
+            }
+
+            ApplyVerticalInputForSpecialStates();
+
+            int state = Frame.D.state;
+            bool handled = false;
+
+            if (IsHeavyWeapon() && (state == LF2States.Standing || state == LF2States.Walking))
+            {
+                ProcessHeavyWalkInput();
+                return true;
+            }
+
+            if (Frame.N == LF2StandardFrames.Crouch)
+                return ProcessCrouchInput();
+
+            if (ProcessDefensiveRecoveryInput())
+                return true;
+
             switch (state)
             {
                 case LF2States.Standing:
-                    return ProcessStandingInputCommand(command);
                 case LF2States.Walking:
-                    return ProcessWalkingInputCommand(command);
+                    ApplyWalkRunFrame(heavy: false);
+                    handled = ProcessStandingActions();
+                    break;
+
                 case LF2States.Running:
-                    return ProcessRunningInputCommand(command);
+                    handled = ProcessRunningInput();
+                    break;
+
                 case LF2States.Jump:
-                    return ProcessJumpInputCommand(command);
+                    if (PS.y < 0f)
+                        handled = ProcessJumpingInput();
+                    break;
+
                 case LF2States.Dash:
-                    return ProcessDashInputCommand(command);
+                    handled = ProcessDashInput();
+                    break;
+
                 case LF2States.Defending:
-                    return ProcessDefendingInputCommand(command);
+                    handled = ProcessDefendingInput();
+                    break;
+
                 case LF2States.Catching:
-                    return ProcessCatchingInputCommand(ToLegacyInputCommand(command));
-                case LF2States.Falling:
-                    return ProcessFallingInputCommand(command);
-                case LF2States.StopRunning:
-                    return ProcessStopRunningInputCommand(command);
-                case LF2States.Charging:
-                    return ProcessChargingInputCommand(command);
-                default:
-                    return false;
-            }
-        }
-
-        private bool ProcessReleaseInputCommand(string command)
-        {
-            return ProcessReleaseInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessStandingInputCommand(NTSDInputCommand command)
-        {
-            bool hasDx = Controller.IsLeft != Controller.IsRight;
-            bool hasDz = Controller.IsUp != Controller.IsDown;
-            if (hasDx || hasDz)
-            {
-                var characterData = _FrameDataWrapper?.characterData;
-                if (characterData == null) return false;
-
-                if (IsHeavyWeapon())
-                {
-                    if (hasDx) PS.vx = Dirh() * characterData.heavy_walking_speed;
-                    PS.vz = Dirv() * characterData.heavy_walking_speedz;
-                }
-                else
-                {
-                    if (command != NTSDInputCommand.Jump)
-                    {
-                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.WalkingStart, "direction input -> walking");
-                        TransitionToFrame(LF2StandardFrames.WalkingStart, 5);
-                    }
-
-                    if (hasDx) PS.vx = Dirh() * characterData.walking_speed;
-                    PS.vz = Dirv() * characterData.walking_speedz;
-                }
+                    handled = ProcessCatchingInput();
+                    break;
             }
 
-            switch (command)
+            return handled;
+        }
+
+        private bool ProcessStandingActions()
+        {
+            bool handled = false;
+            int linkState = Runtime.LinkState;
+
+            if (Controller.IsAttack && (InputState?.AttackCooldown ?? 0) > 0)
             {
-                case NTSDInputCommand.RunLeft:
-                case NTSDInputCommand.RunRight:
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.RunningStart, "double direction -> running");
-                    TransitionToFrame(IsHeavyWeapon() ? LF2StandardFrames.HeavyObjRun : LF2StandardFrames.RunningStart, LF2StateConstants.ComboTransitionWait);
-                    StateReturnFrame = 1;
-                    return true;
+                handled = true;
+                AnimSub = 0;
+                AttackingCounter = 0;
 
-                case NTSDInputCommand.Defend:
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Defend, "defend input");
-                    if (InputState != null && InputState.DefendLockActive) break;
-                    if (IsHeavyWeapon())
-                    {
-                        StateReturnFrame = 1;
-                        return true;
-                    }
-
-                    TransitionToFrame(LF2StandardFrames.Defend, LF2StateConstants.ComboTransitionWait);
-                    StateReturnFrame = 1;
-                    return true;
-
-                case NTSDInputCommand.Jump:
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Jumping, "jump input");
-                    if (IsHeavyWeapon())
-                    {
-                        if (!NTSDSpec.CanHeavyWeaponJump(ObjectId))
-                        {
-                            StateReturnFrame = 1;
-                            return true;
-                        }
-
-                        TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
-                        return true;
-                    }
-
-                    TransitionToFrame(LF2StandardFrames.Jumping, LF2StateConstants.ComboTransitionWait);
-                    StateReturnFrame = 1;
-                    return true;
-
-                case NTSDInputCommand.Attack:
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 0, "Standing", LF2StandardFrames.Punch, "attack input");
-                    if (InputState != null && InputState.DefendLockActive) break;
-
+                if (_heldWeapon == null || linkState == 0)
+                {
                     if (HitConfirmEa > 0 && FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch) != null)
                     {
                         HitConfirmEa = 0;
-                        TransitionToFrame(LF2StandardFrames.SuperPunch, LF2StateConstants.ComboTransitionWait);
-                        StateReturnFrame = 1;
-                        return true;
+                        ImmediateFrame(LF2StandardFrames.SuperPunch);
                     }
-
-                    if (_heldWeapon != null)
+                    else
                     {
-                        if (IsHeavyWeapon())
-                        {
-                            TransitionToFrame(LF2StandardFrames.HeavyWeaponThw, LF2StateConstants.ComboTransitionWait);
-                            StateReturnFrame = 1;
-                            return true;
-                        }
-
-                        if (NTSDSpec.CanJustThrowWeapon(_heldWeapon.ObjectId))
-                        {
-                            TransitionToFrame(LF2StandardFrames.LightWeaponThw, LF2StateConstants.ComboTransitionWait);
-                            StateReturnFrame = 1;
-                            return true;
-                        }
-
-                        if (NTSDSpec.CanStandThrowWeapon(_heldWeapon.ObjectId))
-                        {
-                            TransitionToFrame(LF2StandardFrames.LightWeaponThw, LF2StateConstants.ComboTransitionWait);
-                            StateReturnFrame = 1;
-                            return true;
-                        }
-
-                        if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
-                        {
-                            int normalWeaponAttack = Match.Rng.Next() < 0.5f ? LF2StandardFrames.NormalWeaponAtck : LF2StandardFrames.NormalWeaponAtck2;
-                            TransitionToFrame(normalWeaponAttack, LF2StateConstants.ComboTransitionWait);
-                            StateReturnFrame = 1;
-                            return true;
-                        }
+                        int punchFrame = RandInt(0, 2) == 0 ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
+                        TrySpendFramePpCost(punchFrame, clampOnOverdraw: true);
+                        ImmediateFrame(punchFrame);
                     }
-
-                    int punchFrame = Match.Rng.Next() < 0.5f ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
-                    TransitionToFrame(punchFrame, LF2StateConstants.ComboTransitionWait);
-                    return true;
+                }
+                else if (linkState == 101)
+                {
+                    ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : RandomWeaponAttackFrame());
+                }
+                else if (linkState % 100 == 1)
+                {
+                    ImmediateFrame(RandomWeaponAttackFrame());
+                }
+                else if (linkState == 4)
+                {
+                    ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                }
+                else if (linkState == 6)
+                {
+                    ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+                }
+                else
+                {
+                    ApplyHeldWeaponStandingAttack();
+                }
             }
 
-            return false;
-        }
-
-        private bool ProcessStandingInputCommand(string command)
-        {
-            return ProcessStandingInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessWalkingInputCommand(NTSDInputCommand command)
-        {
-            (int dx, int dz) = Controller.GetMoveInput();
-
-            if (dx != 0 && dx != Dirh())
+            if (Controller.IsJump && (InputState?.JumpCooldown ?? 0) > 0)
             {
-                SwitchDir(PS.dir == "right" ? "left" : "right");
+                handled = true;
+                ImmediateFrame(LF2StandardFrames.Jumping);
+                AttackingCounter = 0;
+                AnimSub = 0;
             }
 
-            return command != NTSDInputCommand.None && ProcessStandingInputCommand(command);
+            if (Controller.IsDefend && (InputState?.DefendCooldown ?? 0) > 0 && InputState.DefendLockActive == false)
+            {
+                handled = true;
+                ImmediateFrame(LF2StandardFrames.Defend);
+                AnimSub = 0;
+                AttackingCounter = 0;
+            }
+
+            return handled;
         }
 
-        private bool ProcessWalkingInputCommand(string command)
+        private void ApplyHeldWeaponStandingAttack()
         {
-            return ProcessWalkingInputCommand(ParseLegacyInputCommand(command));
+            if (_heldWeapon == null)
+                return;
+
+            if ((_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
+            {
+                ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                return;
+            }
+
+            if (NTSDSpec.CanJustThrowWeapon(_heldWeapon.ObjectId) ||
+                NTSDSpec.CanStandThrowWeapon(_heldWeapon.ObjectId))
+            {
+                ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                return;
+            }
+
+            if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+                ImmediateFrame(RandomWeaponAttackFrame());
         }
 
-        private bool ProcessRunningInputCommand(NTSDInputCommand command)
+        private bool ProcessRunningInput()
         {
-            if (command == NTSDInputCommand.None)
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
                 return false;
 
-            if (IsHorizontalCommand(command))
+            if (IsHeavyWeapon())
             {
-                string inputDir = HorizontalCommandDirection(command);
-                if (inputDir != PS.dir)
-                {
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.StopRunning, "opposite direction -> stop running");
-                    TransitionToFrame(IsHeavyWeapon() ? LF2StandardFrames.TreeJump2 : LF2StandardFrames.StopRunning, 10);
-                    StateReturnFrame = 1;
-                    return true;
-                }
+                ProcessHeavyRunningInput(characterData);
+                return true;
             }
-            else if (command == NTSDInputCommand.Defend)
-            {
-                if (IsHeavyWeapon())
-                {
-                    StateReturnFrame = 1;
-                    return true;
-                }
 
-                if (Catching != null && GetState() == LF2States.BeingCaught)
+            AttackingCounter = 0;
+            StepRunningFrame(LF2StandardFrames.RunningStart, LF2StandardFrames.Running1);
+
+            if (PS.dir == "right")
+            {
+                PS.vx = characterData.running_speed;
+                if (Controller.IsLeft)
+                    SetMoveFrameDirect(LF2StandardFrames.StopRunning);
+            }
+            else
+            {
+                PS.vx = -characterData.running_speed;
+                if (Controller.IsRight)
+                    SetMoveFrameDirect(LF2StandardFrames.StopRunning);
+            }
+
+            ApplyRunLane(characterData.running_speedz);
+
+            bool handled = false;
+            int linkState = Runtime.LinkState;
+            if (Controller.IsAttack && (InputState?.AttackCooldown ?? 0) > 0)
+            {
+                handled = true;
+                if (_heldWeapon == null || linkState == 0)
                 {
-                    TransitionToFrame(_caughtFront ? 45 : 55, 10);
+                    if (TrySpendFramePpCost(LF2StandardFrames.RunAttack))
+                        ImmediateFrame(LF2StandardFrames.RunAttack);
+                }
+                else if (linkState % 100 == 1)
+                {
+                    ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.RunWeaponAtck);
+                }
+                else if (linkState == 4)
+                {
+                    ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                }
+                else if (linkState == 6)
+                {
+                    ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.SkyLgtWpThw);
                 }
                 else
                 {
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", 102, "defend while running");
-                    TransitionToFrame(102, 10);
+                    ApplyHeldWeaponRunningAttack();
                 }
-
-                return true;
             }
-            else if (command == NTSDInputCommand.Jump)
+
+            if (Controller.IsDefend && (InputState?.DefendCooldown ?? 0) > 0)
             {
-                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 2, "Running", LF2StandardFrames.DashForward, "jump while running");
-                if (IsHeavyWeapon())
-                {
-                    if (!NTSDSpec.CanHeavyWeaponDash(ObjectId))
-                    {
-                        StateReturnFrame = 1;
-                        return true;
-                    }
-
-                    TransitionToFrame(LF2StandardFrames.DashForward, 10);
-                    StateReturnFrame = 1;
-                    return true;
-                }
-
-                TransitionToFrame(LF2StandardFrames.DashForward, 10);
-                StateReturnFrame = 1;
-                return true;
+                handled = true;
+                ImmediateFrame(LF2StandardFrames.Rowing2);
             }
-            else if (command == NTSDInputCommand.Attack)
+
+            if (Controller.IsJump && (InputState?.JumpCooldown ?? 0) > 0)
             {
-                if (_heldWeapon != null)
+                handled = true;
+                ImmediateFrame(LF2StandardFrames.DashForward);
+                ApplyDashStartVelocity(forward: true);
+            }
+
+            return handled;
+        }
+
+        private void ApplyHeldWeaponRunningAttack()
+        {
+            if (_heldWeapon == null)
+                return;
+
+            if ((_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
+            {
+                ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                return;
+            }
+
+            if (HasHorizontalInput() && NTSDSpec.CanRunThrowWeapon(_heldWeapon.ObjectId))
+            {
+                ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                return;
+            }
+
+            if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+                ImmediateFrame(LF2StandardFrames.RunWeaponAtck);
+        }
+
+        private bool ProcessJumpingInput()
+        {
+            if (Controller.IsRight && !Controller.IsLeft) SwitchDir("right");
+            else if (Controller.IsLeft && !Controller.IsRight) SwitchDir("left");
+
+            if (!Controller.IsAttack || JumpAttackLock > 0)
+                return false;
+
+            int linkState = Runtime.LinkState;
+            if (_heldWeapon == null || linkState == 0)
+            {
+                AttackingCounter = 0;
+                TrySpendFramePpCost(LF2StandardFrames.JumpAttack, clampOnOverdraw: true);
+                ImmediateFrame(LF2StandardFrames.JumpAttack);
+            }
+            else if (linkState % 100 == 1)
+            {
+                AttackingCounter = 0;
+                ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
+            }
+            else if (linkState == 4 || linkState == 6)
+            {
+                ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+            }
+            else if (_heldWeapon != null && NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            {
+                ImmediateFrame(HasHorizontalInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
+            }
+
+            return true;
+        }
+
+        private bool ProcessDashInput()
+        {
+            ApplyDashFrame();
+
+            bool dashForward = (PS.dir == "right" && PS.vx > 0f) || (PS.dir == "left" && PS.vx < 0f);
+            if (!dashForward || !Controller.IsAttack)
+                return false;
+
+            int linkState = Runtime.LinkState;
+            if (_heldWeapon == null || linkState == 0)
+            {
+                if (TrySpendFramePpCost(LF2StandardFrames.DashAttack))
+                    ImmediateFrame(LF2StandardFrames.DashAttack);
+            }
+            else if (linkState % 100 == 1)
+            {
+                ImmediateFrame(LF2StandardFrames.DashWeaponAtck);
+                PS.vy -= 1f;
+                AttackingCounter = 0;
+            }
+            else if (linkState == 4 || linkState == 6)
+            {
+                if (HasAnyDirectionInput())
                 {
-                    if ((_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
-                    {
-                        TransitionToFrame(LF2StandardFrames.HeavyWeaponThw, 10);
-                        StateReturnFrame = 1;
-                        return true;
-                    }
-
-                    bool hasDx = Controller.IsLeft != Controller.IsRight;
-                    if (hasDx && NTSDSpec.CanRunThrowWeapon(_heldWeapon.ObjectId))
-                    {
-                        TransitionToFrame(LF2StandardFrames.LightWeaponThw, 10);
-                        StateReturnFrame = 1;
-                        return true;
-                    }
-
-                    if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
-                    {
-                        TransitionToFrame(LF2StandardFrames.RunWeaponAtck, 10);
-                        StateReturnFrame = 1;
-                        return true;
-                    }
+                    ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+                    PS.vy -= 1f;
+                    AttackingCounter = 0;
                 }
+            }
+            else if (_heldWeapon != null && NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            {
+                ImmediateFrame(LF2StandardFrames.DashWeaponAtck);
+            }
 
-                TransitionToFrame(LF2StandardFrames.RunAttack, 10);
-                StateReturnFrame = 1;
+            return true;
+        }
+
+        private bool ProcessDefendingInput()
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
+                return false;
+
+            float previousVx = PS.vx;
+            PS.vx = 0f;
+            PS.vz = 0f;
+
+            if (!Controller.IsDefend)
+            {
+                ImmediateFrame(LF2StandardFrames.Standing);
                 return true;
             }
 
+            if ((Controller.IsRight || previousVx > 0f) && (InputState?.JumpCooldown ?? 0) > 0)
+            {
+                ImmediateFrame(PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
+                PS.vx = characterData.walking_speed;
+                PS.vy = 0f;
+                InputState?.SetDefendLock(5);
+                return true;
+            }
+
+            if ((Controller.IsLeft || previousVx < 0f) && (InputState?.JumpCooldown ?? 0) > 0)
+            {
+                ImmediateFrame(PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
+                PS.vx = -characterData.walking_speed;
+                PS.vy = 0f;
+                InputState?.SetDefendLock(5);
+                return true;
+            }
+
+            InputState?.SetDefendLock(5);
+            if (Frame.N != LF2StandardFrames.DashForward && Frame.N != LF2StandardFrames.DashForward2)
+                ImmediateFrame(LF2StandardFrames.Defend);
             return false;
         }
 
-        private bool ProcessRunningInputCommand(string command)
+        private bool ProcessCrouchInput()
         {
-            return ProcessRunningInputCommand(ParseLegacyInputCommand(command));
-        }
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
+                return false;
 
-        private bool ProcessJumpInputCommand(NTSDInputCommand command)
-        {
-            if (command == NTSDInputCommand.Defend)
+            bool handled = false;
+            if (Controller.IsDefend && (InputState?.DefendCooldown ?? 0) > 0)
             {
-                if (Catching != null && GetState() == LF2States.BeingCaught)
-                {
-                    TransitionToFrame(_caughtFront ? 30 : 52, 10);
-                }
-                else
-                {
-                    TransitionToFrame(LF2StandardFrames.JumpAttack, 10);
-                }
-
-                StateReturnFrame = 1;
-                return true;
+                ImmediateFrame(LF2StandardFrames.Rowing2);
+                handled = true;
             }
 
-            if ((command == NTSDInputCommand.Attack || Controller.IsAttack) && _jumpAttackLock <= 0)
+            if (Controller.IsJump)
             {
-                if (Frame.N == LF2StandardFrames.JumpingAir)
+                if ((Controller.IsRight || PS.vx > 0.001f) && (InputState?.JumpCooldown ?? 0) > 0)
                 {
-                    if (_heldWeapon != null)
-                    {
-                        bool hasDx = Controller.IsLeft != Controller.IsRight;
-                        bool attackable = NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId);
-                        if (hasDx && attackable)
-                        {
-                            TransitionToFrame(LF2StandardFrames.SkyLgtWpThw, 10);
-                        }
-                        else if (attackable)
-                        {
-                            TransitionToFrame(LF2StandardFrames.JumpWeaponAtck, 10);
-                        }
-                    }
-                    else
-                    {
-                        Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 4, "Jump", LF2StandardFrames.JumpAttack, "jump attack");
-                        TransitionToFrame(LF2StandardFrames.JumpAttack, 10);
-                    }
-
-                    StateReturnFrame = 1;
-                    return true;
+                    ImmediateFrame(PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
+                    PS.vx = characterData.dash_distance;
+                    PS.vy = characterData.dash_height;
+                    ApplyDashLane(characterData.dash_distancez);
+                    AnimSub = 0;
+                    handled = true;
+                }
+                else if ((Controller.IsLeft || PS.vx < -0.001f) && (InputState?.JumpCooldown ?? 0) > 0)
+                {
+                    ImmediateFrame(PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
+                    PS.vx = -characterData.dash_distance;
+                    PS.vy = characterData.dash_height;
+                    ApplyDashLane(characterData.dash_distancez);
+                    AnimSub = 0;
+                    handled = true;
                 }
             }
 
-            return false;
+            ApplyDashLane(characterData.dash_distancez);
+            return handled;
         }
 
-        private bool ProcessJumpInputCommand(string command)
-        {
-            return ProcessJumpInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessDashInputCommand(NTSDInputCommand command)
-        {
-            if (command == NTSDInputCommand.Attack || Controller.IsAttack)
-            {
-                if (Dirh() == (PS.vx > 0 ? 1 : -1))
-                {
-                    if (_heldWeapon != null && NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
-                    {
-                        TransitionToFrame(LF2StandardFrames.DashWeaponAtck, 10);
-                    }
-                    else
-                    {
-                        TransitionToFrame(LF2StandardFrames.DashAttack, 10);
-                    }
-                }
-
-                if (command == NTSDInputCommand.Attack)
-                {
-                    StateReturnFrame = 1;
-                    return true;
-                }
-            }
-
-            if (command == NTSDInputCommand.Defend)
-            {
-                TransitionToFrame(LF2StandardFrames.DashAttack, 10);
-                StateReturnFrame = 1;
-                return true;
-            }
-
-            if (command == NTSDInputCommand.Up || command == NTSDInputCommand.Jump)
-            {
-                var (dx, _) = Controller.GetMoveInput();
-                int upFrame = (dx != 0 && (dx > 0 ? 1 : -1) == Dirh())
-                    ? LF2StandardFrames.DashForward
-                    : LF2StandardFrames.DashForward2;
-                TransitionToFrame(upFrame, 10);
-                StateReturnFrame = 1;
-                return true;
-            }
-
-            if (IsHorizontalCommand(command))
-            {
-                string inputDir = HorizontalCommandDirection(command);
-                if (inputDir != PS.dir)
-                {
-                    if (Dirh() == (PS.vx > 0 ? 1 : -1))
-                    {
-                        if (Frame.N == LF2StandardFrames.DashForward)
-                            TransitionToFrame(LF2StandardFrames.DashForward2, 0);
-
-                        if (Frame.N == LF2StandardFrames.DashBack)
-                            TransitionToFrame(LF2StandardFrames.DashBack2, 0);
-
-                        SwitchDir(inputDir);
-                    }
-                    else
-                    {
-                        if (Frame.N == LF2StandardFrames.DashForward2)
-                            TransitionToFrame(LF2StandardFrames.DashForward, 0);
-
-                        if (Frame.N == LF2StandardFrames.DashBack2)
-                            TransitionToFrame(LF2StandardFrames.DashBack, 0);
-
-                        SwitchDir(inputDir);
-                    }
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool ProcessDashInputCommand(string command)
-        {
-            return ProcessDashInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessDefendingInputCommand(NTSDInputCommand command)
-        {
-            if (Frame.N == LF2StandardFrames.Defend)
-            {
-                if (command == NTSDInputCommand.Left || command == NTSDInputCommand.RunLeft) SwitchDir("left");
-                else if (command == NTSDInputCommand.Right || command == NTSDInputCommand.RunRight) SwitchDir("right");
-            }
-
-            return false;
-        }
-
-        private bool ProcessDefendingInputCommand(string command)
-        {
-            return ProcessDefendingInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessFallingInputCommand(NTSDInputCommand command)
+        private bool ProcessDefensiveRecoveryInput()
         {
             int frameId = Frame.N;
-            if ((frameId == LF2StandardFrames.FallingFront2 || frameId == LF2StandardFrames.FallingBack2) && command == NTSDInputCommand.Jump)
-            {
-                if (HitCounters.Fall >= 0 && Health.HP > 0)
-                {
-                    int rowingFrame = frameId == LF2StandardFrames.FallingFront2
-                        ? LF2StandardFrames.Rowing
-                        : LF2StandardFrames.RowingBack;
-                    TransitionToFrame(rowingFrame, 10);
-
-                    if (PS.vx != 0f) PS.vx = 5f * (PS.vx > 0f ? 1f : -1f);
-                    if (PS.vy == 0f) PS.vy = 5f;
-                    if (PS.vz != 0f) PS.vz = 2f * (PS.vz > 0f ? 1f : -1f);
-
-                    return true;
-                }
-            }
-
-            return true;
-        }
-
-        private bool ProcessFallingInputCommand(string command)
-        {
-            return ProcessFallingInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessStopRunningInputCommand(NTSDInputCommand command)
-        {
-            if (Frame.N != LF2StandardFrames.Crouch)
+            if (frameId != LF2StandardFrames.FallingFront2 && frameId != LF2StandardFrames.FallingBack2)
                 return false;
 
-            if (command == NTSDInputCommand.None)
+            if (WeaponCount < 0 || !Controller.IsJump || (InputState?.JumpCooldown ?? 0) <= 0 || Health.HP <= 0)
                 return false;
 
-            if (command == NTSDInputCommand.Attack)
-            {
-                TransitionToFrame(LF2StandardFrames.Rowing2, 10);
-                return true;
-            }
+            bool backward = PS.dir == "right" ? PS.vx <= 0f : PS.vx >= 0f;
+            ImmediateFrame(backward ? LF2StandardFrames.Rowing : LF2StandardFrames.RowingBack);
+            AttackingCounter = 0;
 
-            if (command == NTSDInputCommand.Defend)
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData != null)
             {
-                Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", 102, "defend from crouch");
-                TransitionToFrame(LF2StandardFrames.Rowing2, 10);
-                return true;
-            }
+                if (PS.vy > characterData.rowing_height)
+                    PS.vy = characterData.rowing_height;
 
-            if (command == NTSDInputCommand.Jump)
-            {
-                var (dx, _) = Controller.GetMoveInput();
-                if (dx != 0)
-                {
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward, "directional crouch jump");
-                    TransitionToFrame(LF2StandardFrames.DashForward, 10);
-                    SwitchDir(dx == 1 ? DIRECTION.RIGHT : DIRECTION.LEFT);
-                }
-                else if (PS.vx == 0)
-                {
-                    Trans.IncWait(2, 10, 99);
-                    Trans.SetNext(LF2StandardFrames.Jumping, 10);
-                }
-                else if ((PS.vx > 0 ? 1 : -1) == Dirh())
-                {
-                    TransitionToFrame(LF2StandardFrames.DashForward, 10);
-                }
+                float rowingDistance = characterData.rowing_distance;
+                if (PS.vx > -1f && PS.vx < 1f)
+                    PS.vx = PS.dir == "left" ? rowingDistance : -rowingDistance;
                 else
-                {
-                    Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.DashForward2, "reverse crouch jump");
-                    TransitionToFrame(LF2StandardFrames.DashForward2, 10);
-                }
-
-                return true;
+                    PS.vx = PS.vx > 0f ? rowingDistance : -rowingDistance;
             }
 
-            return false;
-        }
-
-        private bool ProcessStopRunningInputCommand(string command)
-        {
-            return ProcessStopRunningInputCommand(ParseLegacyInputCommand(command));
-        }
-
-        private bool ProcessChargingInputCommand(NTSDInputCommand command)
-        {
-            if (command == NTSDInputCommand.None)
-                return false;
-
-            Log.Info("[State {0}:{1}] -> Branch: {2}", 17, "Charging", $"charge interrupted key={command}");
-            TransitionToFrame(LF2StandardFrames.Standing, 10);
             return true;
         }
 
-        private bool ProcessChargingInputCommand(string command)
+        private void ProcessHeavyWalkInput()
         {
-            return ProcessChargingInputCommand(ParseLegacyInputCommand(command));
-        }
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
+                return;
 
-        internal bool CanTriggerReleaseInputFrame()
-        {
-            return true;
-        }
+            if (Frame.N < LF2StandardFrames.HeavyObjWalk0)
+                SetMoveFrameDirect(LF2StandardFrames.HeavyObjWalk0);
 
-        internal void MarkInputFrameConsumed()
-        {
-            StateReturnFrame = 1;
-        }
+            ApplyWalkRunFrame(heavy: true);
 
-        private static bool IsHorizontalCommand(NTSDInputCommand command)
-        {
-            return command == NTSDInputCommand.Left
-                || command == NTSDInputCommand.Right
-                || command == NTSDInputCommand.RunLeft
-                || command == NTSDInputCommand.RunRight;
-        }
-
-        private static string HorizontalCommandDirection(NTSDInputCommand command)
-        {
-            return command == NTSDInputCommand.Left || command == NTSDInputCommand.RunLeft
-                ? "left"
-                : "right";
-        }
-
-        private static NTSDInputCommand ParseLegacyInputCommand(string command)
-        {
-            return command switch
+            if (Controller.IsAttack && (InputState?.AttackCooldown ?? 0) > 0)
             {
-                "left" => NTSDInputCommand.Left,
-                "right" => NTSDInputCommand.Right,
-                "up" => NTSDInputCommand.Up,
-                "down" => NTSDInputCommand.Down,
-                "def" => NTSDInputCommand.Defend,
-                "jump" => NTSDInputCommand.Jump,
-                "att" => NTSDInputCommand.Attack,
-                "left-left" => NTSDInputCommand.RunLeft,
-                "right-right" => NTSDInputCommand.RunRight,
-                _ => NTSDInputCommand.None,
-            };
+                ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                AnimSub = 0;
+                AttackingCounter = 0;
+            }
         }
 
-        private static string ToLegacyInputCommand(NTSDInputCommand command)
+        private void ProcessHeavyRunningInput(LF2CharacterData characterData)
         {
-            return command switch
+            AttackingCounter = 0;
+            StepRunningFrame(LF2StandardFrames.HeavyObjRun, LF2StandardFrames.TreeJump0);
+
+            if (PS.dir == "right")
             {
-                NTSDInputCommand.Left => "left",
-                NTSDInputCommand.Right => "right",
-                NTSDInputCommand.Up => "up",
-                NTSDInputCommand.Down => "down",
-                NTSDInputCommand.Defend => "def",
-                NTSDInputCommand.Jump => "jump",
-                NTSDInputCommand.Attack => "att",
-                NTSDInputCommand.RunLeft => "left-left",
-                NTSDInputCommand.RunRight => "right-right",
-                _ => null,
-            };
+                PS.vx = characterData.heavy_running_speed;
+                if (Controller.IsLeft) SetMoveFrameDirect(LF2StandardFrames.TreeJump2);
+            }
+            else
+            {
+                PS.vx = -characterData.heavy_running_speed;
+                if (Controller.IsRight) SetMoveFrameDirect(LF2StandardFrames.TreeJump2);
+            }
+
+            ApplyRunLane(characterData.heavy_running_speedz);
+
+            if (Controller.IsAttack && (InputState?.AttackCooldown ?? 0) > 0)
+                ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+        }
+
+        private void StepRunningFrame(int frameBase, int loopFrame)
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
+                return;
+
+            int rate = characterData.running_frame_rate;
+            if (rate < 1) rate = 1;
+
+            AnimCounter = (AnimCounter + 1) % (rate * 4);
+            int fi = AnimCounter / rate;
+            SetMoveFrameDirect(fi < 3 ? frameBase + fi : loopFrame);
+        }
+
+        private void ApplyVerticalInputForSpecialStates()
+        {
+            int state = Frame?.D?.state ?? 0;
+            if ((state != LF2States.DeepSpecific && state != LF2States.FirenSpecific) || PS.y != 0f)
+                return;
+
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null)
+                return;
+
+            if (Controller.IsUp && !Controller.IsDown)
+                PS.vz = -characterData.running_speedz;
+            else if (Controller.IsDown && !Controller.IsUp)
+                PS.vz = characterData.running_speedz;
+        }
+
+        private void ApplyDashLane(float dashDistanceZ)
+        {
+            if (Controller.IsUp && !Controller.IsDown)
+                PS.vz = -dashDistanceZ;
+            else if (Controller.IsDown && !Controller.IsUp)
+                PS.vz = dashDistanceZ;
+        }
+
+        private bool HasAnyDirectionInput()
+        {
+            return Controller.IsLeft || Controller.IsRight || Controller.IsUp || Controller.IsDown;
+        }
+
+        private bool HasHorizontalInput()
+        {
+            return Controller.IsLeft != Controller.IsRight;
+        }
+
+        private int RandomWeaponAttackFrame()
+        {
+            return RandInt(0, 2) == 0 ? LF2StandardFrames.NormalWeaponAtck : LF2StandardFrames.NormalWeaponAtck2;
         }
     }
 }

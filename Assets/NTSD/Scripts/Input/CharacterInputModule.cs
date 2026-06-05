@@ -31,7 +31,7 @@ namespace NTSD.Game
         private Vector2 _currentMoveInput = Vector2.zero;
         public Vector2 CurrentMoveInput => _currentMoveInput;
 
-        // Step D5: 方向键追踪（支持同帧多方向）
+        // 方向键追踪：支持同帧多方向变化，并写入 tick 对齐输入缓冲。
         private FuncKeyMask _lastDirectionMask = FuncKeyMask.None;
         private const float DIRECTION_DEADZONE = 0.3f;
         private bool _leftPressed;
@@ -66,8 +66,8 @@ namespace NTSD.Game
         }
 
         /// <summary>
-        ///设置显式输入ID（用于池化对象，脱离 Character Hub
-        /// /// </summary>
+        /// 设置显式输入 ID，用于战斗对象池中的角色绑定玩家输入。
+        /// </summary>
         public void SetInputID(int inputId)
         {
             _explicitInputId = inputId;

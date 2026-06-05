@@ -1,16 +1,14 @@
-using NTSD.App;
+﻿using NTSD.App;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
-using NTSD.Extensions;
 using NTSD.Simulation;
 using NTSD.Tools;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 当前对象的帧运行时信息，对应 LF2/FLF 中的 frame 状态。
+    /// 当前对象的帧运行时信息，对应 C++ release 实体的 frame/prev_frame 字段语义。
     /// </summary>
     public class LF2FrameInfo
     {
@@ -23,17 +21,6 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>当前帧 DAT 数据。</summary>
         public LF2FrameData D { get; set; }
 
-        /// <summary>帧动画辅助状态，用于震荡/循环帧序列。</summary>
-        public LF2AnimationState Ani { get; set; } = new LF2AnimationState();
-    }
-
-    /// <summary>
-    /// 帧动画辅助状态。
-    /// </summary>
-    public class LF2AnimationState
-    {
-        public int i { get; set; } = 0;
-        public bool up { get; set; } = true;
     }
 
     /// <summary>
@@ -68,9 +55,6 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>效果剩余时间。</summary>
         public int TimeOut { get; set; } = 0;
 
-        /// <summary>治疗效果附加数据。</summary>
-        public object Heal { get; set; } = null;
-
         public int OscillateDirection { get; set; } = 1;
         public int BlinkCounter { get; set; } = 0;
 
@@ -85,7 +69,6 @@ namespace NTSD.Animation.LF2Objects
             Super = false;
             TimeIn = 0;
             TimeOut = 0;
-            Heal = null;
             OscillateDirection = 1;
             BlinkCounter = 0;
         }
@@ -96,27 +79,55 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public class LF2Health
     {
+        private NTSDEntityRuntime _runtime;
+        private int _hp = 100;
+        private int _mp = 100;
+        private int _pp = 0;
+        private int _maxPP = 500;
+        private int _ppBound = 500;
+        private int _hpLost = 0;
+        private int _hpBound = 100;
+        private int _maxMP = 0;
+
+        /// <summary>
+        /// 绑定正式版实体运行时字段。绑定后 HP/MP/PP 读写都落到 Runtime，避免同一状态出现多份副本。
+        /// </summary>
+        public void BindRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null) return;
+
+            runtime.HP = HP;
+            runtime.MP = MP;
+            runtime.PP = PP;
+            runtime.PPMax = MaxPP;
+            runtime.PPBound = PPBound;
+            runtime.HPLost = HPLost;
+            runtime.HPBound = HPBound;
+            runtime.MPMax = MaxMP;
+            _runtime = runtime;
+        }
+
         /// <summary>当前生命值。</summary>
-        public int HP { get; set; } = 100;
+        public int HP { get => _runtime?.HP ?? _hp; set { if (_runtime != null) _runtime.HP = value; else _hp = value; } }
         /// <summary>当前 MP 值。</summary>
-        public int MP { get; set; } = 100;
+        public int MP { get => _runtime?.MP ?? _mp; set { if (_runtime != null) _runtime.MP = value; else _mp = value; } }
 
         /// <summary>PP 当前值。</summary>
-        public int PP { get; set; } = 0;
+        public int PP { get => _runtime?.PP ?? _pp; set { if (_runtime != null) _runtime.PP = value; else _pp = value; } }
 
         /// <summary>PP 最大值。</summary>
-        public int MaxPP { get; set; } = 500;
+        public int MaxPP { get => _runtime?.PPMax ?? _maxPP; set { if (_runtime != null) _runtime.PPMax = value; else _maxPP = value; } }
 
         /// <summary>PP 当前恢复上限。</summary>
-        public int PPBound { get; set; } = 500;
+        public int PPBound { get => _runtime?.PPBound ?? _ppBound; set { if (_runtime != null) _runtime.PPBound = value; else _ppBound = value; } }
 
         /// <summary>累计受到的 HP 伤害。</summary>
-        public int HPLost { get; set; } = 0;
+        public int HPLost { get => _runtime?.HPLost ?? _hpLost; set { if (_runtime != null) _runtime.HPLost = value; else _hpLost = value; } }
 
         /// <summary>HP 当前恢复上限。</summary>
-        public int HPBound { get; set; } = 100;
+        public int HPBound { get => _runtime?.HPBound ?? _hpBound; set { if (_runtime != null) _runtime.HPBound = value; else _hpBound = value; } }
         /// <summary>MP 最大值，用于部分伤害/资源换算。</summary>
-        public int MaxMP { get; set; } = 0;
+        public int MaxMP { get => _runtime?.MPMax ?? _maxMP; set { if (_runtime != null) _runtime.MPMax = value; else _maxMP = value; } }
     }
 
     /// <summary>
@@ -175,29 +186,23 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>最近一次命中本对象的攻击者。</summary>
         public LF2LivingObject Attacker { get; set; } = null;
 
-        /// <summary>是否是 NPC 派生对象。</summary>
-        public bool IsNpc { get; set; } = false;
-
         /// <summary>
         /// 本帧累计命中次数。正式版在帧后处理阶段用它计算平均击退速度。
         /// </summary>
-        public int HitCount { get; set; } = 1;
+        public int HitCount
+        {
+            get => Runtime.HitCount;
+            set => Runtime.HitCount = value;
+        }
 
         /// <summary>
         /// 命中确认窗口计数。部分 kind 命中会短时间影响后续帧切换。
         /// </summary>
-        public int HitConfirmEa { get; set; } = 0;
-
-        /// <summary>
-        /// HP 恢复计时器；大于 0 时按固定节奏恢复到 HPBound。
-        /// </summary>
-        public override int HealTimer { get; set; } = 0;
-
-        /// <summary>NPC 或派生对象的父对象。</summary>
-        public LF2LivingObject Parent { get; set; } = null;
-
-        /// <summary>战斗统计数据。</summary>
-        public LF2BattleStat Stat { get; private set; } = new LF2BattleStat();
+        public int HitConfirmEa
+        {
+            get => Runtime.HitConfirmEa;
+            set => Runtime.HitConfirmEa = value;
+        }
 
         #endregion
 
@@ -205,43 +210,6 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>当前帧数据包装器。</summary>
         public LF2CharacterDataWrapper _FrameDataWrapper => FrameCache?.Wrapper;
-
-        #endregion
-
-        #region 碰撞体积查询
-
-        /// <summary>
-        /// 获取当前帧身体碰撞体积。
-        /// </summary>
-        public List<PhysicsState.BattleVolume> VolBody()
-        {
-            if (PS == null || Frame.D == null) return new List<PhysicsState.BattleVolume>();
-            float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return new List<PhysicsState.BattleVolume>();
-            return PS.GetBodyVolumes(Frame.D.bodies, Frame.D.centerx, Frame.D.centery, spriteWidthPx);
-        }
-
-        /// <summary>
-        /// 获取当前帧指定 kind 的 itr 交互体积。
-        /// </summary>
-        public List<PhysicsState.BattleVolume> VolItr(int kind)
-        {
-            if (PS == null || Frame.D == null) return new List<PhysicsState.BattleVolume>();
-            var itrs = Frame.D.itrs;
-            if (itrs == null || itrs.Count == 0) return new List<PhysicsState.BattleVolume>();
-
-            float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return new List<PhysicsState.BattleVolume>();
-
-            var filtered = new List<InteractionArea>();
-            for (int i = 0; i < itrs.Count; i++)
-            {
-                if (itrs[i].kind == kind) filtered.Add(itrs[i]);
-            }
-
-            if (filtered.Count == 0) return new List<PhysicsState.BattleVolume>();
-            return PS.GetItrVolumes(filtered, Frame.D.centerx, Frame.D.centery, spriteWidthPx);
-        }
 
         #endregion
 
@@ -295,60 +263,13 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        /// <summary>
-        /// 在 [a,b] 范围内按往返方式更新下一帧。
-        /// </summary>
-        public virtual void FrameAniOscillate(int a, int b)
-        {
-            var ani = Frame?.Ani;
-            if (ani == null) return;
-
-            if (ani.i < a || ani.i > b)
-            {
-                ani.up = true;
-                ani.i = a + 1;
-            }
-
-            if (ani.i < b && ani.up)
-            {
-                Trans?.SetNext(ani.i++);
-            }
-            else if (ani.i > a && !ani.up)
-            {
-                Trans?.SetNext(ani.i--);
-            }
-
-            if (ani.i == b) ani.up = false;
-            if (ani.i == a) ani.up = true;
-        }
-
-        /// <summary>
-        /// 在 [a,b] 范围内按循环方式更新下一帧。
-        /// </summary>
-        public virtual void FrameAniSequence(int a, int b)
-        {
-            var ani = Frame?.Ani;
-            if (ani == null) return;
-
-            if (ani.i < a || ani.i > b)
-            {
-                ani.i = a + 1;
-            }
-
-            Trans?.SetNext(ani.i++);
-
-            if (ani.i > b)
-            {
-                ani.i = a;
-            }
-        }
-
         public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
         {
             int prevFn = Frame.N;
             Log.LogState(Name, "Frame", $"{Frame.N} -> {targetFrameId}");
             Frame.PN = Frame.N;
             Frame.N = targetFrameId;
+            AttackingCounter = 0;
 
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null)
@@ -369,7 +290,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 ResetStateRuntime();
 
-                HitStun = 0;
+                AttackingCounter = 0;
 
                 StateEntryEvent();
 
@@ -393,13 +314,9 @@ namespace NTSD.Animation.LF2Objects
                 Sprite.ShowPic(Frame.D.pic);
             }
 
-            if (!FrameForceEvent())
-            {
-                FrameForce();
-            }
+            FrameForce();
 
-            Trans.SetWait(Frame.D.wait, 99);
-            Trans.SetNext(Frame.D.next, 99);
+            Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
             FrameEvent();
 
             if (Frame.D != null && !string.IsNullOrEmpty(Frame.D.sound))
@@ -458,22 +375,23 @@ namespace NTSD.Animation.LF2Objects
             }
             if (HitConfirmEa > 0) HitConfirmEa--;
 
-            if (HealTimer > 0 && Health?.HP > 0)
+            if (HealTimer / 1000 == 1 && Health?.HP > 0)
             {
                 HealTimer--;
                 if ((HealTimer & 7) == 0)
                 {
-                    int newHp = Health.HP + 8;
-                    if (newHp >= Health.HPBound)
+                    if (Health.HP < Health.HPBound)
                     {
-                        Health.HP = Health.HPBound;
-                        HealTimer = 0;
+                        int newHp = Health.HP + 8;
+                        Health.HP = newHp > Health.HPBound ? Health.HPBound : newHp;
                     }
                     else
                     {
-                        Health.HP = newHp;
+                        HealTimer = 0;
                     }
                 }
+                if (HealTimer % 1000 == 0)
+                    HealTimer = 0;
             }
 
             if (ShakeTimer > 0) ShakeTimer--;
@@ -481,10 +399,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (FrameDelay != 0) return;
 
-            if (!TUForceEvent())
-            {
-                FrameForce();
-            }
+            FrameForce();
 
             ProcessEffects();
 
@@ -580,35 +495,11 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 记录攻击者统计。基类仅保留入口，具体伤害和击退在 Hit 内完成。
+        /// 应用基础伤害：扣 HP、累计 HPLost，并降低 HPBound。
         /// </summary>
-        public virtual bool Attacked(InteractionArea itr, LF2LivingObject attacker)
+        public void ApplyDirectInjury(int inj)
         {
-            // FLF character.js:2161-2167
-            // if (this.is_npc && this.parent) parent.stat.attack += inj
-            // else this.stat.attack += inj
-            return true;
-        }
-
-        /// <summary>
-        /// 记录击杀统计。NPC 派生对象会把击杀数记到父对象上。
-        /// </summary>
-        public void Killed()
-        {
-            // FLF character.js:2182-2188
-            if (IsNpc && Parent != null)
-                Parent.Stat.Kill++;
-            else
-                Stat.Kill++;
-        }
-
-        /// <summary>
-        /// 从攻击统计中抵消指定伤害值。
-        /// </summary>
-        public void OffsetAttack(int inj)
-        {
-            // FLF character.js:2175-2177
-            Stat.Attack -= inj;
+            Injury(inj);
         }
 
         /// <summary>
@@ -620,14 +511,6 @@ namespace NTSD.Animation.LF2Objects
             Health.HP -= inj;
             Health.HPLost += inj;
             Health.HPBound -= Mathf.CeilToInt(inj / 3f);
-        }
-        /// <summary>
-        /// 通过共享 kind 服务检查正式版 itr kind 别名。
-        /// </summary>
-        public bool MatchItrKind(int itrKind, int targetKind)
-        {
-            return Match?.ItrKindService?.MatchesKindAlias(itrKind, targetKind)
-                   ?? NTSDItrKindService.MatchesKindAliasValue(itrKind, targetKind);
         }
 #endregion
 
@@ -648,8 +531,8 @@ namespace NTSD.Animation.LF2Objects
         #region 直接帧切换
 
         /// <summary>
-        /// 立即写入指定帧，不经过 wait/next 推进。
-        /// 用于正式版中直接写 frame 编号的逻辑分支。
+        /// 立即写入指定帧，不经过 wait/next 推进，也不触发状态出入事件。
+        /// C++ release 的命中、抓取、cpoint 等路径多为直接写 frame 字段。
         /// </summary>
         public override void ImmediateFrame(int frameId)
         {
@@ -660,25 +543,13 @@ namespace NTSD.Animation.LF2Objects
 
             Frame.PN = Frame.N;
             Frame.N  = frameId;
-
-            bool isStateTrans = Frame.D?.state != targetFrame.state;
-            if (isStateTrans)
-                StateExitEvent();
-
             Frame.D = targetFrame;
-
-            if (isStateTrans)
-            {
-                ResetStateRuntime();
-                HitStun = 0;
-                StateEntryEvent();
-            }
+            AttackingCounter = 0;
 
             if (Frame.D != null && Frame.D.pic >= 0)
                 Sprite?.ShowPic(Frame.D.pic);
 
-            Trans.SetWait(Frame.D.wait, 99);
-            Trans.SetNext(Frame.D.next, 99);
+            Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
         }
 
         #endregion
@@ -728,8 +599,6 @@ namespace NTSD.Animation.LF2Objects
         #endregion
 
         #region 可选角色模块
-
-        public virtual NTSDCharacterStats CharacterStats => null;
 
         public virtual LF2HitCountersModule HitCounters => null;
 

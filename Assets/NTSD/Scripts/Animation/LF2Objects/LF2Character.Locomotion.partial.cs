@@ -1,20 +1,19 @@
-using NTSD.Tools;
-
 namespace NTSD.Animation.LF2Objects
 {
     public partial class LF2Character
     {
+        private int AnimCounter { get => Runtime.AnimCounter; set => Runtime.AnimCounter = value; }
+        private int AnimSub { get => Runtime.AnimSub; set => Runtime.AnimSub = value; }
+
         private bool State_Standing(string eventType, object eventData)
         {
             switch (eventType)
             {
                 case "frame":
                     if (IsHeavyWeapon())
-                        TransitionToFrame(LF2StandardFrames.HeavyObjWalk0);
+                        SetMoveFrameDirect(LF2StandardFrames.HeavyObjWalk0);
                     break;
 
-                case "combo":
-                    return ProcessStandingInputCommand(eventData as string);
             }
 
             return false;
@@ -22,59 +21,21 @@ namespace NTSD.Animation.LF2Objects
 
         private bool State_Walking(string eventType, object eventData)
         {
-            (int dx, int dz) = Controller.GetMoveInput();
-
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "walking", eventType, eventData is string);
-                    if (IsHeavyWeapon())
-                    {
-                        if (dx != 0 || dz != 0)
-                            FrameAniOscillate(LF2StandardFrames.HeavyObjWalk0, LF2StandardFrames.HeavyObjWalk3);
-                        else
-                            Trans.SetNext(Frame.N);
-                    }
-                    else
-                    {
-                        FrameAniOscillate(LF2StandardFrames.WalkingStart, LF2StandardFrames.WalkingEnd);
-                    }
-
-                    Trans.SetWait(_FrameDataWrapper.characterData.walking_frame_rate - 1);
+                    ApplyWalkRunFrame(heavy: IsHeavyWeapon());
                     return false;
 
                 case "TU":
                 {
-                    var characterData = _FrameDataWrapper?.characterData;
-                    if (characterData == null) return false;
-
-                    var xfactor = 1 - (Dirv() != 0 ? 1 : 0) * (2f / 7f);
-
-                    if (IsHeavyWeapon())
-                    {
-                        if (dx != 0) PS.vx = Dirh() * characterData.heavy_walking_speed * xfactor;
-                        PS.vz = Dirv() * characterData.heavy_walking_speedz;
-                    }
-                    else
-                    {
-                        if (dx != 0) PS.vx = Dirh() * characterData.walking_speed * xfactor;
-                        PS.vz = Dirv() * characterData.walking_speedz;
-                    }
-
-                    if (dx == 0 && dz == 0 && Trans.Next != LF2StandardFrames.LoopToStart)
-                    {
-                        Trans.SetNext(LF2StandardFrames.LoopToStart);
-                        Trans.SetWait(1, 1, 2);
-                    }
                     return false;
                 }
 
                 case "state_entry":
-                    Trans.SetWait(0);
+                    AnimCounter = 0;
+                    AnimSub = 0;
                     return false;
-
-                case "combo":
-                    return ProcessWalkingInputCommand(eventData as string);
 
                 default:
                     return false;
@@ -86,36 +47,13 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}] Event={1}", "ComboKey = {2}", "running", eventType, eventData is string);
-                    if (IsHeavyWeapon())
-                        FrameAniOscillate(LF2StandardFrames.HeavyObjRun, LF2StandardFrames.TreeJump1);
-                    else
-                        FrameAniOscillate(LF2StandardFrames.RunningStart, LF2StandardFrames.RunningEnd);
-                    if (_FrameDataWrapper?.characterData == null) return false;
-                    Trans.SetWait(_FrameDataWrapper.characterData.running_frame_rate);
-                    goto case "TU";
+                    ApplyRunningFrame();
+                    return false;
 
                 case "TU":
                 {
-                    var xfactor = 1 - (Dirv() != 0 ? 1 : 0) * (1f / 7f);
-                    var characterData = _FrameDataWrapper?.characterData;
-                    if (characterData == null) return false;
-
-                    if (IsHeavyWeapon())
-                    {
-                        PS.vx = xfactor * Dirh() * characterData.heavy_running_speed;
-                        PS.vz = Dirv() * characterData.heavy_running_speedz;
-                    }
-                    else
-                    {
-                        PS.vx = xfactor * Dirh() * characterData.running_speed;
-                        PS.vz = Dirv() * characterData.running_speedz;
-                    }
                     return false;
                 }
-
-                case "combo":
-                    return ProcessRunningInputCommand(eventData as string);
 
                 default:
                     return false;
@@ -127,38 +65,25 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    _jumpFrameTU = true;
+                    if (Frame.N == LF2StandardFrames.JumpingAir &&
+                        Frame.PN == LF2StandardFrames.JumpingUp)
+                    {
+                        ApplyJumpStartVelocity();
+                    }
+
                     if (Frame.PN == LF2StandardFrames.JumpAttack ||
                         Frame.PN == LF2StandardFrames.JumpAttack + 1)
                     {
-                        _jumpAttackLock = 2;
+                        JumpAttackLock = 2;
                     }
                     return false;
 
                 case "TU":
-                    if (_jumpFrameTU)
-                    {
-                        _jumpFrameTU = false;
-                        if (Frame.N == LF2StandardFrames.JumpingAir &&
-                            Frame.PN == LF2StandardFrames.JumpingUp)
-                        {
-                            var (dx, dz) = Controller.GetMoveInput();
-                            var characterData = _FrameDataWrapper?.characterData;
-                            if (characterData == null) return false;
-
-                            PS.vx = dx * characterData.jump_distance;
-                            PS.vz = Dirv() * characterData.jump_distancez;
-                            PS.vy = characterData.jump_height;
-                        }
-                    }
-
-                    if (_jumpAttackLock > 0)
-                        _jumpAttackLock--;
+                    if (JumpAttackLock > 0)
+                        JumpAttackLock--;
 
                     return false;
 
-                case "combo":
-                    return ProcessJumpInputCommand(eventData as string);
             }
 
             return false;
@@ -168,22 +93,13 @@ namespace NTSD.Animation.LF2Objects
         {
             switch (eventType)
             {
-                case "state_entry":
-                    if ((Frame.PN >= LF2StandardFrames.RunningStart &&
-                         Frame.PN <= LF2StandardFrames.RunningEnd) ||
-                        Frame.PN == LF2StandardFrames.Crouch)
-                    {
-                        var characterData = _FrameDataWrapper?.characterData;
-                        if (characterData == null) return false;
-
-                        PS.vx = Dirh() * characterData.dash_distance * (Frame.N == LF2StandardFrames.DashForward ? 1 : -1);
-                        PS.vz = Dirv() * characterData.dash_distancez;
-                        PS.vy = characterData.dash_height;
-                    }
+                case "frame":
+                    ApplyDashFrame();
                     return false;
 
-                case "combo":
-                    return ProcessDashInputCommand(eventData as string);
+                case "state_entry":
+                    return false;
+
             }
 
             return false;
@@ -194,18 +110,16 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}", 15, "Mixed", eventType);
                     int frameId = Frame.N;
 
                     if (frameId == LF2StandardFrames.TreeJump2)
                     {
                         if (IsHeavyWeapon())
-                            Trans.SetNext(LF2StandardFrames.HeavyObjWalk0);
+                            SetMoveFrameDirect(LF2StandardFrames.HeavyObjWalk0);
                         break;
                     }
                     else if (frameId == LF2StandardFrames.Crouch)
                     {
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧215 蹲下 → 减少等待时间");
                         Trans.IncWait(-1);
                         break;
                     }
@@ -230,8 +144,6 @@ namespace NTSD.Animation.LF2Objects
                         var D = Frame.D;
                         if (D.next == LF2StandardFrames.LoopToStart && PS.y < 0)
                         {
-                            Log.Info("[State {0}:{1}] -> Branch: {2}", 15, "Mixed", "帧54 空中轻武器投掷结束 → 返回跳跃");
-                            Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 15, "Mixed", LF2StandardFrames.JumpingAir, "空中投掷完成");
                             Trans.SetNext(LF2StandardFrames.JumpingAir);
                         }
                     }
@@ -240,11 +152,206 @@ namespace NTSD.Animation.LF2Objects
                     }
                     break;
 
-                case "combo":
-                    return ProcessStopRunningInputCommand(eventData as string);
             }
 
             return false;
+        }
+
+        private void ApplyWalkRunFrame(bool heavy)
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null || PS == null || Controller == null) return;
+
+            int rate = characterData.walking_frame_rate;
+            if (rate < 1) rate = 1;
+
+            if (AnimSub > 0) AnimSub--;
+            else if (AnimSub < 0) AnimSub++;
+
+            bool handled = false;
+            bool vxSet = false;
+            int frameBase = heavy ? LF2StandardFrames.HeavyObjWalk0 : LF2StandardFrames.WalkingStart;
+            int turnFrame = heavy ? LF2StandardFrames.HeavyObjRun : LF2StandardFrames.RunningStart;
+            float walkSpeed = heavy ? characterData.heavy_walking_speed : characterData.walking_speed;
+            float walkSpeedZ = heavy ? characterData.heavy_walking_speedz : characterData.walking_speedz;
+
+            if (Controller.IsRight && !Controller.IsLeft && PS.y == 0f)
+            {
+                handled = true;
+                if (PS.dir == "left") AnimSub = 0;
+                SwitchDir("right");
+                StepWalkAnimation(rate, frameBase);
+                PS.vx = walkSpeed;
+                vxSet = true;
+                if (InputState?.PreviousRight == false) AnimSub += 10;
+                if (AnimSub >= 11)
+                {
+                    SetMoveFrameDirect(turnFrame);
+                    AnimCounter = 0;
+                    AnimSub = 0;
+                }
+            }
+
+            if (!handled && Controller.IsLeft && !Controller.IsRight && PS.y == 0f)
+            {
+                handled = true;
+                if (PS.dir == "right") AnimSub = 0;
+                SwitchDir("left");
+                StepWalkAnimation(rate, frameBase);
+                PS.vx = -walkSpeed;
+                vxSet = true;
+                if (InputState?.PreviousLeft == false) AnimSub -= 10;
+                if (AnimSub <= -11)
+                {
+                    SetMoveFrameDirect(turnFrame);
+                    AnimCounter = 0;
+                    AnimSub = 0;
+                }
+            }
+
+            if (Controller.IsUp && !Controller.IsDown && PS.y == 0f)
+            {
+                if (!vxSet)
+                    StepWalkAnimation(rate, frameBase);
+                PS.vz = -walkSpeedZ;
+                PS.vx *= 5f / 7f;
+            }
+
+            if (Controller.IsDown && !Controller.IsUp && PS.y == 0f)
+            {
+                if (!vxSet)
+                    StepWalkAnimation(rate, frameBase);
+                PS.vz = walkSpeedZ;
+                PS.vx *= 5f / 7f;
+            }
+        }
+
+        private void StepWalkAnimation(int rate, int frameBase)
+        {
+            AnimCounter = (AnimCounter + 1) % (rate * 6);
+            int fi = AnimCounter / rate;
+            int frameId = fi < 4 ? frameBase + fi : frameBase + (6 - fi);
+            SetMoveFrameDirect(frameId);
+        }
+
+        private void ApplyRunningFrame()
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null || PS == null || Controller == null) return;
+
+            int runRate = characterData.running_frame_rate;
+            if (runRate < 1) runRate = 1;
+
+            AttackingCounter = 0;
+            AnimCounter = (AnimCounter + 1) % (runRate * 4);
+            int fi = AnimCounter / runRate;
+
+            bool heavy = IsHeavyWeapon();
+            if (heavy)
+            {
+                SetMoveFrameDirect(fi < 3 ? LF2StandardFrames.HeavyObjRun + fi : LF2StandardFrames.TreeJump0);
+                PS.vx = PS.dir == "right" ? characterData.heavy_running_speed : -characterData.heavy_running_speed;
+                if ((PS.dir == "right" && Controller.IsLeft) || (PS.dir == "left" && Controller.IsRight))
+                    SetMoveFrameDirect(LF2StandardFrames.TreeJump2);
+                ApplyRunLane(characterData.heavy_running_speedz);
+                return;
+            }
+
+            SetMoveFrameDirect(fi < 3 ? LF2StandardFrames.RunningStart + fi : LF2StandardFrames.Running1);
+            PS.vx = PS.dir == "right" ? characterData.running_speed : -characterData.running_speed;
+            if ((PS.dir == "right" && Controller.IsLeft) || (PS.dir == "left" && Controller.IsRight))
+                SetMoveFrameDirect(LF2StandardFrames.StopRunning);
+            ApplyRunLane(characterData.running_speedz);
+        }
+
+        private void ApplyRunLane(float speedZ)
+        {
+            if (Controller.IsUp && !Controller.IsDown)
+            {
+                PS.vz = -speedZ;
+                PS.vx *= 5f / 6f;
+            }
+            else if (Controller.IsDown && !Controller.IsUp)
+            {
+                PS.vz = speedZ;
+                PS.vx *= 5f / 6f;
+            }
+        }
+
+        private void ApplyDashFrame()
+        {
+            if (PS == null || Controller == null) return;
+
+            if (Controller.IsRight && !Controller.IsLeft) SwitchDir("right");
+            else if (Controller.IsLeft && !Controller.IsRight) SwitchDir("left");
+
+            bool facingRight = PS.dir == "right";
+            if (facingRight)
+            {
+                if (Frame.N != LF2StandardFrames.DashBack2 && PS.vx < 0f)
+                    SetMoveFrameDirect(LF2StandardFrames.DashForward2);
+                else if (PS.vx > 0f && Frame.N != LF2StandardFrames.DashBack)
+                    SetMoveFrameDirect(LF2StandardFrames.DashForward);
+            }
+            else
+            {
+                if (PS.vx > 0f && Frame.N != LF2StandardFrames.DashBack2)
+                    SetMoveFrameDirect(LF2StandardFrames.DashForward2);
+                else if (PS.vx < 0f && Frame.N != LF2StandardFrames.DashBack)
+                    SetMoveFrameDirect(LF2StandardFrames.DashForward);
+            }
+        }
+
+        private void ApplyJumpStartVelocity()
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null || PS == null || Controller == null) return;
+
+            PS.vy = characterData.jump_height;
+            if (Controller.IsRight && !Controller.IsLeft)
+            {
+                PS.vx = characterData.jump_distance;
+                SwitchDir("right");
+            }
+            else if (Controller.IsLeft && !Controller.IsRight)
+            {
+                PS.vx = -characterData.jump_distance;
+                SwitchDir("left");
+            }
+
+            if (Controller.IsUp && !Controller.IsDown)
+                PS.vz = -characterData.jump_distancez;
+            else if (Controller.IsDown && !Controller.IsUp)
+                PS.vz = characterData.jump_distancez;
+        }
+
+        private void ApplyDashStartVelocity(bool forward)
+        {
+            var characterData = _FrameDataWrapper?.characterData;
+            if (characterData == null || PS == null || Controller == null) return;
+
+            float sign = PS.dir == "right" ? 1f : -1f;
+            PS.vx = sign * characterData.dash_distance * (forward ? 1f : -1f);
+            PS.vy = characterData.dash_height;
+            if (Controller.IsUp && !Controller.IsDown)
+                PS.vz = -characterData.dash_distancez;
+            else if (Controller.IsDown && !Controller.IsUp)
+                PS.vz = characterData.dash_distancez;
+            AnimSub = 0;
+        }
+
+        private void SetMoveFrameDirect(int frameId)
+        {
+            LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);
+            if (targetFrame == null || Frame == null) return;
+
+            Frame.PN = Frame.N;
+            Frame.N = frameId;
+            Frame.D = targetFrame;
+            if (Frame.D.pic >= 0)
+                Sprite?.ShowPic(Frame.D.pic);
+            Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
+            Runtime.NextFrame = Frame.D.next;
         }
     }
 }

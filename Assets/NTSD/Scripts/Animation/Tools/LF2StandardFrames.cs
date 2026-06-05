@@ -1,14 +1,8 @@
 namespace NTSD.Animation
 {
     /// <summary>
-    /// LF2/NTSD 标准帧ID配置
-    /// 基于 NTSD 2.4.1 实际DAT文件分析（79个角色，122个通用帧）
-    /// 所有角色必须遵循此标准
-    ///
-    /// 数据来源:
-    /// - NTSD 2.4.1 DAT 文件批量分析（60%覆盖率阈值）
-    /// - 分析日期: 2025-12-21
-    /// - 参考文档: I:\C++Test\NTSD\LF2StandardFrames对照分析报告.md
+    /// NTSD 战斗 DAT 常用帧 ID。
+    /// 这些常量只描述数据约定，具体帧切换仍以 C++ release 战斗逻辑和当前 DAT 为准。
     /// </summary>
     public static class LF2StandardFrames
     {
@@ -213,13 +207,13 @@ namespace NTSD.Animation
         /// <summary>抓取 (60.8%)</summary>
         public const int Catching = 120;
 
-        /// <summary>抓取攻击1 - LF2 源码 character.js:742</summary>
+        /// <summary>抓取攻击1。</summary>
         public const int CatchingAttack1 = 121;
 
-        /// <summary>抓取攻击2 - LF2 源码 character.js:742</summary>
+        /// <summary>抓取攻击2。</summary>
         public const int CatchingAttack2 = 122;
 
-        /// <summary>抓取成功 - LF2 源码 character.js:742-745</summary>
+        /// <summary>抓取成功。</summary>
         public const int CatchingSuccess = 123;
 
         // ==================== 被抓状态 (130-144) ====================
@@ -394,22 +388,22 @@ namespace NTSD.Animation
         /// <summary>背面躺地 (59.5%)</summary>
         public const int LyingBack = 231;
 
-        /// <summary>投掷躺地者0 - LF2 源码 character.js:747-748</summary>
+        /// <summary>投掷躺地者0。</summary>
         public const int ThrowLyingDown = 233;
 
-        /// <summary>投掷躺地者1 - LF2 源码 character.js:747-748</summary>
+        /// <summary>投掷躺地者1。</summary>
         public const int ThrowLyingDown1 = 234;
 
-        /// <summary>Rudolf 变身帧 - LF2 源码 character.js:750-752</summary>
+        /// <summary>变身帧。</summary>
         public const int RudolfTransform = 240;
 
-        /// <summary>笛子攻击伤害帧 - LF2 源码 character.js:534-538</summary>
+        /// <summary>笛子攻击伤害帧。</summary>
         public const int FluteAttackDamage = 251;
 
-        /// <summary>飞行撞击帧 - LF2 源码 character.js:499-500</summary>
+        /// <summary>飞行撞击帧。</summary>
         public const int FlyingCrash = 253;
 
-        /// <summary>消失帧 - LF2 源码 character.js:1183-1185</summary>
+        /// <summary>消失帧。</summary>
         public const int Disappear = 257;
 
         // ==================== NTSD 特有帧 (395-399) ====================
@@ -431,13 +425,10 @@ namespace NTSD.Animation
 
         // ==================== 特殊值 ====================
 
-        /// <summary>
-        /// ⚠️ 未验证 - 停止速度（未在NTSD通用帧分析中出现，可能为LF2原版特有）
-        /// 如确认NTSD未使用，请删除此定义
-        /// </summary>
+        /// <summary>next 哨兵值：停止当前帧推进。</summary>
         public const int StopSpeed = 550;
 
-        /// <summary>返回站立状态 (LF2标准)</summary>
+        /// <summary>next 哨兵值：返回站立帧。</summary>
         public const int LoopToStart = 999;
 
         // ==================== 辅助方法 ====================
