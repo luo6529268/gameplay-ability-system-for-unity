@@ -38,6 +38,7 @@ namespace NTSD.Animation
         protected override void Awake()
         {
             base.Awake();
+            NormalizeTransform(transform);
 
             _availableObjects = new LinkedList<GameObject>();
             _activeObjects = new HashSet<GameObject>();
@@ -76,7 +77,7 @@ namespace NTSD.Animation
             GameObject go;
             if (_cachedLF2ObjectPrefab != null)
             {
-                go = Instantiate(_cachedLF2ObjectPrefab,this.transform);
+                go = Instantiate(_cachedLF2ObjectPrefab, _poolRoot != null ? _poolRoot : this.transform);
                 go.layer = LayerMask.NameToLayer("Battle");
             }
             else
@@ -89,6 +90,8 @@ namespace NTSD.Animation
                 entityModel.AddComponent<SpriteRenderer>();
                 entityModel.AddComponent<LF2ObjectRenderer>();
             }
+
+            NormalizeTransform(go.transform, resetScale: false);
 
             go.SetActive(false);
 
@@ -135,8 +138,9 @@ namespace NTSD.Animation
             go = _availableObjects.First.Value;
             _availableObjects.RemoveFirst();
 
-            //if (_activeRoot != null)
-            go.transform.SetParent(this.transform, false);
+            Transform activeParent = _activeRoot != null ? _activeRoot : this.transform;
+            go.transform.SetParent(activeParent, false);
+            NormalizeTransform(go.transform, resetScale: false);
 
             go.SetActive(true);
             _activeObjects.Add(go);
@@ -268,5 +272,14 @@ namespace NTSD.Animation
 
         public string GetPoolStatus() =>
             $"Available: {_availableObjects.Count}, Active: {_activeObjects.Count}";
+
+        private static void NormalizeTransform(Transform target, bool resetScale = true)
+        {
+            if (target == null) return;
+            target.localPosition = Vector3.zero;
+            target.localRotation = Quaternion.identity;
+            if (resetScale)
+                target.localScale = Vector3.one;
+        }
     }
 }

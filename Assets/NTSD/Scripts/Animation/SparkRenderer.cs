@@ -23,7 +23,7 @@ namespace NTSD.Animation
         private bool _loaded = false;
 
         private readonly List<SpriteRenderer> _activeThisFrame = new List<SpriteRenderer>(32);
-        private readonly List<LF2LivingObject> _objectScratch  = new List<LF2LivingObject>(128);
+        private readonly List<LF2Entity> _objectScratch  = new List<LF2Entity>(128);
 
         // ========== Unity 生命周期 ==========
         private void Awake()
@@ -46,10 +46,10 @@ namespace NTSD.Animation
             if (world == null) { Debug.LogWarning("[SparkRenderer] world is null"); return; }
             if (!_loaded) { Debug.LogWarning("[SparkRenderer] not loaded"); return; }
 
-            world.GetAllLivingObjects(_objectScratch);
+            world.GetAllEntities(_objectScratch);
             for (int i = 0; i < _objectScratch.Count; i++)
             {
-                LF2LivingObject obj = _objectScratch[i];
+                LF2Entity obj = _objectScratch[i];
                 int slotCount = obj.SparkSlotCount;
                 if (slotCount <= 0) continue;
                 RenderObjectSlots(obj, slotCount, pool);
@@ -100,7 +100,7 @@ namespace NTSD.Animation
             return Sprite.Create(tex, rect, pivot, 100f);
         }
 
-        private void RenderObjectSlots(LF2LivingObject obj, int slotCount, LF2ObjectPool pool)
+        private void RenderObjectSlots(LF2Entity obj, int slotCount, LF2ObjectPool pool)
         {
             int j = 0;
             while (j < obj.SparkSlotCount)
@@ -118,9 +118,7 @@ namespace NTSD.Animation
                 float wx = wpos.x;
                 float screenY = wpos.y;
                 float sortZ = wpos.z;
-                const float ppu = 100f;
-                float unityX = wx / ppu;
-                float unityY = PhysicsState.ScreenYToUnityY(screenY);
+                Vector3 unityPos = NTSDRenderSpace.ScreenPixelToWorld(wx, screenY, 0f);
 
                 if (pool != null)
                 {
@@ -128,7 +126,8 @@ namespace NTSD.Animation
                     if (sr != null)
                     {
                         sr.sprite = sprite;
-                        sr.transform.position = new Vector3(unityX, unityY, 0f);
+                        sr.transform.position = unityPos;
+                        sr.transform.localScale = NTSDRenderSpace.RenderScale;
                         sr.sortingLayerName = "Object";
                         sr.sortingOrder = Mathf.Abs(Mathf.RoundToInt(sortZ)) + 1;
                         _activeThisFrame.Add(sr);

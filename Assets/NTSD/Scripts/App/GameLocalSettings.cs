@@ -3,7 +3,8 @@ using UnityEngine;
 namespace NTSD.App
 {
     /// <summary>
-    /// 本地游戏设置管理器，使用 PlayerPrefs 持久化存储。设置变化时触发 GameSettingsChangedEvent。
+    /// 本地持久化游戏设置，底层使用 PlayerPrefs。
+    /// 设置变化时会触发 GameSettingsChangedEvent。
     /// </summary>
     public static class GameLocalSettings
     {

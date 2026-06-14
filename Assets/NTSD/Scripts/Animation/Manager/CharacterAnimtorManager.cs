@@ -812,20 +812,6 @@ namespace NTSD.Animation
         {
             Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {TotalCharacterFrameConfig.Count}</color>");
 
-            TransparentColorData transparentData = new TransparentColorData
-            {
-                targetColor = new Color(0f, 0f, 0f),
-                colorTolerance = 0.031f,
-                preserveEdgeColors = true,
-                edgeSmoothing = 0.5f,
-                borderColor = new Color(0f, 1f, 0f),
-                borderTolerance = 0.12f,
-                searchRadius = 6,
-                useEdgeDetection = true,
-                edgeDetectionRadius = 2,
-                edgeThreshold = 0.5f
-            };
-
             var allFileInfos = new List<(int characterId, SpriteFileInfo fileInfo)>();
 
             foreach (var config in TotalCharacterFrameConfig.Values)
@@ -848,16 +834,16 @@ namespace NTSD.Animation
             Debug.Log($"<color=cyan>共 {allFileInfos.Count} 个文件需要处理</color>");
 
             int totalCreated = 0;
-            int concurrentLimit = System.Environment.ProcessorCount;
-            var semaphore = new System.Threading.SemaphoreSlim(concurrentLimit);
+            int concurrentLimit = Mathf.Clamp(System.Environment.ProcessorCount, 1, 4);
+            var cpuSemaphore = new System.Threading.SemaphoreSlim(concurrentLimit);
+            var uploadSemaphore = new System.Threading.SemaphoreSlim(1);
             var pendingTasks = new List<UniTask>();
 
             foreach (var (characterId, fileInfo) in allFileInfos)
             {
-                await semaphore.WaitAsync();
-
-                var task = ProcessAndCreateSpritesAsync(characterId, fileInfo, transparentData, onProgressText, semaphore)
-                    .ContinueWith(count => { totalCreated += count; });
+                await cpuSemaphore.WaitAsync();
+                var task = ProcessAndCreateSpritesAsync(characterId, fileInfo, onProgressText, cpuSemaphore, uploadSemaphore)
+                    .ContinueWith(count => System.Threading.Interlocked.Add(ref totalCreated, count));
                 pendingTasks.Add(task);
             }
 
@@ -982,15 +968,19 @@ namespace NTSD.Animation
         }
 
         private async UniTask<int> ProcessAndCreateSpritesAsync(int characterId, SpriteFileInfo fileInfo,
-            TransparentColorData transparentData, Action<string> onProgressText, System.Threading.SemaphoreSlim semaphore)
+            Action<string> onProgressText,
+            System.Threading.SemaphoreSlim cpuSemaphore,
+            System.Threading.SemaphoreSlim uploadSemaphore)
         {
             int created = 0;
+            bool cpuSemaphoreHeld = true;
+            bool uploadSemaphoreHeld = false;
             try
             {
                 string filePath = fileInfo.filePath;
                 onProgressText?.Invoke(FormatLoadingResourcePath(filePath));
 
-                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
+                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData32(filePath));
                 if (bmpData == null || bmpData.Pixels == null)
                 {
                     return 0;
@@ -998,7 +988,7 @@ namespace NTSD.Animation
 
                 int textureWidth = bmpData.Width;
                 int textureHeight = bmpData.Height;
-                Color[] sourcePixels = bmpData.Pixels;
+                Color32[] sourcePixels = bmpData.Pixels;
 
                 int expectedWidth = fileInfo.col * (fileInfo.width + 1);
                 int expectedHeight = fileInfo.row * (fileInfo.height + 1);
@@ -1024,35 +1014,42 @@ namespace NTSD.Animation
                 int row = actualRow;
                 int col = actualCol;
 
-                var processedSlices = await UniTask.RunOnThreadPool(() =>
-                    RuntimeSpriteProcessor.SliceAndProcessPixels(
-                        sourcePixels, textureWidth, textureHeight,
-                        spriteWidth, spriteHeight, row, col, transparentData));
+                var processedSheet = await UniTask.RunOnThreadPool(() =>
+                    RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels));
+                var spriteRects = RuntimeSpriteProcessor.BuildSpriteRectsFromTopLeft(
+                    textureWidth, textureHeight, spriteWidth, spriteHeight, row, col);
 
-                if (processedSlices == null || processedSlices.Count == 0)
+                if (processedSheet == null || processedSheet.Length == 0 || spriteRects == null || spriteRects.Count == 0)
                 {
                     return 0;
                 }
 
+                cpuSemaphore.Release();
+                cpuSemaphoreHeld = false;
+
+                await uploadSemaphore.WaitAsync();
+                uploadSemaphoreHeld = true;
                 await UniTask.SwitchToMainThread();
 
                 var allSprites = MergedSprites[characterId];
-                for (int i = 0; i < processedSlices.Count; i++)
+                var texture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels32(processedSheet);
+                texture.Apply(false, true);
+                texture.name = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+                for (int i = 0; i < spriteRects.Count; i++)
                 {
-                    var slice = processedSlices[i];
-                    var texture = new Texture2D(slice.Width, slice.Height, TextureFormat.RGBA32, false);
-                    texture.filterMode = FilterMode.Point;
-                    texture.wrapMode = TextureWrapMode.Clamp;
-                    texture.SetPixels(slice.Pixels);
-                    texture.Apply();
+                    var spriteRect = spriteRects[i];
 
                     Sprite sprite = Sprite.Create(
                         texture,
-                        new Rect(0, 0, slice.Width, slice.Height),
+                        spriteRect.Rect,
                         new Vector2(0.5f, 0f),
                         100f
                     );
-                    sprite.name = slice.Name;
+                    sprite.name = spriteRect.Name;
 
                     int targetIndex = fileInfo.startFrame + i;
                     if (targetIndex >= 0 && targetIndex < allSprites.Count && targetIndex <= fileInfo.endFrame)
@@ -1061,6 +1058,9 @@ namespace NTSD.Animation
                         created++;
                     }
                 }
+                await UniTask.Yield();
+                uploadSemaphore.Release();
+                uploadSemaphoreHeld = false;
             }
             catch (System.Exception e)
             {
@@ -1068,9 +1068,11 @@ namespace NTSD.Animation
             }
             finally
             {
-                semaphore.Release();
+                if (cpuSemaphoreHeld)
+                    cpuSemaphore?.Release();
+                if (uploadSemaphoreHeld)
+                    uploadSemaphore?.Release();
             }
-
             return created;
         }
 

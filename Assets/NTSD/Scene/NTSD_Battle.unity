@@ -1351,7 +1351,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318901073}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.72, y: -9.2, z: 0}
+  m_LocalPosition: {x: 2.13, y: -9.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2937,7 +2937,7 @@ GameObject:
   - component: {fileID: 916859860}
   m_Layer: 0
   m_Name: HUDCamera
-  m_TagString: MainCamera
+  m_TagString: UICamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3727,7 +3727,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1103227591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.83, y: -9.2, z: 0}
+  m_LocalPosition: {x: -3.99, y: -9.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3923,9 +3923,6 @@ MonoBehaviour:
   overrideCharacterIds: 0200000002000000
   autoResume: 1
   delayFrames: 1
-  forceWalkingMode: 0
-  forceRunningMode: 0
-  logForceStateToggle: 0
 --- !u!4 &1196249766
 Transform:
   m_ObjectHideFlags: 0
@@ -5878,10 +5875,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugLogPerTick: 0
   startPaused: 1
+  lockstepSettings:
+    driveMode: 0
+    useUnscaledTime: 1
+    maxCatchUpTicksPerFrame: 1
+    maxBacklogTicks: 8
+    inputDelayTicks: 0
+    requireInputFrameReady: 0
+    enableFrameChecksum: 0
   currentTickIndex: 0
   timeAccumulator: 0
   objectCount: 0
   paused: 1
+  renderAlpha: 0
+  backlogTickCount: 0
 --- !u!4 &1977210493
 Transform:
   m_ObjectHideFlags: 0
@@ -6219,7 +6226,7 @@ GameObject:
   - component: {fileID: 2051450409}
   m_Layer: 0
   m_Name: ScenesCamera
-  m_TagString: UICamera
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

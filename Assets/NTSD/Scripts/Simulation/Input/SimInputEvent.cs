@@ -2,50 +2,31 @@ using NTSD.Input;
 
 namespace NTSD.Simulation
 {
-	/// <summary>
-	/// 模拟输入事件。
-	///
-	/// 职责：
-	/// - 存储单个输入事件（按键按下/抬起）
-	/// - 按 tickIndex 组织，确保确定性
-	///
-	/// 架构原则：
-	/// - 纯数据结构（struct）
-	/// - 不可变（readonly fields）
-	/// - 可序列化，便于战斗回放验证
-	/// </summary>
-	public struct SimInputEvent
-	{
-		/// <summary>
-		/// 事件发生的 Tick 索引
-		/// 对应 C++ release 的 30Hz 战斗逻辑 tick。
-		/// </summary>
-		public readonly int tickIndex;
+    /// <summary>
+    /// 记录在某个模拟逻辑帧上的不可变输入事件。
+    /// </summary>
+    public struct SimInputEvent
+    {
+        /// <summary>
+        /// 目标 30Hz 逻辑帧序号。
+        /// </summary>
+        public readonly int tickIndex;
 
-		/// <summary>
-		/// 按键类型（左/右/上/下/攻击/跳跃/防御等）
-		/// 对应正式输入模块的方向/攻击/跳跃/防御按键掩码。
-		/// </summary>
-		public readonly FuncKeyMask key;
+        /// <summary>
+        /// 逻辑按键掩码。
+        /// </summary>
+        public readonly FuncKeyMask key;
 
-		/// <summary>
-		/// 按键状态
-		/// - true: 按下（pressed）
-		/// - false: 抬起（released）
-		/// </summary>
-		public readonly bool down;
+        /// <summary>
+        /// `true` 表示按下，`false` 表示抬起。
+        /// </summary>
+        public readonly bool down;
 
-		/// <summary>
-		/// 创建输入事件
-		/// </summary>
-		/// <param name="tickIndex">目标 Tick 索引</param>
-		/// <param name="key">按键类型</param>
-		/// <param name="down">按下/抬起</param>
-		public SimInputEvent(int tickIndex, FuncKeyMask key, bool down)
-		{
-			this.tickIndex = tickIndex;
-			this.key = key;
-			this.down = down;
-		}
-	}
+        public SimInputEvent(int tickIndex, FuncKeyMask key, bool down)
+        {
+            this.tickIndex = tickIndex;
+            this.key = key;
+            this.down = down;
+        }
+    }
 }

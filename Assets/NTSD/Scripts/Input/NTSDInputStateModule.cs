@@ -50,6 +50,7 @@ namespace NTSD.Input
         public bool Defend => _defend;
         public bool PreviousRight => _prevRight;
         public bool PreviousLeft => _prevLeft;
+        public bool PreviousJump => _prevJump;
         public int RightCooldown => _cdRight;
         public int LeftCooldown => _cdLeft;
         public int UpCooldown => _cdUp;
@@ -92,8 +93,8 @@ namespace NTSD.Input
                 ApplyEvent(evt.key, evt.down);
                 if (!evt.down) continue;
 
-                owner?.RecordInputKey(FuncKeyMaskToNtsdCode(evt.key));
                 SetEdgeCooldown(evt.key);
+                PushInputHistory(owner, evt.key);
             }
         }
 
@@ -334,6 +335,21 @@ namespace NTSD.Input
                 FuncKeyMask.up => 8,
                 _ => -1,
             };
+        }
+
+        private static void PushInputHistory(LF2Character owner, FuncKeyMask key)
+        {
+            if (owner?.Runtime?.InputHistory == null || owner.Runtime.InputHistory.Length < 6)
+                return;
+
+            int code = FuncKeyMaskToNtsdCode(key);
+            if (code < 0)
+                return;
+
+            int[] history = owner.Runtime.InputHistory;
+            for (int i = history.Length - 1; i > 0; i--)
+                history[i] = history[i - 1];
+            history[0] = code;
         }
 
         private enum ComboMode

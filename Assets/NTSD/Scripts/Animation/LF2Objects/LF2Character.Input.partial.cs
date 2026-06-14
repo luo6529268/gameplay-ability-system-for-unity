@@ -78,7 +78,7 @@ namespace NTSD.Animation.LF2Objects
                 AnimSub = 0;
                 AttackingCounter = 0;
 
-                if (_heldWeapon == null || linkState == 0)
+                if (!HasHeldObject() || linkState == 0)
                 {
                     if (HitConfirmEa > 0 && FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch) != null)
                     {
@@ -135,23 +135,22 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyHeldWeaponStandingAttack()
         {
-            if (_heldWeapon == null)
+            if (!HasHeldObject())
                 return;
 
-            if ((_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
+            if (IsHeldHeavyWeapon())
             {
                 ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
                 return;
             }
 
-            if (NTSDSpec.CanJustThrowWeapon(_heldWeapon.ObjectId) ||
-                NTSDSpec.CanStandThrowWeapon(_heldWeapon.ObjectId))
+            if (CanHeldObjectStandThrow())
             {
                 ImmediateFrame(LF2StandardFrames.LightWeaponThw);
                 return;
             }
 
-            if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            if (IsHeldObjectAttackable())
                 ImmediateFrame(RandomWeaponAttackFrame());
         }
 
@@ -190,7 +189,7 @@ namespace NTSD.Animation.LF2Objects
             if (Controller.IsAttack && (InputState?.AttackCooldown ?? 0) > 0)
             {
                 handled = true;
-                if (_heldWeapon == null || linkState == 0)
+                if (!HasHeldObject() || linkState == 0)
                 {
                     if (TrySpendFramePpCost(LF2StandardFrames.RunAttack))
                         ImmediateFrame(LF2StandardFrames.RunAttack);
@@ -231,22 +230,22 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyHeldWeaponRunningAttack()
         {
-            if (_heldWeapon == null)
+            if (!HasHeldObject())
                 return;
 
-            if ((_heldWeapon as LF2WeaponBase)?.IsHeavy == true)
+            if (IsHeldHeavyWeapon())
             {
                 ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
                 return;
             }
 
-            if (HasHorizontalInput() && NTSDSpec.CanRunThrowWeapon(_heldWeapon.ObjectId))
+            if (HasHorizontalInput() && CanHeldObjectRunThrow())
             {
                 ImmediateFrame(LF2StandardFrames.LightWeaponThw);
                 return;
             }
 
-            if (NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            if (IsHeldObjectAttackable())
                 ImmediateFrame(LF2StandardFrames.RunWeaponAtck);
         }
 
@@ -259,7 +258,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             int linkState = Runtime.LinkState;
-            if (_heldWeapon == null || linkState == 0)
+            if (!HasHeldObject() || linkState == 0)
             {
                 AttackingCounter = 0;
                 TrySpendFramePpCost(LF2StandardFrames.JumpAttack, clampOnOverdraw: true);
@@ -274,7 +273,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
             }
-            else if (_heldWeapon != null && NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            else if (IsHeldObjectAttackable())
             {
                 ImmediateFrame(HasHorizontalInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
             }
@@ -291,7 +290,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             int linkState = Runtime.LinkState;
-            if (_heldWeapon == null || linkState == 0)
+            if (!HasHeldObject() || linkState == 0)
             {
                 if (TrySpendFramePpCost(LF2StandardFrames.DashAttack))
                     ImmediateFrame(LF2StandardFrames.DashAttack);
@@ -311,7 +310,7 @@ namespace NTSD.Animation.LF2Objects
                     AttackingCounter = 0;
                 }
             }
-            else if (_heldWeapon != null && NTSDSpec.IsWeaponAttackable(_heldWeapon.ObjectId))
+            else if (IsHeldObjectAttackable())
             {
                 ImmediateFrame(LF2StandardFrames.DashWeaponAtck);
             }

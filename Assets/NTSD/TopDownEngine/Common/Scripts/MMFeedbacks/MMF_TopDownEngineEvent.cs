@@ -20,15 +20,6 @@ namespace MoreMountains.TopDownEngine
 		#if UNITY_EDITOR
 			public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.EventsColor; } }
 		#endif
-		
-		[MMFInspectorGroup("TopDown Engine Events", true, 17)]
-
-		/// the type of event to trigger
-		[Tooltip("the type of event to trigger")]
-		public TopDownEngineEventTypes EventType = TopDownEngineEventTypes.PauseNoMenu;
-		/// an optional Character to pass to the event
-		[Tooltip("an optional Character to pass to the event")]
-		public Character TargetCharacter;
 
 		/// <summary>
 		/// On play, we ask for a floating text to be spawned
@@ -39,7 +30,6 @@ namespace MoreMountains.TopDownEngine
 		{
 			if (Active)
 			{
-				TopDownEngineEvent.Trigger(EventType, TargetCharacter);
 			}
 		}
 	}

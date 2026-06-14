@@ -3,18 +3,15 @@ using NTSD.Animation.LF2Objects;
 namespace NTSD.Animation
 {
     /// <summary>
-    /// 帧切换请求和 C++ release 风格的 frame_tick 适配器。
-    /// wait_counter 保存上一 tick 结束时的 frame id；attacking 才是 wait 计数。
+    /// C++ release 风格的 frame_tick 适配器。
+    /// wait_counter 保存上一 tick 结束时的 frame id，真正的等待计数使用 attacking。
     /// </summary>
     public class FrameTransistor
     {
         private int wait = 1;
-        private int waitCounter = 0;
+        private int waitCounter;
         private int next = 999;
-        private int requestPriority = 0;
-        private int priorityRelease = 1;
         private bool switchDirAfterTrans;
-        private bool hasFrameRequest;
 
         private readonly LF2Entity _entity;
 
@@ -32,60 +29,46 @@ namespace NTSD.Animation
         /// <summary>
         /// 请求切换到指定帧，并让下一次 Trans 立即处理。
         /// </summary>
-        public void Frame(int frameId, int au = 0)
+        public void Frame(int frameId)
         {
-            SetNext(frameId, au);
-            SetWait(0, au);
+            SetNext(frameId);
+            SetWait(0);
         }
 
         /// <summary>
-        /// 设置当前帧 wait 值。C++ 的攻击计数不因改 wait 自动清零。
+        /// 设置当前帧等待值。
         /// </summary>
-        public void SetWait(int value, int au = 0, int outCount = 1)
+        public void SetWait(int value)
         {
-            if (au == 99) au = requestPriority;
-            if (au < requestPriority) return;
-
-            requestPriority = au;
-            priorityRelease = outCount == 99 ? wait : outCount;
             wait = value < 0 ? 0 : value;
             SyncRuntime();
         }
 
-        /// <summary>
-        /// 调整当前帧 wait 值。
-        /// </summary>
-        public void IncWait(int inc, int au = 0, int outCount = 1)
+        public void SetWait(int value, int directWaitCounter)
         {
-            if (au == 99) au = requestPriority;
-            if (au < requestPriority) return;
+            wait = value < 0 ? 0 : value;
+            waitCounter = directWaitCounter;
+            SyncRuntime();
+        }
 
-            requestPriority = au;
-            priorityRelease = outCount == 99 ? wait : outCount;
+        /// <summary>
+        /// 调整当前帧等待值。
+        /// </summary>
+        public void IncWait(int inc)
+        {
             wait += inc;
-            if (wait < 0) wait = 0;
+            if (wait < 0)
+                wait = 0;
+
             SyncRuntime();
         }
 
         /// <summary>
         /// 设置下一帧请求。
+        /// 负帧沿用现有 Unity 约定：记录翻面请求，实际换帧时再应用。
         /// </summary>
-        public void SetNext(int value, int au = 0, int outCount = 1)
+        public void SetNext(int value)
         {
-            if (au == 99) au = requestPriority;
-            if (au < requestPriority)
-            {
-                NTSD.Tools.Log.LogState(_entity?.Name, "FrameRequest",
-                    $"SetNext({value}) BLOCKED: priority={au} < active={requestPriority}",
-                    NTSD.Tools.Log.StateLogLevel.Warn);
-                return;
-            }
-
-            NTSD.Tools.Log.LogState(_entity?.Name, "FrameRequest",
-                $"SetNext({value}) OK: priority {requestPriority}->{au}");
-            requestPriority = au;
-            priorityRelease = outCount == 99 ? wait : outCount;
-
             if (value < 0)
             {
                 value = -value;
@@ -93,13 +76,13 @@ namespace NTSD.Animation
             }
 
             next = value;
-            hasFrameRequest = true;
             SyncRuntime();
         }
 
         /// <summary>
-        /// 直接写帧后的同步入口。directWaitCounter 对应 C++ Entity::wait_counter，
-        /// 也就是上一 tick 保存的 frame id，不是等待倒计时。
+        /// 直接写帧后的同步入口。
+        /// directWaitCounter 对应 C++ Entity::wait_counter，也就是上一 tick 保存的 frame id，
+        /// 不是等待倒计时。
         /// </summary>
         public void SyncDirectFrameData(int frameWait, int frameNext, int directWaitCounter = int.MinValue)
         {
@@ -108,94 +91,113 @@ namespace NTSD.Animation
             if (directWaitCounter != int.MinValue)
                 waitCounter = directWaitCounter;
 
-            requestPriority = 0;
-            priorityRelease = 1;
             switchDirAfterTrans = false;
-            hasFrameRequest = false;
             SyncRuntime();
         }
 
         /// <summary>
-        /// 释放临时高优先级帧请求门。
-        /// </summary>
-        public void ResetLock(int au = 0)
-        {
-            if (au == 99) au = requestPriority;
-            if (au < requestPriority) return;
-
-            requestPriority = 0;
-            SyncRuntime();
-        }
-
-        /// <summary>
-        /// C++ release next 哨兵语义：999 和 1280 解析为 frame 0。
+        /// 仅展开 next=999 的正式版语义。
+        /// 其余值包括 >=400 在内，仍然要先按 frame_tick 写入 frame，再由后续路径处理。
         /// </summary>
         public int NextFrameResolved()
         {
             int target = next;
-            if (target == 999 || target == 1280) target = 0;
+            if (target == 999)
+                target = 0;
+
             return target;
         }
 
         /// <summary>
-        /// 按 C++ release frame_tick 顺序推进：
-        /// frame 变化先清 attacking，然后 attacking++，超过 wait 才按 next 换帧，
-        /// 最后 wait_counter 同步为当前 frame id。
+        /// 按 C++ release frame_tick 顺序推进。
+        /// frame 变化先清 attacking，然后 attacking++，超过 wait 才按 next 换帧。
+        /// 只有未早退时，尾部才会把 wait_counter 同步为当前 frame id。
         /// </summary>
-        public void Trans()
+        public bool Trans()
         {
             NTSD.Tools.Log.LogState(_entity?.Name, "Trans",
-                $"wait={wait} waitCounterFrame={waitCounter} attacking={_entity?.AttackingCounter ?? 0} next={next} priority={requestPriority}");
-
-            int oldPriority = requestPriority;
-            priorityRelease--;
-            if (priorityRelease == 0) requestPriority = 0;
+                $"wait={wait} waitCounterFrame={waitCounter} attacking={_entity?.AttackingCounter ?? 0} next={next}");
 
             if (_entity == null)
             {
                 SyncRuntime();
-                return;
+                return false;
             }
 
             int currentFrame = _entity.Frame?.N ?? 0;
             if (currentFrame != waitCounter)
+            {
+                _entity.OnFrameTickFrameChangedFromWaitCounter();
                 _entity.AttackingCounter = 0;
+            }
 
             _entity.AttackingCounter++;
+
+            if (!_entity.OnFrameTickBeforeWaitAdvance(waitCounter))
+            {
+                waitCounter = _entity.Frame?.N ?? currentFrame;
+                SyncRuntime();
+                return true;
+            }
+
+            currentFrame = _entity.Frame?.N ?? currentFrame;
 
             if (_entity.AttackingCounter <= wait)
             {
                 waitCounter = currentFrame;
                 SyncRuntime();
-                return;
+                return true;
             }
 
             _entity.AttackingCounter = 0;
 
-            if (next == 0 && !hasFrameRequest)
+            if (next == 0)
             {
                 waitCounter = currentFrame;
                 SyncRuntime();
-                return;
+                return true;
             }
 
-            if (next == 1000)
+            int targetFrame = next;
+            bool switchDir = switchDirAfterTrans;
+            bool allowJumpInit = true;
+
+            if (targetFrame == 999)
             {
-                _entity.OnTransitDestroy();
-                waitCounter = _entity.Frame?.N ?? currentFrame;
-                hasFrameRequest = false;
-                SyncRuntime();
-                return;
+                targetFrame = _entity.ResolveFrameTickNext999Target(out allowJumpInit);
+            }
+            else if (targetFrame < 0)
+            {
+                targetFrame = -targetFrame;
+                switchDir = !switchDir;
             }
 
-            if (next == 999 || next == 1280)
-                next = 0;
+            if (targetFrame < 0)
+            {
+                waitCounter = 0;
+                switchDirAfterTrans = false;
+                SyncRuntime();
+                return false;
+            }
 
-            _entity.OnFrameTransit(next, switchDirAfterTrans, oldPriority);
+            int previousFrame = waitCounter;
+            _entity.OnFrameTickTransit(targetFrame, switchDir);
             switchDirAfterTrans = false;
-            hasFrameRequest = false;
-            waitCounter = _entity.Frame?.N ?? next;
+
+            // 对齐 C++ release：
+            // frame 改写后，如果 frame<0、frame>=400 或目标帧不存在，会在这里直接 return，
+            // 不再执行 jump_init / PP / turn，也不会写 wait_counter=frame。
+            int frameAfterTransit = _entity.Frame?.N ?? targetFrame;
+            if (frameAfterTransit < 0 || frameAfterTransit >= 400 || _entity.Frame?.D == null)
+            {
+                SyncRuntime();
+                return false;
+            }
+
+            _entity.OnFrameTickAfterWaitAdvance(previousFrame, allowJumpInit);
+            waitCounter = _entity.Frame?.N ?? targetFrame;
             SyncRuntime();
+            return true;
         }
 
         /// <summary>
@@ -206,17 +208,18 @@ namespace NTSD.Animation
             wait = 1;
             waitCounter = _entity?.Frame?.N ?? 0;
             next = 999;
-            requestPriority = 0;
-            priorityRelease = 1;
             switchDirAfterTrans = false;
-            hasFrameRequest = false;
-            if (_entity != null) _entity.AttackingCounter = 0;
+            if (_entity != null)
+                _entity.AttackingCounter = 0;
+
             SyncRuntime();
         }
 
         private void SyncRuntime()
         {
-            if (_entity == null) return;
+            if (_entity == null)
+                return;
+
             _entity.Runtime.WaitCounter = waitCounter;
             _entity.Runtime.NextFrame = next;
         }

@@ -30,25 +30,25 @@ namespace NTSD.Animation
 
         public bool ArestTest() => _arest <= 0;
 
-        public bool VrestTest(int attackerStableId)
+        public bool VrestTest(int attackerKey)
         {
-            return !_vrestByAttacker.TryGetValue(attackerStableId, out int v) || v <= 0;
+            return !_vrestByAttacker.TryGetValue(attackerKey, out int v) || v <= 0;
         }
 
         /// <summary>
         /// 检查指定攻击者是否仍在受击者侧的 vrest 冷却中。
         /// </summary>
-        public bool HasVrest(int attackerStableId)
+        public bool HasVrest(int attackerKey)
         {
-            return _vrestByAttacker.TryGetValue(attackerStableId, out int v) && v > 0;
+            return _vrestByAttacker.TryGetValue(attackerKey, out int v) && v > 0;
         }
 
         /// <summary>
         /// 为指定攻击者设置受击者侧 vrest 冷却。
         /// </summary>
-        public void SetVrest(int attackerStableId, int value)
+        public void SetVrest(int attackerKey, int value)
         {
-            _vrestByAttacker[attackerStableId] = value;
+            _vrestByAttacker[attackerKey] = value;
         }
 
         public void ArestUpdate(InteractionArea itr)
@@ -63,17 +63,30 @@ namespace NTSD.Animation
             }
         }
 
-        public void VrestUpdate(int attackerStableId, InteractionArea itr)
+        public void VrestUpdate(int attackerKey, InteractionArea itr)
         {
             if (itr != null && itr.vrest > 0)
             {
-                _vrestByAttacker[attackerStableId] = itr.vrest;
+                _vrestByAttacker[attackerKey] = itr.vrest;
             }
+        }
+
+        public void TickArest()
+        {
+            if (_arest > 0) _arest--;
+        }
+
+        public void TickVrestForAttacker(int attackerKey)
+        {
+            if (!_vrestByAttacker.TryGetValue(attackerKey, out int value) || value <= 0)
+                return;
+
+            _vrestByAttacker[attackerKey] = value - 1;
         }
 
         public void Tick()
         {
-            if (_arest > 0) _arest--;
+            TickArest();
 
             if (_vrestByAttacker.Count == 0) return;
 

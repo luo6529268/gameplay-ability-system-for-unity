@@ -1,26 +1,30 @@
 namespace NTSD.Animation.LF2Tasks
 {
     /// <summary>
-    /// LF2 任务基类。
-    /// 当前主要用于承载 C++ release opoint 创建请求在 Unity 模拟阶段之间的延迟执行。
+    /// LF2 运行时延迟任务基类。
+    /// 当前主要用于在模拟阶段之间传递对齐 C++ 的 opoint 创建请求。
     /// </summary>
     public abstract class LF2TaskBase
     {
-        /// <summary>任务类型</summary>
+        /// <summary>
+        /// 任务类型标识。
+        /// </summary>
         public abstract LF2TaskType TaskType { get; }
 
-        /// <summary>任务优先级（可选，默认 0）</summary>
+        /// <summary>
+        /// 可选任务优先级，默认是 0。
+        /// </summary>
         public virtual int Priority => 0;
     }
 
     /// <summary>
-    /// 任务类型枚举。
+    /// 当前支持的延迟任务类型。
     /// </summary>
     public enum LF2TaskType
     {
-        CreateObject = 0,           // 'create_object'
-        CreateMultipleObjects = 1,  // 'create_multiple_objects'
-        CreateNPCCharacters = 2,    // 'create_non_player_characters'
-        DestroyObject = 3,          // 预留：对象销毁任务
+        CreateObject = 0,
+        CreateMultipleObjects = 1,
+        CreateNPCCharacters = 2,
+        DestroyObject = 3,
     }
 }

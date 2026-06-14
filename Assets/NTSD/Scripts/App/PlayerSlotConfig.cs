@@ -12,11 +12,11 @@ namespace NTSD.App
         public int team;
 
         /// <summary>
-        /// 输入ID（对应 Action Map 中的 Player_X，X 为此 ID）
+        /// 输入 ID，对应运行时的玩家输入映射，例如 `Player_1`。
         /// </summary>
         public int inputId;
 
-        // When isHuman==false.
+        // 当 isHuman == false 时使用。
         public int aiId;
     }
 }

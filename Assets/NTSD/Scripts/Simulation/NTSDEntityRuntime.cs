@@ -15,13 +15,20 @@ namespace NTSD.Simulation
 
         public int ObjType;
         public int EntityType;
+        public int TransformOriginalObjectId = -1;
+        public int TransformTargetObjectId = -1;
 
         public int Team;
+        public int RelationTeam;
         public int OwnerSlotIndex = -1;
         public int OwnerStableId = -1;
+        public int RelationOwnerSlotIndex = -1;
+        public int SpawnerSlotIndex = -1;
         public int GrabbedBy;
         public int LinkState;
         public int TargetSlotIndex = -1;
+        public int CaughtSlotIndex = -1;
+        public int CatcherSlotIndex = -1;
         public int HeldWeaponStableId = -1;
         public int CaughtDuration;
         public int CaughtFrontFlag = 1;
@@ -29,7 +36,11 @@ namespace NTSD.Simulation
         public int JumpAttackLock;
         public int AnimCounter;
         public int AnimSub;
+        public int LateSpecialTargetX;
+        public int LateSpecialTargetZ;
+        public int[] InputHistory = new int[6];
         public int HolderStableId = -1;
+        public int HolderCopySlotIndex = -1;
         public int PickerStableId = -1;
         public int TrackerFlag;
         public bool AiControlled;
@@ -37,14 +48,29 @@ namespace NTSD.Simulation
         public float X;
         public float Y;
         public float Z;
+        public int XInt;
+        public int YInt;
+        public int ZInt;
         public float Vx;
         public float Vy;
         public float Vz;
         public float SpriteX;
         public float SpriteY;
         public float SpriteZ;
+        public float Type3VisualZOffset;
+        public float RenderOffsetX;
 
         public int Frame;
+        public int PrevFrame2;
+        public int FirstPresentationTick;
+        public int SpawnSemantic;
+        public int SuppressFrameTickUntilTick;
+        public int SuppressLateFrameTickUntilTick;
+        public int SuppressPostInteractionUntilTick;
+        public int SuppressObjectInteractionUntilTick;
+        public int SuppressPreInteractionUntilTick;
+        public int SuppressCollisionCandidateUntilTick;
+        public int RenderPicOffset;
         public int WaitCounter;
         public int NextFrame;
         public int AttackingCounter;
@@ -60,7 +86,9 @@ namespace NTSD.Simulation
         public int Bdefend;
         public int HitCount;
         public int HitConfirmEa;
+        public int HitConfirm2;
         public int HealTimer;
+        public int CatchTimer;
         public int KillCount = -1;
         public int ShotCount;
         public int WeaponCount;
@@ -69,25 +97,21 @@ namespace NTSD.Simulation
         public int WeaponDropHurt;
         public int WeaponState;
         public int Blink;
+        public int HitCandidateCount;
+        public int HitCandidateNearestDistance = 1000;
+        public int HitCandidateKind1Distance = 1000;
+        public int HitCandidateExtraDistance = 1000;
+        public bool PendingFlushDestroy;
 
         public int HP = 500;
         public int HPBound = 500;
+        public int HP3 = 500;
         public int HPLost;
         public int MP = 500;
         public int MPMax = 500;
         public int PP = 500;
         public int PPMax = 500;
         public int PPBound = 500;
-
-        public int MergeFlag = -1;
-        public int MergePartnerSlotIndex = -1;
-        public int MergeSelfObjectId;
-        public int MergePartnerObjectId;
-        public int MergeTimer;
-        public int RespawnCount;
-        public int RespawnCountdown;
-
-        public readonly int[] InputHistory = new int[6];
 
         public void Reset()
         {
@@ -96,12 +120,19 @@ namespace NTSD.Simulation
             ObjectId = 0;
             ObjType = 0;
             EntityType = 0;
+            TransformOriginalObjectId = -1;
+            TransformTargetObjectId = -1;
             Team = 0;
+            RelationTeam = 0;
             OwnerSlotIndex = -1;
             OwnerStableId = -1;
+            RelationOwnerSlotIndex = -1;
+            SpawnerSlotIndex = -1;
             GrabbedBy = 0;
             LinkState = 0;
             TargetSlotIndex = -1;
+            CaughtSlotIndex = -1;
+            CatcherSlotIndex = -1;
             HeldWeaponStableId = -1;
             CaughtDuration = 0;
             CaughtFrontFlag = 1;
@@ -109,20 +140,42 @@ namespace NTSD.Simulation
             JumpAttackLock = 0;
             AnimCounter = 0;
             AnimSub = 0;
+            LateSpecialTargetX = 0;
+            LateSpecialTargetZ = 0;
+            if (InputHistory == null || InputHistory.Length != 6)
+                InputHistory = new int[6];
+            else
+                Array.Clear(InputHistory, 0, InputHistory.Length);
             HolderStableId = -1;
+            HolderCopySlotIndex = -1;
             PickerStableId = -1;
             TrackerFlag = 0;
             AiControlled = false;
             X = 0f;
             Y = 0f;
             Z = 0f;
+            XInt = 0;
+            YInt = 0;
+            ZInt = 0;
             Vx = 0f;
             Vy = 0f;
             Vz = 0f;
             SpriteX = 0f;
             SpriteY = 0f;
             SpriteZ = 0f;
+            Type3VisualZOffset = 0f;
+            RenderOffsetX = 0f;
             Frame = 0;
+            PrevFrame2 = 0;
+            FirstPresentationTick = 0;
+            SpawnSemantic = 0;
+            SuppressFrameTickUntilTick = 0;
+            SuppressLateFrameTickUntilTick = 0;
+            SuppressPostInteractionUntilTick = 0;
+            SuppressObjectInteractionUntilTick = 0;
+            SuppressPreInteractionUntilTick = 0;
+            SuppressCollisionCandidateUntilTick = 0;
+            RenderPicOffset = 0;
             WaitCounter = 0;
             NextFrame = 0;
             AttackingCounter = 0;
@@ -138,7 +191,9 @@ namespace NTSD.Simulation
             Bdefend = 0;
             HitCount = 0;
             HitConfirmEa = 0;
+            HitConfirm2 = 0;
             HealTimer = 0;
+            CatchTimer = 0;
             KillCount = -1;
             ShotCount = 0;
             WeaponCount = 0;
@@ -147,22 +202,20 @@ namespace NTSD.Simulation
             WeaponDropHurt = 0;
             WeaponState = 0;
             Blink = 0;
+            HitCandidateCount = 0;
+            HitCandidateNearestDistance = 1000;
+            HitCandidateKind1Distance = 1000;
+            HitCandidateExtraDistance = 1000;
+            PendingFlushDestroy = false;
             HP = 500;
             HPBound = 500;
+            HP3 = 500;
             HPLost = 0;
             MP = 500;
             MPMax = 500;
             PP = 500;
             PPMax = 500;
             PPBound = 500;
-            MergeFlag = -1;
-            MergePartnerSlotIndex = -1;
-            MergeSelfObjectId = 0;
-            MergePartnerObjectId = 0;
-            MergeTimer = 0;
-            RespawnCount = 0;
-            RespawnCountdown = 0;
-            Array.Clear(InputHistory, 0, InputHistory.Length);
         }
     }
 }

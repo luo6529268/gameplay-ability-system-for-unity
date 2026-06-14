@@ -47,37 +47,12 @@ namespace MoreMountains.TopDownEngine
         /// <param name="newSceneName"></param>
         protected virtual void LoadScene(string newSceneName)
 		{
-			if (DestroyPersistentCharacter)
-			{
-				GameManager.Instance.DestroyPersistentCharacter();
-			}
-			
-			if (GameManager.Instance.Paused)
-			{
-				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.UnPause, null);
-			}
-				
 			if (DoNotUseLevelManager)
 			{
 				MMAdditiveSceneLoadingManager.LoadScene(newSceneName);    
 			}
-			else
-			{
-				LevelManager.Instance.GotoLevel(newSceneName);   
-			}
 		}
 
-		/// <summary>
-		/// Restarts the current level, without reloading the whole scene
-		/// </summary>
-		public virtual void RestartLevel()
-		{
-			if (GameManager.Instance.Paused)
-			{
-				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.UnPause, null);
-			}            
-			TopDownEngineEvent.Trigger(TopDownEngineEventTypes.RespawnStarted, null);
-		}
 
 		/// <summary>
 		/// Reloads the current level
@@ -85,7 +60,6 @@ namespace MoreMountains.TopDownEngine
 		public virtual void ReloadLevel()
 		{
 			// we trigger an unPause event for the GameManager (and potentially other classes)
-			TopDownEngineEvent.Trigger(TopDownEngineEventTypes.UnPause, null);
 			LoadScene(SceneManager.GetActiveScene().name);
 		}
 		

@@ -418,7 +418,7 @@ namespace NTSD.UI
         /// </summary>
         private void OnSettingBattleBgResetRandom()
         {
-            // TODO: 实现重置随机选项的逻辑
+            // Reserved for future random-option reset behavior.
         }
 
         /// <summary>

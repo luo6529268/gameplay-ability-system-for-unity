@@ -6,171 +6,193 @@ using UnityEngine;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 鎵€鏈夋垬鏂楀疄浣撶殑鎶借薄鍩虹被锛屾壙杞?C++ release 瀹炰綋杩愯鏃剁殑鍏叡瀛楁銆佸抚鍏ュ彛鍜?Unity 娓叉煋妗ユ帴銆?
+    /// 所有战斗实体的抽象基类，承载 C++ release 实体运行时的公共字段、帧入口和 Unity 桥接。
     /// </summary>
     public abstract class LF2Entity : ILF2Entity
     {
 
-        /// <summary>瀵硅薄鍚嶇О銆?/summary>
+        /// <summary>对象名称。</summary>
         public string Name { get; set; }
 
-        /// <summary>瀹炰綋绋冲畾 ID銆?/summary>
+        /// <summary>实体稳定 ID。</summary>
         public int StableId
         {
             get => Runtime.StableId;
             protected set => Runtime.StableId = value;
         }
 
-        /// <summary>瀵硅薄 ID銆?/summary>
+        /// <summary>对象 ID。</summary>
         public int ObjectId
         {
             get => Runtime.ObjectId;
             set => Runtime.ObjectId = value;
         }
 
-        /// <summary>闃熶紞 ID銆?/summary>
+        /// <summary>队伍 ID。</summary>
         public int Team
         {
             get => Runtime.Team;
             set => Runtime.Team = value;
         }
 
-        /// <summary>鐢熸垚鑰?StableId锛?1 琛ㄧず鏃犵敓鎴愯€呫€?/summary>
+        public virtual int RelationTeam
+        {
+            get => Runtime.RelationTeam;
+            set => Runtime.RelationTeam = value;
+        }
+
+        /// <summary>生成者 StableId；-1 表示无生成者。</summary>
         public int OwnerId
         {
             get => Runtime.OwnerStableId;
             set => Runtime.OwnerStableId = value;
         }
 
-        /// <summary>琚姄鍙栫姸鎬併€?/summary>
+        /// <summary>被抓取状态。</summary>
         public int GrabbedBy
         {
             get => Runtime.GrabbedBy;
             set => Runtime.GrabbedBy = value;
         }
 
-        /// <summary>kind==2 tracker 鏍囪銆?/summary>
+        /// <summary>kind==2 的 tracker 标记。</summary>
         public int TrackerFlag
         {
             get => Runtime.TrackerFlag;
             set => Runtime.TrackerFlag = value;
         }
 
-        /// <summary>kind==2 tracker 鐖跺璞″紩鐢ㄣ€?/summary>
+        /// <summary>kind==2 的 tracker 父对象引用。</summary>
         public LF2Entity TrackerParent { get; set; }
 
-        /// <summary>褰撳墠鍛戒腑浣跨敤鐨?itr slot 绱㈠紩锛岀敤浜?spark 璁℃椂銆?/summary>
+        /// <summary>当前命中的 itr 槽位索引，用于 spark 计时。</summary>
         public int CurrentItrIndex { get; set; }
 
-        /// <summary>瀵硅薄绫诲瀷鏁存暟鍊硷紝鐢卞瓙绫?ObjectTypeEnum 鍐冲畾銆?/summary>
+        /// <summary>对象类型整数值，由子类 ObjectTypeEnum 决定。</summary>
         public int ObjectType => (int)ObjectTypeEnum;
 
-        /// <summary>瀵硅薄绫诲瀷鏋氫妇锛岀敱瀛愮被瀹炵幇銆?/summary>
+        /// <summary>对象类型枚举，由子类实现。</summary>
         public abstract LF2ObjectType ObjectTypeEnum { get; }
 
-        /// <summary>C++ release 瀹炰綋杩愯鏃跺瓧娈甸暅鍍忋€?/summary>
+        /// <summary>C++ release 实体运行时字段镜像。</summary>
         public NTSDEntityRuntime Runtime { get; } = new NTSDEntityRuntime();
 
         private static readonly DeterministicRng FallbackRng = new DeterministicRng(0x4E545344u);
 
-        /// <summary>C++ release 瀹炰綋绫诲瀷鍊笺€?/summary>
+        /// <summary>C++ release 实体类型值。</summary>
         public virtual int ReleaseEntityType => ObjectType;
 
-        /// <summary>瀵硅薄绫诲瀷鏋氫妇鍏ュ彛銆?/summary>
+        public virtual NTSDEntityCategory EntityCategory => NTSDEntityCategory.Special;
+
+        public virtual bool CountsAsRandomWeaponDropCandidate() => false;
+
+        /// <summary>对象类型枚举入口。</summary>
         public LF2ObjectType Type => ObjectTypeEnum;
 
 
 
-        /// <summary>鐗╃悊鐘舵€併€?/summary>
+        /// <summary>物理状态。</summary>
         public PhysicsState PS { get; protected set; }
 
-        /// <summary>褰撳墠甯т俊鎭€?/summary>
+        /// <summary>当前帧信息。</summary>
         public LF2FrameInfo Frame { get; protected set; } = new LF2FrameInfo();
 
-        /// <summary>DAT 甯ф暟鎹紦瀛樸€?/summary>
+        /// <summary>DAT 帧数据缓存。</summary>
         public LF2FrameCache FrameCache { get; protected set; } = new LF2FrameCache();
 
-        /// <summary>甯ц浆鎹㈠櫒銆?/summary>
+        /// <summary>帧转换器。</summary>
         public FrameTransistor Trans { get; protected set; }
 
-        /// <summary>鏁堟灉鐘舵€併€?/summary>
+        /// <summary>效果状态。</summary>
         public LF2EffectState Effect { get; protected set; } = new LF2EffectState();
 
-        /// <summary>Sprite 璧勬簮寮曠敤銆?/summary>
+        /// <summary>Sprite 资源引用。</summary>
         public LF2Sprite Sprite { get; protected set; }
 
-        /// <summary>娓叉煋鍣ㄥ紩鐢ㄣ€?/summary>
+        /// <summary>渲染器引用。</summary>
         public LF2ObjectRenderer Renderer { get; protected set; }
 
-        /// <summary>妯℃嫙涓栫晫寮曠敤銆?/summary>
+        /// <summary>模拟世界引用。</summary>
         public SimulationWorld Match => SimulationTickDriver.Instance?.World;
 
 
 
-        /// <summary>甯у欢杩熻鏁板櫒銆?/summary>
+        /// <summary>帧延迟计数器。</summary>
         public int FrameDelay
         {
             get => Runtime.FrameDelay;
             set => Runtime.FrameDelay = value;
         }
 
-        /// <summary>C++ release Entity::attacking锛屽抚绛夊緟/鏀诲嚮鐘舵€佽鏁板櫒銆?/summary>
+        /// <summary>C++ release Entity::attacking，帧等待/攻击状态计数器。</summary>
         public int AttackingCounter
         {
             get => Runtime.AttackingCounter;
             set => Runtime.AttackingCounter = value;
         }
 
-        /// <summary>鍛戒腑鍋滃抚/閿佸畾璁℃暟銆?/summary>
+        /// <summary>命中停帧/锁定计数。</summary>
         public int HitStun
         {
             get => Runtime.HitStop;
             set => Runtime.HitStop = value;
         }
 
-        /// <summary>绱鍑婚€€ X 閫熷害銆?/summary>
+        /// <summary>累计击退 X 速度。</summary>
         public float KnockbackVx
         {
             get => Runtime.KnockbackVx;
             set => Runtime.KnockbackVx = value;
         }
 
-        /// <summary>绱鍑婚€€ Y 閫熷害銆?/summary>
+        /// <summary>累计击退 Y 速度。</summary>
         public float KnockbackVy
         {
             get => Runtime.KnockbackVy;
             set => Runtime.KnockbackVy = value;
         }
 
-        /// <summary>绱鍑婚€€ Z 閫熷害銆?/summary>
+        /// <summary>累计击退 Z 速度。</summary>
         public float KnockbackVz
         {
             get => Runtime.KnockbackVz;
             set => Runtime.KnockbackVz = value;
         }
 
-        /// <summary>闇囧睆璁℃椂鍣ㄣ€?/summary>
+        /// <summary>震屏计时器。</summary>
         public int ShakeTimer
         {
             get => Runtime.ShakeTimer;
             set => Runtime.ShakeTimer = value;
         }
 
-        /// <summary>鏀诲嚮璞佸厤璁℃暟鍣紱瑙掕壊绫绘敼鐢?HitCounters 瀛樺偍銆?/summary>
+        /// <summary>攻击豁免计数器；角色类改用 HitCounters 存储。</summary>
         public virtual int AttackExempt
         {
             get => Runtime.AttackExempt;
             set => Runtime.AttackExempt = value;
         }
 
-        /// <summary>鐢熸垚鑰呭疄浣撶储寮曪紝opoint 鐢熸垚鏃跺啓鍏ャ€?/summary>
+        public virtual int HitStateCount
+        {
+            get => Runtime.HitStateCount;
+            set => Runtime.HitStateCount = value;
+        }
+
+        public virtual int HitConfirmCounter
+        {
+            get => Runtime.HitConfirmEa;
+            set => Runtime.HitConfirmEa = value;
+        }
+
+        /// <summary>生成者实体索引，opoint 生成时写入。</summary>
         public int OwnerEntityIndex
         {
             get => Runtime.OwnerSlotIndex;
             set => Runtime.OwnerSlotIndex = value;
         }
 
-        /// <summary>寮瑰皠/鐢熸垚璁℃暟銆?/summary>
+        /// <summary>发射/生成计数。</summary>
         public int ShotCount
         {
             get => Runtime.ShotCount;
@@ -184,49 +206,61 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.AiControlled = value;
         }
 
-        /// <summary>itr 鏀诲嚮鍐峰嵈璺熻釜鍣ㄣ€?/summary>
+        /// <summary>itr 攻击冷却跟踪器。</summary>
         public virtual LF2ItrRestTracker ItrRest { get; protected set; } = null;
 
-        /// <summary>鐢熷懡鍜岃祫婧愮姸鎬併€?/summary>
+        /// <summary>生命和资源状态。</summary>
         public virtual LF2Health Health { get; protected set; } = null;
 
-        /// <summary>HP 鎭㈠璁℃椂鍣ㄣ€?/summary>
+        /// <summary>HP 恢复计时器。</summary>
         public virtual int HealTimer
         {
             get => Runtime.HealTimer;
             set => Runtime.HealTimer = value;
         }
 
-        /// <summary>C++ release kill_count锛?1 琛ㄧず鏅€氬疄浣擄紝>=0 琛ㄧず鍏宠仈鐨勭敓鎴愯€?褰掑睘妲姐€?/summary>
+        public virtual int CatchTimer
+        {
+            get => Runtime.CatchTimer;
+            set => Runtime.CatchTimer = value;
+        }
+
+        /// <summary>C++ release kill_count；-1 表示普通实体，&gt;=0 表示关联的生成者/归属槽。</summary>
         public int KillCount
         {
             get => Runtime.KillCount;
             set => Runtime.KillCount = value;
         }
 
-        /// <summary>C++ release weapon_count锛氳鑹插彈绗涘瓙鍛戒腑鏃朵负璐熷€硷紝姝﹀櫒渚х敤浜庨琛?绗涘瓙绱Н銆?/summary>
+        /// <summary>C++ release weapon_count；角色受笛子命中时可为负，武器侧用于飞行/笛子累计。</summary>
         public int WeaponCount
         {
             get => Runtime.WeaponCount;
             set => Runtime.WeaponCount = value;
         }
 
-        /// <summary>C++ release fall_damage_div锛氳惤鍦版寔缁墸琛€鍒嗘敮鐨勪激瀹崇缉鏀鹃櫎鏁般€?/summary>
+        /// <summary>C++ release fall_damage_div；落地持续扣血分支的伤害缩放除数。</summary>
         public int FallDamageDiv
         {
             get => Runtime.FallDamageDiv;
             set => Runtime.FallDamageDiv = value;
         }
 
+        public int HitCount
+        {
+            get => Runtime.HitCount;
+            set => Runtime.HitCount = value;
+        }
 
 
-        /// <summary>闃村奖 SpriteRenderer锛岀敱娓叉煋鍣ㄦ敞鍏ャ€?/summary>
+
+        /// <summary>阴影 SpriteRenderer，由渲染器注入。</summary>
         public SpriteRenderer ShadowRenderer { get; private set; }
 
-        /// <summary>娉ㄥ叆闃村奖娓叉煋鍣ㄥ紩鐢ㄣ€?/summary>
+        /// <summary>注入阴影渲染器引用。</summary>
         public void SetShadowRenderer(SpriteRenderer sr) => ShadowRenderer = sr;
 
-        /// <summary>鏇存柊闃村奖浣嶇疆鍜屾樉绀虹姸鎬併€?/summary>
+        /// <summary>更新阴影位置和显示状态。</summary>
         public void UpdateShadow(int renderFrame = 0)
         {
             if (ShadowRenderer == null || PS == null) return;
@@ -249,10 +283,10 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>褰撳墠娲昏穬 spark slot 鏁伴噺銆?/summary>
+        /// <summary>当前活跃 spark 槽数量。</summary>
         public int SparkSlotCount { get; private set; } = 0;
 
-        /// <summary>鏈€澶?spark slot 鏁伴噺銆?/summary>
+        /// <summary>最大 spark 槽数量。</summary>
         public const int MaxSparkSlots = 10;
 
         private readonly int[] _sparkTimers = new int[MaxSparkSlots];
@@ -351,7 +385,7 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>鍙楀埌 itr kind=10/11 鏃剁殑鍙楀姏澶勭悊锛岃鑹插拰姝﹀櫒鍏辩敤銆?/summary>
+        /// <summary>受到 itr kind=10/11 时的受力处理，角色和武器共用。</summary>
         public virtual void FluteForce()
         {
             if (PS == null) return;
@@ -385,14 +419,14 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>鍐欏叆瀹炰綋浣嶇疆銆?/summary>
+        /// <summary>写入实体位置。</summary>
         public void SetPos(float x, float y, float z)
         {
             if (PS == null) return;
             PS.x = x; PS.y = y; PS.z = z;
         }
 
-        /// <summary>鍒涘缓姝﹀櫒鐮寸纰庣墖鏁堟灉銆?/summary>
+        /// <summary>创建武器破碎碎片特效。</summary>
         public virtual void BrokenEffectCreate(int id, int num = 8)
         {
             SpawnBrokenWeaponFragments(id);
@@ -505,7 +539,7 @@ namespace NTSD.Animation.LF2Objects
             return 0;
         }
 
-        /// <summary>姝ｅ紡鎴樻枟闅忔満鏁板叆鍙ｏ紝瀵瑰簲 C++ release 鐨?ntsd_rand()銆?/summary>
+        /// <summary>正式战斗随机数入口，对应 C++ release 的 ntsd_rand()。</summary>
         public int BattleRandInt(int minInclusive, int maxExclusive)
             => RandInt(minInclusive, maxExclusive);
 
@@ -516,10 +550,10 @@ namespace NTSD.Animation.LF2Objects
             return FallbackRng.NextInt(minInclusive, maxExclusive);
         }
 
-        /// <summary>妫€鏌?itr arest 鍐峰嵈鏄惁鍏佽鏀诲嚮銆?/summary>
+        /// <summary>检查 itr arest 冷却是否允许攻击。</summary>
         public bool ItrArestTest() => ItrRest == null || ItrRest.Arest <= 0;
 
-        /// <summary>鍛戒腑鍚庢洿鏂?arest 鍐峰嵈銆?/summary>
+        /// <summary>命中后更新 arest 冷却。</summary>
         public void ItrArestUpdate(InteractionArea itr)
         {
             if (ItrRest == null) return;
@@ -529,10 +563,10 @@ namespace NTSD.Animation.LF2Objects
                 ItrRest.Arest = NTSDGlobal.Default.Character.ARest;
         }
 
-        /// <summary>妫€鏌ユ寚瀹氭敾鍑昏€呯殑 vrest 鍐峰嵈鏄惁缁撴潫銆?/summary>
+        /// <summary>检查指定攻击者的 vrest 冷却是否结束。</summary>
         public bool ItrVrestTest(int uid) => ItrRest == null || !ItrRest.HasVrest(uid);
 
-        /// <summary>鏇存柊鎸囧畾鏀诲嚮鑰呯殑 vrest 鍐峰嵈銆?/summary>
+        /// <summary>更新指定攻击者的 vrest 冷却。</summary>
         public void ItrVrestUpdate(int attackerUid, InteractionArea itr)
         {
             if (ItrRest == null || itr == null) return;
@@ -540,14 +574,14 @@ namespace NTSD.Animation.LF2Objects
             ItrRest.SetVrest(attackerUid, vrest);
         }
 
-        /// <summary>鏇存柊鍑婚璺緞鐨?vrest 鍐峰嵈锛屽浐瀹氬啓 45銆?/summary>
+        /// <summary>更新击飞路径的 vrest 冷却，固定写 45。</summary>
         public void ItrVrestUpdateKnockdown(int attackerUid, InteractionArea itr)
         {
             if (ItrRest == null || itr == null) return;
             ItrRest.SetVrest(attackerUid, 45);
         }
 
-        /// <summary>绔嬪嵆鍐欏叆鎸囧畾甯э紝缁曡繃 wait 鎺ㄨ繘銆?/summary>
+        /// <summary>立即写入指定帧，绕过 wait 推进。</summary>
         public virtual void ImmediateFrame(int frameId)
         {
             if (Frame == null || Trans == null) return;
@@ -565,18 +599,22 @@ namespace NTSD.Animation.LF2Objects
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
         }
 
-        /// <summary>姣忓抚鏃堕棿鏇存柊鍏ュ彛锛屽悇瀛愮被鎸夐渶瑕侀噸鍐欍€?/summary>
+        /// <summary>每帧时间更新入口，各子类按需重写。</summary>
         public virtual void TUUpdate() { }
 
-        /// <summary>鎸夊抚 ID 鑾峰彇甯ф暟鎹€?/summary>
+        /// <summary>按帧 ID 获取帧数据。</summary>
         public virtual LF2FrameData GetFrameDataById(int frameId)
             => FrameCache?.GetFrameDataById(frameId);
 
-        /// <summary>璇锋眰璺宠浆鍒版寚瀹氬抚銆?/summary>
+        /// <summary>请求跳转到指定帧。</summary>
+        public virtual void TransitionToFrame(int frameId)
+            => TransitionToFrame(frameId, 0);
+
+        /// <summary>请求跳转到指定帧。</summary>
         public virtual void TransitionToFrame(int frameId, int wait = 0)
             => Trans?.Frame(frameId, wait);
 
-        /// <summary>鑾峰彇纰版挒鐢?sprite 瀹藉害锛屽崟浣嶄负鍍忕礌銆?/summary>
+        /// <summary>获取碰撞用 sprite 宽度，单位为像素。</summary>
         public virtual float GetSpriteWidthPxForCollision() => 0f;
 
 
@@ -584,19 +622,19 @@ namespace NTSD.Animation.LF2Objects
         public abstract void Reset();
         public abstract void Init(LF2TaskBase task, LF2ObjectRenderer renderer);
 
-        /// <summary>浠?SimulationWorld 娉ㄩ攢鑷韩銆?/summary>
+        /// <summary>从 SimulationWorld 注销自身。</summary>
         public virtual void UnregisterFromWorld()
         {
             SimulationTickDriver.Instance?.World?.Unregister(this);
         }
 
-        /// <summary>閿€姣佸綋鍓嶅璞＄殑鍙琛ㄧ幇銆?/summary>
+        /// <summary>销毁当前对象的可视表现。</summary>
         public virtual void Destroy()
         {
             Sprite?.Hide();
         }
 
-        /// <summary>FrameTransistor 妫€娴嬪埌 next=1000 鏃惰皟鐢紝瀛愮被鍙疄鐜伴攢姣侀€昏緫銆?/summary>
+        /// <summary>FrameTransistor 检测到 next=1000 时调用，子类可实现销毁逻辑。</summary>
         public virtual void OnTransitDestroy()
         {
             DestroyEvent();
@@ -609,7 +647,12 @@ namespace NTSD.Animation.LF2Objects
             LF2ReferencePool.Instance?.Release(this);
         }
 
-        /// <summary>甯ц浆鎹㈠洖璋冿紝瀛愮被瀹炵幇鍏蜂綋甯у垏鎹㈤€昏緫銆?/summary>
+        public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
+        {
+            OnFrameTransit(targetFrameId, switchDirAfterTrans, Trans?.WaitCounter ?? 0);
+        }
+
+        /// <summary>帧转换回调，子类实现具体帧切换逻辑。</summary>
         public virtual void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock) { }
 
 
@@ -629,38 +672,173 @@ namespace NTSD.Animation.LF2Objects
         public virtual void SimTransit(int tickIndex) { }
         public virtual void SimTU(int tickIndex) { }
         public virtual void SimPostInteraction(int tickIndex) { }
+        public virtual void SimObjectInteraction(int tickIndex) { }
         public virtual void SimPreInteraction(int tickIndex) { }
         public virtual void SimEntityCollision(int tickIndex) { }
+        public virtual void SimFrameTick(int tickIndex) { }
 
-        /// <summary>妯℃嫙鍚庢湡鏇存柊锛岄粯璁ゅ埛鏂版覆鏌撴繁搴︺€?/summary>
+        /// <summary>模拟后期更新，默认刷新渲染深度。</summary>
         public virtual void SimLateTick(int tickIndex)
         {
             if (PS != null) Sprite?.SetZ(PS.z + PS.zz);
         }
 
+        public virtual void RunFrameLogicBeforeAdvance() { }
+
+        internal virtual bool SupportsFrameLogicBeforeAdvancePhase(LF2FrameData frame) => false;
+
+        internal virtual bool SupportsPostInteractionPhase() => false;
+
+        internal virtual bool SupportsObjectInteractionPhase() => false;
+
+        internal virtual bool UsesDynamicRuntimeSlot() => false;
+
+        internal virtual bool IsStageBoundedCharacter() => false;
+
+        internal virtual bool ShouldContributeToReleaseCamera() => false;
+
+        internal virtual void ApplyPreFrameZBounds(float zMin, float zMax) { }
+
+        internal virtual bool ApplyPreFrameXBounds(float stageWidth) => false;
+
+        public virtual void RunStateSpecialPreCollision() { }
+
+        internal virtual void RunPreCollisionRecoveryPhase(int tickIndex) { }
+
+        internal virtual void RunPostCooldownInputPhase(int tickIndex) { }
+
+        internal virtual void RunEarlyTeleportSpecialsPhase(System.Collections.Generic.List<LF2Entity> entities, bool frameToggleGate) { }
+
+        internal virtual void RunLateDeathOpointPreCleanupPhase() { }
+
+        internal virtual bool TryRunLatePostOpointCleanupPhase() => false;
+
+        internal virtual void RunLateTailBeforePrevFrame() { }
+
+        public virtual void MirrorLatePrevFrame()
+        {
+            if (Frame != null)
+                Frame.Prev = Frame.N;
+        }
+
+        public virtual void FreeEntityLikeExe()
+        {
+            OnTransitDestroy();
+        }
+
+        public virtual void DirectWriteFramePreserveWaitCounter(int frameId)
+        {
+            SetFrameTickDirect(frameId);
+        }
+
+        public virtual int GetCurrentDataObjectTypeForSimulation() => ObjectType;
+
+        public virtual void RunCpointCheckStep10() { }
+
+        public virtual void RunCpointMismatchTailStep10() { }
+
+        public virtual void RunWeaponSyncHeldStep10() { }
+
+        public virtual void ClearHitCandidateCarriers() { }
+
+        protected virtual void RunCpointActionSelectionStep10(CatchPoint cpoint, LF2Entity victimEntity) { }
+
+        protected virtual void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity) { }
+
+        protected virtual void SetVictimThrowVzStep10(CatchPoint cpoint, LF2Entity victim) { }
+
+        protected virtual void ApplyCpointDirControlStep10(CatchPoint cpoint) { }
+
+        protected virtual void ApplyCpointHeldInjuryStep10(LF2Entity victimEntity, int injury) { }
+
+        protected virtual void SyncCpointHeldPositionStep10(LF2Entity victimEntity, LF2FrameData catcherFrame, CatchPoint catcherCpoint) { }
+
+        public virtual void OnFrameTickFrameChangedFromWaitCounter() { }
+
+        public virtual bool OnFrameTickBeforeWaitAdvance(int previousFrame) => true;
+
+        public virtual void OnFrameTickTransit(int targetFrameId, bool switchDirAfterTrans)
+        {
+            OnFrameTransit(targetFrameId, switchDirAfterTrans);
+        }
+
+        public virtual void OnFrameTickAfterWaitAdvance(int previousFrame, bool allowJumpInit) { }
+
+        public virtual int ResolveFrameTickNext999Target(out bool allowJumpInit)
+        {
+            allowJumpInit = false;
+            return 0;
+        }
+
+        protected virtual bool ApplyObjectSpecificFrameTickBeforeWaitAdvance() => true;
+
+        protected virtual void ApplyCommonCaughtExitHitStop() { }
+
+        protected virtual bool IsFrameTickLeftPressed() => false;
+
+        protected virtual bool IsFrameTickRightPressed() => false;
+
+        protected virtual void ApplyFrame212JumpInit() { }
+
+        protected bool TryEnterReleaseFrameAdvanceAfterDelay()
+        {
+            if (FrameDelay > 0)
+            {
+                FrameDelay--;
+                return false;
+            }
+
+            if (FrameDelay < 0)
+            {
+                FrameDelay++;
+                return false;
+            }
+
+            return true;
+        }
+
+        protected void SetFrameTickDirect(int frameId)
+        {
+            if (Frame == null || FrameCache == null)
+                return;
+
+            LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);
+            if (targetFrame == null)
+                return;
+
+            Frame.N = frameId;
+            Frame.D = targetFrame;
+            Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, Trans?.WaitCounter ?? 0);
+        }
+
+        protected virtual void RunCommonFrameTick()
+        {
+            Trans?.Trans();
+        }
 
 
-        /// <summary>鍒嗛厤绋冲畾 ID銆?/summary>
+
+        /// <summary>分配稳定 ID。</summary>
         protected void AllocateStableId()
         {
             StableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
             Runtime.StableId = StableId;
         }
 
-        /// <summary>閲嶇疆绋冲畾 ID銆?/summary>
+        /// <summary>重置稳定 ID。</summary>
         protected void ResetStableId()
         {
             StableId = 0;
             Runtime.StableId = 0;
         }
 
-        /// <summary>鍐欏叆杩愯鏃舵Ы浣嶇储寮曘€?/summary>
+        /// <summary>写入运行时槽位索引。</summary>
         public void SetRuntimeSlotIndex(int slotIndex)
         {
             Runtime.SlotIndex = slotIndex;
         }
 
-        /// <summary>鍒锋柊杩愯鏃跺瓧娈甸暅鍍忋€?/summary>
+        /// <summary>刷新运行时字段镜像。</summary>
         public void RefreshRuntimeSnapshot()
         {
             RefreshRuntimeFromEntity();

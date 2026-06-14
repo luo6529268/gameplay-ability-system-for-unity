@@ -160,6 +160,11 @@ namespace NTSD.Animation
             _spawnedBuffer.Clear();
         }
 
+        public void ProcessOpointSpawnAlignedToCpp(LF2Entity spawner)
+        {
+            ProcessOpointSpawn(spawner);
+        }
+
         private void ProcessOneLateOpoint(LF2Entity spawner, LF2FrameData frame, ObjectPoint op)
         {
             if (op.kind <= 0 || op.oid <= 0) return;
@@ -347,6 +352,11 @@ namespace NTSD.Animation
             }
 
             return null;
+        }
+
+        public LF2Entity CreateObjectImmediate(OPointCreateTask task)
+        {
+            return ProcessCreateObject(task);
         }
 
         // ========== 多对象创建 ==========

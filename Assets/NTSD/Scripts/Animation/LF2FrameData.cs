@@ -250,6 +250,16 @@ namespace NTSD.Animation
         // C++ release：itr.kind=8 爆炸传送时的 heal_timer 偏移量。
         public int throwvz = 0;
 
+        // C++ release kind=5 的运行时 itr 替换会继续拷贝这些字段。
+        public int[] catchingact2 = null;
+        public int[] caughtact2 = null;
+        public int respond = 0;
+        public int pickingact = 0;
+        public int pickedact = 0;
+        public int throwvx = 0;
+        public int throwvy = 0;
+        public int throwinjury = 0;
+
         public InteractionArea ShallowCopy() => (InteractionArea)MemberwiseClone();
     }
 

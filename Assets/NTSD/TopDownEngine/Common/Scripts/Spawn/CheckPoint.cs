@@ -52,37 +52,11 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("检查点的顺序")]
         public int CheckPointOrder;
 
-        // 监听器列表，用于管理需要响应重生的对象
-        protected List<Respawnable> _listeners;
-
 		/// <summary>
 		/// 初始化监听器列表
 		/// </summary>
 		protected virtual void Awake () 
 		{
-			_listeners = new List<Respawnable>();
-		}
-				
-		/// <summary>
-		/// 在检查点生成玩家
-		/// </summary>
-		/// <param name="player">玩家角色</param>
-		public virtual void SpawnPlayer(Character player)
-		{
-			// 通知所有监听器玩家已重生
-			foreach(Respawnable listener in _listeners)
-			{
-				listener.OnPlayerRespawn(this,player);
-			}
-		}
-		
-		/// <summary>
-		/// 将可重生对象分配到此检查点
-		/// </summary>
-		/// <param name="listener">需要监听重生的对象</param>
-		public virtual void AssignObjectToCheckPoint (Respawnable listener) 
-		{
-			_listeners.Add(listener);
 		}
 
 		/// <summary>
@@ -109,52 +83,8 @@ namespace MoreMountains.TopDownEngine
 		/// <param name="collider">进入的游戏对象</param>
 		protected virtual void TriggerEnter(GameObject collider)
 		{
-			// 获取角色组件
-			Character character = collider.GetComponent<Character>();
-
-			// 检查是否是玩家角色
-			if (character == null) { return; }
-			if (character.CharacterType != Character.CharacterTypes.Player) { return; }
-			if (!LevelManager.HasInstance) { return; }
 			
-			// 设置当前检查点并触发事件
-			LevelManager.Instance.SetCurrentCheckpoint(this);
-			CheckPointEvent.Trigger(CheckPointOrder);
 		}
 
-		/// <summary>
-		/// 在Scene视图中绘制Gizmos，显示检查点之间的路径
-		/// </summary>
-		protected virtual void OnDrawGizmos()
-		{	
-			#if UNITY_EDITOR
-			// 确保LevelManager存在且有检查点
-			if (!LevelManager.HasInstance)
-			{
-				return;
-			}
-
-			if (LevelManager.Instance.Checkpoints == null)
-			{
-				return;
-			}
-
-			if (LevelManager.Instance.Checkpoints.Count == 0)
-			{
-				return;
-			}
-
-			// 绘制检查点之间的连线
-			for (int i=0; i < LevelManager.Instance.Checkpoints.Count; i++)
-			{
-				// 绘制到下一个检查点的线
-				if ((i+1) < LevelManager.Instance.Checkpoints.Count)
-				{
-					Gizmos.color = Color.green;
-					Gizmos.DrawLine(LevelManager.Instance.Checkpoints[i].transform.position,LevelManager.Instance.Checkpoints[i+1].transform.position);
-				}
-			}
-			#endif
-		}
 	}
 }

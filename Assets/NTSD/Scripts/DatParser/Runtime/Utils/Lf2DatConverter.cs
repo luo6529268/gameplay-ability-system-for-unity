@@ -287,9 +287,17 @@ namespace NTSD.DatParser
                     case "kill": itr.kill = ParseInt(prop.Value); break;
                     case "bdefend": itr.bdefend = ParseInt(prop.Value); break;
                     case "attacking": itr.attacking = ParseInt(prop.Value); break;
+                    case "respond": itr.respond = ParseInt(prop.Value); break;
+                    case "pickingact": itr.pickingact = ParseInt(prop.Value); break;
+                    case "pickedact": itr.pickedact = ParseInt(prop.Value); break;
+                    case "throwvx": itr.throwvx = ParseInt(prop.Value); break;
+                    case "throwvy": itr.throwvy = ParseInt(prop.Value); break;
+                    case "throwinjury": itr.throwinjury = ParseInt(prop.Value); break;
                     case "throwvz": itr.throwvz = ParseInt(prop.Value); break;
                     case "catchingact": itr.catchingact = ParseIntPair(prop.Value); break;
+                    case "catchingact2": itr.catchingact2 = ParseIntPair(prop.Value); break;
                     case "caughtact": itr.caughtact = ParseIntPair(prop.Value); break;
+                    case "caughtact2": itr.caughtact2 = ParseIntPair(prop.Value); break;
                 }
             }
 
@@ -297,18 +305,44 @@ namespace NTSD.DatParser
         }
 
         /// <summary>
-        /// 解析整数
+        /// 解析整数。C++ release 在 Windows/MinGW 下使用 32 位 strtol；
+        /// 超出范围的 DAT 数值会饱和到 int 边界，而不是变成 0。
         /// </summary>
         private static int ParseInt(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrWhiteSpace(value))
                 return 0;
 
-            int result;
-            if (int.TryParse(value, out result))
-                return result;
+            string text = value.Trim();
+            int index = 0;
+            int sign = 1;
+            if (index < text.Length && (text[index] == '+' || text[index] == '-'))
+            {
+                sign = text[index] == '-' ? -1 : 1;
+                index++;
+            }
 
-            return 0;
+            long limit = sign < 0 ? 2147483648L : 2147483647L;
+            long acc = 0;
+            bool hasDigit = false;
+            while (index < text.Length)
+            {
+                char ch = text[index];
+                if (ch < '0' || ch > '9')
+                    break;
+
+                hasDigit = true;
+                acc = acc * 10 + (ch - '0');
+                if (acc >= limit)
+                    return sign < 0 ? int.MinValue : int.MaxValue;
+
+                index++;
+            }
+
+            if (!hasDigit)
+                return 0;
+
+            return sign < 0 ? unchecked((int)-acc) : (int)acc;
         }
 
         /// <summary>

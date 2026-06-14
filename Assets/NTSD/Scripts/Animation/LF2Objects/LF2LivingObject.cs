@@ -15,11 +15,20 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>上一帧编号。</summary>
         public int PN { get; set; } = 0;
 
+        /// <summary>C++ release prev_frame：run_late_entity_update 尾部镜像的上一 tick 结束帧。</summary>
+        public int Prev { get; set; } = 0;
+
         /// <summary>当前帧编号。</summary>
         public int N { get; set; } = 0;
 
         /// <summary>当前帧 DAT 数据。</summary>
         public LF2FrameData D { get; set; }
+
+        /// <summary>C++ release prev_frame2：全局碰撞 pass 开始前快照的帧编号。</summary>
+        public int Prev2 { get; set; } = 0;
+
+        /// <summary>prev_frame2 对应的 DAT 数据，供本 tick 全局碰撞判定使用。</summary>
+        public LF2FrameData Prev2D { get; set; }
 
     }
 
@@ -80,14 +89,15 @@ namespace NTSD.Animation.LF2Objects
     public class LF2Health
     {
         private NTSDEntityRuntime _runtime;
-        private int _hp = 100;
-        private int _mp = 100;
-        private int _pp = 0;
+        private int _hp = 500;
+        private int _mp = 500;
+        private int _pp = 500;
         private int _maxPP = 500;
         private int _ppBound = 500;
         private int _hpLost = 0;
-        private int _hpBound = 100;
-        private int _maxMP = 0;
+        private int _hpBound = 500;
+        private int _hp3 = 500;
+        private int _maxMP = 500;
 
         /// <summary>
         /// 绑定正式版实体运行时字段。绑定后 HP/MP/PP 读写都落到 Runtime，避免同一状态出现多份副本。
@@ -103,6 +113,7 @@ namespace NTSD.Animation.LF2Objects
             runtime.PPBound = PPBound;
             runtime.HPLost = HPLost;
             runtime.HPBound = HPBound;
+            runtime.HP3 = HP3;
             runtime.MPMax = MaxMP;
             _runtime = runtime;
         }
@@ -126,6 +137,8 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>HP 当前恢复上限。</summary>
         public int HPBound { get => _runtime?.HPBound ?? _hpBound; set { if (_runtime != null) _runtime.HPBound = value; else _hpBound = value; } }
+        /// <summary>C++ release hp3，HP 当前恢复上限的硬上限。</summary>
+        public int HP3 { get => _runtime?.HP3 ?? _hp3; set { if (_runtime != null) _runtime.HP3 = value; else _hp3 = value; } }
         /// <summary>MP 最大值，用于部分伤害/资源换算。</summary>
         public int MaxMP { get => _runtime?.MPMax ?? _maxMP; set { if (_runtime != null) _runtime.MPMax = value; else _maxMP = value; } }
     }
@@ -187,21 +200,24 @@ namespace NTSD.Animation.LF2Objects
         public LF2LivingObject Attacker { get; set; } = null;
 
         /// <summary>
-        /// 本帧累计命中次数。正式版在帧后处理阶段用它计算平均击退速度。
-        /// </summary>
-        public int HitCount
-        {
-            get => Runtime.HitCount;
-            set => Runtime.HitCount = value;
-        }
-
-        /// <summary>
         /// 命中确认窗口计数。部分 kind 命中会短时间影响后续帧切换。
         /// </summary>
         public int HitConfirmEa
         {
             get => Runtime.HitConfirmEa;
             set => Runtime.HitConfirmEa = value;
+        }
+
+        public override int HitStateCount
+        {
+            get => HitCounters?.HitStateCount ?? Runtime.HitStateCount;
+            set => HitCounters?.SetHitStateCount(value);
+        }
+
+        public override int HitConfirmCounter
+        {
+            get => HitConfirmEa;
+            set => HitConfirmEa = value;
         }
 
         #endregion
@@ -263,7 +279,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
+        public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
         {
             int prevFn = Frame.N;
             Log.LogState(Name, "Frame", $"{Frame.N} -> {targetFrameId}");
@@ -309,11 +325,6 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         private void FrameUpdateInternal()
         {
-            if (Frame.D != null && Frame.D.pic >= 0)
-            {
-                Sprite.ShowPic(Frame.D.pic);
-            }
-
             FrameForce();
 
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
@@ -330,73 +341,11 @@ namespace NTSD.Animation.LF2Objects
         #region Tick 循环
 
         /// <summary>
-        /// Transit 阶段：先处理 combo，再根据 FrameDelay 决定是否推进帧和状态事件。
+        /// TU 核心步骤。
+        /// 自检辅助入口直接调用这里，避免额外的壳层包装。
         /// </summary>
-        public virtual void Transit()
+        protected void RunTUCore()
         {
-            ComboUpdate();
-
-            int prevDelay = FrameDelay;
-            if (FrameDelay > 0) FrameDelay--;
-            else if (FrameDelay < 0) FrameDelay++;
-
-            if (prevDelay != 0)
-                return;
-
-            if (Effect.TimeIn < 0 && Effect.Stuck)
-            {
-            }
-            else
-            {
-                Trans.Trans();
-            }
-
-            Effect.TimeIn--;
-
-            if (Effect.TimeIn < 0 && Effect.Stuck)
-            {
-            }
-            else
-            {
-                TransitEvent();
-            }
-        }
-
-        /// <summary>
-        /// TU 阶段：推进命中计数、治疗、震动、帧强制、效果和对象主逻辑。
-        /// </summary>
-        public override void TUUpdate()
-        {
-            //   0x004139C7: [esi+0B8h] HitStateCount
-            //   0x004139D8: [esi+0EAh] HitConfirmEa
-            if (HitCounters != null)
-            {
-                if (HitCounters.HitStateCount > 0) HitCounters.SetHitStateCount(HitCounters.HitStateCount - 1);
-            }
-            if (HitConfirmEa > 0) HitConfirmEa--;
-
-            if (HealTimer / 1000 == 1 && Health?.HP > 0)
-            {
-                HealTimer--;
-                if ((HealTimer & 7) == 0)
-                {
-                    if (Health.HP < Health.HPBound)
-                    {
-                        int newHp = Health.HP + 8;
-                        Health.HP = newHp > Health.HPBound ? Health.HPBound : newHp;
-                    }
-                    else
-                    {
-                        HealTimer = 0;
-                    }
-                }
-                if (HealTimer % 1000 == 0)
-                    HealTimer = 0;
-            }
-
-            if (ShakeTimer > 0) ShakeTimer--;
-            else if (ShakeTimer < 0) ShakeTimer++;
-
             if (FrameDelay != 0) return;
 
             FrameForce();
@@ -416,7 +365,6 @@ namespace NTSD.Animation.LF2Objects
                 DieEvent();
                 Dead = true;
             }
-
         }
 
         /// <summary>
@@ -490,7 +438,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public virtual bool Hit(InteractionArea itr, LF2Entity attacker, UnityEngine.Vector3 attackerPos, PhysicsState.BattleVolume vol)
         {
-            if (!ItrVrestTest(attacker.StableId)) return false;
+            int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+            if (attackerSlot >= 0 && !ItrVrestTest(attackerSlot, true)) return false;
             return true;
         }
 
@@ -517,9 +466,7 @@ namespace NTSD.Animation.LF2Objects
         #region 位置和帧数据查询
         public override float GetSpriteWidthPxForCollision()
         {
-            if (_FrameDataWrapper?.characterData?.files == null || _FrameDataWrapper.characterData.files.Count == 0)
-                return 0f;
-            return _FrameDataWrapper.characterData.files[0].width + 1;
+            return ResolveCurrentSpriteFileWidthPx();
         }
 
         #endregion
@@ -545,9 +492,6 @@ namespace NTSD.Animation.LF2Objects
             Frame.N  = frameId;
             Frame.D = targetFrame;
             AttackingCounter = 0;
-
-            if (Frame.D != null && Frame.D.pic >= 0)
-                Sprite?.ShowPic(Frame.D.pic);
 
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
         }
@@ -588,14 +532,6 @@ namespace NTSD.Animation.LF2Objects
 
         #region 模拟接口
 
-        public override void SimTransit(int tickIndex) => Transit();
-        public override void SimTU(int tickIndex) => TUUpdate();
-
-        /// <summary>
-        /// PreInteraction 默认不处理，角色、武器或技能按需要重写。
-        /// </summary>
-        public override void SimPreInteraction(int tickIndex) { }
-
         #endregion
 
         #region 可选角色模块
@@ -622,7 +558,7 @@ namespace NTSD.Animation.LF2Objects
             if (Effect.Oscillate != 0)
             {
                 Effect.OscillateDirection = Effect.OscillateDirection == 1 ? -1 : 1;
-                Sprite?.SetXY(PS.sx + Effect.Oscillate * Effect.OscillateDirection, PS.sy);
+                Sprite?.SetXY(Effect.Oscillate * Effect.OscillateDirection, 0f);
             }
             else if (Effect.Blink)
             {
@@ -647,7 +583,7 @@ namespace NTSD.Animation.LF2Objects
                 if (Effect.Oscillate != 0)
                 {
                     Effect.Oscillate = 0;
-                    Sprite?.SetXY(PS.sx, PS.sy);
+                    Sprite?.SetXY(0f, 0f);
                 }
                 if (Effect.Blink)
                 {
@@ -676,9 +612,7 @@ namespace NTSD.Animation.LF2Objects
             int face = facing >= 20 ? facing % 10 : facing;
             if (face == 0) return parentDir;
             if (face == 1) return (parentDir == "right") ? "left" : "right";
-            if (face >= 2 && face <= 10) return "right";
-            if (face >= 11 && face <= 19) return "left";
-            return parentDir;
+            return "right";
         }
 
         #endregion

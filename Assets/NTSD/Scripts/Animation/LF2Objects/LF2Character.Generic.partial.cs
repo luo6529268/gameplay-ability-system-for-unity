@@ -8,7 +8,6 @@ using NTSD.Tools;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -20,58 +19,69 @@ namespace NTSD.Animation.LF2Objects
         /// 通用时间单元更新。
         /// 负责角色逐 tick 状态逻辑；复刻基准以 C++ release 的实体 tick 流程为准。
         /// </summary>
-        private bool Generic_TU()
+        private bool RunTUPhase()
         {
-            int tickIndex = SimulationTickDriver.Instance != null
-                ? SimulationTickDriver.Instance.CurrentTickIndex
-                : 0;
-
             // post_interaction 已移至 SimPostInteraction 阶段（对齐 C++ release GameMode_Process 碰撞循环）
-            // 原位置：Generic_TU 开头；新位置：所有对象 SerialTickAll 完成后统一执行
+            // 原位置：TU phase 开头；新位置：所有对象 SerialTickAll 完成后统一执行
 
+            ApplyLegacySpecialStateVzInput();
+            UpdateLegacyDeathBlinkLifecycle();
+            RecoverLegacyHitCounters();
+
+            return false;
+        }
+
+        private void ApplyLegacySpecialStateVzInput()
+        {
             // C++ release Entity_InputProcess 0x41507E-0x415114:
             // state==301 (DeepSpecific) 或 state==19 (FirenSpecific) 时，根据左右输入更新 vz
             // 条件：(int)PS.z == 0（整数 z 坐标为 0，即在地面中心线）
-            {
-                int curStateForVz = Frame.D?.state ?? -1;
-                if (curStateForVz == LF2States.DeepSpecific || curStateForVz == LF2States.FirenSpecific)
-                {
-                    bool isLeft  = Controller?.IsLeft  ?? false;
-                    bool isRight = Controller?.IsRight ?? false;
-                    float dvz = Frame.D?.dvz ?? 0f;
-                    if (dvz != 0f && (int)PS.z == 0)
-                    {
-                        if (isLeft && !isRight)
-                            PS.vz = -dvz;
-                        else if (isRight && !isLeft)
-                            PS.vz = dvz;
-                    }
-                }
-            }
+            int curStateForVz = Frame.D?.state ?? -1;
+            if (curStateForVz != LF2States.DeepSpecific && curStateForVz != LF2States.FirenSpecific)
+                return;
 
+            bool isLeft = Controller?.IsLeft ?? false;
+            bool isRight = Controller?.IsRight ?? false;
+            float dvz = Frame.D?.dvz ?? 0f;
+            if (dvz == 0f || (int)PS.z != 0)
+                return;
+
+            if (isLeft && !isRight)
+                PS.vz = -dvz;
+            else if (isRight && !isLeft)
+                PS.vz = dvz;
+        }
+
+        private void UpdateLegacyDeathBlinkLifecycle()
+        {
             // 死亡闪烁流程：0 开始闪烁，1~29 维持，30 后隐藏并从模拟世界注销。
             if (_deadBlinkCount == 0)
             {
                 Effect.Blink = true;
                 _deadBlinkCount = 1;
-            }
-            else if (_deadBlinkCount > 0 && _deadBlinkCount < 30)
-            {
-                _deadBlinkCount++;
-            }
-            else if (_deadBlinkCount >= 30)
-            {
-                Effect.Blink = false;
-                Sprite?.Hide();
-                _deadBlinkCount = -1;
-                Match?.Unregister(this);
+                return;
             }
 
+            if (_deadBlinkCount > 0 && _deadBlinkCount < 30)
+            {
+                _deadBlinkCount++;
+                return;
+            }
+
+            if (_deadBlinkCount < 30)
+                return;
+
+            Effect.Blink = false;
+            Sprite?.Hide();
+            _deadBlinkCount = -1;
+            Match?.Unregister(this);
+        }
+
+        private void RecoverLegacyHitCounters()
+        {
             // fall/bdefend 每 tick 递减，字段通过 HitCounters 绑定到正式运行时。
             HitCounters.RecoverFall(NTSDGlobal.Gameplay.RecoverFall);
             HitCounters.RecoverBdefend(NTSDGlobal.Gameplay.RecoverBdefend);
-
-            return false;
         }
 
         /// <summary>
@@ -119,14 +129,51 @@ namespace NTSD.Animation.LF2Objects
             Health.PP = System.Math.Min(Health.PP + ppGain, NTSDGlobal.Gameplay.PpRecoverCap);
         }
 
+        internal override bool SupportsPostInteractionPhase() => true;
+        internal override bool IsStageBoundedCharacter() => true;
+        internal override bool ShouldContributeToReleaseCamera() => Health != null && Health.HP > 0;
+        internal override void ApplyPreFrameZBounds(float zMin, float zMax)
+        {
+            if (PS == null)
+                return;
+
+            if (PS.z < zMin) PS.z = zMin;
+            if (PS.z > zMax) PS.z = zMax;
+        }
+
+        internal override bool ApplyPreFrameXBounds(float stageWidth)
+        {
+            if (PS == null)
+                return false;
+
+            int slotIndex = Runtime?.SlotIndex ?? StableId;
+            if (slotIndex >= 20)
+            {
+                if (PS.x < -100f) PS.x = -100f;
+                if (PS.x > stageWidth + 100f) PS.x = stageWidth + 100f;
+            }
+            else
+            {
+                if (PS.x < 0f) PS.x = 0f;
+                if (PS.x > stageWidth) PS.x = stageWidth;
+            }
+
+            return false;
+        }
+
+        internal override void RunPreCollisionRecoveryPhase(int tickIndex)
+        {
+            RegeneratePreCollisionStats(tickIndex);
+        }
+
         /// <summary>
         /// 通用物理转换。
         /// C++ release 的击退帧后处理已移到 SimulationWorld.FramePostProcessAll。
         /// </summary>
-        private bool Generic_Transit()
+        private bool RunTransitPhase()
         {
             // C++ release 0x416254-0x41627C：FrameDelay 非零时跳过物理（hit_stop 冻结）
-            // FrameDelay 衰减已在 base.Transit() 中完成，此处为衰减后的值
+            // 当前正式战斗模拟由 SimTransit() 先衰减 FrameDelay，再进入这里。
             if (FrameDelay != 0) return false;
 
             // Frame_PostProcess（C++ release 0x0041BF00）的 Knockback→vx/vy/vz 逻辑
@@ -146,7 +193,7 @@ namespace NTSD.Animation.LF2Objects
         /// 通用帧逻辑。
         /// 处理当前帧资源消耗和 opoint 请求。
         /// </summary>
-        private bool Generic_Frame()
+        private bool RunFramePhase()
         {
             // 角色帧的 mp 资源消耗不在进入帧时统一处理。
             // C++ release 的输入/连招跳帧由 sub_414C30 使用目标帧 mp 检查并扣除 PP/HP；
@@ -154,154 +201,172 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        /// <summary>
-        /// PreInteraction 阶段。
-        /// </summary>
-        private bool Generic_PreInteraction()
+        private static bool IsReleaseInvalidCandidateItrIndex(int itrIndex, LF2FrameData collisionFrame)
         {
-            LF2FrameData frame = FrameCache.GetFrameDataById(Frame.N);
+            return collisionFrame?.itrs == null || itrIndex < 0 || itrIndex >= collisionFrame.itrs.Count;
+        }
+
+        /// <summary>
+        /// C++ release step7/step9 的角色候选消费主路径。
+        /// 按 step6 记录下来的 candidate 顺序逐条消费，并按 itr.kind 当场分派，
+        /// 避免 Unity 侧再拆成先攻击、后抓取/拾取两段，造成同 tick 顺序偏差。
+        /// </summary>
+        private bool TryConsumeUnifiedStep7CandidateSequence()
+        {
+            LF2FrameData frame = GetCollisionFrameData();
             var sceneQuery = Match?.SceneQuery;
             var kindService = Match?.ItrKindService;
-            if (frame == null || sceneQuery == null) return false;
-            if (PS == null) return false;
-
-            var itrs = frame.itrs;
-            if (itrs == null || itrs.Count == 0) return false;
-
-            float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return false;
-
-            var preItrs = ListPool<InteractionArea>.Get();
-            preItrs.Capacity = 4;
-
-            for (int i = 0; i < itrs.Count; i++)
-            {
-                var itr = itrs[i];
-                if (itr == null) continue;
-                if (!kindService.IsPreInteractionKind(itr.kind)) continue;
-                preItrs.Add(itr);
-            }
-
-            if (preItrs.Count == 0)
-            {
-                ListPool<InteractionArea>.Release(preItrs);
+            if (frame?.itrs == null || sceneQuery == null || kindService == null)
                 return false;
-            }
 
+            if (!sceneQuery.TryGetCollisionCandidateSequence(this, out var candidates) || candidates == null)
+                return false;
 
-            var itrVolumes = PS.GetItrVolumes(preItrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: NTSDGlobal.Default.Itr.ZWidth);
-            int count = Mathf.Min(preItrs.Count, itrVolumes.Count);
-            for (int i = 0; i < count; i++)
+            bool allowAttackKinds =
+                ItrArestTest() &&
+                (HitCounters?.AttackExempt ?? 0) <= 0 &&
+                GetState() != LF2States.Falling;
+
+            int candidateLimit = candidates.Count;
+            for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                var itr = preItrs[i];
-                var vol = itrVolumes[i];
+                int liveCandidateCount = Runtime?.HitCandidateCount ?? candidates.Count;
+                if (liveCandidateCount < 0)
+                    liveCandidateCount = 0;
+                if (liveCandidateCount > candidates.Count)
+                    liveCandidateCount = candidates.Count;
+                if (candidateIndex >= liveCandidateCount)
+                    break;
 
-                var candidates = sceneQuery.QueryBodies(vol, this);
-                if (candidates == null || candidates.Count == 0) continue;
+                SceneQueryHit hitInfo = candidates[candidateIndex];
+                int itrIndex = hitInfo.ItrIndex;
+                if (IsReleaseInvalidCandidateItrIndex(itrIndex, frame))
+                    continue;
 
-                for (int c = 0; c < candidates.Count; c++)
-                {
-                    var target = candidates[c];
-                    if (!CanPreInteractTarget(kindService, itr, target)) continue;
+                bool zeroAttackerHpOnConsume;
+                bool releaseHeavyHeldTargetOnConsume;
+                InteractionArea itr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
+                    this,
+                    hitInfo.Target,
+                    frame,
+                    frame.itrs[itrIndex],
+                    out zeroAttackerHpOnConsume,
+                    out releaseHeavyHeldTargetOnConsume);
+                if (itr == null)
+                    continue;
 
-                    if (!DispatchPreInteractionByKind(kindService, itr, target)) continue;
+                hitInfo = new SceneQueryHit(
+                    hitInfo.Target,
+                    hitInfo.BodyX,
+                    hitInfo.ItrIndex,
+                    itr,
+                    zeroAttackerHpOnConsume,
+                    releaseHeavyHeldTargetOnConsume);
 
-                    //target.ItrVrestUpdate(StableId, itr);
-                    ListPool<InteractionArea>.Release(preItrs);
+                LF2Entity target = hitInfo.Target;
+                if (ShouldAbortReleaseConsume(itr, target))
                     return true;
+
+                if (kindService.IsPreInteractionKind(itr.kind))
+                {
+                    if (!CanPreInteractTarget(kindService, itr, target))
+                        continue;
+
+                    DispatchPreInteractionByKind(kindService, itr, target);
+                    continue;
                 }
+
+                if (itr.kind == 6)
+                {
+                    if (target == null || target == this)
+                        continue;
+                    if (target.PS == null)
+                        continue;
+                    if (RelationTeam != 0 && target.RelationTeam == RelationTeam)
+                        continue;
+                    int selfSlot = Runtime?.SlotIndex ?? -1;
+                    if (selfSlot >= 0 && !target.ItrVrestTest(selfSlot, true))
+                        continue;
+                    if (target is not LF2LivingObject living6)
+                        continue;
+
+                    var attackerPos6 = new Vector3(PS.x, PS.y, PS.z);
+                    living6.Hit(itr, this, attackerPos6, default);
+                    continue;
+                }
+
+                if (!kindService.IsAttackKind(itr.kind))
+                    continue;
+                if (!allowAttackKinds)
+                    continue;
+                if (!CanPostInteractTarget(itr, target, hitInfo.BodyX))
+                    continue;
+                if (target is not LF2LivingObject living)
+                    continue;
+                ApplyReleaseSceneQueryConsumeEffects(hitInfo);
+                var attackerPos = new Vector3(PS.x, PS.y, PS.z);
+                CurrentItrIndex = itrIndex;
+                bool hit = living.Hit(itr, this, attackerPos, default);
+                if (!hit)
+                    continue;
+                if (ShouldAbortAfterSuccessfulReleaseHit(itr, target))
+                    return true;
+
+                ItrArestUpdate(itr);
+                if ((Runtime?.HitCandidateCount ?? 0) <= 0)
+                    return true;
+                if (ItrRest != null && ItrRest.Arest > 0)
+                    return true;
             }
 
-            ListPool<InteractionArea>.Release(preItrs);
+            return true;
+        }
+
+        private bool ShouldAbortReleaseConsume(InteractionArea itr, LF2Entity target)
+        {
+            if (itr == null || target == null)
+                return false;
+
+            // C++ release collision.cpp:
+            // 1. attacker.hit_confirm2!=0 且当前 pair 的 victim 是 character -> next_attacker
+            // 2. kind0/effect21 且 victim 当前 frame.state==18/19 -> next_attacker
+            if (HitConfirm2 != 0 && GetDataObjectTypeForReleaseConsume(target) == (int)LF2ObjectType.Character)
+                return true;
+
+            if (itr.kind == 0 &&
+                itr.effect == 21 &&
+                (target.GetState() == LF2States.Burning || target.GetState() == LF2States.FirenSpecific))
+            {
+                return true;
+            }
+
             return false;
         }
 
-        /// <summary>
-        /// 角色攻击命中判定。
-        /// 在全局 PostInteraction pass 中处理正式攻击类 itr。
-        /// </summary>
-        private void Generic_PostInteraction()
+        private static int GetDataObjectTypeForReleaseConsume(LF2Entity entity)
         {
-            var frame = Frame?.D;
-            var sceneQuery = Match?.SceneQuery;
-            var kindService = Match?.ItrKindService;
-            if (frame == null || sceneQuery == null) return;
-            if (PS == null) return;
+            if (entity == null)
+                return -1;
 
-            var itrs = frame.itrs;
-            if (itrs == null || itrs.Count == 0) return;
-
-            if (!ItrArestTest()) return;
-
-            // 攻击方碰撞豁免守卫（C++ release 对齐 0x419E3B：[esi+0ECh] > 0 跳过整体碰撞检测）
-            if (HitCounters?.AttackExempt > 0) return;
-
-            // Falling 状态下不执行 kind=0 攻击判定
-            // C++ release 中 Falling 帧（180-183）实际无 itr，等价于此过滤
-            if (GetState() == LF2States.Falling) return;
-
-            float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return;
-
-            // 普通拳脚攻击的 z 宽由目标 bdy 自身决定。
-            var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
-
-            for (int i = 0; i < Mathf.Min(itrs.Count, itrVolumes.Count); i++)
-            {
-                var itr = itrs[i];
-                if (itr == null) continue;
-                bool isAttackKind = kindService?.IsAttackKind(itr.kind) ?? false;
-                if (!isAttackKind) continue;
-
-                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
-                if (candidates == null || candidates.Count == 0) continue;
-
-                for (int c = 0; c < candidates.Count; c++)
-                {
-                    var target = candidates[c];
-                    if (!CanPostInteractTarget(itr, target)) continue;
-                    if (target is not LF2LivingObject living) continue;
-
-                    var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
-                    CurrentItrIndex = i;
-                    bool hit = living.Hit(itr, this, attackerPos, itrVolumes[i]);
-                    if (!hit) continue;
-
-                    ItrArestUpdate(itr);
-
-                    if (itr.arest > 0) return;
-                    break;
-                }
-            }
-
-            // kind=6：受伤硬直帧向外发出命中确认标记
-            // C++ release 对齐 EXE 0x0042E6F4：[victim+0EAh] = 3
-            // 自身 itr kind=6 碰到附近角色 body → 目标.HitConfirmEa = 3
-            for (int i = 0; i < Mathf.Min(itrs.Count, itrVolumes.Count); i++)
-            {
-                var itr = itrs[i];
-                if (itr == null || itr.kind != 6) continue;
-
-                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
-                if (candidates == null || candidates.Count == 0) continue;
-
-                for (int c = 0; c < candidates.Count; c++)
-                {
-                    var target = candidates[c];
-                    if (target == null || target == this) continue;
-                    if (target.PS == null) continue;
-                    if (Team != 0 && target.Team == Team) continue;
-                    if (!target.ItrVrestTest(StableId)) continue;
-                    if (target is not LF2LivingObject living6) continue;
-
-                    var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
-                    living6.Hit(itr, this, attackerPos, itrVolumes[i]);
-                }
-            }
+            int wrapperOid = entity.FrameCache?.Wrapper?.characterId ?? entity.ObjectId;
+            ObjectDefinition definition = GameDataManager.Instance?.GetObjectById(wrapperOid);
+            return definition?.type ?? entity.ReleaseEntityType;
         }
 
-        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target)
+        private static bool ShouldAbortAfterSuccessfulReleaseHit(InteractionArea itr, LF2Entity target)
         {
+            return itr != null &&
+                   target != null &&
+                   itr.kind == 0 &&
+                   target.ObjectId == 300;
+        }
+
+        private bool CanPostInteractTarget(InteractionArea itr, LF2Entity target, int hitBodyX = 0)
+        {
+            if (itr == null)
+            {
+                return false;
+            }
             if (target == null || target == this)
             {
                 return false;
@@ -314,70 +379,28 @@ namespace NTSD.Animation.LF2Objects
             {
                 return false;
             }
-            if (!target.ItrVrestTest(StableId))
+            if (!BruteForceSceneQuery.IsReleaseItrGeometry(itr))
             {
                 return false;
             }
-            // C++ release 在攻击候选过滤阶段按 kind 组排除同队角色，不只看 effect 0/1。
-            if (target is LF2Character targetCharacter && ShouldRejectSameTeamPostTarget(itr, targetCharacter.Team))
+            // C++ release collision.cpp 在 consume 路径仍会做一次 pair blocked 检查。
+            // step6 先收候选、step7/step9 再消费；期间抓取关系可能已经被前面的 candidate 改写，
+            // 所以这里不能只依赖 collect 时的快照过滤。
+            if (BruteForceSceneQuery.IsReleaseConsumerPairBlocked(this, target))
             {
                 return false;
             }
-
-            // effect 4：只命中非角色且 state==3000。
-            if (itr.effect == 4)
+            if (!BruteForceSceneQuery.RuntimeConsumeItrAllowed(this, itr, target))
             {
-                if (target is LF2Character)
-                {
-                    return false;
-                }
-                if (target.GetState() != LF2States.ProjectileFlying)
-                {
-                    return false;
-                }
+                return false;
             }
-
-            // effect 20/21/22：只命中角色。
-            if (itr.effect == 20 || itr.effect == 21 || itr.effect == 22)
-            {
-                if (target is not LF2Character)
-                {
-                    return false;
-                }
-            }
-
-            // kind=4：不能命中自己的 attacker。
-            if (itr.kind == 4 && Attacker == target)
+            int selfSlot = Runtime?.SlotIndex ?? -1;
+            if (selfSlot >= 0 && !target.ItrVrestTest(selfSlot, true))
             {
                 return false;
             }
 
             return true;
-        }
-
-        private bool ShouldRejectSameTeamPostTarget(InteractionArea itr, int targetTeam)
-        {
-            if (itr == null || Team == 0 || targetTeam != Team)
-            {
-                return false;
-            }
-
-            bool sameTeamFilteredKind =
-                itr.kind < 4 ||
-                itr.kind == 6 ||
-                itr.kind == 9 ||
-                itr.kind == 10 ||
-                itr.kind == 11 ||
-                itr.kind == 15 ||
-                itr.kind == 16;
-
-            if (!sameTeamFilteredKind || itr.kind == 8)
-            {
-                return false;
-            }
-
-            int attackerState = Frame?.D?.state ?? 0;
-            return !(attackerState == LF2States.Burning && itr.effect != 21 && itr.effect != 22);
         }
 
         private bool CanPreInteractTarget(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
@@ -386,7 +409,8 @@ namespace NTSD.Animation.LF2Objects
             if (target == this) return false;
             if (target.PS == null || target.Frame?.D == null) return false;
             if (target.Health != null && target.Health.HP <= 0) return false;
-            if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
+            if (!BruteForceSceneQuery.IsReleaseItrGeometry(itr)) return false;
+            if (BruteForceSceneQuery.IsReleaseConsumerPairBlocked(this, target)) return false;
             if (kindService == null) return false;
 
             return true;
@@ -416,16 +440,7 @@ namespace NTSD.Animation.LF2Objects
         private bool HandlePreInteractionKind(InteractionArea itr, LF2LivingObject target)
         {
             // 只处理角色类型
-            if (target.Type != LF2ObjectType.Character)
-                return false;
-
-            // 检查抓取条件：(kind==1 && 目标处于 Injured2) || kind==3
-            bool canCatch = (itr.kind == 1 && target.GetState() == LF2States.Injured2) || itr.kind == 3;
-            if (!canCatch)
-                return false;
-
-            // 检查 itr arest（防止重复抓取）
-            if (!ItrArestTest())
+            if (GetDataObjectTypeForReleaseConsume(target) != (int)LF2ObjectType.Character)
                 return false;
 
             // 转换为 LF2Character 以调用 CaughtA
@@ -438,21 +453,75 @@ namespace NTSD.Animation.LF2Objects
             if (dir == null)
                 return false;
 
-            // 抓取成功，更新 itr arest
-            ItrArestUpdate(itr);
-
-            // C++ release kind=1/3 抓取成功时无条件直接写双方 frame。
-            int catchFrame = itr.effect != 0 ? itr.effect : LF2StandardFrames.Catching;
+            // C++ release kind=1/3：抓取者写 itr.catchingact[0]，不是 effect。
+            int catchFrame = itr.catchingact != null && itr.catchingact.Length > 0
+                ? itr.catchingact[0]
+                : LF2StandardFrames.Catching;
             ImmediateFrame(catchFrame);
 
             // 设置抓取目标
             Catching = target;
+            CaughtSlotIndex = target.Runtime?.SlotIndex ?? -1;
+            target.CatcherSlotIndex = Runtime?.SlotIndex ?? -1;
 
-            // C++ release 对齐 0x0042D786/0x0042D796：抓取成功时抓取者 FrameDelay=3，被抓者 FrameDelay=-3
-            FrameDelay = 3;
-            targetChar.FrameDelay = -3;
+            ApplyImmediateCatchPairState(targetChar);
 
             return true;
+        }
+
+        /// <summary>
+        /// C++ release kind=1/3 在 step7 成功后会立刻同步一组抓取状态：
+        /// 双方 vx 清零、按 x 关系改朝向、写 caught_duration、victim fall=0，并立刻对位。
+        /// 这些字段如果等到 step10 才补，会导致抓取建立后的当帧表现偏掉。
+        /// </summary>
+        private void ApplyImmediateCatchPairState(LF2Character targetChar)
+        {
+            if (targetChar == null || PS == null || targetChar.PS == null)
+                return;
+
+            PS.vx = 0f;
+            targetChar.PS.vx = 0f;
+            KnockbackVx = 0f;
+            targetChar.KnockbackVx = 0f;
+
+            bool attackerFacesLeft = Mathf.RoundToInt(PS.x) > Mathf.RoundToInt(targetChar.PS.x);
+            SwitchDir(attackerFacesLeft ? "left" : "right");
+            targetChar.SwitchDir(attackerFacesLeft ? "right" : "left");
+
+            CaughtDuration = 300;
+            targetChar.FallCounter = 0;
+            if (targetChar.HitCounters != null)
+                targetChar.HitCounters.ResetFall();
+
+            LF2FrameData attackerFrame = Frame?.D;
+            LF2FrameData victimFrame = targetChar.Frame?.D;
+            if (attackerFrame == null || victimFrame == null)
+                return;
+
+            int attackerWact = attackerFrame.cpoint?.x ?? 0;
+            int victimWact = victimFrame.cpoint?.x ?? 0;
+            int attackerCx = attackerFrame.centerx;
+            int attackerCy = attackerFrame.centery;
+            int victimCx = victimFrame.centerx;
+            int victimCy = victimFrame.centery;
+
+            int attackerXInt = Mathf.RoundToInt(PS.x);
+            int attackerYInt = Mathf.RoundToInt(PS.y);
+            int victimXInt = Mathf.RoundToInt(targetChar.PS.x);
+
+            float victimNewX;
+            if (PS.dir == "right")
+                victimNewX = attackerXInt - attackerCx - victimCx + attackerWact + victimWact;
+            else
+                victimNewX = attackerCx + victimCx + attackerXInt - attackerWact - victimWact;
+
+            float victimNewY = victimCy - attackerCy + attackerYInt;
+            targetChar.PS.x = victimNewX;
+            targetChar.PS.y = victimNewY;
+
+            float lerp = (victimXInt - victimNewX) * 0.5f;
+            targetChar.PS.x += lerp;
+            PS.x += lerp;
         }
 
         private bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
@@ -464,16 +533,22 @@ namespace NTSD.Animation.LF2Objects
         // playAnimation：kind=2 时播放拾取帧，kind=7 时不播。
         private bool PickupWeapon(InteractionArea itr, LF2Entity target, bool playAnimation, bool skipGroundCheck = false)
         {
-            if (_heldWeapon != null)
+            if (HasHeldObject())
                 return false;
 
-            if (target.Type != LF2ObjectType.LightWeapon && target.Type != LF2ObjectType.HeavyWeapon && target.Type != LF2ObjectType.ThrowWeapon && target.Type != LF2ObjectType.Drink)
+            int targetType = GetDataObjectTypeForReleaseConsume(target);
+            if (targetType != (int)LF2ObjectType.LightWeapon &&
+                targetType != (int)LF2ObjectType.HeavyWeapon &&
+                targetType != (int)LF2ObjectType.ThrowWeapon &&
+                targetType != (int)LF2ObjectType.Drink)
                 return false;
 
             // kind=2 只允许拾取地面上的武器；kind=7 只检查 picker==0，不检查地面状态。
             if (!skipGroundCheck)
             {
-                int wstate = target.GetState();
+                int wstate = target is LF2WeaponBase targetWeapon
+                    ? targetWeapon.GetResolvedWeaponStateForExternalUse()
+                    : target.GetState();
                 bool isOnGround = wstate == LF2States.WeaponOnGround
                                || wstate == LF2States.WeaponJustOnGround
                                || wstate == LF2States.HeavyWeaponOnGround;
@@ -481,17 +556,17 @@ namespace NTSD.Animation.LF2Objects
                     return false;
             }
 
-            var weapon = target as LF2WeaponBase;
+            LF2WeaponBase weapon = AsWeaponEntity(target);
             if (weapon == null || !weapon.Pick(this))
                 return false;
 
-            ItrArestUpdate(itr);
-
             if (playAnimation)
             {
-                if (target.Type == LF2ObjectType.LightWeapon || target.Type == LF2ObjectType.ThrowWeapon || target.Type == LF2ObjectType.Drink)
+                if (targetType == (int)LF2ObjectType.LightWeapon ||
+                    targetType == (int)LF2ObjectType.ThrowWeapon ||
+                    targetType == (int)LF2ObjectType.Drink)
                     ImmediateFrame(LF2StandardFrames.PickingLight);
-                else if (target.Type == LF2ObjectType.HeavyWeapon)
+                else if (targetType == (int)LF2ObjectType.HeavyWeapon)
                     ImmediateFrame(LF2StandardFrames.PickingHeavy);
             }
 
@@ -510,7 +585,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 通用状态退出清理。
         /// </summary>
-        private bool Generic_StateExit()
+        private bool RunStateExitPhase()
         {
             InputState?.OnStateExit();
             return false;
@@ -534,9 +609,9 @@ namespace NTSD.Animation.LF2Objects
             bool isFront = (attackerPos.x > PS.x) == (PS.dir == "right");
             CaughtFront = isFront;
 
-            // C++ release kind=1/3 抓取成功时直接写 victim.frame = itr.catchingact。
-            int caughtFrame = itr.catchingact != null && itr.catchingact.Length > 0
-                ? itr.catchingact[0]
+            // C++ release kind=1/3：被抓者写 itr.caughtact[0]，不是 catchingact。
+            int caughtFrame = itr.caughtact != null && itr.caughtact.Length > 0
+                ? itr.caughtact[0]
                 : LF2StandardFrames.PickedCaught;
             ImmediateFrame(caughtFrame);
 
@@ -545,6 +620,9 @@ namespace NTSD.Animation.LF2Objects
 
             // 记录抓取者。
             Catching = attacker;
+            CatcherSlotIndex = attacker?.Runtime?.SlotIndex ?? -1;
+            if (attacker != null)
+                attacker.CaughtSlotIndex = Runtime?.SlotIndex ?? -1;
 
             // 被抓时丢弃当前武器。
             DropWeapon();
@@ -553,12 +631,12 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// PostInteraction 阶段（C++ release 对齐 GameMode_Process 碰撞双层循环）
-        /// 在所有对象 SerialTickAll 完成后统一执行，处理 kind=0/4 普通攻击碰撞。
+        /// C++ release step7 collision_check_loop1：角色作为攻击方时处理攻击、抓取和拾取类 itr。
+        /// 当前统一按 candidate 快照顺序消费，不再拆回旧的分组式查询路径。
         /// </summary>
         public override void SimPostInteraction(int tickIndex)
         {
-            Generic_PostInteraction();
+            TryConsumeUnifiedStep7CandidateSequence();
         }
 
         #endregion

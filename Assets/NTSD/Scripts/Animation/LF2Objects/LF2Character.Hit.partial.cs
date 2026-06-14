@@ -108,8 +108,6 @@ namespace NTSD.Animation.LF2Objects
 
                     if (itr.injury > 0)
                     {
-                        EffectCreate(0, NTSDGlobal.Gameplay.EffectDuration);
-
                         int tar;
                         if (itr.vaction != 0)
                         {
@@ -136,7 +134,7 @@ namespace NTSD.Animation.LF2Objects
 
             // State 19 + 攻击者 state 3000：fire-run 免疫。
             else if (myState == LF2States.FirenSpecific &&
-                     attacker.GetState() == LF2States.ProjectileFlying)
+                     ResolveAttackerState(attacker) == LF2States.ProjectileFlying)
             {
                 return false;
             }
@@ -167,16 +165,13 @@ namespace NTSD.Animation.LF2Objects
 
                 // 攻击方向取攻击者朝向。
                 int attDir = attacker.Dirh();
-                // dvx 直接按方向应用；NoBounce 的 kind=4 会反转 dvx。
-                // C++ release kind=9 命中特效后会影响后续 kind=4 的反弹方向。
-                bool attackerNoBounce = (attacker as LF2SpecialAttack)?.NoBounce == true;
-                int dvxSign = (attackerNoBounce && itr.kind == 4) ? -1 : 1;
-                efDvx = (itr.dvx != 0) ? attDir * dvxSign * (float)itr.dvx : 0f;
+                // C++ 当前基线：dvx 直接按攻击者朝向应用，不做额外反转。
+                efDvx = (itr.dvx != 0) ? attDir * (float)itr.dvx : 0f;
                 efDvy = (itr.dvy != 0) ? (float)itr.dvy : 0f;
 
                 // 重武器命中时，dvx/dvy/injury/fall 减半。
                 // injury/fall 使用整数右移，与 C++ release 的整型语义一致。
-                if (attacker is LF2WeaponBase wb && wb.WeaponType == 2)
+                if (IsHeavyWeaponAttacker(attacker))
                 {
                     efDvx *= 0.5f;
                     efDvy *= 0.5f;
@@ -233,7 +228,7 @@ namespace NTSD.Animation.LF2Objects
                 // 非防御分支。
                 else
                 {
-                    if ((GetHeldWeapon() as LF2WeaponBase)?.IsHeavy == true)
+                    if (IsHeldHeavyWeapon())
                         DropWeapon(0f, 0f);
 
                     // type_sub 免疫规则。
@@ -269,6 +264,32 @@ namespace NTSD.Animation.LF2Objects
 
                     // 普通受击先把 HitStateCount 设为 45。
                     HitCounters.SetHitStateCount(45);
+
+                    // C++ release collision.cpp:
+                    // victim.oid==300 时走专属受击跳转，不进入普通受击/击飞结算。
+                    // 当前帧 bdy.x>1000 时，将其解释为目标帧号并直接改写 frame，
+                    // 同时 attacker.frame_delay=3, victim.frame_delay=-3, victim.unk_364=1。
+                    if (ObjectId == 300)
+                    {
+                        var frameNow = Frame?.D;
+                        var futureFrame = GetFrameDataById((Frame?.N ?? 0) + 6);
+                        int currentBdyX = (frameNow?.bodies != null && frameNow.bodies.Count > 0)
+                            ? frameNow.bodies[0].x
+                            : 0;
+
+                        if (futureFrame?.bodies != null &&
+                            futureFrame.bodies.Count > 0 &&
+                            currentBdyX > 1000)
+                        {
+                            RelationTeam = 1;
+                            DirectWriteFramePreserveWaitCounter(currentBdyX - 1000);
+                            if (attacker != null)
+                                attacker.FrameDelay = 3;
+                            FrameDelay = -3;
+                        }
+
+                        return true;
+                    }
 
                     isKnockdown |= HitFall(inj, ref efDvx, ref efDvy, itr, attackerPos);
 
@@ -315,11 +336,12 @@ namespace NTSD.Animation.LF2Objects
                     float vix = PS.x;
                     float viz = PS.z;
 
-                    if (aix > vix + 5f && PS.vx > 0f) PS.xBoundPositive = true;
-                    else if (aix < vix - 5f && PS.vx < 0f) PS.xBoundNegative = true;
+                    // C++ release apply_kind14 同时检查当前速度和击退速度。
+                    if (aix > vix + 5f && (PS.vx > 0f || KnockbackVx > 0f)) PS.xBoundPositive = true;
+                    else if (aix < vix - 5f && (PS.vx < 0f || KnockbackVx < 0f)) PS.xBoundNegative = true;
 
-                    if (aiz > viz + 2f && PS.vz > 0f) PS.zBoundPositive = true;
-                    else if (aiz < viz - 2f && PS.vz < 0f) PS.zBoundNegative = true;
+                    if (aiz > viz + 2f && (PS.vz > 0f || KnockbackVz > 0f)) PS.zBoundPositive = true;
+                    else if (aiz < viz - 2f && (PS.vz < 0f || KnockbackVz < 0f)) PS.zBoundNegative = true;
                 }
                 return false;   // 不触发 vrest，每帧可持续生效。
             }
@@ -367,10 +389,14 @@ namespace NTSD.Animation.LF2Objects
                 if (attackerLiving != null) Attacker = attackerLiving;
 
                 // 击飞路径和普通路径使用不同 vrest 写入规则。
-                if (isKnockdown)
-                    ItrVrestUpdateKnockdown(attacker.StableId, itr);
-                else
-                    ItrVrestUpdate(attacker.StableId, itr);
+                int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+                if (attackerSlot >= 0)
+                {
+                    if (isKnockdown)
+                        ItrVrestUpdateKnockdown(attackerSlot, itr, true);
+                    else
+                        ItrVrestUpdate(attackerSlot, itr, true);
+                }
 
                 // 攻击方碰撞豁免：vrest 足够大或 arest 非零时使用 itr.vrest，否则最少 4。
                 // 该值写到攻击方的 HitCounters。
@@ -405,7 +431,7 @@ namespace NTSD.Animation.LF2Objects
 
                 // 攻击者 state==1002 命中后反弹。
                 // attacker.vx = -(victim.vx * 0.5)，attacker.vy = -3.5。
-                if (attacker.GetState() == LF2States.WeaponThrowing) // 1002
+                if (ResolveAttackerState(attacker) == LF2States.WeaponThrowing) // 1002
                 {
                     var aps = attacker.PS;
                     if (aps != null)
@@ -449,6 +475,14 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return acceptHit;
+        }
+
+        private static int ResolveAttackerState(LF2Entity attacker)
+        {
+            if (attacker is LF2WeaponBase weapon)
+                return weapon.Runtime?.WeaponState is int state and not 0 ? state : weapon.GetState();
+
+            return attacker?.GetState() ?? 0;
         }
 
         // 受伤数值结算
@@ -571,13 +605,6 @@ namespace NTSD.Animation.LF2Objects
                                        : LF2StandardFrames.FallingFront; // 180
             ImmediateFrame(fallFrame);
 
-            // dvx 兜底：dvx==0 时按攻击者方向补 ±5。
-            if (itr.dvx == 0 && efDvx == 0f)
-            {
-                int attackerDir = (attackerPos.x > PS.x) ? 1 : -1;
-                efDvx = attackerDir * 5.0f;
-            }
-
             // vy 处理：写 KnockbackVy，不直接写 PS.vy。
             // PS.vy 由帧后处理统一写入。
             // 这样可保持同帧多次命中时的速度合并规则。
@@ -649,11 +676,11 @@ namespace NTSD.Animation.LF2Objects
             // fall <= 60：小 spark，计时为 v_5C * 4 + 10。
             // 渲染层会根据 timer 推进 spark 动画。
             // 这里只负责写入 spark slot。
-            int fall   = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
-            int v_5C   = attacker?.CurrentItrIndex ?? 0;
+            int fall = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
+            int sparkPhase = itr.effect == 1 ? 1 : 0;
             int timerInitial = fall > 60
-                ? v_5C * 20
-                : v_5C * 4 + 10;
+                ? sparkPhase * 20
+                : sparkPhase * 20 + 10;
 
             // spark_x 按攻击者朝向和 itr 横向范围计算。
             // spark_y 先在角色高度范围内夹取，再叠加随机偏移。
@@ -709,8 +736,28 @@ namespace NTSD.Animation.LF2Objects
                 sz = PS.z;
             }
 
-            int currentRenderFrame = SimulationTickDriver.Instance?.SparkRenderFrame ?? -1;
-            AddSparkSlot(timerInitial, sx, sy, sz, currentRenderFrame);
+            LF2Entity sparkOwner = SelectSparkOwner(attacker);
+            int currentRenderFrame = Match?.SparkRenderFrame ?? -1;
+            sparkOwner.AddSparkSlot(timerInitial, sx, sy, sz, currentRenderFrame);
+        }
+
+        private LF2Entity SelectSparkOwner(LF2Entity attacker)
+        {
+            if (attacker?.PS == null || PS == null)
+                return this;
+
+            if (attacker.PS.z > PS.z)
+                return attacker;
+
+            if (Mathf.Approximately(attacker.PS.z, PS.z))
+            {
+                int attackerSlot = attacker.Runtime?.SlotIndex ?? -1;
+                int victimSlot = Runtime?.SlotIndex ?? -1;
+                if (attackerSlot > victimSlot)
+                    return attacker;
+            }
+
+            return this;
         }
 
         // HitPostEffect：武器掉落与冰火效果

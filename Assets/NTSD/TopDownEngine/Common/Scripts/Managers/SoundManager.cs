@@ -22,7 +22,7 @@ namespace MoreMountains.TopDownEngine
 	/// This persistent singleton handles sound playing
 	/// </summary>
 	[System.Obsolete("This SoundManager is now obsolete, and has been replaced by the bigger, better, faster MMSoundManager. It will be removed definitely in an upcoming update. You should remove this one from this scene, and add a MMSoundManager in its place.")]
-	public class SoundManager : MMPersistentSingleton<SoundManager>, MMEventListener<TopDownEngineEvent>, MMEventListener<MMGameEvent>
+	public class SoundManager : MMPersistentSingleton<SoundManager>, MMEventListener<MMGameEvent>
 	{
 		[Header("Settings")]
 
@@ -386,28 +386,6 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Watches for pause events to cut the sound on pause
-		/// </summary>
-		/// <param name="engineEvent"></param>
-		public virtual void OnMMEvent(TopDownEngineEvent engineEvent)
-		{
-			if (engineEvent.EventType == TopDownEngineEventTypes.Pause)
-			{
-				if (MuteSfxOnPause)
-				{
-					MuteAllSfx();
-				}
-			}
-			if (engineEvent.EventType == TopDownEngineEventTypes.UnPause)
-			{
-				if (MuteSfxOnPause)
-				{
-					UnmuteAllSfx();
-				}
-			}
-		}
-
-		/// <summary>
 		/// When we grab a sfx event, we play the corresponding sound
 		/// </summary>
 		/// <param name="sfxEvent"></param>
@@ -441,7 +419,6 @@ namespace MoreMountains.TopDownEngine
 		protected virtual void OnEnable()
 		{
 			MMSfxEvent.Register(OnMMSfxEvent);
-			this.MMEventStartListening<TopDownEngineEvent>();
 			this.MMEventStartListening<MMGameEvent>();
 			LoadSoundSettings();
 			_loopingSounds = new List<AudioSource>();
@@ -455,7 +432,6 @@ namespace MoreMountains.TopDownEngine
 			if (_enabled)
 			{
 				MMSfxEvent.Unregister(OnMMSfxEvent);
-				this.MMEventStopListening<TopDownEngineEvent>();
 				this.MMEventStopListening<MMGameEvent>();
 			}
 		}

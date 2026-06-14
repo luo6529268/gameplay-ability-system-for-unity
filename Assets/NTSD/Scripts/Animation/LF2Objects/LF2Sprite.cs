@@ -16,6 +16,7 @@ namespace NTSD.Animation.LF2Objects
 
         private SpriteRenderer _shadowRenderer;
         private bool _hasShadow;
+        private bool _presentationSuppressed;
 
         // SortingGroup 用于角色根节点，优先控制层级；武器/SA 无 SortingGroup 则回退到 SpriteRenderer.sortingOrder
         private SortingGroup _sortingGroup;
@@ -53,6 +54,8 @@ namespace NTSD.Animation.LF2Objects
             }
             if(_sortingGroup != null)
                 _sortingGroup.sortingLayerName = "Object";
+
+            _presentationSuppressed = false;
         }
 
         /// <summary>
@@ -89,7 +92,15 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int actualIndex = _startFrame + picIndex;
+            // 运行时 MergedSprites 已按绝对 pic 编号展开；正常路径直接用 picIndex 取图。
+            // 仅在传入的是局部表索引时，才回退到 startFrame 偏移，避免把 oid=999 等多文件对象二次偏移。
+            int actualIndex = picIndex;
+            if ((actualIndex < 0 || actualIndex >= _sprites.Count || _sprites[actualIndex] == null) &&
+                _startFrame != 0)
+            {
+                actualIndex = _startFrame + picIndex;
+            }
+
             if (actualIndex < 0 || actualIndex >= _sprites.Count)
             {
                 _renderer.enabled = false;
@@ -101,8 +112,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            _renderer.enabled = true;
             _renderer.sprite = _sprites[actualIndex];
+            _renderer.enabled = !_presentationSuppressed;
         }
 
         /// <summary>
@@ -125,7 +136,8 @@ namespace NTSD.Animation.LF2Objects
         public void SetXY(float x, float y)
         {
             if (_renderer == null) return;
-            _renderer.transform.localPosition = new Vector3(x, y, _renderer.transform.localPosition.z);
+            const float ppu = 100f;
+            _renderer.transform.localPosition = new Vector3(x / ppu, -y / ppu, _renderer.transform.localPosition.z);
         }
 
         /// <summary>
@@ -135,10 +147,11 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetZ(float z)
         {
+            int order = (int)z;
             if (_sortingGroup != null)
-                _sortingGroup.sortingOrder = Mathf.Abs((int)z);
+                _sortingGroup.sortingOrder = order;
             else if (_renderer != null)
-                _renderer.sortingOrder = Mathf.Abs((int)z);
+                _renderer.sortingOrder = order;
         }
 
         /// <summary>
@@ -147,7 +160,7 @@ namespace NTSD.Animation.LF2Objects
         public void Show()
         {
             if (_renderer != null)
-                _renderer.enabled = true;
+                _renderer.enabled = !_presentationSuppressed;
         }
 
         /// <summary>
@@ -157,6 +170,22 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_renderer != null)
                 _renderer.enabled = false;
+        }
+
+        public void SetPresentationSuppressed(bool suppressed)
+        {
+            _presentationSuppressed = suppressed;
+            if (_renderer == null)
+                return;
+
+            if (suppressed)
+            {
+                _renderer.enabled = false;
+            }
+            else if (_renderer.sprite != null)
+            {
+                _renderer.enabled = true;
+            }
         }
 
         /// <summary>

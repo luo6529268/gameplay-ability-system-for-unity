@@ -63,7 +63,7 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_entry":
-                    Trans.IncWait(0, 20);
+                    Trans.IncWait(0);
                     return false;
 
                 case "frame":

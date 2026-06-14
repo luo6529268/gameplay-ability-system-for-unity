@@ -50,6 +50,18 @@ namespace NTSD.App
         [Tooltip("Spark SpriteRenderer 桶预热数量")]
         public int PoolInitialSpritePoolSize = 16;
 
+        [Header("Battle Stage Runtime")]
+        [Tooltip("Unity 战斗场景逻辑宽度（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageWidthPx = 800;
+        [Tooltip("Unity 战斗场景逻辑 Z 最小值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageZMinPx = 180;
+        [Tooltip("Unity 战斗场景逻辑 Z 最大值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageZMaxPx = 350;
+        [Tooltip("Unity 战斗场景透视近端参数。默认 0，后续按 Unity 场景表现调整。")]
+        public int BattlePerspectiveNear = 0;
+        [Tooltip("Unity 战斗场景透视远端参数。默认 0，后续按 Unity 场景表现调整。")]
+        public int BattlePerspectiveFar = 0;
+
         #endregion
 
         #region 队伍配置

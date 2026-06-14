@@ -38,6 +38,18 @@ namespace NTSD.Animation
             public string Name;
         }
 
+        public readonly struct SpriteRectData
+        {
+            public readonly Rect Rect;
+            public readonly string Name;
+
+            public SpriteRectData(Rect rect, string name)
+            {
+                Rect = rect;
+                Name = name;
+            }
+        }
+
         /// <summary>
         /// 基础透明处理
         /// </summary>
@@ -383,6 +395,71 @@ namespace NTSD.Animation
             }
 
             return slices;
+        }
+
+        public static Color[] ProcessSheetPixels(Color[] sourcePixels, int textureWidth, int textureHeight, TransparentColorData data)
+        {
+            return MakeColorTransparent_Debleeding_AvoidBorderPixels(sourcePixels, textureWidth, textureHeight, data);
+        }
+
+        public static Color32[] ProcessSheetPixelsFast(Color32[] sourcePixels)
+        {
+            if (sourcePixels == null || sourcePixels.Length == 0)
+            {
+                return sourcePixels;
+            }
+
+            for (int i = 0; i < sourcePixels.Length; i++)
+            {
+                Color32 pixel = sourcePixels[i];
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0)
+                {
+                    pixel.a = 0;
+                }
+                else
+                {
+                    pixel.a = 255;
+                }
+
+                sourcePixels[i] = pixel;
+            }
+
+            return sourcePixels;
+        }
+
+        public static List<SpriteRectData> BuildSpriteRectsFromTopLeft(int textureWidth, int textureHeight,
+            int width, int height, int row, int col)
+        {
+            var rects = new List<SpriteRectData>();
+            int cellWidth = width + 1;
+            int cellHeight = height + 1;
+
+            for (int r = 0; r < row; r++)
+            {
+                for (int c = 0; c < col; c++)
+                {
+                    int x = c * cellWidth;
+                    int y = textureHeight - (r + 1) * cellHeight;
+                    y += 1;
+
+                    if (x < 0 || y < 0)
+                    {
+                        continue;
+                    }
+
+                    if (x + width > textureWidth || y + height > textureHeight)
+                    {
+                        continue;
+                    }
+
+                    rects.Add(new SpriteRectData(
+                        new Rect(x, y, width, height),
+                        $"sprite_{r}_{c}"
+                    ));
+                }
+            }
+
+            return rects;
         }
 
         public static List<SpritePixelData> SliceTextureFromTopLeftPixels(Color[] sourcePixels, int textureWidth, int textureHeight,

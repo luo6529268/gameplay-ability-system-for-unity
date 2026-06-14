@@ -27,8 +27,8 @@ namespace NTSD.Simulation
         [Tooltip("使用 unscaledDeltaTime 驱动外层逻辑时钟，避免 Time.timeScale 影响帧同步规则。")]
         public bool useUnscaledTime = true;
 
-        [Tooltip("单个 Unity 渲染帧最多追多少个逻辑帧，防止卡顿后无限追帧。")]
-        public int maxCatchUpTicksPerFrame = 4;
+        [Tooltip("单个 Unity 渲染帧最多追多少个逻辑帧。正式 NTSD 以 30Hz 逐帧呈现，默认不在一个渲染帧内连续追多个逻辑帧。")]
+        public int maxCatchUpTicksPerFrame = 1;
 
         [Tooltip("最多保留多少个逻辑帧的时间积压，超过后丢弃外层积压但不改变单个逻辑帧步长。")]
         public int maxBacklogTicks = 8;
@@ -57,17 +57,14 @@ namespace NTSD.Simulation
     public interface ISimulationFrameInputProvider
     {
         bool IsFrameInputReady(int tickIndex);
-        void BeforeSimTick(int tickIndex);
-        void AfterSimTick(int tickIndex);
-        void Reset();
+        void BeforeSimTick(int tickIndex) { }
+        void AfterSimTick(int tickIndex) { }
+        void Reset() { }
     }
 
     public sealed class LocalSimulationFrameInputProvider : ISimulationFrameInputProvider
     {
         public bool IsFrameInputReady(int tickIndex) => true;
-        public void BeforeSimTick(int tickIndex) { }
-        public void AfterSimTick(int tickIndex) { }
-        public void Reset() { }
     }
 
     /// <summary>
@@ -211,12 +208,17 @@ namespace NTSD.Simulation
 
             _tickIndex = tickIndex;
             _sparkRenderFrame = tickIndex;
+            if (_world.Runtime?.Flow != null)
+            {
+                _world.Runtime.Flow.CurrentTickIndex = tickIndex;
+                _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
+            }
 
             if (debugLogPerTick)
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
 
             _frameInputProvider?.BeforeSimTick(tickIndex);
-            _battleTickSystem?.RunReleaseTick(tickIndex, _sparkRenderFrame);
+            _battleTickSystem?.RunReleaseTick(tickIndex);
             _frameInputProvider?.AfterSimTick(tickIndex);
             CaptureFrameChecksumIfNeeded(tickIndex);
 
@@ -265,6 +267,30 @@ namespace NTSD.Simulation
 
             lockstepSettings = settings;
             lockstepSettings.Normalize();
+        }
+
+        public void ApplyMatchConfig(MatchConfig config)
+        {
+            if (_world == null)
+                return;
+
+            _world.ResetRuntimeState();
+
+            BattleMatchRuntimeState matchState = _world.Runtime?.Match;
+            if (matchState != null)
+            {
+                matchState.LocalGameModeId = config?.gameMode?.gameModeId ?? 0;
+                matchState.BattleGameModeId = AppManager.ResolveBattleGameMode(config);
+                matchState.BackgroundId = config?.backgroundId ?? -1;
+                matchState.Difficulty = config?.difficulty ?? 2;
+                matchState.Seed = config?.seed ?? 0;
+            }
+
+            _world.Rng?.Seed((uint)(config?.seed ?? 0));
+            _world.Runtime?.Roster?.ApplyMatchConfig(config);
+            _world.RefreshStageRuntimeSnapshotFromScene();
+
+            _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
         }
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)

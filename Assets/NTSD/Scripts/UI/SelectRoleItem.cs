@@ -134,9 +134,7 @@ namespace NTSD.UI
 
         private void Update()
         {
-            {
-                UpdateIdleFlash();
-            }
+            UpdateIdleFlash();
         }
 
         #endregion

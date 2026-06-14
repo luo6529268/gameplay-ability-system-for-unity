@@ -3,7 +3,8 @@ using NTSD.Simulation;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// opoint 生成的角色默认不绑定玩家输入；后续 AI 可替换这个控制器。
+    /// opoint 生成角色的默认空控制器，不绑定玩家输入。
+    /// 后续如果接入 AI，可以在不改生成流程的前提下替换掉它。
     /// </summary>
     public sealed class NullLF2Controller : ILF2Controller
     {

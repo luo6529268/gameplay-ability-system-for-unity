@@ -57,13 +57,10 @@ namespace NTSD.Animation
             ObjectPoint firstOp = hasList ? frame.opoints[0] : frame.opoint.Value;
             if (firstOp.kind <= 0 || animator.AttackingCounter != 0) return;
 
-            // 被命中锁定期间不生成 opoint。
             if (animator.HitStun != 0) return;
 
-            // C++ release：角色在 frame_delay 非零时跳过 opoint；非角色仍可生成。
             if (animator.FrameDelay != 0 && animator.ObjectType == 0) return;
 
-            // 子对象达到较高 ShotCount 后跳过生成，避免无限扩散。
             if (animator.OwnerId != -1 && animator.ShotCount >= 150) return;
 
             if (animator.ShotCount >= 500) return;
@@ -83,7 +80,6 @@ namespace NTSD.Animation
         {
             if (op.oid <= 0 || op.kind <= 0) return;
 
-            // 场景实体总数上限：普通对象 500，type 3/4 对象 250。
             var world = SimulationTickDriver.Instance?.World;
             if (world != null)
             {
@@ -93,7 +89,6 @@ namespace NTSD.Animation
                 if (objectCount >= limit) return;
             }
 
-            // ShotCount 按正式版节奏递增；type 3/4 先减半计算。
             {
                 int count = animator.ShotCount < 500 ? animator.ShotCount : 500;
                 if (animator.ObjectType == 3 || animator.ObjectType == 4) count >>= 1;
@@ -101,7 +96,6 @@ namespace NTSD.Animation
                 animator.ShotCount += step + 1;
             }
 
-            // facing > 10 表示批量生成；负值不进入该分支。
             if (op.facing > 10)
             {
                 int number = op.facing / 10;

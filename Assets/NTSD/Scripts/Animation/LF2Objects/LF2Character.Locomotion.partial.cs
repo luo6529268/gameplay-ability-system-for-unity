@@ -348,8 +348,6 @@ namespace NTSD.Animation.LF2Objects
             Frame.PN = Frame.N;
             Frame.N = frameId;
             Frame.D = targetFrame;
-            if (Frame.D.pic >= 0)
-                Sprite?.ShowPic(Frame.D.pic);
             Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
             Runtime.NextFrame = Frame.D.next;
         }

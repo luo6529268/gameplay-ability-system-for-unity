@@ -157,7 +157,7 @@ namespace NTSD.Animation
 
         /// <summary>
         /// 根据当前帧的 bdy 盒子生成身体碰撞体积。
-        /// 如果没有 bdy，则返回位于原点的零尺寸点体积。
+        /// C++ release 中没有 bdy 的帧不会参与身体命中判定。
         /// </summary>
         public System.Collections.Generic.List<BattleVolume> GetBodyVolumes(
             System.Collections.Generic.List<BodyBox> bodies,
@@ -175,10 +175,7 @@ namespace NTSD.Animation
             var result = new System.Collections.Generic.List<BattleVolume>();
 
             if (bodies == null || bodies.Count == 0)
-            {
-                result.Add(new BattleVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
                 return result;
-            }
 
             bool facingLeft = dir == "left";
             foreach (var body in bodies)
@@ -222,10 +219,7 @@ namespace NTSD.Animation
             float originZ = sz + offsetZ;
 
             if (bodies == null || bodies.Count == 0)
-            {
-                dst.Add(new BattleVolume(originX, originY, originZ, 0f, 0f, 0f, 0f, 0f));
                 return;
-            }
 
             bool facingLeft = dir == "left";
             for (int i = 0; i < bodies.Count; i++)
@@ -322,28 +316,25 @@ namespace NTSD.Animation
         /// <summary>将 NTSD 深度 z 转换为 Unity 屏幕 Y；NTSD z 越大表示越靠屏幕下方。</summary>
         public static float DepthToUnityY(float depthZ)
         {
-            return -depthZ / SimulationConstants.PIXELS_PER_UNIT;
+            return NTSDRenderSpace.GroundPixelToWorld(0f, depthZ).y;
         }
 
         /// <summary>将 Unity 屏幕 Y 转换回 NTSD 深度 z。</summary>
         public static float UnityYToDepth(float unityY)
         {
-            return -unityY * SimulationConstants.PIXELS_PER_UNIT;
+            return NTSDRenderSpace.WorldToGroundPixel(new Vector3(0f, unityY, 0f)).y;
         }
 
         /// <summary>将 NTSD 地面点转换为 Unity X/Y 坐标。</summary>
         public static Vector2 ToUnityGroundPoint(float ntsdX, float ntsdZ)
         {
-            return new Vector2(
-                ntsdX / SimulationConstants.PIXELS_PER_UNIT,
-                DepthToUnityY(ntsdZ)
-            );
+            return NTSDRenderSpace.GroundPixelToWorld(ntsdX, ntsdZ);
         }
 
         /// <summary>将 NTSD 屏幕像素 Y 转换为 Unity 屏幕 Y。</summary>
         public static float ScreenYToUnityY(float screenY)
         {
-            return -screenY / SimulationConstants.PIXELS_PER_UNIT;
+            return NTSDRenderSpace.ScreenPixelToWorld(0f, screenY, 0f).y;
         }
 
         /// <summary>将 NTSD tick 速度转换为 Unity 地面平面上的每秒单位速度。</summary>
@@ -364,18 +355,16 @@ namespace NTSD.Animation
         /// <summary>将 NTSD 地面平面位置转换为 Unity X/Y 坐标。</summary>
         public Vector3 ToUnityPosition()
         {
-            return new Vector3(
-                x / SimulationConstants.PIXELS_PER_UNIT,
-                DepthToUnityY(z),
-                0f
-            );
+            Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(x, z);
+            return new Vector3(groundPoint.x, groundPoint.y, 0f);
         }
 
         /// <summary>根据 Unity 位置初始化 NTSD 地面平面位置。</summary>
         public void FromUnityPosition(Vector3 unityPos)
         {
-            x = unityPos.x * SimulationConstants.PIXELS_PER_UNIT;
-            z = UnityYToDepth(unityPos.y);
+            Vector2 pixel = NTSDRenderSpace.WorldToGroundPixel(unityPos);
+            x = pixel.x;
+            z = pixel.y;
             groundY = 0f;
             y = 0;
         }
@@ -400,9 +389,8 @@ namespace NTSD.Animation
         {
             if (bodies == null || bodies.Count == 0)
             {
-                float worldX = x / SimulationConstants.PIXELS_PER_UNIT;
-                float worldY = DepthToUnityY(z);
-                return new Rect(worldX, worldY, 0f, 0f);
+                Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(x, z);
+                return new Rect(groundPoint.x, groundPoint.y, 0f, 0f);
             }
 
             var body = bodies[0];
@@ -412,8 +400,8 @@ namespace NTSD.Animation
             float bodyLeftPx = dir == "left"
                 ? (x + centerx - body.x - body.w)
                 : (x - centerx + body.x);
-            float bodyWorldX = bodyLeftPx / SimulationConstants.PIXELS_PER_UNIT;
-            float bodyWorldY = ScreenYToUnityY(z + body.y - centery);
+            float bodyWorldX = NTSDRenderSpace.GroundPixelToWorld(bodyLeftPx, z).x;
+            float bodyWorldY = NTSDRenderSpace.ScreenPixelToWorld(0f, z + body.y - centery, 0f).y;
             float bodyWidth = body.w / SimulationConstants.PIXELS_PER_UNIT;
             float bodyHeight = body.h / SimulationConstants.PIXELS_PER_UNIT;
 

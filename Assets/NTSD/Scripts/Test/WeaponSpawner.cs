@@ -94,8 +94,11 @@ namespace NTSD.Test
 
             // 3. 计算 LF2 坐标（ppu=100，LF2 纵深 z 映射到 Unity Y 轴）
             Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-            float lf2X = pos.x * 100f;
-            float lf2Z = spawnPoint != null ? PhysicsState.UnityYToDepth(pos.y) : spawnZ;
+            Vector2 lf2Point = spawnPoint != null
+                ? NTSDRenderSpace.WorldToGroundPixel(pos)
+                : new Vector2(0f, spawnZ);
+            float lf2X = lf2Point.x;
+            float lf2Z = lf2Point.y;
 
             // 4. 构造任务，入队（FlushTasks 由 SimulationTickDriver 自动调用）
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();

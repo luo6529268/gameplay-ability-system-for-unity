@@ -78,7 +78,7 @@ namespace NTSD.Test
             controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.att, down: true);
             attacker.InputState.UpdateFromBuffer(controller.InputBuffer, 1, attacker);
 
-            attacker.TUUpdate();
+            attacker.RunTuCoreForSelfCheck();
 
             Expect(attacker.CurrentFrameId == 120, "aaction 应直接写入抓取者帧 120");
             Expect(victim.CurrentFrameId == 131, "aaction 目标帧 cpoint.vaction 应直接写入被抓者帧 131");
@@ -105,7 +105,7 @@ namespace NTSD.Test
             victim.Catching = attacker;
             attacker.FrameDelay = 0;
 
-            attacker.TUUpdate();
+            attacker.RunTuCoreForSelfCheck();
 
             Expect(attacker.CurrentFrameId == 112, "throwvx 分支应让抓取者进入当前帧 next=112");
             Expect(victim.CurrentFrameId == 132, "throwvx 分支应无条件写入 victim vaction=132");
@@ -132,7 +132,7 @@ namespace NTSD.Test
             victim.Catching = catcher;
             victim.FrameDelay = 0;
 
-            victim.TUUpdate();
+            victim.RunTuCoreForSelfCheck();
 
             Expect(victim.CurrentFrameId == 131, "被抓位置同步应按 catcher cpoint.vaction 写入被抓者帧");
             Expect(Nearly(victim.PS.x, 56f), "被抓者 x 应按 catcher/vaction cpoint 组合计算");
@@ -155,7 +155,7 @@ namespace NTSD.Test
             attacker.FrameDelay = 0;
             attacker.Runtime.CaughtDuration = 3;
 
-            attacker.TUUpdate();
+            attacker.RunTuCoreForSelfCheck();
 
             Expect(attacker.CurrentFrameId == 0, "decrease<0 逃脱后抓取者应回 frame 0");
             Expect(victim.CurrentFrameId == 181, "decrease<0 逃脱后被抓者应进入 frame 181");
@@ -354,18 +354,6 @@ namespace NTSD.Test
             public void OnAdded(SimContext ctx)
             {
                 _ctx = ctx;
-            }
-
-            public void OnRemoved(SimContext ctx)
-            {
-            }
-
-            public void SimTransit(int tickIndex)
-            {
-            }
-
-            public void SimTU(int tickIndex)
-            {
             }
 
             public void SimLateTick(int tickIndex)

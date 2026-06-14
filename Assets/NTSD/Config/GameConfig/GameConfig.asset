@@ -19,6 +19,11 @@ MonoBehaviour:
   PoolExpireTimeSeconds: 120
   PoolCheckIntervalSeconds: 10
   PoolInitialSpritePoolSize: 16
+  BattleStageWidthPx: 800
+  BattleStageZMinPx: 180
+  BattleStageZMaxPx: 350
+  BattlePerspectiveNear: 0
+  BattlePerspectiveFar: 0
   TeamOptions:
   - Independent
   - Team 1

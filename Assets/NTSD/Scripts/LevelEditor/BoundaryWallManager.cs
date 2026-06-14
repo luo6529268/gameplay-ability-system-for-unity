@@ -4,6 +4,8 @@ using UnityEngine;
 using MoreMountains.Tools;
 using NTSD.Animation;
 using NTSD.Simulation;
+using MoreMountains.TopDownEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -52,6 +54,8 @@ namespace NTSD.LevelEditor
         [SerializeField]
         [Tooltip("调试模式（输出详细日志）")]
         private bool _debugMode = false;
+
+        public List<CheckPoint> SpawnPoints;
 
         // ==================== 私有字段 ====================
 
@@ -305,6 +309,36 @@ namespace NTSD.LevelEditor
         /// <summary>
         /// 手动刷新边界列表（查找场景中所有 BoundaryWall）
         /// </summary>
+        public bool TryGetBattleStageRuntime(out int stageWidthPx, out int zMinPx, out int zMaxPx)
+        {
+            stageWidthPx = 0;
+            zMinPx = 0;
+            zMaxPx = 0;
+
+            if (!TryGetWalkableBounds(out Rect worldBounds))
+                return false;
+
+            stageWidthPx = Mathf.RoundToInt(worldBounds.width * SimulationConstants.PIXELS_PER_UNIT);
+            if (stageWidthPx <= 0)
+                return false;
+
+            Vector2 topPixel = NTSDRenderSpace.WorldToGroundPixel(new Vector3(worldBounds.xMin, worldBounds.yMax, 0f));
+            Vector2 bottomPixel = NTSDRenderSpace.WorldToGroundPixel(new Vector3(worldBounds.xMin, worldBounds.yMin, 0f));
+            zMinPx = Mathf.RoundToInt(Mathf.Min(topPixel.y, bottomPixel.y));
+            zMaxPx = Mathf.RoundToInt(Mathf.Max(topPixel.y, bottomPixel.y));
+            return zMaxPx > zMinPx;
+        }
+
+        public bool TryGetBattleStagePixelBounds(out Rect bounds)
+        {
+            bounds = default;
+            if (!TryGetBattleStageRuntime(out int stageWidthPx, out int zMinPx, out int zMaxPx))
+                return false;
+
+            bounds = Rect.MinMaxRect(0f, zMinPx, stageWidthPx, zMaxPx);
+            return true;
+        }
+
         public void RefreshBoundaries()
         {
             _boundaries.Clear();

@@ -1,0 +1,28 @@
+public void ProcessOpointSpawn(LF2Entity spawner)
+        {
+            if (spawner == null || spawner.PS == null) return;
+
+            LF2FrameData frame = spawner.Frame?.D;
+            if (frame == null) return;
+
+            bool hasList = frame.opoints != null && frame.opoints.Count > 0;
+            bool hasSingle = frame.opoint.HasValue;
+            if (!hasList && !hasSingle) return;
+
+            ObjectPoint firstOp = hasList ? frame.opoints[0] : frame.opoint.Value;
+            if (firstOp.kind <= 0 || firstOp.oid <= 0 || spawner.AttackingCounter != 0) return;
+            // 角色的 late opoint 只有在 frame delay 归零后才会真正生成。
+            if (spawner.FrameDelay != 0 && spawner.ObjectType == 0) return;
+
+            if (hasList)
+            {
+                for (int i = 0; i < frame.opoints.Count; i++)
+                    ProcessOneLateOpoint(spawner, frame, frame.opoints[i]);
+            }
+            else
+            {
+                ProcessOneLateOpoint(spawner, frame, frame.opoint.Value);
+            }
+        }
+
+        

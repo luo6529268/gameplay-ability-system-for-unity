@@ -3,7 +3,7 @@ using MoreMountains.Tools;
 namespace NTSD.App
 {
     /// <summary>
-    /// 游戏设置变化事件，当 GameLocalSettings 中的任何设置发生变化时触发。
+    /// GameLocalSettings 中任意设置发生变化时触发的事件。
     /// </summary>
     public struct GameSettingsChangedEvent
     {

@@ -21,21 +21,12 @@ namespace NTSD.Animation.LF2Objects
             return cpoint.hurtable != 0;
         }
 
-        public void caught_release()
-        {
-            Catching = null;
-            ImmediateFrame(181);
-            Effect.Dvx = 3;
-            Effect.Dvy = -3;
-            Effect.TimeIn = -1;
-            Effect.TimeOut = 0;
-            FrameDelay = -3;
-        }
-
         private bool ProcessCatchingInput()
         {
             Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", "input", CurrentFrameId);
-            return ProcessCatchingActionSelection();
+            // C++ release 的抓取动作选择在全局 step10 的 cpoint_check 统一推进。
+            // 输入阶段只保留按键状态，不在这里直接跳帧。
+            return false;
         }
 
         private bool State_Catching(string eventType, object eventData)
@@ -44,241 +35,26 @@ namespace NTSD.Animation.LF2Objects
             {
                 case "state_entry":
                     Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
-                    CatchingStateTU = true;
                     CaughtDuration = 300;
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "初始化抓取持续值 300");
                     return false;
 
                 case "state_exit":
                     Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
                     Catching = null;
+                    CaughtSlotIndex = -1;
                     PS.zz = 0;
                     return false;
 
                 case "frame":
-                    return ProcessCatchingFrame();
+                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, CurrentFrameId);
+                    return false;
 
                 case "TU":
-                    return ProcessCatchingTU();
+                    // C++ release 的抓取推进在全局 step10 执行。
+                    return false;
 
                 default:
                     return false;
-            }
-        }
-
-        private bool ProcessCatchingFrame()
-        {
-            Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", "frame", CurrentFrameId);
-            return false;
-        }
-
-        private bool ProcessCatchingTU()
-        {
-            Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", "TU", CurrentFrameId);
-
-            if (Catching is not LF2Character victim)
-                return false;
-
-            var cpoint = Frame?.D?.cpoint;
-            if (cpoint == null || cpoint.kind != 1)
-            {
-                BreakCatchingRelation(resetVictim: false);
-                return true;
-            }
-
-            var victimCpoint = victim.Frame?.D?.cpoint;
-            if (victimCpoint == null || victimCpoint.kind != 2 || victim.Catching != this)
-            {
-                BreakCatchingRelation(resetVictim: false);
-                return true;
-            }
-
-            if (FrameDelay < 0)
-                return false;
-
-            if (CatchingStateTU)
-                CatchingStateTU = false;
-
-            if (ProcessCpointDecrease(victim))
-                return true;
-
-            if (ProcessCatchingActionSelection())
-                return true;
-
-            if (ProcessCatchingThrowIfNeeded(victim))
-                return true;
-
-            ApplyDirControl();
-            return false;
-        }
-
-        private void BreakCatchingRelation(bool resetVictim)
-        {
-            ImmediateFrame(LF2StandardFrames.Standing);
-            if (resetVictim && Catching is LF2Character victim)
-                victim.Catching = null;
-
-            Catching = null;
-            CaughtDuration = 0;
-        }
-
-        private bool ProcessCpointDecrease(LF2Character victim)
-        {
-            var cpoint = Frame?.D?.cpoint;
-            if (cpoint == null) return false;
-
-            if (cpoint.decrease > 0)
-            {
-                CaughtDuration -= cpoint.decrease;
-            }
-            else if (cpoint.decrease < 0)
-            {
-                CaughtDuration += cpoint.decrease;
-                if (CaughtDuration < 0)
-                {
-                    Log.Info("[State {0}:{1}] -> Branch: {2}", 9, "Catching", "cpoint.decrease 触发逃脱");
-                    ImmediateFrame(LF2StandardFrames.Standing);
-                    victim.ImmediateFrame(181);
-                    HitCount = 1;
-                    victim.HitCount = 1;
-                    victim.KnockbackVx = PS.x > victim.PS.x ? -4f : 4f;
-                    victim.KnockbackVy = -3f;
-                    Catching = null;
-                    victim.Catching = null;
-                    CaughtDuration = 0;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool ProcessCatchingActionSelection()
-        {
-            if (Catching is not LF2Character victim) return false;
-            var cpoint = Frame?.D?.cpoint;
-            if (cpoint == null) return false;
-
-            bool attackReady = Controller?.IsAttack == true && (InputState?.AttackCooldown ?? 0) > 0;
-            bool jumpReady = Controller?.IsJump == true && (InputState?.JumpCooldown ?? 0) > 0;
-            bool hasDirection = Controller != null &&
-                (Controller.IsLeft || Controller.IsRight || Controller.IsUp || Controller.IsDown);
-
-            if (attackReady && cpoint.aaction != 0 && ((!Controller.IsLeft && !Controller.IsRight) || cpoint.taction == 0))
-            {
-                ApplyCatchingActionFrame(cpoint.aaction, victim);
-                return true;
-            }
-
-            if (attackReady && hasDirection && cpoint.taction != 0)
-            {
-                ApplyCatchingActionFrame(cpoint.taction, victim);
-                return true;
-            }
-
-            if (jumpReady && cpoint.jaction != 0)
-            {
-                ApplyCatchingActionFrame(cpoint.jaction, victim);
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ApplyCatchingActionFrame(int actionFrame, LF2Character victim)
-        {
-            if (actionFrame < 0)
-            {
-                SwitchDir(PS.dir == "right" ? "left" : "right");
-                actionFrame = -actionFrame;
-            }
-
-            ImmediateFrame(actionFrame);
-            var actionFrameData = FrameCache.GetFrameDataById(actionFrame);
-            int victimAction = actionFrameData?.cpoint?.vaction ?? 0;
-            victim.ImmediateFrame(victimAction);
-            AttackingCounter = 0;
-            victim.AttackingCounter = 0;
-        }
-
-        private bool ProcessCatchingThrowIfNeeded(LF2Character victim)
-        {
-            var cpoint = Frame?.D?.cpoint;
-            if (cpoint == null || cpoint.throwvx == 0) return false;
-
-            ApplyCatchingThrow(cpoint, victim);
-            int nextFrame = Frame?.D?.next ?? 0;
-            ImmediateFrame(nextFrame);
-            Frame.PN = Frame.N;
-            AttackingCounter = 0;
-            return true;
-        }
-
-        private void ApplyCatchingThrow(CatchPoint cpoint, LF2Character victim)
-        {
-            if (cpoint.throwinjury > 0)
-                victim.WeaponCount = cpoint.throwinjury;
-            else if (cpoint.throwinjury == -1)
-                ApplyCatchingTransformToVictimData(victim);
-
-            SyncCaughtThrowPosition(cpoint, victim);
-
-            int dir = PS.dir == "right" ? 1 : -1;
-            victim.PS.vx = cpoint.throwvx * dir;
-            victim.PS.vy = cpoint.throwvy;
-
-            if (Controller?.IsUp == true && Controller.IsDown == false)
-                victim.PS.vz = -cpoint.throwvz;
-            else if (Controller?.IsUp == false && Controller.IsDown == true)
-                victim.PS.vz = cpoint.throwvz;
-
-            victim.ImmediateFrame(cpoint.vaction);
-            victim.Frame.PN = cpoint.vaction;
-            Catching = null;
-            victim.Catching = null;
-        }
-
-        private void ApplyCatchingTransformToVictimData(LF2Character victim)
-        {
-            var victimConfig = CharacterAnimtorManager.Instance?.GetCharacterConfig(victim.ObjectId);
-            if (victimConfig == null) return;
-
-            FrameCache.Load(victimConfig);
-            ObjectId = victim.ObjectId;
-            ImmediateFrame(0);
-            Frame.PN = Frame.N;
-            PropagateCatchingTransformToOwnedObjects(victimConfig);
-        }
-
-        private void PropagateCatchingTransformToOwnedObjects(LF2CharacterDataWrapper wrapper)
-        {
-            var objects = new List<LF2Entity>();
-            Match?.GetAllEntities(objects);
-
-            for (int i = 0; i < objects.Count; i++)
-            {
-                var entity = objects[i];
-                if (entity == null || entity == this) continue;
-                if (entity.KillCount != StableId) continue;
-                entity.FrameCache.Load(wrapper);
-            }
-        }
-
-        private void ApplyDirControl()
-        {
-            var cpoint = Frame?.D?.cpoint;
-            if (cpoint == null || Controller == null) return;
-            if (AttackingCounter != 2) return;
-
-            if (cpoint.dircontrol == 1)
-            {
-                if (Controller.IsRight && !Controller.IsLeft) SwitchDir("right");
-                else if (!Controller.IsRight && Controller.IsLeft) SwitchDir("left");
-            }
-            else if (cpoint.dircontrol == -1)
-            {
-                if (Controller.IsRight && !Controller.IsLeft) SwitchDir("left");
-                else if (!Controller.IsRight && Controller.IsLeft) SwitchDir("right");
             }
         }
 
@@ -297,7 +73,7 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "TU":
-                    ApplyCollisionCheck2PositionSync();
+                    // C++ release 的被抓同步在全局 step10.5 执行。
                     return false;
 
                 default:
@@ -305,120 +81,191 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private void ApplyCollisionCheck2PositionSync()
+        private void ApplyCatchingTransformToVictimData(LF2Character victim)
         {
-            if (Catching is not LF2Character catcher) return;
+            var victimConfig = CharacterAnimtorManager.Instance?.GetCharacterConfig(victim.ObjectId);
+            if (victimConfig == null) return;
 
-            var catcherCpoint = catcher.Frame?.D?.cpoint;
-            if (catcherCpoint == null || catcherCpoint.kind != 1) return;
-
-            var selfCpoint = Frame?.D?.cpoint;
-            if (selfCpoint == null || selfCpoint.kind != 2) return;
-
-            ApplyBeingCaughtVaction(catcher, catcherCpoint);
-            ApplyCpointInjuryFromCatcher(catcher, catcherCpoint);
-            SyncBeingCaughtPosition(catcher, catcherCpoint);
+            TransformOriginalObjectId = ObjectId;
+            TransformTargetObjectId = victim.ObjectId;
+            FrameCache.Load(victimConfig);
+            ObjectId = victim.ObjectId;
+            ImmediateFrame(0);
+            Frame.PN = Frame.N;
+            PropagateCatchingTransformToOwnedObjects(victimConfig, victim.ObjectId);
         }
 
-        private void ApplyBeingCaughtVaction(LF2Character catcher, CatchPoint catcherCpoint)
+        private void PropagateCatchingTransformToOwnedObjects(LF2CharacterDataWrapper wrapper, int targetObjectId)
         {
-            int vaction = catcherCpoint.vaction;
-            if (vaction == 0) return;
+            var objects = new List<LF2Entity>();
+            Match?.GetAllEntities(objects);
+            int selfSlotIndex = Runtime?.SlotIndex ?? -1;
+            if (selfSlotIndex < 0) return;
 
-            bool shouldSetFrame = (AttackingCounter == 0 && catcherCpoint.dircontrol == 1) || catcherCpoint.dircontrol == 0;
-            if (!shouldSetFrame) return;
-
-            int targetFrame = vaction;
-            if (targetFrame < 0)
+            for (int i = 0; i < objects.Count; i++)
             {
-                PS.dir = PS.dir == "right" ? "left" : "right";
-                targetFrame = -targetFrame;
+                var entity = objects[i];
+                if (entity == null || entity == this) continue;
+                // C++ throwinjury == -1 传播看的是 kill_count == catcher_slot。
+                if (entity.KillCount != selfSlotIndex) continue;
+                entity.FrameCache.Load(wrapper);
+                entity.ObjectId = targetObjectId;
+            }
+        }
+
+        protected override void RunCpointActionSelectionStep10(CatchPoint cpoint, LF2Entity victimEntity)
+        {
+            if (victimEntity is not LF2Character victim)
+                return;
+
+            bool attackReady = Controller?.IsAttack == true && (InputState?.AttackCooldown ?? 0) > 0;
+            bool jumpReady = Controller?.IsJump == true && (InputState?.JumpCooldown ?? 0) > 0;
+
+            if (attackReady && cpoint.aaction != 0)
+            {
+                bool dirOk = Controller == null || ((!Controller.IsLeft && !Controller.IsRight) || cpoint.taction == 0);
+                if (dirOk)
+                    ApplyCpointActionStep10(cpoint.aaction, victim);
             }
 
-            ImmediateFrame(targetFrame);
+            if (attackReady && cpoint.taction != 0)
+            {
+                bool anyDir = Controller != null &&
+                    (Controller.IsLeft || Controller.IsRight || Controller.IsUp || Controller.IsDown);
+                if (anyDir)
+                    ApplyCpointActionStep10(cpoint.taction, victim);
+            }
+
+            if (jumpReady && cpoint.jaction != 0)
+                ApplyCpointActionStep10(cpoint.jaction, victim);
         }
 
-        private void ApplyCpointInjuryFromCatcher(LF2Character catcher, CatchPoint catcherCpoint)
+        private void ApplyCpointActionStep10(int actionFrame, LF2Character victim)
         {
-            if (catcherCpoint.injury == 0) return;
-            if (catcher.AttackingCounter != 0) return;
+            ApplySignedCpointFrame(actionFrame);
+            int victimAction = Frame?.D?.cpoint?.vaction ?? 0;
+            victim.ApplySignedCpointFrame(victimAction);
+            victim.AttackingCounter = 0;
+            AttackingCounter = 0;
+        }
 
-            if (catcherCpoint.injury > 0)
+        protected override void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity)
+        {
+            if (victimEntity is not LF2Character victim)
             {
-                ApplyDirectInjury(catcherCpoint.injury);
-                catcher.FrameDelay = 2;
-                FrameDelay = -3;
-                catcher.AttackingCounter = 1;
+                base.ApplyCpointThrowStep10(cpoint, victimEntity);
+                return;
+            }
+
+            if (cpoint.throwinjury == -1)
+                ApplyCatchingTransformToVictimData(victim);
+
+            base.ApplyCpointThrowStep10(cpoint, victimEntity);
+        }
+
+        protected override void SetVictimThrowVzStep10(CatchPoint cpoint, LF2Entity victim)
+        {
+            if (victim?.PS == null)
+                return;
+
+            if (Controller?.IsUp == true && Controller.IsDown == false)
+                victim.PS.vz = -cpoint.throwvz;
+            else if (Controller?.IsUp == false && Controller.IsDown == true)
+                victim.PS.vz = cpoint.throwvz;
+        }
+
+        protected override void ApplyCpointDirControlStep10(CatchPoint cpoint)
+        {
+            if (Controller == null || AttackingCounter != 2)
+                return;
+
+            if (cpoint.dircontrol == 1)
+            {
+                if (Controller.IsRight && !Controller.IsLeft) SwitchDir("right");
+                else if (!Controller.IsRight && Controller.IsLeft) SwitchDir("left");
+            }
+            else if (cpoint.dircontrol == -1)
+            {
+                if (Controller.IsRight && !Controller.IsLeft) SwitchDir("left");
+                else if (!Controller.IsRight && Controller.IsLeft) SwitchDir("right");
+            }
+        }
+
+        protected override void ApplyCpointHeldInjuryStep10(LF2Entity victimEntity, int injury)
+        {
+            if (victimEntity is not LF2Character victim || victim.Health == null)
+                return;
+
+            if (injury > 0)
+            {
+                int actualInjury = injury;
+                if (victim.FallDamageDiv > 0)
+                    actualInjury = injury * 100 / victim.FallDamageDiv;
+
+                victim.Health.HP -= actualInjury;
+                victim.Health.HPLost += actualInjury;
+                victim.Health.HPBound -= actualInjury / 3;
+                AttackingCounter = 1;
+                FrameDelay = 2;
+                victim.FrameDelay = -3;
+                victim.WeaponCount += actualInjury;
+                return;
+            }
+
+            // C++ Collision_Check2 的 wp.attacking < 0 走回血分支：
+            // victim.hp += attacking; victim.hp_max += attacking / 3; attacker.attacking = 1。
+            victim.Health.HP += injury;
+            victim.Health.HPBound += injury / 3;
+            AttackingCounter = 1;
+        }
+
+        protected override void SyncCpointHeldPositionStep10(LF2Entity victimEntity, LF2FrameData catcherFrame, CatchPoint catcherCpoint)
+        {
+            if (victimEntity is not LF2Character victim)
+                return;
+
+            if (victim.PS == null || catcherFrame == null || catcherCpoint == null)
+                return;
+
+            int catcherX = Runtime != null ? Runtime.XInt : (int)PS.x;
+            int catcherY = Runtime != null ? Runtime.YInt : (int)PS.y;
+            int catcherZ = Runtime != null ? Runtime.ZInt : (int)PS.z;
+            int dx = PS.dir == "right"
+                ? catcherX - catcherFrame.centerx + catcherCpoint.x
+                : catcherFrame.centerx - catcherCpoint.x + catcherX;
+            int dy = catcherY - catcherFrame.centery + catcherCpoint.y;
+
+            LF2FrameData vactionFrame = victim.FrameCache.GetFrameDataById(Mathf.Abs(catcherCpoint.vaction));
+            int victimCpointX = vactionFrame?.cpoint?.x ?? 0;
+            int victimCpointY = vactionFrame?.cpoint?.y ?? 0;
+            // C++ Collision_Check2 这里使用的是 victim 的 vaction 目标帧几何，
+            // 不是 victim 当前帧的 centerx/centery。
+            int victimCenterX = vactionFrame?.centerx ?? 0;
+            int victimCenterY = vactionFrame?.centery ?? 0;
+
+            victim.PS.x = victim.PS.dir == "right"
+                ? victimCenterX - victimCpointX + dx
+                : victimCpointX - victimCenterX + dx;
+            victim.PS.y = victimCenterY - victimCpointY + dy;
+            victim.PS.z = catcherZ;
+
+            int coverDiv = catcherCpoint.cover / 10;
+            int coverRem = catcherCpoint.cover % 10;
+            if (coverRem != 0)
+            {
+                victim.PS.z += 1f;
+                victim.PS.y -= 1f;
             }
             else
             {
-                if (Health != null)
-                {
-                    Health.HP -= catcherCpoint.injury;
-                    Health.HPBound -= catcherCpoint.injury / 3;
-                }
-                catcher.AttackingCounter = 1;
-            }
-        }
-
-        private void SyncBeingCaughtPosition(LF2Character catcher, CatchPoint catcherCpoint)
-        {
-            var catcherFrame = catcher.Frame?.D;
-            var selfFrame = Frame?.D;
-            if (catcherFrame == null || selfFrame == null) return;
-
-            int catcherAdir = catcher.PS.dir == "right" ? 1 : -1;
-            float catcherCenterX = catcherFrame.centerx;
-            float catcherCenterY = catcherFrame.centery;
-
-            float attachX = catcher.PS.x + (catcherCpoint.x - catcherCenterX) * catcherAdir;
-            float attachY = catcher.PS.y - catcherCenterY + catcherCpoint.y;
-
-            var vactionFrame = FrameCache.GetFrameDataById(Mathf.Abs(catcherCpoint.vaction));
-            var vactionCpoint = vactionFrame?.cpoint;
-            float selfCpointX = vactionCpoint?.x ?? 0f;
-            float selfCpointY = vactionCpoint?.y ?? 0f;
-            float selfCenterX = selfFrame.centerx;
-            float selfCenterY = selfFrame.centery;
-
-            PS.x = PS.dir == "right"
-                ? selfCenterX - selfCpointX + attachX
-                : selfCpointX - selfCenterX + attachX;
-            PS.y = selfCenterY - selfCpointY + attachY;
-            PS.z = catcher.PS.z;
-
-            int cover = catcherCpoint.cover;
-            if (cover % 10 != 0)
-            {
-                PS.z += 1f;
-                PS.y -= 1f;
-            }
-            else
-            {
-                PS.z -= 1f;
-                PS.y += 1f;
+                victim.PS.z -= 1f;
+                victim.PS.y += 1f;
             }
 
-            int coverDir = cover / 10;
-            if (coverDir == 1)
-            {
-                PS.dir = catcher.PS.dir;
-            }
-            else if (coverDir == 2)
-            {
-                PS.dir = catcher.PS.dir == "right" ? "left" : "right";
-            }
-        }
-
-        private void SyncCaughtThrowPosition(CatchPoint cpoint, LF2Character victim)
-        {
-            var catcherFrame = Frame?.D;
-            if (catcherFrame == null || victim?.PS == null) return;
-
-            victim.PS.x = PS.dir == "right"
-                ? PS.x - catcherFrame.centerx + cpoint.x
-                : catcherFrame.centerx - cpoint.x + PS.x;
-            victim.PS.y = PS.y - catcherFrame.centery + cpoint.y;
+            if (coverDiv == 1)
+                victim.SwitchDir(PS.dir);
+            else if (coverDiv == 2)
+                victim.SwitchDir(PS.dir == "right" ? "left" : "right");
         }
     }
 }

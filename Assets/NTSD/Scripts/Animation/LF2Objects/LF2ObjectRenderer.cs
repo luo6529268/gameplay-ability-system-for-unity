@@ -1,6 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
 using MoreMountains.Tools;
@@ -8,14 +7,7 @@ using MoreMountains.Tools;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// LF2 对象渲染器（MonoBehaviour 层）
-    /// 职责：
-    /// 1. 每帧更新 SpriteRenderer 的 sprite（SimLateTick）
-    /// 2. 每帧同步 Transform 位置（从 Animator.ps）
-    /// 3. 持有逻辑层对象引用（但不负责其生命周期管理）
-    ///
-    /// 生命周期：固定 SimOrder=100，只参与 LateTick 阶段（渲染更新）
-    /// 逻辑层对象（LF2SpecialAttack 等）在 SimOrder=20/30/40 的阶段执行逻辑
+    /// LF2 对象渲染器，负责把逻辑层实体的当前帧、朝向和 C++ 像素坐标同步到 Unity SpriteRenderer。
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public class LF2ObjectRenderer : MonoBehaviour, ISimObject
@@ -28,10 +20,10 @@ namespace NTSD.Animation.LF2Objects
         // ========== 逻辑层引用 ==========
         private LF2Entity _logicObject;
 
-        // 渲染帧计数器（C++ release 对齐 dword_449098，每渲染帧递增）
+        // 渲染帧计数器，对齐 C++ release 的 dword_449098。
         private int _renderFrameCount = 0;
 
-        // 缓存稳定ID（AllocateStableId 只调用一次）
+        // 缓存稳定 ID，AllocateStableId 只调用一次。
         [SerializeField][MMReadOnly]private int _stableId = 0;
 
         // ========== 公开属性 ==========
@@ -40,7 +32,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== ISimObject 实现 ==========
 
         /// <summary>
-        /// 渲染层固定 SimOrder=100（在所有逻辑之后）
+        /// 渲染层固定在所有逻辑对象之后执行。
         /// </summary>
         public int SimOrder => SimOrderConstants.Renderer;
 
@@ -75,27 +67,46 @@ namespace NTSD.Animation.LF2Objects
             SimulationTickDriver.Instance?.World?.Unregister(this);
         }
 
-        public void OnAdded(SimContext ctx) { }
-
-        public void OnRemoved(SimContext ctx) { }
-
-        public void SimTransit(int tickIndex) { }
-
-        public void SimTU(int tickIndex) { }
-
         public void SimLateTick(int tickIndex)
         {
             if (_logicObject == null) return;
+
+            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
+            if (tickIndex < firstPresentationTick)
+            {
+                HidePresentation();
+                return;
+            }
+
             UpdateSprite();
             UpdatePosition();
+            _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
             ApplyVisualShake();
+        }
+
+        /// <summary>
+        /// opoint 刚生成对象时，逻辑帧和表现对象需要在同一个模拟时刻完成同步。
+        /// </summary>
+        public void ForceRefreshPresentation()
+        {
+            if (_logicObject == null) return;
+            int currentTick = _logicObject?.Match?.CurrentTickIndex ?? 0;
+            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
+            if (currentTick < firstPresentationTick)
+            {
+                HidePresentation();
+                return;
+            }
+
+            UpdateSprite();
+            UpdatePosition();
+            _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
         }
 
         // ========== 核心方法 ==========
 
         /// <summary>
-        /// 设置逻辑对象并初始化
-        /// 由 LF2ObjectFactory 调用
+        /// 设置逻辑对象并初始化对应的 Sprite 资源。
         /// </summary>
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
@@ -116,13 +127,18 @@ namespace NTSD.Animation.LF2Objects
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
 
+            // 新生成对象先压住表现。
+            // C++ release 的 late opoint / transition smoke 不允许在创建当拍先露一帧，
+            // 必须等 FirstPresentationTick 到达后再由 ForceRefresh/SimLateTick 放行。
+            _logicObject?.Sprite?.SetPresentationSuppressed(true);
+
             var frame = _logicObject?.Frame?.D;
             if (frame != null && _logicObject.Sprite != null)
-                _logicObject.Sprite.ShowPic(frame.pic);
+                _logicObject.Sprite.ShowPic(_logicObject.GetRenderPicIndex());
         }
 
         /// <summary>
-        /// 对象池复用时恢复 Unity 渲染组件状态，避免上一轮 Reset/Hide 留下不可见状态。
+        /// 对象池复用时恢复 Unity 渲染组件状态，避免上一轮 Hide/Reset 留下不可见状态。
         /// </summary>
         public void RestorePooledVisualState()
         {
@@ -140,6 +156,13 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
+        private void HidePresentation()
+        {
+            _logicObject?.Sprite?.SetPresentationSuppressed(true);
+            _logicObject?.Sprite?.Hide();
+            _logicObject?.Sprite?.HideShadow();
+        }
+
         public void SetShadowRenderer(SpriteRenderer shadowRenderer)
         {
             _shadowRenderer = shadowRenderer;
@@ -148,7 +171,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 重置状态（归还对象池前调用）
+        /// 重置状态，归还对象池前调用。
         /// </summary>
         public void ResetState()
         {
@@ -159,27 +182,33 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 更新 sprite（从 CurrentFrame.pic 和 PS.dir）
         /// 按当前帧 pic 和运行时方向刷新 Unity SpriteRenderer。
         /// </summary>
         private void UpdateSprite()
         {
             if (_logicObject == null) return;
             var frame = _logicObject.Frame?.D;
-            if (frame == null) return;
+            if (frame == null)
+            {
+                // C++ 侧 frame 已经切到 1000/无效帧时，不应继续保留上一张图。
+                _logicObject.Sprite?.Hide();
+                _logicObject.Sprite?.HideShadow();
+                return;
+            }
             if (_logicObject.Sprite == null) return;
             if (!_logicObject.Sprite.HasRenderer) return;
-            _logicObject.Sprite.ShowPic(frame.pic);
+            _logicObject.Sprite.SetPresentationSuppressed(false);
+            _logicObject.Sprite.ShowPic(_logicObject.GetRenderPicIndex());
             var ps = _logicObject.PS;
             if (ps != null)
                 _logicObject.Sprite.SwitchLR(ps.dir);
         }
 
         /// <summary>
-        /// 同步 Transform 位置（从 PS 像素坐标转换到 Unity 世界坐标）
-        /// 严格对齐 Sibling 结构：
-        /// 1. Root (EntityObject): 负责地面坐标 px, pz
-        /// 2. Model (EntityModel): 负责视觉高度 py 和中心点偏移 cx, cy
+        /// 同步 Transform 位置。
+        /// C++ release draw_entity 使用绘制矩形：
+        /// 朝右 dst.x = x - centerx，朝左 dst.x = x - (frame_w - centerx)，dst.y = z + y - centery。
+        /// Unity 运行时 Sprite 的 pivot 是底部中心，因此这里把 C++ 绘制矩形换算为底部中心点。
         /// </summary>
         private void UpdatePosition()
         {
@@ -187,63 +216,45 @@ namespace NTSD.Animation.LF2Objects
             var ps = _logicObject.PS;
             if (ps == null) return;
 
-            var frame = _logicObject.Frame?.D;
-            float cx = frame?.centerx ?? 0f;
-            float cy = frame?.centery ?? 0f;
-            const float ppu = SimulationConstants.PIXELS_PER_UNIT;
+            ApplyCppDrawEntityPosition(ps);
+            _logicObject.Sprite?.SetZ(_logicObject.GetDisplayZ() + ps.zz);
 
-            Transform rootTransform = transform.parent != null ? transform.parent : transform;
-            float parentScaleY = rootTransform.localScale.y;
-            if (Mathf.Approximately(parentScaleY, 0f)) parentScaleY = 1f;
-
-            if (_logicObject is LF2Character)
-            {
-                float spriteHeight = _spriteRenderer.sprite?.rect.height ?? 0f;
-                float localPosY = -ps.y / (ppu * parentScaleY)
-                                  - (spriteHeight - cy) / ppu;
-                Vector2 groundPlanePos = ps.GetGroundPoint2D();
-                rootTransform.position = new Vector3(
-                    Mathf.Round(groundPlanePos.x * ppu) / ppu,
-                    Mathf.Round(groundPlanePos.y * ppu) / ppu,
-                    rootTransform.position.z
-                );
-
-                if (_visualTransform != null)
-                {
-                    float snappedLocalY = Mathf.Round(localPosY * ppu) / ppu;
-                    _visualTransform.localPosition = new Vector3(0f, snappedLocalY, 0f);
-                }
-            }
-            else
-            {
-                float spriteWidth = _spriteRenderer.sprite?.rect.width ?? 0f;
-                float spriteHeight = _spriteRenderer.sprite?.rect.height ?? 0f;
-                float rootWorldX = Mathf.Round((ps.x / ppu) * ppu) / ppu;
-                // C++ release 渲染非角色对象时使用 screenY = z + y。
-                float rootWorldY = Mathf.Round(PhysicsState.ScreenYToUnityY(ps.z + ps.y) * ppu) / ppu;
-                rootTransform.position = new Vector3(
-                    rootWorldX,
-                    rootWorldY,
-                    rootTransform.position.z
-                );
-
-                if (_visualTransform != null)
-                {
-                    float localPosX = (ps.dir == "left")
-                        ? (cx - spriteWidth * 0.5f) / ppu
-                        : (spriteWidth * 0.5f - cx) / ppu;
-                    float localPosY = -(spriteHeight - cy) / ppu;
-                    float snappedLocalX = Mathf.Round(localPosX * ppu) / ppu;
-                    float snappedLocalY = Mathf.Round(localPosY * ppu) / ppu;
-                    _visualTransform.localPosition = new Vector3(snappedLocalX, snappedLocalY, 0f);
-                }
-            }
-            _logicObject.Sprite?.SetZ(ps.z + ps.zz);
-
-            // 阴影由 LF2Entity.UpdateShadow() 处理（保持在 Root 的本地零点）
+            // 阴影按 C++ 逻辑坐标 x/z 独立更新，不跟随图片 pivot。
             _logicObject.UpdateShadow(_renderFrameCount);
         }
 
+        private void ApplyCppDrawEntityPosition(PhysicsState ps)
+        {
+            var frame = _logicObject.Frame?.D;
+
+            float spriteWidth = _logicObject.GetSpriteWidthPxForRender();
+            float spriteHeight = _logicObject.GetSpriteHeightPxForRender();
+            float centerx = frame?.centerx ?? 0f;
+            float centery = frame?.centery ?? 0f;
+
+            // C++ release draw_entity 使用的是 x_int / y_int / z_int。
+            // 这里不能直接吃 Unity 侧的浮点逻辑坐标，否则同一实体在出生后续拍、
+            // 摩擦衰减和 type=3/oid=999 这类路径上会出现和正式版不一致的像素漂移。
+            var runtime = _logicObject.Runtime;
+            int drawX = _logicObject.GetRuntimeXInt() + Mathf.RoundToInt(_logicObject.GetRenderOffsetX());
+            int drawY = _logicObject.GetRuntimeYInt();
+            int drawDisplayZ = _logicObject.GetRenderZInt();
+
+            float drawLeft = ps.dir == "left"
+                ? drawX - (spriteWidth - centerx)
+                : drawX - centerx;
+            float drawTop = drawDisplayZ + drawY - centery;
+            float pivotX = drawLeft + spriteWidth * 0.5f;
+            float pivotScreenY = drawTop + spriteHeight;
+
+            Transform rootTransform = transform.parent != null ? transform.parent : transform;
+            rootTransform.localScale = NTSDRenderSpace.RenderScale;
+            Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(pivotX, pivotScreenY, rootTransform.position.z);
+            rootTransform.position = NTSDRenderSpace.SnapWorldPosition(worldPos);
+
+            if (_visualTransform != null)
+                _visualTransform.localPosition = Vector3.zero;
+        }
         private void ApplyVisualShake()
         {
             _renderFrameCount++;
@@ -252,7 +263,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== 辅助方法 ==========
 
         /// <summary>
-        /// 获取当前 sprite 宽度（用于 make_point）
+        /// 获取当前 Sprite 宽度，单位为像素。
         /// </summary>
         public float GetSpriteWidth()
         {

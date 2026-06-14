@@ -28,11 +28,21 @@ namespace NTSD.Animation.LF2Tasks
         public bool releaseOpointSpawn;
 
         public bool IsFromPool { get; set; }
+
         public void Clear()
         {
-            opoint = default; parent = null; team = 0;
-            pos = Vector3.zero; z = 0f; dir = null; dvz = 0f; number = 0;
-            useDirectVelocity = false; directVx = 0f; directVy = 0f; directVz = 0f;
+            opoint = default;
+            parent = null;
+            team = 0;
+            pos = Vector3.zero;
+            z = 0f;
+            dir = null;
+            dvz = 0f;
+            number = 0;
+            useDirectVelocity = false;
+            directVx = 0f;
+            directVy = 0f;
+            directVz = 0f;
             preserveActionZero = false;
             ownerEntityIndex = -1;
             frameDelay = 0;

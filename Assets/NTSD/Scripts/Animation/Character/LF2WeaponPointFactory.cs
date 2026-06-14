@@ -45,25 +45,7 @@ namespace NTSD.Animation
             if (character.ReleaseHeldObjectByWPoint(wpoint, out _))
                 return;
 
-            ProcessWeaponFallbackDrop(character);
-        }
-
-        private static void ProcessWeaponFallbackDrop(LF2Character character)
-        {
-            var weapon = character.GetHeldWeapon() as LF2WeaponBase;
-            if (weapon == null) return;
-
-            character.ItrRest.Arest = 0;
-            weapon.ItrRest.Arest = 0;
-
-            weapon.SetFrameDirect(weapon.BattleRandInt(0, 6));
-            weapon.PS.vx = weapon.BattleRandInt(0, 7) - 3;
-            weapon.PS.vy = -weapon.BattleRandInt(0, 4);
-            weapon.PS.vz = (weapon.BattleRandInt(0, 5) - 2) * 0.2f;
-            weapon.PS.zz = 0;
-            weapon.Team = 0;
-            weapon.ForceClearHolder();
-            character.HoldWeapon(null);
+            character.TryDropHeldWeaponFallbackRandomly();
         }
     }
 }

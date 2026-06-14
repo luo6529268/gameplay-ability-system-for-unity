@@ -1,4 +1,5 @@
 using UnityEngine;
+using NTSD.Animation;
 
 namespace NTSD.App
 {
@@ -23,11 +24,13 @@ namespace NTSD.App
         public void EnablePresentation()
         {
             SetPresentationEnabled(true);
+            NTSDRenderSpace.BindWorldCamera(worldCamera);
             EnsureBattleCanvasCamera();
         }
 
         public void DisablePresentation()
         {
+            NTSDRenderSpace.ClearBoundWorldCamera(worldCamera);
             SetPresentationEnabled(false);
         }
 

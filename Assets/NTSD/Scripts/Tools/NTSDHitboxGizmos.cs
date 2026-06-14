@@ -64,6 +64,8 @@ namespace NTSD.Tools
 
         private void DrawBdyBoxes(LF2Entity entity, LF2FrameData frameD, float spriteW)
         {
+            if (frameD.bodies == null || frameD.bodies.Count == 0) return;
+
             var vols = entity.PS.GetBodyVolumes(frameD.bodies, frameD.centerx, frameD.centery, spriteW);
             Color fill = new Color(BdyColor.r, BdyColor.g, BdyColor.b, bdyAlpha);
             Color wire = new Color(BdyColor.r, BdyColor.g, BdyColor.b, 1f);
@@ -81,6 +83,9 @@ namespace NTSD.Tools
 
             for (int i = 0; i < count; i++)
             {
+                InteractionArea itr = frameD.itrs[i];
+                if (ShouldHideReleaseState18Itr(entity, frameD, itr)) continue;
+
                 int kind = frameD.itrs[i].kind;
                 Color baseColor = kind == 0 || kind == 4 || kind == 5
                     ? ItrColor0
@@ -92,6 +97,14 @@ namespace NTSD.Tools
                 Color wire = new Color(baseColor.r, baseColor.g, baseColor.b, 1f);
                 DrawVolume(vols[i], fill, wire);
             }
+        }
+
+        private static bool ShouldHideReleaseState18Itr(LF2Entity entity, LF2FrameData frameD, InteractionArea itr)
+        {
+            if (entity == null || frameD == null || itr == null) return false;
+            if (frameD.state != LF2States.Burning) return false;
+            if (itr.effect == 21 || itr.effect == 22) return false;
+            return entity is LF2Character || entity is LF2WeaponBase || entity is LF2SpecialAttack;
         }
 
         private void DrawWeaponPickupBoxes(LF2WeaponBase weapon, LF2FrameData frameD, float spriteW)
@@ -132,18 +145,16 @@ namespace NTSD.Tools
         /// </summary>
         private static void DrawVolume(PhysicsState.BattleVolume vol, Color fill, Color wire)
         {
-            float ppu = SimulationConstants.PIXELS_PER_UNIT;
-
-            float worldLeft = (vol.x + vol.vx) / ppu;
-            float worldWidth = vol.w / ppu;
+            float screenLeft = vol.x + vol.vx;
+            float worldWidth = NTSDRenderSpace.PixelWidthToWorld(vol.w);
 
             float screenTop = vol.y + vol.vy;
-            float worldTop = PhysicsState.ScreenYToUnityY(screenTop);
-            float worldHeight = vol.h / ppu;
+            Vector3 worldTopLeft = NTSDRenderSpace.ScreenPixelToWorld(screenLeft, screenTop, 0f);
+            float worldHeight = NTSDRenderSpace.PixelHeightToWorld(vol.h);
 
-            float cx = worldLeft + worldWidth * 0.5f;
-            float cy = worldTop - worldHeight * 0.5f;
-            float worldDepth = Mathf.Max(0.05f, (vol.zwidth > 0f ? vol.zwidth : 1f) * 2f / ppu);
+            float cx = worldTopLeft.x + worldWidth * 0.5f;
+            float cy = worldTopLeft.y - worldHeight * 0.5f;
+            float worldDepth = Mathf.Max(0.05f, NTSDRenderSpace.PixelHeightToWorld((vol.zwidth > 0f ? vol.zwidth : 1f) * 2f));
 
             Vector3 center = new Vector3(cx, cy, 0f);
             Vector3 size = new Vector3(worldWidth, worldHeight, worldDepth);

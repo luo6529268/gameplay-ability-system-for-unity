@@ -16,6 +16,11 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public class LF2Weapon : LF2WeaponBase
     {
+        private static LF2Character AsAttackCharacterTarget(LF2Entity target)
+        {
+            return target as LF2Character;
+        }
+
         #region 字段与属性
 
         /// <summary>对象池创建时确定的武器类型，用于 Reset 后恢复 C++ release entity_type。</summary>
@@ -217,6 +222,7 @@ namespace NTSD.Animation.LF2Objects
             int typeSub = charData?.type_sub ?? 0;
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
+            int runtimeState = ResolveRuntimeWeaponState();
 
             // ── 1. 额外水平速度加成（C++ release 0x4162EB-0x416327）──
             if (wt == 4 || typeSub == 0x78)
@@ -235,7 +241,7 @@ namespace NTSD.Animation.LF2Objects
             }
             else if (wt != 3)
             {
-                if (frameState == LF2States.WeaponThrowing)
+                if (runtimeState == LF2States.WeaponThrowing)
                 {
                     switch (typeSub)
                     {
@@ -256,7 +262,7 @@ namespace NTSD.Animation.LF2Objects
                 PS.z += fD.hit_j - 50;
 
             // ── 4. type=4/6 回旋镖（C++ release 0x416466-0x4164A2）──
-            if ((wt == 4 || wt == 6) && frameState == LF2States.WeaponInSky)
+            if ((wt == 4 || wt == 6) && runtimeState == LF2States.WeaponInSky)
             {
                 if (PS.vx > NTSDGlobal.Gameplay.WeaponBoomerangVxMax ||
                     PS.vx < NTSDGlobal.Gameplay.WeaponBoomerangVxMin)
@@ -322,7 +328,7 @@ namespace NTSD.Animation.LF2Objects
                         // 两个条件都不满足 → frame=181(0xB5)
                         // 任一满足 → frame=182(0xB6)
                         // dword_449038 = (dword_449038+1)%12，对应全局 tick mod 12（P1-4）
-                        int globalTick12 = (SimulationTickDriver.Instance?.CurrentTickIndex ?? 0) % 12;
+                        int globalTick12 = (Match?.CurrentTickIndex ?? 0) % 12;
                         if (vy >= 12.0 || globalTick12 < 6)
                             SetPhysicsFrameDirect(181);
                         else
@@ -359,16 +365,17 @@ namespace NTSD.Animation.LF2Objects
                 FlightCounter -= dropHurt;
                 PS.vz = 0f;
 
-                int frameState1 = Frame?.D?.state ?? -1;
+                int runtimeState1 = ResolveRuntimeWeaponState();
 
                 if (PS.vy > 9.9f)
                 {
-                    if (frameState1 == LF2States.WeaponThrowing) // 1002
+                    if (runtimeState1 == LF2States.WeaponThrowing) // 1002
                     {
                         // 大弹：vx*=0.5, 反转方向, frame=7, vy=-8
                         PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                         PS.dir = PS.dir == "right" ? "left" : "right";
                         SetPhysicsFrameDirect(7);
+                        Runtime.WeaponState = LF2States.WeaponInSky;
                         PS.vy = NTSDGlobal.Gameplay.WeaponType1BigBounceVy; // -8
                         PlaySound(WeaponDropSound);
                     }
@@ -377,6 +384,7 @@ namespace NTSD.Animation.LF2Objects
                         // 非1002大弹 → 小弹路径（frame=60，via LABEL_148）
                         PS.vy = 0f;
                         SetPhysicsFrameDirect(0x3C); // frame=60
+                        Runtime.WeaponState = 0;
                         AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
                         PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                     }
@@ -385,7 +393,8 @@ namespace NTSD.Animation.LF2Objects
                 {
                     // vy <= 9.9 → 小弹（via LABEL_148）
                     PS.vy = 0f;
-                    SetPhysicsFrameDirect(frameState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    SetPhysicsFrameDirect(runtimeState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    Runtime.WeaponState = 0;
                     AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
                 }
@@ -417,6 +426,7 @@ namespace NTSD.Animation.LF2Objects
                     if (FlightCounter < 0) FlightCounter = 0;
                     PS.vy = 0f;
                     SetPhysicsFrameDirect(20);
+                    Runtime.WeaponState = 0;
                     // C++ release LABEL_148：vx*=0.5（仅此一次）
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
                     AttackingCounter = 0; // C++ release LABEL_148 → Entity::attacking=0
@@ -438,8 +448,8 @@ namespace NTSD.Animation.LF2Objects
                 // 大弹/小弹判断（C++ release 0x416C7E-0x416CAF）：
                 // 弹起条件：vy > 8.5 AND vx > -10.0 AND vx < 10.0（即 |vx| < 10）
                 // 不弹起：vy <= 8.5 OR |vx| >= 10
-                int fstate46 = Frame?.D?.state ?? -1;
-                bool isFlyState46 = fstate46 == LF2States.WeaponThrowing || fstate46 == LF2States.WeaponInSky;
+                int runtimeState46 = ResolveRuntimeWeaponState();
+                bool isFlyState46 = runtimeState46 == LF2States.WeaponThrowing || runtimeState46 == LF2States.WeaponInSky;
                 bool bigBounce46 = PS.vy > 8.5f          // dbl_443358 = 8.5
                                    && PS.vx > -10f        // dbl_443350 = -10.0
                                    && PS.vx < 10f         // dbl_4432C0 = 10.0
@@ -452,6 +462,7 @@ namespace NTSD.Animation.LF2Objects
                     PS.vy = PS.vy * -0.7f;
                     if (PS.vy < -10.0f) PS.vy = -10.0f;  // C++ release 确认 -10.0，原误写为 -2.5
                     SetPhysicsFrameDirect(0);
+                    Runtime.WeaponState = LF2States.WeaponInSky;
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
                     // C++ release case 4/6 大弹 0x416D39：v54 = v3[42]; if (v54 > -1) sub_419B40(...) P2-10
                     PlaySound(WeaponDropSound);
@@ -462,7 +473,8 @@ namespace NTSD.Animation.LF2Objects
                     PS.vy = 0f;
                     PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
                     PS.zz = 0;
-                    SetPhysicsFrameDirect(fstate46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    SetPhysicsFrameDirect(runtimeState46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    Runtime.WeaponState = 0;
                     AttackingCounter = 0; // C++ release type=4/6 小弹：Entity::attacking=0
                 }
                 // C++ release type=4/6 无 clamp
@@ -499,6 +511,7 @@ namespace NTSD.Animation.LF2Objects
 
                     // frame=185（C++ release 0x4167DB: mov dword ptr [esi+70h], 0B9h）
                     SetPhysicsFrameDirect(185);
+                    Runtime.WeaponState = 0;
 
                     // 对周围角色造成伤害
                     var sceneQuery = Match?.SceneQuery;
@@ -515,10 +528,11 @@ namespace NTSD.Animation.LF2Objects
                                 var itr = new InteractionArea { kind = 0, injury = hurt, dvx = 3, dvy = 7, fall = 70, vrest = 10, arest = 0 };
                                 foreach (var bvol in bodies)
                                 {
-                                    var candidates = sceneQuery.QueryBodies(bvol, this);
-                                    foreach (var t in candidates)
+                                    var hits = sceneQuery.QueryBodyHits(this, frameD, itr, bvol);
+                                    foreach (var hit in hits)
                                     {
-                                        if (t == null || t.Team == Team) continue;
+                                        var t = hit.Target;
+                                        if (t == null || t.RelationTeam == RelationTeam) continue;
                                         if (t is LF2Character ch)
                                             ch.Hit(itr, this, new UnityEngine.Vector3(PS.x, PS.y, PS.z), default);
                                     }
@@ -555,6 +569,7 @@ namespace NTSD.Animation.LF2Objects
                     SetPhysicsFrameDirect(215); // 0xD7
                 else
                     SetPhysicsFrameDirect(219); // 0xDB
+                Runtime.WeaponState = 0;
 
                 AttackingCounter = 0;           // Entity::attacking=0
                 return;
@@ -565,6 +580,7 @@ namespace NTSD.Animation.LF2Objects
                 // type_sub=999：立即静止 frame=101（C++ release 0x416C13: mov [esi+70h], 65h）
                 PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
                 SetPhysicsFrameDirect(0x65); // 101
+                Runtime.WeaponState = 0;
                 AttackingCounter = 0;
             }
             // 其他 type=0 武器落地：不做任何帧切换（C++ release jnz loc_416D5A → fstp st → 末尾）
@@ -581,9 +597,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void Interaction()
         {
-            if (Team == 0) return;
+            if (RelationTeam == 0) return;
 
-            int state = GetState();
+            int state = ResolveRuntimeWeaponState();
 
             bool canInteract = IsLight
                 ? state == LF2States.WeaponThrowing   // 1002：飞行中的轻武器（Entity_FrameAdvance 路径）
@@ -601,7 +617,11 @@ namespace NTSD.Animation.LF2Objects
         public override bool Hit(InteractionArea itr, LF2Entity attacker)
         {
             if (HoldObj != null) return false;
-            if (attacker != null && ItrRest != null && ItrRest.HasVrest(attacker.StableId)) return false;
+            if (attacker != null && ItrRest != null)
+            {
+                int attackerKey = attacker.Runtime?.SlotIndex ?? -1;
+                if (attackerKey >= 0 && ItrRest.HasVrest(attackerKey)) return false;
+            }
 
             // C++ release 0x0042F419-0x0042F45F：轻武器 kind=15/16 跳到同一 vx/vz 物理段
             if (itr.kind == 15 || itr.kind == 16) { WhirlwindForce(itr, attacker); return true; }
@@ -616,7 +636,7 @@ namespace NTSD.Animation.LF2Objects
                 // 轻武器(type=1/4/6): state!=1000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=3
                 // 重武器(type=2):     state!=2000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=2.3
                 const float kFluteVxzFactor = 0.9345f;
-                int curState = GetState();
+                int curState = ResolveRuntimeWeaponState();
                 bool isLight = IsLight; // type=1/4/6
                 int inSkyState = isLight ? LF2States.WeaponInSky : LF2States.HeavyWeaponInSky;
                 if (curState != inSkyState)
@@ -629,7 +649,7 @@ namespace NTSD.Animation.LF2Objects
                 return true;
             }
 
-            int state = GetState();
+            int state = ResolveRuntimeWeaponState();
             bool accept = false;
 
             if (IsLight)
@@ -650,25 +670,11 @@ namespace NTSD.Animation.LF2Objects
 
         private bool HitAsLight(InteractionArea itr, LF2Entity attacker, int state)
         {
-            if (state == LF2States.WeaponThrowing) // 1002
-            {
-                // C++ release：被角色打中时只设 fall=80（由 Entity_AI_Update LABEL_129 处理）
-                // 无速度反转；vrest 由 ApplyHitEffects 统一处理
-                return true;
-            }
+            if (ObjectId == 201 || ObjectId == 202)
+                return false;
 
-            if (state == LF2States.WeaponOnGround) // 1004
-            {
-                if (attacker is LF2Weapon)
-                {
-                    var aps = attacker.PS;
-                    PS.vx = (aps.vx != 0 ? Mathf.Sign(aps.vx) : 0) * NTSDGlobal.Gameplay.WeaponBounceupSpeedX;
-                    PS.vz = (aps.vz != 0 ? Mathf.Sign(aps.vz) : 0) * NTSDGlobal.Gameplay.WeaponBounceupSpeedZ;
-                    return true;
-                }
-            }
-
-            return false;
+            RelationTeam = attacker?.RelationTeam ?? RelationTeam;
+            return true;
         }
 
         private bool HitAsHeavy(InteractionArea itr, LF2Entity attacker, int state)
@@ -679,6 +685,8 @@ namespace NTSD.Animation.LF2Objects
             if (state == LF2States.HeavyWeaponOnGround   // 2004
              || state == LF2States.HeavyWeaponInSky)     // 2000
             {
+                if (attacker != null)
+                    RelationTeam = attacker.RelationTeam;
                 return true;
             }
 
@@ -687,20 +695,74 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyHitEffects(InteractionArea itr, LF2Entity attacker)
         {
-            if (itr.vrest > 0 && attacker != null) ItrRest?.SetVrest(attacker.StableId, itr.vrest);
+            int wt = WeaponType;
+            bool lightThrow = wt == 1;
+            bool heavyLike = wt == 2;
+            bool specialLike = wt == 4 || wt == 6;
+            int attackerKey = attacker?.Runtime?.SlotIndex ?? -1;
+
+            if (attacker != null && attackerKey >= 0)
+            {
+                if (heavyLike)
+                {
+                    int vrest = (itr.fall <= 40 && itr.effect != 4) ? 3 : 19;
+                    if (attacker.Runtime?.LinkState == -2 && attacker.Runtime.HolderStableId >= 0)
+                    {
+                        LF2Entity holder = Match?.FindEntityByRuntimeSlotForQuery(attacker.Runtime.HolderStableId);
+                        holder?.ItrRest?.SetVrest(attackerKey, vrest);
+                    }
+                    else if (GetCurrentDataObjectType() != (int)LF2ObjectType.HeavyWeapon)
+                    {
+                        ItrRest?.SetVrest(attackerKey, vrest);
+                    }
+                }
+                else if (specialLike)
+                {
+                    ItrRest?.SetVrest(attackerKey, 30);
+                }
+                else if (itr.vrest > 0)
+                {
+                    ItrRest?.SetVrest(attackerKey, itr.vrest);
+                }
+            }
 
             // C++ release Entity_AI_Update 26312：[+764h] -= injury（所有 type 均扣 HP）
             if (itr.injury > 0) Health.HP -= itr.injury;
 
             // C++ release：type==1/2/4/6 时 WeaponFlightCounter（耐久）-= injury。
             // itr[0x40]=bdefend==100 时强制置 -1（秒毁）
-            int wt = WeaponType;
-            if (wt == 1 || wt == 2 || wt == 4 || wt == 6)
+            if (lightThrow || heavyLike || specialLike)
             {
+                HitConfirm2 = 1;
                 if (itr.bdefend == 100)
                     FlightCounter = -1;
                 else
                     FlightCounter -= itr.injury;
+            }
+
+            if (attacker != null)
+            {
+                RelationTeam = attacker.RelationTeam;
+
+                if (heavyLike)
+                {
+                    SwitchDir(attacker.PS?.dir ?? PS.dir);
+                    if (itr.fall <= 40 && (int)PS.y >= 0 && itr.effect != 4)
+                    {
+                        SetPhysicsFrameDirect(20);
+                        Runtime.WeaponState = 0;
+                    }
+                    else
+                    {
+                        SetPhysicsFrameDirect(RandInt(0, 6));
+                        Runtime.WeaponState = 0;
+                    }
+                }
+                else if (lightThrow || specialLike)
+                {
+                    SetPhysicsFrameDirect(RandInt(0, 16));
+                    Runtime.WeaponState = 0;
+                }
             }
 
             PlaySound(WeaponHitSound);
@@ -719,10 +781,11 @@ namespace NTSD.Animation.LF2Objects
         private void ApplyAttackerResponse(LF2Entity victim)
         {
             // 步骤1: state=1002 → 反弹（0x42E5F1-0x42E63A）
-            int curState = Frame?.D?.state ?? -1;
+            int curState = ResolveRuntimeWeaponState();
             if (curState == LF2States.WeaponThrowing) // 1002
             {
                 SetPhysicsFrameDirect(RandInt(0, 16));
+                Runtime.WeaponState = 0;
                 float knockbackVx = victim?.KnockbackVx ?? 0f;
                 PS.vx = -(knockbackVx * 0.5f);
                 PS.vy = -4f;
@@ -730,7 +793,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // 步骤2: state=2000 → 飞向victim时减速（0x42E65D-0x42E6A4）
-            curState = Frame?.D?.state ?? -1;
+            curState = ResolveRuntimeWeaponState();
             if (curState == LF2States.HeavyWeaponInSky) // 2000
             {
                 bool flyingToward = (PS.x > victim.PS.x && PS.vx < 0f)
@@ -743,10 +806,11 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // 步骤3: state=3000 → 停止（0x42E6A4-0x42E6E8）
-            curState = Frame?.D?.state ?? -1;
+            curState = ResolveRuntimeWeaponState();
             if (curState == 3000)
             {
                 SetPhysicsFrameDirect(10);
+                Runtime.WeaponState = 0;
                 PS.vx = 0f;
             }
         }
@@ -798,14 +862,19 @@ namespace NTSD.Animation.LF2Objects
             for (int b = 0; b < bodyVols.Count; b++)
             {
                 var vol = bodyVols[b];
-                var candidates = sceneQuery.QueryBodies(vol, this);
-                for (int c = 0; c < candidates.Count; c++)
+                var hits = sceneQuery.QueryBodyHits(this, frame, itr, vol);
+                for (int c = 0; c < hits.Count; c++)
                 {
-                    var target = candidates[c];
+                    var target = hits[c].Target;
                     if (target == holder) continue;
-                    if (target.Team == Team) continue;
-                    if (target is not LF2Character character) continue;
-                    if (ItrRest != null && ItrRest.HasVrest(target.StableId)) continue;
+                    if (target.RelationTeam == RelationTeam) continue;
+                    LF2Character character = AsAttackCharacterTarget(target);
+                    if (character == null) continue;
+                    if (ItrRest != null)
+                    {
+                        int targetKey = target.Runtime?.SlotIndex ?? -1;
+                        if (targetKey >= 0 && ItrRest.HasVrest(targetKey)) continue;
+                    }
 
                     var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
                     bool hit = character.Hit(itr, this, attackerPos, default);
@@ -815,7 +884,9 @@ namespace NTSD.Animation.LF2Objects
                         result.VRest = itr.vrest;
                         result.ARest = itr.arest;
                         ItrArestUpdate(itr);
-                        ItrRest?.SetVrest(target.StableId, itr.vrest);
+                        int targetKey = target.Runtime?.SlotIndex ?? -1;
+                        if (targetKey >= 0)
+                            ItrRest?.SetVrest(targetKey, itr.vrest);
                         return result;
                     }
                 }
