@@ -252,7 +252,7 @@ namespace NTSD.Animation.LF2Objects
             int wt = WeaponType;
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int dropHurt = charData?.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
-            float oldVy = _lastLandingVyBeforeClamp;
+            double oldVy = _lastLandingVyBeforeClamp; // P0-f-2b B1: float→double (landing Vy, baseline oldVy is double)
 
             if (wt == 3) return;
 
@@ -263,7 +263,7 @@ namespace NTSD.Animation.LF2Objects
 
                 int frameState1 = CurrentFrameState();
 
-                if (oldVy > 9.9f)
+                if (oldVy > 9.9) // P0-f-2b B1: 9.9f→9.9 (value-affecting: 9.9f promotes to 9.8999996 as double)
                 {
                     if (frameState1 == LF2States.WeaponThrowing) // 1002
                     {
@@ -331,16 +331,16 @@ namespace NTSD.Animation.LF2Objects
 
                 int frameState46 = CurrentFrameState();
                 bool isFlyState46 = frameState46 == LF2States.WeaponThrowing || frameState46 == LF2States.WeaponInSky;
-                bool highSpeed46 = oldVy > 8.5f
-                                   || Runtime.Vx < -10f
-                                   || Runtime.Vx > 10f;
+                bool highSpeed46 = oldVy > 8.5             // P0-f-2b B1: 8.5f→8.5 (chain double; baseline oldVy>8.5)
+                                   || Runtime.Vx < -10.0   // -10f→-10.0
+                                   || Runtime.Vx > 10.0;   // 10f→10.0
                 bool bigBounce46 = highSpeed46          // dbl_443358 = 8.5
                                    && isFlyState46;
 
                 if (bigBounce46)
                 {
-                    Runtime.Vy = oldVy * -0.7f;
-                    if (Runtime.Vy < -10.0f) Runtime.Vy = -10.0f;  // C++ release 纭 -10.0锛屽師璇啓涓?-2.5
+                    Runtime.Vy = oldVy * -0.7;              // P0-f-2b B1: -0.7f→-0.7 (value-affecting; baseline Vy=oldVy*-0.7)
+                    if (Runtime.Vy < -10.0) Runtime.Vy = -10.0;  // C++ release 纭 -10.0锛屽師璇啓涓?-2.5
                     ImmediateFrame(0);
                     Runtime.WeaponState = LF2States.WeaponInSky;
                     Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
@@ -367,16 +367,16 @@ namespace NTSD.Animation.LF2Objects
 
             if (fstateLand == LF2States.Burning)
             {
-                if (Runtime.Vy > 17.0f || Runtime.Vx > 9.0f || Runtime.Vx < -9.0f)
+                if (Runtime.Vy > 17.0 || Runtime.Vx > 9.0 || Runtime.Vx < -9.0) // P0-f-2b B1: f→double (chain)
                 {
                     int ws = WeaponDropHurt;
                     Health.HP += ws != 0 ? (-1000 / ws) : -10;
 
                     Runtime.Y = 0f;
-                    Runtime.Vy = -3.5f;
+                    Runtime.Vy = -3.5;                       // P0-f-2b B1: -3.5f→-3.5 (baseline Vy=-3.5 double)
                     Runtime.Vz = 0f;
-                    if (Runtime.Vx > 7.0f) Runtime.Vx = 7.0f;
-                    else if (Runtime.Vx < -7.0f) Runtime.Vx = -7.0f;
+                    if (Runtime.Vx > 7.0) Runtime.Vx = 7.0;  // 7.0f→7.0 (chain double; baseline Vx clamp ±7.0)
+                    else if (Runtime.Vx < -7.0) Runtime.Vx = -7.0;
 
 
                     var sceneQuery = Match?.SceneQuery;
@@ -429,7 +429,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (fstateLand != LF2States.Falling && fstateLand != LF2States.Burning)
             {
-                Runtime.Vx *= 0.333f;
+                Runtime.Vx *= 0.3333333333333333; // P0-f-2b B1: VALUE-BUG 0.333f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
                 Runtime.Y = 0f;
                 Runtime.Vy = 0f;
 

@@ -14,7 +14,7 @@ namespace NTSD.Simulation
 
             // 基础物理常量。
             public const float MinSpeed = 1f;
-            public const float Gravity = 1.7f;
+            public const double Gravity = 1.7; // P0-f-2a: double sim gravity (baseline GravityDefault=1.7)
 
             // 倒地摩擦查表。正式版等价逻辑仍使用按阈值取值的语义。
             // 注意：LookupAbs 依赖 key 升序遍历。
@@ -35,28 +35,29 @@ namespace NTSD.Simulation
 
             // C++ release Entity_FrameAdvance / physics_update 常量。
             // state=1002 投射物重力分级（按 chardata.type_sub / DAT 对象类型）。
-            public const float WeaponGravityTypeSub7C  = 0.17f;    // type_sub=0x7C：极轻对象
-            public const float WeaponGravityTypeSub78  = 0.425f;   // type_sub=0x78：轻对象
-            public const float WeaponGravityTypeSub65  = 1.1333f;  // type_sub=0x65：中等对象
-            public const float WeaponGravityDefault1002 = 0.5667f; // state=1002 默认重力
-            public const float WeaponGravityDefault    = 1.7f;     // 非 state=1002 默认重力
+            // P0-f-2a: double sim gravity, baseline full-precision literals (NtsdConstants.cs).
+            public const double WeaponGravityTypeSub7C  = 0.17;                // type_sub=0x7C：极轻对象 (baseline oid124=0.17)
+            public const double WeaponGravityTypeSub78  = 0.425;               // type_sub=0x78：轻对象 (baseline oid120=0.425)
+            public const double WeaponGravityTypeSub65  = 1.1333333333333333;  // type_sub=0x65：中等对象 (baseline GravityType6)
+            public const double WeaponGravityDefault1002 = 0.5666666666666667; // state=1002 默认重力 (baseline)
+            public const double WeaponGravityDefault    = 1.7;                 // 非 state=1002 默认重力 (baseline GravityDefault)
 
             // type=4 / type_sub=0x78 额外 X 速度位置修正。
             public const float WeaponExtraVxFactor = 0.2f;
 
-            // 武器落地反弹参数。
-            public const float WeaponType1BigBounceThreshold = 9.9f;
-            public const float WeaponType1BigBounceVy = -8.0f;
-            public const float WeaponType1VxFactor    = 0.5f;
+            // 武器落地反弹参数。P0-f-2b B1: float→double，对齐 baseline Physics.cs 全 double 落地反弹链。
+            public const double WeaponType1BigBounceThreshold = 9.9;
+            public const double WeaponType1BigBounceVy = -8.0;
+            public const double WeaponType1VxFactor    = 0.5;
 
-            public const float WeaponType2BigBounceThreshold = 9.0f;
-            public const float WeaponType2BigBounceVy = -5.0f;
-            public const float WeaponType2VxFactor    = 0.5f;
+            public const double WeaponType2BigBounceThreshold = 9.0;
+            public const double WeaponType2BigBounceVy = -5.0;
+            public const double WeaponType2VxFactor    = 0.5;
 
-            public const float WeaponType46BigBounceThreshold = 8.5f;
-            public const float WeaponType46BigBounceVyFactor  = -0.7f;
-            public const float WeaponType46BigBounceVyClamp   = -10.0f;
-            public const float WeaponType46VxFactor  = 0.7f;
+            public const double WeaponType46BigBounceThreshold = 8.5;
+            public const double WeaponType46BigBounceVyFactor  = -0.7;
+            public const double WeaponType46BigBounceVyClamp   = -10.0;
+            public const double WeaponType46VxFactor  = 0.7;
 
             // 回旋镖 vx 上下限 clamp。
             public const float WeaponBoomerangVxMax  = 9.0f;
