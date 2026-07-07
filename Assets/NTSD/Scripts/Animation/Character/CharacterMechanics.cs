@@ -72,7 +72,7 @@ namespace NTSD.Animation
         public readonly float visualYOffset;
         public readonly BoundaryResolveMode boundaryMode;
         public readonly bool landed;
-        public readonly float verticalVelocityBeforeLanding;
+        public readonly double verticalVelocityBeforeLanding; // P0-f-2b B2-1: float→double (character landing Vy snapshot, no truncation)
 
         public MechanicsStepResult(
             bool grounded,
@@ -80,7 +80,7 @@ namespace NTSD.Animation
             float visualYOffset,
             BoundaryResolveMode boundaryMode,
             bool landed = false,
-            float verticalVelocityBeforeLanding = 0f)
+            double verticalVelocityBeforeLanding = 0.0) // P0-f-2b B2-1: float→double
         {
             this.grounded = grounded;
             this.groundPlanePos = groundPlanePos;
@@ -195,7 +195,7 @@ namespace NTSD.Animation
                 UnitFriction(runtime);
             }
 
-            float vyBeforeVerticalMove = (float)runtime.Vy;
+            double vyBeforeVerticalMove = runtime.Vy; // P0-f-2b B2-1: no (float) truncation — double landing Vy snapshot
             runtime.Y += runtime.Vy;
 
             bool landed = runtime.Y > 0.0001f;
