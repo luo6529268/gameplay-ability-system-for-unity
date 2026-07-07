@@ -235,7 +235,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (vyBeforeLand <= 17f && _character.Runtime.Vx <= 9f && _character.Runtime.Vx >= -9f)
             {
-                _character.Runtime.Vx *= 1f / 3f;
+                _character.Runtime.Vx *= 0.3333333333333333; // P0-f-2b B2-2: VALUE-BUG 1f/3f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
                 _character.Runtime.Vy = 0f;
                 return;
             }
@@ -420,7 +420,7 @@ namespace NTSD.Animation.LF2Objects
                     }
                     else
                     {
-                        _character.Runtime.Vx *= 1f / 3f;
+                        _character.Runtime.Vx *= 0.3333333333333333; // P0-f-2b B2-2: VALUE-BUG 1f/3f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
                         _character.AttackingCounter = 0;
                         int landFrame = (_character.Frame.N >= LF2StandardFrames.FallingBack)
                             ? LF2StandardFrames.LyingBack
@@ -431,7 +431,7 @@ namespace NTSD.Animation.LF2Objects
             }
             else
             {
-                _character.Runtime.Vx *= 1f / 3f;
+                _character.Runtime.Vx *= 0.3333333333333333; // P0-f-2b B2-2: VALUE-BUG 1f/3f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
                 _character.AttackingCounter = 0;
 
                 int landFrame;
