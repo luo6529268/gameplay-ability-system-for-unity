@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
@@ -8,54 +8,36 @@ using NTSD.Simulation;
 namespace NTSD.Animation.LF2Objects
 {
     /// <summary>
-    /// 武器实体（C++ release 对齐 weapon 结构体，[+6F8h] 字段区分类型）。
+    /// 具体武器实现。
     ///
-    /// C++ release 确认的武器类型（ParseCharData 0x0040CBDA）：
-    ///   type=0 轻武器 / type=1 重武器 / type=2 特殊武器
-    ///   type=3 投掷武器 / type=4 回旋镖 / type=6 道具
+    /// 基类 `LF2WeaponBase` 负责所有武器共有的生命周期，
+    /// 这个类负责补上不同武器类型之间的差异：
+    /// 例如飞行重力、落地反弹、被打反馈、以及手持武器命中角色时的处理。
     /// </summary>
     public class LF2Weapon : LF2WeaponBase
     {
-        private static LF2Character AsAttackCharacterTarget(LF2Entity target)
-        {
-            return target as LF2Character;
-        }
-
-        #region 字段与属性
-
-        /// <summary>对象池创建时确定的武器类型，用于 Reset 后恢复 C++ release entity_type。</summary>
         private int _poolWeaponType;
 
-        /// <summary>
-        /// 飞行计数器（C++ release unk_31C）。
-        /// 控制 type=1/2/4/6 的反弹/停止节奏；初始值 = weapon_hp。
-        /// Entity_FrameAdvance 0x416A6C / 0x416B51 / 0x416C50 均读写此字段。
-        /// </summary>
+        // 这里复用 runtime 里的计数槽，保存武器飞行/耐久相关的即时状态。
         private int FlightCounter
         {
             get => Runtime.WeaponFlightCounter;
             set => Runtime.WeaponFlightCounter = value;
         }
 
-        /// <summary>
-        /// 笛子命中累积器（C++ release weapon_count）。
-        /// kind=10/11 命中时设为 -20；每帧末 frame.state!=12 时清零。
-        /// 用于 type=0 空中帧切换判断和 CondB HP 扣减公式。
-        /// </summary>
         public override int FluteWeight { get => Runtime.WeaponCount; set => Runtime.WeaponCount = value; }
 
         public override LF2ObjectType ObjectTypeEnum => WeaponType == 2
             ? LF2ObjectType.HeavyWeapon
-            : (WeaponType == 4 ? LF2ObjectType.ThrowWeapon : LF2ObjectType.LightWeapon);
+            : (WeaponType == 4
+                ? LF2ObjectType.ThrowWeapon
+                : (WeaponType == 6 ? LF2ObjectType.Drink : LF2ObjectType.LightWeapon));
         public override bool IsLight => WeaponType != 2;
         public override bool IsHeavy => WeaponType == 2;
         public override int WeaponType => Runtime.EntityType;
 
-        #endregion
 
-        #region 初始化
-
-        /// <summary>设置武器类型（DAT 解析时调用）</summary>
+        // 对象池复用时，需要恢复“这个实例当前代表哪一种武器”。
         public void SetWeaponType(int weaponType)
         {
             _poolWeaponType = weaponType;
@@ -70,15 +52,11 @@ namespace NTSD.Animation.LF2Objects
             FluteWeight = 0;
         }
 
-        /// <summary>
-        /// C++ release Entity_Spawn：WeaponFlightCounter 初始值 = weapon_hp。
-        /// </summary>
         protected override void OnHealthInitialized(LF2CharacterData charData)
         {
-            FlightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
+            FlightCounter = charData?.weapon_hp ?? 0;
         }
 
-        /// <summary>C++ release 0x004228A0：type=1/2/4/6 才检查 flightCounter。</summary>
         protected override bool IsWeaponDestroyable()
         {
             int wt = WeaponType;
@@ -87,24 +65,10 @@ namespace NTSD.Animation.LF2Objects
 
         protected override int GetFlightCounter() => FlightCounter;
 
-        /// <summary>C++ release AI_Process2 0x41AD73：weapon.[+31Ch] = 0。</summary>
         protected override void OnDrinkConsumed()
         {
             FlightCounter = 0;
         }
-
-        /// <summary>
-        /// 武器物理路径直接写 frame。
-        /// C++ release Entity_FrameAdvance/physics_update 多处直接写 e.frame，不走帧请求队列。
-        /// </summary>
-        private void SetPhysicsFrameDirect(int frameId)
-        {
-            ImmediateFrame(frameId);
-        }
-
-        #endregion
-
-        #region 状态处理
 
         protected override bool DispatchCurrentStateEvent(string eventType, object eventData = null)
         {
@@ -113,33 +77,16 @@ namespace NTSD.Animation.LF2Objects
                 switch (GetState())
                 {
                     case LF2States.HeavyWeaponInSky:
-                        return State_HeavyInSky(eventType, eventData);
+                        return eventType == "frame" && ProcessHeavyInSkyFrame();
                     case LF2States.HeavyWeaponOnGround:
-                        return State_HeavyOnGround(eventType, eventData);
+                        return eventType == "frame";
                 }
             }
 
             return base.DispatchCurrentStateEvent(eventType, eventData);
         }
 
-        /// <summary>重武器在空中（state 2000）</summary>
-        private bool State_HeavyInSky(string eventType, object eventData)
-        {
-            if (eventType == "frame")
-                return ProcessHeavyInSkyFrame();
-
-            return false;
-        }
-
-        /// <summary>重武器在地面（state 2004）</summary>
-        private bool State_HeavyOnGround(string eventType, object eventData)
-        {
-            if (eventType == "frame")
-                return ProcessHeavyOnGroundFrame();
-
-            return false;
-        }
-
+        // 重武器空中状态的帧事件比较简单，核心是必要时回到落地帧并补音效。
         private bool ProcessHeavyInSkyFrame()
         {
             if (Frame.N == 21)
@@ -153,15 +100,6 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private bool ProcessHeavyOnGroundFrame()
-        {
-            if (Frame.N == 20)
-                Team = 0;
-
-            return true;
-        }
-
-        /// <summary>轻武器刚落地（state 1003）</summary>
         protected override bool State_WeaponJustOnGround(string eventType, object eventData)
         {
             if (IsHeavy) return false;
@@ -179,69 +117,66 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        /// <summary>轻武器在地面（state 1004）</summary>
         protected override bool State_WeaponOnGround(string eventType, object eventData)
         {
             if (IsHeavy) return false;
 
             if (eventType == "frame")
             {
-                if (Frame.N == 64)
-                    Team = 0;
                 return true;
             }
             return false;
         }
 
-        #endregion
+        protected override bool ApplyObjectSpecificFrameTickBeforeWaitAdvance()
+        {
+            if (CurrentFrameState() == LF2States.HeavyWeaponOnGround)
+                SwitchDir(Runtime.Vx > 0f ? "right" : "left");
 
-        #region 飞行物理（OnThrown / WeaponFlightPhysics / OnInFlightFrameUpdate / OnLanded）
+            if (WeaponType == 2 &&
+                CurrentFrameState() == LF2States.HeavyWeaponOnGround &&
+                GetRuntimeYInt() == 0 &&
+                System.Math.Abs(Runtime.Vx) < 0.1)
+            {
+                return false;
+            }
 
-        /// <summary>
-        /// C++ release Entity_Spawn 0x402A74：[entity+31Ch] = charData[+90h] = weapon_hp
-        /// 投掷时 WeaponFlightCounter 初始化为武器的 weapon_hp（耐久/飞行计数）。
-        /// </summary>
+            return base.ApplyObjectSpecificFrameTickBeforeWaitAdvance();
+        }
+
+
         protected override void OnThrown()
         {
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
-            FlightCounter = charData?.weapon_hp > 0 ? charData.weapon_hp : 100;
+            FlightCounter = charData?.weapon_hp ?? 0;
         }
 
-        /// <summary>
-        /// C++ release Entity_FrameAdvance 0x4162EB-0x4164A2：
-        /// 计算本帧的额外水平加速、重力、追踪 vz、回旋镖翻转。
-        /// 重力值写入 _gravityToAdd，由 WeaponDynamics 在 y+=vy 后（新y<0时）应用，
-        /// 严格对齐 C++ release 0x4164BD 的执行顺序。
-        /// </summary>
+        // 飞行中的类型差异都在这里收口处理：
+        // 包括额外水平位移、重力、视觉 z 偏移，以及回旋类武器的切帧。
         protected override void WeaponFlightPhysics()
         {
-            if (PS == null) return;
-
             int wt = WeaponType;
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
-            int runtimeState = ResolveRuntimeWeaponState();
 
-            // ── 1. 额外水平速度加成（C++ release 0x4162EB-0x416327）──
             if (wt == 4 || typeSub == 0x78)
-                PS.x += PS.vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+                Runtime.X += Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
             else if (typeSub == 0x65)
-                PS.x -= PS.vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+                Runtime.X -= Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
 
-            // ── 2. 计算重力（写入 _gravityToAdd，由 WeaponDynamics 在 y+=vy 后应用）──
             if (wt == 6)
             {
                 _gravityToAdd = NTSDGlobal.Gameplay.WeaponGravityTypeSub65;
             }
             else if (wt == 4)
             {
-                _gravityToAdd = 0.85f;
+                _gravityToAdd = 0.85;   // baseline NtsdConstants.GravityType4 = 0.85 (double, 对齐 FlyingA)
             }
             else if (wt != 3)
             {
-                if (runtimeState == LF2States.WeaponThrowing)
+                if (frameState == LF2States.WeaponThrowing)
                 {
                     switch (typeSub)
                     {
@@ -257,263 +192,193 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // ── 3. type=3 当前帧深度修正（C++ release 0x41637D-0x4163A1）──
             if (wt == 3 && fD != null && fD.hit_j > 0)
-                PS.z += fD.hit_j - 50;
-
-            // ── 4. type=4/6 回旋镖（C++ release 0x416466-0x4164A2）──
-            if ((wt == 4 || wt == 6) && runtimeState == LF2States.WeaponInSky)
             {
-                if (PS.vx > NTSDGlobal.Gameplay.WeaponBoomerangVxMax ||
-                    PS.vx < NTSDGlobal.Gameplay.WeaponBoomerangVxMin)
-                {
-                    SetPhysicsFrameDirect(40);
-                }
+                float visualZ = fD.hit_j - 50;
+                Runtime.Z += visualZ;
+                Runtime.Type3VisualZOffset += visualZ;
             }
+
         }
 
-        /// <summary>
-        /// C++ release Entity_FrameAdvance 0x416577-0x41668A：
-        /// type=0 空中（新y&lt;0）时，根据 frame.state 和 vy 动态切换帧号。
-        /// Falling(state=12)：帧 180~189
-        /// Burning(state=18)：帧 205
-        /// </summary>
         protected override void OnInFlightFrameUpdate()
         {
             if (WeaponType != 0) return;
 
-            double vy = PS.vy;
+            double vy = Runtime.Vy;
             int fnum = Frame?.N ?? -1;
             int fstate = Frame?.D?.state ?? -1;
 
-            // C++ release 0x416583~0x41662A：frame.state == 12 (Falling)
-            // 按正式版 fcomp 比较语义展开为 if/else 梯级。
             if (fstate == LF2States.Falling)
             {
                 if (fnum >= 185)
                 {
-                    // 0x41662A: fnum >= 0xBF(191) → 跳过
-                    // 0x4165A1: fnum >= 0xB9(185) 进入此分支
-                    // 0x4165A7: 条件 fnum > 185 && fnum < 191。
                     if (fnum > 185 && fnum < 191)
                     {
-                        // 与 fnum<185 分支相同的 vy 梯级，但帧号 +6
-                        // 0x4165AA: fcomp dbl_443390(-8.0); test ah,1; jz→vy >= -8.0
-                        // 0x4165CD: fcomp dbl_4432B0(1.0);  test ah,1; jz→vy >= 1.0
-                        // 0x4165E2: fcomp dbl_443230(8.0);   test ah,1; jz→vy >= 8.0
-                        if      (vy < -8.0) SetPhysicsFrameDirect(186); // 0xBA
-                        else if (vy < 1.0)  SetPhysicsFrameDirect(187); // 0xBB
-                        else if (vy < 8.0)  SetPhysicsFrameDirect(188); // 0xBC
-                        else                SetPhysicsFrameDirect(189); // 0xBD
+                        if      (vy < -8.0) ImmediateFrame(186); // 0xBA
+                        else if (vy < 1.0)  ImmediateFrame(187); // 0xBB
+                        else if (vy < 8.0)  ImmediateFrame(188); // 0xBC
+                        else                ImmediateFrame(189); // 0xBD
                     }
-                    // fnum==185 或 fnum>=191：不切换帧
                 }
                 else
                 {
-                    // fnum < 185
-                    // 0x4165AA: fcomp dbl_443390(-8.0); test ah,1; jz→下级
-                    //   test ah,1; jz = "跳转如果 C0==0" = "跳转如果 ST(0) >= dbl"
-                    //   所以 jz(0x4165CA) 表示 vy >= -8.0
-                    //   不跳转则 vy < -8.0 → frame=0xB4(180)
-                    if      (vy < -8.0) SetPhysicsFrameDirect(180);
-                    else if (vy < 1.0)  SetPhysicsFrameDirect(181);
-                    else if (vy < 8.0)  SetPhysicsFrameDirect(182);
-                    else                SetPhysicsFrameDirect(183);
+                    if      (vy < -8.0) ImmediateFrame(180);
+                    else if (vy < 1.0)  ImmediateFrame(181);
+                    else if (vy < 8.0)  ImmediateFrame(182);
+                    else                ImmediateFrame(183);
 
-                    // C++ release 0x4165FB~0x416628：[esi+320h] < 0 时覆盖帧
                     if (FluteWeight < 0)
                     {
-                        // 0x416607: fcomp dbl_443388(12.0); test ah,1; jz→下级
-                        // jz = vy >= 12.0 → 0x416617: cmp dword_449038, 6; jl→下级
-                        // 两个条件都不满足 → frame=181(0xB5)
-                        // 任一满足 → frame=182(0xB6)
-                        // dword_449038 = (dword_449038+1)%12，对应全局 tick mod 12（P1-4）
                         int globalTick12 = (Match?.CurrentTickIndex ?? 0) % 12;
                         if (vy >= 12.0 || globalTick12 < 6)
-                            SetPhysicsFrameDirect(181);
+                            ImmediateFrame(181);
                         else
-                            SetPhysicsFrameDirect(182);
+                            ImmediateFrame(182);
                     }
                 }
             }
 
-            // C++ release 0x41668A~0x4166C9：
-            // frame.state == 18(Burning) 且 fnum < 205(0xCD) 且 vy > 1.0 → frame=205
             int fnum2 = Frame?.N ?? fnum;
             int fstate2 = Frame?.D?.state ?? fstate;
             if (fstate2 == LF2States.Burning && fnum2 < 205 && vy > 1.0)
-                SetPhysicsFrameDirect(205);
+                ImmediateFrame(205);
         }
 
-        /// <summary>
-        /// C++ release Entity_FrameAdvance 0x4164A9-0x416DA4：按 type 分流落地逻辑
-        /// </summary>
+        // 武器落地后的弹跳/停地规则很重类型分流，
+        // 这里是理解轻武器、重武器、回旋类武器差异的关键入口。
         protected override void OnLanded()
         {
             int wt = WeaponType;
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
             int dropHurt = charData?.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
+            float oldVy = _lastLandingVyBeforeClamp;
 
-            // ── type=3：落地时跳过弹射（C++ release 0x4164CE: jz loc_416577）──
             if (wt == 3) return;
 
-            // ── type=1（轻武器，苦无）落地（C++ release Entity_FrameAdvance case 1, 0x416A35）──
             if (wt == 1)
             {
-                // 无论大弹/小弹都先扣耐久，vz 清零
-                // C++ release：v37 = this+796 - v3[37]（直接减 dropHurt，无 clamp）
                 FlightCounter -= dropHurt;
-                PS.vz = 0f;
+                Runtime.Vz = 0f;
 
-                int runtimeState1 = ResolveRuntimeWeaponState();
+                int frameState1 = CurrentFrameState();
 
-                if (PS.vy > 9.9f)
+                if (oldVy > 9.9f)
                 {
-                    if (runtimeState1 == LF2States.WeaponThrowing) // 1002
+                    if (frameState1 == LF2States.WeaponThrowing) // 1002
                     {
-                        // 大弹：vx*=0.5, 反转方向, frame=7, vy=-8
-                        PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
-                        PS.dir = PS.dir == "right" ? "left" : "right";
-                        SetPhysicsFrameDirect(7);
+                        Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
+                        Runtime.Dir = Runtime.Dir == "right" ? "left" : "right";
+                        ImmediateFrame(7);
                         Runtime.WeaponState = LF2States.WeaponInSky;
-                        PS.vy = NTSDGlobal.Gameplay.WeaponType1BigBounceVy; // -8
+                        Runtime.Vy = NTSDGlobal.Gameplay.WeaponType1BigBounceVy; // -8
                         PlaySound(WeaponDropSound);
                     }
                     else
                     {
-                        // 非1002大弹 → 小弹路径（frame=60，via LABEL_148）
-                        PS.vy = 0f;
-                        SetPhysicsFrameDirect(0x3C); // frame=60
-                        Runtime.WeaponState = 0;
+                        ImmediateFrame(0x3C); // frame=60
+                        Runtime.WeaponState = LF2States.WeaponOnGround;
                         AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
-                        PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
+                        Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
+                        Runtime.Vy = 0f;
                     }
                 }
                 else
                 {
-                    // vy <= 9.9 → 小弹（via LABEL_148）
-                    PS.vy = 0f;
-                    SetPhysicsFrameDirect(runtimeState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
-                    Runtime.WeaponState = 0;
+                    ImmediateFrame(frameState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    Runtime.WeaponState = frameState1 == LF2States.WeaponThrowing
+                        ? LF2States.WeaponJustOnGround
+                        : LF2States.WeaponOnGround;
                     AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
+                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
+                    Runtime.Vy = 0f;
                 }
-                // C++ release type=1 无 clamp，直接 return
                 return;
             }
 
-            // ── type=2（重武器，原木）落地（C++ release 0x416B34-0x416BDB）──
             if (wt == 2)
             {
-                // C++ release：进入 case 2 后立即统一 WeaponFlightCounter -= 1。
-                FlightCounter--;
+                FlightCounter -= 1;
 
-                if (PS.vy > NTSDGlobal.Gameplay.WeaponType2BigBounceThreshold) // 9.0
+                if (oldVy > NTSDGlobal.Gameplay.WeaponType2BigBounceThreshold) // 9.0
                 {
-                    // 大弹：vx*=0.5，facing 反转，vy=-5，不设 frame
-                    // WeaponFlightCounter 已在入口扣了 1，大弹不再额外扣。
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
-                    PS.dir = PS.dir == "right" ? "left" : "right";
-                    PS.vy = NTSDGlobal.Gameplay.WeaponType2BigBounceVy; // -5
-                    // C++ release case 2 大弹 0x416B74：v45 = v3[42]; if (v45 > -1) sub_419B40(...) P2-10
+                    Runtime.Dir = Runtime.Dir == "right" ? "left" : "right";
+                    Runtime.Vy = NTSDGlobal.Gameplay.WeaponType2BigBounceVy; // -5
+                    Runtime.WeaponState = LF2States.HeavyWeaponInSky;
+                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
                     PlaySound(WeaponDropSound);
                 }
                 else
                 {
-                    // 小弹：再额外 -= dropHurt（clamp >=0），vy=0，frame=20，vx*=0.5（LABEL_148 一次）
-                    // C++ release v48 = v44 - dropHurt; if v48<0: v48=0
                     FlightCounter -= dropHurt;
                     if (FlightCounter < 0) FlightCounter = 0;
-                    PS.vy = 0f;
-                    SetPhysicsFrameDirect(20);
-                    Runtime.WeaponState = 0;
-                    // C++ release LABEL_148：vx*=0.5（仅此一次）
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
-                    AttackingCounter = 0; // C++ release LABEL_148 → Entity::attacking=0
+                    Runtime.Vy = 0f;
+                    ImmediateFrame(20);
+                    Runtime.WeaponState = LF2States.HeavyWeaponOnGround;
+                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
+                    AttackingCounter = 0; // C++ release LABEL_148 鈫?Entity::attacking=0
                 }
                 return;
             }
 
-            // ── type=4/6（特殊重/道具）落地（C++ release 0x416C25-0x416D0E）──
             if (wt == 4 || wt == 6)
             {
-                // 耐久衰减（C++ release 0x416C4A-0x416C7B）
                 FlightCounter -= dropHurt;
-                // type=6 且 weapon.hp <= 0 时强制耐久=-1（C++ release 0x416C64）
-                if (wt == 6 && Health.HP <= 0)
+                if (wt == 6 && Health != null && Health.HP <= 0)
                     FlightCounter = -1;
 
-                PS.vz = 0f;
+                Runtime.Vz = 0f;
 
-                // 大弹/小弹判断（C++ release 0x416C7E-0x416CAF）：
-                // 弹起条件：vy > 8.5 AND vx > -10.0 AND vx < 10.0（即 |vx| < 10）
-                // 不弹起：vy <= 8.5 OR |vx| >= 10
-                int runtimeState46 = ResolveRuntimeWeaponState();
-                bool isFlyState46 = runtimeState46 == LF2States.WeaponThrowing || runtimeState46 == LF2States.WeaponInSky;
-                bool bigBounce46 = PS.vy > 8.5f          // dbl_443358 = 8.5
-                                   && PS.vx > -10f        // dbl_443350 = -10.0
-                                   && PS.vx < 10f         // dbl_4432C0 = 10.0
+                int frameState46 = CurrentFrameState();
+                bool isFlyState46 = frameState46 == LF2States.WeaponThrowing || frameState46 == LF2States.WeaponInSky;
+                bool highSpeed46 = oldVy > 8.5f
+                                   || Runtime.Vx < -10f
+                                   || Runtime.Vx > 10f;
+                bool bigBounce46 = highSpeed46          // dbl_443358 = 8.5
                                    && isFlyState46;
 
                 if (bigBounce46)
                 {
-                    // 大弹：vy*=-0.7，clamp vy >= -10.0（C++ release 0x416D11-0x416D2D）P1-1
-                    // frame=0，vx*=0.7
-                    PS.vy = PS.vy * -0.7f;
-                    if (PS.vy < -10.0f) PS.vy = -10.0f;  // C++ release 确认 -10.0，原误写为 -2.5
-                    SetPhysicsFrameDirect(0);
+                    Runtime.Vy = oldVy * -0.7f;
+                    if (Runtime.Vy < -10.0f) Runtime.Vy = -10.0f;  // C++ release 纭 -10.0锛屽師璇啓涓?-2.5
+                    ImmediateFrame(0);
                     Runtime.WeaponState = LF2States.WeaponInSky;
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
-                    // C++ release case 4/6 大弹 0x416D39：v54 = v3[42]; if (v54 > -1) sub_419B40(...) P2-10
+                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
                     PlaySound(WeaponDropSound);
                 }
                 else
                 {
-                    // 小弹：vy=0，frame=70(state==1002)或frame=60，vx*=0.7，zz=0
-                    PS.vy = 0f;
-                    PS.vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
-                    PS.zz = 0;
-                    SetPhysicsFrameDirect(runtimeState46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
-                    Runtime.WeaponState = 0;
-                    AttackingCounter = 0; // C++ release type=4/6 小弹：Entity::attacking=0
+                    Runtime.Vy = 0f;
+                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
+                    Runtime.Zz = 0;
+                    ImmediateFrame(frameState46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
+                    Runtime.WeaponState = frameState46 == LF2States.WeaponThrowing
+                        ? LF2States.WeaponJustOnGround
+                        : LF2States.WeaponOnGround;
+                    AttackingCounter = 0; // C++ release type=4/6 灏忓脊锛欵ntity::attacking=0
                 }
-                // C++ release type=4/6 无 clamp
                 return;
             }
 
-            // ── type=0 落地（C++ release 0x416BE0-0x416D5A）──
-            // entity_type=0 时：仅 type_sub=999(0x3E7) 有特殊处理，其余直接跳过（loc_416D5A）
-            // C++ release 0x416BE0: cmp [edi+6F4h], 3E7h; jnz loc_416D5A
             var cd = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
 
-            // C++ release sub_416240 case 0 (0x416840-0x416877)：P2-4
-            // C++ release 0x4166FA~0x4167E2：type=0 落地，y>0.0001 AND vy>0.0001 才进入弹射逻辑
-            // 注：y/vy 已由 WeaponDynamics 钳制，此处 epsilon 守卫实际等价
             int fstateLand = Frame?.D?.state ?? -1;
             int fnumLand = Frame?.N ?? 0;
 
             if (fstateLand == LF2States.Burning)
             {
-                // C++ release 0x41672C~0x416774：Burning 大弹（vy>17 OR |vx|>9）
-                if (PS.vy > 17.0f || PS.vx > 9.0f || PS.vx < -9.0f)
+                if (Runtime.Vy > 17.0f || Runtime.Vx > 9.0f || Runtime.Vx < -9.0f)
                 {
-                    // 0x416780: weapon_strength[+340h]==0 → HP-=10；否则 HP += (-1000/weapon_strength)
-                    // C# 用 WeaponDropHurt 对应 weapon_strength（DAT weapon_drop_hurt，初始值等价）
                     int ws = WeaponDropHurt;
                     Health.HP += ws != 0 ? (-1000 / ws) : -10;
 
-                    // 速度钳制（C++ release 0x41679A~0x4167D4）
-                    PS.y = 0f; PS.vy = -3.5f; // 0xC00C0000 hi-word → -3.5
-                    PS.vz = 0f;
-                    // vx 比较 dbl_443310（17.0）后决定方向，再钳制 [-7, 7]
-                    if (PS.vx > 7.0f) PS.vx = 7.0f;
-                    else if (PS.vx < -7.0f) PS.vx = -7.0f;
+                    Runtime.Y = 0f;
+                    Runtime.Vy = -3.5f;
+                    Runtime.Vz = 0f;
+                    if (Runtime.Vx > 7.0f) Runtime.Vx = 7.0f;
+                    else if (Runtime.Vx < -7.0f) Runtime.Vx = -7.0f;
 
-                    // frame=185（C++ release 0x4167DB: mov dword ptr [esi+70h], 0B9h）
-                    SetPhysicsFrameDirect(185);
-                    Runtime.WeaponState = 0;
 
-                    // 对周围角色造成伤害
                     var sceneQuery = Match?.SceneQuery;
                     var frameD = Frame?.D;
                     if (sceneQuery != null && frameD != null)
@@ -522,7 +387,7 @@ namespace NTSD.Animation.LF2Objects
                         float sw = GetSpriteWidthPxForCollision();
                         if (sw > 0f)
                         {
-                            var bodies = PS.GetBodyVolumes(frameD.bodies, frameD.centerx, frameD.centery, sw);
+                            var bodies = NTSDBattleVolumeUtility.GetBodyVolumes(Runtime, frameD.bodies, frameD.centerx, frameD.centery, sw);
                             if (bodies != null)
                             {
                                 var itr = new InteractionArea { kind = 0, injury = hurt, dvx = 3, dvy = 7, fall = 70, vrest = 10, arest = 0 };
@@ -533,8 +398,20 @@ namespace NTSD.Animation.LF2Objects
                                     {
                                         var t = hit.Target;
                                         if (t == null || t.RelationTeam == RelationTeam) continue;
-                                        if (t is LF2Character ch)
-                                            ch.Hit(itr, this, new UnityEngine.Vector3(PS.x, PS.y, PS.z), default);
+
+                                        int targetType = t.GetCurrentDataObjectTypeForSimulation();
+                                        if (targetType != (int)LF2ObjectType.Character)
+                                            continue;
+
+                                        Vector3 attackerPos = new UnityEngine.Vector3((float)Runtime.X, (float)Runtime.Y, (float)Runtime.Z);
+                                        if (t is LF2Character character)
+                                        {
+                                            character.Hit(itr, this, attackerPos, bvol);
+                                        }
+                                        else if (LF2CharacterDatHitResolver.CanResolveTarget(t))
+                                        {
+                                            LF2CharacterDatHitResolver.TryResolveHit(t, itr, this, attackerPos, bvol);
+                                        }
                                     }
                                 }
                             }
@@ -544,32 +421,24 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else
                 {
-                    // C++ release 0x41675C~0x416774：Burning 小弹（vy<=17 AND |vx|<=9）
-                    // vx*=0.333，y=0，vy=0（无帧切换，无 attacking 重置）
-                    PS.vx *= 0.333f;
-                    PS.y = 0f;
-                    PS.vy = 0f;
+                    Runtime.Y = 0f;
+                    Runtime.Vy = 0f;
                     return;
                 }
             }
 
-            // C++ release 0x4167E2~0x41688E：通用小弹（state!=12 AND state!=18）
-            // y>0.0001 AND vy>0.0001（epsilon 守卫，实际等价）
             if (fstateLand != LF2States.Falling && fstateLand != LF2States.Burning)
             {
-                // vx*=0.333，y=0，vy=0
-                PS.vx *= 0.333f;
-                PS.y = 0f;
-                PS.vy = 0f;
+                Runtime.Vx *= 0.333f;
+                Runtime.Y = 0f;
+                Runtime.Vy = 0f;
 
-                // 帧切换（C++ release 0x416847~0x416889）
-                if (fstateLand == 100)          // state==0x64
-                    SetPhysicsFrameDirect(94);  // 0x5E
+                if (fstateLand == 100)
+                    ImmediateFrame(94);  // 0x5E
                 else if (fnumLand == 212 || fstateLand == 6)
-                    SetPhysicsFrameDirect(215); // 0xD7
+                    ImmediateFrame(215); // 0xD7
                 else
-                    SetPhysicsFrameDirect(219); // 0xDB
-                Runtime.WeaponState = 0;
+                    ImmediateFrame(219); // 0xDB
 
                 AttackingCounter = 0;           // Entity::attacking=0
                 return;
@@ -577,122 +446,96 @@ namespace NTSD.Animation.LF2Objects
 
             if (cd?.type_sub == 0x3E7)
             {
-                // type_sub=999：立即静止 frame=101（C++ release 0x416C13: mov [esi+70h], 65h）
-                PS.vx = 0f; PS.vy = 0f; PS.vz = 0f;
-                SetPhysicsFrameDirect(0x65); // 101
-                Runtime.WeaponState = 0;
+                Runtime.Vx = 0f;
+                Runtime.Vy = 0f;
+                Runtime.Vz = 0f;
+                ImmediateFrame(0x65); // 101
                 AttackingCounter = 0;
             }
-            // 其他 type=0 武器落地：不做任何帧切换（C++ release jnz loc_416D5A → fstp st → 末尾）
+
         }
 
-        #endregion
-
-        #region 交互与命中（Interaction / Hit / HitAsLight / HitAsHeavy / ApplyHitEffects / ApplyAttackerResponse）
-
-        /// <summary>
-        /// C++ release sub_4063B0 (0x00407378)：
-        ///   地面武器（state 1004/2004）才对角色造成碰撞伤害。
-        ///   飞行武器（state 1002/2000）的碰撞在 Entity_FrameAdvance 对应路径处理。
-        /// </summary>
         public override void Interaction()
         {
-            if (RelationTeam == 0) return;
-
-            int state = ResolveRuntimeWeaponState();
-
-            bool canInteract = IsLight
-                ? state == LF2States.WeaponThrowing   // 1002：飞行中的轻武器（Entity_FrameAdvance 路径）
-                : state == LF2States.HeavyWeaponInSky; // 2000：飞行中的重武器
-
-            // 地面武器攻击角色（sub_4063B0 路径）
-            bool groundInteract = IsLight
-                ? state == LF2States.WeaponOnGround    // 1004
-                : state == LF2States.HeavyWeaponOnGround; // 2004
-
-            if (canInteract || groundInteract)
-                base.Interaction();
+            base.Interaction();
         }
 
+        // 这是“武器自己被打到”的入口。
+        // 会先判断是否允许受击，再分流到对应的受击反馈逻辑。
         public override bool Hit(InteractionArea itr, LF2Entity attacker)
         {
-            if (HoldObj != null) return false;
+            if (GetRuntimeHolderEntity() != null) return false;
             if (attacker != null && ItrRest != null)
             {
                 int attackerKey = attacker.Runtime?.SlotIndex ?? -1;
-                if (attackerKey >= 0 && ItrRest.HasVrest(attackerKey)) return false;
+                if (attackerKey >= 0 && ItrRest.HasVrest(attackerKey))
+                    return false;
             }
 
-            // C++ release 0x0042F419-0x0042F45F：轻武器 kind=15/16 跳到同一 vx/vz 物理段
-            if (itr.kind == 15 || itr.kind == 16) { WhirlwindForce(itr, attacker); return true; }
+            if (itr.kind == 14)
+            {
+                ApplyKind14DirectionalBlockFrom(attacker);
+                return false;
+            }
+
             if (itr.kind == 10 || itr.kind == 11)
             {
-                // N-24 C++ release 0x0042F42E-0x0042F43C：kind=10/11 命中 entity_type==1/4/6 武器时
-                // oid=201(0xC9) 或 oid=202(0xCA) 跳过武器物理效果
+                if (itr.kind == 11 && FluteWeight >= 0)
+                    return false;
                 if (ObjectId == 201 || ObjectId == 202)
                     return false;
 
-                // P1-10/11: C++ release 0x0042D384/0x0042D450 — kind=10/11 命中武器时的物理效果
-                // 轻武器(type=1/4/6): state!=1000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=3
-                // 重武器(type=2):     state!=2000 则 frame=0; vx/vz*=0.9345; y=-2; vy-=2.3
-                const float kFluteVxzFactor = 0.9345f;
-                int curState = ResolveRuntimeWeaponState();
-                bool isLight = IsLight; // type=1/4/6
+                const float kFluteVxzFactor = 0.93457943f;
+                int curState = Frame?.D?.state ?? -1;
+                bool isLight = WeaponType == 1 || WeaponType == 4 || WeaponType == 6;
                 int inSkyState = isLight ? LF2States.WeaponInSky : LF2States.HeavyWeaponInSky;
                 if (curState != inSkyState)
-                    SetPhysicsFrameDirect(0);
-                PS.vx *= kFluteVxzFactor;
-                PS.vz *= kFluteVxzFactor;
-                PS.y = -2f;
-                PS.vy -= isLight ? 3f : 2.3f;
-                FluteForce();
+                    SetFrameDirect(0);
+                KnockbackVx = (float)(Runtime.Vx * kFluteVxzFactor);
+                Runtime.Vx = KnockbackVx;
+                KnockbackVz = (float)(Runtime.Vz * kFluteVxzFactor);
+                Runtime.Vz = KnockbackVz;
+                ApplyWeaponAirStep(isLight ? 3f : 2.3f);
+                FluteWeight = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
                 return true;
             }
 
-            int state = ResolveRuntimeWeaponState();
-            bool accept = false;
+            if (itr.kind == 15 || itr.kind == 16)
+            {
+                WhirlwindForce(itr, attacker);
+                return true;
+            }
 
-            if (IsLight)
-                accept = HitAsLight(itr, attacker, state);
-            else
-                accept = HitAsHeavy(itr, attacker, state);
+            int state = Frame?.D?.state ?? -1;
+            bool accept = IsLight
+                ? ObjectId != 201 && ObjectId != 202
+                : state == LF2States.HeavyWeaponOnGround || state == LF2States.HeavyWeaponInSky;
 
             if (accept)
-            {
                 ApplyHitEffects(itr, attacker);
-                // C++ release 0x0042D449~0x0042D464：entity_type=4/6（大弹/特效）被命中时 vx *= 0.55
-                if (WeaponType == 4 || WeaponType == 6)
-                    PS.vx *= 0.55f;
-            }
 
             return accept;
         }
 
-        private bool HitAsLight(InteractionArea itr, LF2Entity attacker, int state)
+        private void ApplyWeaponAirStep(float vyStep)
         {
-            if (ObjectId == 201 || ObjectId == 202)
-                return false;
-
-            RelationTeam = attacker?.RelationTeam ?? RelationTeam;
-            return true;
-        }
-
-        private bool HitAsHeavy(InteractionArea itr, LF2Entity attacker, int state)
-        {
-            // C++ release Entity_AI_Update 26344~26351：
-            // type==1/2/4/6 被命中时 fall 强制=80，直接进飞出流程（LABEL_129→LABEL_130→LABEL_131）
-            // 不做任何 vy/frame 设置——武器弹跳帧由 OnLanded() 分支处理
-            if (state == LF2States.HeavyWeaponOnGround   // 2004
-             || state == LF2States.HeavyWeaponInSky)     // 2000
+            if (GetRuntimeYInt() >= -2)
             {
-                if (attacker != null)
-                    RelationTeam = attacker.RelationTeam;
-                return true;
+                Runtime.Y = -2f;
+                Runtime.YInt = -2;
+                Runtime.Vy = -6f;
+                return;
             }
 
-            return false;
+            if (Runtime.Vy > -6f)
+            {
+                Runtime.Vy -= vyStep;
+                KnockbackVy = (float)Runtime.Vy;
+            }
         }
 
+        // 这里真正写入受击结果：
+        // 扣耐久、设置 vrest、计算击退、切受击帧，并处理攻击者的后摇/僵直。
         private void ApplyHitEffects(InteractionArea itr, LF2Entity attacker)
         {
             int wt = WeaponType;
@@ -726,11 +569,6 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // C++ release Entity_AI_Update 26312：[+764h] -= injury（所有 type 均扣 HP）
-            if (itr.injury > 0) Health.HP -= itr.injury;
-
-            // C++ release：type==1/2/4/6 时 WeaponFlightCounter（耐久）-= injury。
-            // itr[0x40]=bdefend==100 时强制置 -1（秒毁）
             if (lightThrow || heavyLike || specialLike)
             {
                 HitConfirm2 = 1;
@@ -744,87 +582,192 @@ namespace NTSD.Animation.LF2Objects
             {
                 RelationTeam = attacker.RelationTeam;
 
-                if (heavyLike)
+                // ── C# baseline: ApplyObjectHurtTail + ApplyStandardDamageKnockbackX ──
+                if (wt != 2 || itr.fall > 40)
+                    HitCount++;
+
+                FallCounter += itr.fall != 0 ? itr.fall : 20;
+
+                if (lightThrow || heavyLike || specialLike)
+                    FallCounter = 80;
+
+                bool knockback = FallCounter > 60;
+
+                // Step 2: ApplyStandardDamageKnockbackX —— 计算 victim.KnockbackVx
+                bool attackerState2000 = (attacker.Frame?.D?.state ?? -1) == LF2States.HeavyWeaponInSky;
+                float dvx = itr.dvx;
+
+                // C# baseline: knockback 且 Vx 接近0 且 dvx==0 时用固定速度
+                if (knockback && Runtime.Vx > -5f && Runtime.Vx < 5f && dvx == 0f)
                 {
-                    SwitchDir(attacker.PS?.dir ?? PS.dir);
-                    if (itr.fall <= 40 && (int)PS.y >= 0 && itr.effect != 4)
+                    KnockbackVx += attackerState2000
+                        ? 5f
+                        : (attacker.Runtime.Dir == "right" ? 5f : -5f);
+                }
+                // C# baseline: state=2000 且有 dvx
+                else if (attackerState2000 && dvx != 0f)
+                {
+                    KnockbackVx += attacker.Runtime.X < Runtime.X ? dvx : -dvx;
+                }
+                // C# baseline: FlyingA/FlyingB 特殊逻辑——根据当前 Vx 动态调整
+                else if (specialLike)
+                {
+                    double scaled = System.Math.Abs(Runtime.Vx) * 0.55f;
+
+                    if (dvx > scaled)
                     {
-                        SetPhysicsFrameDirect(20);
-                        Runtime.WeaponState = 0;
+                        KnockbackVx += attacker.Runtime.Dir == "right" ? dvx : -dvx;
+                    }
+                    else if (attacker.Runtime.Dir == "right")
+                    {
+                        if (KnockbackVx > 0f)
+                            KnockbackVx += dvx;
+                        else if (Runtime.Vx < 0f)
+                            KnockbackVx = (float)(-scaled);
                     }
                     else
                     {
-                        SetPhysicsFrameDirect(RandInt(0, 6));
-                        Runtime.WeaponState = 0;
+                        if (KnockbackVx < 0f)
+                            KnockbackVx -= dvx;
+                        else if (Runtime.Vx > 0f)
+                            KnockbackVx = (float)(-scaled);
                     }
                 }
-                else if (lightThrow || specialLike)
+                // C# baseline: effect=22/23 特殊处理
+                else if (itr.effect == 22 || itr.effect == 23)
                 {
-                    SetPhysicsFrameDirect(RandInt(0, 16));
-                    Runtime.WeaponState = 0;
+                    KnockbackVx += Runtime.X <= attacker.Runtime.X ? dvx : -dvx;
                 }
+                // C# baseline: 常规 dvx 处理
+                else if (dvx != 0f)
+                {
+                    KnockbackVx += attacker.Runtime.Dir == "right" ? dvx : -dvx;
+                }
+
+                // Step 3: knockback 时设置击飞速度和帧；否则走原有轻/重击帧逻辑
+                if (knockback)
+                {
+                    float kbVy = itr.dvy != 0 ? (float)itr.dvy : -7f;
+                    KnockbackVy += kbVy;
+                    if (KnockbackVy + Runtime.Y > 0f) KnockbackVy = 12f;
+
+                    int facing = Runtime.Dir == "left" ? 1 : 0;
+                    int hitFrame = facing == 0
+                        ? (KnockbackVx <= 0f ? 180 : 186)
+                        : (KnockbackVx >= 0f ? 180 : 186);
+                    SetFrameDirect(hitFrame);
+
+                    FallCounter = 0; // C# baseline: victim.Fall = 80 then victim.Fall = 0
+                }
+                else
+                {
+                    // 非 knockback：保留原有帧逻辑
+                    if (heavyLike)
+                    {
+                        SwitchDir(attacker.Runtime.Dir ?? Runtime.Dir);
+                        if (itr.fall <= 40 && (int)Runtime.Y >= 0 && itr.effect != 4)
+                            ImmediateFrame(20);
+                        else
+                            ImmediateFrame(RandInt(0, 6));
+                    }
+                    else if (lightThrow || specialLike)
+                    {
+                        ImmediateFrame(RandInt(0, 16));
+                    }
+                }
+
+                HitStateCount = 45;
+                if (attacker.FrameDelay >= 0)
+                    attacker.FrameDelay = 3;
+                FrameDelay = -3;
+                attacker.AttackExempt = itr.arest;
             }
 
             PlaySound(WeaponHitSound);
 
-            // C++ release 0x42E5DE-0x42E6E8：飞行武器命中角色后的攻击者反弹三步骤
-            // 步骤1: state=1002(WeaponThrowing) → 反弹
-            // 步骤2: state=2000(HeavyWeaponInSky) → 飞向victim时减速
-            // 步骤3: state=3000 → 停止
-            // 三步骤非互斥，每步重新读 state
             ApplyAttackerResponse(attacker);
+            if (attacker != null && itr.kind == 0)
+            {
+                ApplyKind0VictimObjectTail(itr, attacker);
+                ApplyCommonEncodedHitEffectRange(itr.effect);
+            }
         }
 
-        /// <summary>
-        /// C++ release 0x42E5DE-0x42E6E8：飞行武器命中角色后对武器自身的三步骤处理。
-        /// </summary>
-        private void ApplyAttackerResponse(LF2Entity victim)
+        private void ApplyKind0VictimObjectTail(InteractionArea itr, LF2Entity attacker)
         {
-            // 步骤1: state=1002 → 反弹（0x42E5F1-0x42E63A）
-            int curState = ResolveRuntimeWeaponState();
-            if (curState == LF2States.WeaponThrowing) // 1002
+            int wt = WeaponType;
+            if (wt == 1)
             {
-                SetPhysicsFrameDirect(RandInt(0, 16));
-                Runtime.WeaponState = 0;
-                float knockbackVx = victim?.KnockbackVx ?? 0f;
-                PS.vx = -(knockbackVx * 0.5f);
-                PS.vy = -4f;
-                PS.vz *= -0.6667f;
+                HitConfirm2 = 1;
+                SetFrameDirect(RandInt(0, 16));
+                RelationTeam = attacker.RelationTeam;
+                return;
             }
 
-            // 步骤2: state=2000 → 飞向victim时减速（0x42E65D-0x42E6A4）
-            curState = ResolveRuntimeWeaponState();
-            if (curState == LF2States.HeavyWeaponInSky) // 2000
+            if (wt == 4 || wt == 6)
             {
-                bool flyingToward = (PS.x > victim.PS.x && PS.vx < 0f)
-                                 || (PS.x < victim.PS.x && PS.vx > 0f);
+                HitConfirm2 = 1;
+                SetFrameDirect(RandInt(0, 16));
+                RelationTeam = attacker.RelationTeam;
+                return;
+            }
+
+            if (wt == 2)
+            {
+                HitConfirm2 = 1;
+                SwitchDir(attacker.Runtime.Dir);
+                if (itr.fall <= 40 && (int)Runtime.Y >= 0 && itr.effect != 4)
+                    SetFrameDirect(20);
+                else
+                    SetFrameDirect(RandInt(0, 6));
+                RelationTeam = attacker.RelationTeam;
+            }
+        }
+
+        // 武器受击后，攻击者自己也可能被反弹、减速或改帧。
+        private void ApplyAttackerResponse(LF2Entity attacker)
+        {
+            if (attacker?.Runtime == null) return;
+
+            int attackerState = attacker.Frame?.D?.state ?? -1;
+            if (attackerState == LF2States.WeaponThrowing)
+            {
+                attacker.ImmediateFrame(RandInt(0, 16));
+
+                // C# baseline: attacker.Vx = victim.KnockbackVx * -0.5
+                // KnockbackVx 已在 ApplyHitEffects 里按 ApplyStandardDamageKnockbackX 正确累积
+                attacker.Runtime.Vx = -(KnockbackVx * 0.5f);
+                attacker.Runtime.Vy = -4f;
+
+                int attackerWt = (attacker is LF2Weapon aw) ? aw.WeaponType : -1;
+                if (attackerWt == 4 && WeaponType == 4)
+                    attacker.KnockbackVx = -KnockbackVx;
+            }
+
+            attackerState = attacker.Frame?.D?.state ?? -1;
+            if (attackerState == LF2States.HeavyWeaponInSky)
+            {
+                bool flyingToward = (attacker.Runtime.X > Runtime.X && attacker.Runtime.Vx < 0f)
+                                 || (attacker.Runtime.X < Runtime.X && attacker.Runtime.Vx > 0f);
                 if (flyingToward)
                 {
-                    PS.vx *= 0.4f;
-                    PS.vz *= 0.4f;
+                    attacker.Runtime.Vx *= 0.4f;
+                    attacker.Runtime.Vz *= 0.4f;
                 }
             }
 
-            // 步骤3: state=3000 → 停止（0x42E6A4-0x42E6E8）
-            curState = ResolveRuntimeWeaponState();
-            if (curState == 3000)
+            attackerState = attacker.Frame?.D?.state ?? -1;
+            if (attackerState == LF2States.ProjectileFlying)
             {
-                SetPhysicsFrameDirect(10);
-                Runtime.WeaponState = 0;
-                PS.vx = 0f;
+                attacker.ImmediateFrame(10);
+                attacker.AttackingCounter = 0;
+                attacker.Runtime.Vx = 0f;
             }
         }
 
-        #endregion
-
-        #region 持有攻击（ProcessAttack）
-
-        /// <summary>
-        /// 持有攻击处理（C++ release Entity_AI_Update 0x42CAB1）。
-        /// wpoint.attacking 对应 weapon_strength_list 的 entry 编号，
-        /// 用 entry 参数向周围角色发起 ITR 碰撞。
-        /// </summary>
-        protected override WeaponAttackResult ProcessAttack(LF2LivingObject holder, WeaponPoint wpoint, LF2FrameData frame)
+        // 这是“角色手里拿着武器去打别人”的命中流程。
+        // wpoint 会先被翻译成 itr，再通过场景查询命中角色并调用角色 Hit。
+        protected override WeaponAttackResult ProcessAttack(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
         {
             var result = new WeaponAttackResult();
             if (wpoint.attacking <= 0) return result;
@@ -833,16 +776,14 @@ namespace NTSD.Animation.LF2Objects
             if (entry == null) return result;
 
             var sceneQuery = Match?.SceneQuery;
-            if (sceneQuery == null || PS == null || frame == null) return result;
+            if (sceneQuery == null || frame == null) return result;
 
-            // 用武器 body 区域做碰撞查询（持有攻击命中体）
             float spriteW = GetSpriteWidthPxForCollision();
             if (spriteW <= 0f) return result;
 
-            var bodyVols = PS.GetBodyVolumes(frame.bodies, frame.centerx, frame.centery, spriteW);
+            var bodyVols = NTSDBattleVolumeUtility.GetBodyVolumes(Runtime, frame.bodies, frame.centerx, frame.centery, spriteW);
             if (bodyVols == null || bodyVols.Count == 0) return result;
 
-            // 构造临时 ITR（entry 参数 → InteractionArea）
             var itr = new InteractionArea
             {
                 kind = 0,
@@ -855,8 +796,7 @@ namespace NTSD.Animation.LF2Objects
                 effect = entry.effect,
             };
 
-            // 持有攻击 dvx 方向跟随持有者
-            if (holder != null && holder.PS.dir == "left")
+            if (holder != null && holder.Runtime.Dir == "left")
                 itr.dvx = -itr.dvx;
 
             for (int b = 0; b < bodyVols.Count; b++)
@@ -868,33 +808,40 @@ namespace NTSD.Animation.LF2Objects
                     var target = hits[c].Target;
                     if (target == holder) continue;
                     if (target.RelationTeam == RelationTeam) continue;
-                    LF2Character character = AsAttackCharacterTarget(target);
-                    if (character == null) continue;
                     if (ItrRest != null)
                     {
                         int targetKey = target.Runtime?.SlotIndex ?? -1;
                         if (targetKey >= 0 && ItrRest.HasVrest(targetKey)) continue;
                     }
 
-                    var attackerPos = new UnityEngine.Vector3(PS.x, PS.y, PS.z);
-                    bool hit = character.Hit(itr, this, attackerPos, default);
-                    if (hit)
+                    var attackerPos = new UnityEngine.Vector3((float)Runtime.X, (float)Runtime.Y, (float)Runtime.Z);
+                    bool hit = false;
+                    if (target is LF2Character character)
                     {
-                        result.HitUid = target.StableId;
-                        result.VRest = itr.vrest;
-                        result.ARest = itr.arest;
-                        ItrArestUpdate(itr);
-                        int targetKey = target.Runtime?.SlotIndex ?? -1;
-                        if (targetKey >= 0)
-                            ItrRest?.SetVrest(targetKey, itr.vrest);
-                        return result;
+                        hit = character.Hit(itr, this, attackerPos, vol);
                     }
+                    else if (LF2CharacterDatHitResolver.CanResolveTarget(target))
+                    {
+                        hit = LF2CharacterDatHitResolver.TryResolveHit(target, itr, this, attackerPos, vol);
+                    }
+
+                    if (!hit)
+                        continue;
+
+                    result.HitUid = target.StableId;
+                    result.VRest = itr.vrest;
+                    result.ARest = itr.arest;
+                    ItrArestUpdate(itr);
+                    int hitTargetKey = target.Runtime?.SlotIndex ?? -1;
+                    if (hitTargetKey >= 0)
+                        ItrRest?.SetVrest(hitTargetKey, itr.vrest);
+                    return result;
                 }
             }
 
             return result;
         }
 
-        #endregion
     }
 }
+
