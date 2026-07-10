@@ -1270,7 +1270,7 @@ namespace NTSD.Animation.LF2Objects
                     StepSharedCharacterDatWalkAnimation(rate, LF2StandardFrames.WalkingStart);
 
                 Runtime.Vz = -characterData.walking_speedz;
-                Runtime.Vx *= 5f / 7f;
+                Runtime.Vx *= 0.7142857142857143; // P0-f-2b B2-3b: VALUE-BUG 5f/7f→0.7142857142857143 (baseline InputRuntime.cs Vx*=5.0/7.0)
             }
             else if (Runtime.KeyDown != 0 && Runtime.KeyUp == 0)
             {
@@ -1278,7 +1278,7 @@ namespace NTSD.Animation.LF2Objects
                     StepSharedCharacterDatWalkAnimation(rate, LF2StandardFrames.WalkingStart);
 
                 Runtime.Vz = characterData.walking_speedz;
-                Runtime.Vx *= 5f / 7f;
+                Runtime.Vx *= 0.7142857142857143; // P0-f-2b B2-3b: VALUE-BUG 5f/7f→0.7142857142857143 (baseline InputRuntime.cs Vx*=5.0/7.0)
             }
         }
 
@@ -1347,7 +1347,7 @@ namespace NTSD.Animation.LF2Objects
                     StepSharedCharacterDatWalkAnimation(rate, LF2StandardFrames.HeavyObjWalk0);
 
                 Runtime.Vz = -characterData.heavy_walking_speedz;
-                Runtime.Vx *= 5f / 7f;
+                Runtime.Vx *= 0.7142857142857143; // P0-f-2b B2-3b: VALUE-BUG 5f/7f→0.7142857142857143 (baseline InputRuntime.cs Vx*=5.0/7.0)
             }
             else if (Runtime.KeyDown != 0 && Runtime.KeyUp == 0)
             {
@@ -1355,7 +1355,7 @@ namespace NTSD.Animation.LF2Objects
                     StepSharedCharacterDatWalkAnimation(rate, LF2StandardFrames.HeavyObjWalk0);
 
                 Runtime.Vz = characterData.heavy_walking_speedz;
-                Runtime.Vx *= 5f / 7f;
+                Runtime.Vx *= 0.7142857142857143; // P0-f-2b B2-3b: VALUE-BUG 5f/7f→0.7142857142857143 (baseline InputRuntime.cs Vx*=5.0/7.0)
             }
         }
 
