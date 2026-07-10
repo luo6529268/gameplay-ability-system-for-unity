@@ -1221,7 +1221,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetZ < selfZ - 7)
                 Runtime.Vz -= 0.3f;
 
-            Runtime.Vy *= 5f / 7f;
+            Runtime.Vy *= 0.7142857142857143; // P0-f-2b B2-3a: VALUE-BUG 5f/7f→0.7142857142857143 (baseline FrameAdvance.cs Vy*=0.7142857142857143)
 
             if (IsCharacterFrameLogicTarget(target))
             {
@@ -1498,7 +1498,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetZ < selfZ - 5)
                 Runtime.Vz -= 0.4f;
 
-            Runtime.Vy *= 5f / 7f;
+            Runtime.Vy *= 0.7142857142857143; // P0-f-2b B2-3a: VALUE-BUG 5f/7f→0.7142857142857143 (baseline FrameAdvance.cs Vy*=0.7142857142857143)
 
             if (IsCharacterFrameLogicTarget(target))
             {
