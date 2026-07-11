@@ -137,7 +137,10 @@ namespace NTSD.Simulation
 
                 if (entity.TransformTargetObjectId == -1 || entity.TransformOriginalObjectId >= 0)
                 {
-                    entity.ImmediateFrame(0);
+                    // BMD-023: state=500 reset branch must mirror baseline SetFrameImmediate:
+                    // write Frame + FrameWaitCounter only, never Attacking. Unity's
+                    // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+                    entity.DirectWriteFramePreserveWaitCounter(0);
                     RefreshRuntimeSnapshot(entity);
                 }
             }
@@ -165,7 +168,10 @@ namespace NTSD.Simulation
                 entity.TransformOriginalObjectId = entity.ObjectId;
                 entity.FrameCache.Load(wrapper);
                 entity.ObjectId = entity.TransformTargetObjectId;
-                entity.ImmediateFrame(0);
+                // BMD-023: state=501 transform branch must mirror baseline SetFrameImmediate:
+                // write Frame + FrameWaitCounter only, never Attacking. Unity's
+                // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+                entity.DirectWriteFramePreserveWaitCounter(0);
                 RefreshRuntimeSnapshot(entity);
 
                 int ownerStableId = entity.StableId;
@@ -183,7 +189,11 @@ namespace NTSD.Simulation
 
                     child.FrameCache.Load(wrapper);
                     child.ObjectId = entity.ObjectId;
-                    child.ImmediateFrame(child.PS != null && child.PS.y < 0f ? 212 : 0);
+                    // BMD-023: state=501 child-transform branch must mirror baseline SetFrameImmediate.
+                    // Same Y<0→212 / Y≥0→0 split as LF2Character.ApplyObjectSpecificFrameTickBeforeWaitAdvance:
+                    // write Frame + FrameWaitCounter only, never Attacking. Unity's
+                    // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+                    child.DirectWriteFramePreserveWaitCounter(child.PS != null && child.PS.y < 0f ? 212 : 0);
                     RefreshRuntimeSnapshot(child);
                 }
             }

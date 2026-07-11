@@ -52,6 +52,7 @@ namespace NTSD.Test
                 CheckCpointDecreaseEscape();
                 CheckSimulationWorldLateMutation();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
+                CheckSimulationPassesImmediateFrameDoesNotZeroAttacking();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -195,6 +196,34 @@ namespace NTSD.Test
                 "state=0 + Y<0 分支应强制切到 212 空中跳跃帧");
             Expect(character.AttackingCounter == attackingBefore,
                 "BMD-023-extended: 切帧必须保留 AttackingCounter，" +
+                "ImmediateFrame 路径会在 LF2Entity.cs:824 将其清零，违反 baseline parity");
+        }
+
+        private static void CheckSimulationPassesImmediateFrameDoesNotZeroAttacking()
+        {
+            // BMD-023: SimulationWorld.Passes.partial.cs state=500/501 transform branches
+            // used to call entity.ImmediateFrame(N), which zeros AttackingCounter as a side
+            // effect (LF2Entity.cs:824). Baseline FrameTick.cs:67-76 SetFrameImmediate only
+            // writes Frame + FrameWaitCounter. The fix routes through
+            // DirectWriteFramePreserveWaitCounter, which delegates to SetFrameTickDirect and
+            // leaves AttackingCounter alone.
+            //
+            // We test the replacement path end-to-end: build an entity, set Frame.N to a
+            // state=500 frame, stash AttackingCounter, call the replacement, and assert
+            // AttackingCounter survives while Frame advances. This covers all three call
+            // sites (SimulationWorld.Passes.partial.cs:140/:168/:186) since they share the
+            // same SetFrameTickDirect backing.
+            var character = CreateCharacter("SelfCheck_PassesAttacking", 1, BuildCatchingFrames());
+            character.ImmediateFrame(0);
+            const int attackingBefore = 11;
+            character.AttackingCounter = attackingBefore;
+
+            character.DirectWriteFramePreserveWaitCounter(212);
+
+            Expect(character.Frame != null && character.Frame.N == 212,
+                "BMD-023: DirectWriteFramePreserveWaitCounter 必须把 Frame.N 写到目标帧 212");
+            Expect(character.AttackingCounter == attackingBefore,
+                "BMD-023: state=500/501 修复点必须保留 AttackingCounter，" +
                 "ImmediateFrame 路径会在 LF2Entity.cs:824 将其清零，违反 baseline parity");
         }
 
