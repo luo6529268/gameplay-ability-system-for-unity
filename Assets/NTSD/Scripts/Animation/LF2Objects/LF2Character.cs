@@ -2202,7 +2202,13 @@ namespace NTSD.Animation.LF2Objects
         protected override bool ApplyObjectSpecificFrameTickBeforeWaitAdvance()
         {
             if ((Frame?.D?.state ?? -1) == 0 && GetRuntimeYInt() < 0)
-                ImmediateFrame(212);
+                // BMD-023-extended: standing-state-but-below-ground branch must mirror
+                // baseline FrameTick.cs:67-76 (SetFrameImmediate(entity, 212)), which writes
+                // Frame + FrameWaitCounter but does NOT touch Attacking. Unity's
+                // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+                // DirectWriteFramePreserveWaitCounter routes through SetFrameTickDirect,
+                // preserving AttackingCounter while mirroring baseline parity.
+                DirectWriteFramePreserveWaitCounter(212);
 
             if ((Frame?.D?.state ?? -1) == LF2States.Lying &&
                 Health != null &&

@@ -51,6 +51,7 @@ namespace NTSD.Test
                 CheckBeingCaughtPositionSync();
                 CheckCpointDecreaseEscape();
                 CheckSimulationWorldLateMutation();
+                CheckState0BelowGroundFrame212PreservesAttackingCounter();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -163,6 +164,38 @@ namespace NTSD.Test
             Expect(Nearly(victim.KnockbackVx, -4f), "抓取者在右侧时被抓者 knockback_vx 应为 -4");
             Expect(Nearly(victim.KnockbackVy, -3f), "逃脱后被抓者 knockback_vy 应为 -3");
             Expect(attacker.Catching == null && victim.Catching == null, "逃脱后双方抓取关系应清空");
+        }
+
+        private static void CheckState0BelowGroundFrame212PreservesAttackingCounter()
+        {
+            // BMD-023-extended: standing-state-but-below-ground branch
+            // (LF2Character.ApplyObjectSpecificFrameTickBeforeWaitAdvance, frame state 0 + Y < 0)
+            // must mirror baseline FrameTick.cs:67-76 (SetFrameImmediate(entity, 212)).
+            // Baseline's SetFrameImmediate writes Frame + FrameWaitCounter only, never Attacking.
+            // Unity's old ImmediateFrame path zeroed AttackingCounter as a side effect
+            // (LF2Entity.cs:824). Verify the replacement path preserves AttackingCounter.
+            var character = CreateCharacter("SelfCheck_State0BelowGround", 1, BuildCatchingFrames());
+
+            // BuildCatchingFrames frame 0 is state=0, wait=0, next=0 — standing on ground.
+            // Drive it to frame 0 explicitly so Frame.D.state resolves correctly.
+            character.ImmediateFrame(0);
+
+            // Below-ground runtime state: standing frame, but Y < 0 (drops through ground).
+            character.Runtime.YInt = -10;
+
+            // Stash an arbitrary AttackingCounter; the fix must preserve this through the tick.
+            const int attackingBefore = 7;
+            character.AttackingCounter = attackingBefore;
+
+            // OnFrameTickBeforeWaitAdvance is the public entry that routes through
+            // ApplyObjectSpecificFrameTickBeforeWaitAdvance on LF2Character.
+            character.OnFrameTickBeforeWaitAdvance(0);
+
+            Expect(character.Frame != null && character.Frame.N == 212,
+                "state=0 + Y<0 分支应强制切到 212 空中跳跃帧");
+            Expect(character.AttackingCounter == attackingBefore,
+                "BMD-023-extended: 切帧必须保留 AttackingCounter，" +
+                "ImmediateFrame 路径会在 LF2Entity.cs:824 将其清零，违反 baseline parity");
         }
 
         private static void CheckSimulationWorldLateMutation()
