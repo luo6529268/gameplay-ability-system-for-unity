@@ -525,7 +525,7 @@ namespace NTSD.Simulation
 
         public void EarlyFrameAdvanceSpecialsAll(int tickIndex)
         {
-            bool teleportGate = (tickIndex & 1) == 0;
+            bool teleportGate = FrameToggle != 0;
 
             GetActiveEntitiesByRuntimeSlot(_entityScratch);
             for (int i = 0; i < _entityScratch.Count; i++)

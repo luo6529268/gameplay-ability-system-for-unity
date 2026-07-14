@@ -85,7 +85,7 @@ T0-T9 主线已实现并通过针对性 self-check，但**整个战斗运行时�
 
 ## 3. 已确认对齐（不要重复处理）
 
-tick 主循环主干（`InputPhase` 已完成，`FrameToggle` 除外）、kind 0/4/9 主流程、kind 6/8/10/11/14、oid300、kind5 委托、M-5 死亡弹地、M-7 kind4+WeaponCount 翻转、HP/PP 自然恢复、heal/catch timer、state14 复活与 respawn pass、frame mp turn-around、frame202 HitStun=20、opoint 生成、cpoint 正值主流程、state 400/401/500/501、N30 触发、状态转换特效。
+tick 主循环主干（含 `InputPhase`/`FrameMod12`/`FrameToggle` 统一推进）、全局 `ValidatePositiveLinks`、kind 0/4/9 主流程、kind 6/8/10/11/14、oid300、kind5 委托、M-5 死亡弹地、M-7 kind4+WeaponCount 翻转、HP/PP 自然恢复、heal/catch timer、state14 复活与 respawn pass、frame mp turn-around、frame202 HitStun=20、opoint 生成、cpoint 正值主流程、state 400/401/500/501、N30 触发、状态转换特效。
 
 ## 4. 确认可不移植
 
@@ -139,7 +139,7 @@ T0-T9 主线均已完成并通过针对性 Unity 运行时自检。下一步按�
 | 优先级 | 当前推进 |
 |---|---|
 | P0 | ✅ negative `vaction` 已完成并通过 fresh Unity batch：action signed + victim raw、throw raw frame/prev2、held-sync raw→flip/abs 与原始 signed vaction cpoint 坐标 |
-| P1 | `FrameToggle`、`ValidatePositiveLinks`、PreFrame X 逻辑边界、DAT transform shell、Step10 剩余 action 输入优先级、cpoint injury/stat 副作用与非角色参与者 |
+| P1 | PreFrame X 逻辑边界、DAT transform shell、Step10 剩余 action 输入优先级、cpoint injury/stat 副作用与非角色参与者 |
 | P2 | opoint/pass visibility、per-class `frame_advance`、`frame_tick` 内部、collision snapshot/candidate 语义 |
 
 T8 默认 `stage.dat` 部署由用户明确暂缓，不进入当前推进。
@@ -163,4 +163,4 @@ P0 验收覆盖 `CheckCpointNegativeActionMatrix`、`CheckCpointHeldSyncVactionM
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；默认资产部署暂缓** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | 三项 stage self-check 均通过；默认 `stage.dat` 部署由用户明确暂缓 |
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；输入 pass 分段；runtime 字段与 roster/opoint bootstrap | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**；最终代码 fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。这不是完整对局逐帧等价证明；后续按 §9 backlog 继续。T8 默认 `stage.dat` 部署暂缓。
+最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；主 Editor request 于 00:57:49 fresh 返回 `PASS`，覆盖新增 Flow/link 矩阵并回归既有检查。隔离 clone batch 编译成功，但在 post-compile domain reload 后停滞，未形成 PASS 证据。这不是完整对局逐帧等价证明；后续按 §9 backlog 继续。T8 默认 `stage.dat` 部署暂缓。

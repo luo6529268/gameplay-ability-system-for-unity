@@ -57,6 +57,8 @@ namespace NTSD.Test
                 CheckCpointHeldSyncVactionMatrix();
                 CheckCpointThrowRawAndTransformMatrix();
                 CheckCpointDecreaseEscape();
+                CheckBattleFlowToggleAndTeleportMatrix();
+                CheckValidatePositiveLinksMatrix();
                 CheckSimulationWorldLateMutation();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
                 CheckSimulationPassesImmediateFrameDoesNotZeroAttacking();
@@ -605,6 +607,316 @@ namespace NTSD.Test
             Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
                    victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
                 "decrease kind1 sub-pass must not invent runtime link cleanup");
+        }
+
+        private static void CheckBattleFlowToggleAndTeleportMatrix()
+        {
+            var flowWorld = new SimulationWorld();
+            for (int tick = 1; tick <= 13; tick++)
+            {
+                flowWorld.AdvanceBattleFlowTick(tick);
+                if (tick <= 4 || tick >= 11)
+                {
+                    Expect(flowWorld.CurrentTickIndex == tick,
+                        $"flow tick {tick}: CurrentTickIndex must advance at tick head");
+                    Expect(flowWorld.InputPhase == (tick & 1),
+                        $"flow tick {tick}: InputPhase parity mismatch");
+                    Expect(flowWorld.FrameMod12 == tick % 12,
+                        $"flow tick {tick}: FrameMod12 mismatch");
+                    Expect(flowWorld.FrameToggle == (tick & 1),
+                        $"flow tick {tick}: FrameToggle parity mismatch");
+                }
+            }
+
+            flowWorld.ResetRuntimeState();
+            Expect(flowWorld.CurrentTickIndex == 0 && flowWorld.InputPhase == 0 &&
+                   flowWorld.FrameMod12 == 0 && flowWorld.FrameToggle == 0,
+                "battle flow reset must clear tick, input phase, FrameMod12 and FrameToggle");
+
+            var gatedWorld = new SimulationWorld();
+            FlowSelfCheckEntity gatedSource = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportGate_Source", LF2ObjectType.Character,
+                LF2States.TeleportToEnemy, 1, 10, 20, 0);
+            FlowSelfCheckEntity gatedTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportGate_Target", LF2ObjectType.Character,
+                LF2States.Standing, 2, 300, 40, 1);
+            gatedWorld.Register(gatedSource);
+            gatedWorld.Register(gatedTarget);
+
+            gatedWorld.AdvanceBattleFlowTick(1);
+            gatedWorld.EarlyFrameAdvanceSpecialsAll(1);
+            Expect(gatedSource.GetRuntimeXInt() == 10 && gatedSource.GetRenderZInt() == 20,
+                "FrameToggle=1 on tick 1 must gate state 400 teleport");
+
+            gatedWorld.AdvanceBattleFlowTick(2);
+            gatedWorld.EarlyFrameAdvanceSpecialsAll(2);
+            Expect(gatedSource.GetRuntimeXInt() == 180 && gatedSource.GetRenderZInt() == 41,
+                "FrameToggle=0 on tick 2 must run state 400 teleport");
+
+            gatedSource.Runtime.SetPosition(25f, -8f, 30f);
+            gatedSource.Runtime.SyncIntegerPosition();
+            gatedWorld.AdvanceBattleFlowTick(3);
+            gatedWorld.EarlyFrameAdvanceSpecialsAll(3);
+            Expect(gatedSource.GetRuntimeXInt() == 25 && gatedSource.GetRenderZInt() == 30,
+                "FrameToggle=1 on tick 3 must gate state 400 teleport");
+
+            gatedWorld.AdvanceBattleFlowTick(4);
+            gatedWorld.EarlyFrameAdvanceSpecialsAll(4);
+            Expect(gatedSource.GetRuntimeXInt() == 180 && gatedSource.GetRenderZInt() == 41,
+                "FrameToggle=0 on tick 4 must run state 400 teleport");
+
+            var selfWorld = new SimulationWorld();
+            FlowSelfCheckEntity selfSource = CreateFlowSelfCheckEntity(
+                "SelfCheck_Teleport401_Self", LF2ObjectType.Character,
+                LF2States.TeleportToTeammate, 3, 100, 20, 5);
+            selfWorld.Register(selfSource);
+            AdvanceFlowToEvenToggle(selfWorld);
+            selfWorld.EarlyFrameAdvanceSpecialsAll(2);
+            Expect(selfSource.GetRuntimeXInt() == 40 && selfSource.GetRenderZInt() == 21,
+                "state 401 must be allowed to select self when no farther teammate exists");
+
+            var sourceTypeWorld = new SimulationWorld();
+            FlowSelfCheckEntity nonCharacterSource = CreateFlowSelfCheckEntity(
+                "SelfCheck_Teleport_NonCharacterSource", LF2ObjectType.Other,
+                LF2States.TeleportToEnemy, 1, 0, 0, 10);
+            FlowSelfCheckEntity characterTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_Teleport_CharacterTarget", LF2ObjectType.Character,
+                LF2States.Standing, 2, 250, 50, 11);
+            sourceTypeWorld.Register(nonCharacterSource);
+            sourceTypeWorld.Register(characterTarget);
+            AdvanceFlowToEvenToggle(sourceTypeWorld);
+            sourceTypeWorld.EarlyFrameAdvanceSpecialsAll(2);
+            Expect(nonCharacterSource.GetRuntimeXInt() == 130 && nonCharacterSource.GetRenderZInt() == 51,
+                "state 400 source must not require Character DAT when its target is Character DAT");
+
+            var selectionWorld = new SimulationWorld();
+            FlowSelfCheckEntity selectionSource = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportSelection_Source", LF2ObjectType.Character,
+                LF2States.TeleportToEnemy, 1, 0, 0, 20);
+            FlowSelfCheckEntity farCharacter = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportSelection_Far", LF2ObjectType.Character,
+                LF2States.Standing, 2, 400, 0, 21);
+            FlowSelfCheckEntity nearCharacter = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportSelection_Near", LF2ObjectType.Character,
+                LF2States.Standing, 2, 200, 0, 22);
+            FlowSelfCheckEntity ignoredNonCharacter = CreateFlowSelfCheckEntity(
+                "SelfCheck_TeleportSelection_Ignored", LF2ObjectType.Other,
+                LF2States.Standing, 2, 20, 0, 23);
+            selectionWorld.Register(selectionSource);
+            selectionWorld.Register(farCharacter);
+            selectionWorld.Register(nearCharacter);
+            selectionWorld.Register(ignoredNonCharacter);
+            AdvanceFlowToEvenToggle(selectionWorld);
+            selectionWorld.EarlyFrameAdvanceSpecialsAll(2);
+            Expect(selectionSource.GetRuntimeXInt() == 80 && selectionSource.GetRenderZInt() == 1,
+                "state 400 must select the nearest live Character DAT target and ignore non-character targets");
+
+            var noTargetWorld = new SimulationWorld();
+            FlowSelfCheckEntity noTargetSource = CreateFlowSelfCheckEntity(
+                "SelfCheck_Teleport_NoTarget", LF2ObjectType.Character,
+                LF2States.TeleportToEnemy, 4, 70, 30, 30);
+            FlowSelfCheckEntity sameTeamOnly = CreateFlowSelfCheckEntity(
+                "SelfCheck_Teleport_NoTarget_SameTeam", LF2ObjectType.Character,
+                LF2States.Standing, 4, 200, 30, 31);
+            noTargetSource.Runtime.Y = -12f;
+            noTargetSource.Runtime.YInt = -12;
+            noTargetSource.Runtime.Vx = 5f;
+            noTargetSource.Runtime.Vy = -6f;
+            noTargetSource.Runtime.Vz = 7f;
+            noTargetWorld.Register(noTargetSource);
+            noTargetWorld.Register(sameTeamOnly);
+            AdvanceFlowToEvenToggle(noTargetWorld);
+            noTargetWorld.EarlyFrameAdvanceSpecialsAll(2);
+            Expect(noTargetSource.GetRuntimeXInt() == 70 && noTargetSource.GetRenderZInt() == 30 &&
+                   noTargetSource.GetRuntimeYInt() == 0 && Nearly(noTargetSource.Runtime.Vx, 0f) &&
+                   Nearly(noTargetSource.Runtime.Vy, 0f) && Nearly(noTargetSource.Runtime.Vz, 0f),
+                "state 400 no-target branch must preserve X/Z and clear Y/velocity");
+        }
+
+        private static void CheckValidatePositiveLinksMatrix()
+        {
+            var world = new SimulationWorld();
+
+            LF2Character characterHolder = CreateCharacter(
+                "SelfCheck_PositiveLink_CharacterHolder", 1, BuildCatchingFrames());
+            characterHolder.SetRuntimeSlotIndex(0);
+            FlowSelfCheckEntity edgeTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_EdgeTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 399);
+            characterHolder.Runtime.LinkState = 1;
+            characterHolder.Runtime.TargetSlotIndex = 399;
+            characterHolder.Runtime.HeldWeaponStableId = 77;
+            edgeTarget.Runtime.HolderStableId = 0;
+            edgeTarget.Runtime.LinkState = -2;
+
+            FlowSelfCheckEntity nonCharacterHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_NonCharacterHolder", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 23);
+            FlowSelfCheckEntity neutralTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_NeutralTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 3);
+            nonCharacterHolder.Runtime.LinkState = 2;
+            nonCharacterHolder.Runtime.TargetSlotIndex = 3;
+            nonCharacterHolder.Runtime.HeldWeaponStableId = 88;
+            neutralTarget.Runtime.HolderStableId = 23;
+            neutralTarget.Runtime.LinkState = 0;
+
+            FlowSelfCheckEntity positiveTargetHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_PositiveTargetHolder", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 31);
+            FlowSelfCheckEntity positiveTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_PositiveTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 32);
+            FlowSelfCheckEntity positiveTargetChild = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_PositiveTargetChild", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 33);
+            positiveTargetHolder.Runtime.LinkState = 3;
+            positiveTargetHolder.Runtime.TargetSlotIndex = 32;
+            positiveTarget.Runtime.HolderStableId = 31;
+            positiveTarget.Runtime.LinkState = 5;
+            positiveTarget.Runtime.TargetSlotIndex = 33;
+            positiveTargetChild.Runtime.HolderStableId = 32;
+
+            FlowSelfCheckEntity negativeTargetHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_NegativeTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 7);
+            negativeTargetHolder.Runtime.LinkState = 1;
+            negativeTargetHolder.Runtime.TargetSlotIndex = -1;
+            negativeTargetHolder.Runtime.HeldWeaponStableId = 101;
+
+            FlowSelfCheckEntity highTargetHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_HighTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 8);
+            highTargetHolder.Runtime.LinkState = 1;
+            highTargetHolder.Runtime.TargetSlotIndex = 400;
+            highTargetHolder.Runtime.HeldWeaponStableId = 102;
+
+            FlowSelfCheckEntity mismatchHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_MismatchHolder", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 200);
+            FlowSelfCheckEntity mismatchTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_MismatchTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 201);
+            mismatchHolder.Runtime.LinkState = 1;
+            mismatchHolder.Runtime.TargetSlotIndex = 201;
+            mismatchHolder.Runtime.HeldWeaponStableId = 103;
+            mismatchTarget.Runtime.HolderStableId = 199;
+
+            FlowSelfCheckEntity zeroLink = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_Zero", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 300);
+            zeroLink.Runtime.LinkState = 0;
+            zeroLink.Runtime.TargetSlotIndex = 400;
+            zeroLink.Runtime.HeldWeaponStableId = 104;
+
+            FlowSelfCheckEntity negativeLink = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_Negative", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 301);
+            negativeLink.Runtime.LinkState = -2;
+            negativeLink.Runtime.TargetSlotIndex = 400;
+            negativeLink.Runtime.HeldWeaponStableId = 105;
+
+            world.Register(nonCharacterHolder);
+            world.Register(neutralTarget);
+            world.Register(highTargetHolder);
+            world.Register(negativeTargetHolder);
+            world.Register(characterHolder);
+            world.Register(edgeTarget);
+            world.Register(mismatchTarget);
+            world.Register(mismatchHolder);
+            world.Register(positiveTarget);
+            world.Register(positiveTargetChild);
+            world.Register(positiveTargetHolder);
+            world.Register(negativeLink);
+            world.Register(zeroLink);
+
+            world.ValidateHeldLinksAll(1);
+
+            Expect(characterHolder.Runtime.LinkState == 1 &&
+                   characterHolder.Runtime.TargetSlotIndex == 399 &&
+                   characterHolder.Runtime.HeldWeaponStableId == 77,
+                "positive link slot 0->399 must remain valid for a character holder");
+            Expect(nonCharacterHolder.Runtime.LinkState == 2 &&
+                   nonCharacterHolder.Runtime.TargetSlotIndex == 3 &&
+                   nonCharacterHolder.Runtime.HeldWeaponStableId == 88,
+                "positive link validation must include non-character holders");
+            Expect(positiveTargetHolder.Runtime.LinkState == 3,
+                "target positive LinkState must not invalidate an otherwise valid relation");
+            Expect(edgeTarget.Runtime.LinkState == -2 && neutralTarget.Runtime.LinkState == 0 &&
+                   positiveTarget.Runtime.LinkState == 5,
+                "target LinkState sign must be irrelevant to positive holder validation");
+
+            Expect(negativeTargetHolder.Runtime.LinkState == 0 &&
+                   negativeTargetHolder.Runtime.TargetSlotIndex == -1 &&
+                   negativeTargetHolder.Runtime.HeldWeaponStableId == 101,
+                "target slot -1 must clear only holder LinkState");
+            Expect(highTargetHolder.Runtime.LinkState == 0 &&
+                   highTargetHolder.Runtime.TargetSlotIndex == 400 &&
+                   highTargetHolder.Runtime.HeldWeaponStableId == 102,
+                "target slot 400 must clear only holder LinkState");
+            Expect(mismatchHolder.Runtime.LinkState == 0 &&
+                   mismatchHolder.Runtime.TargetSlotIndex == 201 &&
+                   mismatchHolder.Runtime.HeldWeaponStableId == 103 &&
+                   mismatchTarget.Runtime.HolderStableId == 199,
+                "holder mismatch must clear only holder LinkState and preserve both relation fields");
+            Expect(zeroLink.Runtime.LinkState == 0 && zeroLink.Runtime.TargetSlotIndex == 400 &&
+                   zeroLink.Runtime.HeldWeaponStableId == 104,
+                "link==0 entities must not be processed");
+            Expect(negativeLink.Runtime.LinkState == -2 && negativeLink.Runtime.TargetSlotIndex == 400 &&
+                   negativeLink.Runtime.HeldWeaponStableId == 105,
+                "link<0 entities must not be processed");
+
+            var inactiveWorld = new SimulationWorld();
+            FlowSelfCheckEntity inactiveHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_InactiveHolder", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 12);
+            FlowSelfCheckEntity inactiveTarget = CreateFlowSelfCheckEntity(
+                "SelfCheck_PositiveLink_InactiveTarget", LF2ObjectType.Other,
+                LF2States.Standing, 0, 0, 0, 13);
+            inactiveHolder.Runtime.LinkState = 1;
+            inactiveHolder.Runtime.TargetSlotIndex = 13;
+            inactiveHolder.Runtime.HeldWeaponStableId = 106;
+            inactiveTarget.Runtime.HolderStableId = 12;
+            inactiveWorld.Register(inactiveTarget);
+            inactiveWorld.Register(inactiveHolder);
+            inactiveWorld.Unregister(inactiveTarget);
+            inactiveWorld.ValidateHeldLinksAll(1);
+            Expect(inactiveHolder.Runtime.LinkState == 0 &&
+                   inactiveHolder.Runtime.TargetSlotIndex == 13 &&
+                   inactiveHolder.Runtime.HeldWeaponStableId == 106,
+                "inactive target must clear only holder LinkState");
+        }
+
+        private static void AdvanceFlowToEvenToggle(SimulationWorld world)
+        {
+            world.AdvanceBattleFlowTick(1);
+            world.AdvanceBattleFlowTick(2);
+        }
+
+        private static FlowSelfCheckEntity CreateFlowSelfCheckEntity(
+            string name,
+            LF2ObjectType objectType,
+            int state,
+            int relationTeam,
+            int x,
+            int z,
+            int slot)
+        {
+            var entity = new FlowSelfCheckEntity(objectType);
+            entity.BindData(name, 900 + slot, new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, state, 0, 0, 39, 79),
+                },
+            });
+            entity.RelationTeam = relationTeam;
+            entity.SetRuntimeSlotIndex(slot);
+            entity.Runtime.SetPosition(x, 0f, z);
+            entity.Runtime.SyncIntegerPosition();
+            entity.Runtime.Dir = "right";
+            return entity;
         }
 
         private static void CheckState0BelowGroundFrame212PreservesAttackingCounter()
@@ -3517,6 +3829,43 @@ namespace NTSD.Test
         private sealed class InteractionSelfCheckCharacter : LF2Character
         {
             public override float GetSpriteWidthPxForCollision() => 100f;
+        }
+
+        private sealed class FlowSelfCheckEntity : LF2Entity
+        {
+            private readonly LF2ObjectType objectType;
+
+            public override LF2ObjectType ObjectTypeEnum => objectType;
+
+            public FlowSelfCheckEntity(LF2ObjectType objectType)
+            {
+                this.objectType = objectType;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public void BindData(string name, int objectId, LF2CharacterData data)
+            {
+                Name = name;
+                ObjectId = objectId;
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Health.HP = 500;
+                Health.HPBound = 500;
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation() => (int)objectType;
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
         }
 
         private sealed class AlternateDamageSelfCheckWeapon : LF2Weapon

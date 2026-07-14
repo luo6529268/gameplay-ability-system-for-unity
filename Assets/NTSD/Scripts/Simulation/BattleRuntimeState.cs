@@ -234,6 +234,8 @@ namespace NTSD.Simulation
         public int SparkRenderFrame;
         public int AiPhaseGate;
         public int InputPhase;
+        public int FrameMod12;
+        public int FrameToggle;
         public int AiDifficulty;
         public int AiRand3;
         public int AiRand5;
@@ -254,6 +256,8 @@ namespace NTSD.Simulation
             SparkRenderFrame = 0;
             AiPhaseGate = 0;
             InputPhase = 0;
+            FrameMod12 = 0;
+            FrameToggle = 0;
             AiDifficulty = 0;
             AiRand3 = 0;
             AiRand5 = 0;

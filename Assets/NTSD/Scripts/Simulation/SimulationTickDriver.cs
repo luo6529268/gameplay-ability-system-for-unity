@@ -210,7 +210,6 @@ namespace NTSD.Simulation
             _sparkRenderFrame = tickIndex;
             if (_world.Runtime?.Flow != null)
             {
-                _world.Runtime.Flow.CurrentTickIndex = tickIndex;
                 _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
             }
 

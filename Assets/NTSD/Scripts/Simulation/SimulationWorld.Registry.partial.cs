@@ -114,6 +114,8 @@ namespace NTSD.Simulation
         public int MatchSeed => Runtime?.Match?.Seed ?? 0;
         public int AiPhaseGate => Runtime?.Flow?.AiPhaseGate ?? 0;
         public int InputPhase => Runtime?.Flow?.InputPhase ?? 0;
+        public int FrameMod12 => Runtime?.Flow?.FrameMod12 ?? 0;
+        public int FrameToggle => Runtime?.Flow?.FrameToggle ?? 0;
         public int BattleExitCountdown => Runtime?.Flow?.BattleExitCountdown ?? 0;
         public int RouteOutRequest => Runtime?.Flow?.RouteOutRequest ?? 0;
         public int Mode2Request => Runtime?.Flow?.Mode2Request ?? 0;
@@ -156,10 +158,15 @@ namespace NTSD.Simulation
             Runtime.Flow.Mode2Request = value;
         }
 
-        public void AdvanceInputPhase()
+        public void AdvanceBattleFlowTick(int tickIndex)
         {
-            if (Runtime?.Flow != null)
-                Runtime.Flow.InputPhase = (Runtime.Flow.InputPhase + 1) & 1;
+            if (Runtime?.Flow == null)
+                return;
+
+            Runtime.Flow.CurrentTickIndex = tickIndex;
+            Runtime.Flow.InputPhase = (Runtime.Flow.InputPhase + 1) & 1;
+            Runtime.Flow.FrameMod12 = tickIndex % 12;
+            Runtime.Flow.FrameToggle = 1 - Runtime.Flow.FrameToggle;
         }
 
         public void SetStageProgressionValid(bool value)

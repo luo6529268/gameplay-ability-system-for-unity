@@ -18,7 +18,7 @@ namespace NTSD.Simulation
         {
             if (world == null) return;
 
-            world.AdvanceInputPhase();
+            world.AdvanceBattleFlowTick(tickIndex);
             RunFrameAdvancePhase(tickIndex);
             RunInteractionPhase(tickIndex);
             RunPresentationAndCleanupPhase(tickIndex);

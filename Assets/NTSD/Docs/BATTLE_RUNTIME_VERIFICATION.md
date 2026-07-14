@@ -109,7 +109,11 @@ Unity batchmode 自检：
 - `FrameTransistor` 仍是 Unity 适配层，不是 C++ release 原始结构；直接写帧路径已绕过仲裁，但普通请求路径后续仍可继续审计。
 - `HitStun` 剩余使用应只保留在 hit_stop 门控语义中，后续若发现 `attacking=0` 或帧推进语义混用，需要继续迁移到 `AttackingCounter`。
 - negative `vaction` 三类语义已完成并通过 fresh Unity batch：action selection 对 attacker 负 action 做翻面+绝对帧、victim vaction raw 写；throw 将 `next`/`vaction` raw 写入 frame/prev2；held-sync 先 raw 写、负值再翻面取绝对帧，位置使用原始 signed `vaction` 对应 cpoint 坐标，且 `vaction==0` 写 frame 0。三项矩阵均覆盖 real character 与 shared-DAT shell。
-- 其余纯战斗 backlog：`FrameToggle`、`ValidatePositiveLinks`、PreFrame X 逻辑边界、DAT transform shell、opoint/pass visibility、per-class `frame_advance`、`frame_tick` 内部、collision snapshot，以及 Step10 的 catch action 输入优先级、cpoint injury/stat 副作用与非角色参与者专项。完整状态/authority/验收标准见 `csharp-vs-unity-battle-alignment.md` §10。
+- `FrameToggle`/`FrameMod12` 已纳入统一 tick-head Flow 推进；state 400/401 的奇偶 gate、state401 self、non-character source、Character target 选择和 no-target 清速度矩阵已通过 Unity 运行时自检。
+- `ValidatePositiveLinks` 已由 `ValidateHeldLinksAll` 全局覆盖 slot `0..399`，包括 character/non-character holder、边界 slot、越界/inactive/mismatch、target link 正负无关及只清 `LinkState` 契约，已通过 Unity 运行时自检。
+- 其余纯战斗 backlog：PreFrame X 逻辑边界、DAT transform shell、opoint/pass visibility、per-class `frame_advance`、`frame_tick` 内部、collision snapshot，以及 Step10 的 catch action 输入优先级、cpoint injury/stat 副作用与非角色参与者专项。完整状态/authority/验收标准见 `csharp-vs-unity-battle-alignment.md` §10。
 - `InputPhase`、state 500/501、M5 死亡弹地和 T5 respawn 已完成，不再属于已知风险。Mode2/`InitStats` 是 F7-F9/debug 路径，排除于正式战斗对齐。
 
 2026-07-14 P0 cpoint 追加验证：fresh `dotnet build` 为 `0 errors / 18 warnings`；独立 Unity batch 日志 `Unity-BattleRuntimeSelfCheck-P0-rerun7.log` 明确包含“战斗运行时自检通过/自检完成”。
+
+2026-07-15 P1 Flow/link 追加验证：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 `0 errors / 42 warnings`；主 Editor request 于 00:57:49 fresh 返回 `PASS`。隔离 clone batch 的 clean/增量脚本编译均成功且无 C# 错误，但两次都在 post-compile domain reload 后停滞，未生成 PASS，因此不能作为运行时证据。

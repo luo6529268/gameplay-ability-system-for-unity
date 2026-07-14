@@ -2286,15 +2286,12 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>
         /// 早期 state 400/401 传送特判入口。
-        /// 参考 C# 基准工程按当前 DAT 类型参与 `RunState400401Pass`；
-        /// 因此这里不能只依赖 CLR 子类类型，而要看当前加载的 DAT 是否属于角色。
+        /// C++ release 只要求 source active 且有当前 frame；候选 target 才要求 Character DAT。
+        /// source 不能按 CLR 类型或当前 DAT 类型提前排除。
         /// </summary>
         internal virtual void RunEarlyTeleportSpecialsPhase(System.Collections.Generic.List<LF2Entity> entities, bool frameToggleGate)
         {
             if (frameToggleGate || entities == null || Health == null)
-                return;
-
-            if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                 return;
 
             int state = Frame?.D?.state ?? -1;
@@ -2309,7 +2306,7 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < entities.Count; i++)
             {
                 LF2Entity target = entities[i];
-                if (target == null || target == this || target.Health == null)
+                if (target == null || target.Health == null)
                     continue;
                 if (target.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                     continue;

@@ -114,21 +114,23 @@ namespace NTSD.Simulation
 
         public void ValidateHeldLinksAll(int tickIndex)
         {
-            ForEachEntityByRuntimeSlot(entity =>
+            ForEachEntityByRuntimeSlot(holder =>
             {
-                if (entity is not LF2Character holder)
+                int holderSlot = GetRuntimeSlotOrder(holder);
+                if (holderSlot < 0 || holderSlot >= MaxRuntimeSlots)
                     return;
 
                 if (holder.Runtime.LinkState <= 0)
                     return;
 
                 int targetRuntimeSlot = holder.Runtime.TargetSlotIndex;
-                LF2Entity target = FindEntityByRuntimeSlotCurrent(targetRuntimeSlot);
-                if (target == null || target.Runtime.HolderStableId != GetRuntimeSlotOrder(holder))
+                LF2Entity target = targetRuntimeSlot >= 0 && targetRuntimeSlot < MaxRuntimeSlots
+                    ? FindEntityByRuntimeSlotCurrent(targetRuntimeSlot)
+                    : null;
+                if (target == null || target.Runtime.HolderStableId != holderSlot)
                 {
                     holder.Runtime.LinkState = 0;
                     RefreshRuntimeSnapshot(holder);
-                    return;
                 }
             });
         }

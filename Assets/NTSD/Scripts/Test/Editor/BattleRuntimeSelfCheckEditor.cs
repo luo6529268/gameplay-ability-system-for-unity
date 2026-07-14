@@ -19,6 +19,7 @@ namespace NTSD.EditorTools
 
         static BattleRuntimeSelfCheckEditor()
         {
+            // Consume an external request after the next editor domain reload.
             EditorApplication.delayCall += RunIfRequested;
         }
 
