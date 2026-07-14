@@ -228,7 +228,7 @@ Unity 有两套：
 - walk 斜向 `Vx *= 5.0/7.0` = 0.7142857142857143 ✅（两侧都是）
 - heavy run 斜向 `Vx *= 5f/6f` / `0.8333...` ✅
 
-**❌ combo wrapper（DJA 等 9 组方向+攻击/跳连招）缺失**：C# `InputRuntime.cs:740` `RunComboWrappers` 实现 ComboDra/Dla/Dld/Dlu/Drd/Dru/Djd/Dja/Daa/Dab + DjaGuard 等 9 组方向连招 + oid6（Sasuke）DjaGuard 特判。Unity grep `RunComboWrappers / ComboDra / ComboDla / ComboDja / DjaGuard / combo_` **全工程 0 命中**。**修复方向**：移植 `RunComboWrappers` 全部 9 组 + oid6 特判。
+**✅ combo wrapper（DJA 等 9 组方向+攻击/跳连招）已落地并补 fresh 运行时验证**：Unity 现已由 `NTSDInputStateModule` 承载 9 组 wrapper 与 oid6（Sasuke）DjaGuard 特判，真实输入消费路径是 `LF2Character.RunPostCooldownInputPhase -> UpdateLocalInputStateFromControllerBuffer -> ComboUpdate -> NTSDInputStateModule.ApplyFrameInput`。本轮新增 `BattleRuntimeSelfCheck` 覆盖 9 组连招帧跳与 oid6 guard hold/release，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 `PASS`。
 
 ### 6.2 AI（`InputRuntime.PrepareAiInputBasic`）
 
@@ -313,7 +313,6 @@ Unity 有两套：
 
 ### P1 — 已确认缺失战斗逻辑（需新增）
 - [x] **M-13** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **确认缺失**
-- [x] **§6.1 / combo** `RunComboWrappers` 9 组方向连招 + oid6 DjaGuard — **确认缺失**
 - [x] **§6.2 AI** `PrepareAiInputBasic` + 14 个辅助函数 — **确认完全缺失（最大工作量块）**
 
 ### P1 — 已确认对齐（无需动作）
@@ -397,7 +396,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 3 项缺失逻辑（AI、combo、stage 波次）+ 6 项已完成并通过 Unity 运行时自检 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的三块仍是 **AI 输入生成器、combo 连招、stage 波次刷敌**。
+**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 2 项缺失逻辑（AI、stage 波次）+ 7 项已完成并通过 Unity 运行时自检 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的两块是 **AI 输入生成器、stage 波次刷敌**。
 
 ## 实施进度（2026-07-14）
 
@@ -412,5 +411,6 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T4（M-1） | **已完成 / Unity 运行时已验证** | `Oid5152RuntimeMaintenanceAll`、`TryMergeOid7Or8Into51`、`TrySplitOid51BackToPair` 已落地到 `SimulationWorld.Passes.partial.cs` 与运行时身份维护链 | `CheckOid5152MergeSuccessAndDormantIsolation`、`CheckOid5152MergeCooldownOneTriggersSameTick`、`CheckOid5152SplitSuccessAndOddTruncate`、`CheckOid5152SplitFailurePartialRecovery`、`CheckOid5152DjaReleaseTriggersSameTickSplit` 均通过 |
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
+| T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；随后 fresh Unity batchmode `BattleRuntimeSelfCheck` 完整通过，`ntsd_selfcheck_unity.log` 结尾明确记录 `[BattleRuntimeSelfCheck] 战斗运行时自检通过。`。本轮新增通过的针对性断言为 `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 与 `CheckLateDeathBounceFrame`；其中非主线 M5 仅补齐 `EnterLateDeathLaunchFrame()` 的 `Runtime.YInt = -1` 写回，并已验证 frame 186 强制切换、`Y/YInt=-1`、`Vy/KnockbackVy=-3` 以及 grounded frame 212 重弹行为。因此 M-15/M-16/T6 已升级为“已完成 / Unity 运行时已验证”，非主线 M5 也已补齐并通过运行时验证；T0/T1/T2/T3/T4/T5 的既有 Unity PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**。本轮新增 `BattleRuntimeSelfCheck` 的 T7 针对性断言 `CheckComboWrappersCharacterFrameJumps` 与 `CheckOid6DjaGuardComboHold`，先在运行时抓到 `SelfCheck_DRA` 失败，随后按 `NTSDInputStateModule.SetEdgeCooldown` 的真实边沿映射修正了自检注入序列（attack/defend/jump 对应 combo cooldown 并非直观同名）。修正后通过项目内置 request 机制触发当前打开的 Unity 执行自检，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 **PASS**。因此 T7 已升级为“已完成 / Unity 运行时已验证”；T0/T1/T2/T3/T4/T5/T6 的既有 PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。

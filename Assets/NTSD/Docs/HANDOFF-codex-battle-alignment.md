@@ -71,9 +71,9 @@
 
 ### T7 — combo 连招 wrapper（大）
 - **C# 权威**：`InputRuntime.cs:740` `RunComboWrappers`（9 组：Dra/Dla/Dld/Dlu/Drd/Dru/Djd/Dja/Daa/Dab + DjaGuard，含 oid6 Sasuke DjaGuard 特判），入口 `InputRuntime.cs:647`。
-- **Unity 现状**：grep `RunComboWrappers/ComboDra/.../DjaGuard/combo_` 全 0 命中，**完全缺失**。
-- **做法**：在 `LF2CharacterActionResolver` 玩家输入消费的最前段（对应 C# combo wrapper 位置）移植 9 组连招判定 + oid6 特判。
-- **验收**：方向键+攻击/跳组合触发对应连招帧，与 C# 触发条件/目标帧一致。
+- **Unity 现状**：已由 `NTSDInputStateModule` 承载 9 组 wrapper 与 oid6 DjaGuard，真实消费路径为 `LF2Character.RunPostCooldownInputPhase -> UpdateLocalInputStateFromControllerBuffer -> ComboUpdate -> NTSDInputStateModule.ApplyFrameInput`。
+- **本轮新增验证**：`BattleRuntimeSelfCheck` 已补 `CheckComboWrappersCharacterFrameJumps` 与 `CheckOid6DjaGuardComboHold`，覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release。
+- **验收现状**：已通过当前打开 Unity 的 request 自检机制，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 `PASS`。**T7 已完成。**
 
 ### T8 — stage 波次刷敌（M-13，大）
 - **C# 权威**：`GameTick.cs:2317` `ApplyCurrentWavePhaseAdvance` + `2350` `ApplyCurrentWaveImmediateStageSpawns` + `2226` `RefillCurrentWavePositiveStageSpawns`（配套 `StageProgression` + `StageSpawnRuntime*` 一整套，见 `SimulationWorld.cs:68-80`），tick step23。
@@ -138,7 +138,7 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 
 ## 9. 优先级建议
 
-先 **T0**（1 行 bug）→ **T3**（2 行）→ **T2**（小）→ **T1**（P0 减伤）→ **T4/T5**（合体/复活）→ **T6**（kind15/16）→ **T7/T8**（combo/波次）→ **T9**（AI，最后，拆多步）。
+先 **T0**（1 行 bug）→ **T3**（2 行）→ **T2**（小）→ **T1**（P0 减伤）→ **T4/T5**（合体/复活）→ **T6**（kind15/16）→ **T7**（combo，已验收）→ **T8**（波次）→ **T9**（AI，最后，拆多步）。
 
 ## 10. 实施进度（2026-07-14）
 
@@ -153,5 +153,6 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 | T4（M-1） | **已完成 / Unity 运行时已验证** | `Oid5152RuntimeMaintenanceAll`、`TryMergeOid7Or8Into51`、`TrySplitOid51BackToPair` 已落地到 `SimulationWorld.Passes.partial.cs` 与运行时身份维护链 | `CheckOid5152MergeSuccessAndDormantIsolation`、`CheckOid5152MergeCooldownOneTriggersSameTick`、`CheckOid5152SplitSuccessAndOddTruncate`、`CheckOid5152SplitFailurePartialRecovery`、`CheckOid5152DjaReleaseTriggersSameTickSplit` 均通过 |
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
+| T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；随后 fresh Unity batchmode `BattleRuntimeSelfCheck` 完整通过，`ntsd_selfcheck_unity.log` 结尾明确记录 `[BattleRuntimeSelfCheck] 战斗运行时自检通过。`。本轮新增通过的针对性断言为 `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 与 `CheckLateDeathBounceFrame`；其中非主线 M5 仅补齐 `EnterLateDeathLaunchFrame()` 的 `Runtime.YInt = -1` 写回，并已验证 frame 186 强制切换、`Y/YInt=-1`、`Vy/KnockbackVy=-3` 以及 grounded frame 212 重弹行为。因而 T0/T1/T2/T3/T4/T5/T6 均已完成 Unity 运行时验收，非主线 M5 也已补齐并通过运行时验证；剩余主线优先级收敛为 T7/T8 → T9。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**。本轮新增 `BattleRuntimeSelfCheck` 的 T7 针对性断言 `CheckComboWrappersCharacterFrameJumps` 与 `CheckOid6DjaGuardComboHold`，先在运行时抓到 `SelfCheck_DRA` 失败，随后按 `NTSDInputStateModule.SetEdgeCooldown` 的真实边沿映射修正自检输入序列。修正后通过项目内置 request 机制触发当前打开的 Unity 执行自检，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 **PASS**。因而 T0/T1/T2/T3/T4/T5/T6/T7 均已完成 Unity 运行时验收，非主线 M5 也已补齐并通过运行时验证；剩余主线优先级收敛为 T8 → T9。

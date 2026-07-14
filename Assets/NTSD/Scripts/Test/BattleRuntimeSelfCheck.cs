@@ -78,6 +78,8 @@ namespace NTSD.Test
                 CheckKind15CharacterWhirlwind();
                 CheckKind16CharacterSideEffects();
                 CheckLateDeathBounceFrame();
+                CheckComboWrappersCharacterFrameJumps();
+                CheckOid6DjaGuardComboHold();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -2226,6 +2228,114 @@ namespace NTSD.Test
                 "late death bounce should re-launch grounded death frame 212");
         }
 
+        private static void CheckComboWrappersCharacterFrameJumps()
+        {
+            AssertComboFrameJump(
+                "SelfCheck_DRA",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DRA", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.right, FuncKeyMask.jump },
+                100,
+                "right",
+                verifyCooldownClear: true);
+
+            AssertComboFrameJump(
+                "SelfCheck_DLA",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DLA", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.left, FuncKeyMask.jump },
+                100,
+                "left");
+
+            AssertComboFrameJump(
+                "SelfCheck_DUA",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DUA", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.up, FuncKeyMask.jump },
+                101,
+                "right");
+
+            AssertComboFrameJump(
+                "SelfCheck_DDA",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DDA", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.down, FuncKeyMask.jump },
+                102,
+                "right");
+
+            AssertComboFrameJump(
+                "SelfCheck_DRJ",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DRJ", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.right, FuncKeyMask.def },
+                103,
+                "right");
+
+            AssertComboFrameJump(
+                "SelfCheck_DLJ",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DLJ", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.left, FuncKeyMask.def },
+                103,
+                "left");
+
+            AssertComboFrameJump(
+                "SelfCheck_DUJ",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DUJ", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.up, FuncKeyMask.def },
+                104,
+                "right");
+
+            AssertComboFrameJump(
+                "SelfCheck_DDJ",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DDJ", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.down, FuncKeyMask.def },
+                105,
+                "right");
+
+            AssertComboFrameJump(
+                "SelfCheck_DJA",
+                1,
+                BuildComboWrapperCharacterData("SelfCheck_DJA", 180),
+                new[] { FuncKeyMask.att, FuncKeyMask.def, FuncKeyMask.jump },
+                180,
+                "right");
+        }
+
+        private static void CheckOid6DjaGuardComboHold()
+        {
+            var world = new SimulationWorld();
+            LF2Character guarded = CreateCharacter("SelfCheck_Oid6_DjaGuard", 6, BuildComboWrapperCharacterData("SelfCheck_Oid6_DjaGuard", 300));
+            guarded.SwitchDir("right");
+            guarded.Health.HP = 200;
+            world.Register(guarded);
+            world.Runtime.Flow.DjaGuardGlobal44F224 = 0;
+
+            EnqueueComboTicks((SelfCheckController)guarded.Controller, 1, FuncKeyMask.att, FuncKeyMask.def, FuncKeyMask.jump);
+            RunComboTicks(guarded, 1, 3);
+
+            Expect(guarded.Frame.N == 0,
+                "oid6 DjaGuard must block DJA frame jump when hit_ja=300 and guard flag is active");
+            Expect((byte)GetPrivateField(guarded.InputState, "_comboDJA") == 3,
+                "oid6 DjaGuard must preserve comboDJA state while the guard blocks frame jump");
+
+            LF2Character released = CreateCharacter("SelfCheck_Oid6_DjaRelease", 6, BuildComboWrapperCharacterData("SelfCheck_Oid6_DjaRelease", 300));
+            released.SwitchDir("right");
+            released.Health.HP = 200;
+            world.Register(released);
+            world.Runtime.Flow.DjaGuardGlobal44F224 = 1;
+
+            EnqueueComboTicks((SelfCheckController)released.Controller, 1, FuncKeyMask.att, FuncKeyMask.def, FuncKeyMask.jump);
+            RunComboTicks(released, 1, 3);
+
+            Expect(released.Frame.N == 300,
+                "oid6 DJA must frame jump once DjaGuardGlobal44F224 no longer blocks it");
+            Expect((byte)GetPrivateField(released.InputState, "_comboDJA") == 0,
+                "successful oid6 DJA must clear comboDJA state");
+        }
+
         private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
         {
             return new Dictionary<int, LF2CharacterDataWrapper>
@@ -2309,6 +2419,92 @@ namespace NTSD.Test
                     Frame(212, LF2States.Lying, 1, 212, 39, 79),
                 },
             };
+        }
+
+        private static LF2CharacterData BuildComboWrapperCharacterData(string name, int djaTargetFrame)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    new LF2FrameData
+                    {
+                        frameId = 0,
+                        frameName = "self_check_combo_root",
+                        state = 0,
+                        wait = 1,
+                        next = 0,
+                        centerx = 39,
+                        centery = 79,
+                        hit_Fa = 100,
+                        hit_Ua = 101,
+                        hit_Da = 102,
+                        hit_Fj = 103,
+                        hit_Uj = 104,
+                        hit_Dj = 105,
+                        hit_ja = djaTargetFrame,
+                    },
+                    Frame(100, 0, 1, 100, 39, 79),
+                    Frame(101, 0, 1, 101, 39, 79),
+                    Frame(102, 0, 1, 102, 39, 79),
+                    Frame(103, 0, 1, 103, 39, 79),
+                    Frame(104, 0, 1, 104, 39, 79),
+                    Frame(105, 0, 1, 105, 39, 79),
+                    Frame(180, 0, 1, 180, 39, 79),
+                    Frame(300, 0, 1, 300, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildComboWrapperData(string name, int djaTargetFrame)
+        {
+            return BuildComboWrapperCharacterData(name, djaTargetFrame);
+        }
+
+        private static void AssertComboFrameJump(
+            string name,
+            int objectId,
+            LF2CharacterData data,
+            FuncKeyMask[] sequence,
+            int expectedFrame,
+            string expectedDir,
+            bool verifyCooldownClear = false)
+        {
+            LF2Character character = CreateCharacter(name, objectId, data);
+            character.SwitchDir("right");
+
+            EnqueueComboTicks((SelfCheckController)character.Controller, 1, sequence);
+            RunComboTicks(character, 1, sequence.Length);
+
+            Expect(character.Frame.N == expectedFrame,
+                $"{name} should jump to frame {expectedFrame} after combo wrapper input");
+            Expect(character.Runtime.Dir == expectedDir,
+                $"{name} should face {expectedDir} after combo wrapper input");
+
+            if (verifyCooldownClear)
+            {
+                Expect(character.Runtime.CdRight == 0 &&
+                       character.Runtime.CdLeft == 0 &&
+                       character.Runtime.CdUp == 0 &&
+                       character.Runtime.CdDown == 0 &&
+                       character.Runtime.CdAttack == 0 &&
+                       character.Runtime.CdJump == 0 &&
+                       character.Runtime.CdDefend == 0,
+                    $"{name} should clear action and direction cooldowns after successful combo frame jump");
+            }
+        }
+
+        private static void EnqueueComboTicks(SelfCheckController controller, int startTick, params FuncKeyMask[] sequence)
+        {
+            for (int i = 0; i < sequence.Length; i++)
+                controller.InputBuffer.EnqueueForTick(startTick + i, sequence[i], true);
+        }
+
+        private static void RunComboTicks(LF2Character character, int startTick, int count)
+        {
+            for (int i = 0; i < count; i++)
+                character.RunPostCooldownInputPhase(startTick + i);
         }
 
         private static LF2CharacterData BuildRespawnEffectData()
