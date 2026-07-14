@@ -2,12 +2,15 @@
 
 > 创建日期：2026-07-12
 >
-> **唯一权威来源**：`J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore`（NTSD C# 战斗核心工程）
+> **正式 gameplay authority**：`J:\QQFile\NTSD2.4\ntsd_release`（C++ release；必要时回查 EXE）
+>
+> **C# baseline**：`J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore`，用于本清单的 C#→Unity 映射；与 C++/EXE 冲突时以 C++/EXE 为准。
 >
 > **被对齐工程**：`I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts`
 >
 > 说明：
-> - 本文只覆盖**战斗相关逻辑**。可活动范围检测（C# `Bg`/bg.dat）、相机（C# `CameraX`/`UpdateCameraAndBgAnimation`）**不需要对齐**，Unity 保留自己的 BoundaryWall + ProCamera2D。
+> - 本文只覆盖**战斗相关逻辑**：固定 tick/pass 顺序、输入与 AI、帧推进/状态、实体位移与逻辑 X 边界、碰撞/命中、武器/cpoint/opoint、死亡复活、波次和实体生命周期。菜单、选人、加载、HUD/结算、相机、背景/纯渲染、音频播放系统、网络、回放/回滚基础设施不在本清单内。
+> - bg.dat 的 Z 可活动范围与相机/背景表现不对齐，Unity 保留自己的 BoundaryWall + ProCamera2D；但 `ApplyPreframeBounds` 中会改变实体存亡或 X 坐标的逻辑分支仍属于战斗逻辑，不能随表现层一起排除。
 > - "冗余脚本可删除"的判定必须严格：**只有在 C# 无对应分支、且 Unity 自身也不引用时才可删**；若只是 Unity 换了一种架构实现同一件事（组合/resolver/partial），**不算冗余，不得删除**。
 > - **最终表现效果一致原则（重要）**：对于因 Unity 框架/架构限制而**无法做到逻辑层完全对齐**的项，退而求其次的底线是——**运行时最终表现效果必须与 C# 工程完全一致**（位置、帧号、速度、判定结果、伤害数值、时序等对外可观测行为逐帧等价）。即"实现方式可不同，但结果必须等价"。凡标 🔷 的项，验收标准就是这条：不比对代码是否同构，而比对运行结果是否逐帧一致。
 > - 标记含义：✅ 已对齐 / ⚠️ 部分对齐或存疑 / ❌ 缺失或明显偏差 / 🔷 架构不同但结果需等价 / 🗑️ 疑似可删（需二次确认）
@@ -40,8 +43,8 @@ C# `GameTick.Run` 是单一函数，顺序完全线性。Unity 拆成 `NTSDBattl
 
 | # | C# `GameTick.Run` 步骤 | Unity pass | 状态 |
 |---|------------------------|-----------|------|
-| 1 | `GameTick++` / `InputPhase` / `FrameMod12` / `FrameToggle` | tick 计数在 `NTSDBattleTickSystem` | ⚠️ 需核对 `InputPhase`/`FrameToggle` 是否都推进 |
-| 2 | 清瞬时状态 `PendingSounds.Clear()` 等 | 分散 | ⚠️ |
+| 1 | `GameTick++` / `InputPhase` / `FrameMod12` / `FrameToggle` | `NTSDBattleTickSystem` + `BattleRuntimeState.Flow` | ⚠️ `GameTick`/`InputPhase`/`FrameMod12` 已接通；`FrameToggle` 尚未映射 |
+| 2 | 清瞬时状态 `PendingSounds.Clear()` 等 | 战斗候选载体在 `EntityPostFrameTailAll` 清理 | 🔷 音频/overlay 瞬时状态排除；战斗候选清理已存在，仍随碰撞快照专项验收 |
 | 3 | `RunCooldownsTick`（arest-- + attack_exempt 清理） | `VrestTickAll` + `ClearAttackExemptIfCurrentFrameCannotHit` | 🔷 |
 | 4 | `postCooldownInput`（人类输入注入） | `PostCooldownInputAll` | ✅ 顺序已对齐（见 AGENTS.md） |
 | 5 | `RunOid5152RuntimeMaintenance`（7/8→51 合体） | `Oid5152RuntimeMaintenanceAll` + `TryMergeOid7Or8Into51` / `TrySplitOid51BackToPair` | ✅ 已完成并通过 fresh Unity 运行时验收 |
@@ -49,7 +52,7 @@ C# `GameTick.Run` 是单一函数，顺序完全线性。Unity 拆成 `NTSDBattl
 | 7 | `RunEarlyStatePasses`（400/401/500/501） | `EarlyFrameAdvanceSpecialsAll` | ✅ 含 BMD-023 修复 |
 | 8 | `FrameRuntimePasses.RunFrameLogic`（hit_fa>0 非角色） | `FrameLogicBeforeAdvanceAll` | ✅ |
 | 9 | `RunFrameAdvance`（所有 active，清方向键 + 帧推进） | `SerialTickAll`（SimTransit+SimTU） | 🔷 |
-| 10 | `RunPostFrameAdvanceStatePasses`（9998 清理 + 复活） | `CleanupState9998Entities` + `RunReleaseEntityCleanupTail` | ⚠️ 复活 pass 见 §8 |
+| 10 | `RunPostFrameAdvanceStatePasses`（9998 清理 + 复活） | `CleanupState9998Entities` + `PostFrameAdvanceDeathCleanupAll` + `RunReleaseEntityCleanupTail` | ✅ 复活由 T5 完成并通过运行时自检 |
 | 11 | `ClampCharactersToStageZ` | (Z 边界，属可活动范围) | 🚫 不对齐 |
 | 12 | `RunCPoint` | `PreInteractionTickAll`→`RunCpointCheckStep10` | ✅ |
 | 13 | `SyncHeldWeapons` | `RunWeaponSyncHeldStep10` | ✅ |
@@ -65,8 +68,8 @@ C# `GameTick.Run` 是单一函数，顺序完全线性。Unity 拆成 `NTSDBattl
 | 23 | `ApplyCurrentWavePhaseAdvance` / `StageSpawns` | `CurrentWaveStageTickAll`（`SimulationWorld.StageWave.partial.cs`） | ✅ 已完成并通过 fresh Unity 运行时验收 |
 | 24 | `ApplyFramePostProcess`（HitCount→Vx 平均） | `FramePostProcessAll` | ✅ |
 | 25 | `RunLatePerEntityUpdatePass` | `LateEntityUpdateAll` | ✅ 主对齐点 |
-| 26 | `RunMode2RandomWeaponDrop` | `Mode2RandomWeaponDropTailAll` | ✅ |
-| 27 | `RunEntityPostframeTail`（heal/catch timer） | `EntityPostFrameTailAll` | ⚠️ 见 §5 heal 差异 |
+| 26 | `RunMode2RandomWeaponDrop` | `Mode2RandomWeaponDropTailAll` | 🚫 C# baseline 的 F7-F9/debug 控制路径，不作为正式战斗对齐项 |
+| 27 | `RunEntityPostframeTail`（heal/catch timer） | `EntityPostFrameTailAll` | ✅ heal/catch timer 与战斗候选载体清理已落地；`InitStats`/mode2 debug 分支排除 |
 | 28 | `UpdateBattleResultsFlow` | (结算流程) | 🚫 非战斗运行时范围 |
 
 **关键差异**：
@@ -253,7 +256,7 @@ Unity 有两套：
 | M-2 | **复活 pass**（`RunRespawnPass` `GameTick.cs:839-934`：state14+HP<=0 + HitStop 窗口 + 两分支[Hp2Overlay/RespawnCount] + 队友位置平均 + Pp=500/HpMax=Hp3 + Frame=212/YInt=-300 + 生成 oid998 复活特效） | GameTick step10 | ✅ `SimulationWorld.Passes` / `BattleRuntimeSelfCheck` 主逻辑与样例已落地；已补 no-renderer 销毁注销链与 reference-pool 惰性初始化 | **✅ 已完成 / Unity 运行时已验证（T5）** |
 | M-3 | **N30 输入触发**（`RunN30InputTrigger`：input history 9/0/9/0→触发码 100/102/104 生成 998 + history gate 广播） | LateEntityUpdate | ✅ `RunLateCharacterDatInputTrigger`（LF2Entity） | ✅ 已移植 |
 | M-4 | **状态转换特效**（`SpawnStateTransitionEffects`：state13/frame200 退出 + state18/19 燃烧特效） | LateEntityUpdate | ✅ `SpawnLateTransitionEffects` | ✅ |
-| M-5 | **死亡弹地帧**（`ApplyDeathBounceFrame`：frame186 + Vy=-3） | LateEntityUpdate | ⚠️ `RunLateDeathOpointPreCleanupPhase` 需确认 | ⚠️ 未逐行确认 |
+| M-5 | **死亡弹地帧**（`ApplyDeathBounceFrame`：frame186 + Vy=-3） | LateEntityUpdate | ✅ `RunLateDeathOpointPreCleanupPhase` 已对齐并由 `CheckLateDeathBounceFrame` 覆盖 | **✅ 已完成 / Unity 运行时已验证（提交 `995c860b`）** |
 | M-6 | **F8 强制掉武器**（`RunF8WeaponDrop`） | GameTick | ❌ grep `F8/force drop` 0 命中 | 🗑️ **确认是调试功能，可不移植** |
 | M-7 | **kind 4 + WeaponCount>0 → kind 0 + dvx 翻转**（`PreprocessCandidate` 154-172） | HitResolve | ✅ `BruteForceSceneQuery.cs:602-615` 完整实现 | ✅ 已对齐 |
 | M-8 | **ShouldUseAlternateHurt / ApplyAlternateDamage**（injury/10 减伤 + KnockbackVx 特殊累积 + FrameDelay=-5） | HitResolve 629-约827 | ✅ 共享 `LF2AlternateDamageResolver`；`LF2Character.Hit` 与 shared-character-DAT resolver 两入口均接入；runtime/stat/运动尾契约均有自检 | **✅ 已完成 / Unity 运行时已验证（T1）** |
@@ -261,7 +264,7 @@ Unity 有两套：
 | M-10 | **oid300 特殊命中**（bdy.x>1000→帧号） | HitResolve | ✅ `ResolveHit` ObjectId==300（`LF2CharacterHitResolver.cs:279`） | ✅ |
 | M-11 | **state 400/401 传送**（最近敌/最远友） | GameTick early | ✅ `RunEarlyTeleportSpecialsPhase` | ✅ |
 | M-12 | **state 500/501 变身 transform** | GameTick early | ✅ `RunEarlyState500/501Specials`（BMD-023） | ✅ |
-| M-13 | **stage 波次生成**（`ApplyCurrentWavePhaseAdvance` `GameTick.cs:2317` + `ApplyCurrentWaveImmediateStageSpawns` :2350 + `RefillCurrentWavePositiveStageSpawns` :2226，StageProgression/StageSpawnRuntime 一整套） | GameTick step 23 | ✅ `BattleStageCampaignLoader` / `ApplyMatchConfig` 生产接线 + progression + spawn/refill/advance/bound + identity/dynamic-slot 契约已落地 | **✅ 逻辑与接线已完成 / Unity 运行时已验证；默认 stage.dat 资产待部署（T8）** |
+| M-13 | **stage 波次生成**（`ApplyCurrentWavePhaseAdvance` `GameTick.cs:2317` + `ApplyCurrentWaveImmediateStageSpawns` :2350 + `RefillCurrentWavePositiveStageSpawns` :2226，StageProgression/StageSpawnRuntime 一整套） | GameTick step 23 | ✅ `BattleStageCampaignLoader` / `ApplyMatchConfig` 生产接线 + progression + spawn/refill/advance/bound + identity/dynamic-slot 契约已落地 | **✅ 逻辑与接线已完成 / Unity 运行时已验证；默认 `stage.dat` 部署由用户明确暂缓，不进入当前 backlog（T8）** |
 | M-14 | **frame 110/114 → CdDefendLock=3**（`FrameTick.cs:208-209`） | FrameTick 尾 | ✅ `LF2Entity.RunCommonFrameTick` 尾部 + runtime Reset/cooldown | **✅ 已完成 / Unity 运行时已验证（T3）** |
 | M-15 | **kind 16 完整结算**（`ApplyKind15Or16` kind=16：KillStat++/ComboCountAtk/SFX_065/vrest/LinkState 断开） | HitResolve 1640-1704 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已补齐 FallDamageDiv 缩放、KillStat/ComboCount、frame200、vrest、2/-2 持有断开与 SFX_065 | **✅ 已完成 / Unity 运行时已验证（T6）** |
 | M-16 | **kind 15 完整位移**（`ApplyKind15Movement`：KnockbackVx+真实 Vx/Vz+YInt=-2，按对象类型分 vyStep 3.0/2.3） | HitResolve 1737 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已改为 authority 的 KnockbackVx/Vz + YInt/Vy 语义；武器/铁球侧原 `WhirlwindForce` 保持 3.0/2.3 分支 | **✅ 已完成 / Unity 运行时已验证（T6）** |
@@ -310,7 +313,7 @@ Unity 有两套：
 ### P1 — 已补齐并完成 fresh Unity 运行时验证
 - [x] **M-1 / T4** oid 7/8→51 合体拆分 — **已完成并通过 fresh Unity 运行时自检**
 - [x] **M-2 / T5** 复活 pass（`RunRespawnPass` 完整逻辑）— **已完成并通过 fresh Unity 运行时自检**
-- [x] **M-13 / T8** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **逻辑与生产接线已完成并通过 fresh Unity 运行时自检；默认 stage.dat 资产待部署**
+- [x] **M-13 / T8** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **逻辑与生产接线已完成并通过 fresh Unity 运行时自检；默认 `stage.dat` 部署由用户明确暂缓，不进入当前推进**
 
 ### P1 — 已确认缺失战斗逻辑（需新增）
 - [x] **§6.2 AI / T9** `PrepareAiInputBasic` 完整调用闭包 — **已完成并通过 fresh Unity 运行时自检**
@@ -333,10 +336,24 @@ Unity 有两套：
 ### P3 — 确认可不移植
 - [x] **M-6** F8 强制掉武器 — ✅ 确认是调试功能，Unity 不需实现（非冗余，是未移植的调试项）
 
-### 未逐行确认（下一轮核实）
-- [ ] **M-5** 死亡弹地帧（`ApplyDeathBounceFrame`）在 `RunLateDeathOpointPreCleanupPhase` 的落点
-- [ ] §1 tick 表中标 ⚠️ 的次要项：InputPhase/FrameToggle 推进、ValidatePositiveLinks 等价、复活 pass 落点（已随 M-2 定性）
-- [ ] **negative vaction 残余风险**：cpoint 的负 `vaction` 符号帧/翻面语义尚未做专项逐行对齐与 Unity 运行时验证；本轮 T1 PASS 不关闭该项。
+### 剩余纯战斗逻辑 backlog（2026-07-14）
+
+> 本表只列会改变战斗模拟结果的项目。UI/HUD、camera/background/render、audio playback、network、replay，以及 F7-F9/debug 路径均不进入 backlog。`stage.dat` 默认资产部署由用户明确暂缓，也不进入本轮推进。
+
+| 优先级 / 编号 | 状态 | Authority | Unity 现状 | 明确缺口 | 验收标准 |
+|---|---|---|---|---|---|
+| P0 / CP-NV1 action selection | ✅ 已完成 / Unity 运行时已验证 | C++ release `cpoint.cpp:81-124`，EXE `Collision_Check1` 0x41B740 | real character 与 shared-DAT 两入口均由 signed attacker action + raw victim vaction helper 承载；双方 attacking 清零且 wait 保持 | 已关闭 | `CheckCpointNegativeActionMatrix` 覆盖负 a/t/jaction、victim raw negative frame、facing/wait/attacking/Prev2，fresh Unity batch PASS |
+| P0 / CP-NV2 throw raw | ✅ 已完成 / Unity 运行时已验证 | C++ release `cpoint.cpp:126-180`，EXE `Collision_Check1` 0x41B740 | attacker next 与 victim vaction 均 raw 写 `Frame`/`PrevFrame2`；负 frame 允许 `D=null`，不翻面、不改 wait；无/双方向保留旧 Vz | 已关闭 | `CheckCpointThrowRawAndTransformMatrix` 覆盖 real/shared-DAT、raw negative、Prev2/facing/wait/attacking/Vz，fresh Unity batch PASS |
+| P0 / CP-NV3 held sync | ✅ 已完成 / Unity 运行时已验证 | C++ release `weapon.cpp:22-107`，EXE `Collision_Check2` 0x41B2C0 | hurtable gate 下 `vaction==0` 也写；负值 raw 后只翻一次并 abs；wait 保持；位置 cpoint 取原始 signed vaction、center 取 resolved current frame | 已关闭 | `CheckCpointHeldSyncVactionMatrix` 覆盖 `vaction<0/==0/>0` 的 real/shared-DAT frame/facing/wait/位置/attacking，fresh Unity batch PASS |
+| P1 / FLOW-1 FrameToggle | ❌ 缺失 | C# `GameTick.Run:36`，被 state 400/401 pass 读取 | `GameTick`、`InputPhase`、`FrameMod12` 已推进；runtime 无 `FrameToggle` 等价字段 | state 400/401 当前可能每 tick 执行，而 authority 只在 toggle 指定相位执行 | 连续 tick 验证 toggle 0/1 交替，state 400/401 只在对应 tick 选目标/传送 |
+| P1 / LINK-1 positive link validation | ⚠️ 未闭环 | C# `GameTick.ValidatePositiveLinks` | held/cpoint 各路径有局部清理，未确认存在 step14 全局等价 pass | 正 `LinkState` 的 target 越界、inactive 或反向 holder 不匹配时，可能残留 `TargetIdx`/`HeldWeaponSlot` | 构造三类失效 link，step14 后断言 `LinkState=0`、target/held slot 清空，合法 link 保持 |
+| P1 / BOUNDS-X | ⚠️ 部分对齐 | C# `GameTick.ApplyPreframeBounds` 的实体 X clamp/free 分支；C++ release PreFrame 实体逻辑段 | `ApplyPreFrameXBounds(stageWidth)` 已覆盖已知类型；stage runtime 已有 `XMaxOverride` | `unk_364`/`x_max_override`/相关 X 上限来源与类型分支仍未逐项证明；此项属于战斗实体状态，不属于 camera/bg 排除项 | 对角色、type3、oid122/123、普通 grounded 非角色、phase bound override 建边界矩阵，逐帧比较 clamp/free 结果 |
+| P1 / TRANSFORM-SHELL | ⚠️ 架构缺口 | C++ release state `4000..4999` / `8000..8999` 可替换 `char_data` 及 `obj_type` | Unity 可替换 `ObjectId`/`FrameCache` 并用 shared-DAT 桥补部分角色行为，但 CLR 实例类型/部分按类分派不变 | transform 后 DAT 类型与原 shell 不一致时，per-class pass/碰撞/输入/生命周期可能走错分支 | 覆盖 character↔weapon/effect DAT transform，逐 pass 比较 obj type gate、输入、碰撞、frame advance、opoint 与销毁结果 |
+| P1 / STEP10 | ⚠️ 部分对齐 | C# `CPointRuntime` / C++ release Step10/10.5 | 抓取主流程、positive action、negative `vaction` 三类语义及 `throwinjury=-1` DAT/owned-child 传播均已有 real character/shared-DAT shell 矩阵自检 | 仍需真实场景验证 catch action 输入优先级、cpoint injury/stat 副作用及非角色 cpoint 参与者 | 用连续抓取/action 优先级、伤害/统计、非角色持有场景逐 tick 对拍 |
+| P2 / OPOINT-VIS | ⚠️ 时序审计 | C++ release direct spawn visibility；C# `GameTick` frame_logic/natural-drop/late opoint 边界 | Unity 在 pre-advance、natural drop、每实体 late update 后 flush，late pass 使用动态 runtime-slot 扫描 | 仍需证明所有 opoint producer 都走正确边界，且新对象本 tick 可见性与 slot 大小关系一致 | 分别从 hit_Fa/frame_logic、natural drop、DAT late opoint 生成低/高 slot 对象，断言后续 pass 的同 tick/次 tick可见性 |
+| P2 / FRAME-ADV | ⚠️ 未全量审计 | C# `FrameAdvance.cs` / `Physics.cs`；C++ release `frame_advance` | Unity 拆在 `SimTransit`、`SimTU`、`SimFrameTick` 及按类 override | 角色、武器、技能、other object 的职责切分尚未逐类证明无重复/漏跑/顺序偏差 | 每类选最小代表帧，比较 delay/link/cpoint gate、TU、物理、next 与落地结果 |
+| P2 / FRAME-TICK | ⚠️ 未全量审计 | C# `FrameTick.cs`；C++ release `frame_tick` | 公共主干已集中到 `RunCommonFrameTick`，武器也已迁入 | oid9 Amaterasu drain、state14 HP<=0 边界、PP display-delay 映射及武器 progression 仍缺专项闭环 | 针对四类分支新增断言，并以连续多 tick 比较 frame/PP/HP/hit-stop/速度 |
+| P2 / COLLISION-SNAPSHOT | ⚠️ 未全量审计 | C# `CollisionCollect` + `PrevFrame2` 消费；C++ release step6/7/9/10 | `CaptureCollisionFrameSnapshotsAll` + `BruteForceSceneQuery` 已工作，候选 carrier 在 tail 清理 | 快照时点、20 candidate 上限/覆盖顺序、同 tick spawn/destroy 可见性和 Step10 使用旧帧语义尚未整体证明 | 构造多候选、同距、20+、pass 中 spawn/destroy、frame 改变场景，逐项比较候选顺序与最终命中 |
 
 ---
 
@@ -377,26 +394,22 @@ Unity 有两套：
 | combo / T7 | RunComboWrappers 9 组连招 + oid6 DjaGuard |
 | M-13 / T8 | stage immediate spawn、positive refill、清场推进与 phase bound |
 
-**⚠️ 部分对齐（副作用/形式差异，需补齐或验运行结果，共 1 项）：**
-
-| 项 | 内容 |
-|----|------|
-| M-5 | 死亡弹地帧落点未逐行确认 |
+**⚠️ 剩余纯战斗逻辑：** 以 §10「剩余纯战斗逻辑 backlog」为唯一总账。M-5 已由提交 `995c860b` 完成并通过 Unity 运行时验证，不再列为部分对齐。
 
 **✅ 已确认对齐或已完成并验证（主要项）：**
 tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与 alternate）、kind 6/8/10/11/14 命中、oid300、kind5 委托、kind4+WeaponCount 翻转（M-7）、HP/PP 自然恢复（§5）、heal/catch timer、帧推进主干 + state14 复活 HitStop（§3-1~§3-5）、frame mp turn-around、opoint 生成、cpoint 抓取、state 400/401/500/501、N30 触发、状态转换特效。
 
 **🔷 架构不同但等价（严禁删，见 §8）：** resolver / shared-DAT 桥 / 字段化 runtime / hook 拆分 / 动态槽 / DirectWriteFramePreserveWaitCounter 等。
 
-**🚫 不需对齐（见 §9）：** bg 可活动范围、相机、结算、Host、数据加载。**🗑️ 确认可不移植：** M-6 F8 调试掉武器。
+**🚫 不需对齐（见 §9）：** UI/HUD、camera/background/render、audio playback、network/replay、Host 和 F7-F9/debug 控制路径。**🗑️ 确认可不移植：** M-6 F8 调试掉武器。
 
-**⚠️ 残余专项验证风险：** negative `vaction` 的符号帧/翻面语义仍未专项逐行对齐和 Unity 运行时验证，不计入上述 3 项已知部分差异。
+**⏸️ 用户明确暂缓：** T8 默认 `stage.dat` 资产部署。T8 逻辑/接线和 self-check 状态不变，但该资产工作不进入当前推进。
 
 ---
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实与主线实现。** 当前净结果：**P0 未修复项 0 + T0-T9 已完成并通过 Unity 运行时自检 + T8 缺默认数据资产 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。
+**T0-T9 主线与 negative `vaction` P0 已实现并通过针对性 Unity 运行时自检，但不能据此宣称战斗逻辑已全量逐帧等价。** 当前应继续按 §10 的 P1/P2 backlog 推进。T8 默认 `stage.dat` 由用户明确暂缓。
 
 ## 实施进度（2026-07-14）
 
@@ -412,7 +425,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 | T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
-| T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；数据资产待部署** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | `CheckStageWaveBootstrapAndSpawnContract`、`CheckStageWaveImmediateSpawnAndAdvance`、`CheckStageWavePositiveSpawnRefill` 均通过；仓库未携带默认二进制 `stage.dat` |
+| T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；默认资产部署暂缓** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | 三项 stage self-check 均通过；默认 `stage.dat` 部署由用户明确暂缓，不进入当前 backlog |
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；human/AI 输入 pass 分段；runtime 字段与 roster/opoint bootstrap；shared-DAT shell | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。T0-T9 主线均已完成运行时验收；但仓库没有默认二进制 `stage.dat`，普通 Battle 必须在 `Application.streamingAssetsPath/NTSD/data/stage.dat` 部署数据或通过 `MatchConfig.stageCampaignFilePath` 显式注入。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**；最终代码 fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。这证明 T0-T9 的针对性断言通过，不是完整对局逐帧等价证明。T8 默认 `stage.dat` 部署由用户明确暂缓。

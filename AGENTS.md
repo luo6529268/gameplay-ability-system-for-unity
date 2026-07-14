@@ -59,21 +59,21 @@ Recently aligned order points:
 - `SimulationWorld.PreInteractionTickAll` now maps to C++ release step10/10.5 instead of a generic per-object `SimPreInteraction` call. It runs character `cpoint_check` logic first using the step6 `prev_frame2` collision snapshot, then the cpoint kind=2 mismatch tail, then the `weapon_sync_held`/Collision_Check2 cpoint maintenance pass. Initial grab and pickup remain in step7/step9 Entity_AI_Update equivalents and must not be repeated in step10.
 - `LF2Character.Catch.partial.cs` no longer advances cpoint catch/being-caught maintenance from state `TU`; those state events are frame_advance timing and must stay empty for cpoint maintenance. The active maintenance entry points are `RunCpointCheckStep10`, `RunCpointMismatchTailStep10`, and `RunWeaponSyncHeldStep10`.
 - Keep the `PostFrameAdvanceDeathCleanupAll` flush boundary unless the respawn spawning path is rewritten away from queued factory tasks: C++ creates `oid=998` directly at the step4 tail, so Unity queued respawn objects must be flushed before step5 AI_Process2 can observe them.
+- Negative cpoint `vaction` now preserves the three distinct C++/EXE contracts for both real characters and shared-DAT shells: action selection flips/abs only the attacker action and raw-writes victim vaction while preserving waits; throw raw-writes attacker next and victim vaction into frame/prev_frame2 without flipping and preserves Vz when depth input is neither/both; held-sync writes zero, raw-writes then flips/abs a negative value once, and uses the original signed vaction frame only for victim cpoint coordinates. `throwinjury=-1` resolves the transformed DAT through the shared runtime resolver and reloads owned-child frame data.
 
 Still pending or requiring careful confirmation:
-- `state 500/501` early special handling.
-- C++ PreFrame camera/background/render/HUD equivalence remains presentation-layer work only; do not let it mutate Unity combat entity state.
-- `ApplyPreFrameBoundsAll` still lacks exact equivalents for C++ `unk_364`, `x_max_override`, and `unk_344`; current Unity implementation uses confirmed available runtime fields only and should be revisited when those fields are mapped.
-- The remaining `run_entity_postframe_tail` fields are incomplete in Unity: `catch_timer`, `g_game_mode2 == 2` weapon flight-counter clearing, `g_init_stats`, and hit-candidate carrier clearing need explicit runtime fields or confirmed equivalents before they can be aligned.
-- The tail `run_mode2_random_weapon_drop` equivalent is still not implemented; do not confuse it with the earlier natural random weapon drop pass.
-- The step4-tail death/respawn pass still needs exact parity review for C++ `hp2_orig` / `hp_orig` semantics and the spawned oid998 object's `z` double vs `z_int + 1` detail; current Unity maps only confirmed runtime fields.
-- C++ `run_mode2_random_weapon_drop` depends on the transient global `g_game_mode2 == 1` (`dword_449020`), not just the menu `gameModeId`; Unity currently has no confirmed equivalent trigger source, so do not fake this pass from `GameModeConfig` until the source is mapped.
+- `FrameToggle` is not yet mapped in Unity. `InputPhase` is mapped and advances every tick; do not keep grouping it with the missing toggle.
+- `ValidatePositiveLinks` still needs a global step14 equivalent for invalid positive holder/target relationships.
+- C++ PreFrame camera/background/render/HUD and bg/Z activity bounds remain excluded presentation/integration work. Entity X clamp/free behavior remains combat logic: `ApplyPreFrameBoundsAll` still needs exact parity for `unk_364`, `x_max_override`, and related type-specific branches.
+- `state 500/501`, M5 death bounce, and the step4-tail respawn pass are complete and runtime-verified; do not retain them in the pending list.
+- C# baseline Mode2 random drop / weapon-counter reset and `InitStats` are F7-F9/debug control paths and are excluded from formal gameplay parity. Do not treat them as production backlog.
 - Data transforms can change C++ `char_data->obj_type`; Unity currently changes `ObjectId`/`FrameCache`/frame data but does not change the C# runtime class or SimOrder bucket. This is a known architecture gap that must be verified for any object using state `4000..4999` or `8000..8999`.
 - Verify that every opoint-producing path uses the intended boundary: DAT late opoint should create in the current entity late update; hit_Fa/frame_logic and natural weapon drop should create at their pass boundary; no generic frame-tail flush should hide ordering bugs.
 - Per-class `frame_advance` responsibilities, especially whether Unity `SimTransit`, `SimTU`, and `SimFrameTick` split exactly matches C++ timing.
 - Remaining `frame_tick` internals still need a focused pass: C++ oid=9 Amaterasu release drain, exact state 14 HP<=0 mode/difficulty edge conditions, exact PP display-delay field mapping, and runtime validation that weapon frame progression behaves correctly after moving `LF2WeaponBase` onto common `RunCommonFrameTick`. Do not claim full frame_tick parity until these are audited.
 - Candidate collection and collision snapshot semantics around `CaptureCollisionFrameSnapshotsAll` and `BruteForceSceneQuery`.
-- Step10 internals still need runtime validation against C++ visible behavior: catch action input priority, throwinjury=-1 transform propagation, cpoint injury/stat side effects, negative vaction frame handling, and whether any non-character cpoint user exists that should also participate in `weapon_sync_held`.
+- Step10 internals still need runtime validation against C++ visible behavior: catch action input priority, cpoint injury/stat side effects, and whether any non-character cpoint user exists that should also participate in `weapon_sync_held`.
+- T8 stage logic and production wiring are implemented and runtime-verified. Default `stage.dat` asset deployment is explicitly deferred by the user and is not part of the current backlog.
 
 ## 帧同步底层与后续联机预留
 
@@ -910,12 +910,12 @@ Run EditMode tests:
 - 已确认并修正的主循环顺序问题：early specials 改为全体分组 pass；角色死亡/opoint 前清理移动到 opoint 生成之前；1100/1200 帧组退出的 `kill_count` 使用 runtime slot 语义；N-30 输入触发限制为 runtime slot `< 10`；武器 `unk_31C < 0` 的破碎回收移动到 opoint 之后、N-30/状态转场效果之前。
 - 后续战斗对齐不要优先改调度器。主循环基线固定后，应按子系统逐项核对内部逻辑：opoint 生成坐标/时序、烟雾序列帧推进与回收、特殊攻击 hitbox、武器投掷物理、音效派发。
 
-## NTSD Unity ս�����벹�� - 2026-06-06
+## NTSD Unity 战斗对齐补充 - 2026-06-06
 
-- C++ release `spawn_from_opoint` ����ͨ DAT opoint ��ʼ `vz` �̶�Ϊ `0.0`�������ȡ `opoint.dvz`��Unity �� type=5 `LF2OtherObject.InitializeVelocity` �ѵ���Ϊ��`releaseOpointSpawn` �ҷ� direct velocity ʱ��ʼ `PS.vz=0`������ opoint �� `[-5,+5]` z ����ɢ���� `LF2ObjectPointFactory.PostInitLiving` �����ɺ�׷�ӡ���Ҫ�ٰ� DAT `opoint.dvz` ֱ��������ͨ release opoint �ĳ�ʼ�ٶȡ�
-- C++ release `prev_frame` �� `run_late_entity_update` β���������һ tick ����֡�����ǡ��� tick ��֡ǰһ֡����Unity ���� `LF2FrameInfo` ���� `Prev` ר�ųнӸ����壬`MirrorLatePrevFrame()` д `Frame.Prev = Frame.N`��`LF2Character.ApplyFrozenBurningParticles()` ��ȡ `Frame.Prev` �ж� N-31 ����/ȼ��ת��������`Frame.PN` ����������������֡/�����߼�ʹ�ã������������� C++ `prev_frame`��
-- ����ֻ������Ӳ֤�ݵ�˳��/�ֶ����壺type=5 opoint ��ʼ vz �� N-31 ת����Ч prev_frame ��Դ����ѭ�� pass ˳���ݲ��ٵ��������������� late per-entity �ڲ�˳��˶� `frame_tick`��`entity_collision`��`process_opoint_spawn`��`next>=400` ���ա���Ч�ɷ�������Ͷ����
-- ��֤��`dotnet build "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assembly-CSharp.csproj" /v:minimal /m:1` ͨ����0 errors����Ϊ���� 51 warnings��
+- C++ release `spawn_from_opoint` 的普通 DAT opoint 初始 `vz` 固定为 `0.0`，不会读取 `opoint.dvz`。Unity 的 type=5 `LF2OtherObject.InitializeVelocity` 已调整为：`releaseOpointSpawn` 且非 direct velocity 时初始 `PS.vz=0`；批量 opoint 的 `[-5,+5]` z 向扩散仍由 `LF2ObjectPointFactory.PostInitLiving` 在生成后追加。不要再把 DAT `opoint.dvz` 直接塞进普通 release opoint 的初始速度。
+- C++ release `prev_frame` 是 `run_late_entity_update` 尾部镜像的上一 tick 结束帧，不是“本 tick 切帧前一帧”。Unity 已在 `LF2FrameInfo` 增加 `Prev` 专门承接该语义，`MirrorLatePrevFrame()` 写 `Frame.Prev = Frame.N`，`LF2Character.ApplyFrozenBurningParticles()` 读取 `Frame.Prev` 判断 N-31 冰冻/燃烧转场烟雾。`Frame.PN` 继续保留给现有切帧/输入逻辑使用，不能再拿来当 C++ `prev_frame`。
+- 本轮只修正有硬证据的顺序/字段语义：type=5 opoint 初始 vz 和 N-31 转场特效 prev_frame 来源。主循环 pass 顺序暂不再调整；后续继续按 late per-entity 内部顺序核对 `frame_tick`、`entity_collision`、`process_opoint_spawn`、`next>=400` 回收、音效派发与武器投掷。
+- 验证：`dotnet build "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assembly-CSharp.csproj" /v:minimal /m:1` 通过，0 errors，仍为既有 51 warnings。
 
 ## NTSD Unity 战斗主循环补充 - 2026-06-06
 
@@ -958,7 +958,7 @@ Run EditMode tests:
 - C++ release `cpoint_check(GameWorld&)` 与 `weapon_sync_held(Entity&, GameWorld&)` 都按 `objects[0..399]` 扫描所有 `active && char_data` 实体，不是只扫描角色。
 - Unity `SimulationWorld.PreInteractionTickAll` 已改为让 step10 `cpoint_check`、mismatch tail、step10.5 `weapon_sync_held` 对 `LF2Entity` 执行，角色输入/throwinjury=-1 等角色专属分支通过 `LF2Character` override 保留。
 - `NTSDEntityRuntime` 已补充 `CaughtSlotIndex` / `CatcherSlotIndex`，用于承接 C++ `caught_idx` / `catcher_idx` 槽位语义；抓取建立时同步这些槽位。
-- 这一步只对齐 step10 的对象扫描范围和关系字段入口，不代表 cpoint 内部所有分支已完全复刻。后续还要核对 `cpoint_check` 的 action/throw/position 细节、`weapon_sync_held` 的持有物释放字段，以及非角色 type=5 cpoint 数据是否在当前测试场景参与。
+- 这一步只对齐 step10 的对象扫描范围和关系字段入口，不代表 cpoint 内部所有分支已完全复刻。后续仍需核对 catch action 输入优先级、cpoint injury/stat 副作用，以及非角色 type=5 cpoint 数据是否在当前测试场景参与。negative `vaction` 的 action/throw/held-sync 语义及 `throwinjury=-1` DAT/owned-child 传播已完成并通过 real character/shared-DAT shell 矩阵验证。
 - 验证：`dotnet build "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assembly-CSharp.csproj" /v:minimal /m:1` 通过，0 errors，仍为既有 51 warnings。
 
 ## NTSD Unity step10 cpoint 内部语义对齐补充 - 2026-06-06

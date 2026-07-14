@@ -53,6 +53,9 @@ namespace NTSD.Test
                 CheckCatchingThrow();
                 CheckCpointDirControlUsesRuntimeInput();
                 CheckBeingCaughtPositionSync();
+                CheckCpointNegativeActionMatrix();
+                CheckCpointHeldSyncVactionMatrix();
+                CheckCpointThrowRawAndTransformMatrix();
                 CheckCpointDecreaseEscape();
                 CheckSimulationWorldLateMutation();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
@@ -146,8 +149,8 @@ namespace NTSD.Test
             Expect(attacker.CurrentFrameId == 120,
                 "runtime aaction with no runtime direction must ignore conflicting live Controller direction");
             Expect(victim.CurrentFrameId == 131, "aaction 目标帧 cpoint.vaction 应直接写入被抓者帧 131");
-            Expect(attacker.Trans.WaitCounter == 0 && victim.Trans.WaitCounter == 0,
-                "aaction immediate frame writes must reset both wait counters");
+            Expect(attacker.Trans.WaitCounter == 7 && victim.Trans.WaitCounter == 8,
+                "aaction direct frame writes must preserve both wait counters");
             Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0, "aaction 后双方 attacking 应清零");
 
             attacker.ImmediateFrame(100);
@@ -295,8 +298,8 @@ namespace NTSD.Test
             catcher.RunWeaponSyncHeldStep10();
 
             Expect(victim.CurrentFrameId == 131, "被抓位置同步应按 catcher cpoint.vaction 写入被抓者帧");
-            Expect(victim.Trans.WaitCounter == 0,
-                "being-caught vaction immediate frame write must reset the victim wait counter");
+            Expect(victim.Trans.WaitCounter == 9,
+                "being-caught vaction direct frame write must preserve the victim wait counter");
             Expect(Nearly(victim.Runtime.X, 94f),
                 "held sync must use left-facing Runtime.Dir even when PS.dir is stale right");
             Expect(Nearly(victim.Runtime.Y, 20f), "被抓者 y 应按垂直坐标计算并应用 cover 修正");
@@ -305,6 +308,263 @@ namespace NTSD.Test
             Expect(catcher.CaughtSlotIndex == victim.Runtime.SlotIndex &&
                    victim.CatcherSlotIndex == catcher.Runtime.SlotIndex,
                 "position sync must preserve the established runtime cpoint links");
+        }
+
+        private static void CheckCpointNegativeActionMatrix()
+        {
+            string[] actionKinds = { "aaction", "taction", "jaction" };
+            for (int shellIndex = 0; shellIndex < 2; shellIndex++)
+            {
+                bool realCharacter = shellIndex == 0;
+                for (int actionIndex = 0; actionIndex < actionKinds.Length; actionIndex++)
+                {
+                    string actionKind = actionKinds[actionIndex];
+                    CatchPoint sourceCpoint = new CatchPoint
+                    {
+                        kind = 1,
+                        x = 20,
+                        y = 30,
+                        cover = 0,
+                        hurtable = 1,
+                    };
+                    if (actionKind == "aaction") sourceCpoint.aaction = -120;
+                    else if (actionKind == "taction") sourceCpoint.taction = -120;
+                    else sourceCpoint.jaction = -120;
+
+                    LF2CharacterData attackerData = new LF2CharacterData
+                    {
+                        name = $"SelfCheck_NegativeAction_{actionKind}",
+                        frames = new List<LF2FrameData>
+                        {
+                            Frame(0, 0, 0, 0, 39, 79),
+                            Frame(100, 9, 1, 100, 39, 79, sourceCpoint),
+                            Frame(120, 9, 2, 120, 41, 81, new CatchPoint
+                            {
+                                kind = 1, vaction = -131, hurtable = 1
+                            }),
+                        },
+                    };
+                    LF2CharacterData victimData = BuildCpointMatrixVictimFrames();
+                    SimulationWorld world = new SimulationWorld();
+                    LF2Entity attacker = CreateCpointMatrixEntity(realCharacter, $"NegativeAction_{actionKind}_Attacker", 1, attackerData);
+                    LF2Entity victim = CreateCpointMatrixEntity(realCharacter, $"NegativeAction_{actionKind}_Victim", 2, victimData);
+                    world.Register(attacker);
+                    world.Register(victim);
+                    LinkCpointEntities(attacker, victim);
+                    attacker.SetCpointRawFramePreserveWait(100);
+                    victim.SetCpointRawFramePreserveWait(130);
+                    attacker.SwitchDir("right");
+                    victim.SwitchDir("right");
+                    attacker.Trans.SetWait(attacker.Frame.D.wait, 7);
+                    victim.Trans.SetWait(victim.Frame.D.wait, 8);
+                    attacker.AttackingCounter = 5;
+                    victim.AttackingCounter = 6;
+                    attacker.Runtime.CdAttack = 5;
+                    attacker.Runtime.CdJump = 5;
+                    if (actionKind == "aaction") attacker.Runtime.KeyJump = 1;
+                    else if (actionKind == "taction")
+                    {
+                        attacker.Runtime.KeyJump = 1;
+                        attacker.Runtime.KeyRight = 1;
+                    }
+                    else attacker.Runtime.KeyDefend = 1;
+                    world.CaptureCollisionFrameSnapshotsAll();
+
+                    attacker.RunCpointCheckStep10();
+
+                    string label = $"{(realCharacter ? "character" : "shared-DAT")} {actionKind}";
+                    Expect(attacker.Frame.N == 120 && attacker.Runtime.Dir == "left",
+                        $"{label}: negative action must flip attacker once and use the absolute frame");
+                    Expect(victim.Frame.N == -131 && victim.Frame.D == null && victim.Runtime.Dir == "right",
+                        $"{label}: action-produced victim vaction must remain a raw negative frame without flipping");
+                    Expect(attacker.Trans.WaitCounter == 7 && victim.Trans.WaitCounter == 8,
+                        $"{label}: action frame writes must preserve both wait counters");
+                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0,
+                        $"{label}: action selection must explicitly clear both attacking counters");
+                    Expect(attacker.Frame.Prev2 == 100 && victim.Frame.Prev2 == 130,
+                        $"{label}: action selection must not overwrite collision prev_frame2 snapshots");
+                }
+            }
+        }
+
+        private static void CheckCpointHeldSyncVactionMatrix()
+        {
+            int[] vactions = { -131, 0, 131 };
+            for (int shellIndex = 0; shellIndex < 2; shellIndex++)
+            {
+                bool realCharacter = shellIndex == 0;
+                for (int i = 0; i < vactions.Length; i++)
+                {
+                    int vaction = vactions[i];
+                    LF2CharacterData catcherData = new LF2CharacterData
+                    {
+                        name = $"SelfCheck_Held_{vaction}",
+                        frames = new List<LF2FrameData>
+                        {
+                            Frame(0, 0, 0, 0, 39, 79),
+                            Frame(100, 9, 1, 100, 39, 79, new CatchPoint
+                            {
+                                kind = 1, x = 20, y = 30, vaction = vaction, cover = 0, hurtable = 1
+                            }),
+                        },
+                    };
+                    SimulationWorld world = new SimulationWorld();
+                    LF2Entity catcher = CreateCpointMatrixEntity(realCharacter, $"Held_{vaction}_Catcher", 1, catcherData);
+                    LF2Entity victim = CreateCpointMatrixEntity(realCharacter, $"Held_{vaction}_Victim", 2, BuildCpointMatrixVictimFrames());
+                    world.Register(catcher);
+                    world.Register(victim);
+                    LinkCpointEntities(catcher, victim);
+                    catcher.SetCpointRawFramePreserveWait(100);
+                    victim.SetCpointRawFramePreserveWait(130);
+                    catcher.SwitchDir("right");
+                    victim.SwitchDir("right");
+                    catcher.Runtime.SetPosition(50, 12, 4);
+                    catcher.Runtime.SyncIntegerPosition();
+                    victim.Trans.SetWait(victim.Frame.D.wait, 9);
+                    catcher.AttackingCounter = 5;
+                    victim.AttackingCounter = 6;
+                    victim.FrameDelay = 0;
+
+                    catcher.RunWeaponSyncHeldStep10();
+
+                    int expectedFrame = vaction < 0 ? -vaction : vaction;
+                    string expectedDirection = vaction < 0 ? "left" : "right";
+                    float expectedX = vaction < 0 ? -3f : (vaction == 0 ? 58f : 56f);
+                    float expectedY = vaction < 0 ? 33f : 20f;
+                    string label = $"{(realCharacter ? "character" : "shared-DAT")} held vaction={vaction}";
+                    Expect(victim.Frame.N == expectedFrame && victim.Runtime.Dir == expectedDirection,
+                        $"{label}: held sync must raw-write, then flip/abs a negative vaction exactly once");
+                    Expect(victim.Trans.WaitCounter == 9,
+                        $"{label}: held sync must preserve the victim wait counter");
+                    Expect(Nearly(victim.Runtime.X, expectedX) && Nearly(victim.Runtime.Y, expectedY) && Nearly(victim.Runtime.Z, 3f),
+                        $"{label}: held position must use raw-vaction cpoint coordinates and resolved-frame centers");
+                    Expect(catcher.AttackingCounter == 5 && victim.AttackingCounter == 6,
+                        $"{label}: zero-injury held sync must preserve attacking counters");
+                }
+            }
+        }
+
+        private static void CheckCpointThrowRawAndTransformMatrix()
+        {
+            for (int shellIndex = 0; shellIndex < 2; shellIndex++)
+            {
+                bool realCharacter = shellIndex == 0;
+                for (int directionMode = 0; directionMode < 2; directionMode++)
+                {
+                    LF2CharacterData attackerData = BuildCpointThrowFrames(-112, -132, 25);
+                    SimulationWorld world = new SimulationWorld();
+                    LF2Entity attacker = CreateCpointMatrixEntity(realCharacter, "RawThrow_Attacker", 1, attackerData);
+                    LF2Entity victim = CreateCpointMatrixEntity(realCharacter, "RawThrow_Victim", 2, BuildCpointMatrixVictimFrames());
+                    world.Register(attacker);
+                    world.Register(victim);
+                    LinkCpointEntities(attacker, victim);
+                    attacker.SetCpointRawFramePreserveWait(110);
+                    victim.SetCpointRawFramePreserveWait(130);
+                    attacker.SwitchDir("left");
+                    victim.SwitchDir("right");
+                    attacker.Trans.SetWait(attacker.Frame.D.wait, 11);
+                    victim.Trans.SetWait(victim.Frame.D.wait, 12);
+                    attacker.AttackingCounter = 5;
+                    victim.AttackingCounter = 6;
+                    victim.Runtime.Vz = 6f;
+                    if (directionMode == 1)
+                    {
+                        attacker.Runtime.KeyUp = 1;
+                        attacker.Runtime.KeyDown = 1;
+                    }
+                    world.CaptureCollisionFrameSnapshotsAll();
+
+                    attacker.RunCpointCheckStep10();
+
+                    string label = $"{(realCharacter ? "character" : "shared-DAT")} raw throw mode={directionMode}";
+                    Expect(attacker.Frame.N == -112 && attacker.Frame.D == null && attacker.Frame.Prev2 == -112,
+                        $"{label}: attacker next must raw-write frame and prev_frame2");
+                    Expect(victim.Frame.N == -132 && victim.Frame.D == null && victim.Frame.Prev2 == -132,
+                        $"{label}: victim vaction must raw-write frame and prev_frame2");
+                    Expect(attacker.Runtime.Dir == "left" && victim.Runtime.Dir == "right",
+                        $"{label}: raw throw writes must not flip either entity");
+                    Expect(attacker.Trans.WaitCounter == 11 && victim.Trans.WaitCounter == 12,
+                        $"{label}: raw throw writes must preserve wait counters");
+                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 6,
+                        $"{label}: throw clears only attacker attacking");
+                    Expect(Nearly(victim.Runtime.Vz, 6f),
+                        $"{label}: neither/both depth inputs must preserve the previous victim Vz");
+                }
+
+                CheckCpointThrowTransformUsesCurrentDat(realCharacter);
+            }
+        }
+
+        private static void CheckCpointThrowTransformUsesCurrentDat(bool realCharacter)
+        {
+            LF2CharacterData sourceData = BuildCpointThrowFrames(112, -132, -1);
+            sourceData.frames.Add(Frame(130, 10, 1, 130, 35, 70, new CatchPoint { kind = 2 }));
+            LF2CharacterData targetData = new LF2CharacterData
+            {
+                name = "SelfCheck_ThrowTransformTarget",
+                weapon_hp = 321,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 3, -7, 100, 200),
+                    Frame(130, 10, 4, 130, 777, 778, new CatchPoint { kind = 2 }),
+                    Frame(132, 10, 5, 132, 33, 68, new CatchPoint { kind = 2 }),
+                },
+            };
+            LF2CharacterDataWrapper targetWrapper = new LF2CharacterDataWrapper(2, targetData);
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                int resolverCalls = 0;
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                {
+                    resolverCalls++;
+                    return oid == 2 ? targetWrapper : null;
+                };
+                SimulationWorld world = new SimulationWorld();
+                LF2Entity attacker = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Attacker", 1, sourceData);
+                LF2Entity victim = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Victim", 2, targetData);
+                LF2Entity ownedChild = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Child", 1, sourceData);
+                world.Register(attacker);
+                world.Register(victim);
+                world.Register(ownedChild);
+                LinkCpointEntities(attacker, victim);
+                ownedChild.KillCount = attacker.Runtime.SlotIndex;
+                attacker.SetCpointRawFramePreserveWait(110);
+                victim.SetCpointRawFramePreserveWait(130);
+                ownedChild.SetCpointRawFramePreserveWait(130);
+                attacker.SwitchDir("right");
+                victim.SwitchDir("right");
+                attacker.Runtime.SetPosition(100, 20, 7);
+                attacker.Runtime.SyncIntegerPosition();
+                attacker.Trans.SetWait(attacker.Frame.D.wait, 11);
+                victim.Trans.SetWait(victim.Frame.D.wait, 12);
+                victim.Runtime.Vz = 6f;
+                world.CaptureCollisionFrameSnapshotsAll();
+
+                Expect(victim.ObjectId == 2 && attacker.HasStep10ThrowTransformVictimData(victim),
+                    $"transform throw fixture must expose victim DAT; victimOid={victim.ObjectId}");
+                Expect(attacker.GetCollisionFrameData()?.cpoint?.throwinjury == -1,
+                    $"transform throw fixture must preserve throwinjury=-1; actual={attacker.GetCollisionFrameData()?.cpoint?.throwinjury}");
+
+                attacker.RunCpointCheckStep10();
+
+                string label = realCharacter ? "character transform throw" : "shared-DAT transform throw";
+                Expect(attacker.ObjectId == 2,
+                    $"{label}: throwinjury=-1 must replace attacker ObjectId; actual={attacker.ObjectId}, frame={attacker.Frame.N}, resolverCalls={resolverCalls}");
+                Expect(attacker.FrameCache.Wrapper == targetWrapper,
+                    $"{label}: throwinjury=-1 must load target DAT wrapper; actual={attacker.FrameCache.Wrapper?.characterId}");
+                Expect(attacker.Frame.N == -7 && attacker.Frame.Prev2 == -7 && attacker.Trans.WaitCounter == 11,
+                    $"{label}: throw next must come from transformed DAT frame 0 and raw-write without changing wait");
+                Expect(Nearly(victim.Runtime.X, 16f) && Nearly(victim.Runtime.Y, -156f),
+                    $"{label}: throw geometry must use transformed DAT frame 0 centers");
+                Expect(ownedChild.ObjectId == 2 && ownedChild.FrameCache.Wrapper == targetWrapper &&
+                       ownedChild.Frame.D != null && ownedChild.Frame.D.centerx == 777,
+                    $"{label}: owned child must reload current Frame.D after DAT propagation");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
         }
 
         private static void CheckCpointDecreaseEscape()
@@ -2999,6 +3259,97 @@ namespace NTSD.Test
             field?.SetValue(instance, value);
         }
 
+        private static LF2Entity CreateCpointMatrixEntity(
+            bool realCharacter,
+            string name,
+            int objectId,
+            LF2CharacterData data)
+        {
+            if (realCharacter)
+                return CreateCharacter(name, objectId, data);
+
+            var shell = new SelfCheckCharacterDatShell();
+            shell.InitializeForCpoint();
+            shell.Name = name;
+            shell.ObjectId = objectId;
+            shell.FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+            shell.Frame.N = 0;
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(0);
+            shell.Frame.PN = 0;
+            shell.Frame.Prev2 = 0;
+            shell.Frame.Prev2D = shell.Frame.D;
+            shell.Runtime.HP = 500;
+            shell.Runtime.HPBound = 500;
+            shell.Runtime.PP = 500;
+            shell.SetRuntimeSlotIndex(shell.StableId);
+            shell.RefreshRuntimeSnapshot();
+            return shell;
+        }
+
+        private static void LinkCpointEntities(LF2Entity catcher, LF2Entity victim)
+        {
+            catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+            catcher.FrameDelay = 0;
+            victim.FrameDelay = 0;
+            catcher.Runtime.CaughtDuration = 300;
+        }
+
+        private static LF2CharacterData BuildCpointMatrixVictimFrames()
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_CpointMatrixVictim",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 10, 2, 0, 30, 60, new CatchPoint
+                    {
+                        kind = 2, x = 3, y = 4, hurtable = 1
+                    }),
+                    Frame(130, 10, 3, 130, 35, 70, new CatchPoint
+                    {
+                        kind = 2, x = 8, y = 12, hurtable = 1
+                    }),
+                    Frame(131, 10, 4, 131, 34, 69, new CatchPoint
+                    {
+                        kind = 2, x = 9, y = 13, hurtable = 1
+                    }),
+                    Frame(132, 10, 5, 132, 33, 68, new CatchPoint
+                    {
+                        kind = 2, x = 6, y = 10, hurtable = 1
+                    }),
+                    Frame(181, 11, 1, 181, 39, 79),
+                    Frame(212, 5, 1, 212, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildCpointThrowFrames(int nextFrame, int victimAction, int throwInjury)
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_CpointThrow",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 0, 0, 39, 79),
+                    Frame(110, 9, 1, nextFrame, 40, 80, new CatchPoint
+                    {
+                        kind = 1,
+                        x = 16,
+                        y = 24,
+                        vaction = victimAction,
+                        throwvx = 8,
+                        throwvy = -4,
+                        throwvz = 3,
+                        throwinjury = throwInjury,
+                        cover = 0,
+                        hurtable = 1,
+                    }),
+                    Frame(112, 0, 1, 112, 39, 79),
+                },
+            };
+        }
+
         private static LF2Character CreateCharacter(string name, int objectId, LF2CharacterData data)
         {
             var character = new LF2Character();
@@ -3338,6 +3689,14 @@ namespace NTSD.Test
 
         private sealed class SelfCheckCharacterDatShell : LF2SpecialAttack
         {
+            public void InitializeForCpoint()
+            {
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+            }
+
             public override int GetCurrentDataObjectTypeForSimulation() => (int)LF2ObjectType.Character;
             public override void Reset() { }
         }

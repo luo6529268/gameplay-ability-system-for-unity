@@ -2955,7 +2955,7 @@ namespace NTSD.Animation.LF2Objects
             if (valid)
                 return;
 
-            SetCpointRawFrame(212);
+            SetCpointRawFramePreserveWait(212);
             Runtime.Vy = -3f;
             if (Runtime.Y > -2f)
                 Runtime.Y = -2f;
@@ -3021,17 +3021,17 @@ namespace NTSD.Animation.LF2Objects
             if (cpoint == null || victimEntity == null)
                 return;
 
-            LF2FrameData throwFrame = throwFrameSnapshot ?? Frame?.D ?? GetCollisionFrameData();
-
-            if (cpoint.throwinjury == -1 &&
-                SupportsSharedCharacterDatCpointStep10() &&
-                HasStep10ThrowTransformVictimData(victimEntity))
+            if (cpoint.throwinjury == -1 && HasStep10ThrowTransformVictimData(victimEntity))
             {
                 ApplyCpointThrowTransformToSelfAndOwnedObjects(victimEntity);
             }
 
             if (cpoint.throwinjury > 0)
                 victimEntity.WeaponCount = cpoint.throwinjury;
+
+            // cpoint_check keeps using the source cpoint, but geometry and next are read
+            // from the attacker's current DAT/current frame after action/transform.
+            LF2FrameData throwFrame = FrameCache?.GetFrameDataById(Frame?.N ?? 0) ?? Frame?.D;
 
             int centerX = throwFrame?.centerx ?? 0;
             int centerY = throwFrame?.centery ?? 0;
@@ -3044,15 +3044,14 @@ namespace NTSD.Animation.LF2Objects
             victimEntity.Runtime.Y = y;
             victimEntity.Runtime.Vx = Runtime.Dir == "right" ? cpoint.throwvx : -cpoint.throwvx;
             victimEntity.Runtime.Vy = cpoint.throwvy;
-            victimEntity.Runtime.Vz = 0f;
             SetVictimThrowVzStep10(cpoint, victimEntity);
 
             int nextFrame = throwFrame?.next ?? 0;
-            SetCpointRawFrame(nextFrame);
-            SyncCollisionSnapshotToCurrentFrame();
+            SetCpointRawFramePreserveWait(nextFrame);
+            SetCpointRawPrevFrame2(nextFrame);
             AttackingCounter = 0;
-            victimEntity.SetCpointRawFrame(cpoint.vaction, applySignedFrame: false);
-            victimEntity.SyncCollisionSnapshotToCurrentFrame();
+            victimEntity.SetCpointRawFramePreserveWait(cpoint.vaction);
+            victimEntity.SetCpointRawPrevFrame2(cpoint.vaction);
         }
 
         protected void ApplyCpointThrowTransformToSelfAndOwnedObjects(LF2Entity victimEntity)
@@ -3060,7 +3059,7 @@ namespace NTSD.Animation.LF2Objects
             if (victimEntity == null)
                 return;
 
-            LF2CharacterDataWrapper victimConfig = CharacterAnimtorManager.Instance?.GetCharacterConfig(victimEntity.ObjectId);
+            LF2CharacterDataWrapper victimConfig = ResolveRuntimeCharacterConfig(victimEntity.ObjectId);
             if (victimConfig == null)
                 return;
 
@@ -3069,7 +3068,7 @@ namespace NTSD.Animation.LF2Objects
             FrameCache.Load(victimConfig);
             ObjectId = victimEntity.ObjectId;
             WeaponCount = victimConfig.characterData?.weapon_hp ?? 0;
-            ImmediateFrame(0);
+            SetCpointRawFramePreserveWait(0);
             Frame.PN = Frame.N;
             EnsureSharedCharacterDatControllerForSimulation();
             PropagateCpointThrowTransformToOwnedObjects(victimConfig, victimEntity.ObjectId);
@@ -3077,7 +3076,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual void SetVictimThrowVzStep10(CatchPoint cpoint, LF2Entity victim)
         {
-            if (!SupportsSharedCharacterDatCpointStep10() || cpoint == null || victim == null)
+            if (cpoint == null || victim == null)
                 return;
 
             if (Runtime.KeyUp != 0 && Runtime.KeyDown == 0)
@@ -3195,14 +3194,14 @@ namespace NTSD.Animation.LF2Objects
             if (victim == null)
                 return;
 
-            ApplySignedCpointActionFrameStep10(actionFrame);
+            ApplySignedCpointActionFramePreserveWait(actionFrame);
             int victimAction = Frame?.D?.cpoint?.vaction ?? 0;
-            victim.ApplySignedCpointActionFrameStep10(victimAction);
+            victim.SetCpointRawFramePreserveWait(victimAction);
             victim.AttackingCounter = 0;
             AttackingCounter = 0;
         }
 
-        private void ApplySignedCpointActionFrameStep10(int frameId)
+        internal void ApplySignedCpointActionFramePreserveWait(int frameId)
         {
             if (frameId < 0)
             {
@@ -3210,7 +3209,7 @@ namespace NTSD.Animation.LF2Objects
                 frameId = -frameId;
             }
 
-            SetFrameTickDirect(frameId, 0);
+            SetCpointRawFramePreserveWait(frameId);
         }
 
         private void PropagateCpointThrowTransformToOwnedObjects(LF2CharacterDataWrapper wrapper, int targetObjectId)
@@ -3254,9 +3253,10 @@ namespace NTSD.Animation.LF2Objects
                 : catcherFrame.centerx - catcherCpoint.x + catcherX;
             int dy = catcherY - catcherFrame.centery + catcherCpoint.y;
 
+            LF2FrameData victimActionFrame = victimEntity.FrameCache?.GetFrameDataById(catcherCpoint.vaction);
             LF2FrameData victimCurrentFrame = victimEntity.FrameCache?.GetFrameDataById(victimEntity.Frame?.N ?? 0);
-            int victimCpointX = victimCurrentFrame?.cpoint?.x ?? 0;
-            int victimCpointY = victimCurrentFrame?.cpoint?.y ?? 0;
+            int victimCpointX = victimActionFrame?.cpoint?.x ?? 0;
+            int victimCpointY = victimActionFrame?.cpoint?.y ?? 0;
             int victimCenterX = victimCurrentFrame?.centerx ?? 0;
             int victimCenterY = victimCurrentFrame?.centery ?? 0;
 
@@ -3292,15 +3292,15 @@ namespace NTSD.Animation.LF2Objects
             if (victim == null || cpoint == null)
                 return;
 
-            if ((cpoint.hurtable == 0 || (victim.FrameDelay == 0 && cpoint.hurtable == 1)) && cpoint.vaction != 0)
+            if (cpoint.hurtable == 0 || (victim.FrameDelay == 0 && cpoint.hurtable == 1))
             {
-                victim.ApplySignedImmediateFrameWaitReset(cpoint.vaction);
+                victim.SetCpointRawFramePreserveWait(cpoint.vaction);
             }
 
             if (victim.Frame?.N < 0)
             {
                 victim.SwitchDir(victim.Runtime.Dir == "left" ? "right" : "left");
-                victim.SetCpointRawFrame(-victim.Frame.N);
+                victim.SetCpointRawFramePreserveWait(-victim.Frame.N);
             }
 
             int injury = cpoint.injury;
@@ -3310,26 +3310,27 @@ namespace NTSD.Animation.LF2Objects
             SyncCpointHeldPositionStep10(victim, catcherFrame, cpoint);
         }
 
-        private void SetCpointRawFrame(int frameId, bool applySignedFrame = true)
+        internal void SetCpointRawFramePreserveWait(int frameId)
         {
             if (Frame == null || FrameCache == null)
                 return;
 
-            int resolvedFrame = frameId;
-            if (applySignedFrame && resolvedFrame < 0)
-            {
-                SwitchDir(Runtime.Dir == "left" ? "right" : "left");
-                resolvedFrame = -resolvedFrame;
-            }
+            LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);
+            Frame.N = frameId;
+            Frame.D = targetFrame;
+            if (targetFrame != null)
+                Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, Trans?.WaitCounter ?? 0);
+            RefreshRuntimeSnapshot();
+        }
 
-            LF2FrameData targetFrame = FrameCache.GetFrameDataById(resolvedFrame);
-            if (targetFrame == null)
+        internal void SetCpointRawPrevFrame2(int frameId)
+        {
+            if (Frame == null)
                 return;
 
-            Frame.N = resolvedFrame;
-            Frame.D = targetFrame;
-            Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, Trans?.WaitCounter ?? 0);
-            RefreshRuntimeSnapshot();
+            Frame.Prev2 = frameId;
+            Frame.Prev2D = FrameCache?.GetFrameDataById(frameId);
+            Runtime.PrevFrame2 = frameId;
         }
 
         private int GetReleaseXInt()

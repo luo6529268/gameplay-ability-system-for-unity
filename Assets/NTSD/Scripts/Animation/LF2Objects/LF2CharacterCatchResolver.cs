@@ -1,7 +1,6 @@
 using NTSD.Animation;
 using NTSD.Input;
 using NTSD.Tools;
-using System.Collections.Generic;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -81,38 +80,6 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private void ApplyCatchingTransformToVictimData(LF2Entity victim)
-        {
-            var victimConfig = CharacterAnimtorManager.Instance?.GetCharacterConfig(victim.ObjectId);
-            if (victimConfig == null) return;
-
-            _character.TransformOriginalObjectId = _character.ObjectId;
-            _character.TransformTargetObjectId = victim.ObjectId;
-            _character.FrameCache.Load(victimConfig);
-            _character.ObjectId = victim.ObjectId;
-            _character.ImmediateFrame(0);
-            _character.Frame.PN = _character.Frame.N;
-            PropagateCatchingTransformToOwnedObjects(victimConfig, victim.ObjectId);
-        }
-
-        private void PropagateCatchingTransformToOwnedObjects(LF2CharacterDataWrapper wrapper, int targetObjectId)
-        {
-            var objects = new List<LF2Entity>();
-            _character.Match?.GetAllEntities(objects);
-            int selfSlotIndex = _character.Runtime?.SlotIndex ?? -1;
-            if (selfSlotIndex < 0) return;
-
-            for (int i = 0; i < objects.Count; i++)
-            {
-                var entity = objects[i];
-                if (entity == null || entity == _character) continue;
-                // C++ throwinjury == -1 传播看的是 kill_count == catcher_slot。
-                if (entity.KillCount != selfSlotIndex) continue;
-                entity.FrameCache.Load(wrapper);
-                entity.ObjectId = targetObjectId;
-            }
-        }
-
         public void RunCpointActionSelectionStep10(CatchPoint cpoint, LF2Entity victimEntity)
         {
             if (victimEntity == null)
@@ -144,39 +111,16 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyCpointActionStep10(int actionFrame, LF2Entity victim)
         {
-            ApplySignedCpointActionFrameStep10(_character, actionFrame);
+            _character.ApplySignedCpointActionFramePreserveWait(actionFrame);
             int victimAction = _character.Frame?.D?.cpoint?.vaction ?? 0;
-            ApplySignedCpointActionFrameStep10(victim, victimAction);
+            victim.SetCpointRawFramePreserveWait(victimAction);
             victim.AttackingCounter = 0;
             _character.AttackingCounter = 0;
         }
 
-        private static void ApplySignedCpointActionFrameStep10(LF2Entity entity, int frameId)
-        {
-            if (entity == null)
-                return;
-
-            if (frameId < 0)
-            {
-                entity.SwitchDir(entity.Runtime.Dir == "left" ? "right" : "left");
-                frameId = -frameId;
-            }
-
-            entity.DirectWriteFrameImmediateWaitReset(frameId);
-        }
-
         public void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity)
         {
-            LF2FrameData throwFrameSnapshot = _character.Frame?.D ?? _character.GetCollisionFrameData();
-
-            if (victimEntity != null &&
-                cpoint.throwinjury == -1 &&
-                _character.HasStep10ThrowTransformVictimData(victimEntity))
-            {
-                ApplyCatchingTransformToVictimData(victimEntity);
-            }
-
-            _character.ApplyCpointThrowStep10BaseInternal(cpoint, victimEntity, throwFrameSnapshot);
+            _character.ApplyCpointThrowStep10BaseInternal(cpoint, victimEntity);
         }
 
         public void ApplyCpointThrowStep10(
@@ -184,13 +128,6 @@ namespace NTSD.Animation.LF2Objects
             LF2Entity victimEntity,
             LF2FrameData throwFrameSnapshot)
         {
-            if (victimEntity != null &&
-                cpoint.throwinjury == -1 &&
-                _character.HasStep10ThrowTransformVictimData(victimEntity))
-            {
-                ApplyCatchingTransformToVictimData(victimEntity);
-            }
-
             _character.ApplyCpointThrowStep10BaseInternal(cpoint, victimEntity, throwFrameSnapshot);
         }
 
@@ -276,9 +213,10 @@ namespace NTSD.Animation.LF2Objects
                 : catcherFrame.centerx - catcherCpoint.x + catcherX;
             int dy = catcherY - catcherFrame.centery + catcherCpoint.y;
 
+            LF2FrameData victimActionFrame = victimEntity.FrameCache.GetFrameDataById(catcherCpoint.vaction);
             LF2FrameData victimCurrentFrame = victimEntity.FrameCache.GetFrameDataById(victimEntity.Frame?.N ?? 0);
-            int victimCpointX = victimCurrentFrame?.cpoint?.x ?? 0;
-            int victimCpointY = victimCurrentFrame?.cpoint?.y ?? 0;
+            int victimCpointX = victimActionFrame?.cpoint?.x ?? 0;
+            int victimCpointY = victimActionFrame?.cpoint?.y ?? 0;
             int victimCenterX = victimCurrentFrame?.centerx ?? 0;
             int victimCenterY = victimCurrentFrame?.centery ?? 0;
 
