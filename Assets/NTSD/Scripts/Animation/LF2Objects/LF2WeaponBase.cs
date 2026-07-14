@@ -542,20 +542,6 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        internal override bool ApplyPreFrameXBounds(float stageWidth)
-        {
-            if ((ObjectId == 122 || ObjectId == 123) && Runtime.WeaponFlightCounter > 0)
-            {
-                if (Runtime.X < 10f)
-                    Runtime.X = 10f;
-                if (Runtime.X > stageWidth - 10f)
-                    Runtime.X = stageWidth - 10f;
-                return false;
-            }
-
-            return base.ApplyPreFrameXBounds(stageWidth);
-        }
-
         internal override bool SupportsObjectInteractionPhase()
             => GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character;
 

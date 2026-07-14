@@ -2618,27 +2618,6 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Z = zMax;
         }
 
-        internal override bool ApplyPreFrameXBounds(float stageWidth)
-        {
-            int slotIndex = Runtime?.SlotIndex ?? StableId;
-            if (slotIndex >= 20)
-            {
-                if (Runtime.X < -100f)
-                    Runtime.X = -100f;
-                if (Runtime.X > stageWidth + 100f)
-                    Runtime.X = stageWidth + 100f;
-            }
-            else
-            {
-                if (Runtime.X < 0f)
-                    Runtime.X = 0f;
-                if (Runtime.X > stageWidth)
-                    Runtime.X = stageWidth;
-            }
-
-            return false;
-        }
-
         internal override void RunPreCollisionRecoveryPhase(int tickIndex)
         {
             RegeneratePreCollisionStats(tickIndex);

@@ -16,11 +16,12 @@ namespace NTSD.EditorTools
     {
         private const string RequestFile = "Temp/NTSD_BattleRuntimeSelfCheck.request";
         private const string ResultFile = "Temp/NTSD_BattleRuntimeSelfCheck.result";
+        private static bool requestRunInProgress;
+        private static bool staleResultDeleteWarningLogged;
 
         static BattleRuntimeSelfCheckEditor()
         {
-            // Consume an external request after the next editor domain reload.
-            EditorApplication.delayCall += RunIfRequested;
+            EditorApplication.update += PollRequest;
         }
 
         [MenuItem("NTSD/验证/运行战斗运行时自检")]
@@ -34,22 +35,58 @@ namespace NTSD.EditorTools
             RunAndWriteResult(exitBatchmode: true);
         }
 
-        private static void RunIfRequested()
+        private static void PollRequest()
         {
-            string requestPath = ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (requestRunInProgress)
                 return;
 
+            string requestPath = ProjectPath(RequestFile);
+            if (!File.Exists(requestPath))
+            {
+                staleResultDeleteWarningLogged = false;
+                return;
+            }
+
+            // A pending request invalidates any result left by an earlier run.
+            string resultPath = ProjectPath(ResultFile);
             try
             {
-                File.Delete(requestPath);
+                if (File.Exists(resultPath))
+                    File.Delete(resultPath);
+                staleResultDeleteWarningLogged = false;
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[BattleRuntimeSelfCheckEditor] 删除请求文件失败: {ex.Message}");
+                if (!staleResultDeleteWarningLogged)
+                {
+                    Debug.LogWarning($"[BattleRuntimeSelfCheckEditor] Failed to delete stale result file: {ex.Message}");
+                    staleResultDeleteWarningLogged = true;
+                }
+                return;
             }
 
-            RunAndWriteResult(exitBatchmode: false);
+            if (EditorApplication.isCompiling || EditorApplication.isUpdating)
+                return;
+
+            requestRunInProgress = true;
+            try
+            {
+                try
+                {
+                    File.Delete(requestPath);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"[BattleRuntimeSelfCheckEditor] Failed to delete request file: {ex.Message}");
+                    return;
+                }
+
+                RunAndWriteResult(exitBatchmode: false);
+            }
+            finally
+            {
+                requestRunInProgress = false;
+            }
         }
 
         private static void RunAndWriteResult(bool exitBatchmode)

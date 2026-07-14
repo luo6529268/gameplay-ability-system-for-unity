@@ -314,6 +314,7 @@ Unity 有两套：
 - [x] **M-1 / T4** oid 7/8→51 合体拆分 — **已完成并通过 fresh Unity 运行时自检**
 - [x] **M-2 / T5** 复活 pass（`RunRespawnPass` 完整逻辑）— **已完成并通过 fresh Unity 运行时自检**
 - [x] **M-13 / T8** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **逻辑与生产接线已完成并通过 fresh Unity 运行时自检；默认 `stage.dat` 部署由用户明确暂缓，不进入当前推进**
+- [x] **P1 / BOUNDS-X** PreFrame 实体 X clamp/free — **已完成并通过 physical worktree fresh Unity 运行时自检**：base `bg.width` 与 phase override 分离、current-DAT 分派、`RelationTeam`/`HitStop`/`Unk344`/`YInt`/严格边界与 `XInt` 契约均有矩阵覆盖
 
 ### P1 — 已确认缺失战斗逻辑（需新增）
 - [x] **§6.2 AI / T9** `PrepareAiInputBasic` 完整调用闭包 — **已完成并通过 fresh Unity 运行时自检**
@@ -347,7 +348,7 @@ Unity 有两套：
 | P0 / CP-NV3 held sync | ✅ 已完成 / Unity 运行时已验证 | C++ release `weapon.cpp:22-107`，EXE `Collision_Check2` 0x41B2C0 | hurtable gate 下 `vaction==0` 也写；负值 raw 后只翻一次并 abs；wait 保持；位置 cpoint 取原始 signed vaction、center 取 resolved current frame | 已关闭 | `CheckCpointHeldSyncVactionMatrix` 覆盖 `vaction<0/==0/>0` 的 real/shared-DAT frame/facing/wait/位置/attacking，fresh Unity batch PASS |
 | P1 / FLOW-1 FrameToggle | ✅ 已完成 / Unity 运行时已验证 | C++ release tick-head `g_frame_toggle` 与 state 400/401 early pass；C# `GameTick.Run:32-36` | Flow 新增 `FrameMod12`/`FrameToggle` 并由 `AdvanceBattleFlowTick` 与 CurrentTick/InputPhase 同步推进；early teleport 读取 toggle，source 无 Character gate、401 可选 self、target 保留 Character 过滤 | 已关闭 | `CheckBattleFlowToggleAndTeleportMatrix` 覆盖 tick 1-4/11-13、reset、401 self、non-character source、target 选择/no-target，Unity self-check PASS |
 | P1 / LINK-1 positive link validation | ✅ 已完成 / Unity 运行时已验证 | C++ release `game_tick.cpp` step11；C# `GameTick.ValidatePositiveLinks` 仅作映射参考 | `ValidateHeldLinksAll` 按 runtime slot `0..399` 覆盖所有 active `LF2Entity`；valid 仅 target range/active/反向 holder；invalid 只清 `LinkState` | 已关闭 | `CheckValidatePositiveLinksMatrix` 覆盖 valid character/non-character、slot0/399、target -1/400、inactive/mismatch、link<=0、target link 状态和多 holder slot 顺序，Unity self-check PASS |
-| P1 / BOUNDS-X | ⚠️ 部分对齐 | C# `GameTick.ApplyPreframeBounds` 的实体 X clamp/free 分支；C++ release PreFrame 实体逻辑段 | `ApplyPreFrameXBounds(stageWidth)` 已覆盖已知类型；stage runtime 已有 `XMaxOverride` | `unk_364`/`x_max_override`/相关 X 上限来源与类型分支仍未逐项证明；此项属于战斗实体状态，不属于 camera/bg 排除项 | 对角色、type3、oid122/123、普通 grounded 非角色、phase bound override 建边界矩阵，逐帧比较 clamp/free 结果 |
+| P1 / BOUNDS-X | ✅ 已完成 / Unity 运行时已验证 | C++ release `game_tick.cpp:77-130`；C# `GameTick.ApplyPreframeBounds` 仅作映射参考 | `LF2Entity.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride)` 按 current DAT type/OID 中央分派；实体 pass 显式使用 `BaseStageWidthPx`，不改变 stage spawn/AI/camera 的既有 `StageWidthPx` 消费 | 已关闭；oid122/123 条件使用独立 `Unk344>0`，不再误用 `WeaponFlightCounter` | `CheckPreFrameXBoundsMatrix` 覆盖 slot/team/hit-stop/override、strict edges、type3/free、oid122/123、`YInt`、current-DAT/CLR 交叉、base/active width 分离、`XInt` 与 world lifecycle；physical worktree fresh Unity 日志双 PASS |
 | P1 / TRANSFORM-SHELL | ⚠️ 架构缺口 | C++ release state `4000..4999` / `8000..8999` 可替换 `char_data` 及 `obj_type` | Unity 可替换 `ObjectId`/`FrameCache` 并用 shared-DAT 桥补部分角色行为，但 CLR 实例类型/部分按类分派不变 | transform 后 DAT 类型与原 shell 不一致时，per-class pass/碰撞/输入/生命周期可能走错分支 | 覆盖 character↔weapon/effect DAT transform，逐 pass 比较 obj type gate、输入、碰撞、frame advance、opoint 与销毁结果 |
 | P1 / STEP10 | ⚠️ 部分对齐 | C# `CPointRuntime` / C++ release Step10/10.5 | 抓取主流程、positive action、negative `vaction` 三类语义及 `throwinjury=-1` DAT/owned-child 传播均已有 real character/shared-DAT shell 矩阵自检 | 仍需真实场景验证 catch action 输入优先级、cpoint injury/stat 副作用及非角色 cpoint 参与者 | 用连续抓取/action 优先级、伤害/统计、非角色持有场景逐 tick 对拍 |
 | P2 / OPOINT-VIS | ⚠️ 时序审计 | C++ release direct spawn visibility；C# `GameTick` frame_logic/natural-drop/late opoint 边界 | Unity 在 pre-advance、natural drop、每实体 late update 后 flush，late pass 使用动态 runtime-slot 扫描 | 仍需证明所有 opoint producer 都走正确边界，且新对象本 tick 可见性与 slot 大小关系一致 | 分别从 hit_Fa/frame_logic、natural drop、DAT late opoint 生成低/高 slot 对象，断言后续 pass 的同 tick/次 tick可见性 |
@@ -409,7 +410,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**T0-T9 主线与 negative `vaction` P0 已实现并通过针对性 Unity 运行时自检，但不能据此宣称战斗逻辑已全量逐帧等价。** 当前应继续按 §10 的 P1/P2 backlog 推进。T8 默认 `stage.dat` 由用户明确暂缓。
+**T0-T9 主线、negative `vaction` P0 与 P1 BOUNDS-X 已实现并通过针对性 Unity 运行时自检，但不能据此宣称战斗逻辑已全量逐帧等价。** 当前 P1 从 TRANSFORM-SHELL / STEP10 继续，之后按 §10 的 P2 backlog 推进。T8 默认 `stage.dat` 由用户明确暂缓。
 
 ## 实施进度（2026-07-14）
 
@@ -428,4 +429,4 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；默认资产部署暂缓** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | 三项 stage self-check 均通过；默认 `stage.dat` 部署由用户明确暂缓，不进入当前 backlog |
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；human/AI 输入 pass 分段；runtime 字段与 roster/opoint bootstrap；shared-DAT shell | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；主 Editor request 于 00:57:49 fresh 返回 `PASS`，覆盖新增 Flow/link 矩阵并回归 T0-T9 与 negative `vaction`。隔离 clone batch 编译成功，但在 post-compile domain reload 后停滞，未形成 PASS 证据。这证明针对性断言通过，不是完整对局逐帧等价证明。T8 默认 `stage.dat` 部署由用户明确暂缓。
+最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**。BOUNDS-X 使用 detached physical worktree `I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity-boundsverify` 直接执行 `BattleRuntimeSelfCheckEditor.RunForBatchmode`；fresh 日志 `Unity-BattleRuntimeSelfCheck-BOUNDS-X-fresh.log` 明确包含 `Application.AssetDatabase Initial Refresh End`、`[BattleRuntimeSelfCheck] 战斗运行时自检通过。` 与 `[BattleRuntimeSelfCheckEditor] 自检完成。`，并回归既有检查。本次运行时证据来自该 direct batch 入口，不是 request 路径 PASS。request harness 已改为 `EditorApplication.update` 轮询：待处理 request 会先使旧 result 失效，仅在 `isCompiling/isUpdating` 均为 false 时消费 request，并用 in-progress gate 降低重复执行风险；不据此宣称绝对幂等。以上是针对性断言证据，不是完整对局逐帧等价证明。T8 默认 `stage.dat` 部署由用户明确暂缓。

@@ -1019,7 +1019,68 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void ApplyPreFrameZBounds(float zMin, float zMax) { }
 
-        internal virtual bool ApplyPreFrameXBounds(float stageWidth) => false;
+        // C++ PreFrame keeps the background width separate from the phase-only character override.
+        internal virtual bool ApplyPreFrameXBounds(float baseStageWidth, int xMaxOverride)
+        {
+            int currentDataType = GetCurrentDataObjectTypeForSimulation();
+            if (currentDataType == (int)LF2ObjectType.SpecialAttack)
+            {
+                if (Runtime.X < -300f || Runtime.X > baseStageWidth + 300f)
+                {
+                    FreeEntityLikeExe();
+                    return true;
+                }
+            }
+            else if (currentDataType == (int)LF2ObjectType.Character)
+            {
+                int slotIndex = Runtime?.SlotIndex ?? StableId;
+                if (slotIndex >= 20)
+                {
+                    if (Runtime.X < -100f)
+                        Runtime.X = -100f;
+                    if (Runtime.X > baseStageWidth + 100f)
+                        Runtime.X = baseStageWidth + 100f;
+                }
+                else
+                {
+                    if (RelationTeam == 5)
+                    {
+                        if (Runtime.X < -300f)
+                            Runtime.X = -300f;
+                    }
+                    else if (Runtime.X < 0f)
+                    {
+                        Runtime.X = 0f;
+                    }
+
+                    if (Runtime.X > baseStageWidth)
+                        Runtime.X = baseStageWidth;
+
+                    if (xMaxOverride > 0 &&
+                        Runtime.X > xMaxOverride &&
+                        RelationTeam != 5 &&
+                        HitStun == 0)
+                    {
+                        Runtime.X = xMaxOverride;
+                    }
+                }
+            }
+            else if ((ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
+            {
+                if (Runtime.X < 10f)
+                    Runtime.X = 10f;
+                if (Runtime.X > baseStageWidth - 10f)
+                    Runtime.X = baseStageWidth - 10f;
+            }
+            else if (Runtime.YInt == 0 && (Runtime.X < 0f || Runtime.X > baseStageWidth))
+            {
+                FreeEntityLikeExe();
+                return true;
+            }
+
+            Runtime.XInt = (int)Runtime.X;
+            return false;
+        }
 
         /// <summary>
         /// pre-collision 阶段的公共 state 特判。

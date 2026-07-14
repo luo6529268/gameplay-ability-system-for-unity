@@ -59,6 +59,7 @@ namespace NTSD.Test
                 CheckCpointDecreaseEscape();
                 CheckBattleFlowToggleAndTeleportMatrix();
                 CheckValidatePositiveLinksMatrix();
+                CheckPreFrameXBoundsMatrix();
                 CheckSimulationWorldLateMutation();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
                 CheckSimulationPassesImmediateFrameDoesNotZeroAttacking();
@@ -891,6 +892,131 @@ namespace NTSD.Test
         {
             world.AdvanceBattleFlowTick(1);
             world.AdvanceBattleFlowTick(2);
+        }
+
+        private static void CheckPreFrameXBoundsMatrix()
+        {
+            const float baseStageWidth = 800f;
+            const int xMaxOverride = 500;
+
+            FlowSelfCheckEntity ordinary = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsOrdinary", LF2ObjectType.Character, 0, 1, -1, 200, 0);
+            Expect(!ordinary.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   ordinary.Runtime.X == 0f && ordinary.Runtime.XInt == 0,
+                "slot<20 ordinary character must clamp its lower X bound to zero");
+            ordinary.Runtime.X = 700f;
+            ordinary.Runtime.HitStop = 0;
+            Expect(!ordinary.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && ordinary.Runtime.X == 500f,
+                "slot<20 ordinary character must apply the phase X override when hit stop is zero");
+            ordinary.Runtime.X = 700f;
+            ordinary.Runtime.HitStop = 1;
+            Expect(!ordinary.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && ordinary.Runtime.X == 700f,
+                "slot<20 ordinary character must ignore the phase X override during hit stop");
+            ordinary.Runtime.X = 900f;
+            Expect(!ordinary.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && ordinary.Runtime.X == 800f,
+                "base stage width clamp must still run while the phase override is hit-stop gated");
+
+            FlowSelfCheckEntity relationFive = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsRelationFive", LF2ObjectType.Character, 0, 5, -301, 200, 1);
+            Expect(!relationFive.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && relationFive.Runtime.X == -300f,
+                "RelationTeam 5 character must use the -300 lower X bound");
+            relationFive.Runtime.X = 700f;
+            Expect(!relationFive.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && relationFive.Runtime.X == 700f,
+                "RelationTeam 5 character must ignore the phase X override");
+
+            FlowSelfCheckEntity reservedSlot = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsReserved", LF2ObjectType.Character, 0, 1, -101, 200, 20);
+            Expect(!reservedSlot.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && reservedSlot.Runtime.X == -100f,
+                "slot>=20 character must use the -100 lower X bound");
+            reservedSlot.Runtime.X = 901f;
+            Expect(!reservedSlot.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && reservedSlot.Runtime.X == 900f,
+                "slot>=20 character must use base stage width plus 100 and ignore phase override");
+
+            FlowSelfCheckEntity type3LowerEdge = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsType3LowerEdge", LF2ObjectType.SpecialAttack, 0, 1, -300, 200, 2);
+            FlowSelfCheckEntity type3UpperEdge = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsType3UpperEdge", LF2ObjectType.SpecialAttack, 0, 1, 1100, 200, 3);
+            Expect(!type3LowerEdge.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   !type3UpperEdge.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
+                "type3 exact -300/base+300 edges must remain active");
+            FlowSelfCheckEntity type3Outside = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsType3Outside", LF2ObjectType.SpecialAttack, 0, 1, 1101, 200, 4);
+            Expect(type3Outside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
+                "type3 outside base stage width plus 300 must be freed");
+
+            FlowSelfCheckEntity oid122 = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsOid122", LF2ObjectType.LightWeapon, 0, 1, 0, 200, 5);
+            oid122.ObjectId = 122;
+            oid122.Unk344 = 1;
+            Expect(!oid122.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid122.Runtime.X == 10f,
+                "oid122 with Unk344>0 must clamp to the 10 lower X bound");
+            FlowSelfCheckEntity oid123 = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsOid123", LF2ObjectType.Other, 0, 1, 800, 200, 6);
+            oid123.ObjectId = 123;
+            oid123.Unk344 = 2;
+            Expect(!oid123.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid123.Runtime.X == 790f,
+                "oid123 with Unk344>0 must clamp to base stage width minus 10");
+            FlowSelfCheckEntity wrongWeaponField = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsWrongWeaponField", LF2ObjectType.LightWeapon, 0, 1, 5, 200, 7);
+            wrongWeaponField.ObjectId = 122;
+            wrongWeaponField.Unk344 = 0;
+            wrongWeaponField.Runtime.WeaponFlightCounter = 100;
+            Expect(!wrongWeaponField.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && wrongWeaponField.Runtime.X == 5f,
+                "oid122 bounds must use Unk344 rather than WeaponFlightCounter");
+
+            FlowSelfCheckEntity groundedLowerEdge = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsGroundedLowerEdge", LF2ObjectType.Other, 0, 1, 0, 200, 8);
+            groundedLowerEdge.Runtime.YInt = 0;
+            FlowSelfCheckEntity groundedUpperEdge = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsGroundedUpperEdge", LF2ObjectType.Other, 0, 1, 800, 200, 9);
+            groundedUpperEdge.Runtime.YInt = 0;
+            Expect(!groundedLowerEdge.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   !groundedUpperEdge.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
+                "ordinary grounded non-character exact stage edges must remain active");
+            FlowSelfCheckEntity groundedOutside = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsGroundedOutside", LF2ObjectType.Other, 0, 1, -1, 200, 10);
+            groundedOutside.Runtime.YInt = 0;
+            Expect(groundedOutside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
+                "ordinary grounded non-character outside the base stage must be freed");
+            FlowSelfCheckEntity airborneOutside = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsAirborneOutside", LF2ObjectType.Other, 0, 1, 900, 200, 11);
+            airborneOutside.Runtime.YInt = 1;
+            Expect(!airborneOutside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && airborneOutside.Runtime.X == 900f,
+                "ordinary airborne non-character outside the base stage must remain active");
+
+            FlowSelfCheckEntity truncation = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsXInt", LF2ObjectType.Character, 0, 1, 123, 200, 12);
+            truncation.Runtime.X = 123.75f;
+            Expect(!truncation.ApplyPreFrameXBounds(baseStageWidth, 0) && truncation.Runtime.XInt == 123,
+                "surviving PreFrame X bounds must mirror truncated XInt");
+
+            var transformedCharacter = new BoundsSelfCheckCharacter(LF2ObjectType.SpecialAttack);
+            transformedCharacter.BindData("SelfCheck_BoundsClrCharacterDatType3", 912, BuildCatchingFrames());
+            transformedCharacter.SetRuntimeSlotIndex(13);
+            transformedCharacter.Runtime.X = 1101f;
+            Expect(transformedCharacter.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
+                "current DAT type must select type3 bounds even for a character CLR shell");
+
+            var world = new SimulationWorld();
+            FlowSelfCheckEntity hitStopped = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsWorldBaseWidth", LF2ObjectType.Character, 0, 1, 700, 200, 0);
+            hitStopped.Runtime.HitStop = 1;
+            world.Register(hitStopped);
+            world.Runtime.Stage.ApplyPhaseBound(xMaxOverride);
+            Expect(world.Runtime.Stage.StageWidthPx == xMaxOverride,
+                "phase setup must retain the existing active StageWidthPx contract");
+            world.ApplyPreFrameBoundsAll();
+            Expect(hitStopped.Runtime.X == 700f && world.Runtime.Stage.BaseStageWidthPx >= 794,
+                "PreFrame entity bounds must use base stage width separately from active phase width");
+
+            FlowSelfCheckEntity worldFreed = CreateFlowSelfCheckEntity(
+                "SelfCheck_BoundsWorldFree", LF2ObjectType.SpecialAttack, 0, 1, 5000, 200, 14);
+            world.Register(worldFreed);
+            world.ApplyPreFrameBoundsAll();
+            var entities = new List<LF2Entity>();
+            world.GetAllEntities(entities);
+            Expect(!entities.Contains(worldFreed),
+                "PreFrame out-of-bounds free must remove the entity through the world lifecycle");
         }
 
         private static FlowSelfCheckEntity CreateFlowSelfCheckEntity(
@@ -3866,6 +3992,32 @@ namespace NTSD.Test
             public override void Reset() { }
 
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class BoundsSelfCheckCharacter : LF2Character
+        {
+            private readonly LF2ObjectType currentDataType;
+
+            public BoundsSelfCheckCharacter(LF2ObjectType currentDataType)
+            {
+                this.currentDataType = currentDataType;
+                ModuleInitialize();
+                Controller = new SelfCheckController();
+            }
+
+            public void BindData(string name, int objectId, LF2CharacterData data)
+            {
+                Name = name;
+                ObjectId = objectId;
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Initialize(500, 500);
+                FrameDelay = 0;
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation() => (int)currentDataType;
         }
 
         private sealed class AlternateDamageSelfCheckWeapon : LF2Weapon

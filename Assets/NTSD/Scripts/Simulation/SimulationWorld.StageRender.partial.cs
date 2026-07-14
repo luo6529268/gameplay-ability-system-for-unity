@@ -70,13 +70,15 @@ namespace NTSD.Simulation
         {
             RefreshStageRuntimeSnapshotFromScene();
             int stageWidthPx = Runtime?.Stage?.StageWidthPx ?? 800;
+            int baseStageWidthPx = Runtime?.Stage?.BaseStageWidthPx ?? 800;
+            int xMaxOverride = Runtime?.Stage?.XMaxOverride ?? 0;
             int stageZMin = Runtime?.Stage?.ZMin ?? 180;
             int stageZMax = Runtime?.Stage?.ZMax ?? 350;
 
             float zMin = stageZMin;
             float zMax = stageZMax;
-            float stageWidth = stageWidthPx;
-            if (zMax < zMin || stageWidth <= 0f)
+            float baseStageWidth = baseStageWidthPx;
+            if (zMax < zMin || baseStageWidth <= 0f)
                 return;
 
             ForEachEntityByRuntimeSlot(entity =>
@@ -86,7 +88,7 @@ namespace NTSD.Simulation
 
                 entity.ApplyPreFrameZBounds(zMin, zMax);
 
-                bool destroyed = entity.ApplyPreFrameXBounds(stageWidth);
+                bool destroyed = entity.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride);
                 if (!destroyed)
                     RefreshRuntimeSnapshot(entity);
             });

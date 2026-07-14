@@ -134,12 +134,12 @@ tick 主循环主干（含 `InputPhase`/`FrameMod12`/`FrameToggle` 统一推进�
 
 ## 9. 优先级建议
 
-T0-T9 主线均已完成并通过针对性 Unity 运行时自检。下一步按以下纯战斗 backlog 推进；字段级 authority、Unity 现状和验收矩阵见完整差异清单 §10。
+T0-T9 主线与 P1 BOUNDS-X 均已完成并通过针对性 Unity 运行时自检。下一步按以下纯战斗 backlog 推进；字段级 authority、Unity 现状和验收矩阵见完整差异清单 §10。
 
 | 优先级 | 当前推进 |
 |---|---|
 | P0 | ✅ negative `vaction` 已完成并通过 fresh Unity batch：action signed + victim raw、throw raw frame/prev2、held-sync raw→flip/abs 与原始 signed vaction cpoint 坐标 |
-| P1 | PreFrame X 逻辑边界、DAT transform shell、Step10 剩余 action 输入优先级、cpoint injury/stat 副作用与非角色参与者 |
+| P1 | DAT transform shell、Step10 剩余 action 输入优先级、cpoint injury/stat 副作用与非角色参与者 |
 | P2 | opoint/pass visibility、per-class `frame_advance`、`frame_tick` 内部、collision snapshot/candidate 语义 |
 
 T8 默认 `stage.dat` 部署由用户明确暂缓，不进入当前推进。
@@ -163,4 +163,4 @@ P0 验收覆盖 `CheckCpointNegativeActionMatrix`、`CheckCpointHeldSyncVactionM
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；默认资产部署暂缓** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | 三项 stage self-check 均通过；默认 `stage.dat` 部署由用户明确暂缓 |
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；输入 pass 分段；runtime 字段与 roster/opoint bootstrap | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；主 Editor request 于 00:57:49 fresh 返回 `PASS`，覆盖新增 Flow/link 矩阵并回归既有检查。隔离 clone batch 编译成功，但在 post-compile domain reload 后停滞，未形成 PASS 证据。这不是完整对局逐帧等价证明；后续按 §9 backlog 继续。T8 默认 `stage.dat` 部署暂缓。
+最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**。P1 BOUNDS-X 已在 detached physical worktree `I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity-boundsverify` 通过 direct `BattleRuntimeSelfCheckEditor.RunForBatchmode` 完成 fresh Unity 运行时验证；`Unity-BattleRuntimeSelfCheck-BOUNDS-X-fresh.log` 明确包含 AssetDatabase initial refresh end、战斗运行时自检通过和自检完成。新增矩阵覆盖 base width/phase override 分离、slot/team/hit-stop、strict edges、type3/free、oid122/123 `Unk344`、grounded `YInt`、current-DAT/CLR 交叉、`XInt` 与 world lifecycle。该运行时证据不是 request 路径 PASS。request harness 已改为 update 轮询：编译/更新期间保留 request，待处理 request 会先清除旧 result，并以 in-progress gate 降低重复执行风险；不宣称绝对幂等。后续 P1 从 TRANSFORM-SHELL / STEP10 继续；这不是完整对局逐帧等价证明。T8 默认 `stage.dat` 部署暂缓。
