@@ -10,12 +10,12 @@ namespace NTSD.Animation
     public class PhysicsState
     {
         private NTSDEntityRuntime _runtime;
-        private float _x;
-        private float _y;
-        private float _z;
-        private float _vx;
-        private float _vy;
-        private float _vz;
+        private double _x;
+        private double _y;
+        private double _z;
+        private double _vx;
+        private double _vy;
+        private double _vz;
         private float _sx;
         private float _sy;
         private float _sz;
@@ -40,25 +40,25 @@ namespace NTSD.Animation
         }
 
         /// <summary>地面平面 X 坐标，单位为 NTSD 像素。</summary>
-        public float x { get => _runtime?.X ?? _x; set { if (_runtime != null) _runtime.X = value; else _x = value; } }
+        public double x { get => _runtime?.X ?? _x; set { if (_runtime != null) _runtime.X = value; else _x = value; } }
 
         /// <summary>垂直偏移，单位为 NTSD 像素；负数表示在空中。</summary>
-        public float y { get => _runtime?.Y ?? _y; set { if (_runtime != null) _runtime.Y = value; else _y = value; } }
+        public double y { get => _runtime?.Y ?? _y; set { if (_runtime != null) _runtime.Y = value; else _y = value; } }
 
         /// <summary>Unity 世界空间中的地面参考高度。</summary>
         public float groundY = 0f;
 
         /// <summary>地面平面深度坐标，单位为 NTSD 像素。</summary>
-        public float z { get => _runtime?.Z ?? _z; set { if (_runtime != null) _runtime.Z = value; else _z = value; } }
+        public double z { get => _runtime?.Z ?? _z; set { if (_runtime != null) _runtime.Z = value; else _z = value; } }
 
         /// <summary>X 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vx { get => _runtime?.Vx ?? _vx; set { if (_runtime != null) _runtime.Vx = value; else _vx = value; } }
+        public double vx { get => _runtime?.Vx ?? _vx; set { if (_runtime != null) _runtime.Vx = value; else _vx = value; } }
 
         /// <summary>垂直速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vy { get => _runtime?.Vy ?? _vy; set { if (_runtime != null) _runtime.Vy = value; else _vy = value; } }
+        public double vy { get => _runtime?.Vy ?? _vy; set { if (_runtime != null) _runtime.Vy = value; else _vy = value; } }
 
         /// <summary>Z 轴速度，单位为每个 30Hz 模拟 tick 的像素。</summary>
-        public float vz { get => _runtime?.Vz ?? _vz; set { if (_runtime != null) _runtime.Vz = value; else _vz = value; } }
+        public double vz { get => _runtime?.Vz ?? _vz; set { if (_runtime != null) _runtime.Vz = value; else _vz = value; } }
 
         // ==================== 渲染空间缓存坐标 ====================
         /// <summary>缓存的精灵原点 X，单位为 NTSD 像素。</summary>
@@ -119,12 +119,12 @@ namespace NTSD.Animation
         /// </summary>
         public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)
         {
-            sx = dir == "right"
+            sx = (float)(dir == "right"
                 ? (x - centerx)
-                : (x + centerx - spriteWidthPx);
+                : (x + centerx - spriteWidthPx));
 
-            sy = y + z - centery;
-            sz = z;
+            sy = (float)(y + z - centery);
+            sz = (float)z;
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace NTSD.Animation
         public Vector2 ToUnityVelocity()
         {
             float conversion = SimulationConstants.SIM_TICK_RATE / SimulationConstants.PIXELS_PER_UNIT;  // = 0.3
-            return new Vector2(vx * conversion, -vz * conversion);
+            return new Vector2((float)(vx * conversion), (float)(-vz * conversion));
         }
 
         /// <summary>将 Unity 每秒单位速度转换回 NTSD tick 速度。</summary>
@@ -355,7 +355,7 @@ namespace NTSD.Animation
         /// <summary>将 NTSD 地面平面位置转换为 Unity X/Y 坐标。</summary>
         public Vector3 ToUnityPosition()
         {
-            Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(x, z);
+            Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld((float)x, (float)z);
             return new Vector3(groundPoint.x, groundPoint.y, 0f);
         }
 
@@ -372,7 +372,7 @@ namespace NTSD.Animation
         /// <summary>返回用于场景边界检测的 Unity 空间地面平面点。</summary>
         public Vector2 GetGroundPoint2D()
         {
-            return ToUnityGroundPoint(x, z);
+            return ToUnityGroundPoint((float)x, (float)z);
         }
 
         /// <summary>朝左返回 -1，朝右返回 1。</summary>
@@ -389,7 +389,7 @@ namespace NTSD.Animation
         {
             if (bodies == null || bodies.Count == 0)
             {
-                Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(x, z);
+                Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld((float)x, (float)z);
                 return new Rect(groundPoint.x, groundPoint.y, 0f, 0f);
             }
 
@@ -397,11 +397,11 @@ namespace NTSD.Animation
 
             // 朝右：left = ps.x - centerx + body.x
             // 朝左：left = ps.x + centerx - body.x - body.w
-            float bodyLeftPx = dir == "left"
+            double bodyLeftPx = dir == "left"
                 ? (x + centerx - body.x - body.w)
                 : (x - centerx + body.x);
-            float bodyWorldX = NTSDRenderSpace.GroundPixelToWorld(bodyLeftPx, z).x;
-            float bodyWorldY = NTSDRenderSpace.ScreenPixelToWorld(0f, z + body.y - centery, 0f).y;
+            float bodyWorldX = NTSDRenderSpace.GroundPixelToWorld((float)bodyLeftPx, (float)z).x;
+            float bodyWorldY = NTSDRenderSpace.ScreenPixelToWorld(0f, (float)(z + body.y - centery), 0f).y;
             float bodyWidth = body.w / SimulationConstants.PIXELS_PER_UNIT;
             float bodyHeight = body.h / SimulationConstants.PIXELS_PER_UNIT;
 

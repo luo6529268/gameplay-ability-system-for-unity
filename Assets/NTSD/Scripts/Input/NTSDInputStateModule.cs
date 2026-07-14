@@ -98,15 +98,58 @@ namespace NTSD.Input
             }
         }
 
-        public bool ApplyFrameInput(LF2Character character)
+        public bool ApplyFrameInput(LF2Entity character)
         {
             if (character == null || character.Frame?.D == null)
                 return false;
 
             bool result = ApplyComboFrameInput(character);
             result |= ApplyDirectFrameInput(character);
-            result |= character.ProcessReleaseInput();
+            if (character is LF2Character realCharacter)
+                result |= realCharacter.ProcessReleaseInput();
+            SyncToRuntime(character.Runtime);
             return result;
+        }
+
+        internal void SyncFromRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            _right = runtime.KeyRight != 0;
+            _left = runtime.KeyLeft != 0;
+            _up = runtime.KeyUp != 0;
+            _down = runtime.KeyDown != 0;
+            _attack = runtime.KeyAttack != 0;
+            _jump = runtime.KeyJump != 0;
+            _defend = runtime.KeyDefend != 0;
+
+            _prevRight = runtime.PrevRight != 0;
+            _prevLeft = runtime.PrevLeft != 0;
+            _prevUp = runtime.PrevUp != 0;
+            _prevDown = runtime.PrevDown != 0;
+            _prevAttack = runtime.PrevAttack != 0;
+            _prevJump = runtime.PrevJump != 0;
+            _prevDefend = runtime.PrevDefend != 0;
+
+            _cdRight = runtime.CdRight;
+            _cdLeft = runtime.CdLeft;
+            _cdUp = runtime.CdUp;
+            _cdDown = runtime.CdDown;
+            _cdAttack = runtime.CdAttack;
+            _cdJump = runtime.CdJump;
+            _cdDefend = runtime.CdDefend;
+            _cdDefendLock = runtime.CdDefendLock;
+
+            _comboDRA = runtime.ComboDra;
+            _comboDLA = runtime.ComboDla;
+            _comboDUA = runtime.ComboDua;
+            _comboDDA = runtime.ComboDda;
+            _comboDRJ = runtime.ComboDrj;
+            _comboDLJ = runtime.ComboDlj;
+            _comboDUJ = runtime.ComboDuj;
+            _comboDDJ = runtime.ComboDdj;
+            _comboDJA = runtime.ComboDja;
         }
 
         public void OnStateExit()
@@ -152,13 +195,13 @@ namespace NTSD.Input
                 case FuncKeyMask.left: if (!_prevLeft) _cdLeft = 5; break;
                 case FuncKeyMask.up: if (!_prevUp) _cdUp = 5; break;
                 case FuncKeyMask.down: if (!_prevDown) _cdDown = 5; break;
-                case FuncKeyMask.att: if (!_prevAttack) _cdAttack = 5; break;
-                case FuncKeyMask.jump: if (!_prevJump) _cdJump = 5; break;
-                case FuncKeyMask.def: if (!_prevDefend) _cdDefend = 5; break;
+                case FuncKeyMask.att: if (!_prevAttack) _cdDefend = 5; break;
+                case FuncKeyMask.jump: if (!_prevJump) _cdAttack = 5; break;
+                case FuncKeyMask.def: if (!_prevDefend) _cdJump = 5; break;
             }
         }
 
-        private bool ApplyComboFrameInput(LF2Character character)
+        private bool ApplyComboFrameInput(LF2Entity character)
         {
             bool result = false;
 
@@ -176,7 +219,7 @@ namespace NTSD.Input
         }
 
         private bool RunCombo(
-            LF2Character character,
+            LF2Entity character,
             ref byte comboState,
             byte step2Cooldown,
             ComboMode step2Mode,
@@ -191,7 +234,7 @@ namespace NTSD.Input
 
             if (targetFrame != 0 && character.Runtime.LinkState != 2)
             {
-                bool jumped = character.TryInputFrameJump(targetFrame);
+                bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
                 if (!string.IsNullOrEmpty(facing))
                     character.SwitchDir(facing);
                 comboState = 0;
@@ -204,19 +247,25 @@ namespace NTSD.Input
             return false;
         }
 
-        private bool RunDjaCombo(LF2Character character)
+        private bool RunDjaCombo(LF2Entity character)
         {
             bool advanced = false;
             AdvanceCombo(ref _comboDJA, _cdJump, ComboMode.Jump, _cdAttack, ref advanced);
             if (_comboDJA != 3) return false;
 
             int targetFrame = character.Frame.D.hit_ja;
+            if (character.ShouldHoldCharacterDatDjaInputGuard(targetFrame))
+                return false;
+
             if (targetFrame != 0)
             {
-                bool jumped = character.TryInputFrameJump(targetFrame);
-                _comboDJA = 0;
-                if (jumped) ClearActionAndDirectionCooldowns();
-                return true;
+                if (character.CanEnterCharacterDatInputFrameJump())
+                {
+                    bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
+                    _comboDJA = 0;
+                    if (jumped) ClearActionAndDirectionCooldowns();
+                    return true;
+                }
             }
 
             if (ComboInterrupted(ComboMode.Attack, advanced))
@@ -260,14 +309,14 @@ namespace NTSD.Input
             }
         }
 
-        private bool ApplyDirectFrameInput(LF2Character character)
+        private bool ApplyDirectFrameInput(LF2Entity character)
         {
             if (character.Frame?.D == null)
                 return false;
 
             if (character.Frame.D.hit_a != 0 && _cdAttack > _cdDefend && _cdAttack > _cdJump)
             {
-                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_a);
+                bool jumped = character.TryCharacterDatInputFrameJump(character.Frame.D.hit_a);
                 if (jumped) ClearActionAndDirectionCooldowns();
                 _cdAttack = 0;
                 return true;
@@ -275,7 +324,7 @@ namespace NTSD.Input
 
             if (character.Frame.D.hit_d != 0 && _cdDefend > _cdAttack && _cdDefend > _cdJump)
             {
-                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_d);
+                bool jumped = character.TryCharacterDatInputFrameJump(character.Frame.D.hit_d);
                 if (jumped) ClearActionAndDirectionCooldowns();
                 _cdDefend = 0;
                 return true;
@@ -283,7 +332,7 @@ namespace NTSD.Input
 
             if (character.Frame.D.hit_j != 0 && _cdJump > _cdAttack && _cdJump > _cdDefend)
             {
-                bool jumped = character.TryInputFrameJump(character.Frame.D.hit_j);
+                bool jumped = character.TryCharacterDatInputFrameJump(character.Frame.D.hit_j);
                 if (jumped) ClearActionAndDirectionCooldowns();
                 _cdJump = 0;
                 return true;
@@ -346,10 +395,48 @@ namespace NTSD.Input
             if (code < 0)
                 return;
 
-            int[] history = owner.Runtime.InputHistory;
-            for (int i = history.Length - 1; i > 0; i--)
-                history[i] = history[i - 1];
-            history[0] = code;
+            owner.Runtime.PushInputHistory(code);
+        }
+
+        private void SyncToRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            runtime.KeyRight = _right ? (byte)1 : (byte)0;
+            runtime.KeyLeft = _left ? (byte)1 : (byte)0;
+            runtime.KeyUp = _up ? (byte)1 : (byte)0;
+            runtime.KeyDown = _down ? (byte)1 : (byte)0;
+            runtime.KeyAttack = _attack ? (byte)1 : (byte)0;
+            runtime.KeyJump = _jump ? (byte)1 : (byte)0;
+            runtime.KeyDefend = _defend ? (byte)1 : (byte)0;
+
+            runtime.PrevRight = _prevRight ? (byte)1 : (byte)0;
+            runtime.PrevLeft = _prevLeft ? (byte)1 : (byte)0;
+            runtime.PrevUp = _prevUp ? (byte)1 : (byte)0;
+            runtime.PrevDown = _prevDown ? (byte)1 : (byte)0;
+            runtime.PrevAttack = _prevAttack ? (byte)1 : (byte)0;
+            runtime.PrevJump = _prevJump ? (byte)1 : (byte)0;
+            runtime.PrevDefend = _prevDefend ? (byte)1 : (byte)0;
+
+            runtime.CdRight = _cdRight;
+            runtime.CdLeft = _cdLeft;
+            runtime.CdUp = _cdUp;
+            runtime.CdDown = _cdDown;
+            runtime.CdAttack = _cdAttack;
+            runtime.CdJump = _cdJump;
+            runtime.CdDefend = _cdDefend;
+            runtime.CdDefendLock = _cdDefendLock;
+
+            runtime.ComboDra = _comboDRA;
+            runtime.ComboDla = _comboDLA;
+            runtime.ComboDua = _comboDUA;
+            runtime.ComboDda = _comboDDA;
+            runtime.ComboDrj = _comboDRJ;
+            runtime.ComboDlj = _comboDLJ;
+            runtime.ComboDuj = _comboDUJ;
+            runtime.ComboDdj = _comboDDJ;
+            runtime.ComboDja = _comboDJA;
         }
 
         private enum ComboMode

@@ -980,7 +980,7 @@ namespace NTSD.Animation
                 string filePath = fileInfo.filePath;
                 onProgressText?.Invoke(FormatLoadingResourcePath(filePath));
 
-                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData32(filePath));
+                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
                 if (bmpData == null || bmpData.Pixels == null)
                 {
                     return 0;
@@ -988,7 +988,12 @@ namespace NTSD.Animation
 
                 int textureWidth = bmpData.Width;
                 int textureHeight = bmpData.Height;
-                Color32[] sourcePixels = bmpData.Pixels;
+                Color[] loadedPixels = bmpData.Pixels;
+                var sourcePixels = new Color32[loadedPixels.Length];
+                for (int i = 0; i < loadedPixels.Length; i++)
+                {
+                    sourcePixels[i] = loadedPixels[i];
+                }
 
                 int expectedWidth = fileInfo.col * (fileInfo.width + 1);
                 int expectedHeight = fileInfo.row * (fileInfo.height + 1);

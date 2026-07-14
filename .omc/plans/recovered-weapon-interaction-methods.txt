@@ -1,0 +1,188 @@
+        protected virtual bool HandleWeaponKind3Stick(InteractionArea itr, LF2Entity target)
+        {
+            if (target is LF2WeaponBase) return false;
+            if (!ItrArestTest()) return false;
+
+            int catchingFrame = itr.catchingact != null && itr.catchingact.Length > 0 ? itr.catchingact[0] : 0;
+            int caughtFrame   = itr.caughtact   != null && itr.caughtact.Length   > 0 ? itr.caughtact[0]   : 0;
+            if (catchingFrame <= 0 && caughtFrame <= 0)
+                return HandlePreInteractionKind3(itr, target); // 无粘附帧 → 普通攻击
+
+            if (catchingFrame > 0) SetFrameDirect(catchingFrame);
+            if (caughtFrame > 0 && target is LF2Character ch)
+            {
+                ch.ImmediateFrame(caughtFrame);
+            }
+            return true;
+        }
+
+        protected virtual bool TryApplyHit(InteractionArea itr, LF2Entity target)
+        {
+            if (!ItrArestTest()) return false;
+
+            if (target is LF2WeaponBase weapon)
+            {
+                return weapon.Hit(itr, this);
+            }
+
+            if (target is LF2SpecialAttack specialAttack)
+            {
+                return specialAttack.Hit(itr, this);
+            }
+
+            if (target is LF2Character character)
+            {
+                if (PS != null)
+                {
+                    var attackerPos = new Vector3(PS.x, PS.y, PS.z);
+                    return character.Hit(itr, this, attackerPos, default);
+                }
+            }
+
+            return false;
+        }
+
+        private void ApplyPickupGrabbedBy(LF2Character character)
+        {
+            int pickerLink;
+            // C++ release 0x0042E9F0-0x0042E9FC：type_sub=0x78 或 0x7C → grabbed_by=101（优先检查）
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            int typeSub = charData?.type_sub ?? 0;
+            if (typeSub == 0x78 || typeSub == 0x7C)
+                pickerLink = 101;
+            else if (IsHeavy)           // 重武器拾取标记
+                pickerLink = 2;
+            else if (WeaponType == 4)
+                pickerLink = 4;
+            else if (WeaponType == 6)
+                pickerLink = Health.HP > 0 ? 6 : 4;
+            else
+                pickerLink = 0;    // 轻武器
+
+            character.GrabbedBy = pickerLink;
+            GrabbedBy = -pickerLink;
+        }
+
+        private void ApplyPickupFrameJump(LF2Character character)
+        {
+            int jumpFrame = IsHeavy ? 116 : 115;
+            if (character.GetFrameDataById(jumpFrame) != null)
+            {
+                character.ImmediateFrame(jumpFrame);
+            }
+        }
+
+        protected virtual bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
+        {
+            if (HoldObj != null)
+            {
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                return false;
+            }
+            if (Renderer == null)
+            {
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                return false;
+            }
+
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
+            int wstate = GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround)
+            {
+                return false;
+            }
+
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                return false;
+            }
+            character.HoldWeapon(this);
+            ApplyPickupGrabbedBy(character);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
+        }
+
+        protected virtual bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
+        {
+            if (HoldObj != null)
+            {
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                return false;
+            }
+            if (Renderer == null)
+            {
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                return false;
+            }
+
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
+            int wstate = GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround)
+            {
+                return false;
+            }
+
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                return false;
+            }
+            character.HoldWeapon(this);
+            ApplyPickupGrabbedBy(character);
+            // C++ release 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
+            ApplyPickupFrameJump(character);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
+        }
+
+        protected virtual bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
+        {
+            // C++ release sub_419F80：kind=3 时若 target.charData.type != 0（即目标是武器）则跳过
+            // 否则走普通命中路径，与 kind=0 相同
+            if (target is LF2WeaponBase) return false;
+            return TryApplyHit(itr, target);
+        }
+
+        protected virtual bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
+        {
+            // C++ release 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
+            return HandlePreInteractionKind1(itr, target);
+        }
+
+        public override float GetSpriteWidthPxForCollision()
+        {
+            var wrapper = FrameCache?.Wrapper;
+            var files = wrapper?.characterData?.files;
+            if (files == null || files.Count == 0)
+                return 0f;
+
+            return files[0].width + 1;
+        }
+

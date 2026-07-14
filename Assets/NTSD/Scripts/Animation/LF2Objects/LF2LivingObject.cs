@@ -252,7 +252,7 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else if (dvx > 0f)
                 {
-                    float avx = Mathf.Abs(PS.vx);
+                    double avx = System.Math.Abs(PS.vx);
                     if (PS.y < 0 || avx < dvx)
                         PS.vx = Dirh() * dvx;
                 }

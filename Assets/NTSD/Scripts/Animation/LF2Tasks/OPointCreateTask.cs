@@ -36,6 +36,7 @@ namespace NTSD.Animation.LF2Tasks
         public float directVy;
         public float directVz;
         public bool preserveActionZero;
+        public bool skipPostInitZOffset;
         public bool useInitialRuntimeIntPosition;
         public int initialRuntimeX;
         public int initialRuntimeY;
@@ -76,6 +77,7 @@ namespace NTSD.Animation.LF2Tasks
             pos = Vector3.zero; z = 0f; dir = null; dvz = 0f;
             useDirectVelocity = false; directVx = 0f; directVy = 0f; directVz = 0f;
             preserveActionZero = false;
+            skipPostInitZOffset = false;
             useInitialRuntimeIntPosition = false;
             initialRuntimeX = 0;
             initialRuntimeY = 0;

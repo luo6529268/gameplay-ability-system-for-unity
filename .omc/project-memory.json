@@ -1,0 +1,473 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1783932336441,
+  "projectRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "EX-GAS-1.0",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "Assets": {
+      "path": "Assets",
+      "purpose": "Static assets",
+      "fileCount": 13,
+      "lastAccessed": 1783932336374,
+      "keyFiles": [
+        "EXMaid.meta",
+        "InputSystem.inputsettings.asset",
+        "InputSystem.inputsettings.asset.meta",
+        "KAKO.meta",
+        "NTSD.meta"
+      ]
+    },
+    "Bundles": {
+      "path": "Bundles",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1783932336374,
+      "keyFiles": []
+    },
+    "Library": {
+      "path": "Library",
+      "purpose": null,
+      "fileCount": 27,
+      "lastAccessed": 1783932336375,
+      "keyFiles": [
+        "AnnotationManager",
+        "ArtifactDB",
+        "ArtifactDB-lock",
+        "BuildPlayer.prefs",
+        "BuildSettings.asset"
+      ]
+    },
+    "Logs": {
+      "path": "Logs",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1783932336375,
+      "keyFiles": [
+        "build_check.log",
+        "build_p27.log",
+        "Packages-Update.log",
+        "shadercompiler-UnityShaderCompiler.exe0.log"
+      ]
+    },
+    "obj": {
+      "path": "obj",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1783932336375,
+      "keyFiles": []
+    },
+    "Packages": {
+      "path": "Packages",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1783932336376,
+      "keyFiles": [
+        "manifest.json",
+        "packages-lock.json"
+      ]
+    },
+    "ProjectSettings": {
+      "path": "ProjectSettings",
+      "purpose": null,
+      "fileCount": 32,
+      "lastAccessed": 1783932336377,
+      "keyFiles": [
+        "AttributeAsset.asset",
+        "AttributeSetAsset.asset",
+        "AudioManager.asset",
+        "BurstAotSettings_Android.json",
+        "BurstAotSettings_StandaloneWindows.json"
+      ]
+    },
+    "Temp": {
+      "path": "Temp",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1783932336377,
+      "keyFiles": [
+        "FSTimeGet-e47e9507d5df5a74a97a8490c352671c",
+        "UnityLockfile",
+        "workerlic"
+      ]
+    },
+    "Tools": {
+      "path": "Tools",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1783932336378,
+      "keyFiles": [
+        "check_png_size.py",
+        "CompileCheck.ps1",
+        "RunUnityTests.ps1"
+      ]
+    },
+    "UIElementsSchema": {
+      "path": "UIElementsSchema",
+      "purpose": null,
+      "fileCount": 16,
+      "lastAccessed": 1783932336378,
+      "keyFiles": [
+        "UIElements.xsd",
+        "Unity.Profiling.Editor.xsd",
+        "Unity.UI.Builder.xsd",
+        "UnityEditor.Experimental.GraphView.xsd",
+        "UnityEditor.Overlays.xsd"
+      ]
+    },
+    "UserSettings": {
+      "path": "UserSettings",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1783932336379,
+      "keyFiles": [
+        "EditorUserSettings.asset",
+        "Search.index",
+        "Search.settings"
+      ]
+    },
+    "Wiki": {
+      "path": "Wiki",
+      "purpose": null,
+      "fileCount": 32,
+      "lastAccessed": 1783932336379,
+      "keyFiles": [
+        "GAS_IMG_Intro.png",
+        "Granted Ability运作逻辑.jpg",
+        "QQ20240313114652.png",
+        "QQ20240313115953.png",
+        "QQ20240313121300.png"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "Assets\\NTSD\\Scripts",
+      "accessCount": 46,
+      "lastAccessed": 1783941827994,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.cs",
+      "accessCount": 36,
+      "lastAccessed": 1783941685143,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects",
+      "accessCount": 31,
+      "lastAccessed": 1783785016986,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.cs",
+      "accessCount": 17,
+      "lastAccessed": 1783925110362,
+      "type": "directory"
+    },
+    {
+      "path": "",
+      "accessCount": 16,
+      "lastAccessed": 1783843444740,
+      "type": "directory"
+    },
+    {
+      "path": "Assets",
+      "accessCount": 11,
+      "lastAccessed": 1783784075578,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterCatchResolver.cs",
+      "accessCount": 10,
+      "lastAccessed": 1783784892309,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.Held.partial.cs",
+      "accessCount": 9,
+      "lastAccessed": 1783790299731,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "accessCount": 9,
+      "lastAccessed": 1783941707522,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.ReleaseFlow.partial.cs",
+      "accessCount": 8,
+      "lastAccessed": 1783790299810,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\Logan\\.claude\\projects\\I--GitHub-Unity-GAS-gameplay-ability-system-for-unity\\memory\\MEMORY.md",
+      "accessCount": 8,
+      "lastAccessed": 1783930669677,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD",
+      "accessCount": 6,
+      "lastAccessed": 1783783625440,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.FrameControl.partial.cs",
+      "accessCount": 6,
+      "lastAccessed": 1783790299030,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Simulation\\SimulationWorld.Passes.partial.cs",
+      "accessCount": 6,
+      "lastAccessed": 1783941662735,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.HeldObject.partial.cs",
+      "accessCount": 5,
+      "lastAccessed": 1783784893612,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponReleaseFlowResolver.cs",
+      "accessCount": 5,
+      "lastAccessed": 1783787760053,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterHitResolver.cs",
+      "accessCount": 5,
+      "lastAccessed": 1783941792400,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponFrameLogicResolver.cs",
+      "accessCount": 4,
+      "lastAccessed": 1783783555502,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Generic.partial.cs",
+      "accessCount": 4,
+      "lastAccessed": 1783783683824,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterDamageStateResolver.cs",
+      "accessCount": 4,
+      "lastAccessed": 1783925079874,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Weapon.cs",
+      "accessCount": 4,
+      "lastAccessed": 1783941595003,
+      "type": "file"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "accessCount": 3,
+      "lastAccessed": 1783777983509,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "accessCount": 3,
+      "lastAccessed": 1783777984232,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterStateResolver.cs",
+      "accessCount": 3,
+      "lastAccessed": 1783781750282,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterActionResolver.cs",
+      "accessCount": 3,
+      "lastAccessed": 1783783066434,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponInteractionResolver.cs",
+      "accessCount": 3,
+      "lastAccessed": 1783925110086,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\BattleRuntimeSelfCheck.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783772819987,
+      "type": "file"
+    },
+    {
+      "path": "Assets/NTSD/Docs",
+      "accessCount": 2,
+      "lastAccessed": 1783773159049,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Catch.partial.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783781320440,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Locomotion.partial.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783782764001,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Hit.partial.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783783389056,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.Interaction.partial.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783783555870,
+      "type": "file"
+    },
+    {
+      "path": ".sisyphus\\plans\\state-machine-refactor.md",
+      "accessCount": 2,
+      "lastAccessed": 1783840158573,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterInteractionResolver.cs",
+      "accessCount": 2,
+      "lastAccessed": 1783925110000,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\Logan\\.claude\\projects\\I--GitHub-Unity-GAS-gameplay-ability-system-for-unity\\35d46233-e32f-4c2c-a9b0-e0fc716cdaa1\\tool-results\\call_019f51225c497dc1aee4d846.txt",
+      "accessCount": 1,
+      "lastAccessed": 1783772677324,
+      "type": "file"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.4\\ntsd24_pseudoc.txt",
+      "accessCount": 1,
+      "lastAccessed": 1783772703323,
+      "type": "directory"
+    },
+    {
+      "path": "C:\\Users\\Logan\\.claude\\projects\\I--GitHub-Unity-GAS-gameplay-ability-system-for-unity\\memory\\ntsd-bmd-023-fix-status.md",
+      "accessCount": 1,
+      "lastAccessed": 1783772857395,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\Logan\\.claude\\projects\\I--GitHub-Unity-GAS-gameplay-ability-system-for-unity\\memory\\unity-mcp-session-issue.md",
+      "accessCount": 1,
+      "lastAccessed": 1783773778069,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\Logan\\.claude\\projects\\I--GitHub-Unity-GAS-gameplay-ability-system-for-unity\\memory\\bmd-023-session-handoff.md",
+      "accessCount": 1,
+      "lastAccessed": 1783773831431,
+      "type": "file"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/SimulationWorld.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783777620638,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.Damage.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783777682049,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Damage.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783777759846,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Input.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783781750478,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Simulation",
+      "accessCount": 1,
+      "lastAccessed": 1783782570072,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.Lifecycle.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783782703503,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\Character\\PhysicsState.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783782955783,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.Helpers.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783783077310,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Gen",
+      "accessCount": 1,
+      "lastAccessed": 1783783942975,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.Lifecycle.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783783969137,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.ReleaseFlow.partial.cs",
+      "accessCount": 1,
+      "lastAccessed": 1783784479103,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

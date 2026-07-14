@@ -47,6 +47,10 @@ namespace NTSD.Simulation
         private int _cameraX;
         private int _cameraVel;
 
+        public int ReleaseCameraX => _cameraX;
+        internal int MaxRuntimeSlotsForServices => MaxRuntimeSlots;
+        internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
+
         private int GetRuntimeStableId(ISimObject obj)
         {
             return obj is LF2Entity entity ? entity.Runtime.StableId : obj.StableId;
@@ -81,6 +85,8 @@ namespace NTSD.Simulation
         public INTSDItrKindService ItrKindService { get; private set; }
         public DeterministicRng Rng { get; private set; }
         public BattleRuntimeState Runtime { get; private set; }
+        public int[] KillStats => Runtime.KillStats;
+        public int[] DamageStats => Runtime.DamageStats;
 
         public SimulationWorld()
         {
@@ -253,6 +259,11 @@ namespace NTSD.Simulation
                 return false;
 
             return true;
+        }
+
+        internal bool IsActiveForCurrentPassInternal(ISimObject obj)
+        {
+            return IsActiveForCurrentPass(obj);
         }
 
         public int AllocateStableId()

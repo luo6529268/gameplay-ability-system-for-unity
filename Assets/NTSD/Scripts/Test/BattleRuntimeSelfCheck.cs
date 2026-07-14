@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
 using NTSD.Input;
 using NTSD.Simulation;
 using UnityEngine;
@@ -47,12 +48,25 @@ namespace NTSD.Test
             {
                 BattleRuntimeSelfCheckCore.RunAllChecks();
                 CheckCatchingAttackAction();
+                CheckCatchingJumpAction();
                 CheckCatchingThrow();
+                CheckCpointDirControlUsesRuntimeInput();
                 CheckBeingCaughtPositionSync();
                 CheckCpointDecreaseEscape();
                 CheckSimulationWorldLateMutation();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
                 CheckSimulationPassesImmediateFrameDoesNotZeroAttacking();
+                CheckArestCooldownRule();
+                CheckFrameTickDefendLockTail();
+                CheckKind0HitRecords();
+                CheckAlternateHurtTriggerMatrix();
+                CheckAlternateDamageCoreSideEffects();
+                CheckAlternateDamageMotionTailMatrix();
+                CheckAlternateDamageCharacterEntry();
+                CheckAlternateDamageSharedDatEntry();
+                CheckAlternateDamageHeavyWeaponEntries();
+                CheckAlternateDamageInteractionVrest();
+                CheckSpecialAttackDamagePreprocess();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -64,107 +78,252 @@ namespace NTSD.Test
 
         private static void CheckCatchingAttackAction()
         {
+            var world = new SimulationWorld();
             var attacker = CreateCharacter("SelfCheck_Attacker", 1, BuildCatchingFrames());
             var victim = CreateCharacter("SelfCheck_Victim", 2, BuildVictimFrames());
-            var controller = new SelfCheckController();
+            var controller = new SelfCheckController { Jump = true, Right = true };
             attacker.Controller = controller;
+            world.Register(attacker);
+            world.Register(victim);
 
             attacker.ImmediateFrame(100);
             victim.ImmediateFrame(130);
             attacker.Catching = victim;
             victim.Catching = attacker;
+            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
             attacker.FrameDelay = 0;
             attacker.Runtime.CaughtDuration = 300;
+            attacker.Runtime.KeyJump = 0;
+            attacker.Runtime.CdAttack = 5;
+            attacker.Runtime.KeyLeft = 0;
+            attacker.Runtime.KeyRight = 0;
+            attacker.Runtime.KeyUp = 0;
+            attacker.Runtime.KeyDown = 0;
+            attacker.Trans.SetWait(attacker.Frame.D.wait, 7);
+            victim.Trans.SetWait(victim.Frame.D.wait, 8);
+            world.CaptureCollisionFrameSnapshotsAll();
 
-            controller.Attack = true;
-            controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.att, down: true);
-            attacker.InputState.UpdateFromBuffer(controller.InputBuffer, 1, attacker);
+            Expect(attacker.Match == world && victim.Match == world,
+                "catch self-check entities must resolve their registered SimulationWorld");
+            Expect(attacker.Runtime.SlotIndex >= 0 && victim.Runtime.SlotIndex >= 0 &&
+                   attacker.Runtime.SlotIndex != victim.Runtime.SlotIndex,
+                "catch self-check entities must receive distinct runtime slots");
+            Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
+                   victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
+                "catch self-check must establish both runtime cpoint links");
+            attacker.RunCpointCheckStep10();
 
-            attacker.RunTuCoreForSelfCheck();
+            Expect(attacker.CurrentFrameId == 100 && victim.CurrentFrameId == 130,
+                "live Controller jump must not trigger aaction when Runtime.KeyJump is clear");
 
-            Expect(attacker.CurrentFrameId == 120, "aaction 应直接写入抓取者帧 120");
+            controller.Jump = false;
+            attacker.Runtime.KeyJump = 1;
+
+            attacker.RunCpointCheckStep10();
+
+            Expect(attacker.CurrentFrameId == 120,
+                "runtime aaction with no runtime direction must ignore conflicting live Controller direction");
             Expect(victim.CurrentFrameId == 131, "aaction 目标帧 cpoint.vaction 应直接写入被抓者帧 131");
+            Expect(attacker.Trans.WaitCounter == 0 && victim.Trans.WaitCounter == 0,
+                "aaction immediate frame writes must reset both wait counters");
             Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0, "aaction 后双方 attacking 应清零");
+
+            attacker.ImmediateFrame(100);
+            victim.ImmediateFrame(130);
+            controller.Right = false;
+            attacker.Runtime.KeyRight = 1;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            attacker.RunCpointCheckStep10();
+
+            Expect(attacker.CurrentFrameId == 121,
+                "runtime direction must select taction even when the live Controller has no direction");
+            Expect(victim.CurrentFrameId == 131,
+                "taction must read vaction from the newly selected catcher frame");
+        }
+
+        private static void CheckCatchingJumpAction()
+        {
+            var world = new SimulationWorld();
+            var attacker = CreateCharacter("SelfCheck_JumpAction", 1, BuildCatchingFrames());
+            var victim = CreateCharacter("SelfCheck_JumpVictim", 2, BuildVictimFrames());
+            var controller = new SelfCheckController { Defend = true };
+            attacker.Controller = controller;
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.ImmediateFrame(160);
+            victim.ImmediateFrame(130);
+            attacker.Catching = victim;
+            victim.Catching = attacker;
+            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
+            attacker.FrameDelay = 0;
+            attacker.Runtime.KeyDefend = 0;
+            attacker.Runtime.CdJump = 5;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            attacker.RunCpointCheckStep10();
+
+            Expect(attacker.CurrentFrameId == 160 && victim.CurrentFrameId == 130,
+                "live Controller defend must not trigger jaction when Runtime.KeyDefend is clear");
+
+            controller.Defend = false;
+            attacker.Runtime.KeyDefend = 1;
+            attacker.RunCpointCheckStep10();
+
+            Expect(attacker.CurrentFrameId == 120 && victim.CurrentFrameId == 131,
+                "jaction must use Runtime.KeyDefend + Runtime.CdJump");
         }
 
         private static void CheckCatchingThrow()
         {
+            var world = new SimulationWorld();
             var attacker = CreateCharacter("SelfCheck_Thrower", 1, BuildCatchingFrames());
             var victim = CreateCharacter("SelfCheck_ThrowVictim", 2, BuildVictimFrames());
-            var controller = new SelfCheckController { Down = true };
+            var controller = new SelfCheckController { Up = true };
             attacker.Controller = controller;
+            world.Register(attacker);
+            world.Register(victim);
 
             attacker.ImmediateFrame(110);
             victim.ImmediateFrame(130);
             attacker.SwitchDir("left");
-            attacker.PS.x = 100f;
-            attacker.PS.y = 20f;
-            attacker.PS.z = 7f;
-            victim.PS.x = 0f;
-            victim.PS.y = 0f;
-            victim.PS.z = 1f;
+            attacker.Runtime.SetPosition(100f, 20f, 7f);
+            attacker.Runtime.SyncIntegerPosition();
+            victim.Runtime.SetPosition(0f, 0f, 1f);
+            victim.Runtime.SyncIntegerPosition();
             attacker.Catching = victim;
             victim.Catching = attacker;
+            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
             attacker.FrameDelay = 0;
+            attacker.Runtime.KeyUp = 0;
+            attacker.Runtime.KeyDown = 1;
+            world.CaptureCollisionFrameSnapshotsAll();
 
-            attacker.RunTuCoreForSelfCheck();
+            attacker.RunCpointCheckStep10();
 
             Expect(attacker.CurrentFrameId == 112, "throwvx 分支应让抓取者进入当前帧 next=112");
             Expect(victim.CurrentFrameId == 132, "throwvx 分支应无条件写入 victim vaction=132");
-            Expect(Nearly(victim.PS.vx, -8f), "左向投掷应反转 victim.vx");
-            Expect(Nearly(victim.PS.vy, -4f), "投掷应写入 victim.vy");
-            Expect(Nearly(victim.PS.vz, 3f), "按下方向投掷应写入正 throwvz");
+            Expect(Nearly(victim.Runtime.X, 124f) && Nearly(victim.Runtime.Y, -36f),
+                "throwvx branch must place the victim from the catcher frame/cpoint geometry");
+            Expect(Nearly(victim.Runtime.Vx, -8f), "左向投掷应反转 victim.vx");
+            Expect(Nearly(victim.Runtime.Vy, -4f), "投掷应写入 victim.vy");
+            Expect(Nearly(victim.Runtime.Vz, 3f), "按下方向投掷应写入正 throwvz");
             Expect(victim.WeaponCount == 25, "throwinjury>0 应写入 victim.WeaponCount");
-            Expect(attacker.Catching == null && victim.Catching == null, "投掷后双方抓取关系应清空");
+            Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
+                   victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
+                "throw kind1 sub-pass must not invent runtime link cleanup");
+        }
+
+        private static void CheckCpointDirControlUsesRuntimeInput()
+        {
+            var world = new SimulationWorld();
+            var attacker = CreateCharacter("SelfCheck_DirControl", 1, BuildCatchingFrames());
+            var victim = CreateCharacter("SelfCheck_DirControlVictim", 2, BuildVictimFrames());
+            attacker.Controller = new SelfCheckController { Left = true };
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.ImmediateFrame(150);
+            victim.ImmediateFrame(130);
+            attacker.SwitchDir("left");
+            attacker.Catching = victim;
+            victim.Catching = attacker;
+            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
+            attacker.FrameDelay = 0;
+            attacker.AttackingCounter = 2;
+            attacker.Runtime.KeyLeft = 0;
+            attacker.Runtime.KeyRight = 1;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            attacker.RunCpointCheckStep10();
+
+            Expect(attacker.Runtime.Dir == "right",
+                "dircontrol must follow Runtime.KeyRight instead of conflicting live Controller left");
         }
 
         private static void CheckBeingCaughtPositionSync()
         {
+            var world = new SimulationWorld();
             var catcher = CreateCharacter("SelfCheck_Catcher", 1, BuildCatchingFrames());
             var victim = CreateCharacter("SelfCheck_BeingCaught", 2, BuildVictimFrames());
+            world.Register(catcher);
+            world.Register(victim);
 
             catcher.ImmediateFrame(100);
             victim.ImmediateFrame(130);
-            catcher.SwitchDir("right");
+            catcher.SwitchDir("left");
+            catcher.PS.dir = "right";
             victim.SwitchDir("right");
-            catcher.PS.x = 50f;
-            catcher.PS.y = 12f;
-            catcher.PS.z = 4f;
+            catcher.Runtime.SetPosition(50f, 12f, 4f);
+            catcher.Runtime.SyncIntegerPosition();
+            victim.Runtime.SetPosition(0f, 0f, 0f);
+            victim.Runtime.SyncIntegerPosition();
             catcher.Catching = victim;
             victim.Catching = catcher;
+            catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
             victim.FrameDelay = 0;
+            victim.Trans.SetWait(victim.Frame.D.wait, 9);
+            world.CaptureCollisionFrameSnapshotsAll();
 
-            victim.RunTuCoreForSelfCheck();
+            catcher.RunWeaponSyncHeldStep10();
 
             Expect(victim.CurrentFrameId == 131, "被抓位置同步应按 catcher cpoint.vaction 写入被抓者帧");
-            Expect(Nearly(victim.PS.x, 56f), "被抓者 x 应按 catcher/vaction cpoint 组合计算");
-            Expect(Nearly(victim.PS.y, 20f), "被抓者 y 应按垂直坐标计算并应用 cover 修正");
-            Expect(Nearly(victim.PS.z, 3f), "被抓者 z 应复制 catcher 深度并应用 cover 修正");
-            Expect(victim.PS.dir == "right", "cover=10 应复制抓取者方向");
+            Expect(victim.Trans.WaitCounter == 0,
+                "being-caught vaction immediate frame write must reset the victim wait counter");
+            Expect(Nearly(victim.Runtime.X, 94f),
+                "held sync must use left-facing Runtime.Dir even when PS.dir is stale right");
+            Expect(Nearly(victim.Runtime.Y, 20f), "被抓者 y 应按垂直坐标计算并应用 cover 修正");
+            Expect(Nearly(victim.Runtime.Z, 3f), "被抓者 z 应复制 catcher 深度并应用 cover 修正");
+            Expect(victim.Runtime.Dir == "left", "cover=10 应复制抓取者 Runtime.Dir");
+            Expect(catcher.CaughtSlotIndex == victim.Runtime.SlotIndex &&
+                   victim.CatcherSlotIndex == catcher.Runtime.SlotIndex,
+                "position sync must preserve the established runtime cpoint links");
         }
 
         private static void CheckCpointDecreaseEscape()
         {
+            var world = new SimulationWorld();
             var attacker = CreateCharacter("SelfCheck_Decrease", 1, BuildCatchingFrames());
             var victim = CreateCharacter("SelfCheck_EscapeVictim", 2, BuildVictimFrames());
+            world.Register(attacker);
+            world.Register(victim);
 
             attacker.ImmediateFrame(140);
             victim.ImmediateFrame(130);
-            attacker.PS.x = 30f;
-            victim.PS.x = 10f;
+            attacker.Runtime.SetPosition(30f, 0f, 0f);
+            attacker.Runtime.SyncIntegerPosition();
+            victim.Runtime.SetPosition(10f, 0f, 0f);
+            victim.Runtime.SyncIntegerPosition();
             attacker.Catching = victim;
             victim.Catching = attacker;
+            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
             attacker.FrameDelay = 0;
             attacker.Runtime.CaughtDuration = 3;
+            attacker.Trans.SetWait(attacker.Frame.D.wait, 10);
+            victim.Trans.SetWait(victim.Frame.D.wait, 11);
+            world.CaptureCollisionFrameSnapshotsAll();
 
-            attacker.RunTuCoreForSelfCheck();
+            attacker.RunCpointCheckStep10();
 
             Expect(attacker.CurrentFrameId == 0, "decrease<0 逃脱后抓取者应回 frame 0");
             Expect(victim.CurrentFrameId == 181, "decrease<0 逃脱后被抓者应进入 frame 181");
+            Expect(attacker.Trans.WaitCounter == 0 && victim.Trans.WaitCounter == 0,
+                "decrease escape immediate frame writes must reset both wait counters");
             Expect(attacker.HitCount == 1 && victim.HitCount == 1, "decrease<0 逃脱后双方 HitCount 应为 1");
             Expect(Nearly(victim.KnockbackVx, -4f), "抓取者在右侧时被抓者 knockback_vx 应为 -4");
             Expect(Nearly(victim.KnockbackVy, -3f), "逃脱后被抓者 knockback_vy 应为 -3");
-            Expect(attacker.Catching == null && victim.Catching == null, "逃脱后双方抓取关系应清空");
+            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f),
+                "decrease escape must copy knockback into victim runtime velocity");
+            Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
+                   victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
+                "decrease kind1 sub-pass must not invent runtime link cleanup");
         }
 
         private static void CheckState0BelowGroundFrame212PreservesAttackingCounter()
@@ -227,25 +386,1240 @@ namespace NTSD.Test
                 "ImmediateFrame 路径会在 LF2Entity.cs:824 将其清零，违反 baseline parity");
         }
 
+        private static void CheckArestCooldownRule()
+        {
+            Expect(LF2Entity.ResolveArestCooldown(0, 0) == 4, "arest (0,0) must resolve to 4");
+            Expect(LF2Entity.ResolveArestCooldown(3, 0) == 4, "arest (3,0) must resolve to 4");
+            Expect(LF2Entity.ResolveArestCooldown(4, 0) == 4, "arest (4,0) must remain 4");
+            Expect(LF2Entity.ResolveArestCooldown(15, 0) == 15, "arest (15,0) must remain 15");
+            Expect(LF2Entity.ResolveArestCooldown(0, 1) == 0, "arest (0,1) must remain 0");
+            Expect(LF2Entity.ResolveArestCooldown(2, 20) == 2, "arest (2,20) must remain 2");
+            Expect(LF2Entity.ResolveArestCooldown(15, 20) == 15, "arest (15,20) must remain 15");
+        }
+
+        private static void CheckFrameTickDefendLockTail()
+        {
+            var character = CreateCharacter("SelfCheck_FrameTickDefendLock", 1, new LF2CharacterData
+            {
+                name = "SelfCheckFrameTickDefendLock",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 5, 0, 39, 79),
+                    Frame(1, 0, 5, 1, 39, 79),
+                    Frame(110, 0, 5, 110, 39, 79),
+                    Frame(114, 0, 5, 114, 39, 79),
+                }
+            });
+
+            character.ImmediateFrame(110);
+            character.Runtime.CdDefendLock = 0;
+            character.SimFrameTick(1);
+            Expect(character.Runtime.CdDefendLock == 3,
+                "frame_tick tail must set CdDefendLock=3 on frame 110");
+
+            character.ImmediateFrame(114);
+            character.Runtime.CdDefendLock = 0;
+            character.SimFrameTick(2);
+            Expect(character.Runtime.CdDefendLock == 3,
+                "frame_tick tail must set CdDefendLock=3 on frame 114");
+
+            character.ImmediateFrame(110);
+            character.Frame.D.cpoint = new CatchPoint { kind = 2 };
+            character.Runtime.CdDefendLock = 0;
+            character.SimFrameTick(3);
+            Expect(character.Runtime.CdDefendLock == 0,
+                "frame_tick cpoint kind=2 early return must not set CdDefendLock on frame 110");
+            character.Frame.D.cpoint = null;
+
+            character.ImmediateFrame(1);
+            character.Runtime.CdDefendLock = 7;
+            character.SimFrameTick(4);
+            Expect(character.Runtime.CdDefendLock == 7,
+                "frame_tick tail must not change CdDefendLock on an ordinary frame");
+
+            var world = new SimulationWorld();
+            world.Register(character);
+            character.Runtime.CdDefendLock = 3;
+            world.VrestTickAll(5);
+            Expect(character.Runtime.CdDefendLock == 2,
+                "cooldowns pass must decrement CdDefendLock from 3 to 2");
+            world.VrestTickAll(6);
+            Expect(character.Runtime.CdDefendLock == 1,
+                "cooldowns pass must decrement CdDefendLock from 2 to 1");
+            world.VrestTickAll(7);
+            Expect(character.Runtime.CdDefendLock == 0,
+                "cooldowns pass must decrement CdDefendLock from 1 to 0");
+            world.VrestTickAll(8);
+            Expect(character.Runtime.CdDefendLock == 0,
+                "cooldowns pass must keep CdDefendLock at zero");
+        }
+
+        private static void CheckKind0HitRecords()
+        {
+            LF2CharacterData frameData = new LF2CharacterData
+            {
+                name = "SelfCheckKind0HitRecord",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 0, 0, 40, 50),
+                }
+            };
+            var attacker = CreateCharacter("SelfCheck_HitRecordAttacker", 1, frameData);
+            var victim = CreateCharacter("SelfCheck_HitRecordVictim", 2, frameData);
+            attacker.SwitchDir("right");
+            attacker.Runtime.XInt = 100;
+            attacker.Runtime.YInt = -20;
+            victim.Runtime.XInt = 120;
+            victim.Runtime.YInt = -10;
+
+            attacker.Runtime.ZInt = 30;
+            victim.Runtime.ZInt = 20;
+            attacker.SetRuntimeSlotIndex(8);
+            victim.SetRuntimeSlotIndex(3);
+            victim.RecordKind0Hit(attacker, new InteractionArea
+            {
+                kind = 0, x = 5, y = 7, w = 30, h = 20, fall = 61, effect = 0
+            });
+            Expect(attacker.HitRecordCount == 1 && victim.HitRecordCount == 0,
+                "kind0 hit record must use the entity with the larger ZInt as owner");
+            Expect(attacker.GetHitRecordAge(0) == 0,
+                "effect=0 and fall>60 must create timer 0");
+            Expect(attacker.GetHitRecordX(0) >= 91 && attacker.GetHitRecordX(0) <= 99,
+                "kind0 hit record X must use the integer frame/itr formula plus [-4,4] RNG");
+            Expect(attacker.GetHitRecordZ(0) >= -27 && attacker.GetHitRecordZ(0) <= -19,
+                "kind0 hit record Z must use the integer frame/itr formula plus [-4,4] RNG");
+
+            attacker.Runtime.ZInt = 10;
+            victim.Runtime.ZInt = 20;
+            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 0 });
+            Expect(victim.HitRecordCount == 1 && victim.GetHitRecordAge(0) == 10,
+                "effect=0 and fall<=60 must create timer 10 on the larger-Z victim");
+
+            attacker.Runtime.ZInt = 15;
+            victim.Runtime.ZInt = 15;
+            attacker.SetRuntimeSlotIndex(9);
+            victim.SetRuntimeSlotIndex(2);
+            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 61, effect = 1 });
+            Expect(attacker.HitRecordCount == 2 && attacker.GetHitRecordAge(1) == 20,
+                "equal ZInt must use the larger runtime slot owner; effect=1/fall>60 timer must be 20");
+
+            attacker.SetRuntimeSlotIndex(2);
+            victim.SetRuntimeSlotIndex(9);
+            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 1 });
+            Expect(victim.HitRecordCount == 2 && victim.GetHitRecordAge(1) == 30,
+                "equal ZInt must use the larger runtime slot owner; effect=1/fall<=60 timer must be 30");
+
+            attacker.Runtime.ZInt = 10;
+            victim.Runtime.ZInt = 20;
+            for (int i = victim.HitRecordCount; i < LF2Entity.MaxHitRecordSlots; i++)
+                victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 0 });
+
+            int tailAge = victim.GetHitRecordAge(LF2Entity.MaxHitRecordSlots - 1);
+            int tailX = victim.GetHitRecordX(LF2Entity.MaxHitRecordSlots - 1);
+            int tailZ = victim.GetHitRecordZ(LF2Entity.MaxHitRecordSlots - 1);
+            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 61, effect = 1 });
+            Expect(victim.HitRecordCount == LF2Entity.MaxHitRecordSlots,
+                "kind0 hit records must not grow beyond 10 slots");
+            Expect(victim.GetHitRecordAge(LF2Entity.MaxHitRecordSlots - 1) == tailAge &&
+                   victim.GetHitRecordX(LF2Entity.MaxHitRecordSlots - 1) == tailX &&
+                   victim.GetHitRecordZ(LF2Entity.MaxHitRecordSlots - 1) == tailZ,
+                "a full kind0 hit-record owner must leave its tail record unchanged");
+        }
+
+        private static void CheckAlternateHurtTriggerMatrix()
+        {
+            var attackerData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateHurtAttacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var victimData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateHurtVictim",
+                type_sub = 37,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                    Frame(10, LF2States.Standing, 0, 10, 39, 79),
+                    Frame(20, LF2States.Standing, 0, 20, 39, 79),
+                    Frame(23, LF2States.Defending, 0, 23, 39, 79),
+                    Frame(110, LF2States.Defending, 0, 110, 39, 79),
+                }
+            };
+            var attacker = CreateCharacter("SelfCheck_AlternateHurtAttacker", 1, attackerData);
+            var victim = CreateCharacter("SelfCheck_AlternateHurtVictim", 2, victimData);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                effect = 0,
+                bdefend = 0,
+                dvx = 5,
+            };
+
+            attacker.SwitchDir("right");
+            victim.SwitchDir("right");
+            victim.Health.HP = 500;
+            victim.Runtime.PrevFrame2 = 0;
+            victim.HitStateCount = 15;
+            victim.ImmediateFrame(20);
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid37 must use alternate hurt while HitStateCount is within 15");
+            itr.effect = 6;
+            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid37 heavy effects must reject alternate hurt");
+
+            victimData.type_sub = 6;
+            victim.HitStateCount = 1;
+            itr.effect = 0;
+            victim.ImmediateFrame(10);
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid6 must use alternate hurt below frame 20");
+            victim.ImmediateFrame(20);
+            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid6 frame 20 in a non-special state must reject alternate hurt");
+            victim.ImmediateFrame(23);
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid6 state 7 must use alternate hurt at frame 20 or later");
+
+            victimData.type_sub = 52;
+            victim.HitStateCount = 15;
+            victim.ImmediateFrame(20);
+            attackerData.type_sub = 1;
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "oid52 must use alternate hurt for an ordinary attacker within its hit window");
+            attackerData.type_sub = 208;
+            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "attacker oid208 must reject oid52 alternate hurt");
+
+            victimData.type_sub = 1;
+            victim.HitStateCount = 100;
+            victim.Runtime.PrevFrame2 = 110;
+            victim.Health.HP = 500;
+            attackerData.type_sub = 1;
+            itr.bdefend = 60;
+            itr.dvx = 5;
+            attacker.SwitchDir("right");
+            victim.SwitchDir("left");
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "PrevFrame2 state 7 must allow alternate hurt when facings differ");
+            victim.SwitchDir("right");
+            itr.dvx = -1;
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "PrevFrame2 state 7 must allow alternate hurt for negative dvx");
+            itr.dvx = 5;
+            attackerData.type_sub = 124;
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "special defend attacker oid124 must allow alternate hurt with matching facings");
+            attackerData.type_sub = 1;
+            victim.SwitchDir("left");
+            itr.bdefend = 61;
+            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "PrevFrame2 defend alternate hurt must reject bdefend above 60");
+
+            victimData.type_sub = 37;
+            victim.HitStateCount = 0;
+            victim.Runtime.PrevFrame2 = 0;
+            itr.kind = 9;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "raw kind9 fixture must otherwise satisfy alternate-hurt selection");
+            Expect(!(itr.kind != 9 && LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr)),
+                "the caller gate must keep raw kind9 out of alternate hurt");
+        }
+
+        private static void CheckAlternateDamageCoreSideEffects()
+        {
+            var ordinaryData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageOrdinary",
+                type_sub = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var victimData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageVictim",
+                type_sub = 37,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                    Frame(110, LF2States.Defending, 5, 110, 39, 79),
+                    Frame(112, LF2States.BrokenDefend, 5, 112, 39, 79),
+                }
+            };
+            var world = new SimulationWorld();
+            var holder = CreateCharacter("SelfCheck_AlternateDamageHolder", 3, ordinaryData);
+            var attacker = CreateCharacter("SelfCheck_AlternateDamageAttacker", 1, ordinaryData);
+            var victim = CreateCharacter("SelfCheck_AlternateDamageVictim", 37, victimData);
+            world.Register(holder);
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            attacker.Runtime.LinkState = -1;
+            attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            attacker.SwitchDir("right");
+            attacker.FrameDelay = -9;
+            attacker.AttackExempt = 9;
+            attacker.Runtime.ZInt = 10;
+
+            holder.KillStat = 0;
+            holder.ComboCountAtk = 0;
+            holder.FrameDelay = 0;
+
+            victim.ImmediateFrame(110);
+            victim.Runtime.PrevFrame2 = 110;
+            victim.Runtime.Y = 0f;
+            victim.Runtime.YInt = 0;
+            victim.Runtime.Vx = 0f;
+            victim.Runtime.ZInt = 20;
+            victim.KnockbackVx = 0f;
+            victim.Health.HP = 5;
+            victim.Health.HPBound = 101;
+            victim.Health.HPLost = 7;
+            victim.FallDamageDiv = 200;
+            victim.KillCount = -1;
+            victim.Unk344 = 1;
+            victim.ComboCountVic = 0;
+            victim.FallCounter = 0;
+            victim.AttackingCounter = 7;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.AttackExempt = 13;
+            victim.Trans.SetWait(victim.Frame.D.wait, 73);
+
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 100,
+                bdefend = 31,
+                dvx = 5,
+                arest = 2,
+                vrest = 15,
+                effect = 0,
+            };
+
+            LF2AlternateDamageResolver.ApplyAlternateDamage(attacker, victim, victim.HitCounters, itr);
+            victim.RecordKind0Hit(attacker, itr);
+
+            Expect(victim.Health.HP == 0 && victim.Health.HPBound == 100,
+                "alternate damage must apply adjusted injury 50, reduced to 5, with integer HPBound division");
+            Expect(victim.Health.HPLost == 7,
+                "alternate damage must leave HPLost unchanged");
+            Expect(holder.KillStat == 1 && holder.ComboCountAtk == 5 && victim.ComboCountVic == 5,
+                "lethal alternate damage must update holder kill/combo and victim combo stats once");
+            Expect(world.KillStats[1] == 1 && world.DamageStats[1] == 5,
+                "alternate damage must update world kill and damage stat slot Unk344=1");
+            Expect(victim.FallCounter == 80 && victim.AttackingCounter == 0 &&
+                   victim.HitStateCount == 31 && victim.HitCount == 1,
+                "alternate damage must write lethal fall, attacking, hit-state, and hit-count fields");
+            Expect(attacker.FrameDelay == 3 && victim.FrameDelay == -5,
+                "alternate damage must overwrite both attacker and victim frame delays");
+            Expect(victim.CurrentFrameId == 112 && victim.Trans.WaitCounter == 73,
+                "grounded defended alternate damage must enter frame 112 without resetting wait_counter");
+            Expect(Nearly(victim.KnockbackVx, 2f),
+                "ground alternate knockback must use integer dvx/2 for dvx=5");
+            Expect(attacker.AttackExempt == 2 && victim.AttackExempt == 13,
+                "alternate damage must apply arest to the attacker only");
+            Expect(holder.FrameDelay == 3,
+                "a negative-link attacker must propagate its overwritten delay to the active holder");
+
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            Expect(victim.ItrRest.HasVrest(attackerSlot),
+                "alternate damage must create victim-side vrest for the attacker slot");
+            for (int i = 0; i < 11; i++)
+                victim.ItrRest.TickVrestForAttacker(attackerSlot);
+            Expect(victim.ItrRest.HasVrest(attackerSlot),
+                "vrest=15 must clamp to 12 rather than expire after 11 ticks");
+            victim.ItrRest.TickVrestForAttacker(attackerSlot);
+            Expect(!victim.ItrRest.HasVrest(attackerSlot),
+                "vrest=15 must expire after the clamped twelfth tick");
+
+            Expect(attacker.HitRecordCount + victim.HitRecordCount == 1,
+                "the alternate-damage caller must record exactly one kind0 hit");
+
+            int[] killStats = world.KillStats;
+            int[] damageStats = world.DamageStats;
+            world.ResetRuntimeState();
+            Expect(ReferenceEquals(killStats, world.KillStats) && ReferenceEquals(damageStats, world.DamageStats),
+                "world reset must preserve alternate-damage stat array identity");
+            for (int i = 0; i < killStats.Length; i++)
+            {
+                Expect(killStats[i] == 0 && damageStats[i] == 0,
+                    "world reset must clear every alternate-damage stat slot");
+            }
+        }
+
+        private static void CheckAlternateDamageMotionTailMatrix()
+        {
+            LF2CharacterData frameData = BuildAlternateDamageMotionFrames();
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    victim.FallCounter = 80;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, 3.0),
+                    "ground Fall80/dvx0 with a right-facing ordinary attacker must add +3 knockback"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.SwitchDir("left");
+                    victim.FallCounter = 80;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, -3.0),
+                    "ground Fall80/dvx0 with a left-facing ordinary attacker must add -3 knockback"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(21);
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    victim.FallCounter = 80;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, 6.0),
+                    "ground state2000 Fall80/dvx0 must add +6 when the attacker is left of the victim"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(21);
+                    SetAlternateDamagePosition(attacker, 20.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    victim.FallCounter = 80;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, -6.0),
+                    "ground state2000 Fall80/dvx0 must add -6 when the attacker is right of the victim"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(21);
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, 5.0),
+                    "ground state2000 nonzero dvx must use attacker/victim X ordering"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    SetAlternateDamagePosition(attacker, 20.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    itr.effect = 22;
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, 5.0),
+                    "ground effect22 must add +dvx when victim X is not greater than attacker X"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    itr.effect = 23;
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, -5.0),
+                    "ground effect23 must add -dvx when victim X is greater than attacker X"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    SetAlternateDamagePosition(victim, 10.0, -10.0);
+                    victim.FallCounter = 80;
+                    victim.Runtime.Vx = 5.0;
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, 6.0),
+                    "air Fall80 with abs(Vx)<6 and dvx<6 must use right-facing +6 knockback"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, -10.0);
+                    itr.effect = 23;
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, -5.0),
+                    "air effect23 must use victim/attacker X ordering"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.SwitchDir("left");
+                    SetAlternateDamagePosition(victim, 10.0, -10.0);
+                    itr.dvx = 5;
+                },
+                (attacker, victim, itr) => Expect(Nearly(victim.KnockbackVx, -5.0),
+                    "air generic alternate knockback must use the full signed dvx"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    victim.ImmediateFrame(110);
+                    victim.Runtime.PrevFrame2 = 0;
+                    victim.HitStateCount = 0;
+                    victim.Trans.SetWait(victim.Frame.D.wait, 47);
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(
+                    victim.CurrentFrameId == 111 && victim.Trans.WaitCounter == 47,
+                    "ground frame110 with HitStateCount<=30 must enter frame111 and preserve wait_counter"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(20);
+                    attacker.Trans.SetWait(attacker.Frame.D.wait, 63);
+                    attacker.Runtime.Vz = 6.0;
+                    victim.KnockbackVx = 8.0;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(
+                    attacker.CurrentFrameId >= 0 && attacker.CurrentFrameId < 16 &&
+                    Nearly(attacker.Runtime.Vx, -4.0) &&
+                    Nearly(attacker.Runtime.Vy, -4.0) &&
+                    Nearly(attacker.Runtime.Vz, -4.0) &&
+                    attacker.Trans.WaitCounter == 63,
+                    "state1002 tail must select frame0..15, apply reflected velocity, and preserve wait_counter"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(21);
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    attacker.Runtime.Vx = 5.0;
+                    attacker.Runtime.Vz = 10.0;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(
+                    Nearly(attacker.Runtime.Vx, 2.0) && Nearly(attacker.Runtime.Vz, 4.0),
+                    "state2000 attacker moving toward the victim must damp Vx and Vz by 0.4"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(21);
+                    SetAlternateDamagePosition(attacker, 0.0, 0.0);
+                    SetAlternateDamagePosition(victim, 10.0, 0.0);
+                    attacker.Runtime.Vx = -5.0;
+                    attacker.Runtime.Vz = 10.0;
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(
+                    Nearly(attacker.Runtime.Vx, -5.0) && Nearly(attacker.Runtime.Vz, 10.0),
+                    "state2000 attacker moving away from the victim must not damp velocity"));
+
+            RunAlternateDamageMotionCase(
+                frameData,
+                (attacker, victim, itr) =>
+                {
+                    attacker.ImmediateFrame(22);
+                    attacker.AttackingCounter = 7;
+                    attacker.Runtime.Vx = 5.0;
+                    attacker.Runtime.Vz = 9.0;
+                    attacker.Trans.SetWait(attacker.Frame.D.wait, 71);
+                    itr.dvx = 0;
+                },
+                (attacker, victim, itr) => Expect(
+                    attacker.CurrentFrameId == 10 &&
+                    attacker.AttackingCounter == 0 &&
+                    Nearly(attacker.Runtime.Vx, 0.0) &&
+                    Nearly(attacker.Runtime.Vz, 9.0) &&
+                    attacker.Trans.WaitCounter == 71,
+                    "state3000 tail must enter frame10, clear attacking/Vx, preserve Vz and wait_counter"));
+        }
+
+        private static void CheckAlternateDamageCharacterEntry()
+        {
+            var attackerData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageCharacterAttacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var victimData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageCharacterVictim",
+                type_sub = 37,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var world = new SimulationWorld();
+            var attacker = CreateCharacter("SelfCheck_AlternateDamageCharacterAttacker", 1, attackerData);
+            var victim = CreateCharacter("SelfCheck_AlternateDamageCharacterVictim", 37, victimData);
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.SwitchDir("right");
+            attacker.FrameDelay = 0;
+            attacker.AttackExempt = 0;
+            attacker.Runtime.ZInt = 10;
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 100;
+            victim.Health.HPLost = 7;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.FrameDelay = 0;
+            victim.Runtime.Y = 0f;
+            victim.Runtime.YInt = 0;
+            victim.Runtime.Vx = 0f;
+            victim.Runtime.ZInt = 20;
+            victim.KnockbackVx = 0f;
+
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 100,
+                dvx = 5,
+                bdefend = 0,
+                arest = 4,
+                vrest = 0,
+                effect = 0,
+            };
+            var volume = new PhysicsState.BattleVolume(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+
+            bool resolved = victim.Hit(itr, attacker, Vector3.zero, volume);
+
+            Expect(resolved,
+                "LF2Character.Hit must resolve the shared alternate-damage branch");
+            Expect(victim.Health.HP == 90 && victim.Health.HPBound == 97 && victim.Health.HPLost == 7,
+                "LF2Character.Hit alternate damage must apply reduced injury without changing HPLost");
+            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2f),
+                "LF2Character.Hit alternate damage must apply victim delay, hit count, and integer half-dvx");
+            Expect(attacker.FrameDelay == 3 && attacker.AttackExempt == 4,
+                "LF2Character.Hit alternate damage must apply attacker delay and arest");
+            Expect(attacker.HitRecordCount + victim.HitRecordCount == 1,
+                "LF2Character.Hit alternate damage must record exactly one kind0 hit");
+        }
+
+        private static void CheckAlternateDamageSharedDatEntry()
+        {
+            var attackerData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageSharedAttacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var victimData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageSharedVictim",
+                type_sub = 37,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "SelfCheck_AlternateDamageSharedAttacker",
+                1,
+                attackerData);
+            var victim = new AlternateDamageSelfCheckEntity();
+            victim.BindData(37, victimData);
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.SwitchDir("right");
+            attacker.FrameDelay = 0;
+            attacker.AttackExempt = 0;
+            attacker.Runtime.ZInt = 10;
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 100;
+            victim.Health.HPLost = 7;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.FrameDelay = 0;
+            victim.Runtime.Y = 0f;
+            victim.Runtime.YInt = 0;
+            victim.Runtime.Vx = 0f;
+            victim.Runtime.ZInt = 20;
+            victim.KnockbackVx = 0f;
+
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 100,
+                dvx = 5,
+                bdefend = 0,
+                arest = 4,
+                vrest = 0,
+                effect = 0,
+            };
+
+            bool resolved = LF2CharacterDatHitResolver.TryResolveHit(
+                victim,
+                itr,
+                attacker,
+                Vector3.zero,
+                default);
+
+            Expect(resolved,
+                "shared-DAT character entry must resolve the shared alternate-damage branch");
+            Expect(victim.Health.HP == 90 && victim.Health.HPBound == 97 && victim.Health.HPLost == 7,
+                "shared-DAT alternate damage must apply reduced injury without changing HPLost");
+            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2f),
+                "shared-DAT alternate damage must apply victim delay, hit count, and integer half-dvx");
+            Expect(attacker.FrameDelay == 3 && attacker.AttackExempt == 4,
+                "shared-DAT alternate damage must apply attacker delay and arest");
+            Expect(attacker.HitRecordCount + victim.HitRecordCount == 1,
+                "shared-DAT alternate damage must record exactly one kind0 hit");
+        }
+
+        private static void CheckAlternateDamageHeavyWeaponEntries()
+        {
+            LF2CharacterData weaponData = BuildAlternateDamageWeaponFrames();
+            var victimData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateHeavyVictim",
+                type_sub = 37,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                }
+            };
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 100,
+                dvx = 5,
+                bdefend = 0,
+                arest = 4,
+                vrest = 0,
+                effect = 0,
+            };
+
+            var characterWorld = new SimulationWorld();
+            AlternateDamageSelfCheckWeapon characterAttacker = CreateSelfCheckWeapon(
+                "SelfCheck_AlternateHeavyCharacterAttacker",
+                1,
+                2,
+                weaponData,
+                20);
+            LF2Character characterVictim = CreateCharacter(
+                "SelfCheck_AlternateHeavyCharacterVictim",
+                37,
+                victimData);
+            characterWorld.Register(characterAttacker);
+            characterWorld.Register(characterVictim);
+            PrepareAlternateEntry(characterAttacker, characterVictim);
+            characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;
+            characterAttacker.Runtime.Vz = 6.0;
+
+            bool characterResolved = characterVictim.Hit(itr, characterAttacker, Vector3.zero, default);
+
+            Expect(characterResolved && characterVictim.Health.HP == 90,
+                "real-character alternate damage must use the heavy weapon's original injury");
+            Expect(characterAttacker.Frame.N >= 0 && characterAttacker.Frame.N < 16 &&
+                   Nearly(characterAttacker.Runtime.Vx, -1.0) &&
+                   Nearly(characterAttacker.Runtime.Vy, -4.0) &&
+                   Nearly(characterAttacker.Runtime.Vz, -4.0),
+                "state1002 alternate tail must update frame and reflected velocity on a real weapon");
+            Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,
+                "state1002 alternate tail must not rewrite the independent runtime weapon state");
+
+            var sharedWorld = new SimulationWorld();
+            AlternateDamageSelfCheckWeapon sharedAttacker = CreateSelfCheckWeapon(
+                "SelfCheck_AlternateHeavySharedAttacker",
+                1,
+                2,
+                weaponData,
+                0);
+            var sharedVictim = new AlternateDamageSelfCheckEntity();
+            sharedVictim.BindData(37, victimData);
+            sharedWorld.Register(sharedAttacker);
+            sharedWorld.Register(sharedVictim);
+            PrepareAlternateEntry(sharedAttacker, sharedVictim);
+
+            bool sharedResolved = LF2CharacterDatHitResolver.TryResolveHit(
+                sharedVictim,
+                itr,
+                sharedAttacker,
+                Vector3.zero,
+                default);
+
+            Expect(sharedResolved && sharedVictim.Health.HP == 90,
+                "shared-DAT alternate damage must use the heavy weapon's original injury");
+
+            var guardWorld = new SimulationWorld();
+            LF2Character guardAttacker = CreateCharacter(
+                "SelfCheck_AlternateGuardAttacker",
+                1,
+                BuildAlternateDamageMotionFrames());
+            AlternateDamageSelfCheckWeapon guardVictim = CreateSelfCheckWeapon(
+                "SelfCheck_AlternateGuardWeaponVictim",
+                2,
+                1,
+                weaponData,
+                0);
+            guardWorld.Register(guardAttacker);
+            guardWorld.Register(guardVictim);
+            guardVictim.Health.HP = 100;
+            guardVictim.Health.HPBound = 100;
+
+            LF2AlternateDamageResolver.ApplyAlternateDamage(guardAttacker, guardVictim, null, itr);
+
+            Expect(guardVictim.Health.HP == 100 && guardVictim.Health.HPBound == 100,
+                "alternate damage must reject a non-character DAT victim");
+        }
+
+        private static void CheckAlternateDamageInteractionVrest()
+        {
+            var weaponItr = MakeInteractionItr(0, 1, 100, 4);
+            var weaponData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateVrestWeapon",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { InteractionFrame(weaponItr) },
+            };
+            var victimData = BuildInteractionVictimData("SelfCheckAlternateVrestWeaponVictim", 37);
+            var weaponWorld = new SimulationWorld();
+            AlternateDamageSelfCheckWeapon weapon = CreateSelfCheckWeapon(
+                "SelfCheck_AlternateVrestWeapon",
+                1,
+                1,
+                weaponData,
+                0);
+            LF2Character weaponVictim = CreateInteractionCharacter(
+                "SelfCheck_AlternateVrestWeaponVictim",
+                37,
+                victimData);
+            RegisterInteractionPair(weaponWorld, weapon, weaponVictim);
+
+            weaponWorld.CaptureCollisionFrameSnapshotsAll();
+            weaponWorld.CollectCollisionCandidatesAll();
+            weaponWorld.ObjectInteractionTickAll(1);
+            weaponWorld.EndCollisionCandidateConsumption();
+
+            int weaponSlot = weapon.Runtime.SlotIndex;
+            Expect(weaponVictim.Health.HP == 90 && weaponVictim.ItrRest.GetVrest(weaponSlot) == 4,
+                "weapon interaction must preserve alternate vrest clamp 1->4 after Hit returns");
+            Expect(weaponItr.vrest == 1,
+                "weapon interaction must not mutate authored raw vrest data");
+
+            var sharedItr = MakeInteractionItr(0, 20, 100, 4);
+            var sharedData = new LF2CharacterData
+            {
+                name = "SelfCheckAlternateVrestSharedAttacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { InteractionFrame(sharedItr) },
+            };
+            var sharedWorld = new SimulationWorld();
+            var sharedAttacker = new AlternateDamageSelfCheckEntity();
+            sharedAttacker.BindData(1, sharedData);
+            LF2Character sharedVictim = CreateInteractionCharacter(
+                "SelfCheck_AlternateVrestSharedVictim",
+                37,
+                BuildInteractionVictimData("SelfCheckAlternateVrestSharedVictim", 37));
+            RegisterInteractionPair(sharedWorld, sharedAttacker, sharedVictim);
+
+            sharedWorld.CaptureCollisionFrameSnapshotsAll();
+            sharedWorld.CollectCollisionCandidatesAll();
+            sharedWorld.PostInteractionTickAll(1);
+            sharedWorld.EndCollisionCandidateConsumption();
+
+            int sharedSlot = sharedAttacker.Runtime.SlotIndex;
+            Expect(sharedVictim.Health.HP == 90 && sharedVictim.ItrRest.GetVrest(sharedSlot) == 12,
+                "shared-DAT interaction must preserve alternate vrest clamp 20->12 after Hit returns");
+            Expect(sharedItr.vrest == 20,
+                "shared-DAT interaction must not mutate authored raw vrest data");
+        }
+
+        private static void CheckSpecialAttackDamagePreprocess()
+        {
+            RunSpecialAttackPreprocessCase(
+                kind: 4,
+                rawVrest: 1,
+                arrange: special =>
+                {
+                    special.WeaponCount = 1;
+                    special.SwitchDir("left");
+                    special.Runtime.Vx = 1.0;
+                },
+                verify: (special, victim, sourceItr) =>
+                {
+                    Expect(special.Health.HP == 100,
+                        "kind4 preprocessing must not zero special-attack HP");
+                    Expect(Nearly(victim.KnockbackVx, 3.0),
+                        "kind4 preprocessing must convert to kind0 and flip dvx for reverse travel");
+                    Expect(victim.ItrRest.GetVrest(special.Runtime.SlotIndex) == 4,
+                        "special-attack kind4 must preserve alternate vrest clamp 1->4");
+                    Expect(sourceItr.kind == 4 && sourceItr.dvx == 6,
+                        "kind4 preprocessing must not mutate authored itr data");
+                });
+
+            RunSpecialAttackPreprocessCase(
+                kind: 9,
+                rawVrest: 20,
+                arrange: special => special.SwitchDir("right"),
+                verify: (special, victim, sourceItr) =>
+                {
+                    Expect(special.Health.HP == 0,
+                        "kind9 character preprocessing must zero special-attack HP before consume");
+                    Expect(victim.Health.HP == 90,
+                        "kind9 character preprocessing must convert to kind0 and enter alternate damage");
+                    Expect(victim.ItrRest.GetVrest(special.Runtime.SlotIndex) == 12,
+                        "special-attack kind9 must preserve alternate vrest clamp 20->12");
+                    Expect(sourceItr.kind == 9,
+                        "kind9 preprocessing must not mutate authored itr data");
+                });
+        }
+
         private static void CheckSimulationWorldLateMutation()
         {
             var world = new SimulationWorld();
-            var spawner = new MutationSelfCheckObject(1, 0, registerDuringLate: true);
-            var remover = new MutationSelfCheckObject(2, 1, unregisterDuringLate: true);
+            var spawner = new MutationSelfCheckEntity(1, registerDuringLate: true);
+            var remover = new MutationSelfCheckEntity(2, unregisterDuringLate: true);
 
             world.Register(spawner);
             world.Register(remover);
+            int removerSlot = remover.Runtime.SlotIndex;
 
             world.LateEntityUpdateAll(1);
 
-            Expect(spawner.LateTickCount == 1, "LateEntityUpdateAll 应执行原始对象后期更新");
-            Expect(remover.LateTickCount == 1, "LateEntityUpdateAll 应允许对象在后期更新中请求注销");
-            Expect(world.ObjectCount == 2, "LateEntityUpdateAll 应延迟注销并允许新对象注册，不能破坏桶遍历");
+            Expect(spawner.LateTickCount == 1,
+                "LateEntityUpdateAll must execute the original spawner entity");
+            Expect(remover.LateTickCount == 1,
+                "LateEntityUpdateAll must allow an entity to request unregister during SimFrameTick");
+            Expect(spawner.Spawned != null && spawner.Spawned.LateTickCount == 1,
+                "an entity spawned into a later runtime slot must execute in the same late pass");
+            Expect(spawner.Spawned.Runtime.SlotIndex > removerSlot,
+                "the mutation fixture must place the spawned entity in a later runtime slot");
+            Expect(world.FindEntityByRuntimeSlotForQuery(removerSlot) == null,
+                "the unregistering entity must be removed when the late pass flushes mutations");
+            Expect(world.ObjectCount == 2,
+                "the late-pass mutation flush must leave only the spawner and spawned entity");
 
             world.LateEntityUpdateAll(2);
 
-            Expect(spawner.Spawned != null && spawner.Spawned.LateTickCount == 1,
-                "LateEntityUpdateAll 新注册对象应从下一次后期 pass 开始参与遍历");
+            Expect(spawner.LateTickCount == 2 && spawner.Spawned.LateTickCount == 2,
+                "the remaining entities must each continue on the second late pass");
+            Expect(remover.LateTickCount == 1 &&
+                   world.FindEntityByRuntimeSlotForQuery(removerSlot) == null,
+                "the removed entity must not execute or reappear on the second late pass");
+            Expect(world.ObjectCount == 2,
+                "the second late pass must preserve the two remaining entities");
+        }
+
+        private static LF2CharacterData BuildAlternateDamageWeaponFrames()
+        {
+            var frames = new List<LF2FrameData>();
+            for (int frameId = 0; frameId < 16; frameId++)
+                frames.Add(Frame(frameId, LF2States.Standing, 1, frameId, 39, 79));
+            frames.Add(Frame(20, LF2States.WeaponThrowing, 1, 20, 39, 79));
+
+            return new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageWeapon",
+                type_sub = 1,
+                frames = frames,
+            };
+        }
+
+        private static void PrepareAlternateEntry(LF2Entity attacker, LF2Entity victim)
+        {
+            attacker.SwitchDir("right");
+            attacker.FrameDelay = 0;
+            attacker.AttackExempt = 0;
+            attacker.Runtime.LinkState = 0;
+            attacker.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            SetAlternateDamagePosition(attacker, 0.0, 0.0);
+
+            victim.SwitchDir("right");
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 100;
+            victim.Health.HPLost = 0;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.FallCounter = 0;
+            victim.KillCount = 0;
+            victim.FrameDelay = 0;
+            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            victim.KnockbackVx = 0.0;
+            victim.KnockbackVy = 0.0;
+            victim.KnockbackVz = 0.0;
+            SetAlternateDamagePosition(victim, 10.0, 0.0);
+        }
+
+        private static InteractionArea MakeInteractionItr(int kind, int vrest, int injury, int dvx)
+        {
+            return new InteractionArea
+            {
+                kind = kind,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+                zwidth = 20,
+                injury = injury,
+                dvx = dvx,
+                bdefend = 0,
+                arest = 4,
+                vrest = vrest,
+                effect = 0,
+            };
+        }
+
+        private static LF2FrameData InteractionFrame(InteractionArea itr)
+        {
+            LF2FrameData frame = Frame(0, LF2States.Standing, 1, 0, 0, 0);
+            frame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+            });
+            if (itr != null)
+                frame.itrs.Add(itr);
+            return frame;
+        }
+
+        private static LF2CharacterData BuildInteractionVictimData(string name, int objectId)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                type_sub = objectId,
+                frames = new List<LF2FrameData> { InteractionFrame(null) },
+            };
+        }
+
+        private static AlternateDamageSelfCheckWeapon CreateSelfCheckWeapon(
+            string name,
+            int objectId,
+            int weaponType,
+            LF2CharacterData data,
+            int frameId)
+        {
+            var weapon = new AlternateDamageSelfCheckWeapon();
+            weapon.BindData(name, objectId, weaponType, data, frameId);
+            return weapon;
+        }
+
+        private static LF2Character CreateInteractionCharacter(string name, int objectId, LF2CharacterData data)
+        {
+            var character = new InteractionSelfCheckCharacter();
+            character.ModuleInitialize();
+            character.Name = name;
+            character.ObjectId = objectId;
+            character.Controller = new SelfCheckController();
+            character.FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+            character.Frame.D = character.FrameCache.GetFrameDataById(0);
+            character.Frame.PN = 0;
+            character.Frame.N = 0;
+            character.Initialize(500, 500);
+            character.FrameDelay = 0;
+            character.SetRuntimeSlotIndex(character.StableId);
+            return character;
+        }
+
+        private static void RegisterInteractionPair(
+            SimulationWorld world,
+            LF2Entity attacker,
+            LF2Character victim)
+        {
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.Team = 1;
+            attacker.RelationTeam = 1;
+            attacker.Health.HP = 100;
+            attacker.Health.HPBound = 100;
+            attacker.FrameDelay = 0;
+            attacker.AttackExempt = 0;
+            attacker.Runtime.LinkState = 0;
+            attacker.ItrRest.Reset();
+            attacker.Runtime.SetPosition(0.0, 0.0, 0.0);
+            attacker.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            attacker.Runtime.SyncIntegerPosition();
+
+            victim.Team = 2;
+            victim.RelationTeam = 2;
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 100;
+            victim.Health.HPLost = 0;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.FallCounter = 0;
+            victim.KillCount = 0;
+            victim.FrameDelay = 0;
+            victim.ItrRest.Reset();
+            victim.KnockbackVx = 0.0;
+            victim.KnockbackVy = 0.0;
+            victim.KnockbackVz = 0.0;
+            victim.Runtime.SetPosition(0.0, 0.0, 0.0);
+            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            victim.Runtime.SyncIntegerPosition();
+        }
+
+        private static void RunSpecialAttackPreprocessCase(
+            int kind,
+            int rawVrest,
+            Action<AlternateDamageSelfCheckSpecialAttack> arrange,
+            Action<AlternateDamageSelfCheckSpecialAttack, LF2Character, InteractionArea> verify)
+        {
+            InteractionArea sourceItr = MakeInteractionItr(kind, rawVrest, 100, 6);
+            var specialData = new LF2CharacterData
+            {
+                name = $"SelfCheckSpecialPreprocess{kind}",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { InteractionFrame(sourceItr) },
+            };
+            var world = new SimulationWorld();
+            var special = new AlternateDamageSelfCheckSpecialAttack();
+            special.BindData($"SelfCheck_SpecialPreprocess{kind}", 1, specialData);
+            LF2Character victim = CreateInteractionCharacter(
+                $"SelfCheck_SpecialPreprocessVictim{kind}",
+                37,
+                BuildInteractionVictimData($"SelfCheckSpecialPreprocessVictim{kind}", 37));
+            RegisterInteractionPair(world, special, victim);
+            arrange(special);
+
+            special.SimTU(1);
+            Expect(victim.Health.HP == 100,
+                "special-attack TU must not consume interaction candidates");
+
+            special.FrameDelay = 0;
+            special.AttackExempt = 0;
+            special.Runtime.SetPosition(0.0, 0.0, 0.0);
+            special.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            special.Runtime.SyncIntegerPosition();
+            arrange(special);
+            victim.Runtime.SetPosition(0.0, 0.0, 0.0);
+            victim.Runtime.SyncIntegerPosition();
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            world.ObjectInteractionTickAll(2);
+            world.EndCollisionCandidateConsumption();
+
+            Expect(victim.Health.HP == 90,
+                "special-attack object-interaction pass must resolve alternate damage");
+            verify(special, victim, sourceItr);
+        }
+
+        private static void RunAlternateDamageMotionCase(
+            LF2CharacterData frameData,
+            Action<LF2Character, LF2Character, InteractionArea> arrange,
+            Action<LF2Character, LF2Character, InteractionArea> verify)
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter("SelfCheck_AlternateMotionAttacker", 1, frameData);
+            LF2Character victim = CreateCharacter("SelfCheck_AlternateMotionVictim", 2, frameData);
+            world.Register(attacker);
+            world.Register(victim);
+
+            attacker.ImmediateFrame(0);
+            victim.ImmediateFrame(0);
+            attacker.SwitchDir("right");
+            victim.SwitchDir("right");
+            SetAlternateDamagePosition(attacker, 0.0, 0.0);
+            SetAlternateDamagePosition(victim, 10.0, 0.0);
+            attacker.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            attacker.Runtime.LinkState = 0;
+            attacker.Runtime.HolderStableId = -1;
+            attacker.HolderCopySlot = -1;
+            attacker.AttackExempt = 0;
+            attacker.FrameDelay = 0;
+            victim.Health.HP = 500;
+            victim.Health.HPBound = 500;
+            victim.Health.HPLost = 0;
+            victim.FallDamageDiv = 0;
+            victim.KillCount = 0;
+            victim.Unk344 = 0;
+            victim.ComboCountVic = 0;
+            victim.FallCounter = 0;
+            victim.AttackingCounter = 0;
+            victim.HitStateCount = 0;
+            victim.HitCount = 0;
+            victim.KnockbackVx = 0.0;
+            victim.KnockbackVy = 0.0;
+            victim.KnockbackVz = 0.0;
+            victim.FrameDelay = 0;
+            victim.Runtime.PrevFrame2 = 0;
+
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 0,
+                bdefend = 0,
+                dvx = 0,
+                arest = 0,
+                vrest = 0,
+                effect = 0,
+            };
+
+            arrange(attacker, victim, itr);
+            LF2AlternateDamageResolver.ApplyAlternateDamage(attacker, victim, victim.HitCounters, itr);
+            verify(attacker, victim, itr);
+        }
+
+        private static void SetAlternateDamagePosition(LF2Entity entity, double x, double y)
+        {
+            entity.Runtime.SetPosition(x, y, 0.0);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private static LF2CharacterData BuildAlternateDamageMotionFrames()
+        {
+            var frames = new List<LF2FrameData>();
+            for (int frameId = 0; frameId < 16; frameId++)
+                frames.Add(Frame(frameId, LF2States.Standing, 1, frameId, 39, 79));
+
+            frames.Add(Frame(20, LF2States.WeaponThrowing, 2, 20, 39, 79));
+            frames.Add(Frame(21, LF2States.HeavyWeaponInSky, 2, 21, 39, 79));
+            frames.Add(Frame(22, LF2States.ProjectileFlying, 2, 22, 39, 79));
+            frames.Add(Frame(110, LF2States.Defending, 5, 111, 39, 79));
+            frames.Add(Frame(111, LF2States.Defending, 6, 111, 39, 79));
+
+            return new LF2CharacterData
+            {
+                name = "SelfCheckAlternateDamageMotion",
+                type_sub = 1,
+                frames = frames,
+            };
         }
 
         private static LF2Character CreateCharacter(string name, int objectId, LF2CharacterData data)
@@ -274,9 +1648,10 @@ namespace NTSD.Test
                 frames = new List<LF2FrameData>
                 {
                     Frame(0, 0, 0, 0, 39, 79),
+                    Frame(212, 5, 1, 212, 39, 79),
                     Frame(100, 9, 1, 100, 39, 79, new CatchPoint
                     {
-                        kind = 1, x = 20, y = 30, vaction = 131, aaction = 120, cover = 10, hurtable = 1
+                        kind = 1, x = 20, y = 30, vaction = 131, aaction = 120, taction = 121, cover = 10, hurtable = 1
                     }),
                     Frame(110, 9, 1, 112, 40, 80, new CatchPoint
                     {
@@ -288,9 +1663,21 @@ namespace NTSD.Test
                     {
                         kind = 1, x = 20, y = 30, vaction = 131, cover = 10, hurtable = 1
                     }),
+                    Frame(121, 9, 1, 121, 39, 79, new CatchPoint
+                    {
+                        kind = 1, x = 20, y = 30, vaction = 131, cover = 10, hurtable = 1
+                    }),
                     Frame(140, 9, 1, 140, 39, 79, new CatchPoint
                     {
                         kind = 1, x = 20, y = 30, vaction = 131, decrease = -5, cover = 10, hurtable = 1
+                    }),
+                    Frame(150, 9, 1, 150, 39, 79, new CatchPoint
+                    {
+                        kind = 1, x = 20, y = 30, vaction = 131, dircontrol = 1, cover = 10, hurtable = 1
+                    }),
+                    Frame(160, 9, 1, 160, 39, 79, new CatchPoint
+                    {
+                        kind = 1, x = 20, y = 30, vaction = 131, jaction = 120, cover = 10, hurtable = 1
                     }),
                 }
             };
@@ -355,6 +1742,11 @@ namespace NTSD.Test
             return Mathf.Abs(actual - expected) <= 0.001f;
         }
 
+        private static bool Nearly(double actual, double expected)
+        {
+            return System.Math.Abs(actual - expected) <= 0.001;
+        }
+
         private sealed class SelfCheckController : ILF2Controller
         {
             public bool Up { get; set; }
@@ -394,43 +1786,126 @@ namespace NTSD.Test
             }
         }
 
-        private sealed class MutationSelfCheckObject : ISimObject
+        private sealed class InteractionSelfCheckCharacter : LF2Character
+        {
+            public override float GetSpriteWidthPxForCollision() => 100f;
+        }
+
+        private sealed class AlternateDamageSelfCheckWeapon : LF2Weapon
+        {
+            public override float GetSpriteWidthPxForCollision() => 100f;
+
+            public void BindData(
+                string name,
+                int objectId,
+                int weaponType,
+                LF2CharacterData data,
+                int frameId)
+            {
+                Name = name;
+                ObjectId = objectId;
+                SetWeaponType(weaponType);
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(frameId);
+                Frame.PN = frameId;
+                Frame.N = frameId;
+                Runtime.Frame = frameId;
+                Runtime.PrevFrame2 = frameId;
+                Health.HP = 500;
+                Health.HPBound = 500;
+            }
+        }
+
+        private sealed class AlternateDamageSelfCheckSpecialAttack : LF2SpecialAttack
+        {
+            public override float GetSpriteWidthPxForCollision() => 100f;
+
+            public void BindData(string name, int objectId, LF2CharacterData data)
+            {
+                Name = name;
+                ObjectId = objectId;
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Health.HP = 100;
+                Health.HPBound = 100;
+            }
+        }
+
+        private sealed class AlternateDamageSelfCheckEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Character;
+            public override float GetSpriteWidthPxForCollision() => 100f;
+
+            public AlternateDamageSelfCheckEntity()
+            {
+                Name = "SelfCheck_AlternateDamageSharedVictim";
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+            }
+
+            public void BindData(int objectId, LF2CharacterData data)
+            {
+                ObjectId = objectId;
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class MutationSelfCheckEntity : LF2Entity
         {
             private readonly bool _registerDuringLate;
             private readonly bool _unregisterDuringLate;
-            private SimContext _ctx;
 
-            public MutationSelfCheckObject Spawned { get; private set; }
+            public MutationSelfCheckEntity Spawned { get; private set; }
             public int LateTickCount { get; private set; }
-            public int SimOrder { get; }
-            public int StableId { get; }
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
-            public MutationSelfCheckObject(int stableId, int simOrder, bool registerDuringLate = false, bool unregisterDuringLate = false)
+            public MutationSelfCheckEntity(int stableId, bool registerDuringLate = false, bool unregisterDuringLate = false)
             {
                 StableId = stableId;
-                SimOrder = simOrder;
                 _registerDuringLate = registerDuringLate;
                 _unregisterDuringLate = unregisterDuringLate;
             }
 
-            public void OnAdded(SimContext ctx)
-            {
-                _ctx = ctx;
-            }
-
-            public void SimLateTick(int tickIndex)
+            public override void SimFrameTick(int tickIndex)
             {
                 LateTickCount++;
 
                 if (_registerDuringLate && Spawned == null)
                 {
-                    Spawned = new MutationSelfCheckObject(1000 + StableId, SimOrder + 10);
-                    _ctx.World.Register(Spawned);
+                    Spawned = new MutationSelfCheckEntity(1000 + StableId);
+                    Match.Register(Spawned);
                 }
 
                 if (_unregisterDuringLate && LateTickCount == 1)
-                    _ctx.World.Unregister(this);
+                    Match.Unregister(this);
             }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
         }
     }
 }

@@ -30,6 +30,7 @@ namespace NTSD.Simulation
         public int CaughtSlotIndex = -1;
         public int CatcherSlotIndex = -1;
         public int HeldWeaponStableId = -1;
+        public int ThrowFrameGuard = -1;
         public int CaughtDuration;
         public int CaughtFrontFlag = 1;
         public int CatchingStateTU;
@@ -39,26 +40,63 @@ namespace NTSD.Simulation
         public int LateSpecialTargetX;
         public int LateSpecialTargetZ;
         public int[] InputHistory = new int[6];
+        public byte CdAttack;
+        public byte CdJump;
+        public byte CdDefend;
+        public byte CdDefendLock;
+        public byte CdRight;
+        public byte CdLeft;
+        public byte CdUp;
+        public byte CdDown;
+        public byte ComboDra;
+        public byte ComboDla;
+        public byte ComboDua;
+        public byte ComboDda;
+        public byte ComboDrj;
+        public byte ComboDlj;
+        public byte ComboDuj;
+        public byte ComboDdj;
+        public byte ComboDja;
+        public byte PrevUp;
+        public byte PrevDown;
+        public byte PrevLeft;
+        public byte PrevRight;
+        public byte PrevJump;
+        public byte PrevDefend;
+        public byte PrevAttack;
+        public byte KeyUp;
+        public byte KeyDown;
+        public byte KeyLeft;
+        public byte KeyRight;
+        public byte KeyAttack;
+        public byte KeyJump;
+        public byte KeyDefend;
         public int HolderStableId = -1;
         public int HolderCopySlotIndex = -1;
         public int PickerStableId = -1;
         public int TrackerFlag;
         public bool AiControlled;
 
-        public float X;
-        public float Y;
-        public float Z;
+        public double X;
+        public double Y;
+        public double Z;
         public int XInt;
         public int YInt;
         public int ZInt;
-        public float Vx;
-        public float Vy;
-        public float Vz;
+        public double Vx;
+        public double Vy;
+        public double Vz;
         public float SpriteX;
         public float SpriteY;
         public float SpriteZ;
-        public float Type3VisualZOffset;
+        public double Type3VisualZOffset;
         public float RenderOffsetX;
+        public string Dir = "right";
+        public float Zz;
+        public bool XBoundPositive;
+        public bool XBoundNegative;
+        public bool ZBoundPositive;
+        public bool ZBoundNegative;
 
         public int Frame;
         public int PrevFrame2;
@@ -76,9 +114,9 @@ namespace NTSD.Simulation
         public int AttackingCounter;
         public int FrameDelay;
         public int HitStop;
-        public float KnockbackVx;
-        public float KnockbackVy;
-        public float KnockbackVz;
+        public double KnockbackVx;
+        public double KnockbackVy;
+        public double KnockbackVz;
         public int ShakeTimer;
         public int AttackExempt;
         public int HitStateCount;
@@ -90,6 +128,10 @@ namespace NTSD.Simulation
         public int HealTimer;
         public int CatchTimer;
         public int KillCount = -1;
+        public int ComboCountVic;
+        public int ComboCountAtk;
+        public int KillStat;
+        public int Unk344;
         public int ShotCount;
         public int WeaponCount;
         public int FallDamageDiv;
@@ -106,12 +148,125 @@ namespace NTSD.Simulation
         public int HP = 500;
         public int HPBound = 500;
         public int HP3 = 500;
+        public int HPOrig;
+        public int HP2Orig;
+        public int RespawnCount;
         public int HPLost;
         public int MP = 500;
         public int MPMax = 500;
         public int PP = 500;
         public int PPMax = 500;
         public int PPBound = 500;
+        public int PpDisplay;
+
+        public void SetPosition(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
+        public void SetVelocity(double vx, double vy, double vz)
+        {
+            Vx = vx;
+            Vy = vy;
+            Vz = vz;
+        }
+
+        public void SyncIntegerPosition()
+        {
+            XInt = (int)X;
+            YInt = (int)Y;
+            ZInt = (int)Z;
+        }
+
+        public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)
+        {
+            SpriteX = (float)(Dir == "right"
+                ? X - centerx
+                : X + centerx - spriteWidthPx);
+            SpriteY = (float)(Y + Z - centery);
+            SpriteZ = (float)Z;
+        }
+
+        public void ClearBounds()
+        {
+            XBoundPositive = false;
+            XBoundNegative = false;
+            ZBoundPositive = false;
+            ZBoundNegative = false;
+        }
+
+        public int ResolveActiveHeldSlotIndex()
+        {
+            return LinkState > 0 ? TargetSlotIndex : -1;
+        }
+
+        public int ResolveActiveHolderSlotIndex()
+        {
+            return LinkState < 0 ? HolderStableId : -1;
+        }
+
+        public bool IsActivelyHeldBySlot(int holderSlotIndex)
+        {
+            return LinkState < 0 && HolderStableId == holderSlotIndex;
+        }
+
+        public void RollInputFromCurrent()
+        {
+            PrevUp = KeyUp;
+            PrevDown = KeyDown;
+            PrevLeft = KeyLeft;
+            PrevRight = KeyRight;
+            PrevJump = KeyJump;
+            PrevDefend = KeyDefend;
+            PrevAttack = KeyAttack;
+        }
+
+        public void PushInputHistory(int keyNum)
+        {
+            EnsureInputHistory();
+            InputHistory[1] = InputHistory[2];
+            InputHistory[2] = InputHistory[3];
+            InputHistory[3] = InputHistory[4];
+            InputHistory[4] = InputHistory[5];
+            InputHistory[5] = keyNum;
+        }
+
+        public void SetInputHistoryGate(bool enabled)
+        {
+            EnsureInputHistory();
+            InputHistory[0] = enabled ? 1 : 0;
+        }
+
+        public void ClearInputHistoryTail()
+        {
+            EnsureInputHistory();
+            Array.Clear(InputHistory, 1, InputHistory.Length - 1);
+        }
+
+        public void TickInputCooldowns()
+        {
+            if (CdRight > 0) CdRight--;
+            if (CdLeft > 0) CdLeft--;
+            if (CdUp > 0) CdUp--;
+            if (CdDown > 0) CdDown--;
+            if (CdJump > 0) CdJump--;
+            if (CdAttack > 0) CdAttack--;
+            if (CdDefend > 0) CdDefend--;
+        }
+
+        private void EnsureInputHistory()
+        {
+            if (InputHistory == null || InputHistory.Length != 6)
+                InputHistory = new int[6];
+        }
+
+        internal void TickDefendLockCooldown()
+        {
+            if (CdDefendLock > 0)
+                CdDefendLock--;
+        }
 
         public void Reset()
         {
@@ -134,6 +289,7 @@ namespace NTSD.Simulation
             CaughtSlotIndex = -1;
             CatcherSlotIndex = -1;
             HeldWeaponStableId = -1;
+            ThrowFrameGuard = -1;
             CaughtDuration = 0;
             CaughtFrontFlag = 1;
             CatchingStateTU = 0;
@@ -142,10 +298,39 @@ namespace NTSD.Simulation
             AnimSub = 0;
             LateSpecialTargetX = 0;
             LateSpecialTargetZ = 0;
-            if (InputHistory == null || InputHistory.Length != 6)
-                InputHistory = new int[6];
-            else
-                Array.Clear(InputHistory, 0, InputHistory.Length);
+            EnsureInputHistory();
+            Array.Clear(InputHistory, 0, InputHistory.Length);
+            CdAttack = 0;
+            CdJump = 0;
+            CdDefend = 0;
+            CdDefendLock = 0;
+            CdRight = 0;
+            CdLeft = 0;
+            CdUp = 0;
+            CdDown = 0;
+            ComboDra = 0;
+            ComboDla = 0;
+            ComboDua = 0;
+            ComboDda = 0;
+            ComboDrj = 0;
+            ComboDlj = 0;
+            ComboDuj = 0;
+            ComboDdj = 0;
+            ComboDja = 0;
+            PrevUp = 0;
+            PrevDown = 0;
+            PrevLeft = 0;
+            PrevRight = 0;
+            PrevJump = 0;
+            PrevDefend = 0;
+            PrevAttack = 0;
+            KeyUp = 0;
+            KeyDown = 0;
+            KeyLeft = 0;
+            KeyRight = 0;
+            KeyAttack = 0;
+            KeyJump = 0;
+            KeyDefend = 0;
             HolderStableId = -1;
             HolderCopySlotIndex = -1;
             PickerStableId = -1;
@@ -163,8 +348,11 @@ namespace NTSD.Simulation
             SpriteX = 0f;
             SpriteY = 0f;
             SpriteZ = 0f;
-            Type3VisualZOffset = 0f;
+            Type3VisualZOffset = 0.0;
             RenderOffsetX = 0f;
+            Dir = "right";
+            Zz = 0f;
+            ClearBounds();
             Frame = 0;
             PrevFrame2 = 0;
             FirstPresentationTick = 0;
@@ -181,9 +369,9 @@ namespace NTSD.Simulation
             AttackingCounter = 0;
             FrameDelay = 0;
             HitStop = 0;
-            KnockbackVx = 0f;
-            KnockbackVy = 0f;
-            KnockbackVz = 0f;
+            KnockbackVx = 0.0;
+            KnockbackVy = 0.0;
+            KnockbackVz = 0.0;
             ShakeTimer = 0;
             AttackExempt = 0;
             HitStateCount = 0;
@@ -195,6 +383,10 @@ namespace NTSD.Simulation
             HealTimer = 0;
             CatchTimer = 0;
             KillCount = -1;
+            ComboCountVic = 0;
+            ComboCountAtk = 0;
+            KillStat = 0;
+            Unk344 = 0;
             ShotCount = 0;
             WeaponCount = 0;
             FallDamageDiv = 0;
@@ -210,12 +402,16 @@ namespace NTSD.Simulation
             HP = 500;
             HPBound = 500;
             HP3 = 500;
+            HPOrig = 0;
+            HP2Orig = 0;
+            RespawnCount = 0;
             HPLost = 0;
             MP = 500;
             MPMax = 500;
             PP = 500;
             PPMax = 500;
             PPBound = 500;
+            PpDisplay = 0;
         }
     }
 }

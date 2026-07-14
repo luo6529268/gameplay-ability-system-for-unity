@@ -89,7 +89,8 @@ namespace NTSD.Animation
                     if (!IsReleaseBody(body))
                         continue;
 
-                    PhysicsState.BattleVolume bodyVolume = BodyBattleVolume(target, targetFrame, body);
+                    if (!TryBuildBodyBattleVolume(target, targetFrame, body, out PhysicsState.BattleVolume bodyVolume))
+                        continue;
                     bool intersects = CollisionUtil.Intersect(vol, bodyVolume);
                     if (intersects)
                     {
@@ -608,8 +609,8 @@ namespace NTSD.Animation
                 }
 
                 itr.kind = 0;
-                bool facingRight = attacker.PS?.dir == "right";
-                float vx = attacker.PS?.vx ?? 0f;
+                bool facingRight = attacker.Dirh() > 0;
+                double vx = attacker.Runtime?.Vx ?? 0.0;
                 if ((vx > 0f && !facingRight) || (vx < 0f && facingRight))
                     itr.dvx = -itr.dvx;
             }
@@ -1235,7 +1236,8 @@ namespace NTSD.Animation
                 if (!IsReleaseBody(body))
                     continue;
 
-                PhysicsState.BattleVolume bodyVolume = BodyBattleVolume(target, targetCollisionFrame, body);
+                if (!TryBuildBodyBattleVolume(target, targetCollisionFrame, body, out PhysicsState.BattleVolume bodyVolume))
+                    continue;
                 if (!CollisionUtil.Intersect(itrVolume, bodyVolume))
                     continue;
 
@@ -1506,12 +1508,20 @@ namespace NTSD.Animation
                 fullHeight: collectSemantics && BodyIsReleaseFullHeight(body));
         }
 
-        private static PhysicsState.BattleVolume BodyBattleVolume(LF2Entity entity, LF2FrameData frame, BodyBox body)
+        internal static bool TryBuildBodyBattleVolume(
+            LF2Entity entity,
+            LF2FrameData frame,
+            BodyBox body,
+            out PhysicsState.BattleVolume volume)
         {
+            volume = default;
+            if (entity == null || frame == null || !IsReleaseBody(body))
+                return false;
+
             WorldRect rect = BodyWorldRect(entity, frame, body, collectSemantics: true);
             int centerZ = CollisionZInt(entity, frame);
             int zHalf = BodyIsReleaseFullHeight(body) ? 9999 : 15;
-            return new PhysicsState.BattleVolume(
+            volume = new PhysicsState.BattleVolume(
                 rect.X1,
                 rect.Y1,
                 centerZ,
@@ -1520,6 +1530,7 @@ namespace NTSD.Animation
                 rect.X2 - rect.X1,
                 rect.Y2 - rect.Y1,
                 zHalf);
+            return true;
         }
 
         private static WorldRect LocalRectWorldRect(LF2Entity entity, LF2FrameData frame, LocalRect rect, bool fullHeight)

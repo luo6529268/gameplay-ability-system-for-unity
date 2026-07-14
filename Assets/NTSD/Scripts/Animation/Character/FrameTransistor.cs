@@ -137,7 +137,7 @@ namespace NTSD.Animation
             {
                 waitCounter = _entity.Frame?.N ?? currentFrame;
                 SyncRuntime();
-                return true;
+                return false;
             }
 
             currentFrame = _entity.Frame?.N ?? currentFrame;

@@ -43,6 +43,11 @@ namespace NTSD.Animation
             return _vrestByAttacker.TryGetValue(attackerKey, out int v) && v > 0;
         }
 
+        public int GetVrest(int attackerKey)
+        {
+            return _vrestByAttacker.TryGetValue(attackerKey, out int value) ? value : 0;
+        }
+
         /// <summary>
         /// 为指定攻击者设置受击者侧 vrest 冷却。
         /// </summary>

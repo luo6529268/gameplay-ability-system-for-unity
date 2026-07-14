@@ -60,6 +60,11 @@ namespace NTSD.Animation
             return _frames[frameId];
         }
 
+        public bool HasFrame(int frameId)
+        {
+            return GetFrameDataById(frameId) != null;
+        }
+
         public bool TryGetFramesByName(string frameName, out List<LF2FrameData> frames)
         {
             return _framesByName.TryGetValue(frameName, out frames);

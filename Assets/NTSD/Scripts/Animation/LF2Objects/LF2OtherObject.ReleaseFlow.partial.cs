@@ -59,25 +59,25 @@ namespace NTSD.Animation.LF2Objects
         private void ApplyFrameVelocityForFrameAdvance()
         {
             LF2FrameData frame = Frame?.D;
-            if (frame == null || PS == null)
+            if (frame == null || Runtime == null)
                 return;
 
-            float vx = PS.vx;
+            double vx = Runtime.Vx;
             ApplyFrameAxisVelocity(frame.dvx, ref vx, Dirh());
-            PS.vx = vx;
+            Runtime.Vx = vx;
 
             if (frame.dvy > 500)
-                PS.vy = frame.dvy - 550;
+                Runtime.Vy = frame.dvy - 550;
             else if (frame.dvy != 0)
-                PS.vy += frame.dvy;
+                Runtime.Vy += frame.dvy;
 
             if (frame.dvz > 500)
-                PS.vz = frame.dvz - 550;
+                Runtime.Vz = frame.dvz - 550;
             else if (frame.dvz != 0)
-                PS.vz += frame.dvz;
+                Runtime.Vz += frame.dvz;
         }
 
-        private static void ApplyFrameAxisVelocity(int value, ref float velocity, int direction)
+        private static void ApplyFrameAxisVelocity(int value, ref double velocity, int direction)
         {
             if (value > 500)
             {
@@ -126,24 +126,25 @@ namespace NTSD.Animation.LF2Objects
 
         private void RunFrameAdvancePhysics()
         {
-            if (PS == null)
+            if (Runtime == null)
                 return;
 
-            float newY = PS.y + PS.vy;
-            CharacterMechanics.WeaponDynamics(PS, GetOtherObjectGravity());
+            double oldY = Runtime.Y;
+            CharacterMechanics.WeaponDynamics(Runtime, GetOtherObjectGravity(), out double oldVy);
+            double newY = oldY + oldVy;
 
-            if (ObjectId == 999 && IsBrokenFragment() && newY > -0.0001f)
+            if (ObjectId == 999 && IsBrokenFragment() && newY > -0.0001)
             {
-                PS.y = 0f;
-                PS.vx = 0f;
-                PS.vy = 0f;
-                PS.vz = 0f;
+                Runtime.Y = 0.0;
+                Runtime.Vx = 0.0;
+                Runtime.Vy = 0.0;
+                Runtime.Vz = 0.0;
                 SetFrameDirect(101, 0);
                 AttackingCounter = 0;
             }
         }
 
-        private float GetOtherObjectGravity()
+        private double GetOtherObjectGravity()
         {
             LF2FrameData frame = Frame?.D;
             if (frame == null)

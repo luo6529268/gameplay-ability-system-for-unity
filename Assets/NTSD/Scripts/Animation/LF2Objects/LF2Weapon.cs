@@ -384,34 +384,38 @@ namespace NTSD.Animation.LF2Objects
                     if (sceneQuery != null && frameD != null)
                     {
                         int hurt = ws != 0 ? (1000 / ws) : 10;
-                        float sw = GetSpriteWidthPxForCollision();
-                        if (sw > 0f)
+                        if (frameD.bodies != null)
                         {
-                            var bodies = NTSDBattleVolumeUtility.GetBodyVolumes(Runtime, frameD.bodies, frameD.centerx, frameD.centery, sw);
-                            if (bodies != null)
+                            var itr = new InteractionArea { kind = 0, injury = hurt, dvx = 3, dvy = 7, fall = 70, vrest = 10, arest = 0 };
+                            for (int bodyIndex = 0; bodyIndex < frameD.bodies.Count; bodyIndex++)
                             {
-                                var itr = new InteractionArea { kind = 0, injury = hurt, dvx = 3, dvy = 7, fall = 70, vrest = 10, arest = 0 };
-                                foreach (var bvol in bodies)
+                                if (!BruteForceSceneQuery.TryBuildBodyBattleVolume(
+                                        this,
+                                        frameD,
+                                        frameD.bodies[bodyIndex],
+                                        out PhysicsState.BattleVolume bvol))
                                 {
-                                    var hits = sceneQuery.QueryBodyHits(this, frameD, itr, bvol);
-                                    foreach (var hit in hits)
+                                    continue;
+                                }
+
+                                var hits = sceneQuery.QueryBodyHits(this, frameD, itr, bvol);
+                                foreach (var hit in hits)
+                                {
+                                    var t = hit.Target;
+                                    if (t == null || t.RelationTeam == RelationTeam) continue;
+
+                                    int targetType = t.GetCurrentDataObjectTypeForSimulation();
+                                    if (targetType != (int)LF2ObjectType.Character)
+                                        continue;
+
+                                    Vector3 attackerPos = new UnityEngine.Vector3((float)Runtime.X, (float)Runtime.Y, (float)Runtime.Z);
+                                    if (t is LF2Character character)
                                     {
-                                        var t = hit.Target;
-                                        if (t == null || t.RelationTeam == RelationTeam) continue;
-
-                                        int targetType = t.GetCurrentDataObjectTypeForSimulation();
-                                        if (targetType != (int)LF2ObjectType.Character)
-                                            continue;
-
-                                        Vector3 attackerPos = new UnityEngine.Vector3((float)Runtime.X, (float)Runtime.Y, (float)Runtime.Z);
-                                        if (t is LF2Character character)
-                                        {
-                                            character.Hit(itr, this, attackerPos, bvol);
-                                        }
-                                        else if (LF2CharacterDatHitResolver.CanResolveTarget(t))
-                                        {
-                                            LF2CharacterDatHitResolver.TryResolveHit(t, itr, this, attackerPos, bvol);
-                                        }
+                                        character.Hit(itr, this, attackerPos, bvol);
+                                    }
+                                    else if (LF2CharacterDatHitResolver.CanResolveTarget(t))
+                                    {
+                                        LF2CharacterDatHitResolver.TryResolveHit(t, itr, this, attackerPos, bvol);
                                     }
                                 }
                             }
@@ -690,6 +694,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 ApplyKind0VictimObjectTail(itr, attacker);
                 ApplyCommonEncodedHitEffectRange(itr.effect);
+                RecordKind0Hit(attacker, itr);
             }
         }
 
@@ -777,12 +782,7 @@ namespace NTSD.Animation.LF2Objects
 
             var sceneQuery = Match?.SceneQuery;
             if (sceneQuery == null || frame == null) return result;
-
-            float spriteW = GetSpriteWidthPxForCollision();
-            if (spriteW <= 0f) return result;
-
-            var bodyVols = NTSDBattleVolumeUtility.GetBodyVolumes(Runtime, frame.bodies, frame.centerx, frame.centery, spriteW);
-            if (bodyVols == null || bodyVols.Count == 0) return result;
+            if (frame.bodies == null || frame.bodies.Count == 0) return result;
 
             var itr = new InteractionArea
             {
@@ -799,9 +799,17 @@ namespace NTSD.Animation.LF2Objects
             if (holder != null && holder.Runtime.Dir == "left")
                 itr.dvx = -itr.dvx;
 
-            for (int b = 0; b < bodyVols.Count; b++)
+            for (int b = 0; b < frame.bodies.Count; b++)
             {
-                var vol = bodyVols[b];
+                if (!BruteForceSceneQuery.TryBuildBodyBattleVolume(
+                        this,
+                        frame,
+                        frame.bodies[b],
+                        out PhysicsState.BattleVolume vol))
+                {
+                    continue;
+                }
+
                 var hits = sceneQuery.QueryBodyHits(this, frame, itr, vol);
                 for (int c = 0; c < hits.Count; c++)
                 {

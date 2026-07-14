@@ -92,7 +92,6 @@ namespace NTSD.Animation.LF2Objects
 
         private void Generic_TU()
         {
-            Interaction();
             SpecialAttackDynamics();
         }
 
@@ -339,8 +338,8 @@ namespace NTSD.Animation.LF2Objects
         // ========== N-11: hit_Fa=11 爆炸生成 ==========
         private void ApplyHitFa11Spawn()
         {
-            float x = PS.x, y = PS.y, z = PS.z;
-            float vx = PS.vx, vy = PS.vy, vz = PS.vz;
+            double x = PS.x, y = PS.y, z = PS.z;
+            double vx = PS.vx, vy = PS.vy, vz = PS.vz;
             bool facingRight = PS.dir == "right";
             int facing = facingRight ? 0 : 1;
 
@@ -405,8 +404,8 @@ namespace NTSD.Animation.LF2Objects
                     if (obj.GetState() == LF2States.Lying) break;
                     var objFrame = obj.Frame?.D;
                     if (objFrame != null && objFrame.hit_Fa == 14) break;
-                    float zDiff = obj.PS.z - PS.z;
-                    if (Mathf.Abs(zDiff) > 2) break;
+                    double zDiff = obj.PS.z - PS.z;
+                    if (System.Math.Abs(zDiff) > 2) break;
                     if (obj.FrameCache?.Wrapper == FrameCache?.Wrapper) break;
                     if (savedWrapper != null && obj.FrameCache?.Wrapper == savedWrapper) break;
                     return true;
@@ -417,7 +416,7 @@ namespace NTSD.Animation.LF2Objects
             Match?.GetAllLivingObjects(candidates);
 
             int bestIndex = -1;
-            float bestDist = 10000f;
+            double bestDist = 10000f;
 
             for (int i = 0; i < candidates.Count; i++)
             {
@@ -432,10 +431,10 @@ namespace NTSD.Animation.LF2Objects
                 if (savedWrapper != null && obj.FrameCache?.Wrapper == savedWrapper) continue;
                 var objFrame = obj.Frame?.D;
                 if (objFrame != null && objFrame.hit_Fa == 14) continue;
-                float zDiff = obj.PS.z - PS.z;
-                if (Mathf.Abs(zDiff) > 2) continue;
+                double zDiff = obj.PS.z - PS.z;
+                if (System.Math.Abs(zDiff) > 2) continue;
 
-                float dist = Mathf.Abs(obj.PS.x - PS.x) + Mathf.Abs(zDiff);
+                double dist = System.Math.Abs(obj.PS.x - PS.x) + System.Math.Abs(zDiff);
                 if (dist < bestDist)
                 {
                     bestDist = dist;
@@ -527,7 +526,7 @@ namespace NTSD.Animation.LF2Objects
                 ? enemies[RandInt(0, enemies.Count)]
                 : StableId;
 
-            float spawnY = PS.y + RandInt(0, 7) - 3;
+            double spawnY = PS.y + RandInt(0, 7) - 3;
             int facing = PS.dir == "right" ? 0 : 1;
             var op = new ObjectPoint
             {
@@ -537,8 +536,8 @@ namespace NTSD.Animation.LF2Objects
             };
             var t620 = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
             t620.opoint = op; t620.parent = _parent; t620.team = Team;
-            t620.pos = new Vector3(PS.x, spawnY, PS.z); t620.z = PS.z; t620.dir = PS.dir; t620.dvz = 0;
-            t620.useDirectVelocity = true; t620.directVx = PS.vx; t620.directVy = PS.vy; t620.directVz = PS.vz;
+            t620.pos = new Vector3((float)PS.x, (float)spawnY, (float)PS.z); t620.z = (float)PS.z; t620.dir = PS.dir; t620.dvz = 0;
+            t620.useDirectVelocity = true; t620.directVx = (float)PS.vx; t620.directVy = (float)PS.vy; t620.directVz = (float)PS.vz;
             factory.EnqueueCreateObject(t620);
 
             // 注：OwnerEntityIndex 通过 OPointCreateTask.ownerEntityIndex 传递给工厂
@@ -575,9 +574,9 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < count; i++)
             {
                 // vx = rand(21)-11, vy = 3.0-rand(24)*0.25, vz = 3.0-rand(24)*0.25
-                float vx = RandInt(0, 21) - 11;
-                float vy = 3.0f - RandInt(0, 24) * 0.25f;
-                float vz = 3.0f - RandInt(0, 24) * 0.25f;
+                double vx = RandInt(0, 21) - 11;
+                double vy = 3.0f - RandInt(0, 24) * 0.25f;
+                double vz = 3.0f - RandInt(0, 24) * 0.25f;
 
                 // OwnerEntityIndex = 随机敌方 StableId（若无敌方则用自身）
                 int ownerIdx = (enemyCount > 0)
@@ -592,8 +591,8 @@ namespace NTSD.Animation.LF2Objects
                 };
                 var t692 = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
                 t692.opoint = op; t692.parent = _parent; t692.team = Team;
-                t692.pos = new Vector3(PS.x, PS.y, PS.z); t692.z = PS.z; t692.dir = PS.dir; t692.dvz = 0;
-                t692.useDirectVelocity = true; t692.directVx = vx; t692.directVy = vy; t692.directVz = vz;
+                t692.pos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z); t692.z = (float)PS.z; t692.dir = PS.dir; t692.dvz = 0;
+                t692.useDirectVelocity = true; t692.directVx = (float)vx; t692.directVy = (float)vy; t692.directVz = (float)vz;
                 t692.ownerEntityIndex = ownerIdx;
                 factory.EnqueueCreateObject(t692);
             }
@@ -625,7 +624,7 @@ namespace NTSD.Animation.LF2Objects
             for (int i = 0; i < allies.Count; i++)
             {
                 var ally = allies[i];
-                float vx = (ally.PS.x - PS.x) / 50.0f;
+                double vx = (ally.PS.x - PS.x) / 50.0f;
 
                 var op = new ObjectPoint
                 {
@@ -635,8 +634,8 @@ namespace NTSD.Animation.LF2Objects
                 };
                 var t751 = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
                 t751.opoint = op; t751.parent = _parent; t751.team = Team;
-                t751.pos = new Vector3(PS.x, PS.y, PS.z); t751.z = PS.z; t751.dir = "right"; t751.dvz = 0;
-                t751.useDirectVelocity = true; t751.directVx = vx; t751.directVy = 0f; t751.directVz = 0f;
+                t751.pos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z); t751.z = (float)PS.z; t751.dir = "right"; t751.dvz = 0;
+                t751.useDirectVelocity = true; t751.directVx = (float)vx; t751.directVy = 0f; t751.directVz = 0f;
                 t751.ownerEntityIndex = ally.StableId;
                 factory.EnqueueCreateObject(t751);
             }
@@ -671,7 +670,7 @@ namespace NTSD.Animation.LF2Objects
                 if (cap > 0 && spawnCount >= cap) break;
 
                 int oid;
-                float vx, vy;
+                double vx, vy;
                 if (hitFa == 6)
                 {
                     oid = 220;
@@ -694,8 +693,8 @@ namespace NTSD.Animation.LF2Objects
                 };
                 var t798 = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
                 t798.opoint = op; t798.parent = _parent; t798.team = Team;
-                t798.pos = new Vector3(PS.x, PS.y, PS.z); t798.z = PS.z; t798.dir = PS.dir; t798.dvz = 0;
-                t798.useDirectVelocity = true; t798.directVx = vx; t798.directVy = vy; t798.directVz = 0f;
+                t798.pos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z); t798.z = (float)PS.z; t798.dir = PS.dir; t798.dvz = 0;
+                t798.useDirectVelocity = true; t798.directVx = (float)vx; t798.directVy = (float)vy; t798.directVz = 0f;
                 t798.ownerEntityIndex = obj.StableId;
                 factory.EnqueueCreateObject(t798);
                 spawnCount++;
@@ -841,7 +840,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (hitFa == 2)
             {
-                float absVx = System.Math.Abs(PS.vx);
+                double absVx = System.Math.Abs(PS.vx);
                 int curFrame = Frame?.N ?? -1;
                 if (absVx > 14.0f)
                 {
@@ -870,8 +869,8 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // ========== sub_402C00 等价：直接速度生成实体 ==========
-        private void SpawnEntityDirect(int oid, int frameId, float x, float y, float z,
-            float vx, float vy, float vz, int facing)
+        private void SpawnEntityDirect(int oid, int frameId, double x, double y, double z,
+            double vx, double vy, double vz, int facing)
         {
             var factory = LF2ObjectPointFactory.Instance;
             if (factory == null) return;
@@ -885,8 +884,8 @@ namespace NTSD.Animation.LF2Objects
             };
             var t1047 = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
             t1047.opoint = op; t1047.parent = _parent; t1047.team = Team;
-            t1047.pos = new Vector3(x, y, z); t1047.z = z; t1047.dir = dir; t1047.dvz = 0;
-            t1047.useDirectVelocity = true; t1047.directVx = vx; t1047.directVy = vy; t1047.directVz = vz;
+            t1047.pos = new Vector3((float)x, (float)y, (float)z); t1047.z = (float)z; t1047.dir = dir; t1047.dvz = 0;
+            t1047.useDirectVelocity = true; t1047.directVx = (float)vx; t1047.directVy = (float)vy; t1047.directVz = (float)vz;
             factory.EnqueueCreateObject(t1047);
         }
 
@@ -1024,6 +1023,13 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
+        internal override bool SupportsObjectInteractionPhase() => true;
+
+        public override void SimObjectInteraction(int tickIndex)
+        {
+            Interaction();
+        }
+
         // ========== 交互方法 ==========
 
         /// <summary>
@@ -1053,22 +1059,42 @@ namespace NTSD.Animation.LF2Objects
                 var itr = itrs[i];
                 if (itr == null) continue;
 
-                var candidates = sceneQuery.QueryBodies(itrVolumes[i], this);
+                var candidates = sceneQuery.QueryBodyHits(itrVolumes[i], this);
                 if (candidates == null || candidates.Count == 0) continue;
 
                 for (int c = 0; c < candidates.Count; c++)
                 {
-                    var target = candidates[c];
-                    if (!CanInteractTarget(itr, target)) continue;
+                    SceneQueryHit candidate = candidates[c];
+                    LF2Entity target = candidate.Target;
+                    InteractionArea runtimeItr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
+                        this,
+                        target,
+                        frame,
+                        itr,
+                        out bool zeroAttackerHpOnConsume,
+                        out bool releaseHeavyHeldTargetOnConsume);
+                    if (runtimeItr == null) continue;
 
-                    if (!DispatchInteractionByKind(kindService, itr, target)) continue;
+                    var hitInfo = new SceneQueryHit(
+                        target,
+                        candidate.BodyX,
+                        i,
+                        runtimeItr,
+                        zeroAttackerHpOnConsume,
+                        releaseHeavyHeldTargetOnConsume);
 
-                    ItrArestUpdate(itr);
-                    target.ItrVrestUpdate(StableId, itr);
+                    if (!CanInteractTarget(runtimeItr, target)) continue;
+                    ApplyReleaseSceneQueryConsumeEffects(hitInfo);
+                    if (!DispatchInteractionByKind(kindService, runtimeItr, target)) continue;
+
+                    ItrArestUpdate(runtimeItr);
+                    int selfSlot = Runtime?.SlotIndex ?? -1;
+                    if (selfSlot >= 0 && target.ItrVrestTest(selfSlot))
+                        target.ItrVrestUpdate(selfSlot, runtimeItr);
 
                     if (GetState() == LF2States.ProjectileTeleport)
                     {
-                        int vrest = itr.vrest > 0 ? itr.vrest : NTSDGlobal.Default.Weapon.VRest;
+                        int vrest = runtimeItr.vrest > 0 ? runtimeItr.vrest : NTSDGlobal.Default.Weapon.VRest;
                         ItrVrestUpdate(target.StableId, new InteractionArea { vrest = vrest });
                     }
 
@@ -1084,7 +1110,8 @@ namespace NTSD.Animation.LF2Objects
             if (target.PS == null || target.Frame?.D == null) return false;
             if (target.Health != null && target.Health.HP <= 0) return false;
             if (Team != 0 && target.Team != 0 && Team == target.Team) return false;
-            if (!target.ItrVrestTest(StableId)) return false;
+            int selfSlot = Runtime?.SlotIndex ?? -1;
+            if (selfSlot >= 0 && !target.ItrVrestTest(selfSlot)) return false;
             var kindService = Match?.ItrKindService;
             if (itr.kind != 8 && itr.kind != 14)
             {
@@ -1158,7 +1185,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (PS != null)
                 {
-                    var attackerPos = new Vector3(PS.x, PS.y, PS.z);
+                    var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
                     return character.Hit(itr, this, attackerPos, default);
                 }
             }
@@ -1396,7 +1423,7 @@ namespace NTSD.Animation.LF2Objects
             task.parent = this;
             task.team = Team;
             task.pos = MakeObjectPoint(op);
-            task.z = PS.z;
+            task.z = (float)PS.z;
             task.dir = PS.dir;
             task.dvz = 0;
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
@@ -1409,8 +1436,8 @@ namespace NTSD.Animation.LF2Objects
             task.opoint = op;
             task.parent = source;
             task.team = source?.Team ?? 0;
-            task.pos = new Vector3(source?.PS?.x ?? 0, source?.PS?.y ?? 0, source?.PS?.z ?? 0);
-            task.z = source?.PS?.z ?? 0;
+            task.pos = new Vector3((float)(source?.PS?.x ?? 0), (float)(source?.PS?.y ?? 0), (float)(source?.PS?.z ?? 0));
+            task.z = (float)(source?.PS?.z ?? 0);
             task.dir = source?.PS?.dir ?? "right";
             task.dvz = 0;
             LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
@@ -1420,14 +1447,14 @@ namespace NTSD.Animation.LF2Objects
         {
             var frame = Frame?.D;
             if (PS == null || frame == null)
-                return new Vector3(PS?.x ?? 0f, PS?.y ?? 0f, PS?.z ?? 0f);
+                return new Vector3((float)(PS?.x ?? 0f), (float)(PS?.y ?? 0f), (float)(PS?.z ?? 0f));
 
-            float x = PS.dir == "right"
+            double x = PS.dir == "right"
                 ? PS.x - frame.centerx + op.x
                 : PS.x + frame.centerx - op.x;
-            float y = PS.y + PS.z - frame.centery + op.y;
-            float z = PS.z + op.y;
-            return new Vector3(x, y, z);
+            double y = PS.y + PS.z - frame.centery + op.y;
+            double z = PS.z + op.y;
+            return new Vector3((float)x, (float)y, (float)z);
         }
 
         public void PlaySound(string soundId)

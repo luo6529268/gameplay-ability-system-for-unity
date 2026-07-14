@@ -24,7 +24,7 @@ namespace NTSD.Animation.LF2Objects
     {
         public const int OverlaySortingOrderOffset = 10000;
         protected static readonly List<LF2Entity> N30HistoryGateScratch = new List<LF2Entity>(32);
-        private static readonly NTSDInputStateModule SharedCharacterDatInputModule = new NTSDInputStateModule();
+        private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
 
 
         /// <summary>对象名称。</summary>
@@ -96,6 +96,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public NTSDEntityRuntime Runtime { get; } = new NTSDEntityRuntime();
 
+        public PhysicsState PS { get; protected set; } = new PhysicsState();
+
         private static readonly DeterministicRng FallbackRng = new DeterministicRng(0x4E545344u);
 
         /// <summary>C++ release 实体类型值。</summary>
@@ -122,7 +124,9 @@ namespace NTSD.Animation.LF2Objects
         public LF2ObjectRenderer Renderer { get; protected set; }
 
         /// <summary>当前实体所在的战斗世界。大多数情况下通过单例 Driver 反查。</summary>
-        public SimulationWorld Match => SimulationTickDriver.Instance?.World;
+        private SimulationWorld registeredWorld;
+
+        public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
 
 
 
@@ -155,21 +159,21 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>累计击退 X 速度。</summary>
-        public float KnockbackVx
+        public double KnockbackVx
         {
             get => Runtime.KnockbackVx;
             set => Runtime.KnockbackVx = value;
         }
 
         /// <summary>累计击退 Y 速度。</summary>
-        public float KnockbackVy
+        public double KnockbackVy
         {
             get => Runtime.KnockbackVy;
             set => Runtime.KnockbackVy = value;
         }
 
         /// <summary>累计击退 Z 速度。</summary>
-        public float KnockbackVz
+        public double KnockbackVz
         {
             get => Runtime.KnockbackVz;
             set => Runtime.KnockbackVz = value;
@@ -267,6 +271,13 @@ namespace NTSD.Animation.LF2Objects
         {
             get => Runtime.KillStat;
             set => Runtime.KillStat = value;
+        }
+
+        /// <summary>C# authority Entity.Unk344；索引 1..2 指向全局击杀/伤害统计槽。</summary>
+        public int Unk344
+        {
+            get => Runtime.Unk344;
+            set => Runtime.Unk344 = value;
         }
 
         /// <summary>C++ release weapon_count；角色受笛子命中时可为负，武器侧用于飞行/笛子累计。</summary>
@@ -445,6 +456,60 @@ namespace NTSD.Animation.LF2Objects
             _hitRecordX[slot] = anchorX;
             _hitRecordZ[slot] = anchorZ;
             _hitRecordLastAdvanceTick[slot] = int.MinValue;
+        }
+
+        /// <summary>记录一次 kind 0 命中；由受击对象调用。</summary>
+        internal void RecordKind0Hit(LF2Entity attacker, InteractionArea itr)
+        {
+            if (attacker == null || itr == null)
+                return;
+
+            int attackerZ = attacker.Runtime.ZInt;
+            int victimZ = Runtime.ZInt;
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int victimSlot = Runtime.SlotIndex;
+            LF2Entity recordOwner = attackerZ > victimZ ||
+                                    (attackerZ == victimZ && attackerSlot > victimSlot)
+                ? attacker
+                : this;
+
+            if (recordOwner.HitRecordCount >= MaxHitRecordSlots)
+                return;
+
+            int sparkPhase = itr.effect == 1 ? 1 : 0;
+            int timer = itr.fall > 60 ? sparkPhase * 20 : sparkPhase * 20 + 10;
+            LF2FrameData attackerFrame = attacker.GetFrameDataById(attacker.Frame?.N ?? 0) ?? attacker.Frame?.D;
+            int attackerCenterX = attackerFrame?.centerx ?? 0;
+            int attackerCenterY = attackerFrame?.centery ?? 0;
+            int attackerX = attacker.Runtime.XInt;
+            int attackerY = attacker.Runtime.YInt;
+            int victimX = Runtime.XInt;
+            int victimY = Runtime.YInt;
+
+            int hitX;
+            if (attacker.Dirh() > 0)
+            {
+                hitX = attackerX - attackerCenterX + itr.x + itr.w;
+                if (hitX > victimX)
+                    hitX = victimX;
+            }
+            else
+            {
+                hitX = attackerX + attackerCenterX - itr.x - itr.w;
+                if (hitX < victimX)
+                    hitX = victimX;
+            }
+
+            int hitYOffset = attackerY + (itr.h / 2) + itr.y - attackerCenterY;
+            int lowerY = victimY - attackerCenterY;
+            if (hitYOffset < lowerY)
+                hitYOffset = (lowerY + hitYOffset) >> 1;
+            else if (hitYOffset > victimY)
+                hitYOffset = (victimY + hitYOffset) >> 1;
+
+            int hitZ = attackerZ + hitYOffset + BattleRandInt(0, 9) - 4;
+            hitX += BattleRandInt(0, 9) - 4;
+            recordOwner.AddHitRecord(timer, hitX, hitZ);
         }
 
         /// <summary>读取指定命中记录年龄。</summary>
@@ -717,13 +782,18 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>检查 itr arest 冷却是否允许攻击。</summary>
         public bool ItrArestTest() => ItrRest == null || ItrRest.Arest <= 0;
 
+        internal static int ResolveArestCooldown(int arest, int vrest)
+        {
+            return arest < 4 && vrest == 0 ? 4 : arest;
+        }
+
         /// <summary>命中后更新 arest 冷却。</summary>
         public void ItrArestUpdate(InteractionArea itr)
         {
             if (ItrRest == null) return;
             if (itr == null || SuppressesGenericArest(itr.kind)) return;
 
-            ItrRest.Arest = (itr.arest < 4 && itr.vrest == 0) ? 4 : itr.arest;
+            ItrRest.Arest = ResolveArestCooldown(itr.arest, itr.vrest);
         }
 
         /// <summary>检查指定攻击者的 vrest 冷却是否结束。</summary>
@@ -842,7 +912,13 @@ namespace NTSD.Animation.LF2Objects
         // 和 ImmediateFrame 的区别在于：这里是把请求交给 FrameTransistor，
         // 让它按正式 frame_tick 顺序在后续推进里消费。
         public virtual void TransitionToFrame(int frameId, int wait = 0)
-            => Trans?.Frame(frameId, wait);
+        {
+            if (Trans == null)
+                return;
+
+            Trans.SetNext(frameId);
+            Trans.SetWait(wait);
+        }
 
         /// <summary>获取碰撞用 sprite 宽度，单位为像素。</summary>
         public virtual float GetSpriteWidthPxForCollision() => 0f;
@@ -893,11 +969,14 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void OnAdded(SimContext ctx)
         {
+            registeredWorld = ctx?.World;
             RefreshRuntimeSnapshot();
         }
 
         public virtual void OnRemoved(SimContext ctx)
         {
+            if (ReferenceEquals(registeredWorld, ctx?.World))
+                registeredWorld = null;
             Runtime.SlotIndex = -1;
         }
 
@@ -915,7 +994,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>模拟后期更新，默认刷新渲染深度。</summary>
         public virtual void SimLateTick(int tickIndex)
         {
-            Sprite?.SetSortingOrder(GetRenderSortingOrder());
+            Sprite?.SetZ(GetRenderSortingOrder());
         }
 
         public virtual void RunFrameLogicBeforeAdvance() { }
@@ -1021,10 +1100,6 @@ namespace NTSD.Animation.LF2Objects
                 controller = living.Controller;
             else if (this is LF2WeaponBase weapon)
                 controller = weapon.Controller;
-            else if (this is LF2OtherObject other)
-                controller = other.Controller;
-            else if (this is LF2SpecialAttack specialAttack)
-                controller = specialAttack.Controller;
 
             return controller?.InputBuffer != null;
         }
@@ -1039,6 +1114,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal void UpdateSharedRuntimeInputSnapshotForSimulation(int tickIndex)
         {
+            Runtime.RollInputFromCurrent();
+            Runtime.TickInputCooldowns();
+
             if (!TryGetSharedInputControllerForSimulation(out ILF2Controller controller))
                 return;
 
@@ -1047,14 +1125,11 @@ namespace NTSD.Animation.LF2Objects
 
         private void UpdateSharedRuntimeInputSnapshotFromBuffer(SimInputBuffer inputBuffer, int tickIndex)
         {
-            Runtime.RollInputFromCurrent();
-            Runtime.TickInputCooldowns();
-
             if (inputBuffer == null || !inputBuffer.TryDequeueAll(tickIndex, out System.Collections.Generic.List<SimInputEvent> events))
                 return;
 
             for (int i = 0; i < events.Count; i++)
-                ApplySharedRuntimeInputEvent(events[i].key, events[i].down, events[i].forceFreshEdge);
+                ApplySharedRuntimeInputEvent(events[i].key, events[i].down);
         }
 
         private void RunSharedCharacterDatFrameJumpInputPhase()
@@ -1062,8 +1137,8 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime == null)
                 return;
 
-            SharedCharacterDatInputModule.SyncFromRuntime(Runtime);
-            SharedCharacterDatInputModule.ApplyFrameInput(this);
+            sharedCharacterDatInputModule.SyncFromRuntime(Runtime);
+            sharedCharacterDatInputModule.ApplyFrameInput(this);
         }
 
         /// <summary>
@@ -3631,7 +3706,10 @@ namespace NTSD.Animation.LF2Objects
             if (!advanced)
                 return false;
 
-            if ((Frame?.N ?? -1) == 202)
+            int currentFrame = Frame?.N ?? -1;
+            if (currentFrame == 110 || currentFrame == 114)
+                Runtime.CdDefendLock = 3;
+            if (currentFrame == 202)
                 HitStun = 20;
 
             return true;

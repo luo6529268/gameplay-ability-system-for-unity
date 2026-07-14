@@ -20,7 +20,7 @@ namespace NTSD.Animation.LF2Objects
     /// 2. 被扔出去后怎么飞行、落地。
     /// 3. 落在地上后怎么等待再次拾取或被破坏。
     /// </summary>
-    public abstract class LF2WeaponBase : LF2Entity
+    public abstract partial class LF2WeaponBase : LF2Entity
     {
         // ========== 武器专属字段（不在 LF2Entity 的） ==========
 
@@ -572,6 +572,167 @@ namespace NTSD.Animation.LF2Objects
         {
             _releaseFlowResolver.ForceClearHolder();
         }
+
+        public void ForceClearHolder(bool preserveRuntimeOwnerFields)
+        {
+            _releaseFlowResolver.ForceClearHolder(preserveRuntimeOwnerFields);
+        }
+
+        // 供 LF2WeaponHeldStateResolver 调用受保护的 CoincideXYWithWPoint（:332）
+        internal void CoincideXYWithWPointInternal(Vector3 holdpoint, WeaponPoint heldFrameWpoint)
+            => CoincideXYWithWPoint(holdpoint, heldFrameWpoint);
+
+        #region 交互分发（从 8101df55 恢复）
+
+        internal bool HandleWeaponKind3Stick(InteractionArea itr, LF2Entity target)
+        {
+            if (target is LF2WeaponBase) return false;
+            if (!ItrArestTest()) return false;
+
+            int catchingFrame = itr.catchingact != null && itr.catchingact.Length > 0 ? itr.catchingact[0] : 0;
+            int caughtFrame   = itr.caughtact   != null && itr.caughtact.Length   > 0 ? itr.caughtact[0]   : 0;
+            if (catchingFrame <= 0 && caughtFrame <= 0)
+                return HandlePreInteractionKind3(itr, target); // 无粘附帧 → 普通攻击
+
+            if (catchingFrame > 0) SetFrameDirect(catchingFrame);
+            if (caughtFrame > 0 && target is LF2Character ch)
+            {
+                ch.ImmediateFrame(caughtFrame);
+            }
+            return true;
+        }
+
+        internal bool TryApplyHit(InteractionArea itr, LF2Entity target)
+        {
+            if (!ItrArestTest()) return false;
+
+            if (target is LF2WeaponBase weapon)
+            {
+                return weapon.Hit(itr, this);
+            }
+
+            if (target is LF2SpecialAttack specialAttack)
+            {
+                return specialAttack.Hit(itr, this);
+            }
+
+            if (target is LF2Character character)
+            {
+                if (PS != null)
+                {
+                    var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
+                    return character.Hit(itr, this, attackerPos, default);
+                }
+            }
+
+            return false;
+        }
+
+        internal bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
+        {
+            if (HoldObj != null)
+            {
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                return false;
+            }
+            if (Renderer == null)
+            {
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                return false;
+            }
+
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
+            int wstate = GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround)
+            {
+                return false;
+            }
+
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                return false;
+            }
+            character.HoldWeapon(this);
+            _interactionResolver.ApplyPickupGrabbedBy(character);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
+        }
+
+        internal bool HandlePreInteractionKind2(InteractionArea itr, LF2Entity target)
+        {
+            if (HoldObj != null)
+            {
+                return false;
+            }
+            if (!ItrArestTest())
+            {
+                return false;
+            }
+            if (Renderer == null)
+            {
+                return false;
+            }
+            if (target is not LF2Character character)
+            {
+                return false;
+            }
+            if (character.GetHeldWeapon() != null)
+            {
+                return false;
+            }
+
+            // 只有地面武器才能被拾取（C++ release 0x00407378：仅检查 state=1004 和 2004）
+            int wstate = GetState();
+            bool isOnGround = wstate == LF2States.WeaponOnGround
+                           || wstate == LF2States.HeavyWeaponOnGround;
+            if (!isOnGround)
+            {
+                return false;
+            }
+
+            bool pickOk = Pick(character);
+            if (!pickOk)
+            {
+                return false;
+            }
+            character.HoldWeapon(this);
+            _interactionResolver.ApplyPickupGrabbedBy(character);
+            // C++ release 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
+            _interactionResolver.ApplyPickupFrameJump(character);
+            ItrArestUpdate(itr);
+            target.ItrVrestUpdate(StableId, itr);
+            return true;
+        }
+
+        internal bool HandlePreInteractionKind3(InteractionArea itr, LF2Entity target)
+        {
+            // C++ release sub_419F80：kind=3 时若 target.charData.type != 0（即目标是武器）则跳过
+            // 否则走普通命中路径，与 kind=0 相同
+            if (target is LF2WeaponBase) return false;
+            return TryApplyHit(itr, target);
+        }
+
+        internal bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
+        {
+            // C++ release 0x42E97B/0x42E984：kind=7 近身拾取，与 kind=1 相同但无帧跳转
+            return HandlePreInteractionKind1(itr, target);
+        }
+
+        #endregion
 
         public void SetWeaponStrengthList(List<WeaponStrengthEntry> list)
         {

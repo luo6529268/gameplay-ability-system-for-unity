@@ -280,7 +280,7 @@ namespace NTSD.Simulation
             if (matchState != null)
             {
                 matchState.LocalGameModeId = config?.gameMode?.gameModeId ?? 0;
-                matchState.BattleGameModeId = AppManager.ResolveBattleGameMode(config);
+                matchState.BattleGameModeId = config?.gameMode?.battleGameModeId ?? 1;
                 matchState.BackgroundId = config?.backgroundId ?? -1;
                 matchState.Difficulty = config?.difficulty ?? 2;
                 matchState.Seed = config?.seed ?? 0;

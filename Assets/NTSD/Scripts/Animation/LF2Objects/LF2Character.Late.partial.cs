@@ -31,9 +31,9 @@ namespace NTSD.Animation.LF2Objects
             if (factory == null || PS == null)
                 return;
 
-            int baseX = Runtime?.XInt ?? Mathf.RoundToInt(PS.x);
-            int baseY = Runtime?.YInt ?? Mathf.RoundToInt(PS.y);
-            int baseZ = Runtime?.ZInt ?? Mathf.RoundToInt(PS.z);
+            int baseX = Runtime?.XInt ?? Mathf.RoundToInt((float)PS.x);
+            int baseY = Runtime?.YInt ?? Mathf.RoundToInt((float)PS.y);
+            int baseZ = Runtime?.ZInt ?? Mathf.RoundToInt((float)PS.z);
 
             for (int i = 0; i < 5; i++)
             {
@@ -150,10 +150,10 @@ namespace NTSD.Animation.LF2Objects
             task.relationTeam = RelationTeam;
             task.holderCopySlot = -1;
             task.pos = new Vector3(
-                Runtime?.XInt ?? Mathf.RoundToInt(PS.x),
+                Runtime?.XInt ?? Mathf.RoundToInt((float)PS.x),
                 0f,
-                Runtime?.ZInt ?? Mathf.RoundToInt(PS.z));
-            task.z = Runtime?.ZInt ?? Mathf.RoundToInt(PS.z);
+                Runtime?.ZInt ?? Mathf.RoundToInt((float)PS.z));
+            task.z = Runtime?.ZInt ?? Mathf.RoundToInt((float)PS.z);
             task.dir = "right";
             task.useDirectVelocity = true;
             task.directVx = 0f;
@@ -162,9 +162,9 @@ namespace NTSD.Animation.LF2Objects
             task.spawnerEntityIndex = slotIndex;
             task.releaseSpawnSemantic = ReleaseSpawnSemantic.ImmediateEffect;
             task.useInitialRuntimeIntPosition = true;
-            task.initialRuntimeX = Runtime?.XInt ?? Mathf.RoundToInt(PS.x);
+            task.initialRuntimeX = Runtime?.XInt ?? Mathf.RoundToInt((float)PS.x);
             task.initialRuntimeY = 0;
-            task.initialRuntimeZ = Runtime?.ZInt ?? Mathf.RoundToInt(PS.z);
+            task.initialRuntimeZ = Runtime?.ZInt ?? Mathf.RoundToInt((float)PS.z);
             task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
 
             // 中文注释：
@@ -180,64 +180,6 @@ namespace NTSD.Animation.LF2Objects
         {
             RunLateCharacterCleanup();
             base.RunLateTailBeforePrevFrame();
-        }
-
-        /// <summary>
-        /// C++ release run_late_entity_update：角色死亡清理位于 opoint 生成之前。
-        /// </summary>
-        internal override void RunLateDeathOpointPreCleanupPhase()
-        {
-            if (Frame?.D?.state != LF2States.Lying)
-                return;
-            if (Health == null || Health.HP > 0)
-                return;
-
-            ForceDropHeldWeaponForLateDeath();
-
-            int frameId = Frame.N;
-            if (frameId < 12 || frameId == 110 || frameId == 111)
-                EnterLateDeathLaunchFrame();
-
-            if (PS != null &&
-                Mathf.RoundToInt(PS.y) == 0 &&
-                PS.y == 0f &&
-                PS.vy == 0f &&
-                KnockbackVy == 0f)
-            {
-                int currentFrame = Frame.N;
-                bool groundDeathFrame = (currentFrame >= 180 && currentFrame <= 189 && currentFrame != 184) ||
-                                        (currentFrame >= 212 && currentFrame <= 214);
-                if (groundDeathFrame)
-                    EnterLateDeathLaunchFrame();
-            }
-        }
-
-        private void EnterLateDeathLaunchFrame()
-        {
-            ImmediateFrame(186);
-            if (PS == null)
-                return;
-
-            PS.vy = -3f;
-            KnockbackVy = -3f;
-            PS.y = -1f;
-        }
-
-        private void ForceDropHeldWeaponForLateDeath()
-        {
-            LF2WeaponBase weapon = GetHeldWeaponBase();
-            if (weapon == null)
-                return;
-
-            weapon.ForceClearHolder();
-            if (weapon.PS != null)
-                weapon.PS.vx *= 0.5f;
-
-            _heldWeapon = null;
-            GrabbedBy = 0;
-            Runtime.LinkState = 0;
-            Runtime.TargetSlotIndex = -1;
-            Runtime.HeldWeaponStableId = -1;
         }
     }
 }

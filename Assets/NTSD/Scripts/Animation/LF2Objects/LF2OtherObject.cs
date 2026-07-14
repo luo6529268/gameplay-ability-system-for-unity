@@ -10,7 +10,7 @@ namespace NTSD.Animation.LF2Objects
     public partial class LF2OtherObject : LF2Entity
     {
         public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
-        public override NTSDEntityCategory EntityCategory => NTSDEntityCategory.Effect;
+        public NTSDEntityCategory EntityCategory => NTSDEntityCategory.Effect;
         internal override bool UsesDynamicRuntimeSlot() => true;
 
         public override LF2ItrRestTracker ItrRest { get; protected set; }

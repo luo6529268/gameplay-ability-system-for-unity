@@ -39,12 +39,17 @@
       "mcp__t__lsp_diagnostics",
       "mcp__t__python_repl",
       "Bash(python:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(xargs grep -lE \"enum \")",
+      "Bash(xargs grep -lE \"Jump\")",
+      "mcp__plugin_oh-my-claudecode_t__lsp_diagnostics"
     ]
   },
   "enabledMcpjsonServers": [
     "t",
     "x",
-    "g"
+    "g",
+    "unity-mcp",
+    "mem0"
   ]
 }

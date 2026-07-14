@@ -480,6 +480,7 @@ namespace NTSD.Simulation
             ForEachEntityByRuntimeSlot(entity =>
             {
                 entity.ItrRest?.TickArest();
+                entity.Runtime?.TickDefendLockCooldown();
                 ClearAttackExemptIfCurrentFrameCannotHit(entity);
                 RefreshRuntimeSnapshot(entity);
             });

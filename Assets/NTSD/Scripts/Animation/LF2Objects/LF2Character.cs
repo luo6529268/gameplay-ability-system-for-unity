@@ -32,7 +32,7 @@ namespace NTSD.Animation.LF2Objects
     /// 2. 把输入、状态机、受击、抓取、武器链接等模块装配起来。
     /// 3. 在每个战斗 tick 中，对外暴露角色该执行的主要入口。
     /// </summary>
-    public class LF2Character : LF2LivingObject
+    public partial class LF2Character : LF2LivingObject
     {
         // ========== ILF2Object 实现 ==========
 
@@ -147,12 +147,12 @@ namespace NTSD.Animation.LF2Objects
             Runtime.SyncIntegerPosition();
         }
 
-        public override bool Hit(InteractionArea itr, LF2Entity attacker, Vector3 attackerPos, NTSDBattleVolume vol)
+        public override bool Hit(InteractionArea itr, LF2Entity attacker, Vector3 attackerPos, PhysicsState.BattleVolume vol)
         {
             return _hitResolver.ResolveHit(itr, attacker, attackerPos, vol);
         }
 
-        internal bool PassBaseHit(InteractionArea itr, LF2Entity attacker, Vector3 attackerPos, NTSDBattleVolume vol)
+        internal bool PassBaseHit(InteractionArea itr, LF2Entity attacker, Vector3 attackerPos, PhysicsState.BattleVolume vol)
         {
             return base.Hit(itr, attacker, attackerPos, vol);
         }
@@ -216,19 +216,6 @@ namespace NTSD.Animation.LF2Objects
         internal bool IsCurrentDefendPressedInternal()
         {
             return Runtime.KeyDefend != 0 || Controller?.IsDefend == true;
-        }
-
-        internal SimulationInputButtons ReadConfirmedSimulationButtonsFromRuntime()
-        {
-            SimulationInputButtons buttons = SimulationInputButtons.None;
-            if (Runtime.KeyLeft != 0) buttons |= SimulationInputButtons.Left;
-            if (Runtime.KeyRight != 0) buttons |= SimulationInputButtons.Right;
-            if (Runtime.KeyUp != 0) buttons |= SimulationInputButtons.Up;
-            if (Runtime.KeyDown != 0) buttons |= SimulationInputButtons.Down;
-            if (Runtime.KeyAttack != 0) buttons |= SimulationInputButtons.Attack;
-            if (Runtime.KeyJump != 0) buttons |= SimulationInputButtons.Jump;
-            if (Runtime.KeyDefend != 0) buttons |= SimulationInputButtons.Defend;
-            return buttons;
         }
 
         internal bool WasLeftPressedPreviousFrameInternal()
@@ -331,8 +318,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal void SetDefendLockInternal(byte value)
         {
-            InputState?.SetDefendLock(value, Runtime);
             Runtime.CdDefendLock = value;
+            InputState?.SetDefendLock(value);
         }
 
         internal void UpdateLocalInputStateFromControllerBuffer(int tickIndex)
@@ -347,7 +334,7 @@ namespace NTSD.Animation.LF2Objects
 
         internal void ResetLocalInputState()
         {
-            InputState?.Reset(Runtime);
+            InputState?.Reset();
         }
 
         internal void OnLocalInputStateExit()
@@ -431,6 +418,13 @@ namespace NTSD.Animation.LF2Objects
             return _weaponLinkResolver.GetHeldWeaponBase();
         }
 
+        public void DropWeapon(float dvx = 0f, float dvy = 0f)
+        {
+            LF2WeaponBase weapon = GetHeldWeaponBaseInternal();
+            weapon?.Drop(dvx, dvy);
+            _weaponLinkResolver.HoldWeapon(null);
+        }
+
         internal void SetMoveFrameDirectInternal(int frameId)
         {
             _stateResolver.SetMoveFrameDirect(frameId);
@@ -494,7 +488,7 @@ namespace NTSD.Animation.LF2Objects
                 Health.PP = System.Math.Min(Health.PP + injury / 3, Health.MaxPP);
         }
 
-        public override void VisualEffectCreate(int num, NTSDBattleVolume rect, bool righttip = false, int variant = 0, bool withSound = false)
+        public override void VisualEffectCreate(int num, PhysicsState.BattleVolume rect, bool righttip = false, int variant = 0, bool withSound = false)
         {
         }
 
@@ -973,7 +967,7 @@ namespace NTSD.Animation.LF2Objects
             if (Frame.D != null)
                 Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
 
-            InputState?.Reset(Runtime);
+            InputState?.Reset();
             ItrRest?.Reset();
             _hitCounters?.Reset();
 
@@ -1116,12 +1110,7 @@ namespace NTSD.Animation.LF2Objects
 
         public override void SimFrameTick(int tickIndex)
         {
-            if (!RunCommonFrameTick())
-                return;
-
-            int frameN = Frame?.N ?? 0;
-            if (frameN == 110 || frameN == 114)
-                SetDefendLockInternal(3);
+            RunCommonFrameTick();
         }
 
         public override void RunFrameLogicBeforeAdvance()
@@ -1910,7 +1899,7 @@ namespace NTSD.Animation.LF2Objects
             clone.SwitchDir("right");
             clone.SetRuntimeSlotIndex(freeSlot);
             clone.RefreshRuntimeSnapshot();
-            Match.RegisterAtRuntimeSlot(clone, freeSlot);
+            Match.Register(clone);
         }
 
         private void FillHitFa13SpawnTask(OPointCreateTask task)
@@ -2769,9 +2758,19 @@ namespace NTSD.Animation.LF2Objects
             _weaponLinkResolver.RunWeaponSyncHeldStep10();
         }
 
+        public bool ReleaseHeldObjectByWPoint(WeaponPoint holderWPoint, out WeaponActResult result)
+        {
+            return _weaponLinkResolver.ReleaseHeldObjectByWPoint(holderWPoint, out result);
+        }
+
         public bool ReleaseHeldObjectByWPoint(LF2Entity held, WeaponPoint holderWPoint, out WeaponActResult result)
         {
             return _weaponLinkResolver.ReleaseHeldObjectByWPoint(held, holderWPoint, out result);
+        }
+
+        internal bool TryDropHeldWeaponFallbackRandomly()
+        {
+            return _weaponLinkResolver.TryDropHeldWeaponFallbackRandomly();
         }
 
         protected override void RefreshRuntimeFromEntity()

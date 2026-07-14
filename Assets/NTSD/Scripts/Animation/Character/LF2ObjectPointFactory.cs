@@ -187,7 +187,7 @@ namespace NTSD.Animation
                 task.parent = spawner;
                 task.team = spawner.Team;
                 task.pos = MakeLateOpointPosition(spawner, frame, op);
-                task.z = spawner.PS.z;
+                task.z = (float)spawner.PS.z;
                 task.dir = spawner.PS.dir;
                 task.dvz = 0f;
                 task.preserveActionZero = true;
@@ -223,12 +223,12 @@ namespace NTSD.Animation
 
         private static Vector3 MakeLateOpointPosition(LF2Entity spawner, LF2FrameData frame, ObjectPoint op)
         {
-            float x = spawner.PS.dir == "right"
+            double x = spawner.PS.dir == "right"
                 ? spawner.PS.x - frame.centerx + op.x
                 : spawner.PS.x + frame.centerx - op.x;
 
-            float logicalY = spawner.PS.y - frame.centery + op.y;
-            return new Vector3(x, logicalY + spawner.PS.z, spawner.PS.z);
+            double logicalY = spawner.PS.y - frame.centery + op.y;
+            return new Vector3((float)x, (float)(logicalY + spawner.PS.z), (float)spawner.PS.z);
         }
 
         private static void ApplyMultiSpawnExemptAndVrest(List<LF2Entity> spawned)
@@ -334,7 +334,14 @@ namespace NTSD.Animation
                     return null;
                 }
 
-                PostInitLiving(living, task.parent, task.opoint, objType, 0f, task.releaseOpointSpawn);
+                PostInitLiving(
+                    living,
+                    task.parent,
+                    task.opoint,
+                    objType,
+                    0f,
+                    task.releaseOpointSpawn,
+                    task.skipPostInitZOffset);
                 ApplyReleaseOpointDirectionalVz(living, task);
                 ApplyDirectVelocity(living, task);
 
@@ -425,6 +432,7 @@ namespace NTSD.Animation
                 singleTask.directVy = task.directVy;
                 singleTask.directVz = task.directVz;
                 singleTask.preserveActionZero = task.preserveActionZero;
+                singleTask.skipPostInitZOffset = false;
                 singleTask.ownerEntityIndex = task.ownerEntityIndex;
                 singleTask.frameDelay = task.frameDelay;
                 singleTask.attackExempt = task.attackExempt;
@@ -456,7 +464,14 @@ namespace NTSD.Animation
                         continue;
                     }
 
-                    PostInitLiving(living, task.parent, task.opoint, objType, vz, task.releaseOpointSpawn);
+                    PostInitLiving(
+                        living,
+                        task.parent,
+                        task.opoint,
+                        objType,
+                        vz,
+                        task.releaseOpointSpawn,
+                        singleTask.skipPostInitZOffset);
                     ApplyReleaseOpointDirectionalVz(living, singleTask);
                     ApplyDirectVelocity(living, singleTask);
                 }
@@ -471,10 +486,18 @@ namespace NTSD.Animation
         /// SetLogicObject 之后的统一后处理
         /// C++ release 对齐 opoint 创建后初始化序列（0x004223B5-0x0042277E）
         /// </summary>
-        private void PostInitLiving(LF2Entity living, LF2Entity parent, ObjectPoint op, int objType, float dvz, bool releaseOpointSpawn)
+        private void PostInitLiving(
+            LF2Entity living,
+            LF2Entity parent,
+            ObjectPoint op,
+            int objType,
+            float dvz,
+            bool releaseOpointSpawn,
+            bool skipPostInitZOffset)
         {
             // z_float +1（C++ release 对齐 0x004223DD：new.z_float = parent.z_float + 1.0）
-            living.PS.z += 1f;
+            if (!skipPostInitZOffset)
+                living.PS.z += 1f;
 
             if (parent != null)
             {

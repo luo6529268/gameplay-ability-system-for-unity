@@ -153,6 +153,9 @@ namespace NTSD.Simulation
         public int BattleExitCountdown;
         public int RouteOutRequest;
         public int Mode2Request;
+        public int BattleStepMode;
+        public int BattleStepGate;
+        public int DjaGuardGlobal44F224;
 
         public void Reset()
         {
@@ -162,6 +165,9 @@ namespace NTSD.Simulation
             BattleExitCountdown = 0;
             RouteOutRequest = 0;
             Mode2Request = 0;
+            BattleStepMode = 0;
+            BattleStepGate = 0;
+            DjaGuardGlobal44F224 = 0;
         }
     }
 
@@ -172,10 +178,14 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class BattleRuntimeState
     {
+        private const int BattleStatSlotCount = 3;
+
         public BattleMatchRuntimeState Match = new BattleMatchRuntimeState();
         public BattleStageRuntimeState Stage = new BattleStageRuntimeState();
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
+        public int[] KillStats = new int[BattleStatSlotCount];
+        public int[] DamageStats = new int[BattleStatSlotCount];
 
         public void Reset()
         {
@@ -183,6 +193,19 @@ namespace NTSD.Simulation
             Stage?.Reset();
             Roster?.Reset();
             Flow?.Reset();
+            ResetStatArray(ref KillStats);
+            ResetStatArray(ref DamageStats);
+        }
+
+        private static void ResetStatArray(ref int[] stats)
+        {
+            if (stats == null || stats.Length != BattleStatSlotCount)
+            {
+                stats = new int[BattleStatSlotCount];
+                return;
+            }
+
+            Array.Clear(stats, 0, stats.Length);
         }
     }
 }

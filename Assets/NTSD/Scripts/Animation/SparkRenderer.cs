@@ -50,9 +50,9 @@ namespace NTSD.Animation
             for (int i = 0; i < _objectScratch.Count; i++)
             {
                 LF2Entity obj = _objectScratch[i];
-                int slotCount = obj.SparkSlotCount;
+                int slotCount = obj.HitRecordCount;
                 if (slotCount <= 0) continue;
-                RenderObjectSlots(obj, slotCount, pool);
+                RenderObjectSlots(obj, pool, world);
             }
         }
 
@@ -100,41 +100,38 @@ namespace NTSD.Animation
             return Sprite.Create(tex, rect, pivot, 100f);
         }
 
-        private void RenderObjectSlots(LF2Entity obj, int slotCount, LF2ObjectPool pool)
+        private void RenderObjectSlots(LF2Entity obj, LF2ObjectPool pool, SimulationWorld world)
         {
             int j = 0;
-            while (j < obj.SparkSlotCount)
+            while (j < obj.HitRecordCount)
             {
-                int age = obj.GetSparkTimer(j);
+                int age = obj.GetHitRecordAge(j);
                 Sprite sprite = GetSpriteForAge(age);
                 if (sprite == null)
                 {
-                    if (!obj.RemoveSparkSlotIfTail(j))
+                    if (!obj.RemoveHitRecordIfTail(j))
                         j++;
                     continue;
                 }
 
-                Vector3 wpos = obj.GetSparkWorldPos(j);
-                float wx = wpos.x;
-                float screenY = wpos.y;
-                float sortZ = wpos.z;
-                Vector3 unityPos = NTSDRenderSpace.ScreenPixelToWorld(wx, screenY, 0f);
+                float screenX = obj.GetHitRecordX(j) + obj.GetRenderOffsetX() - world.ReleaseCameraX;
+                float screenY = obj.GetHitRecordZ(j);
+                Vector3 unityPos = NTSDRenderSpace.ScreenPixelToWorld(screenX, screenY, 0f);
 
-                if (pool != null)
+                SpriteRenderer sr = pool?.GetSprite();
+                if (sr == null)
                 {
-                    SpriteRenderer sr = pool.GetSprite();
-                    if (sr != null)
-                    {
-                        sr.sprite = sprite;
-                        sr.transform.position = unityPos;
-                        sr.transform.localScale = NTSDRenderSpace.RenderScale;
-                        sr.sortingLayerName = "Object";
-                        sr.sortingOrder = Mathf.Abs(Mathf.RoundToInt(sortZ)) + 1;
-                        _activeThisFrame.Add(sr);
-                    }
+                    j++;
+                    continue;
                 }
 
-                obj.AdvanceSparkSlot(j);
+                sr.sprite = sprite;
+                sr.transform.position = unityPos;
+                sr.transform.localScale = NTSDRenderSpace.RenderScale;
+                sr.sortingLayerName = "Object";
+                sr.sortingOrder = obj.GetRenderSortingOrder() + 1;
+                _activeThisFrame.Add(sr);
+                obj.AdvanceHitRecord(j, world.SparkRenderFrame);
                 j++;
             }
         }

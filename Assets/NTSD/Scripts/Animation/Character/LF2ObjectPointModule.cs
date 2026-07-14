@@ -115,7 +115,7 @@ namespace NTSD.Animation
             task.parent = animator;
             task.team = animator.Team;
             task.pos = pos;
-            task.z = animator.PS.z;
+            task.z = (float)animator.PS.z;
             task.dir = animator.PS.dir;
             task.dvz = 0f;
 
@@ -131,7 +131,7 @@ namespace NTSD.Animation
             task.parent = animator;
             task.team = animator.Team;
             task.pos = pos;
-            task.z = animator.PS.z;
+            task.z = (float)animator.PS.z;
             task.dir = animator.PS.dir;
             task.dvz = 0f;
             task.number = number;
@@ -150,14 +150,14 @@ namespace NTSD.Animation
             if (ps == null || frame == null)
                 return Vector3.zero;
 
-            float x = ps.dir == "right"
+            double x = ps.dir == "right"
                 ? ps.x - frame.centerx + op.x
                 : ps.x + frame.centerx - op.x;
 
-            float logicalY = ps.y - frame.centery + op.y;
-            float screenY = logicalY + ps.z;
+            double logicalY = ps.y - frame.centery + op.y;
+            double screenY = logicalY + ps.z;
 
-            return new Vector3(x, screenY, ps.z);
+            return new Vector3((float)x, (float)screenY, (float)ps.z);
         }
     }
 }

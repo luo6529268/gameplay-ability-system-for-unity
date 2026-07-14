@@ -6,5 +6,6 @@ namespace NTSD.App
     public sealed class GameModeConfig
     {
         public int gameModeId;
+        public int battleGameModeId = 1;
     }
 }
