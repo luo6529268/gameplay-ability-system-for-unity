@@ -72,6 +72,9 @@ namespace NTSD.Test
                 CheckOid5152SplitSuccessAndOddTruncate();
                 CheckOid5152SplitFailurePartialRecovery();
                 CheckOid5152DjaReleaseTriggersSameTickSplit();
+                CheckRespawnPassWithoutStoredCount();
+                CheckRespawnPassFreeEntityGate();
+                CheckRespawnPassWithStoredCountAndEffectSpawn();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -1892,6 +1895,168 @@ namespace NTSD.Test
             }
         }
 
+        private static void CheckRespawnPassWithoutStoredCount()
+        {
+            var world = new SimulationWorld();
+            LF2Character dead = CreateCharacter("SelfCheck_Respawn_NoCount", 1, BuildRespawnCharacterData("SelfCheck_Respawn_NoCount"));
+            LF2Character allyA = CreateCharacter("SelfCheck_Respawn_AllyA", 2, BuildRespawnCharacterData("SelfCheck_Respawn_AllyA"));
+            LF2Character allyB = CreateCharacter("SelfCheck_Respawn_AllyB", 3, BuildRespawnCharacterData("SelfCheck_Respawn_AllyB"));
+            dead.SetRuntimeSlotIndex(0);
+            allyA.SetRuntimeSlotIndex(1);
+            allyB.SetRuntimeSlotIndex(2);
+            world.Register(dead);
+            world.Register(allyA);
+            world.Register(allyB);
+
+            dead.RelationTeam = 5;
+            allyA.RelationTeam = 5;
+            allyB.RelationTeam = 5;
+            dead.ImmediateFrame(14);
+            dead.Health.HP = 0;
+            dead.Health.HP3 = 180;
+            dead.Health.HPBound = 60;
+            dead.HP2Orig = 3;
+            dead.Health.PP = 12;
+            dead.HitStun = 3;
+            dead.Runtime.SetPosition(40.0, 0.0, 5.0);
+            dead.Runtime.SetVelocity(0.0, -7.0, 0.0);
+            dead.Runtime.SyncIntegerPosition();
+
+            allyA.Runtime.SetPosition(100.0, 0.0, 40.0);
+            allyA.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            allyA.Runtime.SyncIntegerPosition();
+            allyB.Runtime.SetPosition(160.0, 0.0, 20.0);
+            allyB.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            allyB.Runtime.SyncIntegerPosition();
+
+            DeterministicRng expectedRng = new DeterministicRng(0x4E545344u);
+            int expectedX = 130 + expectedRng.NextInt(0, 51) - 26;
+            int expectedZ = 30 + expectedRng.NextInt(0, 31) - 16;
+
+            world.PostFrameAdvanceDeathCleanupAll(1);
+
+            Expect(dead.HP2Orig == 2,
+                "respawn no-count branch must decrement HP2 overlay by 1");
+            Expect(dead.Health.HP == 180 && dead.Health.HPBound == 180,
+                "respawn no-count branch must restore HP and HPBound from HP3");
+            Expect(dead.Health.PP == 500,
+                "respawn no-count branch must refill PP to 500");
+            Expect(dead.CurrentFrameId == 212 && dead.HitStun == 20,
+                "respawn no-count branch must enter frame 212 and arm 20 hit stop");
+            Expect(dead.GetRuntimeYInt() == -300 && Nearly(dead.Runtime.Vy, 0.0),
+                "respawn no-count branch must set y to -300 and zero Vy");
+            Expect(dead.GetRuntimeXInt() == expectedX && dead.GetRenderZInt() == expectedZ,
+                $"respawn no-count branch must respawn around same-relation teammates using release RNG offsets; " +
+                $"expected=({expectedX},{expectedZ}) actual=({dead.GetRuntimeXInt()},{dead.GetRenderZInt()}) " +
+                $"runtimeXZ=({dead.Runtime.X},{dead.Runtime.Z}) alliesXZ=({allyA.GetRuntimeXInt()},{allyA.GetRenderZInt()})/({allyB.GetRuntimeXInt()},{allyB.GetRenderZInt()})");
+        }
+
+        private static void CheckRespawnPassFreeEntityGate()
+        {
+            var world = new SimulationWorld();
+            LF2Character freed = CreateCharacter("SelfCheck_Respawn_Free", 1, BuildRespawnCharacterData("SelfCheck_Respawn_Free"));
+            LF2Character gated = CreateCharacter("SelfCheck_Respawn_Gated", 2, BuildRespawnCharacterData("SelfCheck_Respawn_Gated"));
+            freed.SetRuntimeSlotIndex(0);
+            gated.SetRuntimeSlotIndex(1);
+            world.Register(freed);
+            world.Register(gated);
+
+            freed.RelationTeam = 5;
+            freed.ImmediateFrame(14);
+            freed.Health.HP = 0;
+            freed.HP2Orig = 1;
+            freed.HitStun = 2;
+
+            gated.RelationTeam = 4;
+            gated.ImmediateFrame(14);
+            gated.Health.HP = 0;
+            gated.HP2Orig = 5;
+            gated.HitStun = 2;
+            gated.Runtime.SetPosition(33.0, 0.0, 12.0);
+            gated.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            gated.Runtime.SyncIntegerPosition();
+
+            world.PostFrameAdvanceDeathCleanupAll(2);
+
+            Expect(world.FindEntityByRuntimeSlotForQuery(0) == null,
+                "respawn no-count branch must free entity immediately when HP2Orig < 2");
+            Expect(gated.CurrentFrameId == 14 && gated.HP2Orig == 5 &&
+                   gated.GetRuntimeXInt() == 33 && gated.GetRenderZInt() == 12,
+                "respawn pass must respect slot<20 + relation/kill gate and leave gated lying entity unchanged");
+        }
+
+        private static void CheckRespawnPassWithStoredCountAndEffectSpawn()
+        {
+            System.Func<SimulationWorld, LF2Entity, LF2Entity> previousOverride = SimulationWorld.RespawnEffectSpawnOverride;
+            RespawnSelfCheckEffectEntity spawned = null;
+            try
+            {
+                SimulationWorld.RespawnEffectSpawnOverride = (world, source) =>
+                {
+                    spawned = new RespawnSelfCheckEffectEntity();
+                    spawned.BindData(998, BuildRespawnEffectData());
+                    spawned.RelationTeam = source.RelationTeam;
+                    spawned.SpawnerEntityIndex = source.Runtime?.SlotIndex ?? -1;
+                    spawned.Runtime.SetPosition(source.GetRuntimeXInt(), source.GetRuntimeYInt(), source.GetRenderZInt() + 1.0);
+                    spawned.Runtime.SetVelocity(0.0, 0.0, 0.0);
+                    spawned.Runtime.SyncIntegerPosition();
+                    spawned.SetRuntimeSlotIndex(25);
+                    world.Register(spawned);
+                    return spawned;
+                };
+
+                var world = new SimulationWorld();
+                LF2Character dead = CreateCharacter("SelfCheck_Respawn_WithCount", 0x1E, BuildRespawnCharacterData("SelfCheck_Respawn_WithCount"));
+                dead.SetRuntimeSlotIndex(0);
+                world.Register(dead);
+
+                dead.RelationTeam = 3;
+                dead.KillCount = 0;
+                dead.ImmediateFrame(14);
+                dead.Health.HP = 0;
+                dead.Health.PP = 77;
+                dead.Health.HPBound = 10;
+                dead.Health.HP3 = 10;
+                dead.HPOrig = 6;
+                dead.HP2Orig = 4;
+                dead.RespawnCount = 80;
+                dead.AttackingCounter = 9;
+                dead.HitStun = 4;
+                dead.Runtime.SetPosition(77.0, -12.0, 19.0);
+                dead.Runtime.SetVelocity(0.0, 0.0, 0.0);
+                dead.Runtime.SyncIntegerPosition();
+
+                world.PostFrameAdvanceDeathCleanupAll(3);
+
+                Expect(dead.HP2Orig == 6 && dead.HPOrig == 0,
+                    "respawn stored-count branch must copy HP overlay before clearing HPOrig");
+                Expect(dead.Health.PP == 0,
+                    "respawn stored-count branch must zero PP");
+                Expect(dead.Health.HP == 80 && dead.Health.HPBound == 80 && dead.Health.HP3 == 80,
+                    "respawn stored-count branch must restore HP/HPBound/HP3 from RespawnCount");
+                Expect(dead.RespawnCount == 0 && dead.RelationTeam == 1,
+                    "respawn stored-count branch must clear RespawnCount and reset relation identity to 1");
+                Expect(dead.Runtime.RenderPicOffset == 0x8C,
+                    "respawn stored-count branch must write render pic offset 0x8C for oid 0x1E..0x24");
+                Expect(dead.CurrentFrameId == 0xDB && dead.FrameDelay == 0xA && dead.AttackingCounter == 0,
+                    "respawn stored-count branch must enter frame 0xDB with frame delay 10 and clear attacking");
+                Expect(spawned != null && world.ObjectCount == 2,
+                    "respawn stored-count branch must spawn oid998 effect into the world");
+                Expect(spawned.ObjectId == 998 && (spawned.Frame?.N ?? -1) == 6,
+                    "respawn effect spawn must use oid998 frame 6");
+                Expect(spawned.GetRuntimeXInt() == 77 &&
+                       spawned.GetRuntimeYInt() == -12 &&
+                       spawned.GetRenderZInt() == 20,
+                    "respawn effect spawn must copy x/y and use z_int + 1");
+                Expect(spawned.RelationTeam == 1 && spawned.SpawnerEntityIndex == dead.Runtime.SlotIndex,
+                    "respawn effect spawn must inherit post-respawn relation identity and spawner slot");
+            }
+            finally
+            {
+                SimulationWorld.RespawnEffectSpawnOverride = previousOverride;
+            }
+        }
+
         private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
         {
             return new Dictionary<int, LF2CharacterDataWrapper>
@@ -1929,6 +2094,33 @@ namespace NTSD.Test
                     Frame(0, 0, 1, 0, 39, 79),
                     Frame(112, 0, 1, 112, 39, 79),
                     frame290,
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildRespawnCharacterData(string name)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 1, 0, 39, 79),
+                    Frame(14, 14, 1, 14, 39, 79),
+                    Frame(212, 5, 1, 212, 39, 79),
+                    Frame(0xDB, 0, 1, 0xDB, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildRespawnEffectData()
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_RespawnEffect998",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(6, 9998, 1, 1000, 39, 79),
                 },
             };
         }
@@ -2224,6 +2416,37 @@ namespace NTSD.Test
                 Frame.N = 0;
                 Runtime.Frame = 0;
                 Runtime.PrevFrame2 = 0;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class RespawnSelfCheckEffectEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+            public override float GetSpriteWidthPxForCollision() => 100f;
+
+            public RespawnSelfCheckEffectEntity()
+            {
+                Name = "SelfCheck_RespawnEffect998";
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public void BindData(int objectId, LF2CharacterData data)
+            {
+                ObjectId = objectId;
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(6);
+                Frame.PN = 6;
+                Frame.N = 6;
+                Runtime.Frame = 6;
+                Runtime.PrevFrame2 = 6;
             }
 
             public override void Reset() { }

@@ -32,18 +32,30 @@ namespace NTSD.Animation.LF2Objects
         {
             base.Awake();
 
-            _availablePools = new Dictionary<LF2ObjectType, LinkedList<ILF2Object>>();
-            _activeObjects = new HashSet<ILF2Object>();
-
-            _availablePools[LF2ObjectType.LightWeapon] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.HeavyWeapon] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.SpecialAttack] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.ThrowWeapon] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.Drink] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.Character] = new LinkedList<ILF2Object>();
-            _availablePools[LF2ObjectType.Other] = new LinkedList<ILF2Object>();
+            EnsureLogicPoolsInitialized();
 
             PrewarmPool();
+        }
+
+        private void EnsureLogicPoolsInitialized()
+        {
+            _availablePools ??= new Dictionary<LF2ObjectType, LinkedList<ILF2Object>>();
+            _activeObjects ??= new HashSet<ILF2Object>();
+
+            if (!_availablePools.ContainsKey(LF2ObjectType.LightWeapon))
+                _availablePools[LF2ObjectType.LightWeapon] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.HeavyWeapon))
+                _availablePools[LF2ObjectType.HeavyWeapon] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.SpecialAttack))
+                _availablePools[LF2ObjectType.SpecialAttack] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.ThrowWeapon))
+                _availablePools[LF2ObjectType.ThrowWeapon] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.Drink))
+                _availablePools[LF2ObjectType.Drink] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.Character))
+                _availablePools[LF2ObjectType.Character] = new LinkedList<ILF2Object>();
+            if (!_availablePools.ContainsKey(LF2ObjectType.Other))
+                _availablePools[LF2ObjectType.Other] = new LinkedList<ILF2Object>();
         }
 
         private void PrewarmPool()
@@ -110,6 +122,8 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>获取逻辑对象（LF2LivingObject 子类）</summary>
         public ILF2Object Get(LF2ObjectType objectType, int oid)
         {
+            EnsureLogicPoolsInitialized();
+
             ILF2Object obj = null;
 
             if (_availablePools.TryGetValue(objectType, out var pool) && pool.Count > 0)
@@ -136,6 +150,8 @@ namespace NTSD.Animation.LF2Objects
         public void Release(ILF2Object obj)
         {
             if (obj == null) return;
+
+            EnsureLogicPoolsInitialized();
 
             // Reset 已由调用方（OnTransitDestroy -> ResetState）执行，此处只做池 management
             _activeObjects.Remove(obj);

@@ -932,7 +932,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>从 SimulationWorld 注销自身。</summary>
         public virtual void UnregisterFromWorld()
         {
-            SimulationTickDriver.Instance?.World?.Unregister(this);
+            Match?.Unregister(this);
         }
 
         /// <summary>销毁当前对象的可视表现。</summary>
@@ -950,6 +950,10 @@ namespace NTSD.Animation.LF2Objects
             {
                 LF2ObjectPool.Instance?.Release(Renderer);
                 Renderer = null;
+            }
+            else
+            {
+                UnregisterFromWorld();
             }
             LF2ReferencePool.Instance?.Release(this);
         }
@@ -2067,6 +2071,9 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool CanEnterCharacterDatInputFrameJump()
         {
+            if (ObjectId == 51 && Runtime?.Unk328 == 1)
+                return false;
+
             return TransformOriginalObjectId == -1 && Runtime.LinkState != 2;
         }
 

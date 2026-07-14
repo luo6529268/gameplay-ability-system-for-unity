@@ -525,6 +525,10 @@ namespace NTSD.Animation.LF2Objects
                 LF2ObjectPool.Instance?.Release(Renderer);
                 Renderer = null;
             }
+            else
+            {
+                UnregisterFromWorld();
+            }
             LF2ReferencePool.Instance?.Release(this);
         }
 

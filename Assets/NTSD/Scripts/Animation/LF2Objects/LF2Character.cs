@@ -931,13 +931,25 @@ namespace NTSD.Animation.LF2Objects
 
         public override void UnregisterFromWorld()
         {
-            SimulationTickDriver.Instance?.World?.Unregister(this);
+            Match?.Unregister(this);
         }
 
         public override void OnTransitDestroy()
         {
             DestroyEvent();
             Destroy();
+
+            if (Renderer != null)
+            {
+                LF2ObjectPool.Instance?.Release(Renderer);
+                Renderer = null;
+            }
+            else
+            {
+                UnregisterFromWorld();
+            }
+
+            LF2ReferencePool.Instance?.Release(this);
         }
 
         public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)

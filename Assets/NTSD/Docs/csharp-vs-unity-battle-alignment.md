@@ -44,7 +44,7 @@ C# `GameTick.Run` 是单一函数，顺序完全线性。Unity 拆成 `NTSDBattl
 | 2 | 清瞬时状态 `PendingSounds.Clear()` 等 | 分散 | ⚠️ |
 | 3 | `RunCooldownsTick`（arest-- + attack_exempt 清理） | `VrestTickAll` + `ClearAttackExemptIfCurrentFrameCannotHit` | 🔷 |
 | 4 | `postCooldownInput`（人类输入注入） | `PostCooldownInputAll` | ✅ 顺序已对齐（见 AGENTS.md） |
-| 5 | `RunOid5152RuntimeMaintenance`（7/8→51 合体） | `Oid5152RuntimeMaintenanceAll` + `TryMergeOid7Or8Into51` / `TrySplitOid51BackToPair` | ⚠️ 已实现，fresh Unity 运行时验收受项目锁阻塞 |
+| 5 | `RunOid5152RuntimeMaintenance`（7/8→51 合体） | `Oid5152RuntimeMaintenanceAll` + `TryMergeOid7Or8Into51` / `TrySplitOid51BackToPair` | ✅ 已完成并通过 fresh Unity 运行时验收 |
 | 6 | `ApplyCharacterInputPass`（GameTick>1 才应用） | `PostCooldownInputAll` 内 | 🔷 |
 | 7 | `RunEarlyStatePasses`（400/401/500/501） | `EarlyFrameAdvanceSpecialsAll` | ✅ 含 BMD-023 修复 |
 | 8 | `FrameRuntimePasses.RunFrameLogic`（hit_fa>0 非角色） | `FrameLogicBeforeAdvanceAll` | ✅ |
@@ -249,8 +249,8 @@ Unity 有两套：
 
 | 编号 | C# 逻辑 | 位置 | Unity 状态 | 判定 |
 |------|---------|------|-----------|------|
-| M-1 | **oid 7/8 → 51 合体 / 51 拆分** (`RunOid5152RuntimeMaintenance` `GameTick.cs:1093`, `TryMergeOid7Or8Into51` :1123, `SplitOid51BackToPair` :1214) | GameTick early | ⚠️ `NTSDBattleTickSystem` / `SimulationWorld.Passes` / `NTSDEntityRuntime` / `BattleRuntimeSelfCheck` 已落地 | **⚠️ 逻辑已写，fresh Unity 运行时验收待解锁后补跑** |
-| M-2 | **复活 pass**（`RunRespawnPass` `GameTick.cs:839-934`：state14+HP<=0 + HitStop 窗口 + 两分支[Hp2Overlay/RespawnCount] + 队友位置平均 + Pp=500/HpMax=Hp3 + Frame=212/YInt=-300 + 生成 oid998 复活特效） | GameTick step10 | ❌ 仅 `RespawnCount` 字段 + `HitStun=30` 触发碎片，主逻辑未移植 | **❌ 缺失，需新增** |
+| M-1 | **oid 7/8 → 51 合体 / 51 拆分** (`RunOid5152RuntimeMaintenance` `GameTick.cs:1093`, `TryMergeOid7Or8Into51` :1123, `SplitOid51BackToPair` :1214) | GameTick early | ✅ `NTSDBattleTickSystem` / `SimulationWorld.Passes` / `NTSDEntityRuntime` / `BattleRuntimeSelfCheck` 已落地 | **✅ 已完成 / Unity 运行时已验证（T4）** |
+| M-2 | **复活 pass**（`RunRespawnPass` `GameTick.cs:839-934`：state14+HP<=0 + HitStop 窗口 + 两分支[Hp2Overlay/RespawnCount] + 队友位置平均 + Pp=500/HpMax=Hp3 + Frame=212/YInt=-300 + 生成 oid998 复活特效） | GameTick step10 | ✅ `SimulationWorld.Passes` / `BattleRuntimeSelfCheck` 主逻辑与样例已落地；已补 no-renderer 销毁注销链与 reference-pool 惰性初始化 | **✅ 已完成 / Unity 运行时已验证（T5）** |
 | M-3 | **N30 输入触发**（`RunN30InputTrigger`：input history 9/0/9/0→触发码 100/102/104 生成 998 + history gate 广播） | LateEntityUpdate | ✅ `RunLateCharacterDatInputTrigger`（LF2Entity） | ✅ 已移植 |
 | M-4 | **状态转换特效**（`SpawnStateTransitionEffects`：state13/frame200 退出 + state18/19 燃烧特效） | LateEntityUpdate | ✅ `SpawnLateTransitionEffects` | ✅ |
 | M-5 | **死亡弹地帧**（`ApplyDeathBounceFrame`：frame186 + Vy=-3） | LateEntityUpdate | ⚠️ `RunLateDeathOpointPreCleanupPhase` 需确认 | ⚠️ 未逐行确认 |
@@ -307,9 +307,11 @@ Unity 有两套：
 - [x] **§2.1-1 / T0** `exemptVal` 公式 — **已修复并通过 Unity 运行时自检**：`LF2Entity.ResolveArestCooldown` 与 `LF2CharacterHitResolver` 已按 arest/vrest 权威公式处理
 - [x] **§2.1-3 / M-8 / T1** ApplyAlternateDamage — **已完成并通过 Unity 运行时自检**：共享 `LF2AlternateDamageResolver` 覆盖约 line 827 的完整权威契约；真实 `LF2Character.Hit` 与 shared-character-DAT resolver 两入口、`Unk344`/统计数组/`HPBound`、heavy/rest/preprocess/state tail 均有针对性检查
 
+### P1 — 已补齐并完成 fresh Unity 运行时验证
+- [x] **M-1 / T4** oid 7/8→51 合体拆分 — **已完成并通过 fresh Unity 运行时自检**
+- [x] **M-2 / T5** 复活 pass（`RunRespawnPass` 完整逻辑）— **已完成并通过 fresh Unity 运行时自检**
+
 ### P1 — 已确认缺失战斗逻辑（需新增）
-- [x] **M-1** oid 7/8→51 合体拆分 — **代码已实现，待 fresh Unity 运行时验收**
-- [x] **M-2** 复活 pass（`RunRespawnPass` 完整逻辑）— **确认缺失**（仅字段 + HitStun 触发碎片）
 - [x] **M-13** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **确认缺失**
 - [x] **§6.1 / combo** `RunComboWrappers` 9 组方向连招 + oid6 DjaGuard — **确认缺失**
 - [x] **§6.2 AI** `PrepareAiInputBasic` + 14 个辅助函数 — **确认完全缺失（最大工作量块）**
@@ -352,12 +354,10 @@ Unity 有两套：
 
 ## 附二：核实总账（更新至 2026-07-14）
 
-**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 5 项）：**
+**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 3 项）：**
 
 | 项 | 内容 | 工作量 |
 |----|------|--------|
-| M-1 | oid 7/8→51 合体拆分 | 中 |
-| M-2 | 复活 pass（RunRespawnPass 全逻辑）| 大 |
 | M-13 | stage 波次刷敌（ApplyCurrentWave 整套）| 大 |
 | combo | RunComboWrappers 9 组连招 + oid6 DjaGuard | 大 |
 | AI | PrepareAiInputBasic + 14 辅助函数 | **极大（~600 行）** |
@@ -368,10 +368,12 @@ Unity 有两套：
 |----|------|
 | §2.1-1 / T0 | `exemptVal` 已改用权威 arest/vrest 公式，并通过 Unity 运行时自检 |
 
-**✅ 原缺失项已完成并通过 Unity 运行时自检（共 3 项）：**
+**✅ 原缺失项已完成并通过 Unity 运行时自检（共 5 项）：**
 
 | 项 | 内容 |
 |----|------|
+| M-1 / T4 | oid 7/8→51 合体拆分 |
+| M-2 / T5 | 复活 pass（含 free-entity gate、队友平均落点、stored-count 分支与 oid998 特效） |
 | M-8 / T1 | 共享 ApplyAlternateDamage 完整契约、真实角色/shared-DAT 两入口及 object-pass 预处理 |
 | M-9 / T2 | 角色/武器统一 `RecordKind0Hit` |
 | M-14 / T3 | frame 110/114 写 `CdDefendLock=3` 及 cooldown 生命周期 |
@@ -397,7 +399,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 4 项缺失逻辑（AI、combo、stage 波次、复活）+ M-1 已实现待 fresh Unity 运行时验收 + 3 项部分对齐**；T0/T1/T2/T3 均已完成并通过 Unity 运行时自检。另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的三块仍是 **AI 输入生成器、combo 连招、stage 波次刷敌**。
+**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 3 项缺失逻辑（AI、combo、stage 波次）+ 5 项已完成并通过 Unity 运行时自检 + 3 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的三块仍是 **AI 输入生成器、combo 连招、stage 波次刷敌**。
 
 ## 实施进度（2026-07-14）
 
@@ -409,5 +411,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T2（M-9） | **已完成 / Unity 运行时已验证** | `LF2Entity.RecordKind0Hit` 统一命中记录；`LF2Weapon.ApplyHitEffects` 的 kind 0 路径接入 | `CheckKind0HitRecords` 已覆盖 owner、timer、随机坐标范围和 10 槽上限并通过 |
 | T3（M-14） | **已完成 / Unity 运行时已验证** | `LF2Entity.RunCommonFrameTick` 尾部写 `CdDefendLock=3`；runtime 字段、Reset 和 cooldown 衰减已承载 | `CheckFrameTickDefendLockTail` 已覆盖 110/114、早退、普通帧和 3→0 衰减并通过 |
 | T1（M-8） | **已完成 / Unity 运行时已验证** | 共享 `LF2AlternateDamageResolver`；真实 `LF2Character.Hit` 与 `LF2CharacterDatHitResolver.TryResolveHit` 两入口；`NTSDEntityRuntime.Unk344`；稳定 3 槽 `KillStats`/`DamageStats` 与保 identity reset；`HPBound` 整数扣减且 `HPLost` 不变；heavy 顺序、character guard、clamp 后 vrest、SpecialAttack object-pass kind4/9 预处理、state1002 不写 `WeaponState`。type3 lead sound 已按代码权威对齐，headless 未直接观测音频 | `CheckAlternateHurtTriggerMatrix`、`CheckAlternateDamageCoreSideEffects`、`CheckAlternateDamageMotionTailMatrix`、`CheckAlternateDamageCharacterEntry`、`CheckAlternateDamageSharedDatEntry`、`CheckAlternateDamageHeavyWeaponEntries`、`CheckAlternateDamageInteractionVrest`、`CheckSpecialAttackDamagePreprocess` 均通过 |
+| T4（M-1） | **已完成 / Unity 运行时已验证** | `Oid5152RuntimeMaintenanceAll`、`TryMergeOid7Or8Into51`、`TrySplitOid51BackToPair` 已落地到 `SimulationWorld.Passes.partial.cs` 与运行时身份维护链 | `CheckOid5152MergeSuccessAndDormantIsolation`、`CheckOid5152MergeCooldownOneTriggersSameTick`、`CheckOid5152SplitSuccessAndOddTruncate`、`CheckOid5152SplitFailurePartialRecovery`、`CheckOid5152DjaReleaseTriggersSameTickSplit` 均通过 |
+| T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 与 `dotnet build Assembly-CSharp-Editor.csproj /v:minimal /m:1` 均为 **0 errors**。M-1 代码与 `BattleRuntimeSelfCheck` 新样例已落地，但本次 Unity batchmode 自检被当前打开的 Unity 实例阻塞：`ntsd_selfcheck_unity.log` 明确报错 **another Unity instance is running with this project open**，因此 **未生成新的 `Temp/NTSD_BattleRuntimeSelfCheck.result`**，M-1 现阶段只能记为“逻辑已写、运行时未 fresh 验收”。T0/T1/T2/T3 的既有 Unity PASS 证据仍有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**；随后 fresh Unity batchmode `BattleRuntimeSelfCheck` 再次完整通过，`ntsd_selfcheck_unity.log` 结尾明确记录 `[BattleRuntimeSelfCheck] 战斗运行时自检通过。`。因此 M-1/T4 与 M-2/T5 已从“逻辑已写”升级为“已完成 / Unity 运行时已验证”；T0/T1/T2/T3 的既有 Unity PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。
