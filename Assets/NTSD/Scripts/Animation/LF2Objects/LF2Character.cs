@@ -751,6 +751,14 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime.LinkState < 0)
                 return;
 
+            if (AiControlled)
+            {
+                Match?.PrepareAiInputBasic(this, tickIndex);
+                InputState?.SyncFromRuntime(Runtime);
+                ComboUpdate();
+                return;
+            }
+
             // 第一步：把这一帧按键事件整理成“按住状态 + 新按下边沿 + 输入历史”。
             UpdateLocalInputStateFromControllerBuffer(tickIndex);
             // 第二步：根据当前帧 DAT 的 hit_* 配置，决定是否切到技能/动作帧。
@@ -827,7 +835,7 @@ namespace NTSD.Animation.LF2Objects
             FrameDelay = task.frameDelay;
             AttackExempt = task.attackExempt;
 
-            AiControlled = false;
+            AiControlled = true;
             // opoint 生成的角色不能绑定玩家输入，但必须拥有独立的逻辑输入缓冲，
             // 否则 release 风格生成的 AI 角色会被标记为 AiControlled 却无法接收帧输入。
             Controller = new CharacterInputModule();

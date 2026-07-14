@@ -18,6 +18,7 @@ namespace NTSD.Simulation
         {
             if (world == null) return;
 
+            world.AdvanceInputPhase();
             RunFrameAdvancePhase(tickIndex);
             RunInteractionPhase(tickIndex);
             RunPresentationAndCleanupPhase(tickIndex);
@@ -26,8 +27,9 @@ namespace NTSD.Simulation
         private void RunFrameAdvancePhase(int tickIndex)
         {
             TickCooldowns(tickIndex);
-            PostCooldownInput(tickIndex);
+            PostCooldownHumanInput(tickIndex);
             Oid5152RuntimeMaintenance(tickIndex);
+            AiInputAndCombo(tickIndex);
             EarlyFrameAdvanceSpecials(tickIndex);
             FrameLogicBeforeAdvance(tickIndex);
             FrameAdvanceAll(tickIndex);
@@ -66,9 +68,14 @@ namespace NTSD.Simulation
             world.VrestTickAll(tickIndex);
         }
 
-        private void PostCooldownInput(int tickIndex)
+        private void PostCooldownHumanInput(int tickIndex)
         {
-            world.PostCooldownInputAll(tickIndex);
+            world.PostCooldownHumanInputAll(tickIndex);
+        }
+
+        private void AiInputAndCombo(int tickIndex)
+        {
+            world.AiInputAndComboAll(tickIndex);
         }
 
         private void ProcessHeldObjects(int tickIndex)

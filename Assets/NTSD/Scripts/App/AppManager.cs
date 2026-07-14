@@ -205,6 +205,8 @@ namespace NTSD.App
                 lf2.ModuleBind(frameData, slot.characterId);
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = team;
+                lf2.RelationTeam = team;
+                lf2.AiControlled = !slot.isHuman;
 
                 Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
                     ? spawnPoints[i].transform.position: Vector3.zero;

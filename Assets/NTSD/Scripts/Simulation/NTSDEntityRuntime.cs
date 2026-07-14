@@ -137,6 +137,9 @@ namespace NTSD.Simulation
         public int Unk334;
         public int Unk338;
         public int Unk344;
+        public int Unk360 = -1;
+        public int Unk3FC = -1000;
+        public int Unk400 = -1000;
         public int ShotCount;
         public int WeaponCount;
         public int FallDamageDiv;
@@ -227,6 +230,33 @@ namespace NTSD.Simulation
             PrevJump = KeyJump;
             PrevDefend = KeyDefend;
             PrevAttack = KeyAttack;
+        }
+
+        public bool HasInputHistoryGate()
+        {
+            EnsureInputHistory();
+            return InputHistory[0] != 0;
+        }
+
+        public void ClearDirectionalInputKeys()
+        {
+            KeyUp = KeyDown = KeyLeft = KeyRight = 0;
+        }
+
+        public void ClearActionInputKeys()
+        {
+            KeyAttack = KeyJump = KeyDefend = 0;
+        }
+
+        public void ApplyInputEdges()
+        {
+            if (PrevRight == 0 && KeyRight == 1) { CdRight = 5; PushInputHistory(6); }
+            if (PrevLeft == 0 && KeyLeft == 1) { CdLeft = 5; PushInputHistory(4); }
+            if (PrevUp == 0 && KeyUp == 1) { CdUp = 5; PushInputHistory(8); }
+            if (PrevDown == 0 && KeyDown == 1) { CdDown = 5; PushInputHistory(2); }
+            if (PrevAttack == 0 && KeyAttack == 1) { CdDefend = 5; PushInputHistory(9); }
+            if (PrevDefend == 0 && KeyDefend == 1) { CdJump = 5; PushInputHistory(0); }
+            if (PrevJump == 0 && KeyJump == 1) { CdAttack = 5; PushInputHistory(5); }
         }
 
         public void PushInputHistory(int keyNum)
@@ -398,6 +428,9 @@ namespace NTSD.Simulation
             Unk334 = 0;
             Unk338 = 0;
             Unk344 = 0;
+            Unk360 = -1;
+            Unk3FC = -1000;
+            Unk400 = -1000;
             ShotCount = 0;
             WeaponCount = 0;
             FallDamageDiv = 0;

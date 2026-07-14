@@ -1071,7 +1071,14 @@ namespace NTSD.Animation.LF2Objects
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                 return;
 
-            UpdateSharedRuntimeInputSnapshotForSimulation(tickIndex);
+            if (AiControlled)
+            {
+                Match?.PrepareAiInputBasic(this, tickIndex);
+            }
+            else
+            {
+                UpdateSharedRuntimeInputSnapshotForSimulation(tickIndex);
+            }
 
             if (this is LF2Character)
                 return;

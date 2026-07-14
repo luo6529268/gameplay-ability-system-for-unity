@@ -232,7 +232,7 @@ Unity 有两套：
 
 ### 6.2 AI（`InputRuntime.PrepareAiInputBasic`）
 
-**❌ AI 输入生成器完全缺失**：
+**✅ AI 输入生成器已完整落地并通过 fresh Unity 运行时验证**：
 - C# `InputRuntime.cs:16` `PrepareAiInputBasic`（~600 行巨型函数，oid 专属 combo 决策、C8 威胁扫描、7A/7B 守卫、队友守卫、held weapon 决策、历史闸门、oid1/4/5/33/52 多种 oid 专属 combo）。
 - 实际包含 14 个辅助函数（已 grep 确认）：
   - `AiBetweenX`、`AiPostCacheCoordinateAllowsSpecial`、`AiPreUpdateTarget3000SideEffect`
@@ -240,8 +240,8 @@ Unity 有两套：
   - `AiUpdateLabel591Oid51_2_18_7Decision`、`AiUpdateFirstDecision`、`AiUpdateTeammateGuardDecision`
   - `AiUpdateOid1ComboDecision`、`AiUpdateCloseOid1Decision`、`AiUpdateOid4ComboDecision`、`AiUpdateOid5ComboDecision`
   - `AiProcessSubOidGroup`、`AiSpecialOidForSubGate`、`AiProcessHelper`
-- Unity grep `AiUpdate / AiBetweenX / AiPostCache / AiPreUpdate / AiProcessSub / AiSpecialOid / AiProcessHelper / ThreatScan` **全工程 0 文件命中**。
-- **修复方向**：从零移植 `PrepareAiInputBasic` 全部逻辑 + 14 个辅助函数。**这是 P1/P2 后最大的工作量块**。
+- Unity `SimulationWorld.AiInput.partial.cs` 已覆盖主入口及文档原先漏列的 target/team/move-mode/no-target/三个 `AiProcessSub*` 等完整直接/间接 helper 闭包。
+- 输入 pass、runtime 字段、deterministic RNG、runtime-slot 顺序、shared-DAT shell 与 roster/opoint bootstrap 均已接通；fresh build 0 errors，fresh Unity batch 自检通过。
 
 ---
 
@@ -313,7 +313,7 @@ Unity 有两套：
 - [x] **M-13 / T8** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **逻辑与生产接线已完成并通过 fresh Unity 运行时自检；默认 stage.dat 资产待部署**
 
 ### P1 — 已确认缺失战斗逻辑（需新增）
-- [x] **§6.2 AI** `PrepareAiInputBasic` + 14 个辅助函数 — **确认完全缺失（最大工作量块）**
+- [x] **§6.2 AI / T9** `PrepareAiInputBasic` 完整调用闭包 — **已完成并通过 fresh Unity 运行时自检**
 
 ### P1 — 已确认对齐（无需动作）
 - [x] **M-7** kind4+WeaponCount>0→0 dvx 翻转 — ✅ `BruteForceSceneQuery.cs:602-615`
@@ -352,11 +352,11 @@ Unity 有两套：
 
 ## 附二：核实总账（更新至 2026-07-14）
 
-**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 1 项）：**
+**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 0 项）：**
 
 | 项 | 内容 | 工作量 |
 |----|------|--------|
-| AI | PrepareAiInputBasic + 14 辅助函数 | **极大（~600 行）** |
+| AI / T9 | PrepareAiInputBasic 完整调用闭包 | **已完成并通过 Unity 运行时自检** |
 
 **✅ 已修复真 bug（共 1 项）：**
 
@@ -396,7 +396,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 1 项缺失逻辑（AI）+ T0-T7 已完成 + T8 逻辑/接线运行时已验证但缺默认数据资产 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。剩余主线实现是 **T9 AI 输入生成器**。
+**战斗逻辑差异点已完成本轮核实与主线实现。** 当前净结果：**P0 未修复项 0 + T0-T9 已完成并通过 Unity 运行时自检 + T8 缺默认数据资产 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。
 
 ## 实施进度（2026-07-14）
 
@@ -413,5 +413,6 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 | T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；数据资产待部署** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | `CheckStageWaveBootstrapAndSpawnContract`、`CheckStageWaveImmediateSpawnAndAdvance`、`CheckStageWavePositiveSpawnRefill` 均通过；仓库未携带默认二进制 `stage.dat` |
+| T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；human/AI 输入 pass 分段；runtime 字段与 roster/opoint bootstrap；shared-DAT shell | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 的 `Temp/NTSD_BattleRuntimeSelfCheck.result` 返回 **PASS**。T8 三组断言覆盖 parser/bootstrap、pre-wave -1→0、identity/type5、action 0、dynamic slot 50+、20-49 隔离、wave/bound 与 positive refill。T8 逻辑和生产接线已通过运行时验证；但仓库没有默认二进制 `stage.dat`，普通 Battle 必须在 `Application.streamingAssetsPath/NTSD/data/stage.dat` 部署数据或通过 `MatchConfig.stageCampaignFilePath` 显式注入。T0-T7 的既有 PASS 证据继续有效。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。T0-T9 主线均已完成运行时验收；但仓库没有默认二进制 `stage.dat`，普通 Battle 必须在 `Application.streamingAssetsPath/NTSD/data/stage.dat` 部署数据或通过 `MatchConfig.stageCampaignFilePath` 显式注入。

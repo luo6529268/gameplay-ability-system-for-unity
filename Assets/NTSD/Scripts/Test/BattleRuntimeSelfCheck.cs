@@ -84,6 +84,10 @@ namespace NTSD.Test
                 CheckStageWaveBootstrapAndSpawnContract();
                 CheckStageWaveImmediateSpawnAndAdvance();
                 CheckStageWavePositiveSpawnRefill();
+                CheckAiTargetCacheCoordinateAndDeterminism();
+                CheckAiHumanInputIsolation();
+                CheckAiHeldInactiveSlotContract();
+                CheckAiSharedCharacterDatShell();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -2401,6 +2405,8 @@ namespace NTSD.Test
                        spawned.Unk344 == 2 && spawned.HitStun == 20 &&
                        spawned.HolderCopySlot == spawnedSlot,
                     "stage immediate character spawn must apply team, Unk344, init and self-holder contracts");
+                Expect(spawned.AiControlled,
+                    "stage/opoint character spawns must be AI-controlled by default");
                 Expect(world.StageSpawnWaveApplied == 0 && world.StageProgression.WaveIdx == 0,
                     "stage immediate producer must initialize once without advancing while its entity is alive");
 
@@ -2582,6 +2588,167 @@ namespace NTSD.Test
             {
                 LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
             }
+        }
+
+        private static void CheckAiTargetCacheCoordinateAndDeterminism()
+        {
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_AI", 180);
+            SimulationWorld firstWorld = BuildAiSelfCheckWorld(data, 12345, out LF2Character firstAi, out LF2Character firstTarget);
+            firstWorld.AiInputAndComboAll(2);
+
+            Expect(firstAi.Runtime.Unk360 == firstTarget.Runtime.SlotIndex,
+                "AI must cache the selected target by runtime slot");
+            Expect(firstAi.Runtime.KeyRight != 0 || firstAi.Runtime.KeyLeft != 0 ||
+                   firstAi.Runtime.KeyUp != 0 || firstAi.Runtime.KeyDown != 0 ||
+                   firstAi.Runtime.KeyAttack != 0 || firstAi.Runtime.KeyJump != 0 || firstAi.Runtime.KeyDefend != 0 ||
+                   firstAi.Runtime.ComboDra != 0 || firstAi.Runtime.ComboDla != 0 || firstAi.Runtime.ComboDua != 0 ||
+                   firstAi.Runtime.ComboDda != 0 || firstAi.Runtime.ComboDrj != 0 || firstAi.Runtime.ComboDlj != 0 ||
+                   firstAi.Runtime.ComboDuj != 0 || firstAi.Runtime.ComboDdj != 0 || firstAi.Runtime.ComboDja != 0,
+                "AI target pass must produce movement, action, or combo intent");
+
+            SimulationWorld secondWorld = BuildAiSelfCheckWorld(data, 12345, out LF2Character secondAi, out _);
+            secondWorld.AiInputAndComboAll(2);
+            Expect(AiInputSignature(firstAi.Runtime) == AiInputSignature(secondAi.Runtime),
+                "AI decisions must be deterministic for the same seed and runtime-slot world state");
+
+            SimulationWorld coordinateWorld = new SimulationWorld();
+            LF2Character coordinateAi = CreateCharacter("SelfCheck_AI_Coordinate", 33, data);
+            coordinateAi.SetRuntimeSlotIndex(3);
+            coordinateAi.AiControlled = true;
+            coordinateAi.RelationTeam = 1;
+            coordinateAi.Runtime.SetPosition(100, 0, 100);
+            coordinateAi.Runtime.SyncIntegerPosition();
+            coordinateAi.Runtime.Unk3FC = 500;
+            coordinateAi.Runtime.Unk400 = 300;
+            coordinateAi.Runtime.KeyRight = 1;
+            coordinateWorld.Runtime.Flow.AiRand3 = 5;
+            coordinateWorld.Runtime.Match.Difficulty = 2;
+            coordinateWorld.Rng.Seed(3);
+            coordinateWorld.Register(coordinateAi);
+            coordinateWorld.AiInputAndComboAll(2);
+            Expect(coordinateAi.Runtime.KeyRight == 1 && coordinateAi.Runtime.KeyDown == 1,
+                "AI coordinate mode must move toward Unk3FC/Unk400 without requiring a target");
+            Expect(coordinateAi.Runtime.Unk360 == -1,
+                "AI coordinate mode must not mutate the cached combat target");
+            Expect(coordinateWorld.Runtime.Flow.AiRand3 == 5 && coordinateAi.Runtime.PrevRight == 0,
+                "AI coordinate mode must reuse the previous world AiRand3 before normal-path globals are recomputed");
+            Expect(coordinateAi.Runtime.CdRight == 5 &&
+                   coordinateAi.Runtime.InputHistory[4] == 6 &&
+                   coordinateAi.Runtime.InputHistory[5] == 2,
+                "AI coordinate movement must apply right then down edges in authority history order");
+        }
+
+        private static void CheckAiHeldInactiveSlotContract()
+        {
+            LF2CharacterData data = new LF2CharacterData
+            {
+                name = "SelfCheck_AI_HeldInactive",
+                frames = new List<LF2FrameData> { Frame(0, 2, 1, 0, 39, 79) },
+            };
+            SimulationWorld world = new SimulationWorld();
+            world.Runtime.Match.Difficulty = 0;
+            world.Rng.Seed(3);
+            LF2Character ai = CreateCharacter("SelfCheck_AI_HeldInactive_Source", 40, data);
+            LF2Character target = CreateCharacter("SelfCheck_AI_HeldInactive_Target", 41, data);
+            ai.SetRuntimeSlotIndex(0);
+            target.SetRuntimeSlotIndex(1);
+            ai.AiControlled = true;
+            ai.RelationTeam = 1;
+            target.RelationTeam = 2;
+            ai.Runtime.LinkState = 1;
+            ai.Runtime.TargetSlotIndex = 5;
+            ai.Runtime.SetPosition(100, 0, 200);
+            target.Runtime.SetPosition(140, 0, 200);
+            ai.Runtime.SyncIntegerPosition();
+            target.Runtime.SyncIntegerPosition();
+            world.Register(ai);
+            world.Register(target);
+            world.AiInputAndComboAll(2);
+            int nextRng = world.Rng.NextRaw();
+            Expect(AiInputSignature(ai.Runtime) == "1:0100000:0000000:000000000",
+                "a valid but inactive held slot must continue through the authority self-state branch before returning");
+            Expect(nextRng == 12168,
+                "a valid but inactive held slot must preserve the authority RNG consumption count");
+        }
+
+        private static void CheckAiSharedCharacterDatShell()
+        {
+            LF2CharacterData data = new LF2CharacterData
+            {
+                name = "SelfCheck_AI_SharedShell",
+                frames = new List<LF2FrameData> { Frame(0, 3, 1, 0, 39, 79) },
+            };
+            SimulationWorld world = new SimulationWorld();
+            var shell = new SelfCheckCharacterDatShell();
+            shell.ObjectId = 40;
+            shell.FrameCache.Load(new LF2CharacterDataWrapper(40, data));
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(0);
+            shell.Frame.N = 0;
+            shell.Runtime.HP = 500;
+            shell.SetRuntimeSlotIndex(4);
+            shell.AiControlled = true;
+            shell.RelationTeam = 1;
+            shell.Runtime.Unk3FC = 400;
+            shell.Runtime.Unk400 = 200;
+            shell.Runtime.SetPosition(100, 0, 100);
+            shell.Runtime.SyncIntegerPosition();
+            world.Register(shell);
+            world.AiInputAndComboAll(2);
+            Expect(shell.Runtime.KeyRight == 1 && shell.Runtime.KeyDown == 1,
+                "current character-DAT entities must run AI even when their CLR shell is not LF2Character");
+        }
+
+        private static void CheckAiHumanInputIsolation()
+        {
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_AI_Human", 180);
+            SimulationWorld world = new SimulationWorld();
+            LF2Character human = CreateCharacter("SelfCheck_HumanIsolation", 1, data);
+            human.SetRuntimeSlotIndex(0);
+            human.AiControlled = false;
+            ((SelfCheckController)human.Controller).InputBuffer.EnqueueForTick(2, FuncKeyMask.right, true);
+            world.Register(human);
+
+            world.PostCooldownHumanInputAll(2);
+            byte humanRight = human.Runtime.KeyRight;
+            world.AiInputAndComboAll(2);
+
+            Expect(humanRight == 1 && human.Runtime.KeyRight == 1,
+                "human input must be consumed before M1 and remain untouched by the AI pass");
+            Expect(human.Runtime.Unk360 == -1,
+                "human-controlled characters must not run AI target selection");
+        }
+
+        private static SimulationWorld BuildAiSelfCheckWorld(
+            LF2CharacterData data,
+            int seed,
+            out LF2Character ai,
+            out LF2Character target)
+        {
+            SimulationWorld world = new SimulationWorld();
+            world.Rng.Seed(seed);
+            world.Runtime.Match.Difficulty = 2;
+            ai = CreateCharacter("SelfCheck_AI_Source", 33, data);
+            target = CreateCharacter("SelfCheck_AI_Target", 4, data);
+            ai.SetRuntimeSlotIndex(0);
+            target.SetRuntimeSlotIndex(1);
+            ai.AiControlled = true;
+            target.AiControlled = false;
+            ai.RelationTeam = 1;
+            target.RelationTeam = 2;
+            ai.Runtime.SetPosition(100, 0, 200);
+            target.Runtime.SetPosition(260, 0, 210);
+            ai.Runtime.SyncIntegerPosition();
+            target.Runtime.SyncIntegerPosition();
+            world.Register(ai);
+            world.Register(target);
+            return world;
+        }
+
+        private static string AiInputSignature(NTSDEntityRuntime r)
+        {
+            return $"{r.Unk360}:{r.KeyRight}{r.KeyLeft}{r.KeyUp}{r.KeyDown}{r.KeyAttack}{r.KeyJump}{r.KeyDefend}:" +
+                   $"{r.PrevRight}{r.PrevLeft}{r.PrevUp}{r.PrevDown}{r.PrevAttack}{r.PrevJump}{r.PrevDefend}:" +
+                   $"{r.ComboDra}{r.ComboDla}{r.ComboDua}{r.ComboDda}{r.ComboDrj}{r.ComboDlj}{r.ComboDuj}{r.ComboDdj}{r.ComboDja}";
         }
 
         private static LF2CharacterDataWrapper BuildStageSpawnWrapper(int objectId, string name)
@@ -3167,6 +3334,12 @@ namespace NTSD.Test
             public override void Reset() { }
 
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class SelfCheckCharacterDatShell : LF2SpecialAttack
+        {
+            public override int GetCurrentDataObjectTypeForSimulation() => (int)LF2ObjectType.Character;
+            public override void Reset() { }
         }
     }
 }

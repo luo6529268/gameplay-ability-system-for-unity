@@ -42,13 +42,44 @@ namespace NTSD.Simulation
 
         public void PostCooldownInputAll(int tickIndex)
         {
+            PostCooldownHumanInputAll(tickIndex);
+            AiInputAndComboAll(tickIndex);
+        }
+
+        public void PostCooldownHumanInputAll(int tickIndex)
+        {
             RunDeferredMutationEntityPass(entity =>
             {
-                entity.RunPostCooldownInputPhase(tickIndex);
-                if (!IsActiveForCurrentPass(entity))
+                if (entity.AiControlled)
                     return;
-                RefreshRuntimeSnapshot(entity);
+                entity.RunPostCooldownInputPhase(tickIndex);
+                if (IsActiveForCurrentPass(entity))
+                    RefreshRuntimeSnapshot(entity);
             });
+        }
+
+        public void AiInputAndComboAll(int tickIndex)
+        {
+            if (tickIndex <= 1)
+                return;
+
+            BuildAiInputSlotSnapshot();
+            try
+            {
+                RunDeferredMutationEntityPass(entity =>
+                {
+                    if (!entity.AiControlled || entity.GetCurrentDataObjectTypeForSimulation() != 0)
+                        return;
+                    entity.RunPostCooldownInputPhase(tickIndex);
+                    if (!IsActiveForCurrentPass(entity))
+                        return;
+                    RefreshRuntimeSnapshot(entity);
+                });
+            }
+            finally
+            {
+                ClearAiInputSlotSnapshot();
+            }
         }
 
         public void Oid5152RuntimeMaintenanceAll(int tickIndex)

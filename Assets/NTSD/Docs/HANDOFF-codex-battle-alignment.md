@@ -82,12 +82,12 @@
 - **本轮新增验证**：`CheckStageWaveBootstrapAndSpawnContract` 覆盖 stage 文本解析、pre-wave -1→0、bound、type0/type5/非角色身份契约和 action 0；`CheckStageWaveImmediateSpawnAndAdvance` 覆盖真实 direct spawn、dynamic slot 50+、20-49 非 stage 槽隔离、清场推进；`CheckStageWavePositiveSpawnRefill` 覆盖并发槽补位与总量上限。
 - **验收现状**：fresh Unity batch self-check 返回 `PASS`。**T8 逻辑与生产接线代码已完成并通过运行时验证；默认生产激活仍需提供 stage.dat 数据资产或显式路径。**
 
-### T9 — AI 输入生成器（最大块，~600 行）
+### T9 — AI 输入生成器（已完成，Unity 运行时已验证）
 - **C# 权威**：`InputRuntime.cs:16` `PrepareAiInputBasic` + 14 辅助函数：
   `AiBetweenX / AiPostCacheCoordinateAllowsSpecial / AiPreUpdateTarget3000SideEffect / AiUpdateOid33_19_16PredictedDuaDecision / AiUpdateOid52_1_2_21PreLabel591Decision / AiUpdateLabel591Oid51_2_18_7Decision / AiUpdateFirstDecision / AiUpdateTeammateGuardDecision / AiUpdateOid1ComboDecision / AiUpdateCloseOid1Decision / AiUpdateOid4ComboDecision / AiUpdateOid5ComboDecision / AiProcessSubOidGroup / AiSpecialOidForSubGate / AiProcessHelper`（行号见差异清单 §6.2）
-- **Unity 现状**：grep `AiUpdate/AiBetweenX/AiPostCache/AiPreUpdate/AiProcessSub/AiSpecialOid/AiProcessHelper/ThreatScan` 全 0 文件命中，**完全缺失**。
-- **做法**：整块移植。先移主入口 `PrepareAiInputBasic`（目标选择 + C8 威胁扫描 145-250 + 守卫），再逐个移 oid 专属决策。
-- **验收**：AI 角色在相同战场状态下做出与 C# 一致的移动/攻击/守卫/连招决策。**建议拆多个子任务分步验证**，别一次性写完。
+- **Unity 落点**：`SimulationWorld.AiInput.partial.cs` 已完整承载主入口及直接/间接 helper 闭包，包含 runtime-slot target/cache、coordinate、team/history/held gate、C8/D3/D4/7A/7B 扫描、oid 决策组、move-mode/no-target 和三个 `AiProcessSub*` 尾部分支。
+- **输入/生产接线**：human 输入保持在 oid51/52 maintenance 前；AI 在 maintenance 后、early specials 前生成 keys/edges/history 并立即进入同实体 Combo/action。主 roster 按 `isHuman` 设置 `AiControlled`/`RelationTeam`，opoint/stage character 默认启用 AI；current DAT type0 的 shared-DAT shell 同样覆盖。
+- **验收**：fresh dotnet build 为 0 errors / 42 warnings；fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。自检覆盖 target/cache、coordinate、同 seed 确定性和 human 隔离，并回归 T0-T8。**T9 已完成。**
 
 ## 3. 已确认对齐（不要重复处理）
 
@@ -139,7 +139,7 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 
 ## 9. 优先级建议
 
-先 **T0**（1 行 bug）→ **T3**（2 行）→ **T2**（小）→ **T1**（P0 减伤）→ **T4/T5**（合体/复活）→ **T6**（kind15/16）→ **T7**（combo，已验收）→ **T8**（逻辑已验收，需部署 stage.dat）→ **T9**（AI，最后，拆多步）。
+T0-T9 主线均已完成并通过 Unity 运行时自检；T8 默认 Battle 激活仍需部署 `stage.dat` 或显式路径。
 
 ## 10. 实施进度（2026-07-14）
 
@@ -156,5 +156,6 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 | T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；数据资产待部署** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | `CheckStageWaveBootstrapAndSpawnContract`、`CheckStageWaveImmediateSpawnAndAdvance`、`CheckStageWavePositiveSpawnRefill` 均通过；仓库未携带默认二进制 `stage.dat` |
+| T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；输入 pass 分段；runtime 字段与 roster/opoint bootstrap | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 的 `Temp/NTSD_BattleRuntimeSelfCheck.result` 返回 **PASS**。T8 已覆盖 parser/bootstrap、pre-wave、identity、action 0、dynamic slot、wave/bound 与 positive refill。T0-T7 已完成运行时验收；T8 逻辑和接线已验收，但默认 Battle 激活仍以 `stage.dat` 部署或显式路径为前置；剩余主线实现为 T9。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。T0-T9 主线均已完成运行时验收；T8 默认 Battle 激活仍以 `stage.dat` 部署或显式路径为前置。
