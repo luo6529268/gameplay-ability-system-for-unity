@@ -77,6 +77,7 @@ namespace NTSD.Test
                 CheckRespawnPassWithStoredCountAndEffectSpawn();
                 CheckKind15CharacterWhirlwind();
                 CheckKind16CharacterSideEffects();
+                CheckLateDeathBounceFrame();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -2188,6 +2189,43 @@ namespace NTSD.Test
                 "kind16 should launch released held target with Vy=-1");
         }
 
+        private static void CheckLateDeathBounceFrame()
+        {
+            var world = new SimulationWorld();
+            LF2CharacterData data = BuildDeathBounceCharacterData("SelfCheck_DeathBounce");
+            LF2Character victim = CreateCharacter("SelfCheck_DeathBounceVictim", 1, data);
+            world.Register(victim);
+
+            victim.ImmediateFrame(5);
+            victim.Health.HP = 0;
+            victim.Runtime.SetPosition(12.0, 0.0, 3.0);
+            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            victim.Runtime.SyncIntegerPosition();
+            victim.KnockbackVy = 0f;
+
+            victim.RunLateDeathOpointPreCleanupPhase();
+
+            Expect(victim.Frame.N == 186,
+                "late death bounce should force frame 186 for dead lying character in frame<12");
+            Expect(victim.GetRuntimeYInt() == -1 &&
+                   Mathf.Approximately((float)victim.Runtime.Y, -1f) &&
+                   Mathf.Approximately((float)victim.Runtime.Vy, -3f) &&
+                   Mathf.Approximately((float)victim.KnockbackVy, -3f),
+                "late death bounce should set y/yInt to -1 and vy/knockbackVy to -3");
+
+            victim.ImmediateFrame(212);
+            victim.Health.HP = 0;
+            victim.Runtime.SetPosition(12.0, 0.0, 3.0);
+            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            victim.Runtime.SyncIntegerPosition();
+            victim.KnockbackVy = 0f;
+
+            victim.RunLateDeathOpointPreCleanupPhase();
+
+            Expect(victim.Frame.N == 186,
+                "late death bounce should re-launch grounded death frame 212");
+        }
+
         private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
         {
             return new Dictionary<int, LF2CharacterDataWrapper>
@@ -2254,6 +2292,21 @@ namespace NTSD.Test
                     Frame(0, 0, 1, 0, 39, 79),
                     Frame(10, 0, 1, 10, 39, 79),
                     Frame(LF2StandardFrames.MpDrain, 18, 1, LF2StandardFrames.MpDrain, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildDeathBounceCharacterData(string name)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(5, LF2States.Lying, 1, 5, 39, 79),
+                    Frame(14, LF2States.Lying, 1, 14, 39, 79),
+                    Frame(186, LF2States.Lying, 1, 186, 39, 79),
+                    Frame(212, LF2States.Lying, 1, 212, 39, 79),
                 },
             };
         }

@@ -2387,6 +2387,7 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Vy = -3f;
             KnockbackVy = -3f;
             Runtime.Y = -1f;
+            Runtime.YInt = -1;
         }
 
         private void ForceDropHeldWeaponForLateDeath()
