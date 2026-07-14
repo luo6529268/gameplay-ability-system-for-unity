@@ -62,7 +62,7 @@ C# `GameTick.Run` 是单一函数，顺序完全线性。Unity 拆成 `NTSDBattl
 | 20 | `RunF8WeaponDrop` | **未找到 F8 路径** | 🗑️? 调试功能，见 §7 |
 | 21 | `ResolveObjectHits` | `ObjectInteractionTickAll` | 🔷 |
 | 22 | `ApplyPreframeBounds`（含相机/bg） | `ApplyPreFrameBoundsAll`（只做逻辑边界） | 🔷 相机部分不对齐 |
-| 23 | `ApplyCurrentWavePhaseAdvance` / `StageSpawns` | (stage 波次) | ⚠️ 战斗相关，见 §9 |
+| 23 | `ApplyCurrentWavePhaseAdvance` / `StageSpawns` | `CurrentWaveStageTickAll`（`SimulationWorld.StageWave.partial.cs`） | ✅ 已完成并通过 fresh Unity 运行时验收 |
 | 24 | `ApplyFramePostProcess`（HitCount→Vx 平均） | `FramePostProcessAll` | ✅ |
 | 25 | `RunLatePerEntityUpdatePass` | `LateEntityUpdateAll` | ✅ 主对齐点 |
 | 26 | `RunMode2RandomWeaponDrop` | `Mode2RandomWeaponDropTailAll` | ✅ |
@@ -261,12 +261,12 @@ Unity 有两套：
 | M-10 | **oid300 特殊命中**（bdy.x>1000→帧号） | HitResolve | ✅ `ResolveHit` ObjectId==300（`LF2CharacterHitResolver.cs:279`） | ✅ |
 | M-11 | **state 400/401 传送**（最近敌/最远友） | GameTick early | ✅ `RunEarlyTeleportSpecialsPhase` | ✅ |
 | M-12 | **state 500/501 变身 transform** | GameTick early | ✅ `RunEarlyState500/501Specials`（BMD-023） | ✅ |
-| M-13 | **stage 波次生成**（`ApplyCurrentWavePhaseAdvance` `GameTick.cs:2317` + `ApplyCurrentWaveImmediateStageSpawns` :2350 + `RefillCurrentWavePositiveStageSpawns` :2226，StageProgression/StageSpawnRuntime 一整套） | GameTick step 23 | ❌ grep `StageSpawn/StageProgression/WaveIdx` 全 0 命中 | **❌ 缺失（波次刷敌，属战斗逻辑，需新增）** |
+| M-13 | **stage 波次生成**（`ApplyCurrentWavePhaseAdvance` `GameTick.cs:2317` + `ApplyCurrentWaveImmediateStageSpawns` :2350 + `RefillCurrentWavePositiveStageSpawns` :2226，StageProgression/StageSpawnRuntime 一整套） | GameTick step 23 | ✅ `BattleStageCampaignLoader` / `ApplyMatchConfig` 生产接线 + progression + spawn/refill/advance/bound + identity/dynamic-slot 契约已落地 | **✅ 逻辑与接线已完成 / Unity 运行时已验证；默认 stage.dat 资产待部署（T8）** |
 | M-14 | **frame 110/114 → CdDefendLock=3**（`FrameTick.cs:208-209`） | FrameTick 尾 | ✅ `LF2Entity.RunCommonFrameTick` 尾部 + runtime Reset/cooldown | **✅ 已完成 / Unity 运行时已验证（T3）** |
 | M-15 | **kind 16 完整结算**（`ApplyKind15Or16` kind=16：KillStat++/ComboCountAtk/SFX_065/vrest/LinkState 断开） | HitResolve 1640-1704 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已补齐 FallDamageDiv 缩放、KillStat/ComboCount、frame200、vrest、2/-2 持有断开与 SFX_065 | **✅ 已完成 / Unity 运行时已验证（T6）** |
 | M-16 | **kind 15 完整位移**（`ApplyKind15Movement`：KnockbackVx+真实 Vx/Vz+YInt=-2，按对象类型分 vyStep 3.0/2.3） | HitResolve 1737 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已改为 authority 的 KnockbackVx/Vz + YInt/Vy 语义；武器/铁球侧原 `WhirlwindForce` 保持 3.0/2.3 分支 | **✅ 已完成 / Unity 运行时已验证（T6）** |
 
-> **判定原则提醒**：当前仍标 ❌/⚠️ 的 M-1/M-2/M-13/M-15/M-16 都**不能直接删对应 Unity 脚本**；它们是"C# 有 Unity 缺/结果仍需验证"。M-7/M-8/M-9/M-10/M-11/M-12/M-14 已确认对齐或完成并运行验证。只有 M-6（F8 调试）确认是调试功能后可不移植。
+> **判定原则提醒**：当前仍标 ❌/⚠️ 的项目都**不能直接删对应 Unity 脚本**；它们是"C# 有 Unity 缺/结果仍需验证"。M-1/M-2/M-7/M-8/M-9/M-10/M-11/M-12/M-13/M-14/M-15/M-16 已确认对齐或完成并运行验证。只有 M-6（F8 调试）确认是调试功能后可不移植。
 
 ---
 
@@ -310,9 +310,9 @@ Unity 有两套：
 ### P1 — 已补齐并完成 fresh Unity 运行时验证
 - [x] **M-1 / T4** oid 7/8→51 合体拆分 — **已完成并通过 fresh Unity 运行时自检**
 - [x] **M-2 / T5** 复活 pass（`RunRespawnPass` 完整逻辑）— **已完成并通过 fresh Unity 运行时自检**
+- [x] **M-13 / T8** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **逻辑与生产接线已完成并通过 fresh Unity 运行时自检；默认 stage.dat 资产待部署**
 
 ### P1 — 已确认缺失战斗逻辑（需新增）
-- [x] **M-13** stage 波次生成（`ApplyCurrentWaveXxx` 整套）— **确认缺失**
 - [x] **§6.2 AI** `PrepareAiInputBasic` + 14 个辅助函数 — **确认完全缺失（最大工作量块）**
 
 ### P1 — 已确认对齐（无需动作）
@@ -352,12 +352,10 @@ Unity 有两套：
 
 ## 附二：核实总账（更新至 2026-07-14）
 
-**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 3 项）：**
+**❌ 已确认缺失（C# 有 Unity 无，必须新增，共 1 项）：**
 
 | 项 | 内容 | 工作量 |
 |----|------|--------|
-| M-13 | stage 波次刷敌（ApplyCurrentWave 整套）| 大 |
-| combo | RunComboWrappers 9 组连招 + oid6 DjaGuard | 大 |
 | AI | PrepareAiInputBasic + 14 辅助函数 | **极大（~600 行）** |
 
 **✅ 已修复真 bug（共 1 项）：**
@@ -366,7 +364,7 @@ Unity 有两套：
 |----|------|
 | §2.1-1 / T0 | `exemptVal` 已改用权威 arest/vrest 公式，并通过 Unity 运行时自检 |
 
-**✅ 原缺失项已完成并通过 Unity 运行时自检（共 6 项）：**
+**✅ 原缺失项已完成并通过 Unity 运行时自检（主要项）：**
 
 | 项 | 内容 |
 |----|------|
@@ -376,6 +374,8 @@ Unity 有两套：
 | M-9 / T2 | 角色/武器统一 `RecordKind0Hit` |
 | M-14 / T3 | frame 110/114 写 `CdDefendLock=3` 及 cooldown 生命周期 |
 | M-15 / M-16 / T6 | kind15 authority 位移 + kind16 完整结算、副作用与持有断开 |
+| combo / T7 | RunComboWrappers 9 组连招 + oid6 DjaGuard |
+| M-13 / T8 | stage immediate spawn、positive refill、清场推进与 phase bound |
 
 **⚠️ 部分对齐（副作用/形式差异，需补齐或验运行结果，共 1 项）：**
 
@@ -396,7 +396,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 2 项缺失逻辑（AI、stage 波次）+ 7 项已完成并通过 Unity 运行时自检 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的两块是 **AI 输入生成器、stage 波次刷敌**。
+**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 1 项缺失逻辑（AI）+ T0-T7 已完成 + T8 逻辑/接线运行时已验证但缺默认数据资产 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。剩余主线实现是 **T9 AI 输入生成器**。
 
 ## 实施进度（2026-07-14）
 
@@ -412,5 +412,6 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 | T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
+| T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；数据资产待部署** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | `CheckStageWaveBootstrapAndSpawnContract`、`CheckStageWaveImmediateSpawnAndAdvance`、`CheckStageWavePositiveSpawnRefill` 均通过；仓库未携带默认二进制 `stage.dat` |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**。本轮新增 `BattleRuntimeSelfCheck` 的 T7 针对性断言 `CheckComboWrappersCharacterFrameJumps` 与 `CheckOid6DjaGuardComboHold`，先在运行时抓到 `SelfCheck_DRA` 失败，随后按 `NTSDInputStateModule.SetEdgeCooldown` 的真实边沿映射修正了自检注入序列（attack/defend/jump 对应 combo cooldown 并非直观同名）。修正后通过项目内置 request 机制触发当前打开的 Unity 执行自检，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 **PASS**。因此 T7 已升级为“已完成 / Unity 运行时已验证”；T0/T1/T2/T3/T4/T5/T6 的既有 PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 的 `Temp/NTSD_BattleRuntimeSelfCheck.result` 返回 **PASS**。T8 三组断言覆盖 parser/bootstrap、pre-wave -1→0、identity/type5、action 0、dynamic slot 50+、20-49 隔离、wave/bound 与 positive refill。T8 逻辑和生产接线已通过运行时验证；但仓库没有默认二进制 `stage.dat`，普通 Battle 必须在 `Application.streamingAssetsPath/NTSD/data/stage.dat` 部署数据或通过 `MatchConfig.stageCampaignFilePath` 显式注入。T0-T7 的既有 PASS 证据继续有效。

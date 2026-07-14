@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
@@ -80,6 +81,9 @@ namespace NTSD.Test
                 CheckLateDeathBounceFrame();
                 CheckComboWrappersCharacterFrameJumps();
                 CheckOid6DjaGuardComboHold();
+                CheckStageWaveBootstrapAndSpawnContract();
+                CheckStageWaveImmediateSpawnAndAdvance();
+                CheckStageWavePositiveSpawnRefill();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -2336,6 +2340,268 @@ namespace NTSD.Test
                 "successful oid6 DJA must clear comboDJA state");
         }
 
+        private static void CheckStageWaveImmediateSpawnAndAdvance()
+        {
+            const int stageOid = 201;
+            LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StageImmediate");
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
+
+                var world = new SimulationWorld();
+                world.Runtime.Match.BattleGameModeId = 1;
+                world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
+                world.StageCampaigns.Add(new BattleStageCampaignData
+                {
+                    Id = 9,
+                    Phases = new List<BattleStagePhaseData>
+                    {
+                        new BattleStagePhaseData
+                        {
+                            Spawns = new List<BattleStageSpawnData>
+                            {
+                                new BattleStageSpawnData
+                                {
+                                    Id = stageOid,
+                                    Act = 0,
+                                    Hp = 321,
+                                    Times = 1,
+                                    X = 100,
+                                    Y = -20,
+                                    Ratio = 0.0,
+                                },
+                            },
+                        },
+                        new BattleStagePhaseData
+                        {
+                            Bound = 1400,
+                        },
+                    },
+                });
+                world.StageProgression.StageSeriesIdx = 9;
+                world.StageProgression.WaveIdx = 0;
+                world.SetStageProgressionValid(true);
+
+                world.CurrentWaveStageTickAll();
+
+                var entities = new List<LF2Entity>();
+                world.GetAllEntities(entities);
+                Expect(entities.Count == 1,
+                    "stage immediate spawn must create exactly one entity for one immediate entry");
+                LF2Entity spawned = entities[0];
+                int spawnedSlot = spawned.Runtime?.SlotIndex ?? -1;
+                Expect(spawned.ObjectId == stageOid && spawnedSlot >= 50,
+                    "stage immediate spawn must use a dynamic runtime slot");
+                Expect(spawned.Frame.N == 0 && spawned.FrameDelay == 0,
+                    "stage immediate spawn must preserve configured action zero with zero frame delay");
+                Expect(spawned.Health.HP == 321 && spawned.Health.HPBound == 321 && spawned.Health.HP3 == 321,
+                    "stage immediate spawn must apply configured HP to HP, HPBound and HP3");
+                Expect(spawned.Team == 2 && spawned.RelationTeam == 2 &&
+                       spawned.Unk344 == 2 && spawned.HitStun == 20 &&
+                       spawned.HolderCopySlot == spawnedSlot,
+                    "stage immediate character spawn must apply team, Unk344, init and self-holder contracts");
+                Expect(world.StageSpawnWaveApplied == 0 && world.StageProgression.WaveIdx == 0,
+                    "stage immediate producer must initialize once without advancing while its entity is alive");
+
+                world.CurrentWaveStageTickAll();
+                Expect(world.StageProgression.WaveIdx == 0,
+                    "stage wave must not advance while a configured stage entity remains active");
+
+                world.Unregister(spawned);
+                LF2Character reservedSlotEntity = CreateCharacter(
+                    "SelfCheck_StageReservedSlot",
+                    stageOid,
+                    stageWrapper.characterData);
+                reservedSlotEntity.SetRuntimeSlotIndex(20);
+                world.Register(reservedSlotEntity);
+                world.CurrentWaveStageTickAll();
+
+                Expect(world.StageProgression.WaveIdx == 1,
+                    "stage wave must ignore matching non-stage entities below the Unity dynamic slot range");
+                Expect(world.Runtime.Stage.XMaxOverride == 1400 &&
+                       world.Runtime.Stage.CameraMaxOverride == 606 &&
+                       world.Runtime.Stage.StageWidthPx == 1400,
+                    "stage phase advance must apply bound and camera bound overrides");
+                Expect(world.StageSpawnWaveApplied == 1 && world.StageSpawnWaveDeferredEntryApplied == 1,
+                    "empty next phase must initialize both stage spawn producer markers");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static void CheckStageWaveBootstrapAndSpawnContract()
+        {
+            const string stageText =
+                "<stage> id: 12 #self-check\n" +
+                "<phase> bound: 900\n" +
+                "id: 205 act: 0 hp: 275 times: 3 x: -100 y: -20 ratio: 1.5 join: 8\n" +
+                "<phase_end>\n" +
+                "<stage_end>\n";
+
+            List<BattleStageCampaignData> campaigns = BattleStageCampaignLoader.ParseText(stageText);
+            Expect(campaigns.Count == 1 && campaigns[0].Id == 12 && campaigns[0].Comment == "self-check",
+                "stage campaign parser must load stage identity and comment");
+            BattleStagePhaseData phase = campaigns[0].Phases[0];
+            BattleStageSpawnData spawn = phase.Spawns[0];
+            Expect(phase.Bound == 900 && spawn.Id == 205 && spawn.Act == 0 && spawn.Hp == 275 &&
+                   spawn.Times == 3 && spawn.X == -100 && spawn.Y == -20 &&
+                   Nearly(spawn.Ratio, 1.5) && spawn.Join == 8,
+                "stage campaign parser must map all phase and spawn fields");
+
+            string tempStagePath = Path.Combine(Application.temporaryCachePath, "ntsd_stage_campaign_self_check.dat");
+            try
+            {
+                File.WriteAllText(tempStagePath, stageText);
+                List<BattleStageCampaignData> loadedCampaigns =
+                    BattleStageCampaignLoader.LoadFromFile(tempStagePath);
+                Expect(loadedCampaigns.Count == 1 && loadedCampaigns[0].Id == 12,
+                    "stage campaign production loader must read an explicit plaintext DAT path");
+            }
+            finally
+            {
+                if (File.Exists(tempStagePath))
+                    File.Delete(tempStagePath);
+            }
+
+            var world = new SimulationWorld();
+            world.ConfigureStageCampaigns(campaigns, 12, -1);
+            Expect(world.StageProgressionValid && world.StageProgression.StageSeriesIdx == 12 &&
+                   world.StageProgression.WaveIdx == -1,
+                "stage production bootstrap must retain authority pre-wave state after data load");
+            Expect(world.StartInitialStageWave() && world.StageProgression.WaveIdx == 0 &&
+                   world.Runtime.Stage.XMaxOverride == 900,
+                "stage production bootstrap must advance pre-wave to wave zero and apply its bound");
+
+            OPointCreateTask task = SimulationWorld.BuildStageSpawnTask(spawn, 10, -20, 200, "right");
+            Expect(task.preserveActionZero && task.opoint.action == 0,
+                "stage factory task must preserve authored action zero");
+
+            var character = new StageSpawnContractSelfCheckEntity(LF2ObjectType.Character);
+            character.SetRuntimeSlotIndex(50);
+            SimulationWorld.ApplyStageSpawnRuntimeContract(character, 300);
+            Expect(character.Team == 2 && character.RelationTeam == 2 &&
+                   character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 50,
+                "stage character contract must map Unk364 to RelationTeam=2 and use character init semantics");
+
+            var type5 = new StageSpawnContractSelfCheckEntity(LF2ObjectType.Other);
+            type5.SetRuntimeSlotIndex(51);
+            SimulationWorld.ApplyStageSpawnRuntimeContract(type5, 301);
+            Expect(type5.RelationTeam == 2 && type5.HitStun == 20 && type5.Unk344 == 2,
+                "stage DAT type 5 contract must use authority character-init semantics");
+
+            var projectile = new StageSpawnContractSelfCheckEntity(LF2ObjectType.SpecialAttack);
+            projectile.SetRuntimeSlotIndex(52);
+            SimulationWorld.ApplyStageSpawnRuntimeContract(projectile, 302);
+            Expect(projectile.Team == 2 && projectile.RelationTeam == 0 &&
+                   projectile.HitStun == 0 && projectile.Unk344 == 2,
+                "stage non-character contract must preserve Team=2 but clear RelationTeam/Unk364");
+        }
+
+        private static void CheckStageWavePositiveSpawnRefill()
+        {
+            const int stageOid = 202;
+            LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StagePositive");
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
+
+                var world = new SimulationWorld();
+                world.Runtime.Match.BattleGameModeId = 2;
+                LF2Character factorCharacter = CreateCharacter(
+                    "SelfCheck_StageFactor",
+                    1,
+                    BuildStageSpawnCharacterData("SelfCheck_StageFactor"));
+                factorCharacter.SetRuntimeSlotIndex(0);
+                world.Register(factorCharacter);
+                world.StageCampaigns.Add(new BattleStageCampaignData
+                {
+                    Id = 10,
+                    Phases = new List<BattleStagePhaseData>
+                    {
+                        new BattleStagePhaseData
+                        {
+                            Spawns = new List<BattleStageSpawnData>
+                            {
+                                new BattleStageSpawnData
+                                {
+                                    Id = stageOid,
+                                    Act = 7,
+                                    Hp = 250,
+                                    Times = 2,
+                                    X = 200,
+                                    Ratio = 1.0,
+                                },
+                            },
+                        },
+                    },
+                });
+                world.StageProgression.StageSeriesIdx = 10;
+                world.StageProgression.WaveIdx = 0;
+                world.SetStageProgressionValid(true);
+
+                world.CurrentWaveStageTickAll();
+
+                Expect(world.StageSpawnWaveDeferredEntryApplied == 0 && world.StageSpawnRuntimeWave == 0,
+                    "positive stage producer must initialize its deferred marker and runtime wave");
+                Expect(world.StageSpawnRuntimeEntryCount.Count == 1 &&
+                       world.StageSpawnRuntimeEntryCount[0] == 1 &&
+                       world.StageSpawnRuntimeTargetTotal[0] == 2 &&
+                       world.StageSpawnRuntimeSpawnedTotal[0] == 1,
+                    "positive stage runtime must derive one concurrent entry and two total spawns from factor 1");
+                int firstSlot = world.StageSpawnRuntimeSlots[0][0];
+                LF2Entity firstSpawn = world.FindEntityByRuntimeSlotForQuery(firstSlot);
+                Expect(firstSlot >= 50 && firstSpawn != null && firstSpawn.ObjectId == stageOid,
+                    "positive stage producer must track its active spawned entity by dynamic runtime slot");
+
+                world.CurrentWaveStageTickAll();
+                Expect(world.StageSpawnRuntimeSpawnedTotal[0] == 1 &&
+                       world.StageSpawnRuntimeSlots[0][0] == firstSlot,
+                    "positive stage producer must not exceed its concurrent entry count while the slot is alive");
+
+                world.Unregister(firstSpawn);
+                world.CurrentWaveStageTickAll();
+
+                int replacementSlot = world.StageSpawnRuntimeSlots[0][0];
+                LF2Entity replacement = world.FindEntityByRuntimeSlotForQuery(replacementSlot);
+                Expect(replacement != null && replacement.ObjectId == stageOid,
+                    "positive stage producer must refill a cleared concurrent slot");
+                Expect(world.StageSpawnRuntimeSpawnedTotal[0] == 2,
+                    "positive stage producer must increment total spawned count on refill");
+
+                world.Unregister(replacement);
+                world.CurrentWaveStageTickAll();
+                Expect(world.StageSpawnRuntimeSlots[0][0] == -1 &&
+                       world.StageSpawnRuntimeSpawnedTotal[0] == 2,
+                    "positive stage producer must stop refilling after reaching target total");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static LF2CharacterDataWrapper BuildStageSpawnWrapper(int objectId, string name)
+        {
+            return new LF2CharacterDataWrapper(objectId, BuildStageSpawnCharacterData(name));
+        }
+
+        private static LF2CharacterData BuildStageSpawnCharacterData(string name)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 1, 0, 39, 79),
+                    Frame(7, LF2States.Standing, 1, 7, 39, 79),
+                },
+            };
+        }
+
         private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
         {
             return new Dictionary<int, LF2CharacterDataWrapper>
@@ -2762,6 +3028,26 @@ namespace NTSD.Test
                 Health.HP = 500;
                 Health.HPBound = 500;
             }
+        }
+
+        private sealed class StageSpawnContractSelfCheckEntity : LF2Entity
+        {
+            private readonly LF2ObjectType objectType;
+
+            public override LF2ObjectType ObjectTypeEnum => objectType;
+
+            public StageSpawnContractSelfCheckEntity(LF2ObjectType objectType)
+            {
+                this.objectType = objectType;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
         }
 
         private sealed class AlternateDamageSelfCheckSpecialAttack : LF2SpecialAttack

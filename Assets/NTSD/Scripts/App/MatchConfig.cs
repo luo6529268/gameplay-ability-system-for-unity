@@ -13,6 +13,9 @@ namespace NTSD.App
         public int backgroundId = -1;
         public int difficulty = 2;
 
+        public string stageCampaignFilePath = string.Empty;
+        public int stageSeriesId;
+
         public int seed;
     }
 }

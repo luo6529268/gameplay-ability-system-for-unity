@@ -116,6 +116,16 @@ namespace NTSD.Simulation
         public int BattleExitCountdown => Runtime?.Flow?.BattleExitCountdown ?? 0;
         public int RouteOutRequest => Runtime?.Flow?.RouteOutRequest ?? 0;
         public int Mode2Request => Runtime?.Flow?.Mode2Request ?? 0;
+        public List<BattleStageCampaignData> StageCampaigns => Runtime?.StageCampaigns;
+        public BattleStageProgressionState StageProgression => Runtime?.StageProgression;
+        public bool StageProgressionValid => Runtime?.StageProgressionValid ?? false;
+        public int StageSpawnWaveApplied => Runtime?.StageSpawnWaveApplied ?? -1;
+        public int StageSpawnWaveDeferredEntryApplied => Runtime?.StageSpawnWaveDeferredEntryApplied ?? -1;
+        public int StageSpawnRuntimeWave => Runtime?.StageSpawnRuntimeWave ?? -1;
+        public List<int> StageSpawnRuntimeTargetTotal => Runtime?.StageSpawnRuntimeTargetTotal;
+        public List<int> StageSpawnRuntimeEntryCount => Runtime?.StageSpawnRuntimeEntryCount;
+        public List<int> StageSpawnRuntimeSpawnedTotal => Runtime?.StageSpawnRuntimeSpawnedTotal;
+        public List<int[]> StageSpawnRuntimeSlots => Runtime?.StageSpawnRuntimeSlots;
 
         public void SetAiPhaseGate(int value)
         {
@@ -143,6 +153,30 @@ namespace NTSD.Simulation
             Runtime ??= new BattleRuntimeState();
             Runtime.Flow ??= new BattleFlowRuntimeState();
             Runtime.Flow.Mode2Request = value;
+        }
+
+        public void SetStageProgressionValid(bool value)
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.StageProgressionValid = value;
+        }
+
+        public void SetStageSpawnWaveApplied(int value)
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.StageSpawnWaveApplied = value;
+        }
+
+        public void SetStageSpawnWaveDeferredEntryApplied(int value)
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.StageSpawnWaveDeferredEntryApplied = value;
+        }
+
+        public void SetStageSpawnRuntimeWave(int value)
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.StageSpawnRuntimeWave = value;
         }
 
         public void Register(ISimObject obj)

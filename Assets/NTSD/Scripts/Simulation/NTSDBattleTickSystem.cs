@@ -53,6 +53,7 @@ namespace NTSD.Simulation
             ClampCharacterZToStageBounds();
             ValidateHeldObjectsAfterClamp(tickIndex);
             PreFrameBounds();
+            CurrentWaveStage(tickIndex);
             RenderDispatch(tickIndex);
             FramePostProcess();
             LateEntityUpdate(tickIndex);
@@ -153,6 +154,11 @@ namespace NTSD.Simulation
         private void FramePostProcess()
         {
             world.FramePostProcessAll();
+        }
+
+        private void CurrentWaveStage(int tickIndex)
+        {
+            world.CurrentWaveStageTickAll();
         }
 
         private void RenderDispatch(int tickIndex)

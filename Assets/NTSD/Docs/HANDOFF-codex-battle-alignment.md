@@ -77,9 +77,10 @@
 
 ### T8 — stage 波次刷敌（M-13，大）
 - **C# 权威**：`GameTick.cs:2317` `ApplyCurrentWavePhaseAdvance` + `2350` `ApplyCurrentWaveImmediateStageSpawns` + `2226` `RefillCurrentWavePositiveStageSpawns`（配套 `StageProgression` + `StageSpawnRuntime*` 一整套，见 `SimulationWorld.cs:68-80`），tick step23。
-- **Unity 现状**：grep `StageSpawn/StageProgression/WaveIdx` 全 0 命中，**完全缺失**。
-- **做法**：新增波次运行时状态 + 立即刷敌 + 正数补充刷敌三段，落点对应 GameTick step23。
-- **验收**：进入波次时按 stage 数据刷敌，清完波次推进，数量/位置/HP 与 C# 一致。
+- **Unity 落点**：`BattleRuntimeState` 已补齐 `StageProgression` / `StageSpawnRuntime*`；`SimulationWorld.StageWave.partial.cs` 已实现立即刷敌、正 ratio 并发槽/总量补充、清场推进和 phase bound 写回；`NTSDBattleTickSystem` 在 `PreFrameBounds` 后、`RenderDispatch` 前执行该 pass，匹配权威 step23 顺序。spawn 契约已补 `Unk344=2`、DAT type 0/5 的 character-init `RelationTeam=2/HitStun=20`、其他类型 `RelationTeam=0/HitStun=0`、dynamic slot 50+ 和 action 0 保留。
+- **生产接线**：`AppManager.InitializeBattle -> SimulationTickDriver.ApplyMatchConfig -> BattleStageCampaignLoader -> ConfigureStageCampaigns(-1) -> StartInitialStageWave()` 已接通；默认读取 `Application.streamingAssetsPath/NTSD/data/stage.dat`，也可由 `MatchConfig.stageCampaignFilePath` 显式覆盖。仓库当前未纳入二进制 `stage.dat`，缺失时会明确 warning 并保持 `StageProgressionValid=false`。
+- **本轮新增验证**：`CheckStageWaveBootstrapAndSpawnContract` 覆盖 stage 文本解析、pre-wave -1→0、bound、type0/type5/非角色身份契约和 action 0；`CheckStageWaveImmediateSpawnAndAdvance` 覆盖真实 direct spawn、dynamic slot 50+、20-49 非 stage 槽隔离、清场推进；`CheckStageWavePositiveSpawnRefill` 覆盖并发槽补位与总量上限。
+- **验收现状**：fresh Unity batch self-check 返回 `PASS`。**T8 逻辑与生产接线代码已完成并通过运行时验证；默认生产激活仍需提供 stage.dat 数据资产或显式路径。**
 
 ### T9 — AI 输入生成器（最大块，~600 行）
 - **C# 权威**：`InputRuntime.cs:16` `PrepareAiInputBasic` + 14 辅助函数：
@@ -138,7 +139,7 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 
 ## 9. 优先级建议
 
-先 **T0**（1 行 bug）→ **T3**（2 行）→ **T2**（小）→ **T1**（P0 减伤）→ **T4/T5**（合体/复活）→ **T6**（kind15/16）→ **T7**（combo，已验收）→ **T8**（波次）→ **T9**（AI，最后，拆多步）。
+先 **T0**（1 行 bug）→ **T3**（2 行）→ **T2**（小）→ **T1**（P0 减伤）→ **T4/T5**（合体/复活）→ **T6**（kind15/16）→ **T7**（combo，已验收）→ **T8**（逻辑已验收，需部署 stage.dat）→ **T9**（AI，最后，拆多步）。
 
 ## 10. 实施进度（2026-07-14）
 
@@ -154,5 +155,6 @@ bg.dat 可活动范围 / Z 边界钳制、相机（ProCamera2D vs CameraX）、b
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
 | T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 | T7（§6.1 / combo） | **已完成 / Unity 运行时已验证** | `NTSDInputStateModule` 已承载 9 组 combo wrapper 与 oid6 DjaGuard；角色真实输入路径经 `RunPostCooldownInputPhase` 消费并落到 `ApplyFrameInput` | `CheckComboWrappersCharacterFrameJumps`、`CheckOid6DjaGuardComboHold` 已覆盖 9 组 frame jump、左右向切换、cooldown 清空，以及 oid6 guard hold/release 并通过 |
+| T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；数据资产待部署** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | `CheckStageWaveBootstrapAndSpawnContract`、`CheckStageWaveImmediateSpawnAndAdvance`、`CheckStageWavePositiveSpawnRefill` 均通过；仓库未携带默认二进制 `stage.dat` |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**。本轮新增 `BattleRuntimeSelfCheck` 的 T7 针对性断言 `CheckComboWrappersCharacterFrameJumps` 与 `CheckOid6DjaGuardComboHold`，先在运行时抓到 `SelfCheck_DRA` 失败，随后按 `NTSDInputStateModule.SetEdgeCooldown` 的真实边沿映射修正自检输入序列。修正后通过项目内置 request 机制触发当前打开的 Unity 执行自检，`Temp/NTSD_BattleRuntimeSelfCheck.result` fresh 返回 **PASS**。因而 T0/T1/T2/T3/T4/T5/T6/T7 均已完成 Unity 运行时验收，非主线 M5 也已补齐并通过运行时验证；剩余主线优先级收敛为 T8 → T9。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；最终代码 fresh Unity batch 的 `Temp/NTSD_BattleRuntimeSelfCheck.result` 返回 **PASS**。T8 已覆盖 parser/bootstrap、pre-wave、identity、action 0、dynamic slot、wave/bound 与 positive refill。T0-T7 已完成运行时验收；T8 逻辑和接线已验收，但默认 Battle 激活仍以 `stage.dat` 部署或显式路径为前置；剩余主线实现为 T9。

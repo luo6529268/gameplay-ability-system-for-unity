@@ -114,6 +114,8 @@ namespace NTSD.App
 
             SceneManager.SetActiveScene(scene);
 
+            SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
+
             // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
             SetupBattleCharacters();
 

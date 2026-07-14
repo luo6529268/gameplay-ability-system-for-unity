@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NTSD.App;
 using UnityEngine;
 
@@ -34,28 +35,110 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class BattleStageRuntimeState
     {
+        public int BaseStageWidthPx = 800;
         public int StageWidthPx = 800;
         public int ZMin = 180;
         public int ZMax = 350;
         public int PerspectiveNear;
         public int PerspectiveFar;
+        public int XMaxOverride;
+        public int CameraMaxOverride;
 
         public void Reset()
         {
+            BaseStageWidthPx = 800;
             StageWidthPx = 800;
             ZMin = 180;
             ZMax = 350;
             PerspectiveNear = 0;
             PerspectiveFar = 0;
+            XMaxOverride = 0;
+            CameraMaxOverride = 0;
         }
 
-        public void Set(int stageWidthPx, int zMin, int zMax, int perspectiveNear, int perspectiveFar)
+        public void SetSceneSnapshot(int stageWidthPx, int zMin, int zMax, int perspectiveNear, int perspectiveFar)
         {
-            StageWidthPx = Mathf.Max(stageWidthPx, 1);
+            BaseStageWidthPx = Mathf.Max(stageWidthPx, 1);
             ZMin = zMin;
             ZMax = Mathf.Max(zMax, zMin + 1);
             PerspectiveNear = perspectiveNear;
             PerspectiveFar = perspectiveFar;
+            RebuildActiveStageBounds();
+        }
+
+        public void ApplyPhaseBound(int bound)
+        {
+            if (bound > 0)
+            {
+                XMaxOverride = Mathf.Max(bound, 1);
+                CameraMaxOverride = XMaxOverride - 794;
+            }
+            else
+            {
+                XMaxOverride = 0;
+                CameraMaxOverride = 0;
+            }
+
+            RebuildActiveStageBounds();
+        }
+
+        public void ClearPhaseBound()
+        {
+            XMaxOverride = 0;
+            CameraMaxOverride = 0;
+            RebuildActiveStageBounds();
+        }
+
+        private void RebuildActiveStageBounds()
+        {
+            StageWidthPx = XMaxOverride > 0
+                ? Mathf.Max(XMaxOverride, 1)
+                : Mathf.Max(BaseStageWidthPx, 1);
+        }
+    }
+
+    [Serializable]
+    public sealed class BattleStageSpawnData
+    {
+        public int Id = -1;
+        public int Act;
+        public int Hp;
+        public int Times = 1;
+        public int X;
+        public int Y;
+        public double Ratio;
+        public int Join;
+    }
+
+    [Serializable]
+    public sealed class BattleStagePhaseData
+    {
+        public int Bound;
+        public List<BattleStageSpawnData> Spawns = new List<BattleStageSpawnData>();
+    }
+
+    [Serializable]
+    public sealed class BattleStageCampaignData
+    {
+        public int Id = -1;
+        public string Comment = string.Empty;
+        public List<BattleStagePhaseData> Phases = new List<BattleStagePhaseData>();
+    }
+
+    [Serializable]
+    public sealed class BattleStageProgressionState
+    {
+        public int StageSeriesIdx;
+        public int WaveIdx = -1;
+        public int Round;
+        public int RoundMax;
+
+        public void Reset()
+        {
+            StageSeriesIdx = 0;
+            WaveIdx = -1;
+            Round = 0;
+            RoundMax = 0;
         }
     }
 
@@ -182,6 +265,16 @@ namespace NTSD.Simulation
 
         public BattleMatchRuntimeState Match = new BattleMatchRuntimeState();
         public BattleStageRuntimeState Stage = new BattleStageRuntimeState();
+        public List<BattleStageCampaignData> StageCampaigns = new List<BattleStageCampaignData>();
+        public BattleStageProgressionState StageProgression = new BattleStageProgressionState();
+        public bool StageProgressionValid;
+        public int StageSpawnWaveApplied = -1;
+        public int StageSpawnWaveDeferredEntryApplied = -1;
+        public int StageSpawnRuntimeWave = -1;
+        public List<int> StageSpawnRuntimeTargetTotal = new List<int>();
+        public List<int> StageSpawnRuntimeEntryCount = new List<int>();
+        public List<int> StageSpawnRuntimeSpawnedTotal = new List<int>();
+        public List<int[]> StageSpawnRuntimeSlots = new List<int[]>();
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
         public int[] KillStats = new int[BattleStatSlotCount];
@@ -191,6 +284,15 @@ namespace NTSD.Simulation
         {
             Match?.Reset();
             Stage?.Reset();
+            StageProgression?.Reset();
+            StageProgressionValid = StageCampaigns != null && StageCampaigns.Count > 0;
+            StageSpawnWaveApplied = -1;
+            StageSpawnWaveDeferredEntryApplied = -1;
+            StageSpawnRuntimeWave = -1;
+            StageSpawnRuntimeTargetTotal?.Clear();
+            StageSpawnRuntimeEntryCount?.Clear();
+            StageSpawnRuntimeSpawnedTotal?.Clear();
+            StageSpawnRuntimeSlots?.Clear();
             Roster?.Reset();
             Flow?.Reset();
             ResetStatArray(ref KillStats);

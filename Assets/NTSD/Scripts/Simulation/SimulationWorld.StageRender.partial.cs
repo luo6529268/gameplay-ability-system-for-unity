@@ -44,7 +44,7 @@ namespace NTSD.Simulation
         public void RefreshStageRuntimeSnapshotFromScene()
         {
             ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar);
-            Runtime?.Stage?.Set(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
+            Runtime?.Stage?.SetSceneSnapshot(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
         }
 
         public void ClampCharacterZToStageBoundsAll()

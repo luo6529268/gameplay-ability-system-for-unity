@@ -290,6 +290,15 @@ namespace NTSD.Simulation
             _world.Runtime?.Roster?.ApplyMatchConfig(config);
             _world.RefreshStageRuntimeSnapshotFromScene();
 
+            List<BattleStageCampaignData> stageCampaigns = BattleStageCampaignLoader.LoadFromFile(
+                config?.stageCampaignFilePath);
+            _world.ConfigureStageCampaigns(stageCampaigns, config?.stageSeriesId ?? 0, -1);
+            if (matchState != null &&
+                (matchState.BattleGameModeId == 1 || matchState.BattleGameModeId == 2))
+            {
+                _world.StartInitialStageWave();
+            }
+
             _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
         }
 
