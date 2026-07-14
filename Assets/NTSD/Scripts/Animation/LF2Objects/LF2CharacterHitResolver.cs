@@ -314,21 +314,45 @@ namespace NTSD.Animation.LF2Objects
             // 按 attacker 与 victim 的相对位置推开 x/z 速度。
             else if (itr.kind == 15)
             {
-                if (_character.PS != null && attacker?.PS != null)
-                {
-                    _character.PS.vx += (attacker.PS.x >= _character.PS.x) ? 1f : -1f;
-                    _character.PS.vz += (attacker.PS.z >= _character.PS.z) ? 0.5f : -0.5f;
-                }
+                ApplyWhirlwindCharacterForce(attacker);
+                return true;
             }
 
             // Kind 16：冰冻/扣蓝效果。
             else if (itr.kind == 16)
             {
+                int adjustedInjury = itr.injury;
+                if (_character.FallDamageDiv > 0)
+                    adjustedInjury = itr.injury * 100 / _character.FallDamageDiv;
+
+                if (_character.Health.HP > 0 && adjustedInjury >= _character.Health.HP && _character.KillCount == -1)
+                {
+                    LF2Entity holder = ResolveHolderCopyEntity(attacker);
+                    if (holder != null)
+                        holder.KillStat++;
+                }
+
+                _character.Health.HP -= adjustedInjury;
+                _character.Health.HPBound -= adjustedInjury / 3;
+                _character.ComboCountVic += adjustedInjury;
+
+                if (_character.KillCount == -1)
+                {
+                    LF2Entity holder = ResolveHolderCopyEntity(attacker);
+                    if (holder != null)
+                        holder.ComboCountAtk += adjustedInjury;
+                }
+
                 _character.ImmediateFrame(LF2StandardFrames.MpDrain);
-                // 伤害使用与 kind=0 相同的 MaxMP 缩放公式。
-                // 这里不播放独立命中音效；震动由 ShakeTimer 写入后交给渲染层消费。
-                inj = (_character.Health.MaxMP > 0) ? itr.injury * 100 / _character.Health.MaxMP : itr.injury;
-                acceptHit = true;
+                _character.AttackingCounter = 0;
+
+                int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+                if (attackerSlot >= 0)
+                    _character.ItrVrestUpdate(attackerSlot, itr, true);
+
+                ReleaseHeldTargetOnKind16(attackerSlot);
+                _character.QueueBattleSound("SFX_065");
+                return true;
             }
 
             // 命中结算。
@@ -429,6 +453,73 @@ namespace NTSD.Animation.LF2Objects
                 return weapon.Runtime?.WeaponState is int state and not 0 ? state : weapon.GetState();
 
             return attacker?.GetState() ?? 0;
+        }
+
+        private LF2Entity ResolveHolderCopyEntity(LF2Entity attacker)
+        {
+            int holderSlot = attacker?.HolderCopySlot ?? -1;
+            if (holderSlot < 0)
+                return null;
+
+            return _character.Match?.FindEntityByRuntimeSlotForQuery(holderSlot);
+        }
+
+        private void ApplyWhirlwindCharacterForce(LF2Entity attacker)
+        {
+            if (attacker == null || _character.Runtime == null)
+                return;
+
+            _character.KnockbackVx = (float)(_character.Runtime.Vx + (_character.GetRuntimeXInt() > attacker.GetRuntimeXInt() ? -1f : 1f));
+            _character.Runtime.Vx = _character.KnockbackVx;
+            _character.KnockbackVz = (float)(_character.Runtime.Vz + (_character.GetRenderZInt() > attacker.GetRenderZInt() ? -0.5f : 0.5f));
+            _character.Runtime.Vz = _character.KnockbackVz;
+            ApplyWhirlwindAirStep(3.0f);
+            _character.RefreshRuntimeSnapshot();
+        }
+
+        private void ReleaseHeldTargetOnKind16(int attackerSlot)
+        {
+            int heldTargetSlot = _character.Runtime?.ResolveActiveHeldSlotIndex() ?? -1;
+            if (_character.Runtime == null || _character.Runtime.LinkState != 2 || heldTargetSlot < 0)
+                return;
+
+            LF2Entity heldTarget = _character.Match?.FindEntityByRuntimeSlotForQuery(heldTargetSlot);
+            int holderSlot = _character.Runtime.SlotIndex;
+            if (heldTarget?.Runtime == null ||
+                heldTarget.Runtime.LinkState != -2 ||
+                !heldTarget.Runtime.IsActivelyHeldBySlot(holderSlot))
+            {
+                _character.Runtime.LinkState = 0;
+                return;
+            }
+
+            if (attackerSlot >= 0)
+                _character.ItrRest?.SetVrest(attackerSlot, 45);
+
+            _character.ItrRest?.SetVrest(heldTargetSlot, 30);
+            _character.Runtime.LinkState = 0;
+            heldTarget.Runtime.LinkState = 0;
+            heldTarget.ImmediateFrame(heldTarget.BattleRandInt(0, 6));
+            heldTarget.Runtime.Vy = -1f;
+            heldTarget.RefreshRuntimeSnapshot();
+            _character.RefreshRuntimeSnapshot();
+        }
+
+        private void ApplyWhirlwindAirStep(float vyStep)
+        {
+            if (_character.GetRuntimeYInt() >= -2)
+            {
+                _character.Runtime.Y = -2f;
+                _character.Runtime.YInt = -2;
+                _character.Runtime.Vy = -6f;
+                return;
+            }
+
+            if (_character.Runtime.Vy > -6f)
+            {
+                _character.Runtime.Vy -= vyStep;
+                _character.KnockbackVy = (float)_character.Runtime.Vy;
+            }
         }
 
         // HitFall：fall 累积与受击帧选择

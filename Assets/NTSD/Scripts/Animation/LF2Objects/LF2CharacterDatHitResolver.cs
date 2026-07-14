@@ -642,7 +642,8 @@ namespace NTSD.Animation.LF2Objects
                         holder.KillStat++;
                 }
 
-                ApplyHitInjury(adjustedInjury);
+                _victim.Health.HP -= adjustedInjury;
+                _victim.Health.HPBound -= adjustedInjury / 3;
                 _victim.ComboCountVic += adjustedInjury;
                 if (_victim.KillCount == -1)
                 {
@@ -856,6 +857,7 @@ namespace NTSD.Animation.LF2Objects
             _victim.KnockbackVz = (float)(_victim.Runtime.Vz + (_victim.GetRenderZInt() > attacker.GetRenderZInt() ? -0.5f : 0.5f));
             _victim.Runtime.Vz = _victim.KnockbackVz;
             ApplyAirStep(3.0f);
+            _victim.RefreshRuntimeSnapshot();
         }
 
         private void ReleaseHeldTargetOnKind16(int attackerSlot)

@@ -263,8 +263,8 @@ Unity 有两套：
 | M-12 | **state 500/501 变身 transform** | GameTick early | ✅ `RunEarlyState500/501Specials`（BMD-023） | ✅ |
 | M-13 | **stage 波次生成**（`ApplyCurrentWavePhaseAdvance` `GameTick.cs:2317` + `ApplyCurrentWaveImmediateStageSpawns` :2350 + `RefillCurrentWavePositiveStageSpawns` :2226，StageProgression/StageSpawnRuntime 一整套） | GameTick step 23 | ❌ grep `StageSpawn/StageProgression/WaveIdx` 全 0 命中 | **❌ 缺失（波次刷敌，属战斗逻辑，需新增）** |
 | M-14 | **frame 110/114 → CdDefendLock=3**（`FrameTick.cs:208-209`） | FrameTick 尾 | ✅ `LF2Entity.RunCommonFrameTick` 尾部 + runtime Reset/cooldown | **✅ 已完成 / Unity 运行时已验证（T3）** |
-| M-15 | **kind 16 完整结算**（`ApplyKind15Or16` kind=16：KillStat++/ComboCountAtk/SFX_065/vrest/LinkState 断开） | HitResolve 1640-1704 | ⚠️ Unity kind16 只做 ImmediateFrame(200)+伤害，缺 KillStat/ComboCount/音效/vrest/LinkState | **⚠️ 部分缺失** |
-| M-16 | **kind 15 完整位移**（`ApplyKind15Movement`：KnockbackVx+真实 Vx/Vz+YInt=-2，按对象类型分 vyStep 3.0/2.3） | HitResolve 1737 | ⚠️ Unity kind15 走 PS.vx/vz 增量，未设 YInt，未按类型分 vyStep | **⚠️ 形式不同，需验运行结果** |
+| M-15 | **kind 16 完整结算**（`ApplyKind15Or16` kind=16：KillStat++/ComboCountAtk/SFX_065/vrest/LinkState 断开） | HitResolve 1640-1704 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已补齐 FallDamageDiv 缩放、KillStat/ComboCount、frame200、vrest、2/-2 持有断开与 SFX_065 | **✅ 已完成 / Unity 运行时已验证（T6）** |
+| M-16 | **kind 15 完整位移**（`ApplyKind15Movement`：KnockbackVx+真实 Vx/Vz+YInt=-2，按对象类型分 vyStep 3.0/2.3） | HitResolve 1737 | ✅ 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已改为 authority 的 KnockbackVx/Vz + YInt/Vy 语义；武器/铁球侧原 `WhirlwindForce` 保持 3.0/2.3 分支 | **✅ 已完成 / Unity 运行时已验证（T6）** |
 
 > **判定原则提醒**：当前仍标 ❌/⚠️ 的 M-1/M-2/M-13/M-15/M-16 都**不能直接删对应 Unity 脚本**；它们是"C# 有 Unity 缺/结果仍需验证"。M-7/M-8/M-9/M-10/M-11/M-12/M-14 已确认对齐或完成并运行验证。只有 M-6（F8 调试）确认是调试功能后可不移植。
 
@@ -328,9 +328,8 @@ Unity 有两套：
 - [x] **§3-4** frame 202 HitStun=20 — ✅（`LF2Entity.cs:3634`）
 - [x] **M-14 / T3** frame 110/114 CdDefendLock=3 — **已完成并通过 Unity 运行时自检**
 
-### P2 — 部分对齐（需补齐/验运行结果）
-- [x] **M-15** kind 16 完整结算（KillStat/ComboCount/SFX_065/vrest/LinkState 断开）— ⚠️ Unity 缺这些副作用
-- [x] **M-16** kind 15 位移（YInt=-2 + 按类型分 vyStep）— ⚠️ 形式不同，需验运行结果逐帧一致
+### P2 — 已补齐并完成 Unity 运行时验证
+- [x] **M-15 / M-16 / T6** kind 15/16 完整位移与副作用 — **已完成并通过 Unity 运行时自检**
 
 ### P3 — 确认可不移植
 - [x] **M-6** F8 强制掉武器 — ✅ 确认是调试功能，Unity 不需实现（非冗余，是未移植的调试项）
@@ -368,7 +367,7 @@ Unity 有两套：
 |----|------|
 | §2.1-1 / T0 | `exemptVal` 已改用权威 arest/vrest 公式，并通过 Unity 运行时自检 |
 
-**✅ 原缺失项已完成并通过 Unity 运行时自检（共 5 项）：**
+**✅ 原缺失项已完成并通过 Unity 运行时自检（共 6 项）：**
 
 | 项 | 内容 |
 |----|------|
@@ -377,13 +376,12 @@ Unity 有两套：
 | M-8 / T1 | 共享 ApplyAlternateDamage 完整契约、真实角色/shared-DAT 两入口及 object-pass 预处理 |
 | M-9 / T2 | 角色/武器统一 `RecordKind0Hit` |
 | M-14 / T3 | frame 110/114 写 `CdDefendLock=3` 及 cooldown 生命周期 |
+| M-15 / M-16 / T6 | kind15 authority 位移 + kind16 完整结算、副作用与持有断开 |
 
-**⚠️ 部分对齐（副作用/形式差异，需补齐或验运行结果，共 3 项）：**
+**⚠️ 部分对齐（副作用/形式差异，需补齐或验运行结果，共 1 项）：**
 
 | 项 | 内容 |
 |----|------|
-| M-15 | kind 16 缺 KillStat/ComboCount/SFX_065/vrest/LinkState 断开 |
-| M-16 | kind 15 位移形式不同（缺 YInt=-2 + 按类型分 vyStep），验运行结果 |
 | M-5 | 死亡弹地帧落点未逐行确认 |
 
 **✅ 已确认对齐或已完成并验证（主要项）：**
@@ -399,7 +397,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 
 ### 一句话总结
 
-**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 3 项缺失逻辑（AI、combo、stage 波次）+ 5 项已完成并通过 Unity 运行时自检 + 3 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的三块仍是 **AI 输入生成器、combo 连招、stage 波次刷敌**。
+**战斗逻辑差异点已完成本轮核实。** 当前净结果：**P0 未修复项 0 + 3 项缺失逻辑（AI、combo、stage 波次）+ 6 项已完成并通过 Unity 运行时自检 + 1 项部分对齐**；另保留 negative `vaction` 专项验证风险。按剩余工作量排序，最大的三块仍是 **AI 输入生成器、combo 连招、stage 波次刷敌**。
 
 ## 实施进度（2026-07-14）
 
@@ -413,5 +411,6 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T1（M-8） | **已完成 / Unity 运行时已验证** | 共享 `LF2AlternateDamageResolver`；真实 `LF2Character.Hit` 与 `LF2CharacterDatHitResolver.TryResolveHit` 两入口；`NTSDEntityRuntime.Unk344`；稳定 3 槽 `KillStats`/`DamageStats` 与保 identity reset；`HPBound` 整数扣减且 `HPLost` 不变；heavy 顺序、character guard、clamp 后 vrest、SpecialAttack object-pass kind4/9 预处理、state1002 不写 `WeaponState`。type3 lead sound 已按代码权威对齐，headless 未直接观测音频 | `CheckAlternateHurtTriggerMatrix`、`CheckAlternateDamageCoreSideEffects`、`CheckAlternateDamageMotionTailMatrix`、`CheckAlternateDamageCharacterEntry`、`CheckAlternateDamageSharedDatEntry`、`CheckAlternateDamageHeavyWeaponEntries`、`CheckAlternateDamageInteractionVrest`、`CheckSpecialAttackDamagePreprocess` 均通过 |
 | T4（M-1） | **已完成 / Unity 运行时已验证** | `Oid5152RuntimeMaintenanceAll`、`TryMergeOid7Or8Into51`、`TrySplitOid51BackToPair` 已落地到 `SimulationWorld.Passes.partial.cs` 与运行时身份维护链 | `CheckOid5152MergeSuccessAndDormantIsolation`、`CheckOid5152MergeCooldownOneTriggersSameTick`、`CheckOid5152SplitSuccessAndOddTruncate`、`CheckOid5152SplitFailurePartialRecovery`、`CheckOid5152DjaReleaseTriggersSameTickSplit` 均通过 |
 | T5（M-2） | **已完成 / Unity 运行时已验证** | `SimulationWorld.PostFrameAdvanceDeathCleanupAll` 已补齐 respawn 两分支、队友平均落点、PP/HP/HpMax/Frame212/Y=-300、oid998 特效生成；`LF2Entity` / `LF2LivingObject` / `LF2Character` 已补 no-renderer 销毁注销链；`LF2ReferencePool` 已补惰性初始化，允许 self-check 直接 new 的角色安全释放 | `CheckRespawnPassWithoutStoredCount`、`CheckRespawnPassFreeEntityGate`、`CheckRespawnPassWithStoredCountAndEffectSpawn` 均通过 |
+| T6（M-15/M-16） | **已完成 / Unity 运行时已验证** | 真实 `LF2CharacterHitResolver` 与 shared-DAT `LF2CharacterDatHitResolver` 均已对齐 kind15 authority 位移与 kind16 完整结算；角色 victim 不再走旧的 MaxMP 缩放或 `PS.vx/vz` 增量路径 | `CheckKind15CharacterWhirlwind`、`CheckKind16CharacterSideEffects` 均通过 |
 
-最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**；随后 fresh Unity batchmode `BattleRuntimeSelfCheck` 再次完整通过，`ntsd_selfcheck_unity.log` 结尾明确记录 `[BattleRuntimeSelfCheck] 战斗运行时自检通过。`。因此 M-1/T4 与 M-2/T5 已从“逻辑已写”升级为“已完成 / Unity 运行时已验证”；T0/T1/T2/T3 的既有 Unity PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。
+最新验证（2026-07-14）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 42 warnings**；随后 fresh Unity batchmode `BattleRuntimeSelfCheck` 再次完整通过，`ntsd_selfcheck_unity.log` 结尾明确记录 `[BattleRuntimeSelfCheck] 战斗运行时自检通过。`。本轮新增通过的针对性断言为 `CheckKind15CharacterWhirlwind` 与 `CheckKind16CharacterSideEffects`，因此 M-15/M-16/T6 已升级为“已完成 / Unity 运行时已验证”；T0/T1/T2/T3/T4/T5 的既有 Unity PASS 证据继续有效；type3 lead sound 仍只声明代码权威对齐，headless 未直接观测音频播放。

@@ -75,6 +75,8 @@ namespace NTSD.Test
                 CheckRespawnPassWithoutStoredCount();
                 CheckRespawnPassFreeEntityGate();
                 CheckRespawnPassWithStoredCountAndEffectSpawn();
+                CheckKind15CharacterWhirlwind();
+                CheckKind16CharacterSideEffects();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -2057,6 +2059,135 @@ namespace NTSD.Test
             }
         }
 
+        private static void CheckKind15CharacterWhirlwind()
+        {
+            var world = new SimulationWorld();
+            LF2CharacterData data = BuildKind1516CharacterData("SelfCheck_Kind1516");
+            LF2Character attacker = CreateCharacter("SelfCheck_Kind15_Attacker", 1, data);
+            LF2Character groundedVictim = CreateCharacter("SelfCheck_Kind15_Grounded", 2, data);
+            LF2Character airVictim = CreateCharacter("SelfCheck_Kind15_Air", 3, data);
+
+            world.Register(attacker);
+            world.Register(groundedVictim);
+            world.Register(airVictim);
+
+            attacker.ImmediateFrame(0);
+            groundedVictim.ImmediateFrame(0);
+            airVictim.ImmediateFrame(0);
+
+            attacker.Runtime.SetPosition(0.0, 0.0, 0.0);
+            attacker.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            attacker.Runtime.SyncIntegerPosition();
+
+            groundedVictim.Runtime.SetPosition(10.0, 0.0, 5.0);
+            groundedVictim.Runtime.SetVelocity(2.0, -5.0, 1.0);
+            groundedVictim.Runtime.SyncIntegerPosition();
+            groundedVictim.KnockbackVx = 0.0;
+            groundedVictim.KnockbackVy = 0.0;
+            groundedVictim.KnockbackVz = 0.0;
+
+            bool groundedResolved = groundedVictim.Hit(
+                new InteractionArea { kind = 15 },
+                attacker,
+                Vector3.zero,
+                default);
+
+            Expect(groundedResolved, "kind15 should resolve on grounded character victim");
+            Expect(Mathf.Approximately((float)groundedVictim.Runtime.Vx, 1f) &&
+                   Mathf.Approximately((float)groundedVictim.KnockbackVx, 1f),
+                "kind15 should rewrite victim vx from runtime vx ± 1");
+            Expect(Mathf.Approximately((float)groundedVictim.Runtime.Vz, 0.5f) &&
+                   Mathf.Approximately((float)groundedVictim.KnockbackVz, 0.5f),
+                "kind15 should rewrite victim vz from runtime vz ± 0.5");
+            Expect(groundedVictim.GetRuntimeYInt() == -2 &&
+                   Mathf.Approximately((float)groundedVictim.Runtime.Y, -2f) &&
+                   Mathf.Approximately((float)groundedVictim.Runtime.Vy, -6f),
+                "kind15 grounded branch should clamp Y/YInt to -2 and set Vy=-6");
+
+            airVictim.Runtime.SetPosition(10.0, -5.0, 5.0);
+            airVictim.Runtime.SetVelocity(0.0, -5.0, 0.0);
+            airVictim.Runtime.SyncIntegerPosition();
+            airVictim.KnockbackVx = 0.0;
+            airVictim.KnockbackVy = 0.0;
+            airVictim.KnockbackVz = 0.0;
+
+            bool airResolved = airVictim.Hit(
+                new InteractionArea { kind = 15 },
+                attacker,
+                Vector3.zero,
+                default);
+
+            Expect(airResolved, "kind15 should resolve on airborne character victim");
+            Expect(airVictim.GetRuntimeYInt() == -5, "kind15 airborne branch should preserve YInt below -2");
+            Expect(Mathf.Approximately((float)airVictim.Runtime.Vy, -8f) &&
+                   Mathf.Approximately((float)airVictim.KnockbackVy, -8f),
+                "kind15 airborne branch should subtract vyStep=3.0 and mirror KnockbackVy");
+        }
+
+        private static void CheckKind16CharacterSideEffects()
+        {
+            var world = new SimulationWorld();
+            LF2CharacterData data = BuildKind1516CharacterData("SelfCheck_Kind1516");
+            LF2Character holder = CreateCharacter("SelfCheck_Kind16_Holder", 1, data);
+            LF2Character attacker = CreateCharacter("SelfCheck_Kind16_Attacker", 2, data);
+            LF2Character victim = CreateCharacter("SelfCheck_Kind16_Victim", 3, data);
+            LF2Character heldTarget = CreateCharacter("SelfCheck_Kind16_HeldTarget", 4, data);
+
+            world.Register(holder);
+            world.Register(attacker);
+            world.Register(victim);
+            world.Register(heldTarget);
+
+            holder.ImmediateFrame(0);
+            attacker.ImmediateFrame(0);
+            victim.ImmediateFrame(0);
+            heldTarget.ImmediateFrame(10);
+
+            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            victim.Health.HP = 70;
+            victim.Health.HPBound = 100;
+            victim.Health.HPLost = 0;
+            victim.FallDamageDiv = 50;
+            victim.KillCount = -1;
+            victim.ComboCountVic = 0;
+            victim.AttackingCounter = 5;
+            victim.Runtime.LinkState = 2;
+            victim.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
+
+            heldTarget.Runtime.LinkState = -2;
+            heldTarget.Runtime.HolderStableId = victim.Runtime.SlotIndex;
+            heldTarget.Runtime.Vy = 0.0;
+
+            bool resolved = victim.Hit(
+                new InteractionArea
+                {
+                    kind = 16,
+                    injury = 40,
+                    vrest = 12,
+                },
+                attacker,
+                Vector3.zero,
+                default);
+
+            Expect(resolved, "kind16 should resolve on character victim");
+            Expect(victim.Health.HP == -10, "kind16 should scale injury by FallDamageDiv rather than MaxMP");
+            Expect(victim.Health.HPBound == 74, "kind16 should reduce HPBound by adjustedInjury/3 with integer division");
+            Expect(victim.Health.HPLost == 0, "kind16 should not accumulate HPLost via generic injury path");
+            Expect(victim.ComboCountVic == 80, "kind16 should add adjusted injury to victim combo counter");
+            Expect(holder.KillStat == 1, "kind16 lethal hit should increment holder KillStat");
+            Expect(holder.ComboCountAtk == 80, "kind16 should add adjusted injury to holder ComboCountAtk");
+            Expect(victim.Frame.N == LF2StandardFrames.MpDrain && victim.AttackingCounter == 0,
+                "kind16 should jump victim to frame 200 and clear attacking counter");
+            Expect(victim.ItrRest.GetVrest(attacker.Runtime.SlotIndex) == 45,
+                "kind16 release path should overwrite attacker-side vrest to 45 when victim is holding a target");
+            Expect(victim.ItrRest.GetVrest(heldTarget.Runtime.SlotIndex) == 30,
+                "kind16 release path should write held-target vrest=30");
+            Expect(victim.Runtime.LinkState == 0 && heldTarget.Runtime.LinkState == 0,
+                "kind16 should break 2/-2 hold links");
+            Expect(Mathf.Approximately((float)heldTarget.Runtime.Vy, -1f),
+                "kind16 should launch released held target with Vy=-1");
+        }
+
         private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
         {
             return new Dictionary<int, LF2CharacterDataWrapper>
@@ -2109,6 +2240,20 @@ namespace NTSD.Test
                     Frame(14, 14, 1, 14, 39, 79),
                     Frame(212, 5, 1, 212, 39, 79),
                     Frame(0xDB, 0, 1, 0xDB, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildKind1516CharacterData(string name)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 1, 0, 39, 79),
+                    Frame(10, 0, 1, 10, 39, 79),
+                    Frame(LF2StandardFrames.MpDrain, 18, 1, LF2StandardFrames.MpDrain, 39, 79),
                 },
             };
         }
