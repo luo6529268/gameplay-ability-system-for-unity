@@ -140,6 +140,11 @@ namespace NTSD.Simulation
 
         public LF2Entity FindEntityByRuntimeSlotIncludingPending(int runtimeSlot)
         {
+            return FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
+        }
+
+        internal LF2Entity FindEntityByRuntimeSlotIncludingDormant(int runtimeSlot)
+        {
             if (runtimeSlot < 0)
                 return null;
 
@@ -229,7 +234,7 @@ namespace NTSD.Simulation
 
                 for (int i = 0; i < bucket.items.Count; i++)
                 {
-                    if (bucket.items[i] is LF2Entity entity)
+                    if (bucket.items[i] is LF2Entity entity && IsActiveForCurrentPass(entity))
                     {
                         dst.Add(entity);
                     }

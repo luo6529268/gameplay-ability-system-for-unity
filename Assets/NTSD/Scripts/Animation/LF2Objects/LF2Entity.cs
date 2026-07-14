@@ -25,6 +25,7 @@ namespace NTSD.Animation.LF2Objects
         public const int OverlaySortingOrderOffset = 10000;
         protected static readonly List<LF2Entity> N30HistoryGateScratch = new List<LF2Entity>(32);
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
+        internal static System.Func<int, LF2CharacterDataWrapper> RuntimeCharacterConfigResolverOverride;
 
 
         /// <summary>对象名称。</summary>
@@ -2494,7 +2495,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetObjectId < 0)
                 return;
 
-            LF2CharacterDataWrapper wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(targetObjectId);
+            LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(targetObjectId);
             if (wrapper == null)
                 return;
 
@@ -2509,6 +2510,65 @@ namespace NTSD.Animation.LF2Objects
                 HitStun = 140;
 
             RefreshRuntimeSnapshot();
+        }
+
+        internal static LF2CharacterDataWrapper ResolveRuntimeCharacterConfig(int targetObjectId)
+        {
+            LF2CharacterDataWrapper overrideWrapper = RuntimeCharacterConfigResolverOverride?.Invoke(targetObjectId);
+            if (overrideWrapper != null)
+                return overrideWrapper;
+
+            return CharacterAnimtorManager.Instance?.GetCharacterConfig(targetObjectId);
+        }
+
+        internal bool TryApplyRuntimeIdentity(
+            int targetObjectId,
+            int targetFrameId,
+            bool resetWaitCounter,
+            out LF2CharacterDataWrapper wrapper)
+        {
+            wrapper = ResolveRuntimeCharacterConfig(targetObjectId);
+            if (wrapper == null)
+                return false;
+
+            ObjectId = targetObjectId;
+            FrameCache.Load(wrapper);
+            WeaponCount = wrapper.characterData?.weapon_hp ?? 0;
+
+            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                EnsureSharedCharacterDatControllerForSimulation();
+
+            Frame.N = targetFrameId;
+            Frame.D = FrameCache.GetFrameDataById(targetFrameId);
+            if (Frame.D != null)
+            {
+                int waitCounter = resetWaitCounter ? 0 : (Trans?.WaitCounter ?? 0);
+                Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, waitCounter);
+            }
+
+            RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        internal bool TryReloadCurrentFrameDataForRuntimeIdentity(int targetObjectId)
+        {
+            LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(targetObjectId);
+            if (wrapper == null)
+                return false;
+
+            ObjectId = targetObjectId;
+            FrameCache.Load(wrapper);
+            WeaponCount = wrapper.characterData?.weapon_hp ?? 0;
+
+            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                EnsureSharedCharacterDatControllerForSimulation();
+
+            Frame.D = FrameCache.GetFrameDataById(Frame.N);
+            if (Frame.D != null)
+                Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
+
+            RefreshRuntimeSnapshot();
+            return true;
         }
 
         public virtual int GetCurrentDataObjectTypeForSimulation() => ResolveCurrentDataObjectType(this);

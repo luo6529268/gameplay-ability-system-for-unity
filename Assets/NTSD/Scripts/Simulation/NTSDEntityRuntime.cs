@@ -131,6 +131,11 @@ namespace NTSD.Simulation
         public int ComboCountVic;
         public int ComboCountAtk;
         public int KillStat;
+        public int Unk328 = -1;
+        public int Unk32C = -1;
+        public int Unk330;
+        public int Unk334;
+        public int Unk338;
         public int Unk344;
         public int ShotCount;
         public int WeaponCount;
@@ -143,6 +148,7 @@ namespace NTSD.Simulation
         public int HitCandidateNearestDistance = 1000;
         public int HitCandidateKind1Distance = 1000;
         public int HitCandidateExtraDistance = 1000;
+        public bool OidMergeDormant;
         public bool PendingFlushDestroy;
 
         public int HP = 500;
@@ -386,6 +392,11 @@ namespace NTSD.Simulation
             ComboCountVic = 0;
             ComboCountAtk = 0;
             KillStat = 0;
+            Unk328 = -1;
+            Unk32C = -1;
+            Unk330 = 0;
+            Unk334 = 0;
+            Unk338 = 0;
             Unk344 = 0;
             ShotCount = 0;
             WeaponCount = 0;
@@ -398,6 +409,7 @@ namespace NTSD.Simulation
             HitCandidateNearestDistance = 1000;
             HitCandidateKind1Distance = 1000;
             HitCandidateExtraDistance = 1000;
+            OidMergeDormant = false;
             PendingFlushDestroy = false;
             HP = 500;
             HPBound = 500;

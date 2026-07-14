@@ -255,8 +255,14 @@ namespace NTSD.Simulation
             if (obj == null || _pendingUnregister.Contains(obj))
                 return false;
 
-            if (obj is LF2Entity entity && entity.Runtime != null && entity.Runtime.PendingFlushDestroy)
-                return false;
+            if (obj is LF2Entity entity && entity.Runtime != null)
+            {
+                if (entity.Runtime.OidMergeDormant)
+                    return false;
+
+                if (entity.Runtime.PendingFlushDestroy)
+                    return false;
+            }
 
             return true;
         }
@@ -328,7 +334,21 @@ namespace NTSD.Simulation
                 foreach (int simOrder in bucketKeys)
                 {
                     if (!_buckets.TryGetValue(simOrder, out Bucket bucket)) continue;
-                    count += bucket.items.Count;
+                    for (int i = 0; i < bucket.items.Count; i++)
+                    {
+                        ISimObject obj = bucket.items[i];
+                        if (obj is LF2Entity entity)
+                        {
+                            if (_pendingUnregister.Contains(entity))
+                                continue;
+
+                            if (entity.Runtime != null &&
+                                (entity.Runtime.OidMergeDormant || entity.Runtime.PendingFlushDestroy))
+                                continue;
+                        }
+
+                        count++;
+                    }
                 }
                 return count;
             }

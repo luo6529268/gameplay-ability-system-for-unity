@@ -67,6 +67,11 @@ namespace NTSD.Test
                 CheckAlternateDamageHeavyWeaponEntries();
                 CheckAlternateDamageInteractionVrest();
                 CheckSpecialAttackDamagePreprocess();
+                CheckOid5152MergeSuccessAndDormantIsolation();
+                CheckOid5152MergeCooldownOneTriggersSameTick();
+                CheckOid5152SplitSuccessAndOddTruncate();
+                CheckOid5152SplitFailurePartialRecovery();
+                CheckOid5152DjaReleaseTriggersSameTickSplit();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -1620,6 +1625,359 @@ namespace NTSD.Test
                 type_sub = 1,
                 frames = frames,
             };
+        }
+
+        private static void CheckOid5152MergeSuccessAndDormantIsolation()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                var world = new SimulationWorld();
+                LF2Character self = CreateCharacter("SelfCheck_Oid7", 7, wrappers[7].characterData);
+                LF2Character partner = CreateCharacter("SelfCheck_Oid8", 8, wrappers[8].characterData);
+                self.SetRuntimeSlotIndex(0);
+                partner.SetRuntimeSlotIndex(11);
+                world.Register(self);
+                world.Register(partner);
+
+                self.ImmediateFrame(10);
+                partner.ImmediateFrame(10);
+                self.Team = 1;
+                partner.Team = 2;
+                self.RelationTeam = 5;
+                partner.RelationTeam = 5;
+                self.Health.HP = 130;
+                self.Health.HPBound = 150;
+                self.Health.HP3 = 200;
+                partner.Health.HP = 120;
+                partner.Health.HPBound = 80;
+                self.Health.PP = 10;
+                partner.Health.PP = 20;
+                self.Runtime.SetPosition(100f, 0f, 5f);
+                partner.Runtime.SetPosition(121f, 0f, 12f);
+                self.Runtime.SyncIntegerPosition();
+                partner.Runtime.SyncIntegerPosition();
+                self.Runtime.Vy = 7f;
+                partner.Runtime.Vy = 3f;
+
+                world.Oid5152RuntimeMaintenanceAll(1);
+
+                Expect(self.ObjectId == 51 && self.CurrentFrameId == 290,
+                    "oid 7/8 merge must convert self into oid 51 frame 290");
+                Expect(self.Health.HPBound == 200 && self.Health.HP == 200,
+                    "oid 7/8 merge must clamp aggregate HP/HPBound by self HP3");
+                Expect(self.Health.PP == 500,
+                    "oid 7/8 merge must set self PP to 500");
+                Expect(self.GetRuntimeXInt() == 110 && self.GetRenderZInt() == 8,
+                    "oid 7/8 merge must write integer midpoint X/Z");
+                Expect(Nearly(self.Runtime.Vy, 7f) && Nearly(partner.Runtime.Vy, 0f),
+                    "oid 7/8 merge must preserve self Vy and zero partner Vy");
+                Expect(self.Runtime.Unk328 == 1 &&
+                       self.Runtime.Unk32C == 11 &&
+                       self.Runtime.Unk330 == 7 &&
+                       self.Runtime.Unk334 == 8 &&
+                       self.Runtime.Unk338 == 4500,
+                    "oid 7/8 merge must write merge bookkeeping fields");
+                Expect(partner.Runtime.OidMergeDormant,
+                    "merged partner must become dormant instead of being unregistered");
+                Expect(partner.Runtime.SlotIndex == 11 && partner.ObjectId == 8,
+                    "merged partner must retain original slot and DAT identity");
+                Expect(world.ObjectCount == 1,
+                    "dormant merged partner must be excluded from ObjectCount");
+                Expect(world.FindEntityByRuntimeSlotForQuery(11) == null,
+                    "ordinary runtime-slot query must hide dormant merged partner");
+                Expect(world.FindEntityByRuntimeSlotIncludingPending(11) == partner,
+                    "including-pending runtime-slot query must still find dormant merged partner");
+
+                var entities = new List<LF2Entity>();
+                world.GetAllEntities(entities);
+                Expect(entities.Count == 1 && entities[0] == self,
+                    "ordinary entity enumeration must exclude dormant merged partner");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static void CheckOid5152MergeCooldownOneTriggersSameTick()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                var world = new SimulationWorld();
+                LF2Character self = CreateCharacter("SelfCheck_Oid7_Cooldown", 7, wrappers[7].characterData);
+                LF2Character partner = CreateCharacter("SelfCheck_Oid8_Cooldown", 8, wrappers[8].characterData);
+                self.SetRuntimeSlotIndex(1);
+                partner.SetRuntimeSlotIndex(12);
+                world.Register(self);
+                world.Register(partner);
+
+                self.ImmediateFrame(10);
+                partner.ImmediateFrame(10);
+                self.RelationTeam = 1;
+                partner.RelationTeam = 1;
+                self.Health.HP = 100;
+                self.Health.HPBound = 100;
+                self.Health.HP3 = 200;
+                partner.Health.HP = 90;
+                partner.Health.HPBound = 90;
+                self.Runtime.Unk338 = 1;
+                self.Runtime.SetPosition(50f, 0f, 5f);
+                partner.Runtime.SetPosition(80f, 0f, 8f);
+                self.Runtime.SyncIntegerPosition();
+                partner.Runtime.SyncIntegerPosition();
+
+                world.Oid5152RuntimeMaintenanceAll(1);
+
+                Expect(self.ObjectId == 51 && self.Runtime.Unk338 == 4500,
+                    "merge cooldown 1 must decrement to 0 and still allow same-tick merge");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static void CheckOid5152SplitSuccessAndOddTruncate()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+                self.Health.HP = 201;
+                self.Health.HPBound = 199;
+                self.Runtime.Unk338 = 1;
+                self.Runtime.Vy = 9f;
+
+                world.Oid5152RuntimeMaintenanceAll(2);
+
+                Expect(self.ObjectId == 7 && self.CurrentFrameId == 112,
+                    "oid 51 split must restore self identity and enter frame 112");
+                Expect(partner.ObjectId == 8 && partner.CurrentFrameId == 112,
+                    "oid 51 split must revive dormant partner into frame 112");
+                Expect(self.Health.HP == 100 && self.Health.HPBound == 99 &&
+                       partner.Health.HP == 100 && partner.Health.HPBound == 99,
+                    "oid 51 split must floor-divide odd HP and HPBound for both sides");
+                Expect(self.Health.HP3 == 200 && partner.Health.HP3 == 500,
+                    "oid 51 split must preserve self HP3 and keep partner Reset default HP3");
+                Expect(self.Health.PP == 0 && partner.Health.PP == 0,
+                    "oid 51 split must zero PP for both sides");
+                Expect(self.Runtime.Unk328 == -1 && self.Runtime.Unk338 == 900,
+                    "oid 51 split must clear merge flag and write 900 cooldown on self");
+                Expect(!partner.Runtime.OidMergeDormant && world.ObjectCount == 2,
+                    "split success must reactivate dormant partner and restore ObjectCount");
+                Expect(partner.Team == 0 && partner.OwnerId == -1 && partner.Runtime.Unk328 == -1,
+                    "split success partner must come from Reset defaults before contract overwrites");
+                Expect(Nearly(self.Runtime.Vy, 9f) && Nearly(partner.Runtime.Vy, 0f) && Nearly(partner.Runtime.Vz, 0f),
+                    "split success must preserve self Vy/Vz and keep partner Reset default vertical velocity");
+                Expect(self.Runtime.Dir != partner.Runtime.Dir,
+                    "split success must face revived partner opposite to self");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static void CheckOid5152SplitFailurePartialRecovery()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+                self.Health.PP = 123;
+                self.Health.HP = 180;
+                self.Health.HPBound = 180;
+                self.Runtime.Unk32C = 399;
+                self.Runtime.Unk338 = 0;
+
+                world.Oid5152RuntimeMaintenanceAll(3);
+
+                Expect(self.ObjectId == 7,
+                    "split partial recovery must still restore self identity first");
+                Expect(self.Runtime.Unk328 == -1 && self.Runtime.Unk338 == 900,
+                    "split partial recovery must persist self cooldown writes");
+                Expect(self.CurrentFrameId == 290 && self.Health.PP == 123 &&
+                       self.Health.HP == 180 && self.Health.HPBound == 180,
+                    "split partial recovery must not apply frame112, PP0 or HP halving");
+                Expect(self.Frame.D == null,
+                    "split partial recovery must leave self frame data reloaded against original DAT even when frame 290 is absent");
+                Expect(partner.Runtime.OidMergeDormant && world.ObjectCount == 1,
+                    "split partial recovery must not revive dormant partner or increment ObjectCount");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static void CheckOid5152DjaReleaseTriggersSameTickSplit()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            try
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                var world = new SimulationWorld();
+                LF2Character self = CreateCharacter("SelfCheck_Oid51_Dja", 7, wrappers[7].characterData);
+                LF2Character partner = CreateCharacter("SelfCheck_Oid8_Dormant", 8, wrappers[8].characterData);
+                self.SetRuntimeSlotIndex(0);
+                partner.SetRuntimeSlotIndex(11);
+                world.Register(self);
+                world.Register(partner);
+
+                self.RelationTeam = 4;
+                partner.RelationTeam = 4;
+                self.TryApplyRuntimeIdentity(51, 290, true, out _);
+                self.Runtime.Unk328 = 1;
+                self.Runtime.Unk32C = 11;
+                self.Runtime.Unk330 = 7;
+                self.Runtime.Unk334 = 8;
+                self.Runtime.Unk338 = 30;
+                self.Health.HP = 180;
+                self.Health.HPBound = 180;
+                self.Health.HP3 = 200;
+                self.Runtime.SetPosition(60f, 0f, 7f);
+                self.Runtime.SyncIntegerPosition();
+
+                partner.Runtime.OidMergeDormant = true;
+                partner.Runtime.SetPosition(60f, 0f, 7f);
+                partner.Runtime.SyncIntegerPosition();
+
+                SetPrivateField(self.InputState, "_comboDJA", (byte)2);
+                ((SelfCheckController)self.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.jump, true);
+
+                var tickSystem = new NTSDBattleTickSystem(world);
+                tickSystem.RunReleaseTick(1);
+
+                Expect(self.ObjectId == 7 && partner.ObjectId == 8 && world.ObjectCount == 2,
+                    "DJA release in PostCooldownInput must reach M-1 on the same tick and trigger immediate split");
+                Expect(self.Runtime.Unk338 == 900,
+                    "same-tick DJA release split must end with split cooldown 900");
+
+                LF2Character djaOnly = CreateCharacter("SelfCheck_Oid51_DjaOnly", 51, wrappers[51].characterData);
+                djaOnly.ImmediateFrame(290);
+                djaOnly.Runtime.Unk328 = 1;
+                djaOnly.Runtime.Unk338 = 77;
+                SetPrivateField(djaOnly.InputState, "_comboDJA", (byte)3);
+                djaOnly.ApplyFrameInputFromLocalState();
+
+                Expect(djaOnly.Runtime.Unk338 == 0,
+                    "merged DJA branch must zero Unk338 when frame jump cannot be resolved");
+                Expect((byte)GetPrivateField(djaOnly.InputState, "_comboDJA") == 3,
+                    "merged DJA branch must not clear comboDJA state");
+            }
+            finally
+            {
+                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+            }
+        }
+
+        private static Dictionary<int, LF2CharacterDataWrapper> BuildOid5152Wrappers()
+        {
+            return new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [7] = new LF2CharacterDataWrapper(7, BuildOid5152BaseData("SelfCheck_Oid7")),
+                [8] = new LF2CharacterDataWrapper(8, BuildOid5152BaseData("SelfCheck_Oid8")),
+                [51] = new LF2CharacterDataWrapper(51, BuildOid5152MergedData()),
+            };
+        }
+
+        private static LF2CharacterData BuildOid5152BaseData(string name)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 1, 0, 39, 79),
+                    Frame(10, 2, 1, 10, 39, 79),
+                    Frame(112, 0, 1, 112, 39, 79),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildOid5152MergedData()
+        {
+            LF2FrameData frame290 = Frame(290, 2, 1, 290, 39, 79);
+            frame290.hit_ja = 300;
+
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_Oid51",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 1, 0, 39, 79),
+                    Frame(112, 0, 1, 112, 39, 79),
+                    frame290,
+                },
+            };
+        }
+
+        private static SimulationWorld CreateOid5152MergedWorld(
+            Dictionary<int, LF2CharacterDataWrapper> wrappers,
+            out LF2Character self,
+            out LF2Character partner)
+        {
+            var world = new SimulationWorld();
+            self = CreateCharacter("SelfCheck_Oid7_Merged", 7, wrappers[7].characterData);
+            partner = CreateCharacter("SelfCheck_Oid8_Merged", 8, wrappers[8].characterData);
+            self.SetRuntimeSlotIndex(0);
+            partner.SetRuntimeSlotIndex(11);
+            world.Register(self);
+            world.Register(partner);
+
+            self.ImmediateFrame(10);
+            partner.ImmediateFrame(10);
+            self.RelationTeam = 3;
+            partner.RelationTeam = 3;
+            self.Health.HP = 100;
+            self.Health.HPBound = 100;
+            self.Health.HP3 = 200;
+            partner.Health.HP = 100;
+            partner.Health.HPBound = 100;
+            self.Runtime.SetPosition(90f, 0f, 6f);
+            partner.Runtime.SetPosition(120f, 0f, 9f);
+            self.Runtime.SyncIntegerPosition();
+            partner.Runtime.SyncIntegerPosition();
+
+            world.Oid5152RuntimeMaintenanceAll(1);
+            return world;
+        }
+
+        private static object GetPrivateField(object instance, string fieldName)
+        {
+            var field = instance.GetType().GetField(fieldName,
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            return field?.GetValue(instance);
+        }
+
+        private static void SetPrivateField(object instance, string fieldName, object value)
+        {
+            var field = instance.GetType().GetField(fieldName,
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            field?.SetValue(instance, value);
         }
 
         private static LF2Character CreateCharacter(string name, int objectId, LF2CharacterData data)

@@ -266,6 +266,12 @@ namespace NTSD.Input
                     if (jumped) ClearActionAndDirectionCooldowns();
                     return true;
                 }
+
+                if (character.Runtime?.Unk328 == 1)
+                {
+                    character.Runtime.Unk338 = 0;
+                    return false;
+                }
             }
 
             if (ComboInterrupted(ComboMode.Attack, advanced))

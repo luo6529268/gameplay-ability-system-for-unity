@@ -27,6 +27,7 @@ namespace NTSD.Simulation
         {
             TickCooldowns(tickIndex);
             PostCooldownInput(tickIndex);
+            Oid5152RuntimeMaintenance(tickIndex);
             EarlyFrameAdvanceSpecials(tickIndex);
             FrameLogicBeforeAdvance(tickIndex);
             FrameAdvanceAll(tickIndex);
@@ -72,6 +73,11 @@ namespace NTSD.Simulation
         private void ProcessHeldObjects(int tickIndex)
         {
             world.HeldObjectProcessAll(tickIndex);
+        }
+
+        private void Oid5152RuntimeMaintenance(int tickIndex)
+        {
+            world.Oid5152RuntimeMaintenanceAll(tickIndex);
         }
 
         private void CaptureCollisionFrameSnapshots()
