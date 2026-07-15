@@ -47,6 +47,7 @@ namespace NTSD.Test
         {
             try
             {
+                using var singletonSceneObjects = new TemporarySingletonSceneObjectScope();
                 BattleRuntimeSelfCheckCore.RunAllChecks();
                 CheckCatchingAttackAction();
                 CheckCatchingJumpAction();
@@ -5461,6 +5462,7 @@ namespace NTSD.Test
             private readonly System.Reflection.FieldInfo worldField;
             private readonly SimulationWorld originalWorld;
             private readonly SimulationWorld temporaryWorld;
+            private bool worldWasReplaced;
 
             public TemporarySimulationDriverWorld(SimulationWorld world)
             {
@@ -5473,12 +5475,18 @@ namespace NTSD.Test
                 SimulationTickDriver resolvedDriver = SimulationTickDriver.Instance;
                 if (resolvedDriver == null)
                 {
-                    temporaryDriverObject = new GameObject("SelfCheck_TemporarySimulationTickDriver");
-                    resolvedDriver = temporaryDriverObject.AddComponent<SimulationTickDriver>();
-                    var awake = singletonBaseType?.GetMethod("Awake", flags);
-                    awake?.Invoke(resolvedDriver, null);
-                    if (SimulationTickDriver.Instance == null)
+                    resolvedDriver = FindSceneComponent<SimulationTickDriver>();
+                    if (resolvedDriver != null)
+                    {
                         instanceField?.SetValue(null, resolvedDriver);
+                    }
+                    else
+                    {
+                        temporaryDriverObject = new GameObject("SelfCheck_TemporarySimulationTickDriver");
+                        resolvedDriver = temporaryDriverObject.AddComponent<SimulationTickDriver>();
+                        if (SimulationTickDriver.Instance == null)
+                            instanceField?.SetValue(null, resolvedDriver);
+                    }
                 }
                 driver = resolvedDriver;
                 Expect(driver != null && SimulationTickDriver.Instance == driver,
@@ -5490,6 +5498,7 @@ namespace NTSD.Test
                 originalWorld = worldField.GetValue(driver) as SimulationWorld;
                 temporaryWorld = world;
                 worldField.SetValue(driver, temporaryWorld);
+                worldWasReplaced = true;
             }
 
             public void Dispose()
@@ -5509,17 +5518,117 @@ namespace NTSD.Test
                 }
                 finally
                 {
-                    worldField.SetValue(driver, originalWorld);
+                    if (worldWasReplaced)
+                    {
+                        try
+                        {
+                            worldField.SetValue(driver, originalWorld);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogWarning($"[BattleRuntimeSelfCheck] Failed to restore SimulationTickDriver._world: {ex.Message}");
+                        }
+                    }
+
+                    try
+                    {
+                        instanceField?.SetValue(null, originalDriverInstance);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogWarning($"[BattleRuntimeSelfCheck] Failed to restore SimulationTickDriver.Instance: {ex.Message}");
+                    }
+
                     if (temporaryDriverObject != null)
                     {
-                        if (Application.isPlaying)
-                            UnityEngine.Object.Destroy(temporaryDriverObject);
-                        else
-                            UnityEngine.Object.DestroyImmediate(temporaryDriverObject);
+                        try
+                        {
+                            DestroySelfCheckObject(temporaryDriverObject);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogWarning($"[BattleRuntimeSelfCheck] Failed to destroy its temporary SimulationTickDriver: {ex.Message}");
+                        }
                     }
-                    instanceField?.SetValue(null, originalDriverInstance);
                 }
             }
+        }
+
+        private sealed class TemporarySingletonSceneObjectScope : IDisposable
+        {
+            private readonly HashSet<GameObject> originalObjects = new HashSet<GameObject>();
+
+            public TemporarySingletonSceneObjectScope()
+            {
+                CaptureSceneObjects<GameDataManager>(originalObjects);
+                CaptureSceneObjects<CharacterAnimtorManager>(originalObjects);
+                CaptureSceneObjects<LF2ObjectPointFactory>(originalObjects);
+                CaptureSceneObjects<LF2ReferencePool>(originalObjects);
+                CaptureSceneObjects<LF2ObjectPool>(originalObjects);
+                CaptureSceneObjects<SimulationTickDriver>(originalObjects);
+            }
+
+            public void Dispose()
+            {
+                var currentObjects = new HashSet<GameObject>();
+                CaptureSceneObjects<GameDataManager>(currentObjects);
+                CaptureSceneObjects<CharacterAnimtorManager>(currentObjects);
+                CaptureSceneObjects<LF2ObjectPointFactory>(currentObjects);
+                CaptureSceneObjects<LF2ReferencePool>(currentObjects);
+                CaptureSceneObjects<LF2ObjectPool>(currentObjects);
+                CaptureSceneObjects<SimulationTickDriver>(currentObjects);
+
+                foreach (GameObject currentObject in currentObjects)
+                {
+                    if (currentObject == null || originalObjects.Contains(currentObject))
+                        continue;
+
+                    try
+                    {
+                        DestroySelfCheckObject(currentObject);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogWarning(
+                            $"[BattleRuntimeSelfCheck] Failed to destroy self-check singleton '{currentObject.name}': {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private static T FindSceneComponent<T>() where T : Component
+        {
+            T[] components = Resources.FindObjectsOfTypeAll<T>();
+            for (int i = 0; i < components.Length; i++)
+            {
+                T component = components[i];
+                if (component != null && component.gameObject.scene.IsValid())
+                    return component;
+            }
+
+            return null;
+        }
+
+        private static void CaptureSceneObjects<T>(HashSet<GameObject> objects) where T : Component
+        {
+            T[] components = Resources.FindObjectsOfTypeAll<T>();
+            for (int i = 0; i < components.Length; i++)
+            {
+                T component = components[i];
+                if (component != null && component.gameObject.scene.IsValid())
+                    objects.Add(component.gameObject);
+            }
+        }
+
+        private static void DestroySelfCheckObject(GameObject target)
+        {
+            if (target == null)
+                return;
+
+            if (Application.isPlaying)
+                UnityEngine.Object.Destroy(target);
+            else
+                UnityEngine.Object.DestroyImmediate(target);
         }
 
         private sealed class TemporaryObjectPoolInitialization : IDisposable
