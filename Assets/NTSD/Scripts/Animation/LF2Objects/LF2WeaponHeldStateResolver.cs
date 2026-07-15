@@ -87,8 +87,8 @@ namespace NTSD.Animation.LF2Objects
 
             if (wpoint.dvz != 0)
             {
-                bool keyUp = (holder as LF2LivingObject)?.Controller?.IsUp ?? false;
-                bool keyDown = (holder as LF2LivingObject)?.Controller?.IsDown ?? false;
+                bool keyUp = holder.Runtime.KeyUp != 0;
+                bool keyDown = holder.Runtime.KeyDown != 0;
                 if (keyUp && !keyDown)
                     weapon.Runtime.Vz = -wpoint.dvz;
                 else if (!keyUp && keyDown)

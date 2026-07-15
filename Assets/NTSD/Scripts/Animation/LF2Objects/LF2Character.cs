@@ -186,37 +186,37 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal bool IsCurrentLeftPressedInternal()
         {
-            return Runtime.KeyLeft != 0 || Controller?.IsLeft == true;
+            return Runtime.KeyLeft != 0;
         }
 
         internal bool IsCurrentRightPressedInternal()
         {
-            return Runtime.KeyRight != 0 || Controller?.IsRight == true;
+            return Runtime.KeyRight != 0;
         }
 
         internal bool IsCurrentUpPressedInternal()
         {
-            return Runtime.KeyUp != 0 || Controller?.IsUp == true;
+            return Runtime.KeyUp != 0;
         }
 
         internal bool IsCurrentDownPressedInternal()
         {
-            return Runtime.KeyDown != 0 || Controller?.IsDown == true;
+            return Runtime.KeyDown != 0;
         }
 
         internal bool IsCurrentAttackPressedInternal()
         {
-            return Runtime.KeyAttack != 0 || Controller?.IsAttack == true;
+            return Runtime.KeyAttack != 0;
         }
 
         internal bool IsCurrentJumpPressedInternal()
         {
-            return Runtime.KeyJump != 0 || Controller?.IsJump == true;
+            return Runtime.KeyJump != 0;
         }
 
         internal bool IsCurrentDefendPressedInternal()
         {
-            return Runtime.KeyDefend != 0 || Controller?.IsDefend == true;
+            return Runtime.KeyDefend != 0;
         }
 
         internal bool WasLeftPressedPreviousFrameInternal()

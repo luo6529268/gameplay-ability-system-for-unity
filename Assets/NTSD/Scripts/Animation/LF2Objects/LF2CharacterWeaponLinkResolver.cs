@@ -263,8 +263,8 @@ namespace NTSD.Animation.LF2Objects
             held.PS.vx = _character.PS?.dir == "left" ? -holderWPoint.dvx : holderWPoint.dvx;
             held.PS.vy = holderWPoint.dvy;
 
-            bool up = _character.InputState?.Up == true || _character.Controller?.IsUp == true;
-            bool down = _character.InputState?.Down == true || _character.Controller?.IsDown == true;
+            bool up = _character.Runtime.KeyUp != 0;
+            bool down = _character.Runtime.KeyDown != 0;
             if (up && !down)
                 held.PS.vz = -holderWPoint.dvz;
             else if (!up && down)

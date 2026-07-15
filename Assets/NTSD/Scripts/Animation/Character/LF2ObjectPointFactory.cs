@@ -614,18 +614,8 @@ namespace NTSD.Animation
 
             if (task.opoint.oid == 223 || task.opoint.oid == 224) return;
 
-            bool up = false;
-            bool down = false;
-            if (task.parent is LF2Character character)
-            {
-                up = character.InputState?.Up == true || character.Controller?.IsUp == true;
-                down = character.InputState?.Down == true || character.Controller?.IsDown == true;
-            }
-            else if (task.parent is LF2WeaponBase weapon)
-            {
-                up = weapon.Controller?.IsUp == true;
-                down = weapon.Controller?.IsDown == true;
-            }
+            bool up = task.parent.Runtime.KeyUp != 0;
+            bool down = task.parent.Runtime.KeyDown != 0;
 
             if (up && !down)
                 living.PS.vz = -2.5f;

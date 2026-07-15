@@ -829,22 +829,20 @@ namespace NTSD.Animation
             if (entity is not LF2Character character)
                 return false;
 
-            bool jump = character.InputState?.Jump ?? character.Controller?.IsJump == true;
-            bool previousJump = character.InputState?.PreviousJump ?? false;
-            return jump && !previousJump;
+            return character.Runtime.KeyJump != 0 && character.Runtime.PrevJump == 0;
         }
 
         private static bool IsLeftPressed(LF2Entity entity)
         {
             if (entity is LF2Character character)
-                return character.InputState?.Left == true || character.Controller?.IsLeft == true;
+                return character.Runtime.KeyLeft != 0;
             return false;
         }
 
         private static bool IsRightPressed(LF2Entity entity)
         {
             if (entity is LF2Character character)
-                return character.InputState?.Right == true || character.Controller?.IsRight == true;
+                return character.Runtime.KeyRight != 0;
             return false;
         }
 

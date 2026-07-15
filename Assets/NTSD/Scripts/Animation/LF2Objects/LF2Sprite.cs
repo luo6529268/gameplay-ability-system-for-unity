@@ -122,7 +122,6 @@ namespace NTSD.Animation.LF2Objects
         /// <param name="dir">"left" 或 "right"</param>
         public void SwitchLR(string dir)
         {
-            if (dir == _dir) return;
             _dir = dir;
             if (_renderer != null)
             {

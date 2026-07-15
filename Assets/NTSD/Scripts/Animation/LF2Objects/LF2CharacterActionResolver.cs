@@ -25,13 +25,13 @@ namespace NTSD.Animation.LF2Objects
 
         public bool ProcessReleaseInput()
         {
-            if (_character.Frame?.D == null || _character.Controller == null || _character.PS == null)
+            if (_character.Frame?.D == null || _character.PS == null)
                 return false;
 
             if (_character.Frame.N == LF2StandardFrames.Defend)
             {
-                if (_character.Controller.IsRight) _character.SwitchDir("right");
-                if (_character.Controller.IsLeft) _character.SwitchDir("left");
+                if (_character.IsCurrentRightPressedInternal()) _character.SwitchDir("right");
+                if (_character.IsCurrentLeftPressedInternal()) _character.SwitchDir("left");
             }
 
             ApplyVerticalInputForSpecialStates();
@@ -89,7 +89,7 @@ namespace NTSD.Animation.LF2Objects
             bool handled = false;
             int linkState = _character.Runtime.LinkState;
 
-            if (_character.Controller.IsAttack && (_character.InputState?.AttackCooldown ?? 0) > 0)
+            if (_character.IsAttackActionInputReadyInternal())
             {
                 handled = true;
                 _character.SetAnimSubInternal(0);
@@ -131,7 +131,7 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            if (_character.Controller.IsJump && (_character.InputState?.JumpCooldown ?? 0) > 0)
+            if (_character.IsJumpActionInputReadyInternal())
             {
                 handled = true;
                 _character.ImmediateFrame(LF2StandardFrames.Jumping);
@@ -139,9 +139,7 @@ namespace NTSD.Animation.LF2Objects
                 _character.SetAnimSubInternal(0);
             }
 
-            if (_character.Controller.IsDefend &&
-                (_character.InputState?.DefendCooldown ?? 0) > 0 &&
-                !_character.IsDefendLockActiveInternal())
+            if (_character.IsDefendActionInputReadyInternal(requireDefendLockOpen: true))
             {
                 handled = true;
                 _character.ImmediateFrame(LF2StandardFrames.Defend);
@@ -191,13 +189,13 @@ namespace NTSD.Animation.LF2Objects
             if (_character.PS.dir == "right")
             {
                 _character.PS.vx = characterData.running_speed;
-                if (_character.Controller.IsLeft)
+                if (_character.IsCurrentLeftPressedInternal())
                     _character.SetMoveFrameDirectInternal(LF2StandardFrames.StopRunning);
             }
             else
             {
                 _character.PS.vx = -characterData.running_speed;
-                if (_character.Controller.IsRight)
+                if (_character.IsCurrentRightPressedInternal())
                     _character.SetMoveFrameDirectInternal(LF2StandardFrames.StopRunning);
             }
 
@@ -205,7 +203,7 @@ namespace NTSD.Animation.LF2Objects
 
             bool handled = false;
             int linkState = _character.Runtime.LinkState;
-            if (_character.Controller.IsAttack && (_character.InputState?.AttackCooldown ?? 0) > 0)
+            if (_character.IsAttackActionInputReadyInternal())
             {
                 handled = true;
                 if (!_character.HasHeldObjectInternal() || linkState == 0)
@@ -231,13 +229,13 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            if (_character.Controller.IsDefend && (_character.InputState?.DefendCooldown ?? 0) > 0)
+            if (_character.IsDefendActionInputReadyInternal())
             {
                 handled = true;
                 _character.ImmediateFrame(LF2StandardFrames.Rowing2);
             }
 
-            if (_character.Controller.IsJump && (_character.InputState?.JumpCooldown ?? 0) > 0)
+            if (_character.IsJumpActionInputReadyInternal())
             {
                 handled = true;
                 _character.ImmediateFrame(LF2StandardFrames.DashForward);
@@ -270,10 +268,10 @@ namespace NTSD.Animation.LF2Objects
 
         private bool ProcessJumpingInput()
         {
-            if (_character.Controller.IsRight && !_character.Controller.IsLeft) _character.SwitchDir("right");
-            else if (_character.Controller.IsLeft && !_character.Controller.IsRight) _character.SwitchDir("left");
+            if (_character.IsCurrentRightPressedInternal() && !_character.IsCurrentLeftPressedInternal()) _character.SwitchDir("right");
+            else if (_character.IsCurrentLeftPressedInternal() && !_character.IsCurrentRightPressedInternal()) _character.SwitchDir("left");
 
-            if (!_character.Controller.IsAttack || _character.Runtime.JumpAttackLock > 0)
+            if (!_character.IsCurrentJumpPressedInternal() || _character.Runtime.JumpAttackLock > 0)
                 return false;
 
             int linkState = _character.Runtime.LinkState;
@@ -305,7 +303,7 @@ namespace NTSD.Animation.LF2Objects
             _character.ApplyDashFrameInternal();
 
             bool dashForward = (_character.PS.dir == "right" && _character.PS.vx > 0f) || (_character.PS.dir == "left" && _character.PS.vx < 0f);
-            if (!dashForward || !_character.Controller.IsAttack)
+            if (!dashForward || !_character.IsCurrentJumpPressedInternal())
                 return false;
 
             int linkState = _character.Runtime.LinkState;
@@ -347,13 +345,13 @@ namespace NTSD.Animation.LF2Objects
             _character.PS.vx = 0f;
             _character.PS.vz = 0f;
 
-            if (!_character.Controller.IsDefend)
+            if (!_character.IsCurrentAttackPressedInternal())
             {
                 _character.ImmediateFrame(LF2StandardFrames.Standing);
                 return true;
             }
 
-            if ((_character.Controller.IsRight || previousVx > 0f) && (_character.InputState?.JumpCooldown ?? 0) > 0)
+            if ((_character.IsCurrentRightPressedInternal() || previousVx > 0f) && _character.IsJumpActionInputReadyInternal())
             {
                 _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
                 _character.PS.vx = characterData.walking_speed;
@@ -362,7 +360,7 @@ namespace NTSD.Animation.LF2Objects
                 return true;
             }
 
-            if ((_character.Controller.IsLeft || previousVx < 0f) && (_character.InputState?.JumpCooldown ?? 0) > 0)
+            if ((_character.IsCurrentLeftPressedInternal() || previousVx < 0f) && _character.IsJumpActionInputReadyInternal())
             {
                 _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
                 _character.PS.vx = -characterData.walking_speed;
@@ -384,15 +382,15 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             bool handled = false;
-            if (_character.Controller.IsDefend && (_character.InputState?.DefendCooldown ?? 0) > 0)
+            if (_character.IsDefendActionInputReadyInternal())
             {
                 _character.ImmediateFrame(LF2StandardFrames.Rowing2);
                 handled = true;
             }
 
-            if (_character.Controller.IsJump)
+            if (_character.IsCurrentDefendPressedInternal())
             {
-                if ((_character.Controller.IsRight || _character.PS.vx > 0.001f) && (_character.InputState?.JumpCooldown ?? 0) > 0)
+                if ((_character.IsCurrentRightPressedInternal() || _character.PS.vx > 0.001f) && _character.IsJumpActionInputReadyInternal())
                 {
                     _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
                     _character.PS.vx = characterData.dash_distance;
@@ -401,7 +399,7 @@ namespace NTSD.Animation.LF2Objects
                     _character.SetAnimSubInternal(0);
                     handled = true;
                 }
-                else if ((_character.Controller.IsLeft || _character.PS.vx < -0.001f) && (_character.InputState?.JumpCooldown ?? 0) > 0)
+                else if ((_character.IsCurrentLeftPressedInternal() || _character.PS.vx < -0.001f) && _character.IsJumpActionInputReadyInternal())
                 {
                     _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
                     _character.PS.vx = -characterData.dash_distance;
@@ -422,7 +420,7 @@ namespace NTSD.Animation.LF2Objects
             if (frameId != LF2StandardFrames.FallingFront2 && frameId != LF2StandardFrames.FallingBack2)
                 return false;
 
-            if (_character.WeaponCount < 0 || !_character.Controller.IsJump || (_character.InputState?.JumpCooldown ?? 0) <= 0 || _character.Health.HP <= 0)
+            if (_character.WeaponCount < 0 || !_character.IsJumpActionInputReadyInternal() || _character.Health.HP <= 0)
                 return false;
 
             bool backward = _character.PS.dir == "right" ? _character.PS.vx <= 0f : _character.PS.vx >= 0f;
@@ -456,7 +454,7 @@ namespace NTSD.Animation.LF2Objects
 
             _character.ApplyWalkRunFrameInternal(heavy: true);
 
-            if (_character.Controller.IsAttack && (_character.InputState?.AttackCooldown ?? 0) > 0)
+            if (_character.IsAttackActionInputReadyInternal())
             {
                 _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
                 _character.SetAnimSubInternal(0);
@@ -472,17 +470,17 @@ namespace NTSD.Animation.LF2Objects
             if (_character.PS.dir == "right")
             {
                 _character.PS.vx = characterData.heavy_running_speed;
-                if (_character.Controller.IsLeft) _character.SetMoveFrameDirectInternal(LF2StandardFrames.TreeJump2);
+                if (_character.IsCurrentLeftPressedInternal()) _character.SetMoveFrameDirectInternal(LF2StandardFrames.TreeJump2);
             }
             else
             {
                 _character.PS.vx = -characterData.heavy_running_speed;
-                if (_character.Controller.IsRight) _character.SetMoveFrameDirectInternal(LF2StandardFrames.TreeJump2);
+                if (_character.IsCurrentRightPressedInternal()) _character.SetMoveFrameDirectInternal(LF2StandardFrames.TreeJump2);
             }
 
             _character.ApplyRunLaneInternal(characterData.heavy_running_speedz);
 
-            if (_character.Controller.IsAttack && (_character.InputState?.AttackCooldown ?? 0) > 0)
+            if (_character.IsAttackActionInputReadyInternal())
                 _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
         }
 
@@ -512,28 +510,31 @@ namespace NTSD.Animation.LF2Objects
             if (characterData == null)
                 return;
 
-            if (_character.Controller.IsUp && !_character.Controller.IsDown)
+            if (_character.IsCurrentUpPressedInternal() && !_character.IsCurrentDownPressedInternal())
                 _character.PS.vz = -characterData.running_speedz;
-            else if (_character.Controller.IsDown && !_character.Controller.IsUp)
+            else if (_character.IsCurrentDownPressedInternal() && !_character.IsCurrentUpPressedInternal())
                 _character.PS.vz = characterData.running_speedz;
         }
 
         private void ApplyDashLane(float dashDistanceZ)
         {
-            if (_character.Controller.IsUp && !_character.Controller.IsDown)
+            if (_character.IsCurrentUpPressedInternal() && !_character.IsCurrentDownPressedInternal())
                 _character.PS.vz = -dashDistanceZ;
-            else if (_character.Controller.IsDown && !_character.Controller.IsUp)
+            else if (_character.IsCurrentDownPressedInternal() && !_character.IsCurrentUpPressedInternal())
                 _character.PS.vz = dashDistanceZ;
         }
 
         private bool HasAnyDirectionInput()
         {
-            return _character.Controller.IsLeft || _character.Controller.IsRight || _character.Controller.IsUp || _character.Controller.IsDown;
+            return _character.IsCurrentLeftPressedInternal() ||
+                   _character.IsCurrentRightPressedInternal() ||
+                   _character.IsCurrentUpPressedInternal() ||
+                   _character.IsCurrentDownPressedInternal();
         }
 
         private bool HasHorizontalInput()
         {
-            return _character.Controller.IsLeft != _character.Controller.IsRight;
+            return _character.IsCurrentLeftPressedInternal() != _character.IsCurrentRightPressedInternal();
         }
 
         private int RandomWeaponAttackFrame()

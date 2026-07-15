@@ -593,10 +593,9 @@ namespace NTSD.Animation.LF2Objects
         public virtual void SwitchDir(string dir)
         {
             string nextDir = dir == "left" ? "left" : "right";
-            if (Runtime.Dir == nextDir)
-                return;
-
             Runtime.Dir = nextDir;
+            if (PS != null)
+                PS.dir = nextDir;
             Sprite?.SwitchLR(nextDir);
         }
 

@@ -95,6 +95,9 @@ namespace NTSD.Game
             _rightPressed = false;
             _topPressed = false;
             _downPressed = false;
+            _isAttacking = false;
+            _isJumping = false;
+            _isDefending = false;
         }
 
         private void BindActionMap()
@@ -210,22 +213,19 @@ namespace NTSD.Game
 
             if (context.action == AttackAction)
             {
-                _isAttacking = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, down: true);
+                SetAttackActionPressed(true);
                 return;
             }
 
             if (context.action == JumpAction)
             {
-                _isJumping = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, down: true);
+                SetJumpActionPressed(true);
                 return;
             }
 
             if (context.action == DefendAction)
             {
-                _isDefending = true;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, down: true);
+                SetDefendActionPressed(true);
             }
         }
 
@@ -233,22 +233,19 @@ namespace NTSD.Game
         {
             if (context.action == AttackAction)
             {
-                _isAttacking = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, down: false);
+                SetAttackActionPressed(false);
                 return;
             }
 
             if (context.action == JumpAction)
             {
-                _isJumping = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, down: false);
+                SetJumpActionPressed(false);
                 return;
             }
 
             if (context.action == DefendAction)
             {
-                _isDefending = false;
-                InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, down: false);
+                SetDefendActionPressed(false);
                 return;
             }
 
@@ -278,6 +275,25 @@ namespace NTSD.Game
                 _currentMoveInput = Vector2.zero;
                 _lastDirectionMask = FuncKeyMask.None;
             }
+        }
+
+        // Unity action names describe the physical layout; NTSD uses the crossed internal fields below.
+        internal void SetAttackActionPressed(bool pressed)
+        {
+            _isAttacking = pressed;
+            InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, pressed);
+        }
+
+        internal void SetJumpActionPressed(bool pressed)
+        {
+            _isJumping = pressed;
+            InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, pressed);
+        }
+
+        internal void SetDefendActionPressed(bool pressed)
+        {
+            _isDefending = pressed;
+            InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, pressed);
         }
 
         private void CheckAndEnqueueDirectionChange(FuncKeyMask direction, FuncKeyMask oldMask, FuncKeyMask newMask)

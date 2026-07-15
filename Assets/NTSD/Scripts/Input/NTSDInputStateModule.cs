@@ -105,6 +105,7 @@ namespace NTSD.Input
 
             bool result = ApplyComboFrameInput(character);
             result |= ApplyDirectFrameInput(character);
+            SyncToRuntime(character.Runtime);
             if (character is LF2Character realCharacter)
                 result |= realCharacter.ProcessReleaseInput();
             SyncToRuntime(character.Runtime);

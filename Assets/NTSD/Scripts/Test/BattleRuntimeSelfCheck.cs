@@ -4,6 +4,7 @@ using System.IO;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Game;
 using NTSD.Input;
 using NTSD.Simulation;
 using UnityEngine;
@@ -107,6 +108,7 @@ namespace NTSD.Test
                 CheckAiHumanInputIsolation();
                 CheckAiHeldInactiveSlotContract();
                 CheckAiSharedCharacterDatShell();
+                CheckBufferedHumanInputSemantics();
                 Debug.Log("[BattleRuntimeSelfCheck] 战斗运行时自检通过。");
             }
             catch (Exception ex)
@@ -151,8 +153,7 @@ namespace NTSD.Test
             };
 
             LF2Character character = CreateCharacter("SelfCheck_IntegerGroundMovement", 1, data);
-            var controller = (SelfCheckController)character.Controller;
-            controller.Right = true;
+            character.Runtime.KeyRight = 1;
             character.Runtime.Y = -0.5;
             character.Runtime.YInt = 0;
             character.Runtime.Vx = 0.0;
@@ -161,8 +162,8 @@ namespace NTSD.Test
             Expect(System.Math.Abs(character.Runtime.Vx - 4.0) <= 1e-12,
                 $"walking ground gate must use YInt==0 when Y is fractional; actual Vx={character.Runtime.Vx:R}");
 
-            controller.Right = false;
-            controller.Up = true;
+            character.Runtime.KeyRight = 0;
+            character.Runtime.KeyUp = 1;
             const double initialVx = 123456789.125;
             character.Runtime.Vx = initialVx;
             character.ApplyRunLaneInternal(3f);
@@ -171,6 +172,183 @@ namespace NTSD.Test
                 $"running lane factor must preserve double 5/6 precision; actual={character.Runtime.Vx:R}, expected={expectedVx:R}");
 
             CheckSharedCharacterDatGroundMovementUsesIntegerSnapshot();
+        }
+
+        private static void CheckBufferedHumanInputSemantics()
+        {
+            CheckMappedAction(
+                "AttackAction/J",
+                (input, pressed) => input.SetAttackActionPressed(pressed),
+                expectedKeyJump: 1,
+                expectedKeyDefend: 0,
+                expectedKeyAttack: 0,
+                expectedCooldown: runtime => runtime.CdAttack,
+                expectedFrame: character => character.Frame.N == LF2StandardFrames.Punch ||
+                                            character.Frame.N == LF2StandardFrames.Punch4);
+
+            CheckMappedAction(
+                "JumpAction/K",
+                (input, pressed) => input.SetJumpActionPressed(pressed),
+                expectedKeyJump: 0,
+                expectedKeyDefend: 1,
+                expectedKeyAttack: 0,
+                expectedCooldown: runtime => runtime.CdJump,
+                expectedFrame: character => character.Frame.N == LF2StandardFrames.Jumping);
+
+            CheckMappedAction(
+                "DefendAction/L",
+                (input, pressed) => input.SetDefendActionPressed(pressed),
+                expectedKeyJump: 0,
+                expectedKeyDefend: 0,
+                expectedKeyAttack: 1,
+                expectedCooldown: runtime => runtime.CdDefend,
+                expectedFrame: character => character.Frame.N == LF2StandardFrames.Defend);
+
+            CheckBufferedActionCombination();
+            CheckBufferedDirectionReversal();
+        }
+
+        private static void CheckMappedAction(
+            string name,
+            Action<CharacterInputModule, bool> setPressed,
+            byte expectedKeyJump,
+            byte expectedKeyDefend,
+            byte expectedKeyAttack,
+            Func<NTSDEntityRuntime, byte> expectedCooldown,
+            Func<LF2Character, bool> expectedFrame)
+        {
+            LF2Character character = CreateBufferedInputCharacter($"SelfCheck_{name}");
+            var input = (CharacterInputModule)character.Controller;
+
+            setPressed(input, true);
+            character.RunPostCooldownInputPhase(1);
+
+            Expect(character.Runtime.KeyJump == expectedKeyJump &&
+                   character.Runtime.KeyDefend == expectedKeyDefend &&
+                   character.Runtime.KeyAttack == expectedKeyAttack,
+                $"{name} must map to the NTSD internal field contract");
+            Expect(expectedCooldown(character.Runtime) == 5,
+                $"{name} must set only its matching NTSD semantic cooldown edge");
+            Expect(expectedFrame(character),
+                $"{name} must trigger its logical action in the target simulation tick");
+
+            setPressed(input, false);
+            character.RunPostCooldownInputPhase(2);
+            Expect(character.Runtime.KeyJump == 0 &&
+                   character.Runtime.KeyDefend == 0 &&
+                   character.Runtime.KeyAttack == 0,
+                $"{name} release must clear its internal field without a stuck input");
+        }
+
+        private static void CheckBufferedActionCombination()
+        {
+            LF2Character character = CreateBufferedInputCharacter("SelfCheck_ActionCombination");
+            var input = (CharacterInputModule)character.Controller;
+
+            input.SetAttackActionPressed(true);
+            input.SetJumpActionPressed(true);
+            character.RunPostCooldownInputPhase(1);
+            Expect(character.Runtime.KeyJump == 1 && character.Runtime.KeyDefend == 1 && character.Runtime.KeyAttack == 0,
+                "J+K must preserve both internal held fields without writing the defend field");
+            Expect(character.Runtime.CdAttack == 5 && character.Runtime.CdJump == 5 && character.Runtime.CdDefend == 0,
+                "J+K must update attack/jump cooldowns without cross-writing defend cooldown");
+
+            input.SetAttackActionPressed(false);
+            character.RunPostCooldownInputPhase(2);
+            Expect(character.Runtime.KeyJump == 0 && character.Runtime.KeyDefend == 1 && character.Runtime.KeyAttack == 0,
+                "releasing J while K stays held must not clear or duplicate the K field");
+
+            input.SetJumpActionPressed(false);
+            character.RunPostCooldownInputPhase(3);
+            Expect(character.Runtime.KeyJump == 0 && character.Runtime.KeyDefend == 0 && character.Runtime.KeyAttack == 0,
+                "releasing the final combination key must leave no held action field");
+        }
+
+        private static void CheckBufferedDirectionReversal()
+        {
+            GameObject presentationFixture = new GameObject("SelfCheck_DirectionPresentation");
+            try
+            {
+                SpriteRenderer renderer = presentationFixture.AddComponent<SpriteRenderer>();
+                LF2Character walking = CreateBufferedInputCharacter("SelfCheck_WalkingReversal");
+                walking.Sprite.Initialize(renderer, new List<Sprite>());
+                SimInputBuffer walkingBuffer = walking.Controller.InputBuffer;
+                walkingBuffer.EnqueueForTick(1, FuncKeyMask.right, true);
+                walking.RunPostCooldownInputPhase(1);
+                walkingBuffer.EnqueueForTick(2, FuncKeyMask.right, false);
+                walkingBuffer.EnqueueForTick(2, FuncKeyMask.left, true);
+                walking.RunPostCooldownInputPhase(2);
+
+                Expect(walking.Runtime.KeyRight == 0 && walking.Runtime.KeyLeft == 1,
+                    "D release + A press must clear right and set left in the same target tick");
+                Expect(walking.Runtime.Dir == "left" && walking.PS.dir == "left" && walking.Runtime.Vx < 0.0,
+                    "standing/walking reversal must face left and write negative velocity immediately");
+                Expect(walking.Sprite.Dir == "left" && renderer.flipX,
+                    "standing/walking reversal must flip the visible sprite in the same tick");
+
+                walking.PS.dir = "right";
+                walking.Sprite.SwitchLR("right");
+                renderer.flipX = false;
+                walking.SwitchDir("left");
+                Expect(walking.Runtime.Dir == "left" && walking.PS.dir == "left" &&
+                       walking.Sprite.Dir == "left" && renderer.flipX,
+                    "SwitchDir must repair PS and renderer drift even when Runtime already has the requested direction");
+
+                LF2Character running = CreateBufferedInputCharacter("SelfCheck_RunningReversal");
+                running.ImmediateFrame(LF2StandardFrames.RunningStart);
+                running.SwitchDir("right");
+                SimInputBuffer runningBuffer = running.Controller.InputBuffer;
+                runningBuffer.EnqueueForTick(1, FuncKeyMask.right, true);
+                running.RunPostCooldownInputPhase(1);
+                runningBuffer.EnqueueForTick(2, FuncKeyMask.right, false);
+                runningBuffer.EnqueueForTick(2, FuncKeyMask.left, true);
+                running.RunPostCooldownInputPhase(2);
+
+                Expect(running.Runtime.KeyRight == 0 && running.Runtime.KeyLeft == 1,
+                    "running reversal must consume the same-tick D release + A press snapshot");
+                Expect(running.Frame.N == LF2StandardFrames.StopRunning && running.Runtime.Vx > 0.0 &&
+                       running.Runtime.Dir == "right" && running.PS.dir == "right",
+                    "running reversal must enter frame 218 while preserving the old-direction velocity for that tick");
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(presentationFixture);
+            }
+        }
+
+        private static LF2Character CreateBufferedInputCharacter(string name)
+        {
+            var data = new LF2CharacterData
+            {
+                name = name,
+                walking_speed = 4f,
+                walking_speedz = 2f,
+                walking_frame_rate = 1,
+                running_speed = 8f,
+                running_speedz = 3f,
+                running_frame_rate = 1,
+                dash_distance = 10f,
+                dash_height = -4f,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 1, 0, 39, 79),
+                    Frame(5, LF2States.Walking, 1, 5, 39, 79),
+                    Frame(9, LF2States.Running, 1, 9, 39, 79),
+                    Frame(10, LF2States.Running, 1, 10, 39, 79),
+                    Frame(11, LF2States.Running, 1, 11, 39, 79),
+                    Frame(LF2StandardFrames.Punch, LF2States.Attack, 1, LF2StandardFrames.Punch, 39, 79),
+                    Frame(LF2StandardFrames.Punch4, LF2States.Attack, 1, LF2StandardFrames.Punch4, 39, 79),
+                    Frame(LF2StandardFrames.Defend, LF2States.Defending, 1, LF2StandardFrames.Defend, 39, 79),
+                    Frame(LF2StandardFrames.Jumping, LF2States.Jump, 1, LF2StandardFrames.Jumping, 39, 79),
+                    Frame(LF2StandardFrames.StopRunning, LF2States.StopRunning, 1, LF2StandardFrames.StopRunning, 39, 79),
+                },
+            };
+
+            LF2Character character = CreateCharacter(name, 1, data);
+            character.Controller = new CharacterInputModule();
+            character.Runtime.Y = 0.0;
+            character.Runtime.YInt = 0;
+            return character;
         }
 
         private static void CheckSharedCharacterDatGroundMovementUsesIntegerSnapshot()

@@ -953,23 +953,16 @@ namespace NTSD.Animation.LF2Objects
             var sceneQuery = Match?.SceneQuery;
             var kindService = Match?.ItrKindService;
             if (frame == null || sceneQuery == null) return;
-            if (PS == null) return;
 
             var itrs = frame.itrs;
             if (itrs == null || itrs.Count == 0) return;
 
-            float spriteWidthPx = GetSpriteWidthPxForCollision();
-            if (spriteWidthPx <= 0f) return;
-
-            var itrVolumes = PS.GetItrVolumes(itrs, frame.centerx, frame.centery, spriteWidthPx, itrZWidthPx: 0f);
-            int count = Mathf.Min(itrs.Count, itrVolumes.Count);
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < itrs.Count; i++)
             {
                 var itr = itrs[i];
                 if (itr == null) continue;
 
-                var candidates = sceneQuery.QueryBodyHits(itrVolumes[i], this);
+                var candidates = sceneQuery.QueryBodyHits(this, frame, itr);
                 if (candidates == null || candidates.Count == 0) continue;
 
                 for (int c = 0; c < candidates.Count; c++)
