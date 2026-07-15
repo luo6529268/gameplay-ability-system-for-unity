@@ -8,6 +8,7 @@ using NTSD.Game;
 using NTSD.Tools;
 using NTSD.UI;
 using NTSD.Simulation;
+using NTSD.LevelEditor;
 using MoreMountains.TopDownEngine;
 using System.Collections;
 using MoreMountains.Tools;
@@ -117,7 +118,7 @@ namespace NTSD.App
             SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
 
             // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
-            SetupBattleCharacters();
+            SetupBattleCharacters(scene);
 
             if (SimulationTickDriver.Instance != null)
             {
@@ -172,14 +173,12 @@ namespace NTSD.App
             eventSystem.gameObject.SetActive(true);
         }
 
-        private void SetupBattleCharacters()
+        private void SetupBattleCharacters(Scene battleScene)
         {
             if (CurrentMatchConfig == null) return;
 
-            var levelMgr = FindObjectOfType<MultiplayerLevelManager>();
-            if (levelMgr == null) return;
-
-            var spawnPoints = levelMgr.SpawnPoints;
+            var levelMgr = BoundaryWallManager.Instance;
+            var spawnPoints = levelMgr.ResolveSpawnPoints(battleScene);
 
             for (int i = 0; i < CurrentMatchConfig.players.Count; i++)
             {
@@ -208,8 +207,16 @@ namespace NTSD.App
                 lf2.RelationTeam = team;
                 lf2.AiControlled = !slot.isHuman;
 
-                Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
-                    ? spawnPoints[i].transform.position: Vector3.zero;
+                Vector3 spawnPos;
+                if (i < spawnPoints.Count)
+                {
+                    spawnPos = spawnPoints[i].transform.position;
+                }
+                else
+                {
+                    spawnPos = Vector3.zero;
+                    Debug.LogWarning($"[AppManager] No spawn point for player index {i} in scene '{battleScene.name}'; using Vector3.zero.");
+                }
                 
                 float ppu = SimulationConstants.PIXELS_PER_UNIT;
                 lf2.PS.x = spawnPos.x * ppu;

@@ -9,6 +9,7 @@ using NTSD.Extensions;
 using NTSD.Tools;
 using NTSD.App;
 using NTSD.Game;
+using NTSD.LevelEditor;
 using Cysharp.Threading.Tasks;
 
 namespace NTSD.Test
@@ -101,16 +102,9 @@ namespace NTSD.Test
             SceneManager.SetActiveScene(gameObject.scene);
 
             // 6. 配置并启动关卡
-            var levelMgr = FindObjectOfType<MultiplayerLevelManager>(true);
-            if (levelMgr != null)
-            {
-                SetupTestCharacters(levelMgr);
-                Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
-            }
-            else
-            {
-                Debug.LogError("[BattleTestBootstrap] MultiplayerLevelManager not found in scene!");
-            }
+            var levelMgr = BoundaryWallManager.Instance;
+            SetupTestCharacters(levelMgr, gameObject.scene);
+            Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
 
             // 7. 取消暂停
             if (autoResume)
@@ -180,9 +174,9 @@ namespace NTSD.Test
             }
         }
 
-        private void SetupTestCharacters(MultiplayerLevelManager levelMgr)
+        private void SetupTestCharacters(BoundaryWallManager levelMgr, Scene battleScene)
         {
-            var spawnPoints = levelMgr.SpawnPoints;
+            var spawnPoints = levelMgr.ResolveSpawnPoints(battleScene);
             int count = overrideCharacterIds != null ? overrideCharacterIds.Length : 1;
 
             for (int i = 0; i < count; i++)
@@ -208,9 +202,16 @@ namespace NTSD.Test
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = i + 1;
 
-                Vector3 spawnPos = (spawnPoints != null && i < spawnPoints.Count)
-                    ? spawnPoints[i].transform.position
-                    : Vector3.zero;
+                Vector3 spawnPos;
+                if (i < spawnPoints.Count)
+                {
+                    spawnPos = spawnPoints[i].transform.position;
+                }
+                else
+                {
+                    spawnPos = Vector3.zero;
+                    Debug.LogWarning($"[BattleTestBootstrap] No spawn point for player index {i} in scene '{battleScene.name}'; using Vector3.zero.");
+                }
 
                 float ppu = SimulationConstants.PIXELS_PER_UNIT;
                 lf2.PS.x = spawnPos.x * ppu;

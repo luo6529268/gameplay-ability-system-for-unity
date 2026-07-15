@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using MoreMountains.Tools;
 using NTSD.Animation;
 using NTSD.Simulation;
@@ -96,6 +98,79 @@ namespace NTSD.LevelEditor
         }
 
         // ==================== 公共 API ====================
+
+        /// <summary>
+        /// Returns configured spawn points for the target scene, or discovers them at runtime.
+        /// </summary>
+        public IReadOnlyList<CheckPoint> ResolveSpawnPoints(Scene targetScene)
+        {
+            if (!targetScene.IsValid() || !targetScene.isLoaded)
+            {
+                targetScene = SceneManager.GetActiveScene();
+            }
+
+            if (SpawnPoints == null)
+            {
+                SpawnPoints = new List<CheckPoint>();
+            }
+
+            for (int i = SpawnPoints.Count - 1; i >= 0; i--)
+            {
+                CheckPoint spawnPoint = SpawnPoints[i];
+                if (spawnPoint == null || spawnPoint.gameObject.scene != targetScene)
+                {
+                    SpawnPoints.RemoveAt(i);
+                }
+            }
+
+            if (SpawnPoints.Count > 0)
+            {
+                return SpawnPoints;
+            }
+
+            CheckPoint[] sceneCheckPoints = FindObjectsOfType<CheckPoint>(true);
+            for (int i = 0; i < sceneCheckPoints.Length; i++)
+            {
+                CheckPoint spawnPoint = sceneCheckPoints[i];
+                if (spawnPoint != null && spawnPoint.gameObject.scene == targetScene)
+                {
+                    SpawnPoints.Add(spawnPoint);
+                }
+            }
+
+            SpawnPoints.Sort(CompareSpawnPoints);
+            return SpawnPoints;
+        }
+
+        private static int CompareSpawnPoints(CheckPoint left, CheckPoint right)
+        {
+            string leftPath = GetHierarchySortPath(left.transform);
+            string rightPath = GetHierarchySortPath(right.transform);
+            int pathComparison = string.CompareOrdinal(leftPath, rightPath);
+            return pathComparison != 0
+                ? pathComparison
+                : string.CompareOrdinal(left.name, right.name);
+        }
+
+        private static string GetHierarchySortPath(Transform target)
+        {
+            var path = new StringBuilder();
+            AppendHierarchySortPath(path, target);
+            return path.ToString();
+        }
+
+        private static void AppendHierarchySortPath(StringBuilder path, Transform target)
+        {
+            if (target.parent != null)
+            {
+                AppendHierarchySortPath(path, target.parent);
+                path.Append('/');
+            }
+
+            path.Append(target.GetSiblingIndex().ToString("D8"));
+            path.Append(':');
+            path.Append(target.name);
+        }
 
         /// <summary>
         /// 运行时 API：单层边界（Walkable union）。
