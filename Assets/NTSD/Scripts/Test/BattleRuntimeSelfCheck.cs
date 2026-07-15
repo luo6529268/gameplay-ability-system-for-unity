@@ -57,10 +57,18 @@ namespace NTSD.Test
                 CheckCpointHeldSyncVactionMatrix();
                 CheckCpointThrowRawAndTransformMatrix();
                 CheckCpointDecreaseEscape();
+                CheckCpointEscapeAndMismatchStillRunTail();
+                CheckSharedDatCpointStep10StatsAndInputOrder();
                 CheckBattleFlowToggleAndTeleportMatrix();
                 CheckValidatePositiveLinksMatrix();
                 CheckPreFrameXBoundsMatrix();
+                CheckQueuedObjectPointPassBoundaries();
                 CheckSimulationWorldLateMutation();
+                CheckCollisionCandidateCapAndNewbornIsolation();
+                CheckSpecialAttackStep4AndLateFrameTick();
+                CheckFrameTickPpDisplayAndCurrentDatMatrix();
+                CheckStateTransformLandingMatrix();
+                CheckSerialTickInterleaveAndFrameEdgeMatrix();
                 CheckState0BelowGroundFrame212PreservesAttackingCounter();
                 CheckSimulationPassesImmediateFrameDoesNotZeroAttacking();
                 CheckArestCooldownRule();
@@ -589,6 +597,7 @@ namespace NTSD.Test
             attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
             victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
             attacker.FrameDelay = 0;
+            victim.FrameDelay = 0;
             attacker.Runtime.CaughtDuration = 3;
             attacker.Trans.SetWait(attacker.Frame.D.wait, 10);
             victim.Trans.SetWait(victim.Frame.D.wait, 11);
@@ -598,16 +607,212 @@ namespace NTSD.Test
 
             Expect(attacker.CurrentFrameId == 0, "decrease<0 逃脱后抓取者应回 frame 0");
             Expect(victim.CurrentFrameId == 181, "decrease<0 逃脱后被抓者应进入 frame 181");
-            Expect(attacker.Trans.WaitCounter == 0 && victim.Trans.WaitCounter == 0,
-                "decrease escape immediate frame writes must reset both wait counters");
+            Expect(attacker.Trans.WaitCounter == 10 && victim.Trans.WaitCounter == 11,
+                "decrease escape raw frame writes must preserve both wait counters");
+            Expect(attacker.Frame.D != null && attacker.Frame.D.frameId == 0 &&
+                   victim.Frame.D != null && victim.Frame.D.frameId == 181,
+                "decrease escape raw frame writes must keep Frame.D synchronized");
             Expect(attacker.HitCount == 1 && victim.HitCount == 1, "decrease<0 逃脱后双方 HitCount 应为 1");
             Expect(Nearly(victim.KnockbackVx, -4f), "抓取者在右侧时被抓者 knockback_vx 应为 -4");
             Expect(Nearly(victim.KnockbackVy, -3f), "逃脱后被抓者 knockback_vy 应为 -3");
-            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f),
-                "decrease escape must copy knockback into victim runtime velocity");
+            Expect(Nearly(victim.Runtime.Vx, 0f) && Nearly(victim.Runtime.Vy, 0f),
+                "decrease escape must leave runtime velocity untouched before FramePostProcess");
             Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
                    victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
                 "decrease kind1 sub-pass must not invent runtime link cleanup");
+
+            world.FramePostProcessAll();
+
+            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f) && victim.HitCount == 0,
+                $"FramePostProcess must consume escape knockback exactly once; vx={victim.Runtime.Vx}, vy={victim.Runtime.Vy}, hitCount={victim.HitCount}, frameDelay={victim.FrameDelay}");
+        }
+
+        private static void CheckCpointEscapeAndMismatchStillRunTail()
+        {
+            LF2CharacterData throwData = BuildCpointTailFrames(
+                decrease: -5,
+                throwVx: 8,
+                dirControl: 0);
+            var throwWorld = new SimulationWorld();
+            LF2Entity thrower = CreateCpointMatrixEntity(false, "SelfCheck_EscapeThrow_Shared", 1, throwData);
+            LF2Entity throwVictim = CreateCpointMatrixEntity(false, "SelfCheck_EscapeThrowVictim_Shared", 2, BuildCpointMatrixVictimFrames());
+            throwWorld.Register(thrower);
+            throwWorld.Register(throwVictim);
+            LinkCpointEntities(thrower, throwVictim);
+            thrower.SetCpointRawFramePreserveWait(110);
+            throwVictim.SetCpointRawFramePreserveWait(130);
+            thrower.Runtime.CaughtDuration = 3;
+            throwWorld.CaptureCollisionFrameSnapshotsAll();
+
+            thrower.RunCpointCheckStep10();
+
+            Expect(thrower.Frame.N == 0 && throwVictim.Frame.N == 132,
+                "CaughtDuration<0 must skip actions but still execute the throw tail using source cpoint data");
+            Expect(Nearly(throwVictim.Runtime.Vx, 8f) && Nearly(throwVictim.Runtime.Vy, -4f),
+                "CaughtDuration<0 throw tail must still write victim velocity");
+
+            LF2CharacterData dirData = BuildCpointTailFrames(
+                decrease: -5,
+                throwVx: 0,
+                dirControl: 1);
+            var dirWorld = new SimulationWorld();
+            LF2Entity dirCatcher = CreateCpointMatrixEntity(false, "SelfCheck_EscapeDir_Shared", 1, dirData);
+            LF2Entity dirVictim = CreateCpointMatrixEntity(false, "SelfCheck_EscapeDirVictim_Shared", 2, BuildCpointMatrixVictimFrames());
+            dirWorld.Register(dirCatcher);
+            dirWorld.Register(dirVictim);
+            LinkCpointEntities(dirCatcher, dirVictim);
+            dirCatcher.SetCpointRawFramePreserveWait(110);
+            dirVictim.SetCpointRawFramePreserveWait(130);
+            dirCatcher.Runtime.CaughtDuration = 3;
+            dirCatcher.AttackingCounter = 2;
+            dirCatcher.SwitchDir("left");
+            dirCatcher.Runtime.KeyRight = 1;
+            dirWorld.CaptureCollisionFrameSnapshotsAll();
+
+            dirCatcher.RunCpointCheckStep10();
+
+            Expect(dirCatcher.Runtime.Dir == "right",
+                "CaughtDuration<0 must still execute dircontrol after skipping action selection");
+
+            var mismatchWorld = new SimulationWorld();
+            LF2Entity mismatchCatcher = CreateCpointMatrixEntity(false, "SelfCheck_MismatchThrow_Shared", 1, BuildCpointTailFrames(0, 8, 0));
+            LF2Entity mismatchVictim = CreateCpointMatrixEntity(false, "SelfCheck_MismatchThrowVictim_Shared", 2, BuildCpointMatrixVictimFrames());
+            mismatchWorld.Register(mismatchCatcher);
+            mismatchWorld.Register(mismatchVictim);
+            mismatchCatcher.CaughtSlotIndex = mismatchVictim.Runtime.SlotIndex;
+            mismatchVictim.CatcherSlotIndex = -1;
+            mismatchCatcher.SetCpointRawFramePreserveWait(110);
+            mismatchVictim.SetCpointRawFramePreserveWait(130);
+            mismatchCatcher.Trans.SetWait(mismatchCatcher.Frame.D.wait, 9);
+            mismatchWorld.CaptureCollisionFrameSnapshotsAll();
+
+            mismatchCatcher.RunCpointCheckStep10();
+
+            Expect(mismatchCatcher.Frame.N == 0 && mismatchVictim.Frame.N == 132,
+                "cpoint mismatch must suppress actions but still run the source throw tail");
+            Expect(mismatchCatcher.Frame.D != null && mismatchCatcher.Frame.D.frameId == 0 &&
+                   mismatchCatcher.Trans.WaitCounter == 9,
+                "cpoint mismatch frame0 fallback must preserve wait and synchronize Frame.D");
+            Expect(Nearly(mismatchVictim.Runtime.Vx, 8f),
+                "cpoint mismatch throw tail must still apply horizontal throw velocity");
+        }
+
+        private static void CheckSharedDatCpointStep10StatsAndInputOrder()
+        {
+            LF2CharacterData catcherData = BuildSharedCpointStatsFrames();
+            LF2CharacterData victimData = BuildCpointMatrixVictimFrames();
+            var world = new SimulationWorld();
+            LF2Entity holder = CreateCpointMatrixEntity(false, "SelfCheck_SharedCpointHolder", 3, victimData);
+            LF2Entity catcher = CreateCpointMatrixEntity(false, "SelfCheck_SharedCpointCatcher", 1, catcherData);
+            LF2Entity victim = CreateCpointMatrixEntity(false, "SelfCheck_SharedCpointVictim", 2, victimData);
+            world.Register(holder);
+            world.Register(catcher);
+            world.Register(victim);
+            LinkCpointEntities(catcher, victim);
+            catcher.SetCpointRawFramePreserveWait(100);
+            victim.SetCpointRawFramePreserveWait(130);
+            catcher.Runtime.KeyJump = 1;
+            catcher.Runtime.CdAttack = 5;
+            catcher.Runtime.KeyDefend = 1;
+            catcher.Runtime.CdJump = 5;
+            catcher.Runtime.KeyRight = 1;
+            catcher.SwitchDir("right");
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            catcher.RunCpointCheckStep10();
+
+            Expect(catcher.Frame.N == 122 && victim.Frame.N == 133,
+                "simultaneous attack/direction/jump input must resolve taction before the final jaction");
+            Expect(catcher.Runtime.Dir == "right",
+                "positive simultaneous cpoint actions must preserve shared-DAT shell facing");
+
+            catcher.SetCpointRawFramePreserveWait(100);
+            victim.SetCpointRawFramePreserveWait(130);
+            catcher.AttackingCounter = 2;
+            catcher.Runtime.KeyJump = 0;
+            catcher.Runtime.KeyDefend = 0;
+            catcher.Runtime.KeyRight = 0;
+            catcher.Runtime.KeyLeft = 1;
+            world.CaptureCollisionFrameSnapshotsAll();
+            catcher.RunCpointCheckStep10();
+            Expect(catcher.Runtime.Dir == "left",
+                "shared-DAT non-character cpoint dircontrol must use runtime input without a CLR character gate");
+
+            catcher.SetCpointRawFramePreserveWait(100);
+            victim.SetCpointRawFramePreserveWait(130);
+            catcher.AttackingCounter = 0;
+            catcher.HolderCopySlot = holder.Runtime.SlotIndex;
+            victim.Health.HP = 20;
+            victim.Health.HPBound = 20;
+            victim.Health.HPLost = 7;
+            victim.KillCount = -1;
+            victim.Unk344 = 1;
+            world.KillStats[1] = 0;
+            world.DamageStats[1] = 0;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Expect(victim.Health.HP == -10 && victim.Health.HPBound == 10,
+                "shared-DAT held cpoint injury must apply HP and HPBound damage");
+            Expect(victim.Health.HPLost == 7,
+                "held cpoint injury must not write the unrelated HPLost accumulator");
+            Expect(holder.KillStat == 1 && world.KillStats[1] == 1,
+                "lethal held cpoint injury must credit holder and indexed kill statistics");
+            Expect(holder.ComboCountAtk == 30 && victim.ComboCountVic == 30 && world.DamageStats[1] == 30,
+                "held cpoint injury must credit combo and indexed damage statistics exactly once");
+        }
+
+        private static LF2CharacterData BuildCpointTailFrames(int decrease, int throwVx, int dirControl)
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_CpointTail",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 0, 0, 39, 79),
+                    Frame(110, LF2States.Catching, 1, 0, 40, 80, new CatchPoint
+                    {
+                        kind = 1,
+                        x = 16,
+                        y = 24,
+                        vaction = 132,
+                        aaction = 120,
+                        decrease = decrease,
+                        throwvx = throwVx,
+                        throwvy = -4,
+                        throwvz = 3,
+                        dircontrol = dirControl,
+                        hurtable = 1,
+                    }),
+                    Frame(120, LF2States.Catching, 1, 120, 39, 79, new CatchPoint { kind = 1, vaction = 131, hurtable = 1 }),
+                },
+            };
+        }
+
+        private static LF2CharacterData BuildSharedCpointStatsFrames()
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_SharedCpointStats",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 0, 0, 0, 39, 79),
+                    Frame(100, LF2States.Catching, 1, 100, 39, 79, new CatchPoint
+                    {
+                        kind = 1,
+                        vaction = 131,
+                        aaction = 120,
+                        taction = 121,
+                        jaction = 122,
+                        dircontrol = 1,
+                        injury = 30,
+                        hurtable = 1,
+                    }),
+                    Frame(120, LF2States.Catching, 1, 120, 39, 79, new CatchPoint { kind = 1, vaction = 131, hurtable = 1 }),
+                    Frame(121, LF2States.Catching, 1, 121, 39, 79, new CatchPoint { kind = 1, vaction = 132, hurtable = 1 }),
+                    Frame(122, LF2States.Catching, 1, 122, 39, 79, new CatchPoint { kind = 1, vaction = 133, hurtable = 1 }),
+                },
+            };
         }
 
         private static void CheckBattleFlowToggleAndTeleportMatrix()
@@ -2057,6 +2262,931 @@ namespace NTSD.Test
                 "the removed entity must not execute or reappear on the second late pass");
             Expect(world.ObjectCount == 2,
                 "the second late pass must preserve the two remaining entities");
+
+            var lowSlotWorld = new SimulationWorld();
+            var releasedLowSlot = new MutationSelfCheckEntity(10);
+            var beforeSpawner = new MutationSelfCheckEntity(11);
+            var highSlotSpawner = new MutationSelfCheckEntity(12, registerDuringLate: true);
+            lowSlotWorld.Register(releasedLowSlot);
+            lowSlotWorld.Register(beforeSpawner);
+            lowSlotWorld.Register(highSlotSpawner);
+            int lowSlot = releasedLowSlot.Runtime.SlotIndex;
+            int highSlot = highSlotSpawner.Runtime.SlotIndex;
+            lowSlotWorld.Unregister(releasedLowSlot);
+
+            lowSlotWorld.LateEntityUpdateAll(3);
+
+            Expect(highSlotSpawner.Spawned != null && highSlotSpawner.Spawned.Runtime.SlotIndex == lowSlot,
+                "the low-slot mutation fixture must reuse the released runtime slot");
+            Expect(highSlotSpawner.Spawned.Runtime.SlotIndex < highSlot,
+                "the spawned low-slot entity must be behind the current dynamic late scan cursor");
+            Expect(highSlotSpawner.Spawned.LateTickCount == 0,
+                "an entity spawned into an already-scanned lower runtime slot must wait until the next late pass");
+
+            lowSlotWorld.LateEntityUpdateAll(4);
+
+            Expect(highSlotSpawner.Spawned.LateTickCount == 1,
+                "the deferred lower-slot entity must execute exactly once on the next late pass");
+        }
+
+        private static void CheckQueuedObjectPointPassBoundaries()
+        {
+            var oid999Wrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [999] = new LF2CharacterDataWrapper(999, BuildSelfCheckOpoint999Data()),
+            };
+            var oid999Types = new Dictionary<int, int>
+            {
+                [999] = (int)LF2ObjectType.Other,
+            };
+            using var oid999Config = new TemporaryRuntimeObjectConfigs(oid999Types, oid999Wrappers);
+            using var objectPoolState = new TemporaryObjectPoolInitialization();
+            using var sinkWorld = new TemporarySimulationDriverWorld(new SimulationWorld());
+
+            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
+            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            Expect(factory != null && referencePool != null,
+                "queued opoint self-check requires the production factory and reference pool singletons");
+
+            factory.FlushTasks();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "queued opoint self-check must start from an empty production queue");
+
+            var frameLogicWorld = new SimulationWorld();
+            var producer = new QueuedBoundarySelfCheckEntity(
+                QueuedBoundarySelfCheckEntity.Phase.FrameLogic,
+                ReleaseSpawnSemantic.ImmediateEffect);
+            var observer = new QueuedBoundarySelfCheckEntity(
+                QueuedBoundarySelfCheckEntity.Phase.ObserveFrameLogic,
+                ReleaseSpawnSemantic.None);
+            frameLogicWorld.Register(producer);
+            frameLogicWorld.Register(observer);
+
+            frameLogicWorld.FrameLogicBeforeAdvanceAll(1);
+
+            Expect(producer.EnqueueCount == 1 && producer.LastTask != null,
+                "the queued frame_logic fixture must publish exactly one task");
+            Expect(observer.QueueCountObservedAtFrameLogic == 0,
+                "frame_logic tasks must flush before the next runtime-slot entity enters the same pass");
+            Expect(IsRecycledAndCleared(producer.LastTask),
+                "the frame_logic task must be consumed and recycled at its production boundary");
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "the frame_logic boundary must leave no queued publication behind");
+
+            frameLogicWorld.FlushQueuedObjectPointTasks();
+            Expect(producer.EnqueueCount == 1 && !producer.LastTask.IsFromPool &&
+                   GetQueuedObjectPointTaskCount(factory) == 0,
+                "an outer safety flush must not publish or recycle an already-consumed frame_logic task twice");
+
+            QueuedBoundarySelfCheckWeapon directBrokenWeapon = CreateQueuedBoundaryWeapon();
+            bool completedBrokenCleanup = directBrokenWeapon.TryRunLatePostOpointCleanupPhase();
+
+            Expect(completedBrokenCleanup && directBrokenWeapon.Runtime.PendingFlushDestroy,
+                "the real weapon late cleanup phase must mark a depleted destroyable weapon for deferred destroy");
+            Expect(GetQueuedObjectPointTaskCount(factory) == 5,
+                "oid 100 real weapon cleanup must queue its five C++ broken-weapon fragments");
+
+            factory.FlushTasks();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "the broken-fragment production boundary must consume the real factory queue");
+
+            directBrokenWeapon.TryRunLatePostOpointCleanupPhase();
+            factory.FlushTasks();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "repeating cleanup and its safety flush must not publish broken fragments twice");
+
+            var brokenWorld = new SimulationWorld();
+            QueuedBoundarySelfCheckWeapon brokenWeapon = CreateQueuedBoundaryWeapon();
+            brokenWorld.Register(brokenWeapon);
+            int brokenSlot = brokenWeapon.Runtime.SlotIndex;
+
+            brokenWorld.LateEntityUpdateAll(2);
+
+            Expect(brokenWeapon.PendingDestroyObserved && brokenWeapon.TransitDestroyCount == 1,
+                $"the full late pass must enter pending destroy and finalize the depleted weapon exactly once; " +
+                $"pendingObserved={brokenWeapon.PendingDestroyObserved}, transitDestroyCount={brokenWeapon.TransitDestroyCount}, " +
+                $"slotEntity={brokenWorld.FindEntityByRuntimeSlotIncludingPending(brokenSlot)?.Name ?? "null"}");
+            Expect(brokenWorld.FindEntityByRuntimeSlotForQuery(brokenSlot) == null,
+                "the depleted weapon must leave the world after its real fragment queue boundary");
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "the full broken-weapon late pass must not leak fragment tasks into a later pass");
+
+            QueuedBoundaryTransitionSelfCheckEntity directTransition = CreateQueuedBoundaryTransitionEntity();
+            directTransition.RunLateTailBeforePrevFrame();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 15,
+                "leaving state 13 through the real late tail must queue the fifteen C++ transition effects");
+
+            factory.FlushTasks();
+            directTransition.MirrorLatePrevFrame();
+            directTransition.RunLateTailBeforePrevFrame();
+            factory.FlushTasks();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "mirroring prev_frame and repeating the safety flush must not republish transition effects");
+
+            var transitionWorld = new SimulationWorld();
+            QueuedBoundaryTransitionSelfCheckEntity transition = CreateQueuedBoundaryTransitionEntity();
+            transitionWorld.Register(transition);
+
+            transitionWorld.LateEntityUpdateAll(3);
+
+            Expect(transition.Frame.Prev == transition.Frame.N,
+                "the full late pass must mirror prev_frame after the real transition-effect production phase");
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "the transition-effect late boundary must consume the real factory queue before the pass continues");
+
+            transitionWorld.FlushQueuedObjectPointTasks();
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "a repeated late safety flush must not duplicate real transition-effect publication");
+
+            CheckRealOpointSpawnSlotVisibility();
+        }
+
+        private static LF2CharacterData BuildSelfCheckOpoint999Data()
+        {
+            var frames = new List<LF2FrameData>(200);
+            for (int frameId = 0; frameId < 200; frameId++)
+                frames.Add(Frame(frameId, 9999, 100, frameId, 13, 27));
+
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_RealOpoint999",
+                type_sub = 999,
+                frames = frames,
+            };
+        }
+
+        private static void CheckRealOpointSpawnSlotVisibility()
+        {
+            var highWorld = new SimulationWorld();
+            using (new TemporarySimulationDriverWorld(highWorld))
+            {
+                var producer = new RealOpointProducerSelfCheckEntity("HighSlot");
+                highWorld.Register(producer);
+                int producerSlot = producer.Runtime.SlotIndex;
+
+                highWorld.LateEntityUpdateAll(30);
+
+                LF2Entity spawned = FindOidEntity(highWorld, 999);
+                Expect(spawned is LF2OtherObject && spawned.Renderer != null,
+                    "production oid999 opoint must create a real pooled LF2OtherObject with a renderer");
+                Expect(spawned.Runtime.SlotIndex > producerSlot,
+                    "production oid999 opoint must register into the next free high runtime slot");
+                Expect(spawned.AttackingCounter == 1,
+                    "an actual oid999 spawned into a later slot must execute frame_tick in the same late pass");
+            }
+
+            var lowWorld = new SimulationWorld();
+            using (new TemporarySimulationDriverWorld(lowWorld))
+            {
+                var releasedLow = new DynamicSlotSelfCheckEntity(9001);
+                var beforeProducer = new DynamicSlotSelfCheckEntity(9002);
+                var producer = new RealOpointProducerSelfCheckEntity("LowSlot");
+                lowWorld.Register(releasedLow);
+                lowWorld.Register(beforeProducer);
+                lowWorld.Register(producer);
+                int lowSlot = releasedLow.Runtime.SlotIndex;
+                int producerSlot = producer.Runtime.SlotIndex;
+                lowWorld.Unregister(releasedLow);
+
+                lowWorld.LateEntityUpdateAll(31);
+
+                LF2Entity spawned = FindOidEntity(lowWorld, 999);
+                Expect(spawned is LF2OtherObject && spawned.Renderer != null,
+                    "low-slot production opoint must still create the actual oid999 pooled entity");
+                Expect(spawned.Runtime.SlotIndex == lowSlot && spawned.Runtime.SlotIndex < producerSlot,
+                    $"production oid999 opoint must reuse the released lower dynamic slot; " +
+                    $"released={lowSlot}, spawned={spawned.Runtime.SlotIndex}, producer={producerSlot}");
+                Expect(spawned.AttackingCounter == 0,
+                    "an actual oid999 spawned behind the late scan cursor must not execute in the creation tick");
+
+                lowWorld.LateEntityUpdateAll(32);
+
+                Expect(spawned.AttackingCounter == 1,
+                    "the deferred low-slot oid999 must execute exactly once on the next late pass");
+                Expect(FindOidEntity(lowWorld, 999) == spawned,
+                    "the producer must publish one actual oid999 task rather than duplicating it next tick");
+            }
+        }
+
+        private static LF2Entity FindOidEntity(SimulationWorld world, int oid)
+        {
+            for (int slot = 0; slot < 400; slot++)
+            {
+                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingPending(slot);
+                if (entity != null && entity.ObjectId == oid)
+                    return entity;
+            }
+
+            return null;
+        }
+
+        private static QueuedBoundarySelfCheckWeapon CreateQueuedBoundaryWeapon()
+        {
+            var weapon = new QueuedBoundarySelfCheckWeapon();
+            weapon.BindData(new LF2CharacterData
+            {
+                name = "SelfCheck_QueuedBrokenWeapon",
+                type_sub = 100,
+                weapon_hp = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 100, 0, 39, 79),
+                },
+            });
+            weapon.Runtime.WeaponFlightCounter = -1;
+            weapon.Runtime.SetPosition(100, -20, 100);
+            weapon.Runtime.SyncIntegerPosition();
+            return weapon;
+        }
+
+        private static QueuedBoundaryTransitionSelfCheckEntity CreateQueuedBoundaryTransitionEntity()
+        {
+            return new QueuedBoundaryTransitionSelfCheckEntity(new LF2CharacterData
+            {
+                name = "SelfCheck_QueuedTransition",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 100, 0, 39, 79),
+                    Frame(10, 13, 100, 10, 39, 79),
+                },
+            });
+        }
+
+        private static void CheckCollisionCandidateCapAndNewbornIsolation()
+        {
+            InteractionArea itr = MakeInteractionItr(kind: 0, vrest: 1, injury: 10, dvx: 1);
+            var attackerData = new LF2CharacterData
+            {
+                name = "SelfCheck_CandidateCapAttacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { InteractionFrame(itr) },
+            };
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateInteractionCharacter("SelfCheck_CandidateCapAttacker", 1, attackerData);
+            world.Register(attacker);
+            attacker.Team = 1;
+            attacker.RelationTeam = 1;
+            attacker.Runtime.SetPosition(0, 0, 0);
+            attacker.Runtime.SyncIntegerPosition();
+
+            var targets = new List<LF2Character>();
+            for (int i = 0; i < 21; i++)
+            {
+                LF2Character target = CreateInteractionCharacter(
+                    $"SelfCheck_CandidateCapTarget_{i}",
+                    100 + i,
+                    BuildInteractionVictimData($"SelfCheckCandidateCapTarget{i}", 100 + i));
+                world.Register(target);
+                target.Team = 2;
+                target.RelationTeam = 2;
+                target.Runtime.SetPosition(0, 0, 0);
+                target.Runtime.SyncIntegerPosition();
+                targets.Add(target);
+            }
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            var query = world.SceneQuery as BruteForceSceneQuery;
+            Expect(query != null,
+                "candidate cap self-check must use the production BruteForceSceneQuery");
+            bool hasCandidateCarrier = query.TryGetCollisionCandidateSequence(attacker, out List<SceneQueryHit> candidates);
+            Expect(hasCandidateCarrier,
+                "candidate cap self-check must consume the production collision carrier");
+            Expect(attacker.Runtime.HitCandidateCount == 20 && candidates.Count == 20,
+                "collision collection must cap an ordinary attacker carrier at 20 candidates");
+            for (int i = 0; i < 20; i++)
+            {
+                Expect(candidates[i].Target == targets[i],
+                    $"collision candidate {i} must preserve runtime-slot scan order");
+            }
+            Expect(!candidates.Exists(hit => hit.Target == targets[20]),
+                "the 21st runtime-slot target must be excluded by the 20-candidate cap");
+
+            LF2Character newborn = CreateInteractionCharacter(
+                "SelfCheck_Step8Newborn",
+                999,
+                BuildInteractionVictimData("SelfCheckStep8Newborn", 999));
+            world.Register(newborn);
+            newborn.Team = 2;
+            newborn.RelationTeam = 2;
+            newborn.Runtime.SetPosition(0, 0, 0);
+            newborn.Runtime.SyncIntegerPosition();
+
+            Expect(query.TryGetCollisionCandidateSequence(attacker, out List<SceneQueryHit> afterSpawn) &&
+                   afterSpawn.Count == 20 && !afterSpawn.Exists(hit => hit.Target == newborn),
+                "a step8 newborn must not enter an existing step6 collision candidate carrier");
+            Expect(query.TryGetCollisionCandidateSequence(newborn, out List<SceneQueryHit> newbornCarrier) &&
+                   newbornCarrier.Count == 0 && newborn.Runtime.HitCandidateCount == 0,
+                "a step8 newborn must not receive a retroactive candidate carrier in the same tick");
+
+            world.EndCollisionCandidateConsumption();
+        }
+
+        private static void CheckSpecialAttackStep4AndLateFrameTick()
+        {
+            LF2FrameData frame0 = Frame(0, LF2States.Standing, 10, 0, 0, 0);
+            frame0.hit_a = 5;
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_SpecialStep4Late",
+                frames = new List<LF2FrameData> { frame0 },
+            };
+            var world = new SimulationWorld();
+            var special = new AlternateDamageSelfCheckSpecialAttack();
+            special.BindData("SelfCheck_SpecialStep4Late", 200, data);
+            world.Register(special);
+            special.Health.HP = 20;
+            special.AttackingCounter = 0;
+            special.FrameDelay = 0;
+            special.Trans.SyncDirectFrameData(frame0.wait, frame0.next, 0);
+
+            world.SerialTickAll(1);
+
+            Expect(special.Frame.N == 0 && special.AttackingCounter == 0,
+                "SpecialAttack step4 must run TU only and must not advance frame_tick wait/next state");
+            Expect(special.Health.HP == 20,
+                "SpecialAttack step4 TU must not apply the type3 frame_tick hit_a drain");
+
+            world.LateEntityUpdateAll(1);
+
+            Expect(special.Health.HP == 15 && special.AttackingCounter == 1,
+                "SpecialAttack late update must advance frame_tick once and apply hit_a exactly once");
+
+            world.LateEntityUpdateAll(2);
+
+            Expect(special.Health.HP == 10 && special.AttackingCounter == 2,
+                "each subsequent late pass must apply one, and only one, type3 hit_a drain");
+        }
+
+        private static void CheckFrameTickPpDisplayAndCurrentDatMatrix()
+        {
+            LF2FrameData ppSource = Frame(0, LF2States.Standing, 0, 1, 39, 79);
+            LF2FrameData ppCost = Frame(1, LF2States.Standing, 10, 1, 39, 79);
+            ppCost.mp = -30;
+            ppCost.hit_d = 2;
+            var ppData = new LF2CharacterData
+            {
+                name = "SelfCheck_PpDisplayFrameTick",
+                frames = new List<LF2FrameData>
+                {
+                    ppSource,
+                    ppCost,
+                    Frame(2, LF2States.Standing, 1, 2, 39, 79),
+                },
+            };
+            var ppWorld = new SimulationWorld();
+            LF2Character ppCharacter = CreateCharacter("SelfCheck_PpDisplayFrameTick", 1, ppData);
+            ppWorld.Register(ppCharacter);
+            ppCharacter.Health.PP = 100;
+            ppCharacter.PpDisplay = 0;
+            ppCharacter.AttackingCounter = 0;
+            ppCharacter.Trans.SyncDirectFrameData(ppSource.wait, ppSource.next, 0);
+
+            ppCharacter.SimFrameTick(1);
+
+            Expect(ppCharacter.Frame.N == 1 && ppCharacter.Health.PP == 70,
+                "negative frame mp must consume PP after a real wait/next transition");
+            Expect(ppCharacter.PpDisplay == 30,
+                "PP consumption must increase PpDisplay with a positive cost sign");
+
+            LF2FrameData type3Frame = Frame(0, LF2States.ProjectileFlying, 0, 999, 39, 79);
+            type3Frame.hit_a = 4;
+            LF2FrameData caughtFrame = Frame(10, LF2States.ProjectileFlying, 0, 999, 39, 79, new CatchPoint { kind = 2 });
+            caughtFrame.hit_a = 4;
+            var type3Data = new LF2CharacterData
+            {
+                name = "SelfCheck_CurrentDatType3Shell",
+                frames = new List<LF2FrameData>
+                {
+                    type3Frame,
+                    caughtFrame,
+                    Frame(212, LF2States.Jump, 1, 212, 39, 79),
+                },
+            };
+            var type3World = new SimulationWorld();
+            var characterShell = new BoundsSelfCheckCharacter(LF2ObjectType.SpecialAttack);
+            characterShell.BindData("SelfCheck_CurrentDatType3Shell", 200, type3Data);
+            type3World.Register(characterShell);
+            characterShell.Health.HP = 20;
+            characterShell.FrameDelay = 2;
+            characterShell.Runtime.SetPosition(0, -10, 0);
+            characterShell.Runtime.SyncIntegerPosition();
+            characterShell.Trans.SyncDirectFrameData(type3Frame.wait, type3Frame.next, 0);
+
+            characterShell.SimFrameTick(1);
+
+            Expect(characterShell.Health.HP == 16 && characterShell.FrameDelay == 2,
+                "a character CLR shell with current type3 DAT must run frame_tick despite nonzero FrameDelay");
+            Expect(characterShell.Frame.N == 0,
+                "current type3 DAT next=999 must resolve to frame0 even when the CLR shell is a character and airborne");
+
+            characterShell.Health.HP = 20;
+            characterShell.Runtime.LinkState = -1;
+            characterShell.SimFrameTick(2);
+            Expect(characterShell.Health.HP == 20,
+                "current type3 DAT frame_tick must honor the shared negative-link gate before hit_a");
+
+            characterShell.Runtime.LinkState = 0;
+            characterShell.SetCpointRawFramePreserveWait(10);
+            characterShell.SimFrameTick(3);
+            Expect(characterShell.Health.HP == 20 && characterShell.Frame.N == 10,
+                "current type3 DAT frame_tick must honor the caught cpoint kind2 gate before hit_a/next");
+
+            var characterData = new LF2CharacterData
+            {
+                name = "SelfCheck_CurrentDatCharacterShell",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 999, 39, 79),
+                    Frame(10, LF2States.Standing, 0, 999, 39, 79, new CatchPoint { kind = 2 }),
+                    Frame(212, LF2States.Jump, 1, 212, 39, 79),
+                },
+            };
+            var characterWorld = new SimulationWorld();
+            LF2Entity specialShell = CreateCpointMatrixEntity(false, "SelfCheck_CurrentDatCharacterShell", 1, characterData);
+            characterWorld.Register(specialShell);
+            specialShell.Runtime.SetPosition(0, -10, 0);
+            specialShell.Runtime.SyncIntegerPosition();
+            specialShell.FrameDelay = 1;
+            specialShell.Trans.SyncDirectFrameData(0, 999, 0);
+
+            specialShell.SimFrameTick(1);
+            Expect(specialShell.Frame.N == 0,
+                "a SpecialAttack CLR shell with current character DAT must honor the character FrameDelay gate");
+
+            specialShell.SimTU(1);
+            Expect(specialShell.FrameDelay == 0 && specialShell.Frame.N == 0,
+                "current character DAT step4 must decay FrameDelay before returning without dynamics");
+            specialShell.Runtime.LinkState = -1;
+            double heldY = specialShell.Runtime.Y;
+            specialShell.SimTU(2);
+            Expect(Nearly(specialShell.Runtime.Y, heldY),
+                "current character DAT step4 must honor the negative-link dynamics gate");
+
+            specialShell.Runtime.LinkState = 0;
+            specialShell.SimFrameTick(2);
+            Expect(specialShell.Frame.N == 212,
+                "current character DAT next=999 must resolve airborne shells to frame212");
+
+            LF2FrameData heavyFrame = Frame(0, LF2States.HeavyWeaponInSky, 10, 0, 39, 79);
+            var heavyData = new LF2CharacterData
+            {
+                name = "SelfCheck_CurrentDatHeavyShell",
+                frames = new List<LF2FrameData>
+                {
+                    heavyFrame,
+                    Frame(20, LF2States.HeavyWeaponOnGround, 1, 20, 39, 79),
+                },
+            };
+            var heavyWorld = new SimulationWorld();
+            var heavyShell = new BoundsSelfCheckCharacter(LF2ObjectType.HeavyWeapon);
+            heavyShell.BindData("SelfCheck_CurrentDatHeavyShell", 150, heavyData);
+            heavyWorld.Register(heavyShell);
+            heavyShell.Runtime.SetPosition(0, 0, 0);
+            heavyShell.Runtime.SetVelocity(0, 0, 0);
+            heavyShell.Runtime.SyncIntegerPosition();
+            heavyShell.Trans.SyncDirectFrameData(heavyFrame.wait, heavyFrame.next, 0);
+
+            heavyShell.SimFrameTick(1);
+
+            Expect(heavyShell.Frame.N == 20,
+                "a character CLR shell with current type2 DAT must enter frame20 when grounded state2000 is stationary");
+
+            var lyingData = new LF2CharacterData
+            {
+                name = "SelfCheck_State14FrameTick",
+                frames = new List<LF2FrameData> { Frame(0, LF2States.Lying, 10, 0, 39, 79) },
+            };
+            var lyingWorld = new SimulationWorld();
+            LF2Character lying = CreateCharacter("SelfCheck_State14FrameTick", 1, lyingData);
+            lyingWorld.Register(lying);
+            lying.Health.HP = 0;
+            lying.KillCount = -1;
+            lying.RelationTeam = 1;
+            lying.HitStun = 0;
+
+            lying.SimFrameTick(1);
+            Expect(lying.HitStun == 0 && lying.AttackingCounter == 0,
+                "state14 HP<=0 must not arm hit stop for an ordinary unowned low runtime slot");
+
+            lying.KillCount = 0;
+            lying.SimFrameTick(2);
+            Expect(lying.HitStun == 30 && lying.AttackingCounter == 0,
+                "state14 HP<=0 must arm mapped hit stop for an owned entity and keep attacking cleared");
+        }
+
+        private static void CheckStateTransformLandingMatrix()
+        {
+            const int lightOid = 741;
+            const int heavyOid = 742;
+            const int throwOid = 743;
+            const int lightSkyOid = 745;
+            const int drinkOid = 101;
+            const int otherOid = 999;
+
+            var wrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [lightOid] = new LF2CharacterDataWrapper(lightOid,
+                    BuildTransformedLandingData("SelfCheck_TransformLight", 31, 3, LF2States.WeaponThrowing, 70)),
+                [heavyOid] = new LF2CharacterDataWrapper(heavyOid,
+                    BuildTransformedLandingData("SelfCheck_TransformHeavy", 32, 4, LF2States.HeavyWeaponInSky, 20)),
+                [throwOid] = new LF2CharacterDataWrapper(throwOid,
+                    BuildTransformedLandingData("SelfCheck_TransformThrow", 33, 5, LF2States.WeaponInSky, 0)),
+                [lightSkyOid] = new LF2CharacterDataWrapper(lightSkyOid,
+                    BuildTransformedLandingData("SelfCheck_TransformLightSky", 35, 2, LF2States.WeaponInSky, 60)),
+                [drinkOid] = new LF2CharacterDataWrapper(drinkOid,
+                    BuildTransformedLandingData("SelfCheck_TransformDrink", 34, 6, LF2States.WeaponThrowing, 70)),
+                [otherOid] = new LF2CharacterDataWrapper(otherOid,
+                    BuildTransformedLandingData("SelfCheck_TransformOther999", 0, 0, 9999, 101)),
+            };
+            var types = new Dictionary<int, int>
+            {
+                [lightOid] = (int)LF2ObjectType.LightWeapon,
+                [heavyOid] = (int)LF2ObjectType.HeavyWeapon,
+                [throwOid] = (int)LF2ObjectType.ThrowWeapon,
+                [lightSkyOid] = (int)LF2ObjectType.LightWeapon,
+                [drinkOid] = (int)LF2ObjectType.Drink,
+                [otherOid] = (int)LF2ObjectType.Other,
+            };
+            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+
+            using (new TemporaryRuntimeObjectConfigs(types, wrappers))
+            {
+                try
+                {
+                    LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+
+                    TransformedLandingSelfCheckEntity light = CreateTransformedLandingShell(lightOid, false);
+                    light.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(light, 5.0, 8.0, 1);
+                    Expect(light.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.LightWeapon &&
+                           light.Frame.N == 70 && light.Runtime.WeaponFlightCounter == 17,
+                        "state4000 transform must dispatch type1 landing to frame70 and subtract weapon_drop_hurt durability");
+                    Expect(Nearly(light.Runtime.Vx, 4.0) && Nearly(light.Runtime.Vy, 0.0) && light.WeaponCount == 0,
+                        "type1 transformed landing must halve vx, stop vy, and clear WeaponCount outside state12");
+
+                    TransformedLandingSelfCheckEntity lightStop = CreateTransformedLandingShell(lightSkyOid, false);
+                    lightStop.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(lightStop, 5.0, 8.0, 11);
+                    Expect(lightStop.Frame.N == 60 && lightStop.Runtime.WeaponFlightCounter == 18,
+                        "transformed type1 non-throwing low-speed landing must enter frame60 and consume durability");
+
+                    TransformedLandingSelfCheckEntity lightBounce = CreateTransformedLandingShell(lightOid, false);
+                    lightBounce.Runtime.WeaponFlightCounter = 20;
+                    lightBounce.SwitchDir("right");
+                    RunTransformedLandingPasses(lightBounce, 10.0, 8.0, 12);
+                    Expect(lightBounce.Frame.N == 7 && Nearly(lightBounce.Runtime.Vy, -8.0) &&
+                           Nearly(lightBounce.Runtime.Vx, 4.0) && lightBounce.Runtime.Dir == "left" &&
+                           lightBounce.Runtime.WeaponFlightCounter == 17,
+                        "transformed type1 throwing high-speed landing must enter frame7, bounce -8, flip, and consume durability");
+
+                    TransformedLandingSelfCheckEntity heavy = CreateTransformedLandingShell(heavyOid, false);
+                    heavy.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(heavy, 5.0, 8.0, 2);
+                    Expect(heavy.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.HeavyWeapon &&
+                           heavy.Frame.N == 20 && heavy.Runtime.WeaponFlightCounter == 15,
+                        "state4000 transform must dispatch low-speed type2 landing to frame20 and consume 1+drop durability");
+                    Expect(Nearly(heavy.Runtime.Vx, 4.0) && Nearly(heavy.Runtime.Vy, 0.0) && heavy.WeaponCount == 0,
+                        "type2 transformed landing must stop on frame20 and clear WeaponCount outside state12");
+
+                    TransformedLandingSelfCheckEntity heavyBounce = CreateTransformedLandingShell(heavyOid, false);
+                    heavyBounce.Runtime.WeaponFlightCounter = 20;
+                    heavyBounce.SwitchDir("right");
+                    RunTransformedLandingPasses(heavyBounce, 10.0, 8.0, 13);
+                    Expect(heavyBounce.Frame.N == 0 && Nearly(heavyBounce.Runtime.Vy, -5.0) &&
+                           Nearly(heavyBounce.Runtime.Vx, 4.0) && heavyBounce.Runtime.Dir == "right" &&
+                           heavyBounce.Runtime.WeaponFlightCounter == 19,
+                        $"transformed type2 high-speed landing must preserve frame0, bounce -5, consume one durability, " +
+                        $"then let late state2000 face final vx; frame={heavyBounce.Frame.N}, vx={heavyBounce.Runtime.Vx}, " +
+                        $"vy={heavyBounce.Runtime.Vy}, y={heavyBounce.Runtime.Y}, dir={heavyBounce.Runtime.Dir}, " +
+                        $"durability={heavyBounce.Runtime.WeaponFlightCounter}, weaponCount={heavyBounce.WeaponCount}, " +
+                        "inputLandingVy=10, inputVx=8");
+
+                    TransformedLandingSelfCheckEntity thrown = CreateTransformedLandingShell(throwOid, false);
+                    thrown.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(thrown, 10.0, 12.0, 3);
+                    Expect(thrown.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.ThrowWeapon &&
+                           thrown.Frame.N == 0 && thrown.Runtime.WeaponFlightCounter == 15,
+                        "state4000 transform must dispatch high-speed type4 landing to frame0 and subtract drop durability");
+                    Expect(Nearly(thrown.Runtime.Vx, 8.4) && Nearly(thrown.Runtime.Vy, -7.0) && thrown.WeaponCount == 0,
+                        "type4 transformed landing must apply the release 0.7 bounce and clear WeaponCount");
+
+                    TransformedLandingSelfCheckEntity thrownStop = CreateTransformedLandingShell(throwOid, false);
+                    thrownStop.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(thrownStop, 5.0, 8.0, 14);
+                    Expect(thrownStop.Frame.N == 60 && Nearly(thrownStop.Runtime.Vx, 5.6) &&
+                           Nearly(thrownStop.Runtime.Vy, 0.0) && thrownStop.Runtime.WeaponFlightCounter == 15,
+                        "transformed type4 low-speed landing must stop on frame60 with 0.7 vx and consume durability");
+
+                    TransformedLandingSelfCheckEntity drinkBounce = CreateTransformedLandingShell(drinkOid, false);
+                    drinkBounce.Runtime.WeaponFlightCounter = 20;
+                    RunTransformedLandingPasses(drinkBounce, 10.0, 12.0, 15);
+                    Expect(drinkBounce.Frame.N == 0 && Nearly(drinkBounce.Runtime.Vx, 8.4) &&
+                           Nearly(drinkBounce.Runtime.Vy, -7.0) && drinkBounce.Runtime.WeaponFlightCounter == 14,
+                        "oid101 transformed type6 high-speed landing must take the common 0.7 bounce branch");
+
+                    TransformedLandingSelfCheckEntity drink = CreateTransformedLandingShell(drinkOid, true);
+                    drink.Runtime.WeaponFlightCounter = 20;
+                    drink.Health.HP = 0;
+                    RunTransformedLandingPasses(drink, 5.0, 8.0, 4);
+                    Expect(drink.HitStun == 139,
+                        $"state8000 transform hit-stop must count down once in the following production late frame_tick; " +
+                        $"actual={drink.HitStun}, immediate=140");
+                    Expect(drink.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Drink &&
+                           drink.Frame.N == 70 && drink.Runtime.WeaponFlightCounter == -1,
+                        "state8000 transform must dispatch type6 landing and mark depleted drink durability -1");
+                    Expect(Nearly(drink.Runtime.Vx, 5.6) && Nearly(drink.Runtime.Vy, 0.0) && drink.WeaponCount == 0,
+                        "type6 transformed landing must use the 0.7 stop branch and clear WeaponCount");
+
+                    TransformedLandingSelfCheckEntity other999 = CreateTransformedLandingShell(otherOid, false);
+                    RunTransformedLandingPasses(other999, 5.0, 8.0, 16);
+                    Expect(other999.Frame.N == 101 && Nearly(other999.Runtime.Vx, 0.0) &&
+                           Nearly(other999.Runtime.Vy, 0.0),
+                        "state4999 transform must dispatch oid999 default landing to frame101 and stop all planar motion");
+
+                    CheckTransformedPendingDestroyCrossSimOrder(lightOid);
+                }
+                finally
+                {
+                    LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                }
+            }
+        }
+
+        private static LF2CharacterData BuildTransformedLandingData(
+            string name,
+            int weaponHp,
+            int dropHurt,
+            int sourceState,
+            int landingFrame)
+        {
+            var frames = new List<LF2FrameData>
+            {
+                Frame(0, sourceState, 100, 0, 39, 79),
+            };
+            int[] landingFrames = { 7, 20, 60, 70, 101 };
+            for (int i = 0; i < landingFrames.Length; i++)
+            {
+                int frameId = landingFrames[i];
+                int landingState = frameId == 20
+                    ? LF2States.HeavyWeaponOnGround
+                    : frameId == 7 ? LF2States.WeaponInSky
+                    : frameId == 60 ? LF2States.WeaponOnGround
+                    : frameId == 101 ? 9999
+                    : LF2States.WeaponJustOnGround;
+                frames.Add(Frame(frameId, landingState, 100, frameId, 39, 79));
+            }
+
+            return new LF2CharacterData
+            {
+                name = name,
+                weapon_hp = weaponHp,
+                weapon_drop_hurt = dropHurt,
+                frames = frames,
+            };
+        }
+
+        private static TransformedLandingSelfCheckEntity CreateTransformedLandingShell(int targetOid, bool hitStopTransform)
+        {
+            int transformState = (hitStopTransform ? 8000 : 4000) + targetOid;
+            var shell = new TransformedLandingSelfCheckEntity();
+            shell.BindSource(new LF2CharacterData
+            {
+                name = $"SelfCheck_TransformSource_{targetOid}",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, transformState, 100, 0, 39, 79),
+                },
+            });
+            shell.RunStateSpecialPreCollision();
+
+            Expect(shell.ObjectId == targetOid && shell.FrameCache.Wrapper?.characterId == targetOid &&
+                   shell.Frame.N == 0 && shell.Frame.D != null,
+                $"state transform must load oid {targetOid} wrapper and enter its frame0");
+            Expect(shell.WeaponCount == 0,
+                $"state transform must preserve the source WeaponCount for oid {targetOid}");
+            Expect(shell.Runtime.WeaponFlightCounter == shell.FrameCache.Wrapper.characterData.weapon_hp,
+                $"state transform must initialize oid {targetOid} durability from target weapon_hp");
+            Expect(shell.HitStun == (hitStopTransform ? 140 : 0),
+                $"state transform immediate hit-stop mismatch for oid {targetOid}; " +
+                $"actual={shell.HitStun}, expected={(hitStopTransform ? 140 : 0)}");
+            return shell;
+        }
+
+        private static void RunTransformedLandingPasses(
+            TransformedLandingSelfCheckEntity shell,
+            double landingVy,
+            double vx,
+            int tickIndex)
+        {
+            var world = new SimulationWorld();
+            world.Register(shell);
+            shell.Runtime.SetPosition(0, -1, 0);
+            shell.Runtime.SetVelocity(vx, landingVy, 0);
+            shell.Runtime.SyncIntegerPosition();
+
+            world.SerialTickAll(tickIndex);
+            int landingFrame = shell.Frame.N;
+            world.LateEntityUpdateAll(tickIndex);
+
+            Expect(shell.Frame.N == landingFrame && shell.AttackingCounter == 1,
+                "transformed landing must remain visible through the production late frame_tick pass");
+        }
+
+        private static void CheckTransformedPendingDestroyCrossSimOrder(int targetOid)
+        {
+            var world = new SimulationWorld();
+            var shell = new TransformingSimOrderSelfCheckEntity(targetOid);
+            shell.BindSource(new LF2CharacterData
+            {
+                name = "SelfCheck_TransformPendingDestroy",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 4000 + targetOid, 100, 0, 39, 79),
+                },
+            });
+            int originalOrder = shell.SimOrder;
+            world.Register(shell);
+            int slot = shell.Runtime.SlotIndex;
+
+            shell.RunStateSpecialPreCollision();
+            Expect(shell.SimOrder != originalOrder,
+                "cross-SimOrder destroy fixture must change its exposed order after the current-DAT transform");
+            shell.Runtime.PendingFlushDestroy = true;
+
+            world.LateEntityUpdateAll(20);
+
+            Expect(shell.TransitDestroyCount == 1,
+                "transformed PendingFlushDestroy must finalize through OnTransitDestroy exactly once");
+            Expect(world.FindEntityByRuntimeSlotIncludingPending(slot) == null && world.ObjectCount == 0,
+                "transformed PendingFlushDestroy must release its runtime slot and remove every registry reference");
+            Expect(!WorldContainsSimulationBucket(world, originalOrder),
+                "transformed PendingFlushDestroy must remove the entity from its original registration bucket");
+
+            world.LateEntityUpdateAll(21);
+            Expect(shell.TransitDestroyCount == 1,
+                "a later late pass must not finalize the transformed entity twice");
+        }
+
+        private static bool WorldContainsSimulationBucket(SimulationWorld world, int simOrder)
+        {
+            var field = typeof(SimulationWorld).GetField(
+                "_buckets",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            object buckets = field?.GetValue(world);
+            var containsKey = buckets?.GetType().GetMethod("ContainsKey");
+            return containsKey != null && (bool)containsKey.Invoke(buckets, new object[] { simOrder });
+        }
+
+        private static void CheckSerialTickInterleaveAndFrameEdgeMatrix()
+        {
+            var serialEvents = new List<string>();
+            var serialWorld = new SimulationWorld();
+            var low = new SerialOrderSelfCheckEntity("low", serialEvents);
+            var high = new SerialOrderSelfCheckEntity("high", serialEvents);
+            serialWorld.Register(low);
+            serialWorld.Register(high);
+
+            serialWorld.SerialTickAll(1);
+
+            Expect(serialEvents.Count == 4 &&
+                   serialEvents[0] == "low:transit" &&
+                   serialEvents[1] == "low:tu" &&
+                   serialEvents[2] == "high:transit" &&
+                   serialEvents[3] == "high:tu",
+                "SerialTickAll must interleave Transit/TU per runtime slot instead of running two global loops");
+
+            LF2FrameData singlePhysicsFrame = Frame(0, LF2States.Standing, 10, 0, 0, 0);
+            singlePhysicsFrame.dvx = 3;
+            var specialData = new LF2CharacterData
+            {
+                name = "SelfCheck_SpecialSinglePhysics",
+                frames = new List<LF2FrameData> { singlePhysicsFrame },
+            };
+            var specialWorld = new SimulationWorld();
+            var special = new AlternateDamageSelfCheckSpecialAttack();
+            special.BindData("SelfCheck_SpecialSinglePhysics", 200, specialData);
+            specialWorld.Register(special);
+            special.Runtime.SetPosition(0, -10, 0);
+            special.Runtime.SetVelocity(0, 0, 0);
+            special.Runtime.SyncIntegerPosition();
+
+            specialWorld.SerialTickAll(1);
+
+            Expect(Nearly(special.Runtime.X, 3.0) && Nearly(special.Runtime.Vx, 3.0),
+                "SpecialAttack step4 must apply authored non-character velocity and horizontal physics exactly once");
+
+            LF2FrameData weaponSpecialFrame = Frame(0, LF2States.Standing, 10, 0, 0, 0);
+            weaponSpecialFrame.dvx = 2;
+            var weaponSpecialData = new LF2CharacterData
+            {
+                name = "SelfCheck_WeaponShellSpecialDat",
+                frames = new List<LF2FrameData> { weaponSpecialFrame },
+            };
+            var weaponSpecialWorld = new SimulationWorld();
+            var weaponSpecialShell = new CurrentDatSelfCheckWeapon(LF2ObjectType.SpecialAttack);
+            weaponSpecialShell.BindData("SelfCheck_WeaponShellSpecialDat", 200, 1, weaponSpecialData, 0);
+            weaponSpecialWorld.Register(weaponSpecialShell);
+            weaponSpecialShell.Runtime.SetPosition(0, -10, 0);
+            weaponSpecialShell.Runtime.SetVelocity(0, 0, 0);
+            weaponSpecialShell.Runtime.SyncIntegerPosition();
+
+            weaponSpecialShell.SimTU(1);
+
+            Expect(Nearly(weaponSpecialShell.Runtime.X, 2.0) && Nearly(weaponSpecialShell.Runtime.Vy, 0.0),
+                "weapon CLR shell with current type3 DAT must use shared type3 physics with zero gravity");
+
+            LF2FrameData weaponOtherFrame = Frame(0, LF2States.Standing, 10, 0, 0, 0);
+            weaponOtherFrame.dvx = 2;
+            var weaponOtherData = new LF2CharacterData
+            {
+                name = "SelfCheck_WeaponShellOtherDat",
+                frames = new List<LF2FrameData> { weaponOtherFrame },
+            };
+            var weaponOtherWorld = new SimulationWorld();
+            var weaponOtherShell = new CurrentDatSelfCheckWeapon(LF2ObjectType.Other);
+            weaponOtherShell.BindData("SelfCheck_WeaponShellOtherDat", 300, 1, weaponOtherData, 0);
+            weaponOtherWorld.Register(weaponOtherShell);
+            weaponOtherShell.Runtime.SetPosition(0, -10, 0);
+            weaponOtherShell.Runtime.SetVelocity(0, 0, 0);
+            weaponOtherShell.Runtime.SyncIntegerPosition();
+
+            weaponOtherShell.SimTU(1);
+
+            Expect(Nearly(weaponOtherShell.Runtime.X, 2.0) &&
+                   Nearly(weaponOtherShell.Runtime.Vy, NTSDGlobal.Gameplay.WeaponGravityDefault),
+                "weapon CLR shell with current other DAT must use shared ordinary non-character gravity");
+
+            LF2CharacterData negativeNextData = new LF2CharacterData
+            {
+                name = "SelfCheck_NegativeNext",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, -1, 39, 79),
+                    Frame(1, LF2States.Standing, 10, 1, 39, 79),
+                },
+            };
+            var negativeWeapon = new CurrentDatSelfCheckWeapon(LF2ObjectType.LightWeapon);
+            negativeWeapon.BindData("SelfCheck_NegativeNextWeapon", 100, 1, negativeNextData, 0);
+            negativeWeapon.SwitchDir("right");
+            negativeWeapon.Trans.SyncDirectFrameData(0, -1, 0);
+            negativeWeapon.SimFrameTick(1);
+            Expect(negativeWeapon.Frame.N == 1 && negativeWeapon.Runtime.Dir == "left",
+                "weapon negative next must enter the absolute frame and flip facing exactly once");
+
+            var negativeSpecial = new AlternateDamageSelfCheckSpecialAttack();
+            negativeSpecial.BindData("SelfCheck_NegativeNextSpecial", 200, negativeNextData);
+            negativeSpecial.SwitchDir("right");
+            negativeSpecial.Trans.SyncDirectFrameData(0, -1, 0);
+            negativeSpecial.SimFrameTick(1);
+            Expect(negativeSpecial.Frame.N == 1 && negativeSpecial.Runtime.Dir == "left",
+                "SpecialAttack negative next must enter the absolute frame and flip facing exactly once");
+
+            var caughtExitData = new LF2CharacterData
+            {
+                name = "SelfCheck_CaughtExitFrozen",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Lying, 0, 1, 39, 79),
+                    Frame(1, LF2States.Frozen, 10, 1, 39, 79),
+                    Frame(2, LF2States.Standing, 10, 2, 39, 79),
+                },
+            };
+            LF2Character frozenExit = CreateCharacter("SelfCheck_CaughtExitFrozen", 1, caughtExitData);
+            frozenExit.HitStun = 0;
+            frozenExit.Trans.SyncDirectFrameData(0, 1, 0);
+            frozenExit.SimFrameTick(1);
+            Expect(frozenExit.Frame.N == 1 && frozenExit.HitStun == 0,
+                "leaving state14 into Frozen must not arm the generic caught-exit hit stop");
+
+            caughtExitData.frames[0].next = 2;
+            LF2Character ordinaryExit = CreateCharacter("SelfCheck_CaughtExitOrdinary", 1, caughtExitData);
+            ordinaryExit.HitStun = 0;
+            ordinaryExit.Trans.SyncDirectFrameData(0, 2, 0);
+            ordinaryExit.SimFrameTick(1);
+            Expect(ordinaryExit.Frame.N == 2 && ordinaryExit.HitStun == 15,
+                "leaving state14 into an ordinary state must arm the mapped caught-exit hit stop");
+        }
+
+        private static bool IsRecycledAndCleared(OPointCreateTask task)
+        {
+            return task != null &&
+                   !task.IsFromPool &&
+                   task.opoint.oid == 0 &&
+                   task.parent == null &&
+                   task.releaseSpawnSemantic == ReleaseSpawnSemantic.None;
+        }
+
+        private static int GetQueuedObjectPointTaskCount(LF2ObjectPointFactory factory)
+        {
+            var queueField = typeof(LF2ObjectPointFactory).GetField(
+                "_taskQueue",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            object queue = queueField?.GetValue(factory);
+            var countProperty = queue?.GetType().GetProperty("Count");
+            return countProperty == null ? -1 : (int)countProperty.GetValue(queue);
         }
 
         private static LF2CharacterData BuildAlternateDamageWeaponFrames()
@@ -4146,6 +5276,592 @@ namespace NTSD.Test
                 Frame.N = 6;
                 Runtime.Frame = 6;
                 Runtime.PrevFrame2 = 6;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class SerialOrderSelfCheckEntity : LF2Entity
+        {
+            private readonly string label;
+            private readonly List<string> events;
+
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public SerialOrderSelfCheckEntity(string label, List<string> events)
+            {
+                this.label = label;
+                this.events = events;
+                Name = $"SelfCheck_SerialOrder_{label}";
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public override void SimTransit(int tickIndex)
+            {
+                events.Add($"{label}:transit");
+            }
+
+            public override void SimTU(int tickIndex)
+            {
+                events.Add($"{label}:tu");
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private class TransformedLandingSelfCheckEntity : LF2OtherObject
+        {
+            public void BindSource(LF2CharacterData data)
+            {
+                Name = data.name;
+                ObjectId = 740;
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(ObjectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Frame.Prev = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Health.HP = 500;
+                Health.HPBound = 500;
+            }
+        }
+
+        private sealed class TransformingSimOrderSelfCheckEntity : TransformedLandingSelfCheckEntity
+        {
+            private readonly int targetOid;
+
+            public int TransitDestroyCount { get; private set; }
+            public override LF2ObjectType ObjectTypeEnum =>
+                ObjectId == targetOid ? LF2ObjectType.LightWeapon : LF2ObjectType.Other;
+
+            public TransformingSimOrderSelfCheckEntity(int targetOid)
+            {
+                this.targetOid = targetOid;
+            }
+
+            public override void OnTransitDestroy()
+            {
+                TransitDestroyCount++;
+                UnregisterFromWorld();
+            }
+        }
+
+        private sealed class TemporaryRuntimeObjectConfigs : IDisposable
+        {
+            private readonly GameDataManager dataManager;
+            private readonly CharacterAnimtorManager animatorManager;
+            private readonly System.Reflection.FieldInfo objectLookupField;
+            private readonly System.Reflection.FieldInfo cachedConfigField;
+            private readonly System.Reflection.FieldInfo frameConfigField;
+            private readonly Dictionary<int, ObjectDefinition> originalObjectLookup;
+            private readonly GameDataConfig originalCachedConfig;
+            private readonly Dictionary<int, LF2CharacterDataWrapper> originalFrameConfigs;
+            private readonly Dictionary<int, ObjectDefinition> replacedDefinitions = new Dictionary<int, ObjectDefinition>();
+            private readonly Dictionary<int, LF2CharacterDataWrapper> replacedWrappers = new Dictionary<int, LF2CharacterDataWrapper>();
+            private readonly HashSet<int> addedDefinitions = new HashSet<int>();
+            private readonly HashSet<int> addedWrappers = new HashSet<int>();
+
+            public TemporaryRuntimeObjectConfigs(
+                Dictionary<int, int> objectTypes,
+                Dictionary<int, LF2CharacterDataWrapper> wrappers)
+            {
+                dataManager = GameDataManager.Instance;
+                animatorManager = CharacterAnimtorManager.Instance;
+                Expect(dataManager != null && animatorManager != null,
+                    "runtime config fixture requires GameDataManager and CharacterAnimtorManager singletons");
+
+                var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                objectLookupField = typeof(GameDataManager).GetField("objectLookup", flags);
+                cachedConfigField = typeof(GameDataManager).GetField("cachedConfig", flags);
+                frameConfigField = typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", flags);
+                Expect(objectLookupField != null && cachedConfigField != null && frameConfigField != null,
+                    "runtime config fixture reflection contract changed");
+
+                originalObjectLookup = objectLookupField.GetValue(dataManager) as Dictionary<int, ObjectDefinition>;
+                originalCachedConfig = cachedConfigField.GetValue(dataManager) as GameDataConfig;
+                originalFrameConfigs = frameConfigField.GetValue(animatorManager) as Dictionary<int, LF2CharacterDataWrapper>;
+
+                Dictionary<int, ObjectDefinition> objectLookup = originalObjectLookup ?? new Dictionary<int, ObjectDefinition>();
+                Dictionary<int, LF2CharacterDataWrapper> frameConfigs =
+                    originalFrameConfigs ?? new Dictionary<int, LF2CharacterDataWrapper>();
+                if (originalObjectLookup == null)
+                    objectLookupField.SetValue(dataManager, objectLookup);
+                if (originalCachedConfig == null)
+                    cachedConfigField.SetValue(dataManager, new GameDataConfig());
+                if (originalFrameConfigs == null)
+                    frameConfigField.SetValue(animatorManager, frameConfigs);
+
+                foreach (KeyValuePair<int, int> pair in objectTypes)
+                {
+                    if (objectLookup.TryGetValue(pair.Key, out ObjectDefinition existing))
+                        replacedDefinitions[pair.Key] = existing;
+                    else
+                        addedDefinitions.Add(pair.Key);
+                    objectLookup[pair.Key] = new ObjectDefinition(pair.Key, pair.Value, "self-check.dat");
+                }
+
+                foreach (KeyValuePair<int, LF2CharacterDataWrapper> pair in wrappers)
+                {
+                    if (frameConfigs.TryGetValue(pair.Key, out LF2CharacterDataWrapper existing))
+                        replacedWrappers[pair.Key] = existing;
+                    else
+                        addedWrappers.Add(pair.Key);
+                    frameConfigs[pair.Key] = pair.Value;
+                }
+            }
+
+            public void Dispose()
+            {
+                if (originalObjectLookup == null)
+                {
+                    objectLookupField.SetValue(dataManager, null);
+                }
+                else
+                {
+                    foreach (int oid in addedDefinitions)
+                        originalObjectLookup.Remove(oid);
+                    foreach (KeyValuePair<int, ObjectDefinition> pair in replacedDefinitions)
+                        originalObjectLookup[pair.Key] = pair.Value;
+                }
+                cachedConfigField.SetValue(dataManager, originalCachedConfig);
+
+                if (originalFrameConfigs == null)
+                {
+                    frameConfigField.SetValue(animatorManager, null);
+                }
+                else
+                {
+                    foreach (int oid in addedWrappers)
+                        originalFrameConfigs.Remove(oid);
+                    foreach (KeyValuePair<int, LF2CharacterDataWrapper> pair in replacedWrappers)
+                        originalFrameConfigs[pair.Key] = pair.Value;
+                }
+            }
+        }
+
+        private sealed class TemporarySimulationDriverWorld : IDisposable
+        {
+            private readonly SimulationTickDriver driver;
+            private readonly GameObject temporaryDriverObject;
+            private readonly System.Reflection.FieldInfo instanceField;
+            private readonly SimulationTickDriver originalDriverInstance;
+            private readonly System.Reflection.FieldInfo worldField;
+            private readonly SimulationWorld originalWorld;
+            private readonly SimulationWorld temporaryWorld;
+
+            public TemporarySimulationDriverWorld(SimulationWorld world)
+            {
+                var flags = System.Reflection.BindingFlags.Instance |
+                            System.Reflection.BindingFlags.Static |
+                            System.Reflection.BindingFlags.NonPublic;
+                Type singletonBaseType = typeof(SimulationTickDriver).BaseType;
+                instanceField = singletonBaseType?.GetField("<Instance>k__BackingField", flags);
+                originalDriverInstance = instanceField?.GetValue(null) as SimulationTickDriver;
+                SimulationTickDriver resolvedDriver = SimulationTickDriver.Instance;
+                if (resolvedDriver == null)
+                {
+                    temporaryDriverObject = new GameObject("SelfCheck_TemporarySimulationTickDriver");
+                    resolvedDriver = temporaryDriverObject.AddComponent<SimulationTickDriver>();
+                    var awake = singletonBaseType?.GetMethod("Awake", flags);
+                    awake?.Invoke(resolvedDriver, null);
+                    if (SimulationTickDriver.Instance == null)
+                        instanceField?.SetValue(null, resolvedDriver);
+                }
+                driver = resolvedDriver;
+                Expect(driver != null && SimulationTickDriver.Instance == driver,
+                    "real opoint fixture failed to create its temporary SimulationTickDriver singleton");
+                worldField = typeof(SimulationTickDriver).GetField(
+                    "_world",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                Expect(worldField != null, "real opoint fixture SimulationTickDriver._world contract changed");
+                originalWorld = worldField.GetValue(driver) as SimulationWorld;
+                temporaryWorld = world;
+                worldField.SetValue(driver, temporaryWorld);
+            }
+
+            public void Dispose()
+            {
+                try
+                {
+                    var spawned = new List<LF2Entity>();
+                    for (int slot = 0; slot < 400; slot++)
+                    {
+                        LF2Entity entity = temporaryWorld.FindEntityByRuntimeSlotIncludingPending(slot);
+                        if (entity != null && entity.ObjectId == 999 && entity.Renderer != null)
+                            spawned.Add(entity);
+                    }
+
+                    for (int i = 0; i < spawned.Count; i++)
+                        spawned[i].FreeEntityLikeExe();
+                }
+                finally
+                {
+                    worldField.SetValue(driver, originalWorld);
+                    if (temporaryDriverObject != null)
+                    {
+                        if (Application.isPlaying)
+                            UnityEngine.Object.Destroy(temporaryDriverObject);
+                        else
+                            UnityEngine.Object.DestroyImmediate(temporaryDriverObject);
+                    }
+                    instanceField?.SetValue(null, originalDriverInstance);
+                }
+            }
+        }
+
+        private sealed class TemporaryObjectPoolInitialization : IDisposable
+        {
+            private readonly LF2ObjectPool pool;
+            private readonly GameObject temporaryPoolObject;
+            private readonly System.Reflection.FieldInfo availableField;
+            private readonly System.Reflection.FieldInfo activeField;
+            private readonly System.Reflection.FieldInfo releaseMapField;
+            private readonly System.Reflection.FieldInfo spritePoolField;
+            private readonly System.Reflection.FieldInfo cachedPrefabField;
+            private readonly object originalAvailable;
+            private readonly object originalActive;
+            private readonly object originalReleaseMap;
+            private readonly object originalSpritePool;
+            private readonly object originalCachedPrefab;
+            private readonly bool ownsState;
+
+            public TemporaryObjectPoolInitialization()
+            {
+                LF2ObjectPool resolvedPool = LF2ObjectPool.Instance;
+                if (resolvedPool == null)
+                {
+                    temporaryPoolObject = new GameObject("SelfCheck_TemporaryLF2ObjectPool");
+                    resolvedPool = temporaryPoolObject.AddComponent<LF2ObjectPool>();
+                }
+                pool = resolvedPool;
+                Expect(pool != null, "real opoint fixture requires an LF2ObjectPool singleton");
+
+                var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                Type type = typeof(LF2ObjectPool);
+                availableField = type.GetField("_availableObjects", flags);
+                activeField = type.GetField("_activeObjects", flags);
+                releaseMapField = type.GetField("_releaseTimeMap", flags);
+                spritePoolField = type.GetField("_spritePool", flags);
+                cachedPrefabField = type.GetField("_cachedLF2ObjectPrefab", flags);
+                Expect(availableField != null && activeField != null && releaseMapField != null &&
+                       spritePoolField != null && cachedPrefabField != null,
+                    "real opoint fixture LF2ObjectPool field contract changed");
+
+                originalAvailable = availableField.GetValue(pool);
+                originalActive = activeField.GetValue(pool);
+                originalReleaseMap = releaseMapField.GetValue(pool);
+                originalSpritePool = spritePoolField.GetValue(pool);
+                originalCachedPrefab = cachedPrefabField.GetValue(pool);
+                ownsState = originalAvailable == null || originalActive == null || originalReleaseMap == null;
+                if (!ownsState)
+                    return;
+
+                availableField.SetValue(pool, new LinkedList<GameObject>());
+                activeField.SetValue(pool, new HashSet<GameObject>());
+                releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
+                spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
+                cachedPrefabField.SetValue(pool, null);
+            }
+
+            public void Dispose()
+            {
+                try
+                {
+                    if (ownsState)
+                    {
+                        var objects = new HashSet<GameObject>();
+                        if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                        {
+                            foreach (GameObject item in available)
+                                if (item != null) objects.Add(item);
+                        }
+                        if (activeField.GetValue(pool) is HashSet<GameObject> active)
+                        {
+                            foreach (GameObject item in active)
+                                if (item != null) objects.Add(item);
+                        }
+
+                        foreach (GameObject item in objects)
+                        {
+                            if (Application.isPlaying)
+                                UnityEngine.Object.Destroy(item);
+                            else
+                                UnityEngine.Object.DestroyImmediate(item);
+                        }
+
+                        availableField.SetValue(pool, originalAvailable);
+                        activeField.SetValue(pool, originalActive);
+                        releaseMapField.SetValue(pool, originalReleaseMap);
+                        spritePoolField.SetValue(pool, originalSpritePool);
+                        cachedPrefabField.SetValue(pool, originalCachedPrefab);
+                    }
+                }
+                finally
+                {
+                    if (temporaryPoolObject != null)
+                    {
+                        if (Application.isPlaying)
+                            UnityEngine.Object.Destroy(temporaryPoolObject);
+                        else
+                            UnityEngine.Object.DestroyImmediate(temporaryPoolObject);
+                    }
+                }
+            }
+        }
+
+        private sealed class CurrentDatSelfCheckWeapon : LF2Weapon
+        {
+            private readonly LF2ObjectType currentDataType;
+
+            public CurrentDatSelfCheckWeapon(LF2ObjectType currentDataType)
+            {
+                this.currentDataType = currentDataType;
+            }
+
+            public override float GetSpriteWidthPxForCollision() => 100f;
+
+            public void BindData(
+                string name,
+                int objectId,
+                int weaponType,
+                LF2CharacterData data,
+                int frameId)
+            {
+                Name = name;
+                ObjectId = objectId;
+                SetWeaponType(weaponType);
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.D = FrameCache.GetFrameDataById(frameId);
+                Frame.PN = frameId;
+                Frame.N = frameId;
+                Runtime.Frame = frameId;
+                Runtime.PrevFrame2 = frameId;
+                Health.HP = 500;
+                Health.HPBound = 500;
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation() => (int)currentDataType;
+        }
+
+        private sealed class RealOpointProducerSelfCheckEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+            internal override bool UsesDynamicRuntimeSlot() => true;
+
+            public RealOpointProducerSelfCheckEntity(string label)
+            {
+                Name = $"SelfCheck_RealOpointProducer_{label}";
+                ObjectId = 739;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+
+                LF2FrameData frame = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+                frame.opoint = new ObjectPoint { kind = 1, oid = 999, action = 0, facing = 0 };
+                FrameCache.Load(new LF2CharacterDataWrapper(ObjectId, new LF2CharacterData
+                {
+                    name = Name,
+                    frames = new List<LF2FrameData> { frame },
+                }));
+                Frame.D = frame;
+                Frame.PN = 0;
+                Frame.N = 0;
+                Frame.Prev = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+            }
+
+            internal override void RunLateTailBeforePrevFrame()
+            {
+                AttackingCounter = 1;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class DynamicSlotSelfCheckEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+            internal override bool UsesDynamicRuntimeSlot() => true;
+
+            public DynamicSlotSelfCheckEntity(int stableId)
+            {
+                StableId = stableId;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class QueuedBoundarySelfCheckEntity : LF2Entity
+        {
+            public enum Phase
+            {
+                FrameLogic,
+                ObserveFrameLogic,
+            }
+
+            private readonly Phase phase;
+            private readonly ReleaseSpawnSemantic[] semantics;
+
+            public int EnqueueCount { get; private set; }
+            public int QueueCountObservedAtFrameLogic { get; private set; } = -1;
+            public OPointCreateTask LastTask { get; private set; }
+            public List<OPointCreateTask> PublishedTasks { get; } = new List<OPointCreateTask>();
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public QueuedBoundarySelfCheckEntity(Phase phase, params ReleaseSpawnSemantic[] semantics)
+            {
+                this.phase = phase;
+                this.semantics = semantics ?? Array.Empty<ReleaseSpawnSemantic>();
+                Name = $"SelfCheck_QueuedBoundary_{phase}";
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+
+                var data = new LF2CharacterData
+                {
+                    name = Name,
+                    frames = new List<LF2FrameData>
+                    {
+                        new LF2FrameData
+                        {
+                            frameId = 0,
+                            state = LF2States.Standing,
+                            wait = 1,
+                            next = 0,
+                            hit_Fa = 5,
+                        },
+                    },
+                };
+                FrameCache.Load(new LF2CharacterDataWrapper(0, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+            }
+
+            internal override bool SupportsFrameLogicBeforeAdvancePhase(LF2FrameData frame)
+            {
+                return phase == Phase.FrameLogic || phase == Phase.ObserveFrameLogic;
+            }
+
+            public override void RunFrameLogicBeforeAdvance()
+            {
+                if (phase == Phase.ObserveFrameLogic)
+                {
+                    QueueCountObservedAtFrameLogic = GetQueuedObjectPointTaskCount(LF2ObjectPointFactory.Instance);
+                    return;
+                }
+
+                if (phase == Phase.FrameLogic)
+                    Publish(semantics.Length > 0 ? semantics[0] : ReleaseSpawnSemantic.ImmediateEffect);
+            }
+
+            private void Publish(ReleaseSpawnSemantic semantic)
+            {
+                OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                task.opoint = new ObjectPoint { oid = -700 - EnqueueCount, kind = 0, action = 0 };
+                task.parent = this;
+                task.team = Team;
+                task.releaseSpawnSemantic = semantic;
+                LF2ObjectPointFactory.Instance.EnqueueCreateObject(task);
+                LastTask = task;
+                PublishedTasks.Add(task);
+                EnqueueCount++;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class QueuedBoundarySelfCheckWeapon : LF2Weapon
+        {
+            public int TransitDestroyCount { get; private set; }
+            public bool PendingDestroyObserved { get; private set; }
+
+            public void BindData(LF2CharacterData data)
+            {
+                Name = data.name;
+                ObjectId = 100;
+                SetWeaponType((int)LF2ObjectType.LightWeapon);
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(ObjectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Frame.Prev = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Health.HP = 1;
+                Health.HPBound = 1;
+            }
+
+            internal override bool TryRunLatePostOpointCleanupPhase()
+            {
+                bool completed = base.TryRunLatePostOpointCleanupPhase();
+                PendingDestroyObserved |= Runtime.PendingFlushDestroy;
+                return completed;
+            }
+
+            public override void OnTransitDestroy()
+            {
+                TransitDestroyCount++;
+                UnregisterFromWorld();
+            }
+        }
+
+        private sealed class QueuedBoundaryTransitionSelfCheckEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public QueuedBoundaryTransitionSelfCheckEntity(LF2CharacterData data)
+            {
+                Name = data.name;
+                ObjectId = 700;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(ObjectId, data));
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Frame.PN = 0;
+                Frame.N = 0;
+                Frame.Prev = 10;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Runtime.SetPosition(100, -20, 100);
+                Runtime.SyncIntegerPosition();
             }
 
             public override void Reset() { }

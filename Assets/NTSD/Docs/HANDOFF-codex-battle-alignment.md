@@ -134,17 +134,25 @@ tick 主循环主干（含 `InputPhase`/`FrameMod12`/`FrameToggle` 统一推进�
 
 ## 9. 优先级建议
 
-T0-T9 主线与 P1 BOUNDS-X 均已完成并通过针对性 Unity 运行时自检。下一步按以下纯战斗 backlog 推进；字段级 authority、Unity 现状和验收矩阵见完整差异清单 §10。
+T0-T9 主线、P1 BOUNDS-X 以及本轮 OPOINT-VIS、STEP10、TRANSFORM-SHELL、FRAME-ADV/FRAME-TICK 均已通过针对性 Unity 运行时自检。当前没有已确认但未实现的正式战斗代码差异，但这不是完整对局逐帧等价证明。最终 architect 已基于最新 diff、build 和 Unity runtime 证据完成 fresh 复核，结论 PASS、无 blocker。字段级 authority、Unity 现状和验收矩阵见完整差异清单 §10。
 
 | 优先级 | 当前推进 |
 |---|---|
 | P0 | ✅ negative `vaction` 已完成并通过 fresh Unity batch：action signed + victim raw、throw raw frame/prev2、held-sync raw→flip/abs 与原始 signed vaction cpoint 坐标 |
-| P1 | DAT transform shell、Step10 剩余 action 输入优先级、cpoint injury/stat 副作用与非角色参与者 |
-| P2 | opoint/pass visibility、per-class `frame_advance`、`frame_tick` 内部、collision snapshot/candidate 语义 |
+| P1 | ✅ OPOINT-VIS、DAT transform shell、Step10 duration/mismatch throw/dir、non-character current-DAT cpoint、injury/stat 与 `HPLost` 已通过 2026-07-15 fresh runtime matrix |
+| P2 | ✅ per-class `frame_advance` / current-DAT `frame_tick` 已通过 fresh runtime matrix；release 没有 oid9 专属 drain，不新增猜测分支 |
+| P3 | collision snapshot/candidate 权威审计未发现生产差异；保留回归矩阵与未来 snapshot 消费期间 slot reuse 风险 |
 
 T8 默认 `stage.dat` 部署由用户明确暂缓，不进入当前推进。
 
 P0 验收覆盖 `CheckCpointNegativeActionMatrix`、`CheckCpointHeldSyncVactionMatrix`、`CheckCpointThrowRawAndTransformMatrix`，包含 real `LF2Character` 与 shared-DAT shell；最新独立 Unity batch 日志明确返回“战斗运行时自检通过/自检完成”。
+
+本批已验收项：
+
+- OPOINT-VIS：`CheckQueuedObjectPointPassBoundaries` 与 late-mutation 矩阵已验证 pre-advance、natural drop、逐实体 late 发布边界、real factory queue、父回收与高/low slot 可见性；过程修复 pending-destroy active-filter。
+- STEP10：duration/mismatch tail、non-character/shared-DAT cpoint、input priority、KillStats/DamageStats 与 `HPLost` 矩阵已通过。
+- TRANSFORM-SHELL / FRAME-ADV / FRAME-TICK：已验证 character/weapon `PS.BindRuntime`、逐 slot Transit/TU、SpecialAttack 单次 physics/frame_tick/type3 drain、`PpDisplay`、state14、negative next、state4000/8000 WFC/hit-stop 顺序、type1/2/4/6/oid999 current-DAT landing，以及 cross-SimOrder pending destroy 只注销一次。
+- COLLISION-SNAPSHOT：当前 authority 审计未发现生产差异，不是修复项；对象引用 cache 与 C++ slot cache 的潜在分歧只在未来同 slot 即时复用 producer 出现时升级。
 
 ## 10. 实施进度（2026-07-14）
 
@@ -163,4 +171,4 @@ P0 验收覆盖 `CheckCpointNegativeActionMatrix`、`CheckCpointHeldSyncVactionM
 | T8（M-13 / stage） | **逻辑与接线已完成 / Unity 运行时已验证；默认资产部署暂缓** | `BattleStageCampaignLoader`、`ApplyMatchConfig` 生产接线；stage progression/runtime；立即刷敌、positive refill、清场推进、phase bound、精确身份字段与 dynamic slot 50+ | 三项 stage self-check 均通过；默认 `stage.dat` 部署由用户明确暂缓 |
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；输入 pass 分段；runtime 字段与 roster/opoint bootstrap | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 
-最新验证（2026-07-15）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**。P1 BOUNDS-X 已在 detached physical worktree `I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity-boundsverify` 通过 direct `BattleRuntimeSelfCheckEditor.RunForBatchmode` 完成 fresh Unity 运行时验证；`Unity-BattleRuntimeSelfCheck-BOUNDS-X-fresh.log` 明确包含 AssetDatabase initial refresh end、战斗运行时自检通过和自检完成。新增矩阵覆盖 base width/phase override 分离、slot/team/hit-stop、strict edges、type3/free、oid122/123 `Unk344`、grounded `YInt`、current-DAT/CLR 交叉、`XInt` 与 world lifecycle。该运行时证据不是 request 路径 PASS。request harness 已改为 update 轮询：编译/更新期间保留 request，待处理 request 会先清除旧 result，并以 in-progress gate 降低重复执行风险；不宣称绝对幂等。后续 P1 从 TRANSFORM-SHELL / STEP10 继续；这不是完整对局逐帧等价证明。T8 默认 `stage.dat` 部署暂缓。
+最新已完成验证（2026-07-15 12:36:59）：fresh `dotnet build Assembly-CSharp.csproj /v:minimal /m:1` 为 **0 errors / 18 warnings**；UnityMCP 执行最新 `BattleRuntimeSelfCheck` 后日志明确包含“战斗运行时自检通过/自检完成”。本批回归既有检查，并通过 OPOINT-VIS、STEP10、TRANSFORM-SHELL、FRAME-ADV、FRAME-TICK 新增矩阵。这是针对性断言证据，不是完整对局逐帧等价证明。COLLISION-SNAPSHOT 权威审计无生产差异，仅保留未来 pass 内同 slot 即时复用风险。最终 architect 已对最新 diff、build 与 runtime 证据完成 fresh 复核，结论 PASS、无 blocker；T8 默认 `stage.dat` 部署继续暂缓。
