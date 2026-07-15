@@ -52,6 +52,7 @@ namespace NTSD.Test
                 CheckReferencePoolObjectIdPreserved();
                 CheckSpriteDimensionsUseFullRect();
                 CheckEntityAndShadowRenderPositionFormula();
+                CheckCharacterGroundMovementUsesIntegerSnapshot();
                 CheckCatchingAttackAction();
                 CheckCatchingJumpAction();
                 CheckCatchingThrow();
@@ -132,6 +133,117 @@ namespace NTSD.Test
                 obj?.Reset();
                 pool.Release(obj);
             }
+        }
+
+        private static void CheckCharacterGroundMovementUsesIntegerSnapshot()
+        {
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_IntegerGroundMovement",
+                walking_speed = 4f,
+                walking_speedz = 2f,
+                walking_frame_rate = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 1, 0, 39, 79),
+                    Frame(5, LF2States.Walking, 1, 5, 39, 79),
+                },
+            };
+
+            LF2Character character = CreateCharacter("SelfCheck_IntegerGroundMovement", 1, data);
+            var controller = (SelfCheckController)character.Controller;
+            controller.Right = true;
+            character.Runtime.Y = -0.5;
+            character.Runtime.YInt = 0;
+            character.Runtime.Vx = 0.0;
+
+            character.ApplyWalkRunFrameInternal(heavy: false);
+            Expect(System.Math.Abs(character.Runtime.Vx - 4.0) <= 1e-12,
+                $"walking ground gate must use YInt==0 when Y is fractional; actual Vx={character.Runtime.Vx:R}");
+
+            controller.Right = false;
+            controller.Up = true;
+            const double initialVx = 123456789.125;
+            character.Runtime.Vx = initialVx;
+            character.ApplyRunLaneInternal(3f);
+            double expectedVx = initialVx * (5.0 / 6.0);
+            Expect(System.Math.Abs(character.Runtime.Vx - expectedVx) <= 1e-9,
+                $"running lane factor must preserve double 5/6 precision; actual={character.Runtime.Vx:R}, expected={expectedVx:R}");
+
+            CheckSharedCharacterDatGroundMovementUsesIntegerSnapshot();
+        }
+
+        private static void CheckSharedCharacterDatGroundMovementUsesIntegerSnapshot()
+        {
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_SharedIntegerGroundMovement",
+                walking_speed = 4f,
+                walking_speedz = 2f,
+                walking_frame_rate = 1,
+                heavy_walking_speed = 3f,
+                heavy_walking_speedz = 1f,
+                running_speed = 6f,
+                running_speedz = 3f,
+                heavy_running_speed = 7f,
+                heavy_running_speedz = 3f,
+                running_frame_rate = 1,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 1, 0, 39, 79),
+                    Frame(5, LF2States.Walking, 1, 5, 39, 79),
+                    Frame(9, LF2States.Running, 1, 9, 39, 79),
+                    Frame(10, LF2States.Running, 1, 10, 39, 79),
+                    Frame(16, LF2States.Running, 1, 16, 39, 79),
+                    Frame(17, LF2States.Running, 1, 17, 39, 79),
+                },
+            };
+
+            var shell = new SelfCheckCharacterDatShell();
+            shell.InitializeForCpoint();
+            shell.Name = "SelfCheck_SharedIntegerGroundMovement";
+            shell.ObjectId = 2;
+            shell.FrameCache.Load(new LF2CharacterDataWrapper(2, data));
+            shell.Frame.N = 0;
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(0);
+            shell.Runtime.Y = -0.5;
+            shell.Runtime.YInt = 0;
+            shell.Runtime.Dir = "right";
+            shell.Runtime.KeyRight = 1;
+            shell.Runtime.Vx = 0.0;
+
+            shell.RunPostCooldownInputPhase(1);
+            Expect(System.Math.Abs(shell.Runtime.Vx - 4.0) <= 1e-12,
+                $"shared character-DAT walking ground gate must use YInt==0; actual Vx={shell.Runtime.Vx:R}");
+
+            shell.Runtime.LinkState = 2;
+            shell.Frame.N = 0;
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(0);
+            shell.Runtime.KeyUp = 0;
+            shell.Runtime.Vx = 0.0;
+            shell.RunPostCooldownInputPhase(2);
+            Expect(System.Math.Abs(shell.Runtime.Vx - 3.0) <= 1e-12,
+                $"shared character-DAT heavy walking ground gate must use YInt==0; actual Vx={shell.Runtime.Vx:R}");
+
+            shell.Runtime.LinkState = 0;
+            shell.Frame.N = 9;
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(9);
+            shell.Runtime.KeyRight = 0;
+            shell.Runtime.KeyUp = 1;
+            shell.Runtime.Vx = 0.0;
+            shell.RunPostCooldownInputPhase(3);
+            double expectedRunVx = 6.0 * (5.0 / 6.0);
+            Expect(System.Math.Abs(shell.Runtime.Vx - expectedRunVx) <= 1e-12,
+                $"shared character-DAT running lane must apply exact double 5/6; actual={shell.Runtime.Vx:R}, expected={expectedRunVx:R}");
+
+            shell.Runtime.LinkState = 2;
+            shell.Frame.N = 16;
+            shell.Frame.D = shell.FrameCache.GetFrameDataById(16);
+            shell.Runtime.Vx = 0.0;
+            shell.RunPostCooldownInputPhase(4);
+            double expectedHeavyRunVx = 7.0 * (5.0 / 6.0);
+            Expect(System.Math.Abs(shell.Runtime.Vx - expectedHeavyRunVx) <= 1e-12,
+                $"shared character-DAT heavy running lane must preserve exact double 5/6; actual={shell.Runtime.Vx:R}, expected={expectedHeavyRunVx:R}");
         }
 
         private static void CheckSpriteDimensionsUseFullRect()

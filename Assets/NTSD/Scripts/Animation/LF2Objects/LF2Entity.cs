@@ -1357,7 +1357,7 @@ namespace NTSD.Animation.LF2Objects
         private void ApplySharedCharacterDatWalkRunMovement()
         {
             LF2CharacterData characterData = FrameCache?.Wrapper?.characterData;
-            if (characterData == null || Runtime == null || Runtime.Y != 0f)
+            if (characterData == null || Runtime == null || Runtime.YInt != 0)
                 return;
 
             int rate = characterData.walking_frame_rate;
@@ -1434,7 +1434,7 @@ namespace NTSD.Animation.LF2Objects
         private void ApplySharedCharacterDatHeavyWalkMovement()
         {
             LF2CharacterData characterData = FrameCache?.Wrapper?.characterData;
-            if (characterData == null || Runtime == null || Runtime.Y != 0f)
+            if (characterData == null || Runtime == null || Runtime.YInt != 0)
                 return;
 
             int rate = characterData.walking_frame_rate;
@@ -1717,12 +1717,12 @@ namespace NTSD.Animation.LF2Objects
             if (upPressed)
             {
                 Runtime.Vz = -characterData.heavy_running_speedz;
-                Runtime.Vx *= 5f / 6f;
+                Runtime.Vx *= 5.0 / 6.0;
             }
             else if (downPressed)
             {
                 Runtime.Vz = characterData.heavy_running_speedz;
-                Runtime.Vx *= 5f / 6f;
+                Runtime.Vx *= 5.0 / 6.0;
             }
 
             SetSharedCharacterDatMoveFrameDirect(frameId);
@@ -1736,9 +1736,15 @@ namespace NTSD.Animation.LF2Objects
             bool upPressed = Runtime.KeyUp != 0;
             bool downPressed = Runtime.KeyDown != 0;
             if (upPressed && !downPressed)
+            {
                 Runtime.Vz = -speedZ;
+                Runtime.Vx *= 5.0 / 6.0;
+            }
             else if (downPressed && !upPressed)
+            {
                 Runtime.Vz = speedZ;
+                Runtime.Vx *= 5.0 / 6.0;
+            }
         }
 
         /// <summary>

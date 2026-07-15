@@ -188,7 +188,7 @@ namespace NTSD.Animation.LF2Objects
             float walkSpeed = heavy ? characterData.heavy_walking_speed : characterData.walking_speed;
             float walkSpeedZ = heavy ? characterData.heavy_walking_speedz : characterData.walking_speedz;
 
-            if (_character.IsCurrentRightPressedInternal() && !_character.IsCurrentLeftPressedInternal() && _character.Runtime.Y == 0f)
+            if (_character.IsCurrentRightPressedInternal() && !_character.IsCurrentLeftPressedInternal() && _character.Runtime.YInt == 0)
             {
                 handled = true;
                 if (_character.Runtime.Dir == "left")
@@ -207,7 +207,7 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            if (!handled && _character.IsCurrentLeftPressedInternal() && !_character.IsCurrentRightPressedInternal() && _character.Runtime.Y == 0f)
+            if (!handled && _character.IsCurrentLeftPressedInternal() && !_character.IsCurrentRightPressedInternal() && _character.Runtime.YInt == 0)
             {
                 handled = true;
                 if (_character.Runtime.Dir == "right")
@@ -226,7 +226,7 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            if (_character.IsCurrentUpPressedInternal() && !_character.IsCurrentDownPressedInternal() && _character.Runtime.Y == 0f)
+            if (_character.IsCurrentUpPressedInternal() && !_character.IsCurrentDownPressedInternal() && _character.Runtime.YInt == 0)
             {
                 if (!vxSet)
                     StepWalkAnimation(rate, frameBase);
@@ -234,7 +234,7 @@ namespace NTSD.Animation.LF2Objects
                 _character.Runtime.Vx *= 0.7142857142857143; // P0-f-2b B2-3b: VALUE-BUG 5f/7f→0.7142857142857143 (baseline InputRuntime.cs Vx*=5.0/7.0)
             }
 
-            if (_character.IsCurrentDownPressedInternal() && !_character.IsCurrentUpPressedInternal() && _character.Runtime.Y == 0f)
+            if (_character.IsCurrentDownPressedInternal() && !_character.IsCurrentUpPressedInternal() && _character.Runtime.YInt == 0)
             {
                 if (!vxSet)
                     StepWalkAnimation(rate, frameBase);
@@ -248,12 +248,12 @@ namespace NTSD.Animation.LF2Objects
             if (_character.IsCurrentUpPressedInternal() && !_character.IsCurrentDownPressedInternal())
             {
                 _character.Runtime.Vz = -speedZ;
-                _character.Runtime.Vx *= 5f / 6f;
+                _character.Runtime.Vx *= 5.0 / 6.0;
             }
             else if (_character.IsCurrentDownPressedInternal() && !_character.IsCurrentUpPressedInternal())
             {
                 _character.Runtime.Vz = speedZ;
-                _character.Runtime.Vx *= 5f / 6f;
+                _character.Runtime.Vx *= 5.0 / 6.0;
             }
         }
 
