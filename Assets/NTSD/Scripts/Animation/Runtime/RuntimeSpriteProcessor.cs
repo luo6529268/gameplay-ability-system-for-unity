@@ -369,7 +369,14 @@ namespace NTSD.Animation
                     // ✅ 设置锚点为底部中心（0.5, 0），防止序列帧播放时上下漂移
                     Vector2 pivot = new Vector2(0.5f, 0f);
 
-                    Sprite sprite = Sprite.Create(texture, spriteRect, pivot, 100f);
+                    Sprite sprite = Sprite.Create(
+                        texture,
+                        spriteRect,
+                        pivot,
+                        100f,
+                        0,
+                        SpriteMeshType.FullRect
+                    );
                     sprite.name = $"sprite_{r}_{c}";
                     sprites.Add(sprite);
                 }

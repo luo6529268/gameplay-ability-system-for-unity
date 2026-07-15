@@ -49,6 +49,8 @@ namespace NTSD.Test
             {
                 using var singletonSceneObjects = new TemporarySingletonSceneObjectScope();
                 BattleRuntimeSelfCheckCore.RunAllChecks();
+                CheckReferencePoolObjectIdPreserved();
+                CheckSpriteDimensionsUseFullRect();
                 CheckCatchingAttackAction();
                 CheckCatchingJumpAction();
                 CheckCatchingThrow();
@@ -109,6 +111,76 @@ namespace NTSD.Test
             {
                 Debug.LogError($"[BattleRuntimeSelfCheck] 自检失败: {ex.Message}\n{ex.StackTrace}");
                 throw;
+            }
+        }
+
+        private static void CheckReferencePoolObjectIdPreserved()
+        {
+            LF2ReferencePool pool = LF2ReferencePool.Instance;
+            Expect(pool != null, "reference pool identity fixture requires an LF2ReferencePool singleton");
+
+            const int requestedObjectId = 407;
+            ILF2Object obj = pool.Get(LF2ObjectType.Character, requestedObjectId);
+            try
+            {
+                Expect(obj != null && obj.ObjectId == requestedObjectId,
+                    $"reference pool Get must preserve requested ObjectId after Reset; actual={obj?.ObjectId ?? -1}");
+            }
+            finally
+            {
+                obj?.Reset();
+                pool.Release(obj);
+            }
+        }
+
+        private static void CheckSpriteDimensionsUseFullRect()
+        {
+            GameObject fixtureObject = null;
+            Texture2D texture = null;
+            Sprite tightSprite = null;
+
+            try
+            {
+                fixtureObject = new GameObject("SelfCheck_TightSpriteDimensions");
+                SpriteRenderer renderer = fixtureObject.AddComponent<SpriteRenderer>();
+
+                texture = new Texture2D(8, 8, TextureFormat.RGBA32, false);
+                var pixels = new Color[64];
+                for (int i = 0; i < pixels.Length; i++)
+                    pixels[i] = Color.clear;
+                for (int y = 2; y < 6; y++)
+                {
+                    for (int x = 2; x < 6; x++)
+                        pixels[y * 8 + x] = Color.white;
+                }
+                texture.SetPixels(pixels);
+                texture.Apply();
+
+                tightSprite = Sprite.Create(
+                    texture,
+                    new Rect(0f, 0f, 8f, 8f),
+                    new Vector2(0.5f, 0f),
+                    100f,
+                    0,
+                    SpriteMeshType.Tight);
+                renderer.sprite = tightSprite;
+
+                var sprite = new LF2Sprite();
+                sprite.Initialize(renderer, new List<Sprite> { tightSprite });
+
+                Expect(Mathf.Approximately(sprite.GetWidthPx(), tightSprite.rect.width),
+                    $"sprite width must use full rect; actual={sprite.GetWidthPx()}, rect={tightSprite.rect.width}");
+                Expect(Mathf.Approximately(sprite.GetHeightPx(), tightSprite.rect.height),
+                    $"sprite height must use full rect; actual={sprite.GetHeightPx()}, rect={tightSprite.rect.height}");
+            }
+            finally
+            {
+                if (fixtureObject != null)
+                    DestroySelfCheckObject(fixtureObject);
+                if (tightSprite != null)
+                    DestroySelfCheckAsset(tightSprite);
+                if (texture != null)
+                    DestroySelfCheckAsset(texture);
             }
         }
 
@@ -5621,6 +5693,17 @@ namespace NTSD.Test
         }
 
         private static void DestroySelfCheckObject(GameObject target)
+        {
+            if (target == null)
+                return;
+
+            if (Application.isPlaying)
+                UnityEngine.Object.Destroy(target);
+            else
+                UnityEngine.Object.DestroyImmediate(target);
+        }
+
+        private static void DestroySelfCheckAsset(UnityEngine.Object target)
         {
             if (target == null)
                 return;

@@ -1052,7 +1052,9 @@ namespace NTSD.Animation
                         texture,
                         spriteRect.Rect,
                         new Vector2(0.5f, 0f),
-                        100f
+                        100f,
+                        0,
+                        SpriteMeshType.FullRect
                     );
                     sprite.name = spriteRect.Name;
 

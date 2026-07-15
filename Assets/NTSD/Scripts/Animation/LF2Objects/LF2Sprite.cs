@@ -231,7 +231,7 @@ namespace NTSD.Animation.LF2Objects
         public float GetWidthPx()
         {
             if (_renderer == null || _renderer.sprite == null) return 0f;
-            return _renderer.sprite.textureRect.width;
+            return _renderer.sprite.rect.width;
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace NTSD.Animation.LF2Objects
         public float GetHeightPx()
         {
             if (_renderer == null || _renderer.sprite == null) return 0f;
-            return _renderer.sprite.textureRect.height;
+            return _renderer.sprite.rect.height;
         }
     }
 }

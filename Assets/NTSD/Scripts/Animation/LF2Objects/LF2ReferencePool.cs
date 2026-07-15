@@ -138,8 +138,11 @@ namespace NTSD.Animation.LF2Objects
 
             if (obj != null)
             {
-                obj.ObjectId = oid;
                 obj.Reset();
+                // Reset clears the runtime identity as part of pooled-object cleanup.
+                // Assign the requested DAT identity only after reset so callers receive
+                // the object id they requested (and renderer setup can resolve sprites).
+                obj.ObjectId = oid;
                 _activeObjects.Add(obj);
             }
 
