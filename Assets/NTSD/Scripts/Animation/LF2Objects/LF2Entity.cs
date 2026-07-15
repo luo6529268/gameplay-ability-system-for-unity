@@ -424,7 +424,8 @@ namespace NTSD.Animation.LF2Objects
                 // top  = z - shadowH / 2
                 // Unity Sprite 默认中心 pivot，这里把矩形换算回中心点。
                 int cameraX = Match?.ReleaseCameraX ?? 0;
-                float shadowLeft = GetRuntimeXInt() + GetRenderOffsetX() - cameraX - shadowWidth * 0.5f;
+                int renderOffsetX = (int)GetRenderOffsetX();
+                float shadowLeft = GetRuntimeXInt() + renderOffsetX - cameraX - shadowWidth * 0.5f;
                 float shadowTop = GetRenderZInt() - shadowHeight * 0.5f;
                 float shadowCenterX = shadowLeft + shadowWidth * 0.5f;
                 float shadowCenterY = shadowTop + shadowHeight * 0.5f;

@@ -51,6 +51,7 @@ namespace NTSD.Test
                 BattleRuntimeSelfCheckCore.RunAllChecks();
                 CheckReferencePoolObjectIdPreserved();
                 CheckSpriteDimensionsUseFullRect();
+                CheckEntityAndShadowRenderPositionFormula();
                 CheckCatchingAttackAction();
                 CheckCatchingJumpAction();
                 CheckCatchingThrow();
@@ -182,6 +183,158 @@ namespace NTSD.Test
                 if (texture != null)
                     DestroySelfCheckAsset(texture);
             }
+        }
+
+        private static void CheckEntityAndShadowRenderPositionFormula()
+        {
+            Vector2 right = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500,
+                -12,
+                240.9f,
+                7.9f,
+                123,
+                0,
+                8,
+                false,
+                48f,
+                64f,
+                13f,
+                51f,
+                1.5f);
+            Expect(Nearly(right.x, 400.5f) && Nearly(right.y, 247.5f),
+                $"draw_entity must subtract camera X and truncate positive render/display offsets; actual={right}");
+            ExpectRenderAnchor(right, false, 384f, 228f, 48f, 64f, 13f, 51f, 1.5f,
+                "right-facing scaled DAT anchor");
+
+            Vector2 leftNegativeOffset = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500,
+                -12,
+                240.9f,
+                -7.9f,
+                123,
+                0,
+                8,
+                true,
+                48f,
+                64f,
+                13f,
+                51f,
+                1.5f);
+            Expect(Nearly(leftNegativeOffset.x, 353.5f) && Nearly(leftNegativeOffset.y, 247.5f),
+                $"draw_entity must truncate negative render offsets toward zero and preserve left-facing centerx; actual={leftNegativeOffset}");
+            ExpectRenderAnchor(leftNegativeOffset, true, 370f, 228f, 48f, 64f, 13f, 51f, 1.5f,
+                "left-facing scaled DAT anchor");
+
+            Vector2 quarterPixelPivot = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500,
+                -12,
+                240.9f,
+                7.9f,
+                123,
+                0,
+                8,
+                false,
+                47f,
+                49f,
+                22f,
+                31f,
+                1.5f);
+            Expect(Nearly(quarterPixelPivot.x, 386.25f),
+                $"scaled odd-width DAT anchor must preserve quarter-pixel pivot placement; actual={quarterPixelPivot.x}");
+            ExpectRenderAnchor(quarterPixelPivot, false, 384f, 228f, 47f, 49f, 22f, 31f, 1.5f,
+                "quarter-pixel scaled DAT anchor");
+
+            Vector2 evenHitStop = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500, -12, 240.9f, 7.9f, 123, -1, 8, false, 48f, 64f, 13f, 51f, 1.5f);
+            Vector2 oddHitStop = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500, -12, 240.9f, 7.9f, 123, -1, 9, false, 48f, 64f, 13f, 51f, 1.5f);
+            Expect(Nearly(evenHitStop.x, 397.5f) && Nearly(oddHitStop.x, 403.5f),
+                $"negative FrameDelay must alternate draw_entity X by -3/+3; even={evenHitStop.x}, odd={oddHitStop.x}");
+
+            Vector2 type3DisplayZ = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500,
+                -12,
+                205.75f,
+                7.9f,
+                123,
+                0,
+                8,
+                false,
+                48f,
+                64f,
+                13f,
+                51f,
+                1.5f);
+            Expect(Nearly(type3DisplayZ.x, 400.5f) && Nearly(type3DisplayZ.y, 212.5f),
+                $"type3 logical display Z must be truncated before draw_entity positioning; actual={type3DisplayZ}");
+
+            int shadowCenterX = 500 + (int)7.9f - 123;
+            Expect(shadowCenterX == 384,
+                $"shadow must share draw_entity render-offset truncation and camera subtraction; actual={shadowCenterX}");
+
+            CheckScaledWeaponAnchorSample("oid120", 48f, 48f, 24f, 30f, 9f);
+            CheckScaledWeaponAnchorSample("oid124", 48f, 48f, 24f, 35f, 6.5f);
+        }
+
+        private static void CheckScaledWeaponAnchorSample(
+            string sample,
+            float spriteWidth,
+            float spriteHeight,
+            float centerx,
+            float centery,
+            float expectedUncompensatedVerticalError)
+        {
+            const float visualScale = 1.5f;
+            Vector2 pivot = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                420,
+                0,
+                260f,
+                0f,
+                0,
+                0,
+                2,
+                false,
+                spriteWidth,
+                spriteHeight,
+                centerx,
+                centery,
+                visualScale);
+
+            ExpectRenderAnchor(
+                pivot,
+                false,
+                420f,
+                260f,
+                spriteWidth,
+                spriteHeight,
+                centerx,
+                centery,
+                visualScale,
+                sample);
+
+            float uncompensatedError = (visualScale - 1f) * (spriteHeight - centery);
+            Expect(Nearly(uncompensatedError, expectedUncompensatedVerticalError),
+                $"{sample} fixture must retain the observed uncompensated scale error; actual={uncompensatedError}");
+        }
+
+        private static void ExpectRenderAnchor(
+            Vector2 pivot,
+            bool facingLeft,
+            float expectedOriginX,
+            float expectedOriginY,
+            float spriteWidth,
+            float spriteHeight,
+            float centerx,
+            float centery,
+            float visualScale,
+            string context)
+        {
+            float anchorX = facingLeft
+                ? pivot.x - visualScale * (centerx - spriteWidth * 0.5f)
+                : pivot.x - visualScale * (spriteWidth * 0.5f - centerx);
+            float anchorY = pivot.y - visualScale * (spriteHeight - centery);
+            Expect(Nearly(anchorX, expectedOriginX) && Nearly(anchorY, expectedOriginY),
+                $"{context} must stay on the entity/shadow logical origin; anchor=({anchorX}, {anchorY}), expected=({expectedOriginX}, {expectedOriginY})");
         }
 
         private static void CheckCatchingAttackAction()

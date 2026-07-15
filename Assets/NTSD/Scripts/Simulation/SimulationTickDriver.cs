@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MoreMountains.Tools;
-using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Tools;
 using UnityEngine;
@@ -100,7 +99,6 @@ namespace NTSD.Simulation
 
         private int _sparkRenderFrame = 0;
         private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
-        private readonly List<LF2LivingObject> _shakeObjects = new List<LF2LivingObject>(8);
 
         protected override void OnSingletonAwake()
         {
@@ -161,33 +159,6 @@ namespace NTSD.Simulation
             }
 
             _sparkRenderer.RenderAll(_world);
-            ApplyVisualShakeAll();
-        }
-
-        private void ApplyVisualShakeAll()
-        {
-            if (_world == null) return;
-
-            _world.GetAllLivingObjects(_shakeObjects);
-            if (_shakeObjects.Count == 0) return;
-
-            int toggle = _sparkRenderFrame & 1;
-            const float ppu = 100f;
-            float xOffset = (toggle * 6 - 3) / ppu;
-
-            for (int i = 0; i < _shakeObjects.Count; i++)
-            {
-                var obj = _shakeObjects[i];
-                if (obj.ShakeTimer <= -25) continue;
-                if (obj.FrameDelay >= 0) continue;
-
-                var root = (obj as LF2Character)?.EntityTransform ?? obj.Renderer?.transform;
-                if (root == null) continue;
-
-                var pos = root.position;
-                pos.x += xOffset;
-                root.position = pos;
-            }
         }
 
         private bool CanAdvanceTick(int tickIndex)

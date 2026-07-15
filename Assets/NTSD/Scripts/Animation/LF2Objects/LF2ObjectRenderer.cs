@@ -79,7 +79,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             UpdateSprite();
-            UpdatePosition();
+            UpdatePosition(tickIndex);
             _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
             ApplyVisualShake();
         }
@@ -99,7 +99,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             UpdateSprite();
-            UpdatePosition();
+            UpdatePosition(currentTick);
             _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
         }
 
@@ -210,20 +210,20 @@ namespace NTSD.Animation.LF2Objects
         /// 朝右 dst.x = x - centerx，朝左 dst.x = x - (frame_w - centerx)，dst.y = z + y - centery。
         /// Unity 运行时 Sprite 的 pivot 是底部中心，因此这里把 C++ 绘制矩形换算为底部中心点。
         /// </summary>
-        private void UpdatePosition()
+        private void UpdatePosition(int tickIndex)
         {
             if (_logicObject == null) return;
             var ps = _logicObject.PS;
             if (ps == null) return;
 
-            ApplyCppDrawEntityPosition(ps);
+            ApplyCppDrawEntityPosition(ps, tickIndex);
             _logicObject.Sprite?.SetZ(_logicObject.GetDisplayZ() + ps.zz);
 
             // 阴影按 C++ 逻辑坐标 x/z 独立更新，不跟随图片 pivot。
             _logicObject.UpdateShadow(_renderFrameCount);
         }
 
-        private void ApplyCppDrawEntityPosition(PhysicsState ps)
+        private void ApplyCppDrawEntityPosition(PhysicsState ps, int tickIndex)
         {
             var frame = _logicObject.Frame?.D;
 
@@ -235,25 +235,54 @@ namespace NTSD.Animation.LF2Objects
             // C++ release draw_entity 使用的是 x_int / y_int / z_int。
             // 这里不能直接吃 Unity 侧的浮点逻辑坐标，否则同一实体在出生后续拍、
             // 摩擦衰减和 type=3/oid=999 这类路径上会出现和正式版不一致的像素漂移。
-            var runtime = _logicObject.Runtime;
-            int drawX = _logicObject.GetRuntimeXInt() + Mathf.RoundToInt(_logicObject.GetRenderOffsetX());
-            int drawY = _logicObject.GetRuntimeYInt();
-            int drawDisplayZ = _logicObject.GetRenderZInt();
-
-            float drawLeft = ps.dir == "left"
-                ? drawX - (spriteWidth - centerx)
-                : drawX - centerx;
-            float drawTop = drawDisplayZ + drawY - centery;
-            float pivotX = drawLeft + spriteWidth * 0.5f;
-            float pivotScreenY = drawTop + spriteHeight;
+            int cameraX = _logicObject.Match?.ReleaseCameraX ?? 0;
+            Vector2 pivot = ComputeEntityBottomCenterPivotPixels(
+                _logicObject.GetRuntimeXInt(),
+                _logicObject.GetRuntimeYInt(),
+                _logicObject.GetDisplayZ(),
+                _logicObject.GetRenderOffsetX(),
+                cameraX,
+                _logicObject.FrameDelay,
+                tickIndex,
+                ps.dir == "left",
+                spriteWidth,
+                spriteHeight,
+                centerx,
+                centery,
+                NTSDRenderSpace.BattleVisualScale);
 
             Transform rootTransform = transform.parent != null ? transform.parent : transform;
             rootTransform.localScale = NTSDRenderSpace.RenderScale;
-            Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(pivotX, pivotScreenY, rootTransform.position.z);
-            rootTransform.position = NTSDRenderSpace.SnapWorldPosition(worldPos);
+            Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(pivot.x, pivot.y, rootTransform.position.z);
+            rootTransform.position = worldPos;
 
             if (_visualTransform != null)
                 _visualTransform.localPosition = Vector3.zero;
+        }
+
+        internal static Vector2 ComputeEntityBottomCenterPivotPixels(
+            int xInt,
+            int yInt,
+            float displayZ,
+            float renderOffsetX,
+            int cameraX,
+            int frameDelay,
+            int tickIndex,
+            bool facingLeft,
+            float spriteWidth,
+            float spriteHeight,
+            float centerx,
+            float centery,
+            float visualScale)
+        {
+            int extraX = frameDelay < 0 ? 6 * (tickIndex & 1) - 3 : 0;
+            int screenX = xInt + (int)renderOffsetX - cameraX + extraX;
+            int screenY = (int)displayZ + yInt;
+            float pivotX = facingLeft
+                ? screenX + visualScale * (centerx - spriteWidth * 0.5f)
+                : screenX + visualScale * (spriteWidth * 0.5f - centerx);
+            float pivotY = screenY + visualScale * (spriteHeight - centery);
+            return new Vector2(pivotX, pivotY);
         }
         private void ApplyVisualShake()
         {
