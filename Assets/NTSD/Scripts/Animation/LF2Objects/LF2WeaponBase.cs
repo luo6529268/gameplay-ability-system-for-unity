@@ -383,6 +383,7 @@ namespace NTSD.Animation.LF2Objects
         {
             AllocateStableId();
 
+            PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
             Trans = new FrameTransistor(this);
             Frame = new LF2FrameInfo();
@@ -512,10 +513,24 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimTU(int tickIndex)
         {
+            int currentDataType = GetCurrentDataObjectTypeForSimulation();
+            if (currentDataType == (int)LF2ObjectType.Character)
+            {
+                RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
+                return;
+            }
+            if (!UsesNativeWeaponFrameAdvanceForCurrentData(currentDataType))
+            {
+                RunSharedNonCharacterDatFrameAdvance();
+                return;
+            }
+
             RunFrameAdvancePhysics();
             ConsumeForcedRuntimeIntPosition();
             RefreshRuntimeSnapshot();
         }
+
+        protected abstract bool UsesNativeWeaponFrameAdvanceForCurrentData(int currentDataType);
 
         /// <summary>
         /// 武器晚阶段销毁检查。

@@ -36,6 +36,11 @@ namespace NTSD.Animation.LF2Objects
         public override bool IsHeavy => WeaponType == 2;
         public override int WeaponType => Runtime.EntityType;
 
+        protected override bool UsesNativeWeaponFrameAdvanceForCurrentData(int currentDataType)
+        {
+            return currentDataType == _poolWeaponType;
+        }
+
 
         // 对象池复用时，需要恢复“这个实例当前代表哪一种武器”。
         public void SetWeaponType(int weaponType)
@@ -250,115 +255,10 @@ namespace NTSD.Animation.LF2Objects
         protected override void OnLanded()
         {
             int wt = WeaponType;
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
-            int dropHurt = charData?.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
             double oldVy = _lastLandingVyBeforeClamp; // P0-f-2b B1: float→double (landing Vy, baseline oldVy is double)
 
-            if (wt == 3) return;
-
-            if (wt == 1)
-            {
-                FlightCounter -= dropHurt;
-                Runtime.Vz = 0f;
-
-                int frameState1 = CurrentFrameState();
-
-                if (oldVy > 9.9) // P0-f-2b B1: 9.9f→9.9 (value-affecting: 9.9f promotes to 9.8999996 as double)
-                {
-                    if (frameState1 == LF2States.WeaponThrowing) // 1002
-                    {
-                        Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
-                        Runtime.Dir = Runtime.Dir == "right" ? "left" : "right";
-                        ImmediateFrame(7);
-                        Runtime.WeaponState = LF2States.WeaponInSky;
-                        Runtime.Vy = NTSDGlobal.Gameplay.WeaponType1BigBounceVy; // -8
-                        PlaySound(WeaponDropSound);
-                    }
-                    else
-                    {
-                        ImmediateFrame(0x3C); // frame=60
-                        Runtime.WeaponState = LF2States.WeaponOnGround;
-                        AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
-                        Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
-                        Runtime.Vy = 0f;
-                    }
-                }
-                else
-                {
-                    ImmediateFrame(frameState1 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
-                    Runtime.WeaponState = frameState1 == LF2States.WeaponThrowing
-                        ? LF2States.WeaponJustOnGround
-                        : LF2States.WeaponOnGround;
-                    AttackingCounter = 0; // C++ release LABEL_148: Entity::attacking=0
-                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType1VxFactor; // 0.5
-                    Runtime.Vy = 0f;
-                }
+            if (ApplyCurrentDatNonCharacterLanding(wt, Frame?.D, oldVy, crossedGround: true))
                 return;
-            }
-
-            if (wt == 2)
-            {
-                FlightCounter -= 1;
-
-                if (oldVy > NTSDGlobal.Gameplay.WeaponType2BigBounceThreshold) // 9.0
-                {
-                    Runtime.Dir = Runtime.Dir == "right" ? "left" : "right";
-                    Runtime.Vy = NTSDGlobal.Gameplay.WeaponType2BigBounceVy; // -5
-                    Runtime.WeaponState = LF2States.HeavyWeaponInSky;
-                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
-                    PlaySound(WeaponDropSound);
-                }
-                else
-                {
-                    FlightCounter -= dropHurt;
-                    if (FlightCounter < 0) FlightCounter = 0;
-                    Runtime.Vy = 0f;
-                    ImmediateFrame(20);
-                    Runtime.WeaponState = LF2States.HeavyWeaponOnGround;
-                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType2VxFactor; // 0.5
-                    AttackingCounter = 0; // C++ release LABEL_148 鈫?Entity::attacking=0
-                }
-                return;
-            }
-
-            if (wt == 4 || wt == 6)
-            {
-                FlightCounter -= dropHurt;
-                if (wt == 6 && Health != null && Health.HP <= 0)
-                    FlightCounter = -1;
-
-                Runtime.Vz = 0f;
-
-                int frameState46 = CurrentFrameState();
-                bool isFlyState46 = frameState46 == LF2States.WeaponThrowing || frameState46 == LF2States.WeaponInSky;
-                bool highSpeed46 = oldVy > 8.5             // P0-f-2b B1: 8.5f→8.5 (chain double; baseline oldVy>8.5)
-                                   || Runtime.Vx < -10.0   // -10f→-10.0
-                                   || Runtime.Vx > 10.0;   // 10f→10.0
-                bool bigBounce46 = highSpeed46          // dbl_443358 = 8.5
-                                   && isFlyState46;
-
-                if (bigBounce46)
-                {
-                    Runtime.Vy = oldVy * -0.7;              // P0-f-2b B1: -0.7f→-0.7 (value-affecting; baseline Vy=oldVy*-0.7)
-                    if (Runtime.Vy < -10.0) Runtime.Vy = -10.0;  // C++ release 纭 -10.0锛屽師璇啓涓?-2.5
-                    ImmediateFrame(0);
-                    Runtime.WeaponState = LF2States.WeaponInSky;
-                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
-                    PlaySound(WeaponDropSound);
-                }
-                else
-                {
-                    Runtime.Vy = 0f;
-                    Runtime.Vx *= NTSDGlobal.Gameplay.WeaponType46VxFactor; // 0.7
-                    Runtime.Zz = 0;
-                    ImmediateFrame(frameState46 == LF2States.WeaponThrowing ? 0x46 : 0x3C);
-                    Runtime.WeaponState = frameState46 == LF2States.WeaponThrowing
-                        ? LF2States.WeaponJustOnGround
-                        : LF2States.WeaponOnGround;
-                    AttackingCounter = 0; // C++ release type=4/6 灏忓脊锛欵ntity::attacking=0
-                }
-                return;
-            }
 
             var cd = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
 

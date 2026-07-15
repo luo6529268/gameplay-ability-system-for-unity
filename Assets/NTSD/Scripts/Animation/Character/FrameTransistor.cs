@@ -11,7 +11,6 @@ namespace NTSD.Animation
         private int wait = 1;
         private int waitCounter;
         private int next = 999;
-        private bool switchDirAfterTrans;
 
         private readonly LF2Entity _entity;
 
@@ -65,16 +64,10 @@ namespace NTSD.Animation
 
         /// <summary>
         /// 设置下一帧请求。
-        /// 负帧沿用现有 Unity 约定：记录翻面请求，实际换帧时再应用。
+        /// 负帧保持 DAT 原始值，由统一 frame_tick 在真正换帧前翻面。
         /// </summary>
         public void SetNext(int value)
         {
-            if (value < 0)
-            {
-                value = -value;
-                switchDirAfterTrans = true;
-            }
-
             next = value;
             SyncRuntime();
         }
@@ -91,7 +84,6 @@ namespace NTSD.Animation
             if (directWaitCounter != int.MinValue)
                 waitCounter = directWaitCounter;
 
-            switchDirAfterTrans = false;
             SyncRuntime();
         }
 
@@ -109,95 +101,22 @@ namespace NTSD.Animation
         }
 
         /// <summary>
-        /// 按 C++ release frame_tick 顺序推进。
-        /// frame 变化先清 attacking，然后 attacking++，超过 wait 才按 next 换帧。
-        /// 只有未早退时，尾部才会把 wait_counter 同步为当前 frame id。
+        /// 委托实体唯一的 current-DAT frame_tick 实现，避免适配器维护第二套顺序。
         /// </summary>
         public bool Trans()
         {
-            NTSD.Tools.Log.LogState(_entity?.Name, "Trans",
-                $"wait={wait} waitCounterFrame={waitCounter} attacking={_entity?.AttackingCounter ?? 0} next={next}");
-
             if (_entity == null)
             {
                 SyncRuntime();
                 return false;
             }
+            return _entity.RunCommonFrameTickFromTransistor();
+        }
 
-            int currentFrame = _entity.Frame?.N ?? 0;
-            if (currentFrame != waitCounter)
-            {
-                _entity.OnFrameTickFrameChangedFromWaitCounter();
-                _entity.AttackingCounter = 0;
-            }
-
-            _entity.AttackingCounter++;
-
-            if (!_entity.OnFrameTickBeforeWaitAdvance(waitCounter))
-            {
-                waitCounter = _entity.Frame?.N ?? currentFrame;
-                SyncRuntime();
-                return false;
-            }
-
-            currentFrame = _entity.Frame?.N ?? currentFrame;
-
-            if (_entity.AttackingCounter <= wait)
-            {
-                waitCounter = currentFrame;
-                SyncRuntime();
-                return true;
-            }
-
-            _entity.AttackingCounter = 0;
-
-            if (next == 0)
-            {
-                waitCounter = currentFrame;
-                SyncRuntime();
-                return true;
-            }
-
-            int targetFrame = next;
-            bool switchDir = switchDirAfterTrans;
-            bool allowJumpInit = true;
-
-            if (targetFrame == 999)
-            {
-                targetFrame = _entity.ResolveFrameTickNext999Target(out allowJumpInit);
-            }
-            else if (targetFrame < 0)
-            {
-                targetFrame = -targetFrame;
-                switchDir = !switchDir;
-            }
-
-            if (targetFrame < 0)
-            {
-                waitCounter = 0;
-                switchDirAfterTrans = false;
-                SyncRuntime();
-                return false;
-            }
-
-            int previousFrame = waitCounter;
-            _entity.OnFrameTickTransit(targetFrame, switchDir);
-            switchDirAfterTrans = false;
-
-            // 对齐 C++ release：
-            // frame 改写后，如果 frame<0、frame>=400 或目标帧不存在，会在这里直接 return，
-            // 不再执行 jump_init / PP / turn，也不会写 wait_counter=frame。
-            int frameAfterTransit = _entity.Frame?.N ?? targetFrame;
-            if (frameAfterTransit < 0 || frameAfterTransit >= 400 || _entity.Frame?.D == null)
-            {
-                SyncRuntime();
-                return false;
-            }
-
-            _entity.OnFrameTickAfterWaitAdvance(previousFrame, allowJumpInit);
-            waitCounter = _entity.Frame?.N ?? targetFrame;
+        public void SyncWaitCounterFrame(int frameId)
+        {
+            waitCounter = frameId;
             SyncRuntime();
-            return true;
         }
 
         /// <summary>
@@ -208,7 +127,6 @@ namespace NTSD.Animation
             wait = 1;
             waitCounter = _entity?.Frame?.N ?? 0;
             next = 999;
-            switchDirAfterTrans = false;
             if (_entity != null)
                 _entity.AttackingCounter = 0;
 

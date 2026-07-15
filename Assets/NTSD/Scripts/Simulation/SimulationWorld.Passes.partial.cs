@@ -46,6 +46,11 @@ namespace NTSD.Simulation
             AiInputAndComboAll(tickIndex);
         }
 
+        public void FlushQueuedObjectPointTasks()
+        {
+            LF2ObjectPointFactory.Instance?.FlushTasks();
+        }
+
         public void PostCooldownHumanInputAll(int tickIndex)
         {
             RunDeferredMutationEntityPass(entity =>
@@ -308,17 +313,20 @@ namespace NTSD.Simulation
             _ticking = true;
             try
             {
+                // C++ frame_advance scans objects[0..399] and completes one entity before
+                // advancing to the next slot. The dynamic scan lets a flushed producer in a
+                // later slot participate this tick; a reused lower slot waits until next tick.
                 ForEachEntityByRuntimeSlot(entity =>
                 {
                     entity.SimTransit(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
                         return;
-                    RefreshRuntimeSnapshot(entity);
-                });
 
-                ForEachEntityByRuntimeSlot(entity =>
-                {
                     entity.SimTU(tickIndex);
+                    // Some legacy hit_Fa producers still live inside SimTU. Flush while
+                    // the producer is valid so a later runtime slot can run this tick.
+                    if (entity is LF2SpecialAttack)
+                        FlushQueuedObjectPointTasks();
                     if (!IsActiveForCurrentPass(entity))
                         return;
                     RefreshRuntimeSnapshot(entity);
@@ -633,6 +641,7 @@ namespace NTSD.Simulation
                     return;
 
                 entity.RunFrameLogicBeforeAdvance();
+                FlushQueuedObjectPointTasks();
                 if (!IsActiveForCurrentPass(entity))
                     return;
                 RefreshRuntimeSnapshot(entity);
@@ -706,8 +715,13 @@ namespace NTSD.Simulation
                     obj.SimEntityCollision(tickIndex);
                     if (!IsActiveForCurrentPass(obj))
                         continue;
-                    if (HandleLateFrameTickExit(obj))
+                    bool exitedLateFrameTick = HandleLateFrameTickExit(obj);
+                    if (exitedLateFrameTick)
+                    {
+                        if (obj is LF2SpecialAttack)
+                            FlushQueuedObjectPointTasks();
                         continue;
+                    }
                     RefreshRuntimeSnapshot(obj);
 
                     obj.RunLateDeathOpointPreCleanupPhase();
@@ -721,13 +735,16 @@ namespace NTSD.Simulation
                     if (!IsActiveForCurrentPass(obj))
                         continue;
 
-                    if (obj.TryRunLatePostOpointCleanupPhase())
+                    bool completedLateCleanup = obj.TryRunLatePostOpointCleanupPhase();
+                    if (completedLateCleanup)
                     {
+                        FlushQueuedObjectPointTasks();
                         RefreshRuntimeSnapshot(obj);
                         continue;
                     }
 
                     obj.RunLateTailBeforePrevFrame();
+                    FlushQueuedObjectPointTasks();
                     if (!IsActiveForCurrentPass(obj))
                         continue;
 
@@ -951,6 +968,8 @@ namespace NTSD.Simulation
                 if (entity.Runtime != null && tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
                     return;
                 entity.SimObjectInteraction(tickIndex);
+                if (entity is LF2SpecialAttack)
+                    FlushQueuedObjectPointTasks();
                 if (!IsActiveForCurrentPass(entity))
                     return;
                 RefreshRuntimeSnapshot(entity);

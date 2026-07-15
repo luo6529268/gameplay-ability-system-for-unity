@@ -110,6 +110,7 @@ namespace NTSD.Animation.LF2Objects
             Frame = new LF2FrameInfo();
             Effect = new LF2EffectState();
             Health = new LF2Health();
+            PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
             _hitCounters.BindRuntime(Runtime);
             Sprite = new LF2Sprite();
@@ -1034,7 +1035,10 @@ namespace NTSD.Animation.LF2Objects
 
         public override void SimTransit(int tickIndex)
         {
-            RunReleaseFrameAdvance(tickIndex, consumeInitialRuntimePosition: true);
+            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                RunReleaseFrameAdvance(tickIndex, consumeInitialRuntimePosition: true);
+            else
+                RunSharedNonCharacterDatFrameAdvance();
         }
 
         private bool RunReleaseFrameAdvance(int tickIndex, bool consumeInitialRuntimePosition)
@@ -2155,33 +2159,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected override void ApplyCommonCaughtExitHitStop(int previousFrameId)
         {
-            LF2FrameData prevFrame = FrameCache?.GetFrameDataById(previousFrameId);
-            if (prevFrame == null || prevFrame.state != LF2States.Lying)
-                return;
-
-            int newState = Frame?.D?.state ?? 0;
-            if (newState == LF2States.Falling)
-                return;
-
-            int oid = FrameCache?.Wrapper?.characterId ?? -1;
-            int teamKey = RelationTeam != 0 ? RelationTeam : Team;
-            bool aiControlled = teamKey == 5 || Runtime?.SlotIndex >= 20;
-
-            if (aiControlled)
-            {
-                int difficulty = Match?.Difficulty ?? 0;
-                if (difficulty == 2)
-                    return;
-
-                int gameMode = Match?.Runtime?.Match?.BattleGameModeId ?? 0;
-                bool oidSkip = (gameMode == 1 || gameMode == 4) &&
-                               (oid / 5 == 3) &&
-                               oid != 38;
-                if (oidSkip)
-                    return;
-            }
-
-            HitStun = 15;
+            base.ApplyCommonCaughtExitHitStop(previousFrameId);
         }
 
         protected override bool IsFrameTickLeftPressed()

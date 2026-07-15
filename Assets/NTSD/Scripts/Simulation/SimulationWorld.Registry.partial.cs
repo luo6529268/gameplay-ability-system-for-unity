@@ -249,17 +249,33 @@ namespace NTSD.Simulation
 
         private void UnregisterImmediate(ISimObject obj)
         {
-            int simOrder = obj.SimOrder;
-            if (!_buckets.TryGetValue(simOrder, out Bucket bucket))
+            int bucketKey = obj.SimOrder;
+            _buckets.TryGetValue(bucketKey, out Bucket bucket);
+            if (bucket == null || !bucket.items.Contains(obj))
             {
-                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: SimOrder={simOrder}");
-                return;
+                bucket = null;
+                List<int> bucketKeys = GetBucketKeySnapshot();
+                if (bucketKeys != null)
+                {
+                    for (int i = 0; i < bucketKeys.Count; i++)
+                    {
+                        int candidateKey = bucketKeys[i];
+                        if (!_buckets.TryGetValue(candidateKey, out Bucket candidateBucket) ||
+                            !candidateBucket.items.Contains(obj))
+                        {
+                            continue;
+                        }
+
+                        bucketKey = candidateKey;
+                        bucket = candidateBucket;
+                        break;
+                    }
+                }
             }
 
-            bool removed = bucket.items.Remove(obj);
-            if (!removed)
+            if (bucket == null || !bucket.items.Remove(obj))
             {
-                Debug.LogWarning($"[SimulationWorld] Object not found in bucket: SimOrder={simOrder}, StableId={obj.StableId}");
+                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
                 return;
             }
 
@@ -269,9 +285,9 @@ namespace NTSD.Simulation
             obj.OnRemoved(_context);
 
             if (bucket.items.Count == 0)
-                _buckets.Remove(simOrder);
+                _buckets.Remove(bucketKey);
 
-            Debug.Log($"[SimulationWorld] Unregistered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
+            Debug.Log($"[SimulationWorld] Unregistered: SimOrder={bucketKey}, StableId={obj.StableId}, Type={obj.GetType().Name}");
         }
 
         private void FlushPendingUnregister()
@@ -284,13 +300,19 @@ namespace NTSD.Simulation
 
         private void FlushPendingEntityDestroy()
         {
-            GetAllEntities(_entityScratch);
+            // Pending entities are deliberately hidden from active pass queries. Scan the
+            // runtime registry directly so C++ free_entity-at-late-tail still finalizes them.
+            _entityScratch.Clear();
+            for (int runtimeSlot = 0; runtimeSlot < MaxRuntimeSlots; runtimeSlot++)
+            {
+                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
+                if (entity?.Runtime != null && entity.Runtime.PendingFlushDestroy)
+                    _entityScratch.Add(entity);
+            }
+
             for (int i = 0; i < _entityScratch.Count; i++)
             {
                 LF2Entity entity = _entityScratch[i];
-                if (entity?.Runtime == null || !entity.Runtime.PendingFlushDestroy)
-                    continue;
-
                 entity.Runtime.PendingFlushDestroy = false;
                 entity.OnTransitDestroy();
             }

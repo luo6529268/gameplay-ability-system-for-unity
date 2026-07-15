@@ -78,7 +78,6 @@ namespace NTSD.Animation.LF2Objects
 
         protected override bool TUEvent()
         {
-            Generic_TU();
             return DispatchCurrentStateEvent("TU");
         }
 
@@ -89,11 +88,6 @@ namespace NTSD.Animation.LF2Objects
         }
 
         #region 通用状态处理
-
-        private void Generic_TU()
-        {
-            SpecialAttackDynamics();
-        }
 
         private void Generic_Frame()
         {
@@ -109,61 +103,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 SetFrameDirect(1000);
             }
-        }
-
-        private void SpecialAttackDynamics()
-        {
-            if (PS == null) return;
-
-            if (PS.vx > 0 && !PS.xBoundPositive)
-                PS.x += PS.vx;
-            else if (PS.vx < 0 && !PS.xBoundNegative)
-                PS.x += PS.vx;
-
-            if (PS.vz > 0 && !PS.zBoundPositive)
-                PS.z += PS.vz;
-            else if (PS.vz < 0 && !PS.zBoundNegative)
-                PS.z += PS.vz;
-
-            PS.xBoundPositive = false;
-            PS.xBoundNegative = false;
-            PS.zBoundPositive = false;
-            PS.zBoundNegative = false;
-
-            var frame = Frame.D;
-            if (frame != null && frame.hit_j > 0)
-            {
-                PS.z += frame.hit_j - 50;
-            }
-
-            if (PS.y >= 0)
-            {
-                if (PS.vx > 0.0001f)
-                {
-                    PS.vx -= 1.0f;
-                    if (PS.vx < 0.0001f) PS.vx = 0f;
-                }
-                else if (PS.vx < -0.0001f)
-                {
-                    PS.vx += 1.0f;
-                    if (PS.vx > -0.0001f) PS.vx = 0f;
-                }
-
-                if (PS.vz > 0.0001f)
-                {
-                    PS.vz -= 1.0f;
-                    if (PS.vz < 0.0001f) PS.vz = 0f;
-                }
-                else if (PS.vz < -0.0001f)
-                {
-                    PS.vz += 1.0f;
-                    if (PS.vz > -0.0001f) PS.vz = 0f;
-                }
-            }
-
-            PS.y += PS.vy;
-            if (PS.y > 0f) PS.y = 0f;
-            // C++ release：entity_type/type=3 的特殊攻击对象不追加重力。
         }
 
         private void Generic_Die()
@@ -941,50 +880,9 @@ namespace NTSD.Animation.LF2Objects
                 PlaySound(Frame.D.sound);
         }
 
-        /// <summary>
-        /// Transit 阶段：推进当前帧请求，语义对齐 C++ release 的 frame/wait/next 字段。
-        /// </summary>
-        public override void SimTransit(int tickIndex)
+        public override void SimFrameTick(int tickIndex)
         {
-            Trans?.Trans();
-        }
-
-        /// <summary>
-        /// EntityCollision 阶段：处理攻击豁免递减和技能对象碰撞副作用。
-        /// </summary>
-        public override void SimEntityCollision(int tickIndex)
-        {
-            var fD = Frame?.D;
-
-            if (AttackExempt > 0) AttackExempt--;
-
-            if (GrabbedBy < 0) return;
-
-            if (fD != null && fD.cpoint != null && fD.cpoint.kind == 2) return;
-
-            if (ShakeTimer > 0) ShakeTimer--;
-            else if (ShakeTimer < 0) ShakeTimer++;
-
-            if (fD != null && fD.hit_Uj < 0 && NTSDGlobal.MPEnabled && Health != null)
-            {
-                if (Health.PP < fD.hit_Uj)
-                    SetFrameDirect(fD.hit_a);
-                else
-                    Health.PP += fD.hit_Uj;
-            }
-
-            if (Frame?.N == 202)
-                ShakeTimer = 20;
-
-            if (fD != null && fD.hit_a > 0 && Health != null)
-            {
-                Health.HP -= fD.hit_a;
-                if (Health.HP <= 0)
-                {
-                    Health.HP = 0;
-                    SetFrameDirect(fD.hit_d);
-                }
-            }
+            RunCommonFrameTick();
         }
 
         /// <summary>
@@ -1006,6 +904,18 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimTU(int tickIndex)
         {
+            int dataType = GetCurrentDataObjectTypeForSimulation();
+            if (dataType == (int)LF2ObjectType.Character)
+            {
+                RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
+                return;
+            }
+            if (!RunSharedNonCharacterDatFrameAdvance())
+                return;
+
+            if (dataType != (int)LF2ObjectType.SpecialAttack)
+                return;
+
             int currentState = GetState();
 
             if (currentState != _lastState)

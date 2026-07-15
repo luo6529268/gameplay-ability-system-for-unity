@@ -177,10 +177,18 @@ namespace NTSD.Animation.LF2Objects
                     LF2Entity holder = _character.Match?.FindEntityByRuntimeSlotForQuery(_character.HolderCopySlot);
                     if (holder != null)
                         holder.KillStat++;
+
+                    int killStatIndex = victimEntity.Unk344;
+                    if (_character.Match?.KillStats != null &&
+                        killStatIndex > 0 &&
+                        killStatIndex < 3 &&
+                        killStatIndex < _character.Match.KillStats.Length)
+                    {
+                        _character.Match.KillStats[killStatIndex]++;
+                    }
                 }
 
                 victimEntity.Health.HP -= actualInjury;
-                victimEntity.Health.HPLost += actualInjury;
                 victimEntity.Health.HPBound -= actualInjury / 3;
                 victimEntity.ComboCountVic += actualInjury;
                 _character.AttackingCounter = 1;
@@ -190,6 +198,15 @@ namespace NTSD.Animation.LF2Objects
                 LF2Entity comboHolder = _character.Match?.FindEntityByRuntimeSlotForQuery(_character.HolderCopySlot);
                 if (comboHolder != null)
                     comboHolder.ComboCountAtk += actualInjury;
+
+                int damageStatIndex = victimEntity.Unk344;
+                if (_character.Match?.DamageStats != null &&
+                    damageStatIndex > 0 &&
+                    damageStatIndex < 3 &&
+                    damageStatIndex < _character.Match.DamageStats.Length)
+                {
+                    _character.Match.DamageStats[damageStatIndex] += actualInjury;
+                }
                 return;
             }
 
