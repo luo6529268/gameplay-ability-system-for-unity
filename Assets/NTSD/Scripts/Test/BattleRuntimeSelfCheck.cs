@@ -93,6 +93,7 @@ namespace NTSD.Test
                 CheckAudit7LateOpointPrecisionContracts();
                 CheckRuntimeSlotAllocatorAndProfileContracts();
                 CheckPagedRuntimeSlotTableContracts();
+                CheckRuntimeRestStoreContracts();
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
                 CheckLooseQuadtreeShadowBroadphaseContracts();
@@ -524,6 +525,146 @@ namespace NTSD.Test
                    world.FindEntityByRuntimeSlotForQuery(256) == null &&
                    world.ObjectCount == 0,
                 "production runtime registry reset must clear cross-page occupant lookups");
+        }
+
+        private static void CheckRuntimeRestStoreContracts()
+        {
+            var store = new RuntimeRestStore(400);
+            Expect(store.LogicalCapacity == 400 &&
+                   store.MaterializedARestPageCount == 0 &&
+                   store.MaterializedVRestPageCount == 0,
+                "runtime rest storage must begin empty without materializing dense pages");
+
+            Expect(store.SetARest(20, 7) && store.GetARest(20) == 7 &&
+                   store.SetVRest(10, 20, 9) && store.GetVRest(10, 20) == 9 &&
+                   store.GetVRest(20, 10) == 0,
+                "runtime rest storage must keep ARest separate and VRest directional by victim/attacker slot");
+            Expect(store.SetVRest(399, 0, 11) && store.GetVRest(399, 0) == 11 &&
+                   store.SetVRest(33, 33, 13) && store.GetVRest(33, 33) == 13,
+                "runtime rest storage must retain far pairs independent of space and support self-rest pairs");
+
+            int entriesBeforeZeroRemoval = store.VRestEntryCount;
+            Expect(store.SetVRest(10, 20, 0) && store.GetVRest(10, 20) == 0 &&
+                   store.VRestEntryCount == entriesBeforeZeroRemoval - 1,
+                "runtime rest storage must remove zero VRest values instead of retaining sparse entries");
+
+            store.SetARest(12, 5);
+            store.SetVRest(12, 33, 17);
+            store.SetVRest(12, 44, 19);
+            store.SetVRest(33, 12, 21);
+            store.SetVRest(44, 12, 23);
+            store.SetVRest(33, 44, 25);
+            Expect(store.ResetSlot(12) && store.GetARest(12) == 0 &&
+                   store.GetVRest(12, 33) == 0 && store.GetVRest(12, 44) == 0 &&
+                   store.GetVRest(33, 12) == 0 && store.GetVRest(44, 12) == 0 &&
+                   store.GetVRest(33, 44) == 25,
+                "resetting one runtime slot must clear its ARest, victim row, and every peer attacker column only");
+
+            var growing = new RuntimeRestStore(511);
+            growing.SetARest(510, 3);
+            growing.SetVRest(510, 1, 5);
+            RuntimeRestStore.DiagnosticSnapshot beforeGrow = growing.CaptureDiagnosticSnapshot();
+            Expect(growing.GrowTo(700) && growing.LogicalCapacity == 700 &&
+                   growing.GetARest(510) == 3 && growing.GetVRest(510, 1) == 5 &&
+                   growing.SetARest(699, 7) && growing.SetVRest(699, 699, 9),
+                "runtime rest storage growth from 511 to 700 must preserve old values and address the new logical tail");
+            Expect(!growing.GrowTo(699) && !growing.SetARest(700, 1) &&
+                   !growing.SetVRest(699, 700, 1) && !growing.SetVRest(700, 699, 1) &&
+                   growing.GetARest(700) == 0 && growing.GetVRest(699, 700) == 0,
+                "runtime rest storage must reject shrink and guard the physical page tail beyond logical capacity");
+
+            RuntimeRestStore.DiagnosticSnapshot grownSnapshot = growing.CaptureDiagnosticSnapshot();
+            Expect(grownSnapshot.ARestEntries.Count == 2 &&
+                   grownSnapshot.ARestEntries[0].AttackerSlot == 510 &&
+                   grownSnapshot.ARestEntries[1].AttackerSlot == 699 &&
+                   grownSnapshot.VRestEntries.Count == 2 &&
+                   grownSnapshot.VRestEntries[0].VictimSlot == 510 &&
+                   grownSnapshot.VRestEntries[1].VictimSlot == 699,
+                "runtime rest diagnostic snapshots must project entries in deterministic slot order");
+
+            growing.ResetWorld();
+            Expect(growing.ARestEntryCount == 0 && growing.VRestEntryCount == 0 &&
+                   growing.VRestRowCount == 0 && growing.MaterializedARestPageCount == 0 &&
+                   growing.MaterializedVRestPageCount == 0 && growing.GetARest(510) == 0 &&
+                   growing.GetVRest(510, 1) == 0,
+                "runtime rest world reset must clear all values, sparse rows, and materialized pages");
+            Expect(growing.RestoreDiagnosticSnapshot(beforeGrow) && growing.LogicalCapacity == 700 &&
+                   growing.GetARest(510) == 3 && growing.GetVRest(510, 1) == 5 &&
+                   growing.GetARest(699) == 0 && growing.GetVRest(699, 699) == 0,
+                "runtime rest diagnostic restore must recover captured values without shrinking an already-grown store");
+
+            const int differentialCapacity = 32;
+            var differential = new RuntimeRestStore(differentialCapacity);
+            var expectedARest = new int[differentialCapacity];
+            var expectedVRest = new int[differentialCapacity, differentialCapacity];
+            var random = new System.Random(0x525354);
+            for (int operationIndex = 0; operationIndex < 2000; operationIndex++)
+            {
+                int operation = random.Next(4);
+                int first = random.Next(differentialCapacity);
+                int second = random.Next(differentialCapacity);
+                int value = random.Next(-2, 16);
+                int storedValue = Math.Max(0, value);
+
+                if (operation == 0)
+                {
+                    differential.SetARest(first, value);
+                    expectedARest[first] = storedValue;
+                }
+                else if (operation == 1)
+                {
+                    differential.SetVRest(first, second, value);
+                    expectedVRest[first, second] = storedValue;
+                }
+                else if (operation == 2)
+                {
+                    differential.ResetSlot(first);
+                    expectedARest[first] = 0;
+                    for (int slot = 0; slot < differentialCapacity; slot++)
+                    {
+                        expectedVRest[first, slot] = 0;
+                        expectedVRest[slot, first] = 0;
+                    }
+                }
+                else
+                {
+                    differential.ResetWorld();
+                    Array.Clear(expectedARest, 0, expectedARest.Length);
+                    Array.Clear(expectedVRest, 0, expectedVRest.Length);
+                }
+
+                int expectedARestCount = 0;
+                int expectedVRestCount = 0;
+                int expectedVRestRowCount = 0;
+                for (int victimSlot = 0; victimSlot < differentialCapacity; victimSlot++)
+                {
+                    Expect(differential.GetARest(victimSlot) == expectedARest[victimSlot],
+                        $"runtime rest differential ARest mismatch after operation {operationIndex}, slot {victimSlot}");
+                    if (expectedARest[victimSlot] > 0)
+                        expectedARestCount++;
+
+                    bool hasVRestRow = false;
+                    for (int attackerSlot = 0; attackerSlot < differentialCapacity; attackerSlot++)
+                    {
+                        Expect(differential.GetVRest(victimSlot, attackerSlot) ==
+                               expectedVRest[victimSlot, attackerSlot],
+                            $"runtime rest differential VRest mismatch after operation {operationIndex}, pair {victimSlot}/{attackerSlot}");
+                        if (expectedVRest[victimSlot, attackerSlot] > 0)
+                        {
+                            expectedVRestCount++;
+                            hasVRestRow = true;
+                        }
+                    }
+
+                    if (hasVRestRow)
+                        expectedVRestRowCount++;
+                }
+
+                Expect(differential.ARestEntryCount == expectedARestCount &&
+                       differential.VRestEntryCount == expectedVRestCount &&
+                       differential.VRestRowCount == expectedVRestRowCount,
+                    $"runtime rest diagnostic counts mismatch after operation {operationIndex}");
+            }
         }
 
         private static void CheckExtendedSimulationWorldCapacityContracts()
