@@ -1,0 +1,403 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to the License Client on channel: "LicenseClient-Logan" at "2026-07-14T12:49:44.0505528Z"
+[Licensing::Client] Error: Code 10 while verifying Licensing Client signature (process Id: 49544, path: "D:/UnityHub/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] Error: LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.0+aa6cfba
+  Session Id:              7525f8d6ff514b02a183706c78c84527
+  Correlation Id:          6d384540c5851cd82db2c7d1e4abcbf5
+  External correlation Id: 5230974803268142142
+  Machine Id:              YnCgJ/3eXfqj/pKKnk6cl38u0EY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Logan" (connect: 0.00s, validation: 0.01s, handshake: 0.22s)
+[Licensing::IpcConnector] Successfully connected to the License Notification on channel: "LicenseClient-Logan-notifications" at "2026-07-14T12:49:44.283675Z"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+Built from '2022.3/china_unity/release' branch; Version is '2022.3.34f1c1 (1e17368ca73f) revision 1972022'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'zh' Physical Memory: 65349 MB
+[Licensing::Client] Successfully resolved entitlements
+[Licensing::Module] Serial number assigned to: "ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+D:\Unity\HubEditor\2022.3.34f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+-executeMethod
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunForBatchmode
+-logFile
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Unity-BattleRuntimeSelfCheck-T9-blockers.log
+Successfully changed project path to: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [121188] Host "[IP] 192.168.31.76 [Port] 55504 [Flags] 2 [Guid] 4263464023 [EditorId] 4263464023 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [121188] Host "[IP] 192.168.31.76 [Port] 55504 [Flags] 2 [Guid] 4263464023 [EditorId] 4263464023 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 20 workers.
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-129428" after 1.5 seconds.
+[Licensing::Client] Successfully resolved entitlements
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 72 packages:
+  Packages from [https://packages.unity.cn]:
+    com.unity.cinemachine@2.10.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.cinemachine@2.10.0)
+    com.unity.collab-proxy@2.3.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.collab-proxy@2.3.1)
+    com.unity.ide.rider@3.0.28 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.rider@3.0.28)
+    com.unity.inputsystem@1.7.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.inputsystem@1.7.0)
+    com.unity.mathematics@1.2.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.mathematics@1.2.6)
+    com.unity.textmeshpro@3.0.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.textmeshpro@3.0.6)
+    com.unity.timeline@1.7.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.timeline@1.7.6)
+    com.unity.visualscripting@1.9.4 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.visualscripting@1.9.4)
+    com.unity.burst@1.8.15 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.burst@1.8.15)
+    com.unity.ext.nunit@1.0.6 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ext.nunit@1.0.6)
+    com.unity.ide.visualstudio@2.0.22 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.visualstudio@2.0.22)
+    com.unity.ide.vscode@1.2.5 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ide.vscode@1.2.5)
+    com.unity.editorcoroutines@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.editorcoroutines@1.0.0)
+    com.unity.performance.profile-analyzer@1.2.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.performance.profile-analyzer@1.2.2)
+    com.unity.test-framework@1.1.33 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.test-framework@1.1.33)
+    com.unity.testtools.codecoverage@1.2.5 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.testtools.codecoverage@1.2.5)
+    com.unity.2d.animation@9.1.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.animation@9.1.1)
+    com.unity.2d.pixel-perfect@5.0.3 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.pixel-perfect@5.0.3)
+    com.unity.2d.psdimporter@8.0.5 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.psdimporter@8.0.5)
+    com.unity.2d.spriteshape@9.0.3 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.spriteshape@9.0.3)
+    com.unity.2d.tilemap.extras@3.1.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.tilemap.extras@3.1.2)
+    com.unity.2d.aseprite@1.1.4 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.aseprite@1.1.4)
+    com.unity.nuget.newtonsoft-json@3.2.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1)
+    com.unity.searcher@4.9.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.searcher@4.9.2)
+    com.unity.settings-manager@2.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.settings-manager@2.0.1)
+    com.unity.2d.common@8.0.2 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.common@8.0.2)
+    com.unity.collections@1.2.4 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.collections@1.2.4)
+  Built-in packages:
+    com.unity.feature.2d@2.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.feature.2d@2.0.1)
+    com.unity.feature.development@1.0.1 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.feature.development@1.0.1)
+    com.unity.render-pipelines.universal@14.0.11 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.render-pipelines.universal@14.0.11)
+    com.unity.ugui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.ugui@1.0.0)
+    com.unity.modules.ai@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.ai@1.0.0)
+    com.unity.modules.androidjni@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.androidjni@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.animation@1.0.0)
+    com.unity.modules.assetbundle@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.assetbundle@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.audio@1.0.0)
+    com.unity.modules.cloth@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.cloth@1.0.0)
+    com.unity.modules.director@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.director@1.0.0)
+    com.unity.modules.imageconversion@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.imageconversion@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.particlesystem@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.particlesystem@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.physics@1.0.0)
+    com.unity.modules.physics2d@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.physics2d@1.0.0)
+    com.unity.modules.screencapture@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.screencapture@1.0.0)
+    com.unity.modules.terrain@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.terrain@1.0.0)
+    com.unity.modules.terrainphysics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.terrainphysics@1.0.0)
+    com.unity.modules.tilemap@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.tilemap@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.uielements@1.0.0)
+    com.unity.modules.umbra@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.umbra@1.0.0)
+    com.unity.modules.unityanalytics@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unityanalytics@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequest@1.0.0)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle@1.0.0)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestaudio@1.0.0)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequesttexture@1.0.0)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.unitywebrequestwww@1.0.0)
+    com.unity.modules.vehicles@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.vehicles@1.0.0)
+    com.unity.modules.video@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.video@1.0.0)
+    com.unity.modules.vr@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.vr@1.0.0)
+    com.unity.modules.wind@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.wind@1.0.0)
+    com.unity.modules.xr@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.xr@1.0.0)
+    com.unity.modules.subsystems@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.modules.subsystems@1.0.0)
+    com.unity.render-pipelines.core@14.0.11 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.render-pipelines.core@14.0.11)
+    com.unity.shadergraph@14.0.11 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.shadergraph@14.0.11)
+    com.unity.render-pipelines.universal-config@14.0.10 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.render-pipelines.universal-config@14.0.10)
+    com.unity.2d.sprite@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.sprite@1.0.0)
+    com.unity.2d.tilemap@1.0.0 (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.unity.2d.tilemap@1.0.0)
+  Local packages:
+    com.coplaydev.unity-mcp@file:I:\GitHub\Unity_GAS\unity-mcp\MCPForUnity (location: I:\GitHub\Unity_GAS\unity-mcp\MCPForUnity)
+  Git packages:
+    com.cysharp.unitask@https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.cysharp.unitask@5cc97c7f00)
+    com.exhard.exmaidforui@https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.exhard.exmaidforui@b469ae66a3)
+    com.vovgou.loxodon-framework@https://github.com/vovgou/loxodon-framework.git?path=Loxodon.Framework/Assets/LoxodonFramework (location: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Library\PackageCache\com.vovgou.loxodon-framework@2fab55f00c)
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 6.85 seconds
+Refreshing native plugins compatible for Editor in 19385.23 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2022.3.34f1c1 (1e17368ca73f)
+[Subsystems] Discovering subsystems at path D:/Unity/HubEditor/2022.3.34f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0; jobified=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Shader Hidden/ProbeVolume/VoxelizeScene is not supported: GPU does not support conservative rasterization
+[Licensing::Client] Successfully resolved entitlements
+Initialize mono
+Mono path[0] = 'D:/Unity/HubEditor/2022.3.34f1/Editor/Data/Managed'
+Mono path[1] = 'D:/Unity/HubEditor/2022.3.34f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'D:/Unity/HubEditor/2022.3.34f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56428
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: D:/Unity/HubEditor/2022.3.34f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.024895 seconds.
+- Loaded All Assemblies, in  0.669 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.780 seconds
+Domain Reload Profiling: 1413ms
+	BeginReloadAssembly (249ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (48ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (167ms)
+	LoadAllAssembliesAndSetupDomain (157ms)
+		LoadAssemblies (215ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (155ms)
+			TypeCache.Refresh (153ms)
+				TypeCache.ScanAssembly (137ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (781ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (717ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (14ms)
+			SetLoadedEditorAssemblies (8ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (2ms)
+			ProcessInitializeOnLoadAttributes (187ms)
+			ProcessInitializeOnLoadMethodAttributes (506ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlements
+Application.AssetDatabase Initial Refresh Start
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+[Licensing::Client] Successfully resolved entitlements
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:80
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 116.6229ms
+Starting: D:\Unity\HubEditor\2022.3.34f1\Editor\Data\bee_backend.exe --dont-print-to-structured-log --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+DisplayProgressbar: Compiling Scripts
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.runtime.interopservices.windowsruntime has duplicate hint path. Ignoring "D:\Unity\HubEditor\2022.3.34f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Runtime.InteropServices.WindowsRuntime.dll" in favor of "D:\Unity\HubEditor\2022.3.34f1\Editor\Data\NetStandard\Extensions\2.0.0\System.Runtime.InteropServices.WindowsRuntime.dll"
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.componentmodel.composition has duplicate hint path. Ignoring "D:\Unity\HubEditor\2022.3.34f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\System.ComponentModel.Composition.dll" in favor of "D:\Unity\HubEditor\2022.3.34f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.ComponentModel.Composition.dll"
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library\PackageCache\com.unity.burst@1.8.15\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors application/grpc - - 200 - application/grpc 206.1731ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll, with 133 defines and 310 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library\PackageCache\com.unity.burst@1.8.15\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 835.4002ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll, with 131 defines and 331 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 34.3081ms
+ExitCode: 0 Duration: 35s
+[ 898/1195  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[BUSY       6s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll (+2 others)
+[1187/1195  6s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll (+2 others)
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(101,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,44): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,117): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(234,45): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(248,49): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(309,55): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(405,53): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(54,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(55,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(56,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(57,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(58,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(66,41): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,33): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(36,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(40,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(41,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(156,34): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(236,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(241,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(311,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(331,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+Assets\NTSD\Scripts\App\AppManager.cs(31,41): warning CS0414: The field 'AppManager.menuSceneName' is assigned but its value is never used
+[1188/1195  1s] ILPostProcess Library/Bee/artifacts/1900b0aEDbg.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.dll, with 133 defines and 310 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1189/1195  1s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll (+2 others)
+Assets\NTSD\Editor\ClassFactoryWindow.cs(870,24): warning CS0219: The variable 'message' is assigned but its value is never used
+
+Assets\NTSD\Editor\ClassFactoryWindow.cs(972,38): warning CS0168: The variable 'ex' is declared but never used
+[1190/1195  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[1191/1195  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[1192/1195  0s] ILPostProcess Library/Bee/artifacts/1900b0aEDbg.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll, with 131 defines and 331 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1193/1195  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+[1194/1195  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+*** Tundra build success (30.39 seconds), 9 items updated, 1195 evaluated
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(101,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,44): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(112,117): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(234,45): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(248,49): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(309,55): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(405,53): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(54,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(55,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(56,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(57,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(58,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(66,41): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,33): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(35,35): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(36,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(40,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(41,29): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(156,34): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(236,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(241,26): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(311,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\TimeWheel\TimeWheel.cs(331,22): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+Assets\NTSD\Scripts\App\AppManager.cs(31,41): warning CS0414: The field 'AppManager.menuSceneName' is assigned but its value is never used
+Assets\NTSD\Editor\ClassFactoryWindow.cs(870,24): warning CS0219: The variable 'message' is assigned but its value is never used
+Assets\NTSD\Editor\ClassFactoryWindow.cs(972,38): warning CS0168: The variable 'ex' is declared but never used
+AssetDatabase: script compilation time: 47.593019s
+Begin MonoManager ReloadAssembly
+Total cache size 267986494
+Total cache size after purge 267986494
+Symbol file data-0000018BC752B780 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Reflection.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BD22C33C0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BC422DEC0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.Config.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BD2310090 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BD24E62A0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BD250EAB0 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file data-0000018BD2563230 doesn't match image I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.Editor.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  7.756 seconds
+Refreshing native plugins compatible for Editor in 40.89 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.

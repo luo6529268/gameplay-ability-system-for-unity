@@ -1,0 +1,15 @@
+{
+  "provider": "codex",
+  "jobId": "a9302572",
+  "slug": "task-unity-frame-input-runtime",
+  "status": "failed",
+  "pid": 141496,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-task-unity-frame-input-runtime-a9302572.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-task-unity-frame-input-runtime-a9302572.md",
+  "model": "gpt-5.6-sol",
+  "agentRole": "architect",
+  "spawnedAt": "2026-07-17T18:37:18.261Z",
+  "killedByUser": true,
+  "completedAt": "2026-07-17T19:08:21.348Z",
+  "error": "Killed by user (signal: SIGTERM)"
+}

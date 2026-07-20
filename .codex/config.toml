@@ -1,0 +1,35 @@
+[mcp_servers.g]
+command = "node"
+args = ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/gemini-server.cjs"]
+
+[mcp_servers.mem0]
+command = "C:/Users/Logan/.factory/mem0-mcp/venv/Scripts/python.exe"
+args = ["C:/Users/Logan/.factory/mem0-mcp/server.py"]
+
+[mcp_servers.mem0.env]
+OPENAI_API_KEY = "sk-19155fd9007bb783b0584033ceeea75db9172909781a7dc7175cda521da61a7f"
+OPENAI_BASE_URL = "https://www.findcg.com/v1"
+OPENAI_MODEL = "gpt-5.4-high"
+QDRANT_URL = "http://localhost:6333"
+MEM0_USER_ID = "ntsd_project"
+NO_PROXY = "localhost,127.0.0.1"
+no_proxy = "localhost,127.0.0.1"
+
+[mcp_servers.t]
+command = "node"
+args = ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/mcp-server.cjs"]
+
+[mcp_servers.unity-mcp]
+command = "uv"
+args = [
+    "run",
+    "--directory",
+    "I:/GitHub/Unity_GAS/unity-mcp/Server",
+    "python",
+    "-m",
+    "main",
+]
+
+[mcp_servers.x]
+command = "node"
+args = ["C:/Users/Logan/.claude/plugins/cache/omc/oh-my-claudecode/4.0.10/bridge/codex-server.cjs"]

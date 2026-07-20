@@ -1,0 +1,71 @@
+{
+  "agents": [
+    {
+      "agent_id": "aa732e6b539bc7fea",
+      "agent_type": "unknown",
+      "started_at": "2026-07-13T08:28:11.482Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-13T08:28:11.482Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "ae4ee868db45a59ff",
+      "agent_type": "unknown",
+      "started_at": "2026-07-13T08:45:34.536Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-13T08:45:34.536Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a4daac3bad157e49a",
+      "agent_type": "unknown",
+      "started_at": "2026-07-13T08:52:42.034Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-13T08:52:42.034Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "adfe6807740b75f37",
+      "agent_type": "unknown",
+      "started_at": "2026-07-13T11:50:39.620Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-13T11:50:39.620Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a28ed9a7781e064f2",
+      "agent_type": "unknown",
+      "started_at": "2026-07-13T12:03:02.498Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-13T12:03:02.498Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a35dc4082863d2061",
+      "agent_type": "unknown",
+      "started_at": "2026-07-14T05:54:59.260Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-14T05:54:59.260Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "afcef313b7afb4176",
+      "agent_type": "unknown",
+      "started_at": "2026-07-14T09:05:03.510Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-07-14T09:05:03.510Z",
+      "duration_ms": 0
+    }
+  ],
+  "total_spawned": 0,
+  "total_completed": 7,
+  "total_failed": 0,
+  "last_updated": "2026-07-14T09:05:03.623Z"
+}

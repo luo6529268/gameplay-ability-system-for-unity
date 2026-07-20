@@ -1,0 +1,33 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to the License Client on channel: "LicenseClient-Logan"
+[Licensing::Client] Error: Code 10 while verifying Licensing Client signature (process Id: 49544, path: "D:/UnityHub/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] Error: LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.0+aa6cfba
+  Session Id:              b187c2c9aea94014b245361d4e61fdde
+  Correlation Id:          6d384540c5851cd82db2c7d1e4abcbf5
+  External correlation Id: 5271887639560376514
+  Machine Id:              YnCgJ/3eXfqj/pKKnk6cl38u0EY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Logan" (connect: 0.00s, validation: 0.01s, handshake: 0.07s)
+[Licensing::IpcConnector] Successfully connected to the License Notification on channel: "LicenseClient-Logan-notifications"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+Built from '2022.3/china_unity/release' branch; Version is '2022.3.4f1c1 (dae07de86df3) revision 14344317'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'zh' Physical Memory: 65349 MB
+[Licensing::Client] Successfully resolved entitlements
+[Licensing::Module] Serial number assigned to: "ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+D:\Unity\HubEditor\2022.3.4f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+$PWD
+-executeMethod
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunForBatchmode
+-logFile
+$PWD\Unity-BattleRuntimeSelfCheck.log
+Couldn't set project path to: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/$PWD
+Exiting without the bug reporter. Application will terminate with return code 1
