@@ -19,9 +19,9 @@ namespace NTSD.Simulation
             if (runtimeSlot < 0 || runtimeSlot >= MaxRuntimeSlots)
                 return;
 
-            _rawRestSlots[runtimeSlot] = null;
-            for (int victimSlot = 0; victimSlot < _rawRestSlots.Length; victimSlot++)
-                _rawRestSlots[victimSlot]?.VrestByAttacker?.Remove(runtimeSlot);
+            _runtimeSlots.SetRawRest(runtimeSlot, null);
+            for (int victimSlot = 0; victimSlot < _runtimeSlots.LogicalCapacity; victimSlot++)
+                _runtimeSlots.GetRawRest(victimSlot)?.VrestByAttacker?.Remove(runtimeSlot);
 
             occupant?.ItrRest?.Reset();
 
@@ -43,53 +43,15 @@ namespace NTSD.Simulation
             }
         }
 
-        private bool TryGetNextEntityAfterRuntimeSlot(int slotCursor, out LF2Entity nextEntity, out int nextSlot)
-        {
-            nextEntity = null;
-            nextSlot = int.MaxValue;
-
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return false;
-
-            foreach (int key in bucketKeys)
-            {
-                if (!_buckets.TryGetValue(key, out Bucket bucket)) continue;
-                bucket.EnsureSorted(GetRuntimeStableId);
-
-                for (int i = 0; i < bucket.items.Count; i++)
-                {
-                    if (bucket.items[i] is not LF2Entity entity)
-                        continue;
-                    if (!IsActiveForCurrentPass(entity))
-                        continue;
-
-                    int slot = GetRuntimeSlotOrder(entity);
-                    if (slot <= slotCursor || slot >= nextSlot)
-                        continue;
-
-                    nextSlot = slot;
-                    nextEntity = entity;
-                }
-            }
-
-            return nextEntity != null;
-        }
-
         private void ForEachEntityByRuntimeSlot(System.Action<LF2Entity> action)
         {
             if (action == null) return;
 
-            int slotCursor = -1;
-            int safety = 0;
-            while (TryGetNextEntityAfterRuntimeSlot(slotCursor, out LF2Entity entity, out int runtimeSlot))
+            // This is a live ascending scan: a newborn above the cursor joins this pass,
+            // while a recycled lower slot waits for the next pass, matching authority order.
+            for (int runtimeSlot = 0; runtimeSlot < _runtimeSlots.LogicalCapacity; runtimeSlot++)
             {
-                slotCursor = runtimeSlot;
-                if (++safety > 10000)
-                {
-                    Debug.LogError("[SimulationWorld] runtime slot scan safety break");
-                    break;
-                }
-
+                LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
                 if (entity == null || !IsActiveForCurrentPass(entity))
                     continue;
 
@@ -169,53 +131,13 @@ namespace NTSD.Simulation
 
         internal LF2Entity FindEntityByRuntimeSlotIncludingDormant(int runtimeSlot)
         {
-            if (runtimeSlot < 0)
-                return null;
-
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null)
-                return null;
-
-            foreach (int key in bucketKeys)
-            {
-                if (!_buckets.TryGetValue(key, out Bucket bucket))
-                    continue;
-
-                for (int i = 0; i < bucket.items.Count; i++)
-                {
-                    if (bucket.items[i] is LF2Entity entity &&
-                        entity.Runtime?.SlotIndex == runtimeSlot)
-                    {
-                        return entity;
-                    }
-                }
-            }
-
-            return null;
+            return _runtimeSlots.GetCurrentOccupant(runtimeSlot);
         }
 
         private LF2Entity FindEntityByRuntimeSlotCurrent(int runtimeSlot)
         {
-            if (runtimeSlot < 0) return null;
-
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return null;
-
-            foreach (int key in bucketKeys)
-            {
-                if (!_buckets.TryGetValue(key, out Bucket bucket)) continue;
-                for (int i = 0; i < bucket.items.Count; i++)
-                {
-                    if (bucket.items[i] is LF2Entity entity &&
-                        IsActiveForCurrentPass(entity) &&
-                        entity.Runtime?.SlotIndex == runtimeSlot)
-                    {
-                        return entity;
-                    }
-                }
-            }
-
-            return null;
+            LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
+            return IsActiveForCurrentPass(entity) ? entity : null;
         }
 
         public void GetAllLivingObjects(List<LF2LivingObject> dst)

@@ -1185,21 +1185,9 @@ namespace NTSD.Simulation
 
         private void ResetCooldownsForRuntimeSlot(int runtimeSlot)
         {
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return;
-
-            for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
-            {
-                if (!_buckets.TryGetValue(bucketKeys[keyIndex], out Bucket bucket)) continue;
-                for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
-                {
-                    if (bucket.items[itemIndex] is not LF2Entity entity || entity.ItrRest == null) continue;
-                    if (entity.Runtime?.SlotIndex == runtimeSlot)
-                        entity.ItrRest.Reset();
-                    else
-                        entity.ItrRest.RemoveVrest(runtimeSlot);
-                }
-            }
+            ResetCooldownsForRuntimeSlot(
+                runtimeSlot,
+                FindEntityByRuntimeSlotIncludingDormant(runtimeSlot));
         }
 
         public void Mode2RandomWeaponDropTailAll(int tickIndex)
@@ -1264,7 +1252,7 @@ namespace NTSD.Simulation
                 bool hasFreeSlot = false;
                 for (int slot = DynamicRuntimeSlotStart; slot < MaxRuntimeSlots; slot++)
                 {
-                    if (!_runtimeSlotUsed[slot])
+                    if (!_runtimeSlots.IsClaimed(slot))
                     {
                         hasFreeSlot = true;
                         break;

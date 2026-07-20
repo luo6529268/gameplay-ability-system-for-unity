@@ -2,28 +2,64 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认（容量与空间索引决策已确认）/ 未实施。
-- **代码状态**：没有生产代码落地，没有替换现有 `SpriteRenderer`，没有修改战斗 runtime。
-- **验证状态**：没有执行 Unity 编译、`BattleRuntimeSelfCheck`、Play Mode、移动端真机或像素级验收。
+- **状态**：方案已确认；R1、R2A 与 R2B `Authority400` runtime 基础设施已实施并完成代码层验证，其余阶段未实施。
+- **代码状态**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`、`Authority400` 三段 indexed binary min-heap + `nextUnused` 分配器，以及分页 `RuntimeSlotTable` / `RuntimeEntityHandle` 基础设施已落地；R2B 已将生产 `Authority400` registry 的占用、raw runtime 与 raw rest 存储统一迁入单一 `RuntimeSlotTable`。集中式渲染、扩展模式生产接线与 Loose Quadtree 均未落地，现有 `SpriteRenderer` 未替换。
+- **验证状态**：R1、R2A 与 R2B 已有各自的 fresh Unity 编译、完整 `BattleRuntimeSelfCheck` PASS 与架构复核 PASS；尚未完成 Play Mode、移动端真机、像素级或扩展容量生产验收。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
 - **平台 Profile 说明**：平台宏只选择默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。选择优先级固定为“显式测试/命令行覆盖 > 项目配置资产 > 平台宏默认值 > 设备能力运行时降级”；设备降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施前置**：容量/空间索引方案已确认，但仍未实施、未编译、未运行 `BattleRuntimeSelfCheck`、未做 Play Mode、移动端真机或像素级验收。
+- **实施边界**：当前 `SimulationWorld` 仍显式 pin 为 `Authority400`，但生产 registry 已改用 `RuntimeSlotTable`；本批只替换 400-slot 存储后端，没有启用扩展容量。`MobileExtended` / `DesktopExtended` 仍未接入生产 runtime；桌面分页增长、移动端 1000 active admission、AI 迁移、Loose Quadtree、VRest 解耦与集中式渲染均未实施或启用。
+
+### 2026-07-20 R1 第一批实施记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| Profile resolver | **已实施 / 已验证** | 支持显式覆盖 > 配置值 > 平台默认；平台默认由 Unity 条件编译符号选择。Editor/其他平台回落 `Authority400`，Android Player 为 `MobileExtended`，Standalone Player 为 `DesktopExtended` |
+| `Authority400` 最低空闲槽分配 | **已实施 / 已验证** | 以 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused` 保留 roster、stage、dynamic band 语义；支持按索引移除、释放回收和最低槽确定性分配 |
+| 正式 runtime 接线 | **兼容模式已接入** | `SimulationWorld` 仍显式固定为 `Authority400`，本批不改变 400-slot 行为边界，也不自动启用平台扩展模式 |
+| 扩展容量与空间索引 | **基础设施部分已实施 / 生产未启用** | R2A 已实现独立分页 `RuntimeSlotTable` 与 generation handle；`MobileExtended`、`DesktopExtended` 生产接线、桌面动态增长、1000 active admission、AI 迁移和 Loose Quadtree 均保留为后续批次 |
+
+fresh 验证：相关源码时间 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` 结果 `12:05:07` **PASS**；分配器另以 **100,000 次随机 claim/release/allocate 操作**与朴素线性扫描模型逐步对照，结果 **PASS**；架构复核 **PASS**。这些证据只关闭 R1 第一批，不代表 Play Mode、扩展容量、四叉树或集中式渲染已经验收。
+
+### 2026-07-20 R2A 分页槽表与 generation 句柄基础记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| `RuntimeSlotTable` 分页存储 | **基础设施已实施 / 已验证** | 固定 `PageSize = 256`，按首次访问惰性物化页面；逻辑容量为 400 与 1000 时，最后一页超出逻辑尾部的地址均被 guard 拒绝 |
+| raw runtime / raw rest 存储 | **基础设施已实施 / 已验证** | 每个 slot 持有独立 `NTSDEntityRuntime` 与 `LF2ItrRestTracker.StateSnapshot` 存储；raw 状态与实体 claim 生命周期分开，不因只读查询隐式占用槽位 |
+| 占用计数 | **基础设施已实施 / 已验证** | `ClaimedCount` 由 allocator 契约维护，claim、release 与 reset 后均由 focused self-check 校验 |
+| `RuntimeEntityHandle` | **基础设施已实施 / 已验证** | 句柄由 `(slot, generation)` 构成；release、同槽 reuse 与 reset 都推进 generation，使旧句柄无法再 resolve 到新占用者 |
+| 生产 runtime 接线 | **未实施 / 未启用** | `SimulationWorld` 仍使用现有 `Authority400` registry/raw arrays，并未切换到 `RuntimeSlotTable`；本批不改变战斗结果或现有 400-slot parity schema |
+
+R2A fresh 验证：相关源码时间 `2026-07-20 12:33:20` < Unity `Assembly-CSharp.dll` `12:36:25` < 完整 `BattleRuntimeSelfCheck` 结果 `12:36:53` **PASS**；架构复核 **PASS**。这些证据只验证分页地址、惰性物化、独立 raw 存储、`ClaimedCount` 与 generation 失效契约；不代表 `Extended` 已启用，也不覆盖桌面动态增长、移动端 1000 admission、AI 迁移、Loose Quadtree 或 VRest 改造。
+
+### 2026-07-20 R2B `Authority400` 生产 registry 迁移记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| 单一槽位存储后端 | **已实施 / 已验证** | 生产 `SimulationWorld` 的 `_runtimeSlotUsed`、`_rawRuntimeSlots`、`_rawRestSlots` 已由单一 `RuntimeSlotTable` 替代；旧字段检索为 0，registry 不再维护并行槽位真值 |
+| 当前占用者查询 | **已实施 / 已验证** | `FindEntityByRuntimeSlotIncludingDormant` 与 current-pass 查询直接通过 slot 地址 O(1) 解析当前 occupant；长期引用仍必须使用带 generation 的 `RuntimeEntityHandle` |
+| pass 遍历时序 | **已实施 / 已验证** | 保留 live ascending slot scan：游标以上新生实体可进入本 pass，复用游标以下低槽的实体等待下一 pass，保持既有 high-newborn / low-reuse 时序 |
+| release 身份保护 | **已实施 / 已验证** | release 必须同时匹配 slot 与 `expectedEntity`/当前 occupant；过期实体不能释放已被另一实体复用的槽 |
+| raw rest 语义 | **已实施 / 已验证** | stage spawn 继续恢复并消费复用槽 raw rest；ordinary spawn 继续按既有语义重置，不把 R2B 存储迁移扩大成 VRest/ARest 规则变更 |
+| 对外可观察契约 | **保持不变 / 已验证** | `ObjectCount`、对象 buckets、`SceneQueryHit` 的 runtime-slot 地址语义保持不变；生产 Profile 仍固定为 `Authority400` |
+
+R2B fresh 验证：相关生产源码时间 `2026-07-20 12:55:14` < Unity `Assembly-CSharp.dll` `12:56:37` < 完整 `BattleRuntimeSelfCheck` 结果 `12:57:02` **PASS**；fresh `dotnet build` 为 **0 errors**；架构复核 **PASS**；旧并行 registry 字段检索为 **0**。这些证据只关闭 `Authority400` 的生产 registry 存储迁移，不代表 `Extended`、移动端 1000 admission、桌面分页增长、AI、Loose Quadtree、VRest 解耦或集中式渲染已启用。
 
 ## Runtime 容量与空间索引阶段决策
 
-**状态：方案已确认 / 未实施 / 未验证。** 本节是运行时容量与 broadphase 的设计边界，不改变 C# 权威战斗逻辑；具体 API、内存预算和目标设备参数仍需在实现阶段验证。
+**状态：方案已确认 / R1、R2A 与 R2B `Authority400` 基础设施已实施并验证 / 其余未实施。** 本节是运行时容量与 broadphase 的设计边界，不改变 C# 权威战斗逻辑；当前已落地 Profile resolver、`Authority400` 分配器、分页槽表与 generation 句柄，并已将该槽表接入 `SimulationWorld` 的 `Authority400` 生产 registry。扩展容量、空间索引、内存预算和目标设备参数仍需在后续实现阶段验证。
 
 ### RuntimeSlot 容量模式
 
 - **`Authority400` 兼容模式**：保留 C# 的 400 runtime slot、既有特殊槽区和最低空闲槽分配语义，用于现有 self-check、parity 和逐帧对照。该模式的 400 是兼容边界，不代表 render command 上限。
 - **移动端扩展模式**：保证最多 `1000` 个 active runtime entity；第 `1001` 个 active entity 必须确定性拒绝生成，不排队、不替换，也不由设备瞬时内存状态决定。拒绝结果必须进入可重放的结果/日志边界。
 - **桌面扩展模式**：不设置玩法层面的 active entity 上限，slot address 按分页增长；仍受明确的地址空间、内存、对象池、逻辑帧和 render command 技术预算约束，不能解释为物理上无限容量。
-- 空闲槽使用**二叉最小堆 + `nextUnused`**：已释放槽进入最小堆，分配时优先取最小空闲槽；堆为空时使用并递增 `nextUnused`。所有分配、释放和分页增长都必须保持最低槽确定性，不依赖 `Dictionary`/`HashSet` 枚举顺序。
+- 空闲槽使用**二叉最小堆 + `nextUnused`**：R1 第一批已在 `Authority400` 内按 `0..19`、`20..49`、`50..399` 三段实现 indexed binary min-heap；已释放槽进入最小堆，分配时优先取最小空闲槽，堆为空时使用并递增 `nextUnused`。R2A 以 256 槽/页建立惰性分页表并复用该 allocator，R2B 已将它接入生产 `SimulationWorld` 的 `Authority400` registry；桌面无限页增长仍未实现。后续所有分配、释放和分页增长仍必须保持最低槽确定性，不依赖 `Dictionary`/`HashSet` 枚举顺序。
 - **分层位图**仅作为后续候选优化，不作为本阶段实现前提；若采用，必须保持与最小堆相同的最低槽和回放语义。
 
 ### 平台 Profile 与选择边界
 
-**状态：方案已确认 / 未实施 / 未验证。** 平台差异通过统一 Profile/能力配置入口表达；不得在战斗 pass、opoint、碰撞、命中、对象生命周期或空间查询内部散布 `#if UNITY_ANDROID` / `#if UNITY_STANDALONE` 分支。
+**状态：resolver 已实施并验证 / 扩展 Profile 未接入 SimulationWorld。** 平台差异通过统一 Profile/能力配置入口表达；不得在战斗 pass、opoint、碰撞、命中、对象生命周期或空间查询内部散布 `#if UNITY_ANDROID` / `#if UNITY_STANDALONE` 分支。Unity 官方条件编译符号仅用于选择平台默认值；`SystemInfo` 等运行时能力 API 留给后续渲染后端降级，不改变战斗 Profile 或逻辑结果。
 
 运行模式固定为：
 
@@ -368,4 +404,6 @@ CentralOnly
 
 ## 16. 当前决策记录
 
-已确认的设计决策是：保留 `Authority400` 兼容模式；移动端最多 1000 active 且第 1001 个确定性拒绝；桌面采用分页增长和技术预算；空闲槽使用二叉最小堆 + `nextUnused`；空间 broadphase 使用 X/Z Loose Quadtree；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。平台宏只选择默认 Profile，显式覆盖和配置资产可以优先选 Profile，设备能力最后只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。以上均为 **方案已确认 / 未实施 / 未验证**。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。
+已确认的设计决策是：保留 `Authority400` 兼容模式；移动端最多 1000 active 且第 1001 个确定性拒绝；桌面采用分页增长和技术预算；空闲槽使用二叉最小堆 + `nextUnused`；空间 broadphase 使用 X/Z Loose Quadtree；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。平台宏只选择默认 Profile，显式覆盖和配置资产可以优先选 Profile，设备能力最后只降级表现资源/后端；三个 Profile 最终共用同一套确定性 runtime 算法。
+
+截至 2026-07-20，**R1、R2A 与 R2B `Authority400` 基础设施**达到“已实施 / 编译通过 / self-check 通过 / 架构复核通过”：Profile resolver、显式 pin 在 `Authority400` 下的三段 indexed binary min-heap + `nextUnused`、256 槽惰性分页 `RuntimeSlotTable`、独立 raw runtime/rest、`ClaimedCount` 和 generation handle；R2B 已将生产 registry 的占用、raw runtime 与 raw rest 并行数组统一迁入该槽表，同时保持 live ascending scan、release 身份保护和既有 slot-address 契约。`MobileExtended` / `DesktopExtended` 正式接线、桌面动态分页增长、1000 active admission、AI 迁移、Loose Quadtree、VRest 改造及全部集中式渲染模块仍是 **方案已确认 / 未实施 / 未验证**。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。

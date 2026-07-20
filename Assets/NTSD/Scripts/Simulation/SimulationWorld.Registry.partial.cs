@@ -38,10 +38,9 @@ namespace NTSD.Simulation
         private int _nextAutoStableId = 100;
         private const int MaxRuntimeSlots = 400;
         private const int DynamicRuntimeSlotStart = 50;
-        private readonly bool[] _runtimeSlotUsed = new bool[MaxRuntimeSlots];
-        private readonly NTSDEntityRuntime[] _rawRuntimeSlots = CreateRawRuntimeSlots();
-        private readonly LF2ItrRestTracker.StateSnapshot[] _rawRestSlots =
-            new LF2ItrRestTracker.StateSnapshot[MaxRuntimeSlots];
+        private const BattleRuntimeProfile ActiveRuntimeProfile = BattleRuntimeProfile.Authority400;
+        private readonly RuntimeSlotTable _runtimeSlots =
+            new RuntimeSlotTable(MaxRuntimeSlots, 20, DynamicRuntimeSlotStart);
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
         private readonly List<LF2Entity> _pendingSlotReleasedDestroy = new List<LF2Entity>();
@@ -55,6 +54,7 @@ namespace NTSD.Simulation
         internal bool IsUnityFixedWorldCameraStateClear => _cameraX == 0 && _cameraVel == 0;
         internal int MaxRuntimeSlotsForServices => MaxRuntimeSlots;
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
+        internal BattleRuntimeProfile RuntimeProfileForServices => ActiveRuntimeProfile;
 
         private int GetRuntimeStableId(ISimObject obj)
         {
@@ -103,36 +103,14 @@ namespace NTSD.Simulation
             Runtime.Reset();
         }
 
-        private static NTSDEntityRuntime[] CreateRawRuntimeSlots()
-        {
-            var slots = new NTSDEntityRuntime[MaxRuntimeSlots];
-            for (int slot = 0; slot < slots.Length; slot++)
-            {
-                slots[slot] = new NTSDEntityRuntime();
-                slots[slot].Reset();
-            }
-
-            return slots;
-        }
-
         internal NTSDEntityRuntime GetRawRuntimeSlotState(int runtimeSlot)
         {
-            return runtimeSlot >= 0 && runtimeSlot < _rawRuntimeSlots.Length
-                ? _rawRuntimeSlots[runtimeSlot]
-                : null;
+            return _runtimeSlots.GetRawRuntime(runtimeSlot);
         }
 
         private void ResetRawRuntimeSlotState(int runtimeSlot)
         {
             GetRawRuntimeSlotState(runtimeSlot)?.Reset();
-        }
-
-        private void ResetAllRawRuntimeSlotStates()
-        {
-            for (int slot = 0; slot < _rawRuntimeSlots.Length; slot++)
-                _rawRuntimeSlots[slot].Reset();
-
-            System.Array.Clear(_rawRestSlots, 0, _rawRestSlots.Length);
         }
 
         public void ResetRuntimeState()
@@ -209,8 +187,7 @@ namespace NTSD.Simulation
             }
 
             _buckets.Clear();
-            System.Array.Clear(_runtimeSlotUsed, 0, _runtimeSlotUsed.Length);
-            ResetAllRawRuntimeSlotStates();
+            _runtimeSlots.Reset();
         }
 
         public int CurrentTickIndex => Runtime?.Flow?.CurrentTickIndex ?? 0;
@@ -510,55 +487,32 @@ namespace NTSD.Simulation
             int requiredSlot = entity.RequiredRuntimeSlot;
             if (requiredSlot != -1)
             {
-                bool requiredSlotInRange = requiredSlot >= 0 && requiredSlot < MaxRuntimeSlots;
-                if (!requiredSlotInRange || _runtimeSlotUsed[requiredSlot])
+                if (!_runtimeSlots.TryClaim(requiredSlot, entity, out _))
                     return -1;
 
-                _runtimeSlotUsed[requiredSlot] = true;
                 return requiredSlot;
             }
 
             int existingSlot = entity.Runtime?.SlotIndex ?? -1;
             bool existingSlotInRange = existingSlot >= 0 && existingSlot < MaxRuntimeSlots;
             bool existingSlotInAllowedRange = !requiresDynamicSlot || existingSlot >= DynamicRuntimeSlotStart;
-            if (existingSlotInRange && existingSlotInAllowedRange && !_runtimeSlotUsed[existingSlot])
+            int minimumExistingSlot = requiresDynamicSlot ? DynamicRuntimeSlotStart : 0;
+            if (existingSlotInRange && existingSlotInAllowedRange &&
+                existingSlot >= minimumExistingSlot &&
+                _runtimeSlots.TryClaim(existingSlot, entity, out _))
             {
-                _runtimeSlotUsed[existingSlot] = true;
                 return existingSlot;
             }
 
             int startSlot = requiresDynamicSlot ? DynamicRuntimeSlotStart : 0;
-            int slot = FindFreeRuntimeSlot(startSlot);
-            if (slot >= 0)
-                return slot;
-
-            return -1;
+            return _runtimeSlots.AllocateLowest(startSlot, entity, out _);
         }
 
         private int FindFirstFreeRuntimeSlot(int startSlot, int endSlotExclusive)
         {
             ReleasePendingDestroySlots();
 
-            int end = Mathf.Min(endSlotExclusive, MaxRuntimeSlots);
-            for (int slot = Mathf.Max(0, startSlot); slot < end; slot++)
-            {
-                if (!_runtimeSlotUsed[slot])
-                    return slot;
-            }
-
-            return -1;
-        }
-
-        private int FindFreeRuntimeSlot(int startSlot)
-        {
-            for (int i = Mathf.Max(0, startSlot); i < MaxRuntimeSlots; i++)
-            {
-                if (_runtimeSlotUsed[i]) continue;
-                _runtimeSlotUsed[i] = true;
-                return i;
-            }
-
-            return -1;
+            return _runtimeSlots.PeekLowest(startSlot, endSlotExclusive);
         }
 
         private void ReleasePendingDestroySlots()
@@ -586,8 +540,11 @@ namespace NTSD.Simulation
                     if (slot < 0 || slot >= MaxRuntimeSlots)
                         continue;
 
-                    CaptureRawRestSlotState(slot, entity);
-                    _runtimeSlotUsed[slot] = false;
+                    if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
+                    {
+                        CaptureRawRestSlotState(slot, entity);
+                        _runtimeSlots.Release(slot, entity);
+                    }
                     entity.SetRuntimeSlotIndex(-1);
                     if (!_pendingSlotReleasedDestroy.Contains(entity))
                         _pendingSlotReleasedDestroy.Add(entity);
@@ -598,10 +555,11 @@ namespace NTSD.Simulation
         private void ReleaseRuntimeSlot(LF2Entity entity)
         {
             int slot = entity.Runtime?.SlotIndex ?? -1;
-            if (slot >= 0 && slot < MaxRuntimeSlots)
+            if (slot >= 0 && slot < MaxRuntimeSlots &&
+                object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
             {
                 CaptureRawRestSlotState(slot, entity);
-                _runtimeSlotUsed[slot] = false;
+                _runtimeSlots.Release(slot, entity);
             }
 
             entity.SetRuntimeSlotIndex(-1);
@@ -609,15 +567,12 @@ namespace NTSD.Simulation
 
         private void CaptureRawRestSlotState(int runtimeSlot, LF2Entity entity)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= _rawRestSlots.Length)
-                return;
-
-            _rawRestSlots[runtimeSlot] = entity?.ItrRest?.CaptureState();
+            _runtimeSlots.SetRawRest(runtimeSlot, entity?.ItrRest?.CaptureState());
         }
 
         internal void RestoreStageSpawnRestState(int runtimeSlot, LF2Entity entity)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= _rawRestSlots.Length ||
+            if (!_runtimeSlots.IsAddressable(runtimeSlot) ||
                 entity?.Runtime == null ||
                 entity.Runtime.SlotIndex != runtimeSlot ||
                 entity.Runtime.SpawnSemantic != (int)ReleaseSpawnSemantic.StageSpawnAt)
@@ -625,27 +580,24 @@ namespace NTSD.Simulation
                 return;
             }
 
-            entity.ItrRest?.RestoreState(_rawRestSlots[runtimeSlot]);
-            _rawRestSlots[runtimeSlot] = null;
+            entity.ItrRest?.RestoreState(_runtimeSlots.GetRawRest(runtimeSlot));
+            _runtimeSlots.SetRawRest(runtimeSlot, null);
         }
 
         internal int GetRawRestArest(int runtimeSlot)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= _rawRestSlots.Length)
-                return 0;
-
-            return _rawRestSlots[runtimeSlot]?.Arest ?? 0;
+            return _runtimeSlots.GetRawRest(runtimeSlot)?.Arest ?? 0;
         }
 
         internal int GetRawRestVrest(int victimSlot, int attackerSlot)
         {
-            if (victimSlot < 0 || victimSlot >= _rawRestSlots.Length ||
-                attackerSlot < 0 || attackerSlot >= _rawRestSlots.Length)
+            if (!_runtimeSlots.IsAddressable(victimSlot) ||
+                !_runtimeSlots.IsAddressable(attackerSlot))
             {
                 return 0;
             }
 
-            LF2ItrRestTracker.StateSnapshot snapshot = _rawRestSlots[victimSlot];
+            LF2ItrRestTracker.StateSnapshot snapshot = _runtimeSlots.GetRawRest(victimSlot);
             if (snapshot?.VrestByAttacker == null ||
                 !snapshot.VrestByAttacker.TryGetValue(attackerSlot, out int value))
             {

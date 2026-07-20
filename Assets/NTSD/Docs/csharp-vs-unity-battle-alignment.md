@@ -1,8 +1,16 @@
 # NTSD C# 工程 vs Unity 工程 — 战斗逻辑差异与对齐清单
 
-## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（2026-07-19）
+## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / 未实施 / 未验证**；没有生产代码落地，也没有执行 Unity 编译、self-check、Play Mode 或移动端运行时验收。`Authority400` 保留 C# 权威 `NtsdConstants.MaxObjects` 的 400 槽位兼容边界（`Objects[400]`、`VRest[400,400]`、`ARest[400]`），但不再视为所有 Unity 模式的全局容量上限：移动端目标为 1000 active，超过上限的第 1001 个实体确定性拒绝；桌面采用分页增长并受技术预算约束。空闲槽采用二叉最小堆 + `nextUnused`，空间 broadphase 采用 X/Z Loose Quadtree，VRest 与 broadphase 解耦，详细 parity snapshot 不进入生产热路径。render command 容量始终独立于 runtime slot 容量。平台宏只选择默认 Profile：Editor/其他未验收平台默认 `Authority400`，Android Player 默认 `MobileExtended`，Standalone Player 默认 `DesktopExtended`；显式测试/命令行覆盖优先于配置资产，配置资产优先于平台默认，设备能力最后只降级 `Texture2DArray`/多纹理/旧后端等表现路径。最小堆、分页 slot、generation、Loose Quadtree、VRest 和候选排序必须跨平台共用，设备降级不得改变 active admission 或战斗结果。该计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1、R2A 与 R2B `Authority400` 基础设施已实施并验证 / 其余未实施**。R1 已落地 `BattleRuntimeProfileResolver`，解析顺序为显式覆盖 > 配置值 > 平台默认；平台宏仅选择默认 Profile，Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 官方条件编译符号只用于该默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
+
+`Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
+
+R2A 已建立固定 `PageSize = 256`、按需物化的 `RuntimeSlotTable`，验证 400/1000 逻辑容量最后一页的尾部 guard、每槽独立 raw runtime/rest 存储、`ClaimedCount`，以及 `(slot, generation)` 句柄在 release、同槽 reuse、reset 后使旧引用失效。fresh 证据为源码 `2026-07-20 12:33:20` < Unity `Assembly-CSharp.dll` `12:36:25` < 完整 `BattleRuntimeSelfCheck` `12:36:53` **PASS**；架构复核 **PASS**。
+
+R2B 已将生产 `Authority400` registry 迁移到单一 `RuntimeSlotTable`，替换旧的 used/raw runtime/raw rest 并行数组；slot 到当前 occupant 为 O(1) 查询。live ascending slot scan 保留游标以上新生实体同 pass 可见、游标以下低槽复用实体延至下一 pass 的时序；release 以 `expectedEntity`/当前 occupant 防止旧实体释放复用槽。stage spawn 的 raw rest 恢复/消费、ordinary spawn 重置语义，以及 `ObjectCount`、buckets、`SceneQueryHit` 的 slot-address 契约均保持不变。fresh 证据为生产源码 `2026-07-20 12:55:14` < Unity `Assembly-CSharp.dll` `12:56:37` < 完整 `BattleRuntimeSelfCheck` `12:57:02` **PASS**；`dotnet build` **0 errors**；架构复核 **PASS**；旧并行 registry 字段检索 **0**。
+
+未完成边界保持不变：`SimulationWorld` 虽已使用 `RuntimeSlotTable`，仍显式 pin `Authority400`；`MobileExtended` / `DesktopExtended` 尚未接入正式 runtime，桌面动态分页增长、移动端 1000 active admission 与第 1001 个确定性拒绝、AI 迁移、X/Z Loose Quadtree、VRest 解耦、详细 parity 热路径拆分与集中式渲染均未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

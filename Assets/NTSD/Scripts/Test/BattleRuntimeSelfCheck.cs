@@ -90,6 +90,8 @@ namespace NTSD.Test
                 CheckPreFrameXBoundsMatrix();
                 CheckQueuedObjectPointPassBoundaries();
                 CheckAudit7LateOpointPrecisionContracts();
+                CheckRuntimeSlotAllocatorAndProfileContracts();
+                CheckPagedRuntimeSlotTableContracts();
                 CheckInteractionRuntimeSlotContracts();
                 CheckSimulationWorldLateMutation();
                 CheckCollisionCandidateCapAndNewbornIsolation();
@@ -178,6 +180,196 @@ namespace NTSD.Test
                 Debug.LogError($"[BattleRuntimeSelfCheck] 自检失败: {ex.Message}\n{ex.StackTrace}");
                 throw;
             }
+        }
+
+        private static void CheckRuntimeSlotAllocatorAndProfileContracts()
+        {
+            var allocator = new RuntimeSlotAllocator(400, 20, 50);
+            for (int slot = 0; slot <= 299; slot++)
+            {
+                Expect(allocator.ClaimRequired(slot),
+                    $"runtime slot allocator must claim initial slot {slot}");
+            }
+            Expect(allocator.ClaimedCount == 300,
+                "runtime slot allocator claimed count must track logical claims");
+
+            int[] releaseOrder = { 299, 2, 4, 5, 1 };
+            for (int i = 0; i < releaseOrder.Length; i++)
+            {
+                Expect(allocator.Release(releaseOrder[i]),
+                    $"runtime slot allocator must release occupied slot {releaseOrder[i]}");
+            }
+
+            int[] expectedReuseOrder = { 1, 2, 4, 5, 299 };
+            for (int i = 0; i < expectedReuseOrder.Length; i++)
+            {
+                int actual = allocator.AllocateLowest(0);
+                Expect(actual == expectedReuseOrder[i],
+                    $"runtime slot allocator lowest reuse mismatch: expected={expectedReuseOrder[i]}, actual={actual}");
+            }
+
+            allocator.Reset();
+            Expect(allocator.AllocateLowest(50) == 50 && allocator.AllocateLowest(50) == 51,
+                "dynamic runtime allocation must not consume roster or stage slots");
+            Expect(!allocator.IsClaimed(0) && !allocator.IsClaimed(20),
+                "dynamic runtime allocation must leave low slot bands untouched");
+
+            allocator.Reset();
+            Expect(allocator.ClaimRequired(20) && !allocator.ClaimRequired(20),
+                "required runtime slot conflicts must be rejected");
+            Expect(allocator.ClaimExisting(49, 20) && !allocator.ClaimExisting(19, 20),
+                "existing runtime slots must respect their minimum allowed band");
+            Expect(allocator.ClaimRequired(399) && allocator.Release(399) &&
+                   allocator.PeekLowest(399, 400) == 399,
+                "exact high runtime slot claims must return to the free set after release");
+
+            allocator.Reset();
+            int firstStagePeek = allocator.PeekLowest(20, 400);
+            int secondStagePeek = allocator.PeekLowest(20, 400);
+            Expect(firstStagePeek == 20 && secondStagePeek == 20 && !allocator.IsClaimed(20),
+                "runtime slot peek must not claim the selected slot");
+            Expect(allocator.AllocateLowest(20) == 20 && allocator.IsClaimed(20),
+                "stage runtime allocation must claim the lowest stage-or-dynamic slot");
+            allocator.Reset();
+            Expect(allocator.PeekLowest(0, 400) == 0 &&
+                   !allocator.IsClaimed(20) &&
+                   allocator.ClaimedCount == 0,
+                "runtime slot allocator reset must clear all segment state");
+
+            Expect(BattleRuntimeProfileResolver.Resolve(
+                       "MobileExtended",
+                       "DesktopExtended",
+                       BattleRuntimeProfile.Authority400) == BattleRuntimeProfile.MobileExtended,
+                "explicit runtime profile override must win over configured and platform defaults");
+            Expect(BattleRuntimeProfileResolver.Resolve(
+                       null,
+                       "DesktopExtended",
+                       BattleRuntimeProfile.Authority400) == BattleRuntimeProfile.DesktopExtended,
+                "configured runtime profile must win over the platform default");
+            Expect(BattleRuntimeProfileResolver.Resolve(
+                       null,
+                       null,
+                       BattleRuntimeProfile.MobileExtended) == BattleRuntimeProfile.MobileExtended,
+                "platform runtime profile must be used when no higher-priority value is valid");
+            Expect(BattleRuntimeProfileResolver.Resolve(
+                       "invalid",
+                       "authority400",
+                       BattleRuntimeProfile.DesktopExtended) == BattleRuntimeProfile.Authority400,
+                "invalid runtime profile overrides must fall through to a valid configured profile");
+            Expect(!BattleRuntimeProfileResolver.TryParse("1", out _),
+                "runtime profile parser must not accept numeric enum values");
+
+            var world = new SimulationWorld();
+            Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.Authority400 &&
+                   world.MaxRuntimeSlotsForServices == 400,
+                "first runtime slot migration batch must remain explicitly pinned to Authority400");
+        }
+
+        private static void CheckPagedRuntimeSlotTableContracts()
+        {
+            var authorityTable = new RuntimeSlotTable(400, 20, 50);
+            Expect(authorityTable.LogicalCapacity == 400 &&
+                   authorityTable.MaterializedPageCount == 0 &&
+                   authorityTable.ClaimedCount == 0,
+                "runtime slot table must start empty without materializing pages");
+
+            var entity255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var entity256 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var entity399 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(authorityTable.TryClaim(255, entity255, out RuntimeEntityHandle handle255) &&
+                   authorityTable.MaterializedPageCount == 1,
+                "runtime slot table must materialize the first page at slot 255");
+            Expect(authorityTable.TryClaim(256, entity256, out RuntimeEntityHandle handle256) &&
+                   authorityTable.MaterializedPageCount == 2,
+                "runtime slot table must materialize a second page at slot 256");
+            Expect(authorityTable.TryClaim(399, entity399, out RuntimeEntityHandle handle399) &&
+                   authorityTable.ClaimedCount == 3,
+                "runtime slot table must claim the final Authority400 slot");
+            Expect(authorityTable.PeekLowest(255, 400) == 257 &&
+                   !authorityTable.IsClaimed(257),
+                "runtime slot table peek must expose the lowest free slot without claiming it");
+            Expect(!authorityTable.TryClaim(400, new FlowSelfCheckEntity(LF2ObjectType.Character), out _) &&
+                   !authorityTable.IsAddressable(400) &&
+                   authorityTable.GetRawRuntime(400) == null &&
+                   authorityTable.MaterializedPageCount == 2,
+                "runtime slot table must keep the Authority400 tail unavailable");
+            Expect(authorityTable.TryResolve(handle255, out LF2Entity resolved255) &&
+                   ReferenceEquals(resolved255, entity255) &&
+                   authorityTable.TryGetCurrentOccupant(255, out LF2Entity current255) &&
+                   ReferenceEquals(current255, entity255) &&
+                   authorityTable.TryResolve(handle256, out LF2Entity resolved256) &&
+                   ReferenceEquals(resolved256, entity256) &&
+                   authorityTable.TryResolve(handle399, out LF2Entity resolved399) &&
+                   ReferenceEquals(resolved399, entity399),
+                "runtime entity handles must resolve only their current claimed occupants");
+            Expect(authorityTable.GetRawRuntime(255) != null &&
+                   !ReferenceEquals(authorityTable.GetRawRuntime(255), entity255.Runtime),
+                "runtime slot entries must own independent raw runtime storage");
+
+            LF2ItrRestTracker.StateSnapshot restSnapshot = entity255.ItrRest.CaptureState();
+            Expect(authorityTable.SetRawRest(255, restSnapshot) &&
+                   ReferenceEquals(authorityTable.GetRawRest(255), restSnapshot),
+                "runtime slot entries must retain raw itr-rest state");
+            Expect(!authorityTable.Release(255, entity256) &&
+                   ReferenceEquals(authorityTable.GetCurrentOccupant(255), entity255) &&
+                   authorityTable.ClaimedCount == 3,
+                "runtime slot table must reject a stale lifecycle release for a different occupant");
+            Expect(authorityTable.Release(handle255) &&
+                   authorityTable.ClaimedCount == 2 &&
+                   !authorityTable.TryResolve(handle255, out _) &&
+                   ReferenceEquals(authorityTable.GetRawRest(255), restSnapshot),
+                "released runtime entity handles must stop resolving while raw rest survives release");
+
+            var replacement255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(authorityTable.AllocateLowest(255, replacement255, out RuntimeEntityHandle replacementHandle) == 255 &&
+                   replacementHandle != handle255 &&
+                   authorityTable.TryResolve(replacementHandle, out LF2Entity replacementResolved) &&
+                   ReferenceEquals(replacementResolved, replacement255) &&
+                   !authorityTable.TryResolve(handle255, out _) &&
+                   !authorityTable.Release(255, entity255) &&
+                   ReferenceEquals(authorityTable.GetCurrentOccupant(255), replacement255),
+                "same-slot reuse must issue a new generation and keep the old handle invalid");
+
+            authorityTable.Reset();
+            Expect(authorityTable.ClaimedCount == 0 &&
+                   authorityTable.MaterializedPageCount == 2 &&
+                   !authorityTable.TryResolve(replacementHandle, out _) &&
+                   authorityTable.GetRawRest(255) == null,
+                "runtime slot table reset must clear claims and raw rest without losing lazy pages");
+            var afterReset255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(authorityTable.TryClaim(255, afterReset255, out RuntimeEntityHandle afterResetHandle) &&
+                   afterResetHandle != replacementHandle &&
+                   !authorityTable.TryResolve(replacementHandle, out _),
+                "runtime slot table reset must prevent old handles from becoming valid again");
+
+            var mobileTable = new RuntimeSlotTable(1000, 20, 50);
+            var entity999 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(mobileTable.TryClaim(999, entity999, out RuntimeEntityHandle handle999) &&
+                   mobileTable.MaterializedPageCount == 1 &&
+                   mobileTable.TryResolve(handle999, out LF2Entity resolved999) &&
+                   ReferenceEquals(resolved999, entity999),
+                "runtime slot table must lazily claim the final MobileExtended slot");
+            Expect(!mobileTable.TryClaim(1000, new FlowSelfCheckEntity(LF2ObjectType.Character), out _) &&
+                   !mobileTable.IsAddressable(1000) &&
+                   mobileTable.GetRawRuntime(1000) == null &&
+                   mobileTable.MaterializedPageCount == 1,
+                "runtime slot table must keep the MobileExtended tail unavailable");
+
+            var world = new SimulationWorld();
+            var worldEntity255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var worldEntity256 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            worldEntity255.SetRequiredRuntimeSlot(255);
+            worldEntity256.SetRequiredRuntimeSlot(256);
+            world.Register(worldEntity255);
+            world.Register(worldEntity256);
+            Expect(ReferenceEquals(world.FindEntityByRuntimeSlotIncludingPending(255), worldEntity255) &&
+                   ReferenceEquals(world.FindEntityByRuntimeSlotForQuery(256), worldEntity256),
+                "production runtime registry must resolve current occupants across page boundaries");
+            world.ResetRuntimeState();
+            Expect(world.FindEntityByRuntimeSlotIncludingPending(255) == null &&
+                   world.FindEntityByRuntimeSlotForQuery(256) == null &&
+                   world.ObjectCount == 0,
+                "production runtime registry reset must clear cross-page occupant lookups");
         }
 
         private static void CheckParityTraceInfrastructure()
