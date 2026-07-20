@@ -41,6 +41,8 @@ namespace NTSD.Simulation
         public int ZMax = 350;
         public int PerspectiveNear;
         public int PerspectiveFar;
+        public int BoundLeft;
+        public int BoundRight = 800;
         public int XMaxOverride;
         public int CameraMaxOverride;
 
@@ -52,6 +54,8 @@ namespace NTSD.Simulation
             ZMax = 350;
             PerspectiveNear = 0;
             PerspectiveFar = 0;
+            BoundLeft = 0;
+            BoundRight = 800;
             XMaxOverride = 0;
             CameraMaxOverride = 0;
         }
@@ -202,24 +206,35 @@ namespace NTSD.Simulation
             if (config?.players == null)
                 return;
 
-            int writeIndex = 0;
-            for (int i = 0; i < config.players.Count && writeIndex < Slots.Length; i++)
+            int slotCount = Math.Min(config.players.Count, Slots.Length);
+            for (int i = 0; i < slotCount; i++)
             {
                 PlayerSlotConfig player = config.players[i];
                 if (player == null || !player.use)
                     continue;
 
-                BattleSlotRuntimeState slot = Slots[writeIndex];
+                BattleSlotRuntimeState slot = Slots[i];
                 slot.Active = true;
                 slot.IsHuman = player.isHuman;
                 slot.CharacterId = player.characterId;
-                slot.Team = player.team;
-                slot.InputId = player.inputId;
+                slot.Team = ResolveBattleTeam(player.team, i);
+                slot.InputId = ResolveInputId(player.inputId, i);
                 slot.AiId = player.aiId;
-                writeIndex++;
+                ActiveSlotCount++;
             }
+        }
 
-            ActiveSlotCount = writeIndex;
+        public static int ResolveBattleTeam(int configuredTeam, int originalSlotIndex)
+        {
+            if (configuredTeam == GameConfig.TeamIndependent)
+                return 10 + originalSlotIndex;
+
+            return configuredTeam > 0 ? configuredTeam : originalSlotIndex + 1;
+        }
+
+        public static int ResolveInputId(int configuredInputId, int originalSlotIndex)
+        {
+            return configuredInputId > 0 ? configuredInputId : originalSlotIndex + 1;
         }
     }
 
@@ -249,6 +264,8 @@ namespace NTSD.Simulation
         public int BattleStepMode;
         public int BattleStepGate;
         public int DjaGuardGlobal44F224;
+        public bool HumanInputPolledExternally;
+        public bool NeedClearInput;
 
         public void Reset()
         {
@@ -271,6 +288,56 @@ namespace NTSD.Simulation
             BattleStepMode = 0;
             BattleStepGate = 0;
             DjaGuardGlobal44F224 = 0;
+            HumanInputPolledExternally = false;
+            NeedClearInput = false;
+        }
+    }
+
+    [Serializable]
+    public sealed class BattleResultsRuntimeState
+    {
+        public int Phase;
+        public int Timer;
+        public int Winner = -1;
+        public bool HadBoth;
+        public int BattleEndPhase;
+        public int PendingWinner = -2;
+        public int TeamCount;
+        public int[] TeamIds = { -1, -1 };
+        public int PendingHostAction;
+
+        public bool IsActive => Phase >= 200;
+
+        public void Reset()
+        {
+            Phase = 0;
+            Timer = 0;
+            Winner = -1;
+            HadBoth = false;
+            BattleEndPhase = 0;
+            PendingWinner = -2;
+            TeamCount = 0;
+            EnsureTeamIds();
+            TeamIds[0] = -1;
+            TeamIds[1] = -1;
+            PendingHostAction = 0;
+        }
+
+        public void ActivateSummary(int winner, int teamCount, int team0, int team1)
+        {
+            Phase = 200;
+            Timer = 0;
+            Winner = winner;
+            TeamCount = teamCount;
+            EnsureTeamIds();
+            TeamIds[0] = team0;
+            TeamIds[1] = team1;
+        }
+
+        public void EnsureTeamIds()
+        {
+            if (TeamIds == null || TeamIds.Length != 2)
+                TeamIds = new[] { -1, -1 };
         }
     }
 
@@ -297,6 +364,7 @@ namespace NTSD.Simulation
         public List<int[]> StageSpawnRuntimeSlots = new List<int[]>();
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
+        public BattleResultsRuntimeState Results = new BattleResultsRuntimeState();
         public int[] KillStats = new int[BattleStatSlotCount];
         public int[] DamageStats = new int[BattleStatSlotCount];
 
@@ -315,6 +383,7 @@ namespace NTSD.Simulation
             StageSpawnRuntimeSlots?.Clear();
             Roster?.Reset();
             Flow?.Reset();
+            Results?.Reset();
             ResetStatArray(ref KillStats);
             ResetStatArray(ref DamageStats);
         }

@@ -43,7 +43,7 @@ namespace NTSD.Simulation
             public const double WeaponGravityDefault    = 1.7;                 // 非 state=1002 默认重力 (baseline GravityDefault)
 
             // type=4 / type_sub=0x78 额外 X 速度位置修正。
-            public const float WeaponExtraVxFactor = 0.2f;
+            public const double WeaponExtraVxFactor = 0.2;
 
             // 武器落地反弹参数。P0-f-2b B1: float→double，对齐 baseline Physics.cs 全 double 落地反弹链。
             public const double WeaponType1BigBounceThreshold = 9.9;

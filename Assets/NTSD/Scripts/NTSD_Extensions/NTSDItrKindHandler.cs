@@ -14,7 +14,8 @@ namespace NTSD.Extensions
     {
         public bool IsAttackKind(int kind)
         {
-            return kind == 0 || kind == 4 || kind == 8 || kind == 9 || kind == 10 || kind == 11 || kind == 15 || kind == 16;
+            return kind == 0 || kind == 4 || kind == 8 || kind == 9 || kind == 10 || kind == 11 ||
+                   kind == 14 || kind == 15 || kind == 16;
         }
 
         public bool IsPreInteractionKind(int kind)

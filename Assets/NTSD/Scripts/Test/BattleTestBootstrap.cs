@@ -178,6 +178,9 @@ namespace NTSD.Test
         {
             var spawnPoints = levelMgr.ResolveSpawnPoints(battleScene);
             int count = overrideCharacterIds != null ? overrideCharacterIds.Length : 1;
+            SimulationWorld world = SimulationTickDriver.Instance?.World;
+            BattleRosterRuntimeState roster = world?.Runtime?.Roster;
+            roster?.Reset();
 
             for (int i = 0; i < count; i++)
             {
@@ -201,6 +204,21 @@ namespace NTSD.Test
                 lf2.ModuleBind(frameData, characterId);
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = i + 1;
+                lf2.RelationTeam = i + 1;
+                lf2.AiControlled = false;
+
+                if (roster?.Slots != null && i < roster.Slots.Length)
+                {
+                    BattleSlotRuntimeState rosterSlot = roster.Slots[i];
+                    rosterSlot.Active = true;
+                    rosterSlot.IsHuman = true;
+                    rosterSlot.CharacterId = characterId;
+                    rosterSlot.Team = lf2.Team;
+                    rosterSlot.InputId = i + 1;
+                    rosterSlot.RuntimeSlotIndex = lf2.Runtime.SlotIndex;
+                    rosterSlot.StableId = lf2.Runtime.StableId;
+                    roster.ActiveSlotCount++;
+                }
 
                 Vector3 spawnPos;
                 if (i < spawnPoints.Count)

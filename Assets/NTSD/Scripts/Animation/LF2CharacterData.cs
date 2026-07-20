@@ -22,7 +22,7 @@ namespace NTSD.Animation
 
         [Header("奔跑参数")]
         public int running_frame_rate = 3;
-        public float running_speed = 15.0f;
+        public float running_speed = 8.0f;
         public float running_speedz = 3.3f;
 
         [Header("负重行走参数")]

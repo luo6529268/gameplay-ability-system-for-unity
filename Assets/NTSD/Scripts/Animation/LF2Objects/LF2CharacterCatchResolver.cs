@@ -23,7 +23,7 @@ namespace NTSD.Animation.LF2Objects
         public bool ProcessCatchingInput()
         {
             Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", "input", _character.CurrentFrameId);
-            // C++ release 的抓取动作选择在全局 step10 的 cpoint_check 统一推进。
+            // C# authority advances catching action selection in the global step10 cpoint pass.
             // 输入阶段只保留按键状态，不在这里直接跳帧。
             return false;
         }
@@ -39,9 +39,6 @@ namespace NTSD.Animation.LF2Objects
 
                 case "state_exit":
                     Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, _character.CurrentFrameId);
-                    _character.Catching = null;
-                    _character.CaughtSlotIndex = -1;
-                    _character.PS.zz = 0;
                     return false;
 
                 case "frame":
@@ -49,7 +46,7 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "TU":
-                    // C++ release 的抓取推进在全局 step10 执行。
+                    // C# authority advances catching in the global step10 pass.
                     return false;
 
                 default:
@@ -63,7 +60,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 case "state_exit":
                     Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, _character.CurrentFrameId);
-                    _character.Catching = null;
                     return false;
 
                 case "frame":
@@ -72,7 +68,7 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 case "TU":
-                    // C++ release 的被抓同步在全局 step10.5 执行。
+                    // C# authority synchronizes the caught entity in the global held-cpoint pass.
                     return false;
 
                 default:
@@ -111,9 +107,9 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyCpointActionStep10(int actionFrame, LF2Entity victim)
         {
-            _character.ApplySignedCpointActionFramePreserveWait(actionFrame);
+            _character.ApplySignedImmediateFrameWaitReset(actionFrame);
             int victimAction = _character.Frame?.D?.cpoint?.vaction ?? 0;
-            victim.SetCpointRawFramePreserveWait(victimAction);
+            victim.DirectWriteFrameImmediateWaitReset(victimAction);
             victim.AttackingCounter = 0;
             _character.AttackingCounter = 0;
         }
@@ -136,6 +132,7 @@ namespace NTSD.Animation.LF2Objects
             if (victim == null)
                 return;
 
+            victim.Runtime.Vz = 0f;
             if (_character.Runtime.KeyUp != 0 && _character.Runtime.KeyDown == 0)
                 victim.Runtime.Vz = -cpoint.throwvz;
             else if (_character.Runtime.KeyUp == 0 && _character.Runtime.KeyDown != 0)
@@ -178,14 +175,6 @@ namespace NTSD.Animation.LF2Objects
                     if (holder != null)
                         holder.KillStat++;
 
-                    int killStatIndex = victimEntity.Unk344;
-                    if (_character.Match?.KillStats != null &&
-                        killStatIndex > 0 &&
-                        killStatIndex < 3 &&
-                        killStatIndex < _character.Match.KillStats.Length)
-                    {
-                        _character.Match.KillStats[killStatIndex]++;
-                    }
                 }
 
                 victimEntity.Health.HP -= actualInjury;
@@ -199,18 +188,10 @@ namespace NTSD.Animation.LF2Objects
                 if (comboHolder != null)
                     comboHolder.ComboCountAtk += actualInjury;
 
-                int damageStatIndex = victimEntity.Unk344;
-                if (_character.Match?.DamageStats != null &&
-                    damageStatIndex > 0 &&
-                    damageStatIndex < 3 &&
-                    damageStatIndex < _character.Match.DamageStats.Length)
-                {
-                    _character.Match.DamageStats[damageStatIndex] += actualInjury;
-                }
                 return;
             }
 
-            // C++ Collision_Check2 的 wp.attacking < 0 走回血分支：
+            // C# authority uses negative cpoint injury as the healing branch:
             // victim.hp += attacking; victim.hp_max += attacking / 3; attacker.attacking = 1。
             victimEntity.Health.HP += injury;
             victimEntity.Health.HPBound += injury / 3;
@@ -230,10 +211,9 @@ namespace NTSD.Animation.LF2Objects
                 : catcherFrame.centerx - catcherCpoint.x + catcherX;
             int dy = catcherY - catcherFrame.centery + catcherCpoint.y;
 
-            LF2FrameData victimActionFrame = victimEntity.FrameCache.GetFrameDataById(catcherCpoint.vaction);
-            LF2FrameData victimCurrentFrame = victimEntity.FrameCache.GetFrameDataById(victimEntity.Frame?.N ?? 0);
-            int victimCpointX = victimActionFrame?.cpoint?.x ?? 0;
-            int victimCpointY = victimActionFrame?.cpoint?.y ?? 0;
+            LF2FrameData victimCurrentFrame = victimEntity.Frame?.D;
+            int victimCpointX = victimCurrentFrame?.cpoint?.x ?? 0;
+            int victimCpointY = victimCurrentFrame?.cpoint?.y ?? 0;
             int victimCenterX = victimCurrentFrame?.centerx ?? 0;
             int victimCenterY = victimCurrentFrame?.centery ?? 0;
 

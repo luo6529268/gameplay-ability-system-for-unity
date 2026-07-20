@@ -20,32 +20,39 @@ namespace NTSD.Animation.LF2Objects
                 clearHolderCopy: !preserveRuntimeOwnerFields);
         }
 
-        public void ReleaseHeldWeaponRuntime(LF2Entity holder)
+        public void ReleaseHeldWeaponRuntime(LF2Entity holder, bool stampReleaseTick = false)
         {
-            ClearHolderRuntime(holder);
-            ClearWeaponHolderRuntime(clearHolderSlot: true, clearHolderCopy: false);
+            if (stampReleaseTick)
+                weapon.Runtime.ReleaseTick = weapon.Match?.CurrentTickIndex ?? 0;
+            ClearReleasedLinks(holder);
         }
 
         public void ReleaseHeldWeaponForConsume(LF2Entity holder)
         {
-            ClearHolderRuntime(holder);
-            ClearWeaponHolderRuntime(clearHolderSlot: true, clearHolderCopy: true);
+            weapon.Runtime.ReleaseTick = weapon.Match?.CurrentTickIndex ?? 0;
+            ClearReleasedLinks(holder);
+            if (holder?.Runtime != null)
+                holder.Runtime.TargetSlotIndex = 0;
+            weapon.Runtime.HolderStableId = 0;
         }
 
-        private static void ClearHolderRuntime(LF2Entity holder)
+        private void ClearReleasedLinks(LF2Entity holder)
         {
-            if (holder is LF2Character character)
-            {
-                character.HoldWeapon(null);
-                return;
-            }
-
             if (holder?.Runtime == null)
                 return;
 
-            holder.Runtime.HeldWeaponStableId = -1;
-            holder.Runtime.TargetSlotIndex = -1;
             holder.Runtime.LinkState = 0;
+            if (holder.Runtime.HeldWeaponStableId == weapon.Runtime.SlotIndex)
+            {
+                holder.Runtime.HeldWeaponStableId = -1;
+                holder.Runtime.ThrowFrameGuard = -1;
+            }
+
+            if (holder is LF2Character character)
+                character.HeldWeaponReferenceInternal = null;
+
+            weapon.GrabbedBy = 0;
+            weapon.Runtime.LinkState = 0;
         }
 
         private void ClearWeaponHolderRuntime(bool clearHolderSlot, bool clearHolderCopy)

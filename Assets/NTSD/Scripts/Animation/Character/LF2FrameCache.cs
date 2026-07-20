@@ -9,11 +9,13 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class LF2FrameCache
     {
-        public const int MaxFrameIdExclusive = 400;
+        public const int MaxFrameIdExclusive = 600;
+
+        private static readonly LF2FrameData EmptyFrame = new LF2FrameData();
 
         public LF2CharacterDataWrapper Wrapper { get; private set; }
 
-        private LF2FrameData[] _frames = new LF2FrameData[400];
+        private LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
         private readonly Dictionary<string, List<LF2FrameData>> _framesByName = new Dictionary<string, List<LF2FrameData>>();
 
         public void Clear()
@@ -37,7 +39,7 @@ namespace NTSD.Animation
             {
                 if (frameData == null) continue;
 
-                if (frameData.frameId >= 0)
+                if ((uint)frameData.frameId < MaxFrameIdExclusive)
                 {
                     _frames[frameData.frameId] = frameData;
                 }
@@ -57,12 +59,12 @@ namespace NTSD.Animation
         public LF2FrameData GetFrameDataById(int frameId)
         {
             if ((uint)frameId >= (uint)_frames.Length) return null;
-            return _frames[frameId];
+            return _frames[frameId] ?? EmptyFrame;
         }
 
         public bool HasFrame(int frameId)
         {
-            return GetFrameDataById(frameId) != null;
+            return (uint)frameId < (uint)_frames.Length && _frames[frameId] != null;
         }
 
         public bool TryGetFramesByName(string frameName, out List<LF2FrameData> frames)

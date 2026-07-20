@@ -14,6 +14,35 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
+        internal void ResetCooldownsForRuntimeSlot(int runtimeSlot, LF2Entity occupant)
+        {
+            if (runtimeSlot < 0 || runtimeSlot >= MaxRuntimeSlots)
+                return;
+
+            _rawRestSlots[runtimeSlot] = null;
+            for (int victimSlot = 0; victimSlot < _rawRestSlots.Length; victimSlot++)
+                _rawRestSlots[victimSlot]?.VrestByAttacker?.Remove(runtimeSlot);
+
+            occupant?.ItrRest?.Reset();
+
+            List<int> bucketKeys = GetBucketKeySnapshot();
+            if (bucketKeys == null)
+                return;
+
+            for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
+            {
+                int key = bucketKeys[keyIndex];
+                if (!_buckets.TryGetValue(key, out Bucket bucket))
+                    continue;
+
+                for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
+                {
+                    if (bucket.items[itemIndex] is LF2Entity entity && entity != occupant)
+                        entity.ItrRest?.RemoveVrest(runtimeSlot);
+                }
+            }
+        }
+
         private bool TryGetNextEntityAfterRuntimeSlot(int slotCursor, out LF2Entity nextEntity, out int nextSlot)
         {
             nextEntity = null;
@@ -74,10 +103,11 @@ namespace NTSD.Simulation
             {
                 if (held == null || held.Runtime.LinkState >= 0) return;
 
-                LF2Character holder = FindEntityByRuntimeSlotCurrent(held.Runtime.HolderStableId) as LF2Character;
+                LF2Entity holder = FindEntityByRuntimeSlotCurrent(held.Runtime.HolderStableId);
                 if (holder == null || holder.Runtime.TargetSlotIndex != GetRuntimeSlotOrder(held))
                 {
                     held.Runtime.LinkState = 0;
+                    held.Runtime.HolderStableId = -1;
                     RefreshRuntimeSnapshot(held);
                     return;
                 }
@@ -87,25 +117,15 @@ namespace NTSD.Simulation
                     ? holderFrame.wpoints[0]
                     : new WeaponPoint();
 
-                if (!holder.ReleaseHeldObjectByWPoint(held, wpoint, out var actResult))
+                if (!LF2HeldObjectRuntime.RunStep12(holder, held, wpoint, out var actResult))
                     return;
-
-                if (actResult.NeedsKind3Drop)
-                {
-                    var dropPoint = new WeaponPoint
-                    {
-                        kind = 3,
-                        x = wpoint.x,
-                        y = wpoint.y,
-                        weaponact = wpoint.weaponact,
-                        cover = wpoint.cover
-                    };
-                    holder.ReleaseHeldObjectByWPoint(held, dropPoint, out actResult);
-                }
 
                 var attackResult = actResult.AttackResult;
                 if (attackResult != null && attackResult.HitUid != 0 && attackResult.ARest > 0)
-                    holder.ItrRest.Arest = attackResult.ARest;
+                {
+                    if (holder.ItrRest != null)
+                        holder.ItrRest.Arest = attackResult.ARest;
+                }
 
                 RefreshRuntimeSnapshot(holder);
                 RefreshRuntimeSnapshot(held);
@@ -130,6 +150,8 @@ namespace NTSD.Simulation
                 if (target == null || target.Runtime.HolderStableId != holderSlot)
                 {
                     holder.Runtime.LinkState = 0;
+                    holder.Runtime.TargetSlotIndex = -1;
+                    holder.Runtime.HeldWeaponStableId = -1;
                     RefreshRuntimeSnapshot(holder);
                 }
             });
@@ -162,7 +184,7 @@ namespace NTSD.Simulation
                 for (int i = 0; i < bucket.items.Count; i++)
                 {
                     if (bucket.items[i] is LF2Entity entity &&
-                        GetRuntimeSlotOrder(entity) == runtimeSlot)
+                        entity.Runtime?.SlotIndex == runtimeSlot)
                     {
                         return entity;
                     }
@@ -186,7 +208,7 @@ namespace NTSD.Simulation
                 {
                     if (bucket.items[i] is LF2Entity entity &&
                         IsActiveForCurrentPass(entity) &&
-                        GetRuntimeSlotOrder(entity) == runtimeSlot)
+                        entity.Runtime?.SlotIndex == runtimeSlot)
                     {
                         return entity;
                     }

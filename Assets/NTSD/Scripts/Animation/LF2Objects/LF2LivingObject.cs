@@ -332,7 +332,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (Frame.D != null && !string.IsNullOrEmpty(Frame.D.sound))
             {
-                AppManager.Instance?.SoundPlayer?.PlaySfx(Frame.D.sound);
+                QueueBattleSound(Frame.D.sound);
             }
         }
 
@@ -484,6 +484,7 @@ namespace NTSD.Animation.LF2Objects
         public override void ImmediateFrame(int frameId)
         {
             if (Frame == null || Trans == null) return;
+            if (FrameCache?.HasFrame(frameId) != true) return;
 
             LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);
             if (targetFrame == null) return;

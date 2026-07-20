@@ -8,7 +8,6 @@ using NTSD.Game;
 using NTSD.Tools;
 using NTSD.UI;
 using NTSD.Simulation;
-using NTSD.LevelEditor;
 using MoreMountains.TopDownEngine;
 using System.Collections;
 using MoreMountains.Tools;
@@ -177,21 +176,42 @@ namespace NTSD.App
         {
             if (CurrentMatchConfig == null) return;
 
-            var levelMgr = BoundaryWallManager.Instance;
-            var spawnPoints = levelMgr.ResolveSpawnPoints(battleScene);
+            SimulationWorld world = SimulationTickDriver.Instance?.World;
+            BattleRosterRuntimeState roster = world?.Runtime?.Roster;
+            BattleSlotRuntimeState[] rosterSlots = roster?.Slots;
+            if (world == null || rosterSlots == null)
+                return;
 
-            for (int i = 0; i < CurrentMatchConfig.players.Count; i++)
+            int slotCount = System.Math.Min(CurrentMatchConfig.players.Count, rosterSlots.Length);
+            for (int i = 0; i < slotCount; i++)
             {
                 var slot = CurrentMatchConfig.players[i];
-                if (!slot.use) continue;
+                if (slot == null || !slot.use) continue;
+
+                var frameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(slot.characterId);
+                if (frameData == null)
+                {
+                    Debug.LogWarning(
+                        $"[AppManager] Character {slot.characterId} for battle slot {i} is not loaded in scene '{battleScene.name}'.");
+                    continue;
+                }
+
+                BattleStageRuntimeState stage = world.Runtime?.Stage;
+                int stageWidth = stage != null && stage.BaseStageWidthPx > 0
+                    ? stage.BaseStageWidthPx
+                    : 800;
+                int zMin = stage != null && stage.ZMin > 0 ? stage.ZMin : 180;
+                int zMax = stage != null && stage.ZMax > 0 ? stage.ZMax : 350;
+                int xRange = stageWidth / 2;
+                int zRange = zMax - zMin;
+                double spawnX = stageWidth / 4 + (xRange > 0 ? world.Rng.NextRaw() % xRange : 0);
+                int spawnZ = zMin + (zRange > 0 ? world.Rng.NextRaw() % zRange : 0);
 
                 var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
                 var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, slot.characterId) as LF2Character;
 
-                int inputId = slot.inputId > 0 ? slot.inputId : i + 1;
-                int team = slot.team == GameConfig.TeamIndependent
-                    ? 10 + i
-                    : (slot.team > 0 ? slot.team : i + 1);
+                int inputId = BattleRosterRuntimeState.ResolveInputId(slot.inputId, i);
+                int team = BattleRosterRuntimeState.ResolveBattleTeam(slot.team, i);
 
                 lf2.Controller.SetInputID(inputId);
 
@@ -200,28 +220,28 @@ namespace NTSD.App
 
                 EntityModel.SetLogicObject(lf2, null);
 
-                var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(slot.characterId);
                 lf2.ModuleBind(frameData, slot.characterId);
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = team;
                 lf2.RelationTeam = team;
                 lf2.AiControlled = !slot.isHuman;
 
-                Vector3 spawnPos;
-                if (i < spawnPoints.Count)
-                {
-                    spawnPos = spawnPoints[i].transform.position;
-                }
-                else
-                {
-                    spawnPos = Vector3.zero;
-                    Debug.LogWarning($"[AppManager] No spawn point for player index {i} in scene '{battleScene.name}'; using Vector3.zero.");
-                }
-                
-                float ppu = SimulationConstants.PIXELS_PER_UNIT;
-                lf2.PS.x = spawnPos.x * ppu;
-                lf2.PS.z = PhysicsState.UnityYToDepth(spawnPos.y);
+                lf2.PS.x = spawnX;
                 lf2.PS.y = 0;
+                lf2.PS.z = spawnZ;
+                lf2.PS.vx = 0.1;
+                lf2.PS.vy = 0;
+                lf2.PS.vz = 0.1;
+                lf2.HitStun = 75;
+                lf2.Runtime.SyncIntegerPosition();
+                lf2.RefreshRuntimeSnapshot();
+
+                BattleSlotRuntimeState rosterSlot = rosterSlots[i];
+                if (rosterSlot != null && rosterSlot.Active)
+                {
+                    rosterSlot.RuntimeSlotIndex = lf2.Runtime.SlotIndex;
+                    rosterSlot.StableId = lf2.Runtime.StableId;
+                }
             }
         }
 

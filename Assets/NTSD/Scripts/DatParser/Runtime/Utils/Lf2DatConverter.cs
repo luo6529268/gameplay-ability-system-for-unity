@@ -170,8 +170,14 @@ namespace NTSD.DatParser
                     case "kind": cpoint.kind = ParseInt(prop.Value); break;
                     case "x": cpoint.x = ParseInt(prop.Value); break;
                     case "y": cpoint.y = ParseInt(prop.Value); break;
-                    case "fronthurtact": cpoint.fronthurtact = ParseInt(prop.Value); break;
-                    case "backhurtact": cpoint.backhurtact = ParseInt(prop.Value); break;
+                    case "fronthurtact":
+                        cpoint.fronthurtact = ParseInt(prop.Value);
+                        cpoint.injury = cpoint.fronthurtact;
+                        break;
+                    case "backhurtact":
+                        cpoint.backhurtact = ParseInt(prop.Value);
+                        cpoint.cover = cpoint.backhurtact;
+                        break;
                     case "vaction": cpoint.vaction = ParseInt(prop.Value); break;
                     case "throwvz": cpoint.throwvz = ParseInt(prop.Value); break;
                     case "hurtable": cpoint.hurtable = ParseInt(prop.Value); break;

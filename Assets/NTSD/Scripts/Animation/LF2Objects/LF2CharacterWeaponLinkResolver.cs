@@ -21,17 +21,51 @@ namespace NTSD.Animation.LF2Objects
 
         private LF2Entity GetHeldEntity()
         {
-            return _character.HeldWeaponReferenceInternal as LF2Entity;
+            int holderSlot = _character.Runtime?.SlotIndex ?? -1;
+            int heldSlot = _character.Runtime?.TargetSlotIndex ?? -1;
+            if ((_character.Runtime?.LinkState ?? 0) <= 0 || holderSlot < 0 || heldSlot < 0)
+            {
+                ClearStaleHeldReference();
+                return null;
+            }
+
+            LF2Entity held = _character.Match?.FindEntityByRuntimeSlotForQuery(heldSlot);
+            if (held == null)
+            {
+                held = _character.HeldWeaponReferenceInternal as LF2Entity;
+                if ((held?.Runtime?.SlotIndex ?? -1) != heldSlot)
+                    held = null;
+            }
+
+            if (held?.Runtime == null || held.Runtime.LinkState >= 0 ||
+                held.Runtime.HolderStableId != holderSlot)
+            {
+                ClearStaleHeldReference();
+                return null;
+            }
+
+            _character.HeldWeaponReferenceInternal = held;
+            return held;
+        }
+
+        private void ClearStaleHeldReference()
+        {
+            _character.HeldWeaponReferenceInternal = null;
+            if (_character.Runtime == null)
+                return;
+            _character.Runtime.LinkState = 0;
+            _character.Runtime.TargetSlotIndex = -1;
+            _character.Runtime.HeldWeaponStableId = -1;
         }
 
         public LF2WeaponBase GetHeldWeaponBase()
         {
-            return _character.HeldWeaponReferenceInternal as LF2WeaponBase;
+            return GetHeldEntity() as LF2WeaponBase;
         }
 
         public bool HasHeldObject()
         {
-            return _character.HeldWeaponReferenceInternal != null;
+            return GetHeldEntity() != null;
         }
 
         public bool IsHeldHeavyWeapon()
@@ -41,7 +75,7 @@ namespace NTSD.Animation.LF2Objects
 
         private int GetHeldObjectId()
         {
-            return _character.HeldWeaponReferenceInternal?.ObjectId ?? -1;
+            return GetHeldEntity()?.ObjectId ?? -1;
         }
 
         public bool IsHeldObjectAttackable()
@@ -79,7 +113,7 @@ namespace NTSD.Animation.LF2Objects
         public void HoldWeapon(ILF2Object weapon)
         {
             _character.HeldWeaponReferenceInternal = weapon;
-            LF2Entity held = GetHeldEntity();
+            LF2Entity held = weapon as LF2Entity;
             _character.Runtime.HeldWeaponStableId = held?.Runtime?.SlotIndex ?? -1;
             _character.Runtime.TargetSlotIndex = held?.Runtime?.SlotIndex ?? -1;
             _character.Runtime.LinkState = ResolveHeldWeaponLinkState(weapon);
@@ -124,7 +158,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public ILF2Object GetHeldWeapon()
         {
-            return _character.HeldWeaponReferenceInternal;
+            return GetHeldEntity();
         }
 
         /// <summary>
@@ -178,7 +212,7 @@ namespace NTSD.Animation.LF2Objects
                 int objType = held.ObjectType;
                 if (objType == 1 || objType == 4 || objType == 6)
                 {
-                    held.ImmediateFrame(40);
+                    held.DirectWriteHeldFramePreserveWaitCounter(40);
                     ApplyHeldObjectThrowVelocity(held, holderWPoint);
                     ClearReleasedHeldObject(held, clearTeam: false);
                     result.Thrown = true;
@@ -187,7 +221,7 @@ namespace NTSD.Animation.LF2Objects
 
                 if (objType == 2)
                 {
-                    held.ImmediateFrame(_character.RandIntInternal(0, 6));
+                    held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 6));
                     ApplyHeldObjectThrowVelocity(held, holderWPoint);
                     ClearReleasedHeldObject(held, clearTeam: false);
                     result.Thrown = true;
@@ -219,9 +253,9 @@ namespace NTSD.Animation.LF2Objects
             if (held == null || held.PS == null)
                 return;
 
-            held.ImmediateFrame(holderWPoint.weaponact);
-            held.FrameDelay = _character.FrameDelay;
+            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.weaponact);
             held.SwitchDir(_character.PS?.dir ?? held.PS.dir);
+            held.FrameDelay = _character.FrameDelay;
 
             LF2FrameData heldFrame = held.Frame?.D;
             int heldCx = heldFrame?.centerx ?? 0;
@@ -237,11 +271,10 @@ namespace NTSD.Animation.LF2Objects
                 : holdpoint.x + heldWpx - heldCx;
             held.PS.y = holdpoint.y + heldCy - heldWpy;
             held.PS.z = _character.Runtime != null ? _character.Runtime.ZInt : (_character.PS?.z ?? held.PS.z);
+            held.PS.zz = 0f;
 
             int cover = holderWPoint.cover;
-            int coverDiv = cover / 10;
-            int coverRem = cover % 10;
-            if (coverRem != 0)
+            if (cover == 0)
             {
                 held.PS.z += 1f;
                 held.PS.y -= 1f;
@@ -252,10 +285,7 @@ namespace NTSD.Animation.LF2Objects
                 held.PS.y += 1f;
             }
 
-            if (coverDiv == 1)
-                held.SwitchDir(_character.PS?.dir ?? held.PS.dir);
-            else if (coverDiv == 2)
-                held.SwitchDir((_character.PS?.dir ?? held.PS.dir) == "right" ? "left" : "right");
+            held.Runtime.SyncIntegerPosition();
         }
 
         private void ApplyHeldObjectThrowVelocity(LF2Entity held, WeaponPoint holderWPoint)
@@ -270,12 +300,12 @@ namespace NTSD.Animation.LF2Objects
             else if (!up && down)
                 held.PS.vz = holderWPoint.dvz;
 
-            held.PS.zz = 1f;
+            held.PS.zz = 0f;
         }
 
         private void DropHeldObjectFromDamagedHolder(LF2Entity held)
         {
-            held.ImmediateFrame(_character.RandIntInternal(0, 16));
+            held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 16));
             if (_character.HitCount == 1)
             {
                 held.PS.vx = _character.KnockbackVx * (1f / 3f);
@@ -297,7 +327,7 @@ namespace NTSD.Animation.LF2Objects
 
         private void DropHeldObjectRandomly(LF2Entity held)
         {
-            held.ImmediateFrame(_character.RandIntInternal(0, 6));
+            held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 6));
             held.PS.vx = _character.RandIntInternal(0, 7) - 3f;
             held.PS.vy = -_character.RandIntInternal(0, 4);
             held.PS.vz = (_character.RandIntInternal(0, 5) - 2) * 0.2f;
@@ -324,6 +354,11 @@ namespace NTSD.Animation.LF2Objects
             _character.HeldWeaponReferenceInternal = null;
             _character.GrabbedBy = 0;
             _character.Runtime.LinkState = 0;
+            if (_character.Runtime.HeldWeaponStableId == held.Runtime.SlotIndex)
+            {
+                _character.Runtime.HeldWeaponStableId = -1;
+                _character.Runtime.ThrowFrameGuard = -1;
+            }
         }
 
         /// <summary>
@@ -348,9 +383,6 @@ namespace NTSD.Animation.LF2Objects
             LF2WeaponBase weapon = GetHeldWeaponBase();
             if (weapon == null)
                 return false;
-
-            _character.ItrRest.Arest = 0;
-            weapon.ItrRest.Arest = 0;
 
             weapon.SetFrameDirect(weapon.BattleRandInt(0, 6));
             weapon.PS.vx = weapon.BattleRandInt(0, 7) - 3;
@@ -429,7 +461,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void RunWeaponSyncHeldStep10()
         {
-            // TODO(NTSD): 无可溯源实现，待补齐。见上方说明。
+            GetHeldEntity();
         }
     }
 }

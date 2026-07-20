@@ -6,7 +6,16 @@ namespace NTSD.Animation.LF2Objects
         {
             LF2Entity holder = GetRuntimeHolderEntity();
             Team = 0;
-            ReleaseHeldWeaponRuntimeInternal(holder);
+            // Authority ForceDrop clears the active owner fields and the copied
+            // holder identity without stamping ReleaseTick.
+            ForceClearHolder();
+            if (holder?.Runtime != null)
+            {
+                holder.Runtime.LinkState = 0;
+                holder.Runtime.TargetSlotIndex = -1;
+                holder.Runtime.HeldWeaponStableId = -1;
+                holder.Runtime.ThrowFrameGuard = -1;
+            }
             Runtime.WeaponState = 0;
 
             ImmediateFrame(RandInt(0, 16));
@@ -17,6 +26,7 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime.Y < -2.0)
                 Runtime.Y = -2.0;
 
+            Runtime.Zz = 0f;
             PS.zz = 0;
         }
     }

@@ -10,6 +10,29 @@ namespace NTSD.DatParser
     /// </summary>
     public class Lf2DatParserV2
     {
+        private static readonly HashSet<string> BmpMovementPropertyNames =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "walking_frame_rate",
+                "walking_speed",
+                "walking_speedz",
+                "running_frame_rate",
+                "running_speed",
+                "running_speedz",
+                "heavy_walking_speed",
+                "heavy_walking_speedz",
+                "heavy_running_speed",
+                "heavy_running_speedz",
+                "jump_height",
+                "jump_distance",
+                "jump_distancez",
+                "dash_height",
+                "dash_distance",
+                "dash_distancez",
+                "rowing_height",
+                "rowing_distance",
+            };
+
         /// <summary>
         /// 解析 dat 文件文本
         /// </summary>
@@ -160,6 +183,20 @@ namespace NTSD.DatParser
                 }
 
                 // 处理以 : 结尾的 token
+                // Character movement headers in bmp_begin use "key value" rather than
+                // the ordinary "key: value" syntax. Restrict this compatibility path to
+                // the known header fields and the BMP container so frame tokens cannot be
+                // mistaken for top-level character configuration.
+                if (stack.Peek() is Lf2BmpSection movementBmp &&
+                    BmpMovementPropertyNames.Contains(token) &&
+                    i + 1 < tokens.Length &&
+                    !tokens[i + 1].StartsWith("<") &&
+                    !tokens[i + 1].EndsWith(":"))
+                {
+                    movementBmp.AddProperty(new Lf2DatProperty(token, tokens[++i]));
+                    continue;
+                }
+
                 if (token.EndsWith(":"))
                 {
                     string name = token.Substring(0, token.Length - 1).Trim();

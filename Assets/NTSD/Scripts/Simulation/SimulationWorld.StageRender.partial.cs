@@ -14,6 +14,19 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
+        private bool _hasExplicitStageRuntimeSnapshot;
+
+        public void SetExplicitStageRuntimeSnapshotForTesting(
+            int stageWidth,
+            int zMin,
+            int zMax,
+            int perspectiveNear,
+            int perspectiveFar)
+        {
+            Runtime?.Stage?.SetSceneSnapshot(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
+            _hasExplicitStageRuntimeSnapshot = true;
+        }
+
         private static void ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar)
         {
             var cfg = NTSD.App.GameConfig.Instance;
@@ -43,6 +56,9 @@ namespace NTSD.Simulation
 
         public void RefreshStageRuntimeSnapshotFromScene()
         {
+            if (_hasExplicitStageRuntimeSnapshot)
+                return;
+
             ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar);
             Runtime?.Stage?.SetSceneSnapshot(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
         }
@@ -93,7 +109,7 @@ namespace NTSD.Simulation
                     RefreshRuntimeSnapshot(entity);
             });
 
-            UpdateReleaseCameraAndRenderOffsets(stageWidthPx, stageZMin, stageZMax);
+            ResetUnityFixedWorldRenderOffsets();
         }
 
         public void RenderDispatchAll(int tickIndex)
@@ -101,106 +117,20 @@ namespace NTSD.Simulation
             LateRendererUpdateAll(tickIndex);
         }
 
-        private void UpdateReleaseCameraAndRenderOffsets(int stageWidth, int zMin, int zMax)
+        internal void ResetUnityFixedWorldRenderOffsets()
         {
-            int maxCam = stageWidth - NTSDRenderSpace.SourceScreenWidth;
-
-            if (maxCam > 0)
-            {
-                int sumX = 0;
-                int count = 0;
-                GetAllEntities(_entityScratch);
-
-                for (int i = 0; i < _entityScratch.Count; i++)
-                {
-                    LF2Entity entity = _entityScratch[i];
-                    if (entity == null || !entity.ShouldContributeToReleaseCamera() || entity.PS == null)
-                        continue;
-
-                    int slotIndex = entity.Runtime?.SlotIndex ?? -1;
-                    if (slotIndex < 0 || slotIndex >= 8)
-                        continue;
-
-                    int state = entity.Frame?.D?.state ?? 0;
-                    int xInt = entity.GetRuntimeXInt();
-                    int facing = entity.PS.dir == "left" ? -1 : 1;
-                    int px = state == 14 ? xInt : (xInt - facing * 260 + 130);
-                    sumX += px;
-                    count++;
-                }
-
-                if (count == 0)
-                {
-                    for (int i = 0; i < _entityScratch.Count; i++)
-                    {
-                        LF2Entity entity = _entityScratch[i];
-                        if (entity == null || !entity.ShouldContributeToReleaseCamera() || entity.PS == null)
-                            continue;
-
-                        sumX += entity.GetRuntimeXInt();
-                        count++;
-                    }
-
-                    if (count == 0)
-                    {
-                        sumX = 800;
-                        count = 1;
-                    }
-                }
-
-                _entityScratch.Clear();
-
-                int target = count > 0 ? (sumX / count - 397) : 0;
-                if (target < 0) target = 0;
-                if (target > maxCam) target = maxCam;
-
-                int diff = target - _cameraX;
-                int step = diff / 14;
-                _cameraVel = (step + _cameraVel * 6) / 7;
-                if (_cameraVel == 0 && diff != 0)
-                    _cameraVel = diff > 0 ? 1 : -1;
-
-                _cameraX += _cameraVel;
-                if (_cameraX < 0) _cameraX = 0;
-                if (_cameraX > maxCam) _cameraX = maxCam;
-            }
-            else
-            {
-                _cameraX = 0;
-                _cameraVel = 0;
-            }
-
-            UpdateRenderOffsets(stageWidth, zMin, zMax);
-        }
-
-        private void UpdateRenderOffsets(int stageWidth, int zMin, int zMax)
-        {
+            // Unity battle scenes use fixed world coordinates. Keep entity, shadow,
+            // and spark presentation independent from character-driven camera math.
+            _cameraX = 0;
+            _cameraVel = 0;
             GetAllEntities(_entityScratch);
-
-            int perspectiveNear = Runtime?.Stage?.PerspectiveNear ?? 0;
-            int perspectiveFar = Runtime?.Stage?.PerspectiveFar ?? 0;
-            bool hasPerspective = (perspectiveNear != 0 || perspectiveFar != 0) && zMax != zMin;
-            int zRange = zMax - zMin;
-
             for (int i = 0; i < _entityScratch.Count; i++)
             {
                 LF2Entity entity = _entityScratch[i];
-                if (entity == null)
+                if (entity?.Runtime == null)
                     continue;
 
-                float renderOffset = 0f;
-                if (hasPerspective)
-                {
-                    int zInt = entity.GetRenderZInt();
-                    int xInt = entity.GetRuntimeXInt();
-                    int cameraDelta = _cameraX - xInt + 400;
-                    double weight =
-                        ((double)(zInt - zMin) * perspectiveNear / zRange) +
-                        ((double)(zMax - zInt) * perspectiveFar / zRange);
-                    renderOffset = (float)(weight * cameraDelta * 0.0025);
-                }
-
-                entity.Runtime.RenderOffsetX = renderOffset;
+                entity.Runtime.RenderOffsetX = 0f;
             }
 
             _entityScratch.Clear();
@@ -239,6 +169,106 @@ namespace NTSD.Simulation
 
                 obj.SimLateTick(tickIndex);
             }
+        }
+
+        public void UpdateBattleResultsFlow()
+        {
+            BattleRuntimeState battle = Runtime;
+            if (battle?.Match?.BattleGameModeId != 1)
+                return;
+
+            battle.Results ??= new BattleResultsRuntimeState();
+            BattleResultsRuntimeState results = battle.Results;
+            if (results.IsActive)
+                return;
+
+            BattleSlotRuntimeState[] rosterSlots = battle.Roster?.Slots;
+            if (rosterSlots == null)
+                return;
+
+            int[] teamIds = { -1, -1 };
+            int[] alive = new int[2];
+            int teamCount = 0;
+            int slotCount = rosterSlots.Length < 8 ? rosterSlots.Length : 8;
+
+            for (int slotIndex = 0; slotIndex < slotCount; slotIndex++)
+            {
+                BattleSlotRuntimeState rosterSlot = rosterSlots[slotIndex];
+                if (rosterSlot == null)
+                    continue;
+
+                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(rosterSlot.RuntimeSlotIndex);
+                if (entity == null ||
+                    entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+                {
+                    continue;
+                }
+
+                // Authority GameTick keeps a fixed 0..7 slot in the result scan and
+                // skips only when the slot state is dormant and the bound entity is
+                // inactive. An active entity must remain eligible even when its
+                // roster metadata has already been marked inactive.
+                if (!rosterSlot.Active && !IsActiveForCurrentPass(entity))
+                    continue;
+
+                int team = entity.RelationTeam != 0 ? entity.RelationTeam : rosterSlot.Team;
+                if (team == 0)
+                    continue;
+
+                int bucket = -1;
+                for (int i = 0; i < teamCount; i++)
+                {
+                    if (teamIds[i] == team)
+                    {
+                        bucket = i;
+                        break;
+                    }
+                }
+
+                if (bucket < 0 && teamCount < teamIds.Length)
+                {
+                    bucket = teamCount;
+                    teamIds[teamCount++] = team;
+                }
+
+                if (bucket >= 0 && IsActiveForCurrentPass(entity) && entity.Health != null && entity.Health.HP > 0)
+                    alive[bucket]++;
+            }
+
+            if (alive[0] > 0 && alive[1] > 0)
+                results.HadBoth = true;
+
+            if (!results.HadBoth || teamCount < 2)
+                return;
+
+            results.EnsureTeamIds();
+            if (alive[0] > 0 && alive[1] > 0)
+            {
+                results.BattleEndPhase = 0;
+                results.PendingWinner = -2;
+                results.TeamCount = teamCount;
+                results.TeamIds[0] = teamIds[0];
+                results.TeamIds[1] = teamIds[1];
+                return;
+            }
+
+            int decidedWinner = alive[0] > 0 ? 0 : alive[1] > 0 ? 1 : -1;
+            if (results.BattleEndPhase == 0)
+            {
+                results.BattleEndPhase = 1;
+                results.PendingWinner = decidedWinner;
+            }
+            else
+            {
+                results.BattleEndPhase++;
+            }
+
+            results.TeamCount = teamCount;
+            results.TeamIds[0] = teamIds[0];
+            results.TeamIds[1] = teamIds[1];
+
+            if (results.BattleEndPhase >= 11)
+                results.ActivateSummary(results.PendingWinner, teamCount, teamIds[0], teamIds[1]);
         }
     }
 }

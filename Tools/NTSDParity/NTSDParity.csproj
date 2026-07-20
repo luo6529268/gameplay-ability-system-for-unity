@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AuthorityProject Condition="'$(AuthorityProject)' == ''">J:\QQFile\NTSD2.4\ntsd_release_C#\ntsd_release_C#.csproj</AuthorityProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(AuthorityProject)" />
+  </ItemGroup>
+
+</Project>

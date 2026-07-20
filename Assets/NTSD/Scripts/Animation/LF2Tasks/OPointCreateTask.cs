@@ -10,6 +10,7 @@ namespace NTSD.Animation.LF2Tasks
         ImmediateEffect = 2,
         TransitionEffect = 3,
         BrokenFragment = 4,
+        StageSpawnAt = 5,
     }
 
     public enum InitialRuntimeIntPositionHoldMode
@@ -30,11 +31,16 @@ namespace NTSD.Animation.LF2Tasks
         public float z;
         public string dir;
         public float dvz;
+        public int requiredRuntimeSlot = -1;
 
+        public bool useDirectRuntimePosition;
+        public double directX;
+        public double directY;
+        public double directZ;
         public bool useDirectVelocity;
-        public float directVx;
-        public float directVy;
-        public float directVz;
+        public double directVx;
+        public double directVy;
+        public double directVz;
         public bool preserveActionZero;
         public bool skipPostInitZOffset;
         public bool useInitialRuntimeIntPosition;
@@ -70,12 +76,17 @@ namespace NTSD.Animation.LF2Tasks
         public bool IsBrokenFragmentSpawn =>
             releaseSpawnSemantic == ReleaseSpawnSemantic.BrokenFragment;
 
+        public bool IsStageSpawnAt =>
+            releaseSpawnSemantic == ReleaseSpawnSemantic.StageSpawnAt;
+
         public bool IsFromPool { get; set; }
         public void Clear()
         {
             opoint = default; parent = null; team = 0;
             pos = Vector3.zero; z = 0f; dir = null; dvz = 0f;
-            useDirectVelocity = false; directVx = 0f; directVy = 0f; directVz = 0f;
+            requiredRuntimeSlot = -1;
+            useDirectRuntimePosition = false; directX = 0.0; directY = 0.0; directZ = 0.0;
+            useDirectVelocity = false; directVx = 0.0; directVy = 0.0; directVz = 0.0;
             preserveActionZero = false;
             skipPostInitZOffset = false;
             useInitialRuntimeIntPosition = false;

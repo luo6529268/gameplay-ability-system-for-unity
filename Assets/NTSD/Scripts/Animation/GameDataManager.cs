@@ -180,9 +180,6 @@ namespace NTSD.Animation
                 objects.Add(new ObjectDefinition(id, type, file));
             }
 
-            // 按 ID 排序
-            objects.Sort((a, b) => a.id.CompareTo(b.id));
-
             return objects;
         }
 

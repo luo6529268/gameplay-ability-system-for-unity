@@ -1,0 +1,22 @@
+{
+  "seed": 305419896,
+  "gameRoot": "J:\\QQFile\\NTSD2.4",
+  "mode": 1,
+  "difficulty": 1,
+  "stage": 0,
+  "randomStage": 0,
+  "stageFixture": null,
+  "ticks": 2,
+  "slots": [
+    { "playerSlot": 0, "oid": 2, "team": 1, "active": true, "ai": false }
+  ],
+  "inputs": [],
+  "frameCounterProbe": {
+    "runtimeSlot": 0,
+    "prepareTick": 1,
+    "immediateTick": 2,
+    "waitCounter": 37,
+    "frameWaitCounter": 11,
+    "targetFrame": 5
+  }
+}

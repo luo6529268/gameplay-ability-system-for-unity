@@ -140,18 +140,11 @@ namespace NTSD.Simulation
         private int StageSpawnEntryFactor()
         {
             int count = 0;
-            GetAllEntities(_entityScratch);
-
-            for (int i = 0; i < _entityScratch.Count; i++)
+            for (int slot = 0; slot < 20; slot++)
             {
-                LF2Entity entity = _entityScratch[i];
-                if (entity == null)
+                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
+                if (entity == null || !IsActiveForCurrentPass(entity))
                     continue;
-
-                int slot = entity.Runtime?.SlotIndex ?? -1;
-                if (slot < 0 || slot >= 20)
-                    continue;
-
                 if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                     continue;
 
@@ -162,7 +155,6 @@ namespace NTSD.Simulation
                     count += 2;
             }
 
-            _entityScratch.Clear();
             return count;
         }
 
@@ -292,7 +284,7 @@ namespace NTSD.Simulation
                         continue;
 
                     int slot = entity.Runtime?.SlotIndex ?? -1;
-                    if (slot < DynamicRuntimeSlotStart)
+                    if (slot < 20 || slot >= MaxRuntimeSlots)
                         continue;
 
                     if (entity.ObjectId == spawn.Id)
@@ -439,9 +431,23 @@ namespace NTSD.Simulation
             if (spawn == null || spawn.Id < 0)
                 return -1;
 
-            int stageBound = Runtime?.Stage?.StageWidthPx ?? 800;
-            int zMin = Runtime?.Stage?.ZMin ?? 180;
-            int zMax = Runtime?.Stage?.ZMax ?? (zMin + 1);
+            int requiredRuntimeSlot = FindFirstFreeRuntimeSlot(20, MaxRuntimeSlots);
+            if (requiredRuntimeSlot < 0)
+                return -1;
+
+            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+            GameDataManager dataManager = GameDataManager.Instance;
+            if (manager?.GetCharacterConfig(spawn.Id) == null || dataManager?.GetObjectById(spawn.Id) == null)
+                return -1;
+
+            BattleStageRuntimeState stage = Runtime?.Stage;
+            int xMaxOverride = stage?.XMaxOverride ?? 0;
+            int baseStageWidth = stage?.BaseStageWidthPx ?? 800;
+            int stageBound = xMaxOverride > 0 ? xMaxOverride : (baseStageWidth > 0 ? baseStageWidth : 800);
+            int configuredZMin = stage?.ZMin ?? 180;
+            int configuredZMax = stage?.ZMax ?? (configuredZMin + 1);
+            int zMin = configuredZMin > 0 ? configuredZMin : 180;
+            int zMax = configuredZMax > zMin ? configuredZMax : zMin + 1;
             if (zMax <= zMin)
                 zMax = zMin + 1;
 
@@ -462,11 +468,28 @@ namespace NTSD.Simulation
             int hp = spawn.Id == 122 ? 200 : StageSpawnEntryHp(spawn);
             string facingDir = spawnX > (stageBound - 794) ? "left" : "right";
 
-            LF2Entity entity = TrySpawnStageEntityWithFactory(spawn, spawnX, spawn.Y, spawnZ, facingDir, hp);
-            entity ??= TrySpawnStageCharacterDirect(spawn, spawnX, spawn.Y, spawnZ, facingDir, hp);
+            LF2Entity entity = TrySpawnStageEntityWithFactory(
+                spawn,
+                spawnX,
+                spawn.Y,
+                spawnZ,
+                facingDir,
+                hp,
+                requiredRuntimeSlot);
+            entity ??= TrySpawnStageCharacterDirect(
+                spawn,
+                spawnX,
+                spawn.Y,
+                spawnZ,
+                facingDir,
+                hp,
+                requiredRuntimeSlot);
             if (entity == null)
                 return -1;
+            if (entity.Runtime?.SlotIndex != requiredRuntimeSlot)
+                return -1;
 
+            RestoreStageSpawnRestState(requiredRuntimeSlot, entity);
             entity.SetPos(spawnX, spawn.Y, spawnZ);
             entity.Runtime?.SyncIntegerPosition();
             entity.SwitchDir(facingDir);
@@ -482,7 +505,7 @@ namespace NTSD.Simulation
             entity.Health.MaxMP = 500;
             ApplyStageSpawnRuntimeContract(entity, hp);
             entity.RefreshRuntimeSnapshot();
-            return entity.Runtime?.SlotIndex ?? -1;
+            return requiredRuntimeSlot;
         }
 
         internal static bool UsesStageCharacterInitSemantics(int dataObjectType)
@@ -513,7 +536,8 @@ namespace NTSD.Simulation
             int spawnX,
             int spawnY,
             int spawnZ,
-            string facingDir)
+            string facingDir,
+            int requiredRuntimeSlot = -1)
         {
             return new OPointCreateTask
             {
@@ -528,6 +552,7 @@ namespace NTSD.Simulation
                 },
                 parent = null,
                 team = 2,
+                requiredRuntimeSlot = requiredRuntimeSlot,
                 relationTeam = 2,
                 holderCopySlot = -1,
                 useExplicitRelationIdentity = true,
@@ -542,6 +567,7 @@ namespace NTSD.Simulation
                 directVz = 0f,
                 frameDelay = 0,
                 attackExempt = 0,
+                releaseSpawnSemantic = ReleaseSpawnSemantic.StageSpawnAt,
             };
         }
 
@@ -551,7 +577,8 @@ namespace NTSD.Simulation
             int spawnY,
             int spawnZ,
             string facingDir,
-            int hp)
+            int hp,
+            int requiredRuntimeSlot)
         {
             LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
             LF2ReferencePool referencePool = LF2ReferencePool.Instance;
@@ -560,7 +587,13 @@ namespace NTSD.Simulation
             if (factory == null || referencePool == null || objectPool == null || manager == null)
                 return null;
 
-            OPointCreateTask task = BuildStageSpawnTask(spawn, spawnX, spawnY, spawnZ, facingDir);
+            OPointCreateTask task = BuildStageSpawnTask(
+                spawn,
+                spawnX,
+                spawnY,
+                spawnZ,
+                facingDir,
+                requiredRuntimeSlot);
             task.useInitialRuntimeIntPosition = true;
             task.initialRuntimeX = spawnX;
             task.initialRuntimeY = spawnY;
@@ -568,7 +601,7 @@ namespace NTSD.Simulation
             task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
 
             LF2Entity entity = factory.CreateObjectImmediate(task);
-            if (entity == null)
+            if (entity == null || entity.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return null;
 
             entity.Health.HP = hp;
@@ -583,7 +616,8 @@ namespace NTSD.Simulation
             int spawnY,
             int spawnZ,
             string facingDir,
-            int hp)
+            int hp,
+            int requiredRuntimeSlot)
         {
             LF2CharacterDataWrapper wrapper = LF2Entity.ResolveRuntimeCharacterConfig(spawn.Id);
             if (wrapper == null)
@@ -594,15 +628,28 @@ namespace NTSD.Simulation
             if (objectType != (int)LF2ObjectType.Character)
                 return null;
 
-            OPointCreateTask task = BuildStageSpawnTask(spawn, spawnX, spawnY, spawnZ, facingDir);
+            OPointCreateTask task = BuildStageSpawnTask(
+                spawn,
+                spawnX,
+                spawnY,
+                spawnZ,
+                facingDir,
+                requiredRuntimeSlot);
 
             LF2Character character = new LF2Character();
             character.ModuleInitialize();
+            character.SetRequiredRuntimeSlot(requiredRuntimeSlot);
             character.Init(task, null);
             character.ModuleBind(wrapper, spawn.Id);
             if (character.Match == null)
+            {
+                if (character.RequiredRuntimeSlot != requiredRuntimeSlot)
+                    return null;
                 Register(character);
+            }
             else if (character.Match != this)
+                return null;
+            if (character.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return null;
             character.Initialize(hp, 500);
             return character;

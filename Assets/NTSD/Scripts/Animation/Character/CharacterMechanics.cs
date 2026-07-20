@@ -106,15 +106,6 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class CharacterMechanics
     {
-        /// <summary>检查对象地面平面点在 Unity 边界中是否可走。</summary>
-        private static bool IsMovementWalkable(
-            Func<Vector2, bool> isPointWalkable,
-            Vector2 center)
-        {
-            if (isPointWalkable == null) return true;
-            return isPointWalkable(center);
-        }
-
         /// <summary>对 x/z 速度应用 1 单位带符号摩擦。</summary>
         public static void UnitFriction(NTSDEntityRuntime runtime)
         {
@@ -129,19 +120,19 @@ namespace NTSD.Animation
         /// </summary>
         private static double ApplyReleaseUnitFriction(double velocity) // P0-f: double sim velocity
         {
-            if (velocity > 0.0001f)
+            if (velocity > 0.0001)
             {
-                velocity -= 1.0f;
-                if (velocity < 0.0001f)
-                    velocity = 0.0f;
+                velocity -= 1.0;
+                if (velocity < 0.0001)
+                    velocity = 0.0;
                 return velocity;
             }
 
-            if (velocity < -0.0001f)
+            if (velocity < -0.0001)
             {
-                velocity += 1.0f;
-                if (velocity > 0.0001f)
-                    velocity = 0.0f;
+                velocity += 1.0;
+                if (velocity > 0.0001)
+                    velocity = 0.0;
             }
 
             return velocity;
@@ -162,12 +153,10 @@ namespace NTSD.Animation
             }
 
             BoundaryResolveMode boundaryMode = BoundaryResolveMode.None;
-            double oldX = runtime.X;
-            double oldZ = runtime.Z;
             int groundedSnapshotY = runtime.YInt;
             bool startedGrounded = groundedSnapshotY >= 0;
 
-            // C++ 正式版保留速度，只在本 tick 跳过被阻挡轴的位移。
+            // C# 权威实现保留速度，只在本 tick 跳过被阻挡轴的位移。
             bool blockedX = (runtime.Vx > 0f && runtime.XBoundPositive) || (runtime.Vx < 0f && runtime.XBoundNegative);
             bool blockedZ = (runtime.Vz > 0f && runtime.ZBoundPositive) || (runtime.Vz < 0f && runtime.ZBoundNegative);
 
@@ -180,15 +169,6 @@ namespace NTSD.Animation
 
             runtime.ClearBounds();
 
-            // Unity 可走边界适配：正式版的场景边界不属于 Entity 物理本体。
-            if (ctx.isPointWalkable != null &&
-                !IsMovementWalkable(ctx.isPointWalkable, NTSDRenderSpace.GroundPixelToWorld((float)runtime.X, (float)runtime.Z)))
-            {
-                runtime.X = oldX;
-                runtime.Z = oldZ;
-                boundaryMode = BoundaryResolveMode.Stop;
-            }
-
             // 垂直轴：y == 0 表示地面，y < 0 表示空中。
             if (startedGrounded && ctx.mass > 0f)
             {
@@ -198,19 +178,22 @@ namespace NTSD.Animation
             double vyBeforeVerticalMove = runtime.Vy; // P0-f-2b B2-1: no (float) truncation — double landing Vy snapshot
             runtime.Y += runtime.Vy;
 
-            bool landed = runtime.Y > 0.0001f;
+            bool caughtGroundResolve = runtime.Y >= -0.0001 &&
+                                       ctx.frameData?.cpoint != null &&
+                                       ctx.frameData.cpoint.kind == 2;
+            bool landed = !caughtGroundResolve &&
+                          runtime.Y > 0.0001 &&
+                          vyBeforeVerticalMove > 0.0001;
 
-            if (runtime.Y > 0)
-            {
-                runtime.Y = 0;
-            }
+            if (landed)
+                runtime.Y = 0.0;
 
             if (ctx.frameData != null && ctx.spriteWidthPx > 0f)
             {
                 runtime.UpdateSpriteOrigin(ctx.frameData.centerx, ctx.frameData.centery, ctx.spriteWidthPx);
             }
 
-            if (runtime.Y < 0)
+            if (runtime.Y < -0.0001)
             {
                 runtime.Vy += ctx.gravity;
             }
@@ -265,13 +248,12 @@ namespace NTSD.Animation
 
             oldVy = runtime.Vy; // P0-f-2b B1: no (float) truncation — double landing Vy snapshot
             runtime.Y += runtime.Vy;
-            bool landed = runtime.Y > 0.0001f && oldVy > 0.0001; // oldVy now double (baseline Vy>0.0001 double); Y-side threshold unchanged (Y not in B1 oldVy/Vy/Vx scope, already green)
-            if (runtime.Y > 0) runtime.Y = 0;
+            bool crossedGround = runtime.Y > 0.0001;
 
-            if (runtime.Y < -0.0001f)
+            if (runtime.Y < -0.0001)
                 runtime.Vy += gravityToAdd;
 
-            return landed;
+            return crossedGround;
         }
     }
 }

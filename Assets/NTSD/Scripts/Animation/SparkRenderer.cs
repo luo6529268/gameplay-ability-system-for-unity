@@ -129,6 +129,8 @@ namespace NTSD.Animation
                 sr.transform.position = unityPos;
                 sr.transform.localScale = NTSDRenderSpace.RenderScale;
                 sr.sortingLayerName = "Object";
+                // Keep the hit spark immediately above its source entity but
+                // inside that entity's reserved slot sub-order.
                 sr.sortingOrder = obj.GetRenderSortingOrder() + 1;
                 _activeThisFrame.Add(sr);
                 obj.AdvanceHitRecord(j, world.SparkRenderFrame);

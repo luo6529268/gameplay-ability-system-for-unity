@@ -26,20 +26,22 @@ namespace NTSD.Animation.LF2Objects
         {
             int state = _weapon.GetRuntimeWeaponState();
             int hitFa = _weapon.Frame?.D?.hit_Fa ?? 0;
+            int currentDataType = _weapon.GetCurrentDataObjectTypeForSimulation();
 
-            if ((_weapon.WeaponType == 4 || _weapon.WeaponType == 6) &&
+            if ((currentDataType == (int)LF2ObjectType.ThrowWeapon ||
+                 currentDataType == (int)LF2ObjectType.Drink) &&
                 state == LF2States.WeaponInSky &&
                 (_weapon.Runtime.Vx > NTSDGlobal.Gameplay.WeaponBoomerangVxMax ||
                  _weapon.Runtime.Vx < NTSDGlobal.Gameplay.WeaponBoomerangVxMin))
             {
-                _weapon.SetFrameDirect(40);
+                _weapon.SetFrameLogicRawFramePreserveAttacking(40);
             }
 
-            if (_weapon.IsHeavy && state == LF2States.WeaponThrowing)
+            if (state == LF2States.WeaponThrowing)
             {
                 _weapon.Runtime.WeaponState = LF2States.HeavyWeaponInSky;
             }
-            else if (_weapon.IsHeavy && state == LF2States.HeavyWeaponInSky)
+            else if (state == LF2States.HeavyWeaponInSky)
             {
                 _weapon.Runtime.Vx *= 0.5f;
                 if (System.Math.Abs(_weapon.Runtime.Vx) < 0.5)
@@ -80,7 +82,7 @@ namespace NTSD.Animation.LF2Objects
                     _weapon.Runtime.Vx = 0f;
                     _weapon.Runtime.Vy = 0f;
                     _weapon.Runtime.Vz = 0f;
-                    _weapon.SetFrameDirect(60);
+                    _weapon.SetFrameLogicRawFramePreserveAttacking(60);
                     target.CatchTimer = 100;
                     return;
                 }
@@ -185,8 +187,8 @@ namespace NTSD.Animation.LF2Objects
 
             int selfX = _weapon.GetRuntimeXInt();
             int targetX = target.GetRuntimeXInt();
-            int selfZ = _weapon.GetRenderZInt();
-            int targetZ = target.GetRenderZInt();
+            int selfZ = _weapon.Runtime.ZInt;
+            int targetZ = target.Runtime.ZInt;
 
             if (targetX > selfX)
                 _weapon.Runtime.Vx += 0.7f;
@@ -214,38 +216,77 @@ namespace NTSD.Animation.LF2Objects
         // 先尝试复用旧目标；失效后再扫描战场，选择最近的合法角色。
         private LF2Entity ResolveWeaponHitFa12Target()
         {
-            LF2Entity target = _weapon.Match?.FindEntityByRuntimeSlotForQuery(_weapon.PickerStableId);
-            if (IsValidWeaponHitFa12Target(target))
-                return target;
-
             SimulationWorld world = _weapon.Match;
             if (world == null)
                 return null;
+
+            int currentTargetSlot = _weapon.PickerStableId;
+            int selfTeam = ResolveHitFa12RelationIdentity(_weapon);
+            int holderTeam = -1;
+            if (_weapon.SpawnerEntityIndex >= 0)
+            {
+                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(_weapon.SpawnerEntityIndex);
+                if (holder != null)
+                    holderTeam = ResolveHitFa12RelationIdentity(holder);
+            }
+
+            bool needScan = true;
+            LF2Entity target = world.FindEntityByRuntimeSlotForQuery(currentTargetSlot);
+            if (target != null)
+            {
+                bool valid = IsHitFa12CharacterTarget(target) &&
+                             target.Health != null &&
+                             target.Health.HP > 0 &&
+                             target.GetState() != LF2States.Lying &&
+                             System.Math.Abs(target.HitStun) <= 2 &&
+                             ResolveHitFa12RelationIdentity(target) != selfTeam;
+                if (valid && holderTeam != ResolveHitFa12RelationIdentity(target))
+                    needScan = false;
+                if (!valid)
+                    target = null;
+            }
+
+            if (!needScan)
+                return target;
 
             world.GetAllEntities(_boomerangQueryCache);
 
             LF2Entity best = null;
             int bestDist = int.MaxValue;
+            int bestSlot = -1;
             int selfX = _weapon.GetRuntimeXInt();
-            int selfZ = _weapon.GetRenderZInt();
+            int selfZ = _weapon.Runtime.ZInt;
 
             for (int i = 0; i < _boomerangQueryCache.Count; i++)
             {
                 LF2Entity candidate = _boomerangQueryCache[i];
-                if (!IsValidWeaponHitFa12Target(candidate))
+                if (candidate == null || ReferenceEquals(candidate, _weapon))
+                    continue;
+                if (!IsHitFa12CharacterTarget(candidate))
+                    continue;
+                if (candidate.Health == null || candidate.Health.HP <= 0)
+                    continue;
+
+                int candidateTeam = ResolveHitFa12RelationIdentity(candidate);
+                if (candidateTeam == selfTeam)
+                    continue;
+                if (holderTeam >= 0 && candidateTeam == holderTeam)
+                    continue;
+                if ((candidate.GetState() == LF2States.Lying || System.Math.Abs(candidate.HitStun) > 2) &&
+                    currentTargetSlot != -1)
                     continue;
 
                 int dist = Mathf.Abs(candidate.GetRuntimeXInt() - selfX) +
-                           Mathf.Abs(candidate.GetRenderZInt() - selfZ);
+                           Mathf.Abs(candidate.Runtime.ZInt - selfZ);
                 if (dist >= bestDist)
                     continue;
 
                 bestDist = dist;
                 best = candidate;
+                bestSlot = candidate.Runtime?.SlotIndex ?? -1;
             }
 
-            if (best != null)
-                _weapon.PickerStableId = best.Runtime?.SlotIndex ?? -1;
+            _weapon.PickerStableId = bestSlot;
 
             return best;
         }
@@ -265,6 +306,20 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             return true;
+        }
+
+        private static bool IsHitFa12CharacterTarget(LF2Entity target)
+        {
+            return target != null &&
+                   target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character;
+        }
+
+        private static int ResolveHitFa12RelationIdentity(LF2Entity entity)
+        {
+            if (entity == null)
+                return 0;
+
+            return entity.RelationTeam != 0 ? entity.RelationTeam : entity.Team;
         }
     }
 }

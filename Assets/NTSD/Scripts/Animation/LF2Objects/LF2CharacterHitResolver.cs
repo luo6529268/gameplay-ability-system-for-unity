@@ -1,5 +1,4 @@
 using UnityEngine;
-using NTSD.App;
 using NTSD.Simulation;
 
 namespace NTSD.Animation.LF2Objects
@@ -37,12 +36,27 @@ namespace NTSD.Animation.LF2Objects
         {
             if (!_character.PassBaseHit(itr, attacker, attackerPos, vol)) return false;
 
+            if (itr.kind == 4)
+            {
+                if (attacker.WeaponCount <= 0)
+                    return false;
+
+                itr = itr.ShallowCopy();
+                itr.kind = 0;
+                if ((attacker.Runtime.Vx > 0.0 && attacker.Dirh() < 0) ||
+                    (attacker.Runtime.Vx < 0.0 && attacker.Dirh() > 0))
+                {
+                    itr.dvx = -itr.dvx;
+                }
+            }
+
             // Kind 5：委托攻击，使用 TrackerParent 的 wpoint.attacking 替换伤害字段。
             // 条件：victim.GrabbedBy<0、TrackerParent.TrackerFlag==attacker.StableId、父对象不是自己。
             // 替换后走普通 kind=0 命中结算。
-            if (itr.kind == 5 && _character.GrabbedBy < 0 && _character.TrackerParent != null)
+            if (itr.kind == 5 && _character.GrabbedBy < 0)
             {
-                var tp = _character.TrackerParent as LF2Entity;
+                LF2Entity trackerParent = _character.ResolveTrackerParentFromRuntime();
+                var tp = trackerParent;
                 if (tp != null && tp.TrackerFlag == attacker.StableId && tp != _character)
                 {
                     var tpFrame = tp.GetFrameDataById(tp.Frame.N);
@@ -83,12 +97,12 @@ namespace NTSD.Animation.LF2Objects
             }
 
             bool acceptHit  = false;
-            bool defended    = false;
             bool isKnockdown = false;
             float efDvx      = 0f;
             float efDvy      = 0f;
             int inj          = 0;
             int effectNum    = 0;
+            bool standardDamageApplied = false;
 
             int myState = _character.GetState();
 
@@ -101,7 +115,7 @@ namespace NTSD.Animation.LF2Objects
                 if (cHurtable)
                 {
                     acceptHit = true;
-                    isKnockdown |= HitFall(inj, ref efDvy, itr, attackerPos);
+                    isKnockdown |= HitFall(inj, ref efDvy, itr, attacker);
                 }
 
                 if (!cHurtable && _character.Catching != attacker)
@@ -159,14 +173,12 @@ namespace NTSD.Animation.LF2Objects
             {
                 acceptHit = true;
                 int targetFrame = itr.kind - 6000;
-                if (_character.FrameCache.GetFrameDataById(targetFrame) != null)
+                if (_character.FrameCache.HasFrame(targetFrame))
                     _character.ImmediateFrame(targetFrame);
             }
 
             // 主命中流程：kind 0 / kind-4 / kind-9。
-            else if (itr.kind == 0 ||
-                     itr.kind == 4 ||
-                     itr.kind == 9)
+            else if (itr.kind == 0 || itr.kind == 9)
             {
                 acceptHit = true;
 
@@ -194,23 +206,9 @@ namespace NTSD.Animation.LF2Objects
                     return true;
                 }
 
-                // 重武器的减半只属于普通伤害路径；alternate hurt 使用原始 itr。
-                if (_character.IsHeavyWeaponAttackerForHit(attacker))
-                {
-                    efDvx *= 0.5f;
-                    efDvy *= 0.5f;
-                    itr = itr.ShallowCopy();
-                    itr.injury >>= 1;
-                    itr.fall >>= 1;
-                }
+                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
 
-                if (_character.IsHeldHeavyWeaponInternal())
-                    _character.DropWeapon(0f, 0f);
-
-                // 伤害按 MaxMP 缩放。
-                // itr.injury 是缩放输入；MaxMP 为 0 时直接使用 injury。
-                int mpDmg = (_character.Health.MaxMP > 0) ? itr.injury * 100 / _character.Health.MaxMP : itr.injury;
-                if (mpDmg != 0) inj += mpDmg;
+                inj += itr.injury;
 
                 // 普通受击先把 HitStateCount 设为 45。
                 _character.HitCounters.SetHitStateCount(45);
@@ -219,7 +217,8 @@ namespace NTSD.Animation.LF2Objects
                 // victim.oid==300 时走专属受击跳转，不进入普通受击/击飞结算。
                 // 当前帧 bdy.x>1000 时，将其解释为目标帧号并直接改写 frame，
                 // 同时 attacker.frame_delay=3, victim.frame_delay=-3, victim.unk_364=1。
-                if (_character.ObjectId == 300)
+                int currentCharacterOid = _character.FrameCache?.Wrapper?.characterId ?? _character.ObjectId;
+                if (currentCharacterOid == 300)
                 {
                     var frameNow = _character.Frame?.D;
                     var futureFrame = _character.GetFrameDataById((_character.Frame?.N ?? 0) + 6);
@@ -241,11 +240,31 @@ namespace NTSD.Animation.LF2Objects
                     return true;
                 }
 
-                isKnockdown |= HitFall(inj, ref efDvx, ref efDvy, itr, attackerPos);
+                LF2HitResolveRuntimeData.ApplyStandardCharacterDamage(attacker, _character, inj);
+                standardDamageApplied = true;
+                _character.HitCount++;
+                isKnockdown |= HitFall(inj, ref efDvx, ref efDvy, itr, attacker);
 
-                // 非击飞路径才追加 bdefend 到 HitStateCount。
-                if (!isKnockdown)
-                    _character.HitCounters.AddHitStateCount(itr.bdefend);
+                if (itr.kind != 9)
+                    LF2HitResolveRuntimeData.RecordStandardHurtSounds(attacker, _character, itr, isKnockdown);
+
+                float resolvedDvx = LF2HitResolveRuntimeData.ResolveStandardDamageKnockbackX(
+                    attacker,
+                    _character,
+                    itr,
+                    isKnockdown,
+                    efDvx);
+                _character.KnockbackVx += resolvedDvx;
+                LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_character);
+                efDvx = 0f;
+                if (isKnockdown)
+                {
+                    bool facingRight = _character.Dirh() > 0;
+                    int fallFrame = facingRight
+                        ? (_character.KnockbackVx <= 0.0 ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack)
+                        : (_character.KnockbackVx >= 0.0 ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack);
+                    _character.DirectWriteFramePreserveWaitCounter(fallFrame);
+                }
             }
 
             // Kind 6：命中确认标记。受击硬直帧会发出 kind=6，让原攻击者确认命中。
@@ -264,13 +283,14 @@ namespace NTSD.Animation.LF2Objects
             else if (itr.kind == 8)
             {
                 _character.HealTimer = itr.injury + 1000;
-                if (attacker?.PS != null && _character.PS != null)
+                if (attacker?.Runtime != null && _character.Runtime != null)
                 {
-                    attacker.PS.x = _character.PS.x;
-                    attacker.PS.z = _character.PS.z + 1f;
+                    attacker.DirectWriteRawFramePreserveWaitCounter(itr.dvx);
+                    attacker.Runtime.X = _character.Runtime.X;
+                    attacker.Runtime.Z = _character.Runtime.Z + 1f;
+                    attacker.Runtime.XInt = _character.Runtime.XInt;
+                    attacker.Runtime.ZInt = _character.Runtime.ZInt + 1;
                 }
-                if (itr.dvx > 0)
-                    attacker?.ImmediateFrame(itr.dvx);
                 return true;
             }
 
@@ -303,11 +323,25 @@ namespace NTSD.Animation.LF2Objects
 
                 _character.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
                 _character.FluteForce();
-                if (myState == LF2States.Falling)
+
+                if (_character.KillCount == -1 &&
+                    (_character.Match?.CurrentTickIndex ?? 0) % 12 == 0 &&
+                    !LF2HitResolveRuntimeData.IsStepWaitGate(_character))
                 {
-                    inj = itr.injury * 2;
-                    acceptHit = true;
+                    LF2Entity holder = ResolveHolderCopyEntity(attacker);
+                    if (holder != null)
+                        holder.ComboCountAtk += 11;
                 }
+
+                SimulationWorld world = _character.Match ?? attacker?.Match;
+                int damageStatIndex = _character.Unk344;
+                if (world?.DamageStats != null &&
+                    damageStatIndex > 0 &&
+                    damageStatIndex < world.DamageStats.Length)
+                {
+                    world.DamageStats[damageStatIndex] += 11;
+                }
+                return true;
             }
 
             // Kind 15：旋风效果。
@@ -330,6 +364,15 @@ namespace NTSD.Animation.LF2Objects
                     LF2Entity holder = ResolveHolderCopyEntity(attacker);
                     if (holder != null)
                         holder.KillStat++;
+
+                    SimulationWorld world = _character.Match ?? attacker?.Match;
+                    int killStatIndex = _character.Unk344;
+                    if (world?.KillStats != null &&
+                        killStatIndex > 0 &&
+                        killStatIndex < world.KillStats.Length)
+                    {
+                        world.KillStats[killStatIndex]++;
+                    }
                 }
 
                 _character.Health.HP -= adjustedInjury;
@@ -343,6 +386,15 @@ namespace NTSD.Animation.LF2Objects
                         holder.ComboCountAtk += adjustedInjury;
                 }
 
+                SimulationWorld damageWorld = _character.Match ?? attacker?.Match;
+                int damageStatIndex = _character.Unk344;
+                if (damageWorld?.DamageStats != null &&
+                    damageStatIndex > 0 &&
+                    damageStatIndex < damageWorld.DamageStats.Length)
+                {
+                    damageWorld.DamageStats[damageStatIndex] += adjustedInjury;
+                }
+
                 _character.ImmediateFrame(LF2StandardFrames.MpDrain);
                 _character.AttackingCounter = 0;
 
@@ -350,7 +402,7 @@ namespace NTSD.Animation.LF2Objects
                 if (attackerSlot >= 0)
                     _character.ItrVrestUpdate(attackerSlot, itr, true);
 
-                ReleaseHeldTargetOnKind16(attackerSlot);
+                ReleaseHeldTargetOnKind16(attacker);
                 _character.QueueBattleSound("SFX_065");
                 return true;
             }
@@ -374,7 +426,9 @@ namespace NTSD.Animation.LF2Objects
                 // 攻击方碰撞豁免：arest 小于 4 且 vrest 为 0 时最少写 4，否则使用 itr.arest。
                 // 该值写到攻击方的 HitCounters。
                 int exemptVal = LF2Entity.ResolveArestCooldown(itr.arest, itr.vrest);
-                attackerLiving?.HitCounters?.SetAttackExempt(exemptVal);
+                attacker.AttackExempt = exemptVal;
+                if (attacker.ItrRest != null)
+                    attacker.ItrRest.Arest = exemptVal;
 
                 // C++ release 中命中延迟与震动通道分离；Unity 侧只维护逻辑层 FrameDelay/ShakeTimer，
                 // 具体视觉偏移由 SimulationTickDriver 在渲染层统一消费。
@@ -385,15 +439,18 @@ namespace NTSD.Animation.LF2Objects
                 // 受击方始终按当前命中类型覆盖。
                 if (attacker.FrameDelay >= 0)
                     attacker.FrameDelay = 3;
-                _character.FrameDelay = isKnockdown ? -3 : -5;
+                _character.FrameDelay = -3;
 
                 // 攻击方未被抓取时，将 FrameDelay 传给 TrackerParent。
-                if (attacker.GrabbedBy < 0 && attacker.TrackerParent != null)
-                    attacker.TrackerParent.FrameDelay = _character.FrameDelay;
-
-                // 非击飞路径清空 C++ release Entity::attacking。
-                if (!isKnockdown)
-                    _character.AttackingCounter = 0;
+                if ((attacker.Runtime?.LinkState ?? 0) < 0)
+                {
+                    int holderSlot = attacker.Runtime.ResolveActiveHolderSlotIndex();
+                    LF2Entity attackerParent = holderSlot >= 0
+                        ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
+                        : null;
+                    if (attackerParent != null)
+                        attackerParent.FrameDelay = attacker.FrameDelay;
+                }
 
                 // 地面上 HitStateCount 足够高且 kind=7 时进入破防帧。
                 if (!isKnockdown && _character.PS.vy == 0f &&
@@ -406,41 +463,27 @@ namespace NTSD.Animation.LF2Objects
                 // attacker.vx = -(victim.vx * 0.5)，attacker.vy = -3.5。
                 if (ResolveAttackerState(attacker) == LF2States.WeaponThrowing) // 1002
                 {
-                    var aps = attacker.PS;
-                    if (aps != null)
+                    attacker.DirectWriteFramePreserveWaitCounter(attacker.BattleRandInt(0, 16));
+                    attacker.Runtime.Vx = _character.KnockbackVx * -0.5f;
+                    attacker.Runtime.Vy = -4.0f;
+                    if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.ThrowWeapon &&
+                        _character.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.ThrowWeapon)
                     {
-                        aps.vx = -(_character.PS.vx * 0.5f);
-                        aps.vy = -3.5f; // 0xC00C000000000000 = -3.5
+                        attacker.KnockbackVx = -_character.KnockbackVx;
                     }
                 }
 
                 // 非击飞路径的 dvx 写入 KnockbackVx，不直接写 PS.vx。
                 // PS.vx 由帧后处理根据 HitCount 统一写入。
-                if (!defended && efDvx != 0f)
-                {
-                    _character.KnockbackVx += efDvx;
-                    _character.HitCount++;
-                }
+                if (_character.HitCounters.Fall == 80)
+                    _character.HitCounters.SetFall(0);
             }
 
-            if (acceptHit)
+            if (acceptHit && !standardDamageApplied)
                 _character.ApplyHitInjury(inj);
-
-            if (acceptHit && itr.kind == 0)
-            {
-                HitPostEffect(effectNum, vol, efDvx, efDvy, defended, attackerPos, myState);
-            }
 
             // 命中音效：击飞播放 006.wav，普通重击播放 001.wav。
             // 当前通过 SoundPlayer 播放。
-            if (acceptHit && itr.kind == 0)
-            {
-                string hitSfx = isKnockdown
-                    ? NTSDGlobal.Sound.HitKnockdown
-                    : NTSDGlobal.Sound.HitNormal;
-                AppManager.Instance?.SoundPlayer?.PlaySfx(hitSfx);
-            }
-
             if (acceptHit && itr.kind == 0)
                 _character.RecordKind0Hit(attacker, itr);
 
@@ -449,9 +492,6 @@ namespace NTSD.Animation.LF2Objects
 
         private static int ResolveAttackerState(LF2Entity attacker)
         {
-            if (attacker is LF2WeaponBase weapon)
-                return weapon.Runtime?.WeaponState is int state and not 0 ? state : weapon.GetState();
-
             return attacker?.GetState() ?? 0;
         }
 
@@ -477,7 +517,7 @@ namespace NTSD.Animation.LF2Objects
             _character.RefreshRuntimeSnapshot();
         }
 
-        private void ReleaseHeldTargetOnKind16(int attackerSlot)
+        private void ReleaseHeldTargetOnKind16(LF2Entity attacker)
         {
             int heldTargetSlot = _character.Runtime?.ResolveActiveHeldSlotIndex() ?? -1;
             if (_character.Runtime == null || _character.Runtime.LinkState != 2 || heldTargetSlot < 0)
@@ -493,8 +533,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            if (attackerSlot >= 0)
-                _character.ItrRest?.SetVrest(attackerSlot, 45);
+            if (attacker?.Runtime != null)
+                attacker.ItrRest?.SetVrest(heldTargetSlot, 45);
 
             _character.ItrRest?.SetVrest(heldTargetSlot, 30);
             _character.Runtime.LinkState = 0;
@@ -535,21 +575,23 @@ namespace NTSD.Animation.LF2Objects
         /// 每次命中后把 fall 钳制到当前档位上限，避免下一次命中跨档异常。
         /// </summary>
         private bool HitFall(int currentInj, ref float efDvx, ref float efDvy,
-                             InteractionArea itr, Vector3 attackerPos)
+                             InteractionArea itr, LF2Entity attacker)
         {
             int fallInc = (itr.fall != 0) ? itr.fall : NTSDGlobal.Default.Fall.Value;
-            int state   = _character.GetState();
+            int prevState = _character.GetFrameDataById(_character.Frame?.Prev ?? 0)?.state ?? 0;
+            int prev2State = _character.Frame?.Prev2D?.state
+                ?? _character.GetFrameDataById(_character.Runtime?.PrevFrame2 ?? 0)?.state
+                ?? 0;
 
-            // 强制击飞判定在 fall 累积之前执行。
-            bool forceKnockback = (_character.Health.HP - currentInj <= 0)
-                                  || (state == LF2States.Falling)
-                                  || (state == LF2States.Frozen)
-                                  || (itr.fall == 100); // itr.fall==100 强制击飞。
+            bool forceKnockback = _character.Health.HP <= 0 ||
+                                  itr.effect == 4 ||
+                                  prevState == LF2States.Frozen ||
+                                  prev2State == LF2States.Falling;
 
             if (forceKnockback)
             {
                 _character.HitCounters.AddFall(fallInc);
-                return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                return HitFallDown(ref efDvx, ref efDvy, itr, default);
             }
 
             _character.HitCounters.AddFall(fallInc);
@@ -557,15 +599,15 @@ namespace NTSD.Animation.LF2Objects
 
             // fall > 60 时直接击飞。
             if (fall > 60)
-                return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                return HitFallDown(ref efDvx, ref efDvy, itr, default);
 
             // fall > 40 时进入重伤 frame 226；空中则升级为击飞。
             if (fall > 40)
             {
                 _character.HitCounters.SetFall(60); // 钳制到重伤档位上限 60。
-                _character.ImmediateFrame(LF2StandardFrames.Injured6);
-                if (_character.PS.vy < 0)
-                    return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                _character.DirectWriteFramePreserveWaitCounter(LF2StandardFrames.Injured6);
+                if (_character.GetRuntimeYInt() < 0)
+                    return HitFallDown(ref efDvx, ref efDvy, itr, default);
                 return false;
             }
 
@@ -573,10 +615,11 @@ namespace NTSD.Animation.LF2Objects
             if (fall > 20)
             {
                 _character.HitCounters.SetFall(40); // 钳制到中伤档位上限 40。
-                bool sameDir = attacker_dir_matches_victim(attackerPos);
-                _character.ImmediateFrame(sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
-                if (_character.PS.vy < 0)
-                    return HitFallDown(ref efDvx, ref efDvy, itr, attackerPos);
+                bool sameDir = attacker != null && attacker.Dirh() == _character.Dirh();
+                _character.DirectWriteFramePreserveWaitCounter(
+                    sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
+                if (_character.GetRuntimeYInt() < 0)
+                    return HitFallDown(ref efDvx, ref efDvy, itr, default);
                 return false;
             }
 
@@ -584,11 +627,12 @@ namespace NTSD.Animation.LF2Objects
             if (fall > 0)
             {
                 _character.HitCounters.SetFall(20); // 钳制到轻伤档位上限 20。
-                _character.ImmediateFrame(LF2StandardFrames.Injured);
-                if (_character.PS.vy < 0)
+                _character.DirectWriteFramePreserveWaitCounter(LF2StandardFrames.Injured);
+                if (_character.GetRuntimeYInt() < 0)
                 {
-                    bool sameDir = attacker_dir_matches_victim(attackerPos);
-                    _character.ImmediateFrame(sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
+                    bool sameDir = attacker != null && attacker.Dirh() == _character.Dirh();
+                    _character.DirectWriteFramePreserveWaitCounter(
+                        sameDir ? LF2StandardFrames.Injured4 : LF2StandardFrames.Injured2);
                 }
             }
             return false;
@@ -596,10 +640,10 @@ namespace NTSD.Animation.LF2Objects
 
         // 被抓路径只需要传递 y 向击退，保留这个轻量重载。
         private bool HitFall(int currentInj, ref float efDvy,
-                             InteractionArea itr, Vector3 attackerPos)
+                             InteractionArea itr, LF2Entity attacker)
         {
             float efDvxDummy = 0f;
-            return HitFall(currentInj, ref efDvxDummy, ref efDvy, itr, attackerPos);
+            return HitFall(currentInj, ref efDvxDummy, ref efDvy, itr, attacker);
         }
 
         // HitFallDown：击飞倒地处理
@@ -621,23 +665,14 @@ namespace NTSD.Animation.LF2Objects
         {
             _character.HitCounters.ResetFall();
 
-            // 倒地帧由 KnockbackVx 与当前朝向决定。
-            bool facingRight = _character.PS.dir == "right";
-            double kb = _character.KnockbackVx;
-            bool flyingBack = (facingRight && kb > 0f) || (!facingRight && kb < 0f);
-            int fallFrame = flyingBack ? LF2StandardFrames.FallingBack   // 186
-                                       : LF2StandardFrames.FallingFront; // 180
-            _character.ImmediateFrame(fallFrame);
-
             // vy 处理：写 KnockbackVy，不直接写 PS.vy。
             // PS.vy 由帧后处理统一写入。
             // 这样可保持同帧多次命中时的速度合并规则。
             if (itr.dvy != 0)
             {
                 _character.KnockbackVy += itr.dvy;
-                // y + KnockbackVy > 0 时钳制为 -12。
-                if ((int)_character.PS.y + (int)_character.KnockbackVy > 0)
-                    _character.KnockbackVy = -12.0f;
+                if ((int)(_character.KnockbackVy + _character.GetRuntimeYInt()) > 0)
+                    _character.KnockbackVy = 12.0f;
                 efDvy = itr.dvy;
             }
             else
@@ -646,11 +681,6 @@ namespace NTSD.Animation.LF2Objects
                 efDvy = -7.0f;
             }
 
-            // KnockbackVx/Vy 是帧内累积值，PS.vx/vy 由帧后处理根据 HitCount 写入。
-            _character.KnockbackVx += efDvx;
-            _character.HitCount++;
-
-            efDvx = 0f;
             return true;
         }
 

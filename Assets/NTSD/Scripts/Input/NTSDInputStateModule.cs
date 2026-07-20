@@ -58,7 +58,6 @@ namespace NTSD.Input
         public int AttackCooldown => _cdAttack;
         public int JumpCooldown => _cdJump;
         public int DefendCooldown => _cdDefend;
-        public bool DefendLockActive => _cdDefendLock > 0;
 
         public void Reset()
         {
@@ -82,20 +81,23 @@ namespace NTSD.Input
             _prevJump = _jump;
             _prevDefend = _defend;
 
-            DecrementCooldowns();
-
-            if (inputBuffer == null || !inputBuffer.TryDequeueAll(tickIndex, out List<SimInputEvent> events))
-                return;
-
-            for (int i = 0; i < events.Count; i++)
+            if (inputBuffer != null && inputBuffer.TryDequeueAll(tickIndex, out List<SimInputEvent> events))
             {
-                var evt = events[i];
-                ApplyEvent(evt.key, evt.down);
-                if (!evt.down) continue;
-
-                SetEdgeCooldown(evt.key);
-                PushInputHistory(owner, evt.key);
+                for (int i = 0; i < events.Count; i++)
+                {
+                    SimInputEvent evt = events[i];
+                    ApplyEvent(evt.key, evt.down);
+                }
             }
+
+            DecrementCooldowns();
+            ApplyNewPressEdges(owner);
+        }
+
+        internal void PollFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Character owner)
+        {
+            UpdateFromBuffer(inputBuffer, tickIndex, owner);
+            SyncToRuntime(owner?.Runtime);
         }
 
         public bool ApplyFrameInput(LF2Entity character)
@@ -105,7 +107,6 @@ namespace NTSD.Input
 
             bool result = ApplyComboFrameInput(character);
             result |= ApplyDirectFrameInput(character);
-            SyncToRuntime(character.Runtime);
             if (character is LF2Character realCharacter)
                 result |= realCharacter.ProcessReleaseInput();
             SyncToRuntime(character.Runtime);
@@ -133,6 +134,14 @@ namespace NTSD.Input
             _prevJump = runtime.PrevJump != 0;
             _prevDefend = runtime.PrevDefend != 0;
 
+            SyncProgressFromRuntime(runtime);
+        }
+
+        internal void SyncProgressFromRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
             _cdRight = runtime.CdRight;
             _cdLeft = runtime.CdLeft;
             _cdUp = runtime.CdUp;
@@ -155,11 +164,6 @@ namespace NTSD.Input
 
         public void OnStateExit()
         {
-        }
-
-        public void SetDefendLock(byte value)
-        {
-            _cdDefendLock = value;
         }
 
         private void DecrementCooldowns()
@@ -188,18 +192,29 @@ namespace NTSD.Input
             }
         }
 
-        private void SetEdgeCooldown(FuncKeyMask key)
+        private void ApplyNewPressEdges(LF2Character owner)
         {
-            switch (key)
-            {
-                case FuncKeyMask.right: if (!_prevRight) _cdRight = 5; break;
-                case FuncKeyMask.left: if (!_prevLeft) _cdLeft = 5; break;
-                case FuncKeyMask.up: if (!_prevUp) _cdUp = 5; break;
-                case FuncKeyMask.down: if (!_prevDown) _cdDown = 5; break;
-                case FuncKeyMask.att: if (!_prevAttack) _cdDefend = 5; break;
-                case FuncKeyMask.jump: if (!_prevJump) _cdAttack = 5; break;
-                case FuncKeyMask.def: if (!_prevDefend) _cdJump = 5; break;
-            }
+            ApplyNewPressEdge(_prevRight, _right, ref _cdRight, owner, FuncKeyMask.right);
+            ApplyNewPressEdge(_prevLeft, _left, ref _cdLeft, owner, FuncKeyMask.left);
+            ApplyNewPressEdge(_prevUp, _up, ref _cdUp, owner, FuncKeyMask.up);
+            ApplyNewPressEdge(_prevDown, _down, ref _cdDown, owner, FuncKeyMask.down);
+            ApplyNewPressEdge(_prevAttack, _attack, ref _cdDefend, owner, FuncKeyMask.att);
+            ApplyNewPressEdge(_prevDefend, _defend, ref _cdJump, owner, FuncKeyMask.def);
+            ApplyNewPressEdge(_prevJump, _jump, ref _cdAttack, owner, FuncKeyMask.jump);
+        }
+
+        private static void ApplyNewPressEdge(
+            bool previous,
+            bool held,
+            ref byte cooldown,
+            LF2Character owner,
+            FuncKeyMask key)
+        {
+            if (previous || !held)
+                return;
+
+            cooldown = 5;
+            PushInputHistory(owner, key);
         }
 
         private bool ApplyComboFrameInput(LF2Entity character)
@@ -248,38 +263,6 @@ namespace NTSD.Input
             return false;
         }
 
-        private bool RunDjaCombo(LF2Entity character)
-        {
-            bool advanced = false;
-            AdvanceCombo(ref _comboDJA, _cdJump, ComboMode.Jump, _cdAttack, ref advanced);
-            if (_comboDJA != 3) return false;
-
-            int targetFrame = character.Frame.D.hit_ja;
-            if (character.ShouldHoldCharacterDatDjaInputGuard(targetFrame))
-                return false;
-
-            if (targetFrame != 0)
-            {
-                if (character.CanEnterCharacterDatInputFrameJump())
-                {
-                    bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
-                    _comboDJA = 0;
-                    if (jumped) ClearActionAndDirectionCooldowns();
-                    return true;
-                }
-
-                if (character.Runtime?.Unk328 == 1)
-                {
-                    character.Runtime.Unk338 = 0;
-                    return false;
-                }
-            }
-
-            if (ComboInterrupted(ComboMode.Attack, advanced))
-                _comboDJA = 0;
-            return false;
-        }
-
         private void AdvanceCombo(ref byte comboState, byte step2Cooldown, ComboMode step2Mode, byte step3Cooldown, ref bool advanced)
         {
             advanced = false;
@@ -314,6 +297,40 @@ namespace NTSD.Input
                     comboState = 0;
                 }
             }
+        }
+
+        private bool RunDjaCombo(LF2Entity character)
+        {
+            bool advanced = false;
+            AdvanceCombo(ref _comboDJA, _cdJump, ComboMode.Jump, _cdAttack, ref advanced);
+            if (_comboDJA != 3)
+                return false;
+
+            int targetFrame = character.Frame.D.hit_ja;
+            if (character.ShouldHoldCharacterDatDjaInputGuard(targetFrame))
+                return false;
+
+            if (targetFrame != 0)
+            {
+                if (character.CanEnterCharacterDatInputFrameJump())
+                {
+                    bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
+                    _comboDJA = 0;
+                    if (jumped)
+                        ClearActionAndDirectionCooldowns();
+                    return true;
+                }
+
+                if (character.Runtime?.Unk328 == 1)
+                {
+                    character.Runtime.Unk338 = 0;
+                    return false;
+                }
+            }
+
+            if (ComboInterrupted(ComboMode.Attack, advanced))
+                _comboDJA = 0;
+            return false;
         }
 
         private bool ApplyDirectFrameInput(LF2Entity character)
@@ -381,7 +398,7 @@ namespace NTSD.Input
         {
             return key switch
             {
-                // C++ release input_history 编码：right=6,left=4,up=8,down=2,attack=9,defend=0,jump=5。
+                // C# authority input_history 编码：right=6,left=4,up=8,down=2,attack=9,defend=0,jump=5。
                 FuncKeyMask.att => 9,
                 FuncKeyMask.jump => 5,
                 FuncKeyMask.down => 2,

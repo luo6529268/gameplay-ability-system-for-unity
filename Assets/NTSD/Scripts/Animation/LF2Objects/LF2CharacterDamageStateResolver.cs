@@ -242,8 +242,6 @@ namespace NTSD.Animation.LF2Objects
 
             int injury = _character.FallDamageDiv == 0 ? 10 : 1000 / _character.FallDamageDiv;
             _character.Health.HP -= injury;
-            if (_character.Health.HP < 0)
-                _character.Health.HP = 0;
 
             _character.Runtime.Vy = -3.5f;
             if (_character.Runtime.Vx > 7f)
@@ -268,10 +266,6 @@ namespace NTSD.Animation.LF2Objects
 
             _character.Health.HP -= damage;
             _character.Health.HPBound -= damage;
-            if (_character.Health.HP < 0)
-                _character.Health.HP = 0;
-            if (_character.Health.HPBound < 0)
-                _character.Health.HPBound = 0;
             _character.WeaponCount = 0;
         }
 

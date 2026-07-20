@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
 
 namespace NTSD.Animation
 {
@@ -27,6 +28,7 @@ namespace NTSD.Animation
     public readonly struct SceneQueryHit
     {
         public readonly LF2Entity Target;
+        public readonly int TargetSlot;
         public readonly int BodyX;
         public readonly int ItrIndex;
         public readonly InteractionArea RuntimeItr;
@@ -42,11 +44,20 @@ namespace NTSD.Animation
             bool releaseHeavyHeldTargetOnConsume = false)
         {
             Target = target;
+            TargetSlot = target?.Runtime?.SlotIndex ?? -1;
             BodyX = bodyX;
             ItrIndex = itrIndex;
             RuntimeItr = runtimeItr;
             ZeroAttackerHpOnConsume = zeroAttackerHpOnConsume;
             ReleaseHeavyHeldTargetOnConsume = releaseHeavyHeldTargetOnConsume;
+        }
+
+        public LF2Entity ResolveCurrentTarget(SimulationWorld world)
+        {
+            if (world != null && TargetSlot >= 0)
+                return world.FindEntityByRuntimeSlotForQuery(TargetSlot);
+
+            return Target;
         }
     }
 }

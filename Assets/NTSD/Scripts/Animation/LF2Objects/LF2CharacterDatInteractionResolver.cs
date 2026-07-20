@@ -30,6 +30,28 @@ namespace NTSD.Animation.LF2Objects
             new LF2CharacterDatInteractionResolver(attacker).TryConsumeUnifiedStep7CandidateSequenceInternal();
         }
 
+        internal static bool TryApplyPreInteraction(
+            LF2Entity attacker,
+            InteractionArea itr,
+            LF2Entity target)
+        {
+            if (!CanResolveAttacker(attacker) || itr == null || target == null)
+                return false;
+
+            switch (itr.kind)
+            {
+                case 1:
+                    return LF2CharacterInteractionResolver.TryApplyKind1Grab(attacker, target, itr);
+                case 3:
+                    return LF2CharacterInteractionResolver.TryApplyKind3Grab(attacker, target, itr);
+                case 2:
+                case 7:
+                    return TryApplyCurrentDatPickupCandidate(attacker, target, itr.kind);
+                default:
+                    return false;
+            }
+        }
+
         private void TryConsumeUnifiedStep7CandidateSequenceInternal()
         {
             ILF2SceneQuery sceneQuery = _attacker.Match?.SceneQuery;
@@ -47,22 +69,20 @@ namespace NTSD.Animation.LF2Objects
             int candidateLimit = candidates.Count;
             for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                int liveCandidateCount = _attacker.Runtime?.HitCandidateCount ?? candidates.Count;
-                if (liveCandidateCount < 0) liveCandidateCount = 0;
-                if (liveCandidateCount > candidates.Count) liveCandidateCount = candidates.Count;
-                if (candidateIndex >= liveCandidateCount)
-                    break;
-
                 SceneQueryHit hitInfo = candidates[candidateIndex];
                 int itrIndex = hitInfo.ItrIndex;
                 if (itrIndex < 0 || itrIndex >= collisionFrame.itrs.Count)
+                    continue;
+
+                LF2Entity target = hitInfo.ResolveCurrentTarget(_attacker.Match);
+                if (target == null)
                     continue;
 
                 bool zeroAttackerHpOnConsume;
                 bool releaseHeavyHeldTargetOnConsume;
                 InteractionArea itr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
                     _attacker,
-                    hitInfo.Target,
+                    target,
                     collisionFrame,
                     collisionFrame.itrs[itrIndex],
                     out zeroAttackerHpOnConsume,
@@ -71,42 +91,37 @@ namespace NTSD.Animation.LF2Objects
                     continue;
 
                 hitInfo = new SceneQueryHit(
-                    hitInfo.Target,
+                    target,
                     hitInfo.BodyX,
                     hitInfo.ItrIndex,
                     itr,
                     zeroAttackerHpOnConsume,
                     releaseHeavyHeldTargetOnConsume);
 
-                LF2Entity target = hitInfo.Target;
-                if (ShouldAbortReleaseConsume(itr, target))
-                    return;
+                if (!CanConsumeRecordedCandidate(target))
+                    continue;
                 if (itr.kind == 6)
                 {
-                    _attacker.TryApplyKind6HitConfirmForCharacterDatInteraction(itr, target);
+                    target.HitConfirmCounter = 3;
                     continue;
                 }
-                if (!CanInteractTarget(itr, target))
-                    continue;
 
                 _attacker.ApplyReleaseSceneQueryConsumeEffectsForCharacterDatInteraction(hitInfo);
+                bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
+                    target,
+                    itr);
                 if (!DispatchInteractionByKind(kindService, itr, target))
                     continue;
-
-                _attacker.ItrArestUpdate(itr);
-                int selfSlot = _attacker.Runtime?.SlotIndex ?? -1;
-                if (selfSlot >= 0 && target.ItrVrestTest(selfSlot, true))
-                    target.ItrVrestUpdate(selfSlot, itr, true);
-
-                if ((_attacker.Runtime?.HitCandidateCount ?? 0) <= 0)
+                if (abortAfterSuccessfulHit)
                     return;
-
-                break;
             }
         }
 
         private bool DispatchInteractionByKind(INTSDItrKindService kindService, InteractionArea itr, LF2Entity target)
         {
+            if (itr.kind == 1 || itr.kind == 2 || itr.kind == 3 || itr.kind == 7)
+                return TryApplyPreInteraction(_attacker, itr, target);
+
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
                 Vector3 attackerPos = new Vector3((float)_attacker.Runtime.X, (float)_attacker.Runtime.Y, (float)_attacker.Runtime.Z);
@@ -118,43 +133,112 @@ namespace NTSD.Animation.LF2Objects
                     if (LF2CharacterDatHitResolver.CanResolveTarget(target))
                         return LF2CharacterDatHitResolver.TryResolveHit(target, itr, _attacker, attackerPos, default);
                 }
+                if (target is LF2WeaponBase weapon)
+                    return weapon.Hit(itr, _attacker);
+                if (target is LF2SpecialAttack specialAttack)
+                    return specialAttack.Hit(itr, _attacker);
                 return target is LF2LivingObject livingTarget && livingTarget.Hit(itr, _attacker, attackerPos, default);
             }
             return false;
         }
 
-        private bool CanInteractTarget(InteractionArea itr, LF2Entity target)
+        internal static bool TryApplyCurrentDatPickupCandidate(
+            LF2Entity attacker,
+            LF2Entity target,
+            int kind)
         {
-            if (itr == null || target == null)
+            if (attacker?.Runtime == null || target?.Runtime == null)
                 return false;
-            if (target == _attacker)
+            if (kind != 2 && kind != 7)
                 return false;
-            if (target.Frame?.D == null)
+            if (kind == 7 && attacker.Runtime.LinkState != 0)
                 return false;
-            if (target.Health != null && target.Health.HP <= 0)
+
+            int targetType = target.GetCurrentDataObjectTypeForSimulation();
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int targetSlot = target.Runtime.SlotIndex;
+            if (attackerSlot < 0 || targetSlot < 0)
                 return false;
-            if (!BruteForceSceneQuery.IsReleaseItrGeometry(itr))
-                return false;
-            if (BruteForceSceneQuery.IsReleaseConsumerPairBlocked(_attacker, target))
-                return false;
-            if (!BruteForceSceneQuery.RuntimeConsumeItrAllowed(_attacker, itr, target))
-                return false;
-            int selfSlot = _attacker.Runtime?.SlotIndex ?? -1;
-            if (selfSlot >= 0 && !target.ItrVrestTest(selfSlot, true))
-                return false;
-            target.HitConfirmCounter = 3;
+
+            int linkState;
+            int targetLinkState;
+            if (kind == 7)
+            {
+                int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
+                linkState = 1;
+                targetLinkState = -1;
+                if (targetOid == 120 || targetOid == 124)
+                    linkState = 101;
+                else if (targetType == (int)LF2ObjectType.ThrowWeapon)
+                {
+                    linkState = 4;
+                    targetLinkState = -4;
+                }
+                else if (targetType == (int)LF2ObjectType.Drink)
+                {
+                    linkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
+                    targetLinkState = -linkState;
+                }
+            }
+            else
+            {
+                if (targetType == (int)LF2ObjectType.LightWeapon)
+                {
+                    linkState = 1;
+                    attacker.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.PickingLight);
+                }
+                else if (targetType == (int)LF2ObjectType.HeavyWeapon)
+                {
+                    linkState = 2;
+                    attacker.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.PickingHeavy);
+                }
+                else if (targetType == (int)LF2ObjectType.ThrowWeapon)
+                {
+                    linkState = 4;
+                    attacker.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.PickingLight);
+                }
+                else if (targetType == (int)LF2ObjectType.Drink)
+                {
+                    linkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
+                    attacker.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.PickingLight);
+                    if (target.Health == null || target.Health.HP <= 0)
+                        target.Runtime.WeaponFlightCounter = 0;
+                }
+                else
+                {
+                    return false;
+                }
+
+                attacker.AttackingCounter = 0;
+                targetLinkState = -linkState;
+            }
+
+            attacker.Runtime.LinkState = linkState;
+            target.Runtime.LinkState = targetLinkState;
+            target.RelationTeam = attacker.RelationTeam;
+            attacker.Runtime.TargetSlotIndex = targetSlot;
+            attacker.Runtime.HeldWeaponStableId = targetSlot;
+            target.Runtime.HolderStableId = attackerSlot;
+            target.HolderCopySlot = attackerSlot;
+            attacker.Runtime.PickupCount++;
+            if (targetType == (int)LF2ObjectType.Drink &&
+                (target.Health == null || target.Health.HP <= 0))
+            {
+                target.Runtime.WeaponFlightCounter = 0;
+            }
             return true;
         }
 
-        private bool ShouldAbortReleaseConsume(InteractionArea itr, LF2Entity target)
+        private bool CanConsumeRecordedCandidate(LF2Entity target)
         {
-            if (itr == null || target == null)
+            if (target == null || target == _attacker || target.Runtime == null)
                 return false;
-            if (_attacker.HitConfirm2 != 0 && LF2Entity.ResolveCurrentDataObjectType(target) == (int)LF2ObjectType.Character)
-                return true;
-            return itr.kind == 0 &&
-                   itr.effect == 21 &&
-                   (target.GetState() == LF2States.Burning || target.GetState() == LF2States.FirenSpecific);
+            if (target.Runtime.PendingFlushDestroy || target.FrameCache == null)
+                return false;
+
+            int selfSlot = _attacker.Runtime?.SlotIndex ?? -1;
+            return selfSlot < 0 || target.ItrVrestTest(selfSlot, true);
         }
+
     }
 }

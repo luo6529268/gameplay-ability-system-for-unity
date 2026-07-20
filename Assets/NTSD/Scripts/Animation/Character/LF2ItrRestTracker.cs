@@ -10,6 +10,12 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class LF2ItrRestTracker
     {
+        public sealed class StateSnapshot
+        {
+            internal int Arest;
+            internal Dictionary<int, int> VrestByAttacker;
+        }
+
         private int _arest = 0;
         private readonly Dictionary<int, int> _vrestByAttacker = new Dictionary<int, int>();
 
@@ -26,6 +32,29 @@ namespace NTSD.Animation
         {
             _arest = 0;
             _vrestByAttacker.Clear();
+        }
+
+        public StateSnapshot CaptureState()
+        {
+            return new StateSnapshot
+            {
+                Arest = _arest,
+                VrestByAttacker = new Dictionary<int, int>(_vrestByAttacker),
+            };
+        }
+
+        public void RestoreState(StateSnapshot snapshot)
+        {
+            if (snapshot == null)
+                return;
+
+            _arest = snapshot.Arest;
+            _vrestByAttacker.Clear();
+            if (snapshot.VrestByAttacker == null)
+                return;
+
+            foreach (KeyValuePair<int, int> pair in snapshot.VrestByAttacker)
+                _vrestByAttacker[pair.Key] = pair.Value;
         }
 
         public bool ArestTest() => _arest <= 0;
@@ -54,6 +83,11 @@ namespace NTSD.Animation
         public void SetVrest(int attackerKey, int value)
         {
             _vrestByAttacker[attackerKey] = value;
+        }
+
+        public void RemoveVrest(int attackerKey)
+        {
+            _vrestByAttacker.Remove(attackerKey);
         }
 
         public void ArestUpdate(InteractionArea itr)

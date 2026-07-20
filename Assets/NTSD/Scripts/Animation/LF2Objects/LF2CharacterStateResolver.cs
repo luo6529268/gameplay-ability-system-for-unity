@@ -26,9 +26,8 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    if (_character.IsHeavyWeapon())
-                        SetMoveFrameDirect(LF2StandardFrames.HeavyObjWalk0);
-                    break;
+                    // Formal locomotion is consumed once in the post-cooldown input pass.
+                    return false;
             }
 
             return false;
@@ -41,7 +40,6 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    ApplyWalkRunFrame(_character.IsHeavyWeapon());
                     return false;
 
                 case "TU":
@@ -63,7 +61,6 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "frame":
-                    ApplyRunningFrame();
                     return false;
 
                 case "TU":
@@ -326,15 +323,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void SetMoveFrameDirect(int frameId)
         {
-            LF2FrameData targetFrame = _character.FrameCache?.GetFrameDataById(frameId);
-            if (targetFrame == null || _character.Frame == null)
-                return;
-
-            _character.Frame.PN = _character.Frame.N;
-            _character.Frame.N = frameId;
-            _character.Frame.D = targetFrame;
-            _character.Trans?.SyncDirectFrameData(_character.Frame.D.wait, _character.Frame.D.next);
-            _character.Runtime.NextFrame = _character.Frame.D.next;
+            _character.DirectWriteFramePreserveWaitCounter(frameId);
         }
 
         private void StepWalkAnimation(int rate, int frameBase)

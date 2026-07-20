@@ -27,6 +27,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
+
             InitializeParent(task);
             InitializePosition(task);
             InitializeDirection(task);
@@ -85,6 +87,14 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializePosition(OPointCreateTask task)
         {
+            if (task.useDirectRuntimePosition)
+            {
+                PS.x = task.directX;
+                PS.y = task.directY;
+                PS.z = task.directZ;
+                return;
+            }
+
             PS.x = task.pos.x;
             PS.y = task.pos.y;
             PS.z = task.z;
@@ -102,7 +112,7 @@ namespace NTSD.Animation.LF2Objects
             FrameCache.Load(wrapper);
 
             int action = task.opoint.action;
-            if (action == 0 && !task.preserveActionZero && FrameCache.GetFrameDataById(0) == null)
+            if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))
                 action = 999;
 
             Frame.PN = 0;

@@ -2,7 +2,7 @@ namespace NTSD.Simulation
 {
     /// <summary>
     /// Unity NTSD 战斗 tick 调度器。
-    /// pass 顺序以 C++ release 工程为基准；实体专属行为保留在 LF2Entity 子类中，
+    /// pass 顺序以 C# authority 工程为基准；实体专属行为保留在 LF2Entity 子类中，
     /// 本类只负责集中维护这些 pass 的执行时机。
     /// </summary>
     public sealed class NTSDBattleTickSystem
@@ -18,25 +18,49 @@ namespace NTSD.Simulation
         {
             if (world == null) return;
 
+            if (world.Runtime?.Flow != null)
+                world.Runtime.Flow.HumanInputPolledExternally = false;
+            world.PendingSounds.Clear();
             world.AdvanceBattleFlowTick(tickIndex);
-            RunFrameAdvancePhase(tickIndex);
+            if (world.Runtime?.Results?.IsActive == true)
+            {
+                PostCooldownHumanInput(tickIndex);
+                BattleResultsFlow();
+                return;
+            }
+
+            TickCooldowns(tickIndex);
+            PostCooldownHumanInput(tickIndex);
+            if (!RunFrameAdvancePhase(tickIndex))
+                return;
             RunInteractionPhase(tickIndex);
             RunPresentationAndCleanupPhase(tickIndex);
         }
 
-        private void RunFrameAdvancePhase(int tickIndex)
+        private bool RunFrameAdvancePhase(int tickIndex)
         {
-            TickCooldowns(tickIndex);
-            PostCooldownHumanInput(tickIndex);
             Oid5152RuntimeMaintenance(tickIndex);
-            AiInputAndCombo(tickIndex);
+            if (world.NeedClearInput)
+            {
+                world.SetNeedClearInput(false);
+                world.ClearBattleEntryInputAll();
+                return false;
+            }
+
+            CharacterInput(tickIndex);
+
             EarlyFrameAdvanceSpecials(tickIndex);
             FrameLogicBeforeAdvance(tickIndex);
             FrameAdvanceAll(tickIndex);
             PostFrameAdvanceDeathCleanup(tickIndex);
+            ClampCharacterZToStageBounds();
+            ResolvePreInteractions(tickIndex);
+            ValidateHeldLinks(tickIndex);
+            ClampCharacterZToStageBounds();
             ProcessHeldObjects(tickIndex);
             CaptureCollisionFrameSnapshots();
             CollectCollisionCandidates();
+            return true;
         }
 
         private void RunInteractionPhase(int tickIndex)
@@ -45,15 +69,10 @@ namespace NTSD.Simulation
             RandomWeaponDrop(tickIndex);
             ResolveObjectInteractions(tickIndex);
             EndCollisionCandidateConsumption();
-            ResolvePreInteractions(tickIndex);
-            ValidateHeldLinks(tickIndex);
-            ProcessHeldObjects(tickIndex);
         }
 
         private void RunPresentationAndCleanupPhase(int tickIndex)
         {
-            ClampCharacterZToStageBounds();
-            ValidateHeldObjectsAfterClamp(tickIndex);
             PreFrameBounds();
             CurrentWaveStage(tickIndex);
             RenderDispatch(tickIndex);
@@ -61,6 +80,7 @@ namespace NTSD.Simulation
             LateEntityUpdate(tickIndex);
             Mode2RandomWeaponDropTail(tickIndex);
             EntityPostFrameTail(tickIndex);
+            BattleResultsFlow();
         }
 
         private void TickCooldowns(int tickIndex)
@@ -71,11 +91,13 @@ namespace NTSD.Simulation
         private void PostCooldownHumanInput(int tickIndex)
         {
             world.PostCooldownHumanInputAll(tickIndex);
+            if (world.Runtime?.Flow != null)
+                world.Runtime.Flow.HumanInputPolledExternally = true;
         }
 
-        private void AiInputAndCombo(int tickIndex)
+        private void CharacterInput(int tickIndex)
         {
-            world.AiInputAndComboAll(tickIndex);
+            world.CharacterInputAll(tickIndex);
         }
 
         private void ProcessHeldObjects(int tickIndex)
@@ -153,11 +175,6 @@ namespace NTSD.Simulation
             world.ClampCharacterZToStageBoundsAll();
         }
 
-        private void ValidateHeldObjectsAfterClamp(int tickIndex)
-        {
-            world.HeldObjectProcessAll(tickIndex);
-        }
-
         private void FramePostProcess()
         {
             world.FramePostProcessAll();
@@ -191,6 +208,11 @@ namespace NTSD.Simulation
         private void EntityPostFrameTail(int tickIndex)
         {
             world.EntityPostFrameTailAll(tickIndex);
+        }
+
+        private void BattleResultsFlow()
+        {
+            world.UpdateBattleResultsFlow();
         }
     }
 }

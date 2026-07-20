@@ -43,7 +43,7 @@ namespace NTSD.Simulation
         public void PostCooldownInputAll(int tickIndex)
         {
             PostCooldownHumanInputAll(tickIndex);
-            AiInputAndComboAll(tickIndex);
+            CharacterInputAll(tickIndex);
         }
 
         public void FlushQueuedObjectPointTasks()
@@ -53,11 +53,26 @@ namespace NTSD.Simulation
 
         public void PostCooldownHumanInputAll(int tickIndex)
         {
+            RefreshActiveHumanRosterInputBindings();
             RunDeferredMutationEntityPass(entity =>
             {
-                if (entity.AiControlled)
+                if (!IsBoundActiveHumanRosterInputEntity(entity) ||
+                    !entity.TryGetSharedInputControllerForSimulation(out _))
                     return;
-                entity.RunPostCooldownInputPhase(tickIndex);
+                entity.RunHumanInputPollPhase(tickIndex);
+                if (IsActiveForCurrentPass(entity))
+                    RefreshRuntimeSnapshot(entity);
+            });
+        }
+
+        public void ClearBattleEntryInputAll()
+        {
+            RunDeferredMutationEntityPass(entity =>
+            {
+                if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+                    return;
+
+                entity.ClearBattleEntryInputState();
                 if (IsActiveForCurrentPass(entity))
                     RefreshRuntimeSnapshot(entity);
             });
@@ -75,10 +90,34 @@ namespace NTSD.Simulation
                 {
                     if (!entity.AiControlled || entity.GetCurrentDataObjectTypeForSimulation() != 0)
                         return;
-                    entity.RunPostCooldownInputPhase(tickIndex);
+                    entity.RunCharacterInputPhase(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
                         return;
                     RefreshRuntimeSnapshot(entity);
+                });
+            }
+            finally
+            {
+                ClearAiInputSlotSnapshot();
+            }
+        }
+
+        public void CharacterInputAll(int tickIndex)
+        {
+            if (tickIndex <= 1)
+                return;
+
+            BuildAiInputSlotSnapshot();
+            try
+            {
+                RunDeferredMutationEntityPass(entity =>
+                {
+                    if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+                        return;
+
+                    entity.RunCharacterInputPhase(tickIndex);
+                    if (IsActiveForCurrentPass(entity))
+                        RefreshRuntimeSnapshot(entity);
                 });
             }
             finally
@@ -162,7 +201,7 @@ namespace NTSD.Simulation
 
                 LF2FrameData partnerFrame = partner.Frame?.D;
                 int partnerFrameId = partner.Frame?.N ?? -1;
-                if (partnerFrame == null || partnerFrameId < 0 || partnerFrameId >= 400)
+                if (partnerFrame == null || partnerFrameId < 0 || partnerFrameId >= LF2FrameCache.MaxFrameIdExclusive)
                     continue;
                 if (partnerFrame.state == 14)
                     continue;
@@ -204,7 +243,7 @@ namespace NTSD.Simulation
                 partner.Runtime.Vy = 0f;
                 partner.Runtime.OidMergeDormant = true;
 
-                self.TryApplyRuntimeIdentity(51, 290, true, out _);
+                self.TryApplyRuntimeIdentity(51, 290, false, out _);
                 self.Health.PP = 500;
                 self.RefreshRuntimeSnapshot();
                 partner.RefreshRuntimeSnapshot();
@@ -221,9 +260,8 @@ namespace NTSD.Simulation
             if (self.ObjectId != 51 || self.Runtime.Unk328 != 1 || self.Runtime.Unk338 > 0)
                 return false;
 
-            LF2FrameData currentFrame = self.Frame?.D;
             int currentFrameId = self.Frame?.N ?? -1;
-            if (currentFrame == null || (currentFrameId >= 9 && currentFrameId <= 260))
+            if (currentFrameId >= 9 && currentFrameId <= 260)
                 return false;
 
             int originalOid = self.Runtime.Unk330;
@@ -234,8 +272,10 @@ namespace NTSD.Simulation
             int aggregateHpBound = self.Health.HPBound;
             int partnerSlot = self.Runtime.Unk32C;
             int partnerOid = self.Runtime.Unk334;
-            int splitX = self.GetRuntimeXInt();
-            int splitZ = self.GetRenderZInt();
+            double splitX = self.Runtime.X;
+            double splitZ = self.Runtime.Z;
+            int splitXInt = self.GetRuntimeXInt();
+            int splitZInt = self.GetRenderZInt();
             double preservedVy = self.Runtime.Vy;
             double preservedVz = self.Runtime.Vz;
             string preservedDir = self.Runtime.Dir;
@@ -256,22 +296,38 @@ namespace NTSD.Simulation
             int halfHpBound = aggregateHpBound / 2;
             int partnerStableId = partner.Runtime.StableId;
             int partnerRuntimeSlot = partner.Runtime.SlotIndex;
+            LF2ItrRestTracker.StateSnapshot partnerRestState = partner.ItrRest?.CaptureState();
 
-            self.TryApplyRuntimeIdentity(originalOid, 112, true, out _);
+            self.TryApplyRuntimeIdentity(originalOid, 112, false, out _);
             self.Health.HP = halfHp;
             self.Health.HPBound = halfHpBound;
             self.Health.PP = 0;
-            self.Runtime.X = splitX;
             self.Runtime.Y = 0f;
-            self.Runtime.Z = splitZ;
+            self.Runtime.YInt = 0;
             self.Runtime.Vx = 0f;
             self.Runtime.Vy = preservedVy;
             self.Runtime.Vz = preservedVz;
-            self.Runtime.SyncIntegerPosition();
             self.Runtime.Dir = preservedDir;
             self.RefreshRuntimeSnapshot();
 
             partner.Reset();
+            // LF2Character.Reset has pool-specific defaults that differ from formal Entity::reset.
+            partner.FrameDelay = 0;
+            partner.KnockbackVx = 0.1;
+            partner.KnockbackVy = 0.1;
+            partner.KnockbackVz = 0.1;
+            partner.HolderCopySlot = 99;
+            partner.Effect?.Reset();
+            if (partner is LF2Character partnerCharacter)
+                partnerCharacter.DeadBlinkCountInternal = -1;
+            if (partner.Frame != null)
+            {
+                partner.Frame.PN = 0;
+                partner.Frame.Prev = 0;
+                partner.Frame.Prev2 = 0;
+                partner.Frame.Prev2D = null;
+            }
+            partner.ItrRest?.RestoreState(partnerRestState);
             partner.Runtime.StableId = partnerStableId;
             partner.SetRuntimeSlotIndex(partnerRuntimeSlot);
             partner.Runtime.OidMergeDormant = false;
@@ -279,14 +335,16 @@ namespace NTSD.Simulation
             partner.Health.HP = halfHp;
             partner.Health.HPBound = halfHpBound;
             partner.Health.PP = 0;
-            partner.RelationTeam = ResolveOid5152RelationTeam(self);
+            partner.RelationTeam = self.RelationTeam;
             partner.Runtime.X = splitX;
             partner.Runtime.Y = 0f;
             partner.Runtime.Z = splitZ;
+            partner.Runtime.XInt = splitXInt;
+            partner.Runtime.YInt = 0;
+            partner.Runtime.ZInt = splitZInt;
             partner.Runtime.Vx = 0f;
             partner.Runtime.Vy = 0f;
             partner.Runtime.Vz = 0f;
-            partner.Runtime.SyncIntegerPosition();
             partner.SwitchDir(preservedDir == "right" ? "left" : "right");
             partner.RefreshRuntimeSnapshot();
             return true;
@@ -302,10 +360,7 @@ namespace NTSD.Simulation
 
         private static int ResolveOid5152RelationTeam(LF2Entity entity)
         {
-            if (entity == null)
-                return 0;
-
-            return entity.RelationTeam != 0 ? entity.RelationTeam : entity.Team;
+            return entity?.RelationTeam ?? 0;
         }
 
         public void SerialTickAll(int tickIndex)
@@ -318,15 +373,13 @@ namespace NTSD.Simulation
                 // later slot participate this tick; a reused lower slot waits until next tick.
                 ForEachEntityByRuntimeSlot(entity =>
                 {
+                    entity.Runtime?.ClearActionInputKeys();
+                    entity.Runtime?.ClearDirectionalInputKeys();
                     entity.SimTransit(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
                         return;
 
                     entity.SimTU(tickIndex);
-                    // Some legacy hit_Fa producers still live inside SimTU. Flush while
-                    // the producer is valid so a later runtime slot can run this tick.
-                    if (entity is LF2SpecialAttack)
-                        FlushQueuedObjectPointTasks();
                     if (!IsActiveForCurrentPass(entity))
                         return;
                     RefreshRuntimeSnapshot(entity);
@@ -594,7 +647,7 @@ namespace NTSD.Simulation
                 if (frame.state != 501 || entity.TransformTargetObjectId <= -1)
                     continue;
 
-                var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(entity.TransformTargetObjectId);
+                LF2CharacterDataWrapper wrapper = LF2Entity.ResolveRuntimeCharacterConfig(entity.TransformTargetObjectId);
                 if (wrapper == null)
                     continue;
 
@@ -604,18 +657,19 @@ namespace NTSD.Simulation
                 // BMD-023: state=501 transform branch must mirror baseline SetFrameImmediate:
                 // write Frame + FrameWaitCounter only, never Attacking. Unity's
                 // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
-                entity.DirectWriteFramePreserveWaitCounter(0);
+                entity.DirectWriteRawFramePreserveWaitCounter(0);
                 RefreshRuntimeSnapshot(entity);
 
-                int ownerStableId = entity.StableId;
-                int ownerSlotIndex = entity.Runtime?.SlotIndex ?? ownerStableId;
+                int ownerSlotIndex = entity.Runtime?.SlotIndex ?? -1;
+                if (ownerSlotIndex < 0)
+                    continue;
 
                 for (int j = 0; j < entities.Count; j++)
                 {
                     LF2Entity child = entities[j];
-                    if (child == null || child == entity)
+                    if (child == null)
                         continue;
-                    if (child.KillCount != ownerStableId && child.KillCount != ownerSlotIndex)
+                    if (child.KillCount != ownerSlotIndex)
                         continue;
                     if (child.Health != null && child.Health.HP <= 0)
                         continue;
@@ -623,10 +677,10 @@ namespace NTSD.Simulation
                     child.FrameCache.Load(wrapper);
                     child.ObjectId = entity.ObjectId;
                     // BMD-023: state=501 child-transform branch must mirror baseline SetFrameImmediate.
-                    // Same Y<0→212 / Y≥0→0 split as LF2Character.ApplyObjectSpecificFrameTickBeforeWaitAdvance:
+                    // The authority selects from the integer Y snapshot, not the floating render position.
                     // write Frame + FrameWaitCounter only, never Attacking. Unity's
                     // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
-                    child.DirectWriteFramePreserveWaitCounter(child.PS != null && child.PS.y < 0f ? 212 : 0);
+                    child.DirectWriteRawFramePreserveWaitCounter(child.Runtime != null && child.Runtime.YInt < 0 ? 212 : 0);
                     RefreshRuntimeSnapshot(child);
                 }
             }
@@ -637,7 +691,9 @@ namespace NTSD.Simulation
             RunDeferredMutationEntityPass(entity =>
             {
                 LF2FrameData frame = entity.Frame?.D;
-                if (!entity.SupportsFrameLogicBeforeAdvancePhase(frame))
+                if (frame == null ||
+                    frame.hit_Fa <= 0 ||
+                    entity.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
                     return;
 
                 entity.RunFrameLogicBeforeAdvance();
@@ -646,6 +702,11 @@ namespace NTSD.Simulation
                     return;
                 RefreshRuntimeSnapshot(entity);
             });
+        }
+
+        internal int FindFirstFreeFrameLogicRuntimeSlot()
+        {
+            return FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, MaxRuntimeSlots);
         }
 
         public void CaptureCollisionFrameSnapshotsAll()
@@ -767,19 +828,6 @@ namespace NTSD.Simulation
                 return false;
 
             int frameId = entity.Frame.N;
-            if (frameId < 0 || frameId >= 400)
-            {
-                entity.FreeEntityLikeExe();
-                return true;
-            }
-
-            LF2FrameData frameData = entity.Frame.D;
-            if (frameData != null && frameData.state == 9998)
-            {
-                entity.FreeEntityLikeExe();
-                return true;
-            }
-
             int frameGroup = frameId / 100;
             if (frameGroup == 11 || frameGroup == 12)
             {
@@ -799,7 +847,7 @@ namespace NTSD.Simulation
                 return true;
             }
 
-            if (frameId < 0 || frameId >= 400)
+            if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive)
             {
                 entity.FreeEntityLikeExe();
                 return true;
@@ -855,45 +903,13 @@ namespace NTSD.Simulation
                     entity.HealTimer = 1100;
 
                 entity.ClearHitCandidateCarriers();
-
+                entity.Runtime.TransientMp = 0;
+                entity.Runtime.TransientMp2 = 1000;
+                entity.Runtime.TransientMp3 = 1000;
+                entity.Runtime.TransientMp4 = 1000;
                 RefreshRuntimeSnapshot(entity);
             });
 
-            RunReleaseEntityCleanupTail();
-        }
-
-        private void RunReleaseEntityCleanupTail()
-        {
-            GetActiveEntitiesByRuntimeSlot(_entityScratch);
-            for (int i = 0; i < _entityScratch.Count; i++)
-            {
-                LF2Entity entity = _entityScratch[i];
-                if (entity == null || entity.Health == null)
-                    continue;
-
-                LF2FrameData frame = entity.Frame?.D;
-                int dataType = entity.GetCurrentDataObjectTypeForSimulation();
-
-                if (dataType == (int)LF2ObjectType.Character)
-                {
-                    if (frame != null &&
-                        entity.Health.HP <= 0 &&
-                        frame.state == 14 &&
-                        entity.FrameDelay <= 0 &&
-                        entity.Runtime != null &&
-                        entity.Runtime.WaitCounter > frame.wait * 3)
-                    {
-                        entity.FreeEntityLikeExe();
-                    }
-
-                    continue;
-                }
-
-                if (entity.Health.HP <= 0)
-                    entity.FreeEntityLikeExe();
-            }
-
-            _entityScratch.Clear();
         }
 
         public void FramePostProcessAll()
@@ -922,7 +938,6 @@ namespace NTSD.Simulation
             ForEachEntityByRuntimeSlot(entity =>
             {
                 entity.ItrRest?.TickArest();
-                entity.Runtime?.TickDefendLockCooldown();
                 ClearAttackExemptIfCurrentFrameCannotHit(entity);
                 RefreshRuntimeSnapshot(entity);
             });
@@ -933,13 +948,30 @@ namespace NTSD.Simulation
             if (entity == null || entity.AttackExempt <= 0)
                 return;
 
+            LF2CharacterData entityData = (entity as LF2LivingObject)?._FrameDataWrapper?.characterData
+                ?? entity.FrameCache?.Wrapper?.characterData;
+            if (entityData == null)
+                return;
+
             LF2FrameData frame = entity.Frame?.D;
-            bool clear = frame == null;
-            if (!clear)
+            bool clear = frame?.itrs == null || frame.itrs.Count == 0;
+            if (!clear &&
+                frame.state == LF2States.WeaponOnHand &&
+                entity.Runtime != null)
             {
-                bool hasList = frame.opoints != null && frame.opoints.Count > 0;
-                bool hasSingle = frame.opoint.HasValue;
-                clear = !hasList && !hasSingle;
+                int holderSlot = entity.Runtime.ResolveActiveHolderSlotIndex();
+                LF2Entity holder = holderSlot >= 0
+                    ? FindEntityByRuntimeSlotForQuery(holderSlot)
+                    : null;
+                LF2CharacterData holderData = (holder as LF2LivingObject)?._FrameDataWrapper?.characterData
+                    ?? holder?.FrameCache?.Wrapper?.characterData;
+                if (holder != null && holderData != null)
+                {
+                    LF2FrameData holderFrame = holder.Frame?.D;
+                    clear = holderFrame?.wpoints == null ||
+                            holderFrame.wpoints.Count == 0 ||
+                            holderFrame.wpoints[0].attacking == 0;
+                }
             }
 
             if (clear)
@@ -1039,95 +1071,135 @@ namespace NTSD.Simulation
         public void RandomWeaponDropTickAll(int tickIndex)
         {
             int weaponCount = 0;
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return;
-
-            foreach (int simOrder in bucketKeys)
+            ForEachEntityByRuntimeSlot(entity =>
             {
-                if (!_buckets.TryGetValue(simOrder, out Bucket bucket)) continue;
-
-                var snapshot = bucket.items.Count > 0
-                    ? new List<ISimObject>(bucket.items)
-                    : null;
-
-                if (snapshot == null) continue;
-
-                foreach (var obj in snapshot)
-                {
-                    if (obj is LF2Entity entity && entity.CountsAsRandomWeaponDropCandidate())
-                        weaponCount++;
-                }
-            }
+                if (entity.CountsAsRandomWeaponDropCandidate())
+                    weaponCount++;
+            });
             if (weaponCount >= 4) return;
             if (Rng.NextInt(0, 200) != 0) return;
 
-            var manager = CharacterAnimtorManager.Instance;
-            if (manager == null) return;
+            int freeSlot = FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, MaxRuntimeSlots);
+            if (freeSlot < 0) return;
 
-            var candidates = new System.Collections.Generic.List<int>();
-            for (int oid = 100; oid < 200; oid++)
+            var manager = CharacterAnimtorManager.Instance;
+            var dataManager = GameDataManager.Instance;
+            if (manager == null || dataManager == null) return;
+
+            var candidates = new List<int>();
+            var seenOids = new HashSet<int>();
+            List<ObjectDefinition> loadedObjects = dataManager.GetAllObjects();
+            for (int i = 0; i < loadedObjects.Count; i++)
             {
+                int oid = loadedObjects[i].id;
+                if (!seenOids.Add(oid)) continue;
+                if (oid < 100 || oid >= 200) continue;
                 var wrapper = manager.GetCharacterConfig(oid);
                 if (wrapper == null) continue;
                 if (oid == 122 || oid == 123)
                 {
                     if (Rng.NextInt(0, 2) == 0) continue;
+                    if (BattleGameModeId >= 1 && BattleGameModeId <= 4) continue;
                 }
                 candidates.Add(oid);
             }
             if (candidates.Count == 0) return;
 
             int selectedOid = candidates[Rng.NextInt(0, candidates.Count)];
-
             var factory = LF2ObjectPointFactory.Instance;
-            if (factory == null) return;
+            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            if (factory == null || referencePool == null) return;
 
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(selectedOid);
-            int flyFrame = -1;
-            int minFrame = int.MaxValue;
-            if (charData?.frames != null)
-            {
-                foreach (var f in charData.frames)
-                {
-                    if (f == null) continue;
-                    if (f.frameId > 0 && f.frameId < minFrame) minFrame = f.frameId;
-                    if (flyFrame < 0 && f.frameId > 0 && (
-                        f.state == LF2States.WeaponInSky ||
-                        f.state == LF2States.WeaponThrowing ||
-                        f.state == LF2States.HeavyWeaponInSky))
-                        flyFrame = f.frameId;
-                }
-            }
-            if (flyFrame < 0) flyFrame = minFrame != int.MaxValue ? minFrame : 0;
-
-            ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out _, out _);
-            if (stageWidth <= 60 || zMax - zMin <= 60) return;
-
+            BattleStageRuntimeState stage = Runtime?.Stage;
+            int xMaxOverride = stage?.XMaxOverride ?? 0;
+            int stageWidth = stage?.BaseStageWidthPx ?? 800;
+            int zMin = stage?.ZMin ?? 180;
+            int zMax = stage?.ZMax ?? 350;
             int r1 = Rng.NextInt(0, 30);
+            int xBase = xMaxOverride == 0 ? stageWidth - 60 : xMaxOverride - 60;
+            int xStep = xBase / 30;
             int r2 = Rng.NextInt(0, 30);
             int r3 = Rng.NextInt(0, 30);
+            int zBase = zMax - zMin - 60;
+            int zStep = zBase / 30;
             int r4 = Rng.NextInt(0, 30);
-            float lf2X = r1 * ((stageWidth - 60) / 30) + r2 + 30;
-            float lf2Z = r3 * ((zMax - zMin - 60) / 30) + r4 + zMin + 30;
-            const float lf2Y = -500f;
+            double lf2X = r1 * xStep + r2 + 30;
+            double lf2Z = r3 * zStep + r4 + zMin + 30;
+            const double lf2Y = -500.0;
 
-            var spawnTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
-
+            OPointCreateTask spawnTask = referencePool.Fetch<OPointCreateTask>();
             spawnTask.opoint = new ObjectPoint
             {
                 oid = selectedOid,
                 kind = 0,
-                action = flyFrame,
-                x = Mathf.RoundToInt(lf2X),
-                y = Mathf.RoundToInt(lf2Y),
+                action = 0,
+                x = (int)lf2X,
+                y = (int)lf2Y,
                 dvx = 0,
                 dvy = 0,
                 facing = 0,
             };
-            spawnTask.parent = null; spawnTask.team = 0;
-            spawnTask.pos = new UnityEngine.Vector3(lf2X, lf2Y, 0);
-            spawnTask.z = lf2Z; spawnTask.dir = "right"; spawnTask.dvz = 0;
-            factory.CreateObjectImmediate(spawnTask);
+            spawnTask.parent = null;
+            spawnTask.team = 0;
+            spawnTask.requiredRuntimeSlot = freeSlot;
+            spawnTask.pos = new Vector3((float)lf2X, (float)lf2Y, 0f);
+            spawnTask.z = (float)lf2Z;
+            spawnTask.dir = "right";
+            spawnTask.dvz = 0f;
+            spawnTask.preserveActionZero = true;
+            spawnTask.skipPostInitZOffset = true;
+            spawnTask.useDirectRuntimePosition = true;
+            spawnTask.directX = lf2X;
+            spawnTask.directY = lf2Y;
+            spawnTask.directZ = lf2Z;
+            spawnTask.useDirectVelocity = true;
+            spawnTask.directVx = 0.0;
+            spawnTask.directVy = 0.0;
+            spawnTask.directVz = 0.0;
+            spawnTask.useInitialRuntimeIntPosition = true;
+            spawnTask.initialRuntimeX = (int)lf2X;
+            spawnTask.initialRuntimeY = (int)lf2Y;
+            spawnTask.initialRuntimeZ = (int)lf2Z;
+            spawnTask.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
+
+            LF2Entity spawned;
+            try
+            {
+                spawned = factory.CreateObjectImmediate(spawnTask);
+            }
+            finally
+            {
+                referencePool.Recycle(spawnTask);
+            }
+
+            if (spawned == null || spawned.Runtime?.SlotIndex != freeSlot) return;
+
+            spawned.Health.HP = selectedOid == 122 ? 200 : 500;
+            spawned.Health.HPBound = 500;
+            spawned.Health.HP3 = 500;
+            spawned.Health.PP = 500;
+            spawned.KillCount = -1;
+            ResetCooldownsForRuntimeSlot(freeSlot);
+            spawned.RefreshRuntimeSnapshot();
+        }
+
+        private void ResetCooldownsForRuntimeSlot(int runtimeSlot)
+        {
+            var bucketKeys = GetBucketKeySnapshot();
+            if (bucketKeys == null) return;
+
+            for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
+            {
+                if (!_buckets.TryGetValue(bucketKeys[keyIndex], out Bucket bucket)) continue;
+                for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
+                {
+                    if (bucket.items[itemIndex] is not LF2Entity entity || entity.ItrRest == null) continue;
+                    if (entity.Runtime?.SlotIndex == runtimeSlot)
+                        entity.ItrRest.Reset();
+                    else
+                        entity.ItrRest.RemoveVrest(runtimeSlot);
+                }
+            }
         }
 
         public void Mode2RandomWeaponDropTailAll(int tickIndex)

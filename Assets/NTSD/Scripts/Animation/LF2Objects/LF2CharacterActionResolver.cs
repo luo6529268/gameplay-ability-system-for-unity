@@ -64,16 +64,12 @@ namespace NTSD.Animation.LF2Objects
                     break;
 
                 case LF2States.Jump:
-                    if (_character.PS.y < 0f)
+                    if (_character.Runtime.YInt < 0)
                         handled = ProcessJumpingInput();
                     break;
 
                 case LF2States.Dash:
                     handled = ProcessDashInput();
-                    break;
-
-                case LF2States.Defending:
-                    handled = ProcessDefendingInput();
                     break;
 
                 case LF2States.Catching:
@@ -97,33 +93,32 @@ namespace NTSD.Animation.LF2Objects
 
                 if (!_character.HasHeldObjectInternal() || linkState == 0)
                 {
-                    if (_character.HitConfirmEa > 0 && _character.FrameCache.GetFrameDataById(LF2StandardFrames.SuperPunch) != null)
+                    if (_character.HitConfirmEa > 0 && _character.FrameCache.HasFrame(LF2StandardFrames.SuperPunch))
                     {
-                        _character.HitConfirmEa = 0;
-                        _character.ImmediateFrame(LF2StandardFrames.SuperPunch);
+                        _character.SetInputFrameDirectInternal(LF2StandardFrames.SuperPunch);
                     }
                     else
                     {
                         int punchFrame = _character.RandIntInternal(0, 2) == 0 ? LF2StandardFrames.Punch : LF2StandardFrames.Punch4;
                         _character.TrySpendFramePpCost(punchFrame, clampOnOverdraw: true);
-                        _character.ImmediateFrame(punchFrame);
+                        _character.SetInputFrameDirectInternal(punchFrame);
                     }
                 }
                 else if (linkState == 101)
                 {
-                    _character.ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : RandomWeaponAttackFrame());
+                    _character.SetInputFrameDirectInternal(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : RandomWeaponAttackFrame());
                 }
                 else if (linkState % 100 == 1)
                 {
-                    _character.ImmediateFrame(RandomWeaponAttackFrame());
+                    _character.SetInputFrameDirectInternal(RandomWeaponAttackFrame());
                 }
                 else if (linkState == 4)
                 {
-                    _character.ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                    _character.SetInputFrameDirectInternal(LF2StandardFrames.LightWeaponThw);
                 }
                 else if (linkState == 6)
                 {
-                    _character.ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+                    _character.SetInputFrameDirectInternal(LF2StandardFrames.SkyLgtWpThw);
                 }
                 else
                 {
@@ -134,7 +129,7 @@ namespace NTSD.Animation.LF2Objects
             if (_character.IsJumpActionInputReadyInternal())
             {
                 handled = true;
-                _character.ImmediateFrame(LF2StandardFrames.Jumping);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.Jumping);
                 _character.AttackingCounter = 0;
                 _character.SetAnimSubInternal(0);
             }
@@ -142,7 +137,7 @@ namespace NTSD.Animation.LF2Objects
             if (_character.IsDefendActionInputReadyInternal(requireDefendLockOpen: true))
             {
                 handled = true;
-                _character.ImmediateFrame(LF2StandardFrames.Defend);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.Defend);
                 _character.SetAnimSubInternal(0);
                 _character.AttackingCounter = 0;
             }
@@ -157,18 +152,18 @@ namespace NTSD.Animation.LF2Objects
 
             if (_character.IsHeldHeavyWeaponInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.HeavyWeaponThw);
                 return;
             }
 
             if (_character.CanHeldObjectStandThrowInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.LightWeaponThw);
                 return;
             }
 
             if (_character.IsHeldObjectAttackableInternal())
-                _character.ImmediateFrame(RandomWeaponAttackFrame());
+                _character.SetInputFrameDirectInternal(RandomWeaponAttackFrame());
         }
 
         private bool ProcessRunningInput()
@@ -209,19 +204,19 @@ namespace NTSD.Animation.LF2Objects
                 if (!_character.HasHeldObjectInternal() || linkState == 0)
                 {
                     if (_character.TrySpendFramePpCost(LF2StandardFrames.RunAttack))
-                        _character.ImmediateFrame(LF2StandardFrames.RunAttack);
+                        _character.SetInputFrameDirectInternal(LF2StandardFrames.RunAttack);
                 }
                 else if (linkState % 100 == 1)
                 {
-                    _character.ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.RunWeaponAtck);
+                    _character.SetInputFrameDirectInternal(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.RunWeaponAtck);
                 }
                 else if (linkState == 4)
                 {
-                    _character.ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                    _character.SetInputFrameDirectInternal(LF2StandardFrames.LightWeaponThw);
                 }
                 else if (linkState == 6)
                 {
-                    _character.ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.SkyLgtWpThw);
+                    _character.SetInputFrameDirectInternal(HasAnyDirectionInput() ? LF2StandardFrames.LightWeaponThw : LF2StandardFrames.SkyLgtWpThw);
                 }
                 else
                 {
@@ -232,13 +227,13 @@ namespace NTSD.Animation.LF2Objects
             if (_character.IsDefendActionInputReadyInternal())
             {
                 handled = true;
-                _character.ImmediateFrame(LF2StandardFrames.Rowing2);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.Rowing2);
             }
 
             if (_character.IsJumpActionInputReadyInternal())
             {
                 handled = true;
-                _character.ImmediateFrame(LF2StandardFrames.DashForward);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.DashForward);
                 _character.ApplyDashStartVelocityInternal(forward: true);
             }
 
@@ -252,18 +247,18 @@ namespace NTSD.Animation.LF2Objects
 
             if (_character.IsHeldHeavyWeaponInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.HeavyWeaponThw);
                 return;
             }
 
             if (HasHorizontalInput() && _character.CanHeldObjectRunThrowInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.LightWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.LightWeaponThw);
                 return;
             }
 
             if (_character.IsHeldObjectAttackableInternal())
-                _character.ImmediateFrame(LF2StandardFrames.RunWeaponAtck);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.RunWeaponAtck);
         }
 
         private bool ProcessJumpingInput()
@@ -279,20 +274,20 @@ namespace NTSD.Animation.LF2Objects
             {
                 _character.AttackingCounter = 0;
                 _character.TrySpendFramePpCost(LF2StandardFrames.JumpAttack, clampOnOverdraw: true);
-                _character.ImmediateFrame(LF2StandardFrames.JumpAttack);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.JumpAttack);
             }
             else if (linkState % 100 == 1)
             {
                 _character.AttackingCounter = 0;
-                _character.ImmediateFrame(HasAnyDirectionInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
+                _character.SetInputFrameDirectInternal(HasAnyDirectionInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
             }
             else if (linkState == 4 || linkState == 6)
             {
-                _character.ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.SkyLgtWpThw);
             }
             else if (_character.IsHeldObjectAttackableInternal())
             {
-                _character.ImmediateFrame(HasHorizontalInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
+                _character.SetInputFrameDirectInternal(HasHorizontalInput() ? LF2StandardFrames.SkyLgtWpThw : LF2StandardFrames.JumpWeaponAtck);
             }
 
             return true;
@@ -310,11 +305,11 @@ namespace NTSD.Animation.LF2Objects
             if (!_character.HasHeldObjectInternal() || linkState == 0)
             {
                 if (_character.TrySpendFramePpCost(LF2StandardFrames.DashAttack))
-                    _character.ImmediateFrame(LF2StandardFrames.DashAttack);
+                    _character.SetInputFrameDirectInternal(LF2StandardFrames.DashAttack);
             }
             else if (linkState % 100 == 1)
             {
-                _character.ImmediateFrame(LF2StandardFrames.DashWeaponAtck);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.DashWeaponAtck);
                 _character.PS.vy -= 1f;
                 _character.AttackingCounter = 0;
             }
@@ -322,57 +317,17 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (HasAnyDirectionInput())
                 {
-                    _character.ImmediateFrame(LF2StandardFrames.SkyLgtWpThw);
+                    _character.SetInputFrameDirectInternal(LF2StandardFrames.SkyLgtWpThw);
                     _character.PS.vy -= 1f;
                     _character.AttackingCounter = 0;
                 }
             }
             else if (_character.IsHeldObjectAttackableInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.DashWeaponAtck);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.DashWeaponAtck);
             }
 
             return true;
-        }
-
-        private bool ProcessDefendingInput()
-        {
-            var characterData = _character._FrameDataWrapper?.characterData;
-            if (characterData == null)
-                return false;
-
-            double previousVx = _character.PS.vx;
-            _character.PS.vx = 0f;
-            _character.PS.vz = 0f;
-
-            if (!_character.IsCurrentAttackPressedInternal())
-            {
-                _character.ImmediateFrame(LF2StandardFrames.Standing);
-                return true;
-            }
-
-            if ((_character.IsCurrentRightPressedInternal() || previousVx > 0f) && _character.IsJumpActionInputReadyInternal())
-            {
-                _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
-                _character.PS.vx = characterData.walking_speed;
-                _character.PS.vy = 0f;
-                _character.SetDefendLockInternal(5);
-                return true;
-            }
-
-            if ((_character.IsCurrentLeftPressedInternal() || previousVx < 0f) && _character.IsJumpActionInputReadyInternal())
-            {
-                _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
-                _character.PS.vx = -characterData.walking_speed;
-                _character.PS.vy = 0f;
-                _character.SetDefendLockInternal(5);
-                return true;
-            }
-
-            _character.SetDefendLockInternal(5);
-            if (_character.Frame.N != LF2StandardFrames.DashForward && _character.Frame.N != LF2StandardFrames.DashForward2)
-                _character.ImmediateFrame(LF2StandardFrames.Defend);
-            return false;
         }
 
         private bool ProcessCrouchInput()
@@ -384,7 +339,7 @@ namespace NTSD.Animation.LF2Objects
             bool handled = false;
             if (_character.IsDefendActionInputReadyInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.Rowing2);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.Rowing2);
                 handled = true;
             }
 
@@ -392,7 +347,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 if ((_character.IsCurrentRightPressedInternal() || _character.PS.vx > 0.001f) && _character.IsJumpActionInputReadyInternal())
                 {
-                    _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
+                    _character.SetInputFrameDirectInternal(_character.PS.dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
                     _character.PS.vx = characterData.dash_distance;
                     _character.PS.vy = characterData.dash_height;
                     ApplyDashLane(characterData.dash_distancez);
@@ -401,7 +356,7 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else if ((_character.IsCurrentLeftPressedInternal() || _character.PS.vx < -0.001f) && _character.IsJumpActionInputReadyInternal())
                 {
-                    _character.ImmediateFrame(_character.PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
+                    _character.SetInputFrameDirectInternal(_character.PS.dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
                     _character.PS.vx = -characterData.dash_distance;
                     _character.PS.vy = characterData.dash_height;
                     ApplyDashLane(characterData.dash_distancez);
@@ -424,7 +379,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             bool backward = _character.PS.dir == "right" ? _character.PS.vx <= 0f : _character.PS.vx >= 0f;
-            _character.ImmediateFrame(backward ? LF2StandardFrames.Rowing : LF2StandardFrames.RowingBack);
+            _character.SetInputFrameDirectInternal(backward ? LF2StandardFrames.Rowing : LF2StandardFrames.RowingBack);
             _character.AttackingCounter = 0;
 
             var characterData = _character._FrameDataWrapper?.characterData;
@@ -456,7 +411,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (_character.IsAttackActionInputReadyInternal())
             {
-                _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.HeavyWeaponThw);
                 _character.SetAnimSubInternal(0);
                 _character.AttackingCounter = 0;
             }
@@ -481,7 +436,7 @@ namespace NTSD.Animation.LF2Objects
             _character.ApplyRunLaneInternal(characterData.heavy_running_speedz);
 
             if (_character.IsAttackActionInputReadyInternal())
-                _character.ImmediateFrame(LF2StandardFrames.HeavyWeaponThw);
+                _character.SetInputFrameDirectInternal(LF2StandardFrames.HeavyWeaponThw);
         }
 
         private void StepRunningFrame(int frameBase, int loopFrame)
@@ -503,7 +458,7 @@ namespace NTSD.Animation.LF2Objects
         private void ApplyVerticalInputForSpecialStates()
         {
             int state = _character.Frame?.D?.state ?? 0;
-            if ((state != LF2States.DeepSpecific && state != LF2States.FirenSpecific) || _character.PS.y != 0f)
+            if ((state != LF2States.DeepSpecific && state != LF2States.FirenSpecific) || _character.Runtime.YInt != 0)
                 return;
 
             var characterData = _character._FrameDataWrapper?.characterData;

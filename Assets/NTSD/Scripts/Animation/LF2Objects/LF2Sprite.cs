@@ -72,9 +72,13 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 更新精灵列表（用于运行时切换角色）
         /// </summary>
-        public void SetSprites(List<Sprite> sprites)
+        public void SetSprites(List<Sprite> sprites, int startFrame = 0)
         {
             _sprites = sprites;
+            _startFrame = startFrame;
+
+            if (sprites == null)
+                Hide();
         }
 
         /// <summary>

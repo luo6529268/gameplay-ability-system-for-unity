@@ -31,7 +31,9 @@ namespace NTSD.Simulation
         public int CatcherSlotIndex = -1;
         public int HeldWeaponStableId = -1;
         public int ThrowFrameGuard = -1;
+        public int ReleaseTick = -1;
         public int CaughtDuration;
+        public int PickupCount;
         public int CaughtFrontFlag = 1;
         public int CatchingStateTU;
         public int JumpAttackLock;
@@ -72,7 +74,7 @@ namespace NTSD.Simulation
         public byte KeyJump;
         public byte KeyDefend;
         public int HolderStableId = -1;
-        public int HolderCopySlotIndex = -1;
+        public int HolderCopySlotIndex = 99;
         public int PickerStableId = -1;
         public int TrackerFlag;
         public bool AiControlled;
@@ -110,13 +112,14 @@ namespace NTSD.Simulation
         public int SuppressCollisionCandidateUntilTick;
         public int RenderPicOffset;
         public int WaitCounter;
+        public int FrameWaitCounter;
         public int NextFrame;
         public int AttackingCounter;
         public int FrameDelay;
         public int HitStop;
-        public double KnockbackVx;
-        public double KnockbackVy;
-        public double KnockbackVz;
+        public double KnockbackVx = 0.1;
+        public double KnockbackVy = 0.1;
+        public double KnockbackVz = 0.1;
         public int ShakeTimer;
         public int AttackExempt;
         public int HitStateCount;
@@ -151,6 +154,10 @@ namespace NTSD.Simulation
         public int HitCandidateNearestDistance = 1000;
         public int HitCandidateKind1Distance = 1000;
         public int HitCandidateExtraDistance = 1000;
+        public int TransientMp;
+        public int TransientMp2 = 1000;
+        public int TransientMp3 = 1000;
+        public int TransientMp4 = 1000;
         public bool OidMergeDormant;
         public bool PendingFlushDestroy;
 
@@ -248,6 +255,17 @@ namespace NTSD.Simulation
             KeyAttack = KeyJump = KeyDefend = 0;
         }
 
+        public void ResetInputState()
+        {
+            CdAttack = CdJump = CdDefend = CdDefendLock = CdRight = CdLeft = CdUp = CdDown = 0;
+            ComboDra = ComboDla = ComboDua = ComboDda = ComboDrj = ComboDlj = ComboDuj = ComboDdj = ComboDja = 0;
+            EnsureInputHistory();
+            Array.Clear(InputHistory, 0, InputHistory.Length);
+            PrevUp = PrevDown = PrevLeft = PrevRight = PrevJump = PrevDefend = PrevAttack = 0;
+            ClearDirectionalInputKeys();
+            ClearActionInputKeys();
+        }
+
         public void ApplyInputEdges()
         {
             if (PrevRight == 0 && KeyRight == 1) { CdRight = 5; PushInputHistory(6); }
@@ -290,18 +308,13 @@ namespace NTSD.Simulation
             if (CdJump > 0) CdJump--;
             if (CdAttack > 0) CdAttack--;
             if (CdDefend > 0) CdDefend--;
+            if (CdDefendLock > 0) CdDefendLock--;
         }
 
         private void EnsureInputHistory()
         {
             if (InputHistory == null || InputHistory.Length != 6)
                 InputHistory = new int[6];
-        }
-
-        internal void TickDefendLockCooldown()
-        {
-            if (CdDefendLock > 0)
-                CdDefendLock--;
         }
 
         public void Reset()
@@ -326,7 +339,9 @@ namespace NTSD.Simulation
             CatcherSlotIndex = -1;
             HeldWeaponStableId = -1;
             ThrowFrameGuard = -1;
+            ReleaseTick = -1;
             CaughtDuration = 0;
+            PickupCount = 0;
             CaughtFrontFlag = 1;
             CatchingStateTU = 0;
             JumpAttackLock = 0;
@@ -368,7 +383,7 @@ namespace NTSD.Simulation
             KeyJump = 0;
             KeyDefend = 0;
             HolderStableId = -1;
-            HolderCopySlotIndex = -1;
+            HolderCopySlotIndex = 99;
             PickerStableId = -1;
             TrackerFlag = 0;
             AiControlled = false;
@@ -401,13 +416,14 @@ namespace NTSD.Simulation
             SuppressCollisionCandidateUntilTick = 0;
             RenderPicOffset = 0;
             WaitCounter = 0;
+            FrameWaitCounter = 0;
             NextFrame = 0;
             AttackingCounter = 0;
             FrameDelay = 0;
             HitStop = 0;
-            KnockbackVx = 0.0;
-            KnockbackVy = 0.0;
-            KnockbackVz = 0.0;
+            KnockbackVx = 0.1;
+            KnockbackVy = 0.1;
+            KnockbackVz = 0.1;
             ShakeTimer = 0;
             AttackExempt = 0;
             HitStateCount = 0;
@@ -442,6 +458,10 @@ namespace NTSD.Simulation
             HitCandidateNearestDistance = 1000;
             HitCandidateKind1Distance = 1000;
             HitCandidateExtraDistance = 1000;
+            TransientMp = 0;
+            TransientMp2 = 1000;
+            TransientMp3 = 1000;
+            TransientMp4 = 1000;
             OidMergeDormant = false;
             PendingFlushDestroy = false;
             HP = 500;

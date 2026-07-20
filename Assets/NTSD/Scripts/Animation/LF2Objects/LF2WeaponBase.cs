@@ -80,11 +80,6 @@ namespace NTSD.Animation.LF2Objects
         // C++ release [weapon+368h+6F8h]：0=普通轻武器, 1=重武器, 2=轻特殊, 4=特殊重武器, 6=饮料类
         public abstract int WeaponType { get; }
         public override int ReleaseEntityType => WeaponType;
-        public override bool CountsAsRandomWeaponDropCandidate()
-        {
-            int weaponType = WeaponType;
-            return weaponType == 1 || weaponType == 2 || weaponType == 4 || weaponType == 6;
-        }
         internal override bool UsesDynamicRuntimeSlot() => true;
         // C++ release weapon_count：笛子命中累积器，子类实现存储。
         public virtual int FluteWeight { get => 0; set { } }
@@ -203,9 +198,9 @@ namespace NTSD.Animation.LF2Objects
             _heldStateResolver.ApplyHeldWPointSync(holder, holderWPoint, holdpoint, heldWPoint);
         }
 
-        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder)
+        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder, bool stampReleaseTick = false)
         {
-            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder);
+            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder, stampReleaseTick);
         }
 
         internal void ReleaseHeldWeaponForConsumeInternal(LF2Entity holder)
@@ -397,6 +392,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
+
             InitializeParent(task);
             InitializePosition(task);
             InitializeDirection(task);
@@ -498,6 +495,9 @@ namespace NTSD.Animation.LF2Objects
         public override void RunFrameLogicBeforeAdvance()
         {
             RunWeaponFrameLogicBeforeAdvance();
+            int hitFa = Frame?.D?.hit_Fa ?? 0;
+            if (hitFa != 4 && hitFa != 12)
+                base.RunFrameLogicBeforeAdvance();
         }
 
         internal override bool SupportsFrameLogicBeforeAdvancePhase(LF2FrameData frame)
@@ -538,27 +538,16 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal override bool TryRunLatePostOpointCleanupPhase()
         {
-            if (GetRuntimeHolderEntity() != null || !IsWeaponDestroyable() || GetFlightCounter() >= 0)
-                return false;
-
-            // 对齐 C++ release 晚期武器销毁链：
-            // 先生成 oid=999 破碎碎片并播放 broken sound，
-            // 再把对象标记为本 pass 结束后回收。
-            if (!_lateBreakEffectsHandled)
+            bool completed = base.TryRunLatePostOpointCleanupPhase();
+            if (completed)
             {
-                CreateBrokenEffect();
-                RunDiePhase();
+                // The C# authority frees the depleted slot after sound only; suppress Destroy's
+                // generic weapon effect path so this cleanup does not manufacture fragments.
                 _lateBreakEffectsHandled = true;
             }
 
-            Runtime.WeaponFlightCounter = 0;
-            ForceClearHolder();
-            Runtime.PendingFlushDestroy = true;
-            return true;
+            return completed;
         }
-
-        internal override bool SupportsObjectInteractionPhase()
-            => GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character;
 
         protected override bool StateEntryEvent() => DispatchCurrentStateEvent("state_entry");
         protected override bool FrameEvent() => DispatchCurrentStateEvent("frame");
@@ -605,25 +594,30 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool TryApplyHit(InteractionArea itr, LF2Entity target)
         {
-            if (!ItrArestTest()) return false;
+            int targetDataType = target?.GetCurrentDataObjectTypeForSimulation() ?? -1;
+            if (targetDataType == (int)LF2ObjectType.Character && PS != null)
+            {
+                var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
+                if (target is LF2Character character)
+                    return character.Hit(itr, this, attackerPos, default);
 
-            if (target is LF2WeaponBase weapon)
+                return LF2CharacterDatHitResolver.CanResolveTarget(target) &&
+                       LF2CharacterDatHitResolver.TryResolveHit(target, itr, this, attackerPos, default);
+            }
+
+            if ((targetDataType == (int)LF2ObjectType.LightWeapon ||
+                 targetDataType == (int)LF2ObjectType.HeavyWeapon ||
+                 targetDataType == (int)LF2ObjectType.ThrowWeapon ||
+                 targetDataType == (int)LF2ObjectType.Drink) &&
+                target is LF2WeaponBase weapon)
             {
                 return weapon.Hit(itr, this);
             }
 
-            if (target is LF2SpecialAttack specialAttack)
+            if (targetDataType == (int)LF2ObjectType.SpecialAttack &&
+                target is LF2SpecialAttack specialAttack)
             {
                 return specialAttack.Hit(itr, this);
-            }
-
-            if (target is LF2Character character)
-            {
-                if (PS != null)
-                {
-                    var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
-                    return character.Hit(itr, this, attackerPos, default);
-                }
             }
 
             return false;
@@ -668,8 +662,6 @@ namespace NTSD.Animation.LF2Objects
             }
             character.HoldWeapon(this);
             _interactionResolver.ApplyPickupGrabbedBy(character);
-            ItrArestUpdate(itr);
-            target.ItrVrestUpdate(StableId, itr);
             return true;
         }
 
@@ -714,8 +706,6 @@ namespace NTSD.Animation.LF2Objects
             _interactionResolver.ApplyPickupGrabbedBy(character);
             // C++ release 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
             _interactionResolver.ApplyPickupFrameJump(character);
-            ItrArestUpdate(itr);
-            target.ItrVrestUpdate(StableId, itr);
             return true;
         }
 
@@ -793,7 +783,10 @@ namespace NTSD.Animation.LF2Objects
 
         protected void InitializePosition(OPointCreateTask task)
         {
-            SetPos(task.pos.x, task.pos.y, task.z);
+            if (task.useDirectRuntimePosition)
+                SetPos(task.directX, task.directY, task.directZ);
+            else
+                SetPos(task.pos.x, task.pos.y, task.z);
         }
 
         protected void InitializeDirection(OPointCreateTask task)
@@ -835,14 +828,14 @@ namespace NTSD.Animation.LF2Objects
         protected void InitializeHealth()
         {
             var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            Health.HP = 500;
+            Health.HPBound = 500;
+            Health.HP3 = 500;
+            Health.PP = 500;
+
             if (charData != null)
             {
-                Health.HP = charData.weapon_hp;
                 WeaponDropHurt = charData.weapon_drop_hurt > 0 ? charData.weapon_drop_hurt : WeaponDropHurt;
-            }
-            else
-            {
-                Health.HP = 100;
             }
 
             OnHealthInitialized(charData);
@@ -899,6 +892,9 @@ namespace NTSD.Animation.LF2Objects
 
         protected internal void SetFrameDirect(int frameId, int waitCounter = int.MinValue)
         {
+            if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)
+                return;
+
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);
             AttackingCounter = 0;
@@ -930,7 +926,7 @@ namespace NTSD.Animation.LF2Objects
                     WeaponFlightPhysics();
                     bool landed = CharacterMechanics.WeaponDynamics(Runtime, _gravityToAdd, out _lastLandingVyBeforeClamp);
 
-                    if (Runtime.Y < -0.0001f)
+                    if (Runtime.Y < -0.0001)
                         OnInFlightFrameUpdate();
 
                     if (landed)
@@ -948,17 +944,14 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimObjectInteraction(int tickIndex)
         {
-            if (Runtime?.PendingFlushDestroy == true)
-                return;
-            if (FrameDelay != 0)
-                return;
-            if (AttackExempt > 0)
-                return;
-            if (GetRuntimeHolderEntity() != null)
-                return;
-            if (IsBlockedByReleaseLinkOrCaughtCpoint())
+            if (UsesCharacterDatInteractionPhase())
                 return;
 
+            if (Runtime?.PendingFlushDestroy == true)
+                return;
+
+            // Step 9 consumes the candidates frozen by step 6. Held/link state,
+            // frame delay, and attack-exempt gates belong to collection, not here.
             Interaction();
         }
 

@@ -141,22 +141,27 @@ namespace NTSD.Animation
             if (!hasList && !hasSingle) return;
 
             ObjectPoint firstOp = hasList ? frame.opoints[0] : frame.opoint.Value;
-            if (firstOp.kind <= 0 || spawner.AttackingCounter != 0) return;
-            if (spawner.FrameDelay != 0 && spawner.ObjectType == 0) return;
-
-            _spawnedBuffer.Clear();
+            if (firstOp.kind <= 0 || firstOp.oid <= 0 || spawner.AttackingCounter != 0) return;
+            if (spawner.FrameDelay != 0 &&
+                spawner.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                return;
 
             if (hasList)
             {
                 for (int i = 0; i < frame.opoints.Count; i++)
+                {
+                    _spawnedBuffer.Clear();
                     ProcessOneLateOpoint(spawner, frame, frame.opoints[i]);
+                    ApplyMultiSpawnExemptAndVrest(_spawnedBuffer);
+                }
             }
             else
             {
+                _spawnedBuffer.Clear();
                 ProcessOneLateOpoint(spawner, frame, frame.opoint.Value);
+                ApplyMultiSpawnExemptAndVrest(_spawnedBuffer);
             }
 
-            ApplyMultiSpawnExemptAndVrest(_spawnedBuffer);
             _spawnedBuffer.Clear();
         }
 
@@ -186,16 +191,19 @@ namespace NTSD.Animation
                 task.opoint = spawnOp;
                 task.parent = spawner;
                 task.team = spawner.Team;
-                task.pos = MakeLateOpointPosition(spawner, frame, op);
-                task.z = (float)spawner.PS.z;
+                ConfigureLateOpointPosition(task, spawner, frame, op);
                 task.dir = spawner.PS.dir;
                 task.dvz = 0f;
                 task.preserveActionZero = true;
+                task.releaseSpawnSemantic = ReleaseSpawnSemantic.LateOpoint;
                 task.releaseOpointSpawn = true;
 
                 LF2Entity spawned = ProcessCreateObject(task);
                 LF2ReferencePool.Instance?.Recycle(task);
                 if (spawned == null) continue;
+
+                if (op.kind != 2)
+                    spawned.Runtime.HolderStableId = 0;
 
                 if (spawnCount > 1)
                 {
@@ -210,25 +218,38 @@ namespace NTSD.Animation
                         spawned.PS.vx += spread;
                 }
 
-                if (spawner.ObjectType == 3 && frame.state == 3003)
-                {
-                    spawner.ItrRest?.SetVrest(spawned.StableId, 10);
-                    spawned.ItrRest?.SetVrest(spawner.StableId, 10);
-                }
+                if (spawner.GetCurrentDataObjectTypeForSimulation() == 3 && frame.state == 3003)
+                    ApplyState3003LinkedVrest(spawner, spawned);
 
                 spawned.AttackExempt = 0;
                 _spawnedBuffer.Add(spawned);
             }
         }
 
-        private static Vector3 MakeLateOpointPosition(LF2Entity spawner, LF2FrameData frame, ObjectPoint op)
+        private static void ConfigureLateOpointPosition(
+            OPointCreateTask task,
+            LF2Entity spawner,
+            LF2FrameData frame,
+            ObjectPoint op)
         {
-            double x = spawner.PS.dir == "right"
-                ? spawner.PS.x - frame.centerx + op.x
-                : spawner.PS.x + frame.centerx - op.x;
+            int spawnX = spawner.Runtime.Dir == "right"
+                ? spawner.Runtime.XInt - frame.centerx + op.x
+                : spawner.Runtime.XInt + frame.centerx - op.x;
+            int spawnY = spawner.Runtime.YInt - frame.centery + op.y;
+            double spawnZ = spawner.Runtime.Z + 1.0;
 
-            double logicalY = spawner.PS.y - frame.centery + op.y;
-            return new Vector3((float)x, (float)(logicalY + spawner.PS.z), (float)spawner.PS.z);
+            task.pos = new Vector3(spawnX, spawnY, (float)spawnZ);
+            task.z = (float)spawnZ;
+            task.useDirectRuntimePosition = true;
+            task.directX = spawnX;
+            task.directY = spawnY;
+            task.directZ = spawnZ;
+            task.skipPostInitZOffset = true;
+            task.useInitialRuntimeIntPosition = true;
+            task.initialRuntimeX = spawnX;
+            task.initialRuntimeY = spawnY;
+            task.initialRuntimeZ = (int)spawnZ;
+            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
         }
 
         private static void ApplyMultiSpawnExemptAndVrest(List<LF2Entity> spawned)
@@ -257,8 +278,11 @@ namespace NTSD.Animation
                 {
                     LF2Entity other = spawned[prev];
                     if (other == null) continue;
-                    entity.ItrRest?.SetVrest(other.StableId, 40);
-                    other.ItrRest?.SetVrest(entity.StableId, 40);
+                    int entitySlot = entity.Runtime?.SlotIndex ?? -1;
+                    int otherSlot = other.Runtime?.SlotIndex ?? -1;
+                    if (entitySlot < 0 || otherSlot < 0) continue;
+                    entity.ItrRest?.SetVrest(otherSlot, 40);
+                    other.ItrRest?.SetVrest(entitySlot, 40);
                 }
             }
         }
@@ -276,6 +300,10 @@ namespace NTSD.Animation
                 Log.Error($"[Factory] Object {oid} not exists");
                 return null;
             }
+
+            LF2CharacterDataWrapper combatData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+            if (combatData?.characterData == null)
+                return null;
 
             int objType = def.type;
 
@@ -307,6 +335,8 @@ namespace NTSD.Animation
             // 5.2 角色对象初始化（ModuleInitialize 在 SetLogicObject 之前，ModuleBind 在之后，不绑定输入）
             var spawnedChar = logicObject as LF2Character;
             spawnedChar?.ModuleInitialize();
+            if (logicObject is LF2Entity requestedEntity)
+                requestedEntity.SetRequiredRuntimeSlot(task.requiredRuntimeSlot);
 
             // 6. 设置逻辑对象并初始化
             EntityModel.SetLogicObject(logicObject, task);
@@ -319,21 +349,16 @@ namespace NTSD.Animation
                 spawnedChar.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
             }
 
+            if (logicObject is LF2Entity registeredLiving && registeredLiving.Runtime.SlotIndex < 0)
+            {
+                ReleaseRejectedSpawn(EntityModel, logicObject);
+                return null;
+            }
+
             // 所有 LF2Entity（角色、武器、特效）的通用后处理
             if (logicObject is LF2Entity living)
             {
                 // 7. 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
-                int action = (task.opoint.action == 0 && !task.preserveActionZero) ? 999 : task.opoint.action;
-                var frameData = living.GetFrameDataById(action);
-                if (frameData != null && frameData.pic == 999 && frameData.wait == 0 && frameData.next == 1000)
-                {
-                    if (!string.IsNullOrEmpty(frameData.sound))
-                        AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
-                    LF2ObjectPool.Instance?.Release(EntityModel);
-                    LF2ReferencePool.Instance?.Release(logicObject);
-                    return null;
-                }
-
                 PostInitLiving(
                     living,
                     task.parent,
@@ -382,6 +407,10 @@ namespace NTSD.Animation
                 Log.Error($"[Factory] Object {oid} not exists");
                 return;
             }
+
+            LF2CharacterDataWrapper combatData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+            if (combatData?.characterData == null)
+                return;
 
             int objType = def.type;
 
@@ -448,22 +477,17 @@ namespace NTSD.Animation
                     spawnedChar.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 }
 
+                if (logicObject is LF2Entity registeredLiving && registeredLiving.Runtime.SlotIndex < 0)
+                {
+                    ReleaseRejectedSpawn(EntityModel, logicObject);
+                    LF2ReferencePool.Instance?.Recycle(singleTask);
+                    continue;
+                }
+
                 // 所有 LF2Entity（角色、武器、特效）的通用后处理
                 if (logicObject is LF2Entity living)
                 {
                     // 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
-                    int action = (task.opoint.action == 0 && !singleTask.preserveActionZero) ? 999 : task.opoint.action;
-                    var frameData = living.GetFrameDataById(action);
-                    if (frameData != null && frameData.pic == 999 && frameData.wait == 0 && frameData.next == 1000)
-                    {
-                        if (!string.IsNullOrEmpty(frameData.sound))
-                            AppManager.Instance?.SoundPlayer?.PlaySfx(frameData.sound);
-                        LF2ObjectPool.Instance?.Release(EntityModel);
-                        LF2ReferencePool.Instance?.Release(logicObject);
-                        LF2ReferencePool.Instance?.Recycle(singleTask);
-                        continue;
-                    }
-
                     PostInitLiving(
                         living,
                         task.parent,
@@ -501,8 +525,10 @@ namespace NTSD.Animation
 
             if (parent != null)
             {
-                // team 继承（C++ release 对齐 0x004223C3-0x004223C9：new[+364h] = parent[+364h]）
+                // Inherit the C++ release relation identity from the spawning entity.
                 living.Team = parent.Team;
+                living.RelationTeam = parent.RelationTeam;
+                living.HolderCopySlot = parent.HolderCopySlot;
 
                 // owner_id 继承链（C++ release 对齐 0x004224F8-0x0042250B）
                 living.OwnerId = releaseOpointSpawn
@@ -525,16 +551,10 @@ namespace NTSD.Animation
             // oid==5 或 52 特殊 HP 初始化（C++ release 对齐 0x00422694：cmp ecx, 5 / cmp ecx, 34h，检查 data.oid 不是 type）
             if (op.oid == 5 || op.oid == 52)
             {
-                living.Health.HP     = 10;
-                living.Health.MP     = 10;
+                living.Health.HP = 10;
                 living.Health.HPBound = 10;
-            }
-
-            // type==3 且 parent 处于 state 3003(teleport) 时互设 itr_rest（C++ release 对齐 0x0042262A-0x0042267F）
-            if (parent != null && objType == 3 && parent.Frame?.D?.state == 3003)
-            {
-                parent.ItrRest?.SetVrest(living.StableId, 10);
-                living.ItrRest?.SetVrest(parent.StableId, 10);
+                living.Health.HP3 = 10;
+                living.Health.PP = 5;
             }
 
             // kind==2 追踪绑定（C++ release 对齐 0x00422729-0x0042277E，无 entity_type 守卫）
@@ -547,11 +567,13 @@ namespace NTSD.Animation
                     parentCharacter.AttachOpointHeldObject(living);
                 else
                 {
+                    int parentSlot = parent.Runtime?.SlotIndex ?? -1;
+                    int livingSlot = living.Runtime?.SlotIndex ?? -1;
                     parent.Runtime.LinkState = 1;
-                    parent.Runtime.TargetSlotIndex = living.StableId;
-                    parent.Runtime.HeldWeaponStableId = living.StableId;
+                    parent.Runtime.TargetSlotIndex = livingSlot;
+                    parent.Runtime.HeldWeaponStableId = livingSlot;
                     living.Runtime.LinkState = -1;
-                    living.Runtime.HolderStableId = parent.StableId;
+                    living.Runtime.HolderStableId = parentSlot;
                 }
                 // C++ release 0x00422778-0x0042277E：spawned[+364h] = parent[+364h]（team 再次同步）
                 living.Team = parent.Team;
@@ -588,6 +610,25 @@ namespace NTSD.Animation
         {
             if (entity == null) return -1;
             return entity.Runtime.SlotIndex >= 0 ? entity.Runtime.SlotIndex : entity.StableId;
+        }
+
+        private static void ApplyState3003LinkedVrest(LF2Entity spawner, LF2Entity spawned)
+        {
+            int linkedSlot = spawner?.Runtime?.AnimCounter ?? -1;
+            int spawnedSlot = spawned?.Runtime?.SlotIndex ?? -1;
+            if (linkedSlot < 0 || spawnedSlot < 0) return;
+
+            LF2Entity linked = spawner.Match?.FindEntityByRuntimeSlotForQuery(linkedSlot);
+            if (linked == null) return;
+
+            linked.ItrRest?.SetVrest(spawnedSlot, 10);
+            spawned.ItrRest?.SetVrest(linkedSlot, 10);
+        }
+
+        private static void ReleaseRejectedSpawn(LF2ObjectRenderer renderer, ILF2Object logicObject)
+        {
+            LF2ObjectPool.Instance?.Release(renderer);
+            LF2ReferencePool.Instance?.Release(logicObject);
         }
 
         private static void ApplyDirectVelocity(LF2Entity living, OPointCreateTask task)

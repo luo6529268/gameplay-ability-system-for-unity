@@ -3,6 +3,7 @@ using MoreMountains.Tools;
 using NTSD.UI;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -678,6 +679,14 @@ namespace NTSD.Animation
                 ApplyMovementProperty(prop.Key, prop.Value, characterData);
             }
 
+            if (datFile.Bmp != null)
+            {
+                foreach (var prop in datFile.Bmp.Properties)
+                {
+                    ApplyMovementProperty(prop.Key, prop.Value, characterData);
+                }
+            }
+
             // 再从 blocks 中提取（某些 dat 文件可能将参数放在 <object> 块中）
             foreach (var block in datFile.Blocks)
             {
@@ -693,30 +702,24 @@ namespace NTSD.Animation
         /// </summary>
         private void ApplyMovementProperty(string key, string value, LF2CharacterData characterData)
         {
-            // 尝试解析为浮点数
-            if (!float.TryParse(value, out float floatValue))
+            string normalizedKey = key.ToLowerInvariant();
+            if (normalizedKey == "walking_frame_rate" || normalizedKey == "running_frame_rate")
             {
-                // 尝试解析为整数（用于 frame_rate 等）
-                if (!int.TryParse(value, out int intValue))
-                {
+                if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int frameRate))
                     return;
-                }
 
-                // 处理整数类型的参数
-                switch (key.ToLower())
-                {
-                    case "walking_frame_rate":
-                        characterData.walking_frame_rate = intValue;
-                        break;
-                    case "running_frame_rate":
-                        characterData.running_frame_rate = intValue;
-                        break;
-                }
+                if (normalizedKey == "walking_frame_rate")
+                    characterData.walking_frame_rate = frameRate;
+                else
+                    characterData.running_frame_rate = frameRate;
                 return;
             }
 
+            if (!float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatValue))
+                return;
+
             // 处理浮点数类型的参数
-            switch (key.ToLower())
+            switch (normalizedKey)
             {
                 // 行走参数
                 case "walking_speed":

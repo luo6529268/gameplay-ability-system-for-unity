@@ -1,0 +1,19 @@
+{
+  "seed": 305419896,
+  "gameRoot": "J:\\QQFile\\NTSD2.4",
+  "mode": 1,
+  "difficulty": 1,
+  "stage": 0,
+  "randomStage": 0,
+  "stageFixture": null,
+  "ticks": 6,
+  "slots": [
+    { "playerSlot": 0, "oid": 2, "team": 1, "active": true, "ai": false },
+    { "playerSlot": 1, "oid": 1, "team": 2, "active": true, "ai": false }
+  ],
+  "inputs": [
+    { "tick": 2, "players": [{ "playerSlot": 0, "buttonMask": 2 }] },
+    { "tick": 3, "players": [{ "playerSlot": 0, "buttonMask": 2 }] },
+    { "tick": 4, "players": [{ "playerSlot": 0, "buttonMask": 0 }] }
+  ]
+}

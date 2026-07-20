@@ -19,6 +19,7 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== 逻辑层引用 ==========
         private LF2Entity _logicObject;
+        private int _boundSpriteObjectId = int.MinValue;
 
         // 渲染帧计数器，对齐 C++ release 的 dword_449098。
         private int _renderFrameCount = 0;
@@ -71,6 +72,12 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_logicObject == null) return;
 
+            if (_logicObject.Runtime?.OidMergeDormant == true)
+            {
+                HidePresentation();
+                return;
+            }
+
             int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
             if (tickIndex < firstPresentationTick)
             {
@@ -90,6 +97,11 @@ namespace NTSD.Animation.LF2Objects
         public void ForceRefreshPresentation()
         {
             if (_logicObject == null) return;
+            if (_logicObject.Runtime?.OidMergeDormant == true)
+            {
+                HidePresentation();
+                return;
+            }
             int currentTick = _logicObject?.Match?.CurrentTickIndex ?? 0;
             int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
             if (currentTick < firstPresentationTick)
@@ -123,7 +135,14 @@ namespace NTSD.Animation.LF2Objects
                 startFrame = CharacterAnimtorManager.Instance?.GetStartFrame(_logicObject.ObjectId) ?? 0;
             }
             if (sprites != null)
+            {
                 _logicObject?.Sprite?.Initialize(_spriteRenderer, sprites, startFrame);
+                _boundSpriteObjectId = _logicObject.ObjectId;
+            }
+            else
+            {
+                _boundSpriteObjectId = int.MinValue;
+            }
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
 
@@ -187,6 +206,16 @@ namespace NTSD.Animation.LF2Objects
         private void UpdateSprite()
         {
             if (_logicObject == null) return;
+            if (!ShouldDrawEntityForHitStop(_logicObject.Runtime?.HitStop ?? 0))
+            {
+                // C# release DrawEntity hides the entity for the negative HitStop
+                // threshold and four-tick blink phase. This only changes presentation;
+                // the runtime entity continues advancing normally.
+                _logicObject.Sprite?.Hide();
+                return;
+            }
+
+            EnsureRuntimeIdentitySprites();
             var frame = _logicObject.Frame?.D;
             if (frame == null)
             {
@@ -204,6 +233,38 @@ namespace NTSD.Animation.LF2Objects
                 _logicObject.Sprite.SwitchLR(ps.dir);
         }
 
+        internal static bool ShouldDrawEntityForHitStop(int hitStop)
+        {
+            return hitStop > -25 && (System.Math.Abs((long)hitStop) % 4) < 2;
+        }
+
+        internal static bool ShouldDrawShadowForHitStop(int hitStop)
+        {
+            return hitStop > -70 && (System.Math.Abs((long)hitStop) % 4) < 2;
+        }
+
+        private void EnsureRuntimeIdentitySprites()
+        {
+            if (_logicObject == null || _logicObject.Sprite == null ||
+                _boundSpriteObjectId == _logicObject.ObjectId)
+                return;
+
+            CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
+            if (animatorManager != null &&
+                animatorManager.TryGetSprites(_logicObject.ObjectId, out List<Sprite> sprites) &&
+                sprites != null)
+            {
+                int startFrame = animatorManager.GetStartFrame(_logicObject.ObjectId);
+                _logicObject.Sprite.SetSprites(sprites, startFrame);
+                _boundSpriteObjectId = _logicObject.ObjectId;
+                return;
+            }
+
+            // Never render the previous identity's catalog while the new one is still unavailable.
+            _logicObject.Sprite.SetSprites(null);
+            _boundSpriteObjectId = int.MinValue;
+        }
+
         /// <summary>
         /// 同步 Transform 位置。
         /// C++ release draw_entity 使用绘制矩形：
@@ -217,7 +278,8 @@ namespace NTSD.Animation.LF2Objects
             if (ps == null) return;
 
             ApplyCppDrawEntityPosition(ps, tickIndex);
-            _logicObject.Sprite?.SetZ(_logicObject.GetDisplayZ() + ps.zz);
+            _logicObject.Sprite?.SetZ(_logicObject.GetDisplayRenderSortingOrder(
+                _logicObject.GetDisplayZ(), ps.zz));
 
             // 阴影按 C++ 逻辑坐标 x/z 独立更新，不跟随图片 pivot。
             _logicObject.UpdateShadow(_renderFrameCount);
@@ -250,6 +312,7 @@ namespace NTSD.Animation.LF2Objects
                 centerx,
                 centery,
                 NTSDRenderSpace.BattleVisualScale);
+            pivot += ResolveHeldVisualAttachmentOffsetPixels(frame);
 
             Transform rootTransform = transform.parent != null ? transform.parent : transform;
             rootTransform.localScale = NTSDRenderSpace.RenderScale;
@@ -284,6 +347,63 @@ namespace NTSD.Animation.LF2Objects
             float pivotY = screenY + visualScale * (spriteHeight - centery);
             return new Vector2(pivotX, pivotY);
         }
+
+        private Vector2 ResolveHeldVisualAttachmentOffsetPixels(LF2FrameData heldFrame)
+        {
+            if ((_logicObject.Runtime?.LinkState ?? 0) >= 0 || heldFrame == null)
+                return Vector2.zero;
+
+            int holderSlot = _logicObject.Runtime.HolderStableId;
+            LF2Entity holder = _logicObject.Match?.FindEntityByRuntimeSlotForQuery(holderSlot);
+            if (holder?.Runtime == null || holder.Frame?.D == null ||
+                holder.Runtime.TargetSlotIndex != _logicObject.Runtime.SlotIndex)
+                return Vector2.zero;
+
+            WeaponPoint holderWPoint = holder.Frame.D.wpoints != null && holder.Frame.D.wpoints.Count > 0
+                ? holder.Frame.D.wpoints[0]
+                : null;
+            WeaponPoint heldWPoint = heldFrame.wpoints != null && heldFrame.wpoints.Count > 0
+                ? heldFrame.wpoints[0]
+                : null;
+
+            return ComputeHeldVisualAttachmentOffsetPixels(
+                holder.Runtime.Dir == "left",
+                holder.Frame.D.centerx,
+                holder.Frame.D.centery,
+                holderWPoint?.x ?? 0,
+                holderWPoint?.y ?? 0,
+                heldFrame.centerx,
+                heldFrame.centery,
+                heldWPoint?.x ?? 0,
+                heldWPoint?.y ?? 0,
+                NTSDRenderSpace.BattleVisualScale);
+        }
+
+        internal static Vector2 ComputeHeldVisualAttachmentOffsetPixels(
+            bool facingLeft,
+            float holderCenterX,
+            float holderCenterY,
+            float holderWPointX,
+            float holderWPointY,
+            float heldCenterX,
+            float heldCenterY,
+            float heldWPointX,
+            float heldWPointY,
+            float visualScale)
+        {
+            float scaleDelta = visualScale - 1f;
+            float holderDeltaX = holderWPointX - holderCenterX;
+            float heldDeltaX = heldWPointX - heldCenterX;
+            float x = scaleDelta * (holderDeltaX - heldDeltaX);
+            if (facingLeft)
+                x = -x;
+
+            float holderDeltaY = holderWPointY - holderCenterY;
+            float heldDeltaY = heldWPointY - heldCenterY;
+            float y = scaleDelta * (holderDeltaY - heldDeltaY);
+            return new Vector2(x, y);
+        }
+
         private void ApplyVisualShake()
         {
             _renderFrameCount++;

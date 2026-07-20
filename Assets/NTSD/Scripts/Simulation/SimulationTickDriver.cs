@@ -20,14 +20,16 @@ namespace NTSD.Simulation
     [System.Serializable]
     public sealed class LockstepSimulationSettings
     {
+        public const int LocalFreeRunMinCatchUpTicks = 4;
+
         [Tooltip("本地单机直接按时间推进；联机模式会等待指定逻辑帧输入就绪；手动模式只允许外部 StepOneTick 推进。")]
         public SimulationDriveMode driveMode = SimulationDriveMode.LocalFreeRun;
 
         [Tooltip("使用 unscaledDeltaTime 驱动外层逻辑时钟，避免 Time.timeScale 影响帧同步规则。")]
         public bool useUnscaledTime = true;
 
-        [Tooltip("单个 Unity 渲染帧最多追多少个逻辑帧。正式 NTSD 以 30Hz 逐帧呈现，默认不在一个渲染帧内连续追多个逻辑帧。")]
-        public int maxCatchUpTicksPerFrame = 1;
+        [Tooltip("单个 Unity 渲染帧最多追多少个逻辑帧。本地模式必须允许有限追帧，避免渲染帧率低于 30 FPS 时拖慢战斗时钟。")]
+        public int maxCatchUpTicksPerFrame = LocalFreeRunMinCatchUpTicks;
 
         [Tooltip("最多保留多少个逻辑帧的时间积压，超过后丢弃外层积压但不改变单个逻辑帧步长。")]
         public int maxBacklogTicks = 8;
@@ -38,12 +40,16 @@ namespace NTSD.Simulation
         [Tooltip("联机帧同步预留：推进前是否要求该逻辑帧的输入已经准备好。")]
         public bool requireInputFrameReady = false;
 
-        [Tooltip("预留世界校验点；当前只保留调用位置，后续可接入 checksum/hash。")]
+        [Tooltip("在每个逻辑 tick 尾部生成 canonical battle snapshot 和分域 checksum。")]
         public bool enableFrameChecksum = false;
 
         public void Normalize()
         {
-            if (maxCatchUpTicksPerFrame < 1) maxCatchUpTicksPerFrame = 1;
+            int minimumCatchUp = driveMode == SimulationDriveMode.LocalFreeRun
+                ? LocalFreeRunMinCatchUpTicks
+                : 1;
+            if (maxCatchUpTicksPerFrame < minimumCatchUp)
+                maxCatchUpTicksPerFrame = minimumCatchUp;
             if (maxBacklogTicks < maxCatchUpTicksPerFrame) maxBacklogTicks = maxCatchUpTicksPerFrame;
             if (inputDelayTicks < 0) inputDelayTicks = 0;
         }
@@ -56,6 +62,7 @@ namespace NTSD.Simulation
     public interface ISimulationFrameInputProvider
     {
         bool IsFrameInputReady(int tickIndex);
+        FrameInputSet GetFrameInput(int tickIndex) => FrameInputSet.Empty(tickIndex);
         void BeforeSimTick(int tickIndex) { }
         void AfterSimTick(int tickIndex) { }
         void Reset() { }
@@ -64,11 +71,12 @@ namespace NTSD.Simulation
     public sealed class LocalSimulationFrameInputProvider : ISimulationFrameInputProvider
     {
         public bool IsFrameInputReady(int tickIndex) => true;
+        public FrameInputSet GetFrameInput(int tickIndex) => FrameInputSet.Empty(tickIndex);
     }
 
     /// <summary>
     /// 战斗场景模拟时钟。
-    /// 负责固定 30Hz 逻辑 tick，并把 C++ release 风格的 pass 顺序交给 NTSDBattleTickSystem。
+    /// 负责固定 30Hz 逻辑 tick，并把 C# 权威工程的 pass 顺序交给 NTSDBattleTickSystem。
     /// Unity 的 Update/LateUpdate 只作为外层驱动和表现刷新；战斗逻辑内部不能依赖 deltaTime。
     /// </summary>
     public class SimulationTickDriver : SingletonBehaviour<SimulationTickDriver>
@@ -89,6 +97,7 @@ namespace NTSD.Simulation
         [SerializeField][MMReadOnly] private bool paused = true;
         [SerializeField][MMReadOnly] private float renderAlpha = 0f;
         [SerializeField][MMReadOnly] private int backlogTickCount = 0;
+        [SerializeField][MMReadOnly] private string lastFrameChecksum = string.Empty;
 
         private float _timeAccumulator = 0f;
         private int _tickIndex = 0;
@@ -99,6 +108,8 @@ namespace NTSD.Simulation
 
         private int _sparkRenderFrame = 0;
         private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
+        private FrameInputSet _lastAppliedFrameInput = FrameInputSet.Empty(0);
+        private BattleParityFrameSnapshot _lastFrameSnapshot;
 
         protected override void OnSingletonAwake()
         {
@@ -188,9 +199,16 @@ namespace NTSD.Simulation
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
 
             _frameInputProvider?.BeforeSimTick(tickIndex);
+            FrameInputSet frameInput = _frameInputProvider?.GetFrameInput(tickIndex) ??
+                                       FrameInputSet.Empty(tickIndex);
+            if (frameInput.TickIndex != tickIndex)
+                frameInput = FrameInputSet.Empty(tickIndex);
+
+            _lastAppliedFrameInput = frameInput;
+            _world.ApplyFrameInputSet(frameInput);
             _battleTickSystem?.RunReleaseTick(tickIndex);
+            CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
             _frameInputProvider?.AfterSimTick(tickIndex);
-            CaptureFrameChecksumIfNeeded(tickIndex);
 
             if (debugLogPerTick)
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
@@ -198,12 +216,17 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private void CaptureFrameChecksumIfNeeded(int tickIndex)
+        private void CaptureFrameChecksumIfNeeded(int tickIndex, FrameInputSet frameInput)
         {
             if (!lockstepSettings.enableFrameChecksum)
+            {
+                _lastFrameSnapshot = null;
+                lastFrameChecksum = string.Empty;
                 return;
+            }
 
-            // 预留：后续联机/回放可在这里对 SimulationWorld 关键状态计算 checksum。
+            _lastFrameSnapshot = _world.CaptureParityFrameSnapshot(tickIndex, frameInput);
+            lastFrameChecksum = _lastFrameSnapshot?.Hashes?.Overall ?? string.Empty;
         }
 
         private void RefreshInspectorState()
@@ -218,6 +241,10 @@ namespace NTSD.Simulation
         public SimulationWorld World => _world;
         public int SparkRenderFrame => _sparkRenderFrame;
         public int CurrentTickIndex => _tickIndex;
+        public FrameInputSet LastAppliedFrameInput => _lastAppliedFrameInput;
+        public BattleParityFrameSnapshot LastFrameSnapshot => _lastFrameSnapshot;
+        public bool HasFrameChecksum => _lastFrameSnapshot != null;
+        public string LastFrameChecksum => lastFrameChecksum;
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
@@ -258,16 +285,12 @@ namespace NTSD.Simulation
 
             _world.Rng?.Seed((uint)(config?.seed ?? 0));
             _world.Runtime?.Roster?.ApplyMatchConfig(config);
+            _world.SetNeedClearInput(true);
             _world.RefreshStageRuntimeSnapshotFromScene();
 
             List<BattleStageCampaignData> stageCampaigns = BattleStageCampaignLoader.LoadFromFile(
                 config?.stageCampaignFilePath);
             _world.ConfigureStageCampaigns(stageCampaigns, config?.stageSeriesId ?? 0, -1);
-            if (matchState != null &&
-                (matchState.BattleGameModeId == 1 || matchState.BattleGameModeId == 2))
-            {
-                _world.StartInitialStageWave();
-            }
 
             _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
         }
@@ -276,6 +299,7 @@ namespace NTSD.Simulation
         {
             _frameInputProvider = provider ?? new LocalSimulationFrameInputProvider();
             _frameInputProvider.Reset();
+            _lastAppliedFrameInput = FrameInputSet.Empty(_tickIndex);
         }
 
         public bool StepOneTick(bool ignorePaused = false)
@@ -301,6 +325,9 @@ namespace NTSD.Simulation
             _tickIndex = 0;
             _timeAccumulator = 0f;
             _sparkRenderFrame = 0;
+            _lastAppliedFrameInput = FrameInputSet.Empty(0);
+            _lastFrameSnapshot = null;
+            lastFrameChecksum = string.Empty;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
         }

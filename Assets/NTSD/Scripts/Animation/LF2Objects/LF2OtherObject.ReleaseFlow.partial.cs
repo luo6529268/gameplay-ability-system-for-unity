@@ -53,6 +53,9 @@ namespace NTSD.Animation.LF2Objects
 
         private void SetFrameDirect(int frameId, int waitCounter = int.MinValue)
         {
+            if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)
+                return;
+
             Frame.PN = Frame.N;
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);

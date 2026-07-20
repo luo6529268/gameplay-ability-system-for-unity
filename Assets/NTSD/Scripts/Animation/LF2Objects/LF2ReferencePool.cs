@@ -157,7 +157,8 @@ namespace NTSD.Animation.LF2Objects
             EnsureLogicPoolsInitialized();
 
             // Reset 已由调用方（OnTransitDestroy -> ResetState）执行，此处只做池 management
-            _activeObjects.Remove(obj);
+            if (!_activeObjects.Remove(obj))
+                return;
 
             if (_availablePools.TryGetValue(obj.ObjectTypeEnum, out var pool))
                 pool.AddLast(obj);
