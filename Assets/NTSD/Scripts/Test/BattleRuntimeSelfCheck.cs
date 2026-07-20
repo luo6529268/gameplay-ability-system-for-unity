@@ -1332,6 +1332,105 @@ namespace NTSD.Test
 
         private static void CheckLooseQuadtreeShadowBroadphaseContracts()
         {
+            Expect(CollisionBroadphaseBackendResolver.Resolve(
+                       "LooseQuadtree",
+                       "BruteForce") == CollisionBroadphaseBackend.LooseQuadtree &&
+                   CollisionBroadphaseBackendResolver.Resolve(
+                       null,
+                       "LooseQuadtree") == CollisionBroadphaseBackend.LooseQuadtree &&
+                   CollisionBroadphaseBackendResolver.Resolve(
+                       "invalid",
+                       null) == CollisionBroadphaseBackend.BruteForce &&
+                   !CollisionBroadphaseBackendResolver.TryParse("1", out _),
+                "collision broadphase backend must use explicit-over-config precedence and default to BruteForce");
+
+            var bruteParityWorld = new SimulationWorld();
+            var treeParityWorld = new SimulationWorld(
+                BattleRuntimeProfile.Authority400,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            LF2FrameData parityAttackerFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Standing,
+                MakeCollisionAuditItr(0, -20, -20, 40, 40, 20, 1),
+                null);
+            LF2FrameData parityTargetFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Standing,
+                null,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            LF2Character bruteAttacker = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseAttacker",
+                1,
+                BuildCollisionAuditData("SelfCheck_FormalBroadphaseAttacker", parityAttackerFrame));
+            LF2Character bruteTarget = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseTarget",
+                37,
+                BuildCollisionAuditData("SelfCheck_FormalBroadphaseTarget", parityTargetFrame));
+            LF2Character treeAttacker = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseAttackerTree",
+                1,
+                BuildCollisionAuditData("SelfCheck_FormalBroadphaseAttackerTree", parityAttackerFrame));
+            LF2Character treeTarget = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseTargetTree",
+                37,
+                BuildCollisionAuditData("SelfCheck_FormalBroadphaseTargetTree", parityTargetFrame));
+            RegisterCollisionAuditPair(bruteParityWorld, bruteAttacker, bruteTarget, 1, 2);
+            RegisterCollisionAuditPair(treeParityWorld, treeAttacker, treeTarget, 1, 2);
+            SetCollisionAuditFramePair(bruteAttacker, parityAttackerFrame, parityAttackerFrame);
+            SetCollisionAuditFramePair(bruteTarget, parityTargetFrame, parityTargetFrame);
+            SetCollisionAuditFramePair(treeAttacker, parityAttackerFrame, parityAttackerFrame);
+            SetCollisionAuditFramePair(treeTarget, parityTargetFrame, parityTargetFrame);
+            uint bruteRngBefore = bruteParityWorld.Rng.State;
+            uint treeRngBefore = treeParityWorld.Rng.State;
+            List<SceneQueryHit> bruteParityCandidates = CollectCollisionAuditCandidates(
+                bruteParityWorld,
+                bruteAttacker,
+                true);
+            List<SceneQueryHit> treeParityCandidates = CollectCollisionAuditCandidates(
+                treeParityWorld,
+                treeAttacker,
+                true);
+            var treeParityQuery = treeParityWorld.SceneQuery as BruteForceSceneQuery;
+            Expect(treeParityQuery != null &&
+                   treeParityQuery.CollisionBroadphase == CollisionBroadphaseBackend.LooseQuadtree &&
+                   !treeParityQuery.FormalCollectionAborted &&
+                   treeParityCandidates.Count == bruteParityCandidates.Count &&
+                   treeParityCandidates.Count == 1 &&
+                   treeParityCandidates[0].Target == treeTarget &&
+                   bruteParityWorld.Rng.State == bruteRngBefore &&
+                   treeParityWorld.Rng.State == treeRngBefore,
+                "formal LooseQuadtree collection must preserve brute candidate order and RNG state");
+
+            var fallbackWorld = new SimulationWorld(
+                BattleRuntimeProfile.Authority400,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            LF2Character fallbackAttacker = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseFallbackAttacker",
+                1,
+                BuildCollisionAuditData(
+                    "SelfCheck_FormalBroadphaseFallbackAttacker",
+                    parityAttackerFrame));
+            LF2Character fallbackTarget = CreateInteractionCharacter(
+                "SelfCheck_FormalBroadphaseFallbackTarget",
+                37,
+                    BuildCollisionAuditData(
+                        "SelfCheck_FormalBroadphaseFallbackTarget",
+                    BuildCollisionAuditFrame(0, LF2States.Standing, null, null)));
+            RegisterCollisionAuditPair(fallbackWorld, fallbackAttacker, fallbackTarget, 1, 2);
+            SetCollisionAuditFramePair(fallbackAttacker, parityAttackerFrame, parityAttackerFrame);
+            LF2FrameData fallbackTargetFrame = BuildCollisionAuditFrame(0, LF2States.Standing, null, null);
+            SetCollisionAuditFramePair(fallbackTarget, fallbackTargetFrame, fallbackTargetFrame);
+            fallbackWorld.CaptureCollisionFrameSnapshotsAll();
+            fallbackWorld.CollectCollisionCandidatesAll();
+            var fallbackQuery = fallbackWorld.SceneQuery as BruteForceSceneQuery;
+            Expect(fallbackQuery != null &&
+                   fallbackQuery.FormalFallbackParticipantCount == 1 &&
+                   !fallbackQuery.FormalCollectionAborted,
+                "formal LooseQuadtree must conservatively retain participants whose AABB cannot be built");
+            fallbackWorld.EndCollisionCandidateConsumption();
+
             var edgeA = new SpatialAabbXZ(0, 0, 10, 10);
             var edgeB = new SpatialAabbXZ(10, 0, 20, 10);
             var overlapB = new SpatialAabbXZ(9, 0, 20, 10);

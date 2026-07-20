@@ -58,6 +58,7 @@ namespace NTSD.Simulation
         internal int MaxRuntimeSlotsForServices => RuntimeSlotCapacity;
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
         internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
+        internal CollisionBroadphaseBackend CollisionBroadphaseForServices { get; }
         internal int ClaimedRuntimeSlotCountForServices => _runtimeSlots.ClaimedCount;
         internal RuntimeRestStore RuntimeRestStoreForServices => _runtimeRestStore;
 
@@ -103,7 +104,10 @@ namespace NTSD.Simulation
         {
         }
 
-        internal SimulationWorld(BattleRuntimeProfile runtimeProfile, int runtimeSlotCapacity)
+        internal SimulationWorld(
+            BattleRuntimeProfile runtimeProfile,
+            int runtimeSlotCapacity,
+            CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
         {
             if (runtimeSlotCapacity < DynamicRuntimeSlotStart)
                 throw new System.ArgumentOutOfRangeException(nameof(runtimeSlotCapacity),
@@ -117,6 +121,7 @@ namespace NTSD.Simulation
             }
 
             activeRuntimeProfile = runtimeProfile;
+            CollisionBroadphaseForServices = collisionBroadphase;
             maxActiveRuntimeEntities = runtimeProfile == BattleRuntimeProfile.MobileExtended
                 ? BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities
                 : int.MaxValue;
@@ -125,7 +130,7 @@ namespace NTSD.Simulation
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
-            SceneQuery = new BruteForceSceneQuery(this);
+            SceneQuery = new BruteForceSceneQuery(this, collisionBroadphase);
             Rng = new DeterministicRng(0x4E545344u);
             Runtime = new BattleRuntimeState();
             Runtime.Reset();

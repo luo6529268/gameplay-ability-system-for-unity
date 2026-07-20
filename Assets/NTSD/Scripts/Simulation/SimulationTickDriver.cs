@@ -356,7 +356,10 @@ namespace NTSD.Simulation
 
         private void CreateProductionWorld(BattleRuntimeWorldSettings settings)
         {
-            _world = new SimulationWorld(settings.Profile, settings.InitialRuntimeSlotCapacity);
+            _world = new SimulationWorld(
+                settings.Profile,
+                settings.InitialRuntimeSlotCapacity,
+                settings.CollisionBroadphase);
             _battleTickSystem = new NTSDBattleTickSystem(_world);
         }
 
@@ -388,6 +391,9 @@ namespace NTSD.Simulation
             BattleRuntimeWorldSettings settings)
         {
             if (world == null || world.RuntimeProfileForServices != settings.Profile)
+                return false;
+
+            if (world.CollisionBroadphaseForServices != settings.CollisionBroadphase)
                 return false;
 
             return world.MaxRuntimeSlotsForServices == settings.InitialRuntimeSlotCapacity ||

@@ -4,6 +4,7 @@ namespace NTSD.Simulation.Spatial
     {
         public int RebuildCount { get; internal set; }
         public int IndexedCount { get; internal set; }
+        public int FallbackCount { get; internal set; }
         public int BrutePairCount { get; internal set; }
         public int QuadtreePairCount { get; internal set; }
         public int AcceptedPairCount { get; internal set; }
@@ -16,6 +17,7 @@ namespace NTSD.Simulation.Spatial
         {
             RebuildCount++;
             IndexedCount = indexedCount;
+            FallbackCount = 0;
             BrutePairCount = 0;
             QuadtreePairCount = 0;
             AcceptedPairCount = 0;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Spatial;
@@ -16,6 +17,7 @@ namespace NTSD.Animation
         private const int RectMax = 1000000000;
 
         private readonly SimulationWorld _world;
+        private readonly CollisionBroadphaseBackend _collisionBroadphase;
         private readonly List<SceneQueryHit> _tmpHitResult = new List<SceneQueryHit>(16);
         private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
         private readonly List<SceneQueryHit> _emptyCandidateHits = new List<SceneQueryHit>(0);
@@ -28,12 +30,29 @@ namespace NTSD.Animation
         private readonly List<long> _shadowTreePairs = new List<long>(256);
         private readonly List<long> _shadowAcceptedPairs = new List<long>(64);
         private readonly SpatialBroadphaseDiagnostics _shadowDiagnostics = new SpatialBroadphaseDiagnostics();
+        private readonly LooseQuadtreeBroadphase _formalBroadphase = new LooseQuadtreeBroadphase();
+        private readonly List<LF2Entity> _formalParticipants = new List<LF2Entity>(128);
+        private readonly List<SpatialBroadphaseEntry> _formalEntries = new List<SpatialBroadphaseEntry>(128);
+        private readonly List<int> _formalFallbackOrdinals = new List<int>(32);
+        private readonly List<int> _formalQueryIndices = new List<int>(64);
+        private readonly List<long> _formalPairKeys = new List<long>(256);
+        private readonly List<long> _formalAuthorityPairKeys = new List<long>(256);
+        private readonly Dictionary<int, int> _formalSlotToOrdinal = new Dictionary<int, int>();
+        private readonly HashSet<int> _formalSeenSlots = new HashSet<int>();
         private bool _consumeCandidateCache;
+        private int _formalFallbackParticipantCount;
+        private bool _formalCollectionAborted;
         internal bool ShadowBroadphaseDiagnosticsEnabled { get; set; }
         internal SpatialBroadphaseDiagnostics ShadowBroadphaseDiagnostics => _shadowDiagnostics;
-        public BruteForceSceneQuery(SimulationWorld world)
+        internal CollisionBroadphaseBackend CollisionBroadphase => _collisionBroadphase;
+        internal int FormalFallbackParticipantCount => _formalFallbackParticipantCount;
+        internal bool FormalCollectionAborted => _formalCollectionAborted;
+        public BruteForceSceneQuery(
+            SimulationWorld world,
+            CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
         {
             _world = world;
+            _collisionBroadphase = collisionBroadphase;
         }
 
         public List<SceneQueryHit> QueryBodyHits(in PhysicsState.BattleVolume vol, LF2Entity exclude)
@@ -249,21 +268,12 @@ namespace NTSD.Animation
         {
             _candidateCache.Clear();
             _consumeCandidateCache = false;
+            _formalFallbackParticipantCount = 0;
+            _formalCollectionAborted = false;
             int currentTick = _world?.CurrentTickIndex ?? 0;
 
             _world.GetAllEntities(_tmpAllObjects);
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
-            {
-                LF2Entity entity = _tmpAllObjects[i];
-                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
-                    continue;
-
-                entity.ClearHitCandidateCarriers();
-                entity.Runtime.HitCandidateCount = 0;
-                entity.Runtime.HitCandidateNearestDistance = CandidateDistanceUnset;
-                entity.Runtime.HitCandidateKind1Distance = CandidateDistanceUnset;
-                entity.Runtime.HitCandidateExtraDistance = CandidateDistanceUnset;
-            }
+            ResetCandidateCollectionState();
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
@@ -282,9 +292,76 @@ namespace NTSD.Animation
                 _candidateCache[attacker] = new List<SceneQueryHit>(16);
             }
 
+            bool diagnosticsReady = true;
             if (ShadowBroadphaseDiagnosticsEnabled)
-                BuildShadowBroadphase(currentTick);
+            {
+                try
+                {
+                    BuildShadowBroadphase(currentTick);
+                }
+                catch (Exception)
+                {
+                    diagnosticsReady = false;
+                }
+            }
 
+            if (_collisionBroadphase == CollisionBroadphaseBackend.LooseQuadtree)
+            {
+                uint rngStateBeforeFormal = _world.Rng.State;
+                ulong rngCallsBeforeFormal = _world.Rng.CallCount;
+                bool formalSucceeded = diagnosticsReady;
+                if (formalSucceeded)
+                {
+                    try
+                    {
+                        formalSucceeded = TryCollectCollisionCandidatesLoose(currentTick);
+                    }
+                    catch (Exception)
+                    {
+                        formalSucceeded = false;
+                    }
+                }
+
+                if (!formalSucceeded)
+                {
+                    _formalCollectionAborted = true;
+                    _world.Rng.RestoreState(rngStateBeforeFormal, rngCallsBeforeFormal);
+                    ResetCandidateCollectionState();
+                    CollectCollisionCandidatesBruteForce(currentTick);
+                }
+            }
+            else
+            {
+                CollectCollisionCandidatesBruteForce(currentTick);
+            }
+
+            if (ShadowBroadphaseDiagnosticsEnabled && diagnosticsReady)
+                CompareShadowBroadphaseResults();
+
+            _consumeCandidateCache = true;
+        }
+
+        private void ResetCandidateCollectionState()
+        {
+            foreach (KeyValuePair<LF2Entity, List<SceneQueryHit>> pair in _candidateCache)
+                pair.Value?.Clear();
+
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2Entity entity = _tmpAllObjects[i];
+                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
+                    continue;
+
+                entity.ClearHitCandidateCarriers();
+                entity.Runtime.HitCandidateCount = 0;
+                entity.Runtime.HitCandidateNearestDistance = CandidateDistanceUnset;
+                entity.Runtime.HitCandidateKind1Distance = CandidateDistanceUnset;
+                entity.Runtime.HitCandidateExtraDistance = CandidateDistanceUnset;
+            }
+        }
+
+        private void CollectCollisionCandidatesBruteForce(int currentTick)
+        {
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
                 LF2Entity a = _tmpAllObjects[i];
@@ -305,16 +382,189 @@ namespace NTSD.Animation
                     CollectCandidatesForPair(b, a);
                 }
             }
+        }
+
+        private bool TryCollectCollisionCandidatesLoose(int currentTick)
+        {
+            _formalParticipants.Clear();
+            _formalEntries.Clear();
+            _formalFallbackOrdinals.Clear();
+            _formalPairKeys.Clear();
+            _formalAuthorityPairKeys.Clear();
+            _formalSlotToOrdinal.Clear();
+            _formalSeenSlots.Clear();
+
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2Entity entity = _tmpAllObjects[i];
+                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
+                    continue;
+                if (IsCollisionCandidateSuppressed(entity, currentTick))
+                    continue;
+
+                int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
+                if (runtimeSlot < 0 ||
+                    runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
+                    !ReferenceEquals(_world.FindEntityByRuntimeSlotForQuery(runtimeSlot), entity) ||
+                    !_formalSeenSlots.Add(runtimeSlot))
+                    return false;
+                _formalSlotToOrdinal.Add(runtimeSlot, _formalParticipants.Count);
+                _formalParticipants.Add(entity);
+            }
+
+            int participantCount = _formalParticipants.Count;
+            if (participantCount < 2)
+                return true;
+
+            for (int authorityOrdinal = 0; authorityOrdinal < participantCount; authorityOrdinal++)
+            {
+                LF2Entity entity = _formalParticipants[authorityOrdinal];
+                if (!TryBuildCollisionBroadphaseAabb(
+                        entity,
+                        entity.GetCollisionFrameData(),
+                        out SpatialAabbXZ bounds))
+                {
+                    _formalFallbackOrdinals.Add(authorityOrdinal);
+                    continue;
+                }
+
+                _formalEntries.Add(new SpatialBroadphaseEntry(
+                    entity.Runtime.SlotIndex,
+                    authorityOrdinal,
+                    bounds));
+            }
+
+            if (_formalEntries.Count + _formalFallbackOrdinals.Count != participantCount)
+                return false;
+
+            _formalFallbackParticipantCount = _formalFallbackOrdinals.Count;
+
+            BattleStageRuntimeState stage = _world?.Runtime?.Stage;
+            int stageWidth = stage?.StageWidthPx ?? 800;
+            int zMin = stage?.ZMin ?? 180;
+            int zMax = stage?.ZMax ?? 350;
+            SpatialAabbXZ preferredRoot = new SpatialAabbXZ(
+                0,
+                zMin,
+                stageWidth > 0 ? stageWidth : 1,
+                zMax > zMin ? zMax : zMin + 1);
+
+            try
+            {
+                _formalBroadphase.Rebuild(_formalEntries, preferredRoot);
+                if (_formalBroadphase.EntryCount != _formalEntries.Count)
+                    return false;
+
+                for (int entryIndex = 0; entryIndex < _formalEntries.Count; entryIndex++)
+                {
+                    SpatialBroadphaseEntry entry = _formalEntries[entryIndex];
+                    _formalBroadphase.Query(entry.Bounds, _formalQueryIndices);
+                    for (int resultIndex = 0; resultIndex < _formalQueryIndices.Count; resultIndex++)
+                    {
+                        int authorityOrdinal = _formalQueryIndices[resultIndex];
+                        if (authorityOrdinal < 0 || authorityOrdinal >= participantCount)
+                            return false;
+                        if (authorityOrdinal == entry.InputIndex)
+                            continue;
+
+                        int otherRuntimeSlot = _formalParticipants[authorityOrdinal].Runtime.SlotIndex;
+                        if (!_formalSlotToOrdinal.TryGetValue(otherRuntimeSlot, out int mappedOrdinal) ||
+                            mappedOrdinal != authorityOrdinal)
+                        {
+                            return false;
+                        }
+                        AddRuntimeSlotPair(entry.RuntimeSlot, otherRuntimeSlot);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            for (int fallbackIndex = 0; fallbackIndex < _formalFallbackOrdinals.Count; fallbackIndex++)
+            {
+                int fallbackOrdinal = _formalFallbackOrdinals[fallbackIndex];
+                for (int authorityOrdinal = 0; authorityOrdinal < participantCount; authorityOrdinal++)
+                {
+                    if (authorityOrdinal != fallbackOrdinal)
+                    {
+                        AddRuntimeSlotPair(
+                            _formalParticipants[fallbackOrdinal].Runtime.SlotIndex,
+                            _formalParticipants[authorityOrdinal].Runtime.SlotIndex);
+                    }
+                }
+            }
+
+            SortAndDeduplicate(_formalPairKeys);
+            for (int pairIndex = 0; pairIndex < _formalPairKeys.Count; pairIndex++)
+            {
+                long pairKey = _formalPairKeys[pairIndex];
+                int firstSlot = (int)(pairKey >> 32);
+                int secondSlot = (int)(pairKey & 0xffffffffL);
+                if (!_formalSlotToOrdinal.TryGetValue(firstSlot, out int firstOrdinal) ||
+                    !_formalSlotToOrdinal.TryGetValue(secondSlot, out int secondOrdinal) ||
+                    firstOrdinal == secondOrdinal)
+                {
+                    return false;
+                }
+
+                uint minOrdinal = (uint)Math.Min(firstOrdinal, secondOrdinal);
+                uint maxOrdinal = (uint)Math.Max(firstOrdinal, secondOrdinal);
+                _formalAuthorityPairKeys.Add(((long)minOrdinal << 32) | maxOrdinal);
+            }
 
             if (ShadowBroadphaseDiagnosticsEnabled)
-                CompareShadowBroadphaseResults();
+            {
+                for (int i = 0; i < _shadowBrutePairs.Count; i++)
+                {
+                    if (_formalPairKeys.BinarySearch(_shadowBrutePairs[i]) < 0)
+                        return false;
+                }
+            }
 
-            _consumeCandidateCache = true;
+            SortAndDeduplicate(_formalAuthorityPairKeys);
+            try
+            {
+                for (int pairIndex = 0; pairIndex < _formalAuthorityPairKeys.Count; pairIndex++)
+                {
+                    long pairKey = _formalAuthorityPairKeys[pairIndex];
+                    int firstOrdinal = (int)(pairKey >> 32);
+                    int secondOrdinal = (int)(pairKey & 0xffffffffL);
+                    if (firstOrdinal < 0 || secondOrdinal <= firstOrdinal ||
+                        secondOrdinal >= participantCount)
+                    {
+                        return false;
+                    }
+
+                    LF2Entity first = _formalParticipants[firstOrdinal];
+                    LF2Entity second = _formalParticipants[secondOrdinal];
+                    CollectCandidatesForPair(first, second);
+                    CollectCandidatesForPair(second, first);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void AddRuntimeSlotPair(int firstSlot, int secondSlot)
+        {
+            if (firstSlot == secondSlot || firstSlot < 0 || secondSlot < 0)
+                return;
+
+            uint min = (uint)Math.Min(firstSlot, secondSlot);
+            uint max = (uint)Math.Max(firstSlot, secondSlot);
+            _formalPairKeys.Add(((long)min << 32) | max);
         }
 
         private void BuildShadowBroadphase(int currentTick)
         {
             _shadowEntries.Clear();
+            int fallbackCount = 0;
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
                 LF2Entity entity = _tmpAllObjects[i];
@@ -327,6 +577,7 @@ namespace NTSD.Animation
                         entity.GetCollisionFrameData(),
                         out SpatialAabbXZ bounds))
                 {
+                    fallbackCount++;
                     continue;
                 }
 
@@ -383,6 +634,7 @@ namespace NTSD.Animation
             SortAndDeduplicate(_shadowBrutePairs);
             SortAndDeduplicate(_shadowTreePairs);
             _shadowDiagnostics.Begin(_shadowEntries.Count);
+            _shadowDiagnostics.FallbackCount = fallbackCount;
         }
 
         private void CompareShadowBroadphaseResults()

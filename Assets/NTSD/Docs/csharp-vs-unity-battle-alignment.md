@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0 与 B1-B1.3 已完成代码层实施、编译、full self-check 和 architect final review**。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0、B1-B1.3 与 B2A formal Loose Quadtree backend 已完成代码层实施和既定验证**。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -28,7 +28,9 @@ B1.2 production lifecycle 已完成代码层实施与验证：`SimulationWorld` 
 
 B1.3 已实现 collision pair VRest tick 解耦：正式顺序为 `CaptureSnapshots -> sparse Tick -> Collect`；eligible `active + CharData` row 递减，inactive row 冻结；`BruteForceSceneQuery` 删除 pair 内 tick。初版 `19:11:13` PASS 后 architect 发现 eligibility 仍按 `RuntimeSlotCapacity` 全扫，该证据保留为非完成记录。最终改为直接遍历 registered bucket items，无 capacity scan/eligibility snapshot 分配；Desktop sparse high-slot 测试 `visited=2`。最终 `dotnet build` **0 errors**，源码 `19:19:14` < DLL `19:19:47` < self-check `19:22:50` **PASS**；architect final review **PASS / no blocker**。
 
-本批未执行 Play Mode。正式 broadphase 仍未切换，Extended parity/replay/checksum schema 与集中式渲染仍未实施。T8 与本批无关。
+B2A 已实现独立 `CollisionBroadphaseBackend.BruteForce/LooseQuadtree` 正式后端，选择优先级为命令行 `-ntsdCollisionBroadphase` > `GameConfig.BattleCollisionBroadphaseName` > 默认 `BruteForce`。它只替换 fixed-tick candidate collect；即时 weapon/body query 不变。formal participant 保留 brute authority ordinal，tree 与 invalid-AABB fallback-all pair 统一转换为 canonical slot pair、排序去重，再按 authority ordinal 双向派发。slot/mapping/index/entry count 非法、rebuild/query 异常或 diagnostics 缺少 brute coverage 时，整 tick 丢弃 formal 输出，原子恢复 RNG/candidate state 并重跑 brute-force；extra pair 交 narrow phase。fresh 证据为源码 `2026-07-20 22:15:07` < Unity `Assembly-CSharp.dll` `22:18:48` < full `BattleRuntimeSelfCheck` `22:19:28` **PASS**，`dotnet build` **0 errors**；architect final review **PASS / no blocker**。
+
+本批未执行 Play Mode。B2A 已具备 formal switch，但生产默认仍为 `BruteForce`；B2B 增量 quadtree 更新、Extended parity/replay/checksum schema 与集中式渲染仍未实施。T8 默认 `stage.dat` 部署继续暂缓。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

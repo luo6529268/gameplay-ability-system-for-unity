@@ -62,5 +62,11 @@ namespace NTSD.Simulation
             if (b <= a) return a;
             return a + (NextRaw() % (b - a));
         }
+
+        internal void RestoreState(uint state, ulong callCount)
+        {
+            _seed = state;
+            _callCount = callCount;
+        }
     }
 }

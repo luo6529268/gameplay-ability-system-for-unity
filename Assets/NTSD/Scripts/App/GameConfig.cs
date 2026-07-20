@@ -15,6 +15,8 @@ namespace NTSD.App
         public string BattleRuntimeProfileName = "";
         [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
         public int DesktopInitialRuntimeSlotCapacity = 512;
+        [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]
+        public string BattleCollisionBroadphaseName = "";
 
         #region 单例访问
 

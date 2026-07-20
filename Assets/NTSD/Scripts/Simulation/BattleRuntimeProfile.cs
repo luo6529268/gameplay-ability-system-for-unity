@@ -3,6 +3,46 @@ using NTSD.App;
 
 namespace NTSD.Simulation
 {
+    public enum CollisionBroadphaseBackend
+    {
+        BruteForce = 0,
+        LooseQuadtree = 1
+    }
+
+    public static class CollisionBroadphaseBackendResolver
+    {
+        public const string BackendArgument = "-ntsdCollisionBroadphase";
+
+        public static CollisionBroadphaseBackend Resolve(
+            string explicitOverride,
+            string configuredBackend)
+        {
+            if (TryParse(explicitOverride, out CollisionBroadphaseBackend backend))
+                return backend;
+            if (TryParse(configuredBackend, out backend))
+                return backend;
+            return CollisionBroadphaseBackend.BruteForce;
+        }
+
+        public static bool TryParse(string value, out CollisionBroadphaseBackend backend)
+        {
+            if (string.Equals(value, nameof(CollisionBroadphaseBackend.LooseQuadtree), StringComparison.OrdinalIgnoreCase))
+            {
+                backend = CollisionBroadphaseBackend.LooseQuadtree;
+                return true;
+            }
+
+            if (string.Equals(value, nameof(CollisionBroadphaseBackend.BruteForce), StringComparison.OrdinalIgnoreCase))
+            {
+                backend = CollisionBroadphaseBackend.BruteForce;
+                return true;
+            }
+
+            backend = CollisionBroadphaseBackend.BruteForce;
+            return false;
+        }
+    }
+
     public enum BattleRuntimeProfile
     {
         Authority400 = 0,
@@ -76,16 +116,19 @@ namespace NTSD.Simulation
         public BattleRuntimeWorldSettings(
             BattleRuntimeProfile profile,
             int initialRuntimeSlotCapacity,
-            int maxActiveRuntimeEntities)
+            int maxActiveRuntimeEntities,
+            CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
         {
             Profile = profile;
             InitialRuntimeSlotCapacity = initialRuntimeSlotCapacity;
             MaxActiveRuntimeEntities = maxActiveRuntimeEntities;
+            CollisionBroadphase = collisionBroadphase;
         }
 
         public BattleRuntimeProfile Profile { get; }
         public int InitialRuntimeSlotCapacity { get; }
         public int MaxActiveRuntimeEntities { get; }
+        public CollisionBroadphaseBackend CollisionBroadphase { get; }
     }
 
     public static class BattleRuntimeProfilePolicy
@@ -161,6 +204,10 @@ namespace NTSD.Simulation
             string[] arguments = commandLineArguments ?? Environment.GetCommandLineArgs();
             string explicitProfile = FindArgumentValue(arguments, ProfileArgument);
             string configuredProfile = config?.BattleRuntimeProfileName;
+            string explicitBroadphase = FindArgumentValue(
+                arguments,
+                CollisionBroadphaseBackendResolver.BackendArgument);
+            string configuredBroadphase = config?.BattleCollisionBroadphaseName;
             int desktopCapacity = config?.DesktopInitialRuntimeSlotCapacity ??
                 BattleRuntimeProfilePolicy.DesktopDefaultInitialRuntimeSlotCapacity;
 
@@ -171,11 +218,18 @@ namespace NTSD.Simulation
                 desktopCapacity = parsedCapacity;
             }
 
-            return BattleRuntimeProfilePolicy.Resolve(
+            BattleRuntimeWorldSettings profileSettings = BattleRuntimeProfilePolicy.Resolve(
                 explicitProfile,
                 configuredProfile,
                 BattleRuntimeProfileResolver.GetPlatformDefault(),
                 desktopCapacity);
+            return new BattleRuntimeWorldSettings(
+                profileSettings.Profile,
+                profileSettings.InitialRuntimeSlotCapacity,
+                profileSettings.MaxActiveRuntimeEntities,
+                CollisionBroadphaseBackendResolver.Resolve(
+                    explicitBroadphase,
+                    configuredBroadphase));
         }
 
         internal static string FindArgumentValue(string[] arguments, string argumentName)
