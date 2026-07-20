@@ -2,12 +2,12 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认；R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施和验证；其余阶段未实施。
-- **代码状态**：B1.2 已接入 `SimulationWorld` owned store 并删除 `RuntimeSlotTable.RawRest`；Stage rejected bind 完整回收，`ReleaseRuntimeSlot` 的 bool 事务结果现传播到全部注销/待销毁调用链，错槽拒绝不再造成半注销。
-- **验证状态**：B1.2 已达到代码实施完成、编译通过、完整 `BattleRuntimeSelfCheck` PASS、architect final review PASS/no blocker。该结论不包含 Play Mode、collision pair tick 解耦或 Extended parity schema。
+- **状态**：方案已确认；R1-R2C-4、B0 与 B1-B1.3 已完成代码层实施和验证；其余阶段未实施。
+- **代码状态**：B1.3 顺序为 `CaptureSnapshots -> sparse Tick -> Collect`；eligibility 直接遍历 registered bucket items，不再扫描 `RuntimeSlotCapacity`，也不创建 eligibility snapshot。
+- **验证状态**：B1.3 已达到代码实施、dotnet 编译 0 errors、完整 `BattleRuntimeSelfCheck` PASS、architect final PASS/no blocker；Desktop sparse high-slot `visited=2`。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
 - **平台 Profile 说明**：生产解析优先级固定为“命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认值”；平台宏只提供默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。设备能力降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施边界**：B1.2 保持 ordinary claim `ResetSlot + Bind(false)`、release 保留 store 并解绑、`StageSpawnAt` post-Initialize retention、world reset/grow 同步与 parity fallback 直读 store。第三个审查 blocker 已通过 bool 事务传播关闭：任何 runtime-slot release 拒绝都会阻止后续 bucket/slot/lease/entity 半注销。collision pair tick 解耦仍未实施；T8 与本批无关。
+- **实施边界**：B1.3 直接从 registered bucket 稀疏枚举 eligible `active + CharData` victim，inactive row 冻结；不随 Desktop 逻辑容量扫描。store 维护 active-positive-row/stamp 并预扩 scratch。正式 candidate collect、RNG、VRest消费和 brute-force broadphase 语义保持不变；正式 quadtree switch 仍未实施。
 
 ### 2026-07-20 R1 第一批实施记录
 
@@ -152,9 +152,25 @@ B1.2 第一轮 blocker 修复证据：`dotnet build` **0 errors**；源码 `18:2
 
 B1.2 最终 fresh 证据：`dotnet build` **0 errors**；相关源码 `2026-07-20 18:31:25` < Unity DLL `18:33:58` < full self-check `18:34:54` **PASS**。公开 `Unregister` 故障矩阵验证完整注册上下文不变；architect final review **PASS / no blocker**。
 
+### 2026-07-20 B1.3 collision pair VRest tick 解耦记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| pass 顺序 | **已实施 / self-check verified** | 单 tick 固定为 `CaptureSnapshots -> sparse Tick -> Collect`；VRest 递减在候选收集前独立完成 |
+| eligible row | **blocker 已修 / self-check verified** | 直接遍历 registered bucket items，筛选 `active + CharData` victim；inactive row 冻结，不扫描 `RuntimeSlotCapacity` |
+| pair 内副作用 | **已移除 / self-check verified** | `BruteForceSceneQuery` 不再在 pair 枚举内部 tick VRest；early return、无 pair 与候选截断都不能漏 tick 或重复 tick |
+| store 热路径 | **已实施 / self-check verified** | `RuntimeRestStore` 维护 active-positive-row/stamp，scratch 随容量预扩；eligibility 无 capacity scan、无 snapshot 分配 |
+| Desktop 稀疏高槽 | **已验证** | 高逻辑容量 world 仅两个 registered eligible items 时访问计数严格为 `visited=2` |
+| 验证矩阵 | **已覆盖** | dense differential、registration/release lifecycle、inactive freeze、early-return/no-pair、diagnostics 与 parity fallback 均进入 full self-check |
+| broadphase | **未切换** | 正式候选仍由原 brute-force collect 产生；B1.3 不代表 Loose Quadtree 已接管生产 broadphase |
+
+B1.3 初版证据：`dotnet build` **0 errors**；源码 `19:09:44` < DLL `19:10:34` < self-check `19:11:13` **PASS**。architect 随后发现 eligibility 仍为 O(`RuntimeSlotCapacity`) 全扫，该证据因此是**非完成证据**。
+
+B1.3 最终 fresh 证据：`dotnet build` **0 errors**；相关源码 `2026-07-20 19:19:14` < Unity DLL `19:19:47` < full self-check `19:22:50` **PASS**；Desktop sparse high-slot `visited=2`；architect final review **PASS / no blocker**。
+
 ## Runtime 容量与空间索引阶段决策
 
-**状态：B1-B1.2 已完成代码层实施 / 编译 / full self-check / architect final review。** collision pair tick 解耦、正式 quadtree switch、增量更新与 Extended parity/replay/checksum schema 仍需后续实现和验证。
+**状态：B1-B1.3 已完成代码层实施 / 编译 / full self-check / architect final review。** 正式 quadtree switch、增量更新与 Extended parity/replay/checksum schema 仍需后续实现和验证。
 
 ### RuntimeSlot 容量模式
 
@@ -220,7 +236,7 @@ B1.2 最终 fresh 证据：`dotnet build` **0 errors**；相关源码 `2026-07-2
 
 ### VRest 与 Parity 边界
 
-**当前状态：B1.2 production lifecycle 已验证 / pair tick 解耦与 Extended parity schema 未实施。** Stage rejected bind 完整回收、错槽 release 拒绝及 bool 事务传播均有专项 self-check；未执行本批 Play Mode。
+**当前状态：B1.2 production lifecycle 与 B1.3 sparse tick 已验证 / Extended parity schema 未实施。** VRest tick 已移至独立 pass，eligibility 直接遍历 registered bucket items。
 
 - VRest/ARest 的逻辑访问与 broadphase 解耦。空间索引减少候选枚举，不负责 VRest 的递减或过期；VRest 计时必须遍历自己的稀疏活动集合/到期结构，不能因 broadphase 未返回远距离 pair 而停止递减。
 - 详细 parity snapshot（完整 slot、ARest/VRest、哈希和诊断字段）退出生产热路径，只在 `Authority400` 对拍、自检、回放或显式诊断模式中生成；生产 tick 不为 parity 预先扫描整页/全容量数据。
@@ -518,4 +534,4 @@ CentralOnly
 
 已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；B0 先以 X/Z Loose Quadtree shadow 诊断对比，正式 broadphase 切换另行验收；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，设备能力只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。
 
-截至 2026-07-20，R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施和验证。B1.2 初轮审查发现 Stage pool 回收不完整与错槽 release 未拒绝，次轮发现 release 拒绝未传播，末轮复核 PASS/no blocker；partial import 属于 B1.1，不计入 B1.2 三轮审查。`18:13:00` 与 `18:22:59` 保留为非完成历史证据，最终 source `18:31:25` < DLL `18:33:58` < result `18:34:54` **PASS**，dotnet **0 errors**。本批没有 Play Mode；collision pair tick 解耦、Extended parity schema 与正式 broadphase switch 仍是后续任务。T8 与该阶段无关。
+截至 2026-07-20，R1-R2C-4、B0 与 B1-B1.3 已完成代码层实施和验证。B1.3 初版 `19:11:13` PASS 因 capacity-wide eligibility scan 保留为非完成证据；最终直接遍历 registered bucket items，Desktop sparse high-slot `visited=2`，source `19:19:14` < DLL `19:19:47` < result `19:22:50` **PASS**，dotnet **0 errors**，architect final **PASS/no blocker**。本批没有 Play Mode，正式 quadtree switch 与 Extended parity schema 仍是后续任务。

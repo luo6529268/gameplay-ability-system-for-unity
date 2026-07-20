@@ -99,6 +99,7 @@ namespace NTSD.Test
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
                 CheckLooseQuadtreeShadowBroadphaseContracts();
+                CheckCollisionPairVRestDecouplingContracts();
                 CheckExtendedServiceBoundaryContracts();
                 CheckInteractionRuntimeSlotContracts();
                 CheckSimulationWorldLateMutation();
@@ -655,6 +656,72 @@ namespace NTSD.Test
                        differential.VRestRowCount == expectedVRestRowCount,
                     $"runtime rest diagnostic counts mismatch after operation {operationIndex}");
             }
+
+            const int pairTickCapacity = 24;
+            var pairTickStore = new RuntimeRestStore(pairTickCapacity);
+            var pairTickExpected = new int[pairTickCapacity, pairTickCapacity];
+            var pairTickEligible = new bool[pairTickCapacity];
+            var pairTickEligibleSlots = new List<int>(pairTickCapacity);
+            var pairTickRandom = new System.Random(0x50414952);
+            for (int victimSlot = 0; victimSlot < pairTickCapacity; victimSlot++)
+            {
+                for (int attackerSlot = 0; attackerSlot < pairTickCapacity; attackerSlot++)
+                {
+                    int value = pairTickRandom.Next(0, 5);
+                    pairTickExpected[victimSlot, attackerSlot] = value;
+                    pairTickStore.SetVRest(victimSlot, attackerSlot, value);
+                }
+            }
+
+            for (int tick = 0; tick < 32; tick++)
+            {
+                pairTickEligibleSlots.Clear();
+                for (int slot = 0; slot < pairTickCapacity; slot++)
+                {
+                    pairTickEligible[slot] = pairTickRandom.Next(0, 2) != 0;
+                    if (pairTickEligible[slot])
+                        pairTickEligibleSlots.Add(slot);
+                }
+
+                Expect(pairTickStore.TickCollisionPairVRest(pairTickEligibleSlots),
+                    $"collision pair VRest differential tick {tick} must accept its eligible slot view");
+                int expectedEntries = 0;
+                int expectedRows = 0;
+                for (int victimSlot = 0; victimSlot < pairTickCapacity; victimSlot++)
+                {
+                    bool rowHasEntry = false;
+                    for (int attackerSlot = 0; attackerSlot < pairTickCapacity; attackerSlot++)
+                    {
+                        if (victimSlot != attackerSlot && pairTickEligible[victimSlot] &&
+                            pairTickEligible[attackerSlot] &&
+                            pairTickExpected[victimSlot, attackerSlot] > 0)
+                        {
+                            pairTickExpected[victimSlot, attackerSlot]--;
+                        }
+
+                        int expectedValue = pairTickExpected[victimSlot, attackerSlot];
+                        Expect(pairTickStore.GetVRest(victimSlot, attackerSlot) == expectedValue,
+                            $"collision pair VRest differential mismatch at tick {tick}, pair {victimSlot}/{attackerSlot}");
+                        if (expectedValue > 0)
+                        {
+                            expectedEntries++;
+                            rowHasEntry = true;
+                        }
+                    }
+
+                    if (rowHasEntry)
+                        expectedRows++;
+                }
+
+                Expect(pairTickStore.VRestEntryCount == expectedEntries &&
+                       pairTickStore.VRestRowCount == expectedRows,
+                    $"collision pair VRest sparse counters mismatch after differential tick {tick}");
+            }
+
+            Expect(pairTickStore.GrowTo(300) && pairTickStore.SetVRest(299, 1, 2) &&
+                   pairTickStore.TickCollisionPairVRest(new[] { 1, 299 }) &&
+                   pairTickStore.GetVRest(299, 1) == 1,
+                "collision pair VRest eligibility stamps must grow with the store and address the extended tail");
         }
 
         private static void CheckItrRestTrackerBindingContracts()
@@ -1445,6 +1512,7 @@ namespace NTSD.Test
             uint rngBeforeOff = diagnosticWorld.Rng.State;
             ulong callsBeforeOff = diagnosticWorld.Rng.CallCount;
             diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.TickCollisionPairVRestAll();
             diagnosticWorld.CollectCollisionCandidatesAll();
             Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
                        diagnosticAttacker,
@@ -1462,6 +1530,7 @@ namespace NTSD.Test
             uint rngBeforeOn = diagnosticWorld.Rng.State;
             ulong callsBeforeOn = diagnosticWorld.Rng.CallCount;
             diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.TickCollisionPairVRestAll();
             diagnosticWorld.CollectCollisionCandidatesAll();
             SpatialBroadphaseDiagnostics diagnostics = diagnosticQuery.ShadowBroadphaseDiagnostics;
             Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
@@ -1481,6 +1550,7 @@ namespace NTSD.Test
 
             diagnosticTarget.ItrRest.RemoveVrest(attackerSlot);
             diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.TickCollisionPairVRestAll();
             diagnosticWorld.CollectCollisionCandidatesAll();
             Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
                        diagnosticAttacker,
@@ -1566,6 +1636,125 @@ namespace NTSD.Test
                     return false;
             }
             return true;
+        }
+
+        private static void CheckCollisionPairVRestDecouplingContracts()
+        {
+            LF2CharacterData pairData = new LF2CharacterData
+            {
+                name = "SelfCheck_CollisionPairVRest",
+                frames = new List<LF2FrameData>(),
+            };
+            var world = new SimulationWorld();
+            var first = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var second = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var missingData = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var suppressed = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var pending = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var newbornBeforeCollect = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            LF2Entity[] entities = { first, second, missingData, suppressed, pending, newbornBeforeCollect };
+            for (int slot = 0; slot < entities.Length; slot++)
+            {
+                entities[slot].SetRequiredRuntimeSlot(slot);
+                if (!ReferenceEquals(entities[slot], missingData))
+                    ((FlowSelfCheckEntity)entities[slot]).BindData($"PairVRest_{slot}", 30000 + slot, pairData);
+                world.Register(entities[slot]);
+            }
+
+            suppressed.Runtime.SuppressCollisionCandidateUntilTick = 100;
+            pending.Runtime.PendingFlushDestroy = true;
+            int firstSlot = first.Runtime.SlotIndex;
+            int secondSlot = second.Runtime.SlotIndex;
+            int missingSlot = missingData.Runtime.SlotIndex;
+            int suppressedSlot = suppressed.Runtime.SlotIndex;
+            int pendingSlot = pending.Runtime.SlotIndex;
+            int newbornSlot = newbornBeforeCollect.Runtime.SlotIndex;
+            first.ItrRest.SetVrest(secondSlot, 2);
+            second.ItrRest.SetVrest(firstSlot, 3);
+            first.ItrRest.SetVrest(firstSlot, 4);
+            first.ItrRest.SetVrest(missingSlot, 5);
+            first.ItrRest.SetVrest(suppressedSlot, 2);
+            suppressed.ItrRest.SetVrest(firstSlot, 2);
+            first.ItrRest.SetVrest(pendingSlot, 2);
+            first.ItrRest.SetVrest(newbornSlot, 2);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.TickCollisionPairVRestAll();
+            Expect(first.ItrRest.GetVrest(secondSlot) == 1 &&
+                   second.ItrRest.GetVrest(firstSlot) == 2 &&
+                   first.ItrRest.GetVrest(firstSlot) == 4 &&
+                   first.ItrRest.GetVrest(missingSlot) == 5 &&
+                   first.ItrRest.GetVrest(suppressedSlot) == 1 &&
+                   suppressed.ItrRest.GetVrest(firstSlot) == 1 &&
+                   first.ItrRest.GetVrest(pendingSlot) == 2 &&
+                   first.ItrRest.GetVrest(newbornSlot) == 1,
+                "collision pair VRest pass must tick each eligible direction once, skip self/missing-data/pending pairs, and ignore candidate suppression");
+
+            var released = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            released.SetRequiredRuntimeSlot(6);
+            released.BindData("PairVRest_Released", 30006, pairData);
+            world.Register(released);
+            int releasedSlot = released.Runtime.SlotIndex;
+            first.ItrRest.SetVrest(releasedSlot, 3);
+            released.ItrRest.SetVrest(firstSlot, 4);
+            world.Unregister(released);
+            world.TickCollisionPairVRestAll();
+            Expect(first.ItrRest.GetVrest(releasedSlot) == 3 &&
+                   world.GetRawRestVrest(releasedSlot, firstSlot) == 4,
+                "collision pair VRest pass must leave both directions unchanged when either slot was released before collection");
+
+            var earlyWorld = new SimulationWorld();
+            var earlyFirst = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var earlySecond = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            earlyFirst.SetRequiredRuntimeSlot(0);
+            earlySecond.SetRequiredRuntimeSlot(1);
+            earlyFirst.BindData("PairVRest_Early0", 30100, pairData);
+            earlySecond.BindData("PairVRest_Early1", 30101, pairData);
+            earlyWorld.Register(earlyFirst);
+            earlyWorld.Register(earlySecond);
+            earlyFirst.ItrRest.Arest = 2;
+            earlyFirst.ItrRest.SetVrest(1, 2);
+            earlyWorld.SetNeedClearInput(true);
+            new NTSDBattleTickSystem(earlyWorld).RunReleaseTick(1);
+            Expect(earlyFirst.ItrRest.Arest == 1 && earlyFirst.ItrRest.GetVrest(1) == 2,
+                "NeedClearInput early return must occur after ARest tick but before collision pair VRest tick");
+
+            var extendedWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var extendedLow = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var extendedHigh = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            extendedLow.SetRequiredRuntimeSlot(1);
+            extendedHigh.SetRequiredRuntimeSlot(700);
+            extendedLow.BindData("PairVRest_ExtendedLow", 30200, pairData);
+            extendedHigh.BindData("PairVRest_ExtendedHigh", 30201, pairData);
+            extendedWorld.Register(extendedLow);
+            extendedWorld.Register(extendedHigh);
+            extendedHigh.ItrRest.SetVrest(1, 2);
+            extendedLow.ItrRest.SetVrest(700, 3);
+            extendedWorld.TickCollisionPairVRestAll();
+            Expect(extendedWorld.RuntimeSlotCapacity == 768 &&
+                   extendedHigh.ItrRest.GetVrest(1) == 1 &&
+                   extendedLow.ItrRest.GetVrest(700) == 2,
+                "extended collision pair VRest pass must address grown high slots in both directions");
+
+            const int sparseCapacity = 65536;
+            const int sparseHighSlot = 65000;
+            var sparseWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, sparseCapacity);
+            var sparseLow = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var sparseHigh = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            sparseLow.SetRequiredRuntimeSlot(1);
+            sparseHigh.SetRequiredRuntimeSlot(sparseHighSlot);
+            sparseLow.BindData("PairVRest_SparseLow", 30300, pairData);
+            sparseHigh.BindData("PairVRest_SparseHigh", 30301, pairData);
+            sparseWorld.Register(sparseLow);
+            sparseWorld.Register(sparseHigh);
+            sparseLow.ItrRest.SetVrest(sparseHighSlot, 2);
+            sparseHigh.ItrRest.SetVrest(1, 3);
+            sparseWorld.TickCollisionPairVRestAll();
+            Expect(sparseWorld.RuntimeSlotCapacity == sparseCapacity &&
+                   sparseWorld.LastCollisionPairVRestEligibilityVisitCount == 2 &&
+                   sparseLow.ItrRest.GetVrest(sparseHighSlot) == 1 &&
+                   sparseHigh.ItrRest.GetVrest(1) == 2,
+                "collision pair VRest eligibility scan must visit registered bucket items rather than every addressable slot in a sparse high-capacity world");
         }
 
         private static void CheckExtendedServiceBoundaryContracts()

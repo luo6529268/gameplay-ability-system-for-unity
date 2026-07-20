@@ -15,6 +15,7 @@ namespace NTSD.Simulation
     public partial class SimulationWorld
     {
         internal static System.Func<SimulationWorld, LF2Entity, LF2Entity> RespawnEffectSpawnOverride;
+        internal int LastCollisionPairVRestEligibilityVisitCount { get; private set; }
 
         private void RunDeferredMutationEntityPass(System.Action<LF2Entity> action)
         {
@@ -729,6 +730,39 @@ namespace NTSD.Simulation
         {
             if (SceneQuery is BruteForceSceneQuery bruteForce)
                 bruteForce.CollectCollisionCandidates();
+        }
+
+        public void TickCollisionPairVRestAll()
+        {
+            _runtimeRestStore.BeginCollisionPairVRestEligibility();
+            int visitedItems = 0;
+            foreach (KeyValuePair<int, Bucket> pair in _buckets)
+            {
+                List<ISimObject> items = pair.Value.items;
+                for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
+                {
+                    visitedItems++;
+                    if (items[itemIndex] is not LF2Entity entity ||
+                        !IsActiveForCurrentPass(entity) ||
+                        entity.FrameCache?.Wrapper?.characterData == null)
+                    {
+                        continue;
+                    }
+
+                    int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
+                    if (!_runtimeSlots.IsAddressable(runtimeSlot) ||
+                        !object.ReferenceEquals(
+                            _runtimeSlots.GetCurrentOccupant(runtimeSlot),
+                            entity))
+                    {
+                        continue;
+                    }
+
+                    _runtimeRestStore.MarkCollisionPairVRestEligible(runtimeSlot);
+                }
+            }
+            LastCollisionPairVRestEligibilityVisitCount = visitedItems;
+            _runtimeRestStore.TickMarkedCollisionPairVRest();
         }
 
         public void EndCollisionCandidateConsumption()

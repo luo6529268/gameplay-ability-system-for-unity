@@ -82,6 +82,11 @@ namespace NTSD.Simulation
         private int[][] aRestPages;
         private VRestPage[] vRestPages;
         private readonly Dictionary<int, int> bindingTokensByVictim = new Dictionary<int, int>();
+        private int[] collisionEligibilityStamp;
+        private int collisionEligibilityEpoch;
+        private readonly List<int> collisionTickScratch;
+        private int[] activeVRestRowIndices;
+        private readonly List<int> activeVRestVictimSlots;
         private int nextBindingToken = 1;
 
         public RuntimeRestStore(int logicalCapacity)
@@ -93,6 +98,11 @@ namespace NTSD.Simulation
             int pageCount = GetPageCount(logicalCapacity);
             aRestPages = new int[pageCount][];
             vRestPages = new VRestPage[pageCount];
+            collisionEligibilityStamp = new int[logicalCapacity];
+            collisionTickScratch = new List<int>(logicalCapacity);
+            activeVRestRowIndices = new int[logicalCapacity];
+            Array.Fill(activeVRestRowIndices, -1);
+            activeVRestVictimSlots = new List<int>(logicalCapacity);
         }
 
         public int LogicalCapacity { get; private set; }
@@ -205,6 +215,7 @@ namespace NTSD.Simulation
                 {
                     page.Rows[rowIndex] = null;
                     VRestRowCount--;
+                    RemoveActiveVRestRow(victimSlot);
                 }
 
                 return true;
@@ -222,6 +233,7 @@ namespace NTSD.Simulation
                 row = new Dictionary<int, int>();
                 page.Rows[rowIndex] = row;
                 VRestRowCount++;
+                AddActiveVRestRow(victimSlot);
             }
 
             if (!row.ContainsKey(attackerSlot))
@@ -257,6 +269,7 @@ namespace NTSD.Simulation
                     {
                         page.Rows[rowIndex] = null;
                         VRestRowCount--;
+                        RemoveActiveVRestRow(pageIndex * PageSize + rowIndex);
                     }
                 }
             }
@@ -274,6 +287,8 @@ namespace NTSD.Simulation
             VRestRowCount = 0;
             MaterializedARestPageCount = 0;
             MaterializedVRestPageCount = 0;
+            activeVRestVictimSlots.Clear();
+            Array.Fill(activeVRestRowIndices, -1);
         }
 
         public bool GrowTo(int newLogicalCapacity)
@@ -293,6 +308,21 @@ namespace NTSD.Simulation
                 aRestPages = grownARestPages;
                 vRestPages = grownVRestPages;
             }
+
+            var grownEligibilityStamp = new int[newLogicalCapacity];
+            Array.Copy(
+                collisionEligibilityStamp,
+                grownEligibilityStamp,
+                collisionEligibilityStamp.Length);
+            collisionEligibilityStamp = grownEligibilityStamp;
+            if (collisionTickScratch.Capacity < newLogicalCapacity)
+                collisionTickScratch.Capacity = newLogicalCapacity;
+            var grownActiveRowIndices = new int[newLogicalCapacity];
+            Array.Fill(grownActiveRowIndices, -1);
+            Array.Copy(activeVRestRowIndices, grownActiveRowIndices, activeVRestRowIndices.Length);
+            activeVRestRowIndices = grownActiveRowIndices;
+            if (activeVRestVictimSlots.Capacity < newLogicalCapacity)
+                activeVRestVictimSlots.Capacity = newLogicalCapacity;
 
             LogicalCapacity = newLogicalCapacity;
             return true;
@@ -392,6 +422,80 @@ namespace NTSD.Simulation
             return true;
         }
 
+        public bool TickCollisionPairVRest(IReadOnlyList<int> eligibleSlots)
+        {
+            if (eligibleSlots == null)
+                return false;
+
+            BeginCollisionPairVRestEligibility();
+            for (int i = 0; i < eligibleSlots.Count; i++)
+                MarkCollisionPairVRestEligible(eligibleSlots[i]);
+
+            TickMarkedCollisionPairVRest();
+            return true;
+        }
+
+        internal void BeginCollisionPairVRestEligibility()
+        {
+            AdvanceCollisionEligibilityEpoch();
+        }
+
+        internal bool MarkCollisionPairVRestEligible(int slot)
+        {
+            if (!IsAddressable(slot))
+                return false;
+            collisionEligibilityStamp[slot] = collisionEligibilityEpoch;
+            return true;
+        }
+
+        internal void TickMarkedCollisionPairVRest()
+        {
+            int activeRowIndex = 0;
+            while (activeRowIndex < activeVRestVictimSlots.Count)
+            {
+                int victimSlot = activeVRestVictimSlots[activeRowIndex];
+                if (collisionEligibilityStamp[victimSlot] != collisionEligibilityEpoch)
+                {
+                    activeRowIndex++;
+                    continue;
+                }
+
+                VRestPage page = vRestPages[victimSlot / PageSize];
+                Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+                if (row == null || row.Count == 0)
+                {
+                    RemoveActiveVRestRow(victimSlot);
+                    continue;
+                }
+
+                collisionTickScratch.Clear();
+                foreach (KeyValuePair<int, int> pair in row)
+                {
+                    int attackerSlot = pair.Key;
+                    if (attackerSlot != victimSlot &&
+                        collisionEligibilityStamp[attackerSlot] == collisionEligibilityEpoch)
+                    {
+                        collisionTickScratch.Add(attackerSlot);
+                    }
+                }
+
+                for (int i = 0; i < collisionTickScratch.Count; i++)
+                {
+                    int attackerSlot = collisionTickScratch[i];
+                    int value = GetVRest(victimSlot, attackerSlot);
+                    SetVRest(victimSlot, attackerSlot, value - 1);
+                }
+
+                if (activeRowIndex < activeVRestVictimSlots.Count &&
+                    activeVRestVictimSlots[activeRowIndex] == victimSlot)
+                {
+                    activeRowIndex++;
+                }
+            }
+
+            collisionTickScratch.Clear();
+        }
+
         public bool ClearVictimRowOnly(int victimSlot)
         {
             if (!IsAddressable(victimSlot))
@@ -455,11 +559,48 @@ namespace NTSD.Simulation
             VRestEntryCount -= row.Count;
             VRestRowCount--;
             page.Rows[rowIndex] = null;
+            RemoveActiveVRestRow(victimSlot);
         }
 
         private void InvalidateBinding(int victimSlot)
         {
             bindingTokensByVictim.Remove(victimSlot);
+        }
+
+        private void AddActiveVRestRow(int victimSlot)
+        {
+            if (activeVRestRowIndices[victimSlot] >= 0)
+                return;
+            activeVRestRowIndices[victimSlot] = activeVRestVictimSlots.Count;
+            activeVRestVictimSlots.Add(victimSlot);
+        }
+
+        private void RemoveActiveVRestRow(int victimSlot)
+        {
+            int index = activeVRestRowIndices[victimSlot];
+            if (index < 0)
+                return;
+
+            int lastIndex = activeVRestVictimSlots.Count - 1;
+            int movedVictimSlot = activeVRestVictimSlots[lastIndex];
+            activeVRestVictimSlots[index] = movedVictimSlot;
+            activeVRestRowIndices[movedVictimSlot] = index;
+            activeVRestVictimSlots.RemoveAt(lastIndex);
+            activeVRestRowIndices[victimSlot] = -1;
+        }
+
+        private void AdvanceCollisionEligibilityEpoch()
+        {
+            if (collisionEligibilityEpoch == int.MaxValue)
+            {
+                Array.Clear(collisionEligibilityStamp, 0, collisionEligibilityStamp.Length);
+                collisionEligibilityEpoch = 1;
+                return;
+            }
+
+            collisionEligibilityEpoch++;
+            if (collisionEligibilityEpoch == 0)
+                collisionEligibilityEpoch = 1;
         }
 
         private static int GetPageCount(int logicalCapacity)

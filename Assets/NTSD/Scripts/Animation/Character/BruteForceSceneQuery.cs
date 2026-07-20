@@ -301,7 +301,6 @@ namespace NTSD.Animation
                     if (IsCollisionCandidateSuppressed(b, currentTick))
                         continue;
 
-                    DecrementPairVrest(a, b);
                     CollectCandidatesForPair(a, b);
                     CollectCandidatesForPair(b, a);
                 }
@@ -548,19 +547,6 @@ namespace NTSD.Animation
             }
 
             return _tmpHitResult;
-        }
-
-        private static void DecrementPairVrest(LF2Entity a, LF2Entity b)
-        {
-            if (a == null || b == null || a == b)
-                return;
-
-            int bSlot = b.Runtime?.SlotIndex ?? -1;
-            int aSlot = a.Runtime?.SlotIndex ?? -1;
-            if (bSlot >= 0)
-                a.ItrRest?.TickVrestForAttacker(bSlot);
-            if (aSlot >= 0)
-                b.ItrRest?.TickVrestForAttacker(aSlot);
         }
 
         private static bool IsCollisionCandidateSuppressed(LF2Entity entity, int currentTick)

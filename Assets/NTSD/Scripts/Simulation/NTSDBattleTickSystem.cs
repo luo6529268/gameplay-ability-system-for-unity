@@ -59,6 +59,7 @@ namespace NTSD.Simulation
             ClampCharacterZToStageBounds();
             ProcessHeldObjects(tickIndex);
             CaptureCollisionFrameSnapshots();
+            TickCollisionPairVRest();
             CollectCollisionCandidates();
             return true;
         }
@@ -118,6 +119,11 @@ namespace NTSD.Simulation
         private void CollectCollisionCandidates()
         {
             world.CollectCollisionCandidatesAll();
+        }
+
+        private void TickCollisionPairVRest()
+        {
+            world.TickCollisionPairVRestAll();
         }
 
         private void EndCollisionCandidateConsumption()

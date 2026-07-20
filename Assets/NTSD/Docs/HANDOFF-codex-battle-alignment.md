@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案交接（更新于 2026-07-20）
 
-方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施、编译、full self-check 和 architect final review**。
+方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **R1-R2C-4、B0 与 B1-B1.3 已完成代码层实施、编译、full self-check 和 architect final review**。
 
 - **已落地**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`；生产解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认。平台宏只负责默认值：Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 条件编译符号不进入战斗 pass；后续设备能力检测只允许选择或降级渲染后端。
 - **已接线**：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析/创建路径；直接 `BattleTestBootstrap` 在实体注册前协调晚到的 GameConfig。`Authority400` 使用 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`；Mobile total active admission 与 Desktop 自动分页增长已接入，Desktop 增长保留最低空洞并同步 AI snapshot。
@@ -38,8 +38,11 @@
 - **B1.2 旧 fresh 证据**：`dotnet build` **0 errors**；源码 `18:11:41` < DLL `18:12:23` < self-check `18:13:00` **PASS**。该证据早于 blocker 修复，只证明初版可编译/旧断言通过。
 - **B1.2 第一轮修复证据**：源码 `18:21:20` < DLL `18:21:58` < self-check `18:22:59` **PASS**；第二轮审查随后发现半注销 blocker，因此仍是非完成证据。
 - **B1.2 最新 fresh 证据**：`dotnet build` **0 errors**；源码 `18:31:25` < DLL `18:33:58` < self-check `18:34:54` **PASS**。公开 `Unregister` 故障测试验证 bucket/slot/lease/store/entity 完整注册上下文不变；architect final review **PASS / no blocker**。
-- **明确未实施/未启用**：collision pair tick 解耦、正式 broadphase switch、增量更新、Extended replay/checksum schema 与集中式渲染均未实施。
-- **未验收边界**：本批未执行 Play Mode；collision pair tick 解耦、Extended parity schema、正式 broadphase 与完整渲染未完成。T8 与本批无关。
+- **B1.3 tick 解耦已实现 / self-check verified**：`CaptureSnapshots -> sparse Tick -> Collect`；eligible active+CharData row 递减，inactive row 冻结；`BruteForceSceneQuery` 已删除 pair 内 tick。
+- **B1.3 初版非完成证据**：源码 `19:09:44` < DLL `19:10:34` < self-check `19:11:13` **PASS**；architect 随后发现 eligibility 仍按 capacity 全扫。
+- **B1.3 sparse 修复**：eligibility 直接遍历 registered bucket items，无 capacity scan/snapshot 分配；Desktop sparse high-slot `visited=2`。active-positive-row/stamp + scratch 预扩继续保持。
+- **B1.3 最终 fresh 证据**：`dotnet build` **0 errors**；源码 `19:19:14` < DLL `19:19:47` < self-check `19:22:50` **PASS**；architect final review **PASS / no blocker**。
+- **未验收边界**：本批未执行 Play Mode；正式 broadphase 仍未切换，Extended parity schema 与完整渲染未完成。T8 与本批无关。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归交接（2026-07-19）
 

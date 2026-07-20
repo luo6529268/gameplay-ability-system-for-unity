@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施、编译、full self-check 和 architect final review**。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0 与 B1-B1.3 已完成代码层实施、编译、full self-check 和 architect final review**。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -26,7 +26,9 @@ B1.1 已实现 optional `LF2ItrRestTracker` facade 与 exclusive victim-row leas
 
 B1.2 production lifecycle 已完成代码层实施与验证：`SimulationWorld` 持有 store，ordinary claim `ResetSlot + Bind(false)`，release 保留 store 并解绑，`StageSpawnAt` post-Initialize retention，world reset/grow 同步；`RuntimeSlotTable.RawRest` 已删除，parity fallback 直读 store。B1.2 初轮审查发现 Stage pool 回收不完整与错槽 release 未拒绝，次轮发现 release 拒绝未传播，末轮复核 PASS/no blocker；partial import 属于 B1.1，不计入 B1.2 三轮审查。`18:13:00` 与 `18:22:59` 保留为非完成历史证据。最终 `dotnet build` **0 errors**，源码 `18:31:25` < DLL `18:33:58` < self-check `18:34:54` **PASS**。
 
-本批未执行 Play Mode。collision pair tick 解耦、正式 broadphase switch、增量更新、Extended parity/replay/checksum schema 与集中式渲染仍未实施；B1.2 不代表这些阶段完成。T8 与本批无关。
+B1.3 已实现 collision pair VRest tick 解耦：正式顺序为 `CaptureSnapshots -> sparse Tick -> Collect`；eligible `active + CharData` row 递减，inactive row 冻结；`BruteForceSceneQuery` 删除 pair 内 tick。初版 `19:11:13` PASS 后 architect 发现 eligibility 仍按 `RuntimeSlotCapacity` 全扫，该证据保留为非完成记录。最终改为直接遍历 registered bucket items，无 capacity scan/eligibility snapshot 分配；Desktop sparse high-slot 测试 `visited=2`。最终 `dotnet build` **0 errors**，源码 `19:19:14` < DLL `19:19:47` < self-check `19:22:50` **PASS**；architect final review **PASS / no blocker**。
+
+本批未执行 Play Mode。正式 broadphase 仍未切换，Extended parity/replay/checksum schema 与集中式渲染仍未实施。T8 与本批无关。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 
