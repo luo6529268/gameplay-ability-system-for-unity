@@ -2,12 +2,12 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认；R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取、R2C-3B 外部容量边界与 R2C-4 生产 Profile 激活已实施并完成代码层验证，其余阶段未实施。
-- **代码状态**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`、`Authority400` 三段 indexed binary min-heap + `nextUnused` 分配器、分页 `RuntimeSlotTable` / `RuntimeEntityHandle`、allocator/table 单调 `GrowTo`、world 实例容量读取、special/transition 扩展槽边界，以及生产 Profile、active admission 与桌面自动增长已落地；集中式渲染、Loose Quadtree 与 VRest 解耦未落地，现有 `SpriteRenderer` 未替换。
-- **验证状态**：R1、R2A、R2B、R2C、R2C-3A、R2C-3B 与 R2C-4 均已有 fresh Unity 编译、完整 `BattleRuntimeSelfCheck` PASS 与 architect final review PASS。尚未完成 Play Mode、移动端真机、像素级、扩展 replay/checksum schema 或集中式渲染验收。
+- **状态**：方案已确认；R1-R2C-4 runtime 容量阶段与 B0 shadow Loose Quadtree 已实施并完成代码层验证，其余阶段未实施。
+- **代码状态**：生产 Profile、active admission、桌面自动增长、分页 `RuntimeSlotTable` / generation handle，以及纯数据 X/Z half-open Loose Quadtree shadow 诊断已落地；B0 仍以 brute-force 为正式 broadphase，四叉树只做 pair 对比。VRest 解耦、AI/即时武器查询接入、增量更新、正式 broadphase 切换与集中式渲染未落地，现有 `SpriteRenderer` 未替换。
+- **验证状态**：R1-R2C-4 与 B0 均已有 fresh Unity 编译、完整 `BattleRuntimeSelfCheck` PASS 与 architect final review PASS；B0 另有 `NTSDParity` 19 项 PASS。尚未完成 Play Mode、移动端真机、像素级、扩展 replay/checksum schema、正式 broadphase 性能验收或集中式渲染验收。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
 - **平台 Profile 说明**：生产解析优先级固定为“命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认值”；平台宏只提供默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。设备能力降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施边界**：`SimulationTickDriver` 的 `Awake`、`Recreate`、`ApplyMatchConfig` 共用同一 Profile 解析/创建路径；直接 `BattleTestBootstrap` 会在实体注册前重新协调晚到的 `GameConfig` Profile。生产 Profile、Mobile total active admission 和 Desktop 自动分页增长已接入；Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍待后续批次。
+- **实施边界**：`SimulationTickDriver` 的 `Awake`、`Recreate`、`ApplyMatchConfig` 共用同一 Profile 解析/创建路径；直接 `BattleTestBootstrap` 会在实体注册前重新协调晚到的 `GameConfig` Profile。B0 每次 collision collect 全量重建 shadow Loose Quadtree，诊断默认关闭，只比较 brute AABB pair、tree pair 与 accepted subset；正式 `i/j`、VRest、RNG、candidate 顺序仍走原权威流。即时武器查询、AI、VRest 解耦、增量更新、正式 broadphase 切换、Extended replay/checksum schema 与集中式渲染仍待后续批次。
 
 ### 2026-07-20 R1 第一批实施记录
 
@@ -90,13 +90,25 @@ R2C-3B fresh 验证：相关源码时间 `2026-07-20 14:37:37` < Unity `Assembly
 | Driver 生命周期 | **已实施 / 已验证** | `SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析与 world 创建路径；直接 `BattleTestBootstrap` 在实体注册前重新协调晚到的 GameConfig |
 | Desktop 增长 | **已实施 / 已验证** | 自动增长保留最低空洞分配顺序，并同步扩展 AI snapshot 容量，避免 world 与 AI 视图分叉 |
 | Extended checksum/parity | **边界已实施 / 已验证** | Extended Driver checksum 输出跳过/为空；direct parity capture 仍只接受 `Authority400 + 400`，拒绝 `DesktopExtended/512` 与其他非 authority 组合 |
-| 后续阶段 | **未实施 / 未启用** | Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍保持后续计划 |
+| 后续阶段 | **B0 shadow 已后续实施 / 其余未启用** | shadow Loose Quadtree 已由 B0 落地；正式 switch、即时 weapon query、AI、VRest 解耦、增量更新、Extended replay/checksum schema 与集中式渲染仍保持后续计划 |
 
 R2C-4 fresh 验证：相关源码时间 `2026-07-20 15:24:26` < Unity `Assembly-CSharp.dll` `15:25:30` < 完整 `BattleRuntimeSelfCheck` 结果 `15:26:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` 为 **0 errors / 42 existing warnings**；architect final review **PASS**。
 
+### 2026-07-20 B0 shadow Loose Quadtree 记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| 纯数据空间树 | **已实施 / 已验证** | X/Z half-open 归属；`looseness = 1.5`、`leafCapacity = 16`、`maxDepth = 8`；不依赖 Transform 或 Unity Physics |
+| 构建策略 | **shadow 已实施 / 正式切换未实施** | 每次 collision collect 全量重建；尚未采用增量更新，也未替换正式 brute-force broadphase |
+| 诊断边界 | **已实施 / 默认关闭** | 对比 brute AABB pair、tree pair 与正式 accepted subset；诊断关闭时不承担生产结果责任，不据此宣称性能提升 |
+| 权威流程保护 | **保持不变 / 已验证** | 正式 `i/j` 遍历、VRest、RNG、candidate 收集/截断/消费顺序继续使用原权威流，shadow 结果不写回战斗真值 |
+| 后续接入 | **未实施 / 未启用** | 即时 weapon query、AI 查询、VRest 解耦、增量更新与正式 broadphase switch 仍 pending |
+
+B0 fresh 验证：相关源码时间不晚于 `2026-07-20 16:14:10` < Unity `Assembly-CSharp.dll` `16:14:27` < 完整 `BattleRuntimeSelfCheck` 结果 `16:15:43` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` 为 **0 errors**；`NTSDParity` **19 PASS**；architect final review **PASS**。这些证据只证明 shadow 数据结构、pair 诊断和权威流隔离正确，不证明生产 broadphase 已切换或已有性能收益。
+
 ## Runtime 容量与空间索引阶段决策
 
-**状态：方案已确认 / R1、R2A、R2B、R2C、R2C-3A、R2C-3B 与 R2C-4 runtime 基础设施已实施并验证 / 其余未实施。** 本节是运行时容量与 broadphase 的设计边界，不改变 C# 权威战斗逻辑；当前已落地 Profile resolver、生产 Profile 激活、跨槽区 active admission、桌面自动增长、`Authority400` 分配器、分页槽表、generation 句柄、单调 `GrowTo`、world 按实例容量读取、外部 special/transition 容量边界和 authority parity guard，并已将该槽表接入统一 Driver 路径。Loose Quadtree、VRest 解耦、Extended replay/checksum schema、内存预算和目标设备参数仍需在后续实现阶段验证。
+**状态：方案已确认 / R1-R2C-4 runtime 容量基础设施与 B0 shadow Loose Quadtree 已实施并验证 / 其余未实施。** 本节不改变 C# 权威战斗逻辑；生产 Profile、跨槽区 active admission、桌面自动增长、分页槽表/generation handle 和 shadow pair 诊断已落地。B0 尚未切换正式 broadphase；即时 weapon query、AI、VRest 解耦、增量更新、Extended replay/checksum schema、内存预算和目标设备参数仍需在后续阶段验证。
 
 ### RuntimeSlot 容量模式
 
@@ -150,6 +162,8 @@ R2C-4 fresh 验证：相关源码时间 `2026-07-20 15:24:26` < Unity `Assembly-
 - 每次 spawn admission 成功后立即增加已发布计数；同一 boundary 后续 spawn 看到更新后的计数。移动端达到 1000 后，后续第 1001 个发布尝试稳定返回拒绝结果；Extended replay/checksum schema 尚未实现，当前 Extended Driver checksum 明确跳过/返回空值。
 
 ### X/Z Loose Quadtree Broadphase
+
+**当前状态：B0 shadow 诊断已实施 / 正式 broadphase 未切换。** B0 仅在 collision collect 中全量重建纯数据树并比较 pair 集合；不得将 shadow 命中候选写回正式战斗流程，也不得据此宣称性能收益。
 
 - 空间索引使用 X/Z 平面的 **Loose Quadtree**；逻辑实体、AI 范围查询和 itr/bdy 碰撞查询共享空间索引，但查询服务与候选规则分开，不能用 AI 范围结果替代碰撞候选。
 - 实体中心点采用严格的**半开区间**归属（左/下含、右/上不含，边界规则全局一致），保证一个中心点只属于一个子节点。
@@ -454,6 +468,6 @@ CentralOnly
 
 ## 16. 当前决策记录
 
-已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；空间 broadphase 使用 X/Z Loose Quadtree；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，设备能力只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。
+已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；B0 先以 X/Z Loose Quadtree shadow 诊断对比，正式 broadphase 切换另行验收；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，设备能力只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。
 
-截至 2026-07-20，**R1-R2C-4 的 runtime 容量阶段**达到“已实施 / 编译通过 / self-check 通过 / architect review 通过”：Profile resolver、生产 Driver/Profile 激活、默认容量、Mobile total active admission、Desktop 自动增长、最低槽复用、AI snapshot 扩展、256 槽惰性分页 `RuntimeSlotTable`、generation handle、world/外部实体容量读取，以及 strict authority parity capture guard 均已落地；Extended Driver checksum 当前明确跳过/为空。Loose Quadtree、VRest 解耦、Extended replay/checksum schema 及全部集中式渲染模块仍是 **方案已确认 / 未实施 / 未验证**。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。
+截至 2026-07-20，**R1-R2C-4 runtime 容量阶段与 B0 shadow Loose Quadtree**达到“已实施 / 编译通过 / self-check 通过 / architect review 通过”：Profile resolver、生产 Driver/Profile 激活、默认容量、Mobile total active admission、Desktop 自动增长、最低槽复用、AI snapshot 扩展、256 槽惰性分页 `RuntimeSlotTable`、generation handle、world/外部实体容量读取、strict authority parity capture guard，以及纯数据 X/Z half-open tree 的 brute-vs-tree pair 诊断均已落地；`NTSDParity` 19 项通过，Extended Driver checksum 当前明确跳过/为空。正式 broadphase switch、即时 weapon query、AI 查询、VRest 解耦、增量更新、Extended replay/checksum schema 及全部集中式渲染模块仍是 **方案已确认 / 未实施 / 未验证**；不得据 B0 结果宣称性能提升。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。

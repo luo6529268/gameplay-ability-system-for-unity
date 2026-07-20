@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1-R2C-4 的 runtime 容量阶段已实施并通过编译与 self-check / 其余未实施**。生产 Profile 解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认；Editor/其他平台默认 `Authority400`、Android Player 默认 `MobileExtended`、Standalone Player 默认 `DesktopExtended`。Unity 官方条件编译符号只用于默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1-R2C-4 runtime 容量阶段与 B0 shadow Loose Quadtree 已实施并验证 / 其余未实施**。生产 Profile 解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认；Editor/其他平台默认 `Authority400`、Android Player 默认 `MobileExtended`、Standalone Player 默认 `DesktopExtended`。Unity 官方条件编译符号只用于默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -18,7 +18,9 @@ R2C-3B 已关闭外部固定容量边界：`LF2SpecialAttack` 的高槽 holder �
 
 R2C-4 已激活生产 Profile：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用解析/创建路径，直接 `BattleTestBootstrap` 在实体注册前协调晚到的 `GameConfig`。默认容量为 `Authority400=400`、`MobileExtended=1050 logical / TOTAL active admission 1000`（跨全部槽区计数）、`DesktopExtended=512 initial`（按 256-slot 页规范化并自动增长）；Desktop 增长保持最低空洞优先并同步 AI snapshot。Extended Driver checksum 当前跳过/为空，direct parity 仍严格拒绝非 `Authority400/400`。fresh 证据为相关源码 `2026-07-20 15:24:26` < Unity `Assembly-CSharp.dll` `15:25:30` < 完整 `BattleRuntimeSelfCheck` `15:26:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` **0 errors / 42 existing warnings**；architect final review **PASS**。
 
-未完成边界：X/Z Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
+B0 已落地纯数据 X/Z half-open Loose Quadtree shadow：`looseness=1.5`、`leafCapacity=16`、`maxDepth=8`，每次 collision collect 全量重建，诊断默认关闭。诊断比较 brute AABB pair、tree pair 与正式 accepted subset；正式 `i/j`、VRest、RNG、candidate 收集/截断/消费流程保持不变，shadow 结果不写回战斗真值。fresh 证据为相关源码不晚于 `2026-07-20 16:14:10` < Unity `Assembly-CSharp.dll` `16:14:27` < 完整 `BattleRuntimeSelfCheck` `16:15:43` **PASS**；fresh `dotnet build` **0 errors**；`NTSDParity` **19 PASS**；architect final review **PASS**。该结果不代表性能提升或正式 broadphase 已切换。
+
+未完成边界：即时 weapon query、AI 查询、VRest 解耦、Loose Quadtree 增量更新、正式 broadphase switch、Extended replay/checksum schema 与集中式渲染仍未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

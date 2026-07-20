@@ -9,6 +9,7 @@ using NTSD.DatParser;
 using NTSD.Game;
 using NTSD.Input;
 using NTSD.Simulation;
+using NTSD.Simulation.Spatial;
 using UnityEngine;
 
 namespace NTSD.Test
@@ -94,6 +95,7 @@ namespace NTSD.Test
                 CheckPagedRuntimeSlotTableContracts();
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
+                CheckLooseQuadtreeShadowBroadphaseContracts();
                 CheckExtendedServiceBoundaryContracts();
                 CheckInteractionRuntimeSlotContracts();
                 CheckSimulationWorldLateMutation();
@@ -726,6 +728,311 @@ namespace NTSD.Test
                        1,
                        FrameInputSet.Empty(1)) != null,
                 "SimulationTickDriver must retain frame checksum capture for Authority400 worlds");
+        }
+
+        private static void CheckLooseQuadtreeShadowBroadphaseContracts()
+        {
+            var edgeA = new SpatialAabbXZ(0, 0, 10, 10);
+            var edgeB = new SpatialAabbXZ(10, 0, 20, 10);
+            var overlapB = new SpatialAabbXZ(9, 0, 20, 10);
+            Expect(!edgeA.Overlaps(edgeB) && edgeA.Overlaps(overlapB),
+                "LooseQuadtree AABBs must use half-open X/Z overlap semantics");
+
+            var retainedEntries = new List<SpatialBroadphaseEntry>
+            {
+                new SpatialBroadphaseEntry(0, 0, new SpatialAabbXZ(80, 80, 176, 176)),
+                new SpatialBroadphaseEntry(1, 1, new SpatialAabbXZ(4, 4, 8, 8)),
+            };
+            var retainedTree = new LooseQuadtreeBroadphase(1, 4);
+            retainedTree.Rebuild(retainedEntries, new SpatialAabbXZ(0, 0, 256, 256));
+            Expect(retainedTree.NodeCount == 5 && retainedTree.RootRetainedEntryCount == 1,
+                "an AABB crossing a child loose boundary must remain once in its parent after split");
+
+            var depthEntries = new List<SpatialBroadphaseEntry>(17);
+            for (int i = 0; i < 17; i++)
+            {
+                depthEntries.Add(new SpatialBroadphaseEntry(
+                    i,
+                    i,
+                    new SpatialAabbXZ(1, 1, 2, 2)));
+            }
+
+            var depthTree = new LooseQuadtreeBroadphase(16, 8);
+            depthTree.Rebuild(depthEntries, new SpatialAabbXZ(0, 0, 256, 256));
+            var depthQuery = new List<int>();
+            depthTree.Query(new SpatialAabbXZ(1, 1, 2, 2), depthQuery);
+            depthQuery.Sort();
+            Expect(depthTree.NodeCount > 1 &&
+                   depthTree.MaximumObservedDepth == 8 &&
+                   depthQuery.Count == 17,
+                "17 coincident entries must split deterministically and stop at max depth without duplication");
+
+            var growthEntries = new List<SpatialBroadphaseEntry>
+            {
+                new SpatialBroadphaseEntry(0, 0, new SpatialAabbXZ(-600, -20, -590, -10)),
+                new SpatialBroadphaseEntry(1, 1, new SpatialAabbXZ(1500, 900, 1510, 910)),
+            };
+            var growthTree = new LooseQuadtreeBroadphase(1, 4);
+            growthTree.Rebuild(growthEntries, new SpatialAabbXZ(0, 180, 800, 350));
+            Expect(growthTree.RootMinX <= -600 && growthTree.RootMinZ <= -20 &&
+                   growthTree.RootMinX + growthTree.RootSide >= 1510 &&
+                   growthTree.RootMinZ + growthTree.RootSide >= 910,
+                "root growth must use floor semantics and cover negative/out-of-stage bounds");
+
+            var ordered = new List<SpatialBroadphaseEntry>(40);
+            var reversed = new List<SpatialBroadphaseEntry>(40);
+            for (int i = 0; i < 40; i++)
+            {
+                int x = (i % 8) * 12 - 30;
+                int z = (i / 8) * 9 - 20;
+                ordered.Add(new SpatialBroadphaseEntry(
+                    100 + i,
+                    i,
+                    new SpatialAabbXZ(x, z, x + 18, z + 14)));
+            }
+            for (int i = ordered.Count - 1; i >= 0; i--)
+            {
+                SpatialBroadphaseEntry entry = ordered[i];
+                reversed.Add(new SpatialBroadphaseEntry(
+                    entry.RuntimeSlot,
+                    reversed.Count,
+                    entry.Bounds));
+            }
+
+            List<long> orderedPairs = CollectLooseQuadtreePairs(ordered);
+            List<long> reversedPairs = CollectLooseQuadtreePairs(reversed);
+            Expect(SpatialPairListsEqual(orderedPairs, reversedPairs),
+                "quadtree overlap pairs must be invariant to insertion order");
+
+            var random = new System.Random(0x4E545344);
+            var randomEntries = new List<SpatialBroadphaseEntry>(1000);
+            for (int i = 0; i < 1000; i++)
+            {
+                int x = random.Next(-4000, 4001);
+                int z = random.Next(-2000, 2001);
+                int w = random.Next(1, 65);
+                int d = random.Next(1, 65);
+                randomEntries.Add(new SpatialBroadphaseEntry(
+                    i,
+                    i,
+                    new SpatialAabbXZ(x, z, x + w, z + d)));
+            }
+
+            List<long> treePairs = CollectLooseQuadtreePairs(randomEntries);
+            List<long> brutePairs = CollectSpatialBrutePairs(randomEntries);
+            Expect(SpatialPairListsEqual(treePairs, brutePairs),
+                "fixed-seed 1000-AABB quadtree output must equal the O(N^2) differential baseline");
+
+            LF2FrameData kind5Frame = Frame(0, LF2States.Standing, 1, 0, 0, 0);
+            kind5Frame.centerx = 50;
+            kind5Frame.itrs.Add(new InteractionArea
+            {
+                kind = 5,
+                x = 10,
+                y = 0,
+                w = 20,
+                h = 20,
+                zwidth = 0,
+            });
+            LF2Character kind5Entity = CreateInteractionCharacter(
+                "SelfCheck_LooseQuadtreeKind5",
+                1,
+                BuildCollisionAuditData("SelfCheck_LooseQuadtreeKind5", kind5Frame));
+            kind5Entity.Runtime.SetPosition(100, 0, 30);
+            kind5Entity.Runtime.SyncIntegerPosition();
+            kind5Entity.PS.dir = "right";
+            Expect(BruteForceSceneQuery.TryBuildCollisionBroadphaseAabb(
+                       kind5Entity,
+                       kind5Frame,
+                       out SpatialAabbXZ rightKind5Bounds) &&
+                   rightKind5Bounds.Equals(new SpatialAabbXZ(60, 15, 80, 45)),
+                "shadow broadphase bounds must include kind5 and default zwidth=15 from the collision snapshot");
+            kind5Entity.PS.dir = "left";
+            Expect(BruteForceSceneQuery.TryBuildCollisionBroadphaseAabb(
+                       kind5Entity,
+                       kind5Frame,
+                       out SpatialAabbXZ leftKind5Bounds) &&
+                   leftKind5Bounds.Equals(new SpatialAabbXZ(120, 15, 140, 45)),
+                "shadow broadphase bounds must use the same facing flip and centerx formula as collision collection");
+            Expect(!leftKind5Bounds.Overlaps(new SpatialAabbXZ(120, 45, 140, 46)) &&
+                   leftKind5Bounds.Overlaps(new SpatialAabbXZ(120, 44, 140, 45)),
+                "shadow zwidth bounds must reject exact boundary contact and retain a one-unit overlap");
+
+            var diagnosticWorld = new SimulationWorld();
+            InteractionArea diagnosticItr = MakeCollisionAuditItr(0, -20, -20, 40, 40, 20, 1);
+            LF2Character diagnosticAttacker = CreateInteractionCharacter(
+                "SelfCheck_LooseQuadtreeDiagnosticAttacker",
+                1,
+                BuildCollisionAuditData(
+                    "SelfCheck_LooseQuadtreeDiagnosticAttacker",
+                    BuildCollisionAuditFrame(0, LF2States.Standing, diagnosticItr, null)));
+            LF2Character diagnosticTarget = CreateInteractionCharacter(
+                "SelfCheck_LooseQuadtreeDiagnosticTarget",
+                37,
+                BuildCollisionAuditData(
+                    "SelfCheck_LooseQuadtreeDiagnosticTarget",
+                    BuildCollisionAuditFrame(
+                        0,
+                        LF2States.Standing,
+                        null,
+                        new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 })));
+            RegisterCollisionAuditPair(diagnosticWorld, diagnosticAttacker, diagnosticTarget, 1, 2);
+            LF2Character suppressedTarget = CreateInteractionCharacter(
+                "SelfCheck_LooseQuadtreeSuppressedTarget",
+                38,
+                BuildCollisionAuditData(
+                    "SelfCheck_LooseQuadtreeSuppressedTarget",
+                    BuildCollisionAuditFrame(
+                        0,
+                        LF2States.Standing,
+                        null,
+                        new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 })));
+            diagnosticWorld.Register(suppressedTarget);
+            ConfigureCollisionAuditEntity(suppressedTarget, 2, 0);
+            suppressedTarget.Runtime.SuppressCollisionCandidateUntilTick = 1;
+            LF2Character pendingTarget = CreateInteractionCharacter(
+                "SelfCheck_LooseQuadtreePendingTarget",
+                39,
+                BuildCollisionAuditData(
+                    "SelfCheck_LooseQuadtreePendingTarget",
+                    BuildCollisionAuditFrame(
+                        0,
+                        LF2States.Standing,
+                        null,
+                        new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 })));
+            diagnosticWorld.Register(pendingTarget);
+            ConfigureCollisionAuditEntity(pendingTarget, 2, 0);
+            pendingTarget.Runtime.PendingFlushDestroy = true;
+            var diagnosticQuery = diagnosticWorld.SceneQuery as BruteForceSceneQuery;
+            Expect(diagnosticQuery != null && !diagnosticQuery.ShadowBroadphaseDiagnosticsEnabled,
+                "production shadow broadphase diagnostics must default off");
+
+            int attackerSlot = diagnosticAttacker.Runtime.SlotIndex;
+            diagnosticTarget.ItrRest.SetVrest(attackerSlot, 2);
+            uint rngBeforeOff = diagnosticWorld.Rng.State;
+            ulong callsBeforeOff = diagnosticWorld.Rng.CallCount;
+            diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.CollectCollisionCandidatesAll();
+            Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
+                       diagnosticAttacker,
+                       out List<SceneQueryHit> offCandidates) &&
+                   offCandidates.Count == 0 &&
+                   diagnosticTarget.ItrRest.GetVrest(attackerSlot) == 1 &&
+                   diagnosticWorld.Rng.State == rngBeforeOff &&
+                   diagnosticWorld.Rng.CallCount == callsBeforeOff &&
+                   diagnosticQuery.ShadowBroadphaseDiagnostics.RebuildCount == 0,
+                "diagnostics-off collection must preserve the authority candidate/RNG/VRest behavior without building the tree");
+            diagnosticWorld.EndCollisionCandidateConsumption();
+
+            diagnosticTarget.ItrRest.SetVrest(attackerSlot, 2);
+            diagnosticQuery.ShadowBroadphaseDiagnosticsEnabled = true;
+            uint rngBeforeOn = diagnosticWorld.Rng.State;
+            ulong callsBeforeOn = diagnosticWorld.Rng.CallCount;
+            diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.CollectCollisionCandidatesAll();
+            SpatialBroadphaseDiagnostics diagnostics = diagnosticQuery.ShadowBroadphaseDiagnostics;
+            Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
+                       diagnosticAttacker,
+                       out List<SceneQueryHit> onCandidates) &&
+                   onCandidates.Count == offCandidates.Count &&
+                   diagnosticTarget.ItrRest.GetVrest(attackerSlot) == 1 &&
+                   diagnosticWorld.Rng.State == rngBeforeOn &&
+                   diagnosticWorld.Rng.CallCount == callsBeforeOn &&
+                   diagnostics.RebuildCount == 1 &&
+                   diagnostics.IndexedCount == 2 &&
+                   diagnostics.BrutePairCount == 1 &&
+                   diagnostics.QuadtreePairCount == 1 &&
+                   diagnostics.MismatchCount == 0,
+                "diagnostics-on shadow comparison must preserve candidate/RNG/VRest behavior, exclude suppressed/pending entities, and match the brute AABB set");
+            diagnosticWorld.EndCollisionCandidateConsumption();
+
+            diagnosticTarget.ItrRest.RemoveVrest(attackerSlot);
+            diagnosticWorld.CaptureCollisionFrameSnapshotsAll();
+            diagnosticWorld.CollectCollisionCandidatesAll();
+            Expect(diagnosticQuery.TryGetCollisionCandidateSequence(
+                       diagnosticAttacker,
+                       out List<SceneQueryHit> acceptedCandidates) &&
+                   acceptedCandidates.Count == 1 &&
+                   acceptedCandidates[0].Target == diagnosticTarget &&
+                   diagnostics.AcceptedPairCount == 1 &&
+                   diagnostics.MismatchCount == 0,
+                "a real accepted collision pair must be represented by the shadow quadtree set");
+            diagnosticWorld.EndCollisionCandidateConsumption();
+        }
+
+        private static List<long> CollectLooseQuadtreePairs(List<SpatialBroadphaseEntry> entries)
+        {
+            var tree = new LooseQuadtreeBroadphase();
+            tree.Rebuild(entries, new SpatialAabbXZ(0, 180, 800, 350));
+            var query = new List<int>(64);
+            var pairs = new List<long>();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                SpatialBroadphaseEntry first = entries[i];
+                tree.Query(first.Bounds, query);
+                for (int q = 0; q < query.Count; q++)
+                {
+                    int j = query[q];
+                    if (j <= i || j >= entries.Count)
+                        continue;
+                    SpatialBroadphaseEntry second = entries[j];
+                    if (!first.Bounds.Overlaps(second.Bounds))
+                        continue;
+                    pairs.Add(SpatialPairKey(first.RuntimeSlot, second.RuntimeSlot));
+                }
+            }
+            SortUniqueSpatialPairs(pairs);
+            return pairs;
+        }
+
+        private static List<long> CollectSpatialBrutePairs(List<SpatialBroadphaseEntry> entries)
+        {
+            var pairs = new List<long>();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                for (int j = i + 1; j < entries.Count; j++)
+                {
+                    if (entries[i].Bounds.Overlaps(entries[j].Bounds))
+                        pairs.Add(SpatialPairKey(entries[i].RuntimeSlot, entries[j].RuntimeSlot));
+                }
+            }
+            SortUniqueSpatialPairs(pairs);
+            return pairs;
+        }
+
+        private static long SpatialPairKey(int first, int second)
+        {
+            uint min = (uint)Math.Min(first, second);
+            uint max = (uint)Math.Max(first, second);
+            return ((long)min << 32) | max;
+        }
+
+        private static void SortUniqueSpatialPairs(List<long> pairs)
+        {
+            if (pairs.Count < 2)
+                return;
+            pairs.Sort();
+            int write = 1;
+            for (int read = 1; read < pairs.Count; read++)
+            {
+                if (pairs[read] == pairs[write - 1])
+                    continue;
+                pairs[write++] = pairs[read];
+            }
+            if (write < pairs.Count)
+                pairs.RemoveRange(write, pairs.Count - write);
+        }
+
+        private static bool SpatialPairListsEqual(List<long> first, List<long> second)
+        {
+            if (first.Count != second.Count)
+                return false;
+            for (int i = 0; i < first.Count; i++)
+            {
+                if (first[i] != second[i])
+                    return false;
+            }
+            return true;
         }
 
         private static void CheckExtendedServiceBoundaryContracts()

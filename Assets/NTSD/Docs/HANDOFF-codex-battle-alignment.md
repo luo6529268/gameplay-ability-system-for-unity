@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案交接（更新于 2026-07-20）
 
-方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **方案已确认 / R1-R2C-4 的 runtime 容量阶段已实施并通过编译与 self-check / 其余未实施**。
+方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **方案已确认 / R1-R2C-4 runtime 容量阶段与 B0 shadow Loose Quadtree 已实施并验证 / 其余未实施**。
 
 - **已落地**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`；生产解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认。平台宏只负责默认值：Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 条件编译符号不进入战斗 pass；后续设备能力检测只允许选择或降级渲染后端。
 - **已接线**：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析/创建路径；直接 `BattleTestBootstrap` 在实体注册前协调晚到的 GameConfig。`Authority400` 使用 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`；Mobile total active admission 与 Desktop 自动分页增长已接入，Desktop 增长保留最低空洞并同步 AI snapshot。
@@ -24,8 +24,10 @@
 - **R2C-4 生产接线**：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析/创建路径；直接 `BattleTestBootstrap` 在实体注册前协调晚到的 GameConfig。Desktop 增长保留最低空洞优先并同步 AI snapshot。
 - **R2C-4 checksum 边界**：Extended Driver checksum 跳过/为空；direct parity capture 继续严格拒绝非 `Authority400/400`，Extended replay/checksum schema 尚未实施。
 - **R2C-4 fresh 验证**：相关源码 `2026-07-20 15:24:26` < Unity `Assembly-CSharp.dll` `15:25:30` < 完整 `BattleRuntimeSelfCheck` `15:26:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` **0 errors / 42 existing warnings**；architect final review **PASS**。
-- **明确未实施/未启用**：X/Z Loose Quadtree、VRest 解耦、Extended replay/checksum schema，以及图集、`Texture2DArray`、动态 Mesh、Shader、透明排序、URP Pass 等集中式渲染模块均未实施。
-- **未验收边界**：本批没有 Play Mode、目标 Android 真机或像素级验收；不能将 R1-R2C-4 的 self-check PASS 扩大为四叉树、VRest、Extended replay/checksum 或完整渲染方案完成。现有 400-slot parity schema 仍只适用于严格的 `Authority400/400`；本计划不包含 T8。
+- **B0 shadow Loose Quadtree 已落地 / 已验证**：纯数据 X/Z half-open tree，`looseness=1.5`、`leafCapacity=16`、`maxDepth=8`；每次 collision collect 全量重建，诊断默认关闭。比较 brute AABB pair、tree pair 与 accepted subset，正式 `i/j`、VRest、RNG、candidate flow 不变。
+- **B0 fresh 验证**：相关源码不晚于 `2026-07-20 16:14:10` < Unity `Assembly-CSharp.dll` `16:14:27` < 完整 `BattleRuntimeSelfCheck` `16:15:43` **PASS**；fresh `dotnet build` **0 errors**；`NTSDParity` **19 PASS**；architect final review **PASS**。
+- **明确未实施/未启用**：即时 weapon query、AI 查询、VRest 解耦、Loose Quadtree 增量更新、正式 broadphase switch、Extended replay/checksum schema，以及图集、`Texture2DArray`、动态 Mesh、Shader、透明排序、URP Pass 等集中式渲染模块均未实施。B0 不代表性能提升。
+- **未验收边界**：本批没有 Play Mode、目标 Android 真机或像素级验收；不能将 B0 shadow PASS 扩大为正式 broadphase、四叉树性能收益、VRest、Extended replay/checksum 或完整渲染方案完成。现有 400-slot parity schema 仍只适用于严格的 `Authority400/400`；本计划不包含 T8。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归交接（2026-07-19）
 

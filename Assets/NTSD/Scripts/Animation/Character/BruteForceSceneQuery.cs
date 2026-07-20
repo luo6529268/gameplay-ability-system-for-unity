@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+using NTSD.Simulation.Spatial;
 
 namespace NTSD.Animation
 {
@@ -20,7 +21,16 @@ namespace NTSD.Animation
         private readonly List<SceneQueryHit> _emptyCandidateHits = new List<SceneQueryHit>(0);
         private readonly Dictionary<LF2Entity, List<SceneQueryHit>> _candidateCache =
             new Dictionary<LF2Entity, List<SceneQueryHit>>();
+        private readonly LooseQuadtreeBroadphase _shadowBroadphase = new LooseQuadtreeBroadphase();
+        private readonly List<SpatialBroadphaseEntry> _shadowEntries = new List<SpatialBroadphaseEntry>(128);
+        private readonly List<int> _shadowQueryIndices = new List<int>(64);
+        private readonly List<long> _shadowBrutePairs = new List<long>(256);
+        private readonly List<long> _shadowTreePairs = new List<long>(256);
+        private readonly List<long> _shadowAcceptedPairs = new List<long>(64);
+        private readonly SpatialBroadphaseDiagnostics _shadowDiagnostics = new SpatialBroadphaseDiagnostics();
         private bool _consumeCandidateCache;
+        internal bool ShadowBroadphaseDiagnosticsEnabled { get; set; }
+        internal SpatialBroadphaseDiagnostics ShadowBroadphaseDiagnostics => _shadowDiagnostics;
         public BruteForceSceneQuery(SimulationWorld world)
         {
             _world = world;
@@ -272,6 +282,9 @@ namespace NTSD.Animation
                 _candidateCache[attacker] = new List<SceneQueryHit>(16);
             }
 
+            if (ShadowBroadphaseDiagnosticsEnabled)
+                BuildShadowBroadphase(currentTick);
+
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
                 LF2Entity a = _tmpAllObjects[i];
@@ -294,7 +307,181 @@ namespace NTSD.Animation
                 }
             }
 
+            if (ShadowBroadphaseDiagnosticsEnabled)
+                CompareShadowBroadphaseResults();
+
             _consumeCandidateCache = true;
+        }
+
+        private void BuildShadowBroadphase(int currentTick)
+        {
+            _shadowEntries.Clear();
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2Entity entity = _tmpAllObjects[i];
+                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
+                    continue;
+                if (IsCollisionCandidateSuppressed(entity, currentTick))
+                    continue;
+                if (!TryBuildCollisionBroadphaseAabb(
+                        entity,
+                        entity.GetCollisionFrameData(),
+                        out SpatialAabbXZ bounds))
+                {
+                    continue;
+                }
+
+                int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
+                _shadowEntries.Add(new SpatialBroadphaseEntry(runtimeSlot, _shadowEntries.Count, bounds));
+            }
+
+            BattleStageRuntimeState stage = _world?.Runtime?.Stage;
+            int stageWidth = stage?.StageWidthPx ?? 800;
+            int zMin = stage?.ZMin ?? 180;
+            int zMax = stage?.ZMax ?? 350;
+            var preferredRoot = new SpatialAabbXZ(
+                0,
+                zMin,
+                stageWidth > 0 ? stageWidth : 1,
+                zMax > zMin ? zMax : zMin + 1);
+            _shadowBroadphase.Rebuild(_shadowEntries, preferredRoot);
+
+            _shadowBrutePairs.Clear();
+            for (int i = 0; i < _shadowEntries.Count; i++)
+            {
+                SpatialBroadphaseEntry a = _shadowEntries[i];
+                for (int j = i + 1; j < _shadowEntries.Count; j++)
+                {
+                    SpatialBroadphaseEntry b = _shadowEntries[j];
+                    if (a.Bounds.Overlaps(b.Bounds) &&
+                        TryBuildPairKey(a.RuntimeSlot, b.RuntimeSlot, out long pairKey))
+                    {
+                        _shadowBrutePairs.Add(pairKey);
+                    }
+                }
+            }
+
+            _shadowTreePairs.Clear();
+            for (int i = 0; i < _shadowEntries.Count; i++)
+            {
+                SpatialBroadphaseEntry a = _shadowEntries[i];
+                _shadowBroadphase.Query(a.Bounds, _shadowQueryIndices);
+                for (int resultIndex = 0; resultIndex < _shadowQueryIndices.Count; resultIndex++)
+                {
+                    int j = _shadowQueryIndices[resultIndex];
+                    if (j <= i || j >= _shadowEntries.Count)
+                        continue;
+
+                    SpatialBroadphaseEntry b = _shadowEntries[j];
+                    if (a.Bounds.Overlaps(b.Bounds) &&
+                        TryBuildPairKey(a.RuntimeSlot, b.RuntimeSlot, out long pairKey))
+                    {
+                        _shadowTreePairs.Add(pairKey);
+                    }
+                }
+            }
+
+            SortAndDeduplicate(_shadowBrutePairs);
+            SortAndDeduplicate(_shadowTreePairs);
+            _shadowDiagnostics.Begin(_shadowEntries.Count);
+        }
+
+        private void CompareShadowBroadphaseResults()
+        {
+            _shadowAcceptedPairs.Clear();
+            foreach (KeyValuePair<LF2Entity, List<SceneQueryHit>> pair in _candidateCache)
+            {
+                int attackerSlot = pair.Key?.Runtime?.SlotIndex ?? -1;
+                List<SceneQueryHit> hits = pair.Value;
+                int count = pair.Key?.Runtime?.HitCandidateCount ?? hits?.Count ?? 0;
+                if (hits == null)
+                    continue;
+                if (count > hits.Count)
+                    count = hits.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (TryBuildPairKey(attackerSlot, hits[i].TargetSlot, out long pairKey))
+                        _shadowAcceptedPairs.Add(pairKey);
+                }
+            }
+
+            SortAndDeduplicate(_shadowAcceptedPairs);
+            _shadowDiagnostics.BrutePairCount = _shadowBrutePairs.Count;
+            _shadowDiagnostics.QuadtreePairCount = _shadowTreePairs.Count;
+            _shadowDiagnostics.AcceptedPairCount = _shadowAcceptedPairs.Count;
+
+            int bruteIndex = 0;
+            int treeIndex = 0;
+            while (bruteIndex < _shadowBrutePairs.Count || treeIndex < _shadowTreePairs.Count)
+            {
+                if (treeIndex >= _shadowTreePairs.Count ||
+                    (bruteIndex < _shadowBrutePairs.Count &&
+                     _shadowBrutePairs[bruteIndex] < _shadowTreePairs[treeIndex]))
+                {
+                    _shadowDiagnostics.MismatchCount++;
+                    if (_shadowDiagnostics.FirstMissingPair < 0)
+                        _shadowDiagnostics.FirstMissingPair = _shadowBrutePairs[bruteIndex];
+                    bruteIndex++;
+                }
+                else if (bruteIndex >= _shadowBrutePairs.Count ||
+                         _shadowTreePairs[treeIndex] < _shadowBrutePairs[bruteIndex])
+                {
+                    _shadowDiagnostics.MismatchCount++;
+                    if (_shadowDiagnostics.FirstExtraPair < 0)
+                        _shadowDiagnostics.FirstExtraPair = _shadowTreePairs[treeIndex];
+                    treeIndex++;
+                }
+                else
+                {
+                    bruteIndex++;
+                    treeIndex++;
+                }
+            }
+
+            for (int i = 0; i < _shadowAcceptedPairs.Count; i++)
+            {
+                long pairKey = _shadowAcceptedPairs[i];
+                if (_shadowTreePairs.BinarySearch(pairKey) >= 0)
+                    continue;
+
+                _shadowDiagnostics.MismatchCount++;
+                if (_shadowDiagnostics.FirstAcceptedPairMissingFromTree < 0)
+                    _shadowDiagnostics.FirstAcceptedPairMissingFromTree = pairKey;
+            }
+        }
+
+        private static bool TryBuildPairKey(int firstSlot, int secondSlot, out long pairKey)
+        {
+            pairKey = -1;
+            if (firstSlot < 0 || secondSlot < 0 || firstSlot == secondSlot)
+                return false;
+
+            uint min = (uint)(firstSlot < secondSlot ? firstSlot : secondSlot);
+            uint max = (uint)(firstSlot < secondSlot ? secondSlot : firstSlot);
+            pairKey = ((long)min << 32) | max;
+            return true;
+        }
+
+        private static void SortAndDeduplicate(List<long> values)
+        {
+            if (values.Count < 2)
+                return;
+
+            values.Sort();
+            int write = 1;
+            long previous = values[0];
+            for (int read = 1; read < values.Count; read++)
+            {
+                long value = values[read];
+                if (value == previous)
+                    continue;
+                values[write++] = value;
+                previous = value;
+            }
+
+            if (write < values.Count)
+                values.RemoveRange(write, values.Count - write);
         }
 
         public bool TryGetCollisionCandidateSequence(LF2Entity attacker, out List<SceneQueryHit> candidates)
@@ -1560,6 +1747,105 @@ namespace NTSD.Animation
                 frame,
                 new LocalRect(body.x, body.y, body.w, body.h),
                 fullHeight: collectSemantics && BodyIsReleaseFullHeight(body));
+        }
+
+        internal static bool TryBuildCollisionBroadphaseAabb(
+            LF2Entity entity,
+            LF2FrameData collisionFrame,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            if (entity == null || entity.PS == null || collisionFrame == null)
+                return false;
+
+            bool found = false;
+            int minX = 0;
+            int maxX = 0;
+            int minZ = 0;
+            int maxZ = 0;
+            int collisionZ = CollisionZInt(entity, collisionFrame);
+
+            if (collisionFrame.bodies != null)
+            {
+                for (int i = 0; i < collisionFrame.bodies.Count; i++)
+                {
+                    BodyBox body = collisionFrame.bodies[i];
+                    if (!IsReleaseBody(body))
+                        continue;
+
+                    WorldRect rect = BodyWorldRect(entity, collisionFrame, body, collectSemantics: true);
+                    AddBroadphaseRange(
+                        rect.X1,
+                        rect.X2,
+                        collisionZ,
+                        ClampRect((long)collisionZ + 1),
+                        ref found,
+                        ref minX,
+                        ref maxX,
+                        ref minZ,
+                        ref maxZ);
+                }
+            }
+
+            if (collisionFrame.itrs != null)
+            {
+                for (int i = 0; i < collisionFrame.itrs.Count; i++)
+                {
+                    InteractionArea itr = collisionFrame.itrs[i];
+                    if (!IsReleaseItrGeometry(itr))
+                        continue;
+
+                    WorldRect rect = ItrWorldRect(entity, collisionFrame, itr);
+                    int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+                    AddBroadphaseRange(
+                        rect.X1,
+                        rect.X2,
+                        ClampRect((long)collisionZ - zHalf),
+                        ClampRect((long)collisionZ + zHalf),
+                        ref found,
+                        ref minX,
+                        ref maxX,
+                        ref minZ,
+                        ref maxZ);
+                }
+            }
+
+            if (!found)
+                return false;
+
+            bounds = new SpatialAabbXZ(minX, minZ, maxX, maxZ);
+            return bounds.IsValid;
+        }
+
+        private static void AddBroadphaseRange(
+            int x1,
+            int x2,
+            int z1,
+            int z2,
+            ref bool found,
+            ref int minX,
+            ref int maxX,
+            ref int minZ,
+            ref int maxZ)
+        {
+            SpatialAabbXZ range = SpatialAabbXZ.Normalize(x1, z1, x2, z2);
+            if (!range.IsValid)
+                return;
+
+            if (!found)
+            {
+                found = true;
+                minX = range.MinX;
+                maxX = range.MaxX;
+                minZ = range.MinZ;
+                maxZ = range.MaxZ;
+                return;
+            }
+
+            if (range.MinX < minX) minX = range.MinX;
+            if (range.MaxX > maxX) maxX = range.MaxX;
+            if (range.MinZ < minZ) minZ = range.MinZ;
+            if (range.MaxZ > maxZ) maxZ = range.MaxZ;
         }
 
         internal static bool TryBuildBodyBattleVolume(
