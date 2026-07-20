@@ -1,5 +1,4 @@
 using System;
-using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Simulation
@@ -12,7 +11,6 @@ namespace NTSD.Simulation
         {
             public readonly NTSDEntityRuntime RawRuntime = new NTSDEntityRuntime();
             public LF2Entity Entity;
-            public LF2ItrRestTracker.StateSnapshot RawRest;
             public uint Generation;
             public bool Claimed;
 
@@ -182,21 +180,6 @@ namespace NTSD.Simulation
             return IsAddressable(slot) ? GetEntry(slot, true).RawRuntime : null;
         }
 
-        public LF2ItrRestTracker.StateSnapshot GetRawRest(int slot)
-        {
-            Entry entry = GetEntry(slot, false);
-            return entry?.RawRest;
-        }
-
-        public bool SetRawRest(int slot, LF2ItrRestTracker.StateSnapshot state)
-        {
-            if (!IsAddressable(slot))
-                return false;
-
-            GetEntry(slot, true).RawRest = state;
-            return true;
-        }
-
         public void Reset()
         {
             allocator.Reset();
@@ -215,7 +198,6 @@ namespace NTSD.Simulation
                     Entry entry = page.Entries[entryIndex];
                     entry.Entity = null;
                     entry.RawRuntime.Reset();
-                    entry.RawRest = null;
                     entry.Claimed = false;
                     entry.Generation = NextGeneration(entry.Generation);
                 }

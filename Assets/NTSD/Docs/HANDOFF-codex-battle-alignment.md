@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案交接（更新于 2026-07-20）
 
-方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **方案已确认 / R1-R2C-4 runtime 容量阶段、B0 shadow Loose Quadtree、B1 `RuntimeRestStore` 与 B1.1 optional facade 基础已实施并验证 / 其余未实施**。
+方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施、编译、full self-check 和 architect final review**。
 
 - **已落地**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`；生产解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认。平台宏只负责默认值：Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 条件编译符号不进入战斗 pass；后续设备能力检测只允许选择或降级渲染后端。
 - **已接线**：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析/创建路径；直接 `BattleTestBootstrap` 在实体注册前协调晚到的 GameConfig。`Authority400` 使用 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`；Mobile total active admission 与 Desktop 自动分页增长已接入，Desktop 增长保留最低空洞并同步 AI snapshot。
@@ -28,13 +28,18 @@
 - **B0 fresh 验证**：相关源码不晚于 `2026-07-20 16:14:10` < Unity `Assembly-CSharp.dll` `16:14:27` < 完整 `BattleRuntimeSelfCheck` `16:15:43` **PASS**；fresh `dotnet build` **0 errors**；`NTSDParity` **19 PASS**；architect final review **PASS**。
 - **B1 `RuntimeRestStore` 已落地 / 已验证**：分页/惰性 ARest；定向稀疏 `VRest[victim, attacker]` 只存正值、写零移除；`ResetSlot` 清 ARest + victim row + attacker column；支持 `GrowTo`、全局 reset、排序 diagnostics/snapshot 与 restore。
 - **B1 differential / fresh 验证**：2,000 次随机操作与 dense reference model 逐步对照 PASS；源码 `2026-07-20 16:31:32` < Unity `Assembly-CSharp.dll` `16:36:38` < 完整 `BattleRuntimeSelfCheck` `16:37:13` **PASS**；fresh `dotnet build` **0 errors**；architect final review **PASS**。
-- **B1.1 optional facade 已落地 / 已验证**：`LF2ItrRestTracker` 可选绑定 `RuntimeRestStore`；exclusive victim-row lease 保证同一 victim row 同时只有一个 facade owner，释放后才允许接管。当前仍未 production-bound。
+- **B1.1 optional facade 已落地 / 已验证**：`LF2ItrRestTracker` 可选绑定 `RuntimeRestStore`；exclusive victim-row lease 保证同一 victim row 同时只有一个 facade owner，释放后才允许接管。B1.1 阶段未 production-bound，后续已由 B1.2 接入。
 - **B1.1 architect 首轮修正**：`ReplaceVictimState` 对 mixed-invalid attacker 输入原可能部分写入；现已先完整预验证再原子替换。direct `ReplaceVictimState` 与 facade `Bind` 均补 failed-import 原状态不变测试。
 - **B1.1 修正后 fresh 验证**：复跑 `dotnet build` **0 errors / 18 existing warnings**；源码 `2026-07-20 17:34:22` < Unity `Assembly-CSharp.dll` `17:36:49` < 完整 `BattleRuntimeSelfCheck` `17:39:07` **PASS**；architect final review **PASS / no blocker**。
 - **B1.1 非阻塞补强**：invalid bound `RestoreState` 可后续补独立断言；该路径复用已验证 atomic replace 入口，不影响当前结论。
-- **下一批生产接线**：registration、release、world reset 尚未绑定；必须分别保留 ordinary registration/reset 清 rest 与 `StageSpawnAt` 复用槽 retention，不能用统一 reset 抹平两条路径。
-- **明确未实施/未启用**：collision pair tick 解耦、parity integration、即时 weapon query、AI 查询、增量更新、正式 broadphase switch、Extended replay/checksum schema，以及集中式渲染模块均未实施。
-- **未验收边界**：不能将 B1.1 PASS 扩大为 production-bound facade、生产 VRest/ARest 迁移、正式 broadphase 或完整渲染完成；本计划不包含 T8。
+- **B1.2 lifecycle binding**：`SimulationWorld` owns store；ordinary claim、release、`StageSpawnAt`、world reset/grow 与 parity fallback 已接入，`RuntimeSlotTable.RawRest` 已删除。
+- **B1.2 三轮审查归属**：初轮发现 Stage pool 回收不完整与错槽 release 未拒绝，次轮发现 release 拒绝未传播，末轮 PASS/no blocker；partial import 属于 B1.1，不计入 B1.2。
+- **B1.2 三个 architect blockers 已修 / self-check verified**：Stage rejected bind 走共享完整 pool 回收；错槽 release 被拒绝；`ReleaseRuntimeSlot` bool 事务传播到全部注销/待销毁调用链，拒绝时不再半注销。
+- **B1.2 旧 fresh 证据**：`dotnet build` **0 errors**；源码 `18:11:41` < DLL `18:12:23` < self-check `18:13:00` **PASS**。该证据早于 blocker 修复，只证明初版可编译/旧断言通过。
+- **B1.2 第一轮修复证据**：源码 `18:21:20` < DLL `18:21:58` < self-check `18:22:59` **PASS**；第二轮审查随后发现半注销 blocker，因此仍是非完成证据。
+- **B1.2 最新 fresh 证据**：`dotnet build` **0 errors**；源码 `18:31:25` < DLL `18:33:58` < self-check `18:34:54` **PASS**。公开 `Unregister` 故障测试验证 bucket/slot/lease/store/entity 完整注册上下文不变；architect final review **PASS / no blocker**。
+- **明确未实施/未启用**：collision pair tick 解耦、正式 broadphase switch、增量更新、Extended replay/checksum schema 与集中式渲染均未实施。
+- **未验收边界**：本批未执行 Play Mode；collision pair tick 解耦、Extended parity schema、正式 broadphase 与完整渲染未完成。T8 与本批无关。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归交接（2026-07-19）
 

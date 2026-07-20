@@ -41,6 +41,7 @@ namespace NTSD.Simulation
         private const int DynamicRuntimeSlotStart = 50;
         private readonly BattleRuntimeProfile activeRuntimeProfile;
         private readonly RuntimeSlotTable _runtimeSlots;
+        private readonly RuntimeRestStore _runtimeRestStore;
         private readonly int maxActiveRuntimeEntities;
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
@@ -58,6 +59,7 @@ namespace NTSD.Simulation
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
         internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
         internal int ClaimedRuntimeSlotCountForServices => _runtimeSlots.ClaimedCount;
+        internal RuntimeRestStore RuntimeRestStoreForServices => _runtimeRestStore;
 
         private int GetRuntimeStableId(ISimObject obj)
         {
@@ -119,6 +121,7 @@ namespace NTSD.Simulation
                 ? BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities
                 : int.MaxValue;
             _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
+            _runtimeRestStore = new RuntimeRestStore(runtimeSlotCapacity);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
@@ -188,6 +191,7 @@ namespace NTSD.Simulation
                 if (item is not LF2Entity entity)
                     continue;
 
+                entity.ItrRest?.Unbind(false);
                 entity.ItrRest?.Reset();
                 entity.Reset();
                 entity.Runtime?.Reset();
@@ -213,6 +217,7 @@ namespace NTSD.Simulation
 
             _buckets.Clear();
             _runtimeSlots.Reset();
+            _runtimeRestStore.ResetWorld();
         }
 
         public int CurrentTickIndex => Runtime?.Flow?.CurrentTickIndex ?? 0;
@@ -341,6 +346,7 @@ namespace NTSD.Simulation
             if (obj is LF2Entity registeredEntity)
             {
                 _pendingSlotReleasedDestroy.Remove(registeredEntity);
+                registeredEntity.ItrRest?.Unbind(false);
                 int runtimeSlot = AllocateRuntimeSlot(registeredEntity);
                 registeredEntity.SetRuntimeSlotIndex(runtimeSlot);
                 registeredEntity.ClearRequiredRuntimeSlot();
@@ -357,7 +363,17 @@ namespace NTSD.Simulation
                 ResetRawRuntimeSlotState(runtimeSlot);
                 if (registeredEntity.Runtime.SpawnSemantic != (int)ReleaseSpawnSemantic.StageSpawnAt)
                 {
-                    ResetCooldownsForRuntimeSlot(runtimeSlot, registeredEntity);
+                    if (!ResetCooldownsForRuntimeSlot(runtimeSlot, registeredEntity))
+                    {
+                        RollbackRuntimeSlotRegistration(registeredEntity, runtimeSlot);
+                        if (bucket.items.Count == 0)
+                            _buckets.Remove(simOrder);
+                        Debug.LogError(
+                            $"[SimulationWorld] Runtime rest bind failed; registration rejected: " +
+                            $"Slot={runtimeSlot}, StableId={registeredEntity.StableId}, " +
+                            $"Type={registeredEntity.GetType().Name}");
+                        return;
+                    }
                 }
 
                 if (!registeredEntity.ShouldDeferInitialRuntimeSnapshot())
@@ -380,8 +396,8 @@ namespace NTSD.Simulation
 
             if (_ticking)
             {
-                if (obj is LF2Entity pendingEntity)
-                    ReleaseRuntimeSlot(pendingEntity);
+                if (obj is LF2Entity pendingEntity && !ReleaseRuntimeSlot(pendingEntity))
+                    return;
                 if (!_pendingUnregister.Contains(obj))
                     _pendingUnregister.Add(obj);
                 return;
@@ -416,15 +432,26 @@ namespace NTSD.Simulation
                 }
             }
 
-            if (bucket == null || !bucket.items.Remove(obj))
+            if (bucket == null)
+            {
+                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
+                return;
+            }
+
+            if (obj is LF2Entity entity &&
+                entity.Runtime?.SlotIndex >= 0 &&
+                !ReleaseRuntimeSlot(entity))
+            {
+                return;
+            }
+
+            if (!bucket.items.Remove(obj))
             {
                 Debug.LogWarning($"[SimulationWorld] Object not found in buckets: CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
                 return;
             }
 
             bucket.dirty = true;
-            if (obj is LF2Entity entity)
-                ReleaseRuntimeSlot(entity);
             obj.OnRemoved(_context);
 
             if (bucket.items.Count == 0)
@@ -587,7 +614,8 @@ namespace NTSD.Simulation
 
             var grownAiInputSlots = new LF2Entity[normalizedCapacity];
             System.Array.Copy(aiInputSlots, grownAiInputSlots, aiInputSlots.Length);
-            if (!_runtimeSlots.GrowTo(normalizedCapacity))
+            if (!_runtimeRestStore.GrowTo(normalizedCapacity) ||
+                !_runtimeSlots.GrowTo(normalizedCapacity))
                 return false;
 
             aiInputSlots = grownAiInputSlots;
@@ -619,71 +647,90 @@ namespace NTSD.Simulation
                     if (slot < 0 || slot >= RuntimeSlotCapacity)
                         continue;
 
-                    if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
+                    if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity) &&
+                        ReleaseRuntimeSlot(entity) &&
+                        !_pendingSlotReleasedDestroy.Contains(entity))
                     {
-                        CaptureRawRestSlotState(slot, entity);
-                        _runtimeSlots.Release(slot, entity);
-                    }
-                    entity.SetRuntimeSlotIndex(-1);
-                    if (!_pendingSlotReleasedDestroy.Contains(entity))
                         _pendingSlotReleasedDestroy.Add(entity);
+                    }
                 }
             }
         }
 
-        private void ReleaseRuntimeSlot(LF2Entity entity)
+        private bool ReleaseRuntimeSlot(LF2Entity entity)
         {
             int slot = entity.Runtime?.SlotIndex ?? -1;
-            if (slot >= 0 && slot < RuntimeSlotCapacity &&
-                object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
+            if (slot < 0)
+                return true;
+            if (slot >= RuntimeSlotCapacity ||
+                !object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
             {
-                CaptureRawRestSlotState(slot, entity);
-                _runtimeSlots.Release(slot, entity);
+                Debug.LogError(
+                    $"[SimulationWorld] Refusing runtime slot release without the matching claim: " +
+                    $"EntitySlot={slot}, StableId={entity.StableId}");
+                return false;
+            }
+
+            bool wasBound = entity.ItrRest?.IsBound == true;
+            if (wasBound && entity.ItrRest.BoundVictimSlot != slot)
+            {
+                Debug.LogError(
+                    $"[SimulationWorld] Refusing runtime slot release with a mismatched rest binding: " +
+                    $"EntitySlot={slot}, BoundVictimSlot={entity.ItrRest.BoundVictimSlot}, " +
+                    $"StableId={entity.StableId}");
+                return false;
+            }
+            if (wasBound && !entity.ItrRest.Unbind(false))
+                return false;
+
+            if (!_runtimeSlots.Release(slot, entity))
+            {
+                if (wasBound && !entity.ItrRest.Bind(_runtimeRestStore, slot, false))
+                {
+                    Debug.LogError(
+                        $"[SimulationWorld] Failed to restore runtime rest binding after slot release rollback: " +
+                        $"Slot={slot}, StableId={entity.StableId}");
+                }
+                return false;
             }
 
             entity.SetRuntimeSlotIndex(-1);
+            return true;
         }
 
-        private void CaptureRawRestSlotState(int runtimeSlot, LF2Entity entity)
+        private void RollbackRuntimeSlotRegistration(LF2Entity entity, int runtimeSlot)
         {
-            _runtimeSlots.SetRawRest(runtimeSlot, entity?.ItrRest?.CaptureState());
+            entity?.ItrRest?.Unbind(false);
+            if (entity != null &&
+                object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(runtimeSlot), entity))
+            {
+                _runtimeSlots.Release(runtimeSlot, entity);
+            }
+            entity?.SetRuntimeSlotIndex(-1);
         }
 
-        internal void RestoreStageSpawnRestState(int runtimeSlot, LF2Entity entity)
+        internal bool RestoreStageSpawnRestState(int runtimeSlot, LF2Entity entity)
         {
             if (!_runtimeSlots.IsAddressable(runtimeSlot) ||
                 entity?.Runtime == null ||
                 entity.Runtime.SlotIndex != runtimeSlot ||
                 entity.Runtime.SpawnSemantic != (int)ReleaseSpawnSemantic.StageSpawnAt)
             {
-                return;
+                return false;
             }
 
-            entity.ItrRest?.RestoreState(_runtimeSlots.GetRawRest(runtimeSlot));
-            _runtimeSlots.SetRawRest(runtimeSlot, null);
+            return entity.ItrRest != null &&
+                   entity.ItrRest.Bind(_runtimeRestStore, runtimeSlot, false);
         }
 
         internal int GetRawRestArest(int runtimeSlot)
         {
-            return _runtimeSlots.GetRawRest(runtimeSlot)?.Arest ?? 0;
+            return _runtimeRestStore.GetARest(runtimeSlot);
         }
 
         internal int GetRawRestVrest(int victimSlot, int attackerSlot)
         {
-            if (!_runtimeSlots.IsAddressable(victimSlot) ||
-                !_runtimeSlots.IsAddressable(attackerSlot))
-            {
-                return 0;
-            }
-
-            LF2ItrRestTracker.StateSnapshot snapshot = _runtimeSlots.GetRawRest(victimSlot);
-            if (snapshot?.VrestByAttacker == null ||
-                !snapshot.VrestByAttacker.TryGetValue(attackerSlot, out int value))
-            {
-                return 0;
-            }
-
-            return value;
+            return _runtimeRestStore.GetVRest(victimSlot, attackerSlot);
         }
 
         public int ObjectCount

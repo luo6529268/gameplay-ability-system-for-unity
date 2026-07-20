@@ -14,33 +14,16 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
-        internal void ResetCooldownsForRuntimeSlot(int runtimeSlot, LF2Entity occupant)
+        internal bool ResetCooldownsForRuntimeSlot(int runtimeSlot, LF2Entity occupant)
         {
             if (runtimeSlot < 0 || runtimeSlot >= RuntimeSlotCapacity)
-                return;
+                return false;
 
-            _runtimeSlots.SetRawRest(runtimeSlot, null);
-            for (int victimSlot = 0; victimSlot < _runtimeSlots.LogicalCapacity; victimSlot++)
-                _runtimeSlots.GetRawRest(victimSlot)?.VrestByAttacker?.Remove(runtimeSlot);
-
+            if (!_runtimeRestStore.ResetSlot(runtimeSlot))
+                return false;
             occupant?.ItrRest?.Reset();
-
-            List<int> bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null)
-                return;
-
-            for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
-            {
-                int key = bucketKeys[keyIndex];
-                if (!_buckets.TryGetValue(key, out Bucket bucket))
-                    continue;
-
-                for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
-                {
-                    if (bucket.items[itemIndex] is LF2Entity entity && entity != occupant)
-                        entity.ItrRest?.RemoveVrest(runtimeSlot);
-                }
-            }
+            return occupant?.ItrRest == null ||
+                   occupant.ItrRest.Bind(_runtimeRestStore, runtimeSlot, false);
         }
 
         private void ForEachEntityByRuntimeSlot(System.Action<LF2Entity> action)

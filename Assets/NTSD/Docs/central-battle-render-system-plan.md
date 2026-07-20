@@ -2,12 +2,12 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认；R1-R2C-4 runtime 容量阶段、B0 shadow Loose Quadtree、B1 `RuntimeRestStore` 与 B1.1 optional facade 基础已实施并完成代码层验证，其余阶段未实施。
-- **代码状态**：生产 Profile、分页 slot/generation、B0 shadow pair 诊断、B1 分页/稀疏 ARest/VRest store，以及 B1.1 optional `LF2ItrRestTracker` facade + exclusive victim-row lease 已落地；facade 仍未 production-bound。生产 registration/release/reset 接线、碰撞 pair tick 解耦、parity 接入、正式 broadphase 切换与集中式渲染未落地。
-- **验证状态**：R1-R2C-4、B0、B1 与 B1.1 均已有 fresh Unity 编译、完整 `BattleRuntimeSelfCheck` PASS 与 architect final review PASS/no blocker。尚未完成 B1.1 生产绑定、Play Mode、扩展 replay/checksum schema、正式 broadphase 性能验收或集中式渲染验收。
+- **状态**：方案已确认；R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施和验证；其余阶段未实施。
+- **代码状态**：B1.2 已接入 `SimulationWorld` owned store 并删除 `RuntimeSlotTable.RawRest`；Stage rejected bind 完整回收，`ReleaseRuntimeSlot` 的 bool 事务结果现传播到全部注销/待销毁调用链，错槽拒绝不再造成半注销。
+- **验证状态**：B1.2 已达到代码实施完成、编译通过、完整 `BattleRuntimeSelfCheck` PASS、architect final review PASS/no blocker。该结论不包含 Play Mode、collision pair tick 解耦或 Extended parity schema。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
 - **平台 Profile 说明**：生产解析优先级固定为“命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认值”；平台宏只提供默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。设备能力降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施边界**：B1.1 只提供可选 `LF2ItrRestTracker` facade，通过 exclusive victim-row lease 防止同一 victim row 被多个 facade 同时拥有；现有生产 world 尚未绑定该 facade。下一批才接 registration/release/reset，并必须保留 ordinary registration/reset 清 rest 与 `StageSpawnAt` 复用槽 retention 的既有差异语义。碰撞 pair tick 解耦、parity integration、正式 broadphase 切换与集中式渲染仍待后续批次。
+- **实施边界**：B1.2 保持 ordinary claim `ResetSlot + Bind(false)`、release 保留 store 并解绑、`StageSpawnAt` post-Initialize retention、world reset/grow 同步与 parity fallback 直读 store。第三个审查 blocker 已通过 bool 事务传播关闭：任何 runtime-slot release 拒绝都会阻止后续 bucket/slot/lease/entity 半注销。collision pair tick 解耦仍未实施；T8 与本批无关。
 
 ### 2026-07-20 R1 第一批实施记录
 
@@ -115,7 +115,7 @@ B0 fresh 验证：相关源码时间不晚于 `2026-07-20 16:14:10` < Unity `Ass
 | 槽位清理 | **已实施 / 已验证** | `ResetSlot(slot)` 同时清该槽 ARest、VRest victim row 与 attacker column，防止槽复用继承旧 rest |
 | 生命周期与扩容 | **已实施 / 已验证** | 支持 `GrowTo`、全局 reset、排序后的 diagnostics/snapshot，以及 snapshot restore；增长保持既有稀疏状态 |
 | 差分验证 | **已验证** | 2,000 次随机操作与 dense reference model 逐步 differential，对定向读写、清零移除、slot reset、grow/reset 与 snapshot restore 进行比较 |
-| 生产接线 | **未实施 / 未启用** | 当前 `LF2ItrRestTracker` facade/consumer 尚未迁移；collision pair tick 解耦、parity integration 与正式 quadtree switch 仍 pending |
+| 生产接线 | **B1 时未实施；已由 B1.2 后续接入** | facade lifecycle 与 parity fallback 已由 B1.2 接入；collision pair tick 解耦与正式 quadtree switch 仍 pending |
 
 B1 fresh 验证：相关源码时间 `2026-07-20 16:31:32` < Unity `Assembly-CSharp.dll` `16:36:38` < 完整 `BattleRuntimeSelfCheck` 结果 `16:37:13` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` 为 **0 errors**；architect final review **PASS**。这些证据只验证纯数据 store 契约，不代表生产 VRest/ARest owner 已迁移，也不代表 pair tick 已与 collision broadphase 解耦。
 
@@ -129,13 +129,32 @@ B1 fresh 验证：相关源码时间 `2026-07-20 16:31:32` < Unity `Assembly-CSh
 | state import 原子性 | **已修复 / 已验证** | architect 首轮发现 `ReplaceVictimState` 在 mixed-invalid attacker 输入下可能先写入部分合法项再失败；现已先完整预验证，之后原子替换，失败时原状态不变 |
 | failed-import 回归 | **已验证** | direct `ReplaceVictimState` 与 facade `Bind` 两条路径均覆盖 mixed-invalid 输入，并断言失败前后的 ARest/VRest 状态完全一致 |
 | 非阻塞补强 | **可后续补充** | invalid bound `RestoreState` 的单独断言尚可增加；该路径复用已验证的 atomic replace 入口，不构成当前 blocker |
-| 下一批生产接线 | **未实施 / 未启用** | registration、release、world reset 尚未绑定；必须分别保留 ordinary registration/reset 的 rest 清理与 `StageSpawnAt` 复用槽 retention |
+| 下一批生产接线 | **B1.1 时未实施；已由 B1.2 后续接入** | registration、release、world reset 已按 ordinary 清理与 `StageSpawnAt` retention 分流接入 |
 
-B1.1 修正后 fresh 验证：复跑 `dotnet build Assembly-CSharp.csproj` 为 **0 errors / 18 existing warnings**；相关源码时间 `2026-07-20 17:34:22` < Unity `Assembly-CSharp.dll` `17:36:49` < 完整 `BattleRuntimeSelfCheck` 结果 `17:39:07` **PASS**；architect final review **PASS / no blocker**。这些证据仍不代表 facade 已 production-bound。
+B1.1 修正后 fresh 验证：复跑 `dotnet build Assembly-CSharp.csproj` 为 **0 errors / 18 existing warnings**；相关源码时间 `2026-07-20 17:34:22` < Unity `Assembly-CSharp.dll` `17:36:49` < 完整 `BattleRuntimeSelfCheck` 结果 `17:39:07` **PASS**；architect final review **PASS / no blocker**。该批证据本身不代表 production-bound；后续绑定由 B1.2 单独实现和验证。
+
+### 2026-07-20 B1.2 production lifecycle binding 记录（已验证 / architect final PASS）
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| store ownership | **已实施 / self-check verified** | `SimulationWorld` 独占 `RuntimeRestStore`，store 生命周期随 world 创建、reset 与 grow 同步 |
+| ordinary claim | **已实施 / self-check verified** | claim 成功后先 `ResetSlot(slot)`，再以 `Bind(..., importLegacyState: false)` 绑定 tracker |
+| release | **第三个 blocker 已修 / self-check verified** | `ReleaseRuntimeSlot` 返回 bool 并事务传播到全部注销/待销毁调用链；错槽拒绝时不继续半注销，正常 release 保留 store 并解绑 |
+| `StageSpawnAt` | **blocker 已修 / self-check verified** | rejected bind 走共享完整 pool 回收；真实 pool counts、lease、slot 与 `KillStats` 均有回归断言 |
+| public `Unregister` 故障回归 | **已验证** | 通过公开 `Unregister` 触发错槽 release 拒绝，断言完整 registration context（bucket/slot/lease/store/entity）保持不变 |
+| 单一 rest 真值 | **已实施 / self-check verified** | 删除 `RuntimeSlotTable.RawRest`；parity fallback 直接读取 `RuntimeRestStore` |
+| world reset/grow | **已实施 / self-check verified** | world reset/grow 与 store 同步 |
+| 尚未关闭 | **未实施 / 未验证** | collision pair tick 解耦仍未实施；本批不切换正式 broadphase，且与 T8 无关 |
+
+B1.2 初版证据：`dotnet build` **0 errors**；源码 `2026-07-20 18:11:41` < Unity DLL `18:12:23` < full self-check `18:13:00` **PASS**。architect final review 随后发现上述 2 个 blocker；该证据现只说明初版可编译且旧断言通过，**不构成 B1.2 完成/验证证据**。
+
+B1.2 第一轮 blocker 修复证据：`dotnet build` **0 errors**；源码 `18:21:20` < Unity DLL `18:21:58` < self-check `18:22:59` **PASS**。architect 第二轮随后发现 release 拒绝未向 `Unregister` 调用链传播、可能半注销；因此该 PASS 同样是**非完成证据**。
+
+B1.2 最终 fresh 证据：`dotnet build` **0 errors**；相关源码 `2026-07-20 18:31:25` < Unity DLL `18:33:58` < full self-check `18:34:54` **PASS**。公开 `Unregister` 故障矩阵验证完整注册上下文不变；architect final review **PASS / no blocker**。
 
 ## Runtime 容量与空间索引阶段决策
 
-**状态：方案已确认 / R1-R2C-4 runtime 容量、B0 shadow Loose Quadtree、B1 rest-store 与 B1.1 optional facade 基础已实施并验证 / 其余未实施。** 本节不改变 C# 权威战斗逻辑；纯数据 `RuntimeRestStore` 与 exclusive victim-row lease 已落地，但 facade 未 production-bound。production registration/release/reset、collision pair tick 解耦、parity integration、正式 quadtree switch、增量更新、Extended replay/checksum schema、内存预算和目标设备参数仍需后续验证。
+**状态：B1-B1.2 已完成代码层实施 / 编译 / full self-check / architect final review。** collision pair tick 解耦、正式 quadtree switch、增量更新与 Extended parity/replay/checksum schema 仍需后续实现和验证。
 
 ### RuntimeSlot 容量模式
 
@@ -201,7 +220,7 @@ B1.1 修正后 fresh 验证：复跑 `dotnet build Assembly-CSharp.csproj` 为 *
 
 ### VRest 与 Parity 边界
 
-**当前状态：B1 store 与 B1.1 optional facade 已实施 / 生产 owner 与 parity 尚未接线。** `RuntimeRestStore` 的分页 ARest、定向稀疏 VRest、slot 清理、增长和 snapshot 契约已验证；optional `LF2ItrRestTracker` facade 具备 exclusive victim-row lease，但当前生产 world 仍未绑定它。
+**当前状态：B1.2 production lifecycle 已验证 / pair tick 解耦与 Extended parity schema 未实施。** Stage rejected bind 完整回收、错槽 release 拒绝及 bool 事务传播均有专项 self-check；未执行本批 Play Mode。
 
 - VRest/ARest 的逻辑访问与 broadphase 解耦。空间索引减少候选枚举，不负责 VRest 的递减或过期；VRest 计时必须遍历自己的稀疏活动集合/到期结构，不能因 broadphase 未返回远距离 pair 而停止递减。
 - 详细 parity snapshot（完整 slot、ARest/VRest、哈希和诊断字段）退出生产热路径，只在 `Authority400` 对拍、自检、回放或显式诊断模式中生成；生产 tick 不为 parity 预先扫描整页/全容量数据。
@@ -499,4 +518,4 @@ CentralOnly
 
 已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；B0 先以 X/Z Loose Quadtree shadow 诊断对比，正式 broadphase 切换另行验收；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，设备能力只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。
 
-截至 2026-07-20，**R1-R2C-4 runtime 容量阶段、B0 shadow Loose Quadtree、B1 `RuntimeRestStore` 与 B1.1 optional facade 基础**已达到“已实施 / 编译通过 / self-check 通过 / architect review 通过”。分页惰性 ARest、定向稀疏正值 VRest、row/column slot reset、GrowTo/reset、排序 snapshot/restore、2,000 次 dense differential、exclusive victim-row lease 与原子 import 均已落地。facade 尚未 production-bound；registration/release/world reset 接线、ordinary reset 与 `StageSpawnAt` retention 分流、collision pair tick 解耦、parity integration、正式 broadphase switch、增量更新、Extended replay/checksum schema 及集中式渲染仍未实施。invalid bound `RestoreState` 独立断言属于可后续补强的非阻塞项。
+截至 2026-07-20，R1-R2C-4、B0 与 B1-B1.2 已完成代码层实施和验证。B1.2 初轮审查发现 Stage pool 回收不完整与错槽 release 未拒绝，次轮发现 release 拒绝未传播，末轮复核 PASS/no blocker；partial import 属于 B1.1，不计入 B1.2 三轮审查。`18:13:00` 与 `18:22:59` 保留为非完成历史证据，最终 source `18:31:25` < DLL `18:33:58` < result `18:34:54` **PASS**，dotnet **0 errors**。本批没有 Play Mode；collision pair tick 解耦、Extended parity schema 与正式 broadphase switch 仍是后续任务。T8 与该阶段无关。

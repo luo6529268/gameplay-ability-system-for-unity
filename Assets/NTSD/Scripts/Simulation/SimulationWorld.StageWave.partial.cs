@@ -489,7 +489,11 @@ namespace NTSD.Simulation
             if (entity.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return -1;
 
-            RestoreStageSpawnRestState(requiredRuntimeSlot, entity);
+            if (!RestoreStageSpawnRestState(requiredRuntimeSlot, entity))
+            {
+                LF2ObjectPointFactory.ReleaseRejectedSpawn(entity.Renderer, entity);
+                return -1;
+            }
             entity.SetPos(spawnX, spawn.Y, spawnZ);
             entity.Runtime?.SyncIntegerPosition();
             entity.SwitchDir(facingDir);

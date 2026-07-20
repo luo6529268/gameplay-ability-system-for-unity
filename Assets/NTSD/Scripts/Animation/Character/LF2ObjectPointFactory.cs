@@ -625,9 +625,17 @@ namespace NTSD.Animation
             spawned.ItrRest?.SetVrest(linkedSlot, 10);
         }
 
-        private static void ReleaseRejectedSpawn(LF2ObjectRenderer renderer, ILF2Object logicObject)
+        internal static void ReleaseRejectedSpawn(LF2ObjectRenderer renderer, ILF2Object logicObject)
         {
-            LF2ObjectPool.Instance?.Release(renderer);
+            if (renderer != null)
+            {
+                LF2ObjectPool.Instance?.Release(renderer);
+            }
+            else if (logicObject is LF2Entity entity)
+            {
+                entity.UnregisterFromWorld();
+                entity.Reset();
+            }
             LF2ReferencePool.Instance?.Release(logicObject);
         }
 

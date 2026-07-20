@@ -95,6 +95,7 @@ namespace NTSD.Test
                 CheckPagedRuntimeSlotTableContracts();
                 CheckRuntimeRestStoreContracts();
                 CheckItrRestTrackerBindingContracts();
+                CheckProductionRuntimeRestStoreLifecycleContracts();
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
                 CheckLooseQuadtreeShadowBroadphaseContracts();
@@ -373,19 +374,14 @@ namespace NTSD.Test
                    !ReferenceEquals(authorityTable.GetRawRuntime(255), entity255.Runtime),
                 "runtime slot entries must own independent raw runtime storage");
 
-            LF2ItrRestTracker.StateSnapshot restSnapshot = entity255.ItrRest.CaptureState();
-            Expect(authorityTable.SetRawRest(255, restSnapshot) &&
-                   ReferenceEquals(authorityTable.GetRawRest(255), restSnapshot),
-                "runtime slot entries must retain raw itr-rest state");
             Expect(!authorityTable.Release(255, entity256) &&
                    ReferenceEquals(authorityTable.GetCurrentOccupant(255), entity255) &&
                    authorityTable.ClaimedCount == 3,
                 "runtime slot table must reject a stale lifecycle release for a different occupant");
             Expect(authorityTable.Release(handle255) &&
                    authorityTable.ClaimedCount == 2 &&
-                   !authorityTable.TryResolve(handle255, out _) &&
-                   ReferenceEquals(authorityTable.GetRawRest(255), restSnapshot),
-                "released runtime entity handles must stop resolving while raw rest survives release");
+                   !authorityTable.TryResolve(handle255, out _),
+                "released runtime entity handles must stop resolving");
 
             var replacement255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             Expect(authorityTable.AllocateLowest(255, replacement255, out RuntimeEntityHandle replacementHandle) == 255 &&
@@ -400,9 +396,8 @@ namespace NTSD.Test
             authorityTable.Reset();
             Expect(authorityTable.ClaimedCount == 0 &&
                    authorityTable.MaterializedPageCount == 2 &&
-                   !authorityTable.TryResolve(replacementHandle, out _) &&
-                   authorityTable.GetRawRest(255) == null,
-                "runtime slot table reset must clear claims and raw rest without losing lazy pages");
+                   !authorityTable.TryResolve(replacementHandle, out _),
+                "runtime slot table reset must clear claims without losing lazy pages");
             var afterReset255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             Expect(authorityTable.TryClaim(255, afterReset255, out RuntimeEntityHandle afterResetHandle) &&
                    afterResetHandle != replacementHandle &&
@@ -445,11 +440,7 @@ namespace NTSD.Test
                 "runtime slot table growth fixture must retain released low-slot holes");
             NTSDEntityRuntime growingRawRuntime255 = growingTable.GetRawRuntime(255);
             NTSDEntityRuntime growingRawRuntime511 = growingTable.GetRawRuntime(511);
-            LF2ItrRestTracker.StateSnapshot growingRest255 = growingEntity255.ItrRest.CaptureState();
-            LF2ItrRestTracker.StateSnapshot growingRest511 = growingEntity511.ItrRest.CaptureState();
-            Expect(growingTable.SetRawRest(255, growingRest255) &&
-                   growingTable.SetRawRest(511, growingRest511) &&
-                   growingTable.MaterializedPageCount == 2,
+            Expect(growingTable.MaterializedPageCount == 2,
                 "runtime slot table growth fixture must materialize only its original pages");
             Expect(growingTable.GrowTo(768) &&
                    growingTable.LogicalCapacity == 768 &&
@@ -459,10 +450,8 @@ namespace NTSD.Test
                    growingTable.TryResolve(growingHandle511, out LF2Entity grownResolved511) &&
                    ReferenceEquals(grownResolved511, growingEntity511) &&
                    ReferenceEquals(growingTable.GetRawRuntime(255), growingRawRuntime255) &&
-                   ReferenceEquals(growingTable.GetRawRuntime(511), growingRawRuntime511) &&
-                   ReferenceEquals(growingTable.GetRawRest(255), growingRest255) &&
-                   ReferenceEquals(growingTable.GetRawRest(511), growingRest511),
-                "runtime slot table growth must preserve occupants, handles, raw runtime, raw rest, and page objects");
+                   ReferenceEquals(growingTable.GetRawRuntime(511), growingRawRuntime511),
+                "runtime slot table growth must preserve occupants, handles, raw runtime, and page objects");
             var grownHoleEntity51 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             var grownHoleEntity299 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             var grownNewEntity512 = new FlowSelfCheckEntity(LF2ObjectType.Character);
@@ -910,6 +899,7 @@ namespace NTSD.Test
 
             string scriptsRoot = Path.Combine(Application.dataPath, "NTSD", "Scripts");
             string[] productionScripts = Directory.GetFiles(scriptsRoot, "*.cs", SearchOption.AllDirectories);
+            int productionBindCallCount = 0;
             for (int i = 0; i < productionScripts.Length; i++)
             {
                 string path = productionScripts[i].Replace('\\', '/');
@@ -920,10 +910,153 @@ namespace NTSD.Test
                 }
 
                 string source = File.ReadAllText(productionScripts[i]);
-                Expect(!source.Contains("ItrRest.Bind(", StringComparison.Ordinal) &&
-                       !source.Contains("ItrRest?.Bind(", StringComparison.Ordinal),
-                    $"B1.1 facade must remain opt-in; production Bind call found in {path}");
+                System.Text.RegularExpressions.MatchCollection bindCalls =
+                    System.Text.RegularExpressions.Regex.Matches(
+                        source,
+                        @"ItrRest(?:\?)?\.Bind\s*\([^)]*\)",
+                        System.Text.RegularExpressions.RegexOptions.Singleline);
+                for (int callIndex = 0; callIndex < bindCalls.Count; callIndex++)
+                {
+                    productionBindCallCount++;
+                    string call = bindCalls[callIndex].Value;
+                    bool allowedOwner = path.EndsWith(
+                                            "/SimulationWorld.Registry.partial.cs",
+                                            StringComparison.Ordinal) ||
+                                        path.EndsWith(
+                                            "/SimulationWorld.QueryAndLinks.partial.cs",
+                                            StringComparison.Ordinal);
+                    Expect(allowedOwner && call.Contains("_runtimeRestStore", StringComparison.Ordinal) &&
+                           System.Text.RegularExpressions.Regex.IsMatch(call, @",\s*false\s*\)$"),
+                        $"B1.2 production Bind must be store-first and owned by the SimulationWorld lifecycle: {path}: {call}");
+                }
             }
+            Expect(productionBindCallCount == 3,
+                "B1.2 production binding must remain limited to ordinary reset/rebind, release rollback, and StageSpawnAt restore");
+        }
+
+        private static void CheckProductionRuntimeRestStoreLifecycleContracts()
+        {
+            var world = new SimulationWorld();
+            var character = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var weapon = new FlowSelfCheckEntity(LF2ObjectType.LightWeapon);
+            var special = new FlowSelfCheckEntity(LF2ObjectType.SpecialAttack);
+            var other = new FlowSelfCheckEntity(LF2ObjectType.Other);
+            character.SetRequiredRuntimeSlot(0);
+            weapon.SetRequiredRuntimeSlot(50);
+            special.SetRequiredRuntimeSlot(51);
+            other.SetRequiredRuntimeSlot(52);
+            world.Register(character);
+            world.Register(weapon);
+            world.Register(special);
+            world.Register(other);
+
+            RuntimeRestStore store = world.RuntimeRestStoreForServices;
+            Expect(store != null && store.LogicalCapacity == 400 &&
+                   character.ItrRest.IsBound && character.ItrRest.BoundVictimSlot == 0 &&
+                   weapon.ItrRest.IsBound && weapon.ItrRest.BoundVictimSlot == 50 &&
+                   special.ItrRest.IsBound && special.ItrRest.BoundVictimSlot == 51 &&
+                   other.ItrRest.IsBound && other.ItrRest.BoundVictimSlot == 52,
+                "production registration must bind character, weapon, special-attack, and other rest trackers to the world store");
+
+            character.ItrRest.Arest = 7;
+            character.ItrRest.SetVrest(50, 9);
+            weapon.ItrRest.SetVrest(0, 11);
+            world.Unregister(character);
+            Expect(!character.ItrRest.IsBound && character.Runtime.SlotIndex == -1 &&
+                   world.GetRawRestArest(0) == 7 && world.GetRawRestVrest(0, 50) == 9 &&
+                   world.GetRawRestVrest(50, 0) == 11,
+                "slot release must unbind the occupant while preserving inactive ARest and both VRest directions in the world store");
+
+            var replacement = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            replacement.SetRequiredRuntimeSlot(0);
+            replacement.ItrRest.Arest = 13;
+            replacement.ItrRest.SetVrest(50, 15);
+            world.Register(replacement);
+            Expect(replacement.ItrRest.IsBound && replacement.ItrRest.BoundVictimSlot == 0 &&
+                   replacement.ItrRest.Arest == 0 && replacement.ItrRest.GetVrest(50) == 0 &&
+                   weapon.ItrRest.GetVrest(0) == 0 && store.ARestEntryCount == 0 &&
+                   store.GetVRest(0, 50) == 0 && store.GetVRest(50, 0) == 0,
+                "ordinary same-slot registration must clear owner ARest, victim row, and peer attacker column before rebinding");
+
+            world.ResetRuntimeState();
+            Expect(world.ObjectCount == 0 && world.ClaimedRuntimeSlotCountForServices == 0 &&
+                   store.ARestEntryCount == 0 && store.VRestEntryCount == 0 &&
+                   store.VRestRowCount == 0 && !replacement.ItrRest.IsBound &&
+                   !weapon.ItrRest.IsBound && !special.ItrRest.IsBound && !other.ItrRest.IsBound,
+                "world reset must unbind every registered tracker and clear the centralized rest store");
+
+            var growingWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var existingHigh = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            existingHigh.SetRequiredRuntimeSlot(511);
+            growingWorld.Register(existingHigh);
+            existingHigh.ItrRest.Arest = 6;
+            existingHigh.ItrRest.SetVrest(1, 8);
+            var grownTail = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            grownTail.SetRequiredRuntimeSlot(700);
+            growingWorld.Register(grownTail);
+            Expect(growingWorld.RuntimeSlotCapacity == 768 &&
+                   growingWorld.RuntimeRestStoreForServices.LogicalCapacity == 768 &&
+                   existingHigh.ItrRest.IsBound && existingHigh.ItrRest.BoundVictimSlot == 511 &&
+                   existingHigh.ItrRest.Arest == 6 && existingHigh.ItrRest.GetVrest(1) == 8 &&
+                   grownTail.ItrRest.IsBound && grownTail.ItrRest.BoundVictimSlot == 700,
+                "desktop slot growth must grow the world rest store, preserve existing leases, and bind the new high slot");
+
+            var rollbackWorld = new SimulationWorld();
+            RuntimeRestStore rollbackStore = rollbackWorld.RuntimeRestStoreForServices;
+            Expect(rollbackStore.TryAcquireBinding(20, out RuntimeRestBindingHandle blockingLease),
+                "stage rollback fixture must reserve a conflicting store lease");
+            var rejectedStage = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            rejectedStage.SetRequiredRuntimeSlot(20);
+            rejectedStage.Runtime.SpawnSemantic = (int)ReleaseSpawnSemantic.StageSpawnAt;
+            rollbackWorld.Register(rejectedStage);
+            Expect(rejectedStage.Runtime.SlotIndex == 20 && !rejectedStage.ItrRest.IsBound &&
+                   !rollbackWorld.RestoreStageSpawnRestState(20, rejectedStage),
+                "StageSpawnAt registration must defer binding and surface a conflicting post-Initialize lease");
+            rollbackWorld.Unregister(rejectedStage);
+            Expect(rejectedStage.Runtime.SlotIndex == -1 &&
+                   rollbackWorld.ClaimedRuntimeSlotCountForServices == 0 &&
+                   rollbackWorld.ObjectCount == 0 && rollbackStore.IsBindingValid(blockingLease),
+                "failed StageSpawnAt binding must support complete slot/bucket rollback without stealing the existing lease");
+            rollbackStore.ReleaseBinding(blockingLease);
+
+            var mismatchWorld = new SimulationWorld();
+            var mismatched = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            mismatched.SetRequiredRuntimeSlot(20);
+            mismatchWorld.Register(mismatched);
+            RuntimeRestStore mismatchStore = mismatchWorld.RuntimeRestStoreForServices;
+            mismatchStore.SetARest(20, 5);
+            mismatchStore.SetVRest(20, 3, 7);
+            Expect(mismatched.ItrRest.Unbind(false) &&
+                   mismatched.ItrRest.Bind(mismatchStore, 21, false),
+                "mismatched release fixture must move only the tracker lease away from its occupied runtime slot");
+            mismatched.ItrRest.Arest = 9;
+            mismatchWorld.Unregister(mismatched);
+            Expect(mismatched.Runtime.SlotIndex == 20 &&
+                   ReferenceEquals(mismatchWorld.FindEntityByRuntimeSlotIncludingPending(20), mismatched) &&
+                   ReferenceEquals(mismatchWorld.FindEntityByRuntimeSlotForQuery(20), mismatched) &&
+                   mismatchWorld.ClaimedRuntimeSlotCountForServices == 1 &&
+                   mismatchWorld.ObjectCount == 1 && mismatched.RemovedCount == 0 &&
+                   ReferenceEquals(mismatched.Match, mismatchWorld) &&
+                   mismatched.ItrRest.IsBound && mismatched.ItrRest.BoundVictimSlot == 21 &&
+                   mismatchStore.GetARest(20) == 5 && mismatchStore.GetVRest(20, 3) == 7 &&
+                   mismatchStore.GetARest(21) == 9,
+                "public unregister must reject a mismatched tracker lease without changing bucket, context, claim, slot index, lease, or rest state");
+            mismatched.ItrRest.Unbind(false);
+            Expect(mismatched.ItrRest.Bind(mismatchStore, 20, false),
+                "mismatched release fixture must restore the owner binding for cleanup");
+            mismatchWorld.Unregister(mismatched);
+
+            var pendingWorld = new SimulationWorld();
+            var pendingReuse = new PendingRestReuseSelfCheckEntity();
+            pendingReuse.SetRequiredRuntimeSlot(50);
+            pendingWorld.Register(pendingReuse);
+            pendingReuse.ItrRest.Arest = 9;
+            pendingWorld.LateEntityUpdateAll(1);
+            Expect(pendingReuse.LateTickCount == 1 && pendingReuse.Runtime.SlotIndex == 50 &&
+                   pendingReuse.ItrRest.IsBound && pendingReuse.ItrRest.BoundVictimSlot == 50 &&
+                   pendingReuse.ItrRest.Arest == 0 && pendingWorld.ObjectCount == 1 &&
+                   pendingWorld.ClaimedRuntimeSlotCountForServices == 1,
+                "pending unregister/re-register must release the old lease in-stack and bind the reused slot without stale rest");
         }
 
         private static void CheckExtendedSimulationWorldCapacityContracts()
@@ -17239,6 +17372,31 @@ namespace NTSD.Test
                     Expect(ordinary.Runtime.SlotIndex == 20 && ordinary.ItrRest.Arest == 0 &&
                            ordinary.ItrRest.GetVrest(21) == 0 && peer.ItrRest.GetVrest(20) == 0,
                         "BATTLE-AUDIT7-F5: ordinary registration semantic must still clear occupant ARest and both VRest directions");
+
+                    int rendererCountBeforeRejectedStage = GetObjectPoolActiveCount();
+                    int logicCountBeforeRejectedStage = LF2ReferencePool.Instance.ActiveCount;
+                    var rejectedStageWorld = new SimulationWorld();
+                    rejectedStageWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
+                    RuntimeRestStore rejectedStageStore = rejectedStageWorld.RuntimeRestStoreForServices;
+                    Expect(rejectedStageStore.TryAcquireBinding(
+                               20,
+                               out RuntimeRestBindingHandle rejectedStageLease),
+                        "BATTLE-AUDIT7-F5: rejected StageSpawnAt fixture must reserve the target rest lease");
+                    using (new TemporarySimulationDriverWorld(rejectedStageWorld))
+                    {
+                        int rejectedStageSlot = (int)spawnMethod.Invoke(
+                            rejectedStageWorld,
+                            new object[] { spawn });
+                        Expect(rejectedStageSlot == -1 &&
+                               rejectedStageWorld.FindEntityByRuntimeSlotIncludingPending(20) == null &&
+                               rejectedStageWorld.ClaimedRuntimeSlotCountForServices == 0 &&
+                               rejectedStageStore.IsBindingValid(rejectedStageLease) &&
+                               GetObjectPoolActiveCount() == rendererCountBeforeRejectedStage &&
+                               LF2ReferencePool.Instance.ActiveCount == logicCountBeforeRejectedStage &&
+                               Array.TrueForAll(rejectedStageWorld.KillStats, value => value == 0),
+                            "BATTLE-AUDIT7-F5: post-Initialize bind failure must fully return renderer/logic pools without death side effects");
+                    }
+                    rejectedStageStore.ReleaseBinding(rejectedStageLease);
                 }
             }
             finally
@@ -18618,6 +18776,7 @@ namespace NTSD.Test
             private readonly LF2ObjectType objectType;
 
             public override LF2ObjectType ObjectTypeEnum => objectType;
+            public int RemovedCount { get; private set; }
 
             public FlowSelfCheckEntity(LF2ObjectType objectType)
             {
@@ -18644,6 +18803,12 @@ namespace NTSD.Test
             }
 
             public override int GetCurrentDataObjectTypeForSimulation() => (int)objectType;
+
+            public override void OnRemoved(SimContext ctx)
+            {
+                RemovedCount++;
+                base.OnRemoved(ctx);
+            }
 
             public override void Reset() { }
 
@@ -20265,6 +20430,36 @@ namespace NTSD.Test
 
             public override void Reset() { }
 
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class PendingRestReuseSelfCheckEntity : LF2Entity
+        {
+            private bool reused;
+
+            public PendingRestReuseSelfCheckEntity()
+            {
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public int LateTickCount { get; private set; }
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                LateTickCount++;
+                if (reused)
+                    return;
+
+                reused = true;
+                Match.Unregister(this);
+                SetRequiredRuntimeSlot(50);
+                Match.Register(this);
+            }
+
+            public override void Reset() { }
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
         }
 
