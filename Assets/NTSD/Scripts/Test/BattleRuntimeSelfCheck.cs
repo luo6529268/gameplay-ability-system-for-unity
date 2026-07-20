@@ -94,6 +94,7 @@ namespace NTSD.Test
                 CheckRuntimeSlotAllocatorAndProfileContracts();
                 CheckPagedRuntimeSlotTableContracts();
                 CheckRuntimeRestStoreContracts();
+                CheckItrRestTrackerBindingContracts();
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
                 CheckLooseQuadtreeShadowBroadphaseContracts();
@@ -664,6 +665,264 @@ namespace NTSD.Test
                        differential.VRestEntryCount == expectedVRestCount &&
                        differential.VRestRowCount == expectedVRestRowCount,
                     $"runtime rest diagnostic counts mismatch after operation {operationIndex}");
+            }
+        }
+
+        private static void CheckItrRestTrackerBindingContracts()
+        {
+            var local = new LF2ItrRestTracker
+            {
+                Arest = 2,
+            };
+            local.SetVrest(3, 2);
+            local.Tick();
+            Expect(!local.IsBound && local.BoundVictimSlot == -1 && local.Arest == 1 &&
+                   local.GetVrest(3) == 1 && local.HasVrest(3) && !local.VrestTest(3),
+                "unbound LF2ItrRestTracker behavior must remain local and compatible");
+            local.Tick();
+            Expect(local.Arest == 0 && local.GetVrest(3) == 0 && !local.HasVrest(3) &&
+                   local.VrestTest(3),
+                "local tracker tick must remove VRest entries when they reach zero");
+
+            var importStore = new RuntimeRestStore(32);
+            importStore.SetARest(5, 19);
+            importStore.SetVRest(5, 9, 17);
+            importStore.SetVRest(7, 5, 13);
+            var importing = new LF2ItrRestTracker
+            {
+                Arest = 4,
+            };
+            importing.SetVrest(2, 6);
+            Expect(importing.Bind(importStore, 5, true) && importing.IsBound &&
+                   importing.BoundVictimSlot == 5 && importStore.GetARest(5) == 4 &&
+                   importStore.GetVRest(5, 2) == 6 && importStore.GetVRest(5, 9) == 0 &&
+                   importStore.GetVRest(7, 5) == 13,
+                "Bind(importLocal:true) must replace only the bound ARest/victim row and preserve peer columns");
+            Expect(importing.Bind(importStore, 5, false),
+                "binding the same tracker to the same store/slot must be an idempotent success");
+
+            var excluded = new LF2ItrRestTracker();
+            Expect(!excluded.Bind(importStore, 5, false) &&
+                   !importing.Bind(importStore, 6, false),
+                "runtime rest bindings must be exclusive per victim slot and one slot per tracker");
+
+            importing.Reset();
+            Expect(importStore.GetARest(5) == 0 && importStore.GetVRest(5, 2) == 0 &&
+                   importStore.GetVRest(7, 5) == 13 && importing.Unbind(false) &&
+                   importing.Arest == 4 && importing.GetVrest(2) == 6,
+                "bound Reset must clear only the store owner state while Unbind(false) restores the pre-bind local fallback");
+
+            var storeFirst = new RuntimeRestStore(32);
+            storeFirst.SetARest(8, 11);
+            storeFirst.SetVRest(8, 2, 12);
+            var storeFirstTracker = new LF2ItrRestTracker
+            {
+                Arest = 3,
+            };
+            storeFirstTracker.SetVrest(4, 5);
+            Expect(storeFirstTracker.Bind(storeFirst, 8, false) &&
+                   storeFirstTracker.Arest == 11 && storeFirstTracker.GetVrest(2) == 12 &&
+                   storeFirstTracker.GetVrest(4) == 0,
+                "Bind(importLocal:false) must expose existing store state without importing local fallback");
+            storeFirstTracker.Arest = 7;
+            storeFirstTracker.SetVrest(2, 6);
+            Expect(storeFirstTracker.Unbind(true) && !storeFirstTracker.IsBound &&
+                   storeFirstTracker.Arest == 7 && storeFirstTracker.GetVrest(2) == 6 &&
+                   storeFirstTracker.GetVrest(4) == 0,
+                "Unbind(true) must capture the current store owner state into local fallback");
+
+            var preserveLocalStore = new RuntimeRestStore(32);
+            preserveLocalStore.SetARest(9, 15);
+            preserveLocalStore.SetVRest(9, 1, 14);
+            var preserveLocal = new LF2ItrRestTracker
+            {
+                Arest = 5,
+            };
+            preserveLocal.SetVrest(3, 4);
+            Expect(preserveLocal.Bind(preserveLocalStore, 9, false),
+                "store-first tracker setup must bind successfully");
+            preserveLocal.Arest = 8;
+            preserveLocal.SetVrest(1, 7);
+            Expect(preserveLocal.Unbind(false) && preserveLocal.Arest == 5 &&
+                   preserveLocal.GetVrest(3) == 4 && preserveLocal.GetVrest(1) == 0,
+                "Unbind(false) must retain pre-bind local fallback instead of capturing store writes");
+
+            var leaseStore = new RuntimeRestStore(16);
+            Expect(leaseStore.TryAcquireBinding(3, out RuntimeRestBindingHandle firstLease) &&
+                   leaseStore.IsBindingValid(firstLease) &&
+                   !leaseStore.TryAcquireBinding(3, out _),
+                "runtime rest store must issue one exclusive token lease per victim slot");
+            RuntimeRestBindingHandle secondLease = default;
+            Expect(leaseStore.ReleaseBinding(firstLease) &&
+                   !leaseStore.IsBindingValid(firstLease) &&
+                   leaseStore.TryAcquireBinding(3, out secondLease) &&
+                   leaseStore.IsBindingValid(secondLease) && firstLease.Token != secondLease.Token,
+                "released slots must be reusable with a new token that rejects stale handles");
+            leaseStore.ReleaseBinding(secondLease);
+
+            var resetStore = new RuntimeRestStore(16);
+            var resetTracker = new LF2ItrRestTracker
+            {
+                Arest = 2,
+            };
+            resetTracker.SetVrest(4, 3);
+            resetStore.SetARest(6, 9);
+            resetStore.SetVRest(6, 4, 8);
+            Expect(resetTracker.Bind(resetStore, 6, false) && resetStore.ResetSlot(6) &&
+                   !resetTracker.IsBound && resetTracker.BoundVictimSlot == -1 &&
+                   resetTracker.Arest == 2 && resetTracker.GetVrest(4) == 3 &&
+                   resetStore.GetARest(6) == 0 && resetStore.GetVRest(6, 4) == 0,
+                "ResetSlot must invalidate the lease without overwriting the tracker's pre-bind local fallback");
+
+            var worldResetTracker = new LF2ItrRestTracker
+            {
+                Arest = 3,
+            };
+            resetStore.SetARest(7, 10);
+            Expect(worldResetTracker.Bind(resetStore, 7, false),
+                "world-reset lease fixture must bind successfully");
+            resetStore.ResetWorld();
+            Expect(!worldResetTracker.IsBound && worldResetTracker.Arest == 3 &&
+                   resetStore.GetARest(7) == 0,
+                "ResetWorld must invalidate every lease without leaking cleared store state into local fallback");
+
+            resetStore.SetARest(8, 12);
+            var restoreTracker = new LF2ItrRestTracker
+            {
+                Arest = 4,
+            };
+            Expect(restoreTracker.Bind(resetStore, 8, false),
+                "diagnostic-restore lease fixture must bind successfully");
+            RuntimeRestStore.DiagnosticSnapshot restoredSnapshot = resetStore.CaptureDiagnosticSnapshot();
+            resetStore.SetARest(8, 5);
+            Expect(resetStore.RestoreDiagnosticSnapshot(restoredSnapshot) &&
+                   !restoreTracker.IsBound && restoreTracker.Arest == 4 &&
+                   resetStore.GetARest(8) == 12,
+                "diagnostic restore must invalidate old leases while restoring captured store values");
+
+            var growingStore = new RuntimeRestStore(16);
+            var growingTracker = new LF2ItrRestTracker();
+            growingStore.SetARest(15, 6);
+            Expect(growingTracker.Bind(growingStore, 15, false) && growingStore.GrowTo(300) &&
+                   growingTracker.IsBound && growingTracker.BoundVictimSlot == 15 &&
+                   growingTracker.Arest == 6,
+                "GrowTo must preserve active binding tokens and bound state");
+            growingTracker.Unbind(false);
+
+            var snapshotSource = new LF2ItrRestTracker
+            {
+                Arest = 6,
+            };
+            snapshotSource.SetVrest(1, 8);
+            snapshotSource.SetVrest(4, 10);
+            LF2ItrRestTracker.StateSnapshot ownerSnapshot = snapshotSource.CaptureState();
+            var restoreStore = new RuntimeRestStore(16);
+            restoreStore.SetVRest(10, 5, 13);
+            restoreStore.SetVRest(5, 2, 9);
+            var boundRestore = new LF2ItrRestTracker
+            {
+                Arest = 2,
+            };
+            boundRestore.SetVrest(3, 3);
+            Expect(boundRestore.Bind(restoreStore, 5, false),
+                "bound restore fixture must bind successfully");
+            boundRestore.RestoreState(ownerSnapshot);
+            LF2ItrRestTracker.StateSnapshot capturedBound = boundRestore.CaptureState();
+            Expect(boundRestore.Arest == 6 && boundRestore.GetVrest(1) == 8 &&
+                   boundRestore.GetVrest(4) == 10 && boundRestore.GetVrest(2) == 0 &&
+                   restoreStore.GetVRest(10, 5) == 13 && capturedBound.Arest == 6 &&
+                   capturedBound.VrestByAttacker.Count == 2,
+                "bound Capture/Restore must replace only the owner row and preserve peer columns");
+            Expect(boundRestore.Unbind(false) && boundRestore.Arest == 2 &&
+                   boundRestore.GetVrest(3) == 3,
+                "bound RestoreState must not mutate the pre-bind local fallback");
+
+            var tickStore = new RuntimeRestStore(16);
+            var boundTick = new LF2ItrRestTracker();
+            var localTick = new LF2ItrRestTracker();
+            boundTick.Arest = 2;
+            boundTick.SetVrest(3, 2);
+            localTick.Arest = 2;
+            localTick.SetVrest(3, 2);
+            Expect(boundTick.Bind(tickStore, 5, true),
+                "bound tick fixture must import local state");
+            boundTick.Tick();
+            localTick.Tick();
+            Expect(boundTick.Arest == localTick.Arest &&
+                   boundTick.GetVrest(3) == localTick.GetVrest(3) &&
+                   tickStore.ARestEntryCount == 1 && tickStore.VRestEntryCount == 1,
+                "bound and local tracker ticks must produce equivalent positive cooldown state");
+            boundTick.Tick();
+            localTick.Tick();
+            Expect(boundTick.Arest == 0 && boundTick.GetVrest(3) == 0 &&
+                   localTick.Arest == 0 && localTick.GetVrest(3) == 0 &&
+                   tickStore.ARestEntryCount == 0 && tickStore.VRestEntryCount == 0 &&
+                   tickStore.VRestRowCount == 0,
+                "bound/local tick-to-zero must remove sparse entries and retain exact counters");
+            boundTick.Unbind(false);
+
+            var invalid = new LF2ItrRestTracker();
+            Expect(!invalid.Bind(null, 0, false) && !invalid.Bind(new RuntimeRestStore(8), -1, false) &&
+                   !invalid.Bind(new RuntimeRestStore(8), 8, false) && !invalid.IsBound,
+                "tracker binding must reject null stores and non-addressable victim slots");
+
+            var atomicStore = new RuntimeRestStore(16);
+            atomicStore.SetARest(5, 7);
+            atomicStore.SetVRest(5, 2, 8);
+            atomicStore.SetVRest(5, 3, 9);
+            atomicStore.SetVRest(10, 5, 11);
+            int atomicARestCount = atomicStore.ARestEntryCount;
+            int atomicVRestCount = atomicStore.VRestEntryCount;
+            int atomicRowCount = atomicStore.VRestRowCount;
+            var invalidMixedState = new Dictionary<int, int>
+            {
+                [1] = 4,
+                [16] = 6,
+            };
+            Expect(!atomicStore.ReplaceVictimState(5, 12, invalidMixedState) &&
+                   atomicStore.GetARest(5) == 7 && atomicStore.GetVRest(5, 2) == 8 &&
+                   atomicStore.GetVRest(5, 3) == 9 && atomicStore.GetVRest(5, 1) == 0 &&
+                   atomicStore.GetVRest(10, 5) == 11 &&
+                   atomicStore.ARestEntryCount == atomicARestCount &&
+                   atomicStore.VRestEntryCount == atomicVRestCount &&
+                   atomicStore.VRestRowCount == atomicRowCount,
+                "ReplaceVictimState must validate every positive attacker slot before atomically replacing existing state");
+
+            var failedImport = new LF2ItrRestTracker
+            {
+                Arest = 4,
+            };
+            failedImport.SetVrest(1, 5);
+            failedImport.SetVrest(16, 6);
+            Expect(!failedImport.Bind(atomicStore, 5, true) && !failedImport.IsBound &&
+                   failedImport.Arest == 4 && failedImport.GetVrest(1) == 5 &&
+                   failedImport.GetVrest(16) == 6 && atomicStore.GetARest(5) == 7 &&
+                   atomicStore.GetVRest(5, 2) == 8 && atomicStore.GetVRest(5, 3) == 9 &&
+                   atomicStore.ARestEntryCount == atomicARestCount &&
+                   atomicStore.VRestEntryCount == atomicVRestCount &&
+                   atomicStore.VRestRowCount == atomicRowCount,
+                "failed Bind(importLocal:true) must preserve store/local state and detach its rejected lease");
+            var leaseAfterFailedImport = new LF2ItrRestTracker();
+            Expect(leaseAfterFailedImport.Bind(atomicStore, 5, false) &&
+                   leaseAfterFailedImport.Arest == 7 && leaseAfterFailedImport.GetVrest(2) == 8,
+                "a failed importing bind must release its token so the victim slot remains bindable");
+            leaseAfterFailedImport.Unbind(false);
+
+            string scriptsRoot = Path.Combine(Application.dataPath, "NTSD", "Scripts");
+            string[] productionScripts = Directory.GetFiles(scriptsRoot, "*.cs", SearchOption.AllDirectories);
+            for (int i = 0; i < productionScripts.Length; i++)
+            {
+                string path = productionScripts[i].Replace('\\', '/');
+                if (path.Contains("/Test/", StringComparison.Ordinal) ||
+                    path.EndsWith("/LF2ItrRestTracker.cs", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                string source = File.ReadAllText(productionScripts[i]);
+                Expect(!source.Contains("ItrRest.Bind(", StringComparison.Ordinal) &&
+                       !source.Contains("ItrRest?.Bind(", StringComparison.Ordinal),
+                    $"B1.1 facade must remain opt-in; production Bind call found in {path}");
             }
         }
 

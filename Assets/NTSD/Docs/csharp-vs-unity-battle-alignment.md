@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1-R2C-4 runtime 容量阶段、B0 shadow Loose Quadtree 与 B1 `RuntimeRestStore` 纯数据基础已实施并验证 / 其余未实施**。生产 Profile 解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认；Editor/其他平台默认 `Authority400`、Android Player 默认 `MobileExtended`、Standalone Player 默认 `DesktopExtended`。Unity 官方条件编译符号只用于默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1-R2C-4 runtime 容量阶段、B0 shadow Loose Quadtree、B1 `RuntimeRestStore` 与 B1.1 optional facade 基础已实施并验证 / 其余未实施**。生产 Profile 解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认；Editor/其他平台默认 `Authority400`、Android Player 默认 `MobileExtended`、Standalone Player 默认 `DesktopExtended`。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -22,7 +22,9 @@ B0 已落地纯数据 X/Z half-open Loose Quadtree shadow：`looseness=1.5`、`l
 
 B1 已建立纯数据 `RuntimeRestStore`：分页/惰性 ARest；定向稀疏 `VRest[victim, attacker]` 只存正值、写零移除；`ResetSlot` 同时清 ARest、victim row 与 attacker column；支持 `GrowTo`、全局 reset、排序 diagnostics/snapshot 与 restore。2,000 次随机操作已与 dense reference model 逐步 differential。fresh 证据为相关源码 `2026-07-20 16:31:32` < Unity `Assembly-CSharp.dll` `16:36:38` < 完整 `BattleRuntimeSelfCheck` `16:37:13` **PASS**；fresh `dotnet build` **0 errors**；architect final review **PASS**。B1 尚未接入生产。
 
-未完成边界：`LF2ItrRestTracker` facade/生产迁移、collision pair tick 解耦、parity integration、即时 weapon query、AI 查询、Loose Quadtree 增量更新、正式 broadphase switch、Extended replay/checksum schema 与集中式渲染仍未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
+B1.1 已实现 optional `LF2ItrRestTracker` facade 与 exclusive victim-row lease：绑定 store 的 facade 独占一个 victim row，释放后其他 owner 才能接管；未绑定时保留既有 tracker 路径。architect 首轮发现 `ReplaceVictimState` 对 mixed-invalid attacker 输入可能部分写入，现已改为完整预验证后原子替换；direct `ReplaceVictimState` 与 facade `Bind` 均新增 failed-import 原状态不变测试。当前 production world 尚未绑定 facade。复跑 `dotnet build` **0 errors / 18 existing warnings**；相关源码 `2026-07-20 17:34:22` < Unity `Assembly-CSharp.dll` `17:36:49` < 完整 `BattleRuntimeSelfCheck` `17:39:07` **PASS**；architect final review **PASS / no blocker**。invalid bound `RestoreState` 可后续补独立断言，但复用已验证 atomic 入口，不构成 blocker。
+
+下一批才处理 production registration/release/world reset 接线，并必须保持 ordinary registration/reset 清 rest 与 `StageSpawnAt` 复用槽 retention 的差异语义。collision pair tick 解耦、parity integration、即时 weapon query、AI 查询、增量更新、正式 broadphase switch、Extended replay/checksum schema 与集中式渲染仍未实施或启用；B1.1 不代表生产迁移完成。本计划不涉及 T8。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

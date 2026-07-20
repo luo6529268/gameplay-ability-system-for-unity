@@ -4,6 +4,26 @@ using System.Collections.Generic;
 namespace NTSD.Simulation
 {
     /// <summary>
+    /// Exclusive lease for one victim slot in a RuntimeRestStore. The token is
+    /// invalidated when the slot/world is reset or the lease is released.
+    /// </summary>
+    public readonly struct RuntimeRestBindingHandle
+    {
+        internal RuntimeRestBindingHandle(RuntimeRestStore owner, int victimSlot, int token)
+        {
+            Owner = owner;
+            VictimSlot = victimSlot;
+            Token = token;
+        }
+
+        internal RuntimeRestStore Owner { get; }
+        internal int Token { get; }
+        public int BoundVictimSlot => VictimSlot;
+        public bool IsValid => Owner != null && Token != 0;
+        private int VictimSlot { get; }
+    }
+
+    /// <summary>
     /// World-independent storage for the directional runtime rest domains.
     /// This is foundation infrastructure and is not connected to production hit resolution yet.
     /// </summary>
@@ -61,6 +81,8 @@ namespace NTSD.Simulation
 
         private int[][] aRestPages;
         private VRestPage[] vRestPages;
+        private readonly Dictionary<int, int> bindingTokensByVictim = new Dictionary<int, int>();
+        private int nextBindingToken = 1;
 
         public RuntimeRestStore(int logicalCapacity)
         {
@@ -79,6 +101,36 @@ namespace NTSD.Simulation
         public int VRestRowCount { get; private set; }
         public int MaterializedARestPageCount { get; private set; }
         public int MaterializedVRestPageCount { get; private set; }
+
+        public bool TryAcquireBinding(int victimSlot, out RuntimeRestBindingHandle handle)
+        {
+            handle = default;
+            if (!IsAddressable(victimSlot) || bindingTokensByVictim.ContainsKey(victimSlot))
+                return false;
+
+            int token = nextBindingToken++;
+            if (token == 0)
+                token = nextBindingToken++;
+            bindingTokensByVictim[victimSlot] = token;
+            handle = new RuntimeRestBindingHandle(this, victimSlot, token);
+            return true;
+        }
+
+        public bool IsBindingValid(RuntimeRestBindingHandle handle)
+        {
+            return handle.Owner == this &&
+                   bindingTokensByVictim.TryGetValue(handle.BoundVictimSlot, out int token) &&
+                   token == handle.Token;
+        }
+
+        public bool ReleaseBinding(RuntimeRestBindingHandle handle)
+        {
+            if (!IsBindingValid(handle))
+                return false;
+
+            bindingTokensByVictim.Remove(handle.BoundVictimSlot);
+            return true;
+        }
 
         public bool IsAddressable(int slot)
         {
@@ -184,8 +236,9 @@ namespace NTSD.Simulation
             if (!IsAddressable(slot))
                 return false;
 
+            InvalidateBinding(slot);
             SetARest(slot, 0);
-            ClearVictimRow(slot);
+            ClearVictimRowOnly(slot);
 
             for (int pageIndex = 0; pageIndex < vRestPages.Length; pageIndex++)
             {
@@ -213,6 +266,7 @@ namespace NTSD.Simulation
 
         public void ResetWorld()
         {
+            bindingTokensByVictim.Clear();
             Array.Clear(aRestPages, 0, aRestPages.Length);
             Array.Clear(vRestPages, 0, vRestPages.Length);
             ARestEntryCount = 0;
@@ -303,7 +357,94 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private void ClearVictimRow(int victimSlot)
+        public bool TickARest(int attackerSlot)
+        {
+            if (!IsAddressable(attackerSlot))
+                return false;
+
+            int value = GetARest(attackerSlot);
+            return SetARest(attackerSlot, value > 0 ? value - 1 : 0);
+        }
+
+        public bool TickVRestForAttacker(int victimSlot, int attackerSlot)
+        {
+            if (!IsAddressable(victimSlot) || !IsAddressable(attackerSlot))
+                return false;
+
+            int value = GetVRest(victimSlot, attackerSlot);
+            return SetVRest(victimSlot, attackerSlot, value > 0 ? value - 1 : 0);
+        }
+
+        public bool TickVictim(int victimSlot)
+        {
+            if (!IsAddressable(victimSlot))
+                return false;
+
+            TickARest(victimSlot);
+            VRestPage page = vRestPages[victimSlot / PageSize];
+            Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+            if (row == null || row.Count == 0)
+                return true;
+
+            var attackers = new List<int>(row.Keys);
+            for (int i = 0; i < attackers.Count; i++)
+                TickVRestForAttacker(victimSlot, attackers[i]);
+            return true;
+        }
+
+        public bool ClearVictimRowOnly(int victimSlot)
+        {
+            if (!IsAddressable(victimSlot))
+                return false;
+            ClearVictimRowOnlyUnchecked(victimSlot);
+            return true;
+        }
+
+        public bool ReplaceVictimState(int victimSlot, int arest, IReadOnlyDictionary<int, int> vrestByAttacker)
+        {
+            if (!IsAddressable(victimSlot))
+                return false;
+
+            Dictionary<int, int> normalizedVrest = null;
+            if (vrestByAttacker != null)
+            {
+                normalizedVrest = new Dictionary<int, int>(vrestByAttacker.Count);
+                foreach (KeyValuePair<int, int> pair in vrestByAttacker)
+                {
+                    if (pair.Value <= 0)
+                        continue;
+                    if (!IsAddressable(pair.Key))
+                        return false;
+                    normalizedVrest[pair.Key] = pair.Value;
+                }
+            }
+
+            SetARest(victimSlot, arest);
+            ClearVictimRowOnlyUnchecked(victimSlot);
+            if (normalizedVrest == null)
+                return true;
+
+            foreach (KeyValuePair<int, int> pair in normalizedVrest)
+                SetVRest(victimSlot, pair.Key, pair.Value);
+            return true;
+        }
+
+        public Dictionary<int, int> CaptureVictimRow(int victimSlot)
+        {
+            var values = new Dictionary<int, int>();
+            if (!IsAddressable(victimSlot))
+                return values;
+
+            VRestPage page = vRestPages[victimSlot / PageSize];
+            Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+            if (row == null)
+                return values;
+            foreach (KeyValuePair<int, int> pair in row)
+                values[pair.Key] = pair.Value;
+            return values;
+        }
+
+        private void ClearVictimRowOnlyUnchecked(int victimSlot)
         {
             VRestPage page = vRestPages[victimSlot / PageSize];
             int rowIndex = victimSlot % PageSize;
@@ -314,6 +455,11 @@ namespace NTSD.Simulation
             VRestEntryCount -= row.Count;
             VRestRowCount--;
             page.Rows[rowIndex] = null;
+        }
+
+        private void InvalidateBinding(int victimSlot)
+        {
+            bindingTokensByVictim.Remove(victimSlot);
         }
 
         private static int GetPageCount(int logicalCapacity)

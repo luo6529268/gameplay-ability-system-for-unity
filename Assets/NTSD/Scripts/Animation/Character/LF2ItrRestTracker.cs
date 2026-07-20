@@ -18,24 +18,96 @@ namespace NTSD.Animation
 
         private int _arest = 0;
         private readonly Dictionary<int, int> _vrestByAttacker = new Dictionary<int, int>();
+        private RuntimeRestStore _boundStore;
+        private RuntimeRestBindingHandle _bindingHandle;
+
+        public bool IsBound => EnsureActiveBinding();
+        public int BoundVictimSlot => EnsureActiveBinding() ? _bindingHandle.BoundVictimSlot : -1;
 
         /// <summary>
         /// 攻击者自身的命中冷却；大于 0 时不能再次执行 arest 门控的命中。
         /// </summary>
         public int Arest
         {
-            get => _arest;
-            set => _arest = value;
+            get => EnsureActiveBinding()
+                ? _boundStore.GetARest(_bindingHandle.BoundVictimSlot)
+                : _arest;
+            set
+            {
+                int storedValue = value > 0 ? value : 0;
+                if (EnsureActiveBinding())
+                    _boundStore.SetARest(_bindingHandle.BoundVictimSlot, storedValue);
+                else
+                    _arest = storedValue;
+            }
+        }
+
+        public bool Bind(RuntimeRestStore store, int victimSlot, bool importLocal)
+        {
+            if (store == null || !store.IsAddressable(victimSlot))
+                return false;
+
+            if (_boundStore != null && EnsureActiveBinding())
+            {
+                return ReferenceEquals(_boundStore, store) &&
+                       _bindingHandle.BoundVictimSlot == victimSlot;
+            }
+
+            if (!store.TryAcquireBinding(victimSlot, out RuntimeRestBindingHandle handle))
+            {
+                return false;
+            }
+
+            _boundStore = store;
+            _bindingHandle = handle;
+            if (!importLocal)
+                return true;
+
+            if (store.ReplaceVictimState(victimSlot, _arest, _vrestByAttacker))
+                return true;
+
+            store.ReleaseBinding(handle);
+            ClearBinding();
+            return false;
+        }
+
+        public bool Unbind(bool captureStoreState)
+        {
+            if (!EnsureActiveBinding())
+                return false;
+
+            RuntimeRestStore store = _boundStore;
+            RuntimeRestBindingHandle handle = _bindingHandle;
+            if (captureStoreState)
+                CaptureBoundStateToLocal();
+            bool released = store.ReleaseBinding(handle);
+            ClearBinding();
+            return released;
         }
 
         public void Reset()
         {
+            if (EnsureActiveBinding())
+            {
+                _boundStore.SetARest(_bindingHandle.BoundVictimSlot, 0);
+                _boundStore.ClearVictimRowOnly(_bindingHandle.BoundVictimSlot);
+                return;
+            }
             _arest = 0;
             _vrestByAttacker.Clear();
         }
 
         public StateSnapshot CaptureState()
         {
+            if (EnsureActiveBinding())
+            {
+                return new StateSnapshot
+                {
+                    Arest = _boundStore.GetARest(_bindingHandle.BoundVictimSlot),
+                    VrestByAttacker = _boundStore.CaptureVictimRow(_bindingHandle.BoundVictimSlot),
+                };
+            }
+
             return new StateSnapshot
             {
                 Arest = _arest,
@@ -48,19 +120,41 @@ namespace NTSD.Animation
             if (snapshot == null)
                 return;
 
-            _arest = snapshot.Arest;
-            _vrestByAttacker.Clear();
-            if (snapshot.VrestByAttacker == null)
-                return;
+            int restoredArest = snapshot.Arest > 0 ? snapshot.Arest : 0;
+            var restoredVrest = new Dictionary<int, int>();
+            if (snapshot.VrestByAttacker != null)
+            {
+                foreach (KeyValuePair<int, int> pair in snapshot.VrestByAttacker)
+                {
+                    if (pair.Value > 0)
+                        restoredVrest[pair.Key] = pair.Value;
+                }
+            }
 
-            foreach (KeyValuePair<int, int> pair in snapshot.VrestByAttacker)
-                _vrestByAttacker[pair.Key] = pair.Value;
+            bool isBound = EnsureActiveBinding();
+            if (isBound)
+            {
+                _boundStore.ReplaceVictimState(
+                    _bindingHandle.BoundVictimSlot,
+                    restoredArest,
+                    restoredVrest);
+            }
+
+            if (!isBound)
+            {
+                _arest = restoredArest;
+                _vrestByAttacker.Clear();
+                foreach (KeyValuePair<int, int> pair in restoredVrest)
+                    _vrestByAttacker[pair.Key] = pair.Value;
+            }
         }
 
-        public bool ArestTest() => _arest <= 0;
+        public bool ArestTest() => Arest <= 0;
 
         public bool VrestTest(int attackerKey)
         {
+            if (EnsureActiveBinding())
+                return _boundStore.GetVRest(_bindingHandle.BoundVictimSlot, attackerKey) <= 0;
             return !_vrestByAttacker.TryGetValue(attackerKey, out int v) || v <= 0;
         }
 
@@ -69,11 +163,15 @@ namespace NTSD.Animation
         /// </summary>
         public bool HasVrest(int attackerKey)
         {
+            if (EnsureActiveBinding())
+                return _boundStore.GetVRest(_bindingHandle.BoundVictimSlot, attackerKey) > 0;
             return _vrestByAttacker.TryGetValue(attackerKey, out int v) && v > 0;
         }
 
         public int GetVrest(int attackerKey)
         {
+            if (EnsureActiveBinding())
+                return _boundStore.GetVRest(_bindingHandle.BoundVictimSlot, attackerKey);
             return _vrestByAttacker.TryGetValue(attackerKey, out int value) ? value : 0;
         }
 
@@ -82,11 +180,25 @@ namespace NTSD.Animation
         /// </summary>
         public void SetVrest(int attackerKey, int value)
         {
-            _vrestByAttacker[attackerKey] = value;
+            if (EnsureActiveBinding())
+            {
+                _boundStore.SetVRest(_bindingHandle.BoundVictimSlot, attackerKey, value);
+                return;
+            }
+
+            if (value > 0)
+                _vrestByAttacker[attackerKey] = value;
+            else
+                _vrestByAttacker.Remove(attackerKey);
         }
 
         public void RemoveVrest(int attackerKey)
         {
+            if (EnsureActiveBinding())
+            {
+                _boundStore.SetVRest(_bindingHandle.BoundVictimSlot, attackerKey, 0);
+                return;
+            }
             _vrestByAttacker.Remove(attackerKey);
         }
 
@@ -94,11 +206,11 @@ namespace NTSD.Animation
         {
             if (itr != null && itr.arest > 0)
             {
-                _arest = itr.arest;
+                Arest = itr.arest;
             }
             else if (itr == null || itr.vrest <= 0)
             {
-                _arest = NTSDGlobal.Default.Character.ARest;
+                Arest = NTSDGlobal.Default.Character.ARest;
             }
         }
 
@@ -106,25 +218,45 @@ namespace NTSD.Animation
         {
             if (itr != null && itr.vrest > 0)
             {
-                _vrestByAttacker[attackerKey] = itr.vrest;
+                SetVrest(attackerKey, itr.vrest);
             }
         }
 
         public void TickArest()
         {
+            if (EnsureActiveBinding())
+            {
+                _boundStore.TickARest(_bindingHandle.BoundVictimSlot);
+                return;
+            }
             if (_arest > 0) _arest--;
         }
 
         public void TickVrestForAttacker(int attackerKey)
         {
+            if (EnsureActiveBinding())
+            {
+                _boundStore.TickVRestForAttacker(_bindingHandle.BoundVictimSlot, attackerKey);
+                return;
+            }
+
             if (!_vrestByAttacker.TryGetValue(attackerKey, out int value) || value <= 0)
                 return;
 
-            _vrestByAttacker[attackerKey] = value - 1;
+            if (value == 1)
+                _vrestByAttacker.Remove(attackerKey);
+            else
+                _vrestByAttacker[attackerKey] = value - 1;
         }
 
         public void Tick()
         {
+            if (EnsureActiveBinding())
+            {
+                _boundStore.TickVictim(_bindingHandle.BoundVictimSlot);
+                return;
+            }
+
             TickArest();
 
             if (_vrestByAttacker.Count == 0) return;
@@ -134,9 +266,40 @@ namespace NTSD.Animation
             for (int i = 0; i < keys.Count; i++)
             {
                 int k = keys[i];
-                if (_vrestByAttacker[k] > 0) _vrestByAttacker[k]--;
+                int value = _vrestByAttacker[k];
+                if (value <= 1)
+                    _vrestByAttacker.Remove(k);
+                else
+                    _vrestByAttacker[k] = value - 1;
             }
             ListPool<int>.Release(keys);
+        }
+
+        private bool EnsureActiveBinding()
+        {
+            if (_boundStore == null)
+                return false;
+            if (_boundStore.IsBindingValid(_bindingHandle))
+                return true;
+
+            ClearBinding();
+            return false;
+        }
+
+        private void CaptureBoundStateToLocal()
+        {
+            int victimSlot = _bindingHandle.BoundVictimSlot;
+            _arest = _boundStore.GetARest(victimSlot);
+            _vrestByAttacker.Clear();
+            Dictionary<int, int> row = _boundStore.CaptureVictimRow(victimSlot);
+            foreach (KeyValuePair<int, int> pair in row)
+                _vrestByAttacker[pair.Key] = pair.Value;
+        }
+
+        private void ClearBinding()
+        {
+            _boundStore = null;
+            _bindingHandle = default;
         }
     }
 }
