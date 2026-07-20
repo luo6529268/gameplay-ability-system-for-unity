@@ -36,10 +36,12 @@ namespace NTSD.Simulation
         private SimContext _context;
         /// <summary>给没有显式运行时 ID 的对象自动分配 StableId。</summary>
         private int _nextAutoStableId = 100;
-        internal const int AuthorityRuntimeSlotCapacity = 400;
+        internal const int AuthorityRuntimeSlotCapacity =
+            BattleRuntimeProfilePolicy.AuthorityRuntimeSlotCapacity;
         private const int DynamicRuntimeSlotStart = 50;
         private readonly BattleRuntimeProfile activeRuntimeProfile;
         private readonly RuntimeSlotTable _runtimeSlots;
+        private readonly int maxActiveRuntimeEntities;
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
         private readonly List<LF2Entity> _pendingSlotReleasedDestroy = new List<LF2Entity>();
@@ -55,6 +57,7 @@ namespace NTSD.Simulation
         internal int MaxRuntimeSlotsForServices => RuntimeSlotCapacity;
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
         internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
+        internal int ClaimedRuntimeSlotCountForServices => _runtimeSlots.ClaimedCount;
 
         private int GetRuntimeStableId(ISimObject obj)
         {
@@ -112,6 +115,9 @@ namespace NTSD.Simulation
             }
 
             activeRuntimeProfile = runtimeProfile;
+            maxActiveRuntimeEntities = runtimeProfile == BattleRuntimeProfile.MobileExtended
+                ? BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities
+                : int.MaxValue;
             _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             _context = new SimContext(this);
@@ -502,10 +508,19 @@ namespace NTSD.Simulation
         {
             ReleasePendingDestroySlots();
 
+            if (_runtimeSlots.ClaimedCount >= maxActiveRuntimeEntities)
+                return -1;
+
             bool requiresDynamicSlot = entity.UsesDynamicRuntimeSlot();
             int requiredSlot = entity.RequiredRuntimeSlot;
             if (requiredSlot != -1)
             {
+                if (requiredSlot >= RuntimeSlotCapacity &&
+                    !TryGrowDesktopRuntimeSlots((long)requiredSlot + 1))
+                {
+                    return -1;
+                }
+
                 if (!_runtimeSlots.TryClaim(requiredSlot, entity, out _))
                     return -1;
 
@@ -524,6 +539,10 @@ namespace NTSD.Simulation
             }
 
             int startSlot = requiresDynamicSlot ? DynamicRuntimeSlotStart : 0;
+            int allocatedSlot = _runtimeSlots.AllocateLowest(startSlot, entity, out _);
+            if (allocatedSlot >= 0 || !TryGrowDesktopRuntimeSlots((long)RuntimeSlotCapacity + 1))
+                return allocatedSlot;
+
             return _runtimeSlots.AllocateLowest(startSlot, entity, out _);
         }
 
@@ -531,7 +550,48 @@ namespace NTSD.Simulation
         {
             ReleasePendingDestroySlots();
 
-            return _runtimeSlots.PeekLowest(startSlot, endSlotExclusive);
+            if (_runtimeSlots.ClaimedCount >= maxActiveRuntimeEntities)
+                return -1;
+
+            bool scansCurrentTail = endSlotExclusive >= RuntimeSlotCapacity;
+            int slot = _runtimeSlots.PeekLowest(startSlot, endSlotExclusive);
+            if (slot >= 0 || !scansCurrentTail ||
+                !TryGrowDesktopRuntimeSlots((long)RuntimeSlotCapacity + 1))
+            {
+                return slot;
+            }
+
+            return _runtimeSlots.PeekLowest(startSlot, RuntimeSlotCapacity);
+        }
+
+        private bool TryGrowDesktopRuntimeSlots(long minimumCapacity)
+        {
+            if (minimumCapacity <= RuntimeSlotCapacity)
+                return true;
+            if (activeRuntimeProfile != BattleRuntimeProfile.DesktopExtended ||
+                minimumCapacity > int.MaxValue)
+            {
+                return false;
+            }
+
+            int normalizedCapacity;
+            try
+            {
+                normalizedCapacity = BattleRuntimeProfilePolicy.NormalizeDesktopCapacity(
+                    (int)minimumCapacity);
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                return false;
+            }
+
+            var grownAiInputSlots = new LF2Entity[normalizedCapacity];
+            System.Array.Copy(aiInputSlots, grownAiInputSlots, aiInputSlots.Length);
+            if (!_runtimeSlots.GrowTo(normalizedCapacity))
+                return false;
+
+            aiInputSlots = grownAiInputSlots;
+            return true;
         }
 
         private void ReleasePendingDestroySlots()

@@ -93,6 +93,7 @@ namespace NTSD.Test
                 CheckRuntimeSlotAllocatorAndProfileContracts();
                 CheckPagedRuntimeSlotTableContracts();
                 CheckExtendedSimulationWorldCapacityContracts();
+                CheckActivatedRuntimeProfileContracts();
                 CheckExtendedServiceBoundaryContracts();
                 CheckInteractionRuntimeSlotContracts();
                 CheckSimulationWorldLateMutation();
@@ -286,6 +287,40 @@ namespace NTSD.Test
                 "invalid runtime profile overrides must fall through to a valid configured profile");
             Expect(!BattleRuntimeProfileResolver.TryParse("1", out _),
                 "runtime profile parser must not accept numeric enum values");
+
+            BattleRuntimeWorldSettings explicitMobile = BattleRuntimeProfilePolicy.Resolve(
+                "MobileExtended",
+                "DesktopExtended",
+                BattleRuntimeProfile.Authority400,
+                513);
+            BattleRuntimeWorldSettings configuredDesktop = BattleRuntimeProfilePolicy.Resolve(
+                null,
+                "DesktopExtended",
+                BattleRuntimeProfile.Authority400,
+                513);
+            BattleRuntimeWorldSettings platformAuthority = BattleRuntimeProfilePolicy.Resolve(
+                null,
+                null,
+                BattleRuntimeProfile.Authority400,
+                1024);
+            Expect(explicitMobile.Profile == BattleRuntimeProfile.MobileExtended &&
+                   explicitMobile.InitialRuntimeSlotCapacity == 1050 &&
+                   explicitMobile.MaxActiveRuntimeEntities == 1000,
+                "runtime profile policy must map an explicit MobileExtended override to 1050 addresses and 1000 active entities");
+            Expect(configuredDesktop.Profile == BattleRuntimeProfile.DesktopExtended &&
+                   configuredDesktop.InitialRuntimeSlotCapacity == 768 &&
+                   configuredDesktop.MaxActiveRuntimeEntities == int.MaxValue,
+                "runtime profile policy must normalize configured DesktopExtended capacity to 256-slot pages");
+            Expect(platformAuthority.Profile == BattleRuntimeProfile.Authority400 &&
+                   platformAuthority.InitialRuntimeSlotCapacity == 400,
+                "runtime profile policy must keep the Editor/authority fallback pinned to 400 slots");
+            Expect(BattleRuntimeProfileProductionSource.FindArgumentValue(
+                       new[] { "player", "-ntsdBattleRuntimeProfile", "DesktopExtended" },
+                       BattleRuntimeProfileProductionSource.ProfileArgument) == "DesktopExtended" &&
+                   BattleRuntimeProfileProductionSource.FindArgumentValue(
+                       new[] { "player", "-ntsdDesktopRuntimeSlotCapacity=769" },
+                       BattleRuntimeProfileProductionSource.DesktopCapacityArgument) == "769",
+                "runtime profile production source must accept separate and assignment command-line overrides");
 
             var world = new SimulationWorld();
             Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.Authority400 &&
@@ -518,10 +553,10 @@ namespace NTSD.Test
             var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
             LF2Character ai = CreateCharacter("SelfCheck_ExtendedWorld_AI", 33, data);
             LF2Character highTarget = CreateCharacter("SelfCheck_ExtendedWorld_Target", 4, data);
-            var rejectedTail = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var grownTail = new FlowSelfCheckEntity(LF2ObjectType.Character);
             ai.SetRequiredRuntimeSlot(0);
             highTarget.SetRequiredRuntimeSlot(511);
-            rejectedTail.SetRequiredRuntimeSlot(512);
+            grownTail.SetRequiredRuntimeSlot(700);
             ai.AiControlled = true;
             highTarget.AiControlled = false;
             ai.RelationTeam = 1;
@@ -533,15 +568,15 @@ namespace NTSD.Test
 
             world.Register(ai);
             world.Register(highTarget);
-            world.Register(rejectedTail);
+            world.Register(grownTail);
 
             Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended &&
-                   world.MaxRuntimeSlotsForServices == 512 &&
+                   world.MaxRuntimeSlotsForServices == 768 &&
                    highTarget.Runtime.SlotIndex == 511 &&
-                   rejectedTail.Runtime.SlotIndex == -1 &&
+                   grownTail.Runtime.SlotIndex == 700 &&
                    ReferenceEquals(world.FindEntityByRuntimeSlotIncludingPending(511), highTarget) &&
-                   world.FindEntityByRuntimeSlotIncludingPending(512) == null,
-                "DesktopExtended infrastructure must expose its explicit service capacity, accept slot 511, and reject slot 512");
+                   ReferenceEquals(world.FindEntityByRuntimeSlotIncludingPending(700), grownTail),
+                "DesktopExtended infrastructure must grow by one page for a required high runtime slot");
 
             world.AiInputAndComboAll(2);
             Expect(ai.Runtime.Unk360 == 511,
@@ -549,8 +584,9 @@ namespace NTSD.Test
 
             world.ResetRuntimeState();
             Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended &&
-                   world.MaxRuntimeSlotsForServices == 512 &&
+                   world.MaxRuntimeSlotsForServices == 768 &&
                    world.FindEntityByRuntimeSlotIncludingPending(511) == null &&
+                   world.FindEntityByRuntimeSlotIncludingPending(700) == null &&
                    world.ObjectCount == 0,
                 "extended world reset must clear high-slot occupants without changing the configured profile or capacity");
 
@@ -558,6 +594,138 @@ namespace NTSD.Test
             Expect(defaultWorld.RuntimeProfileForServices == BattleRuntimeProfile.Authority400 &&
                    defaultWorld.MaxRuntimeSlotsForServices == SimulationWorld.AuthorityRuntimeSlotCapacity,
                 "the public SimulationWorld constructor must remain pinned to Authority400/400");
+        }
+
+        private static void CheckActivatedRuntimeProfileContracts()
+        {
+            var mobileWorld = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            var mobileEntities = new FlowSelfCheckEntity[1000];
+            for (int slot = 0; slot < mobileEntities.Length; slot++)
+            {
+                var entity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+                entity.SetRequiredRuntimeSlot(slot);
+                mobileEntities[slot] = entity;
+                mobileWorld.Register(entity);
+                Expect(entity.Runtime.SlotIndex == slot,
+                    $"MobileExtended must accept active runtime entity {slot + 1} at required slot {slot}");
+            }
+
+            var rejectedMobileEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            rejectedMobileEntity.SetRequiredRuntimeSlot(1049);
+            mobileWorld.Register(rejectedMobileEntity);
+            Expect(mobileWorld.ClaimedRuntimeSlotCountForServices == 1000 &&
+                   mobileWorld.ObjectCount == 1000 &&
+                   rejectedMobileEntity.Runtime.SlotIndex == -1 &&
+                   mobileWorld.FindEntityByRuntimeSlotIncludingPending(1049) == null,
+                "MobileExtended must deterministically reject the 1001st active entity before publishing slot or bucket residue");
+            var findMobileFreeRuntimeSlot = typeof(SimulationWorld).GetMethod(
+                "FindFirstFreeRuntimeSlot",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            Expect(findMobileFreeRuntimeSlot != null,
+                "MobileExtended admission fixture must retain the shared free-slot query");
+            int blockedMobileFreeSlot = (int)findMobileFreeRuntimeSlot.Invoke(
+                mobileWorld,
+                new object[] { 50, mobileWorld.MaxRuntimeSlotsForServices });
+            Expect(blockedMobileFreeSlot == -1 &&
+                   mobileWorld.FindEntityByRuntimeSlotIncludingPending(1049) == null,
+                "MobileExtended free-slot queries must reject at 1000 total active entities even while high dynamic addresses remain unclaimed");
+
+            mobileEntities[333].Runtime.PendingFlushDestroy = true;
+            Expect(mobileWorld.ClaimedRuntimeSlotCountForServices == 1000,
+                "MobileExtended pending-destroy entities must consume admission until the existing release boundary");
+            var replacementMobileEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            replacementMobileEntity.SetRequiredRuntimeSlot(333);
+            mobileWorld.Register(replacementMobileEntity);
+            Expect(mobileWorld.ClaimedRuntimeSlotCountForServices == 1000 &&
+                   mobileWorld.ObjectCount == 1000 &&
+                   replacementMobileEntity.Runtime.SlotIndex == 333 &&
+                   ReferenceEquals(
+                       mobileWorld.FindEntityByRuntimeSlotIncludingPending(333),
+                       replacementMobileEntity),
+                "MobileExtended must admit a replacement only after ReleasePendingDestroySlots frees its deterministic budget");
+            mobileWorld.ResetRuntimeState();
+            Expect(mobileWorld.ClaimedRuntimeSlotCountForServices == 0,
+                "MobileExtended reset must clear the active admission count");
+
+            var desktopWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var desktopEntities = new FlowSelfCheckEntity[512];
+            for (int slot = 0; slot < desktopEntities.Length; slot++)
+            {
+                var entity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+                entity.SetRequiredRuntimeSlot(slot);
+                desktopEntities[slot] = entity;
+                desktopWorld.Register(entity);
+            }
+
+            desktopWorld.Unregister(desktopEntities[51]);
+            var reusedDesktopEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            desktopWorld.Register(reusedDesktopEntity);
+            Expect(reusedDesktopEntity.Runtime.SlotIndex == 51 &&
+                   desktopWorld.MaxRuntimeSlotsForServices == 512,
+                "DesktopExtended ordinary allocation must reuse the lowest old hole before growing");
+
+            var findFreeRuntimeSlot = typeof(SimulationWorld).GetMethod(
+                "FindFirstFreeRuntimeSlot",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            Expect(findFreeRuntimeSlot != null,
+                "DesktopExtended growth fixture must retain the shared free-slot query");
+            int peekedGrownSlot = (int)findFreeRuntimeSlot.Invoke(
+                desktopWorld,
+                new object[] { 50, desktopWorld.MaxRuntimeSlotsForServices });
+            Expect(peekedGrownSlot == 512 &&
+                   desktopWorld.MaxRuntimeSlotsForServices == 768,
+                "DesktopExtended free-slot queries must grow one page only after the current range is full");
+            var firstGrownDesktopEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            desktopWorld.Register(firstGrownDesktopEntity);
+            Expect(firstGrownDesktopEntity.Runtime.SlotIndex == 512,
+                "DesktopExtended ordinary registration must claim the first address on the grown page");
+
+            var aiResizeWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var retainedAiEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            retainedAiEntity.SetRequiredRuntimeSlot(511);
+            aiResizeWorld.Register(retainedAiEntity);
+            var buildAiSnapshot = typeof(SimulationWorld).GetMethod(
+                "BuildAiInputSlotSnapshot",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            var aiAt = typeof(SimulationWorld).GetMethod(
+                "AiAt",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            Expect(buildAiSnapshot != null && aiAt != null,
+                "DesktopExtended AI growth fixture must retain AI snapshot helpers");
+            buildAiSnapshot.Invoke(aiResizeWorld, null);
+            var requiredHighEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            requiredHighEntity.SetRequiredRuntimeSlot(700);
+            aiResizeWorld.Register(requiredHighEntity);
+            LF2Entity retainedAiSnapshot = aiAt.Invoke(aiResizeWorld, new object[] { 511 }) as LF2Entity;
+            Expect(aiResizeWorld.MaxRuntimeSlotsForServices == 768 &&
+                   requiredHighEntity.Runtime.SlotIndex == 700 &&
+                   ReferenceEquals(retainedAiSnapshot, retainedAiEntity),
+                "DesktopExtended required-slot growth must preserve existing AI snapshot contents while resizing its buffer");
+            Expect(SimulationTickDriver.WorldMatchesRuntimeSettings(
+                       aiResizeWorld,
+                       BattleRuntimeProfilePolicy.Create(BattleRuntimeProfile.DesktopExtended, 512)),
+                "Driver pre-battle profile refresh must accept a DesktopExtended world that has grown beyond its configured initial capacity");
+
+            BattleParityFrameSnapshot skippedExtendedChecksum =
+                SimulationTickDriver.CaptureSupportedFrameSnapshot(
+                    aiResizeWorld,
+                    1,
+                    FrameInputSet.Empty(1));
+            Expect(skippedExtendedChecksum == null &&
+                   !SimulationTickDriver.SupportsAuthorityFrameChecksum(aiResizeWorld),
+                "SimulationTickDriver must skip fixed Authority parity checksums for Extended worlds without throwing");
+            var authorityWorld = new SimulationWorld();
+            Expect(SimulationTickDriver.CaptureSupportedFrameSnapshot(
+                       authorityWorld,
+                       1,
+                       FrameInputSet.Empty(1)) != null,
+                "SimulationTickDriver must retain frame checksum capture for Authority400 worlds");
         }
 
         private static void CheckExtendedServiceBoundaryContracts()

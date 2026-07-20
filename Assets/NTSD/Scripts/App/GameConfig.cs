@@ -10,6 +10,12 @@ namespace NTSD.App
     [CreateAssetMenu(fileName = "GameConfig", menuName = "NTSD/Game Config")]
     public class GameConfig : ScriptableObject
     {
+        [Header("Battle Runtime Profile")]
+        [Tooltip("Optional profile name. Empty uses the platform default.")]
+        public string BattleRuntimeProfileName = "";
+        [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
+        public int DesktopInitialRuntimeSlotCapacity = 512;
+
         #region 单例访问
 
         private static GameConfig _instance;

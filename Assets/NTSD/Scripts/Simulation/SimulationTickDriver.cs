@@ -117,8 +117,7 @@ namespace NTSD.Simulation
             lockstepSettings ??= new LockstepSimulationSettings();
             lockstepSettings.Normalize();
 
-            _world = new SimulationWorld();
-            _battleTickSystem = new NTSDBattleTickSystem(_world);
+            CreateProductionWorld();
 
             Log.Info($"[SimulationTickDriver] Awake. paused={paused}, World created");
         }
@@ -225,8 +224,25 @@ namespace NTSD.Simulation
                 return;
             }
 
-            _lastFrameSnapshot = _world.CaptureParityFrameSnapshot(tickIndex, frameInput);
+            _lastFrameSnapshot = CaptureSupportedFrameSnapshot(_world, tickIndex, frameInput);
             lastFrameChecksum = _lastFrameSnapshot?.Hashes?.Overall ?? string.Empty;
+        }
+
+        internal static bool SupportsAuthorityFrameChecksum(SimulationWorld world)
+        {
+            return world != null &&
+                   world.RuntimeProfileForServices == BattleRuntimeProfile.Authority400 &&
+                   world.MaxRuntimeSlotsForServices == SimulationWorld.AuthorityRuntimeSlotCapacity;
+        }
+
+        internal static BattleParityFrameSnapshot CaptureSupportedFrameSnapshot(
+            SimulationWorld world,
+            int tickIndex,
+            FrameInputSet frameInput)
+        {
+            return SupportsAuthorityFrameChecksum(world)
+                ? world.CaptureParityFrameSnapshot(tickIndex, frameInput)
+                : null;
         }
 
         private void RefreshInspectorState()
@@ -268,7 +284,7 @@ namespace NTSD.Simulation
 
         public void ApplyMatchConfig(MatchConfig config)
         {
-            if (_world == null)
+            if (!EnsureRuntimeProfileFromSources())
                 return;
 
             _world.ResetRuntimeState();
@@ -320,8 +336,7 @@ namespace NTSD.Simulation
 
         public void RecreateWorld()
         {
-            _world = new SimulationWorld();
-            _battleTickSystem = new NTSDBattleTickSystem(_world);
+            CreateProductionWorld();
             _tickIndex = 0;
             _timeAccumulator = 0f;
             _sparkRenderFrame = 0;
@@ -330,6 +345,54 @@ namespace NTSD.Simulation
             lastFrameChecksum = string.Empty;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
+        }
+
+        private void CreateProductionWorld()
+        {
+            BattleRuntimeWorldSettings settings = BattleRuntimeProfileProductionSource.Resolve(
+                GameConfig.Instance);
+            CreateProductionWorld(settings);
+        }
+
+        private void CreateProductionWorld(BattleRuntimeWorldSettings settings)
+        {
+            _world = new SimulationWorld(settings.Profile, settings.InitialRuntimeSlotCapacity);
+            _battleTickSystem = new NTSDBattleTickSystem(_world);
+        }
+
+        internal bool EnsureRuntimeProfileFromSources()
+        {
+            BattleRuntimeWorldSettings settings = BattleRuntimeProfileProductionSource.Resolve(
+                GameConfig.Instance);
+            if (WorldMatchesRuntimeSettings(_world, settings))
+            {
+                return true;
+            }
+
+            if (_world != null &&
+                (_world.ClaimedRuntimeSlotCountForServices > 0 || _world.ObjectCount > 0))
+            {
+                Debug.LogError(
+                    $"[SimulationTickDriver] Runtime profile change rejected while entities are registered. " +
+                    $"Current={_world.RuntimeProfileForServices}/{_world.MaxRuntimeSlotsForServices}, " +
+                    $"Requested={settings.Profile}/{settings.InitialRuntimeSlotCapacity}");
+                return false;
+            }
+
+            CreateProductionWorld(settings);
+            return true;
+        }
+
+        internal static bool WorldMatchesRuntimeSettings(
+            SimulationWorld world,
+            BattleRuntimeWorldSettings settings)
+        {
+            if (world == null || world.RuntimeProfileForServices != settings.Profile)
+                return false;
+
+            return world.MaxRuntimeSlotsForServices == settings.InitialRuntimeSlotCapacity ||
+                   (settings.Profile == BattleRuntimeProfile.DesktopExtended &&
+                    world.MaxRuntimeSlotsForServices > settings.InitialRuntimeSlotCapacity);
         }
 
         protected override void OnSingletonDestroyed()

@@ -2,12 +2,12 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认；R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取与 R2C-3B 外部容量边界已实施并完成代码层验证，其余阶段未实施。
-- **代码状态**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`、`Authority400` 三段 indexed binary min-heap + `nextUnused` 分配器、分页 `RuntimeSlotTable` / `RuntimeEntityHandle`、allocator/table 单调 `GrowTo`、`SimulationWorld` 实例容量读取，以及 special attack / transition effect 的扩展槽边界已落地；默认生产构造仍固定 `Authority400/400`。集中式渲染、扩展 Profile 生产接线与 Loose Quadtree 均未落地，现有 `SpriteRenderer` 未替换。
-- **验证状态**：R1、R2A、R2B、R2C、R2C-3A 与 R2C-3B 均已有 fresh Unity 编译和完整 `BattleRuntimeSelfCheck` PASS；扩展 focused contract 覆盖 `DesktopExtended/512` 高槽行为，parity guard 覆盖 Profile 与容量双门槛。尚未完成 Play Mode、移动端真机、像素级或扩展容量生产验收。
+- **状态**：方案已确认；R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取、R2C-3B 外部容量边界与 R2C-4 生产 Profile 激活已实施并完成代码层验证，其余阶段未实施。
+- **代码状态**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`、`Authority400` 三段 indexed binary min-heap + `nextUnused` 分配器、分页 `RuntimeSlotTable` / `RuntimeEntityHandle`、allocator/table 单调 `GrowTo`、world 实例容量读取、special/transition 扩展槽边界，以及生产 Profile、active admission 与桌面自动增长已落地；集中式渲染、Loose Quadtree 与 VRest 解耦未落地，现有 `SpriteRenderer` 未替换。
+- **验证状态**：R1、R2A、R2B、R2C、R2C-3A、R2C-3B 与 R2C-4 均已有 fresh Unity 编译、完整 `BattleRuntimeSelfCheck` PASS 与 architect final review PASS。尚未完成 Play Mode、移动端真机、像素级、扩展 replay/checksum schema 或集中式渲染验收。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
-- **平台 Profile 说明**：平台宏只选择默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。选择优先级固定为“显式测试/命令行覆盖 > 项目配置资产 > 平台宏默认值 > 设备能力运行时降级”；设备降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施边界**：默认 `SimulationWorld()` 仍显式 pin 为 `Authority400/400`，生产 Driver 未传入扩展 Profile；world 内部容量循环、`LF2SpecialAttack` 高槽 holder/Karasu 查询和 `LF2Entity` transition effect 动态槽计数已读取当前 world capacity。`MobileExtended` / `DesktopExtended` 仍未接入生产 runtime；Profile 到容量策略的正式接线、桌面自动分页增长、移动端 1000 active admission、Loose Quadtree、VRest 解耦与集中式渲染仍待后续批次。
+- **平台 Profile 说明**：生产解析优先级固定为“命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认值”；平台宏只提供默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。设备能力降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
+- **实施边界**：`SimulationTickDriver` 的 `Awake`、`Recreate`、`ApplyMatchConfig` 共用同一 Profile 解析/创建路径；直接 `BattleTestBootstrap` 会在实体注册前重新协调晚到的 `GameConfig` Profile。生产 Profile、Mobile total active admission 和 Desktop 自动分页增长已接入；Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍待后续批次。
 
 ### 2026-07-20 R1 第一批实施记录
 
@@ -53,7 +53,7 @@ R2B fresh 验证：相关生产源码时间 `2026-07-20 12:55:14` < Unity `Assem
 | `RuntimeSlotTable.GrowTo` | **基础设施已实施 / 已验证** | 增长时扩展页引用数组但不主动物化新页；保留既有 page object、occupant、generation handle、raw runtime、raw rest 与 claim 状态，新页仍在首次访问时惰性物化 |
 | 非增长调用 | **已验证** | 目标容量等于当前容量时成功 no-op；缩容请求返回拒绝，且容量、claims、页面、句柄和 raw 状态保持不变 |
 | 移动端地址契约 | **设计边界已修正 / focused 已验证** | `1000 active` 是 admission 预算，不是逻辑地址尾值；保留 `0..49` 后，1000 个动态槽为 `50..1049`，因此逻辑地址容量是 `1050`。`PageSize=256` 时物理数组需要 5 页，但物理尾部 `1050..1279` 必须不可寻址、不可 claim、不可创建 raw runtime |
-| 生产接线 | **未实施 / 未启用** | `SimulationWorld` 仍固定 `Authority400`，生产代码尚未调用 `GrowTo`；`MobileExtended` / `DesktopExtended`、Profile 容量策略、1000 active admission、第 1001 个确定性拒绝、AI 与空间索引仍未启用 |
+| 生产接线 | **R2C 时未实施；已由 R2C-4 后续接入** | `SimulationWorld` 在 R2C 时仍固定 `Authority400`；生产 Profile、Mobile total admission 与 Desktop 自动增长已由 R2C-4 接入 |
 
 R2C fresh 验证：相关源码时间 `2026-07-20 13:23:00` < Unity `Assembly-CSharp.dll` `13:24:49` < 完整 `BattleRuntimeSelfCheck` 结果 `13:25:34` **PASS**；fresh `dotnet build` 为 **0 errors**；架构复核 **PASS**。这些证据只证明 allocator/table 可在保持既有状态与最低槽语义的前提下单调增长，并验证移动端 `1050` 逻辑地址及物理尾部 guard；不代表 Extended Profile、生产增长、移动端 admission、AI、Loose Quadtree 或集中式渲染已经启用。
 
@@ -65,7 +65,7 @@ R2C fresh 验证：相关源码时间 `2026-07-20 13:23:00` < Unity `Assembly-CS
 | 默认兼容模式 | **保持不变 / 已验证** | 默认 `SimulationWorld()` 仍创建 `Authority400/400`；现有生产 Driver、400-slot parity 与默认 self-check 不会自动进入扩展模式 |
 | focused 扩展契约 | **内部测试入口已实施 / 已验证** | internal 构造以 `DesktopExtended/512` 创建 focused world；slot `511` 可注册、查询并进入 AI 目标扫描，slot `512` 被拒绝，reset 后高槽状态被清理 |
 | parity schema | **保持固定 / 已验证** | `BattleParitySnapshot` 继续显式使用 `AuthorityRuntimeSlotCapacity = 400`，没有把历史 400-slot certificate 静默扩展为新 schema |
-| 生产与外部边界 | **Profile 未实施 / 外部固定边界已由 R2C-3B 关闭** | `MobileExtended` / `DesktopExtended` Profile 尚未接入生产 Driver；`LF2SpecialAttack` / `LF2Entity` 的外部固定容量边界已在后续 R2C-3B 按 world capacity 处理 |
+| 生产与外部边界 | **R2C-3A 时 Profile 未实施；现已由 R2C-4 接入** | `MobileExtended` / `DesktopExtended` Profile 后续已接入生产 Driver；`LF2SpecialAttack` / `LF2Entity` 的外部固定容量边界已在 R2C-3B 按 world capacity 处理 |
 
 R2C-3A fresh 验证：相关源码时间约 `2026-07-20 13:45:39` < Unity `Assembly-CSharp.dll` `13:51:07` < 完整 `BattleRuntimeSelfCheck` 结果 `13:54:22` **PASS**；fresh `dotnet build` 为 **0 errors / 42 warnings**。这些证据证明默认 400 行为未变，并证明显式 512-slot world 的代码层容量契约可运行；扩展 Profile 当时仍未接入生产 Driver，外部 special/transition 固定边界随后由 R2C-3B 关闭。
 
@@ -77,33 +77,46 @@ R2C-3A fresh 验证：相关源码时间约 `2026-07-20 13:45:39` < Unity `Assem
 | Karasu 高槽扫描 | **已实施 / 已验证** | Karasu oid209 替换扫描使用当前 world 容量，`DesktopExtended/512` 中的高槽目标不再被 `0..399` 截断 |
 | transition effect 容量计数 | **已实施 / 已验证** | `LF2Entity` transition effect 的可用动态槽计数使用当前 world 的 dynamic 起点到逻辑容量尾部，不再固定扫描 `50..399` |
 | parity capture guard | **已实施 / 已验证** | 历史 parity capture 必须同时满足 Profile 为 `Authority400` 且逻辑容量为 400；`DesktopExtended/512` 与 `DesktopExtended/400` 均明确拒绝，不能仅凭容量为 400 冒充 authority certificate |
-| 生产接线 | **未实施 / 未启用** | 默认生产 Driver 仍未选择 `MobileExtended` / `DesktopExtended`；本批没有实现 admission、桌面自动增长或扩展 parity schema |
+| 生产接线 | **R2C-3B 时未实施；已由 R2C-4 后续接入** | 默认生产 Driver 的 Profile、admission 与桌面自动增长后续已接入；本批仍未实现扩展 parity schema |
 
 R2C-3B fresh 验证：相关源码时间 `2026-07-20 14:37:37` < Unity `Assembly-CSharp.dll` `14:38:09` < 完整 `BattleRuntimeSelfCheck` 结果 `14:44:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` 为 **0 errors**，warnings 为既有告警。该证据关闭 3A 后遗留的 special attack / transition effect 固定容量边界，并建立严格的 authority parity capture guard；不代表生产 Driver/Profile 接线、admission、桌面自动增长、Loose Quadtree、VRest 或集中式渲染已完成。
 
+### 2026-07-20 R2C-4 生产 Profile 激活记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| 生产 Profile 解析优先级 | **已实施 / 已验证** | 命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > Unity 平台宏默认；配置值不再被 `Awake`/重建路径静默覆盖 |
+| 默认容量 | **已实施 / 已验证** | `Authority400` 逻辑容量 `400`；`MobileExtended` 逻辑容量 `1050`，`TOTAL active admission = 1000`（跨 roster/stage/dynamic 全部槽区）；`DesktopExtended` 默认初始逻辑容量 `512`，按 `PageSize=256` 规范化并支持自动增长 |
+| Driver 生命周期 | **已实施 / 已验证** | `SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析与 world 创建路径；直接 `BattleTestBootstrap` 在实体注册前重新协调晚到的 GameConfig |
+| Desktop 增长 | **已实施 / 已验证** | 自动增长保留最低空洞分配顺序，并同步扩展 AI snapshot 容量，避免 world 与 AI 视图分叉 |
+| Extended checksum/parity | **边界已实施 / 已验证** | Extended Driver checksum 输出跳过/为空；direct parity capture 仍只接受 `Authority400 + 400`，拒绝 `DesktopExtended/512` 与其他非 authority 组合 |
+| 后续阶段 | **未实施 / 未启用** | Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍保持后续计划 |
+
+R2C-4 fresh 验证：相关源码时间 `2026-07-20 15:24:26` < Unity `Assembly-CSharp.dll` `15:25:30` < 完整 `BattleRuntimeSelfCheck` 结果 `15:26:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` 为 **0 errors / 42 existing warnings**；architect final review **PASS**。
+
 ## Runtime 容量与空间索引阶段决策
 
-**状态：方案已确认 / R1、R2A、R2B、R2C、R2C-3A 与 R2C-3B runtime 基础设施已实施并验证 / 其余未实施。** 本节是运行时容量与 broadphase 的设计边界，不改变 C# 权威战斗逻辑；当前已落地 Profile resolver、`Authority400` 分配器、分页槽表、generation 句柄、单调 `GrowTo`、world 按实例容量读取、外部 special/transition 容量边界和 authority parity guard，并已将该槽表接入默认 `Authority400/400` registry。Extended Profile 正式生产接线、admission、空间索引、内存预算和目标设备参数仍需在后续实现阶段验证。
+**状态：方案已确认 / R1、R2A、R2B、R2C、R2C-3A、R2C-3B 与 R2C-4 runtime 基础设施已实施并验证 / 其余未实施。** 本节是运行时容量与 broadphase 的设计边界，不改变 C# 权威战斗逻辑；当前已落地 Profile resolver、生产 Profile 激活、跨槽区 active admission、桌面自动增长、`Authority400` 分配器、分页槽表、generation 句柄、单调 `GrowTo`、world 按实例容量读取、外部 special/transition 容量边界和 authority parity guard，并已将该槽表接入统一 Driver 路径。Loose Quadtree、VRest 解耦、Extended replay/checksum schema、内存预算和目标设备参数仍需在后续实现阶段验证。
 
 ### RuntimeSlot 容量模式
 
 - **`Authority400` 兼容模式**：保留 C# 的 400 runtime slot、既有特殊槽区和最低空闲槽分配语义，用于现有 self-check、parity 和逐帧对照。该模式的 400 是兼容边界，不代表 render command 上限。
-- **移动端扩展模式**：保证最多 `1000` 个 active runtime entity；保留 `0..49` 的 roster/stage 地址后，1000 个动态地址固定为 `50..1049`，所以逻辑地址容量为 `1050`，最后有效地址为 `1049`。第 `1001` 个 active entity 必须确定性拒绝生成，不排队、不替换，也不由设备瞬时内存状态决定。拒绝结果必须进入可重放的结果/日志边界。
-- **桌面扩展模式**：不设置玩法层面的 active entity 上限，slot address 按分页增长；仍受明确的地址空间、内存、对象池、逻辑帧和 render command 技术预算约束，不能解释为物理上无限容量。
-- 空闲槽使用**二叉最小堆 + `nextUnused`**：R1 第一批已在 `Authority400` 内按 `0..19`、`20..49`、`50..399` 三段实现 indexed binary min-heap；已释放槽进入最小堆，分配时优先取最小空闲槽，堆为空时使用并递增 `nextUnused`。R2A 以 256 槽/页建立惰性分页表并复用该 allocator，R2B 已将它接入生产 `SimulationWorld` 的 `Authority400` registry，R2C 实现单调 `GrowTo`，R2C-3A 使 world 内部容量循环读取实例容量，R2C-3B 清理 special/transition 外部固定边界；桌面自动增长与 Extended 生产使用仍未实现。后续所有分配、释放和分页增长仍必须保持最低槽确定性，不依赖 `Dictionary`/`HashSet` 枚举顺序。
+- **移动端扩展模式**：逻辑地址容量为 `1050`，最后有效地址为 `1049`；`TOTAL active admission = 1000`，跨 roster/stage/dynamic 全部槽区计数，第 `1001` 个 active entity 必须确定性拒绝生成，不排队、不替换，也不由设备瞬时内存状态决定。拒绝结果必须进入可重放的结果/日志边界。
+- **桌面扩展模式**：默认初始逻辑容量 `512`，按 `PageSize=256` 规范化为整页并在需要时自动增长；不设置玩法层面的 active entity 上限，但仍受明确的地址空间、内存、对象池、逻辑帧和 render command 技术预算约束，不能解释为物理上无限容量。
+- 空闲槽使用**二叉最小堆 + `nextUnused`**：R1 第一批已在 `Authority400` 内按 `0..19`、`20..49`、`50..399` 三段实现 indexed binary min-heap；已释放槽进入最小堆，分配时优先取最小空闲槽，堆为空时使用并递增 `nextUnused`。R2A 以 256 槽/页建立惰性分页表并复用该 allocator，R2B-R2C-3B 依次接入槽表、增长、实例容量和外部边界，R2C-4 已将 Desktop 自动增长接入生产。增长前的最低空洞仍优先于新页地址，且 AI snapshot 与 world 容量同步扩展；所有分配、释放和分页增长继续保持最低槽确定性，不依赖 `Dictionary`/`HashSet` 枚举顺序。
 - **分层位图**仅作为后续候选优化，不作为本阶段实现前提；若采用，必须保持与最小堆相同的最低槽和回放语义。
 
 ### 平台 Profile 与选择边界
 
-**状态：resolver 已实施并验证 / 扩展 Profile 未接入 SimulationWorld。** 平台差异通过统一 Profile/能力配置入口表达；不得在战斗 pass、opoint、碰撞、命中、对象生命周期或空间查询内部散布 `#if UNITY_ANDROID` / `#if UNITY_STANDALONE` 分支。Unity 官方条件编译符号仅用于选择平台默认值；`SystemInfo` 等运行时能力 API 留给后续渲染后端降级，不改变战斗 Profile 或逻辑结果。
+**状态：resolver 与生产 Profile 激活已实施并通过 self-check / architect final PASS。** 平台差异通过统一 Profile/能力配置入口表达；不得在战斗 pass、opoint、碰撞、命中、对象生命周期或空间查询内部散布 `#if UNITY_ANDROID` / `#if UNITY_STANDALONE` 分支。Unity 官方条件编译符号仅用于选择平台默认值；`SystemInfo` 等运行时能力 API 留给后续渲染后端降级，不改变战斗 Profile 或逻辑结果。
 
 运行模式固定为：
 
 | Profile | 平台默认与用途 | RuntimeSlot / active 边界 |
 |---|---|---|
 | `Authority400` | `UNITY_EDITOR` 和未明确支持的平台默认；用于 C# 权威对拍、现有 self-check、历史 parity schema 与兼容诊断 | 固定 400 槽，保留权威特殊槽区和最低空闲槽语义 |
-| `MobileExtended` | `UNITY_ANDROID && !UNITY_EDITOR` Player 默认 | 最多 1000 active；逻辑地址容量 1050，动态槽 `50..1049`；第 1001 个发布尝试确定性拒绝 |
-| `DesktopExtended` | `UNITY_STANDALONE && !UNITY_EDITOR` Player 默认 | RuntimeSlot 按页增长，不设玩法层面的 active 上限，但受明确技术预算约束 |
+| `MobileExtended` | `UNITY_ANDROID && !UNITY_EDITOR` Player 默认 | 逻辑容量 1050；全部槽区合计最多 1000 active，第 1001 个发布尝试确定性拒绝 |
+| `DesktopExtended` | `UNITY_STANDALONE && !UNITY_EDITOR` Player 默认 | 默认初始 512，按 256-slot 页规范化并自动增长；不设玩法层面的 active 上限，但受明确技术预算约束 |
 
 宏边界必须按以下规则实现：
 
@@ -115,14 +128,13 @@ R2C-3B fresh 验证：相关源码时间 `2026-07-20 14:37:37` < Unity `Assembly
 配置解析优先级固定为：
 
 ```text
-显式测试 / 命令行覆盖
-    > 项目配置资产
+命令行显式覆盖
+    > GameConfig.BattleRuntimeProfileName
     > 平台宏默认 Profile
-    > 设备能力运行时降级
 ```
 
-- 显式覆盖用于 self-check、parity、回放和 Editor A/B 验证，必须能强制选择 `Authority400`、`MobileExtended` 或 `DesktopExtended`。
-- 项目配置资产可以显式选择 Profile，并调整容量预算、图集页预算、Mesh chunk 预算和后端偏好，但不能改变最低槽分配、生成顺序、命中规则或同一 Profile 已定义的确定性 admission 语义。
+- 命令行显式覆盖用于 self-check、parity、回放和 Editor A/B 验证，必须能强制选择 `Authority400`、`MobileExtended` 或 `DesktopExtended`。
+- `GameConfig.BattleRuntimeProfileName` 是生产项目配置入口；`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用同一解析路径，直接 `BattleTestBootstrap` 在实体注册前协调晚到配置。
 - 运行时设备能力检测发生在 Profile 解析之后。`SystemInfo.supports2DArrayTextures`、纹理尺寸/slice 上限、图形 API、格式支持和目标 GPU 验证结果只用于选择可用的资源与渲染后端。
 - 推荐降级链为 `Texture2DArray + OrderedChunks` -> `多 Texture2D + OrderedChunks` -> `LegacySpriteBackend`；任何降级都必须保持原 painter 顺序和相同只读表现输入。
 - 设备不支持 `Texture2DArray`、命中设备黑名单或内存预算不足时，不得把 `MobileExtended` 静默改成 `Authority400`，也不得降低 1000 active admission 边界来掩盖渲染预算不足；应通过分 chunk、后端降级、可诊断拒绝或明确启动失败处理。
@@ -131,11 +143,11 @@ R2C-3B fresh 验证：相关源码时间 `2026-07-20 14:37:37` < Unity `Assembly
 
 ### 移动端 1000 active admission 边界
 
-- `1000 active` 与 slot address 容量是两个独立数字：移动端需要保留 `0..19` roster、`20..49` stage 与 `50..1049` 共 1000 个 dynamic slot，因此 `RuntimeSlotTable.LogicalCapacity = 1050`，最后有效地址是 `1049`。5 个 256-slot 物理页仅是存储实现；尾部 `1050..1279` 不属于逻辑地址空间。
+- `1000 active` 与 slot address 容量是两个独立数字：`RuntimeSlotTable.LogicalCapacity = 1050`，最后有效地址是 `1049`，其中 `0..19` 为 roster、`20..49` 为 stage、`50..1049` 为 dynamic 地址。active admission 的 1000 是**全部槽区合计预算**，不是只给 dynamic band 的 1000 个 active 名额；5 个 256-slot 物理页仅是存储实现，尾部 `1050..1279` 不属于逻辑地址空间。
 - active 计数以**已发布且尚未完成注销的 runtime entity**为准：已注册的 active、dormant/merge shell 和 `pending-destroy` entity 都计入；尚未发布的 `pending-spawn`、未占用的 raw slot 以及已归还对象池且没有 runtime 注册的 shell 不计入。
 - `pending-destroy` 在确定性注销边界完成前仍占用 active 预算和 runtime slot；不能因为已经标记销毁就提前释放容量。分配拒绝必须在发布前判断，不能先发布再回滚。
 - 同一 tick 的释放与生成不依赖容器枚举顺序：在既定的 lifecycle mutation boundary 内，先按队列/slot 的确定顺序完成已到期注销，再按既定 producer/pass 顺序逐个进行 spawn admission 和发布；只有前一步已完成注销的 entity 才能为后一步释放容量。若生成发生在注销 boundary 之前，则按当时仍包含 `pending-destroy` 的计数判定并可确定性拒绝。
-- 每次 spawn admission 成功后立即增加已发布计数；同一 boundary 后续 spawn 看到更新后的计数。移动端达到 1000 后，后续第 1001 个发布尝试稳定返回拒绝结果并进入 replay/checksum 边界。
+- 每次 spawn admission 成功后立即增加已发布计数；同一 boundary 后续 spawn 看到更新后的计数。移动端达到 1000 后，后续第 1001 个发布尝试稳定返回拒绝结果；Extended replay/checksum schema 尚未实现，当前 Extended Driver checksum 明确跳过/返回空值。
 
 ### X/Z Loose Quadtree Broadphase
 
@@ -150,6 +162,7 @@ R2C-3B fresh 验证：相关源码时间 `2026-07-20 14:37:37` < Unity `Assembly
 
 - VRest/ARest 的逻辑访问与 broadphase 解耦。空间索引减少候选枚举，不负责 VRest 的递减或过期；VRest 计时必须遍历自己的稀疏活动集合/到期结构，不能因 broadphase 未返回远距离 pair 而停止递减。
 - 详细 parity snapshot（完整 slot、ARest/VRest、哈希和诊断字段）退出生产热路径，只在 `Authority400` 对拍、自检、回放或显式诊断模式中生成；生产 tick 不为 parity 预先扫描整页/全容量数据。
+- Extended Driver 当前不生成 authority checksum，输出跳过/为空；direct parity capture 继续严格要求 `Authority400` Profile 且容量 400。Extended replay/checksum schema 必须另行设计，不能复用或伪装成旧 400-slot certificate。
 
 ## 1. 目标
 
@@ -441,6 +454,6 @@ CentralOnly
 
 ## 16. 当前决策记录
 
-已确认的设计决策是：保留 `Authority400` 兼容模式；移动端最多 1000 active 且第 1001 个确定性拒绝；桌面采用分页增长和技术预算；空闲槽使用二叉最小堆 + `nextUnused`；空间 broadphase 使用 X/Z Loose Quadtree；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。平台宏只选择默认 Profile，显式覆盖和配置资产可以优先选 Profile，设备能力最后只降级表现资源/后端；三个 Profile 最终共用同一套确定性 runtime 算法。
+已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；空间 broadphase 使用 X/Z Loose Quadtree；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，设备能力只降级表现资源/后端；三个 Profile 共用同一套确定性 runtime 算法。
 
-截至 2026-07-20，**R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取与 R2C-3B 外部容量边界**达到“已实施 / 编译通过 / self-check 通过”：Profile resolver、默认 `Authority400/400` 下的三段 indexed binary min-heap + `nextUnused`、256 槽惰性分页 `RuntimeSlotTable`、独立 raw runtime/rest、`ClaimedCount`、generation handle、allocator/table 单调增长，registry/input/pass/query/stage/AI 对当前 world 容量的读取，以及 special attack holder/Karasu、transition effect 动态槽范围和 authority parity capture guard；`DesktopExtended/512` focused contract 已验证高槽注册、查询、AI 与 special/transition 可见性、边界拒绝和 reset，`DesktopExtended/400` 也不能签发 authority parity。`MobileExtended` / `DesktopExtended` 正式 Driver 接线、Profile 容量策略、生产自动增长、1000 active admission、Loose Quadtree、VRest 改造及全部集中式渲染模块仍是 **方案已确认 / 未实施 / 未验证**。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。
+截至 2026-07-20，**R1-R2C-4 的 runtime 容量阶段**达到“已实施 / 编译通过 / self-check 通过 / architect review 通过”：Profile resolver、生产 Driver/Profile 激活、默认容量、Mobile total active admission、Desktop 自动增长、最低槽复用、AI snapshot 扩展、256 槽惰性分页 `RuntimeSlotTable`、generation handle、world/外部实体容量读取，以及 strict authority parity capture guard 均已落地；Extended Driver checksum 当前明确跳过/为空。Loose Quadtree、VRest 解耦、Extended replay/checksum schema 及全部集中式渲染模块仍是 **方案已确认 / 未实施 / 未验证**。具体 API、Shader、装箱算法、内存预算、命令字段、chunk 大小、URP 注入点和最终迁移顺序仍需实施前核验，并持续区分“已确认 / 待确认 / 已实施 / 已验证”。

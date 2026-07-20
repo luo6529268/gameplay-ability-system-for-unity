@@ -87,6 +87,20 @@ namespace NTSD.Test
             }
 
             // 3. 加载角色数据
+            SimulationTickDriver simulationDriver = SimulationTickDriver.Instance;
+            if (simulationDriver == null)
+            {
+                Debug.LogError(
+                    "[BattleTestBootstrap] SimulationTickDriver not found before runtime profile reconciliation.");
+                return;
+            }
+            if (!simulationDriver.EnsureRuntimeProfileFromSources())
+            {
+                Debug.LogError(
+                    "[BattleTestBootstrap] Runtime profile reconciliation failed; test bootstrap aborted before entity registration.");
+                return;
+            }
+
             await LoadCharacterDataAsync();
             if (this == null) return;
 

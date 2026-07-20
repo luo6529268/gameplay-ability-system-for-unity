@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取与 R2C-3B 外部容量边界已实施并验证 / 其余未实施**。R1 已落地 `BattleRuntimeProfileResolver`，解析顺序为显式覆盖 > 配置值 > 平台默认；平台宏仅选择默认 Profile，Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 官方条件编译符号只用于该默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1-R2C-4 的 runtime 容量阶段已实施并通过编译与 self-check / 其余未实施**。生产 Profile 解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认；Editor/其他平台默认 `Authority400`、Android Player 默认 `MobileExtended`、Standalone Player 默认 `DesktopExtended`。Unity 官方条件编译符号只用于默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -16,7 +16,9 @@ R2C-3A 已让 `SimulationWorld.RuntimeSlotCapacity` 读取当前槽表逻辑容�
 
 R2C-3B 已关闭外部固定容量边界：`LF2SpecialAttack` 的高槽 holder 验证和 Karasu oid209 扫描使用当前 world capacity；`LF2Entity` transition effect 的可用槽计数使用当前 dynamic range。历史 parity capture 现在必须同时满足 `Authority400` Profile 与 400 逻辑容量，明确拒绝 `DesktopExtended/512` 和 `DesktopExtended/400`，避免同容量非 authority world 伪装成旧 certificate。fresh 证据为相关源码 `2026-07-20 14:37:37` < Unity `Assembly-CSharp.dll` `14:38:09` < 完整 `BattleRuntimeSelfCheck` `14:44:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` **0 errors**，warnings 为既有告警。
 
-未完成边界保持不变：生产 Driver 尚未接入 `MobileExtended` / `DesktopExtended`，默认 world 仍固定 `Authority400/400`。Profile 容量策略、桌面自动分页增长、移动端 1000 active admission 与第 1001 个确定性拒绝、X/Z Loose Quadtree、VRest 解耦、扩展 parity schema 与集中式渲染均未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
+R2C-4 已激活生产 Profile：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用解析/创建路径，直接 `BattleTestBootstrap` 在实体注册前协调晚到的 `GameConfig`。默认容量为 `Authority400=400`、`MobileExtended=1050 logical / TOTAL active admission 1000`（跨全部槽区计数）、`DesktopExtended=512 initial`（按 256-slot 页规范化并自动增长）；Desktop 增长保持最低空洞优先并同步 AI snapshot。Extended Driver checksum 当前跳过/为空，direct parity 仍严格拒绝非 `Authority400/400`。fresh 证据为相关源码 `2026-07-20 15:24:26` < Unity `Assembly-CSharp.dll` `15:25:30` < 完整 `BattleRuntimeSelfCheck` `15:26:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` **0 errors / 42 existing warnings**；architect final review **PASS**。
+
+未完成边界：X/Z Loose Quadtree、VRest 解耦、Extended replay/checksum schema 与集中式渲染仍未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 
