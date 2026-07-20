@@ -706,7 +706,7 @@ namespace NTSD.Simulation
 
         internal int FindFirstFreeFrameLogicRuntimeSlot()
         {
-            return FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, MaxRuntimeSlots);
+            return FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, RuntimeSlotCapacity);
         }
 
         public void CaptureCollisionFrameSnapshotsAll()
@@ -742,7 +742,7 @@ namespace NTSD.Simulation
             _ticking = true;
             try
             {
-                for (int runtimeSlot = 0; runtimeSlot < MaxRuntimeSlots; runtimeSlot++)
+                for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
                 {
                     LF2Entity obj = FindEntityByRuntimeSlotCurrent(runtimeSlot);
 
@@ -1079,7 +1079,7 @@ namespace NTSD.Simulation
             if (weaponCount >= 4) return;
             if (Rng.NextInt(0, 200) != 0) return;
 
-            int freeSlot = FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, MaxRuntimeSlots);
+            int freeSlot = FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, RuntimeSlotCapacity);
             if (freeSlot < 0) return;
 
             var manager = CharacterAnimtorManager.Instance;
@@ -1250,7 +1250,7 @@ namespace NTSD.Simulation
                 int oid = candidates[chooseIndex];
 
                 bool hasFreeSlot = false;
-                for (int slot = DynamicRuntimeSlotStart; slot < MaxRuntimeSlots; slot++)
+                for (int slot = DynamicRuntimeSlotStart; slot < RuntimeSlotCapacity; slot++)
                 {
                     if (!_runtimeSlots.IsClaimed(slot))
                     {

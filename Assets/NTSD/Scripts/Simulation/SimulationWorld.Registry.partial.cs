@@ -36,11 +36,10 @@ namespace NTSD.Simulation
         private SimContext _context;
         /// <summary>给没有显式运行时 ID 的对象自动分配 StableId。</summary>
         private int _nextAutoStableId = 100;
-        private const int MaxRuntimeSlots = 400;
+        internal const int AuthorityRuntimeSlotCapacity = 400;
         private const int DynamicRuntimeSlotStart = 50;
-        private const BattleRuntimeProfile ActiveRuntimeProfile = BattleRuntimeProfile.Authority400;
-        private readonly RuntimeSlotTable _runtimeSlots =
-            new RuntimeSlotTable(MaxRuntimeSlots, 20, DynamicRuntimeSlotStart);
+        private readonly BattleRuntimeProfile activeRuntimeProfile;
+        private readonly RuntimeSlotTable _runtimeSlots;
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
         private readonly List<LF2Entity> _pendingSlotReleasedDestroy = new List<LF2Entity>();
@@ -52,9 +51,10 @@ namespace NTSD.Simulation
 
         public int ReleaseCameraX => _cameraX;
         internal bool IsUnityFixedWorldCameraStateClear => _cameraX == 0 && _cameraVel == 0;
-        internal int MaxRuntimeSlotsForServices => MaxRuntimeSlots;
+        internal int RuntimeSlotCapacity => _runtimeSlots.LogicalCapacity;
+        internal int MaxRuntimeSlotsForServices => RuntimeSlotCapacity;
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
-        internal BattleRuntimeProfile RuntimeProfileForServices => ActiveRuntimeProfile;
+        internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
 
         private int GetRuntimeStableId(ISimObject obj)
         {
@@ -94,7 +94,26 @@ namespace NTSD.Simulation
         public int[] DamageStats => Runtime.DamageStats;
 
         public SimulationWorld()
+            : this(BattleRuntimeProfile.Authority400, AuthorityRuntimeSlotCapacity)
         {
+        }
+
+        internal SimulationWorld(BattleRuntimeProfile runtimeProfile, int runtimeSlotCapacity)
+        {
+            if (runtimeSlotCapacity < DynamicRuntimeSlotStart)
+                throw new System.ArgumentOutOfRangeException(nameof(runtimeSlotCapacity),
+                    "Runtime slot capacity must include the dynamic slot band.");
+            if (runtimeProfile == BattleRuntimeProfile.Authority400 &&
+                runtimeSlotCapacity != AuthorityRuntimeSlotCapacity)
+            {
+                throw new System.ArgumentException(
+                    "Authority400 worlds must use exactly 400 runtime slots.",
+                    nameof(runtimeSlotCapacity));
+            }
+
+            activeRuntimeProfile = runtimeProfile;
+            _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
+            aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this);
@@ -429,7 +448,7 @@ namespace NTSD.Simulation
             }
             _pendingSlotReleasedDestroy.Clear();
 
-            for (int runtimeSlot = 0; runtimeSlot < MaxRuntimeSlots; runtimeSlot++)
+            for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
             {
                 LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
                 if (entity?.Runtime != null &&
@@ -494,7 +513,7 @@ namespace NTSD.Simulation
             }
 
             int existingSlot = entity.Runtime?.SlotIndex ?? -1;
-            bool existingSlotInRange = existingSlot >= 0 && existingSlot < MaxRuntimeSlots;
+            bool existingSlotInRange = existingSlot >= 0 && existingSlot < RuntimeSlotCapacity;
             bool existingSlotInAllowedRange = !requiresDynamicSlot || existingSlot >= DynamicRuntimeSlotStart;
             int minimumExistingSlot = requiresDynamicSlot ? DynamicRuntimeSlotStart : 0;
             if (existingSlotInRange && existingSlotInAllowedRange &&
@@ -537,7 +556,7 @@ namespace NTSD.Simulation
                     }
 
                     int slot = entity.Runtime.SlotIndex;
-                    if (slot < 0 || slot >= MaxRuntimeSlots)
+                    if (slot < 0 || slot >= RuntimeSlotCapacity)
                         continue;
 
                     if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
@@ -555,7 +574,7 @@ namespace NTSD.Simulation
         private void ReleaseRuntimeSlot(LF2Entity entity)
         {
             int slot = entity.Runtime?.SlotIndex ?? -1;
-            if (slot >= 0 && slot < MaxRuntimeSlots &&
+            if (slot >= 0 && slot < RuntimeSlotCapacity &&
                 object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
             {
                 CaptureRawRestSlotState(slot, entity);

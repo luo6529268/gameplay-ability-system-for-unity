@@ -92,6 +92,8 @@ namespace NTSD.Test
                 CheckAudit7LateOpointPrecisionContracts();
                 CheckRuntimeSlotAllocatorAndProfileContracts();
                 CheckPagedRuntimeSlotTableContracts();
+                CheckExtendedSimulationWorldCapacityContracts();
+                CheckExtendedServiceBoundaryContracts();
                 CheckInteractionRuntimeSlotContracts();
                 CheckSimulationWorldLateMutation();
                 CheckCollisionCandidateCapAndNewbornIsolation();
@@ -236,6 +238,32 @@ namespace NTSD.Test
                    allocator.ClaimedCount == 0,
                 "runtime slot allocator reset must clear all segment state");
 
+            var growingAllocator = new RuntimeSlotAllocator(512, 20, 50);
+            for (int slot = 50; slot < 512; slot++)
+            {
+                Expect(growingAllocator.ClaimRequired(slot),
+                    $"growing runtime slot allocator must claim initial dynamic slot {slot}");
+            }
+            Expect(growingAllocator.Release(299) && growingAllocator.Release(51) &&
+                   growingAllocator.GrowTo(768) && growingAllocator.Capacity == 768 &&
+                   growingAllocator.ClaimedCount == 460,
+                "runtime slot allocator growth must preserve existing claims and released holes");
+            Expect(growingAllocator.AllocateLowest(50) == 51 &&
+                   growingAllocator.AllocateLowest(50) == 299 &&
+                   growingAllocator.AllocateLowest(50) == 512,
+                "runtime slot allocator growth must reuse old lower holes before newly addressable slots");
+            Expect(growingAllocator.ClaimRequired(767) && growingAllocator.IsClaimed(767),
+                "runtime slot allocator growth must permit an exact high required claim");
+            int allocatorCountBeforeNoOp = growingAllocator.ClaimedCount;
+            Expect(growingAllocator.GrowTo(768) &&
+                   growingAllocator.Capacity == 768 &&
+                   growingAllocator.ClaimedCount == allocatorCountBeforeNoOp,
+                "runtime slot allocator same-capacity growth must be a successful no-op");
+            Expect(!growingAllocator.GrowTo(767) &&
+                   growingAllocator.Capacity == 768 &&
+                   growingAllocator.ClaimedCount == allocatorCountBeforeNoOp,
+                "runtime slot allocator shrink must be rejected without changing state");
+
             Expect(BattleRuntimeProfileResolver.Resolve(
                        "MobileExtended",
                        "DesktopExtended",
@@ -342,18 +370,107 @@ namespace NTSD.Test
                    !authorityTable.TryResolve(replacementHandle, out _),
                 "runtime slot table reset must prevent old handles from becoming valid again");
 
-            var mobileTable = new RuntimeSlotTable(1000, 20, 50);
-            var entity999 = new FlowSelfCheckEntity(LF2ObjectType.Character);
-            Expect(mobileTable.TryClaim(999, entity999, out RuntimeEntityHandle handle999) &&
+            var growingTable = new RuntimeSlotTable(512, 20, 50);
+            var growingEntity255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var growingEntity511 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            bool claimedGrowing255 = growingTable.TryClaim(
+                255,
+                growingEntity255,
+                out RuntimeEntityHandle growingHandle255);
+            bool claimedGrowing511 = growingTable.TryClaim(
+                511,
+                growingEntity511,
+                out RuntimeEntityHandle growingHandle511);
+            Expect(claimedGrowing255 && claimedGrowing511,
+                "runtime slot table growth fixture must claim occupants on both existing pages");
+            RuntimeEntityHandle growingHoleHandle51 = RuntimeEntityHandle.Invalid;
+            RuntimeEntityHandle growingHoleHandle299 = RuntimeEntityHandle.Invalid;
+            for (int slot = 50; slot < 512; slot++)
+            {
+                if (slot == 255 || slot == 511)
+                    continue;
+
+                Expect(growingTable.TryClaim(
+                           slot,
+                           new FlowSelfCheckEntity(LF2ObjectType.Character),
+                           out RuntimeEntityHandle claimedHandle),
+                    $"runtime slot table growth fixture must claim initial dynamic slot {slot}");
+                if (slot == 51)
+                    growingHoleHandle51 = claimedHandle;
+                else if (slot == 299)
+                    growingHoleHandle299 = claimedHandle;
+            }
+            Expect(growingTable.Release(growingHoleHandle299) &&
+                   growingTable.Release(growingHoleHandle51) &&
+                   growingTable.ClaimedCount == 460,
+                "runtime slot table growth fixture must retain released low-slot holes");
+            NTSDEntityRuntime growingRawRuntime255 = growingTable.GetRawRuntime(255);
+            NTSDEntityRuntime growingRawRuntime511 = growingTable.GetRawRuntime(511);
+            LF2ItrRestTracker.StateSnapshot growingRest255 = growingEntity255.ItrRest.CaptureState();
+            LF2ItrRestTracker.StateSnapshot growingRest511 = growingEntity511.ItrRest.CaptureState();
+            Expect(growingTable.SetRawRest(255, growingRest255) &&
+                   growingTable.SetRawRest(511, growingRest511) &&
+                   growingTable.MaterializedPageCount == 2,
+                "runtime slot table growth fixture must materialize only its original pages");
+            Expect(growingTable.GrowTo(768) &&
+                   growingTable.LogicalCapacity == 768 &&
+                   growingTable.MaterializedPageCount == 2 &&
+                   growingTable.TryResolve(growingHandle255, out LF2Entity grownResolved255) &&
+                   ReferenceEquals(grownResolved255, growingEntity255) &&
+                   growingTable.TryResolve(growingHandle511, out LF2Entity grownResolved511) &&
+                   ReferenceEquals(grownResolved511, growingEntity511) &&
+                   ReferenceEquals(growingTable.GetRawRuntime(255), growingRawRuntime255) &&
+                   ReferenceEquals(growingTable.GetRawRuntime(511), growingRawRuntime511) &&
+                   ReferenceEquals(growingTable.GetRawRest(255), growingRest255) &&
+                   ReferenceEquals(growingTable.GetRawRest(511), growingRest511),
+                "runtime slot table growth must preserve occupants, handles, raw runtime, raw rest, and page objects");
+            var grownHoleEntity51 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var grownHoleEntity299 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            var grownNewEntity512 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(growingTable.AllocateLowest(50, grownHoleEntity51, out RuntimeEntityHandle grownHandle51) == 51 &&
+                   growingTable.AllocateLowest(50, grownHoleEntity299, out RuntimeEntityHandle grownHandle299) == 299 &&
+                   growingTable.AllocateLowest(50, grownNewEntity512, out RuntimeEntityHandle grownHandle512) == 512 &&
+                   growingTable.TryResolve(grownHandle51, out LF2Entity grownResolved51) &&
+                   ReferenceEquals(grownResolved51, grownHoleEntity51) &&
+                   growingTable.TryResolve(grownHandle299, out LF2Entity grownResolved299) &&
+                   ReferenceEquals(grownResolved299, grownHoleEntity299) &&
+                   growingTable.TryResolve(grownHandle512, out LF2Entity grownResolved512) &&
+                   ReferenceEquals(grownResolved512, grownNewEntity512) &&
+                   growingTable.MaterializedPageCount == 3,
+                "runtime slot table growth must reuse old lower holes before lazily materializing a new-slot page");
+            var growingEntity767 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(growingTable.TryClaim(767, growingEntity767, out RuntimeEntityHandle growingHandle767) &&
+                   growingTable.MaterializedPageCount == 3 &&
+                   growingTable.TryResolve(growingHandle767, out LF2Entity grownResolved767) &&
+                   ReferenceEquals(grownResolved767, growingEntity767),
+                "runtime slot table growth must materialize a new page only when a grown slot is accessed");
+            int tableClaimedBeforeNoOp = growingTable.ClaimedCount;
+            Expect(growingTable.GrowTo(768) &&
+                   growingTable.LogicalCapacity == 768 &&
+                   growingTable.MaterializedPageCount == 3 &&
+                   growingTable.ClaimedCount == tableClaimedBeforeNoOp,
+                "runtime slot table same-capacity growth must be a successful no-op");
+            Expect(!growingTable.GrowTo(767) &&
+                   growingTable.LogicalCapacity == 768 &&
+                   growingTable.MaterializedPageCount == 3 &&
+                   growingTable.ClaimedCount == tableClaimedBeforeNoOp &&
+                   growingTable.TryResolve(growingHandle767, out _),
+                "runtime slot table shrink must be rejected without changing existing state");
+
+            var mobileTable = new RuntimeSlotTable(1050, 20, 50);
+            var entity1049 = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            Expect(mobileTable.TryClaim(1049, entity1049, out RuntimeEntityHandle handle1049) &&
                    mobileTable.MaterializedPageCount == 1 &&
-                   mobileTable.TryResolve(handle999, out LF2Entity resolved999) &&
-                   ReferenceEquals(resolved999, entity999),
-                "runtime slot table must lazily claim the final MobileExtended slot");
-            Expect(!mobileTable.TryClaim(1000, new FlowSelfCheckEntity(LF2ObjectType.Character), out _) &&
-                   !mobileTable.IsAddressable(1000) &&
-                   mobileTable.GetRawRuntime(1000) == null &&
+                   mobileTable.TryResolve(handle1049, out LF2Entity resolved1049) &&
+                   ReferenceEquals(resolved1049, entity1049),
+                "runtime slot table must lazily claim the final MobileExtended dynamic slot");
+            Expect(!mobileTable.TryClaim(1050, new FlowSelfCheckEntity(LF2ObjectType.Character), out _) &&
+                   !mobileTable.IsAddressable(1050) &&
+                   !mobileTable.IsAddressable(1279) &&
+                   mobileTable.GetRawRuntime(1050) == null &&
+                   mobileTable.GetRawRuntime(1279) == null &&
                    mobileTable.MaterializedPageCount == 1,
-                "runtime slot table must keep the MobileExtended tail unavailable");
+                "runtime slot table must expose exactly 1000 MobileExtended dynamic slots and guard its physical tail");
 
             var world = new SimulationWorld();
             var worldEntity255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
@@ -370,6 +487,179 @@ namespace NTSD.Test
                    world.FindEntityByRuntimeSlotForQuery(256) == null &&
                    world.ObjectCount == 0,
                 "production runtime registry reset must clear cross-page occupant lookups");
+        }
+
+        private static void CheckExtendedSimulationWorldCapacityContracts()
+        {
+            bool rejectedTooSmallCapacity = false;
+            try
+            {
+                _ = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 49);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                rejectedTooSmallCapacity = true;
+            }
+
+            bool rejectedNonAuthorityCapacity = false;
+            try
+            {
+                _ = new SimulationWorld(BattleRuntimeProfile.Authority400, 512);
+            }
+            catch (ArgumentException)
+            {
+                rejectedNonAuthorityCapacity = true;
+            }
+
+            Expect(rejectedTooSmallCapacity && rejectedNonAuthorityCapacity,
+                "capacity-aware worlds must retain the dynamic slot band and keep Authority400 exactly 400 slots");
+
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_ExtendedWorld", 180);
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            LF2Character ai = CreateCharacter("SelfCheck_ExtendedWorld_AI", 33, data);
+            LF2Character highTarget = CreateCharacter("SelfCheck_ExtendedWorld_Target", 4, data);
+            var rejectedTail = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            ai.SetRequiredRuntimeSlot(0);
+            highTarget.SetRequiredRuntimeSlot(511);
+            rejectedTail.SetRequiredRuntimeSlot(512);
+            ai.AiControlled = true;
+            highTarget.AiControlled = false;
+            ai.RelationTeam = 1;
+            highTarget.RelationTeam = 2;
+            ai.Runtime.SetPosition(100, 0, 200);
+            highTarget.Runtime.SetPosition(260, 0, 210);
+            ai.Runtime.SyncIntegerPosition();
+            highTarget.Runtime.SyncIntegerPosition();
+
+            world.Register(ai);
+            world.Register(highTarget);
+            world.Register(rejectedTail);
+
+            Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended &&
+                   world.MaxRuntimeSlotsForServices == 512 &&
+                   highTarget.Runtime.SlotIndex == 511 &&
+                   rejectedTail.Runtime.SlotIndex == -1 &&
+                   ReferenceEquals(world.FindEntityByRuntimeSlotIncludingPending(511), highTarget) &&
+                   world.FindEntityByRuntimeSlotIncludingPending(512) == null,
+                "DesktopExtended infrastructure must expose its explicit service capacity, accept slot 511, and reject slot 512");
+
+            world.AiInputAndComboAll(2);
+            Expect(ai.Runtime.Unk360 == 511,
+                "capacity-aware AI slot snapshots and target scans must see a character in runtime slot 511");
+
+            world.ResetRuntimeState();
+            Expect(world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended &&
+                   world.MaxRuntimeSlotsForServices == 512 &&
+                   world.FindEntityByRuntimeSlotIncludingPending(511) == null &&
+                   world.ObjectCount == 0,
+                "extended world reset must clear high-slot occupants without changing the configured profile or capacity");
+
+            var defaultWorld = new SimulationWorld();
+            Expect(defaultWorld.RuntimeProfileForServices == BattleRuntimeProfile.Authority400 &&
+                   defaultWorld.MaxRuntimeSlotsForServices == SimulationWorld.AuthorityRuntimeSlotCapacity,
+                "the public SimulationWorld constructor must remain pinned to Authority400/400");
+        }
+
+        private static void CheckExtendedServiceBoundaryContracts()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var holder = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            holder.SetRequiredRuntimeSlot(511);
+            holder.ObjectId = 4;
+            var attacker = new PhaseRoutingSelfCheckSpecialAttack();
+            attacker.BindSource("SelfCheck_ExtendedHolder", 200, 0);
+            attacker.SetRequiredRuntimeSlot(50);
+            attacker.Runtime.HolderStableId = 511;
+            world.Register(holder);
+            world.Register(attacker);
+
+            var resolveHolder = typeof(LF2SpecialAttack).GetMethod(
+                "ResolveActiveHolder",
+                System.Reflection.BindingFlags.Static |
+                System.Reflection.BindingFlags.NonPublic);
+            Expect(resolveHolder != null,
+                "extended service boundary fixture must retain the special-attack holder resolver");
+            LF2Entity resolvedHolder = resolveHolder.Invoke(null, new object[] { attacker }) as LF2Entity;
+            Expect(ReferenceEquals(resolvedHolder, holder),
+                "special-attack holder resolution must accept the final slot of an extended world");
+
+            var karasu = new FlowSelfCheckEntity(LF2ObjectType.Other);
+            karasu.SetRequiredRuntimeSlot(510);
+            karasu.ObjectId = 209;
+            world.Register(karasu);
+
+            LF2CharacterData karasuData = new LF2CharacterData
+            {
+                name = "SelfCheck_Karasu209",
+                frames = new List<LF2FrameData> { Frame(0, 10, 1, 0, 39, 79) },
+            };
+            var karasuWrapper = new LF2CharacterDataWrapper(209, karasuData);
+            var karasuTypes = new Dictionary<int, int>
+            {
+                [209] = (int)LF2ObjectType.Other,
+            };
+            var karasuWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [209] = karasuWrapper,
+            };
+            using (new TemporaryRuntimeObjectConfigs(karasuTypes, karasuWrappers))
+            {
+                var replaceKarasu = typeof(LF2SpecialAttack).GetMethod(
+                    "ReplaceWithActiveKarasuData",
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.NonPublic);
+                Expect(replaceKarasu != null,
+                    "extended service boundary fixture must retain the Karasu replacement helper");
+                replaceKarasu.Invoke(attacker, null);
+            }
+
+            Expect(attacker.ObjectId == 209,
+                "Karasu replacement scan must include high runtime slots in an extended world");
+
+            var transitionProbe = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            transitionProbe.SetRequiredRuntimeSlot(51);
+            world.Register(transitionProbe);
+            var countAvailable = typeof(LF2Entity).GetMethod(
+                "CountAvailableTransitionEffectSlots",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            Expect(countAvailable != null,
+                "extended service boundary fixture must retain the transition-effect slot counter");
+            int available = (int)countAvailable.Invoke(transitionProbe, null);
+            Expect(available == 458,
+                $"transition effect slot count must use the extended dynamic range; actual={available}");
+
+            bool parityRejected = false;
+            try
+            {
+                world.CaptureParityFrameSnapshot(0);
+            }
+            catch (InvalidOperationException)
+            {
+                parityRejected = true;
+            }
+            Expect(parityRejected,
+                "fixed 400-slot parity snapshots must reject non-Authority400 worlds");
+
+            var extendedAuthorityCapacityWorld =
+                new SimulationWorld(BattleRuntimeProfile.DesktopExtended, SimulationWorld.AuthorityRuntimeSlotCapacity);
+            bool extendedProfileParityRejected = false;
+            try
+            {
+                extendedAuthorityCapacityWorld.CaptureParityFrameSnapshot(0);
+            }
+            catch (InvalidOperationException)
+            {
+                extendedProfileParityRejected = true;
+            }
+            Expect(extendedProfileParityRejected,
+                "fixed 400-slot parity snapshots must reject an extended profile even when capacity is 400");
+
+            var authorityWorld = new SimulationWorld();
+            BattleParityFrameSnapshot authoritySnapshot = authorityWorld.CaptureParityFrameSnapshot(0);
+            Expect(authoritySnapshot != null && authoritySnapshot.Hashes != null &&
+                   !string.IsNullOrEmpty(authoritySnapshot.Hashes.Slots),
+                "Authority400 parity snapshots must retain the fixed 400-slot schema");
         }
 
         private static void CheckParityTraceInfrastructure()

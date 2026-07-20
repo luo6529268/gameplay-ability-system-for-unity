@@ -71,7 +71,7 @@ namespace NTSD.Simulation
 
             if (entity == null)
             {
-                for (int runtimeSlot = 0; runtimeSlot < MaxRuntimeSlots; runtimeSlot++)
+                for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
                 {
                     LF2Entity candidate = ResolveRosterSlotEntity(runtimeSlot, rosterSlot);
                     if (candidate == null || IsRuntimeSlotBoundToOtherRosterPlayer(runtimeSlot, playerSlot))
@@ -131,7 +131,7 @@ namespace NTSD.Simulation
 
         private LF2Entity ResolveBoundRosterSlotEntity(int runtimeSlot, BattleSlotRuntimeState rosterSlot)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= MaxRuntimeSlots)
+            if (runtimeSlot < 0 || runtimeSlot >= RuntimeSlotCapacity)
                 return null;
 
             LF2Entity candidate = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
@@ -140,7 +140,7 @@ namespace NTSD.Simulation
 
         private LF2Entity ResolveRosterSlotEntity(int runtimeSlot, BattleSlotRuntimeState rosterSlot)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= MaxRuntimeSlots)
+            if (runtimeSlot < 0 || runtimeSlot >= RuntimeSlotCapacity)
                 return null;
 
             LF2Entity candidate = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
@@ -149,7 +149,7 @@ namespace NTSD.Simulation
 
         private LF2Entity FindRosterEntityByStableId(int stableId, BattleSlotRuntimeState rosterSlot)
         {
-            for (int runtimeSlot = 0; runtimeSlot < MaxRuntimeSlots; runtimeSlot++)
+            for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
             {
                 LF2Entity candidate = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
                 if (candidate?.Runtime?.StableId == stableId && BoundRosterEntityMatches(candidate, rosterSlot))

@@ -5,7 +5,7 @@ namespace NTSD.Simulation
 {
     public partial class SimulationWorld
     {
-        private readonly LF2Entity[] aiInputSlots = new LF2Entity[400];
+        private readonly LF2Entity[] aiInputSlots;
 
         private struct AiInputContext
         {

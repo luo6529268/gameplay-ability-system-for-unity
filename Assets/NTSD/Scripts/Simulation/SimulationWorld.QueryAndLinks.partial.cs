@@ -16,7 +16,7 @@ namespace NTSD.Simulation
     {
         internal void ResetCooldownsForRuntimeSlot(int runtimeSlot, LF2Entity occupant)
         {
-            if (runtimeSlot < 0 || runtimeSlot >= MaxRuntimeSlots)
+            if (runtimeSlot < 0 || runtimeSlot >= RuntimeSlotCapacity)
                 return;
 
             _runtimeSlots.SetRawRest(runtimeSlot, null);
@@ -99,14 +99,14 @@ namespace NTSD.Simulation
             ForEachEntityByRuntimeSlot(holder =>
             {
                 int holderSlot = GetRuntimeSlotOrder(holder);
-                if (holderSlot < 0 || holderSlot >= MaxRuntimeSlots)
+                if (holderSlot < 0 || holderSlot >= RuntimeSlotCapacity)
                     return;
 
                 if (holder.Runtime.LinkState <= 0)
                     return;
 
                 int targetRuntimeSlot = holder.Runtime.TargetSlotIndex;
-                LF2Entity target = targetRuntimeSlot >= 0 && targetRuntimeSlot < MaxRuntimeSlots
+                LF2Entity target = targetRuntimeSlot >= 0 && targetRuntimeSlot < RuntimeSlotCapacity
                     ? FindEntityByRuntimeSlotCurrent(targetRuntimeSlot)
                     : null;
                 if (target == null || target.Runtime.HolderStableId != holderSlot)

@@ -284,7 +284,7 @@ namespace NTSD.Simulation
                         continue;
 
                     int slot = entity.Runtime?.SlotIndex ?? -1;
-                    if (slot < 20 || slot >= MaxRuntimeSlots)
+                    if (slot < 20 || slot >= RuntimeSlotCapacity)
                         continue;
 
                     if (entity.ObjectId == spawn.Id)
@@ -431,7 +431,7 @@ namespace NTSD.Simulation
             if (spawn == null || spawn.Id < 0)
                 return -1;
 
-            int requiredRuntimeSlot = FindFirstFreeRuntimeSlot(20, MaxRuntimeSlots);
+            int requiredRuntimeSlot = FindFirstFreeRuntimeSlot(20, RuntimeSlotCapacity);
             if (requiredRuntimeSlot < 0)
                 return -1;
 

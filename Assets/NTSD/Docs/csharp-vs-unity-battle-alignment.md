@@ -2,15 +2,21 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1、R2A 与 R2B `Authority400` 基础设施已实施并验证 / 其余未实施**。R1 已落地 `BattleRuntimeProfileResolver`，解析顺序为显式覆盖 > 配置值 > 平台默认；平台宏仅选择默认 Profile，Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 官方条件编译符号只用于该默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **方案已确认 / R1、R2A、R2B、R2C `GrowTo`、R2C-3A world 实例容量读取与 R2C-3B 外部容量边界已实施并验证 / 其余未实施**。R1 已落地 `BattleRuntimeProfileResolver`，解析顺序为显式覆盖 > 配置值 > 平台默认；平台宏仅选择默认 Profile，Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 官方条件编译符号只用于该默认入口，后续 `SystemInfo` 能力检测只允许降级表现后端，不得改变战斗结果。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
-R2A 已建立固定 `PageSize = 256`、按需物化的 `RuntimeSlotTable`，验证 400/1000 逻辑容量最后一页的尾部 guard、每槽独立 raw runtime/rest 存储、`ClaimedCount`，以及 `(slot, generation)` 句柄在 release、同槽 reuse、reset 后使旧引用失效。fresh 证据为源码 `2026-07-20 12:33:20` < Unity `Assembly-CSharp.dll` `12:36:25` < 完整 `BattleRuntimeSelfCheck` `12:36:53` **PASS**；架构复核 **PASS**。
+R2A 已建立固定 `PageSize = 256`、按需物化的 `RuntimeSlotTable`，验证 `Authority400` 的 400 逻辑地址、`MobileExtended` 设计所需的 1050 逻辑地址及最后一页尾部 guard、每槽独立 raw runtime/rest 存储、`ClaimedCount`，以及 `(slot, generation)` 句柄在 release、同槽 reuse、reset 后使旧引用失效。fresh 证据为源码 `2026-07-20 12:33:20` < Unity `Assembly-CSharp.dll` `12:36:25` < 完整 `BattleRuntimeSelfCheck` `12:36:53` **PASS**；架构复核 **PASS**。
 
 R2B 已将生产 `Authority400` registry 迁移到单一 `RuntimeSlotTable`，替换旧的 used/raw runtime/raw rest 并行数组；slot 到当前 occupant 为 O(1) 查询。live ascending slot scan 保留游标以上新生实体同 pass 可见、游标以下低槽复用实体延至下一 pass 的时序；release 以 `expectedEntity`/当前 occupant 防止旧实体释放复用槽。stage spawn 的 raw rest 恢复/消费、ordinary spawn 重置语义，以及 `ObjectCount`、buckets、`SceneQueryHit` 的 slot-address 契约均保持不变。fresh 证据为生产源码 `2026-07-20 12:55:14` < Unity `Assembly-CSharp.dll` `12:56:37` < 完整 `BattleRuntimeSelfCheck` `12:57:02` **PASS**；`dotnet build` **0 errors**；架构复核 **PASS**；旧并行 registry 字段检索 **0**。
 
-未完成边界保持不变：`SimulationWorld` 虽已使用 `RuntimeSlotTable`，仍显式 pin `Authority400`；`MobileExtended` / `DesktopExtended` 尚未接入正式 runtime，桌面动态分页增长、移动端 1000 active admission 与第 1001 个确定性拒绝、AI 迁移、X/Z Loose Quadtree、VRest 解耦、详细 parity 热路径拆分与集中式渲染均未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
+R2C 已为 `RuntimeSlotAllocator` 与 `RuntimeSlotTable` 实现单调 `GrowTo`：增长保持 min-heap、`nextUnused`、claims、既有 pages、occupants、generation handles、raw runtime/rest；等容量调用为成功 no-op，缩容拒绝且不改变状态。移动端契约同时修正为 **1000 active admission + 1050 logical slot addresses**：保留 `0..49` 后，1000 个动态槽为 `50..1049`；256 槽分页会建立 5 个物理页地址区间，但 `1050..1279` 必须不可访问。fresh 证据为源码 `2026-07-20 13:23:00` < Unity `Assembly-CSharp.dll` `13:24:49` < 完整 `BattleRuntimeSelfCheck` `13:25:34` **PASS**；`dotnet build` **0 errors**；架构复核 **PASS**。
+
+R2C-3A 已让 `SimulationWorld.RuntimeSlotCapacity` 读取当前槽表逻辑容量，并将 registry、frame input、entity passes、query/link、stage wave 与 AI 的真实 world 容量边界改为当前实例容量。默认 `SimulationWorld()` 仍是 `Authority400/400`；新增 internal `DesktopExtended/512` focused contract 仅验证 slot `511` 注册/查询/AI 可见、slot `512` 拒绝和 reset 清理，不是生产 Profile 接线。`BattleParitySnapshot` 继续固定使用明确的 400-slot authority schema。fresh 证据为相关源码约 `2026-07-20 13:45:39` < Unity `Assembly-CSharp.dll` `13:51:07` < 完整 `BattleRuntimeSelfCheck` `13:54:22` **PASS**；fresh `dotnet build` **0 errors / 42 warnings**。
+
+R2C-3B 已关闭外部固定容量边界：`LF2SpecialAttack` 的高槽 holder 验证和 Karasu oid209 扫描使用当前 world capacity；`LF2Entity` transition effect 的可用槽计数使用当前 dynamic range。历史 parity capture 现在必须同时满足 `Authority400` Profile 与 400 逻辑容量，明确拒绝 `DesktopExtended/512` 和 `DesktopExtended/400`，避免同容量非 authority world 伪装成旧 certificate。fresh 证据为相关源码 `2026-07-20 14:37:37` < Unity `Assembly-CSharp.dll` `14:38:09` < 完整 `BattleRuntimeSelfCheck` `14:44:04` **PASS**；fresh `dotnet build Assembly-CSharp.csproj` **0 errors**，warnings 为既有告警。
+
+未完成边界保持不变：生产 Driver 尚未接入 `MobileExtended` / `DesktopExtended`，默认 world 仍固定 `Authority400/400`。Profile 容量策略、桌面自动分页增长、移动端 1000 active admission 与第 1001 个确定性拒绝、X/Z Loose Quadtree、VRest 解耦、扩展 parity schema 与集中式渲染均未实施或启用，也没有 Play Mode、Android 真机或像素级验收。render command 容量仍独立于 runtime slot 容量；本计划不涉及 T8，且不得改变 C# 权威战斗逻辑或 runtime 真值。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

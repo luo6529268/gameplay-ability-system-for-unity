@@ -37,7 +37,7 @@ namespace NTSD.Simulation
         }
 
         private readonly RuntimeSlotAllocator allocator;
-        private readonly Page[] pages;
+        private Page[] pages;
 
         public RuntimeSlotTable(int logicalCapacity, int stageStart = 20, int dynamicStart = 50)
         {
@@ -49,9 +49,28 @@ namespace NTSD.Simulation
             pages = new Page[(logicalCapacity + PageSize - 1) / PageSize];
         }
 
-        public int LogicalCapacity { get; }
+        public int LogicalCapacity { get; private set; }
         public int ClaimedCount => allocator.ClaimedCount;
         public int MaterializedPageCount { get; private set; }
+
+        public bool GrowTo(int newLogicalCapacity)
+        {
+            if (newLogicalCapacity < LogicalCapacity)
+                return false;
+            if (newLogicalCapacity == LogicalCapacity)
+                return true;
+
+            int newPageCount = (newLogicalCapacity + PageSize - 1) / PageSize;
+            var grownPages = new Page[newPageCount];
+            Array.Copy(pages, grownPages, pages.Length);
+
+            if (!allocator.GrowTo(newLogicalCapacity))
+                return false;
+
+            pages = grownPages;
+            LogicalCapacity = newLogicalCapacity;
+            return true;
+        }
 
         public bool IsAddressable(int slot)
         {

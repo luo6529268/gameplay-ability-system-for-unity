@@ -1016,7 +1016,7 @@ namespace NTSD.Animation.LF2Objects
                 return null;
 
             int holderSlot = entity.Runtime.HolderStableId;
-            if (holderSlot < 0 || holderSlot >= 400)
+            if (holderSlot < 0 || holderSlot >= entity.Match.MaxRuntimeSlotsForServices)
                 return null;
 
             return entity.Match.FindEntityByRuntimeSlotForQuery(holderSlot);
@@ -1033,7 +1033,7 @@ namespace NTSD.Animation.LF2Objects
             if (Match == null)
                 return;
 
-            for (int slot = 0; slot < 400; slot++)
+            for (int slot = 0; slot < Match.MaxRuntimeSlotsForServices; slot++)
             {
                 LF2Entity candidate = Match.FindEntityByRuntimeSlotForQuery(slot);
                 if (candidate == null || candidate.ObjectId != 209)

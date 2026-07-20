@@ -11,9 +11,9 @@ namespace NTSD.Simulation
         private sealed class Segment
         {
             private readonly int start;
-            private readonly int end;
-            private readonly int[] heap;
-            private readonly int[] positions;
+            private int end;
+            private int[] heap;
+            private int[] positions;
             private int count;
             private int nextUnused;
 
@@ -28,6 +28,25 @@ namespace NTSD.Simulation
 
             public int Start => start;
             public int End => end;
+
+            public void GrowTo(int newEnd)
+            {
+                if (newEnd <= end)
+                    return;
+
+                int oldLength = end - start;
+                int newLength = newEnd - start;
+                var grownHeap = new int[newLength];
+                var grownPositions = new int[newLength];
+                Array.Copy(heap, grownHeap, count);
+                Array.Copy(positions, grownPositions, oldLength);
+                for (int index = oldLength; index < newLength; index++)
+                    grownPositions[index] = -1;
+
+                heap = grownHeap;
+                positions = grownPositions;
+                end = newEnd;
+            }
 
             public void Reset()
             {
@@ -158,7 +177,7 @@ namespace NTSD.Simulation
             }
         }
 
-        private readonly bool[] claimed;
+        private bool[] claimed;
         private readonly Segment[] segments;
 
         public RuntimeSlotAllocator(int capacity, int stageStart = 20, int dynamicStart = 50)
@@ -178,8 +197,24 @@ namespace NTSD.Simulation
             };
         }
 
-        public int Capacity { get; }
+        public int Capacity { get; private set; }
         public int ClaimedCount { get; private set; }
+
+        public bool GrowTo(int newCapacity)
+        {
+            if (newCapacity < Capacity)
+                return false;
+            if (newCapacity == Capacity)
+                return true;
+
+            var grownClaimed = new bool[newCapacity];
+            Array.Copy(claimed, grownClaimed, claimed.Length);
+
+            segments[segments.Length - 1].GrowTo(newCapacity);
+            claimed = grownClaimed;
+            Capacity = newCapacity;
+            return true;
+        }
 
         public bool ClaimRequired(int slot)
         {

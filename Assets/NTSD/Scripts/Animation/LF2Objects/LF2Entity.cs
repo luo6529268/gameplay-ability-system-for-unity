@@ -3839,7 +3839,9 @@ namespace NTSD.Animation.LF2Objects
                 return 350;
 
             int available = 0;
-            for (int slot = 50; slot < 400; slot++)
+            for (int slot = Match.DynamicRuntimeSlotStartForServices;
+                 slot < Match.MaxRuntimeSlotsForServices;
+                 slot++)
             {
                 if (Match.FindEntityByRuntimeSlotForQuery(slot) == null)
                     available++;

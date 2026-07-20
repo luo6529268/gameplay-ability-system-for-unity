@@ -250,6 +250,14 @@ namespace NTSD.Simulation
             FrameInputSet frameInput = null,
             bool includeFullDomains = false)
         {
+            if (RuntimeProfileForServices != BattleRuntimeProfile.Authority400 ||
+                RuntimeSlotCapacity != AuthorityRuntimeSlotCapacity)
+            {
+                throw new InvalidOperationException(
+                    $"Parity snapshots require an Authority400 world ({AuthorityRuntimeSlotCapacity} slots); " +
+                    $"actual profile is {RuntimeProfileForServices} with capacity {RuntimeSlotCapacity}.");
+            }
+
             object inputDomain = ProjectFrameInput(frameInput ?? FrameInputSet.Empty(tickIndex));
             object rngDomain = DictionaryOf(
                 ("callCount", (object)(Rng?.CallCount ?? 0UL)),
@@ -330,7 +338,7 @@ namespace NTSD.Simulation
 
         private object[] ProjectAllRuntimeSlots()
         {
-            var result = new object[MaxRuntimeSlots];
+            var result = new object[AuthorityRuntimeSlotCapacity];
             for (int runtimeSlot = 0; runtimeSlot < result.Length; runtimeSlot++)
             {
                 LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
@@ -702,7 +710,7 @@ namespace NTSD.Simulation
         private object ProjectARestDomain()
         {
             var entries = new List<object>();
-            for (int slot = 0; slot < MaxRuntimeSlots; slot++)
+            for (int slot = 0; slot < AuthorityRuntimeSlotCapacity; slot++)
             {
                 LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
                 int value = entity?.ItrRest?.Arest ?? GetRawRestArest(slot);
@@ -710,7 +718,7 @@ namespace NTSD.Simulation
                     entries.Add(DictionaryOf(("slot", (object)slot), ("value", value)));
             }
             return DictionaryOf(
-                ("dimension", (object)MaxRuntimeSlots),
+                ("dimension", (object)AuthorityRuntimeSlotCapacity),
                 ("encoding", "sparse-nonzero"),
                 ("entries", entries.ToArray()));
         }
@@ -718,13 +726,13 @@ namespace NTSD.Simulation
         private object ProjectVRestDomain()
         {
             var entries = new List<object>();
-            var victims = new LF2Entity[MaxRuntimeSlots];
+            var victims = new LF2Entity[AuthorityRuntimeSlotCapacity];
             for (int victim = 0; victim < victims.Length; victim++)
                 victims[victim] = FindEntityByRuntimeSlotIncludingDormant(victim);
 
-            for (int first = 0; first < MaxRuntimeSlots; first++)
+            for (int first = 0; first < AuthorityRuntimeSlotCapacity; first++)
             {
-                for (int second = 0; second < MaxRuntimeSlots; second++)
+                for (int second = 0; second < AuthorityRuntimeSlotCapacity; second++)
                 {
                     // v3 preserves the authority matrix byte order. Its historical labels
                     // call the first (actual victim) index attackerSlot.
@@ -739,14 +747,14 @@ namespace NTSD.Simulation
                 }
             }
             return DictionaryOf(
-                ("dimension", (object)MaxRuntimeSlots),
+                ("dimension", (object)AuthorityRuntimeSlotCapacity),
                 ("encoding", "sparse-nonzero"),
                 ("entries", entries.ToArray()));
         }
 
         private object ProjectFullARestDomain()
         {
-            var values = new int[MaxRuntimeSlots];
+            var values = new int[AuthorityRuntimeSlotCapacity];
             for (int slot = 0; slot < values.Length; slot++)
             {
                 LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
@@ -754,22 +762,22 @@ namespace NTSD.Simulation
             }
 
             return DictionaryOf(
-                ("dimension", (object)MaxRuntimeSlots),
+                ("dimension", (object)AuthorityRuntimeSlotCapacity),
                 ("encoding", "full"),
                 ("values", values));
         }
 
         private object ProjectFullVRestDomain()
         {
-            var values = new int[MaxRuntimeSlots][];
-            var victims = new LF2Entity[MaxRuntimeSlots];
+            var values = new int[AuthorityRuntimeSlotCapacity][];
+            var victims = new LF2Entity[AuthorityRuntimeSlotCapacity];
             for (int victim = 0; victim < victims.Length; victim++)
                 victims[victim] = FindEntityByRuntimeSlotIncludingDormant(victim);
 
-            for (int first = 0; first < MaxRuntimeSlots; first++)
+            for (int first = 0; first < AuthorityRuntimeSlotCapacity; first++)
             {
-                var row = new int[MaxRuntimeSlots];
-                for (int second = 0; second < MaxRuntimeSlots; second++)
+                var row = new int[AuthorityRuntimeSlotCapacity];
+                for (int second = 0; second < AuthorityRuntimeSlotCapacity; second++)
                 {
                     row[second] = victims[first]?.ItrRest?.GetVrest(second) ??
                                   GetRawRestVrest(first, second);
@@ -778,7 +786,7 @@ namespace NTSD.Simulation
             }
 
             return DictionaryOf(
-                ("dimension", (object)MaxRuntimeSlots),
+                ("dimension", (object)AuthorityRuntimeSlotCapacity),
                 ("encoding", "full-row-major"),
                 ("values", values));
         }
