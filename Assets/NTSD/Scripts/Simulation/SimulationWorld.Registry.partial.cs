@@ -141,6 +141,19 @@ namespace NTSD.Simulation
             return _runtimeSlots.GetRawRuntime(runtimeSlot);
         }
 
+        internal bool TryGetCurrentRuntimeHandle(
+            int runtimeSlot,
+            LF2Entity expectedEntity,
+            out RuntimeEntityHandle handle)
+        {
+            return _runtimeSlots.TryGetCurrentHandle(runtimeSlot, expectedEntity, out handle);
+        }
+
+        internal bool TryResolveRuntimeHandle(RuntimeEntityHandle handle, out LF2Entity entity)
+        {
+            return _runtimeSlots.TryResolve(handle, out entity);
+        }
+
         private void ResetRawRuntimeSlotState(int runtimeSlot)
         {
             GetRawRuntimeSlotState(runtimeSlot)?.Reset();
@@ -166,6 +179,8 @@ namespace NTSD.Simulation
 
         private void ResetRegisteredObjects()
         {
+            (SceneQuery as BruteForceSceneQuery)?.ResetFormalSpatialBroadphase();
+
             var registeredObjects = new HashSet<ISimObject>();
             List<int> bucketKeys = GetBucketKeySnapshot();
             if (bucketKeys != null)

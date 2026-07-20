@@ -32,9 +32,13 @@ namespace NTSD.Animation
         private readonly SpatialBroadphaseDiagnostics _shadowDiagnostics = new SpatialBroadphaseDiagnostics();
         private readonly LooseQuadtreeBroadphase _formalBroadphase = new LooseQuadtreeBroadphase();
         private readonly List<LF2Entity> _formalParticipants = new List<LF2Entity>(128);
-        private readonly List<SpatialBroadphaseEntry> _formalEntries = new List<SpatialBroadphaseEntry>(128);
+        private readonly List<RuntimeEntityHandle> _formalParticipantHandles =
+            new List<RuntimeEntityHandle>(128);
+        private readonly List<IncrementalSpatialEntry> _formalIncrementalEntries =
+            new List<IncrementalSpatialEntry>(128);
         private readonly List<int> _formalFallbackOrdinals = new List<int>(32);
-        private readonly List<int> _formalQueryIndices = new List<int>(64);
+        private readonly List<RuntimeEntityHandle> _formalQueryHandles =
+            new List<RuntimeEntityHandle>(64);
         private readonly List<long> _formalPairKeys = new List<long>(256);
         private readonly List<long> _formalAuthorityPairKeys = new List<long>(256);
         private readonly Dictionary<int, int> _formalSlotToOrdinal = new Dictionary<int, int>();
@@ -47,12 +51,20 @@ namespace NTSD.Animation
         internal CollisionBroadphaseBackend CollisionBroadphase => _collisionBroadphase;
         internal int FormalFallbackParticipantCount => _formalFallbackParticipantCount;
         internal bool FormalCollectionAborted => _formalCollectionAborted;
+        internal SpatialSynchronizeResult FormalSpatialSynchronizeResult { get; private set; }
+        internal LooseQuadtreeBroadphase FormalBroadphaseForSelfCheck => _formalBroadphase;
         public BruteForceSceneQuery(
             SimulationWorld world,
             CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
         {
             _world = world;
             _collisionBroadphase = collisionBroadphase;
+        }
+
+        internal void ResetFormalSpatialBroadphase()
+        {
+            _formalBroadphase.ResetIncremental();
+            FormalSpatialSynchronizeResult = default;
         }
 
         public List<SceneQueryHit> QueryBodyHits(in PhysicsState.BattleVolume vol, LF2Entity exclude)
@@ -387,7 +399,8 @@ namespace NTSD.Animation
         private bool TryCollectCollisionCandidatesLoose(int currentTick)
         {
             _formalParticipants.Clear();
-            _formalEntries.Clear();
+            _formalParticipantHandles.Clear();
+            _formalIncrementalEntries.Clear();
             _formalFallbackOrdinals.Clear();
             _formalPairKeys.Clear();
             _formalAuthorityPairKeys.Clear();
@@ -406,15 +419,17 @@ namespace NTSD.Animation
                 if (runtimeSlot < 0 ||
                     runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
                     !ReferenceEquals(_world.FindEntityByRuntimeSlotForQuery(runtimeSlot), entity) ||
-                    !_formalSeenSlots.Add(runtimeSlot))
-                    return false;
+                    !_formalSeenSlots.Add(runtimeSlot) ||
+                    !_world.TryGetCurrentRuntimeHandle(runtimeSlot, entity, out RuntimeEntityHandle handle))
+                {
+                    return AbortFormalSpatialIndex();
+                }
                 _formalSlotToOrdinal.Add(runtimeSlot, _formalParticipants.Count);
                 _formalParticipants.Add(entity);
+                _formalParticipantHandles.Add(handle);
             }
 
             int participantCount = _formalParticipants.Count;
-            if (participantCount < 2)
-                return true;
 
             for (int authorityOrdinal = 0; authorityOrdinal < participantCount; authorityOrdinal++)
             {
@@ -428,14 +443,13 @@ namespace NTSD.Animation
                     continue;
                 }
 
-                _formalEntries.Add(new SpatialBroadphaseEntry(
-                    entity.Runtime.SlotIndex,
-                    authorityOrdinal,
+                _formalIncrementalEntries.Add(new IncrementalSpatialEntry(
+                    _formalParticipantHandles[authorityOrdinal],
                     bounds));
             }
 
-            if (_formalEntries.Count + _formalFallbackOrdinals.Count != participantCount)
-                return false;
+            if (_formalIncrementalEntries.Count + _formalFallbackOrdinals.Count != participantCount)
+                return AbortFormalSpatialIndex();
 
             _formalFallbackParticipantCount = _formalFallbackOrdinals.Count;
 
@@ -451,35 +465,50 @@ namespace NTSD.Animation
 
             try
             {
-                _formalBroadphase.Rebuild(_formalEntries, preferredRoot);
-                if (_formalBroadphase.EntryCount != _formalEntries.Count)
-                    return false;
-
-                for (int entryIndex = 0; entryIndex < _formalEntries.Count; entryIndex++)
+                FormalSpatialSynchronizeResult = _formalBroadphase.Synchronize(
+                    _formalIncrementalEntries,
+                    preferredRoot);
+                if (!FormalSpatialSynchronizeResult.Succeeded ||
+                    FormalSpatialSynchronizeResult.IndexedCount != _formalIncrementalEntries.Count)
                 {
-                    SpatialBroadphaseEntry entry = _formalEntries[entryIndex];
-                    _formalBroadphase.Query(entry.Bounds, _formalQueryIndices);
-                    for (int resultIndex = 0; resultIndex < _formalQueryIndices.Count; resultIndex++)
+                    return AbortFormalSpatialIndex();
+                }
+
+                if (participantCount < 2)
+                    return true;
+
+                for (int entryIndex = 0; entryIndex < _formalIncrementalEntries.Count; entryIndex++)
+                {
+                    IncrementalSpatialEntry entry = _formalIncrementalEntries[entryIndex];
+                    _formalBroadphase.QueryHandles(entry.Bounds, _formalQueryHandles);
+                    for (int resultIndex = 0; resultIndex < _formalQueryHandles.Count; resultIndex++)
                     {
-                        int authorityOrdinal = _formalQueryIndices[resultIndex];
-                        if (authorityOrdinal < 0 || authorityOrdinal >= participantCount)
-                            return false;
-                        if (authorityOrdinal == entry.InputIndex)
+                        RuntimeEntityHandle otherHandle = _formalQueryHandles[resultIndex];
+                        if (otherHandle == entry.Handle)
                             continue;
 
-                        int otherRuntimeSlot = _formalParticipants[authorityOrdinal].Runtime.SlotIndex;
-                        if (!_formalSlotToOrdinal.TryGetValue(otherRuntimeSlot, out int mappedOrdinal) ||
-                            mappedOrdinal != authorityOrdinal)
+                        if (!_world.TryResolveRuntimeHandle(otherHandle, out LF2Entity otherEntity) ||
+                            otherEntity?.Runtime == null ||
+                            otherEntity.Runtime.SlotIndex != otherHandle.Slot)
                         {
-                            return false;
+                            return AbortFormalSpatialIndex();
                         }
-                        AddRuntimeSlotPair(entry.RuntimeSlot, otherRuntimeSlot);
+
+                        int otherRuntimeSlot = otherHandle.Slot;
+                        if (!_formalSlotToOrdinal.TryGetValue(otherRuntimeSlot, out int mappedOrdinal) ||
+                            mappedOrdinal < 0 || mappedOrdinal >= participantCount ||
+                            !ReferenceEquals(_formalParticipants[mappedOrdinal], otherEntity) ||
+                            _formalParticipantHandles[mappedOrdinal] != otherHandle)
+                        {
+                            return AbortFormalSpatialIndex();
+                        }
+                        AddRuntimeSlotPair(entry.Handle.Slot, otherRuntimeSlot);
                     }
                 }
             }
             catch (Exception)
             {
-                return false;
+                return AbortFormalSpatialIndex();
             }
 
             for (int fallbackIndex = 0; fallbackIndex < _formalFallbackOrdinals.Count; fallbackIndex++)
@@ -506,7 +535,7 @@ namespace NTSD.Animation
                     !_formalSlotToOrdinal.TryGetValue(secondSlot, out int secondOrdinal) ||
                     firstOrdinal == secondOrdinal)
                 {
-                    return false;
+                    return AbortFormalSpatialIndex();
                 }
 
                 uint minOrdinal = (uint)Math.Min(firstOrdinal, secondOrdinal);
@@ -519,7 +548,7 @@ namespace NTSD.Animation
                 for (int i = 0; i < _shadowBrutePairs.Count; i++)
                 {
                     if (_formalPairKeys.BinarySearch(_shadowBrutePairs[i]) < 0)
-                        return false;
+                        return AbortFormalSpatialIndex();
                 }
             }
 
@@ -534,7 +563,7 @@ namespace NTSD.Animation
                     if (firstOrdinal < 0 || secondOrdinal <= firstOrdinal ||
                         secondOrdinal >= participantCount)
                     {
-                        return false;
+                        return AbortFormalSpatialIndex();
                     }
 
                     LF2Entity first = _formalParticipants[firstOrdinal];
@@ -545,10 +574,16 @@ namespace NTSD.Animation
             }
             catch (Exception)
             {
-                return false;
+                return AbortFormalSpatialIndex();
             }
 
             return true;
+        }
+
+        private bool AbortFormalSpatialIndex()
+        {
+            _formalBroadphase.ResetIncremental();
+            return false;
         }
 
         private void AddRuntimeSlotPair(int firstSlot, int secondSlot)

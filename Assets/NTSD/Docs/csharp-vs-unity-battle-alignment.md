@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
-移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0、B1-B1.3 与 B2A formal Loose Quadtree backend 已完成代码层实施和既定验证**。
+移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0、B1-B1.3、B2A 与 B2B generation-aware incremental Loose Quadtree 已完成代码层实施和既定验证**。
 
 `Authority400` 已接入 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`，保留 C# 权威 400 槽、特殊槽区与最低空闲槽语义；`SimulationWorld` 仍显式 pin `Authority400`。fresh 证据为源码 `2026-07-20 11:49:59` < Unity `Assembly-CSharp.dll` `12:04:36` < 完整 `BattleRuntimeSelfCheck` `12:05:07` **PASS**；100,000 次随机分配操作与朴素扫描模型对照 **PASS**；架构复核 **PASS**。
 
@@ -30,7 +30,9 @@ B1.3 已实现 collision pair VRest tick 解耦：正式顺序为 `CaptureSnapsh
 
 B2A 已实现独立 `CollisionBroadphaseBackend.BruteForce/LooseQuadtree` 正式后端，选择优先级为命令行 `-ntsdCollisionBroadphase` > `GameConfig.BattleCollisionBroadphaseName` > 默认 `BruteForce`。它只替换 fixed-tick candidate collect；即时 weapon/body query 不变。formal participant 保留 brute authority ordinal，tree 与 invalid-AABB fallback-all pair 统一转换为 canonical slot pair、排序去重，再按 authority ordinal 双向派发。slot/mapping/index/entry count 非法、rebuild/query 异常或 diagnostics 缺少 brute coverage 时，整 tick 丢弃 formal 输出，原子恢复 RNG/candidate state 并重跑 brute-force；extra pair 交 narrow phase。fresh 证据为源码 `2026-07-20 22:15:07` < Unity `Assembly-CSharp.dll` `22:18:48` < full `BattleRuntimeSelfCheck` `22:19:28` **PASS**，`dotnet build` **0 errors**；architect final review **PASS / no blocker**。
 
-本批未执行 Play Mode。B2A 已具备 formal switch，但生产默认仍为 `BruteForce`；B2B 增量 quadtree 更新、Extended parity/replay/checksum schema 与集中式渲染仍未实施。T8 默认 `stage.dat` 部署继续暂缓。
+B2B 已把 formal backend 从每 tick full rebuild 改为 collision collect 边界的 batch synchronize。索引身份使用 `(runtime slot, generation)` handle：未移动实体保持原记录，AABB 在当前 loose 范围内变化时原位更新，跨 loose 范围时迁移；spawn/remove、valid/invalid AABB 转换与同槽复用都在下一 collect 收口，root escape 才执行 full rebuild。query handle 必须通过当前槽表 generation 解析并核对 entity/ordinal；sync、query、invariant 或 mapping 失败会 reset 索引并走 B2A 的整 tick brute/RNG/candidate rollback。world reset 也显式清空 formal index。fresh 证据为源码 `2026-07-20 22:43:57` < Unity `Assembly-CSharp.dll` `22:46:36` < full `BattleRuntimeSelfCheck` `22:47:04` **PASS**，`dotnet build` **0 errors**；architect final review **PASS / no blocker**。
+
+本批未执行 Play Mode。生产默认仍为 `BruteForce`；即时 weapon/body query、AI 查询、Extended parity/replay/checksum schema 与集中式渲染仍未迁移或实施。T8 默认 `stage.dat` 部署继续暂缓。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归（2026-07-19）
 

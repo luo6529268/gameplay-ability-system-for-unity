@@ -154,6 +154,32 @@ namespace NTSD.Simulation
             return entity != null;
         }
 
+        public bool TryGetCurrentHandle(
+            int slot,
+            LF2Entity expectedEntity,
+            out RuntimeEntityHandle handle)
+        {
+            handle = RuntimeEntityHandle.Invalid;
+            if (expectedEntity == null ||
+                !IsAddressable(slot) ||
+                !allocator.IsClaimed(slot))
+            {
+                return false;
+            }
+
+            Entry entry = GetEntry(slot, false);
+            if (entry == null ||
+                !entry.Claimed ||
+                entry.Generation == 0 ||
+                !ReferenceEquals(entry.Entity, expectedEntity))
+            {
+                return false;
+            }
+
+            handle = new RuntimeEntityHandle(slot, entry.Generation);
+            return handle.IsValid;
+        }
+
         private bool ReleaseEntry(int slot, Entry entry)
         {
             if (!allocator.Release(slot))

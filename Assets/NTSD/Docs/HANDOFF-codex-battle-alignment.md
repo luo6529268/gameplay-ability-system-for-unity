@@ -2,7 +2,7 @@
 
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案交接（更新于 2026-07-20）
 
-方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **R1-R2C-4、B0、B1-B1.3 与 B2A formal Loose Quadtree backend 已完成代码层实施和既定验证**。
+方案入口：[central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态为 **R1-R2C-4、B0、B1-B1.3、B2A 与 B2B generation-aware incremental Loose Quadtree 已完成代码层实施和既定验证**。
 
 - **已落地**：`BattleRuntimeProfile` / `BattleRuntimeProfileResolver`；生产解析顺序为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认。平台宏只负责默认值：Editor/其他平台为 `Authority400`、Android Player 为 `MobileExtended`、Standalone Player 为 `DesktopExtended`。Unity 条件编译符号不进入战斗 pass；后续设备能力检测只允许选择或降级渲染后端。
 - **已接线**：`SimulationTickDriver.Awake`、`Recreate`、`ApplyMatchConfig` 共用 Profile 解析/创建路径；直接 `BattleTestBootstrap` 在实体注册前协调晚到的 GameConfig。`Authority400` 使用 `0..19`、`20..49`、`50..399` 三段 indexed binary min-heap + `nextUnused`；Mobile total active admission 与 Desktop 自动分页增长已接入，Desktop 增长保留最低空洞并同步 AI snapshot。
@@ -46,8 +46,11 @@
 - **B2A 固定帧边界**：仅接管 fixed-tick candidate collect，保持 `CaptureCollisionFrameSnapshots -> TickCollisionPairVRest -> CollectCollisionCandidates`；即时 weapon/body query 继续 brute-force。
 - **B2A pair/回退契约**：eligible participant 保留 authority ordinal；tree pair 与 invalid-AABB fallback-all pair 使用 canonical slot key 合并、排序、去重，再按原 ordinal 双向派发。slot/mapping/index/count 异常、rebuild/query exception 或 diagnostics 缺 brute coverage 时整 tick brute fallback；formal 失败会恢复 RNG 并清除 candidate 中间态，保证 candidate 20 上限、tie、RNG 与消费顺序不被部分执行污染。
 - **B2A fresh 证据**：源码 `2026-07-20 22:15:07` < Unity `Assembly-CSharp.dll` `22:18:48` < full `BattleRuntimeSelfCheck` `22:19:28` **PASS**；`dotnet build` **0 errors**；architect final review **PASS / no blocker**。
-- **下一批**：B2B 实施增量 quadtree 更新；B2A 当前仍是每 fixed tick full rebuild，且生产默认仍为 `BruteForce`。
-- **未验收边界**：本批未执行 Play Mode；Extended parity schema 与完整渲染未完成。T8 默认 `stage.dat` 部署继续暂缓。
+- **B2B 同步与身份**：formal backend 在 collision collect 边界 batch synchronize 当帧 participant；索引键改为 `(runtime slot, generation)` handle。同槽复用不会继承旧 occupant 的空间身份，query 结果必须经当前槽表 generation 解析并核对 entity/ordinal。
+- **B2B 增量策略**：未移动实体保持原记录；AABB 改变但仍在当前节点 loose 范围内时原位更新，越出 loose 范围时迁移。spawn/remove、invalid AABB 与同槽 reuse 均在下一 collect 收口；root escape 才 full rebuild。
+- **B2B 回退/lifecycle**：sync/query/invariant/mapping 异常会 reset 索引并整 tick brute fallback，继续使用 B2A 的 RNG/candidate rollback；world reset 显式清空 formal index。
+- **B2B fresh 证据**：源码 `2026-07-20 22:43:57` < Unity `Assembly-CSharp.dll` `22:46:36` < full `BattleRuntimeSelfCheck` `22:47:04` **PASS**；`dotnet build` **0 errors**；architect final review **PASS / no blocker**。
+- **后续边界**：生产默认仍为 `BruteForce`；即时 weapon/body query 与 AI 查询未迁移，Extended parity/replay/checksum schema 与完整渲染未完成。本批未执行 Play Mode；T8 默认 `stage.dat` 部署继续暂缓。
 
 ## BATTLE-AUDIT14 DAT movement 显式值读取回归交接（2026-07-19）
 

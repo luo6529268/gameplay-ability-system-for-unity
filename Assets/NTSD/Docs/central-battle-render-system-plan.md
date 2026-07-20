@@ -2,12 +2,12 @@
 
 ## BATTLE-RENDER-PLAN1 状态
 
-- **状态**：方案已确认；R1-R2C-4、B0、B1-B1.3 与 B2A 已完成代码层实施和既定验证；其余阶段未实施。
-- **代码状态**：B2A 已提供独立的 `BruteForce` / `LooseQuadtree` 正式 collision broadphase 后端；默认仍为 `BruteForce`，仅替换 fixed-tick candidate collect，B2B 增量更新尚未实施。
-- **验证状态**：B2A fresh `dotnet build` 0 errors；源码 `2026-07-20 22:15:07` < Unity `Assembly-CSharp.dll` `22:18:48` < full `BattleRuntimeSelfCheck` `22:19:28` **PASS**；architect final review **PASS / no blocker**。
+- **状态**：方案已确认；R1-R2C-4、B0、B1-B1.3、B2A 与 B2B 已完成代码层实施和既定验证；其余阶段未实施。
+- **代码状态**：独立 `BruteForce` / `LooseQuadtree` 正式 collision broadphase 后端已具备 generation-aware 增量同步；默认仍为 `BruteForce`，仅替换 fixed-tick candidate collect，即时 weapon/body query 与 AI 查询尚未迁移。
+- **验证状态**：B2B fresh `dotnet build` 0 errors；源码 `2026-07-20 22:43:57` < Unity `Assembly-CSharp.dll` `22:46:36` < full `BattleRuntimeSelfCheck` `22:47:04` **PASS**；architect final review **PASS / no blocker**。
 - **容量说明**：`400` 是 `Authority400` 兼容模式的 C# 权威槽位边界，不是所有 Unity 运行模式的全局容量上限。权威 `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Common\NtsdConstants.cs` 中的 `NtsdConstants.MaxObjects` 定义 `MaxObjects = 400`，`BattleCore\Simulation\SimulationWorld.cs:28-32` 据此创建 `Objects[400]`、`VRest[400,400]` 和 `ARest[400]`；Unity `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:39-44` 以 `MaxRuntimeSlots = 400` 镜像该契约。扩展模式的 active entity 容量与 render command 容量分开管理；每个实体可产生 `Shadow`、`Entity`、`Overlay`、`HitRecord` 等多个命令，Mesh 仍须按实际命令峰值预分配并分 chunk。
 - **平台 Profile 说明**：生产解析优先级固定为“命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认值”；平台宏只提供默认 Profile，不进入战斗逻辑、最小堆、Loose Quadtree、VRest 或命中规则。设备能力降级只改变图集、纹理和渲染后端，不得改变已选 Profile 的战斗容量或结果。
-- **实施边界**：B2A 的 formal Loose Quadtree 只接管 fixed-tick candidate collect；即时 weapon/body query 继续 brute-force。正式结果按 canonical runtime-slot pair 合并、去重，再按原 authority ordinal 双向派发；任何无法证明完整性的情况均整 tick 回退 brute-force，并原子恢复 RNG/candidate 状态。
+- **实施边界**：formal Loose Quadtree 只接管 fixed-tick candidate collect；B2B 在该 collect 边界对当帧 participant 做 batch synchronize，不把 registry mutation 直接写入索引。即时 weapon/body query 继续 brute-force，AI 查询也尚未迁移。正式结果按 canonical runtime-slot pair 合并、去重，再按原 authority ordinal 双向派发；任何无法证明完整性的情况均 reset 增量索引、整 tick 回退 brute-force，并原子恢复 RNG/candidate 状态。
 
 ### 2026-07-20 R1 第一批实施记录
 
@@ -179,13 +179,28 @@ B1.3 最终 fresh 证据：`dotnet build` **0 errors**；相关源码 `2026-07-2
 | 整 tick 回退 | **已实施 / self-check verified** | runtime slot 缺失/重复/越界、slot-to-entity mapping 不一致、query index/entry count 非法、rebuild/query 异常，或 diagnostics 发现缺少 brute coverage 时，丢弃 formal 部分结果并整 tick 重跑原 brute-force |
 | 原子性与确定性 | **已实施 / self-check verified** | formal 失败时恢复进入前 RNG state/call count，清空 candidate carrier/count/distance/cache 后再 brute collect；candidate 20 上限、nearest/type ties、RNG 与消费顺序保持原权威路径 |
 | diagnostics | **默认关闭 / self-check verified** | 开启时比较 brute canonical set 与 formal set；缺 pair 强制整 tick brute fallback，extra pair 允许并交 narrow phase；诊断不改变 RNG 或战斗状态 |
-| 后续阶段 | **B2B 未实施** | B2A 仍为每 fixed tick full rebuild；增量迁移/更新属于下一批 B2B，默认后端在本批未切为 Loose Quadtree |
+| 后续阶段 | **B2A 时未实施；已由 B2B 后续接入** | B2A 当时仍为每 fixed tick full rebuild；generation-aware 增量迁移/更新现已由下节 B2B 接入，生产默认仍未切为 Loose Quadtree |
 
 B2A fresh 证据：`dotnet build Assembly-CSharp.csproj --no-restore /m:1 /v:minimal` **0 errors**；相关源码最新时间 `2026-07-20 22:15:07` < Unity `Assembly-CSharp.dll` `22:18:48` < full `BattleRuntimeSelfCheck` 结果 `22:19:28` **PASS**。architect final review **PASS / no blocker**；本批未执行 Play Mode，不能据此扩大为完整场景验收。T8 默认 `stage.dat` 部署继续暂缓。
 
+### 2026-07-20 B2B generation-aware 增量 Loose Quadtree 记录
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| 同步边界 | **已实施 / self-check verified** | formal backend 在每次 fixed-tick collision collect 边界批量同步当帧 eligible participant；注册、注销和移动本身不直接改树，避免把 registry mutation 时序引入权威 pass |
+| 稳定身份 | **已实施 / self-check verified** | 索引记录与查询结果使用 `(runtime slot, generation)` 的 `RuntimeEntityHandle`；同槽释放再复用时旧 generation 被移除，新 occupant 作为新 handle 插入，不会把旧空间记录解析到新实体 |
+| 增量更新 | **已实施 / self-check verified** | 未移动实体保持原记录；AABB 改变但仍在当前节点 loose 容纳范围内时原位更新；越出 loose 范围时才从旧节点移除并重新插入。新增、销毁、invalid-AABB 转换和同槽复用均由同一 batch sync 收口 |
+| root escape | **保守重建 / self-check verified** | 当前有效 AABB 超出既有 root 时执行一次全量 rebuild；正常的 loose 内移动与跨 loose 迁移不重建整棵树 |
+| live query validation | **已实施 / self-check verified** | quadtree query 返回 handle，派发前必须由当前 `RuntimeSlotTable` generation 成功解析，并再次核对 slot、entity、participant ordinal 与 handle 映射 |
+| 原子回退 | **已实施 / self-check verified** | sync/query/invariant/mapping 异常会 reset 增量索引并整 tick 重跑 brute-force；B2A 已有 RNG/candidate rollback 继续包住 formal collect，部分执行不能污染候选、RNG 或消费顺序 |
+| world reset | **已实施 / self-check verified** | `SimulationWorld` registry reset 显式清理 formal spatial index，旧 match 的 node、record 与 handle 不会进入下一 world 生命周期 |
+| 启用边界 | **默认未切换** | 生产默认仍为 `BruteForce`；只有显式选择 `LooseQuadtree` 才使用增量 formal backend。即时 weapon/body query 和 AI 查询未迁移，Extended parity/replay/checksum schema 与集中式渲染也不属于 B2B |
+
+B2B fresh 证据：`dotnet build Assembly-CSharp.csproj --no-restore /m:1 /v:minimal` **0 errors**；相关源码最新时间 `2026-07-20 22:43:57` < Unity `Assembly-CSharp.dll` `22:46:36` < full `BattleRuntimeSelfCheck` 结果 `22:47:04` **PASS**。architect final review **PASS / no blocker**；本批未执行 Play Mode，不能据此扩大为完整场景验收。T8 默认 `stage.dat` 部署继续暂缓。
+
 ## Runtime 容量与空间索引阶段决策
 
-**状态：B1-B1.3 与 B2A 已完成代码层实施 / 编译 / full self-check / architect final review。** B2B 增量更新与 Extended parity/replay/checksum schema 仍需后续实现和验证；生产默认 broadphase 仍是 `BruteForce`。
+**状态：B1-B1.3、B2A 与 B2B 已完成代码层实施 / 编译 / full self-check / architect final review。** Extended parity/replay/checksum schema 仍需后续实现和验证；生产默认 broadphase 仍是 `BruteForce`。
 
 ### RuntimeSlot 容量模式
 
@@ -240,13 +255,13 @@ B2A fresh 证据：`dotnet build Assembly-CSharp.csproj --no-restore /m:1 /v:min
 
 ### X/Z Loose Quadtree Broadphase
 
-**当前状态：B0 shadow 诊断已实施；B2A formal backend 已实施并通过 full self-check，生产默认仍为 `BruteForce`。** `LooseQuadtree` 只有经显式命令行或 `GameConfig` 选择时才接管 fixed-tick candidate collect；B2B 增量更新尚未实施。
+**当前状态：B0 shadow 诊断、B2A formal backend 与 B2B generation-aware 增量同步均已实施，并通过 full self-check 与 architect final review；生产默认仍为 `BruteForce`。** `LooseQuadtree` 只有经显式命令行或 `GameConfig` 选择时才接管 fixed-tick candidate collect；即时 weapon/body query 与 AI 查询尚未迁移。
 
 - 空间索引使用 X/Z 平面的 **Loose Quadtree**；逻辑实体、AI 范围查询和 itr/bdy 碰撞查询共享空间索引，但查询服务与候选规则分开，不能用 AI 范围结果替代碰撞候选。
 - 实体中心点采用严格的**半开区间**归属（左/下含、右/上不含，边界规则全局一致），保证一个中心点只属于一个子节点。
 - 实体 AABB 只有在完全被节点的 loose 范围容纳时才留在该节点；超出 loose 范围才迁移到父节点或重新选择的节点。
 - 默认参数仅作为 profiling 基准，不能视为最终性能结论：`looseness = 1.5`、`leafCapacity = 16`、`maxDepth = 6..8`。目标设备和真实战斗分布 profiling 后再调整。
-- 更新采用增量策略：实体只在离开当前节点 loose 范围时迁移；未离开时不重建树。生成、销毁、分页复用和跨边界移动必须在确定的 mutation boundary 更新索引。
+- 更新已采用 collect-boundary batch 增量策略：未移动实体保留原记录；AABB 改变但仍处于当前节点 loose 范围时原位更新；离开 loose 范围才迁移。生成、销毁、invalid AABB 和同槽 generation 复用在下一次 collision collect 同步，root escape 才触发全量重建；world reset 显式清空索引。
 - broadphase 每 tick 先按 `RuntimeSlot` 升序遍历 active attacker；各 attacker 查询得到的候选先去重为 `(minSlot, maxSlot)` pair，再在全局按 `(minSlot, maxSlot)` 升序排序后交给现有 narrow phase。保留 C# 的 candidate 截断、距离/类型 tie 顺序和 pair 消费规则；空间索引不得改变命中规则、VRest 计时或最终逻辑结果。
 
 ### VRest 与 Parity 边界
@@ -547,6 +562,6 @@ CentralOnly
 
 ## 16. 当前决策记录
 
-已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；B0 先以 X/Z Loose Quadtree shadow 诊断对比，B2A 再提供 formal full-rebuild backend，默认仍为 `BruteForce`，B2B 才实施增量更新；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，broadphase 独立遵循命令行 > `GameConfig` > 默认 `BruteForce`；设备能力只降级表现资源/后端，三个 Profile 共用同一套确定性 runtime 算法。
+已确认的设计决策是：保留 `Authority400` 兼容模式；移动端全部槽区合计最多 1000 active 且第 1001 个确定性拒绝；桌面从 512 开始按 256-slot 页自动增长并受技术预算约束；空闲槽使用二叉最小堆 + `nextUnused`；B0 先以 X/Z Loose Quadtree shadow 诊断对比，B2A 提供 formal full-rebuild backend，B2B 再以 `(slot, generation)` 身份在 collision collect 边界实施 batch 增量同步，默认仍为 `BruteForce`；VRest 与 broadphase 解耦；详细 parity snapshot 不进入生产热路径。生产 Profile 优先级为命令行显式覆盖 > `GameConfig.BattleRuntimeProfileName` > 平台宏默认，broadphase 独立遵循命令行 > `GameConfig` > 默认 `BruteForce`；设备能力只降级表现资源/后端，三个 Profile 共用同一套确定性 runtime 算法。
 
-截至 2026-07-20，R1-R2C-4、B0、B1-B1.3 与 B2A 已完成代码层实施和既定验证。B2A formal full-rebuild backend 的 fresh chain 为 source `22:15:07` < DLL `22:18:48` < result `22:19:28` **PASS**，dotnet **0 errors**，architect final **PASS / no blocker**。本批没有 Play Mode；生产默认仍为 `BruteForce`，B2B 增量更新与 Extended parity schema 仍是后续任务，T8 默认 `stage.dat` 部署继续暂缓。
+截至 2026-07-20，R1-R2C-4、B0、B1-B1.3、B2A 与 B2B 已完成代码层实施和既定验证。B2B generation-aware incremental backend 的 fresh chain 为 source `22:43:57` < DLL `22:46:36` < result `22:47:04` **PASS**，dotnet **0 errors**，architect final **PASS / no blocker**。本批没有 Play Mode；生产默认仍为 `BruteForce`，即时 weapon/body query、AI 查询、Extended parity schema 与集中式渲染仍是后续任务，T8 默认 `stage.dat` 部署继续暂缓。

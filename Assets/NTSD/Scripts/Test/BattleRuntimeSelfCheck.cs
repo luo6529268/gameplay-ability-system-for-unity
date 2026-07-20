@@ -99,6 +99,7 @@ namespace NTSD.Test
                 CheckExtendedSimulationWorldCapacityContracts();
                 CheckActivatedRuntimeProfileContracts();
                 CheckLooseQuadtreeShadowBroadphaseContracts();
+                CheckIncrementalLooseQuadtreeContracts();
                 CheckCollisionPairVRestDecouplingContracts();
                 CheckExtendedServiceBoundaryContracts();
                 CheckInteractionRuntimeSlotContracts();
@@ -364,6 +365,9 @@ namespace NTSD.Test
                 "runtime slot table must keep the Authority400 tail unavailable");
             Expect(authorityTable.TryResolve(handle255, out LF2Entity resolved255) &&
                    ReferenceEquals(resolved255, entity255) &&
+                   authorityTable.TryGetCurrentHandle(255, entity255, out RuntimeEntityHandle currentHandle255) &&
+                   currentHandle255 == handle255 &&
+                   !authorityTable.TryGetCurrentHandle(255, entity256, out _) &&
                    authorityTable.TryGetCurrentOccupant(255, out LF2Entity current255) &&
                    ReferenceEquals(current255, entity255) &&
                    authorityTable.TryResolve(handle256, out LF2Entity resolved256) &&
@@ -387,6 +391,9 @@ namespace NTSD.Test
             var replacement255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             Expect(authorityTable.AllocateLowest(255, replacement255, out RuntimeEntityHandle replacementHandle) == 255 &&
                    replacementHandle != handle255 &&
+                   authorityTable.TryGetCurrentHandle(255, replacement255, out RuntimeEntityHandle currentReplacementHandle) &&
+                   currentReplacementHandle == replacementHandle &&
+                   !authorityTable.TryGetCurrentHandle(255, entity255, out _) &&
                    authorityTable.TryResolve(replacementHandle, out LF2Entity replacementResolved) &&
                    ReferenceEquals(replacementResolved, replacement255) &&
                    !authorityTable.TryResolve(handle255, out _) &&
@@ -1330,6 +1337,184 @@ namespace NTSD.Test
                 "SimulationTickDriver must retain frame checksum capture for Authority400 worlds");
         }
 
+        private static void CheckIncrementalLooseQuadtreeContracts()
+        {
+            var preferredRoot = new SpatialAabbXZ(0, 0, 256, 256);
+            var handle0 = new RuntimeEntityHandle(0, 1);
+            var handle1 = new RuntimeEntityHandle(1, 1);
+            var handle2 = new RuntimeEntityHandle(2, 1);
+            var entries = new List<IncrementalSpatialEntry>
+            {
+                new IncrementalSpatialEntry(handle0, new SpatialAabbXZ(10, 10, 20, 20)),
+                new IncrementalSpatialEntry(handle1, new SpatialAabbXZ(200, 200, 210, 210)),
+            };
+            var tree = new LooseQuadtreeBroadphase(1, 4);
+
+            SpatialSynchronizeResult initial = tree.Synchronize(entries, preferredRoot);
+            Expect(initial.Succeeded && initial.FullRebuild && initial.IndexedCount == 2 &&
+                   tree.IncrementalFullRebuildCount == 1,
+                "incremental quadtree must establish its first generation-aware index with one deterministic rebuild");
+
+            SpatialSynchronizeResult stationary = tree.Synchronize(entries, preferredRoot);
+            Expect(stationary.Succeeded && !stationary.FullRebuild &&
+                   stationary.InsertedCount == 0 && stationary.UpdatedInPlaceCount == 0 &&
+                   stationary.MigratedCount == 0 && stationary.RemovedCount == 0 &&
+                   tree.IncrementalFullRebuildCount == 1,
+                "stationary incremental entries must not rebuild, migrate, or rewrite their node placement");
+
+            entries[0] = new IncrementalSpatialEntry(
+                handle0,
+                new SpatialAabbXZ(15, 15, 25, 25));
+            SpatialSynchronizeResult looseUpdate = tree.Synchronize(entries, preferredRoot);
+            Expect(looseUpdate.Succeeded && !looseUpdate.FullRebuild &&
+                   looseUpdate.UpdatedInPlaceCount == 1 && looseUpdate.MigratedCount == 0,
+                "an AABB update retained by its current loose node must update in place");
+
+            entries[0] = new IncrementalSpatialEntry(
+                handle0,
+                new SpatialAabbXZ(170, 170, 180, 180));
+            SpatialSynchronizeResult crossedBoundary = tree.Synchronize(entries, preferredRoot);
+            Expect(crossedBoundary.Succeeded && !crossedBoundary.FullRebuild &&
+                   crossedBoundary.MigratedCount == 1 && tree.IncrementalMigrationCount >= 1,
+                "an AABB leaving its current loose node must migrate without rebuilding the root");
+
+            entries.RemoveAt(1);
+            entries.Add(new IncrementalSpatialEntry(
+                handle2,
+                new SpatialAabbXZ(30, 30, 40, 40)));
+            SpatialSynchronizeResult spawnRemove = tree.Synchronize(entries, preferredRoot);
+            Expect(spawnRemove.Succeeded && spawnRemove.InsertedCount == 1 &&
+                   spawnRemove.RemovedCount == 1 && spawnRemove.IndexedCount == 2,
+                "incremental synchronization must insert spawned handles and remove absent handles in one tick");
+
+            RuntimeEntityHandle replacementHandle0 = new RuntimeEntityHandle(0, 2);
+            entries[0] = new IncrementalSpatialEntry(
+                replacementHandle0,
+                new SpatialAabbXZ(170, 170, 180, 180));
+            SpatialSynchronizeResult generationReuse = tree.Synchronize(entries, preferredRoot);
+            var queriedHandles = new List<RuntimeEntityHandle>();
+            tree.QueryHandles(entries[0].Bounds, queriedHandles);
+            Expect(generationReuse.Succeeded && generationReuse.InsertedCount == 1 &&
+                   generationReuse.RemovedCount == 1 &&
+                   queriedHandles.Contains(replacementHandle0) && !queriedHandles.Contains(handle0),
+                "slot reuse must evict the stale generation and return only the current handle");
+
+            entries.RemoveAt(0);
+            SpatialSynchronizeResult invalidRemoval = tree.Synchronize(entries, preferredRoot);
+            entries.Insert(0, new IncrementalSpatialEntry(
+                replacementHandle0,
+                new SpatialAabbXZ(170, 170, 180, 180)));
+            SpatialSynchronizeResult validRestore = tree.Synchronize(entries, preferredRoot);
+            Expect(invalidRemoval.Succeeded && invalidRemoval.RemovedCount == 1 &&
+                   validRestore.Succeeded && validRestore.InsertedCount == 1 &&
+                   validRestore.IndexedCount == 2,
+                "valid-invalid-valid AABB participation must remove and later reinsert the same current handle");
+
+            entries[0] = new IncrementalSpatialEntry(
+                replacementHandle0,
+                new SpatialAabbXZ(2000, 2000, 2010, 2010));
+            SpatialSynchronizeResult rootEscape = tree.Synchronize(entries, preferredRoot);
+            Expect(rootEscape.Succeeded && rootEscape.FullRebuild &&
+                   tree.IncrementalFullRebuildCount == 2 &&
+                   tree.IncrementalRootMinX <= 2000 &&
+                   tree.IncrementalRootMinX + tree.IncrementalRootSide >= 2010 &&
+                   tree.IncrementalRootMinZ <= 2000 &&
+                   tree.IncrementalRootMinZ + tree.IncrementalRootSide >= 2010,
+                "an AABB escaping the loose root must trigger a deterministic full rebuild that covers it");
+
+            var random = new System.Random(0x423242);
+            var differentialTree = new LooseQuadtreeBroadphase(4, 7);
+            var differentialEntries = new List<IncrementalSpatialEntry>(64);
+            var differentialBounds = new Dictionary<RuntimeEntityHandle, SpatialAabbXZ>();
+            var treePairs = new List<long>(256);
+            var brutePairs = new List<long>(256);
+            var queryHandles = new List<RuntimeEntityHandle>(64);
+            for (int i = 0; i < 64; i++)
+            {
+                int x = random.Next(-200, 601);
+                int z = random.Next(-100, 401);
+                int width = random.Next(4, 48);
+                int depth = random.Next(4, 48);
+                differentialEntries.Add(new IncrementalSpatialEntry(
+                    new RuntimeEntityHandle(i, 1),
+                    new SpatialAabbXZ(x, z, x + width, z + depth)));
+            }
+
+            for (int tick = 0; tick < 24; tick++)
+            {
+                if (tick == 7)
+                    differentialEntries.RemoveAt(differentialEntries.Count - 1);
+                if (tick == 13)
+                {
+                    differentialEntries.Add(new IncrementalSpatialEntry(
+                        new RuntimeEntityHandle(63, 2),
+                        new SpatialAabbXZ(40, 40, 70, 70)));
+                }
+
+                for (int i = 0; i < differentialEntries.Count; i++)
+                {
+                    IncrementalSpatialEntry entry = differentialEntries[i];
+                    int dx = random.Next(-4, 5);
+                    int dz = random.Next(-4, 5);
+                    SpatialAabbXZ bounds = entry.Bounds;
+                    differentialEntries[i] = new IncrementalSpatialEntry(
+                        entry.Handle,
+                        new SpatialAabbXZ(
+                            bounds.MinX + dx,
+                            bounds.MinZ + dz,
+                            bounds.MaxX + dx,
+                            bounds.MaxZ + dz));
+                }
+
+                SpatialSynchronizeResult result = differentialTree.Synchronize(
+                    differentialEntries,
+                    preferredRoot);
+                Expect(result.Succeeded && result.IndexedCount == differentialEntries.Count,
+                    $"incremental fixed-seed differential tick {tick} must synchronize every active handle");
+
+                differentialBounds.Clear();
+                for (int i = 0; i < differentialEntries.Count; i++)
+                    differentialBounds.Add(differentialEntries[i].Handle, differentialEntries[i].Bounds);
+
+                treePairs.Clear();
+                for (int i = 0; i < differentialEntries.Count; i++)
+                {
+                    IncrementalSpatialEntry first = differentialEntries[i];
+                    differentialTree.QueryHandles(first.Bounds, queryHandles);
+                    for (int q = 0; q < queryHandles.Count; q++)
+                    {
+                        RuntimeEntityHandle other = queryHandles[q];
+                        if (other.Slot <= first.Handle.Slot ||
+                            !differentialBounds.TryGetValue(other, out SpatialAabbXZ otherBounds) ||
+                            !first.Bounds.Overlaps(otherBounds))
+                        {
+                            continue;
+                        }
+                        treePairs.Add(SpatialPairKey(first.Handle.Slot, other.Slot));
+                    }
+                }
+
+                brutePairs.Clear();
+                for (int i = 0; i < differentialEntries.Count; i++)
+                {
+                    for (int j = i + 1; j < differentialEntries.Count; j++)
+                    {
+                        if (differentialEntries[i].Bounds.Overlaps(differentialEntries[j].Bounds))
+                        {
+                            brutePairs.Add(SpatialPairKey(
+                                differentialEntries[i].Handle.Slot,
+                                differentialEntries[j].Handle.Slot));
+                        }
+                    }
+                }
+
+                SortUniqueSpatialPairs(treePairs);
+                SortUniqueSpatialPairs(brutePairs);
+                Expect(SpatialPairListsEqual(treePairs, brutePairs),
+                    $"incremental fixed-seed differential tick {tick} must match brute overlap pairs");
+            }
+        }
+
         private static void CheckLooseQuadtreeShadowBroadphaseContracts()
         {
             Expect(CollisionBroadphaseBackendResolver.Resolve(
@@ -1401,6 +1586,56 @@ namespace NTSD.Test
                    bruteParityWorld.Rng.State == bruteRngBefore &&
                    treeParityWorld.Rng.State == treeRngBefore,
                 "formal LooseQuadtree collection must preserve brute candidate order and RNG state");
+
+            uint bruteStationaryRng = bruteParityWorld.Rng.State;
+            ulong bruteStationaryCalls = bruteParityWorld.Rng.CallCount;
+            uint treeStationaryRng = treeParityWorld.Rng.State;
+            ulong treeStationaryCalls = treeParityWorld.Rng.CallCount;
+            List<SceneQueryHit> bruteStationaryCandidates = CollectCollisionAuditCandidates(
+                bruteParityWorld,
+                bruteAttacker,
+                true);
+            List<SceneQueryHit> treeStationaryCandidates = CollectCollisionAuditCandidates(
+                treeParityWorld,
+                treeAttacker,
+                true);
+            Expect(!treeParityQuery.FormalCollectionAborted &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
+                   !treeParityQuery.FormalSpatialSynchronizeResult.FullRebuild &&
+                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1 &&
+                   treeStationaryCandidates.Count == bruteStationaryCandidates.Count &&
+                   treeStationaryCandidates.Count == 1 &&
+                   bruteParityWorld.Rng.State == bruteStationaryRng &&
+                   bruteParityWorld.Rng.CallCount == bruteStationaryCalls &&
+                   treeParityWorld.Rng.State == treeStationaryRng &&
+                   treeParityWorld.Rng.CallCount == treeStationaryCalls,
+                "formal incremental collection must reuse a stationary index and preserve candidate/RNG behavior");
+
+            bruteTarget.Runtime.SetPosition(600, 0, 0);
+            bruteTarget.Runtime.SyncIntegerPosition();
+            treeTarget.Runtime.SetPosition(600, 0, 0);
+            treeTarget.Runtime.SyncIntegerPosition();
+            uint bruteMovedRng = bruteParityWorld.Rng.State;
+            ulong bruteMovedCalls = bruteParityWorld.Rng.CallCount;
+            uint treeMovedRng = treeParityWorld.Rng.State;
+            ulong treeMovedCalls = treeParityWorld.Rng.CallCount;
+            List<SceneQueryHit> bruteMovedCandidates = CollectCollisionAuditCandidates(
+                bruteParityWorld,
+                bruteAttacker,
+                true);
+            List<SceneQueryHit> treeMovedCandidates = CollectCollisionAuditCandidates(
+                treeParityWorld,
+                treeAttacker,
+                true);
+            Expect(!treeParityQuery.FormalCollectionAborted &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
+                   treeMovedCandidates.Count == bruteMovedCandidates.Count &&
+                   treeMovedCandidates.Count == 0 &&
+                   bruteParityWorld.Rng.State == bruteMovedRng &&
+                   bruteParityWorld.Rng.CallCount == bruteMovedCalls &&
+                   treeParityWorld.Rng.State == treeMovedRng &&
+                   treeParityWorld.Rng.CallCount == treeMovedCalls,
+                "formal incremental movement must preserve brute candidate and RNG results across ticks");
 
             var fallbackWorld = new SimulationWorld(
                 BattleRuntimeProfile.Authority400,
