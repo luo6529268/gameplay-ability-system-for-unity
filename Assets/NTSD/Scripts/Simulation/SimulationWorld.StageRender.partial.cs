@@ -1,8 +1,10 @@
 ﻿using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.LevelEditor;
+using NTSD.Simulation.Presentation;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,6 +16,59 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
+        // These are presentation-only Unity sorting sub-orders. P1 renders Shadow,
+        // Entity, and HitRecord; Overlay remains a reserved P3 slot until it has a
+        // production consumer.
+        internal const int PresentationShadowSubOrder = 0;
+        internal const int PresentationEntitySubOrder = 1;
+        internal const int PresentationReservedOverlaySubOrder = 2;
+        internal const int PresentationHitRecordSubOrder = 3;
+        private const int PresentationSubOrderCount = 4;
+
+        // Legacy SpriteRenderer sortingOrder is a signed 16-bit value. Reserving
+        // four contiguous presentation positions per entity leaves 8192 published
+        // entities before a positive sorting order would overflow. Central rendering
+        // removes this temporary legacy-backend limit.
+        internal const int LegacySpriteRendererMaxPresentationEntities =
+            (short.MaxValue + 1) / PresentationSubOrderCount;
+
+        private readonly Dictionary<LF2Entity, PresentationRenderOrder> _presentationRenderOrders =
+            new Dictionary<LF2Entity, PresentationRenderOrder>();
+        private static readonly System.Comparison<LF2Entity> PresentationOrderComparison =
+            ComparePresentationRenderOrder;
+        private readonly List<LF2Entity> _presentationRenderScratch = new List<LF2Entity>(128);
+        private readonly List<ISimObject> _rendererSnapshotScratch = new List<ISimObject>(128);
+        private static readonly System.Comparison<ISimObject> RendererStableIdComparison =
+            CompareRendererStableId;
+        private readonly BattlePresentationCoordinator _battlePresentation =
+            new BattlePresentationCoordinator();
+        private BattlePixelFramePlan _currentPixelFramePlan;
+
+        public BattlePresentationCoordinator BattlePresentation => _battlePresentation;
+        public BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
+
+        internal void PublishPixelFramePlan(BattlePixelFramePlan plan)
+        {
+            _currentPixelFramePlan = plan;
+        }
+
+        public void SetBattlePresentationBackend(BattlePresentationBackendMode mode)
+        {
+            _battlePresentation.SetMode(mode);
+        }
+
+        private readonly struct PresentationRenderOrder
+        {
+            public PresentationRenderOrder(RuntimeEntityHandle handle, int rank)
+            {
+                Handle = handle;
+                Rank = rank;
+            }
+
+            public RuntimeEntityHandle Handle { get; }
+            public int Rank { get; }
+        }
+
         private bool _hasExplicitStageRuntimeSnapshot;
 
         public void SetExplicitStageRuntimeSnapshotForTesting(
@@ -114,7 +169,312 @@ namespace NTSD.Simulation
 
         public void RenderDispatchAll(int tickIndex)
         {
+            BuildPresentationRenderOrder();
+            _battlePresentation.BeginFrame(this, tickIndex);
+            BattlePixelFramePlan plan = BattleCentralRenderSystem.PrepareFrame(this);
+            if (RequiresLegacySpriteRendererCapacityGuard(plan))
+                ValidateLegacySpriteRendererPresentationCapacity(_presentationRenderOrders.Count);
             LateRendererUpdateAll(tickIndex);
+        }
+
+        internal static bool RequiresLegacySpriteRendererCapacityGuard(BattlePixelFramePlan plan)
+        {
+            return !plan.IsValid || plan.Owner == BattlePixelFrameOwner.Legacy;
+        }
+
+        internal void GetPresentationEntitiesNoAlloc(List<LF2Entity> destination)
+        {
+            if (destination == null)
+                return;
+
+            destination.Clear();
+            for (int slot = 0; slot < RuntimeSlotCapacity; slot++)
+            {
+                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
+                if (entity != null && IsActiveForCurrentPassInternal(entity))
+                    destination.Add(entity);
+            }
+        }
+
+        internal void RecordLegacyShadowProbe(LF2Entity entity, SpriteRenderer renderer)
+        {
+            if (!_battlePresentation.IsCapturingLegacyProbes || entity?.Runtime == null ||
+                renderer == null || !renderer.enabled)
+            {
+                return;
+            }
+
+            int slot = entity.Runtime.SlotIndex;
+            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                return;
+
+            BattleCommonVisualBinding shadowBinding =
+                CharacterAnimtorManager.Instance?.CommonVisualCatalog?.Shadow;
+            bool matchesCommonShadow = shadowBinding != null &&
+                                       shadowBinding.MatchesSprite(renderer.sprite);
+            BattleSpriteValueDescriptor descriptor = CaptureRendererDescriptor(
+                renderer,
+                out BattleSpriteRenderState renderState,
+                matchesCommonShadow,
+                BattleVisualResourceKey.CommonShadow);
+
+            _battlePresentation.RecordLegacyProbe(new LegacyPresentationProbe(
+                BattleRenderCommandType.Shadow,
+                handle,
+                entity.Runtime.StableId,
+                -1,
+                -1,
+                renderer.sortingOrder,
+                renderer.sortingLayerID,
+                0,
+                renderer.transform.position,
+                CaptureRendererSpriteSize(renderer),
+                renderState,
+                descriptor));
+        }
+
+        internal void RecordLegacyEntityProbe(LF2Entity entity, SpriteRenderer renderer)
+        {
+            if (!_battlePresentation.IsCapturingLegacyProbes || entity?.Runtime == null ||
+                renderer == null || !renderer.enabled)
+            {
+                return;
+            }
+
+            int slot = entity.Runtime.SlotIndex;
+            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                return;
+
+            BattleSpriteValueDescriptor descriptor = CaptureRendererDescriptor(
+                renderer,
+                out BattleSpriteRenderState renderState,
+                true,
+                BattleVisualResourceKey.FromEntity(new BattleSpriteKey(
+                    LF2Entity.ResolveCurrentDataObjectId(entity),
+                    entity.GetRenderPicIndex())));
+            int visualDataId = descriptor.HasLogicalResourceKey &&
+                               descriptor.LogicalResourceKey.IsEntitySprite
+                ? descriptor.LogicalResourceKey.EntitySpriteKey.VisualDataId
+                : -1;
+            int effectivePic = descriptor.HasLogicalResourceKey &&
+                               descriptor.LogicalResourceKey.IsEntitySprite
+                ? descriptor.LogicalResourceKey.EntitySpriteKey.EffectivePic
+                : -1;
+
+            _battlePresentation.RecordLegacyProbe(new LegacyPresentationProbe(
+                BattleRenderCommandType.Entity,
+                handle,
+                entity.Runtime.StableId,
+                visualDataId,
+                effectivePic,
+                renderer.sortingOrder,
+                renderer.sortingLayerID,
+                0,
+                renderer.transform.position,
+                CaptureRendererSpriteSize(renderer),
+                renderState,
+                descriptor));
+        }
+
+        internal void RecordLegacyHitRecordProbe(
+            LF2Entity entity,
+            SpriteRenderer renderer,
+            int hitRecordIndex)
+        {
+            if (!_battlePresentation.IsCapturingLegacyProbes || entity?.Runtime == null ||
+                renderer == null || !renderer.enabled)
+            {
+                return;
+            }
+
+            int slot = entity.Runtime.SlotIndex;
+            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                return;
+
+            BattleVisualResourceKey sparkKey = default;
+            bool hasSparkKey = CharacterAnimtorManager.Instance?.CommonVisualCatalog?.TryGetSparkKey(
+                renderer.sprite,
+                out sparkKey) == true;
+            BattleSpriteValueDescriptor descriptor = CaptureRendererDescriptor(
+                renderer,
+                out BattleSpriteRenderState renderState,
+                hasSparkKey,
+                sparkKey);
+
+            _battlePresentation.RecordLegacyProbe(new LegacyPresentationProbe(
+                BattleRenderCommandType.HitRecord,
+                handle,
+                entity.Runtime.StableId,
+                -1,
+                -1,
+                renderer.sortingOrder,
+                renderer.sortingLayerID,
+                hitRecordIndex,
+                renderer.transform.position,
+                CaptureRendererSpriteSize(renderer),
+                renderState,
+                descriptor));
+        }
+
+        private static Vector2 CaptureRendererSpriteSize(SpriteRenderer renderer)
+        {
+            Sprite sprite = renderer != null ? renderer.sprite : null;
+            return sprite != null ? sprite.rect.size : Vector2.zero;
+        }
+
+        private static BattleSpriteValueDescriptor CaptureRendererDescriptor(
+            SpriteRenderer renderer,
+            out BattleSpriteRenderState renderState,
+            bool hasPreferredKey = false,
+            BattleVisualResourceKey preferredKey = default)
+        {
+            Sprite sprite = renderer != null ? renderer.sprite : null;
+            Rect rect = sprite != null ? sprite.rect : Rect.zero;
+            Vector2 pivot = Vector2.zero;
+            if (sprite != null && rect.width > 0f && rect.height > 0f)
+            {
+                pivot = new Vector2(
+                    sprite.pivot.x / rect.width,
+                    sprite.pivot.y / rect.height);
+            }
+
+            Texture2D texture = sprite != null ? sprite.texture : null;
+            Material material = renderer != null ? renderer.sharedMaterial : null;
+            BattleSpriteCatalog catalog = CharacterAnimtorManager.Instance?.SpriteCatalog ??
+                                          BattleSpriteCatalog.Empty;
+            BattleVisualResourceKey logicalResourceKey = default;
+            bool hasLogicalResourceKey;
+            if (hasPreferredKey &&
+                (preferredKey.Kind == BattleVisualResourceKind.CommonShadow || preferredKey.IsCommonSpark))
+            {
+                logicalResourceKey = preferredKey;
+                hasLogicalResourceKey = true;
+            }
+            else
+            {
+                BattleSpriteKey preferredEntityKey = preferredKey.EntitySpriteKey;
+                bool foundEntityKey = hasPreferredKey && preferredKey.IsEntitySprite
+                    ? catalog.TryGetKey(sprite, preferredEntityKey, out BattleSpriteKey entityKey)
+                    : catalog.TryGetKey(sprite, out entityKey);
+                logicalResourceKey = foundEntityKey
+                    ? BattleVisualResourceKey.FromEntity(entityKey)
+                    : default;
+                hasLogicalResourceKey = foundEntityKey;
+            }
+            renderState = renderer != null
+                ? new BattleSpriteRenderState(
+                    renderer.color,
+                    renderer.flipX,
+                    renderer.flipY,
+                    renderer.maskInteraction,
+                    BattleSpriteMaterialContract.Classify(material))
+                : default;
+            return hasLogicalResourceKey
+                ? new BattleSpriteValueDescriptor(
+                    true,
+                    sprite != null,
+                    sprite != null ? sprite.GetInstanceID() : 0,
+                    texture != null ? texture.GetInstanceID() : 0,
+                    material != null ? material.GetInstanceID() : 0,
+                    rect,
+                    pivot,
+                    logicalResourceKey)
+                : new BattleSpriteValueDescriptor(
+                    true,
+                    sprite != null,
+                    sprite != null ? sprite.GetInstanceID() : 0,
+                    texture != null ? texture.GetInstanceID() : 0,
+                    material != null ? material.GetInstanceID() : 0,
+                    rect,
+                    pivot);
+        }
+
+        /// <summary>
+        /// Publishes a dense Unity presentation order from the release renderer's
+        /// active (ZInt, runtime slot) ordering. This is intentionally not part of
+        /// runtime state, checksums, or collision behavior.
+        /// </summary>
+        internal void BuildPresentationRenderOrder()
+        {
+            GetPresentationEntitiesNoAlloc(_presentationRenderScratch);
+            _presentationRenderScratch.Sort(PresentationOrderComparison);
+            _presentationRenderOrders.Clear();
+
+            int rank = 0;
+            for (int i = 0; i < _presentationRenderScratch.Count; i++)
+            {
+                LF2Entity entity = _presentationRenderScratch[i];
+                int slot = entity?.Runtime?.SlotIndex ?? -1;
+                if (entity == null || slot < 0 ||
+                    !TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                {
+                    continue;
+                }
+
+                _presentationRenderOrders[entity] = new PresentationRenderOrder(handle, rank);
+                rank++;
+            }
+
+            _presentationRenderScratch.Clear();
+        }
+
+        internal static void ValidateLegacySpriteRendererPresentationCapacity(
+            int materializedEntityCount)
+        {
+            if (materializedEntityCount <= LegacySpriteRendererMaxPresentationEntities)
+                return;
+
+            throw new System.InvalidOperationException(
+                "Legacy SpriteRenderer presentation supports at most " +
+                LegacySpriteRendererMaxPresentationEntities +
+                " materialized battle entities because it reserves four sorting orders per entity. " +
+                "Use the central battle renderer before exceeding this temporary legacy limit.");
+        }
+
+        internal int GetPresentationRenderSortingOrder(LF2Entity entity, int subOrder)
+        {
+            if (entity != null &&
+                _presentationRenderOrders.TryGetValue(entity, out PresentationRenderOrder published) &&
+                TryResolveRuntimeHandle(published.Handle, out LF2Entity current) &&
+                ReferenceEquals(current, entity))
+            {
+                return checked(published.Rank * PresentationSubOrderCount +
+                               Mathf.Clamp(subOrder, PresentationShadowSubOrder, PresentationHitRecordSubOrder));
+            }
+
+            // ForceRefreshPresentation can run before the normal render pass. Build
+            // the same active map on demand rather than deriving a Unity order from a
+            // sparse runtime slot. An unregistered/stale entity remains isolated at
+            // its requested sub-order until it is published by a later render pass.
+            if (entity != null && IsActiveForCurrentPass(entity))
+            {
+                BuildPresentationRenderOrder();
+                if (_presentationRenderOrders.TryGetValue(entity, out published) &&
+                    TryResolveRuntimeHandle(published.Handle, out current) &&
+                    ReferenceEquals(current, entity))
+                {
+                    return checked(published.Rank * PresentationSubOrderCount +
+                                   Mathf.Clamp(subOrder, PresentationShadowSubOrder, PresentationHitRecordSubOrder));
+                }
+            }
+
+            return Mathf.Clamp(subOrder, PresentationShadowSubOrder, PresentationHitRecordSubOrder);
+        }
+
+        private static int ComparePresentationRenderOrder(LF2Entity left, LF2Entity right)
+        {
+            int zComparison = (left?.GetRenderZInt() ?? int.MaxValue)
+                .CompareTo(right?.GetRenderZInt() ?? int.MaxValue);
+            if (zComparison != 0)
+                return zComparison;
+
+            int leftSlot = left?.Runtime?.SlotIndex ?? int.MaxValue;
+            int rightSlot = right?.Runtime?.SlotIndex ?? int.MaxValue;
+            int slotComparison = leftSlot.CompareTo(rightSlot);
+            if (slotComparison != 0)
+                return slotComparison;
+
+            return (left?.StableId ?? int.MaxValue).CompareTo(right?.StableId ?? int.MaxValue);
         }
 
         internal void ResetUnityFixedWorldRenderOffsets()
@@ -138,24 +498,26 @@ namespace NTSD.Simulation
 
         private List<ISimObject> BuildRendererSnapshot()
         {
-            var snapshot = new List<ISimObject>();
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return snapshot;
-
-            foreach (int key in bucketKeys)
+            _rendererSnapshotScratch.Clear();
+            if (_buckets.TryGetValue(SimOrderConstants.Renderer, out Bucket bucket))
             {
-                if (!_buckets.TryGetValue(key, out Bucket bucket)) continue;
                 bucket.EnsureSorted(GetRuntimeStableId);
                 for (int i = 0; i < bucket.items.Count; i++)
                 {
                     if (bucket.items[i] is LF2Entity) continue;
                     if (bucket.items[i] is LF2ObjectRenderer)
-                        snapshot.Add(bucket.items[i]);
+                        _rendererSnapshotScratch.Add(bucket.items[i]);
                 }
             }
 
-            snapshot.Sort((a, b) => GetRuntimeStableId(a).CompareTo(GetRuntimeStableId(b)));
-            return snapshot;
+            _rendererSnapshotScratch.Sort(RendererStableIdComparison);
+            return _rendererSnapshotScratch;
+        }
+
+        private static int CompareRendererStableId(ISimObject left, ISimObject right)
+        {
+            return (left?.StableId ?? int.MaxValue).CompareTo(
+                right?.StableId ?? int.MaxValue);
         }
 
         private void LateRendererUpdateAll(int tickIndex)

@@ -24,6 +24,14 @@ namespace NTSD.Animation
         public bool IsBound => EnsureActiveBinding();
         public int BoundVictimSlot => EnsureActiveBinding() ? _bindingHandle.BoundVictimSlot : -1;
 
+        internal bool IsBoundTo(RuntimeRestStore store, int victimSlot)
+        {
+            return store != null &&
+                   EnsureActiveBinding() &&
+                   ReferenceEquals(_boundStore, store) &&
+                   _bindingHandle.BoundVictimSlot == victimSlot;
+        }
+
         /// <summary>
         /// 攻击者自身的命中冷却；大于 0 时不能再次执行 arest 门控的命中。
         /// </summary>

@@ -1,0 +1,77 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to the License Client on channel: "LicenseClient-Logan"
+[Licensing::Client] Error: Code 10 while verifying Licensing Client signature (process Id: 9444, path: "D:/UnityHub/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] Error: LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.0+aa6cfba
+  Session Id:              75642920f4fc4be09e102ba330ca7436
+  Correlation Id:          035aaea857d0f91dcf09fa3b15b06911
+  External correlation Id: 9057478842309739080
+  Machine Id:              YnCgJ/3eXfqj/pKKnk6cl38u0EY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Logan" (connect: 0.00s, validation: 0.01s, handshake: 0.08s)
+[Licensing::IpcConnector] Successfully connected to the License Notification on channel: "LicenseClient-Logan-notifications"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+Built from '2022.3/china_unity/release' branch; Version is '2022.3.4f1c1 (dae07de86df3) revision 14344317'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'zh' Physical Memory: 65349 MB
+[Licensing::Client] Successfully resolved entitlements
+[Licensing::Module] Serial number assigned to: "ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+D:\Unity\HubEditor\2022.3.4f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+-executeMethod
+NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunForBatchmode
+-logFile
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Unity-P5-SelfCheck.log
+Successfully changed project path to: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity
+I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [194280] Host "[IP] 192.168.31.76 [Port] 55497 [Flags] 2 [Guid] 891765045 [EditorId] 891765045 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [194280] Host "[IP] 192.168.31.76 [Port] 55497 [Flags] 2 [Guid] 891765045 [EditorId] 891765045 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-MKTDPPS) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-218740" after 0.3 seconds.
+[Licensing::Client] Successfully resolved entitlements
+[Package Manager] Done resolving packages in 5.18 seconds
+[Licensing::Client] Successfully resolved entitlement details
+An error occurred while resolving packages:
+  Project has invalid dependencies:
+    com.unity.feature.2d: Package [com.unity.feature.2d@2.0.1] cannot be found
+    com.unity.render-pipelines.universal: Package [com.unity.render-pipelines.universal@14.0.11] cannot be found
+Exiting without the bug reporter. Application will terminate with return code 1

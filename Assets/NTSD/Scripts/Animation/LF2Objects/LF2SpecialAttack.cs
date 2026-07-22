@@ -1326,7 +1326,9 @@ namespace NTSD.Animation.LF2Objects
 
         private Vector3 MakePointCenter(LF2FrameData frame)
         {
-            float spriteWidth = Sprite?.GetWidthPx() ?? 0;
+            float spriteWidth = TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry)
+                ? entry.PixelWidth
+                : 0f;
 
             int centerx = frame?.centerx ?? 0;
             int centery = frame?.centery ?? 0;

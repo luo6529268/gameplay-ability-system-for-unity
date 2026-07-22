@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using MoreMountains.Tools;
 using NTSD.UI;
+using NTSD.Animation.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -40,6 +41,44 @@ namespace NTSD.Animation
         )]
         [PropertyOrder(-1)]
         private Dictionary<int, LF2CharacterDataWrapper> TotalCharacterFrameConfig = new Dictionary<int, LF2CharacterDataWrapper>(10);
+        private Dictionary<int, LF2CharacterDataWrapper> pendingCharacterFrameConfig;
+        private int spritePrewarmGeneration;
+        private bool spritePrewarmDisposed;
+        private HashSet<Sprite> publishedOwnedSprites = new HashSet<Sprite>();
+        private HashSet<UnityEngine.Object> publishedOwnedResources = new HashSet<UnityEngine.Object>();
+        private readonly Dictionary<BattleSpriteCatalog, SpritePublicationOwnership> retiredSpritePublications =
+            new Dictionary<BattleSpriteCatalog, SpritePublicationOwnership>();
+        private readonly Dictionary<BattleSpriteCatalog, int> spriteCatalogRendererBindings =
+            new Dictionary<BattleSpriteCatalog, int>();
+
+        private sealed class SpritePublicationOwnership
+        {
+            public readonly HashSet<Sprite> Sprites;
+            public readonly HashSet<UnityEngine.Object> Resources;
+            public readonly BattleSpriteCatalog Catalog;
+
+            public SpritePublicationOwnership(
+                BattleSpriteCatalog catalog,
+                HashSet<Sprite> sprites,
+                HashSet<UnityEngine.Object> resources)
+            {
+                Catalog = catalog;
+                Sprites = sprites ?? new HashSet<Sprite>();
+                Resources = resources ?? new HashSet<UnityEngine.Object>();
+            }
+        }
+
+        private sealed class SparkPublicationStaging
+        {
+            public Texture2D Texture;
+            public Sprite[] Sprites;
+        }
+
+        private sealed class WordsPublicationStaging
+        {
+            public Texture2D[] Textures;
+            public Sprite[][] GlyphSprites;
+        }
 
         [ShowInInspector, ReadOnly]
         [DictionaryDrawerSettings(
@@ -49,6 +88,12 @@ namespace NTSD.Animation
         )]
         [PropertyOrder(-1)]
         private Dictionary<int, List<Sprite>> MergedSprites = new Dictionary<int, List<Sprite>>(10);
+
+        public BattleSpriteCatalog SpriteCatalog { get; private set; } = BattleSpriteCatalog.Empty;
+        public BattleCommonVisualCatalog CommonVisualCatalog { get; private set; } = BattleCommonVisualCatalog.Empty;
+        public string LastAtlasDiagnostic { get; private set; } = string.Empty;
+        public BattleAtlasPolicyDecision LastAtlasPolicyDecision { get; private set; }
+        public BattleAtlasDiagnosticInputs LastAtlasDiagnosticInputs { get; private set; }
 
         #endregion
 
@@ -109,8 +154,6 @@ namespace NTSD.Animation
         [PropertyOrder(10)]
         private void RefreshAllData()
         {
-            TotalCharacterFrameConfig.Clear();
-            MergedSprites.Clear();
 #if UNITY_EDITOR
             EditorApplication.delayCall += async () =>
             {
@@ -209,6 +252,9 @@ namespace NTSD.Animation
             {
                 TotalCharacterFrameConfig.Clear();
                 MergedSprites.Clear();
+                pendingCharacterFrameConfig = null;
+                spritePrewarmGeneration++;
+                InvalidateSpriteCatalog();
                 Debug.Log("所有数据已清空");
             }
 #endif
@@ -382,16 +428,18 @@ namespace NTSD.Animation
 
         public void ApplyLoadedCharacterConfigs(Dictionary<int, LF2CharacterDataWrapper> configs)
         {
-            if (configs == null || configs.Count == 0)
+            if (spritePrewarmDisposed || configs == null || configs.Count == 0)
             {
                 return;
             }
 
-            TotalCharacterFrameConfig.Clear();
+            var pending = new Dictionary<int, LF2CharacterDataWrapper>(configs.Count);
             foreach (var kvp in configs)
             {
-                TotalCharacterFrameConfig[kvp.Key] = kvp.Value;
+                pending[kvp.Key] = kvp.Value;
             }
+            pendingCharacterFrameConfig = pending;
+            spritePrewarmGeneration++;
         }
 
         /// <summary>
@@ -503,6 +551,7 @@ namespace NTSD.Animation
             }
 
             MergedSprites[characterId] = sprites;
+            InvalidateSpriteCatalog();
         }
 
         /// <summary>
@@ -813,20 +862,29 @@ namespace NTSD.Animation
         /// </summary>
         public async UniTask LoadCharacterSpritesAsync(Action<string> onProgressText)
         {
-            Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {TotalCharacterFrameConfig.Count}</color>");
+            if (spritePrewarmDisposed)
+                return;
+
+            int invocation = BeginSpritePrewarmInvocation();
+            Dictionary<int, LF2CharacterDataWrapper> configSource =
+                pendingCharacterFrameConfig ?? TotalCharacterFrameConfig;
+            var stagedConfigs = new Dictionary<int, LF2CharacterDataWrapper>(configSource);
+            var stagedSprites = new Dictionary<int, List<Sprite>>(stagedConfigs.Count);
+            var stagedCreatedSprites = new HashSet<Sprite>();
+            var stagedTextures = new HashSet<Texture2D>();
+            var stagedAtlasSources = new List<BattleAtlasSourcePixels>();
+
+            Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {stagedConfigs.Count}</color>");
 
             var allFileInfos = new List<(int characterId, SpriteFileInfo fileInfo)>();
 
-            foreach (var config in TotalCharacterFrameConfig.Values)
+            foreach (var config in stagedConfigs.Values)
             {
                 int characterId = config.characterId;
-                int totalSpriteCount = 0;
-                if (config.characterData.files.Count > 0)
-                {
-                    var lastFile = config.characterData.files[config.characterData.files.Count - 1];
-                    totalSpriteCount = lastFile.endFrame + 1;
-                }
-                MergedSprites[characterId] = new List<Sprite>(new Sprite[totalSpriteCount]);
+                int totalSpriteCount = config.characterData.files.Count > 0
+                    ? config.characterData.files.Max(fileInfo => fileInfo.endFrame) + 1
+                    : 0;
+                stagedSprites[characterId] = new List<Sprite>(new Sprite[totalSpriteCount]);
 
                 foreach (var fileInfo in config.characterData.files)
                 {
@@ -837,6 +895,7 @@ namespace NTSD.Animation
             Debug.Log($"<color=cyan>共 {allFileInfos.Count} 个文件需要处理</color>");
 
             int totalCreated = 0;
+            int failedSheets = 0;
             int concurrentLimit = Mathf.Clamp(System.Environment.ProcessorCount, 1, 4);
             var cpuSemaphore = new System.Threading.SemaphoreSlim(concurrentLimit);
             var uploadSemaphore = new System.Threading.SemaphoreSlim(1);
@@ -845,29 +904,417 @@ namespace NTSD.Animation
             foreach (var (characterId, fileInfo) in allFileInfos)
             {
                 await cpuSemaphore.WaitAsync();
-                var task = ProcessAndCreateSpritesAsync(characterId, fileInfo, onProgressText, cpuSemaphore, uploadSemaphore)
-                    .ContinueWith(count => System.Threading.Interlocked.Add(ref totalCreated, count));
+                var task = ProcessAndCreateSpritesAsync(
+                        characterId,
+                        fileInfo,
+                        stagedSprites,
+                        stagedCreatedSprites,
+                        stagedTextures,
+                        stagedAtlasSources,
+                        onProgressText,
+                        cpuSemaphore,
+                        uploadSemaphore)
+                    .ContinueWith(count =>
+                    {
+                        if (count < 0)
+                            System.Threading.Interlocked.Increment(ref failedSheets);
+                        else
+                            System.Threading.Interlocked.Add(ref totalCreated, count);
+                    });
                 pendingTasks.Add(task);
             }
 
             await UniTask.WhenAll(pendingTasks);
 
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+            {
+                await UniTask.SwitchToMainThread();
+                DestroyStagedPresentation(stagedCreatedSprites, stagedTextures);
+                return;
+            }
+
+            if (failedSheets > 0)
+            {
+                await UniTask.SwitchToMainThread();
+                DestroyStagedPresentation(stagedCreatedSprites, stagedTextures);
+                throw new InvalidOperationException(
+                    $"Battle sprite prewarm failed for {failedSheets} sheet(s); the previous catalog remains published.");
+            }
+
+            BattleSpriteCatalog stagedCatalog;
+            var stagedResources = new HashSet<UnityEngine.Object>();
+            foreach (Texture2D texture in stagedTextures)
+                stagedResources.Add(texture);
+            string atlasDiagnostic = string.Empty;
+            BattleAtlasPolicyDecision atlasPolicyDecision = null;
+            BattleAtlasDiagnosticInputs atlasDiagnosticInputs = null;
+            SparkPublicationStaging stagedSpark = null;
+            WordsPublicationStaging stagedWords = null;
+            try
+            {
+                stagedCatalog = BuildBattleSpriteCatalog(stagedConfigs, stagedSprites);
+                if (!TryBuildCentralAtlasPublication(
+                        stagedCatalog,
+                        stagedAtlasSources,
+                        BattleRenderingDeviceCapabilities.FromSystem(),
+                        NTSD.App.GameConfig.Instance,
+                        null,
+                        out stagedCatalog,
+                        out HashSet<UnityEngine.Object> atlasResources,
+                        out atlasDiagnostic,
+                        out atlasPolicyDecision,
+                        out atlasDiagnosticInputs))
+                {
+                    throw new InvalidOperationException($"Battle atlas publication failed: {atlasDiagnostic}");
+                }
+                stagedResources.UnionWith(atlasResources);
+
+                stagedSpark = await BuildSparkPublicationAsync(invocation);
+                if (stagedSpark == null || stagedSpark.Texture == null || stagedSpark.Sprites == null)
+                    throw new InvalidOperationException("SPARK.bmp could not be decoded into the common 20-frame publication.");
+                stagedTextures.Add(stagedSpark.Texture);
+                stagedResources.Add(stagedSpark.Texture);
+                foreach (Sprite sparkSprite in stagedSpark.Sprites)
+                {
+                    if (sparkSprite != null)
+                        stagedCreatedSprites.Add(sparkSprite);
+                }
+
+                stagedWords = await BuildWordsPublicationAsync(invocation);
+                if (stagedWords == null || stagedWords.Textures == null || stagedWords.GlyphSprites == null)
+                {
+                    throw new InvalidOperationException(
+                        "WORDS0.bmp through WORDS5.bmp could not be decoded into the common glyph publication.");
+                }
+
+                foreach (Texture2D wordsTexture in stagedWords.Textures)
+                {
+                    if (wordsTexture == null)
+                        throw new InvalidOperationException("WORDS publication contains a missing texture.");
+                    stagedTextures.Add(wordsTexture);
+                    stagedResources.Add(wordsTexture);
+                }
+
+                foreach (Sprite[] glyphs in stagedWords.GlyphSprites)
+                {
+                    if (glyphs == null)
+                        throw new InvalidOperationException("WORDS publication contains a missing glyph page.");
+                    foreach (Sprite glyph in glyphs)
+                    {
+                        if (glyph != null)
+                            stagedCreatedSprites.Add(glyph);
+                    }
+                }
+            }
+            catch
+            {
+                await UniTask.SwitchToMainThread();
+                DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
+                throw;
+            }
+
+            await UniTask.SwitchToMainThread();
+            BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Build(
+                NTSD.App.GameConfig.Instance?.ShadowPrefab,
+                stagedSpark.Texture,
+                stagedSpark.Sprites,
+                stagedWords.Textures,
+                stagedWords.GlyphSprites);
+            if (!commonVisualCatalog.IsComplete)
+            {
+                DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
+                throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
+            }
+            if (!TryCommitSpritePrewarmInvocation(
+                    invocation,
+                    stagedConfigs,
+                    stagedSprites,
+                    stagedCatalog,
+                    stagedCreatedSprites,
+                    null,
+                    stagedResources,
+                    atlasDiagnostic,
+                    commonVisualCatalog))
+            {
+                DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
+                return;
+            }
+            LastAtlasPolicyDecision = atlasPolicyDecision;
+            LastAtlasDiagnosticInputs = atlasDiagnosticInputs;
+            BattleCentralRenderSystem.ResolveDrawPolicyForPublication(NTSD.App.GameConfig.Instance);
+
             Debug.Log($"<color=cyan>精灵加载完成，共创建 {totalCreated} 个精灵</color>");
 
-            // 加载所有角色的UI精灵（head和small）
-            await UniTask.SwitchToMainThread();
-            await LoadAllCharacterUISpritesAsync();
+            // Continue UI loading only while this publication is current.
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return;
+            await LoadAllCharacterUISpritesAsync(invocation);
 
-            IsPrewarmCompleted = true;
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return;
             PrewarmCompleted?.Invoke();
+        }
+
+        private async UniTask<SparkPublicationStaging> BuildSparkPublicationAsync(int invocation)
+        {
+            string sparkPath = Path.Combine(
+                Application.dataPath,
+                "NTSD", "Sprite", "UIPanels", "SPARK.bmp");
+            BMPLoader.BmpData bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(sparkPath));
+            if (bmpData == null || bmpData.Pixels == null ||
+                bmpData.Width < 510 || bmpData.Height != 256)
+            {
+                return null;
+            }
+
+            var transparency = new TransparentColorData
+            {
+                targetColor = Color.black,
+                colorTolerance = 0.1f
+            };
+            Color[] processedPixels = await UniTask.RunOnThreadPool(() =>
+            {
+                return RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
+                    bmpData.Pixels,
+                    transparency,
+                    out _);
+            });
+            if (processedPixels == null || processedPixels.Length != bmpData.Width * bmpData.Height ||
+                !CanCompleteSpritePrewarmInvocation(invocation))
+            {
+                return null;
+            }
+
+            await UniTask.SwitchToMainThread();
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return null;
+
+            Texture2D texture = null;
+            Sprite[] sprites = null;
+            bool transfersOwnership = false;
+            try
+            {
+                texture = new Texture2D(bmpData.Width, bmpData.Height, TextureFormat.RGBA32, false);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels(processedPixels);
+                texture.Apply(false, true);
+                texture.name = "SPARK";
+
+                sprites = new Sprite[BattleCommonVisualCatalog.SparkFrameCount];
+                for (int pic = 0; pic < sprites.Length; pic++)
+                {
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        return null;
+
+                    Rect rect = BattleCommonVisualCatalog.GetSparkPixelRect(pic);
+                    Vector2 pivot = BattleCommonVisualCatalog.GetSparkPivotNormalized(pic);
+                    Sprite sprite = Sprite.Create(texture, rect, pivot, 100f, 0, SpriteMeshType.FullRect);
+                    sprite.name = $"spark_{pic:D2}";
+                    sprites[pic] = sprite;
+                }
+
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    return null;
+
+                transfersOwnership = true;
+                return new SparkPublicationStaging
+                {
+                    Texture = texture,
+                    Sprites = sprites
+                };
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"Failed to create the common SPARK publication: {exception.Message}");
+                return null;
+            }
+            finally
+            {
+                if (!transfersOwnership)
+                    DestroySparkPublicationStaging(texture, sprites);
+            }
+        }
+
+        private static void DestroySparkPublicationStaging(Texture2D texture, Sprite[] sprites)
+        {
+            if (sprites != null)
+            {
+                for (int pic = 0; pic < sprites.Length; pic++)
+                {
+                    Sprite sprite = sprites[pic];
+                    if (sprite == null)
+                        continue;
+                    if (Application.isPlaying)
+                        UnityEngine.Object.Destroy(sprite);
+                    else
+                        UnityEngine.Object.DestroyImmediate(sprite);
+                }
+            }
+
+            if (texture == null)
+                return;
+            if (Application.isPlaying)
+                UnityEngine.Object.Destroy(texture);
+            else
+                UnityEngine.Object.DestroyImmediate(texture);
+        }
+
+        private async UniTask<WordsPublicationStaging> BuildWordsPublicationAsync(int invocation)
+        {
+            var bmpData = new BMPLoader.BmpData[BattleCommonVisualCatalog.WordSheetCount];
+            for (int sheetIndex = 0; sheetIndex < bmpData.Length; sheetIndex++)
+            {
+                int capturedSheetIndex = sheetIndex;
+                string wordsPath = Path.Combine(
+                    Application.dataPath,
+                    "NTSD", "Sprite", "UIPanels", $"WORDS{capturedSheetIndex}.bmp");
+                bmpData[capturedSheetIndex] = await UniTask.RunOnThreadPool(
+                    () => BMPLoader.LoadBmpData(wordsPath));
+                if (bmpData[capturedSheetIndex] == null || bmpData[capturedSheetIndex].Pixels == null ||
+                    bmpData[capturedSheetIndex].Width != BattleCommonVisualCatalog.WordTextureWidth ||
+                    bmpData[capturedSheetIndex].Height != BattleCommonVisualCatalog.WordTextureHeight ||
+                    !CanCompleteSpritePrewarmInvocation(invocation))
+                {
+                    return null;
+                }
+            }
+
+            var transparency = new TransparentColorData
+            {
+                targetColor = Color.black,
+                colorTolerance = 0f
+            };
+            var processedPixels = new Color[BattleCommonVisualCatalog.WordSheetCount][];
+            for (int sheetIndex = 0; sheetIndex < processedPixels.Length; sheetIndex++)
+            {
+                int capturedSheetIndex = sheetIndex;
+                processedPixels[capturedSheetIndex] = await UniTask.RunOnThreadPool(() =>
+                {
+                    return RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
+                        bmpData[capturedSheetIndex].Pixels,
+                        transparency,
+                        out _);
+                });
+                if (processedPixels[capturedSheetIndex] == null ||
+                    processedPixels[capturedSheetIndex].Length !=
+                    bmpData[capturedSheetIndex].Width * bmpData[capturedSheetIndex].Height ||
+                    !CanCompleteSpritePrewarmInvocation(invocation))
+                {
+                    return null;
+                }
+            }
+
+            await UniTask.SwitchToMainThread();
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return null;
+
+            Texture2D[] textures = new Texture2D[BattleCommonVisualCatalog.WordSheetCount];
+            Sprite[][] glyphSprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount][];
+            bool transfersOwnership = false;
+            try
+            {
+                for (int sheetIndex = 0; sheetIndex < textures.Length; sheetIndex++)
+                {
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        return null;
+
+                    Texture2D texture = new Texture2D(
+                        bmpData[sheetIndex].Width,
+                        bmpData[sheetIndex].Height,
+                        TextureFormat.RGBA32,
+                        false);
+                    texture.filterMode = FilterMode.Point;
+                    texture.wrapMode = TextureWrapMode.Clamp;
+                    texture.SetPixels(processedPixels[sheetIndex]);
+                    texture.Apply(false, true);
+                    texture.name = $"WORDS{sheetIndex}";
+                    textures[sheetIndex] = texture;
+
+                    var glyphs = new Sprite[BattleCommonVisualCatalog.WordGlyphsPerSheet];
+                    for (int charCode = 0; charCode < glyphs.Length; charCode++)
+                    {
+                        if (!CanCompleteSpritePrewarmInvocation(invocation))
+                            return null;
+
+                        Sprite glyph = Sprite.Create(
+                            texture,
+                            BattleCommonVisualCatalog.GetWordGlyphPixelRect(charCode),
+                            BattleCommonVisualCatalog.GetWordGlyphPivotNormalized(),
+                            100f,
+                            0,
+                            SpriteMeshType.FullRect);
+                        glyph.name = $"words_{sheetIndex:D1}_{charCode:D3}";
+                        glyphs[charCode] = glyph;
+                    }
+
+                    glyphSprites[sheetIndex] = glyphs;
+                }
+
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    return null;
+
+                transfersOwnership = true;
+                return new WordsPublicationStaging
+                {
+                    Textures = textures,
+                    GlyphSprites = glyphSprites
+                };
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"Failed to create the common WORDS publication: {exception.Message}");
+                return null;
+            }
+            finally
+            {
+                if (!transfersOwnership)
+                    DestroyWordsPublicationStaging(textures, glyphSprites);
+            }
+        }
+
+        private static void DestroyWordsPublicationStaging(Texture2D[] textures, Sprite[][] glyphSprites)
+        {
+            if (glyphSprites != null)
+            {
+                foreach (Sprite[] glyphs in glyphSprites)
+                {
+                    if (glyphs == null)
+                        continue;
+                    foreach (Sprite glyph in glyphs)
+                    {
+                        if (glyph == null)
+                            continue;
+                        if (Application.isPlaying)
+                            UnityEngine.Object.Destroy(glyph);
+                        else
+                            UnityEngine.Object.DestroyImmediate(glyph);
+                    }
+                }
+            }
+
+            if (textures == null)
+                return;
+            foreach (Texture2D texture in textures)
+            {
+                if (texture == null)
+                    continue;
+                if (Application.isPlaying)
+                    UnityEngine.Object.Destroy(texture);
+                else
+                    UnityEngine.Object.DestroyImmediate(texture);
+            }
         }
 
         /// <summary>
         /// 异步加载所有角色的UI精灵（head和small）
         /// 在后台线程读取BMP像素数据，在主线程创建Sprite
         /// </summary>
-        private async UniTask LoadAllCharacterUISpritesAsync()
+        private async UniTask LoadAllCharacterUISpritesAsync(int invocation)
         {
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return;
+
             if (CharacterUIResourceManager.Instance == null)
             {
                 Debug.LogWarning("<color=yellow>CharacterUIResourceManager.Instance 为空，跳过UI精灵加载</color>");
@@ -878,6 +1325,9 @@ namespace NTSD.Animation
 
             foreach (var config in TotalCharacterFrameConfig.Values)
             {
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    return;
+
                 int characterId = config.characterId;
                 var characterData = config.characterData;
 
@@ -889,6 +1339,8 @@ namespace NTSD.Animation
                 {
                     string headPath = ResolveSpritePath(characterData.head, GetDatFileDirectory(characterId));
                     headSprite = await LoadBMPAsSpriteAsync(headPath, $"{characterData.name}_head");
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        return;
                 }
 
                 // 异步加载small精灵
@@ -896,6 +1348,8 @@ namespace NTSD.Animation
                 {
                     string smallPath = ResolveSpritePath(characterData.small, GetDatFileDirectory(characterId));
                     smallSprite = await LoadBMPAsSpriteAsync(smallPath, $"{characterData.name}_small");
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        return;
                 }
 
                 // 存入CharacterUIResourceManager
@@ -970,7 +1424,13 @@ namespace NTSD.Animation
             }
         }
 
-        private async UniTask<int> ProcessAndCreateSpritesAsync(int characterId, SpriteFileInfo fileInfo,
+        private async UniTask<int> ProcessAndCreateSpritesAsync(
+            int characterId,
+            SpriteFileInfo fileInfo,
+            Dictionary<int, List<Sprite>> stagedSprites,
+            HashSet<Sprite> stagedCreatedSprites,
+            HashSet<Texture2D> stagedTextures,
+            List<BattleAtlasSourcePixels> stagedAtlasSources,
             Action<string> onProgressText,
             System.Threading.SemaphoreSlim cpuSemaphore,
             System.Threading.SemaphoreSlim uploadSemaphore)
@@ -986,7 +1446,7 @@ namespace NTSD.Animation
                 var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
                 if (bmpData == null || bmpData.Pixels == null)
                 {
-                    return 0;
+                    return -1;
                 }
 
                 int textureWidth = bmpData.Width;
@@ -998,24 +1458,12 @@ namespace NTSD.Animation
                     sourcePixels[i] = loadedPixels[i];
                 }
 
-                int expectedWidth = fileInfo.col * (fileInfo.width + 1);
-                int expectedHeight = fileInfo.row * (fileInfo.height + 1);
-                int actualRow = fileInfo.row;
-                int actualCol = fileInfo.col;
-
-                bool SizeMatches(int actual, int expected) => Mathf.Abs(actual - expected) <= 1;
-
-                if (!SizeMatches(textureWidth, expectedWidth) || !SizeMatches(textureHeight, expectedHeight))
-                {
-                    int swappedExpectedWidth = fileInfo.row * (fileInfo.width + 1);
-                    int swappedExpectedHeight = fileInfo.col * (fileInfo.height + 1);
-
-                    if (SizeMatches(textureWidth, swappedExpectedWidth) && SizeMatches(textureHeight, swappedExpectedHeight))
-                    {
-                        actualRow = fileInfo.col;
-                        actualCol = fileInfo.row;
-                    }
-                }
+                ResolveEffectiveGrid(
+                    fileInfo,
+                    textureWidth,
+                    textureHeight,
+                    out int actualRow,
+                    out int actualCol);
 
                 int spriteWidth = fileInfo.width;
                 int spriteHeight = fileInfo.height;
@@ -1024,12 +1472,17 @@ namespace NTSD.Animation
 
                 var processedSheet = await UniTask.RunOnThreadPool(() =>
                     RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels));
-                var spriteRects = RuntimeSpriteProcessor.BuildSpriteRectsFromTopLeft(
-                    textureWidth, textureHeight, spriteWidth, spriteHeight, row, col);
+                Rect?[] spriteRects = BuildIndexedSpriteRects(
+                    fileInfo,
+                    textureWidth,
+                    textureHeight,
+                    row,
+                    col);
 
-                if (processedSheet == null || processedSheet.Length == 0 || spriteRects == null || spriteRects.Count == 0)
+                if (processedSheet == null || processedSheet.Length == 0 ||
+                    spriteRects == null || !spriteRects.Any(rect => rect.HasValue))
                 {
-                    return 0;
+                    return -1;
                 }
 
                 cpuSemaphore.Release();
@@ -1039,34 +1492,42 @@ namespace NTSD.Animation
                 uploadSemaphoreHeld = true;
                 await UniTask.SwitchToMainThread();
 
-                var allSprites = MergedSprites[characterId];
+                var allSprites = stagedSprites[characterId];
+                stagedAtlasSources.Add(new BattleAtlasSourcePixels(
+                    filePath,
+                    textureWidth,
+                    textureHeight,
+                    processedSheet));
                 var texture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
                 texture.filterMode = FilterMode.Point;
                 texture.wrapMode = TextureWrapMode.Clamp;
                 texture.SetPixels32(processedSheet);
                 texture.Apply(false, true);
                 texture.name = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                stagedTextures.Add(texture);
 
-                for (int i = 0; i < spriteRects.Count; i++)
+                for (int i = 0; i < spriteRects.Length; i++)
                 {
-                    var spriteRect = spriteRects[i];
+                    Rect? spriteRect = spriteRects[i];
+                    if (!spriteRect.HasValue)
+                        continue;
+
+                    int targetIndex = fileInfo.startFrame + i;
+                    if (targetIndex < 0 || targetIndex >= allSprites.Count || targetIndex > fileInfo.endFrame)
+                        continue;
 
                     Sprite sprite = Sprite.Create(
                         texture,
-                        spriteRect.Rect,
+                        spriteRect.Value,
                         new Vector2(0.5f, 0f),
                         100f,
                         0,
                         SpriteMeshType.FullRect
                     );
-                    sprite.name = spriteRect.Name;
-
-                    int targetIndex = fileInfo.startFrame + i;
-                    if (targetIndex >= 0 && targetIndex < allSprites.Count && targetIndex <= fileInfo.endFrame)
-                    {
-                        allSprites[targetIndex] = sprite;
-                        created++;
-                    }
+                    sprite.name = $"sprite_{i / col}_{i % col}";
+                    stagedCreatedSprites.Add(sprite);
+                    allSprites[targetIndex] = sprite;
+                    created++;
                 }
                 await UniTask.Yield();
                 uploadSemaphore.Release();
@@ -1075,6 +1536,7 @@ namespace NTSD.Animation
             catch (System.Exception e)
             {
                 Debug.LogError($"<color=red>处理文件失败: {fileInfo.filePath}\n{e.Message}</color>");
+                created = -1;
             }
             finally
             {
@@ -1084,6 +1546,711 @@ namespace NTSD.Animation
                     uploadSemaphore?.Release();
             }
             return created;
+        }
+
+        internal static BattleSpriteCatalog BuildBattleSpriteCatalog(
+            Dictionary<int, LF2CharacterDataWrapper> configs,
+            Dictionary<int, List<Sprite>> spritesByVisualDataId)
+        {
+            var builder = new BattleSpriteCatalogBuilder();
+
+            foreach (var config in configs.Values)
+            {
+                int visualDataId = config.characterId;
+                if (!spritesByVisualDataId.TryGetValue(visualDataId, out List<Sprite> sprites) || sprites == null)
+                    continue;
+
+                foreach (SpriteFileInfo fileInfo in config.characterData.files)
+                {
+                    int firstPic = Mathf.Max(0, fileInfo.startFrame);
+                    int lastPic = Mathf.Min(fileInfo.endFrame, sprites.Count - 1);
+                    Sprite firstSprite = null;
+                    for (int pic = firstPic; pic <= lastPic && firstSprite == null; pic++)
+                        firstSprite = sprites[pic];
+
+                    Texture2D texture = firstSprite != null ? firstSprite.texture : null;
+                    if (texture == null)
+                        continue;
+
+                    ResolveEffectiveGrid(fileInfo, texture.width, texture.height, out int row, out int col);
+                    Rect?[] rects = BuildIndexedSpriteRects(
+                        fileInfo,
+                        texture.width,
+                        texture.height,
+                        row,
+                        col);
+
+                    int firstLocalPic = Mathf.Max(0, firstPic - fileInfo.startFrame);
+                    int lastLocalPic = Mathf.Min(
+                        rects.Length - 1,
+                        lastPic - fileInfo.startFrame);
+                    for (int localPic = firstLocalPic; localPic <= lastLocalPic; localPic++)
+                    {
+                        int effectivePic = fileInfo.startFrame + localPic;
+                        if (effectivePic < 0 || effectivePic >= sprites.Count)
+                            continue;
+
+                        Sprite legacySprite = sprites[effectivePic];
+                        if (legacySprite == null || !rects[localPic].HasValue)
+                            continue;
+
+                        builder.Add(
+                            visualDataId,
+                            effectivePic,
+                            fileInfo.filePath,
+                            texture,
+                            rects[localPic].Value,
+                            legacySprite);
+                    }
+                }
+            }
+
+            return builder.Publish();
+        }
+
+        internal static bool TryBuildCentralAtlasPublication(
+            BattleSpriteCatalog sourceCatalog,
+            IReadOnlyList<BattleAtlasSourcePixels> sources,
+            BattleRenderingDeviceCapabilities capabilities,
+            NTSD.App.GameConfig config,
+            string[] commandLineArguments,
+            out BattleSpriteCatalog boundCatalog,
+            out HashSet<UnityEngine.Object> ownedResources,
+            out string diagnostic,
+            out BattleAtlasPolicyDecision policyDecision,
+            out BattleAtlasDiagnosticInputs diagnosticInputs)
+        {
+            boundCatalog = sourceCatalog ?? BattleSpriteCatalog.Empty;
+            ownedResources = new HashSet<UnityEngine.Object>();
+            diagnostic = string.Empty;
+            policyDecision = null;
+            diagnosticInputs = null;
+            if (boundCatalog.Count == 0)
+                return true;
+            if (capabilities == null)
+                throw new ArgumentNullException(nameof(capabilities));
+
+            if (!TryClassifyCentralAtlasSources(
+                    sources,
+                    capabilities.MaxTextureSize,
+                    out List<BattleAtlasSourcePixels> eligibleSources,
+                    out List<string> sourceTexture2DExcludedPaths,
+                    out string oversizedDiagnostic))
+            {
+                diagnostic = oversizedDiagnostic;
+                return false;
+            }
+
+            var descriptors = CreateAtlasDescriptors(eligibleSources);
+
+            BattleAtlasPlanResult planResult = BattleAtlasLayoutPlanner.Plan(descriptors);
+            if (!planResult.Succeeded)
+            {
+                diagnostic = planResult.Diagnostic;
+                return false;
+            }
+
+            policyDecision = BattleRenderingPolicyResolver.ResolveAtlas(
+                capabilities,
+                planResult.Plan.PageCount,
+                config,
+                commandLineArguments);
+            if (planResult.Plan.PageCount == 0)
+            {
+                if (!TryRetainExcludedSourceTexture2DCatalog(
+                        boundCatalog,
+                        sourceTexture2DExcludedPaths,
+                        out string sourceTexture2DDiagnostic))
+                {
+                    diagnostic = sourceTexture2DDiagnostic;
+                    return false;
+                }
+
+                diagnostic = oversizedDiagnostic;
+                diagnosticInputs = new BattleAtlasDiagnosticInputs(
+                    capabilities,
+                    policyDecision,
+                    0,
+                    0,
+                    BattleSpriteCentralBindingMode.SourceTexture2D,
+                    diagnostic);
+                return true;
+            }
+            if (!BattleAtlasResourceBuilder.TryBuild(
+                    planResult.Plan,
+                    eligibleSources,
+                    policyDecision.CapabilityPolicy,
+                    out BattleAtlasResources resources,
+                    out diagnostic))
+            {
+                return false;
+            }
+
+            foreach (UnityEngine.Object resource in resources.OwnedObjects)
+                ownedResources.Add(resource);
+            if (resources.Mode == BattleSpriteCentralBindingMode.AtlasPageTexture2D &&
+                policyDecision.EffectiveMode == BattleAtlasPolicyMode.TextureArray)
+            {
+                string runtimeFallbackReason = string.IsNullOrEmpty(resources.Diagnostic)
+                    ? "Texture2DArray allocation/upload failed; ordered pages were published."
+                    : resources.Diagnostic;
+                policyDecision = new BattleAtlasPolicyDecision(
+                    policyDecision.RequestedMode,
+                    BattleAtlasPolicyMode.OrderedPages,
+                    runtimeFallbackReason,
+                    capabilities.ToAtlasCapabilityPolicy(runtimeFallbackReason));
+            }
+            if (BattleAtlasResourceBuilder.TryBindCatalog(
+                    boundCatalog,
+                    planResult.Plan,
+                    resources,
+                    sourceTexture2DExcludedPaths,
+                    out BattleSpriteCatalog remapped,
+                    out string bindingDiagnostic))
+            {
+                boundCatalog = remapped;
+                diagnostic = CombineAtlasDiagnostics(resources.Diagnostic, oversizedDiagnostic);
+                diagnosticInputs = new BattleAtlasDiagnosticInputs(
+                    capabilities,
+                    policyDecision,
+                    planResult.Plan.PageCount,
+                    BattleAtlasDiagnosticInputs.EstimateAtlasBytes(planResult.Plan.PageCount),
+                    resources.Mode,
+                    diagnostic);
+                return true;
+            }
+
+            DestroyStagedPresentation(null, ownedResources);
+            ownedResources.Clear();
+            diagnostic = bindingDiagnostic;
+            return false;
+        }
+
+        internal static bool TryBuildCentralAtlasPublication(
+            BattleSpriteCatalog sourceCatalog,
+            IReadOnlyList<BattleAtlasSourcePixels> sources,
+            BattleAtlasCapabilityPolicy policy,
+            out BattleSpriteCatalog boundCatalog,
+            out HashSet<UnityEngine.Object> ownedResources,
+            out string diagnostic)
+        {
+            boundCatalog = sourceCatalog ?? BattleSpriteCatalog.Empty;
+            ownedResources = new HashSet<UnityEngine.Object>();
+            diagnostic = string.Empty;
+            if (boundCatalog.Count == 0)
+                return true;
+
+            if (!TryClassifyCentralAtlasSources(
+                    sources,
+                    policy.MaxTextureSize,
+                    out List<BattleAtlasSourcePixels> eligibleSources,
+                    out List<string> sourceTexture2DExcludedPaths,
+                    out string oversizedDiagnostic))
+            {
+                diagnostic = oversizedDiagnostic;
+                return false;
+            }
+
+            var descriptors = CreateAtlasDescriptors(eligibleSources);
+
+            BattleAtlasPlanResult planResult = BattleAtlasLayoutPlanner.Plan(descriptors);
+            if (!planResult.Succeeded)
+            {
+                diagnostic = planResult.Diagnostic;
+                return false;
+            }
+            if (planResult.Plan.PageCount == 0)
+            {
+                if (!TryRetainExcludedSourceTexture2DCatalog(
+                        boundCatalog,
+                        sourceTexture2DExcludedPaths,
+                        out string sourceTexture2DDiagnostic))
+                {
+                    diagnostic = sourceTexture2DDiagnostic;
+                    return false;
+                }
+
+                diagnostic = oversizedDiagnostic;
+                return true;
+            }
+            if (!BattleAtlasResourceBuilder.TryBuild(
+                    planResult.Plan,
+                    eligibleSources,
+                    policy,
+                    out BattleAtlasResources resources,
+                    out diagnostic))
+            {
+                return false;
+            }
+
+            foreach (UnityEngine.Object resource in resources.OwnedObjects)
+                ownedResources.Add(resource);
+            if (BattleAtlasResourceBuilder.TryBindCatalog(
+                    boundCatalog,
+                    planResult.Plan,
+                    resources,
+                    sourceTexture2DExcludedPaths,
+                    out BattleSpriteCatalog remapped,
+                    out string bindingDiagnostic))
+            {
+                boundCatalog = remapped;
+                diagnostic = CombineAtlasDiagnostics(resources.Diagnostic, oversizedDiagnostic);
+                return true;
+            }
+
+            DestroyStagedPresentation(null, ownedResources);
+            ownedResources.Clear();
+            diagnostic = bindingDiagnostic;
+            return false;
+        }
+
+        private static List<BattleAtlasSheetDescriptor> CreateAtlasDescriptors(
+            IReadOnlyList<BattleAtlasSourcePixels> sources)
+        {
+            var descriptors = new List<BattleAtlasSheetDescriptor>(sources?.Count ?? 0);
+            if (sources == null)
+                return descriptors;
+
+            for (int index = 0; index < sources.Count; index++)
+            {
+                BattleAtlasSourcePixels source = sources[index];
+                if (source != null)
+                    descriptors.Add(new BattleAtlasSheetDescriptor(source.Path, source.Width, source.Height));
+            }
+            return descriptors;
+        }
+
+        private static bool TryClassifyCentralAtlasSources(
+            IReadOnlyList<BattleAtlasSourcePixels> sources,
+            int maxSourceTextureSize,
+            out List<BattleAtlasSourcePixels> eligibleSources,
+            out List<string> sourceTexture2DExcludedPaths,
+            out string diagnostic)
+        {
+            eligibleSources = new List<BattleAtlasSourcePixels>(sources?.Count ?? 0);
+            sourceTexture2DExcludedPaths = new List<string>();
+            diagnostic = string.Empty;
+            if (!BattleAtlasResourceBuilder.TryValidateSourceSet(sources, out diagnostic))
+                return false;
+
+            var oversizedByPath = new Dictionary<string, BattleAtlasSheetDescriptor>(StringComparer.Ordinal);
+            var classifiedPaths = new HashSet<string>(StringComparer.Ordinal);
+            if (sources != null)
+            {
+                for (int index = 0; index < sources.Count; index++)
+                {
+                    BattleAtlasSourcePixels source = sources[index];
+                    if (source == null)
+                        continue;
+
+                    string path = BattleAtlasLayoutPlanner.NormalizePath(source.Path);
+                    if (!classifiedPaths.Add(path))
+                        continue;
+
+                    if (BattleAtlasLayoutPlanner.IsPageEligible(source.Width, source.Height))
+                    {
+                        eligibleSources.Add(source);
+                        continue;
+                    }
+
+                    oversizedByPath[path] = new BattleAtlasSheetDescriptor(path, source.Width, source.Height);
+                }
+            }
+
+            if (oversizedByPath.Count == 0)
+                return true;
+
+            var unrenderableByPath = new Dictionary<string, BattleAtlasSheetDescriptor>(StringComparer.Ordinal);
+            foreach (KeyValuePair<string, BattleAtlasSheetDescriptor> pair in oversizedByPath)
+            {
+                BattleAtlasSheetDescriptor source = pair.Value;
+                if (source.Width > maxSourceTextureSize || source.Height > maxSourceTextureSize)
+                    unrenderableByPath.Add(pair.Key, source);
+            }
+            if (unrenderableByPath.Count > 0)
+            {
+                diagnostic = $"unrenderableOversized: MaxTextureSize={maxSourceTextureSize}; sources=[{FormatAtlasSourceList(unrenderableByPath)}].";
+                return false;
+            }
+
+            foreach (string path in oversizedByPath.Keys)
+                sourceTexture2DExcludedPaths.Add(path);
+            sourceTexture2DExcludedPaths.Sort(StringComparer.Ordinal);
+            diagnostic = $"oversizedSource2DRetainedCount={sourceTexture2DExcludedPaths.Count}; oversizedSources=[{FormatAtlasSourceList(oversizedByPath)}].";
+            return true;
+        }
+
+        private static string FormatAtlasSourceList(
+            IReadOnlyDictionary<string, BattleAtlasSheetDescriptor> sources)
+        {
+            var paths = new List<string>(sources.Keys);
+            paths.Sort(StringComparer.Ordinal);
+            var values = new List<string>(paths.Count);
+            for (int index = 0; index < paths.Count; index++)
+            {
+                BattleAtlasSheetDescriptor source = sources[paths[index]];
+                values.Add($"{source.Path} ({source.Width}x{source.Height})");
+            }
+            return string.Join(", ", values);
+        }
+
+        private static bool TryRetainExcludedSourceTexture2DCatalog(
+            BattleSpriteCatalog catalog,
+            IReadOnlyCollection<string> sourceTexture2DExcludedPaths,
+            out string diagnostic)
+        {
+            diagnostic = string.Empty;
+            var excludedPaths = new HashSet<string>(sourceTexture2DExcludedPaths, StringComparer.Ordinal);
+            foreach (KeyValuePair<BattleSpriteKey, BattleSpriteEntry> pair in catalog.Entries)
+            {
+                BattleSpriteEntry entry = pair.Value;
+                if (!excludedPaths.Contains(BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath)))
+                {
+                    diagnostic = $"Catalog entry {pair.Key} references missing atlas source '{entry.SourceSheetPath}'.";
+                    return false;
+                }
+                if (entry.CentralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D ||
+                    !entry.CentralBinding.IsValid)
+                {
+                    diagnostic = $"Catalog entry {pair.Key} cannot retain an invalid SourceTexture2D binding.";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static string CombineAtlasDiagnostics(string primary, string secondary)
+        {
+            if (string.IsNullOrEmpty(primary))
+                return secondary ?? string.Empty;
+            if (string.IsNullOrEmpty(secondary))
+                return primary;
+            return primary + " " + secondary;
+        }
+
+        internal static void ResolveEffectiveGrid(
+            SpriteFileInfo fileInfo,
+            int textureWidth,
+            int textureHeight,
+            out int row,
+            out int col)
+        {
+            row = fileInfo.row;
+            col = fileInfo.col;
+
+            bool SizeMatches(int actual, int expected) => Mathf.Abs(actual - expected) <= 1;
+            int expectedWidth = fileInfo.col * (fileInfo.width + 1);
+            int expectedHeight = fileInfo.row * (fileInfo.height + 1);
+            if (SizeMatches(textureWidth, expectedWidth) && SizeMatches(textureHeight, expectedHeight))
+                return;
+
+            int swappedExpectedWidth = fileInfo.row * (fileInfo.width + 1);
+            int swappedExpectedHeight = fileInfo.col * (fileInfo.height + 1);
+            if (SizeMatches(textureWidth, swappedExpectedWidth) &&
+                SizeMatches(textureHeight, swappedExpectedHeight))
+            {
+                row = fileInfo.col;
+                col = fileInfo.row;
+                return;
+            }
+
+            // Production DAT contains intentionally partial sheets. When neither
+            // full grid matches, retain the authored row/column interpretation;
+            // BuildIndexedSpriteRects leaves each out-of-bounds localPic as a hole.
+        }
+
+        internal static Rect?[] BuildIndexedSpriteRects(
+            SpriteFileInfo fileInfo,
+            int textureWidth,
+            int textureHeight,
+            int row,
+            int col)
+        {
+            if (fileInfo == null || row <= 0 || col <= 0 ||
+                fileInfo.width <= 0 || fileInfo.height <= 0)
+                return Array.Empty<Rect?>();
+
+            var rects = new Rect?[checked(row * col)];
+            int cellWidth = fileInfo.width + 1;
+            int cellHeight = fileInfo.height + 1;
+            for (int localPic = 0; localPic < rects.Length; localPic++)
+            {
+                int rowFromTop = localPic / col;
+                int column = localPic % col;
+                int x = column * cellWidth;
+                int y = textureHeight - (rowFromTop + 1) * cellHeight + 1;
+                if (x < 0 || y < 0 ||
+                    x + fileInfo.width > textureWidth ||
+                    y + fileInfo.height > textureHeight)
+                    continue;
+
+                rects[localPic] = new Rect(x, y, fileInfo.width, fileInfo.height);
+            }
+
+            return rects;
+        }
+
+        internal int BeginSpritePrewarmInvocation()
+        {
+            return ++spritePrewarmGeneration;
+        }
+
+        internal bool CanCompleteSpritePrewarmInvocation(int invocation)
+        {
+            return !spritePrewarmDisposed && invocation == spritePrewarmGeneration;
+        }
+
+        internal void MarkSpritePrewarmDestroyedForSelfCheck()
+        {
+            spritePrewarmDisposed = true;
+            spritePrewarmGeneration++;
+        }
+
+        internal bool TryCommitSpritePrewarmInvocation(
+            int invocation,
+            Dictionary<int, LF2CharacterDataWrapper> configs,
+            Dictionary<int, List<Sprite>> sprites,
+            BattleSpriteCatalog catalog,
+            HashSet<Sprite> ownedSprites = null,
+            HashSet<Texture2D> ownedTextures = null,
+            HashSet<UnityEngine.Object> ownedResources = null,
+            string atlasDiagnostic = "",
+            BattleCommonVisualCatalog commonVisualCatalog = null)
+        {
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return false;
+
+            BattleSpriteCatalog previousCatalog = SpriteCatalog;
+            HashSet<UnityEngine.Object> resources = ownedResources;
+            if (resources == null && ownedTextures != null)
+            {
+                resources = new HashSet<UnityEngine.Object>();
+                foreach (Texture2D texture in ownedTextures)
+                    resources.Add(texture);
+            }
+            bool transfersOwnership = ownedSprites != null || resources != null;
+            if (transfersOwnership &&
+                (publishedOwnedSprites.Count > 0 || publishedOwnedResources.Count > 0))
+            {
+                QueueRetiredSpritePublication(
+                    previousCatalog,
+                    publishedOwnedSprites,
+                    publishedOwnedResources);
+            }
+
+            TotalCharacterFrameConfig = configs;
+            MergedSprites = sprites;
+            SpriteCatalog = catalog ?? BattleSpriteCatalog.Empty;
+            if (commonVisualCatalog != null)
+                CommonVisualCatalog = commonVisualCatalog;
+            if (transfersOwnership)
+            {
+                publishedOwnedSprites = ownedSprites ?? new HashSet<Sprite>();
+                publishedOwnedResources = resources ?? new HashSet<UnityEngine.Object>();
+            }
+            pendingCharacterFrameConfig = null;
+            IsPrewarmCompleted = true;
+            LastAtlasDiagnostic = atlasDiagnostic ?? string.Empty;
+            TryRetireCatalogIfUnbound(previousCatalog);
+            return true;
+        }
+
+        internal void RegisterRendererCatalogBinding(BattleSpriteCatalog catalog)
+        {
+            if (spritePrewarmDisposed || catalog == null || ReferenceEquals(catalog, BattleSpriteCatalog.Empty))
+                return;
+
+            spriteCatalogRendererBindings.TryGetValue(catalog, out int count);
+            spriteCatalogRendererBindings[catalog] = count + 1;
+        }
+
+        internal void UnregisterRendererCatalogBinding(BattleSpriteCatalog catalog)
+        {
+            if (spritePrewarmDisposed || catalog == null ||
+                !spriteCatalogRendererBindings.TryGetValue(catalog, out int count))
+                return;
+
+            if (count <= 1)
+                spriteCatalogRendererBindings.Remove(catalog);
+            else
+                spriteCatalogRendererBindings[catalog] = count - 1;
+
+            TryRetireCatalogIfUnbound(catalog);
+        }
+
+        internal int GetRendererCatalogBindingCount(BattleSpriteCatalog catalog)
+        {
+            return catalog != null && spriteCatalogRendererBindings.TryGetValue(catalog, out int count)
+                ? count
+                : 0;
+        }
+
+        public BattleSpriteCatalogLease AcquireCentralCatalogLease(BattleSpriteCatalog catalog)
+        {
+            BattleSpriteCatalog leasedCatalog = catalog ?? BattleSpriteCatalog.Empty;
+            if (spritePrewarmDisposed || ReferenceEquals(leasedCatalog, BattleSpriteCatalog.Empty))
+                return new BattleSpriteCatalogLease(leasedCatalog, null);
+
+            RegisterRendererCatalogBinding(leasedCatalog);
+            return new BattleSpriteCatalogLease(
+                leasedCatalog,
+                () => UnregisterRendererCatalogBinding(leasedCatalog));
+        }
+
+        internal void QueueRetiredSpritePublication(
+            BattleSpriteCatalog catalog,
+            HashSet<Sprite> sprites,
+            HashSet<Texture2D> textures)
+        {
+            var resources = new HashSet<UnityEngine.Object>();
+            if (textures != null)
+            {
+                foreach (Texture2D texture in textures)
+                    resources.Add(texture);
+            }
+            QueueRetiredSpritePublication(catalog, sprites, resources);
+        }
+
+        internal void QueueRetiredSpritePublication(
+            BattleSpriteCatalog catalog,
+            HashSet<Sprite> sprites,
+            HashSet<UnityEngine.Object> resources)
+        {
+            if (catalog == null)
+                return;
+
+            retiredSpritePublications[catalog] = new SpritePublicationOwnership(
+                catalog,
+                sprites,
+                resources);
+            TryRetireCatalogIfUnbound(catalog);
+        }
+
+        private int TryRetireCatalogIfUnbound(BattleSpriteCatalog catalog)
+        {
+            if (catalog == null || GetRendererCatalogBindingCount(catalog) > 0 ||
+                !retiredSpritePublications.TryGetValue(catalog, out SpritePublicationOwnership ownership))
+                return 0;
+
+            retiredSpritePublications.Remove(catalog);
+            return DestroyStagedPresentation(ownership.Sprites, ownership.Resources);
+        }
+
+        internal static int DestroyStagedPresentation(
+            HashSet<Sprite> stagedCreatedSprites,
+            HashSet<Texture2D> stagedTextures)
+        {
+            var resources = new HashSet<UnityEngine.Object>();
+            if (stagedTextures != null)
+            {
+                foreach (Texture2D texture in stagedTextures)
+                    resources.Add(texture);
+            }
+            return DestroyStagedPresentation(stagedCreatedSprites, resources);
+        }
+
+        internal static int DestroyStagedPresentation(
+            HashSet<Sprite> stagedCreatedSprites,
+            HashSet<UnityEngine.Object> stagedResources)
+        {
+            int destroyedCount = 0;
+            if (stagedCreatedSprites != null)
+            {
+                foreach (Sprite sprite in stagedCreatedSprites)
+                {
+                    if (sprite == null)
+                        continue;
+                    destroyedCount++;
+                    DestroyOwnedPresentationResource(sprite);
+                }
+            }
+
+            if (stagedResources == null)
+                return destroyedCount;
+            foreach (UnityEngine.Object resource in stagedResources)
+            {
+                if (resource == null)
+                    continue;
+
+                destroyedCount++;
+                DestroyOwnedPresentationResource(resource);
+            }
+
+            return destroyedCount;
+        }
+
+        private static void DestroyOwnedPresentationResource(UnityEngine.Object resource)
+        {
+            if (resource == null)
+                return;
+
+            // These objects are transient prewarm/atlas products, and this
+            // method is reached only after the publication has no renderer
+            // lease. Retirement must therefore release ownership synchronously
+            // even when the editor is currently in Play Mode; deferred Destroy
+            // would leave the superseded publication observable until the end
+            // of the frame and can retain a large atlas allocation needlessly.
+            UnityEngine.Object.DestroyImmediate(resource);
+        }
+
+        /// <summary>
+        /// Retires superseded publications whose renderer reference count has
+        /// reached zero. Bound catalogs remain queued until the final unbind.
+        /// </summary>
+        public int RetireSupersededSpritePublicationsAfterRefreshBoundary()
+        {
+            int retiredCount = 0;
+            var catalogs = retiredSpritePublications.Keys.ToArray();
+            for (int index = 0; index < catalogs.Length; index++)
+            {
+                retiredCount += TryRetireCatalogIfUnbound(catalogs[index]);
+            }
+
+            return retiredCount;
+        }
+
+        internal int PendingRetiredSpritePublicationCount => retiredSpritePublications.Count;
+
+        private void OnDestroy()
+        {
+            // Clear central segments and release their catalog lease before the
+            // manager's force-retirement boundary destroys publication resources.
+            NTSD.Animation.Rendering.BattleCentralRenderSystem.ResetRuntime();
+            MarkSpritePrewarmDestroyedForSelfCheck();
+            if (publishedOwnedSprites.Count > 0 || publishedOwnedResources.Count > 0)
+            {
+                retiredSpritePublications[SpriteCatalog] = new SpritePublicationOwnership(
+                    SpriteCatalog,
+                    publishedOwnedSprites,
+                    publishedOwnedResources);
+                publishedOwnedSprites = new HashSet<Sprite>();
+                publishedOwnedResources = new HashSet<UnityEngine.Object>();
+            }
+
+            // Manager teardown is a force-retirement boundary. No future commit
+            // or renderer binding can succeed after the disposed flag is set.
+            foreach (SpritePublicationOwnership ownership in retiredSpritePublications.Values)
+                DestroyStagedPresentation(ownership.Sprites, ownership.Resources);
+            retiredSpritePublications.Clear();
+            spriteCatalogRendererBindings.Clear();
+        }
+
+        private void InvalidateSpriteCatalog()
+        {
+            BattleSpriteCatalog previousCatalog = SpriteCatalog;
+            if ((publishedOwnedSprites.Count > 0 || publishedOwnedResources.Count > 0) &&
+                previousCatalog != null && !ReferenceEquals(previousCatalog, BattleSpriteCatalog.Empty))
+            {
+                QueueRetiredSpritePublication(
+                    previousCatalog,
+                    publishedOwnedSprites,
+                    publishedOwnedResources);
+                publishedOwnedSprites = new HashSet<Sprite>();
+                publishedOwnedResources = new HashSet<UnityEngine.Object>();
+            }
+            SpriteCatalog = BattleSpriteCatalog.Empty;
+            CommonVisualCatalog = BattleCommonVisualCatalog.Empty;
+            IsPrewarmCompleted = false;
         }
 
         /// <summary>
@@ -1251,6 +2418,11 @@ namespace NTSD.Animation
         public bool TryGetSprites(int id, out List<Sprite> sprites)
         {
             return MergedSprites.TryGetValue(id, out sprites);
+        }
+
+        public bool TryGetSpriteEntry(int visualDataId, int effectivePic, out BattleSpriteEntry entry)
+        {
+            return SpriteCatalog.TryGet(visualDataId, effectivePic, out entry);
         }
 
         public bool IsCharacterLoaded(int id)

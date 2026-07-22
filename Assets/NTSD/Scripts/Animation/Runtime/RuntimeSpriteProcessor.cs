@@ -119,6 +119,59 @@ namespace NTSD.Animation
             return resultTexture;
         }
 
+        public static Color[] ProcessColorTransparencyPixels(
+            Color[] sourcePixels,
+            TransparentColorData data,
+            out int transparentPixels)
+        {
+            transparentPixels = 0;
+            if (sourcePixels == null || data == null)
+                return null;
+
+            var pixels = new Color[sourcePixels.Length];
+            System.Array.Copy(sourcePixels, pixels, sourcePixels.Length);
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                Color pixel = pixels[i];
+                float colorDiff = Mathf.Abs(pixel.r - data.targetColor.r) +
+                                  Mathf.Abs(pixel.g - data.targetColor.g) +
+                                  Mathf.Abs(pixel.b - data.targetColor.b);
+                if (colorDiff > data.colorTolerance)
+                    continue;
+
+                float alpha = 0f;
+                if (data.preserveEdgeColors && data.edgeSmoothing > 0)
+                {
+                    alpha = Mathf.Clamp01(
+                        (colorDiff - data.colorTolerance * 0.5f) /
+                        (data.colorTolerance * 0.5f));
+                    alpha = Mathf.Pow(alpha, 1f / (data.edgeSmoothing + 0.1f));
+                    if (alpha > 0f && alpha < 1f)
+                    {
+                        float blendFactor = 1f - alpha;
+                        pixels[i] = new Color(
+                            Mathf.Lerp(pixel.r, data.targetColor.r, blendFactor * 0.5f),
+                            Mathf.Lerp(pixel.g, data.targetColor.g, blendFactor * 0.5f),
+                            Mathf.Lerp(pixel.b, data.targetColor.b, blendFactor * 0.5f),
+                            alpha);
+                    }
+                    else
+                    {
+                        pixels[i] = new Color(pixel.r, pixel.g, pixel.b, alpha);
+                    }
+                }
+                else
+                {
+                    pixels[i] = new Color(data.targetColor.r, data.targetColor.g, data.targetColor.b, alpha);
+                }
+
+                if (alpha == 0f)
+                    transparentPixels++;
+            }
+
+            return pixels;
+        }
+
         /// <summary>
         /// 带防色彩渗透的透明处理（推荐使用）
         /// </summary>

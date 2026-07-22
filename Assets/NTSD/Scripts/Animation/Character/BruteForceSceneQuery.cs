@@ -43,6 +43,13 @@ namespace NTSD.Animation
         private readonly List<long> _formalAuthorityPairKeys = new List<long>(256);
         private readonly Dictionary<int, int> _formalSlotToOrdinal = new Dictionary<int, int>();
         private readonly HashSet<int> _formalSeenSlots = new HashSet<int>();
+        private readonly LooseQuadtreeBroadphase _immediateBroadphase = new LooseQuadtreeBroadphase();
+        private readonly List<SpatialBroadphaseEntry> _immediateEntries =
+            new List<SpatialBroadphaseEntry>(128);
+        private readonly List<int> _immediateQueryIndices = new List<int>(64);
+        private readonly List<int> _immediateFallbackIndices = new List<int>(32);
+        private readonly List<int> _immediateCandidateIndices = new List<int>(96);
+        private readonly List<LF2Entity> _immediateTargets = new List<LF2Entity>(96);
         private bool _consumeCandidateCache;
         private int _formalFallbackParticipantCount;
         private bool _formalCollectionAborted;
@@ -64,7 +71,98 @@ namespace NTSD.Animation
         internal void ResetFormalSpatialBroadphase()
         {
             _formalBroadphase.ResetIncremental();
+            _immediateBroadphase.ResetIncremental();
             FormalSpatialSynchronizeResult = default;
+        }
+
+        private bool TryGetImmediateSpatialTargets(
+            in SpatialAabbXZ queryBounds,
+            out List<LF2Entity> targets)
+        {
+            targets = _immediateTargets;
+            targets.Clear();
+            _world.GetAllEntities(_tmpAllObjects);
+            if (_collisionBroadphase != CollisionBroadphaseBackend.LooseQuadtree ||
+                !queryBounds.IsValid)
+            {
+                return false;
+            }
+
+            _immediateEntries.Clear();
+            _immediateFallbackIndices.Clear();
+            for (int index = 0; index < _tmpAllObjects.Count; index++)
+            {
+                LF2Entity entity = _tmpAllObjects[index];
+                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
+                    continue;
+                int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
+                if (runtimeSlot < 0 || runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
+                    !ReferenceEquals(_world.FindEntityByRuntimeSlotForQuery(runtimeSlot), entity))
+                {
+                    return false;
+                }
+
+                if (TryBuildCollisionBroadphaseAabb(
+                        entity,
+                        entity.GetCollisionFrameData(),
+                        out SpatialAabbXZ bounds))
+                {
+                    _immediateEntries.Add(new SpatialBroadphaseEntry(runtimeSlot, index, bounds));
+                }
+                else
+                {
+                    _immediateFallbackIndices.Add(index);
+                }
+            }
+
+            BattleStageRuntimeState stage = _world.Runtime?.Stage;
+            int stageWidth = stage?.StageWidthPx ?? 800;
+            int zMin = stage?.ZMin ?? 180;
+            int zMax = stage?.ZMax ?? 350;
+            var preferredRoot = new SpatialAabbXZ(
+                0,
+                zMin,
+                stageWidth > 0 ? stageWidth : 1,
+                zMax > zMin ? zMax : zMin + 1);
+            try
+            {
+                _immediateBroadphase.Rebuild(_immediateEntries, preferredRoot);
+                _immediateBroadphase.Query(queryBounds, _immediateQueryIndices);
+            }
+            catch
+            {
+                targets.Clear();
+                return false;
+            }
+
+            _immediateCandidateIndices.Clear();
+            for (int i = 0; i < _immediateQueryIndices.Count; i++)
+            {
+                int inputIndex = _immediateQueryIndices[i];
+                if (inputIndex < 0 || inputIndex >= _tmpAllObjects.Count)
+                {
+                    targets.Clear();
+                    return false;
+                }
+                _immediateCandidateIndices.Add(inputIndex);
+            }
+            _immediateCandidateIndices.AddRange(_immediateFallbackIndices);
+            _immediateCandidateIndices.Sort();
+            int previous = -1;
+            for (int i = 0; i < _immediateCandidateIndices.Count; i++)
+            {
+                int index = _immediateCandidateIndices[i];
+                if (index == previous)
+                    continue;
+                if (index < 0 || index >= _tmpAllObjects.Count)
+                {
+                    targets.Clear();
+                    return false;
+                }
+                previous = index;
+                targets.Add(_tmpAllObjects[index]);
+            }
+            return true;
         }
 
         public List<SceneQueryHit> QueryBodyHits(in PhysicsState.BattleVolume vol, LF2Entity exclude)
@@ -106,11 +204,16 @@ namespace NTSD.Animation
                 return _tmpHitResult;
             }
 
-            _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> spatialTargets = null;
+            bool spatial = TryBuildImmediateVolumeAabb(vol, out SpatialAabbXZ volumeBounds) &&
+                           TryGetImmediateSpatialTargets(volumeBounds, out spatialTargets);
+            if (!spatial)
+                _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> source = spatial ? spatialTargets : _tmpAllObjects;
 
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            for (int i = 0; i < source.Count; i++)
             {
-                LF2Entity target = _tmpAllObjects[i];
+                LF2Entity target = source[i];
                 if (target == exclude) continue;
                 if (IsPendingFlushDestroy(target)) continue;
                 if (IsPureTransitionSmoke(target)) continue;
@@ -230,11 +333,16 @@ namespace NTSD.Animation
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
                 return _tmpHitResult;
 
-            _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> spatialTargets = null;
+            bool spatial = TryBuildImmediateVolumeAabb(volume, out SpatialAabbXZ volumeBounds) &&
+                           TryGetImmediateSpatialTargets(volumeBounds, out spatialTargets);
+            if (!spatial)
+                _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> source = spatial ? spatialTargets : _tmpAllObjects;
 
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            for (int i = 0; i < source.Count; i++)
             {
-                LF2Entity target = _tmpAllObjects[i];
+                LF2Entity target = source[i];
                 if (target == attacker || target == null || target.PS == null)
                     continue;
                 if (IsPendingFlushDestroy(target))
@@ -808,11 +916,20 @@ namespace NTSD.Animation
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
                 return _tmpHitResult;
 
-            _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> spatialTargets = null;
+            bool spatial = TryBuildImmediateItrAabb(
+                               attacker,
+                               attackerCollisionFrame,
+                               itr,
+                               out SpatialAabbXZ itrBounds) &&
+                           TryGetImmediateSpatialTargets(itrBounds, out spatialTargets);
+            if (!spatial)
+                _world.GetAllEntities(_tmpAllObjects);
+            List<LF2Entity> source = spatial ? spatialTargets : _tmpAllObjects;
 
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            for (int i = 0; i < source.Count; i++)
             {
-                LF2Entity target = _tmpAllObjects[i];
+                LF2Entity target = source[i];
                 if (target == attacker || target == null || target.PS == null) continue;
                 if (IsPendingFlushDestroy(target)) continue;
 
@@ -2086,6 +2203,50 @@ namespace NTSD.Animation
             if (!found)
                 return false;
 
+            bounds = new SpatialAabbXZ(minX, minZ, maxX, maxZ);
+            return bounds.IsValid;
+        }
+
+        private static bool TryBuildImmediateItrAabb(
+            LF2Entity attacker,
+            LF2FrameData frame,
+            InteractionArea itr,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            if (attacker == null || frame == null || itr == null || !IsReleaseItrGeometry(itr))
+                return false;
+            WorldRect rect = ItrWorldRect(attacker, frame, itr);
+            int collisionZ = CollisionZInt(attacker, frame);
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            bounds = new SpatialAabbXZ(
+                Math.Min(rect.X1, rect.X2),
+                ClampRect((long)collisionZ - zHalf),
+                Math.Max(rect.X1, rect.X2),
+                ClampRect((long)collisionZ + zHalf));
+            return bounds.IsValid;
+        }
+
+        private static bool TryBuildImmediateVolumeAabb(
+            in PhysicsState.BattleVolume volume,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            double x1 = volume.x + volume.vx;
+            double x2 = x1 + volume.w;
+            double z1 = volume.z - volume.zwidth;
+            double z2 = volume.z + volume.zwidth;
+            if (double.IsNaN(x1) || double.IsNaN(x2) ||
+                double.IsNaN(z1) || double.IsNaN(z2) ||
+                double.IsInfinity(x1) || double.IsInfinity(x2) ||
+                double.IsInfinity(z1) || double.IsInfinity(z2))
+            {
+                return false;
+            }
+            int minX = ClampRect((long)Math.Floor(Math.Min(x1, x2)) - 1L);
+            int maxX = ClampRect((long)Math.Ceiling(Math.Max(x1, x2)) + 1L);
+            int minZ = ClampRect((long)Math.Floor(Math.Min(z1, z2)) - 1L);
+            int maxZ = ClampRect((long)Math.Ceiling(Math.Max(z1, z2)) + 1L);
             bounds = new SpatialAabbXZ(minX, minZ, maxX, maxZ);
             return bounds.IsValid;
         }

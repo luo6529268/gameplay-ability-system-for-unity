@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Animation.Rendering;
 using NTSD.Simulation;
 using MoreMountains.Tools;
 
@@ -16,10 +17,14 @@ namespace NTSD.Animation.LF2Objects
         private SpriteRenderer _spriteRenderer;
         private SpriteRenderer _shadowRenderer;
         private Transform _visualTransform;
+        private Material _defaultSpriteSharedMaterial;
+        private Material _defaultShadowSharedMaterial;
 
         // ========== 逻辑层引用 ==========
         private LF2Entity _logicObject;
         private int _boundSpriteObjectId = int.MinValue;
+        private BattleSpriteCatalog _boundSpriteCatalog;
+        private CharacterAnimtorManager _catalogBindingManager;
 
         // 渲染帧计数器，对齐 C++ release 的 dword_449098。
         private int _renderFrameCount = 0;
@@ -55,6 +60,8 @@ namespace NTSD.Animation.LF2Objects
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            _defaultSpriteSharedMaterial = ResolveBorrowedDefaultSharedMaterial(_spriteRenderer);
+            NormalizeSpriteRendererState(_spriteRenderer, _defaultSpriteSharedMaterial);
             _visualTransform = this.transform;
         }
 
@@ -72,6 +79,14 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_logicObject == null) return;
 
+            if (BattleCentralRenderSystem.ShouldUseCentralPixels(_logicObject.Match))
+            {
+                HidePresentation();
+                _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
+                ApplyVisualShake();
+                return;
+            }
+
             if (_logicObject.Runtime?.OidMergeDormant == true)
             {
                 HidePresentation();
@@ -85,8 +100,10 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            _logicObject.Sprite?.SetPresentationSuppressed(false);
             UpdateSprite();
             UpdatePosition(tickIndex);
+            _logicObject.Match?.RecordLegacyEntityProbe(_logicObject, _spriteRenderer);
             _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
             ApplyVisualShake();
         }
@@ -97,12 +114,18 @@ namespace NTSD.Animation.LF2Objects
         public void ForceRefreshPresentation()
         {
             if (_logicObject == null) return;
+            int currentTick = _logicObject?.Match?.CurrentTickIndex ?? 0;
+            if (BattleCentralRenderSystem.ShouldUseCentralPixels(_logicObject.Match))
+            {
+                HidePresentation();
+                _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
+                return;
+            }
             if (_logicObject.Runtime?.OidMergeDormant == true)
             {
                 HidePresentation();
                 return;
             }
-            int currentTick = _logicObject?.Match?.CurrentTickIndex ?? 0;
             int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
             if (currentTick < firstPresentationTick)
             {
@@ -110,8 +133,10 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            _logicObject.Sprite?.SetPresentationSuppressed(false);
             UpdateSprite();
             UpdatePosition(currentTick);
+            _logicObject.Match?.RecordLegacyEntityProbe(_logicObject, _spriteRenderer);
             _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
         }
 
@@ -122,6 +147,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetLogicObject(ILF2Object logicObject, LF2TaskBase task)
         {
+            ReleaseCatalogBinding();
             RestorePooledVisualState();
             _logicObject = logicObject as LF2Entity;
             _renderFrameCount = 0;
@@ -129,19 +155,36 @@ namespace NTSD.Animation.LF2Objects
 
             List<Sprite> sprites = null;
             int startFrame = 0;
+            int visualDataId = int.MinValue;
+            CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
             if (_logicObject != null)
             {
-                CharacterAnimtorManager.Instance?.TryGetSprites(_logicObject.ObjectId, out sprites);
-                startFrame = CharacterAnimtorManager.Instance?.GetStartFrame(_logicObject.ObjectId) ?? 0;
+                visualDataId = LF2Entity.ResolveCurrentDataObjectId(_logicObject);
+                animatorManager?.TryGetSprites(visualDataId, out sprites);
+                startFrame = animatorManager?.GetStartFrame(visualDataId) ?? 0;
             }
             if (sprites != null)
             {
-                _logicObject?.Sprite?.Initialize(_spriteRenderer, sprites, startFrame);
-                _boundSpriteObjectId = _logicObject.ObjectId;
+                _logicObject?.Sprite?.Initialize(
+                    _spriteRenderer,
+                    sprites,
+                    startFrame,
+                    animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty,
+                    visualDataId);
+                _boundSpriteObjectId = visualDataId;
+                UpdateCatalogBinding(animatorManager, animatorManager?.SpriteCatalog);
             }
             else
             {
+                _logicObject?.Sprite?.Initialize(
+                    _spriteRenderer,
+                    null,
+                    0,
+                    animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty,
+                    visualDataId);
+                _logicObject?.Sprite?.ClearCurrentSprite();
                 _boundSpriteObjectId = int.MinValue;
+                UpdateCatalogBinding(animatorManager, animatorManager?.SpriteCatalog);
             }
             _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
@@ -166,13 +209,15 @@ namespace NTSD.Animation.LF2Objects
 
             if (_spriteRenderer == null)
                 _spriteRenderer = GetComponent<SpriteRenderer>();
+            if (_defaultSpriteSharedMaterial == null)
+                _defaultSpriteSharedMaterial = ResolveBorrowedDefaultSharedMaterial(_spriteRenderer);
 
             if (_spriteRenderer != null)
             {
                 _spriteRenderer.enabled = true;
-                _spriteRenderer.color = Color.white;
-                _spriteRenderer.flipX = false;
+                NormalizeSpriteRendererState(_spriteRenderer, _defaultSpriteSharedMaterial);
             }
+            NormalizeSpriteRendererState(_shadowRenderer, _defaultShadowSharedMaterial);
         }
 
         private void HidePresentation()
@@ -185,6 +230,9 @@ namespace NTSD.Animation.LF2Objects
         public void SetShadowRenderer(SpriteRenderer shadowRenderer)
         {
             _shadowRenderer = shadowRenderer;
+            _defaultShadowSharedMaterial = ResolveBorrowedDefaultSharedMaterial(shadowRenderer);
+            if (_shadowRenderer != null)
+                _shadowRenderer.sortingLayerName = "Object";
             _logicObject?.Sprite?.InitializeShadow(shadowRenderer);
             _logicObject?.SetShadowRenderer(shadowRenderer);
         }
@@ -194,10 +242,41 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ResetState()
         {
+            _logicObject?.Sprite?.ClearCurrentSprite();
+            if (_defaultSpriteSharedMaterial == null)
+                _defaultSpriteSharedMaterial = ResolveBorrowedDefaultSharedMaterial(_spriteRenderer);
+            NormalizeSpriteRendererState(_spriteRenderer, _defaultSpriteSharedMaterial);
+            NormalizeSpriteRendererState(_shadowRenderer, _defaultShadowSharedMaterial);
+            ReleaseCatalogBinding();
             _logicObject?.UnregisterFromWorld();
             _logicObject?.Reset();
             _logicObject = null;
+            _boundSpriteObjectId = int.MinValue;
             gameObject.SetActive(false);
+        }
+
+        internal static void NormalizeSpriteRendererState(
+            SpriteRenderer renderer,
+            Material borrowedDefaultSharedMaterial)
+        {
+            if (renderer == null)
+                return;
+
+            renderer.color = Color.white;
+            renderer.flipX = false;
+            renderer.flipY = false;
+            renderer.maskInteraction = SpriteMaskInteraction.None;
+            if (borrowedDefaultSharedMaterial != null)
+                renderer.sharedMaterial = borrowedDefaultSharedMaterial;
+        }
+
+        internal static Material ResolveBorrowedDefaultSharedMaterial(SpriteRenderer renderer)
+        {
+            Material sharedMaterial = renderer != null ? renderer.sharedMaterial : null;
+            return sharedMaterial != null && sharedMaterial.shader != null &&
+                   sharedMaterial.shader.name == "Sprites/Default"
+                ? sharedMaterial
+                : null;
         }
 
         /// <summary>
@@ -245,24 +324,61 @@ namespace NTSD.Animation.LF2Objects
 
         private void EnsureRuntimeIdentitySprites()
         {
-            if (_logicObject == null || _logicObject.Sprite == null ||
-                _boundSpriteObjectId == _logicObject.ObjectId)
+            if (_logicObject == null || _logicObject.Sprite == null)
                 return;
 
+            int visualDataId = LF2Entity.ResolveCurrentDataObjectId(_logicObject);
             CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
+            BattleSpriteCatalog currentCatalog = animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty;
+            if (_boundSpriteObjectId == visualDataId &&
+                ReferenceEquals(_boundSpriteCatalog, currentCatalog))
+                return;
+
             if (animatorManager != null &&
-                animatorManager.TryGetSprites(_logicObject.ObjectId, out List<Sprite> sprites) &&
+                animatorManager.TryGetSprites(visualDataId, out List<Sprite> sprites) &&
                 sprites != null)
             {
-                int startFrame = animatorManager.GetStartFrame(_logicObject.ObjectId);
+                int startFrame = animatorManager.GetStartFrame(visualDataId);
                 _logicObject.Sprite.SetSprites(sprites, startFrame);
-                _boundSpriteObjectId = _logicObject.ObjectId;
+                _logicObject.Sprite.SetCatalogBinding(animatorManager.SpriteCatalog, visualDataId);
+                _boundSpriteObjectId = visualDataId;
+                UpdateCatalogBinding(animatorManager, animatorManager.SpriteCatalog);
                 return;
             }
 
             // Never render the previous identity's catalog while the new one is still unavailable.
             _logicObject.Sprite.SetSprites(null);
+            _logicObject.Sprite.SetCatalogBinding(
+                animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty,
+                visualDataId);
             _boundSpriteObjectId = int.MinValue;
+            UpdateCatalogBinding(animatorManager, currentCatalog);
+        }
+
+        private void UpdateCatalogBinding(
+            CharacterAnimtorManager manager,
+            BattleSpriteCatalog catalog)
+        {
+            if (ReferenceEquals(_catalogBindingManager, manager) &&
+                ReferenceEquals(_boundSpriteCatalog, catalog))
+                return;
+
+            ReleaseCatalogBinding();
+            _catalogBindingManager = manager;
+            _boundSpriteCatalog = catalog;
+            manager?.RegisterRendererCatalogBinding(catalog);
+        }
+
+        private void ReleaseCatalogBinding()
+        {
+            _catalogBindingManager?.UnregisterRendererCatalogBinding(_boundSpriteCatalog);
+            _catalogBindingManager = null;
+            _boundSpriteCatalog = null;
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseCatalogBinding();
         }
 
         /// <summary>
@@ -350,33 +466,49 @@ namespace NTSD.Animation.LF2Objects
 
         private Vector2 ResolveHeldVisualAttachmentOffsetPixels(LF2FrameData heldFrame)
         {
-            if ((_logicObject.Runtime?.LinkState ?? 0) >= 0 || heldFrame == null)
-                return Vector2.zero;
-
-            int holderSlot = _logicObject.Runtime.HolderStableId;
+            NTSDEntityRuntime heldRuntime = _logicObject.Runtime;
+            int holderSlot = heldRuntime?.HolderStableId ?? -1;
             LF2Entity holder = _logicObject.Match?.FindEntityByRuntimeSlotForQuery(holderSlot);
-            if (holder?.Runtime == null || holder.Frame?.D == null ||
-                holder.Runtime.TargetSlotIndex != _logicObject.Runtime.SlotIndex)
-                return Vector2.zero;
+            return ResolveHeldVisualAttachmentOffsetPixels(
+                heldRuntime,
+                heldFrame,
+                holder,
+                NTSDRenderSpace.BattleVisualScale);
+        }
 
-            WeaponPoint holderWPoint = holder.Frame.D.wpoints != null && holder.Frame.D.wpoints.Count > 0
-                ? holder.Frame.D.wpoints[0]
-                : null;
-            WeaponPoint heldWPoint = heldFrame.wpoints != null && heldFrame.wpoints.Count > 0
-                ? heldFrame.wpoints[0]
-                : null;
+        internal static Vector2 ResolveHeldVisualAttachmentOffsetPixels(
+            NTSDEntityRuntime heldRuntime,
+            LF2FrameData heldFrame,
+            LF2Entity holder,
+            float visualScale)
+        {
+            NTSDEntityRuntime holderRuntime = holder?.Runtime;
+            LF2FrameData holderFrame = holder?.Frame?.D;
+            if (heldRuntime == null || heldRuntime.LinkState >= 0 || heldRuntime.SlotIndex < 0 ||
+                holderRuntime == null || holderRuntime.SlotIndex != heldRuntime.HolderStableId ||
+                holderRuntime.TargetSlotIndex != heldRuntime.SlotIndex ||
+                holderFrame?.wpoints == null || holderFrame.wpoints.Count == 0 ||
+                heldFrame?.wpoints == null || heldFrame.wpoints.Count == 0)
+            {
+                return Vector2.zero;
+            }
+
+            WeaponPoint holderWPoint = holderFrame.wpoints[0];
+            WeaponPoint heldWPoint = heldFrame.wpoints[0];
+            if (holderWPoint == null || heldWPoint == null)
+                return Vector2.zero;
 
             return ComputeHeldVisualAttachmentOffsetPixels(
-                holder.Runtime.Dir == "left",
-                holder.Frame.D.centerx,
-                holder.Frame.D.centery,
-                holderWPoint?.x ?? 0,
-                holderWPoint?.y ?? 0,
+                holderRuntime.Dir == "left",
+                holderFrame.centerx,
+                holderFrame.centery,
+                holderWPoint.x,
+                holderWPoint.y,
                 heldFrame.centerx,
                 heldFrame.centery,
-                heldWPoint?.x ?? 0,
-                heldWPoint?.y ?? 0,
-                NTSDRenderSpace.BattleVisualScale);
+                heldWPoint.x,
+                heldWPoint.y,
+                visualScale);
         }
 
         internal static Vector2 ComputeHeldVisualAttachmentOffsetPixels(
@@ -416,7 +548,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public float GetSpriteWidth()
         {
-            return _spriteRenderer.sprite.textureRect.width;
+            return _logicObject?.GetSpriteWidthPxForRender() ?? 0f;
         }
     }
 }

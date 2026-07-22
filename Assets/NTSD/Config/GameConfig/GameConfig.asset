@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd6905f1c6dbaa4a91769c14bc8b041, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
+  BattleRuntimeProfileName: ''
+  DesktopInitialRuntimeSlotCapacity: 512
+  BattleCollisionBroadphaseName: ''
+  BattlePresentationBackendName: ''
+  BattleAtlasModeName: ''
+  BattleDrawModeName: ''
   ShadowPrefab: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
   LF2ObjectPrefab: {fileID: 8065137006895327203, guid: 9c107ede7c04d83469572b66618c3680, type: 3}
   PoolInitialSize: 10

@@ -7,6 +7,33 @@ namespace NTSD.Simulation
     {
         public const int PageSize = 256;
 
+        /// <summary>
+        /// Read-only slot state for diagnostic/checksum consumers. Obtaining a view never
+        /// creates a backing page or resets a raw runtime record.
+        /// </summary>
+        public readonly struct ReadOnlySlotView
+        {
+            internal ReadOnlySlotView(
+                int runtimeSlot,
+                bool claimed,
+                uint generation,
+                LF2Entity entity,
+                NTSDEntityRuntime rawRuntime)
+            {
+                RuntimeSlot = runtimeSlot;
+                Claimed = claimed;
+                Generation = generation;
+                Entity = entity;
+                RawRuntime = rawRuntime;
+            }
+
+            public int RuntimeSlot { get; }
+            public bool Claimed { get; }
+            public uint Generation { get; }
+            public LF2Entity Entity { get; }
+            public NTSDEntityRuntime RawRuntime { get; }
+        }
+
         private sealed class Entry
         {
             public readonly NTSDEntityRuntime RawRuntime = new NTSDEntityRuntime();
@@ -78,6 +105,20 @@ namespace NTSD.Simulation
         public bool IsClaimed(int slot)
         {
             return allocator.IsClaimed(slot);
+        }
+
+        public ReadOnlySlotView GetReadOnlyView(int slot)
+        {
+            if (!IsAddressable(slot))
+                throw new ArgumentOutOfRangeException(nameof(slot));
+
+            Entry entry = GetEntry(slot, false);
+            return new ReadOnlySlotView(
+                slot,
+                allocator.IsClaimed(slot),
+                entry?.Generation ?? 0u,
+                entry?.Entity,
+                entry?.RawRuntime);
         }
 
         public int PeekLowest(int startSlot, int endSlotExclusive)

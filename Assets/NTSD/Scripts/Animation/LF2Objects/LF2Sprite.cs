@@ -12,6 +12,9 @@ namespace NTSD.Animation.LF2Objects
     {
         private SpriteRenderer _renderer;
         private List<Sprite> _sprites;
+        private BattleSpriteCatalog _catalog;
+        private int _visualDataId = int.MinValue;
+        private BattleSpriteEntry _currentEntry;
         private string _dir = "right";
 
         private SpriteRenderer _shadowRenderer;
@@ -34,11 +37,19 @@ namespace NTSD.Animation.LF2Objects
         /// <param name="renderer">SpriteRenderer 组件引用</param>
         /// <param name="sprites">精灵列表</param>
         /// <param name="startFrame">精灵列表中的起始偏移（对应 SpriteFileInfo.startFrame）</param>
-        public void Initialize(SpriteRenderer renderer, List<Sprite> sprites, int startFrame = 0)
+        public void Initialize(
+            SpriteRenderer renderer,
+            List<Sprite> sprites,
+            int startFrame = 0,
+            BattleSpriteCatalog catalog = null,
+            int visualDataId = int.MinValue)
         {
             _renderer = renderer;
             _sprites = sprites;
             _startFrame = startFrame;
+            _catalog = catalog;
+            _visualDataId = visualDataId;
+            _currentEntry = null;
             _dir = "right";
 
             // 从根节点查找 SortingGroup（角色有，武器/SA 无）
@@ -65,6 +76,8 @@ namespace NTSD.Animation.LF2Objects
         {
             _shadowRenderer = shadowRenderer;
             _hasShadow = shadowRenderer != null;
+            if (_shadowRenderer != null)
+                _shadowRenderer.sortingLayerName = "Object";
         }
 
         public bool HasShadow => _hasShadow;
@@ -78,7 +91,15 @@ namespace NTSD.Animation.LF2Objects
             _startFrame = startFrame;
 
             if (sprites == null)
-                Hide();
+                ClearCurrentSprite();
+        }
+
+        public void SetCatalogBinding(BattleSpriteCatalog catalog, int visualDataId)
+        {
+            _catalog = catalog;
+            _visualDataId = visualDataId;
+            _currentEntry = null;
+            ClearCurrentSprite();
         }
 
         /// <summary>
@@ -89,10 +110,33 @@ namespace NTSD.Animation.LF2Objects
 
         public void ShowPic(int picIndex)
         {
-            if (_renderer == null || _sprites == null) return;
+            if (_renderer == null) return;
             if (picIndex == 999)
             {
-                _renderer.enabled = false;
+                ClearCurrentSprite();
+                return;
+            }
+
+            if (_catalog != null)
+            {
+                if (!_catalog.TryGet(_visualDataId, picIndex, out BattleSpriteEntry entry) ||
+                    entry.LegacySprite == null)
+                {
+                    ClearCurrentSprite();
+                    return;
+                }
+
+                _currentEntry = entry;
+                _renderer.sprite = entry.LegacySprite;
+                _renderer.enabled = !_presentationSuppressed;
+                return;
+            }
+
+            // Editor previews and isolated legacy tests may still bind only a
+            // sprite list. Production battle renderers always bind the catalog.
+            if (_sprites == null)
+            {
+                ClearCurrentSprite();
                 return;
             }
 
@@ -107,17 +151,28 @@ namespace NTSD.Animation.LF2Objects
 
             if (actualIndex < 0 || actualIndex >= _sprites.Count)
             {
-                _renderer.enabled = false;
+                ClearCurrentSprite();
                 return;
             }
             if (_sprites[actualIndex] == null)
             {
-                _renderer.enabled = false;
+                ClearCurrentSprite();
                 return;
             }
 
+            _currentEntry = null;
             _renderer.sprite = _sprites[actualIndex];
             _renderer.enabled = !_presentationSuppressed;
+        }
+
+        public void ClearCurrentSprite()
+        {
+            _currentEntry = null;
+            if (_renderer == null)
+                return;
+
+            _renderer.sprite = null;
+            _renderer.enabled = false;
         }
 
         /// <summary>
@@ -148,13 +203,24 @@ namespace NTSD.Animation.LF2Objects
         /// 角色有 SortingGroup → 改 SortingGroup.sortingOrder（控制整个角色层级）
         /// 武器/SA 无 SortingGroup → 回退改 SpriteRenderer.sortingOrder
         /// </summary>
+        public void SetZ(int order)
+        {
+            if (_sortingGroup != null)
+            {
+                _sortingGroup.sortingLayerName = "Object";
+                _sortingGroup.sortingOrder = order;
+            }
+
+            if (_renderer != null)
+            {
+                _renderer.sortingLayerName = "Object";
+                _renderer.sortingOrder = order;
+            }
+        }
+
         public void SetZ(float z)
         {
-            int order = (int)z;
-            if (_sortingGroup != null)
-                _sortingGroup.sortingOrder = order;
-            else if (_renderer != null)
-                _renderer.sortingOrder = order;
+            SetZ((int)z);
         }
 
         /// <summary>
@@ -224,7 +290,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Destroy()
         {
-            Hide();
+            ClearCurrentSprite();
             HideShadow();
         }
 
@@ -233,8 +299,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public float GetWidthPx()
         {
-            if (_renderer == null || _renderer.sprite == null) return 0f;
-            return _renderer.sprite.rect.width;
+            return _currentEntry?.PixelWidth ?? 0f;
         }
 
         /// <summary>
@@ -247,8 +312,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public float GetHeightPx()
         {
-            if (_renderer == null || _renderer.sprite == null) return 0f;
-            return _renderer.sprite.rect.height;
+            return _currentEntry?.PixelHeight ?? 0f;
         }
+
+        public BattleSpriteEntry CurrentEntry => _currentEntry;
     }
 }

@@ -161,6 +161,7 @@ namespace NTSD.Simulation
 
         public void ResetRuntimeState()
         {
+            _battlePresentation.Reset();
             ResetRegisteredObjects();
 
             Runtime ??= new BattleRuntimeState();

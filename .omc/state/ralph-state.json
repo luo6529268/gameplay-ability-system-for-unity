@@ -1,0 +1,13 @@
+{
+  "active": true,
+  "iteration": 1,
+  "current_phase": "P1 compact render sorting",
+  "task_description": "Complete the central battle rendering and runtime capacity plan excluding T8, with fresh build/self-check and architect verification.",
+  "plan_path": "Assets/NTSD/Docs/central-battle-render-system-plan.md",
+  "started_at": "2026-07-21T01:00:00+08:00",
+  "_meta": {
+    "mode": "ralph",
+    "updatedAt": "2026-07-20T16:53:43.095Z",
+    "updatedBy": "state_write_tool"
+  }
+}

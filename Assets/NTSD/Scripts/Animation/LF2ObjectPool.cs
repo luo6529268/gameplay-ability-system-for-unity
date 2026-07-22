@@ -26,6 +26,7 @@ namespace NTSD.Animation
         private float _lastCheckTime;
 
         private Stack<SpriteRenderer> _spritePool;
+        private Material _spriteDefaultSharedMaterial;
 
         // ========== 配置快捷访问 ==========
         private static GameConfig Cfg => GameConfig.Instance;
@@ -59,6 +60,8 @@ namespace NTSD.Animation
                 Transform parent = _spriteRoot != null ? _spriteRoot : transform;
                 go.transform.SetParent(parent, false);
                 var sr = go.AddComponent<SpriteRenderer>();
+                CaptureOrApplySpriteDefaultMaterial(sr);
+                LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
                 sr.sortingLayerName = "Object";
                 sr.gameObject.SetActive(false);
                 _spritePool.Push(sr);
@@ -250,9 +253,12 @@ namespace NTSD.Animation
                 if (parent != null)
                     go.transform.SetParent(parent, false);
                 sr = go.AddComponent<SpriteRenderer>();
+                CaptureOrApplySpriteDefaultMaterial(sr);
                 sr.sortingLayerName = "Object";
             }
 
+            CaptureOrApplySpriteDefaultMaterial(sr);
+            LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
             sr.gameObject.SetActive(true);
             return sr;
         }
@@ -266,6 +272,8 @@ namespace NTSD.Animation
             if (sr == null) return;
             if (!sr.gameObject.activeSelf) return;  // 已归还过，防重复压栈
             sr.sprite = null;
+            CaptureOrApplySpriteDefaultMaterial(sr);
+            LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
             sr.gameObject.SetActive(false);
             _spritePool.Push(sr);
         }
@@ -280,6 +288,17 @@ namespace NTSD.Animation
             target.localRotation = Quaternion.identity;
             if (resetScale)
                 target.localScale = Vector3.one;
+        }
+
+        private void CaptureOrApplySpriteDefaultMaterial(SpriteRenderer renderer)
+        {
+            if (renderer == null)
+                return;
+            if (_spriteDefaultSharedMaterial == null)
+                _spriteDefaultSharedMaterial =
+                    LF2ObjectRenderer.ResolveBorrowedDefaultSharedMaterial(renderer);
+            else if (renderer.sharedMaterial != _spriteDefaultSharedMaterial)
+                renderer.sharedMaterial = _spriteDefaultSharedMaterial;
         }
     }
 }

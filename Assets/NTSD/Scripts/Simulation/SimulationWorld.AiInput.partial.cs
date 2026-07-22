@@ -1,11 +1,20 @@
 using System;
+using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation.Spatial;
 
 namespace NTSD.Simulation
 {
     public partial class SimulationWorld
     {
         private LF2Entity[] aiInputSlots;
+        private readonly LooseQuadtreeBroadphase aiInputSpatialBroadphase = new LooseQuadtreeBroadphase();
+        private readonly List<IncrementalSpatialEntry> aiInputSpatialEntries =
+            new List<IncrementalSpatialEntry>(128);
+        private readonly List<RuntimeEntityHandle> aiInputSpatialHandles =
+            new List<RuntimeEntityHandle>(128);
+        private readonly List<int> aiInputSpatialSlots = new List<int>(128);
+        private bool aiInputSpatialReady;
 
         private struct AiInputContext
         {
@@ -31,11 +40,124 @@ namespace NTSD.Simulation
                     aiInputSlots[slot] = entity;
             }
             _entityScratch.Clear();
+            SynchronizeAiInputSpatialSnapshot();
         }
 
         private void ClearAiInputSlotSnapshot()
         {
             Array.Clear(aiInputSlots, 0, aiInputSlots.Length);
+            aiInputSpatialReady = false;
+        }
+
+        private void SynchronizeAiInputSpatialSnapshot()
+        {
+            aiInputSpatialEntries.Clear();
+            bool hasBounds = false;
+            int minX = 0;
+            int minZ = 0;
+            int maxX = 0;
+            int maxZ = 0;
+            for (int slot = 0; slot < aiInputSlots.Length; slot++)
+            {
+                LF2Entity entity = aiInputSlots[slot];
+                if (entity == null ||
+                    !TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                {
+                    continue;
+                }
+
+                int x = X(entity);
+                int z = Z(entity);
+                int x2 = x == int.MaxValue ? int.MaxValue : x + 1;
+                int z2 = z == int.MaxValue ? int.MaxValue : z + 1;
+                if (x2 <= x || z2 <= z)
+                {
+                    aiInputSpatialBroadphase.ResetIncremental();
+                    aiInputSpatialReady = false;
+                    return;
+                }
+
+                var bounds = new SpatialAabbXZ(x, z, x2, z2);
+                aiInputSpatialEntries.Add(new IncrementalSpatialEntry(handle, bounds));
+                if (!hasBounds)
+                {
+                    minX = x;
+                    minZ = z;
+                    maxX = x2;
+                    maxZ = z2;
+                    hasBounds = true;
+                }
+                else
+                {
+                    minX = Math.Min(minX, x);
+                    minZ = Math.Min(minZ, z);
+                    maxX = Math.Max(maxX, x2);
+                    maxZ = Math.Max(maxZ, z2);
+                }
+            }
+
+            if (!hasBounds)
+            {
+                aiInputSpatialBroadphase.ResetIncremental();
+                aiInputSpatialReady = false;
+                return;
+            }
+
+            SpatialSynchronizeResult result = aiInputSpatialBroadphase.Synchronize(
+                aiInputSpatialEntries,
+                new SpatialAabbXZ(minX, minZ, maxX, maxZ));
+            aiInputSpatialReady = result.Succeeded &&
+                                  result.IndexedCount == aiInputSpatialEntries.Count;
+            if (!aiInputSpatialReady)
+                aiInputSpatialBroadphase.ResetIncremental();
+        }
+
+        private bool TryQueryAiInputSlots(in SpatialAabbXZ bounds, out List<int> slots)
+        {
+            slots = aiInputSpatialSlots;
+            slots.Clear();
+            if (!aiInputSpatialReady || !bounds.IsValid)
+                return false;
+
+            aiInputSpatialHandles.Clear();
+            try
+            {
+                aiInputSpatialBroadphase.QueryHandles(bounds, aiInputSpatialHandles);
+            }
+            catch
+            {
+                aiInputSpatialBroadphase.ResetIncremental();
+                aiInputSpatialReady = false;
+                return false;
+            }
+
+            for (int i = 0; i < aiInputSpatialHandles.Count; i++)
+            {
+                RuntimeEntityHandle handle = aiInputSpatialHandles[i];
+                int slot = handle.Slot;
+                if (slot < 0 || slot >= aiInputSlots.Length ||
+                    !TryResolveRuntimeHandle(handle, out LF2Entity entity) ||
+                    !ReferenceEquals(entity, aiInputSlots[slot]))
+                {
+                    slots.Clear();
+                    aiInputSpatialBroadphase.ResetIncremental();
+                    aiInputSpatialReady = false;
+                    return false;
+                }
+                slots.Add(slot);
+            }
+
+            slots.Sort();
+            int write = 0;
+            for (int read = 0; read < slots.Count; read++)
+            {
+                if (write > 0 && slots[read] == slots[write - 1])
+                    continue;
+                slots[write++] = slots[read];
+            }
+            if (write < slots.Count)
+                slots.RemoveRange(write, slots.Count - write);
+            return true;
         }
 
         internal void PrepareAiInputBasic(LF2Entity self, int tickIndex)
@@ -377,22 +499,80 @@ namespace NTSD.Simulation
 
         private int FindNearestAiTargetSlot(LF2Entity self, AiInputContext ai, out int bestDist, out bool sameZLane)
         {
+            if (TryFindNearestAiTargetSlotSpatial(self, ai, out int selected, out bestDist, out sameZLane))
+                return selected;
+
+            return FindNearestAiTargetSlotBrute(self, ai, out bestDist, out sameZLane);
+        }
+
+        private bool TryFindNearestAiTargetSlotSpatial(
+            LF2Entity self,
+            AiInputContext ai,
+            out int selected,
+            out int bestDist,
+            out bool sameZLane)
+        {
+            selected = -1;
+            bestDist = 10000;
+            sameZLane = false;
+            int radius = 64;
+            while (radius <= 10000)
+            {
+                int boundedRadius = Math.Min(radius, 9999);
+                SpatialAabbXZ bounds = AroundAiPoint(self, boundedRadius, boundedRadius);
+                if (!TryQueryAiInputSlots(bounds, out List<int> slots))
+                    return false;
+
+                for (int index = 0; index < slots.Count; index++)
+                {
+                    int slot = slots[index];
+                    LF2Entity candidate = AiAt(slot);
+                    if (!IsGroundAiTargetCandidate(self, candidate, ai.InputPhase))
+                        continue;
+                    int dist = Distance(self, candidate);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        selected = slot;
+                    }
+                }
+
+                if (bestDist <= boundedRadius || boundedRadius == 9999)
+                    break;
+                radius = radius > 4999 ? 10000 : radius * 2;
+            }
+
+            sameZLane = selected >= 0 && Abs(Z(AiAt(selected)) - Z(self)) < 15;
+            if (State(self) == 9)
+                return true;
+
+            if (!TryQueryAiInputSlots(AroundAiPoint(self, 249, 39), out List<int> airSlots))
+                return false;
+
+            int bestAirDist = 10000;
+            for (int index = 0; index < airSlots.Count; index++)
+            {
+                int slot = airSlots[index];
+                LF2Entity candidate = AiAt(slot);
+                if (!IsAirAiTargetCandidate(self, candidate, ai.InputPhase))
+                    continue;
+                int dist = Distance(self, candidate);
+                if (dist >= bestAirDist || Abs(Z(candidate) - Z(self)) >= 40 || Abs(X(candidate) - X(self)) >= 250)
+                    continue;
+                bestAirDist = dist;
+                selected = slot;
+            }
+            return true;
+        }
+
+        private int FindNearestAiTargetSlotBrute(LF2Entity self, AiInputContext ai, out int bestDist, out bool sameZLane)
+        {
             int selected = -1;
             bestDist = 10000;
             for (int i = 0; i < aiInputSlots.Length; i++)
             {
                 LF2Entity candidate = AiAt(i);
-                if (candidate == null || candidate == self)
-                    continue;
-                int state = State(candidate);
-                if (!IsCharacterDat(candidate))
-                {
-                    if (state != 3000) continue;
-                    if (X(candidate) > X(self)) { if (!(candidate.Runtime.Vx < 0.001)) continue; }
-                    else if (X(candidate) < X(self)) { if (!(candidate.Runtime.Vx > 0.001)) continue; }
-                    else continue;
-                }
-                if (!TeamCandidateAllowed(self, candidate, ai.InputPhase) || Hp(candidate) <= 0 || state == 14 || Abs(Y(candidate)) > 2)
+                if (!IsGroundAiTargetCandidate(self, candidate, ai.InputPhase))
                     continue;
                 int dist = Distance(self, candidate);
                 if (dist < bestDist) { bestDist = dist; selected = i; }
@@ -405,10 +585,8 @@ namespace NTSD.Simulation
                 for (int i = 0; i < aiInputSlots.Length; i++)
                 {
                     LF2Entity candidate = AiAt(i);
-                    if (candidate == null || candidate == self || !TeamCandidateAllowed(self, candidate, ai.InputPhase) || Hp(candidate) <= 0)
+                    if (!IsAirAiTargetCandidate(self, candidate, ai.InputPhase))
                         continue;
-                    int state = State(candidate);
-                    if (state != 14 && Abs(Y(candidate)) <= 2) continue;
                     int dist = Distance(self, candidate);
                     if (dist >= bestAirDist || Abs(Z(candidate) - Z(self)) >= 40 || Abs(X(candidate) - X(self)) >= 250) continue;
                     bestAirDist = dist;
@@ -416,6 +594,92 @@ namespace NTSD.Simulation
                 }
             }
             return selected;
+        }
+
+        private static bool IsGroundAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
+        {
+            if (candidate == null || candidate == self)
+                return false;
+            int state = State(candidate);
+            if (!IsCharacterDat(candidate))
+            {
+                if (state != 3000)
+                    return false;
+                if (X(candidate) > X(self))
+                {
+                    if (!(candidate.Runtime.Vx < 0.001))
+                        return false;
+                }
+                else if (X(candidate) < X(self))
+                {
+                    if (!(candidate.Runtime.Vx > 0.001))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return TeamCandidateAllowed(self, candidate, inputPhase) &&
+                   Hp(candidate) > 0 &&
+                   state != 14 &&
+                   Abs(Y(candidate)) <= 2;
+        }
+
+        private static bool IsAirAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
+        {
+            return candidate != null &&
+                   candidate != self &&
+                   TeamCandidateAllowed(self, candidate, inputPhase) &&
+                   Hp(candidate) > 0 &&
+                   (State(candidate) == 14 || Abs(Y(candidate)) > 2);
+        }
+
+        private static SpatialAabbXZ AroundAiPoint(LF2Entity entity, int radiusX, int radiusZ)
+        {
+            int x = X(entity);
+            int z = Z(entity);
+            return new SpatialAabbXZ(
+                SaturatingAdd(x, -radiusX),
+                SaturatingAdd(z, -radiusZ),
+                SaturatingAdd(x, radiusX + 1),
+                SaturatingAdd(z, radiusZ + 1));
+        }
+
+        private static int SaturatingAdd(int value, int delta)
+        {
+            long result = (long)value + delta;
+            if (result < int.MinValue)
+                return int.MinValue;
+            return result > int.MaxValue ? int.MaxValue : (int)result;
+        }
+
+        internal bool AiNearestSpatialMatchesBruteForSelfCheck(LF2Entity self, int inputPhase)
+        {
+            BuildAiInputSlotSnapshot();
+            try
+            {
+                var ai = new AiInputContext { InputPhase = inputPhase };
+                bool spatialSucceeded = TryFindNearestAiTargetSlotSpatial(
+                    self,
+                    ai,
+                    out int spatialSlot,
+                    out int spatialDistance,
+                    out bool spatialSameZ);
+                int bruteSlot = FindNearestAiTargetSlotBrute(
+                    self,
+                    ai,
+                    out int bruteDistance,
+                    out bool bruteSameZ);
+                return spatialSucceeded &&
+                       spatialSlot == bruteSlot &&
+                       spatialDistance == bruteDistance &&
+                       spatialSameZ == bruteSameZ;
+            }
+            finally
+            {
+                ClearAiInputSlotSnapshot();
+            }
         }
 
         private static bool TeamCandidateAllowed(LF2Entity self, LF2Entity candidate, int inputPhase)

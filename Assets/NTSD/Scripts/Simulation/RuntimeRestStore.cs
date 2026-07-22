@@ -362,6 +362,15 @@ namespace NTSD.Simulation
                 vRestEntries.ToArray());
         }
 
+        /// <summary>
+        /// Captures the canonical sparse rest state for checksum/replay consumers.
+        /// This intentionally contains no dense victim-by-attacker matrix.
+        /// </summary>
+        public DiagnosticSnapshot CaptureSparseSnapshot()
+        {
+            return CaptureDiagnosticSnapshot();
+        }
+
         public bool RestoreDiagnosticSnapshot(DiagnosticSnapshot snapshot)
         {
             if (snapshot == null || snapshot.LogicalCapacity <= 0)

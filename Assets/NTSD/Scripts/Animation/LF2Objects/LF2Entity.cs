@@ -22,12 +22,6 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public abstract class LF2Entity : ILF2Entity
     {
-        public const int OverlaySortingOrderOffset = 10000;
-        // Unity sortingOrder is an integer while the C# renderer uses a stable
-        // (ZInt, runtime-slot) draw order. Keep the slot tie-break inside each
-        // logical Z bucket and reserve sub-orders for hit sparks/overlays.
-        public const int RenderSortingOrderStride = 4096;
-        public const int RenderSortingSlotStride = 4;
         protected static readonly List<LF2Entity> N30HistoryGateScratch = new List<LF2Entity>(32);
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
         private int requiredRuntimeSlot = -1;
@@ -422,9 +416,16 @@ namespace NTSD.Animation.LF2Objects
         {
             if (ShadowRenderer == null || Runtime == null) return;
 
-            int state = Frame?.D?.state ?? -1;
+            // A sorting layer wins over sortingOrder in Unity. Keep shadows in the
+            // same layer as entities and sparks so the compact presentation order
+            // can interleave Shadow(A), Entity(A), Shadow(B), Entity(B).
+            ShadowRenderer.sortingLayerName = "Object";
+
+            LF2FrameData currentFrame = Frame?.D;
+            int state = currentFrame?.state ?? -1;
             int oid = ObjectId;
-            bool hide = state == 3005
+            bool hide = currentFrame == null
+                     || state == 3005
                      || state == 9997
                      || (Runtime?.LinkState ?? 0) < 0
                      || oid == 223
@@ -434,24 +435,25 @@ namespace NTSD.Animation.LF2Objects
             ShadowRenderer.enabled = !hide;
             if (!hide)
             {
+                ShadowRenderer.sortingOrder = GetPresentationRenderSortingOrder(
+                    SimulationWorld.PresentationShadowSubOrder);
                 var t = ShadowRenderer.transform;
-                Sprite shadowSprite = ShadowRenderer.sprite;
-                float shadowWidth = shadowSprite != null ? shadowSprite.rect.width : 0f;
-                float shadowHeight = shadowSprite != null ? shadowSprite.rect.height : 0f;
 
                 // C# 基准工程先计算阴影绘制矩形：
                 // left = x + renderOffsetX - cameraX - shadowW / 2
                 // top  = z - shadowH / 2
-                // Unity Sprite 默认中心 pivot，这里把矩形换算回中心点。
+                // Unity shadow uses a center pivot, so converting the rect back
+                // to its center cancels shadowW/shadowH exactly. Keep this fixed
+                // center-pivot contract independent of runtime Sprite metrics.
                 int cameraX = Match?.ReleaseCameraX ?? 0;
                 int renderOffsetX = (int)GetRenderOffsetX();
-                float shadowLeft = GetRuntimeXInt() + renderOffsetX - cameraX - shadowWidth * 0.5f;
-                float shadowTop = GetRenderZInt() - shadowHeight * 0.5f;
-                float shadowCenterX = shadowLeft + shadowWidth * 0.5f;
-                float shadowCenterY = shadowTop + shadowHeight * 0.5f;
+                float shadowCenterX = GetRuntimeXInt() + renderOffsetX - cameraX;
+                float shadowCenterY = GetRenderZInt();
                 Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(shadowCenterX, shadowCenterY, t.position.z);
                 t.position = NTSDRenderSpace.SnapWorldPosition(worldPos);
             }
+
+            Match?.RecordLegacyShadowProbe(this, ShadowRenderer);
         }
 
 
@@ -554,6 +556,34 @@ namespace NTSD.Animation.LF2Objects
 
             _hitRecordDamage[slotIndex]++;
             _hitRecordLastAdvanceTick[slotIndex] = tickIndex;
+        }
+
+        internal void AdvanceHitRecordFromPresentation(int slotIndex, int expectedAge)
+        {
+            if (slotIndex < 0 || slotIndex >= HitRecordCount ||
+                _hitRecordDamage[slotIndex] != expectedAge)
+            {
+                return;
+            }
+
+            _hitRecordDamage[slotIndex]++;
+        }
+
+        internal bool RemoveHitRecordTailFromPresentation(
+            int slotIndex,
+            int expectedCount,
+            int expectedAge)
+        {
+            if (HitRecordCount != expectedCount ||
+                slotIndex != HitRecordCount - 1 ||
+                slotIndex < 0 ||
+                _hitRecordDamage[slotIndex] != expectedAge)
+            {
+                return false;
+            }
+
+            RemoveHitRecord(slotIndex);
+            return true;
         }
 
         /// <summary>仅当该记录位于尾槽时移除，对齐 C# 基线尾槽回收规则。</summary>
@@ -4140,39 +4170,35 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual int GetRenderSortingOrder()
         {
-            int order = GetRenderZInt() + Mathf.RoundToInt(Runtime?.Zz ?? 0f);
-            if (ShouldRenderAboveCharacters())
-                order += OverlaySortingOrderOffset;
-            return ComposeRenderSortingOrder(order, Runtime?.SlotIndex ?? -1);
+            return GetPresentationRenderSortingOrder(SimulationWorld.PresentationEntitySubOrder);
         }
 
-        /// <summary>
-        /// Converts a logical integer Z order into a deterministic Unity
-        /// sorting order. The authoritative renderer sorts equal ZInt values
-        /// by runtime slot ascending; Unity's hierarchy order is not a valid
-        /// substitute for that rule.
-        /// </summary>
-        public static int ComposeRenderSortingOrder(int logicalOrder, int runtimeSlot)
+        public int GetHitRecordRenderSortingOrder()
         {
-            int slotTieBreak = runtimeSlot >= 0 ? runtimeSlot : 0;
-            return checked(logicalOrder * RenderSortingOrderStride +
-                           slotTieBreak * RenderSortingSlotStride);
+            return GetPresentationRenderSortingOrder(SimulationWorld.PresentationHitRecordSubOrder);
+        }
+
+        private int GetPresentationRenderSortingOrder(int subOrder)
+        {
+            return Match != null
+                ? Match.GetPresentationRenderSortingOrder(this, subOrder)
+                : subOrder;
         }
 
         /// <summary>
-        /// Renderer-facing adapter for the C# draw_entity Z value plus its
-        /// presentation-only z offset. This keeps the existing float-to-int
-        /// truncation while applying the stable runtime-slot tie-break.
+        /// Renderer-facing entity sub-order. draw_entity position may use its
+        /// display Z offset, while release draw ordering remains ZInt/slot.
         /// </summary>
         public int GetDisplayRenderSortingOrder(float displayZ, float zOffset)
         {
-            int logicalOrder = (int)(displayZ + zOffset);
-            return ComposeRenderSortingOrder(logicalOrder, Runtime?.SlotIndex ?? -1);
+            return GetRenderSortingOrder();
         }
 
         public virtual float GetSpriteWidthPxForRender()
         {
-            float width = Sprite?.GetWidthPx() ?? 0f;
+            float width = TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry)
+                ? entry.PixelWidth
+                : 0f;
             if (width <= 0f)
                 width = GetSpriteWidthPxForCollision();
             return width;
@@ -4180,7 +4206,22 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual float GetSpriteHeightPxForRender()
         {
-            return Sprite?.GetHeightPx() ?? 0f;
+            return TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry)
+                ? entry.PixelHeight
+                : 0f;
+        }
+
+        public bool TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry)
+        {
+            entry = null;
+            int effectivePic = GetRenderPicIndex();
+            if (effectivePic < 0 || effectivePic == 999)
+                return false;
+
+            int visualDataId = ResolveCurrentDataObjectId(this);
+            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+            return manager != null &&
+                   manager.TryGetSpriteEntry(visualDataId, effectivePic, out entry);
         }
 
         public virtual int GetRuntimeXInt()
@@ -4240,8 +4281,9 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual float ResolveCurrentSpriteFileWidthPx()
         {
-            float width = Sprite?.GetCurrentSpriteWidthPx() ?? 0f;
-            return width > 0f ? width : Sprite?.GetWidthPx() ?? 0f;
+            return TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry)
+                ? entry.PixelWidth
+                : 0f;
         }
 
         protected virtual bool ShouldRenderAboveCharacters()

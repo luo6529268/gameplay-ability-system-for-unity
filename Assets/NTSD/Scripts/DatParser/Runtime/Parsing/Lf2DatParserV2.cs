@@ -133,16 +133,17 @@ namespace NTSD.DatParser
                     Lf2BmpSection bmpSection = stack.Peek() as Lf2BmpSection;
                     if (bmpSection != null)
                     {
-                        Lf2SpriteFileDef fileDef = new Lf2SpriteFileDef();
-
-                        // 解析 file(x-y):
-                        string range = token.Substring(5, token.Length - 7); // 去掉 "file(" 和 "):"
-                        string[] parts = range.Split('-');
-                        if (parts.Length == 2)
+                        if (!TryParseSpriteFileRange(token, out int startIndex, out int endIndex))
                         {
-                            int.TryParse(parts[0], out fileDef.StartIndex);
-                            int.TryParse(parts[1], out fileDef.EndIndex);
+                            Debug.LogWarning($"[Parser] Ignoring invalid BMP file range: {token}");
+                            continue;
                         }
+
+                        Lf2SpriteFileDef fileDef = new Lf2SpriteFileDef
+                        {
+                            StartIndex = startIndex,
+                            EndIndex = endIndex,
+                        };
 
                         // 读取文件路径（下一个token）
                         if (i + 1 < tokens.Length)
@@ -259,6 +260,33 @@ namespace NTSD.DatParser
             }
 
             return dat;
+        }
+
+        private static bool TryParseSpriteFileRange(string token, out int startIndex, out int endIndex)
+        {
+            startIndex = 0;
+            endIndex = 0;
+
+            string range = token.Substring(5, token.Length - 7);
+            int separator = range.IndexOf('-');
+            if (separator < 0)
+            {
+                if (!int.TryParse(range, out startIndex) || startIndex < 0)
+                    return false;
+
+                endIndex = startIndex;
+                return true;
+            }
+
+            if (separator == 0 || separator == range.Length - 1 ||
+                range.IndexOf('-', separator + 1) >= 0 ||
+                !int.TryParse(range.Substring(0, separator), out startIndex) ||
+                !int.TryParse(range.Substring(separator + 1), out endIndex))
+            {
+                return false;
+            }
+
+            return startIndex >= 0 && endIndex >= startIndex;
         }
 
         private static void AddProperty(object target, Lf2DatProperty prop)

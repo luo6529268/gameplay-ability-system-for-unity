@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using MoreMountains.Tools;
 using NTSD.App;
+using NTSD.Animation.Rendering;
+using NTSD.Simulation.Presentation;
 using NTSD.Tools;
 using UnityEngine;
 
@@ -105,11 +107,15 @@ namespace NTSD.Simulation
         private SimulationWorld _world;
         private NTSDBattleTickSystem _battleTickSystem;
         private NTSD.Animation.SparkRenderer _sparkRenderer;
+        private NTSD.Animation.BattleEntityOverlayRenderer _overlayRenderer;
+        private BattlePresentationBackendMode _presentationBackendMode =
+            BattlePresentationBackendMode.LegacyOnly;
 
         private int _sparkRenderFrame = 0;
         private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
         private FrameInputSet _lastAppliedFrameInput = FrameInputSet.Empty(0);
         private BattleParityFrameSnapshot _lastFrameSnapshot;
+        private IBattleChecksumSnapshot _lastChecksumSnapshot;
 
         protected override void OnSingletonAwake()
         {
@@ -161,6 +167,10 @@ namespace NTSD.Simulation
 
         private void LateUpdate()
         {
+            if (_overlayRenderer == null)
+                _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
+            _overlayRenderer.RenderAll(_world);
+
             if (_sparkRenderer == null)
             {
                 _sparkRenderer = AppManager.Instance?.SparkRenderer;
@@ -169,6 +179,7 @@ namespace NTSD.Simulation
             }
 
             _sparkRenderer.RenderAll(_world);
+            _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
         }
 
         private bool CanAdvanceTick(int tickIndex)
@@ -220,12 +231,14 @@ namespace NTSD.Simulation
             if (!lockstepSettings.enableFrameChecksum)
             {
                 _lastFrameSnapshot = null;
+                _lastChecksumSnapshot = null;
                 lastFrameChecksum = string.Empty;
                 return;
             }
 
-            _lastFrameSnapshot = CaptureSupportedFrameSnapshot(_world, tickIndex, frameInput);
-            lastFrameChecksum = _lastFrameSnapshot?.Hashes?.Overall ?? string.Empty;
+            _lastChecksumSnapshot = CaptureSupportedChecksumSnapshot(_world, tickIndex, frameInput);
+            _lastFrameSnapshot = _lastChecksumSnapshot as BattleParityFrameSnapshot;
+            lastFrameChecksum = _lastChecksumSnapshot?.OverallChecksum ?? string.Empty;
         }
 
         internal static bool SupportsAuthorityFrameChecksum(SimulationWorld world)
@@ -245,6 +258,33 @@ namespace NTSD.Simulation
                 : null;
         }
 
+        internal static bool SupportsFrameChecksum(SimulationWorld world)
+        {
+            if (world == null)
+                return false;
+
+            return SupportsAuthorityFrameChecksum(world) ||
+                   world.RuntimeProfileForServices == BattleRuntimeProfile.MobileExtended ||
+                   world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended;
+        }
+
+        internal static IBattleChecksumSnapshot CaptureSupportedChecksumSnapshot(
+            SimulationWorld world,
+            int tickIndex,
+            FrameInputSet frameInput)
+        {
+            if (world == null)
+                return null;
+
+            if (SupportsAuthorityFrameChecksum(world))
+                return world.CaptureParityFrameSnapshot(tickIndex, frameInput);
+
+            return world.RuntimeProfileForServices == BattleRuntimeProfile.MobileExtended ||
+                   world.RuntimeProfileForServices == BattleRuntimeProfile.DesktopExtended
+                ? world.CaptureExtendedChecksumSnapshot(tickIndex, frameInput)
+                : null;
+        }
+
         private void RefreshInspectorState()
         {
             currentTickIndex = _tickIndex;
@@ -259,8 +299,10 @@ namespace NTSD.Simulation
         public int CurrentTickIndex => _tickIndex;
         public FrameInputSet LastAppliedFrameInput => _lastAppliedFrameInput;
         public BattleParityFrameSnapshot LastFrameSnapshot => _lastFrameSnapshot;
-        public bool HasFrameChecksum => _lastFrameSnapshot != null;
+        public IBattleChecksumSnapshot LastChecksumSnapshot => _lastChecksumSnapshot;
+        public bool HasFrameChecksum => _lastChecksumSnapshot != null;
         public string LastFrameChecksum => lastFrameChecksum;
+        public BattlePresentationBackendMode PresentationBackendMode => _presentationBackendMode;
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
@@ -301,6 +343,7 @@ namespace NTSD.Simulation
 
             _world.Rng?.Seed((uint)(config?.seed ?? 0));
             _world.Runtime?.Roster?.ApplyMatchConfig(config);
+            _world.Runtime?.ApplyBootstrapFromMatchConfig(config);
             _world.SetNeedClearInput(true);
             _world.RefreshStageRuntimeSnapshotFromScene();
 
@@ -330,6 +373,7 @@ namespace NTSD.Simulation
 
         public void UnbindWorld()
         {
+            _world?.BattlePresentation.Reset();
             _world = null;
             _battleTickSystem = null;
         }
@@ -342,6 +386,7 @@ namespace NTSD.Simulation
             _sparkRenderFrame = 0;
             _lastAppliedFrameInput = FrameInputSet.Empty(0);
             _lastFrameSnapshot = null;
+            _lastChecksumSnapshot = null;
             lastFrameChecksum = string.Empty;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
@@ -351,15 +396,24 @@ namespace NTSD.Simulation
         {
             BattleRuntimeWorldSettings settings = BattleRuntimeProfileProductionSource.Resolve(
                 GameConfig.Instance);
-            CreateProductionWorld(settings);
+            BattlePresentationBackendMode presentationMode =
+                BattlePresentationBackendResolver.Resolve(GameConfig.Instance);
+            CreateProductionWorld(settings, presentationMode);
         }
 
-        private void CreateProductionWorld(BattleRuntimeWorldSettings settings)
+        private void CreateProductionWorld(
+            BattleRuntimeWorldSettings settings,
+            BattlePresentationBackendMode presentationMode)
         {
-            _world = new SimulationWorld(
+            BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
+            var nextWorld = new SimulationWorld(
                 settings.Profile,
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
+            nextWorld.SetBattlePresentationBackend(presentationMode);
+            _world?.BattlePresentation.Reset();
+            _world = nextWorld;
+            _presentationBackendMode = presentationMode;
             _battleTickSystem = new NTSDBattleTickSystem(_world);
         }
 
@@ -367,8 +421,13 @@ namespace NTSD.Simulation
         {
             BattleRuntimeWorldSettings settings = BattleRuntimeProfileProductionSource.Resolve(
                 GameConfig.Instance);
+            BattlePresentationBackendMode presentationMode =
+                BattlePresentationBackendResolver.Resolve(GameConfig.Instance);
+            BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
             if (WorldMatchesRuntimeSettings(_world, settings))
             {
+                _presentationBackendMode = presentationMode;
+                _world.SetBattlePresentationBackend(presentationMode);
                 return true;
             }
 
@@ -382,7 +441,7 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            CreateProductionWorld(settings);
+            CreateProductionWorld(settings, presentationMode);
             return true;
         }
 
@@ -403,6 +462,8 @@ namespace NTSD.Simulation
 
         protected override void OnSingletonDestroyed()
         {
+            BattleCentralRenderSystem.ResetRuntime();
+            _world?.BattlePresentation.Reset();
             _world = null;
             _battleTickSystem = null;
         }

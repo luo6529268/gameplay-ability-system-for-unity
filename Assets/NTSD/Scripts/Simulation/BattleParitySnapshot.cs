@@ -39,8 +39,18 @@ namespace NTSD.Simulation
         }
     }
 
-    public sealed class BattleParityFrameSnapshot
+    public interface IBattleChecksumSnapshot
     {
+        string Schema { get; }
+        int Tick { get; }
+        int ObjectCount { get; }
+        string OverallChecksum { get; }
+        string ToJson();
+    }
+
+    public sealed class BattleParityFrameSnapshot : IBattleChecksumSnapshot
+    {
+        public const string SchemaId = "ntsd-battle-trace-v3";
         internal object InputDomain;
         internal object RngDomain;
         internal object WorldDomain;
@@ -57,6 +67,8 @@ namespace NTSD.Simulation
         public int Tick { get; internal set; }
         public int ObjectCount { get; internal set; }
         public BattleParityHashes Hashes { get; internal set; }
+        public string Schema => SchemaId;
+        public string OverallChecksum => Hashes?.Overall ?? string.Empty;
 
         public string ToJson()
         {
@@ -82,6 +94,87 @@ namespace NTSD.Simulation
                 ["world"] = WorldDomain,
             };
             return BattleCanonicalJson.Serialize(tick);
+        }
+    }
+
+    public sealed class BattleExtendedChecksumHashes
+    {
+        public string ARest;
+        public string Events;
+        public string Input;
+        public string Metadata;
+        public string Overall;
+        public string Rng;
+        public string Slots;
+        public string Stats;
+        public string VRest;
+        public string World;
+
+        internal SortedDictionary<string, object> ToCanonicalObject(bool includeOverall)
+        {
+            var result = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                ["aRest"] = ARest,
+                ["events"] = Events,
+                ["input"] = Input,
+                ["metadata"] = Metadata,
+                ["rng"] = Rng,
+                ["slots"] = Slots,
+                ["stats"] = Stats,
+                ["vRest"] = VRest,
+                ["world"] = World,
+            };
+            if (includeOverall)
+                result["overall"] = Overall;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Capacity-aware checksum for Extended runtime profiles. This is deliberately
+    /// independent from the frozen Authority400 v3 parity/trace representation.
+    /// </summary>
+    public sealed class BattleExtendedChecksumSnapshot : IBattleChecksumSnapshot
+    {
+        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v1";
+
+        internal object InputDomain;
+        internal object MetadataDomain;
+        internal object RngDomain;
+        internal object WorldDomain;
+        internal object SlotsDomain;
+        internal object ARestDomain;
+        internal object VRestDomain;
+        internal object StatsDomain;
+        internal object EventsDomain;
+
+        public string Schema => SchemaId;
+        public string Profile { get; internal set; }
+        public int Tick { get; internal set; }
+        public int LogicalCapacity { get; internal set; }
+        public int ClaimedCount { get; internal set; }
+        public int ObjectCount { get; internal set; }
+        public BattleExtendedChecksumHashes Hashes { get; internal set; }
+        public string OverallChecksum => Hashes?.Overall ?? string.Empty;
+
+        public string ToJson()
+        {
+            return BattleCanonicalJson.Serialize(new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                ["aRest"] = ARestDomain,
+                ["events"] = EventsDomain,
+                ["hashes"] = Hashes.ToCanonicalObject(includeOverall: true),
+                ["input"] = InputDomain,
+                ["kind"] = "extended-checksum",
+                ["metadata"] = MetadataDomain,
+                ["rng"] = RngDomain,
+                ["schema"] = Schema,
+                ["slots"] = SlotsDomain,
+                ["stats"] = StatsDomain,
+                ["tick"] = Tick,
+                ["vRest"] = VRestDomain,
+                ["world"] = WorldDomain,
+            });
         }
     }
 
@@ -323,6 +416,154 @@ namespace NTSD.Simulation
             };
         }
 
+        /// <summary>
+        /// Captures the capacity-aware checksum used by MobileExtended and
+        /// DesktopExtended worlds. It must not be used as a v3 parity trace.
+        /// </summary>
+        public BattleExtendedChecksumSnapshot CaptureExtendedChecksumSnapshot(
+            int tickIndex,
+            FrameInputSet frameInput = null)
+        {
+            if (RuntimeProfileForServices != BattleRuntimeProfile.MobileExtended &&
+                RuntimeProfileForServices != BattleRuntimeProfile.DesktopExtended)
+            {
+                throw new InvalidOperationException(
+                    "Extended checksums require a MobileExtended or DesktopExtended world.");
+            }
+
+            int logicalCapacity = RuntimeSlotCapacity;
+            object inputDomain = ProjectFrameInput(frameInput ?? FrameInputSet.Empty(tickIndex));
+            object rngDomain = DictionaryOf(
+                ("callCount", (object)(Rng?.CallCount ?? 0UL)),
+                ("seed", Rng?.State ?? 0U));
+            object worldDomain = ProjectWorldDomain();
+            object metadataDomain = DictionaryOf(
+                ("claimedCount", (object)_runtimeSlots.ClaimedCount),
+                ("logicalCapacity", logicalCapacity),
+                ("objectCount", ObjectCount),
+                ("profile", RuntimeProfileForServices.ToString()),
+                ("schema", BattleExtendedChecksumSnapshot.SchemaId),
+                ("tick", tickIndex));
+            object slotsDomain = ProjectExtendedRuntimeSlots(logicalCapacity);
+            RuntimeRestStore.DiagnosticSnapshot restSnapshot =
+                _runtimeRestStore.CaptureSparseSnapshot();
+            object aRestDomain = ProjectExtendedARestDomain(restSnapshot);
+            object vRestDomain = ProjectExtendedVRestDomain(restSnapshot);
+            object statsDomain = DictionaryOf(
+                ("damage", CloneArray(DamageStats)),
+                ("kill", CloneArray(KillStats)));
+            object eventsDomain = ProjectEventsDomain();
+
+            var hashes = new BattleExtendedChecksumHashes
+            {
+                ARest = BattleCanonicalJson.Sha256(aRestDomain),
+                Events = BattleCanonicalJson.Sha256(eventsDomain),
+                Input = BattleCanonicalJson.Sha256(inputDomain),
+                Metadata = BattleCanonicalJson.Sha256(metadataDomain),
+                Rng = BattleCanonicalJson.Sha256(rngDomain),
+                Slots = BattleCanonicalJson.Sha256(slotsDomain),
+                Stats = BattleCanonicalJson.Sha256(statsDomain),
+                VRest = BattleCanonicalJson.Sha256(vRestDomain),
+                World = BattleCanonicalJson.Sha256(worldDomain),
+            };
+            hashes.Overall = BattleCanonicalJson.Sha256(
+                hashes.ToCanonicalObject(includeOverall: false));
+
+            return new BattleExtendedChecksumSnapshot
+            {
+                Profile = RuntimeProfileForServices.ToString(),
+                Tick = tickIndex,
+                LogicalCapacity = logicalCapacity,
+                ClaimedCount = _runtimeSlots.ClaimedCount,
+                ObjectCount = ObjectCount,
+                Hashes = hashes,
+                InputDomain = inputDomain,
+                MetadataDomain = metadataDomain,
+                RngDomain = rngDomain,
+                WorldDomain = worldDomain,
+                SlotsDomain = slotsDomain,
+                ARestDomain = aRestDomain,
+                VRestDomain = vRestDomain,
+                StatsDomain = statsDomain,
+                EventsDomain = eventsDomain,
+            };
+        }
+
+        private object ProjectExtendedRuntimeSlots(int logicalCapacity)
+        {
+            var slots = new object[logicalCapacity];
+            for (int runtimeSlot = 0; runtimeSlot < logicalCapacity; runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view = _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                LF2Entity entity = view.Entity;
+                if (view.Claimed &&
+                    (entity?.ItrRest == null ||
+                     !entity.ItrRest.IsBoundTo(_runtimeRestStore, runtimeSlot)))
+                {
+                    throw new InvalidOperationException(
+                        $"Extended checksum requires slot {runtimeSlot} to be bound to the current world's rest store.");
+                }
+                int? currentDataOid = entity?.FrameCache?.Wrapper != null
+                    ? entity.FrameCache.Wrapper.characterId
+                    : entity?.ObjectId;
+                int stableId = entity?.Runtime?.StableId ?? view.RawRuntime?.StableId ?? 0;
+                slots[runtimeSlot] = DictionaryOf(
+                    ("claimed", (object)view.Claimed),
+                    ("currentDataOid", currentDataOid),
+                    ("generation", view.Generation),
+                    ("runtime", entity == null
+                        ? ProjectEntityRuntime(
+                            null,
+                            runtimeSlot,
+                            false,
+                            view.RawRuntime,
+                            projectRawState: view.RawRuntime != null)
+                        : ProjectEntityRuntime(entity, runtimeSlot, IsActiveForCurrentPass(entity))),
+                    ("runtimeSlot", runtimeSlot),
+                    ("stableId", stableId));
+            }
+
+            return DictionaryOf(
+                ("encoding", "capacity-ordered-runtime-slots"),
+                ("logicalCapacity", logicalCapacity),
+                ("slots", slots));
+        }
+
+        private static object ProjectExtendedARestDomain(RuntimeRestStore.DiagnosticSnapshot snapshot)
+        {
+            var entries = new object[snapshot.ARestEntries.Count];
+            for (int i = 0; i < entries.Length; i++)
+            {
+                RuntimeRestStore.ARestEntry entry = snapshot.ARestEntries[i];
+                entries[i] = DictionaryOf(
+                    ("slot", (object)entry.AttackerSlot),
+                    ("value", entry.Value));
+            }
+
+            return DictionaryOf(
+                ("encoding", "sparse-nonzero"),
+                ("logicalCapacity", snapshot.LogicalCapacity),
+                ("entries", entries));
+        }
+
+        private static object ProjectExtendedVRestDomain(RuntimeRestStore.DiagnosticSnapshot snapshot)
+        {
+            var entries = new object[snapshot.VRestEntries.Count];
+            for (int i = 0; i < entries.Length; i++)
+            {
+                RuntimeRestStore.VRestEntry entry = snapshot.VRestEntries[i];
+                entries[i] = DictionaryOf(
+                    ("attackerSlot", (object)entry.AttackerSlot),
+                    ("value", entry.Value),
+                    ("victimSlot", entry.VictimSlot));
+            }
+
+            return DictionaryOf(
+                ("encoding", "sparse-nonzero"),
+                ("logicalCapacity", snapshot.LogicalCapacity),
+                ("entries", entries));
+        }
+
         private object ProjectFrameInput(FrameInputSet frameInput)
         {
             var players = new object[frameInput.Players?.Count ?? 0];
@@ -373,10 +614,11 @@ namespace NTSD.Simulation
             LF2Entity entity,
             int runtimeSlot,
             bool active,
-            NTSDEntityRuntime runtimeOverride = null)
+            NTSDEntityRuntime runtimeOverride = null,
+            bool projectRawState = false)
         {
             NTSDEntityRuntime runtime = entity?.Runtime ?? runtimeOverride;
-            bool isDefault = entity == null;
+            bool isDefault = entity == null && !projectRawState;
             int[] hitRecordDamage = new int[LF2Entity.MaxHitRecordSlots];
             int[] hitRecordX = new int[LF2Entity.MaxHitRecordSlots];
             int[] hitRecordZ = new int[LF2Entity.MaxHitRecordSlots];
@@ -435,7 +677,7 @@ namespace NTSD.Simulation
                 ("hitStateCount", isDefault ? 0 : runtime.HitStateCount),
                 ("hitStop", isDefault ? 0 : runtime.HitStop),
                 ("jumpInitPending", false),
-                ("prevFrame", isDefault ? 0 : entity.Frame?.Prev ?? 0),
+                ("prevFrame", isDefault ? 0 : entity?.Frame?.Prev ?? 0),
                 ("prevFrame2", isDefault ? 0 : runtime.PrevFrame2),
                 ("suppressJumpInit", false),
                 ("waitCounter", isDefault ? 0 : runtime.WaitCounter));

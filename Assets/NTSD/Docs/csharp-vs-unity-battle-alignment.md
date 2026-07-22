@@ -1,5 +1,95 @@
 # NTSD C# 工程 vs Unity 工程 — 战斗逻辑差异与对齐清单
 
+## 2026-07-21 集中式渲染 Fresh Final Validation（当前状态）
+
+本节记录与战斗可观察行为直接相关的中央渲染验收，覆盖本文件顶部及后续旧快照中“`CentralOnly` 不可用、Overlay blocker、P7 未完成、B2C 未经 Architect 验证”的过期措辞。
+
+- **CentralOnly 实际运行**：诊断为 `requested/effective=CentralOnly`，`frame/ownership/ready/submitted=true`，`draws=12`；P7 Overlay、Shadow、Entity、HitRecord 已共同进入单帧 pixel owner，不再有旧后端与中央后端双重出像素。
+- **伪影修复依据**：`BattleDynamicMeshBackend.ClearActive` 曾把 `subMeshCount=0`，触发 Unity 2022.3 释放 native index buffer，造成后续索引错误、黑块及三角形 UV 伪影。修复为保留零索引 inert submesh；不是对战斗 runtime、DAT、挂点或排序规则的改写。
+- **同帧像素验收**：暂停同一帧的 Legacy/Central `1920x1080` 截图比较为 `changed=0`。该截图直接覆盖当前可见的角色、武器/球体与阴影；Overlay/HitRecord 的 ownership 与资源路径另由 self-check 和运行时 diagnostics 证明，不宣称它们在该截图中一定可见。它不能代替所有角色、资源组合和设备的逐帧生产证书。
+- **运行时与空间查询**：`Temp/NTSD_BattleRuntimeSelfCheck.result` 为 **PASS**，Unity Console **0 error / 0 warning**。真实 Play 的 `LooseQuadtree` 为 `backend=LooseQuadtree, objects=12, tick=1436`，Console 同为 **0 error / 0 warning**。B2C 的 Architect final 结论为 **PASS / no P0-P2**。
+- **Editor 性能记录，不作移动端结论**：Legacy `6.1884 ms CPU / 0.346112 ms GPU / 18 draws`；Central `6.5114 ms CPU / 0.70656 ms GPU / 20 draws`；Central 内存 `1391.17 MB allocated / 1005.19 MB graphics`。
+- **外部边界**：尚未取得真实 Adreno/Mali 或 Android Player 的像素、兼容性及性能证据。T8 默认 `stage.dat` 部署仍按用户要求暂缓；该资源前置不构成当前代码差异。
+
+> 下方出现的“CentralOnly 继续拒绝”“Overlay 未实现/阻塞”“P7 仍未完成”“B2C 未经 Architect 复核”以及“Play/pixel/Profiler 尚未验收”等表述均为历史快照。保留它们用于追溯，但当前状态以本节为准。
+
+## P7 Batch6 per-entity Overlay 当前状态（2026-07-21，覆盖旧 Overlay blocker 结论）
+
+- P7 Batch6 已完成代码侧 Overlay 收口，不再把 per-entity Overlay、`WORDS0..5` 缺失或“current Overlay blocker”列为当前代码差异。`WORDS0.bmp` 至 `WORDS5.bmp` 已加入 Unity Assets；其 SHA256 与权威 C# host 引用的运行时资源来源一致。此核验只确认资源依赖，不改变唯一战斗逻辑权威 `J:\QQFile\NTSD2.4\ntsd_release_C#`。
+- `BattleSpriteCatalog.CommonWordGlyph(sheet, charCode)` 覆盖 `6 * 256` glyph，按 top-left authority rect 转 Unity bottom-left rect；WORDS prewarm 使用 exact-black transparency、Point/Clamp、atomic publication 与 retirement ownership。`BattleSlotLabelRuntimeState` 已提供 `char[10,12]` + `int[10]` 并接入 reset/`MatchConfig` bootstrap。
+- `BattleEntityOverlayLayout` 已无分配地布局复活 counter、普通/括号标签、普通 `Com` 与特殊 `WORDS5 Com`；标签 clamp、counter 不 clamp，容量异常 fail-closed。presentation snapshot 保留原始 `ObjectId` 用于 shadow OID223/224 gate，并单列 current DAT identity 用于 Overlay；命令固定为 `Shadow -> Entity -> OverlayGlyph -> HitRecord`。
+- legacy 后端已有 pooled `BattleEntityOverlayRenderer`，含 generation/stable-id guard；`LegacyOnly` 发布 immutable frame 但不构建 central mesh，`CentralShadowBuild` 仍仅诊断，`CentralOnly` 继续由 `ValidateAvailable` 显式拒绝。frame-level catalog lease、HitRecord cycle lease finalizer 和 empty-frame no-retain 均已覆盖；retirement 窗口、命令顺序与 zero-GC 进入 self-check。
+- fresh 证据：latest relevant source `2026-07-21 16:01:49` < Unity DLL `16:03:35` < full self-check result `16:04:54` **PASS**；Unity Console **0 C# error**；最后一次主代理 `dotnet build` **0 errors / 18 existing warnings**；Architect final **PASS / no P0-P2**。`git diff --check` 待主任务最终统一执行。
+- 这只关闭代码/编译/self-check/静态复核层的 Overlay 缺口，不构成 P7 全门槛或完整 Play 验收：Play/pixel/Profiler/Adreno/Mali 未验收，T8 默认 `stage.dat` 部署继续排除。本文后续相反的 Overlay 结论均为历史快照，除非明确另行重开。
+
+## B2C Extended checksum（2026-07-21 当前状态）
+
+`Authority400` 的 `ntsd-battle-trace-v3` 与 direct parity guard 保持不变；`MobileExtended` / `DesktopExtended` 已使用独立 `ntsd-unity-extended-battle-checksum-v1`。容量感知 slot metadata、generation/stable ID、active/runtime raw state、稀疏 ARest/VRest、rest binding guard 与 non-materializing capture 已落地。B2C 也已接入 generation-aware AI Loose Quadtree 输入快照查询，以及显式 `LooseQuadtree` 后端下的即时 weapon/body current-world 查询；索引、几何或映射异常均回退 brute，生产默认仍是 `BruteForce`。最新 full `BattleRuntimeSelfCheck` `2026-07-21 00:48:06` **PASS**；`dotnet build` **0 errors / 42 existing warnings**；`git diff --check` 通过。先前复审的两个 blocker 已修复并进入 self-check，但 fresh 最终架构复审待补，因此当前状态不是 Architect PASS。
+
+## 集中式渲染 P1-P6 与 P7 Batch1-3 当前状态（2026-07-21）
+
+P1 compact legacy sorting 已完成代码与自动验证；具体排序、`8192` legacy guard、同层 renderer 检查和 Play-unverified 边界见集中式方案文档。P2 immutable `BattleSpriteCatalog` 也已完成代码层实施：唯一 key 为 `(LF2Entity.ResolveCurrentDataObjectId(entity), effectivePic)`，entry 保存 source sheet/shared texture、bottom-left rect、UV、metrics、pivot 与 legacy `Sprite`。
+
+P2 prewarm 使用 invocation-local staging、generation/disposed gate 和原子 publish；configs、`MergedSprites`、catalog 只会整体替换，失败、stale result 与 teardown 均清理。renderer 引用计数把旧 catalog 的退役推迟到零引用。正式 partial BMP 按 declared row/col + `localPic` 建立稀疏 rect 并保留 holes，normal/swapped 仅在完整匹配时择优；weapon6、weapon3 等生产矩阵已进入 self-check。display、collision、anchor、SpecialAttack point-center 与 shadow metrics 不再以战斗期 `Sprite.rect` 为真值；`pic=999`、missing key、current identity 切换和 pool reuse 均清除旧表现引用。
+
+P2 fresh 证据为 source `2026-07-21 04:16:00` < Unity DLL `04:17:06` < full `BattleRuntimeSelfCheck` `04:18:04` **PASS**；dotnet build **0 errors**。由于 Unity 自动生成 `.csproj` 的刷新视图不同，既有 warning 数分别出现 18 与 42，本节不冻结 warning 数。最终 architect review **PASS / no blocker**；最终 code review **no P0-P2 findings**。本轮未执行 Play Mode、真实异步 BMP stress 或性能验收，因此 P2 仅能标为“代码、编译、self-check、静态复核完成；Play/stress/performance-unverified”。
+
+P3 已实现 value-only immutable presentation snapshot/commands、double buffering、几何容量增长和 atomic publish。模式边界是默认 `LegacyOnly`、诊断 `CentralShadowBuild` 和明确拒绝的 `CentralOnly`。命令按 `(ZInt, runtime slot)` 排序，并为每实体依次产生 `Shadow -> Entity -> Overlay -> HitRecord`。早期 `AuthorityExpectedButLegacyMissing` 标记来自不完整权威盘点，现已废止；权威两个 host 实际都绘制 per-entity Overlay，Unity 尚未实现，所以 P3 不能宣称 overlay 等价。
+
+P3 actual legacy probe 直接采样真实 renderer 的 sprite、texture、material instance、rect、pivot、position、flip 和 sorting；HitRecord 在 legacy advance 前采样。catch-up 帧的中间逻辑 tick 因没有对应实际 renderer 状态而明确记录为 `Incomplete`，包含 count/first/last，只有最后可观测 tick 能做完整 probe。persistent scratch 已由 steady `RenderDispatch` zero-allocation self-check 覆盖；zero-hit 经 `SparkRenderer.RenderAll` finalize，production pool 路径覆盖 nonzero spark atlas cells、每 tick age once 和 `OnDisable`/`OnDestroy` 归池。P3 诊断与战斗 checksum 隔离。
+
+P3 fresh 证据为 source `2026-07-21 05:38:38` < Unity DLL `05:39:29` < full `BattleRuntimeSelfCheck` `05:40:16` **PASS**；dotnet build **0 errors / 18 existing warnings**；最终 architect review **PASS / no blocker**，最终 code review **no P0-P2 findings**。未执行 Play Mode、真实 SPARK BMP/设备或性能验收；未来异步 consumer 仍必须持有 catalog lease 并验证 generation。不能把 catch-up `Incomplete` 中间 tick 扩大为逐 tick actual legacy parity 已验证。
+
+P4 已完成代码层实现：中央 Mesh 后端持久复用，并以 `4096` quad/`UInt16` index 的固定 chunk 契约切分。`OrderedChunks` 只合并相邻兼容命令并保持 `A,A,B,A` 原序；`StrictOrderedDraw` 提供更细的正确性回退。unresolved command 是提交 barrier，stale chunk/submesh 会清空。模式边界继续是 `LegacyOnly` 不 build、`CentralShadowBuild` 不提交、`CentralOnly` 在全类别 ownership 完成前拒绝。
+
+P4 URP pass 过滤为 world camera 的 `Base` camera，注入点为 `AfterRenderingTransparents`。`BattleRenderFeature` 已验证为 active renderer asset 的唯一 subasset。初审发现 feature B 覆盖 A 后注销 B 不恢复 A，现已改为 registration stack，并以 `A -> B -> unregister B -> restore A` 覆盖 fallback material、array material 与 draw mode 恢复。
+
+P4 fresh 证据为 source `2026-07-21 06:32:00.287` < Unity DLL `06:32:56.970` < full `BattleRuntimeSelfCheck` result `06:33:43.796` **PASS**；dotnet build **0 errors / 42 existing warnings**；最终 architect review **PASS / no P0-P2 findings**。没有执行 Play Mode、桌面像素 baseline、Profiler GC 或 Android/Adreno/Mali 验证，故只能标为 P4 代码/self-check/静态复核完成，不能宣称全部验收门槛完成。
+
+P5 已完成代码层实现：确定性 planner 以 whole-sheet 为单位生成 `2048 x 2048` 多页布局，按 normalized path ordinal 去重；同 path/同尺寸的 pixels 冲突会拒绝。sheet 使用 `1px` extrusion。满足能力 gate 时建立 `RGBA32 Texture2DArray`，否则使用保持相同 page 顺序的 2D fallback。catalog entry 保留 legacy source 并增加 immutable central binding；manager 以事务方式发布，明确持有 Unity Object ownership，renderer 与 central lease 一起控制旧资源退役。
+
+P5 array shader 使用 per-vertex slice，允许相邻跨 slice 命令在相同 array material 下保持顺序合批；2D fallback 的 `A/B/A` 保持三个连续段，禁止重排。array/fallback 双 shader、material、pass 和 installer 均已接线。复核关闭两个 P2：同 path、同尺寸、不同 pixels 对两种输入排列都拒绝，equal-content duplicate 成功；显式两页 fallback 在 page0 成功、page1 失败时，两页均销毁且不产生 partial publication。
+
+P5 fresh 证据为 source `2026-07-21 07:06:28` < Unity DLL `07:07:12` < full `BattleRuntimeSelfCheck` log `07:08:13` **PASS**；dotnet build **0 errors / 42 existing warnings**；architect final review **PASS / no P0-P2 findings**，code review **no P0-P2 findings**。未执行生产 BMP Play、桌面 overlap pixel baseline、Profiler/allocation stress、Android/Adreno/Mali array/fallback 与内存性能验收，因此 P5 仅为代码/self-check/静态复核完成，不能宣称全部验收完成。
+
+P6 已完成设备策略与诊断代码：`BattleRenderingDevicePolicy` 是 immutable capabilities，`FromSystem` 是唯一系统能力采集边界。resolver 严格按 CLI > `GameConfig` > Auto 解析 `-ntsdBattleAtlasMode` / `-ntsdBattleDrawMode`，在 `TextureArray` 与 `OrderedPages` 间安全 fallback 并报告原因；draw mode 只在 Auto、`OrderedChunks`、`StrictOrderedDraw` 中选择，`SingleMesh` 不进入生产。确定性 JSON report 显式记录请求、capabilities、effective mode 与 fallback reason。
+
+P6 manager 每次 publication 只解析一次，central 使用缓存的 effective draw mode；每 tick 不再查询 `SystemInfo` 或 CLI。该策略不改变 profile、capacity、tick、collision、checksum 或 `CentralOnly` guard。P6 尚未完成 Adreno/Mali、Play、pixel baseline 或 Profiler 验收，因此只能宣称代码策略/诊断完成。
+
+P7 Batch1 完成 held-object 子批。权威链为 `InteractionRuntimePasses -> WeaponPointRuntime/WeaponRuntime -> SdlBattleRenderer/BattleHostForm`；legacy 与 snapshot 共用 pure held-offset helper，在 capture 时将 offset 固化为 immutable 值并追加到 Entity command。right/left、target mismatch、release、missing holder/wpoints、slot generation reuse、dormant holder 与 legacy/central equality 均已覆盖。
+
+P6/P7-held 统一 fresh 证据为 self-check source UTC `23:42:44` < Unity DLL `23:44:03` < `Unity-P6-P7-Final2-SelfCheck.log` `23:45:00` **PASS**；dotnet build **0 errors / 18 existing warnings**；architect **PASS**，code review **approve / no P0-P2 findings**。
+
+P7 Batch2 已完成 render-state semantic parity：snapshot/command 持有 value-only `Color32`、flipX/flipY、mask/material semantic 与 logical resource key，instance ID 仅用于诊断。catalog 提供 immutable `Sprite -> key[]` 反查和 preferred entity key。legacy probe/Compare 检测 RGB、alpha、flipY、unsupported state 与 logical key；central resolver 转发 color，对无法解析的语义 fail closed。
+
+Mesh 把 color 写入 quad 四顶点，flipY 通过交换 V 坐标实现；color 变化不切 segment，material semantic variant 必须断段。pool entity/shadow/spark checkout 重置为 white、flipXY false、mask none；首次干净 checkout 借用 `Sprites/Default.sharedMaterial`，不触发 `.material` 实例。
+
+两个中央 shader 依据 Unity 官方 `2022.3.4f1` builtin shaders ZIP changeset `35713cd46cd7` 改为 `Blend One OneMinusSrcAlpha`，最终 `rgb *= a`，并声明 `NTSDAlphaContract` tag；installer 验证 white/tag。fresh 链为 source `08:27:50` < DLL `08:28:48` < self-check log `08:29:48` **PASS**；installer validation **PASS**；dotnet **0 errors**；architect/code review **PASS / no P0-P2 findings**。
+
+P7 Batch3 已完成 Shadow。实现依据 authority `BattleHostForm` / `SdlBattleRenderer.DrawShadow` gates；资源采用 typed `EntitySprite`/`CommonShadow` key。`GameConfig.ShadowPrefab` 被捕获为 immutable borrowed binding，包含真实 sprite、texture、UV、size、pivot、color 和 material；manager 在 main thread atomic common publication，borrowed Unity Object 不进入 owned retirement。
+
+snapshot 保存 actual ObjectId 与 `HasCurrentFrame`；Shadow command 携带 real descriptor/`CommonShadow` 并位于 Entity 前，legacy probe 对比 exact sprite。central resolver 校验 sprite、texture、rect、pivot、material ID，并使用 source2D + fallback material；missing config/resource 一律 fail closed。actual OID223/224、state3005/9997、`Link < 0`、HitStop 与 missing frame 已对齐。
+
+review 关闭 P1 missing-frame legacy/central，以及 P2 material ID、真实 `GameConfig` asset、real commit -> replace retirement tests。fresh 链为 source `09:29:03` < Unity DLL `09:31:10` < self-check log `09:32:07` **PASS**；dotnet build **0 errors / 18 existing warnings**；architect/review **PASS / no P0-P2 findings**。
+
+Batch3 结束时 P7 仍未完成，Play、实际 pixel baseline 与设备未验收，HitRecord/Overlay 当时均未收口。后续 Batch4/5 已关闭 HitRecord resource/lifecycle 代码缺口；当前仍由 Overlay 阻塞 `CentralOnly`。T8 继续排除。
+
+P7 Batch4 已完成 **SPARK / Common HitRecord resource ownership** 的代码层收口：typed `CommonSpark(pic)` 的 20 帧资源在 prewarm 中只 decode/process 一次，再于 main thread atomic publish；legacy `SparkRenderer` 不再在 `Awake` decode 或创建资源。central resolver 验证 logical key、`Sprite`、`Texture`、rect、pivot、size 和 material；publication lease/retirement 已接入。
+
+Batch4 失败契约：缺失/无效 SPARK 释放 stale lease 且不修改 `HitRecord` age/count；partial `Texture`/`Sprite` 构造失败事务式清理，不能发布半成品资源。fresh 链为 source `11:13:05` < Unity DLL `11:15:20` < result `11:17:38` **PASS**；architect re-review **PASS / no P0-P2 findings**。code-review provider 为 `429`，不得表述为 code-review 通过。
+
+此项不构成 P7 整体或运行时验收：Play、pixel、Profiler、真机和真实 SPARK 资源路径未验证；Batch4 当时未包含的 HitRecord lifecycle mutation 已由下方 Batch5 收口。T8 继续排除。
+
+P7 Batch5 已完成 backend-neutral immutable double-buffer HitRecord presentation cycle。`RenderDispatch` 捕获 owner handle/generation、count、age、x/z 与 frozen common publication；`SparkRenderer` 只 materialize/probe，不写 live HitRecord。`LateUpdate` 顺序固定为 legacy materialize -> central `PrepareFrame` -> one finalizer；catch-up 只 finalize 最后 cycle。
+
+Batch5 mutation 契约：missing SPARK zero-write；valid age 每 cycle 恰好 `+1`；invalid sampled tail 每 cycle 最多删除 1 项，`4/14/28/38` 进入 gap 的同 cycle 不删除。slot reuse、count/age guard 已覆盖，pool/camera/backend 不影响结果。后续 P2 修复将 binding 改为 direct ownership transfer，无 per-tick lease GC；no-hit 不持 binding。coordinator reset 接入 world reset、driver unbind、world replacement、destroy；ordered owner cursor 为 O(N)，`1000` owners 精确为 `1000` comparisons。
+
+Batch5 fresh 链为 source `12:39:24` < Unity DLL `12:40:40` < result `12:41:20` **PASS**；dotnet build **0 errors / 18 existing warnings**；architect **PASS / no P0-P2 findings**；code review **APPROVE / no P0-P2 findings**。Play、pixel 与 device 仍未验收。
+
+Overlay authority re-audit 将其确认为当前 blocker，而不是空占位：权威 `BattleHostForm` 与 `SdlBattleRenderer` 都按 `Shadow -> Entity -> EntityOverlays -> HitRecords` 绘制。per-entity Overlay 内容为 `Hp2Orig > 1` 的复活次数和 entity label；资源 `WORDS0..5.bmp` 的 glyph 为 `8x16`、步距 `9`、black colorkey。Unity `Assets` 当前没有 `WORDS0..5`，也缺 `BattleSlotLabels[10,12]` / state 镜像和 snapshot 字段契约，因此 Overlay 未实现，`CentralOnly` 继续拒绝。global function/pause overlay 是独立后置 UI，且 GDI/SDL 不一致，不塞入 per-entity P7，本批不处理；T8 继续排除。
+
+以下旧阶段中“Extended checksum 跳过/为空、schema 未实施”或“即时 weapon/body、AI 查询未迁移”的陈述是历史快照，已由本节覆盖。Loose Quadtree 默认启用证据、P1-P6 的运行时表现/真机/真实资源/性能验收，以及 P7 Overlay 实现仍未完成；Batch5 已关闭 HitRecord lifecycle mutation 代码层缺口。T8 已排除，不计入完成条件。
+
 ## BATTLE-RENDER-PLAN1 集中式战斗渲染系统方案（更新于 2026-07-20）
 
 移动端集中式战斗渲染与 runtime 容量/空间索引决策已记录在 [central-battle-render-system-plan.md](central-battle-render-system-plan.md)。当前状态是 **R1-R2C-4、B0、B1-B1.3、B2A 与 B2B generation-aware incremental Loose Quadtree 已完成代码层实施和既定验证**。
@@ -123,7 +213,7 @@ F1-F7 仅达到 source/static + focused self-check 闭合，尚未全部 Play Mo
 
 ### BATTLE-AUDIT9 修复进度（LP-01 / LP-02 / LP-04）
 
-冻结清单建立后，`LP-01`、`LP-02` 与 `LP-04` 已进入“**代码已写 / self-check verified / Play-unverified**”，但仍保留在 BATTLE-AUDIT9 差异清单中，不能据此关闭整个清单。`LP-01` 的 generic held 正式 throw/kind3 释放写回已落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs` 的 `ThrowHeldObject`、`DropRandomly` 与 `ClearLinks(..., stampReleaseTick: true)`，并由 `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs` 的 `CheckAudit9GenericHeldReleaseTickContracts` 覆盖；`LP-02` 的同 Z slot tie-break 已落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs` 的 `ComposeRenderSortingOrder` 与 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` 的 `UpdatePosition`，并由 `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs` 的 `CheckRenderSortingSlotTieBreak` 覆盖；`LP-04` 的实体/阴影 `HitStop` 阈值与四拍显示门控已落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` 的 `UpdateSprite`、`ShouldDrawEntityForHitStop`、`ShouldDrawShadowForHitStop`，并由 `CheckHitStopPresentationGates` 覆盖。
+冻结清单建立后，`LP-01`、`LP-02` 与 `LP-04` 已进入“**代码已写 / self-check verified / Play-unverified**”，但仍保留在 BATTLE-AUDIT9 差异清单中，不能据此关闭整个清单。`LP-01` 的 generic held 正式 throw/kind3 释放写回已落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs` 的 `ThrowHeldObject`、`DropRandomly` 与 `ClearLinks(..., stampReleaseTick: true)`，并由 `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs` 的 `CheckAudit9GenericHeldReleaseTickContracts` 覆盖；`LP-02` 现为 `(ZInt, runtime slot)` dense presentation rank，落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs` 的 `GetPresentationRenderSortingOrder` 与 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` 的 `ForceRefreshPresentation`，并由 `CheckCompactPresentationRenderSorting`、`CheckLegacySpriteRendererPresentationSorting` 覆盖；`LP-04` 的实体/阴影 `HitStop` 阈值与四拍显示门控已落在 `Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` 的 `UpdateSprite`、`ShouldDrawEntityForHitStop`、`ShouldDrawShadowForHitStop`，并由 `CheckHitStopPresentationGates` 覆盖。
 
 本批验证证据：`dotnet build Assembly-CSharp.csproj --no-restore /m:1` 为 **0 errors / 42 warnings**；fresh Unity full `BattleRuntimeSelfCheck` 于 `2026-07-18 14:01:51.078` 返回 **PASS**，`Assembly-CSharp.dll` 时间 `14:01:27.540` 晚于本轮最新相关源码。该证据关闭三项的编译与 self-check 层级；generic held 实际投掷/掉落、同 Z slot 排序的画面顺序和负 `HitStop` 实体/阴影闪烁仍需 Play Mode 定向验证。
 
@@ -933,7 +1023,7 @@ R-GP-01 freshness：authority source `2026-07-18 00:11:23` < authority DLL `00:1
 | `FW-BOOT-02` | `DirectBattleBootstrap.InitializeBattleStats:224-244`：difficulty HP bonus/cap、PPBound、respawn、HitStop、速度、输入边沿、Cd 全集 | `Assets/NTSD/Scripts/App/AppManager.cs:224-235` 主要依赖 `Initialize` 默认值，仅显式写部分 team/位置/速度/HitStun | 非默认 difficulty、DAT `Hp3` 非默认、pool/rebootstrap 或初始边沿非零；预期完整字段集合，实际依赖隐式 reset/default | confirmed-difference；字段契约缺失，未修复、未运行时验证。报告：framework inventory |
 | `FW-RESET-01` | `BattleCore/Simulation/SimulationWorld.Passes.cs:13-70` reset 不调用 `NtsdRng.Srand`，进程级 RNG 延续 | `Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs:138-151` 每次 reset `Rng.Seed(0x4E545344u)`，之后 config seed 再播种 | 同进程重开/重赛后发生随机掉落或 stage spawn；预期按权威入口延续/显式播种，实际 Unity 增加 reset 播种边界 | confirmed-difference；静态调用链，播种归属仍有 authority-unresolved 依赖，未修复。报告：framework inventory |
 | `LP-01` | `BattleCore/Interaction/WeaponRuntime.cs:169-212,287-303` generic held 正式 throw/kind3 都写 `ReleaseTick=currentTick` | `Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs:391-424` generic throw/kind3 通过 `ClearLinks(..., stampReleaseTick: true)` 写当前 tick | 非 `LF2WeaponBase` CLR 壳但按 DAT held 参加 step12，且 `Dvx != 0` 或 kind3；预期清 link 同时写 tick | confirmed-difference；**代码已写 / `CheckAudit9GenericHeldReleaseTickContracts` self-check verified / Play-unverified**。报告：lifecycle inventory |
-| `LP-02` | `src/Host/SdlBattleRenderer.cs:476-497` 先 `ZInt`，同 Z 按 runtime slot 升序稳定绘制 | `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs` `ComposeRenderSortingOrder`、`Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` `UpdatePosition`；`LF2Sprite.cs` 表现刷新 | 两个实体同 `ZInt` 且无额外 cover；预期 slot tie-break，Unity 已写入 slot tie-break 排序值，并经 `CheckRenderSortingSlotTieBreak` fresh self-check PASS | confirmed-difference；**代码已写 / self-check verified / Play-unverified**。报告：lifecycle inventory |
+| `LP-02` | `src/Host/SdlBattleRenderer.cs:476-497` 先 `ZInt`，同 Z 按 runtime slot 升序稳定绘制；随后按 `Shadow -> Entity -> EntityOverlays -> HitRecords` 展开 | `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs` compact presentation sort、`Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs` `ForceRefresh`；`LF2Sprite.cs` 表现刷新 | 两个实体同 `ZInt` 且无额外 cover；按 `(ZInt, runtime slot)` dense rank。四槽为 `Shadow/Entity/Overlay/HitRecord=0/1/2/3`；Unity Overlay 子序存在但对应 per-entity consumer 未实现。真实双实体 renderer 检查为 `Shadow(A)=0`、`Entity(A)=1`、`Shadow(B)=4`、`Entity(B)=5` | confirmed-difference；排序代码/self-check/architect verified，Overlay 仍为 confirmed blocker，Play-unverified。legacy 后端 guard 为 `8192` materialized active entities；移动端 `1000` 安全，DesktopExtended 在中央后端完成前受此临时表现上限约束。报告：lifecycle inventory |
 | `LP-03` | `BattleCore/Interaction/WeaponRuntime.cs:169-212` 释放只写逻辑位置/速度/owner/link/ReleaseTick，层级由 `ZInt/slot` | `Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs:77-98,391-402` 额外写 `Runtime.Zz=1`，由 `LF2Entity.GetRenderSortingOrder` 加入排序 | 正式投掷起始帧；预期由权威 Z/slot 决定，实际 Unity 额外上抬一个 sorting order | confirmed-difference；静态表现契约，未修复、未 Play。报告：lifecycle inventory |
 | `LP-04` | `src/Host/SdlBattleRenderer.cs:519-548`：实体/阴影分别按负 `HitStop` 阈值和四拍相位隐藏 | `Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs:416-448`、`LF2ObjectRenderer.cs:206-243` 已接入实体/阴影各自的 `HitStop` gate | 实体进入负 HitStop 闪烁/隐藏区间；预期按实体/阴影不同阈值隐藏 | confirmed-difference；**代码已写 / `CheckHitStopPresentationGates` self-check verified / Play-unverified**。报告：lifecycle inventory |
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
+using NTSD.Animation.Rendering;
 using UnityEngine;
 
 namespace NTSD.Animation
@@ -8,9 +9,9 @@ namespace NTSD.Animation
     /// <summary>
     /// 命中闪光渲染器
     ///
-    /// 对应 C++ release 的 SPARK blit 逻辑。
+    /// 对应权威 C# host renderer 的 SPARK blit 逻辑。
     ///
-    /// C++ 在 draw_hit_records 中按 hit_record_damage 选取 SPARK.bmp 的 20 个图块，
+    /// C# Host DrawHitRecords 按 HitRecordDamage 选取 SPARK.bmp 的 20 个图块，
     /// 成功绘制后立即递增 age；无效 age 只在该 slot 是最后一个时回收。
     /// </summary>
     public class SparkRenderer : MonoBehaviour
@@ -19,173 +20,191 @@ namespace NTSD.Animation
 
         // ========== 内部状态 ==========
         private Texture2D _sparkTex;
-        private Sprite[] _sparkSprites;
+        private Sprite[] _sparkSprites = new Sprite[SparkFrameCount];
+        private BattleCommonVisualCatalog _boundCommonCatalog = BattleCommonVisualCatalog.Empty;
         private bool _loaded = false;
 
         private readonly List<SpriteRenderer> _activeThisFrame = new List<SpriteRenderer>(32);
-        private readonly List<LF2Entity> _objectScratch  = new List<LF2Entity>(128);
+        private readonly List<LF2ObjectPool> _activePools = new List<LF2ObjectPool>(32);
 
         // ========== Unity 生命周期 ==========
         private void Awake()
         {
-            LoadSparkBmp();
+            _loaded = false;
+        }
+
+        private void OnDisable()
+        {
+            ReleaseActiveRenderers();
+            ReleaseCatalogBinding();
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseActiveRenderers();
+            ReleaseCatalogBinding();
         }
 
         // ========== 公共 API ==========
 
         public void RenderAll(SimulationWorld world)
         {
-            var pool = LF2ObjectPool.Instance;
-            if (pool != null)
-            {
-                for (int i = 0; i < _activeThisFrame.Count; i++)
-                    pool.ReleaseSprite(_activeThisFrame[i]);
-            }
-            _activeThisFrame.Clear();
+            ReleaseActiveRenderers();
 
             if (world == null) { Debug.LogWarning("[SparkRenderer] world is null"); return; }
-            if (!_loaded) { Debug.LogWarning("[SparkRenderer] not loaded"); return; }
+            if (BattleCentralRenderSystem.ShouldUseCentralPixels(world))
+                return;
 
-            world.GetAllEntities(_objectScratch);
-            for (int i = 0; i < _objectScratch.Count; i++)
+            var pool = LF2ObjectPool.Instance;
+            BattleHitRecordPresentationCycle cycle =
+                world.BattlePresentation.PublishedHitRecordCycle;
+            if (cycle == null)
             {
-                LF2Entity obj = _objectScratch[i];
-                int slotCount = obj.HitRecordCount;
-                if (slotCount <= 0) continue;
-                RenderObjectSlots(obj, pool, world);
+                world.BattlePresentation.CompleteLegacyFrame();
+                return;
             }
+
+            RefreshCommonPublication(cycle.CommonVisualCatalog);
+            if (!_loaded)
+            {
+                Debug.LogWarning("[SparkRenderer] not loaded");
+                world.BattlePresentation.CompleteLegacyFrame();
+                return;
+            }
+
+            for (int ownerIndex = 0; ownerIndex < cycle.OwnerCount; ownerIndex++)
+            {
+                BattleHitRecordOwnerSnapshot owner = cycle.GetOwner(ownerIndex);
+                RenderObjectSlots(cycle, owner, pool, world);
+            }
+            world.BattlePresentation.CompleteLegacyFrame();
         }
 
         // ========== 私有实现 ==========
 
         /// <summary>
-        /// 使用 BMPLoader 加载 SPARK.bmp，黑色透明处理后切割成 Sprite 数组。
+        /// Binds the manager's immutable common publication. No BMP decode or
+        /// Sprite.Create occurs on this renderer path.
         /// </summary>
-        private void LoadSparkBmp()
+        private void RefreshCommonPublication(BattleCommonVisualCatalog catalog)
         {
-            string sparkPath = System.IO.Path.Combine(
-                UnityEngine.Application.dataPath,
-                "NTSD", "Sprite", "UIPanels", "SPARK.bmp");
-
-            var tex = BMPLoader.LoadBMP(sparkPath);
-            if (tex == null)
+            catalog ??= BattleCommonVisualCatalog.Empty;
+            if (catalog.IsSparkValid)
             {
-                Debug.LogWarning($"[SparkRenderer] SPARK.bmp not found at {sparkPath}. Spark will not render.");
+                if (ReferenceEquals(catalog, _boundCommonCatalog) &&
+                    _sparkSprites != null && _sparkSprites.Length == SparkFrameCount)
+                {
+                    _loaded = true;
+                    return;
+                }
+
+                ReleaseCatalogBinding();
+                _boundCommonCatalog = catalog;
+                for (int pic = 0; pic < SparkFrameCount; pic++)
+                {
+                    catalog.TryGetSpark(pic, out BattleCommonVisualBinding binding);
+                    _sparkSprites[pic] = binding?.Sprite;
+                    if (pic == 0)
+                        _sparkTex = binding?.Texture;
+                }
+                _loaded = _sparkTex != null;
                 return;
             }
 
-            var transparentData = new TransparentColorData
-            {
-                targetColor    = Color.black,
-                colorTolerance = 0.1f
-            };
-            tex = RuntimeSpriteProcessor.MakeColorTransparent(tex, transparentData);
-
-            _sparkTex = tex;
-            _sparkSprites = new Sprite[SparkFrameCount];
-            for (int pic = 0; pic < SparkFrameCount; pic++)
-            {
-                GetSparkSourceRect(pic, out int srcX, out int srcY, out int w, out int h);
-                GetSparkOffset(pic, out int xoff, out int yoff);
-                _sparkSprites[pic] = SliceSprite(tex, srcX, srcY, w, h, xoff, yoff);
-            }
-            _loaded = true;
+            ReleaseCatalogBinding();
         }
 
-        private static Sprite SliceSprite(Texture2D tex, int srcX, int srcY, int w, int h, int xoff, int yoff)
+        private void ReleaseCatalogBinding()
         {
-            int flippedY = tex.height - srcY - h;
-            var rect = new Rect(srcX, flippedY, w, h);
-            var pivot = new Vector2(xoff / (float)w, (h - yoff) / (float)h);
-            return Sprite.Create(tex, rect, pivot, 100f);
+            _boundCommonCatalog = BattleCommonVisualCatalog.Empty;
+            _sparkTex = null;
+            if (_sparkSprites == null || _sparkSprites.Length != SparkFrameCount)
+                _sparkSprites = new Sprite[SparkFrameCount];
+            else
+                System.Array.Clear(_sparkSprites, 0, _sparkSprites.Length);
+            _loaded = false;
+
         }
 
-        private void RenderObjectSlots(LF2Entity obj, LF2ObjectPool pool, SimulationWorld world)
+        private void RenderObjectSlots(
+            BattleHitRecordPresentationCycle cycle,
+            in BattleHitRecordOwnerSnapshot owner,
+            LF2ObjectPool pool,
+            SimulationWorld world)
         {
-            int j = 0;
-            while (j < obj.HitRecordCount)
+            for (int hitIndex = 0; hitIndex < owner.HitRecordCount; hitIndex++)
             {
-                int age = obj.GetHitRecordAge(j);
-                Sprite sprite = GetSpriteForAge(age);
-                if (sprite == null)
+                BattlePresentationHitRecordSnapshot hit = cycle.GetHitRecord(
+                    owner.HitRecordStart + hitIndex);
+                if (!BattleCommonVisualCatalog.TryResolveSparkAge(hit.Age, out int pic) ||
+                    !cycle.CommonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding binding))
                 {
-                    if (!obj.RemoveHitRecordIfTail(j))
-                        j++;
                     continue;
                 }
 
-                float screenX = obj.GetHitRecordX(j) + obj.GetRenderOffsetX() - world.ReleaseCameraX;
-                float screenY = obj.GetHitRecordZ(j);
+                Sprite sprite = GetSpriteForAge(hit.Age);
+                if (sprite == null)
+                    continue;
+
+                float screenX = hit.AnchorX + owner.RenderOffsetX - owner.CameraX;
+                float screenY = hit.AnchorZ;
                 Vector3 unityPos = NTSDRenderSpace.ScreenPixelToWorld(screenX, screenY, 0f);
 
                 SpriteRenderer sr = pool?.GetSprite();
                 if (sr == null)
-                {
-                    j++;
                     continue;
-                }
 
                 sr.sprite = sprite;
+                if (binding.Material != null)
+                    sr.sharedMaterial = binding.Material;
+                sr.color = binding.Color;
+                sr.flipX = binding.RenderState.FlipX;
+                sr.flipY = binding.RenderState.FlipY;
+                sr.maskInteraction = binding.RenderState.MaskInteraction;
                 sr.transform.position = unityPos;
                 sr.transform.localScale = NTSDRenderSpace.RenderScale;
                 sr.sortingLayerName = "Object";
-                // Keep the hit spark immediately above its source entity but
-                // inside that entity's reserved slot sub-order.
-                sr.sortingOrder = obj.GetRenderSortingOrder() + 1;
+                sr.sortingOrder = owner.PresentationBaseOrder +
+                                  SimulationWorld.PresentationHitRecordSubOrder;
                 _activeThisFrame.Add(sr);
-                obj.AdvanceHitRecord(j, world.SparkRenderFrame);
-                j++;
+                _activePools.Add(pool);
+                world.BattlePresentation.RecordLegacyHitRecordProbe(
+                    owner,
+                    sr,
+                    hitIndex,
+                    binding);
             }
+        }
+
+        private void ReleaseActiveRenderers()
+        {
+            for (int i = 0; i < _activeThisFrame.Count; i++)
+            {
+                SpriteRenderer renderer = _activeThisFrame[i];
+                LF2ObjectPool ownerPool = i < _activePools.Count ? _activePools[i] : null;
+                if (ownerPool != null)
+                {
+                    ownerPool.ReleaseSprite(renderer);
+                }
+                else if (renderer != null)
+                {
+                    renderer.sprite = null;
+                    renderer.gameObject.SetActive(false);
+                }
+            }
+
+            _activeThisFrame.Clear();
+            _activePools.Clear();
         }
 
         private Sprite GetSpriteForAge(int age)
         {
-            int pic = -1;
-            if (age < 5)
-                pic = age;
-            else if (age >= 10 && age < 15)
-                pic = age - 5;
-            else if (age >= 20 && age < 29)
-                pic = (age - 20) / 2 + 10;
-            else if (age >= 30 && age < 39)
-                pic = (age - 30) / 2 + 15;
+            if (!BattleCommonVisualCatalog.TryResolveSparkAge(age, out int pic))
+                return null;
 
             if (pic >= 0 && _sparkSprites != null && pic < _sparkSprites.Length)
                 return _sparkSprites[pic];
             return null;
-        }
-
-        private static void GetSparkSourceRect(int pic, out int x, out int y, out int w, out int h)
-        {
-            if (pic < 5)
-            {
-                x = pic * 102; y = 0; w = 102; h = 80;
-                return;
-            }
-            if (pic < 10)
-            {
-                x = (pic - 5) * 61; y = 80; w = 61; h = 48;
-                return;
-            }
-            if (pic < 15)
-            {
-                x = (pic - 10) * 102; y = 128; w = 102; h = 80;
-                return;
-            }
-
-            x = (pic - 15) * 61; y = 208; w = 61; h = 48;
-        }
-
-        private static void GetSparkOffset(int pic, out int xoff, out int yoff)
-        {
-            if (pic < 5 || (pic >= 10 && pic < 15))
-            {
-                xoff = 51; yoff = 40;
-            }
-            else
-            {
-                xoff = 30; yoff = 24;
-            }
         }
     }
 }

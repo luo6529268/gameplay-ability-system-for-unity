@@ -238,6 +238,40 @@ namespace NTSD.Simulation
         }
     }
 
+    [Serializable]
+    public sealed class BattleSlotLabelRuntimeState
+    {
+        public const int SlotCount = 10;
+        public const int CharacterCapacity = 12;
+
+        public char[,] BattleSlotLabels = new char[SlotCount, CharacterCapacity];
+        public int[] BattleSlotLabelState = new int[SlotCount];
+
+        public void Reset()
+        {
+            Array.Clear(BattleSlotLabels, 0, BattleSlotLabels.Length);
+            Array.Clear(BattleSlotLabelState, 0, BattleSlotLabelState.Length);
+        }
+
+        public void ApplyBootstrapFromMatchConfig(MatchConfig config)
+        {
+            Reset();
+            if (config?.players == null)
+                return;
+
+            int slotCount = Math.Min(config.players.Count, 4);
+            for (int slotIndex = 0; slotIndex < slotCount; slotIndex++)
+            {
+                PlayerSlotConfig player = config.players[slotIndex];
+                if (player == null || !player.use)
+                    continue;
+
+                BattleSlotLabels[slotIndex, 0] = (char)('1' + slotIndex);
+                BattleSlotLabelState[slotIndex] = slotIndex + 1;
+            }
+        }
+    }
+
     /// <summary>
     /// 对齐 C++ GameWorld / battle globals 的流程态。
     /// 这里只收全局 tick / gate / route 标记，不混表现层字段。
@@ -365,6 +399,7 @@ namespace NTSD.Simulation
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
         public BattleResultsRuntimeState Results = new BattleResultsRuntimeState();
+        public BattleSlotLabelRuntimeState SlotLabels = new BattleSlotLabelRuntimeState();
         public int[] KillStats = new int[BattleStatSlotCount];
         public int[] DamageStats = new int[BattleStatSlotCount];
 
@@ -384,8 +419,14 @@ namespace NTSD.Simulation
             Roster?.Reset();
             Flow?.Reset();
             Results?.Reset();
+            SlotLabels?.Reset();
             ResetStatArray(ref KillStats);
             ResetStatArray(ref DamageStats);
+        }
+
+        public void ApplyBootstrapFromMatchConfig(MatchConfig config)
+        {
+            SlotLabels?.ApplyBootstrapFromMatchConfig(config);
         }
 
         private static void ResetStatArray(ref int[] stats)
