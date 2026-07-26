@@ -15,11 +15,17 @@ namespace NTSD.Animation.LF2Objects
         private BattleSpriteCatalog _catalog;
         private int _visualDataId = int.MinValue;
         private BattleSpriteEntry _currentEntry;
+        private int _currentPic = 999;
         private string _dir = "right";
 
         private SpriteRenderer _shadowRenderer;
         private bool _hasShadow;
+        private bool _entityVisible = true;
+        private bool _shadowVisible = true;
         private bool _presentationSuppressed;
+        private bool _legacyRendererSuppressed;
+        private bool _legacyEntityVisible = true;
+        private Vector2 _localOffsetPixels;
 
         // SortingGroup 用于角色根节点，优先控制层级；武器/SA 无 SortingGroup 则回退到 SpriteRenderer.sortingOrder
         private SortingGroup _sortingGroup;
@@ -28,6 +34,16 @@ namespace NTSD.Animation.LF2Objects
         /// 当前方向
         /// </summary>
         public string Dir => _dir;
+
+        public bool EntityVisible => _entityVisible;
+
+        public bool ShadowVisible => _shadowVisible;
+
+        public bool PresentationSuppressed => _presentationSuppressed;
+
+        public Vector2 LocalOffsetPixels => _localOffsetPixels;
+
+        public int CurrentPic => _currentPic;
 
         private int _startFrame;
 
@@ -50,7 +66,14 @@ namespace NTSD.Animation.LF2Objects
             _catalog = catalog;
             _visualDataId = visualDataId;
             _currentEntry = null;
+            _currentPic = 999;
             _dir = "right";
+            _entityVisible = true;
+            _shadowVisible = true;
+            _presentationSuppressed = false;
+            _legacyRendererSuppressed = false;
+            _legacyEntityVisible = true;
+            _localOffsetPixels = Vector2.zero;
 
             // 从根节点查找 SortingGroup（角色有，武器/SA 无）
             _sortingGroup = renderer != null
@@ -60,13 +83,16 @@ namespace NTSD.Animation.LF2Objects
             if (_renderer != null)
             {
                 _renderer.sortingLayerName = "Object";
-                _renderer.enabled = true;
                 _renderer.color = Color.white;
+                _renderer.sprite = null;
+                _renderer.flipX = false;
+                Vector3 localPosition = _renderer.transform.localPosition;
+                _renderer.transform.localPosition = new Vector3(0f, 0f, localPosition.z);
+                ApplyEntityRendererVisibility();
             }
             if(_sortingGroup != null)
                 _sortingGroup.sortingLayerName = "Object";
 
-            _presentationSuppressed = false;
         }
 
         /// <summary>
@@ -77,7 +103,10 @@ namespace NTSD.Animation.LF2Objects
             _shadowRenderer = shadowRenderer;
             _hasShadow = shadowRenderer != null;
             if (_shadowRenderer != null)
+            {
                 _shadowRenderer.sortingLayerName = "Object";
+                ApplyShadowRendererVisibility();
+            }
         }
 
         public bool HasShadow => _hasShadow;
@@ -110,7 +139,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void ShowPic(int picIndex)
         {
-            if (_renderer == null) return;
+            _currentPic = picIndex;
             if (picIndex == 999)
             {
                 ClearCurrentSprite();
@@ -120,15 +149,17 @@ namespace NTSD.Animation.LF2Objects
             if (_catalog != null)
             {
                 if (!_catalog.TryGet(_visualDataId, picIndex, out BattleSpriteEntry entry) ||
-                    entry.LegacySprite == null)
+                    entry == null)
                 {
-                    ClearCurrentSprite();
+                    ClearResolvedSprite();
                     return;
                 }
 
                 _currentEntry = entry;
-                _renderer.sprite = entry.LegacySprite;
-                _renderer.enabled = !_presentationSuppressed;
+                _entityVisible = true;
+                if (_renderer != null)
+                    _renderer.sprite = entry.LegacySprite;
+                ApplyEntityRendererVisibility();
                 return;
             }
 
@@ -136,7 +167,7 @@ namespace NTSD.Animation.LF2Objects
             // sprite list. Production battle renderers always bind the catalog.
             if (_sprites == null)
             {
-                ClearCurrentSprite();
+                ClearResolvedSprite();
                 return;
             }
 
@@ -151,21 +182,29 @@ namespace NTSD.Animation.LF2Objects
 
             if (actualIndex < 0 || actualIndex >= _sprites.Count)
             {
-                ClearCurrentSprite();
+                ClearResolvedSprite();
                 return;
             }
             if (_sprites[actualIndex] == null)
             {
-                ClearCurrentSprite();
+                ClearResolvedSprite();
                 return;
             }
 
             _currentEntry = null;
-            _renderer.sprite = _sprites[actualIndex];
-            _renderer.enabled = !_presentationSuppressed;
+            _entityVisible = true;
+            if (_renderer != null)
+                _renderer.sprite = _sprites[actualIndex];
+            ApplyEntityRendererVisibility();
         }
 
         public void ClearCurrentSprite()
+        {
+            _currentPic = 999;
+            ClearResolvedSprite();
+        }
+
+        private void ClearResolvedSprite()
         {
             _currentEntry = null;
             if (_renderer == null)
@@ -193,6 +232,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetXY(float x, float y)
         {
+            _localOffsetPixels = new Vector2(x, y);
             if (_renderer == null) return;
             const float ppu = 100f;
             _renderer.transform.localPosition = new Vector3(x / ppu, -y / ppu, _renderer.transform.localPosition.z);
@@ -228,8 +268,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Show()
         {
-            if (_renderer != null)
-                _renderer.enabled = !_presentationSuppressed;
+            _entityVisible = true;
+            ApplyEntityRendererVisibility();
         }
 
         /// <summary>
@@ -237,24 +277,28 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Hide()
         {
-            if (_renderer != null)
-                _renderer.enabled = false;
+            _entityVisible = false;
+            ApplyEntityRendererVisibility();
         }
 
         public void SetPresentationSuppressed(bool suppressed)
         {
             _presentationSuppressed = suppressed;
-            if (_renderer == null)
-                return;
+            ApplyEntityRendererVisibility();
+            ApplyShadowRendererVisibility();
+        }
 
-            if (suppressed)
-            {
-                _renderer.enabled = false;
-            }
-            else if (_renderer.sprite != null)
-            {
-                _renderer.enabled = true;
-            }
+        public void SetLegacyRendererSuppressed(bool suppressed)
+        {
+            _legacyRendererSuppressed = suppressed;
+            ApplyEntityRendererVisibility();
+            ApplyShadowRendererVisibility();
+        }
+
+        public void SetLegacyEntityVisible(bool visible)
+        {
+            _legacyEntityVisible = visible;
+            ApplyEntityRendererVisibility();
         }
 
         /// <summary>
@@ -262,8 +306,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ShowShadow()
         {
-            if (_shadowRenderer != null)
-                _shadowRenderer.enabled = true;
+            _shadowVisible = true;
+            ApplyShadowRendererVisibility();
         }
 
         /// <summary>
@@ -271,8 +315,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void HideShadow()
         {
-            if (_shadowRenderer != null)
-                _shadowRenderer.enabled = false;
+            _shadowVisible = false;
+            ApplyShadowRendererVisibility();
         }
 
         /// <summary>
@@ -291,7 +335,63 @@ namespace NTSD.Animation.LF2Objects
         public void Destroy()
         {
             ClearCurrentSprite();
+            Hide();
             HideShadow();
+        }
+
+        public void Reset()
+        {
+            _sprites = null;
+            _catalog = null;
+            _visualDataId = int.MinValue;
+            _startFrame = 0;
+            _currentPic = 999;
+            _currentEntry = null;
+            _dir = "right";
+            _entityVisible = false;
+            _shadowVisible = false;
+            _presentationSuppressed = false;
+            _legacyRendererSuppressed = false;
+            _legacyEntityVisible = true;
+            _localOffsetPixels = Vector2.zero;
+            _sortingGroup = null;
+
+            if (_renderer != null)
+            {
+                _renderer.sprite = null;
+                _renderer.flipX = false;
+                Vector3 localPosition = _renderer.transform.localPosition;
+                _renderer.transform.localPosition = new Vector3(0f, 0f, localPosition.z);
+                _renderer.enabled = false;
+            }
+            if (_shadowRenderer != null)
+                _shadowRenderer.enabled = false;
+
+            _renderer = null;
+            _shadowRenderer = null;
+            _hasShadow = false;
+        }
+
+        private void ApplyEntityRendererVisibility()
+        {
+            if (_renderer == null)
+                return;
+
+            _renderer.enabled = _entityVisible &&
+                                _legacyEntityVisible &&
+                                !_presentationSuppressed &&
+                                !_legacyRendererSuppressed &&
+                                _renderer.sprite != null;
+        }
+
+        private void ApplyShadowRendererVisibility()
+        {
+            if (_shadowRenderer == null)
+                return;
+
+            _shadowRenderer.enabled = _shadowVisible &&
+                                      !_presentationSuppressed &&
+                                      !_legacyRendererSuppressed;
         }
 
         /// <summary>

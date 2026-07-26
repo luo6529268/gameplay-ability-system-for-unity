@@ -25,6 +25,11 @@ namespace NTSD.Test
     /// </summary>
     public class BattleTestBootstrap : MonoBehaviour
     {
+#if UNITY_EDITOR
+        public static bool SuppressEntityCreationForProductionStress { get; set; }
+        public static bool ProductionStressServicesReady { get; private set; }
+#endif
+
         [Header("仅在没有 AppManager 时生效（直接打开战斗场景）")]
         [Tooltip("游戏全局配置（直接拖入 GameConfig.asset）")]
         [SerializeField] private App.GameConfig gameConfig;
@@ -52,8 +57,16 @@ namespace NTSD.Test
 
         private async void Start()
         {
+#if UNITY_EDITOR
+            if (SuppressEntityCreationForProductionStress)
+                ProductionStressServicesReady = false;
+#endif
             if (App.AppManager.Instance != null)
             {
+#if UNITY_EDITOR
+                if (SuppressEntityCreationForProductionStress)
+                    ProductionStressServicesReady = true;
+#endif
                 Debug.Log("[BattleTestBootstrap] AppManager exists, skipping test bootstrap.");
                 return;
             }
@@ -114,6 +127,16 @@ namespace NTSD.Test
 
             // 5. 设置当前场景为活动场景
             SceneManager.SetActiveScene(gameObject.scene);
+
+#if UNITY_EDITOR
+            if (SuppressEntityCreationForProductionStress)
+            {
+                ProductionStressServicesReady = true;
+                Debug.Log(
+                    "[BattleTestBootstrap] Production stress services are ready; test entities and auto-resume are suppressed.");
+                return;
+            }
+#endif
 
             // 6. 配置并启动关卡
             var levelMgr = BoundaryWallManager.Instance;
@@ -245,8 +268,7 @@ namespace NTSD.Test
                     Debug.LogWarning($"[BattleTestBootstrap] No spawn point for player index {i} in scene '{battleScene.name}'; using Vector3.zero.");
                 }
 
-                float ppu = SimulationConstants.PIXELS_PER_UNIT;
-                lf2.PS.x = spawnPos.x * ppu;
+                lf2.PS.x = NTSDRenderSpace.WorldToGroundPixel(spawnPos).x;
                 lf2.PS.z = PhysicsState.UnityYToDepth(spawnPos.y);
                 lf2.PS.y = 0;
 

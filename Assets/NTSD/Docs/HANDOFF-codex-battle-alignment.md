@@ -1,10 +1,114 @@
 # 接手文档 — NTSD C# → Unity 战斗逻辑对齐（Codex 无缝接手版）
 
+## 2026-07-26：1000 实体优化接手状态
+
+**当前结论：三项等价优化已实现并通过代码侧回归，但 1000 实体仍未达到 30 Hz。** 接手者不得把 `104/104`、self-check PASS 或单轮耗时下降扩大为性能验收完成。本节取代下方 2026-07-24 压力阶段中“尚无 per-pass timing”和“AI 仍全槽扫描”的历史接手描述。
+
+1. **最终可见 tick：**`LocalFreeRun + CentralOnly` 的 catch-up 只在最后一个可见 tick 构建中央表现命令；中间 tick 的 battle pass 全部执行。`LegacyOnly`/`Shadow` 不抑制。
+2. **Late snapshot：**removed=`StateSpecial/FrameExit/PrevFrameMirror/Recovery/FrameTickSuppressed/CleanupCompleted`；retained=`FrameTick/DeathOpoint/TailAndQueuedFlush`。最新 334-tick 报告中 removed `callCount=0`，retained 各 `334000`，平均 `0.850/0.668/0.771 ms`。
+3. **AI：**exact empty-air、ground team partition、phase1 Team5 list、融合索引与 first-10 top/second 已接线。新增 occupancy-epoch resolver elision：`RuntimeSlotTable` 成功 claim/allocate/release/reset/grow 后推进非零 epoch；snapshot 前后 epoch 一致才发布，filter 以 epoch、generation、slot entity 证明，失败 `Abort -> existing brute`。实时 HP/team/state/Y/Vx、tie、same-Z、air、RNG 与 slot consumption 不变。
+
+### 最新性能证据
+
+| 报告 | tick (ms) | `CharacterInput` (ms) | `FindGround` (ms) | `Remaining` (ms) | `Late` (ms) |
+|---|---:|---:|---:|---:|---:|
+| `Temp/NTSD_ProductionEntityStress.dispersed-full-ai-air-fastpath-detail-20260726.json` | `110.846 ms` | `37.318` | `15.698` | `24.944` | `23.444` |
+| `Temp/NTSD_ProductionEntityStress.dispersed-full-ai-team-partition-detail-20260726.json` | `85.898 ms` | `29.171` | `9.237` | `16.779` | `14.373` |
+| `Temp/NTSD_ProductionEntityStress.dispersed-full-ai-index-fusion-detail-20260726.json` | `62.061 ms` | `21.344` | `6.847` | `12.370` | `11.841` |
+| `Temp/NTSD_ProductionEntityStress.dispersed-full-ai-late-recovery-elided-detail-20260726.json`（334 ticks） | `82.712 ms` | `28.148` | — | — | `14.164` |
+
+- **occupancy 最新报告：**`Temp/NTSD_ProductionEntityStress.dispersed-full-ai-occupancy-epoch-detail-20260726.json`：402 sampled ticks，tick `53.483 ms`；`CharacterInput/Ground/Air/Nearest/Remaining/Late=17.919/5.712/2.036/7.748/10.086/10.130 ms`；`bruteFallback=0`、visits/AI=`25.16`。
+- **禁止跨轮硬比较：**同机仍有其他 Unity Editor 与系统负载漂移；no-AI `72.343 ms/tick` 甚至慢于 full-AI `62.061 ms/tick`。occupancy 独立收益尚未稳定隔离，最新结果仍高于 `33.33 ms/tick`。
+- **fresh gate：**Unity compile `0 error`；EditMode `49f6e6800c8a45db988de0b7b9f412ef` 为 **112 completed / 0 failed**（global total=`216`，不要写 112/112）；self-check `2026-07-26 04:37:33 PASS`；Architect `PASS`、`P0-P2=0`，`P3` 仅为证据措辞。
+- **下一步：**nearest 暂停继续大改，转向 `RemainingAiDecision` 与全实体基础 pass；继续观察 `FrameTick/Opoint`、`CandidateCollect`。删除 retained Late refresh 前仍先做 debug-only snapshot delta oracle。
+- **清理：**本批所有报告 `restored=true`，active GameObject/world entities/claimed slots 均为 `0`；inactive pool capacity 增长只表示缓存保留。
+- **继续排除：**T8 默认 `stage.dat` 和 Android 真机验证不属于当前任务。
+
+## 2026-07-24 P8 v5 当前交接结论（覆盖下方 v3/v4 历史快照）
+
+- P8-A/B1/B2 已完成，P8-C 保持既有生产 factory/pool、像素与稳定性验收范围。P8-D v5 的 Editor/Windows Development Player `100/300/500/1000` 共 8 份 real-runtime A/B 报告全部 PASS。
+- 报告路径为 `Temp/P8-D-runtime-{100,300,500,1000}-{editor,player}-ab-v5.json`。每个 backend 有 120/120 样本，适用必需指标完整，generation-owned texture memory 为正，600-frame leak 与 post-dispose teardown 通过，owned bytes/resources 归零；Central/Legacy 的 workload fingerprint、input fingerprint、final runtime checksum 相等。
+- v4 的全局 `Texture Memory` counter 返回 0，属于 `Incomplete` 历史证据；v5 不再依赖它。Player 也不再使用 `-batchmode`/`-nographics`，从而保留真实 graphics device、GPU timing 和 draw-call 证据。0 draw calls 对非空 workload 无效，正式样本最多重试 16 次，耗尽为 `Incomplete`。
+- 当前 16-retry/cleanup 源码重新生成的 Editor `100/300/500/1000` 报告完成于 `2026-07-24 03:00:12`、`03:06:39`、`03:12:02`、`14:10:19`：logic tick 平均/最大依次为 `13.227/45.537`、`42.752/198.637`、`78.149/221.383`、`36.488/201.219 ms`。其中 Editor 300/500/1000 平均均超过 30 Hz 的 `33.33 ms` 预算；Player 1000 为 `9.123012 / 42.3011 ms`。数据非单调且受 Editor/当前机器影响；PASS 只说明门禁和可比 workload 通过，**不代表性能预算达标，也不代表 Central 必然快于 Legacy**。
+- fresh 验证：UnityMCP EditMode job `9869909f3c27446d8ca33cbaf0f436ab` 为 `44/44 passed`、`0 failed`、`0 skipped`，取代此前 `34/34` 的旧证据，并包含 request processor lifecycle 的 3 个 focused tests；完整 `BattleRuntimeSelfCheck` `PASS`，Runtime/Editor dotnet build 0 errors。矩阵连续启动 300 Player 时曾一次 native exit `-805306369`；同 build 的独立 300 单样本与完整重跑均退出码 0，最终四档 Player 报告均有效。
+- fresh Architect 最终只读复核：`PASS`，`P0=0`、`P1=0`、`P2=0`、`P3=0`。复核范围包括 benchmark 生命周期、v5 policy、8 份报告、teardown、A/B identity、fresh `44/44`、self-check/build/Console 与当前文档边界；它不推翻 Editor 性能预算未达标的结论。
+- 本轮修复 P1：Play Mode 退出可能遗留 hidden benchmark runner，让请求已被消费但永久显示 `RUNNING`。processor 已接入 `ExitingPlayMode` fail-close、非 Play 状态 runner reconcile 与 EditMode request 保留；新增 3 个 focused tests 通过。
+- P8-E Android/Adreno/Mali 真机继续由用户负责；T8 默认 `stage.dat` 部署取消/排除。后续接手者不得用下方 v3/v4 或 presentation-only 结论覆盖本节。
+
+### 2026-07-24 ProductionEntityStressHarness 全交互压力交接
+
+- 新增 `ProductionEntityStressHarness`：真实 `GameObject`、正式 `SimulationWorld`、全 AI/正式输入、碰撞命中、opoint 与完整 lifecycle，配置为 `MobileExtended(1050)` 和 `LooseQuadtree`；它不等同于 P8-D v5 的受控/冻结 A/B workload。
+- smoke 证据 `Temp/NTSD_ProductionEntityStress.smoke-fresh-v3-20260724.json`：50 个初始实体、46 个衍生实体、peak `96`，`SmokePassed`。teardown 后 active GameObject/world objects/world entities/claimed slots/objectPool active/referencePool active 均为 `0`；objectPool available 从 `10` 增长到 `96` 并作为 inactive 缓存保留，不是资源恢复到运行前基线。
+- **cleanup remediation 回归：**teardown 现按阶段 best-effort 执行，使用 stress root 独立扫描 `activeGameObjectsAfter`；清理异常进入结构化记录并令 `restored=false`，retained inactive pool capacity 仅作信息，不参与 `restored` 判定。`Temp/NTSD_ProductionEntityStress.smoke-cleanup-remediation-20260724.json` 为 `SmokePassed`：50 initial、peak world entities `301`，`restored/activeState/driver/logging=true`，`cleanupExceptionCount=0`，active GameObject/world objects/world entities/claimed slots/objectPool active/referencePool active after 均为 `0`，retained inactive capacity 为 `10 -> 301`。这是追加的 remediation 回归，不替代上一条旧 smoke 的 50 initial + 46 衍生历史数据。
+- **cleanup remediation fresh 验证：**Unity fresh compile `0 error`；focused EditMode job `1327ac9736cf4b03ad9a73d75dabd298` 为 `15/15`；`BattleRuntimeSelfCheck` 于 `22:02:29` 为 `PASS`。
+- dispersed 1000 证据 `Temp/NTSD_ProductionEntityStress.dispersed1000-cleanlog-20260724.json`：1000 个真实 GameObject/world entities/slots、41 samples；平均/P95/最大 `3077.612/5943.039/6245.802 ms`，pair sum/peak `5706633/184181`，candidate peak `735`；`StoppedCleanly`。teardown 后上述活动对象/逻辑注册与 active pool 计数均为 `0`；objectPool available 为 `10 -> 1001` 的 inactive 缓存，不是资源恢复到运行前基线。
+- concentrated 1000 证据 `Temp/NTSD_ProductionEntityStress.concentrated1000-short-20260724.json`：1000 个真实 GameObject/world entities/slots、25 samples；平均/P95/最大 `5148.808/8889.234/9848.765 ms`，pair sum/peak `11427523/499500`，candidate peak `198`；`StoppedCleanly`。teardown 后上述活动对象/逻辑注册与 active pool 计数均为 `0`；objectPool available 同样为 `10 -> 1001` 的 inactive 缓存，不是资源恢复到运行前基线。
+- **接手结论：**Editor 1000 全 AI、全交互实体约 `0.1-0.3 FPS`，远未达到 30 Hz。不能以 P8-D v5、中央渲染正确性、资源或 teardown PASS 声称 1000 实体完整战斗性能达标。代码审查已确认：`BruteForceSceneQuery` 的 formal fallback participant 会与全部 participant 配对、排序去重后双向 `CollectCandidatesForPair`；分散场景 peak fallback=`154`，仅 fallback 理论约 `142,065` unique pairs，约为实测 peak `184,181` 的 `77%`；集中场景 peak=`499,500`（`1000 choose 2`），但 candidate peak 仅 `198`。次要热点是所有 1000 实体启用 AI 时，`SimulationWorld.AiInput.partial.cs` 每个 AI 仍扫描 slots `20..1049`，约 `103` 万 slot visits/tick，部分 phase 另有同队扫描。当前报告没有 per-pass timing，不能精确分摊毫秒。清理方面可结论为本次运行的活动对象与逻辑注册清理正确，inactive pool capacity 仍只是保留缓存信息。T8 `stage.dat` 仍取消/排除；Android 真机仍由用户负责，状态不变。
+
+## 2026-07-23 P8 当前交接证据（优先于下方 P8-C/P8-D 历史快照）
+
+- **P8-B 已具备可核验诊断契约：**`FrameId`、显式 `AtlasPageIndex`、strict binding validation、first unresolved/unsupported status 和 generation/tick-coherent aggregate diagnostics 均已进入当前实现与 focused/full checks。Runtime/Editor 相关构建为 0 errors。
+- **P8-C 生产验收已更新：**`Temp/P8-C-Resume-Live/P8-C-report.json` 于 `2026-07-23 17:28:29` **PASS**。正式链是 `LF2ObjectPointFactory.CreateObjectImmediate` / `FreeEntityLikeExe`：`availableBefore=7`、`totalCheckout=9`、`expandedAndPublished=2`、`availableAfter=9`、`uniqueRuntimeHandles=2`，cleanup PASS。生产 `Entity(33,0)` type `0`、`AtlasPageTexture2D` 在 Legacy/Central 都有 `4971` alpha pixels；`Entity(100,0)` type `4`、`AtlasPageTexture2D` 都有 `2090` alpha pixels；两者 maximum pixel diff 均为 `0`。该 factory/pool/publication 证据不覆盖 skill-input opoint。
+- **P8-D final v3 取代 synthetic-only 描述：**`Temp/P8-D-runtime-{100,300,500,1000}-editor-ab-v3.json` 及 matching `-player-ab-v3.json` 全部 **PASS**。每一项使用真实 `MobileExtended(1050)` primary + mirror `SimulationWorld`、准确数量的真实 `LF2Entity`、`FrameInputSet.Empty` 和完整 `NTSDBattleTickSystem`；执行 30 warmup + 120 sample logic ticks、deterministic checksum、真实 handles/generation/positions 的 frozen presentation、相同 A/B workload 与 600-frame leak gate。不能由此写成 central 快于 legacy。
+
+| v3 report | logic tick avg/max ms | tick allocation avg/max B |
+|---|---:|---:|
+| `100-editor` | `8.3087375 / 12.0803` | `0 / 0` |
+| `300-editor` | `24.3566941666667 / 33.9412` | `0 / 0` |
+| `500-editor` | `42.7971166666667 / 57.0061` | `0 / 0` |
+| `1000-editor` | `100.006675 / 126.7602` | `0 / 0` |
+| `100-player` | `0.537154166666667 / 1.285` | `0 / 0` |
+| `300-player` | `2.59706583333333 / 29.4842` | `0 / 0` |
+| `500-player` | `1.56702166666667 / 2.752` | `0 / 0` |
+| `1000-player` | `2.980925 / 6.0687` | `0 / 0` |
+
+- **性能解释：**Editor 1000 的约 `100 ms/tick` 不满足 30 Hz；Windows Standalone final v3 1000 约 `2.98 ms/tick`。A/B PASS 证明同一工作负载和 gate 的正确执行，不是一般性的 performance-winner 结论。
+- **最终顺序回归：**held geometry 失败已定性为 parentless/root renderer 的 `_visualTransform == rootTransform`，不是 benchmark 全局状态泄漏；正确世界位置曾被随后对同一 Transform 的 local-zero 重置。当前实现只对独立 child visual 归零，并有 focused fixture 验证 runtime X/Y/Z、`FirstPresentationTick`、`CentralShadowBuild`、legacy suppression 与 immutable central command 对照。fresh DLL `18:05:55` 晚于源码 `17:59:02`；1000 实体 A/B `18:10:49` PASS，退出 Play 后 full self-check `18:13:03` PASS；最终 Runtime/Editor dotnet 构建分别为 `0 errors / 42 warnings`、`0 errors / 48 warnings`。当前仍不预写 Architect PASS。P8-E Android/Adreno/Mali 与 T8 默认 `stage.dat` 继续排除。
+
+## 2026-07-23 P8 中央渲染交接状态（当前）
+
+- P8-C 正确性/像素矩阵已闭合到其定义范围：`Temp/P8-C-EditModeTest/P8-C-report.json` PASS；`Temp/P8-C-LivePool/P8-C-report.json` PASS（真实 Play pool `4 available -> acquire 5`，5 个唯一 mount owner）。旧 job `f278668e3a2445139c6a1a5ceb8815be` 的 11/11 仅为历史；P2 回归后的 fresh job `e455b7f70043438a938faa23e82e53f3` 为 12/12（P8-C 2 + P8-D 10，0 failed/skipped）；fresh full self-check `Temp/NTSD_BattleRuntimeSelfCheck.result` 为 2026-07-23 12:07:26 PASS（P2 `BattleRenderingBenchmark.cs` 11:56:24 < Unity DLL 11:59:33 < result 12:07:26）。过滤到的 2 条 Console error 是 self-check 刻意构造的 registration rollback / mismatched rest binding release 拒绝路径（`BattleRuntimeSelfCheck:7046` / `:1133`），无编译错误栈或 benchmark 异常。
+- P8-D 四档受控表现 A/B 报告均通过：`Temp/P8-D-presentation-100-ab-rerun.json`、`300`、`500`、`1000`。它们严格验证 presentation count/commands、256x256、资源、owned memory 与 retained heap 阈值，但只是 deterministic synthetic presentation workload，不表示真实 SimulationWorld active capacity、logic tick 性能、生产 atlas 性能或全面性能收益。P2 已关闭 EditMode 将 mesh segment 冒充 `Graphics.DrawMesh` submission：`presenterSubmissionDrawCalls` 显式 unavailable，Play 仅在实际调用提交后计数；其他无法取得的 main/render/GPU/draw 指标也保持 unavailable。本轮没有 Standalone Player 实测。
+- 额外 current-scene production 覆盖：`Temp/P8-D-current-scene-ab-v2.json` PASS。退出 Play 前真实 `NTSD_Battle` 是 `ObjectCount=12/tick=3847`，冻结 published frame 是 `6 entities/12 commands`；Central/Legacy 均实际 `6/12`、同 fingerprint `f3aaf429518f46ec`、同 256x256。retained managed heap 为 Central `+28672 B`、Legacy `+49152 B`，graphics/owned bytes `+0`、resource count 不变。presentation build/GPU 仅为一次 Windows Editor 样本，main/render/draw unavailable；该项只是额外生产覆盖，不是 P8 独立 gate 或整体性能结论，运行后已退出 Play。
+- P8-E Android/Adreno/Mali 真机验证仍由用户负责，T8 默认 `stage.dat` 部署继续排除。下方关于 P8-C/D 待实施、Play/pixel/Profiler 待验收的相反表述均为历史记录，不能覆盖本节。
+
+## 2026-07-22 对象池预热上限后 opoint 武器不可见（当前接手结论）
+
+- **复现：**隔离 `PoolInitialSize=10`，经生产 `opoint`/factory 保留 12 个 `LightWeapon`。第 11/12 个实体逻辑、声音、unique root/renderer、mount/runtime handle、sprite、12 条 Entity command 均存在，中央像素却缺失。
+- **定性与修复：**这不是 C# 战斗逻辑差异，也不是 pool 扩容、runtime handle 或资源问题，而是 Unity `BattleDynamicMeshBackend` 的动态 submesh descriptor 生命周期适配缺陷；权威 C# 不定义此 Unity 渲染实现。旧布局/增长时默认 descriptor 临时重叠，Unity 2022.3 收缩 `subMeshCount` 会截断 index buffer。每 chunk 现维护 `activeSubMeshCount`，physical `subMeshCount` 为只增不减的 high-water；增长后先置全部 descriptor inert 再写 active，非增长先清旧 active 再写 active，empty 不收缩；禁止 bulk `SetSubMeshes`，此前会触发 native crash。
+- **回归覆盖：**隔离预热 10、生产 `opoint`/factory 12 个 `LightWeapon`，检查 unique root/renderer、mount/handle、sprite、12 条 Entity command；并覆盖 `1 -> 32 -> 1 -> 33 -> 1`、inactive inert tail、`GraphicsBuffer.count=24576`、`4096/4097`、recovery、0 GC、scoped warning 捕获。
+- **fresh 证据：**source `20:24:58` / `20:26:45` < DLL `20:28:54` < result `20:29:44` **PASS**；Unity `0 compile errors`。本轮 `Editor.log` offset `31277122` 后 descriptor overlap、bulk `SetSubMeshes`、native crash 均为 `0`；Editor PID 响应正常。
+- **诚实状态：**代码、编译、self-check、生产 `opoint` 链已验证；用户真实 Play Mode 视觉复测仍待确认。T8 明确排除，默认 `stage.dat` 部署继续暂缓。
+
+## 2026-07-22 Rendererless 武器显示回归修复（当前接手结论）
+
+- **问题与根因（旧复现限定）：**4 个随机掉落武器存在后，角色 `opoint` 武器会使掉落武器与新武器不显示；后续 `opoint` 仍不显示，但落地声音继续。rendererless `LF2Sprite.Hide` 把 `EntityVisible=false`，成功 `ShowPic(valid)` 未恢复它，导致 `CurrentEntry`、`pic`、逻辑和声音正常而中央 Entity command 被持续过滤。此 `EntityVisible` 根因只解释该旧复现，不解释 `PoolInitialSize=10` 后第 11/12 个实体已有 command 但缺像素；该问题以本文件上方的 Unity 动态 submesh descriptor 适配缺陷为准。
+- **已修复的边界：**仅成功解析 catalog 或 legacy sprite 时恢复 `EntityVisible`。`pic=999` 与 missing sprite 不恢复显示，保留失败/隐藏语义。
+- **fresh 证据：**Unity `Assembly-CSharp.dll` `2026-07-22 18:56:11` fresh compile，Console `0 error`；完整 `BattleRuntimeSelfCheck` `18:58:50` **PASS**；`dotnet build Assembly-CSharp.csproj` 为 `0 errors / 42 warnings`。Play Mode：4 个预存随机武器后，经 `LF2ObjectPointFactory` `opoint oid121` 的 `Hide -> ShowPic`，随机 slot `50` 和 opoint slot `54` 都有 Entity command；销毁复用同一 renderer instance 后再执行 `opoint`，slot `54` command 仍存在；central `IsStale=false`、`unresolved=0`。
+- **验收边界：**本项仅证明该 rendererless 武器显示回归已完成编译、self-check 和定向 Play Mode 验证；不扩大为完整战斗系统或全设备/资源组合验收。T8 默认 `stage.dat` 部署继续暂缓。
+
+## 2026-07-22 Rendererless Central Mount 收口（当前接手结论）
+
+- **生产 prefab 已接线：**`EntityObject` 与 `Shadow` prefab 的对应节点均已挂载 `BattleCentralPresentationMount`；持久 `Entity`/`Shadow` `SpriteRenderer` 已从生产 prefab 移除。common shadow 使用 `BattleCommonShadowDescriptor`；`LF2Sprite` 维护 renderer-independent 的 `visible`、`pic` 与 offset。默认模式为 `CentralOnly`。
+- **生命周期、销毁和失败语义：**mount 标记 `[ExecuteAlways]`，以 `gameObject.scene.IsValid()` 为 gate；prefab asset 本身不注册。Prefab Stage preview 可参加编辑态 lifecycle，但没有 runtime handle，因而不属于生产 battle/pool 验证。mount/renderer 在 `OnDestroy` 主动移除 owner binding，防止 pool expire 销毁后静态字典仍保留 destroyed wrapper。冷启动失败 fail closed；已有成功帧后出现失败时保留 last-good frame 并记录 stale。该表现路径不回写战斗 runtime。
+- **fresh 自动、编译与 Console 证据：**mount source `15:41:46` < Unity `Assembly-CSharp.dll` `15:43:40` < 完整 `BattleRuntimeSelfCheck` result **PASS** `15:44:50`；full self-check 已加入真实 `DestroyImmediate(root)` focused 断言，覆盖销毁 owner binding 清理。主代理最后一次 `dotnet build` 为 **0 errors / 18 existing warnings**，此前 42 warnings 属于不同生成视图。最新清空 Console Play/Stop 为 **0 error / 0 warning**。第一轮截图工具自身的 RenderTarget errors 不作为项目错误或项目验证证据，第一轮截图不能用于写 Console 为零。
+- **最新 Play Mode 状态：**`NTSD_Battle` 最新观测为 `objects=6`，requested/effective=`CentralOnly`，`frame`、`ownership`、`submission`、`submitted` 均为 true，`draws=6`，`sim/display tick=339`，`stale=false`；3 个生产 `LF2ObjectRenderer`、6 个 mount/handle 均有效，且 `persistent SpriteRenderer=0`。
+- **前一轮视觉证据：**此前 `objects=12`、6 个生产 renderer、12 个 mount/handle、`draws=12` 的观测继续保留为前一轮视觉证据；`Temp/central-rendererless-game-20260722.png` 可见角色、武器与阴影。该截图不代表最新运行的对象数量。
+- **当前 Prefab Stage 例外：**一个 `EntityObject` prefab-stage preview instance 仍带旧 `SpriteRenderer`，但 `logic=null`；它可参加编辑态 lifecycle，却没有 runtime handle，是当前打开 Prefab Stage 的内存态，不属于生产 battle/pool 对象，未计入生产验证。本轮没有修改或关闭用户的 Prefab Stage。当前 Scene View 位于该 Prefab Stage，故本轮没有 fresh Scene View 截图；此前 Scene View 证据仅保留为历史证据。
+- **继续排除：**T8 默认 `stage.dat` 部署和 Android/真机验证仍不在本轮范围内。
+
+## 2026-07-22 Central Presentation Mount v1（历史快照，已由上方 rendererless 收口取代）
+
+- **已实施，范围严格受限：**新增 `BattleCentralPresentationMount` 和 `BattleCentralPresentationMountRegistry`，并在 `LF2ObjectRenderer` 中声明/注册。v1 只建立 generation-aware `RuntimeEntityHandle` 绑定；没有更改渲染、资源加载、`Update`、render command 或战斗 runtime。
+- **World 生命周期：**`SimulationWorld` 已在 register、release 与 reset 路径接线，确保 handle generation 变化或 runtime slot 复用后，旧 mount 不会继续代表新实体。disable -> enable restore 与 rollback clear 均已关闭并纳入 `BattleRuntimeSelfCheck` 覆盖；本批新增并通过了 world `ResetRuntimeState` 与 registration rollback focused checks。自检同时覆盖 `LF2ObjectRenderer` 集成、注册、release、reset 和 generation-aware binding。
+- **场景与迁移边界（历史）：**当时尚未编辑 prefab，`Legacy` 保留；当时的下一项是向 `EntityObject` 的 `EntityModel` 和 `Shadow` nodes 挂 mount component 并设置 `ownerRenderer`。此段不代表当前 rendererless `CentralOnly` 状态。
+- **最终验证：**relevant source `2026-07-22 11:48:18` < Unity `Assembly-CSharp.dll` `11:49:08` < `Temp/NTSD_BattleRuntimeSelfCheck.result` **PASS** `11:50:11`。最终完整命令 `dotnet build Assembly-CSharp.csproj --no-restore /m:1` 完成，结果为 **0 errors / 42 existing warnings**；Architect closure 为 **PASS / no P0-P2**。Console 清空后仍有两类预期 self-check-active Error：既有 mismatched release 和新的 registration rollback。因此本批不是“Console 0 errors”验证，任何旧的 0-error Console 叙述不得用于证明此批。
+
 ## 2026-07-22 Editor Scene View Preview Validation
 
 - **Scope and guardrails:** `CentralOnly` submits the same immutable mesh from the base Scene View camera only under `#if UNITY_EDITOR` and `Application.isPlaying`. Only the exact world camera may update renderer readiness. Scene View preview does not alter combat state, Player builds, or the Game camera.
 - **Freshness and automated evidence:** Unity `Assembly-CSharp.dll` timestamp `23:47:47` is newer than the relevant source timestamp `23:30`; the direct `BattleRuntimeSelfCheck` result is **PASS**.
-- **Observed Play/Scene View evidence:** Play state reported `objects=12` and the central mesh reported `quads=12`. `Temp/screenshot-20260722-000938.png` shows all current entities in the Scene View. The Unity Console reported **0 errors / 0 warnings**.
+- **Observed Play/Scene View evidence:** Play state reported `objects=12` and the central mesh reported `quads=12`. `Temp/screenshot-20260722-000938.png` shows all current entities in the Scene View. The screenshot round's tool-originated RenderTarget errors are not project evidence; this screenshot does not establish a Console-zero result.
 - **Validation boundary:** This verifies the current observed Scene View preview state only. It does not establish coverage for all resource scenes. T8 default `stage.dat` deployment and Android/device validation are not part of this task.
 
 ## 2026-07-21 Fresh Final Validation（接手时的当前渲染状态）
@@ -613,3 +717,11 @@ P0 的旧 CP-NV 检查曾含覆盖不足或反权威期待，历史 PASS 已废�
 Audit3 历史验证（2026-07-16）：fresh `/m:1` build 为 **0 errors / 42 existing warnings**；`BattleRuntimeSelfCheck.cs` source `18:24:04` < Unity DLL `18:31:52` < `Temp/NTSD_BattleRuntimeSelfCheck.result` `18:33:00`，full self-check 返回 **PASS**。M-1/T4 的 gate、oid8 镜像、identity/presentation、human+AI DJA full-tick、split formal reset 与 `ItrRest` 保留矩阵，以及 Audit3-10/12 的扩展矩阵均包含在该结果中。M-1 runtime self-check 已完成，但仍不能扩大为全部战斗逻辑完全对齐。T8 默认 `stage.dat` 部署继续由用户明确暂缓。
 
 当前版本 `NTSD_Battle` Play Mode 已通过 Input System 的 `L -> L+S -> L+S+K` 完整生产输入链并观测 `frame271=True`、`max204/max205=11/3`、`uniqueClones/action307/maxVisible=6/6/6`。螺旋丸、奔跑防跳和投掷武器三项 Play 也已分别于 `01:10:34`、`09:34:36`、`09:45:21` 通过。上述证据完成本批定向场景验收；历史 RISK-4 已由 Audit5 `R-HC-05` 关闭，但这些定向证据仍不能替代任意对局、全输入 production certificate。T8 默认 `stage.dat` 部署仍暂缓。
+## 2026-07-22 交接补充：C++ 跳跃动量与 Texture2DArray 边界
+
+- 用户明确要求本项以 `J:\QQFile\NTSD2.4\ntsd_release` 的 C++ 表现纠正 C# 共有缺陷。C++ `src/entity/frame_advance.cpp` 的 frame 212 只在存在互斥方向输入时用 DAT `jump_distance/jump_distancez` 覆盖 `vx/vz`，否则保留起跳前水平速度；空中不走地面摩擦。
+- 根因位于 Unity `SimulationWorld.SerialTickAll`：它与 C# `GameTick.cs` 一样，在 frame advance 前清 current keys，使同 tick 后段 211 -> 212 初始化看不到按住方向。已移除这两次清键；战斗入口 `NeedClearInput` 全量 reset 不变，human/AI 下一 tick 的输入滚动仍由各自输入阶段负责。
+- `BattleRuntimeSelfCheck` 已把 GT-02 改为 current/previous keys through-frame-advance 保留契约，并新增真实 211 -> 212 定向/无方向 Vx/Vz 回归及 cooldown/history 不变断言。
+- 新鲜证据：`git diff --check` 无错误；dotnet build 为 **0 errors / 42 existing warnings**；源码 `23:15:11` < Unity DLL `23:15:37` < result `23:16:33`，fresh full `BattleRuntimeSelfCheck` 返回 **PASS**。因此代码与自动运行时契约已关闭；真实键盘 Play Mode 移动起跳仍未执行。
+- 同轮解除 P4 阻塞：pool overflow 的首个动态扩容武器 mount 实际为 `Invalid`，而 world handle 为 `62:1`。`BindOwnerRuntime` 已直接同步 renderer 本体的 EntityModel mount，同时保留 generation-aware handle；P4 回归通过后全套才继续执行到跳跃矩阵并最终 PASS。
+- 渲染澄清：角色中央资源已经有 `Texture2DArray` 主路径；公共阴影仍为独立 `SourceTexture2D`，因此角色/阴影会拆 resource segment。不要再把当前系统描述成“未使用 Texture2DArray”。

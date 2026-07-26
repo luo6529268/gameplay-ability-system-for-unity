@@ -38,14 +38,13 @@ namespace NTSD.Simulation
             ComparePresentationRenderOrder;
         private readonly List<LF2Entity> _presentationRenderScratch = new List<LF2Entity>(128);
         private readonly List<ISimObject> _rendererSnapshotScratch = new List<ISimObject>(128);
-        private static readonly System.Comparison<ISimObject> RendererStableIdComparison =
-            CompareRendererStableId;
         private readonly BattlePresentationCoordinator _battlePresentation =
             new BattlePresentationCoordinator();
         private BattlePixelFramePlan _currentPixelFramePlan;
 
         public BattlePresentationCoordinator BattlePresentation => _battlePresentation;
         public BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
+        public int LateRendererUpdateInvocationCountForDiagnostics { get; private set; }
 
         internal void PublishPixelFramePlan(BattlePixelFramePlan plan)
         {
@@ -169,17 +168,49 @@ namespace NTSD.Simulation
 
         public void RenderDispatchAll(int tickIndex)
         {
-            BuildPresentationRenderOrder();
-            _battlePresentation.BeginFrame(this, tickIndex);
-            BattlePixelFramePlan plan = BattleCentralRenderSystem.PrepareFrame(this);
-            if (RequiresLegacySpriteRendererCapacityGuard(plan))
-                ValidateLegacySpriteRendererPresentationCapacity(_presentationRenderOrders.Count);
+            RenderDispatchAll(tickIndex, buildPresentation: true);
+        }
+
+        public void RenderDispatchAll(int tickIndex, bool buildPresentation)
+        {
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            bool publishPresentation =
+                buildPresentation ||
+                _battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly;
+            if (publishPresentation)
+            {
+                detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderPresentationOrder);
+                BuildPresentationRenderOrder();
+                detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderPresentationOrder);
+
+                detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderBeginFrame);
+                _battlePresentation.BeginFrame(this, tickIndex);
+                detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderBeginFrame);
+
+                BattleCentralRenderSystem.QueueLatestPublishedFrame(this);
+                if (!Application.isPlaying || Application.isBatchMode)
+                    BattleCentralRenderSystem.FlushLatestPublishedFrame(this);
+
+                if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(this))
+                {
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                    ValidateLegacySpriteRendererPresentationCapacity(
+                        _presentationRenderOrders.Count);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                }
+            }
+
+            detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderLateRendererUpdate);
             LateRendererUpdateAll(tickIndex);
+            detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderLateRendererUpdate);
         }
 
         internal static bool RequiresLegacySpriteRendererCapacityGuard(BattlePixelFramePlan plan)
         {
-            return !plan.IsValid || plan.Owner == BattlePixelFrameOwner.Legacy;
+            return !plan.SuppressesLegacyMaterializers;
         }
 
         internal void GetPresentationEntitiesNoAlloc(List<LF2Entity> destination)
@@ -510,18 +541,12 @@ namespace NTSD.Simulation
                 }
             }
 
-            _rendererSnapshotScratch.Sort(RendererStableIdComparison);
             return _rendererSnapshotScratch;
-        }
-
-        private static int CompareRendererStableId(ISimObject left, ISimObject right)
-        {
-            return (left?.StableId ?? int.MaxValue).CompareTo(
-                right?.StableId ?? int.MaxValue);
         }
 
         private void LateRendererUpdateAll(int tickIndex)
         {
+            LateRendererUpdateInvocationCountForDiagnostics++;
             var snapshot = BuildRendererSnapshot();
             for (int i = 0; i < snapshot.Count; i++)
             {

@@ -27,7 +27,7 @@ namespace NTSD.Animation
         public void RenderAll(SimulationWorld world)
         {
             ReleaseActiveRenderers();
-            if (world == null || BattleCentralRenderSystem.ShouldUseCentralPixels(world))
+            if (world == null || BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
                 return;
 
             BattlePresentationFrame frame = world.BattlePresentation.PublishedFrame;

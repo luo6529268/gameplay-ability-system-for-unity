@@ -22,7 +22,7 @@ namespace NTSD.Simulation.Presentation
                 return mode;
             if (TryParse(configuredBackend, out mode))
                 return mode;
-            return BattlePresentationBackendMode.LegacyOnly;
+            return BattlePresentationBackendMode.CentralOnly;
         }
 
         public static BattlePresentationBackendMode Resolve(
@@ -54,7 +54,7 @@ namespace NTSD.Simulation.Presentation
                 return true;
             }
 
-            mode = BattlePresentationBackendMode.LegacyOnly;
+            mode = BattlePresentationBackendMode.CentralOnly;
             return false;
         }
 

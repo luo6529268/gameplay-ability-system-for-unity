@@ -72,12 +72,16 @@ namespace NTSD.Animation
         {
             public Texture2D Texture;
             public Sprite[] Sprites;
+            public string SourcePath;
+            public Color32[] ProcessedPixels;
         }
 
         private sealed class WordsPublicationStaging
         {
             public Texture2D[] Textures;
             public Sprite[][] GlyphSprites;
+            public string[] SourcePaths;
+            public Color32[][] ProcessedPixels;
         }
 
         [ShowInInspector, ReadOnly]
@@ -950,27 +954,13 @@ namespace NTSD.Animation
             BattleAtlasDiagnosticInputs atlasDiagnosticInputs = null;
             SparkPublicationStaging stagedSpark = null;
             WordsPublicationStaging stagedWords = null;
+            BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
                 stagedCatalog = BuildBattleSpriteCatalog(stagedConfigs, stagedSprites);
-                if (!TryBuildCentralAtlasPublication(
-                        stagedCatalog,
-                        stagedAtlasSources,
-                        BattleRenderingDeviceCapabilities.FromSystem(),
-                        NTSD.App.GameConfig.Instance,
-                        null,
-                        out stagedCatalog,
-                        out HashSet<UnityEngine.Object> atlasResources,
-                        out atlasDiagnostic,
-                        out atlasPolicyDecision,
-                        out atlasDiagnosticInputs))
-                {
-                    throw new InvalidOperationException($"Battle atlas publication failed: {atlasDiagnostic}");
-                }
-                stagedResources.UnionWith(atlasResources);
-
                 stagedSpark = await BuildSparkPublicationAsync(invocation);
-                if (stagedSpark == null || stagedSpark.Texture == null || stagedSpark.Sprites == null)
+                if (stagedSpark == null || stagedSpark.Texture == null ||
+                    stagedSpark.Sprites == null || stagedSpark.ProcessedPixels == null)
                     throw new InvalidOperationException("SPARK.bmp could not be decoded into the common 20-frame publication.");
                 stagedTextures.Add(stagedSpark.Texture);
                 stagedResources.Add(stagedSpark.Texture);
@@ -981,7 +971,9 @@ namespace NTSD.Animation
                 }
 
                 stagedWords = await BuildWordsPublicationAsync(invocation);
-                if (stagedWords == null || stagedWords.Textures == null || stagedWords.GlyphSprites == null)
+                if (stagedWords == null || stagedWords.Textures == null ||
+                    stagedWords.GlyphSprites == null || stagedWords.ProcessedPixels == null ||
+                    stagedWords.SourcePaths == null)
                 {
                     throw new InvalidOperationException(
                         "WORDS0.bmp through WORDS5.bmp could not be decoded into the common glyph publication.");
@@ -1005,6 +997,61 @@ namespace NTSD.Animation
                             stagedCreatedSprites.Add(glyph);
                     }
                 }
+
+                await UniTask.SwitchToMainThread();
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                {
+                    DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
+                    return;
+                }
+
+                commonVisualCatalog = BattleCommonVisualCatalog.Build(
+                    NTSD.App.GameConfig.Instance?.ShadowPrefab,
+                    stagedSpark.Texture,
+                    stagedSpark.Sprites,
+                    stagedWords.Textures,
+                    stagedWords.GlyphSprites);
+                if (!commonVisualCatalog.IsComplete)
+                    throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
+
+                var commonSourcePaths =
+                    new Dictionary<BattleVisualResourceKey, string>(
+                        1 + BattleCommonVisualCatalog.SparkFrameCount +
+                        BattleCommonVisualCatalog.WordSheetCount *
+                        BattleCommonVisualCatalog.WordGlyphsPerSheet);
+                var forcedCommonSource2DPaths = new List<string>();
+                if (!TryAppendCommonAtlasSources(
+                        commonVisualCatalog,
+                        stagedSpark,
+                        stagedWords,
+                        stagedAtlasSources,
+                        commonSourcePaths,
+                        forcedCommonSource2DPaths,
+                        out string commonSourceDiagnostic))
+                {
+                    throw new InvalidOperationException(commonSourceDiagnostic);
+                }
+
+                if (!TryBuildUnifiedCentralAtlasPublication(
+                        stagedCatalog,
+                        commonVisualCatalog,
+                        stagedAtlasSources,
+                        commonSourcePaths,
+                        forcedCommonSource2DPaths,
+                        BattleRenderingDeviceCapabilities.FromSystem(),
+                        NTSD.App.GameConfig.Instance,
+                        null,
+                        out stagedCatalog,
+                        out commonVisualCatalog,
+                        out HashSet<UnityEngine.Object> atlasResources,
+                        out atlasDiagnostic,
+                        out atlasPolicyDecision,
+                        out atlasDiagnosticInputs))
+                {
+                    throw new InvalidOperationException($"Battle atlas publication failed: {atlasDiagnostic}");
+                }
+                stagedResources.UnionWith(atlasResources);
+                atlasDiagnostic = CombineAtlasDiagnostics(atlasDiagnostic, commonSourceDiagnostic);
             }
             catch
             {
@@ -1014,17 +1061,6 @@ namespace NTSD.Animation
             }
 
             await UniTask.SwitchToMainThread();
-            BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Build(
-                NTSD.App.GameConfig.Instance?.ShadowPrefab,
-                stagedSpark.Texture,
-                stagedSpark.Sprites,
-                stagedWords.Textures,
-                stagedWords.GlyphSprites);
-            if (!commonVisualCatalog.IsComplete)
-            {
-                DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
-                throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
-            }
             if (!TryCommitSpritePrewarmInvocation(
                     invocation,
                     stagedConfigs,
@@ -1072,12 +1108,13 @@ namespace NTSD.Animation
                 targetColor = Color.black,
                 colorTolerance = 0.1f
             };
-            Color[] processedPixels = await UniTask.RunOnThreadPool(() =>
+            Color32[] processedPixels = await UniTask.RunOnThreadPool(() =>
             {
-                return RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
+                Color[] colors = RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
                     bmpData.Pixels,
                     transparency,
                     out _);
+                return ConvertToColor32(colors);
             });
             if (processedPixels == null || processedPixels.Length != bmpData.Width * bmpData.Height ||
                 !CanCompleteSpritePrewarmInvocation(invocation))
@@ -1097,7 +1134,7 @@ namespace NTSD.Animation
                 texture = new Texture2D(bmpData.Width, bmpData.Height, TextureFormat.RGBA32, false);
                 texture.filterMode = FilterMode.Point;
                 texture.wrapMode = TextureWrapMode.Clamp;
-                texture.SetPixels(processedPixels);
+                texture.SetPixels32(processedPixels);
                 texture.Apply(false, true);
                 texture.name = "SPARK";
 
@@ -1121,7 +1158,9 @@ namespace NTSD.Animation
                 return new SparkPublicationStaging
                 {
                     Texture = texture,
-                    Sprites = sprites
+                    Sprites = sprites,
+                    SourcePath = sparkPath,
+                    ProcessedPixels = processedPixels,
                 };
             }
             catch (Exception exception)
@@ -1134,6 +1173,17 @@ namespace NTSD.Animation
                 if (!transfersOwnership)
                     DestroySparkPublicationStaging(texture, sprites);
             }
+        }
+
+        private static Color32[] ConvertToColor32(Color[] colors)
+        {
+            if (colors == null)
+                return null;
+
+            var pixels = new Color32[colors.Length];
+            for (int index = 0; index < colors.Length; index++)
+                pixels[index] = colors[index];
+            return pixels;
         }
 
         private static void DestroySparkPublicationStaging(Texture2D texture, Sprite[] sprites)
@@ -1163,12 +1213,14 @@ namespace NTSD.Animation
         private async UniTask<WordsPublicationStaging> BuildWordsPublicationAsync(int invocation)
         {
             var bmpData = new BMPLoader.BmpData[BattleCommonVisualCatalog.WordSheetCount];
+            var sourcePaths = new string[BattleCommonVisualCatalog.WordSheetCount];
             for (int sheetIndex = 0; sheetIndex < bmpData.Length; sheetIndex++)
             {
                 int capturedSheetIndex = sheetIndex;
                 string wordsPath = Path.Combine(
                     Application.dataPath,
                     "NTSD", "Sprite", "UIPanels", $"WORDS{capturedSheetIndex}.bmp");
+                sourcePaths[capturedSheetIndex] = wordsPath;
                 bmpData[capturedSheetIndex] = await UniTask.RunOnThreadPool(
                     () => BMPLoader.LoadBmpData(wordsPath));
                 if (bmpData[capturedSheetIndex] == null || bmpData[capturedSheetIndex].Pixels == null ||
@@ -1185,16 +1237,17 @@ namespace NTSD.Animation
                 targetColor = Color.black,
                 colorTolerance = 0f
             };
-            var processedPixels = new Color[BattleCommonVisualCatalog.WordSheetCount][];
+            var processedPixels = new Color32[BattleCommonVisualCatalog.WordSheetCount][];
             for (int sheetIndex = 0; sheetIndex < processedPixels.Length; sheetIndex++)
             {
                 int capturedSheetIndex = sheetIndex;
                 processedPixels[capturedSheetIndex] = await UniTask.RunOnThreadPool(() =>
                 {
-                    return RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
+                    Color[] colors = RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
                         bmpData[capturedSheetIndex].Pixels,
                         transparency,
                         out _);
+                    return ConvertToColor32(colors);
                 });
                 if (processedPixels[capturedSheetIndex] == null ||
                     processedPixels[capturedSheetIndex].Length !=
@@ -1226,7 +1279,7 @@ namespace NTSD.Animation
                         false);
                     texture.filterMode = FilterMode.Point;
                     texture.wrapMode = TextureWrapMode.Clamp;
-                    texture.SetPixels(processedPixels[sheetIndex]);
+                    texture.SetPixels32(processedPixels[sheetIndex]);
                     texture.Apply(false, true);
                     texture.name = $"WORDS{sheetIndex}";
                     textures[sheetIndex] = texture;
@@ -1258,7 +1311,9 @@ namespace NTSD.Animation
                 return new WordsPublicationStaging
                 {
                     Textures = textures,
-                    GlyphSprites = glyphSprites
+                    GlyphSprites = glyphSprites,
+                    SourcePaths = sourcePaths,
+                    ProcessedPixels = processedPixels,
                 };
             }
             catch (Exception exception)
@@ -1304,6 +1359,137 @@ namespace NTSD.Animation
                 else
                     UnityEngine.Object.DestroyImmediate(texture);
             }
+        }
+
+        private static bool TryAppendCommonAtlasSources(
+            BattleCommonVisualCatalog commonCatalog,
+            SparkPublicationStaging spark,
+            WordsPublicationStaging words,
+            ICollection<BattleAtlasSourcePixels> sources,
+            IDictionary<BattleVisualResourceKey, string> sourcePaths,
+            ICollection<string> forcedSourceTexture2DPaths,
+            out string diagnostic)
+        {
+            diagnostic = string.Empty;
+            if (commonCatalog == null || !commonCatalog.IsComplete ||
+                spark?.Texture == null || spark.ProcessedPixels == null ||
+                string.IsNullOrWhiteSpace(spark.SourcePath) ||
+                words?.Textures == null || words.GlyphSprites == null ||
+                words.ProcessedPixels == null || words.SourcePaths == null ||
+                sources == null || sourcePaths == null || forcedSourceTexture2DPaths == null)
+            {
+                diagnostic = "Complete common staging data is required for unified atlas publication.";
+                return false;
+            }
+
+            if (spark.ProcessedPixels.Length != spark.Texture.width * spark.Texture.height)
+            {
+                diagnostic = "SPARK processed pixels do not match the published descriptor texture.";
+                return false;
+            }
+
+            sources.Add(new BattleAtlasSourcePixels(
+                spark.SourcePath,
+                spark.Texture.width,
+                spark.Texture.height,
+                spark.ProcessedPixels));
+            for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
+                sourcePaths[BattleVisualResourceKey.CommonSpark(pic)] = spark.SourcePath;
+
+            if (words.Textures.Length != BattleCommonVisualCatalog.WordSheetCount ||
+                words.ProcessedPixels.Length != BattleCommonVisualCatalog.WordSheetCount ||
+                words.SourcePaths.Length != BattleCommonVisualCatalog.WordSheetCount)
+            {
+                diagnostic = "WORDS staging arrays do not contain all six source sheets.";
+                return false;
+            }
+
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                Texture2D texture = words.Textures[sheetIndex];
+                Color32[] pixels = words.ProcessedPixels[sheetIndex];
+                string path = words.SourcePaths[sheetIndex];
+                if (texture == null || pixels == null || string.IsNullOrWhiteSpace(path) ||
+                    pixels.Length != texture.width * texture.height)
+                {
+                    diagnostic = $"WORDS{sheetIndex} processed pixels do not match the published descriptor texture.";
+                    return false;
+                }
+
+                sources.Add(new BattleAtlasSourcePixels(path, texture.width, texture.height, pixels));
+                for (int charCode = 0;
+                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                     charCode++)
+                {
+                    sourcePaths[BattleVisualResourceKey.CommonWordGlyph(sheetIndex, charCode)] = path;
+                }
+            }
+
+            BattleCommonVisualBinding shadow = commonCatalog.Shadow;
+            Texture2D shadowTexture = shadow?.Texture;
+            string shadowPath = ResolveCommonShadowAtlasSourcePath(shadowTexture);
+            sourcePaths[BattleVisualResourceKey.CommonShadow] = shadowPath;
+            try
+            {
+                Color32[] shadowPixels = shadowTexture != null
+                    ? shadowTexture.GetPixels32()
+                    : null;
+                if (shadowPixels == null ||
+                    shadowPixels.Length != shadowTexture.width * shadowTexture.height)
+                {
+                    throw new InvalidOperationException("pixel count does not match the descriptor texture");
+                }
+
+                sources.Add(new BattleAtlasSourcePixels(
+                    shadowPath,
+                    shadowTexture.width,
+                    shadowTexture.height,
+                    shadowPixels));
+            }
+            catch (Exception exception)
+            {
+                if (shadow?.CentralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D ||
+                    !shadow.CentralBinding.IsValid)
+                {
+                    diagnostic =
+                        $"Common shadow cannot be decoded for the atlas and has no valid SourceTexture2D fallback: {exception.Message}";
+                    return false;
+                }
+
+                forcedSourceTexture2DPaths.Add(shadowPath);
+                diagnostic =
+                    $"commonShadowSource2DRetained=nonReadable; source='{shadowPath}'; reason='{exception.Message}'.";
+            }
+
+            return true;
+        }
+
+        private static string ResolveCommonShadowAtlasSourcePath(Texture2D texture)
+        {
+#if UNITY_EDITOR
+            if (texture != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(texture);
+                if (!string.IsNullOrWhiteSpace(assetPath))
+                {
+                    string projectRoot = Directory.GetParent(Application.dataPath)?.FullName ??
+                                         Application.dataPath;
+                    return Path.GetFullPath(Path.Combine(projectRoot, assetPath));
+                }
+            }
+#endif
+            string name = texture != null && !string.IsNullOrWhiteSpace(texture.name)
+                ? texture.name
+                : "missing";
+            foreach (char invalid in Path.GetInvalidFileNameChars())
+                name = name.Replace(invalid, '_');
+            return Path.Combine(
+                Application.dataPath,
+                "NTSD",
+                ".runtime-atlas",
+                $"common-shadow-{name}-{(texture != null ? texture.GetInstanceID() : 0)}.rgba32");
         }
 
         /// <summary>
@@ -1726,6 +1912,172 @@ namespace NTSD.Animation
             return false;
         }
 
+        internal static bool TryBuildUnifiedCentralAtlasPublication(
+            BattleSpriteCatalog sourceCatalog,
+            BattleCommonVisualCatalog sourceCommonCatalog,
+            IReadOnlyList<BattleAtlasSourcePixels> sources,
+            IReadOnlyDictionary<BattleVisualResourceKey, string> commonSourcePaths,
+            IReadOnlyCollection<string> forcedCommonSourceTexture2DPaths,
+            BattleRenderingDeviceCapabilities capabilities,
+            NTSD.App.GameConfig config,
+            string[] commandLineArguments,
+            out BattleSpriteCatalog boundCatalog,
+            out BattleCommonVisualCatalog boundCommonCatalog,
+            out HashSet<UnityEngine.Object> ownedResources,
+            out string diagnostic,
+            out BattleAtlasPolicyDecision policyDecision,
+            out BattleAtlasDiagnosticInputs diagnosticInputs)
+        {
+            boundCatalog = sourceCatalog ?? BattleSpriteCatalog.Empty;
+            boundCommonCatalog = sourceCommonCatalog ?? BattleCommonVisualCatalog.Empty;
+            ownedResources = new HashSet<UnityEngine.Object>();
+            diagnostic = string.Empty;
+            policyDecision = null;
+            diagnosticInputs = null;
+            if (!boundCommonCatalog.IsComplete)
+            {
+                diagnostic = "Unified atlas publication requires a complete common visual catalog.";
+                return false;
+            }
+            if (commonSourcePaths == null)
+            {
+                diagnostic = "Unified atlas publication requires common visual source paths.";
+                return false;
+            }
+            if (capabilities == null)
+                throw new ArgumentNullException(nameof(capabilities));
+
+            if (!TryClassifyCentralAtlasSources(
+                    sources,
+                    capabilities.MaxTextureSize,
+                    out List<BattleAtlasSourcePixels> eligibleSources,
+                    out List<string> sourceTexture2DExcludedPaths,
+                    out string oversizedDiagnostic))
+            {
+                diagnostic = oversizedDiagnostic;
+                return false;
+            }
+
+            if (forcedCommonSourceTexture2DPaths != null)
+            {
+                var exclusions = new HashSet<string>(
+                    sourceTexture2DExcludedPaths,
+                    StringComparer.Ordinal);
+                foreach (string path in forcedCommonSourceTexture2DPaths)
+                {
+                    string normalizedPath = BattleAtlasLayoutPlanner.NormalizePath(path);
+                    if (!string.IsNullOrEmpty(normalizedPath))
+                        exclusions.Add(normalizedPath);
+                }
+                sourceTexture2DExcludedPaths = exclusions.ToList();
+                sourceTexture2DExcludedPaths.Sort(StringComparer.Ordinal);
+            }
+
+            BattleAtlasPlanResult planResult =
+                BattleAtlasLayoutPlanner.Plan(CreateAtlasDescriptors(eligibleSources));
+            if (!planResult.Succeeded)
+            {
+                diagnostic = planResult.Diagnostic;
+                return false;
+            }
+
+            policyDecision = BattleRenderingPolicyResolver.ResolveAtlas(
+                capabilities,
+                planResult.Plan.PageCount,
+                config,
+                commandLineArguments);
+            if (planResult.Plan.PageCount == 0)
+            {
+                if (!TryRetainExcludedSourceTexture2DCatalog(
+                        boundCatalog,
+                        sourceTexture2DExcludedPaths,
+                        out diagnostic) ||
+                    !TryRetainExcludedSourceTexture2DCommonCatalog(
+                        boundCommonCatalog,
+                        commonSourcePaths,
+                        sourceTexture2DExcludedPaths,
+                        out diagnostic))
+                {
+                    return false;
+                }
+
+                diagnostic = oversizedDiagnostic;
+                diagnosticInputs = new BattleAtlasDiagnosticInputs(
+                    capabilities,
+                    policyDecision,
+                    0,
+                    0,
+                    BattleSpriteCentralBindingMode.SourceTexture2D,
+                    diagnostic);
+                return true;
+            }
+
+            if (!BattleAtlasResourceBuilder.TryBuild(
+                    planResult.Plan,
+                    eligibleSources,
+                    policyDecision.CapabilityPolicy,
+                    out BattleAtlasResources resources,
+                    out diagnostic))
+            {
+                return false;
+            }
+
+            foreach (UnityEngine.Object resource in resources.OwnedObjects)
+                ownedResources.Add(resource);
+            if (resources.Mode == BattleSpriteCentralBindingMode.AtlasPageTexture2D &&
+                policyDecision.EffectiveMode == BattleAtlasPolicyMode.TextureArray)
+            {
+                string runtimeFallbackReason = string.IsNullOrEmpty(resources.Diagnostic)
+                    ? "Texture2DArray allocation/upload failed; ordered pages were published."
+                    : resources.Diagnostic;
+                policyDecision = new BattleAtlasPolicyDecision(
+                    policyDecision.RequestedMode,
+                    BattleAtlasPolicyMode.OrderedPages,
+                    runtimeFallbackReason,
+                    capabilities.ToAtlasCapabilityPolicy(runtimeFallbackReason));
+            }
+
+            if (!BattleAtlasResourceBuilder.TryBindCatalog(
+                    boundCatalog,
+                    planResult.Plan,
+                    resources,
+                    sourceTexture2DExcludedPaths,
+                    out BattleSpriteCatalog remappedCatalog,
+                    out string entityBindingDiagnostic))
+            {
+                DestroyStagedPresentation(null, ownedResources);
+                ownedResources.Clear();
+                diagnostic = entityBindingDiagnostic;
+                return false;
+            }
+            if (!BattleAtlasResourceBuilder.TryBindCommonCatalog(
+                    boundCommonCatalog,
+                    planResult.Plan,
+                    resources,
+                    commonSourcePaths,
+                    sourceTexture2DExcludedPaths,
+                    out BattleCommonVisualCatalog remappedCommonCatalog,
+                    out string commonBindingDiagnostic))
+            {
+                DestroyStagedPresentation(null, ownedResources);
+                ownedResources.Clear();
+                diagnostic = commonBindingDiagnostic;
+                return false;
+            }
+
+            boundCatalog = remappedCatalog;
+            boundCommonCatalog = remappedCommonCatalog;
+            diagnostic = CombineAtlasDiagnostics(resources.Diagnostic, oversizedDiagnostic);
+            diagnosticInputs = new BattleAtlasDiagnosticInputs(
+                capabilities,
+                policyDecision,
+                planResult.Plan.PageCount,
+                BattleAtlasDiagnosticInputs.EstimateAtlasBytes(planResult.Plan.PageCount),
+                resources.Mode,
+                diagnostic);
+            return true;
+        }
+
         internal static bool TryBuildCentralAtlasPublication(
             BattleSpriteCatalog sourceCatalog,
             IReadOnlyList<BattleAtlasSourcePixels> sources,
@@ -1915,6 +2267,100 @@ namespace NTSD.Animation
                     diagnostic = $"Catalog entry {pair.Key} cannot retain an invalid SourceTexture2D binding.";
                     return false;
                 }
+            }
+            return true;
+        }
+
+        private static bool TryRetainExcludedSourceTexture2DCommonCatalog(
+            BattleCommonVisualCatalog catalog,
+            IReadOnlyDictionary<BattleVisualResourceKey, string> sourcePaths,
+            IReadOnlyCollection<string> sourceTexture2DExcludedPaths,
+            out string diagnostic)
+        {
+            diagnostic = string.Empty;
+            if (catalog == null || !catalog.IsComplete)
+            {
+                diagnostic = "A complete common visual catalog is required for SourceTexture2D retention.";
+                return false;
+            }
+
+            var excludedPaths = new HashSet<string>(
+                sourceTexture2DExcludedPaths ?? Array.Empty<string>(),
+                StringComparer.Ordinal);
+            if (!CanRetainCommonSourceTexture2D(
+                    catalog.Shadow,
+                    sourcePaths,
+                    excludedPaths,
+                    out diagnostic))
+            {
+                return false;
+            }
+
+            for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
+            {
+                if (!catalog.TryGetSpark(pic, out BattleCommonVisualBinding spark) ||
+                    !CanRetainCommonSourceTexture2D(
+                        spark,
+                        sourcePaths,
+                        excludedPaths,
+                        out diagnostic))
+                {
+                    return false;
+                }
+            }
+
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                for (int charCode = 0;
+                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                     charCode++)
+                {
+                    if (!catalog.TryGetWordGlyph(
+                            sheetIndex,
+                            charCode,
+                            out BattleCommonVisualBinding glyph) ||
+                        !CanRetainCommonSourceTexture2D(
+                            glyph,
+                            sourcePaths,
+                            excludedPaths,
+                            out diagnostic))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static bool CanRetainCommonSourceTexture2D(
+            BattleCommonVisualBinding binding,
+            IReadOnlyDictionary<BattleVisualResourceKey, string> sourcePaths,
+            ISet<string> excludedPaths,
+            out string diagnostic)
+        {
+            diagnostic = string.Empty;
+            if (binding == null ||
+                !sourcePaths.TryGetValue(binding.Key, out string sourcePath))
+            {
+                diagnostic =
+                    $"Common visual {binding?.Key.ToString() ?? "<null>"} has no SourceTexture2D path.";
+                return false;
+            }
+            if (!excludedPaths.Contains(BattleAtlasLayoutPlanner.NormalizePath(sourcePath)))
+            {
+                diagnostic =
+                    $"Common visual {binding.Key} references missing atlas source '{sourcePath}'.";
+                return false;
+            }
+            if (binding.CentralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D ||
+                !binding.CentralBinding.IsValid)
+            {
+                diagnostic =
+                    $"Common visual {binding.Key} cannot retain an invalid SourceTexture2D binding.";
+                return false;
             }
             return true;
         }

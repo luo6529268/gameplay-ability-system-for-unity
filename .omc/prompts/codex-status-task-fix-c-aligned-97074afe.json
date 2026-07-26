@@ -1,0 +1,13 @@
+{
+  "provider": "codex",
+  "jobId": "97074afe",
+  "slug": "task-fix-c-aligned",
+  "status": "completed",
+  "pid": 355176,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-task-fix-c-aligned-97074afe.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-task-fix-c-aligned-97074afe.md",
+  "model": "gpt-5.3-codex",
+  "agentRole": "tdd-guide",
+  "spawnedAt": "2026-07-22T14:55:59.109Z",
+  "completedAt": "2026-07-22T14:56:10.138Z"
+}

@@ -137,7 +137,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>渲染器引用。</summary>
         public LF2ObjectRenderer Renderer { get; protected set; }
 
-        /// <summary>当前实体所在的战斗世界。大多数情况下通过单例 Driver 反查。</summary>
+        /// <summary>成功注册后所属的战斗世界。</summary>
         private SimulationWorld registeredWorld;
 
         public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
@@ -405,21 +405,20 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>阴影 SpriteRenderer，由渲染器注入。</summary>
+        /// <summary>可选的旧版阴影 SpriteRenderer，由渲染适配器注入。</summary>
         public SpriteRenderer ShadowRenderer { get; private set; }
 
-        /// <summary>注入阴影渲染器引用。</summary>
-        public void SetShadowRenderer(SpriteRenderer sr) => ShadowRenderer = sr;
+        /// <summary>注入可选的旧版阴影渲染器引用。</summary>
+        public void SetShadowRenderer(SpriteRenderer sr)
+        {
+            ShadowRenderer = sr;
+            Sprite?.InitializeShadow(sr);
+        }
 
         /// <summary>更新阴影位置和显示状态。</summary>
         public void UpdateShadow(int renderFrame = 0)
         {
-            if (ShadowRenderer == null || Runtime == null) return;
-
-            // A sorting layer wins over sortingOrder in Unity. Keep shadows in the
-            // same layer as entities and sparks so the compact presentation order
-            // can interleave Shadow(A), Entity(A), Shadow(B), Entity(B).
-            ShadowRenderer.sortingLayerName = "Object";
+            if (Runtime == null) return;
 
             LF2FrameData currentFrame = Frame?.D;
             int state = currentFrame?.state ?? -1;
@@ -432,7 +431,20 @@ namespace NTSD.Animation.LF2Objects
                      || oid == 224
                      || !LF2ObjectRenderer.ShouldDrawShadowForHitStop(Runtime.HitStop);
 
-            ShadowRenderer.enabled = !hide;
+            if (hide)
+                Sprite?.HideShadow();
+            else
+                Sprite?.ShowShadow();
+
+            if (ShadowRenderer == null)
+                return;
+
+            // A sorting layer wins over sortingOrder in Unity. Keep shadows in the
+            // same layer as entities and sparks so the compact presentation order
+            // can interleave Shadow(A), Entity(A), Shadow(B), Entity(B).
+            ShadowRenderer.sortingLayerName = "Object";
+            if (Sprite == null)
+                ShadowRenderer.enabled = !hide;
             if (!hide)
             {
                 ShadowRenderer.sortingOrder = GetPresentationRenderSortingOrder(
@@ -983,7 +995,7 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>从 SimulationWorld 注销自身。</summary>
         public virtual void UnregisterFromWorld()
         {
-            Match?.Unregister(this);
+            registeredWorld?.Unregister(this);
         }
 
         /// <summary>销毁当前对象的可视表现。</summary>
@@ -3785,20 +3797,28 @@ namespace NTSD.Animation.LF2Objects
 
             int prevState = prevFrame.state;
             int currentState = currentFrame.state;
+            bool shouldSpawnBranch1 =
+                (prevState == 13 || (Frame?.Prev ?? 0) == 200) &&
+                currentState != 13 && (Frame?.N ?? 0) != 200;
+            bool shouldSpawnBranch2 = prevState == 18 || prevState == 19;
+            if (!shouldSpawnBranch1 && !shouldSpawnBranch2)
+                return;
+
             bool spawned = false;
             bool hasEffectResources = LF2ObjectPointFactory.Instance != null &&
                                       ResolveRuntimeCharacterConfig(999) != null;
-            int availableSlots = hasEffectResources ? CountAvailableTransitionEffectSlots() : 0;
+            int availableSlots = 0;
+            bool availableSlotsCalculated = false;
 
-            if (hasEffectResources &&
-                (prevState == 13 || (Frame?.Prev ?? 0) == 200) &&
-                currentState != 13 && (Frame?.N ?? 0) != 200)
+            if (hasEffectResources && shouldSpawnBranch1)
             {
+                availableSlots = CountAvailableTransitionEffectSlots();
+                availableSlotsCalculated = true;
                 Match?.QueueSound("SFX_066", Runtime.XInt);
                 spawned |= SpawnTransitionEffectBranch1(ref availableSlots);
             }
 
-            if (prevState != 18 && prevState != 19)
+            if (!shouldSpawnBranch2)
                 return;
 
             int count = 0;
@@ -3808,7 +3828,15 @@ namespace NTSD.Animation.LF2Objects
                 count = 1;
 
             if (count > 0)
+            {
+                if (hasEffectResources && !availableSlotsCalculated)
+                {
+                    availableSlots = CountAvailableTransitionEffectSlots();
+                    availableSlotsCalculated = true;
+                }
+
                 spawned |= SpawnTransitionEffectBranch2(count, ref availableSlots);
+            }
 
             if (spawned)
                 RefreshRuntimeSnapshot();

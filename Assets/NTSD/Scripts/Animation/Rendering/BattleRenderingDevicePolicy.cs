@@ -22,9 +22,63 @@ namespace NTSD.Animation.Rendering
         StrictOrderedDraw = 2,
     }
 
+    public enum BattleRenderingPlatformCategory : byte
+    {
+        Other = 0,
+        Desktop = 1,
+        Mobile = 2,
+    }
+
+    public static class BattleRenderingPlatformPolicy
+    {
+        public const long MobileAtlasMemoryBudgetBytes = 256L * 1024L * 1024L;
+        public const long DesktopAtlasMemoryBudgetBytes = 512L * 1024L * 1024L;
+
+        public static BattleRenderingPlatformCategory ResolvePlatformCategory(
+            bool isEditor,
+            bool isStandalone,
+            bool isAndroid,
+            bool isIos)
+        {
+            if (isEditor)
+                return BattleRenderingPlatformCategory.Desktop;
+            if (isAndroid || isIos)
+                return BattleRenderingPlatformCategory.Mobile;
+            if (isStandalone)
+                return BattleRenderingPlatformCategory.Desktop;
+            return BattleRenderingPlatformCategory.Other;
+        }
+
+        public static long ResolveDefaultAtlasMemoryBudgetBytes(
+            BattleRenderingPlatformCategory category)
+        {
+            return category == BattleRenderingPlatformCategory.Desktop
+                ? DesktopAtlasMemoryBudgetBytes
+                : MobileAtlasMemoryBudgetBytes;
+        }
+
+        internal static BattleRenderingPlatformCategory ResolveCurrentPlatformCategory()
+        {
+#if UNITY_EDITOR
+            return ResolvePlatformCategory(true, false, false, false);
+#elif UNITY_ANDROID
+            return ResolvePlatformCategory(false, false, true, false);
+#elif UNITY_IOS
+            return ResolvePlatformCategory(false, false, false, true);
+#elif UNITY_STANDALONE
+            return ResolvePlatformCategory(false, true, false, false);
+#else
+            return ResolvePlatformCategory(false, false, false, false);
+#endif
+        }
+    }
+
     public sealed class BattleRenderingDeviceCapabilities
     {
-        public const long DefaultAtlasMemoryBudgetBytes = 256L * 1024L * 1024L;
+        public const long MobileAtlasMemoryBudgetBytes =
+            BattleRenderingPlatformPolicy.MobileAtlasMemoryBudgetBytes;
+        public const long DesktopAtlasMemoryBudgetBytes =
+            BattleRenderingPlatformPolicy.DesktopAtlasMemoryBudgetBytes;
 
         public BattleRenderingDeviceCapabilities(
             string gpuName,
@@ -71,8 +125,15 @@ namespace NTSD.Animation.Rendering
                 forcedOrderedPagesReason);
         }
 
-        public static BattleRenderingDeviceCapabilities FromSystem(
-            long atlasMemoryBudgetBytes = DefaultAtlasMemoryBudgetBytes)
+        public static BattleRenderingDeviceCapabilities FromSystem()
+        {
+            BattleRenderingPlatformCategory category =
+                BattleRenderingPlatformPolicy.ResolveCurrentPlatformCategory();
+            return FromSystem(
+                BattleRenderingPlatformPolicy.ResolveDefaultAtlasMemoryBudgetBytes(category));
+        }
+
+        public static BattleRenderingDeviceCapabilities FromSystem(long atlasMemoryBudgetBytes)
         {
             return new BattleRenderingDeviceCapabilities(
                 SystemInfo.graphicsDeviceName,
@@ -373,7 +434,19 @@ namespace NTSD.Animation.Rendering
             int segmentCount,
             int submissionDrawCount,
             BattlePresentationBackendMode requestedPixelMode,
-            BattlePresentationBackendMode effectivePixelMode)
+            BattlePresentationBackendMode effectivePixelMode,
+            int snapshotEntityCount = 0,
+            int generation = 0,
+            int buildTick = -1,
+            int simulationTick = -1,
+            int displayTick = -1,
+            bool isStale = false,
+            string refusalReason = "",
+            bool submissionBuildCurrent = false,
+            int unsupportedRenderStateCount = 0,
+            int firstUnresolvedCommandIndex = -1,
+            BattleRenderCommandType firstUnresolvedCommandType = default,
+            BattleCentralResourceStatus firstUnresolvedStatus = BattleCentralResourceStatus.Resolved)
         {
             Atlas = atlas ?? throw new ArgumentNullException(nameof(atlas));
             Draw = draw;
@@ -386,6 +459,18 @@ namespace NTSD.Animation.Rendering
             SubmissionDrawCount = submissionDrawCount;
             RequestedPixelMode = requestedPixelMode;
             EffectivePixelMode = effectivePixelMode;
+            SnapshotEntityCount = snapshotEntityCount;
+            Generation = generation;
+            BuildTick = buildTick;
+            SimulationTick = simulationTick;
+            DisplayTick = displayTick;
+            IsStale = isStale;
+            RefusalReason = refusalReason ?? string.Empty;
+            SubmissionBuildCurrent = submissionBuildCurrent;
+            UnsupportedRenderStateCount = unsupportedRenderStateCount;
+            FirstUnresolvedCommandIndex = firstUnresolvedCommandIndex;
+            FirstUnresolvedCommandType = firstUnresolvedCommandType;
+            FirstUnresolvedStatus = firstUnresolvedStatus;
         }
 
         public BattleAtlasDiagnosticInputs Atlas { get; }
@@ -399,6 +484,18 @@ namespace NTSD.Animation.Rendering
         public int SubmissionDrawCount { get; }
         public BattlePresentationBackendMode RequestedPixelMode { get; }
         public BattlePresentationBackendMode EffectivePixelMode { get; }
+        public int SnapshotEntityCount { get; }
+        public int Generation { get; }
+        public int BuildTick { get; }
+        public int SimulationTick { get; }
+        public int DisplayTick { get; }
+        public bool IsStale { get; }
+        public string RefusalReason { get; }
+        public bool SubmissionBuildCurrent { get; }
+        public int UnsupportedRenderStateCount { get; }
+        public int FirstUnresolvedCommandIndex { get; }
+        public BattleRenderCommandType FirstUnresolvedCommandType { get; }
+        public BattleCentralResourceStatus FirstUnresolvedStatus { get; }
 
         public string ToJson()
         {
@@ -428,11 +525,31 @@ namespace NTSD.Animation.Rendering
             AppendProperty(builder, "resolvedCommandCount", ResolvedCommandCount, false);
             AppendProperty(builder, "unresolvedCommandCount", UnresolvedCommandCount, false);
             AppendProperty(builder, "unsupportedCategoryCount", UnsupportedCategoryCount, false);
+            AppendProperty(builder, "unsupportedRenderStateCount", UnsupportedRenderStateCount, false);
+            AppendProperty(builder, "firstUnresolvedCommandIndex", FirstUnresolvedCommandIndex, false);
+            AppendProperty(
+                builder,
+                "firstUnresolvedCommandType",
+                FirstUnresolvedCommandIndex >= 0 ? FirstUnresolvedCommandType.ToString() : string.Empty,
+                false);
+            AppendProperty(
+                builder,
+                "firstUnresolvedStatus",
+                FirstUnresolvedCommandIndex >= 0 ? FirstUnresolvedStatus.ToString() : string.Empty,
+                false);
             AppendProperty(builder, "activeChunkCount", ActiveChunkCount, false);
             AppendProperty(builder, "segmentCount", SegmentCount, false);
             AppendProperty(builder, "submissionDrawCount", SubmissionDrawCount, false);
+            AppendProperty(builder, "snapshotEntityCount", SnapshotEntityCount, false);
             AppendProperty(builder, "requestedPixelMode", RequestedPixelMode.ToString(), false);
             AppendProperty(builder, "effectivePixelMode", EffectivePixelMode.ToString(), false);
+            AppendProperty(builder, "generation", Generation, false);
+            AppendProperty(builder, "buildTick", BuildTick, false);
+            AppendProperty(builder, "simulationTick", SimulationTick, false);
+            AppendProperty(builder, "displayTick", DisplayTick, false);
+            AppendProperty(builder, "isStale", IsStale, false);
+            AppendProperty(builder, "refusalReason", RefusalReason, false);
+            AppendProperty(builder, "submissionBuildCurrent", SubmissionBuildCurrent, false);
             builder.Append('}');
             return builder.ToString();
         }

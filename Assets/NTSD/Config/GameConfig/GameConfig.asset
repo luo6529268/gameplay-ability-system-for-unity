@@ -15,7 +15,7 @@ MonoBehaviour:
   BattleRuntimeProfileName: ''
   DesktopInitialRuntimeSlotCapacity: 512
   BattleCollisionBroadphaseName: ''
-  BattlePresentationBackendName: ''
+  BattlePresentationBackendName: CentralOnly
   BattleAtlasModeName: ''
   BattleDrawModeName: ''
   ShadowPrefab: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}

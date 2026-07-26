@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
 
@@ -19,6 +21,113 @@ namespace NTSD.Animation.Rendering
         UnsupportedRenderState = 3,
     }
 
+    public enum BattleCentralEntityDiagnosticReason : byte
+    {
+        None = 0,
+        InvalidRuntimeHandle = 1,
+        GenerationMismatch = 2,
+        MissingSnapshotEntity = 3,
+        PresentationVisibilityFalse = 4,
+        CommandSuppressed = 5,
+        MissingCatalogKey = 6,
+        MissingTextureOrMaterial = 7,
+        InvalidCentralBinding = 8,
+        UnsupportedRenderState = 9,
+        UnresolvedResource = 10,
+        NotSubmitted = 11,
+        StalePlan = 12,
+        BackendMutationMismatch = 13,
+    }
+
+    public readonly struct BattleCentralEntityDiagnostic
+    {
+        internal BattleCentralEntityDiagnostic(
+            BattleCentralEntityDiagnosticReason reason,
+            RuntimeEntityHandle handle,
+            BattleRenderCommandType commandType,
+            in BattlePresentationEntitySnapshot snapshot,
+            bool hasSnapshot,
+            in BattleRenderCommand command,
+            bool hasCommand,
+            in BattleCentralResolvedResource resource,
+            bool hasResolvedResource,
+            int commandIndex,
+            int segmentIndex,
+            int chunkIndex,
+            bool submitted)
+        {
+            Reason = reason;
+            Handle = handle;
+            CommandType = commandType;
+            StableId = hasSnapshot ? snapshot.StableId : 0;
+            ObjectId = hasSnapshot ? snapshot.ObjectId : -1;
+            CurrentDatObjectId = hasSnapshot ? snapshot.CurrentDatObjectId : -1;
+            EffectivePic = hasSnapshot ? snapshot.EffectivePic : -1;
+            FrameId = hasSnapshot ? snapshot.FrameId : -1;
+            EntityVisible = hasSnapshot && snapshot.EntityVisible;
+            ShadowVisible = hasSnapshot && snapshot.ShadowVisible;
+            PresentationBaseOrder = hasSnapshot ? snapshot.PresentationBaseOrder : -1;
+            HasLogicalResourceKey = hasCommand && command.SpriteDescriptor.HasLogicalResourceKey;
+            LogicalResourceKey = HasLogicalResourceKey
+                ? command.SpriteDescriptor.LogicalResourceKey
+                : default;
+            BindingMode = hasResolvedResource
+                ? resource.BindingMode
+                : BattleSpriteCentralBindingMode.SourceTexture2D;
+            AtlasSlice = hasResolvedResource ? resource.AtlasSlice : -1;
+            AtlasPageIndex = hasResolvedResource ? resource.AtlasPageIndex : -1;
+            NormalizedUv = hasResolvedResource
+                ? resource.NormalizedUv
+                : hasCommand ? command.NormalizedUv : default;
+            Pivot = hasResolvedResource ? resource.Pivot : hasCommand ? command.Pivot : default;
+            Position = hasCommand ? command.Position : default;
+            FlipX = hasCommand && command.FlipX;
+            FlipY = hasCommand && command.FlipY;
+            Color = hasCommand ? command.Color : default;
+            SortOrder = hasCommand ? command.SortOrder : -1;
+            LocalSequence = hasCommand ? command.LocalSequence : -1;
+            CommandIndex = commandIndex;
+            SegmentIndex = segmentIndex;
+            ChunkIndex = chunkIndex;
+            Submitted = submitted;
+            HasSnapshot = hasSnapshot;
+            HasCommand = hasCommand;
+            HasResolvedResource = hasResolvedResource;
+        }
+
+        public BattleCentralEntityDiagnosticReason Reason { get; }
+        public RuntimeEntityHandle Handle { get; }
+        public BattleRenderCommandType CommandType { get; }
+        public int StableId { get; }
+        public int ObjectId { get; }
+        public int CurrentDatObjectId { get; }
+        public int EffectivePic { get; }
+        public int FrameId { get; }
+        public bool EntityVisible { get; }
+        public bool ShadowVisible { get; }
+        public int PresentationBaseOrder { get; }
+        public bool HasLogicalResourceKey { get; }
+        public BattleVisualResourceKey LogicalResourceKey { get; }
+        public BattleSpriteCentralBindingMode BindingMode { get; }
+        public int AtlasSlice { get; }
+        public int AtlasPageIndex { get; }
+        public Rect NormalizedUv { get; }
+        public Vector2 Pivot { get; }
+        public Vector3 Position { get; }
+        public bool FlipX { get; }
+        public bool FlipY { get; }
+        public Color32 Color { get; }
+        public int SortOrder { get; }
+        public int LocalSequence { get; }
+        public int CommandIndex { get; }
+        public int SegmentIndex { get; }
+        public int ChunkIndex { get; }
+        public bool Submitted { get; }
+        public bool HasSnapshot { get; }
+        public bool HasCommand { get; }
+        public bool HasResolvedResource { get; }
+    }
+
     public readonly struct BattleCentralResolvedResource
     {
         public BattleCentralResolvedResource(
@@ -30,7 +139,8 @@ namespace NTSD.Animation.Rendering
             Color32 color,
             int materialVariant = 0,
             int atlasSlice = 0,
-            BattleSpriteCentralBindingMode bindingMode = BattleSpriteCentralBindingMode.SourceTexture2D)
+            BattleSpriteCentralBindingMode bindingMode = BattleSpriteCentralBindingMode.SourceTexture2D,
+            int atlasPageIndex = -1)
         {
             Texture = texture;
             Material = material;
@@ -41,6 +151,7 @@ namespace NTSD.Animation.Rendering
             MaterialVariant = materialVariant;
             AtlasSlice = atlasSlice;
             BindingMode = bindingMode;
+            AtlasPageIndex = atlasPageIndex;
         }
 
         public Texture Texture { get; }
@@ -52,6 +163,7 @@ namespace NTSD.Animation.Rendering
         public int MaterialVariant { get; }
         public int AtlasSlice { get; }
         public BattleSpriteCentralBindingMode BindingMode { get; }
+        public int AtlasPageIndex { get; }
 
         internal bool HasDrawableResource => Texture != null && Material != null;
     }
@@ -76,7 +188,8 @@ namespace NTSD.Animation.Rendering
             Material material,
             int materialVariant,
             int atlasSlice,
-            BattleSpriteCentralBindingMode bindingMode = BattleSpriteCentralBindingMode.SourceTexture2D)
+            BattleSpriteCentralBindingMode bindingMode = BattleSpriteCentralBindingMode.SourceTexture2D,
+            int atlasPageIndex = -1)
         {
             ChunkIndex = chunkIndex;
             SubMeshIndex = subMeshIndex;
@@ -89,6 +202,9 @@ namespace NTSD.Animation.Rendering
             MaterialVariant = materialVariant;
             AtlasSlice = atlasSlice;
             BindingMode = bindingMode;
+            AtlasPageIndex = bindingMode == BattleSpriteCentralBindingMode.AtlasPageTexture2D
+                ? atlasPageIndex
+                : -1;
         }
 
         public int ChunkIndex { get; }
@@ -102,6 +218,7 @@ namespace NTSD.Animation.Rendering
         public int MaterialVariant { get; }
         public int AtlasSlice { get; }
         public BattleSpriteCentralBindingMode BindingMode { get; }
+        public int AtlasPageIndex { get; }
     }
 
     public sealed class BattleCentralBuildDiagnostics
@@ -114,6 +231,7 @@ namespace NTSD.Animation.Rendering
         public int UnsupportedRenderStateCount { get; internal set; }
         public int FirstUnresolvedCommandIndex { get; internal set; } = -1;
         public BattleRenderCommandType FirstUnresolvedCommandType { get; internal set; }
+        public BattleCentralResourceStatus FirstUnresolvedStatus { get; internal set; }
         public int ActiveChunkCount { get; internal set; }
         public int SegmentCount { get; internal set; }
         public int CapacityGrowthCount { get; internal set; }
@@ -129,6 +247,7 @@ namespace NTSD.Animation.Rendering
             UnsupportedRenderStateCount = 0;
             FirstUnresolvedCommandIndex = -1;
             FirstUnresolvedCommandType = default;
+            FirstUnresolvedStatus = BattleCentralResourceStatus.Resolved;
             ActiveChunkCount = 0;
             SegmentCount = 0;
             DrawMode = drawMode;
@@ -137,10 +256,30 @@ namespace NTSD.Animation.Rendering
 
     public sealed class BattleCatalogCentralResourceResolver : IBattleCentralResourceResolver
     {
+        private const int InitialEntityTemplateCapacity = 128;
+
+        private readonly Dictionary<BattleSpriteKey, BattleCentralResourceTemplate> entityTemplates =
+            new Dictionary<BattleSpriteKey, BattleCentralResourceTemplate>(InitialEntityTemplateCapacity);
+        private readonly BattleCentralResourceTemplate[] sparkTemplates =
+            new BattleCentralResourceTemplate[BattleCommonVisualCatalog.SparkFrameCount];
+        private readonly int[] initializedSparkTemplateSlots =
+            new int[BattleCommonVisualCatalog.SparkFrameCount];
+        private readonly BattleCentralResourceTemplate[][] wordTemplates = CreateWordTemplateCache();
+        private readonly int[] initializedWordTemplateSlots =
+            new int[BattleCommonVisualCatalog.WordSheetCount *
+                    BattleCommonVisualCatalog.WordGlyphsPerSheet];
+
         private BattleSpriteCatalog catalog = BattleSpriteCatalog.Empty;
         private BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
         private Material fallbackMaterial;
         private Material arrayMaterial;
+        private Material configuredFallbackMaterial;
+        private Material configuredArrayMaterial;
+        private bool fallbackMaterialContractValid;
+        private bool arrayMaterialContractValid;
+        private BattleCentralResourceTemplate shadowTemplate;
+        private int initializedSparkTemplateCount;
+        private int initializedWordTemplateCount;
 
         public void Configure(BattleSpriteCatalog value, Material sharedMaterial)
         {
@@ -165,10 +304,19 @@ namespace NTSD.Animation.Rendering
             Material sharedFallbackMaterial,
             Material sharedArrayMaterial)
         {
+            ClearTemplates();
             catalog = value ?? BattleSpriteCatalog.Empty;
             commonVisualCatalog = commonVisuals ?? BattleCommonVisualCatalog.Empty;
             fallbackMaterial = sharedFallbackMaterial;
             arrayMaterial = sharedArrayMaterial;
+            configuredFallbackMaterial = fallbackMaterial;
+            configuredArrayMaterial = arrayMaterial;
+            fallbackMaterialContractValid = BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
+                fallbackMaterial,
+                false);
+            arrayMaterialContractValid = BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
+                arrayMaterial,
+                true);
         }
 
         public BattleCentralResourceStatus Resolve(
@@ -197,156 +345,499 @@ namespace NTSD.Animation.Rendering
             }
 
             if (!command.SpriteDescriptor.HasLogicalResourceKey ||
-                !command.SpriteDescriptor.LogicalResourceKey.IsEntitySprite ||
-                !catalog.TryGet(
-                    command.SpriteDescriptor.LogicalResourceKey.EntitySpriteKey,
-                    out BattleSpriteEntry entry) ||
-                entry.Key.VisualDataId != command.VisualDataId ||
-                entry.Key.EffectivePic != command.EffectivePic)
+                !command.SpriteDescriptor.LogicalResourceKey.IsEntitySprite)
             {
                 resource = default;
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            BattleSpriteCentralBinding binding = entry.CentralBinding;
-            Material material = binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray
-                ? arrayMaterial
-                : fallbackMaterial;
-            bool expectsArray = binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray;
-            if (!binding.IsValid ||
-                !BattleSpriteMaterialContract.IsDeclaredCentralMaterial(material, expectsArray))
+            BattleSpriteKey key = command.SpriteDescriptor.LogicalResourceKey.EntitySpriteKey;
+            if (!entityTemplates.TryGetValue(key, out BattleCentralResourceTemplate template) ||
+                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
             {
-                resource = default;
-                return BattleCentralResourceStatus.UnresolvedVisual;
+                template = BuildEntityTemplate(key);
+                entityTemplates[key] = template;
             }
 
-            resource = new BattleCentralResolvedResource(
-                binding.Texture,
-                material,
-                binding.NormalizedUv,
-                new Vector2(entry.PixelWidth, entry.PixelHeight),
-                entry.Pivot,
-                command.Color,
-                (int)command.RenderState.MaterialSemantic,
-                binding.AtlasSlice,
-                binding.Mode);
-            return BattleCentralResourceStatus.Resolved;
+            return template.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonWordGlyph(
             in BattleRenderCommand command,
             out BattleCentralResolvedResource resource)
         {
-            resource = default;
             if (!command.RenderState.IsSupported)
-                return BattleCentralResourceStatus.UnsupportedRenderState;
-            if (!command.SpriteDescriptor.HasLogicalResourceKey ||
-                !command.SpriteDescriptor.LogicalResourceKey.IsCommonWordGlyph ||
-                command.VisualDataId != command.SpriteDescriptor.LogicalResourceKey.CommonWordSheetIndex ||
-                command.EffectivePic != command.SpriteDescriptor.LogicalResourceKey.CommonWordCharCode ||
-                !commonVisualCatalog.TryGetWordGlyph(
-                    command.VisualDataId,
-                    command.EffectivePic,
-                    out BattleCommonVisualBinding binding) ||
-                binding.Key != command.SpriteDescriptor.LogicalResourceKey ||
-                command.SpriteDescriptor.SpriteInstanceId != binding.SpriteInstanceId ||
-                command.SpriteDescriptor.TextureInstanceId != binding.TextureInstanceId ||
-                command.SpriteDescriptor.MaterialInstanceId != binding.MaterialInstanceId ||
-                command.SpriteDescriptor.PixelRect != binding.PixelRect ||
-                command.SpriteDescriptor.PivotNormalized != binding.Pivot ||
-                command.Size != binding.PixelSize ||
-                command.RenderState.MaterialSemantic != binding.RenderState.MaterialSemantic ||
-                command.RenderState.MaskInteraction != binding.RenderState.MaskInteraction ||
-                !BattleSpriteMaterialContract.IsDeclaredCentralMaterial(fallbackMaterial, false))
             {
+                resource = default;
+                return BattleCentralResourceStatus.UnsupportedRenderState;
+            }
+            if (!command.SpriteDescriptor.HasLogicalResourceKey ||
+                !command.SpriteDescriptor.LogicalResourceKey.IsCommonWordGlyph)
+            {
+                resource = default;
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            resource = new BattleCentralResolvedResource(
-                binding.Texture,
-                fallbackMaterial,
-                binding.NormalizedUv,
-                binding.PixelSize,
-                binding.Pivot,
-                command.Color,
-                (int)command.RenderState.MaterialSemantic,
-                0,
-                BattleSpriteCentralBindingMode.SourceTexture2D);
-            return BattleCentralResourceStatus.Resolved;
+            BattleVisualResourceKey key = command.SpriteDescriptor.LogicalResourceKey;
+            int sheetIndex = key.CommonWordSheetIndex;
+            int charCode = key.CommonWordCharCode;
+            if (sheetIndex < 0 || sheetIndex >= BattleCommonVisualCatalog.WordSheetCount ||
+                charCode < 0 || charCode >= BattleCommonVisualCatalog.WordGlyphsPerSheet)
+            {
+                resource = default;
+                return BattleCentralResourceStatus.UnresolvedVisual;
+            }
+
+            BattleCentralResourceTemplate template = wordTemplates[sheetIndex][charCode];
+            if (!template.IsInitialized ||
+                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+            {
+                template = BuildCommonWordTemplate(sheetIndex, charCode);
+                if (!wordTemplates[sheetIndex][charCode].IsInitialized)
+                {
+                    initializedWordTemplateSlots[initializedWordTemplateCount++] =
+                        sheetIndex * BattleCommonVisualCatalog.WordGlyphsPerSheet + charCode;
+                }
+                wordTemplates[sheetIndex][charCode] = template;
+            }
+
+            return template.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonShadow(
             in BattleRenderCommand command,
             out BattleCentralResolvedResource resource)
         {
-            BattleCommonVisualBinding binding = commonVisualCatalog.Shadow;
             if (!command.RenderState.IsSupported)
             {
                 resource = default;
                 return BattleCentralResourceStatus.UnsupportedRenderState;
             }
-            if (binding == null ||
-                !command.SpriteDescriptor.HasLogicalResourceKey ||
-                command.SpriteDescriptor.LogicalResourceKey != BattleVisualResourceKey.CommonShadow ||
-                command.SpriteDescriptor.SpriteInstanceId != binding.SpriteInstanceId ||
-                command.SpriteDescriptor.TextureInstanceId != binding.TextureInstanceId ||
-                command.SpriteDescriptor.MaterialInstanceId != binding.MaterialInstanceId ||
-                command.SpriteDescriptor.PixelRect != binding.PixelRect ||
-                command.SpriteDescriptor.PivotNormalized != binding.Pivot ||
-                !BattleSpriteMaterialContract.IsDeclaredCentralMaterial(fallbackMaterial, false))
+            if (!command.SpriteDescriptor.HasLogicalResourceKey ||
+                command.SpriteDescriptor.LogicalResourceKey != BattleVisualResourceKey.CommonShadow)
             {
                 resource = default;
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            resource = new BattleCentralResolvedResource(
-                binding.Texture,
-                fallbackMaterial,
-                binding.NormalizedUv,
-                binding.PixelSize,
-                binding.Pivot,
-                command.Color,
-                (int)command.RenderState.MaterialSemantic,
-                0,
-                BattleSpriteCentralBindingMode.SourceTexture2D);
-            return BattleCentralResourceStatus.Resolved;
+            if (!shadowTemplate.IsInitialized ||
+                !shadowTemplate.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+            {
+                shadowTemplate = BuildCommonTemplate(
+                    BattleRenderCommandType.Shadow,
+                    -1,
+                    -1,
+                    commonVisualCatalog.Shadow);
+            }
+
+            return shadowTemplate.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonSpark(
             in BattleRenderCommand command,
             out BattleCentralResolvedResource resource)
         {
-            resource = default;
             if (!command.RenderState.IsSupported)
-                return BattleCentralResourceStatus.UnsupportedRenderState;
-            if (!command.SpriteDescriptor.HasLogicalResourceKey ||
-                !command.SpriteDescriptor.LogicalResourceKey.IsCommonSpark ||
-                command.EffectivePic != command.SpriteDescriptor.LogicalResourceKey.CommonSparkPic ||
-                !commonVisualCatalog.TryGetSpark(command.EffectivePic, out BattleCommonVisualBinding binding) ||
-                binding.Key != command.SpriteDescriptor.LogicalResourceKey ||
-                command.SpriteDescriptor.SpriteInstanceId != binding.SpriteInstanceId ||
-                command.SpriteDescriptor.TextureInstanceId != binding.TextureInstanceId ||
-                command.SpriteDescriptor.PixelRect != binding.PixelRect ||
-                command.SpriteDescriptor.PivotNormalized != binding.Pivot ||
-                command.Size != binding.PixelSize ||
-                command.RenderState.MaterialSemantic != binding.RenderState.MaterialSemantic ||
-                command.RenderState.MaskInteraction != binding.RenderState.MaskInteraction ||
-                !BattleSpriteMaterialContract.IsDeclaredCentralMaterial(fallbackMaterial, false))
             {
+                resource = default;
+                return BattleCentralResourceStatus.UnsupportedRenderState;
+            }
+            if (!command.SpriteDescriptor.HasLogicalResourceKey ||
+                !command.SpriteDescriptor.LogicalResourceKey.IsCommonSpark)
+            {
+                resource = default;
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            resource = new BattleCentralResolvedResource(
+            int pic = command.SpriteDescriptor.LogicalResourceKey.CommonSparkPic;
+            if (pic < 0 || pic >= BattleCommonVisualCatalog.SparkFrameCount)
+            {
+                resource = default;
+                return BattleCentralResourceStatus.UnresolvedVisual;
+            }
+
+            BattleCentralResourceTemplate template = sparkTemplates[pic];
+            if (!template.IsInitialized ||
+                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+            {
+                commonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding binding);
+                template = BuildCommonTemplate(
+                    BattleRenderCommandType.HitRecord,
+                    -1,
+                    pic,
+                    binding);
+                if (!sparkTemplates[pic].IsInitialized)
+                    initializedSparkTemplateSlots[initializedSparkTemplateCount++] = pic;
+                sparkTemplates[pic] = template;
+            }
+
+            return template.Resolve(command, out resource);
+        }
+
+        private BattleCentralResourceTemplate BuildEntityTemplate(BattleSpriteKey key)
+        {
+            if (!catalog.TryGet(key, out BattleSpriteEntry entry) || entry == null)
+                return BattleCentralResourceTemplate.Unresolved;
+
+            BattleCentralResourceSignature signature =
+                BattleCentralResourceSignature.FromEntity(entry);
+            return BuildTemplate(signature, entry.CentralBinding);
+        }
+
+        private BattleCentralResourceTemplate BuildCommonWordTemplate(int sheetIndex, int charCode)
+        {
+            commonVisualCatalog.TryGetWordGlyph(
+                sheetIndex,
+                charCode,
+                out BattleCommonVisualBinding binding);
+            return BuildCommonTemplate(
+                BattleRenderCommandType.OverlayGlyph,
+                sheetIndex,
+                charCode,
+                binding);
+        }
+
+        private BattleCentralResourceTemplate BuildCommonTemplate(
+            BattleRenderCommandType commandType,
+            int visualDataId,
+            int effectivePic,
+            BattleCommonVisualBinding binding)
+        {
+            if (binding == null)
+                return BattleCentralResourceTemplate.Unresolved;
+
+            BattleCentralResourceSignature signature =
+                BattleCentralResourceSignature.FromCommon(
+                    commandType,
+                    visualDataId,
+                    effectivePic,
+                    binding);
+            return BuildTemplate(signature, binding.CentralBinding);
+        }
+
+        private BattleCentralResourceTemplate BuildTemplate(
+            in BattleCentralResourceSignature signature,
+            in BattleSpriteCentralBinding binding)
+        {
+            bool expectsArray =
+                binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray;
+            Material material = expectsArray ? arrayMaterial : fallbackMaterial;
+            bool materialContractValid = IsConfiguredMaterialContractValid(material, expectsArray);
+            if (!binding.IsValid || !materialContractValid)
+            {
+                return BattleCentralResourceTemplate.UnresolvedWithSignature(
+                    signature,
+                    material,
+                    binding.Mode);
+            }
+
+            return BattleCentralResourceTemplate.Resolved(
+                signature,
                 binding.Texture,
-                fallbackMaterial,
+                material,
                 binding.NormalizedUv,
-                binding.PixelSize,
-                binding.Pivot,
-                command.Color,
-                (int)command.RenderState.MaterialSemantic,
-                0,
-                BattleSpriteCentralBindingMode.SourceTexture2D);
-            return BattleCentralResourceStatus.Resolved;
+                binding.AtlasSlice,
+                binding.Mode,
+                binding.AtlasPageIndex);
+        }
+
+        private bool IsConfiguredMaterialContractValid(Material material, bool expectsArray)
+        {
+            if (expectsArray && ReferenceEquals(material, configuredArrayMaterial))
+                return arrayMaterialContractValid;
+            if (!expectsArray && ReferenceEquals(material, configuredFallbackMaterial))
+                return fallbackMaterialContractValid;
+            return BattleSpriteMaterialContract.IsDeclaredCentralMaterial(material, expectsArray);
+        }
+
+        private void ClearTemplates()
+        {
+            entityTemplates.Clear();
+            shadowTemplate = default;
+
+            for (int index = 0; index < initializedSparkTemplateCount; index++)
+                sparkTemplates[initializedSparkTemplateSlots[index]] = default;
+            initializedSparkTemplateCount = 0;
+
+            for (int index = 0; index < initializedWordTemplateCount; index++)
+            {
+                int slot = initializedWordTemplateSlots[index];
+                int sheetIndex = slot / BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                int charCode = slot % BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                wordTemplates[sheetIndex][charCode] = default;
+            }
+            initializedWordTemplateCount = 0;
+        }
+
+        private static BattleCentralResourceTemplate[][] CreateWordTemplateCache()
+        {
+            var templates = new BattleCentralResourceTemplate[
+                BattleCommonVisualCatalog.WordSheetCount][];
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                templates[sheetIndex] = new BattleCentralResourceTemplate[
+                    BattleCommonVisualCatalog.WordGlyphsPerSheet];
+            }
+            return templates;
+        }
+
+        private readonly struct BattleCentralResourceTemplate
+        {
+            private BattleCentralResourceTemplate(
+                BattleCentralResourceStatus status,
+                in BattleCentralResourceSignature signature,
+                Texture texture,
+                Material material,
+                Rect normalizedUv,
+                int atlasSlice,
+                BattleSpriteCentralBindingMode bindingMode,
+                int atlasPageIndex,
+                bool tracksMaterial)
+            {
+                IsInitialized = true;
+                Status = status;
+                Signature = signature;
+                Texture = texture;
+                Material = material;
+                NormalizedUv = normalizedUv;
+                AtlasSlice = atlasSlice;
+                BindingMode = bindingMode;
+                AtlasPageIndex = atlasPageIndex;
+                TracksMaterial = tracksMaterial;
+            }
+
+            public static BattleCentralResourceTemplate Unresolved { get; } =
+                new BattleCentralResourceTemplate(
+                    BattleCentralResourceStatus.UnresolvedVisual,
+                    default,
+                    null,
+                    null,
+                    default,
+                    0,
+                    BattleSpriteCentralBindingMode.SourceTexture2D,
+                    -1,
+                    false);
+
+            public bool IsInitialized { get; }
+            private BattleCentralResourceStatus Status { get; }
+            private BattleCentralResourceSignature Signature { get; }
+            private Texture Texture { get; }
+            private Material Material { get; }
+            private Rect NormalizedUv { get; }
+            private int AtlasSlice { get; }
+            private BattleSpriteCentralBindingMode BindingMode { get; }
+            private int AtlasPageIndex { get; }
+            private bool TracksMaterial { get; }
+
+            public static BattleCentralResourceTemplate UnresolvedWithSignature(
+                in BattleCentralResourceSignature signature,
+                Material material,
+                BattleSpriteCentralBindingMode bindingMode)
+            {
+                return new BattleCentralResourceTemplate(
+                    BattleCentralResourceStatus.UnresolvedVisual,
+                    signature,
+                    null,
+                    material,
+                    default,
+                    0,
+                    bindingMode,
+                    -1,
+                    true);
+            }
+
+            public static BattleCentralResourceTemplate Resolved(
+                in BattleCentralResourceSignature signature,
+                Texture texture,
+                Material material,
+                Rect normalizedUv,
+                int atlasSlice,
+                BattleSpriteCentralBindingMode bindingMode,
+                int atlasPageIndex)
+            {
+                return new BattleCentralResourceTemplate(
+                    BattleCentralResourceStatus.Resolved,
+                    signature,
+                    texture,
+                    material,
+                    normalizedUv,
+                    atlasSlice,
+                    bindingMode,
+                    atlasPageIndex,
+                    true);
+            }
+
+            public bool MatchesConfiguredMaterial(
+                Material currentFallbackMaterial,
+                Material currentArrayMaterial)
+            {
+                if (!TracksMaterial)
+                    return true;
+                Material currentMaterial =
+                    BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray
+                        ? currentArrayMaterial
+                        : currentFallbackMaterial;
+                return ReferenceEquals(Material, currentMaterial);
+            }
+
+            public BattleCentralResourceStatus Resolve(
+                in BattleRenderCommand command,
+                out BattleCentralResolvedResource resource)
+            {
+                if (Status != BattleCentralResourceStatus.Resolved)
+                {
+                    resource = default;
+                    return Status;
+                }
+                if (!Signature.Matches(command))
+                {
+                    resource = default;
+                    return BattleCentralResourceStatus.UnresolvedVisual;
+                }
+
+                resource = new BattleCentralResolvedResource(
+                    Texture,
+                    Material,
+                    NormalizedUv,
+                    Signature.PixelSize,
+                    Signature.Pivot,
+                    command.Color,
+                    (int)Signature.MaterialSemantic,
+                    AtlasSlice,
+                    BindingMode,
+                    AtlasPageIndex);
+                return BattleCentralResourceStatus.Resolved;
+            }
+        }
+
+        private readonly struct BattleCentralResourceSignature
+        {
+            private BattleCentralResourceSignature(
+                BattleRenderCommandType commandType,
+                int visualDataId,
+                int effectivePic,
+                bool requiresSprite,
+                bool hasSprite,
+                int spriteInstanceId,
+                int textureInstanceId,
+                int materialInstanceId,
+                Rect pixelRect,
+                Vector2 pivot,
+                Rect normalizedUv,
+                Vector2 pixelSize,
+                BattleVisualResourceKey logicalResourceKey,
+                SpriteMaskInteraction maskInteraction,
+                BattleSpriteMaterialSemantic materialSemantic,
+                bool isSupported)
+            {
+                CommandType = commandType;
+                VisualDataId = visualDataId;
+                EffectivePic = effectivePic;
+                RequiresSprite = requiresSprite;
+                HasSprite = hasSprite;
+                SpriteInstanceId = spriteInstanceId;
+                TextureInstanceId = textureInstanceId;
+                MaterialInstanceId = materialInstanceId;
+                PixelRect = pixelRect;
+                Pivot = pivot;
+                NormalizedUv = normalizedUv;
+                PixelSize = pixelSize;
+                LogicalResourceKey = logicalResourceKey;
+                MaskInteraction = maskInteraction;
+                MaterialSemantic = materialSemantic;
+                IsSupported = isSupported;
+            }
+
+            public Vector2 Pivot { get; }
+            public Vector2 PixelSize { get; }
+            public BattleSpriteMaterialSemantic MaterialSemantic { get; }
+            private BattleRenderCommandType CommandType { get; }
+            private int VisualDataId { get; }
+            private int EffectivePic { get; }
+            private bool RequiresSprite { get; }
+            private bool HasSprite { get; }
+            private int SpriteInstanceId { get; }
+            private int TextureInstanceId { get; }
+            private int MaterialInstanceId { get; }
+            private Rect PixelRect { get; }
+            private Rect NormalizedUv { get; }
+            private BattleVisualResourceKey LogicalResourceKey { get; }
+            private SpriteMaskInteraction MaskInteraction { get; }
+            private bool IsSupported { get; }
+
+            public static BattleCentralResourceSignature FromEntity(BattleSpriteEntry entry)
+            {
+                Sprite sprite = entry.LegacySprite;
+                Texture2D texture = entry.SharedTexture;
+                BattleSpriteRenderState renderState = BattleSpriteRenderState.Default();
+                return new BattleCentralResourceSignature(
+                    BattleRenderCommandType.Entity,
+                    entry.Key.VisualDataId,
+                    entry.Key.EffectivePic,
+                    true,
+                    sprite != null,
+                    sprite != null ? sprite.GetInstanceID() : 0,
+                    texture != null ? texture.GetInstanceID() : 0,
+                    0,
+                    entry.PixelRect,
+                    entry.Pivot,
+                    entry.NormalizedUv,
+                    new Vector2(entry.PixelWidth, entry.PixelHeight),
+                    BattleVisualResourceKey.FromEntity(entry.Key),
+                    renderState.MaskInteraction,
+                    renderState.MaterialSemantic,
+                    renderState.IsSupported);
+            }
+
+            public static BattleCentralResourceSignature FromCommon(
+                BattleRenderCommandType commandType,
+                int visualDataId,
+                int effectivePic,
+                BattleCommonVisualBinding binding)
+            {
+                return new BattleCentralResourceSignature(
+                    commandType,
+                    visualDataId,
+                    effectivePic,
+                    true,
+                    binding.Sprite != null,
+                    binding.SpriteInstanceId,
+                    binding.TextureInstanceId,
+                    binding.MaterialInstanceId,
+                    binding.PixelRect,
+                    binding.Pivot,
+                    binding.NormalizedUv,
+                    binding.PixelSize,
+                    binding.Key,
+                    binding.RenderState.MaskInteraction,
+                    binding.RenderState.MaterialSemantic,
+                    binding.RenderState.IsSupported);
+            }
+
+            public bool Matches(in BattleRenderCommand command)
+            {
+                BattleSpriteValueDescriptor descriptor = command.SpriteDescriptor;
+                return command.Type == CommandType &&
+                       command.VisualDataId == VisualDataId &&
+                       command.EffectivePic == EffectivePic &&
+                       descriptor.RequiresSprite == RequiresSprite &&
+                       descriptor.HasSprite == HasSprite &&
+                       descriptor.HasLogicalResourceKey &&
+                       descriptor.LogicalResourceKey == LogicalResourceKey &&
+                       descriptor.SpriteInstanceId == SpriteInstanceId &&
+                       descriptor.TextureInstanceId == TextureInstanceId &&
+                       descriptor.MaterialInstanceId == MaterialInstanceId &&
+                       descriptor.PixelRect == PixelRect &&
+                       descriptor.PivotNormalized == Pivot &&
+                       command.Pivot == Pivot &&
+                       command.NormalizedUv == NormalizedUv &&
+                       command.Size == PixelSize &&
+                       command.RenderState.MaskInteraction == MaskInteraction &&
+                       command.RenderState.MaterialSemantic == MaterialSemantic &&
+                       command.RenderState.IsSupported == IsSupported;
+            }
         }
     }
 }

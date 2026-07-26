@@ -18,18 +18,22 @@ namespace NTSD.Animation.Rendering
             BattlePresentationFrame capturedFrame,
             BattlePresentationBackendMode requestedMode,
             BattlePixelFrameOwner owner,
-            int tickIndex,
+            int simulationTick,
+            int displayTick,
             int generation,
-            string fallbackReason,
+            bool isStale,
+            string reason,
             BattleCentralSubmission submission)
         {
             World = world;
             CapturedFrame = capturedFrame;
             RequestedMode = requestedMode;
             Owner = owner;
-            TickIndex = tickIndex;
+            SimulationTick = simulationTick;
+            DisplayTick = displayTick;
             Generation = generation;
-            FallbackReason = fallbackReason ?? string.Empty;
+            IsStale = isStale;
+            Reason = reason ?? string.Empty;
             Submission = submission;
         }
 
@@ -37,16 +41,24 @@ namespace NTSD.Animation.Rendering
         public BattlePresentationFrame CapturedFrame { get; }
         public BattlePresentationBackendMode RequestedMode { get; }
         public BattlePixelFrameOwner Owner { get; }
-        public int TickIndex { get; }
+        public int SimulationTick { get; }
+        public int DisplayTick { get; }
+        public int TickIndex => DisplayTick;
         public int Generation { get; }
-        public string FallbackReason { get; }
+        public bool IsStale { get; }
+        public string Reason { get; }
+        public string FallbackReason => Reason;
         public BattleCentralSubmission Submission { get; }
         public bool IsValid => World != null;
         public bool UsesCentralPixels => Owner == BattlePixelFrameOwner.Central && Submission != null;
+        public bool SuppressesLegacyMaterializers =>
+            RequestedMode == BattlePresentationBackendMode.CentralOnly &&
+            Owner == BattlePixelFrameOwner.Central;
     }
 
     public sealed class BattleCentralSubmission
     {
+        private readonly BattlePresentationFrame frozenFrame = new BattlePresentationFrame();
         private CharacterAnimtorManager catalogManager;
         private BattleSpriteCatalog catalog = BattleSpriteCatalog.Empty;
         private int readLeaseCount;
@@ -54,6 +66,9 @@ namespace NTSD.Animation.Rendering
         private int nextReadLeaseToken;
         private int retired = 1;
         private int resourcesReleased = 1;
+        private int submittedGeneration;
+        private int submittedTickIndex = -1;
+        private int submittedDrawCount;
 
         internal BattleCentralSubmission(BattleDynamicMeshBackend backend)
         {
@@ -65,9 +80,25 @@ namespace NTSD.Animation.Rendering
         public int TickIndex { get; private set; }
         public int Generation { get; private set; }
         public BattleDynamicMeshBackend Backend { get; }
+        public int BackendMutationVersion { get; private set; }
         public int ReadLeaseCount => Volatile.Read(ref readLeaseCount);
         public bool IsRetired => Volatile.Read(ref retired) != 0;
+        internal bool IsBackendBuildCurrent =>
+            Backend != null && Backend.MutationVersion == BackendMutationVersion &&
+            ReferenceEquals(Backend.BuiltFrame, CapturedFrame);
         internal bool IsReusable => IsRetired && ReadLeaseCount == 0;
+
+        internal BattlePresentationFrame CaptureFrame(
+            BattlePresentationFrame source,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics = null)
+        {
+            if (!IsReusable)
+                throw new InvalidOperationException("Cannot capture into a leased central submission slot.");
+            frozenFrame.CopyFrom(
+                source ?? throw new ArgumentNullException(nameof(source)),
+                detailDiagnostics);
+            return frozenFrame;
+        }
 
         internal void Publish(
             SimulationWorld world,
@@ -79,17 +110,48 @@ namespace NTSD.Animation.Rendering
         {
             if (!IsReusable)
                 throw new InvalidOperationException("Cannot publish into a leased central submission slot.");
+            if (!ReferenceEquals(capturedFrame, frozenFrame) ||
+                !ReferenceEquals(Backend.BuiltFrame, frozenFrame))
+            {
+                throw new InvalidOperationException(
+                    "A central submission must publish the independent frozen frame used by its backend build.");
+            }
 
             ReleaseCatalogBinding();
             World = world;
             CapturedFrame = capturedFrame;
             TickIndex = tickIndex;
             Generation = generation;
+            BackendMutationVersion = Backend.MutationVersion;
             catalogManager = manager;
             catalog = publishedCatalog ?? BattleSpriteCatalog.Empty;
             catalogManager?.RegisterRendererCatalogBinding(catalog);
+            Volatile.Write(ref submittedDrawCount, 0);
+            Volatile.Write(ref submittedTickIndex, -1);
+            Volatile.Write(ref submittedGeneration, 0);
             Volatile.Write(ref resourcesReleased, 0);
             Volatile.Write(ref retired, 0);
+        }
+
+        internal bool TryRecordExecutedDraws(int generation, int tickIndex, int drawCount)
+        {
+            if (drawCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(drawCount));
+            if (Volatile.Read(ref retired) != 0 || generation != Generation || tickIndex != TickIndex)
+                return false;
+
+            Volatile.Write(ref submittedGeneration, generation);
+            Volatile.Write(ref submittedTickIndex, tickIndex);
+            Volatile.Write(ref submittedDrawCount, drawCount);
+            return true;
+        }
+
+        internal int GetExecutedDrawCount(int generation, int tickIndex)
+        {
+            return Volatile.Read(ref submittedGeneration) == generation &&
+                   Volatile.Read(ref submittedTickIndex) == tickIndex
+                ? Volatile.Read(ref submittedDrawCount)
+                : 0;
         }
 
         internal bool TryAcquire(out BattleCentralSubmissionLease lease)

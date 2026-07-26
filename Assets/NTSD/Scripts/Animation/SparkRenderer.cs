@@ -52,7 +52,7 @@ namespace NTSD.Animation
             ReleaseActiveRenderers();
 
             if (world == null) { Debug.LogWarning("[SparkRenderer] world is null"); return; }
-            if (BattleCentralRenderSystem.ShouldUseCentralPixels(world))
+            if (BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
                 return;
 
             var pool = LF2ObjectPool.Instance;

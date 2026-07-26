@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Tools;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering;
 using NTSD.Tools;
 using NTSD.App;
 using Cysharp.Threading.Tasks;
@@ -33,6 +34,10 @@ namespace NTSD.Animation
 
         // 缓存 prefab 引用，避免懒加载时 GameConfig.Instance 为 null
         private GameObject _cachedLF2ObjectPrefab;
+
+        // Read-only acceptance evidence; avoids editor tooling reflecting private pool state.
+        public int AvailableObjectCountForAcceptance => _availableObjects?.Count ?? 0;
+        public int ActiveObjectCountForAcceptance => _activeObjects?.Count ?? 0;
 
         // ========== 生命周期 ==========
 
@@ -87,11 +92,28 @@ namespace NTSD.Animation
             {
                 go = new GameObject("LF2Object");
                 go.layer = LayerMask.NameToLayer("Battle");
+                go.SetActive(false);
+
                 var entityModel = new GameObject("EntityModel");
                 entityModel.layer = LayerMask.NameToLayer("Battle");
                 entityModel.transform.SetParent(go.transform, false);
-                entityModel.AddComponent<SpriteRenderer>();
-                entityModel.AddComponent<LF2ObjectRenderer>();
+                LF2ObjectRenderer fallbackRenderer = entityModel.AddComponent<LF2ObjectRenderer>();
+                BattleCentralPresentationMount entityMount =
+                    entityModel.AddComponent<BattleCentralPresentationMount>();
+                entityMount.ConfigureRuntimeFallback(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.EntitySprite,
+                    fallbackRenderer);
+
+                var shadow = new GameObject("Shadow");
+                shadow.layer = LayerMask.NameToLayer("Battle");
+                shadow.transform.SetParent(go.transform, false);
+                BattleCentralPresentationMount shadowMount =
+                    shadow.AddComponent<BattleCentralPresentationMount>();
+                shadowMount.ConfigureRuntimeFallback(
+                    BattleCentralPresentationMountRole.Shadow,
+                    BattleCentralPresentationMountPurpose.CommonShadow,
+                    fallbackRenderer);
             }
 
             NormalizeTransform(go.transform, resetScale: false);
@@ -106,14 +128,6 @@ namespace NTSD.Animation
                 Destroy(go);
                 return null;
             }
-
-            // Shadow 已内嵌在 prefab 中，查找名为 Shadow 的子节点
-            SpriteRenderer shadowRenderer = null;
-            var shadowTransform = go.transform.Find("Shadow");
-            if (shadowTransform != null)
-                shadowRenderer = shadowTransform.GetComponent<SpriteRenderer>();
-
-            r.SetShadowRenderer(shadowRenderer);
 
             _availableObjects.AddLast(go);
             return r;
@@ -180,8 +194,9 @@ namespace NTSD.Animation
 
             var go = r.transform.parent.gameObject;
 
-            if (_poolRoot != null)
-                go.transform.SetParent(_poolRoot, false);
+            Transform poolParent = _poolRoot != null ? _poolRoot : transform;
+            go.transform.SetParent(poolParent, false);
+            NormalizeTransform(go.transform, resetScale: false);
 
             go.SetActive(false);
             _activeObjects.Remove(go);

@@ -74,6 +74,7 @@ namespace NTSD.Simulation.Presentation
         public const int SlotCount = 10;
         public const int SlotLabelCharacterCapacity = 12;
         public const int GlyphAdvance = 9;
+        public const int MaximumGlyphCount = 3 + SlotLabelCharacterCapacity + 2;
 
         public static bool TryBuild(
             in BattleEntityOverlayRuntimeSlot entity,

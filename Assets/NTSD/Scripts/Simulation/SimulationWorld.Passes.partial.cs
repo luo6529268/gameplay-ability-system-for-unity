@@ -92,9 +92,9 @@ namespace NTSD.Simulation
                     if (!entity.AiControlled || entity.GetCurrentDataObjectTypeForSimulation() != 0)
                         return;
                     entity.RunCharacterInputPhase(tickIndex);
-                    if (!IsActiveForCurrentPass(entity))
-                        return;
-                    RefreshRuntimeSnapshot(entity);
+                    if (IsActiveForCurrentPass(entity))
+                        RefreshRuntimeSnapshot(entity);
+                    ObserveAiTeamHpSummaryMutation(entity);
                 });
             }
             finally
@@ -108,7 +108,18 @@ namespace NTSD.Simulation
             if (tickIndex <= 1)
                 return;
 
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattleAiInputDetailDiagnostics aiDetailDiagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            aiDetailDiagnostics?.BeginTick(tickIndex);
+            detailDiagnostics?.BeginPhase(
+                BattleTickDetailPhase.CharacterInputSnapshotBuild);
             BuildAiInputSlotSnapshot();
+            detailDiagnostics?.EndPhase(
+                BattleTickDetailPhase.CharacterInputSnapshotBuild);
+            detailDiagnostics?.BeginPhase(
+                BattleTickDetailPhase.CharacterInputEntityInputPass);
             try
             {
                 RunDeferredMutationEntityPass(entity =>
@@ -118,12 +129,26 @@ namespace NTSD.Simulation
 
                     entity.RunCharacterInputPhase(tickIndex);
                     if (IsActiveForCurrentPass(entity))
+                    {
+                        aiDetailDiagnostics?.BeginPhase(
+                            BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
                         RefreshRuntimeSnapshot(entity);
+                        aiDetailDiagnostics?.RecordRefresh();
+                        aiDetailDiagnostics?.EndPhase(
+                            BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
+                    }
+                    ObserveAiTeamHpSummaryMutation(entity);
                 });
             }
             finally
             {
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.CharacterInputEntityInputPass);
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.CharacterInputSnapshotClear);
                 ClearAiInputSlotSnapshot();
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.CharacterInputSnapshotClear);
             }
         }
 
@@ -374,8 +399,9 @@ namespace NTSD.Simulation
                 // later slot participate this tick; a reused lower slot waits until next tick.
                 ForEachEntityByRuntimeSlot(entity =>
                 {
-                    entity.Runtime?.ClearActionInputKeys();
-                    entity.Runtime?.ClearDirectionalInputKeys();
+                    // C++ keeps this tick's held state visible through frame advance and the
+                    // later frame_tick pass. The input phase owns rolling/clearing the next
+                    // tick, so clearing here loses jump direction and inherited momentum.
                     entity.SimTransit(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
                         return;
@@ -773,6 +799,12 @@ namespace NTSD.Simulation
 
         public void LateEntityUpdateAll(int tickIndex)
         {
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            // The production object-point factory is pass-stable. Resolve it lazily so an
+            // empty LateEntityUpdateAll invocation retains the existing no-auto-create behavior.
+            LF2ObjectPointFactory opointFactory = null;
+            bool opointFactoryResolved = false;
             _ticking = true;
             try
             {
@@ -785,74 +817,184 @@ namespace NTSD.Simulation
                     if (!IsActiveForCurrentPass(obj))
                         continue;
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityStateSpecial);
                     obj.RunStateSpecialPreCollision();
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityStateSpecial);
                         continue;
-                    RefreshRuntimeSnapshot(obj);
+                    }
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityStateSpecial);
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityRecovery);
                     obj.RunPreCollisionRecoveryPhase(tickIndex);
                     if (!IsActiveForCurrentPass(obj))
-                        continue;
-                    RefreshRuntimeSnapshot(obj);
-
-                    if (obj.Runtime != null && tickIndex < obj.Runtime.SuppressLateFrameTickUntilTick)
                     {
-                        RefreshRuntimeSnapshot(obj);
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityRecovery);
+                        continue;
                     }
-                    else
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityRecovery);
+
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityFrameTick);
+                    if (obj.Runtime == null ||
+                        tickIndex >= obj.Runtime.SuppressLateFrameTickUntilTick)
                     {
                         obj.SimFrameTick(tickIndex);
                     }
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityFrameTick);
                         continue;
-                    RefreshRuntimeSnapshot(obj);
+                    }
+                    RefreshLateRuntimeSnapshot(
+                        obj,
+                        BattleLateRuntimeSnapshotStage.FrameTick,
+                        detailDiagnostics);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityFrameTick);
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityCollision);
                     obj.SimEntityCollision(tickIndex);
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityCollision);
                         continue;
+                    }
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityCollision);
+
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityFrameExit);
                     bool exitedLateFrameTick = HandleLateFrameTickExit(obj);
                     if (exitedLateFrameTick)
                     {
                         if (obj is LF2SpecialAttack)
                             FlushQueuedObjectPointTasks();
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityFrameExit);
                         continue;
                     }
-                    RefreshRuntimeSnapshot(obj);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityFrameExit);
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityDeathOpoint);
                     obj.RunLateDeathOpointPreCleanupPhase();
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityDeathOpoint);
                         continue;
-                    RefreshRuntimeSnapshot(obj);
+                    }
+                    RefreshLateRuntimeSnapshot(
+                        obj,
+                        BattleLateRuntimeSnapshotStage.DeathOpoint,
+                        detailDiagnostics);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityDeathOpoint);
 
-                    var opointFactory = LF2ObjectPointFactory.Instance;
-                    if (opointFactory != null)
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityOpointProcess);
+                    if (!opointFactoryResolved)
+                    {
+                        opointFactory = LF2ObjectPointFactory.Instance;
+                        opointFactoryResolved = true;
+                    }
+                    LF2FrameData opointFrame = obj.Frame?.D;
+                    bool frameHasOpoint = opointFrame != null &&
+                        ((opointFrame.opoints != null && opointFrame.opoints.Count > 0) ||
+                         opointFrame.opoint.HasValue);
+                    if (opointFactory != null && frameHasOpoint)
                         opointFactory.ProcessOpointSpawnAlignedToCpp(obj);
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityOpointProcess);
                         continue;
+                    }
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityOpointProcess);
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityCleanup);
                     bool completedLateCleanup = obj.TryRunLatePostOpointCleanupPhase();
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityCleanup);
                     if (completedLateCleanup)
                     {
+                        detailDiagnostics?.BeginPhase(
+                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                         FlushQueuedObjectPointTasks();
-                        RefreshRuntimeSnapshot(obj);
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                         continue;
                     }
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                     obj.RunLateTailBeforePrevFrame();
                     FlushQueuedObjectPointTasks();
                     if (!IsActiveForCurrentPass(obj))
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                         continue;
+                    }
 
-                    RefreshRuntimeSnapshot(obj);
+                    RefreshLateRuntimeSnapshot(
+                        obj,
+                        BattleLateRuntimeSnapshotStage.TailAndQueuedFlush,
+                        detailDiagnostics);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
                     obj.MirrorLatePrevFrame();
-                    RefreshRuntimeSnapshot(obj);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
                 }
             }
             finally
             {
                 _ticking = false;
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.LateEntityFinalPendingFlush);
                 FlushPendingUnregister();
                 FlushPendingEntityDestroy();
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.LateEntityFinalPendingFlush);
+            }
+        }
+
+        private void RefreshLateRuntimeSnapshot(
+            LF2Entity entity,
+            BattleLateRuntimeSnapshotStage stage,
+            BattleTickDetailPhaseDiagnostics diagnostics)
+        {
+            if (diagnostics == null)
+            {
+                RefreshRuntimeSnapshot(entity);
+                return;
+            }
+
+            diagnostics.BeginLateRuntimeSnapshot(stage);
+            try
+            {
+                RefreshRuntimeSnapshot(entity);
+            }
+            finally
+            {
+                diagnostics.EndLateRuntimeSnapshot(stage);
             }
         }
 
@@ -1349,5 +1491,209 @@ namespace NTSD.Simulation
                 factory.CreateObjectImmediate(spawnTask);
             }
         }
+
+#if UNITY_INCLUDE_TESTS
+        internal int[] CaptureLateRuntimeSnapshotBoundaryForSelfCheck(int mode)
+        {
+            LF2Entity entity;
+            LateRuntimeSnapshotProbe probe = null;
+            LateRuntimeSnapshotWeaponProbe weapon = null;
+            if (mode == 3)
+            {
+                weapon = new LateRuntimeSnapshotWeaponProbe();
+                weapon.BindData();
+                entity = weapon;
+            }
+            else
+            {
+                probe = new LateRuntimeSnapshotProbe(
+                    zeroHpDuringRecovery: mode == 0,
+                    cleanupCompleted: mode == 2);
+                entity = probe;
+            }
+
+            Register(entity);
+            if (mode == 1)
+                entity.Runtime.SuppressLateFrameTickUntilTick = 2;
+
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            diagnostics.BeginTick(1);
+            LateEntityUpdateAll(1);
+
+            return new[]
+            {
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.Recovery),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.FrameTickSuppressed),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.CleanupCompleted),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.FrameTick),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.DeathOpoint),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.TailAndQueuedFlush),
+                probe?.RecoveryCount ?? 0,
+                probe?.FrameTickCount ?? 0,
+                probe?.FrameTickObservedHp ?? 0,
+                probe?.DeathOpointCount ?? 0,
+                probe?.DeathOpointObservedHp ?? 0,
+                probe?.CleanupCount ?? 0,
+                probe?.TailCount ?? 0,
+                ObjectCount,
+                weapon?.PendingDestroyObserved == true ? 1 : 0,
+            };
+        }
+
+        private sealed class LateRuntimeSnapshotProbe : LF2Entity
+        {
+            private readonly bool zeroHpDuringRecovery;
+            private readonly bool cleanupCompleted;
+
+            internal int RecoveryCount { get; private set; }
+            internal int FrameTickCount { get; private set; }
+            internal int FrameTickObservedHp { get; private set; }
+            internal int DeathOpointCount { get; private set; }
+            internal int DeathOpointObservedHp { get; private set; }
+            internal int CleanupCount { get; private set; }
+            internal int TailCount { get; private set; }
+            public override LF2ObjectType ObjectTypeEnum =>
+                LF2ObjectType.Character;
+            internal override bool UsesDynamicRuntimeSlot() => true;
+
+            internal LateRuntimeSnapshotProbe(
+                bool zeroHpDuringRecovery,
+                bool cleanupCompleted)
+            {
+                this.zeroHpDuringRecovery = zeroHpDuringRecovery;
+                this.cleanupCompleted = cleanupCompleted;
+                Name = "LateRuntimeSnapshotProbe";
+                ObjectId = 1;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                Health.HP = 100;
+                Health.HPBound = 100;
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+                var frame = new LF2FrameData
+                {
+                    frameId = 0,
+                    state = 0,
+                    wait = 1,
+                    next = 0,
+                    centerx = 0,
+                    centery = 0,
+                };
+                FrameCache.Load(new LF2CharacterDataWrapper(
+                    ObjectId,
+                    new LF2CharacterData
+                    {
+                        name = Name,
+                        type_sub = (int)LF2ObjectType.Character,
+                        frames = new List<LF2FrameData> { frame },
+                    }));
+                Frame.D = frame;
+                Frame.N = 0;
+                Frame.PN = 0;
+                Frame.Prev = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+            }
+
+            internal override void RunPreCollisionRecoveryPhase(int tickIndex)
+            {
+                RecoveryCount++;
+                if (zeroHpDuringRecovery)
+                    Health.HP = 0;
+            }
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                FrameTickCount++;
+                FrameTickObservedHp = Runtime.HP;
+            }
+
+            internal override void RunLateDeathOpointPreCleanupPhase()
+            {
+                DeathOpointCount++;
+                DeathOpointObservedHp = Runtime.HP;
+            }
+
+            internal override bool TryRunLatePostOpointCleanupPhase()
+            {
+                CleanupCount++;
+                return cleanupCompleted;
+            }
+
+            internal override void RunLateTailBeforePrevFrame()
+            {
+                TailCount++;
+            }
+
+            public override void Reset()
+            {
+            }
+
+            public override void Init(
+                LF2TaskBase task,
+                LF2ObjectRenderer renderer)
+            {
+            }
+        }
+
+        private sealed class LateRuntimeSnapshotWeaponProbe : LF2Weapon
+        {
+            internal bool PendingDestroyObserved { get; private set; }
+
+            internal void BindData()
+            {
+                Name = "LateRuntimeSnapshotDepletedWeapon";
+                ObjectId = 100;
+                SetWeaponType((int)LF2ObjectType.LightWeapon);
+                PS.BindRuntime(Runtime);
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                Trans = new FrameTransistor(this);
+                var frame = new LF2FrameData
+                {
+                    frameId = 0,
+                    state = 0,
+                    wait = 100,
+                    next = 0,
+                    centerx = 0,
+                    centery = 0,
+                };
+                FrameCache.Load(new LF2CharacterDataWrapper(
+                    ObjectId,
+                    new LF2CharacterData
+                    {
+                        name = Name,
+                        type_sub = 100,
+                        weapon_hp = 1,
+                        weapon_broken_sound = "LateSnapshot_Depleted",
+                        frames = new List<LF2FrameData> { frame },
+                    }));
+                Frame.D = frame;
+                Frame.PN = 0;
+                Frame.N = 0;
+                Frame.Prev = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Health.HP = 1;
+                Health.HPBound = 1;
+                Runtime.WeaponFlightCounter = -1;
+            }
+
+            internal override bool TryRunLatePostOpointCleanupPhase()
+            {
+                bool completed = base.TryRunLatePostOpointCleanupPhase();
+                PendingDestroyObserved |= Runtime.PendingFlushDestroy;
+                return completed;
+            }
+        }
+#endif
     }
 }

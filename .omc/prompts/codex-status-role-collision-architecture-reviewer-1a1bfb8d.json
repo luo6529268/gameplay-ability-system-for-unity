@@ -1,0 +1,15 @@
+{
+  "provider": "codex",
+  "jobId": "1a1bfb8d",
+  "slug": "role-collision-architecture-reviewer",
+  "status": "failed",
+  "pid": 66748,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-role-collision-architecture-reviewer-1a1bfb8d.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-role-collision-architecture-reviewer-1a1bfb8d.md",
+  "model": "gpt-5.2",
+  "agentRole": "code-reviewer",
+  "spawnedAt": "2026-07-25T08:34:26.959Z",
+  "killedByUser": true,
+  "completedAt": "2026-07-25T08:35:52.659Z",
+  "error": "Killed by user (signal: SIGTERM)"
+}

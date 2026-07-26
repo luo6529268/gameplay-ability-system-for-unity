@@ -1,13 +1,12 @@
 {
   "active": true,
   "iteration": 1,
-  "current_phase": "P1 compact render sorting",
-  "task_description": "Complete the central battle rendering and runtime capacity plan excluding T8, with fresh build/self-check and architect verification.",
-  "plan_path": "Assets/NTSD/Docs/central-battle-render-system-plan.md",
-  "started_at": "2026-07-21T01:00:00+08:00",
+  "current_phase": "p8_d_v4_metric_gate",
+  "task_description": "完成 P8-D v4 中央战斗渲染 benchmark 严格指标门禁、Editor/Player 证据、自检与审查；排除 P8-E Android 和 T8",
+  "started_at": "2026-07-23T13:00:53.305Z",
   "_meta": {
     "mode": "ralph",
-    "updatedAt": "2026-07-20T16:53:43.095Z",
+    "updatedAt": "2026-07-23T13:00:53.714Z",
     "updatedBy": "state_write_tool"
   }
 }

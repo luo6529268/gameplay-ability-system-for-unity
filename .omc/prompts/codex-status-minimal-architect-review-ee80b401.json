@@ -1,0 +1,13 @@
+{
+  "provider": "codex",
+  "jobId": "ee80b401",
+  "slug": "minimal-architect-review",
+  "status": "completed",
+  "pid": 360896,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-minimal-architect-review-ee80b401.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-minimal-architect-review-ee80b401.md",
+  "model": "gpt-5.4",
+  "agentRole": "architect",
+  "spawnedAt": "2026-07-22T15:33:21.934Z",
+  "completedAt": "2026-07-22T15:35:00.713Z"
+}

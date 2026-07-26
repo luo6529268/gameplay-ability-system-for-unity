@@ -60,6 +60,13 @@ namespace NTSD.Simulation
         internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
         internal CollisionBroadphaseBackend CollisionBroadphaseForServices { get; }
         internal int ClaimedRuntimeSlotCountForServices => _runtimeSlots.ClaimedCount;
+        internal ulong RuntimeSlotOccupancyEpochForServices =>
+            _runtimeSlots.OccupancyEpoch;
+        public BattleRuntimeProfile RuntimeProfileForDiagnostics => activeRuntimeProfile;
+        public int RuntimeSlotCapacityForDiagnostics => _runtimeSlots.LogicalCapacity;
+        public CollisionBroadphaseBackend CollisionBroadphaseForDiagnostics =>
+            CollisionBroadphaseForServices;
+        public int ClaimedRuntimeSlotCountForDiagnostics => _runtimeSlots.ClaimedCount;
         internal RuntimeRestStore RuntimeRestStoreForServices => _runtimeRestStore;
 
         private int GetRuntimeStableId(ISimObject obj)
@@ -104,7 +111,7 @@ namespace NTSD.Simulation
         {
         }
 
-        internal SimulationWorld(
+        public SimulationWorld(
             BattleRuntimeProfile runtimeProfile,
             int runtimeSlotCapacity,
             CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
@@ -152,6 +159,85 @@ namespace NTSD.Simulation
         internal bool TryResolveRuntimeHandle(RuntimeEntityHandle handle, out LF2Entity entity)
         {
             return _runtimeSlots.TryResolve(handle, out entity);
+        }
+
+        public bool TryGetCurrentRuntimeHandleForDiagnostics(
+            int runtimeSlot,
+            LF2Entity expectedEntity,
+            out RuntimeEntityHandle handle)
+        {
+            return _runtimeSlots.TryGetCurrentHandle(runtimeSlot, expectedEntity, out handle);
+        }
+
+        public bool TryResolveRuntimeHandleForDiagnostics(
+            RuntimeEntityHandle handle,
+            out LF2Entity entity)
+        {
+            return _runtimeSlots.TryResolve(handle, out entity);
+        }
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Returns currently claimed, pass-active runtime entities by resolving a fresh
+        /// generation-checked handle for every runtime slot. This intentionally does
+        /// not use bucket/pass queries so diagnostic cleanup can find leaked entries.
+        /// </summary>
+        public void GetActiveRuntimeEntitySnapshotForDiagnostics(List<LF2Entity> dst)
+        {
+            if (dst == null)
+                return;
+
+            dst.Clear();
+            for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view = _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                if (!view.Claimed || view.Entity == null || view.Generation == 0)
+                    continue;
+
+                var handle = new RuntimeEntityHandle(runtimeSlot, view.Generation);
+                if (!_runtimeSlots.TryResolve(handle, out LF2Entity entity) ||
+                    entity == null ||
+                    entity.Runtime?.PendingFlushDestroy == true ||
+                    dst.Contains(entity))
+                {
+                    continue;
+                }
+
+                dst.Add(entity);
+            }
+
+            dst.Sort(CompareRuntimeSlotOrder);
+        }
+
+        /// <summary>
+        /// Forces the same delayed destroy release boundary used by simulation passes.
+        /// It never resets the world and is only valid outside a running pass.
+        /// </summary>
+        public void FlushPendingDestroyForDiagnostics()
+        {
+            if (_ticking)
+                throw new System.InvalidOperationException(
+                    "Diagnostic destroy flushing cannot run while SimulationWorld is ticking.");
+
+            ReleasePendingDestroySlots();
+            FlushPendingUnregister();
+            FlushPendingEntityDestroy();
+            FlushPendingUnregister();
+        }
+#endif
+
+        internal bool TryGetRuntimeSlotReadOnlyView(
+            int runtimeSlot,
+            out RuntimeSlotTable.ReadOnlySlotView view)
+        {
+            if (!_runtimeSlots.IsAddressable(runtimeSlot))
+            {
+                view = default;
+                return false;
+            }
+
+            view = _runtimeSlots.GetReadOnlyView(runtimeSlot);
+            return true;
         }
 
         private void ResetRawRuntimeSlotState(int runtimeSlot)
@@ -212,6 +298,8 @@ namespace NTSD.Simulation
                 if (item is not LF2Entity entity)
                     continue;
 
+                NTSD.Animation.Rendering.BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(
+                    entity.Renderer);
                 entity.ItrRest?.Unbind(false);
                 entity.ItrRest?.Reset();
                 entity.Reset();
@@ -404,6 +492,16 @@ namespace NTSD.Simulation
             bucket.items.Add(obj);
             bucket.dirty = true;
             obj.OnAdded(_context);
+            if (obj is LF2Entity addedEntity &&
+                TryGetCurrentRuntimeHandle(
+                    addedEntity.Runtime.SlotIndex,
+                    addedEntity,
+                    out RuntimeEntityHandle runtimeHandle))
+            {
+                NTSD.Animation.Rendering.BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                    addedEntity.Renderer,
+                    runtimeHandle);
+            }
             Debug.Log($"[SimulationWorld] Registered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
         }
 
@@ -417,8 +515,11 @@ namespace NTSD.Simulation
 
             if (_ticking)
             {
-                if (obj is LF2Entity pendingEntity && !ReleaseRuntimeSlot(pendingEntity))
+                if (obj is LF2Entity pendingEntity &&
+                    !ReleaseRuntimeSlotAndClearPresentationBinding(pendingEntity))
+                {
                     return;
+                }
                 if (!_pendingUnregister.Contains(obj))
                     _pendingUnregister.Add(obj);
                 return;
@@ -461,7 +562,7 @@ namespace NTSD.Simulation
 
             if (obj is LF2Entity entity &&
                 entity.Runtime?.SlotIndex >= 0 &&
-                !ReleaseRuntimeSlot(entity))
+                !ReleaseRuntimeSlotAndClearPresentationBinding(entity))
             {
                 return;
             }
@@ -669,7 +770,7 @@ namespace NTSD.Simulation
                         continue;
 
                     if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity) &&
-                        ReleaseRuntimeSlot(entity) &&
+                        ReleaseRuntimeSlotAndClearPresentationBinding(entity) &&
                         !_pendingSlotReleasedDestroy.Contains(entity))
                     {
                         _pendingSlotReleasedDestroy.Add(entity);
@@ -719,12 +820,33 @@ namespace NTSD.Simulation
             return true;
         }
 
+        private bool ReleaseRuntimeSlotAndClearPresentationBinding(LF2Entity entity)
+        {
+            NTSD.Animation.Rendering.BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(
+                entity?.Renderer);
+            if (ReleaseRuntimeSlot(entity))
+                return true;
+
+            int slot = entity?.Runtime?.SlotIndex ?? -1;
+            if (slot >= 0 &&
+                TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle restoredHandle))
+            {
+                NTSD.Animation.Rendering.BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                    entity.Renderer,
+                    restoredHandle);
+            }
+
+            return false;
+        }
+
         private void RollbackRuntimeSlotRegistration(LF2Entity entity, int runtimeSlot)
         {
             entity?.ItrRest?.Unbind(false);
             if (entity != null &&
                 object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(runtimeSlot), entity))
             {
+                NTSD.Animation.Rendering.BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(
+                    entity.Renderer);
                 _runtimeSlots.Release(runtimeSlot, entity);
             }
             entity?.SetRuntimeSlotIndex(-1);

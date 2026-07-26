@@ -770,11 +770,28 @@ namespace NTSD.Animation.LF2Objects
 
             if (AiControlled)
             {
-                Match?.PrepareAiInputBasic(this, tickIndex);
+                BattleAiInputDetailDiagnostics diagnostics =
+                    Match?.ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+                diagnostics?.RecordAi();
+                diagnostics?.BeginPhase(BattleAiInputDetailPhase.RemainingAiDecision);
+                try
+                {
+                    Match?.PrepareAiInputBasic(this, tickIndex);
+                }
+                finally
+                {
+                    diagnostics?.EndPhase(BattleAiInputDetailPhase.RemainingAiDecision);
+                }
+                diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
                 InputState?.SyncFromRuntime(Runtime);
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
             }
 
+            BattleAiInputDetailDiagnostics comboDiagnostics =
+                Match?.ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            comboDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ComboUpdate);
             ComboUpdate();
+            comboDiagnostics?.EndPhase(BattleAiInputDetailPhase.ComboUpdate);
             ApplyNonCharacterFrameVelocityForFrameAdvance();
         }
 
@@ -966,7 +983,7 @@ namespace NTSD.Animation.LF2Objects
 
         public override void UnregisterFromWorld()
         {
-            Match?.Unregister(this);
+            base.UnregisterFromWorld();
         }
 
         public override void OnTransitDestroy()

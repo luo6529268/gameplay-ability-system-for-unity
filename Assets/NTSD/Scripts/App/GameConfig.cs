@@ -17,8 +17,8 @@ namespace NTSD.App
         public int DesktopInitialRuntimeSlotCapacity = 512;
         [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]
         public string BattleCollisionBroadphaseName = "";
-        [Tooltip("Battle presentation backend. Empty uses LegacyOnly. Valid values: LegacyOnly, CentralShadowBuild, CentralOnly. CentralOnly falls back to LegacyOnly for a frame when central ownership, resources, or renderer validation fails.")]
-        public string BattlePresentationBackendName = "";
+        [Tooltip("Battle presentation backend. Empty uses CentralOnly. Valid values: LegacyOnly, CentralShadowBuild, CentralOnly. CentralOnly owns battle pixels and fails closed without enabling legacy presenters.")]
+        public string BattlePresentationBackendName = "CentralOnly";
         [Tooltip("Battle atlas policy. Empty uses Auto. Valid values: Auto, TextureArray, OrderedPages.")]
         public string BattleAtlasModeName = "";
         [Tooltip("Central battle draw policy. Empty uses the renderer feature default. Valid values: Auto, OrderedChunks, StrictOrderedDraw.")]

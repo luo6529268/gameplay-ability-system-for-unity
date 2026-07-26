@@ -3,6 +3,18 @@ using System.Collections.Generic;
 
 namespace NTSD.Simulation.Spatial
 {
+    public enum IncrementalPointFilterDecision
+    {
+        Reject = 0,
+        Accept = 1,
+        Abort = 2,
+    }
+
+    public interface IIncrementalPointNearestFilter
+    {
+        IncrementalPointFilterDecision Evaluate(RuntimeEntityHandle handle);
+    }
+
     public sealed class LooseQuadtreeBroadphase : ISpatialBroadphase, IIncrementalSpatialBroadphase
     {
         public const int DefaultLeafCapacity = 16;
@@ -114,6 +126,14 @@ namespace NTSD.Simulation.Spatial
             }
         }
 
+        private struct NearestNodeQueueEntry
+        {
+            public int NodeIndex;
+            public int ManhattanLowerBound;
+            public int XLowerBound;
+            public int ZLowerBound;
+        }
+
         private readonly int leafCapacity;
         private readonly int maxDepth;
         private Node[] nodes = new Node[16];
@@ -134,6 +154,9 @@ namespace NTSD.Simulation.Spatial
         private int incrementalActiveCount;
         private int incrementalValidationToken;
         private bool incrementalInitialized;
+        private NearestNodeQueueEntry[] nearestNodeQueue =
+            new NearestNodeQueueEntry[16];
+        private int nearestNodeQueueCount;
 
         public LooseQuadtreeBroadphase(
             int leafCapacity = DefaultLeafCapacity,
@@ -300,6 +323,231 @@ namespace NTSD.Simulation.Spatial
             QueryIncrementalNode(0, bounds, resultHandles);
         }
 
+        public bool TryFindNearestPointManhattan<TFilter>(
+            int pointX,
+            int pointZ,
+            int maxDistanceExclusive,
+            int maxAbsXExclusive,
+            int maxAbsZExclusive,
+            ref TFilter filter,
+            out RuntimeEntityHandle nearestHandle,
+            out int nearestDistance,
+            out int visitedRecordCount)
+            where TFilter : struct, IIncrementalPointNearestFilter
+        {
+            nearestHandle = RuntimeEntityHandle.Invalid;
+            nearestDistance = maxDistanceExclusive;
+            visitedRecordCount = 0;
+            nearestNodeQueueCount = 0;
+
+            if (!incrementalInitialized || incrementalNodeCount == 0 ||
+                maxDistanceExclusive <= 0 ||
+                maxAbsXExclusive <= 0 ||
+                maxAbsZExclusive <= 0)
+            {
+                return incrementalInitialized && incrementalNodeCount > 0;
+            }
+
+            try
+            {
+                NearestNodeQueueEntry root = CreateNearestQueueEntry(
+                    0,
+                    pointX,
+                    pointZ);
+                if (CanNearestNodeContainCandidate(
+                    root,
+                    nearestDistance,
+                    maxDistanceExclusive,
+                    maxAbsXExclusive,
+                    maxAbsZExclusive))
+                {
+                    PushNearestNode(root);
+                }
+
+                while (nearestNodeQueueCount > 0)
+                {
+                    NearestNodeQueueEntry queued = PopNearestNode();
+                    if (queued.ManhattanLowerBound > nearestDistance)
+                        break;
+                    if (!CanNearestNodeContainCandidate(
+                        queued,
+                        nearestDistance,
+                        maxDistanceExclusive,
+                        maxAbsXExclusive,
+                        maxAbsZExclusive))
+                    {
+                        continue;
+                    }
+
+                    if (queued.NodeIndex < 0 || queued.NodeIndex >= incrementalNodeCount)
+                        return false;
+
+                    IncrementalNode node = incrementalNodes[queued.NodeIndex];
+                    if (node == null)
+                        return false;
+
+                    for (int i = 0; i < node.Entries.Count; i++)
+                    {
+                        int recordIndex = node.Entries[i];
+                        if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
+                            return false;
+
+                        IncrementalRecord record = incrementalRecords[recordIndex];
+                        if (record == null || !record.Active ||
+                            record.NodeIndex != queued.NodeIndex ||
+                            !record.Bounds.IsValid)
+                        {
+                            return false;
+                        }
+
+                        visitedRecordCount++;
+                        int deltaX = SaturatingAbsDifference(record.Bounds.MinX, pointX);
+                        if (deltaX >= maxAbsXExclusive)
+                            continue;
+                        int deltaZ = SaturatingAbsDifference(record.Bounds.MinZ, pointZ);
+                        if (deltaZ >= maxAbsZExclusive)
+                            continue;
+                        int distance = SaturatingAdd(deltaX, deltaZ);
+                        if (distance >= maxDistanceExclusive ||
+                            distance > nearestDistance)
+                        {
+                            continue;
+                        }
+
+                        IncrementalPointFilterDecision decision =
+                            filter.Evaluate(record.Handle);
+                        if (decision == IncrementalPointFilterDecision.Abort)
+                            return false;
+                        if (decision != IncrementalPointFilterDecision.Accept)
+                            continue;
+
+                        if (distance < nearestDistance ||
+                            (distance == nearestDistance &&
+                             nearestHandle.IsValid &&
+                             record.Handle.Slot < nearestHandle.Slot))
+                        {
+                            nearestDistance = distance;
+                            nearestHandle = record.Handle;
+                        }
+                    }
+
+                    if (!node.HasChildren)
+                        continue;
+
+                    PushNearestChildIfRelevant(
+                        node.Child0,
+                        pointX,
+                        pointZ,
+                        nearestDistance,
+                        maxDistanceExclusive,
+                        maxAbsXExclusive,
+                        maxAbsZExclusive);
+                    PushNearestChildIfRelevant(
+                        node.Child1,
+                        pointX,
+                        pointZ,
+                        nearestDistance,
+                        maxDistanceExclusive,
+                        maxAbsXExclusive,
+                        maxAbsZExclusive);
+                    PushNearestChildIfRelevant(
+                        node.Child2,
+                        pointX,
+                        pointZ,
+                        nearestDistance,
+                        maxDistanceExclusive,
+                        maxAbsXExclusive,
+                        maxAbsZExclusive);
+                    PushNearestChildIfRelevant(
+                        node.Child3,
+                        pointX,
+                        pointZ,
+                        nearestDistance,
+                        maxDistanceExclusive,
+                        maxAbsXExclusive,
+                        maxAbsZExclusive);
+                }
+
+                return true;
+            }
+            finally
+            {
+                nearestNodeQueueCount = 0;
+            }
+        }
+
+        public bool TryUpsertIncremental(
+            RuntimeEntityHandle handle,
+            in SpatialAabbXZ bounds)
+        {
+            if (!handle.IsValid || !bounds.IsValid ||
+                !incrementalInitialized || incrementalNodeCount == 0 ||
+                !ContainsInLooseBounds(incrementalNodes[0], bounds))
+            {
+                return false;
+            }
+
+            try
+            {
+                if (!incrementalHandleToRecord.TryGetValue(handle, out int recordIndex))
+                {
+                    recordIndex = AllocateIncrementalRecord(handle, bounds);
+                    InsertIncremental(0, recordIndex);
+                    return true;
+                }
+
+                if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
+                    return false;
+                IncrementalRecord record = incrementalRecords[recordIndex];
+                if (record == null || !record.Active || record.Handle != handle ||
+                    record.NodeIndex < 0 || record.NodeIndex >= incrementalNodeCount)
+                {
+                    return false;
+                }
+                if (record.Bounds.Equals(bounds))
+                    return true;
+
+                if (ContainsInLooseBounds(incrementalNodes[record.NodeIndex], bounds))
+                {
+                    record.Bounds = bounds;
+                    IncrementalInPlaceUpdateCount++;
+                    return true;
+                }
+
+                if (!RemoveRecordIndexFromNode(record.NodeIndex, recordIndex))
+                    return false;
+                record.Bounds = bounds;
+                record.NodeIndex = -1;
+                InsertIncremental(0, recordIndex);
+                IncrementalMigrationCount++;
+                return true;
+            }
+            catch
+            {
+                ResetIncremental();
+                return false;
+            }
+        }
+
+        public bool TryRemoveIncremental(RuntimeEntityHandle handle)
+        {
+            if (!handle.IsValid || !incrementalInitialized ||
+                !incrementalHandleToRecord.TryGetValue(handle, out int recordIndex))
+            {
+                return false;
+            }
+
+            try
+            {
+                return RemoveIncrementalRecord(recordIndex);
+            }
+            catch
+            {
+                ResetIncremental();
+                return false;
+            }
+        }
+
         public void ResetIncremental()
         {
             for (int i = 0; i < incrementalNodeCount; i++)
@@ -316,6 +564,180 @@ namespace NTSD.Simulation.Spatial
             incrementalRecordCount = 0;
             incrementalActiveCount = 0;
             incrementalInitialized = false;
+        }
+
+        private void PushNearestChildIfRelevant(
+            int nodeIndex,
+            int pointX,
+            int pointZ,
+            int nearestDistance,
+            int maxDistanceExclusive,
+            int maxAbsXExclusive,
+            int maxAbsZExclusive)
+        {
+            NearestNodeQueueEntry entry = CreateNearestQueueEntry(
+                nodeIndex,
+                pointX,
+                pointZ);
+            if (CanNearestNodeContainCandidate(
+                entry,
+                nearestDistance,
+                maxDistanceExclusive,
+                maxAbsXExclusive,
+                maxAbsZExclusive))
+            {
+                PushNearestNode(entry);
+            }
+        }
+
+        private NearestNodeQueueEntry CreateNearestQueueEntry(
+            int nodeIndex,
+            int pointX,
+            int pointZ)
+        {
+            if (nodeIndex < 0 || nodeIndex >= incrementalNodeCount)
+            {
+                return new NearestNodeQueueEntry
+                {
+                    NodeIndex = nodeIndex,
+                    ManhattanLowerBound = int.MaxValue,
+                    XLowerBound = int.MaxValue,
+                    ZLowerBound = int.MaxValue,
+                };
+            }
+
+            IncrementalNode node = incrementalNodes[nodeIndex];
+            long looseMinX4 = node.MinX * 4 - node.Side;
+            long looseMinZ4 = node.MinZ * 4 - node.Side;
+            long looseMaxX4 = (node.MinX + node.Side) * 4 + node.Side;
+            long looseMaxZ4 = (node.MinZ + node.Side) * 4 + node.Side;
+            int xLowerBound = DistanceToQuarterInterval(
+                (long)pointX * 4,
+                looseMinX4,
+                looseMaxX4);
+            int zLowerBound = DistanceToQuarterInterval(
+                (long)pointZ * 4,
+                looseMinZ4,
+                looseMaxZ4);
+            return new NearestNodeQueueEntry
+            {
+                NodeIndex = nodeIndex,
+                ManhattanLowerBound = SaturatingAdd(xLowerBound, zLowerBound),
+                XLowerBound = xLowerBound,
+                ZLowerBound = zLowerBound,
+            };
+        }
+
+        private static bool CanNearestNodeContainCandidate(
+            in NearestNodeQueueEntry entry,
+            int nearestDistance,
+            int maxDistanceExclusive,
+            int maxAbsXExclusive,
+            int maxAbsZExclusive)
+        {
+            return entry.ManhattanLowerBound <= nearestDistance &&
+                   entry.ManhattanLowerBound < maxDistanceExclusive &&
+                   entry.XLowerBound < maxAbsXExclusive &&
+                   entry.ZLowerBound < maxAbsZExclusive;
+        }
+
+        private void PushNearestNode(in NearestNodeQueueEntry entry)
+        {
+            EnsureNearestNodeQueueCapacity(nearestNodeQueueCount + 1);
+            int index = nearestNodeQueueCount++;
+            while (index > 0)
+            {
+                int parent = (index - 1) / 2;
+                if (CompareNearestQueueEntries(nearestNodeQueue[parent], entry) <= 0)
+                    break;
+                nearestNodeQueue[index] = nearestNodeQueue[parent];
+                index = parent;
+            }
+            nearestNodeQueue[index] = entry;
+        }
+
+        private NearestNodeQueueEntry PopNearestNode()
+        {
+            NearestNodeQueueEntry result = nearestNodeQueue[0];
+            int lastIndex = --nearestNodeQueueCount;
+            if (lastIndex <= 0)
+                return result;
+
+            NearestNodeQueueEntry replacement = nearestNodeQueue[lastIndex];
+            int index = 0;
+            while (true)
+            {
+                int left = index * 2 + 1;
+                if (left >= nearestNodeQueueCount)
+                    break;
+                int right = left + 1;
+                int child = right < nearestNodeQueueCount &&
+                            CompareNearestQueueEntries(
+                                nearestNodeQueue[right],
+                                nearestNodeQueue[left]) < 0
+                    ? right
+                    : left;
+                if (CompareNearestQueueEntries(replacement, nearestNodeQueue[child]) <= 0)
+                    break;
+                nearestNodeQueue[index] = nearestNodeQueue[child];
+                index = child;
+            }
+            nearestNodeQueue[index] = replacement;
+            return result;
+        }
+
+        private static int CompareNearestQueueEntries(
+            in NearestNodeQueueEntry left,
+            in NearestNodeQueueEntry right)
+        {
+            int comparison = left.ManhattanLowerBound.CompareTo(
+                right.ManhattanLowerBound);
+            if (comparison != 0)
+                return comparison;
+            comparison = left.XLowerBound.CompareTo(right.XLowerBound);
+            if (comparison != 0)
+                return comparison;
+            comparison = left.ZLowerBound.CompareTo(right.ZLowerBound);
+            return comparison != 0
+                ? comparison
+                : left.NodeIndex.CompareTo(right.NodeIndex);
+        }
+
+        private void EnsureNearestNodeQueueCapacity(int required)
+        {
+            if (required <= nearestNodeQueue.Length)
+                return;
+
+            int capacity = nearestNodeQueue.Length;
+            while (capacity < required)
+                capacity *= 2;
+            Array.Resize(ref nearestNodeQueue, capacity);
+        }
+
+        private static int DistanceToQuarterInterval(
+            long point4,
+            long min4,
+            long max4)
+        {
+            long quarterDistance = point4 < min4
+                ? min4 - point4
+                : point4 > max4
+                    ? point4 - max4
+                    : 0;
+            long distance = quarterDistance / 4;
+            return distance >= int.MaxValue ? int.MaxValue : (int)distance;
+        }
+
+        private static int SaturatingAbsDifference(int left, int right)
+        {
+            long difference = Math.Abs((long)left - right);
+            return difference >= int.MaxValue ? int.MaxValue : (int)difference;
+        }
+
+        private static int SaturatingAdd(int left, int right)
+        {
+            long sum = (long)left + right;
+            return sum >= int.MaxValue ? int.MaxValue : (int)sum;
         }
 
         private SpatialSynchronizeResult RebuildIncremental(

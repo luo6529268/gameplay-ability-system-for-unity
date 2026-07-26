@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace NTSD.Simulation.Presentation
@@ -408,7 +409,11 @@ namespace NTSD.Simulation.Presentation
             bool hasCatalogKey,
             BattleSpriteValueDescriptor spriteDescriptor,
             int hitRecordStart,
-            int hitRecordCount)
+            int hitRecordCount,
+            bool entityVisible = true,
+            bool shadowVisible = true,
+            Vector2 localOffsetPixels = default(Vector2),
+            int frameId = -1)
         {
             Handle = handle;
             StableId = stableId;
@@ -443,6 +448,10 @@ namespace NTSD.Simulation.Presentation
             SpriteDescriptor = spriteDescriptor;
             HitRecordStart = hitRecordStart;
             HitRecordCount = hitRecordCount;
+            EntityVisible = entityVisible;
+            ShadowVisible = shadowVisible;
+            LocalOffsetPixels = localOffsetPixels;
+            FrameId = frameId;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -479,6 +488,10 @@ namespace NTSD.Simulation.Presentation
         public BattleSpriteValueDescriptor SpriteDescriptor { get; }
         public int HitRecordStart { get; }
         public int HitRecordCount { get; }
+        public bool EntityVisible { get; }
+        public bool ShadowVisible { get; }
+        public Vector2 LocalOffsetPixels { get; }
+        public int FrameId { get; }
     }
 
     public readonly struct BattleRenderCommand
@@ -579,6 +592,8 @@ namespace NTSD.Simulation.Presentation
 
     public sealed class BattlePresentationFrame
     {
+        private static readonly ProfilerMarker FrozenFrameCopyMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.FrozenFrameCopy");
         private BattlePresentationEntitySnapshot[] entities = new BattlePresentationEntitySnapshot[16];
         private BattlePresentationHitRecordSnapshot[] hitRecords = new BattlePresentationHitRecordSnapshot[16];
         private BattleRenderCommand[] commands = new BattleRenderCommand[64];
@@ -601,6 +616,8 @@ namespace NTSD.Simulation.Presentation
         public int CommandCapacity => commands.Length;
         internal char[,] SlotLabelChars => slotLabelChars;
         internal int[] SlotLabelState => slotLabelState;
+        public BattleSpriteCatalog BoundCatalogForAcceptance => boundCatalog;
+        internal BattleSpriteCatalog BoundCatalog => boundCatalog;
 
         public BattlePresentationEntitySnapshot GetEntity(int index)
         {
@@ -621,6 +638,50 @@ namespace NTSD.Simulation.Presentation
             if ((uint)index >= (uint)CommandCount)
                 throw new ArgumentOutOfRangeException(nameof(index));
             return commands[index];
+        }
+
+        internal void CopyFrom(
+            BattlePresentationFrame source,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics = null)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (ReferenceEquals(this, source))
+                return;
+
+            detailDiagnostics?.BeginPhase(
+                BattleTickDetailPhase.RenderPrepareFrameFrozenFrameCopy);
+            try
+            {
+                using (FrozenFrameCopyMarker.Auto())
+                {
+                    ReleasePublicationBinding();
+                    EnsureEntityCapacity(source.EntityCount);
+                    EnsureHitRecordCapacity(source.HitRecordCount);
+                    EnsureCommandCapacity(source.CommandCount);
+                    Array.Copy(source.entities, entities, source.EntityCount);
+                    Array.Copy(source.hitRecords, hitRecords, source.HitRecordCount);
+                    Array.Copy(source.commands, commands, source.CommandCount);
+                    Array.Copy(source.slotLabelChars, slotLabelChars, source.slotLabelChars.Length);
+                    Array.Copy(source.slotLabelState, slotLabelState, source.slotLabelState.Length);
+
+                    TickIndex = source.TickIndex;
+                    EntityCount = source.EntityCount;
+                    HitRecordCount = source.HitRecordCount;
+                    CommandCount = source.CommandCount;
+                    OverlayUnsupportedCount = source.OverlayUnsupportedCount;
+                    CommonVisualCatalog = source.CommonVisualCatalog;
+                    CommonShadowBinding = source.CommonShadowBinding;
+                    CommonShadowDiagnostic = source.CommonShadowDiagnostic;
+                    // Submission catalog binding owns resource lifetime for frozen copies.
+                    boundCatalog = source.boundCatalog;
+                }
+            }
+            finally
+            {
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameFrozenFrameCopy);
+            }
         }
 
         internal void Reset(
@@ -695,6 +756,42 @@ namespace NTSD.Simulation.Presentation
         {
             EnsureCommandCapacity(CommandCount + 1);
             commands[CommandCount++] = command;
+        }
+
+        internal CommandWriter BeginCommandWrite(int maximumCommandCount)
+        {
+            if (maximumCommandCount < CommandCount)
+                throw new ArgumentOutOfRangeException(nameof(maximumCommandCount));
+
+            EnsureCommandCapacity(maximumCommandCount);
+            return new CommandWriter(this, commands, CommandCount);
+        }
+
+        internal struct CommandWriter
+        {
+            private readonly BattlePresentationFrame owner;
+            private readonly BattleRenderCommand[] destination;
+            private int count;
+
+            internal CommandWriter(
+                BattlePresentationFrame owner,
+                BattleRenderCommand[] destination,
+                int count)
+            {
+                this.owner = owner;
+                this.destination = destination;
+                this.count = count;
+            }
+
+            internal void AddUnchecked(in BattleRenderCommand command)
+            {
+                destination[count++] = command;
+            }
+
+            internal void Commit()
+            {
+                owner.CommandCount = count;
+            }
         }
 
         private static void EnsureCapacity<T>(ref T[] array, int required)
@@ -808,8 +905,21 @@ namespace NTSD.Simulation.Presentation
 
     public sealed class BattlePresentationCoordinator
     {
+        private const int MaximumCommandsPerEntityWithoutHitRecords =
+            2 + BattleEntityOverlayLayout.MaximumGlyphCount;
+        private const int WordGlyphTemplateCount =
+            BattleCommonVisualCatalog.WordSheetCount *
+            BattleCommonVisualCatalog.WordGlyphsPerSheet;
         private static readonly Comparison<LF2Entity> EntityOrderComparison = CompareEntityOrder;
         private static readonly int ObjectSortingLayerId = SortingLayer.NameToID("Object");
+        private static readonly ProfilerMarker SortEntitiesMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.SortEntities");
+        private static readonly ProfilerMarker CaptureHitRecordsMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.CaptureHitRecords");
+        private static readonly ProfilerMarker CaptureEntitiesMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.CaptureEntities");
+        private static readonly ProfilerMarker BuildCommandsMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.BuildCommands");
         private readonly BattlePresentationFrame frameA = new BattlePresentationFrame();
         private readonly BattlePresentationFrame frameB = new BattlePresentationFrame();
         private readonly BattleHitRecordPresentationCycle hitRecordCycleA =
@@ -819,7 +929,12 @@ namespace NTSD.Simulation.Presentation
         private readonly List<LF2Entity> entityScratch = new List<LF2Entity>(128);
         private readonly BattleEntityOverlayGlyph[] overlayGlyphScratch =
             new BattleEntityOverlayGlyph[32];
+        private readonly WordGlyphCommandTemplate[] wordGlyphCommandTemplates =
+            new WordGlyphCommandTemplate[WordGlyphTemplateCount];
+        private readonly int[] wordGlyphTemplateEpochs = new int[WordGlyphTemplateCount];
         private LegacyPresentationProbe[] legacyProbes = new LegacyPresentationProbe[64];
+        private BattleCommonVisualCatalog wordGlyphTemplateCatalog;
+        private int wordGlyphTemplateEpoch = 1;
         private BattlePresentationFrame publishedFrame;
         private BattleHitRecordPresentationCycle publishedHitRecordCycle;
         private BattlePresentationBackendMode mode;
@@ -861,60 +976,118 @@ namespace NTSD.Simulation.Presentation
             if (world == null)
                 return;
 
-            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
-            BattleCommonVisualCatalog commonVisualCatalog =
-                manager?.CommonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
-            BattleHitRecordPresentationCycle previousCycle = PublishedHitRecordCycle;
-            BattleHitRecordPresentationCycle writeCycle =
-                ReferenceEquals(previousCycle, hitRecordCycleA)
-                    ? hitRecordCycleB
-                    : hitRecordCycleA;
-            int cycleId = nextHitRecordCycleId == int.MaxValue ? 1 : nextHitRecordCycleId + 1;
-            nextHitRecordCycleId = cycleId;
-            CaptureHitRecordCycle(
-                world,
-                tickIndex,
-                cycleId,
-                commonVisualCatalog,
-                writeCycle);
-            if (writeCycle.HitRecordCount > 0 && commonVisualCatalog.IsSparkValid)
+            entityScratch.Clear();
+            try
             {
-                writeCycle.RetainPublicationBinding(
-                    manager,
-                    manager?.SpriteCatalog,
-                    previousCycle);
-            }
-            Interlocked.Exchange(ref publishedHitRecordCycle, writeCycle);
-            previousCycle?.ReleasePublicationBinding();
+                BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                    world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderBeginFrameSortEntities);
+                try
+                {
+                    using (SortEntitiesMarker.Auto())
+                    {
+                        world.GetPresentationEntitiesNoAlloc(entityScratch);
+                        entityScratch.Sort(EntityOrderComparison);
+                    }
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderBeginFrameSortEntities);
+                }
 
-            // Legacy overlays consume the same immutable command snapshot, but the
-            // central renderer still refuses to build or submit geometry in this mode.
-            if (mode == BattlePresentationBackendMode.LegacyOnly)
-            {
-                CaptureBuildAndPublishFrame(world, tickIndex, commonVisualCatalog, writeCycle, manager);
-                return;
-            }
+                CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+                BattleCommonVisualCatalog commonVisualCatalog =
+                    manager?.CommonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
+                BattleHitRecordPresentationCycle previousCycle = PublishedHitRecordCycle;
+                BattleHitRecordPresentationCycle writeCycle =
+                    ReferenceEquals(previousCycle, hitRecordCycleA)
+                        ? hitRecordCycleB
+                        : hitRecordCycleA;
+                int cycleId = nextHitRecordCycleId == int.MaxValue ? 1 : nextHitRecordCycleId + 1;
+                nextHitRecordCycleId = cycleId;
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderBeginFrameCaptureHitRecords);
+                try
+                {
+                    using (CaptureHitRecordsMarker.Auto())
+                    {
+                        CaptureHitRecordCycle(
+                            world,
+                            entityScratch,
+                            tickIndex,
+                            cycleId,
+                            commonVisualCatalog,
+                            writeCycle);
+                    }
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderBeginFrameCaptureHitRecords);
+                }
+                if (writeCycle.HitRecordCount > 0 && commonVisualCatalog.IsSparkValid)
+                {
+                    writeCycle.RetainPublicationBinding(
+                        manager,
+                        manager?.SpriteCatalog,
+                        previousCycle);
+                }
+                Interlocked.Exchange(ref publishedHitRecordCycle, writeCycle);
+                previousCycle?.ReleasePublicationBinding();
 
-            if (mode == BattlePresentationBackendMode.CentralOnly)
-            {
-                CaptureBuildAndPublishFrame(world, tickIndex, commonVisualCatalog, writeCycle, manager);
-                awaitingLegacyCompletion = false;
+                // Legacy overlays consume the same immutable command snapshot, but the
+                // central renderer still refuses to build or submit geometry in this mode.
+                if (mode == BattlePresentationBackendMode.LegacyOnly)
+                {
+                    CaptureBuildAndPublishFrame(
+                        world,
+                        entityScratch,
+                        tickIndex,
+                        commonVisualCatalog,
+                        writeCycle,
+                        manager);
+                    return;
+                }
+
+                if (mode == BattlePresentationBackendMode.CentralOnly)
+                {
+                    CaptureBuildAndPublishFrame(
+                        world,
+                        entityScratch,
+                        tickIndex,
+                        commonVisualCatalog,
+                        writeCycle,
+                        manager);
+                    awaitingLegacyCompletion = false;
+                    legacyProbeCount = 0;
+                    return;
+                }
+
+                if (mode != BattlePresentationBackendMode.CentralShadowBuild)
+                    return;
+
+                if (awaitingLegacyCompletion)
+                    RecordIncompleteLegacyFrame();
+
+                CaptureBuildAndPublishFrame(
+                    world,
+                    entityScratch,
+                    tickIndex,
+                    commonVisualCatalog,
+                    writeCycle,
+                    manager);
                 legacyProbeCount = 0;
-                return;
+                probeSequence = 0;
+                awaitingLegacyCompletion = true;
+                Diagnostics.Status = BattlePresentationParityStatus.PendingLegacyFrame;
+                Diagnostics.TickIndex = tickIndex;
             }
-
-            if (mode != BattlePresentationBackendMode.CentralShadowBuild)
-                return;
-
-            if (awaitingLegacyCompletion)
-                RecordIncompleteLegacyFrame();
-
-            CaptureBuildAndPublishFrame(world, tickIndex, commonVisualCatalog, writeCycle, manager);
-            legacyProbeCount = 0;
-            probeSequence = 0;
-            awaitingLegacyCompletion = true;
-            Diagnostics.Status = BattlePresentationParityStatus.PendingLegacyFrame;
-            Diagnostics.TickIndex = tickIndex;
+            finally
+            {
+                entityScratch.Clear();
+            }
         }
 
         public bool FinalizePublishedHitRecordCycle(SimulationWorld world)
@@ -1186,17 +1359,16 @@ namespace NTSD.Simulation.Presentation
 
         private void CaptureHitRecordCycle(
             SimulationWorld world,
+            List<LF2Entity> sortedEntities,
             int tickIndex,
             int cycleId,
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle cycle)
         {
             cycle.Reset(cycleId, tickIndex, commonVisualCatalog);
-            world.GetPresentationEntitiesNoAlloc(entityScratch);
-            entityScratch.Sort(EntityOrderComparison);
-            for (int index = 0; index < entityScratch.Count; index++)
+            for (int index = 0; index < sortedEntities.Count; index++)
             {
-                LF2Entity entity = entityScratch[index];
+                LF2Entity entity = sortedEntities[index];
                 NTSDEntityRuntime runtime = entity?.Runtime;
                 int slot = runtime?.SlotIndex ?? -1;
                 if (entity == null || runtime == null || slot < 0 ||
@@ -1229,11 +1401,11 @@ namespace NTSD.Simulation.Presentation
                     hitRecordStart,
                     sampledCount));
             }
-            entityScratch.Clear();
         }
 
         private void CaptureBuildAndPublishFrame(
             SimulationWorld world,
+            List<LF2Entity> sortedEntities,
             int tickIndex,
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
@@ -1241,7 +1413,13 @@ namespace NTSD.Simulation.Presentation
         {
             BattlePresentationFrame previousFrame = PublishedFrame;
             BattlePresentationFrame writeFrame = ReferenceEquals(previousFrame, frameA) ? frameB : frameA;
-            CaptureAndBuild(world, tickIndex, commonVisualCatalog, hitRecordCycle, writeFrame);
+            CaptureAndBuild(
+                world,
+                sortedEntities,
+                tickIndex,
+                commonVisualCatalog,
+                hitRecordCycle,
+                writeFrame);
             if (RequiresPublicationBinding(writeFrame))
             {
                 writeFrame.RetainPublicationBinding(
@@ -1271,136 +1449,176 @@ namespace NTSD.Simulation.Presentation
 
         private void CaptureAndBuild(
             SimulationWorld world,
+            List<LF2Entity> sortedEntities,
             int tickIndex,
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
             BattlePresentationFrame frame)
         {
-            frame.Reset(tickIndex, commonVisualCatalog);
-            Array.Copy(
-                world.Runtime.SlotLabels.BattleSlotLabels,
-                frame.SlotLabelChars,
-                frame.SlotLabelChars.Length);
-            Array.Copy(
-                world.Runtime.SlotLabels.BattleSlotLabelState,
-                frame.SlotLabelState,
-                frame.SlotLabelState.Length);
-            world.GetPresentationEntitiesNoAlloc(entityScratch);
-            entityScratch.Sort(EntityOrderComparison);
-            frame.EnsureEntityCapacity(entityScratch.Count);
-            int hitRecordOwnerCursor = 0;
-            LastHitRecordOwnerLookupCount = 0;
-
-            for (int i = 0; i < entityScratch.Count; i++)
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            detailDiagnostics?.BeginPhase(
+                BattleTickDetailPhase.RenderBeginFrameCaptureEntities);
+            try
             {
-                LF2Entity entity = entityScratch[i];
-                NTSDEntityRuntime runtime = entity?.Runtime;
-                int slot = runtime?.SlotIndex ?? -1;
-                if (entity == null || runtime == null || slot < 0 ||
-                    runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
-                    tickIndex < runtime.FirstPresentationTick ||
-                    !world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                using (CaptureEntitiesMarker.Auto())
                 {
-                    continue;
-                }
+                    frame.Reset(tickIndex, commonVisualCatalog);
+                    Array.Copy(
+                        world.Runtime.SlotLabels.BattleSlotLabels,
+                        frame.SlotLabelChars,
+                        frame.SlotLabelChars.Length);
+                    Array.Copy(
+                        world.Runtime.SlotLabels.BattleSlotLabelState,
+                        frame.SlotLabelState,
+                        frame.SlotLabelState.Length);
+                    frame.EnsureEntityCapacity(sortedEntities.Count);
+                    int hitRecordOwnerCursor = 0;
+                    LastHitRecordOwnerLookupCount = 0;
 
-                LF2FrameData currentFrame = entity.Frame?.D;
-                int visualDataId = LF2Entity.ResolveCurrentDataObjectId(entity);
-                int effectivePic = entity.GetRenderPicIndex();
-                bool hasCatalogKey = entity.TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry);
-                Sprite catalogSprite = entry?.LegacySprite;
-                Texture2D catalogTexture = entry?.SharedTexture;
-                var spriteDescriptor = new BattleSpriteValueDescriptor(
-                    hasCatalogKey,
-                    catalogSprite != null,
-                    catalogSprite != null ? catalogSprite.GetInstanceID() : 0,
-                    catalogTexture != null ? catalogTexture.GetInstanceID() : 0,
-                    0,
-                    entry?.PixelRect ?? Rect.zero,
-                    entry?.Pivot ?? Vector2.zero,
-                    hasCatalogKey,
-                    hasCatalogKey ? entry.Key : default);
-                int hitRecordStart = frame.HitRecordCount;
-                int sourceHitRecordCount = 0;
-                BattleHitRecordOwnerSnapshot hitRecordOwner = default;
-                if (hitRecordOwnerCursor < hitRecordCycle.OwnerCount)
-                {
-                    LastHitRecordOwnerLookupCount++;
-                    BattleHitRecordOwnerSnapshot candidate =
-                        hitRecordCycle.GetOwner(hitRecordOwnerCursor);
-                    if (candidate.Handle.Equals(handle))
+                    for (int i = 0; i < sortedEntities.Count; i++)
                     {
-                        hitRecordOwner = candidate;
-                        sourceHitRecordCount = candidate.HitRecordCount;
-                        hitRecordOwnerCursor++;
+                        LF2Entity entity = sortedEntities[i];
+                        NTSDEntityRuntime runtime = entity?.Runtime;
+                        int slot = runtime?.SlotIndex ?? -1;
+                        if (entity == null || runtime == null || slot < 0 ||
+                            runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
+                            tickIndex < runtime.FirstPresentationTick ||
+                            !world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                        {
+                            continue;
+                        }
+
+                        LF2FrameData currentFrame = entity.Frame?.D;
+                        int visualDataId = LF2Entity.ResolveCurrentDataObjectId(entity);
+                        int effectivePic = entity.GetRenderPicIndex();
+                        bool hasCatalogKey = entity.TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry);
+                        Sprite catalogSprite = entry?.LegacySprite;
+                        Texture2D catalogTexture = entry?.SharedTexture;
+                        var spriteDescriptor = new BattleSpriteValueDescriptor(
+                            hasCatalogKey,
+                            catalogSprite != null,
+                            catalogSprite != null ? catalogSprite.GetInstanceID() : 0,
+                            catalogTexture != null ? catalogTexture.GetInstanceID() : 0,
+                            0,
+                            entry?.PixelRect ?? Rect.zero,
+                            entry?.Pivot ?? Vector2.zero,
+                            hasCatalogKey,
+                            hasCatalogKey ? entry.Key : default);
+                        int hitRecordStart = frame.HitRecordCount;
+                        int sourceHitRecordCount = 0;
+                        BattleHitRecordOwnerSnapshot hitRecordOwner = default;
+                        if (hitRecordOwnerCursor < hitRecordCycle.OwnerCount)
+                        {
+                            LastHitRecordOwnerLookupCount++;
+                            BattleHitRecordOwnerSnapshot candidate =
+                                hitRecordCycle.GetOwner(hitRecordOwnerCursor);
+                            if (candidate.Handle.Equals(handle))
+                            {
+                                hitRecordOwner = candidate;
+                                sourceHitRecordCount = candidate.HitRecordCount;
+                                hitRecordOwnerCursor++;
+                            }
+                        }
+                        frame.EnsureHitRecordCapacity(frame.HitRecordCount + sourceHitRecordCount);
+                        for (int hitIndex = 0; hitIndex < sourceHitRecordCount; hitIndex++)
+                        {
+                            frame.AddHitRecord(hitRecordCycle.GetHitRecord(
+                                hitRecordOwner.HitRecordStart + hitIndex));
+                        }
+
+                        int holderSlot = runtime.HolderStableId;
+                        LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(holderSlot);
+                        Vector2 heldVisualAttachmentOffsetPixels =
+                            LF2ObjectRenderer.ResolveHeldVisualAttachmentOffsetPixels(
+                                runtime,
+                                currentFrame,
+                                holder,
+                                NTSDRenderSpace.BattleVisualScale);
+                        LF2Sprite entitySprite = entity.Sprite;
+                        bool entityVisible = entitySprite?.EntityVisible ?? true;
+                        bool shadowVisible = entitySprite?.ShadowVisible ?? true;
+                        Vector2 localOffsetPixels = entitySprite?.LocalOffsetPixels ?? Vector2.zero;
+
+                        frame.AddEntity(new BattlePresentationEntitySnapshot(
+                            handle,
+                            runtime.StableId,
+                            entity.ObjectId,
+                            visualDataId,
+                            effectivePic,
+                            runtime.ZInt,
+                            slot,
+                            entity.GetRenderSortingOrder() - SimulationWorld.PresentationEntitySubOrder,
+                            runtime.HitStop,
+                            currentFrame != null,
+                            currentFrame?.state ?? -1,
+                            runtime.LinkState,
+                            runtime.HP2Orig,
+                            runtime.RelationTeam,
+                            entity.GetCurrentDataObjectTypeForSimulation(),
+                            entity.GetRuntimeXInt(),
+                            entity.GetRuntimeYInt(),
+                            entity.GetDisplayZ(),
+                            entity.GetRenderOffsetX(),
+                            world.ReleaseCameraX,
+                            entity.FrameDelay,
+                            currentFrame?.centerx ?? 0f,
+                            currentFrame?.centery ?? 0f,
+                            entry?.PixelWidth ?? 0f,
+                            entry?.PixelHeight ?? 0f,
+                            heldVisualAttachmentOffsetPixels,
+                            entry?.NormalizedUv ?? Rect.zero,
+                            entry?.Pivot ?? new Vector2(0.5f, 0f),
+                            string.Equals(runtime.Dir, "left", StringComparison.Ordinal),
+                            hasCatalogKey,
+                            spriteDescriptor,
+                            hitRecordStart,
+                            sourceHitRecordCount,
+                            entityVisible,
+                            shadowVisible,
+                            localOffsetPixels,
+                            currentFrame?.frameId ?? -1));
                     }
                 }
-                frame.EnsureHitRecordCapacity(frame.HitRecordCount + sourceHitRecordCount);
-                for (int hitIndex = 0; hitIndex < sourceHitRecordCount; hitIndex++)
-                {
-                    frame.AddHitRecord(hitRecordCycle.GetHitRecord(
-                        hitRecordOwner.HitRecordStart + hitIndex));
-                }
-
-                int holderSlot = runtime.HolderStableId;
-                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(holderSlot);
-                Vector2 heldVisualAttachmentOffsetPixels =
-                    LF2ObjectRenderer.ResolveHeldVisualAttachmentOffsetPixels(
-                        runtime,
-                        currentFrame,
-                        holder,
-                        NTSDRenderSpace.BattleVisualScale);
-
-                frame.AddEntity(new BattlePresentationEntitySnapshot(
-                    handle,
-                    runtime.StableId,
-                    entity.ObjectId,
-                    visualDataId,
-                    effectivePic,
-                    runtime.ZInt,
-                    slot,
-                    entity.GetRenderSortingOrder() - SimulationWorld.PresentationEntitySubOrder,
-                    runtime.HitStop,
-                    currentFrame != null,
-                    currentFrame?.state ?? -1,
-                    runtime.LinkState,
-                    runtime.HP2Orig,
-                    runtime.RelationTeam,
-                    entity.GetCurrentDataObjectTypeForSimulation(),
-                    entity.GetRuntimeXInt(),
-                    entity.GetRuntimeYInt(),
-                    entity.GetDisplayZ(),
-                    entity.GetRenderOffsetX(),
-                    world.ReleaseCameraX,
-                    entity.FrameDelay,
-                    currentFrame?.centerx ?? 0f,
-                    currentFrame?.centery ?? 0f,
-                    entry?.PixelWidth ?? 0f,
-                    entry?.PixelHeight ?? 0f,
-                    heldVisualAttachmentOffsetPixels,
-                    entry?.NormalizedUv ?? Rect.zero,
-                    entry?.Pivot ?? new Vector2(0.5f, 0f),
-                    string.Equals(runtime.Dir, "left", StringComparison.Ordinal),
-                    hasCatalogKey,
-                    spriteDescriptor,
-                    hitRecordStart,
-                    sourceHitRecordCount));
+            }
+            finally
+            {
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.RenderBeginFrameCaptureEntities);
             }
 
-            entityScratch.Clear();
-            BuildCommands(frame);
+            detailDiagnostics?.BeginPhase(
+                BattleTickDetailPhase.RenderBeginFrameBuildCommands);
+            try
+            {
+                using (BuildCommandsMarker.Auto())
+                {
+                    BuildCommands(frame);
+                }
+            }
+            finally
+            {
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.RenderBeginFrameBuildCommands);
+            }
         }
 
         private void BuildCommands(BattlePresentationFrame frame)
         {
-            frame.EnsureCommandCapacity(Math.Max(16, frame.EntityCount * 8 + frame.HitRecordCount));
+            int maximumCommandCount = checked(
+                frame.CommandCount +
+                checked(frame.EntityCount * MaximumCommandsPerEntityWithoutHitRecords) +
+                frame.HitRecordCount);
+            BattlePresentationFrame.CommandWriter writer =
+                frame.BeginCommandWrite(Math.Max(16, maximumCommandCount));
+            RefreshWordGlyphTemplateEpoch(frame.CommonVisualCatalog);
             for (int rank = 0; rank < frame.EntityCount; rank++)
             {
                 BattlePresentationEntitySnapshot entity = frame.GetEntity(rank);
                 int baseOrder = entity.PresentationBaseOrder;
                 int localSequence = 0;
 
-                bool drawShadow = entity.HasCurrentFrame &&
+                bool drawShadow = entity.ShadowVisible && entity.HasCurrentFrame &&
                                   entity.State != 3005 && entity.State != 9997 &&
                                   entity.LinkState >= 0 && entity.ObjectId != 223 &&
                                   entity.ObjectId != 224 && frame.CommonShadowBinding != null &&
@@ -1412,7 +1630,7 @@ namespace NTSD.Simulation.Presentation
                         entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
                         entity.ZInt,
                         0f);
-                    AddCommand(frame, new BattleRenderCommand(
+                    writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Shadow,
                         entity.Handle,
                         entity.StableId,
@@ -1439,7 +1657,8 @@ namespace NTSD.Simulation.Presentation
                             BattleVisualResourceKey.CommonShadow)));
                 }
 
-                bool drawEntity = entity.State >= 0 && entity.EffectivePic != 999 &&
+                bool drawEntity = entity.EntityVisible && entity.State >= 0 &&
+                                  entity.EffectivePic != 999 &&
                                   entity.HasCatalogKey &&
                                   LF2ObjectRenderer.ShouldDrawEntityForHitStop(entity.HitStop);
                 if (drawEntity)
@@ -1459,8 +1678,9 @@ namespace NTSD.Simulation.Presentation
                         entity.CenterY,
                         NTSDRenderSpace.BattleVisualScale);
                     pivotPixels += entity.HeldVisualAttachmentOffsetPixels;
+                    pivotPixels += entity.LocalOffsetPixels * NTSDRenderSpace.BattleVisualScale;
                     Vector3 entityPosition = NTSDRenderSpace.ScreenPixelToWorld(pivotPixels.x, pivotPixels.y, 0f);
-                    AddCommand(frame, new BattleRenderCommand(
+                    writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Entity,
                         entity.Handle,
                         entity.StableId,
@@ -1504,10 +1724,11 @@ namespace NTSD.Simulation.Presentation
                         for (int glyphIndex = 0; glyphIndex < overlayGlyphCount; glyphIndex++)
                         {
                             BattleEntityOverlayGlyph glyph = overlayGlyphScratch[glyphIndex];
-                            if (!frame.CommonVisualCatalog.TryGetWordGlyph(
+                            if (!TryGetWordGlyphCommandTemplate(
+                                    frame.CommonVisualCatalog,
                                     glyph.SheetIndex,
                                     glyph.CharCode,
-                                    out BattleCommonVisualBinding binding))
+                                    out WordGlyphCommandTemplate template))
                             {
                                 continue;
                             }
@@ -1516,31 +1737,15 @@ namespace NTSD.Simulation.Presentation
                                 glyph.PixelX,
                                 glyph.PixelY,
                                 0f);
-                            AddCommand(frame, new BattleRenderCommand(
-                                BattleRenderCommandType.OverlayGlyph,
+                            writer.AddUnchecked(template.CreateCommand(
                                 entity.Handle,
                                 entity.StableId,
-                                glyph.SheetIndex,
-                                glyph.CharCode,
                                 entity.ZInt,
                                 entity.RuntimeSlot,
                                 baseOrder + 2,
                                 ObjectSortingLayerId,
                                 localSequence++,
-                                glyphPosition,
-                                binding.PixelSize,
-                                binding.Pivot,
-                                binding.NormalizedUv,
-                                binding.RenderState,
-                                new BattleSpriteValueDescriptor(
-                                    true,
-                                    true,
-                                    binding.SpriteInstanceId,
-                                    binding.TextureInstanceId,
-                                    binding.MaterialInstanceId,
-                                    binding.PixelRect,
-                                    binding.Pivot,
-                                    binding.Key)));
+                                glyphPosition));
                         }
                     }
                 }
@@ -1562,7 +1767,7 @@ namespace NTSD.Simulation.Presentation
                         hit.AnchorX + entity.RenderOffsetX - entity.CameraX,
                         hit.AnchorZ,
                         0f);
-                    AddCommand(frame, new BattleRenderCommand(
+                    writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.HitRecord,
                         entity.Handle,
                         entity.StableId,
@@ -1589,6 +1794,101 @@ namespace NTSD.Simulation.Presentation
                             spark.Key)));
                 }
             }
+            writer.Commit();
+        }
+
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+        public void BuildCommandsForSelfCheck(BattlePresentationFrame frame)
+        {
+            if (frame == null)
+                throw new ArgumentNullException(nameof(frame));
+
+            frame.CommandCount = 0;
+            BuildCommands(frame);
+        }
+
+        public bool TryCreateWordGlyphCommandForSelfCheck(
+            BattleCommonVisualCatalog catalog,
+            int sheetIndex,
+            int charCode,
+            RuntimeEntityHandle handle,
+            int stableId,
+            int zInt,
+            int runtimeSlot,
+            int sortOrder,
+            int localSequence,
+            Vector3 position,
+            out BattleRenderCommand command)
+        {
+            RefreshWordGlyphTemplateEpoch(catalog);
+            if (!TryGetWordGlyphCommandTemplate(
+                    catalog,
+                    sheetIndex,
+                    charCode,
+                    out WordGlyphCommandTemplate template))
+            {
+                command = default;
+                return false;
+            }
+
+            command = template.CreateCommand(
+                handle,
+                stableId,
+                zInt,
+                runtimeSlot,
+                sortOrder,
+                ObjectSortingLayerId,
+                localSequence,
+                position);
+            return true;
+        }
+#endif
+
+        private void RefreshWordGlyphTemplateEpoch(BattleCommonVisualCatalog catalog)
+        {
+            catalog ??= BattleCommonVisualCatalog.Empty;
+            if (ReferenceEquals(wordGlyphTemplateCatalog, catalog))
+                return;
+
+            wordGlyphTemplateCatalog = catalog;
+            wordGlyphTemplateEpoch = unchecked(wordGlyphTemplateEpoch + 1);
+            if (wordGlyphTemplateEpoch > 0)
+                return;
+
+            Array.Clear(wordGlyphTemplateEpochs, 0, wordGlyphTemplateEpochs.Length);
+            wordGlyphTemplateEpoch = 1;
+        }
+
+        private bool TryGetWordGlyphCommandTemplate(
+            BattleCommonVisualCatalog catalog,
+            int sheetIndex,
+            int charCode,
+            out WordGlyphCommandTemplate template)
+        {
+            if ((uint)sheetIndex >= BattleCommonVisualCatalog.WordSheetCount ||
+                (uint)charCode >= BattleCommonVisualCatalog.WordGlyphsPerSheet)
+            {
+                template = default;
+                return false;
+            }
+
+            int templateIndex =
+                sheetIndex * BattleCommonVisualCatalog.WordGlyphsPerSheet + charCode;
+            if (wordGlyphTemplateEpochs[templateIndex] != wordGlyphTemplateEpoch)
+            {
+                wordGlyphTemplateEpochs[templateIndex] = wordGlyphTemplateEpoch;
+                wordGlyphCommandTemplates[templateIndex] =
+                    catalog != null &&
+                    catalog.TryGetWordGlyph(
+                        sheetIndex,
+                        charCode,
+                        out BattleCommonVisualBinding binding)
+                        ? new WordGlyphCommandTemplate(sheetIndex, charCode, binding)
+                        : default;
+            }
+
+            template = wordGlyphCommandTemplates[templateIndex];
+            return template.HasBinding;
         }
 
         internal static bool TryResolveSparkFrame(
@@ -1619,9 +1919,68 @@ namespace NTSD.Simulation.Presentation
             return BattleCommonVisualCatalog.GetSparkPivotNormalized(pic);
         }
 
-        private static void AddCommand(BattlePresentationFrame frame, in BattleRenderCommand command)
+        private readonly struct WordGlyphCommandTemplate
         {
-            frame.AddCommand(command);
+            internal WordGlyphCommandTemplate(
+                int sheetIndex,
+                int charCode,
+                BattleCommonVisualBinding binding)
+            {
+                HasBinding = true;
+                SheetIndex = sheetIndex;
+                CharCode = charCode;
+                Size = binding.PixelSize;
+                Pivot = binding.Pivot;
+                NormalizedUv = binding.NormalizedUv;
+                RenderState = binding.RenderState;
+                SpriteDescriptor = new BattleSpriteValueDescriptor(
+                    true,
+                    true,
+                    binding.SpriteInstanceId,
+                    binding.TextureInstanceId,
+                    binding.MaterialInstanceId,
+                    binding.PixelRect,
+                    binding.Pivot,
+                    binding.Key);
+            }
+
+            internal bool HasBinding { get; }
+            private int SheetIndex { get; }
+            private int CharCode { get; }
+            private Vector2 Size { get; }
+            private Vector2 Pivot { get; }
+            private Rect NormalizedUv { get; }
+            private BattleSpriteRenderState RenderState { get; }
+            private BattleSpriteValueDescriptor SpriteDescriptor { get; }
+
+            internal BattleRenderCommand CreateCommand(
+                RuntimeEntityHandle handle,
+                int stableId,
+                int zInt,
+                int runtimeSlot,
+                int sortOrder,
+                int sortingLayerId,
+                int localSequence,
+                Vector3 position)
+            {
+                return new BattleRenderCommand(
+                    BattleRenderCommandType.OverlayGlyph,
+                    handle,
+                    stableId,
+                    SheetIndex,
+                    CharCode,
+                    zInt,
+                    runtimeSlot,
+                    sortOrder,
+                    sortingLayerId,
+                    localSequence,
+                    position,
+                    Size,
+                    Pivot,
+                    NormalizedUv,
+                    RenderState,
+                    SpriteDescriptor);
+            }
         }
 
         private void ComparePublishedFrameToLegacyProbes()

@@ -10,7 +10,6 @@ namespace NTSD.Animation.LF2Objects
     /// <summary>
     /// LF2 对象渲染器，负责把逻辑层实体的当前帧、朝向和 C++ 像素坐标同步到 Unity SpriteRenderer。
     /// </summary>
-    [RequireComponent(typeof(SpriteRenderer))]
     public class LF2ObjectRenderer : MonoBehaviour, ISimObject
     {
         // ========== 组件引用 ==========
@@ -79,9 +78,21 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_logicObject == null) return;
 
-            if (BattleCentralRenderSystem.ShouldUseCentralPixels(_logicObject.Match))
+            bool suppressLegacyMaterializers =
+                BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(_logicObject.Match);
+            _logicObject.Sprite?.SetLegacyRendererSuppressed(suppressLegacyMaterializers);
+
+            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
+            bool presentationBlocked = _logicObject.Runtime?.OidMergeDormant == true ||
+                                       tickIndex < firstPresentationTick;
+            if (suppressLegacyMaterializers)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(presentationBlocked);
+                if (!presentationBlocked)
+                {
+                    UpdateSprite();
+                    _logicObject.UpdateShadow(_renderFrameCount);
+                }
                 _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
                 ApplyVisualShake();
                 return;
@@ -89,14 +100,13 @@ namespace NTSD.Animation.LF2Objects
 
             if (_logicObject.Runtime?.OidMergeDormant == true)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(true);
                 return;
             }
 
-            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
             if (tickIndex < firstPresentationTick)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(true);
                 return;
             }
 
@@ -115,21 +125,33 @@ namespace NTSD.Animation.LF2Objects
         {
             if (_logicObject == null) return;
             int currentTick = _logicObject?.Match?.CurrentTickIndex ?? 0;
-            if (BattleCentralRenderSystem.ShouldUseCentralPixels(_logicObject.Match))
+            bool suppressLegacyMaterializers =
+                BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(_logicObject.Match);
+            _logicObject.Sprite?.SetLegacyRendererSuppressed(suppressLegacyMaterializers);
+
+            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
+            bool presentationBlocked = _logicObject.Runtime?.OidMergeDormant == true ||
+                                       currentTick < firstPresentationTick;
+            if (suppressLegacyMaterializers)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(presentationBlocked);
+                if (!presentationBlocked)
+                {
+                    UpdateSprite();
+                    _logicObject.UpdateShadow(_renderFrameCount);
+                }
                 _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
                 return;
             }
+
             if (_logicObject.Runtime?.OidMergeDormant == true)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(true);
                 return;
             }
-            int firstPresentationTick = _logicObject.Runtime?.FirstPresentationTick ?? 0;
             if (currentTick < firstPresentationTick)
             {
-                HidePresentation();
+                _logicObject.Sprite?.SetPresentationSuppressed(true);
                 return;
             }
 
@@ -152,6 +174,9 @@ namespace NTSD.Animation.LF2Objects
             _logicObject = logicObject as LF2Entity;
             _renderFrameCount = 0;
             _logicObject?.Init(task, this);
+            BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                this,
+                ResolveCurrentRuntimeHandle(_logicObject));
 
             List<Sprite> sprites = null;
             int startFrame = 0;
@@ -186,7 +211,6 @@ namespace NTSD.Animation.LF2Objects
                 _boundSpriteObjectId = int.MinValue;
                 UpdateCatalogBinding(animatorManager, animatorManager?.SpriteCatalog);
             }
-            _logicObject?.Sprite?.InitializeShadow(_shadowRenderer);
             _logicObject?.SetShadowRenderer(_shadowRenderer);
 
             // 新生成对象先压住表现。
@@ -220,20 +244,12 @@ namespace NTSD.Animation.LF2Objects
             NormalizeSpriteRendererState(_shadowRenderer, _defaultShadowSharedMaterial);
         }
 
-        private void HidePresentation()
-        {
-            _logicObject?.Sprite?.SetPresentationSuppressed(true);
-            _logicObject?.Sprite?.Hide();
-            _logicObject?.Sprite?.HideShadow();
-        }
-
         public void SetShadowRenderer(SpriteRenderer shadowRenderer)
         {
             _shadowRenderer = shadowRenderer;
             _defaultShadowSharedMaterial = ResolveBorrowedDefaultSharedMaterial(shadowRenderer);
             if (_shadowRenderer != null)
                 _shadowRenderer.sortingLayerName = "Object";
-            _logicObject?.Sprite?.InitializeShadow(shadowRenderer);
             _logicObject?.SetShadowRenderer(shadowRenderer);
         }
 
@@ -242,7 +258,9 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ResetState()
         {
-            _logicObject?.Sprite?.ClearCurrentSprite();
+            BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(this);
+            _logicObject?.Sprite?.Reset();
+            _logicObject?.SetShadowRenderer(null);
             if (_defaultSpriteSharedMaterial == null)
                 _defaultSpriteSharedMaterial = ResolveBorrowedDefaultSharedMaterial(_spriteRenderer);
             NormalizeSpriteRendererState(_spriteRenderer, _defaultSpriteSharedMaterial);
@@ -253,6 +271,20 @@ namespace NTSD.Animation.LF2Objects
             _logicObject = null;
             _boundSpriteObjectId = int.MinValue;
             gameObject.SetActive(false);
+        }
+
+        private static RuntimeEntityHandle ResolveCurrentRuntimeHandle(LF2Entity logicObject)
+        {
+            if (logicObject == null || logicObject.Runtime?.SlotIndex < 0)
+                return RuntimeEntityHandle.Invalid;
+
+            SimulationWorld world = logicObject.Match;
+            return world != null && world.TryGetCurrentRuntimeHandle(
+                logicObject.Runtime.SlotIndex,
+                logicObject,
+                out RuntimeEntityHandle handle)
+                ? handle
+                : RuntimeEntityHandle.Invalid;
         }
 
         internal static void NormalizeSpriteRendererState(
@@ -285,12 +317,13 @@ namespace NTSD.Animation.LF2Objects
         private void UpdateSprite()
         {
             if (_logicObject == null) return;
-            if (!ShouldDrawEntityForHitStop(_logicObject.Runtime?.HitStop ?? 0))
+            bool shouldDrawForHitStop = ShouldDrawEntityForHitStop(_logicObject.Runtime?.HitStop ?? 0);
+            _logicObject.Sprite?.SetLegacyEntityVisible(shouldDrawForHitStop);
+            if (!shouldDrawForHitStop)
             {
                 // C# release DrawEntity hides the entity for the negative HitStop
                 // threshold and four-tick blink phase. This only changes presentation;
                 // the runtime entity continues advancing normally.
-                _logicObject.Sprite?.Hide();
                 return;
             }
 
@@ -304,8 +337,6 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
             if (_logicObject.Sprite == null) return;
-            if (!_logicObject.Sprite.HasRenderer) return;
-            _logicObject.Sprite.SetPresentationSuppressed(false);
             _logicObject.Sprite.ShowPic(_logicObject.GetRenderPicIndex());
             var ps = _logicObject.PS;
             if (ps != null)
@@ -378,6 +409,7 @@ namespace NTSD.Animation.LF2Objects
 
         private void OnDestroy()
         {
+            BattleCentralPresentationMountRegistry.RemoveOwnerRuntimeBinding(this);
             ReleaseCatalogBinding();
         }
 
@@ -435,7 +467,7 @@ namespace NTSD.Animation.LF2Objects
             Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(pivot.x, pivot.y, rootTransform.position.z);
             rootTransform.position = worldPos;
 
-            if (_visualTransform != null)
+            if (_visualTransform != null && _visualTransform != rootTransform)
                 _visualTransform.localPosition = Vector3.zero;
         }
 

@@ -18,16 +18,20 @@ namespace NTSD.Animation.Rendering
         private readonly BattleCentralBuildDiagnostics diagnostics = new BattleCentralBuildDiagnostics();
         private BattleMeshChunk[] chunks = new BattleMeshChunk[1];
         private BattleCentralRenderSegment[] segments = new BattleCentralRenderSegment[16];
+        private SegmentBoundsAccumulator[] segmentBounds =
+            new SegmentBoundsAccumulator[16];
         private int activeChunkCount;
         private int segmentCount;
         private int mutationVersion;
         private bool disposed;
+        private BattlePresentationFrame builtFrame;
 
         public BattleCentralBuildDiagnostics Diagnostics => diagnostics;
         public int ActiveChunkCount => activeChunkCount;
         public int SegmentCount => segmentCount;
         public int AllocatedChunkCount => chunks.Length;
         internal int MutationVersion => mutationVersion;
+        internal BattlePresentationFrame BuiltFrame => builtFrame;
 
         public Mesh GetChunkMesh(int index)
         {
@@ -81,7 +85,8 @@ namespace NTSD.Animation.Rendering
         public void Build(
             BattlePresentationFrame frame,
             IBattleCentralResourceResolver resolver,
-            BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks)
+            BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics = null)
         {
             if (disposed)
                 throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
@@ -89,6 +94,7 @@ namespace NTSD.Animation.Rendering
                 throw new ArgumentNullException(nameof(resolver));
 
             mutationVersion++;
+            builtFrame = frame;
 
             int commandCount = frame?.CommandCount ?? 0;
             diagnostics.Reset(frame?.TickIndex ?? 0, commandCount, drawMode);
@@ -100,7 +106,19 @@ namespace NTSD.Animation.Rendering
             for (int commandIndex = 0; commandIndex < commandCount; commandIndex++)
             {
                 BattleRenderCommand command = frame.GetCommand(commandIndex);
-                BattleCentralResourceStatus status = resolver.Resolve(command, out BattleCentralResolvedResource resource);
+                BattleCentralResolvedResource resource;
+                BattleCentralResourceStatus status;
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                try
+                {
+                    status = resolver.Resolve(command, out resource);
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                }
                 if (status != BattleCentralResourceStatus.Resolved)
                 {
                     if (status == BattleCentralResourceStatus.UnsupportedCategory)
@@ -113,6 +131,7 @@ namespace NTSD.Animation.Rendering
                     {
                         diagnostics.FirstUnresolvedCommandIndex = commandIndex;
                         diagnostics.FirstUnresolvedCommandType = command.Type;
+                        diagnostics.FirstUnresolvedStatus = status;
                     }
                     // An unresolved command still occupies an authoritative position
                     // in the P3 stream. Never batch resolved commands across it.
@@ -125,12 +144,32 @@ namespace NTSD.Animation.Rendering
                 int quadIndex = resolvedCount % QuadsPerChunk;
                 EnsureChunk(chunkIndex);
                 BattleMeshChunk chunk = chunks[chunkIndex];
-                chunk.WriteQuad(quadIndex, command, resource);
-
                 bool strict = drawMode == BattleCentralDrawMode.StrictOrderedDraw;
                 bool canAppend = !strict && lastSegmentIndex >= 0 && lastChunkIndex == chunkIndex &&
                                  IsCompatible(segments[lastSegmentIndex], resource) &&
                                  segments[lastSegmentIndex].FirstQuad + segments[lastSegmentIndex].QuadCount == quadIndex;
+                if (!canAppend)
+                    EnsureSegmentCapacity(segmentCount + 1);
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
+                try
+                {
+                    chunk.WriteQuad(
+                        quadIndex,
+                        command,
+                        resource,
+                        out SegmentBoundsAccumulator quadBounds);
+                    if (canAppend)
+                        segmentBounds[lastSegmentIndex].Encapsulate(quadBounds);
+                    else
+                        segmentBounds[segmentCount] = quadBounds;
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
+                }
+
                 if (canAppend)
                 {
                     BattleCentralRenderSegment previous = segments[lastSegmentIndex];
@@ -145,11 +184,11 @@ namespace NTSD.Animation.Rendering
                         previous.Material,
                         previous.MaterialVariant,
                         previous.AtlasSlice,
-                        previous.BindingMode);
+                        previous.BindingMode,
+                        previous.AtlasPageIndex);
                 }
                 else
                 {
-                    EnsureSegmentCapacity(segmentCount + 1);
                     int subMeshIndex = chunk.PendingSegmentCount;
                     chunk.PendingSegmentCount++;
                     segments[segmentCount] = new BattleCentralRenderSegment(
@@ -163,7 +202,8 @@ namespace NTSD.Animation.Rendering
                         resource.Material,
                         resource.MaterialVariant,
                         resource.AtlasSlice,
-                        resource.BindingMode);
+                        resource.BindingMode,
+                        resource.AtlasPageIndex);
                     lastSegmentIndex = segmentCount++;
                     lastChunkIndex = chunkIndex;
                 }
@@ -177,7 +217,14 @@ namespace NTSD.Animation.Rendering
             {
                 BattleMeshChunk chunk = chunks[chunkIndex];
                 int activeQuads = Math.Min(QuadsPerChunk, resolvedCount - chunkIndex * QuadsPerChunk);
-                chunk.Upload(chunkIndex, activeQuads, segments, ref segmentCursor, segmentCount);
+                chunk.Upload(
+                    chunkIndex,
+                    activeQuads,
+                    segments,
+                    segmentBounds,
+                    ref segmentCursor,
+                    segmentCount,
+                    detailDiagnostics);
             }
             for (int chunkIndex = activeChunkCount; chunkIndex < chunks.Length; chunkIndex++)
                 chunks[chunkIndex]?.ClearActive();
@@ -190,8 +237,10 @@ namespace NTSD.Animation.Rendering
         public void Clear()
         {
             mutationVersion++;
+            builtFrame = null;
             segmentCount = 0;
             activeChunkCount = 0;
+            builtFrame = null;
             for (int i = 0; i < chunks.Length; i++)
                 chunks[i]?.ClearActive();
             diagnostics.Reset(0, 0, BattleCentralDrawMode.OrderedChunks);
@@ -206,6 +255,7 @@ namespace NTSD.Animation.Rendering
                 chunks[i]?.Dispose();
             chunks = Array.Empty<BattleMeshChunk>();
             segments = Array.Empty<BattleCentralRenderSegment>();
+            segmentBounds = Array.Empty<SegmentBoundsAccumulator>();
             activeChunkCount = 0;
             segmentCount = 0;
         }
@@ -235,6 +285,7 @@ namespace NTSD.Animation.Rendering
             while (next < required)
                 next = checked(next * 2);
             Array.Resize(ref segments, next);
+            Array.Resize(ref segmentBounds, next);
             diagnostics.CapacityGrowthCount++;
         }
 
@@ -246,6 +297,8 @@ namespace NTSD.Animation.Rendering
                    segment.Material == resource.Material &&
                    segment.MaterialVariant == resource.MaterialVariant &&
                    segment.BindingMode == resource.BindingMode &&
+                   (resource.BindingMode != BattleSpriteCentralBindingMode.AtlasPageTexture2D ||
+                    segment.AtlasPageIndex == resource.AtlasPageIndex) &&
                    (resource.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray ||
                     segment.AtlasSlice == resource.AtlasSlice);
         }
@@ -256,6 +309,43 @@ namespace NTSD.Animation.Rendering
             public Color32 Color;
             public Vector2 Uv;
             public float AtlasSlice;
+        }
+
+        private struct SegmentBoundsAccumulator
+        {
+            private bool hasValue;
+            private Vector3 min;
+            private Vector3 max;
+
+            public void Set(Vector3 valueMin, Vector3 valueMax)
+            {
+                min = valueMin;
+                max = valueMax;
+                hasValue = true;
+            }
+
+            public void Encapsulate(in SegmentBoundsAccumulator other)
+            {
+                if (!other.hasValue)
+                    return;
+                if (!hasValue)
+                {
+                    this = other;
+                    return;
+                }
+
+                min = Vector3.Min(min, other.min);
+                max = Vector3.Max(max, other.max);
+            }
+
+            public Bounds ToBounds()
+            {
+                if (!hasValue)
+                    return new Bounds(Vector3.zero, Vector3.zero);
+                var bounds = new Bounds();
+                bounds.SetMinMax(min, max);
+                return bounds;
+            }
         }
 
         private sealed class BattleMeshChunk : IDisposable
@@ -272,6 +362,7 @@ namespace NTSD.Animation.Rendering
             private readonly ushort[] indexTemplate = new ushort[IndicesPerChunk];
             private readonly int chunkIndex;
             private Mesh mesh;
+            private int activeSubMeshCount;
             private bool hasBounds;
             private Vector3 boundsMin;
             private Vector3 boundsMax;
@@ -329,7 +420,8 @@ namespace NTSD.Animation.Rendering
             public void WriteQuad(
                 int quadIndex,
                 in BattleRenderCommand command,
-                in BattleCentralResolvedResource resource)
+                in BattleCentralResolvedResource resource,
+                out SegmentBoundsAccumulator quadBounds)
             {
                 if ((uint)quadIndex >= QuadsPerChunk)
                     throw new ArgumentOutOfRangeException(nameof(quadIndex));
@@ -355,59 +447,124 @@ namespace NTSD.Animation.Rendering
                 vertices[vertex + 2] = CreateVertex(right, bottom, z, u1, v0, resource);
                 vertices[vertex + 3] = CreateVertex(right, top, z, u1, v1, resource);
 
-                Encapsulate(new Vector3(left, bottom, z));
-                Encapsulate(new Vector3(right, top, z));
+                Vector3 firstCorner = new Vector3(left, bottom, z);
+                Vector3 secondCorner = new Vector3(right, top, z);
+                Vector3 quadMin = Vector3.Min(firstCorner, secondCorner);
+                Vector3 quadMax = Vector3.Max(firstCorner, secondCorner);
+                quadBounds = default;
+                quadBounds.Set(quadMin, quadMax);
+                Encapsulate(firstCorner);
+                Encapsulate(secondCorner);
             }
 
             public void Upload(
                 int chunkIndex,
                 int activeQuads,
                 BattleCentralRenderSegment[] allSegments,
+                SegmentBoundsAccumulator[] allSegmentBounds,
                 ref int segmentCursor,
-                int totalSegments)
+                int totalSegments,
+                BattleTickDetailPhaseDiagnostics detailDiagnostics)
             {
                 Mesh targetMesh = EnsureMesh();
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
+                try
+                {
+                    int previousActiveSubMeshCount = activeSubMeshCount;
+                    int desiredSubMeshCount = PendingSegmentCount;
+                    int physicalSubMeshCount = targetMesh.subMeshCount;
+                    if (desiredSubMeshCount > physicalSubMeshCount)
+                    {
+                        targetMesh.subMeshCount = desiredSubMeshCount;
+                        // Unity does not guarantee safe default descriptors after native
+                        // submesh growth, so reinitialize the complete physical range.
+                        for (int subMeshIndex = 0; subMeshIndex < targetMesh.subMeshCount; subMeshIndex++)
+                            SetInertSubmesh(targetMesh, subMeshIndex);
+                    }
+                    else
+                    {
+                        // Reset every descriptor that was active in the previous upload before
+                        // rewriting this frame's active range. Keep the physical high-water;
+                        // shrinking subMeshCount here forces Unity to rebuild native state.
+                        int inertEnd = Math.Min(previousActiveSubMeshCount, physicalSubMeshCount);
+                        for (int subMeshIndex = 0; subMeshIndex < inertEnd; subMeshIndex++)
+                            SetInertSubmesh(targetMesh, subMeshIndex);
+                    }
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
+                }
+
                 ActiveQuadCount = activeQuads;
                 int activeVertices = activeQuads * VerticesPerQuad;
                 if (activeVertices > 0)
                 {
-                    targetMesh.SetVertexBufferData(
-                        vertices,
-                        0,
-                        0,
-                        activeVertices,
-                        0,
-                        MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
-                        MeshUpdateFlags.DontNotifyMeshUsers);
-                }
-
-                targetMesh.subMeshCount = PendingSegmentCount;
-                while (segmentCursor < totalSegments &&
-                       allSegments[segmentCursor].ChunkIndex == chunkIndex)
-                {
-                    BattleCentralRenderSegment segment = allSegments[segmentCursor];
-                    targetMesh.SetSubMesh(
-                        segment.SubMeshIndex,
-                        new SubMeshDescriptor(
-                            segment.FirstQuad * IndicesPerQuad,
-                            segment.QuadCount * IndicesPerQuad,
-                            MeshTopology.Triangles)
-                        {
-                            baseVertex = 0,
-                            firstVertex = segment.FirstQuad * VerticesPerQuad,
-                            vertexCount = segment.QuadCount * VerticesPerQuad,
-                            bounds = CurrentBounds(),
-                        },
-                        MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
-                        MeshUpdateFlags.DontNotifyMeshUsers);
-                    segmentCursor++;
-                    if (segmentCursor >= totalSegments ||
-                        allSegments[segmentCursor].ChunkIndex != segment.ChunkIndex)
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameSetVertexBufferData);
+                    try
                     {
-                        break;
+                        targetMesh.SetVertexBufferData(
+                            vertices,
+                            0,
+                            0,
+                            activeVertices,
+                            0,
+                            MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
+                            MeshUpdateFlags.DontNotifyMeshUsers);
+                    }
+                    finally
+                    {
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.RenderPrepareFrameSetVertexBufferData);
                     }
                 }
-                targetMesh.bounds = CurrentBounds();
+
+                int desiredActiveSubMeshCount = PendingSegmentCount;
+                Bounds currentBounds = CurrentBounds();
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
+                try
+                {
+                    for (int activeSubMeshIndex = 0;
+                         activeSubMeshIndex < desiredActiveSubMeshCount;
+                         activeSubMeshIndex++)
+                    {
+                        if (segmentCursor >= totalSegments ||
+                            allSegments[segmentCursor].ChunkIndex != chunkIndex ||
+                            allSegments[segmentCursor].SubMeshIndex != activeSubMeshIndex)
+                        {
+                            throw new InvalidOperationException(
+                                "Chunk submesh descriptors must be contiguous and sequential.");
+                        }
+
+                        BattleCentralRenderSegment segment = allSegments[segmentCursor];
+                        targetMesh.SetSubMesh(
+                            activeSubMeshIndex,
+                            new SubMeshDescriptor(
+                                segment.FirstQuad * IndicesPerQuad,
+                                segment.QuadCount * IndicesPerQuad,
+                                MeshTopology.Triangles)
+                            {
+                                baseVertex = 0,
+                                firstVertex = segment.FirstQuad * VerticesPerQuad,
+                                vertexCount = segment.QuadCount * VerticesPerQuad,
+                                bounds = allSegmentBounds[segmentCursor].ToBounds(),
+                            },
+                            MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
+                            MeshUpdateFlags.DontNotifyMeshUsers);
+                        segmentCursor++;
+                    }
+                }
+                finally
+                {
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
+                }
+                activeSubMeshCount = desiredActiveSubMeshCount;
+                targetMesh.bounds = currentBounds;
                 PendingSegmentCount = 0;
                 hasBounds = false;
             }
@@ -419,13 +576,16 @@ namespace NTSD.Animation.Rendering
                 Mesh targetMesh = mesh;
                 if (targetMesh == null)
                 {
+                    activeSubMeshCount = 0;
                     hasBounds = false;
                     return;
                 }
-                // Unity 2022.3 releases the native index buffer when subMeshCount
-                // reaches zero. Keep one inert submesh so the immutable UInt16
-                // template survives empty frames and can be reused on the next build.
-                SetInertSubmesh(targetMesh);
+                int physicalSubMeshCount = targetMesh.subMeshCount;
+                int inertSubMeshCount = Math.Min(activeSubMeshCount, physicalSubMeshCount);
+                for (int subMeshIndex = 0; subMeshIndex < inertSubMeshCount; subMeshIndex++)
+                    SetInertSubmesh(targetMesh, subMeshIndex);
+                activeSubMeshCount = 0;
+                targetMesh.bounds = new Bounds(Vector3.zero, Vector3.zero);
                 hasBounds = false;
             }
 
@@ -448,6 +608,7 @@ namespace NTSD.Animation.Rendering
                 if (mesh != null)
                     return mesh;
 
+                activeSubMeshCount = 0;
                 mesh = CreateMesh();
                 return mesh;
             }
@@ -469,15 +630,16 @@ namespace NTSD.Animation.Rendering
                     indexTemplate.Length,
                     MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
                     MeshUpdateFlags.DontNotifyMeshUsers);
-                SetInertSubmesh(createdMesh);
+                createdMesh.subMeshCount = 1;
+                SetInertSubmesh(createdMesh, 0);
+                createdMesh.bounds = new Bounds(Vector3.zero, Vector3.zero);
                 return createdMesh;
             }
 
-            private static void SetInertSubmesh(Mesh targetMesh)
+            private static void SetInertSubmesh(Mesh targetMesh, int subMeshIndex)
             {
-                targetMesh.subMeshCount = 1;
                 targetMesh.SetSubMesh(
-                    0,
+                    subMeshIndex,
                     new SubMeshDescriptor(0, 0, MeshTopology.Triangles)
                     {
                         baseVertex = 0,
@@ -487,7 +649,6 @@ namespace NTSD.Animation.Rendering
                     },
                     MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
                     MeshUpdateFlags.DontNotifyMeshUsers);
-                targetMesh.bounds = new Bounds(Vector3.zero, Vector3.zero);
             }
 
             private static BattleQuadVertex CreateVertex(
@@ -528,6 +689,7 @@ namespace NTSD.Animation.Rendering
                 bounds.SetMinMax(boundsMin, boundsMax);
                 return bounds;
             }
+
         }
     }
 }

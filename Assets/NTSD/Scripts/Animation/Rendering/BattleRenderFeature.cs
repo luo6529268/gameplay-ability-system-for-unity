@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using NTSD.Simulation;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -46,6 +49,10 @@ namespace NTSD.Animation.Rendering
                 renderer,
                 renderingData.cameraData.camera,
                 renderingData.cameraData.renderType);
+            BattleCentralRenderSystem.MaterializeLatestPublishedFrameForCamera(
+                this,
+                renderingData.cameraData.camera,
+                renderingData.cameraData.renderType);
             if (renderer == null ||
                 !BattleCentralRenderSystem.TryAcquireSubmission(
                     renderingData.cameraData.camera,
@@ -70,6 +77,8 @@ namespace NTSD.Animation.Rendering
         {
             private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
             private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
+            private static readonly ProfilerMarker ExecuteCommandBufferMarker =
+                new ProfilerMarker("NTSD.BattlePresentation.ExecuteCommandBuffer");
             private readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
             private BattleCentralSubmission.BattleCentralSubmissionLease submissionLease;
 
@@ -112,13 +121,34 @@ namespace NTSD.Animation.Rendering
                                 propertyBlock);
                             drawCount++;
                         }
-                        context.ExecuteCommandBuffer(commandBuffer);
+                        BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                            lease.Submission?.World?
+                                .ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                        long executeStarted = detailDiagnostics != null
+                            ? Stopwatch.GetTimestamp()
+                            : 0;
+                        try
+                        {
+                            using (ExecuteCommandBufferMarker.Auto())
+                            {
+                                context.ExecuteCommandBuffer(commandBuffer);
+                            }
+                        }
+                        finally
+                        {
+                            if (detailDiagnostics != null)
+                            {
+                                detailDiagnostics.RecordDeferredPhaseElapsed(
+                                    BattleTickDetailPhase.RenderExecuteCommandBuffer,
+                                    Stopwatch.GetTimestamp() - executeStarted);
+                            }
+                        }
                     }
                     finally
                     {
                         CommandBufferPool.Release(commandBuffer);
                     }
-                    BattleCentralRenderSystem.RecordSubmission(drawCount);
+                    BattleCentralRenderSystem.RecordSubmission(lease, drawCount);
                 }
                 finally
                 {

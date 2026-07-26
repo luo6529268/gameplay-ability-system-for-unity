@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using NTSD.Animation.Rendering;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
 
@@ -20,11 +21,13 @@ namespace NTSD.Animation
             Texture texture,
             int atlasSlice,
             Rect normalizedUv,
-            Rect atlasContentPixelRect)
+            Rect atlasContentPixelRect,
+            int atlasPageIndex = -1)
         {
             Mode = mode;
             Texture = texture;
             AtlasSlice = atlasSlice;
+            AtlasPageIndex = atlasPageIndex;
             NormalizedUv = normalizedUv;
             AtlasContentPixelRect = atlasContentPixelRect;
         }
@@ -32,9 +35,70 @@ namespace NTSD.Animation
         public BattleSpriteCentralBindingMode Mode { get; }
         public Texture Texture { get; }
         public int AtlasSlice { get; }
+        public int AtlasPageIndex { get; }
         public Rect NormalizedUv { get; }
         public Rect AtlasContentPixelRect { get; }
-        public bool IsValid => Texture != null && NormalizedUv.width > 0f && NormalizedUv.height > 0f;
+        public bool IsValid
+        {
+            get
+            {
+                if ((Mode != BattleSpriteCentralBindingMode.SourceTexture2D &&
+                     Mode != BattleSpriteCentralBindingMode.AtlasTextureArray &&
+                     Mode != BattleSpriteCentralBindingMode.AtlasPageTexture2D) ||
+                    Texture == null || Texture.width <= 0 || Texture.height <= 0 ||
+                    !IsFiniteRect(NormalizedUv) ||
+                    NormalizedUv.x < 0f || NormalizedUv.y < 0f ||
+                    NormalizedUv.width <= 0f || NormalizedUv.height <= 0f ||
+                    NormalizedUv.xMax > 1f || NormalizedUv.yMax > 1f ||
+                    !IsFiniteRect(AtlasContentPixelRect) ||
+                    AtlasContentPixelRect.x < 0f || AtlasContentPixelRect.y < 0f ||
+                    AtlasContentPixelRect.width <= 0f || AtlasContentPixelRect.height <= 0f ||
+                    AtlasContentPixelRect.xMax > Texture.width ||
+                    AtlasContentPixelRect.yMax > Texture.height)
+                {
+                    return false;
+                }
+
+                switch (Mode)
+                {
+                    case BattleSpriteCentralBindingMode.SourceTexture2D:
+                        if (!(Texture is Texture2D) || AtlasSlice != 0 || AtlasPageIndex != -1)
+                            return false;
+                        break;
+                    case BattleSpriteCentralBindingMode.AtlasTextureArray:
+                        if (!(Texture is Texture2DArray arrayTexture) ||
+                            AtlasSlice < 0 || AtlasSlice >= arrayTexture.depth ||
+                            AtlasPageIndex < 0 || AtlasPageIndex != AtlasSlice)
+                        {
+                            return false;
+                        }
+                        break;
+                    case BattleSpriteCentralBindingMode.AtlasPageTexture2D:
+                        if (!(Texture is Texture2D) || AtlasSlice != 0 || AtlasPageIndex < 0)
+                            return false;
+                        break;
+                    default:
+                        return false;
+                }
+
+                const float epsilon = 0.001f;
+                return Mathf.Abs(NormalizedUv.x * Texture.width - AtlasContentPixelRect.x) <= epsilon &&
+                       Mathf.Abs(NormalizedUv.y * Texture.height - AtlasContentPixelRect.y) <= epsilon &&
+                       Mathf.Abs(NormalizedUv.width * Texture.width - AtlasContentPixelRect.width) <= epsilon &&
+                       Mathf.Abs(NormalizedUv.height * Texture.height - AtlasContentPixelRect.height) <= epsilon;
+            }
+        }
+
+        private static bool IsFiniteRect(Rect rect)
+        {
+            return IsFinite(rect.x) && IsFinite(rect.y) &&
+                   IsFinite(rect.width) && IsFinite(rect.height);
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
     }
 
     /// <summary>
@@ -181,6 +245,31 @@ namespace NTSD.Animation
             Vector2 pixelSize,
             Vector2 pivot,
             BattleSpriteRenderState renderState)
+            : this(
+                key,
+                sprite,
+                texture,
+                material,
+                pixelRect,
+                normalizedUv,
+                pixelSize,
+                pivot,
+                renderState,
+                CreateSourceBinding(texture, pixelRect))
+        {
+        }
+
+        private BattleCommonVisualBinding(
+            BattleVisualResourceKey key,
+            Sprite sprite,
+            Texture2D texture,
+            Material material,
+            Rect pixelRect,
+            Rect normalizedUv,
+            Vector2 pixelSize,
+            Vector2 pivot,
+            BattleSpriteRenderState renderState,
+            BattleSpriteCentralBinding centralBinding)
         {
             Key = key;
             Sprite = sprite;
@@ -191,6 +280,7 @@ namespace NTSD.Animation
             PixelSize = pixelSize;
             Pivot = pivot;
             RenderState = renderState;
+            CentralBinding = centralBinding;
         }
 
         public BattleVisualResourceKey Key { get; }
@@ -202,6 +292,7 @@ namespace NTSD.Animation
         public Vector2 PixelSize { get; }
         public Vector2 Pivot { get; }
         public BattleSpriteRenderState RenderState { get; }
+        public BattleSpriteCentralBinding CentralBinding { get; }
         public Color32 Color => RenderState.Color;
         public int SpriteInstanceId => Sprite != null ? Sprite.GetInstanceID() : 0;
         public int TextureInstanceId => Texture != null ? Texture.GetInstanceID() : 0;
@@ -221,6 +312,46 @@ namespace NTSD.Animation
                    descriptor.TextureInstanceId == TextureInstanceId &&
                    descriptor.PixelRect == PixelRect &&
                    descriptor.PivotNormalized == Pivot;
+        }
+
+        internal BattleCommonVisualBinding WithCentralBinding(
+            BattleSpriteCentralBinding centralBinding)
+        {
+            if (!centralBinding.IsValid)
+                throw new ArgumentException("Common visual central binding must be valid.", nameof(centralBinding));
+
+            return new BattleCommonVisualBinding(
+                Key,
+                Sprite,
+                Texture,
+                Material,
+                PixelRect,
+                NormalizedUv,
+                PixelSize,
+                Pivot,
+                RenderState,
+                centralBinding);
+        }
+
+        private static BattleSpriteCentralBinding CreateSourceBinding(
+            Texture2D texture,
+            Rect pixelRect)
+        {
+            float width = texture != null ? texture.width : 0f;
+            float height = texture != null ? texture.height : 0f;
+            Rect uv = width > 0f && height > 0f
+                ? new Rect(
+                    pixelRect.x / width,
+                    pixelRect.y / height,
+                    pixelRect.width / width,
+                    pixelRect.height / height)
+                : Rect.zero;
+            return new BattleSpriteCentralBinding(
+                BattleSpriteCentralBindingMode.SourceTexture2D,
+                texture,
+                0,
+                uv,
+                pixelRect);
         }
     }
 
@@ -411,29 +542,19 @@ namespace NTSD.Animation
             if (shadowPrefab == null)
                 return Invalid("GameConfig.ShadowPrefab is missing.");
 
-            SpriteRenderer renderer = shadowPrefab.GetComponent<SpriteRenderer>();
-            if (renderer == null)
-                return Invalid("GameConfig.ShadowPrefab is missing its root SpriteRenderer.");
+            BattleCommonShadowDescriptor descriptor =
+                shadowPrefab.GetComponent<BattleCommonShadowDescriptor>();
+            if (descriptor == null)
+                return Invalid("GameConfig.ShadowPrefab is missing its root BattleCommonShadowDescriptor.");
+            if (!descriptor.TryValidate(out string diagnostic))
+                return Invalid(diagnostic);
 
-            Sprite sprite = renderer.sprite;
-            if (sprite == null)
-                return Invalid("GameConfig.ShadowPrefab SpriteRenderer is missing its Sprite.");
-
+            Sprite sprite = descriptor.Sprite;
             Texture2D texture = sprite.texture;
-            if (texture == null)
-                return Invalid("GameConfig.ShadowPrefab Sprite has no Texture2D.");
-
-            Material material = renderer.sharedMaterial;
+            Material material = descriptor.Material;
             BattleSpriteMaterialSemantic semantic = BattleSpriteMaterialContract.Classify(material);
-            if (semantic != BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha)
-                return Invalid("GameConfig.ShadowPrefab material does not declare premultiplied sprite alpha semantics.");
-            if (renderer.maskInteraction != SpriteMaskInteraction.None)
-                return Invalid("GameConfig.ShadowPrefab SpriteRenderer uses an unsupported mask interaction.");
 
             Rect pixelRect = sprite.rect;
-            if (pixelRect.width <= 0f || pixelRect.height <= 0f || texture.width <= 0 || texture.height <= 0)
-                return Invalid("GameConfig.ShadowPrefab Sprite has invalid pixel metrics.");
-
             Vector2 pivot = new Vector2(
                 sprite.pivot.x / pixelRect.width,
                 sprite.pivot.y / pixelRect.height);
@@ -443,10 +564,10 @@ namespace NTSD.Animation
                 pixelRect.width / texture.width,
                 pixelRect.height / texture.height);
             var renderState = new BattleSpriteRenderState(
-                renderer.color,
-                renderer.flipX,
-                renderer.flipY,
-                renderer.maskInteraction,
+                descriptor.Color,
+                descriptor.FlipX,
+                descriptor.FlipY,
+                descriptor.MaskInteraction,
                 semantic);
             return new BattleCommonVisualCatalog(
                 new BattleCommonVisualBinding(
@@ -626,6 +747,54 @@ namespace NTSD.Animation
             }
 
             return new BattleCommonVisualCatalog(Shadow, sparks, textures, bindings, string.Empty);
+        }
+
+        internal BattleCommonVisualCatalog WithCentralBindings(
+            IReadOnlyDictionary<BattleVisualResourceKey, BattleSpriteCentralBinding> bindings)
+        {
+            if (bindings == null)
+                throw new ArgumentNullException(nameof(bindings));
+            if (!IsComplete)
+                throw new InvalidOperationException("A complete common visual catalog is required before central bindings can be published.");
+
+            BattleCommonVisualBinding remappedShadow = RemapBinding(Shadow, bindings);
+            var remappedSparks = new BattleCommonVisualBinding[sparks.Length];
+            for (int pic = 0; pic < sparks.Length; pic++)
+                remappedSparks[pic] = RemapBinding(sparks[pic], bindings);
+
+            var remappedWords = new BattleCommonVisualBinding[wordGlyphs.Length][];
+            for (int sheetIndex = 0; sheetIndex < wordGlyphs.Length; sheetIndex++)
+            {
+                BattleCommonVisualBinding[] sourceGlyphs = wordGlyphs[sheetIndex];
+                remappedWords[sheetIndex] = new BattleCommonVisualBinding[sourceGlyphs.Length];
+                for (int charCode = 0; charCode < sourceGlyphs.Length; charCode++)
+                {
+                    remappedWords[sheetIndex][charCode] =
+                        RemapBinding(sourceGlyphs[charCode], bindings);
+                }
+            }
+
+            return new BattleCommonVisualCatalog(
+                remappedShadow,
+                remappedSparks,
+                wordTextures,
+                remappedWords,
+                Diagnostic);
+        }
+
+        private static BattleCommonVisualBinding RemapBinding(
+            BattleCommonVisualBinding source,
+            IReadOnlyDictionary<BattleVisualResourceKey, BattleSpriteCentralBinding> bindings)
+        {
+            if (source == null ||
+                !bindings.TryGetValue(source.Key, out BattleSpriteCentralBinding centralBinding) ||
+                !centralBinding.IsValid)
+            {
+                throw new InvalidOperationException(
+                    $"Missing central atlas binding for common visual {source?.Key.ToString() ?? "<null>"}.");
+            }
+
+            return source.WithCentralBinding(centralBinding);
         }
 
         private static BattleCommonVisualCatalog Invalid(string diagnostic)

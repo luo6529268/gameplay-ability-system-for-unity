@@ -1,12 +1,13 @@
 using NTSD.Simulation;
 using NTSD.LevelEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NTSD.Animation
 {
     /// <summary>
-    /// C++ release 使用 794x550 的固定逻辑屏幕坐标绘制战斗层。
-    /// 这里只做 C++ 屏幕像素到 Unity 世界坐标的映射；背景图和输出分辨率不能反向改变实体比例。
+    /// C# authority 使用 794x550 的固定逻辑屏幕坐标绘制战斗层。
+    /// 这里只做权威 C# 渲染坐标到 Unity 世界坐标的映射；背景图和输出分辨率不能反向改变实体比例。
     /// </summary>
     public static class NTSDRenderSpace
     {
@@ -19,6 +20,16 @@ namespace NTSD.Animation
         private static Camera _boundWorldCamera;
         private static Camera _cachedWorldCamera;
         private static BoundaryWallManager _cachedBoundaryManager;
+        private static BoundaryWallManager _boundaryViewportManager;
+        private static Camera _boundaryViewportCamera;
+        private static int _boundaryViewportSceneHandle = int.MinValue;
+        private static int _boundaryViewportFrame = int.MinValue;
+        private static bool _boundaryViewportResolved;
+        private static bool _hasBoundaryViewport;
+        private static Rect _cachedBoundaryViewport;
+        private static bool _boundaryViewportOverrideEnabledForSelfCheck;
+        private static bool _boundaryViewportOverrideHasBoundsForSelfCheck;
+        private static Rect _boundaryViewportOverrideForSelfCheck;
 
         public static Camera WorldCamera
         {
@@ -64,11 +75,13 @@ namespace NTSD.Animation
         public static float UnitsPerPixelY => 1f / SimulationConstants.PIXELS_PER_UNIT;
         public const float BattleVisualScale = 1.5f;
         public static Vector3 RenderScale => Vector3.one * BattleVisualScale;
+        internal static Camera BoundWorldCameraForSelfCheck => _boundWorldCamera;
 
         public static void BindWorldCamera(Camera camera)
         {
             _boundWorldCamera = camera;
             _cachedWorldCamera = camera;
+            InvalidateBoundaryViewportCache();
         }
 
         public static void ClearBoundWorldCamera(Camera camera)
@@ -77,6 +90,29 @@ namespace NTSD.Animation
                 _boundWorldCamera = null;
             if (_cachedWorldCamera == camera)
                 _cachedWorldCamera = null;
+            InvalidateBoundaryViewportCache();
+        }
+
+        internal static void InvalidateBoundaryViewportCache()
+        {
+            _boundaryViewportResolved = false;
+            _boundaryViewportFrame = int.MinValue;
+        }
+
+        internal static void SetBoundaryViewportOverrideForSelfCheck(bool hasBounds, Rect bounds)
+        {
+            _boundaryViewportOverrideEnabledForSelfCheck = true;
+            _boundaryViewportOverrideHasBoundsForSelfCheck = hasBounds;
+            _boundaryViewportOverrideForSelfCheck = bounds;
+            InvalidateBoundaryViewportCache();
+        }
+
+        internal static void ClearBoundaryViewportOverrideForSelfCheck()
+        {
+            _boundaryViewportOverrideEnabledForSelfCheck = false;
+            _boundaryViewportOverrideHasBoundsForSelfCheck = false;
+            _boundaryViewportOverrideForSelfCheck = default;
+            InvalidateBoundaryViewportCache();
         }
 
         public static Vector3 ScreenPixelToWorld(float screenX, float screenY, float z = 0f)
@@ -170,43 +206,87 @@ namespace NTSD.Animation
         private static void GetViewport(out float left, out float top)
         {
             Camera camera = WorldCamera;
-            if (camera != null && camera.orthographic)
+            bool hasBoundaryViewport = TryGetBoundaryViewport(camera, out Rect worldBounds);
+
+            if (hasBoundaryViewport)
+            {
+                left = worldBounds.xMin;
+            }
+            else if (camera != null && camera.orthographic)
             {
                 float canvasWidth = SourceScreenWidth * UnitsPerPixelX;
+                left = camera.transform.position.x - canvasWidth * 0.5f;
+            }
+            else
+            {
+                left = 0f;
+            }
+
+            if (camera != null && camera.orthographic)
+            {
                 float canvasHeight = SourceScreenHeight * UnitsPerPixelY;
                 Vector3 cameraPos = camera.transform.position;
-                left = cameraPos.x - canvasWidth * 0.5f;
                 top = cameraPos.y + canvasHeight * 0.5f;
                 return;
             }
 
-            // 只有在场景相机还未绑定的兜底路径下，才退回到 Boundary 外接框。
-            // 正式战斗中的屏幕像素坐标必须跟随 ScenesCamera 的固定 794x550 逻辑视口，
-            // 不能直接把整张可走区域当成 draw_entity 的 camera viewport。
-            if (TryGetBoundaryViewport(out Rect worldBounds))
+            // Horizontal logical pixels start at the walkable boundary; vertical screen pixels
+            // continue to use the bound camera's fixed 550px viewport when one is available.
+            if (hasBoundaryViewport)
             {
-                left = worldBounds.xMin;
                 top = worldBounds.yMax;
                 return;
             }
 
-            left = 0f;
             top = 0f;
         }
 
         private static bool TryGetBoundaryViewport(out Rect worldBounds)
         {
-            worldBounds = default;
+            return TryGetBoundaryViewport(WorldCamera, out worldBounds);
+        }
 
-            BoundaryWallManager manager = _cachedBoundaryManager != null
-                ? _cachedBoundaryManager
+        private static bool TryGetBoundaryViewport(Camera camera, out Rect worldBounds)
+        {
+            if (_boundaryViewportOverrideEnabledForSelfCheck)
+            {
+                worldBounds = _boundaryViewportOverrideForSelfCheck;
+                return _boundaryViewportOverrideHasBoundsForSelfCheck &&
+                       worldBounds.width > 0f && worldBounds.height > 0f;
+            }
+
+            int frame = Time.frameCount;
+            int sceneHandle = SceneManager.GetActiveScene().handle;
+            BoundaryWallManager knownManager = _cachedBoundaryManager;
+            bool cachedManagerStillValid = !_hasBoundaryViewport || _boundaryViewportManager != null;
+            if (_boundaryViewportResolved &&
+                _boundaryViewportFrame == frame &&
+                _boundaryViewportSceneHandle == sceneHandle &&
+                _boundaryViewportCamera == camera &&
+                _boundaryViewportManager == knownManager &&
+                cachedManagerStillValid)
+            {
+                worldBounds = _cachedBoundaryViewport;
+                return _hasBoundaryViewport;
+            }
+
+            BoundaryWallManager manager = knownManager != null
+                ? knownManager
                 : Object.FindObjectOfType<BoundaryWallManager>();
 
-            if (manager == null)
-                return false;
-
             _cachedBoundaryManager = manager;
-            return manager.TryGetWalkableBounds(out worldBounds);
+            _boundaryViewportManager = manager;
+            _boundaryViewportCamera = camera;
+            _boundaryViewportSceneHandle = sceneHandle;
+            _boundaryViewportFrame = frame;
+            _boundaryViewportResolved = true;
+            _hasBoundaryViewport = manager != null &&
+                                   manager.TryGetWalkableBounds(out _cachedBoundaryViewport) &&
+                                   _cachedBoundaryViewport.width > 0f &&
+                                   _cachedBoundaryViewport.height > 0f;
+
+            worldBounds = _cachedBoundaryViewport;
+            return _hasBoundaryViewport;
         }
     }
 }

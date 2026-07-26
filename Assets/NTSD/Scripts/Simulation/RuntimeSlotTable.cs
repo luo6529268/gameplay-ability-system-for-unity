@@ -63,6 +63,7 @@ namespace NTSD.Simulation
 
         private readonly RuntimeSlotAllocator allocator;
         private Page[] pages;
+        private ulong occupancyEpoch = 1;
 
         public RuntimeSlotTable(int logicalCapacity, int stageStart = 20, int dynamicStart = 50)
         {
@@ -77,6 +78,7 @@ namespace NTSD.Simulation
         public int LogicalCapacity { get; private set; }
         public int ClaimedCount => allocator.ClaimedCount;
         public int MaterializedPageCount { get; private set; }
+        public ulong OccupancyEpoch => occupancyEpoch;
 
         public bool GrowTo(int newLogicalCapacity)
         {
@@ -94,6 +96,7 @@ namespace NTSD.Simulation
 
             pages = grownPages;
             LogicalCapacity = newLogicalCapacity;
+            AdvanceOccupancyEpoch();
             return true;
         }
 
@@ -137,6 +140,7 @@ namespace NTSD.Simulation
             entry.Entity = entity;
             entry.Claimed = true;
             handle = new RuntimeEntityHandle(slot, entry.Generation);
+            AdvanceOccupancyEpoch();
             return true;
         }
 
@@ -155,6 +159,7 @@ namespace NTSD.Simulation
             entry.Entity = entity;
             entry.Claimed = true;
             handle = new RuntimeEntityHandle(slot, entry.Generation);
+            AdvanceOccupancyEpoch();
             return slot;
         }
 
@@ -229,6 +234,7 @@ namespace NTSD.Simulation
             entry.Entity = null;
             entry.Claimed = false;
             entry.Generation = NextGeneration(entry.Generation);
+            AdvanceOccupancyEpoch();
             return true;
         }
 
@@ -269,6 +275,7 @@ namespace NTSD.Simulation
                     entry.Generation = NextGeneration(entry.Generation);
                 }
             }
+            AdvanceOccupancyEpoch();
         }
 
         private bool TryGetMatchingEntry(RuntimeEntityHandle handle, out Entry entry)
@@ -303,5 +310,19 @@ namespace NTSD.Simulation
             generation++;
             return generation == 0 ? 1u : generation;
         }
+
+        private void AdvanceOccupancyEpoch()
+        {
+            occupancyEpoch++;
+            if (occupancyEpoch == 0)
+                occupancyEpoch = 1;
+        }
+
+#if UNITY_INCLUDE_TESTS
+        internal void SetOccupancyEpochForSelfCheck(ulong value)
+        {
+            occupancyEpoch = value;
+        }
+#endif
     }
 }

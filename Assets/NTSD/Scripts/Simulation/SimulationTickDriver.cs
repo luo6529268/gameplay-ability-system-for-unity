@@ -109,7 +109,7 @@ namespace NTSD.Simulation
         private NTSD.Animation.SparkRenderer _sparkRenderer;
         private NTSD.Animation.BattleEntityOverlayRenderer _overlayRenderer;
         private BattlePresentationBackendMode _presentationBackendMode =
-            BattlePresentationBackendMode.LegacyOnly;
+            BattlePresentationBackendMode.CentralOnly;
 
         private int _sparkRenderFrame = 0;
         private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
@@ -153,7 +153,13 @@ namespace NTSD.Simulation
                     break;
 
                 _timeAccumulator -= SimulationConstants.SIM_DT;
-                StepOneTickInternal(nextTickIndex);
+                bool buildPresentation = ShouldBuildPresentationForCatchUpTick(
+                    lockstepSettings.driveMode,
+                    lockstepSettings.requireInputFrameReady,
+                    _timeAccumulator,
+                    catchUpTicks,
+                    lockstepSettings.maxCatchUpTicksPerFrame);
+                StepOneTickInternal(nextTickIndex, buildPresentation);
                 catchUpTicks++;
             }
 
@@ -193,7 +199,7 @@ namespace NTSD.Simulation
             return _frameInputProvider == null || _frameInputProvider.IsFrameInputReady(tickIndex);
         }
 
-        private bool StepOneTickInternal(int tickIndex)
+        private bool StepOneTickInternal(int tickIndex, bool buildPresentation)
         {
             if (_world == null || !CanAdvanceTick(tickIndex))
                 return false;
@@ -216,7 +222,7 @@ namespace NTSD.Simulation
 
             _lastAppliedFrameInput = frameInput;
             _world.ApplyFrameInputSet(frameInput);
-            _battleTickSystem?.RunReleaseTick(tickIndex);
+            _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
             CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
             _frameInputProvider?.AfterSimTick(tickIndex);
 
@@ -363,16 +369,23 @@ namespace NTSD.Simulation
 
         public bool StepOneTick(bool ignorePaused = false)
         {
+            return StepOneTick(ignorePaused, buildPresentation: true);
+        }
+
+        public bool StepOneTick(bool ignorePaused, bool buildPresentation)
+        {
             if (!ignorePaused && paused)
                 return false;
 
-            bool stepped = StepOneTickInternal(_tickIndex + 1);
+            bool stepped = StepOneTickInternal(_tickIndex + 1, buildPresentation);
             RefreshInspectorState();
             return stepped;
         }
 
         public void UnbindWorld()
         {
+            if (_world != null)
+                BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = null;
             _battleTickSystem = null;
@@ -381,6 +394,39 @@ namespace NTSD.Simulation
         public void RecreateWorld()
         {
             CreateProductionWorld();
+            ResetDriverStateAfterWorldCreation();
+        }
+
+#if UNITY_EDITOR
+        public bool TryConfigureEmptyDiagnosticWorld(
+            BattleRuntimeWorldSettings settings,
+            out string failureReason)
+        {
+            if (_world != null &&
+                (_world.ObjectCount != 0 || _world.ClaimedRuntimeSlotCountForDiagnostics != 0))
+            {
+                failureReason =
+                    "The diagnostic world can only be configured before entities are registered.";
+                return false;
+            }
+
+            try
+            {
+                CreateProductionWorld(settings, _presentationBackendMode);
+                ResetDriverStateAfterWorldCreation();
+                failureReason = string.Empty;
+                return true;
+            }
+            catch (System.Exception exception)
+            {
+                failureReason = exception.Message;
+                return false;
+            }
+        }
+#endif
+
+        private void ResetDriverStateAfterWorldCreation()
+        {
             _tickIndex = 0;
             _timeAccumulator = 0f;
             _sparkRenderFrame = 0;
@@ -411,6 +457,8 @@ namespace NTSD.Simulation
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
             nextWorld.SetBattlePresentationBackend(presentationMode);
+            if (_world != null)
+                BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = nextWorld;
             _presentationBackendMode = presentationMode;
@@ -443,6 +491,30 @@ namespace NTSD.Simulation
 
             CreateProductionWorld(settings, presentationMode);
             return true;
+        }
+
+        public static bool IsFinalCatchUpTick(
+            float remainingAccumulator,
+            int ticksAlreadyExecuted,
+            int maxCatchUpTicks)
+        {
+            return remainingAccumulator < SimulationConstants.SIM_DT ||
+                   ticksAlreadyExecuted + 1 >= maxCatchUpTicks;
+        }
+
+        public static bool ShouldBuildPresentationForCatchUpTick(
+            SimulationDriveMode driveMode,
+            bool requireInputFrameReady,
+            float remainingAccumulator,
+            int ticksAlreadyExecuted,
+            int maxCatchUpTicks)
+        {
+            return driveMode != SimulationDriveMode.LocalFreeRun ||
+                   requireInputFrameReady ||
+                   IsFinalCatchUpTick(
+                       remainingAccumulator,
+                       ticksAlreadyExecuted,
+                       maxCatchUpTicks);
         }
 
         internal static bool WorldMatchesRuntimeSettings(

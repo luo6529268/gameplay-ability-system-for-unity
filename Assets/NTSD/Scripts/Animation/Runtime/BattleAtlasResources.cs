@@ -295,6 +295,184 @@ namespace NTSD.Animation
         }
 
         /// <summary>
+        /// Publishes atlas bindings for every immutable common visual descriptor.
+        /// Descriptor Sprite/Texture2D/PixelRect/Material identities remain unchanged;
+        /// only the independent central binding is remapped.
+        /// </summary>
+        public static bool TryBindCommonCatalog(
+            BattleCommonVisualCatalog sourceCatalog,
+            BattleAtlasPlan plan,
+            BattleAtlasResources resources,
+            IReadOnlyDictionary<BattleVisualResourceKey, string> sourcePaths,
+            IEnumerable<string> sourceTexture2DExcludedPaths,
+            out BattleCommonVisualCatalog boundCatalog,
+            out string diagnostic)
+        {
+            boundCatalog = null;
+            diagnostic = string.Empty;
+            if (sourceCatalog == null || plan == null || resources == null || sourcePaths == null)
+            {
+                diagnostic = "Common catalog, atlas plan, atlas resources, and source paths are required.";
+                return false;
+            }
+            if (!sourceCatalog.IsComplete)
+            {
+                diagnostic = "A complete common visual catalog is required for atlas binding.";
+                return false;
+            }
+
+            var excludedPaths = new HashSet<string>(StringComparer.Ordinal);
+            if (sourceTexture2DExcludedPaths != null)
+            {
+                foreach (string path in sourceTexture2DExcludedPaths)
+                    excludedPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(path));
+            }
+
+            var bindings =
+                new Dictionary<BattleVisualResourceKey, BattleSpriteCentralBinding>(
+                    1 + BattleCommonVisualCatalog.SparkFrameCount +
+                    BattleCommonVisualCatalog.WordSheetCount * BattleCommonVisualCatalog.WordGlyphsPerSheet);
+            if (!TryBindCommonVisual(
+                    sourceCatalog.Shadow,
+                    plan,
+                    resources,
+                    sourcePaths,
+                    excludedPaths,
+                    bindings,
+                    out diagnostic))
+            {
+                return false;
+            }
+
+            for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
+            {
+                if (!sourceCatalog.TryGetSpark(pic, out BattleCommonVisualBinding spark) ||
+                    !TryBindCommonVisual(
+                        spark,
+                        plan,
+                        resources,
+                        sourcePaths,
+                        excludedPaths,
+                        bindings,
+                        out diagnostic))
+                {
+                    return false;
+                }
+            }
+
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                for (int charCode = 0;
+                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                     charCode++)
+                {
+                    if (!sourceCatalog.TryGetWordGlyph(
+                            sheetIndex,
+                            charCode,
+                            out BattleCommonVisualBinding glyph) ||
+                        !TryBindCommonVisual(
+                            glyph,
+                            plan,
+                            resources,
+                            sourcePaths,
+                            excludedPaths,
+                            bindings,
+                            out diagnostic))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            try
+            {
+                boundCatalog = sourceCatalog.WithCentralBindings(bindings);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                diagnostic = exception.Message;
+                return false;
+            }
+        }
+
+        private static bool TryBindCommonVisual(
+            BattleCommonVisualBinding descriptor,
+            BattleAtlasPlan plan,
+            BattleAtlasResources resources,
+            IReadOnlyDictionary<BattleVisualResourceKey, string> sourcePaths,
+            HashSet<string> excludedPaths,
+            IDictionary<BattleVisualResourceKey, BattleSpriteCentralBinding> bindings,
+            out string diagnostic)
+        {
+            diagnostic = string.Empty;
+            if (descriptor == null ||
+                !sourcePaths.TryGetValue(descriptor.Key, out string sourcePath))
+            {
+                diagnostic = $"Common visual {descriptor?.Key.ToString() ?? "<null>"} has no atlas source path.";
+                return false;
+            }
+
+            string normalizedPath = BattleAtlasLayoutPlanner.NormalizePath(sourcePath);
+            if (!plan.TryGetPlacement(normalizedPath, out BattleAtlasPlacement placement))
+            {
+                if (excludedPaths.Contains(normalizedPath) &&
+                    descriptor.CentralBinding.Mode == BattleSpriteCentralBindingMode.SourceTexture2D &&
+                    descriptor.CentralBinding.IsValid)
+                {
+                    bindings.Add(descriptor.Key, descriptor.CentralBinding);
+                    return true;
+                }
+
+                diagnostic =
+                    $"Common visual {descriptor.Key} references missing atlas source '{sourcePath}'.";
+                return false;
+            }
+
+            Rect sourceRect = descriptor.PixelRect;
+            if (sourceRect.x < 0f || sourceRect.y < 0f ||
+                sourceRect.width <= 0f || sourceRect.height <= 0f ||
+                sourceRect.xMax > placement.ContentRect.width ||
+                sourceRect.yMax > placement.ContentRect.height)
+            {
+                diagnostic =
+                    $"Common visual {descriptor.Key} has an out-of-range source rect for '{sourcePath}'.";
+                return false;
+            }
+
+            var atlasRect = new Rect(
+                placement.ContentRect.x + sourceRect.x,
+                placement.ContentRect.y + sourceRect.y,
+                sourceRect.width,
+                sourceRect.height);
+            float pageSize = plan.PageSize;
+            var uv = new Rect(
+                atlasRect.x / pageSize,
+                atlasRect.y / pageSize,
+                atlasRect.width / pageSize,
+                atlasRect.height / pageSize);
+            var binding = new BattleSpriteCentralBinding(
+                resources.Mode,
+                resources.ResolveTexture(placement.PageIndex),
+                resources.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray
+                    ? placement.PageIndex
+                    : 0,
+                uv,
+                atlasRect,
+                placement.PageIndex);
+            if (!binding.IsValid)
+            {
+                diagnostic = $"Common visual {descriptor.Key} produced an invalid atlas binding.";
+                return false;
+            }
+
+            bindings.Add(descriptor.Key, binding);
+            return true;
+        }
+
+        /// <summary>
         /// Binds planned sources to atlas resources while retaining only the explicitly
         /// excluded sources as their original Texture2D bindings. This is intentionally
         /// fail-closed for every other missing placement.
@@ -360,7 +538,8 @@ namespace NTSD.Animation
                         ? placement.PageIndex
                         : 0,
                     uv,
-                    atlasRect);
+                    atlasRect,
+                    placement.PageIndex);
                 if (!binding.IsValid)
                 {
                     diagnostic = $"Catalog entry {pair.Key} produced an invalid atlas binding.";

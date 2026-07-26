@@ -59,6 +59,7 @@ namespace NTSD.Test
                 BattleRuntimeSelfCheckCore.RunAllChecks();
                 CheckReferencePoolObjectIdPreserved();
                 CheckReferencePoolRejectsUnownedObjects();
+                CheckObjectPoolReleaseEscapesExternalParent();
                 CheckSpriteDimensionsUseFullRect();
                 CheckBattleSpriteCatalogContracts();
                 CheckBattleSpritePrewarmTransactionContracts();
@@ -67,6 +68,7 @@ namespace NTSD.Test
                 CheckCompactPresentationRenderSorting();
                 CheckLegacySpriteRendererPresentationSorting();
                 CheckBattlePresentationShadowBuildContracts();
+                CheckRendererlessSpritePresentationContracts();
                 CheckBattleEntityOverlayLayoutContracts();
                 CheckHitRecordPresentationLifecycleContracts();
                 CheckCommonShadowCentralOwnershipContracts();
@@ -74,7 +76,10 @@ namespace NTSD.Test
                 CheckBattlePresentationProductionProbeContracts();
                 CheckBattleRenderStateSemanticContracts();
                 CheckBattleCentralMeshAndUrpContracts();
+                CheckBattleCentralEntityDiagnosticContracts();
                 CheckCentralPixelOwnershipContracts();
+                CheckBattleCentralPresentationMountProductionPrefabContracts();
+                CheckBattleCentralPresentationMountContracts();
                 CheckBattleAtlasArrayContracts();
                 CheckBattleRenderingDevicePolicyContracts();
                 CheckHitStopPresentationGates();
@@ -108,6 +113,7 @@ namespace NTSD.Test
                 CheckReleaseTickCpointSyncPrecedesCandidates();
                 CheckReleaseTickZClampPrecedesCandidates();
                 CheckPreFrameXBoundsMatrix();
+                CheckRenderSpaceHorizontalOriginContracts();
                 CheckQueuedObjectPointPassBoundaries();
                 CheckAudit7LateOpointPrecisionContracts();
                 CheckRuntimeSlotAllocatorAndProfileContracts();
@@ -198,6 +204,10 @@ namespace NTSD.Test
                 CheckStageWaveImmediateSpawnAndAdvance();
                 CheckStageWavePositiveSpawnRefill();
                 CheckAiTargetCacheCoordinateAndDeterminism();
+                CheckAiSpatialQueryTieAndSentinelContracts();
+                CheckAiPhase1TargetIndexContracts();
+                CheckAiSameTeamHpSummaryContracts();
+                CheckAiSpecialObjectScanIndexContracts();
                 CheckAiHumanInputIsolation();
                 CheckAiHeldInactiveSlotContract();
                 CheckAiSharedCharacterDatShell();
@@ -1692,7 +1702,13 @@ namespace NTSD.Test
             var treeParityQuery = treeParityWorld.SceneQuery as BruteForceSceneQuery;
             Expect(treeParityQuery != null &&
                    treeParityQuery.CollisionBroadphase == CollisionBroadphaseBackend.LooseQuadtree &&
+                   treeParityQuery.LastFormalCollectorModeForDiagnostics ==
+                   CollisionFormalCollectorMode.ForceRoleAware &&
                    !treeParityQuery.FormalCollectionAborted &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.FullRebuild &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.IndexedCount == 1 &&
+                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1 &&
                    treeParityCandidates.Count == bruteParityCandidates.Count &&
                    treeParityCandidates.Count == 1 &&
                    treeParityCandidates[0].Target == treeTarget &&
@@ -1713,8 +1729,14 @@ namespace NTSD.Test
                 treeAttacker,
                 true);
             Expect(!treeParityQuery.FormalCollectionAborted &&
+                   treeParityQuery.LastFormalCollectorModeForDiagnostics ==
+                   CollisionFormalCollectorMode.ForceRoleAware &&
                    treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
                    !treeParityQuery.FormalSpatialSynchronizeResult.FullRebuild &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.InsertedCount == 0 &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.UpdatedInPlaceCount == 0 &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.MigratedCount == 0 &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.RemovedCount == 0 &&
                    treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1 &&
                    treeStationaryCandidates.Count == bruteStationaryCandidates.Count &&
                    treeStationaryCandidates.Count == 1 &&
@@ -1776,7 +1798,14 @@ namespace NTSD.Test
             Expect(fallbackQuery != null &&
                    fallbackQuery.FormalFallbackParticipantCount == 1 &&
                    !fallbackQuery.FormalCollectionAborted,
-                "formal LooseQuadtree must conservatively retain participants whose AABB cannot be built");
+                "formal LooseQuadtree must conservatively retain participants whose AABB cannot be built: " +
+                $"mode={fallbackQuery?.LastFormalCollectorModeForDiagnostics}," +
+                $"participants={fallbackQuery?.LastRoleAwareParticipantCountForDiagnostics}," +
+                $"inert={fallbackQuery?.LastRoleAwareInertParticipantCountForDiagnostics}," +
+                $"bodies={fallbackQuery?.LastRoleAwareBodyEntryCountForDiagnostics}," +
+                $"itrs={fallbackQuery?.LastRoleAwareItrQueryCountForDiagnostics}," +
+                $"fallback={fallbackQuery?.FormalFallbackParticipantCount}," +
+                $"aborted={fallbackQuery?.FormalCollectionAborted}");
             fallbackWorld.EndCollisionCandidateConsumption();
 
             var edgeA = new SpatialAabbXZ(0, 0, 10, 10);
@@ -2573,8 +2602,8 @@ namespace NTSD.Test
                 "frame input must bind the roster player to the resolved fixed runtime slot");
 
             world.SerialTickAll(1);
-            Expect(character.Runtime.KeyLeft == 0 && character.Frame.N == 0,
-                "frame advance must clear the tick1 current left key without changing the unresolved frame");
+            Expect(character.Runtime.KeyLeft == 1 && character.Frame.N == 0,
+                "frame advance must retain the tick1 current left key without changing the unresolved frame");
 
             world.ApplyFrameInputSet(new FrameInputSet(2, new[]
             {
@@ -2726,6 +2755,51 @@ namespace NTSD.Test
             Expect(borrowed is LF2SpecialAttack,
                 $"SpecialAttack pool must return LF2SpecialAttack, actual={borrowed?.GetType().Name ?? "null"}");
             pool.Release(borrowed);
+        }
+
+        private static void CheckObjectPoolReleaseEscapesExternalParent()
+        {
+            using var initialization = new TemporaryObjectPoolInitialization();
+            LF2ObjectPool pool = LF2ObjectPool.Instance;
+            using var isolatedState = new TemporaryIsolatedObjectPoolState(pool);
+            GameObject externalParent = new GameObject("SelfCheck_ObjectPoolExternalParent");
+            LF2ObjectRenderer borrowedRenderer = null;
+
+            try
+            {
+                GameObject borrowedRoot = pool.Get(out borrowedRenderer);
+                Expect(borrowedRoot != null && borrowedRenderer != null,
+                    "object-pool external-parent regression requires a borrowed production renderer");
+
+                borrowedRoot.transform.SetParent(externalParent.transform, true);
+                borrowedRoot.transform.localPosition = new Vector3(7f, 8f, 9f);
+                borrowedRoot.transform.localRotation = Quaternion.Euler(10f, 20f, 30f);
+                pool.Release(borrowedRenderer);
+                borrowedRenderer = null;
+
+                Expect(borrowedRoot.transform.parent == pool.transform &&
+                       borrowedRoot.transform.localPosition == Vector3.zero &&
+                       borrowedRoot.transform.localRotation == Quaternion.identity &&
+                       !borrowedRoot.activeSelf &&
+                       pool.AvailableObjectCountForAcceptance == 1 &&
+                       pool.ActiveObjectCountForAcceptance == 0,
+                    "released pool root must escape an external parent and return normalized to the available pool");
+
+                UnityEngine.Object.DestroyImmediate(externalParent);
+                externalParent = null;
+
+                GameObject reusedRoot = pool.Get(out borrowedRenderer);
+                Expect(reusedRoot != null && ReferenceEquals(reusedRoot, borrowedRoot) &&
+                       reusedRoot.transform.parent == pool.transform && reusedRoot.activeSelf,
+                    "destroying the prior external parent must not destroy an available pooled root");
+            }
+            finally
+            {
+                if (borrowedRenderer != null)
+                    pool.Release(borrowedRenderer);
+                if (externalParent != null)
+                    UnityEngine.Object.DestroyImmediate(externalParent);
+            }
         }
 
         private static void CheckCharacterGroundMovementUsesIntegerSnapshot()
@@ -4400,7 +4474,33 @@ namespace NTSD.Test
                 heldView = new GameObject("SelfCheck_P7_HeldLegacyProbe");
                 heldView.AddComponent<SpriteRenderer>();
                 LF2ObjectRenderer renderer = heldView.AddComponent<LF2ObjectRenderer>();
+                var visualTransformField = typeof(LF2ObjectRenderer).GetField(
+                    "_visualTransform",
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.NonPublic);
+                Expect(visualTransformField != null,
+                    "P7 held geometry fixture requires the legacy renderer visual Transform binding");
+                // Awake initializes this in Play Mode. Mirror that state so Edit Mode catches root/self resets too.
+                visualTransformField.SetValue(renderer, heldView.transform);
+                double liveXBeforeBind = held.Runtime.X;
+                double liveYBeforeBind = held.Runtime.Y;
+                double liveZBeforeBind = held.Runtime.Z;
+                int firstPresentationTickBeforeBind = held.Runtime.FirstPresentationTick;
                 renderer.SetLogicObject(held, null);
+                Expect(Nearly(held.Runtime.X, liveXBeforeBind) &&
+                       Nearly(held.Runtime.Y, liveYBeforeBind) &&
+                       Nearly(held.Runtime.Z, liveZBeforeBind) &&
+                       held.Runtime.FirstPresentationTick == firstPresentationTickBeforeBind,
+                    $"P7 SetLogicObject must preserve the registered held runtime; " +
+                    $"before=({liveXBeforeBind:R},{liveYBeforeBind:R},{liveZBeforeBind:R}," +
+                    $"first={firstPresentationTickBeforeBind})," +
+                    $"after=({held.Runtime.X:R},{held.Runtime.Y:R},{held.Runtime.Z:R}," +
+                    $"first={held.Runtime.FirstPresentationTick})");
+                Expect(world.BattlePresentation.Mode == BattlePresentationBackendMode.CentralShadowBuild &&
+                       !BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world),
+                    $"P7 CentralShadowBuild must keep the legacy comparison renderer active; " +
+                    $"mode={world.BattlePresentation.Mode},tick={world.CurrentTickIndex}," +
+                    $"first={held.Runtime.FirstPresentationTick}");
                 renderer.ForceRefreshPresentation();
                 Expect((heldView.transform.position - heldCommand.Position).sqrMagnitude <= 0.000001f,
                     $"P7 central Entity command must equal the legacy held renderer position; " +
@@ -4977,7 +5077,7 @@ namespace NTSD.Test
         private static void CheckBattlePresentationShadowBuildContracts()
         {
             Expect(BattlePresentationBackendResolver.Resolve((string)null, (string)null) ==
-                       BattlePresentationBackendMode.LegacyOnly &&
+                       BattlePresentationBackendMode.CentralOnly &&
                    BattlePresentationBackendResolver.Resolve(
                        "CentralShadowBuild",
                        "LegacyOnly") == BattlePresentationBackendMode.CentralShadowBuild &&
@@ -4986,9 +5086,12 @@ namespace NTSD.Test
                        "CentralShadowBuild") == BattlePresentationBackendMode.CentralShadowBuild &&
                    BattlePresentationBackendResolver.Resolve(
                        "invalid",
-                       "invalid") == BattlePresentationBackendMode.LegacyOnly &&
+                       "invalid") == BattlePresentationBackendMode.CentralOnly &&
+                   BattlePresentationBackendResolver.Resolve(
+                       "LegacyOnly",
+                       "CentralOnly") == BattlePresentationBackendMode.LegacyOnly &&
                    !BattlePresentationBackendResolver.TryParse("1", out _),
-                "P3 presentation mode must resolve command line before GameConfig and default to LegacyOnly");
+                "presentation mode must resolve command line before GameConfig, retain explicit modes, and default to CentralOnly");
 
             BattlePresentationBackendResolver.ValidateAvailable(
                 BattlePresentationBackendMode.CentralOnly);
@@ -5503,11 +5606,14 @@ namespace NTSD.Test
                 centralMaterial = new Material(centralShader);
                 var catalogResolver = new BattleCatalogCentralResourceResolver();
                 catalogResolver.Configure(catalog, centralMaterial, null);
+                var resolverDescriptor = new BattleSpriteValueDescriptor(
+                    true, true, sprite.GetInstanceID(), texture.GetInstanceID(), 0,
+                    sprite.rect, new Vector2(0.5f, 0f), true, spriteKey);
                 var forwardedState = new BattleSpriteRenderState(
                     new Color32(19, 29, 39, 49), false, false,
                     SpriteMaskInteraction.None, BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha);
                 BattleCentralResourceStatus forwardedStatus = catalogResolver.Resolve(
-                    BuildRenderStateSelfCheckCommand(forwardedState, expectedDescriptor),
+                    BuildRenderStateSelfCheckCommand(forwardedState, resolverDescriptor),
                     out BattleCentralResolvedResource forwardedResource);
                 Expect(forwardedStatus == BattleCentralResourceStatus.Resolved &&
                        forwardedResource.Color.Equals(forwardedState.Color) &&
@@ -5570,9 +5676,13 @@ namespace NTSD.Test
                            BuildRenderStateSelfCheckCommand(white, unregisteredDescriptor), out _) ==
                            BattleCentralResourceStatus.UnresolvedVisual &&
                        catalogResolver.Resolve(
-                           BuildRenderStateSelfCheckCommand(unsupported, expectedDescriptor), out _) ==
+                           BuildRenderStateSelfCheckCommand(white, expectedDescriptor), out _) ==
+                           BattleCentralResourceStatus.UnresolvedVisual &&
+                       catalogResolver.Resolve(
+                           BuildRenderStateSelfCheckCommand(unsupported, resolverDescriptor), out _) ==
                            BattleCentralResourceStatus.UnsupportedRenderState,
-                    "P7 central resolver must refuse missing logical keys and unsupported renderer semantics");
+                    "P7 central resolver must refuse missing logical keys, stale entity material identity, " +
+                    "and unsupported renderer semantics");
 
                 rendererView = new GameObject("SelfCheck_P7_RendererReset");
                 SpriteRenderer spriteRenderer = rendererView.AddComponent<SpriteRenderer>();
@@ -5640,6 +5750,202 @@ namespace NTSD.Test
                 renderState, descriptor);
         }
 
+        private static void CheckRendererlessSpritePresentationContracts()
+        {
+            const int runtimeSlot = 4;
+            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+            Expect(manager != null,
+                "rendererless LF2Sprite self-check requires CharacterAnimtorManager");
+            using var sprites = new TemporaryCharacterSpriteConfig(manager, 7340, 16);
+
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralShadowBuild);
+            var entity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            entity.BindData(
+                "SelfCheck_RendererlessSprite",
+                7340,
+                BuildComboWrapperCharacterData("SelfCheck_RendererlessSprite", 180));
+            entity.BindRendererlessSprite(manager.SpriteCatalog, 7340, 0);
+            entity.SetRequiredRuntimeSlot(runtimeSlot);
+            entity.Runtime.SetPosition(120, 0, 220);
+            entity.Runtime.SyncIntegerPosition();
+            entity.AddHitRecord(0, 140, 230);
+            world.Runtime.SlotLabels.BattleSlotLabels[runtimeSlot, 0] = 'R';
+            world.Register(entity);
+
+            world.RenderDispatchAll(300);
+            BattlePresentationFrame baselineFrame = world.BattlePresentation.PublishedFrame;
+            BattleRenderCommand baselineEntity = default;
+            BattleRenderCommand baselineShadow = default;
+            BattleRenderCommand baselineOverlay = default;
+            BattleRenderCommand baselineHit = default;
+            Expect(TryFindPresentationEntity(
+                       baselineFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot baselineSnapshot) &&
+                   baselineSnapshot.EntityVisible && baselineSnapshot.ShadowVisible &&
+                   baselineSnapshot.LocalOffsetPixels == Vector2.zero &&
+                   TryFindPresentationCommand(
+                       baselineFrame, runtimeSlot, BattleRenderCommandType.Entity, out baselineEntity) &&
+                   TryFindPresentationCommand(
+                       baselineFrame, runtimeSlot, BattleRenderCommandType.Shadow, out baselineShadow) &&
+                   TryFindPresentationCommand(
+                       baselineFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out baselineOverlay) &&
+                   TryFindPresentationCommand(
+                       baselineFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out baselineHit),
+                "rendererless LF2Sprite must publish its default visibility and all presentation command categories");
+
+            var localOffset = new Vector2(8f, -6f);
+            entity.Sprite.SetXY(localOffset.x, localOffset.y);
+            world.RenderDispatchAll(301);
+            BattlePresentationFrame offsetFrame = world.BattlePresentation.PublishedFrame;
+            BattleRenderCommand offsetEntity = default;
+            BattleRenderCommand offsetShadow = default;
+            BattleRenderCommand offsetOverlay = default;
+            BattleRenderCommand offsetHit = default;
+            Expect(TryFindPresentationEntity(
+                       offsetFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot offsetSnapshot) &&
+                   offsetSnapshot.LocalOffsetPixels == localOffset &&
+                   TryFindPresentationCommand(
+                       offsetFrame, runtimeSlot, BattleRenderCommandType.Entity, out offsetEntity) &&
+                   TryFindPresentationCommand(
+                       offsetFrame, runtimeSlot, BattleRenderCommandType.Shadow, out offsetShadow) &&
+                   TryFindPresentationCommand(
+                       offsetFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out offsetOverlay) &&
+                   TryFindPresentationCommand(
+                       offsetFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out offsetHit),
+                "rendererless LF2Sprite local offset must survive immutable snapshot and command publication");
+            Vector2 baselineEntityPixels = NTSDRenderSpace.WorldToScreenPixel(baselineEntity.Position);
+            Vector2 offsetEntityPixels = NTSDRenderSpace.WorldToScreenPixel(offsetEntity.Position);
+            Vector2 expectedEntityDelta = localOffset * NTSDRenderSpace.BattleVisualScale;
+            Expect(Nearly(offsetEntityPixels.x - baselineEntityPixels.x, expectedEntityDelta.x) &&
+                   Nearly(offsetEntityPixels.y - baselineEntityPixels.y, expectedEntityDelta.y) &&
+                   offsetShadow.Position == baselineShadow.Position &&
+                   offsetOverlay.Position == baselineOverlay.Position &&
+                   offsetHit.Position == baselineHit.Position,
+                "rendererless LF2Sprite local offset must be scaled once for Entity only, without moving Shadow, Overlay, or HitRecord");
+
+            entity.Sprite.Hide();
+            world.RenderDispatchAll(302);
+            BattlePresentationFrame entityHiddenFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       entityHiddenFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot entityHiddenSnapshot) &&
+                   !entityHiddenSnapshot.EntityVisible && entityHiddenSnapshot.ShadowVisible &&
+                   !TryFindPresentationCommand(
+                       entityHiddenFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   TryFindPresentationCommand(
+                       entityHiddenFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       entityHiddenFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       entityHiddenFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless EntityVisible must gate only Entity commands");
+
+            entity.Sprite.ShowPic(999);
+            world.RenderDispatchAll(303);
+            BattlePresentationFrame emptyPicFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       emptyPicFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot emptyPicSnapshot) &&
+                   !emptyPicSnapshot.EntityVisible && emptyPicSnapshot.ShadowVisible &&
+                   !TryFindPresentationCommand(
+                       emptyPicFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   TryFindPresentationCommand(
+                       emptyPicFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       emptyPicFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       emptyPicFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless LF2Sprite ShowPic(999) must not restore Entity visibility or suppress Shadow, Overlay, or HitRecord commands");
+
+            entity.Sprite.ShowPic(16);
+            world.RenderDispatchAll(304);
+            BattlePresentationFrame missingPicFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       missingPicFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot missingPicSnapshot) &&
+                   !missingPicSnapshot.EntityVisible && missingPicSnapshot.ShadowVisible &&
+                   !TryFindPresentationCommand(
+                       missingPicFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   TryFindPresentationCommand(
+                       missingPicFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       missingPicFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       missingPicFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless LF2Sprite missing catalog pic must not restore Entity visibility or suppress Shadow, Overlay, or HitRecord commands");
+
+            entity.Sprite.ShowPic(0);
+            world.RenderDispatchAll(305);
+            BattlePresentationFrame restoredPicFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       restoredPicFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot restoredPicSnapshot) &&
+                   restoredPicSnapshot.EntityVisible && restoredPicSnapshot.ShadowVisible &&
+                   TryFindPresentationCommand(
+                       restoredPicFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   TryFindPresentationCommand(
+                       restoredPicFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       restoredPicFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       restoredPicFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless LF2Sprite valid ShowPic must restore Entity visibility and its command without Show()");
+
+            var missingLegacySprite = new LF2Sprite();
+            missingLegacySprite.Initialize(null, new List<Sprite> { sprites.Sprite }, 0);
+            missingLegacySprite.Hide();
+            missingLegacySprite.ShowPic(1);
+            Expect(!missingLegacySprite.EntityVisible,
+                "LF2Sprite missing legacy sprite must not restore Entity visibility");
+            missingLegacySprite.ShowPic(0);
+            Expect(missingLegacySprite.EntityVisible,
+                "LF2Sprite valid legacy sprite must restore Entity visibility");
+
+            entity.Sprite.HideShadow();
+            world.RenderDispatchAll(306);
+            BattlePresentationFrame shadowHiddenFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       shadowHiddenFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot shadowHiddenSnapshot) &&
+                   shadowHiddenSnapshot.EntityVisible && !shadowHiddenSnapshot.ShadowVisible &&
+                   TryFindPresentationCommand(
+                       shadowHiddenFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   !TryFindPresentationCommand(
+                       shadowHiddenFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       shadowHiddenFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       shadowHiddenFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless ShadowVisible must gate only Shadow commands");
+
+            entity.Sprite.Hide();
+            world.RenderDispatchAll(307);
+            BattlePresentationFrame bothHiddenFrame = world.BattlePresentation.PublishedFrame;
+            Expect(TryFindPresentationEntity(
+                       bothHiddenFrame,
+                       runtimeSlot,
+                       out BattlePresentationEntitySnapshot bothHiddenSnapshot) &&
+                   !bothHiddenSnapshot.EntityVisible && !bothHiddenSnapshot.ShadowVisible &&
+                   !TryFindPresentationCommand(
+                       bothHiddenFrame, runtimeSlot, BattleRenderCommandType.Entity, out _) &&
+                   !TryFindPresentationCommand(
+                       bothHiddenFrame, runtimeSlot, BattleRenderCommandType.Shadow, out _) &&
+                   TryFindPresentationCommand(
+                       bothHiddenFrame, runtimeSlot, BattleRenderCommandType.OverlayGlyph, out _) &&
+                   TryFindPresentationCommand(
+                       bothHiddenFrame, runtimeSlot, BattleRenderCommandType.HitRecord, out _),
+                "rendererless visibility gates must not suppress Overlay or HitRecord commands");
+        }
+
         private static void CheckBattleCentralMeshAndUrpContracts()
         {
             Texture2D textureA = null;
@@ -5694,6 +6000,8 @@ namespace NTSD.Test
                     Expect(backend.ActiveChunkCount == expectedChunks &&
                            backend.Diagnostics.ResolvedCommandCount == quadCount,
                         $"P4 {quadCount}-quad boundary must use {expectedChunks} UInt16 chunk(s)");
+                    for (int chunkIndex = 0; chunkIndex < expectedChunks; chunkIndex++)
+                        ExpectCentralMeshIndexBufferCapacity(backend.GetChunkMesh(chunkIndex));
                 }
 
                 Mesh fullChunkMesh = backend.GetChunkMesh(0);
@@ -5727,6 +6035,81 @@ namespace NTSD.Test
                        backend.GetSegment(1).FirstCommandIndex == 2 &&
                        backend.GetSegment(2).FirstCommandIndex == 3,
                     "P4 OrderedChunks must preserve A,A,B,A as three original-stream segments");
+
+                int overlappingIndexBufferWarningCount = 0;
+                Application.LogCallback overlapWarningCapture = (condition, stackTrace, logType) =>
+                {
+                    if (condition != null && condition.IndexOf(
+                            "shares part of its index buffer",
+                            StringComparison.Ordinal) >= 0)
+                    {
+                        overlappingIndexBufferWarningCount++;
+                    }
+                };
+                Application.logMessageReceived += overlapWarningCapture;
+                try
+                {
+                    using var transitionBackend = new BattleDynamicMeshBackend();
+
+                    BuildCentralMeshFrame(frame, 101, 32, false);
+                    transitionBackend.Build(frame, resolver);
+                    Mesh transitionMesh = transitionBackend.GetChunkMesh(0);
+                    int physicalAfterOne = transitionMesh.subMeshCount;
+                    Expect(transitionBackend.SegmentCount == 1,
+                        "P4 same-resource 32-quad frame must retain one active segment");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 1, 32);
+
+                    BuildAlternatingCentralMeshFrame(frame, 102, 32);
+                    transitionBackend.Build(frame, resolver);
+                    int physicalAfterThirtyTwo = transitionMesh.subMeshCount;
+                    Expect(transitionBackend.SegmentCount == 32,
+                        "P4 alternating resource frame must retain one active segment per quad");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 32, 32);
+
+                    BuildCentralMeshFrame(frame, 103, 8, false);
+                    transitionBackend.Build(frame, resolver);
+                    int physicalAfterCollapse = transitionMesh.subMeshCount;
+                    Expect(transitionBackend.SegmentCount == 1,
+                        "P4 same-resource 8-quad frame must collapse to one active segment");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 1, 8);
+
+                    BuildAlternatingCentralMeshFrame(frame, 104, 33);
+                    transitionBackend.Build(frame, resolver);
+                    int physicalAfterThirtyThree = transitionMesh.subMeshCount;
+                    Expect(transitionBackend.SegmentCount == 33,
+                        "P4 33 alternating quads must expand to one active segment per quad");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 33, 33);
+
+                    BuildCentralMeshFrame(frame, 105, 32, false);
+                    transitionBackend.Build(frame, resolver);
+                    int physicalAfterFinalCollapse = transitionMesh.subMeshCount;
+                    Expect(transitionBackend.SegmentCount == 1,
+                        "P4 same-resource frame must collapse a 33-submesh layout to one active segment");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 1, 32);
+
+                    Expect(physicalAfterOne == 1 && physicalAfterThirtyTwo == 32 &&
+                           physicalAfterCollapse == 32 && physicalAfterThirtyThree == 33 &&
+                           physicalAfterFinalCollapse == 33,
+                        $"P4 physical submesh high-water must be monotonic for active sequence 1->32->1->33->1; " +
+                        $"physical={physicalAfterOne},{physicalAfterThirtyTwo},{physicalAfterCollapse}," +
+                        $"{physicalAfterThirtyThree},{physicalAfterFinalCollapse}");
+
+                    BuildCentralMeshFrame(frame, 106, 0, false);
+                    transitionBackend.Build(frame, resolver);
+                    Expect(transitionBackend.ActiveChunkCount == 0 &&
+                           transitionMesh.subMeshCount == physicalAfterFinalCollapse,
+                        "P4 empty transition builds must retain the physical submesh high-water");
+                    ExpectCentralMeshSubMeshRanges(transitionMesh, 0, 0);
+                }
+                finally
+                {
+                    Application.logMessageReceived -= overlapWarningCapture;
+                }
+                Expect(overlappingIndexBufferWarningCount == 0,
+                    $"P4 high-water transitions must not emit overlapping index-buffer warnings; " +
+                    $"count={overlappingIndexBufferWarningCount}");
+
+                BuildCentralMeshFrame(frame, 10, 4, true);
                 backend.Build(frame, resolver, BattleCentralDrawMode.StrictOrderedDraw);
                 Expect(backend.SegmentCount == 4,
                     "P4 StrictOrderedDraw must retain one draw segment per resolved command");
@@ -5743,14 +6126,17 @@ namespace NTSD.Test
                 Mesh firstMesh = backend.GetChunkMesh(0);
                 Mesh secondMesh = backend.GetChunkMesh(1);
                 int allocatedChunks = backend.AllocatedChunkCount;
+                int firstPhysicalSubMeshCount = firstMesh.subMeshCount;
+                int secondPhysicalSubMeshCount = secondMesh.subMeshCount;
 
                 BuildCentralMeshFrame(frame, 12, 0, false);
                 backend.Build(frame, resolver);
-                Expect(backend.ActiveChunkCount == 0 && firstMesh.subMeshCount == 1 &&
-                       secondMesh.subMeshCount == 1 && firstMesh.GetIndexCount(0) == 0 &&
-                       secondMesh.GetIndexCount(0) == 0 && firstMesh.bounds.size == Vector3.zero &&
-                       secondMesh.bounds.size == Vector3.zero,
-                    "P4 empty builds must retain one inert submesh/index allocation while clearing stale draws and bounds");
+                Expect(backend.ActiveChunkCount == 0 &&
+                       firstMesh.subMeshCount == firstPhysicalSubMeshCount &&
+                       secondMesh.subMeshCount == secondPhysicalSubMeshCount,
+                    "P4 empty builds must retain each chunk's physical submesh high-water");
+                ExpectCentralMeshSubMeshRanges(firstMesh, 0, 0);
+                ExpectCentralMeshSubMeshRanges(secondMesh, 0, 0);
 
                 BuildCentralMeshFrame(frame, 13, 4097, false);
                 backend.Build(frame, resolver);
@@ -5759,6 +6145,8 @@ namespace NTSD.Test
                        firstMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerChunk &&
                        secondMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerQuad,
                     "P4 empty-to-active rebuilds must preserve the native index buffer and expose both quad triangles");
+                ExpectCentralMeshSubMeshRanges(firstMesh, 1, 4096);
+                ExpectCentralMeshSubMeshRanges(secondMesh, 1, 1);
                 int growthAfterWarm = backend.Diagnostics.CapacityGrowthCount;
                 long allocationBefore = GC.GetAllocatedBytesForCurrentThread();
                 for (int iteration = 0; iteration < 4; iteration++)
@@ -5787,6 +6175,7 @@ namespace NTSD.Test
                        recoveredMesh.GetNativeIndexBufferPtr() != IntPtr.Zero &&
                        recoveredMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerChunk,
                     "P4 a destroyed persistent mesh must self-heal with its immutable UInt16 index template");
+                ExpectCentralMeshSubMeshRanges(recoveredMesh, 1, 4096);
 
                 BuildCentralMeshFrame(frame, 14, 3, false, unresolvedMiddle: true);
                 backend.Build(frame, resolver);
@@ -5929,10 +6318,14 @@ namespace NTSD.Test
                 world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
                 BattleCentralRenderSystem.PrepareFrame(world);
                 Expect(world.CurrentPixelFramePlan.RequestedMode ==
-                           BattlePresentationBackendMode.CentralOnly &&
-                       world.CurrentPixelFramePlan.Owner == BattlePixelFrameOwner.Legacy &&
-                       world.CurrentPixelFramePlan.Submission == null,
-                    "CentralOnly readiness failure must publish one whole-frame Legacy fallback without a submission");
+                            BattlePresentationBackendMode.CentralOnly &&
+                       world.CurrentPixelFramePlan.Owner == BattlePixelFrameOwner.Central &&
+                       world.CurrentPixelFramePlan.Submission == null &&
+                       world.CurrentPixelFramePlan.SuppressesLegacyMaterializers &&
+                       world.CurrentPixelFramePlan.DisplayTick == -1 &&
+                       world.CurrentPixelFramePlan.IsStale &&
+                       !string.IsNullOrEmpty(world.CurrentPixelFramePlan.Reason),
+                    "CentralOnly readiness failure must remain central-owned and fail closed without legacy materialization");
             }
             finally
             {
@@ -5970,6 +6363,547 @@ namespace NTSD.Test
             }
         }
 
+        private static void CheckBattleCentralEntityDiagnosticContracts()
+        {
+            BattleRenderFeature feature = null;
+            Material material = null;
+            Material arrayMaterial = null;
+            TemporaryCharacterSpriteConfig spriteConfig = null;
+            BattlePresentationFrame diagnosticResourceFrame = null;
+            var world = new SimulationWorld();
+            LF2Character entity = null;
+            LF2Character absentFromFrame = null;
+            try
+            {
+                CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+                Expect(manager != null, "P8-B1 diagnostics require CharacterAnimtorManager");
+                spriteConfig = new TemporaryCharacterSpriteConfig(manager, 7360, 4);
+
+                Shader shader = Shader.Find(BattleSpriteMaterialContract.CentralTextureShaderName);
+                Shader arrayShader = Shader.Find(BattleSpriteMaterialContract.CentralArrayShaderName);
+                Expect(shader != null && arrayShader != null,
+                    "P8-B1 diagnostics require both installed central shaders");
+                material = new Material(shader);
+                arrayMaterial = new Material(arrayShader);
+                feature = ScriptableObject.CreateInstance<BattleRenderFeature>();
+                BattleCentralRenderSystem.RegisterFeature(
+                    feature,
+                    material,
+                    arrayMaterial,
+                    BattleCentralDrawMode.OrderedChunks);
+
+                entity = CreateCharacter(
+                    "SelfCheck_P8_Diagnostic",
+                    7360,
+                    BuildComboWrapperCharacterData("SelfCheck_P8_Diagnostic", 180));
+                entity.SetRequiredRuntimeSlot(0);
+                entity.Sprite.SetPresentationSuppressed(false);
+                entity.Sprite.Show();
+                entity.Sprite.ShowShadow();
+                entity.Runtime.SetPosition(100, 0, 220);
+                entity.Runtime.SyncIntegerPosition();
+                world.Register(entity);
+                Expect(world.TryGetCurrentRuntimeHandle(0, entity, out RuntimeEntityHandle handle),
+                    "P8-B1 diagnostics require a generation-aware current handle");
+
+                world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralShadowBuild);
+                world.RenderDispatchAll(401);
+                BattleCentralRenderSystem.PrepareFrame(world);
+                BattlePresentationFrame frame = world.BattlePresentation.PublishedFrame;
+                BattleDynamicMeshBackend backend = BattleCentralRenderSystem.MeshBackend;
+                int entityCountBefore = frame.EntityCount;
+                int commandCountBefore = frame.CommandCount;
+                int resolvedBefore = backend.Diagnostics.ResolvedCommandCount;
+                IBattleChecksumSnapshot checksumBefore =
+                    SimulationTickDriver.CaptureSupportedChecksumSnapshot(
+                        world,
+                        401,
+                        FrameInputSet.Empty(401));
+
+                BattleCentralEntityDiagnostic entityNotSubmitted =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                BattleCentralEntityDiagnostic shadowNotSubmitted =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(
+                        world,
+                        handle,
+                        BattleRenderCommandType.Shadow);
+                Expect(entityNotSubmitted.Reason == BattleCentralEntityDiagnosticReason.NotSubmitted &&
+                       entityNotSubmitted.HasSnapshot && entityNotSubmitted.HasCommand &&
+                       entityNotSubmitted.HasResolvedResource && !entityNotSubmitted.Submitted &&
+                       entityNotSubmitted.CommandIndex >= 0 &&
+                       entityNotSubmitted.SegmentIndex >= 0 &&
+                       entityNotSubmitted.LogicalResourceKey.IsEntitySprite &&
+                       shadowNotSubmitted.Reason == BattleCentralEntityDiagnosticReason.NotSubmitted &&
+                       shadowNotSubmitted.HasSnapshot && shadowNotSubmitted.HasCommand &&
+                       shadowNotSubmitted.HasResolvedResource && !shadowNotSubmitted.Submitted &&
+                       shadowNotSubmitted.LogicalResourceKey == BattleVisualResourceKey.CommonShadow,
+                    "P8-B1 built but unsubmitted Entity/Shadow queries must expose immutable resource and segment facts");
+
+                BattleCentralEntityDiagnostic invalid =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(
+                        world,
+                        RuntimeEntityHandle.Invalid);
+                BattleCentralEntityDiagnostic generationMismatch =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(
+                        world,
+                        new RuntimeEntityHandle(handle.Slot, handle.Generation + 1));
+                IBattleChecksumSnapshot checksumAfterInitialQueries =
+                    SimulationTickDriver.CaptureSupportedChecksumSnapshot(
+                        world,
+                        401,
+                        FrameInputSet.Empty(401));
+                Expect(invalid.Reason == BattleCentralEntityDiagnosticReason.InvalidRuntimeHandle &&
+                       generationMismatch.Reason == BattleCentralEntityDiagnosticReason.GenerationMismatch,
+                    "P8-B1 diagnostics must distinguish invalid handles from stale generations");
+                Expect(frame.EntityCount == entityCountBefore &&
+                       frame.CommandCount == commandCountBefore &&
+                       backend.Diagnostics.ResolvedCommandCount == resolvedBefore &&
+                       checksumBefore != null && checksumAfterInitialQueries != null &&
+                       checksumBefore.OverallChecksum == checksumAfterInitialQueries.OverallChecksum,
+                    "P8-B1 diagnostic reads must not mutate the current immutable frame, backend, or checksum");
+
+#if UNITY_EDITOR
+                var missingKeyCommand = new BattleRenderCommand(
+                    BattleRenderCommandType.Entity,
+                    handle,
+                    entity.StableId,
+                    7361,
+                    0,
+                    0,
+                    handle.Slot,
+                    0,
+                    0,
+                    0,
+                    Vector3.zero,
+                    Vector2.one,
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    BattleSpriteRenderState.Default(),
+                    default);
+                var unsupportedCommand = new BattleRenderCommand(
+                    BattleRenderCommandType.Entity,
+                    handle,
+                    entity.StableId,
+                    7361,
+                    0,
+                    0,
+                    handle.Slot,
+                    0,
+                    0,
+                    0,
+                    Vector3.zero,
+                    Vector2.one,
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    default(BattleSpriteRenderState),
+                    default);
+                var invalidBindingKey = new BattleSpriteKey(7361, 0);
+                var missingTextureKey = new BattleSpriteKey(7362, 0);
+                var invalidBindingDescriptor = new BattleSpriteValueDescriptor(
+                    true,
+                    true,
+                    0,
+                    Texture2D.whiteTexture.GetInstanceID(),
+                    0,
+                    new Rect(0f, 0f, 1f, 1f),
+                    new Vector2(0.5f, 0f),
+                    true,
+                    invalidBindingKey);
+                var missingTextureDescriptor = new BattleSpriteValueDescriptor(
+                    true,
+                    false,
+                    0,
+                    0,
+                    0,
+                    new Rect(0f, 0f, 1f, 1f),
+                    new Vector2(0.5f, 0f),
+                    true,
+                    missingTextureKey);
+                var invalidBindingCommand = new BattleRenderCommand(
+                    BattleRenderCommandType.Entity,
+                    handle,
+                    entity.StableId,
+                    invalidBindingKey.VisualDataId,
+                    invalidBindingKey.EffectivePic,
+                    0,
+                    handle.Slot,
+                    0,
+                    0,
+                    0,
+                    Vector3.zero,
+                    Vector2.one,
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    BattleSpriteRenderState.Default(),
+                    invalidBindingDescriptor);
+                var missingTextureCommand = new BattleRenderCommand(
+                    BattleRenderCommandType.Entity,
+                    handle,
+                    entity.StableId,
+                    missingTextureKey.VisualDataId,
+                    missingTextureKey.EffectivePic,
+                    0,
+                    handle.Slot,
+                    0,
+                    0,
+                    0,
+                    Vector3.zero,
+                    Vector2.one,
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    BattleSpriteRenderState.Default(),
+                    missingTextureDescriptor);
+                var unresolvedResourceCommand = new BattleRenderCommand(
+                    BattleRenderCommandType.Shadow,
+                    handle,
+                    entity.StableId,
+                    invalidBindingKey.VisualDataId,
+                    invalidBindingKey.EffectivePic,
+                    0,
+                    handle.Slot,
+                    0,
+                    0,
+                    0,
+                    Vector3.zero,
+                    Vector2.one,
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    BattleSpriteRenderState.Default(),
+                    invalidBindingDescriptor);
+                var invalidEntries = new Dictionary<BattleSpriteKey, BattleSpriteEntry>
+                {
+                    [invalidBindingKey] = new BattleSpriteEntry(
+                        invalidBindingKey,
+                        "self-check-invalid-binding.bmp",
+                        Texture2D.whiteTexture,
+                        new Rect(0f, 0f, 1f, 1f),
+                        new Vector2(0.5f, 0f),
+                        spriteConfig.Sprite,
+                        new BattleSpriteCentralBinding(
+                            BattleSpriteCentralBindingMode.SourceTexture2D,
+                            Texture2D.whiteTexture,
+                            0,
+                            Rect.zero,
+                            new Rect(0f, 0f, 1f, 1f))),
+                    [missingTextureKey] = new BattleSpriteEntry(
+                        missingTextureKey,
+                        "self-check-missing-texture.bmp",
+                        Texture2D.whiteTexture,
+                        new Rect(0f, 0f, 1f, 1f),
+                        new Vector2(0.5f, 0f),
+                        spriteConfig.Sprite,
+                        new BattleSpriteCentralBinding(
+                            BattleSpriteCentralBindingMode.SourceTexture2D,
+                            null,
+                            0,
+                            new Rect(0f, 0f, 1f, 1f),
+                            new Rect(0f, 0f, 1f, 1f))),
+                };
+                diagnosticResourceFrame = new BattlePresentationFrame();
+                diagnosticResourceFrame.Reset(401);
+                diagnosticResourceFrame.RetainPublicationBinding(
+                    manager,
+                    new BattleSpriteCatalog(invalidEntries),
+                    null);
+                Expect(BattleCentralRenderSystem.CaptureResourceReasonForSelfCheck(
+                           diagnosticResourceFrame,
+                           missingKeyCommand) == BattleCentralEntityDiagnosticReason.MissingCatalogKey &&
+                        BattleCentralRenderSystem.CaptureResourceReasonForSelfCheck(
+                           diagnosticResourceFrame,
+                           invalidBindingCommand) == BattleCentralEntityDiagnosticReason.InvalidCentralBinding &&
+                       BattleCentralRenderSystem.CaptureResourceReasonForSelfCheck(
+                           diagnosticResourceFrame,
+                           missingTextureCommand) == BattleCentralEntityDiagnosticReason.MissingTextureOrMaterial &&
+                       BattleCentralRenderSystem.CaptureResourceReasonForSelfCheck(
+                           diagnosticResourceFrame,
+                           unresolvedResourceCommand) == BattleCentralEntityDiagnosticReason.UnresolvedResource &&
+                       BattleCentralRenderSystem.CaptureResourceReasonForSelfCheck(
+                           diagnosticResourceFrame,
+                           unsupportedCommand) == BattleCentralEntityDiagnosticReason.UnsupportedRenderState,
+                    "P8-B1 diagnostics must distinguish missing keys, missing resources, invalid bindings, unresolved resources, and unsupported render states");
+                Expect(!new BattleSpriteCentralBinding(
+                           (BattleSpriteCentralBindingMode)byte.MaxValue,
+                           Texture2D.whiteTexture,
+                           0,
+                           new Rect(0f, 0f, 1f, 1f),
+                           new Rect(0f, 0f, 1f, 1f)).IsValid &&
+                       !new BattleSpriteCentralBinding(
+                           BattleSpriteCentralBindingMode.AtlasTextureArray,
+                           Texture2D.whiteTexture,
+                           0,
+                           new Rect(0f, 0f, 1f, 1f),
+                           new Rect(0f, 0f, 1f, 1f),
+                           0).IsValid &&
+                       !new BattleSpriteCentralBinding(
+                           BattleSpriteCentralBindingMode.SourceTexture2D,
+                           Texture2D.whiteTexture,
+                           0,
+                           new Rect(float.NaN, 0f, 1f, 1f),
+                           new Rect(0f, 0f, 1f, 1f)).IsValid &&
+                       !new BattleSpriteCentralBinding(
+                           BattleSpriteCentralBindingMode.SourceTexture2D,
+                           Texture2D.whiteTexture,
+                           1,
+                           new Rect(0f, 0f, 1f, 1f),
+                           new Rect(0f, 0f, 1f, 1f)).IsValid &&
+                       new BattleSpriteCentralBinding(
+                           BattleSpriteCentralBindingMode.AtlasPageTexture2D,
+                           Texture2D.whiteTexture,
+                           0,
+                           new Rect(0f, 0f, 1f, 1f),
+                           new Rect(
+                               0f,
+                               0f,
+                               Texture2D.whiteTexture.width,
+                               Texture2D.whiteTexture.height),
+                           3).IsValid,
+                    "P8-B1 binding validation must reject unknown modes, wrong texture kinds, invalid slices, and non-finite UVs while accepting an explicit ordered-page index");
+#endif
+
+                absentFromFrame = CreateCharacter(
+                    "SelfCheck_P8_Absent",
+                    7360,
+                    BuildComboWrapperCharacterData("SelfCheck_P8_Absent", 180));
+                absentFromFrame.SetRequiredRuntimeSlot(1);
+                world.Register(absentFromFrame);
+                Expect(world.TryGetCurrentRuntimeHandle(1, absentFromFrame, out RuntimeEntityHandle absentHandle) &&
+                       BattleCentralRenderSystem.CaptureEntityDiagnostic(world, absentHandle).Reason ==
+                           BattleCentralEntityDiagnosticReason.MissingSnapshotEntity,
+                    "P8-B1 current handles absent from the published compact snapshot must be explicit");
+
+                entity.Sprite.Hide();
+                world.RenderDispatchAll(402);
+                BattleCentralRenderSystem.PrepareFrame(world);
+                BattleCentralEntityDiagnostic hidden =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                Expect(hidden.Reason == BattleCentralEntityDiagnosticReason.PresentationVisibilityFalse &&
+                       hidden.HasSnapshot && !hidden.HasCommand && !hidden.EntityVisible,
+                    "P8-B1 an explicitly hidden entity must report presentation visibility false");
+
+                entity.Sprite.Show();
+                int originalState = entity.Frame.D.state;
+                entity.Frame.D.state = -1;
+                world.RenderDispatchAll(403);
+                BattleCentralRenderSystem.PrepareFrame(world);
+                BattleCentralEntityDiagnostic suppressed =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                Expect(suppressed.Reason == BattleCentralEntityDiagnosticReason.CommandSuppressed &&
+                       suppressed.HasSnapshot && suppressed.EntityVisible && !suppressed.HasCommand,
+                    "P8-B1 a visible snapshot rejected by command gates must report command suppression");
+
+                entity.Frame.D.state = originalState;
+                world.RenderDispatchAll(404);
+                BattleCentralRenderSystem.PrepareFrame(world);
+                BattlePresentationFrame submittedFrame = world.BattlePresentation.PublishedFrame;
+                BattleDynamicMeshBackend submittedBackend = BattleCentralRenderSystem.MeshBackend;
+                int submittedEntityCountBefore = submittedFrame.EntityCount;
+                int submittedCommandCountBefore = submittedFrame.CommandCount;
+                int submittedResolvedBefore = submittedBackend.Diagnostics.ResolvedCommandCount;
+                IBattleChecksumSnapshot checksumBeforeSubmittedQueries =
+                    SimulationTickDriver.CaptureSupportedChecksumSnapshot(
+                        world,
+                        404,
+                        FrameInputSet.Empty(404));
+                BattlePixelFramePlan published =
+                    BattleCentralRenderSystem.PublishBuiltCentralPlanForSelfCheck(world);
+                BattleCentralEntityDiagnostic publishedButNotSubmittedEntity =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                BattleCentralEntityDiagnostic publishedButNotSubmittedShadow =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(
+                        world,
+                        handle,
+                        BattleRenderCommandType.Shadow);
+                Expect(published.Owner == BattlePixelFrameOwner.Central &&
+                       published.Submission != null &&
+                       !ReferenceEquals(published.CapturedFrame, submittedFrame) &&
+                       publishedButNotSubmittedEntity.Reason ==
+                           BattleCentralEntityDiagnosticReason.NotSubmitted &&
+                       !publishedButNotSubmittedEntity.Submitted &&
+                       publishedButNotSubmittedShadow.Reason ==
+                           BattleCentralEntityDiagnosticReason.NotSubmitted &&
+                       !publishedButNotSubmittedShadow.Submitted &&
+                       !BattleCentralRenderSystem.Diagnostics.SubmittedPixelsLastFrame &&
+                       BattleCentralRenderSystem.Diagnostics.LastSubmissionDrawCount == 0,
+                    "P8-B1 publishing a central plan must freeze its frame but must not claim pixel submission before RenderPass execution");
+
+                int simulatedDrawCount = published.Submission.Backend.SegmentCount;
+#if UNITY_EDITOR
+                Expect(simulatedDrawCount > 0,
+                    "P8-B1 actual-submission self-check requires at least one central draw segment");
+                BattleCentralRenderSystem.RecordSubmissionForSelfCheck(
+                    published,
+                    simulatedDrawCount);
+#endif
+                BattleCentralEntityDiagnostic submittedEntity =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                BattleCentralEntityDiagnostic submittedShadow =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(
+                        world,
+                        handle,
+                        BattleRenderCommandType.Shadow);
+                BattleCentralEntityDiagnostic bySlot =
+                    BattleCentralRenderSystem.CaptureEntityDiagnosticBySlot(world, handle.Slot);
+                IBattleChecksumSnapshot checksumAfter =
+                    SimulationTickDriver.CaptureSupportedChecksumSnapshot(
+                        world,
+                        404,
+                        FrameInputSet.Empty(404));
+                Expect(published.Owner == BattlePixelFrameOwner.Central &&
+                       submittedEntity.Reason == BattleCentralEntityDiagnosticReason.None &&
+                       submittedEntity.Submitted && submittedEntity.HasResolvedResource &&
+                       submittedEntity.FrameId == entity.CurrentFrameId &&
+                       submittedShadow.Reason == BattleCentralEntityDiagnosticReason.None &&
+                       submittedShadow.Submitted &&
+                       bySlot.Reason == BattleCentralEntityDiagnosticReason.None &&
+                       bySlot.Handle == handle &&
+                       BattleCentralRenderSystem.Diagnostics.SubmittedPixelsLastFrame &&
+                       BattleCentralRenderSystem.Diagnostics.LastSubmissionDrawCount ==
+                           published.Submission.Backend.SegmentCount,
+                    "P8-B1 Entity/Shadow diagnostics may report Submitted only after a matching generation/tick records actual draws");
+                var diagnosticCapabilities = new BattleRenderingDeviceCapabilities(
+                    "P8-B1 GPU",
+                    "P8-B1 Device",
+                    "P8-B1 API",
+                    true,
+                    4096,
+                    16,
+                    true,
+                    true,
+                    64L * 1024L * 1024L);
+                BattleAtlasPolicyDecision diagnosticAtlasDecision =
+                    BattleRenderingPolicyResolver.ResolveAtlas(
+                        diagnosticCapabilities,
+                        1,
+                        Array.Empty<string>(),
+                        nameof(BattleAtlasPolicyMode.TextureArray));
+                var diagnosticAtlasInputs = new BattleAtlasDiagnosticInputs(
+                    diagnosticCapabilities,
+                    diagnosticAtlasDecision,
+                    1,
+                    BattleAtlasDiagnosticInputs.EstimateAtlasBytes(1),
+                    BattleSpriteCentralBindingMode.AtlasTextureArray,
+                    "P8-B1 aggregate fixture");
+                BattleRenderingDiagnosticReport submittedReport =
+                    BattleCentralRenderSystem.CaptureDiagnosticReportForSelfCheck(
+                        diagnosticAtlasInputs);
+                Expect(submittedReport != null &&
+                       submittedReport.Generation == published.Generation &&
+                       submittedReport.BuildTick == published.DisplayTick &&
+                       submittedReport.SimulationTick == published.SimulationTick &&
+                       submittedReport.DisplayTick == published.DisplayTick &&
+                       !submittedReport.IsStale && submittedReport.SubmissionBuildCurrent &&
+                       submittedReport.SourceCommandCount == published.Submission.Backend.Diagnostics.SourceCommandCount &&
+                       submittedReport.SubmissionDrawCount == simulatedDrawCount &&
+                       submittedReport.SnapshotEntityCount == published.CapturedFrame.EntityCount,
+                    "P8-B1 aggregate reports must describe one matching build/submission generation and tick");
+                Expect(submittedFrame.EntityCount == submittedEntityCountBefore &&
+                       submittedFrame.CommandCount == submittedCommandCountBefore &&
+                       submittedBackend.Diagnostics.ResolvedCommandCount == submittedResolvedBefore &&
+                       checksumBeforeSubmittedQueries != null && checksumAfter != null &&
+                       checksumBeforeSubmittedQueries.OverallChecksum == checksumAfter.OverallChecksum,
+                    "P8-B1 submitted diagnostic reads must not mutate immutable frame/backend counts or checksum");
+
+                BattlePresentationFrame frozenSubmissionFrame = published.CapturedFrame;
+                BattleDynamicMeshBackend frozenSubmissionBackend = published.Submission.Backend;
+                int frozenTickBeforeSourceWrap = frozenSubmissionFrame.TickIndex;
+                int frozenEntityCountBeforeSourceWrap = frozenSubmissionFrame.EntityCount;
+                int frozenHitRecordCountBeforeSourceWrap = frozenSubmissionFrame.HitRecordCount;
+                int frozenCommandCountBeforeSourceWrap = frozenSubmissionFrame.CommandCount;
+                int frozenOverlayUnsupportedCountBeforeSourceWrap =
+                    frozenSubmissionFrame.OverlayUnsupportedCount;
+                BattleRenderCommand frozenCommandBeforeSourceWrap =
+                    frozenSubmissionFrame.GetCommand(0);
+                Expect(TryFindPresentationEntity(
+                           frozenSubmissionFrame,
+                           handle.Slot,
+                           out BattlePresentationEntitySnapshot frozenEntityBeforeSourceWrap),
+                    "P8-B1 frozen-frame wrap check requires the queried runtime entity snapshot");
+                int frozenBackendMutationVersion = frozenSubmissionBackend.MutationVersion;
+
+                entity.Runtime.SetPosition(260, 0, 320);
+                entity.Runtime.SyncIntegerPosition();
+                world.BattlePresentation.BeginFrame(world, 405);
+                entity.Runtime.SetPosition(420, 0, 380);
+                entity.Runtime.SyncIntegerPosition();
+                world.BattlePresentation.BeginFrame(world, 406);
+                bool foundWrappedSourceEntity = TryFindPresentationEntity(
+                    submittedFrame,
+                    handle.Slot,
+                    out BattlePresentationEntitySnapshot wrappedSourceEntity);
+                bool foundFrozenEntityAfterWrap = TryFindPresentationEntity(
+                    frozenSubmissionFrame,
+                    handle.Slot,
+                    out BattlePresentationEntitySnapshot frozenEntityAfterSourceWrap);
+                Expect(submittedFrame.TickIndex == 406 &&
+                       foundWrappedSourceEntity && foundFrozenEntityAfterWrap &&
+                       wrappedSourceEntity.XInt != frozenEntityBeforeSourceWrap.XInt &&
+                       frozenEntityAfterSourceWrap.XInt == frozenEntityBeforeSourceWrap.XInt &&
+                       frozenSubmissionFrame.TickIndex == frozenTickBeforeSourceWrap &&
+                       frozenSubmissionFrame.EntityCount == frozenEntityCountBeforeSourceWrap &&
+                       frozenSubmissionFrame.HitRecordCount == frozenHitRecordCountBeforeSourceWrap &&
+                       frozenSubmissionFrame.CommandCount == frozenCommandCountBeforeSourceWrap &&
+                       frozenSubmissionFrame.OverlayUnsupportedCount ==
+                           frozenOverlayUnsupportedCountBeforeSourceWrap &&
+                       frozenSubmissionFrame.GetCommand(0).Equals(frozenCommandBeforeSourceWrap) &&
+                       frozenSubmissionBackend.MutationVersion == frozenBackendMutationVersion &&
+                       ReferenceEquals(frozenSubmissionBackend.BuiltFrame, frozenSubmissionFrame) &&
+                       published.Submission.IsBackendBuildCurrent,
+                    "P8-B1 a reusable submission must retain an independent frozen frame when the coordinator source double-buffer wraps twice: " +
+                    $"sourceTick={submittedFrame.TickIndex}, sourceEntityChanged={foundWrappedSourceEntity && wrappedSourceEntity.XInt != frozenEntityBeforeSourceWrap.XInt}, " +
+                    $"frozenEntityStable={foundFrozenEntityAfterWrap && frozenEntityAfterSourceWrap.XInt == frozenEntityBeforeSourceWrap.XInt}, " +
+                    $"frozenTick={frozenSubmissionFrame.TickIndex}/{frozenTickBeforeSourceWrap}, " +
+                    $"frozenEntityCount={frozenSubmissionFrame.EntityCount}/{frozenEntityCountBeforeSourceWrap}, " +
+                    $"frozenHitCount={frozenSubmissionFrame.HitRecordCount}/{frozenHitRecordCountBeforeSourceWrap}, " +
+                    $"frozenCommandCount={frozenSubmissionFrame.CommandCount}/{frozenCommandCountBeforeSourceWrap}, " +
+                    $"frozenOverlayCount={frozenSubmissionFrame.OverlayUnsupportedCount}/{frozenOverlayUnsupportedCountBeforeSourceWrap}, " +
+                    $"frozenCommandStable={frozenSubmissionFrame.GetCommand(0).Equals(frozenCommandBeforeSourceWrap)}, " +
+                    $"backendVersion={frozenSubmissionBackend.MutationVersion}/{frozenBackendMutationVersion}, " +
+                    $"backendFrameStable={ReferenceEquals(frozenSubmissionBackend.BuiltFrame, frozenSubmissionFrame)}, " +
+                    $"backendCurrent={published.Submission.IsBackendBuildCurrent}");
+
+                BattleCentralRenderSystem.PublishStaleCentralPlanForSelfCheck(world, 407);
+                BattleCentralEntityDiagnostic stale =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                BattlePixelFramePlan stalePlan = world.CurrentPixelFramePlan;
+                BattleRenderingDiagnosticReport staleReport =
+                    BattleCentralRenderSystem.CaptureDiagnosticReportForSelfCheck(
+                        diagnosticAtlasInputs);
+                Expect(world.CurrentPixelFramePlan.IsStale &&
+                       stale.Reason == BattleCentralEntityDiagnosticReason.StalePlan &&
+                       stale.Submitted && staleReport != null &&
+                       staleReport.Generation == published.Generation &&
+                       staleReport.BuildTick == published.DisplayTick &&
+                       staleReport.SimulationTick == 407 &&
+                       staleReport.DisplayTick == published.DisplayTick &&
+                       staleReport.IsStale && staleReport.SubmissionBuildCurrent &&
+                       staleReport.SourceCommandCount == published.Submission.Backend.Diagnostics.SourceCommandCount &&
+                       staleReport.SubmissionDrawCount == simulatedDrawCount &&
+                       staleReport.RefusalReason == stalePlan.Reason,
+                    "P8-B1 retained last-good frames must remain stale while preserving the factual matching-generation submission result");
+
+                submittedBackend.Clear();
+                BattleCentralEntityDiagnostic mutated =
+                    BattleCentralRenderSystem.CaptureEntityDiagnostic(world, handle);
+                Expect(mutated.Reason == BattleCentralEntityDiagnosticReason.BackendMutationMismatch &&
+                       !mutated.Submitted,
+                    "P8-B1 must reject a submission after its backend build identity changes");
+            }
+            finally
+            {
+                diagnosticResourceFrame?.ReleasePublicationBinding();
+                world.ResetRuntimeState();
+                BattleCentralRenderSystem.ResetRuntime();
+                if (feature != null)
+                {
+                    BattleCentralRenderSystem.UnregisterFeature(feature);
+                    DestroySelfCheckAsset(feature);
+                }
+                if (material != null) DestroySelfCheckAsset(material);
+                if (arrayMaterial != null) DestroySelfCheckAsset(arrayMaterial);
+                spriteConfig?.Dispose();
+            }
+        }
+
         private static void CheckCentralPixelOwnershipContracts()
         {
             BattleCentralRenderSystem.ResetRuntime();
@@ -5985,27 +6919,33 @@ namespace NTSD.Test
                 var world = new SimulationWorld();
                 world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
                 world.RenderDispatchAll(200);
-                BattlePixelFramePlan readinessFallback = world.CurrentPixelFramePlan;
-                Expect(readinessFallback.IsValid &&
-                       readinessFallback.RequestedMode == BattlePresentationBackendMode.CentralOnly &&
-                       readinessFallback.Owner == BattlePixelFrameOwner.Legacy &&
-                       readinessFallback.Submission == null,
-                    "CentralOnly without a verified active renderer must atomically fall back to one Legacy frame");
+                BattlePixelFramePlan coldPlan = world.CurrentPixelFramePlan;
+                Expect(coldPlan.IsValid &&
+                       coldPlan.RequestedMode == BattlePresentationBackendMode.CentralOnly &&
+                       coldPlan.Owner == BattlePixelFrameOwner.Central &&
+                       coldPlan.Submission == null &&
+                       coldPlan.SuppressesLegacyMaterializers &&
+                       coldPlan.SimulationTick == 200 && coldPlan.DisplayTick == -1 &&
+                       coldPlan.IsStale && !string.IsNullOrEmpty(coldPlan.Reason) &&
+                       !BattleCentralRenderSystem.ShouldUseCentralPixels(world),
+                    "CentralOnly without a verified active renderer must remain central-owned and fail closed without legacy pixels");
+                poolInitialization = new TemporaryObjectPoolInitialization();
+                CheckCentralOnlyPooledMaterializersSuppressed(world, "cold");
 
                 BattlePixelFramePlan frameN =
                     BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
                 Expect(frameN.IsValid && frameN.Owner == BattlePixelFrameOwner.Central &&
                        frameN.RequestedMode == BattlePresentationBackendMode.CentralOnly &&
                        ReferenceEquals(frameN.World, world) &&
-                       ReferenceEquals(frameN.CapturedFrame, world.BattlePresentation.PublishedFrame) &&
+                       !ReferenceEquals(frameN.CapturedFrame, world.BattlePresentation.PublishedFrame) &&
                        frameN.TickIndex == frameN.CapturedFrame.TickIndex &&
-                       frameN.Generation > readinessFallback.Generation &&
+                       frameN.Generation > coldPlan.Generation &&
                        frameN.Generation == world.CurrentPixelFramePlan.Generation &&
                        BattleCentralRenderSystem.ShouldUseCentralPixels(world),
-                    "Central frame plan must publish matching world/frame/mode/tick/generation ownership");
+                    "Central frame plan must publish matching world/mode/tick/generation ownership with an independent frozen submission frame");
                 Expect(!SimulationWorld.RequiresLegacySpriteRendererCapacityGuard(frameN) &&
-                       SimulationWorld.RequiresLegacySpriteRendererCapacityGuard(readinessFallback),
-                    "the 8192 SpriteRenderer capacity guard must apply only to Legacy-owned frames");
+                       !SimulationWorld.RequiresLegacySpriteRendererCapacityGuard(coldPlan),
+                    "the 8192 SpriteRenderer capacity guard must remain disabled for ready and cold CentralOnly frames");
 
                 for (int index = 0; index < 4; index++)
                     BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
@@ -6033,22 +6973,34 @@ namespace NTSD.Test
                        !ReferenceEquals(frameN1.Submission.Backend, frameNBackend) &&
                        frameNBackend.MutationVersion == frameNMutationVersion,
                     "publishing frame N+1 must use the other backend and leave leased frame N untouched");
-                BattlePixelFramePlan noFreeSlot =
-                    BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
-                Expect(noFreeSlot.Owner == BattlePixelFrameOwner.Legacy &&
-                       noFreeSlot.Submission == null &&
+                world.RenderDispatchAll(201);
+                BattlePixelFramePlan stalePlan = world.CurrentPixelFramePlan;
+                BattleCentralSubmission.BattleCentralSubmissionLease staleLease = default;
+                Expect(stalePlan.Owner == BattlePixelFrameOwner.Central &&
+                       stalePlan.SuppressesLegacyMaterializers && stalePlan.IsStale &&
+                       stalePlan.SimulationTick == 201 &&
+                       stalePlan.DisplayTick == frameN1.DisplayTick &&
+                       stalePlan.Generation == frameN1.Generation &&
+                       ReferenceEquals(stalePlan.Submission, frameN1.Submission) &&
+                       ReferenceEquals(stalePlan.CapturedFrame, frameN1.CapturedFrame) &&
+                       !string.IsNullOrEmpty(stalePlan.Reason) &&
+                       !SimulationWorld.RequiresLegacySpriteRendererCapacityGuard(stalePlan) &&
+                       stalePlan.Submission.TryAcquire(out staleLease) &&
                        !frameN.Submission.TryAcquire(out _),
-                    "two occupied backend slots must fail the whole frame to Legacy and retired submissions must be stale");
+                    "a CentralOnly build refusal with last-good pixels must retain an acquirable stale submission and never start legacy");
+                CheckCentralOnlyPooledMaterializersSuppressed(world, "stale");
+                staleLease.Dispose();
                 frameNLease.Dispose();
                 BattlePixelFramePlan reused =
                     BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
-                if (!ReferenceEquals(reused.Submission?.Backend, frameNBackend))
-                    reused = BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
                 Expect(reused.Owner == BattlePixelFrameOwner.Central &&
                        ReferenceEquals(reused.Submission.Backend, frameNBackend) &&
                        frameNBackend.MutationVersion > frameNMutationVersion &&
-                       reused.Submission.ReadLeaseCount == 0,
-                    "a retired backend must become eligible and be reused without a leaked read lease after release");
+                       reused.Submission.ReadLeaseCount == 0 &&
+                       reused.Generation > stalePlan.Generation && !reused.IsStale &&
+                       reused.SimulationTick == 201 && reused.DisplayTick == 201 &&
+                       frameN1.Submission.IsRetired && !frameN1.Submission.TryAcquire(out _),
+                    "a successful replacement must reuse the released backend and retire the previous last-good submission");
 
                 registrationProbe = ScriptableObject.CreateInstance<BattleRenderFeature>();
                 int stableGeneration = reused.Generation;
@@ -6093,7 +7045,6 @@ namespace NTSD.Test
                        (int)GetPrivateField(objectRenderer, "_renderFrameCount") == renderFrameBeforeCentral + 1,
                     "Central owner must suppress legacy entity/shadow pixels while retaining render-frame side effects");
 
-                poolInitialization = new TemporaryObjectPoolInitialization();
                 LF2ObjectPool pool = LF2ObjectPool.Instance;
                 Expect(pool != null, "central pooled materializer suppression requires LF2ObjectPool");
                 overlayView = new GameObject("SelfCheck_CentralOverlayRenderer");
@@ -6155,6 +7106,528 @@ namespace NTSD.Test
                 if (entityView != null) DestroySelfCheckObject(entityView);
                 BattleCentralRenderSystem.ResetRuntime();
             }
+        }
+
+        private static void CheckCentralOnlyPooledMaterializersSuppressed(
+            SimulationWorld world,
+            string planState)
+        {
+            GameObject overlayView = null;
+            GameObject sparkView = null;
+            try
+            {
+                LF2ObjectPool pool = LF2ObjectPool.Instance;
+                Expect(pool != null,
+                    $"CentralOnly {planState} materializer suppression requires LF2ObjectPool");
+                overlayView = new GameObject($"SelfCheck_CentralOnly_{planState}_Overlay");
+                BattleEntityOverlayRenderer overlayRenderer =
+                    overlayView.AddComponent<BattleEntityOverlayRenderer>();
+                sparkView = new GameObject($"SelfCheck_CentralOnly_{planState}_Spark");
+                SparkRenderer sparkRenderer = sparkView.AddComponent<SparkRenderer>();
+                SpriteRenderer overlayBorrowed = pool.GetSprite();
+                SpriteRenderer sparkBorrowed = pool.GetSprite();
+                var overlayActive = GetPrivateField(
+                    overlayRenderer,
+                    "activeRenderers") as List<SpriteRenderer>;
+                var sparkActive = GetPrivateField(
+                    sparkRenderer,
+                    "_activeThisFrame") as List<SpriteRenderer>;
+                var sparkPools = GetPrivateField(
+                    sparkRenderer,
+                    "_activePools") as List<LF2ObjectPool>;
+                var spritePool = GetPrivateField(pool, "_spritePool") as Stack<SpriteRenderer>;
+                Expect(overlayActive != null && sparkActive != null && sparkPools != null &&
+                       spritePool != null,
+                    $"CentralOnly {planState} pooled materializer fixture fields changed");
+                overlayActive.Add(overlayBorrowed);
+                sparkActive.Add(sparkBorrowed);
+                sparkPools.Add(pool);
+                int poolCountBeforeRelease = spritePool.Count;
+                overlayRenderer.RenderAll(world);
+                sparkRenderer.RenderAll(world);
+                Expect(world.CurrentPixelFramePlan.SuppressesLegacyMaterializers &&
+                       overlayActive.Count == 0 && sparkActive.Count == 0 &&
+                       sparkPools.Count == 0 && spritePool.Count == poolCountBeforeRelease + 2,
+                    $"CentralOnly {planState} plan must release previous Overlay/Spark pool objects and acquire no legacy replacements");
+            }
+            finally
+            {
+                if (sparkView != null)
+                    DestroySelfCheckObject(sparkView);
+                if (overlayView != null)
+                    DestroySelfCheckObject(overlayView);
+            }
+        }
+
+        private static void CheckBattleCentralPresentationMountContracts()
+        {
+            GameObject entityRoot = null;
+            GameObject wrongRoot = null;
+            GameObject missingOwnerNode = null;
+            GameObject mismatchNode = null;
+            GameObject duplicateNode = null;
+            GameObject rollbackMountRoot = null;
+            GameObject destroyedOwnerRoot = null;
+            BattleCentralPresentationMount rollbackMount = null;
+            try
+            {
+                BattleCentralPresentationMountRegistry.ResetAllRuntimeBindings();
+                entityRoot = new GameObject("EntityObject");
+                var entityModelNode = new GameObject("EntityModel");
+                entityModelNode.transform.SetParent(entityRoot.transform, false);
+                entityModelNode.AddComponent<SpriteRenderer>();
+                LF2ObjectRenderer owner = entityModelNode.AddComponent<LF2ObjectRenderer>();
+                BattleCentralPresentationMount entityMount =
+                    entityModelNode.AddComponent<BattleCentralPresentationMount>();
+                entityMount.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.EntitySprite,
+                    owner);
+                RegisterPresentationMountFixture(entityMount);
+
+                var shadowNode = new GameObject("Shadow");
+                shadowNode.transform.SetParent(entityRoot.transform, false);
+                shadowNode.AddComponent<SpriteRenderer>();
+                owner.SetShadowRenderer(shadowNode.GetComponent<SpriteRenderer>());
+                BattleCentralPresentationMount shadowMount =
+                    shadowNode.AddComponent<BattleCentralPresentationMount>();
+                shadowMount.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.Shadow,
+                    BattleCentralPresentationMountPurpose.CommonShadow,
+                    owner);
+                RegisterPresentationMountFixture(shadowMount);
+
+                var world = new SimulationWorld();
+                LF2Character character = CreateCharacter(
+                    "SelfCheck_CentralPresentationMount",
+                    7400,
+                    BuildComboWrapperCharacterData("SelfCheck_CentralPresentationMount", 180));
+                character.SetRequiredRuntimeSlot(0);
+                owner.SetLogicObject(character, null);
+                Expect(!entityMount.RuntimeHandle.IsValid && !shadowMount.RuntimeHandle.IsValid,
+                    "mount bindings must remain invalid until a normal character acquires a runtime handle");
+
+                world.Register(character);
+                bool resolvedFirstHandle = world.TryGetCurrentRuntimeHandle(
+                    character.Runtime.SlotIndex,
+                    character,
+                    out RuntimeEntityHandle firstHandle);
+                Expect(resolvedFirstHandle &&
+                       entityMount.RuntimeHandle == firstHandle && shadowMount.RuntimeHandle == firstHandle,
+                    "SimulationWorld.Register must refresh both EntityModel and Shadow mounts for normal characters; " +
+                    $"resolved={resolvedFirstHandle}, entityHandle={firstHandle}, " +
+                    $"entityMount={entityMount.RuntimeHandle}, shadowMount={shadowMount.RuntimeHandle}, " +
+                    $"entityOwner={entityMount.OwnerRenderer?.GetInstanceID()}, " +
+                    $"shadowOwner={shadowMount.OwnerRenderer?.GetInstanceID()}, " +
+                    $"expectedOwner={owner.GetInstanceID()}, " +
+                    $"entityParent={entityModelNode.transform.parent?.GetInstanceID()}, " +
+                    $"shadowParent={shadowNode.transform.parent?.GetInstanceID()}, " +
+                    $"ownerParent={owner.transform.parent?.GetInstanceID()}");
+                BattleCentralPresentationMountRegistry.ValidateActiveMounts();
+
+                BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(owner);
+                Expect(!entityMount.RuntimeHandle.IsValid && !shadowMount.RuntimeHandle.IsValid,
+                    "owner reset must invalidate every presentation mount before entity teardown");
+
+                RuntimeEntityHandle reusedHandle = new RuntimeEntityHandle(
+                    firstHandle.Slot,
+                    firstHandle.Generation + 1);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                Expect(entityMount.RuntimeHandle == reusedHandle && shadowMount.RuntimeHandle == reusedHandle &&
+                       reusedHandle != firstHandle,
+                    "mount bindings must preserve generation when a runtime slot is reused");
+
+                entityModelNode.SetActive(false);
+                entityModelNode.SetActive(true);
+                Expect(entityMount.RuntimeHandle == reusedHandle,
+                    "a re-enabled mount must restore its cached owner runtime handle");
+
+                BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(owner);
+                entityModelNode.SetActive(false);
+                entityModelNode.SetActive(true);
+                Expect(!entityMount.RuntimeHandle.IsValid,
+                    "a re-enabled mount must remain invalid after its owner runtime binding is reset");
+
+                RuntimeEntityHandle nextGenerationHandle = new RuntimeEntityHandle(
+                    reusedHandle.Slot,
+                    reusedHandle.Generation + 1);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, nextGenerationHandle);
+                entityModelNode.SetActive(false);
+                entityModelNode.SetActive(true);
+                Expect(entityMount.RuntimeHandle == nextGenerationHandle,
+                    "a re-enabled mount must restore the newest owner runtime handle generation");
+                reusedHandle = nextGenerationHandle;
+
+                for (int modeIndex = 0; modeIndex < 3; modeIndex++)
+                {
+                    BattlePresentationBackendMode mode = (BattlePresentationBackendMode)modeIndex;
+                    BattleCentralRenderSystem.ResetRuntime();
+                    BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                    world.SetBattlePresentationBackend(mode);
+                    world.RenderDispatchAll(300 + modeIndex * 2);
+                    int commandCountBefore = world.BattlePresentation.PublishedFrame.CommandCount;
+                    int submissionCountBefore = BattleCentralRenderSystem.Diagnostics.SubmissionCount;
+                    world.RecordLegacyEntityProbe(character, entityModelNode.GetComponent<SpriteRenderer>());
+                    world.RecordLegacyShadowProbe(character, shadowNode.GetComponent<SpriteRenderer>());
+                    world.BattlePresentation.CompleteLegacyFrame();
+                    int legacyProbeCountBefore = world.BattlePresentation.Diagnostics.ActualCount;
+
+                    BattleCentralPresentationMountRegistry.ResetAllRuntimeBindings();
+                    BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                    world.RenderDispatchAll(301 + modeIndex * 2);
+                    int commandCountAfter = world.BattlePresentation.PublishedFrame.CommandCount;
+                    int submissionCountAfter = BattleCentralRenderSystem.Diagnostics.SubmissionCount;
+                    world.RecordLegacyEntityProbe(character, entityModelNode.GetComponent<SpriteRenderer>());
+                    world.RecordLegacyShadowProbe(character, shadowNode.GetComponent<SpriteRenderer>());
+                    world.BattlePresentation.CompleteLegacyFrame();
+                    int legacyProbeCountAfter = world.BattlePresentation.Diagnostics.ActualCount;
+                    Expect(commandCountAfter == commandCountBefore &&
+                           submissionCountAfter == submissionCountBefore &&
+                           legacyProbeCountAfter == legacyProbeCountBefore,
+                        $"{mode} mount registration must not change command, submission, or legacy-probe counters");
+                }
+
+                UnregisterPresentationMountFixture(entityMount);
+                UnregisterPresentationMountFixture(entityMount);
+                RegisterPresentationMountFixture(entityMount);
+                RegisterPresentationMountFixture(entityMount);
+                BattleCentralPresentationMountRegistry.ValidateActiveMounts();
+
+                missingOwnerNode = new GameObject("MissingOwner");
+                missingOwnerNode.transform.SetParent(entityRoot.transform, false);
+                BattleCentralPresentationMount missingOwner =
+                    missingOwnerNode.AddComponent<BattleCentralPresentationMount>();
+                missingOwner.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.EntitySprite,
+                    null);
+                RegisterPresentationMountFixture(missingOwner);
+                Expect(!BattleCentralPresentationMountRegistry.ValidateActiveMounts(out string validationError) &&
+                       validationError.Contains("no owner"),
+                    "mount validation must reject missing owners");
+                UnregisterPresentationMountFixture(missingOwner);
+                missingOwnerNode.SetActive(false);
+
+                mismatchNode = new GameObject("MismatchedPurpose");
+                mismatchNode.transform.SetParent(entityRoot.transform, false);
+                BattleCentralPresentationMount mismatch =
+                    mismatchNode.AddComponent<BattleCentralPresentationMount>();
+                mismatch.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.CommonShadow,
+                    owner);
+                RegisterPresentationMountFixture(mismatch);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                Expect(!mismatch.RuntimeHandle.IsValid,
+                    "role/purpose mismatches must remain unbound even when their owner has a valid handle");
+                Expect(!BattleCentralPresentationMountRegistry.ValidateActiveMounts(out validationError) &&
+                       validationError.Contains("role/purpose"),
+                    "mount validation must reject role/purpose mismatches");
+                UnregisterPresentationMountFixture(mismatch);
+                mismatchNode.SetActive(false);
+
+                wrongRoot = new GameObject("EntityObject");
+                var wrongSiblingModel = new GameObject("EntityModel");
+                wrongSiblingModel.transform.SetParent(wrongRoot.transform, false);
+                wrongSiblingModel.AddComponent<LF2ObjectRenderer>();
+                var wrongShadowNode = new GameObject("Shadow");
+                wrongShadowNode.transform.SetParent(wrongRoot.transform, false);
+                BattleCentralPresentationMount wrongNode =
+                    wrongShadowNode.AddComponent<BattleCentralPresentationMount>();
+                wrongNode.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.Shadow,
+                    BattleCentralPresentationMountPurpose.CommonShadow,
+                    owner);
+                wrongRoot.SetActive(false);
+                wrongRoot.SetActive(true);
+                Expect(wrongNode.OwnerRenderer == owner,
+                    "an explicit Shadow owner must not be replaced by sibling fallback resolution");
+                RegisterPresentationMountFixture(wrongNode);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                Expect(!wrongNode.RuntimeHandle.IsValid,
+                    "shadows outside their owner's direct entity root must remain unbound");
+                Expect(!BattleCentralPresentationMountRegistry.ValidateActiveMounts(out validationError) &&
+                       validationError.Contains("wrong node"),
+                    "mount validation must reject shadows outside their owner's direct entity root");
+                UnregisterPresentationMountFixture(wrongNode);
+                wrongRoot.SetActive(false);
+
+                duplicateNode = new GameObject("DuplicateShadow");
+                duplicateNode.transform.SetParent(entityRoot.transform, false);
+                BattleCentralPresentationMount duplicate =
+                    duplicateNode.AddComponent<BattleCentralPresentationMount>();
+                duplicate.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.Shadow,
+                    BattleCentralPresentationMountPurpose.CommonShadow,
+                    owner);
+                RegisterPresentationMountFixture(duplicate);
+                Expect(!BattleCentralPresentationMountRegistry.ValidateActiveMounts(out validationError) &&
+                       validationError.Contains("duplicates"),
+                    "mount validation must reject duplicate owner/purpose declarations");
+                UnregisterPresentationMountFixture(duplicate);
+                duplicateNode.SetActive(false);
+
+                world.ResetRuntimeState();
+                Expect(!entityMount.RuntimeHandle.IsValid && !shadowMount.RuntimeHandle.IsValid &&
+                       !world.TryResolveRuntimeHandle(firstHandle, out _) &&
+                       world.ObjectCount == 0,
+                    "ResetRuntimeState must invalidate EntityModel and Shadow mounts and retire the old runtime handle");
+
+                rollbackMount = CreateEntityModelPresentationMountFixture(
+                    "SelfCheck_CentralPresentationRollback",
+                    out rollbackMountRoot,
+                    out LF2ObjectRenderer rollbackOwner);
+                var rollbackWorld = new SimulationWorld();
+                var foreignRestStore = new RuntimeRestStore(400);
+                var rollbackEntity = new RegistrationRollbackSelfCheckEntity(7401);
+                Expect(rollbackEntity.BindForeignTracker(foreignRestStore, 20),
+                    "mount rollback fixture must bind the entity tracker to a foreign runtime-rest store");
+                rollbackEntity.SetRequiredRuntimeSlot(20);
+                rollbackOwner.SetLogicObject(rollbackEntity, null);
+                rollbackWorld.Register(rollbackEntity);
+                bool foreignLeaseAvailable = foreignRestStore.TryAcquireBinding(
+                    20,
+                    out RuntimeRestBindingHandle releasedLease);
+                bool foreignLeaseReleased = foreignLeaseAvailable &&
+                                           foreignRestStore.ReleaseBinding(releasedLease);
+                int rollbackSlot = rollbackEntity.Runtime.SlotIndex;
+                int rollbackClaimed = rollbackWorld.ClaimedRuntimeSlotCountForServices;
+                int rollbackObjectCount = rollbackWorld.ObjectCount;
+                RuntimeEntityHandle rollbackMountHandle = rollbackMount.RuntimeHandle;
+                bool rollbackTrackerBound = rollbackEntity.ItrRest.IsBound;
+                Expect(rollbackSlot == -1,
+                    $"runtime-rest rollback must clear the slot; slot={rollbackSlot}");
+                Expect(rollbackClaimed == 0,
+                    $"runtime-rest rollback must release the claimed slot; claimed={rollbackClaimed}");
+                Expect(rollbackObjectCount == 0,
+                    $"runtime-rest rollback must remove the pending bucket entry; objectCount={rollbackObjectCount}");
+                Expect(!rollbackMountHandle.IsValid,
+                    $"runtime-rest rollback must invalidate the EntityModel mount; mountHandle={rollbackMountHandle}");
+                Expect(!rollbackTrackerBound,
+                    $"runtime-rest rollback must unbind the tracker; itrRestIsBound={rollbackTrackerBound}");
+                Expect(foreignLeaseAvailable,
+                    $"runtime-rest rollback must release the foreign lease; foreignTryAcquire20={foreignLeaseAvailable}");
+                Expect(foreignLeaseReleased,
+                    $"foreign rollback diagnostic lease must release cleanly; foreignRelease20={foreignLeaseReleased}");
+
+                int bindingCountBeforeDestroyedOwner =
+                    BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck;
+                BattleCentralPresentationMount destroyedOwnerMount =
+                    CreateEntityModelPresentationMountFixture(
+                        "SelfCheck_DestroyedPresentationOwner",
+                        out destroyedOwnerRoot,
+                        out LF2ObjectRenderer destroyedOwner);
+                int destroyedOwnerInstanceId = destroyedOwner.GetInstanceID();
+                var destroyedOwnerHandle = new RuntimeEntityHandle(74, 1);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                    destroyedOwner,
+                    destroyedOwnerHandle);
+                Expect(destroyedOwnerMount.RuntimeHandle == destroyedOwnerHandle &&
+                       BattleCentralPresentationMountRegistry.HasOwnerRuntimeBindingForSelfCheck(
+                           destroyedOwnerInstanceId) &&
+                       BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck ==
+                           bindingCountBeforeDestroyedOwner + 1,
+                    "destroyed-owner fixture must hold one active owner binding before teardown");
+
+                BattleCentralPresentationMountRegistry.RemoveOwnerRuntimeBinding(destroyedOwner);
+                Expect(!destroyedOwnerMount.RuntimeHandle.IsValid &&
+                       !BattleCentralPresentationMountRegistry.HasOwnerRuntimeBindingForSelfCheck(
+                           destroyedOwnerInstanceId) &&
+                       BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck ==
+                           bindingCountBeforeDestroyedOwner,
+                    "explicit owner removal must invalidate active mounts and remove only the exact owner binding");
+
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                    destroyedOwner,
+                    destroyedOwnerHandle);
+                Expect(BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck ==
+                           bindingCountBeforeDestroyedOwner + 1,
+                    "destroyed-owner fixture must restore its binding before root destruction");
+                UnityEngine.Object.DestroyImmediate(destroyedOwnerRoot);
+                destroyedOwnerRoot = null;
+                Expect(!BattleCentralPresentationMountRegistry.HasOwnerRuntimeBindingForSelfCheck(
+                           destroyedOwnerInstanceId) &&
+                       BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck ==
+                           bindingCountBeforeDestroyedOwner,
+                    "destroying an owner root must immediately remove its binding without a later registry prune");
+            }
+            finally
+            {
+                if (rollbackMount != null)
+                    UnregisterPresentationMountFixture(rollbackMount);
+                if (rollbackMountRoot != null) rollbackMountRoot.SetActive(false);
+                if (duplicateNode != null) duplicateNode.SetActive(false);
+                if (mismatchNode != null) mismatchNode.SetActive(false);
+                if (missingOwnerNode != null) missingOwnerNode.SetActive(false);
+                if (wrongRoot != null) wrongRoot.SetActive(false);
+                if (entityRoot != null) entityRoot.SetActive(false);
+                BattleCentralPresentationMountRegistry.ResetAllRuntimeBindings();
+                if (destroyedOwnerRoot != null) DestroySelfCheckObject(destroyedOwnerRoot);
+                if (duplicateNode != null) DestroySelfCheckObject(duplicateNode);
+                if (mismatchNode != null) DestroySelfCheckObject(mismatchNode);
+                if (missingOwnerNode != null) DestroySelfCheckObject(missingOwnerNode);
+                if (wrongRoot != null) DestroySelfCheckObject(wrongRoot);
+                if (rollbackMountRoot != null) DestroySelfCheckObject(rollbackMountRoot);
+                if (entityRoot != null) DestroySelfCheckObject(entityRoot);
+            }
+        }
+
+        private static void CheckBattleCentralPresentationMountProductionPrefabContracts()
+        {
+            GameObject instance = null;
+            try
+            {
+                BattleCentralPresentationMountRegistry.ResetAllRuntimeBindings();
+
+                GameConfig productionConfig;
+#if UNITY_EDITOR
+                productionConfig = UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                    "Assets/NTSD/Config/GameConfig/GameConfig.asset");
+#else
+                productionConfig = GameConfig.Instance;
+#endif
+                GameObject productionPrefab = productionConfig != null
+                    ? productionConfig.LF2ObjectPrefab
+                    : null;
+                Expect(productionConfig != null && productionPrefab != null,
+                    "production mount self-check requires GameConfig.LF2ObjectPrefab");
+
+                BattleCentralPresentationMount[] prefabMounts =
+                    productionPrefab.GetComponentsInChildren<BattleCentralPresentationMount>(true);
+                LF2ObjectRenderer prefabOwner =
+                    productionPrefab.GetComponentInChildren<LF2ObjectRenderer>(true);
+                BattleCentralPresentationMount prefabEntityMount = null;
+                BattleCentralPresentationMount prefabShadowMount = null;
+                for (int index = 0; index < prefabMounts.Length; index++)
+                {
+                    BattleCentralPresentationMount mount = prefabMounts[index];
+                    if (mount.Role == BattleCentralPresentationMountRole.EntityModel)
+                        prefabEntityMount = mount;
+                    else if (mount.Role == BattleCentralPresentationMountRole.Shadow)
+                        prefabShadowMount = mount;
+                }
+
+                Expect(prefabMounts.Length == 2 && prefabOwner != null &&
+                       prefabEntityMount != null && prefabShadowMount != null,
+                    "production LF2ObjectPrefab must declare exactly one EntityModel and one Shadow mount");
+                Expect(prefabEntityMount.GetComponent<SpriteRenderer>() == null &&
+                       prefabShadowMount.GetComponent<SpriteRenderer>() == null,
+                    "production LF2ObjectPrefab EntityModel and Shadow mounts must not retain persistent SpriteRenderers");
+                Expect(prefabEntityMount.Purpose == BattleCentralPresentationMountPurpose.EntitySprite &&
+                       prefabEntityMount.gameObject == prefabOwner.gameObject &&
+                       prefabEntityMount.OwnerRenderer == prefabOwner,
+                    "production EntityModel mount must be self-referenced on the LF2ObjectRenderer node");
+                Expect(prefabShadowMount.Purpose == BattleCentralPresentationMountPurpose.CommonShadow &&
+                       prefabShadowMount.OwnerRenderer == null &&
+                       prefabShadowMount.transform.parent == prefabOwner.transform.parent,
+                    "production Shadow mount must keep its cross-prefab owner empty and share the EntityModel parent");
+
+                instance = UnityEngine.Object.Instantiate(productionPrefab);
+                instance.name = "SelfCheck_ProductionEntityObjectMount";
+                BattleCentralPresentationMount[] instanceMounts =
+                    instance.GetComponentsInChildren<BattleCentralPresentationMount>(true);
+                LF2ObjectRenderer instanceOwner =
+                    instance.GetComponentInChildren<LF2ObjectRenderer>(true);
+                BattleCentralPresentationMount entityMount = null;
+                BattleCentralPresentationMount shadowMount = null;
+                for (int index = 0; index < instanceMounts.Length; index++)
+                {
+                    BattleCentralPresentationMount mount = instanceMounts[index];
+                    if (mount.Role == BattleCentralPresentationMountRole.EntityModel)
+                        entityMount = mount;
+                    else if (mount.Role == BattleCentralPresentationMountRole.Shadow)
+                        shadowMount = mount;
+                }
+
+                Expect(instanceMounts.Length == 2 && instanceOwner != null &&
+                       entityMount != null && shadowMount != null,
+                    "an instantiated production LF2ObjectPrefab must expose exactly two presentation mounts");
+                Expect(entityMount.GetComponent<SpriteRenderer>() == null &&
+                       shadowMount.GetComponent<SpriteRenderer>() == null,
+                    "an instantiated production LF2ObjectPrefab must not create persistent EntityModel or Shadow SpriteRenderers");
+                Expect(entityMount.Purpose == BattleCentralPresentationMountPurpose.EntitySprite &&
+                       entityMount.gameObject == instanceOwner.gameObject &&
+                       entityMount.OwnerRenderer == instanceOwner,
+                    "the instantiated EntityModel mount must resolve the LF2ObjectRenderer on its own node");
+                Expect(shadowMount.Purpose == BattleCentralPresentationMountPurpose.CommonShadow &&
+                       shadowMount.transform.parent == instanceOwner.transform.parent &&
+                       shadowMount.OwnerRenderer == instanceOwner &&
+                       entityMount.OwnerRenderer == shadowMount.OwnerRenderer,
+                    "the instantiated Shadow mount must resolve the sibling EntityModel owner before registration");
+
+                instance.SetActive(false);
+                entityMount.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.EntitySprite,
+                    null);
+                instance.SetActive(true);
+                Expect(entityMount.OwnerRenderer == instanceOwner,
+                    "an empty EntityModel owner must deterministically resolve the same-node LF2ObjectRenderer");
+
+                var firstHandle = new RuntimeEntityHandle(73, 1);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(instanceOwner, firstHandle);
+                Expect(entityMount.RuntimeHandle == firstHandle && shadowMount.RuntimeHandle == firstHandle,
+                    "production prefab mounts must share the bound runtime handle");
+
+                instance.SetActive(false);
+                Expect(!entityMount.RuntimeHandle.IsValid && !shadowMount.RuntimeHandle.IsValid,
+                    "pooled production prefab deactivation must clear both mount handles");
+                instance.SetActive(true);
+                Expect(entityMount.RuntimeHandle == firstHandle && shadowMount.RuntimeHandle == firstHandle,
+                    "pooled production prefab reactivation must restore the cached owner binding");
+
+                BattleCentralPresentationMountRegistry.ResetOwnerRuntimeBinding(instanceOwner);
+                Expect(!entityMount.RuntimeHandle.IsValid && !shadowMount.RuntimeHandle.IsValid,
+                    "production prefab owner reset must invalidate both mounts before reuse");
+
+                var reusedHandle = new RuntimeEntityHandle(firstHandle.Slot, firstHandle.Generation + 1);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(instanceOwner, reusedHandle);
+                instance.SetActive(false);
+                instance.SetActive(true);
+                Expect(entityMount.RuntimeHandle == reusedHandle && shadowMount.RuntimeHandle == reusedHandle &&
+                       reusedHandle != firstHandle,
+                    "same-slot production prefab reuse must restore only the newest runtime generation");
+            }
+            finally
+            {
+                if (instance != null)
+                {
+                    instance.SetActive(false);
+                    DestroySelfCheckObject(instance);
+                }
+
+                BattleCentralPresentationMountRegistry.ResetAllRuntimeBindings();
+            }
+        }
+
+        private static BattleCentralPresentationMount CreateEntityModelPresentationMountFixture(
+            string rootName,
+            out GameObject root,
+            out LF2ObjectRenderer owner)
+        {
+            root = new GameObject(rootName);
+            var entityModelNode = new GameObject("EntityModel");
+            entityModelNode.transform.SetParent(root.transform, false);
+            entityModelNode.AddComponent<SpriteRenderer>();
+            owner = entityModelNode.AddComponent<LF2ObjectRenderer>();
+            BattleCentralPresentationMount mount =
+                entityModelNode.AddComponent<BattleCentralPresentationMount>();
+            mount.ConfigureForSelfCheck(
+                BattleCentralPresentationMountRole.EntityModel,
+                BattleCentralPresentationMountPurpose.EntitySprite,
+                owner);
+            RegisterPresentationMountFixture(mount);
+            return mount;
+        }
+
+        private static void RegisterPresentationMountFixture(BattleCentralPresentationMount mount)
+        {
+            BattleCentralPresentationMountRegistry.Register(mount);
+        }
+
+        private static void UnregisterPresentationMountFixture(BattleCentralPresentationMount mount)
+        {
+            BattleCentralPresentationMountRegistry.Unregister(mount);
         }
 
         private static void CheckBattleAtlasArrayContracts()
@@ -6371,6 +7844,8 @@ namespace NTSD.Test
                        atlasEntry.NormalizedUv == sourceUv &&
                        atlasEntry.SharedTexture == sourceTexture &&
                        atlasEntry.CentralBinding.Mode == BattleSpriteCentralBindingMode.AtlasPageTexture2D &&
+                       atlasEntry.CentralBinding.AtlasPageIndex == 0 &&
+                       atlasEntry.CentralBinding.AtlasSlice == 0 &&
                        atlasEntry.CentralBinding.Texture == fallbackResources.Pages[0] &&
                        atlasEntry.CentralBinding.AtlasContentPixelRect == new Rect(3f, 4f, 4f, 2f) &&
                        atlasEntry.CentralBinding.NormalizedUv ==
@@ -6533,6 +8008,7 @@ namespace NTSD.Test
                 using var backend = new BattleDynamicMeshBackend();
                 backend.Build(frame, new AtlasArraySelfCheckResolver(arrayTexture, material));
                 Expect(backend.SegmentCount == 1 && backend.GetSegment(0).QuadCount == 3 &&
+                       backend.GetSegment(0).AtlasPageIndex == -1 &&
                        backend.GetChunkVertexAtlasSlice(0, 0) == 0f &&
                        backend.GetChunkVertexAtlasSlice(0, 4) == 1f &&
                        backend.GetChunkVertexAtlasSlice(0, 8) == 0f,
@@ -6545,6 +8021,9 @@ namespace NTSD.Test
                        backend.GetSegment(0).Texture == fallbackTextureA &&
                        backend.GetSegment(1).Texture == fallbackTextureB &&
                        backend.GetSegment(2).Texture == fallbackTextureA &&
+                       backend.GetSegment(0).AtlasPageIndex == 0 &&
+                       backend.GetSegment(1).AtlasPageIndex == 1 &&
+                       backend.GetSegment(2).AtlasPageIndex == 0 &&
                        backend.GetSegment(0).FirstCommandIndex == 0 &&
                        backend.GetSegment(1).FirstCommandIndex == 1 &&
                        backend.GetSegment(2).FirstCommandIndex == 2,
@@ -6616,6 +8095,21 @@ namespace NTSD.Test
 
         private static void CheckBattleRenderingDevicePolicyContracts()
         {
+            const long mib = 1024L * 1024L;
+            BattleRenderingPlatformCategory desktopCategory =
+                BattleRenderingPlatformPolicy.ResolvePlatformCategory(
+                    true, false, false, false);
+            BattleRenderingPlatformCategory mobileCategory =
+                BattleRenderingPlatformPolicy.ResolvePlatformCategory(
+                    false, false, true, false);
+            Expect(desktopCategory == BattleRenderingPlatformCategory.Desktop &&
+                   mobileCategory == BattleRenderingPlatformCategory.Mobile &&
+                   BattleRenderingPlatformPolicy.ResolveDefaultAtlasMemoryBudgetBytes(
+                       desktopCategory) == 512L * mib &&
+                   BattleRenderingPlatformPolicy.ResolveDefaultAtlasMemoryBudgetBytes(
+                       mobileCategory) == 256L * mib,
+                "P6 platform atlas budgets must use 512 MiB for Editor/Standalone and 256 MiB for Android/iOS without GPU-name guessing");
+
             var supportedWithoutCopy = new BattleRenderingDeviceCapabilities(
                 "Injected GPU",
                 "Injected Device",
@@ -6738,15 +8232,34 @@ namespace NTSD.Test
                 3,
                 3,
                 BattlePresentationBackendMode.CentralShadowBuild,
-                BattlePresentationBackendMode.LegacyOnly);
+                BattlePresentationBackendMode.LegacyOnly,
+                snapshotEntityCount: 5,
+                generation: 17,
+                buildTick: 44,
+                simulationTick: 46,
+                displayTick: 44,
+                isStale: true,
+                refusalReason: "retained last-good",
+                submissionBuildCurrent: true,
+                unsupportedRenderStateCount: 1,
+                firstUnresolvedCommandIndex: 7,
+                firstUnresolvedCommandType: BattleRenderCommandType.Entity,
+                firstUnresolvedStatus: BattleCentralResourceStatus.UnsupportedRenderState);
             string firstJson = report.ToJson();
             string secondJson = report.ToJson();
             Expect(firstJson == secondJson &&
                    firstJson.StartsWith("{\"requestedAtlasMode\":\"TextureArray\"") &&
+                   firstJson.Contains("\"atlasMemoryBudgetBytes\":134217728") &&
                    firstJson.Contains("\"estimatedAtlasBytes\":33554432") &&
                    firstJson.Contains("\"catalogResourceMode\":\"AtlasTextureArray\"") &&
                    firstJson.Contains("CPU upload \\\"stable\\\"\\npath") &&
-                   firstJson.EndsWith("\"effectivePixelMode\":\"LegacyOnly\"}"),
+                   firstJson.Contains("\"firstUnresolvedCommandIndex\":7") &&
+                   firstJson.Contains("\"firstUnresolvedStatus\":\"UnsupportedRenderState\"") &&
+                   firstJson.Contains("\"generation\":17") &&
+                   firstJson.Contains("\"simulationTick\":46") &&
+                   firstJson.Contains("\"displayTick\":44") &&
+                   firstJson.Contains("\"isStale\":true") &&
+                   firstJson.EndsWith("\"submissionBuildCurrent\":true}"),
                 "P6 explicit report capture must serialize all policy and render diagnostics in a stable deterministic order");
 
             var config = ScriptableObject.CreateInstance<GameConfig>();
@@ -6889,6 +8402,92 @@ namespace NTSD.Test
             }
         }
 
+        private static void BuildAlternatingCentralMeshFrame(
+            BattlePresentationFrame frame,
+            int tickIndex,
+            int commandCount)
+        {
+            frame.Reset(tickIndex);
+            frame.EnsureCommandCapacity(commandCount);
+            for (int index = 0; index < commandCount; index++)
+            {
+                frame.AddCommand(new BattleRenderCommand(
+                    BattleRenderCommandType.Entity,
+                    RuntimeEntityHandle.Invalid,
+                    index,
+                    (index & 1) == 0 ? 1 : 2,
+                    index,
+                    0,
+                    index,
+                    index,
+                    0,
+                    index,
+                    new Vector3(index * 0.01f, 0f, 0f),
+                    new Vector2(8f, 8f),
+                    new Vector2(0.5f, 0f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    false,
+                    default));
+            }
+        }
+
+        private static void ExpectCentralMeshSubMeshRanges(
+            Mesh mesh,
+            int expectedActiveSubMeshCount,
+            int expectedQuadCount)
+        {
+            int physicalSubMeshCount = mesh.subMeshCount;
+            Expect(physicalSubMeshCount >= Math.Max(1, expectedActiveSubMeshCount),
+                $"P4 physical submesh high-water must cover {expectedActiveSubMeshCount} active descriptors; " +
+                $"physical={physicalSubMeshCount}");
+            int previousEnd = 0;
+            int expectedIndexCount = expectedQuadCount * BattleDynamicMeshBackend.IndicesPerQuad;
+            int expectedDescriptorIndexCount = expectedActiveSubMeshCount == 1
+                ? expectedIndexCount
+                : BattleDynamicMeshBackend.IndicesPerQuad;
+            for (int subMeshIndex = 0; subMeshIndex < expectedActiveSubMeshCount; subMeshIndex++)
+            {
+                int indexStart = (int)mesh.GetIndexStart(subMeshIndex);
+                int indexCount = (int)mesh.GetIndexCount(subMeshIndex);
+                UnityEngine.Rendering.SubMeshDescriptor descriptor = mesh.GetSubMesh(subMeshIndex);
+                Expect(indexStart == previousEnd && indexCount == expectedDescriptorIndexCount &&
+                       descriptor.bounds.size != Vector3.zero,
+                    $"P4 submesh transition must keep descriptor {subMeshIndex} in its exact contiguous range with bounds");
+                previousEnd = indexStart + indexCount;
+            }
+            for (int subMeshIndex = expectedActiveSubMeshCount;
+                 subMeshIndex < physicalSubMeshCount;
+                 subMeshIndex++)
+            {
+                Expect(mesh.GetIndexCount(subMeshIndex) == 0,
+                    $"P4 inactive physical submesh tail must remain inert; index={subMeshIndex}, " +
+                    $"physical={physicalSubMeshCount}");
+            }
+            Expect(previousEnd == expectedIndexCount &&
+                   (expectedActiveSubMeshCount > 0
+                       ? mesh.bounds.size != Vector3.zero
+                       : mesh.bounds.size == Vector3.zero),
+                "P4 submesh transition must cover exactly the active prefix and publish matching mesh bounds");
+            ExpectCentralMeshIndexBufferCapacity(mesh);
+        }
+
+        private static void ExpectCentralMeshIndexBufferCapacity(Mesh mesh)
+        {
+            UnityEngine.GraphicsBuffer indexBuffer = null;
+            try
+            {
+                indexBuffer = mesh.GetIndexBuffer();
+                Expect(indexBuffer != null &&
+                       indexBuffer.count == BattleDynamicMeshBackend.IndicesPerChunk,
+                    $"P4 every chunk must retain the fixed {BattleDynamicMeshBackend.IndicesPerChunk}-index buffer; " +
+                    $"actual={(indexBuffer != null ? indexBuffer.count : -1)}");
+            }
+            finally
+            {
+                indexBuffer?.Dispose();
+            }
+        }
+
         private static void BuildCentralMaterialVariantFrame(
             BattlePresentationFrame frame,
             int tickIndex)
@@ -7008,7 +8607,8 @@ namespace NTSD.Test
                     Color.white,
                     0,
                     command.EffectivePic & 1,
-                    BattleSpriteCentralBindingMode.AtlasTextureArray);
+                    BattleSpriteCentralBindingMode.AtlasTextureArray,
+                    command.EffectivePic & 1);
                 return BattleCentralResourceStatus.Resolved;
             }
         }
@@ -7040,7 +8640,8 @@ namespace NTSD.Test
                     Color.white,
                     0,
                     0,
-                    BattleSpriteCentralBindingMode.AtlasPageTexture2D);
+                    BattleSpriteCentralBindingMode.AtlasPageTexture2D,
+                    command.EffectivePic == 1 ? 1 : 0);
                 return BattleCentralResourceStatus.Resolved;
             }
         }
@@ -7075,7 +8676,8 @@ namespace NTSD.Test
                     Color.white,
                     0,
                     binding.AtlasSlice,
-                    binding.Mode);
+                    binding.Mode,
+                    binding.AtlasPageIndex);
                 return BattleCentralResourceStatus.Resolved;
             }
         }
@@ -7169,9 +8771,11 @@ namespace NTSD.Test
         private static void CheckCommonShadowCentralOwnershipContracts()
         {
             GameObject shadowPrefab = null;
-            GameObject missingRendererPrefab = null;
+            GameObject missingDescriptorPrefab = null;
             GameObject missingSpritePrefab = null;
             GameObject missingMaterialPrefab = null;
+            GameObject invalidMaterialPrefab = null;
+            GameObject invalidMaskPrefab = null;
             GameObject missingTexturePrefab = null;
             GameObject probeView = null;
             GameObject missingFrameShadowView = null;
@@ -7180,6 +8784,7 @@ namespace NTSD.Test
             Sprite sprite = null;
             Sprite missingTextureSprite = null;
             Material spriteMaterial = null;
+            Material invalidMaterial = null;
             Material centralMaterial = null;
             BattleCommonVisualCatalog previousCommonCatalog = null;
             System.Reflection.FieldInfo commonCatalogField = null;
@@ -7210,10 +8815,14 @@ namespace NTSD.Test
                     new Vector2(0.25f, 0.75f),
                     100f);
                 shadowPrefab = new GameObject("SelfCheck_CommonShadowPrefab");
-                SpriteRenderer prefabRenderer = shadowPrefab.AddComponent<SpriteRenderer>();
-                prefabRenderer.sprite = sprite;
-                prefabRenderer.sharedMaterial = spriteMaterial;
-                prefabRenderer.color = new Color32(17, 31, 47, 191);
+                BattleCommonShadowDescriptor descriptor =
+                    shadowPrefab.AddComponent<BattleCommonShadowDescriptor>();
+                descriptor.ConfigureForSelfCheck(
+                    sprite,
+                    spriteMaterial,
+                    new Color32(17, 31, 47, 191),
+                    true,
+                    true);
 
                 BattleCommonVisualCatalog commonCatalog = BattleCommonVisualCatalog.Build(shadowPrefab);
                 BattleCommonVisualBinding binding = commonCatalog.Shadow;
@@ -7226,17 +8835,38 @@ namespace NTSD.Test
                        binding.NormalizedUv == expectedUv &&
                        binding.Pivot == new Vector2(0.25f, 0.75f) &&
                        binding.Color.Equals(new Color32(17, 31, 47, 191)) &&
+                       binding.RenderState.FlipX && binding.RenderState.FlipY &&
+                       binding.RenderState.MaskInteraction == SpriteMaskInteraction.None &&
                        binding.RenderState.MaterialSemantic ==
-                           BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha,
-                    "P7 common shadow binding must capture exact borrowed texture/rect/UV/size/pivot/color semantics");
+                            BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha,
+                    "P7 common shadow descriptor must capture exact borrowed texture/rect/UV/size/pivot/render-state semantics");
 
-                missingRendererPrefab = new GameObject("SelfCheck_CommonShadowMissingRenderer");
+                missingDescriptorPrefab = new GameObject("SelfCheck_CommonShadowMissingDescriptor");
                 missingSpritePrefab = new GameObject("SelfCheck_CommonShadowMissingSprite");
-                missingSpritePrefab.AddComponent<SpriteRenderer>().sharedMaterial = spriteMaterial;
+                missingSpritePrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    null,
+                    spriteMaterial,
+                    Color.white);
                 missingMaterialPrefab = new GameObject("SelfCheck_CommonShadowMissingMaterial");
-                SpriteRenderer missingMaterialRenderer = missingMaterialPrefab.AddComponent<SpriteRenderer>();
-                missingMaterialRenderer.sprite = sprite;
-                missingMaterialRenderer.sharedMaterial = null;
+                missingMaterialPrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    sprite,
+                    null,
+                    Color.white);
+                invalidMaterial = new Material(spriteShader);
+                invalidMaterial.color = Color.red;
+                invalidMaterialPrefab = new GameObject("SelfCheck_CommonShadowInvalidMaterial");
+                invalidMaterialPrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    sprite,
+                    invalidMaterial,
+                    Color.white);
+                invalidMaskPrefab = new GameObject("SelfCheck_CommonShadowInvalidMask");
+                invalidMaskPrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    sprite,
+                    spriteMaterial,
+                    Color.white,
+                    false,
+                    false,
+                    SpriteMaskInteraction.VisibleInsideMask);
                 missingTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
                 missingTextureSprite = Sprite.Create(
                     missingTexture,
@@ -7244,17 +8874,20 @@ namespace NTSD.Test
                     new Vector2(0.5f, 0.5f),
                     100f);
                 missingTexturePrefab = new GameObject("SelfCheck_CommonShadowMissingTexture");
-                SpriteRenderer missingTextureRenderer = missingTexturePrefab.AddComponent<SpriteRenderer>();
-                missingTextureRenderer.sprite = missingTextureSprite;
-                missingTextureRenderer.sharedMaterial = spriteMaterial;
+                missingTexturePrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    missingTextureSprite,
+                    spriteMaterial,
+                    Color.white);
                 DestroySelfCheckAsset(missingTexture);
                 missingTexture = null;
                 Expect(!BattleCommonVisualCatalog.Build(null).IsValid &&
-                       !BattleCommonVisualCatalog.Build(missingRendererPrefab).IsValid &&
+                       !BattleCommonVisualCatalog.Build(missingDescriptorPrefab).IsValid &&
                        !BattleCommonVisualCatalog.Build(missingSpritePrefab).IsValid &&
                        !BattleCommonVisualCatalog.Build(missingMaterialPrefab).IsValid &&
+                       !BattleCommonVisualCatalog.Build(invalidMaterialPrefab).IsValid &&
+                       !BattleCommonVisualCatalog.Build(invalidMaskPrefab).IsValid &&
                        !BattleCommonVisualCatalog.Build(missingTexturePrefab).IsValid,
-                    "P7 common shadow publication must fail closed for missing prefab/renderer/sprite/texture/material semantic");
+                    "P7 common shadow publication must fail closed for missing prefab/descriptor/fields, invalid material or mask, and retired texture");
 
                 commonCatalogField.SetValue(manager, commonCatalog);
                 using var entitySprites = new TemporaryCharacterSpriteConfig(manager, 7300, 1);
@@ -7464,6 +9097,9 @@ namespace NTSD.Test
                 probeRenderer.enabled = true;
                 probeRenderer.sharedMaterial = binding.Material;
                 probeRenderer.color = binding.Color;
+                probeRenderer.flipX = binding.RenderState.FlipX;
+                probeRenderer.flipY = binding.RenderState.FlipY;
+                probeRenderer.maskInteraction = binding.RenderState.MaskInteraction;
                 probeRenderer.sprite = entitySprites.Sprite;
                 var probeWorld = new SimulationWorld();
                 probeWorld.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralShadowBuild);
@@ -7483,6 +9119,9 @@ namespace NTSD.Test
                     "P7 legacy shadow probe must reject a wrong actual Sprite/resource key");
                 probeWorld.RenderDispatchAll(33);
                 probeRenderer.sprite = binding.Sprite;
+                Expect(ReferenceEquals(probeRenderer.sprite, binding.Sprite) &&
+                       ReferenceEquals(probeRenderer.sharedMaterial, binding.Material),
+                    "P7 legacy shadow probe fixture must retain the exact published Sprite and Material references");
                 probeWorld.RecordLegacyShadowProbe(probeEntity, probeRenderer);
                 probeWorld.BattlePresentation.CompleteLegacyFrame();
                 Expect(probeWorld.BattlePresentation.Diagnostics.FirstDifferenceKind ==
@@ -7512,15 +9151,18 @@ namespace NTSD.Test
                 if (missingFrameShadowView != null) DestroySelfCheckObject(missingFrameShadowView);
                 if (probeView != null) DestroySelfCheckObject(probeView);
                 if (missingTexturePrefab != null) DestroySelfCheckObject(missingTexturePrefab);
+                if (invalidMaskPrefab != null) DestroySelfCheckObject(invalidMaskPrefab);
+                if (invalidMaterialPrefab != null) DestroySelfCheckObject(invalidMaterialPrefab);
                 if (missingMaterialPrefab != null) DestroySelfCheckObject(missingMaterialPrefab);
                 if (missingSpritePrefab != null) DestroySelfCheckObject(missingSpritePrefab);
-                if (missingRendererPrefab != null) DestroySelfCheckObject(missingRendererPrefab);
+                if (missingDescriptorPrefab != null) DestroySelfCheckObject(missingDescriptorPrefab);
                 if (shadowPrefab != null) DestroySelfCheckObject(shadowPrefab);
                 if (missingTextureSprite != null) DestroySelfCheckAsset(missingTextureSprite);
                 if (missingTexture != null) DestroySelfCheckAsset(missingTexture);
                 if (sprite != null) DestroySelfCheckAsset(sprite);
                 if (texture != null) DestroySelfCheckAsset(texture);
                 if (centralMaterial != null) DestroySelfCheckAsset(centralMaterial);
+                if (invalidMaterial != null) DestroySelfCheckAsset(invalidMaterial);
                 if (spriteMaterial != null) DestroySelfCheckAsset(spriteMaterial);
             }
         }
@@ -7571,9 +9213,10 @@ namespace NTSD.Test
                     new Vector2(0.5f, 0.5f),
                     100f);
                 shadowPrefab = new GameObject("SelfCheck_CommonSparkShadow");
-                SpriteRenderer shadowRenderer = shadowPrefab.AddComponent<SpriteRenderer>();
-                shadowRenderer.sprite = shadowSprite;
-                shadowRenderer.sharedMaterial = spriteMaterial;
+                shadowPrefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                    shadowSprite,
+                    spriteMaterial,
+                    Color.white);
 
                 sparkTexture = new Texture2D(510, 256, TextureFormat.RGBA32, false);
                 sparkTexture.name = "SelfCheck_SPARK";
@@ -10748,6 +12391,69 @@ namespace NTSD.Test
             world.GetAllEntities(entities);
             Expect(!entities.Contains(worldFreed),
                 "PreFrame out-of-bounds free must remove the entity through the world lifecycle");
+        }
+
+        private static void CheckRenderSpaceHorizontalOriginContracts()
+        {
+            const float stageWidthPx = 1987f;
+            const float boundaryLeft = -11.746f;
+            const float cameraX = -1.77f;
+            const float cameraY = 2.25f;
+            Camera previousBoundCamera = NTSDRenderSpace.BoundWorldCameraForSelfCheck;
+            var cameraObject = new GameObject("SelfCheck_RenderSpaceCamera");
+            Camera camera = cameraObject.AddComponent<Camera>();
+            camera.orthographic = true;
+            camera.transform.position = new Vector3(cameraX, cameraY, -10f);
+
+            try
+            {
+                NTSDRenderSpace.BindWorldCamera(camera);
+                Rect boundaryBounds = Rect.MinMaxRect(
+                    boundaryLeft,
+                    -3f,
+                    boundaryLeft + NTSDRenderSpace.PixelWidthToWorld(stageWidthPx),
+                    7f);
+                NTSDRenderSpace.SetBoundaryViewportOverrideForSelfCheck(true, boundaryBounds);
+
+                Vector2 worldLeft = NTSDRenderSpace.GroundPixelToWorld(0f, 0f);
+                Vector2 worldRight = NTSDRenderSpace.GroundPixelToWorld(stageWidthPx, 0f);
+                Vector2 rightPixels = NTSDRenderSpace.WorldToGroundPixel(
+                    new Vector3(worldRight.x, worldRight.y, 0f));
+                Expect(Nearly(worldLeft.x, boundaryBounds.xMin) &&
+                       Nearly(worldRight.x, boundaryBounds.xMax) &&
+                       Nearly(rightPixels.x, stageWidthPx),
+                    "render-space horizontal origin must map boundary xMin/xMax to logical 0/stageWidth pixels");
+
+                const float sampleX = 731.25f;
+                const float sampleZ = 243.5f;
+                Vector2 sampleWorld = NTSDRenderSpace.GroundPixelToWorld(sampleX, sampleZ);
+                Vector2 samplePixels = NTSDRenderSpace.WorldToGroundPixel(
+                    new Vector3(sampleWorld.x, sampleWorld.y, 0f));
+                float expectedTop = cameraY +
+                                    NTSDRenderSpace.SourceScreenHeight * NTSDRenderSpace.UnitsPerPixelY * 0.5f;
+                Expect(Nearly(samplePixels.x, sampleX) && Nearly(samplePixels.y, sampleZ) &&
+                       Nearly(worldLeft.y, expectedTop),
+                    "render-space world/ground roundtrip must preserve logical pixels while vertical top keeps the fixed 550px camera viewport");
+                Expect(!Nearly(NTSDRenderSpace.BattleVisualScale, 1f) &&
+                       Nearly(worldRight.x - worldLeft.x,
+                           stageWidthPx * NTSDRenderSpace.UnitsPerPixelX),
+                    "BattleVisualScale must not participate in logical-pixel/world coordinate conversion");
+
+                NTSDRenderSpace.SetBoundaryViewportOverrideForSelfCheck(false, default);
+                float expectedFallbackLeft = cameraX -
+                                             NTSDRenderSpace.SourceScreenWidth * NTSDRenderSpace.UnitsPerPixelX * 0.5f;
+                Vector2 fallbackLeft = NTSDRenderSpace.GroundPixelToWorld(0f, 0f);
+                Expect(Nearly(fallbackLeft.x, expectedFallbackLeft),
+                    "render-space horizontal origin must fall back to the fixed 794px camera viewport when no boundary is available");
+            }
+            finally
+            {
+                NTSDRenderSpace.ClearBoundaryViewportOverrideForSelfCheck();
+                NTSDRenderSpace.ClearBoundWorldCamera(camera);
+                if (previousBoundCamera != null)
+                    NTSDRenderSpace.BindWorldCamera(previousBoundCamera);
+                DestroySelfCheckObject(cameraObject);
+            }
         }
 
         private static FlowSelfCheckEntity CreateFlowSelfCheckEntity(
@@ -14702,6 +16408,54 @@ namespace NTSD.Test
 
             Expect(highSlotSpawner.Spawned.LateTickCount == 1,
                 "the deferred lower-slot entity must execute exactly once on the next late pass");
+
+            GameObject pendingMountRoot = null;
+            try
+            {
+                pendingMountRoot = new GameObject("SelfCheck_PendingUnregisterMountRoot");
+                var pendingMountNode = new GameObject("EntityModel");
+                pendingMountNode.transform.SetParent(pendingMountRoot.transform, false);
+                pendingMountNode.AddComponent<SpriteRenderer>();
+                LF2ObjectRenderer pendingRenderer = pendingMountNode.AddComponent<LF2ObjectRenderer>();
+                BattleCentralPresentationMount pendingMount =
+                    pendingMountNode.AddComponent<BattleCentralPresentationMount>();
+                pendingMount.ConfigureForSelfCheck(
+                    BattleCentralPresentationMountRole.EntityModel,
+                    BattleCentralPresentationMountPurpose.EntitySprite,
+                    pendingRenderer);
+                RegisterPresentationMountFixture(pendingMount);
+
+                var pendingMountWorld = new SimulationWorld();
+                var pendingMountEntity = new MutationSelfCheckEntity(
+                    20,
+                    unregisterDuringLate: true);
+                pendingRenderer.SetLogicObject(pendingMountEntity, null);
+                pendingMountWorld.Register(pendingMountEntity);
+                RuntimeEntityHandle pendingHandle = pendingMount.RuntimeHandle;
+                Expect(pendingHandle.IsValid,
+                    "pending-unregister mount fixture must bind after normal entity registration");
+
+                bool observedPendingUnregister = false;
+                RuntimeEntityHandle handleAtUnregisterRequest = pendingHandle;
+                pendingMountEntity.OnUnregisterRequested = () =>
+                {
+                    observedPendingUnregister = true;
+                    handleAtUnregisterRequest = pendingMount.RuntimeHandle;
+                };
+                pendingMountWorld.LateEntityUpdateAll(5);
+                Expect(observedPendingUnregister && !handleAtUnregisterRequest.IsValid &&
+                       !pendingMount.RuntimeHandle.IsValid &&
+                       !pendingMountWorld.TryResolveRuntimeHandle(pendingHandle, out _),
+                    "tick-time unregister must clear presentation binding before releasing its runtime handle");
+            }
+            finally
+            {
+                if (pendingMountRoot != null)
+                {
+                    pendingMountRoot.SetActive(false);
+                    DestroySelfCheckObject(pendingMountRoot);
+                }
+            }
         }
 
         private static void CheckQueuedObjectPointPassBoundaries()
@@ -14822,6 +16576,7 @@ namespace NTSD.Test
                 "a repeated late safety flush must not duplicate real transition-effect publication");
 
             CheckRealOpointSpawnSlotVisibility();
+            CheckP4PoolOverflowOpointPresentationRegression();
         }
 
         private static LF2CharacterData BuildSelfCheckOpoint999Data()
@@ -14895,6 +16650,141 @@ namespace NTSD.Test
                     "the deferred low-slot oid999 must execute exactly once on the next late pass");
                 Expect(FindOidEntity(lowWorld, 999) == spawned,
                     "the producer must publish one actual oid999 task rather than duplicating it next tick");
+            }
+        }
+
+        private static void CheckP4PoolOverflowOpointPresentationRegression()
+        {
+            const int weaponOid = 31897;
+            const int prewarmedCount = 10;
+            const int spawnCount = 12;
+            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+            Expect(manager != null,
+                "P4 pool-overflow opoint regression requires CharacterAnimtorManager");
+
+            LF2CharacterData weaponData = BuildSelfCheckOpoint999Data();
+            weaponData.name = "SelfCheck_P4PoolOverflowLightWeapon";
+            using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
+                new Dictionary<int, int> { [weaponOid] = (int)LF2ObjectType.LightWeapon },
+                new Dictionary<int, LF2CharacterDataWrapper>
+                {
+                    [weaponOid] = new LF2CharacterDataWrapper(weaponOid, weaponData),
+                });
+            using var objectPoolInitialization = new TemporaryObjectPoolInitialization();
+            using var isolatedPool = new TemporaryIsolatedObjectPoolState(LF2ObjectPool.Instance);
+            using var sprites = new TemporaryCharacterSpriteConfig(manager, weaponOid, 1);
+
+            isolatedPool.Prewarm(prewarmedCount);
+            IReadOnlyList<GameObject> prewarmedObjects = isolatedPool.AvailableObjects;
+            bool allPrewarmedObjectsInactive = true;
+            for (int index = 0; index < prewarmedObjects.Count; index++)
+                allPrewarmedObjectsInactive &= prewarmedObjects[index] != null &&
+                                               !prewarmedObjects[index].activeSelf;
+            Expect(prewarmedObjects.Count == prewarmedCount && allPrewarmedObjectsInactive,
+                "P4 pool-overflow opoint regression must start with exactly ten inactive available pool objects");
+
+            var prewarmedObjectIds = new HashSet<int>();
+            for (int index = 0; index < prewarmedObjects.Count; index++)
+                prewarmedObjectIds.Add(prewarmedObjects[index].GetInstanceID());
+
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralShadowBuild);
+            var producers = new List<RealOpointProducerSelfCheckEntity>(spawnCount);
+            var spawnedWeapons = new List<LF2Entity>(spawnCount);
+            using var driverWorld = new TemporarySimulationDriverWorld(world);
+            try
+            {
+                for (int index = 0; index < spawnCount; index++)
+                {
+                    var producer = new RealOpointProducerSelfCheckEntity(
+                        $"P4PoolOverflow_{index}",
+                        weaponOid);
+                    producer.Runtime.SetPosition(index * 20.0, 0.0, index);
+                    producer.Runtime.SyncIntegerPosition();
+                    world.Register(producer);
+                    producers.Add(producer);
+                }
+
+                world.LateEntityUpdateAll(91);
+
+                var rendererIds = new HashSet<int>();
+                var rootIds = new HashSet<int>();
+                int reusedPrewarmedCount = 0;
+                for (int slot = 50; slot < 400; slot++)
+                {
+                    LF2Entity entity = world.FindEntityByRuntimeSlotIncludingPending(slot);
+                    if (entity?.ObjectId != weaponOid)
+                        continue;
+
+                    spawnedWeapons.Add(entity);
+                    LF2ObjectRenderer renderer = entity.Renderer;
+                    GameObject root = renderer?.transform.parent?.gameObject;
+                    BattleCentralPresentationMount mount = renderer?.GetComponent<BattleCentralPresentationMount>();
+                    bool hasHandle = world.TryGetCurrentRuntimeHandle(
+                        entity.Runtime.SlotIndex,
+                        entity,
+                        out RuntimeEntityHandle handle);
+                    bool resolvesSprite = entity.TryResolveCurrentSpriteEntry(out BattleSpriteEntry entry) &&
+                                          entry != null && entry.SharedTexture != null;
+                    bool hasRenderer = renderer != null;
+                    bool hasRoot = root != null;
+                    bool uniqueRenderer = hasRenderer && rendererIds.Add(renderer.GetInstanceID());
+                    bool uniqueRoot = hasRoot && rootIds.Add(root.GetInstanceID());
+                    bool validHandle = hasHandle && handle.IsValid;
+                    bool hasMount = mount != null;
+                    bool mountOwnsRenderer = hasMount && mount.OwnerRenderer == renderer;
+                    bool mountMatchesHandle = hasMount && mount.RuntimeHandle == handle;
+                    Expect(hasRenderer && hasRoot && uniqueRenderer && uniqueRoot && validHandle &&
+                           hasMount && mountOwnsRenderer && mountMatchesHandle && resolvesSprite,
+                        $"P4 pool-overflow opoint weapon must retain its own renderer, root, mount handle, and central sprite resource; " +
+                        $"slot={slot}; renderer={hasRenderer}; root={hasRoot}; uniqueRenderer={uniqueRenderer}; " +
+                        $"uniqueRoot={uniqueRoot}; handle={validHandle}; mount={hasMount}; " +
+                        $"mountOwner={mountOwnsRenderer}; mountHandle={mountMatchesHandle}; " +
+                        $"expectedHandle={handle}; actualMountHandle={mount?.RuntimeHandle.ToString() ?? "<null>"}; " +
+                        $"sprite={resolvesSprite}");
+
+                    if (prewarmedObjectIds.Contains(root.GetInstanceID()))
+                        reusedPrewarmedCount++;
+                }
+
+                Expect(spawnedWeapons.Count == spawnCount && rendererIds.Count == spawnCount &&
+                       rootIds.Count == spawnCount && reusedPrewarmedCount == prewarmedCount,
+                    $"P4 pool-overflow opoint must retain all twelve LightWeapon entities without renderer reuse or loss; " +
+                    $"spawned={spawnedWeapons.Count}, renderers={rendererIds.Count}, roots={rootIds.Count}, " +
+                    $"reusedPrewarmed={reusedPrewarmedCount}");
+
+                world.RenderDispatchAll(92);
+                BattlePresentationFrame frame = world.BattlePresentation.PublishedFrame;
+                int entityCommandCount = 0;
+                var commandSlots = new HashSet<int>();
+                for (int index = 0; index < spawnedWeapons.Count; index++)
+                {
+                    LF2Entity weapon = spawnedWeapons[index];
+                    if (TryFindPresentationCommand(
+                            frame,
+                            weapon.Runtime.SlotIndex,
+                            BattleRenderCommandType.Entity,
+                            out BattleRenderCommand command) &&
+                        command.Handle.IsValid && command.Handle.Slot == weapon.Runtime.SlotIndex &&
+                        command.SpriteDescriptor.HasLogicalResourceKey &&
+                        commandSlots.Add(weapon.Runtime.SlotIndex))
+                    {
+                        entityCommandCount++;
+                    }
+                }
+
+                Expect(entityCommandCount == spawnCount && commandSlots.Count == spawnCount,
+                    $"P4 pool-overflow opoint must publish a distinct central Entity command for every retained weapon; " +
+                    $"commands={entityCommandCount}, slots={commandSlots.Count}");
+            }
+            finally
+            {
+                for (int index = 0; index < spawnedWeapons.Count; index++)
+                    spawnedWeapons[index]?.FreeEntityLikeExe();
+                for (int index = 0; index < producers.Count; index++)
+                    producers[index]?.UnregisterFromWorld();
+
+                LF2ObjectPointFactory.Instance?.FlushTasks();
             }
         }
 
@@ -17753,6 +19643,34 @@ namespace NTSD.Test
 
         private static void CheckFrameLifecycleResetContracts()
         {
+            LF2CharacterData unregisterData = new LF2CharacterData
+            {
+                name = "SelfCheck_RegisteredWorldOnly",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 100, 0, 39, 79),
+                },
+            };
+            var unregisterWorld = new SimulationWorld();
+            LF2Character registeredSurvivor = CreateCharacter(
+                "SelfCheck_RegisteredWorldOnly_Survivor", 698, unregisterData);
+            unregisterWorld.Register(registeredSurvivor);
+            LF2Character neverRegistered = CreateCharacter(
+                "SelfCheck_RegisteredWorldOnly_NeverRegistered", 699, unregisterData);
+            neverRegistered.UnregisterFromWorld();
+            Expect(unregisterWorld.ObjectCount == 1 &&
+                   IsSimulationObjectRegistered(unregisterWorld, registeredSurvivor),
+                "R-LC-00: unregistering an entity that was never added must not affect another world");
+
+            LF2Character registeredThenRemoved = CreateCharacter(
+                "SelfCheck_RegisteredWorldOnly_Registered", 700, unregisterData);
+            unregisterWorld.Register(registeredThenRemoved);
+            registeredThenRemoved.UnregisterFromWorld();
+            Expect(unregisterWorld.ObjectCount == 1 &&
+                   IsSimulationObjectRegistered(unregisterWorld, registeredSurvivor) &&
+                   !IsSimulationObjectRegistered(unregisterWorld, registeredThenRemoved),
+                "R-LC-00: OnAdded must retain the successful registration world for later unregistration");
+
             LF2FrameData reusedFrameA = Frame(111, LF2States.Dash, 7, 0, 31, 71);
             LF2CharacterData reusedDataA = new LF2CharacterData
             {
@@ -18025,12 +19943,88 @@ namespace NTSD.Test
 
             serialWorld.SerialTickAll(2);
 
-            ExpectCurrentInputKeysCleared(serialReal.Runtime, "GT-02 real character");
-            ExpectCurrentInputKeysCleared(serialShared.Runtime, "GT-02 shared character-DAT shell");
-            ExpectCurrentInputKeysCleared(serialProbe.Runtime, "GT-02 current-DAT shell");
+            ExpectCurrentInputKeysPreserved(serialReal.Runtime, "GT-02 real character");
+            ExpectCurrentInputKeysPreserved(serialShared.Runtime, "GT-02 shared character-DAT shell");
+            ExpectCurrentInputKeysPreserved(serialProbe.Runtime, "GT-02 current-DAT shell");
             Expect(serialProbe.TransitCount == 1 && serialProbe.TuCount == 1 &&
-                   serialProbe.KeysClearedBeforeTransit && serialProbe.PreviousKeysPreservedBeforeTransit,
-                "GT-02: every active slot must clear only current runtime keys before its frame advance begins");
+                   serialProbe.CurrentKeysPreservedBeforeTransit &&
+                   serialProbe.PreviousKeysPreservedBeforeTransit,
+                "GT-02: every active slot must retain current and previous input through frame advance");
+
+            CheckCppFrame212JumpVelocityRetention();
+        }
+
+        private static void CheckCppFrame212JumpVelocityRetention()
+        {
+            const float jumpHeight = -14.25f;
+            const float jumpDistance = 9.5f;
+            const float jumpDistanceZ = 3.75f;
+            LF2FrameData jumpStart = Frame(211, LF2States.Jump, 0, 212, 39, 79);
+            LF2FrameData airborne = Frame(212, LF2States.Jump, 1, 212, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_CppJumpVelocityRetention",
+                jump_height = jumpHeight,
+                jump_distance = jumpDistance,
+                jump_distancez = jumpDistanceZ,
+                frames = new List<LF2FrameData> { jumpStart, airborne },
+            };
+
+            LF2Character directed = CreateCharacter(
+                "SelfCheck_CppJumpVelocityDirected", 765, data);
+            directed.ImmediateFrame(211);
+            directed.AttackingCounter = 1;
+            directed.Runtime.SetPosition(0.0, -1.0, 0.0);
+            directed.Runtime.SetVelocity(2.25, -1.0, 1.5);
+            directed.Runtime.SyncIntegerPosition();
+            directed.Runtime.KeyRight = 1;
+            directed.Runtime.KeyUp = 1;
+            directed.Runtime.PrevRight = 1;
+            directed.Runtime.PrevUp = 1;
+            directed.Runtime.CdRight = 4;
+            directed.Runtime.CdUp = 3;
+            directed.Runtime.PushInputHistory(6);
+            int[] directedHistory = (int[])directed.Runtime.InputHistory.Clone();
+
+            var directedWorld = new SimulationWorld();
+            directedWorld.Register(directed);
+            directedWorld.SerialTickAll(2);
+            directed.SimFrameTick(2);
+
+            Expect(directed.Frame.N == 212 &&
+                   Nearly(directed.Runtime.Vx, jumpDistance) &&
+                   Nearly(directed.Runtime.Vy, jumpHeight) &&
+                   Nearly(directed.Runtime.Vz, -jumpDistanceZ),
+                $"GT-03: C++ frame 212 must apply DAT jump velocity from held right/up; " +
+                $"frame={directed.Frame.N}, velocity=({directed.Runtime.Vx:R}," +
+                $"{directed.Runtime.Vy:R},{directed.Runtime.Vz:R})");
+            Expect(directed.Runtime.PrevRight == 1 && directed.Runtime.PrevUp == 1 &&
+                   directed.Runtime.CdRight == 4 && directed.Runtime.CdUp == 3 &&
+                   System.Linq.Enumerable.SequenceEqual(directedHistory, directed.Runtime.InputHistory),
+                "GT-03: frame advance must not manufacture input edges, cooldowns, or history");
+
+            const double inheritedVx = 6.25;
+            const double inheritedVz = -2.5;
+            LF2Character inherited = CreateCharacter(
+                "SelfCheck_CppJumpVelocityInherited", 766, data);
+            inherited.ImmediateFrame(211);
+            inherited.AttackingCounter = 1;
+            inherited.Runtime.SetPosition(0.0, -1.0, 0.0);
+            inherited.Runtime.SetVelocity(inheritedVx, -1.0, inheritedVz);
+            inherited.Runtime.SyncIntegerPosition();
+
+            var inheritedWorld = new SimulationWorld();
+            inheritedWorld.Register(inherited);
+            inheritedWorld.SerialTickAll(2);
+            inherited.SimFrameTick(2);
+
+            Expect(inherited.Frame.N == 212 &&
+                   Nearly(inherited.Runtime.Vx, inheritedVx) &&
+                   Nearly(inherited.Runtime.Vy, jumpHeight) &&
+                   Nearly(inherited.Runtime.Vz, inheritedVz),
+                $"GT-03: C++ frame 212 without a direction override must retain pre-jump Vx/Vz; " +
+                $"frame={inherited.Frame.N}, velocity=({inherited.Runtime.Vx:R}," +
+                $"{inherited.Runtime.Vy:R},{inherited.Runtime.Vz:R})");
         }
 
         private static void CheckAudit6InputPhaseOrder()
@@ -18090,14 +20084,14 @@ namespace NTSD.Test
             Expect(localHeld.Runtime.KeyLeft == 1 && localHeld.Runtime.PrevLeft == 0,
                 "AUDIT6-01: local edge input must establish the held state on its target tick");
             localHeldWorld.SerialTickAll(2);
-            Expect(localHeld.Runtime.KeyLeft == 0,
-                "AUDIT6-01: authority frame advance must clear the current local input key");
+            Expect(localHeld.Runtime.KeyLeft == 1,
+                "AUDIT6-01: C++ frame advance must retain the current local input key");
             localHeld.Runtime.CdDefendLock = 2;
 
             localHeldWorld.PostCooldownHumanInputAll(3);
             Expect(localHeld.Runtime.KeyLeft == 1 && localHeld.Runtime.PrevLeft == 1 &&
                    localHeld.Runtime.CdLeft == 4 && localHeld.Runtime.CdDefendLock == 1,
-                $"AUDIT6-01: a locally held key must restore the full snapshot after authority frame-clear " +
+                $"AUDIT6-01: a locally held key must roll the full snapshot after frame advance " +
                 "without requiring a repeated callback; " +
                 $"keyLeft={localHeld.Runtime.KeyLeft},prevLeft={localHeld.Runtime.PrevLeft}," +
                 $"cdLeft={localHeld.Runtime.CdLeft},defendLock={localHeld.Runtime.CdDefendLock}");
@@ -19125,6 +21119,14 @@ namespace NTSD.Test
                    runtime.KeyLeft == 0 && runtime.KeyRight == 0 &&
                    runtime.KeyAttack == 0 && runtime.KeyJump == 0 && runtime.KeyDefend == 0,
                 $"{label}: current runtime input keys must be clear");
+        }
+
+        private static void ExpectCurrentInputKeysPreserved(NTSDEntityRuntime runtime, string label)
+        {
+            Expect(runtime.KeyUp == 1 && runtime.KeyDown == 1 &&
+                   runtime.KeyLeft == 1 && runtime.KeyRight == 1 &&
+                   runtime.KeyAttack == 1 && runtime.KeyJump == 1 && runtime.KeyDefend == 1,
+                $"{label}: current runtime input keys must remain visible through frame advance");
         }
 
         private static void CheckPhysicsMovementAndVerticalBoundaryContracts()
@@ -21829,12 +23831,17 @@ namespace NTSD.Test
                                 }
                             }
 
-                            SpriteRenderer spriteRenderer = entity.Renderer != null
-                                ? entity.Renderer.GetComponent<SpriteRenderer>()
-                                : null;
                             if (entity.Renderer != null && !IsSimulationObjectRegistered(world, entity.Renderer))
                                 world.Register(entity.Renderer);
-                            if (spriteRenderer != null && spriteRenderer.enabled && spriteRenderer.sprite != null)
+
+                            LF2Sprite sprite = entity.Sprite;
+                            int effectivePic = entity.GetRenderPicIndex();
+                            if (sprite != null && sprite.EntityVisible &&
+                                sprite.CurrentPic == effectivePic && effectivePic != 999 &&
+                                sprite.CurrentEntry != null &&
+                                entity.TryResolveCurrentSpriteEntry(out BattleSpriteEntry resolvedEntry) &&
+                                ReferenceEquals(sprite.CurrentEntry, resolvedEntry) &&
+                                resolvedEntry.SharedTexture != null)
                                 visibleCloneStableIds.Add(entity.StableId);
                         }
                     }
@@ -23321,6 +25328,93 @@ namespace NTSD.Test
                 "AI coordinate movement must apply right then down edges in authority history order");
         }
 
+        private static void CheckAiSpatialQueryTieAndSentinelContracts()
+        {
+            var tree = new LooseQuadtreeBroadphase(1, 6);
+            var entries = new List<IncrementalSpatialEntry>(20);
+            for (int slot = 0; slot < 20; slot++)
+            {
+                int x = (slot % 5) * 32;
+                int z = (slot / 5) * 32;
+                entries.Add(new IncrementalSpatialEntry(
+                    new RuntimeEntityHandle(slot, 1),
+                    new SpatialAabbXZ(x, z, x + 4, z + 4)));
+            }
+
+            SpatialSynchronizeResult synchronized = tree.Synchronize(
+                entries,
+                new SpatialAabbXZ(0, 0, 256, 256));
+            var queriedHandles = new List<RuntimeEntityHandle>();
+            tree.QueryHandles(new SpatialAabbXZ(0, 0, 256, 256), queriedHandles);
+            var uniqueHandles = new HashSet<RuntimeEntityHandle>(queriedHandles);
+            Expect(synchronized.Succeeded && queriedHandles.Count == entries.Count &&
+                   uniqueHandles.Count == entries.Count,
+                "incremental quadtree queries must enumerate every active handle exactly once without AI-side sorting or deduplication");
+
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_AI_SpatialTie", 180);
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character self = CreateCharacter("SelfCheck_AI_SpatialTieSelf", 33, data);
+            LF2Character groundLow = CreateCharacter("SelfCheck_AI_SpatialTieGroundLow", 4, data);
+            LF2Character groundHigh = CreateCharacter("SelfCheck_AI_SpatialTieGroundHigh", 4, data);
+            LF2Character airLow = CreateCharacter("SelfCheck_AI_SpatialTieAirLow", 4, data);
+            LF2Character airHigh = CreateCharacter("SelfCheck_AI_SpatialTieAirHigh", 4, data);
+            self.SetRequiredRuntimeSlot(0);
+            groundLow.SetRequiredRuntimeSlot(2);
+            groundHigh.SetRequiredRuntimeSlot(17);
+            airLow.SetRequiredRuntimeSlot(4);
+            airHigh.SetRequiredRuntimeSlot(6);
+            self.RelationTeam = 1;
+            groundLow.RelationTeam = groundHigh.RelationTeam = airLow.RelationTeam = airHigh.RelationTeam = 2;
+            self.Runtime.SetPosition(0, 0, 0);
+            groundLow.Runtime.SetPosition(100, 0, 10);
+            groundHigh.Runtime.SetPosition(-100, 0, 10);
+            airLow.Runtime.SetPosition(20, -3, 35);
+            airHigh.Runtime.SetPosition(-20, -3, 35);
+            self.Runtime.SyncIntegerPosition();
+            groundLow.Runtime.SyncIntegerPosition();
+            groundHigh.Runtime.SyncIntegerPosition();
+            airLow.Runtime.SyncIntegerPosition();
+            airHigh.Runtime.SyncIntegerPosition();
+            world.Register(self);
+            world.Register(groundLow);
+            world.Register(groundHigh);
+            world.Register(airLow);
+            world.Register(airHigh);
+
+            world.CaptureAiNearestTargetForSelfCheck(
+                self,
+                2,
+                false,
+                out int selected,
+                out int bestDistance,
+                out bool sameZLane);
+            Expect(selected == airLow.Runtime.SlotIndex && bestDistance == 110 && sameZLane,
+                "AI spatial selection must keep the lower slot on equal ground and air distances while preserving same-Z from the ground result");
+
+            var boundaryWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character boundarySelf = CreateCharacter("SelfCheck_AI_SpatialSentinelSelf", 33, data);
+            LF2Character boundaryTarget = CreateCharacter("SelfCheck_AI_SpatialSentinelTarget", 4, data);
+            boundarySelf.SetRequiredRuntimeSlot(0);
+            boundaryTarget.SetRequiredRuntimeSlot(5);
+            boundarySelf.RelationTeam = 1;
+            boundaryTarget.RelationTeam = 2;
+            boundarySelf.Runtime.SetPosition(0, 0, 0);
+            boundaryTarget.Runtime.SetPosition(10000, 0, 0);
+            boundarySelf.Runtime.SyncIntegerPosition();
+            boundaryTarget.Runtime.SyncIntegerPosition();
+            boundaryWorld.Register(boundarySelf);
+            boundaryWorld.Register(boundaryTarget);
+            boundaryWorld.CaptureAiNearestTargetForSelfCheck(
+                boundarySelf,
+                2,
+                false,
+                out int boundarySelected,
+                out int boundaryDistance,
+                out bool boundarySameZ);
+            Expect(boundarySelected == -1 && boundaryDistance == 10000 && !boundarySameZ,
+                "AI spatial selection must reject an exact 10000-distance ground candidate when no nearer slot exists");
+        }
+
         private static void CheckAiHeldInactiveSlotContract()
         {
             LF2CharacterData data = new LF2CharacterData
@@ -23352,6 +25446,517 @@ namespace NTSD.Test
                 "a valid but inactive held slot must continue through the authority self-state branch before returning");
             Expect(nextRng == 12168,
                 "a valid but inactive held slot must preserve the authority RNG consumption count");
+        }
+
+        private static void CheckAiPhase1TargetIndexContracts()
+        {
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_AI_Phase1Index", 180);
+
+            var noTeam5World = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character noTeam5Self = CreateAiPhase1TargetEntity(
+                noTeam5World,
+                data,
+                "SelfCheck_AI_Phase1_NoTeam5Self",
+                0,
+                1,
+                100,
+                0,
+                200,
+                true);
+            CreateAiPhase1TargetEntity(
+                noTeam5World,
+                data,
+                "SelfCheck_AI_Phase1_NoTeam5Candidate",
+                1,
+                2,
+                120,
+                0,
+                200,
+                false);
+            Expect(noTeam5World.AiPhase1TargetSlotsMatchForSelfCheck(Array.Empty<int>()),
+                "phase1 target index must stay empty when the slot snapshot has no team-5 entity");
+            ExpectAiTargetSelectionParity(
+                noTeam5World,
+                noTeam5Self,
+                1,
+                -1,
+                10000,
+                false,
+                "phase1 without team-5 targets");
+
+            var team5SelfWorld = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character team5Self = CreateAiPhase1TargetEntity(
+                team5SelfWorld,
+                data,
+                "SelfCheck_AI_Phase1_Team5Self",
+                0,
+                5,
+                100,
+                0,
+                200,
+                true);
+            CreateAiPhase1TargetEntity(
+                team5SelfWorld,
+                data,
+                "SelfCheck_AI_Phase1_Team5Foreign",
+                1,
+                2,
+                120,
+                0,
+                200,
+                false);
+            ExpectAiTargetSelectionParity(
+                team5SelfWorld,
+                team5Self,
+                1,
+                1,
+                20,
+                true,
+                "phase1 team-5 self may select a foreign team");
+
+            SimulationWorld indexedWorld = BuildAiPhase1TargetIndexSelfCheckWorld(
+                data,
+                0x51A5E,
+                out LF2Character indexedSelf);
+            Expect(!indexedWorld.ForceFullAiPhase1TargetScanForDiagnostics &&
+                   indexedWorld.AiPhase1TargetSlotsMatchForSelfCheck(new[] { 2, 3, 4, 5, 6 }),
+                "phase1 target index must contain snapshot-time team-5 slots in ascending runtime-slot order");
+            ExpectAiTargetSelectionParity(
+                indexedWorld,
+                indexedSelf,
+                1,
+                4,
+                60,
+                true,
+                "phase1 ground tie and air override");
+
+            LF2FrameData standingFrame = indexedSelf.Frame.D;
+            indexedSelf.Frame.D = Frame(9009, 9, 1, 9009, 39, 79);
+            ExpectAiTargetSelectionParity(
+                indexedWorld,
+                indexedSelf,
+                1,
+                2,
+                60,
+                true,
+                "phase1 state-9 air early return");
+            indexedSelf.Frame.D = standingFrame;
+
+            var phase4World = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character phase4Self = CreateAiPhase1TargetEntity(
+                phase4World,
+                data,
+                "SelfCheck_AI_Phase4_Self",
+                0,
+                1,
+                100,
+                0,
+                200,
+                true);
+            CreateAiPhase1TargetEntity(
+                phase4World,
+                data,
+                "SelfCheck_AI_Phase4_Foreign",
+                1,
+                2,
+                130,
+                0,
+                200,
+                false);
+            ExpectAiTargetSelectionParity(
+                phase4World,
+                phase4Self,
+                4,
+                1,
+                30,
+                true,
+                "phase4 foreign-team target");
+
+            SimulationWorld fullWorld = BuildAiPhase1TargetIndexSelfCheckWorld(
+                data,
+                0x51A5E,
+                out LF2Character fullSelf);
+            fullWorld.ForceFullAiPhase1TargetScanForDiagnostics = true;
+            indexedWorld.Runtime.Flow.InputPhase = 1;
+            fullWorld.Runtime.Flow.InputPhase = 1;
+            indexedWorld.AiInputAndComboAll(2);
+            fullWorld.AiInputAndComboAll(2);
+            Expect(indexedSelf.Runtime.Unk360 == fullSelf.Runtime.Unk360 &&
+                   indexedSelf.Runtime.Unk360 == 4 &&
+                   AiInputSignature(indexedSelf.Runtime) == AiInputSignature(fullSelf.Runtime) &&
+                   indexedWorld.Rng.State == fullWorld.Rng.State &&
+                   indexedWorld.Rng.CallCount == fullWorld.Rng.CallCount,
+                "phase1 indexed/full A/B must preserve Unk360, input signature, RNG state, and RNG call count");
+        }
+
+        private static void ExpectAiTargetSelectionParity(
+            SimulationWorld world,
+            LF2Entity self,
+            int inputPhase,
+            int expectedSlot,
+            int expectedBestDist,
+            bool expectedSameZLane,
+            string scenario)
+        {
+            world.CaptureAiNearestTargetForSelfCheck(
+                self,
+                inputPhase,
+                false,
+                out int indexedSlot,
+                out int indexedBestDist,
+                out bool indexedSameZLane);
+            world.CaptureAiNearestTargetForSelfCheck(
+                self,
+                inputPhase,
+                true,
+                out int fullSlot,
+                out int fullBestDist,
+                out bool fullSameZLane);
+
+            Expect(indexedSlot == fullSlot &&
+                   indexedBestDist == fullBestDist &&
+                   indexedSameZLane == fullSameZLane,
+                $"{scenario}: indexed target selection must match the full spatial/brute path");
+            Expect(indexedSlot == expectedSlot &&
+                   indexedBestDist == expectedBestDist &&
+                   indexedSameZLane == expectedSameZLane,
+                $"{scenario}: target slot/bestDist/sameZLane must preserve authority semantics");
+        }
+
+        private static SimulationWorld BuildAiPhase1TargetIndexSelfCheckWorld(
+            LF2CharacterData data,
+            int seed,
+            out LF2Character self)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            world.Rng.Seed(seed);
+            world.Runtime.Match.Difficulty = 2;
+            self = CreateAiPhase1TargetEntity(
+                world,
+                data,
+                "SelfCheck_AI_Phase1_Source",
+                0,
+                1,
+                100,
+                0,
+                200,
+                true);
+            CreateAiPhase1TargetEntity(world, data, "SelfCheck_AI_Phase1_Foreign", 1, 2, 101, 0, 200, false);
+            CreateAiPhase1TargetEntity(world, data, "SelfCheck_AI_Phase1_GroundLow", 2, 5, 150, 0, 210, false);
+            CreateAiPhase1TargetEntity(world, data, "SelfCheck_AI_Phase1_GroundHigh", 3, 5, 50, 0, 210, false);
+            CreateAiPhase1TargetEntity(world, data, "SelfCheck_AI_Phase1_AirLow", 4, 5, 120, -3, 205, false);
+            CreateAiPhase1TargetEntity(world, data, "SelfCheck_AI_Phase1_AirHigh", 5, 5, 80, -3, 205, false);
+            LF2Character dead = CreateAiPhase1TargetEntity(
+                world,
+                data,
+                "SelfCheck_AI_Phase1_Dead",
+                6,
+                5,
+                105,
+                0,
+                200,
+                false);
+            dead.Runtime.HP = 0;
+            return world;
+        }
+
+        private static LF2Character CreateAiPhase1TargetEntity(
+            SimulationWorld world,
+            LF2CharacterData data,
+            string name,
+            int slot,
+            int relationTeam,
+            int x,
+            int y,
+            int z,
+            bool aiControlled)
+        {
+            LF2Character entity = CreateCharacter(name, 4, data);
+            entity.SetRequiredRuntimeSlot(slot);
+            entity.RelationTeam = relationTeam;
+            entity.AiControlled = aiControlled;
+            entity.Runtime.SetPosition(x, y, z);
+            entity.Runtime.SyncIntegerPosition();
+            world.Register(entity);
+            return entity;
+        }
+
+        private static void CheckAiSameTeamHpSummaryContracts()
+        {
+            LF2CharacterData data = BuildComboWrapperCharacterData("SelfCheck_AI_TeamHp", 180);
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+
+            LF2Character noTeammate = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_None", 0, 6, 300);
+            LF2Character oneTeammate = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_One", 1, 7, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_OneMate", 2, 7, 400);
+
+            LF2Character uniqueMin = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_UniqueMin", 3, 8, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_UniqueSecond", 4, 8, 400);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_UniqueHigh", 5, 8, 450);
+
+            LF2Character tiedMin = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_TiedMin", 6, 9, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_TiedMate", 7, 9, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_TiedHigh", 8, 9, 450);
+
+            LF2Character equalBoundary = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_EqualBoundary", 9, 10, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_EqualBoundaryMate", 10, 10, 100);
+            LF2Character belowBoundary = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_BelowBoundary", 11, 11, 300);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_BelowBoundaryMate", 12, 11, 99);
+
+            LF2Character filtered = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_Filtered", 13, 12, 300);
+            LF2Character dead = CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_Dead", 14, 12, 1);
+            dead.Health.HP = 0;
+            dead.RefreshRuntimeSnapshot();
+            var nonCharacter = new FlowSelfCheckEntity(LF2ObjectType.Other);
+            nonCharacter.BindData("SelfCheck_AI_TeamHp_NonCharacter", 700, data);
+            nonCharacter.SetRequiredRuntimeSlot(15);
+            nonCharacter.RelationTeam = 12;
+            nonCharacter.Health.HP = 1;
+            world.Register(nonCharacter);
+            CreateAiTeamHpEntity(world, data, "SelfCheck_AI_TeamHp_Foreign", 16, 13, 1);
+
+            ExpectAiSameTeamDecision(world, noTeammate, 1, 0, int.MaxValue, false, false, "zero teammates");
+            ExpectAiSameTeamDecision(world, oneTeammate, 1, 1, 400, true, false, "one teammate");
+            ExpectAiSameTeamDecision(world, uniqueMin, 1, 2, 400, true, false, "self unique minimum uses second minimum");
+            ExpectAiSameTeamDecision(world, tiedMin, 1, 2, 300, true, false, "tied minimum retains the shared minimum");
+            ExpectAiSameTeamDecision(world, equalBoundary, 1, 1, 100, false, false, "strict self minus 200 equality");
+            ExpectAiSameTeamDecision(world, belowBoundary, 1, 1, 99, false, true, "strict self minus 200 lower value");
+            ExpectAiSameTeamDecision(world, filtered, 1, 0, int.MaxValue, false, false, "dead non-character and foreign teams ignored");
+
+            world.CaptureAiSameTeamDecisionForSelfCheck(
+                oneTeammate,
+                0,
+                false,
+                out bool phase0Evaluated,
+                out bool phase0UsedSummary,
+                out _,
+                out _,
+                out _,
+                out _);
+            Expect(!phase0Evaluated && !phase0UsedSummary,
+                "phase0 must not evaluate or consume the same-team HP summary");
+            ExpectAiSameTeamDecision(world, oneTeammate, 4, 1, 400, true, false, "phase4 summary path");
+
+            CheckAiSameTeamMutationFallbackParity(data, 1);
+            CheckAiSameTeamMutationFallbackParity(data, 4);
+        }
+
+        private static LF2Character CreateAiTeamHpEntity(
+            SimulationWorld world,
+            LF2CharacterData data,
+            string name,
+            int slot,
+            int relationTeam,
+            int hp)
+        {
+            LF2Character entity = CreateCharacter(name, 4, data);
+            entity.SetRequiredRuntimeSlot(slot);
+            entity.RelationTeam = relationTeam;
+            entity.Health.HP = hp;
+            entity.Health.HPBound = 500;
+            entity.Health.HP3 = 500;
+            world.Register(entity);
+            return entity;
+        }
+
+        private static void ExpectAiSameTeamDecision(
+            SimulationWorld world,
+            LF2Character self,
+            int inputPhase,
+            int expectedOtherCount,
+            int expectedOtherMinHp,
+            bool expectedForce7AGround,
+            bool expectedGuard7A,
+            string scenario)
+        {
+            world.CaptureAiSameTeamDecisionForSelfCheck(
+                self,
+                inputPhase,
+                false,
+                out bool indexedEvaluated,
+                out bool usedSummary,
+                out int indexedCount,
+                out int indexedMinHp,
+                out bool indexedForce7A,
+                out bool indexedGuard7A);
+            world.CaptureAiSameTeamDecisionForSelfCheck(
+                self,
+                inputPhase,
+                true,
+                out bool fullEvaluated,
+                out bool fullUsedSummary,
+                out int fullCount,
+                out int fullMinHp,
+                out bool fullForce7A,
+                out bool fullGuard7A);
+
+            Expect(indexedEvaluated && fullEvaluated && usedSummary && !fullUsedSummary &&
+                   indexedCount == fullCount && indexedMinHp == fullMinHp &&
+                   indexedForce7A == fullForce7A && indexedGuard7A == fullGuard7A,
+                $"{scenario}: indexed/full same-team HP decisions must match");
+            Expect(indexedCount == expectedOtherCount && indexedMinHp == expectedOtherMinHp &&
+                   indexedForce7A == expectedForce7AGround && indexedGuard7A == expectedGuard7A,
+                $"{scenario}: count/min/force7A/guard7A must preserve strict authority comparisons");
+        }
+
+        private static void CheckAiSameTeamMutationFallbackParity(LF2CharacterData baseData, int inputPhase)
+        {
+            const int seed = 0x7A11CE;
+            SimulationWorld indexedWorld = BuildAiSameTeamMutationWorld(
+                baseData,
+                seed,
+                inputPhase,
+                out LF2Character indexedAi,
+                out LF2Character indexedSelfDamagingTeammate);
+            SimulationWorld fullWorld = BuildAiSameTeamMutationWorld(
+                baseData,
+                seed,
+                inputPhase,
+                out LF2Character fullAi,
+                out LF2Character fullSelfDamagingTeammate);
+            fullWorld.ForceFullAiSameTeamScanForDiagnostics = true;
+
+            indexedWorld.CharacterInputAll(2);
+            fullWorld.CharacterInputAll(2);
+
+            Expect(indexedSelfDamagingTeammate.Runtime.HP == 290 &&
+                   fullSelfDamagingTeammate.Runtime.HP == 290,
+                $"phase{inputPhase} mutation fixture must apply the earlier-slot special input HP cost");
+            Expect(indexedWorld.AiSameTeamSummaryFallbackCountForDiagnostics > 0,
+                $"phase{inputPhase} later-slot AI must fall back after the earlier-slot HP mutation invalidates the summary");
+            Expect(indexedAi.Runtime.Unk360 == fullAi.Runtime.Unk360 &&
+                   AiInputSignature(indexedAi.Runtime) == AiInputSignature(fullAi.Runtime) &&
+                   indexedWorld.Rng.State == fullWorld.Rng.State &&
+                   indexedWorld.Rng.CallCount == fullWorld.Rng.CallCount,
+                $"phase{inputPhase} invalidated-summary/full A/B must preserve Unk360, input signature, RNG state, and RNG call count");
+        }
+
+        private static SimulationWorld BuildAiSameTeamMutationWorld(
+            LF2CharacterData baseData,
+            int seed,
+            int inputPhase,
+            out LF2Character ai,
+            out LF2Character selfDamagingTeammate)
+        {
+            LF2CharacterData data = BuildComboWrapperCharacterData(baseData.name + "_Mutation", 180);
+            data.frames.Find(frame => frame.frameId == 0).hit_a = 100;
+            data.frames.Find(frame => frame.frameId == 100).mp = 1000;
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            world.Rng.Seed(seed);
+            world.Runtime.Match.Difficulty = 2;
+            world.Runtime.Flow.InputPhase = inputPhase;
+
+            selfDamagingTeammate = CreateAiTeamHpEntity(
+                world, data, $"SelfCheck_AI_TeamHp_Mutator_{inputPhase}", 0, 1, 300);
+            ((SelfCheckController)selfDamagingTeammate.Controller).InputBuffer.EnqueueForTick(
+                2,
+                FuncKeyMask.jump,
+                true);
+            selfDamagingTeammate.RunHumanInputPollPhase(2);
+
+            ai = CreateAiTeamHpEntity(world, data, $"SelfCheck_AI_TeamHp_Source_{inputPhase}", 1, 1, 300);
+            ai.AiControlled = true;
+            ai.Runtime.SetPosition(100, 0, 200);
+            ai.Runtime.SyncIntegerPosition();
+
+            LF2Character target = CreateAiTeamHpEntity(
+                world,
+                data,
+                $"SelfCheck_AI_TeamHp_Target_{inputPhase}",
+                2,
+                inputPhase == 1 ? 5 : 2,
+                500);
+            target.Runtime.SetPosition(260, 0, 200);
+            target.Runtime.SyncIntegerPosition();
+            return world;
+        }
+
+        private static void CheckAiSpecialObjectScanIndexContracts()
+        {
+            const int seed = 0xA15C0DE;
+            SimulationWorld indexedWorld = BuildAiSpecialScanSelfCheckWorld(
+                seed,
+                out LF2Character indexedAi,
+                out LF2Character indexedC8);
+            indexedWorld.AiInputAndComboAll(2);
+            int[] expectedSlots = { 21, 23, 25, 27, 28, 29, 31 };
+            string actualSlots = indexedWorld.CaptureAiSpecialScanSlotsForSelfCheck();
+            Expect(!indexedWorld.ForceFullAiSpecialScanForDiagnostics &&
+                   indexedWorld.AiSpecialScanSlotsMatchForSelfCheck(expectedSlots),
+                "AI special scan index must skip interleaved irrelevant OIDs and retain C8/D3/D4/D5/7A/7B plus oid/100==1 in ascending runtime-slot order:" +
+                $" expected=[{string.Join(",", expectedSlots)}], actual=[{actualSlots}]");
+
+            SimulationWorld fullWorld = BuildAiSpecialScanSelfCheckWorld(
+                seed,
+                out LF2Character fullAi,
+                out LF2Character fullC8);
+            fullWorld.ForceFullAiSpecialScanForDiagnostics = true;
+            fullWorld.AiInputAndComboAll(2);
+
+            Expect(indexedAi.Runtime.Unk360 == indexedC8.Runtime.SlotIndex &&
+                   fullAi.Runtime.Unk360 == fullC8.Runtime.SlotIndex &&
+                   AiInputSignature(indexedAi.Runtime) == AiInputSignature(fullAi.Runtime) &&
+                   indexedWorld.Rng.State == fullWorld.Rng.State &&
+                   indexedWorld.Rng.CallCount == fullWorld.Rng.CallCount,
+                "indexed and forced-full AI special scans must preserve selected target, input state, RNG state, and RNG call count");
+        }
+
+        private static SimulationWorld BuildAiSpecialScanSelfCheckWorld(
+            int seed,
+            out LF2Character ai,
+            out LF2Character c8)
+        {
+            LF2CharacterData data = new LF2CharacterData
+            {
+                name = "SelfCheck_AiSpecialScan",
+                frames = new List<LF2FrameData> { Frame(0, LF2States.Standing, 1, 0, 39, 79) },
+            };
+            var world = new SimulationWorld();
+            world.Rng.Seed(seed);
+            world.Runtime.Match.Difficulty = 2;
+            c8 = null;
+            ai = CreateCharacter("SelfCheck_AiSpecialScan_Source", 33, data);
+            ai.SetRequiredRuntimeSlot(0);
+            ai.AiControlled = true;
+            ai.RelationTeam = 1;
+            ai.Runtime.HP = 100;
+            ai.Runtime.HP3 = 500;
+            ai.Runtime.HPBound = 500;
+            ConfigureAiSpecialScanEntity(ai, 100, 200);
+            world.Register(ai);
+
+            LF2Character target = CreateCharacter("SelfCheck_AiSpecialScan_Target", 4, data);
+            target.SetRequiredRuntimeSlot(1);
+            target.RelationTeam = 2;
+            ConfigureAiSpecialScanEntity(target, 260, 200);
+            world.Register(target);
+
+            int[] objectIds = { 42, 0xC8, 77, 0xD3, 88, 0xD4, 99, 0xD5, 0x7A, 0x7B, 201, 199 };
+            for (int index = 0; index < objectIds.Length; index++)
+            {
+                int slot = 20 + index;
+                LF2Character obj = CreateCharacter(
+                    $"SelfCheck_AiSpecialScan_{objectIds[index]:X2}_{slot}",
+                    objectIds[index],
+                    data);
+                obj.SetRequiredRuntimeSlot(slot);
+                obj.RelationTeam = 1;
+                ConfigureAiSpecialScanEntity(obj, 140 + index * 10, 200);
+                world.Register(obj);
+                if (obj.ObjectId == 0xC8)
+                {
+                    obj.Runtime.Frame = 50;
+                    c8 = obj;
+                }
+            }
+
+            return world;
+        }
+
+        private static void ConfigureAiSpecialScanEntity(LF2Character entity, int x, int z)
+        {
+            entity.Runtime.SetPosition(x, 0, z);
+            entity.Runtime.SyncIntegerPosition();
         }
 
         private static void CheckAiSharedCharacterDatShell()
@@ -24195,6 +26800,16 @@ namespace NTSD.Test
                 Health.HPBound = 500;
             }
 
+            public void BindRendererlessSprite(
+                BattleSpriteCatalog catalog,
+                int visualDataId,
+                int pic)
+            {
+                Sprite = new LF2Sprite();
+                Sprite.Initialize(null, null, 0, catalog, visualDataId);
+                Sprite.ShowPic(pic);
+            }
+
             public override int GetCurrentDataObjectTypeForSimulation() => (int)objectType;
 
             public override void OnRemoved(SimContext ctx)
@@ -24212,7 +26827,7 @@ namespace NTSD.Test
         {
             public int TransitCount { get; private set; }
             public int TuCount { get; private set; }
-            public bool KeysClearedBeforeTransit { get; private set; }
+            public bool CurrentKeysPreservedBeforeTransit { get; private set; }
             public bool PreviousKeysPreservedBeforeTransit { get; private set; }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
@@ -24228,9 +26843,9 @@ namespace NTSD.Test
             public override void SimTransit(int tickIndex)
             {
                 TransitCount++;
-                KeysClearedBeforeTransit = Runtime.KeyUp == 0 && Runtime.KeyDown == 0 &&
-                    Runtime.KeyLeft == 0 && Runtime.KeyRight == 0 &&
-                    Runtime.KeyAttack == 0 && Runtime.KeyJump == 0 && Runtime.KeyDefend == 0;
+                CurrentKeysPreservedBeforeTransit = Runtime.KeyUp == 1 && Runtime.KeyDown == 1 &&
+                    Runtime.KeyLeft == 1 && Runtime.KeyRight == 1 &&
+                    Runtime.KeyAttack == 1 && Runtime.KeyJump == 1 && Runtime.KeyDefend == 1;
                 PreviousKeysPreservedBeforeTransit = Runtime.PrevUp == 1 && Runtime.PrevDown == 1 &&
                     Runtime.PrevLeft == 1 && Runtime.PrevRight == 1 &&
                     Runtime.PrevAttack == 1 && Runtime.PrevJump == 1 && Runtime.PrevDefend == 1;
@@ -24846,6 +27461,7 @@ namespace NTSD.Test
             private readonly System.Reflection.FieldInfo catalogField;
             private readonly BattleCommonVisualCatalog originalCatalog;
             private readonly Sprite temporarySprite;
+            private readonly Material temporaryMaterial;
             private readonly Texture2D temporarySparkTexture;
             private readonly Sprite[] temporarySparkSprites;
             private readonly Texture2D[] temporaryWordTextures;
@@ -24870,22 +27486,22 @@ namespace NTSD.Test
                     UnityEditor.AssetDatabase.LoadAssetAtPath<NTSD.App.GameConfig>(
                         "Assets/NTSD/Config/GameConfig/GameConfig.asset");
                 GameObject productionShadowPrefab = productionConfig?.ShadowPrefab;
-                SpriteRenderer productionRenderer =
+                BattleCommonShadowDescriptor productionDescriptor =
                     productionShadowPrefab != null
-                        ? productionShadowPrefab.GetComponent<SpriteRenderer>()
+                        ? productionShadowPrefab.GetComponent<BattleCommonShadowDescriptor>()
                         : null;
-                Sprite productionSprite = productionRenderer != null
-                    ? productionRenderer.sprite
+                Sprite productionSprite = productionDescriptor != null
+                    ? productionDescriptor.Sprite
                     : null;
                 Texture2D productionTexture = productionSprite != null
                     ? productionSprite.texture
                     : null;
                 BattleSpriteMaterialSemantic productionSemantic =
                     BattleSpriteMaterialContract.Classify(
-                        productionRenderer != null ? productionRenderer.sharedMaterial : null);
+                        productionDescriptor != null ? productionDescriptor.Material : null);
                 catalog = BattleCommonVisualCatalog.Build(productionShadowPrefab);
                 Expect(productionConfig != null && productionShadowPrefab != null &&
-                       productionRenderer != null && productionSprite != null &&
+                       productionDescriptor != null && productionSprite != null &&
                        productionTexture != null &&
                        productionSemantic == BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha &&
                        catalog.IsValid,
@@ -24902,8 +27518,15 @@ namespace NTSD.Test
                         new Rect(0f, 0f, 1f, 1f),
                         new Vector2(0.5f, 0.5f),
                         100f);
+                    Shader spriteShader = Shader.Find(BattleSpriteMaterialContract.BuiltInSpriteShaderName);
+                    Expect(spriteShader != null,
+                        "P7 self-check common shadow fixture requires the built-in sprite shader");
+                    temporaryMaterial = new Material(spriteShader);
                     var prefab = new GameObject("SelfCheck_CommonShadowPublication");
-                    prefab.AddComponent<SpriteRenderer>().sprite = temporarySprite;
+                    prefab.AddComponent<BattleCommonShadowDescriptor>().ConfigureForSelfCheck(
+                        temporarySprite,
+                        temporaryMaterial,
+                        Color.white);
                     catalog = BattleCommonVisualCatalog.Build(prefab);
                     DestroySelfCheckObject(prefab);
                 }
@@ -24955,6 +27578,8 @@ namespace NTSD.Test
                 catalogField?.SetValue(animatorManager, originalCatalog);
                 if (temporarySprite != null)
                     DestroySelfCheckAsset(temporarySprite);
+                if (temporaryMaterial != null)
+                    DestroySelfCheckAsset(temporaryMaterial);
                 if (temporarySparkSprites != null)
                 {
                     for (int pic = 0; pic < temporarySparkSprites.Length; pic++)
@@ -25506,6 +28131,106 @@ namespace NTSD.Test
             }
         }
 
+        private sealed class TemporaryIsolatedObjectPoolState : IDisposable
+        {
+            private readonly LF2ObjectPool pool;
+            private readonly System.Reflection.FieldInfo availableField;
+            private readonly System.Reflection.FieldInfo activeField;
+            private readonly System.Reflection.FieldInfo releaseMapField;
+            private readonly System.Reflection.FieldInfo spritePoolField;
+            private readonly System.Reflection.FieldInfo cachedPrefabField;
+            private readonly System.Reflection.MethodInfo createNewObjectMethod;
+            private readonly object originalAvailable;
+            private readonly object originalActive;
+            private readonly object originalReleaseMap;
+            private readonly object originalSpritePool;
+            private readonly object originalCachedPrefab;
+
+            public TemporaryIsolatedObjectPoolState(LF2ObjectPool pool)
+            {
+                this.pool = pool;
+                Expect(pool != null,
+                    "P4 pool-overflow opoint regression requires an LF2ObjectPool singleton");
+
+                const System.Reflection.BindingFlags flags =
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                Type type = typeof(LF2ObjectPool);
+                availableField = type.GetField("_availableObjects", flags);
+                activeField = type.GetField("_activeObjects", flags);
+                releaseMapField = type.GetField("_releaseTimeMap", flags);
+                spritePoolField = type.GetField("_spritePool", flags);
+                cachedPrefabField = type.GetField("_cachedLF2ObjectPrefab", flags);
+                createNewObjectMethod = type.GetMethod("CreateNewObject", flags);
+                Expect(availableField != null && activeField != null && releaseMapField != null &&
+                       spritePoolField != null && cachedPrefabField != null && createNewObjectMethod != null,
+                    "P4 pool-overflow opoint regression LF2ObjectPool private contract changed");
+
+                originalAvailable = availableField.GetValue(pool);
+                originalActive = activeField.GetValue(pool);
+                originalReleaseMap = releaseMapField.GetValue(pool);
+                originalSpritePool = spritePoolField.GetValue(pool);
+                originalCachedPrefab = cachedPrefabField.GetValue(pool);
+
+                availableField.SetValue(pool, new LinkedList<GameObject>());
+                activeField.SetValue(pool, new HashSet<GameObject>());
+                releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
+                spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
+                cachedPrefabField.SetValue(pool, null);
+            }
+
+            public IReadOnlyList<GameObject> AvailableObjects
+            {
+                get
+                {
+                    var objects = new List<GameObject>();
+                    if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                    {
+                        foreach (GameObject item in available)
+                            objects.Add(item);
+                    }
+                    return objects;
+                }
+            }
+
+            public void Prewarm(int count)
+            {
+                for (int index = 0; index < count; index++)
+                    createNewObjectMethod.Invoke(pool, null);
+
+                Expect(AvailableObjects.Count == count,
+                    $"P4 pool-overflow opoint regression failed to establish its {count}-object available prewarm");
+            }
+
+            public void Dispose()
+            {
+                var objects = new HashSet<GameObject>();
+                try
+                {
+                    if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                    {
+                        foreach (GameObject item in available)
+                            if (item != null) objects.Add(item);
+                    }
+                    if (activeField.GetValue(pool) is HashSet<GameObject> active)
+                    {
+                        foreach (GameObject item in active)
+                            if (item != null) objects.Add(item);
+                    }
+                }
+                finally
+                {
+                    availableField.SetValue(pool, originalAvailable);
+                    activeField.SetValue(pool, originalActive);
+                    releaseMapField.SetValue(pool, originalReleaseMap);
+                    spritePoolField.SetValue(pool, originalSpritePool);
+                    cachedPrefabField.SetValue(pool, originalCachedPrefab);
+                }
+
+                foreach (GameObject item in objects)
+                    DestroySelfCheckObject(item);
+            }
+        }
+
         private sealed class CurrentDatSelfCheckWeapon : LF2Weapon
         {
             private readonly LF2ObjectType currentDataType;
@@ -26043,6 +28768,7 @@ namespace NTSD.Test
 
             public MutationSelfCheckEntity Spawned { get; private set; }
             public int LateTickCount { get; private set; }
+            public Action OnUnregisterRequested { get; set; }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
             public MutationSelfCheckEntity(int stableId, bool registerDuringLate = false, bool unregisterDuringLate = false)
@@ -26063,12 +28789,60 @@ namespace NTSD.Test
                 }
 
                 if (_unregisterDuringLate && LateTickCount == 1)
+                {
                     Match.Unregister(this);
+                    OnUnregisterRequested?.Invoke();
+                }
             }
 
             public override void Reset() { }
 
-            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
+            {
+                Renderer = renderer;
+            }
+        }
+
+        // Adversarial fixture: tracker identity follows Register's ItrRest evaluation order to force rollback.
+        private sealed class RegistrationRollbackSelfCheckEntity : LF2Entity
+        {
+            private readonly LF2ItrRestTracker initialTracker = new LF2ItrRestTracker();
+            private readonly LF2ItrRestTracker foreignTracker = new LF2ItrRestTracker();
+            private bool initialTrackerRead;
+
+            public RegistrationRollbackSelfCheckEntity(int stableId)
+            {
+                StableId = stableId;
+            }
+
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public override LF2ItrRestTracker ItrRest
+            {
+                get
+                {
+                    if (!initialTrackerRead)
+                    {
+                        initialTrackerRead = true;
+                        return initialTracker;
+                    }
+
+                    return foreignTracker;
+                }
+                protected set { }
+            }
+
+            public bool BindForeignTracker(RuntimeRestStore store, int runtimeSlot)
+            {
+                return foreignTracker.Bind(store, runtimeSlot, false);
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
+            {
+                Renderer = renderer;
+            }
         }
 
         private sealed class SelfCheckCharacterDatShell : LF2SpecialAttack

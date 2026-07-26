@@ -1,0 +1,14 @@
+{
+  "provider": "codex",
+  "jobId": "ff3d9d41",
+  "slug": "role-performance-architect-read-only",
+  "status": "failed",
+  "pid": 58836,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-role-performance-architect-read-only-ff3d9d41.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-role-performance-architect-read-only-ff3d9d41.md",
+  "model": "gpt-5.2",
+  "agentRole": "architect",
+  "spawnedAt": "2026-07-25T08:33:02.241Z",
+  "completedAt": "2026-07-25T08:35:10.441Z",
+  "error": "All models in fallback chain failed. Last error: {\"detail\":\"The 'gpt-5.2' model is not supported when using Codex with a ChatGPT account.\"}"
+}

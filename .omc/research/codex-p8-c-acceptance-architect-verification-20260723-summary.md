@@ -1,0 +1,10 @@
+{"type":"thread.started","thread_id":"019f8e27-fe79-7ae1-a58d-a2e3c2bb63dc"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"Model metadata for `gpt-5.3-codex` not found. Defaulting to fallback metadata; this can degrade performance and cause issues."}}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 1/5 (unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 90a95833-a1b1-4472-b7b6-7cc4060eab7c)"}
+{"type":"error","message":"Reconnecting... 2/5 (unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 5365e30e-4d7e-48ea-a679-6def0cfd989c)"}
+{"type":"error","message":"Reconnecting... 3/5 (unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: f92f2ca5-f63d-463f-9ae1-b01ae3a36d73)"}
+{"type":"error","message":"Reconnecting... 4/5 (unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 5e87d424-5654-4272-8265-09dc82e6d197)"}
+{"type":"error","message":"Reconnecting... 5/5 (unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 5faf2f50-a964-4358-ace3-433b2312926c)"}
+{"type":"error","message":"unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 8acb9f45-12f4-4c40-a80c-1ea6a274a4d2"}
+{"type":"turn.failed","error":{"message":"unexpected status 404 Not Found: Model \"gpt-5.3-codex\" is not supported by any configured account in this group, url: https://www.findcg.com/v1/responses, request id: 8acb9f45-12f4-4c40-a80c-1ea6a274a4d2"}}

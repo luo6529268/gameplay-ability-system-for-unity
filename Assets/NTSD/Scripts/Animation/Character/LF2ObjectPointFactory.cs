@@ -184,6 +184,10 @@ namespace NTSD.Animation
 
             for (int i = 0; i < spawnCount; i++)
             {
+                int requiredRuntimeSlot = spawner.Match?.FindFirstFreeFrameLogicRuntimeSlot() ?? -1;
+                if (requiredRuntimeSlot < 0)
+                    continue;
+
                 ObjectPoint spawnOp = op;
                 spawnOp.facing = facingMode;
 
@@ -197,6 +201,7 @@ namespace NTSD.Animation
                 task.preserveActionZero = true;
                 task.releaseSpawnSemantic = ReleaseSpawnSemantic.LateOpoint;
                 task.releaseOpointSpawn = true;
+                task.requiredRuntimeSlot = requiredRuntimeSlot;
 
                 LF2Entity spawned = ProcessCreateObject(task);
                 LF2ReferencePool.Instance?.Recycle(task);
