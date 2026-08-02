@@ -1,41 +1,140 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using BeatEmUpTemplate2D;
 using Cysharp.Threading.Tasks;
 using MoreMountains.Tools;
+using NTSD.Animation;
 using NTSD.Load;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.App
 {
-    public sealed class NTSDSoundPlayer : MonoBehaviour
+    public sealed class NTSDSoundPlayer : MonoBehaviour, ISimulationSoundPresentationSink
     {
         [SerializeField] private string soundRootFolder = "NTSD/Sound";
 
-        public void PlaySfx(string soundId, Vector3? position = null, Transform parent = null)
+        private sealed class PreparedSoundCue
         {
-            PlaySfxAsync(soundId, position, parent).Forget();
+            public AudioItem AudioItem;
+            public string CacheKey;
+            public string SourcePath;
+            public bool IsSingleFile;
+            public bool IsLoaded;
+            public AudioClip[] Clips;
         }
 
-        private async UniTaskVoid PlaySfxAsync(string soundId, Vector3? position, Transform parent)
+        private readonly Dictionary<string, PreparedSoundCue> preparedCues =
+            new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
+        private AudioController preparedAudioController;
+        private long preparedCueBuildCount;
+
+        public int PreparedCueCountForDiagnostics => preparedCues.Count;
+        public long PreparedCueBuildCountForDiagnostics => preparedCueBuildCount;
+
+        public void PlaySfx(string soundId, Vector3? position = null, Transform parent = null)
         {
-            if (string.IsNullOrEmpty(soundId))
+            PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
+            if (preparedCue == null)
+                return;
+
+            if (preparedCue.IsLoaded)
             {
+                PlayPreparedCue(preparedCue, position, parent);
                 return;
             }
 
-            Debug.Log($"[SoundPlayer] PlaySfx: {soundId}");
+            LoadAndPlayPreparedCueAsync(preparedCue, position, parent).Forget();
+        }
 
-            // 确保 MMSoundManager 已初始化（访问 Instance 会触发自动创建 + OnEnable/Register）
-            _ = MMSoundManager.Instance;
+        public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
+        {
+            if (sounds == null)
+                return;
 
-            AudioItem audioItem = FindAudioItem(soundId) ?? CreateFallbackAudioItem(soundId);
-            AudioClip[] clips = await LoadClipsAsync(soundId, audioItem);
-            AudioClip clip = PickClip(clips);
-            Debug.Log($"[SoundPlayer] clip={clip?.name ?? "NULL"} for {soundId}");
+            for (int i = 0; i < sounds.Count; i++)
+                PresentSound(sounds[i]);
+        }
+
+        public void PresentSound(PendingSoundEvent sound)
+        {
+            Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(sound.WorldX, 0f);
+            PlaySfx(sound.Cue, new Vector3(groundPoint.x, groundPoint.y, 0f));
+        }
+
+        public bool TryGetPreparedSingleFileWrapperForDiagnostics(
+            string soundId,
+            out AudioClip[] clips)
+        {
+            PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
+            if (preparedCue == null || !preparedCue.IsSingleFile)
+            {
+                clips = null;
+                return false;
+            }
+
+            clips = preparedCue.Clips;
+            return true;
+        }
+
+        private PreparedSoundCue GetOrPrepareCue(string soundId)
+        {
+            if (string.IsNullOrEmpty(soundId))
+                return null;
+
+            AudioController controller = AudioController.Instance;
+            if (!ReferenceEquals(controller, preparedAudioController))
+            {
+                preparedCues.Clear();
+                preparedAudioController = controller;
+            }
+
+            if (preparedCues.TryGetValue(soundId, out PreparedSoundCue preparedCue))
+                return preparedCue;
+
+            AudioItem audioItem = FindAudioItem(controller, soundId) ??
+                                  CreateFallbackAudioItem(soundId);
+            string relativeFolder = ResolveRelativeFolder(soundId, audioItem);
+            string normalizedRelativeFolder = NormalizeRelativeFolder(relativeFolder);
+            bool isSingleFile = IsSingleFilePath(normalizedRelativeFolder);
+            preparedCue = new PreparedSoundCue
+            {
+                AudioItem = audioItem,
+                IsSingleFile = isSingleFile,
+                CacheKey = isSingleFile
+                    ? $"NTSD.AudioFile::{normalizedRelativeFolder}"
+                    : $"NTSD.Audio::{normalizedRelativeFolder}",
+                SourcePath = Path.Combine(
+                    Application.dataPath,
+                    soundRootFolder,
+                    normalizedRelativeFolder),
+                Clips = isSingleFile ? new AudioClip[1] : null,
+            };
+            preparedCues.Add(soundId, preparedCue);
+            preparedCueBuildCount++;
+            return preparedCue;
+        }
+
+        private async UniTaskVoid LoadAndPlayPreparedCueAsync(
+            PreparedSoundCue preparedCue,
+            Vector3? position,
+            Transform parent)
+        {
+            await LoadPreparedClipsAsync(preparedCue);
+            PlayPreparedCue(preparedCue, position, parent);
+        }
+
+        private void PlayPreparedCue(
+            PreparedSoundCue preparedCue,
+            Vector3? position,
+            Transform parent)
+        {
+            AudioItem audioItem = preparedCue.AudioItem;
+
+            AudioClip clip = PickClip(preparedCue.Clips);
             if (clip == null)
             {
-                Debug.LogWarning($"[NTSD][Audio] AudioClip is missing for: {soundId}, folder: {ResolveRelativeFolder(soundId, audioItem)}");
                 return;
             }
 
@@ -66,13 +165,11 @@ namespace NTSD.App
                 options.MinDistance = audioItem.range > 3f ? audioItem.range - 3f : 0f;
             }
 
-            var src = MMSoundManager.Instance?.PlaySound(clip, options);
-            Debug.Log($"[SoundPlayer] Trigger: {clip.name} vol={options.Volume} src={src?.name} isPlaying={src?.isPlaying}");
+            MMSoundManager.Instance?.PlaySound(clip, options);
         }
 
-        private AudioItem FindAudioItem(string soundId)
+        private static AudioItem FindAudioItem(AudioController controller, string soundId)
         {
-            AudioController controller = AudioController.Instance;
             if (controller == null || controller.AudioList == null)
             {
                 return null;
@@ -89,30 +186,34 @@ namespace NTSD.App
             return null;
         }
 
-        private async UniTask<AudioClip[]> LoadClipsAsync(string soundId, AudioItem audioItem)
+        private async UniTask LoadPreparedClipsAsync(PreparedSoundCue preparedCue)
         {
-            string relativeFolder = ResolveRelativeFolder(soundId, audioItem);
-            string normalizedRelativeFolder = NormalizeRelativeFolder(relativeFolder);
+            if (preparedCue.IsLoaded)
+                return;
 
             // 单文件模式：soundId 以音频扩展名结尾（如 data\003.wav）
-            if (IsSingleFilePath(normalizedRelativeFolder))
+            if (preparedCue.IsSingleFile)
             {
-                string cacheKey = $"NTSD.AudioFile::{normalizedRelativeFolder}";
-                string filePath = Path.Combine(Application.dataPath, soundRootFolder, normalizedRelativeFolder);
-                AudioClip clip = await NTSD_ResourceLoader.Instance.LoadSingleAudioClipAsync(cacheKey, filePath);
-                return clip != null ? new[] { clip } : Array.Empty<AudioClip>();
+                preparedCue.Clips[0] = await NTSD_ResourceLoader.Instance.LoadSingleAudioClipAsync(
+                    preparedCue.CacheKey,
+                    preparedCue.SourcePath);
+                preparedCue.IsLoaded = true;
+                return;
             }
 
             // 目录模式：soundId 是目录路径，加载目录下所有音频文件
-            string dirCacheKey = $"NTSD.Audio::{normalizedRelativeFolder}";
-            string directoryPath = Path.Combine(Application.dataPath, soundRootFolder, normalizedRelativeFolder);
-            AudioClip[] loadedClips = await NTSD_ResourceLoader.Instance.LoadAudioClipsAsync(dirCacheKey, directoryPath);
+            AudioClip[] loadedClips = await NTSD_ResourceLoader.Instance.LoadAudioClipsAsync(
+                preparedCue.CacheKey,
+                preparedCue.SourcePath);
             if (loadedClips != null && loadedClips.Length > 0)
             {
-                return loadedClips;
+                preparedCue.Clips = loadedClips;
             }
-
-            return audioItem?.clip;
+            else
+            {
+                preparedCue.Clips = preparedCue.AudioItem?.clip ?? Array.Empty<AudioClip>();
+            }
+            preparedCue.IsLoaded = true;
         }
 
         private static bool IsSingleFilePath(string path)

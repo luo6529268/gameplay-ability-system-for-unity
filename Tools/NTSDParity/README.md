@@ -107,3 +107,103 @@ dotnet run --project Tools/NTSDParity/NTSDParity.csproj -- self-test `
 
 The suite covers empty/header-only traces, skipped and missing ticks, stale or
 forged hashes, changed bodies, and manifest mismatches.
+
+## Authority400 witness runner
+
+`authority400-witness-manifest.v1.json` freezes the Slice 0 witness ledger.
+W01 (dense input/RNG) and W02 (frame wait/immediate-frame reset) remain on the
+unchanged v3 trace schema. W03 (live scan plus free/reuse lifecycle), W04
+(allocator start bands), and W07 (positive-link validation) use the additive
+v4 structural event domain. W05, W06, and W08 remain
+`requires-v4-structural-events/source-callchain-plus-focused-test`.
+
+W06 is backed by `W06CollisionHitResolveWitnessEditorTests`. The focused tests
+execute Unity's real `NTSDBattleTickSystem.RunInteractionPhase` and production
+collision candidate/character-hit consume path. They lock the authority order
+`CollectCandidates -> ResolveCharacterHits -> natural random weapon drop ->
+ResolveObjectHits` from `GameTick.cs`, including the RNG-call boundary around
+the random-drop gate. They also prove that the frozen candidate carrier is
+consumed in ascending runtime-slot order without re-filtering later geometry or
+team mutations, matching `HitResolve.ResolveCandidates`. This closes the local
+focused-test requirement, but W06 remains non-runnable until the corresponding
+v4 cross-runtime structural events exist; it is not a parity certificate.
+
+Every v4 structural record has the canonical fields `tick`, `pass`, `action`,
+`cursorSlot`, `actorSlot`, `slot`, `searchStart`, `searchEndExclusive`,
+`before`, `after`, `lifecycleEpoch`, and `sourceKind`. `lifecycleEpoch` is
+derived independently by each exporter from allocations observed for the same
+slot. Unity's internal `RuntimeSlotTable.Generation` is intentionally never
+serialized or compared across runtimes. The comparer rejects slot fields above
+399 and search ends above 400.
+
+W07 `link-validation` records additionally contain canonical forward fields
+`beforeLinkState`, `beforeTargetSlot`, `beforeHeldWeaponSlot`,
+`afterLinkState`, `afterTargetSlot`, and `afterHeldWeaponSlot`; observation
+fields `targetActive` and `observedHolderSlot`; `outcome` and `reason`; and
+target reverse fields `targetBeforeHolderSlot`, `targetBeforeLinkState`,
+`targetAfterHolderSlot`, and `targetAfterLinkState`. These are runtime slot
+indices only; Unity stable-id terminology is not serialized into the canonical
+event contract.
+
+W03/W04 are diagnostic source-callchain witnesses, not production parity
+certificates. The Unity W03 fixture executes the real `LateEntityUpdateAll`
+live pass and real registry mutation boundaries. The authority W03 exporter
+uses the real fixed `Objects` table plus `SpawnAt`/`FreeEntity`, but its cursor
+loop is an exporter fixture matching `GameTick.cs`; it does not instrument an
+actual `GameTick.Run` pass. W04 similarly exercises real registry operations
+while its 0/20/50 start searches are explicit exporter fixtures anchored to
+`SimulationWorld.Registry.cs`, `GameTick.cs`, and `FrameTick.cs`. Consequently
+their manifest coverage is `diagnostic-source-callchain`, and runner summaries
+remain `certificateEligible: false`.
+
+W07 is `diagnostic-source-callchain/partial`, also never certificate eligible.
+The authority method `ValidatePositiveLinks` is private, so its fixture invokes
+the real accessible `GameTick.Run` path and observes state through the adjacent
+`beforeCollectCandidates` and `afterCollectCandidates` hooks. The Unity fixture
+invokes the real `ValidateHeldLinksAll`. It proves the focused reciprocal-link
+keep and holder-mismatch clear cases, not every positive-link branch or the
+entire production tick. Structural sinks are null by default; diagnostic maps,
+context writes, source classification, and event construction are guarded and
+do not execute on the normal production path.
+
+The focused comparer self-test also requires missing structural fields,
+changed field values, event deletion, and event reordering to fail. Cross-tick
+`lifecycleEpoch` monotonicity remains exporter-derived but is not yet enforced
+as a whole-trace comparer invariant.
+
+The checked-in scenarios use `${AUTHORITY_GAME_ROOT}` rather than a machine
+specific `J:` path. The runner materializes that token only into its output
+directory; it never changes the checked-in scenario, exporter, trace schema,
+or an expected trace.
+
+Validate the manifest and portable scenarios before execution. On Windows
+PowerShell (available on this machine):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File Tools/NTSDParity/Invoke-Authority400Witness.ps1 -ValidateOnly
+```
+
+PowerShell 7 users can equivalently run `pwsh Tools/NTSDParity/Invoke-Authority400Witness.ps1 -ValidateOnly`.
+
+Run all currently executable v3/v4 witnesses (one Unity batch process at a time):
+
+```powershell
+$env:UNITY_EXE = 'C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.exe'
+$env:NTSD_AUTHORITY_GAME_ROOT = 'J:\QQFile\NTSD2.4'
+powershell -ExecutionPolicy Bypass -File Tools/NTSDParity/Invoke-Authority400Witness.ps1 -ExecutableOnly
+```
+
+Use `-WitnessId W01`, `-UnityExe`, `-ProjectPath`, `-AuthorityAssembly`,
+`-AuthorityGameRoot`, and `-OutputRoot` for focused or CI runs. `-DryRun`
+validates selection without starting processes. Normal artifacts are retained
+under `.omc/validation/authority400-witness/<witness-id>/`, including the
+resolved scenario, authority trace, Unity trace, comparison report, Unity log,
+and an aggregate `summary.json`; this avoids Unity's exit-time `Temp` cleanup.
+The runner refuses to launch while any `Unity.exe` process exists, preventing a
+second Editor from contending for the project Library.
+
+The runner intentionally uses the `authority-dat-diagnostic` fixture and
+passes `--allow-diagnostic` to the comparer. Summaries are always marked
+`certificateEligible: false` with evidence class `diagnostic-witness-only`;
+`completed` only means that the selected diagnostic witness comparison ran
+successfully, never that it produced a production parity certificate.

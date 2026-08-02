@@ -1,15 +1,24 @@
 using System.Collections.Generic;
-using NTSD.Animation;
-using NTSD.App;
-using UnityEngine;
 
 namespace NTSD.Simulation
 {
-    public sealed class PendingSoundEvent
+    public readonly struct PendingSoundEvent
     {
-        public string Cue;
-        public int WorldX;
-        public int Tick;
+        public PendingSoundEvent(string cue, int worldX, int tick)
+        {
+            Cue = cue;
+            WorldX = worldX;
+            Tick = tick;
+        }
+
+        public string Cue { get; }
+        public int WorldX { get; }
+        public int Tick { get; }
+    }
+
+    public interface ISimulationSoundPresentationSink
+    {
+        void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds);
     }
 
     /// <summary>
@@ -19,23 +28,15 @@ namespace NTSD.Simulation
     {
         public bool PpMode => NTSDGlobal.MPEnabled;
         public List<PendingSoundEvent> PendingSounds { get; } = new List<PendingSoundEvent>();
+        public long QueuedSoundEventCountForDiagnostics { get; private set; }
 
         public void QueueSound(string soundId, int worldX)
         {
             if (string.IsNullOrEmpty(soundId))
                 return;
 
-            PendingSounds.Add(new PendingSoundEvent
-            {
-                Cue = soundId,
-                WorldX = worldX,
-                Tick = CurrentTickIndex,
-            });
-
-            Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(worldX, 0f);
-            AppManager.Instance?.SoundPlayer?.PlaySfx(
-                soundId,
-                new Vector3(groundPoint.x, groundPoint.y, 0f));
+            PendingSounds.Add(new PendingSoundEvent(soundId, worldX, CurrentTickIndex));
+            QueuedSoundEventCountForDiagnostics++;
         }
     }
 }

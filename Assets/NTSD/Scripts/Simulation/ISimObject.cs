@@ -58,9 +58,14 @@ namespace NTSD.Simulation
         /// </summary>
 
         /// <summary>
-        /// EntityCollision 阶段：对齐 C++ release 的实体碰撞路径。
-        /// 职责：武器地面/边界碰撞、state/type 特殊分支。
+        /// Reserved compatibility hook for legacy implementers.
+        /// Production collision handling stays in SimulationWorld's authoritative collision passes.
         /// </summary>
+        /// <remarks>
+        /// Reserved compatibility hook; production collision passes do not dispatch this method.
+        /// </remarks>
+        [System.Obsolete(
+            "Reserved compatibility hook only. SimulationWorld no longer invokes SimEntityCollision as a production pass.")]
         void SimEntityCollision(int tickIndex) { }
 
         /// <summary>
@@ -69,7 +74,8 @@ namespace NTSD.Simulation
         void SimFrameTick(int tickIndex) { }
 
         /// <summary>
-        /// 每个模拟 tick 的后期处理，在同一实体的 SimEntityCollision 后立即执行。
+        /// Presentation-only late hook. It is dispatched by the render/presentation
+        /// phase after simulation and is not ordered after SimEntityCollision.
         /// </summary>
         void SimLateTick(int tickIndex) { }
     }

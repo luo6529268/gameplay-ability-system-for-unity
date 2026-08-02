@@ -28,7 +28,8 @@ namespace NTSD.Animation.LF2Objects
         // 渲染帧计数器，对齐 C++ release 的 dword_449098。
         private int _renderFrameCount = 0;
 
-        // 缓存稳定 ID，AllocateStableId 只调用一次。
+        // Renderer identity is presentation-only. It must never consume the
+        // deterministic logic-entity StableId sequence owned by SimulationWorld.
         [SerializeField][MMReadOnly]private int _stableId = 0;
 
         // ========== 公开属性 ==========
@@ -47,7 +48,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (_stableId == 0)
                 {
-                    _stableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? GetInstanceID();
+                    _stableId = GetInstanceID();
                 }
 
                 return _stableId;
@@ -91,9 +92,9 @@ namespace NTSD.Animation.LF2Objects
                 if (!presentationBlocked)
                 {
                     UpdateSprite();
+                    RefreshLegacySortingMetadata();
                     _logicObject.UpdateShadow(_renderFrameCount);
                 }
-                _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
                 ApplyVisualShake();
                 return;
             }
@@ -114,7 +115,6 @@ namespace NTSD.Animation.LF2Objects
             UpdateSprite();
             UpdatePosition(tickIndex);
             _logicObject.Match?.RecordLegacyEntityProbe(_logicObject, _spriteRenderer);
-            _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(tickIndex);
             ApplyVisualShake();
         }
 
@@ -138,9 +138,9 @@ namespace NTSD.Animation.LF2Objects
                 if (!presentationBlocked)
                 {
                     UpdateSprite();
+                    RefreshLegacySortingMetadata();
                     _logicObject.UpdateShadow(_renderFrameCount);
                 }
-                _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
                 return;
             }
 
@@ -159,7 +159,6 @@ namespace NTSD.Animation.LF2Objects
             UpdateSprite();
             UpdatePosition(currentTick);
             _logicObject.Match?.RecordLegacyEntityProbe(_logicObject, _spriteRenderer);
-            _logicObject.ReleaseForcedRuntimeIntPositionAfterFirstPresentation(currentTick);
         }
 
         // ========== 核心方法 ==========
@@ -431,6 +430,16 @@ namespace NTSD.Animation.LF2Objects
 
             // 阴影按 C++ 逻辑坐标 x/z 独立更新，不跟随图片 pivot。
             _logicObject.UpdateShadow(_renderFrameCount);
+        }
+
+        private void RefreshLegacySortingMetadata()
+        {
+            if (_logicObject == null) return;
+            var ps = _logicObject.PS;
+            if (ps == null) return;
+
+            _logicObject.Sprite?.SetZ(_logicObject.GetDisplayRenderSortingOrder(
+                _logicObject.GetDisplayZ(), ps.zz));
         }
 
         private void ApplyCppDrawEntityPosition(PhysicsState ps, int tickIndex)

@@ -72,11 +72,11 @@ namespace NTSD.Animation
 
         private void ReleaseActiveRenderers()
         {
-            LF2ObjectPool pool = LF2ObjectPool.Instance;
+            LF2ObjectPool pool = LF2ObjectPool.TryGetInstance();
             for (int index = 0; index < activeRenderers.Count; index++)
             {
                 SpriteRenderer renderer = activeRenderers[index];
-                if (pool != null)
+                if (pool != null && pool.IsRuntimeStateValidForAcceptance)
                     pool.ReleaseSprite(renderer);
                 else if (renderer != null)
                 {

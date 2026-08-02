@@ -116,19 +116,33 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void SetSprites(List<Sprite> sprites, int startFrame = 0)
         {
+            SetSpritesManagedOnly(sprites, startFrame);
+
+            if (sprites == null)
+                ClearResolvedRendererSprite();
+        }
+
+        internal void SetSpritesManagedOnly(List<Sprite> sprites, int startFrame = 0)
+        {
             _sprites = sprites;
             _startFrame = startFrame;
 
             if (sprites == null)
-                ClearCurrentSprite();
+                ClearCurrentSpriteManagedOnly();
         }
 
         public void SetCatalogBinding(BattleSpriteCatalog catalog, int visualDataId)
         {
+            SetCatalogBindingManagedOnly(catalog, visualDataId);
+            ClearResolvedRendererSprite();
+        }
+
+        internal void SetCatalogBindingManagedOnly(BattleSpriteCatalog catalog, int visualDataId)
+        {
             _catalog = catalog;
             _visualDataId = visualDataId;
             _currentEntry = null;
-            ClearCurrentSprite();
+            ClearCurrentSpriteManagedOnly();
         }
 
         /// <summary>
@@ -139,11 +153,32 @@ namespace NTSD.Animation.LF2Objects
 
         public void ShowPic(int picIndex)
         {
+            Sprite resolvedSprite = ResolvePicManagedOnly(picIndex);
+            if (_renderer == null)
+                return;
+
+            _renderer.sprite = resolvedSprite;
+            if (resolvedSprite == null)
+            {
+                _renderer.enabled = false;
+                return;
+            }
+
+            ApplyEntityRendererVisibility();
+        }
+
+        internal void ShowPicManagedOnly(int picIndex)
+        {
+            ResolvePicManagedOnly(picIndex);
+        }
+
+        private Sprite ResolvePicManagedOnly(int picIndex)
+        {
             _currentPic = picIndex;
             if (picIndex == 999)
             {
-                ClearCurrentSprite();
-                return;
+                ClearCurrentSpriteManagedOnly();
+                return null;
             }
 
             if (_catalog != null)
@@ -151,24 +186,21 @@ namespace NTSD.Animation.LF2Objects
                 if (!_catalog.TryGet(_visualDataId, picIndex, out BattleSpriteEntry entry) ||
                     entry == null)
                 {
-                    ClearResolvedSprite();
-                    return;
+                    ClearResolvedSpriteManagedOnly();
+                    return null;
                 }
 
                 _currentEntry = entry;
                 _entityVisible = true;
-                if (_renderer != null)
-                    _renderer.sprite = entry.LegacySprite;
-                ApplyEntityRendererVisibility();
-                return;
+                return entry.LegacySprite;
             }
 
             // Editor previews and isolated legacy tests may still bind only a
             // sprite list. Production battle renderers always bind the catalog.
             if (_sprites == null)
             {
-                ClearResolvedSprite();
-                return;
+                ClearResolvedSpriteManagedOnly();
+                return null;
             }
 
             // 运行时 MergedSprites 已按绝对 pic 编号展开；正常路径直接用 picIndex 取图。
@@ -182,31 +214,39 @@ namespace NTSD.Animation.LF2Objects
 
             if (actualIndex < 0 || actualIndex >= _sprites.Count)
             {
-                ClearResolvedSprite();
-                return;
+                ClearResolvedSpriteManagedOnly();
+                return null;
             }
             if (_sprites[actualIndex] == null)
             {
-                ClearResolvedSprite();
-                return;
+                ClearResolvedSpriteManagedOnly();
+                return null;
             }
 
             _currentEntry = null;
             _entityVisible = true;
-            if (_renderer != null)
-                _renderer.sprite = _sprites[actualIndex];
-            ApplyEntityRendererVisibility();
+            return _sprites[actualIndex];
         }
 
         public void ClearCurrentSprite()
         {
-            _currentPic = 999;
-            ClearResolvedSprite();
+            ClearCurrentSpriteManagedOnly();
+            ClearResolvedRendererSprite();
         }
 
-        private void ClearResolvedSprite()
+        internal void ClearCurrentSpriteManagedOnly()
+        {
+            _currentPic = 999;
+            ClearResolvedSpriteManagedOnly();
+        }
+
+        private void ClearResolvedSpriteManagedOnly()
         {
             _currentEntry = null;
+        }
+
+        private void ClearResolvedRendererSprite()
+        {
             if (_renderer == null)
                 return;
 
@@ -220,11 +260,16 @@ namespace NTSD.Animation.LF2Objects
         /// <param name="dir">"left" 或 "right"</param>
         public void SwitchLR(string dir)
         {
-            _dir = dir;
+            SwitchLRManagedOnly(dir);
             if (_renderer != null)
             {
                 _renderer.flipX = (dir == "left");
             }
+        }
+
+        internal void SwitchLRManagedOnly(string dir)
+        {
+            _dir = dir;
         }
 
         /// <summary>
@@ -268,7 +313,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Show()
         {
-            _entityVisible = true;
+            SetEntityVisibleManagedOnly(true);
             ApplyEntityRendererVisibility();
         }
 
@@ -277,19 +322,33 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Hide()
         {
-            _entityVisible = false;
+            SetEntityVisibleManagedOnly(false);
             ApplyEntityRendererVisibility();
+        }
+
+        internal void SetEntityVisibleManagedOnly(bool visible)
+        {
+            _entityVisible = visible;
         }
 
         public void SetPresentationSuppressed(bool suppressed)
         {
+            if (_presentationSuppressed == suppressed)
+                return;
+
             _presentationSuppressed = suppressed;
+            if (_legacyRendererSuppressed)
+                return;
+
             ApplyEntityRendererVisibility();
             ApplyShadowRendererVisibility();
         }
 
         public void SetLegacyRendererSuppressed(bool suppressed)
         {
+            if (_legacyRendererSuppressed == suppressed)
+                return;
+
             _legacyRendererSuppressed = suppressed;
             ApplyEntityRendererVisibility();
             ApplyShadowRendererVisibility();
@@ -297,8 +356,13 @@ namespace NTSD.Animation.LF2Objects
 
         public void SetLegacyEntityVisible(bool visible)
         {
-            _legacyEntityVisible = visible;
+            SetLegacyEntityVisibleManagedOnly(visible);
             ApplyEntityRendererVisibility();
+        }
+
+        internal void SetLegacyEntityVisibleManagedOnly(bool visible)
+        {
+            _legacyEntityVisible = visible;
         }
 
         /// <summary>
@@ -306,7 +370,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ShowShadow()
         {
-            _shadowVisible = true;
+            SetShadowVisibleManagedOnly(true);
             ApplyShadowRendererVisibility();
         }
 
@@ -315,8 +379,13 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void HideShadow()
         {
-            _shadowVisible = false;
+            SetShadowVisibleManagedOnly(false);
             ApplyShadowRendererVisibility();
+        }
+
+        internal void SetShadowVisibleManagedOnly(bool visible)
+        {
+            _shadowVisible = visible;
         }
 
         /// <summary>

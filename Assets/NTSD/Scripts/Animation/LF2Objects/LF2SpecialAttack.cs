@@ -39,8 +39,6 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            AllocateStableId();
-
             PS = new PhysicsState();
             PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
@@ -61,7 +59,7 @@ namespace NTSD.Animation.LF2Objects
             InitializeParent(task);
             InitializeDirection(task);
             InitializeFrame(task);
-            InitializePosition(task);
+            ApplyInitialRuntimePosition(task);
             InitializeVelocity(task);
             InitializeHealth();
 
@@ -308,13 +306,14 @@ namespace NTSD.Animation.LF2Objects
             var sceneQuery = Match?.SceneQuery;
             var kindService = Match?.ItrKindService;
             if (frame?.itrs == null || sceneQuery == null || kindService == null) return;
-            if (!sceneQuery.TryGetCollisionCandidateSequence(this, out var candidates) || candidates == null)
+            if (!sceneQuery.TryGetCollisionCandidateRange(this, out var candidates))
                 return;
 
             int candidateLimit = candidates.Count;
             for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                SceneQueryHit candidate = candidates[candidateIndex];
+                if (!candidates.TryGet(candidateIndex, out SceneQueryHit candidate))
+                    continue;
                 int itrIndex = candidate.ItrIndex;
                 if (itrIndex < 0 || itrIndex >= frame.itrs.Count)
                     continue;
@@ -1268,21 +1267,6 @@ namespace NTSD.Animation.LF2Objects
             _parent = task.parent as LF2LivingObject;
             ObjectId = task.opoint.oid;
             Team = task.team;
-        }
-
-        private void InitializePosition(OPointCreateTask task)
-        {
-            if (task.useDirectRuntimePosition)
-            {
-                PS.x = task.directX;
-                PS.y = task.directY;
-                PS.z = task.directZ;
-                return;
-            }
-
-            PS.x = task.pos.x;
-            PS.y = task.pos.y;
-            PS.z = task.z;
         }
 
         private void InitializeDirection(OPointCreateTask task)

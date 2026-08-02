@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace NTSD.Simulation
 {
@@ -9,6 +10,12 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class NTSDEntityRuntime
     {
+        private static long pendingFlushDestroyMutationEpoch;
+        private int pendingFlushDestroy;
+
+        public static long PendingFlushDestroyMutationEpochForDiagnostics =>
+            Volatile.Read(ref pendingFlushDestroyMutationEpoch);
+
         public int SlotIndex = -1;
         public int StableId;
         public int ObjectId;
@@ -159,7 +166,16 @@ namespace NTSD.Simulation
         public int TransientMp3 = 1000;
         public int TransientMp4 = 1000;
         public bool OidMergeDormant;
-        public bool PendingFlushDestroy;
+        public bool PendingFlushDestroy
+        {
+            get => Volatile.Read(ref pendingFlushDestroy) != 0;
+            set
+            {
+                int next = value ? 1 : 0;
+                if (Interlocked.Exchange(ref pendingFlushDestroy, next) != next)
+                    Interlocked.Increment(ref pendingFlushDestroyMutationEpoch);
+            }
+        }
 
         public int HP = 500;
         public int HPBound = 500;

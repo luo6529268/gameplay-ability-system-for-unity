@@ -1,0 +1,14 @@
+{
+  "provider": "codex",
+  "jobId": "4988a6f5",
+  "slug": "review-the-proposed-direction",
+  "status": "failed",
+  "pid": 9420,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-review-the-proposed-direction-4988a6f5.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-review-the-proposed-direction-4988a6f5.md",
+  "model": "gpt-5.2",
+  "agentRole": "architect",
+  "spawnedAt": "2026-07-27T00:22:04.188Z",
+  "completedAt": "2026-07-27T00:24:22.111Z",
+  "error": "All models in fallback chain failed. Last error: {\"detail\":\"The 'gpt-5.2' model is not supported when using Codex with a ChatGPT account.\"}"
+}

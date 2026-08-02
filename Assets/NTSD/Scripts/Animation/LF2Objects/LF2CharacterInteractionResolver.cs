@@ -39,13 +39,14 @@ namespace NTSD.Animation.LF2Objects
             if (frame?.itrs == null || sceneQuery == null || kindService == null)
                 return false;
 
-            if (!sceneQuery.TryGetCollisionCandidateSequence(_character, out var candidates) || candidates == null)
+            if (!sceneQuery.TryGetCollisionCandidateRange(_character, out var candidates))
                 return false;
 
             int candidateLimit = candidates.Count;
             for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                SceneQueryHit hitInfo = candidates[candidateIndex];
+                if (!candidates.TryGet(candidateIndex, out SceneQueryHit hitInfo))
+                    continue;
                 int itrIndex = hitInfo.ItrIndex;
                 if (IsReleaseInvalidCandidateItrIndex(itrIndex, frame))
                     continue;

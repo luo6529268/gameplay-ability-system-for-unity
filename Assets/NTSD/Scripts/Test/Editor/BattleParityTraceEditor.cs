@@ -149,6 +149,7 @@ namespace NTSD.EditorTools
             string resolvedOutputPath = ProjectPath(outputPath);
             BattleTraceScenario scenario = JsonUtility.FromJson<BattleTraceScenario>(
                 File.ReadAllText(resolvedScenarioPath, Encoding.UTF8));
+            NormalizeOptionalFrameCounterProbe(scenario);
             ValidateScenario(scenario);
 
             string indexPath = Path.Combine(Path.GetFullPath(scenario.gameRoot), "data", "data.txt");
@@ -166,6 +167,8 @@ namespace NTSD.EditorTools
             SimulationTickDriver driver = driverScope.Driver;
             SimulationWorld world = driver.World;
             ConfigureWorldAndRoster(world, dataScope, scenario);
+            BattleParityStructuralEventBuffer structuralEvents =
+                RunStructuralWitnessFixture(scenario.structuralWitness);
 
             var provider = new ScenarioFrameInputProvider(scenario);
             driver.ApplySettings(new LockstepSimulationSettings
@@ -194,8 +197,14 @@ namespace NTSD.EditorTools
 
                 ValidateParityRuntimeContracts(world, scenario, tick);
                 ApplyFrameCounterProbe(world, scenario.frameCounterProbe, tick);
-                BattleParityFrameSnapshot snapshot = full || scenario.frameCounterProbe != null
-                    ? world.CaptureParityFrameSnapshot(tick, driver.LastAppliedFrameInput, includeFullDomains: true)
+                BattleParityFrameSnapshot snapshot = full ||
+                    scenario.frameCounterProbe != null ||
+                    structuralEvents != null
+                    ? world.CaptureParityFrameSnapshot(
+                        tick,
+                        driver.LastAppliedFrameInput,
+                        includeFullDomains: true,
+                        structuralEvents?.CaptureTick(tick))
                     : driver.LastFrameSnapshot;
                 if (snapshot == null || snapshot.Tick != tick)
                     throw new InvalidOperationException($"Unity parity snapshot missing for tick {tick}.");
@@ -204,6 +213,116 @@ namespace NTSD.EditorTools
             }
 
             return resolvedOutputPath;
+        }
+
+        internal static BattleParityStructuralEventBuffer RunStructuralWitnessFixture(
+            string witnessId)
+        {
+            if (string.IsNullOrWhiteSpace(witnessId))
+                return null;
+
+            var events = new BattleParityStructuralEventBuffer(400);
+            if (string.Equals(witnessId, "W03", StringComparison.Ordinal))
+            {
+                var world = new SimulationWorld();
+                world.SetStructuralEventSinkForDiagnostics(events, 0, "fixture-setup");
+
+                var mutator = new BattleTraceStructuralMutationEntity(100);
+                mutator.SetRequiredRuntimeSlot(0);
+                var slot1 = new BattleTraceStructuralEntity(101);
+                slot1.SetRequiredRuntimeSlot(1);
+                var slot2 = new BattleTraceStructuralEntity(102);
+                slot2.SetRequiredRuntimeSlot(2);
+                world.Register(mutator);
+                world.Register(slot1);
+                world.Register(slot2);
+
+                world.LateEntityUpdateAll(1);
+                world.LateEntityUpdateAll(2);
+
+                if (mutator.Replacement?.Runtime?.SlotIndex != 0 ||
+                    mutator.HighNewborn?.Runtime?.SlotIndex != 3 ||
+                    mutator.Replacement.TickCount != 1 ||
+                    mutator.HighNewborn.TickCount != 2)
+                {
+                    throw new InvalidOperationException(
+                        "Unity W03 structural fixture did not hit high-slot same-pass and low-slot next-pass semantics.");
+                }
+                return events;
+            }
+
+            if (string.Equals(witnessId, "W04", StringComparison.Ordinal))
+            {
+                var world = new SimulationWorld();
+                world.SetStructuralEventSinkForDiagnostics(events, 1, "allocator");
+
+                var general = new BattleTraceStructuralEntity(200);
+                world.Register(general);
+
+                int stageSlot = world.FindFirstFreeRuntimeSlotForDiagnostics(20, 400);
+                var stage = new BattleTraceStructuralEntity(201);
+                stage.Runtime.SpawnSemantic = (int)ReleaseSpawnSemantic.StageSpawnAt;
+                stage.SetRequiredRuntimeSlot(stageSlot);
+                world.Register(stage);
+
+                var dynamicEntity = new LF2OtherObject();
+                dynamicEntity.Runtime.StableId = 202;
+                world.Register(dynamicEntity);
+
+                var high = new BattleTraceStructuralEntity(203);
+                high.SetRequiredRuntimeSlot(399);
+                world.Register(high);
+
+                if (general.Runtime.SlotIndex != 0 ||
+                    stage.Runtime.SlotIndex != 20 ||
+                    dynamicEntity.Runtime.SlotIndex != 50 ||
+                    high.Runtime.SlotIndex != 399)
+                {
+                    throw new InvalidOperationException(
+                        "Unity W04 structural fixture did not hit allocator starts 0/20/50 and Authority400 slot 399.");
+                }
+                return events;
+            }
+
+            if (string.Equals(witnessId, "W07", StringComparison.Ordinal))
+            {
+                var world = new SimulationWorld();
+                world.SetStructuralEventSinkForDiagnostics(events, 0, "fixture-setup");
+
+                var holder = new BattleTraceStructuralEntity(300);
+                holder.SetRequiredRuntimeSlot(0);
+                var target = new BattleTraceStructuralEntity(301);
+                target.SetRequiredRuntimeSlot(1);
+                world.Register(holder);
+                world.Register(target);
+
+                world.ValidateHeldLinksAll(1);
+
+                holder.Runtime.LinkState = 1;
+                holder.Runtime.TargetSlotIndex = 1;
+                holder.Runtime.HeldWeaponStableId = 1;
+                target.Runtime.LinkState = 0;
+                target.Runtime.HolderStableId = 0;
+                world.ValidateHeldLinksAll(2);
+
+                target.Runtime.HolderStableId = 2;
+                world.ValidateHeldLinksAll(3);
+
+                if (holder.Runtime.LinkState != 0 ||
+                    holder.Runtime.TargetSlotIndex != -1 ||
+                    holder.Runtime.HeldWeaponStableId != -1 ||
+                    target.Runtime.HolderStableId != 2 ||
+                    target.Runtime.LinkState != 0)
+                {
+                    throw new InvalidOperationException(
+                        "Unity W07 structural fixture did not preserve target reverse fields while clearing the mismatched holder link.");
+                }
+                return events;
+            }
+
+            throw new ArgumentException(
+                $"Unsupported structuralWitness '{witnessId}'. Expected W03, W04, or W07.",
+                nameof(witnessId));
         }
 
         private static void ApplyFrameCounterProbe(
@@ -349,7 +468,6 @@ namespace NTSD.EditorTools
             var character = new LF2Character();
             character.ModuleInitialize();
             character.ObjectId = slot.oid;
-            character.Runtime.StableId = world.AllocateStableId();
             character.Runtime.X = x;
             character.Runtime.Y = 0.0;
             character.Runtime.Z = z;
@@ -444,7 +562,9 @@ namespace NTSD.EditorTools
                     ("seed", world.Rng.State))),
                 ("scenario", ProjectScenario(scenario)),
                 ("scenarioName", Path.GetFileName(scenarioPath)),
-                ("schema", "ntsd-battle-trace-v3"),
+                ("schema", string.IsNullOrWhiteSpace(scenario.structuralWitness)
+                    ? "ntsd-battle-trace-v3"
+                    : "ntsd-battle-trace-v4"),
                 ("stageFixture", DictionaryOf(
                     ("campaignCount", (object)0),
                     ("loaded", false),
@@ -475,7 +595,7 @@ namespace NTSD.EditorTools
                     ("tick", input.tick)))
                 .Cast<object>()
                 .ToArray();
-            return DictionaryOf(
+            SortedDictionary<string, object> result = DictionaryOf(
                 ("difficulty", (object)scenario.difficulty),
                 ("frameCounterProbe", ProjectFrameCounterProbe(scenario.frameCounterProbe)),
                 ("inputs", inputs),
@@ -485,6 +605,9 @@ namespace NTSD.EditorTools
                 ("slots", slots),
                 ("stage", scenario.stage),
                 ("ticks", scenario.ticks));
+            if (!string.IsNullOrWhiteSpace(scenario.structuralWitness))
+                result["structuralWitness"] = scenario.structuralWitness;
+            return result;
         }
 
         private static object ProjectFrameCounterProbe(BattleTraceFrameCounterProbe probe)
@@ -546,6 +669,21 @@ namespace NTSD.EditorTools
             if (string.IsNullOrWhiteSpace(manifest))
                 throw new InvalidDataException("Unity battle-logic manifest missing from data audit report.");
             return manifest;
+        }
+
+        private static void NormalizeOptionalFrameCounterProbe(BattleTraceScenario scenario)
+        {
+            BattleTraceFrameCounterProbe probe = scenario?.frameCounterProbe;
+            if (probe != null &&
+                probe.runtimeSlot == 0 &&
+                probe.prepareTick == 0 &&
+                probe.immediateTick == 0 &&
+                probe.waitCounter == 0 &&
+                probe.frameWaitCounter == 0 &&
+                probe.targetFrame == 0)
+            {
+                scenario.frameCounterProbe = null;
+            }
         }
 
         private static void ValidateScenario(BattleTraceScenario scenario)
@@ -611,6 +749,15 @@ namespace NTSD.EditorTools
                     throw new ArgumentException("frameCounterProbe counters must be nonzero and distinguishable.");
                 if (probe.targetFrame < 0 || probe.targetFrame >= 400)
                     throw new ArgumentOutOfRangeException(nameof(probe.targetFrame));
+            }
+
+            if (!string.IsNullOrWhiteSpace(scenario.structuralWitness) &&
+                scenario.structuralWitness != "W03" &&
+                scenario.structuralWitness != "W04" &&
+                scenario.structuralWitness != "W07")
+            {
+                throw new ArgumentException(
+                    "structuralWitness must be W03, W04, or W07 when present.");
             }
         }
 
@@ -847,6 +994,58 @@ namespace NTSD.EditorTools
             public string dataFixture = ProductionDataFixture;
         }
 
+        private class BattleTraceStructuralEntity : LF2Entity
+        {
+            public BattleTraceStructuralEntity(int stableId)
+            {
+                StableId = stableId;
+            }
+
+            public int TickCount { get; private set; }
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Character;
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                TickCount++;
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
+            {
+                Renderer = renderer;
+            }
+        }
+
+        private sealed class BattleTraceStructuralMutationEntity :
+            BattleTraceStructuralEntity
+        {
+            private bool mutated;
+
+            public BattleTraceStructuralMutationEntity(int stableId)
+                : base(stableId)
+            {
+            }
+
+            public BattleTraceStructuralEntity Replacement { get; private set; }
+            public BattleTraceStructuralEntity HighNewborn { get; private set; }
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                base.SimFrameTick(tickIndex);
+                if (mutated)
+                    return;
+
+                mutated = true;
+                Match.Unregister(this);
+                Replacement = new BattleTraceStructuralEntity(1000);
+                Match.Register(Replacement);
+                HighNewborn = new BattleTraceStructuralEntity(1001);
+                HighNewborn.SetRequiredRuntimeSlot(3);
+                Match.Register(HighNewborn);
+            }
+        }
+
         [Serializable]
         private sealed class BattleTraceScenario
         {
@@ -861,6 +1060,7 @@ namespace NTSD.EditorTools
             public BattleTraceSlot[] slots;
             public BattleTraceTickInput[] inputs;
             public BattleTraceFrameCounterProbe frameCounterProbe;
+            public string structuralWitness;
         }
 
         [Serializable]

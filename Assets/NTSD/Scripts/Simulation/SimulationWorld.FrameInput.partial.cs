@@ -41,7 +41,10 @@ namespace NTSD.Simulation
                 {
                     (SimulationInputButtons button, FuncKeyMask key) mapping = FrameInputKeys[keyIndex];
                     bool down = (playerInput.Buttons & mapping.button) != 0;
-                    controller.InputBuffer.EnqueueForTick(frameInput.TickIndex, mapping.key, down);
+                    controller.InputBuffer.EnqueueCompletePacketKeyForTick(
+                        frameInput.TickIndex,
+                        mapping.key,
+                        down);
                 }
             }
         }

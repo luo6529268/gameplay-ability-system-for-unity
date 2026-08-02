@@ -254,7 +254,32 @@ namespace NTSD.Animation
             task.initialRuntimeX = spawnX;
             task.initialRuntimeY = spawnY;
             task.initialRuntimeZ = (int)spawnZ;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
+        }
+
+        public static void PrepareFinalRuntimePositionForCreation(OPointCreateTask task)
+        {
+            if (task == null)
+                return;
+
+            double x = task.useDirectRuntimePosition ? task.directX : task.pos.x;
+            double y = task.useDirectRuntimePosition ? task.directY : task.pos.y;
+            double z = task.useDirectRuntimePosition ? task.directZ : task.z;
+            if (!task.skipPostInitZOffset)
+                z += 1.0;
+
+            task.useDirectRuntimePosition = true;
+            task.directX = x;
+            task.directY = y;
+            task.directZ = z;
+            task.skipPostInitZOffset = true;
+
+            if (!task.useInitialRuntimeIntPosition)
+            {
+                task.useInitialRuntimeIntPosition = true;
+                task.initialRuntimeX = (int)x;
+                task.initialRuntimeY = (int)y;
+                task.initialRuntimeZ = (int)z;
+            }
         }
 
         private static void ApplyMultiSpawnExemptAndVrest(List<LF2Entity> spawned)
@@ -344,6 +369,7 @@ namespace NTSD.Animation
                 requestedEntity.SetRequiredRuntimeSlot(task.requiredRuntimeSlot);
 
             // 6. 设置逻辑对象并初始化
+            PrepareFinalRuntimePositionForCreation(task);
             EntityModel.SetLogicObject(logicObject, task);
 
             if (spawnedChar != null)
@@ -370,8 +396,7 @@ namespace NTSD.Animation
                     task.opoint,
                     objType,
                     0f,
-                    task.releaseOpointSpawn,
-                    task.skipPostInitZOffset);
+                    task.releaseOpointSpawn);
                 ApplyReleaseOpointDirectionalVz(living, task);
                 ApplyDirectVelocity(living, task);
 
@@ -472,6 +497,7 @@ namespace NTSD.Animation
                 singleTask.attackExempt = task.attackExempt;
                 singleTask.releaseOpointSpawn = task.releaseOpointSpawn;
 
+                PrepareFinalRuntimePositionForCreation(singleTask);
                 EntityModel.SetLogicObject(logicObject, singleTask);
 
                 if (spawnedChar != null)
@@ -499,8 +525,7 @@ namespace NTSD.Animation
                         task.opoint,
                         objType,
                         vz,
-                        task.releaseOpointSpawn,
-                        singleTask.skipPostInitZOffset);
+                        task.releaseOpointSpawn);
                     ApplyReleaseOpointDirectionalVz(living, singleTask);
                     ApplyDirectVelocity(living, singleTask);
                 }
@@ -521,13 +546,8 @@ namespace NTSD.Animation
             ObjectPoint op,
             int objType,
             float dvz,
-            bool releaseOpointSpawn,
-            bool skipPostInitZOffset)
+            bool releaseOpointSpawn)
         {
-            // z_float +1（C++ release 对齐 0x004223DD：new.z_float = parent.z_float + 1.0）
-            if (!skipPostInitZOffset)
-                living.PS.z += 1f;
-
             if (parent != null)
             {
                 // Inherit the C++ release relation identity from the spawning entity.

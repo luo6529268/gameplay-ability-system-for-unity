@@ -28,6 +28,7 @@ namespace NTSD.Animation.Rendering.Editor
                 BindingFlags.Static | BindingFlags.NonPublic);
 
         [Test]
+        [Category("NTSD_W08Regression")]
         public void ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity()
         {
             using var fixture = new CommonFixture();
@@ -94,11 +95,11 @@ namespace NTSD.Animation.Rendering.Editor
                 bound,
                 fixture.FallbackMaterial,
                 fixture.ArrayMaterial);
-            AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.Shadow, boundShadow, 0, 0));
+            AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1));
             AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.HitRecord, boundSpark, -1, 13));
             AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.OverlayGlyph, boundWord, 5, 'L'));
             BattleRenderCommand staleShadow =
-                CreateCommand(BattleRenderCommandType.Shadow, boundShadow, 0, 0, 1);
+                CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1, 1);
             Assert.That(
                 resolver.Resolve(staleShadow, out _),
                 Is.EqualTo(BattleCentralResourceStatus.UnresolvedVisual),
@@ -109,7 +110,7 @@ namespace NTSD.Animation.Rendering.Editor
             ResetFrameMethod.Invoke(frame, new object[] { 1, bound });
             AddCommandMethod.Invoke(
                 frame,
-                new object[] { CreateCommand(BattleRenderCommandType.Shadow, boundShadow, 0, 0) });
+                new object[] { CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1) });
             AddCommandMethod.Invoke(
                 frame,
                 new object[] { CreateCommand(BattleRenderCommandType.HitRecord, boundSpark, -1, 13) });
@@ -118,7 +119,7 @@ namespace NTSD.Animation.Rendering.Editor
                 new object[] { CreateCommand(BattleRenderCommandType.OverlayGlyph, boundWord, 5, 'L') });
             AddCommandMethod.Invoke(
                 frame,
-                new object[] { CreateCommand(BattleRenderCommandType.Shadow, boundShadow, 0, 0) });
+                new object[] { CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1) });
             using (var backend = new BattleDynamicMeshBackend())
             {
                 backend.Build(frame, resolver, BattleCentralDrawMode.OrderedChunks);

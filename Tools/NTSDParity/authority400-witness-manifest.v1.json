@@ -1,0 +1,110 @@
+{
+  "schema": "ntsd-authority400-witness-manifest.v1",
+  "profile": {
+    "id": "Authority400",
+    "runtimeSlotCount": 400,
+    "purpose": "Deterministic, authority-side and Unity-side per-tick witness comparison."
+  },
+  "traceSchemas": ["ntsd-battle-trace-v3", "ntsd-battle-trace-v4"],
+  "defaultComparison": {
+    "detail": "full",
+    "profile": "fixed-world-camera",
+    "dataFixture": "authority-dat-diagnostic",
+    "allowDiagnostic": true,
+    "requireCertificate": false,
+    "meaning": "A comparison result is evidence for its listed witness only; it does not certify uncovered contracts."
+  },
+  "contracts": [
+    { "id": "C01", "description": "pass order" },
+    { "id": "C02", "description": "live ascending scan" },
+    { "id": "C03", "description": "high-slot newborn same pass" },
+    { "id": "C04", "description": "low-slot reuse next pass" },
+    { "id": "C05", "description": "Transit->TU->snapshot" },
+    { "id": "C06", "description": "character hit/random drop/object hit consume order" },
+    { "id": "C07", "description": "late state/recovery/frame/collision/opoint/tail" },
+    { "id": "C08", "description": "segmented opoint flush" },
+    { "id": "C09", "description": "free/deferred unregister/generation" },
+    { "id": "C10", "description": "RNG state/calls/ascending consumption" },
+    { "id": "C11", "description": "holder/target/link" },
+    { "id": "C12", "description": "presentation no-writeback" },
+    { "id": "C13", "description": "cursor-local opoint immediate/high-slot visibility" },
+    { "id": "C14", "description": "allocator bands/start search" }
+  ],
+  "witnesses": [
+    {
+      "id": "W01",
+      "title": "dense-input-rng",
+      "status": "current-v3-runnable",
+      "scenario": "Tools/NTSDParity/Scenarios/Authority400/W01-dense-input-rng.v1.json",
+      "covers": ["C10", "C01"],
+      "evidence": "Both producers emit the current v3 input and RNG domains for every fixed tick."
+    },
+    {
+      "id": "W02",
+      "title": "frame-wait-immediate",
+      "status": "current-v3-runnable",
+      "scenario": "Tools/NTSDParity/Scenarios/Authority400/W02-frame-wait-immediate.v1.json",
+      "covers": ["C05"],
+      "evidence": "The existing frameCounterProbe checks wait preservation and immediate-frame wait reset on both producers."
+    },
+    {
+      "id": "W03",
+      "title": "structural-spawn-free-slot-sequence",
+      "status": "current-v4-runnable",
+      "scenario": "Tools/NTSDParity/Scenarios/Authority400/W03-structural-spawn-free-slot-sequence.v1.json",
+      "covers": ["C02", "C03", "C04", "C09"],
+      "evidence": "Detached diagnostic fixture runs the real Unity late live scan and registry lifecycle while the authority exporter drives the same fixed Objects[0..399] scan and SpawnAt/FreeEntity operations."
+    },
+    {
+      "id": "W04",
+      "title": "structural-stage-dynamic-allocation",
+      "status": "current-v4-runnable",
+      "scenario": "Tools/NTSDParity/Scenarios/Authority400/W04-structural-stage-dynamic-allocation.v1.json",
+      "covers": ["C14"],
+      "evidence": "Both diagnostic fixtures execute lowest-free searches from general 0, stage 20, and dynamic 50, plus the inclusive Authority400 tail slot 399."
+    },
+    {
+      "id": "W05",
+      "title": "structural-opoint-lifecycle",
+      "status": "requires-v4-structural-events/source-callchain-plus-focused-test",
+      "covers": ["C07", "C08", "C13"]
+    },
+    {
+      "id": "W06",
+      "title": "structural-collision-hitresolve",
+      "status": "requires-v4-structural-events/source-callchain-plus-focused-test",
+      "covers": ["C06"],
+      "evidence": "W06CollisionHitResolveWitnessEditorTests executes the real Unity RunInteractionPhase order and the production collision carrier/character hit consume path. It proves character-hit consume precedes the natural random-drop RNG gate, object-hit consume observes that RNG side effect, and frozen candidates resolve in ascending runtime-slot order without later geometry/team re-filtering. Authority anchors: GameTick.cs lines 105-111 and HitResolve.cs lines 24-64."
+    },
+    {
+      "id": "W07",
+      "title": "structural-positive-link-validation",
+      "status": "current-v4-runnable",
+      "scenario": "Tools/NTSDParity/Scenarios/Authority400/W07-structural-positive-link-validation.v1.json",
+      "covers": ["C11"],
+      "evidence": "The authority fixture reaches private ValidatePositiveLinks through public GameTick.Run observation hooks; Unity executes the real ValidateHeldLinksAll. Tick 2 keeps reciprocal forward/reverse links and tick 3 clears only holder forward fields after a reverse holder mismatch."
+    },
+    {
+      "id": "W08",
+      "title": "structural-pass-order-and-lifecycle",
+      "status": "requires-v4-structural-events/source-callchain-plus-focused-test",
+      "covers": ["C12"]
+    }
+  ],
+  "coverage": [
+    { "contract": "C01", "witness": "W01", "status": "partial-observable-edge", "coverageLevel": "partial-observable-edge" },
+    { "contract": "C02", "witness": "W03", "status": "diagnostic-source-callchain", "coverageLevel": "diagnostic-source-callchain" },
+    { "contract": "C03", "witness": "W03", "status": "diagnostic-source-callchain", "coverageLevel": "diagnostic-source-callchain" },
+    { "contract": "C04", "witness": "W03", "status": "diagnostic-source-callchain", "coverageLevel": "diagnostic-source-callchain" },
+    { "contract": "C05", "witness": "W02", "status": "partial-observable-edge", "coverageLevel": "partial-observable-edge" },
+    { "contract": "C06", "witness": "W06", "status": "planned", "coverageLevel": "planned" },
+    { "contract": "C07", "witness": "W05", "status": "planned", "coverageLevel": "planned" },
+    { "contract": "C08", "witness": "W05", "status": "planned", "coverageLevel": "planned" },
+    { "contract": "C09", "witness": "W03", "status": "diagnostic-source-callchain", "coverageLevel": "diagnostic-source-callchain" },
+    { "contract": "C10", "witness": "W01", "status": "trace-direct", "coverageLevel": "trace-direct" },
+    { "contract": "C11", "witness": "W07", "status": "diagnostic-source-callchain/partial", "coverageLevel": "diagnostic-source-callchain/partial" },
+    { "contract": "C12", "witness": "W08", "status": "planned", "coverageLevel": "planned" },
+    { "contract": "C13", "witness": "W05", "status": "planned", "coverageLevel": "planned" },
+    { "contract": "C14", "witness": "W04", "status": "diagnostic-source-callchain", "coverageLevel": "diagnostic-source-callchain" }
+  ]
+}

@@ -25,9 +25,8 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// 初始化方法。
         /// 负责：
-        /// 1. 分配 StableId
-        /// 2. 初始化位置、速度、方向、帧
-        /// 3. 注册到 SimulationWorld
+        /// 1. 初始化位置、速度、方向、帧
+        /// 2. 注册到 SimulationWorld；StableId 由 world 在成功接纳生命周期时分配
         /// </summary>
         /// <param name="task">创建任务数据</param>
         /// <param name="renderer">渲染器引用（用于访问 Animator）</param>

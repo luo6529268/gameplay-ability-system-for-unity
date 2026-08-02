@@ -11,6 +11,42 @@ namespace NTSD.Animation
     /// </summary>
     public static class NTSDRenderSpace
     {
+        public readonly struct ViewportTransformSnapshot
+        {
+            internal ViewportTransformSnapshot(
+                float left,
+                float top,
+                float unitsPerPixelX,
+                float unitsPerPixelY)
+            {
+                Left = left;
+                Top = top;
+                UnitsPerPixelX = unitsPerPixelX;
+                UnitsPerPixelY = unitsPerPixelY;
+            }
+
+            public float Left { get; }
+            public float Top { get; }
+            public float UnitsPerPixelX { get; }
+            public float UnitsPerPixelY { get; }
+
+            public Vector3 ScreenPixelToWorld(float screenX, float screenY, float z = 0f)
+            {
+                return new Vector3(
+                    Left + screenX * UnitsPerPixelX,
+                    Top - screenY * UnitsPerPixelY,
+                    z);
+            }
+
+            public Vector3 SnapWorldPosition(Vector3 worldPos)
+            {
+                return new Vector3(
+                    Left + Mathf.Round((worldPos.x - Left) / UnitsPerPixelX) * UnitsPerPixelX,
+                    Top - Mathf.Round((Top - worldPos.y) / UnitsPerPixelY) * UnitsPerPixelY,
+                    worldPos.z);
+            }
+        }
+
         public const int SourceScreenWidth = 794;
         public const int SourceScreenHeight = 550;
 
@@ -113,6 +149,16 @@ namespace NTSD.Animation
             _boundaryViewportOverrideHasBoundsForSelfCheck = false;
             _boundaryViewportOverrideForSelfCheck = default;
             InvalidateBoundaryViewportCache();
+        }
+
+        public static ViewportTransformSnapshot CaptureViewportTransform()
+        {
+            GetViewport(out float left, out float top);
+            return new ViewportTransformSnapshot(
+                left,
+                top,
+                UnitsPerPixelX,
+                UnitsPerPixelY);
         }
 
         public static Vector3 ScreenPixelToWorld(float screenX, float screenY, float z = 0f)

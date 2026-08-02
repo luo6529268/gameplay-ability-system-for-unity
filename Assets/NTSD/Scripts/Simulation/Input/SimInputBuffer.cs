@@ -74,6 +74,23 @@ namespace NTSD.Simulation
 		/// <param name="down">按下/抬起</param>
 		public void EnqueueForTick(int tickIndex, FuncKeyMask key, bool down)
 		{
+			EnqueueForTick(tickIndex, key, down, completePacket: false);
+		}
+
+		/// <summary>
+		/// Writes one key from a complete authoritative held-state packet.
+		/// </summary>
+		public void EnqueueCompletePacketKeyForTick(int tickIndex, FuncKeyMask key, bool down)
+		{
+			EnqueueForTick(tickIndex, key, down, completePacket: true);
+		}
+
+		private void EnqueueForTick(
+			int tickIndex,
+			FuncKeyMask key,
+			bool down,
+			bool completePacket)
+		{
 			// 获取或创建目标 tick 的事件列表
 			if (!_buffer.TryGetValue(tickIndex, out List<SimInputEvent> events))
 			{
@@ -82,7 +99,11 @@ namespace NTSD.Simulation
 			}
 
 			// 添加事件
-			SimInputEvent evt = new SimInputEvent(tickIndex, key, down);
+			SimInputEvent evt = new SimInputEvent(
+				tickIndex,
+				key,
+				down,
+				completePacket);
 			events.Add(evt);
 
 			// 需要排查输入时可在这里记录诊断事件。

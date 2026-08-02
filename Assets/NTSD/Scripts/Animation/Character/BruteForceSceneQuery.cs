@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Spatial;
@@ -11,10 +12,14 @@ namespace NTSD.Animation
     /// </summary>
     public class BruteForceSceneQuery : ILF2SceneQuery
     {
-        private const int HitCandidateMax = 20;
+        private const int HitCandidateMax = CollisionCandidateStore.HitCandidateMax;
         private const int CandidateDistanceUnset = 1000;
         private const int RectMin = -1000000000;
         private const int RectMax = 1000000000;
+        private const byte RoleAwareFormalExactAttackRole = 1 << 0;
+        private const byte RoleAwareFormalExactBodyRole = 1 << 1;
+        public const long RoleAwareDirectComparisonThreshold = 262144L;
+        public const long RoleAwareSweepDirectCrossover = 8192L;
 
         private readonly SimulationWorld _world;
         private readonly CollisionBroadphaseBackend _collisionBroadphase;
@@ -23,6 +28,13 @@ namespace NTSD.Animation
         private readonly List<SceneQueryHit> _emptyCandidateHits = new List<SceneQueryHit>(0);
         private readonly Dictionary<LF2Entity, List<SceneQueryHit>> _candidateCache =
             new Dictionary<LF2Entity, List<SceneQueryHit>>();
+        private readonly Stack<List<SceneQueryHit>> _candidateListPool =
+            new Stack<List<SceneQueryHit>>();
+        private readonly CollisionCandidateStoreDiagnostics _candidateStoreShadowDiagnostics =
+            new CollisionCandidateStoreDiagnostics();
+        private readonly CollisionCandidateStoreAuthorityDiagnostics _candidateStoreAuthorityDiagnostics =
+            new CollisionCandidateStoreAuthorityDiagnostics();
+        private readonly CollisionCandidateStore _candidateStoreShadow;
         private readonly LooseQuadtreeBroadphase _shadowBroadphase = new LooseQuadtreeBroadphase();
         private readonly List<RoleAwareShadowParticipant> _roleShadowParticipants =
             new List<RoleAwareShadowParticipant>(128);
@@ -41,10 +53,38 @@ namespace NTSD.Animation
             new LooseQuadtreeBroadphase();
         private readonly List<RoleAwareFormalParticipant> _roleFormalParticipants =
             new List<RoleAwareFormalParticipant>(128);
-        private readonly List<RoleAwareFormalBodyEntry> _roleFormalBodyEntries =
-            new List<RoleAwareFormalBodyEntry>(128);
+        private readonly Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>
+            _roleFormalBodyTemplates =
+                new Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>(
+                    LF2FrameDataReferenceComparer.Instance);
         private readonly List<RoleAwareFormalItrEntry> _roleFormalItrEntries =
             new List<RoleAwareFormalItrEntry>(128);
+        private readonly List<RoleAwareFormalExactItrRectEntry>
+            _roleFormalExactItrRects =
+                new List<RoleAwareFormalExactItrRectEntry>(128);
+        private readonly List<RoleAwareFormalExactBodyRectEntry>
+            _roleFormalExactBodyRects =
+                new List<RoleAwareFormalExactBodyRectEntry>(128);
+        private readonly List<byte> _roleFormalExactRequiredRoles =
+            new List<byte>(128);
+        private readonly List<int> _roleFormalBodyOrdinals =
+            new List<int>(128);
+        private readonly List<int> _roleFormalFallbackAttackOrdinals =
+            new List<int>(32);
+        private readonly List<int> _roleFormalExactAttackOrdinals =
+            new List<int>(128);
+        private readonly List<int> _roleFormalFallbackBodyOrdinals =
+            new List<int>(32);
+        private readonly List<RoleAwareSweepEvent> _roleFormalSweepEvents =
+            new List<RoleAwareSweepEvent>(512);
+        private readonly List<int> _roleFormalSweepActiveBodyIndices =
+            new List<int>(128);
+        private readonly List<int> _roleFormalSweepActiveItrIndices =
+            new List<int>(128);
+        private readonly List<int> _roleFormalSweepBodyPositions =
+            new List<int>(128);
+        private readonly List<int> _roleFormalSweepItrPositions =
+            new List<int>(128);
         private readonly LooseQuadtreeBroadphase _formalBroadphase = new LooseQuadtreeBroadphase();
         private readonly List<LF2Entity> _formalParticipants = new List<LF2Entity>(128);
         private readonly List<RuntimeEntityHandle> _formalParticipantHandles =
@@ -66,15 +106,128 @@ namespace NTSD.Animation
         private readonly List<int> _immediateCandidateIndices = new List<int>(96);
         private readonly List<LF2Entity> _immediateTargets = new List<LF2Entity>(96);
         private bool _consumeCandidateCache;
+        private bool _candidateStoreAuthorityRequestedForCurrentTick;
+        private bool _candidateStoreAuthorityAppliedForCurrentTick;
+        private int _candidateStoreLegacyOracleInterval = 1;
+        private int _candidateProducerTickForCurrentCollection;
+        private bool _candidateStoreProducerHealthyForCurrentTick;
+        private CollisionCandidateProducerMode _candidateProducerModeForCurrentTick;
+        private int _candidateConsumptionEpoch;
+        private CollisionCandidateConsumptionSource _candidateConsumptionSource;
+        private long _candidateListCreatedCount;
+        private long _candidateListReusedCount;
         private int _formalFallbackParticipantCount;
         private bool _formalCollectionAborted;
+        private bool _collisionRoleZeroItrEarlyReturnAppliedForCurrentTick;
         private int _lastFormalPairCount;
         private int _lastRoleAwareParticipantCount;
         private int _lastRoleAwareInertParticipantCount;
         private int _lastRoleAwareBodyEntryCount;
         private int _lastRoleAwareItrQueryCount;
+        private int _lastRoleAwareBodyTemplateBuildCount;
+        private int _lastRoleAwareBodyTemplateHitCount;
+        private int _lastRoleAwareBodyTemplateFallbackCount;
+        private long _lastRoleAwareDirectComparisonCount;
+        private long _totalRoleAwareDirectComparisonCount;
+        private long _lastRoleAwareDirectCost;
+        private bool _lastRoleAwareDirectCostAvailable;
+        private int _lastRoleAwareDirectTickCount;
+        private int _lastRoleAwareTreeTickCount;
+        private int _lastRoleAwareNestedDirectTickCount;
+        private int _lastRoleAwareSweepDirectTickCount;
+        private long _lastRoleAwareSweepXCandidateCount;
+        private long _lastRoleAwareSweepFullOverlapCheckCount;
+        private int _lastRoleAwareCheapInputValidationCount;
+        private int _lastRoleAwareFullInputValidationCount;
+        private int _lastRoleAwareExactItrRectBuildCount;
+        private int _lastRoleAwareExactBodyRectBuildCount;
+        private int _lastRoleAwareExactDirectionCount;
+        private int _lastRoleAwareExactItrVisitCount;
+        private int _lastRoleAwareExactBodyOverlapCheckCount;
+        private long _totalRoleAwareDirectTickCount;
+        private long _totalRoleAwareTreeTickCount;
+        private long _totalRoleAwareNestedDirectTickCount;
+        private long _totalRoleAwareSweepDirectTickCount;
+        private long _totalRoleAwareSweepXCandidateCount;
+        private long _totalRoleAwareSweepFullOverlapCheckCount;
+        private bool _forceRoleAwareNestedDirectForDiagnostics;
+        private bool _forceRoleAwareSweepDirectForDiagnostics;
         public bool ShadowBroadphaseDiagnosticsEnabled { get; set; }
+        public bool CollisionCandidateStoreShadowDiagnosticsEnabled { get; set; }
+        public bool CollisionCandidateStoreAuthorityEnabled { get; set; }
+        public int CollisionCandidateStoreLegacyOracleInterval
+        {
+            get => _candidateStoreLegacyOracleInterval;
+            set => _candidateStoreLegacyOracleInterval = Math.Max(0, value);
+        }
+        public CollisionCandidateStoreDiagnostics CollisionCandidateStoreShadowDiagnostics =>
+            _candidateStoreShadowDiagnostics;
+        public CollisionCandidateStoreAuthorityDiagnostics CollisionCandidateStoreAuthorityDiagnostics =>
+            _candidateStoreAuthorityDiagnostics;
+        public bool CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics =>
+            _candidateStoreAuthorityAppliedForCurrentTick;
+        public bool CollisionCandidateStoreLegacyOracleSampledForCurrentTickForDiagnostics =>
+            _candidateProducerModeForCurrentTick ==
+            CollisionCandidateProducerMode.StoreWithLegacyOracle;
+        public bool CollisionCandidateStoreOnlyForCurrentTickForDiagnostics =>
+            _candidateProducerModeForCurrentTick ==
+            CollisionCandidateProducerMode.StoreOnly;
+        public int CollisionCandidateStoreRuntimeCapacityForDiagnostics =>
+            _candidateStoreShadow.RuntimeCapacity;
+        public long CandidateListCreatedCountForDiagnostics =>
+            _candidateListCreatedCount;
+        public long CandidateListReusedCountForDiagnostics =>
+            _candidateListReusedCount;
+        public int CandidateListPoolCountForDiagnostics => _candidateListPool.Count;
+        public int ActiveCandidateListCountForDiagnostics => _candidateCache.Count;
         public CollisionFormalCollectorMode FormalCollectorMode { get; set; }
+        public bool ForceLegacyRoleBodyBuildForDiagnostics { get; set; }
+        public bool ForceRoleAwareTreeForDiagnostics { get; set; }
+        public bool ForceRoleAwareDirectForDiagnostics { get; set; }
+        public bool ForceRoleAwareNestedDirectForDiagnostics
+        {
+            get => _forceRoleAwareNestedDirectForDiagnostics;
+            set
+            {
+                _forceRoleAwareNestedDirectForDiagnostics = value;
+                if (value)
+                    _forceRoleAwareSweepDirectForDiagnostics = false;
+            }
+        }
+        public bool ForceRoleAwareSweepDirectForDiagnostics
+        {
+            get => _forceRoleAwareSweepDirectForDiagnostics;
+            set
+            {
+                _forceRoleAwareSweepDirectForDiagnostics = value;
+                if (value)
+                    _forceRoleAwareNestedDirectForDiagnostics = false;
+            }
+        }
+        public bool ForceFullRoleAwareFormalInputValidationForDiagnostics { get; set; }
+        public bool CollisionRoleZeroItrFastPathEnabled { get; private set; }
+        public long CollisionRoleZeroItrFastPathRequestedCountForDiagnostics { get; private set; }
+        public long CollisionRoleZeroItrFastPathAppliedCountForDiagnostics { get; private set; }
+        public long CollisionRoleZeroItrFastPathFallbackCountForDiagnostics { get; private set; }
+        public long CollisionRoleZeroItrFastPathInvalidCountForDiagnostics { get; private set; }
+        public long CollisionRoleZeroItrFastPathZeroItrCountForDiagnostics { get; private set; }
+        public int CollisionRoleZeroItrFastPathParticipantCountForDiagnostics { get; private set; }
+        // Compatibility name retained for existing report JSON. This now means the
+        // participant count produced by the existing role-aware build; no handles are scanned.
+        public int CollisionRoleZeroItrFastPathTouchedHandleCountForDiagnostics =>
+            CollisionRoleZeroItrFastPathParticipantCountForDiagnostics;
+
+        public void SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(bool enabled)
+        {
+            if (_consumeCandidateCache)
+            {
+                throw new InvalidOperationException(
+                    "Collision role zero-itr mode cannot change during candidate consumption.");
+            }
+
+            CollisionRoleZeroItrFastPathEnabled = enabled;
+        }
+
         internal SpatialBroadphaseDiagnostics ShadowBroadphaseDiagnostics => _shadowDiagnostics;
         public RoleAwareCollisionShadowDiagnostics RoleAwareShadowDiagnostics =>
             _roleShadowDiagnostics;
@@ -87,8 +240,284 @@ namespace NTSD.Animation
                 ? _roleFormalBroadphase
                 : _formalBroadphase;
 #if UNITY_INCLUDE_TESTS
+        private readonly List<byte> _roleFormalExactCommonBuildCounts =
+            new List<byte>(128);
+        private readonly List<byte> _roleFormalExactAttackBuildCounts =
+            new List<byte>(128);
+        private readonly List<byte> _roleFormalExactBodyBuildCounts =
+            new List<byte>(128);
+        private readonly List<byte> _roleFormalExactValidationCounts =
+            new List<byte>(128);
         public bool ThrowDuringRoleAwareShadowForSelfCheck { get; set; }
         public int ThrowAfterRoleAwareFormalPairCountForSelfCheck { get; set; } = -1;
+        public bool ForceLegacyPerPairValidationForDiagnostics { get; set; }
+        public bool ForceLegacyRoleAwareExactPrefilterForDiagnostics { get; set; }
+        public bool ForceRoleAwareExactCacheRevalidationForDiagnostics { get; set; }
+        public int ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck { get; set; } = -1;
+        private int _collisionCandidateStoreWriteCountForSelfCheck;
+        private bool _collisionCandidateStoreFaultInjectedForSelfCheck;
+        public Action BeforeRoleAwareFormalInputValidationForSelfCheck { get; set; }
+        public Action<int> AfterRoleAwareExactPairForSelfCheck { get; set; }
+        public Action BeforeCollisionCandidateStoreFinalCompareForSelfCheck { get; set; }
+        public bool TryAppendCollisionCandidateLegacyOracleForSelfCheck(
+            LF2Entity attacker,
+            in SceneQueryHit hit)
+        {
+            if (attacker == null ||
+                !_candidateCache.TryGetValue(attacker, out List<SceneQueryHit> candidates))
+            {
+                return false;
+            }
+
+            candidates.Add(hit);
+            return true;
+        }
+
+        public long MeasureWarmedRoleAwareDirectAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+
+            _formalAuthorityPairKeys.Clear();
+            CollectRoleAwareDirectBroadphasePairs();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+            {
+                _formalAuthorityPairKeys.Clear();
+                CollectRoleAwareDirectBroadphasePairs();
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        public long MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+
+            CollectCollisionCandidates();
+            EndCollisionCandidateConsumption();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+            {
+                CollectCollisionCandidates();
+                EndCollisionCandidateConsumption();
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        public long MeasureWarmedRoleAwareFallbackPairAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+
+            _formalAuthorityPairKeys.Clear();
+            CollectRoleAwareFormalFallbackPairs();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+            {
+                _formalAuthorityPairKeys.Clear();
+                CollectRoleAwareFormalFallbackPairs();
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        public long MeasureWarmedRoleAwareExactRectCacheAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+            if (_roleFormalExactRequiredRoles.Count !=
+                _roleFormalParticipants.Count)
+            {
+                throw new InvalidOperationException(
+                    "Role-aware exact cache inputs have not been collected.");
+            }
+
+            RebuildRoleAwareFormalExactRectCachesForSelfCheck();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+                RebuildRoleAwareFormalExactRectCachesForSelfCheck();
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        private void RebuildRoleAwareFormalExactRectCachesForSelfCheck()
+        {
+            _roleFormalExactItrRects.Clear();
+            _roleFormalExactBodyRects.Clear();
+            _lastRoleAwareExactItrRectBuildCount = 0;
+            _lastRoleAwareExactBodyRectBuildCount = 0;
+            for (int participantOrdinal = 0;
+                 participantOrdinal < _roleFormalParticipants.Count;
+                 participantOrdinal++)
+            {
+                byte requiredRoles =
+                    _roleFormalExactRequiredRoles[participantOrdinal];
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                if ((requiredRoles & RoleAwareFormalExactAttackRole) != 0)
+                {
+                    participant.HasExactAttackCache = false;
+                    participant.HasOrdinaryItrUnion = false;
+                    BuildRoleAwareFormalExactAttackCache(ref participant);
+                }
+                if ((requiredRoles & RoleAwareFormalExactBodyRole) != 0)
+                {
+                    participant.HasExactBodyCache = false;
+                    participant.HasBodyUnion = false;
+                    BuildRoleAwareFormalExactBodyCache(ref participant);
+                }
+
+                _roleFormalParticipants[participantOrdinal] = participant;
+            }
+        }
+
+        public void GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(
+            out int bodyCount,
+            out int fallbackAttackCount,
+            out int exactAttackCount,
+            out int fallbackBodyCount)
+        {
+            bodyCount = _roleFormalBodyOrdinals.Count;
+            fallbackAttackCount = _roleFormalFallbackAttackOrdinals.Count;
+            exactAttackCount = _roleFormalExactAttackOrdinals.Count;
+            fallbackBodyCount = _roleFormalFallbackBodyOrdinals.Count;
+        }
+
+        public void CopyLastRoleAwareFallbackPairKeysForSelfCheck(
+            List<long> oldPredicateKeys,
+            List<long> roleListKeys)
+        {
+            if (oldPredicateKeys == null)
+                throw new ArgumentNullException(nameof(oldPredicateKeys));
+            if (roleListKeys == null)
+                throw new ArgumentNullException(nameof(roleListKeys));
+
+            oldPredicateKeys.Clear();
+            roleListKeys.Clear();
+            for (int attackerOrdinal = 0;
+                 attackerOrdinal < _roleFormalParticipants.Count;
+                 attackerOrdinal++)
+            {
+                RoleAwareFormalParticipant attacker =
+                    _roleFormalParticipants[attackerOrdinal];
+                for (int targetOrdinal = 0;
+                     targetOrdinal < _roleFormalParticipants.Count;
+                     targetOrdinal++)
+                {
+                    if (attackerOrdinal == targetOrdinal)
+                        continue;
+
+                    RoleAwareFormalParticipant target =
+                        _roleFormalParticipants[targetOrdinal];
+                    if (attacker.HasAttackItr &&
+                        target.HasBody &&
+                        (attacker.HasFallbackAttackItr ||
+                         target.HasFallbackBody))
+                    {
+                        AddOrdinalPair(
+                            oldPredicateKeys,
+                            attackerOrdinal,
+                            targetOrdinal);
+                    }
+                }
+            }
+
+            AddRoleAwareFormalFallbackPairsTo(roleListKeys);
+            SortAndDeduplicate(oldPredicateKeys);
+            SortAndDeduplicate(roleListKeys);
+        }
+
+        public bool TryGetLastRoleAwareParticipantFlagsForSelfCheck(
+            LF2Entity entity,
+            out bool hasBody,
+            out bool hasFallbackBody,
+            out bool hasAttackItr,
+            out bool hasFallbackAttackItr)
+        {
+            hasBody = false;
+            hasFallbackBody = false;
+            hasAttackItr = false;
+            hasFallbackAttackItr = false;
+            for (int participantOrdinal = 0;
+                 participantOrdinal < _roleFormalParticipants.Count;
+                 participantOrdinal++)
+            {
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                if (!ReferenceEquals(participant.Entity, entity))
+                    continue;
+
+                hasBody = participant.HasBody;
+                hasFallbackBody = participant.HasFallbackBody;
+                hasAttackItr = participant.HasAttackItr;
+                hasFallbackAttackItr = participant.HasFallbackAttackItr;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryGetLastRoleAwareExactCacheCountsForSelfCheck(
+            LF2Entity entity,
+            out int commonBuildCount,
+            out int attackBuildCount,
+            out int bodyBuildCount,
+            out int validationCount,
+            out bool attackRequired,
+            out bool bodyRequired)
+        {
+            commonBuildCount = 0;
+            attackBuildCount = 0;
+            bodyBuildCount = 0;
+            validationCount = 0;
+            attackRequired = false;
+            bodyRequired = false;
+            for (int participantOrdinal = 0;
+                 participantOrdinal < _roleFormalParticipants.Count;
+                 participantOrdinal++)
+            {
+                if (!ReferenceEquals(
+                        _roleFormalParticipants[participantOrdinal].Entity,
+                        entity))
+                {
+                    continue;
+                }
+
+                if (participantOrdinal >= _roleFormalExactRequiredRoles.Count ||
+                    participantOrdinal >= _roleFormalExactCommonBuildCounts.Count ||
+                    participantOrdinal >= _roleFormalExactAttackBuildCounts.Count ||
+                    participantOrdinal >= _roleFormalExactBodyBuildCounts.Count ||
+                    participantOrdinal >= _roleFormalExactValidationCounts.Count)
+                {
+                    return false;
+                }
+
+                byte requiredRoles =
+                    _roleFormalExactRequiredRoles[participantOrdinal];
+                commonBuildCount =
+                    _roleFormalExactCommonBuildCounts[participantOrdinal];
+                attackBuildCount =
+                    _roleFormalExactAttackBuildCounts[participantOrdinal];
+                bodyBuildCount =
+                    _roleFormalExactBodyBuildCounts[participantOrdinal];
+                validationCount =
+                    _roleFormalExactValidationCounts[participantOrdinal];
+                attackRequired =
+                    (requiredRoles & RoleAwareFormalExactAttackRole) != 0;
+                bodyRequired =
+                    (requiredRoles & RoleAwareFormalExactBodyRole) != 0;
+                return true;
+            }
+
+            return false;
+        }
 
         public void CopyLastFormalRuntimeSlotPairKeysForSelfCheck(List<long> destination)
         {
@@ -158,7 +587,171 @@ namespace NTSD.Animation
             uint max = (uint)Math.Max(firstSlot, secondSlot);
             destination.Add(((long)min << 32) | max);
         }
+
+        public bool TryGetCollisionCandidateStoreRowForSelfCheck(
+            RuntimeEntityHandle attackerHandle,
+            out int count)
+        {
+            if (!_world.TryResolveRuntimeHandle(attackerHandle, out _))
+            {
+                count = 0;
+                return false;
+            }
+            return _candidateStoreShadow.TryGetVisibleAttackerRow(attackerHandle, out count);
+        }
+
+        public bool TryGetCollisionCandidateStoreEntryForSelfCheck(
+            RuntimeEntityHandle attackerHandle,
+            int candidateIndex,
+            out CollisionCandidateStoreEntry entry)
+        {
+            if (!_world.TryResolveRuntimeHandle(attackerHandle, out _))
+            {
+                entry = default;
+                return false;
+            }
+            return _candidateStoreShadow.TryGetVisibleCandidate(
+                attackerHandle,
+                candidateIndex,
+                out entry);
+        }
+
+        public bool TryBuildCollisionCandidateStoreCapacityForSelfCheck(
+            int runtimeCapacity)
+        {
+            bool began = _candidateStoreShadow.BeginBuild(runtimeCapacity);
+            _candidateStoreShadow.AbortBuild();
+            return began;
+        }
+
+        public long MeasureWarmedCollisionCandidateStoreShadowAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+            if (!CollisionCandidateStoreShadowDiagnosticsEnabled)
+            {
+                throw new InvalidOperationException(
+                    "Collision candidate store shadow diagnostics are disabled.");
+            }
+
+            TouchVisibleCollisionCandidateStoreShadowForSelfCheck();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+                TouchVisibleCollisionCandidateStoreShadowForSelfCheck();
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        public long MeasureWarmedCollisionRoleZeroItrFastPathAllocationsForSelfCheck(
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+            if (!CollisionRoleZeroItrFastPathEnabled)
+            {
+                throw new InvalidOperationException(
+                    "Collision role zero-itr fast path is disabled.");
+            }
+
+            CollectCollisionCandidates();
+            EndCollisionCandidateConsumption();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+            {
+                CollectCollisionCandidates();
+                EndCollisionCandidateConsumption();
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        public long MeasureWarmedCollisionCandidateStoreAuthorityAllocationsForSelfCheck(
+            LF2Entity attacker,
+            int iterationCount)
+        {
+            if (iterationCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(iterationCount));
+            if (!_candidateStoreAuthorityAppliedForCurrentTick)
+            {
+                throw new InvalidOperationException(
+                    "Collision candidate store authority is not applied for this tick.");
+            }
+
+            TouchCollisionCandidateStoreAuthorityForSelfCheck(attacker);
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < iterationCount; iteration++)
+                TouchCollisionCandidateStoreAuthorityForSelfCheck(attacker);
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            return after - before;
+        }
+
+        private void TouchCollisionCandidateStoreAuthorityForSelfCheck(LF2Entity attacker)
+        {
+            if (!TryGetCollisionCandidateRange(attacker, out CollisionCandidateRange candidates))
+                return;
+
+            int count = candidates.Count;
+            for (int candidateIndex = 0; candidateIndex < count; candidateIndex++)
+                candidates.TryGet(candidateIndex, out _);
+        }
+
+        private void TouchVisibleCollisionCandidateStoreShadowForSelfCheck()
+        {
+            int runtimeCapacity = _world.MaxRuntimeSlotsForServices;
+            for (int runtimeSlot = 0; runtimeSlot < runtimeCapacity; runtimeSlot++)
+            {
+                LF2Entity attacker = _world.FindEntityByRuntimeSlotForQuery(runtimeSlot);
+                if (attacker == null || !_candidateCache.ContainsKey(attacker) ||
+                    !_world.TryGetCurrentRuntimeHandle(
+                        runtimeSlot,
+                        attacker,
+                        out RuntimeEntityHandle attackerHandle) ||
+                    !_candidateStoreShadow.TryGetVisibleAttackerRow(
+                        attackerHandle,
+                        out int count))
+                {
+                    continue;
+                }
+
+                for (int candidateIndex = 0; candidateIndex < count; candidateIndex++)
+                {
+                    _candidateStoreShadow.TryGetVisibleCandidate(
+                        attackerHandle,
+                        candidateIndex,
+                        out _);
+                }
+            }
+        }
 #endif
+        public bool TryGetLastRoleAwareBodyBoundsForSelfCheck(
+            LF2Entity entity,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            if (entity?.Runtime == null ||
+                LastFormalCollectorModeForDiagnostics !=
+                    CollisionFormalCollectorMode.ForceRoleAware)
+            {
+                return false;
+            }
+
+            int slot = entity.Runtime.SlotIndex;
+            for (int entryIndex = 0;
+                 entryIndex < _formalIncrementalEntries.Count;
+                 entryIndex++)
+            {
+                IncrementalSpatialEntry entry = _formalIncrementalEntries[entryIndex];
+                if (entry.Handle.Slot != slot)
+                    continue;
+
+                bounds = entry.Bounds;
+                return bounds.IsValid;
+            }
+
+            return false;
+        }
+
         public CollisionFormalCollectorMode LastFormalCollectorModeForDiagnostics { get; private set; }
         public int LastFormalPairCountForDiagnostics => _lastFormalPairCount;
         public int LastFormalFallbackParticipantCountForDiagnostics =>
@@ -171,12 +764,69 @@ namespace NTSD.Animation
         public int LastRoleAwareParticipantCountForDiagnostics => _lastRoleAwareParticipantCount;
         public int LastRoleAwareInertParticipantCountForDiagnostics =>
             _lastRoleAwareInertParticipantCount;
+        public int LastRoleAwareBodyTemplateBuildCountForDiagnostics =>
+            _lastRoleAwareBodyTemplateBuildCount;
+        public int LastRoleAwareBodyTemplateHitCountForDiagnostics =>
+            _lastRoleAwareBodyTemplateHitCount;
+        public int LastRoleAwareBodyTemplateFallbackCountForDiagnostics =>
+            _lastRoleAwareBodyTemplateFallbackCount;
+        public long LastRoleAwareDirectComparisonCountForDiagnostics =>
+            _lastRoleAwareDirectComparisonCount;
+        public long TotalRoleAwareDirectComparisonCountForDiagnostics =>
+            _totalRoleAwareDirectComparisonCount;
+        // Reset to unavailable at the start of every formal collection. It becomes
+        // available only after role-aware input validation reaches the direct/tree
+        // selection point; later collection failure keeps the already-computed cost.
+        public long LastRoleAwareDirectCostForDiagnostics =>
+            _lastRoleAwareDirectCost;
+        public bool LastRoleAwareDirectCostAvailableForDiagnostics =>
+            _lastRoleAwareDirectCostAvailable;
+        public int LastRoleAwareDirectTickCountForDiagnostics =>
+            _lastRoleAwareDirectTickCount;
+        public int LastRoleAwareTreeTickCountForDiagnostics =>
+            _lastRoleAwareTreeTickCount;
+        public int LastRoleAwareNestedDirectTickCountForDiagnostics =>
+            _lastRoleAwareNestedDirectTickCount;
+        public int LastRoleAwareSweepDirectTickCountForDiagnostics =>
+            _lastRoleAwareSweepDirectTickCount;
+        public long LastRoleAwareSweepXCandidateCountForDiagnostics =>
+            _lastRoleAwareSweepXCandidateCount;
+        public long LastRoleAwareSweepFullOverlapCheckCountForDiagnostics =>
+            _lastRoleAwareSweepFullOverlapCheckCount;
+        public int LastRoleAwareCheapInputValidationCountForDiagnostics =>
+            _lastRoleAwareCheapInputValidationCount;
+        public int LastRoleAwareFullInputValidationCountForDiagnostics =>
+            _lastRoleAwareFullInputValidationCount;
+        public int LastRoleAwareExactItrRectBuildCountForDiagnostics =>
+            _lastRoleAwareExactItrRectBuildCount;
+        public int LastRoleAwareExactBodyRectBuildCountForDiagnostics =>
+            _lastRoleAwareExactBodyRectBuildCount;
+        public int LastRoleAwareExactDirectionCountForDiagnostics =>
+            _lastRoleAwareExactDirectionCount;
+        public int LastRoleAwareExactItrVisitCountForDiagnostics =>
+            _lastRoleAwareExactItrVisitCount;
+        public int LastRoleAwareExactBodyOverlapCheckCountForDiagnostics =>
+            _lastRoleAwareExactBodyOverlapCheckCount;
+        public long TotalRoleAwareDirectTickCountForDiagnostics =>
+            _totalRoleAwareDirectTickCount;
+        public long TotalRoleAwareTreeTickCountForDiagnostics =>
+            _totalRoleAwareTreeTickCount;
+        public long TotalRoleAwareNestedDirectTickCountForDiagnostics =>
+            _totalRoleAwareNestedDirectTickCount;
+        public long TotalRoleAwareSweepDirectTickCountForDiagnostics =>
+            _totalRoleAwareSweepDirectTickCount;
+        public long TotalRoleAwareSweepXCandidateCountForDiagnostics =>
+            _totalRoleAwareSweepXCandidateCount;
+        public long TotalRoleAwareSweepFullOverlapCheckCountForDiagnostics =>
+            _totalRoleAwareSweepFullOverlapCheckCount;
         public BruteForceSceneQuery(
             SimulationWorld world,
             CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
         {
             _world = world;
             _collisionBroadphase = collisionBroadphase;
+            _candidateStoreShadow = new CollisionCandidateStore(
+                _candidateStoreShadowDiagnostics);
         }
 
         internal void ResetFormalSpatialBroadphase()
@@ -282,17 +932,14 @@ namespace NTSD.Animation
             _tmpHitResult.Clear();
 
             if (_consumeCandidateCache && exclude != null &&
-                _candidateCache.TryGetValue(exclude, out var cachedCandidates))
+                TryGetCollisionCandidateRange(
+                    exclude,
+                    out CollisionCandidateRange cachedCandidates))
             {
-                int candidateCount = exclude.Runtime?.HitCandidateCount ?? cachedCandidates.Count;
-                if (candidateCount < 0)
-                    candidateCount = 0;
-                if (candidateCount > cachedCandidates.Count)
-                    candidateCount = cachedCandidates.Count;
-
-                for (int i = 0; i < candidateCount; i++)
+                for (int i = 0; i < cachedCandidates.Count; i++)
                 {
-                    SceneQueryHit hit = cachedCandidates[i];
+                    if (!cachedCandidates.TryGet(i, out SceneQueryHit hit))
+                        continue;
                     LF2Entity target = hit.ResolveCurrentTarget(_world);
                     if (target == null || target == exclude)
                         continue;
@@ -367,19 +1014,16 @@ namespace NTSD.Animation
                 _tmpHitResult.Clear();
                 if (attacker != null &&
                     itr != null &&
-                    _candidateCache.TryGetValue(attacker, out var cached))
+                    TryGetCollisionCandidateRange(
+                        attacker,
+                        out CollisionCandidateRange cached))
                 {
                     int itrIndex = ResolveItrIndex(attackerFrame, itr);
                     LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();
-                    int candidateCount = attacker.Runtime?.HitCandidateCount ?? cached.Count;
-                    if (candidateCount < 0)
-                        candidateCount = 0;
-                    if (candidateCount > cached.Count)
-                        candidateCount = cached.Count;
-
-                    for (int i = 0; i < candidateCount; i++)
+                    for (int i = 0; i < cached.Count; i++)
                     {
-                        SceneQueryHit hit = cached[i];
+                        if (!cached.TryGet(i, out SceneQueryHit hit))
+                            continue;
                         LF2Entity target = hit.ResolveCurrentTarget(_world);
                         if (target == null || IsPendingFlushDestroy(target))
                             continue;
@@ -445,6 +1089,68 @@ namespace NTSD.Animation
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
                 return _tmpHitResult;
 
+            if (_consumeCandidateCache)
+            {
+                if (!TryGetCollisionCandidateRange(
+                        attacker,
+                        out CollisionCandidateRange cached))
+                {
+                    return _tmpHitResult;
+                }
+
+                int itrIndex = ResolveItrIndex(attackerFrame, itr);
+                for (int i = 0; i < cached.Count; i++)
+                {
+                    if (!cached.TryGet(i, out SceneQueryHit hit) ||
+                        hit.ItrIndex != itrIndex)
+                    {
+                        continue;
+                    }
+
+                    LF2Entity target = hit.ResolveCurrentTarget(_world);
+                    if (target == null || target == attacker ||
+                        target.PS == null || IsPendingFlushDestroy(target))
+                    {
+                        continue;
+                    }
+
+                    LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();
+                    if (targetCollisionFrame == null ||
+                        !HitsTarget(
+                            volume,
+                            target,
+                            targetCollisionFrame,
+                            out int bodyX))
+                    {
+                        continue;
+                    }
+
+                    InteractionArea runtimeItr = ResolveRuntimeItrForPair(
+                        attacker,
+                        target,
+                        attackerCollisionFrame,
+                        itr,
+                        out bool zeroAttackerHpOnConsume,
+                        out bool releaseHeavyHeldTargetOnConsume);
+                    if (runtimeItr == null ||
+                        IsReleaseConsumerPairBlocked(attacker, target) ||
+                        !RuntimeConsumeItrAllowed(attacker, runtimeItr, target))
+                    {
+                        continue;
+                    }
+
+                    _tmpHitResult.Add(new SceneQueryHit(
+                        target,
+                        bodyX,
+                        hit.ItrIndex,
+                        runtimeItr,
+                        zeroAttackerHpOnConsume,
+                        releaseHeavyHeldTargetOnConsume));
+                }
+
+                return _tmpHitResult;
+            }
+
             List<LF2Entity> spatialTargets = null;
             bool spatial = TryBuildImmediateVolumeAabb(volume, out SpatialAabbXZ volumeBounds) &&
                            TryGetImmediateSpatialTargets(volumeBounds, out spatialTargets);
@@ -498,37 +1204,86 @@ namespace NTSD.Animation
         /// </summary>
         public void CollectCollisionCandidates()
         {
-            _candidateCache.Clear();
-            _consumeCandidateCache = false;
-            _formalFallbackParticipantCount = 0;
-            _formalCollectionAborted = false;
-            _lastFormalPairCount = 0;
-            _lastRoleAwareParticipantCount = 0;
-            _lastRoleAwareInertParticipantCount = 0;
-            _lastRoleAwareBodyEntryCount = 0;
-            _lastRoleAwareItrQueryCount = 0;
-            FormalSpatialSynchronizeResult = default;
+            _candidateStoreShadow.AbortBuild();
+            InvalidateCollisionCandidateRanges();
+            CollisionRoleZeroItrFastPathParticipantCountForDiagnostics = 0;
+            _collisionRoleZeroItrEarlyReturnAppliedForCurrentTick = false;
             int currentTick = _world?.CurrentTickIndex ?? 0;
-
-            _world.GetAllEntities(_tmpAllObjects);
-            ResetCandidateCollectionState();
-
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            FreezeCollisionCandidateProducerMode(currentTick);
+#if UNITY_INCLUDE_TESTS
+            _collisionCandidateStoreWriteCountForSelfCheck = 0;
+            _collisionCandidateStoreFaultInjectedForSelfCheck = false;
+#endif
+            BattleTickDetailPhaseDiagnostics cacheSetupDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (cacheSetupDiagnostics != null)
             {
-                LF2Entity attacker = _tmpAllObjects[i];
-                if (attacker == null || attacker.PS == null || IsPendingFlushDestroy(attacker))
-                    continue;
-                if (IsCollisionCandidateSuppressed(attacker, currentTick))
-                    continue;
-                if (GetAuthoredCurrentFrame(attacker) == null)
-                    continue;
-
-                LF2FrameData attackerFrame = attacker.GetCollisionFrameData();
-                if (attackerFrame?.itrs == null || attackerFrame.itrs.Count == 0)
-                    continue;
-
-                _candidateCache[attacker] = new List<SceneQueryHit>(16);
+                cacheSetupDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectCacheSetup);
             }
+
+            CollisionFormalCollectorMode collectorMode;
+            try
+            {
+                ReleaseCandidateListsToPool();
+                _roleFormalExactItrRects.Clear();
+                _roleFormalExactBodyRects.Clear();
+                _consumeCandidateCache = false;
+                _formalFallbackParticipantCount = 0;
+                _formalCollectionAborted = false;
+                _lastFormalPairCount = 0;
+                _lastRoleAwareParticipantCount = 0;
+                _lastRoleAwareInertParticipantCount = 0;
+                _lastRoleAwareBodyEntryCount = 0;
+                _lastRoleAwareItrQueryCount = 0;
+                _lastRoleAwareBodyTemplateBuildCount = 0;
+                _lastRoleAwareBodyTemplateHitCount = 0;
+                _lastRoleAwareBodyTemplateFallbackCount = 0;
+                _lastRoleAwareDirectComparisonCount = 0;
+                _lastRoleAwareDirectCost = 0;
+                _lastRoleAwareDirectCostAvailable = false;
+                _lastRoleAwareDirectTickCount = 0;
+                _lastRoleAwareTreeTickCount = 0;
+                _lastRoleAwareNestedDirectTickCount = 0;
+                _lastRoleAwareSweepDirectTickCount = 0;
+                _lastRoleAwareSweepXCandidateCount = 0;
+                _lastRoleAwareSweepFullOverlapCheckCount = 0;
+                _lastRoleAwareCheapInputValidationCount = 0;
+                _lastRoleAwareFullInputValidationCount = 0;
+                _lastRoleAwareExactItrRectBuildCount = 0;
+                _lastRoleAwareExactBodyRectBuildCount = 0;
+                _lastRoleAwareExactDirectionCount = 0;
+                _lastRoleAwareExactItrVisitCount = 0;
+                _lastRoleAwareExactBodyOverlapCheckCount = 0;
+                FormalSpatialSynchronizeResult = default;
+                collectorMode = ResolveFormalCollectorMode();
+                LastFormalCollectorModeForDiagnostics = collectorMode;
+
+                _world.GetAllEntities(_tmpAllObjects);
+                ResetCandidateCollectionState();
+
+                for (int i = 0; i < _tmpAllObjects.Count; i++)
+                {
+                    LF2Entity attacker = _tmpAllObjects[i];
+                    if (!IsCollisionCandidateAttackerEligible(attacker, currentTick))
+                        continue;
+
+                    if (LegacyCandidateListsEnabledForCurrentTick)
+                    {
+                        _candidateCache[attacker] = RentCandidateList();
+                        RecordLegacyCandidateListTouchForAuthority();
+                    }
+                }
+            }
+            finally
+            {
+                if (cacheSetupDiagnostics != null)
+                {
+                    cacheSetupDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectCacheSetup);
+                }
+            }
+            BeginCollisionCandidateStoreShadowBuild();
 
             if (ShadowBroadphaseDiagnosticsEnabled)
             {
@@ -542,8 +1297,6 @@ namespace NTSD.Animation
                 }
             }
 
-            CollisionFormalCollectorMode collectorMode = ResolveFormalCollectorMode();
-            LastFormalCollectorModeForDiagnostics = collectorMode;
             if (collectorMode != CollisionFormalCollectorMode.ForceBruteForce)
             {
                 uint rngStateBeforeFormal = _world.Rng.State;
@@ -564,11 +1317,34 @@ namespace NTSD.Animation
                     }
                 }
 
+                if (_collisionRoleZeroItrEarlyReturnAppliedForCurrentTick)
+                    return;
+
                 if (!formalSucceeded)
                 {
                     _formalCollectionAborted = true;
                     _world.Rng.RestoreState(rngStateBeforeFormal, rngCallsBeforeFormal);
-                    ResetCandidateCollectionState();
+                    BattleTickDetailPhaseDiagnostics fallbackCacheDiagnostics =
+                        _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                    if (fallbackCacheDiagnostics != null)
+                    {
+                        fallbackCacheDiagnostics.BeginPhase(
+                            BattleTickDetailPhase.CandidateCollectCacheSetup);
+                    }
+
+                    try
+                    {
+                        ResetCandidateCollectionState();
+                    }
+                    finally
+                    {
+                        if (fallbackCacheDiagnostics != null)
+                        {
+                            fallbackCacheDiagnostics.EndPhase(
+                                BattleTickDetailPhase.CandidateCollectCacheSetup);
+                        }
+                    }
+                    RestartCollisionCandidateStoreShadowBuild();
                     CollectCollisionCandidatesBruteForce(currentTick);
                 }
             }
@@ -589,7 +1365,370 @@ namespace NTSD.Animation
                 }
             }
 
+#if UNITY_INCLUDE_TESTS
+            BeforeCollisionCandidateStoreFinalCompareForSelfCheck?.Invoke();
+#endif
+            CompareAndCompleteCollisionCandidateStoreShadow();
+
+            LockCollisionCandidateConsumptionSource();
             _consumeCandidateCache = true;
+        }
+
+        private bool CollisionCandidateStoreBuildRequestedForCurrentTick =>
+            _candidateProducerModeForCurrentTick !=
+            CollisionCandidateProducerMode.LegacyOnly;
+
+        private bool LegacyCandidateListsEnabledForCurrentTick =>
+            _candidateProducerModeForCurrentTick !=
+            CollisionCandidateProducerMode.StoreOnly;
+
+        private bool CandidateStoreOracleComparisonEnabledForCurrentTick =>
+            _candidateProducerModeForCurrentTick ==
+            CollisionCandidateProducerMode.LegacyWithStoreShadow ||
+            _candidateProducerModeForCurrentTick ==
+            CollisionCandidateProducerMode.StoreWithLegacyOracle;
+
+        private void FreezeCollisionCandidateProducerMode(int currentTick)
+        {
+            _candidateProducerTickForCurrentCollection = currentTick;
+            _candidateStoreAuthorityRequestedForCurrentTick =
+                CollisionCandidateStoreAuthorityEnabled;
+            _candidateStoreAuthorityAppliedForCurrentTick = false;
+            _candidateStoreProducerHealthyForCurrentTick = false;
+
+            if (!_candidateStoreAuthorityRequestedForCurrentTick)
+            {
+                _candidateProducerModeForCurrentTick =
+                    CollisionCandidateStoreShadowDiagnosticsEnabled
+                        ? CollisionCandidateProducerMode.LegacyWithStoreShadow
+                        : CollisionCandidateProducerMode.LegacyOnly;
+                return;
+            }
+
+            _candidateStoreAuthorityDiagnostics.RecordRequestedTick();
+            int interval = _candidateStoreLegacyOracleInterval;
+            bool sampleOracle = IsCollisionCandidateLegacyOracleSampleTick(
+                currentTick,
+                interval);
+            if (sampleOracle)
+            {
+                _candidateProducerModeForCurrentTick =
+                    CollisionCandidateProducerMode.StoreWithLegacyOracle;
+                _candidateStoreAuthorityDiagnostics.RecordSampledOracleTick();
+            }
+            else
+            {
+                _candidateProducerModeForCurrentTick =
+                    CollisionCandidateProducerMode.StoreOnly;
+                _candidateStoreAuthorityDiagnostics.RecordStoreOnlyTick();
+            }
+        }
+
+        public static bool IsCollisionCandidateLegacyOracleSampleTick(
+            int frozenTickIndex,
+            int legacyOracleInterval)
+        {
+            return legacyOracleInterval > 0 &&
+                   frozenTickIndex % legacyOracleInterval == 0;
+        }
+
+        private void RecordLegacyCandidateListTouchForAuthority()
+        {
+            if (_candidateStoreAuthorityRequestedForCurrentTick)
+            {
+                _candidateStoreAuthorityDiagnostics
+                    .RecordLegacyListCreatedOrWritten();
+            }
+        }
+
+        private bool IsCollisionCandidateAttackerEligible(
+            LF2Entity attacker,
+            int currentTick)
+        {
+            if (attacker == null || attacker.PS == null ||
+                IsPendingFlushDestroy(attacker) ||
+                IsCollisionCandidateSuppressed(attacker, currentTick) ||
+                GetAuthoredCurrentFrame(attacker) == null)
+            {
+                return false;
+            }
+
+            LF2FrameData attackerFrame = attacker.GetCollisionFrameData();
+            return attackerFrame?.itrs != null && attackerFrame.itrs.Count > 0;
+        }
+
+        private void BeginCollisionCandidateStoreShadowBuild()
+        {
+            if (!CollisionCandidateStoreBuildRequestedForCurrentTick)
+                return;
+
+            try
+            {
+                if (!_candidateStoreShadow.BeginBuild(_world.MaxRuntimeSlotsForServices))
+                    return;
+                if (!InitializeCollisionCandidateStoreAttackerCarriers())
+                {
+                    _candidateStoreShadow.AbortBuild();
+                    return;
+                }
+
+                _candidateStoreProducerHealthyForCurrentTick = true;
+            }
+            catch (Exception)
+            {
+                _candidateStoreShadow.RecordInvalid(
+                    CollisionCandidateStoreMismatchReason.UnexpectedShadowException);
+                _candidateStoreShadow.AbortBuild();
+            }
+        }
+
+        private void RestartCollisionCandidateStoreShadowBuild()
+        {
+            if (!CollisionCandidateStoreBuildRequestedForCurrentTick)
+                return;
+
+            _candidateStoreShadow.AbortBuild();
+            _candidateStoreProducerHealthyForCurrentTick = false;
+            BeginCollisionCandidateStoreShadowBuild();
+        }
+
+        private bool InitializeCollisionCandidateStoreAttackerCarriers()
+        {
+            int initializedCount = 0;
+            int eligibleAttackerCount = 0;
+            int runtimeCapacity = _world.MaxRuntimeSlotsForServices;
+            for (int runtimeSlot = 0; runtimeSlot < runtimeCapacity; runtimeSlot++)
+            {
+                LF2Entity attacker = _world.FindEntityByRuntimeSlotForQuery(runtimeSlot);
+                if (!IsCollisionCandidateAttackerEligible(
+                        attacker,
+                        _candidateProducerTickForCurrentCollection))
+                {
+                    continue;
+                }
+
+                eligibleAttackerCount++;
+
+                if (!_world.TryGetCurrentRuntimeHandle(
+                        runtimeSlot,
+                        attacker,
+                        out RuntimeEntityHandle attackerHandle))
+                {
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+                    return false;
+                }
+
+                if (!_candidateStoreShadow.TryBeginAttacker(attackerHandle))
+                    return false;
+                initializedCount++;
+            }
+
+            if (initializedCount == eligibleAttackerCount)
+                return true;
+
+            _candidateStoreShadow.RecordInvalid(
+                CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+            return false;
+        }
+
+        private void CompareAndCompleteCollisionCandidateStoreShadow()
+        {
+            if (!CollisionCandidateStoreBuildRequestedForCurrentTick ||
+                !_candidateStoreShadow.IsBuilding)
+            {
+                return;
+            }
+
+            try
+            {
+                if (CandidateStoreOracleComparisonEnabledForCurrentTick &&
+                    !CompareCandidateCacheToStoreByRuntimeSlot())
+                {
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                    return;
+                }
+
+                if (!_candidateStoreShadow.CompleteBuild())
+                {
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.UnexpectedShadowException);
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                }
+            }
+            catch (Exception)
+            {
+                _candidateStoreShadow.RecordInvalid(
+                    CollisionCandidateStoreMismatchReason.UnexpectedShadowException);
+                _candidateStoreShadow.AbortBuild();
+                _candidateStoreProducerHealthyForCurrentTick = false;
+            }
+        }
+
+        private void LockCollisionCandidateConsumptionSource()
+        {
+            _candidateConsumptionSource = CollisionCandidateConsumptionSource.LegacyOracle;
+            if (!_candidateStoreAuthorityRequestedForCurrentTick)
+                return;
+
+            if (_candidateStoreShadow.IsVisible)
+            {
+                _candidateConsumptionSource = CollisionCandidateConsumptionSource.StoreAuthority;
+                _candidateStoreAuthorityAppliedForCurrentTick = true;
+                _candidateStoreAuthorityDiagnostics.RecordAppliedTick();
+                return;
+            }
+
+            if (_candidateProducerModeForCurrentTick ==
+                CollisionCandidateProducerMode.StoreOnly)
+            {
+                _candidateConsumptionSource =
+                    CollisionCandidateConsumptionSource.StoreAuthorityFailedClosed;
+                _candidateStoreAuthorityDiagnostics.RecordStoreOnlyHardFailure();
+                _candidateStoreAuthorityDiagnostics.RecordFailure(
+                    CollisionCandidateStoreAuthorityFailureReason
+                        .StoreOnlyProducerUnavailable);
+                return;
+            }
+
+            _candidateStoreAuthorityDiagnostics.RecordLegacyFallbackTick();
+            _candidateStoreAuthorityDiagnostics.RecordFailure(
+                CollisionCandidateStoreAuthorityFailureReason.StoreNotComplete);
+        }
+
+        private bool CompareCandidateCacheToStoreByRuntimeSlot()
+        {
+            bool matches = true;
+            int comparedAttackerCount = 0;
+            int runtimeCapacity = _world.MaxRuntimeSlotsForServices;
+            for (int runtimeSlot = 0; runtimeSlot < runtimeCapacity; runtimeSlot++)
+            {
+                LF2Entity attacker = _world.FindEntityByRuntimeSlotForQuery(runtimeSlot);
+                if (attacker == null ||
+                    !_candidateCache.TryGetValue(attacker, out List<SceneQueryHit> hits))
+                {
+                    continue;
+                }
+
+                comparedAttackerCount++;
+                _candidateStoreShadow.RecordComparedAttacker();
+                if (!_world.TryGetCurrentRuntimeHandle(
+                        runtimeSlot,
+                        attacker,
+                        out RuntimeEntityHandle attackerHandle))
+                {
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+                    matches = false;
+                    continue;
+                }
+
+                if (!_candidateStoreShadow.TryGetBuildingAttackerRowForCompare(
+                        attackerHandle,
+                        out int storeCount))
+                {
+                    _candidateStoreShadow.RecordMismatch(
+                        CollisionCandidateStoreMismatchReason.AttackerRowMissing);
+                    matches = false;
+                    continue;
+                }
+
+                int authorityCount = attacker.Runtime?.HitCandidateCount ?? hits?.Count ?? 0;
+                int authorityListCount = hits?.Count ?? 0;
+                if (storeCount != authorityCount || authorityListCount != authorityCount)
+                {
+                    _candidateStoreShadow.RecordMismatch(
+                        CollisionCandidateStoreMismatchReason.CandidateCountMismatch);
+                    matches = false;
+                }
+
+                int compareCount = storeCount < authorityCount
+                    ? storeCount
+                    : authorityCount;
+                if (compareCount > authorityListCount)
+                    compareCount = authorityListCount;
+                for (int candidateIndex = 0;
+                     candidateIndex < compareCount;
+                     candidateIndex++)
+                {
+                    _candidateStoreShadow.RecordComparedCandidate();
+                    if (!_candidateStoreShadow.TryGetBuildingCandidateForCompare(
+                            attackerHandle,
+                            candidateIndex,
+                            out CollisionCandidateStoreEntry entry))
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.CandidateCountMismatch);
+                        matches = false;
+                        continue;
+                    }
+
+                    SceneQueryHit hit = hits[candidateIndex];
+                    if (entry.TargetSlot != hit.TargetSlot)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.TargetSlotMismatch);
+                        matches = false;
+                    }
+
+                    RuntimeEntityHandle currentTargetHandle = RuntimeEntityHandle.Invalid;
+                    if (hit.TargetSlot >= 0 && hit.TargetSlot < runtimeCapacity)
+                    {
+                        _world.TryGetCurrentRuntimeHandle(
+                            hit.TargetSlot,
+                            hit.Target,
+                            out currentTargetHandle);
+                    }
+                    if (entry.TargetHandle != currentTargetHandle)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.TargetHandleSnapshotMismatch);
+                        matches = false;
+                    }
+                    if (entry.BodyX != hit.BodyX)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.BodyXMismatch);
+                        matches = false;
+                    }
+                    if (entry.ItrIndex != hit.ItrIndex)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.ItrIndexMismatch);
+                        matches = false;
+                    }
+                    if (!ReferenceEquals(entry.RuntimeItr, hit.RuntimeItr))
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.RuntimeItrIdentityMismatch);
+                        matches = false;
+                    }
+                    if (entry.ZeroAttackerHpOnConsume !=
+                        hit.ZeroAttackerHpOnConsume)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.ZeroAttackerHpOnConsumeMismatch);
+                        matches = false;
+                    }
+                    if (entry.ReleaseHeavyHeldTargetOnConsume !=
+                        hit.ReleaseHeavyHeldTargetOnConsume)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.ReleaseHeavyHeldTargetOnConsumeMismatch);
+                        matches = false;
+                    }
+                }
+            }
+
+            if (comparedAttackerCount != _candidateCache.Count)
+            {
+                _candidateStoreShadow.RecordInvalid(
+                    CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+                matches = false;
+            }
+            return matches;
         }
 
         private CollisionFormalCollectorMode ResolveFormalCollectorMode()
@@ -623,24 +1762,43 @@ namespace NTSD.Animation
 
         private void CollectCollisionCandidatesBruteForce(int currentTick)
         {
-            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            BattleTickDetailPhaseDiagnostics pairLoopDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (pairLoopDiagnostics != null)
             {
-                LF2Entity a = _tmpAllObjects[i];
-                if (a == null || a.PS == null || IsPendingFlushDestroy(a))
-                    continue;
-                if (IsCollisionCandidateSuppressed(a, currentTick))
-                    continue;
+                pairLoopDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectPairExactLoop);
+            }
 
-                for (int j = i + 1; j < _tmpAllObjects.Count; j++)
+            try
+            {
+                for (int i = 0; i < _tmpAllObjects.Count; i++)
                 {
-                    LF2Entity b = _tmpAllObjects[j];
-                    if (b == null || b.PS == null || IsPendingFlushDestroy(b))
+                    LF2Entity a = _tmpAllObjects[i];
+                    if (a == null || a.PS == null || IsPendingFlushDestroy(a))
                         continue;
-                    if (IsCollisionCandidateSuppressed(b, currentTick))
+                    if (IsCollisionCandidateSuppressed(a, currentTick))
                         continue;
 
-                    CollectCandidatesForPair(a, b);
-                    CollectCandidatesForPair(b, a);
+                    for (int j = i + 1; j < _tmpAllObjects.Count; j++)
+                    {
+                        LF2Entity b = _tmpAllObjects[j];
+                        if (b == null || b.PS == null || IsPendingFlushDestroy(b))
+                            continue;
+                        if (IsCollisionCandidateSuppressed(b, currentTick))
+                            continue;
+
+                        CollectCandidatesForPair(a, b);
+                        CollectCandidatesForPair(b, a);
+                    }
+                }
+            }
+            finally
+            {
+                if (pairLoopDiagnostics != null)
+                {
+                    pairLoopDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectPairExactLoop);
                 }
             }
         }
@@ -823,188 +1981,346 @@ namespace NTSD.Animation
 
         private bool TryCollectCollisionCandidatesRoleAware(int currentTick)
         {
-            _roleFormalParticipants.Clear();
-            _roleFormalBodyEntries.Clear();
-            _roleFormalItrEntries.Clear();
-            _formalIncrementalEntries.Clear();
-            _formalQueryHandles.Clear();
-            _formalAuthorityPairKeys.Clear();
-            _formalSlotToOrdinal.Clear();
-            _formalSeenSlots.Clear();
-
-            for (int authorityOrdinal = 0;
-                 authorityOrdinal < _tmpAllObjects.Count;
-                 authorityOrdinal++)
+            ulong roleAwareOccupancyEpoch =
+                _world.RuntimeSlotOccupancyEpochForServices;
+            int roleFormalBodyEntryCount = 0;
+            bool directInputSafe = true;
+            BattleTickDetailPhaseDiagnostics participantBuildDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (participantBuildDiagnostics != null)
             {
-                LF2Entity entity = _tmpAllObjects[authorityOrdinal];
-                if (entity == null || entity.PS == null || IsPendingFlushDestroy(entity))
-                    continue;
-                if (IsCollisionCandidateSuppressed(entity, currentTick))
-                    continue;
-
-                int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
-                if (runtimeSlot < 0 ||
-                    runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
-                    !ReferenceEquals(_world.FindEntityByRuntimeSlotForQuery(runtimeSlot), entity) ||
-                    !_formalSeenSlots.Add(runtimeSlot) ||
-                    !_world.TryGetCurrentRuntimeHandle(
-                        runtimeSlot,
-                        entity,
-                        out RuntimeEntityHandle handle))
-                {
-                    return AbortFormalSpatialIndex();
-                }
-
-                LF2FrameData collisionFrame = entity.GetCollisionFrameData();
-                var participant = new RoleAwareFormalParticipant(
-                    entity,
-                    collisionFrame,
-                    handle);
-                int participantOrdinal = _roleFormalParticipants.Count;
-                _roleFormalParticipants.Add(participant);
-                _formalSlotToOrdinal.Add(runtimeSlot, participantOrdinal);
-
-                bool hasIndexableBody = false;
-                SpatialAabbXZ indexableBodyBounds = default;
-                if (collisionFrame?.bodies != null)
-                {
-                    for (int bodyIndex = 0;
-                         bodyIndex < collisionFrame.bodies.Count;
-                         bodyIndex++)
-                    {
-                        BodyBox body = collisionFrame.bodies[bodyIndex];
-                        if (!IsReleaseBody(body))
-                            continue;
-
-                        participant.HasBody = true;
-                        if (TryBuildFormalBodyAabb(
-                                entity,
-                                collisionFrame,
-                                body,
-                                out SpatialAabbXZ bodyBounds))
-                        {
-                            _roleFormalBodyEntries.Add(new RoleAwareFormalBodyEntry(
-                                participantOrdinal,
-                                handle));
-                            if (!hasIndexableBody)
-                            {
-                                indexableBodyBounds = bodyBounds;
-                                hasIndexableBody = true;
-                            }
-                            else
-                            {
-                                indexableBodyBounds = new SpatialAabbXZ(
-                                    Math.Min(indexableBodyBounds.MinX, bodyBounds.MinX),
-                                    Math.Min(indexableBodyBounds.MinZ, bodyBounds.MinZ),
-                                    Math.Max(indexableBodyBounds.MaxX, bodyBounds.MaxX),
-                                    Math.Max(indexableBodyBounds.MaxZ, bodyBounds.MaxZ));
-                            }
-                        }
-                        else
-                        {
-                            participant.HasFallbackBody = true;
-                        }
-                    }
-                }
-                if (hasIndexableBody)
-                {
-                    _formalIncrementalEntries.Add(new IncrementalSpatialEntry(
-                        handle,
-                        indexableBodyBounds));
-                }
-
-                if (collisionFrame?.itrs != null)
-                {
-                    for (int itrIndex = 0;
-                         itrIndex < collisionFrame.itrs.Count;
-                         itrIndex++)
-                    {
-                        InteractionArea itr = collisionFrame.itrs[itrIndex];
-                        if (!IsReleaseItrGeometry(itr))
-                            continue;
-
-                        participant.HasAttackItr = true;
-                        if (TryBuildImmediateItrAabb(
-                                entity,
-                                collisionFrame,
-                                itr,
-                                out SpatialAabbXZ itrBounds))
-                        {
-                            _roleFormalItrEntries.Add(new RoleAwareFormalItrEntry(
-                                participantOrdinal,
-                                handle,
-                                itrBounds));
-                        }
-                        else
-                        {
-                            participant.HasFallbackAttackItr = true;
-                        }
-                    }
-                }
+                participantBuildDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectParticipantBodyItrBuild);
             }
-
-            int participantCount = _roleFormalParticipants.Count;
-            _lastRoleAwareParticipantCount = participantCount;
-            _lastRoleAwareInertParticipantCount =
-                CountRoleAwareFormalInertParticipants();
-            BattleStageRuntimeState stage = _world?.Runtime?.Stage;
-            int stageWidth = stage?.StageWidthPx ?? 800;
-            int zMin = stage?.ZMin ?? 180;
-            int zMax = stage?.ZMax ?? 350;
-            var preferredRoot = new SpatialAabbXZ(
-                0,
-                zMin,
-                stageWidth > 0 ? stageWidth : 1,
-                zMax > zMin ? zMax : zMin + 1);
 
             try
             {
-                FormalSpatialSynchronizeResult = _roleFormalBroadphase.Synchronize(
-                    _formalIncrementalEntries,
-                    preferredRoot);
-                if (!FormalSpatialSynchronizeResult.Succeeded ||
-                    FormalSpatialSynchronizeResult.IndexedCount !=
-                    _formalIncrementalEntries.Count)
-                {
-                    return AbortFormalSpatialIndex();
-                }
+                _roleFormalParticipants.Clear();
+                _roleFormalBodyTemplates.Clear();
+                _roleFormalItrEntries.Clear();
+                _roleFormalExactItrRects.Clear();
+                _roleFormalExactBodyRects.Clear();
+                _roleFormalExactRequiredRoles.Clear();
+                _roleFormalBodyOrdinals.Clear();
+                _roleFormalFallbackAttackOrdinals.Clear();
+                _roleFormalExactAttackOrdinals.Clear();
+                _roleFormalFallbackBodyOrdinals.Clear();
+#if UNITY_INCLUDE_TESTS
+                _roleFormalExactCommonBuildCounts.Clear();
+                _roleFormalExactAttackBuildCounts.Clear();
+                _roleFormalExactBodyBuildCounts.Clear();
+                _roleFormalExactValidationCounts.Clear();
+#endif
+                _formalIncrementalEntries.Clear();
+                _formalQueryHandles.Clear();
+                _formalAuthorityPairKeys.Clear();
+                _formalSlotToOrdinal.Clear();
+                _formalSeenSlots.Clear();
 
-                for (int itrEntryIndex = 0;
-                     itrEntryIndex < _roleFormalItrEntries.Count;
-                     itrEntryIndex++)
+                for (int authorityOrdinal = 0;
+                     authorityOrdinal < _tmpAllObjects.Count;
+                     authorityOrdinal++)
                 {
-                    RoleAwareFormalItrEntry itrEntry =
-                        _roleFormalItrEntries[itrEntryIndex];
-                    if (!TryValidateRoleAwareParticipant(
-                            itrEntry.ParticipantOrdinal,
-                            itrEntry.Handle,
-                            out _))
+                    LF2Entity entity = _tmpAllObjects[authorityOrdinal];
+                    if (entity == null || entity.PS == null ||
+                        IsPendingFlushDestroy(entity))
+                    {
+                        continue;
+                    }
+                    if (IsCollisionCandidateSuppressed(entity, currentTick))
+                        continue;
+
+                    int runtimeSlot = entity.Runtime?.SlotIndex ?? -1;
+                    if (runtimeSlot < 0 ||
+                        runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
+                        !ReferenceEquals(
+                            _world.FindEntityByRuntimeSlotForQuery(runtimeSlot),
+                            entity) ||
+                        !_formalSeenSlots.Add(runtimeSlot) ||
+                        !_world.TryGetCurrentRuntimeHandle(
+                            runtimeSlot,
+                            entity,
+                            out RuntimeEntityHandle handle))
                     {
                         return AbortFormalSpatialIndex();
                     }
 
-                    _roleFormalBroadphase.QueryHandles(
-                        itrEntry.Bounds,
-                        _formalQueryHandles);
-                    for (int resultIndex = 0;
-                         resultIndex < _formalQueryHandles.Count;
-                         resultIndex++)
+                    LF2FrameData currentFrame = GetAuthoredCurrentFrame(entity);
+                    LF2FrameData collisionFrame = entity.GetCollisionFrameData();
+                    var participant = new RoleAwareFormalParticipant(
+                        entity,
+                        currentFrame,
+                        collisionFrame,
+                        handle);
+                    int participantOrdinal = _roleFormalParticipants.Count;
+
+                    BuildRoleAwareFormalBodyState(
+                        ref participant,
+                        ref roleFormalBodyEntryCount,
+                        out bool hasIndexableBody,
+                        out SpatialAabbXZ indexableBodyBounds);
+                    if (hasIndexableBody)
                     {
-                        RuntimeEntityHandle bodyHandle = _formalQueryHandles[resultIndex];
-                        if (!_formalSlotToOrdinal.TryGetValue(
-                                bodyHandle.Slot,
-                                out int bodyParticipantOrdinal) ||
-                            !TryValidateRoleAwareParticipant(
-                                bodyParticipantOrdinal,
-                                bodyHandle,
-                                out _))
+                        _formalIncrementalEntries.Add(new IncrementalSpatialEntry(
+                            handle,
+                            indexableBodyBounds));
+                    }
+
+                    if (collisionFrame?.itrs != null)
+                    {
+                        for (int itrIndex = 0;
+                             itrIndex < collisionFrame.itrs.Count;
+                             itrIndex++)
+                        {
+                            InteractionArea itr = collisionFrame.itrs[itrIndex];
+                            if (!IsReleaseItrGeometry(itr))
+                                continue;
+
+                            participant.HasAttackItr = true;
+                            if (TryBuildImmediateItrAabb(
+                                    entity,
+                                    collisionFrame,
+                                    itr,
+                                    out SpatialAabbXZ itrBounds))
+                            {
+                                _roleFormalItrEntries.Add(new RoleAwareFormalItrEntry(
+                                    participantOrdinal,
+                                    handle,
+                                    itrIndex,
+                                    itr,
+                                    itrBounds));
+                            }
+                            else
+                            {
+                                participant.HasFallbackAttackItr = true;
+                            }
+                        }
+                    }
+
+                    AddRoleAwareFormalParticipantOrdinals(
+                        participantOrdinal,
+                        in participant);
+                    if (participant.HasFallbackAttackItr ||
+                        participant.HasFallbackBody)
+                    {
+                        directInputSafe = false;
+                    }
+                    _formalSlotToOrdinal.Add(runtimeSlot, participantOrdinal);
+                    _roleFormalParticipants.Add(participant);
+                }
+            }
+            finally
+            {
+                if (participantBuildDiagnostics != null)
+                {
+                    participantBuildDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectParticipantBodyItrBuild);
+                }
+            }
+
+            int participantCount = _roleFormalParticipants.Count;
+            if (TryCompleteCollisionRoleZeroItrFastPath(
+                    participantCount,
+                    roleFormalBodyEntryCount))
+            {
+                return true;
+            }
+
+            InitializeRoleAwareFormalExactTracking(participantCount);
+            _lastRoleAwareParticipantCount = participantCount;
+            _lastRoleAwareInertParticipantCount =
+                CountRoleAwareFormalInertParticipants();
+            BattleTickDetailPhaseDiagnostics inputValidationDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (inputValidationDiagnostics != null)
+            {
+                inputValidationDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectInputValidation);
+            }
+
+            bool inputsValid;
+            try
+            {
+                bool runFullInputValidation =
+                    ForceFullRoleAwareFormalInputValidationForDiagnostics;
+#if UNITY_INCLUDE_TESTS
+                Action beforeInputValidation =
+                    BeforeRoleAwareFormalInputValidationForSelfCheck;
+                if (beforeInputValidation != null)
+                {
+                    beforeInputValidation.Invoke();
+                    runFullInputValidation = true;
+                }
+#endif
+                // Production reaches this gate synchronously from the construction
+                // loops above, with no callback or await between them. The occupancy
+                // epoch protects slot membership changes; it intentionally cannot
+                // detect same-slot frame/geometry mutation. Test hooks and explicit
+                // diagnostics opt into the full geometry revalidation below.
+                _lastRoleAwareCheapInputValidationCount++;
+                bool cheapInputsValid =
+                    TryValidateRoleAwareFormalBroadphaseInputsCheap(
+                        participantCount,
+                        roleAwareOccupancyEpoch);
+                bool fullInputsValid = true;
+                if (runFullInputValidation)
+                {
+                    _lastRoleAwareFullInputValidationCount++;
+                    fullInputsValid =
+                        TryValidateRoleAwareFormalBroadphaseInputsFull(
+                            out bool fullyValidatedDirectInputSafe) &&
+                        fullyValidatedDirectInputSafe == directInputSafe;
+                }
+
+                inputsValid = cheapInputsValid && fullInputsValid;
+            }
+            finally
+            {
+                if (inputValidationDiagnostics != null)
+                {
+                    inputValidationDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectInputValidation);
+                }
+            }
+
+            if (!inputsValid)
+            {
+                return AbortFormalSpatialIndex();
+            }
+
+            long directCost =
+                (long)_roleFormalItrEntries.Count *
+                _formalIncrementalEntries.Count;
+            _lastRoleAwareDirectCost = directCost;
+            _lastRoleAwareDirectCostAvailable = true;
+            // Explicit tree diagnostics win over every direct diagnostic switch.
+            bool useDirect =
+                directInputSafe &&
+                !ForceRoleAwareTreeForDiagnostics &&
+                (ForceRoleAwareDirectForDiagnostics ||
+                 ForceRoleAwareNestedDirectForDiagnostics ||
+                 ForceRoleAwareSweepDirectForDiagnostics ||
+                 directCost <= RoleAwareDirectComparisonThreshold);
+            bool useSweepDirect =
+                useDirect && ShouldUseRoleAwareSweepDirect(directCost);
+
+            try
+            {
+                if (useDirect)
+                {
+                    BattleTickDetailPhaseDiagnostics directDiagnostics =
+                        _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                    if (directDiagnostics != null)
+                    {
+                        directDiagnostics.BeginPhase(
+                            BattleTickDetailPhase.CandidateCollectDirectBroadphase);
+                    }
+
+                    try
+                    {
+                        _lastRoleAwareDirectTickCount = 1;
+                        _totalRoleAwareDirectTickCount =
+                            SaturatingIncrement(_totalRoleAwareDirectTickCount);
+                        if (useSweepDirect)
+                        {
+                            _lastRoleAwareSweepDirectTickCount = 1;
+                            _totalRoleAwareSweepDirectTickCount =
+                                SaturatingIncrement(
+                                    _totalRoleAwareSweepDirectTickCount);
+                            CollectRoleAwareSweepDirectBroadphasePairs();
+                        }
+                        else
+                        {
+                            _lastRoleAwareNestedDirectTickCount = 1;
+                            _totalRoleAwareNestedDirectTickCount =
+                                SaturatingIncrement(
+                                    _totalRoleAwareNestedDirectTickCount);
+                            CollectRoleAwareNestedDirectBroadphasePairs();
+                        }
+                    }
+                    finally
+                    {
+                        if (directDiagnostics != null)
+                        {
+                            directDiagnostics.EndPhase(
+                                BattleTickDetailPhase.CandidateCollectDirectBroadphase);
+                        }
+                    }
+                }
+                else
+                {
+                    BattleTickDetailPhaseDiagnostics treeDiagnostics =
+                        _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                    if (treeDiagnostics != null)
+                    {
+                        treeDiagnostics.BeginPhase(
+                            BattleTickDetailPhase.CandidateCollectTreeBroadphase);
+                    }
+
+                    try
+                    {
+                        _lastRoleAwareTreeTickCount = 1;
+                        _totalRoleAwareTreeTickCount =
+                            SaturatingIncrement(_totalRoleAwareTreeTickCount);
+                        BattleStageRuntimeState stage = _world?.Runtime?.Stage;
+                        int stageWidth = stage?.StageWidthPx ?? 800;
+                        int zMin = stage?.ZMin ?? 180;
+                        int zMax = stage?.ZMax ?? 350;
+                        var preferredRoot = new SpatialAabbXZ(
+                            0,
+                            zMin,
+                            stageWidth > 0 ? stageWidth : 1,
+                            zMax > zMin ? zMax : zMin + 1);
+                        FormalSpatialSynchronizeResult =
+                            _roleFormalBroadphase.Synchronize(
+                                _formalIncrementalEntries,
+                                preferredRoot);
+                        if (!FormalSpatialSynchronizeResult.Succeeded ||
+                            FormalSpatialSynchronizeResult.IndexedCount !=
+                            _formalIncrementalEntries.Count)
                         {
                             return AbortFormalSpatialIndex();
                         }
 
-                        AddAuthorityOrdinalPair(
-                            itrEntry.ParticipantOrdinal,
-                            bodyParticipantOrdinal);
+                        for (int itrEntryIndex = 0;
+                             itrEntryIndex < _roleFormalItrEntries.Count;
+                             itrEntryIndex++)
+                        {
+                            RoleAwareFormalItrEntry itrEntry =
+                                _roleFormalItrEntries[itrEntryIndex];
+                            _roleFormalBroadphase.QueryHandles(
+                                itrEntry.Bounds,
+                                _formalQueryHandles);
+                            for (int resultIndex = 0;
+                                 resultIndex < _formalQueryHandles.Count;
+                                 resultIndex++)
+                            {
+                                RuntimeEntityHandle bodyHandle =
+                                    _formalQueryHandles[resultIndex];
+                                if (!_formalSlotToOrdinal.TryGetValue(
+                                        bodyHandle.Slot,
+                                        out int bodyParticipantOrdinal) ||
+                                    !TryValidateRoleAwareParticipant(
+                                        bodyParticipantOrdinal,
+                                        bodyHandle,
+                                        out _))
+                                {
+                                    return AbortFormalSpatialIndex();
+                                }
+
+                                AddAuthorityOrdinalPair(
+                                    itrEntry.ParticipantOrdinal,
+                                    bodyParticipantOrdinal);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        if (treeDiagnostics != null)
+                        {
+                            treeDiagnostics.EndPhase(
+                                BattleTickDetailPhase.CandidateCollectTreeBroadphase);
+                        }
                     }
                 }
             }
@@ -1013,86 +2329,1180 @@ namespace NTSD.Animation
                 return AbortFormalSpatialIndex();
             }
 
-            for (int attackerOrdinal = 0;
-                 attackerOrdinal < participantCount;
-                 attackerOrdinal++)
+            BattleTickDetailPhaseDiagnostics fallbackPairDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (fallbackPairDiagnostics != null)
             {
-                RoleAwareFormalParticipant attacker =
-                    _roleFormalParticipants[attackerOrdinal];
-                if (!attacker.HasAttackItr)
-                    continue;
+                fallbackPairDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectFallbackPairAdd);
+            }
 
-                for (int targetOrdinal = 0;
-                     targetOrdinal < participantCount;
-                     targetOrdinal++)
+            try
+            {
+                CollectRoleAwareFormalFallbackPairs();
+            }
+            finally
+            {
+                if (fallbackPairDiagnostics != null)
                 {
-                    if (attackerOrdinal == targetOrdinal)
-                        continue;
-
-                    RoleAwareFormalParticipant target =
-                        _roleFormalParticipants[targetOrdinal];
-                    if (!target.HasBody ||
-                        (!attacker.HasFallbackAttackItr && !target.HasFallbackBody))
-                    {
-                        continue;
-                    }
-
-                    AddAuthorityOrdinalPair(attackerOrdinal, targetOrdinal);
+                    fallbackPairDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectFallbackPairAdd);
                 }
             }
 
-            SortAndDeduplicate(_formalAuthorityPairKeys);
+            BattleTickDetailPhaseDiagnostics sortDiagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (sortDiagnostics != null)
+            {
+                sortDiagnostics.BeginPhase(
+                    BattleTickDetailPhase.CandidateCollectSortDeduplicate);
+            }
+
+            try
+            {
+                SortAndDeduplicate(_formalAuthorityPairKeys);
+            }
+            finally
+            {
+                if (sortDiagnostics != null)
+                {
+                    sortDiagnostics.EndPhase(
+                        BattleTickDetailPhase.CandidateCollectSortDeduplicate);
+                }
+            }
+            if (roleAwareOccupancyEpoch !=
+                _world.RuntimeSlotOccupancyEpochForServices)
+            {
+                return AbortFormalSpatialIndex();
+            }
+
+            if (!TryCollectRoleAwareFormalExactRequirements(participantCount) ||
+                !TryBuildRequiredRoleAwareFormalExactCaches(participantCount) ||
+                roleAwareOccupancyEpoch !=
+                    _world.RuntimeSlotOccupancyEpochForServices)
+            {
+                return AbortFormalSpatialIndex();
+            }
+
             _formalFallbackParticipantCount = CountRoleAwareFormalFallbackParticipants();
             _lastFormalPairCount = _formalAuthorityPairKeys.Count;
-            _lastRoleAwareBodyEntryCount = _roleFormalBodyEntries.Count;
+            _lastRoleAwareBodyEntryCount = roleFormalBodyEntryCount;
             _lastRoleAwareItrQueryCount = _roleFormalItrEntries.Count;
 
             try
             {
-                for (int pairIndex = 0;
-                     pairIndex < _formalAuthorityPairKeys.Count;
-                     pairIndex++)
+                BattleTickDetailPhaseDiagnostics pairLoopDiagnostics =
+                    _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                if (pairLoopDiagnostics != null)
                 {
-                    long pairKey = _formalAuthorityPairKeys[pairIndex];
-                    int firstOrdinal = (int)(pairKey >> 32);
-                    int secondOrdinal = (int)(pairKey & 0xffffffffL);
-                    if (firstOrdinal < 0 ||
-                        secondOrdinal <= firstOrdinal ||
-                        secondOrdinal >= participantCount)
-                    {
-                        return AbortFormalSpatialIndex();
-                    }
+                    pairLoopDiagnostics.BeginPhase(
+                        BattleTickDetailPhase.CandidateCollectPairExactLoop);
+                }
 
-                    if (!TryValidateRoleAwareParticipant(
-                            firstOrdinal,
-                            _roleFormalParticipants[firstOrdinal].Handle,
-                            out LF2Entity first) ||
-                        !TryValidateRoleAwareParticipant(
-                            secondOrdinal,
-                            _roleFormalParticipants[secondOrdinal].Handle,
-                            out LF2Entity second))
+                try
+                {
+                    for (int pairIndex = 0;
+                         pairIndex < _formalAuthorityPairKeys.Count;
+                         pairIndex++)
                     {
-                        return AbortFormalSpatialIndex();
-                    }
+                        long pairKey = _formalAuthorityPairKeys[pairIndex];
+                        int firstOrdinal = (int)(pairKey >> 32);
+                        int secondOrdinal = (int)(pairKey & 0xffffffffL);
+                        if (firstOrdinal < 0 ||
+                            secondOrdinal <= firstOrdinal ||
+                            secondOrdinal >= participantCount)
+                        {
+                            return AbortFormalSpatialIndex();
+                        }
 
-                    CollectCandidatesForPair(first, second);
-                    CollectCandidatesForPair(second, first);
+                        RoleAwareFormalParticipant firstParticipant =
+                            _roleFormalParticipants[firstOrdinal];
+                        RoleAwareFormalParticipant secondParticipant =
+                            _roleFormalParticipants[secondOrdinal];
+                        LF2Entity first = firstParticipant.Entity;
+                        LF2Entity second = secondParticipant.Entity;
 #if UNITY_INCLUDE_TESTS
-                    if (ThrowAfterRoleAwareFormalPairCountForSelfCheck >= 0 &&
-                        pairIndex + 1 >= ThrowAfterRoleAwareFormalPairCountForSelfCheck)
-                    {
-                        throw new InvalidOperationException(
-                            "Forced role-aware formal collector self-check failure.");
-                    }
+                        if (ForceRoleAwareExactCacheRevalidationForDiagnostics &&
+                            (!RoleAwareFormalExactCacheIsCurrent(
+                                 in firstParticipant,
+                                 _roleFormalExactRequiredRoles[firstOrdinal]) ||
+                             !RoleAwareFormalExactCacheIsCurrent(
+                                 in secondParticipant,
+                                 _roleFormalExactRequiredRoles[secondOrdinal])))
+                        {
+                            return AbortFormalSpatialIndex();
+                        }
+                        if (ForceLegacyPerPairValidationForDiagnostics &&
+                            (!TryValidateRoleAwareParticipant(
+                                 firstOrdinal,
+                                 firstParticipant.Handle,
+                                 out first) ||
+                             !TryValidateRoleAwareParticipant(
+                                 secondOrdinal,
+                                 secondParticipant.Handle,
+                                 out second)))
+                        {
+                            return AbortFormalSpatialIndex();
+                        }
 #endif
+
+                        if (firstParticipant.HasAttackItr &&
+                            secondParticipant.HasBody)
+                        {
+#if UNITY_INCLUDE_TESTS
+                            if (ForceLegacyRoleAwareExactPrefilterForDiagnostics)
+                                CollectCandidatesForPair(first, second);
+                            else
+#endif
+                                CollectCandidatesForRoleAwareFormalDirection(
+                                    in firstParticipant,
+                                    in secondParticipant);
+                        }
+                        if (secondParticipant.HasAttackItr &&
+                            firstParticipant.HasBody)
+                        {
+#if UNITY_INCLUDE_TESTS
+                            if (ForceLegacyRoleAwareExactPrefilterForDiagnostics)
+                                CollectCandidatesForPair(second, first);
+                            else
+#endif
+                                CollectCandidatesForRoleAwareFormalDirection(
+                                    in secondParticipant,
+                                    in firstParticipant);
+                        }
+#if UNITY_INCLUDE_TESTS
+                        AfterRoleAwareExactPairForSelfCheck?.Invoke(pairIndex);
+                        if (ThrowAfterRoleAwareFormalPairCountForSelfCheck >= 0 &&
+                            pairIndex + 1 >= ThrowAfterRoleAwareFormalPairCountForSelfCheck)
+                        {
+                            throw new InvalidOperationException(
+                                "Forced role-aware formal collector self-check failure.");
+                        }
+#endif
+                    }
+                }
+                finally
+                {
+                    if (pairLoopDiagnostics != null)
+                    {
+                        pairLoopDiagnostics.EndPhase(
+                            BattleTickDetailPhase.CandidateCollectPairExactLoop);
+                    }
                 }
             }
             catch (Exception)
+            {
+                return AbortFormalSpatialIndex();
+            }
+
+            if (roleAwareOccupancyEpoch !=
+                _world.RuntimeSlotOccupancyEpochForServices)
             {
                 return AbortFormalSpatialIndex();
             }
 
             return true;
+        }
+
+        private bool TryCompleteCollisionRoleZeroItrFastPath(
+            int participantCount,
+            int bodyEntryCount)
+        {
+            if (!CollisionRoleZeroItrFastPathEnabled)
+                return false;
+
+            CollisionRoleZeroItrFastPathRequestedCountForDiagnostics++;
+            if (_roleFormalItrEntries.Count != 0)
+            {
+                CollisionRoleZeroItrFastPathFallbackCountForDiagnostics++;
+                return false;
+            }
+
+            for (int participantOrdinal = 0;
+                 participantOrdinal < _roleFormalParticipants.Count;
+                 participantOrdinal++)
+            {
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                if (participant.HasAttackItr || participant.HasFallbackAttackItr)
+                {
+                    CollisionRoleZeroItrFastPathFallbackCountForDiagnostics++;
+                    return false;
+                }
+            }
+
+            if (_candidateProducerModeForCurrentTick != CollisionCandidateProducerMode.StoreOnly ||
+                ShadowBroadphaseDiagnosticsEnabled ||
+                CollisionCandidateStoreShadowDiagnosticsEnabled ||
+                ForceLegacyRoleBodyBuildForDiagnostics ||
+                ForceRoleAwareTreeForDiagnostics ||
+                ForceRoleAwareDirectForDiagnostics ||
+                ForceRoleAwareNestedDirectForDiagnostics ||
+                ForceRoleAwareSweepDirectForDiagnostics ||
+                ForceFullRoleAwareFormalInputValidationForDiagnostics)
+            {
+                CollisionRoleZeroItrFastPathFallbackCountForDiagnostics++;
+                return false;
+            }
+#if UNITY_INCLUDE_TESTS
+            if (BeforeRoleAwareFormalInputValidationForSelfCheck != null ||
+                BeforeCollisionCandidateStoreFinalCompareForSelfCheck != null ||
+                ForceLegacyPerPairValidationForDiagnostics ||
+                ForceLegacyRoleAwareExactPrefilterForDiagnostics ||
+                ForceRoleAwareExactCacheRevalidationForDiagnostics)
+            {
+                CollisionRoleZeroItrFastPathFallbackCountForDiagnostics++;
+                return false;
+            }
+#endif
+
+            CollisionRoleZeroItrFastPathZeroItrCountForDiagnostics++;
+            CompareAndCompleteCollisionCandidateStoreShadow();
+            if (!_candidateStoreShadow.IsVisible)
+            {
+                CollisionRoleZeroItrFastPathInvalidCountForDiagnostics++;
+                CollisionRoleZeroItrFastPathFallbackCountForDiagnostics++;
+                return false;
+            }
+
+            _lastFormalPairCount = 0;
+            _lastRoleAwareParticipantCount = participantCount;
+            _lastRoleAwareInertParticipantCount =
+                CountRoleAwareFormalInertParticipants();
+            _lastRoleAwareBodyEntryCount = bodyEntryCount;
+            _lastRoleAwareItrQueryCount = 0;
+            _lastRoleAwareDirectCost = 0;
+            _lastRoleAwareDirectCostAvailable = true;
+            CollisionRoleZeroItrFastPathParticipantCountForDiagnostics = participantCount;
+            CollisionRoleZeroItrFastPathAppliedCountForDiagnostics++;
+            LockCollisionCandidateConsumptionSource();
+            _consumeCandidateCache = true;
+            _collisionRoleZeroItrEarlyReturnAppliedForCurrentTick = true;
+            return true;
+        }
+
+        private bool TryCollectRoleAwareFormalExactRequirements(
+            int participantCount)
+        {
+            if (_roleFormalExactRequiredRoles.Count != participantCount)
+                return false;
+
+            for (int pairIndex = 0;
+                 pairIndex < _formalAuthorityPairKeys.Count;
+                 pairIndex++)
+            {
+                long pairKey = _formalAuthorityPairKeys[pairIndex];
+                int firstOrdinal = (int)(pairKey >> 32);
+                int secondOrdinal = (int)(pairKey & 0xffffffffL);
+                if (firstOrdinal < 0 ||
+                    secondOrdinal <= firstOrdinal ||
+                    secondOrdinal >= participantCount)
+                {
+                    return false;
+                }
+
+                RoleAwareFormalParticipant first =
+                    _roleFormalParticipants[firstOrdinal];
+                RoleAwareFormalParticipant second =
+                    _roleFormalParticipants[secondOrdinal];
+                AddRoleAwareFormalExactDirectionRequirement(
+                    firstOrdinal,
+                    in first,
+                    secondOrdinal,
+                    in second);
+                AddRoleAwareFormalExactDirectionRequirement(
+                    secondOrdinal,
+                    in second,
+                    firstOrdinal,
+                    in first);
+            }
+
+            return true;
+        }
+
+        private void AddRoleAwareFormalExactDirectionRequirement(
+            int attackerOrdinal,
+            in RoleAwareFormalParticipant attacker,
+            int targetOrdinal,
+            in RoleAwareFormalParticipant target)
+        {
+            if (!attacker.HasAttackItr ||
+                attacker.HasFallbackAttackItr ||
+                !target.HasBody ||
+                target.HasFallbackBody)
+            {
+                return;
+            }
+
+            _roleFormalExactRequiredRoles[attackerOrdinal] |=
+                RoleAwareFormalExactAttackRole;
+            _roleFormalExactRequiredRoles[targetOrdinal] |=
+                RoleAwareFormalExactBodyRole;
+        }
+
+        private bool TryValidateRoleAwareFormalBroadphaseInputsCheap(
+            int participantCount,
+            ulong expectedOccupancyEpoch)
+        {
+            return expectedOccupancyEpoch ==
+                       _world.RuntimeSlotOccupancyEpochForServices &&
+                   participantCount == _roleFormalParticipants.Count &&
+                   participantCount == _formalSlotToOrdinal.Count &&
+                   participantCount == _formalSeenSlots.Count &&
+                   participantCount == _roleFormalExactRequiredRoles.Count &&
+                   _roleFormalBodyOrdinals.Count <= participantCount &&
+                   _roleFormalFallbackBodyOrdinals.Count <=
+                       _roleFormalBodyOrdinals.Count &&
+                   _roleFormalFallbackAttackOrdinals.Count +
+                       _roleFormalExactAttackOrdinals.Count <= participantCount &&
+                   _formalIncrementalEntries.Count <=
+                       _roleFormalBodyOrdinals.Count;
+        }
+
+        private bool TryValidateRoleAwareFormalBroadphaseInputsFull(
+            out bool directInputSafe)
+        {
+            directInputSafe = true;
+            for (int participantOrdinal = 0;
+                 participantOrdinal < _roleFormalParticipants.Count;
+                 participantOrdinal++)
+            {
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                if (!TryValidateRoleAwareParticipant(
+                        participantOrdinal,
+                        participant.Handle,
+                        out LF2Entity entity) ||
+                    !ReferenceEquals(
+                        GetAuthoredCurrentFrame(entity),
+                        participant.CurrentFrame) ||
+                    !ReferenceEquals(
+                        entity.GetCollisionFrameData(),
+                        participant.CollisionFrame) ||
+                    (participant.CurrentFrame?.itrs?.Count ?? 0) !=
+                        participant.CurrentItrCount ||
+                    (participant.CollisionFrame?.itrs?.Count ?? 0) !=
+                        participant.CollisionItrCount ||
+                    (participant.CollisionFrame?.bodies?.Count ?? 0) !=
+                        participant.CollisionBodyCount)
+                {
+                    return false;
+                }
+                if (participant.HasFallbackAttackItr ||
+                    participant.HasFallbackBody)
+                {
+                    directInputSafe = false;
+                }
+            }
+
+            for (int itrEntryIndex = 0;
+                 itrEntryIndex < _roleFormalItrEntries.Count;
+                 itrEntryIndex++)
+            {
+                RoleAwareFormalItrEntry itrEntry =
+                    _roleFormalItrEntries[itrEntryIndex];
+                if (!itrEntry.Bounds.IsValid ||
+                    !TryValidateRoleAwareParticipant(
+                        itrEntry.ParticipantOrdinal,
+                        itrEntry.Handle,
+                        out LF2Entity entity))
+                {
+                    return false;
+                }
+
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[itrEntry.ParticipantOrdinal];
+                List<InteractionArea> itrs = participant.CollisionFrame?.itrs;
+                if (itrs == null ||
+                    itrEntry.ItrIndex < 0 ||
+                    itrEntry.ItrIndex >= itrs.Count ||
+                    !ReferenceEquals(itrs[itrEntry.ItrIndex], itrEntry.Itr) ||
+                    !TryBuildImmediateItrAabb(
+                        entity,
+                        participant.CollisionFrame,
+                        itrEntry.Itr,
+                        out SpatialAabbXZ currentBounds) ||
+                    !currentBounds.Equals(itrEntry.Bounds))
+                {
+                    return false;
+                }
+            }
+
+            for (int bodyEntryIndex = 0;
+                 bodyEntryIndex < _formalIncrementalEntries.Count;
+                 bodyEntryIndex++)
+            {
+                IncrementalSpatialEntry bodyEntry =
+                    _formalIncrementalEntries[bodyEntryIndex];
+                if (!bodyEntry.Bounds.IsValid ||
+                    !_formalSlotToOrdinal.TryGetValue(
+                        bodyEntry.Handle.Slot,
+                        out int bodyParticipantOrdinal) ||
+                    !TryValidateRoleAwareParticipant(
+                        bodyParticipantOrdinal,
+                        bodyEntry.Handle,
+                        out LF2Entity entity) ||
+                    !TryBuildCurrentRoleAwareFormalBodyBounds(
+                        entity,
+                        _roleFormalParticipants[bodyParticipantOrdinal].CollisionFrame,
+                        out SpatialAabbXZ currentBounds) ||
+                    !currentBounds.Equals(bodyEntry.Bounds))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void CollectRoleAwareDirectBroadphasePairs()
+        {
+            long directCost =
+                (long)_roleFormalItrEntries.Count *
+                _formalIncrementalEntries.Count;
+            if (ShouldUseRoleAwareSweepDirect(directCost))
+                CollectRoleAwareSweepDirectBroadphasePairs();
+            else
+                CollectRoleAwareNestedDirectBroadphasePairs();
+        }
+
+        private bool ShouldUseRoleAwareSweepDirect(long directCost)
+        {
+            if (ForceRoleAwareNestedDirectForDiagnostics)
+                return false;
+            if (ForceRoleAwareSweepDirectForDiagnostics)
+                return true;
+            return directCost >= RoleAwareSweepDirectCrossover;
+        }
+
+        private void CollectRoleAwareNestedDirectBroadphasePairs()
+        {
+            long comparisonCount = 0;
+            for (int itrEntryIndex = 0;
+                 itrEntryIndex < _roleFormalItrEntries.Count;
+                 itrEntryIndex++)
+            {
+                RoleAwareFormalItrEntry itrEntry =
+                    _roleFormalItrEntries[itrEntryIndex];
+                for (int bodyEntryIndex = 0;
+                     bodyEntryIndex < _formalIncrementalEntries.Count;
+                     bodyEntryIndex++)
+                {
+                    IncrementalSpatialEntry bodyEntry =
+                        _formalIncrementalEntries[bodyEntryIndex];
+                    comparisonCount++;
+                    if (!itrEntry.Bounds.Overlaps(bodyEntry.Bounds))
+                        continue;
+
+                    int bodyParticipantOrdinal =
+                        _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                    AddAuthorityOrdinalPair(
+                        itrEntry.ParticipantOrdinal,
+                        bodyParticipantOrdinal);
+                }
+            }
+
+            _lastRoleAwareDirectComparisonCount = comparisonCount;
+            _totalRoleAwareDirectComparisonCount = SaturatingAdd(
+                _totalRoleAwareDirectComparisonCount,
+                comparisonCount);
+        }
+
+        private void CollectRoleAwareSweepDirectBroadphasePairs()
+        {
+            _roleFormalSweepEvents.Clear();
+            _roleFormalSweepActiveBodyIndices.Clear();
+            _roleFormalSweepActiveItrIndices.Clear();
+            PrepareRoleAwareSweepPositions(
+                _roleFormalSweepBodyPositions,
+                _formalIncrementalEntries.Count);
+            PrepareRoleAwareSweepPositions(
+                _roleFormalSweepItrPositions,
+                _roleFormalItrEntries.Count);
+
+            for (int bodyEntryIndex = 0;
+                 bodyEntryIndex < _formalIncrementalEntries.Count;
+                 bodyEntryIndex++)
+            {
+                SpatialAabbXZ bounds =
+                    _formalIncrementalEntries[bodyEntryIndex].Bounds;
+                if (!bounds.IsValid)
+                    continue;
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    bounds.MinX,
+                    RoleAwareSweepEventKind.BodyStart,
+                    bodyEntryIndex));
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    bounds.MaxX,
+                    RoleAwareSweepEventKind.BodyEnd,
+                    bodyEntryIndex));
+            }
+            for (int itrEntryIndex = 0;
+                 itrEntryIndex < _roleFormalItrEntries.Count;
+                 itrEntryIndex++)
+            {
+                SpatialAabbXZ bounds = _roleFormalItrEntries[itrEntryIndex].Bounds;
+                if (!bounds.IsValid)
+                    continue;
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    bounds.MinX,
+                    RoleAwareSweepEventKind.ItrStart,
+                    itrEntryIndex));
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    bounds.MaxX,
+                    RoleAwareSweepEventKind.ItrEnd,
+                    itrEntryIndex));
+            }
+
+            _roleFormalSweepEvents.Sort(RoleAwareSweepEventComparer.Instance);
+            long xCandidateCount = 0;
+            long fullOverlapCheckCount = 0;
+            for (int eventIndex = 0;
+                 eventIndex < _roleFormalSweepEvents.Count;
+                 eventIndex++)
+            {
+                RoleAwareSweepEvent sweepEvent =
+                    _roleFormalSweepEvents[eventIndex];
+                switch (sweepEvent.Kind)
+                {
+                    case RoleAwareSweepEventKind.BodyEnd:
+                        RemoveRoleAwareSweepActiveIndex(
+                            sweepEvent.EntryIndex,
+                            _roleFormalSweepActiveBodyIndices,
+                            _roleFormalSweepBodyPositions);
+                        break;
+                    case RoleAwareSweepEventKind.ItrEnd:
+                        RemoveRoleAwareSweepActiveIndex(
+                            sweepEvent.EntryIndex,
+                            _roleFormalSweepActiveItrIndices,
+                            _roleFormalSweepItrPositions);
+                        break;
+                    case RoleAwareSweepEventKind.BodyStart:
+                    {
+                        IncrementalSpatialEntry bodyEntry =
+                            _formalIncrementalEntries[sweepEvent.EntryIndex];
+                        int bodyParticipantOrdinal =
+                            _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                        for (int activeIndex = 0;
+                             activeIndex < _roleFormalSweepActiveItrIndices.Count;
+                             activeIndex++)
+                        {
+                            RoleAwareFormalItrEntry itrEntry =
+                                _roleFormalItrEntries[
+                                    _roleFormalSweepActiveItrIndices[activeIndex]];
+                            xCandidateCount++;
+                            fullOverlapCheckCount++;
+                            if (!itrEntry.Bounds.Overlaps(bodyEntry.Bounds))
+                                continue;
+                            AddAuthorityOrdinalPair(
+                                itrEntry.ParticipantOrdinal,
+                                bodyParticipantOrdinal);
+                        }
+                        AddRoleAwareSweepActiveIndex(
+                            sweepEvent.EntryIndex,
+                            _roleFormalSweepActiveBodyIndices,
+                            _roleFormalSweepBodyPositions);
+                        break;
+                    }
+                    case RoleAwareSweepEventKind.ItrStart:
+                    {
+                        RoleAwareFormalItrEntry itrEntry =
+                            _roleFormalItrEntries[sweepEvent.EntryIndex];
+                        for (int activeIndex = 0;
+                             activeIndex < _roleFormalSweepActiveBodyIndices.Count;
+                             activeIndex++)
+                        {
+                            IncrementalSpatialEntry bodyEntry =
+                                _formalIncrementalEntries[
+                                    _roleFormalSweepActiveBodyIndices[activeIndex]];
+                            xCandidateCount++;
+                            fullOverlapCheckCount++;
+                            if (!itrEntry.Bounds.Overlaps(bodyEntry.Bounds))
+                                continue;
+                            int bodyParticipantOrdinal =
+                                _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                            AddAuthorityOrdinalPair(
+                                itrEntry.ParticipantOrdinal,
+                                bodyParticipantOrdinal);
+                        }
+                        AddRoleAwareSweepActiveIndex(
+                            sweepEvent.EntryIndex,
+                            _roleFormalSweepActiveItrIndices,
+                            _roleFormalSweepItrPositions);
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            _lastRoleAwareSweepXCandidateCount = xCandidateCount;
+            _lastRoleAwareSweepFullOverlapCheckCount = fullOverlapCheckCount;
+            _totalRoleAwareSweepXCandidateCount = SaturatingAdd(
+                _totalRoleAwareSweepXCandidateCount,
+                xCandidateCount);
+            _totalRoleAwareSweepFullOverlapCheckCount = SaturatingAdd(
+                _totalRoleAwareSweepFullOverlapCheckCount,
+                fullOverlapCheckCount);
+            _lastRoleAwareDirectComparisonCount = fullOverlapCheckCount;
+            _totalRoleAwareDirectComparisonCount = SaturatingAdd(
+                _totalRoleAwareDirectComparisonCount,
+                fullOverlapCheckCount);
+        }
+
+        private static void PrepareRoleAwareSweepPositions(
+            List<int> positions,
+            int requiredCount)
+        {
+            while (positions.Count < requiredCount)
+                positions.Add(-1);
+            if (positions.Count > requiredCount)
+            {
+                positions.RemoveRange(
+                    requiredCount,
+                    positions.Count - requiredCount);
+            }
+            for (int index = 0; index < requiredCount; index++)
+                positions[index] = -1;
+        }
+
+        private static void AddRoleAwareSweepActiveIndex(
+            int entryIndex,
+            List<int> activeIndices,
+            List<int> positions)
+        {
+            positions[entryIndex] = activeIndices.Count;
+            activeIndices.Add(entryIndex);
+        }
+
+        private static void RemoveRoleAwareSweepActiveIndex(
+            int entryIndex,
+            List<int> activeIndices,
+            List<int> positions)
+        {
+            int position = positions[entryIndex];
+            if (position < 0)
+                return;
+
+            int lastPosition = activeIndices.Count - 1;
+            int lastEntryIndex = activeIndices[lastPosition];
+            activeIndices[position] = lastEntryIndex;
+            activeIndices.RemoveAt(lastPosition);
+            positions[lastEntryIndex] = position;
+            positions[entryIndex] = -1;
+        }
+
+        private static long SaturatingIncrement(long value) =>
+            value == long.MaxValue ? long.MaxValue : value + 1;
+
+        private static long SaturatingAdd(long value, long increment)
+        {
+            if (increment <= 0)
+                return value;
+            return value > long.MaxValue - increment
+                ? long.MaxValue
+                : value + increment;
+        }
+
+        private void BuildRoleAwareFormalBodyState(
+            ref RoleAwareFormalParticipant participant,
+            ref int bodyEntryCount,
+            out bool hasIndexableBody,
+            out SpatialAabbXZ indexableBodyBounds)
+        {
+            hasIndexableBody = false;
+            indexableBodyBounds = default;
+            LF2FrameData frame = participant.Frame;
+            if (frame == null)
+                return;
+
+            if (!ForceLegacyRoleBodyBuildForDiagnostics)
+            {
+                RoleAwareFormalBodyTemplate template;
+                if (_roleFormalBodyTemplates.TryGetValue(frame, out template))
+                {
+                    _lastRoleAwareBodyTemplateHitCount++;
+                }
+                else
+                {
+                    template = BuildRoleAwareFormalBodyTemplate(frame);
+                    _roleFormalBodyTemplates.Add(frame, template);
+                    _lastRoleAwareBodyTemplateBuildCount++;
+                }
+
+                if (TryMaterializeRoleAwareFormalBodyTemplate(
+                        ref participant,
+                        in template,
+                        ref bodyEntryCount,
+                        out hasIndexableBody,
+                        out indexableBodyBounds))
+                {
+                    return;
+                }
+
+                _lastRoleAwareBodyTemplateFallbackCount++;
+            }
+
+            BuildRoleAwareFormalBodyStateLegacy(
+                ref participant,
+                ref bodyEntryCount,
+                out hasIndexableBody,
+                out indexableBodyBounds);
+        }
+
+        private static RoleAwareFormalBodyTemplate BuildRoleAwareFormalBodyTemplate(
+            LF2FrameData frame)
+        {
+            List<BodyBox> bodies = frame?.bodies;
+            int bodyCount = bodies?.Count ?? 0;
+            int centerX = frame?.centerx ?? 0;
+            int releaseBodyCount = 0;
+            bool hasUnion = false;
+            bool fastProof = frame != null &&
+                             centerX != int.MinValue &&
+                             centerX != int.MaxValue;
+            long rightMinX = 0;
+            long rightMaxX = 0;
+            long leftMinX = 0;
+            long leftMaxX = 0;
+
+            for (int bodyIndex = 0; bodyIndex < bodyCount; bodyIndex++)
+            {
+                BodyBox body = bodies[bodyIndex];
+                if (!IsReleaseBody(body))
+                    continue;
+
+                releaseBodyCount++;
+                if (body.x == int.MinValue ||
+                    body.x == int.MaxValue ||
+                    body.w <= 0 ||
+                    body.w == int.MaxValue)
+                {
+                    fastProof = false;
+                    continue;
+                }
+
+                long rightX1 = (long)-centerX + body.x;
+                long rightX2 = rightX1 + body.w;
+                long leftX2 = (long)centerX - body.x;
+                long leftX1 = leftX2 - body.w;
+                if (rightX1 < RectMin ||
+                    rightX2 > RectMax ||
+                    leftX1 < RectMin ||
+                    leftX2 > RectMax ||
+                    rightX1 >= rightX2 ||
+                    leftX1 >= leftX2)
+                {
+                    fastProof = false;
+                    continue;
+                }
+
+                if (!hasUnion)
+                {
+                    rightMinX = rightX1;
+                    rightMaxX = rightX2;
+                    leftMinX = leftX1;
+                    leftMaxX = leftX2;
+                    hasUnion = true;
+                }
+                else
+                {
+                    rightMinX = Math.Min(rightMinX, rightX1);
+                    rightMaxX = Math.Max(rightMaxX, rightX2);
+                    leftMinX = Math.Min(leftMinX, leftX1);
+                    leftMaxX = Math.Max(leftMaxX, leftX2);
+                }
+            }
+
+            fastProof &= releaseBodyCount == 0 || hasUnion;
+            return new RoleAwareFormalBodyTemplate(
+                bodies,
+                bodyCount,
+                centerX,
+                releaseBodyCount,
+                rightMinX,
+                rightMaxX,
+                leftMinX,
+                leftMaxX,
+                fastProof);
+        }
+
+        private static bool TryMaterializeRoleAwareFormalBodyTemplate(
+            ref RoleAwareFormalParticipant participant,
+            in RoleAwareFormalBodyTemplate template,
+            ref int bodyEntryCount,
+            out bool hasIndexableBody,
+            out SpatialAabbXZ indexableBodyBounds)
+        {
+            hasIndexableBody = false;
+            indexableBodyBounds = default;
+            LF2Entity entity = participant.Entity;
+            LF2FrameData frame = participant.Frame;
+            if (entity?.Runtime == null ||
+                entity.PS == null ||
+                frame == null ||
+                !ReferenceEquals(frame.bodies, template.SourceBodies) ||
+                (frame.bodies?.Count ?? 0) != template.SourceBodyCount ||
+                frame.centerx != template.SourceCenterX ||
+                !template.FastProof)
+            {
+                return false;
+            }
+
+            participant.HasBody = template.ReleaseBodyCount > 0;
+            if (!participant.HasBody)
+                return true;
+
+            int entityX = entity.Runtime.XInt;
+            if (entityX == int.MinValue || entityX == int.MaxValue)
+                return false;
+
+            bool facingLeft = entity.PS.dir == "left";
+            long minX = (long)entityX +
+                        (facingLeft ? template.LeftMinX : template.RightMinX);
+            long maxX = (long)entityX +
+                        (facingLeft ? template.LeftMaxX : template.RightMaxX);
+            if (minX < RectMin ||
+                maxX > RectMax ||
+                minX >= maxX)
+            {
+                return false;
+            }
+
+            int collisionZ = CollisionZInt(entity, frame);
+            indexableBodyBounds = new SpatialAabbXZ(
+                (int)minX,
+                collisionZ,
+                (int)maxX,
+                ClampRect((long)collisionZ + 1));
+            if (!indexableBodyBounds.IsValid)
+                return false;
+
+            SaturatingAddBodyEntryCount(
+                ref bodyEntryCount,
+                template.ReleaseBodyCount);
+            hasIndexableBody = true;
+            return true;
+        }
+
+        private static void BuildRoleAwareFormalBodyStateLegacy(
+            ref RoleAwareFormalParticipant participant,
+            ref int bodyEntryCount,
+            out bool hasIndexableBody,
+            out SpatialAabbXZ indexableBodyBounds)
+        {
+            hasIndexableBody = false;
+            indexableBodyBounds = default;
+            LF2Entity entity = participant.Entity;
+            LF2FrameData frame = participant.Frame;
+            if (frame?.bodies == null)
+                return;
+
+            for (int bodyIndex = 0;
+                 bodyIndex < frame.bodies.Count;
+                 bodyIndex++)
+            {
+                BodyBox body = frame.bodies[bodyIndex];
+                if (!IsReleaseBody(body))
+                    continue;
+
+                participant.HasBody = true;
+                if (TryBuildFormalBodyAabb(
+                        entity,
+                        frame,
+                        body,
+                        out SpatialAabbXZ bodyBounds))
+                {
+                    SaturatingAddBodyEntryCount(ref bodyEntryCount, 1);
+                    if (!hasIndexableBody)
+                    {
+                        indexableBodyBounds = bodyBounds;
+                        hasIndexableBody = true;
+                    }
+                    else
+                    {
+                        indexableBodyBounds = new SpatialAabbXZ(
+                            Math.Min(indexableBodyBounds.MinX, bodyBounds.MinX),
+                            Math.Min(indexableBodyBounds.MinZ, bodyBounds.MinZ),
+                            Math.Max(indexableBodyBounds.MaxX, bodyBounds.MaxX),
+                            Math.Max(indexableBodyBounds.MaxZ, bodyBounds.MaxZ));
+                    }
+                }
+                else
+                {
+                    participant.HasFallbackBody = true;
+                }
+            }
+        }
+
+        private static bool TryBuildCurrentRoleAwareFormalBodyBounds(
+            LF2Entity entity,
+            LF2FrameData frame,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            bool hasBounds = false;
+            if (frame?.bodies == null)
+                return false;
+
+            for (int bodyIndex = 0; bodyIndex < frame.bodies.Count; bodyIndex++)
+            {
+                BodyBox body = frame.bodies[bodyIndex];
+                if (!IsReleaseBody(body) ||
+                    !TryBuildFormalBodyAabb(
+                        entity,
+                        frame,
+                        body,
+                        out SpatialAabbXZ bodyBounds))
+                {
+                    continue;
+                }
+
+                if (!hasBounds)
+                {
+                    bounds = bodyBounds;
+                    hasBounds = true;
+                }
+                else
+                {
+                    bounds = new SpatialAabbXZ(
+                        Math.Min(bounds.MinX, bodyBounds.MinX),
+                        Math.Min(bounds.MinZ, bodyBounds.MinZ),
+                        Math.Max(bounds.MaxX, bodyBounds.MaxX),
+                        Math.Max(bounds.MaxZ, bodyBounds.MaxZ));
+                }
+            }
+
+            return hasBounds && bounds.IsValid;
+        }
+
+        private void InitializeRoleAwareFormalExactTracking(int participantCount)
+        {
+            _roleFormalExactRequiredRoles.Clear();
+#if UNITY_INCLUDE_TESTS
+            _roleFormalExactCommonBuildCounts.Clear();
+            _roleFormalExactAttackBuildCounts.Clear();
+            _roleFormalExactBodyBuildCounts.Clear();
+            _roleFormalExactValidationCounts.Clear();
+#endif
+            for (int participantOrdinal = 0;
+                 participantOrdinal < participantCount;
+                 participantOrdinal++)
+            {
+                _roleFormalExactRequiredRoles.Add(0);
+#if UNITY_INCLUDE_TESTS
+                _roleFormalExactCommonBuildCounts.Add(0);
+                _roleFormalExactAttackBuildCounts.Add(0);
+                _roleFormalExactBodyBuildCounts.Add(0);
+                _roleFormalExactValidationCounts.Add(0);
+#endif
+            }
+        }
+
+        private bool TryBuildRequiredRoleAwareFormalExactCaches(
+            int participantCount)
+        {
+            if (_roleFormalExactRequiredRoles.Count != participantCount)
+                return false;
+
+            for (int participantOrdinal = 0;
+                 participantOrdinal < participantCount;
+                 participantOrdinal++)
+            {
+                byte requiredRoles =
+                    _roleFormalExactRequiredRoles[participantOrdinal];
+                if (requiredRoles == 0)
+                    continue;
+
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                if (!BuildRoleAwareFormalExactCommonCache(ref participant))
+                    return false;
+#if UNITY_INCLUDE_TESTS
+                IncrementRoleAwareFormalExactCounter(
+                    _roleFormalExactCommonBuildCounts,
+                    participantOrdinal);
+#endif
+
+                if ((requiredRoles & RoleAwareFormalExactAttackRole) != 0)
+                {
+                    BuildRoleAwareFormalExactAttackCache(ref participant);
+#if UNITY_INCLUDE_TESTS
+                    IncrementRoleAwareFormalExactCounter(
+                        _roleFormalExactAttackBuildCounts,
+                        participantOrdinal);
+#endif
+                }
+
+                if ((requiredRoles & RoleAwareFormalExactBodyRole) != 0)
+                {
+                    BuildRoleAwareFormalExactBodyCache(ref participant);
+#if UNITY_INCLUDE_TESTS
+                    IncrementRoleAwareFormalExactCounter(
+                        _roleFormalExactBodyBuildCounts,
+                        participantOrdinal);
+#endif
+                }
+
+                _roleFormalParticipants[participantOrdinal] = participant;
+#if UNITY_INCLUDE_TESTS
+                IncrementRoleAwareFormalExactCounter(
+                    _roleFormalExactValidationCounts,
+                    participantOrdinal);
+#endif
+                if (!RoleAwareFormalExactCacheIsCurrent(
+                        in participant,
+                        requiredRoles))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool BuildRoleAwareFormalExactCommonCache(
+            ref RoleAwareFormalParticipant participant)
+        {
+            if (participant.HasExactCommonCache)
+                return true;
+
+            LF2Entity entity = participant.Entity;
+            LF2FrameData collisionFrame = participant.CollisionFrame;
+            if (entity?.PS == null ||
+                entity.Runtime == null ||
+                collisionFrame == null)
+            {
+                return false;
+            }
+
+            participant.CollisionX = entity.Runtime.XInt;
+            participant.CollisionY = entity.Runtime.YInt;
+            participant.CollisionZ = CollisionZInt(entity, collisionFrame);
+            participant.FacingLeft = entity.PS.dir == "left";
+            participant.HasExactCommonCache = true;
+            return true;
+        }
+
+        private void BuildRoleAwareFormalExactAttackCache(
+            ref RoleAwareFormalParticipant participant)
+        {
+            if (participant.HasExactAttackCache)
+                return;
+
+            LF2FrameData collisionFrame = participant.CollisionFrame;
+            participant.ExactItrRectOffset = _roleFormalExactItrRects.Count;
+            participant.ExactItrRectCount = 0;
+            List<InteractionArea> itrs = collisionFrame?.itrs;
+            if (itrs != null)
+            {
+                for (int itrIndex = 0; itrIndex < itrs.Count; itrIndex++)
+                {
+                    InteractionArea itr = itrs[itrIndex];
+                    if (itr == null)
+                        continue;
+
+                    _roleFormalExactItrRects.Add(
+                        new RoleAwareFormalExactItrRectEntry(
+                            itr,
+                            itrIndex,
+                            ItrWorldRect(
+                                participant.Entity,
+                                collisionFrame,
+                                itr)));
+                    participant.ExactItrRectCount++;
+                    _lastRoleAwareExactItrRectBuildCount++;
+                }
+            }
+
+            if (TryUnionItrRect(collisionFrame, out LocalRect ordinaryItrUnion))
+            {
+                participant.OrdinaryItrUnionWorld = LocalRectWorldRect(
+                    participant.Entity,
+                    collisionFrame,
+                    ordinaryItrUnion,
+                    fullHeight: false);
+                participant.HasOrdinaryItrUnion = true;
+            }
+
+            participant.HasExactAttackCache = true;
+        }
+
+        private void BuildRoleAwareFormalExactBodyCache(
+            ref RoleAwareFormalParticipant participant)
+        {
+            if (participant.HasExactBodyCache)
+                return;
+
+            LF2FrameData currentFrame = participant.CurrentFrame;
+            LF2FrameData collisionFrame = participant.CollisionFrame;
+            participant.ExactBodyRectOffset = _roleFormalExactBodyRects.Count;
+            participant.ExactBodyRectCount = 0;
+            List<BodyBox> bodies = collisionFrame?.bodies;
+            if (bodies != null)
+            {
+                for (int bodyIndex = 0; bodyIndex < bodies.Count; bodyIndex++)
+                {
+                    BodyBox body = bodies[bodyIndex];
+                    if (!IsReleaseBody(body))
+                        continue;
+
+                    _roleFormalExactBodyRects.Add(
+                        new RoleAwareFormalExactBodyRectEntry(
+                            body.x,
+                            BodyWorldRect(
+                                participant.Entity,
+                                collisionFrame,
+                                body,
+                                collectSemantics: true)));
+                    participant.ExactBodyRectCount++;
+                    _lastRoleAwareExactBodyRectBuildCount++;
+                }
+            }
+
+            bool hasCollisionReleaseBody = TryUnionBodyRect(
+                    collisionFrame,
+                    out LocalRect bodyUnion,
+                    out bool fullHeight);
+            participant.HasCollisionReleaseBody = hasCollisionReleaseBody;
+            participant.HasCurrentReleaseBody =
+                ReferenceEquals(currentFrame, collisionFrame)
+                    ? hasCollisionReleaseBody
+                    : HasAnyReleaseBody(currentFrame);
+            if (hasCollisionReleaseBody)
+            {
+                participant.BodyUnionWorld = LocalRectWorldRect(
+                    participant.Entity,
+                    collisionFrame,
+                    bodyUnion,
+                    fullHeight);
+                participant.HasBodyUnion = true;
+            }
+
+            participant.HasExactBodyCache = true;
+        }
+
+#if UNITY_INCLUDE_TESTS
+        private static void IncrementRoleAwareFormalExactCounter(
+            List<byte> counters,
+            int participantOrdinal)
+        {
+            byte count = counters[participantOrdinal];
+            counters[participantOrdinal] = count == byte.MaxValue
+                ? byte.MaxValue
+                : (byte)(count + 1);
+        }
+#endif
+
+        private static void SaturatingAddBodyEntryCount(
+            ref int bodyEntryCount,
+            int increment)
+        {
+            if (increment <= 0 || bodyEntryCount == int.MaxValue)
+                return;
+            bodyEntryCount = bodyEntryCount > int.MaxValue - increment
+                ? int.MaxValue
+                : bodyEntryCount + increment;
         }
 
         private bool TryValidateRoleAwareParticipant(
@@ -1161,9 +3571,80 @@ namespace NTSD.Animation
             return count;
         }
 
+        private void AddRoleAwareFormalParticipantOrdinals(
+            int participantOrdinal,
+            in RoleAwareFormalParticipant participant)
+        {
+            if (participant.HasBody)
+                _roleFormalBodyOrdinals.Add(participantOrdinal);
+            if (participant.HasFallbackBody && participant.HasBody)
+                _roleFormalFallbackBodyOrdinals.Add(participantOrdinal);
+            if (!participant.HasAttackItr)
+                return;
+
+            if (participant.HasFallbackAttackItr)
+                _roleFormalFallbackAttackOrdinals.Add(participantOrdinal);
+            else
+                _roleFormalExactAttackOrdinals.Add(participantOrdinal);
+        }
+
+        private void CollectRoleAwareFormalFallbackPairs()
+        {
+            AddRoleAwareFormalFallbackPairsTo(_formalAuthorityPairKeys);
+        }
+
+        private void AddRoleAwareFormalFallbackPairsTo(List<long> destination)
+        {
+            for (int attackerIndex = 0;
+                 attackerIndex < _roleFormalFallbackAttackOrdinals.Count;
+                 attackerIndex++)
+            {
+                int attackerOrdinal =
+                    _roleFormalFallbackAttackOrdinals[attackerIndex];
+                for (int bodyIndex = 0;
+                     bodyIndex < _roleFormalBodyOrdinals.Count;
+                     bodyIndex++)
+                {
+                    AddOrdinalPair(
+                        destination,
+                        attackerOrdinal,
+                        _roleFormalBodyOrdinals[bodyIndex]);
+                }
+            }
+
+            for (int attackerIndex = 0;
+                 attackerIndex < _roleFormalExactAttackOrdinals.Count;
+                 attackerIndex++)
+            {
+                int attackerOrdinal =
+                    _roleFormalExactAttackOrdinals[attackerIndex];
+                for (int bodyIndex = 0;
+                     bodyIndex < _roleFormalFallbackBodyOrdinals.Count;
+                     bodyIndex++)
+                {
+                    AddOrdinalPair(
+                        destination,
+                        attackerOrdinal,
+                        _roleFormalFallbackBodyOrdinals[bodyIndex]);
+                }
+            }
+        }
+
         private void AddAuthorityOrdinalPair(int firstOrdinal, int secondOrdinal)
         {
-            if (firstOrdinal == secondOrdinal ||
+            AddOrdinalPair(
+                _formalAuthorityPairKeys,
+                firstOrdinal,
+                secondOrdinal);
+        }
+
+        private static void AddOrdinalPair(
+            List<long> destination,
+            int firstOrdinal,
+            int secondOrdinal)
+        {
+            if (destination == null ||
+                firstOrdinal == secondOrdinal ||
                 firstOrdinal < 0 ||
                 secondOrdinal < 0)
             {
@@ -1172,7 +3653,7 @@ namespace NTSD.Animation
 
             uint min = (uint)Math.Min(firstOrdinal, secondOrdinal);
             uint max = (uint)Math.Max(firstOrdinal, secondOrdinal);
-            _formalAuthorityPairKeys.Add(((long)min << 32) | max);
+            destination.Add(((long)min << 32) | max);
         }
 
         private bool AbortFormalSpatialIndex()
@@ -1587,10 +4068,205 @@ namespace NTSD.Animation
             return false;
         }
 
+        public bool TryGetCollisionCandidateRange(
+            LF2Entity attacker,
+            out CollisionCandidateRange candidates)
+        {
+            if (!_consumeCandidateCache)
+            {
+                candidates = default;
+                return false;
+            }
+
+            if (_candidateConsumptionSource ==
+                CollisionCandidateConsumptionSource.StoreAuthority)
+            {
+                _candidateStoreAuthorityDiagnostics.RecordRangeRead();
+                RuntimeEntityHandle attackerHandle = RuntimeEntityHandle.Invalid;
+                int count = 0;
+                int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+                if (!_world.TryGetCurrentRuntimeHandle(
+                        attackerSlot,
+                        attacker,
+                        out attackerHandle))
+                {
+                    candidates = CreateCollisionCandidateRange(
+                        null,
+                        RuntimeEntityHandle.Invalid,
+                        0,
+                        storeAuthority: true);
+                    return true;
+                }
+
+                if (!_candidateStoreShadow.TryGetVisibleAttackerRow(
+                        attackerHandle,
+                        out count))
+                {
+                    // Step8 newborn attackers intentionally have no step6 row and
+                    // therefore see an empty range for the rest of this tick.
+                    count = 0;
+                    attackerHandle = RuntimeEntityHandle.Invalid;
+                }
+
+                candidates = CreateCollisionCandidateRange(
+                    null,
+                    attackerHandle,
+                    count,
+                    storeAuthority: true);
+                return true;
+            }
+
+            if (_candidateConsumptionSource ==
+                CollisionCandidateConsumptionSource.StoreAuthorityFailedClosed)
+            {
+                _candidateStoreAuthorityDiagnostics.RecordRangeRead();
+                candidates = CreateCollisionCandidateRange(
+                    null,
+                    RuntimeEntityHandle.Invalid,
+                    0,
+                    storeAuthority: false);
+                return true;
+            }
+
+            List<SceneQueryHit> legacyCandidates = _emptyCandidateHits;
+            if (attacker != null &&
+                _candidateCache.TryGetValue(attacker, out List<SceneQueryHit> cached))
+            {
+                legacyCandidates = cached;
+            }
+
+            candidates = CreateCollisionCandidateRange(
+                legacyCandidates,
+                RuntimeEntityHandle.Invalid,
+                legacyCandidates.Count,
+                storeAuthority: false);
+            return true;
+        }
+
+        internal bool IsCollisionCandidateRangeValidForServices(int consumptionEpoch)
+        {
+            return _consumeCandidateCache &&
+                   consumptionEpoch == _candidateConsumptionEpoch;
+        }
+
+        internal bool TryReadCollisionCandidateRangeEntryForServices(
+            List<SceneQueryHit> legacyCandidates,
+            RuntimeEntityHandle attackerHandle,
+            int count,
+            int candidateIndex,
+            int consumptionEpoch,
+            bool storeAuthority,
+            out SceneQueryHit hit)
+        {
+            hit = default;
+            if (!IsCollisionCandidateRangeValidForServices(consumptionEpoch) ||
+                candidateIndex < 0 ||
+                candidateIndex >= count)
+            {
+                return false;
+            }
+
+            if (!storeAuthority)
+            {
+                if (legacyCandidates == null || candidateIndex >= legacyCandidates.Count)
+                    return false;
+
+                hit = legacyCandidates[candidateIndex];
+                return true;
+            }
+
+            _candidateStoreAuthorityDiagnostics.RecordEntryRead();
+            if (!_world.TryResolveRuntimeHandle(attackerHandle, out _))
+            {
+                _candidateStoreAuthorityDiagnostics.RecordFailure(
+                    CollisionCandidateStoreAuthorityFailureReason.AttackerHandleNotCurrent);
+                return false;
+            }
+            if (!_candidateStoreShadow.TryGetVisibleCandidate(
+                    attackerHandle,
+                    candidateIndex,
+                    out CollisionCandidateStoreEntry entry))
+            {
+                _candidateStoreAuthorityDiagnostics.RecordFailure(
+                    CollisionCandidateStoreAuthorityFailureReason.CandidateReadFailed);
+                return false;
+            }
+
+            // C++/legacy consumption follows the current occupant of TargetSlot.
+            // TargetHandle is only shadow/oracle metadata and never gates reads.
+            LF2Entity target = _world.FindEntityByRuntimeSlotForQuery(entry.TargetSlot);
+            hit = new SceneQueryHit(
+                target,
+                entry.TargetSlot,
+                entry.BodyX,
+                entry.ItrIndex,
+                entry.RuntimeItr,
+                entry.ZeroAttackerHpOnConsume,
+                entry.ReleaseHeavyHeldTargetOnConsume);
+            return true;
+        }
+
+        private CollisionCandidateRange CreateCollisionCandidateRange(
+            List<SceneQueryHit> legacyCandidates,
+            RuntimeEntityHandle attackerHandle,
+            int count,
+            bool storeAuthority)
+        {
+            return new CollisionCandidateRange(
+                this,
+                legacyCandidates,
+                attackerHandle,
+                count,
+                _candidateConsumptionEpoch,
+                storeAuthority);
+        }
+
         public void EndCollisionCandidateConsumption()
         {
-            _consumeCandidateCache = false;
+            InvalidateCollisionCandidateRanges();
+            ReleaseCandidateListsToPool();
+            _candidateStoreShadow.EndTickVisibility();
+        }
+
+        private List<SceneQueryHit> RentCandidateList()
+        {
+            if (_candidateListPool.Count == 0)
+            {
+                _candidateListCreatedCount++;
+                return new List<SceneQueryHit>(16);
+            }
+
+            List<SceneQueryHit> candidates = _candidateListPool.Pop();
+            candidates.Clear();
+            _candidateListReusedCount++;
+            return candidates;
+        }
+
+        private void ReleaseCandidateListsToPool()
+        {
+            foreach (KeyValuePair<LF2Entity, List<SceneQueryHit>> pair in _candidateCache)
+            {
+                List<SceneQueryHit> candidates = pair.Value;
+                if (candidates == null)
+                    continue;
+
+                candidates.Clear();
+                _candidateListPool.Push(candidates);
+            }
+
             _candidateCache.Clear();
+        }
+
+        private void InvalidateCollisionCandidateRanges()
+        {
+            _consumeCandidateCache = false;
+            _candidateStoreAuthorityAppliedForCurrentTick = false;
+            _candidateStoreProducerHealthyForCurrentTick = false;
+            _candidateConsumptionSource = CollisionCandidateConsumptionSource.LegacyOracle;
+            unchecked
+            {
+                _candidateConsumptionEpoch++;
+            }
         }
 
         private List<SceneQueryHit> QueryBodyHitsImmediate(LF2Entity attacker, LF2FrameData attackerFrame, InteractionArea itr)
@@ -1668,7 +4344,7 @@ namespace NTSD.Animation
             if (attackerCurrentFrame?.itrs == null || attackerCurrentFrame.itrs.Count == 0)
                 return;
 
-            if (!_candidateCache.TryGetValue(attacker, out var dst))
+            if (!IsCandidateAttackerCarrierForCurrentTick(attacker))
                 return;
 
             LF2FrameData targetCurrentFrame = GetAuthoredCurrentFrame(target);
@@ -1700,9 +4376,287 @@ namespace NTSD.Animation
                 if (HitsTarget(attacker, attackerCollisionFrame, itr, target, targetCollisionFrame, out int bodyX) &&
                     CandidateAccepts(attacker, attackerCurrentFrame, itr, target, targetCurrentFrame, bodyX))
                 {
-                    TryRecordReleaseCandidate(attacker, target, itr, targetCurrentFrame, bodyX, itrIndex, dst);
+                    TryRecordReleaseCandidate(
+                        attacker,
+                        target,
+                        itr,
+                        targetCurrentFrame,
+                        bodyX,
+                        itrIndex);
                 }
             }
+        }
+
+        private void CollectCandidatesForRoleAwareFormalDirection(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant)
+        {
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+            if (attackerParticipant.HasFallbackAttackItr ||
+                targetParticipant.HasFallbackBody ||
+                !attackerParticipant.HasExactAttackCache ||
+                !targetParticipant.HasExactBodyCache ||
+                !attackerParticipant.HasExactCommonCache ||
+                !targetParticipant.HasExactCommonCache)
+            {
+                CollectCandidatesForPair(attacker, target);
+                return;
+            }
+
+            CollectCandidatesForPairCached(
+                in attackerParticipant,
+                in targetParticipant);
+        }
+
+        private void CollectCandidatesForPairCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant)
+        {
+            _lastRoleAwareExactDirectionCount++;
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+
+            if (attacker == null || target == null || attacker == target)
+                return;
+            if (!CandidateCollectionPairAllowed(attacker, target))
+                return;
+
+            LF2FrameData attackerCurrentFrame = attackerParticipant.CurrentFrame;
+            LF2FrameData attackerCollisionFrame = attackerParticipant.CollisionFrame;
+            if (attackerCurrentFrame == null ||
+                attackerParticipant.CurrentItrCount == 0 ||
+                attackerCollisionFrame?.itrs == null ||
+                attackerParticipant.CollisionItrCount == 0)
+            {
+                return;
+            }
+
+            if (!IsCandidateAttackerCarrierForCurrentTick(attacker))
+                return;
+
+            LF2FrameData targetCurrentFrame = targetParticipant.CurrentFrame;
+            if (targetCurrentFrame == null ||
+                !targetParticipant.HasCurrentReleaseBody)
+            {
+                return;
+            }
+
+            if (!PassesReleaseCoarsePrefilterCached(
+                    in attackerParticipant,
+                    in targetParticipant))
+            {
+                return;
+            }
+
+            int itrRectEnd = attackerParticipant.ExactItrRectOffset +
+                             attackerParticipant.ExactItrRectCount;
+            for (int itrRectIndex = attackerParticipant.ExactItrRectOffset;
+                 itrRectIndex < itrRectEnd;
+                 itrRectIndex++)
+            {
+                RoleAwareFormalExactItrRectEntry itrEntry =
+                    _roleFormalExactItrRects[itrRectIndex];
+                InteractionArea itr = itrEntry.Itr;
+                _lastRoleAwareExactItrVisitCount++;
+                if (!ItrAllowedCached(
+                        attacker,
+                        attackerCurrentFrame,
+                        attackerCollisionFrame,
+                        itr,
+                        target,
+                        targetCurrentFrame))
+                {
+                    continue;
+                }
+
+                if (HitsTargetCached(
+                        in attackerParticipant,
+                        in itrEntry,
+                        in targetParticipant,
+                        out int bodyX))
+                {
+                    TryRecordReleaseCandidate(
+                        attacker,
+                        target,
+                        itr,
+                        targetCurrentFrame,
+                        bodyX,
+                        itrEntry.ItrIndex,
+                        attackerParticipant.Handle);
+                }
+            }
+        }
+
+        private bool RoleAwareFormalExactCacheIsCurrent(
+            in RoleAwareFormalParticipant participant,
+            byte requiredRoles)
+        {
+            if (requiredRoles == 0)
+                return true;
+
+            LF2Entity entity = participant.Entity;
+            if (entity?.Runtime == null || entity.PS == null)
+                return false;
+            if (!ReferenceEquals(
+                    GetAuthoredCurrentFrame(entity),
+                    participant.CurrentFrame) ||
+                !ReferenceEquals(
+                    entity.GetCollisionFrameData(),
+                    participant.CollisionFrame))
+            {
+                return false;
+            }
+
+            if (!participant.HasExactCommonCache ||
+                entity.Runtime.XInt != participant.CollisionX ||
+                entity.Runtime.YInt != participant.CollisionY ||
+                (entity.PS.dir == "left") != participant.FacingLeft ||
+                CollisionZInt(entity, participant.CollisionFrame) !=
+                    participant.CollisionZ)
+            {
+                return false;
+            }
+
+            if ((requiredRoles & RoleAwareFormalExactAttackRole) != 0 &&
+                (!participant.HasExactAttackCache ||
+                 (participant.CurrentFrame?.itrs?.Count ?? 0) !=
+                    participant.CurrentItrCount ||
+                 (participant.CollisionFrame?.itrs?.Count ?? 0) !=
+                    participant.CollisionItrCount ||
+                 !ExactCacheRangeIsValid(
+                     participant.ExactItrRectOffset,
+                     participant.ExactItrRectCount,
+                     _roleFormalExactItrRects.Count)))
+            {
+                return false;
+            }
+
+            if ((requiredRoles & RoleAwareFormalExactBodyRole) != 0 &&
+                (!participant.HasExactBodyCache ||
+                 (participant.CollisionFrame?.bodies?.Count ?? 0) !=
+                    participant.CollisionBodyCount ||
+                 (participant.HasCollisionReleaseBody &&
+                  !participant.HasBodyUnion) ||
+                 !ExactCacheRangeIsValid(
+                     participant.ExactBodyRectOffset,
+                     participant.ExactBodyRectCount,
+                     _roleFormalExactBodyRects.Count)))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool ExactCacheRangeIsValid(
+            int offset,
+            int count,
+            int listCount)
+        {
+            return offset >= 0 &&
+                   count >= 0 &&
+                   offset <= listCount &&
+                   count <= listCount - offset;
+        }
+
+        private bool PassesReleaseCoarsePrefilterCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant)
+        {
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+            LF2FrameData attackerCurrentFrame = attackerParticipant.CurrentFrame;
+            LF2FrameData attackerCollisionFrame = attackerParticipant.CollisionFrame;
+            LF2FrameData targetCurrentFrame = targetParticipant.CurrentFrame;
+            if (attacker == null || target == null ||
+                attackerCurrentFrame?.itrs == null ||
+                attackerParticipant.CurrentItrCount == 0 ||
+                attackerCollisionFrame?.itrs == null ||
+                attackerParticipant.CollisionItrCount == 0 ||
+                !targetParticipant.HasCollisionReleaseBody ||
+                !targetParticipant.HasBodyUnion)
+            {
+                return false;
+            }
+
+            if (attackerParticipant.HasOrdinaryItrUnion &&
+                Overlap(
+                    attackerParticipant.OrdinaryItrUnionWorld,
+                    targetParticipant.BodyUnionWorld))
+            {
+                return true;
+            }
+
+            int targetType = GetCurrentDataObjectType(target);
+            int targetState = targetCurrentFrame?.state ?? 0;
+            int itrRectEnd = attackerParticipant.ExactItrRectOffset +
+                             attackerParticipant.ExactItrRectCount;
+            for (int itrRectIndex = attackerParticipant.ExactItrRectOffset;
+                 itrRectIndex < itrRectEnd;
+                 itrRectIndex++)
+            {
+                RoleAwareFormalExactItrRectEntry itrEntry =
+                    _roleFormalExactItrRects[itrRectIndex];
+                InteractionArea itr = itrEntry.Itr;
+                if (itr.kind != 5 ||
+                    !Kind5Allowed(attacker, target, targetState, targetType))
+                {
+                    continue;
+                }
+
+                if (Overlap(
+                        itrEntry.WorldRect,
+                        targetParticipant.BodyUnionWorld))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool HitsTargetCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalExactItrRectEntry itrEntry,
+            in RoleAwareFormalParticipant targetParticipant,
+            out int bodyX)
+        {
+            bodyX = 0;
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2FrameData attackerCollisionFrame = attackerParticipant.CollisionFrame;
+            LF2Entity target = targetParticipant.Entity;
+            LF2FrameData targetCollisionFrame = targetParticipant.CollisionFrame;
+            InteractionArea itr = itrEntry.Itr;
+            if (attacker?.PS == null || attackerCollisionFrame == null || itr == null ||
+                target?.PS == null || targetCollisionFrame?.bodies == null ||
+                !targetParticipant.HasCollisionReleaseBody ||
+                !IsReleaseItrGeometry(itr))
+            {
+                return false;
+            }
+
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            int zDelta = targetParticipant.CollisionZ -
+                         attackerParticipant.CollisionZ;
+            if (zDelta >= zHalf || zDelta <= -zHalf)
+                return false;
+
+            int bodyRectEnd = targetParticipant.ExactBodyRectOffset +
+                              targetParticipant.ExactBodyRectCount;
+            for (int bodyRectIndex = targetParticipant.ExactBodyRectOffset;
+                 bodyRectIndex < bodyRectEnd;
+                 bodyRectIndex++)
+            {
+                RoleAwareFormalExactBodyRectEntry bodyEntry =
+                    _roleFormalExactBodyRects[bodyRectIndex];
+                _lastRoleAwareExactBodyOverlapCheckCount++;
+                if (!Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
+                    continue;
+
+                bodyX = bodyEntry.BodyX;
+                return true;
+            }
+
+            return false;
         }
 
         private void TryRecordReleaseCandidate(
@@ -1712,10 +4666,13 @@ namespace NTSD.Animation
             LF2FrameData targetFrame,
             int bodyX,
             int itrIndex,
-            List<SceneQueryHit> dst)
+            RuntimeEntityHandle validatedAttackerHandle = default)
         {
-            if (attacker == null || target == null || itr == null || targetFrame == null || dst == null)
+            if (attacker == null || target == null || itr == null ||
+                targetFrame == null)
+            {
                 return;
+            }
 
             int rejectFlag = ResolveReleaseRejectFlag(attacker, itr, target, targetFrame, bodyX);
             if (rejectFlag == 2)
@@ -1729,10 +4686,12 @@ namespace NTSD.Animation
                     bodyX,
                     itrIndex,
                     rejectFlag,
-                    dst))
+                    validatedAttackerHandle))
                 return;
 
-            int candidateCount = attacker.Runtime?.HitCandidateCount ?? dst.Count;
+            int candidateCount = GetCollisionCandidateProducerCount(
+                attacker,
+                validatedAttackerHandle);
             if (candidateCount >= HitCandidateMax)
                 return;
 
@@ -1744,10 +4703,24 @@ namespace NTSD.Animation
                 return;
 
             SceneQueryHit candidate = new SceneQueryHit(target, bodyX, itrIndex, itr);
-            if (candidateCount < dst.Count)
-                dst[candidateCount] = candidate;
-            else
-                dst.Add(candidate);
+            WriteCollisionCandidateStoreFirst(
+                attacker,
+                validatedAttackerHandle,
+                candidateCount,
+                in candidate,
+                replaceSingle: false);
+
+            if (LegacyCandidateListsEnabledForCurrentTick &&
+                _candidateCache.TryGetValue(
+                    attacker,
+                    out List<SceneQueryHit> legacyCandidates))
+            {
+                if (candidateCount < legacyCandidates.Count)
+                    legacyCandidates[candidateCount] = candidate;
+                else
+                    legacyCandidates.Add(candidate);
+                RecordLegacyCandidateListTouchForAuthority();
+            }
 
             attacker.Runtime.HitCandidateCount = candidateCount + 1;
         }
@@ -1760,10 +4733,13 @@ namespace NTSD.Animation
             int bodyX,
             int itrIndex,
             int rejectFlag,
-            List<SceneQueryHit> dst)
+            RuntimeEntityHandle validatedAttackerHandle)
         {
-            if (attacker == null || target == null || itr == null || targetFrame == null || dst == null)
+            if (attacker == null || target == null || itr == null ||
+                targetFrame == null)
+            {
                 return false;
+            }
 
             if (rejectFlag != 0)
                 return false;
@@ -1794,10 +4770,206 @@ namespace NTSD.Animation
             attacker.Runtime.HitCandidateNearestDistance = distance;
             // C++ release 在 nearest path 接管并替换更近目标时，
             // 会把 cand0 写成当前目标并把 candidate_count 直接重置为 1。
-            dst.Clear();
-            dst.Add(new SceneQueryHit(target, bodyX, itrIndex, itr));
+            var candidate = new SceneQueryHit(target, bodyX, itrIndex, itr);
+            WriteCollisionCandidateStoreFirst(
+                attacker,
+                validatedAttackerHandle,
+                0,
+                in candidate,
+                replaceSingle: true);
+            if (LegacyCandidateListsEnabledForCurrentTick &&
+                _candidateCache.TryGetValue(
+                    attacker,
+                    out List<SceneQueryHit> legacyCandidates))
+            {
+                legacyCandidates.Clear();
+                legacyCandidates.Add(candidate);
+                RecordLegacyCandidateListTouchForAuthority();
+            }
+
             attacker.Runtime.HitCandidateCount = 1;
             return true;
+        }
+
+        private int GetCollisionCandidateProducerCount(
+            LF2Entity attacker,
+            RuntimeEntityHandle validatedAttackerHandle)
+        {
+            if (_candidateStoreProducerHealthyForCurrentTick &&
+                CollisionCandidateStoreBuildRequestedForCurrentTick)
+            {
+                RuntimeEntityHandle attackerHandle = validatedAttackerHandle;
+                if (!attackerHandle.IsValid &&
+                    !TryGetCurrentCollisionCandidateAttackerHandle(
+                        attacker,
+                        out attackerHandle))
+                {
+                    return attacker?.Runtime?.HitCandidateCount ?? 0;
+                }
+
+                if (_candidateStoreShadow.TryGetProducerAttackerRow(
+                        attackerHandle,
+                        out int storeCount))
+                {
+                    return storeCount;
+                }
+            }
+
+            return attacker?.Runtime?.HitCandidateCount ?? 0;
+        }
+
+        private bool IsCandidateAttackerCarrierForCurrentTick(LF2Entity attacker)
+        {
+            if (attacker == null)
+                return false;
+
+            if (CollisionCandidateStoreBuildRequestedForCurrentTick &&
+                TryGetCurrentCollisionCandidateAttackerHandle(
+                    attacker,
+                    out RuntimeEntityHandle attackerHandle) &&
+                _candidateStoreShadow.TryGetProducerAttackerRow(
+                    attackerHandle,
+                    out _))
+            {
+                return true;
+            }
+
+            if (LegacyCandidateListsEnabledForCurrentTick)
+                return _candidateCache.ContainsKey(attacker);
+
+            // A failed store-only build must not trigger a second collector pass.
+            // Continue the original pass only to preserve RNG call order; the
+            // consumption source will be locked fail-closed for this tick.
+            return IsCollisionCandidateAttackerEligible(
+                attacker,
+                _candidateProducerTickForCurrentCollection);
+        }
+
+        private bool TryGetCurrentCollisionCandidateAttackerHandle(
+            LF2Entity attacker,
+            out RuntimeEntityHandle attackerHandle)
+        {
+            int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+            return _world.TryGetCurrentRuntimeHandle(
+                attackerSlot,
+                attacker,
+                out attackerHandle);
+        }
+
+        private void WriteCollisionCandidateStoreFirst(
+            LF2Entity attacker,
+            RuntimeEntityHandle validatedAttackerHandle,
+            int candidateIndex,
+            in SceneQueryHit hit,
+            bool replaceSingle)
+        {
+            if (!CollisionCandidateStoreBuildRequestedForCurrentTick)
+            {
+                return;
+            }
+
+            if (!_candidateStoreProducerHealthyForCurrentTick ||
+                !_candidateStoreShadow.IsBuilding)
+            {
+                _candidateStoreProducerHealthyForCurrentTick = false;
+                return;
+            }
+
+            try
+            {
+                RuntimeEntityHandle attackerHandle = validatedAttackerHandle;
+                if (!attackerHandle.IsValid &&
+                    !TryGetCurrentCollisionCandidateAttackerHandle(
+                        attacker,
+                        out attackerHandle))
+                {
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                    return;
+                }
+
+                int targetSlot = hit.TargetSlot;
+                if (targetSlot < 0 ||
+                    targetSlot >= _world.MaxRuntimeSlotsForServices)
+                {
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.TargetSlotOutOfRange);
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                    return;
+                }
+                if (!_world.TryGetCurrentRuntimeHandle(
+                        targetSlot,
+                        hit.Target,
+                        out RuntimeEntityHandle targetHandle))
+                {
+                    // Target generation is diagnostic metadata only. It never gates
+                    // the authoritative slot-based candidate cache or consumption.
+                    _candidateStoreShadow.RecordInvalid(
+                        CollisionCandidateStoreMismatchReason.TargetHandleNotCurrent);
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                    return;
+                }
+
+                var entry = new CollisionCandidateStoreEntry(
+                    targetSlot,
+                    targetHandle,
+                    hit.BodyX,
+                    hit.ItrIndex,
+                    hit.RuntimeItr,
+                    hit.ZeroAttackerHpOnConsume,
+                    hit.ReleaseHeavyHeldTargetOnConsume);
+                bool wrote = replaceSingle
+                    ? _candidateStoreShadow.TryReplaceSingle(attackerHandle, in entry)
+                    : _candidateStoreShadow.TryWriteAt(
+                        attackerHandle,
+                        candidateIndex,
+                        in entry);
+                if (!wrote)
+                {
+                    _candidateStoreShadow.AbortBuild();
+                    _candidateStoreProducerHealthyForCurrentTick = false;
+                    return;
+                }
+
+#if UNITY_INCLUDE_TESTS
+                _collisionCandidateStoreWriteCountForSelfCheck++;
+                if (!_collisionCandidateStoreFaultInjectedForSelfCheck &&
+                    ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck >= 0 &&
+                    _collisionCandidateStoreWriteCountForSelfCheck >=
+                    ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck)
+                {
+                    _collisionCandidateStoreFaultInjectedForSelfCheck = true;
+                    throw new InvalidOperationException(
+                        "Injected collision candidate store dual-write failure.");
+                }
+#endif
+            }
+            catch (Exception)
+            {
+                _candidateStoreShadow.RecordInvalid(
+                    CollisionCandidateStoreMismatchReason.UnexpectedShadowException);
+                _candidateStoreShadow.AbortBuild();
+                _candidateStoreProducerHealthyForCurrentTick = false;
+            }
+        }
+
+        private enum CollisionCandidateProducerMode
+        {
+            LegacyOnly = 0,
+            LegacyWithStoreShadow = 1,
+            StoreWithLegacyOracle = 2,
+            StoreOnly = 3,
+        }
+
+        private enum CollisionCandidateConsumptionSource
+        {
+            LegacyOracle = 0,
+            StoreAuthority = 1,
+            StoreAuthorityFailedClosed = 2,
         }
 
         internal static InteractionArea ResolveRuntimeItrForPair(
@@ -2309,6 +5481,44 @@ namespace NTSD.Animation
             LF2Entity target,
             LF2FrameData targetFrame)
         {
+            LF2FrameData attackerCurrentFrame =
+                GetAuthoredCurrentFrame(attacker) ?? attackerFrame;
+            LF2FrameData attackerCollisionFrame =
+                attacker?.GetCollisionFrameData() ?? attackerFrame;
+            return ItrAllowedCore(
+                attacker,
+                attackerCurrentFrame,
+                attackerCollisionFrame,
+                itr,
+                target,
+                targetFrame);
+        }
+
+        private static bool ItrAllowedCached(
+            LF2Entity attacker,
+            LF2FrameData attackerCurrentFrame,
+            LF2FrameData attackerCollisionFrame,
+            InteractionArea itr,
+            LF2Entity target,
+            LF2FrameData targetFrame)
+        {
+            return ItrAllowedCore(
+                attacker,
+                attackerCurrentFrame,
+                attackerCollisionFrame,
+                itr,
+                target,
+                targetFrame);
+        }
+
+        private static bool ItrAllowedCore(
+            LF2Entity attacker,
+            LF2FrameData attackerCurrentFrame,
+            LF2FrameData attackerCollisionFrame,
+            InteractionArea itr,
+            LF2Entity target,
+            LF2FrameData targetFrame)
+        {
             if (attacker == null || itr == null || target == null || targetFrame == null)
                 return false;
 
@@ -2319,8 +5529,6 @@ namespace NTSD.Animation
             int targetOid = LF2Entity.ResolveCurrentDataObjectId(target);
             int targetType = GetCurrentDataObjectType(target);
             int targetState = targetFrame?.state ?? 0;
-            LF2FrameData attackerCurrentFrame = GetAuthoredCurrentFrame(attacker) ?? attackerFrame;
-            LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData() ?? attackerFrame;
 
             if (IsBlockedReleaseOidInteraction(attackerOid, targetOid, kind))
                 return false;
@@ -3277,39 +6485,158 @@ namespace NTSD.Animation
         public SpatialAabbXZ Bounds { get; }
     }
 
-    internal sealed class RoleAwareFormalParticipant
+    internal struct RoleAwareFormalParticipant
     {
         public RoleAwareFormalParticipant(
             LF2Entity entity,
-            LF2FrameData frame,
+            LF2FrameData currentFrame,
+            LF2FrameData collisionFrame,
             RuntimeEntityHandle handle)
         {
             Entity = entity;
-            Frame = frame;
+            CurrentFrame = currentFrame;
+            CollisionFrame = collisionFrame;
             Handle = handle;
+            HasBody = false;
+            HasFallbackBody = false;
+            HasAttackItr = false;
+            HasFallbackAttackItr = false;
+            HasCurrentReleaseBody = false;
+            HasCollisionReleaseBody = false;
+            HasBodyUnion = false;
+            BodyUnionWorld = default;
+            HasOrdinaryItrUnion = false;
+            OrdinaryItrUnionWorld = default;
+            CollisionX = 0;
+            CollisionY = 0;
+            CollisionZ = 0;
+            FacingLeft = false;
+            CurrentItrCount = currentFrame?.itrs?.Count ?? 0;
+            CollisionItrCount = ReferenceEquals(currentFrame, collisionFrame)
+                ? CurrentItrCount
+                : collisionFrame?.itrs?.Count ?? 0;
+            CollisionBodyCount = collisionFrame?.bodies?.Count ?? 0;
+            ExactItrRectOffset = 0;
+            ExactItrRectCount = 0;
+            ExactBodyRectOffset = 0;
+            ExactBodyRectCount = 0;
+            HasExactCommonCache = false;
+            HasExactAttackCache = false;
+            HasExactBodyCache = false;
         }
 
         public LF2Entity Entity { get; }
-        public LF2FrameData Frame { get; }
+        public LF2FrameData CurrentFrame { get; }
+        public LF2FrameData CollisionFrame { get; }
+        public LF2FrameData Frame => CollisionFrame;
         public RuntimeEntityHandle Handle { get; }
         public bool HasBody { get; set; }
         public bool HasFallbackBody { get; set; }
         public bool HasAttackItr { get; set; }
         public bool HasFallbackAttackItr { get; set; }
+        public bool HasCurrentReleaseBody { get; set; }
+        public bool HasCollisionReleaseBody { get; set; }
+        public bool HasBodyUnion { get; set; }
+        public WorldRect BodyUnionWorld { get; set; }
+        public bool HasOrdinaryItrUnion { get; set; }
+        public WorldRect OrdinaryItrUnionWorld { get; set; }
+        public int CollisionX { get; set; }
+        public int CollisionY { get; set; }
+        public int CollisionZ { get; set; }
+        public bool FacingLeft { get; set; }
+        public int CurrentItrCount { get; set; }
+        public int CollisionItrCount { get; set; }
+        public int CollisionBodyCount { get; set; }
+        public int ExactItrRectOffset { get; set; }
+        public int ExactItrRectCount { get; set; }
+        public int ExactBodyRectOffset { get; set; }
+        public int ExactBodyRectCount { get; set; }
+        public bool HasExactCommonCache { get; set; }
+        public bool HasExactAttackCache { get; set; }
+        public bool HasExactBodyCache { get; set; }
     }
 
-    internal readonly struct RoleAwareFormalBodyEntry
+    internal readonly struct RoleAwareFormalExactItrRectEntry
     {
-        public RoleAwareFormalBodyEntry(
-            int participantOrdinal,
-            RuntimeEntityHandle handle)
+        public RoleAwareFormalExactItrRectEntry(
+            InteractionArea itr,
+            int itrIndex,
+            in WorldRect worldRect)
         {
-            ParticipantOrdinal = participantOrdinal;
-            Handle = handle;
+            Itr = itr;
+            ItrIndex = itrIndex;
+            WorldRect = worldRect;
         }
 
-        public int ParticipantOrdinal { get; }
-        public RuntimeEntityHandle Handle { get; }
+        public InteractionArea Itr { get; }
+        public int ItrIndex { get; }
+        public WorldRect WorldRect { get; }
+    }
+
+    internal readonly struct RoleAwareFormalExactBodyRectEntry
+    {
+        public RoleAwareFormalExactBodyRectEntry(
+            int bodyX,
+            in WorldRect worldRect)
+        {
+            BodyX = bodyX;
+            WorldRect = worldRect;
+        }
+
+        public int BodyX { get; }
+        public WorldRect WorldRect { get; }
+    }
+
+    internal readonly struct RoleAwareFormalBodyTemplate
+    {
+        public RoleAwareFormalBodyTemplate(
+            List<BodyBox> sourceBodies,
+            int sourceBodyCount,
+            int sourceCenterX,
+            int releaseBodyCount,
+            long rightMinX,
+            long rightMaxX,
+            long leftMinX,
+            long leftMaxX,
+            bool fastProof)
+        {
+            SourceBodies = sourceBodies;
+            SourceBodyCount = sourceBodyCount;
+            SourceCenterX = sourceCenterX;
+            ReleaseBodyCount = releaseBodyCount;
+            RightMinX = rightMinX;
+            RightMaxX = rightMaxX;
+            LeftMinX = leftMinX;
+            LeftMaxX = leftMaxX;
+            FastProof = fastProof;
+        }
+
+        public List<BodyBox> SourceBodies { get; }
+        public int SourceBodyCount { get; }
+        public int SourceCenterX { get; }
+        public int ReleaseBodyCount { get; }
+        public long RightMinX { get; }
+        public long RightMaxX { get; }
+        public long LeftMinX { get; }
+        public long LeftMaxX { get; }
+        public bool FastProof { get; }
+    }
+
+    internal sealed class LF2FrameDataReferenceComparer :
+        IEqualityComparer<LF2FrameData>
+    {
+        public static readonly LF2FrameDataReferenceComparer Instance =
+            new LF2FrameDataReferenceComparer();
+
+        private LF2FrameDataReferenceComparer()
+        {
+        }
+
+        public bool Equals(LF2FrameData x, LF2FrameData y) =>
+            ReferenceEquals(x, y);
+
+        public int GetHashCode(LF2FrameData obj) =>
+            obj == null ? 0 : RuntimeHelpers.GetHashCode(obj);
     }
 
     internal readonly struct RoleAwareFormalItrEntry
@@ -3317,16 +6644,72 @@ namespace NTSD.Animation
         public RoleAwareFormalItrEntry(
             int participantOrdinal,
             RuntimeEntityHandle handle,
+            int itrIndex,
+            InteractionArea itr,
             in SpatialAabbXZ bounds)
         {
             ParticipantOrdinal = participantOrdinal;
             Handle = handle;
+            ItrIndex = itrIndex;
+            Itr = itr;
             Bounds = bounds;
         }
 
         public int ParticipantOrdinal { get; }
         public RuntimeEntityHandle Handle { get; }
+        public int ItrIndex { get; }
+        public InteractionArea Itr { get; }
         public SpatialAabbXZ Bounds { get; }
+    }
+
+    internal enum RoleAwareSweepEventKind : byte
+    {
+        // Both end kinds sort before either start kind so X intervals are
+        // strictly half-open. BodyStart before ItrStart makes equal-start
+        // body/itr entries meet exactly once, at ItrStart.
+        BodyEnd = 0,
+        ItrEnd = 1,
+        BodyStart = 2,
+        ItrStart = 3,
+    }
+
+    internal readonly struct RoleAwareSweepEvent
+    {
+        public RoleAwareSweepEvent(
+            int x,
+            RoleAwareSweepEventKind kind,
+            int entryIndex)
+        {
+            X = x;
+            Kind = kind;
+            EntryIndex = entryIndex;
+        }
+
+        public int X { get; }
+        public RoleAwareSweepEventKind Kind { get; }
+        public int EntryIndex { get; }
+    }
+
+    internal sealed class RoleAwareSweepEventComparer :
+        IComparer<RoleAwareSweepEvent>
+    {
+        public static readonly RoleAwareSweepEventComparer Instance =
+            new RoleAwareSweepEventComparer();
+
+        private RoleAwareSweepEventComparer()
+        {
+        }
+
+        public int Compare(RoleAwareSweepEvent left, RoleAwareSweepEvent right)
+        {
+            int xComparison = left.X.CompareTo(right.X);
+            if (xComparison != 0)
+                return xComparison;
+            int kindComparison = ((byte)left.Kind).CompareTo((byte)right.Kind);
+            return kindComparison != 0
+                ? kindComparison
+                : left.EntryIndex.CompareTo(right.EntryIndex);
+        }
     }
 
     /// <summary>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.2095276">
+  <test-suite type="TestSuite" id="1490" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.209528" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1968" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.173477" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="100052" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1969" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.159749" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1970" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="217" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.150789" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1672" name="RoleAwareCollisionFormalCollectorSelfCheckTests" fullname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests" classname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests" runstate="Runnable" testcasecount="54" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.143775" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1706" name="CandidateStore_CapOrderFieldsEndAndZeroAllocation" fullname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStore_CapOrderFieldsEndAndZeroAllocation" methodname="CandidateStore_CapOrderFieldsEndAndZeroAllocation" classname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests" runstate="Runnable" seed="104892218" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.089729" asserts="0">
+              <properties />
+              <output><![CDATA[[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+]]></output>
+            </test-case>
+            <test-case id="1734" name="CandidateStore_GenerationTargetReuseFaultIsolationAndGrow" fullname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStore_GenerationTargetReuseFaultIsolationAndGrow" methodname="CandidateStore_GenerationTargetReuseFaultIsolationAndGrow" classname="NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests" runstate="Runnable" seed="1401702053" result="Passed" start-time="2026-08-01 04:13:19Z" end-time="2026-08-01 04:13:19Z" duration="0.030584" asserts="0">
+              <properties />
+              <output><![CDATA[[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Unregistered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Unregistered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Unregistered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=FormalSelfCheckCharacter
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

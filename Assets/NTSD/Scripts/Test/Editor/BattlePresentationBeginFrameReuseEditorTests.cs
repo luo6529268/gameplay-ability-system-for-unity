@@ -98,6 +98,76 @@ namespace NTSD.Test
             Assert.That(world.BattlePresentation.PublishedFrame.GetEntity(0).StableId, Is.EqualTo(402));
         }
 
+        [Test]
+        public void CentralOnly_RenderDispatchReusesCoordinatorSortForPresentationOrder()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            List<PresentationFixtureEntity> entities = RegisterFixtures(
+                world,
+                (501, 8, 220),
+                (502, 4, 180),
+                (503, 2, 180));
+
+            world.RenderDispatchAll(40);
+
+            Assert.That(entities[2].GetRenderSortingOrder(), Is.EqualTo(1),
+                "same-Z entities must use their runtime slot as the tie-breaker");
+            Assert.That(entities[1].GetRenderSortingOrder(), Is.EqualTo(5));
+            Assert.That(entities[0].GetRenderSortingOrder(), Is.EqualTo(9));
+            Assert.That(world.PresentationRenderOrderBuildCountForDiagnostics, Is.Zero,
+                "CentralOnly must not re-scan and sort the world before BeginFrame");
+            Assert.That(world.PresentationRenderOrderReusePublishCountForDiagnostics, Is.EqualTo(1),
+                "CentralOnly must publish the map from the one coordinator sort");
+            Assert.That(world.PresentationEntityScanAndSortCountForDiagnostics, Is.EqualTo(1),
+                "CentralOnly must scan and sort presentation entities exactly once per dispatch");
+        }
+
+        [TestCase(BattlePresentationBackendMode.LegacyOnly)]
+        [TestCase(BattlePresentationBackendMode.CentralShadowBuild)]
+        public void NonCentralOnly_RenderDispatchPreservesIndependentPresentationOrderBuild(
+            BattlePresentationBackendMode mode)
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(mode);
+            RegisterFixtures(world, (510, 3, 180));
+
+            world.RenderDispatchAll(41);
+
+            Assert.That(world.PresentationRenderOrderBuildCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.PresentationRenderOrderReusePublishCountForDiagnostics, Is.Zero);
+            Assert.That(world.PresentationEntityScanAndSortCountForDiagnostics, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void CentralOnly_RenderDispatchRejectsStaleOrderWhenRuntimeSlotGenerationIsReused()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            List<PresentationFixtureEntity> initial = RegisterFixtures(
+                world,
+                (601, 2, 180),
+                (602, 4, 220));
+            PresentationFixtureEntity released = initial[1];
+
+            world.RenderDispatchAll(50);
+            Assert.That(released.GetRenderSortingOrder(), Is.EqualTo(5));
+
+            world.Unregister(released);
+            var replacement = new PresentationFixtureEntity(603, 220);
+            replacement.SetRequiredRuntimeSlot(4);
+            world.Register(replacement);
+            world.RenderDispatchAll(51);
+
+            Assert.That(released.GetRenderSortingOrder(), Is.EqualTo(1),
+                "a released entity must not retain its prior generation's published rank");
+            Assert.That(replacement.GetRenderSortingOrder(), Is.EqualTo(5),
+                "the replacement generation must receive the reused slot's current rank");
+            Assert.That(world.PresentationRenderOrderBuildCountForDiagnostics, Is.Zero);
+            Assert.That(world.PresentationRenderOrderReusePublishCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(world.PresentationEntityScanAndSortCountForDiagnostics, Is.EqualTo(2));
+        }
+
         private static void AssertMatchesIndependentReference(
             SimulationWorld world,
             List<PresentationFixtureEntity> source,

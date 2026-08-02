@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="dat-skill-flow-build-id" content="20260801150440683-432c52a713cb4ee99770a8276639c19b" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Dat Skill Flow</title>
+    <link rel="stylesheet" href="/src/client/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header><p class="eyebrow">NTSD local workspace</p><h1>Dat Skill Flow</h1><p id="server-status" data-testid="server-status" role="status">Connecting to local server...</p></header>
+      <section class="project-bar" aria-label="Project selection">
+        <label>Object <select id="object-select"></select></label>
+        <strong id="session-name">No project session</strong><span id="revision-readout">revision -</span><span id="dirty-readout">clean</span>
+        <button id="save-project" type="button">Save overwrite</button>
+      </section>
+      <section class="workspace" aria-label="DAT workspace">
+        <canvas id="sprite-canvas" data-testid="sprite-canvas" width="794" height="550" aria-label="DAT sprite preview"></canvas>
+        <aside class="timeline-panel" aria-label="Frame controls and editor">
+          <div class="readouts"><p><span>Tick</span><strong id="tick-readout">0</strong></p><p><span>Frame</span><strong id="frame-readout">-</strong></p><p><span>Time</span><strong id="time-readout">0 ms</strong></p></div>
+          <label>Frame <select id="frame-select"></select></label>
+          <div class="button-row"><button id="play-toggle" type="button" aria-pressed="false">Play</button><button id="step-once" type="button">Step</button><button id="reset-timeline" type="button">Back to 0</button></div>
+          <label class="range-control" for="timeline-seek">Seek <input id="timeline-seek" type="range" min="0" max="0" value="0" /></label>
+          <label class="toggle-control"><input id="loop-enabled" type="checkbox" /> Loop from selected frame</label>
+          <section><h2>Frame fields</h2><form id="frame-editor"><div id="frame-fields"></div><button type="submit">Apply edit</button></form></section>
+          <section><h2>Hit jumps</h2><div class="hit-buttons">
+            <button id="hit-a" type="button">hit_a</button><button id="hit-d" type="button">hit_d</button><button id="hit-j" type="button">hit_j</button><button id="hit-fj" type="button">hit_Fj</button><button id="hit-fa" type="button">hit_Fa</button><button id="hit-da" type="button">hit_Da</button><button id="hit-ua" type="button">hit_Ua</button><button id="hit-ja" type="button">hit_ja</button><button id="hit-dj" type="button">hit_Dj</button><button id="hit-uj" type="button">hit_Uj</button>
+          </div></section>
+          <section><h2>Diagnostics</h2><p id="diagnostics">Waiting for project data.</p></section>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/client/main.js"></script>
+  </body>
+</html>

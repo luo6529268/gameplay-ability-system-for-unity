@@ -2,6 +2,7 @@
 using MoreMountains.Tools;
 using NTSD.App;
 using NTSD.Animation.Rendering;
+using NTSD.Simulation.Lockstep;
 using NTSD.Simulation.Presentation;
 using NTSD.Tools;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace NTSD.Simulation
     public interface ISimulationFrameInputProvider
     {
         bool IsFrameInputReady(int tickIndex);
-        FrameInputSet GetFrameInput(int tickIndex) => FrameInputSet.Empty(tickIndex);
+        FrameInputSet GetFrameInput(int tickIndex);
         void BeforeSimTick(int tickIndex) { }
         void AfterSimTick(int tickIndex) { }
         void Reset() { }
@@ -72,8 +73,19 @@ namespace NTSD.Simulation
 
     public sealed class LocalSimulationFrameInputProvider : ISimulationFrameInputProvider
     {
+        private readonly FrameInputSet emptyFrame = FrameInputSet.Empty(0);
+
         public bool IsFrameInputReady(int tickIndex) => true;
-        public FrameInputSet GetFrameInput(int tickIndex) => FrameInputSet.Empty(tickIndex);
+        public FrameInputSet GetFrameInput(int tickIndex)
+        {
+            emptyFrame.ResetPreallocated(tickIndex, null);
+            return emptyFrame;
+        }
+
+        public void Reset()
+        {
+            emptyFrame.ResetPreallocated(0, null);
+        }
     }
 
     /// <summary>
@@ -100,6 +112,12 @@ namespace NTSD.Simulation
         [SerializeField][MMReadOnly] private float renderAlpha = 0f;
         [SerializeField][MMReadOnly] private int backlogTickCount = 0;
         [SerializeField][MMReadOnly] private string lastFrameChecksum = string.Empty;
+        [SerializeField][MMReadOnly] private string effectiveAiExecutionProfile =
+            nameof(BattleAiExecutionProfile.LegacyCanonical);
+
+        [Header("Sound Presentation Diagnostics")]
+        [Tooltip("Diagnostic-only switch. Logical sound events and checksums are still recorded when presentation is suppressed.")]
+        [SerializeField] private bool suppressSoundPresentationForDiagnostics = false;
 
         private float _timeAccumulator = 0f;
         private int _tickIndex = 0;
@@ -110,12 +128,17 @@ namespace NTSD.Simulation
         private NTSD.Animation.BattleEntityOverlayRenderer _overlayRenderer;
         private BattlePresentationBackendMode _presentationBackendMode =
             BattlePresentationBackendMode.CentralOnly;
+        private BattleAiExecutionProfile _aiExecutionProfile =
+            BattleAiExecutionProfile.LegacyCanonical;
 
         private int _sparkRenderFrame = 0;
         private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
         private FrameInputSet _lastAppliedFrameInput = FrameInputSet.Empty(0);
         private BattleParityFrameSnapshot _lastFrameSnapshot;
         private IBattleChecksumSnapshot _lastChecksumSnapshot;
+        private ISimulationSoundPresentationSink _soundPresentationSinkForDiagnostics;
+        private long _dispatchedSoundEventCount;
+        private long _suppressedSoundEventCount;
 
         protected override void OnSingletonAwake()
         {
@@ -196,7 +219,9 @@ namespace NTSD.Simulation
                 return true;
             }
 
-            return _frameInputProvider == null || _frameInputProvider.IsFrameInputReady(tickIndex);
+            return _frameInputProvider != null &&
+                   !(_frameInputProvider is LocalSimulationFrameInputProvider) &&
+                   _frameInputProvider.IsFrameInputReady(tickIndex);
         }
 
         private bool StepOneTickInternal(int tickIndex, bool buildPresentation)
@@ -204,6 +229,27 @@ namespace NTSD.Simulation
             if (_world == null || !CanAdvanceTick(tickIndex))
                 return false;
 
+            ISimulationFrameInputProvider provider = _frameInputProvider;
+            if (provider == null)
+                return false;
+
+            FrameInputSet frameInput = provider.GetFrameInput(tickIndex);
+            if (frameInput == null || frameInput.TickIndex != tickIndex)
+                return false;
+
+            provider.BeforeSimTick(tickIndex);
+            bool stepped = StepOneTickInternal(frameInput, buildPresentation);
+            if (stepped)
+                provider.AfterSimTick(tickIndex);
+            return stepped;
+        }
+
+        private bool StepOneTickInternal(FrameInputSet frameInput, bool buildPresentation)
+        {
+            if (_world == null || frameInput == null || frameInput.TickIndex != _tickIndex + 1)
+                return false;
+
+            int tickIndex = frameInput.TickIndex;
             _tickIndex = tickIndex;
             _sparkRenderFrame = tickIndex;
             if (_world.Runtime?.Flow != null)
@@ -214,17 +260,11 @@ namespace NTSD.Simulation
             if (debugLogPerTick)
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
 
-            _frameInputProvider?.BeforeSimTick(tickIndex);
-            FrameInputSet frameInput = _frameInputProvider?.GetFrameInput(tickIndex) ??
-                                       FrameInputSet.Empty(tickIndex);
-            if (frameInput.TickIndex != tickIndex)
-                frameInput = FrameInputSet.Empty(tickIndex);
-
             _lastAppliedFrameInput = frameInput;
             _world.ApplyFrameInputSet(frameInput);
             _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
             CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
-            _frameInputProvider?.AfterSimTick(tickIndex);
+            DispatchPendingSoundsAfterChecksum();
 
             if (debugLogPerTick)
                 Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
@@ -245,6 +285,28 @@ namespace NTSD.Simulation
             _lastChecksumSnapshot = CaptureSupportedChecksumSnapshot(_world, tickIndex, frameInput);
             _lastFrameSnapshot = _lastChecksumSnapshot as BattleParityFrameSnapshot;
             lastFrameChecksum = _lastChecksumSnapshot?.OverallChecksum ?? string.Empty;
+        }
+
+        private void DispatchPendingSoundsAfterChecksum()
+        {
+            IReadOnlyList<PendingSoundEvent> sounds = _world?.PendingSounds;
+            int soundCount = sounds?.Count ?? 0;
+            if (soundCount == 0)
+                return;
+
+            if (suppressSoundPresentationForDiagnostics)
+            {
+                _suppressedSoundEventCount += soundCount;
+                return;
+            }
+
+            ISimulationSoundPresentationSink sink =
+                _soundPresentationSinkForDiagnostics ?? AppManager.Instance?.SoundPlayer;
+            if (sink == null)
+                return;
+
+            sink.PresentSounds(sounds);
+            _dispatchedSoundEventCount += soundCount;
         }
 
         internal static bool SupportsAuthorityFrameChecksum(SimulationWorld world)
@@ -309,6 +371,11 @@ namespace NTSD.Simulation
         public bool HasFrameChecksum => _lastChecksumSnapshot != null;
         public string LastFrameChecksum => lastFrameChecksum;
         public BattlePresentationBackendMode PresentationBackendMode => _presentationBackendMode;
+        public BattleAiExecutionProfile AiExecutionProfile => _aiExecutionProfile;
+        public bool SuppressSoundPresentationForDiagnostics =>
+            suppressSoundPresentationForDiagnostics;
+        public long DispatchedSoundEventCountForDiagnostics => _dispatchedSoundEventCount;
+        public long SuppressedSoundEventCountForDiagnostics => _suppressedSoundEventCount;
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
@@ -319,6 +386,17 @@ namespace NTSD.Simulation
         public void SetPaused(bool value)
         {
             paused = value;
+        }
+
+        public void SetSoundPresentationSuppressedForDiagnostics(bool value)
+        {
+            suppressSoundPresentationForDiagnostics = value;
+        }
+
+        public void SetSoundPresentationSinkForDiagnostics(
+            ISimulationSoundPresentationSink sink)
+        {
+            _soundPresentationSinkForDiagnostics = sink;
         }
 
         public void ApplySettings(LockstepSimulationSettings settings)
@@ -332,7 +410,7 @@ namespace NTSD.Simulation
 
         public void ApplyMatchConfig(MatchConfig config)
         {
-            if (!EnsureRuntimeProfileFromSources())
+            if (!EnsureProductionConfigurationFromSources())
                 return;
 
             _world.ResetRuntimeState();
@@ -362,9 +440,40 @@ namespace NTSD.Simulation
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)
         {
-            _frameInputProvider = provider ?? new LocalSimulationFrameInputProvider();
-            _frameInputProvider.Reset();
+            _frameInputProvider = provider ??
+                (lockstepSettings.driveMode == SimulationDriveMode.LocalFreeRun &&
+                 !lockstepSettings.requireInputFrameReady
+                    ? new LocalSimulationFrameInputProvider()
+                    : null);
+            _frameInputProvider?.Reset();
             _lastAppliedFrameInput = FrameInputSet.Empty(_tickIndex);
+        }
+
+        public BattleLockstepSession CreateStrictLockstepSession(
+            LockstepSessionIdentity identity,
+            int futureFrameCapacity,
+            int journalCapacity)
+        {
+            lockstepSettings.Normalize();
+            return new BattleLockstepSession(
+                this,
+                identity,
+                lockstepSettings.inputDelayTicks,
+                futureFrameCapacity,
+                journalCapacity);
+        }
+
+        public bool StepOneTick(
+            FrameInputSet frameInput,
+            bool ignorePaused = false,
+            bool buildPresentation = true)
+        {
+            if (!ignorePaused && paused)
+                return false;
+
+            bool stepped = StepOneTickInternal(frameInput, buildPresentation);
+            RefreshInspectorState();
+            return stepped;
         }
 
         public bool StepOneTick(bool ignorePaused = false)
@@ -402,6 +511,17 @@ namespace NTSD.Simulation
             BattleRuntimeWorldSettings settings,
             out string failureReason)
         {
+            return TryConfigureEmptyDiagnosticWorld(
+                settings,
+                BattleAiExecutionProfile.LegacyCanonical,
+                out failureReason);
+        }
+
+        public bool TryConfigureEmptyDiagnosticWorld(
+            BattleRuntimeWorldSettings settings,
+            BattleAiExecutionProfile aiExecutionProfile,
+            out string failureReason)
+        {
             if (_world != null &&
                 (_world.ObjectCount != 0 || _world.ClaimedRuntimeSlotCountForDiagnostics != 0))
             {
@@ -412,7 +532,10 @@ namespace NTSD.Simulation
 
             try
             {
-                CreateProductionWorld(settings, _presentationBackendMode);
+                CreateProductionWorld(
+                    settings,
+                    _presentationBackendMode,
+                    aiExecutionProfile);
                 ResetDriverStateAfterWorldCreation();
                 failureReason = string.Empty;
                 return true;
@@ -434,6 +557,8 @@ namespace NTSD.Simulation
             _lastFrameSnapshot = null;
             _lastChecksumSnapshot = null;
             lastFrameChecksum = string.Empty;
+            _dispatchedSoundEventCount = 0;
+            _suppressedSoundEventCount = 0;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
         }
@@ -444,37 +569,47 @@ namespace NTSD.Simulation
                 GameConfig.Instance);
             BattlePresentationBackendMode presentationMode =
                 BattlePresentationBackendResolver.Resolve(GameConfig.Instance);
-            CreateProductionWorld(settings, presentationMode);
+            BattleAiExecutionProfile aiExecutionProfile =
+                BattleAiExecutionProfileProductionSource.Resolve(GameConfig.Instance);
+            CreateProductionWorld(settings, presentationMode, aiExecutionProfile);
         }
 
         private void CreateProductionWorld(
             BattleRuntimeWorldSettings settings,
-            BattlePresentationBackendMode presentationMode)
+            BattlePresentationBackendMode presentationMode,
+            BattleAiExecutionProfile aiExecutionProfile)
         {
             BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
             var nextWorld = new SimulationWorld(
                 settings.Profile,
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
+            nextWorld.ConfigureAiExecutionProfile(aiExecutionProfile);
             nextWorld.SetBattlePresentationBackend(presentationMode);
             if (_world != null)
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = nextWorld;
             _presentationBackendMode = presentationMode;
+            _aiExecutionProfile = aiExecutionProfile;
+            effectiveAiExecutionProfile = aiExecutionProfile.ToString();
             _battleTickSystem = new NTSDBattleTickSystem(_world);
         }
 
-        internal bool EnsureRuntimeProfileFromSources()
+        internal bool EnsureProductionConfigurationFromSources()
         {
             BattleRuntimeWorldSettings settings = BattleRuntimeProfileProductionSource.Resolve(
                 GameConfig.Instance);
             BattlePresentationBackendMode presentationMode =
                 BattlePresentationBackendResolver.Resolve(GameConfig.Instance);
+            BattleAiExecutionProfile aiExecutionProfile =
+                BattleAiExecutionProfileProductionSource.Resolve(GameConfig.Instance);
             BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
-            if (WorldMatchesRuntimeSettings(_world, settings))
+            if (WorldMatchesRuntimeSettings(_world, settings, aiExecutionProfile))
             {
                 _presentationBackendMode = presentationMode;
+                _aiExecutionProfile = aiExecutionProfile;
+                effectiveAiExecutionProfile = aiExecutionProfile.ToString();
                 _world.SetBattlePresentationBackend(presentationMode);
                 return true;
             }
@@ -484,13 +619,19 @@ namespace NTSD.Simulation
             {
                 Debug.LogError(
                     $"[SimulationTickDriver] Runtime profile change rejected while entities are registered. " +
-                    $"Current={_world.RuntimeProfileForServices}/{_world.MaxRuntimeSlotsForServices}, " +
-                    $"Requested={settings.Profile}/{settings.InitialRuntimeSlotCapacity}");
+                    $"Current={_world.RuntimeProfileForServices}/{_world.MaxRuntimeSlotsForServices}/" +
+                    $"{_world.AiExecutionProfile}, Requested={settings.Profile}/" +
+                    $"{settings.InitialRuntimeSlotCapacity}/{aiExecutionProfile}");
                 return false;
             }
 
-            CreateProductionWorld(settings, presentationMode);
+            CreateProductionWorld(settings, presentationMode, aiExecutionProfile);
             return true;
+        }
+
+        internal bool EnsureRuntimeProfileFromSources()
+        {
+            return EnsureProductionConfigurationFromSources();
         }
 
         public static bool IsFinalCatchUpTick(
@@ -521,7 +662,21 @@ namespace NTSD.Simulation
             SimulationWorld world,
             BattleRuntimeWorldSettings settings)
         {
+            return WorldMatchesRuntimeSettings(
+                world,
+                settings,
+                BattleAiExecutionProfile.LegacyCanonical);
+        }
+
+        internal static bool WorldMatchesRuntimeSettings(
+            SimulationWorld world,
+            BattleRuntimeWorldSettings settings,
+            BattleAiExecutionProfile aiExecutionProfile)
+        {
             if (world == null || world.RuntimeProfileForServices != settings.Profile)
+                return false;
+
+            if (world.AiExecutionProfile != aiExecutionProfile)
                 return false;
 
             if (world.CollisionBroadphaseForServices != settings.CollisionBroadphase)

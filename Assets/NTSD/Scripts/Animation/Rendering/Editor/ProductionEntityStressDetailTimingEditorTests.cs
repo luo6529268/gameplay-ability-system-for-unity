@@ -2,12 +2,37 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
 
 namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class ProductionEntityStressDetailTimingEditorTests
     {
+        [Test]
+        public void LateEntityUpdateAll_DoesNotInvokeReservedCollisionCompatibilityHook()
+        {
+            var world = new SimulationWorld();
+            var probe = new LateEntityCollisionGhostProbe(7000);
+            probe.SetRequiredRuntimeSlot(0);
+            world.Register(probe);
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            recorder.BeginTick(1);
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(probe.FrameTickCount, Is.EqualTo(1));
+            Assert.That(probe.EntityCollisionCount, Is.Zero);
+            Assert.That(
+                recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)6),
+                Is.Zero);
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetPhaseName((BattleTickDetailPhase)6),
+                Is.EqualTo("Reserved/RemovedLateEntityCollision"));
+        }
+
         [Test]
         public void DetailTiming_DefaultWorldKeepsRecorderUnallocatedAndInactive()
         {
@@ -234,16 +259,19 @@ namespace NTSD.Animation.Rendering.Editor
             recorder.SetEnabled(true);
 
             recorder.BeginTick(1);
-            recorder.BeginPhase(BattleTickDetailPhase.LateEntityCollision);
+            recorder.BeginPhase(BattleTickDetailPhase.LateEntityFrameTick);
             Thread.SpinWait(20000);
-            recorder.EndPhase(BattleTickDetailPhase.LateEntityCollision);
+            recorder.EndPhase(BattleTickDetailPhase.LateEntityFrameTick);
             collector.CaptureAfterTick(recorder, null, 1, 1);
             Assert.That(collector.SampleCount, Is.EqualTo(0));
 
             recorder.BeginTick(2);
-            recorder.BeginPhase(BattleTickDetailPhase.LateEntityCollision);
+            recorder.BeginPhase(BattleTickDetailPhase.LateEntityFrameTick);
             Thread.SpinWait(20000);
-            recorder.EndPhase(BattleTickDetailPhase.LateEntityCollision);
+            recorder.EndPhase(BattleTickDetailPhase.LateEntityFrameTick);
+            recorder.RecordPhaseElapsed(
+                BattleTickDetailPhase.RenderBuildCommandsOverlay,
+                1234);
             collector.CaptureAfterTick(recorder, null, 2, 1);
 
             var report = new ProductionEntityStressReport
@@ -258,8 +286,29 @@ namespace NTSD.Animation.Rendering.Editor
                 Has.Count.EqualTo(BattleTickDetailPhaseDiagnostics.PhaseCount));
             Assert.That(
                 report.detailPhaseTimings[
-                    (int)BattleTickDetailPhase.LateEntityCollision].timing.sampleCount,
+                    (int)BattleTickDetailPhase.LateEntityFrameTick].timing.sampleCount,
                 Is.EqualTo(1));
+            Assert.That(
+                report.detailPhaseTimings[6].phase,
+                Does.Contain("Reserved"));
+            Assert.That(
+                report.detailPhaseTimings[6].timing.sampleCount,
+                Is.EqualTo(1),
+                "collector samples every phase slot per tick, including a reserved zero-duration slot");
+            Assert.That(
+                report.detailPhaseTimings[6].timing.average,
+                Is.Zero);
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.PhaseCount,
+                Is.EqualTo(40));
+            Assert.That(
+                report.detailPhaseTimings[
+                    (int)BattleTickDetailPhase.RenderBuildCommandsOverlay].phase,
+                Is.EqualTo("Render/BeginFrame/BuildCommands/Overlay"));
+            Assert.That(
+                report.detailPhaseTimings[
+                    (int)BattleTickDetailPhase.RenderBuildCommandsOverlay].timing.average,
+                Is.GreaterThan(0d));
             Assert.That(
                 report.detailPhaseTimingSource,
                 Is.EqualTo(ProductionEntityStressDetailPhaseTimingCollector.Source));
@@ -296,6 +345,9 @@ namespace NTSD.Animation.Rendering.Editor
                 aiRecorder.BeginPhase(phase);
                 Thread.SpinWait(20000);
                 aiRecorder.EndPhase(phase);
+                aiRecorder.RecordPhaseCall(phase);
+                aiRecorder.RecordPhaseSlotVisits(phase, i + 1);
+                aiRecorder.RecordPhaseRngCalls(phase, (ulong)(i % 3));
             }
             aiRecorder.RecordAi();
             collector.CaptureAfterTick(detailRecorder, aiRecorder, 10, 9);
@@ -331,6 +383,15 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(summary.timing.p95, Is.EqualTo(summary.timing.average));
                 Assert.That(summary.timing.source, Is.EqualTo(
                     ProductionEntityStressDetailPhaseTimingCollector.AiInputSource));
+                Assert.That(
+                    report.aiInputDetailCounters.phaseCallCounts[i],
+                    Is.EqualTo(1));
+                Assert.That(
+                    report.aiInputDetailCounters.phaseSlotVisitCounts[i],
+                    Is.EqualTo(i + 1));
+                Assert.That(
+                    report.aiInputDetailCounters.phaseRngCallCounts[i],
+                    Is.EqualTo(i % 3));
             }
         }
 
@@ -545,11 +606,102 @@ namespace NTSD.Animation.Rendering.Editor
                 recorder.BeginPhase(BattleAiInputDetailPhase.FindNearestGround);
                 recorder.RecordCandidateVisits(4);
                 recorder.RecordRadius(64);
+                recorder.RecordPhaseCall(
+                    BattleAiInputDetailPhase.ContextMoveMode);
+                recorder.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    4);
+                recorder.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    2);
                 recorder.EndPhase(BattleAiInputDetailPhase.FindNearestGround);
             }
             long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
 
             Assert.That(allocatedAfter - allocatedBefore, Is.EqualTo(0));
+            Assert.That(
+                recorder.GetLastCallCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.EqualTo(1000));
+            Assert.That(
+                recorder.GetLastSlotVisitCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.EqualTo(4000));
+            Assert.That(
+                recorder.GetLastRngCallCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.EqualTo(2000));
+        }
+
+        [Test]
+        public void AiInputDetail_DisabledPhaseCountersStayZeroAndAllocateNothing()
+        {
+            var recorder = new BattleAiInputDetailDiagnostics();
+
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 1000; i++)
+            {
+                recorder.BeginPhase(BattleAiInputDetailPhase.ContextMoveMode);
+                recorder.RecordPhaseCall(
+                    BattleAiInputDetailPhase.ContextMoveMode);
+                recorder.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    10);
+                recorder.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    3);
+                recorder.EndPhase(BattleAiInputDetailPhase.ContextMoveMode);
+            }
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+            Assert.That(
+                recorder.GetLastElapsedTimestampTicks(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.Zero);
+            Assert.That(
+                recorder.GetLastCallCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.Zero);
+            Assert.That(
+                recorder.GetLastSlotVisitCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.Zero);
+            Assert.That(
+                recorder.GetLastRngCallCount(
+                    BattleAiInputDetailPhase.ContextMoveMode),
+                Is.Zero);
+        }
+
+        private sealed class LateEntityCollisionGhostProbe : LF2Entity
+        {
+            public LateEntityCollisionGhostProbe(int stableId)
+            {
+                StableId = stableId;
+            }
+
+            public int FrameTickCount { get; private set; }
+            public int EntityCollisionCount { get; private set; }
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Character;
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                FrameTickCount++;
+            }
+
+            public override void SimEntityCollision(int tickIndex)
+            {
+                EntityCollisionCount++;
+            }
+
+            public override void Reset()
+            {
+            }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
+            {
+                Renderer = renderer;
+            }
         }
     }
 }

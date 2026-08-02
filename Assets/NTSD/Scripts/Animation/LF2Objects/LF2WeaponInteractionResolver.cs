@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Extensions;
 
@@ -26,7 +25,7 @@ namespace NTSD.Animation.LF2Objects
             var kindService = _weapon.Match?.ItrKindService;
             if (sceneQuery == null || kindService == null) return;
 
-            if (sceneQuery.TryGetCollisionCandidateSequence(_weapon, out var candidateSequence))
+            if (sceneQuery.TryGetCollisionCandidateRange(_weapon, out var candidateSequence))
             {
                 ConsumeInteractionCandidateSequence(_weapon.GetCollisionFrameData(), kindService, candidateSequence);
                 return;
@@ -36,16 +35,17 @@ namespace NTSD.Animation.LF2Objects
         private void ConsumeInteractionCandidateSequence(
             LF2FrameData frame,
             INTSDItrKindService kindService,
-            List<SceneQueryHit> candidates)
+            CollisionCandidateRange candidates)
         {
             LF2FrameData collisionFrame = _weapon.GetCollisionFrameData();
-            if (collisionFrame?.itrs == null || candidates == null)
+            if (collisionFrame?.itrs == null)
                 return;
 
             int candidateLimit = candidates.Count;
             for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                SceneQueryHit hitInfo = candidates[candidateIndex];
+                if (!candidates.TryGet(candidateIndex, out SceneQueryHit hitInfo))
+                    continue;
                 int itrIndex = hitInfo.ItrIndex;
                 if (itrIndex < 0 || itrIndex >= collisionFrame.itrs.Count)
                     continue;

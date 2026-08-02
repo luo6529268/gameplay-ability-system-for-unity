@@ -1,4 +1,4 @@
-﻿using NTSD.Animation;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
@@ -15,7 +15,30 @@ namespace NTSD.Simulation
     public partial class SimulationWorld
     {
         internal static System.Func<SimulationWorld, LF2Entity, LF2Entity> RespawnEffectSpawnOverride;
+#if UNITY_INCLUDE_TESTS
+        internal static System.Action<SimulationWorld, LF2Entity> CharacterInputPassMutationOverrideForSelfCheck;
+#endif
         internal int LastCollisionPairVRestEligibilityVisitCount { get; private set; }
+
+        public bool ForceLegacyPreInteractionForDiagnostics { get; set; }
+        public int LastPreInteractionScannedCountForDiagnostics { get; private set; }
+        public int LastPreInteractionExecutedCountForDiagnostics { get; private set; }
+        public int LastPreInteractionProofSkipCountForDiagnostics { get; private set; }
+        public int LastPreInteractionSnapshotSkipCountForDiagnostics { get; private set; }
+        public int LastPreInteractionFailClosedCountForDiagnostics { get; private set; }
+        public int LastPreInteractionCpointCheckProofSkipCountForDiagnostics { get; private set; }
+        public int LastPreInteractionMismatchTailProofSkipCountForDiagnostics { get; private set; }
+        public bool LastPreInteractionWholePassProofSucceededForDiagnostics { get; private set; }
+        public int LastPreInteractionWholePassParticipantCountForDiagnostics { get; private set; }
+        private readonly List<RuntimeEntityHandle> earlyState500Handles =
+            new List<RuntimeEntityHandle>(16);
+        private readonly List<RuntimeEntityHandle> earlyState501Handles =
+            new List<RuntimeEntityHandle>(16);
+        public bool ForceLegacyEarlyFrameAdvanceForDiagnostics { get; set; }
+        public int LastEarlyTeleportRefreshCountForDiagnostics { get; private set; }
+        public int LastEarlyTeleportSnapshotSkipCountForDiagnostics { get; private set; }
+        public bool LastEarlyStateHandlePathUsedForDiagnostics { get; private set; }
+        public int LastEarlyStateHandleFallbackCountForDiagnostics { get; private set; }
 
         private void RunDeferredMutationEntityPass(System.Action<LF2Entity> action)
         {
@@ -25,13 +48,20 @@ namespace NTSD.Simulation
             _ticking = true;
             try
             {
-                ForEachEntityByRuntimeSlot(entity =>
+                // Keep the authority live ascending-slot semantics, but do not wrap
+                // every pass action in a second capturing delegate. New occupants
+                // above the cursor remain visible to this pass; recycled lower slots
+                // still wait for the next pass.
+                for (int runtimeSlot = 0;
+                     runtimeSlot < _runtimeSlots.LogicalCapacity;
+                     runtimeSlot++)
                 {
+                    LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
                     if (entity == null || !IsActiveForCurrentPass(entity))
-                        return;
+                        continue;
 
                     action(entity);
-                });
+                }
             }
             finally
             {
@@ -84,21 +114,54 @@ namespace NTSD.Simulation
             if (tickIndex <= 1)
                 return;
 
+            EnsureAiSensingModeAvailableBeforeTick();
             BuildAiInputSlotSnapshot();
+            if (AiDecisionRequiresSharedRows &&
+                !AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                PrepareAiDecisionSharedPass();
+            CompleteAiUnifiedSnapshotShadowInitialComparison();
             try
             {
                 RunDeferredMutationEntityPass(entity =>
                 {
                     if (!entity.AiControlled || entity.GetCurrentDataObjectTypeForSimulation() != 0)
                         return;
+                    BeginAiUnifiedSnapshotExecutionConsumer(entity);
                     entity.RunCharacterInputPhase(tickIndex);
+#if UNITY_INCLUDE_TESTS
+                    if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
+                        ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
+#endif
                     if (IsActiveForCurrentPass(entity))
                         RefreshRuntimeSnapshot(entity);
-                    ObserveAiTeamHpSummaryMutation(entity);
+                    if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                    {
+                        ObserveAiCandidateCharacterInputMutation(entity);
+                        RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
+                    }
+                    else
+                    {
+                        if (AiDecisionRequiresSharedRows)
+                            RefreshAiDecisionSharedRowAfterCharacterInput(entity);
+                        if (aiSensingMode == AiSensingMode.SoAAiSensing)
+                        {
+                            ObserveAiCandidateCharacterInputMutation(entity);
+                            RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                        }
+                        else
+                        {
+                            ObserveAiTeamHpSummaryMutation(entity);
+                        }
+                        if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
+                            RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                        RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
+                    }
                 });
             }
             finally
             {
+                if (AiDecisionRequiresSharedRows)
+                    EndAiDecisionSharedPass();
                 ClearAiInputSlotSnapshot();
             }
         }
@@ -108,6 +171,7 @@ namespace NTSD.Simulation
             if (tickIndex <= 1)
                 return;
 
+            EnsureAiSensingModeAvailableBeforeTick();
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             BattleAiInputDetailDiagnostics aiDetailDiagnostics =
@@ -116,29 +180,82 @@ namespace NTSD.Simulation
             detailDiagnostics?.BeginPhase(
                 BattleTickDetailPhase.CharacterInputSnapshotBuild);
             BuildAiInputSlotSnapshot();
+            if (AiDecisionRequiresSharedRows &&
+                !AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                PrepareAiDecisionSharedPass();
+            CompleteAiUnifiedSnapshotShadowInitialComparison();
             detailDiagnostics?.EndPhase(
                 BattleTickDetailPhase.CharacterInputSnapshotBuild);
             detailDiagnostics?.BeginPhase(
                 BattleTickDetailPhase.CharacterInputEntityInputPass);
             try
             {
-                RunDeferredMutationEntityPass(entity =>
+                _ticking = true;
+                try
                 {
-                    if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                        return;
-
-                    entity.RunCharacterInputPhase(tickIndex);
-                    if (IsActiveForCurrentPass(entity))
+                    for (int runtimeSlot = 0;
+                         runtimeSlot < _runtimeSlots.LogicalCapacity;
+                         runtimeSlot++)
                     {
-                        aiDetailDiagnostics?.BeginPhase(
-                            BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
-                        RefreshRuntimeSnapshot(entity);
-                        aiDetailDiagnostics?.RecordRefresh();
-                        aiDetailDiagnostics?.EndPhase(
-                            BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
+                        LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
+                        if (entity == null || !IsActiveForCurrentPass(entity))
+                            continue;
+                        if (entity.GetCurrentDataObjectTypeForSimulation() !=
+                            (int)LF2ObjectType.Character)
+                        {
+                            continue;
+                        }
+
+                        BeginAiUnifiedSnapshotExecutionConsumer(entity);
+                        entity.RunCharacterInputPhase(tickIndex);
+#if UNITY_INCLUDE_TESTS
+                        if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
+                            ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
+                        CharacterInputPassMutationOverrideForSelfCheck?.Invoke(this, entity);
+#endif
+                        if (IsActiveForCurrentPass(entity))
+                        {
+                            aiDetailDiagnostics?.BeginPhase(
+                                BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
+                            RefreshRuntimeSnapshot(entity);
+                            aiDetailDiagnostics?.RecordRefresh();
+                            aiDetailDiagnostics?.EndPhase(
+                                BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
+                        }
+                        if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                        {
+                            aiDetailDiagnostics?.BeginPhase(
+                                BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh);
+                            ObserveAiCandidateCharacterInputMutation(entity);
+                            RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
+                            aiDetailDiagnostics?.EndPhase(
+                                BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh);
+                        }
+                        else
+                        {
+                            if (AiDecisionRequiresSharedRows)
+                                RefreshAiDecisionSharedRowAfterCharacterInput(entity);
+                            if (aiSensingMode == AiSensingMode.SoAAiSensing)
+                            {
+                                ObserveAiCandidateCharacterInputMutation(entity);
+                                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                            }
+                            else
+                            {
+                                ObserveAiTeamHpSummaryMutation(entity);
+                            }
+                            if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
+                                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                            RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
+                        }
                     }
-                    ObserveAiTeamHpSummaryMutation(entity);
-                });
+                }
+                finally
+                {
+                    _ticking = false;
+                    FlushPendingUnregister();
+                    FlushPendingEntityDestroy();
+                }
             }
             finally
             {
@@ -146,6 +263,8 @@ namespace NTSD.Simulation
                     BattleTickDetailPhase.CharacterInputEntityInputPass);
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.CharacterInputSnapshotClear);
+                if (AiDecisionRequiresSharedRows)
+                    EndAiDecisionSharedPass();
                 ClearAiInputSlotSnapshot();
                 detailDiagnostics?.EndPhase(
                     BattleTickDetailPhase.CharacterInputSnapshotClear);
@@ -394,14 +513,17 @@ namespace NTSD.Simulation
             _ticking = true;
             try
             {
-                // C++ frame_advance scans objects[0..399] and completes one entity before
-                // advancing to the next slot. The dynamic scan lets a flushed producer in a
-                // later slot participate this tick; a reused lower slot waits until next tick.
+                // C# authority GameTick scans active slots in ascending order and completes
+                // one entity before advancing to the next slot. The dynamic scan lets a
+                // flushed producer in a later slot participate this tick; a reused lower slot
+                // waits until the next tick.
                 ForEachEntityByRuntimeSlot(entity =>
                 {
-                    // C++ keeps this tick's held state visible through frame advance and the
-                    // later frame_tick pass. The input phase owns rolling/clearing the next
-                    // tick, so clearing here loses jump direction and inherited momentum.
+                    // C# authority GameTick clears current action/direction keys immediately
+                    // before each active entity enters frame advance. Prev*, cooldowns,
+                    // combo state, and input history remain untouched.
+                    entity.Runtime?.ClearActionInputKeys();
+                    entity.Runtime?.ClearDirectionalInputKeys();
                     entity.SimTransit(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
                         return;
@@ -596,7 +718,6 @@ namespace NTSD.Simulation
             task.initialRuntimeX = entity.GetRuntimeXInt();
             task.initialRuntimeY = entity.GetRuntimeYInt();
             task.initialRuntimeZ = entity.GetRenderZInt() + 1;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
             task.deferPresentationToNextTick = false;
             task.suppressLateFrameTickThisTick = false;
             task.deferFrameTickToNextTick = false;
@@ -613,8 +734,92 @@ namespace NTSD.Simulation
 
         public void EarlyFrameAdvanceSpecialsAll(int tickIndex)
         {
-            bool teleportGate = FrameToggle != 0;
+            LastEarlyTeleportRefreshCountForDiagnostics = 0;
+            LastEarlyTeleportSnapshotSkipCountForDiagnostics = 0;
+            LastEarlyStateHandlePathUsedForDiagnostics = false;
+            LastEarlyStateHandleFallbackCountForDiagnostics = 0;
 
+            if (ForceLegacyEarlyFrameAdvanceForDiagnostics)
+            {
+                RunEarlyFrameAdvanceSpecialsLegacy();
+                return;
+            }
+
+            bool teleportGate = FrameToggle != 0;
+            bool handleSnapshotValid = TryBuildEarlyStateHandleSnapshot(
+                out ulong occupancyEpoch,
+                out int logicalCapacity);
+            if (!handleSnapshotValid)
+            {
+                // A partial slot-table proof cannot stand in for the authority's
+                // complete active snapshot. Rebuild the exact legacy view before
+                // running any entity callbacks.
+                GetActiveEntitiesByRuntimeSlot(_entityScratch);
+                earlyState500Handles.Clear();
+                earlyState501Handles.Clear();
+            }
+
+            for (int i = 0; i < _entityScratch.Count; i++)
+            {
+                LF2Entity entity = _entityScratch[i];
+                if (entity == null)
+                    continue;
+
+                bool mutated =
+                    entity.RunEarlyTeleportSpecialsPhaseWithMutationReport(
+                        _entityScratch,
+                        teleportGate);
+                if (!IsActiveForCurrentPass(entity))
+                    continue;
+                if (mutated)
+                {
+                    LastEarlyTeleportRefreshCountForDiagnostics++;
+                    RefreshRuntimeSnapshot(entity);
+                }
+                else
+                {
+                    LastEarlyTeleportSnapshotSkipCountForDiagnostics++;
+                }
+            }
+
+            if (handleSnapshotValid &&
+                ValidateEarlyStateHandleSnapshot(
+                    occupancyEpoch,
+                    logicalCapacity))
+            {
+                LastEarlyStateHandlePathUsedForDiagnostics = true;
+                if (!RunEarlyStateHandles(
+                        earlyState500Handles,
+                        500,
+                        occupancyEpoch,
+                        logicalCapacity) ||
+                    !RunEarlyStateHandles(
+                        earlyState501Handles,
+                        501,
+                        occupancyEpoch,
+                        logicalCapacity))
+                {
+                    LastEarlyStateHandlePathUsedForDiagnostics = false;
+                    LastEarlyStateHandleFallbackCountForDiagnostics++;
+                    RunEarlyState500Specials(_entityScratch);
+                    RunEarlyState501Specials(_entityScratch);
+                }
+            }
+            else
+            {
+                LastEarlyStateHandleFallbackCountForDiagnostics++;
+                RunEarlyState500Specials(_entityScratch);
+                RunEarlyState501Specials(_entityScratch);
+            }
+
+            earlyState500Handles.Clear();
+            earlyState501Handles.Clear();
+            _entityScratch.Clear();
+        }
+
+        private void RunEarlyFrameAdvanceSpecialsLegacy()
+        {
+            bool teleportGate = FrameToggle != 0;
             GetActiveEntitiesByRuntimeSlot(_entityScratch);
             for (int i = 0; i < _entityScratch.Count; i++)
             {
@@ -622,15 +827,155 @@ namespace NTSD.Simulation
                 if (entity == null)
                     continue;
 
-                entity.RunEarlyTeleportSpecialsPhase(_entityScratch, teleportGate);
+                entity.RunEarlyTeleportSpecialsPhase(
+                    _entityScratch,
+                    teleportGate);
                 if (!IsActiveForCurrentPass(entity))
                     continue;
+                LastEarlyTeleportRefreshCountForDiagnostics++;
                 RefreshRuntimeSnapshot(entity);
             }
 
             RunEarlyState500Specials(_entityScratch);
             RunEarlyState501Specials(_entityScratch);
             _entityScratch.Clear();
+        }
+
+        private bool TryBuildEarlyStateHandleSnapshot(
+            out ulong occupancyEpoch,
+            out int logicalCapacity)
+        {
+            _entityScratch.Clear();
+            earlyState500Handles.Clear();
+            earlyState501Handles.Clear();
+
+            occupancyEpoch = _runtimeSlots.OccupancyEpoch;
+            logicalCapacity = _runtimeSlots.LogicalCapacity;
+            for (int runtimeSlot = 0;
+                 runtimeSlot < logicalCapacity;
+                 runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view =
+                    _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                if (!view.Claimed)
+                {
+                    if (view.Entity != null)
+                        return false;
+                    continue;
+                }
+
+                LF2Entity entity = view.Entity;
+                if (entity == null ||
+                    view.Generation == 0 ||
+                    entity.Runtime == null ||
+                    entity.Runtime.SlotIndex != runtimeSlot)
+                {
+                    return false;
+                }
+
+                var handle =
+                    new RuntimeEntityHandle(runtimeSlot, view.Generation);
+                if (!_runtimeSlots.TryResolve(handle, out LF2Entity resolved) ||
+                    !ReferenceEquals(resolved, entity))
+                {
+                    return false;
+                }
+
+                if (!IsActiveForCurrentPass(entity))
+                    continue;
+
+                _entityScratch.Add(entity);
+                int state = entity.Frame?.D?.state ?? -1;
+                if (state == 500)
+                    earlyState500Handles.Add(handle);
+                else if (state == 501)
+                    earlyState501Handles.Add(handle);
+            }
+
+            return occupancyEpoch == _runtimeSlots.OccupancyEpoch &&
+                   logicalCapacity == _runtimeSlots.LogicalCapacity;
+        }
+
+        private bool ValidateEarlyStateHandleSnapshot(
+            ulong occupancyEpoch,
+            int logicalCapacity)
+        {
+            if (occupancyEpoch != _runtimeSlots.OccupancyEpoch ||
+                logicalCapacity != _runtimeSlots.LogicalCapacity)
+            {
+                return false;
+            }
+
+            return ValidateEarlyStateHandles(earlyState500Handles, 500) &&
+                   ValidateEarlyStateHandles(earlyState501Handles, 501) &&
+                   occupancyEpoch == _runtimeSlots.OccupancyEpoch;
+        }
+
+        private bool ValidateEarlyStateHandles(
+            List<RuntimeEntityHandle> handles,
+            int expectedState)
+        {
+            for (int i = 0; i < handles.Count; i++)
+            {
+                if (!TryResolveEarlyStateHandle(
+                        handles[i],
+                        expectedState,
+                        out _))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool RunEarlyStateHandles(
+            List<RuntimeEntityHandle> handles,
+            int expectedState,
+            ulong occupancyEpoch,
+            int logicalCapacity)
+        {
+            for (int i = 0; i < handles.Count; i++)
+            {
+                if (occupancyEpoch != _runtimeSlots.OccupancyEpoch ||
+                    logicalCapacity != _runtimeSlots.LogicalCapacity ||
+                    !TryResolveEarlyStateHandle(
+                        handles[i],
+                        expectedState,
+                        out LF2Entity entity))
+                {
+                    return false;
+                }
+
+                if (expectedState == 500)
+                    RunEarlyState500Special(entity);
+                else
+                    RunEarlyState501Special(entity, _entityScratch);
+            }
+
+            return occupancyEpoch == _runtimeSlots.OccupancyEpoch &&
+                   logicalCapacity == _runtimeSlots.LogicalCapacity;
+        }
+
+        private bool TryResolveEarlyStateHandle(
+            RuntimeEntityHandle handle,
+            int expectedState,
+            out LF2Entity entity)
+        {
+            entity = null;
+            if (!handle.IsValid ||
+                !_runtimeSlots.TryResolve(handle, out LF2Entity resolved) ||
+                resolved == null ||
+                resolved.Runtime == null ||
+                resolved.Runtime.SlotIndex != handle.Slot ||
+                !IsActiveForCurrentPass(resolved) ||
+                resolved.Frame?.D?.state != expectedState)
+            {
+                return false;
+            }
+
+            entity = resolved;
+            return true;
         }
 
         private void RunEarlyState500Specials(List<LF2Entity> entities)
@@ -641,21 +986,24 @@ namespace NTSD.Simulation
             for (int i = 0; i < entities.Count; i++)
             {
                 LF2Entity entity = entities[i];
-                LF2FrameData frame = entity?.Frame?.D;
-                if (frame == null)
-                    continue;
+                RunEarlyState500Special(entity);
+            }
+        }
 
-                if (frame.state != 500)
-                    continue;
+        private void RunEarlyState500Special(LF2Entity entity)
+        {
+            LF2FrameData frame = entity?.Frame?.D;
+            if (frame == null || frame.state != 500)
+                return;
 
-                if (entity.TransformTargetObjectId == -1 || entity.TransformOriginalObjectId >= 0)
-                {
-                    // BMD-023: state=500 reset branch must mirror baseline SetFrameImmediate:
-                    // write Frame + FrameWaitCounter only, never Attacking. Unity's
-                    // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
-                    entity.DirectWriteFramePreserveWaitCounter(0);
-                    RefreshRuntimeSnapshot(entity);
-                }
+            if (entity.TransformTargetObjectId == -1 ||
+                entity.TransformOriginalObjectId >= 0)
+            {
+                // BMD-023: state=500 reset branch must mirror baseline SetFrameImmediate:
+                // write Frame + FrameWaitCounter only, never Attacking. Unity's
+                // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+                entity.DirectWriteFramePreserveWaitCounter(0);
+                RefreshRuntimeSnapshot(entity);
             }
         }
 
@@ -667,49 +1015,62 @@ namespace NTSD.Simulation
             for (int i = 0; i < entities.Count; i++)
             {
                 LF2Entity entity = entities[i];
-                LF2FrameData frame = entity?.Frame?.D;
-                if (frame == null)
+                RunEarlyState501Special(entity, entities);
+            }
+        }
+
+        private void RunEarlyState501Special(
+            LF2Entity entity,
+            List<LF2Entity> activeEntities)
+        {
+            LF2FrameData frame = entity?.Frame?.D;
+            if (frame == null ||
+                frame.state != 501 ||
+                entity.TransformTargetObjectId <= -1)
+            {
+                return;
+            }
+
+            LF2CharacterDataWrapper wrapper =
+                LF2Entity.ResolveRuntimeCharacterConfig(
+                    entity.TransformTargetObjectId);
+            if (wrapper == null)
+                return;
+
+            entity.TransformOriginalObjectId = entity.ObjectId;
+            entity.FrameCache.Load(wrapper);
+            entity.ObjectId = entity.TransformTargetObjectId;
+            // BMD-023: state=501 transform branch must mirror baseline SetFrameImmediate:
+            // write Frame + FrameWaitCounter only, never Attacking. Unity's
+            // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
+            entity.DirectWriteRawFramePreserveWaitCounter(0);
+            RefreshRuntimeSnapshot(entity);
+
+            int ownerSlotIndex = entity.Runtime?.SlotIndex ?? -1;
+            if (ownerSlotIndex < 0)
+                return;
+
+            for (int j = 0; j < activeEntities.Count; j++)
+            {
+                LF2Entity child = activeEntities[j];
+                if (child == null)
+                    continue;
+                if (child.KillCount != ownerSlotIndex)
+                    continue;
+                if (child.Health != null && child.Health.HP <= 0)
                     continue;
 
-                if (frame.state != 501 || entity.TransformTargetObjectId <= -1)
-                    continue;
-
-                LF2CharacterDataWrapper wrapper = LF2Entity.ResolveRuntimeCharacterConfig(entity.TransformTargetObjectId);
-                if (wrapper == null)
-                    continue;
-
-                entity.TransformOriginalObjectId = entity.ObjectId;
-                entity.FrameCache.Load(wrapper);
-                entity.ObjectId = entity.TransformTargetObjectId;
-                // BMD-023: state=501 transform branch must mirror baseline SetFrameImmediate:
+                child.FrameCache.Load(wrapper);
+                child.ObjectId = entity.ObjectId;
+                // BMD-023: state=501 child-transform branch must mirror baseline SetFrameImmediate.
+                // The authority selects from the integer Y snapshot, not the floating render position.
                 // write Frame + FrameWaitCounter only, never Attacking. Unity's
                 // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
-                entity.DirectWriteRawFramePreserveWaitCounter(0);
-                RefreshRuntimeSnapshot(entity);
-
-                int ownerSlotIndex = entity.Runtime?.SlotIndex ?? -1;
-                if (ownerSlotIndex < 0)
-                    continue;
-
-                for (int j = 0; j < entities.Count; j++)
-                {
-                    LF2Entity child = entities[j];
-                    if (child == null)
-                        continue;
-                    if (child.KillCount != ownerSlotIndex)
-                        continue;
-                    if (child.Health != null && child.Health.HP <= 0)
-                        continue;
-
-                    child.FrameCache.Load(wrapper);
-                    child.ObjectId = entity.ObjectId;
-                    // BMD-023: state=501 child-transform branch must mirror baseline SetFrameImmediate.
-                    // The authority selects from the integer Y snapshot, not the floating render position.
-                    // write Frame + FrameWaitCounter only, never Attacking. Unity's
-                    // ImmediateFrame zeros AttackingCounter as a side effect (LF2Entity.cs:824).
-                    child.DirectWriteRawFramePreserveWaitCounter(child.Runtime != null && child.Runtime.YInt < 0 ? 212 : 0);
-                    RefreshRuntimeSnapshot(child);
-                }
+                child.DirectWriteRawFramePreserveWaitCounter(
+                    child.Runtime != null && child.Runtime.YInt < 0
+                        ? 212
+                        : 0);
+                RefreshRuntimeSnapshot(child);
             }
         }
 
@@ -750,6 +1111,7 @@ namespace NTSD.Simulation
                 entity.CaptureCollisionFrameSnapshot();
                 RefreshRuntimeSnapshot(entity);
             });
+
         }
 
         public void CollectCollisionCandidatesAll()
@@ -805,6 +1167,8 @@ namespace NTSD.Simulation
             // empty LateEntityUpdateAll invocation retains the existing no-auto-create behavior.
             LF2ObjectPointFactory opointFactory = null;
             bool opointFactoryResolved = false;
+            if (structuralEventSink != null)
+                SetStructuralEventContextForDiagnostics(tickIndex, "late-entity-update");
             _ticking = true;
             try
             {
@@ -816,6 +1180,20 @@ namespace NTSD.Simulation
                         continue;
                     if (!IsActiveForCurrentPass(obj))
                         continue;
+
+                    if (structuralEventSink != null)
+                    {
+                        structuralEventCursorSlot = runtimeSlot;
+                        EmitStructuralEvent(
+                            "scan",
+                            runtimeSlot,
+                            0,
+                            RuntimeSlotCapacity,
+                            "active",
+                            "visited",
+                            StructuralSourceKind(obj),
+                            runtimeSlot);
+                    }
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityStateSpecial);
@@ -854,28 +1232,22 @@ namespace NTSD.Simulation
                             BattleTickDetailPhase.LateEntityFrameTick);
                         continue;
                     }
-                    RefreshLateRuntimeSnapshot(
-                        obj,
-                        BattleLateRuntimeSnapshotStage.FrameTick,
-                        detailDiagnostics);
+                    if (LateRuntimeSnapshotModeForDiagnostics ==
+                        BattleLateRuntimeSnapshotMode.LegacyThree)
+                    {
+                        RefreshLateRuntimeSnapshot(
+                            obj,
+                            BattleLateRuntimeSnapshotStage.FrameTick,
+                            detailDiagnostics);
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityFrameTick);
 
                     detailDiagnostics?.BeginPhase(
-                        BattleTickDetailPhase.LateEntityCollision);
-                    obj.SimEntityCollision(tickIndex);
-                    if (!IsActiveForCurrentPass(obj))
-                    {
-                        detailDiagnostics?.EndPhase(
-                            BattleTickDetailPhase.LateEntityCollision);
-                        continue;
-                    }
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.LateEntityCollision);
-
-                    detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityFrameExit);
-                    bool exitedLateFrameTick = HandleLateFrameTickExit(obj);
+                    bool exitedLateFrameTick = HandleLateFrameTickExit(
+                        obj,
+                        detailDiagnostics);
                     if (exitedLateFrameTick)
                     {
                         if (obj is LF2SpecialAttack)
@@ -896,10 +1268,14 @@ namespace NTSD.Simulation
                             BattleTickDetailPhase.LateEntityDeathOpoint);
                         continue;
                     }
-                    RefreshLateRuntimeSnapshot(
-                        obj,
-                        BattleLateRuntimeSnapshotStage.DeathOpoint,
-                        detailDiagnostics);
+                    if (LateRuntimeSnapshotModeForDiagnostics ==
+                        BattleLateRuntimeSnapshotMode.LegacyThree)
+                    {
+                        RefreshLateRuntimeSnapshot(
+                            obj,
+                            BattleLateRuntimeSnapshotStage.DeathOpoint,
+                            detailDiagnostics);
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityDeathOpoint);
 
@@ -967,6 +1343,8 @@ namespace NTSD.Simulation
             finally
             {
                 _ticking = false;
+                if (structuralEventSink != null)
+                    structuralEventCursorSlot = -1;
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.LateEntityFinalPendingFlush);
                 FlushPendingUnregister();
@@ -998,7 +1376,29 @@ namespace NTSD.Simulation
             }
         }
 
-        private bool HandleLateFrameTickExit(LF2Entity entity)
+        public BattleLateRuntimeSnapshotMode LateRuntimeSnapshotModeForDiagnostics
+        {
+            get;
+            set;
+        } = BattleLateRuntimeSnapshotMode.ConsolidatedFinal;
+
+        internal void RefreshLateTransitionRuntimeSnapshot(LF2Entity entity)
+        {
+            if (LateRuntimeSnapshotModeForDiagnostics ==
+                BattleLateRuntimeSnapshotMode.ConsolidatedFinal)
+            {
+                return;
+            }
+
+            RefreshLateRuntimeSnapshot(
+                entity,
+                BattleLateRuntimeSnapshotStage.TransitionInternal,
+                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics);
+        }
+
+        private bool HandleLateFrameTickExit(
+            LF2Entity entity,
+            BattleTickDetailPhaseDiagnostics diagnostics)
         {
             if (entity?.Frame == null)
                 return false;
@@ -1019,7 +1419,10 @@ namespace NTSD.Simulation
                 _entityScratch.Clear();
                 entity.HitStun = 1100 - frameId;
                 entity.DirectWriteFramePreserveWaitCounter(0);
-                RefreshRuntimeSnapshot(entity);
+                RefreshLateRuntimeSnapshot(
+                    entity,
+                    BattleLateRuntimeSnapshotStage.FrameExit,
+                    diagnostics);
                 return true;
             }
 
@@ -1186,9 +1589,39 @@ namespace NTSD.Simulation
 
         public void PreInteractionTickAll(int tickIndex)
         {
+            LastPreInteractionScannedCountForDiagnostics = 0;
+            LastPreInteractionExecutedCountForDiagnostics = 0;
+            LastPreInteractionProofSkipCountForDiagnostics = 0;
+            LastPreInteractionSnapshotSkipCountForDiagnostics = 0;
+            LastPreInteractionFailClosedCountForDiagnostics = 0;
+            LastPreInteractionCpointCheckProofSkipCountForDiagnostics = 0;
+            LastPreInteractionMismatchTailProofSkipCountForDiagnostics = 0;
+            LastPreInteractionWholePassProofSucceededForDiagnostics = false;
+            LastPreInteractionWholePassParticipantCountForDiagnostics = 0;
+
             _ticking = true;
             try
             {
+                if (!ForceLegacyPreInteractionForDiagnostics &&
+                    TryProveWholePreInteractionPassNoOp(
+                        tickIndex,
+                        out int participantCount))
+                {
+                    LastPreInteractionWholePassProofSucceededForDiagnostics = true;
+                    LastPreInteractionWholePassParticipantCountForDiagnostics =
+                        participantCount;
+                    LastPreInteractionScannedCountForDiagnostics = participantCount;
+                    LastPreInteractionProofSkipCountForDiagnostics =
+                        participantCount * 3;
+                    LastPreInteractionSnapshotSkipCountForDiagnostics =
+                        participantCount * 3;
+                    LastPreInteractionCpointCheckProofSkipCountForDiagnostics =
+                        participantCount;
+                    LastPreInteractionMismatchTailProofSkipCountForDiagnostics =
+                        participantCount;
+                    return;
+                }
+
                 GetActiveEntitiesByRuntimeSlot(_entityScratch);
                 if (_entityScratch.Count == 0) return;
 
@@ -1200,6 +1633,8 @@ namespace NTSD.Simulation
                     if (!IsActiveForCurrentPass(entity))
                         continue;
 
+                    LastPreInteractionScannedCountForDiagnostics++;
+                    LastPreInteractionExecutedCountForDiagnostics++;
                     entity.RunCpointCheckStep10();
                     if (!IsActiveForCurrentPass(entity))
                         continue;
@@ -1214,6 +1649,8 @@ namespace NTSD.Simulation
                     if (!IsActiveForCurrentPass(entity))
                         continue;
 
+                    LastPreInteractionScannedCountForDiagnostics++;
+                    LastPreInteractionExecutedCountForDiagnostics++;
                     entity.RunCpointMismatchTailStep10();
                     if (!IsActiveForCurrentPass(entity))
                         continue;
@@ -1222,18 +1659,28 @@ namespace NTSD.Simulation
 
                 _entityScratch.Clear();
 
-                ForEachEntityByRuntimeSlot(entity =>
+                // Keep the authority live ascending scan without allocating a
+                // tick-capturing delegate. Newborns above the cursor join this
+                // pass, while a recycled lower slot waits for the next pass.
+                for (int runtimeSlot = 0;
+                     runtimeSlot < _runtimeSlots.LogicalCapacity;
+                     runtimeSlot++)
                 {
+                    LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
+                    if (entity == null)
+                        continue;
                     if (entity.Runtime != null && tickIndex < entity.Runtime.SuppressPreInteractionUntilTick)
-                        return;
+                        continue;
                     if (!IsActiveForCurrentPass(entity))
-                        return;
+                        continue;
 
+                    LastPreInteractionScannedCountForDiagnostics++;
+                    LastPreInteractionExecutedCountForDiagnostics++;
                     entity.RunWeaponSyncHeldStep10();
                     if (!IsActiveForCurrentPass(entity))
-                        return;
+                        continue;
                     RefreshRuntimeSnapshot(entity);
-                });
+                }
             }
             finally
             {
@@ -1242,6 +1689,97 @@ namespace NTSD.Simulation
                 FlushPendingUnregister();
                 FlushPendingEntityDestroy();
             }
+        }
+
+        private bool TryProveWholePreInteractionPassNoOp(
+            int tickIndex,
+            out int participantCount)
+        {
+            participantCount = 0;
+            int logicalCapacity = _runtimeSlots.LogicalCapacity;
+            int claimedCount = _runtimeSlots.ClaimedCount;
+            ulong occupancyEpoch = _runtimeSlots.OccupancyEpoch;
+            long pendingDestroyEpoch =
+                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+            int pendingUnregisterCount = _pendingUnregister.Count;
+
+            for (int runtimeSlot = 0; runtimeSlot < logicalCapacity; runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view =
+                    _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                if (!view.Claimed)
+                {
+                    if (view.Entity != null)
+                        return false;
+                    continue;
+                }
+
+                LF2Entity entity = view.Entity;
+                if (entity == null ||
+                    view.Generation == 0 ||
+                    entity.Runtime == null ||
+                    entity.Runtime.SlotIndex != runtimeSlot)
+                {
+                    return false;
+                }
+
+                var handle =
+                    new RuntimeEntityHandle(runtimeSlot, view.Generation);
+                if (!_runtimeSlots.TryResolve(handle, out LF2Entity resolved) ||
+                    !ReferenceEquals(resolved, entity))
+                {
+                    return false;
+                }
+
+                if (entity.Runtime.SuppressPreInteractionUntilTick > tickIndex ||
+                    !IsActiveForCurrentPass(entity))
+                {
+                    continue;
+                }
+
+                participantCount++;
+                if (!TryProveNeutralPreInteractionParticipant(entity))
+                    return false;
+            }
+
+            return logicalCapacity == _runtimeSlots.LogicalCapacity &&
+                   claimedCount == _runtimeSlots.ClaimedCount &&
+                   occupancyEpoch == _runtimeSlots.OccupancyEpoch &&
+                   pendingDestroyEpoch ==
+                       NTSDEntityRuntime
+                           .PendingFlushDestroyMutationEpochForDiagnostics &&
+                   pendingUnregisterCount == _pendingUnregister.Count;
+        }
+
+        private static bool TryProveNeutralPreInteractionParticipant(
+            LF2Entity entity)
+        {
+            if (entity == null || entity.GetType() != typeof(LF2Character))
+                return false;
+            if (!entity.IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp())
+                return false;
+
+            var character = (LF2Character)entity;
+            NTSDEntityRuntime runtime = character.Runtime;
+            if (runtime.LinkState != 0 ||
+                runtime.TargetSlotIndex != -1 ||
+                runtime.HeldWeaponStableId != -1 ||
+                character.HeldWeaponReferenceInternal != null)
+            {
+                return false;
+            }
+
+            CatchPoint collisionCpoint =
+                character.GetCollisionFrameData()?.cpoint;
+            if (collisionCpoint != null &&
+                (collisionCpoint.kind == 1 || collisionCpoint.kind == 2))
+            {
+                return false;
+            }
+
+            CatchPoint currentCpoint = character.Frame?.D?.cpoint;
+            return currentCpoint == null ||
+                   (currentCpoint.kind != 1 && currentCpoint.kind != 2);
         }
 
         public void RandomWeaponDropTickAll(int tickIndex)
@@ -1336,7 +1874,6 @@ namespace NTSD.Simulation
             spawnTask.initialRuntimeX = (int)lf2X;
             spawnTask.initialRuntimeY = (int)lf2Y;
             spawnTask.initialRuntimeZ = (int)lf2Z;
-            spawnTask.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
 
             LF2Entity spawned;
             try
@@ -1495,6 +2032,23 @@ namespace NTSD.Simulation
 #if UNITY_INCLUDE_TESTS
         internal int[] CaptureLateRuntimeSnapshotBoundaryForSelfCheck(int mode)
         {
+            return CaptureLateRuntimeSnapshotBoundaryForModeForSelfCheck(
+                mode,
+                (int)BattleLateRuntimeSnapshotMode.LegacyThree);
+        }
+
+        internal int[] CaptureLateRuntimeSnapshotBoundaryForModeForSelfCheck(
+            int mode,
+            int snapshotMode)
+        {
+            if (snapshotMode < (int)BattleLateRuntimeSnapshotMode.LegacyThree ||
+                snapshotMode > (int)BattleLateRuntimeSnapshotMode.ConsolidatedFinal)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(snapshotMode));
+            }
+
+            LateRuntimeSnapshotModeForDiagnostics =
+                (BattleLateRuntimeSnapshotMode)snapshotMode;
             LF2Entity entity;
             LateRuntimeSnapshotProbe probe = null;
             LateRuntimeSnapshotWeaponProbe weapon = null;
@@ -1515,6 +2069,12 @@ namespace NTSD.Simulation
             Register(entity);
             if (mode == 1)
                 entity.Runtime.SuppressLateFrameTickUntilTick = 2;
+            if (mode == 4 || mode == 5)
+            {
+                int exitFrame = mode == 4 ? 1100 : 1200;
+                entity.Frame.N = exitFrame;
+                entity.Runtime.Frame = exitFrame;
+            }
 
             BattleTickDetailPhaseDiagnostics diagnostics =
                 EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
@@ -1544,6 +2104,11 @@ namespace NTSD.Simulation
                 probe?.TailCount ?? 0,
                 ObjectCount,
                 weapon?.PendingDestroyObserved == true ? 1 : 0,
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.FrameExit),
+                (int)diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.TransitionInternal),
+                entity.Runtime?.Frame ?? -1,
             };
         }
 

@@ -257,9 +257,11 @@ namespace NTSD.Test
         }
 
         [Test]
+        [Category("NTSD_W08Regression")]
         public void AirRoleIndex_LiveGroundAirTransitionsMatchAuthorityBruteScan()
         {
             var world = new SimulationWorld();
+            world.ForceLegacyAiNearestFilterForDiagnostics = true;
             LF2Character self = CreateCharacter("AirRole_Self", 33, 0, 1, 0, 0, 0);
             LF2Character target = CreateCharacter(
                 "AirRole_Target",
@@ -277,13 +279,13 @@ namespace NTSD.Test
                 self,
                 target,
                 2,
-                -3), Is.True);
+                -3), Is.True, "ground-to-air role mutation");
             Assert.That(InvokeAirRoleMutationParity(
                 world,
                 self,
                 target,
                 2,
-                0), Is.True);
+                0), Is.True, "air-to-ground role mutation");
 
             target.RelationTeam = 1;
             Assert.That(InvokeAirRoleMutationParity(
@@ -291,7 +293,7 @@ namespace NTSD.Test
                 self,
                 target,
                 2,
-                -3), Is.True);
+                -3), Is.True, "same-team air role mutation");
             target.RelationTeam = 2;
             target.Runtime.HP = 0;
             Assert.That(InvokeAirRoleMutationParity(
@@ -299,14 +301,14 @@ namespace NTSD.Test
                 self,
                 target,
                 2,
-                0), Is.True);
+                0), Is.True, "dead ground role mutation");
             target.Runtime.HP = 500;
             Assert.That(InvokeAirRoleMutationParity(
                 world,
                 self,
                 target,
                 1,
-                -3), Is.True);
+                -3), Is.True, "phase-one revived air role mutation");
         }
 
         [Test]

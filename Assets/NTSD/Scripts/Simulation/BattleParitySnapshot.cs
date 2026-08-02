@@ -8,6 +8,134 @@ using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Simulation
 {
+    public sealed class BattleParityStructuralEvent
+    {
+        public int Tick;
+        public string Pass;
+        public string Action;
+        public int CursorSlot = -1;
+        public int ActorSlot = -1;
+        public int Slot = -1;
+        public int SearchStart = -1;
+        public int SearchEndExclusive = -1;
+        public string Before;
+        public string After;
+        public int LifecycleEpoch;
+        public string SourceKind;
+        public int BeforeLinkState;
+        public int BeforeTargetSlot = -1;
+        public int BeforeHeldWeaponSlot = -1;
+        public int AfterLinkState;
+        public int AfterTargetSlot = -1;
+        public int AfterHeldWeaponSlot = -1;
+        public bool TargetActive;
+        public int ObservedHolderSlot = -1;
+        public string Outcome;
+        public string Reason;
+        public int TargetBeforeHolderSlot = -1;
+        public int TargetBeforeLinkState;
+        public int TargetAfterHolderSlot = -1;
+        public int TargetAfterLinkState;
+
+        internal object ToCanonicalObject()
+        {
+            var result = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                ["action"] = Action ?? string.Empty,
+                ["actorSlot"] = ActorSlot,
+                ["after"] = After ?? string.Empty,
+                ["before"] = Before ?? string.Empty,
+                ["cursorSlot"] = CursorSlot,
+                ["lifecycleEpoch"] = LifecycleEpoch,
+                ["pass"] = Pass ?? string.Empty,
+                ["searchEndExclusive"] = SearchEndExclusive,
+                ["searchStart"] = SearchStart,
+                ["slot"] = Slot,
+                ["sourceKind"] = SourceKind ?? string.Empty,
+                ["tick"] = Tick,
+            };
+            if (string.Equals(Action, "link-validation", StringComparison.Ordinal))
+            {
+                result["afterHeldWeaponSlot"] = AfterHeldWeaponSlot;
+                result["afterLinkState"] = AfterLinkState;
+                result["afterTargetSlot"] = AfterTargetSlot;
+                result["beforeHeldWeaponSlot"] = BeforeHeldWeaponSlot;
+                result["beforeLinkState"] = BeforeLinkState;
+                result["beforeTargetSlot"] = BeforeTargetSlot;
+                result["observedHolderSlot"] = ObservedHolderSlot;
+                result["outcome"] = Outcome ?? string.Empty;
+                result["reason"] = Reason ?? string.Empty;
+                result["targetActive"] = TargetActive;
+                result["targetAfterHolderSlot"] = TargetAfterHolderSlot;
+                result["targetAfterLinkState"] = TargetAfterLinkState;
+                result["targetBeforeHolderSlot"] = TargetBeforeHolderSlot;
+                result["targetBeforeLinkState"] = TargetBeforeLinkState;
+            }
+            return result;
+        }
+    }
+
+    public interface IBattleParityStructuralEventSink
+    {
+        void Record(BattleParityStructuralEvent structuralEvent);
+    }
+
+    /// <summary>
+    /// Diagnostic-only structural event collector. Lifecycle epochs are derived from
+    /// observed allocations per slot; RuntimeSlotTable generations never cross the
+    /// Authority/Unity trace boundary.
+    /// </summary>
+    public sealed class BattleParityStructuralEventBuffer : IBattleParityStructuralEventSink
+    {
+        private readonly int[] lifecycleEpochs;
+        private readonly List<BattleParityStructuralEvent> events =
+            new List<BattleParityStructuralEvent>();
+
+        public BattleParityStructuralEventBuffer(int slotCapacity)
+        {
+            if (slotCapacity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(slotCapacity));
+            lifecycleEpochs = new int[slotCapacity];
+        }
+
+        public IReadOnlyList<BattleParityStructuralEvent> Events => events;
+
+        public void Record(BattleParityStructuralEvent structuralEvent)
+        {
+            if (structuralEvent == null)
+                return;
+
+            int slot = structuralEvent.Slot;
+            if (slot >= lifecycleEpochs.Length)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(structuralEvent),
+                    $"Structural event slot {slot} exceeds Authority400 capacity.");
+            }
+
+            if (slot >= 0 &&
+                string.Equals(structuralEvent.Action, "allocate", StringComparison.Ordinal))
+            {
+                lifecycleEpochs[slot]++;
+            }
+
+            structuralEvent.LifecycleEpoch = slot >= 0 ? lifecycleEpochs[slot] : 0;
+            events.Add(structuralEvent);
+        }
+
+        public IReadOnlyList<BattleParityStructuralEvent> CaptureTick(int tick)
+        {
+            var result = new List<BattleParityStructuralEvent>();
+            for (int index = 0; index < events.Count; index++)
+            {
+                BattleParityStructuralEvent structuralEvent = events[index];
+                if (structuralEvent.Tick == tick)
+                    result.Add(structuralEvent);
+            }
+            return result;
+        }
+    }
+
     public sealed class BattleParityHashes
     {
         public string ARest;
@@ -166,6 +294,88 @@ namespace NTSD.Simulation
                 ["hashes"] = Hashes.ToCanonicalObject(includeOverall: true),
                 ["input"] = InputDomain,
                 ["kind"] = "extended-checksum",
+                ["metadata"] = MetadataDomain,
+                ["rng"] = RngDomain,
+                ["schema"] = Schema,
+                ["slots"] = SlotsDomain,
+                ["stats"] = StatsDomain,
+                ["tick"] = Tick,
+                ["vRest"] = VRestDomain,
+                ["world"] = WorldDomain,
+            });
+        }
+    }
+
+    public sealed class BattleLockstepChecksumHashes
+    {
+        public string ARest;
+        public string Events;
+        public string Input;
+        public string Metadata;
+        public string Overall;
+        public string Rng;
+        public string Slots;
+        public string Stats;
+        public string VRest;
+        public string World;
+
+        internal SortedDictionary<string, object> ToCanonicalObject(bool includeOverall)
+        {
+            var result = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                ["aRest"] = ARest,
+                ["events"] = Events,
+                ["input"] = Input,
+                ["metadata"] = Metadata,
+                ["rng"] = Rng,
+                ["slots"] = Slots,
+                ["stats"] = Stats,
+                ["vRest"] = VRest,
+                ["world"] = World,
+            };
+            if (includeOverall)
+                result["overall"] = Overall;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Deterministic lockstep projection. Presentation-owned hit-record samples are
+    /// deliberately excluded because their retirement follows Unity presentation
+    /// finalization rather than the fixed simulation tick.
+    /// </summary>
+    public sealed class BattleLockstepChecksumSnapshot : IBattleChecksumSnapshot
+    {
+        public const string SchemaId = "ntsd-lockstep-core-checksum-v1";
+
+        internal object InputDomain;
+        internal object MetadataDomain;
+        internal object RngDomain;
+        internal object WorldDomain;
+        internal object SlotsDomain;
+        internal object ARestDomain;
+        internal object VRestDomain;
+        internal object StatsDomain;
+        internal object EventsDomain;
+
+        public string Schema => SchemaId;
+        public string Profile { get; internal set; }
+        public int Tick { get; internal set; }
+        public int LogicalCapacity { get; internal set; }
+        public int ClaimedCount { get; internal set; }
+        public int ObjectCount { get; internal set; }
+        public BattleLockstepChecksumHashes Hashes { get; internal set; }
+        public string OverallChecksum => Hashes?.Overall ?? string.Empty;
+
+        public string ToJson()
+        {
+            return BattleCanonicalJson.Serialize(new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                ["aRest"] = ARestDomain,
+                ["events"] = EventsDomain,
+                ["hashes"] = Hashes.ToCanonicalObject(includeOverall: true),
+                ["input"] = InputDomain,
+                ["kind"] = "lockstep-core-checksum",
                 ["metadata"] = MetadataDomain,
                 ["rng"] = RngDomain,
                 ["schema"] = Schema,
@@ -341,7 +551,8 @@ namespace NTSD.Simulation
         public BattleParityFrameSnapshot CaptureParityFrameSnapshot(
             int tickIndex,
             FrameInputSet frameInput = null,
-            bool includeFullDomains = false)
+            bool includeFullDomains = false,
+            IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null)
         {
             if (RuntimeProfileForServices != BattleRuntimeProfile.Authority400 ||
                 RuntimeSlotCapacity != AuthorityRuntimeSlotCapacity)
@@ -356,7 +567,7 @@ namespace NTSD.Simulation
                 ("callCount", (object)(Rng?.CallCount ?? 0UL)),
                 ("seed", Rng?.State ?? 0U));
             object worldDomain = ProjectWorldDomain();
-            object[] allSlots = ProjectAllRuntimeSlots();
+            object[] allSlots = ProjectAllRuntimeSlots(includePresentationHitRecords: true);
             var slotCommitments = new string[allSlots.Length];
             for (int slot = 0; slot < allSlots.Length; slot++)
                 slotCommitments[slot] = BattleCanonicalJson.Sha256(allSlots[slot]);
@@ -368,7 +579,7 @@ namespace NTSD.Simulation
             object statsDomain = DictionaryOf(
                 ("damage", CloneArray(DamageStats)),
                 ("kill", CloneArray(KillStats)));
-            object eventsDomain = ProjectEventsDomain();
+            object eventsDomain = ProjectEventsDomain(structuralEvents);
 
             var hashes = new BattleParityHashes
             {
@@ -386,7 +597,9 @@ namespace NTSD.Simulation
             var compactSlots = new List<object>();
             for (int slot = 0; slot < allSlots.Length; slot++)
             {
-                object baseline = ProjectDefaultRuntimeSlot(slot);
+                object baseline = ProjectDefaultRuntimeSlot(
+                    slot,
+                    includePresentationHitRecords: true);
                 if (!string.Equals(
                         BattleCanonicalJson.Sha256(allSlots[slot]),
                         BattleCanonicalJson.Sha256(baseline),
@@ -444,7 +657,9 @@ namespace NTSD.Simulation
                 ("profile", RuntimeProfileForServices.ToString()),
                 ("schema", BattleExtendedChecksumSnapshot.SchemaId),
                 ("tick", tickIndex));
-            object slotsDomain = ProjectExtendedRuntimeSlots(logicalCapacity);
+            object slotsDomain = ProjectExtendedRuntimeSlots(
+                logicalCapacity,
+                includePresentationHitRecords: true);
             RuntimeRestStore.DiagnosticSnapshot restSnapshot =
                 _runtimeRestStore.CaptureSparseSnapshot();
             object aRestDomain = ProjectExtendedARestDomain(restSnapshot);
@@ -489,7 +704,79 @@ namespace NTSD.Simulation
             };
         }
 
-        private object ProjectExtendedRuntimeSlots(int logicalCapacity)
+        /// <summary>
+        /// Captures the versioned deterministic core used for lockstep comparison.
+        /// Unlike the diagnostic parity snapshots, this projection excludes only the
+        /// four presentation-finalized hit-record fields.
+        /// </summary>
+        public BattleLockstepChecksumSnapshot CaptureLockstepChecksumSnapshot(
+            int tickIndex,
+            FrameInputSet frameInput = null,
+            IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null)
+        {
+            int logicalCapacity = RuntimeSlotCapacity;
+            object inputDomain = ProjectFrameInput(frameInput ?? FrameInputSet.Empty(tickIndex));
+            object rngDomain = DictionaryOf(
+                ("callCount", (object)(Rng?.CallCount ?? 0UL)),
+                ("seed", Rng?.State ?? 0U));
+            object worldDomain = ProjectWorldDomain();
+            object metadataDomain = DictionaryOf(
+                ("claimedCount", (object)_runtimeSlots.ClaimedCount),
+                ("logicalCapacity", logicalCapacity),
+                ("objectCount", ObjectCount),
+                ("profile", RuntimeProfileForServices.ToString()),
+                ("schema", BattleLockstepChecksumSnapshot.SchemaId),
+                ("tick", tickIndex));
+            object slotsDomain = ProjectExtendedRuntimeSlots(
+                logicalCapacity,
+                includePresentationHitRecords: false);
+            RuntimeRestStore.DiagnosticSnapshot restSnapshot =
+                _runtimeRestStore.CaptureSparseSnapshot();
+            object aRestDomain = ProjectExtendedARestDomain(restSnapshot);
+            object vRestDomain = ProjectExtendedVRestDomain(restSnapshot);
+            object statsDomain = DictionaryOf(
+                ("damage", CloneArray(DamageStats)),
+                ("kill", CloneArray(KillStats)));
+            object eventsDomain = ProjectEventsDomain(structuralEvents);
+
+            var hashes = new BattleLockstepChecksumHashes
+            {
+                ARest = BattleCanonicalJson.Sha256(aRestDomain),
+                Events = BattleCanonicalJson.Sha256(eventsDomain),
+                Input = BattleCanonicalJson.Sha256(inputDomain),
+                Metadata = BattleCanonicalJson.Sha256(metadataDomain),
+                Rng = BattleCanonicalJson.Sha256(rngDomain),
+                Slots = BattleCanonicalJson.Sha256(slotsDomain),
+                Stats = BattleCanonicalJson.Sha256(statsDomain),
+                VRest = BattleCanonicalJson.Sha256(vRestDomain),
+                World = BattleCanonicalJson.Sha256(worldDomain),
+            };
+            hashes.Overall = BattleCanonicalJson.Sha256(
+                hashes.ToCanonicalObject(includeOverall: false));
+
+            return new BattleLockstepChecksumSnapshot
+            {
+                Profile = RuntimeProfileForServices.ToString(),
+                Tick = tickIndex,
+                LogicalCapacity = logicalCapacity,
+                ClaimedCount = _runtimeSlots.ClaimedCount,
+                ObjectCount = ObjectCount,
+                Hashes = hashes,
+                InputDomain = inputDomain,
+                MetadataDomain = metadataDomain,
+                RngDomain = rngDomain,
+                WorldDomain = worldDomain,
+                SlotsDomain = slotsDomain,
+                ARestDomain = aRestDomain,
+                VRestDomain = vRestDomain,
+                StatsDomain = statsDomain,
+                EventsDomain = eventsDomain,
+            };
+        }
+
+        private object ProjectExtendedRuntimeSlots(
+            int logicalCapacity,
+            bool includePresentationHitRecords)
         {
             var slots = new object[logicalCapacity];
             for (int runtimeSlot = 0; runtimeSlot < logicalCapacity; runtimeSlot++)
@@ -517,8 +804,13 @@ namespace NTSD.Simulation
                             runtimeSlot,
                             false,
                             view.RawRuntime,
-                            projectRawState: view.RawRuntime != null)
-                        : ProjectEntityRuntime(entity, runtimeSlot, IsActiveForCurrentPass(entity))),
+                            projectRawState: view.RawRuntime != null,
+                            includePresentationHitRecords: includePresentationHitRecords)
+                        : ProjectEntityRuntime(
+                            entity,
+                            runtimeSlot,
+                            IsActiveForCurrentPass(entity),
+                            includePresentationHitRecords: includePresentationHitRecords)),
                     ("runtimeSlot", runtimeSlot),
                     ("stableId", stableId));
             }
@@ -577,28 +869,42 @@ namespace NTSD.Simulation
             return DictionaryOf(("players", (object)players), ("tickIndex", frameInput.TickIndex));
         }
 
-        private object[] ProjectAllRuntimeSlots()
+        private object[] ProjectAllRuntimeSlots(bool includePresentationHitRecords)
         {
             var result = new object[AuthorityRuntimeSlotCapacity];
             for (int runtimeSlot = 0; runtimeSlot < result.Length; runtimeSlot++)
             {
                 LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
                 result[runtimeSlot] = entity == null
-                    ? ProjectDefaultRuntimeSlot(runtimeSlot, GetRawRuntimeSlotState(runtimeSlot))
-                    : ProjectRuntimeSlot(entity, runtimeSlot);
+                    ? ProjectDefaultRuntimeSlot(
+                        runtimeSlot,
+                        GetRawRuntimeSlotState(runtimeSlot),
+                        includePresentationHitRecords)
+                    : ProjectRuntimeSlot(entity, runtimeSlot, includePresentationHitRecords);
             }
             return result;
         }
 
-        private object ProjectDefaultRuntimeSlot(int runtimeSlot, NTSDEntityRuntime runtime = null)
+        private object ProjectDefaultRuntimeSlot(
+            int runtimeSlot,
+            NTSDEntityRuntime runtime = null,
+            bool includePresentationHitRecords = true)
         {
             return DictionaryOf(
                 ("currentDataOid", null),
-                ("runtime", ProjectEntityRuntime(null, runtimeSlot, false, runtime)),
+                ("runtime", ProjectEntityRuntime(
+                    null,
+                    runtimeSlot,
+                    false,
+                    runtime,
+                    includePresentationHitRecords: includePresentationHitRecords)),
                 ("runtimeSlot", runtimeSlot));
         }
 
-        private object ProjectRuntimeSlot(LF2Entity entity, int runtimeSlot)
+        private object ProjectRuntimeSlot(
+            LF2Entity entity,
+            int runtimeSlot,
+            bool includePresentationHitRecords)
         {
             bool active = IsActiveForCurrentPass(entity);
             int? currentDataOid = entity.FrameCache?.Wrapper != null
@@ -606,7 +912,11 @@ namespace NTSD.Simulation
                 : entity.ObjectId;
             return DictionaryOf(
                 ("currentDataOid", (object)currentDataOid),
-                ("runtime", ProjectEntityRuntime(entity, runtimeSlot, active)),
+                ("runtime", ProjectEntityRuntime(
+                    entity,
+                    runtimeSlot,
+                    active,
+                    includePresentationHitRecords: includePresentationHitRecords)),
                 ("runtimeSlot", runtimeSlot));
         }
 
@@ -615,20 +925,27 @@ namespace NTSD.Simulation
             int runtimeSlot,
             bool active,
             NTSDEntityRuntime runtimeOverride = null,
-            bool projectRawState = false)
+            bool projectRawState = false,
+            bool includePresentationHitRecords = true)
         {
             NTSDEntityRuntime runtime = entity?.Runtime ?? runtimeOverride;
             bool isDefault = entity == null && !projectRawState;
-            int[] hitRecordDamage = new int[LF2Entity.MaxHitRecordSlots];
-            int[] hitRecordX = new int[LF2Entity.MaxHitRecordSlots];
-            int[] hitRecordZ = new int[LF2Entity.MaxHitRecordSlots];
-            if (entity != null)
+            int[] hitRecordDamage = null;
+            int[] hitRecordX = null;
+            int[] hitRecordZ = null;
+            if (includePresentationHitRecords)
             {
-                for (int i = 0; i < hitRecordDamage.Length; i++)
+                hitRecordDamage = new int[LF2Entity.MaxHitRecordSlots];
+                hitRecordX = new int[LF2Entity.MaxHitRecordSlots];
+                hitRecordZ = new int[LF2Entity.MaxHitRecordSlots];
+                if (entity != null)
                 {
-                    hitRecordDamage[i] = entity.GetHitRecordAge(i);
-                    hitRecordX[i] = entity.GetHitRecordX(i);
-                    hitRecordZ[i] = entity.GetHitRecordZ(i);
+                    for (int i = 0; i < hitRecordDamage.Length; i++)
+                    {
+                        hitRecordDamage[i] = entity.GetHitRecordAge(i);
+                        hitRecordX[i] = entity.GetHitRecordX(i);
+                        hitRecordZ[i] = entity.GetHitRecordZ(i);
+                    }
                 }
             }
 
@@ -637,7 +954,7 @@ namespace NTSD.Simulation
             object identity = DictionaryOf(
                 ("active", active),
                 ("aiControlled", runtime?.AiControlled ?? false),
-                ("category", isDefault ? 0 : category),
+                ("category", category),
                 ("charId", isDefault ? -1 : runtime.ObjectId),
                 ("entityType", isDefault ? 0 : runtime.EntityType),
                 ("objType", isDefault ? 0 : runtime.ObjType),
@@ -756,15 +1073,18 @@ namespace NTSD.Simulation
                 ("prevRight", runtime?.PrevRight ?? 0),
                 ("prevUp", runtime?.PrevUp ?? 0));
 
-            object presentation = DictionaryOf(
+            SortedDictionary<string, object> presentation = DictionaryOf(
                 ("blink", isDefault ? 0 : runtime.Blink),
-                ("hitRecordCount", entity?.HitRecordCount ?? 0),
-                ("hitRecordDamage", hitRecordDamage),
-                ("hitRecordX", hitRecordX),
-                ("hitRecordZ", hitRecordZ),
                 ("hp2Orig", isDefault ? 0 : runtime.HP2Orig),
                 ("hpOrig", isDefault ? 0 : runtime.HPOrig),
                 ("ppDisplay", isDefault ? 0 : runtime.PpDisplay));
+            if (includePresentationHitRecords)
+            {
+                presentation["hitRecordCount"] = entity?.HitRecordCount ?? 0;
+                presentation["hitRecordDamage"] = hitRecordDamage;
+                presentation["hitRecordX"] = hitRecordX;
+                presentation["hitRecordZ"] = hitRecordZ;
+            }
 
             object residual = DictionaryOf(
                 ("abortRemainingHitPairs", false),
@@ -1033,18 +1353,27 @@ namespace NTSD.Simulation
                 ("values", values));
         }
 
-        private object ProjectEventsDomain()
+        private object ProjectEventsDomain(
+            IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null)
         {
             var sounds = new object[PendingSounds?.Count ?? 0];
             for (int i = 0; i < sounds.Length; i++)
             {
                 PendingSoundEvent sound = PendingSounds[i];
                 sounds[i] = DictionaryOf(
-                    ("cue", (object)NormalizeTraceAssetCue(sound?.Cue)),
-                    ("tick", sound?.Tick ?? 0),
-                    ("worldX", sound?.WorldX ?? 0));
+                    ("cue", (object)NormalizeTraceAssetCue(sound.Cue)),
+                    ("tick", sound.Tick),
+                    ("worldX", sound.WorldX));
             }
-            return DictionaryOf(("pendingSounds", (object)sounds));
+            if (structuralEvents == null)
+                return DictionaryOf(("pendingSounds", (object)sounds));
+
+            var structural = new object[structuralEvents.Count];
+            for (int i = 0; i < structural.Length; i++)
+                structural[i] = structuralEvents[i]?.ToCanonicalObject();
+            return DictionaryOf(
+                ("pendingSounds", (object)sounds),
+                ("structural", structural));
         }
 
         internal static string NormalizeTraceAssetCue(string value)

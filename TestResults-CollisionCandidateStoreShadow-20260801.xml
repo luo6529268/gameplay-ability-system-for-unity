@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.1304372">
+  <test-suite type="TestSuite" id="1490" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.130437" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1968" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.105651" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="89772" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1969" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.094533" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1970" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="217" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.085384" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1668" name="RoleAwareCollisionShadowSelfCheckTests" fullname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests" classname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.077774" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1669" name="Shadow_DefaultsOff_AndOnlyEmitsAttackToBodyPairs" fullname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.Shadow_DefaultsOff_AndOnlyEmitsAttackToBodyPairs" methodname="Shadow_DefaultsOff_AndOnlyEmitsAttackToBodyPairs" classname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests" runstate="Runnable" seed="12300735" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.050478" asserts="0">
+              <properties />
+              <output><![CDATA[<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+]]></output>
+            </test-case>
+            <test-case id="1671" name="Shadow_ExceptionCannotChangeFormalCollection_AndNextRunResetsAbort" fullname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.Shadow_ExceptionCannotChangeFormalCollection_AndNextRunResetsAbort" methodname="Shadow_ExceptionCannotChangeFormalCollection_AndNextRunResetsAbort" classname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests" runstate="Runnable" seed="98834853" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.008598" asserts="0">
+              <properties />
+              <output><![CDATA[<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+]]></output>
+            </test-case>
+            <test-case id="1670" name="Shadow_NonIndexableRoleBoundsFallbackConservatively" fullname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.Shadow_NonIndexableRoleBoundsFallbackConservatively" methodname="Shadow_NonIndexableRoleBoundsFallbackConservatively" classname="NTSD.Test.RoleAwareCollisionShadowSelfCheckTests" runstate="Runnable" seed="235435222" result="Passed" start-time="2026-08-01 03:13:27Z" end-time="2026-08-01 03:13:27Z" duration="0.006337" asserts="0">
+              <properties />
+              <output><![CDATA[<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+[SimulationWorld] Registered: SimOrder=10, StableId=0, Type=LF2Character
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

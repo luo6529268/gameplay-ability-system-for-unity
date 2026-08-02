@@ -1,5 +1,89 @@
 # NTSD C# 工程 vs Unity 工程 — 战斗逻辑差异与对齐清单
 
+## 2026-08-03：BuildCommands / 高频表现命令性能状态
+
+- 本批只改变 Unity 表现命令的构建与资源解析成本，不改变权威 C# 战斗 tick、pass 顺序、输入、碰撞、opoint、生命周期或 runtime 真值。
+- `BuildCommands` 已加入默认关闭的 Shadow/Entity/Overlay/HitRecord 分类计时。1000 AI 详细基线为 Avg `5.295 ms`，Overlay `2.788 ms` 是最大子项。
+- 将每个表现对象重复执行的 viewport 查询收敛为每 tick 一份 `ViewportTransformSnapshot` 后，`BuildCommands` Avg 降至 `2.789 ms`（`-47.3%`）。资源 resolver 再将可信生产命令的完整身份校验收敛为一次，`ResolveCommands` Avg 从 `5.066` 降至 `4.190 ms`；不可信命令仍保留完整签名与 fail-closed 行为。
+- 两轮 1000 AI no-detail 120 tick 报告分别为 Avg/P95=`32.846/40.521 ms` 与 `32.648/39.167 ms`，sampled GC=`0 B/tick`、parity hash 相同且 teardown 完整。该结果只证明平均逻辑 tick 两次进入 30 Hz 预算；P95 与 Unity frame 仍未稳定达标，1000 AI 性能 gate 保持开放。
+- 当前 coarse 热点为 CharacterInput Avg/P95=`7.742/8.924 ms`、RenderDispatch=`7.137/8.619 ms`、CandidateCollect=`4.024/9.580 ms`。下一项代码级性能工作应优先处理 CandidateCollect 尖峰，而不是再次改写已经降半的 BuildCommands 坐标链。
+- fresh 证据：Unity compile `0 error`；完整 EditMode job `6e2addcb4bbb4d089e8f669ac802f595` 为 `714/714 passed`；`BattleRuntimeSelfCheck` 于 `2026-08-03 00:37:00` 为 `PASS`。T8 默认 `stage.dat` 与 Android 真机验证不纳入本轮。
+
+## 2026-08-02：Slice 0/1 fresh 对齐证据（当前口径）
+
+本节覆盖下方较早日期的“当前结论”，但不改变 `J:\QQFile\NTSD2.4\ntsd_release_C#` 的唯一战斗逻辑权威，也不扩大本轮范围。
+
+### 权威诊断与回归
+
+- Authority400 fresh witness：`.omc/validation/authority400-witness-slice0-final-20260802/{W01,W02,W03,W04,W07}/comparison.json` 全部为 `equal-diagnostic`，比较 tick 数为 `8/2/2/1/3`；全部 `certificateEligible=false`。该结果仅证明固定夹具下的诊断相等，不是生产证书。
+- W06 focused EditMode：UnityMCP job `e1e1a3d8b6e74bb895fa0068333a4cf7`，`2/2 passed`。
+- W06 导入前的既有全量 EditMode：UnityMCP job `e1b5a3057e7d4f7bbdd71bbb8cbe381e`，`472/472 passed`、`0 failed`、`0 skipped`。导入 W06 后当时发现总数为 `474`，但该轮只补跑了 W06 的 `2/2`；此后 full-order 运行暴露的 **W05 测试隔离失败**已完成代码修复，但 Unity LicenseRevoked modal 阻止正式 focused summary 与 full-suite 重跑。当前 full suite **不得记录为绿色**。
+- fresh `BattleRuntimeSelfCheck`：`2026-08-02 02:49:44 PASS`。
+
+### Registry 日志与 W05 回归状态
+
+- Unity `SimulationWorld.Registry.partial.cs` 中成功 Register/Unregister 的 `Debug.Log` 已由明确默认 `false` 的 world-level `EnableRegistryLifecycleLoggingForDiagnostics` 保护；只有显式诊断启用时才构造插值字符串并调用 Log。注册、slot/generation、structural event 与 pass 语义不变。fresh Runtime/Editor dotnet build 均为 `0 errors`。
+- `.omc/validation/UnityMCP-http-restored-editor-20260802.log` 长 `3,309,135,435 bytes`（约 `3.309 GB` 十进制），它是定位默认生命周期日志与 Unity 堆栈放大的发现证据，不是性能证据。`ProductionEntityStressHarness` 在压力运行期间使用 `Debug.unityLogger.filterLogType=LogType.Error`，Candidate final300 报告亦为 `runningFilterLogType=Error`；普通 Register/Unregister `Log` 当时已经被过滤。因此本日志修复**不能计入 Candidate long300 性能收益**，也不改变 `34.7836 ms` Avg / `50.888 ms` P95 的既有结论。
+- W05 根因是测试间共享的 `GameConfig.LF2ObjectPrefab` 污染。隔离 fixture 已保存原值、测试期间清空并在 dispose 恢复；严格的每 renderer 两个 mount、current generation 绑定、released generation 不复活和 no-ghost command 契约继续保留。fresh Editor dotnet build 为 `0 errors`。
+- focused Unity 执行到达 `RunFinished` 且日志没有新的 assertion failure 信号，但随后记录 `License revoked: Your Unity Personal Version license has been revoked` 与 `EditorWindow.ShowModal`，MCP job 未形成正式 summary，full suite 也未重跑。当前只能记为**代码修复 / Unity 回归未验收**；不得写 focused PASS、full-suite PASS 或整体已对齐。
+
+### 1000 AI A/B/C 受控报告
+
+| 顺序 / 模式 | Avg (ms) | P95 (ms) | 判断 |
+|---|---:|---:|---|
+| 正向 Legacy | `43.848` | `60.641` | 同轮相对基线 |
+| 正向 Candidate | `31.327` | `38.780` | 相对 Legacy 改善 `28.56%/36.05%` |
+| 正向 Candidate + Remainder | `34.181` | `42.998` | 相对 Candidate 回退 `9.11%/10.88%` |
+| 反向 Candidate | `32.000` | `39.777` | 与正向 Candidate 接近 |
+| 反向 Candidate + Remainder | `34.246` | `40.426` | 相对 Candidate 回退 `7.02%/1.63%` |
+| 反向 Legacy | `74.494` | `163.728` | **异常系统抖动/离群样本**，不得用于稳定相对结论 |
+| Candidate final300 no-detail | `34.7836` | `50.888` | `0 B/tick`；可真实运行，但绝对 30 Hz 未通过 |
+
+上述报告位于 `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-*-20260802.json`。最新长样本 `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-candidate-final300-20260802.json` 为 `StoppedCleanly`、`60 warmup + 300 sample`、Avg `34.7836 ms`、P95 `50.888 ms`、GC average/maximum=`0 B/tick`，final parity overall hash=`68af82ba7cdf284d7f62e889e1cd1188e14e9c15ec48d15167cd6c8dcf210388`；teardown `restored=true`、活动对象/world/claimed slots 清零、cleanup exception=`0`。因此 Candidate workload **可真实运行**，但不得描述为稳定 30 Hz。正向同轮 A/B 对 Candidate 的相对门禁提供 positive evidence；反向 Legacy 的异常离群不能用于闭合稳定性结论，Remainder 在两个顺序下均回退并保持关闭。
+
+### Gate-B candidate list pool fresh 证据
+
+- 修复前 Unified SoA configured 基线 `Temp/NTSD_ProductionEntityStress.dispersed1000.gateb-authority-100ticks-20260802.json` 为 Avg `31.367 ms`、P95 `40.225 ms`。Profiler 根因证据显示 CandidateCollect 每 tick 为约 1000 个 AI 分别分配 `List`，合计约 `155.9 KB`。
+- candidate list pool 修复的 focused Unity job `fe5de...` 为 `4/4`，fresh `BattleRuntimeSelfCheck` 为 `PASS`。
+- fixed 报告 `Temp/NTSD_ProductionEntityStress.dispersed1000.gateb-listpool-100ticks-20260802.json` 有效且为 `StoppedCleanly`；overall hash=`0ce668469bce74a7945adc2981ff7bacc5596f6dcc374d3ee6478a694a70976d`，与旧 configured 基线一致；逻辑 tick Avg/P95=`34.552/45.569 ms`，CandidateCollect Avg/P95/max=`4.991/10.438/14.588 ms`，sampled GC average/maximum=`0/0 B`，Console=`0 error`。
+- Editor 抖动意味着本次与旧 configured 基线的差值既不能证明性能回退，也不能证明达到目标。1000 AI 仍未稳定达到 30 Hz，gate 不关闭；broadphase pair peak=`23,262`，约为均值的 10 倍。broadphase-only SoA shadow 仍在推进且尚未切为 authority；T8 默认 `stage.dat` 与 Android/Adreno/Mali 真机验收继续排除。
+
+### CandidateCollect 负实验记录
+
+#### CandidateStore authority（默认关闭）
+
+| 报告 | authority | Tick Avg/P95 (ms) | CandidateCollect Avg/P95 (ms) |
+|---|---|---:|---:|
+| `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-candidate-neighbor-detail100-20260802.json` | off | `39.1249 / 56.0624` | `4.3780 / 9.5977` |
+| `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-candidate-store-only-detail100-20260802.json` | on | `43.1031 / 65.4513` | `5.3683 / 16.2869` |
+
+- on 相对 off 的 tick Avg/P95 回退 `10.17%/16.75%`，CandidateCollect Avg/P95 回退 `22.62%/69.70%`，未通过至少改善 10% 的性能门。
+- 两份均为 `StoppedCleanly`、GC average/maximum=`0 B/tick`；所有 final parity 分层 hash 与 overall hash 一致（overall=`fa019a38aba6668b7222bf9b61b0400d2cba7b422799bbd0964506a9875450e9`）。on 报告 `requested/configured/applied=true`、`appliedTickCount=160`、legacy fallback=`0`。两份 teardown 均 `restored=true`，活动对象/world/claimed slots 清零，cleanup exception=`0`。
+- 该 authority 路径仅保留为显式诊断/实验入口，生产默认继续关闭；不得把它记为 CandidateCollect 优化完成。
+
+#### Stamped role-aware ordinal map（实验已删除）
+
+| A/B 顺序 | 报告 | stamped | Tick Avg/P95 (ms) |
+|---|---|---|---:|
+| 正向 | `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-stamped-off-detail100-20260802.json` | off | `34.8805 / 46.3090` |
+| 正向 | `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-stamped-on-detail100-20260802.json` | on | `38.8578 / 68.2115` |
+| 反向 | `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-stamped-on-detail100-rev-20260802.json` | on | `34.0021 / 45.7062` |
+| 反向 | `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-stamped-off-detail100-rev-20260802.json` | off | `32.2586 / 40.3518` |
+
+- stamped on 在正向顺序的 tick Avg/P95 回退 `11.40%/47.30%`，反向顺序仍回退 `5.40%/13.27%`，两种顺序均未过门。
+- 四份均为 `StoppedCleanly`、GC average/maximum=`0 B/tick`、teardown `restored=true`、活动对象/world/claimed slots 清零、cleanup exception=`0`；两份 on 均实际应用 `160` ticks 并在 teardown 恢复。反向 A/B 的全部 final parity hash 一致（overall=`fa019a38aba6668b7222bf9b61b0400d2cba7b422799bbd0964506a9875450e9`）。正向 A/B 的 input/RNG/metadata/world/A-rest/V-rest/stats/events hash 一致，但首份 off 为冷池运行（inactive pool capacity `10 -> 1000`），所以 slots/overall hash 与随后暖池 on 不同，不能误写为正向 overall hash 一致。
+- 实验实现、专用接线与测试已经删除；只有上述 JSON 作为负实验记录保留，生产不存在 stamped 开关或默认启用路径。
+
+### 尚未对齐/验收的边界
+
+- Candidate production switch/default 未关闭。
+- CandidateStore authority 性能负实验未过门并保持默认关闭；stamped ordinal map 正反向负实验未过门且实验代码已删除。
+- 绝对稳定 30 Hz 未关闭。
+- candidate list pool 已消除该 Profiler 分配根因并保持 parity，但 fixed Editor 样本不构成性能改善/回退结论；pair peak 与 broadphase-only SoA shadow authority 切换仍未关闭。
+- slot identity parity 未关闭；现有 equal-diagnostic 不替代该合同。
+- W05 根因与代码修复已关闭，但 LicenseRevoked modal 阻止正式 focused summary/full suite，Unity 回归验收仍待关闭，当前 full suite 不得写绿；当前证据不构成“迁移完成”“全量通过”或“整体战斗已对齐”。
+- T8 默认 `stage.dat` 部署和 Android/Adreno/Mali 真机验收继续排除。
+
 ## 2026-07-26：1000 实体等价优化当前结论
 
 **状态：表现构建、Late snapshot 与 AI 查询三条优化已落地并通过代码侧验证；30 Hz 性能门禁未通过。** 本批只改变 Unity 适配层的工作量，不改变 C# 权威定义的 battle pass、候选消费、输入、RNG 或生命周期语义。本节取代下方 2026-07-24 压力阶段中“尚无 per-pass timing”和“AI 仍全槽扫描”的历史描述。
@@ -579,9 +663,9 @@ C# 在 `HitResolve.ApplyCandidate` 里**同一个 switch** 同时处理攻击(0/
 - 新确认差异 1：`LF2ReferencePool.Release` 无条件接收外部 synthetic 实例，造成逻辑池类型污染。
 - 新确认差异 2：factory 角色 opoint 在 `ModuleBind` 注册前用 `slot < 0` 过早拒绝，合法生成会被提前丢弃。
 - 新确认差异 3：tick 中 pending-unregister 对象同 tick 归池复用时，旧生命周期仍留在 registry bucket；后续 `Register` 被旧 bucket 的 `Contains` 拒绝，递归六分支只生成 3 个 clone。
-- 新确认差异 4：池化 `LF2Character.Init` 没有重新分配 `StableId`，复用角色无法保持独立生命周期身份。
+- 新确认差异 4（历史根因）：旧实现依赖构造、`Init` 或 renderer 提前消耗 `StableId`，使池的冷热状态和表现对象创建顺序影响逻辑身份；池化复用时也无法可靠表达独立逻辑生命周期。
 - 新确认差异 5：`SpawnFromOpoint` 缺少 `RelationTeam`、`Unk364` 与 holder-copy 继承，生成角色的关系字段与 authority 不完整。
-- 已修复契约：`Release` 只把 active 实例归池；`Register` 先 finalize 旧 pending lifecycle；`slot < 0` guard 移到 `ModuleBind + Initialize` 之后；character `Init` 重新 `AllocateStableId`；`PostInitLiving` 继承 `Team`、`RelationTeam` 与 holder-copy（含 `Unk364`）。
+- 已修复契约：`Release` 只把 active 实例归池；`Register` 先 finalize 旧 pending lifecycle；`slot < 0` guard 移到 `ModuleBind + Initialize` 之后；每个新逻辑生命周期只在 `SimulationWorld.Register` 成功完成 slot/rest admission 后获得 `StableId`，构造、`Init` 与 renderer 均不得提前消耗逻辑 ID；`PostInitLiving` 继承 `Team`、`RelationTeam` 与 holder-copy（含 `Unk364`）。
 - 回归结果：PP `500 -> 295`，所有生成对象使用 dynamic slot，6 个 clone 拥有 6 个唯一 `StableId`，均实际到达 action/frame `307`，且 6 个 renderer 均可见。
 
 **真实 Unity Play Mode 生产输入链验收：** 在 `NTSD_Battle` Play Mode 中等待 slot0 的 `CharacterInputModule`/`ActionMap` 就绪，再通过 UnityMCP 临时 `InputSystem.Keyboard` 事件按默认物理绑定依次注入 `L (Defend) -> S (Down) -> K (Jump)`。事件真实经过 `InputActionMap -> CharacterInputModule -> SimInputBuffer`，没有直接调用技能、写帧或调用 opoint。观测日志为 `INPUT focused=True buffered=1, attackAction=0, jumpAction=1, defendAction=1, moveY=-1`；这里的 crossed internal mapping 是项目/C# baseline 的预期映射，不是错误。运行结果：
@@ -758,7 +842,7 @@ Unity 有两套：
 
 - **INPUT-1~9：全部已修复并运行时验证。** `CheckRecordedInputAlignmentContracts` 与 shared-DAT 输入矩阵覆盖 state switch、`YInt` 门、frame velocity tail、单一 defend-lock 真值、Super Punch、raw frame write、running 顺序/defend/反向停跑和 frame215。
 - **INTERACT-1~5：全部已修复并运行时验证。** `CheckInteractionRuntimeSlotContracts` 覆盖 dynamic slot `50..399`、满槽直接拒绝、runtime-slot vrest、state3003 双向 vrest 和 non-character kind2 链接；满槽拒绝同时断言不遗留空 registry bucket、renderer pool 或 reference/logic pool 生命周期残留。
-- **NARUTO-DDJ / OPOINT-LIFECYCLE：已修复并运行时验证。** 真实 frame271→272/273→oid205/204→六分支→`6 x oid33/action307` 回归覆盖 reference pool 类型安全、pending lifecycle finalize、factory 注册时机、池化角色 `StableId` 重分配和 opoint 关系字段继承；详细链路见 §4.3。
+- **NARUTO-DDJ / OPOINT-LIFECYCLE：已修复并运行时验证。** 真实 frame271→272/273→oid205/204→六分支→`6 x oid33/action307` 回归覆盖 reference pool 类型安全、pending lifecycle finalize、factory 注册时机、成功注册后按新逻辑生命周期分配 `StableId`，以及 opoint 关系字段继承；详细链路见 §4.3。
 
 #### 历史 Audit2 风险收口（当前均已关闭）
 
@@ -827,7 +911,7 @@ Unity 有两套：
 
 **✅ Naruto DDJ 新确认差异已收口（1 个关联差异簇 / 5 个根因）：**
 
-真实 Naruto 防下跳链暴露的 reference pool 污染、factory 注册时机、pending lifecycle 同槽复用、池化角色 StableId 和 opoint 关系字段继承问题均已修复；完整链回归确认 6 个 clone 到达 action307 且 renderer 可见。
+真实 Naruto 防下跳链暴露的 reference pool 污染、factory 注册时机、pending lifecycle 同槽复用、旧构造/`Init`/renderer 提前消耗 StableId，以及 opoint 关系字段继承问题均已修复；当前机制为成功注册后给每个新逻辑生命周期分配 StableId。完整链回归确认 6 个 clone 到达 action307 且 renderer 可见。
 
 **✅ 已修复真 bug（共 1 项）：**
 
@@ -910,7 +994,7 @@ tick 主循环主干、kind 0/4/9 主流程（含 raw kind9→kind0 预处理与
 | T9（AI） | **已完成 / Unity 运行时已验证** | `SimulationWorld.AiInput.partial.cs` 完整 AI 闭包；human/AI 输入 pass 分段；runtime 字段与 roster/opoint bootstrap；shared-DAT shell | `CheckAiTargetCacheCoordinateAndDeterminism`、`CheckAiHumanInputIsolation` 通过，并回归 T0-T8 |
 | 二次审计 INPUT-1~9 | **全部已修复 / Unity 运行时已验证** | real/shared-DAT input state、raw frame、velocity tail、running/frame215 等契约已按 authority 收口 | `CheckRecordedInputAlignmentContracts` 与 shared-DAT 输入矩阵通过 |
 | 二次审计 INTERACT-1~5 | **全部已修复 / Unity 运行时已验证** | dynamic slot、满槽拒绝、runtime-slot vrest、state3003、non-character kind2 已收口；拒绝路径清理空 bucket/pool/reference 生命周期 | `CheckInteractionRuntimeSlotContracts` 通过 |
-| Naruto DDJ / OPOINT-LIFECYCLE | **已修复 / 当前版本真实 Play Mode 已通过** | active-only reference release；register finalize pending old lifecycle；factory slot guard 后移；pooled character 重分配 StableId；`PostInitLiving` 补 Team/RelationTeam/HolderCopy 继承 | 真实生产输入链 `L -> L+S -> L+S+K` 通过；6 个 unique clone 均到 action307，6 个 renderer 同时可见 |
+| Naruto DDJ / OPOINT-LIFECYCLE | **已修复 / 当前版本真实 Play Mode 已通过** | active-only reference release；register finalize pending old lifecycle；factory slot guard 后移；成功 slot/rest admission 后按新逻辑生命周期分配 StableId；`PostInitLiving` 补 Team/RelationTeam/HolderCopy 继承 | 真实生产输入链 `L -> L+S -> L+S+K` 通过；6 个 unique clone 均到 action307，6 个 renderer 同时可见 |
 | 二次审计 RISK | **历史 RISK-1..5 均已关闭** | locomotion、raw move frame、held/Tracker slot、current-DAT interaction 与 fixed-slot reuse 已收口 | Audit5 对应 `R-GP/R-HC/R-FL/R-LC/R-FT` 总账 15/15 关闭 |
 
 Audit3 历史验证（2026-07-16）：fresh `/m:1` build 为 **0 errors / 42 existing warnings**；`BattleRuntimeSelfCheck.cs` source `18:24:04` < Unity DLL `18:31:52` < `Temp/NTSD_BattleRuntimeSelfCheck.result` `18:33:00`，full self-check 返回 **PASS**。M-1/T4 的 gate、oid8 镜像、identity/presentation、human+AI DJA full-tick、split formal reset 与 `ItrRest` 保留矩阵，以及 Audit3-10/12 的扩展矩阵均包含在该结果中。该结果是针对性断言证据，不是完整 Play Mode 或逐帧等价证明；M-1 已完成 runtime self-check，不能据此扩大为全部战斗逻辑完全对齐。RISK-4 与完整对局逐帧对拍仍是验证缺口；T8 默认 `stage.dat` 部署继续由用户明确暂缓。
@@ -1145,7 +1229,90 @@ R-GP-01 freshness：authority source `2026-07-18 00:11:23` < authority DLL `00:1
 - **当前证据**：`git diff --check` 无 whitespace error；`dotnet build Assembly-CSharp.csproj --no-restore /m:1 /v:minimal` 为 **0 errors / 42 existing warnings**。目标源码最晚时间 `23:15:11` < Unity `Assembly-CSharp.dll` `23:15:37` < fresh result `23:16:33`，`Temp/NTSD_BattleRuntimeSelfCheck.result` 为 **PASS**。本项状态是 **逻辑已修正 / Unity 自动运行时已验证**；真实键盘 Play Mode 的移动起跳体感仍待用户或后续定向验证。
 - **同时关闭的表现阻塞**：fresh 自检先定位出动态扩容池实例的 EntityModel mount 保持 `Invalid` handle。`BattleCentralPresentationMountRegistry.BindOwnerRuntime` 现会直接更新 renderer 本体 mount，并继续保留 slot+generation 校验；P4 pool-overflow 回归随后通过。
 
+## 2026-08-01 — Slice 0 current evidence and open contracts
+
+### Authority and scope
+
+- The sole general battle-logic authority is `J:\QQFile\NTSD2.4\ntsd_release_C#`. C++, disassembly, old implementations, and historical logs are not general authority. The only retained historical directed exceptions are the user-specified Naruto 防下攻 case and jump horizontal momentum; neither may be generalized.
+- T8 default `stage.dat` deployment and Android/mobile rendering remain excluded from this Slice.
+
+### Fresh evidence
+
+- Full `BattleRuntimeSelfCheck`: **PASS** — `.omc/validation/BattleRuntimeSelfCheck-combotxn2-20260801.log`.
+- W01: 6/6 `equal-diagnostic` — `.omc/validation/authority400-witness-root-run-W01-aftercombo2`; W02: 2/2 `equal-diagnostic` — `.omc/validation/authority400-witness-root-run-W02-final`. Both are diagnostic observations only, not certificates.
+- Simulation-only AI short smoke cleanup passed at 100/300/500/1000 entities — `.omc/validation/ProductionEntityStress.dispersed{N}.ai-sim-smoke-20260801.json`.
+- At 1000 entities, average tick was `81.888 ms` (~`12.21 Hz`) and average visible frame was `394.413 ms`; this does **not** meet 30 Hz. Dynamic opoint/capacity makes the four sizes non-monotonic, so the results are a baseline, not performance acceptance.
+
+### Confirmed but open
+
+| Item | Authority / Unity finding | Current status |
+|---|---|---|
+| C07 | C# `RunLateEntityUpdate` has no independent collision; Unity `LateEntityUpdateAll` additionally calls `SimEntityCollision`. | confirmed difference; pending contract correction, not complete. |
+| W08 / C12 | `LF2ObjectRenderer` presentation can release/consume forced runtime integer position and write back `XInt/YInt/ZInt`. | P0 presentation writeback; move it to the deterministic TU-success physics tail; not fixed. |
+| W03 / W04 v4 | Structural witnesses are still being implemented. | not complete; do not mark verified. |
+
 ### Texture2DArray 现状澄清
 
 - 中央渲染的角色图集主路径已经使用 `BattleSpriteCentralBindingMode.AtlasTextureArray`；设备不支持数组或策略选择 `OrderedPages` 时才回退到多 `Texture2D`。
 - 公共阴影当前由 `BattleCommonVisualCatalog` 发布为 `SourceTexture2D`，没有进入角色的 `Texture2DArray`，所以阴影与角色仍会形成不同 resource segment/draw。该事实是批次边界，不代表角色数组路径未实现。
+
+## 2026-08-02 — Slice 1 identity / AI 热路径状态（未完成 Unity 验收）
+
+| 项目 | 已落地实现 | 当前验证状态 |
+|---|---|---|
+| StableId lifecycle | 逻辑 ID 仅在 `SimulationWorld.Register` 成功完成 slot/rest admission 后分配；renderer 改以 `GetInstanceID()` 作仅表现 identity；显式 ID 冲突 fail-closed，并推进 auto allocator 下界。 | `StableIdDeterminismEditorTests` 已新增，覆盖冷热池、Reset checksum、失败注册零消耗、同槽 generation/新 identity；Unity focused job 因 license modal 为 `0/unknown`，不可标 PASS。 |
+| AI decision row context | `AiDecisionRowContext` 默认关闭；每 AI 一次 bind，正常两次 gateway/六 identity rows，无全槽预扫。RNG 前失败整实体 fallback；RNG 后失败 hard failure，禁止 replay legacy。 | focused/`0 B/tick` 契约与 stress gate 已写入；尚未得到新鲜 Unity test/stress 结果。 |
+
+- 本轮根目录最终顺序 `dotnet build` 为 Runtime `0 error / 18 warnings`、Editor `0 error / 48 warnings`，且 `git diff --check` 通过。这些只证明编译/空白检查，不证明运行时行为。
+- Architect P1 denominator 已在代码合同中关闭：stress 不再从 tick 结束时的 `AiControlled` 数量反推分母，而是精确统计 eligible invocation；门禁为 `applied + fallback + hard == eligible`，并覆盖 dead、coordinate、DAT-change 与 non-character 分支。dotnet 构建为 0 error，但 Unity 运行仍待主流程执行。
+- StableId P2 测试新增两项：zero-ID rest-bind rollback 不消耗逻辑 ID；active renderer 以相反 activation order 创建时，逻辑 checksum 与 RNG 保持不变。测试代码已写入，尚未宣称 Unity PASS。
+- UnityMCP HTTP 已恢复；目标 Unity Editor 被 `License revoked: Your Unity Personal Version license has been revoked` modal 阻塞。fresh `BattleRuntimeSelfCheck`、StableId focused test 和 1000 AI 压力测试均待 modal 解除后重跑。
+- 最近可用真实 1000 AI long300 Candidate 报告仍为 `Temp/NTSD_ProductionEntityStress.dispersed1000.slice1-candidate-final300-20260802.json`：Avg `34.7836 ms`（约 `28.75 Hz`）、P95 `50.888 ms`、max `75.992 ms`、`0 B/tick`。未达到稳定 30 Hz，不能宣称性能验收。
+- T8 默认 `stage.dat` 与 Android 真机验证继续暂缓/排除。
+
+## 2026-08-02 — Fresh Unity 验收与 1000 AI DecisionRowContext A/B
+
+### 自动验收
+
+- Unity fresh scripts refresh 后 Console 为 `0 error`。
+- focused tests：`202/202 PASS`，耗时 `44.908 s`。
+- full EditMode：`483/483 PASS`，耗时 `147.809 s`。
+- fresh `BattleRuntimeSelfCheck`：**PASS**。
+- 以上结果关闭了本轮先前记录的 license modal 验收阻塞；不改变更早历史证据自身的时间边界。
+
+### 1000 全 AI、同 seed、60 warmup + 300 sample
+
+| A/B 顺序 | Avg ms | P95 ms | P99 ms | Max ms |
+|---|---:|---:|---:|---:|
+| forward baseline | `32.878289` | `39.47168` | `52.064546` | `224.4373` |
+| forward `DecisionRowContext` enabled | `34.418292` | `43.71326` | `56.953651` | `63.1937` |
+| reverse baseline | `32.084814` | `39.6633` | `46.135898` | `63.9063` |
+
+- 三份报告的 overall/RNG/slots hashes 相同，GC 为 `0 B/tick`，teardown 均为 `restored=true`、cleanup exception=`0`。
+- enabled 路径精确计数为 eligible=`359000`、applied=`359000`、bind=`359000`、gateway=`718000`、identity rows=`2154000`、fallback=`0`、hard failure=`0`；行为与 denominator 门通过。
+- 性能门未通过：enabled 的 Avg/P95 双向回退，因此 `AiDecisionRowContext` 继续默认关闭且不记为性能收益。baseline Avg 略高于 30 Hz，但 P95 约 `39.5–39.7 ms`，不能宣称稳定 30 Hz。
+- 下一步为 Late snapshot `3 -> 1`。T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+
+## 2026-08-02 — Late snapshot `3 -> 1` promotion
+
+### 对齐合同
+
+- 权威 C# `GameTick` 的单实体 Late 连续链没有中间 snapshot。Unity 仅把 Runtime mirror 从三次合并为最终发布，不调整 pass/flush/opoint/RNG/slot/lifecycle。
+- 普通 active entity 的 `Consolidated` 模式仅 Tail final refresh 一次；11xx/12xx FrameExit 保留即时 refresh；inactive/free/cleanup 不发布无效 snapshot；transition 内部冗余 refresh 被跳过。
+- `LegacyThree` 显式 oracle 继续保留，便于 A/B 和回归定位。
+
+六份 A/B 报告前缀为 `Temp/NTSD_ProductionEntityStress.dispersed1000.late-snapshot-ab-*-20260802.json`。
+
+| 测试 | LegacyThree Avg/P95 | Consolidated Avg/P95 | 关键证据 |
+|---|---|---|---|
+| detailed100 | `31.898607 / 39.055705 ms` | `31.038641 / 38.034015 ms` | legacy FrameTick/Death/Tail=`100000/100000/100000`；consolidated=`0/0/100000`；delta=`-0.859966/-1.02169 ms` |
+| long300 forward | `31.619902 / 39.4185 ms` | `31.063709 / 37.637035 ms` | 同 seed、60 warmup + 300 sample |
+| long300 reverse | `34.39729 / 49.865545 ms` | `32.93091 / 45.88688 ms` | 反向顺序仍改善 |
+
+- detailed100 overall=`fa019a38aba6668b7222bf9b61b0400d2cba7b422799bbd0964506a9875450e9`；两组 long300 overall=`68af82ba7cdf284d7f62e889e1cd1188e14e9c15ec48d15167cd6c8dcf210388`。各自 RNG/slots/events 相同，全部 `0 B/tick`、清理完整；long300 `restored=true`、cleanup exception=`0`。
+- Architect **PASS**，已 promotion：ordinary world、request empty/default、Window default、AI smoke 均使用 `Consolidated`，显式 legacy 仍可选。
+- fresh runtime/editor build 均 `0 error`；Unity clean refresh `0 error`；focused `135/135 PASS`（job `d63ca30b2e7049a88d718807a6d9820d`）；full EditMode `495/495 PASS`（job `7936ba59d6a44553b3d41429821810d1`）；fresh `BattleRuntimeSelfCheck` **PASS**。
+- omitted-mode smoke `Temp/NTSD_ProductionEntityStress.smoke50.late-snapshot-default-promotion-20260802.json` 为 `SmokePassed`，requested/effective consolidated，`0 B/tick`、`restored=true`、cleanup exception=`0`；退出 Play Mode并清 Console 后仍为 `0 error`。
+- 诚实状态：该优化已晋升，但 1000 AI 未稳定 30 Hz。best forward Avg `31.063709 ms`、P95 `37.637035 ms`，reverse P95 `45.88688 ms`。
+- 后续 SoA slice 应优先处理 CharacterInput Avg `9.188 ms`（Remaining `5.223 ms`）、CandidateCollect Avg/P95 `3.878/9.405 ms`、Late FrameTick `2.377 ms`、FrameAdvance `2.05 ms`。
+- T8 默认 `stage.dat` 与 Android 真机验证继续排除。

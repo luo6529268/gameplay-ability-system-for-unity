@@ -7,6 +7,7 @@ namespace NTSDParity;
 internal static class TraceCompareCommand
 {
     internal const string TraceSchema = "ntsd-battle-trace-v3";
+    internal const string StructuralTraceSchema = "ntsd-battle-trace-v4";
     internal const int RuntimeSlotCount = 400;
     internal const string StrictProfile = "strict";
     internal const string FixedWorldCameraProfile = "fixed-world-camera";
@@ -195,6 +196,7 @@ internal static class TraceCompareCommand
             return Fail(report, "stream", authorityHeader.ExpectedTicks + 1, "unexpected-extra-tick", authorityExtra, unityExtra, fullFieldDiff);
 
         report.CertificateEligible = !diagnosticComparison &&
+                                     authorityHeader.Schema == TraceSchema &&
                                      authorityHeader.Detail == "full" &&
                                      unityHeader.Detail == "full";
         report.CertificateClass = report.CertificateEligible
@@ -212,7 +214,9 @@ internal static class TraceCompareCommand
     {
         JsonObject header = ParseObject(line, producer + " header");
         RequireString(header, "kind", "header");
-        RequireString(header, "schema", TraceSchema);
+        string schema = RequireString(header, "schema");
+        if (schema is not (TraceSchema or StructuralTraceSchema))
+            throw new InvalidDataException("schema must be ntsd-battle-trace-v3 or ntsd-battle-trace-v4");
 
         int expectedTicks = RequireInt(header, "expectedTicks");
         if (expectedTicks <= 0)
@@ -259,6 +263,7 @@ internal static class TraceCompareCommand
 
         return new HeaderContract
         {
+            Schema = schema,
             ExpectedTicks = expectedTicks,
             Detail = detail,
             DataFixture = dataFixture,
@@ -278,6 +283,8 @@ internal static class TraceCompareCommand
     {
         if (authority.ExpectedTicks != unity.ExpectedTicks)
             return "expectedTicks";
+        if (!string.Equals(authority.Schema, unity.Schema, StringComparison.Ordinal))
+            return "schema";
         if (authority.LoadedChars != unity.LoadedChars)
             return "loadedChars";
         if (!string.Equals(authority.Manifest, unity.Manifest, StringComparison.Ordinal))
@@ -315,6 +322,10 @@ internal static class TraceCompareCommand
         if (RequireInt(worldBody, "objectCount") != topLevelObjectCount)
             throw new InvalidDataException("top-level objectCount does not match world.objectCount");
 
+        JsonObject eventsBody = RequireObject(tick, "events");
+        if (header.Schema == StructuralTraceSchema)
+            ValidateStructuralEvents(eventsBody, expectedTick);
+
         Dictionary<string, JsonNode?> domains = new(StringComparer.Ordinal)
         {
             ["input"] = CanonicalJson.Canonicalize(RequireNode(tick, "input")),
@@ -323,7 +334,7 @@ internal static class TraceCompareCommand
             ["aRest"] = NormalizeARest(RequireObject(tick, "aRest")),
             ["vRest"] = NormalizeVRest(RequireObject(tick, "vRest")),
             ["stats"] = CanonicalJson.Canonicalize(RequireNode(tick, "stats")),
-            ["events"] = CanonicalJson.Canonicalize(RequireNode(tick, "events")),
+            ["events"] = CanonicalJson.Canonicalize(eventsBody),
         };
         SlotValidation slots = ValidateSlots(tick, header.Detail);
         domains["slots"] = slots.CommitmentDomain;
@@ -384,6 +395,118 @@ internal static class TraceCompareCommand
             throw new ArgumentException(
                 $"--profile must be '{StrictProfile}' or '{FixedWorldCameraProfile}'.");
         }
+    }
+
+    private static void ValidateStructuralEvents(JsonObject events, int expectedTick)
+    {
+        JsonArray structural = RequireArray(events, "structural");
+        foreach (JsonNode? node in structural)
+        {
+            JsonObject item = node as JsonObject
+                ?? throw new InvalidDataException("structural event must be an object");
+            if (RequireInt(item, "tick") != expectedTick)
+                throw new InvalidDataException("structural event tick must match its containing tick");
+            _ = RequireString(item, "pass");
+            _ = RequireString(item, "action");
+            _ = RequireString(item, "before");
+            _ = RequireString(item, "after");
+            _ = RequireString(item, "sourceKind");
+            int cursorSlot = RequireInt(item, "cursorSlot");
+            int actorSlot = RequireInt(item, "actorSlot");
+            int slot = RequireInt(item, "slot");
+            int searchStart = RequireInt(item, "searchStart");
+            int searchEndExclusive = RequireInt(item, "searchEndExclusive");
+            int lifecycleEpoch = RequireInt(item, "lifecycleEpoch");
+            if (cursorSlot is < -1 or >= RuntimeSlotCount ||
+                actorSlot is < -1 or >= RuntimeSlotCount ||
+                slot is < -1 or >= RuntimeSlotCount)
+            {
+                throw new InvalidDataException("structural event slot fields must stay within -1..399");
+            }
+            if (searchStart is < -1 or > RuntimeSlotCount ||
+                searchEndExclusive is < -1 or > RuntimeSlotCount ||
+                (searchStart >= 0 && searchEndExclusive <= searchStart))
+            {
+                throw new InvalidDataException("structural event search range is invalid");
+            }
+            if (lifecycleEpoch < 0)
+                throw new InvalidDataException("structural lifecycleEpoch must be nonnegative");
+            if (string.Equals(RequireString(item, "action"), "link-validation", StringComparison.Ordinal))
+                ValidatePositiveLinkStructuralEvent(item, actorSlot, cursorSlot, slot);
+        }
+    }
+
+    private static void ValidatePositiveLinkStructuralEvent(
+        JsonObject item,
+        int actorSlot,
+        int cursorSlot,
+        int slot)
+    {
+        int beforeLinkState = RequireInt(item, "beforeLinkState");
+        int beforeTargetSlot = RequireInt(item, "beforeTargetSlot");
+        int beforeHeldWeaponSlot = RequireInt(item, "beforeHeldWeaponSlot");
+        int afterLinkState = RequireInt(item, "afterLinkState");
+        int afterTargetSlot = RequireInt(item, "afterTargetSlot");
+        int afterHeldWeaponSlot = RequireInt(item, "afterHeldWeaponSlot");
+        bool targetActive = RequireBool(item, "targetActive");
+        int observedHolderSlot = RequireInt(item, "observedHolderSlot");
+        string outcome = RequireString(item, "outcome");
+        string reason = RequireString(item, "reason");
+        int targetBeforeHolderSlot = RequireInt(item, "targetBeforeHolderSlot");
+        int targetBeforeLinkState = RequireInt(item, "targetBeforeLinkState");
+        int targetAfterHolderSlot = RequireInt(item, "targetAfterHolderSlot");
+        int targetAfterLinkState = RequireInt(item, "targetAfterLinkState");
+
+        int[] linkSlots =
+        [
+            beforeTargetSlot,
+            beforeHeldWeaponSlot,
+            afterTargetSlot,
+            afterHeldWeaponSlot,
+            observedHolderSlot,
+            targetBeforeHolderSlot,
+            targetAfterHolderSlot,
+        ];
+        if (linkSlots.Any(value => value is < -1 or >= RuntimeSlotCount))
+            throw new InvalidDataException("positive-link event slot fields must stay within -1..399");
+        if (actorSlot != slot || cursorSlot != slot)
+            throw new InvalidDataException("positive-link event actor/cursor/slot must identify the holder slot");
+        if (RequireString(item, "before") !=
+            $"{beforeLinkState}/{beforeTargetSlot}/{beforeHeldWeaponSlot}" ||
+            RequireString(item, "after") !=
+            $"{afterLinkState}/{afterTargetSlot}/{afterHeldWeaponSlot}")
+        {
+            throw new InvalidDataException("positive-link before/after must match the canonical forward fields");
+        }
+        if (targetBeforeHolderSlot != observedHolderSlot)
+            throw new InvalidDataException("positive-link observed holder must match target reverse before state");
+        if (targetBeforeHolderSlot != targetAfterHolderSlot ||
+            targetBeforeLinkState != targetAfterLinkState)
+        {
+            throw new InvalidDataException("positive-link validation must not mutate target reverse fields");
+        }
+
+        if (outcome == "kept")
+        {
+            if (reason != "reciprocal" || !targetActive || observedHolderSlot != actorSlot ||
+                beforeLinkState <= 0 || afterLinkState != beforeLinkState ||
+                afterTargetSlot != beforeTargetSlot || afterHeldWeaponSlot != beforeHeldWeaponSlot)
+            {
+                throw new InvalidDataException("positive-link kept event is not reciprocal and unchanged");
+            }
+            return;
+        }
+
+        if (outcome != "cleared" || reason is not ("holder-mismatch" or "target-inactive") ||
+            beforeLinkState <= 0 || afterLinkState != 0 ||
+            afterTargetSlot != -1 || afterHeldWeaponSlot != -1)
+        {
+            throw new InvalidDataException("positive-link cleared event has invalid outcome fields");
+        }
+        if (reason == "holder-mismatch" && (!targetActive || observedHolderSlot == actorSlot))
+            throw new InvalidDataException("positive-link holder-mismatch event must observe a different active holder");
+        if (reason == "target-inactive" && targetActive)
+            throw new InvalidDataException("positive-link target-inactive event must observe an inactive target");
     }
 
     private static SlotValidation ValidateSlots(JsonObject tick, string detail)
@@ -619,6 +742,7 @@ internal static class TraceCompareCommand
 
     private sealed class HeaderContract
     {
+        public string Schema { get; set; } = string.Empty;
         public int ExpectedTicks { get; set; }
         public int LoadedChars { get; set; }
         public string Detail { get; set; } = string.Empty;

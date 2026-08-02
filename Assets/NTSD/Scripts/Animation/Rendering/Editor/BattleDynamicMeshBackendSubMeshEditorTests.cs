@@ -114,9 +114,22 @@ namespace NTSD.Animation.Rendering.Editor
 
             Mesh firstMesh = backend.GetChunkMesh(0);
             Mesh secondMesh = backend.GetChunkMesh(1);
-            UnityEngine.Object.DestroyImmediate(firstMesh);
+            AssertIndexBufferStateForDevice(firstMesh, BattleDynamicMeshBackend.IndicesPerChunk);
+            AssertIndexBufferStateForDevice(secondMesh, BattleDynamicMeshBackend.IndicesPerQuad);
+
+            BuildFrame(frame, 9, 0, false);
+            backend.Build(frame, resolver);
+            Assert.That(backend.ActiveChunkCount, Is.Zero);
+            AssertInertTail(firstMesh, 0);
+            AssertInertTail(secondMesh, 0);
 
             BuildFrame(frame, 10, 4097, false);
+            backend.Build(frame, resolver);
+            AssertIndexBufferStateForDevice(firstMesh, BattleDynamicMeshBackend.IndicesPerChunk);
+            AssertIndexBufferStateForDevice(secondMesh, BattleDynamicMeshBackend.IndicesPerQuad);
+            UnityEngine.Object.DestroyImmediate(firstMesh);
+
+            BuildFrame(frame, 11, 4097, false);
             backend.Build(frame, resolver);
             Mesh recoveredMesh = backend.GetChunkMesh(0);
             Assert.That(firstMesh == null, Is.True);
@@ -186,6 +199,18 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(descriptor.vertexCount, Is.Zero);
                 Assert.That(descriptor.bounds.size, Is.EqualTo(Vector3.zero));
             }
+        }
+
+        private static void AssertIndexBufferStateForDevice(Mesh mesh, int expectedActiveIndexCount)
+        {
+            Assert.That(mesh.GetIndexCount(0), Is.EqualTo(expectedActiveIndexCount));
+            using GraphicsBuffer indexBuffer = mesh.GetIndexBuffer();
+            Assert.That(indexBuffer, Is.Not.Null);
+            Assert.That(indexBuffer.count, Is.EqualTo(BattleDynamicMeshBackend.IndicesPerChunk));
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
+                Assert.That(mesh.GetNativeIndexBufferPtr(), Is.EqualTo(IntPtr.Zero));
+            else
+                Assert.That(mesh.GetNativeIndexBufferPtr(), Is.Not.EqualTo(IntPtr.Zero));
         }
 
         private sealed class DescriptorResolver : IBattleCentralResourceResolver

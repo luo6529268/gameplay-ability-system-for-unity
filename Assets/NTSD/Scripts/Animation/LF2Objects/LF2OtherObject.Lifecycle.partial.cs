@@ -8,8 +8,6 @@ namespace NTSD.Animation.LF2Objects
     {
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            AllocateStableId();
-
             PS = new PhysicsState();
             PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
@@ -30,12 +28,11 @@ namespace NTSD.Animation.LF2Objects
             Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
 
             InitializeParent(task);
-            InitializePosition(task);
+            ApplyInitialRuntimePosition(task);
             InitializeDirection(task);
             InitializeFrame(task);
             InitializeVelocity(task);
             InitializeHealth();
-            InitializeRuntimeIntPosition(task);
 
             SimulationTickDriver.Instance?.World?.Register(this);
         }
@@ -83,21 +80,6 @@ namespace NTSD.Animation.LF2Objects
             RelationOwnerSlot = -1;
             OwnerEntityIndex = -1;
             SpawnerEntityIndex = -1;
-        }
-
-        private void InitializePosition(OPointCreateTask task)
-        {
-            if (task.useDirectRuntimePosition)
-            {
-                PS.x = task.directX;
-                PS.y = task.directY;
-                PS.z = task.directZ;
-                return;
-            }
-
-            PS.x = task.pos.x;
-            PS.y = task.pos.y;
-            PS.z = task.z;
         }
 
         private void InitializeDirection(OPointCreateTask task)
@@ -152,18 +134,5 @@ namespace NTSD.Animation.LF2Objects
             Health.MaxMP = NTSDGlobal.Default.Health.MpFull;
         }
 
-        private void InitializeRuntimeIntPosition(OPointCreateTask task)
-        {
-            if (task == null)
-                return;
-
-            if (task.useInitialRuntimeIntPosition)
-            {
-                ApplyForcedRuntimeIntPosition(task.initialRuntimeX, task.initialRuntimeY, task.initialRuntimeZ);
-                return;
-            }
-
-            ClearForcedRuntimeIntPosition();
-        }
     }
 }

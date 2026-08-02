@@ -93,8 +93,6 @@ namespace NTSD.Animation.LF2Objects
 
         public LF2Character() : base()
         {
-            AllocateStableId();
-
             // 创建角色专用模块
             InputState = new NTSDInputStateModule();
             _hitCounters = new LF2HitCountersModule();
@@ -859,9 +857,8 @@ namespace NTSD.Animation.LF2Objects
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, 0);
 
-            SetOpointPosition(task);
+            ApplyInitialRuntimePosition(task);
             SetOpointVelocity(task);
-            InitializeRuntimeIntPosition(task);
 
             FrameDelay = task.frameDelay;
             AttackExempt = task.attackExempt;
@@ -872,14 +869,6 @@ namespace NTSD.Animation.LF2Objects
             Controller = new CharacterInputModule();
             _preserveOpointActionZero = task.preserveActionZero;
             _initializedFromOpoint = true;
-        }
-
-        private void SetOpointPosition(OPointCreateTask task)
-        {
-            if (task.useDirectRuntimePosition)
-                SetPos(task.directX, task.directY, task.directZ);
-            else
-                SetPos(task.pos.x, task.pos.y, task.z);
         }
 
         private void SetOpointVelocity(OPointCreateTask task)
@@ -895,20 +884,6 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Vx = Dirh() * task.opoint.dvx;
             Runtime.Vy = task.opoint.dvy;
             Runtime.Vz = 0f;
-        }
-
-        private void InitializeRuntimeIntPosition(OPointCreateTask task)
-        {
-            if (task == null)
-                return;
-
-            if (task.useInitialRuntimeIntPosition)
-            {
-                ApplyForcedRuntimeIntPosition(task.initialRuntimeX, task.initialRuntimeY, task.initialRuntimeZ);
-                return;
-            }
-
-            ClearForcedRuntimeIntPosition();
         }
 
         public void InjectDependencies(Transform entityTransform, Transform visualTransform, string name)
@@ -941,7 +916,6 @@ namespace NTSD.Animation.LF2Objects
             if (task is not OPointCreateTask opTask)
                 return;
 
-            AllocateStableId();
             InitializeFromOpoint(opTask);
         }
 
@@ -1085,12 +1059,12 @@ namespace NTSD.Animation.LF2Objects
         public override void SimTransit(int tickIndex)
         {
             if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
-                RunReleaseFrameAdvance(tickIndex, consumeInitialRuntimePosition: true);
+                RunReleaseFrameAdvance(tickIndex);
             else
                 RunSharedNonCharacterDatFrameAdvance();
         }
 
-        private bool RunReleaseFrameAdvance(int tickIndex, bool consumeInitialRuntimePosition)
+        private bool RunReleaseFrameAdvance(int tickIndex)
         {
             if (!TryEnterReleaseFrameAdvanceAfterDelay())
                 return false;
@@ -1105,9 +1079,6 @@ namespace NTSD.Animation.LF2Objects
             PromoteState12AirborneFrameIfNeeded(tickIndex);
             PromoteBurningAirborneFrame205IfNeeded();
             ResetWeaponCountOutsideState12FrameAdvanceTail();
-
-            if (consumeInitialRuntimePosition)
-                ConsumeForcedRuntimeIntPosition();
 
             return true;
         }
@@ -1391,6 +1362,7 @@ namespace NTSD.Animation.LF2Objects
         protected override void SyncCpointHeldPositionStep10(LF2Entity victimEntity, LF2FrameData catcherFrame, CatchPoint catcherCpoint)
         {
             _catchResolver.SyncCpointHeldPositionStep10(victimEntity, catcherFrame, catcherCpoint);
+            victimEntity?.Runtime.SyncIntegerPosition();
         }
 
         private bool State_Standing(string eventType, object eventData)

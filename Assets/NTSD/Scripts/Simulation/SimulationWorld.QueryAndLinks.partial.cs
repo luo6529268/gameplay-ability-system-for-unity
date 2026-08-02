@@ -79,6 +79,10 @@ namespace NTSD.Simulation
 
         public void ValidateHeldLinksAll(int tickIndex)
         {
+            IBattleParityStructuralEventSink eventSink = structuralEventSink;
+            if (eventSink != null)
+                SetStructuralEventContextForDiagnostics(tickIndex, "positive-link-validation");
+
             ForEachEntityByRuntimeSlot(holder =>
             {
                 int holderSlot = GetRuntimeSlotOrder(holder);
@@ -92,12 +96,60 @@ namespace NTSD.Simulation
                 LF2Entity target = targetRuntimeSlot >= 0 && targetRuntimeSlot < RuntimeSlotCapacity
                     ? FindEntityByRuntimeSlotCurrent(targetRuntimeSlot)
                     : null;
-                if (target == null || target.Runtime.HolderStableId != holderSlot)
+                bool targetActive = target != null;
+                int observedHolderSlot = targetActive ? target.Runtime.HolderStableId : -1;
+                int beforeLinkState = 0;
+                int beforeTargetSlot = -1;
+                int beforeHeldWeaponSlot = -1;
+                int targetBeforeLinkState = 0;
+                if (eventSink != null)
+                {
+                    // These fields exist solely for the structural witness. Keep their
+                    // reads out of the normal positive-link validation hot path.
+                    beforeLinkState = holder.Runtime.LinkState;
+                    beforeTargetSlot = holder.Runtime.TargetSlotIndex;
+                    beforeHeldWeaponSlot = holder.Runtime.HeldWeaponStableId;
+                    targetBeforeLinkState = targetActive ? target.Runtime.LinkState : 0;
+                }
+                bool valid = targetActive && observedHolderSlot == holderSlot;
+                if (!valid)
                 {
                     holder.Runtime.LinkState = 0;
                     holder.Runtime.TargetSlotIndex = -1;
                     holder.Runtime.HeldWeaponStableId = -1;
                     RefreshRuntimeSnapshot(holder);
+                }
+
+                if (eventSink != null)
+                {
+                    int targetAfterHolderSlot = targetActive ? target.Runtime.HolderStableId : -1;
+                    int targetAfterLinkState = targetActive ? target.Runtime.LinkState : 0;
+                    eventSink.Record(new BattleParityStructuralEvent
+                    {
+                        Tick = tickIndex,
+                        Pass = "positive-link-validation",
+                        Action = "link-validation",
+                        CursorSlot = holderSlot,
+                        ActorSlot = holderSlot,
+                        Slot = holderSlot,
+                        Before = $"{beforeLinkState}/{beforeTargetSlot}/{beforeHeldWeaponSlot}",
+                        After = $"{holder.Runtime.LinkState}/{holder.Runtime.TargetSlotIndex}/{holder.Runtime.HeldWeaponStableId}",
+                        SourceKind = "positive-link",
+                        BeforeLinkState = beforeLinkState,
+                        BeforeTargetSlot = beforeTargetSlot,
+                        BeforeHeldWeaponSlot = beforeHeldWeaponSlot,
+                        AfterLinkState = holder.Runtime.LinkState,
+                        AfterTargetSlot = holder.Runtime.TargetSlotIndex,
+                        AfterHeldWeaponSlot = holder.Runtime.HeldWeaponStableId,
+                        TargetActive = targetActive,
+                        ObservedHolderSlot = observedHolderSlot,
+                        Outcome = valid ? "kept" : "cleared",
+                        Reason = valid ? "reciprocal" : targetActive ? "holder-mismatch" : "target-inactive",
+                        TargetBeforeHolderSlot = observedHolderSlot,
+                        TargetBeforeLinkState = targetBeforeLinkState,
+                        TargetAfterHolderSlot = targetAfterHolderSlot,
+                        TargetAfterLinkState = targetAfterLinkState,
+                    });
                 }
             });
         }
@@ -153,24 +205,17 @@ namespace NTSD.Simulation
             if (dst == null) return;
             dst.Clear();
 
-            var bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null) return;
-
-            foreach (int simOrder in bucketKeys)
+            // Every registered LF2Entity owns one runtime slot. Scanning the slot
+            // table therefore produces the same ascending runtime order without a
+            // bucket-key snapshot, LINQ sort, or temporary enumerator.
+            for (int runtimeSlot = 0;
+                 runtimeSlot < _runtimeSlots.LogicalCapacity;
+                 runtimeSlot++)
             {
-                if (!_buckets.TryGetValue(simOrder, out Bucket bucket)) continue;
-                bucket.EnsureSorted(GetRuntimeStableId);
-
-                for (int i = 0; i < bucket.items.Count; i++)
-                {
-                    if (bucket.items[i] is LF2Entity entity && IsActiveForCurrentPass(entity))
-                    {
-                        dst.Add(entity);
-                    }
-                }
+                LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
+                if (entity != null && IsActiveForCurrentPass(entity))
+                    dst.Add(entity);
             }
-
-            dst.Sort(CompareRuntimeSlotOrder);
         }
 
         private void GetActiveEntitiesByRuntimeSlot(List<LF2Entity> dst)
@@ -178,11 +223,14 @@ namespace NTSD.Simulation
             if (dst == null) return;
             dst.Clear();
 
-            ForEachEntityByRuntimeSlot(entity =>
+            for (int runtimeSlot = 0;
+                 runtimeSlot < _runtimeSlots.LogicalCapacity;
+                 runtimeSlot++)
             {
+                LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
                 if (entity != null && IsActiveForCurrentPass(entity))
                     dst.Add(entity);
-            });
+            }
         }
     }
 }

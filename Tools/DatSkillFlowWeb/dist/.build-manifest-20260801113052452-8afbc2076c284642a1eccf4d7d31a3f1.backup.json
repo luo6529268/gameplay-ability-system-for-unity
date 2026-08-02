@@ -1,0 +1,718 @@
+{
+  "schemaVersion": 1,
+  "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+  "clientRoot": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+  "serverEntry": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/cli.js",
+  "testFiles": [
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/build.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/client-build-manifest.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/manifest-integrity.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-api.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-native-file.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-save.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-static-policy.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-windows-replace.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-workspace.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/server.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/verified-loader.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-html-contract.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-render-contract.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-timeline-controller.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/diagnostics.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate1a-corpus-roundtrip.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate1a-data-pipeline.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-code-unit-order.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-sim-core.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-timeline-trace.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3a-hit-input.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3a-input-authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b1-opoint-authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b1-opoint.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b2-wpoint-authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b2-wpoint.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate4-motion-authority-ledger.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate4-motion.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/preservation-manifest.test.js",
+    "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/trace-envelope.test.js"
+  ],
+  "runtimeAssets": [
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/runtime/windows-replace-file.ps1",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2019,
+      "sha256": "fc6f79541e00edfd6b91585b13ed8fdff440cef5029bcdd70aed8af70524e8eb"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/runtime/windows-safe-file.ps1",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 49404,
+      "sha256": "aa8a088732397d9767716b27eb9cac759c523c25f732322c10eba49514d19962"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/index.html",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2851,
+      "sha256": "2bf10214a95875ae94aad11403400efaf2aedc0b0f907ad1343b4ba0e9a90dc7"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/runtime/windows-replace-file.ps1",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2019,
+      "sha256": "fc6f79541e00edfd6b91585b13ed8fdff440cef5029bcdd70aed8af70524e8eb"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/runtime/windows-safe-file.ps1",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 49404,
+      "sha256": "aa8a088732397d9767716b27eb9cac759c523c25f732322c10eba49514d19962"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/scripts/manifest-integrity.mjs",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 13132,
+      "sha256": "8fa344f43c8f4536235cf3da961126a158e6f8e0815f92302e143f56660fc595"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/scripts/preservation-manifest.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1533,
+      "sha256": "a07f0107244f171c1bbd05f0e097612278310aa696fc82cbaa9f5db3e0cf56e4"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/client/styles.css",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3393,
+      "sha256": "1ccee51be1944b8d31ff511379f9b5aa1f359b27f02d602ca45a4554d3902ea9"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/assets/bmp.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5260,
+      "sha256": "f7ea0586fb7b2133e88f6b81905ecdc879e221f8579219ed0836c0df21855eaf"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/assets/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 101,
+      "sha256": "1a0ad104d398e1f8e081c36cd71662a5e9dff1238656dbcf68bb9acbb801498e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate1-data-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3379,
+      "sha256": "762f51defe86a87e55a2f8f9a0ce537b42309ea2df5b2a57a64469fcf627f395"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate2-sim-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5843,
+      "sha256": "e3d39aaa0864255637dd91dd21c8c7cd05ef049c598313fb8624e92603561fcf"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate3-input-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 4522,
+      "sha256": "64735c927b1791865764c796fa4614bd497411da0b67a170504283f3deaa3a9b"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate3-opoint-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3442,
+      "sha256": "5e2cd5e9a09821eb30d369c4bd6fc94f6d8d42f127f757f861732ab878269b75"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate3-wpoint-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6206,
+      "sha256": "30014b6fa5952a3b8bee138025426ef00eb60c2854ab339ff46ddefbfde4ac80"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/gate4-motion-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 7149,
+      "sha256": "784b6abd03a82d4bbac406866041d9511aa90a1d254db6278fa6f2b4745192e3"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/authority/ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3815,
+      "sha256": "6a4459560a1dee314b5c1d8f9630cc3e906ef1bd41daea18a8b4c63070c4a3a8"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/client/main.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6857,
+      "sha256": "359032209dd4f7db0b466c5e7301c619a78f1f75a8683e611b71b94ba03279dc"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/client/timeline-controller.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6115,
+      "sha256": "25a655dbf0a97522f5d34eb3ff543449f1c044a47b703fc7137ce33be8a542de"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/diagnostics/envelope.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2378,
+      "sha256": "6f1a83859d0e8cb63dac14a65e2f67f2739eb8645b5d5ec5a8636e1ab617c407"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/model/dat-document.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 7561,
+      "sha256": "69131bac5352216a1e8c49b7dd72ee16c19df139439b417ad542f02568837d81"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/model/dat-projection.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 11340,
+      "sha256": "89673249471235437d747f56778dfd5698407a7c23a3e80710ff368896ed1ded"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/model/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 147,
+      "sha256": "c35505bd3dd62ffa934b7d2b9df272a01cf20e252856df28ce9f740a6849f867"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/project/data-txt.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 11448,
+      "sha256": "2658f79c6fe0f0e26a993a0cd2466c1bd2e326a17d1b4c7d0970c523787a6b88"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/project/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 106,
+      "sha256": "ea92fe80902d0edeb7c0f8eb67400969d955dcfb72792720db1eba75129facc8"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/build-manifest.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6303,
+      "sha256": "919ce9ee5cb467c40c2ee71c9f9277d14281f9dfcfdcc9ff9c80116fd981b3b1"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/cli.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2955,
+      "sha256": "5a07769bb05ddbc8fb3d70d85e345c2174728be32447d63d1017178539bd66aa"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/preservation-manifest.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3777,
+      "sha256": "417831907042ec003a215cdbf78b2b5748ef940b7c213fc8ae74bce14dd795c0"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/safe-save.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 13976,
+      "sha256": "e14b4132b4e12998de281c8a48f8a844f3dc9a562ad5390a111fb57e3d2ba374"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/server.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 29725,
+      "sha256": "356f643bbfe4b6ec89e0b61eed3e55e27ad0523d656313709d38f756c8bbf417"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/windows-replace-adapter.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6772,
+      "sha256": "dacd32e7078ee3714aea273c43a50a430c13821252e24d3d537f4ce98b5f3603"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/windows-safe-file-adapter.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 21064,
+      "sha256": "4df0776f1de310b72b442c8e2f7611ee54cbf207c42dc991a78a57e9fb45e17f"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/server/workspace-registry.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 9935,
+      "sha256": "b2e5c48678127354d9f0d4ff36d07b5a80405b00e541b687efd5c73a32bbfa7e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/canonical.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 8258,
+      "sha256": "8a6394077691992ae333788388f5bb945faf0d18fd92b9717c0aea1066be934f"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/catalog.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 9447,
+      "sha256": "b521c362e43aad157735cc788d0b6b119bd8f1ebec54d668bce5bcbbf7979385"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/constants.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 555,
+      "sha256": "337b9e0e7b8868f51410c69bddac9daefb29437813e47846d65a723e91949261"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/core.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 22069,
+      "sha256": "5dd9e848f6f4951bff019f7aa47be23698e4ccd0bc33c5c200fffe84c791dc0f"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/frame-tick.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5020,
+      "sha256": "24a32ba876923c0f7b80da4c9e49558b7d34bf94f1ecbdeecb3bed3e36addb0c"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2522,
+      "sha256": "a3634aad883d3a0a96fa6b823223bdb8bcb05be861499679ced315f4151ad96b"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/input.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 14399,
+      "sha256": "659ab8c56a5595091f2240df17e7fe1ac83e985ae7f0b01f01309999a7fdfb93"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/motion.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5141,
+      "sha256": "d450f8d276e7dc51185e246c819ca4e2c0fbc67950867b99013d73b6b5b9aecc"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/opoint.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 12684,
+      "sha256": "841ace7551cb03b3229b8541555261de39170573e5d449eacadcd12cb62fc61a"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/rng.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 550,
+      "sha256": "43f467a00759edfc4a13dfe2d53e3f377620fc0e4e761f7a02d3bab321f12b7e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/rules.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3815,
+      "sha256": "8861b70164e809af4b556ecc1a1c7c7e3176882acb526ece4938287f447af738"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/timeline.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6590,
+      "sha256": "0f62f2f86198dad195f989e5d7990a8c2aae6b0a4a8ce12119aa38056cfb9b5a"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/types.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 13288,
+      "sha256": "4ebbc77ac993eb69c460bc6150996f1bcaafda1b17359951a741bdecd21d5443"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/world.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5989,
+      "sha256": "ae66c110933055c2ed908a2fdc254e5e9c07a147d633825c0a4a2b879a48bdef"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/sim/wpoint.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 19695,
+      "sha256": "c0171fc2988da6011dccf02a5f6120e59302214b645fa2fb533f2f00cc9a2913"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/syntax/byte-cst.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 17680,
+      "sha256": "007c67414058a905423bd0fa90141e12caeb03531bb391b020d03dfc354a0cf0"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/syntax/dat-envelope.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3538,
+      "sha256": "3747ea33520ecdaae47b82c8ed266d187eef4d6c89059321a1108aa28245460b"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/syntax/data-diagnostic.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 914,
+      "sha256": "2ca5970f15fc56b57719841ab591ae8c46eec85b783c72d787f682efb0db9e10"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/syntax/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 215,
+      "sha256": "c3bcecc9c9da82d1f4a0f2723d9b50b7c6a5f07aade1e6fdb57a17ae8f20dc7d"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/syntax/patch-emitter.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3763,
+      "sha256": "30475ad321a03e5a36f1fc79fb315246263e964abdf5267a07261f6254d8a281"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/trace/envelope.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3904,
+      "sha256": "bce321782f90a8c5900dcbc7bb00fb275d2eabf8044e2b8c2825284eb149cb1b"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/src/validation/strict.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3051,
+      "sha256": "47faa29a5d37815fbca0fd89d35ac8d16bd9c2c30f839f1ffc79ab634a055712"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/build.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 8042,
+      "sha256": "823846e1c6356be113a1c47b152d15519fc8c30b93853d4ab2f825448a141cee"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/client-build-manifest.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1535,
+      "sha256": "7a9482f61af81712387fe61595979a9a3dfa1aff50e3c943ab5cb0b08f5a41dd"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/manifest-integrity.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 8134,
+      "sha256": "38a6f3eda556510456fa8952cee9f3e3cba4e7abc373815f6fcfd6a8780d8042"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-api.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 7326,
+      "sha256": "3e40e7cabcf5a723c3434795febf514a30b28eb33110a56304b2b5f769fea547"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-native-file.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 18587,
+      "sha256": "241c595dadb382d1abfba4bc3c9b3be8b6649979c9bdae7a2eb25cd7f6892ec3"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-save.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6337,
+      "sha256": "a2437f76c6d08fb726037bedbea64179cbabfc583b91e72e4e72b4c983776427"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-static-policy.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1103,
+      "sha256": "4d5371b6e4999ecaee4e98aa13229bc3438a2f71e61b96feb7abfb8bb8400091"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-windows-replace.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6294,
+      "sha256": "c0663da6db247ae406570085789c3644d74899bead0d52736d825003b0bd654c"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/safe-workspace.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 4604,
+      "sha256": "bb264998769560b23a1032c7ddab7ebb391b3a538d334b7738fa5c77d795f412"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/server.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 19277,
+      "sha256": "20417deb08dce138851c06024c635de2eee718ceaa1a86f1b47ad73277702fb2"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/integration/verified-loader.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 8755,
+      "sha256": "826e8e72abfd90105da717c1e1cebf5725fef0b0a642f48d3a41f3ad1ba180eb"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1917,
+      "sha256": "1b14ca3681e989225b2499995c1d44e285d8feb9433853878ad03ba8d0a90c23"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-html-contract.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 758,
+      "sha256": "fe205f174e6b18ce123edffbe304a0b28ec025d3c15a92b2f7cc480f745bb546"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-render-contract.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1006,
+      "sha256": "c78a7d0bfdcf80f20c395bf6d991993bf84b6bd34ee67dfbd43122199a85dd78"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/client-timeline-controller.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2409,
+      "sha256": "2906b7742d238ff34f53477868a3ed35d44730a716415f3670cb54d44bba0340"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/diagnostics.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1449,
+      "sha256": "83d8b55a1abd779f79dd4ab56c6321946b109e99825a7ae85f04f9ba7b0b240e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate1a-corpus-roundtrip.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1454,
+      "sha256": "04415a61b7c7f742bb1a74f81d04f7db9c3f43b0a49886d529d5c6ca037b992e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate1a-data-pipeline.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 17141,
+      "sha256": "ff65aed36adca7eade599834a7d0b3a90dcb26033b5f988c4868ea938ad6c9b0"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate1a-fixtures.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 4790,
+      "sha256": "60526bdf32b1524d1d45c657b4d56e1d27f6f19823ec7f8faace89fb72dda116"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2869,
+      "sha256": "6e4b7f6f515a3ce9b1d9b0d678b9998abdebeee16234466c1ba3ac1a34090ef4"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-code-unit-order.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1522,
+      "sha256": "bcb3e923e1062a58670d905a65e3df6ccc0ccc43abbceb7e794a335a38c47783"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-sim-core.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 9165,
+      "sha256": "484b4ef361e95edef1216a66fc6ded1979c5272b4d66f1e2fcabb1cb5dc16b65"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate2-timeline-trace.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6178,
+      "sha256": "e1fe8699056543dd1fbfc7d8c78534f6e64b5f4e9c514e11744e4bc3777e0eca"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3a-hit-input.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 17527,
+      "sha256": "b0fcfca38cb334000bfc19044e3861f9331a6fdcb226adf193403a592cc20811"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3a-input-authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1325,
+      "sha256": "b670055c8fd460b3b3ae8ce73f2f38f939c3ffebae1f178b6994189b8bfa0ca4"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b1-opoint-authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1066,
+      "sha256": "22f389033ce01e8a832b1c3538b0f663d640a9c1683bf3f8c2ab6de99ad84013"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b1-opoint.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 24625,
+      "sha256": "0a666083316aba262098ede18645446af76b18b2c67753c03fdd19ee23527812"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b2-wpoint-authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1727,
+      "sha256": "5305eceb19d176addf0f75d99d418aeed24045e66720d0fa45779adde9e2040e"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate3b2-wpoint.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 24164,
+      "sha256": "bb863f876764d0225ef83d7754cf8fbd49d68520d232ac866b084c0b65280daa"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate4-motion-authority-ledger.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2152,
+      "sha256": "071376e74fa0826b6402d7577a433d91845cf1cc8648152dc7cdedb085df0585"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/gate4-motion.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 17149,
+      "sha256": "354fe9eb70389a0fd69b66b3a7caaf56b9e3086730d8de65dbb575ea4403d4c7"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/preservation-manifest.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2914,
+      "sha256": "26207356bb5bd46c7894d3f2e2964e844aa6e93ef05497ce70623c0e194d16da"
+    },
+    {
+      "path": "builds/20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5/tests/unit/trace-envelope.test.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 1890,
+      "sha256": "3389ccfe13a2f838884657e8b98236b8efc2b720d04b6f9b0f91c5a0c6d8eb14"
+    }
+  ],
+  "clientFiles": [
+    {
+      "path": "index.html",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2851,
+      "sha256": "2bf10214a95875ae94aad11403400efaf2aedc0b0f907ad1343b4ba0e9a90dc7"
+    },
+    {
+      "path": "src/client/main.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6857,
+      "sha256": "359032209dd4f7db0b466c5e7301c619a78f1f75a8683e611b71b94ba03279dc"
+    },
+    {
+      "path": "src/client/styles.css",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3393,
+      "sha256": "1ccee51be1944b8d31ff511379f9b5aa1f359b27f02d602ca45a4554d3902ea9"
+    },
+    {
+      "path": "src/client/timeline-controller.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6115,
+      "sha256": "25a655dbf0a97522f5d34eb3ff543449f1c044a47b703fc7137ce33be8a542de"
+    },
+    {
+      "path": "src/sim/canonical.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 8258,
+      "sha256": "8a6394077691992ae333788388f5bb945faf0d18fd92b9717c0aea1066be934f"
+    },
+    {
+      "path": "src/sim/catalog.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 9447,
+      "sha256": "b521c362e43aad157735cc788d0b6b119bd8f1ebec54d668bce5bcbbf7979385"
+    },
+    {
+      "path": "src/sim/constants.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 555,
+      "sha256": "337b9e0e7b8868f51410c69bddac9daefb29437813e47846d65a723e91949261"
+    },
+    {
+      "path": "src/sim/core.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 22069,
+      "sha256": "5dd9e848f6f4951bff019f7aa47be23698e4ccd0bc33c5c200fffe84c791dc0f"
+    },
+    {
+      "path": "src/sim/frame-tick.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5020,
+      "sha256": "24a32ba876923c0f7b80da4c9e49558b7d34bf94f1ecbdeecb3bed3e36addb0c"
+    },
+    {
+      "path": "src/sim/index.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2522,
+      "sha256": "a3634aad883d3a0a96fa6b823223bdb8bcb05be861499679ced315f4151ad96b"
+    },
+    {
+      "path": "src/sim/input.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 14399,
+      "sha256": "659ab8c56a5595091f2240df17e7fe1ac83e985ae7f0b01f01309999a7fdfb93"
+    },
+    {
+      "path": "src/sim/motion.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5141,
+      "sha256": "d450f8d276e7dc51185e246c819ca4e2c0fbc67950867b99013d73b6b5b9aecc"
+    },
+    {
+      "path": "src/sim/opoint.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 12684,
+      "sha256": "841ace7551cb03b3229b8541555261de39170573e5d449eacadcd12cb62fc61a"
+    },
+    {
+      "path": "src/sim/rng.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 550,
+      "sha256": "43f467a00759edfc4a13dfe2d53e3f377620fc0e4e761f7a02d3bab321f12b7e"
+    },
+    {
+      "path": "src/sim/rules.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3815,
+      "sha256": "8861b70164e809af4b556ecc1a1c7c7e3176882acb526ece4938287f447af738"
+    },
+    {
+      "path": "src/sim/timeline.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 6590,
+      "sha256": "0f62f2f86198dad195f989e5d7990a8c2aae6b0a4a8ce12119aa38056cfb9b5a"
+    },
+    {
+      "path": "src/sim/types.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 13288,
+      "sha256": "4ebbc77ac993eb69c460bc6150996f1bcaafda1b17359951a741bdecd21d5443"
+    },
+    {
+      "path": "src/sim/wpoint.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 19695,
+      "sha256": "c0171fc2988da6011dccf02a5f6120e59302214b645fa2fb533f2f00cc9a2913"
+    },
+    {
+      "path": "src/sim/world.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5989,
+      "sha256": "ae66c110933055c2ed908a2fdc254e5e9c07a147d633825c0a4a2b879a48bdef"
+    },
+    {
+      "path": "src/authority/gate2-sim-ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 5843,
+      "sha256": "e3d39aaa0864255637dd91dd21c8c7cd05ef049c598313fb8624e92603561fcf"
+    },
+    {
+      "path": "src/authority/ledger.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3815,
+      "sha256": "6a4459560a1dee314b5c1d8f9630cc3e906ef1bd41daea18a8b4c63070c4a3a8"
+    },
+    {
+      "path": "src/trace/envelope.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3904,
+      "sha256": "bce321782f90a8c5900dcbc7bb00fb275d2eabf8044e2b8c2825284eb149cb1b"
+    },
+    {
+      "path": "src/diagnostics/envelope.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 2378,
+      "sha256": "6f1a83859d0e8cb63dac14a65e2f67f2739eb8645b5d5ec5a8636e1ab617c407"
+    },
+    {
+      "path": "src/validation/strict.js",
+      "buildId": "20260801112950012-1b95aa3f3b9b4b68a48a6c3354cf1fe5",
+      "size": 3051,
+      "sha256": "47faa29a5d37815fbca0fd89d35ac8d16bd9c2c30f839f1ffc79ab634a055712"
+    }
+  ]
+}

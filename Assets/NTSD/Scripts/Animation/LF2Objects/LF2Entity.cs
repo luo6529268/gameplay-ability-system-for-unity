@@ -1,4 +1,4 @@
-﻿using NTSD.Animation;
+using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Input;
 using NTSD.Simulation;
@@ -401,10 +401,6 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.SpawnerSlotIndex = value;
         }
 
-        private bool _hasForcedRuntimeIntPosition;
-
-
-
         /// <summary>可选的旧版阴影 SpriteRenderer，由渲染适配器注入。</summary>
         public SpriteRenderer ShadowRenderer { get; private set; }
 
@@ -420,16 +416,11 @@ namespace NTSD.Animation.LF2Objects
         {
             if (Runtime == null) return;
 
-            LF2FrameData currentFrame = Frame?.D;
-            int state = currentFrame?.state ?? -1;
-            int oid = ObjectId;
-            bool hide = currentFrame == null
-                     || state == 3005
-                     || state == 9997
-                     || (Runtime?.LinkState ?? 0) < 0
-                     || oid == 223
-                     || oid == 224
-                     || !LF2ObjectRenderer.ShouldDrawShadowForHitStop(Runtime.HitStop);
+            bool hide = ShouldHideShadowForPresentation(
+                Frame?.D,
+                Runtime.LinkState,
+                ObjectId,
+                Runtime.HitStop);
 
             if (hide)
                 Sprite?.HideShadow();
@@ -466,6 +457,35 @@ namespace NTSD.Animation.LF2Objects
             }
 
             Match?.RecordLegacyShadowProbe(this, ShadowRenderer);
+        }
+
+        internal void UpdateShadowManagedState()
+        {
+            if (Runtime == null)
+                return;
+
+            bool hide = ShouldHideShadowForPresentation(
+                Frame?.D,
+                Runtime.LinkState,
+                ObjectId,
+                Runtime.HitStop);
+            Sprite?.SetShadowVisibleManagedOnly(!hide);
+        }
+
+        internal static bool ShouldHideShadowForPresentation(
+            LF2FrameData currentFrame,
+            int linkState,
+            int objectId,
+            int hitStop)
+        {
+            int state = currentFrame?.state ?? -1;
+            return currentFrame == null
+                || state == 3005
+                || state == 9997
+                || linkState < 0
+                || objectId == 223
+                || objectId == 224
+                || !LF2ObjectRenderer.ShouldDrawShadowForHitStop(hitStop);
         }
 
 
@@ -1976,7 +1996,6 @@ namespace NTSD.Animation.LF2Objects
             task.initialRuntimeX = (int)task.pos.x;
             task.initialRuntimeY = (int)task.pos.y;
             task.initialRuntimeZ = (int)task.pos.z;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
         }
 
         private void FillHitFa8SpawnTask(OPointCreateTask task)
@@ -1995,7 +2014,6 @@ namespace NTSD.Animation.LF2Objects
             task.initialRuntimeX = Runtime.XInt;
             task.initialRuntimeY = Runtime.YInt;
             task.initialRuntimeZ = Runtime.ZInt;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
         }
 
         private LF2Entity ResolveFrameLogicTargetByHitFa(int hitFa)
@@ -2455,22 +2473,23 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal void UpdateSharedRuntimeInputSnapshotForSimulation(int tickIndex)
         {
-            Runtime.RollInputFromCurrent();
-            Runtime.TickInputCooldowns();
-
-            if (!TryGetSharedInputControllerForSimulation(out ILF2Controller controller))
-                return;
-
-            UpdateSharedRuntimeInputSnapshotFromBuffer(controller.InputBuffer, tickIndex);
-        }
-
-        private void UpdateSharedRuntimeInputSnapshotFromBuffer(SimInputBuffer inputBuffer, int tickIndex)
-        {
-            if (inputBuffer == null || !inputBuffer.TryDequeueAll(tickIndex, out System.Collections.Generic.List<SimInputEvent> events))
-                return;
-
-            for (int i = 0; i < events.Count; i++)
-                ApplySharedRuntimeInputEvent(events[i].key, events[i].down);
+            SimInputBuffer inputBuffer = null;
+            if (TryGetSharedInputControllerForSimulation(out ILF2Controller controller))
+            {
+                inputBuffer = controller.InputBuffer;
+                sharedCharacterDatInputModule.SyncProgressFromRuntime(Runtime);
+            }
+            else
+            {
+                // A controllerless shared shell can still receive the complete current-tick
+                // packet through runtime fields. Seed the local adapter from that authority
+                // snapshot; controller-backed sparse input must keep its private held mirror.
+                sharedCharacterDatInputModule.SyncFromRuntime(Runtime);
+            }
+            sharedCharacterDatInputModule.PollFromBuffer(
+                inputBuffer,
+                tickIndex,
+                this);
         }
 
         private void RunSharedCharacterDatFrameJumpInputPhase()
@@ -3555,7 +3574,6 @@ namespace NTSD.Animation.LF2Objects
             task.initialRuntimeX = GetRuntimeXInt();
             task.initialRuntimeY = 0;
             task.initialRuntimeZ = GetRenderZInt();
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
             task.skipPostInitZOffset = true;
             task.deferPresentationToNextTick = false;
             task.suppressLateFrameTickThisTick = false;
@@ -3703,6 +3721,32 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Vz = 0f;
         }
 
+        internal bool RunEarlyTeleportSpecialsPhaseWithMutationReport(
+            System.Collections.Generic.List<LF2Entity> entities,
+            bool frameToggleGate)
+        {
+            // LF2Character's production override delegates directly to this base
+            // implementation. Unknown derived shells remain fail-closed because an
+            // override may add writes outside the teleport runtime fields.
+            bool canReportExactly = GetType() == typeof(LF2Character);
+            int state = Frame?.D?.state ?? -1;
+            bool stalePublishedSnapshot =
+                canReportExactly &&
+                !IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp();
+            bool writesTeleportRuntime =
+                canReportExactly &&
+                !frameToggleGate &&
+                entities != null &&
+                Health != null &&
+                (state == LF2States.TeleportToEnemy ||
+                 state == LF2States.TeleportToTeammate);
+
+            RunEarlyTeleportSpecialsPhase(entities, frameToggleGate);
+            return !canReportExactly ||
+                   stalePublishedSnapshot ||
+                   writesTeleportRuntime;
+        }
+
         internal virtual void RunLateDeathOpointPreCleanupPhase()
         {
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
@@ -3839,7 +3883,12 @@ namespace NTSD.Animation.LF2Objects
             }
 
             if (spawned)
-                RefreshRuntimeSnapshot();
+            {
+                if (Match == null)
+                    RefreshRuntimeSnapshot();
+                else
+                    Match.RefreshLateTransitionRuntimeSnapshot(this);
+            }
         }
 
         private bool SpawnTransitionEffectBranch1(ref int availableSlots)
@@ -3948,7 +3997,6 @@ namespace NTSD.Animation.LF2Objects
             task.initialRuntimeX = Runtime.XInt;
             task.initialRuntimeY = Runtime.YInt;
             task.initialRuntimeZ = Runtime.ZInt;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
             task.skipPostInitZOffset = true;
             task.deferPresentationToNextTick = false;
             task.suppressLateFrameTickThisTick = false;
@@ -4405,7 +4453,6 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void ResetPooledEntityState()
         {
-            _hasForcedRuntimeIntPosition = false;
             requiredRuntimeSlot = -1;
             Runtime.PendingFlushDestroy = false;
             Runtime.TransformOriginalObjectId = -1;
@@ -4413,29 +4460,31 @@ namespace NTSD.Animation.LF2Objects
             Runtime.RenderOffsetX = 0f;
         }
 
+        public void ApplyInitialRuntimePosition(OPointCreateTask task)
+        {
+            if (task == null)
+                return;
+
+            Runtime.X = task.useDirectRuntimePosition ? task.directX : task.pos.x;
+            Runtime.Y = task.useDirectRuntimePosition ? task.directY : task.pos.y;
+            Runtime.Z = task.useDirectRuntimePosition ? task.directZ : task.z;
+
+            if (task.useInitialRuntimeIntPosition)
+            {
+                Runtime.XInt = task.initialRuntimeX;
+                Runtime.YInt = task.initialRuntimeY;
+                Runtime.ZInt = task.initialRuntimeZ;
+                return;
+            }
+
+            Runtime.SyncIntegerPosition();
+        }
+
         public virtual void ApplyForcedRuntimeIntPosition(int x, int y, int z)
         {
             Runtime.XInt = x;
             Runtime.YInt = y;
             Runtime.ZInt = z;
-            _hasForcedRuntimeIntPosition = true;
-        }
-
-        public virtual void ClearForcedRuntimeIntPosition()
-        {
-            _hasForcedRuntimeIntPosition = false;
-        }
-
-        public virtual void ConsumeForcedRuntimeIntPosition()
-        {
-            _hasForcedRuntimeIntPosition = false;
-            RefreshRuntimeIntPosition();
-        }
-
-        public virtual void ReleaseForcedRuntimeIntPositionAfterFirstPresentation(int tickIndex)
-        {
-            if (tickIndex >= Runtime.FirstPresentationTick)
-                ConsumeForcedRuntimeIntPosition();
         }
 
         public virtual void RunCpointCheckStep10()
@@ -4608,6 +4657,8 @@ namespace NTSD.Animation.LF2Objects
 
             victimEntity.Runtime.X = x;
             victimEntity.Runtime.Y = y;
+            victimEntity.Runtime.XInt = x;
+            victimEntity.Runtime.YInt = y;
 
             int nextFrame = throwFrame?.next ?? 0;
             SetCpointRawFramePreserveWait(nextFrame, sourceNextFrame);
@@ -4848,6 +4899,7 @@ namespace NTSD.Animation.LF2Objects
             else if (coverDiv == 2)
                 victimEntity.SwitchDir(Runtime.Dir == "right" ? "left" : "right");
 
+            victimEntity.Runtime.SyncIntegerPosition();
             victimEntity.RefreshRuntimeSnapshot();
         }
 
@@ -5112,7 +5164,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        protected void RunSharedCharacterDatFrameAdvanceAsCharacter(int tickIndex, bool consumeForcedRuntimeIntPosition = true)
+        protected void RunSharedCharacterDatFrameAdvanceAsCharacter(int tickIndex)
         {
             if (!TryEnterReleaseFrameAdvanceAfterDelay())
                 return;
@@ -5147,8 +5199,6 @@ namespace NTSD.Animation.LF2Objects
             PromoteSharedCharacterDatBurningAirborneFrame205IfNeeded();
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
-            if (consumeForcedRuntimeIntPosition)
-                ConsumeForcedRuntimeIntPosition();
         }
 
         protected bool ShouldResolveCharacterLanding(MechanicsStepResult stepResult)
@@ -5156,7 +5206,7 @@ namespace NTSD.Animation.LF2Objects
             return stepResult.landed;
         }
 
-        protected bool RunSharedNonCharacterDatFrameAdvance(bool consumeForcedRuntimeIntPosition = true)
+        protected bool RunSharedNonCharacterDatFrameAdvance()
         {
             if (!TryEnterReleaseFrameAdvanceAfterDelay())
                 return false;
@@ -5198,8 +5248,6 @@ namespace NTSD.Animation.LF2Objects
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
             Runtime.SyncIntegerPosition();
-            if (consumeForcedRuntimeIntPosition)
-                ConsumeForcedRuntimeIntPosition();
             RefreshRuntimeSnapshot();
             return true;
         }
@@ -5807,11 +5855,13 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>分配稳定 ID。</summary>
-        protected void AllocateStableId()
+        /// <summary>在 SimulationWorld 成功接纳实体生命周期后分配稳定 ID。</summary>
+        internal void AssignStableIdForRegistration(int stableId)
         {
-            StableId = SimulationTickDriver.Instance?.World?.AllocateStableId() ?? 0;
-            Runtime.StableId = StableId;
+            if (StableId > 0)
+                return;
+
+            StableId = stableId;
         }
 
         /// <summary>重置稳定 ID。</summary>
@@ -5831,6 +5881,24 @@ namespace NTSD.Animation.LF2Objects
         public void RefreshRuntimeSnapshot()
         {
             RefreshRuntimeFromEntity();
+        }
+
+        internal bool IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp()
+        {
+            if (Runtime == null)
+                return false;
+
+            int currentDataType = GetCurrentDataObjectTypeForSimulation();
+            if (Runtime.ObjType != ResolveReferenceRuntimeObjTypeFromDataType(currentDataType) ||
+                Runtime.EntityType != currentDataType ||
+                Runtime.Frame != (Frame?.N ?? 0) ||
+                Runtime.WaitCounter != (Trans?.WaitCounter ?? 0) ||
+                Runtime.NextFrame != (Trans?.Next ?? 0))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected virtual void RefreshRuntimeFromEntity()
@@ -5860,9 +5928,6 @@ namespace NTSD.Animation.LF2Objects
             Runtime.HP2Orig = HP2Orig;
             Runtime.RespawnCount = RespawnCount;
 
-            if (!_hasForcedRuntimeIntPosition)
-                RefreshRuntimeIntPosition();
-
             if (Health != null)
             {
                 Runtime.HP = Health.HP;
@@ -5874,11 +5939,6 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.HPBound = Health.HPBound;
                 Runtime.MPMax = Health.MaxMP;
             }
-        }
-
-        private void RefreshRuntimeIntPosition()
-        {
-            Runtime.SyncIntegerPosition();
         }
 
         /// <summary>

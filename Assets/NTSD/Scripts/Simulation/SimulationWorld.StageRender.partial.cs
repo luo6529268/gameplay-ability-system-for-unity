@@ -41,10 +41,37 @@ namespace NTSD.Simulation
         private readonly BattlePresentationCoordinator _battlePresentation =
             new BattlePresentationCoordinator();
         private BattlePixelFramePlan _currentPixelFramePlan;
+        private bool skipLateRendererUpdateForDiagnostics;
 
         public BattlePresentationCoordinator BattlePresentation => _battlePresentation;
         public BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
         public int LateRendererUpdateInvocationCountForDiagnostics { get; private set; }
+        public int PresentationRenderOrderBuildCountForDiagnostics { get; private set; }
+        public int PresentationRenderOrderReusePublishCountForDiagnostics { get; private set; }
+        public int PresentationEntityScanAndSortCountForDiagnostics { get; private set; }
+        public bool SkipLateRendererUpdateForDiagnostics =>
+            skipLateRendererUpdateForDiagnostics;
+        public long SkippedLateRendererUpdateTickCountForDiagnostics { get; private set; }
+
+        public bool ConfigureSkipLateRendererUpdateForDiagnostics(
+            bool requested,
+            bool simulationOnly)
+        {
+            if (requested && !simulationOnly)
+            {
+                throw new System.InvalidOperationException(
+                    "SkipLateRendererUpdate may only be enabled for a simulation-only diagnostic run.");
+            }
+
+            bool previous = skipLateRendererUpdateForDiagnostics;
+            skipLateRendererUpdateForDiagnostics = requested;
+            return previous;
+        }
+
+        public void RestoreSkipLateRendererUpdateForDiagnostics(bool previous)
+        {
+            skipLateRendererUpdateForDiagnostics = previous;
+        }
 
         internal void PublishPixelFramePlan(BattlePixelFramePlan plan)
         {
@@ -132,6 +159,7 @@ namespace NTSD.Simulation
 
                 if (entity.PS.z > zMax) entity.PS.z = zMax;
                 if (entity.PS.z < zMin) entity.PS.z = zMin;
+                entity.Runtime.ZInt = (int)entity.Runtime.Z;
                 RefreshRuntimeSnapshot(entity);
             });
         }
@@ -180,9 +208,15 @@ namespace NTSD.Simulation
                 _battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly;
             if (publishPresentation)
             {
-                detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderPresentationOrder);
-                BuildPresentationRenderOrder();
-                detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderPresentationOrder);
+                // CentralOnly publishes the map from BattlePresentationCoordinator's
+                // already sorted capture list. Legacy paths retain their independent
+                // pre-publication order build because their materializers consume it.
+                if (_battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly)
+                {
+                    detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderPresentationOrder);
+                    BuildPresentationRenderOrder();
+                    detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderPresentationOrder);
+                }
 
                 detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderBeginFrame);
                 _battlePresentation.BeginFrame(this, tickIndex);
@@ -204,7 +238,10 @@ namespace NTSD.Simulation
             }
 
             detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderLateRendererUpdate);
-            LateRendererUpdateAll(tickIndex);
+            if (SkipLateRendererUpdateForDiagnostics)
+                SkippedLateRendererUpdateTickCountForDiagnostics++;
+            else
+                LateRendererUpdateAll(tickIndex);
             detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderLateRendererUpdate);
         }
 
@@ -427,14 +464,33 @@ namespace NTSD.Simulation
         /// </summary>
         internal void BuildPresentationRenderOrder()
         {
+            PresentationRenderOrderBuildCountForDiagnostics++;
+            PresentationEntityScanAndSortCountForDiagnostics++;
             GetPresentationEntitiesNoAlloc(_presentationRenderScratch);
             _presentationRenderScratch.Sort(PresentationOrderComparison);
+            PublishPresentationRenderOrderFromSortedEntities(_presentationRenderScratch);
+            _presentationRenderScratch.Clear();
+        }
+
+        /// <summary>
+        /// Publishes the dense Unity presentation order from a list already sorted by
+        /// (ZInt, runtime slot). CentralOnly reuses the coordinator's capture list to
+        /// avoid a second registry traversal and sort for the same presentation frame.
+        /// </summary>
+        internal void PublishPresentationRenderOrderFromSortedEntities(
+            IReadOnlyList<LF2Entity> sortedEntities,
+            bool reusesCoordinatorSort = false)
+        {
+            if (reusesCoordinatorSort)
+                PresentationRenderOrderReusePublishCountForDiagnostics++;
             _presentationRenderOrders.Clear();
+            if (sortedEntities == null)
+                return;
 
             int rank = 0;
-            for (int i = 0; i < _presentationRenderScratch.Count; i++)
+            for (int i = 0; i < sortedEntities.Count; i++)
             {
-                LF2Entity entity = _presentationRenderScratch[i];
+                LF2Entity entity = sortedEntities[i];
                 int slot = entity?.Runtime?.SlotIndex ?? -1;
                 if (entity == null || slot < 0 ||
                     !TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
@@ -445,8 +501,11 @@ namespace NTSD.Simulation
                 _presentationRenderOrders[entity] = new PresentationRenderOrder(handle, rank);
                 rank++;
             }
+        }
 
-            _presentationRenderScratch.Clear();
+        internal void RecordPresentationEntityScanAndSortForDiagnostics()
+        {
+            PresentationEntityScanAndSortCountForDiagnostics++;
         }
 
         internal static void ValidateLegacySpriteRendererPresentationCapacity(

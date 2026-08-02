@@ -1,0 +1,98 @@
+// dat-skill-flow-build:20260801083153538-b57ffe96d20c4088aa1b8e64faace4f8
+                                                                            
+import { MAX_WORLD_SLOTS } from "./catalog.js";
+
+export function createSlots(entities                      )                                {
+    const slots                       = Array(MAX_WORLD_SLOTS).fill(null);
+    for (const entity of entities) {
+        if (entity.slot < 0 || entity.slot >= MAX_WORLD_SLOTS) {
+            throw new RangeError("entity.slot must be in 0..399");
+        }
+        if (slots[entity.slot] !== null) {
+            throw new TypeError(`duplicate slot: ${entity.slot}`);
+        }
+        slots[entity.slot] = entity;
+    }
+    return Object.freeze(slots);
+}
+
+export function entitiesFromSlots(slots                               )                       {
+    return Object.freeze(slots.filter((entity)                      => entity !== null));
+}
+
+export function replaceSlot(
+    state                 ,
+    slot        ,
+    entity                  ,
+    changes                           = {},
+)                  {
+    const slots = [...state.slots];
+    slots[slot] = entity;
+    const frozenSlots = Object.freeze(slots);
+    return freezeSimulationState({ ...state, ...changes, slots: frozenSlots, entities: entitiesFromSlots(frozenSlots) });
+}
+
+export function freezeSimulationState(state                 )                  {
+    return Object.freeze({
+        ...state,
+        slots: Object.freeze([...state.slots]),
+        entities: Object.freeze([...state.entities]),
+        catalog: Object.freeze([...state.catalog]),
+        attackRest: Object.freeze([...state.attackRest]),
+        vrest: Object.freeze([...state.vrest]),
+    });
+}
+
+export function firstFreeSpawnSlot(state                 )         {
+    for (let slot = 50; slot < MAX_WORLD_SLOTS; slot++) {
+        if (state.slots[slot]?.active !== true) {
+            return slot;
+        }
+    }
+    return -1;
+}
+
+export function normalizeVrest(entries                                      )                           {
+    const values = new Map                       ();
+    for (const entry of entries ?? []) {
+        if (!Number.isSafeInteger(entry.fromSlot) || entry.fromSlot < 0 || entry.fromSlot >= MAX_WORLD_SLOTS
+            || !Number.isSafeInteger(entry.toSlot) || entry.toSlot < 0 || entry.toSlot >= MAX_WORLD_SLOTS) {
+            throw new RangeError("vrest slots must be in 0..399");
+        }
+        if (!Number.isSafeInteger(entry.ticks)) {
+            throw new TypeError("vrest.ticks must be a safe integer");
+        }
+        if (entry.ticks !== 0) {
+            values.set(`${entry.fromSlot}:${entry.toSlot}`, Object.freeze({ ...entry }));
+        }
+    }
+    return Object.freeze([...values.values()].sort((left, right) => (
+        left.fromSlot - right.fromSlot || left.toSlot - right.toSlot
+    )));
+}
+
+export function vrestAt(state                 , fromSlot        , toSlot        )         {
+    return state.vrest.find((entry) => entry.fromSlot === fromSlot && entry.toSlot === toSlot)?.ticks ?? 0;
+}
+
+export function resetSlotCooldowns(state                 , slot        )                                                {
+    const attackRest = [...state.attackRest];
+    attackRest[slot] = 0;
+    return {
+        attackRest: Object.freeze(attackRest),
+        vrest: Object.freeze(state.vrest.filter((entry) => entry.fromSlot !== slot && entry.toSlot !== slot)),
+    };
+}
+
+export function setVrest(
+    entries                          ,
+    fromSlot        ,
+    toSlot        ,
+    ticks        ,
+)                           {
+    const filtered = entries.filter((entry) => entry.fromSlot !== fromSlot || entry.toSlot !== toSlot);
+    if (ticks !== 0) {
+        filtered.push(Object.freeze({ fromSlot, toSlot, ticks }));
+    }
+    return Object.freeze(filtered.sort((left, right) => left.fromSlot - right.fromSlot || left.toSlot - right.toSlot));
+}

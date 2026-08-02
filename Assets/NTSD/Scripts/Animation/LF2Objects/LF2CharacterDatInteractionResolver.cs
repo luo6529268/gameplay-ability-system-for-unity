@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Extensions;
 using NTSD.Simulation;
@@ -59,17 +58,18 @@ namespace NTSD.Animation.LF2Objects
             if (sceneQuery == null || kindService == null)
                 return;
 
-            if (!sceneQuery.TryGetCollisionCandidateSequence(_attacker, out List<SceneQueryHit> candidates))
+            if (!sceneQuery.TryGetCollisionCandidateRange(_attacker, out CollisionCandidateRange candidates))
                 return;
 
             LF2FrameData collisionFrame = _attacker.GetCollisionFrameData();
-            if (collisionFrame?.itrs == null || candidates == null)
+            if (collisionFrame?.itrs == null)
                 return;
 
             int candidateLimit = candidates.Count;
             for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
             {
-                SceneQueryHit hitInfo = candidates[candidateIndex];
+                if (!candidates.TryGet(candidateIndex, out SceneQueryHit hitInfo))
+                    continue;
                 int itrIndex = hitInfo.ItrIndex;
                 if (itrIndex < 0 || itrIndex >= collisionFrame.itrs.Count)
                     continue;

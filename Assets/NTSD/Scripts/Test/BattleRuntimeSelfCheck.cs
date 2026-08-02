@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using NTSD.Animation;
@@ -1690,7 +1690,13 @@ namespace NTSD.Test
             Expect(orderedImmediate.Count == 1 && orderedImmediate[0].Target == orderedTarget,
                 "LooseQuadtree immediate query must preserve valid targets when an earlier source entry falls back due to invalid AABB");
             uint bruteRngBefore = bruteParityWorld.Rng.State;
+            ulong bruteCallsBefore = bruteParityWorld.Rng.CallCount;
             uint treeRngBefore = treeParityWorld.Rng.State;
+            ulong treeCallsBefore = treeParityWorld.Rng.CallCount;
+            var treeParityQuery = treeParityWorld.SceneQuery as BruteForceSceneQuery;
+            Expect(treeParityQuery != null,
+                "formal LooseQuadtree collection requires a BruteForceSceneQuery");
+            treeParityQuery.ForceRoleAwareTreeForDiagnostics = true;
             List<SceneQueryHit> bruteParityCandidates = CollectCollisionAuditCandidates(
                 bruteParityWorld,
                 bruteAttacker,
@@ -1699,7 +1705,6 @@ namespace NTSD.Test
                 treeParityWorld,
                 treeAttacker,
                 true);
-            var treeParityQuery = treeParityWorld.SceneQuery as BruteForceSceneQuery;
             Expect(treeParityQuery != null &&
                    treeParityQuery.CollisionBroadphase == CollisionBroadphaseBackend.LooseQuadtree &&
                    treeParityQuery.LastFormalCollectorModeForDiagnostics ==
@@ -1708,13 +1713,17 @@ namespace NTSD.Test
                    treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
                    treeParityQuery.FormalSpatialSynchronizeResult.FullRebuild &&
                    treeParityQuery.FormalSpatialSynchronizeResult.IndexedCount == 1 &&
-                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1 &&
-                   treeParityCandidates.Count == bruteParityCandidates.Count &&
+                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1,
+                "formal LooseQuadtree collection must use the role-aware tree path and complete its initial rebuild");
+            Expect(treeParityCandidates.Count == bruteParityCandidates.Count &&
                    treeParityCandidates.Count == 1 &&
-                   treeParityCandidates[0].Target == treeTarget &&
-                   bruteParityWorld.Rng.State == bruteRngBefore &&
-                   treeParityWorld.Rng.State == treeRngBefore,
-                "formal LooseQuadtree collection must preserve brute candidate order and RNG state");
+                   treeParityCandidates[0].Target == treeTarget,
+                "formal LooseQuadtree collection must preserve brute candidate count, order, and target");
+            Expect(bruteParityWorld.Rng.State == bruteRngBefore &&
+                   bruteParityWorld.Rng.CallCount == bruteCallsBefore &&
+                   treeParityWorld.Rng.State == treeRngBefore &&
+                   treeParityWorld.Rng.CallCount == treeCallsBefore,
+                "formal LooseQuadtree collection must preserve brute and tree RNG state and call count");
 
             uint bruteStationaryRng = bruteParityWorld.Rng.State;
             ulong bruteStationaryCalls = bruteParityWorld.Rng.CallCount;
@@ -1737,14 +1746,17 @@ namespace NTSD.Test
                    treeParityQuery.FormalSpatialSynchronizeResult.UpdatedInPlaceCount == 0 &&
                    treeParityQuery.FormalSpatialSynchronizeResult.MigratedCount == 0 &&
                    treeParityQuery.FormalSpatialSynchronizeResult.RemovedCount == 0 &&
-                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1 &&
-                   treeStationaryCandidates.Count == bruteStationaryCandidates.Count &&
+                   treeParityQuery.FormalBroadphaseForSelfCheck.IncrementalFullRebuildCount == 1,
+                "formal incremental collection must reuse a stationary role-aware tree index");
+            Expect(treeStationaryCandidates.Count == bruteStationaryCandidates.Count &&
                    treeStationaryCandidates.Count == 1 &&
-                   bruteParityWorld.Rng.State == bruteStationaryRng &&
+                   treeStationaryCandidates[0].Target == treeTarget,
+                "formal stationary collection must preserve brute candidate count, order, and target");
+            Expect(bruteParityWorld.Rng.State == bruteStationaryRng &&
                    bruteParityWorld.Rng.CallCount == bruteStationaryCalls &&
                    treeParityWorld.Rng.State == treeStationaryRng &&
                    treeParityWorld.Rng.CallCount == treeStationaryCalls,
-                "formal incremental collection must reuse a stationary index and preserve candidate/RNG behavior");
+                "formal stationary collection must preserve brute and tree RNG state and call count");
 
             bruteTarget.Runtime.SetPosition(600, 0, 0);
             bruteTarget.Runtime.SyncIntegerPosition();
@@ -1763,14 +1775,16 @@ namespace NTSD.Test
                 treeAttacker,
                 true);
             Expect(!treeParityQuery.FormalCollectionAborted &&
-                   treeParityQuery.FormalSpatialSynchronizeResult.Succeeded &&
-                   treeMovedCandidates.Count == bruteMovedCandidates.Count &&
-                   treeMovedCandidates.Count == 0 &&
-                   bruteParityWorld.Rng.State == bruteMovedRng &&
+                   treeParityQuery.FormalSpatialSynchronizeResult.Succeeded,
+                "formal incremental movement must synchronize the role-aware tree without aborting");
+            Expect(treeMovedCandidates.Count == bruteMovedCandidates.Count &&
+                   treeMovedCandidates.Count == 0,
+                "formal incremental movement must preserve brute candidate count, order, and target");
+            Expect(bruteParityWorld.Rng.State == bruteMovedRng &&
                    bruteParityWorld.Rng.CallCount == bruteMovedCalls &&
                    treeParityWorld.Rng.State == treeMovedRng &&
                    treeParityWorld.Rng.CallCount == treeMovedCalls,
-                "formal incremental movement must preserve brute candidate and RNG results across ticks");
+                "formal incremental movement must preserve brute and tree RNG state and call count");
 
             var fallbackWorld = new SimulationWorld(
                 BattleRuntimeProfile.Authority400,
@@ -2575,6 +2589,34 @@ namespace NTSD.Test
                         wait = 10,
                         next = 0,
                     },
+                    Frame(
+                        LF2StandardFrames.WalkingStart,
+                        LF2States.Walking,
+                        10,
+                        LF2StandardFrames.WalkingStart,
+                        39,
+                        79),
+                    Frame(
+                        LF2StandardFrames.RunningStart,
+                        LF2States.Running,
+                        10,
+                        LF2StandardFrames.RunningStart,
+                        39,
+                        79),
+                    Frame(
+                        LF2StandardFrames.Running1,
+                        LF2States.Running,
+                        10,
+                        LF2StandardFrames.Running1,
+                        39,
+                        79),
+                    Frame(
+                        LF2StandardFrames.RunningEnd,
+                        LF2States.Running,
+                        10,
+                        LF2StandardFrames.RunningEnd,
+                        39,
+                        79),
                 },
             };
             LF2Character character = CreateCharacter("SelfCheck_ParityInput", 2, data);
@@ -2588,55 +2630,69 @@ namespace NTSD.Test
             world.Runtime.Roster.ActiveSlotCount = 1;
             world.Register(character);
 
-            world.ApplyFrameInputSet(new FrameInputSet(1, new[]
+            var heldTickSystem = new NTSDBattleTickSystem(world);
+            for (int tick = 1; tick <= 6; tick++)
             {
-                new SimulationPlayerInput(
-                    0,
-                    SimulationInputButtons.Left),
-            }));
-            character.RunHumanInputPollPhase(1);
-            Expect(character.Runtime.KeyLeft == 1 && character.Runtime.PrevLeft == 0 &&
-                   character.Runtime.CdLeft == 5 && character.Runtime.InputHistory[5] == 4,
-                "full frame input tick1 must create a left edge, cooldown 5, and one authority history push");
+                world.ApplyFrameInputSet(new FrameInputSet(tick, new[]
+                {
+                    new SimulationPlayerInput(
+                        0,
+                        SimulationInputButtons.Left),
+                }));
+                heldTickSystem.RunReleaseTick(tick);
+
+                if (tick == 2)
+                {
+                    Expect(character.Runtime.KeyLeft == 0,
+                        $"C# authority frame-advance boundary must clear tick2 current left; " +
+                        $"keyLeft={character.Runtime.KeyLeft},frame={character.Frame.N}");
+                    Expect(character.Frame.N == LF2StandardFrames.WalkingStart &&
+                           character.Runtime.Dir == "left",
+                        $"tick2 CharacterInput must consume left before the C# authority clear boundary; " +
+                        $"frame={character.Frame.N},dir={character.Runtime.Dir}");
+                }
+
+                if (tick == 3)
+                {
+                    Expect(character.Runtime.KeyLeft == 0 && character.Runtime.PrevLeft == 0 &&
+                           character.Runtime.CdLeft == 5 &&
+                           character.Runtime.InputHistory[3] == 4 &&
+                           character.Runtime.InputHistory[4] == 4 &&
+                           character.Runtime.InputHistory[5] == 4,
+                        $"complete held packet tick3 must rebuild the C# authority edge; " +
+                        $"keyLeft={character.Runtime.KeyLeft},prevLeft={character.Runtime.PrevLeft}," +
+                        $"cdLeft={character.Runtime.CdLeft}," +
+                        $"history={string.Join(",", character.Runtime.InputHistory)}");
+                }
+            }
             Expect(rosterSlot.RuntimeSlotIndex == character.Runtime.SlotIndex,
                 "frame input must bind the roster player to the resolved fixed runtime slot");
-
-            world.SerialTickAll(1);
-            Expect(character.Runtime.KeyLeft == 1 && character.Frame.N == 0,
-                "frame advance must retain the tick1 current left key without changing the unresolved frame");
-
-            world.ApplyFrameInputSet(new FrameInputSet(2, new[]
-            {
-                new SimulationPlayerInput(
-                    0,
-                    SimulationInputButtons.Left),
-            }));
-            character.RunHumanInputPollPhase(2);
-            Expect(character.Runtime.KeyLeft == 1 && character.Runtime.PrevLeft == 1 &&
-                   character.Runtime.CdLeft == 4 &&
-                   character.Runtime.InputHistory[4] == 0 && character.Runtime.InputHistory[5] == 4 &&
-                   character.Frame.N == 0,
-                "full frame input tick2 must preserve the held left key without rebuilding an edge from cleared runtime keys");
+            Expect(character.Runtime.KeyLeft == 0 && character.Runtime.PrevLeft == 0 &&
+                   character.Runtime.CdLeft == 5 &&
+                   character.Runtime.InputHistory[1] == 4 &&
+                   character.Runtime.InputHistory[2] == 4 &&
+                   character.Runtime.InputHistory[3] == 4 &&
+                   character.Runtime.InputHistory[4] == 4 &&
+                   character.Runtime.InputHistory[5] == 4,
+                $"six complete held-left packets must repeat the C# authority edge/history; " +
+                $"keyLeft={character.Runtime.KeyLeft},prevLeft={character.Runtime.PrevLeft}," +
+                $"cdLeft={character.Runtime.CdLeft}," +
+                $"history={string.Join(",", character.Runtime.InputHistory)}");
 
             LF2Character sparseLocal = CreateCharacter("SelfCheck_ParitySparseLocal", 3, data);
             ((SelfCheckController)sparseLocal.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.left, true);
             sparseLocal.RunHumanInputPollPhase(1);
             int[] sparseHistory = (int[])sparseLocal.Runtime.InputHistory.Clone();
+            var sparseWorld = new SimulationWorld();
+            sparseWorld.Register(sparseLocal);
+            sparseWorld.SerialTickAll(1);
+            Expect(sparseLocal.Runtime.KeyLeft == 0,
+                "C# authority frame-advance boundary must clear sparse tick1 runtime left");
             sparseLocal.RunHumanInputPollPhase(2);
             Expect(sparseLocal.Runtime.KeyLeft == 1 && sparseLocal.Runtime.PrevLeft == 1 &&
                    sparseLocal.Runtime.CdLeft == 4 &&
                    System.Linq.Enumerable.SequenceEqual(sparseHistory, sparseLocal.Runtime.InputHistory),
                 "sparse local event input must retain held state without manufacturing a repeated edge");
-
-            world.SerialTickAll(2);
-
-            world.ApplyFrameInputSet(new FrameInputSet(3, new[]
-            {
-                new SimulationPlayerInput(0, SimulationInputButtons.None),
-            }));
-            character.RunHumanInputPollPhase(3);
-            Expect(character.Runtime.KeyLeft == 0 && character.Runtime.PrevLeft == 1,
-                "full frame input must apply releases against the prior held snapshot on the requested tick");
 
             world.AdvanceBattleFlowTick(3);
             rosterSlot.RuntimeSlotIndex = -1;
@@ -3346,9 +3402,9 @@ namespace NTSD.Test
             HoldDirectionForTicks(right, FuncKeyMask.right, 1, 6);
             EnqueueInputTick(right, 7, (FuncKeyMask.att, true));
             right.RunPostCooldownInputPhase(7);
-            Expect(right.Frame.N == 102 && right.Runtime.ComboDrj == 1 &&
+            Expect(right.Frame.N == 102 && right.Runtime.ComboDrj == 0 &&
                    right.Runtime.CdDefend == 0 && right.Runtime.CdRight == 0 && right.Runtime.CdJump == 0,
-                $"partial held-right+defend must persist the defend step, then direct hit_d must enter102 and clear cooldowns; " +
+                $"partial held-right+defend must not commit before the DJA fallthrough, while direct hit_d enters102 and clears cooldowns; " +
                 $"frame={right.Frame.N},combo={right.Runtime.ComboDrj},cdD={right.Runtime.CdDefend}," +
                 $"cdR={right.Runtime.CdRight},cdJ={right.Runtime.CdJump}");
             EnqueueInputTick(right, 8, (FuncKeyMask.def, true));
@@ -3362,9 +3418,9 @@ namespace NTSD.Test
             HoldDirectionForTicks(left, FuncKeyMask.left, 1, 6);
             EnqueueInputTick(left, 7, (FuncKeyMask.att, true));
             left.RunPostCooldownInputPhase(7);
-            Expect(left.Frame.N == 102 && left.Runtime.ComboDlj == 1 &&
+            Expect(left.Frame.N == 102 && left.Runtime.ComboDlj == 0 &&
                    left.Runtime.CdDefend == 0 && left.Runtime.CdLeft == 0 && left.Runtime.CdJump == 0,
-                $"partial held-left+defend must persist the defend step, then direct hit_d must enter102 and clear cooldowns; " +
+                $"partial held-left+defend must not commit before the DJA fallthrough, while direct hit_d enters102 and clears cooldowns; " +
                 $"frame={left.Frame.N},combo={left.Runtime.ComboDlj},cdD={left.Runtime.CdDefend}," +
                 $"cdL={left.Runtime.CdLeft},cdJ={left.Runtime.CdJump}");
             EnqueueInputTick(left, 8, (FuncKeyMask.def, true));
@@ -3641,9 +3697,13 @@ namespace NTSD.Test
             shell.Runtime.KeyRight = 1;
             shell.Runtime.Vx = 0.0;
 
-            shell.RunPostCooldownInputPhase(1);
+            shell.RunHumanInputPollPhase(1);
+            Expect(System.Math.Abs(shell.Runtime.Vx) <= 1e-12 && shell.Runtime.KeyRight == 1,
+                "shared character-DAT HumanInput poll must preserve the current-tick packet without applying movement");
+            shell.RunCharacterInputPhase(1);
             Expect(System.Math.Abs(shell.Runtime.Vx - 4.0) <= 1e-12,
-                $"shared character-DAT walking ground gate must use YInt==0; actual Vx={shell.Runtime.Vx:R}");
+                $"shared character-DAT CharacterInput must apply walking before the C# authority clear boundary " +
+                $"and use YInt==0; actual Vx={shell.Runtime.Vx:R}");
 
             shell.Runtime.LinkState = 2;
             shell.Frame.N = 0;
@@ -6140,8 +6200,11 @@ namespace NTSD.Test
 
                 BuildCentralMeshFrame(frame, 13, 4097, false);
                 backend.Build(frame, resolver);
-                Expect(firstMesh.GetNativeIndexBufferPtr() != IntPtr.Zero &&
-                       secondMesh.GetNativeIndexBufferPtr() != IntPtr.Zero &&
+                bool nativeIndexBufferAvailable =
+                    SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null;
+                Expect((!nativeIndexBufferAvailable ||
+                        (firstMesh.GetNativeIndexBufferPtr() != IntPtr.Zero &&
+                         secondMesh.GetNativeIndexBufferPtr() != IntPtr.Zero)) &&
                        firstMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerChunk &&
                        secondMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerQuad,
                     "P4 empty-to-active rebuilds must preserve the native index buffer and expose both quad triangles");
@@ -6172,7 +6235,8 @@ namespace NTSD.Test
                 Expect(destroyedMesh == null && recoveredMesh != null &&
                        !ReferenceEquals(destroyedMesh, recoveredMesh) &&
                        recoveredMesh.indexFormat == UnityEngine.Rendering.IndexFormat.UInt16 &&
-                       recoveredMesh.GetNativeIndexBufferPtr() != IntPtr.Zero &&
+                       (!nativeIndexBufferAvailable ||
+                        recoveredMesh.GetNativeIndexBufferPtr() != IntPtr.Zero) &&
                        recoveredMesh.GetIndexCount(0) == BattleDynamicMeshBackend.IndicesPerChunk,
                     "P4 a destroyed persistent mesh must self-heal with its immutable UInt16 index template");
                 ExpectCentralMeshSubMeshRanges(recoveredMesh, 1, 4096);
@@ -8878,16 +8942,24 @@ namespace NTSD.Test
                     missingTextureSprite,
                     spriteMaterial,
                     Color.white);
-                DestroySelfCheckAsset(missingTexture);
+                // Destroy is deferred while Play Mode self-checks run. This contract must
+                // validate a genuinely retired texture, not one awaiting end-of-frame cleanup.
+                DestroySelfCheckAssetImmediately(missingTexture);
                 missingTexture = null;
-                Expect(!BattleCommonVisualCatalog.Build(null).IsValid &&
-                       !BattleCommonVisualCatalog.Build(missingDescriptorPrefab).IsValid &&
-                       !BattleCommonVisualCatalog.Build(missingSpritePrefab).IsValid &&
-                       !BattleCommonVisualCatalog.Build(missingMaterialPrefab).IsValid &&
-                       !BattleCommonVisualCatalog.Build(invalidMaterialPrefab).IsValid &&
-                       !BattleCommonVisualCatalog.Build(invalidMaskPrefab).IsValid &&
-                       !BattleCommonVisualCatalog.Build(missingTexturePrefab).IsValid,
-                    "P7 common shadow publication must fail closed for missing prefab/descriptor/fields, invalid material or mask, and retired texture");
+                Expect(!BattleCommonVisualCatalog.Build(null).IsValid,
+                    "P7 common shadow publication must fail closed for a missing prefab");
+                Expect(!BattleCommonVisualCatalog.Build(missingDescriptorPrefab).IsValid,
+                    "P7 common shadow publication must fail closed for a missing descriptor");
+                Expect(!BattleCommonVisualCatalog.Build(missingSpritePrefab).IsValid,
+                    "P7 common shadow publication must fail closed for a missing sprite");
+                Expect(!BattleCommonVisualCatalog.Build(missingMaterialPrefab).IsValid,
+                    "P7 common shadow publication must fail closed for a missing material");
+                Expect(!BattleCommonVisualCatalog.Build(invalidMaterialPrefab).IsValid,
+                    "P7 common shadow publication must fail closed for a red-tinted Sprites/Default material");
+                Expect(!BattleCommonVisualCatalog.Build(invalidMaskPrefab).IsValid,
+                    "P7 common shadow publication must fail closed for an unsupported mask interaction");
+                Expect(!BattleCommonVisualCatalog.Build(missingTexturePrefab).IsValid,
+                    "P7 common shadow publication must fail closed for a sprite referencing a retired texture");
 
                 commonCatalogField.SetValue(manager, commonCatalog);
                 using var entitySprites = new TemporaryCharacterSpriteConfig(manager, 7300, 1);
@@ -12597,6 +12669,9 @@ namespace NTSD.Test
             character.RunHumanInputPollPhase(5);
             Expect(character.Runtime.CdDefendLock == 2,
                 "BATTLE-AUDIT7-R1: real human PollHumanInput must decrement CdDefendLock from 3 to 2");
+            character.RunHumanInputPollPhase(6);
+            Expect(character.Runtime.CdDefendLock == 1,
+                "BATTLE-AUDIT7-R1: real human PollHumanInput must decrement CdDefendLock exactly once per tick");
 
             SelfCheckCharacterDatShell shared = CreateSharedInputShell(
                 character.FrameCache.Wrapper.characterData,
@@ -12605,6 +12680,9 @@ namespace NTSD.Test
             shared.RunHumanInputPollPhase(6);
             Expect(shared.Runtime.CdDefendLock == 2,
                 "BATTLE-AUDIT7-R1: shared Character-DAT human poll must decrement CdDefendLock from 3 to 2");
+            shared.RunHumanInputPollPhase(7);
+            Expect(shared.Runtime.CdDefendLock == 1,
+                "BATTLE-AUDIT7-R1: shared Character-DAT human poll must decrement CdDefendLock exactly once per tick");
 
             var aiWorld = new SimulationWorld();
             LF2Character ai = CreateCharacter(
@@ -14468,6 +14546,15 @@ namespace NTSD.Test
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             Expect(postInitLiving != null,
                 "BATTLE-AUDIT4-08: oid5 opoint fixture requires the production PostInitLiving entry");
+            System.Reflection.ParameterInfo[] postInitLivingParameters = postInitLiving.GetParameters();
+            Expect(postInitLivingParameters.Length == 6 &&
+                   postInitLivingParameters[0].ParameterType == typeof(LF2Entity) &&
+                   postInitLivingParameters[1].ParameterType == typeof(LF2Entity) &&
+                   postInitLivingParameters[2].ParameterType == typeof(ObjectPoint) &&
+                   postInitLivingParameters[3].ParameterType == typeof(int) &&
+                   postInitLivingParameters[4].ParameterType == typeof(float) &&
+                   postInitLivingParameters[5].ParameterType == typeof(bool),
+                "BATTLE-AUDIT4-08: PostInitLiving fixture must match the position-pure six-parameter contract");
             postInitLiving.Invoke(LF2ObjectPointFactory.Instance, new object[]
             {
                 oid5Spawned,
@@ -14476,7 +14563,6 @@ namespace NTSD.Test
                 (int)LF2ObjectType.Other,
                 0f,
                 false,
-                true,
             });
             Expect(oid5Spawned.Health.HP == 10 && oid5Spawned.Health.HP3 == 10 &&
                    oid5Spawned.Health.HPBound == 10 && oid5Spawned.Health.PP == 5,
@@ -17015,7 +17101,7 @@ namespace NTSD.Test
             for (int i = 0; i < spawned.Count; i++)
             {
                 Expect(spawned[i].StableId > 0,
-                    "every multi character opoint must allocate a positive StableId before registration");
+                    "every registered multi character opoint must receive a positive StableId");
                 stableIds.Add(spawned[i].StableId);
             }
             Expect(stableIds.Count == 2,
@@ -19769,13 +19855,15 @@ namespace NTSD.Test
             var pendingList = GetPrivateField(resetWorld, "_pendingUnregister") as List<ISimObject>;
             var pendingDestroyList = GetPrivateField(resetWorld, "_pendingSlotReleasedDestroy") as List<LF2Entity>;
             int replayRawA = resetWorld.Rng.NextRaw();
-            int replayStableA = resetWorld.AllocateStableId();
+            var replayIdentityA = new DynamicSlotSelfCheckEntity(0);
+            resetWorld.Register(replayIdentityA);
+            int replayStableA = replayIdentityA.StableId;
             resetWorld.ResetRuntimeState();
-            int replayRawB = resetWorld.Rng.NextRaw();
-            int replayStableB = resetWorld.AllocateStableId();
             int objectCountAfterReset = resetWorld.ObjectCount;
-            var replaySlot = new DynamicSlotSelfCheckEntity(655);
+            int replayRawB = resetWorld.Rng.NextRaw();
+            var replaySlot = new DynamicSlotSelfCheckEntity(0);
             resetWorld.Register(replaySlot);
+            int replayStableB = replaySlot.StableId;
             object resetCameraXValue = GetPrivateField(resetWorld, "_cameraX");
             object resetCameraVelValue = GetPrivateField(resetWorld, "_cameraVel");
             Expect(objectCountAfterReset == 0 && resetEntity.ItrRest.Arest == 0 &&
@@ -19943,18 +20031,18 @@ namespace NTSD.Test
 
             serialWorld.SerialTickAll(2);
 
-            ExpectCurrentInputKeysPreserved(serialReal.Runtime, "GT-02 real character");
-            ExpectCurrentInputKeysPreserved(serialShared.Runtime, "GT-02 shared character-DAT shell");
-            ExpectCurrentInputKeysPreserved(serialProbe.Runtime, "GT-02 current-DAT shell");
+            ExpectCurrentInputKeysCleared(serialReal.Runtime, "GT-02 real character");
+            ExpectCurrentInputKeysCleared(serialShared.Runtime, "GT-02 shared character-DAT shell");
+            ExpectCurrentInputKeysCleared(serialProbe.Runtime, "GT-02 current-DAT shell");
             Expect(serialProbe.TransitCount == 1 && serialProbe.TuCount == 1 &&
-                   serialProbe.CurrentKeysPreservedBeforeTransit &&
+                   serialProbe.CurrentKeysClearedBeforeTransit &&
                    serialProbe.PreviousKeysPreservedBeforeTransit,
-                "GT-02: every active slot must retain current and previous input through frame advance");
+                "GT-02: C# authority must clear current keys and preserve previous keys before frame advance");
 
-            CheckCppFrame212JumpVelocityRetention();
+            CheckAuthorityFrame212JumpVelocityAfterInputClear();
         }
 
-        private static void CheckCppFrame212JumpVelocityRetention()
+        private static void CheckAuthorityFrame212JumpVelocityAfterInputClear()
         {
             const float jumpHeight = -14.25f;
             const float jumpDistance = 9.5f;
@@ -19963,7 +20051,7 @@ namespace NTSD.Test
             LF2FrameData airborne = Frame(212, LF2States.Jump, 1, 212, 39, 79);
             var data = new LF2CharacterData
             {
-                name = "SelfCheck_CppJumpVelocityRetention",
+                name = "SelfCheck_AuthorityJumpVelocityAfterInputClear",
                 jump_height = jumpHeight,
                 jump_distance = jumpDistance,
                 jump_distancez = jumpDistanceZ,
@@ -19971,7 +20059,7 @@ namespace NTSD.Test
             };
 
             LF2Character directed = CreateCharacter(
-                "SelfCheck_CppJumpVelocityDirected", 765, data);
+                "SelfCheck_AuthorityJumpVelocityDirected", 765, data);
             directed.ImmediateFrame(211);
             directed.AttackingCounter = 1;
             directed.Runtime.SetPosition(0.0, -1.0, 0.0);
@@ -19992,10 +20080,10 @@ namespace NTSD.Test
             directed.SimFrameTick(2);
 
             Expect(directed.Frame.N == 212 &&
-                   Nearly(directed.Runtime.Vx, jumpDistance) &&
+                   Nearly(directed.Runtime.Vx, 2.25) &&
                    Nearly(directed.Runtime.Vy, jumpHeight) &&
-                   Nearly(directed.Runtime.Vz, -jumpDistanceZ),
-                $"GT-03: C++ frame 212 must apply DAT jump velocity from held right/up; " +
+                   Nearly(directed.Runtime.Vz, 1.5),
+                $"GT-03: C# authority input clear must prevent stale right/up from overriding frame 212 Vx/Vz; " +
                 $"frame={directed.Frame.N}, velocity=({directed.Runtime.Vx:R}," +
                 $"{directed.Runtime.Vy:R},{directed.Runtime.Vz:R})");
             Expect(directed.Runtime.PrevRight == 1 && directed.Runtime.PrevUp == 1 &&
@@ -20006,7 +20094,7 @@ namespace NTSD.Test
             const double inheritedVx = 6.25;
             const double inheritedVz = -2.5;
             LF2Character inherited = CreateCharacter(
-                "SelfCheck_CppJumpVelocityInherited", 766, data);
+                "SelfCheck_AuthorityJumpVelocityInherited", 766, data);
             inherited.ImmediateFrame(211);
             inherited.AttackingCounter = 1;
             inherited.Runtime.SetPosition(0.0, -1.0, 0.0);
@@ -20022,7 +20110,7 @@ namespace NTSD.Test
                    Nearly(inherited.Runtime.Vx, inheritedVx) &&
                    Nearly(inherited.Runtime.Vy, jumpHeight) &&
                    Nearly(inherited.Runtime.Vz, inheritedVz),
-                $"GT-03: C++ frame 212 without a direction override must retain pre-jump Vx/Vz; " +
+                $"GT-03: C# authority frame 212 without a direction override must retain pre-jump Vx/Vz; " +
                 $"frame={inherited.Frame.N}, velocity=({inherited.Runtime.Vx:R}," +
                 $"{inherited.Runtime.Vy:R},{inherited.Runtime.Vz:R})");
         }
@@ -20084,8 +20172,8 @@ namespace NTSD.Test
             Expect(localHeld.Runtime.KeyLeft == 1 && localHeld.Runtime.PrevLeft == 0,
                 "AUDIT6-01: local edge input must establish the held state on its target tick");
             localHeldWorld.SerialTickAll(2);
-            Expect(localHeld.Runtime.KeyLeft == 1,
-                "AUDIT6-01: C++ frame advance must retain the current local input key");
+            Expect(localHeld.Runtime.KeyLeft == 0,
+                "AUDIT6-01: C# authority frame advance must clear the current local input key");
             localHeld.Runtime.CdDefendLock = 2;
 
             localHeldWorld.PostCooldownHumanInputAll(3);
@@ -21119,14 +21207,6 @@ namespace NTSD.Test
                    runtime.KeyLeft == 0 && runtime.KeyRight == 0 &&
                    runtime.KeyAttack == 0 && runtime.KeyJump == 0 && runtime.KeyDefend == 0,
                 $"{label}: current runtime input keys must be clear");
-        }
-
-        private static void ExpectCurrentInputKeysPreserved(NTSDEntityRuntime runtime, string label)
-        {
-            Expect(runtime.KeyUp == 1 && runtime.KeyDown == 1 &&
-                   runtime.KeyLeft == 1 && runtime.KeyRight == 1 &&
-                   runtime.KeyAttack == 1 && runtime.KeyJump == 1 && runtime.KeyDefend == 1,
-                $"{label}: current runtime input keys must remain visible through frame advance");
         }
 
         private static void CheckPhysicsMovementAndVerticalBoundaryContracts()
@@ -22894,9 +22974,10 @@ namespace NTSD.Test
 
                 Expect(djaOnly.Runtime.Unk338 == 77,
                     "missing DJA target must not fall through to the merged Unk338 release branch");
-                Expect((byte)GetPrivateField(djaOnly.InputState, "_comboDJA") == 0 &&
-                       djaOnly.Runtime.ComboDja == 0,
-                    "missing-target DJA attempt must consume completed private/runtime comboDJA progress");
+                // HitJa returns before the authority commit, even though its local comboDja is cleared.
+                Expect((byte)GetPrivateField(djaOnly.InputState, "_comboDJA") == 3 &&
+                       djaOnly.Runtime.ComboDja == 3,
+                    "missing-target DJA attempt must retain entered private/runtime comboDJA progress");
 
                 wrappers[51].characterData.frames.Add(Frame(300, 0, 1, 300, 39, 79));
                 LF2Character validDja = CreateCharacter("SelfCheck_Oid51_ValidDja", 51, wrappers[51].characterData);
@@ -22907,9 +22988,9 @@ namespace NTSD.Test
                 validDja.Runtime.ComboDja = 3;
                 validDja.ApplyFrameInputFromLocalState();
                 Expect(validDja.Frame.N == 300 && validDja.Runtime.Unk338 == 66 &&
-                       (byte)GetPrivateField(validDja.InputState, "_comboDJA") == 0 &&
-                       validDja.Runtime.ComboDja == 0,
-                    "valid merged DJA target must jump and consume completed private/runtime comboDJA progress");
+                       (byte)GetPrivateField(validDja.InputState, "_comboDJA") == 3 &&
+                       validDja.Runtime.ComboDja == 3,
+                    "valid merged DJA target must jump without committing private/runtime comboDJA progress");
 
                 SimulationWorld aiWorld = CreateOid5152MergedWorld(
                     wrappers, out LF2Character aiSelf, out LF2Character aiPartner);
@@ -23411,6 +23492,40 @@ namespace NTSD.Test
 
         private static void CheckComboLocalShadowCommitContracts()
         {
+            LF2CharacterData w01Data = BuildComboWrapperCharacterData(
+                "SelfCheck_ComboLocalW01",
+                180);
+            w01Data.frames.Add(Frame(
+                LF2StandardFrames.WalkingStart,
+                LF2States.Walking,
+                10,
+                LF2StandardFrames.WalkingStart,
+                39,
+                79));
+            LF2Character w01 = CreateCharacter(
+                "SelfCheck_ComboLocalW01",
+                2,
+                w01Data);
+            SelfCheckController w01Controller = (SelfCheckController)w01.Controller;
+            w01Controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.left, true);
+            w01.RunPostCooldownInputPhase(1);
+            ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
+                "W01 Left must not commit local combo progress before the DJA fallthrough");
+            w01.Runtime.ClearDirectionalInputKeys();
+            w01.Runtime.ClearActionInputKeys();
+
+            w01Controller.InputBuffer.EnqueueForTick(2, FuncKeyMask.att, true);
+            w01.RunPostCooldownInputPhase(2);
+            ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
+                "W01 held Left+Attack must keep all nine runtime combo fields at authority zero");
+            w01.Runtime.ClearDirectionalInputKeys();
+            w01.Runtime.ClearActionInputKeys();
+
+            w01Controller.InputBuffer.EnqueueForTick(3, FuncKeyMask.left, false);
+            w01.RunPostCooldownInputPhase(3);
+            ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
+                "W01 held Attack after Left release must keep all nine runtime combo fields at authority zero");
+
             LF2Character partial = CreateCharacter(
                 "SelfCheck_ComboLocalPartial",
                 1,
@@ -23418,8 +23533,8 @@ namespace NTSD.Test
             SetComboLocalSeeds(partial, ordinaryValue: 1, djaValue: 0);
             ((SelfCheckController)partial.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.att, true);
             partial.RunPostCooldownInputPhase(1);
-            ExpectComboLocalSeeds(partial, ordinaryValue: 0, djaValue: 1,
-                "an incomplete DJA must persist its first step while interrupted ordinary wrappers reset");
+            ExpectComboLocalSeeds(partial, ordinaryValue: 1, djaValue: 0,
+                "an incomplete DJA must discard the entire local combo transaction");
 
             LF2CharacterData failedJumpData = BuildComboWrapperCharacterData(
                 "SelfCheck_ComboLocalFailedDjaJump", 399);
@@ -23433,8 +23548,8 @@ namespace NTSD.Test
             Expect(failedJump.Frame.N == 85,
                 $"BATTLE-AUDIT3-18 missing DJA target must skip 399 and continue through the running action tail to 85; " +
                 $"actual={failedJump.Frame.N}");
-            ExpectComboLocalSeeds(failedJump, ordinaryValue: 0, djaValue: 0,
-                "a completed DJA attempt must consume its progress even when the authored target frame is missing");
+            ExpectComboLocalSeeds(failedJump, ordinaryValue: 1, djaValue: 2,
+                "a HitJa early return must not commit local combo progress when the authored target frame is missing");
 
             LF2CharacterData unk328Data = BuildComboWrapperCharacterData(
                 "SelfCheck_ComboLocalUnk328", 300);
@@ -23451,8 +23566,8 @@ namespace NTSD.Test
             Expect(unk328.Frame.N == 85 && unk328.Runtime.Unk338 == 0,
                 $"BATTLE-AUDIT3-18 Unk328 branch must clear Unk338, skip 300, and continue to running action85; " +
                 $"frame={unk328.Frame.N},Unk338={unk328.Runtime.Unk338}");
-            ExpectComboLocalSeeds(unk328, ordinaryValue: 0, djaValue: 3,
-                "Unk328 must preserve completed DJA progress while interrupted ordinary wrappers reset");
+            ExpectComboLocalSeeds(unk328, ordinaryValue: 1, djaValue: 2,
+                "Unk328 early return must clear Unk338 without committing any local combo progress");
 
             LF2Character committed = CreateCharacter(
                 "SelfCheck_ComboLocalCommit",
@@ -23487,26 +23602,26 @@ namespace NTSD.Test
             // Physical L/S/K maps to internal att/down/def and therefore to CdDefend/CdDown/CdJump.
             controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.att, true);
             naruto.RunPostCooldownInputPhase(1);
-            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 1 &&
+            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0 &&
                    naruto.Runtime.CdDefend == 5,
-                $"physical L must persist the first DDJ step; frame={naruto.Frame.N}," +
+                $"physical L must not commit an incomplete DDJ transaction; frame={naruto.Frame.N}," +
                 $"combo={naruto.Runtime.ComboDdj},cdDefend={naruto.Runtime.CdDefend}");
             naruto.Runtime.ClearDirectionalInputKeys();
             naruto.Runtime.ClearActionInputKeys();
 
             controller.InputBuffer.EnqueueForTick(2, FuncKeyMask.down, true);
             naruto.RunPostCooldownInputPhase(2);
-            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 2 &&
+            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0 &&
                    naruto.Runtime.CdDown == 5,
-                $"physical S on the next logic tick must persist the second DDJ step; frame={naruto.Frame.N}," +
+                $"physical S on the next logic tick cannot resume discarded DDJ local progress; frame={naruto.Frame.N}," +
                 $"combo={naruto.Runtime.ComboDdj},cdDown={naruto.Runtime.CdDown}");
             naruto.Runtime.ClearDirectionalInputKeys();
             naruto.Runtime.ClearActionInputKeys();
 
             controller.InputBuffer.EnqueueForTick(3, FuncKeyMask.def, true);
             naruto.RunPostCooldownInputPhase(3);
-            Expect(naruto.Frame.N == 105 && naruto.Runtime.ComboDdj == 0,
-                $"physical K on the third logic tick must complete defend-down-jump at hit_Dj; " +
+            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0,
+                $"staggered physical L/S/K must not complete DDJ without a committed transaction; " +
                 $"frame={naruto.Frame.N},combo={naruto.Runtime.ComboDdj},cdJump={naruto.Runtime.CdJump}");
         }
 
@@ -24437,8 +24552,8 @@ namespace NTSD.Test
             Expect(guarded.Frame.N == 85,
                 $"oid6 DjaGuard must block DJA frame300 but continue through the running action tail to85; " +
                 $"actual={guarded.Frame.N}");
-            ExpectComboLocalSeeds(guarded, ordinaryValue: 0, djaValue: 3,
-                "oid6 DjaGuard must hold completed DJA progress while interrupted ordinary wrappers reset");
+            ExpectComboLocalSeeds(guarded, ordinaryValue: 1, djaValue: 2,
+                "oid6 DjaGuard early return must discard the entire local combo transaction");
 
             LF2Character released = CreateCharacter("SelfCheck_Oid6_DjaRelease", 6, BuildComboWrapperCharacterData("SelfCheck_Oid6_DjaRelease", 300));
             released.SwitchDir("right");
@@ -24450,10 +24565,10 @@ namespace NTSD.Test
             ((SelfCheckController)released.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.jump, true);
             released.RunPostCooldownInputPhase(1);
 
-            Expect(released.Frame.N == 300,
-                "oid6 DJA must frame jump once DjaGuardGlobal44F224 no longer blocks it");
-            ExpectComboLocalSeeds(released, ordinaryValue: 0, djaValue: 0,
-                "successful oid6 DJA must consume completed progress after entering its target frame");
+            Expect(released.Frame.N == 300 && released.Runtime.CdAttack == 0,
+                "oid6 DJA must frame jump and preserve its cooldown-clear side effect once the guard opens");
+            ExpectComboLocalSeeds(released, ordinaryValue: 1, djaValue: 2,
+                "successful HitJa frame-jump early return must not commit local combo progress");
         }
 
         private static void CheckRandomWeaponDropAuthorityContract()
@@ -26827,7 +26942,7 @@ namespace NTSD.Test
         {
             public int TransitCount { get; private set; }
             public int TuCount { get; private set; }
-            public bool CurrentKeysPreservedBeforeTransit { get; private set; }
+            public bool CurrentKeysClearedBeforeTransit { get; private set; }
             public bool PreviousKeysPreservedBeforeTransit { get; private set; }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
@@ -26843,9 +26958,9 @@ namespace NTSD.Test
             public override void SimTransit(int tickIndex)
             {
                 TransitCount++;
-                CurrentKeysPreservedBeforeTransit = Runtime.KeyUp == 1 && Runtime.KeyDown == 1 &&
-                    Runtime.KeyLeft == 1 && Runtime.KeyRight == 1 &&
-                    Runtime.KeyAttack == 1 && Runtime.KeyJump == 1 && Runtime.KeyDefend == 1;
+                CurrentKeysClearedBeforeTransit = Runtime.KeyUp == 0 && Runtime.KeyDown == 0 &&
+                    Runtime.KeyLeft == 0 && Runtime.KeyRight == 0 &&
+                    Runtime.KeyAttack == 0 && Runtime.KeyJump == 0 && Runtime.KeyDefend == 0;
                 PreviousKeysPreservedBeforeTransit = Runtime.PrevUp == 1 && Runtime.PrevDown == 1 &&
                     Runtime.PrevLeft == 1 && Runtime.PrevRight == 1 &&
                     Runtime.PrevAttack == 1 && Runtime.PrevJump == 1 && Runtime.PrevDefend == 1;
@@ -28019,6 +28134,12 @@ namespace NTSD.Test
             if (Application.isPlaying)
                 UnityEngine.Object.Destroy(target);
             else
+                UnityEngine.Object.DestroyImmediate(target);
+        }
+
+        private static void DestroySelfCheckAssetImmediately(UnityEngine.Object target)
+        {
+            if (target != null)
                 UnityEngine.Object.DestroyImmediate(target);
         }
 

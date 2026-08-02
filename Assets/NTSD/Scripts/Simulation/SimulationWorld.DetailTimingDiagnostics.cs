@@ -1,9 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Unity.Profiling;
 
 namespace NTSD.Simulation
 {
+    public enum BattleLateRuntimeSnapshotMode
+    {
+        LegacyThree = 0,
+        ConsolidatedFinal = 1,
+    }
+
     public enum BattleTickDetailPhase
     {
         CharacterInputSnapshotBuild = 0,
@@ -12,6 +19,7 @@ namespace NTSD.Simulation
         LateEntityStateSpecial = 3,
         LateEntityRecovery = 4,
         LateEntityFrameTick = 5,
+        [Obsolete("Reserved historical phase id 6; production never samples this removed ghost pass.")]
         LateEntityCollision = 6,
         LateEntityFrameExit = 7,
         LateEntityDeathOpoint = 8,
@@ -34,7 +42,19 @@ namespace NTSD.Simulation
         RenderPrepareFrameSetVertexBufferData = 25,
         RenderPrepareFrameSetSubMeshes = 26,
         RenderExecuteCommandBuffer = 27,
-        Count = 28,
+        CandidateCollectCacheSetup = 28,
+        CandidateCollectParticipantBodyItrBuild = 29,
+        CandidateCollectInputValidation = 30,
+        CandidateCollectDirectBroadphase = 31,
+        CandidateCollectTreeBroadphase = 32,
+        CandidateCollectFallbackPairAdd = 33,
+        CandidateCollectSortDeduplicate = 34,
+        CandidateCollectPairExactLoop = 35,
+        RenderBuildCommandsShadow = 36,
+        RenderBuildCommandsEntity = 37,
+        RenderBuildCommandsOverlay = 38,
+        RenderBuildCommandsHitRecord = 39,
+        Count = 40,
     }
 
     /// <summary>
@@ -53,11 +73,31 @@ namespace NTSD.Simulation
         CleanupCompleted = 6,
         TailAndQueuedFlush = 7,
         PrevFrameMirror = 8,
-        Count = 9,
+        TransitionInternal = 9,
+        Count = 10,
     }
 
     public sealed class BattleTickDetailPhaseDiagnostics
     {
+        private const string ProfilerMarkerNamePrefix = "NTSD.BattleTick.Detail.";
+
+        private static class PhaseProfilerMarkers
+        {
+            internal static readonly ProfilerMarker[] All = Create();
+
+            private static ProfilerMarker[] Create()
+            {
+                var markers = new ProfilerMarker[(int)BattleTickDetailPhase.Count];
+                for (int index = 0; index < markers.Length; index++)
+                {
+                    markers[index] = new ProfilerMarker(
+                        GetProfilerMarkerNameForDiagnostics(
+                            (BattleTickDetailPhase)index));
+                }
+                return markers;
+            }
+        }
+
         private readonly long[] elapsedTimestampTicks =
             new long[(int)BattleTickDetailPhase.Count];
         private readonly long[] deferredRenderElapsedTimestampTicks =
@@ -80,9 +120,16 @@ namespace NTSD.Simulation
         public static long TimestampFrequency => Stopwatch.Frequency;
         public bool Enabled { get; private set; }
         public int LastTickIndex { get; private set; } = -1;
+        public int ActivePhaseDepthForDiagnostics => activePhaseDepth;
+        public BattleTickDetailPhase ActivePhaseForDiagnostics =>
+            activePhaseDepth > 0
+                ? activePhases[activePhaseDepth - 1]
+                : BattleTickDetailPhase.Count;
 
         public void SetEnabled(bool enabled)
         {
+            if (Enabled)
+                EndTick();
             Enabled = enabled;
             activePhaseDepth = 0;
             LastTickIndex = -1;
@@ -108,6 +155,7 @@ namespace NTSD.Simulation
             if (!Enabled)
                 return;
 
+            EndTick();
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
             Array.Clear(
@@ -157,6 +205,7 @@ namespace NTSD.Simulation
 
             activePhases[activePhaseDepth] = phase;
             activePhaseTimestamps[activePhaseDepth] = Stopwatch.GetTimestamp();
+            PhaseProfilerMarkers.All[(int)phase].Begin();
             activePhaseDepth++;
         }
 
@@ -168,21 +217,19 @@ namespace NTSD.Simulation
                 return;
             }
 
-            activePhaseDepth--;
-            long elapsed = Stopwatch.GetTimestamp() -
-                           activePhaseTimestamps[activePhaseDepth];
-            if (deferredRenderMaterializationDepth > 0 &&
-                IsDeferredMaterializationPhase(phase))
-            {
-                Interlocked.Add(
-                    ref deferredRenderElapsedTimestampTicks[(int)phase],
-                    elapsed);
-            }
-            else
-            {
-                elapsedTimestampTicks[(int)phase] += elapsed;
-            }
-            activePhaseTimestamps[activePhaseDepth] = 0;
+            EndActivePhase();
+        }
+
+        public void EndTick()
+        {
+            if (!Enabled)
+                return;
+
+            while (activePhaseDepth > 0)
+                EndActivePhase();
+            while (activeLateRuntimeSnapshotDepth > 0)
+                EndActiveLateRuntimeSnapshot();
+            deferredRenderMaterializationDepth = 0;
         }
 
         public void RecordDeferredPhaseElapsed(
@@ -198,6 +245,19 @@ namespace NTSD.Simulation
             Interlocked.Add(
                 ref deferredRenderElapsedTimestampTicks[(int)phase],
                 elapsedTicks);
+        }
+
+        public void RecordPhaseElapsed(
+            BattleTickDetailPhase phase,
+            long elapsedTicks)
+        {
+            if (!Enabled || (uint)phase >= (uint)BattleTickDetailPhase.Count ||
+                elapsedTicks <= 0)
+            {
+                return;
+            }
+
+            elapsedTimestampTicks[(int)phase] += elapsedTicks;
         }
 
         public long GetLastElapsedTimestampTicks(BattleTickDetailPhase phase)
@@ -282,6 +342,8 @@ namespace NTSD.Simulation
                     return "LateEntityUpdate/RefreshRuntimeSnapshot/TailAndQueuedFlush";
                 case BattleLateRuntimeSnapshotStage.PrevFrameMirror:
                     return "LateEntityUpdate/RefreshRuntimeSnapshot/PrevFrameMirror";
+                case BattleLateRuntimeSnapshotStage.TransitionInternal:
+                    return "LateEntityUpdate/RefreshRuntimeSnapshot/TransitionInternal";
                 default:
                     return string.Empty;
             }
@@ -303,8 +365,8 @@ namespace NTSD.Simulation
                     return "LateEntityUpdate/Recovery";
                 case BattleTickDetailPhase.LateEntityFrameTick:
                     return "LateEntityUpdate/FrameTick";
-                case BattleTickDetailPhase.LateEntityCollision:
-                    return "LateEntityUpdate/EntityCollision";
+                case (BattleTickDetailPhase)6:
+                    return "Reserved/RemovedLateEntityCollision";
                 case BattleTickDetailPhase.LateEntityFrameExit:
                     return "LateEntityUpdate/FrameExit";
                 case BattleTickDetailPhase.LateEntityDeathOpoint:
@@ -347,9 +409,74 @@ namespace NTSD.Simulation
                     return "Render/PrepareFrame/SetSubMeshes";
                 case BattleTickDetailPhase.RenderExecuteCommandBuffer:
                     return "Render/ExecuteCommandBuffer";
+                case BattleTickDetailPhase.CandidateCollectCacheSetup:
+                    return "CandidateCollect/CacheSetup";
+                case BattleTickDetailPhase.CandidateCollectParticipantBodyItrBuild:
+                    return "CandidateCollect/ParticipantBodyItrBuild";
+                case BattleTickDetailPhase.CandidateCollectInputValidation:
+                    return "CandidateCollect/InputValidation";
+                case BattleTickDetailPhase.CandidateCollectDirectBroadphase:
+                    return "CandidateCollect/DirectBroadphase";
+                case BattleTickDetailPhase.CandidateCollectTreeBroadphase:
+                    return "CandidateCollect/TreeBroadphase";
+                case BattleTickDetailPhase.CandidateCollectFallbackPairAdd:
+                    return "CandidateCollect/FallbackPairAdd";
+                case BattleTickDetailPhase.CandidateCollectSortDeduplicate:
+                    return "CandidateCollect/SortDeduplicate";
+                case BattleTickDetailPhase.CandidateCollectPairExactLoop:
+                    return "CandidateCollect/PairExactLoop";
+                case BattleTickDetailPhase.RenderBuildCommandsShadow:
+                    return "Render/BeginFrame/BuildCommands/Shadow";
+                case BattleTickDetailPhase.RenderBuildCommandsEntity:
+                    return "Render/BeginFrame/BuildCommands/Entity";
+                case BattleTickDetailPhase.RenderBuildCommandsOverlay:
+                    return "Render/BeginFrame/BuildCommands/Overlay";
+                case BattleTickDetailPhase.RenderBuildCommandsHitRecord:
+                    return "Render/BeginFrame/BuildCommands/HitRecord";
                 default:
                     return string.Empty;
             }
+        }
+
+        public static string GetProfilerMarkerNameForDiagnostics(
+            BattleTickDetailPhase phase)
+        {
+            string phaseName = GetPhaseName(phase);
+            return phaseName.Length == 0
+                ? string.Empty
+                : ProfilerMarkerNamePrefix + phaseName;
+        }
+
+        private void EndActivePhase()
+        {
+            activePhaseDepth--;
+            BattleTickDetailPhase phase = activePhases[activePhaseDepth];
+            long elapsed = Stopwatch.GetTimestamp() -
+                           activePhaseTimestamps[activePhaseDepth];
+            PhaseProfilerMarkers.All[(int)phase].End();
+            if (deferredRenderMaterializationDepth > 0 &&
+                IsDeferredMaterializationPhase(phase))
+            {
+                Interlocked.Add(
+                    ref deferredRenderElapsedTimestampTicks[(int)phase],
+                    elapsed);
+            }
+            else
+            {
+                elapsedTimestampTicks[(int)phase] += elapsed;
+            }
+            activePhaseTimestamps[activePhaseDepth] = 0;
+        }
+
+        private void EndActiveLateRuntimeSnapshot()
+        {
+            activeLateRuntimeSnapshotDepth--;
+            BattleLateRuntimeSnapshotStage stage =
+                activeLateRuntimeSnapshotStages[activeLateRuntimeSnapshotDepth];
+            lateRuntimeSnapshotElapsedTimestampTicks[(int)stage] +=
+                Stopwatch.GetTimestamp() -
+                activeLateRuntimeSnapshotTimestamps[activeLateRuntimeSnapshotDepth];
+            activeLateRuntimeSnapshotTimestamps[activeLateRuntimeSnapshotDepth] = 0;
         }
 
         private static bool IsDeferredMaterializationPhase(BattleTickDetailPhase phase)
@@ -371,7 +498,18 @@ namespace NTSD.Simulation
         InputStateSyncFromRuntime = 6,
         ComboUpdate = 7,
         RefreshRuntimeSnapshot = 8,
-        Count = 9,
+        CandidateNearest = 9,
+        CandidateSpecial = 10,
+        ContextMoveMode = 11,
+        CachedTargetRetention = 12,
+        PostSpecialMainDecision = 13,
+        Teammate20Scan = 14,
+        Held20Scan = 15,
+        InputEdges = 16,
+        SnapshotUnifiedDuplicateCapture = 17,
+        SnapshotUnifiedDuplicateIndexBuild = 18,
+        UnifiedSnapshotExecutionRowRefresh = 19,
+        Count = 20,
     }
 
     /// <summary>
@@ -383,6 +521,12 @@ namespace NTSD.Simulation
         public const int RadiusHistogramBucketCount = 9;
 
         private readonly long[] elapsedTimestampTicks =
+            new long[(int)BattleAiInputDetailPhase.Count];
+        private readonly long[] phaseCallCounts =
+            new long[(int)BattleAiInputDetailPhase.Count];
+        private readonly long[] phaseSlotVisitCounts =
+            new long[(int)BattleAiInputDetailPhase.Count];
+        private readonly long[] phaseRngCallCounts =
             new long[(int)BattleAiInputDetailPhase.Count];
         private readonly BattleAiInputDetailPhase[] activePhases =
             new BattleAiInputDetailPhase[4];
@@ -450,6 +594,27 @@ namespace NTSD.Simulation
                 : 0;
         }
 
+        public long GetLastCallCount(BattleAiInputDetailPhase phase)
+        {
+            return (uint)phase < (uint)BattleAiInputDetailPhase.Count
+                ? phaseCallCounts[(int)phase]
+                : 0;
+        }
+
+        public long GetLastSlotVisitCount(BattleAiInputDetailPhase phase)
+        {
+            return (uint)phase < (uint)BattleAiInputDetailPhase.Count
+                ? phaseSlotVisitCounts[(int)phase]
+                : 0;
+        }
+
+        public long GetLastRngCallCount(BattleAiInputDetailPhase phase)
+        {
+            return (uint)phase < (uint)BattleAiInputDetailPhase.Count
+                ? phaseRngCallCounts[(int)phase]
+                : 0;
+        }
+
         public long GetRadiusHistogramValue(int index)
         {
             return (uint)index < (uint)radiusHistogram.Length ? radiusHistogram[index] : 0;
@@ -477,6 +642,28 @@ namespace NTSD.Simulation
                     return "CharacterInput/AI/ComboUpdate";
                 case BattleAiInputDetailPhase.RefreshRuntimeSnapshot:
                     return "CharacterInput/AI/RefreshRuntimeSnapshot";
+                case BattleAiInputDetailPhase.CandidateNearest:
+                    return "CharacterInput/AI/RemainingAiDecision/CandidateNearest";
+                case BattleAiInputDetailPhase.CandidateSpecial:
+                    return "CharacterInput/AI/RemainingAiDecision/CandidateSpecial";
+                case BattleAiInputDetailPhase.ContextMoveMode:
+                    return "CharacterInput/AI/RemainingAiDecision/ContextMoveMode";
+                case BattleAiInputDetailPhase.CachedTargetRetention:
+                    return "CharacterInput/AI/RemainingAiDecision/CachedTargetRetention";
+                case BattleAiInputDetailPhase.PostSpecialMainDecision:
+                    return "CharacterInput/AI/RemainingAiDecision/PostSpecialMainDecision";
+                case BattleAiInputDetailPhase.Teammate20Scan:
+                    return "CharacterInput/AI/RemainingAiDecision/PostSpecialMainDecision/Teammate20Scan";
+                case BattleAiInputDetailPhase.Held20Scan:
+                    return "CharacterInput/AI/RemainingAiDecision/PostSpecialMainDecision/Held20Scan";
+                case BattleAiInputDetailPhase.InputEdges:
+                    return "CharacterInput/AI/RemainingAiDecision/InputEdges";
+                case BattleAiInputDetailPhase.SnapshotUnifiedDuplicateCapture:
+                    return "CharacterInput/AI/SnapshotUnifiedDuplicateCapture";
+                case BattleAiInputDetailPhase.SnapshotUnifiedDuplicateIndexBuild:
+                    return "CharacterInput/AI/SnapshotUnifiedDuplicateIndexBuild";
+                case BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh:
+                    return "CharacterInput/AI/UnifiedSnapshotExecutionRowRefresh";
                 default:
                     return string.Empty;
             }
@@ -500,10 +687,36 @@ namespace NTSD.Simulation
         public void RecordBruteSlotVisits(int count) { if (Enabled) BruteSlotVisits += count; }
         public void RecordPhase1ListVisits(int count) { if (Enabled) Phase1ListVisits += count; }
         public void RecordRefresh() { if (Enabled) RefreshCount++; }
+        public void RecordPhaseCall(BattleAiInputDetailPhase phase)
+        {
+            if (Enabled && (uint)phase < (uint)BattleAiInputDetailPhase.Count)
+                phaseCallCounts[(int)phase]++;
+        }
+        public void RecordPhaseSlotVisits(BattleAiInputDetailPhase phase, int count)
+        {
+            if (Enabled && count > 0 &&
+                (uint)phase < (uint)BattleAiInputDetailPhase.Count)
+            {
+                phaseSlotVisitCounts[(int)phase] += count;
+            }
+        }
+        public void RecordPhaseRngCalls(BattleAiInputDetailPhase phase, ulong count)
+        {
+            if (Enabled && count > 0 &&
+                (uint)phase < (uint)BattleAiInputDetailPhase.Count)
+            {
+                phaseRngCallCounts[(int)phase] += count > long.MaxValue
+                    ? long.MaxValue
+                    : (long)count;
+            }
+        }
 
         private void Reset(int tickIndex)
         {
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
+            Array.Clear(phaseCallCounts, 0, phaseCallCounts.Length);
+            Array.Clear(phaseSlotVisitCounts, 0, phaseSlotVisitCounts.Length);
+            Array.Clear(phaseRngCallCounts, 0, phaseRngCallCounts.Length);
             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
             Array.Clear(radiusHistogram, 0, radiusHistogram.Length);
             activePhaseDepth = 0;

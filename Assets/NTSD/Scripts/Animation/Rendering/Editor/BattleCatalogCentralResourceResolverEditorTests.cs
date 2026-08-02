@@ -40,10 +40,17 @@ namespace NTSD.Animation.Rendering.Editor
 
             fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
             AssertResolved(fixture.Resolver, command);
+            int clearsAfterValidConfiguration = fixture.Resolver.TemplateClears;
 
             fixture.Valid2DMaterial.SetColor("_Color", Color.black);
             fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
             AssertUnresolved(fixture.Resolver, command);
+            Assert.That(fixture.Resolver.TemplateClears, Is.EqualTo(clearsAfterValidConfiguration + 1));
+
+            fixture.Valid2DMaterial.SetColor("_Color", Color.white);
+            fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
+            AssertResolved(fixture.Resolver, command);
+            Assert.That(fixture.Resolver.TemplateClears, Is.EqualTo(clearsAfterValidConfiguration + 2));
         }
 
         [Test]
@@ -91,6 +98,51 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(coldStatus, Is.EqualTo(BattleCentralResourceStatus.Resolved));
                 Assert.That(cachedStatus, Is.EqualTo(coldStatus));
                 AssertResourcesEqual(cold, cached);
+            }
+        }
+
+        [Test]
+        public void Configure_SameReferencesAndValidity_PreservesWarmedTemplateCaches()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: true);
+            using var common = new CommonFixture("no-op");
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                common.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+            BattleRenderCommand[] commands =
+            {
+                fixture.CreateCommand(0),
+                fixture.CreateCommand(1),
+                common.CreateShadowCommand(),
+                common.CreateSparkCommand(),
+                common.CreateWordCommand(),
+            };
+            var expectedResources = new BattleCentralResolvedResource[commands.Length];
+            for (int commandIndex = 0; commandIndex < commands.Length; commandIndex++)
+            {
+                Assert.That(
+                    fixture.Resolver.Resolve(commands[commandIndex], out expectedResources[commandIndex]),
+                    Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            }
+
+            int clearsBeforeNoOp = fixture.Resolver.TemplateClears;
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                common.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            Assert.That(fixture.Resolver.ConfigureCalls, Is.EqualTo(2));
+            Assert.That(fixture.Resolver.NoOpHits, Is.EqualTo(1));
+            Assert.That(fixture.Resolver.TemplateClears, Is.EqualTo(clearsBeforeNoOp));
+            for (int commandIndex = 0; commandIndex < commands.Length; commandIndex++)
+            {
+                Assert.That(
+                    fixture.Resolver.Resolve(commands[commandIndex], out BattleCentralResolvedResource actual),
+                    Is.EqualTo(BattleCentralResourceStatus.Resolved));
+                AssertResourcesEqual(expectedResources[commandIndex], actual);
             }
         }
 
@@ -185,7 +237,7 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
-        public void Configure_EveryCallDropsPriorCatalogCommonAndMaterialTemplates()
+        public void Configure_ReferenceChangesDropPriorCatalogCommonAndMaterialTemplates()
         {
             using var first = new ResolverFixture(includeArrayBinding: true, name: "epoch-a");
             using var second = new ResolverFixture(includeArrayBinding: true, name: "epoch-b");
@@ -205,12 +257,14 @@ namespace NTSD.Animation.Rendering.Editor
                 first.ValidArrayMaterial);
             AssertResolved(resolver, entityA);
             AssertResolved(resolver, shadowA);
+            int expectedTemplateClears = resolver.TemplateClears;
 
             resolver.Configure(
                 second.Catalog,
                 commonA.Catalog,
                 first.Valid2DMaterial,
                 first.ValidArrayMaterial);
+            Assert.That(resolver.TemplateClears, Is.EqualTo(++expectedTemplateClears));
             AssertUnresolved(resolver, entityA);
             Assert.That(
                 resolver.Resolve(entityB, out BattleCentralResolvedResource entityBResource),
@@ -222,6 +276,7 @@ namespace NTSD.Animation.Rendering.Editor
                 commonB.Catalog,
                 first.Valid2DMaterial,
                 first.ValidArrayMaterial);
+            Assert.That(resolver.TemplateClears, Is.EqualTo(++expectedTemplateClears));
             AssertUnresolved(resolver, shadowA);
             Assert.That(
                 resolver.Resolve(shadowB, out BattleCentralResolvedResource shadowBResource),
@@ -233,6 +288,7 @@ namespace NTSD.Animation.Rendering.Editor
                 commonB.Catalog,
                 first.AlternateValid2DMaterial,
                 first.ValidArrayMaterial);
+            Assert.That(resolver.TemplateClears, Is.EqualTo(++expectedTemplateClears));
             Assert.That(
                 resolver.Resolve(entityB, out BattleCentralResolvedResource fallbackResource),
                 Is.EqualTo(BattleCentralResourceStatus.Resolved));
@@ -245,6 +301,7 @@ namespace NTSD.Animation.Rendering.Editor
                 commonB.Catalog,
                 first.AlternateValid2DMaterial,
                 first.AlternateValidArrayMaterial);
+            Assert.That(resolver.TemplateClears, Is.EqualTo(++expectedTemplateClears));
             Assert.That(
                 resolver.Resolve(arrayB, out BattleCentralResolvedResource arrayResource),
                 Is.EqualTo(BattleCentralResourceStatus.Resolved));
@@ -253,8 +310,74 @@ namespace NTSD.Animation.Rendering.Editor
                 Is.True);
 
             resolver.Configure(null, null, null, null);
+            Assert.That(resolver.TemplateClears, Is.EqualTo(++expectedTemplateClears));
             AssertUnresolved(resolver, entityB);
             AssertUnresolved(resolver, shadowB);
+        }
+
+        [Test]
+        public void Configure_DestroyedMaterialNeverUsesTheNoOpCachePath()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            BattleRenderCommand command = fixture.CreateCommand(0);
+            fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
+            AssertResolved(fixture.Resolver, command);
+            int clearsBeforeDestroy = fixture.Resolver.TemplateClears;
+
+            UnityEngine.Object.DestroyImmediate(fixture.Valid2DMaterial);
+            Assert.That(fixture.Valid2DMaterial == null, Is.True);
+            fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
+
+            Assert.That(fixture.Resolver.TemplateClears, Is.EqualTo(clearsBeforeDestroy + 1));
+            Assert.That(fixture.Resolver.NoOpHits, Is.Zero);
+            AssertUnresolved(fixture.Resolver, command);
+
+            fixture.Resolver.Configure(fixture.Catalog, fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
+            Assert.That(fixture.Resolver.TemplateClears, Is.EqualTo(clearsBeforeDestroy + 2));
+            AssertUnresolved(fixture.Resolver, command);
+        }
+
+        [Test]
+        public void CommonCatalog_ValidityFlags_PreserveExistingCompletenessSemantics()
+        {
+            using var common = new CommonFixture("validity");
+
+            BattleCommonVisualCatalog complete = common.CreateCatalog(
+                includeShadow: true,
+                completeSparks: true,
+                completeWords: true);
+            BattleCommonVisualCatalog missingShadow = common.CreateCatalog(
+                includeShadow: false,
+                completeSparks: true,
+                completeWords: true);
+            BattleCommonVisualCatalog missingSpark = common.CreateCatalog(
+                includeShadow: true,
+                completeSparks: false,
+                completeWords: true);
+            BattleCommonVisualCatalog missingGlyph = common.CreateCatalog(
+                includeShadow: true,
+                completeSparks: true,
+                completeWords: false);
+
+            Assert.That(complete.IsShadowValid, Is.True);
+            Assert.That(complete.IsSparkValid, Is.True);
+            Assert.That(complete.IsWordsValid, Is.True);
+            Assert.That(complete.IsComplete, Is.True);
+
+            Assert.That(missingShadow.IsShadowValid, Is.False);
+            Assert.That(missingShadow.IsSparkValid, Is.True);
+            Assert.That(missingShadow.IsWordsValid, Is.True);
+            Assert.That(missingShadow.IsComplete, Is.False);
+
+            Assert.That(missingSpark.IsShadowValid, Is.True);
+            Assert.That(missingSpark.IsSparkValid, Is.False);
+            Assert.That(missingSpark.IsWordsValid, Is.True);
+            Assert.That(missingSpark.IsComplete, Is.False);
+
+            Assert.That(missingGlyph.IsShadowValid, Is.True);
+            Assert.That(missingGlyph.IsSparkValid, Is.True);
+            Assert.That(missingGlyph.IsWordsValid, Is.False);
+            Assert.That(missingGlyph.IsComplete, Is.False);
         }
 
         [Test]
@@ -311,6 +434,41 @@ namespace NTSD.Animation.Rendering.Editor
             long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
 
             Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+        }
+
+        [Test]
+        public void Resolve_DestroyedEntityAndCommonResourcesInvalidateTheWholeGeneration()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            using var common = new CommonFixture("destroy-generation");
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                common.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+            BattleRenderCommand entity = fixture.CreateCommand(0);
+            BattleRenderCommand shadow = common.CreateShadowCommand();
+            AssertResolved(fixture.Resolver, entity);
+            AssertResolved(fixture.Resolver, entity);
+            int generationBeforeEntityDestroy = fixture.Resolver.BindingGeneration;
+
+            UnityEngine.Object.DestroyImmediate(fixture.SourceTexture);
+            Assert.That(fixture.SourceTexture == null, Is.True);
+            AssertUnresolved(fixture.Resolver, entity);
+            Assert.That(
+                fixture.Resolver.BindingGeneration,
+                Is.GreaterThan(generationBeforeEntityDestroy));
+            Assert.That(fixture.Resolver.DestroyedResourceInvalidations, Is.EqualTo(1));
+
+            AssertResolved(fixture.Resolver, shadow);
+            int generationBeforeCommonDestroy = fixture.Resolver.BindingGeneration;
+            UnityEngine.Object.DestroyImmediate(common.Texture);
+            Assert.That(common.Texture == null, Is.True);
+            AssertUnresolved(fixture.Resolver, shadow);
+            Assert.That(
+                fixture.Resolver.BindingGeneration,
+                Is.GreaterThan(generationBeforeCommonDestroy));
+            Assert.That(fixture.Resolver.DestroyedResourceInvalidations, Is.EqualTo(2));
         }
 
         private static void AssertResolved(
@@ -808,36 +966,75 @@ namespace NTSD.Animation.Rendering.Editor
                     wordSprite,
                     wordTexture);
 
+                Catalog = CreateCatalog(
+                    includeShadow: true,
+                    completeSparks: false,
+                    completeWords: false);
+            }
+
+            public BattleCommonVisualCatalog Catalog { get; }
+            public Texture2D Texture { get; }
+
+            public BattleCommonVisualCatalog CreateCatalog(
+                bool includeShadow,
+                bool completeSparks,
+                bool completeWords)
+            {
                 var sparks = new BattleCommonVisualBinding[
                     BattleCommonVisualCatalog.SparkFrameCount];
-                sparks[SparkPic] = sparkBinding;
+                if (completeSparks)
+                {
+                    for (int pic = 0; pic < sparks.Length; pic++)
+                        sparks[pic] = sparkBinding;
+                }
+                else
+                {
+                    sparks[SparkPic] = sparkBinding;
+                }
+
                 var wordTextures = new Texture2D[BattleCommonVisualCatalog.WordSheetCount];
-                wordTextures[WordSheetIndex] = wordTexture;
                 var words = new BattleCommonVisualBinding[
                     BattleCommonVisualCatalog.WordSheetCount][];
                 for (int sheetIndex = 0;
                      sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
                      sheetIndex++)
                 {
-                    words[sheetIndex] = sheetIndex == WordSheetIndex
-                        ? new BattleCommonVisualBinding[
-                            BattleCommonVisualCatalog.WordGlyphsPerSheet]
-                        : Array.Empty<BattleCommonVisualBinding>();
+                    if (completeWords)
+                    {
+                        wordTextures[sheetIndex] = wordTexture;
+                        words[sheetIndex] = new BattleCommonVisualBinding[
+                            BattleCommonVisualCatalog.WordGlyphsPerSheet];
+                        for (int charCode = 0;
+                             charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                             charCode++)
+                        {
+                            words[sheetIndex][charCode] = wordBinding;
+                        }
+                    }
+                    else
+                    {
+                        words[sheetIndex] = sheetIndex == WordSheetIndex
+                            ? new BattleCommonVisualBinding[
+                                BattleCommonVisualCatalog.WordGlyphsPerSheet]
+                            : Array.Empty<BattleCommonVisualBinding>();
+                    }
                 }
-                words[WordSheetIndex][WordCharCode] = wordBinding;
-                Catalog = (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
+                if (!completeWords)
+                {
+                    wordTextures[WordSheetIndex] = wordTexture;
+                    words[WordSheetIndex][WordCharCode] = wordBinding;
+                }
+
+                return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
                     new object[]
                     {
-                        shadowBinding,
+                        includeShadow ? shadowBinding : null,
                         sparks,
                         wordTextures,
                         words,
                         string.Empty,
                     });
             }
-
-            public BattleCommonVisualCatalog Catalog { get; }
-            public Texture2D Texture { get; }
 
             public BattleRenderCommand CreateShadowCommand()
             {

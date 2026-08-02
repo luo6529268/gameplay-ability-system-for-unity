@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "root": ".",
+  "createdFor": "Gate 0 pre-scaffold preservation baseline",
+  "entries": [
+    {
+      "path": "README.md",
+      "size": 5026,
+      "sha256": "38f8b69951dec21bdcea032ef31751c2bc18951f05bfaf8be05d5dc6466e7cb4"
+    },
+    {
+      "path": "data/cpp-runtime.json",
+      "size": 258048,
+      "sha256": "f57bb0137c8b58a5f0148eb2d1658b21db24ebfdcef010bdd6faed1ae04606dd"
+    }
+  ]
+}

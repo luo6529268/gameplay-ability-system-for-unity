@@ -280,6 +280,13 @@ namespace NTSD.Animation.Rendering
         private BattleCentralResourceTemplate shadowTemplate;
         private int initializedSparkTemplateCount;
         private int initializedWordTemplateCount;
+        private bool hasConfiguration;
+
+        public int ConfigureCalls { get; private set; }
+        public int NoOpHits { get; private set; }
+        public int TemplateClears { get; private set; }
+        public int BindingGeneration { get; private set; }
+        public int DestroyedResourceInvalidations { get; private set; }
 
         public void Configure(BattleSpriteCatalog value, Material sharedMaterial)
         {
@@ -304,19 +311,44 @@ namespace NTSD.Animation.Rendering
             Material sharedFallbackMaterial,
             Material sharedArrayMaterial)
         {
+            ConfigureCalls++;
+            BattleSpriteCatalog nextCatalog = value ?? BattleSpriteCatalog.Empty;
+            BattleCommonVisualCatalog nextCommonVisualCatalog =
+                commonVisuals ?? BattleCommonVisualCatalog.Empty;
+            bool nextFallbackMaterialContractValid =
+                BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
+                    sharedFallbackMaterial,
+                    false);
+            bool nextArrayMaterialContractValid =
+                BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
+                    sharedArrayMaterial,
+                    true);
+            bool hasDestroyedMaterial =
+                IsDestroyedUnityObject(sharedFallbackMaterial) ||
+                IsDestroyedUnityObject(sharedArrayMaterial);
+            if (hasConfiguration &&
+                !hasDestroyedMaterial &&
+                ReferenceEquals(catalog, nextCatalog) &&
+                ReferenceEquals(commonVisualCatalog, nextCommonVisualCatalog) &&
+                ReferenceEquals(fallbackMaterial, sharedFallbackMaterial) &&
+                ReferenceEquals(arrayMaterial, sharedArrayMaterial) &&
+                fallbackMaterialContractValid == nextFallbackMaterialContractValid &&
+                arrayMaterialContractValid == nextArrayMaterialContractValid)
+            {
+                NoOpHits++;
+                return;
+            }
+
             ClearTemplates();
-            catalog = value ?? BattleSpriteCatalog.Empty;
-            commonVisualCatalog = commonVisuals ?? BattleCommonVisualCatalog.Empty;
+            catalog = nextCatalog;
+            commonVisualCatalog = nextCommonVisualCatalog;
             fallbackMaterial = sharedFallbackMaterial;
             arrayMaterial = sharedArrayMaterial;
             configuredFallbackMaterial = fallbackMaterial;
             configuredArrayMaterial = arrayMaterial;
-            fallbackMaterialContractValid = BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
-                fallbackMaterial,
-                false);
-            arrayMaterialContractValid = BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
-                arrayMaterial,
-                true);
+            fallbackMaterialContractValid = nextFallbackMaterialContractValid;
+            arrayMaterialContractValid = nextArrayMaterialContractValid;
+            hasConfiguration = true;
         }
 
         public BattleCentralResourceStatus Resolve(
@@ -352,14 +384,30 @@ namespace NTSD.Animation.Rendering
             }
 
             BattleSpriteKey key = command.SpriteDescriptor.LogicalResourceKey.EntitySpriteKey;
-            if (!entityTemplates.TryGetValue(key, out BattleCentralResourceTemplate template) ||
-                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+            bool hasTemplate = entityTemplates.TryGetValue(
+                key,
+                out BattleCentralResourceTemplate template);
+            bool matchesTrustedIdentity =
+                hasTemplate && template.MatchesTrustedIdentity(command);
+            if (hasTemplate && !matchesTrustedIdentity &&
+                template.HasDestroyedResource)
+            {
+                InvalidateDestroyedResourceGeneration();
+                template = default;
+                matchesTrustedIdentity = false;
+            }
+            if (!template.IsInitialized ||
+                (!matchesTrustedIdentity &&
+                 !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial)))
             {
                 template = BuildEntityTemplate(key);
                 entityTemplates[key] = template;
+                matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
             }
 
-            return template.Resolve(command, out resource);
+            return matchesTrustedIdentity
+                ? template.ResolveTrusted(command, out resource)
+                : template.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonWordGlyph(
@@ -389,8 +437,17 @@ namespace NTSD.Animation.Rendering
             }
 
             BattleCentralResourceTemplate template = wordTemplates[sheetIndex][charCode];
+            bool matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
+            if (!matchesTrustedIdentity &&
+                template.HasDestroyedResource)
+            {
+                InvalidateDestroyedResourceGeneration();
+                template = default;
+                matchesTrustedIdentity = false;
+            }
             if (!template.IsInitialized ||
-                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+                (!matchesTrustedIdentity &&
+                 !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial)))
             {
                 template = BuildCommonWordTemplate(sheetIndex, charCode);
                 if (!wordTemplates[sheetIndex][charCode].IsInitialized)
@@ -399,9 +456,12 @@ namespace NTSD.Animation.Rendering
                         sheetIndex * BattleCommonVisualCatalog.WordGlyphsPerSheet + charCode;
                 }
                 wordTemplates[sheetIndex][charCode] = template;
+                matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
             }
 
-            return template.Resolve(command, out resource);
+            return matchesTrustedIdentity
+                ? template.ResolveTrusted(command, out resource)
+                : template.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonShadow(
@@ -420,17 +480,29 @@ namespace NTSD.Animation.Rendering
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
+            bool matchesTrustedIdentity = shadowTemplate.MatchesTrustedIdentity(command);
+            if (!matchesTrustedIdentity &&
+                shadowTemplate.HasDestroyedResource)
+            {
+                InvalidateDestroyedResourceGeneration();
+                shadowTemplate = default;
+                matchesTrustedIdentity = false;
+            }
             if (!shadowTemplate.IsInitialized ||
-                !shadowTemplate.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+                (!matchesTrustedIdentity &&
+                 !shadowTemplate.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial)))
             {
                 shadowTemplate = BuildCommonTemplate(
                     BattleRenderCommandType.Shadow,
                     -1,
                     -1,
                     commonVisualCatalog.Shadow);
+                matchesTrustedIdentity = shadowTemplate.MatchesTrustedIdentity(command);
             }
 
-            return shadowTemplate.Resolve(command, out resource);
+            return matchesTrustedIdentity
+                ? shadowTemplate.ResolveTrusted(command, out resource)
+                : shadowTemplate.Resolve(command, out resource);
         }
 
         private BattleCentralResourceStatus ResolveCommonSpark(
@@ -457,8 +529,17 @@ namespace NTSD.Animation.Rendering
             }
 
             BattleCentralResourceTemplate template = sparkTemplates[pic];
+            bool matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
+            if (!matchesTrustedIdentity &&
+                template.HasDestroyedResource)
+            {
+                InvalidateDestroyedResourceGeneration();
+                template = default;
+                matchesTrustedIdentity = false;
+            }
             if (!template.IsInitialized ||
-                !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial))
+                (!matchesTrustedIdentity &&
+                 !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial)))
             {
                 commonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding binding);
                 template = BuildCommonTemplate(
@@ -469,9 +550,12 @@ namespace NTSD.Animation.Rendering
                 if (!sparkTemplates[pic].IsInitialized)
                     initializedSparkTemplateSlots[initializedSparkTemplateCount++] = pic;
                 sparkTemplates[pic] = template;
+                matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
             }
 
-            return template.Resolve(command, out resource);
+            return matchesTrustedIdentity
+                ? template.ResolveTrusted(command, out resource)
+                : template.Resolve(command, out resource);
         }
 
         private BattleCentralResourceTemplate BuildEntityTemplate(BattleSpriteKey key)
@@ -550,8 +634,28 @@ namespace NTSD.Animation.Rendering
             return BattleSpriteMaterialContract.IsDeclaredCentralMaterial(material, expectsArray);
         }
 
+        private void InvalidateDestroyedResourceGeneration()
+        {
+            DestroyedResourceInvalidations++;
+            ClearTemplates();
+        }
+
+        private static bool IsDestroyedUnityObject(UnityEngine.Object value)
+        {
+            return !ReferenceEquals(value, null) && value == null;
+        }
+
+        private void AdvanceBindingGeneration()
+        {
+            BindingGeneration = BindingGeneration == int.MaxValue
+                ? 1
+                : BindingGeneration + 1;
+        }
+
         private void ClearTemplates()
         {
+            TemplateClears++;
+            AdvanceBindingGeneration();
             entityTemplates.Clear();
             shadowTemplate = default;
 
@@ -621,6 +725,10 @@ namespace NTSD.Animation.Rendering
                     false);
 
             public bool IsInitialized { get; }
+            public bool HasDestroyedResource =>
+                IsInitialized &&
+                Status == BattleCentralResourceStatus.Resolved &&
+                (IsDestroyedUnityObject(Texture) || IsDestroyedUnityObject(Material));
             private BattleCentralResourceStatus Status { get; }
             private BattleCentralResourceSignature Signature { get; }
             private Texture Texture { get; }
@@ -682,6 +790,12 @@ namespace NTSD.Animation.Rendering
                 return ReferenceEquals(Material, currentMaterial);
             }
 
+            public bool MatchesTrustedIdentity(in BattleRenderCommand command)
+            {
+                return IsInitialized &&
+                       Signature.MatchesTrustedIdentity(command);
+            }
+
             public BattleCentralResourceStatus Resolve(
                 in BattleRenderCommand command,
                 out BattleCentralResolvedResource resource)
@@ -695,6 +809,19 @@ namespace NTSD.Animation.Rendering
                 {
                     resource = default;
                     return BattleCentralResourceStatus.UnresolvedVisual;
+                }
+
+                return ResolveTrusted(command, out resource);
+            }
+
+            public BattleCentralResourceStatus ResolveTrusted(
+                in BattleRenderCommand command,
+                out BattleCentralResolvedResource resource)
+            {
+                if (Status != BattleCentralResourceStatus.Resolved)
+                {
+                    resource = default;
+                    return Status;
                 }
 
                 resource = new BattleCentralResolvedResource(
@@ -730,7 +857,8 @@ namespace NTSD.Animation.Rendering
                 BattleVisualResourceKey logicalResourceKey,
                 SpriteMaskInteraction maskInteraction,
                 BattleSpriteMaterialSemantic materialSemantic,
-                bool isSupported)
+                bool isSupported,
+                object trustedResourceIdentity)
             {
                 CommandType = commandType;
                 VisualDataId = visualDataId;
@@ -748,6 +876,7 @@ namespace NTSD.Animation.Rendering
                 MaskInteraction = maskInteraction;
                 MaterialSemantic = materialSemantic;
                 IsSupported = isSupported;
+                TrustedResourceIdentity = trustedResourceIdentity;
             }
 
             public Vector2 Pivot { get; }
@@ -766,6 +895,7 @@ namespace NTSD.Animation.Rendering
             private BattleVisualResourceKey LogicalResourceKey { get; }
             private SpriteMaskInteraction MaskInteraction { get; }
             private bool IsSupported { get; }
+            private object TrustedResourceIdentity { get; }
 
             public static BattleCentralResourceSignature FromEntity(BattleSpriteEntry entry)
             {
@@ -788,7 +918,8 @@ namespace NTSD.Animation.Rendering
                     BattleVisualResourceKey.FromEntity(entry.Key),
                     renderState.MaskInteraction,
                     renderState.MaterialSemantic,
-                    renderState.IsSupported);
+                    renderState.IsSupported,
+                    entry);
             }
 
             public static BattleCentralResourceSignature FromCommon(
@@ -813,11 +944,15 @@ namespace NTSD.Animation.Rendering
                     binding.Key,
                     binding.RenderState.MaskInteraction,
                     binding.RenderState.MaterialSemantic,
-                    binding.RenderState.IsSupported);
+                    binding.RenderState.IsSupported,
+                    binding);
             }
 
             public bool Matches(in BattleRenderCommand command)
             {
+                if (MatchesTrustedIdentity(command))
+                    return true;
+
                 BattleSpriteValueDescriptor descriptor = command.SpriteDescriptor;
                 return command.Type == CommandType &&
                        command.VisualDataId == VisualDataId &&
@@ -837,6 +972,14 @@ namespace NTSD.Animation.Rendering
                        command.RenderState.MaskInteraction == MaskInteraction &&
                        command.RenderState.MaterialSemantic == MaterialSemantic &&
                        command.RenderState.IsSupported == IsSupported;
+            }
+
+            public bool MatchesTrustedIdentity(in BattleRenderCommand command)
+            {
+                return TrustedResourceIdentity != null &&
+                       ReferenceEquals(
+                           TrustedResourceIdentity,
+                           command.TrustedResourceIdentity);
             }
         }
     }

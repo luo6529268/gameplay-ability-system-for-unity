@@ -1,0 +1,89 @@
+AI SENSING SCALAR SoA SHADOW V1 - MIRROR CHANGESET
+
+Scope
+-----
+All changes are confined to this prepared mirror. No real Assets file was written.
+
+Mechanical sync precondition
+----------------------------
+The three real destination files were re-hashed immediately before handoff and still
+match the mirror baseline hashes in MANIFEST.txt. Therefore these mirror files may be
+copied directly over their same relative paths after the parent/reviewer accepts them.
+
+Copy/update these files
+-----------------------
+Assets/NTSD/Scripts/Simulation/SimulationWorld.AiInput.partial.cs
+  baseline: 00F4BA305CC4979050C5F32D52EBC0F64D4260E183DC42CA5C931CE3F58EE746
+  mirror:   E0574A95ADB71C5B8CBD874EC094A82A6A341B2F2E02E0EE4E976F886A891A58
+
+Assets/NTSD/Scripts/Simulation/SimulationWorld.Passes.partial.cs
+  baseline: 5695B1F8A8EE33D080942007BE9BC3434D89E26D4B4B0A5C70A61150724F2926
+  mirror:   E0BAB1693AF451866DB16258D878DDE01D96C9ABC5CC8614E3C63922F3BB5FCB
+
+Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs
+  baseline: 00BAECFBF7DB7D97050C5C7AB1929E43E48FDFF27988AE6FBD324D969287B9EB
+  mirror:   4CEA8FFCAA635BA7D97615BCA54721E32BDB9FFEE4BB6CF88BA845CCABAA284D
+
+Add these files
+---------------
+Assets/NTSD/Scripts/Simulation/SimulationWorld.AiSoaShadow.partial.cs
+  sha256: 122C703A8483E2E092100B7E1297155F85E1E93D49DF88404A26B008664EA247
+
+Assets/NTSD/Scripts/Simulation/SimulationWorld.AiSoaShadow.partial.cs.meta
+  sha256: AF2DB7105F9A82B0D1268AB52EAFBE280B06899074803B3E7C709A1D7333BDA3
+
+Existing-file diff size
+-----------------------
+SimulationWorld.AiInput.partial.cs:  +38 lines
+SimulationWorld.Passes.partial.cs:   +6 lines
+SimulationWorld.Registry.partial.cs: +3 lines
+
+Implemented contract
+--------------------
+- Public three-state AiSensingMode. Legacy is enum/default zero. Shadow is opt-in.
+  SoAAiSensing throws NotSupportedException and is also checked before ResetRuntimeState
+  mutates state and before character-input passes begin.
+- One preallocated scalar SoA column set per runtime slot. The row storage contains no
+  LF2Entity, UnityEngine.Object, GameObject, Transform, List, or Dictionary references.
+- BuildAiInputSlotSnapshot captures scalar data with occupancy epoch, handle generation,
+  and runtime StableId identity. Any drift invalidates the shadow for the rest of the pass.
+- A pure ascending brute scan reproduces initial nearest/bestDist/sameZLane, local-copy RNG
+  cached selection, and post-special selection/flags. It does not write input or consume the
+  world RNG. No second quadtree was introduced.
+- Canonical PrepareAiInputBasic still executes exactly once and remains the only input/RNG
+  authority. Its existing locals are compared against the pending shadow trace.
+- Pending traces are paired by tick, runtime slot, generation, and StableId. Mismatches are
+  buffered in a fixed bitmask and published only after a complete valid comparison. Invalid
+  traces publish no result and increment no mismatch counter.
+- CharacterInputAll and AiInputAndComboAll refresh the scalar row after each actually
+  processed current-character-DAT entity's legacy handling without an LF2Character CLR
+  check, covering human/AI/transformed shells and earlier-slot mutation visibility.
+- Diagnostics expose fixed counters, cumulative/last mismatch masks, publish state, and the
+  first structured mismatch. No tick-path strings, logging, boxing, LINQ, or collections.
+- All five internal self-check entry points reject `_ticking` before changing state. Their
+  temporary Shadow mode and snapshot build are exception-safe: previous mode is restored
+  even when Build throws, and snapshot clear runs only after Build completed successfully.
+- Normal pass snapshot clear preserves the last published comparison/mismatch diagnostics;
+  new snapshot/query start resets stale published state, while invalidation still clears it.
+
+Verification performed
+----------------------
+- Baseline-to-mirror no-index diff inspected; only the three documented hook files changed.
+- New partial brace balance: 138 open / 138 close.
+- Self-check hardening structure: 5 ticking guards, 5 successful-build markers, and
+  5 exception-safe completion calls.
+- Static forbidden-storage scan found no LF2Entity arrays, Unity references, collections,
+  or logging in the new partial.
+- An injected Assembly-CSharp MSBuild compile reached C# compilation and reported no errors
+  in any mirrored/new file. The overall build could not pass outside Unity because the
+  generated project references unavailable package assemblies (UniTask, InputSystem, URP,
+  MoreMountains, etc.); this is an environment/baseline limitation, not a mirror-file error.
+
+Remaining verification
+----------------------
+- Run the new Editor fixture in Unity for the six approved matrices: three-state behavior,
+  nearest strict ties/filters/air override, special found/not-found/C8 restore, earlier-slot
+  refresh including transformed non-LF2Character shell, epoch/generation/identity fail-closed,
+  and RNG/input/checksum invariance plus warmed zero allocation.
+- Confirm whether project API naming prefers AiSensingMode as both enum type and property;
+  this is valid C# and keeps the intended public switch concise.

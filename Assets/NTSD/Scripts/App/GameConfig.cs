@@ -13,6 +13,8 @@ namespace NTSD.App
         [Header("Battle Runtime Profile")]
         [Tooltip("Optional profile name. Empty uses the platform default.")]
         public string BattleRuntimeProfileName = "";
+        [Tooltip("Battle AI execution profile. Empty uses LegacyCanonical on every platform. Valid values: LegacyCanonical, DataOrientedCanonical.")]
+        public string BattleAiExecutionProfileName = "";
         [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
         public int DesktopInitialRuntimeSlotCapacity = 512;
         [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]

@@ -11,6 +11,11 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleDynamicMeshBackendSegmentBoundsEditorTests
     {
+        private static readonly FieldInfo LastInactiveChunkClearCountField =
+            typeof(BattleDynamicMeshBackend).GetField(
+                "lastInactiveChunkClearCount",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
         [Test]
         public void AccumulatedBounds_MatchLegacyVertexScanAcrossRandomSegments()
         {
@@ -72,6 +77,7 @@ namespace NTSD.Animation.Rendering.Editor
 
             backend.Build(frame, resolver);
             Assert.That(backend.ActiveChunkCount, Is.EqualTo(2));
+            Assert.That(GetLastInactiveChunkClearCount(backend), Is.Zero);
             AssertAllSegmentBoundsMatchLegacy(frame, backend);
             Mesh firstChunk = backend.GetChunkMesh(0);
             Mesh secondChunk = backend.GetChunkMesh(1);
@@ -91,6 +97,7 @@ namespace NTSD.Animation.Rendering.Editor
                 new Vector2(-0.5f, 1.5f)));
             backend.Build(frame, resolver);
             Assert.That(backend.ActiveChunkCount, Is.EqualTo(1));
+            Assert.That(GetLastInactiveChunkClearCount(backend), Is.EqualTo(1));
             Assert.That(backend.SegmentCount, Is.EqualTo(1));
             AssertAllSegmentBoundsMatchLegacy(frame, backend);
             Assert.That(secondChunk.bounds.size, Is.EqualTo(Vector3.zero));
@@ -99,6 +106,7 @@ namespace NTSD.Animation.Rendering.Editor
             FrameAccess.Reset(frame, 3);
             backend.Build(frame, resolver);
             Assert.That(backend.ActiveChunkCount, Is.Zero);
+            Assert.That(GetLastInactiveChunkClearCount(backend), Is.EqualTo(1));
             Assert.That(firstChunk.bounds.size, Is.EqualTo(Vector3.zero));
             Assert.That(secondChunk.bounds.size, Is.EqualTo(Vector3.zero));
             AssertInertDescriptors(firstChunk);
@@ -112,6 +120,11 @@ namespace NTSD.Animation.Rendering.Editor
                 new Vector2(8f, 6f),
                 new Vector2(0f, 0f)));
             backend.Build(frame, resolver);
+            Assert.That(GetLastInactiveChunkClearCount(backend), Is.Zero);
+            AssertAllSegmentBoundsMatchLegacy(frame, backend);
+
+            backend.Build(frame, resolver);
+            Assert.That(GetLastInactiveChunkClearCount(backend), Is.Zero);
             AssertAllSegmentBoundsMatchLegacy(frame, backend);
         }
 
@@ -181,6 +194,12 @@ namespace NTSD.Animation.Rendering.Editor
                 Bounds expected = CalculateLegacyBounds(frame, segment);
                 AssertBoundsEqual(actual, expected, segmentIndex);
             }
+        }
+
+        private static int GetLastInactiveChunkClearCount(BattleDynamicMeshBackend backend)
+        {
+            Assert.That(LastInactiveChunkClearCountField, Is.Not.Null);
+            return (int)LastInactiveChunkClearCountField.GetValue(backend);
         }
 
         private static Bounds CalculateLegacyBounds(

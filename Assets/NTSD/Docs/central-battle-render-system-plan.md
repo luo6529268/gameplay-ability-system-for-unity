@@ -1,5 +1,21 @@
 # 集中式战斗渲染系统方案
 
+## 2026-08-03：BuildCommands 与高频表现命令优化
+
+- **BuildCommands 诊断基线：**`Temp/NTSD_ProductionEntityStress.data-oriented-buildcommands-detail-1000-60ticks-20260802.json`（1000 个分散 AI、30 warmup + 60 sample、CentralOnly）中，`BuildCommands` Avg/P95=`5.295/5.591 ms`；其中 Overlay=`2.788 ms`、Shadow=`1.424 ms`、Entity=`0.893 ms`。详细诊断仅用于归因，其逐命令计时会产生观察开销，不能用其绝对帧率作为最终门禁。
+- **视口快照复用：**原实现对影子、实体、三个 `Com` 字形及 hit record 分别调用 `ScreenPixelToWorld`，而该接口每次都会重新获取 viewport；1000 AI 下约为每 tick 5000 次重复 viewport 查询。现在 `BuildCommands` 每 tick 只捕获一次 `ViewportTransformSnapshot`，后续坐标换算与 shadow snap 全部复用。`Temp/NTSD_ProductionEntityStress.data-oriented-viewport-snapshot-1000-60ticks-20260802.json` 中 `BuildCommands` 降至 `2.789 ms`（`-47.3%`），Overlay/Shadow/Entity 分别降至 `1.504/0.627/0.465 ms`；60 tick parity hash 保持一致且 sampled GC=`0 B/tick`。
+- **可信资源解析单次校验：**生产命令携带不可变的 `BattleSpriteEntry` 或 `BattleCommonVisualBinding` 身份。resolver 现在先做一次可信身份匹配，匹配成功后使用 `ResolveTrusted`，避免同一命令在 invalidation、material 与 resolve 分支重复比较完整签名；外部、测试及身份不匹配命令仍走完整签名校验并保持 fail-closed。详细 A/B 中 `ResolveCommands` Avg 从 `5.066` 降至 `4.190 ms`（`-17.3%`），`PrepareFrame` 从 `10.418` 降至 `8.842 ms`。
+- **真实 no-detail 结果：**`Temp/NTSD_ProductionEntityStress.data-oriented-resolver-single-trust-clean-1000-120ticks-20260802.json` 与 repeat 报告分别为 Avg/P95=`32.846/40.521 ms`、`32.648/39.167 ms`；两轮 sampled GC 都是 `0 B/tick`，120 tick parity hash 相同，cleanup 后 active GameObject/world entity/claimed slot 全为 0。平均逻辑 tick 已连续两轮进入 `33.33 ms` 预算，但 P95 仍未达标，Unity frame Avg 仍为 `59.825/58.237 ms`，因此不得宣称“1000 AI 稳定 30 FPS”。
+- **后续热点：**关闭详细诊断后的 coarse 报告 `Temp/NTSD_ProductionEntityStress.data-oriented-resolver-single-trust-coarse-1000-120ticks-20260802.json` 中，CharacterInput Avg/P95=`7.742/8.924 ms`、RenderDispatch=`7.137/8.619 ms`、CandidateCollect=`4.024/9.580 ms`。BuildCommands 本批主要重复 API 与资源解析问题已关闭；下一优先级是 CandidateCollect 的 P95 尖峰，其次才是继续压缩 CharacterInput/RenderDispatch 常态成本。
+- **fresh 验证：**Unity compile=`0 error`；focused command writer/mesh backend=`10/10 passed`，resolver=`15/15 passed`；完整 EditMode job `6e2addcb4bbb4d089e8f669ac802f595`=`714/714 passed`；`BattleRuntimeSelfCheck` 于 `2026-08-03 00:37:00` 为 `PASS`。T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+
+## 2026-08-02：Gate-B candidate list pool fresh 证据（1000 AI gate 未关闭）
+
+- **修复前 configured 基线：**`Temp/NTSD_ProductionEntityStress.dispersed1000.gateb-authority-100ticks-20260802.json` 的 Unified SoA configured workload 为 Avg `31.367 ms`、P95 `40.225 ms`。Profiler 将 CandidateCollect 的主要分配定位为每 tick 对约 1000 个 AI 各创建一个 `List`，合计约 `155.9 KB`。
+- **修复与代码侧验证：**candidate list pool 修复已通过 focused Unity job `fe5de...` 的 `4/4`，fresh `BattleRuntimeSelfCheck` 为 `PASS`。
+- **fixed 报告：**`Temp/NTSD_ProductionEntityStress.dispersed1000.gateb-listpool-100ticks-20260802.json` 有效且为 `StoppedCleanly`；final parity overall hash=`0ce668469bce74a7945adc2981ff7bacc5596f6dcc374d3ee6478a694a70976d`，与修复前 configured 基线一致。逻辑 tick Avg/P95=`34.552/45.569 ms`；CandidateCollect Avg/P95/max=`4.991/10.438/14.588 ms`；sampled GC average/maximum=`0/0 B`；Console 为 `0 error`。
+- **证据边界：**同一 Editor 的抖动使 `31.367/40.225 ms` 与 `34.552/45.569 ms` 不能证明性能回退，也不能证明目标达成。1000 AI 仍未稳定达到 30 Hz，gate 保持开放；broadphase pair peak=`23,262`，约为均值的 10 倍。broadphase-only SoA shadow 仍在推进，尚未切为 authority。T8 默认 `stage.dat` 与 Android/Adreno/Mali 真机验收继续排除。
+
 ## 2026-07-26：1000 实体三项性能优化进展
 
 **状态：三项等价优化已落地并通过代码侧回归；1000 实体性能验收未完成。** 当前 full-AI 分散样本仍高于 30 Hz 的 `33.33 ms/tick` 预算，不能写成容量目标已达标。本节取代下方 2026-07-24 压力阶段中“尚无 per-pass timing”和“AI 仍全槽扫描”的历史描述。

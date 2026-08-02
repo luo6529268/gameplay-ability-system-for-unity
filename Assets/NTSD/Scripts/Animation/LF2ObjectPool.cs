@@ -28,6 +28,7 @@ namespace NTSD.Animation
 
         private Stack<SpriteRenderer> _spritePool;
         private Material _spriteDefaultSharedMaterial;
+        private bool _runtimeStateInvalidationLogged;
 
         // ========== 配置快捷访问 ==========
         private static GameConfig Cfg => GameConfig.Instance;
@@ -38,6 +39,7 @@ namespace NTSD.Animation
         // Read-only acceptance evidence; avoids editor tooling reflecting private pool state.
         public int AvailableObjectCountForAcceptance => _availableObjects?.Count ?? 0;
         public int ActiveObjectCountForAcceptance => _activeObjects?.Count ?? 0;
+        public bool IsRuntimeStateValidForAcceptance => HasValidRuntimeState();
 
         // ========== 生命周期 ==========
 
@@ -50,6 +52,7 @@ namespace NTSD.Animation
             _activeObjects = new HashSet<GameObject>();
             _releaseTimeMap = new Dictionary<GameObject, float>();
             _spritePool = new Stack<SpriteRenderer>(32);
+            _runtimeStateInvalidationLogged = false;
 
             // 缓存 prefab 引用 - 延迟到 CreateNewObject 时再获取
             _cachedLF2ObjectPrefab = null;
@@ -208,6 +211,19 @@ namespace NTSD.Animation
 
         private void Update()
         {
+            if (!HasValidRuntimeState())
+            {
+                if (!_runtimeStateInvalidationLogged)
+                {
+                    _runtimeStateInvalidationLogged = true;
+                    Debug.LogError(
+                        "[LF2ObjectPool] managed runtime state was invalidated; " +
+                        "disabling the component until a clean Play Mode restart.");
+                }
+                enabled = false;
+                return;
+            }
+
             int initialSize = Cfg?.PoolInitialSize ?? 0;
             float expireTime = Cfg?.PoolExpireTimeSeconds ?? 120f;
             float checkInterval = Cfg?.PoolCheckIntervalSeconds ?? 10f;
@@ -293,8 +309,20 @@ namespace NTSD.Animation
             _spritePool.Push(sr);
         }
 
-        public string GetPoolStatus() =>
-            $"Available: {_availableObjects.Count}, Active: {_activeObjects.Count}";
+        public string GetPoolStatus()
+        {
+            return HasValidRuntimeState()
+                ? $"Available: {_availableObjects.Count}, Active: {_activeObjects.Count}"
+                : "Unavailable: managed runtime state invalidated";
+        }
+
+        private bool HasValidRuntimeState()
+        {
+            return _availableObjects != null &&
+                   _activeObjects != null &&
+                   _releaseTimeMap != null &&
+                   _spritePool != null;
+        }
 
         private static void NormalizeTransform(Transform target, bool resetScale = true)
         {

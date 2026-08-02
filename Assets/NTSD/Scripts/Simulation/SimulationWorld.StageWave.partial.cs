@@ -602,7 +602,6 @@ namespace NTSD.Simulation
             task.initialRuntimeX = spawnX;
             task.initialRuntimeY = spawnY;
             task.initialRuntimeZ = spawnZ;
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
 
             LF2Entity entity = factory.CreateObjectImmediate(task);
             if (entity == null || entity.Runtime?.SlotIndex != requiredRuntimeSlot)

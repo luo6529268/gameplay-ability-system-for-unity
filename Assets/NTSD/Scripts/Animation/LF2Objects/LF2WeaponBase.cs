@@ -376,8 +376,6 @@ namespace NTSD.Animation.LF2Objects
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            AllocateStableId();
-
             PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
             Trans = new FrameTransistor(this);
@@ -395,12 +393,11 @@ namespace NTSD.Animation.LF2Objects
             Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
 
             InitializeParent(task);
-            InitializePosition(task);
+            ApplyInitialRuntimePosition(task);
             InitializeDirection(task);
             InitializeFrame(task);
             InitializeVelocity(task);
             InitializeHealth();
-            InitializeRuntimeIntPosition(task);
 
             Renderer = renderer;
             SimulationTickDriver.Instance?.World?.Register(this);
@@ -526,7 +523,7 @@ namespace NTSD.Animation.LF2Objects
             }
 
             RunFrameAdvancePhysics();
-            ConsumeForcedRuntimeIntPosition();
+            Runtime.SyncIntegerPosition();
             RefreshRuntimeSnapshot();
         }
 
@@ -781,14 +778,6 @@ namespace NTSD.Animation.LF2Objects
             SpawnerEntityIndex = -1;
         }
 
-        protected void InitializePosition(OPointCreateTask task)
-        {
-            if (task.useDirectRuntimePosition)
-                SetPos(task.directX, task.directY, task.directZ);
-            else
-                SetPos(task.pos.x, task.pos.y, task.z);
-        }
-
         protected void InitializeDirection(OPointCreateTask task)
         {
             string dir = CalculateDirection(task.opoint.facing, task.dir);
@@ -839,20 +828,6 @@ namespace NTSD.Animation.LF2Objects
             }
 
             OnHealthInitialized(charData);
-        }
-
-        protected void InitializeRuntimeIntPosition(OPointCreateTask task)
-        {
-            if (task == null)
-                return;
-
-            if (task.useInitialRuntimeIntPosition)
-            {
-                ApplyForcedRuntimeIntPosition(task.initialRuntimeX, task.initialRuntimeY, task.initialRuntimeZ);
-                return;
-            }
-
-            ClearForcedRuntimeIntPosition();
         }
 
         private void ApplyWhirlwindVelocity(LF2Entity attacker, float vyDelta)

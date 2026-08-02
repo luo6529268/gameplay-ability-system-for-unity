@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="16" result="Passed" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.1925094">
+  <test-suite type="TestSuite" id="1490" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.192509" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1968" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.164011" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="85180" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1969" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="413" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.153448" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1971" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="196" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.132022" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1972" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="196" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.123428" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1973" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="196" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.110597" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1851" name="ProductionEntityStressDetailTimingEditorTests" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.093899" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1867" name="AiInputDetail_DisabledPhaseCountersStayZeroAndAllocateNothing" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.AiInputDetail_DisabledPhaseCountersStayZeroAndAllocateNothing" methodname="AiInputDetail_DisabledPhaseCountersStayZeroAndAllocateNothing" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="525238623" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.010718" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1866" name="AiInputDetail_EnabledSteadyStateAddsNoManagedAllocations" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.AiInputDetail_EnabledSteadyStateAddsNoManagedAllocations" methodname="AiInputDetail_EnabledSteadyStateAddsNoManagedAllocations" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1060992574" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.001466" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1865" name="AiInputDetail_OneThousandNestedSegmentsAccumulateAndResetPerTick" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.AiInputDetail_OneThousandNestedSegmentsAccumulateAndResetPerTick" methodname="AiInputDetail_OneThousandNestedSegmentsAccumulateAndResetPerTick" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="643403982" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.006310" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1860" name="AiInputDetailTimingCollector_CapturesEveryPhaseAsIndependentRollingSummary" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.AiInputDetailTimingCollector_CapturesEveryPhaseAsIndependentRollingSummary" methodname="AiInputDetailTimingCollector_CapturesEveryPhaseAsIndependentRollingSummary" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1085810392" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.017713" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1861" name="AiInputDetailTimingCollector_DefaultReportIsUnavailableWithoutAllocatingSamples" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.AiInputDetailTimingCollector_DefaultReportIsUnavailableWithoutAllocatingSamples" methodname="AiInputDetailTimingCollector_DefaultReportIsUnavailableWithoutAllocatingSamples" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1363526010" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.001681" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1858" name="DetailTiming_BeginTickResetsAllNestedPhaseTotals" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTiming_BeginTickResetsAllNestedPhaseTotals" methodname="DetailTiming_BeginTickResetsAllNestedPhaseTotals" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1840374353" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.001058" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1852" name="DetailTiming_DefaultWorldKeepsRecorderUnallocatedAndInactive" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTiming_DefaultWorldKeepsRecorderUnallocatedAndInactive" methodname="DetailTiming_DefaultWorldKeepsRecorderUnallocatedAndInactive" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="159737557" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.013157" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1853" name="DetailTiming_OneThousandRepeatedEntitySegmentsAccumulateWithinTick" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTiming_OneThousandRepeatedEntitySegmentsAccumulateWithinTick" methodname="DetailTiming_OneThousandRepeatedEntitySegmentsAccumulateWithinTick" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1998100462" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.002320" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1859" name="DetailTimingCollector_PopulatesSeparateReportOnlyAfterWarmup" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTimingCollector_PopulatesSeparateReportOnlyAfterWarmup" methodname="DetailTimingCollector_PopulatesSeparateReportOnlyAfterWarmup" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1616545467" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.003430" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1863" name="DetailTimingLifecycle_CleanupDisablesTopLevelAndDetailRecorders" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTimingLifecycle_CleanupDisablesTopLevelAndDetailRecorders" methodname="DetailTimingLifecycle_CleanupDisablesTopLevelAndDetailRecorders" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="2035734823" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.002933" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1864" name="DetailTimingRecorder_EnabledSteadyStateAddsNoManagedAllocations" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.DetailTimingRecorder_EnabledSteadyStateAddsNoManagedAllocations" methodname="DetailTimingRecorder_EnabledSteadyStateAddsNoManagedAllocations" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1011644800" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.000528" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1856" name="LateRuntimeSnapshotTiming_BeginTickResetsCountsAndElapsedTime" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.LateRuntimeSnapshotTiming_BeginTickResetsCountsAndElapsedTime" methodname="LateRuntimeSnapshotTiming_BeginTickResetsCountsAndElapsedTime" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1761448381" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.000478" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1854" name="LateRuntimeSnapshotTiming_DisabledRecorderHasNoAllocationsOrCounters" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.LateRuntimeSnapshotTiming_DisabledRecorderHasNoAllocationsOrCounters" methodname="LateRuntimeSnapshotTiming_DisabledRecorderHasNoAllocationsOrCounters" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1864127694" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.000336" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1857" name="LateRuntimeSnapshotTiming_EnabledSteadyStateAddsNoManagedAllocations" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.LateRuntimeSnapshotTiming_EnabledSteadyStateAddsNoManagedAllocations" methodname="LateRuntimeSnapshotTiming_EnabledSteadyStateAddsNoManagedAllocations" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1332532522" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.000337" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1855" name="LateRuntimeSnapshotTiming_RetainsRemovedStagesAtZeroAndSurvivesNestedException" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.LateRuntimeSnapshotTiming_RetainsRemovedStagesAtZeroAndSurvivesNestedException" methodname="LateRuntimeSnapshotTiming_RetainsRemovedStagesAtZeroAndSurvivesNestedException" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1738836744" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.001344" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1862" name="LateRuntimeSnapshotTimingCollector_SerializesCallsAndMillisecondsByStableStage" fullname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests.LateRuntimeSnapshotTimingCollector_SerializesCallsAndMillisecondsByStableStage" methodname="LateRuntimeSnapshotTimingCollector_SerializesCallsAndMillisecondsByStableStage" classname="NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests" runstate="Runnable" seed="1506953754" result="Passed" start-time="2026-08-01 02:34:33Z" end-time="2026-08-01 02:34:33Z" duration="0.003744" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

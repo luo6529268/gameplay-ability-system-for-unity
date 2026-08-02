@@ -75,8 +75,6 @@ namespace NTSD.Animation.LF2Objects
             task.initialRuntimeX = Runtime?.XInt ?? Mathf.RoundToInt((float)PS.x);
             task.initialRuntimeY = 0;
             task.initialRuntimeZ = Runtime?.ZInt ?? Mathf.RoundToInt((float)PS.z);
-            task.initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.UntilCurrentTickTu;
-
             // 中文注释：
             // C++ release 的 N-30 触发 998 也是 late special 里的直接创建链。
             // 这里同样不再额外强制 next-tick 展示，避免首帧表现再被人为推迟。

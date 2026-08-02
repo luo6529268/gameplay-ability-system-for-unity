@@ -21,10 +21,14 @@ namespace NTSD.Animation.Rendering
         private SegmentBoundsAccumulator[] segmentBounds =
             new SegmentBoundsAccumulator[16];
         private int activeChunkCount;
+        private int dirtyChunkCount;
         private int segmentCount;
         private int mutationVersion;
         private bool disposed;
         private BattlePresentationFrame builtFrame;
+#if UNITY_EDITOR
+        private int lastInactiveChunkClearCount;
+#endif
 
         public BattleCentralBuildDiagnostics Diagnostics => diagnostics;
         public int ActiveChunkCount => activeChunkCount;
@@ -95,6 +99,9 @@ namespace NTSD.Animation.Rendering
 
             mutationVersion++;
             builtFrame = frame;
+#if UNITY_EDITOR
+            lastInactiveChunkClearCount = 0;
+#endif
 
             int commandCount = frame?.CommandCount ?? 0;
             diagnostics.Reset(frame?.TickIndex ?? 0, commandCount, drawMode);
@@ -105,7 +112,8 @@ namespace NTSD.Animation.Rendering
 
             for (int commandIndex = 0; commandIndex < commandCount; commandIndex++)
             {
-                BattleRenderCommand command = frame.GetCommand(commandIndex);
+                ref readonly BattleRenderCommand command =
+                    ref frame.GetCommandRef(commandIndex);
                 BattleCentralResolvedResource resource;
                 BattleCentralResourceStatus status;
                 detailDiagnostics?.BeginPhase(
@@ -226,8 +234,14 @@ namespace NTSD.Animation.Rendering
                     segmentCount,
                     detailDiagnostics);
             }
-            for (int chunkIndex = activeChunkCount; chunkIndex < chunks.Length; chunkIndex++)
+            for (int chunkIndex = activeChunkCount; chunkIndex < dirtyChunkCount; chunkIndex++)
+            {
                 chunks[chunkIndex]?.ClearActive();
+#if UNITY_EDITOR
+                lastInactiveChunkClearCount++;
+#endif
+            }
+            dirtyChunkCount = activeChunkCount;
 
             diagnostics.ResolvedCommandCount = resolvedCount;
             diagnostics.ActiveChunkCount = activeChunkCount;
@@ -241,8 +255,9 @@ namespace NTSD.Animation.Rendering
             segmentCount = 0;
             activeChunkCount = 0;
             builtFrame = null;
-            for (int i = 0; i < chunks.Length; i++)
+            for (int i = 0; i < dirtyChunkCount; i++)
                 chunks[i]?.ClearActive();
+            dirtyChunkCount = 0;
             diagnostics.Reset(0, 0, BattleCentralDrawMode.OrderedChunks);
         }
 
@@ -257,6 +272,7 @@ namespace NTSD.Animation.Rendering
             segments = Array.Empty<BattleCentralRenderSegment>();
             segmentBounds = Array.Empty<SegmentBoundsAccumulator>();
             activeChunkCount = 0;
+            dirtyChunkCount = 0;
             segmentCount = 0;
         }
 
@@ -275,6 +291,8 @@ namespace NTSD.Animation.Rendering
                 chunks[chunkIndex] = new BattleMeshChunk(chunkIndex);
                 diagnostics.CapacityGrowthCount++;
             }
+            if (dirtyChunkCount <= chunkIndex)
+                dirtyChunkCount = chunkIndex + 1;
         }
 
         private void EnsureSegmentCapacity(int required)
@@ -453,8 +471,7 @@ namespace NTSD.Animation.Rendering
                 Vector3 quadMax = Vector3.Max(firstCorner, secondCorner);
                 quadBounds = default;
                 quadBounds.Set(quadMin, quadMax);
-                Encapsulate(firstCorner);
-                Encapsulate(secondCorner);
+                Encapsulate(quadMin, quadMax);
             }
 
             public void Upload(
@@ -668,17 +685,17 @@ namespace NTSD.Animation.Rendering
                 };
             }
 
-            private void Encapsulate(Vector3 position)
+            private void Encapsulate(Vector3 min, Vector3 max)
             {
                 if (!hasBounds)
                 {
-                    boundsMin = position;
-                    boundsMax = position;
+                    boundsMin = min;
+                    boundsMax = max;
                     hasBounds = true;
                     return;
                 }
-                boundsMin = Vector3.Min(boundsMin, position);
-                boundsMax = Vector3.Max(boundsMax, position);
+                boundsMin = Vector3.Min(boundsMin, min);
+                boundsMax = Vector3.Max(boundsMax, max);
             }
 
             private Bounds CurrentBounds()

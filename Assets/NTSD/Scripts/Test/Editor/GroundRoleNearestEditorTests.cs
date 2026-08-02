@@ -92,9 +92,11 @@ namespace NTSD.Test
         }
 
         [Test]
+        [Category("NTSD_W08Regression")]
         public void GroundRoleNearest_LiveRoleUpdatesAndPositionFailClosedMatchAuthority()
         {
             var world = new SimulationWorld();
+            world.ForceLegacyAiNearestFilterForDiagnostics = true;
             bool logging = Debug.unityLogger.logEnabled;
             Debug.unityLogger.logEnabled = false;
             try
@@ -105,14 +107,14 @@ namespace NTSD.Test
 
                 GroundMutationResult stationary = MutateGroundRole(
                     world, self, target, 2, 100, 0, 10, 0);
-                Assert.That(stationary.Matches, Is.True);
+                Assert.That(stationary.Matches, Is.True, "stationary ground role");
                 Assert.That(stationary.FullRebuildDelta, Is.Zero);
                 Assert.That(stationary.InPlaceUpdateDelta, Is.Zero);
                 Assert.That(stationary.MigrationDelta, Is.Zero);
 
                 GroundMutationResult moved = MutateGroundRole(
                     world, self, target, 2, 101, 0, 10, 0);
-                Assert.That(moved.Matches, Is.True);
+                Assert.That(moved.Matches, Is.True, "position mutation fail-closed path");
                 Assert.That(moved.FullRebuildDelta, Is.Zero);
                 Assert.That(
                     moved.InPlaceUpdateDelta + moved.MigrationDelta,
@@ -120,12 +122,12 @@ namespace NTSD.Test
 
                 GroundMutationResult airborne = MutateGroundRole(
                     world, self, target, 2, 101, 3, 10, 0);
-                Assert.That(airborne.Matches, Is.True);
+                Assert.That(airborne.Matches, Is.True, "ground-to-air role mutation");
                 Assert.That(airborne.FullRebuildDelta, Is.Zero);
 
                 GroundMutationResult landed = MutateGroundRole(
                     world, self, target, 2, 101, 0, 10, 0);
-                Assert.That(landed.Matches, Is.True);
+                Assert.That(landed.Matches, Is.True, "air-to-ground role mutation");
                 Assert.That(landed.FullRebuildDelta, Is.Zero);
             }
             finally

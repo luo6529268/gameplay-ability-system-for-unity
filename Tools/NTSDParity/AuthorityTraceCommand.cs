@@ -54,6 +54,11 @@ internal static class AuthorityTraceCommand
         AuthorityScenario scenario = LoadScenario(scenarioPath);
         ValidateScenario(scenario);
 
+        // Diagnostic fixtures are detached from the exported battle world. Run them
+        // before seeding the production trace so their real call chains cannot alter
+        // the trace RNG state or call count.
+        StructuralWitnessEventBuffer? structuralEvents =
+            StructuralWitnessFixture.Run(scenario.StructuralWitness);
         NtsdRng.Srand(scenario.Seed);
         GameWorld world = new();
         RuntimeBootstrap bootstrap = new(scenario.GameRoot);
@@ -101,7 +106,14 @@ internal static class AuthorityTraceCommand
 
             CharacterSync.SyncRuntimeFromLegacy(world);
             ApplyFrameCounterProbe(world, scenario.FrameCounterProbe, tick);
-            WriteJsonLine(writer, BuildTick(world, inputProvider.GetFrameInput(tick), defaultSlots, detail));
+            WriteJsonLine(
+                writer,
+                BuildTick(
+                    world,
+                    inputProvider.GetFrameInput(tick),
+                    defaultSlots,
+                    detail,
+                    structuralEvents?.CaptureTick(tick)));
         }
 
         Console.WriteLine(outputPath);
@@ -173,6 +185,9 @@ internal static class AuthorityTraceCommand
             if (probe.TargetFrame is < 0 or >= 400)
                 throw new ArgumentException("frameCounterProbe.targetFrame must be 0..399.");
         }
+
+        if (scenario.StructuralWitness is not null and not ("W03" or "W04" or "W07"))
+            throw new ArgumentException("structuralWitness must be W03, W04, or W07 when present.");
     }
 
     private static void ApplyFrameCounterProbe(GameWorld world, FrameCounterProbe? probe, int tick)
@@ -266,7 +281,9 @@ internal static class AuthorityTraceCommand
         return new SortedDictionary<string, object?>(StringComparer.Ordinal)
         {
             ["kind"] = "header",
-            ["schema"] = "ntsd-battle-trace-v3",
+            ["schema"] = string.IsNullOrWhiteSpace(scenario.StructuralWitness)
+                ? "ntsd-battle-trace-v3"
+                : "ntsd-battle-trace-v4",
             ["scenarioName"] = Path.GetFileName(scenarioPath),
             ["scenario"] = ProjectScenario(scenario),
             ["loadedChars"] = loadedChars,
@@ -296,7 +313,8 @@ internal static class AuthorityTraceCommand
     }
 
     private static object ProjectScenario(AuthorityScenario scenario)
-        => new SortedDictionary<string, object?>(StringComparer.Ordinal)
+    {
+        SortedDictionary<string, object?> result = new(StringComparer.Ordinal)
         {
             ["seed"] = scenario.Seed,
             ["mode"] = scenario.Mode,
@@ -308,6 +326,10 @@ internal static class AuthorityTraceCommand
             ["inputs"] = JsonProjection.Project(scenario.Inputs),
             ["frameCounterProbe"] = ProjectFrameCounterProbe(scenario.FrameCounterProbe),
         };
+        if (!string.IsNullOrWhiteSpace(scenario.StructuralWitness))
+            result["structuralWitness"] = scenario.StructuralWitness;
+        return result;
+    }
 
     private static object? ProjectFrameCounterProbe(FrameCounterProbe? probe)
         => probe is null
@@ -326,7 +348,8 @@ internal static class AuthorityTraceCommand
         GameWorld world,
         SimulationFrameInput input,
         object?[] defaultSlots,
-        string detail)
+        string detail,
+        object[]? structuralEvents)
     {
         object inputDomain = JsonProjection.Project(input)!;
         object rngDomain = new SortedDictionary<string, object?>(StringComparer.Ordinal)
@@ -353,6 +376,8 @@ internal static class AuthorityTraceCommand
         {
             ["pendingSounds"] = JsonProjection.Project(world.PendingSounds, normalizedPathMembers: TracePathMembers),
         };
+        if (structuralEvents is not null)
+            ((SortedDictionary<string, object?>)eventsDomain)["structural"] = structuralEvents;
 
         SortedDictionary<string, string> hashes = new(StringComparer.Ordinal)
         {
@@ -600,6 +625,7 @@ internal sealed class AuthorityScenario
     public List<ScenarioSlot> Slots { get; set; } = [];
     public List<ScenarioTickInput> Inputs { get; set; } = [];
     public FrameCounterProbe? FrameCounterProbe { get; set; }
+    public string? StructuralWitness { get; set; }
 }
 
 internal sealed class FrameCounterProbe

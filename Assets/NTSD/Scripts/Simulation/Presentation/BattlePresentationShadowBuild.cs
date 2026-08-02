@@ -98,22 +98,98 @@ namespace NTSD.Simulation.Presentation
         public const string PremultipliedAlphaContract = "PremultipliedSpriteAlpha";
 
         private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly Dictionary<int, MaterialClassificationCacheEntry>
+            ClassificationByMaterialId =
+                new Dictionary<int, MaterialClassificationCacheEntry>(8);
+
+        private enum SupportedShaderKind : byte
+        {
+            Unsupported = 0,
+            BuiltInSprite = 1,
+            CentralTexture = 2,
+            CentralArray = 3,
+        }
+
+        private sealed class MaterialClassificationCacheEntry
+        {
+            internal Material Material;
+            internal Shader Shader;
+            internal SupportedShaderKind ShaderKind;
+            internal bool AlphaContractSupported;
+        }
 
         public static BattleSpriteMaterialSemantic Classify(Material material)
         {
-            if (material == null || material.shader == null)
-                return BattleSpriteMaterialSemantic.Unsupported;
+            MaterialClassificationCacheEntry entry = GetClassificationEntry(material);
+            return ClassifyCurrentMaterialState(material, entry);
+        }
 
-            string shaderName = material.shader.name;
-            if (shaderName != BuiltInSpriteShaderName &&
-                shaderName != CentralTextureShaderName &&
-                shaderName != CentralArrayShaderName)
+        public static bool IsDeclaredCentralMaterial(Material material, bool textureArray)
+        {
+            MaterialClassificationCacheEntry entry = GetClassificationEntry(material);
+            if (entry == null)
+                return false;
+
+            SupportedShaderKind expectedKind = textureArray
+                ? SupportedShaderKind.CentralArray
+                : SupportedShaderKind.CentralTexture;
+            return entry.ShaderKind == expectedKind &&
+                   ClassifyCurrentMaterialState(material, entry) ==
+                   BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
+        }
+
+        private static MaterialClassificationCacheEntry GetClassificationEntry(
+            Material material)
+        {
+            if (material == null)
+                return null;
+
+            Shader shader = material.shader;
+            if (shader == null)
+                return null;
+
+            int materialId = material.GetInstanceID();
+            if (ClassificationByMaterialId.TryGetValue(
+                    materialId,
+                    out MaterialClassificationCacheEntry cached) &&
+                object.ReferenceEquals(cached.Material, material) &&
+                object.ReferenceEquals(cached.Shader, shader))
             {
-                return BattleSpriteMaterialSemantic.Unsupported;
+                return cached;
             }
 
-            if (shaderName != BuiltInSpriteShaderName &&
-                material.GetTag(AlphaContractTag, false, string.Empty) != PremultipliedAlphaContract)
+            string shaderName = shader.name;
+            SupportedShaderKind shaderKind = SupportedShaderKind.Unsupported;
+            if (shaderName == BuiltInSpriteShaderName)
+                shaderKind = SupportedShaderKind.BuiltInSprite;
+            else if (shaderName == CentralTextureShaderName)
+                shaderKind = SupportedShaderKind.CentralTexture;
+            else if (shaderName == CentralArrayShaderName)
+                shaderKind = SupportedShaderKind.CentralArray;
+
+            bool alphaContractSupported =
+                shaderKind == SupportedShaderKind.BuiltInSprite ||
+                (shaderKind != SupportedShaderKind.Unsupported &&
+                 material.GetTag(AlphaContractTag, false, string.Empty) ==
+                 PremultipliedAlphaContract);
+            cached = new MaterialClassificationCacheEntry
+            {
+                Material = material,
+                Shader = shader,
+                ShaderKind = shaderKind,
+                AlphaContractSupported = alphaContractSupported,
+            };
+            ClassificationByMaterialId[materialId] = cached;
+            return cached;
+        }
+
+        private static BattleSpriteMaterialSemantic ClassifyCurrentMaterialState(
+            Material material,
+            MaterialClassificationCacheEntry entry)
+        {
+            if (material == null || entry == null ||
+                entry.ShaderKind == SupportedShaderKind.Unsupported ||
+                !entry.AlphaContractSupported)
             {
                 return BattleSpriteMaterialSemantic.Unsupported;
             }
@@ -125,17 +201,6 @@ namespace NTSD.Simulation.Presentation
             }
 
             return BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
-        }
-
-        public static bool IsDeclaredCentralMaterial(Material material, bool textureArray)
-        {
-            if (material == null || material.shader == null)
-                return false;
-            string expectedShader = textureArray
-                ? CentralArrayShaderName
-                : CentralTextureShaderName;
-            return material.shader.name == expectedShader &&
-                   Classify(material) == BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
         }
 
         private static bool IsWhite(Color color)
@@ -413,7 +478,8 @@ namespace NTSD.Simulation.Presentation
             bool entityVisible = true,
             bool shadowVisible = true,
             Vector2 localOffsetPixels = default(Vector2),
-            int frameId = -1)
+            int frameId = -1,
+            object trustedResourceIdentity = null)
         {
             Handle = handle;
             StableId = stableId;
@@ -452,6 +518,7 @@ namespace NTSD.Simulation.Presentation
             ShadowVisible = shadowVisible;
             LocalOffsetPixels = localOffsetPixels;
             FrameId = frameId;
+            TrustedResourceIdentity = trustedResourceIdentity;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -492,6 +559,7 @@ namespace NTSD.Simulation.Presentation
         public bool ShadowVisible { get; }
         public Vector2 LocalOffsetPixels { get; }
         public int FrameId { get; }
+        internal object TrustedResourceIdentity { get; }
     }
 
     public readonly struct BattleRenderCommand
@@ -533,6 +601,45 @@ namespace NTSD.Simulation.Presentation
         {
         }
 
+        internal BattleRenderCommand(
+            BattleRenderCommandType type,
+            RuntimeEntityHandle handle,
+            int stableId,
+            int visualDataId,
+            int effectivePic,
+            int zInt,
+            int runtimeSlot,
+            int sortOrder,
+            int sortingLayerId,
+            int localSequence,
+            Vector3 position,
+            Vector2 size,
+            Vector2 pivot,
+            Rect normalizedUv,
+            bool flipX,
+            BattleSpriteValueDescriptor spriteDescriptor,
+            object trustedResourceIdentity)
+            : this(
+                type,
+                handle,
+                stableId,
+                visualDataId,
+                effectivePic,
+                zInt,
+                runtimeSlot,
+                sortOrder,
+                sortingLayerId,
+                localSequence,
+                position,
+                size,
+                pivot,
+                normalizedUv,
+                BattleSpriteRenderState.Default(flipX),
+                spriteDescriptor,
+                trustedResourceIdentity)
+        {
+        }
+
         public BattleRenderCommand(
             BattleRenderCommandType type,
             RuntimeEntityHandle handle,
@@ -550,6 +657,45 @@ namespace NTSD.Simulation.Presentation
             Rect normalizedUv,
             BattleSpriteRenderState renderState,
             BattleSpriteValueDescriptor spriteDescriptor)
+            : this(
+                type,
+                handle,
+                stableId,
+                visualDataId,
+                effectivePic,
+                zInt,
+                runtimeSlot,
+                sortOrder,
+                sortingLayerId,
+                localSequence,
+                position,
+                size,
+                pivot,
+                normalizedUv,
+                renderState,
+                spriteDescriptor,
+                null)
+        {
+        }
+
+        internal BattleRenderCommand(
+            BattleRenderCommandType type,
+            RuntimeEntityHandle handle,
+            int stableId,
+            int visualDataId,
+            int effectivePic,
+            int zInt,
+            int runtimeSlot,
+            int sortOrder,
+            int sortingLayerId,
+            int localSequence,
+            Vector3 position,
+            Vector2 size,
+            Vector2 pivot,
+            Rect normalizedUv,
+            BattleSpriteRenderState renderState,
+            BattleSpriteValueDescriptor spriteDescriptor,
+            object trustedResourceIdentity)
         {
             Type = type;
             Handle = handle;
@@ -567,6 +713,7 @@ namespace NTSD.Simulation.Presentation
             NormalizedUv = normalizedUv;
             RenderState = renderState;
             SpriteDescriptor = spriteDescriptor;
+            TrustedResourceIdentity = trustedResourceIdentity;
         }
 
         public BattleRenderCommandType Type { get; }
@@ -588,6 +735,7 @@ namespace NTSD.Simulation.Presentation
         public bool FlipX => RenderState.FlipX;
         public bool FlipY => RenderState.FlipY;
         public BattleSpriteValueDescriptor SpriteDescriptor { get; }
+        internal object TrustedResourceIdentity { get; }
     }
 
     public sealed class BattlePresentationFrame
@@ -626,6 +774,13 @@ namespace NTSD.Simulation.Presentation
             return entities[index];
         }
 
+        internal ref readonly BattlePresentationEntitySnapshot GetEntityRef(int index)
+        {
+            if ((uint)index >= (uint)EntityCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return ref entities[index];
+        }
+
         public BattlePresentationHitRecordSnapshot GetHitRecord(int index)
         {
             if ((uint)index >= (uint)HitRecordCount)
@@ -633,11 +788,25 @@ namespace NTSD.Simulation.Presentation
             return hitRecords[index];
         }
 
+        internal ref readonly BattlePresentationHitRecordSnapshot GetHitRecordRef(int index)
+        {
+            if ((uint)index >= (uint)HitRecordCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return ref hitRecords[index];
+        }
+
         public BattleRenderCommand GetCommand(int index)
         {
             if ((uint)index >= (uint)CommandCount)
                 throw new ArgumentOutOfRangeException(nameof(index));
             return commands[index];
+        }
+
+        internal ref readonly BattleRenderCommand GetCommandRef(int index)
+        {
+            if ((uint)index >= (uint)CommandCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return ref commands[index];
         }
 
         internal void CopyFrom(
@@ -989,6 +1158,13 @@ namespace NTSD.Simulation.Presentation
                     {
                         world.GetPresentationEntitiesNoAlloc(entityScratch);
                         entityScratch.Sort(EntityOrderComparison);
+                        world.RecordPresentationEntityScanAndSortForDiagnostics();
+                        if (mode == BattlePresentationBackendMode.CentralOnly)
+                        {
+                            world.PublishPresentationRenderOrderFromSortedEntities(
+                                entityScratch,
+                                reusesCoordinatorSort: true);
+                        }
                     }
                 }
                 finally
@@ -1577,7 +1753,8 @@ namespace NTSD.Simulation.Presentation
                             entityVisible,
                             shadowVisible,
                             localOffsetPixels,
-                            currentFrame?.frameId ?? -1));
+                            currentFrame?.frameId ?? -1,
+                            hasCatalogKey ? entry : null));
                     }
                 }
             }
@@ -1593,7 +1770,7 @@ namespace NTSD.Simulation.Presentation
             {
                 using (BuildCommandsMarker.Auto())
                 {
-                    BuildCommands(frame);
+                    BuildCommands(frame, detailDiagnostics);
                 }
             }
             finally
@@ -1603,7 +1780,9 @@ namespace NTSD.Simulation.Presentation
             }
         }
 
-        private void BuildCommands(BattlePresentationFrame frame)
+        private void BuildCommands(
+            BattlePresentationFrame frame,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics)
         {
             int maximumCommandCount = checked(
                 frame.CommandCount +
@@ -1612,12 +1791,23 @@ namespace NTSD.Simulation.Presentation
             BattlePresentationFrame.CommandWriter writer =
                 frame.BeginCommandWrite(Math.Max(16, maximumCommandCount));
             RefreshWordGlyphTemplateEpoch(frame.CommonVisualCatalog);
+            NTSDRenderSpace.ViewportTransformSnapshot viewportTransform =
+                NTSDRenderSpace.CaptureViewportTransform();
+            bool collectDetailTimings = detailDiagnostics != null;
+            long shadowElapsedTicks = 0;
+            long entityElapsedTicks = 0;
+            long overlayElapsedTicks = 0;
+            long hitRecordElapsedTicks = 0;
             for (int rank = 0; rank < frame.EntityCount; rank++)
             {
-                BattlePresentationEntitySnapshot entity = frame.GetEntity(rank);
+                ref readonly BattlePresentationEntitySnapshot entity =
+                    ref frame.GetEntityRef(rank);
                 int baseOrder = entity.PresentationBaseOrder;
                 int localSequence = 0;
 
+                long sectionStartedAt = collectDetailTimings
+                    ? System.Diagnostics.Stopwatch.GetTimestamp()
+                    : 0;
                 bool drawShadow = entity.ShadowVisible && entity.HasCurrentFrame &&
                                   entity.State != 3005 && entity.State != 9997 &&
                                   entity.LinkState >= 0 && entity.ObjectId != 223 &&
@@ -1626,7 +1816,7 @@ namespace NTSD.Simulation.Presentation
                 if (drawShadow)
                 {
                     BattleCommonVisualBinding shadow = frame.CommonShadowBinding;
-                    Vector3 shadowPosition = NTSDRenderSpace.ScreenPixelToWorld(
+                    Vector3 shadowPosition = viewportTransform.ScreenPixelToWorld(
                         entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
                         entity.ZInt,
                         0f);
@@ -1641,7 +1831,7 @@ namespace NTSD.Simulation.Presentation
                         baseOrder,
                         ObjectSortingLayerId,
                         localSequence++,
-                        NTSDRenderSpace.SnapWorldPosition(shadowPosition),
+                        viewportTransform.SnapWorldPosition(shadowPosition),
                         shadow.PixelSize,
                         shadow.Pivot,
                         shadow.NormalizedUv,
@@ -1654,7 +1844,14 @@ namespace NTSD.Simulation.Presentation
                             shadow.MaterialInstanceId,
                             shadow.PixelRect,
                             shadow.Pivot,
-                            BattleVisualResourceKey.CommonShadow)));
+                            BattleVisualResourceKey.CommonShadow),
+                        shadow));
+                }
+                if (collectDetailTimings)
+                {
+                    long sectionCompletedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+                    shadowElapsedTicks += sectionCompletedAt - sectionStartedAt;
+                    sectionStartedAt = sectionCompletedAt;
                 }
 
                 bool drawEntity = entity.EntityVisible && entity.State >= 0 &&
@@ -1679,7 +1876,10 @@ namespace NTSD.Simulation.Presentation
                         NTSDRenderSpace.BattleVisualScale);
                     pivotPixels += entity.HeldVisualAttachmentOffsetPixels;
                     pivotPixels += entity.LocalOffsetPixels * NTSDRenderSpace.BattleVisualScale;
-                    Vector3 entityPosition = NTSDRenderSpace.ScreenPixelToWorld(pivotPixels.x, pivotPixels.y, 0f);
+                    Vector3 entityPosition = viewportTransform.ScreenPixelToWorld(
+                        pivotPixels.x,
+                        pivotPixels.y,
+                        0f);
                     writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Entity,
                         entity.Handle,
@@ -1696,7 +1896,14 @@ namespace NTSD.Simulation.Presentation
                         entity.Pivot,
                         entity.NormalizedUv,
                         entity.FlipX,
-                        entity.SpriteDescriptor));
+                        entity.SpriteDescriptor,
+                        entity.TrustedResourceIdentity));
+                }
+                if (collectDetailTimings)
+                {
+                    long sectionCompletedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+                    entityElapsedTicks += sectionCompletedAt - sectionStartedAt;
+                    sectionStartedAt = sectionCompletedAt;
                 }
 
                 if (entity.HasCurrentFrame)
@@ -1733,7 +1940,7 @@ namespace NTSD.Simulation.Presentation
                                 continue;
                             }
 
-                            Vector3 glyphPosition = NTSDRenderSpace.ScreenPixelToWorld(
+                            Vector3 glyphPosition = viewportTransform.ScreenPixelToWorld(
                                 glyph.PixelX,
                                 glyph.PixelY,
                                 0f);
@@ -1749,11 +1956,17 @@ namespace NTSD.Simulation.Presentation
                         }
                     }
                 }
+                if (collectDetailTimings)
+                {
+                    long sectionCompletedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+                    overlayElapsedTicks += sectionCompletedAt - sectionStartedAt;
+                    sectionStartedAt = sectionCompletedAt;
+                }
 
                 for (int hitIndex = 0; hitIndex < entity.HitRecordCount; hitIndex++)
                 {
-                    BattlePresentationHitRecordSnapshot hit = frame.GetHitRecord(
-                        entity.HitRecordStart + hitIndex);
+                    ref readonly BattlePresentationHitRecordSnapshot hit =
+                        ref frame.GetHitRecordRef(entity.HitRecordStart + hitIndex);
                     if (!TryResolveSparkFrame(
                             hit.Age,
                             out int pic,
@@ -1763,7 +1976,7 @@ namespace NTSD.Simulation.Presentation
                     if (!frame.CommonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding spark))
                         continue;
 
-                    Vector3 hitPosition = NTSDRenderSpace.ScreenPixelToWorld(
+                    Vector3 hitPosition = viewportTransform.ScreenPixelToWorld(
                         hit.AnchorX + entity.RenderOffsetX - entity.CameraX,
                         hit.AnchorZ,
                         0f);
@@ -1791,10 +2004,31 @@ namespace NTSD.Simulation.Presentation
                             spark.MaterialInstanceId,
                             spark.PixelRect,
                             spark.Pivot,
-                            spark.Key)));
+                            spark.Key),
+                        spark));
+                }
+                if (collectDetailTimings)
+                {
+                    hitRecordElapsedTicks +=
+                        System.Diagnostics.Stopwatch.GetTimestamp() - sectionStartedAt;
                 }
             }
             writer.Commit();
+            if (collectDetailTimings)
+            {
+                detailDiagnostics.RecordPhaseElapsed(
+                    BattleTickDetailPhase.RenderBuildCommandsShadow,
+                    shadowElapsedTicks);
+                detailDiagnostics.RecordPhaseElapsed(
+                    BattleTickDetailPhase.RenderBuildCommandsEntity,
+                    entityElapsedTicks);
+                detailDiagnostics.RecordPhaseElapsed(
+                    BattleTickDetailPhase.RenderBuildCommandsOverlay,
+                    overlayElapsedTicks);
+                detailDiagnostics.RecordPhaseElapsed(
+                    BattleTickDetailPhase.RenderBuildCommandsHitRecord,
+                    hitRecordElapsedTicks);
+            }
         }
 
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
@@ -1804,7 +2038,7 @@ namespace NTSD.Simulation.Presentation
                 throw new ArgumentNullException(nameof(frame));
 
             frame.CommandCount = 0;
-            BuildCommands(frame);
+            BuildCommands(frame, null);
         }
 
         public bool TryCreateWordGlyphCommandForSelfCheck(
@@ -1933,6 +2167,7 @@ namespace NTSD.Simulation.Presentation
                 Pivot = binding.Pivot;
                 NormalizedUv = binding.NormalizedUv;
                 RenderState = binding.RenderState;
+                TrustedResourceIdentity = binding;
                 SpriteDescriptor = new BattleSpriteValueDescriptor(
                     true,
                     true,
@@ -1952,6 +2187,7 @@ namespace NTSD.Simulation.Presentation
             private Rect NormalizedUv { get; }
             private BattleSpriteRenderState RenderState { get; }
             private BattleSpriteValueDescriptor SpriteDescriptor { get; }
+            private object TrustedResourceIdentity { get; }
 
             internal BattleRenderCommand CreateCommand(
                 RuntimeEntityHandle handle,
@@ -1979,7 +2215,8 @@ namespace NTSD.Simulation.Presentation
                     Pivot,
                     NormalizedUv,
                     RenderState,
-                    SpriteDescriptor);
+                    SpriteDescriptor,
+                    TrustedResourceIdentity);
             }
         }
 

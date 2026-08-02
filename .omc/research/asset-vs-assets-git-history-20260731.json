@@ -1,0 +1,82 @@
+{
+  "scope": "read-only",
+  "baseline": {
+    "repository": "I:\\GitHub\\Unity_GAS\\_git_recovery_full_20260731",
+    "head": "ee3fc7597e77b3c89531108ea25288522e7b1421",
+    "headTime": "2026-07-26T09:32:16+08:00",
+    "reachableCommitCount": 730
+  },
+  "lostCommitEvidence": {
+    "id": "ae8fb0c62d3ff6f23d544294bbfa58291a5d9d5c",
+    "message": "111",
+    "approximateTime": "2026-07-27T09:09:00+08:00",
+    "objectAvailable": false,
+    "warning": "No recovered file is asserted to belong to this unavailable commit."
+  },
+  "rawPathComparison": {
+    "assetFiles": 6331,
+    "assetsFiles": 7743,
+    "sameRelativePathAndContent": 14,
+    "sameRelativePathDifferentContent": 12,
+    "assetOnly": 6305,
+    "assetsOnly": 7717
+  },
+  "inferredNtsdMapping": {
+    "recoveredRoots": [
+      {
+        "source": "Asset/NTSD/$Folder100002ECA",
+        "destination": "Assets/NTSD",
+        "files": 5617,
+        "sameContent": 4376,
+        "differentContent": 1212
+      },
+      {
+        "source": "Asset/NTSD/00040000001DF94F27659311",
+        "destination": "Assets/NTSD/Sprite",
+        "files": 688,
+        "sameContent": 320,
+        "differentContent": 368,
+        "postHeadCandidates": 0,
+        "mtimeCaution": "All differing-file mtimes precede HEAD, but mtime alone does not prove age or correctness."
+      }
+    ],
+    "baselineRoot": "Assets/NTSD",
+    "recoveredFiles": 6305,
+    "baselineFiles": 6602,
+    "sameContent": 4696,
+    "differentContent": 1580,
+    "onlyRecovered": 29,
+    "onlyBaseline": 326
+  },
+  "classification": {
+    "different_recovered_blob_in_reachable_history_proven_older": 949,
+    "different_unknown_mtime_not_later_than_head_unresolved": 231,
+    "different_unknown_mtime_head_to_lost_commit_candidate": 29,
+    "different_unknown_mtime_after_lost_commit_candidate_uncommitted": 3,
+    "only_recovered_unknown_head_to_lost_commit_candidate": 22,
+    "only_recovered_unknown_not_later_than_head_unresolved": 7,
+    "second_container_different_without_post_head_timestamp_evidence": 368
+  },
+  "postHeadCandidateCount": 54,
+  "strongestCandidates": [
+    {
+      "recoveredPath": "Asset/NTSD/$Folder100002ECA/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "destinationPath": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "mtime": "2026-07-27T10:12:43+08:00",
+      "classification": "unreachable blob; timestamp after unavailable lost commit; candidate only"
+    },
+    {
+      "recoveredPath": "Asset/NTSD/$Folder100002ECA/Scripts/Test/Editor/BattleParityTraceEditor.cs",
+      "destinationPath": "Assets/NTSD/Scripts/Test/Editor/BattleParityTraceEditor.cs",
+      "mtime": "2026-07-27T10:32:08+08:00",
+      "classification": "unreachable blob; timestamp after unavailable lost commit; candidate only"
+    },
+    {
+      "recoveredPath": "Asset/NTSD/$Folder100002ECA/Scripts/Simulation/BattleParitySnapshot.cs",
+      "destinationPath": "Assets/NTSD/Scripts/Simulation/BattleParitySnapshot.cs",
+      "mtime": "2026-07-27T10:50:32+08:00",
+      "classification": "unreachable blob; timestamp after unavailable lost commit; candidate only"
+    }
+  ],
+  "recommendation": "Keep Assets active. Never overwrite from Asset wholesale. Review candidates individually before any selective merge."
+}

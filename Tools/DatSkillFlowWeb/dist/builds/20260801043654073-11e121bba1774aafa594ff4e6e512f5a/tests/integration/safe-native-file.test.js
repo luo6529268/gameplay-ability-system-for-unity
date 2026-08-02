@@ -1,0 +1,186 @@
+// dat-skill-flow-build:20260801043654073-11e121bba1774aafa594ff4e6e512f5a
+import assert from "node:assert/strict";
+import {
+    mkdtemp,
+    readFile,
+    rename,
+    symlink,
+    writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { describe, it } from "node:test";
+
+import { SafeSaveError, SafeSaveService } from "../../src/server/safe-save.js";
+import {
+    PowerShellWindowsSafeFileClient,
+                              
+} from "../../src/server/windows-safe-file-adapter.js";
+import { WorkspaceRegistry } from "../../src/server/workspace-registry.js";
+
+const windowsOnly = { skip: process.platform !== "win32" }         ;
+
+async function temporaryRoot(label        )                  {
+    const root = await mkdtemp(join(tmpdir(), `dat-flow-native-${label}-`));
+    process.stdout.write(`[safe-test-artifacts] ${root}\n`);
+    return root;
+}
+
+function nativeClient(
+    hooks                                                                            = {},
+)                                  {
+    return new PowerShellWindowsSafeFileClient({
+        scriptPath: resolve("scripts/windows-safe-file.ps1"),
+        hooks,
+    });
+}
+
+describe("Windows handle-safe file transactions", windowsOnly, () => {
+    it("reads from a validated handle and creates a new file without overwriting", async () => {
+        const root = await temporaryRoot("read-save-as");
+        await writeFile(join(root, "source.dat"), "original");
+        const client = nativeClient();
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+        const opened = await registry.openDocument(rootId, "source.dat");
+
+        const read = await registry.readDocument(opened.documentId);
+        assert.equal(read.bytes.toString("utf8"), "original");
+        assert.equal(read.fingerprint.sha256, opened.fingerprint.sha256);
+
+        const service = new SafeSaveService(registry, { nativeClient: client });
+        const created = await service.saveAs(opened.documentId, rootId, "copy.dat", Buffer.from("copy"));
+        assert.equal(created.status, "created");
+        assert.equal(await readFile(join(root, "copy.dat"), "utf8"), "copy");
+        await assert.rejects(
+            service.saveAs(opened.documentId, rootId, "copy.dat", Buffer.from("must-not-overwrite")),
+            (error         ) => error instanceof SafeSaveError && error.code === "overwrite-required",
+        );
+        assert.equal(await readFile(join(root, "copy.dat"), "utf8"), "copy");
+    });
+
+    it("keeps every parent directory handle open so rename-to-junction swapping fails", async () => {
+        const root = await temporaryRoot("junction-root");
+        const outside = await temporaryRoot("junction-outside");
+        const nested = join(root, "nested");
+        await import("node:fs/promises").then(({ mkdir }) => mkdir(nested));
+        await writeFile(join(nested, "source.dat"), "inside");
+        await writeFile(join(outside, "source.dat"), "outside-secret");
+        let swapFailed = false;
+        const client = nativeClient({
+            async onBarrier(event) {
+                if (event.name !== "after-directory-handles") {
+                    return;
+                }
+                const moved = join(root, "nested-moved");
+                try {
+                    await rename(nested, moved);
+                    await symlink(outside, nested, "junction");
+                } catch (error) {
+                    const code = (error                         ).code;
+                    swapFailed = code === "EPERM" || code === "EACCES" || code === "EBUSY";
+                }
+            },
+        });
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+
+        const opened = await registry.openDocument(rootId, "nested/source.dat");
+        const read = await registry.readDocument(opened.documentId);
+
+        assert.equal(swapFailed, true);
+        assert.equal(read.bytes.toString("utf8"), "inside");
+        assert.equal(await readFile(join(outside, "source.dat"), "utf8"), "outside-secret");
+    });
+
+    for (const mutationTarget of ["target", "replacement"]         ) {
+        it(`fails closed when ${mutationTarget} bytes change in the pre-publication window`, async () => {
+            const root = await temporaryRoot(`before-publish-${mutationTarget}`);
+            await writeFile(join(root, "source.dat"), "original");
+            const client = nativeClient({
+                async onBarrier(event) {
+                    if (event.name !== "before-publish") {
+                        return;
+                    }
+                    await writeFile(
+                        mutationTarget === "target" ? event.targetPath : event.replacementPath,
+                        `mutated-${mutationTarget}`,
+                    );
+                },
+            });
+            const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+            const { rootId } = await registry.grantAbsoluteRoot(root);
+            const { documentId } = await registry.openDocument(rootId, "source.dat");
+            const service = new SafeSaveService(registry, { nativeClient: client });
+            const bytes = Buffer.from("intended-new");
+            const challenge = await service.issueOverwriteChallenge(documentId, rootId, "source.dat", bytes);
+
+            await assert.rejects(
+                service.overwrite(documentId, challenge.challengeId, bytes),
+                (error         ) => {
+                    assert.ok(error instanceof SafeSaveError);
+                    assert.equal(error.code, "replace-result-inconsistent");
+                    assert.match(error.recovery?.target.sha256 ?? "", /^[a-f0-9]{64}$/);
+                    assert.match(error.recovery?.backup?.sha256 ?? "", /^[a-f0-9]{64}$/);
+                    return true;
+                },
+            );
+        });
+    }
+
+    it("rejects a forged success result whose reported target or backup hashes are wrong", async () => {
+        const root = await temporaryRoot("fake-ok");
+        const targetPath = join(root, "source.dat");
+        await writeFile(targetPath, "original");
+        const realClient = nativeClient();
+        const fakeClient                       = {
+            inspectRoot: (request) => realClient.inspectRoot(request),
+            read: (request) => realClient.read(request),
+            saveAs: (request) => realClient.saveAs(request),
+            async overwrite(request) {
+                const wrong = "0".repeat(64);
+                return {
+                    canonicalPath: targetPath,
+                    fingerprint: { ...request.expectedFingerprint, sha256: wrong },
+                    recovery: {
+                        target: { path: targetPath, exists: true, size: 5, sha256: wrong },
+                        replacement: { path: join(root, request.replacementName), exists: false },
+                        backup: { path: join(root, request.backupName), exists: true, size: 8, sha256: wrong },
+                    },
+                };
+            },
+        };
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: realClient });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+        const { documentId } = await registry.openDocument(rootId, "source.dat");
+        const service = new SafeSaveService(registry, { nativeClient: fakeClient });
+        const bytes = Buffer.from("intended-new");
+        const challenge = await service.issueOverwriteChallenge(documentId, rootId, "source.dat", bytes);
+
+        await assert.rejects(
+            service.overwrite(documentId, challenge.challengeId, bytes),
+            (error         ) => error instanceof SafeSaveError && error.code === "replace-result-inconsistent",
+        );
+        assert.equal(await readFile(targetPath, "utf8"), "original");
+    });
+
+    it("performs a verified ReplaceFileW publication and verifies both target and backup hashes", async () => {
+        const root = await temporaryRoot("overwrite");
+        await writeFile(join(root, "source.dat"), "original");
+        const client = nativeClient();
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+        const { documentId } = await registry.openDocument(rootId, "source.dat");
+        const service = new SafeSaveService(registry, { nativeClient: client });
+        const bytes = Buffer.from("intended-new");
+        const challenge = await service.issueOverwriteChallenge(documentId, rootId, "source.dat", bytes);
+
+        const result = await service.overwrite(documentId, challenge.challengeId, bytes);
+
+        assert.equal(result.recovery.target.sha256, challenge.contentSha256);
+        assert.equal(result.recovery.backup.sha256, challenge.targetFingerprint.sha256);
+        assert.equal(result.recovery.replacement.exists, false);
+        assert.equal(await readFile(join(root, "source.dat"), "utf8"), "intended-new");
+        assert.equal(await readFile(result.recovery.backup.path, "utf8"), "original");
+    });
+});

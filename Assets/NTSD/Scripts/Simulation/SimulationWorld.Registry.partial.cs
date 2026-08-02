@@ -46,9 +46,23 @@ namespace NTSD.Simulation
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
         private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
         private readonly List<LF2Entity> _pendingSlotReleasedDestroy = new List<LF2Entity>();
+        private Dictionary<ISimObject, int> structuralPendingUnregisterSlots;
+        private IBattleParityStructuralEventSink structuralEventSink;
+        private int structuralEventTick;
+        private string structuralEventPass = string.Empty;
+        private int structuralEventCursorSlot = -1;
+        private bool pendingDestroyScanCacheValid;
+        private long pendingDestroyScanMutationEpoch;
+        private ulong pendingDestroyScanOccupancyEpoch;
         /// <summary>世界正在遍历模拟对象时为 true。</summary>
         private bool _ticking = false;
         private readonly List<LF2Entity> _entityScratch = new List<LF2Entity>(128);
+#if UNITY_EDITOR
+        private readonly HashSet<LF2Entity> activeRuntimeEntitySnapshotSeen =
+            new HashSet<LF2Entity>();
+        private readonly System.Comparison<LF2Entity>
+            activeRuntimeEntitySnapshotComparison;
+#endif
         private int _cameraX;
         private int _cameraVel;
 
@@ -67,11 +81,114 @@ namespace NTSD.Simulation
         public CollisionBroadphaseBackend CollisionBroadphaseForDiagnostics =>
             CollisionBroadphaseForServices;
         public int ClaimedRuntimeSlotCountForDiagnostics => _runtimeSlots.ClaimedCount;
+        public long PendingDestroyFullScanCount { get; private set; }
+        public long PendingDestroySkipCount { get; private set; }
+        public long PendingDestroyVisitedEntityCount { get; private set; }
+        public bool ForceLegacyPendingDestroyScanForDiagnostics { get; set; }
+        public bool EnableRegistryLifecycleLoggingForDiagnostics { get; set; } = false;
         internal RuntimeRestStore RuntimeRestStoreForServices => _runtimeRestStore;
+
+        public void SetStructuralEventSinkForDiagnostics(
+            IBattleParityStructuralEventSink sink,
+            int tick,
+            string pass)
+        {
+            structuralEventSink = sink;
+            structuralEventTick = tick;
+            structuralEventPass = pass ?? string.Empty;
+            structuralEventCursorSlot = -1;
+            if (sink != null)
+            {
+                if (structuralPendingUnregisterSlots == null)
+                    structuralPendingUnregisterSlots = new Dictionary<ISimObject, int>();
+                else
+                    structuralPendingUnregisterSlots.Clear();
+            }
+            else
+            {
+                structuralPendingUnregisterSlots = null;
+            }
+        }
+
+        public void SetStructuralEventContextForDiagnostics(int tick, string pass)
+        {
+            if (structuralEventSink == null)
+                return;
+            structuralEventTick = tick;
+            structuralEventPass = pass ?? string.Empty;
+            structuralEventCursorSlot = -1;
+        }
+
+        public int FindFirstFreeRuntimeSlotForDiagnostics(
+            int startSlot,
+            int endSlotExclusive)
+        {
+            return FindFirstFreeRuntimeSlot(startSlot, endSlotExclusive);
+        }
+
+        private void EmitStructuralEvent(
+            string action,
+            int slot,
+            int searchStart,
+            int searchEndExclusive,
+            string before,
+            string after,
+            string sourceKind,
+            int actorSlot = -1)
+        {
+            IBattleParityStructuralEventSink sink = structuralEventSink;
+            if (sink == null)
+                return;
+
+            sink.Record(new BattleParityStructuralEvent
+            {
+                Tick = structuralEventTick,
+                Pass = structuralEventPass,
+                Action = action,
+                CursorSlot = structuralEventCursorSlot,
+                ActorSlot = actorSlot >= 0 ? actorSlot : structuralEventCursorSlot,
+                Slot = slot,
+                SearchStart = searchStart,
+                SearchEndExclusive = searchEndExclusive,
+                Before = before,
+                After = after,
+                SourceKind = sourceKind,
+            });
+        }
+
+        private static string StructuralSourceKind(LF2Entity entity)
+        {
+            if (entity?.Runtime?.SpawnSemantic ==
+                (int)ReleaseSpawnSemantic.StageSpawnAt)
+            {
+                return "stage";
+            }
+            return entity != null && entity.UsesDynamicRuntimeSlot()
+                ? "dynamic"
+                : "general";
+        }
 
         private int GetRuntimeStableId(ISimObject obj)
         {
             return obj is LF2Entity entity ? entity.Runtime.StableId : obj.StableId;
+        }
+
+        private bool ContainsRegisteredEntityStableId(int stableId)
+        {
+            foreach (KeyValuePair<int, Bucket> pair in _buckets)
+            {
+                List<ISimObject> items = pair.Value.items;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (items[i] is LF2Entity entity &&
+                        entity.Runtime.StableId == stableId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private int GetRuntimeSlotOrder(LF2Entity entity)
@@ -135,12 +252,16 @@ namespace NTSD.Simulation
             _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
             _runtimeRestStore = new RuntimeRestStore(runtimeSlotCapacity);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
+            InitializeAiSoASensingRows(runtimeSlotCapacity);
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this, collisionBroadphase);
             Rng = new DeterministicRng(0x4E545344u);
             Runtime = new BattleRuntimeState();
             Runtime.Reset();
+#if UNITY_EDITOR
+            activeRuntimeEntitySnapshotComparison = CompareRuntimeSlotOrder;
+#endif
         }
 
         internal NTSDEntityRuntime GetRawRuntimeSlotState(int runtimeSlot)
@@ -188,25 +309,36 @@ namespace NTSD.Simulation
                 return;
 
             dst.Clear();
-            for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
+            activeRuntimeEntitySnapshotSeen.Clear();
+            try
             {
-                RuntimeSlotTable.ReadOnlySlotView view = _runtimeSlots.GetReadOnlyView(runtimeSlot);
-                if (!view.Claimed || view.Entity == null || view.Generation == 0)
-                    continue;
-
-                var handle = new RuntimeEntityHandle(runtimeSlot, view.Generation);
-                if (!_runtimeSlots.TryResolve(handle, out LF2Entity entity) ||
-                    entity == null ||
-                    entity.Runtime?.PendingFlushDestroy == true ||
-                    dst.Contains(entity))
+                for (int runtimeSlot = 0;
+                     runtimeSlot < RuntimeSlotCapacity;
+                     runtimeSlot++)
                 {
-                    continue;
+                    RuntimeSlotTable.ReadOnlySlotView view =
+                        _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                    if (!view.Claimed || view.Entity == null || view.Generation == 0)
+                        continue;
+
+                    var handle = new RuntimeEntityHandle(runtimeSlot, view.Generation);
+                    if (!_runtimeSlots.TryResolve(handle, out LF2Entity entity) ||
+                        entity == null ||
+                        entity.Runtime?.PendingFlushDestroy == true ||
+                        !activeRuntimeEntitySnapshotSeen.Add(entity))
+                    {
+                        continue;
+                    }
+
+                    dst.Add(entity);
                 }
 
-                dst.Add(entity);
+                dst.Sort(activeRuntimeEntitySnapshotComparison);
             }
-
-            dst.Sort(CompareRuntimeSlotOrder);
+            finally
+            {
+                activeRuntimeEntitySnapshotSeen.Clear();
+            }
         }
 
         /// <summary>
@@ -247,6 +379,7 @@ namespace NTSD.Simulation
 
         public void ResetRuntimeState()
         {
+            EnsureAiSensingModeAvailableBeforeTick();
             _battlePresentation.Reset();
             ResetRegisteredObjects();
 
@@ -485,8 +618,43 @@ namespace NTSD.Simulation
                     }
                 }
 
+                int requestedStableId = registeredEntity.Runtime.StableId;
+                if (requestedStableId > 0)
+                {
+                    if (ContainsRegisteredEntityStableId(requestedStableId) ||
+                        requestedStableId == int.MaxValue)
+                    {
+                        RollbackRuntimeSlotRegistration(registeredEntity, runtimeSlot);
+                        if (bucket.items.Count == 0)
+                            _buckets.Remove(simOrder);
+                        Debug.LogError(
+                            $"[SimulationWorld] StableId registration rejected: " +
+                            $"StableId={requestedStableId}, Type={registeredEntity.GetType().Name}");
+                        return;
+                    }
+
+                    if (requestedStableId >= _nextAutoStableId)
+                        _nextAutoStableId = requestedStableId + 1;
+                }
+                else
+                {
+                    registeredEntity.AssignStableIdForRegistration(AllocateStableId());
+                }
+
                 if (!registeredEntity.ShouldDeferInitialRuntimeSnapshot())
                     registeredEntity.RefreshRuntimeSnapshot();
+
+                if (structuralEventSink != null)
+                {
+                    EmitStructuralEvent(
+                        "allocate",
+                        runtimeSlot,
+                        -1,
+                        -1,
+                        "free",
+                        "active",
+                        StructuralSourceKind(registeredEntity));
+                }
             }
 
             bucket.items.Add(obj);
@@ -502,7 +670,12 @@ namespace NTSD.Simulation
                     addedEntity.Renderer,
                     runtimeHandle);
             }
-            Debug.Log($"[SimulationWorld] Registered: SimOrder={simOrder}, StableId={obj.StableId}, Type={obj.GetType().Name}");
+            if (EnableRegistryLifecycleLoggingForDiagnostics)
+            {
+                Debug.Log(
+                    $"[SimulationWorld] Registered: SimOrder={simOrder}, " +
+                    $"StableId={obj.StableId}, Type={obj.GetType().Name}");
+            }
         }
 
         public void Unregister(ISimObject obj)
@@ -515,6 +688,9 @@ namespace NTSD.Simulation
 
             if (_ticking)
             {
+                int pendingSlot = -1;
+                if (structuralEventSink != null && obj is LF2Entity pendingSlotEntity)
+                    pendingSlot = pendingSlotEntity.Runtime?.SlotIndex ?? -1;
                 if (obj is LF2Entity pendingEntity &&
                     !ReleaseRuntimeSlotAndClearPresentationBinding(pendingEntity))
                 {
@@ -522,6 +698,21 @@ namespace NTSD.Simulation
                 }
                 if (!_pendingUnregister.Contains(obj))
                     _pendingUnregister.Add(obj);
+                if (structuralEventSink != null)
+                {
+                    if (pendingSlot >= 0)
+                        structuralPendingUnregisterSlots[obj] = pendingSlot;
+                    EmitStructuralEvent(
+                        "unregister-deferred",
+                        pendingSlot,
+                        -1,
+                        -1,
+                        "active",
+                        "pending",
+                        obj is LF2Entity pendingSource
+                            ? StructuralSourceKind(pendingSource)
+                            : "general");
+                }
                 return;
             }
 
@@ -579,14 +770,42 @@ namespace NTSD.Simulation
             if (bucket.items.Count == 0)
                 _buckets.Remove(bucketKey);
 
-            Debug.Log($"[SimulationWorld] Unregistered: SimOrder={bucketKey}, StableId={obj.StableId}, Type={obj.GetType().Name}");
+            if (EnableRegistryLifecycleLoggingForDiagnostics)
+            {
+                Debug.Log(
+                    $"[SimulationWorld] Unregistered: SimOrder={bucketKey}, " +
+                    $"StableId={obj.StableId}, Type={obj.GetType().Name}");
+            }
         }
 
         private void FlushPendingUnregister()
         {
             if (_pendingUnregister.Count == 0) return;
             foreach (var obj in _pendingUnregister)
+            {
+                int pendingSlot = -1;
+                if (structuralEventSink != null &&
+                    structuralPendingUnregisterSlots != null &&
+                    structuralPendingUnregisterSlots.TryGetValue(obj, out int recordedSlot))
+                {
+                    pendingSlot = recordedSlot;
+                }
                 UnregisterImmediate(obj);
+                if (structuralEventSink != null)
+                {
+                    EmitStructuralEvent(
+                        "unregister-flush",
+                        pendingSlot,
+                        -1,
+                        -1,
+                        "pending",
+                        "free",
+                        obj is LF2Entity entity
+                            ? StructuralSourceKind(entity)
+                            : "general");
+                    structuralPendingUnregisterSlots?.Remove(obj);
+                }
+            }
             _pendingUnregister.Clear();
         }
 
@@ -648,7 +867,7 @@ namespace NTSD.Simulation
             return IsActiveForCurrentPass(obj);
         }
 
-        public int AllocateStableId()
+        private int AllocateStableId()
         {
             return _nextAutoStableId++;
         }
@@ -667,13 +886,29 @@ namespace NTSD.Simulation
                 if (requiredSlot >= RuntimeSlotCapacity &&
                     !TryGrowDesktopRuntimeSlots((long)requiredSlot + 1))
                 {
-                    return -1;
+                    return RecordStructuralSearch(
+                        -1,
+                        requiredSlot,
+                        requiredSlot + 1,
+                        entity);
                 }
 
                 if (!_runtimeSlots.TryClaim(requiredSlot, entity, out _))
-                    return -1;
+                    return RecordStructuralSearch(
+                        -1,
+                        entity.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt ? 20 : requiredSlot,
+                        entity.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt
+                            ? RuntimeSlotCapacity
+                            : requiredSlot + 1,
+                        entity);
 
-                return requiredSlot;
+                return RecordStructuralSearch(
+                    requiredSlot,
+                    entity.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt ? 20 : requiredSlot,
+                    entity.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt
+                        ? RuntimeSlotCapacity
+                        : requiredSlot + 1,
+                    entity);
             }
 
             int existingSlot = entity.Runtime?.SlotIndex ?? -1;
@@ -684,15 +919,46 @@ namespace NTSD.Simulation
                 existingSlot >= minimumExistingSlot &&
                 _runtimeSlots.TryClaim(existingSlot, entity, out _))
             {
-                return existingSlot;
+                return RecordStructuralSearch(
+                    existingSlot,
+                    minimumExistingSlot,
+                    RuntimeSlotCapacity,
+                    entity);
             }
 
             int startSlot = requiresDynamicSlot ? DynamicRuntimeSlotStart : 0;
             int allocatedSlot = _runtimeSlots.AllocateLowest(startSlot, entity, out _);
             if (allocatedSlot >= 0 || !TryGrowDesktopRuntimeSlots((long)RuntimeSlotCapacity + 1))
-                return allocatedSlot;
+                return RecordStructuralSearch(
+                    allocatedSlot,
+                    startSlot,
+                    RuntimeSlotCapacity,
+                    entity);
 
-            return _runtimeSlots.AllocateLowest(startSlot, entity, out _);
+            return RecordStructuralSearch(
+                _runtimeSlots.AllocateLowest(startSlot, entity, out _),
+                startSlot,
+                RuntimeSlotCapacity,
+                entity);
+        }
+
+        private int RecordStructuralSearch(
+            int slot,
+            int searchStart,
+            int searchEndExclusive,
+            LF2Entity entity)
+        {
+            if (structuralEventSink == null)
+                return slot;
+            EmitStructuralEvent(
+                "search",
+                slot,
+                searchStart,
+                searchEndExclusive,
+                "free",
+                slot >= 0 ? "selected" : "exhausted",
+                StructuralSourceKind(entity));
+            return slot;
         }
 
         private int FindFirstFreeRuntimeSlot(int startSlot, int endSlotExclusive)
@@ -741,42 +1007,65 @@ namespace NTSD.Simulation
                 return false;
 
             aiInputSlots = grownAiInputSlots;
+            GrowAiSoASensingRows(normalizedCapacity);
             return true;
         }
 
         private void ReleasePendingDestroySlots()
         {
-            List<int> bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys == null)
-                return;
-
-            for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
+            long mutationEpoch =
+                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+            ulong occupancyEpoch = _runtimeSlots.OccupancyEpoch;
+            if (!ForceLegacyPendingDestroyScanForDiagnostics &&
+                pendingDestroyScanCacheValid &&
+                pendingDestroyScanMutationEpoch == mutationEpoch &&
+                pendingDestroyScanOccupancyEpoch == occupancyEpoch)
             {
-                int key = bucketKeys[keyIndex];
-                if (!_buckets.TryGetValue(key, out Bucket bucket))
-                    continue;
+                PendingDestroySkipCount++;
+                return;
+            }
 
-                for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
+            PendingDestroyFullScanCount++;
+            List<int> bucketKeys = GetBucketKeySnapshot();
+            if (bucketKeys != null)
+            {
+                for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
                 {
-                    if (bucket.items[itemIndex] is not LF2Entity entity ||
-                        entity.Runtime == null ||
-                        !entity.Runtime.PendingFlushDestroy)
-                    {
-                        continue;
-                    }
-
-                    int slot = entity.Runtime.SlotIndex;
-                    if (slot < 0 || slot >= RuntimeSlotCapacity)
+                    int key = bucketKeys[keyIndex];
+                    if (!_buckets.TryGetValue(key, out Bucket bucket))
                         continue;
 
-                    if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity) &&
-                        ReleaseRuntimeSlotAndClearPresentationBinding(entity) &&
-                        !_pendingSlotReleasedDestroy.Contains(entity))
+                    for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
                     {
-                        _pendingSlotReleasedDestroy.Add(entity);
+                        if (bucket.items[itemIndex] is not LF2Entity entity)
+                            continue;
+
+                        PendingDestroyVisitedEntityCount++;
+                        if (entity.Runtime == null ||
+                            !entity.Runtime.PendingFlushDestroy)
+                        {
+                            continue;
+                        }
+
+                        int slot = entity.Runtime.SlotIndex;
+                        if (slot < 0 || slot >= RuntimeSlotCapacity)
+                            continue;
+
+                        if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity) &&
+                            ReleaseRuntimeSlotAndClearPresentationBinding(entity) &&
+                            !_pendingSlotReleasedDestroy.Contains(entity))
+                        {
+                            _pendingSlotReleasedDestroy.Add(entity);
+                        }
                     }
                 }
             }
+
+            long completedMutationEpoch =
+                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+            pendingDestroyScanMutationEpoch = completedMutationEpoch;
+            pendingDestroyScanOccupancyEpoch = _runtimeSlots.OccupancyEpoch;
+            pendingDestroyScanCacheValid = mutationEpoch == completedMutationEpoch;
         }
 
         private bool ReleaseRuntimeSlot(LF2Entity entity)
@@ -816,6 +1105,18 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            if (structuralEventSink != null)
+            {
+                EmitStructuralEvent(
+                    "free",
+                    slot,
+                    -1,
+                    -1,
+                    "active",
+                    "free",
+                    StructuralSourceKind(entity),
+                    slot);
+            }
             entity.SetRuntimeSlotIndex(-1);
             return true;
         }

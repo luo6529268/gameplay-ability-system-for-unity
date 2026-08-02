@@ -1,0 +1,13 @@
+{
+  "provider": "codex",
+  "jobId": "2cc4b0cd",
+  "slug": "architect-review-unity",
+  "status": "completed",
+  "pid": 114000,
+  "promptFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-prompt-architect-review-unity-2cc4b0cd.md",
+  "responseFile": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.omc\\prompts\\codex-response-architect-review-unity-2cc4b0cd.md",
+  "model": "gpt-5.3-codex",
+  "agentRole": "architect",
+  "spawnedAt": "2026-07-26T17:06:49.404Z",
+  "completedAt": "2026-07-26T17:07:10.816Z"
+}

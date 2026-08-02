@@ -22,11 +22,22 @@ namespace NTSD.Simulation
         /// </summary>
         public readonly bool down;
 
-        public SimInputEvent(int tickIndex, FuncKeyMask key, bool down)
+        /// <summary>
+        /// True when this key value belongs to a complete per-tick held-state packet.
+        /// Sparse Unity callbacks leave this false and rely on the local held mirror.
+        /// </summary>
+        public readonly bool completePacket;
+
+        public SimInputEvent(
+            int tickIndex,
+            FuncKeyMask key,
+            bool down,
+            bool completePacket = false)
         {
             this.tickIndex = tickIndex;
             this.key = key;
             this.down = down;
+            this.completePacket = completePacket;
         }
     }
 }

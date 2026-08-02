@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System.Collections.Generic;
 using System.Threading;
 using NTSD.Simulation;
 using NUnit.Framework;
@@ -7,6 +8,92 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleRenderDetailTimingEditorTests
     {
+        [Test]
+        public void ProfilerScopesAndNamesRemainStableAcrossLifecycleResets()
+        {
+            var names = new HashSet<string>();
+            for (int index = 0;
+                 index < (int)BattleTickDetailPhase.Count;
+                 index++)
+            {
+                string name =
+                    BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                        (BattleTickDetailPhase)index);
+                Assert.That(name, Does.StartWith("NTSD.BattleTick.Detail."));
+                Assert.That(names.Add(name), Is.True, $"duplicate marker name {name}");
+            }
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                    BattleTickDetailPhase.CandidateCollectCacheSetup),
+                Is.EqualTo("NTSD.BattleTick.Detail.CandidateCollect/CacheSetup"));
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                    BattleTickDetailPhase.CandidateCollectParticipantBodyItrBuild),
+                Is.EqualTo(
+                    "NTSD.BattleTick.Detail.CandidateCollect/ParticipantBodyItrBuild"));
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                    BattleTickDetailPhase.CandidateCollectDirectBroadphase),
+                Is.EqualTo(
+                    "NTSD.BattleTick.Detail.CandidateCollect/DirectBroadphase"));
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                    BattleTickDetailPhase.CandidateCollectSortDeduplicate),
+                Is.EqualTo(
+                    "NTSD.BattleTick.Detail.CandidateCollect/SortDeduplicate"));
+            Assert.That(
+                BattleTickDetailPhaseDiagnostics.GetProfilerMarkerNameForDiagnostics(
+                    BattleTickDetailPhase.CandidateCollectPairExactLoop),
+                Is.EqualTo(
+                    "NTSD.BattleTick.Detail.CandidateCollect/PairExactLoop"));
+
+            var diagnostics = new BattleTickDetailPhaseDiagnostics();
+            diagnostics.BeginTick(1);
+            diagnostics.BeginPhase(BattleTickDetailPhase.CandidateCollectCacheSetup);
+            diagnostics.EndTick();
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.Zero);
+            Assert.That(diagnostics.LastTickIndex, Is.EqualTo(-1));
+
+            diagnostics.SetEnabled(true);
+            diagnostics.BeginTick(19);
+            diagnostics.BeginPhase(BattleTickDetailPhase.CandidateCollectCacheSetup);
+            diagnostics.BeginPhase(
+                BattleTickDetailPhase.CandidateCollectDirectBroadphase);
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.EqualTo(2));
+            Assert.That(diagnostics.ActivePhaseForDiagnostics,
+                Is.EqualTo(BattleTickDetailPhase.CandidateCollectDirectBroadphase));
+
+            diagnostics.EndPhase(BattleTickDetailPhase.CandidateCollectCacheSetup);
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.EqualTo(2));
+            Thread.SpinWait(5000);
+            diagnostics.EndPhase(
+                BattleTickDetailPhase.CandidateCollectDirectBroadphase);
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.EqualTo(1));
+            Assert.That(diagnostics.GetLastElapsedTimestampTicks(
+                BattleTickDetailPhase.CandidateCollectDirectBroadphase),
+                Is.GreaterThan(0));
+
+            diagnostics.BeginPhase(
+                BattleTickDetailPhase.CandidateCollectSortDeduplicate);
+            diagnostics.BeginTick(20);
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.Zero);
+            Assert.That(diagnostics.GetLastPhaseSumTimestampTicks(), Is.Zero);
+
+            diagnostics.BeginPhase(
+                BattleTickDetailPhase.CandidateCollectPairExactLoop);
+            diagnostics.BeginPhase(
+                BattleTickDetailPhase.CandidateCollectPairExactLoop);
+            diagnostics.EndTick();
+            diagnostics.EndTick();
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.Zero);
+
+            diagnostics.BeginPhase(BattleTickDetailPhase.CharacterInputSnapshotBuild);
+            diagnostics.SetEnabled(false);
+            Assert.That(diagnostics.Enabled, Is.False);
+            Assert.That(diagnostics.ActivePhaseDepthForDiagnostics, Is.Zero);
+            Assert.That(diagnostics.LastTickIndex, Is.EqualTo(-1));
+        }
+
         [Test]
         public void DisabledWorld_DoesNotAllocateOrActivateDetailRecorder()
         {

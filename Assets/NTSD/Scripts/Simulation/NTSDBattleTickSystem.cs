@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Unity.Profiling;
 
 namespace NTSD.Simulation
 {
@@ -39,6 +40,23 @@ namespace NTSD.Simulation
 
     public sealed class BattleTickPhaseDiagnostics
     {
+        private static class PhaseProfilerMarkers
+        {
+            internal static readonly ProfilerMarker[] All = Create();
+
+            private static ProfilerMarker[] Create()
+            {
+                var markers = new ProfilerMarker[(int)BattleTickPhase.Count];
+                for (int index = 0; index < markers.Length; index++)
+                {
+                    BattleTickPhase phase = (BattleTickPhase)index;
+                    markers[index] = new ProfilerMarker(
+                        "NTSD.BattleTick." + GetPhaseName(phase));
+                }
+                return markers;
+            }
+        }
+
         private readonly long[] elapsedTimestampTicks = new long[(int)BattleTickPhase.Count];
         private BattleTickPhase activePhase = BattleTickPhase.Count;
         private long activePhaseTimestamp;
@@ -47,9 +65,14 @@ namespace NTSD.Simulation
         public static long TimestampFrequency => Stopwatch.Frequency;
         public bool Enabled { get; private set; }
         public int LastTickIndex { get; private set; } = -1;
+        public bool HasActivePhaseForDiagnostics =>
+            activePhase != BattleTickPhase.Count;
+        public BattleTickPhase ActivePhaseForDiagnostics => activePhase;
 
         public void SetEnabled(bool enabled)
         {
+            if (Enabled)
+                EndActivePhase();
             Enabled = enabled;
             activePhase = BattleTickPhase.Count;
             activePhaseTimestamp = 0;
@@ -62,9 +85,8 @@ namespace NTSD.Simulation
             if (!Enabled)
                 return;
 
+            EndActivePhase();
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
-            activePhase = BattleTickPhase.Count;
-            activePhaseTimestamp = 0;
             LastTickIndex = tickIndex;
         }
 
@@ -73,8 +95,10 @@ namespace NTSD.Simulation
             if (!Enabled || (uint)phase >= (uint)BattleTickPhase.Count)
                 return;
 
+            EndActivePhase();
             activePhase = phase;
             activePhaseTimestamp = Stopwatch.GetTimestamp();
+            PhaseProfilerMarkers.All[(int)phase].Begin();
         }
 
         public void EndPhase(BattleTickPhase phase)
@@ -82,9 +106,15 @@ namespace NTSD.Simulation
             if (!Enabled || activePhase != phase)
                 return;
 
-            elapsedTimestampTicks[(int)phase] += Stopwatch.GetTimestamp() - activePhaseTimestamp;
-            activePhase = BattleTickPhase.Count;
-            activePhaseTimestamp = 0;
+            EndActivePhase();
+        }
+
+        public void EndTick()
+        {
+            if (!Enabled)
+                return;
+
+            EndActivePhase();
         }
 
         public long GetLastElapsedTimestampTicks(BattleTickPhase phase)
@@ -138,6 +168,19 @@ namespace NTSD.Simulation
                 case BattleTickPhase.BattleResults: return "BattleResults";
                 default: return string.Empty;
             }
+        }
+
+        private void EndActivePhase()
+        {
+            BattleTickPhase phase = activePhase;
+            if ((uint)phase >= (uint)BattleTickPhase.Count)
+                return;
+
+            elapsedTimestampTicks[(int)phase] +=
+                Stopwatch.GetTimestamp() - activePhaseTimestamp;
+            PhaseProfilerMarkers.All[(int)phase].End();
+            activePhase = BattleTickPhase.Count;
+            activePhaseTimestamp = 0;
         }
     }
 
@@ -193,33 +236,41 @@ namespace NTSD.Simulation
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             diagnostics?.BeginTick(tickIndex);
             detailDiagnostics?.BeginTick(tickIndex);
-            diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
-            if (world.Runtime?.Flow != null)
-                world.Runtime.Flow.HumanInputPolledExternally = false;
-            world.PendingSounds.Clear();
-            world.AdvanceBattleFlowTick(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
-            if (world.Runtime?.Results?.IsActive == true)
+            try
             {
+                diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
+                if (world.Runtime?.Flow != null)
+                    world.Runtime.Flow.HumanInputPolledExternally = false;
+                world.PendingSounds.Clear();
+                world.AdvanceBattleFlowTick(tickIndex);
+                diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
+                if (world.Runtime?.Results?.IsActive == true)
+                {
+                    diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
+                    PostCooldownHumanInput(tickIndex);
+                    diagnostics?.EndPhase(BattleTickPhase.HumanInput);
+                    diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
+                    BattleResultsFlow();
+                    diagnostics?.EndPhase(BattleTickPhase.BattleResults);
+                    return;
+                }
+
+                diagnostics?.BeginPhase(BattleTickPhase.Cooldown);
+                TickCooldowns(tickIndex);
+                diagnostics?.EndPhase(BattleTickPhase.Cooldown);
                 diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
                 PostCooldownHumanInput(tickIndex);
                 diagnostics?.EndPhase(BattleTickPhase.HumanInput);
-                diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
-                BattleResultsFlow();
-                diagnostics?.EndPhase(BattleTickPhase.BattleResults);
-                return;
+                if (!RunFrameAdvancePhase(tickIndex, diagnostics))
+                    return;
+                RunInteractionPhase(tickIndex, diagnostics);
+                RunPresentationAndCleanupPhase(tickIndex, buildPresentation, diagnostics);
             }
-
-            diagnostics?.BeginPhase(BattleTickPhase.Cooldown);
-            TickCooldowns(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.Cooldown);
-            diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
-            PostCooldownHumanInput(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.HumanInput);
-            if (!RunFrameAdvancePhase(tickIndex, diagnostics))
-                return;
-            RunInteractionPhase(tickIndex, diagnostics);
-            RunPresentationAndCleanupPhase(tickIndex, buildPresentation, diagnostics);
+            finally
+            {
+                detailDiagnostics?.EndTick();
+                diagnostics?.EndTick();
+            }
         }
 
         private bool RunFrameAdvancePhase(

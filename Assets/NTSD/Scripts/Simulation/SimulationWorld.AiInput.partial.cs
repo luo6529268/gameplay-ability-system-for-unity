@@ -31,12 +31,12 @@ namespace NTSD.Simulation
         private int[] aiPhase1TeamBySlot;
         private uint[] aiPhase1GenerationBySlot;
         private bool aiPhase1TargetSlotsValid;
-        private readonly bool[] aiMoveModeFirst10Present = new bool[10];
-        private readonly bool[] aiMoveModeFirst10Eligible = new bool[10];
-        private readonly uint[] aiMoveModeFirst10Generation = new uint[10];
-        private readonly int[] aiMoveModeFirst10Hp = new int[10];
-        private readonly int[] aiMoveModeFirst10X = new int[10];
-        private readonly int[] aiMoveModeFirst10Z = new int[10];
+        private bool[] aiMoveModeFirst10Present = new bool[10];
+        private bool[] aiMoveModeFirst10Eligible = new bool[10];
+        private uint[] aiMoveModeFirst10Generation = new uint[10];
+        private int[] aiMoveModeFirst10Hp = new int[10];
+        private int[] aiMoveModeFirst10X = new int[10];
+        private int[] aiMoveModeFirst10Z = new int[10];
         private int aiMoveModeTopSlot = -1;
         private int aiMoveModeTopX = -1;
         private int aiMoveModeTopZ;
@@ -55,6 +55,9 @@ namespace NTSD.Simulation
         private int[] aiInputGroundTeamBySlot;
         private uint[] aiInputGroundGenerationBySlot;
         private bool[] aiInputAirRoleBySlot;
+        private AiNearestSlotFacts[] aiNearestFactsBySlot;
+        private uint aiNearestFactsVersionCounter;
+        private uint aiNearestFactsActiveVersion;
         private ulong aiInputSlotSnapshotOccupancyEpoch;
         private bool aiInputSpatialReady;
         private bool aiInputGroundSpatialReady;
@@ -71,8 +74,9 @@ namespace NTSD.Simulation
         internal bool ForceFullAiMoveModeScanForDiagnostics { get; set; }
         internal bool ForceFullAiNearestScanForDiagnostics { get; set; }
         internal bool ForceLegacyAiNearestQueryForDiagnostics { get; set; }
+        public bool ForceLegacyAiNearestFilterForDiagnostics { get; set; }
         internal bool EnableAiNearestBestFirstShadowForDiagnostics { get; set; }
-        internal int AiSameTeamSummaryFallbackCountForDiagnostics { get; private set; }
+        public int AiSameTeamSummaryFallbackCountForDiagnostics { get; private set; }
         internal int AiNearestBestFirstShadowMismatchCountForDiagnostics { get; private set; }
         internal string AiNearestBestFirstFirstShadowMismatchForDiagnostics { get; private set; }
         internal int AiNearestAirPassCountForDiagnostics { get; private set; }
@@ -139,86 +143,227 @@ namespace NTSD.Simulation
             public int InputPhase;
         }
 
+        private struct AiNearestSlotFacts
+        {
+            public LF2Entity Entity;
+            public uint HandleGeneration;
+            public uint SnapshotVersion;
+            public ulong OccupancyEpoch;
+            public int Slot;
+            public int X;
+            public int Y;
+            public int Z;
+            public int Hp;
+            public int Team;
+            public int State;
+            public int DataObjectType;
+            public double Vx;
+            public bool Active;
+            public bool Included;
+            public bool GroundRole;
+            public bool AirRole;
+        }
+
+        private struct AiNearestSnapshotStamp
+        {
+            public LF2Entity[] Slots;
+            public uint[] GenerationBySlot;
+            public AiNearestSlotFacts[] FactsBySlot;
+            public ulong OccupancyEpoch;
+            public uint FactsVersion;
+            public int SlotCount;
+        }
+
         private struct AiNearestPointFilter : IIncrementalPointNearestFilter
         {
             public SimulationWorld World;
-            public LF2Entity Self;
+            public AiNearestSnapshotStamp Stamp;
+            public LF2Entity SelfEntity;
+            public int SelfSlot;
+            public int SelfX;
+            public int SelfTeam;
             public int InputPhase;
             public bool Air;
+            public bool UseSnapshotFacts;
 
             public IncrementalPointFilterDecision Evaluate(RuntimeEntityHandle handle)
             {
                 int slot = handle.Slot;
-                if (World == null ||
-                    World.aiInputSlotSnapshotOccupancyEpoch == 0 ||
+                if (World == null || !handle.IsValid)
+                    return IncrementalPointFilterDecision.Abort;
+
+                if (UseSnapshotFacts)
+                {
+                    if (!World.IsAiNearestSnapshotStampCurrent(in Stamp) ||
+                        slot < 0 ||
+                        slot >= Stamp.SlotCount ||
+                        handle.Generation != Stamp.GenerationBySlot[slot])
+                    {
+                        return IncrementalPointFilterDecision.Abort;
+                    }
+
+                    LF2Entity candidate = Stamp.Slots[slot];
+                    ref readonly AiNearestSlotFacts facts = ref Stamp.FactsBySlot[slot];
+                    if (facts.SnapshotVersion != Stamp.FactsVersion ||
+                        facts.OccupancyEpoch != Stamp.OccupancyEpoch ||
+                        facts.Slot != slot ||
+                        facts.HandleGeneration != handle.Generation ||
+                        !facts.Included ||
+                        !facts.Active ||
+                        !ReferenceEquals(facts.Entity, candidate))
+                    {
+                        return IncrementalPointFilterDecision.Abort;
+                    }
+
+                    bool accepted = Air
+                        ? IsAirAiTargetCandidate(
+                            SelfEntity,
+                            SelfSlot,
+                            SelfTeam,
+                            in facts,
+                            InputPhase)
+                        : IsGroundAiTargetCandidate(
+                            SelfEntity,
+                            SelfSlot,
+                            SelfX,
+                            SelfTeam,
+                            in facts,
+                            InputPhase);
+                    return accepted
+                        ? IncrementalPointFilterDecision.Accept
+                        : IncrementalPointFilterDecision.Reject;
+                }
+
+                if (World.aiInputSlotSnapshotOccupancyEpoch == 0 ||
                     World.RuntimeSlotOccupancyEpochForServices !=
-                    World.aiInputSlotSnapshotOccupancyEpoch ||
-                    !handle.IsValid ||
+                        World.aiInputSlotSnapshotOccupancyEpoch ||
                     slot < 0 ||
                     slot >= World.aiInputSlots.Length ||
                     World.aiInputGroundGenerationBySlot == null ||
                     slot >= World.aiInputGroundGenerationBySlot.Length ||
-                    handle.Generation !=
-                    World.aiInputGroundGenerationBySlot[slot])
+                    handle.Generation != World.aiInputGroundGenerationBySlot[slot])
                 {
                     return IncrementalPointFilterDecision.Abort;
                 }
 
-                LF2Entity candidate = World.aiInputSlots[slot];
-                if (candidate?.Runtime == null ||
-                    candidate.Runtime.SlotIndex != slot)
-                {
+                LF2Entity live = World.aiInputSlots[slot];
+                if (live?.Runtime == null || live.Runtime.SlotIndex != slot)
                     return IncrementalPointFilterDecision.Abort;
-                }
 
-                bool accepted = Air
-                    ? IsAirAiTargetCandidate(Self, candidate, InputPhase)
-                    : IsGroundAiTargetCandidate(Self, candidate, InputPhase);
-                return accepted
+                bool liveAccepted = Air
+                    ? World.IsAirAiTargetCandidate(SelfEntity, live, InputPhase)
+                    : World.IsGroundAiTargetCandidate(SelfEntity, live, InputPhase);
+                return liveAccepted
                     ? IncrementalPointFilterDecision.Accept
                     : IncrementalPointFilterDecision.Reject;
             }
         }
-
         private void BuildAiInputSlotSnapshot()
         {
             aiInputSlotSnapshotOccupancyEpoch = 0;
-            ulong occupancyEpochBefore =
-                RuntimeSlotOccupancyEpochForServices;
-            BattleAiInputDetailDiagnostics diagnostics =
-                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            aiNearestFactsActiveVersion = 0;
+            bool useSoACandidate = aiSensingMode == AiSensingMode.SoAAiSensing;
+            uint factsVersion = useSoACandidate ? 0 : AdvanceAiNearestFactsVersion();
+            int runtimeCapacityBefore = RuntimeSlotCapacity;
+            ulong occupancyEpochBefore = RuntimeSlotOccupancyEpochForServices;
+            BattleAiInputDetailDiagnostics diagnostics = ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
             AiSameTeamSummaryFallbackCountForDiagnostics = 0;
             ResetAiNearestAirPassCountForSelfCheck();
-            diagnostics?.BeginPhase(BattleAiInputDetailPhase.SnapshotSlotSnapshot);
-            Array.Clear(aiInputSlots, 0, aiInputSlots.Length);
-            GetAllEntities(_entityScratch);
-            for (int i = 0; i < _entityScratch.Count; i++)
+            if (aiUnifiedSnapshotExecutionMode ==
+                    AiUnifiedSnapshotExecutionMode.UnifiedAuthority &&
+                TryPrepareAiUnifiedSnapshotExecutionPass(diagnostics))
             {
-                LF2Entity entity = _entityScratch[i];
-                int slot = entity?.Runtime?.SlotIndex ?? -1;
-                if (slot >= 0 && slot < aiInputSlots.Length && IsActiveForCurrentPass(entity))
-                    aiInputSlots[slot] = entity;
+                return;
             }
-            _entityScratch.Clear();
+            if (!useSoACandidate)
+                EnsureAiTeamHpSnapshotCapacity();
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.SnapshotSlotSnapshot);
+            if (useSoACandidate)
+            {
+                CaptureAiSoACandidateFusedSnapshot(
+                    runtimeCapacityBefore,
+                    occupancyEpochBefore);
+            }
+            else
+            {
+                Array.Clear(aiInputSlots, 0, aiInputSlots.Length);
+                GetAllEntities(_entityScratch);
+                for (int i = 0; i < _entityScratch.Count; i++)
+                {
+                    LF2Entity entity = _entityScratch[i];
+                    int slot = entity?.Runtime?.SlotIndex ?? -1;
+                    if (slot >= 0 &&
+                        slot < aiInputSlots.Length &&
+                        IsActiveForCurrentPass(entity))
+                    {
+                        aiInputSlots[slot] = entity;
+                    }
+                }
+                _entityScratch.Clear();
+                if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
+                    CaptureAiSoASensingShadowSnapshot(occupancyEpochBefore);
+            }
+            bool factsProven = !useSoACandidate &&
+                               CaptureAiNearestFactsSnapshot(
+                                   factsVersion,
+                                   occupancyEpochBefore);
             diagnostics?.EndPhase(BattleAiInputDetailPhase.SnapshotSlotSnapshot);
-
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.SnapshotIndexBuild);
-            BuildAiSnapshotIndices();
+            if (useSoACandidate)
+            {
+                BuildAiCandidateSnapshotProducts();
+            }
+            else
+            {
+                BuildAiSnapshotIndices();
+            }
             diagnostics?.EndPhase(BattleAiInputDetailPhase.SnapshotIndexBuild);
-
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.SnapshotQuadtreeSync);
-            SynchronizeAiInputSpatialSnapshot();
+            if (!useSoACandidate)
+                SynchronizeAiInputSpatialSnapshot();
             diagnostics?.EndPhase(BattleAiInputDetailPhase.SnapshotQuadtreeSync);
-
-            ulong occupancyEpochAfter =
-                RuntimeSlotOccupancyEpochForServices;
+            ulong occupancyEpochAfter = RuntimeSlotOccupancyEpochForServices;
+            if (aiSensingMode == AiSensingMode.SoAShadowAiSensing ||
+                aiSensingMode == AiSensingMode.SoAAiSensing)
+                ObserveAiSoASensingSnapshotBuildEpoch(occupancyEpochBefore, occupancyEpochAfter);
             if (occupancyEpochBefore == occupancyEpochAfter)
+            {
                 aiInputSlotSnapshotOccupancyEpoch = occupancyEpochAfter;
+                if (factsProven) aiNearestFactsActiveVersion = factsVersion;
+            }
+            PrepareAiUnifiedSnapshotShadowPass(diagnostics);
         }
 
         private void ClearAiInputSlotSnapshot()
         {
+            bool usedUnifiedAuthority =
+                AiUnifiedSnapshotExecutionFallbackForbidden;
+            EndAiUnifiedSnapshotExecutionPass();
+            if (usedUnifiedAuthority)
+                RestoreAiUnifiedSnapshotLegacyConsumerBuffers();
+            EndAiUnifiedSnapshotShadowPass();
+            bool useSoACandidate = aiSensingMode == AiSensingMode.SoAAiSensing;
+            if (aiSensingMode == AiSensingMode.SoAShadowAiSensing ||
+                aiSensingMode == AiSensingMode.SoAAiSensing)
+                ClearAiSoASensingShadowSnapshot();
             aiInputSlotSnapshotOccupancyEpoch = 0;
+            aiNearestFactsActiveVersion = 0;
+            if (useSoACandidate)
+            {
+                Array.Clear(aiInputSlots, 0, aiInputSlots.Length);
+                ResetAiMoveModeFirst10Snapshot();
+                aiTeamHpSummaryValid = false;
+                aiPhase1TargetSlotsValid = false;
+                aiInputSpatialReady = false;
+                aiInputGroundSpatialReady = false;
+                aiInputGroundTeamPartitionsValid = false;
+                aiInputAirSpatialReady = false;
+                aiInputAirRoleCount = 0;
+                aiInputAirRoleCountValid = false;
+                return;
+            }
+            if (aiNearestFactsBySlot != null)
+                Array.Clear(aiNearestFactsBySlot, 0, aiNearestFactsBySlot.Length);
             Array.Clear(aiInputSlots, 0, aiInputSlots.Length);
             aiSpecialScanSlots.Clear();
             aiPhase1TargetSlots.Clear();
@@ -259,6 +404,7 @@ namespace NTSD.Simulation
 
         private void BuildAiSnapshotIndices()
         {
+            AiLegacySnapshotIndexBuildCountForDiagnostics++;
             EnsureAiTeamHpSnapshotCapacity();
             Array.Clear(aiTeamHpSnapshotEligible, 0, aiTeamHpSnapshotEligible.Length);
             Array.Clear(aiTeamHpSnapshotTeams, 0, aiTeamHpSnapshotTeams.Length);
@@ -338,6 +484,21 @@ namespace NTSD.Simulation
             aiMoveModeFirst10Valid = moveModeFirst10Proven;
         }
 
+        // Candidate captures the shared first-ten move-mode snapshot in the fused
+        // runtime-slot scan. In particular, do not populate Legacy team summaries,
+        // special lists, phase-1 targets, nearest facts, or any quadtree state here.
+        private void BuildAiCandidateSnapshotProducts()
+        {
+            aiTeamHpSummaryValid = false;
+            aiPhase1TargetSlotsValid = false;
+            aiInputSpatialReady = false;
+            aiInputGroundSpatialReady = false;
+            aiInputGroundTeamPartitionsValid = false;
+            aiInputAirSpatialReady = false;
+            aiInputAirRoleCount = 0;
+            aiInputAirRoleCountValid = false;
+        }
+
         private void EnsureAiTeamHpSnapshotCapacity()
         {
             if (aiTeamHpSnapshotEligible?.Length == aiInputSlots.Length &&
@@ -345,6 +506,7 @@ namespace NTSD.Simulation
                 aiInputGroundTeamBySlot?.Length == aiInputSlots.Length &&
                 aiInputGroundGenerationBySlot?.Length == aiInputSlots.Length &&
                 aiInputAirRoleBySlot?.Length == aiInputSlots.Length &&
+                aiNearestFactsBySlot?.Length == aiInputSlots.Length &&
                 aiPhase1TeamBySlot?.Length == aiInputSlots.Length &&
                 aiPhase1GenerationBySlot?.Length == aiInputSlots.Length)
                 return;
@@ -358,12 +520,165 @@ namespace NTSD.Simulation
             aiInputGroundTeamBySlot = new int[aiInputSlots.Length];
             aiInputGroundGenerationBySlot = new uint[aiInputSlots.Length];
             aiInputAirRoleBySlot = new bool[aiInputSlots.Length];
+            aiNearestFactsBySlot = new AiNearestSlotFacts[aiInputSlots.Length];
             aiPhase1TeamBySlot = new int[aiInputSlots.Length];
             aiPhase1GenerationBySlot = new uint[aiInputSlots.Length];
         }
 
+        private uint AdvanceAiNearestFactsVersion()
+        {
+            unchecked
+            {
+                aiNearestFactsVersionCounter++;
+                if (aiNearestFactsVersionCounter == 0)
+                    aiNearestFactsVersionCounter = 1;
+            }
+            return aiNearestFactsVersionCounter;
+        }
+
+        private bool CaptureAiNearestFactsSnapshot(
+            uint snapshotVersion,
+            ulong occupancyEpoch)
+        {
+            AiLegacyNearestFactsBuildCountForDiagnostics++;
+            Array.Clear(
+                aiNearestFactsBySlot,
+                0,
+                aiNearestFactsBySlot.Length);
+            bool proven = true;
+            for (int slot = 0; slot < aiInputSlots.Length; slot++)
+            {
+                LF2Entity entity = aiInputSlots[slot];
+                if (entity == null)
+                    continue;
+
+                if (!TryGetCurrentRuntimeHandle(
+                        slot,
+                        entity,
+                        out RuntimeEntityHandle handle) ||
+                    !TryCaptureAiNearestSlotFacts(
+                        entity,
+                        slot,
+                        handle.Generation,
+                        snapshotVersion,
+                        occupancyEpoch,
+                        out AiNearestSlotFacts facts))
+                {
+                    proven = false;
+                    continue;
+                }
+
+                aiNearestFactsBySlot[slot] = facts;
+            }
+            return proven;
+        }
+
+        private bool TryCaptureAiNearestSlotFacts(
+            LF2Entity entity,
+            int slot,
+            uint handleGeneration,
+            uint snapshotVersion,
+            ulong occupancyEpoch,
+            out AiNearestSlotFacts facts)
+        {
+            facts = default;
+            if (entity?.Runtime == null ||
+                handleGeneration == 0 ||
+                snapshotVersion == 0 ||
+                occupancyEpoch == 0 ||
+                slot < 0 ||
+                slot >= aiInputSlots.Length ||
+                !ReferenceEquals(aiInputSlots[slot], entity) ||
+                entity.Runtime.SlotIndex != slot ||
+                !IsActiveForCurrentPass(entity))
+            {
+                return false;
+            }
+
+            NTSDEntityRuntime runtime = entity.Runtime;
+            int state = State(entity);
+            int dataObjectType =
+                entity.GetCurrentDataObjectTypeForSimulation();
+            int y = runtime.YInt;
+            bool airRole = state == 14 || Abs(y) > 2;
+            facts = new AiNearestSlotFacts
+            {
+                Entity = entity,
+                HandleGeneration = handleGeneration,
+                SnapshotVersion = snapshotVersion,
+                OccupancyEpoch = occupancyEpoch,
+                Slot = slot,
+                X = runtime.XInt,
+                Y = y,
+                Z = runtime.ZInt,
+                Hp = runtime.HP,
+                Team = runtime.RelationTeam,
+                State = state,
+                DataObjectType = dataObjectType,
+                Vx = runtime.Vx,
+                Active = true,
+                Included = true,
+                GroundRole =
+                    !airRole &&
+                    (dataObjectType == 0 || state == 3000),
+                AirRole = airRole,
+            };
+            return true;
+        }
+
+        private void ObserveAiNearestFactsMutation(LF2Entity entity)
+        {
+            if (aiNearestFactsActiveVersion == 0)
+                return;
+            if (RuntimeSlotOccupancyEpochForServices !=
+                aiInputSlotSnapshotOccupancyEpoch ||
+                entity?.Runtime == null)
+            {
+                aiNearestFactsActiveVersion = 0;
+                return;
+            }
+
+            int slot = entity.Runtime.SlotIndex;
+            if (slot < 0 ||
+                slot >= aiInputSlots.Length ||
+                !ReferenceEquals(aiInputSlots[slot], entity) ||
+                !TryGetCurrentRuntimeHandle(
+                    slot,
+                    entity,
+                    out RuntimeEntityHandle handle))
+            {
+                aiNearestFactsActiveVersion = 0;
+                return;
+            }
+
+            AiNearestSlotFacts previous = aiNearestFactsBySlot[slot];
+            if (previous.SnapshotVersion !=
+                    aiNearestFactsActiveVersion ||
+                previous.OccupancyEpoch !=
+                    aiInputSlotSnapshotOccupancyEpoch ||
+                previous.HandleGeneration != handle.Generation ||
+                !previous.Included ||
+                !previous.Active ||
+                !ReferenceEquals(previous.Entity, entity) ||
+                !TryCaptureAiNearestSlotFacts(
+                    entity,
+                    slot,
+                    handle.Generation,
+                    aiNearestFactsActiveVersion,
+                    aiInputSlotSnapshotOccupancyEpoch,
+                    out AiNearestSlotFacts current))
+            {
+                aiNearestFactsActiveVersion = 0;
+                return;
+            }
+
+            aiNearestFactsBySlot[slot] = current;
+        }
+
         private void ObserveAiTeamHpSummaryMutation(LF2Entity entity)
         {
+            AiLegacySnapshotMutationCountForDiagnostics++;
+            ObserveAiNearestFactsMutation(entity);
             ObserveAiPhase1TargetSlotsMutation(entity);
             ObserveAiMoveModeFirst10Mutation(entity);
             ObserveAiGroundSpatialRoleMutation(entity);
@@ -387,6 +702,14 @@ namespace NTSD.Simulation
             {
                 aiTeamHpSummaryValid = false;
             }
+        }
+
+        // Candidate owns nearest/special state in the SoA rows.  The sole Legacy-era
+        // product still shared by CreateAiInputContext is the first-ten move-mode
+        // snapshot, so do not touch facts, team summaries, phase-one lists, or trees.
+        private void ObserveAiCandidateCharacterInputMutation(LF2Entity entity)
+        {
+            ObserveAiMoveModeFirst10Mutation(entity);
         }
 
         private void ObserveAiAirSpatialRoleMutation(LF2Entity entity)
@@ -860,6 +1183,7 @@ namespace NTSD.Simulation
 
         private void SynchronizeAiInputSpatialSnapshot()
         {
+            AiLegacyQuadtreeSyncCountForDiagnostics++;
             aiInputSpatialEntries.Clear();
             aiInputGroundSpatialEntries.Clear();
             aiInputAirSpatialEntries.Clear();
@@ -1049,33 +1373,221 @@ namespace NTSD.Simulation
 
         internal void PrepareAiInputBasic(LF2Entity self, int tickIndex)
         {
+            if (aiDecisionExecutionMode == AiDecisionExecutionMode.IndexedCanonical)
+            {
+                if (!TryPrepareAiDecisionIndexedCanonical(self, tickIndex))
+                    PrepareAiInputBasicLegacyCore(self, tickIndex);
+                return;
+            }
+
+            if (aiDecisionShadowMode == AiDecisionShadowMode.Disabled)
+            {
+                PrepareAiInputBasicLegacyCore(self, tickIndex);
+                return;
+            }
+
+            bool aiDecisionShadowComparisonStarted =
+                BeginAiDecisionShadowComparison(self, tickIndex);
+            try
+            {
+                PrepareAiInputBasicLegacyCore(self, tickIndex);
+            }
+            finally
+            {
+                CompleteAiDecisionShadowComparison(
+                    aiDecisionShadowComparisonStarted);
+            }
+        }
+
+        private void PrepareAiInputBasicLegacyCore(LF2Entity self, int tickIndex)
+        {
+            aiSoADecisionRemainderUseRowsForCurrentInput = false;
+            aiSoADecisionRemainderAttemptedForCurrentInput = false;
+            aiSoADecisionRemainderRandomBoundaryPassed = false;
+            aiSoADecisionRemainderHardFailureRecordedForCurrentInput = false;
+            aiSoADecisionRowContext = default;
+            bool compareSoAShadow = aiSensingMode == AiSensingMode.SoAShadowAiSensing;
+            bool useSoACandidate = aiSensingMode == AiSensingMode.SoAAiSensing;
+            if (compareSoAShadow)
+                BeginAiSoASensingShadowComparison(self, tickIndex);
+            else if (useSoACandidate)
+                EnsureAiSensingModeAvailableBeforeTick();
+
             if (self?.Runtime == null || self.Runtime.HP <= 0)
                 return;
 
             NTSDEntityRuntime input = self.Runtime;
+            BattleAiInputDetailDiagnostics decisionDiagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
             if (input.Unk3FC > -1000)
             {
                 RollAndClearAiKeys(input);
                 MoveTowardCoordinate(self, CreateCoordinateAiInputContext());
-                input.ApplyInputEdges();
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: false,
+                    postSpecialRngCallsBefore: 0);
                 return;
             }
 
+            ulong contextRngCallsBefore = decisionDiagnostics != null
+                ? Rng?.CallCount ?? 0
+                : 0;
+            decisionDiagnostics?.RecordPhaseCall(
+                BattleAiInputDetailPhase.ContextMoveMode);
+            decisionDiagnostics?.BeginPhase(
+                BattleAiInputDetailPhase.ContextMoveMode);
             AiInputContext ai = CreateAiInputContext(self, tickIndex);
+            decisionDiagnostics?.EndPhase(
+                BattleAiInputDetailPhase.ContextMoveMode);
+            if (decisionDiagnostics != null)
+            {
+                decisionDiagnostics.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    ResolveAiInputDetailRngCallDelta(
+                        contextRngCallsBefore,
+                        Rng?.CallCount ?? 0));
+            }
 
-            int selectedSlot = FindNearestAiTargetSlot(self, ai, out int bestDist, out bool sameZLane);
+            int selectedSlot;
+            int bestDist;
+            bool sameZLane;
+            bool candidateUsesLegacyForThisInput =
+                useSoACandidate && aiSoACandidatePassLatchedToLegacy;
+            if (useSoACandidate && !candidateUsesLegacyForThisInput)
+            {
+                if (TryRunAiSoACandidateNearest(
+                        self,
+                        ai.InputPhase,
+                        out AiSoANearestResult nearest))
+                {
+                    selectedSlot = nearest.SelectedSlot;
+                    bestDist = nearest.BestDist;
+                    sameZLane = nearest.SameZLane;
+                }
+                else
+                {
+                    LatchAiSoACandidateToLegacyBeforeRandom();
+                    candidateUsesLegacyForThisInput = true;
+                    AiSoACandidateLegacyNearestScanCountForDiagnostics++;
+                    selectedSlot = FindNearestAiTargetSlotBrute(
+                        self,
+                        ai,
+                        out bestDist,
+                        out sameZLane);
+                }
+            }
+            else
+            {
+                if (useSoACandidate)
+                {
+                    AiSoACandidateLegacyNearestScanCountForDiagnostics++;
+                    selectedSlot = FindNearestAiTargetSlotBrute(
+                        self,
+                        ai,
+                        out bestDist,
+                        out sameZLane);
+                }
+                else
+                {
+                    selectedSlot = FindNearestAiTargetSlot(
+                        self,
+                        ai,
+                        out bestDist,
+                        out sameZLane);
+                }
+            }
+            if (compareSoAShadow)
+                CompareAiSoASensingInitial(self, tickIndex, selectedSlot, bestDist, sameZLane);
+            decisionDiagnostics?.RecordPhaseCall(
+                BattleAiInputDetailPhase.CachedTargetRetention);
+            decisionDiagnostics?.BeginPhase(
+                BattleAiInputDetailPhase.CachedTargetRetention);
             int savedTargetSlot = input.Unk360;
             LF2Entity cached = AiAt(savedTargetSlot);
-            if (IsLivingCharacterDat(cached) && Rand(30) > 0)
-                selectedSlot = savedTargetSlot;
+            decisionDiagnostics?.RecordPhaseSlotVisits(
+                BattleAiInputDetailPhase.CachedTargetRetention,
+                1);
+            bool decisionRemainderRequested =
+                aiSoADecisionRemainderEnabledForSelfCheck &&
+                aiSensingMode == AiSensingMode.SoAAiSensing;
+            if (decisionRemainderRequested)
+                AiSoADecisionRemainderEligibleAttemptCountForDiagnostics++;
+            if (decisionRemainderRequested &&
+                !TryBindAiSoADecisionRowContext(
+                    self,
+                    selectedSlot,
+                    savedTargetSlot,
+                    cached))
+            {
+                if (!candidateUsesLegacyForThisInput)
+                {
+                    candidateUsesLegacyForThisInput = true;
+                    AiSoACandidateLegacyNearestScanCountForDiagnostics++;
+                    selectedSlot = FindNearestAiTargetSlotBrute(
+                        self,
+                        ai,
+                        out bestDist,
+                        out sameZLane);
+                }
+            }
+            uint cacheRngStateBefore = Rng?.State ?? 0;
+            ulong cacheRngCallsBefore = Rng?.CallCount ?? 0;
+            bool cachedTargetEligible = IsLivingCharacterDat(cached);
+            bool cacheRandomCalled = false;
+            int cacheRoll = 0;
+            if (cachedTargetEligible)
+            {
+                cacheRandomCalled = true;
+                cacheRoll = Rand(30);
+                if (cacheRoll > 0)
+                    selectedSlot = savedTargetSlot;
+                else
+                    input.Unk360 = selectedSlot;
+            }
             else
+            {
                 input.Unk360 = selectedSlot;
+            }
+            uint cacheRngStateAfter = Rng?.State ?? 0;
+            ulong cacheRngCallsAfter = Rng?.CallCount ?? 0;
+            if (compareSoAShadow)
+            {
+                ContinueAiSoASensingShadowComparisonAfterCache(
+                    self,
+                    tickIndex,
+                    cachedTargetEligible,
+                    cacheRandomCalled,
+                    cacheRoll,
+                    cacheRngStateBefore,
+                    cacheRngCallsBefore,
+                    cacheRngStateAfter,
+                    cacheRngCallsAfter,
+                    selectedSlot);
+            }
+            decisionDiagnostics?.EndPhase(
+                BattleAiInputDetailPhase.CachedTargetRetention);
+            if (decisionDiagnostics != null)
+            {
+                decisionDiagnostics.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.CachedTargetRetention,
+                    ResolveAiInputDetailRngCallDelta(
+                        cacheRngCallsBefore,
+                        cacheRngCallsAfter));
+            }
 
             if (selectedSlot < 0)
             {
+                if (compareSoAShadow)
+                    CompleteAiSoASensingComparisonWithoutSpecial(self, tickIndex);
                 RollAndClearAiKeys(input);
                 AiPostNoTargetFallback(self, cached, ai);
-                input.ApplyInputEdges();
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: false,
+                    postSpecialRngCallsBefore: 0);
                 return;
             }
 
@@ -1092,170 +1604,316 @@ namespace NTSD.Simulation
             bool specialPostSelectionSeen = false;
             int specialBestDist = 10000;
 
-            if (ai.InputPhase == 1 || ai.InputPhase == 4)
+            bool runLegacySpecialScan = !useSoACandidate || candidateUsesLegacyForThisInput;
+            if (useSoACandidate && !runLegacySpecialScan)
             {
-                int selfTeam = Team(self);
-                if (selfTeam != 5)
-                {
-                    specialForce7AGround = true;
-                    if (Hp(self) > (4 * Hp3(self)) / 5 || Hp(self) > Hp3(self) - 130)
-                        specialForce7AGround = false;
-                    if (Hp(self) > 430 || Hp(self) > Hp3(self) - 130)
-                        specialGuard7A = true;
-
-                    ResolveAiSameTeamSummaryExcludingSelf(
+                if (TryRunAiSoACandidateSpecial(
                         self,
-                        selfTeam,
-                        out int sameTeamCount,
-                        out int sameTeamMinHp);
-                    if (sameTeamMinHp < Hp(self)) specialForce7AGround = false;
-                    if (sameTeamMinHp < Hp(self) - 200) specialGuard7A = true;
-                    if (sameTeamCount == 0) specialForce7AGround = false;
+                        ai.InputPhase,
+                        selectedSlot,
+                        bestDist,
+                        sameZLane,
+                        out AiSoASpecialResult special))
+                {
+                    selectedSlot = special.SelectedSlot;
+                    specialBestDist = special.BestDist;
+                    int flags = special.Flags;
+                    specialObjectProximity = (flags & AiSoASpecialProximity) != 0;
+                    specialLeft = (flags & AiSoASpecialLeft) != 0;
+                    specialRight = (flags & AiSoASpecialRight) != 0;
+                    specialUp = (flags & AiSoASpecialUp) != 0;
+                    specialDown = (flags & AiSoASpecialDown) != 0;
+                    specialGuard7A = (flags & AiSoASpecialGuard7A) != 0;
+                    specialGuard7B = (flags & AiSoASpecialGuard7B) != 0;
+                    specialForce7AGround = (flags & AiSoASpecialForce7AGround) != 0;
+                    specialC8ThreatSeen = (flags & AiSoASpecialC8ThreatSeen) != 0;
+                    specialPostSelectionSeen =
+                        (flags & AiSoASpecialPostSelectionSeen) != 0;
+                }
+                else
+                {
+                    LatchAiSoACandidateToLegacyAfterRandom();
+                    LatchAiSoADecisionRemainderToLegacy();
+                    runLegacySpecialScan =
+                        !aiSoADecisionRemainderUseRowsForCurrentInput;
                 }
             }
 
-            if (self.Runtime.KillCount > -1) { specialGuard7A = true; specialGuard7B = true; }
-            if (Pp(self) > 250) specialGuard7B = true;
-            if (ai.InputPhase == 1 && Team(self) == 1) specialGuard7B = true;
-            if (Slot(self) >= 20 && ai.InputPhase == 4) specialGuard7B = true;
-
-            int specialScanCount = ForceFullAiSpecialScanForDiagnostics
-                ? aiInputSlots.Length - 20
-                : aiSpecialScanSlots.Count;
-            for (int specialScanIndex = 0; specialScanIndex < specialScanCount; specialScanIndex++)
+            if (runLegacySpecialScan)
             {
-                int i = ForceFullAiSpecialScanForDiagnostics
-                    ? specialScanIndex + 20
-                    : aiSpecialScanSlots[specialScanIndex];
-                LF2Entity obj = AiAt(i);
-                if (obj == null) continue;
-                int objOid = obj.ObjectId;
-                int objState = State(obj);
-                if (objOid == 0xC8)
+                if (useSoACandidate)
+                    AiSoACandidateLegacySpecialScanCountForDiagnostics++;
+
+                if (ai.InputPhase == 1 || ai.InputPhase == 4)
                 {
-                    int frameGroup = Frame(obj) / 10;
-                    bool threat = frameGroup == 6 && Team(obj) != Team(self);
-                    if (!threat && frameGroup == 5)
+                    int selfTeam = Team(self);
+                    if (selfTeam != 5)
                     {
-                        bool lowHpWindow = (Hp(self) >= Hp3(self) - 70 || Hp(self) >= Hp3(self) - 200) &&
-                                           (Hp(self) >= (3 * Hp3(self)) / 5 || Hp(self) < Hp3(self) - 200);
-                        threat = (self.ObjectId == 2 || self.ObjectId == 34) && lowHpWindow && Team(obj) == Team(self);
+                        specialForce7AGround = true;
+                        if (Hp(self) > (4 * Hp3(self)) / 5 || Hp(self) > Hp3(self) - 130)
+                            specialForce7AGround = false;
+                        if (Hp(self) > 430 || Hp(self) > Hp3(self) - 130)
+                            specialGuard7A = true;
+
+                        ResolveAiSameTeamSummaryExcludingSelf(
+                            self,
+                            selfTeam,
+                            out int sameTeamCount,
+                            out int sameTeamMinHp);
+                        if (sameTeamMinHp < Hp(self)) specialForce7AGround = false;
+                        if (sameTeamMinHp < Hp(self) - 200) specialGuard7A = true;
+                        if (sameTeamCount == 0) specialForce7AGround = false;
                     }
-                    if (threat) specialC8ThreatSeen = true;
-                    if (threat && Abs(Z(obj) - Z(self)) < 25 && Abs(X(obj) - X(self)) < 150)
+                }
+
+                if (self.Runtime.KillCount > -1) { specialGuard7A = true; specialGuard7B = true; }
+                if (Pp(self) > 250) specialGuard7B = true;
+                if (ai.InputPhase == 1 && Team(self) == 1) specialGuard7B = true;
+                if (Slot(self) >= 20 && ai.InputPhase == 4) specialGuard7B = true;
+
+                // Candidate does not build the Legacy compact special list.  Once a
+                // Candidate query fails, retain the authoritative slot order through
+                // the full 20..capacity scan rather than rebuilding Legacy products.
+                bool fullLegacySpecialScan =
+                    ForceFullAiSpecialScanForDiagnostics || useSoACandidate;
+                int specialScanCount = fullLegacySpecialScan
+                    ? aiInputSlots.Length - 20
+                    : aiSpecialScanSlots.Count;
+                for (int specialScanIndex = 0; specialScanIndex < specialScanCount; specialScanIndex++)
+                {
+                    int i = fullLegacySpecialScan
+                        ? specialScanIndex + 20
+                        : aiSpecialScanSlots[specialScanIndex];
+                    LF2Entity obj = AiAt(i);
+                    if (obj == null) continue;
+                    int objOid = obj.ObjectId;
+                    int objState = State(obj);
+                    if (objOid == 0xC8)
                     {
-                        specialObjectProximity = true;
-                        if (Abs(Z(obj) - Z(self)) < 20)
+                        int frameGroup = Frame(obj) / 10;
+                        bool threat = frameGroup == 6 && Team(obj) != Team(self);
+                        if (!threat && frameGroup == 5)
                         {
-                            if (Abs(X(obj) - X(self)) < 180)
+                            bool lowHpWindow = (Hp(self) >= Hp3(self) - 70 || Hp(self) >= Hp3(self) - 200) &&
+                                               (Hp(self) >= (3 * Hp3(self)) / 5 || Hp(self) < Hp3(self) - 200);
+                            threat = (ObjectId(self) == 2 || ObjectId(self) == 34) && lowHpWindow && Team(obj) == Team(self);
+                        }
+                        if (threat) specialC8ThreatSeen = true;
+                        if (threat && Abs(Z(obj) - Z(self)) < 25 && Abs(X(obj) - X(self)) < 150)
+                        {
+                            specialObjectProximity = true;
+                            if (Abs(Z(obj) - Z(self)) < 20)
                             {
-                                if (Z(obj) <= Z(self)) specialUp = true; else specialDown = true;
+                                if (Abs(X(obj) - X(self)) < 180)
+                                {
+                                    if (Z(obj) <= Z(self)) specialUp = true; else specialDown = true;
+                                }
+                                if (X(obj) <= X(self)) specialLeft = true; else specialRight = true;
                             }
-                            if (X(obj) <= X(self)) specialLeft = true; else specialRight = true;
                         }
                     }
-                }
 
-                if ((objOid == 0xD3 && objState == 0x12) || (objOid == 0xD4 && Frame(obj) >= 150 && Frame(obj) <= 170))
-                {
-                    if (Abs(X(obj) - X(self)) < 80)
+                    if ((objOid == 0xD3 && objState == 0x12) || (objOid == 0xD4 && Frame(obj) >= 150 && Frame(obj) <= 170))
                     {
-                        if (Z(obj) > Z(self) + 20) specialDown = true;
-                        else if (Z(obj) < Z(self) - 20) specialUp = true;
+                        if (Abs(X(obj) - X(self)) < 80)
+                        {
+                            if (Z(obj) > Z(self) + 20) specialDown = true;
+                            else if (Z(obj) < Z(self) - 20) specialUp = true;
+                        }
+                        if (Abs(Z(obj) - Z(self)) < 20)
+                        {
+                            if (X(obj) > X(self) + 100) specialRight = true;
+                            else if (X(obj) < X(self) - 100) specialLeft = true;
+                        }
                     }
-                    if (Abs(Z(obj) - Z(self)) < 20)
-                    {
-                        if (X(obj) > X(self) + 100) specialRight = true;
-                        else if (X(obj) < X(self) - 100) specialLeft = true;
-                    }
-                }
 
-                if (!specialPostSelectionSeen && !specialC8ThreatSeen && !sameZLane && input.LinkState == 0)
-                {
-                    int dist = Distance(self, obj);
-                    bool oidCandidate = objOid / 100 == 1 || objOid == 0xD5;
-                    bool guarded = (objOid == 0x7A && specialGuard7A) || (objOid == 0x7B && specialGuard7B) ||
-                                   (input.HasInputHistoryGate() && objOid != 0x7A);
-                    if (dist < 2 * bestDist && dist < specialBestDist && oidCandidate && !guarded &&
-                        obj.Runtime.LinkState == 0 && (objState == 0x3EC || objState == 0x7D4))
+                    if (!specialPostSelectionSeen && !specialC8ThreatSeen && !sameZLane && input.LinkState == 0)
+                    {
+                        int dist = Distance(self, obj);
+                        bool oidCandidate = objOid / 100 == 1 || objOid == 0xD5;
+                        bool guarded = (objOid == 0x7A && specialGuard7A) || (objOid == 0x7B && specialGuard7B) ||
+                                       (input.HasInputHistoryGate() && objOid != 0x7A);
+                        if (dist < 2 * bestDist && dist < specialBestDist && oidCandidate && !guarded &&
+                            obj.Runtime.LinkState == 0 && (objState == 0x3EC || objState == 0x7D4))
+                        {
+                            selectedSlot = i;
+                            specialBestDist = dist;
+                        }
+                    }
+
+                    if (objOid == 0xC8 && Frame(obj) / 10 == 5 && Abs(X(obj) - X(self)) < 300 &&
+                        Abs(Z(obj) - Z(self)) < 90 && Team(obj) == Team(self))
+                    {
+                        bool pressure = (Hp(self) < HpMax(self) - 70 && Hp(self) < 140) ||
+                                        (Hp(self) < (3 * HpMax(self)) / 5 && Hp(self) >= 140);
+                        if (pressure) selectedSlot = i;
+                        specialPostSelectionSeen = true;
+                    }
+
+                    if (specialForce7AGround && objOid == 0x7A && objState == 0x3EC && input.LinkState == 0)
                     {
                         selectedSlot = i;
-                        specialBestDist = dist;
+                        specialPostSelectionSeen = true;
                     }
                 }
 
-                if (objOid == 0xC8 && Frame(obj) / 10 == 5 && Abs(X(obj) - X(self)) < 300 &&
-                    Abs(Z(obj) - Z(self)) < 90 && Team(obj) == Team(self))
-                {
-                    bool pressure = (Hp(self) < HpMax(self) - 70 && Hp(self) < 140) ||
-                                    (Hp(self) < (3 * HpMax(self)) / 5 && Hp(self) >= 140);
-                    if (pressure) selectedSlot = i;
-                    specialPostSelectionSeen = true;
-                }
-
-                if (specialForce7AGround && objOid == 0x7A && objState == 0x3EC && input.LinkState == 0)
-                {
-                    selectedSlot = i;
-                    specialPostSelectionSeen = true;
-                }
+                if (specialC8ThreatSeen) selectedSlot = selectedBeforeSpecialScan;
             }
-
-            if (specialC8ThreatSeen) selectedSlot = selectedBeforeSpecialScan;
+            if (compareSoAShadow)
+            {
+                CompareAiSoASensingPostSpecial(
+                    self,
+                    tickIndex,
+                    selectedSlot,
+                    specialBestDist,
+                    specialObjectProximity,
+                    specialLeft,
+                    specialRight,
+                    specialUp,
+                    specialDown,
+                    specialGuard7A,
+                    specialGuard7B,
+                    specialForce7AGround,
+                    specialC8ThreatSeen,
+                    specialPostSelectionSeen);
+            }
+            TrackAiSoADecisionSelectedRow(selectedSlot);
+            ulong postSpecialRngCallsBefore = decisionDiagnostics != null
+                ? Rng?.CallCount ?? 0
+                : 0;
+            decisionDiagnostics?.RecordPhaseCall(
+                BattleAiInputDetailPhase.PostSpecialMainDecision);
+            decisionDiagnostics?.BeginPhase(
+                BattleAiInputDetailPhase.PostSpecialMainDecision);
             input.Unk360 = selectedSlot;
             RollAndClearAiKeys(input);
             LF2Entity target = AiAt(selectedSlot);
-            if (target == null) { input.ApplyInputEdges(); return; }
+            decisionDiagnostics?.RecordPhaseSlotVisits(
+                BattleAiInputDetailPhase.PostSpecialMainDecision,
+                1);
+            if (target == null)
+            {
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
+            }
             int selfState = State(self);
             int targetState = State(target);
-            int targetOid = target.ObjectId;
+            int targetOid = ObjectId(target);
 
             if (X(target) > X(self) && Facing(self) == 1) input.KeyRight = 1;
             if (X(target) < X(self) && Facing(self) == 0) input.KeyLeft = 1;
             if (selfState == 2) { if (Facing(self) == 1) input.KeyRight = 1; else input.KeyLeft = 1; }
 
             int blockRoll = Rand(ai.Rand5 + 8);
-            if (blockRoll == 0 && (input.ZBoundNegative || input.ZBoundPositive || input.XBoundNegative || input.XBoundPositive))
+            if (blockRoll == 0 && HasBoundaryBlock(self))
             { input.PrevJump = 0; input.KeyJump = 1; }
 
-            if (AiPreUpdateTarget3000SideEffect(self, target, selfState, targetState, ai)) { input.ApplyInputEdges(); return; }
-
-            if (input.HasInputHistoryGate() && input.LinkState > 0)
+            if (AiPreUpdateTarget3000SideEffect(self, target, selfState, targetState, ai))
             {
-                LF2Entity held = AiAt(input.TargetSlotIndex);
-                if (held != null && (held.ObjectId == 0x7A || held.ObjectId == 0x7B))
-                { input.PrevJump = 0; input.KeyJump = 1; input.ApplyInputEdges(); return; }
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
             }
 
-            bool coordinateAllowsSpecial = !input.HasInputHistoryGate() || AiPostCacheCoordinateAllowsSpecial(self);
+            if (HasInputHistoryGate(self) && LinkState(self) > 0)
+            {
+                LF2Entity held = AiAt(TargetSlot(self));
+                decisionDiagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.PostSpecialMainDecision,
+                    1);
+                if (held != null && (ObjectId(held) == 0x7A || ObjectId(held) == 0x7B))
+                {
+                    input.PrevJump = 0;
+                    input.KeyJump = 1;
+                    ApplyAiInputEdgesWithDiagnostics(
+                        input,
+                        decisionDiagnostics,
+                        completePostSpecialMainDecision: true,
+                        postSpecialRngCallsBefore);
+                    return;
+                }
+            }
+
+            bool coordinateAllowsSpecial = !HasInputHistoryGate(self) || AiPostCacheCoordinateAllowsSpecial(self);
             if (coordinateAllowsSpecial && (targetState == 0x3EC || targetState == 0x7D4))
             {
-                if (input.HasInputHistoryGate() && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240) &&
-                    targetOid != 0x7A && targetOid != 0x7B) { input.ApplyInputEdges(); return; }
+                if (HasInputHistoryGate(self) && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240) &&
+                    targetOid != 0x7A && targetOid != 0x7B)
+                {
+                    ApplyAiInputEdgesWithDiagnostics(
+                        input,
+                        decisionDiagnostics,
+                        completePostSpecialMainDecision: true,
+                        postSpecialRngCallsBefore);
+                    return;
+                }
                 MoveTowardTarget(self, target, ai, selfState);
                 if (Abs(Z(target) - Z(self)) <= 3 && Abs(X(target) - X(self)) <= 6) { input.PrevJump = 0; input.KeyJump = 1; }
-                input.ApplyInputEdges(); return;
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
             }
 
             if (targetState == 14 || Abs(Y(target)) > 2)
             {
-                if (X(target) > ai.StageTargetX - 30) { input.KeyLeft = 1; input.PrevLeft = 0; input.ApplyInputEdges(); return; }
-                if (X(target) < 30) { input.KeyRight = 1; input.PrevRight = 0; input.ApplyInputEdges(); return; }
+                if (X(target) > ai.StageTargetX - 30)
+                {
+                    input.KeyLeft = 1;
+                    input.PrevLeft = 0;
+                    ApplyAiInputEdgesWithDiagnostics(
+                        input,
+                        decisionDiagnostics,
+                        completePostSpecialMainDecision: true,
+                        postSpecialRngCallsBefore);
+                    return;
+                }
+                if (X(target) < 30)
+                {
+                    input.KeyRight = 1;
+                    input.PrevRight = 0;
+                    ApplyAiInputEdgesWithDiagnostics(
+                        input,
+                        decisionDiagnostics,
+                        completePostSpecialMainDecision: true,
+                        postSpecialRngCallsBefore);
+                    return;
+                }
                 if (Abs(Z(target) - Z(self)) <= 45 || Abs(X(target) - X(self)) <= 350)
                 {
                     if (X(target) > X(self)) { input.KeyLeft = 1; if (Rand(ai.Rand20 + 35) == 0) input.PrevLeft = 0; }
                     else { input.KeyRight = 1; if (Rand(ai.Rand20 + 35) == 0) input.PrevRight = 0; }
                     if (Z(target) < Z(self) || Z(target) < StageZMin + 10) input.KeyDown = 1; else input.KeyUp = 1;
                 }
-                input.ApplyInputEdges(); return;
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
             }
 
-            bool c8Allowed = (input.HasInputHistoryGate() && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240)) ||
+            bool c8Allowed = (HasInputHistoryGate(self) && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240)) ||
                              (targetState != 14 && Abs(Y(target)) <= 2);
             if (c8Allowed && targetOid == 0xC8)
             {
                 if (X(target) > X(self) + 7) input.KeyRight = 1; else if (X(target) < X(self) - 7) input.KeyLeft = 1;
                 if (Z(target) > Z(self) + 2) input.KeyDown = 1; else if (Z(target) < Z(self) - 2) input.KeyUp = 1;
-                input.ApplyInputEdges(); return;
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
             }
 
             if (Rand(ai.Rand5 + 1) == 0)
@@ -1266,16 +1924,30 @@ namespace NTSD.Simulation
                     AiUpdateCloseOid1Decision(self, target) ||
                     AiUpdateOid4ComboDecision(self, target) ||
                     AiUpdateOid5ComboDecision(self, target))
-                { input.ApplyInputEdges(); return; }
+                {
+                    ApplyAiInputEdgesWithDiagnostics(
+                        input,
+                        decisionDiagnostics,
+                        completePostSpecialMainDecision: true,
+                        postSpecialRngCallsBefore);
+                    return;
+                }
             }
 
             if (AiUpdateOid33_19_16PredictedDuaDecision(self, target, targetState) ||
                 AiUpdateOid52_1_2_21PreLabel591Decision(self, target, targetState) ||
                 AiUpdateLabel591Oid51_2_18_7Decision(self, target))
-            { input.ApplyInputEdges(); return; }
+            {
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
+            }
 
-            bool closeOrFree = !input.HasInputHistoryGate() || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
-            int selfOid = self.ObjectId;
+            bool closeOrFree = !HasInputHistoryGate(self) || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
+            int selfOid = ObjectId(self);
             bool widePath = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
             if (!widePath)
             {
@@ -1301,21 +1973,62 @@ namespace NTSD.Simulation
                 }
             }
 
-            if (input.LinkState > 0 && !AiProcessHelper(self, target, ai, selfState, targetState, sameZLane, specialObjectProximity))
-            { input.ApplyInputEdges(); return; }
+            if (LinkState(self) > 0 && !AiProcessHelper(self, target, ai, selfState, targetState, sameZLane, specialObjectProximity))
+            {
+                ApplyAiInputEdgesWithDiagnostics(
+                    input,
+                    decisionDiagnostics,
+                    completePostSpecialMainDecision: true,
+                    postSpecialRngCallsBefore);
+                return;
+            }
 
             if (Rand(ai.Difficulty * 7 + 10) == 0 && (targetState == 3 || targetState / 100 == 3) &&
                 Abs(Z(target) - Z(self)) < 9 && ((Facing(target) == 0 && X(target) < X(self)) || (Facing(target) == 1 && X(target) > X(self))))
                 input.KeyAttack = 1;
             if (closeOrFree && Rand(2 * (ai.Rand5 + 10)) < 3 && Rand(20) < 3 && targetState != 14) input.KeyDefend = 1;
             bool selfGroup = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
-            if ((!selfGroup || targetState == 16) && Abs(X(target) - 2 * (int)self.Runtime.Vx - X(self)) < 50 &&
+            if ((!selfGroup || targetState == 16) && Abs(X(target) - 2 * (int)Vx(self) - X(self)) < 50 &&
                 Abs(Z(target) - Z(self)) < 5 && Rand(ai.Rand3 + 3) == 0 && targetState != 14) input.KeyJump = 1;
 
             AiProcessSubCallerPrewrite(self, target, ai, selfState, targetState);
             AiProcessSubLabel435PressurePrewrite(self, target, ai, selfState, targetState);
             AiProcessSubHelper(self, target, ai, targetState, specialLeft, specialRight);
+            ApplyAiInputEdgesWithDiagnostics(
+                input,
+                decisionDiagnostics,
+                completePostSpecialMainDecision: true,
+                postSpecialRngCallsBefore);
+        }
+
+        private void ApplyAiInputEdgesWithDiagnostics(
+            NTSDEntityRuntime input,
+            BattleAiInputDetailDiagnostics diagnostics,
+            bool completePostSpecialMainDecision,
+            ulong postSpecialRngCallsBefore)
+        {
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.InputEdges);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputEdges);
             input.ApplyInputEdges();
+            CompleteAiSoADecisionRemainderInput();
+            diagnostics?.EndPhase(BattleAiInputDetailPhase.InputEdges);
+            if (!completePostSpecialMainDecision || diagnostics == null)
+                return;
+
+            diagnostics.RecordPhaseRngCalls(
+                BattleAiInputDetailPhase.PostSpecialMainDecision,
+                ResolveAiInputDetailRngCallDelta(
+                    postSpecialRngCallsBefore,
+                    Rng?.CallCount ?? 0));
+            diagnostics.EndPhase(
+                BattleAiInputDetailPhase.PostSpecialMainDecision);
+        }
+
+        private static ulong ResolveAiInputDetailRngCallDelta(
+            ulong before,
+            ulong after)
+        {
+            return after >= before ? after - before : 0;
         }
 
         private AiInputContext CreateAiInputContext(LF2Entity self, int tickIndex)
@@ -1324,7 +2037,7 @@ namespace NTSD.Simulation
             int difficulty = Difficulty;
             bool forceZero = AiPhaseGate == 1;
             if (!forceZero && inputPhase == 1 && Team(self) != 5)
-                forceZero = Slot(self) < 20 || self.ObjectId < 30;
+                forceZero = Slot(self) < 20 || ObjectId(self) < 30;
             if (forceZero || difficulty < 0) difficulty = 0;
             AiInputContext ai = new AiInputContext
             {
@@ -1366,26 +2079,304 @@ namespace NTSD.Simulation
             };
         }
 
+        private bool TryBindAiSoADecisionRowContext(
+            LF2Entity self,
+            int selectedSlot,
+            int cachedSlot,
+            LF2Entity cached)
+        {
+            aiSoADecisionRemainderAttemptedForCurrentInput = true;
+            AiSoASensingRows rows = aiSoASensingRows;
+            var context = new AiDecisionRowContext
+            {
+                Rows = rows,
+                Slots = aiInputSlots,
+                OccupancyEpoch = aiSoASensingSnapshotEpoch,
+            };
+            bool captured = TryCaptureAiSoADecisionRowIdentity(
+                                rows,
+                                self?.Runtime?.SlotIndex ?? -1,
+                                self,
+                                out context.Self) &&
+                            TryCaptureAiSoADecisionRowIdentity(
+                                rows,
+                                selectedSlot,
+                                AiAt(selectedSlot),
+                                out context.Selected) &&
+                            TryCaptureAiSoADecisionRowIdentity(
+                                rows,
+                                cachedSlot,
+                                cached,
+                                out context.Cached);
+            if (!captured ||
+                !ValidateAiSoADecisionRowContext(ref context, terminalGuard: false))
+            {
+                LatchAiSoADecisionRemainderToLegacy();
+                return false;
+            }
+
+            context.Bound = true;
+            aiSoADecisionRowContext = context;
+            aiSoADecisionRemainderUseRowsForCurrentInput = true;
+            AiSoADecisionRemainderContextBindCountForDiagnostics++;
+            return true;
+        }
+
+        private static bool TryCaptureAiSoADecisionRowIdentity(
+            AiSoASensingRows rows,
+            int slot,
+            LF2Entity entity,
+            out AiDecisionRowIdentity identity)
+        {
+            identity = new AiDecisionRowIdentity
+            {
+                Entity = entity,
+                Slot = slot,
+            };
+            if (rows == null)
+                return false;
+            if (slot < 0 || slot >= rows.Capacity)
+                return entity == null;
+
+            identity.Included = rows.Included[slot];
+            identity.Generation = rows.Generation[slot];
+            identity.StableId = rows.Identity[slot];
+            return true;
+        }
+
+        private bool ValidateAiSoADecisionRowContext(
+            ref AiDecisionRowContext context,
+            bool terminalGuard)
+        {
+            AiSoADecisionRemainderGatewayValidationCountForDiagnostics++;
+            bool mutationActive =
+                aiSoADecisionRemainderMutationKindForSelfCheck != 0 &&
+                aiSoADecisionRemainderMutationAfterRandomForSelfCheck == terminalGuard &&
+                (!terminalGuard || aiSoADecisionRemainderRandomBoundaryPassed);
+            if ((terminalGuard &&
+                 aiSoADecisionRemainderRandomBoundaryPassed &&
+                 aiSoADecisionRemainderForceAfterRandomFailureForSelfCheck) ||
+                (aiSoADecisionRemainderForceBeforeRandomFailureForSelfCheck &&
+                 !terminalGuard) ||
+                (mutationActive &&
+                 aiSoADecisionRemainderMutationKindForSelfCheck == 1) ||
+                !aiSoADecisionRemainderEnabledForSelfCheck ||
+                aiSensingMode != AiSensingMode.SoAAiSensing ||
+                aiSoACandidatePassLatchedToLegacy ||
+                !aiSoASensingSnapshotValid ||
+                aiSoASensingPassInvalidated ||
+                context.Rows == null ||
+                context.Slots == null ||
+                !ReferenceEquals(context.Rows, aiSoASensingRows) ||
+                !ReferenceEquals(context.Slots, aiInputSlots) ||
+                context.Rows.Capacity != context.Slots.Length ||
+                RuntimeSlotCapacity != context.Rows.Capacity ||
+                context.OccupancyEpoch != aiSoASensingSnapshotEpoch ||
+                aiInputSlotSnapshotOccupancyEpoch != context.OccupancyEpoch ||
+                RuntimeSlotOccupancyEpochForServices != context.OccupancyEpoch)
+            {
+                return false;
+            }
+
+            return ValidateAiSoADecisionRowIdentity(
+                       ref context,
+                       context.Self,
+                       mutationActive &&
+                       aiSoADecisionRemainderMutationKindForSelfCheck == 2) &&
+                   ValidateAiSoADecisionRowIdentity(
+                       ref context,
+                       context.Selected,
+                       mutationActive &&
+                       aiSoADecisionRemainderMutationKindForSelfCheck == 3) &&
+                   ValidateAiSoADecisionRowIdentity(
+                       ref context,
+                       context.Cached,
+                       mutationActive &&
+                       aiSoADecisionRemainderMutationKindForSelfCheck == 4);
+        }
+
+        private bool ValidateAiSoADecisionRowIdentity(
+            ref AiDecisionRowContext context,
+            AiDecisionRowIdentity identity,
+            bool forceMismatch)
+        {
+            AiSoADecisionRemainderRowVisitCountForDiagnostics++;
+            if (forceMismatch)
+                return false;
+            if (identity.Slot < 0 || identity.Slot >= context.Rows.Capacity)
+                return identity.Entity == null && !identity.Included;
+            if (!identity.Included)
+            {
+                return identity.Entity == null &&
+                       context.Slots[identity.Slot] == null &&
+                       TryGetRuntimeSlotReadOnlyView(
+                           identity.Slot,
+                           out RuntimeSlotTable.ReadOnlySlotView emptyView) &&
+                       emptyView.RuntimeSlot == identity.Slot &&
+                       !emptyView.Claimed &&
+                       emptyView.Entity == null;
+            }
+
+            return identity.Entity?.Runtime != null &&
+                   ReferenceEquals(context.Slots[identity.Slot], identity.Entity) &&
+                   identity.Entity.Runtime.SlotIndex == identity.Slot &&
+                   identity.Entity.Runtime.StableId == identity.StableId &&
+                   TryGetCurrentRuntimeHandle(
+                       identity.Slot,
+                       identity.Entity,
+                       out RuntimeEntityHandle handle) &&
+                   handle.Generation == identity.Generation;
+        }
+
+        private void TrackAiSoADecisionSelectedRow(int selectedSlot)
+        {
+            if (!aiSoADecisionRemainderUseRowsForCurrentInput)
+                return;
+
+            TryCaptureAiSoADecisionRowIdentity(
+                aiSoADecisionRowContext.Rows,
+                selectedSlot,
+                AiAt(selectedSlot),
+                out aiSoADecisionRowContext.Selected);
+        }
+
+        private bool TryGetAiSoADecisionRemainderRow(
+            LF2Entity entity,
+            out AiSoASensingRows rows,
+            out int slot)
+        {
+            // The slot snapshot and SoA rows are published at one occupancy epoch.
+            // Registry mutations are deferred for this pass, and the lease is guarded
+            // at bind/end, so property reads must not repeat global row validation.
+            rows = null;
+            slot = -1;
+            if (!aiSoADecisionRemainderUseRowsForCurrentInput ||
+                !aiSoADecisionRowContext.Bound)
+            {
+                return false;
+            }
+
+            rows = aiSoADecisionRowContext.Rows;
+            if (entity?.Runtime == null || rows == null)
+                return false;
+
+            slot = entity.Runtime.SlotIndex;
+            return slot >= 0 &&
+                   slot < rows.Capacity &&
+                   rows.Included[slot];
+        }
+
+        private void LatchAiSoADecisionRemainderToLegacy()
+        {
+            if (!aiSoADecisionRemainderAttemptedForCurrentInput)
+                return;
+            if (AiUnifiedSnapshotExecutionFallbackForbidden)
+            {
+                ThrowAiUnifiedSnapshotExecutionHardBreach(
+                    AiUnifiedSnapshotExceptionStage.InitialDecisionCompare,
+                    "AI decision remainder attempted fallback after unified snapshot commit.");
+            }
+
+            if (aiSoADecisionRemainderRandomBoundaryPassed)
+            {
+                RecordAiSoADecisionRemainderHardFailure();
+                return;
+            }
+
+            aiSoADecisionRemainderAttemptedForCurrentInput = false;
+            aiSoADecisionRemainderUseRowsForCurrentInput = false;
+            aiSoADecisionRowContext = default;
+            AiSoADecisionRemainderFallbackCountForDiagnostics++;
+            AiSoADecisionRemainderPreRandomFailureCountForDiagnostics++;
+        }
+
+        private void RecordAiSoADecisionRemainderHardFailure()
+        {
+            if (aiSoADecisionRemainderHardFailureRecordedForCurrentInput)
+                return;
+
+            aiSoADecisionRemainderHardFailureRecordedForCurrentInput = true;
+            AiSoADecisionRemainderPostRandomFailureCountForDiagnostics++;
+            AiSoADecisionRemainderHardFailureCountForDiagnostics++;
+            if (AiUnifiedSnapshotExecutionFallbackForbidden)
+            {
+                ThrowAiUnifiedSnapshotExecutionHardBreach(
+                    AiUnifiedSnapshotExceptionStage.InitialDecisionCompare,
+                    "AI decision remainder failed after the random boundary under unified snapshot authority.");
+            }
+        }
+
+        private void CompleteAiSoADecisionRemainderInput()
+        {
+            if (aiSoADecisionRemainderAttemptedForCurrentInput &&
+                aiSoADecisionRemainderUseRowsForCurrentInput)
+            {
+                if (!ValidateAiSoADecisionRowContext(
+                        ref aiSoADecisionRowContext,
+                        terminalGuard: true))
+                {
+                    if (aiSoADecisionRemainderRandomBoundaryPassed)
+                    {
+                        RecordAiSoADecisionRemainderHardFailure();
+                    }
+                    else
+                    {
+                        AiSoADecisionRemainderFallbackCountForDiagnostics++;
+                        AiSoADecisionRemainderPreRandomFailureCountForDiagnostics++;
+                    }
+                }
+                else if (!aiSoADecisionRemainderHardFailureRecordedForCurrentInput)
+                {
+                    AiSoADecisionRemainderAppliedCountForDiagnostics++;
+                }
+            }
+
+            aiSoADecisionRemainderAttemptedForCurrentInput = false;
+            aiSoADecisionRemainderUseRowsForCurrentInput = false;
+            aiSoADecisionRemainderRandomBoundaryPassed = false;
+            aiSoADecisionRemainderHardFailureRecordedForCurrentInput = false;
+            aiSoADecisionRowContext = default;
+        }
+
         private int StageZMin => Runtime?.Stage?.ZMin ?? 180;
         private int StageZMax => Runtime?.Stage?.ZMax ?? 350;
-        private int Rand(int modulus) => Rng.NextRaw() % Math.Max(1, modulus);
+        private int Rand(int modulus)
+        {
+            int random = Rng.NextRaw();
+            int value = random % Math.Max(1, modulus);
+            if (aiDecisionLegacyRngRecording)
+                RecordAiDecisionShadowLegacyRng(modulus, random, value);
+            if (aiSoADecisionRemainderUseRowsForCurrentInput &&
+                !aiSoADecisionRemainderRandomBoundaryPassed)
+            {
+                aiSoADecisionRemainderRandomBoundaryPassed = true;
+            }
+            return value;
+        }
         private LF2Entity AiAt(int slot) => slot >= 0 && slot < aiInputSlots.Length ? aiInputSlots[slot] : null;
-        private static int X(LF2Entity e) => e.Runtime.XInt;
-        private static int Y(LF2Entity e) => e.Runtime.YInt;
-        private static int Z(LF2Entity e) => e.Runtime.ZInt;
-        private static int Hp(LF2Entity e) => e.Runtime.HP;
-        private static int Hp3(LF2Entity e) => e.Runtime.HP3;
-        private static int HpMax(LF2Entity e) => e.Runtime.HPBound;
-        private static int Pp(LF2Entity e) => e.Runtime.PP;
-        private static int Team(LF2Entity e) => e.Runtime.RelationTeam;
-        private static int Slot(LF2Entity e) => e.Runtime.SlotIndex;
-        private static int Frame(LF2Entity e) => e.Runtime.Frame;
-        private static int State(LF2Entity e) => e.GetState();
-        private static int Facing(LF2Entity e) => e.Runtime.Dir == "left" ? 1 : 0;
+        private int X(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.X[slot] : e.Runtime.XInt;
+        private int Y(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Y[slot] : e.Runtime.YInt;
+        private int Z(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Z[slot] : e.Runtime.ZInt;
+        private int Hp(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Hp[slot] : e.Runtime.HP;
+        private int Hp3(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Hp3[slot] : e.Runtime.HP3;
+        private int HpMax(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.HpMax[slot] : e.Runtime.HPBound;
+        private int Pp(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Pp[slot] : e.Runtime.PP;
+        private int Team(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Team[slot] : e.Runtime.RelationTeam;
+        private int Slot(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out _, out int slot) ? slot : e.Runtime.SlotIndex;
+        private int Frame(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Frame[slot] : e.Runtime.Frame;
+        private int State(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.State[slot] : e.GetState();
+        private int Facing(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Facing[slot] : (e.Runtime.Dir == "left" ? 1 : 0);
+        private int ObjectId(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.ObjectId[slot] : e.ObjectId;
+        private int LinkState(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.LinkState[slot] : e.Runtime.LinkState;
+        private int TargetSlot(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.TargetSlot[slot] : e.Runtime.TargetSlotIndex;
+        private int HitStop(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.HitStop[slot] : e.Runtime.HitStop;
+        private double Vx(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.Vx[slot] : e.Runtime.Vx;
+        private bool HasInputHistoryGate(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.InputHistoryGate[slot] : e.Runtime.HasInputHistoryGate();
+        private bool HasBoundaryBlock(LF2Entity e) => TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.BoundaryFlags[slot] != 0 : e.Runtime.ZBoundNegative || e.Runtime.ZBoundPositive || e.Runtime.XBoundNegative || e.Runtime.XBoundPositive;
         private static int Abs(int value) => Math.Abs(value);
-        private static int Distance(LF2Entity a, LF2Entity b) => Abs(X(b) - X(a)) + Abs(Z(b) - Z(a));
-        private static bool IsCharacterDat(LF2Entity e) => e != null && e.GetCurrentDataObjectTypeForSimulation() == 0;
-        private static bool IsLivingCharacterDat(LF2Entity e) => IsCharacterDat(e) && Hp(e) > 0;
+        private int Distance(LF2Entity a, LF2Entity b) => Abs(X(b) - X(a)) + Abs(Z(b) - Z(a));
+        private bool IsCharacterDat(LF2Entity e) => e != null && (TryGetAiSoADecisionRemainderRow(e, out AiSoASensingRows rows, out int slot) ? rows.DataObjectType[slot] : e.GetCurrentDataObjectTypeForSimulation()) == 0;
+        private bool IsLivingCharacterDat(LF2Entity e) => IsCharacterDat(e) && Hp(e) > 0;
 
         private int FindNearestAiTargetSlot(LF2Entity self, AiInputContext ai, out int bestDist, out bool sameZLane)
         {
@@ -1560,6 +2551,82 @@ namespace NTSD.Simulation
             return selected;
         }
 
+        private AiNearestPointFilter CreateAiNearestPointFilter(
+            LF2Entity self,
+            int inputPhase,
+            bool air)
+        {
+            NTSDEntityRuntime runtime = self?.Runtime;
+            var filter = new AiNearestPointFilter
+            {
+                World = this,
+                SelfEntity = self,
+                SelfSlot = runtime?.SlotIndex ?? -1,
+                SelfX = runtime?.XInt ?? 0,
+                SelfTeam = runtime?.RelationTeam ?? 0,
+                InputPhase = inputPhase,
+                Air = air,
+                UseSnapshotFacts = !ForceLegacyAiNearestFilterForDiagnostics,
+            };
+            if (filter.UseSnapshotFacts &&
+                TryCreateAiNearestSnapshotStamp(out AiNearestSnapshotStamp stamp))
+            {
+                filter.Stamp = stamp;
+            }
+            return filter;
+        }
+
+        private bool TryCreateAiNearestSnapshotStamp(
+            out AiNearestSnapshotStamp stamp)
+        {
+            stamp = default;
+            LF2Entity[] slots = aiInputSlots;
+            uint[] generations = aiInputGroundGenerationBySlot;
+            AiNearestSlotFacts[] facts = aiNearestFactsBySlot;
+            ulong epoch = aiInputSlotSnapshotOccupancyEpoch;
+            uint version = aiNearestFactsActiveVersion;
+            int count = slots?.Length ?? 0;
+            if (slots == null ||
+                epoch == 0 ||
+                version == 0 ||
+                generations == null ||
+                facts == null ||
+                generations.Length != count ||
+                facts.Length != count ||
+                RuntimeSlotOccupancyEpochForServices != epoch)
+            {
+                return false;
+            }
+
+            stamp = new AiNearestSnapshotStamp
+            {
+                Slots = slots,
+                GenerationBySlot = generations,
+                FactsBySlot = facts,
+                OccupancyEpoch = epoch,
+                FactsVersion = version,
+                SlotCount = count,
+            };
+            return true;
+        }
+
+        private bool IsAiNearestSnapshotStampCurrent(
+            in AiNearestSnapshotStamp stamp)
+        {
+            return stamp.OccupancyEpoch != 0 &&
+                   stamp.FactsVersion != 0 &&
+                   ReferenceEquals(stamp.Slots, aiInputSlots) &&
+                   ReferenceEquals(
+                       stamp.GenerationBySlot,
+                       aiInputGroundGenerationBySlot) &&
+                   ReferenceEquals(stamp.FactsBySlot, aiNearestFactsBySlot) &&
+                   stamp.SlotCount == aiInputSlots.Length &&
+                   stamp.SlotCount == aiInputGroundGenerationBySlot.Length &&
+                   stamp.SlotCount == aiNearestFactsBySlot.Length &&
+                   aiInputSlotSnapshotOccupancyEpoch == stamp.OccupancyEpoch &&
+                   RuntimeSlotOccupancyEpochForServices == stamp.OccupancyEpoch &&
+                   aiNearestFactsActiveVersion == stamp.FactsVersion;
+        }
         private bool TryFindNearestAiTargetSlotBestFirst(
             LF2Entity self,
             AiInputContext ai,
@@ -1579,13 +2646,10 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.FindNearestGround);
             try
             {
-                var filter = new AiNearestPointFilter
-                {
-                    World = this,
-                    Self = self,
-                    InputPhase = ai.InputPhase,
-                    Air = false,
-                };
+                AiNearestPointFilter filter = CreateAiNearestPointFilter(
+                    self,
+                    ai.InputPhase,
+                    false);
                 bool partitionSucceeded =
                     TryFindNearestGroundInSingleAllowedTeamPartition(
                         self,
@@ -1690,13 +2754,10 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.FindNearestAir);
             try
             {
-                var filter = new AiNearestPointFilter
-                {
-                    World = this,
-                    Self = self,
-                    InputPhase = ai.InputPhase,
-                    Air = true,
-                };
+                AiNearestPointFilter filter = CreateAiNearestPointFilter(
+                    self,
+                    ai.InputPhase,
+                    true);
                 diagnostics?.RecordSpatialQuery();
                 LooseQuadtreeBroadphase airBroadphase = aiInputAirSpatialReady
                     ? aiInputAirSpatialBroadphase
@@ -2030,7 +3091,7 @@ namespace NTSD.Simulation
                     candidateSlot < selectedSlot);
         }
 
-        private static bool IsGroundAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
+        private bool IsGroundAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
         {
             if (candidate == null || candidate == self)
                 return false;
@@ -2060,7 +3121,54 @@ namespace NTSD.Simulation
                    Abs(Y(candidate)) <= 2;
         }
 
-        private static bool IsAirAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
+        private static bool IsGroundAiTargetCandidate(
+            LF2Entity self,
+            int selfSlot,
+            int selfX,
+            int selfTeam,
+            in AiNearestSlotFacts candidate,
+            int inputPhase)
+        {
+            if (!candidate.Included ||
+                !candidate.Active ||
+                candidate.Entity == null ||
+                ReferenceEquals(candidate.Entity, self) ||
+                candidate.Slot == selfSlot ||
+                !candidate.GroundRole)
+            {
+                return false;
+            }
+
+            if (candidate.DataObjectType != 0)
+            {
+                if (candidate.State != 3000)
+                    return false;
+                if (candidate.X > selfX)
+                {
+                    if (!(candidate.Vx < 0.001))
+                        return false;
+                }
+                else if (candidate.X < selfX)
+                {
+                    if (!(candidate.Vx > 0.001))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return TeamCandidateAllowed(
+                       selfTeam,
+                       candidate.Team,
+                       inputPhase) &&
+                   candidate.Hp > 0 &&
+                   candidate.State != 14 &&
+                   Abs(candidate.Y) <= 2;
+        }
+
+        private bool IsAirAiTargetCandidate(LF2Entity self, LF2Entity candidate, int inputPhase)
         {
             return candidate != null &&
                    candidate != self &&
@@ -2069,13 +3177,33 @@ namespace NTSD.Simulation
                    (State(candidate) == 14 || Abs(Y(candidate)) > 2);
         }
 
-        private static bool IsAirAiSpatialRole(LF2Entity candidate)
+        private static bool IsAirAiTargetCandidate(
+            LF2Entity self,
+            int selfSlot,
+            int selfTeam,
+            in AiNearestSlotFacts candidate,
+            int inputPhase)
+        {
+            return candidate.Included &&
+                   candidate.Active &&
+                   candidate.Entity != null &&
+                   !ReferenceEquals(candidate.Entity, self) &&
+                   candidate.Slot != selfSlot &&
+                   TeamCandidateAllowed(
+                       selfTeam,
+                       candidate.Team,
+                       inputPhase) &&
+                   candidate.Hp > 0 &&
+                   candidate.AirRole;
+        }
+
+        private bool IsAirAiSpatialRole(LF2Entity candidate)
         {
             return candidate != null &&
                    (State(candidate) == 14 || Abs(Y(candidate)) > 2);
         }
 
-        private static bool IsGroundAiSpatialRole(LF2Entity candidate)
+        private bool IsGroundAiSpatialRole(LF2Entity candidate)
         {
             if (candidate == null || State(candidate) == 14 || Abs(Y(candidate)) > 2)
                 return false;
@@ -2083,7 +3211,7 @@ namespace NTSD.Simulation
             return IsCharacterDat(candidate) || State(candidate) == 3000;
         }
 
-        private static SpatialAabbXZ AroundAiPoint(LF2Entity entity, int radiusX, int radiusZ)
+        private SpatialAabbXZ AroundAiPoint(LF2Entity entity, int radiusX, int radiusZ)
         {
             int x = X(entity);
             int z = Z(entity);
@@ -2471,6 +3599,7 @@ namespace NTSD.Simulation
             {
                 candidate.Runtime.Y = candidateY;
                 candidate.Runtime.YInt = candidateY;
+                ObserveAiGroundSpatialRoleMutation(candidate);
                 ObserveAiAirSpatialRoleMutation(candidate);
                 if (!aiInputAirSpatialReady)
                     return false;
@@ -2813,13 +3942,10 @@ namespace NTSD.Simulation
                     Team(self),
                     inputPhase,
                     out _);
-                var filter = new AiNearestPointFilter
-                {
-                    World = this,
-                    Self = self,
-                    InputPhase = inputPhase,
-                    Air = false,
-                };
+                AiNearestPointFilter filter = CreateAiNearestPointFilter(
+                    self,
+                    inputPhase,
+                    false);
                 bool partitionSucceeded =
                     TryFindNearestGroundInSingleAllowedTeamPartition(
                         self,
@@ -3176,6 +4302,162 @@ namespace NTSD.Simulation
         }
 
 #if UNITY_INCLUDE_TESTS
+        internal void CaptureAiNearestFactsTargetForSelfCheck(
+            LF2Entity self,
+            int inputPhase,
+            bool forceLiveFacts,
+            bool forceBrute,
+            out int selected,
+            out int bestDist,
+            out bool sameZLane)
+        {
+            bool oldFilter = ForceLegacyAiNearestFilterForDiagnostics;
+            bool oldFull = ForceFullAiNearestScanForDiagnostics;
+            bool oldPhase1 = ForceFullAiPhase1TargetScanForDiagnostics;
+            bool oldQuery = ForceLegacyAiNearestQueryForDiagnostics;
+            BuildAiInputSlotSnapshot();
+            try
+            {
+                if (forceLiveFacts)
+                    ForceLegacyAiNearestFilterForDiagnostics = true;
+                ForceFullAiNearestScanForDiagnostics = forceBrute;
+                ForceFullAiPhase1TargetScanForDiagnostics = true;
+                ForceLegacyAiNearestQueryForDiagnostics = false;
+                var ai = new AiInputContext { InputPhase = inputPhase };
+                selected = FindNearestAiTargetSlot(
+                    self,
+                    ai,
+                    out bestDist,
+                    out sameZLane);
+            }
+            finally
+            {
+                ForceLegacyAiNearestFilterForDiagnostics = oldFilter;
+                ForceFullAiNearestScanForDiagnostics = oldFull;
+                ForceFullAiPhase1TargetScanForDiagnostics = oldPhase1;
+                ForceLegacyAiNearestQueryForDiagnostics = oldQuery;
+                ClearAiInputSlotSnapshot();
+            }
+        }
+
+        internal bool AiNearestSnapshotStampRejectsMutationForSelfCheck(
+            int mutationKind)
+        {
+            BuildAiInputSlotSnapshot();
+            LF2Entity[] oldSlots = aiInputSlots;
+            uint[] oldGenerations = aiInputGroundGenerationBySlot;
+            AiNearestSlotFacts[] oldFacts = aiNearestFactsBySlot;
+            ulong oldEpoch = aiInputSlotSnapshotOccupancyEpoch;
+            uint oldVersion = aiNearestFactsActiveVersion;
+            try
+            {
+                if (!TryCreateAiNearestSnapshotStamp(
+                        out AiNearestSnapshotStamp stamp))
+                {
+                    return false;
+                }
+
+                switch (mutationKind)
+                {
+                    case 0:
+                        aiInputSlotSnapshotOccupancyEpoch =
+                            oldEpoch == ulong.MaxValue ? 1UL : oldEpoch + 1UL;
+                        break;
+                    case 1:
+                        aiNearestFactsActiveVersion =
+                            oldVersion == uint.MaxValue ? 1u : oldVersion + 1u;
+                        break;
+                    case 2:
+                        aiInputSlots = (LF2Entity[])oldSlots.Clone();
+                        break;
+                    case 3:
+                        aiInputGroundGenerationBySlot =
+                            (uint[])oldGenerations.Clone();
+                        break;
+                    case 4:
+                        aiNearestFactsBySlot =
+                            (AiNearestSlotFacts[])oldFacts.Clone();
+                        break;
+                    default:
+                        return false;
+                }
+
+                return !IsAiNearestSnapshotStampCurrent(in stamp);
+            }
+            finally
+            {
+                aiInputSlots = oldSlots;
+                aiInputGroundGenerationBySlot = oldGenerations;
+                aiNearestFactsBySlot = oldFacts;
+                aiInputSlotSnapshotOccupancyEpoch = oldEpoch;
+                aiNearestFactsActiveVersion = oldVersion;
+                ClearAiInputSlotSnapshot();
+            }
+        }
+
+        internal bool AiNearestFactsValidationFallbackForSelfCheck(
+            LF2Entity self,
+            LF2Entity candidate,
+            int inputPhase,
+            int invalidationKind,
+            out bool fastAborted)
+        {
+            fastAborted = false;
+            BuildAiInputSlotSnapshot();
+            bool oldDormant = candidate?.Runtime?.OidMergeDormant ?? false;
+            bool oldPending = candidate?.Runtime?.PendingFlushDestroy ?? false;
+            try
+            {
+                int slot = Slot(candidate);
+                if (slot < 0 || slot >= aiNearestFactsBySlot.Length)
+                    return false;
+
+                AiNearestSlotFacts facts = aiNearestFactsBySlot[slot];
+                switch (invalidationKind)
+                {
+                    case 0:
+                        facts.SnapshotVersion = facts.SnapshotVersion == uint.MaxValue
+                            ? 1u
+                            : facts.SnapshotVersion + 1u;
+                        aiNearestFactsBySlot[slot] = facts;
+                        break;
+                    case 1:
+                        facts.HandleGeneration = facts.HandleGeneration == uint.MaxValue
+                            ? 1u
+                            : facts.HandleGeneration + 1u;
+                        aiNearestFactsBySlot[slot] = facts;
+                        break;
+                    case 2:
+                        facts.Entity = self;
+                        aiNearestFactsBySlot[slot] = facts;
+                        break;
+                    case 3:
+                        candidate.Runtime.OidMergeDormant = true;
+                        ObserveAiTeamHpSummaryMutation(candidate);
+                        break;
+                    case 4:
+                        candidate.Runtime.PendingFlushDestroy = true;
+                        ObserveAiTeamHpSummaryMutation(candidate);
+                        break;
+                    default:
+                        return false;
+                }
+
+                return AiNearestFastAbortAndFallbackMatchesFullForSelfCheck(
+                    self,
+                    inputPhase,
+                    out fastAborted);
+            }
+            finally
+            {
+                if (candidate?.Runtime != null)
+                {
+                    candidate.Runtime.OidMergeDormant = oldDormant;
+                    candidate.Runtime.PendingFlushDestroy = oldPending;
+                }
+                ClearAiInputSlotSnapshot();
+            }
+        }
         internal bool AiNearestOccupancyMutationFallsBackForSelfCheck(
             LF2Entity self,
             LF2Entity transientEntity,
@@ -3416,13 +4698,10 @@ namespace NTSD.Simulation
             out int distance,
             out int visitedRecords)
         {
-            var filter = new AiNearestPointFilter
-            {
-                World = this,
-                Self = self,
-                InputPhase = inputPhase,
-                Air = false,
-            };
+            AiNearestPointFilter filter = CreateAiNearestPointFilter(
+                    self,
+                    inputPhase,
+                    false);
             bool succeeded = broadphase.TryFindNearestPointManhattan(
                 X(self),
                 Z(self),
@@ -3616,22 +4895,39 @@ namespace NTSD.Simulation
             }
         }
 
-        private static bool TeamCandidateAllowed(LF2Entity self, LF2Entity candidate, int inputPhase)
+        private bool TeamCandidateAllowed(LF2Entity self, LF2Entity candidate, int inputPhase)
         {
-            if (Team(candidate) != Team(self))
+            return TeamCandidateAllowed(
+                Team(self),
+                Team(candidate),
+                inputPhase);
+        }
+
+        private static bool TeamCandidateAllowed(
+            int selfTeam,
+            int candidateTeam,
+            int inputPhase)
+        {
+            if (candidateTeam != selfTeam)
             {
                 if (inputPhase != 1) return true;
-                if (Team(self) == 5) return true;
+                if (selfTeam == 5) return true;
             }
-            if (Team(candidate) != 5) return false;
+            if (candidateTeam != 5) return false;
             if (inputPhase != 1) return false;
-            return Team(candidate) != Team(self);
+            return candidateTeam != selfTeam;
         }
 
         private void AiUpdateMoveModeScan(LF2Entity self, ref AiInputContext ai)
         {
             if (ai.InputPhase != 1 || Team(self) == 5)
                 return;
+
+            if (aiSoADecisionRemainderUseRowsForCurrentInput)
+            {
+                AiUpdateMoveModeScanRows(self, ref ai);
+                return;
+            }
 
             if (ForceFullAiMoveModeScanForDiagnostics ||
                 !aiMoveModeFirst10Valid ||
@@ -3656,12 +4952,73 @@ namespace NTSD.Simulation
             ApplyAiMoveModeFromRightmost(self, rightmostX, rightmostZ, ref ai);
         }
 
+        private void AiUpdateMoveModeScanRows(
+            LF2Entity self,
+            ref AiInputContext ai)
+        {
+            AiSoASensingRows rows = aiSoASensingRows;
+            int selfSlot = Slot(self);
+            int rightmostX = -1;
+            int rightmostZ = 0;
+            int count = Math.Min(10, rows.Capacity);
+            for (int slot = 0; slot < count; slot++)
+            {
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics?
+                    .RecordPhaseSlotVisits(
+                        BattleAiInputDetailPhase.ContextMoveMode,
+                        1);
+
+                if (slot == selfSlot ||
+                    !rows.Included[slot] ||
+                    rows.DataObjectType[slot] != 0 ||
+                    rows.Hp[slot] <= 0)
+                {
+                    continue;
+                }
+
+                if (rows.X[slot] > rightmostX)
+                {
+                    rightmostX = rows.X[slot];
+                    rightmostZ = rows.Z[slot];
+                }
+            }
+
+            if (rightmostX >= 0)
+            {
+                ApplyAiMoveModeFromRightmost(
+                    self,
+                    rightmostX,
+                    rightmostZ,
+                    ref ai);
+            }
+        }
+
         private bool IsAiMoveModeSnapshotSelfCurrent(LF2Entity self)
         {
             if (self?.Runtime == null)
                 return false;
 
+            ActiveBattleAiInputDetailDiagnosticsForDiagnostics?
+                .RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    1);
             int slot = Slot(self);
+            if (aiSensingMode == AiSensingMode.SoAAiSensing)
+            {
+                return slot >= 0 &&
+                       slot < aiInputSlots.Length &&
+                       aiSoASensingRows != null &&
+                       slot < aiSoASensingRows.Capacity &&
+                       ReferenceEquals(aiInputSlots[slot], self) &&
+                       aiSoASensingRows.Included[slot] &&
+                       self.Runtime.StableId == aiSoASensingRows.Identity[slot] &&
+                       TryGetCurrentRuntimeHandle(
+                           slot,
+                           self,
+                           out RuntimeEntityHandle candidateHandle) &&
+                       candidateHandle.Generation == aiSoASensingRows.Generation[slot];
+            }
+
             return slot >= 0 &&
                    slot < aiInputSlots.Length &&
                    ReferenceEquals(aiInputSlots[slot], self) &&
@@ -3678,8 +5035,13 @@ namespace NTSD.Simulation
         {
             int rightmostX = -1;
             int rightmostZ = 0;
+            BattleAiInputDetailDiagnostics diagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
             for (int i = 0; i < 10; i++)
             {
+                diagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.ContextMoveMode,
+                    1);
                 LF2Entity candidate = CurrentAiMoveModeCandidateAt(i);
                 if (candidate == null ||
                     candidate == self ||
@@ -3718,7 +5080,7 @@ namespace NTSD.Simulation
             return view.Entity;
         }
 
-        private static void ApplyAiMoveModeFromRightmost(
+        private void ApplyAiMoveModeFromRightmost(
             LF2Entity self,
             int rightmostX,
             int rightmostZ,
@@ -3737,12 +5099,12 @@ namespace NTSD.Simulation
         {
             if (savedTarget != null)
             {
-                bool close = !self.Runtime.HasInputHistoryGate() || (Abs(Z(self) - Z(savedTarget)) <= 150 && Abs(X(self) - X(savedTarget)) <= 240);
+                bool close = !HasInputHistoryGate(self) || (Abs(Z(self) - Z(savedTarget)) <= 150 && Abs(X(self) - X(savedTarget)) <= 240);
                 if (close && ai.MoveMode == 1) self.Runtime.KeyLeft = 1;
             }
-            if ((self.ObjectId == 7 && Frame(self) >= 255 && Frame(self) <= 261) ||
-                (self.ObjectId == 9 && Frame(self) >= 280 && Frame(self) <= 290) ||
-                (self.ObjectId == 32 && Frame(self) >= 240 && Frame(self) <= 245))
+            if ((ObjectId(self) == 7 && Frame(self) >= 255 && Frame(self) <= 261) ||
+                (ObjectId(self) == 9 && Frame(self) >= 280 && Frame(self) <= 290) ||
+                (ObjectId(self) == 32 && Frame(self) >= 240 && Frame(self) <= 245))
                 self.Runtime.KeyAttack = 1;
         }
 
@@ -3795,7 +5157,7 @@ namespace NTSD.Simulation
             else if (Z(self) > Z(target) + 3) input.KeyUp = 1;
         }
 
-        private static bool AiPostCacheCoordinateAllowsSpecial(LF2Entity self)
+        private bool AiPostCacheCoordinateAllowsSpecial(LF2Entity self)
         {
             NTSDEntityRuntime r = self.Runtime;
             if (r.Unk3FC <= -1000) return true;
@@ -3809,8 +5171,8 @@ namespace NTSD.Simulation
             if (targetState != 3000) return false;
             bool randomGate = ai.Rand3 <= 0 || Rand(ai.Rand3) == 0;
             if (selfState != 7 && randomGate &&
-                ((X(target) > X(self) && X(target) < X(self) + 200 && target.Runtime.Vx < 0.0) ||
-                 (X(target) < X(self) && X(target) > X(self) - 200 && target.Runtime.Vx > 0.0)))
+                ((X(target) > X(self) && X(target) < X(self) + 200 && Vx(target) < 0.0) ||
+                 (X(target) < X(self) && X(target) > X(self) - 200 && Vx(target) > 0.0)))
             { self.Runtime.PrevAttack = 0; self.Runtime.KeyAttack = 1; }
             if (X(target) > X(self) && Facing(self) == 1) self.Runtime.KeyRight = 1;
             if (X(target) < X(self) && Facing(self) == 0) self.Runtime.KeyLeft = 1;
@@ -3819,18 +5181,18 @@ namespace NTSD.Simulation
 
         private bool AiUpdateOid33_19_16PredictedDuaDecision(LF2Entity self, LF2Entity target, int targetState)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 33 && oid != 19 && oid != 16) return false;
             if (Rand(5) != 0 && targetState != 16 && targetState != 8) return false;
             bool facing = (Facing(self) == 0 && X(self) < X(target)) || (Facing(self) == 1 && X(self) > X(target));
-            if (Abs(X(target) + (int)self.Runtime.Vx - X(self)) < 60 && Abs(Z(target) - Z(self)) < 7 && Pp(self) > 150 && facing)
+            if (Abs(X(target) + (int)Vx(self) - X(self)) < 60 && Abs(Z(target) - Z(self)) < 7 && Pp(self) > 150 && facing)
             { self.Runtime.ComboDua = 3; return true; }
             return false;
         }
 
         private bool AiUpdateOid52_1_2_21PreLabel591Decision(LF2Entity self, LF2Entity target, int targetState)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 52 && oid != 1 && oid != 2 && oid != 21) return false;
             int dx = Abs(X(target) - X(self));
             int dz = Abs(Z(target) - Z(self));
@@ -3844,14 +5206,14 @@ namespace NTSD.Simulation
             { if (X(target) > X(self)) self.Runtime.ComboDrj = 3; else self.Runtime.ComboDlj = 3; return true; }
             bool predictedGate = Rand(5) == 0 || targetState == 16 || targetState == 8;
             bool facing = (Facing(self) == 0 && X(self) < X(target)) || (Facing(self) == 1 && X(self) > X(target));
-            if (predictedGate && Abs(X(target) + (int)self.Runtime.Vx - X(self)) < 100 && dz < 7 && Pp(self) < 100 && facing)
+            if (predictedGate && Abs(X(target) + (int)Vx(self) - X(self)) < 100 && dz < 7 && Pp(self) < 100 && facing)
             { self.Runtime.ComboDua = 3; return true; }
             return false;
         }
 
         private bool AiUpdateLabel591Oid51_2_18_7Decision(LF2Entity self, LF2Entity target)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 51 && oid != 2 && oid != 18 && oid != 7) return false;
             int dx = Abs(X(target) - X(self));
             int dz = Abs(Z(target) - Z(self));
@@ -3866,13 +5228,13 @@ namespace NTSD.Simulation
 
         private bool AiUpdateFirstDecision(LF2Entity self, LF2Entity target, int nearestTargetDist, bool specialObjectProximity)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 1 && oid != 2 && oid != 4 && oid != 5 && oid != 21) return false;
             if (Rand(10) == 0 && Pp(self) > 85 &&
                 ((Hp(self) < HpMax(self) - 70 && Hp(self) < 450) || (Hp(self) < (3 * HpMax(self)) / 5 && Hp(self) >= 140)))
             { self.Runtime.ComboDdj = 3; return true; }
             if (nearestTargetDist < 10000 && Rand(30) == 0 && Pp(self) > 250) { self.Runtime.ComboDua = 3; return true; }
-            int targetOid = target.ObjectId;
+            int targetOid = ObjectId(target);
             bool split = targetOid == 2 || targetOid == 9 || targetOid == 10 || targetOid == 11 || targetOid == 33 || targetOid == 34;
             int maxDx = split ? 500 : 250;
             int targetPpMin = split ? 220 : 170;
@@ -3884,14 +5246,80 @@ namespace NTSD.Simulation
 
         private bool AiUpdateTeammateGuardDecision(LF2Entity self, AiInputContext ai, int nearestTargetDist, bool sameZLane)
         {
-            int oid = self.ObjectId;
+            BattleAiInputDetailDiagnostics diagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            if (diagnostics == null)
+            {
+                return AiUpdateTeammateGuardDecisionCore(
+                    self,
+                    ai,
+                    nearestTargetDist,
+                    sameZLane,
+                    null);
+            }
+
+            diagnostics.RecordPhaseCall(
+                BattleAiInputDetailPhase.Teammate20Scan);
+            ulong rngCallsBefore = Rng?.CallCount ?? 0;
+            diagnostics.BeginPhase(BattleAiInputDetailPhase.Teammate20Scan);
+            try
+            {
+                return AiUpdateTeammateGuardDecisionCore(
+                    self,
+                    ai,
+                    nearestTargetDist,
+                    sameZLane,
+                    diagnostics);
+            }
+            finally
+            {
+                diagnostics.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.Teammate20Scan,
+                    ResolveAiInputDetailRngCallDelta(
+                        rngCallsBefore,
+                        Rng?.CallCount ?? 0));
+                diagnostics.EndPhase(BattleAiInputDetailPhase.Teammate20Scan);
+            }
+        }
+
+        private bool AiUpdateTeammateGuardDecisionCore(
+            LF2Entity self,
+            AiInputContext ai,
+            int nearestTargetDist,
+            bool sameZLane,
+            BattleAiInputDetailDiagnostics diagnostics)
+        {
+            int oid = ObjectId(self);
             if (oid != 1 && oid != 2 && oid != 4 && oid != 5 && oid != 21) return false;
             if (self.Runtime.LinkState != 0 && Frame(self) >= 9) return false;
             bool hpWindow = (Hp(self) >= HpMax(self) - 70 || Hp(self) >= 140) &&
                             (Hp(self) >= (3 * HpMax(self)) / 5 || Hp(self) < 140);
             if (!hpWindow || sameZLane) return false;
-            for (int i = 0; i < 20; i++)
+            if (aiSoADecisionRemainderUseRowsForCurrentInput)
             {
+                return AiUpdateTeammateGuardDecisionRows(
+                    self,
+                    nearestTargetDist,
+                    diagnostics);
+            }
+            return AiUpdateTeammateGuardDecisionLegacy(
+                self,
+                nearestTargetDist,
+                diagnostics,
+                0);
+        }
+
+        private bool AiUpdateTeammateGuardDecisionLegacy(
+            LF2Entity self,
+            int nearestTargetDist,
+            BattleAiInputDetailDiagnostics diagnostics,
+            int startSlot)
+        {
+            for (int i = startSlot; i < 20; i++)
+            {
+                diagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.Teammate20Scan,
+                    1);
                 LF2Entity cand = AiAt(i);
                 if (cand == null || cand == self || Team(cand) == 0 || Team(cand) != Team(self) ||
                     Abs(X(cand) - X(self)) >= 250 || Abs(Z(cand) - Z(self)) >= 60 || Pp(self) <= 350)
@@ -3908,9 +5336,66 @@ namespace NTSD.Simulation
             return false;
         }
 
+        private bool AiUpdateTeammateGuardDecisionRows(
+            LF2Entity self,
+            int nearestTargetDist,
+            BattleAiInputDetailDiagnostics diagnostics)
+        {
+            AiSoASensingRows rows = aiSoASensingRows;
+            int selfSlot = Slot(self);
+            int selfTeam = Team(self);
+            int selfX = X(self);
+            int selfZ = Z(self);
+            int count = Math.Min(20, rows.Capacity);
+            for (int slot = 0; slot < count; slot++)
+            {
+                diagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.Teammate20Scan,
+                    1);
+                if (!rows.Included[slot] ||
+                    slot == selfSlot ||
+                    rows.Team[slot] == 0 ||
+                    rows.Team[slot] != selfTeam ||
+                    Abs(rows.X[slot] - selfX) >= 250 ||
+                    Abs(rows.Z[slot] - selfZ) >= 60 ||
+                    Pp(self) <= 350)
+                {
+                    continue;
+                }
+
+                int hp = rows.Hp[slot];
+                int hpMax = rows.HpMax[slot];
+                bool lowHp = (hp < hpMax - 90 && hp < 140) ||
+                             (hp < (3 * hpMax) / 5 && hp >= 140);
+                int distance = Abs(rows.X[slot] - selfX) +
+                               Abs(rows.Z[slot] - selfZ);
+                if (!lowHp || hp <= 0 || distance >= nearestTargetDist / 3)
+                    continue;
+
+                int deltaX = rows.X[slot] - selfX;
+                if (deltaX > 0 && Facing(self) == 1 && Abs(deltaX) >= 5)
+                {
+                    self.Runtime.KeyRight = 1;
+                    self.Runtime.KeyLeft = 0;
+                    return true;
+                }
+                if (deltaX < 0 && Facing(self) != 1 && Abs(deltaX) >= 5)
+                {
+                    self.Runtime.KeyRight = 0;
+                    self.Runtime.KeyLeft = 1;
+                    return true;
+                }
+
+                self.Runtime.ComboDuj = 3;
+                return true;
+            }
+
+            return false;
+        }
+
         private bool AiUpdateOid1ComboDecision(LF2Entity self, LF2Entity target, int targetState)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 1 && oid != 21 && oid != 17) return false;
             int dx = Abs(X(target) - X(self));
             int dz = Abs(Z(target) - Z(self));
@@ -3930,7 +5415,7 @@ namespace NTSD.Simulation
 
         private bool AiUpdateCloseOid1Decision(LF2Entity self, LF2Entity target)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 1 && oid != 21 && oid != 17) return false;
             if (Frame(self) < 260 || Frame(self) > 289 || Abs(X(target) - X(self)) >= 100 || Abs(Z(target) - Z(self)) >= 7) return false;
             if ((Y(target) == 0 && Y(self) == 0 && Rand(3) == 0) || (Y(target) < 0 && Y(self) < 0 && Rand(7) == 0))
@@ -3945,7 +5430,7 @@ namespace NTSD.Simulation
 
         private bool AiUpdateOid4ComboDecision(LF2Entity self, LF2Entity target)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 4 && oid != 10 && oid != 19) return false;
             int dx = Abs(X(target) - X(self));
             int dz = Abs(Z(target) - Z(self));
@@ -3963,7 +5448,7 @@ namespace NTSD.Simulation
 
         private bool AiUpdateOid5ComboDecision(LF2Entity self, LF2Entity target)
         {
-            int oid = self.ObjectId;
+            int oid = ObjectId(self);
             if (oid != 5 && oid != 19) return false;
             int dx = Abs(X(target) - X(self));
             int dz = Abs(Z(target) - Z(self));
@@ -3985,10 +5470,10 @@ namespace NTSD.Simulation
         private void AiProcessSubHelper(LF2Entity self, LF2Entity target, AiInputContext ai, int targetState, bool specialLeft, bool specialRight)
         {
             NTSDEntityRuntime input = self.Runtime;
-            int oid = self.ObjectId;
-            int predictedTargetX = X(target) + 2 * (int)target.Runtime.Vx;
+            int oid = ObjectId(self);
+            int predictedTargetX = X(target) + 2 * (int)Vx(target);
             if (Pp(self) < 150) input.ComboDja = 3;
-            if (Abs(X(target) - 2 * (int)self.Runtime.Vx - X(self)) < 80 && Abs(Z(target) - Z(self)) < 5 &&
+            if (Abs(X(target) - 2 * (int)Vx(self) - X(self)) < 80 && Abs(Z(target) - Z(self)) < 5 &&
                 Rand(ai.Rand3 + 3) == 0 && targetState != 14) input.KeyJump = 1;
             if ((specialLeft && X(target) > X(self)) || (specialRight && X(target) < X(self))) return;
             if (Rand(ai.Rand3 + 1) != 0) return;
@@ -4017,13 +5502,13 @@ namespace NTSD.Simulation
         private void AiProcessSubCallerPrewrite(LF2Entity self, LF2Entity target, AiInputContext ai, int selfState, int targetState)
         {
             NTSDEntityRuntime input = self.Runtime;
-            bool specialOid = AiSpecialOidForSubGate(self.ObjectId);
-            if (input.LinkState == 0 && targetState == 16 && specialOid &&
+            bool specialOid = AiSpecialOidForSubGate(ObjectId(self));
+            if (LinkState(self) == 0 && targetState == 16 && specialOid &&
                 Abs(X(target) - 2 * (int)input.Vx - X(self)) < 350 && Abs(Z(target) - Z(self)) < 5 && Rand(ai.Rand3 + 3) == 0)
             {
                 if ((X(target) > X(self) && Facing(self) == 0) || (X(target) <= X(self) && Facing(self) == 1)) input.KeyJump = 1;
             }
-            if (input.LinkState != 0 || targetState == 16 || !specialOid) return;
+            if (LinkState(self) != 0 || targetState == 16 || !specialOid) return;
             bool closeTrigger = X(target) - X(self) < 100 && Abs(Z(target) - Z(self)) < 80 && Rand(ai.Rand3 + 2) == 0;
             if (!closeTrigger && selfState != 7)
             {
@@ -4033,7 +5518,7 @@ namespace NTSD.Simulation
             }
             else if (selfState != 7)
             {
-                bool closeWindow = !input.HasInputHistoryGate() || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
+                bool closeWindow = !HasInputHistoryGate(self) || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
                 ApplyPressureRetreat(self, target, ai, closeWindow);
                 if (closeWindow && Rand(17) == 0) input.KeyDefend = 1;
             }
@@ -4042,18 +5527,18 @@ namespace NTSD.Simulation
         private void AiProcessSubLabel435PressurePrewrite(LF2Entity self, LF2Entity target, AiInputContext ai, int selfState, int targetState)
         {
             NTSDEntityRuntime input = self.Runtime;
-            bool specialOid = AiSpecialOidForSubGate(self.ObjectId);
-            if (targetState != 16 && specialOid && input.LinkState == 0) return;
+            bool specialOid = AiSpecialOidForSubGate(ObjectId(self));
+            if (targetState != 16 && specialOid && LinkState(self) == 0) return;
             bool pressure = Hp(target) > Hp(self) * 2 || (Hp(self) <= 100 && Hp3(self) > 100);
             if (!pressure || ai.InputPhase != 1 || !IsCharacterDat(target) || Slot(self) < 20 || Team(self) == 5) return;
             bool closeTrigger = X(target) - X(self) < 100 && Abs(Z(target) - Z(self)) < 80 && Rand(ai.Rand3 + 2) == 0;
             if (!closeTrigger || selfState == 7) return;
-            bool closeWindow = !input.HasInputHistoryGate() || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
+            bool closeWindow = !HasInputHistoryGate(self) || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
             ApplyPressureRetreat(self, target, ai, closeWindow);
             if (closeWindow && Rand(17) == 0) input.KeyDefend = 1;
         }
 
-        private static void ApplyPressureRetreat(LF2Entity self, LF2Entity target, AiInputContext ai, bool closeWindow)
+        private void ApplyPressureRetreat(LF2Entity self, LF2Entity target, AiInputContext ai, bool closeWindow)
         {
             if (!closeWindow) return;
             if ((X(target) < 250 || X(target) < X(self)) && X(target) <= ai.StageTargetX - 250)
@@ -4066,23 +5551,50 @@ namespace NTSD.Simulation
         {
             NTSDEntityRuntime input = self.Runtime;
             if (Rand(ai.Rand3 + 1) > 0) return false;
-            int heldSlot = input.TargetSlotIndex;
+            int heldSlot = TargetSlot(self);
             if (heldSlot < 0 || heldSlot >= aiInputSlots.Length) return true;
             LF2Entity held = AiAt(heldSlot);
-            int heldOid = held != null ? held.ObjectId : -1;
+            int heldOid = held != null ? ObjectId(held) : -1;
             bool lineCover = false;
-            for (int i = 0; i < 20; i++)
+            BattleAiInputDetailDiagnostics heldScanDiagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            heldScanDiagnostics?.RecordPhaseCall(
+                BattleAiInputDetailPhase.Held20Scan);
+            ulong heldScanRngCallsBefore = heldScanDiagnostics != null
+                ? Rng?.CallCount ?? 0
+                : 0;
+            heldScanDiagnostics?.BeginPhase(
+                BattleAiInputDetailPhase.Held20Scan);
+            if (aiSoADecisionRemainderUseRowsForCurrentInput)
             {
-                LF2Entity cand = AiAt(i);
-                if (cand == null || cand == self || Team(cand) == 0 || Team(target) != Team(self) || Hp(cand) <= 0 ||
-                    State(cand) == 14 || Abs(Y(cand)) > 2) continue;
-                if (Abs(Z(cand) - Z(self)) < 15 && ((X(self) < X(cand) && X(cand) < X(target)) || (X(target) < X(cand) && X(cand) < X(self))))
-                    lineCover = true;
+                lineCover = HasAiSoADecisionHeldLineCoverRows(
+                    self,
+                    target,
+                    heldScanDiagnostics);
+            }
+            else
+            {
+                lineCover = HasAiSoADecisionHeldLineCoverLegacy(
+                    self,
+                    target,
+                    heldScanDiagnostics,
+                    0,
+                    false);
+            }
+            heldScanDiagnostics?.EndPhase(
+                BattleAiInputDetailPhase.Held20Scan);
+            if (heldScanDiagnostics != null)
+            {
+                heldScanDiagnostics.RecordPhaseRngCalls(
+                    BattleAiInputDetailPhase.Held20Scan,
+                    ResolveAiInputDetailRngCallDelta(
+                        heldScanRngCallsBefore,
+                        Rng?.CallCount ?? 0));
             }
             if (selfState == 2 && Rand(ai.Rand3 + 5) == 0)
             { if (lineCover) input.KeyDefend = 1; else input.KeyJump = 1; }
 
-            int vxTwice = 2 * (int)input.Vx;
+            int vxTwice = 2 * (int)Vx(self);
             if (heldOid == 100 || heldOid == 101 || heldOid == 120 || heldOid == 121 || heldOid == 124)
             {
                 if (Abs(X(target) - vxTwice - X(self)) < 10000 && Abs(Z(target) - Z(self)) < 6 && Rand(ai.Rand3 + 3) == 0 && targetState != 14)
@@ -4090,7 +5602,7 @@ namespace NTSD.Simulation
                 if (heldOid == 124 && Rand(ai.Rand15 + 30) == 0) input.KeyJump = 1;
                 if (Rand(ai.Rand3 + 5) == 0)
                 {
-                    bool close = !input.HasInputHistoryGate() || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
+                    bool close = !HasInputHistoryGate(self) || (Abs(Z(self) - Z(target)) <= 150 && Abs(X(self) - X(target)) <= 240);
                     if (close && Abs(X(target) - X(self)) < 600 && Abs(Z(target) - Z(self)) < 20)
                     {
                         if (X(target) > X(self) && ai.MoveMode == 0) { input.KeyRight = 1; input.PrevRight = 0; }
@@ -4103,9 +5615,9 @@ namespace NTSD.Simulation
             if (heldOid != 122 && heldOid != 123) return true;
 
             input.ClearActionInputKeys(); input.ClearDirectionalInputKeys();
-            if (selfState == 17 && sameZLane && !specialObjectProximity && input.HitStop != 0)
+            if (selfState == 17 && sameZLane && !specialObjectProximity && HitStop(self) != 0)
             { input.KeyAttack = 1; return false; }
-            if (input.HasInputHistoryGate() && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240)) return false;
+            if (HasInputHistoryGate(self) && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240)) return false;
             if (Z(target) < StageZMin + 30) input.KeyDown = 1;
             else if (Z(target) < StageZMax - 30) input.KeyUp = 1;
             else if (Z(target) > Z(self)) input.KeyUp = 1;
@@ -4134,10 +5646,87 @@ namespace NTSD.Simulation
             if (selfState == 2)
             { if (Facing(self) == 0) input.KeyLeft = 1; if (Facing(self) == 1) input.KeyRight = 1; return false; }
             if (Rand(5) != 0) return false;
-            if (specialObjectProximity || (self.ObjectId != 2 && self.ObjectId != 34) || Pp(self) <= 150 || Rand(ai.Rand3 + 3) <= 0)
+            if (specialObjectProximity || (ObjectId(self) != 2 && ObjectId(self) != 34) || Pp(self) <= 150 || Rand(ai.Rand3 + 3) <= 0)
             { input.KeyJump = 1; return false; }
             if (X(target) > X(self)) input.ComboDrj = 3; else input.ComboDlj = 3;
             return true;
+        }
+
+        private bool HasAiSoADecisionHeldLineCoverRows(
+            LF2Entity self,
+            LF2Entity target,
+            BattleAiInputDetailDiagnostics diagnostics)
+        {
+            AiSoASensingRows rows = aiSoASensingRows;
+            int selfSlot = Slot(self);
+            int selfTeam = Team(self);
+            int selfX = X(self);
+            int selfZ = Z(self);
+            int targetX = X(target);
+            int targetTeam = Team(target);
+            bool lineCover = false;
+            int count = Math.Min(20, rows.Capacity);
+            for (int slot = 0; slot < count; slot++)
+            {
+                diagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.Held20Scan,
+                    1);
+                if (!rows.Included[slot] ||
+                    slot == selfSlot ||
+                    rows.Team[slot] == 0 ||
+                    targetTeam != selfTeam ||
+                    rows.Hp[slot] <= 0 ||
+                    rows.State[slot] == 14 ||
+                    Abs(rows.Y[slot]) > 2)
+                {
+                    continue;
+                }
+
+                int candidateX = rows.X[slot];
+                if (Abs(rows.Z[slot] - selfZ) < 15 &&
+                    ((selfX < candidateX && candidateX < targetX) ||
+                     (targetX < candidateX && candidateX < selfX)))
+                {
+                    lineCover = true;
+                }
+            }
+
+            return lineCover;
+        }
+
+        private bool HasAiSoADecisionHeldLineCoverLegacy(
+            LF2Entity self,
+            LF2Entity target,
+            BattleAiInputDetailDiagnostics diagnostics,
+            int startSlot,
+            bool lineCover)
+        {
+            for (int slot = startSlot; slot < 20; slot++)
+            {
+                diagnostics?.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.Held20Scan,
+                    1);
+                LF2Entity candidate = AiAt(slot);
+                if (candidate == null ||
+                    candidate == self ||
+                    Team(candidate) == 0 ||
+                    Team(target) != Team(self) ||
+                    Hp(candidate) <= 0 ||
+                    State(candidate) == 14 ||
+                    Abs(Y(candidate)) > 2)
+                {
+                    continue;
+                }
+
+                if (Abs(Z(candidate) - Z(self)) < 15 &&
+                    ((X(self) < X(candidate) && X(candidate) < X(target)) ||
+                     (X(target) < X(candidate) && X(candidate) < X(self))))
+                {
+                    lineCover = true;
+                }
+            }
+
+            return lineCover;
         }
     }
 }

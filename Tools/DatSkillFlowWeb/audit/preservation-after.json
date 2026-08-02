@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "root": ".",
+  "createdFor": "Gate 0 post-scaffold preservation evidence",
+  "entries": [
+    { "path": "audit/preservation-before.json", "size": 420, "sha256": "7de4be24327f494f9a46945ff20f2ebd628e04f11d48eec54f8e4542c26fabeb" },
+    { "path": "audit/recovery-audit.md", "size": 634, "sha256": "6073579d89c5ef8f9b506ef68d73b01c62b6d8e8c2354388ecad2533efcbb2b9" },
+    { "path": "data/cpp-runtime.json", "size": 258048, "sha256": "f57bb0137c8b58a5f0148eb2d1658b21db24ebfdcef010bdd6faed1ae04606dd" },
+    { "path": "index.html", "size": 1048, "sha256": "40d5727d394bd835bfe7c193bc3ef8aeb53a56db05227afe83368b1f5be26dba" },
+    { "path": "package.json", "size": 962, "sha256": "0fb8d122e2a7da5a2b252628ba6d0d0c05b2c08ce4fd21a6f3b63d08857e5e40" },
+    { "path": "playwright.config.ts", "size": 489, "sha256": "3022c2a510eb76c022afecaffffa5653bf26aa61c9ae3d8bebfebb9fdb6cfa8f" },
+    { "path": "README.md", "size": 5026, "sha256": "38f8b69951dec21bdcea032ef31751c2bc18951f05bfaf8be05d5dc6466e7cb4" },
+    { "path": "scripts/preservation-manifest.ts", "size": 1458, "sha256": "65f0ef648c4683748ec816a6c760b5dd7d44a66d2375318313949e9afdcb2072" },
+    { "path": "src/authority/ledger.ts", "size": 1760, "sha256": "58e9d07a031ffa2397471fcfd71488f55b96bd9ac34f18f1e5de9e6ad6e3a316" },
+    { "path": "src/client/main.ts", "size": 1131, "sha256": "84c58b3f87c613a307a73a9009024243bb71b25caa361c885af0f75c15f220bc" },
+    { "path": "src/client/styles.css", "size": 1665, "sha256": "f60c46ced4eaca646bfba5061943ee850f5f075d9a8367efc3dbe428cfc791ff" },
+    { "path": "src/diagnostics/envelope.ts", "size": 991, "sha256": "6e8253644a35965e8080bd5cfddc288b2401dad4092fcb37905f927b68dd5794" },
+    { "path": "src/server/cli.ts", "size": 942, "sha256": "3a2e6546ea90e6a5f1fd51e97dba6cb1d4e892e577272fc5697a8db2ab0254f5" },
+    { "path": "src/server/preservation-manifest.ts", "size": 2839, "sha256": "73ac9bab50d739206dfd1351da2de1bb97da6469e7613373ba9e2c4718db6407" },
+    { "path": "src/server/server.ts", "size": 6721, "sha256": "70de42a1d8643af3e3329481bb3d54fbe2ced854c960c6f8f845d9c38c5aa0ab" },
+    { "path": "src/trace/envelope.ts", "size": 1455, "sha256": "4bb72dec14250ec6bdda403d8d789504ab68bedd5c723f606c12d47cbfd164ca" },
+    { "path": "tests/e2e/shell.spec.ts", "size": 545, "sha256": "2a58b7b79aa554147682077fcf8c95e8a8846066ce2e2aa28df995b63072ebaa" },
+    { "path": "tests/integration/server.test.ts", "size": 1938, "sha256": "e04973262719bdb84a5d46817b373115d15dbd39d9aaa523841faad4c260bf35" },
+    { "path": "tests/unit/authority-ledger.test.ts", "size": 1231, "sha256": "c055c1c94a26a4e9ea33547ff451fc2824e9a451c5b9543d559bf54ef1ddd1e6" },
+    { "path": "tests/unit/diagnostics.test.ts", "size": 652, "sha256": "77d0ad00f08de6f970dcd91b75e0df88add59e53e97ddd3a45e1951fb67f75d3" },
+    { "path": "tests/unit/preservation-manifest.test.ts", "size": 1782, "sha256": "d0e442702ea481a984d215b7b40533112065bbba2d37652ac9eb59cfa31aea2e" },
+    { "path": "tests/unit/trace-envelope.test.ts", "size": 1155, "sha256": "98b8de55469c37042f6ed99d2133d94e6eb097ef257800cf11ba3dc70443fe7b" },
+    { "path": "tsconfig.json", "size": 557, "sha256": "4981f2a4d2b7cc73c4b591e44192e9ad41d0b9254f1fa2fd0ffe57ed1a06e68e" },
+    { "path": "tsconfig.server.json", "size": 413, "sha256": "9a626a7e8f9a1394d63fec6a2964632be956d3f19fa7fffed2caf2cd8a24e64d" },
+    { "path": "vite.config.ts", "size": 221, "sha256": "46df87bec308314691f7863cf68382f04c21529e7e40e40e3f7c746ab7d0e58a" },
+    { "path": "vitest.config.ts", "size": 249, "sha256": "c9c603a69f16ae51ef547aabd8911fd0c65e6ee674e6ab1dd42858a971a9a604" }
+  ]
+}

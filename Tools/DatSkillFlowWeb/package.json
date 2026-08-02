@@ -1,0 +1,18 @@
+{
+  "name": "dat-skill-flow-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.11.1 <25"
+  },
+  "scripts": {
+    "build": "node --disable-warning=ExperimentalWarning scripts/build.mjs",
+    "test": "npm run build && node scripts/test.mjs",
+    "start": "node scripts/start.mjs --root dist --manifest dist/build-manifest.json",
+    "dev:server": "npm run build && npm run start",
+    "start:server": "npm run start"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

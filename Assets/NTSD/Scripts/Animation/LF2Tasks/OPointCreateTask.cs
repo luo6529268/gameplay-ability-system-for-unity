@@ -13,13 +13,6 @@ namespace NTSD.Animation.LF2Tasks
         StageSpawnAt = 5,
     }
 
-    public enum InitialRuntimeIntPositionHoldMode
-    {
-        None = 0,
-        UntilCurrentTickTu = 1,
-        UntilNextTickPresentation = 2,
-    }
-
     public class OPointCreateTask : LF2TaskBase, ILF2Recyclable
     {
         public override LF2TaskType TaskType => LF2TaskType.CreateObject;
@@ -47,8 +40,6 @@ namespace NTSD.Animation.LF2Tasks
         public int initialRuntimeX;
         public int initialRuntimeY;
         public int initialRuntimeZ;
-        public InitialRuntimeIntPositionHoldMode initialRuntimeHoldMode;
-
         public int ownerEntityIndex = -1;
         public int spawnerEntityIndex = -1;
         public int trackedTargetSlot = -1;
@@ -93,7 +84,6 @@ namespace NTSD.Animation.LF2Tasks
             initialRuntimeX = 0;
             initialRuntimeY = 0;
             initialRuntimeZ = 0;
-            initialRuntimeHoldMode = InitialRuntimeIntPositionHoldMode.None;
             ownerEntityIndex = -1;
             spawnerEntityIndex = -1;
             trackedTargetSlot = -1;

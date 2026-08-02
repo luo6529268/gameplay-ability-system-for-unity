@@ -71,8 +71,27 @@ namespace NTSD.Input
             _comboDRJ = _comboDLJ = _comboDUJ = _comboDDJ = _comboDJA = 0;
         }
 
-        public void UpdateFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Character owner)
+        public void UpdateFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Entity owner)
         {
+            List<SimInputEvent> events = null;
+            bool hasEvents = inputBuffer != null &&
+                             inputBuffer.TryDequeueAll(tickIndex, out events);
+            bool hasCompletePacket = false;
+            if (hasEvents)
+            {
+                for (int i = 0; i < events.Count; i++)
+                {
+                    if (!events[i].completePacket)
+                        continue;
+
+                    hasCompletePacket = true;
+                    break;
+                }
+            }
+
+            if (hasCompletePacket)
+                SetHeldStateFromRuntime(owner?.Runtime);
+
             _prevRight = _right;
             _prevLeft = _left;
             _prevUp = _up;
@@ -81,11 +100,13 @@ namespace NTSD.Input
             _prevJump = _jump;
             _prevDefend = _defend;
 
-            if (inputBuffer != null && inputBuffer.TryDequeueAll(tickIndex, out List<SimInputEvent> events))
+            if (hasEvents)
             {
                 for (int i = 0; i < events.Count; i++)
                 {
                     SimInputEvent evt = events[i];
+                    if (hasCompletePacket && !evt.completePacket)
+                        continue;
                     ApplyEvent(evt.key, evt.down);
                 }
             }
@@ -94,10 +115,24 @@ namespace NTSD.Input
             ApplyNewPressEdges(owner);
         }
 
-        internal void PollFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Character owner)
+        internal void PollFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Entity owner)
         {
             UpdateFromBuffer(inputBuffer, tickIndex, owner);
             SyncToRuntime(owner?.Runtime);
+        }
+
+        private void SetHeldStateFromRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            _right = runtime.KeyRight != 0;
+            _left = runtime.KeyLeft != 0;
+            _up = runtime.KeyUp != 0;
+            _down = runtime.KeyDown != 0;
+            _attack = runtime.KeyAttack != 0;
+            _jump = runtime.KeyJump != 0;
+            _defend = runtime.KeyDefend != 0;
         }
 
         public bool ApplyFrameInput(LF2Entity character)
@@ -192,7 +227,7 @@ namespace NTSD.Input
             }
         }
 
-        private void ApplyNewPressEdges(LF2Character owner)
+        private void ApplyNewPressEdges(LF2Entity owner)
         {
             ApplyNewPressEdge(_prevRight, _right, ref _cdRight, owner, FuncKeyMask.right);
             ApplyNewPressEdge(_prevLeft, _left, ref _cdLeft, owner, FuncKeyMask.left);
@@ -207,7 +242,7 @@ namespace NTSD.Input
             bool previous,
             bool held,
             ref byte cooldown,
-            LF2Character owner,
+            LF2Entity owner,
             FuncKeyMask key)
         {
             if (previous || !held)
@@ -219,19 +254,90 @@ namespace NTSD.Input
 
         private bool ApplyComboFrameInput(LF2Entity character)
         {
+            // C# authority RunComboWrappers advances all nine combo values as one local
+            // transaction. Only the final DJA fallthrough commits them; every earlier
+            // return keeps frame/facing/cooldown side effects but discards local progress.
+            byte comboDRA = _comboDRA;
+            byte comboDLA = _comboDLA;
+            byte comboDUA = _comboDUA;
+            byte comboDDA = _comboDDA;
+            byte comboDRJ = _comboDRJ;
+            byte comboDLJ = _comboDLJ;
+            byte comboDUJ = _comboDUJ;
+            byte comboDDJ = _comboDDJ;
+            byte comboDJA = _comboDJA;
             bool result = false;
 
-            result |= RunCombo(character, ref _comboDRA, _cdRight, ComboMode.Right, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Fa, "right");
-            result |= RunCombo(character, ref _comboDLA, _cdLeft, ComboMode.Left, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Fa, "left");
-            result |= RunCombo(character, ref _comboDUA, _cdUp, ComboMode.Up, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Ua, null);
-            result |= RunCombo(character, ref _comboDDA, _cdDown, ComboMode.Down, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Da, null);
-            result |= RunCombo(character, ref _comboDRJ, _cdRight, ComboMode.Right, _cdJump, ComboMode.Jump, character.Frame.D.hit_Fj, "right");
-            result |= RunCombo(character, ref _comboDLJ, _cdLeft, ComboMode.Left, _cdJump, ComboMode.Jump, character.Frame.D.hit_Fj, "left");
-            result |= RunCombo(character, ref _comboDUJ, _cdUp, ComboMode.Up, _cdJump, ComboMode.Jump, character.Frame.D.hit_Uj, null);
-            result |= RunCombo(character, ref _comboDDJ, _cdDown, ComboMode.Down, _cdJump, ComboMode.Jump, character.Frame.D.hit_Dj, null);
-            result |= RunDjaCombo(character);
+            result |= RunCombo(character, ref comboDRA, _cdRight, ComboMode.Right, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Fa, "right");
+            result |= RunCombo(character, ref comboDLA, _cdLeft, ComboMode.Left, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Fa, "left");
+            result |= RunCombo(character, ref comboDUA, _cdUp, ComboMode.Up, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Ua, null);
+            result |= RunCombo(character, ref comboDDA, _cdDown, ComboMode.Down, _cdAttack, ComboMode.Attack, character.Frame.D.hit_Da, null);
+            result |= RunCombo(character, ref comboDRJ, _cdRight, ComboMode.Right, _cdJump, ComboMode.Jump, character.Frame.D.hit_Fj, "right");
+            result |= RunCombo(character, ref comboDLJ, _cdLeft, ComboMode.Left, _cdJump, ComboMode.Jump, character.Frame.D.hit_Fj, "left");
+            result |= RunCombo(character, ref comboDUJ, _cdUp, ComboMode.Up, _cdJump, ComboMode.Jump, character.Frame.D.hit_Uj, null);
+            result |= RunCombo(character, ref comboDDJ, _cdDown, ComboMode.Down, _cdJump, ComboMode.Jump, character.Frame.D.hit_Dj, null);
+
+            bool djaAdvanced = false;
+            AdvanceCombo(ref comboDJA, _cdJump, ComboMode.Jump, _cdAttack, ref djaAdvanced);
+            if (character.Frame?.D == null || comboDJA != 3)
+                return result;
+
+            int targetFrame = character.Frame.D.hit_ja;
+            if (character.ShouldHoldCharacterDatDjaInputGuard(targetFrame))
+                return result;
+
+            if (targetFrame != 0 && character.CanEnterCharacterDatInputFrameJump())
+            {
+                bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
+                comboDJA = 0;
+                if (jumped)
+                    ClearActionAndDirectionCooldowns();
+                return true;
+            }
+
+            if (character.Runtime?.Unk328 == 1)
+            {
+                character.Runtime.Unk338 = 0;
+                return result;
+            }
+
+            if (ComboInterrupted(ComboMode.Attack, djaAdvanced))
+                comboDJA = 0;
+
+            CommitComboProgress(
+                comboDRA,
+                comboDLA,
+                comboDUA,
+                comboDDA,
+                comboDRJ,
+                comboDLJ,
+                comboDUJ,
+                comboDDJ,
+                comboDJA);
 
             return result;
+        }
+
+        private void CommitComboProgress(
+            byte comboDRA,
+            byte comboDLA,
+            byte comboDUA,
+            byte comboDDA,
+            byte comboDRJ,
+            byte comboDLJ,
+            byte comboDUJ,
+            byte comboDDJ,
+            byte comboDJA)
+        {
+            _comboDRA = comboDRA;
+            _comboDLA = comboDLA;
+            _comboDUA = comboDUA;
+            _comboDDA = comboDDA;
+            _comboDRJ = comboDRJ;
+            _comboDLJ = comboDLJ;
+            _comboDUJ = comboDUJ;
+            _comboDDJ = comboDDJ;
+            _comboDJA = comboDJA;
         }
 
         private bool RunCombo(
@@ -297,40 +403,6 @@ namespace NTSD.Input
                     comboState = 0;
                 }
             }
-        }
-
-        private bool RunDjaCombo(LF2Entity character)
-        {
-            bool advanced = false;
-            AdvanceCombo(ref _comboDJA, _cdJump, ComboMode.Jump, _cdAttack, ref advanced);
-            if (_comboDJA != 3)
-                return false;
-
-            int targetFrame = character.Frame.D.hit_ja;
-            if (character.ShouldHoldCharacterDatDjaInputGuard(targetFrame))
-                return false;
-
-            if (targetFrame != 0)
-            {
-                if (character.CanEnterCharacterDatInputFrameJump())
-                {
-                    bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
-                    _comboDJA = 0;
-                    if (jumped)
-                        ClearActionAndDirectionCooldowns();
-                    return true;
-                }
-
-                if (character.Runtime?.Unk328 == 1)
-                {
-                    character.Runtime.Unk338 = 0;
-                    return false;
-                }
-            }
-
-            if (ComboInterrupted(ComboMode.Attack, advanced))
-                _comboDJA = 0;
-            return false;
         }
 
         private bool ApplyDirectFrameInput(LF2Entity character)
@@ -410,7 +482,7 @@ namespace NTSD.Input
             };
         }
 
-        private static void PushInputHistory(LF2Character owner, FuncKeyMask key)
+        private static void PushInputHistory(LF2Entity owner, FuncKeyMask key)
         {
             if (owner?.Runtime?.InputHistory == null || owner.Runtime.InputHistory.Length < 6)
                 return;

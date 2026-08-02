@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="dat-skill-flow-build-id" content="20260801043453136-7fcfc4d2c7b1402aa5b73d3f9bfcb77c" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Dat Skill Flow</title>
+    <link rel="stylesheet" href="/src/client/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header>
+        <p class="eyebrow">NTSD local workspace</p>
+        <h1>Dat Skill Flow</h1>
+        <p id="server-status" data-testid="server-status" role="status">Connecting to local server…</p>
+      </header>
+      <section class="workspace" aria-label="Preview workspace">
+        <canvas
+          id="preview-canvas"
+          data-testid="preview-canvas"
+          width="794"
+          height="550"
+          aria-label="Empty character preview canvas"
+        ></canvas>
+        <aside aria-label="Diagnostics">
+          <h2>Diagnostics</h2>
+          <p id="diagnostics">No project selected. Gate 0 foundation is ready.</p>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/client/main.js"></script>
+  </body>
+</html>
