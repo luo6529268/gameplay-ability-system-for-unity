@@ -51,6 +51,10 @@ class FakeNativeClient implements NativeSafeFileClient {
         return { canonicalPath: canonicalRoot, volumeSerial: "test-volume", fileId: "test-root" };
     }
 
+    async ensureDirectory(): Promise<{ canonicalPath: string }> {
+        return { canonicalPath: canonicalRoot };
+    }
+
     async read(_request: NativeReadRequest) {
         if (this.failRead) throw new Error("injected read failure with secret path");
         return {
@@ -296,6 +300,7 @@ describe("server-owned DAT session core", () => {
         const initial = await service.openDocument(documentId, "plaintext");
         const pic = initial.fields.find((field) => field.key === "pic" && field.value === 2)!;
         const walkingSpeed = initial.fields.find((field) => field.key === "walking_speed")!;
+        assert.equal(initial.dirty, false);
         assert.equal(pic.numericKind, "integer");
         assert.equal(walkingSpeed.numericKind, "number");
         assert.equal(Object.hasOwn(initial.fields.find((field) => field.key === "name")!, "numericKind"), false);
@@ -313,6 +318,7 @@ describe("server-owned DAT session core", () => {
             expectedRevision: 0,
         });
         assert.equal(afterFraction.revision, 0);
+        assert.equal(afterFraction.dirty, false);
         assert.equal(afterFraction.projection.frames[0]?.pic, 2);
 
         const max = await service.edit({
@@ -322,6 +328,7 @@ describe("server-owned DAT session core", () => {
             expectedRevision: 0,
         });
         assert.equal(max.revision, 1);
+        assert.equal(max.dirty, true);
         assert.equal(max.projection.frames[0]?.pic, 2_147_483_647);
         const min = await service.edit({
             sessionId: initial.sessionId,

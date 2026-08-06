@@ -8,7 +8,7 @@ interface BuildManifest {
 }
 
 const expectedClientFiles = [
-    "index.html", "src/client/main.js", "src/client/styles.css", "src/client/timeline-controller.js",
+    "index.html", "src/client/main.js", "src/client/project-client.js", "src/client/styles.css", "src/client/timeline-controller.js",
     "src/presentation/camera.js", "src/presentation/index.js", "src/presentation/projection.js",
     "src/sim/canonical.js", "src/sim/catalog.js", "src/sim/constants.js", "src/sim/core.js", "src/sim/frame-tick.js",
     "src/sim/index.js", "src/sim/input.js", "src/sim/motion.js", "src/sim/opoint.js", "src/sim/rng.js", "src/sim/rules.js", "src/sim/timeline.js", "src/sim/types.js",
@@ -18,7 +18,7 @@ const expectedClientFiles = [
 ].sort();
 
 describe("Gate 2 browser build allowlist", () => {
-    it("allows exactly the browser entry, client UI, simulation graph, and its authority/trace validation dependencies", async () => {
+    it("allows exactly the browser entry, client modules, simulation graph, and authority dependencies", async () => {
         const manifest = JSON.parse(await readFile(resolve("dist/build-manifest.json"), "utf8")) as BuildManifest;
         const clientPaths = manifest.clientFiles.map((entry) => entry.path).sort();
 

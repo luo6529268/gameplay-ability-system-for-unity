@@ -172,8 +172,25 @@ export class SafeSaveService {
         logicalPath: string,
         bytes: Uint8Array,
     ): Promise<SaveAsResult> {
-        ensureContentBound(bytes);
         this.#registry.getDocument(documentId);
+        return await this.#saveAs(documentId, rootId, logicalPath, bytes);
+    }
+
+    async saveAsNew(
+        rootId: string,
+        logicalPath: string,
+        bytes: Uint8Array,
+    ): Promise<SaveAsResult> {
+        return await this.#saveAs(undefined, rootId, logicalPath, bytes);
+    }
+
+    async #saveAs(
+        documentId: string | undefined,
+        rootId: string,
+        logicalPath: string,
+        bytes: Uint8Array,
+    ): Promise<SaveAsResult> {
+        ensureContentBound(bytes);
         const stableBytes = Buffer.from(bytes);
         const normalized = this.#registry.normalizeLogicalPath(logicalPath);
         return await this.#locks.runExclusive(targetLockKey(rootId, normalized), async () => {
@@ -197,15 +214,32 @@ export class SafeSaveService {
                     recovery: publicRecovery(result.recovery),
                 });
             }
-            const document = this.#registry.bindNativeDocument(
-                documentId,
-                rootId,
-                normalized,
-                result.canonicalPath,
-                result.fingerprint,
-            );
+            const document = documentId === undefined
+                ? await this.#openCreatedDocument(rootId, normalized, result.canonicalPath, result.fingerprint)
+                : this.#registry.bindNativeDocument(
+                    documentId,
+                    rootId,
+                    normalized,
+                    result.canonicalPath,
+                    result.fingerprint,
+                );
             return { status: "created", document };
         });
+    }
+
+    async #openCreatedDocument(
+        rootId: string,
+        logicalPath: string,
+        canonicalPath: string,
+        fingerprint: FileFingerprint,
+    ): Promise<OpenedDocument> {
+        const opened = await this.#registry.openDocument(rootId, logicalPath);
+        if (!fingerprintsEqual(opened.fingerprint, fingerprint)
+            || this.#registry.getDocument(opened.documentId).canonicalPath.toLowerCase() !== canonicalPath.toLowerCase()) {
+            this.#registry.closeDocument(opened.documentId);
+            throw new SafeSaveError("save-as-write-failed", "The created document changed before registration.");
+        }
+        return opened;
     }
 
     async issueOverwriteChallenge(
@@ -215,6 +249,7 @@ export class SafeSaveService {
         bytes: Uint8Array,
     ): Promise<OverwriteChallenge> {
         ensureContentBound(bytes);
+        this.#purgeExpiredChallenges();
         const stableBytes = Buffer.from(bytes);
         const document = this.#registry.getDocument(documentId);
         const normalized = this.#registry.normalizeLogicalPath(logicalPath);
@@ -309,6 +344,15 @@ export class SafeSaveService {
                 recovery: recovery as Required<RecoveryReport>,
             };
         });
+    }
+
+    #purgeExpiredChallenges(): void {
+        const now = this.#now();
+        for (const [challengeId, challenge] of this.#challenges) {
+            if (challenge.expiresAt < now) {
+                this.#challenges.delete(challengeId);
+            }
+        }
     }
 
     #mapSaveAsFailure(error: unknown): SafeSaveError {

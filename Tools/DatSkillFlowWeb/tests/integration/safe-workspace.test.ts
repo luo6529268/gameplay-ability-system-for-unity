@@ -74,6 +74,12 @@ describe("opaque workspace and document registry", () => {
         const changed = await registry.readDocument(opened.documentId);
         assert.equal(changed.externallyModified, true);
         assert.notEqual(changed.fingerprint.sha256, opened.fingerprint.sha256);
+        assert.equal(registry.closeDocument(opened.documentId), true);
+        assert.equal(registry.closeDocument(opened.documentId), false);
+        await assert.rejects(
+            registry.readDocument(opened.documentId),
+            (error: unknown) => error instanceof WorkspaceSecurityError && error.code === "unknown-document",
+        );
     });
 
     it("rejects NUL, traversal, absolute, drive-relative, and oversized reads", async () => {

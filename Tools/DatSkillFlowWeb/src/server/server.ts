@@ -22,6 +22,14 @@ import {
     type WorkspaceRegistryOptions,
     WorkspaceSecurityError,
 } from "./workspace-registry.js";
+import {
+    ProjectDatError,
+    type ProjectDatService,
+} from "./project-dat-service.js";
+import {
+    ProjectSkillError,
+    type ProjectSkillService,
+} from "./project-skill-service.js";
 
 export const LOOPBACK_HOST = "127.0.0.1" as const;
 export const MAX_EPHEMERAL_LOOPBACK_LISTEN_ATTEMPTS = 8;
@@ -69,6 +77,8 @@ export interface ApplicationServerOptions {
     workspace?: WorkspaceRegistry | WorkspaceRegistryOptions;
     safeSave?: SafeSaveService;
     safeSaveOptions?: SafeSaveServiceOptions;
+    projectDatService?: ProjectDatService;
+    projectSkillService?: ProjectSkillService;
 }
 
 interface StaticConfiguration {
@@ -372,6 +382,48 @@ function sendApiError(request: IncomingMessage, response: ServerResponse, error:
         });
         return;
     }
+    if (error instanceof ProjectDatError) {
+        const status = error.code === "unknown-session" || error.code === "unknown-object" || error.code === "object-unavailable" || error.code === "unknown-asset"
+            ? 404
+            : error.code === "invalid-asset"
+                ? 422
+                : error.code === "revision-conflict"
+                    ? 409
+                    : error.code === "invalid-request"
+                        ? 400
+                        : error.code === "project-disabled"
+                            ? 503
+                            : 500;
+        sendJson(request, response, status, {
+            ok: false,
+            diagnostics: [createDiagnostic(
+                status === 404 ? "not-found" : status === 422 ? "missing-asset" : status === 400 || status === 409 ? "unsafe-save" : "internal-error",
+                error.message,
+                { projectCode: error.code },
+            )],
+        });
+        return;
+    }
+    if (error instanceof ProjectSkillError) {
+        const status = error.code === "schema-invalid"
+            ? 422
+            : error.code === "revision-conflict"
+                ? 409
+                : error.code === "invalid-request"
+                    ? 400
+                    : error.code === "project-disabled"
+                        ? 503
+                        : 500;
+        sendJson(request, response, status, {
+            ok: false,
+            diagnostics: [createDiagnostic(
+                status === 422 ? "invalid-sidecar" : status === 409 ? "unsafe-save" : status === 400 ? "invalid-request" : "internal-error",
+                error.message,
+                { projectSkillCode: error.code },
+            )],
+        });
+        return;
+    }
     const requestedStatus = (error as { httpStatus?: unknown })?.httpStatus;
     const status = typeof requestedStatus === "number" ? requestedStatus : 400;
     sendJson(request, response, status, {
@@ -383,8 +435,8 @@ function sendApiError(request: IncomingMessage, response: ServerResponse, error:
     });
 }
 
-function rejectMethod(request: IncomingMessage, response: ServerResponse): void {
-    response.setHeader("Allow", "GET, HEAD");
+function rejectMethod(request: IncomingMessage, response: ServerResponse, allowedMethods = "GET, HEAD"): void {
+    response.setHeader("Allow", allowedMethods);
     sendJson(request, response, 405, {
         ok: false,
         diagnostics: [createDiagnostic("method-not-allowed", `Method ${request.method ?? "UNKNOWN"} is not allowed.`)],
@@ -447,6 +499,8 @@ async function handleApiRequest(
     pathname: string,
     workspace: WorkspaceRegistry,
     safeSave: SafeSaveService,
+    projectDatService: ProjectDatService | undefined,
+    projectSkillService: ProjectSkillService | undefined,
 ): Promise<boolean> {
     if (pathname === "/api/health") {
         if (advertisesRequestBody(request)) {
@@ -483,7 +537,7 @@ async function handleApiRequest(
             return true;
         }
         if (request.method !== "GET") {
-            rejectMethod(request, response);
+            rejectMethod(request, response, "GET");
             return true;
         }
         const startupRoot = workspace.getStartupRootGrant();
@@ -503,7 +557,7 @@ async function handleApiRequest(
     const readMatch = /^\/api\/documents\/([A-Za-z0-9_-]{32,})\/read$/.exec(pathname);
     if (readMatch !== null) {
         if (request.method !== "GET") {
-            rejectMethod(request, response);
+            rejectMethod(request, response, "GET");
             return true;
         }
         try {
@@ -526,14 +580,118 @@ async function handleApiRequest(
         return true;
     }
 
+    const projectCatalogMatch = pathname === "/api/project";
+    if (projectCatalogMatch) {
+        if (advertisesRequestBody(request)) {
+            response.setHeader("Connection", "close");
+            sendJson(request, response, 413, {
+                ok: false,
+                diagnostics: [createDiagnostic("request-body-not-allowed", "The project catalog route does not accept a request body.")],
+            });
+            return true;
+        }
+        if (request.method !== "GET" && request.method !== "HEAD") {
+            rejectMethod(request, response);
+            return true;
+        }
+        if (projectDatService === undefined) {
+            sendJson(request, response, 503, {
+                ok: false,
+                diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+            });
+            return true;
+        }
+        try {
+            response.setHeader("Cache-Control", "no-store");
+            sendJson(request, response, 200, {
+                ok: true,
+                data: await projectDatService.catalog(),
+                diagnostics: [],
+            });
+        } catch (error) {
+            sendApiError(request, response, error);
+        }
+        return true;
+    }
+
+    if (pathname === "/api/project/skills" && (request.method === "GET" || request.method === "HEAD")) {
+        if (advertisesRequestBody(request)) {
+            response.setHeader("Connection", "close");
+            sendJson(request, response, 413, {
+                ok: false,
+                diagnostics: [createDiagnostic("request-body-not-allowed", "The project skills route does not accept a request body for GET.")],
+            });
+            return true;
+        }
+        if (request.method !== "GET" && request.method !== "HEAD") {
+            rejectMethod(request, response);
+            return true;
+        }
+        if (projectSkillService === undefined) {
+            sendJson(request, response, 503, {
+                ok: false,
+                diagnostics: [createDiagnostic("internal-error", "The project skill service is not available.")],
+            });
+            return true;
+        }
+        try {
+            response.setHeader("Cache-Control", "no-store");
+            sendJson(request, response, 200, {
+                ok: true,
+                data: await projectSkillService.get(),
+                diagnostics: [],
+            });
+        } catch (error) {
+            sendApiError(request, response, error);
+        }
+        return true;
+    }
+
+    const assetMatch = /^\/api\/assets\/([A-Za-z0-9_-]{32,})$/.exec(pathname);
+    if (assetMatch !== null) {
+        if (request.method !== "GET" && request.method !== "HEAD") {
+            rejectMethod(request, response);
+            return true;
+        }
+        const requestPath = new URL(request.url ?? "/", "http://127.0.0.1");
+        if (requestPath.searchParams.size > 0) {
+            sendJson(request, response, 400, {
+                ok: false,
+                diagnostics: [createDiagnostic("request-body-not-allowed", "The project asset route does not support query parameters.")],
+            });
+            return true;
+        }
+        if (projectDatService === undefined) {
+            sendJson(request, response, 503, {
+                ok: false,
+                diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+            });
+            return true;
+        }
+        try {
+            const asset = await projectDatService.asset(assetMatch[1] as string);
+            response.setHeader("Cache-Control", "no-store");
+            sendBody(request, response, 200, "image/bmp", asset.bytes);
+        } catch (error) {
+            sendApiError(request, response, error);
+        }
+        return true;
+    }
+
     const stateRoute = pathname === "/api/workspace/grant"
         || pathname === "/api/documents/open"
+        || pathname === "/api/project/open"
+        || pathname === "/api/project/edit"
+        || pathname === "/api/project/preview"
+        || pathname === "/api/project/save"
+        || pathname === "/api/project/close"
+        || pathname === "/api/project/skills"
         || /^\/api\/documents\/[A-Za-z0-9_-]{32,}\/(?:save-as|overwrite-challenge|overwrite)$/.test(pathname);
     if (!stateRoute) {
         return false;
     }
     if (request.method !== "POST") {
-        rejectMethod(request, response);
+        rejectMethod(request, response, "POST");
         return true;
     }
     if (!exactStateChangingOrigin(server, request)
@@ -557,6 +715,80 @@ async function handleApiRequest(
             requireExactKeys(body, ["rootId", "path"]);
             const document = await workspace.openDocument(requireString(body, "rootId"), requireString(body, "path"));
             sendJson(request, response, 200, { ok: true, data: document, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/open") {
+            requireExactKeys(body, ["objectKey"]);
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.open(requireString(body, "objectKey"));
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/edit") {
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.edit(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/preview") {
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.preview(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/save") {
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.save(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/close") {
+            requireExactKeys(body, ["sessionId"]);
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.close(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/skills") {
+            if (projectSkillService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project skill service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectSkillService.save(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
             return true;
         }
 
@@ -660,7 +892,16 @@ export function createApplicationServer(options: ApplicationServerOptions): Serv
                 });
                 return;
             }
-            if (await handleApiRequest(server, request, response, pathname, workspace, safeSave)) {
+            if (await handleApiRequest(
+                server,
+                request,
+                response,
+                pathname,
+                workspace,
+                safeSave,
+                options.projectDatService,
+                options.projectSkillService,
+            )) {
                 return;
             }
 

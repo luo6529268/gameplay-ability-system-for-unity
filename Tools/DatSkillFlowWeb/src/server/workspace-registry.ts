@@ -202,6 +202,10 @@ export class WorkspaceRegistry {
         return document;
     }
 
+    closeDocument(documentId: string): boolean {
+        return this.#documents.delete(documentId);
+    }
+
     getRootDescriptor(rootId: string): NativeRootDescriptor {
         const root = this.#roots.get(rootId);
         if (root === undefined) {

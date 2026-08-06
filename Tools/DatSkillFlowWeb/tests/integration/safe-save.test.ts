@@ -94,6 +94,7 @@ describe("recoverable safe-save protocol", windowsOnly, () => {
         let peak = 0;
         const delayed: NativeSafeFileClient = {
             inspectRoot: (request) => client.inspectRoot(request),
+            ensureDirectory: (request) => client.ensureDirectory(request),
             read: (request) => client.read(request),
             overwrite: (request) => client.overwrite(request),
             async saveAs(request) {

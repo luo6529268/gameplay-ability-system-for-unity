@@ -37,7 +37,7 @@ export function parseCliArguments(argv: readonly string[]): CliArguments {
     }
 
     if (!values.has("--workspace") && (values.has("--data-txt") || values.has("--asset-workspace"))) {
-        throw new Error("--data-txt and --asset-workspace require --workspace.");
+        throw new Error("Each of --data-txt and --asset-workspace requires --workspace.");
     }
 
     return Object.freeze({

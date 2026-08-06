@@ -46,6 +46,10 @@ class OverlayNativeClient implements NativeSafeFileClient {
         };
     }
 
+    async ensureDirectory(request: { root: NativeRootDescriptor; logicalPath: string }): Promise<{ canonicalPath: string }> {
+        return { canonicalPath: `${request.root.canonicalPath}/${normalized(request.logicalPath)}` };
+    }
+
     async read(request: NativeReadRequest) {
         const logicalPath = normalized(request.logicalPath);
         this.reads.push({ root: request.root.canonicalPath, logicalPath });
@@ -88,6 +92,7 @@ function narutoDat(): Buffer {
         "file(0-0): Assets\\NTSD\\Sprite\\Character\\MingRen\\naruto.bmp w: 1 h: 1 row: 1 col: 1\n",
         "file(1-1): ..\\outside.bmp w: 1 h: 1 row: 1 col: 1\n",
         "file(2-2): Assets\\NTSD\\Sprite\\Character\\MingRen\\invalid.bmp w: 1 h: 1 row: 1 col: 1\n",
+        "file(3-3): Assets\\NTSD\\Sprite\\\\invalid-empty-segment.bmp w: 1 h: 1 row: 1 col: 1\n",
         "<frame> 0 idle\n",
         "pic: 0 state: 0 wait: 1 next: 0 sound: secret\\sound.wav\n",
         "<frame_end>\n",
@@ -162,6 +167,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             primaryRegistry: primary,
             assetRegistry: assets,
             dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "a".repeat(32),
             previewRunner: {
                 preview: async (plaintext: Uint8Array, options?: { startFrame?: number; ticks?: number }) => {
                     const input = Buffer.from(plaintext);
@@ -212,15 +218,22 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(catalogText.includes(dataTxtPath), false);
 
         const objectKey = catalog.data.objects[0]!.objectKey;
+        assert.equal((await post(origin, token, "/api/project/open", {
+            objectKey: catalog.data.objects[1]!.objectKey,
+        })).status, 404, "native preview is explicitly limited to Naruto OID 2");
         assert.equal((await post(origin, undefined, "/api/project/open", { objectKey })).status, 403);
         assert.equal((await post(origin, token, "/api/project/open", { objectKey }, "http://attacker.invalid")).status, 403);
         assert.equal((await post(origin, token, "/api/project/open", { objectKey, path: datPath })).status, 400);
+        const wrongMethod = await fetch(`${origin}/api/project/open`);
+        assert.equal(wrongMethod.status, 405);
+        assert.equal(wrongMethod.headers.get("allow"), "POST");
 
         const openedResponse = await post(origin, token, "/api/project/open", { objectKey });
         const openedText = await openedResponse.text();
         const opened = JSON.parse(openedText) as { data: {
             sessionId: string;
             revision: number;
+            dirty: boolean;
             oid: number;
             type: number;
             name: string;
@@ -230,6 +243,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             diagnostics: Array<Record<string, unknown>>;
         } };
         assert.equal(openedResponse.status, 200);
+        assert.equal(opened.data.dirty, false);
         assert.equal(opened.data.oid, 2);
         assert.equal(opened.data.name, "Naruto");
         assert.equal(opened.data.preview.ticks[0]?.entities[0]?.pic, 0);
@@ -237,7 +251,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(opened.data.preview.metadata.tickDriver, "SimulationTickDriver");
         assert.equal(Object.hasOwn(opened.data.preview.metadata, "naruto_dat_override"), false);
         assert.equal(Object.hasOwn(opened.data.preview.metadata, "data_path"), false);
-        assert.equal(opened.data.spriteRanges.length, 2, "unsafe traversal range is not minted");
+        assert.equal(opened.data.spriteRanges.length, 2, "unsafe sprite paths do not mint capabilities");
         assert.ok(opened.data.fields.some((field) => field.key === "name" && field.kind === "string"));
         assert.ok(opened.data.fields.some((field) => field.key === "pic" && field.kind === "number"));
         assert.equal(opened.data.fields.some((field) => ["head", "small", "file", "sound"].includes(field.key)), false);
@@ -254,9 +268,10 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             value: 2,
             expectedRevision: 0,
         });
-        const edited = await editedResponse.json() as { data: { revision: number; preview: { ticks: Array<{ entities: Array<{ pic: number }> }> } } };
+        const edited = await editedResponse.json() as { data: { revision: number; dirty: boolean; preview: { ticks: Array<{ entities: Array<{ pic: number }> }> } } };
         assert.equal(editedResponse.status, 200);
         assert.equal(edited.data.revision, 1);
+        assert.equal(edited.data.dirty, true);
         assert.equal(edited.data.preview.ticks[0]?.entities[0]?.pic, 2);
         assert.equal(previewInputs.length, 2);
         assert.equal((await post(origin, token, "/api/project/edit", {
@@ -276,6 +291,12 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(previewResponse.status, 200);
         assert.equal(preview.data.preview.metadata.startFrame, 0);
         assert.equal(preview.data.preview.metadata.ticksRequested, 2);
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 1,
+            startFrame: 599,
+            ticks: 1800,
+        })).status, 200);
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
             expectedRevision: 1,
@@ -300,6 +321,28 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(invalidAsset.status, 422);
         assert.equal(invalidText.includes("invalid.bmp"), false);
         assert.equal((await fetch(`${origin}/api/assets/${opened.data.spriteRanges[0]!.assetId}?path=../outside`)).status, 400);
+
+        const closedResponse = await post(origin, token, "/api/project/close", {
+            sessionId: opened.data.sessionId,
+        });
+        const closed = await closedResponse.json() as { data: { sessionId: string; closed: boolean } };
+        assert.equal(closedResponse.status, 200);
+        assert.deepEqual(closed.data, { sessionId: opened.data.sessionId, closed: true });
+        assert.equal((await fetch(`${origin}/api/assets/${opened.data.spriteRanges[0]!.assetId}`)).status, 404);
+        assert.equal((await post(origin, token, "/api/project/edit", {
+            sessionId: opened.data.sessionId,
+            fieldId: pic.fieldId,
+            value: 3,
+            expectedRevision: 1,
+        })).status, 404);
+        for (let index = 0; index < 33; index += 1) {
+            const reopenedResponse = await post(origin, token, "/api/project/open", { objectKey });
+            const reopened = await reopenedResponse.json() as { data: { sessionId: string } };
+            assert.equal(reopenedResponse.status, 200);
+            assert.equal((await post(origin, token, "/api/project/close", {
+                sessionId: reopened.data.sessionId,
+            })).status, 200);
+        }
 
         native.set(primaryRoot, dataTxtPath, catalogBytes("Assets/NTSD/Config/replaced.dat"));
         const refreshed = await (await fetch(`${origin}/api/project`)).json() as { data: { catalogRevision: number; objects: Array<{ objectKey: string }> } };

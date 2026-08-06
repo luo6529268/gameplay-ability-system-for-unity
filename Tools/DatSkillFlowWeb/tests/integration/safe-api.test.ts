@@ -12,11 +12,16 @@ import {
     listenLoopback,
     MAX_JSON_BODY_BYTES,
 } from "../../src/server/server.js";
+import type { ProjectSkillService } from "../../src/server/project-skill-service.js";
 import { WorkspaceRegistry, WorkspaceSecurityError } from "../../src/server/workspace-registry.js";
 
 const servers: Server[] = [];
 
-async function serverFixture(allowAbsoluteRootGrant: boolean, startupWorkspace = false): Promise<{
+async function serverFixture(
+    allowAbsoluteRootGrant: boolean,
+    startupWorkspace = false,
+    projectSkillService?: ProjectSkillService,
+): Promise<{
     server: Server;
     origin: string;
     token: string;
@@ -64,6 +69,7 @@ async function serverFixture(allowAbsoluteRootGrant: boolean, startupWorkspace =
         staticRoot,
         manifestPath,
         workspace,
+        projectSkillService,
     });
     servers.push(server);
     const origin = await listenLoopback(server, 0);
@@ -250,5 +256,48 @@ describe("safe workspace HTTP API", () => {
             outgoing.flushHeaders();
         });
         assert.equal(status, 413);
+    });
+
+    it("serves project skills read-only and protects skill writes with the process token", async () => {
+        const initial = {
+            schemaVersion: 1 as const,
+            revision: 0,
+            etag: "0".repeat(64),
+            skills: [] as const,
+        };
+        let savedRequest: unknown;
+        const projectSkillService = {
+            get: async () => initial,
+            save: async (input: unknown) => {
+                savedRequest = input;
+                return {
+                    schemaVersion: 1 as const,
+                    revision: 1,
+                    etag: "1".repeat(64),
+                    skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+                };
+            },
+        } as ProjectSkillService;
+        const { origin, token } = await serverFixture(false, false, projectSkillService);
+
+        const read = await fetch(`${origin}/api/project/skills`);
+        assert.equal(read.status, 200);
+        assert.equal(read.headers.get("cache-control"), "no-store");
+        assert.deepEqual((await read.json() as { data: unknown }).data, initial);
+        assert.equal((await post(origin, undefined, "/api/project/skills", {
+            expectedRevision: 0,
+            expectedEtag: initial.etag,
+            skills: [],
+        })).status, 403);
+
+        const requestBody = {
+            expectedRevision: 0,
+            expectedEtag: initial.etag,
+            skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+        };
+        const saved = await post(origin, token, "/api/project/skills", requestBody);
+        assert.equal(saved.status, 200);
+        assert.deepEqual(savedRequest, requestBody);
+        assert.equal((await saved.json() as { data: { revision: number } }).data.revision, 1);
     });
 });

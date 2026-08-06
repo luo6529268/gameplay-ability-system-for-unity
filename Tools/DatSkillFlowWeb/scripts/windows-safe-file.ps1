@@ -74,6 +74,12 @@ public static class DatSkillFlowSafeFileTransaction
         uint flagsAndAttributes,
         IntPtr templateFile);
 
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool CreateDirectoryW(
+        string path,
+        IntPtr securityAttributes);
+
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetFileInformationByHandleEx(
@@ -902,6 +908,92 @@ public static class DatSkillFlowSafeFileTransaction
         }
     }
 
+    private static Dictionary<string, object> EnsureDirectoryOperation(Dictionary<string, object> request)
+    {
+        Dictionary<string, object> root = RequiredRecord(request, "root");
+        string expectedRootPath = NormalizePath(RequiredString(root, "canonicalPath"));
+        string expectedVolume = RequiredString(root, "volumeSerial");
+        string expectedFileId = RequiredString(root, "fileId");
+        string logicalPath = RequiredString(request, "logicalPath");
+        if (logicalPath.IndexOf('\\') >= 0 || logicalPath.StartsWith("/", StringComparison.Ordinal))
+        {
+            throw new TransactionFailure("invalid-logical-path", "The logical path is not a portable relative path.", null);
+        }
+        string[] segments = logicalPath.Split('/');
+        if (segments.Length == 0)
+        {
+            throw new TransactionFailure("invalid-logical-path", "The logical path is empty.", null);
+        }
+
+        List<SafeFileHandle> handles = new List<SafeFileHandle>();
+        List<string> paths = new List<string>();
+        try
+        {
+            SafeFileHandle rootHandle = OpenDirectory(expectedRootPath);
+            handles.Add(rootHandle);
+            string rootFinal = FinalPath(rootHandle);
+            paths.Add(rootFinal);
+            BY_HANDLE_FILE_INFORMATION rootInfo = HandleInfo(rootHandle);
+            if (!SamePath(rootFinal, expectedRootPath)
+                || rootInfo.VolumeSerialNumber.ToString() != expectedVolume
+                || FileId(rootInfo).ToString() != expectedFileId)
+            {
+                throw new TransactionFailure("root-changed", "The granted workspace root no longer identifies the same directory.", null);
+            }
+
+            string current = rootFinal;
+            for (int index = 0; index < segments.Length; index++)
+            {
+                ValidateLeaf(segments[index], "logical path segment");
+                string requestedChild = NormalizePath(Path.Combine(current, segments[index]));
+                if (!Contained(rootFinal, requestedChild))
+                {
+                    throw new TransactionFailure("root-escape", "A requested directory escapes the workspace root.", null);
+                }
+                bool created = CreateDirectoryW(requestedChild, IntPtr.Zero);
+                if (!created)
+                {
+                    int code = Marshal.GetLastWin32Error();
+                    if (code != ERROR_ALREADY_EXISTS)
+                    {
+                        throw new TransactionFailure("directory-create-failed", "CreateDirectoryW failed for a transaction directory.", code);
+                    }
+                }
+                SafeFileHandle child = OpenDirectory(requestedChild);
+                string childFinal = FinalPath(child);
+                if (!SamePath(childFinal, requestedChild) || !Contained(rootFinal, childFinal))
+                {
+                    child.Dispose();
+                    throw new TransactionFailure("root-escape", "The created directory does not match the validated workspace target.", null);
+                }
+                handles.Add(child);
+                paths.Add(childFinal);
+                current = childFinal;
+            }
+            for (int index = 0; index < handles.Count; index++)
+            {
+                RequireNoReparse(handles[index], true);
+                if (!SamePath(FinalPath(handles[index]), paths[index]))
+                {
+                    throw new TransactionFailure("root-changed", "A validated directory changed before completion.", null);
+                }
+            }
+            return new Dictionary<string, object>
+            {
+                { "type", "result" },
+                { "ok", true },
+                { "canonicalPath", current }
+            };
+        }
+        finally
+        {
+            for (int index = handles.Count - 1; index >= 0; index--)
+            {
+                handles[index].Dispose();
+            }
+        }
+    }
+
     private static Dictionary<string, object> ReadOperation(
         Stream protocol,
         Dictionary<string, object> request,
@@ -1167,6 +1259,14 @@ public static class DatSkillFlowSafeFileTransaction
                     throw new TransactionFailure("protocol-error", "inspectRoot does not accept content.", null);
                 }
                 result = InspectRoot(request);
+            }
+            else if (operation == "ensureDirectory")
+            {
+                if (contentLength != 0)
+                {
+                    throw new TransactionFailure("protocol-error", "ensureDirectory does not accept content.", null);
+                }
+                result = EnsureDirectoryOperation(request);
             }
             else
             {

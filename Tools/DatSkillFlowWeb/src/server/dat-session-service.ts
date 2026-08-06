@@ -569,16 +569,20 @@ export class DatSessionService {
     }
 
     sweepExpired(): number {
+        return this.sweepExpiredSessionIds().length;
+    }
+
+    sweepExpiredSessionIds(): string[] {
         this.#ensureActive();
         const now = this.#clock();
-        let count = 0;
+        const expiredSessionIds: string[] = [];
         for (const session of [...this.#sessions.values()]) {
             if (this.#queues.has(session.sessionId)) continue;
             if (now - session.lastAccess < this.#limits.idleTtlMs) continue;
             this.#release(session, true);
-            count += 1;
+            expiredSessionIds.push(session.sessionId);
         }
-        return count;
+        return expiredSessionIds;
     }
 
     dispose(): void {
@@ -650,6 +654,7 @@ export class DatSessionService {
         const view: DatSessionView = {
             sessionId: session.sessionId,
             revision: session.revision,
+            dirty: session.revision !== session.persistedRevision,
             format: session.format,
             encrypted: session.format === "encrypted",
             fields,

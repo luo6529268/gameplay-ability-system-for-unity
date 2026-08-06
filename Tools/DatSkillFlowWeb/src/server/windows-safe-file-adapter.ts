@@ -48,6 +48,11 @@ export interface NativeInspectRootRequest {
     absoluteRoot: string;
 }
 
+export interface NativeEnsureDirectoryRequest {
+    root: NativeRootDescriptor;
+    logicalPath: string;
+}
+
 export interface NativeReadRequest {
     root: NativeRootDescriptor;
     logicalPath: string;
@@ -66,6 +71,7 @@ export interface NativeOverwriteRequest extends NativeSaveAsRequest {
 
 export interface NativeSafeFileClient {
     inspectRoot(request: NativeInspectRootRequest): Promise<NativeRootDescriptor>;
+    ensureDirectory(request: NativeEnsureDirectoryRequest): Promise<{ canonicalPath: string }>;
     read(request: NativeReadRequest): Promise<NativeReadResult>;
     saveAs(request: NativeSaveAsRequest): Promise<NativeWriteResult>;
     overwrite(request: NativeOverwriteRequest): Promise<NativeWriteResult>;
@@ -117,7 +123,7 @@ export class NativeSafeFileError extends Error {
 }
 
 interface NativeProtocolRequest {
-    operation: "inspectRoot" | "read" | "saveAs" | "overwrite";
+    operation: "inspectRoot" | "ensureDirectory" | "read" | "saveAs" | "overwrite";
     absoluteRoot?: string;
     root?: NativeRootDescriptor;
     logicalPath?: string;
@@ -326,6 +332,17 @@ export class PowerShellWindowsSafeFileClient implements NativeSafeFileClient {
             barriers: [],
         }, Buffer.alloc(0));
         return parseRoot(result.root);
+    }
+
+    async ensureDirectory(request: NativeEnsureDirectoryRequest): Promise<{ canonicalPath: string }> {
+        const result = await this.#invoke({
+            operation: "ensureDirectory",
+            root: request.root,
+            logicalPath: request.logicalPath,
+            contentLength: 0,
+            barriers: [],
+        }, Buffer.alloc(0));
+        return { canonicalPath: assertString(result.canonicalPath, "ensureDirectory.canonicalPath") };
     }
 
     async read(request: NativeReadRequest): Promise<NativeReadResult> {

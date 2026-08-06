@@ -79,6 +79,34 @@ describe("Windows handle-safe file transactions", windowsOnly, () => {
         assert.equal(await readFile(join(root, "copy.dat"), "utf8"), "copy");
     });
 
+    it("creates a validated sidecar directory and registers its file independently", async () => {
+        const root = await temporaryRoot("sidecar-directory");
+        await writeFile(join(root, "source.dat"), "original");
+        const client = nativeClient();
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+        const source = await registry.openDocument(rootId, "source.dat");
+        const directory = await client.ensureDirectory({
+            root: registry.getRootDescriptor(rootId),
+            logicalPath: ".dat-skill-flow",
+        });
+        assert.equal(directory.canonicalPath.toLowerCase(), join(root, ".dat-skill-flow").toLowerCase());
+
+        const service = new SafeSaveService(registry, { nativeClient: client });
+        const created = await service.saveAsNew(
+            rootId,
+            ".dat-skill-flow/skills.json",
+            Buffer.from('{"schemaVersion":1,"revision":0,"skills":[]}\n'),
+        );
+
+        assert.notEqual(created.document.documentId, source.documentId);
+        assert.equal(registry.getDocument(source.documentId).logicalPath, "source.dat");
+        assert.equal(
+            await readFile(join(root, ".dat-skill-flow", "skills.json"), "utf8"),
+            '{"schemaVersion":1,"revision":0,"skills":[]}\n',
+        );
+    });
+
     it("keeps every parent directory handle open so rename-to-junction swapping fails", async () => {
         const root = await temporaryRoot("junction-root");
         const outside = await temporaryRoot("junction-outside");
@@ -277,6 +305,7 @@ describe("Windows handle-safe file transactions", windowsOnly, () => {
         let peakOverwrites = 0;
         const delayedClient: NativeSafeFileClient = {
             inspectRoot: (request) => realClient.inspectRoot(request),
+            ensureDirectory: (request) => realClient.ensureDirectory(request),
             read: (request) => realClient.read(request),
             saveAs: (request) => realClient.saveAs(request),
             async overwrite(request) {
@@ -322,6 +351,7 @@ describe("Windows handle-safe file transactions", windowsOnly, () => {
         const realClient = nativeClient();
         const fakeClient: NativeSafeFileClient = {
             inspectRoot: (request) => realClient.inspectRoot(request),
+            ensureDirectory: (request) => realClient.ensureDirectory(request),
             read: (request) => realClient.read(request),
             saveAs: (request) => realClient.saveAs(request),
             async overwrite(request) {

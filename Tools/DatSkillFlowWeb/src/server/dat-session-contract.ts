@@ -68,6 +68,7 @@ export interface DatSessionProjectionView {
 export interface DatSessionView {
     readonly sessionId: string;
     readonly revision: number;
+    readonly dirty: boolean;
     readonly format: DatInputFormat;
     readonly encrypted: boolean;
     readonly fields: readonly DatSessionFieldView[];

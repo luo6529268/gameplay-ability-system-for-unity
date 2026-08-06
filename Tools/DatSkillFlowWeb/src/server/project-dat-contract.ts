@@ -9,6 +9,7 @@ export type ProjectDatErrorCode =
     | "unknown-session"
     | "unknown-asset"
     | "invalid-asset"
+    | "revision-conflict"
     | "preview-failed"
     | "save-failed"
     | "invalid-request";
@@ -99,6 +100,7 @@ export interface NativePreviewView {
 export interface ProjectSessionView {
     readonly sessionId: string;
     readonly revision: number;
+    readonly dirty: boolean;
     readonly oid: number;
     readonly type: number;
     readonly name: string;
@@ -124,6 +126,11 @@ export interface ProjectPreviewResponse {
     readonly sessionId: string;
     readonly revision: number;
     readonly preview: NativePreviewView;
+}
+
+export interface ProjectCloseResponse {
+    readonly sessionId: string;
+    readonly closed: true;
 }
 
 export interface ProjectAssetResponse {

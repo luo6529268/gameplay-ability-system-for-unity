@@ -1,0 +1,210 @@
+import { createHash } from "node:crypto";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
+import {
+    ProjectSkillError,
+    ProjectSkillService,
+} from "../../src/server/project-skill-service.js";
+import {
+    NativeSafeFileError,
+    type NativeEnsureDirectoryRequest,
+    type NativeOverwriteRequest,
+    type NativeReadRequest,
+    type NativeRootDescriptor,
+    type NativeSafeFileClient,
+    type NativeSaveAsRequest,
+} from "../../src/server/windows-safe-file-adapter.js";
+import { WorkspaceRegistry } from "../../src/server/workspace-registry.js";
+
+const rootPath = "C:/project";
+const rootDescriptor: NativeRootDescriptor = {
+    canonicalPath: rootPath,
+    volumeSerial: "volume",
+    fileId: "root",
+};
+
+function digest(bytes: Uint8Array): string {
+    return createHash("sha256").update(bytes).digest("hex");
+}
+
+class MemoryNativeClient implements NativeSafeFileClient {
+    readonly files = new Map<string, Buffer>();
+    readonly directories: string[] = [];
+
+    async inspectRoot(): Promise<NativeRootDescriptor> {
+        return rootDescriptor;
+    }
+
+    async ensureDirectory(request: NativeEnsureDirectoryRequest): Promise<{ canonicalPath: string }> {
+        this.directories.push(request.logicalPath);
+        return { canonicalPath: `${request.root.canonicalPath}/${request.logicalPath}` };
+    }
+
+    async read(request: NativeReadRequest) {
+        const key = this.#key(request.root, request.logicalPath);
+        const bytes = this.files.get(key);
+        if (bytes === undefined) throw new NativeSafeFileError("not-a-file", "missing");
+        if (bytes.length > request.maximumBytes) throw new NativeSafeFileError("read-too-large", "too large");
+        return {
+            canonicalPath: `${request.root.canonicalPath}/${request.logicalPath}`,
+            bytes: Buffer.from(bytes),
+            fingerprint: this.#fingerprint(bytes),
+        };
+    }
+
+    async saveAs(request: NativeSaveAsRequest) {
+        const key = this.#key(request.root, request.logicalPath);
+        if (this.files.has(key)) throw new NativeSafeFileError("already-exists", "exists");
+        const bytes = Buffer.from(request.bytes);
+        this.files.set(key, bytes);
+        return {
+            canonicalPath: `${request.root.canonicalPath}/${request.logicalPath}`,
+            fingerprint: this.#fingerprint(bytes),
+            recovery: {
+                target: {
+                    path: `${request.root.canonicalPath}/${request.logicalPath}`,
+                    exists: true,
+                    size: bytes.length,
+                    sha256: digest(bytes),
+                },
+            },
+        };
+    }
+
+    async overwrite(request: NativeOverwriteRequest) {
+        const key = this.#key(request.root, request.logicalPath);
+        const current = this.files.get(key);
+        if (current === undefined) throw new NativeSafeFileError("not-a-file", "missing");
+        const actual = this.#fingerprint(current);
+        if (actual.sha256 !== request.expectedFingerprint.sha256) {
+            throw new NativeSafeFileError("external-change", "changed");
+        }
+        const bytes = Buffer.from(request.bytes);
+        this.files.set(key, bytes);
+        return {
+            canonicalPath: `${request.root.canonicalPath}/${request.logicalPath}`,
+            fingerprint: this.#fingerprint(bytes),
+            recovery: {
+                target: {
+                    path: `${request.root.canonicalPath}/${request.logicalPath}`,
+                    exists: true,
+                    size: bytes.length,
+                    sha256: digest(bytes),
+                },
+                replacement: {
+                    path: `${request.root.canonicalPath}/${request.replacementName}`,
+                    exists: false,
+                },
+                backup: {
+                    path: `${request.root.canonicalPath}/${request.backupName}`,
+                    exists: true,
+                    size: current.length,
+                    sha256: digest(current),
+                },
+            },
+        };
+    }
+
+    #key(root: NativeRootDescriptor, logicalPath: string): string {
+        return `${root.canonicalPath}|${logicalPath}`;
+    }
+
+    #fingerprint(bytes: Uint8Array) {
+        return {
+            sha256: digest(bytes),
+            size: bytes.length,
+            modifiedNanoseconds: "1",
+            changedNanoseconds: "1",
+            device: "volume",
+            inode: "sidecar",
+        };
+    }
+}
+
+async function fixture(): Promise<{
+    native: MemoryNativeClient;
+    registry: WorkspaceRegistry;
+    service: ProjectSkillService;
+    rootId: string;
+    datDocumentId: string;
+}> {
+    const native = new MemoryNativeClient();
+    native.files.set(`${rootPath}|fighter.dat`, Buffer.from("dat"));
+    const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: native });
+    const { rootId } = await registry.grantAbsoluteRoot(rootPath);
+    const { documentId: datDocumentId } = await registry.openDocument(rootId, "fighter.dat");
+    const service = new ProjectSkillService({ registry, rootId });
+    return { native, registry, service, rootId, datDocumentId };
+}
+
+describe("project skill sidecar service", () => {
+    it("returns an empty non-persistent state and saves without rebinding the DAT document", async () => {
+        const { native, registry, service, rootId, datDocumentId } = await fixture();
+        const initial = await service.get();
+        assert.deepEqual(initial.skills, []);
+        assert.equal(initial.revision, 0);
+
+        const saved = await service.save({
+            expectedRevision: initial.revision,
+            expectedEtag: initial.etag,
+            skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+        });
+        assert.equal(saved.revision, 1);
+        assert.deepEqual(saved.skills, [{ oid: 2, name: "影分身", startFrame: 300 }]);
+        assert.deepEqual(native.directories, [".dat-skill-flow"]);
+        assert.equal(registry.getDocument(datDocumentId).logicalPath, "fighter.dat");
+        assert.notEqual(saved.etag, initial.etag);
+        assert.equal(native.files.has(`${rootPath}|.dat-skill-flow/skills.json`), true);
+    });
+
+    it("rejects stale compare-and-swap writes and invalid sidecar content", async () => {
+        const { native, service, rootId } = await fixture();
+        const initial = await service.get();
+        await service.save({
+            expectedRevision: initial.revision,
+            expectedEtag: initial.etag,
+            skills: [],
+        });
+        await assert.rejects(
+            service.save({
+                expectedRevision: initial.revision,
+                expectedEtag: initial.etag,
+                skills: [],
+            }),
+            (error: unknown) => error instanceof ProjectSkillError && error.code === "revision-conflict",
+        );
+
+        native.files.set(`${rootPath}|.dat-skill-flow/skills.json`, Buffer.from("{\"schemaVersion\":1,\"revision\":1,\"skills\":[],\"extra\":true}"));
+        const invalidRegistry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: native });
+        const { rootId: invalidRootId } = await invalidRegistry.grantAbsoluteRoot(rootPath);
+        const invalidService = new ProjectSkillService({ registry: invalidRegistry, rootId: invalidRootId });
+        await assert.rejects(
+            invalidService.get(),
+            (error: unknown) => error instanceof ProjectSkillError && error.code === "schema-invalid",
+        );
+        assert.equal(rootId.length > 0, true);
+    });
+
+    it("validates request bounds and preserves duplicate UI entries", async () => {
+        const { service } = await fixture();
+        const initial = await service.get();
+        const saved = await service.save({
+            expectedRevision: initial.revision,
+            expectedEtag: initial.etag,
+            skills: [
+                { oid: 2, name: "同名", startFrame: 0 },
+                { oid: 2, name: "同名", startFrame: 0 },
+            ],
+        });
+        assert.equal(saved.skills.length, 2);
+        await assert.rejects(
+            service.save({
+                expectedRevision: saved.revision,
+                expectedEtag: saved.etag,
+                skills: [{ oid: 1000, name: "bad", startFrame: 0 }],
+            }),
+            (error: unknown) => error instanceof ProjectSkillError && error.code === "invalid-request",
+        );
+    });
+});

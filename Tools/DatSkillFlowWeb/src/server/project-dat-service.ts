@@ -7,6 +7,7 @@ import { basename, join } from "node:path";
 import { parseBmpMetadata } from "../assets/bmp.js";
 import type { DatFrameProjection } from "../model/dat-projection.js";
 import { DataTxtDocument, diagnoseResourcePath, type DataTxtEntry } from "../project/data-txt.js";
+import { MAX_CATALOG_OIDS } from "../sim/catalog.js";
 import { DatSessionError, DatSessionService, type DatSessionView } from "./dat-session-service.js";
 import type {
     NativePreviewEntityView,
@@ -14,17 +15,18 @@ import type {
     NativePreviewView,
     ProjectAssetResponse,
     ProjectCatalogView,
+    ProjectCloseResponse,
     ProjectDatErrorCode,
     ProjectFrameView,
     ProjectSaveResponse,
     ProjectSessionView,
 } from "./project-dat-contract.js";
 import { SafeSaveError, SafeSaveService } from "./safe-save.js";
-import { WorkspaceRegistry, WorkspaceSecurityError } from "./workspace-registry.js";
+import { type OpenedDocument, WorkspaceRegistry, WorkspaceSecurityError } from "./workspace-registry.js";
 
-const NARUTO_OID = 2;
 const DEFAULT_START_FRAME = 300;
 const DEFAULT_TICKS = 30;
+const NARUTO_OID = 2;
 const MAX_PREVIEW_OUTPUT_BYTES = 8 * 1024 * 1024;
 const DEFAULT_CPP_DIRECTORY = "J:\\QQFile\\NTSD2.4\\ntsd_cpp";
 const DEFAULT_CPP_EXECUTABLE = "J:\\QQFile\\NTSD2.4\\ntsd_cpp\\dat_preview_cli.exe";
@@ -46,7 +48,7 @@ export interface NativeDatPreviewRunner {
 export interface ProjectDatServiceOptions {
     readonly primaryRegistry: WorkspaceRegistry;
     readonly assetRegistry?: WorkspaceRegistry;
-    readonly dataTxtLogicalPath: string;
+    readonly dataTxtLogicalPath?: string;
     readonly previewRunner?: NativeDatPreviewRunner;
     readonly safeSave?: SafeSaveService;
     readonly assetBmpDirectories?: readonly string[];
@@ -55,20 +57,21 @@ export interface ProjectDatServiceOptions {
 
 interface CatalogObject {
     objectKey: string;
-    oid: 2;
+    oid: number;
     type: number;
     candidates: readonly DataTxtEntry[];
     availablePrimary: boolean;
 }
 
 interface SessionBinding {
+    sessionId: string;
     service: DatSessionService;
     documentId: string;
     rootId: string;
     logicalPath: string;
-    oid: 2;
+    oid: number;
     type: number;
-    assetIds: Set<string>;
+    assetIdsByPath: Map<string, string>;
 }
 
 interface AssetBinding {
@@ -98,14 +101,14 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
     readonly #execFile: ExecFileFunction;
 
     constructor(options: { executable?: string; workingDirectory?: string; execFile?: ExecFileFunction } = {}) {
-        this.#executable = options.executable ?? DEFAULT_CPP_EXECUTABLE;
-        this.#workingDirectory = options.workingDirectory ?? DEFAULT_CPP_DIRECTORY;
-        this.#execFile = options.execFile ?? nodeExecFile as unknown as ExecFileFunction;
+        this.#executable = options.executable === undefined ? DEFAULT_CPP_EXECUTABLE : options.executable;
+        this.#workingDirectory = options.workingDirectory === undefined ? DEFAULT_CPP_DIRECTORY : options.workingDirectory;
+        this.#execFile = options.execFile === undefined ? nodeExecFile as unknown as ExecFileFunction : options.execFile;
     }
 
     async preview(plaintext: Uint8Array, options: { startFrame?: number; ticks?: number } = {}): Promise<unknown> {
-        const startFrame = boundedInteger(options.startFrame ?? DEFAULT_START_FRAME, 0, 599, "startFrame");
-        const ticks = boundedInteger(options.ticks ?? DEFAULT_TICKS, 1, 1800, "ticks");
+        const startFrame = boundedInteger(options.startFrame === undefined ? DEFAULT_START_FRAME : options.startFrame, 0, 599, "startFrame");
+        const ticks = boundedInteger(options.ticks === undefined ? DEFAULT_TICKS : options.ticks, 1, 1800, "ticks");
         const directory = await mkdtemp(join(tmpdir(), "dat-skill-flow-preview-"));
         const datPath = join(directory, "naruto.dat");
         const outputPath = join(directory, "preview.json");
@@ -149,7 +152,8 @@ export class ProjectDatService {
     readonly #assetBindings = new Map<string, AssetBinding>();
     readonly #queues = new Map<string, Promise<void>>();
     #catalogRevision = 1;
-    #catalogObject?: CatalogObject;
+    #catalogObjects: CatalogObject[] = [];
+    #nextIdSequence = 0;
 
     private constructor(
         options: ProjectDatServiceOptions,
@@ -161,10 +165,11 @@ export class ProjectDatService {
         this.#assets = options.assetRegistry;
         this.#primarySessions = new DatSessionService(this.#primary);
         this.#assetSessions = this.#assets === undefined ? undefined : new DatSessionService(this.#assets);
-        this.#safeSave = options.safeSave ?? new SafeSaveService(this.#primary);
-        this.#previewRunner = options.previewRunner ?? new CppNativeDatPreviewRunner();
-        this.#idFactory = options.idFactory ?? (() => randomBytes(32).toString("base64url"));
-        this.#assetDirectories = (options.assetBmpDirectories ?? ["sprite/sys"])
+        this.#safeSave = options.safeSave === undefined ? new SafeSaveService(this.#primary) : options.safeSave;
+        this.#previewRunner = options.previewRunner === undefined ? new CppNativeDatPreviewRunner() : options.previewRunner;
+        this.#idFactory = options.idFactory === undefined ? (() => randomBytes(32).toString("base64url")) : options.idFactory;
+        const assetBmpDirectories = options.assetBmpDirectories === undefined ? ["sprite/sys"] : options.assetBmpDirectories;
+        this.#assetDirectories = assetBmpDirectories
             .map((value) => this.#primary.normalizeLogicalPath(value));
         this.#dataDocumentId = dataDocumentId;
         this.#primaryRootId = primaryRootId;
@@ -172,11 +177,18 @@ export class ProjectDatService {
     }
 
     static async initialize(options: ProjectDatServiceOptions): Promise<ProjectDatService> {
-        const primaryRootId = options.primaryRegistry.getStartupRootGrant()?.rootId;
+        const primaryRoot = options.primaryRegistry.getStartupRootGrant();
+        const primaryRootId = primaryRoot === undefined ? undefined : primaryRoot.rootId;
         if (primaryRootId === undefined) throw new ProjectDatError("project-disabled", "The project workspace is not configured.");
-        const dataPath = options.primaryRegistry.normalizeLogicalPath(options.dataTxtLogicalPath);
+        const dataPath = options.primaryRegistry.normalizeLogicalPath(
+            options.dataTxtLogicalPath === undefined ? "Assets/NTSD/Config/data.txt" : options.dataTxtLogicalPath,
+        );
         const dataDocument = await options.primaryRegistry.openDocument(primaryRootId, dataPath);
-        const assetRootId = options.assetRegistry?.getStartupRootGrant()?.rootId;
+        let assetRootId: string | undefined;
+        if (options.assetRegistry !== undefined) {
+            const assetRoot = options.assetRegistry.getStartupRootGrant();
+            assetRootId = assetRoot === undefined ? undefined : assetRoot.rootId;
+        }
         if (options.assetRegistry !== undefined && assetRootId === undefined) {
             throw new ProjectDatError("project-disabled", "The asset workspace is not configured.");
         }
@@ -188,43 +200,50 @@ export class ProjectDatService {
 
     async catalog(): Promise<ProjectCatalogView> {
         await this.#refreshCatalog();
+        const objects = this.#catalogObjects.map((object) => ({
+            objectKey: object.objectKey,
+            oid: object.oid,
+            type: object.type,
+            availablePrimary: object.availablePrimary,
+        }));
         return {
             catalogRevision: this.#catalogRevision,
-            objects: this.#catalogObject === undefined ? [] : [{
-                objectKey: this.#catalogObject.objectKey,
-                oid: this.#catalogObject.oid,
-                type: this.#catalogObject.type,
-                availablePrimary: this.#catalogObject.availablePrimary,
-            }],
+            objects,
         };
     }
 
     async open(objectKey: string): Promise<ProjectSessionView> {
         await this.#refreshCatalog();
-        const object = this.#catalogObject;
-        if (object === undefined || object.objectKey !== requireOpaqueId(objectKey, "objectKey")) {
+        const objectKeyValidated = requireOpaqueId(objectKey, "objectKey");
+        const object = this.#catalogObjects.find((candidate) => candidate.objectKey === objectKeyValidated);
+        if (object === undefined) {
             throw new ProjectDatError("unknown-object", "The project object is unknown.");
         }
+        if (object.oid !== NARUTO_OID) {
+            throw new ProjectDatError("object-unavailable", "Native preview currently supports Naruto OID 2 only.");
+        }
         const opened = await this.#openCandidate(object.candidates);
-        if (opened === undefined) throw new ProjectDatError("object-unavailable", "Naruto DAT is unavailable.");
+        if (opened === undefined) throw new ProjectDatError("object-unavailable", "The selected DAT object is unavailable.");
         let session: DatSessionView;
         try {
             session = await opened.service.openDocument(opened.documentId, "encrypted");
         } catch (error) {
+            opened.registry.closeDocument(opened.documentId);
             throw mapSessionError(error);
         }
         const binding: SessionBinding = {
             ...opened,
-            oid: NARUTO_OID,
+            sessionId: session.sessionId,
+            oid: object.oid,
             type: object.type,
-            assetIds: new Set(),
+            assetIdsByPath: new Map(),
         };
         this.#sessions.set(session.sessionId, binding);
         try {
             return await this.#buildSessionView(session, binding);
         } catch (error) {
-            this.#sessions.delete(session.sessionId);
             await opened.service.close(session.sessionId);
+            this.#releaseBinding(session.sessionId, binding);
             throw error;
         }
     }
@@ -241,7 +260,6 @@ export class ProjectDatService {
             } catch (error) {
                 throw mapSessionError(error);
             }
-            this.#invalidateAssets(binding);
             return await this.#buildSessionView(view, binding);
         });
     }
@@ -298,8 +316,19 @@ export class ProjectDatService {
         });
     }
 
+    async close(input: unknown): Promise<ProjectCloseResponse> {
+        const request = exactRecord(input, ["sessionId"]);
+        const sessionId = requireOpaqueId(request.sessionId, "sessionId");
+        return await this.#enqueue(sessionId, async () => {
+            const binding = this.#requireSession(sessionId);
+            await binding.service.close(sessionId);
+            this.#releaseBinding(sessionId, binding);
+            return { sessionId, closed: true };
+        });
+    }
+
     async asset(assetId: string): Promise<ProjectAssetResponse> {
-        await this.#refreshCatalog();
+        this.#sweepExpired();
         const id = requireOpaqueId(assetId, "assetId");
         const binding = this.#assetBindings.get(id);
         if (binding === undefined || !this.#sessions.has(binding.sessionId)) {
@@ -317,6 +346,7 @@ export class ProjectDatService {
     }
 
     async #refreshCatalog(): Promise<void> {
+        this.#sweepExpired();
         let prepared;
         try {
             prepared = await this.#primary.prepareDocumentRefresh(this.#dataDocumentId);
@@ -332,28 +362,46 @@ export class ProjectDatService {
 
     async #replaceCatalog(bytes: Uint8Array): Promise<void> {
         const parsed = DataTxtDocument.parse(bytes);
-        const candidates = parsed.entries.filter((entry) => (
-            entry.section === "object" && entry.id === NARUTO_OID && entry.type !== undefined
+        const objects = parsed.entries.filter((entry) => (
+            entry.section === "object"
+            && entry.type !== undefined
+            && entry.id >= 0
+            && entry.id < MAX_CATALOG_OIDS
         ));
-        if (candidates.length === 0) {
-            this.#catalogObject = undefined;
+        if (objects.length === 0) {
+            this.#catalogObjects = [];
             return;
         }
-        let availablePrimary = false;
-        for (const candidate of candidates) {
-            if (diagnoseResourcePath(candidate.file) !== undefined) continue;
-            if (await this.#canOpen(this.#primary, this.#primaryRootId, candidate.file)) {
-                availablePrimary = true;
-                break;
-            }
+
+        const candidatesByOid = new Map<number, DataTxtEntry[]>();
+        for (const candidate of objects) {
+            const candidates = candidatesByOid.get(candidate.id);
+            if (candidates === undefined) candidatesByOid.set(candidate.id, [candidate]);
+            else candidates.push(candidate);
         }
-        this.#catalogObject = {
-            objectKey: this.#newId(),
-            oid: NARUTO_OID,
-            type: candidates[0]!.type!,
-            candidates,
-            availablePrimary,
-        };
+
+        const prepared: CatalogObject[] = [];
+        for (const candidates of candidatesByOid.values()) {
+            const first = candidates[0]!;
+            let availablePrimary = false;
+            if (first.id === NARUTO_OID) {
+                for (const candidate of candidates) {
+                    if (diagnoseResourcePath(candidate.file) !== undefined) continue;
+                    if (await this.#canOpen(this.#primary, this.#primaryRootId, candidate.file)) {
+                        availablePrimary = true;
+                        break;
+                    }
+                }
+            }
+            prepared.push({
+                objectKey: this.#newId(),
+                oid: first.id,
+                type: first.type!,
+                candidates,
+                availablePrimary,
+            });
+        }
+        this.#catalogObjects = prepared;
     }
 
     async #openCandidate(candidates: readonly DataTxtEntry[]): Promise<OpenedCandidate | undefined> {
@@ -372,9 +420,8 @@ export class ProjectDatService {
     async #buildSessionView(session: DatSessionView, binding: SessionBinding): Promise<ProjectSessionView> {
         const spriteRanges = [];
         for (const range of session.projection.spriteRanges) {
-            const asset = await this.#resolveSpriteAsset(session.sessionId, range.file);
+            const asset = await this.#resolveSpriteAsset(binding, range.file);
             if (asset === undefined) continue;
-            binding.assetIds.add(asset.assetId);
             spriteRanges.push({
                 frameLo: range.frameLo, frameHi: range.frameHi, assetId: asset.assetId,
                 w: range.w, h: range.h, row: range.row, col: range.col,
@@ -384,6 +431,7 @@ export class ProjectDatService {
         return {
             sessionId: session.sessionId,
             revision: session.revision,
+            dirty: session.dirty,
             oid: binding.oid,
             type: binding.type,
             name: session.projection.top.name,
@@ -401,26 +449,47 @@ export class ProjectDatService {
         };
     }
 
-    async #resolveSpriteAsset(sessionId: string, rawPath: string): Promise<{ assetId: string } | undefined> {
+    async #resolveSpriteAsset(binding: SessionBinding, rawPath: string): Promise<{ assetId: string } | undefined> {
         if (diagnoseResourcePath(rawPath) !== undefined) return undefined;
+        let pathKey: string;
+        try {
+            pathKey = this.#primary.normalizeLogicalPath(rawPath).toLowerCase();
+        } catch (error) {
+            if (error instanceof WorkspaceSecurityError && error.code === "invalid-logical-path") return undefined;
+            throw error;
+        }
+        const existing = binding.assetIdsByPath.get(pathKey);
+        if (existing !== undefined) return { assetId: existing };
         const exactPrimary = await this.#tryOpenDocument(this.#primary, this.#primaryRootId, rawPath);
-        if (exactPrimary !== undefined) return this.#bindAsset(sessionId, this.#primary, exactPrimary.documentId);
+        if (exactPrimary !== undefined) return this.#bindAsset(binding, pathKey, this.#primary, exactPrimary);
         if (this.#assets === undefined || this.#assetRootId === undefined) return undefined;
         const exactFallback = await this.#tryOpenDocument(this.#assets, this.#assetRootId, rawPath);
-        if (exactFallback !== undefined) return this.#bindAsset(sessionId, this.#assets, exactFallback.documentId);
+        if (exactFallback !== undefined) return this.#bindAsset(binding, pathKey, this.#assets, exactFallback);
         const name = basename(rawPath.replaceAll("\\", "/"));
         if (!/^[^/\\\0]+\.bmp$/i.test(name)) return undefined;
-        const matches: Array<{ documentId: string }> = [];
+        const matches: OpenedDocument[] = [];
         for (const directory of this.#assetDirectories) {
             const candidate = await this.#tryOpenDocument(this.#assets, this.#assetRootId, `${directory}/${name}`);
             if (candidate !== undefined) matches.push(candidate);
         }
-        return matches.length === 1 ? this.#bindAsset(sessionId, this.#assets, matches[0]!.documentId) : undefined;
+        if (matches.length === 1) return this.#bindAsset(binding, pathKey, this.#assets, matches[0]!);
+        for (const match of matches) this.#assets.closeDocument(match.documentId);
+        return undefined;
     }
 
-    #bindAsset(sessionId: string, registry: WorkspaceRegistry, documentId: string): { assetId: string } {
+    #bindAsset(
+        binding: SessionBinding,
+        pathKey: string,
+        registry: WorkspaceRegistry,
+        document: { documentId: string },
+    ): { assetId: string } {
         const assetId = this.#newId();
-        this.#assetBindings.set(assetId, { sessionId, registry, documentId });
+        binding.assetIdsByPath.set(pathKey, assetId);
+        this.#assetBindings.set(assetId, {
+            sessionId: binding.sessionId,
+            registry,
+            documentId: document.documentId,
+        });
         return { assetId };
     }
 
@@ -455,7 +524,10 @@ export class ProjectDatService {
     }
 
     async #canOpen(registry: WorkspaceRegistry, rootId: string, path: string): Promise<boolean> {
-        return await this.#tryOpenDocument(registry, rootId, path) !== undefined;
+        const opened = await this.#tryOpenDocument(registry, rootId, path);
+        if (opened === undefined) return false;
+        registry.closeDocument(opened.documentId);
+        return true;
     }
 
     #requireSession(sessionId: string): SessionBinding {
@@ -464,24 +536,48 @@ export class ProjectDatService {
         return binding;
     }
 
-    #invalidateAssets(binding: SessionBinding): void {
-        for (const assetId of binding.assetIds) this.#assetBindings.delete(assetId);
-        binding.assetIds.clear();
-    }
-
     async #invalidateAll(): Promise<void> {
         const sessions = [...this.#sessions.entries()];
-        this.#sessions.clear();
-        this.#assetBindings.clear();
-        await Promise.all(sessions.map(([sessionId, binding]) => binding.service.close(sessionId)));
+        const results = await Promise.allSettled(sessions.map(async ([sessionId, binding]) => {
+            try {
+                await binding.service.close(sessionId);
+            } finally {
+                this.#releaseBinding(sessionId, binding);
+            }
+        }));
+        const rejected = results.find((result) => result.status === "rejected");
+        if (rejected?.status === "rejected") throw rejected.reason;
+    }
+
+    #sweepExpired(): void {
+        const expiredSessionIds = [
+            ...this.#primarySessions.sweepExpiredSessionIds(),
+            ...(this.#assetSessions?.sweepExpiredSessionIds() ?? []),
+        ];
+        for (const sessionId of expiredSessionIds) {
+            const binding = this.#sessions.get(sessionId);
+            if (binding !== undefined) this.#releaseBinding(sessionId, binding);
+        }
+    }
+
+    #releaseBinding(sessionId: string, binding: SessionBinding): void {
+        this.#sessions.delete(sessionId);
+        for (const assetId of binding.assetIdsByPath.values()) {
+            const asset = this.#assetBindings.get(assetId);
+            if (asset !== undefined) asset.registry.closeDocument(asset.documentId);
+            this.#assetBindings.delete(assetId);
+        }
+        binding.assetIdsByPath.clear();
+        binding.registry.closeDocument(binding.documentId);
     }
 
     async #enqueue<T>(sessionId: string, operation: () => Promise<T>): Promise<T> {
-        const previous = this.#queues.get(sessionId) ?? Promise.resolve();
+        const previous = this.#queues.get(sessionId);
+        const previousOperation = previous === undefined ? Promise.resolve() : previous;
         let release!: () => void;
         const current = new Promise<void>((resolveRelease) => { release = resolveRelease; });
         this.#queues.set(sessionId, current);
-        await previous;
+        await previousOperation;
         try {
             return await operation();
         } finally {
@@ -492,8 +588,14 @@ export class ProjectDatService {
 
     #newId(): string {
         for (let attempt = 0; attempt < 16; attempt += 1) {
-            const id = this.#idFactory();
-            if (/^[A-Za-z0-9_-]{32,128}$/.test(id)) return id;
+            const randomPart = this.#idFactory();
+            if (typeof randomPart !== "string" || !/^[A-Za-z0-9_-]{32,128}$/.test(randomPart)) continue;
+            if (this.#nextIdSequence >= Number.MAX_SAFE_INTEGER) {
+                throw new ProjectDatError("invalid-request", "The capability ID sequence is exhausted.");
+            }
+            this.#nextIdSequence += 1;
+            const suffix = this.#nextIdSequence.toString(36);
+            return `${randomPart.slice(0, 128 - suffix.length - 1)}-${suffix}`;
         }
         throw new ProjectDatError("invalid-request", "The capability ID source failed.");
     }
@@ -580,6 +682,8 @@ function sanitizePreview(value: unknown): NativePreviewView {
     const root = record(value, "root");
     const metadata = record(root.metadata, "metadata");
     const stage = record(metadata.stage, "stage");
+    const startFrame = finite(metadata.start_frame, "start_frame");
+    const ticksRequested = finite(metadata.ticks_requested, "ticks_requested");
     const initial = metadata.initial === undefined
         ? { p1: { x: 0, y: 0, z: 0 }, p2: { x: 0, y: 0, z: 0 } }
         : (() => {
@@ -587,20 +691,19 @@ function sanitizePreview(value: unknown): NativePreviewView {
             return { p1: vector(raw.p1, "initial.p1"), p2: vector(raw.p2, "initial.p2") };
         })();
     const ticks = Array.isArray(root.ticks) ? root.ticks : [];
-    if (ticks.length > 1800) throw new ProjectDatError("preview-failed", "Native preview tick count exceeds its limit.");
+    if (ticks.length > ticksRequested + 1) throw new ProjectDatError("preview-failed", "Native preview tick count exceeds its limit.");
     if (metadata.runtime !== "ntsd_cpp" || metadata.tick_driver !== "SimulationTickDriver" || metadata.renderer !== "none") {
         throw new ProjectDatError("preview-failed", "Native preview authority metadata is invalid.");
     }
     return {
-        metadata: {
-            runtime: "ntsd_cpp", tickDriver: "SimulationTickDriver", renderer: "none",
-            seed: finite(metadata.seed, "seed"), startFrame: finite(metadata.start_frame, "start_frame"),
-            ticksRequested: finite(metadata.ticks_requested, "ticks_requested"),
-            stage: {
-                index: finite(stage.index, "stage.index"), name: textValue(stage.name, "stage.name"),
-                width: finite(stage.width, "stage.width"), zMin: finite(stage.z_min, "stage.z_min"), zMax: finite(stage.z_max, "stage.z_max"),
-            },
-            initial,
+            metadata: {
+                runtime: "ntsd_cpp", tickDriver: "SimulationTickDriver", renderer: "none",
+                seed: finite(metadata.seed, "seed"), startFrame, ticksRequested,
+                stage: {
+                    index: finite(stage.index, "stage.index"), name: textValue(stage.name, "stage.name"),
+                    width: finite(stage.width, "stage.width"), zMin: finite(stage.z_min, "stage.z_min"), zMax: finite(stage.z_max, "stage.z_max"),
+                },
+                initial,
         },
         ticks: ticks.map(sanitizeTick),
     };
@@ -625,7 +728,7 @@ function safeObservation(value: { exists: boolean; size?: number; sha256?: strin
 
 function mapSessionError(error: unknown): ProjectDatError {
     if (!(error instanceof DatSessionError)) return new ProjectDatError("invalid-request", "The DAT session operation failed.", { cause: error });
-    if (error.code === "revision-conflict") return new ProjectDatError("invalid-request", "The DAT session revision is stale.", { cause: error });
-    if (error.code === "unknown-session" || error.code === "expired-session") return new ProjectDatError("unknown-session", "The project session is unknown.", { cause: error });
+    if (error.code === "revision-conflict") return new ProjectDatError("revision-conflict", "The DAT session revision is stale.", { cause: error });
+    if (error.code === "unknown-session" || error.code === "expired") return new ProjectDatError("unknown-session", "The project session is unknown.", { cause: error });
     return new ProjectDatError("invalid-request", error.message, { cause: error });
 }

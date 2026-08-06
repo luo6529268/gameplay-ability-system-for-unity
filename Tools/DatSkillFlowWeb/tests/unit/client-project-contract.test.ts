@@ -11,10 +11,21 @@ describe("project-backed client contract", () => {
         ]);
 
         assert.doesNotMatch(`${html}\n${main}`, /GATE2_AUTHORITY_FIXTURE|Synthetic fixture|Gate2 authority fixture/);
-        for (const path of ["/api/bootstrap", "/api/project", "/api/project/open", "/api/project/preview", "/api/project/edit"]) assert.match(main, new RegExp(path.replaceAll("/", "\\/")));
+        assert.match(html, /<html lang="zh-CN">/);
+        assert.match(html, /NTSD DAT 技能流程编辑器/);
+        assert.match(html, /正在连接本地服务/);
+        assert.match(html, /保存并覆盖 DAT/);
+        assert.match(main, /已载入/);
+        assert.match(main, /请求失败（HTTP/);
+        assert.match(main, /字段 \$\{key\} 没有可编辑标识/);
+        for (const path of ["/api/bootstrap", "/api/project", "/api/project/open", "/api/project/preview", "/api/project/edit", "/api/project/close"]) assert.match(main, new RegExp(path.replaceAll("/", "\\/")));
         assert.match(main, /nativeTicks/);
         assert.match(main, /tokenHeader/);
         assert.match(main, /fieldIds/);
+        assert.match(main, /project\.dirty\s*&&\s*!window\.confirm/);
+        assert.match(main, /objectSwitchQueue\.then/);
+        assert.match(main, /event\.persisted/);
+        assert.match(main, /beforeunload/);
         assert.match(main, /number\(range\.row\)/);
         for (const id of [
             "object-select", "frame-select", "frame-editor", "sprite-canvas", "play-toggle", "step-once", "reset-timeline",
