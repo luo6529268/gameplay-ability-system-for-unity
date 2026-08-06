@@ -2,11 +2,11 @@
 
 ## 1. 目标与边界
 
-本架构服务于 Standard 模式第一阶段，不创造 NTSD 战斗规则。
+本架构服务于 Standard 模式当前已验证范围（Phase 1–6），不创造 NTSD 战斗规则。
 
 - DAT 原始字段和重复顺序由 lossless DAT/CST parser 负责。
 - `ntsd_cpp` 是单角色 Native preview 的运行权威。
-- 浏览器只持有 opaque session、field 和 asset capability。
+- 浏览器只持有 opaque session、field、structure 和 asset capability。
 - 技能名称与起始帧属于项目侧车元数据，不写入 DAT。
 - `itr` 的成对动作字段必须原子编辑。
 - `opoint/wpoint/cpoint` 的生成、武器、抓取语义不在第一阶段推断；第一阶段只显示和编辑原始字段、几何位置。
@@ -19,9 +19,11 @@ Browser
 ├── ProjectApi
 ├── SkillMetadataClient
 ├── SkillFlowGraph
+├── FlowSvg / SkillTimeline
 ├── PlaybackController
 ├── PreviewRenderer
 ├── OverlayGeometry
+├── CanvasGeometryEdit
 ├── InspectorModel
 └── EditorShell / responsive views
 
@@ -29,6 +31,7 @@ Loopback Server
 ├── ProjectSkillService
 ├── ProjectDatService
 ├── DatSessionService
+├── DatStructureEdit
 ├── WorkspaceRegistry
 ├── SafeSaveService
 └── NativeDatPreviewRunner
@@ -41,10 +44,11 @@ Loopback Server
 | `AppState` | 统一保存 bootstrap、catalog、skill、session、selection、playback、preview、overlay、inspector、persistence 和 layout 状态 | fetch、Canvas 或 DAT 语义 |
 | `ProjectApi` | 统一请求、状态 token、响应错误、请求 epoch | DOM 和本地业务状态 |
 | `SkillMetadataClient` | 读取/写入侧车技能 | DAT 文件和 Native preview |
-| `SkillFlowGraph` | 从起始帧遍历真实 `next/hit_*`，保留循环、分支、未知目标 | 自动技能命名和运行结果 |
+| `SkillFlowGraph` / `FlowSvg` / `SkillTimeline` | 从起始帧遍历真实 `next/hit_*`，保留循环、分支、未知目标；渲染真实边并按 DAT wait 展开 | 自动技能命名、运行结果和时间单位 |
 | `PlaybackController` | play/pause/step/seek/loop、末端停止和 timer | 修改 DAT |
 | `PreviewRenderer` | DPR、viewport、BMP、sprite、camera、镜像和预览状态 | 逻辑实体真值 |
 | `OverlayGeometry` | 六类块的纯坐标变换和 hit-test | 命中、生成、抓取和武器结果 |
+| `CanvasGeometryEdit` | capability 约束下的 move/resize、镜像逆变换、snap、键盘和 Esc 草稿 | 创建缺失字段或提交部分几何 |
 | `InspectorModel` | 完整 capability 定位、分组、draft、校验和提交 | 投影默认值伪造 capability |
 | `EditorShell` | 五区布局、按钮状态、抽屉/标签页和 live region | 保存业务真值 |
 
@@ -128,6 +132,13 @@ expectedRevision, expectedEtag, skills
 ```
 
 服务器负责生成新 revision/etag。写入必须经过精确 Host、Origin、token、固定 root、目标锁、fingerprint compare-and-swap 和安全目录创建。sidecar revision 与 DAT session revision 完全独立。
+
+技能管理继续复用同一 schema 和一次 CAS：
+
+- 复制项插入原项之后，名称追加“副本”。
+- 删除必须确认；上移/下移只交换相邻项。
+- 查询和 mutation 必须按当前 OID 隔离，不能编辑其他 OID 的 sidecar 项。
+- 成功后选择复制项、移动项或删除位置的相邻项。
 
 ## 5. Capability 定位合同
 
@@ -271,7 +282,33 @@ loading > disabled > selected > active > hover > default
 - 1024×768：左右栏可收起抽屉，中间预览保持主区。
 - 390×844：技能、预览、属性、时间轴四个标签页，无水平溢出。
 
-## 10. 阶段实施顺序
+## 10. Phase 6 事务与可视化合同
+
+### Batch 字段编辑
+
+- 单请求包含 1–16 个唯一 `fieldId`，只接受服务签发的 scalar 或 pair capability。
+- Canvas move 原子提交 x/y；resize 原子提交 x/y/w/h；pair 在一个原始 value span 中提交两个 int32。
+- no-op 不增加 revision；任一字段非法、冲突、preview/view 失败时整批回滚。
+- edit busy 与未应用 draft/Canvas interaction 期间锁定 frame、block、skill、Flow、保存和结构操作。
+
+### Lossless 结构事务
+
+- frame 复制使用完整闭合 frame span，只重写副本 header 的 frame ID。
+- block 新建/复制均使用当前同类完整闭合 span；删除移除完整 span。
+- 不创建空白默认字段，不修复 `next`、`hit_*`、技能起始帧或其他引用。
+- 每次结构事务只增加一个 revision，并重新签发全部 field/structure capability；旧 capability 立即失效。
+- field + structure capability 共用 50,000 总限额；超限、非法 span、revision 冲突和 preview/view 失败无部分发布。
+- 显式安全保存后沿用恢复备份、hash 和服务重启恢复合同。
+
+### Canvas / Flow / 时间轴
+
+- Canvas 默认 1px，可切换 4px 网格；方向键 ±1，Shift+方向键 ±4，Esc 取消且不增加 revision。
+- 矩形四角 resize 要求最终 w/h 为正；镜像方向使用纯函数逆变换。
+- SVG 仅把真实已有 `next`/`hit_*` capability 标为可编辑；目标只能选择已有 frame。
+- 写 `0` 仍是写入原始值，不等同于删除边；循环、分支和 unresolved 保持可见。
+- 时间轴宽度只表达 `max(1, wait)` 的 DAT wait 视觉比例，不标记为秒或 Native tick。
+
+## 11. 阶段实施顺序
 
 ### Phase 2：合同确认
 
@@ -299,8 +336,20 @@ loading > disabled > selected > active > hover > default
 ### Phase 5：稳定性
 
 - 并发、损坏 sidecar、外部变化、资源失败、长列表、性能和安全审查。
+- 主实体使用 Native slot 0，拒绝非法和重复 slot。
+- 草稿跨导航保留；skill/edit/save 使用独占 busy 状态。
+- Preview 单飞且只保留最后 pending 请求。
+- 隔离 DAT 覆盖、恢复备份和服务重启达到 E5。
 
-## 11. 阶段停止条件
+### Phase 6：可视化创作
+
+- 已完成技能删除、复制、排序及 OID 隔离。
+- 已完成 frame/block 的 lossless 新建、删除、复制及 commit 前 preview 回滚。
+- 已完成 Canvas 几何拖拽、缩放、网格吸附、键盘微调和 Esc。
+- 已完成 SVG Flow 已有边重定向和按 `wait` 展开的视觉时间轴。
+- release build `20260806172742780-4037ab3a29ef4617ba7386f804ae3c1b` 达到 E4/E5。
+
+## 12. 阶段停止条件
 
 - 发现字段含义只能靠猜测。
 - 需要修改 `ntsd_cpp` 权威逻辑但没有批准。

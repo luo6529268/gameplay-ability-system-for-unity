@@ -2,9 +2,18 @@ import { randomBytes } from "node:crypto";
 
 import {
     createSetScalarCommand,
+    createSetIntegerPairCommand,
     isLatin1ScalarString,
     LosslessDatDocument,
 } from "../model/dat-document.js";
+import {
+    applyDatStructureEdit,
+    canCopyBlock,
+    canCopyFrame,
+    canDeleteBlock,
+    canDeleteFrame,
+    type DatStructureLocator,
+} from "../model/dat-structure-edit.js";
 import type {
     BdyProjection,
     BPointProjection,
@@ -16,35 +25,48 @@ import type {
     SpriteRangeProjection,
     WPointProjection,
 } from "../model/dat-projection.js";
-import type { DatBlockType, DatFieldCst } from "../syntax/byte-cst.js";
+import { isSignedInt32, type DatBlockType, type DatFieldCst } from "../syntax/byte-cst.js";
 import type { DataDiagnostic } from "../syntax/data-diagnostic.js";
 import { DAT_ENVELOPE_PREFIX_LENGTH } from "../syntax/dat-envelope.js";
 import type {
     DatInputFormat,
+    DatFieldLocator,
+    DatSessionBatchEditItem,
+    DatSessionBatchEditRequest,
     DatSessionDiagnosticView,
     DatSessionEditRequest,
     DatSessionErrorCode,
-    DatSessionFieldScope,
+    DatSessionFieldKind,
     DatSessionFieldView,
+    DatSessionFieldValue,
     DatSessionNumericKind,
     DatSessionProjectionView,
     DatSessionReloadRequest,
     DatSessionServiceOptions,
+    DatSessionStructureEditRequest,
+    DatSessionStructureOperation,
     DatSessionView,
 } from "./dat-session-contract.js";
 import { WorkspaceRegistry } from "./workspace-registry.js";
 
 export type {
     DatInputFormat,
+    DatFieldLocator,
+    DatSessionBatchEditItem,
+    DatSessionBatchEditRequest,
     DatSessionDiagnosticView,
     DatSessionEditRequest,
     DatSessionErrorCode,
+    DatSessionFieldKind,
     DatSessionFieldScope,
     DatSessionFieldView,
+    DatSessionFieldValue,
     DatSessionNumericKind,
     DatSessionProjectionView,
     DatSessionReloadRequest,
     DatSessionServiceOptions,
+    DatSessionStructureEditRequest,
+    DatSessionStructureOperation,
     DatSessionView,
 } from "./dat-session-contract.js";
 
@@ -70,27 +92,26 @@ export class DatSessionError extends Error {
     }
 }
 
-interface FieldLocation {
-    scope: DatSessionFieldScope;
-    occurrence: number;
-    spriteRangeIndex?: number;
-    frameId?: number;
-    frameOccurrence?: number;
-    blockType?: DatBlockType;
-    blockIndex?: number;
-}
+type FieldLocation = DatFieldLocator;
 
 interface FieldDescriptor {
     field: DatFieldCst;
-    kind: "number" | "string";
+    kind: DatSessionFieldKind;
     numericKind?: DatSessionNumericKind;
-    value: number | string;
+    value: DatSessionFieldValue;
     location: FieldLocation;
 }
 
 interface FieldCapability extends FieldDescriptor {
     fieldId: string;
-    currentValue: number | string;
+    currentValue: DatSessionFieldValue;
+}
+
+interface StructureCapability {
+    capabilityId: string;
+    locator: DatStructureLocator;
+    canCopy: boolean;
+    canDelete: boolean;
 }
 
 interface SessionState {
@@ -104,6 +125,9 @@ interface SessionState {
     lastAccess: number;
     fields: Map<string, FieldCapability>;
     fieldOrder: string[];
+    structures: Map<string, StructureCapability>;
+    structureOrder: string[];
+    blocksByFrame: Map<number, StructureCapability[]>;
 }
 
 export interface DatSessionEmission {
@@ -114,6 +138,11 @@ export interface DatSessionEmission {
     readonly plaintext: Buffer;
     readonly file: Buffer;
 }
+
+export type DatSessionBeforeCommit = (
+    view: DatSessionView,
+    emission: DatSessionEmission,
+) => Promise<void> | void;
 
 interface AnalyzedDocument {
     document: LosslessDatDocument;
@@ -169,9 +198,6 @@ const BLOCK_INTEGER_FIELDS: Readonly<Record<DatBlockType, ReadonlySet<string>>> 
     ]),
 };
 
-const INT32_MIN = -2_147_483_648;
-const INT32_MAX = 2_147_483_647;
-
 function positiveSafeInteger(value: number, name: string): number {
     if (!Number.isSafeInteger(value) || value < 1) throw new RangeError(`${name} must be a positive safe integer.`);
     return value;
@@ -180,6 +206,19 @@ function positiveSafeInteger(value: number, name: string): number {
 function nonnegativeSafeInteger(value: number, name: string): number {
     if (!Number.isSafeInteger(value) || value < 0) throw new RangeError(`${name} must be a nonnegative safe integer.`);
     return value;
+}
+
+function sameFieldValue(
+    left: DatSessionFieldValue,
+    right: DatSessionFieldValue,
+): boolean {
+    if (Array.isArray(left) || Array.isArray(right)) {
+        return Array.isArray(left)
+            && Array.isArray(right)
+            && left[0] === right[0]
+            && left[1] === right[1];
+    }
+    return left === right;
 }
 
 function exactRecord(value: unknown, keys: readonly string[]): Record<string, unknown> {
@@ -217,7 +256,10 @@ function requiredRevision(value: unknown): number {
     return value;
 }
 
-function authorityKind(field: DatFieldCst, location: Omit<FieldLocation, "occurrence">): "integer" | "number" | "string" | undefined {
+function authorityKind(
+    field: DatFieldCst,
+    location: Omit<FieldLocation, "occurrence">,
+): "integer" | "number" | "string" | "integer-pair" | undefined {
     if (location.scope === "top") {
         if (TOP_STRING_FIELDS.has(field.key)) return "string";
         if (MOVEMENT_DOUBLE_FIELDS.has(field.key)) return "number";
@@ -232,7 +274,8 @@ function authorityKind(field: DatFieldCst, location: Omit<FieldLocation, "occurr
         if (field.key === "sound") return "string";
         return FRAME_INTEGER_FIELDS.has(field.key) ? "integer" : undefined;
     }
-    if (location.blockType === undefined || field.key === "catchingact" || field.key === "caughtact") return undefined;
+    if (location.blockType === undefined) return undefined;
+    if (location.blockType === "itr" && (field.key === "catchingact" || field.key === "caughtact")) return "integer-pair";
     return BLOCK_INTEGER_FIELDS[location.blockType].has(field.key) ? "integer" : undefined;
 }
 
@@ -248,7 +291,20 @@ function collectFields(
             occurrences.set(field.key, occurrence + 1);
             const semanticKind = authorityKind(field, base);
             if (semanticKind === undefined) continue;
-            let value: number | string;
+            let value: DatSessionFieldValue;
+            if (semanticKind === "integer-pair") {
+                if (field.integerPairValue === undefined) {
+                    throw new DatSessionError(failureCode, `ITR field ${field.key} requires exactly two signed 32-bit integers.`);
+                }
+                value = field.integerPairValue;
+                descriptors.push({
+                    field,
+                    kind: semanticKind,
+                    value,
+                    location: { ...base, occurrence },
+                });
+                continue;
+            }
             if (semanticKind === "string") {
                 value = field.rawValue.toString("latin1");
                 if (!isLatin1ScalarString(value)) {
@@ -261,7 +317,7 @@ function collectFields(
                 }
                 if (semanticKind === "integer"
                     && (!/^[+-]?\d+$/.test(field.rawValue.toString("latin1"))
-                        || !Number.isInteger(numericValue) || numericValue < INT32_MIN || numericValue > INT32_MAX)) {
+                        || !isSignedInt32(numericValue))) {
                     throw new DatSessionError(failureCode, `Integer DAT field ${field.key} is outside the signed 32-bit contract.`);
                 }
                 value = numericValue;
@@ -435,45 +491,37 @@ export class DatSessionService {
         }
     }
 
-    async edit(input: unknown): Promise<DatSessionView> {
+    async edit(input: unknown, beforeCommit?: DatSessionBeforeCommit): Promise<DatSessionView> {
         this.#ensureActive();
         const request = this.#parseEditRequest(input);
         return await this.#enqueue(request.sessionId, () => {
             const session = this.#requireSession(request.sessionId);
             session.lastAccess = this.#clock();
-            if (session.revision !== request.expectedRevision) {
-                throw new DatSessionError("revision-conflict", "The DAT session revision is stale.");
-            }
-            const capability = session.fields.get(request.fieldId);
-            if (capability === undefined) {
-                throw new DatSessionError("unknown-field", "The field capability is unknown for this session epoch.");
-            }
-            if (capability.kind !== typeof request.value) {
-                throw new DatSessionError("invalid-request", "The scalar value type does not match the field capability.");
-            }
-            if (capability.kind === "number" && capability.numericKind === "integer"
-                && (!Number.isInteger(request.value) || request.value < INT32_MIN || request.value > INT32_MAX)) {
-                throw new DatSessionError("invalid-request", "The numeric field requires a signed 32-bit integer.");
-            }
-            if (capability.currentValue === request.value) return this.#createView(session);
+            return this.#applyBatch(session, {
+                sessionId: request.sessionId,
+                edits: [{ fieldId: request.fieldId, value: request.value }],
+                expectedRevision: request.expectedRevision,
+            }, beforeCommit);
+        });
+    }
 
-            const previousValue = capability.currentValue;
-            const applied = session.document.apply(createSetScalarCommand("dat-session-edit", capability.field, request.value));
-            if (!applied.applied) {
-                if (applied.diagnostics.length === 0) return this.#createView(session);
-                throw new DatSessionError("invalid-request", "The scalar edit is not supported.");
-            }
-            const previousRevision = session.revision;
-            capability.currentValue = request.value;
-            session.revision += 1;
-            try {
-                return this.#createView(session);
-            } catch (error) {
-                session.document.apply(createSetScalarCommand("dat-session-edit-rollback", capability.field, previousValue));
-                capability.currentValue = previousValue;
-                session.revision = previousRevision;
-                throw error;
-            }
+    async editBatch(input: unknown, beforeCommit?: DatSessionBeforeCommit): Promise<DatSessionView> {
+        this.#ensureActive();
+        const request = this.#parseBatchEditRequest(input);
+        return await this.#enqueue(request.sessionId, () => {
+            const session = this.#requireSession(request.sessionId);
+            session.lastAccess = this.#clock();
+            return this.#applyBatch(session, request, beforeCommit);
+        });
+    }
+
+    async editStructure(input: unknown, beforeCommit?: DatSessionBeforeCommit): Promise<DatSessionView> {
+        this.#ensureActive();
+        const request = this.#parseStructureEditRequest(input);
+        return await this.#enqueue(request.sessionId, () => {
+            const session = this.#requireSession(request.sessionId);
+            session.lastAccess = this.#clock();
+            return this.#applyStructureEdit(session, request, beforeCommit);
         });
     }
 
@@ -488,14 +536,7 @@ export class DatSessionService {
             if (session.revision !== expectedRevision) {
                 throw new DatSessionError("revision-conflict", "The DAT session revision is stale.");
             }
-            return {
-                sessionId,
-                documentId: session.documentId,
-                revision: session.revision,
-                dirty: session.revision !== session.persistedRevision,
-                plaintext: Buffer.from(session.document.emitPlaintext()),
-                file: Buffer.from(session.document.emitFile()),
-            };
+            return this.#createEmission(session);
         });
     }
 
@@ -613,11 +654,16 @@ export class DatSessionService {
         if (descriptors.length > this.#limits.maxFieldsPerSession) {
             throw new DatSessionError("field-limit", "The DAT field capability limit has been reached.");
         }
+        const structureCount = document.cst.frames.reduce((count, frame) => (
+            count + 1 + frame.blocks.length
+        ), 0);
+        if (descriptors.length + structureCount > this.#limits.maxFieldsPerSession) {
+            throw new DatSessionError("field-limit", "The DAT capability limit has been reached.");
+        }
         for (const descriptor of descriptors) {
             this.#boundedString(descriptor.field.key);
             if (typeof descriptor.value === "string") this.#boundedString(descriptor.value);
         }
-        this.#copyProjection(document);
         return { document, format, descriptors };
     }
 
@@ -635,6 +681,38 @@ export class DatSessionService {
             fields.set(fieldId, { ...descriptor, fieldId, currentValue: descriptor.value });
             fieldOrder.push(fieldId);
         }
+        const structures = new Map<string, StructureCapability>();
+        const structureOrder: string[] = [];
+        const blocksByFrame = new Map<number, StructureCapability[]>();
+        for (const frame of analyzed.document.cst.frames) {
+            if (frame.frameId < 0 || frame.frameId >= 600) continue;
+            const frameCapabilityId = this.#newId();
+            structures.set(frameCapabilityId, {
+                capabilityId: frameCapabilityId,
+                locator: { kind: "frame", frameOccurrence: frame.occurrence },
+                canCopy: canCopyFrame(analyzed.document.cst, frame),
+                canDelete: canDeleteFrame(frame),
+            });
+            structureOrder.push(frameCapabilityId);
+            for (const block of frame.blocks) {
+                const blockCapabilityId = this.#newId();
+                structures.set(blockCapabilityId, {
+                    capabilityId: blockCapabilityId,
+                    locator: {
+                        kind: "block",
+                        frameOccurrence: frame.occurrence,
+                        blockType: block.type,
+                        blockIndex: block.index,
+                    },
+                    canCopy: canCopyBlock(analyzed.document.cst, block),
+                    canDelete: canDeleteBlock(block),
+                });
+                structureOrder.push(blockCapabilityId);
+                const blocks = blocksByFrame.get(frame.occurrence);
+                if (blocks) blocks.push(structures.get(blockCapabilityId)!);
+                else blocksByFrame.set(frame.occurrence, [structures.get(blockCapabilityId)!]);
+            }
+        }
         return {
             sessionId,
             documentId,
@@ -646,11 +724,15 @@ export class DatSessionService {
             lastAccess: this.#clock(),
             fields,
             fieldOrder,
+            structures,
+            structureOrder,
+            blocksByFrame,
         };
     }
 
     #createView(session: SessionState): DatSessionView {
         const fields = session.fieldOrder.map((fieldId) => this.#copyField(session.fields.get(fieldId)!));
+        const framesByOccurrence = new Map(session.document.cst.frames.map((frame) => [frame.occurrence, frame]));
         const view: DatSessionView = {
             sessionId: session.sessionId,
             revision: session.revision,
@@ -658,6 +740,34 @@ export class DatSessionService {
             format: session.format,
             encrypted: session.format === "encrypted",
             fields,
+            structureCapabilities: session.structureOrder.flatMap((capabilityId) => {
+                const capability = session.structures.get(capabilityId)!;
+                if (capability.locator.kind !== "frame") return [];
+                const blocks = (session.blocksByFrame.get(capability.locator.frameOccurrence) ?? []).map((block) => {
+                    if (block.locator.kind !== "block") {
+                        throw new DatSessionError("view-limit", "The DAT block capability cannot be represented safely.");
+                    }
+                    return {
+                        capabilityId: block.capabilityId,
+                        blockType: block.locator.blockType,
+                        blockIndex: block.locator.blockIndex,
+                        canCopy: block.canCopy,
+                        canDelete: block.canDelete,
+                    };
+                });
+                const frame = framesByOccurrence.get(capability.locator.frameOccurrence);
+                if (frame === undefined) {
+                    throw new DatSessionError("view-limit", "The DAT frame capability cannot be represented safely.");
+                }
+                return [{
+                    capabilityId: capability.capabilityId,
+                    frameId: frame.frameId,
+                    occurrence: frame.occurrence,
+                    canCopy: capability.canCopy,
+                    canDelete: capability.canDelete,
+                    blocks,
+                }];
+            }),
             projection: this.#copyProjection(session.document),
             diagnostics: this.#copyDiagnostics(session.document.diagnostics),
         };
@@ -674,34 +784,32 @@ export class DatSessionService {
     }
 
     #copyField(capability: FieldCapability): DatSessionFieldView {
-        const view: {
-            fieldId: string;
-            key: string;
-            kind: "number" | "string";
-            numericKind?: DatSessionNumericKind;
-            value: number | string;
-            scope: DatSessionFieldScope;
-            occurrence?: number;
-            spriteRangeIndex?: number;
-            frameId?: number;
-            frameOccurrence?: number;
-            blockType?: DatBlockType;
-            blockIndex?: number;
-        } = {
+        if (capability.kind === "integer-pair") {
+            const key = capability.field.key;
+            const value = capability.currentValue;
+            if ((key !== "catchingact" && key !== "caughtact") || !Array.isArray(value) || value.length !== 2) {
+                throw new DatSessionError("view-limit", "The DAT pair field cannot be represented safely.");
+            }
+            return {
+                fieldId: capability.fieldId,
+                key,
+                kind: "integer-pair",
+                value: [value[0]!, value[1]!] as const,
+                ...capability.location,
+            };
+        }
+        const value = capability.currentValue;
+        if (typeof value !== "number" && typeof value !== "string") {
+            throw new DatSessionError("view-limit", "The DAT scalar field cannot be represented safely.");
+        }
+        return {
             fieldId: capability.fieldId,
             key: capability.field.key,
             kind: capability.kind,
-            value: capability.currentValue,
-            scope: capability.location.scope,
-            occurrence: capability.location.occurrence,
+            value,
+            ...(capability.kind === "number" ? { numericKind: capability.numericKind } : {}),
+            ...capability.location,
         };
-        if (capability.kind === "number") view.numericKind = capability.numericKind;
-        if (capability.location.spriteRangeIndex !== undefined) view.spriteRangeIndex = capability.location.spriteRangeIndex;
-        if (capability.location.frameId !== undefined) view.frameId = capability.location.frameId;
-        if (capability.location.frameOccurrence !== undefined) view.frameOccurrence = capability.location.frameOccurrence;
-        if (capability.location.blockType !== undefined) view.blockType = capability.location.blockType;
-        if (capability.location.blockIndex !== undefined) view.blockIndex = capability.location.blockIndex;
-        return view;
     }
 
     #copyDiagnostics(values: readonly DataDiagnostic[]): DatSessionDiagnosticView[] {
@@ -749,17 +857,237 @@ export class DatSessionService {
 
     #parseEditRequest(input: unknown): DatSessionEditRequest {
         const record = exactRecord(input, ["sessionId", "fieldId", "value", "expectedRevision"]);
-        const value = record.value;
-        if ((typeof value !== "number" && typeof value !== "string")
-            || (typeof value === "number" && !Number.isFinite(value))
-            || (typeof value === "string" && (!isLatin1ScalarString(value) || Buffer.byteLength(value, "latin1") > this.#limits.maxStringBytes))) {
-            throw new DatSessionError("invalid-request", "value must be a bounded finite number or single-line Latin-1 string.");
-        }
+        const value = this.#parseEditValue(record.value);
         return {
             sessionId: requiredId(record.sessionId, "sessionId"),
             fieldId: requiredId(record.fieldId, "fieldId"),
             value,
             expectedRevision: requiredRevision(record.expectedRevision),
+        };
+    }
+
+    #parseEditValue(value: unknown): DatSessionFieldValue {
+        if (Array.isArray(value)) {
+            if (value.length !== 2 || !value.every(isSignedInt32)) {
+                throw new DatSessionError("invalid-request", "Pair value must contain two signed 32-bit integers.");
+            }
+            return [value[0]!, value[1]!] as const;
+        } else if ((typeof value !== "number" && typeof value !== "string")
+            || (typeof value === "number" && !Number.isFinite(value))
+            || (typeof value === "string" && (!isLatin1ScalarString(value) || Buffer.byteLength(value, "latin1") > this.#limits.maxStringBytes))) {
+            throw new DatSessionError("invalid-request", "value must be a bounded finite number, pair, or single-line Latin-1 string.");
+        }
+        return value;
+    }
+
+    #parseBatchEditRequest(input: unknown): DatSessionBatchEditRequest {
+        const record = exactRecord(input, ["sessionId", "edits", "expectedRevision"]);
+        if (!Array.isArray(record.edits) || record.edits.length < 1 || record.edits.length > 16) {
+            throw new DatSessionError("invalid-request", "edits must contain between 1 and 16 items.");
+        }
+        const fieldIds = new Set<string>();
+        const edits: DatSessionBatchEditItem[] = record.edits.map((value) => {
+            const item = exactRecord(value, ["fieldId", "value"]);
+            const fieldId = requiredId(item.fieldId, "fieldId");
+            if (fieldIds.has(fieldId)) {
+                throw new DatSessionError("invalid-request", "A batch cannot edit the same field capability twice.");
+            }
+            fieldIds.add(fieldId);
+            return { fieldId, value: this.#parseEditValue(item.value) };
+        });
+        return {
+            sessionId: requiredId(record.sessionId, "sessionId"),
+            edits,
+            expectedRevision: requiredRevision(record.expectedRevision),
+        };
+    }
+
+    #parseStructureEditRequest(input: unknown): DatSessionStructureEditRequest {
+        if (typeof input !== "object" || input === null || Array.isArray(input)) {
+            throw new DatSessionError("invalid-request", "The request must be an object.");
+        }
+        const record = input as Record<string, unknown>;
+        const supported: readonly DatSessionStructureOperation[] = [
+            "copy-frame", "delete-frame", "create-block", "copy-block", "delete-block",
+        ];
+        const operation = supported.find((candidate) => candidate === record.operation);
+        if (operation === undefined) {
+            throw new DatSessionError("invalid-request", "The structure operation is unsupported.");
+        }
+        exactRecord(input, operation === "copy-frame"
+            ? ["sessionId", "capabilityId", "operation", "newFrameId", "expectedRevision"]
+            : ["sessionId", "capabilityId", "operation", "expectedRevision"]);
+        let newFrameId: number | undefined;
+        if (operation === "copy-frame") {
+            if (!Number.isSafeInteger(record.newFrameId)
+                || (record.newFrameId as number) < 0
+                || (record.newFrameId as number) >= 600) {
+                throw new DatSessionError("invalid-request", "newFrameId must be an integer from 0 through 599.");
+            }
+            newFrameId = record.newFrameId as number;
+        }
+        return {
+            sessionId: requiredId(record.sessionId, "sessionId"),
+            capabilityId: requiredId(record.capabilityId, "capabilityId"),
+            operation,
+            ...(newFrameId === undefined ? {} : { newFrameId }),
+            expectedRevision: requiredRevision(record.expectedRevision),
+        };
+    }
+
+    async #applyBatch(
+        session: SessionState,
+        request: DatSessionBatchEditRequest,
+        beforeCommit?: DatSessionBeforeCommit,
+    ): Promise<DatSessionView> {
+        if (session.revision !== request.expectedRevision) {
+            throw new DatSessionError("revision-conflict", "The DAT session revision is stale.");
+        }
+        const resolved = request.edits.map((edit) => {
+            const capability = session.fields.get(edit.fieldId);
+            if (capability === undefined) {
+                throw new DatSessionError("unknown-field", "A field capability is unknown for this session epoch.");
+            }
+            if (capability.kind === "integer-pair") {
+                if (!Array.isArray(edit.value)) {
+                    throw new DatSessionError("invalid-request", "The pair field requires two integer values.");
+                }
+            } else if (Array.isArray(edit.value) || capability.kind !== typeof edit.value) {
+                throw new DatSessionError("invalid-request", "The scalar value type does not match the field capability.");
+            }
+            if (capability.kind === "number"
+                && capability.numericKind === "integer"
+                && !isSignedInt32(edit.value)) {
+                throw new DatSessionError("invalid-request", "The numeric field requires a signed 32-bit integer.");
+            }
+            return { capability, value: edit.value };
+        });
+        const previousRevision = session.revision;
+        const previousLoadedBytes = session.loadedBytes;
+        const previousValues = resolved.map(({ capability }) => capability.currentValue);
+        const savepoint = session.document.createPatchSavepoint();
+        let changed = false;
+        try {
+            for (const { capability, value } of resolved) {
+                if (sameFieldValue(capability.currentValue, value)) continue;
+                const applied = capability.kind === "integer-pair"
+                    ? session.document.apply(createSetIntegerPairCommand(
+                        "dat-session-batch-pair-edit",
+                        capability.field,
+                        value as readonly [number, number],
+                    ))
+                    : session.document.apply(createSetScalarCommand(
+                        "dat-session-batch-scalar-edit",
+                        capability.field,
+                        value as number | string,
+                    ));
+                if (!applied.applied && applied.diagnostics.length > 0) {
+                    throw new DatSessionError("invalid-request", "A batch field edit is not supported.");
+                }
+                changed ||= applied.applied;
+                capability.currentValue = Array.isArray(value)
+                    ? [value[0]!, value[1]!] as const
+                    : value;
+            }
+            if (!changed) {
+                const view = this.#createView(session);
+                await beforeCommit?.(view, this.#createEmission(session));
+                return view;
+            }
+            const nextLoadedBytes = session.document.emitFile().length;
+            const totalLoadedBytes = this.#loadedBytes - session.loadedBytes + nextLoadedBytes;
+            if (totalLoadedBytes > this.#limits.maxLoadedBytes) {
+                throw new DatSessionError("byte-limit", "The edited DAT exceeds the loaded byte limit.");
+            }
+            session.revision += 1;
+            session.loadedBytes = nextLoadedBytes;
+            const view = this.#createView(session);
+            await beforeCommit?.(view, this.#createEmission(session));
+            this.#loadedBytes = totalLoadedBytes;
+            return view;
+        } catch (error) {
+            session.document.restorePatchSavepoint(savepoint);
+            resolved.forEach(({ capability }, index) => {
+                capability.currentValue = previousValues[index]!;
+            });
+            session.revision = previousRevision;
+            session.loadedBytes = previousLoadedBytes;
+            throw error;
+        }
+    }
+
+    async #applyStructureEdit(
+        session: SessionState,
+        request: DatSessionStructureEditRequest,
+        beforeCommit?: DatSessionBeforeCommit,
+    ): Promise<DatSessionView> {
+        if (session.revision !== request.expectedRevision) {
+            throw new DatSessionError("revision-conflict", "The DAT session revision is stale.");
+        }
+        const capability = session.structures.get(request.capabilityId);
+        if (capability === undefined) {
+            throw new DatSessionError("unknown-field", "The structure capability is unknown for this session epoch.");
+        }
+        const frameOperation = request.operation === "copy-frame" || request.operation === "delete-frame";
+        if ((capability.locator.kind === "frame") !== frameOperation) {
+            throw new DatSessionError("invalid-request", "The structure operation does not match its capability.");
+        }
+        if ((request.operation === "copy-frame"
+                || request.operation === "copy-block"
+                || request.operation === "create-block")
+            && !capability.canCopy) {
+            throw new DatSessionError("invalid-request", "The selected structure cannot be copied safely.");
+        }
+        if ((request.operation === "delete-frame" || request.operation === "delete-block")
+            && !capability.canDelete) {
+            throw new DatSessionError("invalid-request", "The selected structure cannot be deleted safely.");
+        }
+        const current = session.document.withPlaintext(session.document.emitPlaintext());
+        let plaintext: Buffer;
+        try {
+            plaintext = applyDatStructureEdit(current.cst, request.operation === "copy-frame"
+                ? {
+                    operation: request.operation,
+                    target: capability.locator as Extract<DatStructureLocator, { kind: "frame" }>,
+                    newFrameId: request.newFrameId!,
+                }
+                : {
+                    operation: request.operation,
+                    target: capability.locator as never,
+                });
+        } catch (error) {
+            throw new DatSessionError("invalid-request", "The lossless structure edit could not be applied.", { cause: error });
+        }
+        const nextDocument = current.withPlaintext(plaintext);
+        const nextFile = nextDocument.emitFile();
+        const nextLoadedBytes = this.#loadedBytes - session.loadedBytes + nextFile.length;
+        if (nextLoadedBytes > this.#limits.maxLoadedBytes) {
+            throw new DatSessionError("byte-limit", "The edited DAT exceeds the loaded byte limit.");
+        }
+        const analyzed = this.#analyze(nextFile, session.format, "invalid-request");
+        const replacement = this.#createState(
+            session.sessionId,
+            session.documentId,
+            nextFile.length,
+            session.revision + 1,
+            analyzed,
+        );
+        replacement.persistedRevision = session.persistedRevision;
+        const view = this.#createView(replacement);
+        await beforeCommit?.(view, this.#createEmission(replacement));
+        this.#loadedBytes = nextLoadedBytes;
+        this.#sessions.set(session.sessionId, replacement);
+        return view;
+    }
+
+    #createEmission(session: SessionState): DatSessionEmission {
+        return {
+            sessionId: session.sessionId,
+            documentId: session.documentId,
+            revision: session.revision,
+            dirty: session.revision !== session.persistedRevision,
+            plaintext: Buffer.from(session.document.emitPlaintext()),
+            file: Buffer.from(session.document.emitFile()),
         };
     }
 

@@ -5,7 +5,7 @@
 - Name: NTSD DAT 技能流程编辑器
 - Owner: Logan
 - Created: 2026-08-06
-- Current version: 0.3 Phase 2
+- Current version: 0.6 Phase 6
 - Scale mode: `Standard`
 
 ## Source Brief and Maturity
@@ -19,7 +19,7 @@
 - User-authorized defaults:
   - 第一阶段使用“技能名称 + 起始帧”，不自动推断技能分类。
   - 第一阶段采用单角色场景预览。
-  - 第一阶段完成编辑器基础闭环，不同时扩展全部 DAT 块编辑。
+  - 第一阶段先完成编辑器基础闭环，再接入全部现有 DAT 块编辑。
   - 第一阶段包含现有 DAT 块的结构化查看、字段编辑和几何叠加。
   - 技能元数据保存到项目根目录 `.dat-skill-flow/skills.json`。
   - GPT 视觉稿作为修正后的桌面视觉方向，不照搬虚构数据或未接线功能。
@@ -65,7 +65,7 @@
   - 技能流由起始帧沿真实 `next` 与 `hit_*` 关系展示。
 - Assumptions:
   - 技能名称不是 DAT 的权威字段，使用独立侧车元数据。
-  - 第一阶段不需要双角色战斗和完整碰撞框编辑。
+  - 双角色战斗仍不属于当前范围；Canvas 只直接编辑 DAT 中已存在且获得 capability 的几何字段。
 - Unknowns:
   - 后续复杂运行语义需要哪些 `ntsd_cpp` 输出扩展。
 
@@ -82,21 +82,24 @@
 - 明确的交互、加载、错误、脏状态和保存状态。
 - 中文界面并保留 DAT 原始键名。
 - 当前构建的自动化渲染与关键交互验证。
+- 技能复制、确认删除和相邻排序，保持 sidecar schema 与 OID 隔离。
+- 完整 frame/block CST span 的模板式新建、复制和删除。
+- Canvas 几何 move/resize、1/4px 网格、键盘微调和 Esc 取消。
+- SVG Flow 已有跳转字段重定向，以及按 `max(1, wait)` 展开的 DAT wait 视觉时间轴。
 
 ### Out of Scope
 
 - 自动猜测或命名 NTSD 技能。
 - 双角色完整战斗模拟。
-- 在第一阶段同时提供所有 `itr`、`bdy`、`opoint`、`wpoint`、`cpoint` 几何编辑器。
+- 创建 DAT 中缺失的字段、空白结构默认模板或自动引用修复。
 - 修改 `ntsd_cpp` 权威战斗逻辑。
 - 游戏主菜单、商城、联机或与 DAT 编辑无关的功能。
 
 ### Deferred Candidates
 
-- 碰撞框和攻击框可视化编辑。
-- `opoint`、`wpoint`、`cpoint` 专用编辑器。
+- 缺少完整 x/y 或 x/y/w/h capability 的 block 专用几何交互。
 - 双角色交互预览。
-- 技能模板、复制、对比和批量检查。
+- 技能模板、对比和批量检查。
 
 ## Context
 
@@ -107,7 +110,7 @@
 - Runtime or deployment environment:
   - Windows 10
   - Node.js 24
-  - 本地回环服务 `http://127.0.0.1:4173`
+  - 本地回环服务使用启动器分配的随机端口
 - External dependencies:
   - `ntsd_cpp` 原生预览程序。
   - 用户提供的 GPT 视觉概念图仅作为设计输入，不作为运行时依赖。
@@ -122,14 +125,17 @@
 NTSD DAT 技能流程编辑器
 ├── 技能工作区
 │   ├── 技能元数据（名称 + 起始帧）
-│   └── DAT 帧关系视图
+│   ├── 复制、确认删除与相邻排序
+│   └── SVG DAT 帧关系视图与已有边重定向
 ├── 预览工作区
 │   ├── ntsd_cpp 权威 Tick
-│   └── 2D 精灵与镜头投影
+│   ├── 2D 精灵与镜头投影
+│   └── capability 约束的 Canvas 几何交互
 ├── 属性检查器
 │   ├── DAT 字段能力
-│   └── 会话内无损编辑
-├── 时间轴与交互状态
+│   ├── batch 会话内无损编辑
+│   └── 完整 CST span 结构事务
+├── DAT wait 视觉时间轴与交互状态
 └── 本地安全服务
     ├── 项目会话
     ├── 资源 capability
@@ -152,14 +158,16 @@ NTSD DAT 技能流程编辑器
 
 ## Current Phase
 
-- Phase: 阶段 2，需求、架构和合同确认。
-- Phase goal: 固化技能侧车、完整 capability 定位、ITR 成对字段、技能流程和几何叠加合同。
-- Allowed changes: 架构文档、schema、合同测试、最小服务接口和可撤销技术探针。
-- Forbidden changes: 自动推断技能；伪造复杂运行语义；改变 DAT 或 Native preview 权威行为。
-- Exit criteria:
-  - `ARCHITECTURE.md` 中的 sidecar、capability、pair、flow、overlay 和状态合同通过审阅。
-  - 成对 `itr` 字段的原子编辑合同通过测试。
-  - 第一阶段实施切片和 E4 验收流程明确。
+- Phase: 阶段 6，可视化创作能力与 release E4/E5 验收完成。
+- Phase goal: 在不创造 DAT/Native 语义的前提下完成技能组织、lossless 结构事务、直接几何编辑和真实 Flow/wait 视觉表达。
+- Completed evidence:
+  - Native preview 以稳定 slot 0 识别主实体。
+  - 草稿跨导航保留，重复提交受 busy 状态保护。
+  - Preview 单飞并只保留最后 pending 请求。
+  - 隔离 DAT 完成显式覆盖、恢复备份和服务重启 E5。
+  - 技能复制/删除/排序、frame/block span 事务、Canvas、SVG Flow 和 DAT wait 轴在 release build 完成 E4/E5。
+- Next phase: 待用户定义；当前 REQ-001 至 REQ-015 已验证。
+- Forbidden changes: 自动推断技能；伪造复杂运行语义；绕过 lossless CST 或安全保存边界。
 - Stop conditions:
   - 视觉稿与真实 DAT 数据或现有服务能力冲突。
   - 需要改变公共 API、保存格式或权威预览边界但尚未确认。

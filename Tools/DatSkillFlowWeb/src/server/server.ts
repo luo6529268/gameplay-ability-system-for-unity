@@ -385,9 +385,9 @@ function sendApiError(request: IncomingMessage, response: ServerResponse, error:
     if (error instanceof ProjectDatError) {
         const status = error.code === "unknown-session" || error.code === "unknown-object" || error.code === "object-unavailable" || error.code === "unknown-asset"
             ? 404
-            : error.code === "invalid-asset"
+            : error.code === "invalid-asset" || error.code === "preview-failed"
                 ? 422
-                : error.code === "revision-conflict"
+                : error.code === "revision-conflict" || error.code === "read-only-session"
                     ? 409
                     : error.code === "invalid-request"
                         ? 400
@@ -397,7 +397,13 @@ function sendApiError(request: IncomingMessage, response: ServerResponse, error:
         sendJson(request, response, status, {
             ok: false,
             diagnostics: [createDiagnostic(
-                status === 404 ? "not-found" : status === 422 ? "missing-asset" : status === 400 || status === 409 ? "unsafe-save" : "internal-error",
+                status === 404
+                    ? "not-found"
+                    : error.code === "invalid-asset"
+                        ? "missing-asset"
+                        : error.code === "preview-failed"
+                            ? "parse-failure"
+                            : status === 400 || status === 409 ? "unsafe-save" : "internal-error",
                 error.message,
                 { projectCode: error.code },
             )],
@@ -682,6 +688,8 @@ async function handleApiRequest(
         || pathname === "/api/documents/open"
         || pathname === "/api/project/open"
         || pathname === "/api/project/edit"
+        || pathname === "/api/project/edit-batch"
+        || pathname === "/api/project/edit-structure"
         || pathname === "/api/project/preview"
         || pathname === "/api/project/save"
         || pathname === "/api/project/close"
@@ -739,6 +747,30 @@ async function handleApiRequest(
                 return true;
             }
             const result = await projectDatService.edit(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/edit-batch") {
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.editBatch(body);
+            sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
+            return true;
+        }
+        if (pathname === "/api/project/edit-structure") {
+            if (projectDatService === undefined) {
+                sendJson(request, response, 503, {
+                    ok: false,
+                    diagnostics: [createDiagnostic("internal-error", "The project service is not available.")],
+                });
+                return true;
+            }
+            const result = await projectDatService.editStructure(body);
             sendJson(request, response, 200, { ok: true, data: result, diagnostics: [] });
             return true;
         }

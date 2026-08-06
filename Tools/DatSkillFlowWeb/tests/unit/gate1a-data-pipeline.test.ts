@@ -12,6 +12,7 @@ import { lexBytes, parseDatCst } from "../../src/syntax/byte-cst.js";
 import { emitSpanPatches } from "../../src/syntax/patch-emitter.js";
 import {
     LosslessDatDocument,
+    createSetIntegerPairCommand,
     createSetScalarCommand,
 } from "../../src/model/dat-document.js";
 import {
@@ -108,6 +109,21 @@ describe("Gate1A byte CST and typed DAT projection", () => {
         assert.deepEqual(document.emitPlaintext(), syntheticDatPlaintext());
     });
 
+    it("preserves legacy duplicate selection while allowing an exact frame occurrence", () => {
+        const document = LosslessDatDocument.fromPlaintext(Buffer.from([
+            "<frame> 7 first\n",
+            "pic: 1 pic: 2\n",
+            "<frame_end>\n",
+            "<frame> 7 last\n",
+            "pic: 3 pic: 4\n",
+            "<frame_end>\n",
+        ].join(""), "ascii"));
+
+        assert.equal(document.findFrameField(7, "pic", "first")?.rawValue.toString("ascii"), "1");
+        assert.equal(document.findFrameField(7, "pic", "last")?.rawValue.toString("ascii"), "4");
+        assert.equal(document.findFrameField(7, "pic", 0, "last")?.rawValue.toString("ascii"), "2");
+    });
+
     it("replaces only a selected numeric/string value span and re-encrypts around untouched bytes", () => {
         const originalPlaintext = syntheticDatPlaintext();
         const originalEncrypted = independentlyEncryptDat(originalPlaintext);
@@ -147,6 +163,38 @@ describe("Gate1A byte CST and typed DAT projection", () => {
 
         assert.equal(document.apply(createSetScalarCommand("pic-a", picField, picField.numericValue!)).applied, true);
         assert.equal(document.apply(createSetScalarCommand("name-a", nameField, nameField.rawValue.toString("utf8"))).applied, true);
+        assert.deepEqual(document.emitPlaintext(), original);
+        assert.deepEqual(document.emitPlaintextResult().changes, []);
+    });
+
+    it("edits an ITR integer pair as one lossless value-span patch", () => {
+        const original = Buffer.from([
+            "<frame> 7 pair\n",
+            "itr:\n",
+            " catchingact:\t+005  -006\t# keep comment\n",
+            "itr_end:\n",
+            "<frame_end>\n",
+        ].join(""), "ascii");
+        const document = LosslessDatDocument.fromPlaintext(original);
+        const pair = document.findNestedField(7, "itr", 0, "catchingact", 0);
+        assert.ok(pair);
+        assert.deepEqual(pair.integerPairValue, [5, -6]);
+
+        const applied = document.apply(createSetIntegerPairCommand("set-catching-actions", pair, [70, 71]));
+        assert.equal(applied.applied, true);
+        assert.deepEqual(document.emitPlaintextResult().changes, [{
+            label: "set-catching-actions",
+            originalSpan: pair.valueSpan,
+            outputSpan: { start: pair.valueSpan.start, end: pair.valueSpan.start + 5 },
+            originalLength: pair.valueSpan.end - pair.valueSpan.start,
+            replacementLength: 5,
+        }]);
+        assert.equal(
+            document.emitPlaintext().toString("ascii"),
+            original.toString("ascii").replace("+005  -006", "70 71"),
+        );
+
+        assert.equal(document.apply(createSetIntegerPairCommand("restore-catching-actions", pair, [5, -6])).applied, true);
         assert.deepEqual(document.emitPlaintext(), original);
         assert.deepEqual(document.emitPlaintextResult().changes, []);
     });

@@ -7,7 +7,10 @@ import { join, resolve } from "node:path";
 import { afterEach, describe, it } from "node:test";
 
 import { encryptDatPayload } from "../../src/syntax/dat-envelope.js";
-import { ProjectDatService } from "../../src/server/project-dat-service.js";
+import {
+    CppNativeDatPreviewRunner,
+    ProjectDatService,
+} from "../../src/server/project-dat-service.js";
 import {
     createApplicationServer,
     getApplicationServerSecurity,
@@ -15,6 +18,7 @@ import {
 } from "../../src/server/server.js";
 import {
     NativeSafeFileError,
+    type NativeOverwriteRequest,
     type NativeReadRequest,
     type NativeRootDescriptor,
     type NativeSafeFileClient,
@@ -36,6 +40,12 @@ class OverlayNativeClient implements NativeSafeFileClient {
         const key = `${root}|${normalized(logicalPath)}`;
         const previous = this.#files.get(key);
         this.#files.set(key, { bytes: Buffer.from(bytes), generation: (previous?.generation ?? 0) + 1 });
+    }
+
+    bytes(root: string, logicalPath: string): Buffer {
+        const file = this.#files.get(`${root}|${normalized(logicalPath)}`);
+        if (file === undefined) throw new Error("missing test file");
+        return Buffer.from(file.bytes);
     }
 
     async inspectRoot(request: { absoluteRoot: string }): Promise<NativeRootDescriptor> {
@@ -71,7 +81,50 @@ class OverlayNativeClient implements NativeSafeFileClient {
     }
 
     async saveAs(): Promise<never> { throw new Error("save deferred"); }
-    async overwrite(): Promise<never> { throw new Error("save deferred"); }
+
+    async overwrite(request: NativeOverwriteRequest) {
+        const logicalPath = normalized(request.logicalPath);
+        const key = `${request.root.canonicalPath}|${logicalPath}`;
+        const current = this.#files.get(key);
+        if (current === undefined) throw new NativeSafeFileError("not-a-file", "not found");
+        const originalSha256 = createHash("sha256").update(current.bytes).digest("hex");
+        if (originalSha256 !== request.expectedFingerprint.sha256) {
+            throw new NativeSafeFileError("external-change", "changed");
+        }
+        const bytes = Buffer.from(request.bytes);
+        const generation = current.generation + 1;
+        this.#files.set(key, { bytes, generation });
+        const sha256 = createHash("sha256").update(bytes).digest("hex");
+        return {
+            canonicalPath: `${request.root.canonicalPath}/${logicalPath}`,
+            fingerprint: {
+                sha256,
+                size: bytes.length,
+                modifiedNanoseconds: String(generation),
+                changedNanoseconds: String(generation),
+                device: request.root.volumeSerial,
+                inode: `${request.root.fileId}:${logicalPath}`,
+            },
+            recovery: {
+                target: {
+                    path: `${request.root.canonicalPath}/${logicalPath}`,
+                    exists: true,
+                    size: bytes.length,
+                    sha256,
+                },
+                replacement: {
+                    path: `${request.root.canonicalPath}/${request.replacementName}`,
+                    exists: false,
+                },
+                backup: {
+                    path: `${request.root.canonicalPath}/${request.backupName}`,
+                    exists: true,
+                    size: current.bytes.length,
+                    sha256: originalSha256,
+                },
+            },
+        };
+    }
 }
 
 function catalogBytes(validDatPath: string): Buffer {
@@ -95,9 +148,41 @@ function narutoDat(): Buffer {
         "file(3-3): Assets\\NTSD\\Sprite\\\\invalid-empty-segment.bmp w: 1 h: 1 row: 1 col: 1\n",
         "<frame> 0 idle\n",
         "pic: 0 state: 0 wait: 1 next: 0 sound: secret\\sound.wav\n",
+        "itr:\n",
+        " catchingact: 5 6\n",
+        "itr_end:\n",
+        "bdy:\n",
+        " x: 10 y: 20 w: 30 h: 40\n",
+        "bdy_end:\n",
         "<frame_end>\n",
     ].join(""), "latin1");
     return encryptDatPayload(Buffer.alloc(123, 0x41), plaintext);
+}
+
+function nativePreview(startFrame = 300, ticksRequested = 30): unknown {
+    return {
+        metadata: {
+            runtime: "ntsd_cpp",
+            tick_driver: "SimulationTickDriver",
+            renderer: "none",
+            seed: 1,
+            start_frame: startFrame,
+            ticks_requested: ticksRequested,
+            stage: { index: 0, name: "Stage", width: 1000, z_min: 0, z_max: 500 },
+        },
+        ticks: [{
+            tick: 0,
+            camera_x: 0,
+            camera_vel: 0,
+            bg: { width: 1000, z_min: 0, z_max: 500, bound_left: 0, bound_right: 1000 },
+            entities: [{
+                slot: 0, oid: 2, frame: startFrame, pic: 0, facing: 0,
+                x: 320, y: 0, z: 500, x_int: 320, y_int: 0, z_int: 500,
+                v: { x: 0, y: 0, z: 0 }, render_offset_x: 0, frame_delay: 0,
+                team: 1, target: 1, holder: -1, link: 0, ai: false,
+            }],
+        }],
+    };
 }
 
 async function staticFixture(): Promise<{ staticRoot: string; manifestPath: string }> {
@@ -143,6 +228,36 @@ afterEach(async () => {
     await Promise.all(servers.splice(0).map((server) => new Promise<void>((resolveClose) => server.close(() => resolveClose()))));
 });
 
+describe("native DAT preview output bounds", () => {
+    it("rejects output larger than 8 MiB before parsing it", async () => {
+        const runner = new CppNativeDatPreviewRunner({
+            executable: "preview-test.exe",
+            workingDirectory: tmpdir(),
+            execFile: (_file, args, _options, callback) => {
+                const outputPath = args[args.indexOf("--output") + 1];
+                if (outputPath === undefined) {
+                    callback(new Error("missing preview output path"), "", "");
+                    return;
+                }
+                void writeFile(outputPath, Buffer.alloc(8 * 1024 * 1024 + 1))
+                    .then(
+                        () => callback(null, "", ""),
+                        (error: unknown) => callback(
+                            error instanceof Error ? error : new Error(String(error)),
+                            "",
+                            "",
+                        ),
+                    );
+            },
+        });
+
+        await assert.rejects(
+            runner.preview(Buffer.from("name: Naruto\n", "latin1")),
+            /Native preview output exceeds its limit/,
+        );
+    });
+});
+
 describe("Naruto project DAT HTTP vertical slice", () => {
     it("opens OID 2 through a primary/fallback overlay, edits it, and serves verified BMP bytes without path leaks", async () => {
         const primaryRoot = resolve("project-api-primary");
@@ -151,7 +266,8 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         const datPath = "Assets/NTSD/Config/2.dat";
         const native = new OverlayNativeClient();
         native.set(primaryRoot, dataTxtPath, catalogBytes(datPath));
-        native.set(primaryRoot, datPath, narutoDat());
+        const originalDat = narutoDat();
+        native.set(primaryRoot, datPath, originalDat);
         const bmp = syntheticBmp(24, 2, 2);
         native.set(assetRoot, "sprite/sys/naruto.bmp", bmp);
         native.set(assetRoot, "sprite/sys/invalid.bmp", Buffer.from("not a bmp"));
@@ -163,6 +279,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         primary.sealStartupAuthorization();
         assets.sealStartupAuthorization();
         const previewInputs: Buffer[] = [];
+        let previewEntityTransform: ((entities: Array<Record<string, unknown>>) => unknown[]) | undefined;
         const project = await ProjectDatService.initialize({
             primaryRegistry: primary,
             assetRegistry: assets,
@@ -173,6 +290,12 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                     const input = Buffer.from(plaintext);
                     previewInputs.push(input);
                     const pic = /pic:\s*2\b/.test(input.toString("latin1")) ? 2 : 0;
+                    const entities: Array<Record<string, unknown>> = [{
+                        slot: 0, oid: 2, frame: options?.startFrame ?? 300, pic, facing: 0,
+                        x: 320, y: 0, z: 500, x_int: 320, y_int: 0, z_int: 500,
+                        v: { x: 0, y: 0, z: 0 }, render_offset_x: 0, frame_delay: 0,
+                        team: 1, target: 1, holder: -1, link: 0, ai: false,
+                    }];
                     return {
                         metadata: {
                             runtime: "ntsd_cpp",
@@ -189,12 +312,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                             camera_x: 0,
                             camera_vel: 0,
                             bg: { width: 1000, z_min: 0, z_max: 500, bound_left: 0, bound_right: 1000 },
-                            entities: [{
-                                slot: 0, oid: 2, frame: options?.startFrame ?? 300, pic, facing: 0,
-                                x: 320, y: 0, z: 500, x_int: 320, y_int: 0, z_int: 500,
-                                v: { x: 0, y: 0, z: 0 }, render_offset_x: 0, frame_delay: 0,
-                                team: 1, target: 1, holder: -1, link: 0, ai: false,
-                            }],
+                            entities: previewEntityTransform?.(entities) ?? entities,
                         }],
                     };
                 },
@@ -234,16 +352,23 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             sessionId: string;
             revision: number;
             dirty: boolean;
+            writable: boolean;
             oid: number;
             type: number;
             name: string;
-            fields: Array<{ fieldId: string; key: string; value: number | string; kind: string }>;
+            fields: Array<{ fieldId: string; key: string; value: number | string | number[]; kind: string }>;
+            structureCapabilities: Array<{
+                capabilityId: string;
+                occurrence: number;
+                blocks: Array<{ capabilityId: string; blockType: string; blockIndex: number }>;
+            }>;
             spriteRanges: Array<{ assetId: string }>;
             preview: { metadata: Record<string, unknown>; ticks: Array<{ entities: Array<{ pic: number }> }> };
             diagnostics: Array<Record<string, unknown>>;
         } };
         assert.equal(openedResponse.status, 200);
         assert.equal(opened.data.dirty, false);
+        assert.equal(opened.data.writable, true);
         assert.equal(opened.data.oid, 2);
         assert.equal(opened.data.name, "Naruto");
         assert.equal(opened.data.preview.ticks[0]?.entities[0]?.pic, 0);
@@ -254,6 +379,9 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(opened.data.spriteRanges.length, 2, "unsafe sprite paths do not mint capabilities");
         assert.ok(opened.data.fields.some((field) => field.key === "name" && field.kind === "string"));
         assert.ok(opened.data.fields.some((field) => field.key === "pic" && field.kind === "number"));
+        assert.ok(opened.data.fields.some((field) => field.key === "catchingact" && field.kind === "integer-pair"));
+        assert.equal(opened.data.structureCapabilities.length, 1);
+        assert.equal(opened.data.structureCapabilities[0]?.blocks.some((block) => block.blockType === "bdy"), true);
         assert.equal(opened.data.fields.some((field) => ["head", "small", "file", "sound"].includes(field.key)), false);
         for (const secret of [primaryRoot, assetRoot, dataTxtPath, datPath, "naruto.bmp", "outside.bmp", "secret\\sound.wav", "data/stage.dat"]) {
             assert.equal(openedText.includes(secret), false, `response leaked ${secret}`);
@@ -274,6 +402,110 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(edited.data.dirty, true);
         assert.equal(edited.data.preview.ticks[0]?.entities[0]?.pic, 2);
         assert.equal(previewInputs.length, 2);
+        const pair = opened.data.fields.find((field) => field.key === "catchingact")!;
+        const pairEditedResponse = await post(origin, token, "/api/project/edit", {
+            sessionId: opened.data.sessionId,
+            fieldId: pair.fieldId,
+            value: [70, 71],
+            expectedRevision: 1,
+        });
+        const pairEdited = await pairEditedResponse.json() as { data: { revision: number; fields: Array<{ fieldId: string; value: unknown }> } };
+        assert.equal(pairEditedResponse.status, 200);
+        assert.equal(pairEdited.data.revision, 2);
+        assert.deepEqual(pairEdited.data.fields.find((field) => field.fieldId === pair.fieldId)?.value, [70, 71]);
+        assert.match(previewInputs[2]?.toString("latin1") ?? "", /catchingact:\s*70 71/);
+
+        const pairEditedData = pairEdited as unknown as { data: {
+            revision: number;
+            fields: Array<{ fieldId: string; key?: string; value: unknown; blockType?: string }>;
+            structureCapabilities: Array<{
+                capabilityId: string;
+                occurrence: number;
+                blocks: Array<{ capabilityId: string; blockType: string; blockIndex: number }>;
+            }>;
+        } };
+        const x = pairEditedData.data.fields.find((field) => field.key === "x" && field.blockType === "bdy")!;
+        const y = pairEditedData.data.fields.find((field) => field.key === "y" && field.blockType === "bdy")!;
+        previewEntityTransform = (entities) => [{ ...entities[0], slot: -1 }];
+        assert.equal((await post(origin, token, "/api/project/edit-batch", {
+            sessionId: opened.data.sessionId,
+            edits: [
+                { fieldId: x.fieldId, value: 13 },
+                { fieldId: y.fieldId, value: 24 },
+            ],
+            expectedRevision: 2,
+        })).status, 422);
+        previewEntityTransform = undefined;
+        const batchResponse = await post(origin, token, "/api/project/edit-batch", {
+            sessionId: opened.data.sessionId,
+            edits: [
+                { fieldId: x.fieldId, value: 13 },
+                { fieldId: y.fieldId, value: 24 },
+            ],
+            expectedRevision: 2,
+        });
+        const batch = await batchResponse.json() as { data: {
+            revision: number;
+            fields: Array<{ fieldId: string; value: unknown }>;
+            structureCapabilities: typeof pairEditedData.data.structureCapabilities;
+        } };
+        assert.equal(batchResponse.status, 200);
+        assert.equal(batch.data.revision, 3);
+        assert.equal(batch.data.fields.find((field) => field.fieldId === x.fieldId)?.value, 13);
+        assert.equal(batch.data.fields.find((field) => field.fieldId === y.fieldId)?.value, 24);
+        assert.equal((await post(origin, token, "/api/project/edit-batch", {
+            sessionId: opened.data.sessionId,
+            edits: [
+                { fieldId: x.fieldId, value: 14 },
+                { fieldId: "missing-capability", value: 25 },
+            ],
+            expectedRevision: 3,
+        })).status, 400);
+
+        const bdy = batch.data.structureCapabilities[0]!.blocks.find((block) => block.blockType === "bdy")!;
+        previewEntityTransform = (entities) => [{ ...entities[0], slot: -1 }];
+        assert.equal((await post(origin, token, "/api/project/edit-structure", {
+            sessionId: opened.data.sessionId,
+            capabilityId: bdy.capabilityId,
+            operation: "copy-block",
+            expectedRevision: 3,
+        })).status, 422);
+        previewEntityTransform = undefined;
+        const copiedBlockResponse = await post(origin, token, "/api/project/edit-structure", {
+            sessionId: opened.data.sessionId,
+            capabilityId: bdy.capabilityId,
+            operation: "copy-block",
+            expectedRevision: 3,
+        });
+        const copiedBlock = await copiedBlockResponse.json() as { data: {
+            revision: number;
+            structureCapabilities: typeof pairEditedData.data.structureCapabilities;
+        } };
+        assert.equal(copiedBlockResponse.status, 200);
+        assert.equal(copiedBlock.data.revision, 4);
+        assert.equal(copiedBlock.data.structureCapabilities[0]?.blocks.filter((block) => block.blockType === "bdy").length, 2);
+        assert.equal((await post(origin, token, "/api/project/edit-structure", {
+            sessionId: opened.data.sessionId,
+            capabilityId: bdy.capabilityId,
+            operation: "delete-block",
+            expectedRevision: 4,
+        })).status, 400, "structure capabilities rotate after every structure transaction");
+
+        const frameCapability = copiedBlock.data.structureCapabilities[0]!;
+        const copiedFrameResponse = await post(origin, token, "/api/project/edit-structure", {
+            sessionId: opened.data.sessionId,
+            capabilityId: frameCapability.capabilityId,
+            operation: "copy-frame",
+            newFrameId: 17,
+            expectedRevision: 4,
+        });
+        const copiedFrame = await copiedFrameResponse.json() as { data: {
+            revision: number;
+            frames: Array<{ frameId: number }>;
+        } };
+        assert.equal(copiedFrameResponse.status, 200);
+        assert.equal(copiedFrame.data.revision, 5);
+        assert.equal(copiedFrame.data.frames.some((frame) => frame.frameId === 17), true);
         assert.equal((await post(origin, token, "/api/project/edit", {
             sessionId: opened.data.sessionId,
             fieldId: pic.fieldId,
@@ -283,7 +515,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
 
         const previewResponse = await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
-            expectedRevision: 1,
+            expectedRevision: 5,
             startFrame: 0,
             ticks: 2,
         });
@@ -293,22 +525,63 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(preview.data.preview.metadata.ticksRequested, 2);
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
-            expectedRevision: 1,
+            expectedRevision: 5,
             startFrame: 599,
             ticks: 1800,
         })).status, 200);
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
-            expectedRevision: 1,
+            expectedRevision: 5,
             startFrame: 600,
             ticks: 2,
         })).status, 400);
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
-            expectedRevision: 1,
+            expectedRevision: 5,
             startFrame: 0,
             ticks: 1801,
         })).status, 400);
+        for (const invalidSlot of [-1, 0.5, 400]) {
+            previewEntityTransform = (entities) => [{ ...entities[0], slot: invalidSlot }];
+            assert.equal((await post(origin, token, "/api/project/preview", {
+                sessionId: opened.data.sessionId,
+                expectedRevision: 5,
+                startFrame: 0,
+                ticks: 2,
+            })).status, 422);
+        }
+        previewEntityTransform = (entities) => [entities[0]!, { ...entities[0] }];
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+            startFrame: 0,
+            ticks: 2,
+        })).status, 422);
+        previewEntityTransform = undefined;
+
+        const savedResponse = await post(origin, token, "/api/project/save", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+        });
+        const savedText = await savedResponse.text();
+        const saved = JSON.parse(savedText) as { data: {
+            revision: number;
+            dirty: boolean;
+            recovery: {
+                backup: { name: string; exists: boolean; sha256: string };
+                target: { name: string; exists: boolean; sha256: string };
+                replacement: { name: string; exists: boolean };
+            };
+        } };
+        assert.equal(savedResponse.status, 200);
+        assert.equal(saved.data.revision, 5);
+        assert.equal(saved.data.dirty, false);
+        assert.match(saved.data.recovery.backup.name, /^\.2\.dat\.backup-[A-Za-z0-9-]+\.bak$/);
+        assert.equal(saved.data.recovery.backup.sha256, createHash("sha256").update(originalDat).digest("hex"));
+        assert.equal(saved.data.recovery.target.sha256, createHash("sha256").update(native.bytes(primaryRoot, datPath)).digest("hex"));
+        assert.equal(saved.data.recovery.replacement.exists, false);
+        assert.equal(savedText.includes(primaryRoot), false);
+        assert.equal(savedText.includes(assetRoot), false);
 
         const validAsset = await fetch(`${origin}/api/assets/${opened.data.spriteRanges[0]!.assetId}`);
         assert.equal(validAsset.status, 200);
@@ -335,6 +608,24 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             value: 3,
             expectedRevision: 1,
         })).status, 404);
+        const persistedResponse = await post(origin, token, "/api/project/open", { objectKey });
+        const persisted = await persistedResponse.json() as { data: {
+            sessionId: string;
+            revision: number;
+            dirty: boolean;
+            fields: Array<{ key: string; value: unknown }>;
+            frames: Array<{ frameId: number; bdys: unknown[] }>;
+        } };
+        assert.equal(persistedResponse.status, 200);
+        assert.equal(persisted.data.revision, 0);
+        assert.equal(persisted.data.dirty, false);
+        assert.equal(persisted.data.fields.find((field) => field.key === "pic")?.value, 2);
+        assert.deepEqual(persisted.data.fields.find((field) => field.key === "catchingact")?.value, [70, 71]);
+        assert.equal(persisted.data.frames.some((frame) => frame.frameId === 17), true);
+        assert.equal(persisted.data.frames.find((frame) => frame.frameId === 0)?.bdys.length, 2);
+        assert.equal((await post(origin, token, "/api/project/close", {
+            sessionId: persisted.data.sessionId,
+        })).status, 200);
         for (let index = 0; index < 33; index += 1) {
             const reopenedResponse = await post(origin, token, "/api/project/open", { objectKey });
             const reopened = await reopenedResponse.json() as { data: { sessionId: string } };
@@ -355,5 +646,90 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             value: 3,
             expectedRevision: 1,
         })).status, 404);
+    });
+
+    it("opens fallback Naruto as an explicit read-only session", async () => {
+        const primaryRoot = resolve("project-api-readonly-primary");
+        const assetRoot = resolve("project-api-readonly-assets");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const datPath = "Assets/NTSD/Config/2.dat";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, catalogBytes(datPath));
+        native.set(assetRoot, datPath, narutoDat());
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        const assets = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        await assets.authorizeStartupRoot(assetRoot);
+        primary.sealStartupAuthorization();
+        assets.sealStartupAuthorization();
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            assetRegistry: assets,
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "b".repeat(32),
+            previewRunner: {
+                preview: async (_plaintext, options) => nativePreview(options?.startFrame, options?.ticks),
+            },
+        });
+        const staticFiles = await staticFixture();
+        const server = createApplicationServer({ ...staticFiles, workspace: primary, projectDatService: project });
+        servers.push(server);
+        const origin = await listenLoopback(server, 0);
+        const token = getApplicationServerSecurity(server).token;
+
+        const catalog = await (await fetch(`${origin}/api/project`)).json() as { data: {
+            objects: Array<{ objectKey: string; oid: number; availablePrimary: boolean }>;
+        } };
+        const naruto = catalog.data.objects.find((entry) => entry.oid === 2)!;
+        assert.equal(naruto.availablePrimary, false);
+        const openedResponse = await post(origin, token, "/api/project/open", { objectKey: naruto.objectKey });
+        const opened = await openedResponse.json() as { data: {
+            sessionId: string;
+            revision: number;
+            dirty: boolean;
+            writable: boolean;
+            fields: Array<{ fieldId: string; key: string }>;
+            structureCapabilities: Array<{ capabilityId: string }>;
+        } };
+        assert.equal(openedResponse.status, 200);
+        assert.equal(opened.data.writable, false);
+        assert.equal(opened.data.dirty, false);
+        const pic = opened.data.fields.find((field) => field.key === "pic")!;
+
+        for (const [path, body] of [
+            ["/api/project/edit", {
+                sessionId: opened.data.sessionId,
+                fieldId: pic.fieldId,
+                value: 2,
+                expectedRevision: opened.data.revision,
+            }],
+            ["/api/project/edit-batch", {
+                sessionId: opened.data.sessionId,
+                edits: [{ fieldId: pic.fieldId, value: 2 }],
+                expectedRevision: opened.data.revision,
+            }],
+            ["/api/project/edit-structure", {
+                sessionId: opened.data.sessionId,
+                capabilityId: opened.data.structureCapabilities[0]!.capabilityId,
+                operation: "copy-frame",
+                newFrameId: 17,
+                expectedRevision: opened.data.revision,
+            }],
+            ["/api/project/save", {
+                sessionId: opened.data.sessionId,
+                expectedRevision: opened.data.revision,
+            }],
+        ] as const) {
+            const response = await post(origin, token, path, body);
+            const text = await response.text();
+            assert.equal(response.status, 409);
+            assert.match(text, /read-only-session/);
+            assert.equal(text.includes(primaryRoot), false);
+            assert.equal(text.includes(assetRoot), false);
+        }
+        assert.equal((await post(origin, token, "/api/project/close", {
+            sessionId: opened.data.sessionId,
+        })).status, 200);
     });
 });

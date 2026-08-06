@@ -8,17 +8,21 @@
 
 | ID | Requirement | Source | Evidence | Priority | Status | Validation |
 |---|---|---|---|---|---|---|
-| REQ-001 | 专业技能编辑器四区布局 | User / Visual brief | Confirmed | P0 | Confirmed | VAL-001 |
-| REQ-002 | 技能名称与起始帧侧车元数据 | User | Confirmed | P0 | Confirmed | VAL-002 |
-| REQ-003 | 当前技能真实 DAT 帧流程 | User / Product goal | Confirmed | P0 | Confirmed | VAL-003 |
-| REQ-004 | 单角色高质量场景预览 | User | Confirmed | P0 | Confirmed | VAL-004 |
-| REQ-005 | 全部现有 DAT 块的几何叠加 | User | Confirmed | P0 | Confirmed | VAL-005 |
-| REQ-006 | 全部现有 DAT 块的结构化查看与编辑 | User | Confirmed | P0 | Confirmed | VAL-006 |
-| REQ-007 | 明确的按钮与操作反馈状态 | User | Confirmed | P0 | Confirmed | VAL-007 |
-| REQ-008 | 会话修改与 DAT 覆盖清晰分离 | User / Existing safety contract | Confirmed | P0 | Confirmed | VAL-008 |
-| REQ-009 | 桌面、中屏、窄屏自适应 | Template / Recommended default | User-authorized default | P1 | Confirmed | VAL-009 |
-| REQ-010 | 用户可见功能自行运行到 E4 证据 | Template | Confirmed | P0 | Confirmed | VAL-010 |
-| REQ-011 | DAT 与 Native preview 权威行为不被 UI 改写 | Project rules | Confirmed | P0 | Confirmed | VAL-011 |
+| REQ-001 | 专业技能编辑器四区布局 | User / Visual brief | Confirmed | P0 | Validated | VAL-001 |
+| REQ-002 | 技能名称与起始帧侧车元数据 | User | Confirmed | P0 | Validated | VAL-002 |
+| REQ-003 | 当前技能真实 DAT 帧流程 | User / Product goal | Confirmed | P0 | Validated | VAL-003 |
+| REQ-004 | 单角色高质量场景预览 | User | Confirmed | P0 | Validated | VAL-004 |
+| REQ-005 | 全部现有 DAT 块的几何叠加 | User | Confirmed | P0 | Validated | VAL-005 |
+| REQ-006 | 全部现有 DAT 块的结构化查看与编辑 | User | Confirmed | P0 | Validated | VAL-006 |
+| REQ-007 | 明确的按钮与操作反馈状态 | User | Confirmed | P0 | Validated | VAL-007 |
+| REQ-008 | 会话修改与 DAT 覆盖清晰分离 | User / Existing safety contract | Confirmed | P0 | Validated | VAL-008 |
+| REQ-009 | 桌面、中屏、窄屏自适应 | Template / Recommended default | User-authorized default | P1 | Validated | VAL-009 |
+| REQ-010 | 用户可见功能自行运行到 E4 证据 | Template | Confirmed | P0 | Validated | VAL-010 |
+| REQ-011 | DAT 与 Native preview 权威行为不被 UI 改写 | Project rules | Confirmed | P0 | Validated | VAL-011 |
+| REQ-012 | 技能复制、删除与排序 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-012 |
+| REQ-013 | 模板式 lossless frame/block 结构编辑 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P0 | Validated | VAL-013 |
+| REQ-014 | Canvas 几何直接编辑 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-014 |
+| REQ-015 | 可视化 Flow 与 DAT wait 视觉时间轴 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-015 |
 
 ## Requirement Detail
 
@@ -35,7 +39,7 @@
 - Dependencies: REQ-002、REQ-004、REQ-006。
 - Acceptance: 用户能在一个视图中定位当前角色、技能、帧、预览、属性和时间轴。
 - Validation ID: VAL-001
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-002: 技能名称与起始帧侧车元数据
 
@@ -50,7 +54,7 @@
 - Dependencies: 安全工作区与安全保存合同。
 - Acceptance: 新建或修改技能后重启服务，技能仍能恢复且 DAT 指纹不变。
 - Validation ID: VAL-002
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-003: 当前技能真实 DAT 帧流程
 
@@ -65,7 +69,7 @@
 - Dependencies: REQ-002。
 - Acceptance: 选择流程节点会定位预览和检查器到同一 DAT 帧。
 - Validation ID: VAL-003
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-004: 单角色高质量场景预览
 
@@ -80,7 +84,7 @@
 - Dependencies: `ntsd_cpp`、BMP 资源。
 - Acceptance: 当前角色、帧、朝向和播放状态在预览中可辨识。
 - Validation ID: VAL-004
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-005: 全部现有 DAT 块的几何叠加
 
@@ -95,7 +99,7 @@
 - Dependencies: REQ-004、REQ-006。
 - Acceptance: 切换每个叠加层只影响显示，不改变 DAT；选择叠加项会选中对应检查器块。
 - Validation ID: VAL-005
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-006: 全部现有 DAT 块的结构化查看与编辑
 
@@ -111,7 +115,7 @@
 - Dependencies: DatSessionService。
 - Acceptance: 修改 block 字段后叠加位置同步变化，修订版本递增且 `dirty=true`。
 - Validation ID: VAL-006
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-007: 明确的按钮与操作反馈状态
 
@@ -126,7 +130,7 @@
 - Dependencies: REQ-001。
 - Acceptance: 自动交互截图可观察到播放选中、加载禁用、按下和未保存状态。
 - Validation ID: VAL-007
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-008: 会话修改与 DAT 覆盖清晰分离
 
@@ -141,7 +145,7 @@
 - Dependencies: ProjectDatService safe save。
 - Acceptance: 编辑后显示未保存状态；保存成功后恢复已保存状态；切换技能不关闭同一项目会话。
 - Validation ID: VAL-008
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-009: 自适应布局
 
@@ -156,7 +160,7 @@
 - Dependencies: REQ-001。
 - Acceptance: 三个目标 viewport 均能完成选择技能、播放、编辑一个字段。
 - Validation ID: VAL-009
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-010: 自行运行验证
 
@@ -171,7 +175,7 @@
 - Dependencies: 测试环境。
 - Acceptance: `ACCEPTANCE.md` 记录构建 ID、操作、结果和证据路径。
 - Validation ID: VAL-010
-- Status: Confirmed
+- Status: Validated
 
 ### REQ-011: 权威边界
 
@@ -186,7 +190,67 @@
 - Dependencies: 项目权威资料和 `ntsd_cpp`。
 - Acceptance: 代码审查确认没有以 UI 推断替代权威运行结果。
 - Validation ID: VAL-011
-- Status: Confirmed
+- Status: Validated
+
+### REQ-012: 技能复制、删除与排序
+
+- Statement: 用户可复制、删除选中技能，并将技能上移或下移一位。
+- Rationale: 技能侧车需要支持日常组织，而不要求修改 DAT 或引入新 schema。
+- Source: 用户于 2026-08-06 确认采用建议规则。
+- Evidence: `Confirmed`
+- Preconditions: 技能侧车已载入且项目可写。
+- Inputs: 当前选中技能和 sidecar revision/etag。
+- Outputs: 更新后的有序 `skills[]`。
+- Invariants: 复制项插在原项后并追加“副本”；删除必须确认；操作后保持结果项或相邻项选中；不改变 sidecar schema 或 DAT 字节。
+- Dependencies: REQ-002、REQ-008。
+- Acceptance: 复制、删除、上移、下移分别只产生一次 sidecar CAS 保存；重启服务后顺序和名称恢复。
+- Validation ID: VAL-012
+- Status: Validated
+
+### REQ-013: 模板式 lossless frame/block 结构编辑
+
+- Statement: 用户可复制当前完整 frame 并显式指定新 frame ID；可用当前同类 block 的完整字节作为模板新建或复制 block；可删除当前完整 frame/block。
+- Rationale: 空白结构的默认字段没有权威合同，完整 span 模板能保留未知字节、格式和注释。
+- Source: 用户于 2026-08-06 确认“模板式新建”。
+- Evidence: `Confirmed`
+- Preconditions: 当前结构具有完整、可安全复制或删除的 CST span；项目可写且 revision 最新。
+- Inputs: 服务器签发的结构 capability、操作类型、新 frame ID（仅 frame 复制）。
+- Outputs: 一次 revision 的 lossless 结构事务和重新签发的全部字段/结构 capability。
+- Invariants: frame 复制仅修改副本 header 中的 frame ID；block 新建与复制都复制当前同类完整 span；删除不自动修复 `next`、`hit_*`、技能起始帧或其他引用；不生成空白默认字段；旧 capability 在结构事务后失效。
+- Dependencies: REQ-006、REQ-008、REQ-011。
+- Acceptance: 未知字段、注释、换行和非目标字节保持不变；失败、超限和 revision 冲突原子回滚；显式保存和重启后结构恢复。
+- Validation ID: VAL-013
+- Status: Validated
+
+### REQ-014: Canvas 几何直接编辑
+
+- Statement: 用户可在 Canvas 上移动现有点/矩形几何，使用矩形边角调整 x/y/w/h，并通过键盘微调。
+- Rationale: 几何编辑应直接反馈到预览，而不是完全依赖检查器数字输入。
+- Source: 用户于 2026-08-06 确认采用建议交互。
+- Evidence: `Confirmed`
+- Preconditions: 所需 x/y 或 x/y/w/h 字段已有服务器 capability；项目可写。
+- Inputs: pointer drag、resize handle、Esc、方向键、Shift、4px 网格开关。
+- Outputs: 拖动中的本地草稿几何，以及 pointerup 后一次原子 batch edit。
+- Invariants: 默认 1px；4px 网格可切换；方向键 ±1、Shift+方向键 ±4；Esc 取消未提交交互；镜像方向使用经测试的逆变换；缺失 capability 时禁用对应操作；w/h 不得提交非正值。
+- Dependencies: REQ-005、REQ-006、REQ-008。
+- Acceptance: move 每次只增加一个 revision 并同时更新 x/y；resize 每次只增加一个 revision 并同时更新 x/y/w/h；冲突或失败不留下部分字段修改。
+- Validation ID: VAL-014
+- Status: Validated
+
+### REQ-015: 可视化 Flow 与 DAT wait 视觉时间轴
+
+- Statement: 当前技能以 SVG 节点和真实已有 `next`/`hit_*` 字段连线展示；用户只能将已有跳转字段重定向到已有 frame；时间轴按 `max(1, wait)` 展开并明确标记为 DAT wait 视觉比例。
+- Rationale: 提升流程可读性，同时不把 DAT 值伪装成未确认的 Native tick 或秒数。
+- Source: 用户于 2026-08-06 理解并确认采用安全边界，后续根据表现微调。
+- Evidence: `Confirmed`
+- Preconditions: 当前技能与 frame projection 已载入。
+- Inputs: 真实 frame、已有字段 capability、用户选择的目标 frame。
+- Outputs: 可选择节点、可选择/重定向边、按 wait 比例展开的单轨时间轴。
+- Invariants: 不创建或删除缺失跳转字段；不把写 `0` 当作删除边；不自动推断主分支或运行时长；视觉单位不声明等于 Native tick 或秒。
+- Dependencies: REQ-003、REQ-006、REQ-011。
+- Acceptance: 节点、边和时间轴选择定位到同一 frame；重定向已有边只修改对应字段一次；分支、循环和 unresolved 仍可辨识；时间轴宽度满足 `max(1, wait)` 比例。
+- Validation ID: VAL-015
+- Status: Validated
 
 ## Non-Goals
 

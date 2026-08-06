@@ -1,6 +1,6 @@
 import { execFile as nodeExecFile } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, open as openFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 
@@ -8,7 +8,13 @@ import { parseBmpMetadata } from "../assets/bmp.js";
 import type { DatFrameProjection } from "../model/dat-projection.js";
 import { DataTxtDocument, diagnoseResourcePath, type DataTxtEntry } from "../project/data-txt.js";
 import { MAX_CATALOG_OIDS } from "../sim/catalog.js";
-import { DatSessionError, DatSessionService, type DatSessionView } from "./dat-session-service.js";
+import {
+    DatSessionError,
+    DatSessionService,
+    type DatSessionBeforeCommit,
+    type DatSessionEmission,
+    type DatSessionView,
+} from "./dat-session-service.js";
 import type {
     NativePreviewEntityView,
     NativePreviewTickView,
@@ -71,6 +77,7 @@ interface SessionBinding {
     logicalPath: string;
     oid: number;
     type: number;
+    writable: boolean;
     assetIdsByPath: Map<string, string>;
 }
 
@@ -127,9 +134,24 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
                     maxBuffer: 1024 * 1024,
                 }, (error) => error === null ? resolveRun() : rejectRun(error));
             });
-            const bytes = await readFile(outputPath);
-            if (bytes.length > MAX_PREVIEW_OUTPUT_BYTES) throw new Error("Native preview output exceeds its limit.");
-            return JSON.parse(bytes.toString("utf8")) as unknown;
+            const output = await openFile(outputPath, "r");
+            try {
+                const statistics = await output.stat();
+                if (!statistics.isFile() || statistics.size > MAX_PREVIEW_OUTPUT_BYTES) {
+                    throw new Error("Native preview output exceeds its limit.");
+                }
+                const bytes = Buffer.allocUnsafe(MAX_PREVIEW_OUTPUT_BYTES + 1);
+                let offset = 0;
+                while (offset < bytes.length) {
+                    const read = await output.read(bytes, offset, bytes.length - offset, offset);
+                    if (read.bytesRead === 0) break;
+                    offset += read.bytesRead;
+                }
+                if (offset > MAX_PREVIEW_OUTPUT_BYTES) throw new Error("Native preview output exceeds its limit.");
+                return JSON.parse(bytes.subarray(0, offset).toString("utf8")) as unknown;
+            } finally {
+                await output.close();
+            }
         } finally {
             await rm(directory, { recursive: true, force: true });
         }
@@ -236,6 +258,7 @@ export class ProjectDatService {
             sessionId: session.sessionId,
             oid: object.oid,
             type: object.type,
+            writable: opened.registry === this.#primary,
             assetIdsByPath: new Map(),
         };
         this.#sessions.set(session.sessionId, binding);
@@ -251,16 +274,51 @@ export class ProjectDatService {
     async edit(input: unknown): Promise<ProjectSessionView> {
         const request = exactRecord(input, ["sessionId", "fieldId", "value", "expectedRevision"]);
         const sessionId = requireOpaqueId(request.sessionId, "sessionId");
+        return await this.#editSession(sessionId, async (binding, beforeCommit) => {
+            await binding.service.edit(input, beforeCommit);
+        });
+    }
+
+    async editBatch(input: unknown): Promise<ProjectSessionView> {
+        const request = exactRecord(input, ["sessionId", "edits", "expectedRevision"]);
+        const sessionId = requireOpaqueId(request.sessionId, "sessionId");
+        return await this.#editSession(sessionId, async (binding, beforeCommit) => {
+            await binding.service.editBatch(input, beforeCommit);
+        });
+    }
+
+    async editStructure(input: unknown): Promise<ProjectSessionView> {
+        const request = typeof input === "object" && input !== null && !Array.isArray(input)
+            ? input as Record<string, unknown>
+            : {};
+        const sessionId = requireOpaqueId(request.sessionId, "sessionId");
+        return await this.#editSession(sessionId, async (binding, beforeCommit) => {
+            await binding.service.editStructure(input, beforeCommit);
+        });
+    }
+
+    async #editSession(
+        sessionId: string,
+        operation: (binding: SessionBinding, beforeCommit: DatSessionBeforeCommit) => Promise<void>,
+    ): Promise<ProjectSessionView> {
         await this.#refreshCatalog();
         return await this.#enqueue(sessionId, async () => {
             const binding = this.#requireSession(sessionId);
-            let view;
+            if (!binding.writable) {
+                throw new ProjectDatError("read-only-session", "Fallback DAT sessions are read-only.");
+            }
+            let prepared: ProjectSessionView | undefined;
             try {
-                view = await binding.service.edit(input);
+                await operation(binding, async (view, emission) => {
+                    prepared = await this.#buildSessionView(view, binding, emission);
+                });
             } catch (error) {
                 throw mapSessionError(error);
             }
-            return await this.#buildSessionView(view, binding);
+            if (prepared === undefined) {
+                throw new ProjectDatError("invalid-request", "The DAT edit did not prepare a session view.");
+            }
+            return prepared;
         });
     }
 
@@ -289,8 +347,8 @@ export class ProjectDatService {
         await this.#refreshCatalog();
         return await this.#enqueue(sessionId, async () => {
             const binding = this.#requireSession(sessionId);
-            if (binding.registry !== this.#primary) {
-                throw new ProjectDatError("save-failed", "Fallback assets are read-only; this DAT cannot be overwritten.");
+            if (!binding.writable) {
+                throw new ProjectDatError("read-only-session", "Fallback DAT sessions are read-only.");
             }
             const emission = await binding.service.emit(sessionId, expectedRevision).catch((error) => { throw mapSessionError(error); });
             try {
@@ -417,7 +475,11 @@ export class ProjectDatService {
         return undefined;
     }
 
-    async #buildSessionView(session: DatSessionView, binding: SessionBinding): Promise<ProjectSessionView> {
+    async #buildSessionView(
+        session: DatSessionView,
+        binding: SessionBinding,
+        preparedEmission?: DatSessionEmission,
+    ): Promise<ProjectSessionView> {
         const spriteRanges = [];
         for (const range of session.projection.spriteRanges) {
             const asset = await this.#resolveSpriteAsset(binding, range.file);
@@ -427,11 +489,13 @@ export class ProjectDatService {
                 w: range.w, h: range.h, row: range.row, col: range.col,
             });
         }
-        const emission = await binding.service.emit(session.sessionId, session.revision).catch((error) => { throw mapSessionError(error); });
+        const emission = preparedEmission ?? await binding.service.emit(session.sessionId, session.revision)
+            .catch((error) => { throw mapSessionError(error); });
         return {
             sessionId: session.sessionId,
             revision: session.revision,
             dirty: session.dirty,
+            writable: binding.writable,
             oid: binding.oid,
             type: binding.type,
             name: session.projection.top.name,
@@ -440,6 +504,7 @@ export class ProjectDatService {
             fields: session.fields.filter((field) => ![
                 "head", "small", "file", "sound", "weapon_hit_sound", "weapon_drop_sound", "weapon_broken_sound",
             ].includes(field.key)),
+            structureCapabilities: session.structureCapabilities,
             preview: await this.#runPreview(emission.plaintext),
             diagnostics: session.diagnostics.map((diagnostic) => ({
                 code: diagnostic.code,
@@ -632,6 +697,13 @@ function finite(value: unknown, name: string): number {
     return value;
 }
 
+function previewInteger(value: unknown, minimum: number, maximum: number, name: string): number {
+    if (typeof value !== "number" || !Number.isSafeInteger(value) || value < minimum || value > maximum) {
+        throw new ProjectDatError("preview-failed", `Native preview ${name} is invalid.`);
+    }
+    return value;
+}
+
 function record(value: unknown, name: string): Record<string, unknown> {
     if (typeof value !== "object" || value === null || Array.isArray(value)) throw new ProjectDatError("preview-failed", `Native preview ${name} is invalid.`);
     return value as Record<string, unknown>;
@@ -652,7 +724,7 @@ function vector(value: unknown, name: string): { x: number; y: number; z: number
 function sanitizeEntity(value: unknown): NativePreviewEntityView {
     const item = record(value, "entity");
     return {
-        slot: finite(item.slot, "slot"), oid: finite(item.oid, "oid"), frame: finite(item.frame, "frame"),
+        slot: previewInteger(item.slot, 0, 399, "slot"), oid: finite(item.oid, "oid"), frame: finite(item.frame, "frame"),
         pic: finite(item.pic, "pic"), facing: finite(item.facing, "facing"), x: finite(item.x, "x"),
         y: finite(item.y, "y"), z: finite(item.z, "z"), xInt: finite(item.x_int, "x_int"),
         yInt: finite(item.y_int, "y_int"), zInt: finite(item.z_int, "z_int"), velocity: vector(item.v, "v"),
@@ -667,6 +739,10 @@ function sanitizeTick(value: unknown): NativePreviewTickView {
     const bg = record(item.bg, "background");
     const entities = Array.isArray(item.entities) ? item.entities : [];
     if (entities.length > 400) throw new ProjectDatError("preview-failed", "Native preview entity count exceeds its limit.");
+    const sanitizedEntities = entities.map(sanitizeEntity);
+    if (new Set(sanitizedEntities.map((entity) => entity.slot)).size !== sanitizedEntities.length) {
+        throw new ProjectDatError("preview-failed", "Native preview contains duplicate entity slots.");
+    }
     return {
         tick: finite(item.tick, "tick"), cameraX: finite(item.camera_x, "camera_x"),
         cameraVelocity: finite(item.camera_vel, "camera_vel"),
@@ -674,7 +750,7 @@ function sanitizeTick(value: unknown): NativePreviewTickView {
             width: finite(bg.width, "bg.width"), zMin: finite(bg.z_min, "bg.z_min"), zMax: finite(bg.z_max, "bg.z_max"),
             boundLeft: finite(bg.bound_left, "bg.bound_left"), boundRight: finite(bg.bound_right, "bg.bound_right"),
         },
-        entities: entities.map(sanitizeEntity),
+        entities: sanitizedEntities,
     };
 }
 
@@ -722,11 +798,17 @@ function copySafeFrame(value: DatFrameProjection): ProjectFrameView {
     };
 }
 
-function safeObservation(value: { exists: boolean; size?: number; sha256?: string }) {
-    return { exists: value.exists, ...(value.size === undefined ? {} : { size: value.size }), ...(value.sha256 === undefined ? {} : { sha256: value.sha256 }) };
+function safeObservation(value: { path: string; exists: boolean; size?: number; sha256?: string }) {
+    return {
+        name: basename(value.path),
+        exists: value.exists,
+        ...(value.size === undefined ? {} : { size: value.size }),
+        ...(value.sha256 === undefined ? {} : { sha256: value.sha256 }),
+    };
 }
 
 function mapSessionError(error: unknown): ProjectDatError {
+    if (error instanceof ProjectDatError) return error;
     if (!(error instanceof DatSessionError)) return new ProjectDatError("invalid-request", "The DAT session operation failed.", { cause: error });
     if (error.code === "revision-conflict") return new ProjectDatError("revision-conflict", "The DAT session revision is stale.", { cause: error });
     if (error.code === "unknown-session" || error.code === "expired") return new ProjectDatError("unknown-session", "The project session is unknown.", { cause: error });

@@ -33,13 +33,20 @@ namespace NTSD.Animation.Rendering.Editor
         private bool enablePresentationTiming;
         private bool enableDetailPhaseTiming;
         private string outputPath = "Temp/NTSD_ProductionEntityStress.dispersed.json";
-        private string status = "Ready. A start request enters Play Mode and leaves the 1000-entity run visible until cleanup.";
+        private string status = "就绪。启动请求将进入播放模式，并让 1000 实体压力测试保持可见，直到执行清理。";
         private static readonly string[] FormalCollectorModes =
         {
             "configured",
             "legacy",
             "role",
             "brute",
+        };
+        private static readonly string[] FormalCollectorModeLabels =
+        {
+            "按配置",
+            "旧版",
+            "角色感知",
+            "暴力遍历",
         };
         private static readonly string[] AiExecutionProfiles =
         {
@@ -48,8 +55,8 @@ namespace NTSD.Animation.Rendering.Editor
         };
         private static readonly string[] AiExecutionProfileLabels =
         {
-            "Legacy Canonical",
-            "Data-Oriented Canonical",
+            "旧版规范模式",
+            "数据导向规范模式",
         };
         private static readonly string[] LateRuntimeSnapshotModes =
         {
@@ -58,8 +65,8 @@ namespace NTSD.Animation.Rendering.Editor
         };
         private static readonly string[] LateRuntimeSnapshotModeLabels =
         {
-            "Legacy Three",
-            "Consolidated Final",
+            "旧版三阶段快照",
+            "合并最终快照",
         };
         private static readonly string[] SoundPresentationModes =
         {
@@ -69,63 +76,63 @@ namespace NTSD.Animation.Rendering.Editor
         };
         private static readonly string[] SoundPresentationModeLabels =
         {
-            "Inherit from Simulation Only",
-            "Suppress",
-            "Dispatch",
+            "跟随仅模拟设置",
+            "抑制",
+            "派发",
         };
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试")]
         public static void Open()
         {
-            GetWindow<ProductionEntityStressWindow>("Production Entity Stress");
+            GetWindow<ProductionEntityStressWindow>("生产实体压力测试");
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 50 Smoke")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 50 实体冒烟测试")]
         public static void RunSmokeFromMenu()
         {
             ProductionEntityStressRequestProcessor.WriteRequest(
                 CreateDefaultRequest("smoke", "Temp/NTSD_ProductionEntityStress.smoke.json"));
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 Dispersed")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 1000 实体分散测试")]
         public static void RunDispersedFromMenu()
         {
             ProductionEntityStressRequestProcessor.WriteRequest(
                 CreateDefaultRequest("dispersed", "Temp/NTSD_ProductionEntityStress.dispersed.json"));
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 Concentrated")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 1000 实体集中测试")]
         public static void RunConcentratedFromMenu()
         {
             ProductionEntityStressRequestProcessor.WriteRequest(
                 CreateDefaultRequest("concentrated", "Temp/NTSD_ProductionEntityStress.concentrated.json"));
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run AI Simulation Smoke/100 Dispersed")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 AI 纯模拟冒烟测试/100 实体分散")]
         public static void RunDispersed100AiSimulationSmokeFromMenu()
         {
             WriteDispersedAiSimulationSmokeRequest(100);
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run AI Simulation Smoke/300 Dispersed")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 AI 纯模拟冒烟测试/300 实体分散")]
         public static void RunDispersed300AiSimulationSmokeFromMenu()
         {
             WriteDispersedAiSimulationSmokeRequest(300);
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run AI Simulation Smoke/500 Dispersed")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 AI 纯模拟冒烟测试/500 实体分散")]
         public static void RunDispersed500AiSimulationSmokeFromMenu()
         {
             WriteDispersedAiSimulationSmokeRequest(500);
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run AI Simulation Smoke/1000 Dispersed")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 AI 纯模拟冒烟测试/1000 实体分散")]
         public static void RunDispersed1000AiSimulationSmokeFromMenu()
         {
             WriteDispersedAiSimulationSmokeRequest(1000);
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Stop and Cleanup")]
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/停止并清理")]
         public static void StopFromMenu()
         {
             ProductionEntityStressRequestProcessor.WriteStopRequest();
@@ -133,126 +140,136 @@ namespace NTSD.Animation.Rendering.Editor
 
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("Real Production Entity Stress", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("真实生产实体压力测试", EditorStyles.boldLabel);
             EditorGUILayout.LabelField(
-                "Profile",
-                "MobileExtended (1050 slots), LooseQuadtree");
-            warmupTicks = EditorGUILayout.IntField("Warmup Logic Ticks", warmupTicks);
-            sampleTicks = EditorGUILayout.IntField("Target Sample Ticks", sampleTicks);
+                "配置",
+                "移动扩展（MobileExtended，1050 个槽位），松散四叉树（LooseQuadtree）");
+            warmupTicks = EditorGUILayout.IntField("预热逻辑帧数", warmupTicks);
+            sampleTicks = EditorGUILayout.IntField("目标采样帧数", sampleTicks);
             aiSimulationSmokeSampleTicks = EditorGUILayout.IntSlider(
-                "AI Simulation Smoke Samples",
+                "AI 纯模拟冒烟采样数",
                 aiSimulationSmokeSampleTicks,
                 10,
                 30);
-            spawnBatchSize = EditorGUILayout.IntSlider("Spawn Batch", spawnBatchSize, 1, 100);
+            spawnBatchSize = EditorGUILayout.IntSlider("每批生成数量", spawnBatchSize, 1, 100);
             maxCatchUpTicksPerFrame = EditorGUILayout.IntSlider(
-                "Max Catch-up Ticks",
+                "每帧最大追赶帧数",
                 maxCatchUpTicksPerFrame,
                 1,
                 12);
             maxBacklogTicks = EditorGUILayout.IntSlider(
-                "Max Backlog Ticks",
+                "最大积压帧数",
                 maxBacklogTicks,
                 maxCatchUpTicksPerFrame,
                 30);
             maxSaturationDrainTicks = EditorGUILayout.IntField(
-                "Max Saturation Drain Ticks",
+                "最大饱和排空帧数",
                 Math.Max(1, maxSaturationDrainTicks));
             formalCollectorModeIndex = EditorGUILayout.Popup(
-                "Formal Collector",
+                "正式收集器",
                 formalCollectorModeIndex,
-                FormalCollectorModes);
+                FormalCollectorModeLabels);
             aiExecutionProfileIndex = EditorGUILayout.Popup(
-                "AI Execution Profile",
+                "AI 执行模式",
                 aiExecutionProfileIndex,
                 AiExecutionProfileLabels);
+            string selectedAiExecutionProfile =
+                AiExecutionProfiles[aiExecutionProfileIndex];
+            NormalizeDecisionShadowModesForProfile(
+                selectedAiExecutionProfile,
+                ref enableAiDecisionSoAShadow,
+                ref enableAiDecisionSharedShadow);
             lateRuntimeSnapshotModeIndex = EditorGUILayout.Popup(
-                "Late Snapshot",
+                "延迟运行时快照",
                 lateRuntimeSnapshotModeIndex,
                 LateRuntimeSnapshotModeLabels);
-            bool requestedDeepShadow = EditorGUILayout.Toggle(
-                "AI Decision SoA Shadow",
-                enableAiDecisionSoAShadow);
-            if (requestedDeepShadow != enableAiDecisionSoAShadow)
+            using (new EditorGUI.DisabledScope(
+                       !SupportsDecisionShadowModes(selectedAiExecutionProfile)))
             {
-                enableAiDecisionSoAShadow = requestedDeepShadow;
-                if (enableAiDecisionSoAShadow)
-                    enableAiDecisionSharedShadow = false;
+                bool requestedDeepShadow = EditorGUILayout.Toggle(
+                    "AI 决策 SoA 影子验证",
+                    enableAiDecisionSoAShadow);
+                if (requestedDeepShadow != enableAiDecisionSoAShadow)
+                {
+                    enableAiDecisionSoAShadow = requestedDeepShadow;
+                    if (enableAiDecisionSoAShadow)
+                        enableAiDecisionSharedShadow = false;
+                }
+                bool requestedSharedShadow = EditorGUILayout.Toggle(
+                    "AI 决策共享影子验证",
+                    enableAiDecisionSharedShadow);
+                if (requestedSharedShadow != enableAiDecisionSharedShadow)
+                {
+                    enableAiDecisionSharedShadow = requestedSharedShadow;
+                    if (enableAiDecisionSharedShadow)
+                        enableAiDecisionSoAShadow = false;
+                }
             }
-            bool requestedSharedShadow = EditorGUILayout.Toggle(
-                "AI Decision Shared Shadow",
-                enableAiDecisionSharedShadow);
-            if (requestedSharedShadow != enableAiDecisionSharedShadow)
-            {
-                enableAiDecisionSharedShadow = requestedSharedShadow;
-                if (enableAiDecisionSharedShadow)
-                    enableAiDecisionSoAShadow = false;
-            }
-            if (AiExecutionProfiles[aiExecutionProfileIndex] ==
-                "data-oriented-canonical")
+            if (selectedAiExecutionProfile == "data-oriented-canonical")
             {
                 EditorGUILayout.HelpBox(
-                    "Uses the atomic SoA sensing + indexed decision + unified authority production profile.",
+                    "使用原子化 SoA 感知、索引化决策与统一权威的生产配置。" +
+                    "此模式自带采样完整预言机，不能同时启用决策影子验证。",
                     MessageType.Info);
             }
-            long editedSeed = EditorGUILayout.LongField("Deterministic Seed", seed);
+            long editedSeed = EditorGUILayout.LongField("确定性种子", seed);
             seed = (uint)Math.Max(uint.MinValue, Math.Min(uint.MaxValue, editedSeed));
-            simulationOnly = EditorGUILayout.Toggle("Simulation Only", simulationOnly);
+            simulationOnly = EditorGUILayout.Toggle("仅模拟", simulationOnly);
             soundPresentationModeIndex = EditorGUILayout.Popup(
-                "Sound Presentation",
+                "声音表现",
                 soundPresentationModeIndex,
                 SoundPresentationModeLabels);
             using (new EditorGUI.DisabledScope(!simulationOnly))
             {
                 skipLateRendererUpdate = EditorGUILayout.Toggle(
-                    "Skip Late Renderer Update",
+                    "跳过延迟渲染器更新",
                     skipLateRendererUpdate);
             }
             if (skipLateRendererUpdate && !simulationOnly)
             {
                 EditorGUILayout.HelpBox(
-                    "Skip Late Renderer Update requires Simulation Only.",
+                    "“跳过延迟渲染器更新”要求启用“仅模拟”。",
                     MessageType.Error);
             }
             autoStopWhenSampled = EditorGUILayout.Toggle(
-                "Auto-stop When Sampled",
+                "采样完成后自动停止",
                 autoStopWhenSampled);
-            enablePhaseTiming = EditorGUILayout.Toggle("Coarse Phase Timing", enablePhaseTiming);
+            enablePhaseTiming = EditorGUILayout.Toggle("粗粒度阶段计时", enablePhaseTiming);
             enablePresentationTiming = EditorGUILayout.Toggle(
-                "Presentation Timing",
+                "表现层计时",
                 enablePresentationTiming);
             enableDetailPhaseTiming = EditorGUILayout.Toggle(
-                "Detail Phase Timing",
+                "详细阶段计时",
                 enableDetailPhaseTiming);
-            outputPath = EditorGUILayout.TextField("Report Path", outputPath);
+            outputPath = EditorGUILayout.TextField("报告路径", outputPath);
 
             EditorGUILayout.Space();
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("50 Smoke"))
+                if (GUILayout.Button("50 实体冒烟测试"))
                     WriteStart("smoke", "Temp/NTSD_ProductionEntityStress.smoke.json");
-                if (GUILayout.Button("1000 Dispersed"))
+                if (GUILayout.Button("1000 实体分散测试"))
                     WriteStart("dispersed", "Temp/NTSD_ProductionEntityStress.dispersed.json");
-                if (GUILayout.Button("1000 Concentrated"))
+                if (GUILayout.Button("1000 实体集中测试"))
                     WriteStart("concentrated", "Temp/NTSD_ProductionEntityStress.concentrated.json");
             }
-            if (GUILayout.Button("Stop / Cleanup"))
+            if (GUILayout.Button("停止并清理"))
                 StopFromMenu();
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Dispersed AI Simulation-only Smoke", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("分散式 AI 纯模拟冒烟测试", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(
-                "Frozen ladder: 30 warmup ticks, 10-30 samples, auto-stop, deterministic AI input, and no presentation.",
+                "固定阶梯：预热 30 个逻辑帧，采样 10 到 30 次，自动停止，使用确定性 AI 输入且禁用表现。",
                 MessageType.None);
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("100 AI Sim"))
+                if (GUILayout.Button("100 实体 AI 模拟"))
                     WriteDispersedAiSimulationSmoke(100);
-                if (GUILayout.Button("300 AI Sim"))
+                if (GUILayout.Button("300 实体 AI 模拟"))
                     WriteDispersedAiSimulationSmoke(300);
-                if (GUILayout.Button("500 AI Sim"))
+                if (GUILayout.Button("500 实体 AI 模拟"))
                     WriteDispersedAiSimulationSmoke(500);
-                if (GUILayout.Button("1000 AI Sim"))
+                if (GUILayout.Button("1000 实体 AI 模拟"))
                     WriteDispersedAiSimulationSmoke(1000);
             }
 
@@ -260,14 +277,35 @@ namespace NTSD.Animation.Rendering.Editor
             if (runner != null && runner.Report != null)
             {
                 ProductionEntityStressReport report = runner.Report;
-                status = $"{report.status}: activeGO={report.activeGameObjectCount}, " +
-                         $"world={report.worldObjectCount}, slots={report.claimedRuntimeSlotCount}, " +
-                         $"samples={report.sampledLogicTicks}, collector={report.formalCollectorMode}, " +
-                         $"bodyEntries={report.formalCollectorBodyEntries}, " +
-                         $"itrQueries={report.formalCollectorItrQueries}";
+                status = $"{LocalizeRunStatus(report.status)}：活动对象={report.activeGameObjectCount}，" +
+                         $"世界对象={report.worldObjectCount}，运行时槽位={report.claimedRuntimeSlotCount}，" +
+                         $"已采样逻辑帧={report.sampledLogicTicks}，" +
+                         $"收集器={LocalizeFormalCollectorMode(report.formalCollectorMode)}，" +
+                         $"bdy 条目={report.formalCollectorBodyEntries}，" +
+                         $"itr 查询={report.formalCollectorItrQueries}";
                 Repaint();
             }
             EditorGUILayout.HelpBox(status, MessageType.Info);
+        }
+
+        internal static bool SupportsDecisionShadowModes(string aiExecutionProfile)
+        {
+            return string.Equals(
+                aiExecutionProfile,
+                "legacy",
+                StringComparison.Ordinal);
+        }
+
+        internal static void NormalizeDecisionShadowModesForProfile(
+            string aiExecutionProfile,
+            ref bool enableSoAShadow,
+            ref bool enableSharedShadow)
+        {
+            if (SupportsDecisionShadowModes(aiExecutionProfile))
+                return;
+
+            enableSoAShadow = false;
+            enableSharedShadow = false;
         }
 
         private void WriteStart(string action, string defaultOutputPath)
@@ -304,11 +342,11 @@ namespace NTSD.Animation.Rendering.Editor
                     outputPath = selectedOutput,
                 };
                 ProductionEntityStressRequestProcessor.WriteRequest(request);
-                status = "Request written. Waiting for Play Mode production services.";
+                status = "请求已写入，正在等待播放模式下的生产服务。";
             }
             catch (Exception exception)
             {
-                status = exception.Message;
+                status = $"错误：{exception.Message}";
                 Debug.LogError($"[ProductionEntityStress] Request write failed: {exception}");
             }
         }
@@ -329,12 +367,58 @@ namespace NTSD.Animation.Rendering.Editor
                         aiSimulationSmokeSampleTicks,
                         LateRuntimeSnapshotModes[lateRuntimeSnapshotModeIndex],
                         skipLateRendererUpdate));
-                status = "AI simulation-only smoke request written. Waiting for Play Mode production services.";
+                status = "AI 纯模拟冒烟测试请求已写入，正在等待播放模式下的生产服务。";
             }
             catch (Exception exception)
             {
-                status = exception.Message;
+                status = $"错误：{exception.Message}";
                 Debug.LogError($"[ProductionEntityStress] Request write failed: {exception}");
+            }
+        }
+
+        private static string LocalizeRunStatus(string value)
+        {
+            switch (value)
+            {
+                case "Starting":
+                    return "正在启动";
+                case "Running":
+                    return "正在运行";
+                case "Failed":
+                    return "失败";
+                case "SmokePassed":
+                    return "冒烟测试通过";
+                case "SmokeFailed":
+                    return "冒烟测试失败";
+                case "StoppedCleanly":
+                    return "已正常停止";
+                case "StoppedWithResidue":
+                    return "已停止但存在残留";
+                case "InterruptedCleanly":
+                    return "中断后已清理";
+                case "InterruptedWithResidue":
+                    return "中断后仍有残留";
+                case "SaturationBlockedReplenishment":
+                    return "因容量饱和而无法补充实体";
+                default:
+                    return value;
+            }
+        }
+
+        private static string LocalizeFormalCollectorMode(string value)
+        {
+            switch (value)
+            {
+                case "configured":
+                    return "按配置";
+                case "legacy":
+                    return "旧版";
+                case "role":
+                    return "角色感知";
+                case "brute":
+                    return "暴力遍历";
+                default:
+                    return value;
             }
         }
 

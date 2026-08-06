@@ -27,6 +27,7 @@ export interface DatFieldCst {
     rawValue: Buffer;
     scalarKind: DatScalarKind;
     numericValue?: number;
+    integerPairValue?: readonly [number, number];
     frameOccurrence?: number;
     blockType?: DatBlockType;
     blockIndex?: number;
@@ -36,6 +37,7 @@ export interface DatBlockCst {
     type: DatBlockType;
     index: number;
     span: ByteSpan;
+    closed: boolean;
     fields: DatFieldCst[];
 }
 
@@ -43,6 +45,8 @@ export interface DatFrameCst {
     frameId: number;
     occurrence: number;
     span: ByteSpan;
+    frameIdSpan: ByteSpan;
+    closed: boolean;
     fields: DatFieldCst[];
     blocks: DatBlockCst[];
 }
@@ -264,12 +268,39 @@ function isAuthorityStringField(key: string, scope: FieldParseScope): boolean {
         || (scope === "sprite" && key === "file");
 }
 
-function scalarKindForField(raw: Buffer, key: string, scope: FieldParseScope): { scalarKind: DatScalarKind; numericValue?: number } {
+const INT32_MIN = -2_147_483_648;
+const INT32_MAX = 2_147_483_647;
+
+export function isSignedInt32(value: unknown): value is number {
+    return typeof value === "number"
+        && Number.isSafeInteger(value)
+        && value >= INT32_MIN
+        && value <= INT32_MAX;
+}
+
+function parseIntegerPair(raw: Buffer): readonly [number, number] | undefined {
+    const match = /^[+-]?\d+[ \t]+[+-]?\d+$/.exec(raw.toString("latin1"));
+    if (match === null) return undefined;
+    const values = raw.toString("latin1").split(/[ \t]+/).map((value) => Number(value));
+    if (values.length !== 2 || values.some((value) => !isSignedInt32(value))) return undefined;
+    return [values[0]!, values[1]!] as const;
+}
+
+function scalarKindForField(
+    raw: Buffer,
+    key: string,
+    scope: FieldParseScope,
+    blockType?: DatBlockType,
+): { scalarKind: DatScalarKind; numericValue?: number; integerPairValue?: readonly [number, number] } {
     if (isAuthorityStringField(key, scope)) {
         for (const value of raw) {
             if (isOpaqueByte(value)) return { scalarKind: "opaque" };
         }
         return { scalarKind: "string" };
+    }
+    if (scope === "block" && blockType === "itr" && (key === "catchingact" || key === "caughtact")) {
+        const integerPairValue = parseIntegerPair(raw);
+        if (integerPairValue !== undefined) return { scalarKind: "number", integerPairValue };
     }
     return scalarKindAndNumber(raw);
 }
@@ -289,7 +320,7 @@ function parseFieldsOnLine(
         const nextStart = matches[index + 1]?.keyStart ?? content.end;
         const valueSpan = trimHorizontal(source, { start: match.colonEnd, end: nextStart });
         const rawValue = Buffer.from(source.subarray(valueSpan.start, valueSpan.end));
-        const parsed = scalarKindForField(rawValue, match.key, context.scope);
+        const parsed = scalarKindForField(rawValue, match.key, context.scope, context.blockType);
         const { scope: _scope, ...fieldContext } = context;
         fields.push({
             key: match.key,
@@ -303,12 +334,24 @@ function parseFieldsOnLine(
     return fields;
 }
 
-function parseFrameHeader(source: Uint8Array, span: ByteSpan): number | undefined {
+function parseFrameHeader(
+    source: Uint8Array,
+    span: ByteSpan,
+): { frameId: number; frameIdSpan: ByteSpan } | undefined {
     const text = ascii(source, span.start, span.end);
     const match = /^\s*<frame>\s*([+-]?\d+)/.exec(text);
     if (!match) return undefined;
-    const value = Number.parseInt(match[1]!, 10);
-    return Number.isSafeInteger(value) ? value : undefined;
+    const rawId = match[1]!;
+    const frameId = Number.parseInt(rawId, 10);
+    if (!Number.isSafeInteger(frameId)) return undefined;
+    const relativeStart = match[0].lastIndexOf(rawId);
+    return {
+        frameId,
+        frameIdSpan: {
+            start: span.start + relativeStart,
+            end: span.start + relativeStart + rawId.length,
+        },
+    };
 }
 
 function parseSpriteRange(source: Buffer, line: LineSpan): DatSpriteRangeCst | undefined {
@@ -359,14 +402,15 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
     const frames: DatFrameCst[] = [];
     let currentFrame: DatFrameCst | undefined;
     let currentBlock: DatBlockCst | undefined;
+    let currentBlockCounts = new Map<DatBlockType, number>();
     let frameOccurrence = 0;
 
     for (const line of splitLines(source)) {
         const content = lineWithoutComment(source, line.content);
         const trimmed = trimHorizontal(source, content);
         const lineText = ascii(source, trimmed.start, trimmed.end);
-        const frameId = parseFrameHeader(source, trimmed);
-        if (frameId !== undefined) {
+        const frameHeader = parseFrameHeader(source, trimmed);
+        if (frameHeader !== undefined) {
             if (currentBlock) {
                 diagnostics.push(dataDiagnostic("malformed-block", `Unclosed ${currentBlock.type} block.`, { span: currentBlock.span }));
             }
@@ -374,15 +418,18 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
                 diagnostics.push(dataDiagnostic("malformed-frame", "Unclosed frame before the next <frame> marker.", { span: currentFrame.span }));
             }
             currentFrame = {
-                frameId,
+                frameId: frameHeader.frameId,
                 occurrence: frameOccurrence,
                 span: { start: line.full.start, end: line.full.end },
+                frameIdSpan: frameHeader.frameIdSpan,
+                closed: false,
                 fields: [],
                 blocks: [],
             };
             frameOccurrence += 1;
             frames.push(currentFrame);
             currentBlock = undefined;
+            currentBlockCounts = new Map();
             continue;
         }
 
@@ -394,7 +441,9 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
             }
             if (currentFrame) {
                 currentFrame.span.end = line.full.end;
+                currentFrame.closed = true;
                 currentFrame = undefined;
+                currentBlockCounts = new Map();
             }
             continue;
         }
@@ -406,8 +455,15 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
                     diagnostics.push(dataDiagnostic("malformed-block", `Unclosed ${currentBlock.type} block.`, { span: currentBlock.span }));
                 }
                 const type = blockStart[1] as DatBlockType;
-                const index = currentFrame.blocks.filter((block) => block.type === type).length;
-                currentBlock = { type, index, span: { start: line.full.start, end: line.full.end }, fields: [] };
+                const index = currentBlockCounts.get(type) ?? 0;
+                currentBlockCounts.set(type, index + 1);
+                currentBlock = {
+                    type,
+                    index,
+                    span: { start: line.full.start, end: line.full.end },
+                    closed: false,
+                    fields: [],
+                };
                 currentFrame.blocks.push(currentBlock);
                 currentBlock.fields.push(...parseFieldsOnLine(
                     source,
@@ -422,6 +478,7 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
             if (blockEnd) {
                 if (currentBlock?.type === blockEnd[1]) {
                     currentBlock.span.end = line.full.end;
+                    currentBlock.closed = true;
                     currentBlock = undefined;
                 } else {
                     diagnostics.push(dataDiagnostic("malformed-block", `Unexpected ${blockEnd[1]}_end marker.`, { span: { ...line.content } }));

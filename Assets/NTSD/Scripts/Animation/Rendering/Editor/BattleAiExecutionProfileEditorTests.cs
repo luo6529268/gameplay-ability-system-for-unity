@@ -115,6 +115,47 @@ namespace NTSD.Animation.Rendering.Editor
                 Is.EqualTo(AiUnifiedSnapshotExecutionMode.UnifiedAuthority));
         }
 
+        [TestCase("legacy", true)]
+        [TestCase("data-oriented-canonical", false)]
+        public void StressWindow_ProfileControlsDecisionShadowAvailability(
+            string profile,
+            bool expected)
+        {
+            Assert.That(
+                ProductionEntityStressWindow.SupportsDecisionShadowModes(profile),
+                Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void StressWindow_DataOrientedProfileClearsStaleDecisionShadowSelections()
+        {
+            bool enableSoAShadow = true;
+            bool enableSharedShadow = true;
+
+            ProductionEntityStressWindow.NormalizeDecisionShadowModesForProfile(
+                "data-oriented-canonical",
+                ref enableSoAShadow,
+                ref enableSharedShadow);
+
+            Assert.That(enableSoAShadow, Is.False);
+            Assert.That(enableSharedShadow, Is.False);
+        }
+
+        [Test]
+        public void StressWindow_LegacyProfilePreservesDecisionShadowSelection()
+        {
+            bool enableSoAShadow = true;
+            bool enableSharedShadow = false;
+
+            ProductionEntityStressWindow.NormalizeDecisionShadowModesForProfile(
+                "legacy",
+                ref enableSoAShadow,
+                ref enableSharedShadow);
+
+            Assert.That(enableSoAShadow, Is.True);
+            Assert.That(enableSharedShadow, Is.False);
+        }
+
         [Test]
         public void StressRequest_OldCandidateJsonRemainsExplicitCompatibilityOnly()
         {

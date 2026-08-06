@@ -1,4 +1,7 @@
-import type { DatSessionFieldView } from "./dat-session-contract.js";
+import type {
+    DatSessionFieldView,
+    DatSessionFrameStructureView,
+} from "./dat-session-contract.js";
 import type { DatFrameProjection } from "../model/dat-projection.js";
 
 export type ProjectDatErrorCode =
@@ -10,6 +13,7 @@ export type ProjectDatErrorCode =
     | "unknown-asset"
     | "invalid-asset"
     | "revision-conflict"
+    | "read-only-session"
     | "preview-failed"
     | "save-failed"
     | "invalid-request";
@@ -101,12 +105,14 @@ export interface ProjectSessionView {
     readonly sessionId: string;
     readonly revision: number;
     readonly dirty: boolean;
+    readonly writable: boolean;
     readonly oid: number;
     readonly type: number;
     readonly name: string;
     readonly spriteRanges: readonly ProjectSpriteRangeView[];
     readonly frames: readonly ProjectFrameView[];
     readonly fields: readonly DatSessionFieldView[];
+    readonly structureCapabilities: readonly DatSessionFrameStructureView[];
     readonly preview: NativePreviewView;
     readonly diagnostics: readonly {
         readonly code: string;
@@ -142,8 +148,8 @@ export interface ProjectSaveResponse {
     readonly revision: number;
     readonly dirty: false;
     readonly recovery: {
-        readonly target: { readonly exists: boolean; readonly size?: number; readonly sha256?: string };
-        readonly replacement: { readonly exists: boolean; readonly size?: number; readonly sha256?: string };
-        readonly backup: { readonly exists: boolean; readonly size?: number; readonly sha256?: string };
+        readonly target: { readonly name: string; readonly exists: boolean; readonly size?: number; readonly sha256?: string };
+        readonly replacement: { readonly name: string; readonly exists: boolean; readonly size?: number; readonly sha256?: string };
+        readonly backup: { readonly name: string; readonly exists: boolean; readonly size?: number; readonly sha256?: string };
     };
 }

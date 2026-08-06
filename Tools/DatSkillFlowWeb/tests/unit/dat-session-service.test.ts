@@ -82,6 +82,27 @@ function datSource(name = "Second Hero", pic = 2): Buffer {
     ].join(""), "ascii");
 }
 
+function duplicateLocatorSource(): Buffer {
+    return Buffer.from([
+        "name: Locator Hero\n",
+        "<frame> 7 first\n",
+        "pic: 1 pic: 2\n",
+        "itr:\n",
+        " catchingact: 1 2 catchingact: 3 4\n",
+        "itr_end:\n",
+        "itr:\n",
+        " caughtact: 5 6\n",
+        "itr_end:\n",
+        "<frame_end>\n",
+        "<frame> 7 second\n",
+        "pic: 8 pic: 9\n",
+        "itr:\n",
+        " catchingact: 10 11\n",
+        "itr_end:\n",
+        "<frame_end>\n",
+    ].join(""), "ascii");
+}
+
 function idFactory(): () => string {
     let next = 0;
     return () => `opaque-${String(++next).padStart(6, "0")}-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`;
@@ -356,7 +377,7 @@ describe("server-owned DAT session core", () => {
         assert.equal(movement.projection.top.walking_speed, 1.5);
     });
 
-    it("fails closed for malformed source integers and withholds pair or unknown scalar capabilities", async () => {
+    it("fails closed for malformed scalar or ITR pair values and withholds unknown capabilities", async () => {
         const fractional = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2", "pic: 1 pic: 1.5"), "latin1"));
         await rejectsCode(fractional.service.openDocument(fractional.documentId, "plaintext"), "invalid-request");
         const overflowing = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2", "pic: 1 pic: 2147483648"), "latin1"));
@@ -370,14 +391,22 @@ describe("server-owned DAT session core", () => {
         const badMovement = await fixture(Buffer.from(datSource().toString("latin1").replace("walking_speed: 4.5", "walking_speed: nope"), "latin1"));
         await rejectsCode(badMovement.service.openDocument(badMovement.documentId, "plaintext"), "invalid-request");
 
+        for (const malformedPair of ["5", "5 6 7", "5.0 6", "2147483648 0", "-2147483649 0"]) {
+            const malformed = await fixture(Buffer.from(
+                datSource().toString("latin1").replace("catchingact: 5 6", `catchingact: ${malformedPair}`),
+                "latin1",
+            ));
+            await rejectsCode(malformed.service.openDocument(malformed.documentId, "plaintext"), "invalid-request");
+        }
+
         const source = Buffer.from(datSource().toString("latin1").replace(
             "catchingact: 5 6",
             "catchingact: 5 6 caughtact: 7 8 mystery: hello",
         ), "latin1");
         const { service, documentId } = await fixture(source);
         const view = await service.openDocument(documentId, "plaintext");
-        assert.equal(view.fields.some((field) => field.key === "catchingact"), false);
-        assert.equal(view.fields.some((field) => field.key === "caughtact"), false);
+        assert.deepEqual(view.fields.find((field) => field.key === "catchingact")?.value, [5, 6]);
+        assert.deepEqual(view.fields.find((field) => field.key === "caughtact")?.value, [7, 8]);
         assert.equal(view.fields.some((field) => field.key === "mystery"), false);
         await rejectsCode(service.edit({
             sessionId: view.sessionId,
@@ -400,6 +429,250 @@ describe("server-owned DAT session core", () => {
         assert.equal(unchanged.revision, 0);
         assert.equal(unchanged.projection.frames[0]?.pic, 2);
         assert.equal((await reloadFixture.registry.readDocument(reloadFixture.documentId)).externallyModified, true);
+    });
+
+    it("locates duplicate frames, blocks, fields, and edits ITR pairs atomically", async () => {
+        const source = duplicateLocatorSource();
+        const { service, documentId } = await fixture(source);
+        const initial = await service.openDocument(documentId, "plaintext");
+        const firstFramePair = initial.fields.find((field) => (
+            field.kind === "integer-pair"
+            && field.key === "catchingact"
+            && field.frameOccurrence === 0
+            && field.blockType === "itr"
+            && field.blockIndex === 0
+            && field.occurrence === 1
+        ));
+        const secondFramePic = initial.fields.find((field) => (
+            field.kind === "number"
+            && field.key === "pic"
+            && field.frameOccurrence === 1
+            && field.occurrence === 1
+        ));
+        const caughtPair = initial.fields.find((field) => (
+            field.kind === "integer-pair"
+            && field.key === "caughtact"
+            && field.frameOccurrence === 0
+            && field.blockIndex === 1
+        ));
+        assert.ok(firstFramePair);
+        assert.ok(secondFramePic);
+        assert.ok(caughtPair);
+        assert.deepEqual(firstFramePair.value, [3, 4]);
+        assert.deepEqual(caughtPair.value, [5, 6]);
+        assert.deepEqual(
+            {
+                scope: firstFramePair.scope,
+                occurrence: firstFramePair.occurrence,
+                frameId: firstFramePair.frameId,
+                frameOccurrence: firstFramePair.frameOccurrence,
+                blockType: firstFramePair.blockType,
+                blockIndex: firstFramePair.blockIndex,
+            },
+            {
+                scope: "block",
+                occurrence: 1,
+                frameId: 7,
+                frameOccurrence: 0,
+                blockType: "itr",
+                blockIndex: 0,
+            },
+        );
+        assert.notEqual(firstFramePair.fieldId, initial.fields.find((field) => (
+            field.kind === "integer-pair" && field.frameOccurrence === 1
+        ))?.fieldId);
+
+        for (const value of [
+            [1],
+            [1, 2, 3],
+            [1.5, 2],
+            ["1", 2],
+            [Number.NaN, 2],
+            [Number.POSITIVE_INFINITY, 2],
+            [2_147_483_648, 0],
+            [-2_147_483_649, 0],
+            [null, 0],
+        ]) {
+            await rejectsCode(service.edit({
+                sessionId: initial.sessionId,
+                fieldId: firstFramePair.fieldId,
+                value,
+                expectedRevision: 0,
+            }), "invalid-request");
+        }
+
+        const pairEdited = await service.edit({
+            sessionId: initial.sessionId,
+            fieldId: firstFramePair.fieldId,
+            value: [30, 40],
+            expectedRevision: 0,
+        });
+        assert.equal(pairEdited.revision, 1);
+        assert.equal(pairEdited.dirty, true);
+        assert.deepEqual(pairEdited.fields.find((field) => field.fieldId === firstFramePair.fieldId)?.value, [30, 40]);
+        assert.deepEqual(
+            [pairEdited.projection.frames[0]?.itrs[0]?.catchingact, pairEdited.projection.frames[0]?.itrs[0]?.catchingact2],
+            [30, 40],
+        );
+        assert.deepEqual(
+            [pairEdited.projection.frames[1]?.itrs[0]?.catchingact, pairEdited.projection.frames[1]?.itrs[0]?.catchingact2],
+            [10, 11],
+        );
+        const pairEmission = await service.emit(initial.sessionId, 1);
+        assert.equal(
+            pairEmission.plaintext.toString("ascii"),
+            source.toString("ascii").replace("catchingact: 3 4", "catchingact: 30 40"),
+        );
+
+        const noOp = await service.edit({
+            sessionId: initial.sessionId,
+            fieldId: firstFramePair.fieldId,
+            value: [30, 40],
+            expectedRevision: 1,
+        });
+        assert.equal(noOp.revision, 1);
+
+        const scalarEdited = await service.edit({
+            sessionId: initial.sessionId,
+            fieldId: secondFramePic.fieldId,
+            value: 99,
+            expectedRevision: 1,
+        });
+        assert.equal(scalarEdited.revision, 2);
+        assert.equal(scalarEdited.projection.frames[0]?.pic, 2);
+        assert.equal(scalarEdited.projection.frames[1]?.pic, 99);
+        assert.equal((await service.emit(initial.sessionId, 2)).plaintext.toString("ascii"), source.toString("ascii")
+            .replace("catchingact: 3 4", "catchingact: 30 40")
+            .replace("pic: 8 pic: 9", "pic: 8 pic: 99"));
+    });
+
+    it("applies a batch as one revision and rolls back every field on validation failure", async () => {
+        const source = duplicateLocatorSource();
+        const { service, documentId } = await fixture(source);
+        const initial = await service.openDocument(documentId, "plaintext");
+        const pic = initial.fields.find((field) => (
+            field.key === "pic" && field.frameOccurrence === 1 && field.occurrence === 1
+        ))!;
+        const pair = initial.fields.find((field) => field.kind === "integer-pair")!;
+
+        const edited = await service.editBatch({
+            sessionId: initial.sessionId,
+            edits: [
+                { fieldId: pic.fieldId, value: 99 },
+                { fieldId: pair.fieldId, value: [30, 31] },
+            ],
+            expectedRevision: 0,
+        });
+        assert.equal(edited.revision, 1);
+        assert.equal(edited.dirty, true);
+        assert.equal(edited.projection.frames[1]?.pic, 99);
+        assert.deepEqual(edited.fields.find((field) => field.fieldId === pair.fieldId)?.value, [30, 31]);
+        assert.equal((await service.emit(initial.sessionId, 1)).plaintext.toString("ascii"), source.toString("ascii")
+            .replace("pic: 8 pic: 9", "pic: 8 pic: 99")
+            .replace("catchingact: 1 2", "catchingact: 30 31"));
+
+        await assert.rejects(service.editBatch({
+            sessionId: initial.sessionId,
+            edits: [
+                { fieldId: pic.fieldId, value: 100 },
+                { fieldId: pair.fieldId, value: [40, 41] },
+            ],
+            expectedRevision: 1,
+        }, () => {
+            throw new Error("preview failed");
+        }), /preview failed/u);
+        await rejectsCode(service.editBatch({
+            sessionId: initial.sessionId,
+            edits: [{ fieldId: pic.fieldId, value: 12 }],
+            expectedRevision: 0,
+        }), "revision-conflict");
+        await rejectsCode(service.editBatch({
+            sessionId: initial.sessionId,
+            edits: [
+                { fieldId: pic.fieldId, value: 12 },
+                { fieldId: "missing-capability", value: 13 },
+            ],
+            expectedRevision: 1,
+        }), "unknown-field");
+        assert.equal((await service.emit(initial.sessionId, 1)).plaintext.toString("ascii"), source.toString("ascii")
+            .replace("pic: 8 pic: 9", "pic: 8 pic: 99")
+            .replace("catchingact: 1 2", "catchingact: 30 31"));
+    });
+
+    it("re-signs structure capabilities after lossless frame and block transactions", async () => {
+        const source = duplicateLocatorSource();
+        const { service, documentId } = await fixture(source);
+        const initial = await service.openDocument(documentId, "plaintext");
+        const frameCapability = initial.structureCapabilities.find((frame) => frame.occurrence === 0)!;
+        const firstBlock = frameCapability.blocks.find((block) => block.blockType === "itr" && block.blockIndex === 0)!;
+        assert.equal(frameCapability.canCopy, true);
+        assert.equal(firstBlock.canCopy, true);
+
+        const copiedFrame = await service.editStructure({
+            sessionId: initial.sessionId,
+            capabilityId: frameCapability.capabilityId,
+            operation: "copy-frame",
+            newFrameId: 17,
+            expectedRevision: 0,
+        });
+        assert.equal(copiedFrame.revision, 1);
+        assert.equal(copiedFrame.dirty, true);
+        assert.ok(copiedFrame.projection.frames.some((frame) => frame.frameId === 17));
+        assert.equal(copiedFrame.structureCapabilities.some((frame) => frame.capabilityId === frameCapability.capabilityId), false);
+        await rejectsCode(service.editStructure({
+            sessionId: initial.sessionId,
+            capabilityId: frameCapability.capabilityId,
+            operation: "delete-frame",
+            expectedRevision: 1,
+        }), "unknown-field");
+
+        const copiedFrameCapability = copiedFrame.structureCapabilities.find((frame) => frame.occurrence === 0)!;
+        await assert.rejects(service.editStructure({
+            sessionId: copiedFrame.sessionId,
+            capabilityId: copiedFrameCapability.capabilityId,
+            operation: "copy-frame",
+            newFrameId: 16,
+            expectedRevision: 1,
+        }, () => {
+            throw new Error("preview failed");
+        }), /preview failed/u);
+        assert.doesNotMatch((await service.emit(initial.sessionId, 1)).plaintext.toString("ascii"), /<frame> 16/u);
+
+        const copiedBlockCapability = copiedFrame.structureCapabilities
+            .find((frame) => frame.occurrence === 0)!.blocks
+            .find((block) => block.blockType === "itr" && block.blockIndex === 0)!;
+        const copiedBlock = await service.editStructure({
+            sessionId: copiedFrame.sessionId,
+            capabilityId: copiedBlockCapability.capabilityId,
+            operation: "copy-block",
+            expectedRevision: 1,
+        });
+        assert.equal(copiedBlock.revision, 2);
+        assert.equal(copiedBlock.projection.frames[0]?.itrs.length, 3);
+        assert.equal(copiedBlock.structureCapabilities.find((frame) => frame.occurrence === 0)?.blocks
+            .filter((block) => block.blockType === "itr").length, 3);
+        const emitted = await service.emit(initial.sessionId, 2);
+        assert.match(emitted.plaintext.toString("ascii"), /<frame> 17 first/u);
+        assert.match(emitted.plaintext.toString("ascii"), /catchingact: 3 4/u);
+    });
+
+    it("preserves the encrypted envelope when a structure transaction changes plaintext", async () => {
+        const prefix = Buffer.alloc(123, 0x51);
+        const encrypted = encryptDatPayload(prefix, duplicateLocatorSource());
+        const { service, documentId } = await fixture(encrypted);
+        const initial = await service.openDocument(documentId, "encrypted");
+        const frame = initial.structureCapabilities.find((candidate) => candidate.occurrence === 0)!;
+        const result = await service.editStructure({
+            sessionId: initial.sessionId,
+            capabilityId: frame.capabilityId,
+            operation: "copy-frame",
+            newFrameId: 18,
+            expectedRevision: 0,
+        });
+        assert.equal(result.format, "encrypted");
+        const emitted = await service.emit(initial.sessionId, result.revision);
+        assert.deepEqual(emitted.file.subarray(0, prefix.length), encrypted.subarray(0, prefix.length));
+        assert.match(emitted.plaintext.toString("ascii"), /<frame> 18 first/u);
     });
 
     it("keeps field IDs stable within an epoch, preserves no-op revision, and prioritizes stale revision", async () => {
@@ -589,6 +862,16 @@ describe("server-owned DAT session core", () => {
 
         const fieldLimited = await fixture(source, { maxFieldsPerSession: 1 });
         await rejectsCode(fieldLimited.service.openDocument(fieldLimited.documentId, "plaintext"), "field-limit");
+        const structureSource = Buffer.from([
+            "name: structure limit",
+            "<frame> 0 a",
+            "<frame_end>",
+            "<frame> 1 b",
+            "<frame_end>",
+            "",
+        ].join("\n"), "ascii");
+        const structureLimited = await fixture(structureSource, { maxFieldsPerSession: 2 });
+        await rejectsCode(structureLimited.service.openDocument(structureLimited.documentId, "plaintext"), "field-limit");
         const byteLimited = await fixture(source, { maxLoadedBytes: source.length - 1 });
         await rejectsCode(byteLimited.service.openDocument(byteLimited.documentId, "plaintext"), "byte-limit");
     });
@@ -672,6 +955,7 @@ describe("server-owned DAT session core", () => {
         const { client, registry, service, documentId } = await fixture(datSource(), { maxViewBytes: baselineBytes + 8 });
         const initial = await service.openDocument(documentId, "plaintext");
         const name = initial.fields.find((field) => field.key === "name" && field.value === "Second Hero")!;
+        const pair = initial.fields.find((field) => field.kind === "integer-pair" && field.key === "catchingact")!;
         await rejectsCode(service.edit({
             sessionId: initial.sessionId,
             fieldId: name.fieldId,
@@ -686,6 +970,21 @@ describe("server-owned DAT session core", () => {
         });
         assert.equal(afterEditFailure.revision, 0);
         assert.equal(afterEditFailure.projection.top.name, "Second Hero");
+        await rejectsCode(service.edit({
+            sessionId: initial.sessionId,
+            fieldId: pair.fieldId,
+            value: [2_147_483_647, -2_147_483_648],
+            expectedRevision: 0,
+        }), "view-limit");
+        const afterPairFailure = await service.edit({
+            sessionId: initial.sessionId,
+            fieldId: pair.fieldId,
+            value: [5, 6],
+            expectedRevision: 0,
+        });
+        assert.equal(afterPairFailure.revision, 0);
+        assert.deepEqual(afterPairFailure.fields.find((field) => field.fieldId === pair.fieldId)?.value, [5, 6]);
+        assert.deepEqual((await service.emit(initial.sessionId, 0)).plaintext, datSource());
 
         client.setBytes(datSource("x".repeat(100), 9));
         await rejectsCode(service.reload({ sessionId: initial.sessionId, expectedRevision: 0 }), "view-limit");

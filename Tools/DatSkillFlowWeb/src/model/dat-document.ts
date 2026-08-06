@@ -1,4 +1,5 @@
 import {
+    isSignedInt32,
     parseDatCst,
     type DatBlockType,
     type DatCstDocument,
@@ -20,6 +21,13 @@ export interface SetScalarCommand {
     value: number | string;
 }
 
+export interface SetIntegerPairCommand {
+    kind: "set-integer-pair";
+    name: string;
+    field: DatFieldCst;
+    value: readonly [number, number];
+}
+
 export interface CommandApplication {
     applied: boolean;
     diagnostics: DataDiagnostic[];
@@ -39,6 +47,14 @@ export function createSetScalarCommand(
     return { kind: "set-scalar", name, field, value };
 }
 
+export function createSetIntegerPairCommand(
+    name: string,
+    field: DatFieldCst,
+    value: readonly [number, number],
+): SetIntegerPairCommand {
+    return { kind: "set-integer-pair", name, field, value };
+}
+
 export function isLatin1ScalarString(value: unknown): value is string {
     if (typeof value !== "string" || /[\r\n\0]/.test(value)) return false;
     for (const character of value) {
@@ -50,6 +66,9 @@ export function isLatin1ScalarString(value: unknown): value is string {
 function replacementForCommand(command: SetScalarCommand): Buffer | DataDiagnostic {
     if (command.name.length === 0) {
         return dataDiagnostic("unsupported-edit", "Every edit command must have a non-empty name.");
+    }
+    if (command.field.integerPairValue !== undefined) {
+        return dataDiagnostic("unsupported-edit", `Pair field ${command.field.key} requires a pair edit command.`);
     }
     if (command.field.scalarKind === "number") {
         if (typeof command.value !== "number" || !Number.isFinite(command.value)) {
@@ -66,8 +85,34 @@ function replacementForCommand(command: SetScalarCommand): Buffer | DataDiagnost
     return dataDiagnostic("unsupported-edit", `Opaque field ${command.field.key} cannot be edited safely.`);
 }
 
+function replacementForIntegerPair(command: SetIntegerPairCommand): Buffer | DataDiagnostic {
+    if (command.name.length === 0) {
+        return dataDiagnostic("unsupported-edit", "Every edit command must have a non-empty name.");
+    }
+    if (command.field.blockType !== "itr"
+        || (command.field.key !== "catchingact" && command.field.key !== "caughtact")
+        || command.field.integerPairValue === undefined) {
+        return dataDiagnostic("unsupported-edit", "The selected field is not a valid ITR integer pair.");
+    }
+    const [first, second] = command.value;
+    if (![first, second].every(isSignedInt32)) {
+        return dataDiagnostic("unsupported-edit", "An ITR integer pair requires two signed 32-bit integers.");
+    }
+    if (first === command.field.integerPairValue[0] && second === command.field.integerPairValue[1]) {
+        return Buffer.from(command.field.rawValue);
+    }
+    return Buffer.from(`${first} ${second}`, "ascii");
+}
+
 function last<T>(values: readonly T[]): T | undefined {
     return values.length === 0 ? undefined : values[values.length - 1];
+}
+
+type OccurrenceSelector = number | "first" | "last";
+
+function selectOccurrence<T>(values: readonly T[], selector: OccurrenceSelector): T | undefined {
+    if (typeof selector === "number") return values[selector];
+    return selector === "first" ? values[0] : last(values);
 }
 
 export class LosslessDatDocument {
@@ -103,21 +148,31 @@ export class LosslessDatDocument {
         ];
     }
 
-    public findTopField(key: string, occurrence: "first" | "last" = "last"): DatFieldCst | undefined {
+    public withPlaintext(plaintext: Uint8Array): LosslessDatDocument {
+        return new LosslessDatDocument(parseDatCst(plaintext), this.envelope);
+    }
+
+    public findTopField(key: string, occurrence: OccurrenceSelector = "last"): DatFieldCst | undefined {
         const fields = this.cst.topFields.filter((field) => field.key === key);
-        return occurrence === "first" ? fields[0] : last(fields);
+        return selectOccurrence(fields, occurrence);
     }
 
     public findFrameField(
         frameId: number,
         key: string,
-        occurrence: "first" | "last" = "last",
+        frameOccurrenceOrFieldOccurrence: number | "first" | "last" = "last",
+        fieldOccurrence: OccurrenceSelector = "last",
     ): DatFieldCst | undefined {
         const frames = this.cst.frames.filter((frame) => frame.frameId === frameId);
-        const frame = occurrence === "first" ? frames[0] : last(frames);
+        const frame = typeof frameOccurrenceOrFieldOccurrence === "number"
+            ? frames.find((candidate) => candidate.occurrence === frameOccurrenceOrFieldOccurrence)
+            : selectOccurrence(frames, frameOccurrenceOrFieldOccurrence);
         if (!frame) return undefined;
         const fields = frame.fields.filter((field) => field.key === key);
-        return occurrence === "first" ? fields[0] : last(fields);
+        const occurrence = typeof frameOccurrenceOrFieldOccurrence === "number"
+            ? fieldOccurrence
+            : frameOccurrenceOrFieldOccurrence;
+        return selectOccurrence(fields, occurrence);
     }
 
     public findNestedField(
@@ -125,28 +180,53 @@ export class LosslessDatDocument {
         blockType: DatBlockType,
         blockIndex: number,
         key: string,
-        occurrence: "first" | "last" = "last",
+        frameOccurrenceOrFieldOccurrence: number | "first" | "last" = "last",
+        fieldOccurrence: OccurrenceSelector = "last",
     ): DatFieldCst | undefined {
-        const frame = last(this.cst.frames.filter((candidate) => candidate.frameId === frameId));
+        const frame = typeof frameOccurrenceOrFieldOccurrence === "number"
+            ? this.cst.frames.find((candidate) => (
+                candidate.frameId === frameId && candidate.occurrence === frameOccurrenceOrFieldOccurrence
+            ))
+            : last(this.cst.frames.filter((candidate) => candidate.frameId === frameId));
         const block = frame?.blocks.filter((candidate) => candidate.type === blockType)[blockIndex];
         if (!block) return undefined;
         const fields = block.fields.filter((field) => field.key === key);
-        return occurrence === "first" ? fields[0] : last(fields);
+        const occurrence = typeof frameOccurrenceOrFieldOccurrence === "number"
+            ? fieldOccurrence
+            : frameOccurrenceOrFieldOccurrence;
+        return selectOccurrence(fields, occurrence);
     }
 
     public findSpriteRangeField(
         rangeIndex: number,
         key: "file" | "w" | "h" | "row" | "col",
-        occurrence: "first" | "last" = "last",
+        occurrence: OccurrenceSelector = "last",
     ): DatFieldCst | undefined {
         const range = this.cst.spriteRanges[rangeIndex];
         if (!range) return undefined;
         if (key === "file") return range.fileField;
         const fields = range.fields.filter((field) => field.key === key);
-        return occurrence === "first" ? fields[0] : last(fields);
+        return selectOccurrence(fields, occurrence);
     }
 
-    public apply(command: SetScalarCommand): CommandApplication {
+    public createPatchSavepoint(): readonly SpanPatch[] {
+        return this.patches.map((patch) => ({
+            span: { ...patch.span },
+            replacement: Buffer.from(patch.replacement),
+            label: patch.label,
+        }));
+    }
+
+    public restorePatchSavepoint(savepoint: readonly SpanPatch[]): void {
+        this.patches.length = 0;
+        this.patches.push(...savepoint.map((patch) => ({
+            span: { ...patch.span },
+            replacement: Buffer.from(patch.replacement),
+            label: patch.label,
+        })));
+    }
+
+    public apply(command: SetScalarCommand | SetIntegerPairCommand): CommandApplication {
         if (this.cst.encoding === "utf16le" || this.cst.encoding === "utf16be"
             || this.cst.encoding === "utf32le" || this.cst.encoding === "utf32be") {
             return {
@@ -168,7 +248,9 @@ export class LosslessDatDocument {
                 diagnostics: [dataDiagnostic("unsupported-edit", "The selected field does not belong to this document.")],
             };
         }
-        const replacement = replacementForCommand(command);
+        const replacement = command.kind === "set-scalar"
+            ? replacementForCommand(command)
+            : replacementForIntegerPair(command);
         if (!Buffer.isBuffer(replacement)) return { applied: false, diagnostics: [replacement] };
         const sameSpanIndex = this.patches.findIndex((patch) => (
             patch.span.start === command.field.valueSpan.start && patch.span.end === command.field.valueSpan.end

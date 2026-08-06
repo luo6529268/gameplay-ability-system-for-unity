@@ -8,7 +8,7 @@ interface BuildManifest {
 }
 
 const expectedClientFiles = [
-    "index.html", "src/client/main.js", "src/client/project-client.js", "src/client/styles.css", "src/client/timeline-controller.js",
+    "index.html", "src/client/main.js", "src/client/canvas-geometry-edit.js", "src/client/editor-support.js", "src/client/flow-layout.js", "src/client/flow-svg.js", "src/client/latest-task-scheduler.js", "src/client/preview-renderer.js", "src/client/project-client.js", "src/client/skill-flow.js", "src/client/skill-management.js", "src/client/skill-timeline.js", "src/client/overlay-geometry.js", "src/client/styles.css", "src/client/timeline-controller.js",
     "src/presentation/camera.js", "src/presentation/index.js", "src/presentation/projection.js",
     "src/sim/canonical.js", "src/sim/catalog.js", "src/sim/constants.js", "src/sim/core.js", "src/sim/frame-tick.js",
     "src/sim/index.js", "src/sim/input.js", "src/sim/motion.js", "src/sim/opoint.js", "src/sim/rng.js", "src/sim/rules.js", "src/sim/timeline.js", "src/sim/types.js",

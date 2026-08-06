@@ -9,6 +9,7 @@ import type {
     SpriteRangeProjection,
     WPointProjection,
 } from "../model/dat-projection.js";
+import type { DatBlockType } from "../syntax/byte-cst.js";
 import type { DataDiagnosticCode } from "../syntax/data-diagnostic.js";
 
 export type DatSessionErrorCode =
@@ -37,20 +38,35 @@ export interface DatSessionDiagnosticView {
 
 export type DatSessionFieldScope = "top" | "sprite" | "frame" | "block";
 
-export interface DatSessionFieldView {
+export type DatSessionFieldKind = "number" | "string" | "integer-pair";
+export type DatSessionFieldValue = number | string | readonly [number, number];
+
+export interface DatFieldLocator {
+    readonly scope: DatSessionFieldScope;
+    readonly occurrence: number;
+    readonly spriteRangeIndex?: number;
+    readonly frameId?: number;
+    readonly frameOccurrence?: number;
+    readonly blockType?: DatBlockType;
+    readonly blockIndex?: number;
+}
+
+export interface DatSessionScalarFieldView extends DatFieldLocator {
     readonly fieldId: string;
     readonly key: string;
     readonly kind: "number" | "string";
     readonly numericKind?: DatSessionNumericKind;
     readonly value: number | string;
-    readonly scope: DatSessionFieldScope;
-    readonly occurrence?: number;
-    readonly spriteRangeIndex?: number;
-    readonly frameId?: number;
-    readonly frameOccurrence?: number;
-    readonly blockType?: "itr" | "bdy" | "opoint" | "wpoint" | "bpoint" | "cpoint";
-    readonly blockIndex?: number;
 }
+
+export interface DatSessionPairView extends DatFieldLocator {
+    readonly fieldId: string;
+    readonly key: "catchingact" | "caughtact";
+    readonly kind: "integer-pair";
+    readonly value: readonly [number, number];
+}
+
+export type DatSessionFieldView = DatSessionScalarFieldView | DatSessionPairView;
 
 export interface DatSessionProjectionView {
     readonly top: Readonly<DatTopProjection>;
@@ -65,6 +81,23 @@ export interface DatSessionProjectionView {
     }>[];
 }
 
+export interface DatSessionBlockStructureView {
+    readonly capabilityId: string;
+    readonly blockType: DatBlockType;
+    readonly blockIndex: number;
+    readonly canCopy: boolean;
+    readonly canDelete: boolean;
+}
+
+export interface DatSessionFrameStructureView {
+    readonly capabilityId: string;
+    readonly frameId: number;
+    readonly occurrence: number;
+    readonly canCopy: boolean;
+    readonly canDelete: boolean;
+    readonly blocks: readonly DatSessionBlockStructureView[];
+}
+
 export interface DatSessionView {
     readonly sessionId: string;
     readonly revision: number;
@@ -72,6 +105,7 @@ export interface DatSessionView {
     readonly format: DatInputFormat;
     readonly encrypted: boolean;
     readonly fields: readonly DatSessionFieldView[];
+    readonly structureCapabilities: readonly DatSessionFrameStructureView[];
     readonly projection: DatSessionProjectionView;
     readonly diagnostics: readonly DatSessionDiagnosticView[];
 }
@@ -79,7 +113,33 @@ export interface DatSessionView {
 export interface DatSessionEditRequest {
     readonly sessionId: string;
     readonly fieldId: string;
-    readonly value: number | string;
+    readonly value: DatSessionFieldValue;
+    readonly expectedRevision: number;
+}
+
+export interface DatSessionBatchEditItem {
+    readonly fieldId: string;
+    readonly value: DatSessionFieldValue;
+}
+
+export interface DatSessionBatchEditRequest {
+    readonly sessionId: string;
+    readonly edits: readonly DatSessionBatchEditItem[];
+    readonly expectedRevision: number;
+}
+
+export type DatSessionStructureOperation =
+    | "copy-frame"
+    | "delete-frame"
+    | "create-block"
+    | "copy-block"
+    | "delete-block";
+
+export interface DatSessionStructureEditRequest {
+    readonly sessionId: string;
+    readonly capabilityId: string;
+    readonly operation: DatSessionStructureOperation;
+    readonly newFrameId?: number;
     readonly expectedRevision: number;
 }
 
