@@ -23,7 +23,7 @@ namespace NTSD.Simulation
     [System.Serializable]
     public sealed class LockstepSimulationSettings
     {
-        public const int LocalFreeRunMinCatchUpTicks = 4;
+        public const int DefaultMaxTicksPerFrame = 1;
 
         [Tooltip("本地单机直接按时间推进；联机模式会等待指定逻辑帧输入就绪；手动模式只允许外部 StepOneTick 推进。")]
         public SimulationDriveMode driveMode = SimulationDriveMode.LocalFreeRun;
@@ -31,8 +31,8 @@ namespace NTSD.Simulation
         [Tooltip("使用 unscaledDeltaTime 驱动外层逻辑时钟，避免 Time.timeScale 影响帧同步规则。")]
         public bool useUnscaledTime = true;
 
-        [Tooltip("单个 Unity 渲染帧最多追多少个逻辑帧。本地模式必须允许有限追帧，避免渲染帧率低于 30 FPS 时拖慢战斗时钟。")]
-        public int maxCatchUpTicksPerFrame = LocalFreeRunMinCatchUpTicks;
+        [Tooltip("单个 Unity 渲染帧最多执行多少个逻辑帧。单机默认 1；大于 1 仅用于显式追帧或吞吐诊断。")]
+        public int maxCatchUpTicksPerFrame = DefaultMaxTicksPerFrame;
 
         [Tooltip("最多保留多少个逻辑帧的时间积压，超过后丢弃外层积压但不改变单个逻辑帧步长。")]
         public int maxBacklogTicks = 8;
@@ -48,11 +48,8 @@ namespace NTSD.Simulation
 
         public void Normalize()
         {
-            int minimumCatchUp = driveMode == SimulationDriveMode.LocalFreeRun
-                ? LocalFreeRunMinCatchUpTicks
-                : 1;
-            if (maxCatchUpTicksPerFrame < minimumCatchUp)
-                maxCatchUpTicksPerFrame = minimumCatchUp;
+            if (maxCatchUpTicksPerFrame < 1)
+                maxCatchUpTicksPerFrame = 1;
             if (maxBacklogTicks < maxCatchUpTicksPerFrame) maxBacklogTicks = maxCatchUpTicksPerFrame;
             if (inputDelayTicks < 0) inputDelayTicks = 0;
         }
@@ -196,6 +193,9 @@ namespace NTSD.Simulation
 
         private void LateUpdate()
         {
+            if (_world == null)
+                return;
+
             if (_overlayRenderer == null)
                 _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
             _overlayRenderer.RenderAll(_world);

@@ -9,12 +9,6 @@ import {
     snapDelta,
 } from "../../src/client/canvas-geometry-edit.js";
 import { layoutSkillFlow } from "../../src/client/flow-layout.js";
-import {
-    deleteSkillForOid,
-    duplicateSkill,
-    moveSkillForOid,
-    skillIndexesForOid,
-} from "../../src/client/skill-management.js";
 import { buildSkillFlow } from "../../src/client/skill-flow.js";
 import {
     buildSkillTimeline,
@@ -30,6 +24,7 @@ function frame(
     return {
         frameId,
         occurrence,
+        label: "",
         pic: 0,
         state: 0,
         wait: 1,
@@ -61,42 +56,6 @@ function frame(
         ...values,
     };
 }
-
-describe("Phase 6 skill management", () => {
-    const skills = [
-        { oid: 2, name: "A", startFrame: 1 },
-        { oid: 2, name: "B", startFrame: 2 },
-    ];
-
-    it("duplicates after the selected skill and keeps the copy selected", () => {
-        const result = duplicateSkill(skills, 0);
-        assert.deepEqual(result.skills, [
-            skills[0],
-            { oid: 2, name: "A 副本", startFrame: 1 },
-            skills[1],
-        ]);
-        assert.equal(result.selectedIndex, 1);
-        assert.deepEqual(skills.map((skill) => skill.name), ["A", "B"]);
-    });
-
-    it("isolates deletion and one-position ordering to the active OID without mutating input", () => {
-        const mixed = [
-            { oid: 2, name: "A", startFrame: 1 },
-            { oid: 3, name: "Other", startFrame: 10 },
-            { oid: 2, name: "B", startFrame: 2 },
-        ];
-        assert.deepEqual(skillIndexesForOid(mixed, 2), [0, 2]);
-        assert.deepEqual(moveSkillForOid(mixed, 2, 2, -1), {
-            skills: [mixed[2], mixed[1], mixed[0]],
-            selectedIndex: 0,
-        });
-        assert.deepEqual(deleteSkillForOid(mixed, 0, 2), {
-            skills: [mixed[1], mixed[2]],
-            selectedIndex: 1,
-        });
-        assert.deepEqual(mixed.map((skill) => skill.name), ["A", "Other", "B"]);
-    });
-});
 
 describe("Phase 6 canvas geometry math", () => {
     it("snaps total pointer deltas and inverts horizontal movement for mirrored sprites", () => {

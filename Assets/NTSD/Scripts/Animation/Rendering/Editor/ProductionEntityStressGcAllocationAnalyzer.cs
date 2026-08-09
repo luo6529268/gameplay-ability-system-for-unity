@@ -15,7 +15,11 @@ namespace NTSD.Animation.Rendering.Editor
         private const int MaximumFrames = 10000;
         private const int MaximumRows = 100;
         private const string OutputPath = "Temp/NTSD_ProductionEntityStress.gc-callstacks.txt";
-        private const string SavedProfilePath = "Temp/NTSD_DataOrientedGC_Steady_20260802.raw";
+        private const string SavedProfilePath = "Temp/NTSD_1000AI_p57-gc-path.raw";
+        private const string TickMarkerName =
+            "NTSD.ProductionEntityStress.Driver.StepOneTick";
+        private const string ReportWriteMarkerName =
+            "NTSD.ProductionEntityStress.WriteReport";
 
         private sealed class AllocationAggregate
         {
@@ -54,15 +58,42 @@ namespace NTSD.Animation.Rendering.Editor
             long totalBytes = 0;
             int totalCount = 0;
             int scannedFrames = 0;
+            int tickFrames = 0;
+            int reportWriteFramesExcluded = 0;
 
             for (int frameIndex = scanFirstFrame; frameIndex <= lastFrame; frameIndex++)
             {
                 using (RawFrameDataView frame = ProfilerDriver.GetRawFrameDataView(frameIndex, 0))
                 {
-                    if (frame == null || !frame.valid)
+                    if (frame == null || !frame.valid || frame.sampleCount <= 0)
                         continue;
 
+                    bool containsTick = false;
+                    bool containsReportWrite = false;
+                    for (int sampleIndex = 0; sampleIndex < frame.sampleCount; sampleIndex++)
+                    {
+                        string sampleName = frame.GetSampleName(sampleIndex);
+                        if (string.Equals(sampleName, TickMarkerName, StringComparison.Ordinal))
+                            containsTick = true;
+                        if (string.Equals(
+                                sampleName,
+                                ReportWriteMarkerName,
+                                StringComparison.Ordinal))
+                        {
+                            containsReportWrite = true;
+                        }
+                    }
+
+                    if (!containsTick)
+                        continue;
+                    if (containsReportWrite)
+                    {
+                        reportWriteFramesExcluded++;
+                        continue;
+                    }
+
                     scannedFrames++;
+                    tickFrames++;
                     sampleScopes.Clear();
                     for (int sampleIndex = 0; sampleIndex < frame.sampleCount; sampleIndex++)
                     {
@@ -112,6 +143,9 @@ namespace NTSD.Animation.Rendering.Editor
             var builder = new StringBuilder(8192);
             builder.AppendLine("NTSD Production Entity Stress - Recent GC.Alloc Callstacks");
             builder.Append("frames=").Append(scannedFrames)
+                .Append(" tickFrames=").Append(tickFrames)
+                .Append(" reportWriteFramesExcluded=")
+                .Append(reportWriteFramesExcluded)
                 .Append(" range=").Append(scanFirstFrame).Append("..").Append(lastFrame)
                 .Append(" allocations=").Append(totalCount)
                 .Append(" bytes=").Append(totalBytes)

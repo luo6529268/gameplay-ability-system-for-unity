@@ -908,7 +908,8 @@ namespace NTSD.Simulation
             LF2Entity entity,
             int slot,
             uint generation,
-            bool captureSpecialMembership)
+            bool captureSpecialMembership,
+            bool useFreshRuntimeIdentity = false)
         {
             NTSDEntityRuntime runtime = entity?.Runtime;
             if (rows == null ||
@@ -921,11 +922,18 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            int objectId = useFreshRuntimeIdentity
+                ? runtime.ObjectId
+                : entity.ObjectId;
+            int dataObjectType = useFreshRuntimeIdentity
+                ? runtime.EntityType
+                : entity.GetCurrentDataObjectTypeForSimulation();
+
             rows.Included[slot] = true;
             if (captureSpecialMembership)
             {
                 bool specialScanMember =
-                    slot >= 20 && IsAiSpecialScanObjectId(entity.ObjectId);
+                    slot >= 20 && IsAiSpecialScanObjectId(objectId);
                 rows.SpecialScanMember[slot] = specialScanMember;
                 if (specialScanMember)
                     rows.SpecialSlots[rows.SpecialSlotCount++] = slot;
@@ -933,8 +941,8 @@ namespace NTSD.Simulation
             rows.InputHistoryGate[slot] = runtime.HasInputHistoryGate();
             rows.Generation[slot] = generation;
             rows.Identity[slot] = runtime.StableId;
-            rows.ObjectId[slot] = entity.ObjectId;
-            rows.DataObjectType[slot] = entity.GetCurrentDataObjectTypeForSimulation();
+            rows.ObjectId[slot] = objectId;
+            rows.DataObjectType[slot] = dataObjectType;
             rows.X[slot] = runtime.XInt;
             rows.Y[slot] = runtime.YInt;
             rows.Z[slot] = runtime.ZInt;

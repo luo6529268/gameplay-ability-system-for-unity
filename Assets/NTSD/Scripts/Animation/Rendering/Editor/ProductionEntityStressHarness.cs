@@ -27,6 +27,7 @@ namespace NTSD.Animation.Rendering.Editor
     internal enum ProductionEntityStressInputMode
     {
         Ai,
+        Move,
         None,
     }
 
@@ -48,8 +49,9 @@ namespace NTSD.Animation.Rendering.Editor
         public int warmupTicks = 30;
         public int sampleTicks = 300;
         public int spawnBatchSize = 25;
-        public int maxCatchUpTicksPerFrame = 4;
+        public int maxCatchUpTicksPerFrame = 1;
         public int maxBacklogTicks = 8;
+        public float catchUpCpuBudgetMs;
         public int maxSaturationDrainTicks = 300;
         public bool enablePhaseTiming;
         public bool enablePresentationTiming;
@@ -130,7 +132,8 @@ namespace NTSD.Animation.Rendering.Editor
             int maxSaturationDrainTicks = 300,
             BattleAiExecutionProfile aiExecutionProfile =
                 BattleAiExecutionProfile.LegacyCanonical,
-            bool usesLegacyAiConfigurationCompatibility = true)
+            bool usesLegacyAiConfigurationCompatibility = true,
+            float catchUpCpuBudgetMs = 0f)
         {
             Mode = mode;
             InputMode = inputMode;
@@ -140,6 +143,11 @@ namespace NTSD.Animation.Rendering.Editor
             SpawnBatchSize = Math.Max(1, Math.Min(100, spawnBatchSize));
             MaxCatchUpTicksPerFrame = Math.Max(1, maxCatchUpTicksPerFrame);
             MaxBacklogTicks = Math.Max(MaxCatchUpTicksPerFrame, maxBacklogTicks);
+            CatchUpCpuBudgetMs = float.IsNaN(catchUpCpuBudgetMs) ||
+                                 float.IsInfinity(catchUpCpuBudgetMs) ||
+                                 catchUpCpuBudgetMs <= 0f
+                ? 0d
+                : Math.Min(1000d, catchUpCpuBudgetMs);
             MaxSaturationDrainTicks = Math.Max(1, maxSaturationDrainTicks);
             EnablePhaseTiming = enablePhaseTiming;
             EnablePresentationTiming = enablePresentationTiming;
@@ -278,6 +286,8 @@ namespace NTSD.Animation.Rendering.Editor
         internal int SpawnBatchSize { get; }
         internal int MaxCatchUpTicksPerFrame { get; }
         internal int MaxBacklogTicks { get; }
+        internal double CatchUpCpuBudgetMs { get; }
+        internal bool LimitsCatchUpByCpuBudget => CatchUpCpuBudgetMs > 0d;
         internal int MaxSaturationDrainTicks { get; }
         internal bool EnablePhaseTiming { get; }
         internal bool EnablePresentationTiming { get; }
@@ -439,7 +449,8 @@ namespace NTSD.Animation.Rendering.Editor
                 requestedUnifiedMode,
                 request.maxSaturationDrainTicks,
                 aiExecutionProfile,
-                usesLegacyAiConfigurationCompatibility);
+                usesLegacyAiConfigurationCompatibility,
+                request.catchUpCpuBudgetMs);
         }
 
         internal static BattleAiExecutionProfile ParseAiExecutionProfile(string value)
@@ -553,11 +564,13 @@ namespace NTSD.Animation.Rendering.Editor
                 case "":
                 case "ai":
                     return ProductionEntityStressInputMode.Ai;
+                case "move":
+                    return ProductionEntityStressInputMode.Move;
                 case "none":
                     return ProductionEntityStressInputMode.None;
                 default:
                     throw new ArgumentException(
-                        $"Unknown production stress input mode '{value}'. Expected ai or none.",
+                        $"Unknown production stress input mode '{value}'. Expected ai, move, or none.",
                         nameof(value));
             }
         }
@@ -568,6 +581,8 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 case ProductionEntityStressInputMode.Ai:
                     return "ai";
+                case ProductionEntityStressInputMode.Move:
+                    return "move";
                 case ProductionEntityStressInputMode.None:
                     return "none";
                 default:
@@ -775,6 +790,8 @@ namespace NTSD.Animation.Rendering.Editor
         CaptureProductionCountersAiReportDiagnostics = 4,
         CaptureProductionCountersObserveRuntimeEntitySnapshot = 5,
         WriteReport = 6,
+        RunnerSteadyFrameOverhead = 7,
+        RefreshRosterAndCapacityDiagnostics = 8,
     }
 
     [Serializable]
@@ -799,6 +816,8 @@ namespace NTSD.Animation.Rendering.Editor
         CaptureProductionCountersAiReportDiagnostics = 8,
         CaptureProductionCountersObserveRuntimeEntitySnapshot = 9,
         WriteReport = 10,
+        RunnerSteadyFrameOverhead = 11,
+        RefreshRosterAndCapacityDiagnostics = 12,
     }
 
     [Serializable]
@@ -1010,6 +1029,9 @@ namespace NTSD.Animation.Rendering.Editor
         public int lifecycleReplacements;
         public int baseRosterActiveCount;
         public int baseAiActiveCount;
+        public long scriptedMoveVelocityAssignmentCount;
+        public int scriptedMoveObservedActiveCountPeak;
+        public double scriptedMoveAbsoluteDisplacementSumPeak;
         public int derivedOrTemporaryActiveCount;
         public int totalActiveRuntimeEntityCount;
         public int totalClaimedRuntimeSlotCount;
@@ -1039,6 +1061,13 @@ namespace NTSD.Animation.Rendering.Editor
         public int worldEntityCount;
         public int peakWorldEntityCount;
         public int claimedRuntimeSlotCount;
+        public int presentationEntityCount;
+        public int presentationCommandCount;
+        public int presentationHitRecordCount;
+        public string presentationBackendMode;
+        public bool managerCommonVisualCatalogComplete;
+        public bool managerCommonVisualSpecialComValid;
+        public bool publishedFrameCommonVisualSpecialComValid;
         public string runtimeProfile;
         public int runtimeSlotCapacity;
         public string broadphaseBackend;
@@ -1186,6 +1215,8 @@ namespace NTSD.Animation.Rendering.Editor
         public int sampledUnityFrames;
         public int framesWithCatchUp;
         public int maximumCatchUpTicksInFrame;
+        public double catchUpCpuBudgetMs;
+        public int framesLimitedByCatchUpCpuBudget;
         public int currentBacklogTicks;
         public int maximumBacklogTicks;
         public int droppedBacklogTicks;
@@ -1241,6 +1272,10 @@ namespace NTSD.Animation.Rendering.Editor
         public ProductionEntityStressAllocationRegionMetrics
             allocationCaptureProductionCountersObserveRuntimeEntitySnapshot;
         public ProductionEntityStressAllocationRegionMetrics allocationWriteReport;
+        public ProductionEntityStressAllocationRegionMetrics
+            allocationRunnerSteadyFrameOverhead;
+        public ProductionEntityStressAllocationRegionMetrics
+            allocationRefreshRosterAndCapacityDiagnostics;
         public ProductionEntityStressCpuRegionMetrics cpuRunnerUpdateTotal;
         public ProductionEntityStressCpuRegionMetrics cpuSpawnOrRemove;
         public ProductionEntityStressCpuRegionMetrics cpuStepMeasuredTickTotal;
@@ -1257,6 +1292,9 @@ namespace NTSD.Animation.Rendering.Editor
         public ProductionEntityStressCpuRegionMetrics
             cpuCaptureProductionCountersObserveRuntimeEntitySnapshot;
         public ProductionEntityStressCpuRegionMetrics cpuWriteReport;
+        public ProductionEntityStressCpuRegionMetrics cpuRunnerSteadyFrameOverhead;
+        public ProductionEntityStressCpuRegionMetrics
+            cpuRefreshRosterAndCapacityDiagnostics;
         public bool phaseTimingEnabled;
         public string phaseTimingSource;
         public List<ProductionEntityStressPhaseTimingSummary> phaseTimings =
@@ -2896,6 +2934,8 @@ namespace NTSD.Animation.Rendering.Editor
                 "spawn-batch-" + config.SpawnBatchSize.ToString(CultureInfo.InvariantCulture),
                 "max-catchup-" + config.MaxCatchUpTicksPerFrame.ToString(CultureInfo.InvariantCulture),
                 "max-backlog-" + config.MaxBacklogTicks.ToString(CultureInfo.InvariantCulture),
+                "catchup-cpu-budget-ms-" +
+                config.CatchUpCpuBudgetMs.ToString("R", CultureInfo.InvariantCulture),
                 "max-saturation-drain-" +
                 config.MaxSaturationDrainTicks.ToString(CultureInfo.InvariantCulture),
                 config.ShouldAutoStopWhenSampled ? "auto-stop-on" : "auto-stop-off",
@@ -3101,8 +3141,11 @@ namespace NTSD.Animation.Rendering.Editor
                 "NTSD.ProductionEntityStress.CaptureProductionCounters.ObserveRuntimeEntitySnapshot");
         private static readonly ProfilerMarker WriteReportProfilerMarker =
             new ProfilerMarker("NTSD.ProductionEntityStress.WriteReport");
-
+        private static readonly ProfilerMarker RefreshRosterAndCapacityProfilerMarker =
+            new ProfilerMarker(
+                "NTSD.ProductionEntityStress.RefreshRosterAndCapacityDiagnostics");
         private readonly List<LF2Character> entities = new List<LF2Character>(1000);
+        private readonly List<double> initialRosterX = new List<double>(1000);
         private readonly List<LF2Entity> entityScratch = new List<LF2Entity>(1050);
         private readonly HashSet<RuntimeEntityHandle> harnessOwnedHandles =
             new HashSet<RuntimeEntityHandle>();
@@ -3250,6 +3293,18 @@ namespace NTSD.Animation.Rendering.Editor
             int targetSampleTicks)
         {
             return !shouldAutoStopWhenSampled || sampledLogicTicks < targetSampleTicks;
+        }
+
+        internal static bool ShouldDeferCatchUpTickForCpuBudget(
+            double cpuBudgetMs,
+            int ticksAlreadyExecuted,
+            double elapsedCatchUpMs,
+            double previousTickMs)
+        {
+            if (cpuBudgetMs <= 0d || ticksAlreadyExecuted <= 0 || previousTickMs <= 0d)
+                return false;
+
+            return elapsedCatchUpMs + previousTickMs >= cpuBudgetMs;
         }
 
         internal static bool ApplySkipLateRendererUpdateForDiagnostics(
@@ -3503,6 +3558,7 @@ namespace NTSD.Animation.Rendering.Editor
                 stressRootName = gameObject.name,
                 outputPath = config.OutputPath,
                 requestedEntityCount = config.EntityCount,
+                catchUpCpuBudgetMs = config.CatchUpCpuBudgetMs,
                 maxSaturationDrainTicks = config.MaxSaturationDrainTicks,
                 replenishmentState = "InitialPopulation",
                 opointCounterAvailable = true,
@@ -3738,6 +3794,11 @@ namespace NTSD.Animation.Rendering.Editor
         {
             FinalizeProfilerFrameGcEvidence(frameBoundaryCompleted: true);
             long updateTimestamp = Stopwatch.GetTimestamp();
+            long updateAllocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            long sampledTickElapsedTicks = 0L;
+            long sampledTickAllocatedBytes = 0L;
+            bool sampledSteadyTickThisUpdate = false;
+            long writeReportSampleCountAtStart = report?.cpuWriteReport.sampleCount ?? 0L;
             ProfilerMarker.AutoScope updateProfilerScope =
                 RunnerUpdateProfilerMarker.Auto();
             try
@@ -3775,7 +3836,7 @@ namespace NTSD.Animation.Rendering.Editor
                         rosterMutationPendingForNextTick = true;
                     }
 
-                    RefreshRosterAndCapacityDiagnostics();
+                    RefreshRosterAndCapacityDiagnosticsMeasured();
                     ProductionEntityStressReplenishmentAction replenishmentAction =
                         ProductionEntityStressReplenishmentPolicy.Evaluate(
                             report.baseRosterActiveCount,
@@ -3844,6 +3905,8 @@ namespace NTSD.Animation.Rendering.Editor
                     }
 
                     int ticksThisFrame = 0;
+                    long catchUpStartedAt = Stopwatch.GetTimestamp();
+                    double previousTickMs = 0d;
                     if (ProductionEntityStressProfilerFrameSamplePolicy.ShouldStart(
                             report.logicTicksExecuted,
                             config.WarmupTicks,
@@ -3868,22 +3931,52 @@ namespace NTSD.Animation.Rendering.Editor
                                report.sampledLogicTicks,
                                config.SampleTicks))
                     {
+                        double elapsedCatchUpMs =
+                            (Stopwatch.GetTimestamp() - catchUpStartedAt) * 1000d /
+                            Stopwatch.Frequency;
+                        if (ShouldDeferCatchUpTickForCpuBudget(
+                                config.CatchUpCpuBudgetMs,
+                                ticksThisFrame,
+                                elapsedCatchUpMs,
+                                previousTickMs))
+                        {
+                            report.framesLimitedByCatchUpCpuBudget++;
+                            break;
+                        }
+
                         accumulator -= SimulationConstants.SIM_DT;
-                        bool buildPresentation = ResolveBuildPresentationForStressTick(
-                            config.SimulationOnly,
-                            accumulator,
-                            ticksThisFrame,
-                            config.MaxCatchUpTicksPerFrame);
+                        bool buildPresentation = config.LimitsCatchUpByCpuBudget
+                            ? !config.SimulationOnly
+                            : ResolveBuildPresentationForStressTick(
+                                config.SimulationOnly,
+                                accumulator,
+                                ticksThisFrame,
+                                config.MaxCatchUpTicksPerFrame);
+                        long tickStartedAt = Stopwatch.GetTimestamp();
+                        long tickAllocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+                        int sampledLogicTicksBefore = report.sampledLogicTicks;
                         StepMeasuredTick(
                             buildPresentation,
                             rosterMutationPendingForNextTick);
+                        long tickElapsedTicks = Stopwatch.GetTimestamp() - tickStartedAt;
+                        previousTickMs =
+                            tickElapsedTicks * 1000d /
+                            Stopwatch.Frequency;
+                        if (report.sampledLogicTicks > sampledLogicTicksBefore)
+                        {
+                            sampledSteadyTickThisUpdate = true;
+                            sampledTickElapsedTicks += tickElapsedTicks;
+                            sampledTickAllocatedBytes += Math.Max(
+                                0L,
+                                GC.GetAllocatedBytesForCurrentThread() - tickAllocatedBefore);
+                        }
                         rosterMutationPendingForNextTick = false;
                         ticksThisFrame++;
                         if (saturationDrainActive)
                         {
                             report.currentSaturationDrainTicks++;
                             report.saturationDrainTickCount++;
-                            RefreshRosterAndCapacityDiagnostics();
+                            RefreshRosterAndCapacityDiagnosticsMeasured();
                             ProductionEntityStressReplenishmentAction drainAction =
                                 ProductionEntityStressReplenishmentPolicy.Evaluate(
                                     report.baseRosterActiveCount,
@@ -3968,10 +4061,29 @@ namespace NTSD.Animation.Rendering.Editor
             finally
             {
                 updateProfilerScope.Dispose();
+                long updateElapsedTicks = Stopwatch.GetTimestamp() - updateTimestamp;
                 RecordCpuElapsedTicksForReport(
                     report,
                     ProductionEntityStressCpuRegion.RunnerUpdateTotal,
-                    Stopwatch.GetTimestamp() - updateTimestamp);
+                    updateElapsedTicks);
+                if (sampledSteadyTickThisUpdate &&
+                    !cleaned &&
+                    !terminalCpuDiagnosticsFlushPending &&
+                    report != null &&
+                    report.cpuWriteReport.sampleCount == writeReportSampleCountAtStart)
+                {
+                    RecordCpuElapsedTicksForReport(
+                        report,
+                        ProductionEntityStressCpuRegion.RunnerSteadyFrameOverhead,
+                        Math.Max(0L, updateElapsedTicks - sampledTickElapsedTicks));
+                    RecordAllocationBytesForReport(
+                        report,
+                        ProductionEntityStressAllocationRegion.RunnerSteadyFrameOverhead,
+                        Math.Max(
+                            0L,
+                            GC.GetAllocatedBytesForCurrentThread() - updateAllocatedBefore -
+                            sampledTickAllocatedBytes));
+                }
                 if (terminalCpuDiagnosticsFlushPending)
                 {
                     terminalCpuDiagnosticsFlushPending = false;
@@ -4069,6 +4181,7 @@ namespace NTSD.Animation.Rendering.Editor
                 StepMeasuredTickProfilerMarker.Auto();
             try
             {
+                ApplyScriptedMoveVelocityForNextTick();
                 long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
                 int poolCapacityBeforeTick = GetObjectPoolCapacityForDiagnostics();
                 ProfilerMarker.AutoScope driverStepOneTickProfilerScope =
@@ -4227,6 +4340,23 @@ namespace NTSD.Animation.Rendering.Editor
 
         private void CaptureProductionCounters()
         {
+            BattlePresentationFrame publishedFrame =
+                world?.BattlePresentation?.PublishedFrame;
+            report.presentationEntityCount = publishedFrame?.EntityCount ?? 0;
+            report.presentationCommandCount = publishedFrame?.CommandCount ?? 0;
+            report.presentationHitRecordCount = publishedFrame?.HitRecordCount ?? 0;
+            report.presentationBackendMode =
+                world?.BattlePresentation?.Mode.ToString() ?? string.Empty;
+            BattleCommonVisualCatalog managerCatalog =
+                CharacterAnimtorManager.Instance?.CommonVisualCatalog;
+            report.managerCommonVisualCatalogComplete =
+                managerCatalog != null && managerCatalog.IsComplete;
+            report.managerCommonVisualSpecialComValid =
+                managerCatalog != null && managerCatalog.IsSpecialComValid;
+            report.publishedFrameCommonVisualSpecialComValid =
+                publishedFrame?.CommonVisualCatalog != null &&
+                publishedFrame.CommonVisualCatalog.IsSpecialComValid;
+
             long activeEntityScanAllocatedBefore =
                 GC.GetAllocatedBytesForCurrentThread();
             long activeEntityScanTimestamp = Stopwatch.GetTimestamp();
@@ -5164,6 +5294,17 @@ namespace NTSD.Animation.Rendering.Editor
                         ref targetReport.allocationWriteReport,
                         normalizedBytes);
                     break;
+                case ProductionEntityStressAllocationRegion.RunnerSteadyFrameOverhead:
+                    RecordAllocationBytes(
+                        ref targetReport.allocationRunnerSteadyFrameOverhead,
+                        normalizedBytes);
+                    break;
+                case ProductionEntityStressAllocationRegion
+                    .RefreshRosterAndCapacityDiagnostics:
+                    RecordAllocationBytes(
+                        ref targetReport.allocationRefreshRosterAndCapacityDiagnostics,
+                        normalizedBytes);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(region), region, null);
             }
@@ -5271,6 +5412,17 @@ namespace NTSD.Animation.Rendering.Editor
                 case ProductionEntityStressCpuRegion.WriteReport:
                     RecordCpuMilliseconds(
                         ref targetReport.cpuWriteReport,
+                        normalizedMilliseconds);
+                    break;
+                case ProductionEntityStressCpuRegion.RunnerSteadyFrameOverhead:
+                    RecordCpuMilliseconds(
+                        ref targetReport.cpuRunnerSteadyFrameOverhead,
+                        normalizedMilliseconds);
+                    break;
+                case ProductionEntityStressCpuRegion
+                    .RefreshRosterAndCapacityDiagnostics:
+                    RecordCpuMilliseconds(
+                        ref targetReport.cpuRefreshRosterAndCapacityDiagnostics,
                         normalizedMilliseconds);
                     break;
                 default:
@@ -6341,9 +6493,15 @@ namespace NTSD.Animation.Rendering.Editor
                             $"Production creation chain failed at entity {placementIndex}/{config.EntityCount}.");
                     }
                     if (placementIndex < entities.Count)
+                    {
                         entities[placementIndex] = entity;
+                        initialRosterX[placementIndex] = entity.Runtime.X;
+                    }
                     else
+                    {
                         entities.Add(entity);
+                        initialRosterX.Add(entity.Runtime.X);
+                    }
                     report.totalEntitiesCreated++;
                     createdCount++;
                 }
@@ -6432,6 +6590,28 @@ namespace NTSD.Animation.Rendering.Editor
             return character;
         }
 
+        private void ApplyScriptedMoveVelocityForNextTick()
+        {
+            if (config.InputMode != ProductionEntityStressInputMode.Move)
+                return;
+
+            for (int i = 0; i < entities.Count; i++)
+            {
+                LF2Character entity = entities[i];
+                if (!IsActive(entity))
+                    continue;
+
+                LF2CharacterData characterData = entity._FrameDataWrapper?.characterData;
+                if (characterData == null || characterData.walking_speed <= 0f)
+                    continue;
+
+                entity.Runtime.Vx = (i & 1) == 0
+                    ? characterData.walking_speed
+                    : -characterData.walking_speed;
+                report.scriptedMoveVelocityAssignmentCount++;
+            }
+        }
+
         private int RemoveReleasedEntities()
         {
             long spawnOrRemoveTimestamp = Stopwatch.GetTimestamp();
@@ -6500,6 +6680,32 @@ namespace NTSD.Animation.Rendering.Editor
             report.derivedOrTemporaryActiveCount = Math.Max(
                 0,
                 report.totalActiveRuntimeEntityCount - report.baseRosterActiveCount);
+        }
+
+        private void RefreshRosterAndCapacityDiagnosticsMeasured()
+        {
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            long timestamp = Stopwatch.GetTimestamp();
+            ProfilerMarker.AutoScope profilerScope =
+                RefreshRosterAndCapacityProfilerMarker.Auto();
+            try
+            {
+                RefreshRosterAndCapacityDiagnostics();
+            }
+            finally
+            {
+                profilerScope.Dispose();
+                RecordAllocationBytesForReport(
+                    report,
+                    ProductionEntityStressAllocationRegion
+                        .RefreshRosterAndCapacityDiagnostics,
+                    GC.GetAllocatedBytesForCurrentThread() - allocatedBefore);
+                RecordCpuElapsedTicksForReport(
+                    report,
+                    ProductionEntityStressCpuRegion
+                        .RefreshRosterAndCapacityDiagnostics,
+                    Stopwatch.GetTimestamp() - timestamp);
+            }
         }
 
         private int GetObjectPoolCapacityForDiagnostics()
@@ -6946,6 +7152,7 @@ namespace NTSD.Animation.Rendering.Editor
             report.claimedRuntimeSlotCount = world?.ClaimedRuntimeSlotCountForDiagnostics ?? 0;
             report.baseRosterActiveCount = CountActiveBaseRoster(out int baseAiCount);
             report.baseAiActiveCount = baseAiCount;
+            CaptureScriptedMoveDiagnostics();
             report.totalActiveRuntimeEntityCount = report.worldEntityCount;
             report.totalClaimedRuntimeSlotCount = report.claimedRuntimeSlotCount;
             report.derivedOrTemporaryActiveCount = Math.Max(
@@ -7102,6 +7309,34 @@ namespace NTSD.Animation.Rendering.Editor
                     ProductionEntityStressCpuRegion.WriteReport,
                     Stopwatch.GetTimestamp() - writeReportTimestamp);
             }
+        }
+
+        private void CaptureScriptedMoveDiagnostics()
+        {
+            if (config.InputMode != ProductionEntityStressInputMode.Move)
+                return;
+
+            int observedActiveCount = 0;
+            double absoluteDisplacementSum = 0d;
+            int count = Math.Min(entities.Count, initialRosterX.Count);
+            for (int i = 0; i < count; i++)
+            {
+                LF2Character entity = entities[i];
+                if (!IsActive(entity))
+                    continue;
+
+                double displacement = Math.Abs(entity.Runtime.X - initialRosterX[i]);
+                absoluteDisplacementSum += displacement;
+                if (displacement > 0.0001d)
+                    observedActiveCount++;
+            }
+
+            report.scriptedMoveObservedActiveCountPeak = Math.Max(
+                report.scriptedMoveObservedActiveCountPeak,
+                observedActiveCount);
+            report.scriptedMoveAbsoluteDisplacementSumPeak = Math.Max(
+                report.scriptedMoveAbsoluteDisplacementSumPeak,
+                absoluteDisplacementSum);
         }
 
         private int CountActiveEntityGameObjects()

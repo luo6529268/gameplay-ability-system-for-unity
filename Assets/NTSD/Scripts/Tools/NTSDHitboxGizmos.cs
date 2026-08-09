@@ -3,6 +3,9 @@ using UnityEngine;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace NTSD.Tools
 {
@@ -37,29 +40,45 @@ namespace NTSD.Tools
             var driver = SimulationTickDriver.Instance;
             if (driver == null) return;
 
+#if UNITY_EDITOR
+            if (showOnlySelected)
+            {
+                GameObject selectedObject = Selection.activeGameObject;
+                LF2Entity selectedEntity = selectedObject != null
+                    ? selectedObject.GetComponentInParent<LF2Entity>()
+                    : null;
+                if (selectedEntity != null)
+                    DrawEntity(selectedEntity);
+                return;
+            }
+#endif
+
             driver.World?.GetAllEntities(_entities);
             if (_entities.Count == 0) return;
 
             foreach (var entity in _entities)
-            {
-                if (entity == null) continue;
+                DrawEntity(entity);
+        }
 
-                var frameD = entity.Frame?.D;
-                if (frameD == null) continue;
+        private void DrawEntity(LF2Entity entity)
+        {
+            if (entity == null) return;
 
-                float spriteW = entity.GetSpriteWidthPxForCollision();
-                if (spriteW <= 0f) continue;
+            LF2FrameData frameD = entity.Frame?.D;
+            if (frameD == null) return;
 
-                if (showBdy)
-                    DrawBdyBoxes(entity, frameD, spriteW);
+            float spriteW = entity.GetSpriteWidthPxForCollision();
+            if (spriteW <= 0f) return;
 
-                if (!showItr) continue;
+            if (showBdy)
+                DrawBdyBoxes(entity, frameD, spriteW);
 
-                DrawItrBoxes(entity, frameD, spriteW);
+            if (!showItr) return;
 
-                if (entity is LF2WeaponBase weaponBase)
-                    DrawWeaponPickupBoxes(weaponBase, frameD, spriteW);
-            }
+            DrawItrBoxes(entity, frameD, spriteW);
+
+            if (entity is LF2WeaponBase weaponBase)
+                DrawWeaponPickupBoxes(weaponBase, frameD, spriteW);
         }
 
         private void DrawBdyBoxes(LF2Entity entity, LF2FrameData frameD, float spriteW)

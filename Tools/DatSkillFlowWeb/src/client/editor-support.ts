@@ -1,5 +1,10 @@
 import { OVERLAY_COLORS, type OverlayType } from "./overlay-geometry.js";
 import type { DatFrameProjection } from "../model/dat-projection.js";
+import {
+    SKILL_ENTRY_HIT_KEYS,
+    type SkillDisplayMetadata,
+    type SkillEntry,
+} from "./skill-entries.js";
 
 export type Json = Record<string, unknown>;
 export type Frame = DatFrameProjection & Json;
@@ -15,7 +20,7 @@ export type FieldCapability = Json & {
     blockType?: OverlayType;
     blockIndex?: number;
 };
-export interface ProjectSkill { oid: number; name: string; startFrame: number; }
+export type ProjectSkill = SkillEntry;
 export interface BlockStructureCapability {
     capabilityId: string;
     blockType: OverlayType;
@@ -31,7 +36,13 @@ export interface FrameStructureCapability {
     canDelete: boolean;
     blocks: BlockStructureCapability[];
 }
-export interface SkillState { revision: number; etag: string; skills: ProjectSkill[]; }
+export interface SkillState {
+    revision: number;
+    etag: string;
+    sidecarStatus: "missing" | "valid" | "legacy" | "invalid";
+    metadata: SkillDisplayMetadata[];
+    skills: ProjectSkill[];
+}
 export interface FieldDraft {
     capability: FieldCapability;
     rawValue: string | [string, string];
@@ -56,7 +67,7 @@ export const frameFieldLabels: Readonly<Record<string, string>> = Object.freeze(
 export const frameGroups = Object.freeze([
     { title: "帧基础属性", keys: ["pic", "state", "wait", "next", "sound"] },
     { title: "移动参数", keys: ["dvx", "dvy", "dvz", "centerx", "centery"] },
-    { title: "跳转字段", keys: ["hit_a", "hit_d", "hit_j", "hit_Fa", "hit_Fj", "hit_Ua", "hit_Uj", "hit_Da", "hit_Dj", "hit_ja"] },
+    { title: "跳转字段", keys: [...SKILL_ENTRY_HIT_KEYS] },
     { title: "其他", keys: ["mp", "vaction"] },
 ]);
 export const blockCollections: Readonly<Record<OverlayType, keyof DatFrameProjection>> = Object.freeze({

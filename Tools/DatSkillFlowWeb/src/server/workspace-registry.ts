@@ -226,6 +226,20 @@ export class WorkspaceRegistry {
         return normalizeLogicalPath(logicalPath);
     }
 
+    async readLogicalFile(rootId: string, logicalPath: string): Promise<Buffer> {
+        const normalized = normalizeLogicalPath(logicalPath);
+        try {
+            const snapshot = await this.#nativeClient.read({
+                root: this.getRootDescriptor(rootId),
+                logicalPath: normalized,
+                maximumBytes: this.#maxDocumentBytes,
+            });
+            return Buffer.from(snapshot.bytes);
+        } catch (error) {
+            throw this.#mapNativeError(error, "not-a-file", "The requested file could not be read safely.");
+        }
+    }
+
     async openDocument(rootId: string, logicalPath: string): Promise<OpenedDocument> {
         const normalized = normalizeLogicalPath(logicalPath);
         let snapshot;

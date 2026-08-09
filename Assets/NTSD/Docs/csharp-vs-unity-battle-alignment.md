@@ -1,5 +1,13 @@
 # NTSD C# 工程 vs Unity 工程 — 战斗逻辑差异与对齐清单
 
+## 2026-08-08：压力工具追帧预算与 1000 AI 实测
+
+- 本批只修改 `ProductionEntityStressHarness` 的 Unity 外层追帧调度和诊断报告，不改变权威 C# 的 battle tick、pass 顺序、输入、RNG、碰撞候选消费、opoint 或生命周期语义。`catchUpCpuBudgetMs=0` 保留旧吞吐模式；Window 默认 `33.33 ms` 时，首 tick 一定执行，预计下一 tick 会越过预算才延后。
+- 同 seed、同 1000 AI、同 30 warmup + 120 sample A/B 中，预算模式最大 `1 tick/frame`，Unity frame Avg/P95=`75.388/103.443 ms`（约 `13.26 FPS`）；旧吞吐模式最大 `4 ticks/frame`，Unity frame Avg/P95=`161.826/257.808 ms`（约 `6.18 FPS`）。预算模式改善可见帧卡顿，但最大 backlog=`7`、dropped=`113`，明显高于无预算的 `4/20`，因此它不是逻辑吞吐量优化，也不能用于伪造 30 Hz 达标。
+- 两轮 final lockstep 的 input/RNG/metadata/world/slots/aRest/vRest/stats/events/overall hash 全部一致，overall=`2348281130f1c432260ccb9f17a6f31affc06a08632724c3be77070542ce82e4`。extended parity 的 slots/overall 差异来自表现刷新频率及其中 4 个 presentation-finalized hit-record 字段，不是战斗核心分叉。
+- 预算模式单个完整带表现 tick Avg/P95=`45.573/61.142 ms`；无预算样本带表现/不带表现 Avg=`34.597/28.108 ms`。两轮逻辑 tick 分配均为 `0 B/tick`，但 Editor frame GC 仍高，因此当前证据支持“catch-up 循环放大了卡顿”，不支持“循环是全部根因”或“GC 已清零”。1000 AI 稳定 30 Hz 差异点仍开放。
+- fresh 证据：Unity 编译完成；focused `2/2 passed`（job `ded49f6e80d346eebee7f3229bdfc0e6`）；full EditMode `720/720 passed`（job `15ba76f83027436db37474e58681c015`）；完整 `BattleRuntimeSelfCheck` 于 `2026-08-08 12:54:38` 返回 `PASS`；两轮压力报告 teardown 均完整恢复。T8 默认 `stage.dat` 和 Android 真机验证继续不纳入本轮。
+
 ## 2026-08-03：BuildCommands / 高频表现命令性能状态
 
 - 本批只改变 Unity 表现命令的构建与资源解析成本，不改变权威 C# 战斗 tick、pass 顺序、输入、碰撞、opoint、生命周期或 runtime 真值。

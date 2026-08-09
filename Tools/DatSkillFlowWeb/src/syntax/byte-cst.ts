@@ -44,6 +44,7 @@ export interface DatBlockCst {
 export interface DatFrameCst {
     frameId: number;
     occurrence: number;
+    label: string;
     span: ByteSpan;
     frameIdSpan: ByteSpan;
     closed: boolean;
@@ -337,7 +338,7 @@ function parseFieldsOnLine(
 function parseFrameHeader(
     source: Uint8Array,
     span: ByteSpan,
-): { frameId: number; frameIdSpan: ByteSpan } | undefined {
+): { frameId: number; frameIdSpan: ByteSpan; label: string } | undefined {
     const text = ascii(source, span.start, span.end);
     const match = /^\s*<frame>\s*([+-]?\d+)/.exec(text);
     if (!match) return undefined;
@@ -347,6 +348,7 @@ function parseFrameHeader(
     const relativeStart = match[0].lastIndexOf(rawId);
     return {
         frameId,
+        label: text.slice(match[0].length).trim(),
         frameIdSpan: {
             start: span.start + relativeStart,
             end: span.start + relativeStart + rawId.length,
@@ -420,6 +422,7 @@ export function parseDatCst(input: Uint8Array): DatCstDocument {
             currentFrame = {
                 frameId: frameHeader.frameId,
                 occurrence: frameOccurrence,
+                label: frameHeader.label,
                 span: { start: line.full.start, end: line.full.end },
                 frameIdSpan: frameHeader.frameIdSpan,
                 closed: false,

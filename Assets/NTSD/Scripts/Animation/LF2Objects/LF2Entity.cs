@@ -25,6 +25,11 @@ namespace NTSD.Animation.LF2Objects
         protected static readonly List<LF2Entity> N30HistoryGateScratch = new List<LF2Entity>(32);
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
         private int requiredRuntimeSlot = -1;
+        private SimulationWorld dataObjectTypeCacheWorld;
+        private int dataObjectTypeCacheTick = -1;
+        private int dataObjectTypeCacheObjectId = -1;
+        private ObjectDefinition dataObjectTypeCacheDefinition;
+        private int dataObjectTypeCacheFallback;
         internal static System.Func<int, LF2CharacterDataWrapper> RuntimeCharacterConfigResolverOverride;
 
 
@@ -1058,6 +1063,7 @@ namespace NTSD.Animation.LF2Objects
         public virtual void OnAdded(SimContext ctx)
         {
             registeredWorld = ctx?.World;
+            InvalidateDataObjectTypeTickCache();
             RefreshRuntimeSnapshot();
         }
 
@@ -1065,6 +1071,7 @@ namespace NTSD.Animation.LF2Objects
         {
             if (ReferenceEquals(registeredWorld, ctx?.World))
                 registeredWorld = null;
+            InvalidateDataObjectTypeTickCache();
             TrackerParent = null;
             Runtime.SlotIndex = -1;
         }
@@ -2415,6 +2422,14 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+                return;
+
+            RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
+        }
+
+        internal virtual void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
+        {
+            if (Runtime == null || Runtime.LinkState < 0)
                 return;
 
             if (AiControlled)
@@ -4168,8 +4183,38 @@ namespace NTSD.Animation.LF2Objects
                 return -1;
 
             int wrapperOid = ResolveCurrentDataObjectId(entity);
+            int fallbackType = entity.ReleaseEntityType;
+            SimulationWorld world = entity.registeredWorld;
+            int activeTick = world?.ActiveDataObjectTypeCacheTick ?? -1;
+            if (activeTick >= 0 &&
+                ReferenceEquals(entity.dataObjectTypeCacheWorld, world) &&
+                entity.dataObjectTypeCacheTick == activeTick &&
+                entity.dataObjectTypeCacheObjectId == wrapperOid &&
+                entity.dataObjectTypeCacheFallback == fallbackType)
+            {
+                return entity.dataObjectTypeCacheDefinition?.type ?? fallbackType;
+            }
+
             ObjectDefinition definition = GameDataManager.Instance?.GetObjectById(wrapperOid);
-            return definition?.type ?? entity.ReleaseEntityType;
+            if (activeTick >= 0)
+            {
+                entity.dataObjectTypeCacheWorld = world;
+                entity.dataObjectTypeCacheTick = activeTick;
+                entity.dataObjectTypeCacheObjectId = wrapperOid;
+                entity.dataObjectTypeCacheDefinition = definition;
+                entity.dataObjectTypeCacheFallback = fallbackType;
+            }
+
+            return definition?.type ?? fallbackType;
+        }
+
+        private void InvalidateDataObjectTypeTickCache()
+        {
+            dataObjectTypeCacheWorld = null;
+            dataObjectTypeCacheTick = -1;
+            dataObjectTypeCacheObjectId = -1;
+            dataObjectTypeCacheDefinition = null;
+            dataObjectTypeCacheFallback = 0;
         }
 
         /// <summary>
@@ -4234,7 +4279,12 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual float GetDisplayZ()
         {
-            if (GetCurrentDataObjectType() == (int)LF2ObjectType.SpecialAttack &&
+            return GetDisplayZForCurrentDataType(GetCurrentDataObjectType());
+        }
+
+        internal float GetDisplayZForCurrentDataType(int currentDataObjectType)
+        {
+            if (currentDataObjectType == (int)LF2ObjectType.SpecialAttack &&
                 Runtime != null &&
                 System.Math.Abs(Runtime.Type3VisualZOffset) > 0.0001)
             {

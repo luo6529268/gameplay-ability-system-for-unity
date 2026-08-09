@@ -233,7 +233,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void CollisionRoleZeroItrFastPath_DegenerateAuthoredItrFallsBackAndMatchesOriginalCollector()
+        public void CollisionRoleZeroItrFastPath_DegenerateAuthoredItrUsesConservativeIndexAndMatchesOriginalCollector()
         {
             var world = new SimulationWorld();
             LF2Character attacker = CreateCharacter(
@@ -266,7 +266,8 @@ namespace NTSD.Test
             Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.Zero);
             Assert.That(query.CollisionRoleZeroItrFastPathFallbackCountForDiagnostics, Is.EqualTo(1));
             Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
             Assert.That(query.TryGetLastRoleAwareParticipantFlagsForSelfCheck(
                 attacker,
                 out _,
@@ -274,7 +275,7 @@ namespace NTSD.Test
                 out bool hasAttackItr,
                 out bool hasFallbackAttackItr), Is.True);
             Assert.That(hasAttackItr, Is.True);
-            Assert.That(hasFallbackAttackItr, Is.True);
+            Assert.That(hasFallbackAttackItr, Is.False);
             Assert.That(query.TryGetCollisionCandidateSequence(
                 attacker,
                 out List<SceneQueryHit> fallbackCandidates), Is.True);
@@ -808,7 +809,7 @@ namespace NTSD.Test
             Assert.That(noBodyLegacy, Is.EqualTo(new[] { false, false, false, false }));
             Assert.That(fastLegacy, Is.EqualTo(new[] { true, false, false, false }));
             Assert.That(fallbackLegacy, Is.EqualTo(new[] { true, false, false, false }));
-            Assert.That(invalidBoundsLegacy, Is.EqualTo(new[] { true, true, false, false }));
+            Assert.That(invalidBoundsLegacy, Is.EqualTo(new[] { true, false, false, false }));
             Assert.That(
                 query.LastRoleAwareBodyTemplateFallbackCountForDiagnostics,
                 Is.EqualTo(2));
@@ -1514,7 +1515,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Formal_DegenerateTemplateAndClampTranslationFallbackLocallyWithParity()
+        public void Formal_DegenerateTemplateUsesConservativeIndexAndClampFallsBackWithParity()
         {
             LF2FrameData degenerateFrame = MakeFrame(
                 new InteractionArea
@@ -1572,7 +1573,7 @@ namespace NTSD.Test
                 second);
 
             AssertRunsEqual(degenerateLegacy, degenerateTemplated);
-            Assert.That(degenerateTemplated.BodyEntryCount, Is.EqualTo(2));
+            Assert.That(degenerateTemplated.BodyEntryCount, Is.EqualTo(4));
             Assert.That(
                 degenerateQuery.LastRoleAwareBodyTemplateBuildCountForDiagnostics,
                 Is.EqualTo(1));
@@ -1970,7 +1971,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Formal_NonIndexableRoleBoundsFallbackMatchesLegacy()
+        public void Formal_DegenerateRoleBoundsUseConservativeIndexAndMatchLegacy()
         {
             var world = new SimulationWorld();
             LF2Character degenerateItr = CreateCharacter(
@@ -2036,11 +2037,11 @@ namespace NTSD.Test
                 validItr);
 
             AssertRunsEqual(legacy, role);
-            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.Zero);
-            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(query.LastRoleAwareDirectComparisonCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareDirectComparisonCountForDiagnostics, Is.EqualTo(4));
             Assert.That(query.LastFormalPairCountForDiagnostics, Is.EqualTo(4));
-            Assert.That(query.LastFormalFallbackParticipantCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(query.LastFormalFallbackParticipantCountForDiagnostics, Is.Zero);
             Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
         }
 
@@ -2558,7 +2559,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Formal_FallbackRoleListsMatchOldPredicateResetAndStayWarm()
+        public void Formal_ConservativeDegenerateRolesLeaveFallbackListsEmptyAndStayWarm()
         {
             var world = new SimulationWorld();
             LF2Character fallbackAttack = CreateCharacter(
@@ -2675,7 +2676,7 @@ namespace NTSD.Test
 
             Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
             Assert.That(roleListKeys, Is.EqualTo(oldPredicateKeys));
-            Assert.That(roleListKeys, Has.Count.EqualTo(8));
+            Assert.That(roleListKeys, Is.Empty);
             Assert.That(
                 roleListKeys.Contains(((long)2 << 32) | 2L),
                 Is.False);
@@ -2683,9 +2684,9 @@ namespace NTSD.Test
                 roleListKeys.Contains(((long)3 << 32) | 4L),
                 Is.False);
             Assert.That(bodyCount, Is.EqualTo(4));
-            Assert.That(fallbackAttackCount, Is.EqualTo(2));
-            Assert.That(exactAttackCount, Is.EqualTo(1));
-            Assert.That(fallbackBodyCount, Is.EqualTo(2));
+            Assert.That(fallbackAttackCount, Is.Zero);
+            Assert.That(exactAttackCount, Is.EqualTo(3));
+            Assert.That(fallbackBodyCount, Is.Zero);
             Assert.That(
                 query.MeasureWarmedRoleAwareFallbackPairAllocationsForSelfCheck(64),
                 Is.Zero);
@@ -2727,7 +2728,8 @@ namespace NTSD.Test
             // Authority CollisionCollect keeps zero-width authored rectangles and
             // uses strict endpoint comparisons. A zero-width interval therefore
             // still overlaps when its coordinate lies strictly inside the other
-            // interval. The role collector must conservatively fall back per role.
+            // interval. The role collector uses a conservative non-empty broadphase
+            // range and still delegates the final strict decision to the exact pass.
             AssertMixedDegenerateRoleParity(
                 mixedParticipantIsAttacker: true,
                 expectedBodyX: 40);
@@ -2805,7 +2807,7 @@ namespace NTSD.Test
                         h = random.Next(6, 25),
                     }
                     : null;
-                if (degenerateItr || degenerateBody || (!hasItr && !hasBody))
+                if (!hasItr && !hasBody)
                     expectedFallbackParticipants++;
 
                 LF2Character entity = CreateCharacter(
@@ -3201,7 +3203,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Formal_ForcedSweepKeepsDegenerateRolesOnTreeFallbackPath()
+        public void Formal_ForcedSweepIndexesDegenerateRolesConservatively()
         {
             var world = new SimulationWorld();
             LF2Character invalidItr = CreateCharacter(
@@ -3267,10 +3269,10 @@ namespace NTSD.Test
 
             AssertRunsEqual(brute, role);
             Assert.That(role.CollectionAborted, Is.False);
-            Assert.That(query.LastRoleAwareSweepDirectTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareSweepDirectTickCountForDiagnostics, Is.EqualTo(1));
             Assert.That(query.LastRoleAwareNestedDirectTickCountForDiagnostics, Is.Zero);
-            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(query.LastRoleAwareSweepXCandidateCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareSweepXCandidateCountForDiagnostics, Is.GreaterThan(0));
         }
 
         [Test]
@@ -4158,7 +4160,7 @@ namespace NTSD.Test
             Assert.That(legacy.Counts, Is.EqualTo(new[] { 0 }), context);
             Assert.That(legacy.FormalPairCount, Is.Zero, context);
             Assert.That(role.FormalPairCount, Is.EqualTo(1), context);
-            Assert.That(role.FallbackParticipantCount, Is.EqualTo(1), context);
+            Assert.That(role.FallbackParticipantCount, Is.Zero, context);
         }
 
         private static void AssertExactCacheCounts(

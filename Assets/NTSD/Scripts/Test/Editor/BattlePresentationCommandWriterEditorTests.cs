@@ -58,6 +58,34 @@ namespace NTSD.Test
                     typeof(string),
                 },
                 null);
+        private static readonly ConstructorInfo CatalogWithSpecialConstructor =
+            typeof(BattleCommonVisualCatalog).GetConstructor(
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                new[]
+                {
+                    typeof(BattleCommonVisualBinding),
+                    typeof(BattleCommonVisualBinding[]),
+                    typeof(Texture2D[]),
+                    typeof(BattleCommonVisualBinding[][]),
+                    typeof(BattleCommonVisualBinding),
+                    typeof(string),
+                },
+                null);
+        private static readonly ConstructorInfo CatalogWithComLabelsConstructor =
+            typeof(BattleCommonVisualCatalog).GetConstructor(
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                new[]
+                {
+                    typeof(BattleCommonVisualBinding),
+                    typeof(BattleCommonVisualBinding[]),
+                    typeof(Texture2D[]),
+                    typeof(BattleCommonVisualBinding[][]),
+                    typeof(BattleCommonVisualBinding[]),
+                    typeof(string),
+                },
+                null);
 
         [Test]
         public void OptimizedWriter_MatchesReferenceForWords5ComCounterAndBracket()
@@ -202,6 +230,141 @@ namespace NTSD.Test
             Assert.That(frame.CommandCount, Is.EqualTo(entityCount * 3));
         }
 
+        [Test]
+        public void CentralOnly_SpecialComUsesOneCompositeCommand_LegacyKeepsThreeGlyphs()
+        {
+            BattleCommonVisualCatalog catalog = CreateCatalog(0, includeSpecialCom: true);
+            var frame = new BattlePresentationFrame();
+            Reset(frame, catalog);
+            AddEntity(frame, CreateOverlayEntity(
+                new RuntimeEntityHandle(20, 7),
+                100,
+                20,
+                1,
+                5,
+                0,
+                1,
+                120,
+                180));
+
+            var centralCoordinator = new BattlePresentationCoordinator();
+            centralCoordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+            centralCoordinator.BuildCommandsForSelfCheck(frame);
+
+            Assert.That(frame.CommandCount, Is.EqualTo(1));
+            BattleRenderCommand composite = frame.GetCommand(0);
+            Assert.That(composite.Type, Is.EqualTo(BattleRenderCommandType.OverlayGlyph));
+            Assert.That(composite.SpriteDescriptor.LogicalResourceKey,
+                Is.EqualTo(BattleVisualResourceKey.CommonSpecialCom));
+            Assert.That(composite.Size,
+                Is.EqualTo(new Vector2(
+                    BattleCommonVisualCatalog.SpecialComWidth,
+                    BattleCommonVisualCatalog.SpecialComHeight)));
+            Assert.That(composite.Pivot,
+                Is.EqualTo(BattleCommonVisualCatalog.GetSpecialComPivotNormalized()));
+
+            var runtime = new BattleEntityOverlayRuntimeSlot(
+                20,
+                1,
+                5,
+                0,
+                1,
+                0,
+                120,
+                0,
+                180,
+                0,
+                0,
+                0);
+            Assert.That(
+                BattleEntityOverlayLayout.TryGetSpecialComLayout(
+                    in runtime,
+                    out int labelX,
+                    out int labelY,
+                    out _),
+                Is.True);
+            Assert.That(composite.Position,
+                Is.EqualTo(NTSDRenderSpace.ScreenPixelToWorld(labelX, labelY, 0f)));
+
+            var legacyCoordinator = new BattlePresentationCoordinator();
+            legacyCoordinator.BuildCommandsForSelfCheck(frame);
+            Assert.That(frame.CommandCount, Is.EqualTo(3));
+            Assert.That(frame.GetCommand(0).EffectivePic, Is.EqualTo('C'));
+            Assert.That(frame.GetCommand(1).EffectivePic, Is.EqualTo('o'));
+            Assert.That(frame.GetCommand(2).EffectivePic, Is.EqualTo('m'));
+        }
+
+        [Test]
+        public void CentralOnly_GenericComUsesRelationSheetComposite_LegacyKeepsThreeGlyphs()
+        {
+            const int relationSheet = 2;
+            BattleCommonVisualCatalog catalog = CreateCatalog(0, includeAllComLabels: true);
+            var frame = new BattlePresentationFrame();
+            Reset(frame, catalog);
+            AddEntity(frame, CreateOverlayEntity(
+                new RuntimeEntityHandle(20, 8),
+                101,
+                20,
+                1,
+                relationSheet,
+                0,
+                31,
+                240,
+                210));
+
+            var centralCoordinator = new BattlePresentationCoordinator();
+            centralCoordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+            centralCoordinator.BuildCommandsForSelfCheck(frame);
+
+            Assert.That(frame.CommandCount, Is.EqualTo(1));
+            BattleRenderCommand composite = frame.GetCommand(0);
+            Assert.That(composite.Type, Is.EqualTo(BattleRenderCommandType.OverlayGlyph));
+            Assert.That(composite.SpriteDescriptor.LogicalResourceKey,
+                Is.EqualTo(BattleVisualResourceKey.CommonComLabel(relationSheet)));
+            Assert.That(composite.Size,
+                Is.EqualTo(new Vector2(
+                    BattleCommonVisualCatalog.SpecialComWidth,
+                    BattleCommonVisualCatalog.SpecialComHeight)));
+            Assert.That(composite.Pivot,
+                Is.EqualTo(BattleCommonVisualCatalog.GetSpecialComPivotNormalized()));
+
+            var runtime = new BattleEntityOverlayRuntimeSlot(
+                20,
+                1,
+                relationSheet,
+                0,
+                31,
+                0,
+                240,
+                0,
+                210,
+                0,
+                0,
+                0);
+            var glyphs = new BattleEntityOverlayGlyph[BattleEntityOverlayLayout.MaximumGlyphCount];
+            Assert.That(
+                BattleEntityOverlayLayout.TryBuild(
+                    in runtime,
+                    GetLabels(frame),
+                    GetLabelState(frame),
+                    glyphs,
+                    out int glyphCount),
+                Is.True);
+            Assert.That(glyphCount, Is.EqualTo(3));
+            Assert.That(composite.Position,
+                Is.EqualTo(NTSDRenderSpace.ScreenPixelToWorld(
+                    glyphs[0].PixelX,
+                    glyphs[0].PixelY,
+                    0f)));
+
+            var legacyCoordinator = new BattlePresentationCoordinator();
+            legacyCoordinator.BuildCommandsForSelfCheck(frame);
+            Assert.That(frame.CommandCount, Is.EqualTo(3));
+            Assert.That(frame.GetCommand(0).EffectivePic, Is.EqualTo('C'));
+            Assert.That(frame.GetCommand(1).EffectivePic, Is.EqualTo('o'));
+            Assert.That(frame.GetCommand(2).EffectivePic, Is.EqualTo('m'));
+        }
+
         private static List<BattleRenderCommand> BuildReference(
             BattlePresentationFrame frame,
             BattleCommonVisualCatalog catalog)
@@ -324,7 +487,10 @@ namespace NTSD.Test
                 false);
         }
 
-        private static BattleCommonVisualCatalog CreateCatalog(int variant)
+        private static BattleCommonVisualCatalog CreateCatalog(
+            int variant,
+            bool includeSpecialCom = false,
+            bool includeAllComLabels = false)
         {
             Assert.That(BindingConstructor, Is.Not.Null);
             Assert.That(CatalogConstructor, Is.Not.Null);
@@ -368,13 +534,85 @@ namespace NTSD.Test
                 }
             }
 
-            return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
+            if (!includeSpecialCom && !includeAllComLabels)
+            {
+                return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
+                    new object[]
+                    {
+                        null,
+                        Array.Empty<BattleCommonVisualBinding>(),
+                        Array.Empty<Texture2D>(),
+                        glyphs,
+                        string.Empty,
+                    });
+            }
+
+
+            if (includeAllComLabels)
+            {
+                Assert.That(CatalogWithComLabelsConstructor, Is.Not.Null);
+                var comLabels = new BattleCommonVisualBinding[BattleCommonVisualCatalog.WordSheetCount];
+                for (int sheetIndex = 0; sheetIndex < comLabels.Length; sheetIndex++)
+                {
+                    Rect rect = BattleCommonVisualCatalog.GetComLabelPixelRect(sheetIndex);
+                    comLabels[sheetIndex] = (BattleCommonVisualBinding)BindingConstructor.Invoke(
+                        new object[]
+                        {
+                            BattleVisualResourceKey.CommonComLabel(sheetIndex),
+                            null,
+                            null,
+                            null,
+                            rect,
+                            new Rect(
+                                0f,
+                                rect.y / BattleCommonVisualCatalog.ComLabelsTextureHeight,
+                                1f,
+                                rect.height / BattleCommonVisualCatalog.ComLabelsTextureHeight),
+                            rect.size,
+                            BattleCommonVisualCatalog.GetSpecialComPivotNormalized(),
+                            BattleSpriteRenderState.Default(),
+                        });
+                }
+
+                return (BattleCommonVisualCatalog)CatalogWithComLabelsConstructor.Invoke(
+                    new object[]
+                    {
+                        null,
+                        Array.Empty<BattleCommonVisualBinding>(),
+                        Array.Empty<Texture2D>(),
+                        glyphs,
+                        comLabels,
+                        string.Empty,
+                    });
+            }
+
+            Assert.That(CatalogWithSpecialConstructor, Is.Not.Null);
+            var specialRect = new Rect(
+                0f,
+                0f,
+                BattleCommonVisualCatalog.SpecialComWidth,
+                BattleCommonVisualCatalog.SpecialComHeight);
+            var specialBinding = (BattleCommonVisualBinding)BindingConstructor.Invoke(
+                new object[]
+                {
+                    BattleVisualResourceKey.CommonSpecialCom,
+                    null,
+                    null,
+                    null,
+                    specialRect,
+                    new Rect(0f, 0f, 1f, 1f),
+                    specialRect.size,
+                    BattleCommonVisualCatalog.GetSpecialComPivotNormalized(),
+                    BattleSpriteRenderState.Default(),
+                });
+            return (BattleCommonVisualCatalog)CatalogWithSpecialConstructor.Invoke(
                 new object[]
                 {
                     null,
                     Array.Empty<BattleCommonVisualBinding>(),
                     Array.Empty<Texture2D>(),
                     glyphs,
+                    specialBinding,
                     string.Empty,
                 });
         }

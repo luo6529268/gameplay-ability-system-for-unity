@@ -4,18 +4,29 @@
 
 ## Snapshot
 
-- Updated: 2026-08-06
+- Updated: 2026-08-08
 - Brief maturity: `Validated`
 - Requirement gate: `Ready`
-- Project phase: 阶段 6，技能管理、lossless 结构编辑、Canvas、SVG Flow 与 DAT wait 轴已完成 E4/E5 验收
-- Active task: 当前定义范围完成，等待用户决定下一阶段
-- Active requirement IDs: REQ-001 至 REQ-015
+- Project phase: 阶段 8，Native 技能 Trace DTO、OID 分类、多 OID 资源投影和浏览器 E3 视觉验收均已完成
+- Active task: 从技能成功触发开始生成真实 C++ 逻辑 tick；主体、分身和投射物按类别结束
+- Active requirement IDs: REQ-001 至 REQ-019
 - Current branch or workspace: `feat/dat-skill-flow-editor` / `Tools/DatSkillFlowWeb`
-- Current build ID or revision: `20260806172742780-4037ab3a29ef4617ba7386f804ae3c1b`
-- Open P0-P2 issues: 无已知代码缺陷。
-- Next required action: 等待项目所有者确认当前交付；确认后再决定是否进入新的需求阶段，当前无需继续启动服务或浏览器。
+- Current build ID or revision: `20260808115824286-7edd5b5c6b1f4c0d97e943bb9f1df4d6`
+- Open P0-P2 issues: 无已确认代码缺陷；本轮未重新启动已失败过的自动化浏览器，因此新的启动/切换性能改动尚未取得浏览器 E4 截图。
+- Next required action: 用户直接运行一键启动进行视觉确认；若仍有表现差异，再基于该次操作录像定向复现。
 
 ## Completed
+
+- 启动阶段从真实 DAT 派生并预热 86 个 Native 技能场景，同时安全读取并缓存 31 个当前战斗资源；浏览器只在服务完成准备后打开。
+- `CppNativeDatPreviewRunner`、项目会话和客户端分别按 DAT 内容、revision 与完整 preview intent 做有界 LRU/并发去重；编辑后自动进入新 key，不复用旧 revision。
+- 每次技能/Frame 预览不再同步刷新 `data.txt`；显式 catalog 读取仍执行新鲜度检查并保持外部变更失效语义。
+- C++ `render_resources` 直接提供 OID 33/121/205 等实体的 object type、frame center 和 sprite range；服务端不再为同一 Trace 重读辅助 DAT 猜测渲染资源。
+- BMP capability 在项目响应中保持 opaque；项目打开不再逐图同步探测，首次 `/api/assets/:id` 仍通过已授权 root 做 handle-safe 读取，随后只在当前会话内复用字节。
+- 真实链路基线从项目打开 75.7 秒、切换 1.4–1.5 秒，降为准备后项目打开 15.2ms、F265 首次切换 29.4ms、重复切换 3.9ms；预热资源响应 2.8ms。
+- Native preview 的 C++ 源码/对象来自 `J:\QQFile\NTSD2.4\ntsd_cpp`，但运行数据根显式固定为 `J:\QQFile\NTSD 2.4.1`；CLI 按该版本的 `data\data.txt` 全量加载 137 个 object DAT 并保留原始 type。响应仅投影本次 Trace 实际出现的 OID 资源，避免把完整 catalog 重复传给浏览器。
+- F271 已验证真实链路：Naruto F271/F272 生成 type-3 OID 205，OID 205 从 F99 推进到 F325+，随后生成 6 个进入可绘制帧的 OID 33 分身；不再落入旧 type-2 的 F69/F70 循环。
+- 一键启动的只读 asset workspace 与 Native `--game-root` 均使用 `J:\QQFile\NTSD 2.4.1`，不得从 C++ 源码目录的父级推导运行 DAT/BMP。
+- 完整自动测试 333 项：332 通过、0 失败、1 跳过；F210/F211/F212、F265/OID 33、F271/OID 205 -> OID 33、F263/OID 121 Native 定向验收通过。
 
 - 接入真实 `data.txt`、DAT、BMP、项目会话、编辑、预览、保存和关闭 API。
 - Native preview 明确限制为 Naruto OID 2。
@@ -40,7 +51,7 @@
 - 完成 GPT 视觉方向对应的顶部状态、左侧技能/flow、中间 Native preview、右侧 inspector 和底部时间轴布局。
 - 完成技能新建/编辑、真实 flow/timeline 联动、六类 overlay、Canvas hit-test、完整块 inspector、ITR pair 双输入和会话编辑。
 - 完成 1440×900、1024×768、390×844 三档响应式布局，均无水平溢出。
-- 新增 `一键启动.cmd` 和安全启动脚本：保留既有测试副本、随机回环端口、服务就绪后打开浏览器，显式 `-ResetWorkspace` 才重建副本。
+- 新增 `一键启动.cmd` 和安全启动脚本：保留既有测试副本、随机回环端口、服务就绪后打开浏览器。
 - 修复 preview 乱序响应覆盖和不支持对象切换问题。
 - 独立 headless Edge E4 已验证技能、20 帧流程/时间轴、预览控制、overlay、字段编辑、dirty/revision 和三档 viewport。
 - Native preview 主实体固定使用权威 slot 0；非法、越界和重复 slot 在服务边界拒绝。
@@ -54,13 +65,31 @@
 - 完成 Canvas move、四角 resize、1/4px 网格、方向键/Shift 微调、Esc 取消和 batch 单 revision。
 - 完成 SVG Flow 真节点/真实字段边、已有 frame 重定向、unresolved/cycle 保留和 `max(1, wait)` 视觉时间轴。
 - 修复 edit busy 后 Flow 永久只读，以及 `dataset.oid` 字符串导致对象重开显示 OID 0 的真实浏览器缺陷。
-- 最终完整测试 296 项：295 通过、0 失败、1 跳过。
+- 历史 Phase 6 完整测试 297 项：296 通过、0 失败、1 跳过。
 - release build E4/E5：latest-wins 最终 frame 303/occurrence 225/slot 0；技能、结构、Canvas、Flow、wait 轴、signed scalar/pair、busy lock、三档 viewport 和零 console/error 均通过。
 - release E5：保存 revision 6 后恢复备份/hash 存在；服务重启后 sidecar 技能、frame 589、3 个 BDY、`hit_j:302`、`dvx=-1` 恢复。
+- 完成 REQ-016：无参数一键启动显示正式/测试/取消选择；显式 `-Mode Project|Test` 支持自动化；正式模式使用仓库根 workspace，测试模式保留 LocalAppData 副本，测试重置不能作用于正式项目。
+- 完成 REQ-017：frame 标题经 CST/projection/project DTO 透传；当前 DAT 自动派生标题段和非零 `hit_*` 精确入口。
+- Flow 的 `next` 继续展开；指向其他入口的 `hit_*` 显示为可点击叶节点，不吞并目标技能流程。
+- sidecar 只保存显示名称、分组、顺序、置顶、隐藏和备注；旧 `name` 可读迁移，missing/invalid 不清空 DAT 自动入口。
+- 正式 Naruto 无 sidecar 自动显示 86 个入口；standing 展开 0→1→2→3，点击 `hit_Uj` F300 后切换到 rasenganshuriken。
+- 临时 sidecar 别名保存并重启恢复；Naruto DAT SHA-256 前后均为 `0493F5F76F08A363366A4C748DA97DF7ADF0F594F1264EE390E2D7AB13DD2AB9`，验收 sidecar 已删除。
+- 1440×900、1024×768、390×844 均保持 86 个入口、零水平溢出；页面 error/console 为空。
+- 最终完整测试 300 项：299 通过、0 失败、1 跳过；build `20260807022745217-fe7793893aac4349b461aef35a668a32`。
+- 完成 REQ-018：桌面左/中和中/右边界均提供 6px 可访问 separator，支持 pointer capture、方向键/Shift、Esc 恢复和容器 resize clamp；≤850px 继续使用移动标签页。
+- 真实无头 Edge 验收：1440 双拖动为 360/728/340px；1024 极限拖动为 412/360/240px；900 拖动中 resize 保持中栏 360px；390 移动标签页无 separator，全部 viewport 水平溢出为 0。
+- 三栏拖动最终完整测试 310 项：309 通过、0 失败、1 跳过；build `20260807072730170-45381c691244494182d27963d1440e09`。
+- 实现 REQ-019 网页侧 Trace DTO：按 catalog `type` 映射 root/actor/clone/projectile/unknown，记录逐 tick lineage、spawn/despawn、rootSkillEnded、分身释放、投射物落地/失效和 `timeout`/`persistent`。
+- 服务端按 Native 输出中的 OID 加载对应 DAT frame/range/BMP capability；客户端按 OID 选择真实资源，不再把非 OID 2 实体固定绘制为 fallback。
+- 客户端主体进度在 root 结束处停止，播放边界继续覆盖投射物尾迹；slot reuse 在新 lineage 前显式结束旧 lineage。
+- 新增 `tests/unit/native-preview-trace.test.ts`，覆盖 raw object type、root/clone/projectile 分类和 slot reuse。
+- 当前完整测试 313 项：312 通过、0 失败、1 跳过；build `20260807122548278-e9b45dbba5944cc7942d1feca662b133`。
+- 真实 Native 服务链路已验证：F300 返回 OID 33/204/216 的 203/116/83 帧资源并分类为 clone/projectile；Frame 263 返回 OID 121 武器，两个 lineage 均以 `landed` 完成。
+- 浏览器 E3 已验证：隔离 headless Chrome 在 1440×900 下实际显示 F300 主体/分身/效果和 Frame 263 预览，播放推进到后续帧，console/errors 均为空；截图保存在 `artifacts/acceptance-20260807-e3/`。
 
 ## In Progress
 
-- 无。REQ-001 至 REQ-015 均已达到要求的证据级别。
+- REQ-019 Native 技能 Trace：网页 DTO、真实 CLI/服务链路和浏览器 E3 视觉验收均已通过。
 
 ## Blocked
 
@@ -71,13 +100,16 @@
 - 使用 `C:\Users\Logan\.codex\templates\large-goal`，不重新设计项目模板。
 - Standard 模式。
 - 不依赖 Unity 运行。
-- 技能不自动推断，由用户维护名称和起始帧。
-- 技能元数据保存在 `.dat-skill-flow/skills.json`。
+- 入口和首帧由当前 DAT frame 标题段与跳转关系派生，不凭空生成中文技能语义。
+- `.dat-skill-flow/skills.json` 只保存纯展示覆盖，不能创建或删除入口。
 - 第一阶段使用单角色预览。
 - 第一阶段包含 `itr`、`bdy`、`opoint`、`wpoint`、`bpoint`、`cpoint` 查看、编辑和几何叠加。
 - 复杂对象生成、武器联动、抓取和命中结果语义延后。
 - DAT 和 `ntsd_cpp` 是数据与预览权威，UI 不创造战斗规则。
 - 用户可见功能未达到 E4 不得标记通过。
+- 临时浏览器可以启动但必须受控：先检查并优先复用可用 profile；不可用时确认空闲后再关闭；每次使用结束关闭完整进程树并确认临时 profile 残留为 0，不得结束用户普通 Chrome/Edge。
+- Trace 不调用 UI 键盘模拟；从技能已成功触发语义开始。
+- 网页按 C++ 对应 OID DAT/catalog 的 `rawObjectType` 分类：角色/分身只确认 opoint 释放和首个有效快照，不等待 AI；武器/投射物继续处理轨迹、落地、碰撞和失效。
 
 ## Unknowns and Assumptions
 
@@ -89,28 +121,35 @@
 ## Recent Decisions
 
 - DEC-001: 使用 Standard large-goal 模式。
-- DEC-002: 技能由名称和起始帧定义。
-- DEC-003: 技能元数据使用项目侧车文件。
+- DEC-002: 已被 DEC-009 取代；历史版本由名称和起始帧定义手工技能。
+- DEC-003: sidecar 只保存项目展示元数据，不拥有 DAT 入口。
 - DEC-004: 第一阶段使用单角色预览。
 - DEC-005: 第一阶段纳入全部现有 DAT 块查看、编辑和几何叠加。
 - DEC-006: GPT 图作为修正后的视觉方向稿。
 - DEC-007: itr 成对动作字段原子编辑。
+- DEC-008: 一键启动默认交互选择 `Project`/`Test`；非交互必须显式 `-Mode`，`-ResetWorkspace` 仅限测试模式。
+- DEC-009: 使用混合自动入口；同标题且 frame ID 连续的段合并，非零 `hit_*` 的有效目标为精确入口。
+- DEC-010: 跨入口 `hit_*` 是可点击叶节点；`next` 继续展开当前流程。
+- DEC-012: 复用临时浏览器并限制实例，使用后清零进程。
+- DEC-013: Trace 按派生对象类别分别结束；分身不等待 AI，武器/投射物继续到权威完成。
 
 ## Validation
 
-- Last build command and result: `npm test`，295 passed / 0 failed / 1 skipped；build ID `20260806172742780-4037ab3a29ef4617ba7386f804ae3c1b`。
-- Last startup command and result: 使用固定 release manifest、随机 loopback 端口和 LocalAppData 隔离 workspace 启动成功；同一浏览器跨服务重启完成恢复验证。
-- Automated test environment: Node integration/unit tests、独立 headless Edge/CDP、LocalAppData 隔离 DAT 副本。
+- Last build command and result: PowerShell 直接运行 `npm-cli.js test`，332 passed / 0 failed / 1 skipped；build ID `20260808115824286-7edd5b5c6b1f4c0d97e943bb9f1df4d6`。
+- Last startup command and result: `start-local.ps1 -Mode Project -ValidateOnly -NoBrowser` 通过；一次真实 Node 冷启动计时在服务代码执行前被本机 `ncrypto::CSPRNG` 断言阻塞，任务创建的 PID 139600 已退出并清理，因此本轮没有新的服务就绪耗时或浏览器视觉证据。
+- Automated test environment: Node integration/unit tests、PowerShell 5.1 parser、tuistory PTY、正式/测试 launcher 服务、既有独立 Edge/CDP 证据。
 - Highest evidence level reached: 用户可见编辑器核心流程 E4；显式 DAT 覆盖、恢复备份和重启持久化达到 E5。
 - Evidence locations: `ACCEPTANCE.md`、`artifacts/acceptance-20260806-4037ab3a/`、Factory 当前会话浏览器/测试日志。
-- Runtime, console or network errors: release 页面 `errors` 和 `console` 均为空；Preview latest-wins 最终状态一致。
-- Started processes and cleanup result: 自有 Edge、服务 Node、CDP `19269`、临时 workspace/profile 均为 0；未触碰来源不明浏览器进程。
-- Remaining verification: 无当前范围内必需验证。
+- Runtime, console or network errors: 最终自动入口页面 `errors` 和 `console` 均为空；standing→F300 后预览、选择和 Flow 一致。
+- Started processes and cleanup result: REQ-017 最终 Node 服务、Edge profile 对应进程、CDP 9231 和临时 profile 均为 0/不存在；临时正式 sidecar 已删除；用户此前启动的测试服务未触碰。
+- External dist restoration: 已恢复 build `20260806232034560-c9ee0125ea734d98a762056770e672a7` 和 manifest SHA-256 `322446D69A55B81D531FDBF183C4AE67F324A13B7BF2B9EA877E85E80E271F53`；build/backup 名称集合与任务前快照完全一致。
+- Remaining verification: 用户通过一键启动在真实 Web Canvas 中确认 F271 的计时条之后出现 6 个 Naruto 分身；本轮仅完成 Native Trace、真实 BMP 哈希/内容核对和 Canvas draw-call 自动化回归，没有新的浏览器截图。
 
 ## Next Actions
 
-1. 等待项目所有者确认当前交付并定义下一阶段目标。
-2. 若新增用户可见能力，先建立对应 REQ/VAL，再按 DAT/CST/`ntsd_cpp` 权威边界实现。
+1. 用 CLI/Node/PowerShell 取得 F300 分身和 Frame 263 投射物的真实输出，核对 DTO 分类与结束 tick。
+2. 完成真实多 OID BMP capability 的非浏览器 renderer 验证。
+3. 若用户要求 E4，再复用单个可用临时浏览器并在使用后清零。
 
 ## Recovery Checkpoint
 

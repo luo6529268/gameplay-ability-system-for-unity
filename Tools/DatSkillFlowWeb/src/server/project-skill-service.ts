@@ -23,14 +23,22 @@ const EMPTY_ETAG = hashBytes(serializeSidecar(EMPTY_SIDECAR));
 
 export interface ProjectSkill {
     readonly oid: number;
-    readonly name: string;
     readonly startFrame: number;
+    readonly displayName?: string;
+    readonly group?: string;
+    readonly order?: number;
+    readonly pinned?: boolean;
+    readonly hidden?: boolean;
+    readonly notes?: string;
 }
+
+export type ProjectSkillSidecarStatus = "missing" | "valid" | "legacy" | "invalid";
 
 export interface ProjectSkillsView {
     readonly schemaVersion: 1;
     readonly revision: number;
     readonly etag: string;
+    readonly sidecarStatus: ProjectSkillSidecarStatus;
     readonly skills: readonly ProjectSkill[];
 }
 
@@ -69,6 +77,7 @@ interface SidecarSnapshot {
     readonly bytes: Buffer;
     readonly value: ParsedSidecar;
     readonly etag: string;
+    readonly sidecarStatus: Exclude<ProjectSkillSidecarStatus, "invalid">;
 }
 
 function hashBytes(bytes: Uint8Array): string {
@@ -79,7 +88,16 @@ function serializeSidecar(value: ParsedSidecar): Buffer {
     return Buffer.from(JSON.stringify({
         schemaVersion: value.schemaVersion,
         revision: value.revision,
-        skills: value.skills,
+        skills: value.skills.map((skill) => ({
+            oid: skill.oid,
+            startFrame: skill.startFrame,
+            ...(skill.displayName === undefined ? {} : { displayName: skill.displayName }),
+            ...(skill.group === undefined ? {} : { group: skill.group }),
+            ...(skill.order === undefined ? {} : { order: skill.order }),
+            ...(skill.pinned === undefined ? {} : { pinned: skill.pinned }),
+            ...(skill.hidden === undefined ? {} : { hidden: skill.hidden }),
+            ...(skill.notes === undefined ? {} : { notes: skill.notes }),
+        })),
     }) + "\n", "utf8");
 }
 
@@ -112,13 +130,19 @@ function integer(
     return value as number;
 }
 
-function skillName(value: unknown, code: ProjectSkillErrorCode): string {
+function optionalText(
+    value: unknown,
+    label: string,
+    maximumBytes: number,
+    code: ProjectSkillErrorCode,
+): string | undefined {
+    if (value === undefined) return undefined;
     if (typeof value !== "string"
         || value.length === 0
-        || Buffer.byteLength(value, "utf8") > 256
+        || Buffer.byteLength(value, "utf8") > maximumBytes
         || /[\u0000-\u001f\u007f-\u009f]/u.test(value)
         || /[\uD800-\uDFFF]/u.test(value)) {
-        throw new ProjectSkillError(code, "Skill names must be valid UTF-8 text without control characters.");
+        throw new ProjectSkillError(code, `${label} must be valid UTF-8 text without control characters.`);
     }
     return value;
 }
@@ -127,15 +151,46 @@ function parseSkill(value: unknown, index: number, code: ProjectSkillErrorCode):
     if (!isRecord(value)) {
         throw new ProjectSkillError(code, `Skill ${index} must be an object.`);
     }
-    exactKeys(value, ["oid", "name", "startFrame"], `Skill ${index}`, code);
+    const allowed = new Set([
+        "oid", "startFrame", "name", "displayName", "group", "order", "pinned", "hidden", "notes",
+    ]);
+    if (!Object.hasOwn(value, "oid")
+        || !Object.hasOwn(value, "startFrame")
+        || Object.keys(value).some((key) => !allowed.has(key))
+        || (value.name !== undefined && value.displayName !== undefined)) {
+        throw new ProjectSkillError(code, `Skill ${index} contains missing or unknown fields.`);
+    }
+    if (value.pinned !== undefined && typeof value.pinned !== "boolean") {
+        throw new ProjectSkillError(code, `Skill ${index}.pinned must be boolean.`);
+    }
+    if (value.hidden !== undefined && typeof value.hidden !== "boolean") {
+        throw new ProjectSkillError(code, `Skill ${index}.hidden must be boolean.`);
+    }
+    const displayName = optionalText(
+        value.displayName ?? value.name,
+        `Skill ${index}.displayName`,
+        256,
+        code,
+    );
     return Object.freeze({
         oid: integer(value.oid, 0, 999, `Skill ${index}.oid`, code),
-        name: skillName(value.name, code),
         startFrame: integer(value.startFrame, 0, 599, `Skill ${index}.startFrame`, code),
+        ...(displayName === undefined ? {} : { displayName }),
+        ...(value.group === undefined ? {} : {
+            group: optionalText(value.group, `Skill ${index}.group`, 256, code)!,
+        }),
+        ...(value.order === undefined ? {} : {
+            order: integer(value.order, -1_000_000, 1_000_000, `Skill ${index}.order`, code),
+        }),
+        ...(value.pinned === undefined ? {} : { pinned: value.pinned }),
+        ...(value.hidden === undefined ? {} : { hidden: value.hidden }),
+        ...(value.notes === undefined ? {} : {
+            notes: optionalText(value.notes, `Skill ${index}.notes`, 4096, code)!,
+        }),
     });
 }
 
-function parseSidecarBytes(bytes: Uint8Array): ParsedSidecar {
+function parseSidecarBytes(bytes: Uint8Array): { value: ParsedSidecar; legacy: boolean } {
     if (bytes.byteLength > SIDECAR_MAX_BYTES) {
         throw new ProjectSkillError("schema-invalid", "The skill sidecar exceeds its size limit.");
     }
@@ -162,8 +217,12 @@ function parseSidecarBytes(bytes: Uint8Array): ParsedSidecar {
     if (!Array.isArray(parsed.skills) || parsed.skills.length > MAX_SKILLS) {
         throw new ProjectSkillError("schema-invalid", "The skill sidecar contains too many skills.");
     }
+    const legacy = parsed.skills.some((item) => isRecord(item) && Object.hasOwn(item, "name"));
     const skills = parsed.skills.map((item, index) => parseSkill(item, index, "schema-invalid"));
-    return Object.freeze({ schemaVersion: 1, revision, skills: Object.freeze(skills) });
+    return {
+        value: Object.freeze({ schemaVersion: 1, revision, skills: Object.freeze(skills) }),
+        legacy,
+    };
 }
 
 function parseRequestSkills(value: unknown): readonly ProjectSkill[] {
@@ -207,8 +266,19 @@ export class ProjectSkillService {
 
     async get(): Promise<ProjectSkillsView> {
         return await this.#exclusive(async () => {
-            const snapshot = await this.#readSnapshot();
-            return this.#view(snapshot);
+            try {
+                const snapshot = await this.#readSnapshot();
+                return this.#view(snapshot);
+            } catch (error) {
+                if (!(error instanceof ProjectSkillError) || error.code !== "schema-invalid") throw error;
+                return {
+                    schemaVersion: 1,
+                    revision: 0,
+                    etag: EMPTY_ETAG,
+                    sidecarStatus: "invalid",
+                    skills: [],
+                };
+            }
         });
     }
 
@@ -258,6 +328,7 @@ export class ProjectSkillService {
                 bytes,
                 value: next,
                 etag: document.fingerprint.sha256,
+                sidecarStatus: "valid",
             });
         });
     }
@@ -323,19 +394,25 @@ export class ProjectSkillService {
             throw new ProjectSkillError("save-failed", "The skill sidecar could not be read safely.", { cause: error });
         }
         const current = prepared.snapshot;
-        const value = parseSidecarBytes(current.bytes);
+        const parsed = parseSidecarBytes(current.bytes);
         prepared.commit();
         return {
             documentId,
             fingerprint: current.fingerprint,
             bytes: current.bytes,
-            value,
+            value: parsed.value,
             etag: current.fingerprint.sha256,
+            sidecarStatus: parsed.legacy ? "legacy" : "valid",
         };
     }
 
     #emptySnapshot(): SidecarSnapshot {
-        return { bytes: serializeSidecar(EMPTY_SIDECAR), value: EMPTY_SIDECAR, etag: EMPTY_ETAG };
+        return {
+            bytes: serializeSidecar(EMPTY_SIDECAR),
+            value: EMPTY_SIDECAR,
+            etag: EMPTY_ETAG,
+            sidecarStatus: "missing",
+        };
     }
 
     #view(snapshot: SidecarSnapshot): ProjectSkillsView {
@@ -343,6 +420,7 @@ export class ProjectSkillService {
             schemaVersion: 1,
             revision: snapshot.value.revision,
             etag: snapshot.etag,
+            sidecarStatus: snapshot.sidecarStatus,
             skills: snapshot.value.skills.map((skill) => ({ ...skill })),
         };
     }

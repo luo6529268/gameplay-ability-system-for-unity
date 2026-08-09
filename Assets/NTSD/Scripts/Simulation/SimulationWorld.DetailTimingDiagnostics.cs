@@ -509,7 +509,11 @@ namespace NTSD.Simulation
         SnapshotUnifiedDuplicateCapture = 17,
         SnapshotUnifiedDuplicateIndexBuild = 18,
         UnifiedSnapshotExecutionRowRefresh = 19,
-        Count = 20,
+        IndexedCanonicalCapture = 20,
+        IndexedCanonicalKernel = 21,
+        IndexedCanonicalCommitValidation = 22,
+        IndexedCanonicalCommitApply = 23,
+        Count = 24,
     }
 
     /// <summary>
@@ -664,6 +668,14 @@ namespace NTSD.Simulation
                     return "CharacterInput/AI/SnapshotUnifiedDuplicateIndexBuild";
                 case BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh:
                     return "CharacterInput/AI/UnifiedSnapshotExecutionRowRefresh";
+                case BattleAiInputDetailPhase.IndexedCanonicalCapture:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalCapture";
+                case BattleAiInputDetailPhase.IndexedCanonicalKernel:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalKernel";
+                case BattleAiInputDetailPhase.IndexedCanonicalCommitValidation:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalCommitValidation";
+                case BattleAiInputDetailPhase.IndexedCanonicalCommitApply:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalCommitApply";
                 default:
                     return string.Empty;
             }

@@ -82,6 +82,10 @@ namespace NTSD.Animation
             public Sprite[][] GlyphSprites;
             public string[] SourcePaths;
             public Color32[][] ProcessedPixels;
+            public Texture2D ComLabelsTexture;
+            public Sprite[] ComLabelSprites;
+            public string ComLabelsSourcePath;
+            public Color32[] ComLabelsProcessedPixels;
         }
 
         [ShowInInspector, ReadOnly]
@@ -997,6 +1001,19 @@ namespace NTSD.Animation
                             stagedCreatedSprites.Add(glyph);
                     }
                 }
+                if (stagedWords.ComLabelsTexture == null ||
+                    stagedWords.ComLabelSprites == null ||
+                    stagedWords.ComLabelSprites.Length != BattleCommonVisualCatalog.WordSheetCount ||
+                    stagedWords.ComLabelsProcessedPixels == null ||
+                    string.IsNullOrWhiteSpace(stagedWords.ComLabelsSourcePath))
+                {
+                    throw new InvalidOperationException(
+                        "WORDS publication contains no generated Com-label bindings.");
+                }
+                stagedTextures.Add(stagedWords.ComLabelsTexture);
+                stagedResources.Add(stagedWords.ComLabelsTexture);
+                foreach (Sprite comLabelSprite in stagedWords.ComLabelSprites)
+                    stagedCreatedSprites.Add(comLabelSprite);
 
                 await UniTask.SwitchToMainThread();
                 if (!CanCompleteSpritePrewarmInvocation(invocation))
@@ -1010,7 +1027,9 @@ namespace NTSD.Animation
                     stagedSpark.Texture,
                     stagedSpark.Sprites,
                     stagedWords.Textures,
-                    stagedWords.GlyphSprites);
+                    stagedWords.GlyphSprites,
+                    stagedWords.ComLabelsTexture,
+                    stagedWords.ComLabelSprites);
                 if (!commonVisualCatalog.IsComplete)
                     throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
 
@@ -1018,7 +1037,7 @@ namespace NTSD.Animation
                     new Dictionary<BattleVisualResourceKey, string>(
                         1 + BattleCommonVisualCatalog.SparkFrameCount +
                         BattleCommonVisualCatalog.WordSheetCount *
-                        BattleCommonVisualCatalog.WordGlyphsPerSheet);
+                        BattleCommonVisualCatalog.WordGlyphsPerSheet + 1);
                 var forcedCommonSource2DPaths = new List<string>();
                 if (!TryAppendCommonAtlasSources(
                         commonVisualCatalog,
@@ -1264,6 +1283,8 @@ namespace NTSD.Animation
 
             Texture2D[] textures = new Texture2D[BattleCommonVisualCatalog.WordSheetCount];
             Sprite[][] glyphSprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount][];
+            Texture2D comLabelsTexture = null;
+            Sprite[] comLabelSprites = null;
             bool transfersOwnership = false;
             try
             {
@@ -1304,6 +1325,33 @@ namespace NTSD.Animation
                     glyphSprites[sheetIndex] = glyphs;
                 }
 
+                Color32[] comLabelsPixels = BuildComLabelsPixels(processedPixels);
+                comLabelsTexture = new Texture2D(
+                    BattleCommonVisualCatalog.SpecialComWidth,
+                    BattleCommonVisualCatalog.ComLabelsTextureHeight,
+                    TextureFormat.RGBA32,
+                    false)
+                {
+                    filterMode = FilterMode.Point,
+                    wrapMode = TextureWrapMode.Clamp,
+                    name = "WORDS_COM_LABELS",
+                };
+                comLabelsTexture.SetPixels32(comLabelsPixels);
+                comLabelsTexture.Apply(false, true);
+                comLabelSprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount];
+                for (int sheetIndex = 0; sheetIndex < comLabelSprites.Length; sheetIndex++)
+                {
+                    Sprite comLabelSprite = Sprite.Create(
+                        comLabelsTexture,
+                        BattleCommonVisualCatalog.GetComLabelPixelRect(sheetIndex),
+                        BattleCommonVisualCatalog.GetSpecialComPivotNormalized(),
+                        100f,
+                        0,
+                        SpriteMeshType.FullRect);
+                    comLabelSprite.name = $"words_{sheetIndex}_com_label";
+                    comLabelSprites[sheetIndex] = comLabelSprite;
+                }
+
                 if (!CanCompleteSpritePrewarmInvocation(invocation))
                     return null;
 
@@ -1314,6 +1362,10 @@ namespace NTSD.Animation
                     GlyphSprites = glyphSprites,
                     SourcePaths = sourcePaths,
                     ProcessedPixels = processedPixels,
+                    ComLabelsTexture = comLabelsTexture,
+                    ComLabelSprites = comLabelSprites,
+                    ComLabelsSourcePath = sourcePaths[0] + ".com-labels.generated",
+                    ComLabelsProcessedPixels = comLabelsPixels,
                 };
             }
             catch (Exception exception)
@@ -1324,11 +1376,69 @@ namespace NTSD.Animation
             finally
             {
                 if (!transfersOwnership)
-                    DestroyWordsPublicationStaging(textures, glyphSprites);
+                    DestroyWordsPublicationStaging(
+                        textures,
+                        glyphSprites,
+                        comLabelsTexture,
+                        comLabelSprites);
             }
         }
 
-        private static void DestroyWordsPublicationStaging(Texture2D[] textures, Sprite[][] glyphSprites)
+        private static Color32[] BuildComLabelsPixels(Color32[][] wordSheetPixels)
+        {
+            int sourceWidth = BattleCommonVisualCatalog.WordTextureWidth;
+            int sourceHeight = BattleCommonVisualCatalog.WordTextureHeight;
+            if (wordSheetPixels == null ||
+                wordSheetPixels.Length != BattleCommonVisualCatalog.WordSheetCount)
+            {
+                throw new InvalidOperationException(
+                    "All WORDS sheet pixels are required for Com-label publication.");
+            }
+
+            var result = new Color32[
+                BattleCommonVisualCatalog.SpecialComWidth *
+                BattleCommonVisualCatalog.ComLabelsTextureHeight];
+            int[] charCodes = { 'C', 'o', 'm' };
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                Color32[] sourcePixels = wordSheetPixels[sheetIndex];
+                if (sourcePixels == null || sourcePixels.Length != sourceWidth * sourceHeight)
+                {
+                    throw new InvalidOperationException(
+                        $"WORDS{sheetIndex} pixels are unavailable for Com-label publication.");
+                }
+
+                int destinationY = sheetIndex * BattleCommonVisualCatalog.SpecialComHeight;
+                for (int glyphIndex = 0; glyphIndex < charCodes.Length; glyphIndex++)
+                {
+                    Rect rect = BattleCommonVisualCatalog.GetWordGlyphPixelRect(
+                        charCodes[glyphIndex]);
+                    int sourceX = (int)rect.x;
+                    int sourceY = (int)rect.y;
+                    int destinationX = glyphIndex *
+                        NTSD.Simulation.Presentation.BattleEntityOverlayLayout.GlyphAdvance;
+                    for (int row = 0; row < BattleCommonVisualCatalog.SpecialComHeight; row++)
+                    {
+                        Array.Copy(
+                            sourcePixels,
+                            (sourceY + row) * sourceWidth + sourceX,
+                            result,
+                            (destinationY + row) * BattleCommonVisualCatalog.SpecialComWidth +
+                            destinationX,
+                            BattleCommonVisualCatalog.WordGlyphWidth);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static void DestroyWordsPublicationStaging(
+            Texture2D[] textures,
+            Sprite[][] glyphSprites,
+            Texture2D comLabelsTexture,
+            Sprite[] comLabelSprites)
         {
             if (glyphSprites != null)
             {
@@ -1348,16 +1458,37 @@ namespace NTSD.Animation
                 }
             }
 
-            if (textures == null)
-                return;
-            foreach (Texture2D texture in textures)
+            if (textures != null)
             {
-                if (texture == null)
-                    continue;
+                foreach (Texture2D texture in textures)
+                {
+                    if (texture == null)
+                        continue;
+                    if (Application.isPlaying)
+                        UnityEngine.Object.Destroy(texture);
+                    else
+                        UnityEngine.Object.DestroyImmediate(texture);
+                }
+            }
+
+            if (comLabelSprites != null)
+            {
+                foreach (Sprite comLabelSprite in comLabelSprites)
+                {
+                    if (comLabelSprite == null)
+                        continue;
+                    if (Application.isPlaying)
+                        UnityEngine.Object.Destroy(comLabelSprite);
+                    else
+                        UnityEngine.Object.DestroyImmediate(comLabelSprite);
+                }
+            }
+            if (comLabelsTexture != null)
+            {
                 if (Application.isPlaying)
-                    UnityEngine.Object.Destroy(texture);
+                    UnityEngine.Object.Destroy(comLabelsTexture);
                 else
-                    UnityEngine.Object.DestroyImmediate(texture);
+                    UnityEngine.Object.DestroyImmediate(comLabelsTexture);
             }
         }
 
@@ -1376,6 +1507,10 @@ namespace NTSD.Animation
                 string.IsNullOrWhiteSpace(spark.SourcePath) ||
                 words?.Textures == null || words.GlyphSprites == null ||
                 words.ProcessedPixels == null || words.SourcePaths == null ||
+                words.ComLabelsTexture == null || words.ComLabelSprites == null ||
+                words.ComLabelSprites.Length != BattleCommonVisualCatalog.WordSheetCount ||
+                words.ComLabelsProcessedPixels == null ||
+                string.IsNullOrWhiteSpace(words.ComLabelsSourcePath) ||
                 sources == null || sourcePaths == null || forcedSourceTexture2DPaths == null)
             {
                 diagnostic = "Complete common staging data is required for unified atlas publication.";
@@ -1425,6 +1560,35 @@ namespace NTSD.Animation
                 {
                     sourcePaths[BattleVisualResourceKey.CommonWordGlyph(sheetIndex, charCode)] = path;
                 }
+            }
+
+            if (!commonCatalog.IsComLabelsComplete ||
+                words.ComLabelsProcessedPixels.Length !=
+                BattleCommonVisualCatalog.SpecialComWidth *
+                BattleCommonVisualCatalog.ComLabelsTextureHeight)
+            {
+                diagnostic = "Com-label staging does not match the common visual catalog.";
+                return false;
+            }
+            sources.Add(new BattleAtlasSourcePixels(
+                words.ComLabelsSourcePath,
+                BattleCommonVisualCatalog.SpecialComWidth,
+                BattleCommonVisualCatalog.ComLabelsTextureHeight,
+                words.ComLabelsProcessedPixels));
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                if (!commonCatalog.TryGetComLabel(
+                        sheetIndex,
+                        out BattleCommonVisualBinding comLabel) ||
+                    comLabel.Texture != words.ComLabelsTexture)
+                {
+                    diagnostic = $"Com-label binding {sheetIndex} does not match the staging texture.";
+                    return false;
+                }
+                sourcePaths[BattleVisualResourceKey.CommonComLabel(sheetIndex)] =
+                    words.ComLabelsSourcePath;
             }
 
             BattleCommonVisualBinding shadow = commonCatalog.Shadow;
@@ -2329,6 +2493,21 @@ namespace NTSD.Animation
                     {
                         return false;
                     }
+                }
+            }
+
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                if (catalog.TryGetComLabel(sheetIndex, out BattleCommonVisualBinding comLabel) &&
+                    !CanRetainCommonSourceTexture2D(
+                        comLabel,
+                        sourcePaths,
+                        excludedPaths,
+                        out diagnostic))
+                {
+                    return false;
                 }
             }
 

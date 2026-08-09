@@ -331,7 +331,9 @@ namespace NTSD.Animation
             var bindings =
                 new Dictionary<BattleVisualResourceKey, BattleSpriteCentralBinding>(
                     1 + BattleCommonVisualCatalog.SparkFrameCount +
-                    BattleCommonVisualCatalog.WordSheetCount * BattleCommonVisualCatalog.WordGlyphsPerSheet);
+                    BattleCommonVisualCatalog.WordSheetCount *
+                    BattleCommonVisualCatalog.WordGlyphsPerSheet +
+                    sourceCatalog.ComLabels.Count);
             if (!TryBindCommonVisual(
                     sourceCatalog.Shadow,
                     plan,
@@ -383,6 +385,26 @@ namespace NTSD.Animation
                     {
                         return false;
                     }
+                }
+            }
+
+            for (int sheetIndex = 0;
+                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                 sheetIndex++)
+            {
+                if (sourceCatalog.TryGetComLabel(
+                        sheetIndex,
+                        out BattleCommonVisualBinding comLabel) &&
+                    !TryBindCommonVisual(
+                        comLabel,
+                        plan,
+                        resources,
+                        sourcePaths,
+                        excludedPaths,
+                        bindings,
+                        out diagnostic))
+                {
+                    return false;
                 }
             }
 

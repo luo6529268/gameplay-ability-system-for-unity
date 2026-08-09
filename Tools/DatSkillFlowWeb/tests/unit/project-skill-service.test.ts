@@ -144,14 +144,34 @@ describe("project skill sidecar service", () => {
         const initial = await service.get();
         assert.deepEqual(initial.skills, []);
         assert.equal(initial.revision, 0);
+        assert.equal(initial.sidecarStatus, "missing");
 
         const saved = await service.save({
             expectedRevision: initial.revision,
             expectedEtag: initial.etag,
-            skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+            skills: [{
+                oid: 2,
+                startFrame: 300,
+                displayName: "影分身",
+                group: "输入技能",
+                order: 1,
+                pinned: true,
+                hidden: false,
+                notes: "仅用于编辑器显示",
+            }],
         });
         assert.equal(saved.revision, 1);
-        assert.deepEqual(saved.skills, [{ oid: 2, name: "影分身", startFrame: 300 }]);
+        assert.deepEqual(saved.skills, [{
+            oid: 2,
+            startFrame: 300,
+            displayName: "影分身",
+            group: "输入技能",
+            order: 1,
+            pinned: true,
+            hidden: false,
+            notes: "仅用于编辑器显示",
+        }]);
+        assert.equal(saved.sidecarStatus, "valid");
         assert.deepEqual(native.directories, [".dat-skill-flow"]);
         assert.equal(registry.getDocument(datDocumentId).logicalPath, "fighter.dat");
         assert.notEqual(saved.etag, initial.etag);
@@ -179,30 +199,41 @@ describe("project skill sidecar service", () => {
         const invalidRegistry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: native });
         const { rootId: invalidRootId } = await invalidRegistry.grantAbsoluteRoot(rootPath);
         const invalidService = new ProjectSkillService({ registry: invalidRegistry, rootId: invalidRootId });
-        await assert.rejects(
-            invalidService.get(),
-            (error: unknown) => error instanceof ProjectSkillError && error.code === "schema-invalid",
-        );
+        const invalid = await invalidService.get();
+        assert.equal(invalid.sidecarStatus, "invalid");
+        assert.deepEqual(invalid.skills, []);
         assert.equal(rootId.length > 0, true);
     });
 
-    it("validates request bounds and preserves duplicate UI entries", async () => {
-        const { service } = await fixture();
+    it("reads legacy names as display metadata, migrates on save, and validates request bounds", async () => {
+        const { native, registry, rootId } = await fixture();
+        native.files.set(
+            `${rootPath}|.dat-skill-flow/skills.json`,
+            Buffer.from("{\"schemaVersion\":1,\"revision\":3,\"skills\":[{\"oid\":2,\"name\":\"旧名称\",\"startFrame\":300}]}\n"),
+        );
+        const service = new ProjectSkillService({
+            registry,
+            rootId,
+        });
         const initial = await service.get();
+        assert.equal(initial.sidecarStatus, "legacy");
+        assert.deepEqual(initial.skills, [{ oid: 2, startFrame: 300, displayName: "旧名称" }]);
         const saved = await service.save({
             expectedRevision: initial.revision,
             expectedEtag: initial.etag,
-            skills: [
-                { oid: 2, name: "同名", startFrame: 0 },
-                { oid: 2, name: "同名", startFrame: 0 },
-            ],
+            skills: [{ oid: 2, displayName: "新名称", startFrame: 300 }],
         });
-        assert.equal(saved.skills.length, 2);
+        assert.equal(saved.sidecarStatus, "valid");
+        assert.deepEqual(saved.skills, [{ oid: 2, startFrame: 300, displayName: "新名称" }]);
+        assert.doesNotMatch(
+            native.files.get(`${rootPath}|.dat-skill-flow/skills.json`)!.toString("utf8"),
+            /"name":/,
+        );
         await assert.rejects(
             service.save({
                 expectedRevision: saved.revision,
                 expectedEtag: saved.etag,
-                skills: [{ oid: 1000, name: "bad", startFrame: 0 }],
+                skills: [{ oid: 1000, displayName: "bad", startFrame: 0 }],
             }),
             (error: unknown) => error instanceof ProjectSkillError && error.code === "invalid-request",
         );

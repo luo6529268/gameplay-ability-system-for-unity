@@ -107,8 +107,14 @@ namespace NTSD.Animation.Rendering
             diagnostics.Reset(frame?.TickIndex ?? 0, commandCount, drawMode);
             segmentCount = 0;
             int resolvedCount = 0;
-            int lastChunkIndex = -1;
-            int lastSegmentIndex = -1;
+            bool hasOpenSegment = false;
+            int openSegmentIndex = -1;
+            int openChunkIndex = -1;
+            int openSubMeshIndex = -1;
+            int openFirstCommandIndex = -1;
+            int openFirstQuad = -1;
+            int openQuadCount = 0;
+            BattleCentralResolvedResource openSegmentResource = default;
 
             for (int commandIndex = 0; commandIndex < commandCount; commandIndex++)
             {
@@ -143,8 +149,18 @@ namespace NTSD.Animation.Rendering
                     }
                     // An unresolved command still occupies an authoritative position
                     // in the P3 stream. Never batch resolved commands across it.
-                    lastSegmentIndex = -1;
-                    lastChunkIndex = -1;
+                    if (hasOpenSegment)
+                    {
+                        CommitSegment(
+                            openSegmentIndex,
+                            openChunkIndex,
+                            openSubMeshIndex,
+                            openFirstCommandIndex,
+                            openFirstQuad,
+                            openQuadCount,
+                            openSegmentResource);
+                        hasOpenSegment = false;
+                    }
                     continue;
                 }
 
@@ -153,11 +169,32 @@ namespace NTSD.Animation.Rendering
                 EnsureChunk(chunkIndex);
                 BattleMeshChunk chunk = chunks[chunkIndex];
                 bool strict = drawMode == BattleCentralDrawMode.StrictOrderedDraw;
-                bool canAppend = !strict && lastSegmentIndex >= 0 && lastChunkIndex == chunkIndex &&
-                                 IsCompatible(segments[lastSegmentIndex], resource) &&
-                                 segments[lastSegmentIndex].FirstQuad + segments[lastSegmentIndex].QuadCount == quadIndex;
+                bool canAppend = !strict && hasOpenSegment && openChunkIndex == chunkIndex &&
+                                 IsCompatible(openSegmentResource, resource) &&
+                                 openFirstQuad + openQuadCount == quadIndex;
                 if (!canAppend)
+                {
+                    if (hasOpenSegment)
+                    {
+                        CommitSegment(
+                            openSegmentIndex,
+                            openChunkIndex,
+                            openSubMeshIndex,
+                            openFirstCommandIndex,
+                            openFirstQuad,
+                            openQuadCount,
+                            openSegmentResource);
+                    }
                     EnsureSegmentCapacity(segmentCount + 1);
+                    openSegmentIndex = segmentCount++;
+                    openChunkIndex = chunkIndex;
+                    openSubMeshIndex = chunk.PendingSegmentCount++;
+                    openFirstCommandIndex = commandIndex;
+                    openFirstQuad = quadIndex;
+                    openQuadCount = 0;
+                    openSegmentResource = resource;
+                    hasOpenSegment = true;
+                }
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
                 try
@@ -168,9 +205,9 @@ namespace NTSD.Animation.Rendering
                         resource,
                         out SegmentBoundsAccumulator quadBounds);
                     if (canAppend)
-                        segmentBounds[lastSegmentIndex].Encapsulate(quadBounds);
+                        segmentBounds[openSegmentIndex].Encapsulate(quadBounds);
                     else
-                        segmentBounds[segmentCount] = quadBounds;
+                        segmentBounds[openSegmentIndex] = quadBounds;
                 }
                 finally
                 {
@@ -178,45 +215,20 @@ namespace NTSD.Animation.Rendering
                         BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
                 }
 
-                if (canAppend)
-                {
-                    BattleCentralRenderSegment previous = segments[lastSegmentIndex];
-                    segments[lastSegmentIndex] = new BattleCentralRenderSegment(
-                        previous.ChunkIndex,
-                        previous.SubMeshIndex,
-                        previous.FirstCommandIndex,
-                        commandIndex - previous.FirstCommandIndex + 1,
-                        previous.FirstQuad,
-                        previous.QuadCount + 1,
-                        previous.Texture,
-                        previous.Material,
-                        previous.MaterialVariant,
-                        previous.AtlasSlice,
-                        previous.BindingMode,
-                        previous.AtlasPageIndex);
-                }
-                else
-                {
-                    int subMeshIndex = chunk.PendingSegmentCount;
-                    chunk.PendingSegmentCount++;
-                    segments[segmentCount] = new BattleCentralRenderSegment(
-                        chunkIndex,
-                        subMeshIndex,
-                        commandIndex,
-                        1,
-                        quadIndex,
-                        1,
-                        resource.Texture,
-                        resource.Material,
-                        resource.MaterialVariant,
-                        resource.AtlasSlice,
-                        resource.BindingMode,
-                        resource.AtlasPageIndex);
-                    lastSegmentIndex = segmentCount++;
-                    lastChunkIndex = chunkIndex;
-                }
-
+                openQuadCount++;
                 resolvedCount++;
+            }
+
+            if (hasOpenSegment)
+            {
+                CommitSegment(
+                    openSegmentIndex,
+                    openChunkIndex,
+                    openSubMeshIndex,
+                    openFirstCommandIndex,
+                    openFirstQuad,
+                    openQuadCount,
+                    openSegmentResource);
             }
 
             activeChunkCount = resolvedCount == 0 ? 0 : (resolvedCount + QuadsPerChunk - 1) / QuadsPerChunk;
@@ -307,18 +319,42 @@ namespace NTSD.Animation.Rendering
             diagnostics.CapacityGrowthCount++;
         }
 
-        private static bool IsCompatible(
-            in BattleCentralRenderSegment segment,
+        private void CommitSegment(
+            int segmentIndex,
+            int chunkIndex,
+            int subMeshIndex,
+            int firstCommandIndex,
+            int firstQuad,
+            int quadCount,
             in BattleCentralResolvedResource resource)
         {
-            return segment.Texture == resource.Texture &&
-                   segment.Material == resource.Material &&
-                   segment.MaterialVariant == resource.MaterialVariant &&
-                   segment.BindingMode == resource.BindingMode &&
-                   (resource.BindingMode != BattleSpriteCentralBindingMode.AtlasPageTexture2D ||
-                    segment.AtlasPageIndex == resource.AtlasPageIndex) &&
-                   (resource.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray ||
-                    segment.AtlasSlice == resource.AtlasSlice);
+            segments[segmentIndex] = new BattleCentralRenderSegment(
+                chunkIndex,
+                subMeshIndex,
+                firstCommandIndex,
+                quadCount,
+                firstQuad,
+                quadCount,
+                resource.Texture,
+                resource.Material,
+                resource.MaterialVariant,
+                resource.AtlasSlice,
+                resource.BindingMode,
+                resource.AtlasPageIndex);
+        }
+
+        private static bool IsCompatible(
+            in BattleCentralResolvedResource current,
+            in BattleCentralResolvedResource next)
+        {
+            return current.Texture == next.Texture &&
+                   current.Material == next.Material &&
+                   current.MaterialVariant == next.MaterialVariant &&
+                   current.BindingMode == next.BindingMode &&
+                   (next.BindingMode != BattleSpriteCentralBindingMode.AtlasPageTexture2D ||
+                    current.AtlasPageIndex == next.AtlasPageIndex) &&
+                   (next.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray ||
+                    current.AtlasSlice == next.AtlasSlice);
         }
 
         private struct BattleQuadVertex
@@ -332,13 +368,27 @@ namespace NTSD.Animation.Rendering
         private struct SegmentBoundsAccumulator
         {
             private bool hasValue;
-            private Vector3 min;
-            private Vector3 max;
+            private float minX;
+            private float minY;
+            private float minZ;
+            private float maxX;
+            private float maxY;
+            private float maxZ;
 
-            public void Set(Vector3 valueMin, Vector3 valueMax)
+            public void Set(
+                float valueMinX,
+                float valueMinY,
+                float valueMinZ,
+                float valueMaxX,
+                float valueMaxY,
+                float valueMaxZ)
             {
-                min = valueMin;
-                max = valueMax;
+                minX = valueMinX;
+                minY = valueMinY;
+                minZ = valueMinZ;
+                maxX = valueMaxX;
+                maxY = valueMaxY;
+                maxZ = valueMaxZ;
                 hasValue = true;
             }
 
@@ -352,8 +402,12 @@ namespace NTSD.Animation.Rendering
                     return;
                 }
 
-                min = Vector3.Min(min, other.min);
-                max = Vector3.Max(max, other.max);
+                minX = Mathf.Min(minX, other.minX);
+                minY = Mathf.Min(minY, other.minY);
+                minZ = Mathf.Min(minZ, other.minZ);
+                maxX = Mathf.Max(maxX, other.maxX);
+                maxY = Mathf.Max(maxY, other.maxY);
+                maxZ = Mathf.Max(maxZ, other.maxZ);
             }
 
             public Bounds ToBounds()
@@ -361,7 +415,9 @@ namespace NTSD.Animation.Rendering
                 if (!hasValue)
                     return new Bounds(Vector3.zero, Vector3.zero);
                 var bounds = new Bounds();
-                bounds.SetMinMax(min, max);
+                bounds.SetMinMax(
+                    new Vector3(minX, minY, minZ),
+                    new Vector3(maxX, maxY, maxZ));
                 return bounds;
             }
         }
@@ -382,8 +438,12 @@ namespace NTSD.Animation.Rendering
             private Mesh mesh;
             private int activeSubMeshCount;
             private bool hasBounds;
-            private Vector3 boundsMin;
-            private Vector3 boundsMax;
+            private float boundsMinX;
+            private float boundsMinY;
+            private float boundsMinZ;
+            private float boundsMaxX;
+            private float boundsMaxY;
+            private float boundsMaxZ;
 
             public BattleMeshChunk(int index)
             {
@@ -465,13 +525,13 @@ namespace NTSD.Animation.Rendering
                 vertices[vertex + 2] = CreateVertex(right, bottom, z, u1, v0, resource);
                 vertices[vertex + 3] = CreateVertex(right, top, z, u1, v1, resource);
 
-                Vector3 firstCorner = new Vector3(left, bottom, z);
-                Vector3 secondCorner = new Vector3(right, top, z);
-                Vector3 quadMin = Vector3.Min(firstCorner, secondCorner);
-                Vector3 quadMax = Vector3.Max(firstCorner, secondCorner);
+                float minX = Mathf.Min(left, right);
+                float minY = Mathf.Min(bottom, top);
+                float maxX = Mathf.Max(left, right);
+                float maxY = Mathf.Max(bottom, top);
                 quadBounds = default;
-                quadBounds.Set(quadMin, quadMax);
-                Encapsulate(quadMin, quadMax);
+                quadBounds.Set(minX, minY, z, maxX, maxY, z);
+                Encapsulate(minX, minY, z, maxX, maxY, z);
             }
 
             public void Upload(
@@ -685,17 +745,31 @@ namespace NTSD.Animation.Rendering
                 };
             }
 
-            private void Encapsulate(Vector3 min, Vector3 max)
+            private void Encapsulate(
+                float minX,
+                float minY,
+                float minZ,
+                float maxX,
+                float maxY,
+                float maxZ)
             {
                 if (!hasBounds)
                 {
-                    boundsMin = min;
-                    boundsMax = max;
+                    boundsMinX = minX;
+                    boundsMinY = minY;
+                    boundsMinZ = minZ;
+                    boundsMaxX = maxX;
+                    boundsMaxY = maxY;
+                    boundsMaxZ = maxZ;
                     hasBounds = true;
                     return;
                 }
-                boundsMin = Vector3.Min(boundsMin, min);
-                boundsMax = Vector3.Max(boundsMax, max);
+                boundsMinX = Mathf.Min(boundsMinX, minX);
+                boundsMinY = Mathf.Min(boundsMinY, minY);
+                boundsMinZ = Mathf.Min(boundsMinZ, minZ);
+                boundsMaxX = Mathf.Max(boundsMaxX, maxX);
+                boundsMaxY = Mathf.Max(boundsMaxY, maxY);
+                boundsMaxZ = Mathf.Max(boundsMaxZ, maxZ);
             }
 
             private Bounds CurrentBounds()
@@ -703,7 +777,9 @@ namespace NTSD.Animation.Rendering
                 if (!hasBounds)
                     return new Bounds(Vector3.zero, Vector3.zero);
                 var bounds = new Bounds();
-                bounds.SetMinMax(boundsMin, boundsMax);
+                bounds.SetMinMax(
+                    new Vector3(boundsMinX, boundsMinY, boundsMinZ),
+                    new Vector3(boundsMaxX, boundsMaxY, boundsMaxZ));
                 return bounds;
             }
 

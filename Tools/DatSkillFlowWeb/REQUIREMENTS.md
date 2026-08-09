@@ -9,7 +9,7 @@
 | ID | Requirement | Source | Evidence | Priority | Status | Validation |
 |---|---|---|---|---|---|---|
 | REQ-001 | 专业技能编辑器四区布局 | User / Visual brief | Confirmed | P0 | Validated | VAL-001 |
-| REQ-002 | 技能名称与起始帧侧车元数据 | User | Confirmed | P0 | Validated | VAL-002 |
+| REQ-002 | 技能入口显示侧车元数据 | User / 2026-08-07 clarification | Confirmed | P0 | Validated | VAL-002 |
 | REQ-003 | 当前技能真实 DAT 帧流程 | User / Product goal | Confirmed | P0 | Validated | VAL-003 |
 | REQ-004 | 单角色高质量场景预览 | User | Confirmed | P0 | Validated | VAL-004 |
 | REQ-005 | 全部现有 DAT 块的几何叠加 | User | Confirmed | P0 | Validated | VAL-005 |
@@ -19,10 +19,14 @@
 | REQ-009 | 桌面、中屏、窄屏自适应 | Template / Recommended default | User-authorized default | P1 | Validated | VAL-009 |
 | REQ-010 | 用户可见功能自行运行到 E4 证据 | Template | Confirmed | P0 | Validated | VAL-010 |
 | REQ-011 | DAT 与 Native preview 权威行为不被 UI 改写 | Project rules | Confirmed | P0 | Validated | VAL-011 |
-| REQ-012 | 技能复制、删除与排序 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-012 |
+| REQ-012 | 手工技能复制、删除与排序 | User / 2026-08-06 Phase 6 confirmation | Superseded by REQ-017 | P1 | Superseded | VAL-012 |
 | REQ-013 | 模板式 lossless frame/block 结构编辑 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P0 | Validated | VAL-013 |
 | REQ-014 | Canvas 几何直接编辑 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-014 |
 | REQ-015 | 可视化 Flow 与 DAT wait 视觉时间轴 | User / 2026-08-06 Phase 6 confirmation | Confirmed | P1 | Validated | VAL-015 |
+| REQ-016 | 一键启动选择正式项目或测试副本 | User / 2026-08-07 clarification | Confirmed | P0 | Validated | VAL-016 |
+| REQ-017 | DAT 自动状态/技能入口与跨技能链接 | User / 2026-08-07 design confirmation | Confirmed | P0 | Validated | VAL-017 |
+| REQ-018 | 桌面三栏可拖动调宽 | User / 2026-08-07 explicit request | Confirmed | P1 | Validated | VAL-018 |
+| REQ-019 | Native 技能 Trace 按主体、分身和投射物分类运行 | User / 2026-08-07 clarification | Confirmed | P0 | Planned | VAL-019 |
 
 ## Requirement Detail
 
@@ -41,31 +45,31 @@
 - Validation ID: VAL-001
 - Status: Validated
 
-### REQ-002: 技能名称与起始帧侧车元数据
+### REQ-002: 技能入口显示侧车元数据
 
-- Statement: 技能由用户维护的名称和起始帧组成，保存到项目根目录 `.dat-skill-flow/skills.json`。
-- Rationale: 技能名称不是 DAT 权威字段，不能污染 DAT，也不能由工具自动猜测。
-- Source: 用户确认。
+- Statement: DAT 决定入口是否存在及其首帧；项目根目录 `.dat-skill-flow/skills.json` 只保存显示名称、分组、顺序、置顶、隐藏和备注。
+- Rationale: 中文别名和编辑器分组不是 DAT 权威字段，不能污染 DAT；sidecar 缺失或无效也不能使真实 DAT 入口消失。
+- Source: 用户于 2026-08-07 明确确认调整后的 sidecar 作用。
 - Evidence: `Confirmed`
 - Preconditions: 项目工作区已授权。
-- Inputs: OID、技能名称、起始帧。
-- Outputs: 可恢复、可共享的技能元数据。
-- Invariants: 侧车文件不得包含绝对路径；不得改变 DAT 字节。
+- Inputs: OID、由 DAT 识别的首帧及可选显示信息。
+- Outputs: 可恢复、可共享的纯展示元数据。
+- Invariants: 侧车文件不得包含绝对路径；不得创建 DAT 不存在的入口；不得改变 DAT 字节、state、next 或 `hit_*`。
 - Dependencies: 安全工作区与安全保存合同。
-- Acceptance: 新建或修改技能后重启服务，技能仍能恢复且 DAT 指纹不变。
+- Acceptance: 修改显示信息后重启服务仍能恢复且 DAT 指纹不变；删除、缺失或损坏 sidecar 时自动入口仍由 DAT 恢复。
 - Validation ID: VAL-002
 - Status: Validated
 
 ### REQ-003: 当前技能真实 DAT 帧流程
 
-- Statement: 从技能起始帧出发，使用真实 `next` 和 `hit_*` 字段展示当前技能帧关系，不自动命名或分类技能。
+- Statement: 从 DAT 自动入口首帧出发，使用真实 `next` 展开当前流程；`hit_*` 指向其他入口时显示可点击的跨技能目标，不继续吞并目标技能流程。
 - Rationale: 技能编辑器必须表达帧流程而不是只列出全部 DAT 帧。
 - Source: 用户确认的技能模型与产品目标。
 - Evidence: `Confirmed`
-- Preconditions: 当前技能起始帧存在。
+- Preconditions: 当前 DAT 已识别至少一个入口首帧。
 - Inputs: DAT 帧、`next`、`hit_a`、`hit_d`、`hit_j`、组合输入跳转。
 - Outputs: 可选择的技能帧关系视图和时间轴标记。
-- Invariants: 保留循环和分支；不把未知跳转解释成不存在的技能语义。
+- Invariants: 保留循环和分支；技能首帧为 `hit_*` 跳转后的真实目标帧；未知跳转仍保持 unresolved。
 - Dependencies: REQ-002。
 - Acceptance: 选择流程节点会定位预览和检查器到同一 DAT 帧。
 - Validation ID: VAL-003
@@ -192,20 +196,20 @@
 - Validation ID: VAL-011
 - Status: Validated
 
-### REQ-012: 技能复制、删除与排序
+### REQ-012: 手工技能复制、删除与排序（已取代）
 
-- Statement: 用户可复制、删除选中技能，并将技能上移或下移一位。
-- Rationale: 技能侧车需要支持日常组织，而不要求修改 DAT 或引入新 schema。
+- Statement: 历史版本允许复制、删除选中技能，并将技能上移或下移一位。
+- Rationale: 该合同基于 sidecar 定义技能实体；REQ-017 改为 DAT 自动定义入口后，sidecar 不再有权创建、复制或删除技能。
 - Source: 用户于 2026-08-06 确认采用建议规则。
 - Evidence: `Confirmed`
-- Preconditions: 技能侧车已载入且项目可写。
+- Preconditions: 仅适用于 REQ-017 之前的历史版本。
 - Inputs: 当前选中技能和 sidecar revision/etag。
 - Outputs: 更新后的有序 `skills[]`。
 - Invariants: 复制项插在原项后并追加“副本”；删除必须确认；操作后保持结果项或相邻项选中；不改变 sidecar schema 或 DAT 字节。
 - Dependencies: REQ-002、REQ-008。
 - Acceptance: 复制、删除、上移、下移分别只产生一次 sidecar CAS 保存；重启服务后顺序和名称恢复。
 - Validation ID: VAL-012
-- Status: Validated
+- Status: Superseded by REQ-017
 
 ### REQ-013: 模板式 lossless frame/block 结构编辑
 
@@ -252,11 +256,71 @@
 - Validation ID: VAL-015
 - Status: Validated
 
+### REQ-016: 正式项目与测试副本启动模式
+
+- Statement: 双击“一键启动”时必须由用户选择正式项目或测试副本；自动化可通过显式参数选择同一模式。
+- Rationale: 默认固定 LocalAppData 测试副本会让用户误以为正在编辑正式项目，也无法在仓库中持久化正式技能 sidecar。
+- Source: 用户于 2026-08-07 明确要求启动时选择正式或测试模式。
+- Evidence: `Confirmed`
+- Preconditions: 仓库 `Assets/NTSD/Config/data.txt`、Native preview 和 Node 24 可用。
+- Inputs: 交互选择，或 `-Mode Project` / `-Mode Test`。
+- Outputs: 正式模式使用仓库根 workspace；测试模式使用 `%LOCALAPPDATA%\DatSkillFlowWeb\test-workspace`。
+- Invariants: 正式模式不复制或删除仓库 Config；测试模式只有显式 `-ResetWorkspace` 才重建；`-ResetWorkspace` 不允许用于正式模式；两种模式都不生成演示技能；服务仍使用随机 loopback 端口并在就绪后打开浏览器。
+- Dependencies: REQ-002、REQ-008、现有 safe workspace/save 合同。
+- Acceptance: 无参数双击显示中文正式/测试/取消选择；两种显式模式将精确 workspace 传给服务；取消不构建或启动；冲突参数被拒绝；正式保存继续经过页面确认和恢复备份。
+- Validation ID: VAL-016
+- Status: Validated
+
+### REQ-017: DAT 自动状态/技能入口与跨技能链接
+
+- Statement: 左侧状态与技能入口必须直接从当前 DAT 自动派生；连续同标题 frame 段合并为一项，非零 `hit_*` 的有效目标帧作为精确技能首帧，同标题但不连续的段保持独立；无普通 `next` 前驱的动作段仍可见。
+- Rationale: 正式项目即使没有 sidecar，也应自动显示 `standing · F0`、`walking · F5`、`rasengan · F240` 等真实 DAT 入口，不能要求用户重复录入 DAT 已包含的信息。
+- Source: 用户于 2026-08-07 提出并确认混合入口、跨技能链接和纯展示 sidecar 方案。
+- Evidence: `Confirmed`
+- Preconditions: 当前对象 DAT 已解密并投影 frame 标题、state、next 和 `hit_*`。
+- Inputs: frame 标题段、frame ID/occurrence、state、next、全部受支持 `hit_*`，以及可选 sidecar 展示覆盖。
+- Outputs: 分组的自动入口列表；从所选入口开始的当前流程；可点击但默认不继续展开的跨技能目标卡。
+- Invariants: `hit_*` 的技能首帧是跳转后的目标帧；`next` 继续展开当前流程；值 `0` 不得被解释为 frame 0 入口；sidecar 不得创建入口或改变 DAT。
+- Dependencies: REQ-002、REQ-003、REQ-006、REQ-015。
+- Acceptance: Naruto 无 sidecar 时至少自动显示 `standing · F0` 和 `rasenganshuriken · F300`；选择 standing 时 `next` 展开 0→1→2→3，`hit_Uj:300` 显示为跨技能目标且不展开 301；点击目标切换到 F300 流程；sidecar 别名只改变显示。
+- Validation ID: VAL-017
+- Status: Validated
+
+### REQ-018: 桌面三栏可拖动调宽
+
+- Statement: 桌面布局的状态/技能区、预览区和属性区之间必须提供两条可拖动分隔条；鼠标、触控笔和键盘均可调整左右栏宽度，容器变化后自动保持有效边界。
+- Rationale: 固定三栏宽度无法兼顾长技能名称、主预览画布和密集属性字段，用户需要按当前任务分配屏幕空间。
+- Source: 用户于 2026-08-07 明确要求“左中右侧，要支持拖动”。
+- Evidence: `Confirmed`
+- Preconditions: viewport 宽度大于 850px，编辑器工作区已渲染。
+- Inputs: 左/右 separator 的 pointer delta、方向键、Shift 加速、Esc 取消，以及工作区 ResizeObserver 尺寸。
+- Outputs: 左右栏 CSS 宽度、剩余中栏宽度和同步更新的 separator ARIA value。
+- Invariants: 左栏保持 200–420px，右栏保持 240–460px；中栏在紧凑桌面至少 360px、宽屏至少 420px；极限拖动和窗口缩放不得产生页面水平溢出；Esc 恢复本次拖动起点；不写 localStorage、DAT 或 sidecar。
+- Dependencies: REQ-001、REQ-007、REQ-009。
+- Acceptance: 1440×900 与 1024×768 可真实拖动两条分隔条并保持中栏最小宽度；方向键可调宽，拖动中 Esc 恢复；拖动中 resize 会结束交互并重新 clamp；390×844 隐藏分隔条且四标签页继续可用；console/error 为空。
+- Validation ID: VAL-018
+- Status: Validated
+
+### REQ-019: Native 技能 Trace 按主体、分身和投射物分类运行
+
+- Statement: 预览从技能已成功触发开始，按 `ntsd_cpp` 真实逻辑 tick 运行；主体回到有效地面 idle 时结束主体技能进度；opoint 生成的角色/分身只需确认成功释放和首个有效快照；武器/投射物必须继续处理飞行、地面、碰撞和权威失效路径。
+- Rationale: 分身后续属于 AI，不应拖长技能结束；投掷武器的轨迹和落地碰撞仍是技能可观察结果，不能因主体 idle 被截断。
+- Source: 用户于 2026-08-07 对 Naruto 分身技能和 Frame 263 投掷武器场景的明确澄清。
+- Evidence: `Confirmed`
+- Preconditions: `ntsd_cpp` 可读取 root 与派生 OID 的 DAT；网页能按 Native entity 的 OID 加载对应 DAT/catalog 的 `rawObjectType`，并读取 Native 逐 tick entity 和必要状态字段。
+- Inputs: 已成功触发的 root start frame、DAT/C++ runner seed、Native logical tick。
+- Outputs: root actor 状态、opoint 生成事件、角色分身首个有效快照、投射物逐 tick 世界 Trace、分类完成原因。
+- Invariants: 不调用 UI 键盘模拟；不把 DAT `wait` 当作 Native tick；不等待角色分身 AI 生命周期；不提前截断武器/投射物；slot 释放和复用不混淆 lineage。
+- Dependencies: REQ-004、REQ-005、REQ-011、`ntsd_cpp` runner、multi-OID DAT/BMP resource projection、OID catalog object-type mapping。
+- Acceptance: F300 能显示 opoint 生成的分身；主体回 idle 后网页进度停止；Frame 263 类投射物继续显示飞行、落地/碰撞或权威失效；Trace 缺少完成条件时明确报告 `timeout`/`persistent`，不伪造完成。
+- Validation ID: VAL-019
+- Status: Planned
+
 ## Non-Goals
 
 | ID | Explicitly excluded item | Reason | Revisit condition |
 |---|---|---|---|
-| NREQ-001 | 自动推断技能名称和分类 | 容易误判 NTSD 数据 | 有权威元数据来源时 |
+| NREQ-001 | 脱离 DAT 标题、state 和跳转关系凭空生成技能语义或中文名称 | 容易误判 NTSD 数据 | 有额外权威元数据来源时 |
 | NREQ-002 | 第一阶段完整运行 `opoint/wpoint/cpoint` 语义 | 当前 Native runner 合同不足 | `ntsd_cpp` 提供对应可观察输出后 |
 | NREQ-003 | 第一阶段双角色战斗预览 | 超出最小垂直切片 | 单角色和几何叠加达到 E4 后 |
 | NREQ-004 | 虚构搜索、撤销、全局保存等未接线按钮 | 违反真实可用原则 | 有正式需求和完整实现时 |

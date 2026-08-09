@@ -45,6 +45,22 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void BeginFrame_ReusedSortPreservesSignedZAndSlotTieBreakExtremes()
+        {
+            var world = new SimulationWorld();
+            List<PresentationFixtureEntity> entities = RegisterFixtures(
+                world,
+                (211, 8, int.MaxValue),
+                (212, 2, 0),
+                (213, 9, int.MinValue),
+                (214, 4, -1),
+                (215, 1, 0),
+                (216, 6, int.MinValue));
+
+            AssertMatchesIndependentReference(world, entities, 21);
+        }
+
+        [Test]
         public void BeginFrame_RecollectsAndFiltersDormantPendingAndFuturePresentation()
         {
             var world = new SimulationWorld();

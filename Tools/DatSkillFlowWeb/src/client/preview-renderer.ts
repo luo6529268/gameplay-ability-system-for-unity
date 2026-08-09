@@ -4,10 +4,41 @@ import { number, text, type Frame, type Json } from "./editor-support.js";
 
 export type PreviewEntity = Json & { slot: number; frame: number; oid: number; x: number; y: number; z: number };
 export type PreviewTick = Json & { entities: PreviewEntity[]; cameraX: number };
+export interface PreviewStage {
+    readonly width: number;
+    readonly zMin: number;
+    readonly zMax: number;
+    readonly background?: {
+        readonly shadow?: {
+            readonly width: number;
+            readonly height: number;
+            readonly assetId?: string;
+        };
+        readonly layers: readonly {
+            readonly transparency: number;
+            readonly parallaxWidth: number;
+            readonly x: number;
+            readonly y: number;
+            readonly loop: number;
+            readonly cc: number;
+            readonly c1: number;
+            readonly c2: number;
+            readonly animCounter: number;
+            readonly assetId?: string;
+        }[];
+    };
+}
 export interface PreviewProject {
     readonly frames: readonly Frame[];
     readonly ranges: readonly Json[];
+    readonly previewObjects?: readonly PreviewObject[];
     readonly assets: ReadonlyMap<string, string>;
+    readonly stage?: PreviewStage;
+}
+export interface PreviewObject {
+    readonly oid: number;
+    readonly frames: readonly Frame[];
+    readonly ranges: readonly Json[];
 }
 export interface PreviewRenderInput {
     readonly canvas: HTMLCanvasElement;
@@ -15,10 +46,13 @@ export interface PreviewRenderInput {
     readonly tick: PreviewTick | undefined;
     readonly runtimeFrame: Frame | undefined;
     readonly images: Map<string, HTMLImageElement>;
+    readonly colorKeyImages: Map<string, HTMLCanvasElement>;
     readonly visibleOverlays: ReadonlySet<OverlayType>;
     readonly draftGeometry?: OverlayGeometry;
     readonly requestRender: () => void;
 }
+
+type ImageFactory = () => HTMLImageElement;
 
 function drawAxes(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, tick: PreviewTick, entity: PreviewEntity): void {
     const x = number(entity.xInt ?? entity.x) + number(entity.renderOffsetX) - tick.cameraX;
@@ -69,47 +103,258 @@ function drawDraftGeometry(context: CanvasRenderingContext2D, geometry: OverlayG
     context.restore();
 }
 
-function loadImage(input: PreviewRenderInput, assetId: string): HTMLImageElement {
-    let image = input.images.get(assetId);
+function drawGround(context: CanvasRenderingContext2D, tick: PreviewTick): void {
+    const ground = number(recordValue(tick.background)?.zMin, 0);
+    if (ground <= 0) return;
+    context.save();
+    context.fillStyle = "rgba(80, 60, 30, .45)";
+    context.fillRect(0, ground, context.canvas.width, 1);
+    context.restore();
+}
+
+function recordValue(value: unknown): Record<string, unknown> | undefined {
+    return typeof value === "object" && value !== null && !Array.isArray(value)
+        ? value as Record<string, unknown>
+        : undefined;
+}
+
+function ensureImage(
+    images: Map<string, HTMLImageElement>,
+    assetId: string,
+    requestRender: () => void,
+    createImage: ImageFactory = () => new Image(),
+): HTMLImageElement {
+    let image = images.get(assetId);
     if (image === undefined) {
-        image = new Image();
+        image = createImage();
+        images.set(assetId, image);
+        image.addEventListener("load", requestRender);
+        image.addEventListener("error", requestRender);
         image.src = `/api/assets/${encodeURIComponent(assetId)}`;
-        image.onload = input.requestRender;
-        input.images.set(assetId, image);
     }
     return image;
+}
+
+function loadImage(input: PreviewRenderInput, assetId: string): HTMLImageElement {
+    return ensureImage(input.images, assetId, input.requestRender);
+}
+
+export function previewObjectAssetIds(project: PreviewProject): readonly string[] {
+    const result = new Set<string>();
+    for (const resource of project.previewObjects ?? []) {
+        for (const range of resource.ranges) {
+            const assetId = text(range.assetId)
+                || project.assets.get(text(range.file))
+                || project.assets.get("")
+                || "";
+            if (assetId) result.add(assetId);
+        }
+    }
+    return Object.freeze([...result]);
+}
+
+function waitForImage(image: HTMLImageElement): Promise<void> {
+    if (image.complete) return Promise.resolve();
+    return new Promise((resolve) => {
+        const settle = (): void => {
+            image.removeEventListener("load", settle);
+            image.removeEventListener("error", settle);
+            resolve();
+        };
+        image.addEventListener("load", settle);
+        image.addEventListener("error", settle);
+    });
+}
+
+export async function preloadPreviewObjectAssets(
+    project: PreviewProject,
+    images: Map<string, HTMLImageElement>,
+    requestRender: () => void,
+    createImage: ImageFactory = () => new Image(),
+): Promise<void> {
+    await Promise.all(previewObjectAssetIds(project).map(async (assetId) => {
+        const image = ensureImage(images, assetId, requestRender, createImage);
+        await waitForImage(image);
+    }));
+}
+
+function loadColorKeyImage(
+    input: PreviewRenderInput,
+    assetId: string,
+    image: HTMLImageElement,
+): HTMLCanvasElement | undefined {
+    const existing = input.colorKeyImages.get(assetId);
+    if (existing !== undefined) return existing;
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    if ((!image.complete && width <= 0) || width <= 0 || height <= 0) return undefined;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const canvasContext = canvas.getContext("2d");
+    if (canvasContext === null) return undefined;
+    try {
+        canvasContext.drawImage(image, 0, 0);
+        const pixels = canvasContext.getImageData(0, 0, width, height);
+        for (let index = 0; index < pixels.data.length; index += 4) {
+            if (pixels.data[index] === 0 && pixels.data[index + 1] === 0 && pixels.data[index + 2] === 0) {
+                pixels.data[index + 3] = 0;
+            }
+        }
+        canvasContext.putImageData(pixels, 0, 0);
+    } catch {
+        return undefined;
+    }
+    input.colorKeyImages.set(assetId, canvas);
+    return canvas;
+}
+
+function imageReady(image: HTMLImageElement): boolean {
+    return image.complete && (image.naturalWidth || image.width) > 0 && (image.naturalHeight || image.height) > 0;
+}
+
+function drawBackgroundLayer(
+    context: CanvasRenderingContext2D,
+    input: PreviewRenderInput,
+    layer: NonNullable<PreviewStage["background"]>["layers"][number],
+    tick: PreviewTick,
+): void {
+    const assetId = text(layer.assetId);
+    if (!assetId || (layer.cc > 0 && (layer.animCounter < layer.c1 || layer.animCounter > layer.c2))) return;
+    const image = loadImage(input, assetId);
+    if (!imageReady(image)) return;
+    const source = layer.transparency === 0 ? image : loadColorKeyImage(input, assetId, image);
+    if (!source) return;
+    const stageWidth = number(input.project.stage?.width, number(tick.background?.width, context.canvas.width));
+    const parallaxWidth = number(layer.parallaxWidth, stageWidth);
+    const parallax = stageParallaxOffset(stageWidth, context.canvas.width, parallaxWidth, tick.cameraX);
+    if (layer.x >= parallaxWidth) return;
+    const x = layer.x + parallax;
+    const y = layer.y;
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    context.drawImage(source, x, y, width, height);
+    if (layer.loop <= 0) return;
+    for (let tilePosition = layer.x + layer.loop, tileX = x + layer.loop, tileCount = 0;
+        tilePosition < parallaxWidth && tileCount < 4096;
+        tilePosition += layer.loop, tileX += layer.loop, tileCount += 1) {
+        context.drawImage(source, tileX, y, width, height);
+    }
+}
+
+function drawSceneBackground(context: CanvasRenderingContext2D, input: PreviewRenderInput, tick: PreviewTick): void {
+    context.fillStyle = "#151b25";
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    for (const layer of input.project.stage?.background?.layers ?? []) {
+        drawBackgroundLayer(context, input, layer, tick);
+    }
+    drawGround(context, tick);
+}
+
+function drawShadow(
+    context: CanvasRenderingContext2D,
+    input: PreviewRenderInput,
+    entity: PreviewEntity,
+    primary: PreviewEntity | undefined,
+    resource: PreviewObject | undefined,
+): void {
+    const shadow = input.project.stage?.background?.shadow;
+    const assetId = text(shadow?.assetId);
+    const hitStop = number(entity.hitStop);
+    if (!shadow || !assetId || entity.link < 0 || hitStop <= -70 || Math.abs(hitStop) % 4 >= 2) return;
+    const isPrimary = entity === primary;
+    const frames = resource?.frames ?? (isPrimary ? input.project.frames : []);
+    const frame = isPrimary ? input.runtimeFrame ?? lastFrameForId(frames, entity.frame) : lastFrameForId(frames, entity.frame);
+    if (frame?.state === 3005 || frame?.state === 9997) return;
+    const image = loadImage(input, assetId);
+    if (!imageReady(image)) return;
+    const source = loadColorKeyImage(input, assetId, image);
+    if (!source) return;
+    const width = number(shadow.width, image.naturalWidth || image.width);
+    const height = number(shadow.height, image.naturalHeight || image.height);
+    const x = number(entity.xInt ?? entity.x) + number(entity.renderOffsetX) - input.tick!.cameraX - width / 2;
+    const y = number(entity.zInt ?? entity.z) - height / 2;
+    context.drawImage(source, 0, 0, width, height, x, y, width, height);
+}
+
+export function spriteSheetColumnCount(range: Json | undefined): number {
+    // ntsd_cpp passes DAT SpriteRange::row as Renderer::load_sprite(..., cols).
+    return number(range?.row);
+}
+
+export function effectivePreviewPic(entity: PreviewEntity, frame: Frame | undefined): number {
+    return number(entity.renderPic ?? frame?.pic ?? entity.pic, 999);
+}
+
+export function sortPreviewEntities(entities: readonly PreviewEntity[]): PreviewEntity[] {
+    return [...entities].sort((left, right) =>
+        number(left.zInt ?? left.z) - number(right.zInt ?? right.z));
+}
+
+export function stageParallaxOffset(
+    stageWidth: number,
+    viewportWidth: number,
+    parallaxWidth: number,
+    cameraX: number,
+): number {
+    if (stageWidth <= viewportWidth) return 0;
+    const offset = -((parallaxWidth - viewportWidth) * cameraX) / (stageWidth - viewportWidth);
+    return offset === 0 ? 0 : offset;
 }
 
 function drawEntity(
     context: CanvasRenderingContext2D,
     input: PreviewRenderInput,
     entity: PreviewEntity,
-    primary: PreviewEntity,
+    primary: PreviewEntity | undefined,
+    resource: PreviewObject | undefined,
 ): readonly OverlayGeometry[] {
-    const loaded = entity.oid === 2;
-    const frame = loaded && entity === primary ? input.runtimeFrame : loaded ? lastFrameForId(input.project.frames, entity.frame) : undefined;
-    const pic = number(frame?.pic ?? entity.pic, 999);
-    const range = loaded ? input.project.ranges.find((candidate) => pic >= number(candidate.frameLo ?? candidate.frame_lo) && pic <= number(candidate.frameHi ?? candidate.frame_hi, -1)) : undefined;
-    const width = number(range?.w, 24), height = number(range?.h, 24), columns = number(range?.row);
-    const placement = spritePlacement({ xInt: number(entity.xInt ?? entity.x), yInt: number(entity.yInt ?? entity.y), zInt: number(entity.zInt ?? entity.z), renderOffsetX: number(entity.renderOffsetX), cameraX: input.tick!.cameraX, centerX: number(frame?.centerx), centerY: number(frame?.centery), width, facing: number(entity.facing) });
+    const hitStop = number(entity.hitStop);
+    if (hitStop <= -25 || Math.abs(hitStop) % 4 >= 2) return [];
+    const isPrimary = entity === primary;
+    const loaded = resource !== undefined || isPrimary;
+    const frames = resource?.frames ?? (isPrimary ? input.project.frames : []);
+    const ranges = resource?.ranges ?? (isPrimary ? input.project.ranges : []);
+    const frame = isPrimary ? input.runtimeFrame ?? lastFrameForId(frames, entity.frame) : lastFrameForId(frames, entity.frame);
+    const pic = effectivePreviewPic(entity, frame);
+    const range = loaded ? ranges.find((candidate) => pic >= number(candidate.frameLo ?? candidate.frame_lo) && pic <= number(candidate.frameHi ?? candidate.frame_hi, -1)) : undefined;
+    const width = number(range?.w), height = number(range?.h), columns = spriteSheetColumnCount(range);
+    const rows = number(range?.col);
     const assetId = range === undefined ? undefined : (text(range.assetId) || input.project.assets.get(text(range.file)) || input.project.assets.get(""));
-    if (!range || !assetId || pic === 999 || columns <= 0) {
-        context.strokeStyle = "#e8b828";
-        context.strokeRect(placement.x, placement.y, 24, 24);
+    if (!range || !assetId || pic === 999 || columns <= 0 || rows <= 0 || width <= 0 || height <= 0) {
         return [];
     }
 
+    const renderPhase = Math.trunc(number(input.tick!.tick)) & 1;
+    const extraX = number(entity.frameDelay) < 0 ? 6 * renderPhase - 3 : 0;
+    const placement = spritePlacement({
+        xInt: number(entity.xInt ?? entity.x) + extraX,
+        yInt: number(entity.yInt ?? entity.y),
+        zInt: number(entity.displayZ ?? entity.zInt ?? entity.z),
+        renderOffsetX: number(entity.renderOffsetX),
+        cameraX: input.tick!.cameraX,
+        centerX: number(frame?.centerx),
+        centerY: number(frame?.centery),
+        width,
+        facing: number(entity.facing),
+    });
+    const drawX = frame?.state === 9997 ? Math.max(0, Math.min(714, placement.x)) : placement.x;
+
     const local = pic - number(range.frameLo ?? range.frame_lo), image = loadImage(input, assetId);
+    const colorKeyImage = loadColorKeyImage(input, assetId, image);
+    if (colorKeyImage === undefined) {
+        return [];
+    }
     context.save();
     if (placement.mirror) {
-        context.translate(placement.x + width, placement.y); context.scale(-1, 1);
-        context.drawImage(image, (local % columns) * (width + 1), Math.floor(local / columns) * (height + 1), width, height, 0, 0, width, height);
+        context.translate(drawX + width, placement.y); context.scale(-1, 1);
+        context.drawImage(colorKeyImage, (local % columns) * (width + 1), Math.floor(local / columns) * (height + 1), width, height, 0, 0, width, height);
     } else {
-        context.drawImage(image, (local % columns) * (width + 1), Math.floor(local / columns) * (height + 1), width, height, placement.x, placement.y, width, height);
+        context.drawImage(colorKeyImage, (local % columns) * (width + 1), Math.floor(local / columns) * (height + 1), width, height, drawX, placement.y, width, height);
     }
     context.restore();
     if (entity !== primary || !frame) return [];
-    return buildOverlayGeometry(frame, { left: placement.x, top: placement.y, width, height, mirror: placement.mirror })
+    return buildOverlayGeometry(frame, { left: drawX, top: placement.y, width, height, mirror: placement.mirror })
         .filter((item) => input.visibleOverlays.has(item.type));
 }
 
@@ -122,12 +367,17 @@ export function drawPreviewCanvas(input: PreviewRenderInput): readonly OverlayGe
         context.fillText("尚未收到原生预览数据。", 20, 30);
         return [];
     }
+    drawSceneBackground(context, input, input.tick);
     const primary = primaryPreviewEntity(input.tick.entities);
-    if (primary === undefined) return [];
-    drawAxes(context, input.canvas, input.tick, primary);
+    const axisEntity = primary ?? input.tick.entities[0];
+    if (axisEntity !== undefined) drawAxes(context, input.canvas, input.tick, axisEntity);
     let geometry: readonly OverlayGeometry[] = [];
-    for (const entity of input.tick.entities) {
-        const candidate = drawEntity(context, input, entity, primary);
+    const entities = sortPreviewEntities(input.tick.entities);
+    const resourcesByOid = new Map((input.project.previewObjects ?? []).map((resource) => [resource.oid, resource]));
+    for (const entity of entities) {
+        const resource = resourcesByOid.get(entity.oid);
+        drawShadow(context, input, entity, primary, resource);
+        const candidate = drawEntity(context, input, entity, primary, resource);
         if (candidate.length > 0) geometry = candidate;
     }
     drawGeometry(context, geometry);

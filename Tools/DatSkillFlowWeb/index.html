@@ -32,30 +32,24 @@
         <button type="button" data-tab-target="timeline-panel" aria-pressed="false">时间轴</button>
       </nav>
 
-      <section class="editor-grid" aria-label="DAT 编辑工作区">
+      <section id="editor-grid" class="editor-grid" aria-label="DAT 编辑工作区">
         <aside id="left-panel" class="panel left-panel" data-mobile-panel>
           <section class="panel-section skills-section">
             <div class="section-heading">
-              <h2>技能列表</h2>
+              <h2>状态与技能入口</h2>
               <span id="skill-count" class="count-badge">0</span>
             </div>
-            <div class="toolbar-row">
-              <button id="new-skill" class="button button-cyan" type="button" disabled>＋ 新建技能</button>
-              <button id="edit-skill" class="button button-quiet" type="button" disabled>编辑技能信息</button>
-            </div>
-            <div class="toolbar-row compact-toolbar" aria-label="技能管理">
-              <button id="copy-skill" class="button button-quiet" type="button" disabled>复制</button>
-              <button id="delete-skill" class="button button-quiet" type="button" disabled>删除</button>
-              <button id="move-skill-up" class="button button-quiet" type="button" disabled>上移</button>
-              <button id="move-skill-down" class="button button-quiet" type="button" disabled>下移</button>
+            <div class="toolbar-row entry-toolbar">
+              <button id="edit-skill" class="button button-quiet" type="button" disabled>编辑显示信息</button>
+              <label><input id="show-hidden-skills" type="checkbox" /> 显示隐藏入口</label>
             </div>
             <div class="table-wrap skill-table-wrap">
               <table class="data-table">
-                <thead><tr><th>名称</th><th>起始帧</th><th>帧数</th><th>命中跳跃</th></tr></thead>
+                <thead><tr><th>名称</th><th>首帧</th><th>段帧数</th><th>触发</th></tr></thead>
                 <tbody id="skill-list"></tbody>
               </table>
             </div>
-            <p id="skill-empty" class="empty-state">尚未创建技能。点击“新建技能”定义名称和起始帧。</p>
+            <p id="skill-empty" class="empty-state">当前 DAT 未识别到可用入口。</p>
           </section>
 
           <section class="panel-section flow-section">
@@ -79,6 +73,18 @@
             </div>
           </section>
         </aside>
+
+        <div
+          id="left-panel-separator"
+          class="panel-separator left-panel-separator"
+          role="separator"
+          aria-label="调整状态技能区与预览区宽度"
+          aria-orientation="vertical"
+          aria-controls="left-panel preview-panel"
+          aria-valuemin="200"
+          aria-valuemax="420"
+          aria-valuenow="286"
+          tabindex="0"></div>
 
         <section id="preview-panel" class="panel preview-panel is-mobile-active" data-mobile-panel aria-busy="false">
           <div class="preview-toolbar">
@@ -112,6 +118,18 @@
           </div>
           <p id="diagnostics" class="diagnostics" role="status">正在等待项目数据。</p>
         </section>
+
+        <div
+          id="right-panel-separator"
+          class="panel-separator right-panel-separator"
+          role="separator"
+          aria-label="调整预览区与属性区宽度"
+          aria-orientation="vertical"
+          aria-controls="preview-panel inspector-panel"
+          aria-valuemin="240"
+          aria-valuemax="460"
+          aria-valuenow="330"
+          tabindex="0"></div>
 
         <aside id="inspector-panel" class="panel inspector-panel" data-mobile-panel>
           <div class="section-heading inspector-heading">
@@ -163,11 +181,16 @@
 
     <dialog id="skill-dialog">
       <form id="skill-form" method="dialog" aria-busy="false">
-        <div class="dialog-heading"><h2 id="skill-dialog-title">新建技能</h2><button value="cancel" aria-label="关闭">×</button></div>
-        <label>技能名称<input id="skill-name" name="name" maxlength="256" required /></label>
-        <label>起始帧<input id="skill-start-frame" name="startFrame" type="number" min="0" max="599" required /></label>
-        <p>名称与起始帧保存到项目侧车，不写入 DAT。</p>
-        <div class="dialog-actions"><button class="button button-quiet" value="cancel">取消</button><button id="save-skill" class="button button-cyan" value="default">保存技能</button></div>
+        <div class="dialog-heading"><h2 id="skill-dialog-title">编辑入口显示信息</h2><button value="cancel" aria-label="关闭">×</button></div>
+        <p>DAT 入口：<strong id="skill-start-frame-readout">-</strong></p>
+        <label>显示名称<input id="skill-name" name="displayName" maxlength="256" placeholder="留空使用 DAT 标题" /></label>
+        <label>自定义分组<input id="skill-group" name="group" maxlength="256" placeholder="留空使用自动分组" /></label>
+        <label>排序值<input id="skill-order" name="order" type="number" min="-1000000" max="1000000" placeholder="留空按首帧排序" /></label>
+        <label class="checkbox-row"><input id="skill-pinned" name="pinned" type="checkbox" /> 置顶显示</label>
+        <label class="checkbox-row"><input id="skill-hidden" name="hidden" type="checkbox" /> 隐藏入口</label>
+        <label>备注<textarea id="skill-notes" name="notes" maxlength="4096"></textarea></label>
+        <p>sidecar 只保存显示信息，不创建入口、不改变首帧，也不修改 DAT。</p>
+        <div class="dialog-actions"><button class="button button-quiet" value="cancel">取消</button><button id="save-skill" class="button button-cyan" value="default">保存显示信息</button></div>
       </form>
     </dialog>
     <script type="module" src="/src/client/main.js"></script>

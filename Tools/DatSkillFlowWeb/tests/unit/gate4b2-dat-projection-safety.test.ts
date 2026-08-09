@@ -69,7 +69,7 @@ describe("Gate4B2 DatProjection prototype-sensitive keys", () => {
             "rowing_height", "rowing_distance",
         ]);
         assertExactDto(frame, [
-            "frameId", "occurrence", "pic", "state", "wait", "next", "dvx", "dvy", "dvz",
+            "frameId", "occurrence", "label", "pic", "state", "wait", "next", "dvx", "dvy", "dvz",
             "centerx", "centery", "hit_Fa", "hit_Fj", "hit_Ua", "hit_Uj", "hit_Da", "hit_Dj",
             "hit_ja", "hit_a", "hit_d", "hit_j", "mp", "vaction", "sound", "itrs", "bdys",
             "opoints", "wpoints", "bpoints", "cpoints",

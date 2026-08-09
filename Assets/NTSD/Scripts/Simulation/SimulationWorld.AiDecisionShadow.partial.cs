@@ -952,8 +952,19 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            AiDecisionAvailability captureAvailability =
-                CaptureAiDecisionSharedOwnedSnapshot(self, aiDecisionIndexedSnapshot);
+            BattleAiInputDetailDiagnostics diagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalCapture);
+            AiDecisionAvailability captureAvailability;
+            try
+            {
+                captureAvailability =
+                    CaptureAiDecisionSharedOwnedSnapshot(self, aiDecisionIndexedSnapshot);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalCapture);
+            }
             if (captureAvailability != AiDecisionAvailability.Available)
             {
                 RecordAiDecisionIndexedCanonicalFallback(captureAvailability);
@@ -965,6 +976,7 @@ namespace NTSD.Simulation
             long ordinal = AiDecisionIndexedCanonicalEligibleCountForDiagnostics - 1L;
             int sampleInterval = aiDecisionIndexedCanonicalFullOracleSampleInterval;
             bool captureOracleTrace = sampleInterval > 0 && ordinal % sampleInterval == 0;
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalKernel);
             try
             {
                 indexedAvailable = AiDecisionKernel.TryEvaluate(
@@ -981,6 +993,10 @@ namespace NTSD.Simulation
                 InvalidateAiDecisionSharedPass(AiDecisionAvailability.SnapshotMissing);
                 RecordAiDecisionIndexedCanonicalFallback(AiDecisionAvailability.SnapshotMissing);
                 return false;
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalKernel);
             }
             if (!indexedAvailable)
             {
@@ -1022,18 +1038,37 @@ namespace NTSD.Simulation
                 }
             }
 
-            AiDecisionAvailability commitAvailability =
-                ValidateAiDecisionIndexedCanonicalCommit(
-                    self,
-                    aiDecisionIndexedSnapshot,
-                    indexedWitness);
+            diagnostics?.BeginPhase(
+                BattleAiInputDetailPhase.IndexedCanonicalCommitValidation);
+            AiDecisionAvailability commitAvailability;
+            try
+            {
+                commitAvailability =
+                    ValidateAiDecisionIndexedCanonicalCommit(
+                        self,
+                        aiDecisionIndexedSnapshot,
+                        indexedWitness);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(
+                    BattleAiInputDetailPhase.IndexedCanonicalCommitValidation);
+            }
             if (commitAvailability != AiDecisionAvailability.Available)
             {
                 RecordAiDecisionIndexedCanonicalFallback(commitAvailability);
                 return false;
             }
 
-            ApplyAiDecisionIndexedCanonicalCommit(self.Runtime, indexedWitness);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalCommitApply);
+            try
+            {
+                ApplyAiDecisionIndexedCanonicalCommit(self.Runtime, indexedWitness);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalCommitApply);
+            }
             AiDecisionIndexedCanonicalCommittedCountForDiagnostics++;
             return true;
         }
@@ -1079,15 +1114,12 @@ namespace NTSD.Simulation
             {
                 return AiDecisionAvailability.StableIdMismatch;
             }
-            if (!TryCaptureAiDecisionInputState(
-                    self.Runtime,
-                    out AiDecisionInputState currentInput) ||
-                !AiDecisionInputEquals(snapshot.Input, currentInput) ||
-                !AiDecisionWorldEquals(snapshot.World, CaptureAiDecisionWorldState()) ||
-                Rng == null ||
-                Rng.State != snapshot.RngState ||
-                Rng.CallCount != snapshot.RngCalls ||
-                Runtime?.Flow == null)
+            // IndexedCanonical evaluates a fully owned value snapshot and does not
+            // call back into the world before this commit gate. Re-reading and
+            // comparing every input/world/RNG field here duplicated the capture for
+            // every AI. Occupancy, self identity and selected-handle validation still
+            // guard every mutable reference consumed by the commit.
+            if (Rng == null || Runtime?.Flow == null)
             {
                 return AiDecisionAvailability.SnapshotMissing;
             }
@@ -1493,24 +1525,46 @@ namespace NTSD.Simulation
                 return AiDecisionAvailability.EpochMismatch;
             }
 
-            snapshot.ResetOwned(epoch);
             int selfSlot = self.Runtime.SlotIndex;
             if (selfSlot < 0 || selfSlot >= rows.Capacity)
-                return AiDecisionAvailability.SelfSlotInvalid;
+            {
+                return ResetRejectedAiDecisionSnapshot(
+                    snapshot,
+                    epoch,
+                    AiDecisionAvailability.SelfSlotInvalid);
+            }
             if (!rows.Included[selfSlot])
-                return AiDecisionAvailability.SelfNotIncluded;
+            {
+                return ResetRejectedAiDecisionSnapshot(
+                    snapshot,
+                    epoch,
+                    AiDecisionAvailability.SelfNotIncluded);
+            }
             if (!TryGetCurrentRuntimeHandle(
                     selfSlot,
                     self,
                     out RuntimeEntityHandle selfHandle) ||
                 rows.Generation[selfSlot] != selfHandle.Generation)
             {
-                return AiDecisionAvailability.GenerationMismatch;
+                return ResetRejectedAiDecisionSnapshot(
+                    snapshot,
+                    epoch,
+                    AiDecisionAvailability.GenerationMismatch);
             }
             if (rows.Identity[selfSlot] != self.Runtime.StableId)
-                return AiDecisionAvailability.StableIdMismatch;
+            {
+                return ResetRejectedAiDecisionSnapshot(
+                    snapshot,
+                    epoch,
+                    AiDecisionAvailability.StableIdMismatch);
+            }
             if (!TryCaptureAiDecisionInputState(self.Runtime, out snapshot.Input))
-                return AiDecisionAvailability.SnapshotMissing;
+            {
+                return ResetRejectedAiDecisionSnapshot(
+                    snapshot,
+                    epoch,
+                    AiDecisionAvailability.SnapshotMissing);
+            }
 
             snapshot.SelfSlot = selfSlot;
             snapshot.SelfGeneration = selfHandle.Generation;
@@ -1519,7 +1573,18 @@ namespace NTSD.Simulation
             snapshot.World = CaptureAiDecisionWorldState();
             snapshot.RngState = Rng?.State ?? 0;
             snapshot.RngCalls = Rng?.CallCount ?? 0;
+            snapshot.RngTraceCount = 0;
+            snapshot.RngTraceOverflow = false;
             return AiDecisionAvailability.Available;
+        }
+
+        private static AiDecisionAvailability ResetRejectedAiDecisionSnapshot(
+            AiDecisionSnapshot snapshot,
+            ulong epoch,
+            AiDecisionAvailability availability)
+        {
+            snapshot.ResetOwned(epoch);
+            return availability;
         }
 
         private void RefreshAiDecisionSharedRowAfterCharacterInput(LF2Entity entity)
@@ -1576,7 +1641,8 @@ namespace NTSD.Simulation
                         entity,
                         slot,
                         handle.Generation,
-                        false))
+                        false,
+                        true))
                 {
                     InvalidateAiDecisionSharedPass(AiDecisionAvailability.SnapshotMissing);
                     return;
@@ -2836,7 +2902,8 @@ namespace NTSD.Simulation
                         entity,
                         slot,
                         handle.Generation,
-                        false))
+                        false,
+                        true))
                 {
                     throw new InvalidOperationException(
                         "Unified AI snapshot authority could not refresh a committed row.");

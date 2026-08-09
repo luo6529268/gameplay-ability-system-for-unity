@@ -1,5 +1,14 @@
 # 集中式战斗渲染系统方案
 
+## 2026-08-08：1000 AI 追帧循环 CPU 预算 A/B
+
+- **问题闭环：**Profiler 中 `ProductionEntityStressRunner.Update -> StepMeasuredTick -> Driver.StepOneTick` 的高耗时不等于 harness 自身另有一段隐藏业务循环；它是外层 accumulator 在同一 Unity 帧最多连续执行 4 个完整战斗 tick。单 tick 已接近或超过 `33.33 ms` 时，这会把一个可见帧放大到约 `4 × tick` 的停顿。
+- **实现：**压力工具新增 `catchUpCpuBudgetMs`。`0` 保持旧吞吐模式；大于 `0` 时首 tick 必定执行，后续 tick 用本帧已耗时加上一 tick 实测耗时预测，超过预算即延后。Window 默认使用 `1000/30 ms`；旧 request 未提供字段时仍为 `0`。报告新增 `catchUpCpuBudgetMs` 与 `framesLimitedByCatchUpCpuBudget`，backlog/dropped tick 继续真实记录，不以调度优化掩盖容量失败。
+- **1000 AI A/B：**预算报告 `Temp/NTSD_ProductionEntityStress.catchup-budget-1000-120ticks-20260808.json` 为 `30 warmup + 120 sample`，最大 `1 tick/frame`，Unity frame Avg/P95=`75.388/103.443 ms`（约 `13.26 FPS`），149 帧受预算限制，最大 backlog=`7`，dropped=`113`。无预算报告 `Temp/NTSD_ProductionEntityStress.catchup-throughput-1000-120ticks-20260808.json` 最大 `4 ticks/frame`，Unity frame Avg/P95=`161.826/257.808 ms`（约 `6.18 FPS`），最大 backlog=`4`，dropped=`20`。预算模式将平均/P95 可见帧停顿分别降低约 `53.4%/59.9%`，但不是吞吐量提升。
+- **逻辑与表现边界：**两轮 final lockstep input/RNG/metadata/world/slots/aRest/vRest/stats/events/overall hash 全部一致，overall=`2348281130f1c432260ccb9f17a6f31affc06a08632724c3be77070542ce82e4`。extended parity 只有 slots/overall 不同，因为预算模式每个实际 tick 都构建表现，而吞吐模式仅在一帧最后一个 catch-up tick 构建，扩展校验包含 4 个 presentation-finalized hit-record 字段；这不是战斗核心状态分叉。
+- **性能结论：**预算模式单个带表现 tick Avg/P95=`45.573/61.142 ms`，仍超过 30 Hz 预算；无预算混合样本的带表现/不带表现 Avg=`34.597/28.108 ms`。两轮 `logicTickAllocatedBytes=0 B/tick`，但 Editor Profiler frame GC 仍存在（预算 Avg/P95 约 `250,109/922,533 B/frame`，无预算约 `413,864/2,150,105 B/frame`），不能把本项描述为 GC 根因已关闭。追帧循环是卡顿放大器，单 tick 的 CharacterInput、CandidateCollect、RenderDispatch/表现构建等才是剩余容量瓶颈；1000 AI 稳定 30 Hz gate 保持开放。
+- **fresh 验证：**Unity 脚本刷新编译完成；focused job `ded49f6e80d346eebee7f3229bdfc0e6` 为 `2/2 passed`；完整 EditMode job `15ba76f83027436db37474e58681c015` 为 `720/720 passed`；`BattleRuntimeSelfCheck` 于 `2026-08-08 12:54:38` 返回 `PASS`。两轮 teardown 均 `restored=true`、cleanup exception=`0`，active GameObject/world entity/claimed slot 均清零。T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+
 ## 2026-08-03：BuildCommands 与高频表现命令优化
 
 - **BuildCommands 诊断基线：**`Temp/NTSD_ProductionEntityStress.data-oriented-buildcommands-detail-1000-60ticks-20260802.json`（1000 个分散 AI、30 warmup + 60 sample、CentralOnly）中，`BuildCommands` Avg/P95=`5.295/5.591 ms`；其中 Overlay=`2.788 ms`、Shadow=`1.424 ms`、Entity=`0.893 ms`。详细诊断仅用于归因，其逐命令计时会产生观察开销，不能用其绝对帧率作为最终门禁。

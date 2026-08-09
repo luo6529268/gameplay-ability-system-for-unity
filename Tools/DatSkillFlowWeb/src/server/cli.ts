@@ -70,6 +70,19 @@ if (startupWorkspace !== undefined) {
         assetRegistry: assetWorkspace,
         dataTxtLogicalPath: cliArguments.dataTxt,
     });
+    process.stdout.write("Preparing DAT project and Native skill previews...\n");
+    let lastReported = 0;
+    const prepared = await projectDatService.prepareDefaultSession((completed, total) => {
+        const percent = total === 0 ? 100 : Math.floor(completed * 100 / total);
+        if (completed === total || percent >= lastReported + 25) {
+            lastReported = percent;
+            process.stdout.write(`Native preview warmup: ${completed}/${total}\n`);
+        }
+    });
+    process.stdout.write(
+        `DAT preparation complete: ${prepared.scenarios - prepared.failed}/${prepared.scenarios} previews, `
+        + `${prepared.assets - prepared.assetFailures}/${prepared.assets} assets in ${prepared.elapsedMs} ms.\n`,
+    );
     const startupRoot = workspace.getStartupRootGrant();
     if (startupRoot === undefined) {
         throw new Error("The project skill service requires an authorized startup workspace.");

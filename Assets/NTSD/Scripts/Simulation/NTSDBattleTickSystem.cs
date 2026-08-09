@@ -236,6 +236,7 @@ namespace NTSD.Simulation
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             diagnostics?.BeginTick(tickIndex);
             detailDiagnostics?.BeginTick(tickIndex);
+            world.BeginDataObjectTypeTickCache(tickIndex);
             try
             {
                 diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
@@ -268,6 +269,7 @@ namespace NTSD.Simulation
             }
             finally
             {
+                world.EndDataObjectTypeTickCache();
                 detailDiagnostics?.EndTick();
                 diagnostics?.EndTick();
             }

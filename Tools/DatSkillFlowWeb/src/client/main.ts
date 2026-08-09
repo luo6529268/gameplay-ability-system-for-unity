@@ -1,11 +1,26 @@
 import {
+    BoundedLruCache,
     findFrameFieldCapability,
     lastFrameForId,
     mergePreview,
+    previewIntentCacheKey,
     primaryPreviewEntity,
 } from "./project-client.js";
-import { buildSkillFlow, type SkillFlowEdge, type SkillFlowGraph } from "./skill-flow.js";
+import {
+    buildSkillFlow,
+    type SkillFlowEdge,
+    type SkillFlowGraph,
+} from "./skill-flow.js";
 import { renderFlowSvg } from "./flow-svg.js";
+import {
+    buildSkillPreviewScenario,
+    deriveSkillEntries,
+    entriesByStartFrame,
+    type SkillDisplayMetadata,
+    type SkillEntry,
+    type SkillPreviewInputStep,
+    type SkillPreviewScenario,
+} from "./skill-entries.js";
 import { buildSkillTimeline } from "./skill-timeline.js";
 import {
     draftOverlayGeometry,
@@ -16,22 +31,28 @@ import {
     type ResizeHandle,
 } from "./canvas-geometry-edit.js";
 import {
-    deleteSkillForOid,
-    duplicateSkill,
-    moveSkillForOid,
-    skillIndexesForOid,
-} from "./skill-management.js";
-import {
     hitTestOverlay,
     type OverlayGeometry,
     type OverlayType,
 } from "./overlay-geometry.js";
 import {
     drawPreviewCanvas,
+    preloadPreviewObjectAssets,
+    type PreviewStage,
     type PreviewEntity,
     type PreviewTick,
 } from "./preview-renderer.js";
 import { createLatestTaskScheduler } from "./latest-task-scheduler.js";
+import {
+    clampPanelWidths,
+    defaultPanelWidths,
+    MOBILE_PANEL_MAXIMUM,
+    PANEL_SEPARATOR_WIDTH,
+    resizePanelWidths,
+    type PanelLayout,
+    type PanelWidths,
+    type ResizablePanel,
+} from "./panel-layout.js";
 import {
     allOverlayTypes,
     blockCollections,
@@ -67,11 +88,25 @@ interface ProjectState {
     frames: Frame[];
     ranges: Json[];
     nativeTicks: NativeTick[];
+    nativeTrace: Json;
+    previewObjects: readonly {
+        oid: number;
+        frames: Frame[];
+        ranges: Json[];
+    }[];
+    stage?: PreviewStage;
     assets: Map<string, string>;
     fields: FieldCapability[];
     structures: FrameStructureCapability[];
 }
-interface PreviewIntent { readonly sessionId: string; readonly revision: string | number; readonly startFrame: number; }
+interface PreviewIntent {
+    readonly sessionId: string;
+    readonly revision: string | number;
+    readonly startFrame: number;
+    readonly initialFrame?: number;
+    readonly inputPlan?: readonly SkillPreviewInputStep[];
+    readonly ticks: number;
+}
 type ExclusiveAction = "skill" | "edit" | "save";
 
 const select = <T extends Element>(id: string): T | null => document.querySelector<T>(`#${id}`);
@@ -86,11 +121,20 @@ const playButton = select<HTMLButtonElement>("play-toggle");
 const fields = select<HTMLElement>("frame-fields");
 const blockSelect = select<HTMLSelectElement>("block-select");
 const skillDialog = select<HTMLDialogElement>("skill-dialog");
+const editorGrid = select<HTMLElement>("editor-grid");
+const leftPanelSeparator = select<HTMLElement>("left-panel-separator");
+const rightPanelSeparator = select<HTMLElement>("right-panel-separator");
+const mobilePanelQuery = window.matchMedia(`(max-width: ${MOBILE_PANEL_MAXIMUM}px)`);
 
 let project: ProjectState | undefined;
-let skillState: SkillState = { revision: 0, etag: "", skills: [] };
+let skillState: SkillState = {
+    revision: 0,
+    etag: "",
+    sidecarStatus: "missing",
+    metadata: [],
+    skills: [],
+};
 let selectedSkillIndex = -1;
-let editingSkillIndex = -1;
 let selectedBlock: BlockSelection = { type: "frame" };
 let selectedFrameOccurrence: number | undefined;
 let fieldDraft: FieldDraft | undefined;
@@ -121,11 +165,22 @@ let canvasInteraction: {
     values: { x: number; y: number; w?: number; h?: number };
     capabilities: Readonly<Record<string, FieldCapability>>;
 } | undefined;
+let panelLayout: PanelLayout | undefined;
+let panelContainerWidthValue = 0;
+let splitterInteraction: {
+    readonly pointerId: number;
+    readonly panel: ResizablePanel;
+    readonly separator: HTMLElement;
+    readonly startClientX: number;
+    readonly startWidths: PanelWidths;
+} | undefined;
 const flowCache = new Map<number, SkillFlowGraph>();
 const frameFieldsByLocator = new Map<string, FieldCapability>();
 const visibleOverlays = new Set<OverlayType>(allOverlayTypes);
 const images = new Map<string, HTMLImageElement>();
+const colorKeyImages = new Map<string, HTMLCanvasElement>();
 const actionBusy: Record<ExclusiveAction, boolean> = { skill: false, edit: false, save: false };
+const previewResponseCache = new BoundedLruCache<string, Json>(64);
 const INT32_MIN = -2_147_483_648;
 const INT32_MAX = 2_147_483_647;
 
@@ -147,6 +202,7 @@ async function closeProjectSession(sessionId: string, keepalive = false): Promis
 function normalize(payload: Json): ProjectState {
     const data = record(payload.data), session = record(data.document ?? data.session ?? data.project ?? data), projection = record(session.projection ?? data.projection);
     const preview = record(session.nativePreview ?? session.preview ?? session.trace ?? data.nativePreview ?? data.preview ?? data.trace);
+    const stage = normalizePreviewStage(record(preview.metadata).stage);
     const frames = list(projection.frames ?? session.frames).map((value, index) => ({ ...record(value), frameId: number(record(value).frameId ?? record(value).id, index), occurrence: number(record(value).occurrence, index) })) as Frame[];
     const assets = new Map<string, string>();
     for (const value of list(session.assets ?? session.spriteAssets ?? data.assets ?? data.spriteAssets)) { const asset = record(value); const id = text(asset.assetId ?? asset.id); if (id) assets.set(text(asset.file), id); }
@@ -156,6 +212,24 @@ function normalize(payload: Json): ProjectState {
         return fieldId && key && kind && scope ? [{ ...field, fieldId, key, kind, scope, value: field.value, occurrence: number(field.occurrence) } as FieldCapability] : [];
     });
     const ticks = list(preview.ticks ?? preview.nativeTicks ?? session.ticks).map((value) => { const raw = record(value); return { ...raw, cameraX: number(raw.camera_x ?? raw.cameraX), entities: list(raw.entities).map((entity) => { const item = record(entity); return { ...item, slot: number(item.slot, -1), oid: number(item.oid), frame: number(item.frame), x: number(item.x), y: number(item.y), z: number(item.z) }; }) }; });
+    const previewObjects = list(preview.resources ?? session.previewObjects).flatMap((value) => {
+        const resource = record(value);
+        const oid = number(resource.oid, -1);
+        if (oid < 0) return [];
+        const resourceFrames = list(resource.frames).map((frame, index) => {
+            const item = record(frame);
+            return {
+                ...item,
+                frameId: number(item.frameId ?? item.id, index),
+                occurrence: number(item.occurrence, index),
+            } as Frame;
+        });
+        return [{
+            oid,
+            frames: resourceFrames,
+            ranges: list(resource.spriteRanges).map(record),
+        }];
+    });
     const structures = list(session.structureCapabilities ?? data.structureCapabilities).flatMap((value) => {
         const item = record(value);
         const capabilityId = text(item.capabilityId);
@@ -190,9 +264,53 @@ function normalize(payload: Json): ProjectState {
         frames,
         ranges: list(projection.spriteRanges ?? session.spriteRanges ?? data.spriteRanges).map(record),
         nativeTicks: ticks,
+        nativeTrace: record(preview.trace),
+        previewObjects,
+        ...(stage === undefined ? {} : { stage }),
         assets,
         fields: fieldCapabilities,
         structures,
+    };
+}
+
+function normalizePreviewStage(value: unknown): PreviewStage | undefined {
+    const raw = record(value);
+    const width = number(raw.width, -1);
+    if (width < 0) return undefined;
+    const background = record(raw.background);
+    const layers = list(background.layers).map((value) => {
+        const layer = record(value);
+        return {
+            transparency: number(layer.transparency),
+            parallaxWidth: number(layer.parallaxWidth),
+            x: number(layer.x),
+            y: number(layer.y),
+            loop: number(layer.loop),
+            cc: number(layer.cc),
+            c1: number(layer.c1),
+            c2: number(layer.c2),
+            animCounter: number(layer.animCounter),
+            ...(text(layer.assetId) ? { assetId: text(layer.assetId) } : {}),
+        };
+    });
+    const rawShadow = record(background.shadow);
+    const shadow = text(rawShadow.assetId)
+        ? {
+            width: number(rawShadow.width),
+            height: number(rawShadow.height),
+            assetId: text(rawShadow.assetId),
+        }
+        : undefined;
+    return {
+        width,
+        zMin: number(raw.zMin),
+        zMax: number(raw.zMax),
+        ...(layers.length === 0 && shadow === undefined ? {} : {
+            background: {
+                layers,
+                ...(shadow === undefined ? {} : { shadow }),
+            },
+        }),
     };
 }
 function syncPreviewBusy(busy: boolean): void {
@@ -203,20 +321,38 @@ function syncPreviewBusy(busy: boolean): void {
     else if (project) update();
 }
 const previewScheduler = createLatestTaskScheduler<PreviewIntent, Json>(
-    async (intent) => await request("/api/project/preview", {
-        method: "POST",
-        body: JSON.stringify({
-            sessionId: intent.sessionId,
-            expectedRevision: intent.revision,
-            startFrame: intent.startFrame,
-            ticks: 180,
-        }),
-    }, true),
+    async (intent) => {
+        const key = previewIntentCacheKey(intent);
+        const cached = previewResponseCache.get(key);
+        if (cached !== undefined) return cached;
+        const response = await request("/api/project/preview", {
+            method: "POST",
+            body: JSON.stringify({
+                sessionId: intent.sessionId,
+                expectedRevision: intent.revision,
+                startFrame: intent.startFrame,
+                ...(intent.initialFrame === undefined ? {} : { initialFrame: intent.initialFrame }),
+                ...(intent.inputPlan === undefined ? {} : { inputPlan: intent.inputPlan }),
+                ticks: intent.ticks,
+            }),
+        }, true);
+        previewResponseCache.set(key, response);
+        return response;
+    },
     syncPreviewBusy,
 );
 function primaryEntity(): TickEntity | undefined { return primaryPreviewEntity(project?.nativeTicks[tickIndex]?.entities ?? []); }
 function currentFrame(): Frame | undefined { const primary = primaryEntity(), selected = project?.frames.find((frame) => frame.occurrence === selectedFrameOccurrence); if (selected && (!primary || selected.frameId === primary.frame)) return selected; return lastFrameForId(project?.frames ?? [], primary?.frame); }
 function currentRuntimeFrame(): Frame | undefined { return lastFrameForId(project?.frames ?? [], primaryEntity()?.frame); }
+function playbackEndIndex(): number {
+    const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
+    return Math.min(last, Math.max(0, Math.trunc(number(project?.nativeTrace.playbackEndTick, last))));
+}
+function progressEndIndex(): number {
+    const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
+    const value = number(project?.nativeTrace.progressEndTick, -1);
+    return value < 0 ? -1 : Math.min(last, Math.max(0, Math.trunc(value)));
+}
 function fieldCapability(frame: Frame, key: string, block: BlockSelection): FieldCapability | undefined {
     const runtime = lastFrameForId(project?.frames ?? [], frame.frameId);
     if (runtime?.occurrence !== frame.occurrence) return undefined;
@@ -261,30 +397,188 @@ function reportOperation(operation: Promise<unknown>, fallback: string): void {
         if (diagnostics) diagnostics.textContent = errorText(error, fallback);
     });
 }
+function panelSeparator(panel: ResizablePanel): HTMLElement | null {
+    return panel === "left" ? leftPanelSeparator : rightPanelSeparator;
+}
+function samePanelLayout(left: PanelLayout | undefined, right: PanelLayout): boolean {
+    return left?.left === right.left
+        && left.right === right.right
+        && left.middle === right.middle
+        && left.middleMinimum === right.middleMinimum
+        && left.leftMinimum === right.leftMinimum
+        && left.leftMaximum === right.leftMaximum
+        && left.rightMinimum === right.rightMinimum
+        && left.rightMaximum === right.rightMaximum;
+}
+function applyPanelLayout(next: PanelLayout): void {
+    if (!editorGrid || samePanelLayout(panelLayout, next)) return;
+    const previous = panelLayout;
+    panelLayout = next;
+    if (previous?.left !== next.left) {
+        editorGrid.style.setProperty("--left-panel-width", `${next.left}px`);
+    }
+    if (previous?.right !== next.right) {
+        editorGrid.style.setProperty("--right-panel-width", `${next.right}px`);
+    }
+    const containerWidth = next.left + next.middle + next.right + PANEL_SEPARATOR_WIDTH * 2;
+    const leftValues = {
+        minimum: next.leftMinimum,
+        maximum: next.leftMaximum,
+        now: next.left,
+        text: `状态技能区宽 ${next.left} 像素`,
+    };
+    const rightValues = {
+        minimum: containerWidth - next.rightMaximum,
+        maximum: containerWidth - next.rightMinimum,
+        now: containerWidth - next.right,
+        text: `属性区宽 ${next.right} 像素`,
+    };
+    for (const [panel, values] of [["left", leftValues], ["right", rightValues]] as const) {
+        const separator = panelSeparator(panel);
+        separator?.setAttribute("aria-valuemin", String(values.minimum));
+        separator?.setAttribute("aria-valuemax", String(values.maximum));
+        separator?.setAttribute("aria-valuenow", String(values.now));
+        separator?.setAttribute("aria-valuetext", values.text);
+    }
+}
+function refreshPanelContainerWidth(): number {
+    panelContainerWidthValue = editorGrid?.getBoundingClientRect().width ?? 0;
+    return panelContainerWidthValue;
+}
+function syncPanelLayout(): void {
+    if (!editorGrid || mobilePanelQuery.matches) return;
+    const width = refreshPanelContainerWidth();
+    if (width <= 0) return;
+    applyPanelLayout(clampPanelWidths(
+        width,
+        panelLayout ?? defaultPanelWidths(width),
+    ));
+}
+function finishSplitterInteraction(restoreStart: boolean, releaseCapture: boolean): void {
+    const interaction = splitterInteraction;
+    if (!interaction) return;
+    splitterInteraction = undefined;
+    if (restoreStart) {
+        const width = refreshPanelContainerWidth();
+        if (width > 0) applyPanelLayout(clampPanelWidths(width, interaction.startWidths));
+    }
+    interaction.separator.classList.remove("is-dragging");
+    document.body.classList.remove("is-resizing-panels");
+    if (releaseCapture && interaction.separator.hasPointerCapture(interaction.pointerId)) {
+        interaction.separator.releasePointerCapture(interaction.pointerId);
+    }
+}
+function startSplitterInteraction(
+    event: PointerEvent,
+    panel: ResizablePanel,
+    separator: HTMLElement,
+): void {
+    if (event.button !== 0 || mobilePanelQuery.matches || splitterInteraction) return;
+    syncPanelLayout();
+    if (!panelLayout) return;
+    event.preventDefault();
+    separator.focus();
+    splitterInteraction = {
+        pointerId: event.pointerId,
+        panel,
+        separator,
+        startClientX: event.clientX,
+        startWidths: { left: panelLayout.left, right: panelLayout.right },
+    };
+    separator.classList.add("is-dragging");
+    document.body.classList.add("is-resizing-panels");
+    separator.setPointerCapture(event.pointerId);
+}
+function moveSplitterInteraction(event: PointerEvent): void {
+    const interaction = splitterInteraction;
+    if (!interaction || interaction.pointerId !== event.pointerId) return;
+    const width = panelContainerWidthValue;
+    if (width <= 0) return;
+    event.preventDefault();
+    applyPanelLayout(resizePanelWidths(
+        width,
+        interaction.startWidths,
+        interaction.panel,
+        event.clientX - interaction.startClientX,
+    ));
+}
+function handleSplitterKeydown(event: KeyboardEvent, panel: ResizablePanel): void {
+    if (event.key === "Escape" && splitterInteraction?.panel === panel) {
+        event.preventDefault();
+        finishSplitterInteraction(true, true);
+        return;
+    }
+    if (splitterInteraction || mobilePanelQuery.matches) return;
+    const direction = event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
+    if (direction === 0) return;
+    syncPanelLayout();
+    if (!panelLayout) return;
+    event.preventDefault();
+    applyPanelLayout(resizePanelWidths(
+        panelContainerWidthValue,
+        panelLayout,
+        panel,
+        direction * (event.shiftKey ? 32 : 8),
+    ));
+}
+function initializePanelSplitters(): void {
+    if (!editorGrid || !leftPanelSeparator || !rightPanelSeparator) return;
+    const separators = [
+        { panel: "left", element: leftPanelSeparator },
+        { panel: "right", element: rightPanelSeparator },
+    ] as const;
+    for (const { panel, element } of separators) {
+        element.addEventListener("pointerdown", (event) => startSplitterInteraction(event, panel, element));
+        element.addEventListener("pointermove", moveSplitterInteraction);
+        element.addEventListener("pointerup", (event) => {
+            if (splitterInteraction?.pointerId === event.pointerId) finishSplitterInteraction(false, true);
+        });
+        element.addEventListener("pointercancel", (event) => {
+            if (splitterInteraction?.pointerId === event.pointerId) finishSplitterInteraction(true, false);
+        });
+        element.addEventListener("lostpointercapture", (event) => {
+            if (splitterInteraction?.pointerId === event.pointerId) finishSplitterInteraction(false, false);
+        });
+        element.addEventListener("keydown", (event) => handleSplitterKeydown(event, panel));
+    }
+    const resizeObserver = new ResizeObserver(() => {
+        finishSplitterInteraction(false, true);
+        syncPanelLayout();
+    });
+    resizeObserver.observe(editorGrid);
+    mobilePanelQuery.addEventListener("change", () => {
+        finishSplitterInteraction(false, true);
+        syncPanelLayout();
+    });
+    syncPanelLayout();
+}
+function isActionBusy(): boolean {
+    return Object.values(actionBusy).some(Boolean);
+}
+function isSelectionLocked(): boolean {
+    return isActionBusy()
+        || fieldDraft !== undefined
+        || canvasInteraction !== undefined;
+}
+function syncSkillActionState(): void {
+    const editSkill = select<HTMLButtonElement>("edit-skill");
+    if (!editSkill) return;
+    editSkill.disabled = project?.writable !== true
+        || selectedSkillIndex < 0
+        || isSelectionLocked()
+        || skillState.sidecarStatus === "invalid";
+}
 function syncActionState(): void {
     const skillForm = select<HTMLFormElement>("skill-form"), saveSkill = select<HTMLButtonElement>("save-skill");
     const frameEditor = select<HTMLFormElement>("frame-editor");
-    const newSkill = select<HTMLButtonElement>("new-skill"), editSkill = select<HTMLButtonElement>("edit-skill");
     if (skillForm) skillForm.ariaBusy = String(actionBusy.skill);
     if (saveSkill) {
-        saveSkill.textContent = actionBusy.skill ? "保存中…" : "保存技能";
-        saveSkill.disabled = actionBusy.skill;
+        saveSkill.textContent = actionBusy.skill ? "保存中…" : "保存显示信息";
+        saveSkill.disabled = actionBusy.skill || skillState.sidecarStatus === "invalid";
     }
-    const selectionLocked = actionBusy.edit || fieldDraft !== undefined || canvasInteraction !== undefined;
-    if (newSkill) newSkill.disabled = project?.writable !== true || actionBusy.skill || selectionLocked;
-    if (editSkill) editSkill.disabled = project?.writable !== true || selectedSkillIndex < 0 || actionBusy.skill || selectionLocked;
-    const visibleSkills = skillIndexesForOid(skillState.skills, activeProjectOid());
-    const selectedVisibleIndex = visibleSkills.indexOf(selectedSkillIndex);
-    const skillControls: Readonly<Record<string, boolean>> = {
-        "copy-skill": selectedSkillIndex < 0,
-        "delete-skill": selectedSkillIndex < 0,
-        "move-skill-up": selectedVisibleIndex <= 0,
-        "move-skill-down": selectedVisibleIndex < 0 || selectedVisibleIndex >= visibleSkills.length - 1,
-    };
-    for (const [id, unavailable] of Object.entries(skillControls)) {
-        const control = select<HTMLButtonElement>(id);
-        if (control) control.disabled = !project || project.writable !== true || actionBusy.skill || selectionLocked || unavailable;
-    }
+    const selectionLocked = isSelectionLocked();
+    syncSkillActionState();
+    if (objectSelect) objectSelect.disabled = selectionLocked;
     if (frameSelect) frameSelect.disabled = selectionLocked;
     if (blockSelect) blockSelect.disabled = selectionLocked;
     for (const id of ["play-toggle", "step-once", "reset-timeline", "step-back", "jump-end"]) {
@@ -294,6 +588,7 @@ function syncActionState(): void {
     document.querySelectorAll<HTMLButtonElement>(".timeline-segment").forEach((button) => button.disabled = selectionLocked);
     document.querySelectorAll<HTMLElement>("#skill-list tr, #flow-list tr").forEach((row) => row.ariaDisabled = String(selectionLocked));
     if (seek) seek.disabled = selectionLocked;
+    syncFlowEdgeEditor(currentFlow());
     if (frameEditor) frameEditor.ariaBusy = String(actionBusy.edit);
     syncStructureActions();
     syncDraftActions();
@@ -312,7 +607,7 @@ function currentBlockStructureCapability(): FrameStructureCapability["blocks"][n
 function syncStructureActions(): void {
     const frame = currentStructureCapability();
     const block = currentBlockStructureCapability();
-    const unavailable = project?.writable !== true || actionBusy.edit || fieldDraft !== undefined;
+    const unavailable = project?.writable !== true || isSelectionLocked();
     const states: Readonly<Record<string, boolean>> = {
         "copy-frame": unavailable || frame?.canCopy !== true,
         "delete-frame": unavailable || frame?.canDelete !== true,
@@ -326,7 +621,7 @@ function syncStructureActions(): void {
     }
 }
 async function runExclusiveAction<T>(kind: ExclusiveAction, operation: () => Promise<T>): Promise<T | undefined> {
-    if (actionBusy[kind]) return undefined;
+    if (isActionBusy()) throw new Error("另一项操作正在进行，请稍候重试。");
     actionBusy[kind] = true;
     syncActionState();
     try {
@@ -349,9 +644,16 @@ function syncReadOnlyUi(): void {
     const frameKey = frame === undefined ? "" : `${frame.frameId}:${frame.occurrence}`;
     setText("tick-readout", String(tickIndex));
     setText("frame-readout", frame ? String(frame.frameId) : "-");
-    setText("time-readout", `原生预览采样 ${tickIndex}`);
+    const progressEnd = progressEndIndex();
+    const playbackEnd = playbackEndIndex();
+    setText("time-readout", progressEnd >= 0
+        ? `原生预览采样 ${tickIndex} / 主体结束 ${progressEnd} / 尾迹 ${playbackEnd}`
+        : `原生预览采样 ${tickIndex} / 主体未结束`);
     setText("preview-frame-count", String(count));
-    setText("play-state", primary ? playing ? "播放中" : "已暂停" : "主实体不可用");
+    const rootEnded = progressEnd >= 0 && tickIndex >= progressEnd;
+    setText("play-state", primary
+        ? playing ? rootEnded ? "主体结束，播放尾迹" : "播放中" : rootEnded ? "主体已结束" : "已暂停"
+        : "主实体不可用");
     setText("facing-readout", primary ? number(primary.facing) === 1 ? "左" : "右" : "—");
     if (frameSelect && frame) frameSelect.value = String(frame.occurrence);
     if (renderedFrameKey !== frameKey) { renderedFrameKey = frameKey; populateBlockSelect(); renderFields(); }
@@ -368,6 +670,7 @@ function drawPreview(): void {
         tick: project.nativeTicks[tickIndex],
         runtimeFrame: currentRuntimeFrame(),
         images,
+        colorKeyImages,
         visibleOverlays,
         draftGeometry: canvasDraftGeometry,
         requestRender: requestPreviewRender,
@@ -384,9 +687,23 @@ function selectedSkill(): ProjectSkill | undefined {
     const skill = skillState.skills[selectedSkillIndex];
     return skill?.oid === activeProjectOid() ? skill : undefined;
 }
+function rebuildSkillEntries(preferredStartFrame = selectedSkill()?.startFrame): void {
+    if (!project) {
+        skillState.skills = [];
+        selectedSkillIndex = -1;
+        return;
+    }
+    skillState.skills = [...deriveSkillEntries(project.frames, project.oid, skillState.metadata)];
+    selectedSkillIndex = preferredStartFrame === undefined
+        ? -1
+        : skillState.skills.findIndex((entry) => entry.startFrame === preferredStartFrame);
+    if (selectedSkillIndex < 0 || skillState.skills[selectedSkillIndex]?.hidden === true) {
+        selectedSkillIndex = skillState.skills.findIndex((entry) => !entry.hidden);
+    }
+}
 function skillFlow(startFrame: number): SkillFlowGraph | undefined {
     if (!project) return undefined;
-    const projectKey = `${project.sessionId}:${project.revision}`;
+    const projectKey = `${project.sessionId}:${project.revision}:${skillState.revision}:${skillState.etag}`;
     if (flowCacheProjectKey !== projectKey) {
         flowCacheProjectKey = projectKey;
         flowCache.clear();
@@ -397,6 +714,7 @@ function skillFlow(startFrame: number): SkillFlowGraph | undefined {
             project.frames,
             startFrame,
             (frame, key) => existingFrameField(frame as Frame, key) !== undefined,
+            entriesByStartFrame(skillState.skills),
         );
         flowCache.set(startFrame, graph);
     }
@@ -409,29 +727,55 @@ function currentFlow(): SkillFlowGraph | undefined {
 function renderSkillList(): void {
     const body = select<HTMLTableSectionElement>("skill-list");
     if (!body) return;
-    const visibleSkills = skillIndexesForOid(skillState.skills, activeProjectOid());
-    body.replaceChildren(...visibleSkills.map((index) => {
+    const showHidden = select<HTMLInputElement>("show-hidden-skills")?.checked === true;
+    const visibleSkills = skillState.skills.flatMap((skill, index) => (
+        skill.oid === activeProjectOid() && (!skill.hidden || showHidden) ? [index] : []
+    ));
+    const rows: HTMLTableRowElement[] = [];
+    let lastGroup = "";
+    for (const index of visibleSkills) {
         const skill = skillState.skills[index]!;
-        const row = document.createElement("tr"), graph = skillFlow(skill.startFrame);
+        if (skill.group !== lastGroup) {
+            const heading = document.createElement("tr");
+            heading.className = "skill-group-row";
+            const cell = document.createElement("td");
+            cell.colSpan = 4;
+            cell.textContent = skill.group;
+            heading.append(cell);
+            rows.push(heading);
+            lastGroup = skill.group;
+        }
+        const row = document.createElement("tr");
         if (index === selectedSkillIndex) row.classList.add("is-selected");
-        row.innerHTML = `<td></td><td>${skill.startFrame}</td><td>${graph?.nodes.filter((node) => node.kind === "frame").length ?? 0}</td><td>${graph?.edges.filter((edge) => edge.key !== "next" && edge.resolution === "frame").length ?? 0}</td>`;
-        row.cells[0]!.textContent = skill.name;
+        if (skill.hidden) row.classList.add("is-hidden-entry");
+        const name = document.createElement("td");
+        const frame = document.createElement("td");
+        const count = document.createElement("td");
+        const trigger = document.createElement("td");
+        name.textContent = `${skill.pinned ? "★ " : ""}${skill.displayName}`;
+        name.title = skill.displayName === skill.label
+            ? skill.label
+            : `${skill.displayName}（DAT: ${skill.label}）`;
+        frame.textContent = String(skill.startFrame);
+        count.textContent = String(skill.segmentFrameCount);
+        trigger.textContent = skill.triggers.map((item) => item.key).join(" · ") || "—";
+        row.append(name, frame, count, trigger);
         row.addEventListener("click", () => {
-            if (!actionBusy.edit) reportOperation(selectSkill(index), "技能预览失败。");
+            if (!isSelectionLocked()) reportOperation(selectSkill(index), "技能预览失败。");
         });
-        return row;
-    }));
+        rows.push(row);
+    }
+    body.replaceChildren(...rows);
     setText("skill-count", String(visibleSkills.length));
     select<HTMLElement>("skill-empty")!.hidden = visibleSkills.length > 0;
-    const editButton = select<HTMLButtonElement>("edit-skill");
-    if (editButton) editButton.disabled = selectedSkillIndex < 0 || actionBusy.skill;
+    syncSkillActionState();
 }
 function flowSummary(edges: readonly SkillFlowEdge[]): string {
     return edges.filter((edge) => edge.key !== "next" && edge.rawTarget !== 0)
         .slice(0, 2).map((edge) => `${edge.key.replace("hit_", "")}:${edge.rawTarget}`).join(" · ") || "—";
 }
 function editableFlowFields(graph: SkillFlowGraph): ReadonlyMap<string, string> {
-    if (project?.writable !== true || actionBusy.edit || fieldDraft !== undefined || canvasInteraction !== undefined) {
+    if (project?.writable !== true || isSelectionLocked()) {
         return new Map();
     }
     const result = new Map<string, string>();
@@ -464,12 +808,12 @@ function syncFlowEdgeEditor(
         ? "选择一条已有跳转连线"
         : `${edge.key}: ${edge.rawTarget}${editable ? "" : "（只读）"}`;
     target.disabled = !editable;
-    apply.disabled = !editable || actionBusy.edit;
+    apply.disabled = !editable || isSelectionLocked();
 }
 function renderFlow(): void {
     const body = select<HTMLTableSectionElement>("flow-list"), graph = currentFlow(), skill = selectedSkill();
     if (!body) return;
-    setText("flow-title", skill ? `${skill.name} · 帧流程` : "当前技能帧流程");
+    setText("flow-title", skill ? `${skill.displayName} · 帧流程` : "当前技能帧流程");
     if (!graph || !project) {
         body.replaceChildren();
         select<SVGSVGElement>("flow-svg")?.replaceChildren();
@@ -496,12 +840,25 @@ function renderFlow(): void {
             row.innerHTML = `<td>${node.target}</td><td>${node.reason}</td><td>—</td><td>未解析</td>`;
             return row;
         }
+        if (node.kind === "entry") {
+            row.classList.add("is-entry-link");
+            row.innerHTML = `<td>${node.frameId}</td><td></td><td>切换入口</td><td>跨技能</td>`;
+            row.cells[1]!.textContent = node.label;
+            row.addEventListener("click", () => {
+                const index = skillState.skills.findIndex((entry) => entry.id === node.entryId);
+                if (index >= 0 && !isSelectionLocked()) {
+                    reportOperation(selectSkill(index), "入口预览失败。");
+                }
+            });
+            return row;
+        }
         const frame = framesByOccurrence.get(node.occurrence)!;
         const edges = edgesByFrom.get(node.id) ?? [], next = edges.find((edge) => edge.key === "next");
         row.dataset.frameOccurrence = String(frame.occurrence);
-        row.innerHTML = `<td>${frame.frameId}</td><td>状态 ${frame.state}</td><td>${next?.rawTarget ?? "—"}</td><td>${flowSummary(edges)}</td>`;
+        row.innerHTML = `<td>${frame.frameId}</td><td></td><td>${next?.rawTarget ?? "—"}</td><td>${flowSummary(edges)}</td>`;
+        row.cells[1]!.textContent = frame.label || `状态 ${frame.state}`;
         row.addEventListener("click", () => {
-            if (!actionBusy.edit) reportOperation(selectFrame(frame.frameId, frame.occurrence, true), "预览失败。");
+            if (!isSelectionLocked()) reportOperation(selectFrame(frame.frameId, frame.occurrence, true), "预览失败。");
         });
         return row;
     });
@@ -516,12 +873,20 @@ function renderFlow(): void {
             editableFieldIds: editableFields,
             selectedEdgeId: selectedFlowEdgeId,
             onSelectEdge: (edge) => {
-                selectedFlowEdgeId = edge.id;
-                renderFlow();
+                if (!isSelectionLocked()) {
+                    selectedFlowEdgeId = edge.id;
+                    renderFlow();
+                }
             },
             onSelectNode: (node) => {
-                if (!actionBusy.edit) {
+                if (!isSelectionLocked()) {
                     reportOperation(selectFrame(node.frameId, node.occurrence, true), "预览失败。");
+                }
+            },
+            onSelectEntry: (node) => {
+                const index = skillState.skills.findIndex((entry) => entry.id === node.entryId);
+                if (index >= 0 && !isSelectionLocked()) {
+                    reportOperation(selectSkill(index), "入口预览失败。");
                 }
             },
         });
@@ -545,7 +910,7 @@ function renderTimelineSegments(graph = currentFlow()): void {
         button.style.flex = `${wait} 1 0`;
         button.disabled = actionBusy.edit;
         button.addEventListener("click", () => {
-            if (!actionBusy.edit) reportOperation(selectFrame(node.frameId, node.occurrence, true), "预览失败。");
+            if (!isSelectionLocked()) reportOperation(selectFrame(node.frameId, node.occurrence, true), "预览失败。");
         });
         return button;
     }));
@@ -648,7 +1013,8 @@ function clearDraft(): void {
 function syncDraftActions(): void {
     const apply = select<HTMLButtonElement>("apply-draft"), topApply = select<HTMLButtonElement>("apply-session");
     const discard = select<HTMLButtonElement>("discard-draft");
-    const canApply = project?.writable === true && fieldDraft?.valid === true && fieldDraft.value !== undefined && !actionBusy.edit;
+    const editorLocked = isActionBusy() || canvasInteraction !== undefined;
+    const canApply = project?.writable === true && fieldDraft?.valid === true && fieldDraft.value !== undefined && !editorLocked;
     if (apply) {
         apply.textContent = actionBusy.edit ? "应用中…" : "应用本次修改";
         apply.disabled = !canApply;
@@ -657,9 +1023,11 @@ function syncDraftActions(): void {
         topApply.textContent = actionBusy.edit ? "应用中…" : "应用会话修改";
         topApply.disabled = !canApply;
     }
-    if (discard) discard.disabled = fieldDraft === undefined || actionBusy.edit;
+    if (discard) discard.disabled = fieldDraft === undefined || editorLocked;
     fields?.querySelectorAll<HTMLInputElement>("input[data-field-id]").forEach((input) => {
-        input.disabled = project?.writable !== true || actionBusy.edit || (fieldDraft !== undefined && input.dataset.fieldId !== fieldDraft.capability.fieldId);
+        input.disabled = project?.writable !== true
+            || editorLocked
+            || (fieldDraft !== undefined && input.dataset.fieldId !== fieldDraft.capability.fieldId);
     });
 }
 function renderFields(): void {
@@ -689,18 +1057,35 @@ function render(): void {
     frameSelect?.replaceChildren(...project.frames.map((frame) => new Option(`帧 ${frame.frameId} · occurrence ${frame.occurrence}`, String(frame.occurrence))));
     renderSkillList(); renderFlow(); populateBlockSelect(); renderFields(); syncActionState(); update();
 }
-async function preview(startFrame: number): Promise<void> {
+async function preview(selection: number | SkillPreviewScenario): Promise<void> {
     if (!project) return;
-    const intent = { sessionId: project.sessionId, revision: project.revision, startFrame };
+    const scenario = typeof selection === "number"
+        ? { startFrame: selection, ticks: 30 }
+        : selection;
+    const intent: PreviewIntent = {
+        sessionId: project.sessionId,
+        revision: project.revision,
+        ...scenario,
+    };
+    const cached = previewResponseCache.get(previewIntentCacheKey(intent));
+    if (cached !== undefined) {
+        commitPreview(intent, cached);
+        return;
+    }
     const result = await previewScheduler.schedule(intent);
     if (result.status !== "committed" || project?.sessionId !== intent.sessionId || project.revision !== intent.revision) return;
-    const partial = normalize(result.value);
-    project = mergePreview(project, partial.revision, partial.nativeTicks) as ProjectState;
+    commitPreview(intent, result.value);
+}
+function commitPreview(intent: PreviewIntent, payload: Json): void {
+    if (project?.sessionId !== intent.sessionId || project.revision !== intent.revision) return;
+    const partial = normalize(payload);
+    project = mergePreview(project, partial.revision, partial.nativeTicks, partial.nativeTrace, partial.previewObjects) as ProjectState;
     tickIndex = 0;
     render();
+    void preloadPreviewObjectAssets(partial, images, requestPreviewRender).catch(() => undefined);
 }
 function step(): void {
-    const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
+    const last = playbackEndIndex();
     if (tickIndex >= last && !loop?.checked) { playing = false; update(); return; }
     tickIndex = tickIndex >= last ? 0 : tickIndex + 1;
     update();
@@ -716,7 +1101,7 @@ function syncSaveState(): void {
     const dirty = project?.dirty === true, save = select<HTMLButtonElement>("save-project"), dirtyReadout = select<HTMLElement>("dirty-readout");
     if (save) {
         save.textContent = actionBusy.save ? "保存中…" : "覆盖 DAT 文件";
-        save.disabled = project?.writable !== true || !dirty || fieldDraft !== undefined || actionBusy.save || actionBusy.edit;
+        save.disabled = project?.writable !== true || !dirty || actionBusy.save || isSelectionLocked();
     }
     if (dirtyReadout) {
         dirtyReadout.dataset.dirty = String(dirty);
@@ -732,41 +1117,43 @@ async function loadSkills(): Promise<void> {
     skillState = {
         revision: number(data.revision),
         etag: text(data.etag),
-        skills: list(data.skills).map((value) => ({ oid: number(record(value).oid), name: text(record(value).name), startFrame: number(record(value).startFrame) })),
+        sidecarStatus: (["missing", "valid", "legacy", "invalid"].includes(text(data.sidecarStatus))
+            ? text(data.sidecarStatus)
+            : "invalid") as SkillState["sidecarStatus"],
+        metadata: list(data.skills).flatMap((value): SkillDisplayMetadata[] => {
+            const item = record(value);
+            const oid = number(item.oid, -1);
+            const startFrame = number(item.startFrame, -1);
+            if (!Number.isSafeInteger(oid) || !Number.isSafeInteger(startFrame)) return [];
+            return [{
+                oid,
+                startFrame,
+                ...(text(item.displayName) === "" ? {} : { displayName: text(item.displayName) }),
+                ...(text(item.group) === "" ? {} : { group: text(item.group) }),
+                ...(Number.isSafeInteger(item.order) ? { order: number(item.order) } : {}),
+                ...(item.pinned === true ? { pinned: true } : {}),
+                ...(item.hidden === true ? { hidden: true } : {}),
+                ...(text(item.notes) === "" ? {} : { notes: text(item.notes) }),
+            }];
+        }),
+        skills: [],
     };
-    selectedSkillIndex = skillState.skills.findIndex((skill) => skill.oid === activeProjectOid());
+    rebuildSkillEntries();
 }
-async function saveSkills(skills: ProjectSkill[]): Promise<void> {
-    const response = await request("/api/project/skills", { method: "POST", body: JSON.stringify({ expectedRevision: skillState.revision, expectedEtag: skillState.etag, skills }) }, true);
+async function saveSkillMetadata(metadata: readonly SkillDisplayMetadata[]): Promise<void> {
+    const response = await request("/api/project/skills", {
+        method: "POST",
+        body: JSON.stringify({
+            expectedRevision: skillState.revision,
+            expectedEtag: skillState.etag,
+            skills: metadata,
+        }),
+    }, true);
     const data = record(response.data);
-    skillState = { revision: number(data.revision), etag: text(data.etag), skills: list(data.skills).map((value) => ({ oid: number(record(value).oid), name: text(record(value).name), startFrame: number(record(value).startFrame) })) };
-}
-async function commitSkillMutation(
-    mutation: { readonly skills: readonly ProjectSkill[]; readonly selectedIndex: number },
-): Promise<void> {
-    await runExclusiveAction("skill", async () => {
-        await saveSkills([...mutation.skills]);
-        selectedSkillIndex = mutation.selectedIndex;
-        renderSkillList();
-        renderFlow();
-        if (selectedSkillIndex >= 0) await selectSkill(selectedSkillIndex);
-        else render();
-    });
-}
-async function duplicateSelectedSkill(): Promise<void> {
-    if (selectedSkillIndex < 0) return;
-    await commitSkillMutation(duplicateSkill(skillState.skills, selectedSkillIndex));
-}
-async function deleteSelectedSkill(): Promise<void> {
-    const skill = selectedSkill();
-    if (!skill || !window.confirm(`确定删除技能“${skill.name}”吗？`)) return;
-    await commitSkillMutation(deleteSkillForOid(skillState.skills, selectedSkillIndex, activeProjectOid()));
-}
-async function moveSelectedSkill(delta: -1 | 1): Promise<void> {
-    if (selectedSkillIndex < 0) return;
-    const mutation = moveSkillForOid(skillState.skills, selectedSkillIndex, activeProjectOid(), delta);
-    if (mutation.selectedIndex === selectedSkillIndex) return;
-    await commitSkillMutation(mutation);
+    skillState.revision = number(data.revision);
+    skillState.etag = text(data.etag);
+    skillState.sidecarStatus = "valid";
+    skillState.metadata = [...metadata];
 }
 async function open(objectKey: string, oid: number): Promise<void> {
     if (project?.sessionId) {
@@ -779,17 +1166,25 @@ async function open(objectKey: string, oid: number): Promise<void> {
         await closeProjectSession(project.sessionId);
         project = undefined;
         images.clear();
+        colorKeyImages.clear();
         requestPreviewRender();
     }
+    previewResponseCache.clear();
     const response = await request("/api/project/open", { method: "POST", body: JSON.stringify({ objectKey }) }, true);
     project = normalize(response); loadedObjectKey = objectKey; tickIndex = 0; selectedBlock = { type: "frame" };
-    selectedSkillIndex = skillState.skills.findIndex((skill) => skill.oid === project!.oid);
+    rebuildSkillEntries();
     selectedFrameOccurrence = lastFrameForId(project.frames, primaryPreviewEntity(project.nativeTicks[0]?.entities ?? [])?.frame)?.occurrence;
     status!.dataset.state = "connected"; status!.textContent = `已载入 ${project.name} / OID ${oid}${project.writable ? "" : "（只读）"}`;
-    diagnostics!.textContent = project.writable
+    const sidecarNotice = skillState.sidecarStatus === "invalid"
+        ? "技能 sidecar 无效，已忽略；DAT 自动入口仍可使用。"
+        : skillState.sidecarStatus === "legacy"
+            ? "已读取旧版技能 sidecar；下次编辑显示信息时会迁移。"
+            : "";
+    diagnostics!.textContent = sidecarNotice || (project.writable
         ? "项目数据已载入，可以选择技能、播放、查看叠加层或编辑当前帧。"
-        : "项目仅存在于 fallback 资源中，当前会话为只读预览。";
+        : "项目仅存在于 fallback 资源中，当前会话为只读预览。");
     render();
+    if (selectedSkillIndex >= 0) await selectSkill(selectedSkillIndex);
 }
 function switchObject(objectKey: string, oid: number): void {
     const operation = objectSwitchQueue.then(() => open(objectKey, oid));
@@ -814,50 +1209,118 @@ async function start(): Promise<void> {
         }));
         const selected = objectSelect?.selectedOptions[0];
         await open(objectSelect?.value || "", number(Number(selected?.dataset.oid), 2));
-        if (selectedSkill()) await selectSkill(selectedSkillIndex);
     } catch (error) {
         status!.dataset.state = "error"; status!.textContent = "项目不可用";
         diagnostics!.textContent = errorText(error, "项目载入失败。");
     }
 }
 async function selectFrame(frameId: number, occurrence: number, refreshPreview: boolean): Promise<void> {
-    if (actionBusy.edit || fieldDraft !== undefined || canvasInteraction !== undefined) return;
+    if (isSelectionLocked()) return;
     selectedFrameOccurrence = occurrence; selectedBlock = { type: "frame" }; renderedFrameKey = "";
-    if (refreshPreview) await preview(frameId); else render();
+    if (refreshPreview) {
+        const graphContainsFrame = currentFlow()?.nodes.some((node) => (
+            node.kind === "frame" && node.occurrence === occurrence
+        )) === true;
+        const skill = graphContainsFrame ? selectedSkill() : undefined;
+        await preview(skill && project
+            ? buildSkillPreviewScenario(project.frames, skill)
+            : frameId);
+    } else {
+        render();
+    }
 }
 async function selectSkill(index: number): Promise<void> {
-    if (actionBusy.edit || fieldDraft !== undefined || canvasInteraction !== undefined) return;
+    if (isSelectionLocked()) return;
     const skill = skillState.skills[index];
     if (!skill || !project || skill.oid !== project.oid) return;
     selectedSkillIndex = index; renderSkillList(); renderFlow();
     const frame = lastFrameForId(project.frames, skill.startFrame);
-    if (frame) await selectFrame(frame.frameId, frame.occurrence, true);
-    else diagnostics!.textContent = `技能“${skill.name}”的起始帧 ${skill.startFrame} 不存在。`;
+    if (frame) {
+        selectedFrameOccurrence = frame.occurrence;
+        selectedBlock = { type: "frame" };
+        renderedFrameKey = "";
+        await preview(buildSkillPreviewScenario(project.frames, skill));
+    }
+    else diagnostics!.textContent = `入口“${skill.displayName}”的起始帧 ${skill.startFrame} 不存在。`;
 }
-function openSkillDialog(index: number): void {
-    editingSkillIndex = index;
-    const skill = skillState.skills[index], title = select<HTMLElement>("skill-dialog-title");
-    if (title) title.textContent = skill ? "编辑技能信息" : "新建技能";
-    const name = select<HTMLInputElement>("skill-name"), startFrame = select<HTMLInputElement>("skill-start-frame");
-    if (name) name.value = skill?.name ?? "";
-    if (startFrame) startFrame.value = String(skill?.startFrame ?? currentFrame()?.frameId ?? 0);
+function currentSkillMetadata(skill: SkillEntry): SkillDisplayMetadata | undefined {
+    return skillState.metadata.find((entry) => (
+        entry.oid === skill.oid && entry.startFrame === skill.startFrame
+    ));
+}
+function validateSkillText(
+    input: HTMLInputElement | HTMLTextAreaElement | null,
+    maximumBytes: number,
+    label: string,
+): boolean {
+    const value = input?.value.trim() ?? "";
+    const valid = new TextEncoder().encode(value).byteLength <= maximumBytes
+        && !/[\u0000-\u001f\u007f-\u009f\uD800-\uDFFF]/u.test(value);
+    if (!valid) {
+        if (diagnostics) diagnostics.textContent = `${label}必须是不含控制字符且不超过 ${maximumBytes} 个 UTF-8 字节的文本。`;
+        input?.focus();
+    }
+    return valid;
+}
+function openSkillDialog(): void {
+    const skill = selectedSkill();
+    if (!skill || skillState.sidecarStatus === "invalid") return;
+    const metadata = currentSkillMetadata(skill);
+    setText("skill-dialog-title", "编辑入口显示信息");
+    setText("skill-start-frame-readout", `${skill.startFrame} · ${skill.label}`);
+    const name = select<HTMLInputElement>("skill-name");
+    const group = select<HTMLInputElement>("skill-group");
+    const order = select<HTMLInputElement>("skill-order");
+    const pinned = select<HTMLInputElement>("skill-pinned");
+    const hidden = select<HTMLInputElement>("skill-hidden");
+    const notes = select<HTMLTextAreaElement>("skill-notes");
+    if (name) name.value = metadata?.displayName ?? "";
+    if (group) group.value = metadata?.group ?? "";
+    if (order) order.value = metadata?.order === undefined ? "" : String(metadata.order);
+    if (pinned) pinned.checked = metadata?.pinned === true;
+    if (hidden) hidden.checked = metadata?.hidden === true;
+    if (notes) notes.value = metadata?.notes ?? "";
     skillDialog?.showModal();
 }
 async function submitSkillForm(event: SubmitEvent): Promise<void> {
     event.preventDefault();
     if (event.submitter instanceof HTMLButtonElement && event.submitter.value === "cancel") { skillDialog?.close(); return; }
-    const name = select<HTMLInputElement>("skill-name")?.value.trim() ?? "", startFrame = Number(select<HTMLInputElement>("skill-start-frame")?.value);
-    if (!name || !Number.isInteger(startFrame) || startFrame < 0 || startFrame > 599) return;
+    const skill = selectedSkill();
+    const nameInput = select<HTMLInputElement>("skill-name");
+    const groupInput = select<HTMLInputElement>("skill-group");
+    const notesInput = select<HTMLTextAreaElement>("skill-notes");
+    const displayName = nameInput?.value.trim() ?? "";
+    const group = groupInput?.value.trim() ?? "";
+    const orderValue = select<HTMLInputElement>("skill-order")?.value.trim() ?? "";
+    const order = orderValue === "" ? undefined : Number(orderValue);
+    const pinned = select<HTMLInputElement>("skill-pinned")?.checked === true;
+    const hidden = select<HTMLInputElement>("skill-hidden")?.checked === true;
+    const notes = notesInput?.value.trim() ?? "";
+    if (!skill
+        || !validateSkillText(nameInput, 256, "显示名称")
+        || !validateSkillText(groupInput, 256, "自定义分组")
+        || !validateSkillText(notesInput, 4096, "备注")
+        || (order !== undefined && (!Number.isSafeInteger(order) || order < -1_000_000 || order > 1_000_000))) return;
+    const next: SkillDisplayMetadata = {
+        oid: skill.oid,
+        startFrame: skill.startFrame,
+        ...(displayName === "" ? {} : { displayName }),
+        ...(group === "" ? {} : { group }),
+        ...(order === undefined ? {} : { order }),
+        ...(pinned ? { pinned: true } : {}),
+        ...(hidden ? { hidden: true } : {}),
+        ...(notes === "" ? {} : { notes }),
+    };
+    const hasOverride = Object.keys(next).length > 2;
     await runExclusiveAction("skill", async () => {
-        const oid = activeProjectOid(), skills = [...skillState.skills], next = { oid, name, startFrame };
-        if (editingSkillIndex >= 0) skills[editingSkillIndex] = next; else skills.push(next);
-        await saveSkills(skills); selectedSkillIndex = editingSkillIndex >= 0 ? editingSkillIndex : skills.length - 1;
-        skillDialog?.close(); renderSkillList();
-        try {
-            await selectSkill(selectedSkillIndex);
-        } catch (error) {
-            if (diagnostics) diagnostics.textContent = `技能已保存，但${errorText(error, "预览失败。")}`;
-        }
+        const metadata = skillState.metadata.filter((entry) => !(
+            entry.oid === skill.oid && entry.startFrame === skill.startFrame
+        ));
+        if (hasOverride) metadata.push(next);
+        await saveSkillMetadata(metadata);
+        rebuildSkillEntries(skill.startFrame);
+        skillDialog?.close();
+        render();
     });
 }
 async function applyDraft(): Promise<void> {
@@ -871,6 +1334,7 @@ async function applyBatchEdits(
     previewFrameId: number,
 ): Promise<void> {
     if (project?.writable !== true || edits.length === 0) return;
+    const preferredEntryFrame = selectedSkill()?.startFrame;
     await runExclusiveAction("edit", async () => {
         previewScheduler.invalidate();
         const response = await request("/api/project/edit-batch", {
@@ -882,6 +1346,7 @@ async function applyBatchEdits(
             }),
         }, true);
         project = normalize(response);
+        rebuildSkillEntries(preferredEntryFrame);
         fieldDraft = undefined;
         diagnostics!.textContent = "修改已应用到当前会话，尚未覆盖 DAT 文件。";
         render();
@@ -893,6 +1358,7 @@ async function applyBatchEdits(
     });
 }
 async function applyFlowReroute(): Promise<void> {
+    if (isSelectionLocked()) return;
     const edge = currentFlow()?.edges.find((candidate) => candidate.id === selectedFlowEdgeId);
     const target = select<HTMLSelectElement>("flow-edge-target");
     if (!edge || !target || project?.writable !== true) return;
@@ -930,6 +1396,7 @@ async function applyStructureEdit(
     }
     const oldOccurrence = frame.occurrence;
     const oldBlock = { ...selectedBlock };
+    const preferredEntryFrame = selectedSkill()?.startFrame;
     await runExclusiveAction("edit", async () => {
         previewScheduler.invalidate();
         project = normalize(await request("/api/project/edit-structure", {
@@ -942,6 +1409,7 @@ async function applyStructureEdit(
                 expectedRevision: project!.revision,
             }),
         }, true));
+        rebuildSkillEntries(preferredEntryFrame);
         fieldDraft = undefined;
         selectedFlowEdgeId = undefined;
         let selectedFrame: Frame | undefined;
@@ -983,7 +1451,7 @@ async function applyStructureEdit(
     });
 }
 async function saveProject(): Promise<void> {
-    if (actionBusy.edit || project?.writable !== true || !project.dirty || fieldDraft || !window.confirm("确定覆盖当前工作区中的 DAT 文件吗？")) return;
+    if (actionBusy.save || isSelectionLocked() || project?.writable !== true || !project.dirty || !window.confirm("确定覆盖当前工作区中的 DAT 文件吗？")) return;
     await runExclusiveAction("save", async () => {
         previewScheduler.invalidate();
         const response = await request("/api/project/save", { method: "POST", body: JSON.stringify({ sessionId: project!.sessionId, expectedRevision: project!.revision }) }, true);
@@ -1009,13 +1477,9 @@ select("step-once")?.addEventListener("click", step);
 select("reset-timeline")?.addEventListener("click", () => { tickIndex = 0; update(); });
 playButton?.addEventListener("click", () => setPlaying(!playing));
 select("step-back")?.addEventListener("click", () => { tickIndex = Math.max(0, tickIndex - 1); update(); });
-select("jump-end")?.addEventListener("click", () => { tickIndex = Math.max(0, (project?.nativeTicks.length ?? 1) - 1); update(); });
-select("new-skill")?.addEventListener("click", () => openSkillDialog(-1));
-select("edit-skill")?.addEventListener("click", () => openSkillDialog(selectedSkillIndex));
-select("copy-skill")?.addEventListener("click", () => reportOperation(duplicateSelectedSkill(), "技能复制失败。"));
-select("delete-skill")?.addEventListener("click", () => reportOperation(deleteSelectedSkill(), "技能删除失败。"));
-select("move-skill-up")?.addEventListener("click", () => reportOperation(moveSelectedSkill(-1), "技能上移失败。"));
-select("move-skill-down")?.addEventListener("click", () => reportOperation(moveSelectedSkill(1), "技能下移失败。"));
+select("jump-end")?.addEventListener("click", () => { tickIndex = playbackEndIndex(); update(); });
+select("edit-skill")?.addEventListener("click", openSkillDialog);
+select("show-hidden-skills")?.addEventListener("change", renderSkillList);
 select<HTMLFormElement>("skill-form")?.addEventListener("submit", (event) => void submitSkillForm(event).catch((error) => diagnostics!.textContent = errorText(error, "技能保存失败。")));
 select<HTMLFormElement>("frame-editor")?.addEventListener("submit", (event) => { event.preventDefault(); void applyDraft().catch((error) => diagnostics!.textContent = errorText(error, "修改失败。")); });
 select("discard-draft")?.addEventListener("click", () => { clearDraft(); renderFields(); });
@@ -1084,14 +1548,14 @@ function finishCanvasInteraction(pointerId = canvasInteraction?.pointerId): void
     requestPreviewRender();
 }
 canvas?.addEventListener("pointerdown", (event) => {
-    if (!blockSelect) return;
+    if (!blockSelect || isSelectionLocked()) return;
     const point = canvasPoint(event);
     const hit = hitTestOverlay(currentGeometry, point.x, point.y);
     if (!hit) return;
     selectedBlock = { type: hit.type, index: hit.index };
     populateBlockSelect();
     renderFields();
-    if (actionBusy.edit || project?.writable !== true || fieldDraft !== undefined) return;
+    if (project?.writable !== true) return;
     const capabilities = canvasCapabilities(hit);
     const handle = hit.kind === "rect" ? hitResizeHandle(hit, point.x, point.y) : undefined;
     const canResize = handle !== undefined
@@ -1189,4 +1653,5 @@ window.addEventListener("pagehide", (event) => {
     if (!project?.sessionId || !stateToken) return;
     void closeProjectSession(project.sessionId, true).catch(() => undefined);
 });
+initializePanelSplitters();
 void start();

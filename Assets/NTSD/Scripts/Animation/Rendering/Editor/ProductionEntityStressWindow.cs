@@ -16,8 +16,9 @@ namespace NTSD.Animation.Rendering.Editor
         private int sampleTicks = 300;
         private int aiSimulationSmokeSampleTicks = 30;
         private int spawnBatchSize = 25;
-        private int maxCatchUpTicksPerFrame = 4;
+        private int maxCatchUpTicksPerFrame = 1;
         private int maxBacklogTicks = 8;
+        private float catchUpCpuBudgetMs = 1000f / 30f;
         private int maxSaturationDrainTicks = 300;
         private int formalCollectorModeIndex;
         private int aiExecutionProfileIndex;
@@ -162,6 +163,15 @@ namespace NTSD.Animation.Rendering.Editor
                 maxBacklogTicks,
                 maxCatchUpTicksPerFrame,
                 30);
+            catchUpCpuBudgetMs = Mathf.Max(
+                0f,
+                EditorGUILayout.FloatField(
+                    "追帧 CPU 预算(ms，0=关闭)",
+                    catchUpCpuBudgetMs));
+            EditorGUILayout.HelpBox(
+                "启用预算后，首个逻辑 tick 一定执行；仅当预计下一 tick 仍在预算内时才继续追帧。" +
+                "显式提高每帧最大 tick 数时，它能限制单个 Unity Update 的停顿放大，但不会掩盖 backlog 和 dropped tick。",
+                MessageType.Info);
             maxSaturationDrainTicks = EditorGUILayout.IntField(
                 "最大饱和排空帧数",
                 Math.Max(1, maxSaturationDrainTicks));
@@ -323,6 +333,7 @@ namespace NTSD.Animation.Rendering.Editor
                     spawnBatchSize = spawnBatchSize,
                     maxCatchUpTicksPerFrame = maxCatchUpTicksPerFrame,
                     maxBacklogTicks = maxBacklogTicks,
+                    catchUpCpuBudgetMs = catchUpCpuBudgetMs,
                     maxSaturationDrainTicks = maxSaturationDrainTicks,
                     enablePhaseTiming = enablePhaseTiming,
                     enablePresentationTiming = enablePresentationTiming,
@@ -433,7 +444,7 @@ namespace NTSD.Animation.Rendering.Editor
                 warmupTicks = smoke ? 2 : 30,
                 sampleTicks = smoke ? 10 : 300,
                 spawnBatchSize = 25,
-                maxCatchUpTicksPerFrame = 4,
+                maxCatchUpTicksPerFrame = 1,
                 maxBacklogTicks = 8,
                 maxSaturationDrainTicks = 300,
                 aiExecutionProfile = "legacy",
@@ -466,7 +477,7 @@ namespace NTSD.Animation.Rendering.Editor
                 warmupTicks = 30,
                 sampleTicks = sampleTicks,
                 spawnBatchSize = 25,
-                maxCatchUpTicksPerFrame = 4,
+                maxCatchUpTicksPerFrame = 1,
                 maxBacklogTicks = 8,
                 maxSaturationDrainTicks = 300,
                 simulationOnly = true,

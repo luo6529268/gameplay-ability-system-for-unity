@@ -263,6 +263,7 @@ describe("safe workspace HTTP API", () => {
             schemaVersion: 1 as const,
             revision: 0,
             etag: "0".repeat(64),
+            sidecarStatus: "missing" as const,
             skills: [] as const,
         };
         let savedRequest: unknown;
@@ -274,7 +275,8 @@ describe("safe workspace HTTP API", () => {
                     schemaVersion: 1 as const,
                     revision: 1,
                     etag: "1".repeat(64),
-                    skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+                    sidecarStatus: "valid" as const,
+                    skills: [{ oid: 2, displayName: "影分身", startFrame: 300 }],
                 };
             },
         } as ProjectSkillService;
@@ -293,7 +295,7 @@ describe("safe workspace HTTP API", () => {
         const requestBody = {
             expectedRevision: 0,
             expectedEtag: initial.etag,
-            skills: [{ oid: 2, name: "影分身", startFrame: 300 }],
+            skills: [{ oid: 2, displayName: "影分身", startFrame: 300 }],
         };
         const saved = await post(origin, token, "/api/project/skills", requestBody);
         assert.equal(saved.status, 200);

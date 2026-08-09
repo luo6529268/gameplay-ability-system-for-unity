@@ -1,0 +1,67 @@
+// dat-skill-flow-build:20260808055522244-4e483c59f0574f7da99baf153401a868
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { describe, it } from "node:test";
+
+describe("one-click launcher contract", () => {
+    it("selects a writable project or test workspace without exposing repository Config to reset operations", async () => {
+        const launcherPath = resolve("scripts/start-local.ps1");
+        const launcherBytes = await readFile(launcherPath);
+        const launcher = await readFile(launcherPath, "utf8");
+
+        assert.deepEqual([...launcherBytes.subarray(0, 3)], [0xef, 0xbb, 0xbf]);
+        assert.match(launcher, /\[ValidateSet\("Project", "Test"\)\]\s*\[string\]\$Mode/);
+        assert.match(launcher, /Non-interactive startup requires -Mode Project or -Mode Test/);
+        assert.match(launcher, /请选择启动模式/);
+        assert.match(launcher, /"1" \{ return "Project" \}/);
+        assert.match(launcher, /"2" \{ return "Test" \}/);
+        assert.match(launcher, /"0" \{ return \$null \}/);
+        assert.match(launcher, /if \(\$launchMode -eq "Project" -and \$ResetWorkspace\)/);
+        assert.match(launcher, /\$workspace = \$repositoryRoot/);
+        assert.match(launcher, /Join-Path \$repositoryRoot "\.dat-skill-flow\\skills\.json"/);
+        assert.match(launcher, /\$workspace = \$testWorkspace/);
+        assert.match(launcher, /Join-Path \$testWorkspace "\.dat-skill-flow\\skills\.json"/);
+        assert.match(launcher, /"--workspace", \$workspace/);
+
+        const modeResolution = launcher.indexOf("$launchMode = Resolve-LaunchMode");
+        const cancellation = launcher.indexOf("已取消启动。");
+        const postSelectionPrerequisites = launcher.indexOf("\nAssert-StartupPrerequisites\n", modeResolution);
+        assert.ok(modeResolution >= 0);
+        assert.ok(cancellation > modeResolution);
+        assert.ok(postSelectionPrerequisites > cancellation);
+        const prerequisites = launcher.match(/function Assert-StartupPrerequisites \{([\s\S]*?)\n\}/);
+        assert.ok(prerequisites);
+        assert.match(prerequisites[1] , /Get-Command npm\.cmd/);
+        assert.match(prerequisites[1] , /scripts\\build\.mjs/);
+        assert.match(prerequisites[1] , /scripts\\start\.mjs/);
+        assert.ok(launcher.indexOf("\n    Initialize-TestWorkspace", postSelectionPrerequisites) > postSelectionPrerequisites);
+
+        const projectBranch = launcher.match(/if \(\$launchMode -eq "Project"\) \{([\s\S]*?)\n\}\nelse \{/);
+        assert.ok(projectBranch);
+        assert.doesNotMatch(projectBranch[1] , /Copy-Item|Remove-Item|Initialize-TestWorkspace/);
+
+        const testInitializer = launcher.match(/function Initialize-TestWorkspace \{([\s\S]*?)\n\}/);
+        assert.ok(testInitializer);
+        assert.match(launcher, /\[switch\]\$ResetWorkspace/);
+        assert.match(testInitializer[1] , /if \(\$ResetWorkspace -and \(Test-Path -LiteralPath \$testWorkspace\)\)/);
+        assert.match(testInitializer[1] , /Remove-Item -LiteralPath \$testWorkspace -Recurse -Force/);
+        assert.match(testInitializer[1] , /if \(-not \(Test-Path -LiteralPath \$testConfig -PathType Container\)\)/);
+        assert.match(testInitializer[1] , /Copy-Item -Path \(Join-Path \$sourceConfig "\*"\) -Destination \$testConfig -Recurse/);
+    });
+
+    it("opens the browser only after an ephemeral listener is ready", async () => {
+        const launcher = await readFile(resolve("scripts/start-local.ps1"), "utf8");
+
+        assert.doesNotMatch(launcher, /Get-AvailableLoopbackPort|Start-Sleep -Seconds 2/);
+        assert.match(launcher, /"--port", "0"/);
+        assert.match(launcher, /\$processInfo\.RedirectStandardError = \$false/);
+        assert.match(launcher, /\$process\.Kill\(\)/);
+
+        const readyCheck = launcher.indexOf("Dat Skill Flow server listening at");
+        const browserOpen = launcher.indexOf("Start-Process $url");
+        assert.ok(readyCheck >= 0);
+        assert.ok(browserOpen > readyCheck);
+        assert.match(launcher, /One-click startup prerequisites passed\./);
+    });
+});

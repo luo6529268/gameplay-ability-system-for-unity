@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { buildSkillFlow } from "../../src/client/skill-flow.js";
+import {
+    buildSkillFlow,
+    traceStartFrameForSelection,
+} from "../../src/client/skill-flow.js";
+import { deriveSkillEntries, entriesByStartFrame } from "../../src/client/skill-entries.js";
 import { buildOverlayGeometry, hitTestOverlay } from "../../src/client/overlay-geometry.js";
 import type { DatFrameProjection } from "../../src/model/dat-projection.js";
 
@@ -9,6 +13,7 @@ function frame(frameId: number, occurrence: number, overrides: Partial<DatFrameP
     return {
         frameId,
         occurrence,
+        label: "",
         pic: 0,
         state: 0,
         wait: 1,
@@ -42,6 +47,23 @@ function frame(frameId: number, occurrence: number, overrides: Partial<DatFrameP
 }
 
 describe("skill flow graph", () => {
+    it("keeps frame inspection on the selected node while tracing from the authored skill entry", () => {
+        const frames = [
+            frame(210, 0, { label: "jump", state: 4, next: 211 }),
+            frame(211, 1, { label: "jump", state: 4, next: 212 }),
+            frame(212, 2, { label: "jump", state: 4, next: 0 }),
+            frame(271, 3, { label: "mass clone", state: 3, next: 272 }),
+        ];
+        const jump = buildSkillFlow(frames, 210);
+
+        assert.equal(traceStartFrameForSelection(frames, 212, 2, jump), 210);
+        assert.equal(traceStartFrameForSelection(frames, 211, 1, jump), 210);
+        assert.equal(traceStartFrameForSelection(frames, 271, 3, jump), 271);
+
+        const directTail = buildSkillFlow(frames, 212);
+        assert.equal(traceStartFrameForSelection(frames, 212, 2, directTail), 212);
+    });
+
     it("uses the last duplicate frame occurrence and preserves branches, self-loops, zero, negative, 999, and missing targets", () => {
         const graph = buildSkillFlow([
             frame(10, 0, { next: 11, hit_a: 12 }),
@@ -73,6 +95,32 @@ describe("skill flow graph", () => {
         const graph = buildSkillFlow([frame(7, 0, { next: 7 })], 7);
         assert.deepEqual(graph.cycles, [{ edgeId: "frame:7:0:next", from: "frame:7:0", to: "frame:7:0" }]);
         assert.equal(graph.edges.find((edge) => edge.key === "hit_a")?.resolution, "zero");
+    });
+
+    it("keeps next in the current flow and collapses another hit entry into a clickable leaf", () => {
+        const frames = [
+            frame(0, 0, { label: "standing", state: 0, next: 1, hit_Uj: 300 }),
+            frame(1, 1, { label: "standing", state: 0, next: 999 }),
+            frame(300, 2, { label: "rasenganshuriken", state: 15, next: 301 }),
+            frame(301, 3, { label: "rasenganshuriken", state: 15, next: 999 }),
+        ];
+        const entries = deriveSkillEntries(frames, 2);
+        const graph = buildSkillFlow(frames, 0, () => true, entriesByStartFrame(entries));
+
+        assert.equal(graph.nodes.some((node) => node.kind === "frame" && node.frameId === 1), true);
+        assert.equal(graph.nodes.some((node) => node.kind === "frame" && node.frameId === 300), false);
+        assert.equal(graph.nodes.some((node) => node.kind === "frame" && node.frameId === 301), false);
+        assert.deepEqual(
+            graph.nodes.find((node) => node.kind === "entry" && node.frameId === 300),
+            {
+                id: "entry-ref:entry:2:300",
+                kind: "entry",
+                entryId: "entry:2:300",
+                frameId: 300,
+                label: "rasenganshuriken",
+            },
+        );
+        assert.equal(graph.edges.find((edge) => edge.key === "hit_Uj")?.resolution, "entry");
     });
 });
 

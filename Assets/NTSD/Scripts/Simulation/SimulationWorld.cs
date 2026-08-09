@@ -26,6 +26,8 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
+        internal int ActiveDataObjectTypeCacheTick { get; private set; } = -1;
+
         public bool PpMode => NTSDGlobal.MPEnabled;
         public List<PendingSoundEvent> PendingSounds { get; } = new List<PendingSoundEvent>();
         public long QueuedSoundEventCountForDiagnostics { get; private set; }
@@ -37,6 +39,16 @@ namespace NTSD.Simulation
 
             PendingSounds.Add(new PendingSoundEvent(soundId, worldX, CurrentTickIndex));
             QueuedSoundEventCountForDiagnostics++;
+        }
+
+        internal void BeginDataObjectTypeTickCache(int tickIndex)
+        {
+            ActiveDataObjectTypeCacheTick = tickIndex;
+        }
+
+        internal void EndDataObjectTypeTickCache()
+        {
+            ActiveDataObjectTypeCacheTick = -1;
         }
     }
 }

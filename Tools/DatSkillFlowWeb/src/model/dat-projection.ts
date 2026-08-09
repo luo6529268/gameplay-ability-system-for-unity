@@ -95,6 +95,7 @@ export interface CPointProjection {
 export interface DatFrameProjection {
     frameId: number;
     occurrence: number;
+    label: string;
     pic: number;
     state: number;
     wait: number;
@@ -450,6 +451,7 @@ function projectFrame(frame: DatCstDocument["frames"][number]): DatFrameProjecti
     const result: DatFrameProjection = {
         frameId: frame.frameId,
         occurrence: frame.occurrence,
+        label: frame.label,
         ...frameDefaults,
         sound: "",
         itrs: [],

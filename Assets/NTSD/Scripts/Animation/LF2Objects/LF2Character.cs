@@ -766,6 +766,14 @@ namespace NTSD.Animation.LF2Objects
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                 return;
 
+            RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
+        }
+
+        internal override void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
+        {
+            if (Runtime == null || Runtime.LinkState < 0)
+                return;
+
             if (AiControlled)
             {
                 BattleAiInputDetailDiagnostics diagnostics =

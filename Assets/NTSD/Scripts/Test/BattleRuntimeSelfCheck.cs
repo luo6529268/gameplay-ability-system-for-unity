@@ -85,7 +85,7 @@ namespace NTSD.Test
                 CheckHitStopPresentationGates();
                 CheckUnityBattleCameraRemainsDisabled();
                 CheckCharacterGroundMovementUsesIntegerSnapshot();
-                CheckLocalFreeRunMaintainsFixedBattleClock();
+                CheckLocalFreeRunUsesSingleTickHostPacing();
                 CheckCatchingAttackAction();
                 CheckCatchingJumpAction();
                 CheckCatchingThrow();
@@ -2895,7 +2895,7 @@ namespace NTSD.Test
             CheckSharedCharacterDatGroundMovementUsesIntegerSnapshot();
         }
 
-        private static void CheckLocalFreeRunMaintainsFixedBattleClock()
+        private static void CheckLocalFreeRunUsesSingleTickHostPacing()
         {
             var local = new LockstepSimulationSettings
             {
@@ -2905,9 +2905,20 @@ namespace NTSD.Test
             };
             local.Normalize();
 
-            Expect(local.maxCatchUpTicksPerFrame == LockstepSimulationSettings.LocalFreeRunMinCatchUpTicks &&
+            Expect(local.maxCatchUpTicksPerFrame == LockstepSimulationSettings.DefaultMaxTicksPerFrame &&
                    local.maxBacklogTicks >= local.maxCatchUpTicksPerFrame,
-                "local free-run must retain enough catch-up capacity to keep the fixed 30 Hz battle clock when rendering drops below 30 FPS");
+                "local free-run must preserve one-tick host pacing instead of forcing four complete battle ticks into one Unity Update");
+
+            var explicitThroughput = new LockstepSimulationSettings
+            {
+                driveMode = SimulationDriveMode.LocalFreeRun,
+                maxCatchUpTicksPerFrame = 4,
+                maxBacklogTicks = 8,
+            };
+            explicitThroughput.Normalize();
+
+            Expect(explicitThroughput.maxCatchUpTicksPerFrame == 4,
+                "local free-run must retain an explicitly configured multi-tick throughput diagnostic");
 
             var buffered = new LockstepSimulationSettings
             {

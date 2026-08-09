@@ -1,9 +1,11 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [switch]$NoBuild,
     [switch]$NoBrowser,
     [switch]$ValidateOnly,
-    [switch]$ResetWorkspace
+    [switch]$ResetWorkspace,
+    [ValidateSet("Project", "Test")]
+    [string]$Mode
 )
 
 $ErrorActionPreference = "Stop"
@@ -12,7 +14,8 @@ $toolRoot = Split-Path -Parent $PSScriptRoot
 $repositoryRoot = (Resolve-Path (Join-Path $toolRoot "..\..")).Path
 $dataTxtPath = Join-Path $repositoryRoot "Assets\NTSD\Config\data.txt"
 $assetWorkspace = "J:\QQFile\NTSD 2.4.1"
-$previewExecutable = "J:\QQFile\NTSD2.4\ntsd_cpp\dat_preview_cli.exe"
+$previewExecutable = Join-Path $toolRoot "native\bin\dat_preview_cli.exe"
+$previewBuildScript = Join-Path $toolRoot "scripts\build-native-preview.ps1"
 $testWorkspace = Join-Path $env:LOCALAPPDATA "DatSkillFlowWeb\test-workspace"
 $sourceConfig = Join-Path $repositoryRoot "Assets\NTSD\Config"
 $testConfig = Join-Path $testWorkspace "Assets\NTSD\Config"
@@ -50,6 +53,27 @@ function Assert-NodeVersion {
     }
 }
 
+function Test-WebBuildRequired {
+    $manifestPath = Join-Path $toolRoot "dist\build-manifest.json"
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        return $true
+    }
+
+    $manifestTime = (Get-Item -LiteralPath $manifestPath).LastWriteTimeUtc
+    $inputs = @(
+        Get-Item -LiteralPath (Join-Path $toolRoot "index.html")
+        Get-Item -LiteralPath (Join-Path $toolRoot "package.json")
+        Get-Item -LiteralPath (Join-Path $toolRoot "package-lock.json")
+        Get-Item -LiteralPath (Join-Path $toolRoot "tsconfig.json")
+        Get-Item -LiteralPath (Join-Path $toolRoot "tsconfig.server.json")
+        Get-Item -LiteralPath (Join-Path $toolRoot "vite.config.ts")
+        Get-ChildItem -LiteralPath (Join-Path $toolRoot "src") -Recurse -File
+        Get-ChildItem -LiteralPath (Join-Path $toolRoot "tests") -Recurse -File
+        Get-ChildItem -LiteralPath (Join-Path $toolRoot "scripts") -File
+    )
+    return $null -ne ($inputs | Where-Object { $_.LastWriteTimeUtc -gt $manifestTime } | Select-Object -First 1)
+}
+
 function ConvertTo-NativeArgument([string]$Value) {
     if ($Value.Contains('"')) {
         Stop-WithMessage "Native process arguments must not contain quotes: $Value"
@@ -60,25 +84,41 @@ function ConvertTo-NativeArgument([string]$Value) {
     return '"' + $Value + '"'
 }
 
-Assert-NodeVersion
-Assert-FileExists $dataTxtPath "Project data.txt"
-Assert-DirectoryExists $assetWorkspace "NTSD asset workspace"
-Assert-FileExists $previewExecutable "Native preview executable"
-
-if ($ValidateOnly) {
-    if ($null -eq (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
-        Stop-WithMessage "npm.cmd was not found."
+function Test-InteractiveTerminal {
+    try {
+        return [Environment]::UserInteractive `
+            -and $Host.Name -eq "ConsoleHost" `
+            -and -not [Console]::IsInputRedirected
     }
-    Assert-FileExists (Join-Path $toolRoot "package.json") "Package manifest"
-    Assert-FileExists (Join-Path $toolRoot "scripts\build.mjs") "Build script"
-    Assert-FileExists (Join-Path $toolRoot "scripts\start.mjs") "Server entry point"
-    Write-Host "One-click startup prerequisites passed."
-    exit 0
+    catch {
+        return $false
+    }
 }
 
-$process = $null
-Push-Location $toolRoot
-try {
+function Resolve-LaunchMode {
+    if (-not [string]::IsNullOrWhiteSpace($Mode)) {
+        return $Mode
+    }
+    if (-not (Test-InteractiveTerminal)) {
+        Stop-WithMessage "Non-interactive startup requires -Mode Project or -Mode Test."
+    }
+
+    Write-Host ""
+    Write-Host "请选择启动模式："
+    Write-Host "  1. 正式项目（可通过安全确认和备份协议写入仓库 DAT）"
+    Write-Host "  2. 测试副本（使用 LocalAppData 隔离工作区）"
+    Write-Host "  0. 取消"
+    while ($true) {
+        switch (Read-Host "请输入 1、2 或 0") {
+            "1" { return "Project" }
+            "2" { return "Test" }
+            "0" { return $null }
+            default { Write-Host "无效选择，请重新输入。" }
+        }
+    }
+}
+
+function Initialize-TestWorkspace {
     Write-Host "Preparing an isolated DAT test workspace..."
     if ($ResetWorkspace -and (Test-Path -LiteralPath $testWorkspace)) {
         Remove-Item -LiteralPath $testWorkspace -Recurse -Force
@@ -87,12 +127,85 @@ try {
         New-Item -ItemType Directory -Path $testConfig -Force | Out-Null
         Copy-Item -Path (Join-Path $sourceConfig "*") -Destination $testConfig -Recurse
     }
+}
 
+function Assert-StartupPrerequisites {
+    Assert-NodeVersion
+    Assert-FileExists $dataTxtPath "Project data.txt"
+    Assert-DirectoryExists $assetWorkspace "NTSD asset workspace"
+    Assert-FileExists (Join-Path $toolRoot "package.json") "Package manifest"
+    Assert-FileExists (Join-Path $toolRoot "scripts\start.mjs") "Server entry point"
     if (-not $NoBuild) {
-        Write-Host "Building DAT Skill Flow Web..."
-        & npm.cmd run build
+        if ($null -eq (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
+            Stop-WithMessage "npm.cmd was not found."
+        }
+        Assert-FileExists (Join-Path $toolRoot "scripts\build.mjs") "Build script"
+        Assert-FileExists $previewBuildScript "Native preview build script"
+    }
+    else {
+        Assert-FileExists $previewExecutable "Native preview executable"
+        Assert-FileExists (Join-Path $toolRoot "dist\build-manifest.json") "Build manifest"
+    }
+}
+
+if ($ValidateOnly) {
+    Assert-StartupPrerequisites
+    Assert-FileExists $previewExecutable "Native preview executable"
+    Write-Host "One-click startup prerequisites passed."
+    exit 0
+}
+
+$launchMode = Resolve-LaunchMode
+if ($null -eq $launchMode) {
+    Write-Host "已取消启动。"
+    exit 0
+}
+if ($launchMode -eq "Project" -and $ResetWorkspace) {
+    Stop-WithMessage "-ResetWorkspace is only valid with -Mode Test."
+}
+Assert-StartupPrerequisites
+
+$workspace = $null
+$writableDataTxt = $null
+$sidecarPath = $null
+if ($launchMode -eq "Project") {
+    $workspace = $repositoryRoot
+    $writableDataTxt = $dataTxtPath
+    $sidecarPath = Join-Path $repositoryRoot ".dat-skill-flow\skills.json"
+    Write-Host "当前模式：正式项目"
+    Write-Host "警告：确认覆盖后将写入仓库中的真实 DAT。"
+}
+else {
+    Initialize-TestWorkspace
+    $workspace = $testWorkspace
+    $writableDataTxt = Join-Path $testWorkspace "Assets\NTSD\Config\data.txt"
+    $sidecarPath = Join-Path $testWorkspace ".dat-skill-flow\skills.json"
+    Write-Host "当前模式：测试副本"
+}
+Write-Host "可写 workspace：$workspace"
+Write-Host "可写 data.txt：$writableDataTxt"
+Write-Host "可写技能 sidecar：$sidecarPath"
+
+$process = $null
+Push-Location $toolRoot
+try {
+    if (-not $NoBuild) {
+        Write-Host "Building C++ battle preview adapter..."
+        & $previewBuildScript
         if ($LASTEXITCODE -ne 0) {
-            Stop-WithMessage "Build failed with exit code $LASTEXITCODE."
+            Stop-WithMessage "Native preview build failed with exit code $LASTEXITCODE."
+        }
+        Assert-FileExists $previewExecutable "Native preview executable"
+
+        if (Test-WebBuildRequired) {
+            Write-Host "Building DAT Skill Flow Web..."
+            & npm.cmd run build
+            if ($LASTEXITCODE -ne 0) {
+                Stop-WithMessage "Build failed with exit code $LASTEXITCODE."
+            }
+        }
+        else {
+            Write-Host "DAT Skill Flow Web build is up to date."
         }
     }
 
@@ -100,7 +213,7 @@ try {
         (Join-Path $toolRoot "scripts\start.mjs"),
         "--root", (Join-Path $toolRoot "dist"),
         "--manifest", (Join-Path $toolRoot "dist\build-manifest.json"),
-        "--workspace", $testWorkspace,
+        "--workspace", $workspace,
         "--data-txt", "Assets/NTSD/Config/data.txt",
         "--asset-workspace", $assetWorkspace,
         "--port", "0"
@@ -111,7 +224,19 @@ try {
     $processInfo.UseShellExecute = $false
     $processInfo.RedirectStandardOutput = $true
     $processInfo.RedirectStandardError = $false
-    $process = [System.Diagnostics.Process]::Start($processInfo)
+    $previewEnvironmentName = "DAT_SKILL_FLOW_CPP_PREVIEW_EXECUTABLE"
+    $gameRootEnvironmentName = "DAT_SKILL_FLOW_CPP_GAME_ROOT"
+    $previousPreviewExecutable = [Environment]::GetEnvironmentVariable($previewEnvironmentName, "Process")
+    $previousGameRoot = [Environment]::GetEnvironmentVariable($gameRootEnvironmentName, "Process")
+    [Environment]::SetEnvironmentVariable($previewEnvironmentName, $previewExecutable, "Process")
+    [Environment]::SetEnvironmentVariable($gameRootEnvironmentName, $assetWorkspace, "Process")
+    try {
+        $process = [System.Diagnostics.Process]::Start($processInfo)
+    }
+    finally {
+        [Environment]::SetEnvironmentVariable($previewEnvironmentName, $previousPreviewExecutable, "Process")
+        [Environment]::SetEnvironmentVariable($gameRootEnvironmentName, $previousGameRoot, "Process")
+    }
 
     $url = $null
     while (-not $process.HasExited) {
@@ -135,8 +260,13 @@ try {
     }
 
     Write-Host "Editor ready at: $url"
-    Write-Host "Editable test copy: $testWorkspace"
-    Write-Host "Use -ResetWorkspace to replace the test copy on the next launch."
+    if ($launchMode -eq "Test") {
+        Write-Host "Editable test copy: $testWorkspace"
+        Write-Host "Use -Mode Test -ResetWorkspace to replace the test copy on the next launch."
+    }
+    else {
+        Write-Host "正式项目保存仍需通过页面内的安全确认和备份协议。"
+    }
     Write-Host "Close this window to stop the server."
 
     while (-not $process.HasExited) {

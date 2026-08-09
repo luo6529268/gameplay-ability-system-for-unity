@@ -41,10 +41,14 @@
 | REQ-009 | 三种 viewport 均能完成核心流程 | VAL-009 | E4 | 1440/1024/390 Edge interaction | Passed |
 | REQ-010 | 当前构建由隔离环境自动运行并保存渲染与交互证据 | VAL-010 | E4 | Release build, isolated Edge, screenshots and zero-error check | Passed |
 | REQ-011 | UI 未创造 DAT 或 Native preview 运行语义 | VAL-011 | E4 | DAT/CST contracts plus final UI review | Passed |
-| REQ-012 | 技能复制、删除和排序一次 CAS 保存并可重启恢复 | VAL-012 | E4 | Pure contracts plus release Edge CAS interactions | Passed |
+| REQ-012 | 手工技能复制、删除和排序一次 CAS 保存并可重启恢复 | VAL-012 | E4 | Historical pure contracts plus release Edge CAS interactions | Superseded by REQ-017 |
 | REQ-013 | frame/block 模板式结构事务保持非目标字节并可安全保存恢复 | VAL-013 | E5 | Unit/integration rollback tests plus release save/restart | Passed |
 | REQ-014 | Canvas move/resize/keyboard 以单 revision 原子更新几何 | VAL-014 | E4 | Pure geometry tests plus real pointer/keyboard Edge interactions | Passed |
 | REQ-015 | SVG Flow 只重定向已有字段，时间轴按 DAT wait 视觉比例展开 | VAL-015 | E4 | Flow/timeline contracts plus release Edge interaction | Passed |
+| REQ-016 | 一键启动明确选择仓库正式项目或 LocalAppData 测试副本 | VAL-016 | E4 | Launcher contract, PTY interaction and both workspace modes | Passed |
+| REQ-017 | DAT 自动入口、精确 hit_* 目标首帧与可点击跨技能链接 | VAL-017 | E4 | Pure graph tests plus real Naruto browser workflow | Passed |
+| REQ-018 | 桌面左/中/右区域通过两条分隔条安全调宽 | VAL-018 | E4 | Pure layout tests plus real pointer/keyboard/resize browser workflow | Passed |
+| REQ-019 | Native Trace 区分主体结束、分身释放确认和投射物完成 | VAL-019 | E3 | DTO/lineage tests plus real F300/Frame 263 CLI/service trace and 1440×900 browser screenshots | Passed |
 
 ## Validation Entry
 
@@ -303,6 +307,74 @@
 - Status: Passed
 - Known limitations: 不创建/删除跳转字段，不推断主分支或真实运行时长。
 
+### VAL-016: 正式项目与测试副本启动选择
+
+- Linked requirements: REQ-016
+- Purpose: 防止一键启动静默落入测试副本，并确保正式项目和测试副本的写入边界可辨识。
+- Preconditions: Windows ConsoleHost、Node 24、仓库 Config 和 LocalAppData 可用。
+- Command or procedure: 双击或无 `-Mode` 启动并选择正式/测试/取消；分别以 `-Mode Project`、`-Mode Test` 非交互启动；验证 workspace 参数、提示、重置冲突和服务就绪顺序。
+- Build ID or revision: `20260806231404869-63dc4e37fba448e6bfd698ca9493c473`
+- Evidence level: E4
+- Expected result: 正式模式精确使用仓库根 workspace 并警告真实 DAT 可写；测试模式保留隔离副本；取消不启动；正式模式不能重置；两种模式均不生成演示技能。
+- Actual result: PowerShell 5.1 parser、UTF-8 BOM 和 2 项 launcher 聚焦合同通过；完整套件 297 tests 中 296 passed / 0 failed / 1 skipped。真实 PTY 显示中文正式/测试/取消选择且 `0` 无构建退出；`-Mode Project` 启动参数精确使用仓库根 workspace 并显示真实 DAT 警告，`-Mode Test` 精确使用 LocalAppData 副本；正式模式与 `-ResetWorkspace` 冲突在服务启动前被拒绝。
+- Evidence location: `scripts/start-local.ps1`、`tests/unit/launcher-contract.test.ts`、本次 Factory 会话终端日志。
+- Environment: Windows 10 / PowerShell 5.1
+- Started processes: 两个顺序 launcher/Node 验证服务和一个隔离 tuistory PTY session；未打开浏览器。
+- Cleanup result: Passed；本轮正式/测试服务、父 PowerShell、PTY session 和 tuistory daemon 均已停止，未触碰用户原有测试服务。
+- Status: Passed
+- Known limitations: 启动模式只决定 workspace 安全边界；入口列表由 REQ-017 的当前 DAT 自动分析负责。
+
+### VAL-017: DAT 自动入口与跨技能边界
+
+- Linked requirements: REQ-002、REQ-003、REQ-017
+- Purpose: 验证正式 Naruto DAT 在无 sidecar 时自动生成状态/技能入口，并阻止 `hit_*` 将其他技能完整吞入当前流程。
+- Preconditions: 正式仓库 Naruto DAT 可读；`.dat-skill-flow/skills.json` 缺失或使用隔离 sidecar fixture。
+- Command or procedure: 运行标签投影、入口识别、Flow 和 sidecar 聚焦测试；启动正式模式浏览器，检查 `standing · F0` 与 `rasenganshuriken · F300`；选择 standing 并点击 `hit_Uj` 目标卡；验证 sidecar 别名只改变显示。
+- Build ID or revision: `20260807022745217-fe7793893aac4349b461aef35a668a32`
+- Evidence level: E4
+- Expected result: 连续同标题段只产生一个入口；同标题不连续段保持独立；`hit_Uj:300` 的首帧为 300；standing Flow 展开 `next`，但 F300 作为可点击叶节点；sidecar 缺失/无效不清空入口且不改变 DAT。
+- Actual result: 完整套件 300 tests 中 299 passed / 0 failed / 1 skipped。正式 Naruto 无 sidecar 自动显示 86 个入口；standing Flow 只展开 0→1→2→3，并显示 `hit_Uj → F300 rasenganshuriken` 目标卡；真实点击后选择、预览和 Flow 均切换到 F300。临时 sidecar 别名保存后重启恢复，DAT SHA-256 前后均为 `0493F5F76F08A363366A4C748DA97DF7ADF0F594F1264EE390E2D7AB13DD2AB9`；临时 sidecar 已删除。1440×900、1024×768、390×844 均为 86 个入口且无水平溢出；最终 build 的 Edge errors/console 为空。
+- Evidence location: `src/client/skill-entries.ts`、`src/client/skill-flow.ts`、`src/server/project-skill-service.ts`、相关 unit/integration tests 和本次 Factory Edge/CDP/终端日志。
+- Environment: Windows 10 / Node 24 / Edge
+- Started processes: 顺序 loopback Node 服务、独立 headless Edge/CDP 与 Temp profile；未使用用户浏览器 profile。
+- Cleanup result: Passed；最终 Node 服务、Edge profile 对应进程、CDP 9231 和临时 profile 均为 0/不存在；正式 sidecar 不存在；external dist manifest 已恢复为 `20260806232034560-c9ee0125ea734d98a762056770e672a7`，快照前后的 build/backup 名称集合一致。
+- Status: Passed
+- Known limitations: 自动名称严格来自 DAT frame 标题；中文别名仍需 sidecar 显式提供。
+
+### VAL-018: 桌面三栏拖动调宽
+
+- Linked requirements: REQ-018
+- Purpose: 验证两条桌面分隔条的 pointer、键盘、Esc、resize clamp、ARIA 和移动端回退合同。
+- Preconditions: 正式 Naruto 项目服务和隔离无头 Edge/CDP 可用。
+- Command or procedure: 在 1440×900 与 1024×768 真实拖动左右 separator，执行 ArrowLeft 和拖动中 Esc，在 pointer capture 期间缩小 viewport；切换 390×844 并点击移动属性标签；读取栏宽、ARIA、overflow、console 和 errors。
+- Build ID or revision: `20260807072119677-07b2c1f4bdd840ffbb52bb59b644d69e`（浏览器），`20260807072730170-45381c691244494182d27963d1440e09`（最终完整回归入口）
+- Evidence level: E4
+- Expected result: 左/右栏保持边界，中栏不低于 360/420px；pointer capture 和 Esc 正确清理；resize 中断拖动并重新 clamp；移动端隐藏 separator 且标签页无回归；页面无水平溢出。
+- Actual result: 1440×900 双拖动后为 360/728/340px；1024×768 极限拖动为 412/360/240px；900px 拖动中 resize 后为 288/360/240px 且 capture/dragging 已清理；ArrowLeft 后左栏 280px，Esc 恢复 280px。390×844 的 separator 均为 `display:none`，属性标签切换成功。所有视口页面 overflow 为 0，console/errors 为空。最终套件 310 tests 中 309 passed / 0 failed / 1 skipped；首次最终运行遇到随机 Fetch 禁用端口和并发 manifest 瞬时 ENOENT，清理本轮验证进程后原样重跑通过。
+- Evidence location: `src/client/panel-layout.ts`、`src/client/main.ts`、`src/client/styles.css`、`tests/unit/panel-layout.test.ts`、client contract tests，以及本次 Factory 无头 Edge/CDP/终端日志。
+- Environment: Windows 10 / Node 24 / Edge 151 headless
+- Started processes: 随机 loopback Node 正式项目服务、独立无头 Edge/CDP 12947 与 Temp profile；未使用用户浏览器 profile。
+- Cleanup result: Passed；本轮正式项目 Node、可见/无头 Edge、CDP 和 Temp profile 已清理；用户既有 LocalAppData test-workspace 服务未触碰；external dist 已恢复到任务前快照。
+- Status: Passed
+- Known limitations: 调整结果只保留在当前页面会话，不写 localStorage；≤850px 继续使用移动标签页而非拖动。
+
+### VAL-019: Native 技能 Trace 分类结束与投射物尾迹
+
+- Linked requirements: REQ-019
+- Purpose: 验证技能主体、opoint 分身和武器/投射物不使用同一个错误结束条件。
+- Preconditions: `ntsd_cpp` runner 可运行；F300 分身路径和 Frame 263 投射物路径可取得逐 tick entity 输出。
+- Command or procedure: 从技能已成功触发语义启动 Native Trace；检查 root 回 idle 的 `actorSkillEnded`；检查 F300 的角色 child 只记录释放确认和首个有效快照；检查 Frame 263 的武器 child 在 root idle 后继续记录飞行、落地/碰撞或失效；验证 slot 复用不会混淆 lineage。
+- Build ID or revision: `20260807122548278-e9b45dbba5944cc7942d1feca662b133`
+- Evidence level: E3
+- Expected result: 网页主体进度在 root idle 停止；分身成功释放可见但不等待 AI；投射物继续到权威完成；无法完成时明确 `timeout`/`persistent`，不伪造 `traceComplete`。
+- Actual result: 网页侧已按 catalog type 生成 root/actor/clone/projectile/unknown 分类，记录 lineage、spawn/despawn、rootSkillEnded、projectile landed/persistent；按 Native tick 中的 OID 加载对应 DAT frame/range/BMP，并由 renderer 按 OID 选择资源。最终套件 313 项中 312 passed / 0 failed / 1 skipped。真实服务链路已确认 F300 的 OID 33/204/216 资源分别为 203/116/83 帧，Frame 263 的两个 OID 121 weapon lineage 均以 `landed` 完成。隔离浏览器在 1440×900 下实际显示 F300 主体/分身/效果、Frame 263 主体结束状态和预览联动；播放过程中无 console/errors。
+- Evidence location: `src/server/native-preview-trace.ts`、`src/server/project-dat-contract.ts`、`src/server/project-dat-service.ts`、`src/client/preview-renderer.ts`、`tests/unit/native-preview-trace.test.ts`、`artifacts/acceptance-20260807-e3/f300-desktop-1440.png`、`artifacts/acceptance-20260807-e3/f300-playing-1440.png`、`artifacts/acceptance-20260807-e3/frame263-desktop-1440.png`、`artifacts/acceptance-20260807-e3/frame263-playing-1440.png`。
+- Environment: Windows 10 / Node 24 / C++ Native CLI / isolated headless Chrome via loopback CDP
+- Started processes: Test-mode loopback Node service和独立临时 Chrome profile；未使用用户浏览器 profile。
+- Cleanup result: Passed；测试服务、CDP、临时 Chrome profile 和 agent-browser session 均已清理。
+- Status: Passed
+- Known limitations: 当前 runner 仍固定 `startFrame + ticks`，不支持 per-tick input；分类依赖 catalog 对应 OID，未知 OID 明确标记为 `unknown` 并使用 fallback。
+
 ## Test Layers
 
 ### Static
@@ -328,7 +400,7 @@
 
 ### End-to-End
 
-- 创建技能 → 选择技能 → 播放 → 选择流程帧 → 切换叠加层 → 编辑块字段 → 保存。
+- 从 DAT 自动入口选择技能 → 点击跨技能目标 → 播放 → 选择流程帧 → 切换叠加层 → 编辑块字段 → 保存。
 - Runtime or browser environment: Isolated Chrome-compatible browser.
 - Visual evidence: Three target viewports.
 - Interaction evidence: State and screenshot sequence.
@@ -343,7 +415,7 @@
 
 ### Failure and Recovery
 
-- Invalid input: 技能起始帧不存在、字段值无效。
+- Invalid input: sidecar 展示文本超限/含控制字符、字段值无效。
 - Partial failure: BMP 缺失、Native preview 失败、侧车写入失败。
 - Restart: 技能元数据和已保存 DAT 恢复。
 - Reconnection or recovery: 会话失效后明确提示重新载入。
@@ -353,11 +425,11 @@
 - Pre-implementation maturity gate passed: Yes
 - All P0 requirements validated: Yes
 - Required evidence levels satisfied: Yes
-- Current build or revision confirmed: Yes，`20260806172742780-4037ab3a29ef4617ba7386f804ae3c1b`
-- User-visible workflows automatically exercised: Yes，release build 已覆盖核心闭环和 REQ-012 至 REQ-015。
+- Current build or revision confirmed: Yes，核心历史 release 为 `20260806172742780-4037ab3a29ef4617ba7386f804ae3c1b`；启动模式 build 为 `20260806231404869-63dc4e37fba448e6bfd698ca9493c473`；DAT 自动入口最终 build 为 `20260807022745217-fe7793893aac4349b461aef35a668a32`；三栏拖动浏览器 build 为 `20260807072119677-07b2c1f4bdd840ffbb52bb59b644d69e`。
+- User-visible workflows automatically exercised: Yes，核心历史 release 覆盖 REQ-001 至 REQ-015；真实 PTY 和两种 launcher 服务覆盖 REQ-016；最终 Edge 正式 Naruto 流程覆盖 REQ-017；无头 Edge 的 pointer/keyboard/Esc/resize/mobile 流程覆盖 REQ-018。
 - Runtime errors and failed resources reviewed: Yes，最终 `errors`/`console` 为空，未发现资源失败或未处理异常。
 - Self-started test processes cleaned up: Yes，Node 服务、Edge 根进程/子进程和临时 profile 均为 0。
-- Known failures documented: Yes；最终 release 无已知失败，1 个自动测试跳过项为既有环境性 skip。
+- Known failures documented: Yes；当前完整套件无失败，1 个自动测试跳过项为既有环境性 skip。
 - No unapproved scope changes: Yes
 - Reproduction and deployment instructions available: Partial
 - Final owner approval: Pending

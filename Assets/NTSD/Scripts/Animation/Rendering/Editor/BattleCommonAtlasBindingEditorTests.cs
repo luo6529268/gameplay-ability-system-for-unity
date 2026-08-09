@@ -70,24 +70,32 @@ namespace NTSD.Animation.Rendering.Editor
             BattleCommonVisualBinding boundShadow = bound.Shadow;
             Assert.That(bound.TryGetSpark(13, out BattleCommonVisualBinding boundSpark), Is.True);
             Assert.That(bound.TryGetWordGlyph(5, 'L', out BattleCommonVisualBinding boundWord), Is.True);
+            Assert.That(bound.TryGetSpecialCom(out BattleCommonVisualBinding boundSpecialCom), Is.True);
             Assert.That(fixture.Catalog.TryGetSpark(13, out BattleCommonVisualBinding sourceSpark), Is.True);
             Assert.That(fixture.Catalog.TryGetWordGlyph(5, 'L', out BattleCommonVisualBinding sourceWord), Is.True);
+            Assert.That(fixture.Catalog.TryGetSpecialCom(
+                out BattleCommonVisualBinding sourceSpecialCom), Is.True);
 
             AssertDescriptorIdentity(sourceShadow, boundShadow);
             AssertDescriptorIdentity(sourceSpark, boundSpark);
             AssertDescriptorIdentity(sourceWord, boundWord);
+            AssertDescriptorIdentity(sourceSpecialCom, boundSpecialCom);
             Assert.That(boundShadow.CentralBinding.Texture, Is.SameAs(resources.TextureArray));
             Assert.That(boundSpark.CentralBinding.Texture, Is.SameAs(resources.TextureArray));
             Assert.That(boundWord.CentralBinding.Texture, Is.SameAs(resources.TextureArray));
+            Assert.That(boundSpecialCom.CentralBinding.Texture, Is.SameAs(resources.TextureArray));
             Assert.That(boundShadow.CentralBinding.Mode,
                 Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
             Assert.That(boundSpark.CentralBinding.Mode,
                 Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
             Assert.That(boundWord.CentralBinding.Mode,
                 Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
+            Assert.That(boundSpecialCom.CentralBinding.Mode,
+                Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
             Assert.That(boundShadow.CentralBinding.IsValid, Is.True);
             Assert.That(boundSpark.CentralBinding.IsValid, Is.True);
             Assert.That(boundWord.CentralBinding.IsValid, Is.True);
+            Assert.That(boundSpecialCom.CentralBinding.IsValid, Is.True);
 
             var resolver = new BattleCatalogCentralResourceResolver();
             resolver.Configure(
@@ -98,6 +106,11 @@ namespace NTSD.Animation.Rendering.Editor
             AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1));
             AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.HitRecord, boundSpark, -1, 13));
             AssertArrayResolved(resolver, CreateCommand(BattleRenderCommandType.OverlayGlyph, boundWord, 5, 'L'));
+            AssertArrayResolved(resolver, CreateCommand(
+                BattleRenderCommandType.OverlayGlyph,
+                boundSpecialCom,
+                5,
+                'C'));
             BattleRenderCommand staleShadow =
                 CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1, 1);
             Assert.That(
@@ -119,11 +132,21 @@ namespace NTSD.Animation.Rendering.Editor
                 new object[] { CreateCommand(BattleRenderCommandType.OverlayGlyph, boundWord, 5, 'L') });
             AddCommandMethod.Invoke(
                 frame,
+                new object[]
+                {
+                    CreateCommand(
+                        BattleRenderCommandType.OverlayGlyph,
+                        boundSpecialCom,
+                        5,
+                        'C'),
+                });
+            AddCommandMethod.Invoke(
+                frame,
                 new object[] { CreateCommand(BattleRenderCommandType.Shadow, boundShadow, -1, -1) });
             using (var backend = new BattleDynamicMeshBackend())
             {
                 backend.Build(frame, resolver, BattleCentralDrawMode.OrderedChunks);
-                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(4));
+                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(5));
                 Assert.That(backend.SegmentCount, Is.EqualTo(1),
                     "Interleaved common command kinds sharing one array/material variant must collapse into one ordered segment.");
             }
@@ -160,9 +183,12 @@ namespace NTSD.Animation.Rendering.Editor
                 Is.EqualTo(BattleSpriteCentralBindingMode.AtlasPageTexture2D));
             Assert.That(ordered.TryGetSpark(13, out BattleCommonVisualBinding orderedSpark), Is.True);
             Assert.That(ordered.TryGetWordGlyph(5, 'L', out BattleCommonVisualBinding orderedWord), Is.True);
+            Assert.That(ordered.TryGetSpecialCom(
+                out BattleCommonVisualBinding orderedSpecialCom), Is.True);
             AssertOrderedPageBinding(planResult.Plan, fixture.SourcePaths, ordered.Shadow);
             AssertOrderedPageBinding(planResult.Plan, fixture.SourcePaths, orderedSpark);
             AssertOrderedPageBinding(planResult.Plan, fixture.SourcePaths, orderedWord);
+            AssertOrderedPageBinding(planResult.Plan, fixture.SourcePaths, orderedSpecialCom);
 
             fixture.CreateWithoutShadowSource(
                 out List<BattleAtlasSourcePixels> nonShadowSources,
@@ -406,13 +432,31 @@ namespace NTSD.Animation.Rendering.Editor
                     }
                 }
 
+                Texture2D specialComTexture = Track(CreateTexture(
+                    BattleCommonVisualCatalog.SpecialComWidth,
+                    BattleCommonVisualCatalog.SpecialComHeight,
+                    "common-special-com"));
+                Sprite specialComSprite = Track(Sprite.Create(
+                    specialComTexture,
+                    new Rect(
+                        0f,
+                        0f,
+                        BattleCommonVisualCatalog.SpecialComWidth,
+                        BattleCommonVisualCatalog.SpecialComHeight),
+                    BattleCommonVisualCatalog.GetSpecialComPivotNormalized(),
+                    100f,
+                    0,
+                    SpriteMeshType.FullRect));
                 Catalog = BattleCommonVisualCatalog.Build(
                     shadowPrefab,
                     sparkTexture,
                     sparkSprites,
                     wordTextures,
-                    wordSprites);
+                    wordSprites,
+                    specialComTexture,
+                    specialComSprite);
                 Assert.That(Catalog.IsComplete, Is.True, Catalog.Diagnostic);
+                Assert.That(Catalog.IsSpecialComValid, Is.True);
 
                 Sources = new List<BattleAtlasSourcePixels>();
                 Descriptors = new List<BattleAtlasSheetDescriptor>();
@@ -432,6 +476,10 @@ namespace NTSD.Animation.Rendering.Editor
                         SourcePaths[BattleVisualResourceKey.CommonWordGlyph(sheetIndex, charCode)] = path;
                     }
                 }
+                AddSource(
+                    "common-special-com",
+                    specialComTexture,
+                    BattleVisualResourceKey.CommonSpecialCom);
             }
 
             public BattleCommonVisualCatalog Catalog { get; }

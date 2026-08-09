@@ -32,8 +32,11 @@ namespace NTSD.Simulation
         internal const int LegacySpriteRendererMaxPresentationEntities =
             (short.MaxValue + 1) / PresentationSubOrderCount;
 
-        private readonly Dictionary<LF2Entity, PresentationRenderOrder> _presentationRenderOrders =
-            new Dictionary<LF2Entity, PresentationRenderOrder>();
+        private PresentationRenderOrder[] _presentationRenderOrders =
+            new PresentationRenderOrder[128];
+        private int[] _presentationRenderOrderEpochs = new int[128];
+        private int _presentationRenderOrderEpoch = 1;
+        private int _presentationRenderOrderCount;
         private static readonly System.Comparison<LF2Entity> PresentationOrderComparison =
             ComparePresentationRenderOrder;
         private readonly List<LF2Entity> _presentationRenderScratch = new List<LF2Entity>(128);
@@ -231,7 +234,7 @@ namespace NTSD.Simulation
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
                     ValidateLegacySpriteRendererPresentationCapacity(
-                        _presentationRenderOrders.Count);
+                        _presentationRenderOrderCount);
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
                 }
@@ -483,9 +486,12 @@ namespace NTSD.Simulation
         {
             if (reusesCoordinatorSort)
                 PresentationRenderOrderReusePublishCountForDiagnostics++;
-            _presentationRenderOrders.Clear();
+            AdvancePresentationRenderOrderEpoch();
+            _presentationRenderOrderCount = 0;
             if (sortedEntities == null)
                 return;
+
+            EnsurePresentationRenderOrderCapacity(RuntimeSlotCapacity);
 
             int rank = 0;
             for (int i = 0; i < sortedEntities.Count; i++)
@@ -498,9 +504,39 @@ namespace NTSD.Simulation
                     continue;
                 }
 
-                _presentationRenderOrders[entity] = new PresentationRenderOrder(handle, rank);
+                EnsurePresentationRenderOrderCapacity(slot + 1);
+                _presentationRenderOrders[slot] = new PresentationRenderOrder(handle, rank);
+                _presentationRenderOrderEpochs[slot] = _presentationRenderOrderEpoch;
+                _presentationRenderOrderCount++;
                 rank++;
             }
+        }
+
+        private void AdvancePresentationRenderOrderEpoch()
+        {
+            if (_presentationRenderOrderEpoch == int.MaxValue)
+            {
+                System.Array.Clear(
+                    _presentationRenderOrderEpochs,
+                    0,
+                    _presentationRenderOrderEpochs.Length);
+                _presentationRenderOrderEpoch = 1;
+                return;
+            }
+
+            _presentationRenderOrderEpoch++;
+        }
+
+        private void EnsurePresentationRenderOrderCapacity(int required)
+        {
+            if (required <= _presentationRenderOrders.Length)
+                return;
+
+            int capacity = _presentationRenderOrders.Length;
+            while (capacity < required)
+                capacity = checked(capacity * 2);
+            System.Array.Resize(ref _presentationRenderOrders, capacity);
+            System.Array.Resize(ref _presentationRenderOrderEpochs, capacity);
         }
 
         internal void RecordPresentationEntityScanAndSortForDiagnostics()
@@ -523,8 +559,11 @@ namespace NTSD.Simulation
 
         internal int GetPresentationRenderSortingOrder(LF2Entity entity, int subOrder)
         {
-            if (entity != null &&
-                _presentationRenderOrders.TryGetValue(entity, out PresentationRenderOrder published) &&
+            int slot = entity?.Runtime?.SlotIndex ?? -1;
+            if (slot >= 0 &&
+                slot < _presentationRenderOrders.Length &&
+                _presentationRenderOrderEpochs[slot] == _presentationRenderOrderEpoch &&
+                TryGetPublishedPresentationRenderOrder(slot, out PresentationRenderOrder published) &&
                 TryResolveRuntimeHandle(published.Handle, out LF2Entity current) &&
                 ReferenceEquals(current, entity))
             {
@@ -539,7 +578,11 @@ namespace NTSD.Simulation
             if (entity != null && IsActiveForCurrentPass(entity))
             {
                 BuildPresentationRenderOrder();
-                if (_presentationRenderOrders.TryGetValue(entity, out published) &&
+                slot = entity.Runtime?.SlotIndex ?? -1;
+                if (slot >= 0 &&
+                    slot < _presentationRenderOrders.Length &&
+                    _presentationRenderOrderEpochs[slot] == _presentationRenderOrderEpoch &&
+                    TryGetPublishedPresentationRenderOrder(slot, out published) &&
                     TryResolveRuntimeHandle(published.Handle, out current) &&
                     ReferenceEquals(current, entity))
                 {
@@ -549,6 +592,22 @@ namespace NTSD.Simulation
             }
 
             return Mathf.Clamp(subOrder, PresentationShadowSubOrder, PresentationHitRecordSubOrder);
+        }
+
+        private bool TryGetPublishedPresentationRenderOrder(
+            int slot,
+            out PresentationRenderOrder order)
+        {
+            if (slot >= 0 &&
+                slot < _presentationRenderOrders.Length &&
+                _presentationRenderOrderEpochs[slot] == _presentationRenderOrderEpoch)
+            {
+                order = _presentationRenderOrders[slot];
+                return true;
+            }
+
+            order = default;
+            return false;
         }
 
         private static int ComparePresentationRenderOrder(LF2Entity left, LF2Entity right)

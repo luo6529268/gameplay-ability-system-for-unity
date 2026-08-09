@@ -42,11 +42,20 @@ export interface ProjectSpriteRangeView {
 
 export type ProjectFrameView = Omit<DatFrameProjection, "sound">;
 
+export interface ProjectPreviewObjectView {
+    readonly oid: number;
+    readonly type: number;
+    readonly name: string;
+    readonly spriteRanges: readonly ProjectSpriteRangeView[];
+    readonly frames: readonly ProjectFrameView[];
+}
+
 export interface NativePreviewEntityView {
     readonly slot: number;
     readonly oid: number;
     readonly frame: number;
     readonly pic: number;
+    readonly renderPic?: number;
     readonly facing: number;
     readonly x: number;
     readonly y: number;
@@ -54,14 +63,22 @@ export interface NativePreviewEntityView {
     readonly xInt: number;
     readonly yInt: number;
     readonly zInt: number;
+    readonly displayZ: number;
     readonly velocity: { readonly x: number; readonly y: number; readonly z: number };
     readonly renderOffsetX: number;
     readonly frameDelay: number;
+    readonly hitStop: number;
     readonly team: number;
     readonly target: number;
     readonly holder: number;
     readonly link: number;
     readonly ai: boolean;
+    readonly objectType: number | null;
+    readonly kind: "root" | "actor" | "clone" | "projectile" | "unknown";
+    readonly lineageId: string;
+    readonly firstSeenTick: number;
+    readonly lastSeenTick: number;
+    readonly resourceAvailable: boolean;
 }
 
 export interface NativePreviewTickView {
@@ -78,6 +95,13 @@ export interface NativePreviewTickView {
     readonly entities: readonly NativePreviewEntityView[];
 }
 
+export type NativePreviewInputKey = "A" | "D" | "W" | "S" | "J" | "K" | "L";
+
+export interface NativePreviewInputStep {
+    readonly tick: number;
+    readonly keys: readonly NativePreviewInputKey[];
+}
+
 export interface NativePreviewView {
     readonly metadata: {
         readonly runtime: "ntsd_cpp";
@@ -85,6 +109,8 @@ export interface NativePreviewView {
         readonly renderer: "none";
         readonly seed: number;
         readonly startFrame: number;
+        readonly initialFrame?: number;
+        readonly inputPlan?: readonly NativePreviewInputStep[];
         readonly ticksRequested: number;
         readonly stage: {
             readonly index: number;
@@ -92,6 +118,27 @@ export interface NativePreviewView {
             readonly width: number;
             readonly zMin: number;
             readonly zMax: number;
+            readonly background?: {
+                readonly shadow?: {
+                    readonly path: string;
+                    readonly width: number;
+                    readonly height: number;
+                    readonly assetId?: string;
+                };
+                readonly layers: readonly {
+                    readonly path: string;
+                    readonly transparency: number;
+                    readonly parallaxWidth: number;
+                    readonly x: number;
+                    readonly y: number;
+                    readonly loop: number;
+                    readonly cc: number;
+                    readonly c1: number;
+                    readonly c2: number;
+                    readonly animCounter: number;
+                    readonly assetId?: string;
+                }[];
+            };
         };
         readonly initial: {
             readonly p1: { readonly x: number; readonly y: number; readonly z: number };
@@ -99,6 +146,37 @@ export interface NativePreviewView {
         };
     };
     readonly ticks: readonly NativePreviewTickView[];
+    readonly resources: readonly ProjectPreviewObjectView[];
+    readonly trace: NativePreviewTraceView;
+}
+
+export interface NativePreviewTraceEntityView {
+    readonly lineageId: string;
+    readonly slot: number;
+    readonly oid: number;
+    readonly kind: "root" | "actor" | "clone" | "projectile" | "unknown";
+    readonly firstSeenTick: number;
+    readonly lastSeenTick: number;
+    readonly completedTick: number | null;
+    readonly completion: "root-ended" | "spawned" | "despawned" | "landed" | "persistent" | "unknown";
+}
+
+export interface NativePreviewTraceEventView {
+    readonly tick: number;
+    readonly kind: "spawn" | "despawn";
+    readonly lineageId: string;
+    readonly slot: number;
+    readonly oid: number;
+}
+
+export interface NativePreviewTraceView {
+    readonly rootSkillEndedTick: number | null;
+    readonly progressEndTick: number | null;
+    readonly playbackEndTick: number;
+    readonly status: "complete" | "timeout" | "persistent";
+    readonly pendingProjectiles: readonly string[];
+    readonly entities: readonly NativePreviewTraceEntityView[];
+    readonly events: readonly NativePreviewTraceEventView[];
 }
 
 export interface ProjectSessionView {
@@ -110,6 +188,7 @@ export interface ProjectSessionView {
     readonly type: number;
     readonly name: string;
     readonly spriteRanges: readonly ProjectSpriteRangeView[];
+    readonly previewObjects: readonly ProjectPreviewObjectView[];
     readonly frames: readonly ProjectFrameView[];
     readonly fields: readonly DatSessionFieldView[];
     readonly structureCapabilities: readonly DatSessionFrameStructureView[];
@@ -125,6 +204,8 @@ export interface ProjectPreviewRequest {
     readonly sessionId: string;
     readonly expectedRevision: number;
     readonly startFrame: number;
+    readonly initialFrame?: number;
+    readonly inputPlan?: readonly NativePreviewInputStep[];
     readonly ticks: number;
 }
 

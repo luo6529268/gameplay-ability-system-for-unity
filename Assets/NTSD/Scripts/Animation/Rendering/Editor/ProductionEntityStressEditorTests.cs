@@ -1587,6 +1587,29 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void InputMode_MoveParsesWithoutEnablingAiPolicy()
+        {
+            var request = new ProductionEntityStressRequest
+            {
+                action = "dispersed",
+                inputMode = "move",
+                outputPath = "Temp/input-move.json",
+            };
+
+            ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
+                request,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(config.InputMode, Is.EqualTo(ProductionEntityStressInputMode.Move));
+            Assert.That(
+                ProductionEntityStressConfig.FormatInputMode(config.InputMode),
+                Is.EqualTo("move"));
+            Assert.That(
+                config.InputMode == ProductionEntityStressInputMode.Ai,
+                Is.False);
+        }
+
+        [Test]
         public void InputMode_UnknownValueIsRejected()
         {
             var request = new ProductionEntityStressRequest
@@ -1602,7 +1625,7 @@ namespace NTSD.Animation.Rendering.Editor
                     ProductionEntityStressPaths.ProjectRoot));
 
             Assert.That(exception.Message, Does.Contain("human"));
-            Assert.That(exception.Message, Does.Contain("ai or none"));
+            Assert.That(exception.Message, Does.Contain("ai, move, or none"));
         }
 
         [Test]
@@ -3543,6 +3566,15 @@ namespace NTSD.Animation.Rendering.Editor
                 report,
                 ProductionEntityStressAllocationRegion.WriteReport,
                 707L);
+            ProductionEntityStressRunner.RecordAllocationBytesForReport(
+                report,
+                ProductionEntityStressAllocationRegion.RunnerSteadyFrameOverhead,
+                808L);
+            ProductionEntityStressRunner.RecordAllocationBytesForReport(
+                report,
+                ProductionEntityStressAllocationRegion
+                    .RefreshRosterAndCapacityDiagnostics,
+                909L);
 
             AssertAllocationMetrics(
                 report.allocationPostTickTimingCollectors,
@@ -3586,11 +3618,24 @@ namespace NTSD.Animation.Rendering.Editor
                 707L,
                 707L,
                 707L);
+            AssertAllocationMetrics(
+                report.allocationRunnerSteadyFrameOverhead,
+                1L,
+                808L,
+                808L,
+                808L);
+            AssertAllocationMetrics(
+                report.allocationRefreshRosterAndCapacityDiagnostics,
+                1L,
+                909L,
+                909L,
+                909L);
 
             string json = JsonUtility.ToJson(report);
             Assert.That(json, Does.Contain(
                 "\"allocationPostTickTimingCollectors\""));
             Assert.That(json, Does.Contain("\"allocationWriteReport\""));
+            Assert.That(json, Does.Contain("\"allocationRunnerSteadyFrameOverhead\""));
         }
 
         [Test]
@@ -3677,6 +3722,15 @@ namespace NTSD.Animation.Rendering.Editor
                 report,
                 ProductionEntityStressCpuRegion.WriteReport,
                 1111d);
+            ProductionEntityStressRunner.RecordCpuMillisecondsForReport(
+                report,
+                ProductionEntityStressCpuRegion.RunnerSteadyFrameOverhead,
+                1212d);
+            ProductionEntityStressRunner.RecordCpuMillisecondsForReport(
+                report,
+                ProductionEntityStressCpuRegion
+                    .RefreshRosterAndCapacityDiagnostics,
+                1313d);
 
             AssertCpuMetrics(report.cpuRunnerUpdateTotal, 1L, 101d, 101d, 101d);
             AssertCpuMetrics(report.cpuSpawnOrRemove, 1L, 202d, 202d, 202d);
@@ -3729,10 +3783,23 @@ namespace NTSD.Animation.Rendering.Editor
                 1010d,
                 1010d);
             AssertCpuMetrics(report.cpuWriteReport, 1L, 1111d, 1111d, 1111d);
+            AssertCpuMetrics(
+                report.cpuRunnerSteadyFrameOverhead,
+                1L,
+                1212d,
+                1212d,
+                1212d);
+            AssertCpuMetrics(
+                report.cpuRefreshRosterAndCapacityDiagnostics,
+                1L,
+                1313d,
+                1313d,
+                1313d);
 
             string json = JsonUtility.ToJson(report);
             Assert.That(json, Does.Contain("\"cpuRunnerUpdateTotal\""));
             Assert.That(json, Does.Contain("\"cpuWriteReport\""));
+            Assert.That(json, Does.Contain("\"cpuRunnerSteadyFrameOverhead\""));
         }
 
         private static void AssertAllocationMetrics(
@@ -3973,6 +4040,8 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(request.enableDetailPhaseTiming, Is.False);
             Assert.That(request.aiSensingMode, Is.EqualTo("legacy"));
             Assert.That(request.allowUnsafeAiSoACandidate, Is.False);
+            Assert.That(request.maxCatchUpTicksPerFrame, Is.EqualTo(1));
+            Assert.That(config.MaxCatchUpTicksPerFrame, Is.EqualTo(1));
             Assert.That(config.ShouldAutoStopWhenSampled, Is.False);
         }
 
@@ -4688,7 +4757,7 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(config.SimulationOnly, Is.True);
             Assert.That(config.ShouldAutoStopWhenSampled, Is.True);
             Assert.That(config.SpawnBatchSize, Is.EqualTo(25));
-            Assert.That(config.MaxCatchUpTicksPerFrame, Is.EqualTo(4));
+            Assert.That(config.MaxCatchUpTicksPerFrame, Is.EqualTo(1));
             Assert.That(config.MaxBacklogTicks, Is.EqualTo(8));
             Assert.That(config.Seed, Is.EqualTo(0x4E545344u));
             Assert.That(
@@ -5192,6 +5261,77 @@ namespace NTSD.Animation.Rendering.Editor
                 ProductionEntityStressSamplePolicy.IsSteadyStateSample(
                     31, 30, 1000, 1000, false, true),
                 Is.False);
+        }
+
+        [Test]
+        public void CatchUpCpuBudget_PredictsNextTickWithoutBlockingTheFirstTick()
+        {
+            Assert.That(
+                ProductionEntityStressRunner.ShouldDeferCatchUpTickForCpuBudget(
+                    cpuBudgetMs: 0d,
+                    ticksAlreadyExecuted: 1,
+                    elapsedCatchUpMs: 30d,
+                    previousTickMs: 30d),
+                Is.False,
+                "A zero budget must preserve the throughput loop.");
+            Assert.That(
+                ProductionEntityStressRunner.ShouldDeferCatchUpTickForCpuBudget(
+                    cpuBudgetMs: 33.333d,
+                    ticksAlreadyExecuted: 0,
+                    elapsedCatchUpMs: 0d,
+                    previousTickMs: 30d),
+                Is.False,
+                "The first tick must always be allowed.");
+            Assert.That(
+                ProductionEntityStressRunner.ShouldDeferCatchUpTickForCpuBudget(
+                    cpuBudgetMs: 33.333d,
+                    ticksAlreadyExecuted: 1,
+                    elapsedCatchUpMs: 10d,
+                    previousTickMs: 10d),
+                Is.False);
+            Assert.That(
+                ProductionEntityStressRunner.ShouldDeferCatchUpTickForCpuBudget(
+                    cpuBudgetMs: 33.333d,
+                    ticksAlreadyExecuted: 1,
+                    elapsedCatchUpMs: 30d,
+                    previousTickMs: 30d),
+                Is.True,
+                "A second heavy tick must be deferred instead of multiplying the frame stall.");
+        }
+
+        [Test]
+        public void CatchUpCpuBudget_IsParsedReportedAndFingerprinted()
+        {
+            var throughputRequest = new ProductionEntityStressRequest
+            {
+                action = "dispersed100",
+                entityCount = 100,
+                catchUpCpuBudgetMs = 0f,
+                outputPath = "Temp/catchup-throughput.json",
+            };
+            var interactiveRequest = new ProductionEntityStressRequest
+            {
+                action = throughputRequest.action,
+                entityCount = throughputRequest.entityCount,
+                catchUpCpuBudgetMs = 1000f / 30f,
+                outputPath = "Temp/catchup-interactive.json",
+            };
+
+            ProductionEntityStressConfig throughput =
+                ProductionEntityStressConfig.FromRequest(
+                    throughputRequest,
+                    ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig interactive =
+                ProductionEntityStressConfig.FromRequest(
+                    interactiveRequest,
+                    ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(throughput.LimitsCatchUpByCpuBudget, Is.False);
+            Assert.That(interactive.LimitsCatchUpByCpuBudget, Is.True);
+            Assert.That(interactive.CatchUpCpuBudgetMs, Is.EqualTo(1000d / 30d).Within(0.001d));
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildWorkload(interactive),
+                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(throughput)));
         }
 
         [Test]

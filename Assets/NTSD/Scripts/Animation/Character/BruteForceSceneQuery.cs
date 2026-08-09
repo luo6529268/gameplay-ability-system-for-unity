@@ -2077,7 +2077,7 @@ namespace NTSD.Animation
                                 continue;
 
                             participant.HasAttackItr = true;
-                            if (TryBuildImmediateItrAabb(
+                            if (TryBuildFormalItrAabb(
                                     entity,
                                     collisionFrame,
                                     itr,
@@ -2717,7 +2717,7 @@ namespace NTSD.Animation
                     itrEntry.ItrIndex < 0 ||
                     itrEntry.ItrIndex >= itrs.Count ||
                     !ReferenceEquals(itrs[itrEntry.ItrIndex], itrEntry.Itr) ||
-                    !TryBuildImmediateItrAabb(
+                    !TryBuildFormalItrAabb(
                         entity,
                         participant.CollisionFrame,
                         itrEntry.Itr,
@@ -3380,6 +3380,15 @@ namespace NTSD.Animation
             participant.CollisionY = entity.Runtime.YInt;
             participant.CollisionZ = CollisionZInt(entity, collisionFrame);
             participant.FacingLeft = entity.PS.dir == "left";
+            participant.DataObjectType = GetCurrentDataObjectType(entity);
+            participant.CurrentDataObjectId =
+                LF2Entity.ResolveCurrentDataObjectId(entity);
+            participant.PairCollectionBaseAllowed =
+                !IsPendingFlushDestroy(entity) &&
+                !IsPureTransitionSmoke(entity);
+            participant.AttackPairCollectionBaseAllowed =
+                participant.PairCollectionBaseAllowed &&
+                entity.AttackExempt <= 0;
             participant.HasExactCommonCache = true;
             return true;
         }
@@ -3391,6 +3400,8 @@ namespace NTSD.Animation
                 return;
 
             LF2FrameData collisionFrame = participant.CollisionFrame;
+            participant.CandidateAttackerCarrier =
+                IsCandidateAttackerCarrierForCurrentTick(participant.Entity);
             participant.ExactItrRectOffset = _roleFormalExactItrRects.Count;
             participant.ExactItrRectCount = 0;
             List<InteractionArea> itrs = collisionFrame?.itrs;
@@ -4419,7 +4430,9 @@ namespace NTSD.Animation
 
             if (attacker == null || target == null || attacker == target)
                 return;
-            if (!CandidateCollectionPairAllowed(attacker, target))
+            if (!CandidateCollectionPairAllowedCached(
+                    in attackerParticipant,
+                    in targetParticipant))
                 return;
 
             LF2FrameData attackerCurrentFrame = attackerParticipant.CurrentFrame;
@@ -4432,7 +4445,7 @@ namespace NTSD.Animation
                 return;
             }
 
-            if (!IsCandidateAttackerCarrierForCurrentTick(attacker))
+            if (!attackerParticipant.CandidateAttackerCarrier)
                 return;
 
             LF2FrameData targetCurrentFrame = targetParticipant.CurrentFrame;
@@ -4588,7 +4601,7 @@ namespace NTSD.Animation
                 return true;
             }
 
-            int targetType = GetCurrentDataObjectType(target);
+            int targetType = targetParticipant.DataObjectType;
             int targetState = targetCurrentFrame?.state ?? 0;
             int itrRectEnd = attackerParticipant.ExactItrRectOffset +
                              attackerParticipant.ExactItrRectCount;
@@ -5361,6 +5374,60 @@ namespace NTSD.Animation
             return true;
         }
 
+        private static bool CandidateCollectionPairAllowedCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant)
+        {
+            if (!attackerParticipant.AttackPairCollectionBaseAllowed ||
+                !targetParticipant.PairCollectionBaseAllowed)
+            {
+                return false;
+            }
+
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+            int attackerVrestKey = attacker.Runtime?.SlotIndex ?? -1;
+            if (attackerVrestKey >= 0 &&
+                target.ItrRest != null &&
+                target.ItrRest.HasVrest(attackerVrestKey))
+            {
+                return false;
+            }
+
+            return !IsBlockedReleasePairCached(
+                in attackerParticipant,
+                in targetParticipant);
+        }
+
+        private static bool IsBlockedReleasePairCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant)
+        {
+            int attackerOid = attackerParticipant.CurrentDataObjectId;
+            if (attackerOid != 200 &&
+                attackerOid != 203 &&
+                attackerOid != 205 &&
+                attackerOid != 206 &&
+                attackerOid != 207 &&
+                attackerOid != 215 &&
+                attackerOid != 216)
+            {
+                return false;
+            }
+
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+            LF2FrameData targetFrame = targetParticipant.CurrentFrame;
+            return targetParticipant.CurrentDataObjectId == 9 &&
+                   (target.Frame?.N ?? -1) == 301 &&
+                   targetFrame != null &&
+                   targetFrame.hit_a == 999 &&
+                   targetFrame.hit_d == 999 &&
+                   targetFrame.hit_j == 999 &&
+                   attacker.RelationTeam == target.RelationTeam &&
+                   attacker.RelationTeam != 0;
+        }
+
         private static bool IsBlockedReleasePair(LF2Entity attacker, LF2Entity target)
         {
             int attackerOid = LF2Entity.ResolveCurrentDataObjectId(attacker);
@@ -6126,6 +6193,35 @@ namespace NTSD.Animation
             return bounds.IsValid;
         }
 
+        private static bool TryBuildFormalItrAabb(
+            LF2Entity attacker,
+            LF2FrameData frame,
+            InteractionArea itr,
+            out SpatialAabbXZ bounds)
+        {
+            bounds = default;
+            if (attacker == null || frame == null || itr == null ||
+                !IsReleaseItrGeometry(itr))
+            {
+                return false;
+            }
+
+            WorldRect rect = ItrWorldRect(attacker, frame, itr);
+            BuildConservativeNonEmptyXRange(
+                rect.X1,
+                rect.X2,
+                out int minX,
+                out int maxX);
+            int collisionZ = CollisionZInt(attacker, frame);
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            bounds = new SpatialAabbXZ(
+                minX,
+                ClampRect((long)collisionZ - zHalf),
+                maxX,
+                ClampRect((long)collisionZ + zHalf));
+            return bounds.IsValid;
+        }
+
         private static bool TryBuildShadowBodyAabb(
             LF2Entity target,
             LF2FrameData frame,
@@ -6158,13 +6254,35 @@ namespace NTSD.Animation
                 return false;
 
             WorldRect rect = BodyWorldRect(target, frame, body, collectSemantics: true);
+            BuildConservativeNonEmptyXRange(
+                rect.X1,
+                rect.X2,
+                out int minX,
+                out int maxX);
             int collisionZ = CollisionZInt(target, frame);
             bounds = new SpatialAabbXZ(
-                Math.Min(rect.X1, rect.X2),
+                minX,
                 collisionZ,
-                Math.Max(rect.X1, rect.X2),
+                maxX,
                 ClampRect((long)collisionZ + 1));
             return bounds.IsValid;
+        }
+
+        private static void BuildConservativeNonEmptyXRange(
+            int x1,
+            int x2,
+            out int minX,
+            out int maxX)
+        {
+            minX = Math.Min(x1, x2);
+            maxX = Math.Max(x1, x2);
+            if (minX != maxX)
+            {
+                return;
+            }
+
+            minX = ClampRect((long)minX - 1L);
+            maxX = ClampRect((long)maxX + 1L);
         }
 
         private static bool TryBuildImmediateVolumeAabb(
@@ -6511,6 +6629,11 @@ namespace NTSD.Animation
             CollisionY = 0;
             CollisionZ = 0;
             FacingLeft = false;
+            DataObjectType = -1;
+            CandidateAttackerCarrier = false;
+            CurrentDataObjectId = -1;
+            PairCollectionBaseAllowed = false;
+            AttackPairCollectionBaseAllowed = false;
             CurrentItrCount = currentFrame?.itrs?.Count ?? 0;
             CollisionItrCount = ReferenceEquals(currentFrame, collisionFrame)
                 ? CurrentItrCount
@@ -6544,6 +6667,11 @@ namespace NTSD.Animation
         public int CollisionY { get; set; }
         public int CollisionZ { get; set; }
         public bool FacingLeft { get; set; }
+        public int DataObjectType { get; set; }
+        public bool CandidateAttackerCarrier { get; set; }
+        public int CurrentDataObjectId { get; set; }
+        public bool PairCollectionBaseAllowed { get; set; }
+        public bool AttackPairCollectionBaseAllowed { get; set; }
         public int CurrentItrCount { get; set; }
         public int CollisionItrCount { get; set; }
         public int CollisionBodyCount { get; set; }

@@ -94,12 +94,13 @@ namespace NTSD.Simulation.Presentation
                 return false;
             }
 
+            bool specialCom = IsSpecialCom(in entity);
             int counterLength = entity.HP2Orig > 1 ? (entity.HP2Orig <= 9 ? 2 : 3) : 0;
-            int labelLength = GetLabelLength(in entity, slotLabelChars);
+            int labelLength = GetLabelLength(in entity, slotLabelChars, specialCom);
 
             bool bracketed = entity.SlotIndex >= 0 && entity.SlotIndex < SlotCount &&
                              slotLabelState[entity.SlotIndex] == -1 &&
-                             !IsSpecialCom(in entity);
+                             !specialCom;
             if (bracketed)
                 labelLength += 2;
 
@@ -120,16 +121,24 @@ namespace NTSD.Simulation.Presentation
 
             if (labelLength != 0)
             {
-                int sheetIndex = IsSpecialCom(in entity) ? 5 : ResolveRelationSheet(entity.RelationTeam);
-                int labelX = entity.XInt + entity.RenderOffsetX - ((GlyphAdvance * labelLength) >> 1) - entity.CameraX;
-                int maxX = 794 - GlyphAdvance * labelLength;
-                if (labelX < 0)
-                    labelX = 0;
-                if (labelX > maxX)
-                    labelX = maxX;
+                int sheetIndex;
+                int labelX;
+                int labelY;
+                if (specialCom)
+                {
+                    TryGetSpecialComLayout(
+                        in entity,
+                        out labelX,
+                        out labelY,
+                        out sheetIndex);
+                }
+                else
+                {
+                    sheetIndex = ResolveRelationSheet(entity.RelationTeam);
+                    ResolveLabelOrigin(in entity, labelLength, out labelX, out labelY);
+                }
 
-                int labelY = entity.ZInt + 3;
-                if (IsSpecialCom(in entity) || (entity.SlotIndex < 0 || entity.SlotIndex >= SlotCount))
+                if (specialCom || (entity.SlotIndex < 0 || entity.SlotIndex >= SlotCount))
                 {
                     WriteGlyph(glyphBuffer, ref sequence, 'C', sheetIndex, labelX, labelY, BattleEntityOverlayGlyphType.Label);
                     WriteGlyph(glyphBuffer, ref sequence, 'o', sheetIndex, labelX + GlyphAdvance, labelY, BattleEntityOverlayGlyphType.Label);
@@ -156,10 +165,32 @@ namespace NTSD.Simulation.Presentation
             return true;
         }
 
-        private static int GetLabelLength(in BattleEntityOverlayRuntimeSlot entity, char[,] slotLabelChars)
+        public static bool TryGetSpecialComLayout(
+            in BattleEntityOverlayRuntimeSlot entity,
+            out int labelX,
+            out int labelY,
+            out int sheetIndex)
+        {
+            if (!IsSpecialCom(in entity))
+            {
+                labelX = 0;
+                labelY = 0;
+                sheetIndex = 0;
+                return false;
+            }
+
+            sheetIndex = 5;
+            ResolveLabelOrigin(in entity, 3, out labelX, out labelY);
+            return true;
+        }
+
+        private static int GetLabelLength(
+            in BattleEntityOverlayRuntimeSlot entity,
+            char[,] slotLabelChars,
+            bool specialCom)
         {
             if ((entity.SlotIndex >= 20 && (entity.RelationTeam == 5 || entity.ObjType != 0)) || entity.HitStop <= -25)
-                return IsSpecialCom(in entity) ? 3 : 0;
+                return specialCom ? 3 : 0;
 
             if (entity.SlotIndex < 0 || entity.SlotIndex >= SlotCount)
                 return 3;
@@ -182,6 +213,22 @@ namespace NTSD.Simulation.Presentation
         private static int ResolveRelationSheet(int relationTeam)
         {
             return relationTeam >= 1 && relationTeam <= 4 ? relationTeam : 0;
+        }
+
+        private static void ResolveLabelOrigin(
+            in BattleEntityOverlayRuntimeSlot entity,
+            int labelLength,
+            out int labelX,
+            out int labelY)
+        {
+            labelX = entity.XInt + entity.RenderOffsetX -
+                     ((GlyphAdvance * labelLength) >> 1) - entity.CameraX;
+            int maxX = 794 - GlyphAdvance * labelLength;
+            if (labelX < 0)
+                labelX = 0;
+            if (labelX > maxX)
+                labelX = maxX;
+            labelY = entity.ZInt + 3;
         }
 
         private static void WriteGlyph(

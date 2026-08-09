@@ -14,6 +14,8 @@ namespace NTSD.App
     public sealed class NTSDSoundPlayer : MonoBehaviour, ISimulationSoundPresentationSink
     {
         [SerializeField] private string soundRootFolder = "NTSD/Sound";
+        [SerializeField, Min(1)] private int desktopOneShotVoiceLimit = 48;
+        [SerializeField, Min(1)] private int mobileOneShotVoiceLimit = 24;
 
         private sealed class PreparedSoundCue
         {
@@ -22,6 +24,7 @@ namespace NTSD.App
             public string SourcePath;
             public bool IsSingleFile;
             public bool IsLoaded;
+            public bool IsLoading;
             public AudioClip[] Clips;
         }
 
@@ -29,11 +32,38 @@ namespace NTSD.App
             new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
         private AudioController preparedAudioController;
         private long preparedCueBuildCount;
+        private AudioSource[] oneShotVoices = Array.Empty<AudioSource>();
+        private MMFollowTarget[] oneShotVoiceFollowers = Array.Empty<MMFollowTarget>();
+        private double[] oneShotVoiceAvailableDspTimes = Array.Empty<double>();
+        private int nextOneShotVoiceIndex;
+        private long pooledOneShotPlayCount;
+        private long oneShotVoiceLimitDropCount;
+        private long coalescedLoadRequestCount;
+        private long loopFallbackPlayCount;
 
         public int PreparedCueCountForDiagnostics => preparedCues.Count;
         public long PreparedCueBuildCountForDiagnostics => preparedCueBuildCount;
+        public int OneShotVoiceCountForDiagnostics => oneShotVoices.Length;
+        public long PooledOneShotPlayCountForDiagnostics => pooledOneShotPlayCount;
+        public long OneShotVoiceLimitDropCountForDiagnostics => oneShotVoiceLimitDropCount;
+        public long CoalescedLoadRequestCountForDiagnostics => coalescedLoadRequestCount;
+        public long LoopFallbackPlayCountForDiagnostics => loopFallbackPlayCount;
+
+        private void Start()
+        {
+            EnsureOneShotVoicePool();
+        }
 
         public void PlaySfx(string soundId, Vector3? position = null, Transform parent = null)
+        {
+            PlaySfx(soundId, position, parent, ResolveListenerTransform());
+        }
+
+        private void PlaySfx(
+            string soundId,
+            Vector3? position,
+            Transform parent,
+            Transform listenerTransform)
         {
             PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
             if (preparedCue == null)
@@ -41,11 +71,22 @@ namespace NTSD.App
 
             if (preparedCue.IsLoaded)
             {
-                PlayPreparedCue(preparedCue, position, parent);
+                PlayPreparedCue(preparedCue, position, parent, listenerTransform);
                 return;
             }
 
-            LoadAndPlayPreparedCueAsync(preparedCue, position, parent).Forget();
+            if (preparedCue.IsLoading)
+            {
+                coalescedLoadRequestCount++;
+                return;
+            }
+
+            preparedCue.IsLoading = true;
+            LoadAndPlayPreparedCueAsync(
+                preparedCue,
+                position,
+                parent,
+                listenerTransform).Forget();
         }
 
         public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
@@ -53,14 +94,24 @@ namespace NTSD.App
             if (sounds == null)
                 return;
 
+            Transform listenerTransform = ResolveListenerTransform();
             for (int i = 0; i < sounds.Count; i++)
-                PresentSound(sounds[i]);
+                PresentSound(sounds[i], listenerTransform);
         }
 
         public void PresentSound(PendingSoundEvent sound)
         {
+            PresentSound(sound, ResolveListenerTransform());
+        }
+
+        private void PresentSound(PendingSoundEvent sound, Transform listenerTransform)
+        {
             Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(sound.WorldX, 0f);
-            PlaySfx(sound.Cue, new Vector3(groundPoint.x, groundPoint.y, 0f));
+            PlaySfx(
+                sound.Cue,
+                new Vector3(groundPoint.x, groundPoint.y, 0f),
+                null,
+                listenerTransform);
         }
 
         public bool TryGetPreparedSingleFileWrapperForDiagnostics(
@@ -119,16 +170,25 @@ namespace NTSD.App
         private async UniTaskVoid LoadAndPlayPreparedCueAsync(
             PreparedSoundCue preparedCue,
             Vector3? position,
-            Transform parent)
+            Transform parent,
+            Transform listenerTransform)
         {
-            await LoadPreparedClipsAsync(preparedCue);
-            PlayPreparedCue(preparedCue, position, parent);
+            try
+            {
+                await LoadPreparedClipsAsync(preparedCue);
+                PlayPreparedCue(preparedCue, position, parent, listenerTransform);
+            }
+            finally
+            {
+                preparedCue.IsLoading = false;
+            }
         }
 
         private void PlayPreparedCue(
             PreparedSoundCue preparedCue,
             Vector3? position,
-            Transform parent)
+            Transform parent,
+            Transform listenerTransform)
         {
             AudioItem audioItem = preparedCue.AudioItem;
 
@@ -145,9 +205,8 @@ namespace NTSD.App
 
             audioItem.lastTimePlayed = Time.time;
 
-            Transform listenerTransform = Camera.main != null ? Camera.main.transform : null;
             Vector3 playbackPosition = position ?? (listenerTransform != null ? listenerTransform.position : Vector3.zero);
-            Transform attachTarget = audioItem.range <= 0f ? listenerTransform : parent;
+            Transform attachTarget = audioItem.range > 0f ? parent : null;
 
             MMSoundManagerPlayOptions options = MMSoundManagerPlayOptions.Default;
             options.MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.Sfx;
@@ -165,7 +224,113 @@ namespace NTSD.App
                 options.MinDistance = audioItem.range > 3f ? audioItem.range - 3f : 0f;
             }
 
-            MMSoundManager.Instance?.PlaySound(clip, options);
+            if (audioItem.loop)
+            {
+                loopFallbackPlayCount++;
+                MMSoundManager.Instance?.PlaySound(clip, options);
+                return;
+            }
+
+            MMSoundManager soundManager = MMSoundManager.Instance;
+            if (soundManager == null)
+            {
+                return;
+            }
+
+            AudioSource voice = AcquireOneShotVoice(out int voiceIndex);
+            if (voice == null)
+            {
+                oneShotVoiceLimitDropCount++;
+                return;
+            }
+
+            options.RecycleAudioSource = voice;
+            AudioSource playingVoice = soundManager.PlaySound(clip, options);
+            if (playingVoice == null)
+            {
+                return;
+            }
+
+            float absolutePitch = Mathf.Max(0.01f, Mathf.Abs(options.Pitch));
+            oneShotVoiceAvailableDspTimes[voiceIndex] =
+                AudioSettings.dspTime + clip.length / absolutePitch;
+            pooledOneShotPlayCount++;
+        }
+
+        private AudioSource AcquireOneShotVoice(out int voiceIndex)
+        {
+            EnsureOneShotVoicePool();
+            voiceIndex = -1;
+            int voiceCount = oneShotVoices.Length;
+            double currentDspTime = AudioSettings.dspTime;
+            for (int offset = 0; offset < voiceCount; offset++)
+            {
+                int index = (nextOneShotVoiceIndex + offset) % voiceCount;
+                AudioSource voice = oneShotVoices[index];
+                if (voice == null || oneShotVoiceAvailableDspTimes[index] > currentDspTime)
+                {
+                    continue;
+                }
+
+                MMFollowTarget follower = oneShotVoiceFollowers[index];
+                if (follower != null)
+                {
+                    follower.Target = null;
+                    follower.enabled = false;
+                }
+
+                voice.transform.SetParent(transform, false);
+                nextOneShotVoiceIndex = (index + 1) % voiceCount;
+                voiceIndex = index;
+                return voice;
+            }
+
+            return null;
+        }
+
+        private void EnsureOneShotVoicePool()
+        {
+            int voiceLimit = ResolveOneShotVoiceLimit();
+            if (oneShotVoices.Length == voiceLimit)
+            {
+                return;
+            }
+
+            oneShotVoices = new AudioSource[voiceLimit];
+            oneShotVoiceFollowers = new MMFollowTarget[voiceLimit];
+            oneShotVoiceAvailableDspTimes = new double[voiceLimit];
+            nextOneShotVoiceIndex = 0;
+            for (int i = 0; i < voiceLimit; i++)
+            {
+                var voiceHost = new GameObject($"NTSD SFX Voice {i}");
+                voiceHost.transform.SetParent(transform, false);
+
+                AudioSource voice = voiceHost.AddComponent<AudioSource>();
+                voice.playOnAwake = false;
+                voice.loop = false;
+
+                MMFollowTarget follower = voiceHost.AddComponent<MMFollowTarget>();
+                follower.Target = null;
+                follower.enabled = false;
+
+                oneShotVoices[i] = voice;
+                oneShotVoiceFollowers[i] = follower;
+            }
+        }
+
+        private int ResolveOneShotVoiceLimit()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            return Mathf.Max(1, mobileOneShotVoiceLimit);
+#else
+            return Mathf.Max(1, desktopOneShotVoiceLimit);
+#endif
+        }
+
+        private static Transform ResolveListenerTransform()
+        {
+            Camera listenerCamera = Camera.main;
+            return listenerCamera != null ? listenerCamera.transform : null;
         }
 
         private static AudioItem FindAudioItem(AudioController controller, string soundId)

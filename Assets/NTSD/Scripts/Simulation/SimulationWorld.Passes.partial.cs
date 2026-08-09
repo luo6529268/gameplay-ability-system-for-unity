@@ -207,7 +207,7 @@ namespace NTSD.Simulation
                         }
 
                         BeginAiUnifiedSnapshotExecutionConsumer(entity);
-                        entity.RunCharacterInputPhase(tickIndex);
+                        entity.RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
 #if UNITY_INCLUDE_TESTS
                         if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
                             ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);

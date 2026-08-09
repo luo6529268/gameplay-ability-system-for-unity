@@ -1,7 +1,12 @@
 import type { DatFrameProjection } from "../model/dat-projection.js";
+import {
+    latestRuntimeFrameMap,
+    SKILL_ENTRY_HIT_KEYS,
+    type SkillEntry,
+} from "./skill-entries.js";
 
 export const SKILL_FLOW_EDGE_KEYS = Object.freeze([
-    "next", "hit_a", "hit_d", "hit_j", "hit_Fa", "hit_Fj", "hit_Ua", "hit_Uj", "hit_Da", "hit_Dj", "hit_ja",
+    "next", ...SKILL_ENTRY_HIT_KEYS,
 ] as const);
 
 export type SkillFlowEdgeKey = typeof SKILL_FLOW_EDGE_KEYS[number];
@@ -21,14 +26,22 @@ export interface SkillFlowUnresolvedNode {
     readonly reason: SkillFlowUnresolvedReason;
 }
 
-export type SkillFlowNode = SkillFlowFrameNode | SkillFlowUnresolvedNode;
+export interface SkillFlowEntryNode {
+    readonly id: string;
+    readonly kind: "entry";
+    readonly entryId: string;
+    readonly frameId: number;
+    readonly label: string;
+}
+
+export type SkillFlowNode = SkillFlowFrameNode | SkillFlowUnresolvedNode | SkillFlowEntryNode;
 
 export interface SkillFlowEdge {
     readonly id: string;
     readonly from: string;
     readonly key: SkillFlowEdgeKey;
     readonly rawTarget: number;
-    readonly resolution: "frame" | SkillFlowUnresolvedReason;
+    readonly resolution: "frame" | "entry" | SkillFlowUnresolvedReason;
     readonly to: string;
 }
 
@@ -46,6 +59,19 @@ export interface SkillFlowGraph {
     readonly cycles: readonly SkillFlowCycle[];
 }
 
+export function traceStartFrameForSelection(
+    frames: readonly DatFrameProjection[],
+    requestedFrameId: number,
+    requestedOccurrence: number,
+    graph: SkillFlowGraph | undefined,
+): number {
+    const graphContainsFrame = graph?.nodes.some((node) => (
+        node.kind === "frame" && node.occurrence === requestedOccurrence
+    )) === true;
+    const selectedStartFrame = graphContainsFrame ? graph!.startFrame : requestedFrameId;
+    return selectedStartFrame;
+}
+
 function frameNodeId(frameId: number, occurrence: number): string {
     return `frame:${frameId}:${occurrence}`;
 }
@@ -54,21 +80,15 @@ function unresolvedNodeId(target: number, reason: SkillFlowUnresolvedReason): st
     return `unresolved:${reason}:${target}`;
 }
 
+function entryNodeId(entry: SkillEntry): string {
+    return `entry-ref:${entry.id}`;
+}
+
 function targetReason(target: number, frameById: ReadonlyMap<number, DatFrameProjection>): "frame" | SkillFlowUnresolvedReason {
     if (target === 0) return "zero";
     if (target < 0) return "negative";
     if (target >= 600) return "out-of-range";
     return frameById.has(target) ? "frame" : "missing";
-}
-
-function latestFrames(frames: readonly DatFrameProjection[]): Map<number, DatFrameProjection> {
-    const result = new Map<number, DatFrameProjection>();
-    for (const frame of frames) {
-        if (Number.isSafeInteger(frame.frameId) && frame.frameId >= 0 && frame.frameId < 600) {
-            result.set(frame.frameId, frame);
-        }
-    }
-    return result;
 }
 
 function frameNode(frame: DatFrameProjection): SkillFlowFrameNode {
@@ -89,12 +109,23 @@ function unresolvedNode(target: number, reason: SkillFlowUnresolvedReason): Skil
     });
 }
 
+function entryNode(entry: SkillEntry): SkillFlowEntryNode {
+    return Object.freeze({
+        id: entryNodeId(entry),
+        kind: "entry",
+        entryId: entry.id,
+        frameId: entry.startFrame,
+        label: entry.displayName,
+    });
+}
+
 export function buildSkillFlow(
     frames: readonly DatFrameProjection[],
     startFrame: number,
     hasField: (frame: DatFrameProjection, key: SkillFlowEdgeKey) => boolean = () => true,
+    entryIndex: ReadonlyMap<number, SkillEntry> = new Map(),
 ): SkillFlowGraph {
-    const frameById = latestFrames(frames);
+    const frameById = latestRuntimeFrameMap(frames);
     const start = frameById.get(startFrame);
     if (start === undefined) {
         const reason = startFrame < 0 ? "negative" : startFrame >= 600 ? "out-of-range" : "missing";
@@ -125,6 +156,22 @@ export function buildSkillFlow(
             const rawTarget = frame[key];
             const resolution = targetReason(rawTarget, frameById);
             const edgeId = `${from}:${key}`;
+            const targetEntry = key === "next" || rawTarget === startFrame
+                ? undefined
+                : entryIndex.get(rawTarget);
+            if (resolution === "frame" && targetEntry !== undefined) {
+                const targetNode = entryNode(targetEntry);
+                nodes.set(targetNode.id, targetNode);
+                edges.push(Object.freeze({
+                    id: edgeId,
+                    from,
+                    key,
+                    rawTarget,
+                    resolution: "entry" as const,
+                    to: targetNode.id,
+                }));
+                continue;
+            }
             if (resolution === "frame") {
                 const target = frameById.get(rawTarget)!;
                 const targetNode = frameNode(target);
@@ -169,7 +216,7 @@ export function buildSkillFlow(
         if (visited.has(nodeId)) return;
         active.add(nodeId);
         for (const edge of edgeByFrom.get(nodeId) ?? []) {
-            if (nodes.get(edge.to)?.kind !== "frame") continue;
+            if (edge.resolution !== "frame" || nodes.get(edge.to)?.kind !== "frame") continue;
             if (active.has(edge.to)) cycles.push(Object.freeze({ edgeId: edge.id, from: edge.from, to: edge.to }));
             else visit(edge.to);
         }

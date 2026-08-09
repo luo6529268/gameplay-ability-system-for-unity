@@ -254,6 +254,20 @@ namespace NTSD.Input
 
         private bool ApplyComboFrameInput(LF2Entity character)
         {
+            if (_cdDefend != 5 &&
+                _comboDRA == 0 &&
+                _comboDLA == 0 &&
+                _comboDUA == 0 &&
+                _comboDDA == 0 &&
+                _comboDRJ == 0 &&
+                _comboDLJ == 0 &&
+                _comboDUJ == 0 &&
+                _comboDDJ == 0 &&
+                _comboDJA == 0)
+            {
+                return false;
+            }
+
             // C# authority RunComboWrappers advances all nine combo values as one local
             // transaction. Only the final DJA fallthrough commits them; every earlier
             // return keeps frame/facing/cooldown side effects but discards local progress.

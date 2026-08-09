@@ -1,5 +1,13 @@
 # 接手文档 — NTSD C# → Unity 战斗逻辑对齐（Codex 无缝接手版）
 
+## 2026-08-08：1000 AI catch-up CPU 预算接手状态
+
+- `ProductionEntityStressHarness` 已加入可关闭的 `catchUpCpuBudgetMs`：request 默认 `0` 保持历史吞吐口径，诊断 Window 默认 `33.33 ms`。首 tick 不会被预算阻止；后续 tick 依据本帧累计耗时和上一 tick 实测成本决定是否延后。报告/fingerprint 已包含预算与受限帧数，backlog/dropped tick 不隐藏。
+- 预算 A/B 报告分别为 `Temp/NTSD_ProductionEntityStress.catchup-budget-1000-120ticks-20260808.json` 与 `Temp/NTSD_ProductionEntityStress.catchup-throughput-1000-120ticks-20260808.json`。预算模式最大 `1 tick/frame`，Unity frame Avg/P95=`75.388/103.443 ms`（约 `13.26 FPS`）；无预算模式最大 `4 ticks/frame`，为 `161.826/257.808 ms`（约 `6.18 FPS`）。可见卡顿下降，但预算模式 dropped tick=`113`，无预算=`20`，所以该模式只改善 Editor 交互性，不提高逻辑吞吐。
+- 核心 lockstep 所有分层哈希和 overall 均一致（overall=`2348281130f1c432260ccb9f17a6f31affc06a08632724c3be77070542ce82e4`）。extended slots/overall 的差异由每 tick 与最终 catch-up tick 两种表现刷新频率造成，仅涉及 presentation-finalized hit-record 字段。
+- 仍未达到目标：预算模式完整 tick Avg/P95=`45.573/61.142 ms`，无预算带表现 tick Avg=`34.597 ms`。两轮 logic tick allocation=`0 B/tick`，但 Editor Profiler frame GC 仍为数百 KB 级。后续不要继续把追帧调度当成容量优化；应回到单 tick 的 CharacterInput、CandidateCollect、RenderDispatch/表现构建和 Editor frame 分配归因。
+- fresh 回归：Unity 编译完成；focused job `ded49f6e80d346eebee7f3229bdfc0e6`=`2/2 passed`；full EditMode job `15ba76f83027436db37474e58681c015`=`720/720 passed`；完整 `BattleRuntimeSelfCheck`=`2026-08-08 12:54:38 PASS`。两轮 teardown 均 restored、cleanup exception=`0`、active runtime 清零。1000 AI 稳定 30 Hz gate 仍开放；T8 与 Android 真机继续排除。
+
 ## 2026-08-03：BuildCommands / 高频表现命令接手状态
 
 - 已完成两项有证据的等价优化：`BuildCommands` 每 tick 单次捕获 viewport 快照；可信生产资源命令只做一次身份校验并走 `ResolveTrusted`。外部/测试/身份失配命令继续完整签名校验并 fail-closed。

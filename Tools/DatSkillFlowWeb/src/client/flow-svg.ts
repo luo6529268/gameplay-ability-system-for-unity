@@ -1,4 +1,10 @@
-import type { SkillFlowEdge, SkillFlowFrameNode, SkillFlowGraph, SkillFlowNode } from "./skill-flow.js";
+import type {
+    SkillFlowEdge,
+    SkillFlowEntryNode,
+    SkillFlowFrameNode,
+    SkillFlowGraph,
+    SkillFlowNode,
+} from "./skill-flow.js";
 import { layoutSkillFlow, type FlowNodePosition } from "./flow-layout.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -8,6 +14,7 @@ export interface FlowSvgOptions {
     readonly selectedEdgeId?: string;
     readonly onSelectEdge: (edge: SkillFlowEdge) => void;
     readonly onSelectNode: (node: SkillFlowFrameNode) => void;
+    readonly onSelectEntry: (node: SkillFlowEntryNode) => void;
 }
 
 function element<K extends keyof SVGElementTagNameMap>(name: K): SVGElementTagNameMap[K] {
@@ -57,7 +64,9 @@ function renderNode(
     label.setAttribute("text-anchor", "middle");
     label.textContent = position.node.kind === "frame"
         ? `帧 ${position.node.frameId}`
-        : `目标 ${position.node.target}`;
+        : position.node.kind === "entry"
+            ? position.node.label
+            : `目标 ${position.node.target}`;
     group.append(label);
     if (position.node.kind === "frame") {
         const occurrence = element("text");
@@ -68,6 +77,15 @@ function renderNode(
         occurrence.textContent = `#${position.node.occurrence}`;
         group.append(occurrence);
         group.addEventListener("click", () => options.onSelectNode(position.node));
+    } else if (position.node.kind === "entry") {
+        const target = element("text");
+        target.setAttribute("x", String(position.width / 2));
+        target.setAttribute("y", "34");
+        target.setAttribute("text-anchor", "middle");
+        target.classList.add("flow-node-meta");
+        target.textContent = `入口帧 ${position.node.frameId}`;
+        group.append(target);
+        group.addEventListener("click", () => options.onSelectEntry(position.node));
     } else {
         appendTitle(group, `未解析目标 ${position.node.target}：${position.node.reason}`);
     }

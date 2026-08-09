@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   BattleRuntimeProfileName: ''
+  BattleAiExecutionProfileName: DataOrientedCanonical
   DesktopInitialRuntimeSlotCapacity: 512
   BattleCollisionBroadphaseName: ''
   BattlePresentationBackendName: CentralOnly

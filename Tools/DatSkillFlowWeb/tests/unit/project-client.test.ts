@@ -2,14 +2,38 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
+    BoundedLruCache,
     findFrameFieldCapability,
     lastFrameForId,
     mergePreview,
+    previewIntentCacheKey,
     primaryPreviewEntity,
     spritePlacement,
 } from "../../src/client/project-client.js";
 
 describe("project client helpers", () => {
+    it("keys complete preview scenarios and evicts the least recently used response", () => {
+        const base = {
+            sessionId: "session",
+            revision: 3,
+            startFrame: 265,
+            initialFrame: 0,
+            inputPlan: [{ tick: 2, keys: ["L"] }],
+            ticks: 120,
+        };
+        assert.equal(previewIntentCacheKey(base), previewIntentCacheKey({ ...base }));
+        assert.notEqual(previewIntentCacheKey(base), previewIntentCacheKey({ ...base, startFrame: 271 }));
+
+        const cache = new BoundedLruCache<string, number>(2);
+        cache.set("jump", 1);
+        cache.set("clone", 2);
+        assert.equal(cache.get("jump"), 1);
+        cache.set("projectile", 3);
+        assert.equal(cache.get("clone"), undefined);
+        assert.equal(cache.get("jump"), 1);
+        assert.equal(cache.get("projectile"), 3);
+    });
+
     it("merges preview updates without discarding the loaded project", () => {
         const project = { name: "Naruto", frames: [{ frameId: 0 }], ranges: [{ row: 3 }], revision: 1, nativeTicks: [{ tick: 0 }] };
         const merged = mergePreview(project, 2, [{ tick: 1 }]);

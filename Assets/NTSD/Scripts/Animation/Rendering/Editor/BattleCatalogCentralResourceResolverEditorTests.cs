@@ -102,6 +102,30 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void Resolve_CommonSpecialCom_UsesPublishedBindingAndTrustedCache()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: true);
+            using var common = new CommonFixture("special-com");
+            BattleCommonVisualCatalog catalog = common.CreateCatalog(
+                includeShadow: true,
+                completeSparks: false,
+                completeWords: false,
+                includeSpecialCom: true);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            BattleRenderCommand command = common.CreateSpecialComCommand();
+            AssertResolved(fixture.Resolver, command);
+            int cacheHitsBefore = fixture.Resolver.TrustedResourceCacheHits;
+            AssertResolved(fixture.Resolver, command);
+            Assert.That(fixture.Resolver.TrustedResourceCacheHits,
+                Is.EqualTo(cacheHitsBefore + 1));
+        }
+
+        [Test]
         public void Configure_SameReferencesAndValidity_PreservesWarmedTemplateCaches()
         {
             using var fixture = new ResolverFixture(includeArrayBinding: true);
@@ -230,6 +254,36 @@ namespace NTSD.Animation.Rendering.Editor
                     out BattleCentralResolvedResource second),
                 Is.EqualTo(BattleCentralResourceStatus.Resolved));
 
+            Assert.That(first.Color, Is.EqualTo(firstColor));
+            Assert.That(second.Color, Is.EqualTo(secondColor));
+            Assert.That(ReferenceEquals(first.Texture, second.Texture), Is.True);
+            Assert.That(ReferenceEquals(first.Material, second.Material), Is.True);
+        }
+
+        [Test]
+        public void Resolve_TrustedIdentityCache_ReusesResourceAndKeepsPerCommandColor()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            Color32 firstColor = new Color32(17, 31, 47, 63);
+            Color32 secondColor = new Color32(79, 97, 113, 131);
+            BattleRenderCommand firstCommand = fixture.CreateTrustedCommand(0, firstColor);
+            BattleRenderCommand secondCommand = fixture.CreateTrustedCommand(0, secondColor);
+
+            Assert.That(
+                fixture.Resolver.Resolve(firstCommand, out BattleCentralResolvedResource first),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(fixture.Resolver.TrustedResourceCacheMisses, Is.EqualTo(1));
+            Assert.That(fixture.Resolver.TrustedResourceCacheHits, Is.EqualTo(0));
+
+            Assert.That(
+                fixture.Resolver.Resolve(secondCommand, out BattleCentralResolvedResource second),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(fixture.Resolver.TrustedResourceCacheHits, Is.EqualTo(1));
             Assert.That(first.Color, Is.EqualTo(firstColor));
             Assert.That(second.Color, Is.EqualTo(secondColor));
             Assert.That(ReferenceEquals(first.Texture, second.Texture), Is.True);
@@ -696,7 +750,6 @@ namespace NTSD.Animation.Rendering.Editor
                         typeof(IDictionary<BattleSpriteKey, BattleSpriteEntry>),
                     },
                     null);
-
             private readonly Texture2D texture;
             private readonly Texture2DArray arrayTexture;
             private readonly Sprite sourceSprite;
@@ -801,6 +854,43 @@ namespace NTSD.Animation.Rendering.Editor
                         entry.PixelRect,
                         entry.Pivot,
                         BattleVisualResourceKey.FromEntity(entry.Key)));
+            }
+
+            public BattleRenderCommand CreateTrustedCommand(
+                int effectivePic,
+                Color32 color)
+            {
+                Assert.That(
+                    Catalog.TryGet(17, effectivePic, out BattleSpriteEntry entry),
+                    Is.True);
+                BattleRenderCommand source = CreateCommand(effectivePic, color);
+                object boxedCommand = Activator.CreateInstance(
+                    typeof(BattleRenderCommand),
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    new object[]
+                    {
+                        source.Type,
+                        source.Handle,
+                        source.StableId,
+                        source.VisualDataId,
+                        source.EffectivePic,
+                        source.ZInt,
+                        source.RuntimeSlot,
+                        source.SortOrder,
+                        source.SortingLayerId,
+                        source.LocalSequence,
+                        source.Position,
+                        source.Size,
+                        source.Pivot,
+                        source.NormalizedUv,
+                        source.RenderState,
+                        source.SpriteDescriptor,
+                        entry,
+                    },
+                    null);
+                Assert.That(boxedCommand, Is.Not.Null);
+                return (BattleRenderCommand)boxedCommand;
             }
 
             public BattleSpriteCatalog CreateInvalidBindingCatalog()
@@ -932,15 +1022,32 @@ namespace NTSD.Animation.Rendering.Editor
                         typeof(string),
                     },
                     null);
+            private static readonly ConstructorInfo CatalogWithSpecialConstructor =
+                typeof(BattleCommonVisualCatalog).GetConstructor(
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    new[]
+                    {
+                        typeof(BattleCommonVisualBinding),
+                        typeof(BattleCommonVisualBinding[]),
+                        typeof(Texture2D[]),
+                        typeof(BattleCommonVisualBinding[][]),
+                        typeof(BattleCommonVisualBinding),
+                        typeof(string),
+                    },
+                    null);
 
             private readonly Texture2D sparkTexture;
             private readonly Texture2D wordTexture;
+            private readonly Texture2D specialComTexture;
             private readonly Sprite shadowSprite;
             private readonly Sprite sparkSprite;
             private readonly Sprite wordSprite;
+            private readonly Sprite specialComSprite;
             private readonly BattleCommonVisualBinding shadowBinding;
             private readonly BattleCommonVisualBinding sparkBinding;
             private readonly BattleCommonVisualBinding wordBinding;
+            private readonly BattleCommonVisualBinding specialComBinding;
 
             public CommonFixture(string name)
             {
@@ -950,9 +1057,13 @@ namespace NTSD.Animation.Rendering.Editor
                 Texture = CreateTexture($"{name}-shadow");
                 sparkTexture = CreateTexture($"{name}-spark");
                 wordTexture = CreateTexture($"{name}-word");
+                specialComTexture = CreateTexture($"{name}-special-com");
                 shadowSprite = CreateSprite(Texture, $"{name}-shadow-sprite");
                 sparkSprite = CreateSprite(sparkTexture, $"{name}-spark-sprite");
                 wordSprite = CreateSprite(wordTexture, $"{name}-word-sprite");
+                specialComSprite = CreateSprite(
+                    specialComTexture,
+                    $"{name}-special-com-sprite");
                 shadowBinding = CreateBinding(
                     BattleVisualResourceKey.CommonShadow,
                     shadowSprite,
@@ -965,6 +1076,10 @@ namespace NTSD.Animation.Rendering.Editor
                     BattleVisualResourceKey.CommonWordGlyph(WordSheetIndex, WordCharCode),
                     wordSprite,
                     wordTexture);
+                specialComBinding = CreateBinding(
+                    BattleVisualResourceKey.CommonSpecialCom,
+                    specialComSprite,
+                    specialComTexture);
 
                 Catalog = CreateCatalog(
                     includeShadow: true,
@@ -978,7 +1093,8 @@ namespace NTSD.Animation.Rendering.Editor
             public BattleCommonVisualCatalog CreateCatalog(
                 bool includeShadow,
                 bool completeSparks,
-                bool completeWords)
+                bool completeWords,
+                bool includeSpecialCom = false)
             {
                 var sparks = new BattleCommonVisualBinding[
                     BattleCommonVisualCatalog.SparkFrameCount];
@@ -1025,13 +1141,28 @@ namespace NTSD.Animation.Rendering.Editor
                     words[WordSheetIndex][WordCharCode] = wordBinding;
                 }
 
-                return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
+                if (!includeSpecialCom)
+                {
+                    return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
+                        new object[]
+                        {
+                            includeShadow ? shadowBinding : null,
+                            sparks,
+                            wordTextures,
+                            words,
+                            string.Empty,
+                        });
+                }
+
+                Assert.That(CatalogWithSpecialConstructor, Is.Not.Null);
+                return (BattleCommonVisualCatalog)CatalogWithSpecialConstructor.Invoke(
                     new object[]
                     {
                         includeShadow ? shadowBinding : null,
                         sparks,
                         wordTextures,
                         words,
+                        specialComBinding,
                         string.Empty,
                     });
             }
@@ -1063,14 +1194,52 @@ namespace NTSD.Animation.Rendering.Editor
                     wordBinding);
             }
 
+            public BattleRenderCommand CreateSpecialComCommand()
+            {
+                BattleRenderCommand source = CreateCommand(
+                    BattleRenderCommandType.OverlayGlyph,
+                    5,
+                    'C',
+                    specialComBinding);
+                object boxedCommand = Activator.CreateInstance(
+                    typeof(BattleRenderCommand),
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    new object[]
+                    {
+                        source.Type,
+                        source.Handle,
+                        source.StableId,
+                        source.VisualDataId,
+                        source.EffectivePic,
+                        source.ZInt,
+                        source.RuntimeSlot,
+                        source.SortOrder,
+                        source.SortingLayerId,
+                        source.LocalSequence,
+                        source.Position,
+                        source.Size,
+                        source.Pivot,
+                        source.NormalizedUv,
+                        source.RenderState,
+                        source.SpriteDescriptor,
+                        specialComBinding,
+                    },
+                    null);
+                Assert.That(boxedCommand, Is.Not.Null);
+                return (BattleRenderCommand)boxedCommand;
+            }
+
             public void Dispose()
             {
                 UnityEngine.Object.DestroyImmediate(shadowSprite);
                 UnityEngine.Object.DestroyImmediate(sparkSprite);
                 UnityEngine.Object.DestroyImmediate(wordSprite);
+                UnityEngine.Object.DestroyImmediate(specialComSprite);
                 UnityEngine.Object.DestroyImmediate(Texture);
                 UnityEngine.Object.DestroyImmediate(sparkTexture);
                 UnityEngine.Object.DestroyImmediate(wordTexture);
+                UnityEngine.Object.DestroyImmediate(specialComTexture);
             }
 
             private static Texture2D CreateTexture(string name)
@@ -1156,6 +1325,7 @@ namespace NTSD.Animation.Rendering.Editor
                         binding.Pivot,
                         binding.Key));
             }
+
         }
     }
 }

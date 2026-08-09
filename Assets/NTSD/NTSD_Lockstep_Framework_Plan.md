@@ -1,5 +1,9 @@
 # NTSD 联机帧同步（Lockstep）框架布置方案（核对清单）
 
+> **已废弃（2026-08-08）：**本文包含 `FixedUpdate` 驱动等过时事实，不再作为当前计划或实现依据，也不会继续维护。
+> 当前单机主计划：`Assets/NTSD/Docs/singleplayer-1000ai-performance-plan.md`
+> 未来服务器架构备忘：`Assets/NTSD/Docs/future-server-lockstep-architecture.md`
+
 > 目标：联机时战斗核心按帧同步推进（只传输入、不传状态）；当前项目核心目录为 `Assets/NTSD`。
 > 本文只讨论架构与目录布置，不涉及代码修改。
 

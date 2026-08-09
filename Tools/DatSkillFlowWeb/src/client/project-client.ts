@@ -35,6 +35,67 @@ export interface NativeSlotEntity {
     readonly slot: number;
 }
 
+export interface PreviewIntentIdentity {
+    readonly sessionId: string;
+    readonly revision: string | number;
+    readonly startFrame: number;
+    readonly initialFrame?: number;
+    readonly inputPlan?: readonly {
+        readonly tick: number;
+        readonly keys: readonly string[];
+    }[];
+    readonly ticks: number;
+}
+
+export class BoundedLruCache<K, V> {
+    readonly #maximumEntries: number;
+    readonly #entries = new Map<K, V>();
+
+    constructor(maximumEntries: number) {
+        if (!Number.isSafeInteger(maximumEntries) || maximumEntries < 1) {
+            throw new RangeError("maximumEntries must be a positive safe integer.");
+        }
+        this.#maximumEntries = maximumEntries;
+    }
+
+    get size(): number {
+        return this.#entries.size;
+    }
+
+    get(key: K): V | undefined {
+        const value = this.#entries.get(key);
+        if (value === undefined) return undefined;
+        this.#entries.delete(key);
+        this.#entries.set(key, value);
+        return value;
+    }
+
+    set(key: K, value: V): void {
+        this.#entries.delete(key);
+        this.#entries.set(key, value);
+        while (this.#entries.size > this.#maximumEntries) {
+            const oldest = this.#entries.keys().next().value as K | undefined;
+            if (oldest === undefined) break;
+            this.#entries.delete(oldest);
+        }
+    }
+
+    clear(): void {
+        this.#entries.clear();
+    }
+}
+
+export function previewIntentCacheKey(intent: PreviewIntentIdentity): string {
+    return JSON.stringify({
+        sessionId: intent.sessionId,
+        revision: intent.revision,
+        startFrame: intent.startFrame,
+        initialFrame: intent.initialFrame ?? intent.startFrame,
+        ticks: intent.ticks,
+        inputPlan: (intent.inputPlan ?? []).map((step) => ({ tick: step.tick, keys: [...step.keys] })),
+    });
+}
+
 export function primaryPreviewEntity<T extends NativeSlotEntity>(
     entities: readonly T[],
 ): T | undefined {
@@ -80,9 +141,23 @@ export function spritePlacement(input: SpritePlacementInput): SpritePlacement {
     });
 }
 
-export function mergePreview<T extends object>(project: T, revision: string | number, nativeTicks: readonly unknown[]): T & {
+export function mergePreview<T extends object>(
+    project: T,
+    revision: string | number,
+    nativeTicks: readonly unknown[],
+    nativeTrace?: unknown,
+    previewObjects?: readonly unknown[],
+): T & {
     readonly revision: string | number;
     readonly nativeTicks: readonly unknown[];
+    readonly nativeTrace?: unknown;
+    readonly previewObjects?: readonly unknown[];
 } {
-    return Object.freeze({ ...project, revision, nativeTicks: Object.freeze([...nativeTicks]) });
+    return Object.freeze({
+        ...project,
+        revision,
+        nativeTicks: Object.freeze([...nativeTicks]),
+        ...(nativeTrace === undefined ? {} : { nativeTrace }),
+        ...(previewObjects === undefined ? {} : { previewObjects: Object.freeze([...previewObjects]) }),
+    });
 }

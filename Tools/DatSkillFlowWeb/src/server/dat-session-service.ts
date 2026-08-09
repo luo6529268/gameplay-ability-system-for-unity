@@ -414,7 +414,8 @@ function copyCpoint(value: CPointProjection): CPointProjection {
 
 function copyFrame(value: DatFrameProjection, stringValue: (value: string) => string): DatFrameProjection {
     return {
-        frameId: value.frameId, occurrence: value.occurrence, pic: value.pic, state: value.state, wait: value.wait,
+        frameId: value.frameId, occurrence: value.occurrence, label: stringValue(value.label),
+        pic: value.pic, state: value.state, wait: value.wait,
         next: value.next, dvx: value.dvx, dvy: value.dvy, dvz: value.dvz, centerx: value.centerx,
         centery: value.centery, hit_Fa: value.hit_Fa, hit_Fj: value.hit_Fj, hit_Ua: value.hit_Ua,
         hit_Uj: value.hit_Uj, hit_Da: value.hit_Da, hit_Dj: value.hit_Dj, hit_ja: value.hit_ja,

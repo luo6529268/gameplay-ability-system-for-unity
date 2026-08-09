@@ -102,46 +102,53 @@ namespace NTSD.Simulation
             witness.SelfGeneration = snapshot.SelfGeneration;
             witness.SelfStableId = snapshot.SelfStableId;
             witness.OccupancyEpoch = snapshot.OccupancyEpoch;
-            witness.Input = snapshot.Input;
-            witness.World = snapshot.World;
-            witness.RngState = snapshot.RngState;
-            witness.RngCalls = snapshot.RngCalls;
-            witness.RngOrderHash = RngHashOffset;
             snapshot.RngTraceCount = 0;
             snapshot.RngTraceOverflow = false;
 
             int self = snapshot.SelfSlot;
             if (self < 0 || self >= rows.Capacity)
             {
-                witness.Availability = AiDecisionAvailability.SelfSlotInvalid;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.SelfSlotInvalid,
+                    ref witness);
             }
             if (!rows.Included[self])
             {
-                witness.Availability = AiDecisionAvailability.SelfNotIncluded;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.SelfNotIncluded,
+                    ref witness);
             }
             if (snapshot.OccupancyEpoch != rows.CapturedOccupancyEpoch)
             {
-                witness.Availability = AiDecisionAvailability.EpochMismatch;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.EpochMismatch,
+                    ref witness);
             }
             if (snapshot.SelfGeneration == 0 ||
                 rows.Generation[self] != snapshot.SelfGeneration)
             {
-                witness.Availability = AiDecisionAvailability.GenerationMismatch;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.GenerationMismatch,
+                    ref witness);
             }
             if (rows.Identity[self] != snapshot.SelfStableId)
             {
-                witness.Availability = AiDecisionAvailability.StableIdMismatch;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.StableIdMismatch,
+                    ref witness);
             }
             if (policy == AiDecisionEvaluationPolicy.Indexed &&
                 !AiSensingKernel.AreIndexesReady(rows))
             {
-                witness.Availability = AiDecisionAvailability.IndexesNotReady;
-                return false;
+                return RejectBeforeEvaluation(
+                    snapshot,
+                    AiDecisionAvailability.IndexesNotReady,
+                    ref witness);
             }
 
             witness.Availability = AiDecisionAvailability.Available;
@@ -1607,6 +1614,20 @@ namespace NTSD.Simulation
             witness.RngTraceOverflow = rng.TraceOverflow;
             // The snapshot owns the preallocated order trace scratch used by shadow comparison.
             // Publishing only advances primitive cursors; no per-decision arrays are created.
+        }
+
+        private static bool RejectBeforeEvaluation(
+            AiDecisionSnapshot snapshot,
+            AiDecisionAvailability availability,
+            ref AiDecisionWitness witness)
+        {
+            witness.Availability = availability;
+            witness.Input = snapshot.Input;
+            witness.World = snapshot.World;
+            witness.RngState = snapshot.RngState;
+            witness.RngCalls = snapshot.RngCalls;
+            witness.RngOrderHash = RngHashOffset;
+            return false;
         }
 
         private static bool IsIncluded(AiSensingSnapshot rows, int slot)

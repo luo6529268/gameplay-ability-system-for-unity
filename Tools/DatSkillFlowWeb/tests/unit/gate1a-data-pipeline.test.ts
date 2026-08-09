@@ -88,6 +88,19 @@ describe("Gate1A byte CST and typed DAT projection", () => {
         assert.deepEqual(parseDatCst(plaintext).emit(), plaintext);
     });
 
+    it("projects the DAT frame header label without changing source bytes", () => {
+        const source = Buffer.from([
+            "<frame> 0 standing # comment\n",
+            "pic: 0 state: 0 wait: 1 next: 0\n",
+            "<frame_end>\n",
+        ].join(""), "latin1");
+        const document = LosslessDatDocument.fromPlaintext(source);
+
+        assert.equal(document.cst.frames[0]?.label, "standing");
+        assert.equal(document.projection.frames[0]?.label, "standing");
+        assert.deepEqual(document.emitPlaintext(), source);
+    });
+
     it("projects C++ defaults, duplicate-last frames, block fields, aliases, and ignores unknown bdy zwidth", () => {
         const document = LosslessDatDocument.fromPlaintext(syntheticDatPlaintext());
         const frame = document.projection.getFrame(7);

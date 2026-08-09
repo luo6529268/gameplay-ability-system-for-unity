@@ -136,6 +136,7 @@ namespace NTSD.Animation
         CommonShadow = 2,
         CommonSpark = 3,
         CommonWordGlyph = 4,
+        CommonSpecialCom = 5,
     }
 
     public readonly struct BattleVisualResourceKey : IEquatable<BattleVisualResourceKey>
@@ -164,11 +165,25 @@ namespace NTSD.Animation
         public bool IsEntitySprite => Kind == BattleVisualResourceKind.EntitySprite;
         public bool IsCommonSpark => Kind == BattleVisualResourceKind.CommonSpark;
         public bool IsCommonWordGlyph => Kind == BattleVisualResourceKind.CommonWordGlyph;
+        public bool IsCommonSpecialCom => Kind == BattleVisualResourceKind.CommonSpecialCom;
         public int CommonSparkPic => commonSparkPic;
         public int CommonWordSheetIndex => commonWordSheetIndex;
         public int CommonWordCharCode => commonWordCharCode;
         public static BattleVisualResourceKey CommonShadow { get; } =
             new BattleVisualResourceKey(BattleVisualResourceKind.CommonShadow, default);
+        public static BattleVisualResourceKey CommonSpecialCom { get; } =
+            CommonComLabel(BattleCommonVisualCatalog.SpecialComSheetIndex);
+
+        public static BattleVisualResourceKey CommonComLabel(int sheetIndex)
+        {
+            if (sheetIndex < 0 || sheetIndex >= BattleCommonVisualCatalog.WordSheetCount)
+                throw new ArgumentOutOfRangeException(nameof(sheetIndex));
+            return new BattleVisualResourceKey(
+                BattleVisualResourceKind.CommonSpecialCom,
+                default,
+                -1,
+                sheetIndex);
+        }
 
         public static BattleVisualResourceKey CommonSpark(int pic)
         {
@@ -203,7 +218,9 @@ namespace NTSD.Animation
                    (Kind != BattleVisualResourceKind.CommonSpark || commonSparkPic == other.commonSparkPic) &&
                    (Kind != BattleVisualResourceKind.CommonWordGlyph ||
                     (commonWordSheetIndex == other.commonWordSheetIndex &&
-                     commonWordCharCode == other.commonWordCharCode));
+                     commonWordCharCode == other.commonWordCharCode)) &&
+                   (Kind != BattleVisualResourceKind.CommonSpecialCom ||
+                    commonWordSheetIndex == other.commonWordSheetIndex);
         }
 
         public override bool Equals(object obj) => obj is BattleVisualResourceKey other && Equals(other);
@@ -215,6 +232,8 @@ namespace NTSD.Animation
                     return ((int)Kind * 397) ^ entitySpriteKey.GetHashCode();
                 if (Kind == BattleVisualResourceKind.CommonWordGlyph)
                     return (((int)Kind * 397) ^ commonWordSheetIndex) * 397 ^ commonWordCharCode;
+                if (Kind == BattleVisualResourceKind.CommonSpecialCom)
+                    return ((int)Kind * 397) ^ commonWordSheetIndex;
                 return ((int)Kind * 397) ^ commonSparkPic;
             }
         }
@@ -229,6 +248,8 @@ namespace NTSD.Animation
                 return $"CommonSpark({commonSparkPic})";
             if (IsCommonWordGlyph)
                 return $"CommonWordGlyph({commonWordSheetIndex},{commonWordCharCode})";
+            if (IsCommonSpecialCom)
+                return $"CommonComLabel({commonWordSheetIndex})";
             return Kind.ToString();
         }
     }
@@ -364,9 +385,14 @@ namespace NTSD.Animation
         public const int WordGlyphHeight = 16;
         public const int WordTextureWidth = 251;
         public const int WordTextureHeight = 257;
+        public const int SpecialComSheetIndex = 5;
+        public const int SpecialComWidth = 26;
+        public const int SpecialComHeight = WordGlyphHeight;
+        public const int ComLabelsTextureHeight = WordSheetCount * SpecialComHeight;
         private readonly BattleCommonVisualBinding[] sparks;
         private readonly Texture2D[] wordTextures;
         private readonly BattleCommonVisualBinding[][] wordGlyphs;
+        private readonly BattleCommonVisualBinding[] comLabels;
 
         private BattleCommonVisualCatalog(
             BattleCommonVisualBinding shadow,
@@ -374,11 +400,46 @@ namespace NTSD.Animation
             Texture2D[] wordTextures,
             BattleCommonVisualBinding[][] wordGlyphs,
             string diagnostic)
+            : this(
+                shadow,
+                sparks,
+                wordTextures,
+                wordGlyphs,
+                (BattleCommonVisualBinding[])null,
+                diagnostic)
+        {
+        }
+
+        private BattleCommonVisualCatalog(
+            BattleCommonVisualBinding shadow,
+            BattleCommonVisualBinding[] sparks,
+            Texture2D[] wordTextures,
+            BattleCommonVisualBinding[][] wordGlyphs,
+            BattleCommonVisualBinding specialCom,
+            string diagnostic)
+            : this(
+                shadow,
+                sparks,
+                wordTextures,
+                wordGlyphs,
+                BuildComLabelsFromSpecial(specialCom),
+                diagnostic)
+        {
+        }
+
+        private BattleCommonVisualCatalog(
+            BattleCommonVisualBinding shadow,
+            BattleCommonVisualBinding[] sparks,
+            Texture2D[] wordTextures,
+            BattleCommonVisualBinding[][] wordGlyphs,
+            BattleCommonVisualBinding[] comLabels,
+            string diagnostic)
         {
             Shadow = shadow;
             this.sparks = sparks ?? Array.Empty<BattleCommonVisualBinding>();
             this.wordTextures = wordTextures ?? Array.Empty<Texture2D>();
             this.wordGlyphs = wordGlyphs ?? Array.Empty<BattleCommonVisualBinding[]>();
+            this.comLabels = comLabels ?? Array.Empty<BattleCommonVisualBinding>();
             Diagnostic = diagnostic ?? string.Empty;
         }
 
@@ -387,8 +448,11 @@ namespace NTSD.Animation
                 "Common shadow, spark, and word bindings have not been published.");
 
         public BattleCommonVisualBinding Shadow { get; }
+        public BattleCommonVisualBinding SpecialCom =>
+            comLabels.Length == WordSheetCount ? comLabels[SpecialComSheetIndex] : null;
         public IReadOnlyList<BattleCommonVisualBinding> Sparks => sparks;
         public IReadOnlyList<Texture2D> WordTextures => wordTextures;
+        public IReadOnlyList<BattleCommonVisualBinding> ComLabels => comLabels;
         public string Diagnostic { get; }
         public bool IsShadowValid => Shadow != null;
         public bool IsSparkValid => sparks.Length == SparkFrameCount &&
@@ -414,6 +478,10 @@ namespace NTSD.Animation
         }
         public bool IsValid => IsShadowValid;
         public bool IsComplete => IsShadowValid && IsSparkValid && IsWordsValid;
+        public bool IsSpecialComValid => SpecialCom != null;
+        public bool IsComLabelsComplete =>
+            comLabels.Length == WordSheetCount &&
+            Array.TrueForAll(comLabels, binding => binding != null);
 
         public bool TryGetSpark(int pic, out BattleCommonVisualBinding binding)
         {
@@ -457,6 +525,37 @@ namespace NTSD.Animation
 
             binding = null;
             return false;
+        }
+
+        public bool TryGetSpecialCom(out BattleCommonVisualBinding binding)
+        {
+            return TryGetComLabel(SpecialComSheetIndex, out binding);
+        }
+
+        public bool TryGetComLabel(int sheetIndex, out BattleCommonVisualBinding binding)
+        {
+            if (sheetIndex >= 0 && sheetIndex < comLabels.Length)
+            {
+                binding = comLabels[sheetIndex];
+                return binding != null;
+            }
+
+            binding = null;
+            return false;
+        }
+
+        public static Vector2 GetSpecialComPivotNormalized() =>
+            new Vector2(4f / SpecialComWidth, 0.5f);
+
+        public static Rect GetComLabelPixelRect(int sheetIndex)
+        {
+            if (sheetIndex < 0 || sheetIndex >= WordSheetCount)
+                throw new ArgumentOutOfRangeException(nameof(sheetIndex));
+            return new Rect(
+                0f,
+                sheetIndex * SpecialComHeight,
+                SpecialComWidth,
+                SpecialComHeight);
         }
 
         public static Rect GetWordGlyphPixelRect(int charCode)
@@ -608,6 +707,42 @@ namespace NTSD.Animation
             return shadowAndSpark.WithWords(wordsTextures, wordGlyphSprites);
         }
 
+        public static BattleCommonVisualCatalog Build(
+            GameObject shadowPrefab,
+            Texture2D sparkTexture,
+            Sprite[] sparkSprites,
+            Texture2D[] wordsTextures,
+            Sprite[][] wordGlyphSprites,
+            Texture2D specialComTexture,
+            Sprite specialComSprite)
+        {
+            return Build(
+                    shadowPrefab,
+                    sparkTexture,
+                    sparkSprites,
+                    wordsTextures,
+                    wordGlyphSprites)
+                .WithSpecialCom(specialComTexture, specialComSprite);
+        }
+
+        public static BattleCommonVisualCatalog Build(
+            GameObject shadowPrefab,
+            Texture2D sparkTexture,
+            Sprite[] sparkSprites,
+            Texture2D[] wordsTextures,
+            Sprite[][] wordGlyphSprites,
+            Texture2D comLabelsTexture,
+            Sprite[] comLabelSprites)
+        {
+            return Build(
+                    shadowPrefab,
+                    sparkTexture,
+                    sparkSprites,
+                    wordsTextures,
+                    wordGlyphSprites)
+                .WithComLabels(comLabelsTexture, comLabelSprites);
+        }
+
         public BattleCommonVisualCatalog WithSpark(Texture2D sparkTexture, Sprite[] sparkSprites)
         {
             if (!IsShadowValid)
@@ -665,7 +800,12 @@ namespace NTSD.Animation
                         BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha));
             }
 
-            return new BattleCommonVisualCatalog(Shadow, bindings, wordTextures, wordGlyphs,
+            return new BattleCommonVisualCatalog(
+                Shadow,
+                bindings,
+                wordTextures,
+                wordGlyphs,
+                comLabels,
                 IsWordsValid ? string.Empty : "WORDS bindings have not been published.");
         }
 
@@ -746,7 +886,118 @@ namespace NTSD.Animation
                 }
             }
 
-            return new BattleCommonVisualCatalog(Shadow, sparks, textures, bindings, string.Empty);
+            return new BattleCommonVisualCatalog(
+                Shadow,
+                sparks,
+                textures,
+                bindings,
+                comLabels,
+                string.Empty);
+        }
+
+        public BattleCommonVisualCatalog WithSpecialCom(
+            Texture2D texture,
+            Sprite sprite)
+        {
+            if (!IsComplete)
+                return this;
+            Rect expectedRect = new Rect(0f, 0f, SpecialComWidth, SpecialComHeight);
+            Vector2 expectedPivot = GetSpecialComPivotNormalized();
+            if (texture == null ||
+                texture.width != SpecialComWidth ||
+                texture.height != SpecialComHeight ||
+                sprite == null ||
+                sprite.texture != texture ||
+                sprite.rect != expectedRect ||
+                new Vector2(
+                    sprite.pivot.x / sprite.rect.width,
+                    sprite.pivot.y / sprite.rect.height) != expectedPivot)
+            {
+                return this;
+            }
+
+            return new BattleCommonVisualCatalog(
+                Shadow,
+                sparks,
+                wordTextures,
+                wordGlyphs,
+                new BattleCommonVisualBinding(
+                    BattleVisualResourceKey.CommonSpecialCom,
+                    sprite,
+                    texture,
+                    null,
+                    expectedRect,
+                    new Rect(0f, 0f, 1f, 1f),
+                    expectedRect.size,
+                    expectedPivot,
+                    new BattleSpriteRenderState(
+                        Color.white,
+                        false,
+                        false,
+                        SpriteMaskInteraction.None,
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha)),
+                Diagnostic);
+        }
+
+        public BattleCommonVisualCatalog WithComLabels(
+            Texture2D texture,
+            Sprite[] sprites)
+        {
+            if (!IsComplete)
+                return this;
+            if (texture == null ||
+                texture.width != SpecialComWidth ||
+                texture.height != ComLabelsTextureHeight ||
+                sprites == null ||
+                sprites.Length != WordSheetCount)
+            {
+                return this;
+            }
+
+            var bindings = new BattleCommonVisualBinding[WordSheetCount];
+            Vector2 expectedPivot = GetSpecialComPivotNormalized();
+            for (int sheetIndex = 0; sheetIndex < WordSheetCount; sheetIndex++)
+            {
+                Sprite sprite = sprites[sheetIndex];
+                Rect expectedRect = GetComLabelPixelRect(sheetIndex);
+                if (sprite == null ||
+                    sprite.texture != texture ||
+                    sprite.rect != expectedRect ||
+                    new Vector2(
+                        sprite.pivot.x / sprite.rect.width,
+                        sprite.pivot.y / sprite.rect.height) != expectedPivot)
+                {
+                    return this;
+                }
+
+                bindings[sheetIndex] = new BattleCommonVisualBinding(
+                    BattleVisualResourceKey.CommonComLabel(sheetIndex),
+                    sprite,
+                    texture,
+                    null,
+                    expectedRect,
+                    new Rect(
+                        0f,
+                        expectedRect.y / texture.height,
+                        1f,
+                        (float)SpecialComHeight / texture.height),
+                    expectedRect.size,
+                    expectedPivot,
+                    new BattleSpriteRenderState(
+                        Color.white,
+                        false,
+                        false,
+                        SpriteMaskInteraction.None,
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha));
+            }
+
+            return new BattleCommonVisualCatalog(
+                Shadow,
+                sparks,
+                wordTextures,
+                wordGlyphs,
+                bindings,
+                Diagnostic);
         }
 
         internal BattleCommonVisualCatalog WithCentralBindings(
@@ -774,11 +1025,20 @@ namespace NTSD.Animation
                 }
             }
 
+            var remappedComLabels = new BattleCommonVisualBinding[comLabels.Length];
+            for (int sheetIndex = 0; sheetIndex < comLabels.Length; sheetIndex++)
+            {
+                remappedComLabels[sheetIndex] = comLabels[sheetIndex] != null
+                    ? RemapBinding(comLabels[sheetIndex], bindings)
+                    : null;
+            }
+
             return new BattleCommonVisualCatalog(
                 remappedShadow,
                 remappedSparks,
                 wordTextures,
                 remappedWords,
+                remappedComLabels,
                 Diagnostic);
         }
 
@@ -800,6 +1060,16 @@ namespace NTSD.Animation
         private static BattleCommonVisualCatalog Invalid(string diagnostic)
         {
             return new BattleCommonVisualCatalog(null, null, null, null, diagnostic);
+        }
+
+        private static BattleCommonVisualBinding[] BuildComLabelsFromSpecial(
+            BattleCommonVisualBinding specialCom)
+        {
+            if (specialCom == null)
+                return null;
+            var bindings = new BattleCommonVisualBinding[WordSheetCount];
+            bindings[SpecialComSheetIndex] = specialCom;
+            return bindings;
         }
     }
 

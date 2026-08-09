@@ -229,6 +229,81 @@ afterEach(async () => {
 });
 
 describe("native DAT preview output bounds", () => {
+    it("reuses completed Native output for the same DAT revision and scenario", async () => {
+        let executions = 0;
+        const runner = new CppNativeDatPreviewRunner({
+            executable: "preview-test.exe",
+            workingDirectory: tmpdir(),
+            gameRoot: "J:\\QQFile\\NTSD 2.4.1",
+            execFile: (_file, args, _options, callback) => {
+                executions += 1;
+                const outputPath = args[args.indexOf("--output") + 1]!;
+                void writeFile(outputPath, "{}", "utf8").then(
+                    () => callback(null, "", ""),
+                    (error: unknown) => callback(error instanceof Error ? error : new Error(String(error)), "", ""),
+                );
+            },
+        });
+        const plaintext = Buffer.from("name: Naruto\n", "latin1");
+        const scenario = { startFrame: 265, initialFrame: 0, ticks: 120 };
+
+        const [first, concurrent] = await Promise.all([
+            runner.preview(plaintext, scenario),
+            runner.preview(plaintext, scenario),
+        ]);
+        const repeated = await runner.preview(plaintext, scenario);
+
+        assert.deepEqual(first, {});
+        assert.strictEqual(concurrent, first);
+        assert.strictEqual(repeated, first);
+        assert.equal(executions, 1);
+        await runner.preview(plaintext, { ...scenario, startFrame: 271 });
+        await runner.preview(Buffer.from("name: Edited Naruto\n", "latin1"), scenario);
+        assert.equal(executions, 3);
+    });
+
+    it("passes the selected entry, real initial frame, and deterministic input plan to Native", async () => {
+        let capturedArguments: readonly string[] = [];
+        const runner = new CppNativeDatPreviewRunner({
+            executable: "preview-test.exe",
+            workingDirectory: tmpdir(),
+            execFile: (_file, args, _options, callback) => {
+                capturedArguments = args;
+                const outputPath = args[args.indexOf("--output") + 1];
+                if (outputPath === undefined) {
+                    callback(new Error("missing preview output path"), "", "");
+                    return;
+                }
+                void writeFile(outputPath, "{}", "utf8").then(
+                    () => callback(null, "", ""),
+                    (error: unknown) => callback(error instanceof Error ? error : new Error(String(error)), "", ""),
+                );
+            },
+        });
+
+        await runner.preview(Buffer.from("name: Naruto\n", "latin1"), {
+            startFrame: 265,
+            initialFrame: 0,
+            ticks: 120,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["W"] },
+                { tick: 6, keys: ["J"] },
+            ],
+        });
+
+        const gameRootIndex = capturedArguments.indexOf("--game-root");
+        assert.deepEqual(capturedArguments.slice(gameRootIndex, gameRootIndex + 2), [
+            "--game-root", "J:\\QQFile\\NTSD 2.4.1",
+        ]);
+        assert.deepEqual(capturedArguments.slice(capturedArguments.indexOf("--start-frame")), [
+            "--start-frame", "0",
+            "--entry-frame", "265",
+            "--ticks", "120",
+            "--input-plan", "2:L,4:W,6:J",
+        ]);
+    });
+
     it("rejects output larger than 8 MiB before parsing it", async () => {
         const runner = new CppNativeDatPreviewRunner({
             executable: "preview-test.exe",
@@ -279,6 +354,12 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         primary.sealStartupAuthorization();
         assets.sealStartupAuthorization();
         const previewInputs: Buffer[] = [];
+        const previewOptions: Array<{
+            startFrame?: number;
+            initialFrame?: number;
+            ticks?: number;
+            inputPlan?: readonly { tick: number; keys: readonly ("A" | "D" | "W" | "S" | "J" | "K" | "L")[] }[];
+        } | undefined> = [];
         let previewEntityTransform: ((entities: Array<Record<string, unknown>>) => unknown[]) | undefined;
         const project = await ProjectDatService.initialize({
             primaryRegistry: primary,
@@ -286,9 +367,15 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             dataTxtLogicalPath: dataTxtPath,
             idFactory: () => "a".repeat(32),
             previewRunner: {
-                preview: async (plaintext: Uint8Array, options?: { startFrame?: number; ticks?: number }) => {
+                preview: async (plaintext: Uint8Array, options?: {
+                    startFrame?: number;
+                    initialFrame?: number;
+                    ticks?: number;
+                    inputPlan?: readonly { tick: number; keys: readonly ("A" | "D" | "W" | "S" | "J" | "K" | "L")[] }[];
+                }) => {
                     const input = Buffer.from(plaintext);
                     previewInputs.push(input);
+                    previewOptions.push(options);
                     const pic = /pic:\s*2\b/.test(input.toString("latin1")) ? 2 : 0;
                     const entities: Array<Record<string, unknown>> = [{
                         slot: 0, oid: 2, frame: options?.startFrame ?? 300, pic, facing: 0,
@@ -307,6 +394,28 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                             naruto_dat_override: `${primaryRoot}/secret-preview.dat`,
                             stage: { index: 0, data_path: "data/stage.dat", name: "Stage", width: 1000, z_min: 0, z_max: 500 },
                         },
+                        render_resources: [{
+                            oid: 2,
+                            type: 0,
+                            name: "Naruto",
+                            ranges: [
+                                {
+                                    file: "Assets\\NTSD\\Sprite\\Character\\MingRen\\naruto.bmp",
+                                    frame_lo: 0, frame_hi: 0, w: 1, h: 1, row: 1, col: 1,
+                                },
+                                {
+                                    file: "Assets\\NTSD\\Sprite\\Character\\MingRen\\invalid.bmp",
+                                    frame_lo: 2, frame_hi: 2, w: 1, h: 1, row: 1, col: 1,
+                                },
+                            ],
+                            frames: [{
+                                frame_id: options?.startFrame ?? 300,
+                                pic,
+                                state: 0,
+                                center_x: 0,
+                                center_y: 0,
+                            }],
+                        }],
                         ticks: [{
                             tick: 0,
                             camera_x: 0,
@@ -356,6 +465,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             oid: number;
             type: number;
             name: string;
+            frames: Array<{ frameId: number; label: string }>;
             fields: Array<{ fieldId: string; key: string; value: number | string | number[]; kind: string }>;
             structureCapabilities: Array<{
                 capabilityId: string;
@@ -371,12 +481,19 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(opened.data.writable, true);
         assert.equal(opened.data.oid, 2);
         assert.equal(opened.data.name, "Naruto");
+        assert.equal(opened.data.frames[0]?.frameId, 0);
+        assert.equal(opened.data.frames[0]?.label, "idle");
         assert.equal(opened.data.preview.ticks[0]?.entities[0]?.pic, 0);
         assert.equal(opened.data.preview.metadata.runtime, "ntsd_cpp");
         assert.equal(opened.data.preview.metadata.tickDriver, "SimulationTickDriver");
         assert.equal(Object.hasOwn(opened.data.preview.metadata, "naruto_dat_override"), false);
         assert.equal(Object.hasOwn(opened.data.preview.metadata, "data_path"), false);
         assert.equal(opened.data.spriteRanges.length, 2, "unsafe sprite paths do not mint capabilities");
+        assert.equal(
+            native.reads.filter((read) => /\.bmp$/i.test(read.logicalPath)).length,
+            0,
+            "project opening must not block on BMP reads",
+        );
         assert.ok(opened.data.fields.some((field) => field.key === "name" && field.kind === "string"));
         assert.ok(opened.data.fields.some((field) => field.key === "pic" && field.kind === "number"));
         assert.ok(opened.data.fields.some((field) => field.key === "catchingact" && field.kind === "integer-pair"));
@@ -516,13 +633,43 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         const previewResponse = await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
             expectedRevision: 5,
-            startFrame: 0,
-            ticks: 2,
+            startFrame: 265,
+            initialFrame: 0,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["W"] },
+                { tick: 6, keys: ["J"] },
+            ],
+            ticks: 8,
         });
         const preview = await previewResponse.json() as { data: { preview: { metadata: { startFrame: number; ticksRequested: number } } } };
         assert.equal(previewResponse.status, 200);
-        assert.equal(preview.data.preview.metadata.startFrame, 0);
-        assert.equal(preview.data.preview.metadata.ticksRequested, 2);
+        assert.equal(preview.data.preview.metadata.startFrame, 265);
+        assert.equal(preview.data.preview.metadata.ticksRequested, 8);
+        assert.deepEqual(previewOptions.at(-1), {
+            startFrame: 265,
+            initialFrame: 0,
+            ticks: 8,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["W"] },
+                { tick: 6, keys: ["J"] },
+            ],
+        });
+        const previewCallsAfterFirst = previewOptions.length;
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+            startFrame: 265,
+            initialFrame: 0,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["W"] },
+                { tick: 6, keys: ["J"] },
+            ],
+            ticks: 8,
+        })).status, 200);
+        assert.equal(previewOptions.length, previewCallsAfterFirst, "identical session previews reuse their completed result");
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
             expectedRevision: 5,
@@ -534,6 +681,14 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             expectedRevision: 5,
             startFrame: 600,
             ticks: 2,
+        })).status, 400);
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+            startFrame: 265,
+            initialFrame: 0,
+            inputPlan: [{ tick: 2, keys: ["X"] }],
+            ticks: 8,
         })).status, 400);
         assert.equal((await post(origin, token, "/api/project/preview", {
             sessionId: opened.data.sessionId,
@@ -583,12 +738,17 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(savedText.includes(primaryRoot), false);
         assert.equal(savedText.includes(assetRoot), false);
 
+        const readsBeforeAsset = native.reads.length;
         const validAsset = await fetch(`${origin}/api/assets/${opened.data.spriteRanges[0]!.assetId}`);
         assert.equal(validAsset.status, 200);
         assert.equal(validAsset.headers.get("content-type"), "image/bmp");
         assert.equal(validAsset.headers.get("cache-control"), "no-store");
         assert.equal(validAsset.headers.get("x-content-type-options"), "nosniff");
         assert.deepEqual(Buffer.from(await validAsset.arrayBuffer()), bmp);
+        const readsAfterAsset = native.reads.length;
+        assert.ok(readsAfterAsset > readsBeforeAsset, "the first asset request resolves its safe path lazily");
+        assert.equal((await fetch(`${origin}/api/assets/${opened.data.spriteRanges[0]!.assetId}`)).status, 200);
+        assert.equal(native.reads.length, readsAfterAsset, "resolved asset bytes are reused for the session");
         const invalidAsset = await fetch(`${origin}/api/assets/${opened.data.spriteRanges[1]!.assetId}`);
         const invalidText = await invalidAsset.text();
         assert.equal(invalidAsset.status, 422);

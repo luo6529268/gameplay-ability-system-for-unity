@@ -91,9 +91,8 @@ namespace NTSD.Animation.LF2Objects
                 _logicObject.Sprite?.SetPresentationSuppressed(presentationBlocked);
                 if (!presentationBlocked)
                 {
-                    UpdateSprite();
-                    RefreshLegacySortingMetadata();
-                    _logicObject.UpdateShadow(_renderFrameCount);
+                    UpdateCentralManagedSpriteState();
+                    _logicObject.UpdateShadowManagedState();
                 }
                 ApplyVisualShake();
                 return;
@@ -137,9 +136,8 @@ namespace NTSD.Animation.LF2Objects
                 _logicObject.Sprite?.SetPresentationSuppressed(presentationBlocked);
                 if (!presentationBlocked)
                 {
-                    UpdateSprite();
-                    RefreshLegacySortingMetadata();
-                    _logicObject.UpdateShadow(_renderFrameCount);
+                    UpdateCentralManagedSpriteState();
+                    _logicObject.UpdateShadowManagedState();
                 }
                 return;
             }
@@ -342,6 +340,35 @@ namespace NTSD.Animation.LF2Objects
                 _logicObject.Sprite.SwitchLR(ps.dir);
         }
 
+        private void UpdateCentralManagedSpriteState()
+        {
+            if (_logicObject == null)
+                return;
+
+            LF2Sprite sprite = _logicObject.Sprite;
+            bool shouldDrawForHitStop =
+                ShouldDrawEntityForHitStop(_logicObject.Runtime?.HitStop ?? 0);
+            sprite?.SetLegacyEntityVisibleManagedOnly(shouldDrawForHitStop);
+            if (!shouldDrawForHitStop)
+                return;
+
+            EnsureRuntimeIdentitySprites(managedOnly: true);
+            LF2FrameData frame = _logicObject.Frame?.D;
+            if (frame == null)
+            {
+                sprite?.ClearCurrentSpriteManagedOnly();
+                sprite?.SetShadowVisibleManagedOnly(false);
+                return;
+            }
+            if (sprite == null)
+                return;
+
+            sprite.ShowPicManagedOnly(_logicObject.GetRenderPicIndex());
+            PhysicsState ps = _logicObject.PS;
+            if (ps != null)
+                sprite.SwitchLRManagedOnly(ps.dir);
+        }
+
         internal static bool ShouldDrawEntityForHitStop(int hitStop)
         {
             return hitStop > -25 && (System.Math.Abs((long)hitStop) % 4) < 2;
@@ -352,7 +379,7 @@ namespace NTSD.Animation.LF2Objects
             return hitStop > -70 && (System.Math.Abs((long)hitStop) % 4) < 2;
         }
 
-        private void EnsureRuntimeIdentitySprites()
+        private void EnsureRuntimeIdentitySprites(bool managedOnly = false)
         {
             if (_logicObject == null || _logicObject.Sprite == null)
                 return;
@@ -369,18 +396,42 @@ namespace NTSD.Animation.LF2Objects
                 sprites != null)
             {
                 int startFrame = animatorManager.GetStartFrame(visualDataId);
-                _logicObject.Sprite.SetSprites(sprites, startFrame);
-                _logicObject.Sprite.SetCatalogBinding(animatorManager.SpriteCatalog, visualDataId);
+                if (managedOnly)
+                {
+                    _logicObject.Sprite.SetSpritesManagedOnly(sprites, startFrame);
+                    _logicObject.Sprite.SetCatalogBindingManagedOnly(
+                        animatorManager.SpriteCatalog,
+                        visualDataId);
+                }
+                else
+                {
+                    _logicObject.Sprite.SetSprites(sprites, startFrame);
+                    _logicObject.Sprite.SetCatalogBinding(
+                        animatorManager.SpriteCatalog,
+                        visualDataId);
+                }
                 _boundSpriteObjectId = visualDataId;
                 UpdateCatalogBinding(animatorManager, animatorManager.SpriteCatalog);
                 return;
             }
 
             // Never render the previous identity's catalog while the new one is still unavailable.
-            _logicObject.Sprite.SetSprites(null);
-            _logicObject.Sprite.SetCatalogBinding(
-                animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty,
-                visualDataId);
+            BattleSpriteCatalog fallbackCatalog =
+                animatorManager?.SpriteCatalog ?? BattleSpriteCatalog.Empty;
+            if (managedOnly)
+            {
+                _logicObject.Sprite.SetSpritesManagedOnly(null);
+                _logicObject.Sprite.SetCatalogBindingManagedOnly(
+                    fallbackCatalog,
+                    visualDataId);
+            }
+            else
+            {
+                _logicObject.Sprite.SetSprites(null);
+                _logicObject.Sprite.SetCatalogBinding(
+                    fallbackCatalog,
+                    visualDataId);
+            }
             _boundSpriteObjectId = int.MinValue;
             UpdateCatalogBinding(animatorManager, currentCatalog);
         }
