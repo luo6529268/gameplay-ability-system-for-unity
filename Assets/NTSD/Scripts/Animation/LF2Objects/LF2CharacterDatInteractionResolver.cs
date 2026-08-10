@@ -9,7 +9,7 @@ namespace NTSD.Animation.LF2Objects
     {
         private readonly LF2Entity _attacker;
 
-        private LF2CharacterDatInteractionResolver(LF2Entity attacker)
+        internal LF2CharacterDatInteractionResolver(LF2Entity attacker)
         {
             _attacker = attacker;
         }
@@ -26,7 +26,7 @@ namespace NTSD.Animation.LF2Objects
             if (!CanResolveAttacker(attacker))
                 return;
 
-            new LF2CharacterDatInteractionResolver(attacker).TryConsumeUnifiedStep7CandidateSequenceInternal();
+            attacker.ConsumeCharacterDatInteractionCandidates();
         }
 
         internal static bool TryApplyPreInteraction(
@@ -51,7 +51,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private void TryConsumeUnifiedStep7CandidateSequenceInternal()
+        internal void TryConsumeUnifiedStep7CandidateSequence()
         {
             ILF2SceneQuery sceneQuery = _attacker.Match?.SceneQuery;
             INTSDItrKindService kindService = _attacker.Match?.ItrKindService;

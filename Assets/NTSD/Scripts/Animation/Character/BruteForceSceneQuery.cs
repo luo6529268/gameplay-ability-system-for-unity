@@ -18,6 +18,11 @@ namespace NTSD.Animation
         private const int RectMax = 1000000000;
         private const byte RoleAwareFormalExactAttackRole = 1 << 0;
         private const byte RoleAwareFormalExactBodyRole = 1 << 1;
+        private const byte RoleAwareFormalParticipantHasAttackItr = 1 << 0;
+        private const byte RoleAwareFormalParticipantHasFallbackAttackItr = 1 << 1;
+        private const byte RoleAwareFormalParticipantHasBody = 1 << 2;
+        private const byte RoleAwareFormalParticipantHasFallbackBody = 1 << 3;
+        private const int AuthorityPairCountingSortThreshold = 4096;
         public const long RoleAwareDirectComparisonThreshold = 262144L;
         public const long RoleAwareSweepDirectCrossover = 8192L;
 
@@ -53,6 +58,9 @@ namespace NTSD.Animation
             new LooseQuadtreeBroadphase();
         private readonly List<RoleAwareFormalParticipant> _roleFormalParticipants =
             new List<RoleAwareFormalParticipant>(128);
+        private RoleAwareFormalParticipant[] _roleFormalParticipantReadBuffer =
+            new RoleAwareFormalParticipant[128];
+        private byte[] _roleFormalParticipantRoleFlags = new byte[128];
         private readonly Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>
             _roleFormalBodyTemplates =
                 new Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>(
@@ -96,6 +104,9 @@ namespace NTSD.Animation
             new List<RuntimeEntityHandle>(64);
         private readonly List<long> _formalPairKeys = new List<long>(256);
         private readonly List<long> _formalAuthorityPairKeys = new List<long>(256);
+        private long[] _formalAuthorityPairSortScratch = Array.Empty<long>();
+        private int[] _formalAuthorityPairSortCounts = Array.Empty<int>();
+        private int[] _formalAuthorityPairSortOffsets = Array.Empty<int>();
         private readonly Dictionary<int, int> _formalSlotToOrdinal = new Dictionary<int, int>();
         private readonly HashSet<int> _formalSeenSlots = new HashSet<int>();
         private readonly LooseQuadtreeBroadphase _immediateBroadphase = new LooseQuadtreeBroadphase();
@@ -116,6 +127,7 @@ namespace NTSD.Animation
         private CollisionCandidateConsumptionSource _candidateConsumptionSource;
         private long _candidateListCreatedCount;
         private long _candidateListReusedCount;
+        private long _candidateListRejectedRentCount;
         private int _formalFallbackParticipantCount;
         private bool _formalCollectionAborted;
         private bool _collisionRoleZeroItrEarlyReturnAppliedForCurrentTick;
@@ -178,6 +190,8 @@ namespace NTSD.Animation
             _candidateListCreatedCount;
         public long CandidateListReusedCountForDiagnostics =>
             _candidateListReusedCount;
+        public long CandidateListRejectedRentCountForDiagnostics =>
+            _candidateListRejectedRentCount;
         public int CandidateListPoolCountForDiagnostics => _candidateListPool.Count;
         public int ActiveCandidateListCountForDiagnostics => _candidateCache.Count;
         public CollisionFormalCollectorMode FormalCollectorMode { get; set; }
@@ -829,6 +843,136 @@ namespace NTSD.Animation
                 _candidateStoreShadowDiagnostics);
         }
 
+        internal void PrepareBattleCapacity(
+            int entityCapacity,
+            int maximumBodyCountPerEntity = 1,
+            int maximumItrCountPerEntity = 1)
+        {
+            if (entityCapacity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(entityCapacity));
+
+            int exactBodyRectCapacity = checked(
+                entityCapacity * Math.Max(1, maximumBodyCountPerEntity));
+            int exactItrRectCapacity = checked(
+                entityCapacity * Math.Max(1, maximumItrCountPerEntity));
+
+            int pairCapacity = checked(entityCapacity * (entityCapacity - 1) / 2);
+            int sweepCapacity = checked(entityCapacity * 4);
+
+            EnsureListCapacity(_tmpHitResult, HitCandidateMax);
+            EnsureListCapacity(_tmpAllObjects, entityCapacity);
+            _candidateCache.EnsureCapacity(entityCapacity);
+            while (_candidateListPool.Count < entityCapacity)
+                _candidateListPool.Push(new List<SceneQueryHit>(HitCandidateMax));
+            _candidateStoreShadow.PrepareCapacity(entityCapacity);
+
+            EnsureListCapacity(_roleFormalParticipants, entityCapacity);
+            if (_roleFormalParticipantReadBuffer.Length < entityCapacity)
+            {
+                Array.Resize(
+                    ref _roleFormalParticipantReadBuffer,
+                    entityCapacity);
+            }
+            if (_roleFormalParticipantRoleFlags.Length < entityCapacity)
+            {
+                Array.Resize(
+                    ref _roleFormalParticipantRoleFlags,
+                    entityCapacity);
+            }
+            _roleFormalBodyTemplates.EnsureCapacity(entityCapacity);
+            EnsureListCapacity(_roleFormalItrEntries, entityCapacity);
+            EnsureListCapacity(_roleFormalExactItrRects, exactItrRectCapacity);
+            EnsureListCapacity(_roleFormalExactBodyRects, exactBodyRectCapacity);
+            EnsureListCapacity(_roleFormalExactRequiredRoles, entityCapacity);
+            EnsureListCapacity(_roleFormalBodyOrdinals, entityCapacity);
+            EnsureListCapacity(_roleFormalFallbackAttackOrdinals, entityCapacity);
+            EnsureListCapacity(_roleFormalExactAttackOrdinals, entityCapacity);
+            EnsureListCapacity(_roleFormalFallbackBodyOrdinals, entityCapacity);
+            EnsureListCapacity(_roleFormalSweepEvents, sweepCapacity);
+            EnsureListCapacity(_roleFormalSweepActiveBodyIndices, entityCapacity);
+            EnsureListCapacity(_roleFormalSweepActiveItrIndices, entityCapacity);
+            EnsureListCapacity(_roleFormalSweepBodyPositions, entityCapacity);
+            EnsureListCapacity(_roleFormalSweepItrPositions, entityCapacity);
+
+            EnsureListCapacity(_formalParticipants, entityCapacity);
+            EnsureListCapacity(_formalParticipantHandles, entityCapacity);
+            EnsureListCapacity(_formalIncrementalEntries, entityCapacity);
+            EnsureListCapacity(_formalFallbackOrdinals, entityCapacity);
+            EnsureListCapacity(_formalQueryHandles, entityCapacity);
+            EnsureListCapacity(_formalPairKeys, pairCapacity);
+            EnsureListCapacity(_formalAuthorityPairKeys, pairCapacity);
+            if (_formalAuthorityPairSortScratch.Length < pairCapacity)
+            {
+                Array.Resize(
+                    ref _formalAuthorityPairSortScratch,
+                    pairCapacity);
+            }
+            if (_formalAuthorityPairSortCounts.Length < entityCapacity)
+            {
+                Array.Resize(
+                    ref _formalAuthorityPairSortCounts,
+                    entityCapacity);
+            }
+            if (_formalAuthorityPairSortOffsets.Length < entityCapacity)
+            {
+                Array.Resize(
+                    ref _formalAuthorityPairSortOffsets,
+                    entityCapacity);
+            }
+            _formalSlotToOrdinal.EnsureCapacity(entityCapacity);
+            _formalSeenSlots.EnsureCapacity(entityCapacity);
+
+            EnsureListCapacity(_immediateEntries, entityCapacity);
+            EnsureListCapacity(_immediateQueryIndices, entityCapacity);
+            EnsureListCapacity(_immediateFallbackIndices, entityCapacity);
+            EnsureListCapacity(_immediateCandidateIndices, entityCapacity);
+            EnsureListCapacity(_immediateTargets, entityCapacity);
+
+            _roleFormalBroadphase.PrepareCapacity(entityCapacity);
+            _formalBroadphase.PrepareCapacity(entityCapacity);
+            _immediateBroadphase.PrepareCapacity(entityCapacity);
+            PrewarmCollisionSorters();
+        }
+
+        private void PrewarmCollisionSorters()
+        {
+            if (_immediateCandidateIndices.Count == 0)
+            {
+                _immediateCandidateIndices.Add(1);
+                _immediateCandidateIndices.Add(0);
+                _immediateCandidateIndices.Sort();
+                _immediateCandidateIndices.Clear();
+            }
+
+            if (_formalPairKeys.Count == 0)
+            {
+                _formalPairKeys.Add(1L);
+                _formalPairKeys.Add(0L);
+                SortAndDeduplicate(_formalPairKeys);
+                _formalPairKeys.Clear();
+            }
+
+            if (_roleFormalSweepEvents.Count == 0)
+            {
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    1,
+                    RoleAwareSweepEventKind.BodyStart,
+                    1));
+                _roleFormalSweepEvents.Add(new RoleAwareSweepEvent(
+                    0,
+                    RoleAwareSweepEventKind.BodyEnd,
+                    0));
+                _roleFormalSweepEvents.Sort(RoleAwareSweepEventComparer.Instance);
+                _roleFormalSweepEvents.Clear();
+            }
+        }
+
+        private static void EnsureListCapacity<T>(List<T> values, int capacity)
+        {
+            if (values.Capacity < capacity)
+                values.Capacity = capacity;
+        }
+
         internal void ResetFormalSpatialBroadphase()
         {
             _formalBroadphase.ResetIncremental();
@@ -1223,6 +1367,7 @@ namespace NTSD.Animation
             }
 
             CollisionFormalCollectorMode collectorMode;
+            bool candidateListCapacityRejected = false;
             try
             {
                 ReleaseCandidateListsToPool();
@@ -1270,7 +1415,14 @@ namespace NTSD.Animation
 
                     if (LegacyCandidateListsEnabledForCurrentTick)
                     {
-                        _candidateCache[attacker] = RentCandidateList();
+                        List<SceneQueryHit> candidates = RentCandidateList();
+                        if (candidates == null)
+                        {
+                            candidateListCapacityRejected = true;
+                            break;
+                        }
+
+                        _candidateCache[attacker] = candidates;
                         RecordLegacyCandidateListTouchForAuthority();
                     }
                 }
@@ -1283,6 +1435,17 @@ namespace NTSD.Animation
                         BattleTickDetailPhase.CandidateCollectCacheSetup);
                 }
             }
+
+            if (candidateListCapacityRejected)
+            {
+                _formalCollectionAborted = true;
+                ReleaseCandidateListsToPool();
+                ResetCandidateCollectionState();
+                _candidateStoreShadow.AbortBuild();
+                _consumeCandidateCache = true;
+                return;
+            }
+
             BeginCollisionCandidateStoreShadowBuild();
 
             if (ShadowBroadphaseDiagnosticsEnabled)
@@ -2360,7 +2523,9 @@ namespace NTSD.Animation
 
             try
             {
-                SortAndDeduplicate(_formalAuthorityPairKeys);
+                SortAndDeduplicateAuthorityOrdinalPairs(
+                    _formalAuthorityPairKeys,
+                    participantCount);
             }
             finally
             {
@@ -2376,13 +2541,16 @@ namespace NTSD.Animation
                 return AbortFormalSpatialIndex();
             }
 
-            if (!TryCollectRoleAwareFormalExactRequirements(participantCount) ||
+            if (!TryPrepareRoleAwareFormalParticipantRoleFlags(participantCount) ||
+                !TryCollectRoleAwareFormalExactRequirements(participantCount) ||
                 !TryBuildRequiredRoleAwareFormalExactCaches(participantCount) ||
                 roleAwareOccupancyEpoch !=
                     _world.RuntimeSlotOccupancyEpochForServices)
             {
                 return AbortFormalSpatialIndex();
             }
+            if (!TryPrepareRoleAwareFormalParticipantReadBuffer(participantCount))
+                return AbortFormalSpatialIndex();
 
             _formalFallbackParticipantCount = CountRoleAwareFormalFallbackParticipants();
             _lastFormalPairCount = _formalAuthorityPairKeys.Count;
@@ -2415,10 +2583,10 @@ namespace NTSD.Animation
                             return AbortFormalSpatialIndex();
                         }
 
-                        RoleAwareFormalParticipant firstParticipant =
-                            _roleFormalParticipants[firstOrdinal];
-                        RoleAwareFormalParticipant secondParticipant =
-                            _roleFormalParticipants[secondOrdinal];
+                        ref readonly RoleAwareFormalParticipant firstParticipant =
+                            ref _roleFormalParticipantReadBuffer[firstOrdinal];
+                        ref readonly RoleAwareFormalParticipant secondParticipant =
+                            ref _roleFormalParticipantReadBuffer[secondOrdinal];
                         LF2Entity first = firstParticipant.Entity;
                         LF2Entity second = secondParticipant.Entity;
 #if UNITY_INCLUDE_TESTS
@@ -2494,6 +2662,13 @@ namespace NTSD.Animation
             {
                 return AbortFormalSpatialIndex();
             }
+            finally
+            {
+                Array.Clear(
+                    _roleFormalParticipantReadBuffer,
+                    0,
+                    participantCount);
+            }
 
             if (roleAwareOccupancyEpoch !=
                 _world.RuntimeSlotOccupancyEpochForServices)
@@ -2501,6 +2676,33 @@ namespace NTSD.Animation
                 return AbortFormalSpatialIndex();
             }
 
+            return true;
+        }
+
+        private bool TryPrepareRoleAwareFormalParticipantReadBuffer(
+            int participantCount)
+        {
+            if (participantCount > _roleFormalParticipantReadBuffer.Length)
+            {
+                SimulationRuntimeCapacityModule runtimeCapacity =
+                    _world?.RuntimeCapacity;
+                if (runtimeCapacity != null &&
+                    !runtimeCapacity.TryAuthorizeGrowth())
+                {
+                    return false;
+                }
+
+                int nextCapacity = Math.Max(
+                    participantCount,
+                    checked(_roleFormalParticipantReadBuffer.Length * 2));
+                Array.Resize(
+                    ref _roleFormalParticipantReadBuffer,
+                    nextCapacity);
+            }
+
+            _roleFormalParticipants.CopyTo(
+                _roleFormalParticipantReadBuffer,
+                0);
             return true;
         }
 
@@ -2601,20 +2803,20 @@ namespace NTSD.Animation
                     return false;
                 }
 
-                RoleAwareFormalParticipant first =
-                    _roleFormalParticipants[firstOrdinal];
-                RoleAwareFormalParticipant second =
-                    _roleFormalParticipants[secondOrdinal];
+                byte firstRoleFlags =
+                    _roleFormalParticipantRoleFlags[firstOrdinal];
+                byte secondRoleFlags =
+                    _roleFormalParticipantRoleFlags[secondOrdinal];
                 AddRoleAwareFormalExactDirectionRequirement(
                     firstOrdinal,
-                    in first,
+                    firstRoleFlags,
                     secondOrdinal,
-                    in second);
+                    secondRoleFlags);
                 AddRoleAwareFormalExactDirectionRequirement(
                     secondOrdinal,
-                    in second,
+                    secondRoleFlags,
                     firstOrdinal,
-                    in first);
+                    firstRoleFlags);
             }
 
             return true;
@@ -2622,14 +2824,18 @@ namespace NTSD.Animation
 
         private void AddRoleAwareFormalExactDirectionRequirement(
             int attackerOrdinal,
-            in RoleAwareFormalParticipant attacker,
+            byte attackerRoleFlags,
             int targetOrdinal,
-            in RoleAwareFormalParticipant target)
+            byte targetRoleFlags)
         {
-            if (!attacker.HasAttackItr ||
-                attacker.HasFallbackAttackItr ||
-                !target.HasBody ||
-                target.HasFallbackBody)
+            if ((attackerRoleFlags &
+                    RoleAwareFormalParticipantHasAttackItr) == 0 ||
+                (attackerRoleFlags &
+                    RoleAwareFormalParticipantHasFallbackAttackItr) != 0 ||
+                (targetRoleFlags &
+                    RoleAwareFormalParticipantHasBody) == 0 ||
+                (targetRoleFlags &
+                    RoleAwareFormalParticipantHasFallbackBody) != 0)
             {
                 return;
             }
@@ -2638,6 +2844,56 @@ namespace NTSD.Animation
                 RoleAwareFormalExactAttackRole;
             _roleFormalExactRequiredRoles[targetOrdinal] |=
                 RoleAwareFormalExactBodyRole;
+        }
+
+        private static byte BuildRoleAwareFormalParticipantRoleFlags(
+            in RoleAwareFormalParticipant participant)
+        {
+            byte flags = 0;
+            if (participant.HasAttackItr)
+                flags |= RoleAwareFormalParticipantHasAttackItr;
+            if (participant.HasFallbackAttackItr)
+                flags |= RoleAwareFormalParticipantHasFallbackAttackItr;
+            if (participant.HasBody)
+                flags |= RoleAwareFormalParticipantHasBody;
+            if (participant.HasFallbackBody)
+                flags |= RoleAwareFormalParticipantHasFallbackBody;
+            return flags;
+        }
+
+        private bool TryPrepareRoleAwareFormalParticipantRoleFlags(
+            int participantCount)
+        {
+            if (participantCount > _roleFormalParticipantRoleFlags.Length)
+            {
+                SimulationRuntimeCapacityModule runtimeCapacity =
+                    _world?.RuntimeCapacity;
+                if (runtimeCapacity != null &&
+                    !runtimeCapacity.TryAuthorizeGrowth())
+                {
+                    return false;
+                }
+
+                int nextCapacity = Math.Max(
+                    participantCount,
+                    checked(_roleFormalParticipantRoleFlags.Length * 2));
+                Array.Resize(
+                    ref _roleFormalParticipantRoleFlags,
+                    nextCapacity);
+            }
+
+            for (int participantOrdinal = 0;
+                 participantOrdinal < participantCount;
+                 participantOrdinal++)
+            {
+                RoleAwareFormalParticipant participant =
+                    _roleFormalParticipants[participantOrdinal];
+                _roleFormalParticipantRoleFlags[participantOrdinal] =
+                    BuildRoleAwareFormalParticipantRoleFlags(
+                        in participant);
+            }
+
+            return true;
         }
 
         private bool TryValidateRoleAwareFormalBroadphaseInputsCheap(
@@ -4040,12 +4296,94 @@ namespace NTSD.Animation
             return true;
         }
 
+        private void SortAndDeduplicateAuthorityOrdinalPairs(
+            List<long> values,
+            int participantCount)
+        {
+            int valueCount = values.Count;
+            if (valueCount < AuthorityPairCountingSortThreshold ||
+                participantCount <= 0 ||
+                participantCount > _formalAuthorityPairSortCounts.Length ||
+                participantCount > _formalAuthorityPairSortOffsets.Length ||
+                valueCount > _formalAuthorityPairSortScratch.Length)
+            {
+                SortAndDeduplicate(values);
+                return;
+            }
+
+            Array.Clear(
+                _formalAuthorityPairSortCounts,
+                0,
+                participantCount);
+            for (int valueIndex = 0; valueIndex < valueCount; valueIndex++)
+            {
+                long value = values[valueIndex];
+                int firstOrdinal = (int)(value >> 32);
+                int secondOrdinal = (int)(value & 0xffffffffL);
+                if (firstOrdinal < 0 ||
+                    firstOrdinal >= participantCount ||
+                    secondOrdinal < 0 ||
+                    secondOrdinal >= participantCount)
+                {
+                    SortAndDeduplicate(values);
+                    return;
+                }
+
+                _formalAuthorityPairSortCounts[secondOrdinal]++;
+            }
+
+            BuildCountingSortOffsets(participantCount);
+            for (int valueIndex = 0; valueIndex < valueCount; valueIndex++)
+            {
+                long value = values[valueIndex];
+                int secondOrdinal = (int)(value & 0xffffffffL);
+                _formalAuthorityPairSortScratch[
+                    _formalAuthorityPairSortOffsets[secondOrdinal]++] = value;
+            }
+
+            Array.Clear(
+                _formalAuthorityPairSortCounts,
+                0,
+                participantCount);
+            for (int valueIndex = 0; valueIndex < valueCount; valueIndex++)
+            {
+                int firstOrdinal =
+                    (int)(_formalAuthorityPairSortScratch[valueIndex] >> 32);
+                _formalAuthorityPairSortCounts[firstOrdinal]++;
+            }
+
+            BuildCountingSortOffsets(participantCount);
+            for (int valueIndex = 0; valueIndex < valueCount; valueIndex++)
+            {
+                long value = _formalAuthorityPairSortScratch[valueIndex];
+                int firstOrdinal = (int)(value >> 32);
+                values[_formalAuthorityPairSortOffsets[firstOrdinal]++] = value;
+            }
+
+            DeduplicateSorted(values);
+        }
+
+        private void BuildCountingSortOffsets(int participantCount)
+        {
+            int nextOffset = 0;
+            for (int ordinal = 0; ordinal < participantCount; ordinal++)
+            {
+                _formalAuthorityPairSortOffsets[ordinal] = nextOffset;
+                nextOffset += _formalAuthorityPairSortCounts[ordinal];
+            }
+        }
+
         private static void SortAndDeduplicate(List<long> values)
         {
             if (values.Count < 2)
                 return;
 
             values.Sort();
+            DeduplicateSorted(values);
+        }
+
+        private static void DeduplicateSorted(List<long> values)
+        {
             int write = 1;
             long previous = values[0];
             for (int read = 1; read < values.Count; read++)
@@ -4243,8 +4581,14 @@ namespace NTSD.Animation
         {
             if (_candidateListPool.Count == 0)
             {
+                if (_world?.RuntimeCapacity?.IsSealed == true)
+                {
+                    _candidateListRejectedRentCount++;
+                    return null;
+                }
+
                 _candidateListCreatedCount++;
-                return new List<SceneQueryHit>(16);
+                return new List<SceneQueryHit>(HitCandidateMax);
             }
 
             List<SceneQueryHit> candidates = _candidateListPool.Pop();

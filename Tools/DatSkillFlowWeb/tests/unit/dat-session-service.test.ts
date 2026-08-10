@@ -377,11 +377,56 @@ describe("server-owned DAT session core", () => {
         assert.equal(movement.projection.top.walking_speed, 1.5);
     });
 
+    it("normalizes legacy Native integer overflow without rewriting source bytes", async () => {
+        const overflowSource = Buffer.from([
+            "name: Overflow Hero\n",
+            "weapon_hp: 2147483648\n",
+            "<frame> 7 overflow\n",
+            "pic: 2147483648 state: 3 wait: 1 next: 8\n",
+            "itr:\n catchingact: 2147483648 -2147483649\n itr_end:\n",
+            "bdy:\n x: -9999999999 y: -88888888888880000 w: 9999999999 h: 40\n bdy_end:\n",
+            "<frame_end>\n",
+        ].join(""), "ascii");
+        const { service, documentId } = await fixture(overflowSource);
+        const view = await service.openDocument(documentId, "plaintext");
+
+        assert.equal(view.projection.top.weapon_hp, 2_147_483_647);
+        assert.equal(view.projection.frames[0]?.pic, 2_147_483_647);
+        assert.deepEqual(
+            [view.projection.frames[0]?.itrs[0]?.catchingact, view.projection.frames[0]?.itrs[0]?.catchingact2],
+            [2_147_483_647, -2_147_483_648],
+        );
+        assert.deepEqual(view.projection.frames[0]?.bdys[0], {
+            x: -2_147_483_648,
+            y: -2_147_483_648,
+            w: 2_147_483_647,
+            h: 40,
+        });
+        assert.equal(view.fields.find((field) => field.scope === "block" && field.key === "y")?.value, -2_147_483_648);
+        assert.deepEqual((await service.emit(view.sessionId, view.revision)).plaintext, overflowSource);
+
+        const state = view.fields.find((field) => field.scope === "frame" && field.key === "state")!;
+        const edited = await service.edit({
+            sessionId: view.sessionId,
+            fieldId: state.fieldId,
+            value: 4,
+            expectedRevision: view.revision,
+        });
+        const emitted = await service.emit(edited.sessionId, edited.revision);
+        assert.match(emitted.plaintext.toString("latin1"), /state: 4/);
+        assert.match(emitted.plaintext.toString("latin1"), /y: -88888888888880000/);
+        assert.match(emitted.plaintext.toString("latin1"), /w: 9999999999/);
+        await rejectsCode(service.edit({
+            sessionId: edited.sessionId,
+            fieldId: state.fieldId,
+            value: 2_147_483_648,
+            expectedRevision: edited.revision,
+        }), "invalid-request");
+    });
+
     it("fails closed for malformed scalar or ITR pair values and withholds unknown capabilities", async () => {
         const fractional = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2", "pic: 1 pic: 1.5"), "latin1"));
         await rejectsCode(fractional.service.openDocument(fractional.documentId, "plaintext"), "invalid-request");
-        const overflowing = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2", "pic: 1 pic: 2147483648"), "latin1"));
-        await rejectsCode(overflowing.service.openDocument(overflowing.documentId, "plaintext"), "invalid-request");
         const nonnumeric = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2", "pic: 1 pic: nope"), "latin1"));
         await rejectsCode(nonnumeric.service.openDocument(nonnumeric.documentId, "plaintext"), "invalid-request");
         const empty = await fixture(Buffer.from(datSource().toString("latin1").replace("pic: 1 pic: 2 state:", "pic: 1 pic: state:"), "latin1"));
@@ -391,7 +436,7 @@ describe("server-owned DAT session core", () => {
         const badMovement = await fixture(Buffer.from(datSource().toString("latin1").replace("walking_speed: 4.5", "walking_speed: nope"), "latin1"));
         await rejectsCode(badMovement.service.openDocument(badMovement.documentId, "plaintext"), "invalid-request");
 
-        for (const malformedPair of ["5", "5 6 7", "5.0 6", "2147483648 0", "-2147483649 0"]) {
+        for (const malformedPair of ["5", "5 6 7", "5.0 6"]) {
             const malformed = await fixture(Buffer.from(
                 datSource().toString("latin1").replace("catchingact: 5 6", `catchingact: ${malformedPair}`),
                 "latin1",
@@ -874,6 +919,33 @@ describe("server-owned DAT session core", () => {
         await rejectsCode(structureLimited.service.openDocument(structureLimited.documentId, "plaintext"), "field-limit");
         const byteLimited = await fixture(source, { maxLoadedBytes: source.length - 1 });
         await rejectsCode(byteLimited.service.openDocument(byteLimited.documentId, "plaintext"), "byte-limit");
+    });
+
+    it("renews an unswept idle session for a trusted Native preview emission", async () => {
+        let now = 1_000;
+        const idle = await fixture(datSource(), {
+            idleTtlMs: 10,
+            now: () => now,
+        });
+        const opened = await idle.service.openDocument(idle.documentId, "plaintext");
+
+        now += 10;
+        const emission = await idle.service.emit(opened.sessionId, opened.revision);
+        assert.equal(emission.revision, opened.revision);
+
+        now += 9;
+        const field = opened.fields.find((candidate) => candidate.key === "pic")!;
+        const edited = await idle.service.edit({
+            sessionId: opened.sessionId,
+            fieldId: field.fieldId,
+            value: 9,
+            expectedRevision: opened.revision,
+        });
+        assert.equal(edited.revision, opened.revision + 1);
+
+        now += 10;
+        assert.equal(idle.service.sweepExpired(), 1);
+        await rejectsCode(idle.service.emit(opened.sessionId, edited.revision), "expired");
     });
 
     it("reserves concurrent opens and keeps ID/tombstone lifecycle bounded", async () => {

@@ -1,6 +1,5 @@
 using NTSD.Animation;
 using NTSD.Input;
-using NTSD.Tools;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -22,7 +21,6 @@ namespace NTSD.Animation.LF2Objects
 
         public bool ProcessCatchingInput()
         {
-            Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", "input", _character.CurrentFrameId);
             // C# authority advances catching action selection in the global step10 cpoint pass.
             // 输入阶段只保留按键状态，不在这里直接跳帧。
             return false;
@@ -33,16 +31,13 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_entry":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, _character.CurrentFrameId);
                     _character.Runtime.CaughtDuration = 300;
                     return false;
 
                 case "state_exit":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, _character.CurrentFrameId);
                     return false;
 
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 9, "Catching", eventType, _character.CurrentFrameId);
                     return false;
 
                 case "TU":
@@ -59,11 +54,9 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "state_exit":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, _character.CurrentFrameId);
                     return false;
 
                 case "frame":
-                    Log.Info("[State {0}:{1}] Event={2}, Frame.D={3}", 10, "BeingCaught", eventType, _character.CurrentFrameId);
                     _character.Trans.SetWait(99);
                     return false;
 

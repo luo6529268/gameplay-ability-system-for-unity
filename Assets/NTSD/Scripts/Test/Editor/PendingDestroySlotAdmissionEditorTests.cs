@@ -20,30 +20,30 @@ namespace NTSD.Test
         public void PendingFlushDestroyMutationEpoch_AdvancesOnlyWhenValueChanges()
         {
             var runtime = new NTSDEntityRuntime();
-            long epoch = NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+            long epoch = runtime.PendingFlushDestroyMutationEpochForDiagnostics;
 
             runtime.PendingFlushDestroy = false;
             Assert.That(
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics,
+                runtime.PendingFlushDestroyMutationEpochForDiagnostics,
                 Is.EqualTo(epoch));
 
             runtime.PendingFlushDestroy = true;
             epoch++;
             Assert.That(runtime.PendingFlushDestroy, Is.True);
             Assert.That(
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics,
+                runtime.PendingFlushDestroyMutationEpochForDiagnostics,
                 Is.EqualTo(epoch));
 
             runtime.PendingFlushDestroy = true;
             Assert.That(
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics,
+                runtime.PendingFlushDestroyMutationEpochForDiagnostics,
                 Is.EqualTo(epoch));
 
             runtime.Reset();
             epoch++;
             Assert.That(runtime.PendingFlushDestroy, Is.False);
             Assert.That(
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics,
+                runtime.PendingFlushDestroyMutationEpochForDiagnostics,
                 Is.EqualTo(epoch));
         }
 
@@ -128,7 +128,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void CrossWorldPendingMutation_CausesAtMostOneExtraScanWithoutChangingResult()
+        public void CrossWorldPendingMutation_DoesNotInvalidateAnotherWorldScanCache()
         {
             using var logging = new DisabledLoggingScope();
             SimulationWorld world = CreateSaturatedMobileWorld(out _);
@@ -144,10 +144,10 @@ namespace NTSD.Test
             otherEntity.Runtime.PendingFlushDestroy = true;
 
             Assert.That(ProbeDynamicBand(world, probe), Is.EqualTo(-1));
-            Assert.That(world.PendingDestroyFullScanCount, Is.EqualTo(fullScans + 1));
+            Assert.That(world.PendingDestroyFullScanCount, Is.EqualTo(fullScans));
             Assert.That(ProbeDynamicBand(world, probe), Is.EqualTo(-1));
-            Assert.That(world.PendingDestroyFullScanCount, Is.EqualTo(fullScans + 1));
-            Assert.That(world.PendingDestroySkipCount, Is.EqualTo(skips + 1));
+            Assert.That(world.PendingDestroyFullScanCount, Is.EqualTo(fullScans));
+            Assert.That(world.PendingDestroySkipCount, Is.EqualTo(skips + 2));
         }
 
         [Test]
@@ -206,6 +206,35 @@ namespace NTSD.Test
 
             Assert.That(checksum, Is.EqualTo(-512));
             Assert.That(after - before, Is.Zero);
+        }
+
+        [Test]
+        public void ResetRuntimeState_WarmedRegistry_AllocatesNoManagedMemory()
+        {
+            using var logging = new DisabledLoggingScope();
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.DesktopExtended,
+                128);
+            var entities = new List<SlotOccupant>(32);
+            for (int i = 0; i < entities.Capacity; i++)
+            {
+                var entity = new SlotOccupant(3000 + i);
+                entities.Add(entity);
+                world.Register(entity);
+            }
+
+            world.ResetRuntimeState();
+            for (int i = 0; i < entities.Count; i++)
+                world.Register(entities[i]);
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            world.ResetRuntimeState();
+            long after = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(after - before, Is.Zero);
+            Assert.That(world.ObjectCount, Is.Zero);
+            Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.Zero);
         }
 
         private static SimulationWorld CreateSaturatedMobileWorld(

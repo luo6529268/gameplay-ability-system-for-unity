@@ -32,6 +32,12 @@ namespace NTSD.Animation.Rendering
     public static class BattleCentralRenderSystem
     {
         private const int RendererObservationMaxAgeFrames = 2;
+        private const int MaximumCommonTrustedResourceCount =
+            1 +
+            BattleCommonVisualCatalog.SparkFrameCount +
+            BattleCommonVisualCatalog.WordSheetCount *
+            BattleCommonVisualCatalog.WordGlyphsPerSheet +
+            BattleCommonVisualCatalog.WordSheetCount;
 
         private static readonly BattleDynamicMeshBackend[] Backends =
         {
@@ -111,6 +117,36 @@ namespace NTSD.Animation.Rendering
             Volatile.Read(ref pendingPublishedTick);
         public static int LastMaterializedPublishedTickForDiagnostics =>
             Volatile.Read(ref lastMaterializedPublishedTick);
+
+        internal static void PrepareBattleCapacity(
+            int commandCapacity,
+            int catalogEntryCapacity)
+        {
+            if (commandCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(commandCapacity));
+            if (catalogEntryCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(catalogEntryCapacity));
+
+            for (int index = 0; index < Backends.Length; index++)
+                Backends[index].PrepareCapacity(commandCapacity);
+
+            int trustedResourceCapacity = checked(
+                catalogEntryCapacity + MaximumCommonTrustedResourceCount);
+            CatalogResolver.PrepareCapacity(
+                catalogEntryCapacity,
+                trustedResourceCapacity);
+            DiagnosticCatalogResolver.PrepareCapacity(
+                catalogEntryCapacity,
+                trustedResourceCapacity);
+            CatalogResolver.SealCapacity();
+            DiagnosticCatalogResolver.SealCapacity();
+        }
+
+        internal static void EndBattleCapacitySeal()
+        {
+            CatalogResolver.UnsealCapacity();
+            DiagnosticCatalogResolver.UnsealCapacity();
+        }
 
         internal static void RegisterFeature(
             BattleRenderFeature owner,

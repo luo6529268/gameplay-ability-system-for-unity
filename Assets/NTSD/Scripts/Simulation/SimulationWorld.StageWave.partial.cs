@@ -8,17 +8,68 @@ using UnityEngine;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// SimulationWorld 的 stage 波次推进与刷怪 pass。
+    /// SimulationWorld 持有的 stage 波次推进与刷怪模块。
     /// </summary>
-    public partial class SimulationWorld
+    internal sealed class SimulationStageWaveModule
     {
-        public void CurrentWaveStageTickAll()
+        private readonly SimulationWorld world;
+        private readonly List<LF2Entity> entityScratch = new List<LF2Entity>(128);
+
+        internal SimulationStageWaveModule(SimulationWorld world)
+        {
+            this.world = world ?? throw new ArgumentNullException(nameof(world));
+        }
+
+        private List<BattleStageCampaignData> StageCampaigns => world.StageCampaigns;
+        private BattleStageProgressionState StageProgression => world.StageProgression;
+        private bool StageProgressionValid => world.StageProgressionValid;
+        private int StageSpawnWaveApplied => world.StageSpawnWaveApplied;
+        private int StageSpawnWaveDeferredEntryApplied =>
+            world.StageSpawnWaveDeferredEntryApplied;
+        private int StageSpawnRuntimeWave => world.StageSpawnRuntimeWave;
+        private List<int> StageSpawnRuntimeTargetTotal =>
+            world.StageSpawnRuntimeTargetTotal;
+        private List<int> StageSpawnRuntimeEntryCount =>
+            world.StageSpawnRuntimeEntryCount;
+        private List<int> StageSpawnRuntimeSpawnedTotal =>
+            world.StageSpawnRuntimeSpawnedTotal;
+        private List<int[]> StageSpawnRuntimeSlots => world.StageSpawnRuntimeSlots;
+        private BattleRuntimeState Runtime => world.Runtime;
+        private int BattleGameModeId => world.BattleGameModeId;
+        private int RuntimeSlotCapacity => world.RuntimeSlotCapacity;
+        private DeterministicRng Rng => world.Rng;
+        private RuntimeCharacterConfigResolver RuntimeCharacterConfigs =>
+            world.RuntimeCharacterConfigs;
+        private StageSpawnTaskConfigurator StageSpawnTaskConfigurator =>
+            world.StageSpawnTaskConfigurator;
+
+        private void SetStageProgressionValid(bool value)
+        {
+            world.SetStageProgressionValid(value);
+        }
+
+        private void SetStageSpawnWaveApplied(int value)
+        {
+            world.SetStageSpawnWaveApplied(value);
+        }
+
+        private void SetStageSpawnWaveDeferredEntryApplied(int value)
+        {
+            world.SetStageSpawnWaveDeferredEntryApplied(value);
+        }
+
+        private void SetStageSpawnRuntimeWave(int value)
+        {
+            world.SetStageSpawnRuntimeWave(value);
+        }
+
+        internal void CurrentWaveStageTickAll()
         {
             ApplyCurrentWavePhaseAdvance();
             ApplyCurrentWaveImmediateStageSpawns();
         }
 
-        public void ConfigureStageCampaigns(
+        internal void ConfigureStageCampaigns(
             List<BattleStageCampaignData> campaigns,
             int stageSeriesIdx,
             int initialWaveIdx)
@@ -66,7 +117,7 @@ namespace NTSD.Simulation
                 Runtime?.Stage?.ApplyPhaseBound(phase.Bound);
         }
 
-        public bool StartInitialStageWave()
+        internal bool StartInitialStageWave()
         {
             if (!StageProgressionValid || StageProgression == null || StageProgression.WaveIdx != -1)
                 return false;
@@ -137,13 +188,13 @@ namespace NTSD.Simulation
         private static int StageSpawnEntryHp(BattleStageSpawnData spawn)
             => spawn != null && spawn.Hp > 0 ? spawn.Hp : 500;
 
-        private int StageSpawnEntryFactor()
+        internal int StageSpawnEntryFactor()
         {
             int count = 0;
             for (int slot = 0; slot < 20; slot++)
             {
-                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
-                if (entity == null || !IsActiveForCurrentPass(entity))
+                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(slot);
+                if (entity == null || !world.IsActiveForCurrentPassInternal(entity))
                     continue;
                 if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                     continue;
@@ -164,7 +215,7 @@ namespace NTSD.Simulation
             StageSpawnRuntimeTargetTotal?.Clear();
             StageSpawnRuntimeEntryCount?.Clear();
             StageSpawnRuntimeSpawnedTotal?.Clear();
-            StageSpawnRuntimeSlots?.Clear();
+            Runtime?.EnsureStageSpawnBuffers().Recycle(StageSpawnRuntimeSlots);
         }
 
         private void EnsureCurrentWavePositiveStageRuntime(BattleStagePhaseData phase, int factor)
@@ -186,16 +237,17 @@ namespace NTSD.Simulation
             StageSpawnRuntimeTargetTotal?.Clear();
             StageSpawnRuntimeEntryCount?.Clear();
             StageSpawnRuntimeSpawnedTotal?.Clear();
-            StageSpawnRuntimeSlots?.Clear();
+            Runtime?.EnsureStageSpawnBuffers().Recycle(StageSpawnRuntimeSlots);
 
             for (int si = 0; si < spawnCount; si++)
             {
                 StageSpawnRuntimeTargetTotal?.Add(0);
                 StageSpawnRuntimeEntryCount?.Add(0);
                 StageSpawnRuntimeSpawnedTotal?.Add(0);
-                int[] slots = new int[40];
-                Array.Fill(slots, -1);
+                int[] slots = Runtime.EnsureStageSpawnBuffers().Rent();
                 StageSpawnRuntimeSlots?.Add(slots);
+                if (slots == null)
+                    continue;
 
                 BattleStageSpawnData spawn = phase.Spawns[si];
                 if (spawn == null || spawn.Id < 0 || spawn.Ratio <= 0.0)
@@ -234,23 +286,24 @@ namespace NTSD.Simulation
 
                 int entryCount = StageSpawnRuntimeEntryCount[si];
                 int targetTotal = StageSpawnRuntimeTargetTotal[si];
-                if (entryCount <= 0 || targetTotal <= 0)
+                int[] slots = StageSpawnRuntimeSlots[si];
+                if (slots == null || entryCount <= 0 || targetTotal <= 0)
                     continue;
 
                 for (int i = 0; i < entryCount; i++)
                 {
-                    int slot = StageSpawnRuntimeSlots[si][i];
+                    int slot = slots[i];
                     if (slot < 0)
                         continue;
 
-                    LF2Entity entity = FindEntityByRuntimeSlotForQuery(slot);
+                    LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
                     if (entity == null || entity.ObjectId != spawn.Id)
-                        StageSpawnRuntimeSlots[si][i] = -1;
+                        slots[i] = -1;
                 }
 
                 for (int i = 0; i < entryCount; i++)
                 {
-                    if (StageSpawnRuntimeSlots[si][i] != -1)
+                    if (slots[i] != -1)
                         continue;
                     if (StageSpawnRuntimeSpawnedTotal[si] >= targetTotal)
                         break;
@@ -259,7 +312,7 @@ namespace NTSD.Simulation
                     if (slot < 0)
                         break;
 
-                    StageSpawnRuntimeSlots[si][i] = slot;
+                    slots[i] = slot;
                     StageSpawnRuntimeSpawnedTotal[si]++;
                 }
             }
@@ -276,10 +329,10 @@ namespace NTSD.Simulation
                 if (spawn == null || spawn.Id < 0)
                     continue;
 
-                GetAllEntities(_entityScratch);
-                for (int i = 0; i < _entityScratch.Count; i++)
+                world.GetAllEntities(entityScratch);
+                for (int i = 0; i < entityScratch.Count; i++)
                 {
-                    LF2Entity entity = _entityScratch[i];
+                    LF2Entity entity = entityScratch[i];
                     if (entity == null)
                         continue;
 
@@ -289,12 +342,12 @@ namespace NTSD.Simulation
 
                     if (entity.ObjectId == spawn.Id)
                     {
-                        _entityScratch.Clear();
+                        entityScratch.Clear();
                         return false;
                     }
                 }
 
-                _entityScratch.Clear();
+                entityScratch.Clear();
             }
 
             return true;
@@ -426,12 +479,14 @@ namespace NTSD.Simulation
             RefillCurrentWavePositiveStageSpawns(phase);
         }
 
-        private int SpawnStageImmediateEntrySlot(BattleStageSpawnData spawn)
+        internal int SpawnStageImmediateEntrySlot(BattleStageSpawnData spawn)
         {
             if (spawn == null || spawn.Id < 0)
                 return -1;
 
-            int requiredRuntimeSlot = FindFirstFreeRuntimeSlot(20, RuntimeSlotCapacity);
+            int requiredRuntimeSlot = world.FindFirstFreeRuntimeSlotForModule(
+                20,
+                RuntimeSlotCapacity);
             if (requiredRuntimeSlot < 0)
                 return -1;
 
@@ -476,20 +531,23 @@ namespace NTSD.Simulation
                 facingDir,
                 hp,
                 requiredRuntimeSlot);
-            entity ??= TrySpawnStageCharacterDirect(
-                spawn,
-                spawnX,
-                spawn.Y,
-                spawnZ,
-                facingDir,
-                hp,
-                requiredRuntimeSlot);
+            if (entity == null && !IsStageRuntimeAllocationSealed())
+            {
+                entity = TrySpawnStageCharacterDirect(
+                    spawn,
+                    spawnX,
+                    spawn.Y,
+                    spawnZ,
+                    facingDir,
+                    hp,
+                    requiredRuntimeSlot);
+            }
             if (entity == null)
                 return -1;
             if (entity.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return -1;
 
-            if (!RestoreStageSpawnRestState(requiredRuntimeSlot, entity))
+            if (!world.RestoreStageSpawnRestState(requiredRuntimeSlot, entity))
             {
                 LF2ObjectPointFactory.ReleaseRejectedSpawn(entity.Renderer, entity);
                 return -1;
@@ -535,44 +593,10 @@ namespace NTSD.Simulation
             entity.HolderCopySlot = entity.Runtime?.SlotIndex ?? -1;
         }
 
-        internal static OPointCreateTask BuildStageSpawnTask(
-            BattleStageSpawnData spawn,
-            int spawnX,
-            int spawnY,
-            int spawnZ,
-            string facingDir,
-            int requiredRuntimeSlot = -1)
+        private static bool IsStageRuntimeAllocationSealed()
         {
-            return new OPointCreateTask
-            {
-                opoint = new ObjectPoint
-                {
-                    oid = spawn.Id,
-                    kind = 0,
-                    action = spawn.Act,
-                    x = spawnX,
-                    y = spawnY,
-                    facing = 0,
-                },
-                parent = null,
-                team = 2,
-                requiredRuntimeSlot = requiredRuntimeSlot,
-                relationTeam = 2,
-                holderCopySlot = -1,
-                useExplicitRelationIdentity = true,
-                pos = new Vector3(spawnX, spawnY, 0f),
-                z = spawnZ,
-                dir = facingDir,
-                preserveActionZero = true,
-                skipPostInitZOffset = true,
-                useDirectVelocity = true,
-                directVx = 0f,
-                directVy = 0f,
-                directVz = 0f,
-                frameDelay = 0,
-                attackExempt = 0,
-                releaseSpawnSemantic = ReleaseSpawnSemantic.StageSpawnAt,
-            };
+            return LF2ReferencePool.Instance?.IsBattleCapacitySealed == true ||
+                   LF2ObjectPool.Instance?.IsBattleCapacitySealed == true;
         }
 
         private LF2Entity TrySpawnStageEntityWithFactory(
@@ -591,19 +615,32 @@ namespace NTSD.Simulation
             if (factory == null || referencePool == null || objectPool == null || manager == null)
                 return null;
 
-            OPointCreateTask task = BuildStageSpawnTask(
-                spawn,
-                spawnX,
-                spawnY,
-                spawnZ,
-                facingDir,
-                requiredRuntimeSlot);
-            task.useInitialRuntimeIntPosition = true;
-            task.initialRuntimeX = spawnX;
-            task.initialRuntimeY = spawnY;
-            task.initialRuntimeZ = spawnZ;
+            OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+            if (task == null)
+                return null;
 
-            LF2Entity entity = factory.CreateObjectImmediate(task);
+            LF2Entity entity;
+            try
+            {
+                StageSpawnTaskConfigurator.Configure(
+                    task,
+                    spawn,
+                    spawnX,
+                    spawnY,
+                    spawnZ,
+                    facingDir,
+                    requiredRuntimeSlot);
+                task.useInitialRuntimeIntPosition = true;
+                task.initialRuntimeX = spawnX;
+                task.initialRuntimeY = spawnY;
+                task.initialRuntimeZ = spawnZ;
+                entity = factory.CreateObjectImmediate(task);
+            }
+            finally
+            {
+                referencePool.Recycle(task);
+            }
+
             if (entity == null || entity.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return null;
 
@@ -622,7 +659,7 @@ namespace NTSD.Simulation
             int hp,
             int requiredRuntimeSlot)
         {
-            LF2CharacterDataWrapper wrapper = LF2Entity.ResolveRuntimeCharacterConfig(spawn.Id);
+            LF2CharacterDataWrapper wrapper = RuntimeCharacterConfigs.Resolve(spawn.Id);
             if (wrapper == null)
                 return null;
 
@@ -631,7 +668,7 @@ namespace NTSD.Simulation
             if (objectType != (int)LF2ObjectType.Character)
                 return null;
 
-            OPointCreateTask task = BuildStageSpawnTask(
+            OPointCreateTask task = StageSpawnTaskConfigurator.CreateCold(
                 spawn,
                 spawnX,
                 spawnY,
@@ -648,9 +685,9 @@ namespace NTSD.Simulation
             {
                 if (character.RequiredRuntimeSlot != requiredRuntimeSlot)
                     return null;
-                Register(character);
+                world.Register(character);
             }
-            else if (character.Match != this)
+            else if (character.Match != world)
                 return null;
             if (character.Runtime?.SlotIndex != requiredRuntimeSlot)
                 return null;

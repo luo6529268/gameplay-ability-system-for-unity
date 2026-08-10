@@ -170,12 +170,33 @@ namespace NTSD.Animation.LF2Objects
             return ReleaseHeldObjectByWPoint(GetHeldEntity(), holderWPoint, out result);
         }
 
+        public bool DropHeldObjectByWPoint(WeaponPoint holderWPoint)
+        {
+            return DropHeldObjectByWPoint(GetHeldEntity(), holderWPoint);
+        }
+
+        private bool DropHeldObjectByWPoint(
+            LF2Entity held,
+            WeaponPoint holderWPoint)
+        {
+            if (holderWPoint == null || held == null || held.PS == null)
+                return false;
+
+            if (!ReferenceEquals(_character.HeldWeaponReferenceInternal, held))
+                _character.HeldWeaponReferenceInternal = held;
+
+            Vector3 holdpoint = CalcHeldObjectPoint(holderWPoint);
+            SyncHeldObjectFrameAndPosition(held, holderWPoint, holdpoint);
+            DropHeldObjectRandomly(held);
+            return true;
+        }
+
         /// <summary>
         /// C++ release AI_Process2 遍历 link_state&lt;0 对象后，按 holder 当前 wpoint 同步/释放。
         /// </summary>
         public bool ReleaseHeldObjectByWPoint(LF2Entity held, WeaponPoint holderWPoint, out WeaponActResult result)
         {
-            result = new WeaponActResult();
+            result = default;
             if (holderWPoint == null || held == null || held.PS == null)
                 return false;
 
@@ -186,9 +207,7 @@ namespace NTSD.Animation.LF2Objects
 
             if (holderWPoint.kind == 3)
             {
-                SyncHeldObjectFrameAndPosition(held, holderWPoint, holdpoint);
-                DropHeldObjectRandomly(held);
-                return true;
+                return DropHeldObjectByWPoint(held, holderWPoint);
             }
 
             LF2WeaponBase weapon = AsWeaponEntity(held);

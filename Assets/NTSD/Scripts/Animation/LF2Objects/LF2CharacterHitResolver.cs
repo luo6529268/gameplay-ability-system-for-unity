@@ -21,6 +21,7 @@ namespace NTSD.Animation.LF2Objects
     internal sealed class LF2CharacterHitResolver
     {
         private readonly LF2Character _character;
+        private readonly InteractionArea _runtimeItr = new InteractionArea();
 
         public LF2CharacterHitResolver(LF2Character character)
         {
@@ -41,7 +42,8 @@ namespace NTSD.Animation.LF2Objects
                 if (attacker.WeaponCount <= 0)
                     return false;
 
-                itr = itr.ShallowCopy();
+                _runtimeItr.CopyFrom(itr);
+                itr = _runtimeItr;
                 itr.kind = 0;
                 if ((attacker.Runtime.Vx > 0.0 && attacker.Dirh() < 0) ||
                     (attacker.Runtime.Vx < 0.0 && attacker.Dirh() > 0))
@@ -71,26 +73,21 @@ namespace NTSD.Animation.LF2Objects
                         if (srcWp != null)
                         {
                             // 保留原始 itr 的碰撞框，替换伤害字段，并将 kind 强制为普通攻击。
-                            itr = new InteractionArea
-                            {
-                                kind    = 0,
-                                x       = itr.x,
-                                y       = itr.y,
-                                w       = itr.w,
-                                h       = itr.h,
-                                zwidth  = srcWp.cover,
-                                dvx     = srcWp.dvx,
-                                dvy     = srcWp.dvy,
-                                dvz     = srcWp.dvz,
-                                injury  = srcWp.injury,
-                                fall    = srcWp.fall,
-                                vaction = srcWp.vaction,
-                                arest   = srcWp.arest,
-                                vrest   = srcWp.vrest,
-                                effect  = srcWp.effect,
-                                kill    = srcWp.kill,
-                                bdefend = srcWp.bdefend,
-                            };
+                            _runtimeItr.CopyFrom(itr);
+                            itr = _runtimeItr;
+                            itr.kind = 0;
+                            itr.zwidth = srcWp.cover;
+                            itr.dvx = srcWp.dvx;
+                            itr.dvy = srcWp.dvy;
+                            itr.dvz = srcWp.dvz;
+                            itr.injury = srcWp.injury;
+                            itr.fall = srcWp.fall;
+                            itr.vaction = srcWp.vaction;
+                            itr.arest = srcWp.arest;
+                            itr.vrest = srcWp.vrest;
+                            itr.effect = srcWp.effect;
+                            itr.kill = srcWp.kill;
+                            itr.bdefend = srcWp.bdefend;
                         }
                     }
                 }

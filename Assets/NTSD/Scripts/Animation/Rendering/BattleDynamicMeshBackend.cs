@@ -72,6 +72,24 @@ namespace NTSD.Animation.Rendering
             return chunks[chunkIndex].GetVertexColor(vertexIndex);
         }
 
+        public void PrepareCapacity(int commandCapacity)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
+            if (commandCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(commandCapacity));
+            if (commandCapacity == 0)
+                return;
+
+            int requiredChunkCount =
+                (commandCapacity + QuadsPerChunk - 1) / QuadsPerChunk;
+            for (int chunkIndex = 0; chunkIndex < requiredChunkCount; chunkIndex++)
+                EnsureChunk(chunkIndex);
+            EnsureSegmentCapacity(commandCapacity);
+            dirtyChunkCount = 0;
+            diagnostics.CapacityGrowthCount = 0;
+        }
+
         internal Vector2 GetChunkVertexUv(int chunkIndex, int vertexIndex)
         {
             if ((uint)chunkIndex >= (uint)chunks.Length || chunks[chunkIndex] == null)
@@ -561,11 +579,15 @@ namespace NTSD.Animation.Rendering
                     }
                     else
                     {
-                        // Reset every descriptor that was active in the previous upload before
-                        // rewriting this frame's active range. Keep the physical high-water;
-                        // shrinking subMeshCount here forces Unity to rebuild native state.
+                        // The active prefix is overwritten below before this backend can be
+                        // leased to the renderer. Only clear the stale tail; resetting the
+                        // whole previous prefix adds a native SetSubMesh call for every live
+                        // segment on every frame without changing the resulting mesh.
+                        // Keep the physical high-water; shrinking subMeshCount here forces
+                        // Unity to rebuild native state.
+                        int inertStart = Math.Min(desiredSubMeshCount, physicalSubMeshCount);
                         int inertEnd = Math.Min(previousActiveSubMeshCount, physicalSubMeshCount);
-                        for (int subMeshIndex = 0; subMeshIndex < inertEnd; subMeshIndex++)
+                        for (int subMeshIndex = inertStart; subMeshIndex < inertEnd; subMeshIndex++)
                             SetInertSubmesh(targetMesh, subMeshIndex);
                     }
                 }

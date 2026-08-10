@@ -81,7 +81,7 @@ export const number = (value: unknown, fallback = 0): number => typeof value ===
 
 export function localizedRequestError(statusCode: number, path: string): string {
     if (statusCode === 403) return "页面会话已经失效，请刷新页面后重试。";
-    if (statusCode === 404 && path === "/api/project/open") return "当前对象尚未接入原生预览，请选择 OID 2 Naruto。";
+    if (statusCode === 404 && path === "/api/project/open") return "所选角色不存在或资源不可用，请重新载入角色目录。";
     if (statusCode === 404 && path.startsWith("/api/assets/")) return "图片资源已经失效，请重新打开项目。";
     if (statusCode === 404) return "项目会话已经失效，请重新打开项目。";
     if (statusCode === 409) return "数据版本已经变化，请重新载入后再修改。";
@@ -90,6 +90,34 @@ export function localizedRequestError(statusCode: number, path: string): string 
     if (statusCode === 422) return "图片资源格式无效，无法预览。";
     if (statusCode === 503) return "项目服务尚未就绪，请稍后重试。";
     return `请求失败（HTTP ${statusCode}）。`;
+}
+
+export function localizedResponseError(statusCode: number, path: string, payload: unknown): string {
+    const localized = localizedRequestError(statusCode, path);
+    const detail = list(record(payload).diagnostics)
+        .map((value) => text(record(value).message).trim())
+        .find((value) => value !== "");
+    return detail === undefined || localized.includes(detail)
+        ? localized
+        : `${localized} ${detail}`;
+}
+
+export function projectResponseCode(payload: unknown): string {
+    return list(record(payload).diagnostics)
+        .map((value) => text(record(record(value).details).projectCode))
+        .find((value) => value !== "") ?? "";
+}
+
+export type ProjectSessionRecoveryDecision = "retry" | "preserve-dirty" | "none";
+
+export function projectSessionRecoveryDecision(
+    projectCode: string,
+    dirty: boolean,
+    hasDraft: boolean,
+    objectKey: string,
+): ProjectSessionRecoveryDecision {
+    if (projectCode !== "unknown-session" || objectKey === "") return "none";
+    return dirty || hasDraft ? "preserve-dirty" : "retry";
 }
 
 export function errorText(error: unknown, fallback: string): string {

@@ -1,4 +1,5 @@
 import {
+    parseNativeInt32Token,
     type DatBlockCst,
     type DatCstDocument,
     type DatFieldCst,
@@ -241,11 +242,15 @@ const cpointDefaults: CPointProjection = {
 
 function numericValues(rawValue: Uint8Array): number[] {
     const matches = Buffer.from(rawValue).toString("latin1").match(/[+-]?\d+/g) ?? [];
-    return matches.map((match) => Number.parseInt(match, 10)).filter(Number.isSafeInteger);
+    return matches.flatMap((match) => {
+        const value = parseNativeInt32Token(match);
+        return value === undefined ? [] : [value];
+    });
 }
 
 function projectTopField(target: DatTopProjection, field: DatFieldCst): void {
     const rawText = field.rawValue.toString("latin1");
+    const nativeInteger = parseNativeInt32Token(field.rawValue);
     switch (field.key) {
         case "name": target.name = rawText; break;
         case "head": target.head = rawText; break;
@@ -253,12 +258,12 @@ function projectTopField(target: DatTopProjection, field: DatFieldCst): void {
         case "weapon_hit_sound": target.weapon_hit_sound = rawText; break;
         case "weapon_drop_sound": target.weapon_drop_sound = rawText; break;
         case "weapon_broken_sound": target.weapon_broken_sound = rawText; break;
-        case "weapon_hp": if (field.numericValue !== undefined) target.weapon_hp = field.numericValue; break;
-        case "weapon_drop_hurt": if (field.numericValue !== undefined) target.weapon_drop_hurt = field.numericValue; break;
-        case "walking_frame_rate": if (field.numericValue !== undefined) target.walking_frame_rate = field.numericValue; break;
+        case "weapon_hp": if (nativeInteger !== undefined) target.weapon_hp = nativeInteger; break;
+        case "weapon_drop_hurt": if (nativeInteger !== undefined) target.weapon_drop_hurt = nativeInteger; break;
+        case "walking_frame_rate": if (nativeInteger !== undefined) target.walking_frame_rate = nativeInteger; break;
         case "walking_speed": if (field.numericValue !== undefined) target.walking_speed = field.numericValue; break;
         case "walking_speedz": if (field.numericValue !== undefined) target.walking_speedz = field.numericValue; break;
-        case "running_frame_rate": if (field.numericValue !== undefined) target.running_frame_rate = field.numericValue; break;
+        case "running_frame_rate": if (nativeInteger !== undefined) target.running_frame_rate = nativeInteger; break;
         case "running_speed": if (field.numericValue !== undefined) target.running_speed = field.numericValue; break;
         case "running_speedz": if (field.numericValue !== undefined) target.running_speedz = field.numericValue; break;
         case "heavy_walking_speed": if (field.numericValue !== undefined) target.heavy_walking_speed = field.numericValue; break;

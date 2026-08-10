@@ -102,6 +102,50 @@ namespace NTSD.Animation.Rendering.Editor
                 CreateDefaultRequest("dispersed", "Temp/NTSD_ProductionEntityStress.dispersed.json"));
         }
 
+        [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 1000 AI 分组近战零 GC 测试")]
+        public static void RunCombatFromMenu()
+        {
+            ProductionEntityStressRequestProcessor.WriteRequest(
+                CreateCombatZeroGcRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.zero-gc.json"));
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Capacity Pressure Smoke")]
+        public static void RunCombatCapacityPressureSmokeFromMenu()
+        {
+            ProductionEntityStressRequestProcessor.WriteRequest(
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.capacity-pressure-smoke.json",
+                    "legacy"));
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Capacity Pressure Smoke")]
+        public static void RunCombatDataOrientedCapacityPressureSmokeFromMenu()
+        {
+            ProductionEntityStressRequestProcessor.WriteRequest(
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-capacity-pressure-smoke.json",
+                    "data-oriented-canonical"));
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Performance Smoke")]
+        public static void RunCombatDataOrientedPerformanceSmokeFromMenu()
+        {
+            ProductionEntityStressRequestProcessor.WriteRequest(
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-performance-smoke.json",
+                    "data-oriented-canonical"));
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Steady State Gate")]
+        public static void RunCombatDataOrientedSteadyStateGateFromMenu()
+        {
+            ProductionEntityStressRequestProcessor.WriteRequest(
+                CreateCombatSteadyStateRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-steady-state.json",
+                    "data-oriented-canonical"));
+        }
+
         [MenuItem("NTSD/战斗诊断/生产实体压力测试/运行 1000 实体集中测试")]
         public static void RunConcentratedFromMenu()
         {
@@ -260,6 +304,8 @@ namespace NTSD.Animation.Rendering.Editor
                     WriteStart("smoke", "Temp/NTSD_ProductionEntityStress.smoke.json");
                 if (GUILayout.Button("1000 实体分散测试"))
                     WriteStart("dispersed", "Temp/NTSD_ProductionEntityStress.dispersed.json");
+                if (GUILayout.Button("1000 AI 分组近战"))
+                    WriteStart("combat", "Temp/NTSD_ProductionEntityStress.combat1000.zero-gc.json");
                 if (GUILayout.Button("1000 实体集中测试"))
                     WriteStart("concentrated", "Temp/NTSD_ProductionEntityStress.concentrated.json");
             }
@@ -454,6 +500,71 @@ namespace NTSD.Animation.Rendering.Editor
             };
         }
 
+        internal static ProductionEntityStressRequest CreateCombatZeroGcRequest(
+            string reportPath)
+        {
+            return new ProductionEntityStressRequest
+            {
+                action = "combat1000",
+                inputMode = "ai",
+                warmupTicks = 120,
+                sampleTicks = 1800,
+                spawnBatchSize = 25,
+                maxCatchUpTicksPerFrame = 1,
+                maxBacklogTicks = 8,
+                maxSaturationDrainTicks = 300,
+                autoStopWhenSampled = true,
+                requireZeroGcAfterWarmup = true,
+                seed = 0x4E545344u,
+                aiExecutionProfile = "legacy",
+                lateRuntimeSnapshotMode = "consolidated-final",
+                formalCollectorMode = "configured",
+                outputPath = reportPath,
+            };
+        }
+
+        internal static ProductionEntityStressRequest CreateCombatCapacityPressureSmokeRequest(
+            string reportPath,
+            string aiExecutionProfile)
+        {
+            ProductionEntityStressRequest request = CreateCombatZeroGcRequest(reportPath);
+            request.warmupTicks = 30;
+            request.sampleTicks = 180;
+            request.spawnBatchSize = 100;
+            request.aiExecutionProfile = aiExecutionProfile;
+            request.enablePhaseTiming = true;
+            request.enablePresentationTiming = true;
+            request.enableDetailPhaseTiming = true;
+            return request;
+        }
+
+        internal static ProductionEntityStressRequest CreateCombatPerformanceSmokeRequest(
+            string reportPath,
+            string aiExecutionProfile)
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    reportPath,
+                    aiExecutionProfile);
+            request.enablePhaseTiming = false;
+            request.enablePresentationTiming = false;
+            request.enableDetailPhaseTiming = false;
+            return request;
+        }
+
+        internal static ProductionEntityStressRequest CreateCombatSteadyStateRequest(
+            string reportPath,
+            string aiExecutionProfile)
+        {
+            ProductionEntityStressRequest request = CreateCombatZeroGcRequest(reportPath);
+            request.spawnBatchSize = 100;
+            request.aiExecutionProfile = aiExecutionProfile;
+            request.enablePhaseTiming = false;
+            request.enablePresentationTiming = false;
+            request.enableDetailPhaseTiming = false;
+            return request;
+        }
+
         internal static ProductionEntityStressRequest CreateDispersedAiSimulationOnlySmokeRequest(
             int entityCount,
             string reportPath,
@@ -562,6 +673,8 @@ namespace NTSD.Animation.Rendering.Editor
             "NTSD.ProductionEntityStress.ActiveRequestJson";
         private const string SessionActiveConfigJsonKey =
             "NTSD.ProductionEntityStress.ActiveConfigJson";
+        private const string SessionActiveStatePresentKey =
+            "NTSD.ProductionEntityStress.ActiveStatePresent";
         private const string SessionReloadRecoveryPendingKey =
             "NTSD.ProductionEntityStress.ReloadRecoveryPending";
         private const string SessionReloadRecoveryDispatchedKey =
@@ -574,13 +687,17 @@ namespace NTSD.Animation.Rendering.Editor
         internal const int ReloadRecoveryLimitForDiagnostics = 1;
         internal const double ServiceWaitTimeoutSecondsForDiagnostics = 120d;
         private static bool processing;
+        private static bool requestPending =
+            File.Exists(ProductionEntityStressPaths.RequestAbsolutePath);
+        private static bool polling;
 
         static ProductionEntityStressRequestProcessor()
         {
             ConfigureBootstrapSuppressionFromPendingRequest();
             AssemblyReloadEvents.beforeAssemblyReload += BeforeAssemblyReload;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            EditorApplication.update += PollRequest;
+            if (requestPending || HasPendingReloadRecovery())
+                StartPolling();
         }
 
         internal static void WriteRequest(ProductionEntityStressRequest request)
@@ -593,7 +710,21 @@ namespace NTSD.Animation.Rendering.Editor
 
         internal static void WriteStopRequest()
         {
-            WriteRequestJson("{\"action\":\"stop\"}");
+            ProductionEntityStressRunner activeRunner = ProductionEntityStressRunner.Active;
+            if (activeRunner != null)
+            {
+                activeRunner.StopAndCleanup("stop-request");
+            }
+            else
+            {
+                ProductionEntityStressPaths.WriteTerminalResult(
+                    true,
+                    string.Empty,
+                    "No active production entity stress runner required cleanup.");
+            }
+
+            NotifyRunStopped();
+            CompleteRequest(ProductionEntityStressPaths.RequestAbsolutePath);
         }
 
         internal static bool ShouldEnterPlayMode(string action, bool isPlaying)
@@ -785,11 +916,12 @@ namespace NTSD.Animation.Rendering.Editor
             if (ShouldSuppressBattleTestBootstrap(request?.action))
                 ClearActiveRunRecoveryState(clearCount: true);
             ClearPlayRestartGuard();
-            string requestPath = ProductionEntityStressPaths.ProjectPath(
-                ProductionEntityStressPaths.RequestFile);
+            string requestPath = ProductionEntityStressPaths.RequestAbsolutePath;
             Directory.CreateDirectory(
                 Path.GetDirectoryName(requestPath) ?? ProductionEntityStressPaths.ProjectPath("Temp"));
             File.WriteAllText(requestPath, json, new UTF8Encoding(false));
+            requestPending = true;
+            StartPolling();
             SessionState.SetString(SessionRequestJsonKey, json);
             SessionState.SetString(
                 SessionServiceWaitDeadlineKey,
@@ -798,8 +930,7 @@ namespace NTSD.Animation.Rendering.Editor
             BattleTestBootstrap.SuppressEntityCreationForProductionStress =
                 ShouldSuppressBattleTestBootstrap(request?.action);
 
-            string resultPath = ProductionEntityStressPaths.ProjectPath(
-                ProductionEntityStressPaths.ResultFile);
+            string resultPath = ProductionEntityStressPaths.ResultAbsolutePath;
             if (File.Exists(resultPath))
                 File.Delete(resultPath);
         }
@@ -808,16 +939,28 @@ namespace NTSD.Animation.Rendering.Editor
         {
             if (processing || EditorApplication.isCompiling || EditorApplication.isUpdating)
                 return;
-            if (ProcessReloadRecovery())
-                return;
-            string requestPath = ProductionEntityStressPaths.ProjectPath(
-                ProductionEntityStressPaths.RequestFile);
-            if (!File.Exists(requestPath))
+            if (ProductionEntityStressRunner.Active != null)
             {
-                SessionState.EraseString(SessionRequestJsonKey);
-                ClearPlayRestartGuard();
+                StopPolling();
                 return;
             }
+            if (ProcessReloadRecovery())
+                return;
+            if (!requestPending)
+            {
+                if (EditorApplication.isPlayingOrWillChangePlaymode)
+                    return;
+
+                requestPending = File.Exists(ProductionEntityStressPaths.RequestAbsolutePath);
+                if (!requestPending)
+                {
+                    SessionState.EraseString(SessionRequestJsonKey);
+                    ClearPlayRestartGuard();
+                    return;
+                }
+            }
+
+            string requestPath = ProductionEntityStressPaths.RequestAbsolutePath;
 
             processing = true;
             try
@@ -968,8 +1111,7 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static void WriteRunningResult(string reportPath)
         {
-            string resultPath = ProductionEntityStressPaths.ProjectPath(
-                ProductionEntityStressPaths.ResultFile);
+            string resultPath = ProductionEntityStressPaths.ResultAbsolutePath;
             Directory.CreateDirectory(
                 Path.GetDirectoryName(resultPath) ?? ProductionEntityStressPaths.ProjectPath("Temp"));
             File.WriteAllText(
@@ -987,10 +1129,13 @@ namespace NTSD.Animation.Rendering.Editor
             }
             finally
             {
+                requestPending = false;
                 SessionState.EraseString(SessionRequestJsonKey);
                 SessionState.EraseString(SessionServiceWaitDeadlineKey);
                 ClearPlayRestartGuard();
                 BattleTestBootstrap.SuppressEntityCreationForProductionStress = false;
+                if (!HasPendingReloadRecovery())
+                    StopPolling();
             }
         }
 
@@ -999,6 +1144,32 @@ namespace NTSD.Animation.Rendering.Editor
             ClearActiveRunRecoveryState(clearCount: true);
             ClearPlayRestartGuard();
             BattleTestBootstrap.SuppressEntityCreationForProductionStress = false;
+            if (!requestPending)
+                StopPolling();
+        }
+
+        private static bool HasPendingReloadRecovery()
+        {
+            return SessionState.GetBool(SessionReloadRecoveryPendingKey, false) ||
+                   SessionState.GetBool(SessionReloadRecoveryTransitionKey, false);
+        }
+
+        private static void StartPolling()
+        {
+            if (polling)
+                return;
+
+            EditorApplication.update += PollRequest;
+            polling = true;
+        }
+
+        private static void StopPolling()
+        {
+            if (!polling)
+                return;
+
+            EditorApplication.update -= PollRequest;
+            polling = false;
         }
 
         private static void PersistActiveRun(
@@ -1009,6 +1180,7 @@ namespace NTSD.Animation.Rendering.Editor
             SessionState.SetString(
                 SessionActiveConfigJsonKey,
                 BuildActiveConfigJson(requestJson, config));
+            SessionState.SetBool(SessionActiveStatePresentKey, true);
             SessionState.SetBool(SessionReloadRecoveryPendingKey, false);
             SessionState.SetBool(SessionReloadRecoveryDispatchedKey, false);
             SessionState.SetBool(SessionReloadRecoveryTransitionKey, false);
@@ -1020,6 +1192,15 @@ namespace NTSD.Animation.Rendering.Editor
             bool transition = SessionState.GetBool(
                 SessionReloadRecoveryTransitionKey,
                 false);
+            if (!pending && !transition)
+            {
+                if (ProductionEntityStressRunner.Active != null ||
+                    !SessionState.GetBool(SessionActiveStatePresentKey, false))
+                {
+                    return false;
+                }
+            }
+
             string requestJson = SessionState.GetString(
                 SessionActiveRequestJsonKey,
                 string.Empty);
@@ -1245,6 +1426,7 @@ namespace NTSD.Animation.Rendering.Editor
         {
             SessionState.EraseString(SessionActiveRequestJsonKey);
             SessionState.EraseString(SessionActiveConfigJsonKey);
+            SessionState.EraseBool(SessionActiveStatePresentKey);
             SessionState.EraseBool(SessionReloadRecoveryPendingKey);
             SessionState.EraseBool(SessionReloadRecoveryDispatchedKey);
             SessionState.EraseBool(SessionReloadRecoveryTransitionKey);

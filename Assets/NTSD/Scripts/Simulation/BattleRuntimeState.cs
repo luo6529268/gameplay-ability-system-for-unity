@@ -17,6 +17,7 @@ namespace NTSD.Simulation
         public int BackgroundId = -1;
         public int Difficulty = 2;
         public int Seed;
+        public bool PpMode = true;
 
         public void Reset()
         {
@@ -25,6 +26,7 @@ namespace NTSD.Simulation
             BackgroundId = -1;
             Difficulty = 2;
             Seed = 0;
+            PpMode = true;
         }
     }
 
@@ -396,6 +398,9 @@ namespace NTSD.Simulation
         public List<int> StageSpawnRuntimeEntryCount = new List<int>();
         public List<int> StageSpawnRuntimeSpawnedTotal = new List<int>();
         public List<int[]> StageSpawnRuntimeSlots = new List<int[]>();
+        [NonSerialized]
+        public StageSpawnRuntimeBufferPool StageSpawnBuffers =
+            new StageSpawnRuntimeBufferPool();
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
         public BattleResultsRuntimeState Results = new BattleResultsRuntimeState();
@@ -415,7 +420,8 @@ namespace NTSD.Simulation
             StageSpawnRuntimeTargetTotal?.Clear();
             StageSpawnRuntimeEntryCount?.Clear();
             StageSpawnRuntimeSpawnedTotal?.Clear();
-            StageSpawnRuntimeSlots?.Clear();
+            EnsureStageSpawnBuffers();
+            StageSpawnBuffers.Recycle(StageSpawnRuntimeSlots);
             Roster?.Reset();
             Flow?.Reset();
             Results?.Reset();
@@ -427,6 +433,12 @@ namespace NTSD.Simulation
         public void ApplyBootstrapFromMatchConfig(MatchConfig config)
         {
             SlotLabels?.ApplyBootstrapFromMatchConfig(config);
+        }
+
+        public StageSpawnRuntimeBufferPool EnsureStageSpawnBuffers()
+        {
+            StageSpawnBuffers ??= new StageSpawnRuntimeBufferPool();
+            return StageSpawnBuffers;
         }
 
         private static void ResetStatArray(ref int[] stats)

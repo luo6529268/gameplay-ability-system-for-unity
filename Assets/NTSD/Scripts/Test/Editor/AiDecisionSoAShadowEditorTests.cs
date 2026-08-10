@@ -955,6 +955,72 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void UnifiedAuthority_IncrementalPostInputRefreshMatchesFullRefreshAcrossTicks()
+        {
+            var incremental = new SimulationWorld();
+            var full = new SimulationWorld
+            {
+                ForceFullCharacterInputPostRefreshForDiagnostics = true,
+            };
+            int[] slots = { 0, 3, 7, 20 };
+            var incrementalCharacters = new LF2Character[slots.Length];
+            var fullCharacters = new LF2Character[slots.Length];
+            for (int index = 0; index < slots.Length; index++)
+            {
+                int state = index == 1 ? 9 : index == 3 ? 14 : 2;
+                incrementalCharacters[index] = RegisterCharacter(
+                    incremental,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    index == 3 ? 12 : 0,
+                    0,
+                    state,
+                    true);
+                fullCharacters[index] = RegisterCharacter(
+                    full,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    index == 3 ? 12 : 0,
+                    0,
+                    state,
+                    true);
+            }
+            ConfigureGateBWorld(incremental, unifiedAuthority: true, 0x91A7u);
+            ConfigureGateBWorld(full, unifiedAuthority: true, 0x91A7u);
+
+            for (int tick = 2; tick < 32; tick++)
+            {
+                incremental.CharacterInputAll(tick);
+                full.CharacterInputAll(tick);
+
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    AssertDecisionStateEqual(
+                        full,
+                        fullCharacters[index],
+                        incremental,
+                        incrementalCharacters[index]);
+                    AssertEntityObservableStateEqual(
+                        fullCharacters[index],
+                        incrementalCharacters[index]);
+                }
+
+                Assert.That(
+                    incremental.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                    Is.True,
+                    $"incremental published snapshot must remain internally valid at tick {tick}");
+                Assert.That(
+                    full.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                    Is.True,
+                    $"full published snapshot must remain internally valid at tick {tick}");
+            }
+        }
+
+        [Test]
         public void UnifiedAuthority_AscendingRefreshMakesLowVisibleToHighWithoutReverseEarlyVisibility()
         {
             var world = new SimulationWorld();

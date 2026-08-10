@@ -3006,6 +3006,68 @@ namespace NTSD.Animation
             return wrapper;
         }
 
+        public void GetMaximumBattleCollisionRectCounts(
+            out int maximumBodyCount,
+            out int maximumItrCount)
+        {
+            maximumBodyCount = 1;
+            maximumItrCount = 1;
+
+            foreach (LF2CharacterDataWrapper wrapper in
+                     TotalCharacterFrameConfig.Values)
+            {
+                List<LF2FrameData> frames = wrapper?.characterData?.frames;
+                if (frames == null)
+                    continue;
+
+                for (int frameIndex = 0; frameIndex < frames.Count; frameIndex++)
+                {
+                    LF2FrameData frame = frames[frameIndex];
+                    if (frame == null)
+                        continue;
+
+                    maximumBodyCount = Mathf.Max(
+                        maximumBodyCount,
+                        frame.bodies?.Count ?? 0);
+                    maximumItrCount = Mathf.Max(
+                        maximumItrCount,
+                        frame.itrs?.Count ?? 0);
+                }
+            }
+        }
+
+        public void CollectBattleSoundIds(ISet<string> destination)
+        {
+            if (destination == null)
+                throw new System.ArgumentNullException(nameof(destination));
+
+            foreach (LF2CharacterDataWrapper wrapper in
+                     TotalCharacterFrameConfig.Values)
+            {
+                LF2CharacterData data = wrapper?.characterData;
+                if (data == null)
+                    continue;
+
+                AddBattleSoundId(destination, data.weapon_hit_sound);
+                AddBattleSoundId(destination, data.weapon_drop_sound);
+                AddBattleSoundId(destination, data.weapon_broken_sound);
+                List<LF2FrameData> frames = data.frames;
+                if (frames == null)
+                    continue;
+
+                for (int index = 0; index < frames.Count; index++)
+                    AddBattleSoundId(destination, frames[index]?.sound);
+            }
+        }
+
+        private static void AddBattleSoundId(
+            ISet<string> destination,
+            string soundId)
+        {
+            if (!string.IsNullOrWhiteSpace(soundId))
+                destination.Add(soundId);
+        }
+
         public LF2CharacterData GetCharacterData(int id)
         {
             return GetCharacterConfig(id)?.characterData;

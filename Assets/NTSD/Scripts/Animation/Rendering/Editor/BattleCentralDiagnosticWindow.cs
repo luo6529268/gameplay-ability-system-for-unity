@@ -277,6 +277,10 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static bool requestInProgress;
         private static bool staleResultDeleteWarningLogged;
+        private static readonly string RequestAbsolutePath =
+            BattleCentralDiagnosticExporter.ProjectPath(RequestFile);
+        private static readonly string ResultAbsolutePath =
+            BattleCentralDiagnosticExporter.ProjectPath(ResultFile);
 
         static BattleCentralDiagnosticRequestProcessor()
         {
@@ -285,21 +289,21 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static void PollRequest()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
             if (requestInProgress)
                 return;
 
-            string requestPath = BattleCentralDiagnosticExporter.ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (!File.Exists(RequestAbsolutePath))
             {
                 staleResultDeleteWarningLogged = false;
                 return;
             }
 
-            string resultPath = BattleCentralDiagnosticExporter.ProjectPath(ResultFile);
             try
             {
-                if (File.Exists(resultPath))
-                    File.Delete(resultPath);
+                if (File.Exists(ResultAbsolutePath))
+                    File.Delete(ResultAbsolutePath);
                 staleResultDeleteWarningLogged = false;
             }
             catch (Exception ex)
@@ -319,18 +323,17 @@ namespace NTSD.Animation.Rendering.Editor
             requestInProgress = true;
             try
             {
-                ProcessRequest(requestPath);
+                ProcessRequest(RequestAbsolutePath);
             }
             finally
             {
-                TryDeleteRequest(requestPath);
+                TryDeleteRequest(RequestAbsolutePath);
                 requestInProgress = false;
             }
         }
 
         private static void ProcessRequest(string requestPath)
         {
-            string resultPath = BattleCentralDiagnosticExporter.ProjectPath(ResultFile);
             try
             {
                 string requestJson = File.ReadAllText(requestPath, Encoding.UTF8);
@@ -346,12 +349,12 @@ namespace NTSD.Animation.Rendering.Editor
                     request.runtimeSlot,
                     commandType);
                 BattleCentralDiagnosticExporter.WriteJson(outputPath, json);
-                WriteResult(resultPath, $"PASS{Environment.NewLine}{outputPath}");
+                WriteResult(ResultAbsolutePath, $"PASS{Environment.NewLine}{outputPath}");
                 Debug.Log($"[BattleCentralDiagnostic] Request exported: {outputPath}");
             }
             catch (Exception ex)
             {
-                WriteResult(resultPath, $"FAIL{Environment.NewLine}{ex}");
+                WriteResult(ResultAbsolutePath, $"FAIL{Environment.NewLine}{ex}");
                 Debug.LogError($"[BattleCentralDiagnostic] Request failed: {ex}");
             }
         }

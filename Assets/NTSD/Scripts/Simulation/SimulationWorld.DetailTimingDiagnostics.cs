@@ -126,6 +126,11 @@ namespace NTSD.Simulation
                 ? activePhases[activePhaseDepth - 1]
                 : BattleTickDetailPhase.Count;
 
+        internal static void PrepareProfilerMarkers()
+        {
+            _ = PhaseProfilerMarkers.All.Length;
+        }
+
         public void SetEnabled(bool enabled)
         {
             if (Enabled)
@@ -745,52 +750,4 @@ namespace NTSD.Simulation
         }
     }
 
-    public partial class SimulationWorld
-    {
-        private BattleTickDetailPhaseDiagnostics battleTickDetailPhaseDiagnostics;
-        private BattleAiInputDetailDiagnostics battleAiInputDetailDiagnostics;
-
-        public bool BattleTickDetailPhaseDiagnosticsAllocatedForDiagnostics =>
-            battleTickDetailPhaseDiagnostics != null;
-
-        public BattleTickDetailPhaseDiagnostics ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics =>
-            battleTickDetailPhaseDiagnostics != null &&
-            battleTickDetailPhaseDiagnostics.Enabled
-                ? battleTickDetailPhaseDiagnostics
-                : null;
-
-        public BattleTickDetailPhaseDiagnostics EnableBattleTickDetailPhaseDiagnosticsForDiagnostics()
-        {
-            if (battleTickDetailPhaseDiagnostics == null)
-                battleTickDetailPhaseDiagnostics = new BattleTickDetailPhaseDiagnostics();
-            battleTickDetailPhaseDiagnostics.SetEnabled(true);
-            return battleTickDetailPhaseDiagnostics;
-        }
-
-        public void DisableBattleTickDetailPhaseDiagnosticsForDiagnostics()
-        {
-            battleTickDetailPhaseDiagnostics?.SetEnabled(false);
-        }
-
-        public bool BattleAiInputDetailDiagnosticsAllocatedForDiagnostics =>
-            battleAiInputDetailDiagnostics != null;
-
-        public BattleAiInputDetailDiagnostics ActiveBattleAiInputDetailDiagnosticsForDiagnostics =>
-            battleAiInputDetailDiagnostics != null && battleAiInputDetailDiagnostics.Enabled
-                ? battleAiInputDetailDiagnostics
-                : null;
-
-        public BattleAiInputDetailDiagnostics EnableBattleAiInputDetailDiagnosticsForDiagnostics()
-        {
-            if (battleAiInputDetailDiagnostics == null)
-                battleAiInputDetailDiagnostics = new BattleAiInputDetailDiagnostics();
-            battleAiInputDetailDiagnostics.SetEnabled(true);
-            return battleAiInputDetailDiagnostics;
-        }
-
-        public void DisableBattleAiInputDetailDiagnosticsForDiagnostics()
-        {
-            battleAiInputDetailDiagnostics?.SetEnabled(false);
-        }
-    }
 }

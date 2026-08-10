@@ -57,6 +57,7 @@ namespace NTSD.Test
                 using var commonShadowVisuals = new TemporaryCommonShadowVisualConfig(
                     CharacterAnimtorManager.Instance);
                 BattleRuntimeSelfCheckCore.RunAllChecks();
+                CheckPerWorldPpModeOwnership();
                 CheckReferencePoolObjectIdPreserved();
                 CheckReferencePoolRejectsUnownedObjects();
                 CheckObjectPoolReleaseEscapesExternalParent();
@@ -1024,13 +1025,20 @@ namespace NTSD.Test
                 {
                     productionBindCallCount++;
                     string call = bindCalls[callIndex].Value;
-                    bool allowedOwner = path.EndsWith(
-                                            "/SimulationWorld.Registry.partial.cs",
-                                            StringComparison.Ordinal) ||
-                                        path.EndsWith(
-                                            "/SimulationWorld.QueryAndLinks.partial.cs",
-                                            StringComparison.Ordinal);
-                    Expect(allowedOwner && call.Contains("_runtimeRestStore", StringComparison.Ordinal) &&
+                    bool registryOwner = path.EndsWith(
+                        "/SimulationWorld.Registry.partial.cs",
+                        StringComparison.Ordinal);
+                    bool queryModuleOwner = path.EndsWith(
+                        "/SimulationQueryAndLinkModule.cs",
+                        StringComparison.Ordinal);
+                    bool usesOwnedStore =
+                        (registryOwner && call.Contains(
+                            "_runtimeRestStore",
+                            StringComparison.Ordinal)) ||
+                        (queryModuleOwner && call.Contains(
+                            "restStore",
+                            StringComparison.Ordinal));
+                    Expect((registryOwner || queryModuleOwner) && usesOwnedStore &&
                            System.Text.RegularExpressions.Regex.IsMatch(call, @",\s*false\s*\)$"),
                         $"B1.2 production Bind must be store-first and owned by the SimulationWorld lifecycle: {path}: {call}");
                 }
@@ -2518,6 +2526,23 @@ namespace NTSD.Test
             rng.Seed(0x12345678u);
             Expect(rng.State == 0x12345678u && rng.CallCount == 0,
                 "parity RNG Seed must reset CallCount for replay bootstrap");
+
+            var detachedRngEntityA = new LF2Character();
+            var detachedRngEntityB = new LF2Character();
+            var detachedExpectedRng =
+                new DeterministicRng(0x4E545344u);
+            int detachedExpectedFirst = detachedExpectedRng.NextInt(0, 257);
+            int detachedExpectedSecond = detachedExpectedRng.NextInt(0, 257);
+            Expect(
+                detachedRngEntityA.BattleRandInt(0, 257) ==
+                    detachedExpectedFirst &&
+                detachedRngEntityB.BattleRandInt(0, 257) ==
+                    detachedExpectedFirst &&
+                detachedRngEntityA.BattleRandInt(0, 257) ==
+                    detachedExpectedSecond &&
+                detachedRngEntityB.BattleRandInt(0, 257) ==
+                    detachedExpectedSecond,
+                "detached entities must not share mutable fallback RNG state");
 
             var canonicalA = new Dictionary<string, object>
             {
@@ -5524,8 +5549,8 @@ namespace NTSD.Test
             pendingUnregister.BindData("SelfCheck_P3_PendingUnregister", 7100, data);
             pendingUnregister.SetRequiredRuntimeSlot(15);
             world.Register(pendingUnregister);
-            var pendingList = GetPrivateField(world, "_pendingUnregister") as List<ISimObject>;
-            Expect(pendingList != null, "P3 pending-unregister test contract changed");
+            List<ISimObject> pendingList =
+                world.BattleBuffersForServices.PendingUnregister;
             pendingList.Add(pendingUnregister);
 
             world.RenderDispatchAll(8);
@@ -5716,6 +5741,17 @@ namespace NTSD.Test
                                            Shader.Find("Unlit/Color");
                 Expect(unsupportedShader != null, "P7 unsupported-material test requires a non-sprite shader");
                 unsupportedMaterial = new Material(unsupportedShader);
+                var materialClassifier = new BattleSpriteMaterialClassifier();
+                Expect(
+                    materialClassifier.Classify(materialA) ==
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha &&
+                    materialClassifier.Classify(centralMaterial) ==
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha &&
+                    materialClassifier.Classify(unsupportedMaterial) ==
+                        BattleSpriteMaterialSemantic.Unsupported,
+                    "P7 presentation-owned material classifier must preserve the " +
+                    "built-in, central, and unsupported shader contract without " +
+                    "runtime shader-name lookup");
                 var unsupported = new BattleSpriteRenderState(
                     Color.white, false, false, SpriteMaskInteraction.None,
                     BattleSpriteMaterialContract.Classify(unsupportedMaterial));
@@ -7332,6 +7368,35 @@ namespace NTSD.Test
                 Expect(entityMount.RuntimeHandle == nextGenerationHandle,
                     "a re-enabled mount must restore the newest owner runtime handle generation");
                 reusedHandle = nextGenerationHandle;
+
+                bool registryWasSealed =
+                    BattleCentralPresentationMountRegistry.IsCapacitySealed;
+                long bindingAllocatedBytes;
+                try
+                {
+                    BattleCentralPresentationMountRegistry.UnsealCapacity();
+                    BattleCentralPresentationMountRegistry.PrepareCapacity(
+                        BattleCentralPresentationMountRegistry.OwnerRuntimeBindingCountForSelfCheck + 1);
+                    BattleCentralPresentationMountRegistry.BindOwnerRuntime(owner, reusedHandle);
+                    BattleCentralPresentationMountRegistry.SealCapacity();
+
+                    long bindingAllocationBefore = GC.GetAllocatedBytesForCurrentThread();
+                    for (int iteration = 0; iteration < 100; iteration++)
+                    {
+                        BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                            owner,
+                            reusedHandle);
+                    }
+                    bindingAllocatedBytes =
+                        GC.GetAllocatedBytesForCurrentThread() - bindingAllocationBefore;
+                }
+                finally
+                {
+                    if (!registryWasSealed)
+                        BattleCentralPresentationMountRegistry.UnsealCapacity();
+                }
+                Expect(bindingAllocatedBytes == 0,
+                    $"sealed presentation owner rebinding must allocate 0 B; actual={bindingAllocatedBytes}");
 
                 for (int modeIndex = 0; modeIndex < 3; modeIndex++)
                 {
@@ -10654,16 +10719,18 @@ namespace NTSD.Test
                 },
             };
             LF2CharacterDataWrapper targetWrapper = new LF2CharacterDataWrapper(2, targetData);
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs = null;
             try
             {
                 int resolverCalls = 0;
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
+                runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
                 {
                     resolverCalls++;
                     return oid == 2 ? targetWrapper : null;
-                };
+                });
                 SimulationWorld world = new SimulationWorld();
+                world.SetRuntimeCharacterConfigResolverForSelfCheck(
+                    runtimeCharacterConfigs.Resolve);
                 LF2Entity attacker = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Attacker", 1, sourceData);
                 LF2Entity victim = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Victim", 2, targetData);
                 LF2Entity ownedChild = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Child", 1, sourceData);
@@ -10708,7 +10775,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs?.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -17181,8 +17248,9 @@ namespace NTSD.Test
                     "a pending-unregister entity must not alias its StableId as a runtime slot");
                 world.Register(entity);
 
-                var pending = GetPrivateField(world, "_pendingUnregister") as List<ISimObject>;
-                Expect(pending != null && pending.Count == 0,
+                List<ISimObject> pending =
+                    world.BattleBuffersForServices.PendingUnregister;
+                Expect(pending.Count == 0,
                     "same-tick pooled-instance registration must remove its old pending-unregister entry");
                 Expect(entity.Runtime.SlotIndex == originalSlot &&
                        world.FindEntityByRuntimeSlotIncludingPending(originalSlot) == entity,
@@ -19863,8 +19931,10 @@ namespace NTSD.Test
             resetWorld.Unregister(pendingEntity);
             SetPrivateField(resetWorld, "_ticking", false);
             resetWorld.ResetRuntimeState();
-            var pendingList = GetPrivateField(resetWorld, "_pendingUnregister") as List<ISimObject>;
-            var pendingDestroyList = GetPrivateField(resetWorld, "_pendingSlotReleasedDestroy") as List<LF2Entity>;
+            List<ISimObject> pendingList =
+                resetWorld.BattleBuffersForServices.PendingUnregister;
+            List<LF2Entity> pendingDestroyList =
+                resetWorld.BattleBuffersForServices.PendingSlotReleasedDestroy;
             int replayRawA = resetWorld.Rng.NextRaw();
             var replayIdentityA = new DynamicSlotSelfCheckEntity(0);
             resetWorld.Register(replayIdentityA);
@@ -19878,8 +19948,8 @@ namespace NTSD.Test
             object resetCameraXValue = GetPrivateField(resetWorld, "_cameraX");
             object resetCameraVelValue = GetPrivateField(resetWorld, "_cameraVel");
             Expect(objectCountAfterReset == 0 && resetEntity.ItrRest.Arest == 0 &&
-                   !resetEntity.ItrRest.HasVrest(51) && pendingList?.Count == 0 &&
-                   pendingDestroyList?.Count == 0 && resetWorld.CurrentTickIndex == 0 &&
+                   !resetEntity.ItrRest.HasVrest(51) && pendingList.Count == 0 &&
+                   pendingDestroyList.Count == 0 && resetWorld.CurrentTickIndex == 0 &&
                    resetWorld.PendingSounds.Count == 0 &&
                    resetCameraXValue is int resetCameraX && resetCameraX == 0 &&
                    resetCameraVelValue is int resetCameraVel && resetCameraVel == 0 &&
@@ -20339,7 +20409,7 @@ namespace NTSD.Test
                 $"keyJump={unboundHuman.Runtime.KeyJump},prevJump={unboundHuman.Runtime.PrevJump}," +
                 $"cdRight={unboundHuman.Runtime.CdRight},cdAttack={unboundHuman.Runtime.CdAttack}," +
                 $"history={string.Join(",", unboundHuman.Runtime.InputHistory)},frame={unboundHuman.Frame.N}");
-            Expect(unboundBuffer.TryDequeueAll(1, out List<SimInputEvent> unboundEvents) &&
+            Expect(unboundBuffer.TryDequeueAll(1, out SimInputEventBatch unboundEvents) &&
                    unboundEvents.Count == 1 && unboundEvents[0].key == FuncKeyMask.jump &&
                    unboundEvents[0].down,
                 "AUDIT6-01: the unbound human negative poll must leave its exact buffered event untouched");
@@ -20390,7 +20460,7 @@ namespace NTSD.Test
                 $"prevJump={rosterAi.Runtime.PrevJump},cdLeft={rosterAi.Runtime.CdLeft}," +
                 $"cdAttack={rosterAi.Runtime.CdAttack}," +
                 $"history={string.Join(",", rosterAi.Runtime.InputHistory)},frame={rosterAi.Frame.N}");
-            Expect(rosterAiBuffer.TryDequeueAll(1, out List<SimInputEvent> rosterAiEvents) &&
+            Expect(rosterAiBuffer.TryDequeueAll(1, out SimInputEventBatch rosterAiEvents) &&
                    rosterAiEvents.Count == 1 && rosterAiEvents[0].key == FuncKeyMask.jump &&
                    rosterAiEvents[0].down,
                 "AUDIT6-01: the AI negative poll and rejected packet must leave its exact local event untouched");
@@ -20484,16 +20554,16 @@ namespace NTSD.Test
                 [801] = (int)LF2ObjectType.Other,
                 [802] = (int)LF2ObjectType.Character,
             };
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs = null;
 
             using (new TemporaryRuntimeObjectConfigs(types, wrappers))
             {
                 try
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+                    runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
 
-                    var state501World = new SimulationWorld();
+                    var state501World = new SimulationWorld(runtimeCharacterConfigs);
                     var source = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 9500);
                     source.BindData(sourceOid, source501Data);
                     source.SetRuntimeSlotIndex(50);
@@ -20557,7 +20627,7 @@ namespace NTSD.Test
                            reverseType3.Health.PP == 0 && reverseType3.WeaponCount == -1,
                         "GT-06: a character CLR shell with current non-character DAT must not regenerate character stats");
 
-                    var deathWorld = new SimulationWorld();
+                    var deathWorld = new SimulationWorld(runtimeCharacterConfigs);
                     var sharedDead = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 9504);
                     sharedDead.BindData(796,
                         BuildGameTickCurrentDatData("SelfCheck_GT07_SharedDead", LF2ObjectType.Character, 0));
@@ -20617,7 +20687,7 @@ namespace NTSD.Test
                         CurrentDatDispatchSelfCheckEntity holderProbe = null;
                         if (dataType == LF2ObjectType.LightWeapon)
                         {
-                            heldWorld = new SimulationWorld();
+                            heldWorld = new SimulationWorld(runtimeCharacterConfigs);
                             holderProbe = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Character, 9700);
                             holderProbe.BindData(802,
                                 BuildGameTickCurrentDatData("SelfCheck_GT07_HolderProbe", LF2ObjectType.Character, 0));
@@ -20678,7 +20748,7 @@ namespace NTSD.Test
                 }
                 finally
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                    runtimeCharacterConfigs?.SetOverrideForSelfCheck(null);
                 }
             }
         }
@@ -21231,7 +21301,7 @@ namespace NTSD.Test
             movement.SetVelocity(2.0, 0.0, 3.0);
             movement.SyncIntegerPosition();
             MechanicsStepResult movementResult = mechanics.Step(new CharacterMechanicsContext(
-                movement, null, 0f, 0f, 0f, gravity, _ => false));
+                movement, null, 0f, 0f, 0f, gravity));
             Expect(movement.X == 12.0 && movement.Z == 23.0 && movementResult.boundaryMode == BoundaryResolveMode.None,
                 "PH-01: a rejected scene polygon point must not roll back unblocked C# authority X/Z movement");
 
@@ -21241,7 +21311,7 @@ namespace NTSD.Test
             blockedMovement.SyncIntegerPosition();
             blockedMovement.XBoundPositive = true;
             MechanicsStepResult blockedResult = mechanics.Step(new CharacterMechanicsContext(
-                blockedMovement, null, 0f, 0f, 0f, gravity, _ => false));
+                blockedMovement, null, 0f, 0f, 0f, gravity));
             Expect(blockedMovement.X == 10.0 && blockedMovement.Z == 23.0 &&
                    blockedResult.boundaryMode == BoundaryResolveMode.ZOnly,
                 "PH-01: block flags must remain the sole per-axis movement gate");
@@ -21251,7 +21321,7 @@ namespace NTSD.Test
             positiveEdge.SetVelocity(0.0, 0.0, 0.0);
             positiveEdge.SyncIntegerPosition();
             MechanicsStepResult positiveEdgeResult = mechanics.Step(new CharacterMechanicsContext(
-                positiveEdge, null, 0f, 0f, 0f, gravity, null));
+                positiveEdge, null, 0f, 0f, 0f, gravity));
             Expect(!positiveEdgeResult.landed && positiveEdge.Y == epsilon && positiveEdge.Vy == 0.0,
                 "PH-02: character Y=+0.0001 must remain unchanged without landing");
 
@@ -21260,7 +21330,7 @@ namespace NTSD.Test
             negativeEdge.SetVelocity(0.0, 0.0, 0.0);
             negativeEdge.SyncIntegerPosition();
             MechanicsStepResult negativeEdgeResult = mechanics.Step(new CharacterMechanicsContext(
-                negativeEdge, null, 0f, 0f, 0f, gravity, null));
+                negativeEdge, null, 0f, 0f, 0f, gravity));
             Expect(!negativeEdgeResult.landed && negativeEdge.Y == -epsilon && negativeEdge.Vy == 0.0,
                 "PH-02: character Y=-0.0001 must not receive air gravity");
 
@@ -21269,7 +21339,7 @@ namespace NTSD.Test
             abovePositiveEdge.SetVelocity(0.0, 0.0, 0.0);
             abovePositiveEdge.SyncIntegerPosition();
             MechanicsStepResult abovePositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                abovePositiveEdge, null, 0f, 0f, 0f, gravity, null));
+                abovePositiveEdge, null, 0f, 0f, 0f, gravity));
             Expect(!abovePositiveResult.landed && abovePositiveEdge.Y == epsilon + 1e-12 &&
                    abovePositiveEdge.Vy == 0.0,
                 "PH-02: character Y above +0.0001 with zero pre-move Vy must not enter ground resolve");
@@ -21279,7 +21349,7 @@ namespace NTSD.Test
             descendingPositiveEdge.SetVelocity(0.0, 0.5, 0.0);
             descendingPositiveEdge.SyncIntegerPosition();
             MechanicsStepResult descendingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                descendingPositiveEdge, null, 0f, 0f, 0f, gravity, null));
+                descendingPositiveEdge, null, 0f, 0f, 0f, gravity));
             Expect(descendingPositiveResult.landed && descendingPositiveEdge.Y == 0.0,
                 "PH-02: character must enter ground resolve only after a positive-Y ground crossing with positive pre-move Vy");
 
@@ -21288,7 +21358,7 @@ namespace NTSD.Test
             risingPositiveEdge.SetVelocity(0.0, -0.1, 0.0);
             risingPositiveEdge.SyncIntegerPosition();
             MechanicsStepResult risingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                risingPositiveEdge, null, 0f, 0f, 0f, gravity, null));
+                risingPositiveEdge, null, 0f, 0f, 0f, gravity));
             Expect(!risingPositiveResult.landed && Nearly(risingPositiveEdge.Y, 0.15) &&
                    risingPositiveEdge.Vy == -0.1,
                 "PH-02: character Y above +0.0001 with negative pre-move Vy must not clamp or enter ground resolve");
@@ -21300,7 +21370,7 @@ namespace NTSD.Test
             caughtMechanicsRuntime.SetVelocity(0.0, 0.5, 0.0);
             caughtMechanicsRuntime.SyncIntegerPosition();
             MechanicsStepResult caughtMechanicsResult = mechanics.Step(new CharacterMechanicsContext(
-                caughtMechanicsRuntime, caughtPositiveFrame, 0f, 0f, 0f, gravity, null));
+                caughtMechanicsRuntime, caughtPositiveFrame, 0f, 0f, 0f, gravity));
             Expect(!caughtMechanicsResult.landed && caughtMechanicsRuntime.Y == 0.75 &&
                    caughtMechanicsRuntime.Vy == 0.5,
                 "PH-02: cpoint kind2 ground resolve must return before positive character Y is clamped");
@@ -21332,7 +21402,7 @@ namespace NTSD.Test
             belowNegativeEdge.SetVelocity(0.0, 0.0, 0.0);
             belowNegativeEdge.SyncIntegerPosition();
             mechanics.Step(new CharacterMechanicsContext(
-                belowNegativeEdge, null, 0f, 0f, 0f, gravity, null));
+                belowNegativeEdge, null, 0f, 0f, 0f, gravity));
             Expect(belowNegativeEdge.Y == -epsilon - 1e-12 && belowNegativeEdge.Vy == gravity,
                 "PH-02: character Y below -0.0001 must receive air gravity without changing Y");
 
@@ -21586,16 +21656,17 @@ namespace NTSD.Test
                 [drinkOid] = (int)LF2ObjectType.Drink,
                 [otherOid] = (int)LF2ObjectType.Other,
             };
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs = null;
 
             using (new TemporaryRuntimeObjectConfigs(types, wrappers))
             {
                 try
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+                    runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
 
-                    TransformedLandingSelfCheckEntity light = CreateTransformedLandingShell(lightOid, false);
+                    TransformedLandingSelfCheckEntity light = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, lightOid, false);
                     light.Runtime.WeaponFlightCounter = 20;
                     light.Runtime.WeaponState = 4321;
                     RunTransformedLandingPasses(light, 5.0, 8.0, 1);
@@ -21606,13 +21677,15 @@ namespace NTSD.Test
                     Expect(Nearly(light.Runtime.Vx, 4.0) && Nearly(light.Runtime.Vy, 0.0) && light.WeaponCount == 0,
                         "type1 transformed landing must halve vx, stop vy, and clear WeaponCount outside state12");
 
-                    TransformedLandingSelfCheckEntity lightStop = CreateTransformedLandingShell(lightSkyOid, false);
+                    TransformedLandingSelfCheckEntity lightStop = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, lightSkyOid, false);
                     lightStop.Runtime.WeaponFlightCounter = 20;
                     RunTransformedLandingPasses(lightStop, 5.0, 8.0, 11);
                     Expect(lightStop.Frame.N == 60 && lightStop.Runtime.WeaponFlightCounter == 18,
                         "transformed type1 non-throwing low-speed landing must enter frame60 and consume durability");
 
-                    TransformedLandingSelfCheckEntity lightBounce = CreateTransformedLandingShell(lightOid, false);
+                    TransformedLandingSelfCheckEntity lightBounce = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, lightOid, false);
                     lightBounce.Runtime.WeaponFlightCounter = 20;
                     lightBounce.Runtime.WeaponState = 4322;
                     lightBounce.SwitchDir("right");
@@ -21622,7 +21695,8 @@ namespace NTSD.Test
                            lightBounce.Runtime.WeaponFlightCounter == 17 && lightBounce.Runtime.WeaponState == 4322,
                         "transformed type1 throwing high-speed landing must enter frame7, bounce -8, flip, and consume durability");
 
-                    TransformedLandingSelfCheckEntity heavy = CreateTransformedLandingShell(heavyOid, false);
+                    TransformedLandingSelfCheckEntity heavy = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, heavyOid, false);
                     heavy.Runtime.WeaponFlightCounter = 20;
                     heavy.Runtime.WeaponState = 4323;
                     RunTransformedLandingPasses(heavy, 5.0, 8.0, 2);
@@ -21633,7 +21707,8 @@ namespace NTSD.Test
                     Expect(Nearly(heavy.Runtime.Vx, 4.0) && Nearly(heavy.Runtime.Vy, 0.0) && heavy.WeaponCount == 0,
                         "type2 transformed landing must stop on frame20 and clear WeaponCount outside state12");
 
-                    TransformedLandingSelfCheckEntity heavyBounce = CreateTransformedLandingShell(heavyOid, false);
+                    TransformedLandingSelfCheckEntity heavyBounce = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, heavyOid, false);
                     heavyBounce.Runtime.WeaponFlightCounter = 20;
                     heavyBounce.Runtime.WeaponState = 4324;
                     heavyBounce.SwitchDir("right");
@@ -21647,7 +21722,8 @@ namespace NTSD.Test
                         $"durability={heavyBounce.Runtime.WeaponFlightCounter}, weaponCount={heavyBounce.WeaponCount}, " +
                         "inputLandingVy=10, inputVx=8");
 
-                    TransformedLandingSelfCheckEntity thrown = CreateTransformedLandingShell(throwOid, false);
+                    TransformedLandingSelfCheckEntity thrown = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, throwOid, false);
                     thrown.Runtime.WeaponFlightCounter = 20;
                     thrown.Runtime.WeaponState = 4325;
                     RunTransformedLandingPasses(thrown, 10.0, 8.0, 3);
@@ -21660,7 +21736,8 @@ namespace NTSD.Test
                     Expect(Nearly(thrown.Runtime.Vx, 5.6) && Nearly(thrown.Runtime.Vy, -7.0) && thrown.WeaponCount == 0,
                         "type4 transformed landing must apply the release 0.7 bounce and clear WeaponCount");
 
-                    TransformedLandingSelfCheckEntity thrownBoomerang = CreateTransformedLandingShell(throwOid, false);
+                    TransformedLandingSelfCheckEntity thrownBoomerang = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, throwOid, false);
                     thrownBoomerang.Runtime.WeaponFlightCounter = 20;
                     RunTransformedLandingPasses(thrownBoomerang, 10.0, 12.0, 6);
                     Expect(thrownBoomerang.Frame.N == 60 &&
@@ -21669,21 +21746,24 @@ namespace NTSD.Test
                            Nearly(thrownBoomerang.Runtime.Vy, 0.0),
                         "type4 state1000 high-vx landing must apply boomerang frame40 selection before ground resolve");
 
-                    TransformedLandingSelfCheckEntity thrownStop = CreateTransformedLandingShell(throwOid, false);
+                    TransformedLandingSelfCheckEntity thrownStop = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, throwOid, false);
                     thrownStop.Runtime.WeaponFlightCounter = 20;
                     RunTransformedLandingPasses(thrownStop, 5.0, 8.0, 14);
                     Expect(thrownStop.Frame.N == 60 && Nearly(thrownStop.Runtime.Vx, 5.6) &&
                            Nearly(thrownStop.Runtime.Vy, 0.0) && thrownStop.Runtime.WeaponFlightCounter == 15,
                         "transformed type4 low-speed landing must stop on frame60 with 0.7 vx and consume durability");
 
-                    TransformedLandingSelfCheckEntity drinkBounce = CreateTransformedLandingShell(drinkOid, false);
+                    TransformedLandingSelfCheckEntity drinkBounce = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, drinkOid, false);
                     drinkBounce.Runtime.WeaponFlightCounter = 20;
                     RunTransformedLandingPasses(drinkBounce, 10.0, 12.0, 15);
                     Expect(drinkBounce.Frame.N == 0 && Nearly(drinkBounce.Runtime.Vx, 8.4) &&
                            Nearly(drinkBounce.Runtime.Vy, -7.0) && drinkBounce.Runtime.WeaponFlightCounter == 14,
                         "oid101 transformed type6 high-speed landing must take the common 0.7 bounce branch");
 
-                    TransformedLandingSelfCheckEntity drink = CreateTransformedLandingShell(drinkOid, true);
+                    TransformedLandingSelfCheckEntity drink = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, drinkOid, true);
                     drink.Runtime.WeaponFlightCounter = 20;
                     drink.Runtime.WeaponState = 4326;
                     drink.Health.HP = 0;
@@ -21698,28 +21778,31 @@ namespace NTSD.Test
                     Expect(Nearly(drink.Runtime.Vx, 5.6) && Nearly(drink.Runtime.Vy, 0.0) && drink.WeaponCount == 0,
                         "type6 transformed landing must use the 0.7 stop branch and clear WeaponCount");
 
-                    TransformedLandingSelfCheckEntity other999 = CreateTransformedLandingShell(otherOid, false);
+                    TransformedLandingSelfCheckEntity other999 = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, otherOid, false);
                     RunTransformedLandingPasses(other999, 5.0, 8.0, 16);
                     Expect(other999.Frame.N == 101 && Nearly(other999.Runtime.Vx, 0.0) &&
                            Nearly(other999.Runtime.Vy, 0.0),
                         "state4999 transform must dispatch oid999 default landing to frame101 and stop all planar motion");
 
-                    TransformedLandingSelfCheckEntity grounded999 = CreateTransformedLandingShell(otherOid, false);
+                    TransformedLandingSelfCheckEntity grounded999 = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, otherOid, false);
                     grounded999.Runtime.SetPosition(0.0, 0.0, 0.0);
                     grounded999.Runtime.SetVelocity(4.0, 0.0, 0.0);
                     grounded999.Runtime.SyncIntegerPosition();
-                    var grounded999World = new SimulationWorld();
+                    var grounded999World = new SimulationWorld(runtimeCharacterConfigs);
                     grounded999World.Register(grounded999);
                     grounded999World.SerialTickAll(17);
                     Expect(grounded999.Frame.N == 0,
                         $"PH-05: exact-ground oid999 must not enter frame101; frame={grounded999.Frame.N}");
 
                     const double preciseVx = 0.12345678901234567;
-                    TransformedLandingSelfCheckEntity preciseThrow = CreateTransformedLandingShell(throwOid, false);
+                    TransformedLandingSelfCheckEntity preciseThrow = CreateTransformedLandingShell(
+                        runtimeCharacterConfigs, throwOid, false);
                     preciseThrow.Runtime.SetPosition(0.0, -100.0, 0.0);
                     preciseThrow.Runtime.SetVelocity(preciseVx, 0.0, 0.0);
                     preciseThrow.Runtime.SyncIntegerPosition();
-                    var preciseThrowWorld = new SimulationWorld();
+                    var preciseThrowWorld = new SimulationWorld(runtimeCharacterConfigs);
                     preciseThrowWorld.Register(preciseThrow);
                     preciseThrowWorld.SerialTickAll(18);
                     double preciseExpectedX = preciseVx + preciseVx * 0.2;
@@ -21731,7 +21814,7 @@ namespace NTSD.Test
                 }
                 finally
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                    runtimeCharacterConfigs?.SetOverrideForSelfCheck(null);
                 }
             }
         }
@@ -21764,16 +21847,16 @@ namespace NTSD.Test
                 [nonCharacterOid] = (int)LF2ObjectType.SpecialAttack,
                 [characterOid] = (int)LF2ObjectType.Character,
             };
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs = null;
 
             using (new TemporaryRuntimeObjectConfigs(types, wrappers))
             {
                 try
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
+                    runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                        wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
 
-                    var characterWorld = new SimulationWorld();
+                    var characterWorld = new SimulationWorld(runtimeCharacterConfigs);
                     var characterShell = new PhaseRoutingSelfCheckCharacter();
                     characterShell.BindSource("SelfCheck_CharacterShellToType3", 770, nonCharacterOid);
                     characterWorld.Register(characterShell);
@@ -21790,7 +21873,7 @@ namespace NTSD.Test
                     Expect(characterShell.PostInteractionCount == 0 && characterShell.ObjectInteractionCount == 1,
                         "character shell transformed to non-character DAT must skip step7 and enter step9 exactly once");
 
-                    var specialWorld = new SimulationWorld();
+                    var specialWorld = new SimulationWorld(runtimeCharacterConfigs);
                     var specialShell = new PhaseRoutingSelfCheckSpecialAttack();
                     specialShell.BindSource("SelfCheck_SpecialShellToCharacter", 773, characterOid);
                     specialWorld.Register(specialShell);
@@ -21809,7 +21892,7 @@ namespace NTSD.Test
                 }
                 finally
                 {
-                    LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                    runtimeCharacterConfigs?.SetOverrideForSelfCheck(null);
                 }
             }
         }
@@ -21847,10 +21930,15 @@ namespace NTSD.Test
             };
         }
 
-        private static TransformedLandingSelfCheckEntity CreateTransformedLandingShell(int targetOid, bool hitStopTransform)
+        private static TransformedLandingSelfCheckEntity CreateTransformedLandingShell(
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs,
+            int targetOid,
+            bool hitStopTransform)
         {
             int transformState = (hitStopTransform ? 8000 : 4000) + targetOid;
             var shell = new TransformedLandingSelfCheckEntity();
+            shell.SetRuntimeCharacterConfigResolverForSelfCheck(
+                runtimeCharacterConfigs);
             shell.BindSource(new LF2CharacterData
             {
                 name = $"SelfCheck_TransformSource_{targetOid}",
@@ -21880,7 +21968,8 @@ namespace NTSD.Test
             double vx,
             int tickIndex)
         {
-            var world = new SimulationWorld();
+            var world = new SimulationWorld(
+                shell.RuntimeCharacterConfigResolverForSelfCheck);
             world.Register(shell);
             int runtimeSlot = shell.Runtime.SlotIndex;
             shell.Runtime.SetPosition(0, -1, 0);
@@ -22402,13 +22491,11 @@ namespace NTSD.Test
         private static void CheckOid5152MergeSuccessAndDormantIsolation()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
             try
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 LF2Character self = CreateCharacter("SelfCheck_Oid7", 7, wrappers[7].characterData);
                 LF2Character partner = CreateCharacter("SelfCheck_Oid8", 8, wrappers[8].characterData);
                 self.SetRuntimeSlotIndex(0);
@@ -22481,20 +22568,18 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
         private static void CheckOid5152MergeCooldownOneTriggersSameTick()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
             try
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 LF2Character self = CreateCharacter("SelfCheck_Oid7_Cooldown", 7, wrappers[7].characterData);
                 LF2Character partner = CreateCharacter("SelfCheck_Oid8_Cooldown", 8, wrappers[8].characterData);
                 self.SetRuntimeSlotIndex(1);
@@ -22524,20 +22609,15 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
         private static void CheckOid5152AuthorityGateMatrix()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
-            try
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
 
-                AssertOid5152MergeRejected(wrappers, "both-high-slots", 7, 10, 11, null);
+            AssertOid5152MergeRejected(wrappers, "both-high-slots", 7, 10, 11, null);
                 AssertOid5152MergeRejected(wrappers, "self-dead", 7, 0, 11,
                     (world, self, partner) => self.Health.HP = 0);
                 AssertOid5152MergeRejected(wrappers, "self-state", 7, 0, 11,
@@ -22587,26 +22667,17 @@ namespace NTSD.Test
                 orderedSelf.Runtime.SyncIntegerPosition();
                 orderedPartner.Runtime.SyncIntegerPosition();
                 orderedWorld.Oid5152RuntimeMaintenanceAll(1);
-                Expect(orderedSelf.ObjectId == 51 && orderedPartner.Runtime.OidMergeDormant,
-                    "two low slots must merge only when the earlier self slot is strictly right of its partner");
-            }
-            finally
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
-            }
+            Expect(orderedSelf.ObjectId == 51 && orderedPartner.Runtime.OidMergeDormant,
+                "two low slots must merge only when the earlier self slot is strictly right of its partner");
         }
 
         private static void CheckOid5152MirrorIdentityAndPresentation()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
             GameObject selfView = null;
             GameObject partnerView = null;
             try
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
-
                 CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
                 Expect(animatorManager != null,
                     "oid 7/8 presentation identity check requires CharacterAnimtorManager");
@@ -22703,7 +22774,6 @@ namespace NTSD.Test
             {
                 if (selfView != null) DestroySelfCheckObject(selfView);
                 if (partnerView != null) DestroySelfCheckObject(partnerView);
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
             }
         }
 
@@ -22732,7 +22802,9 @@ namespace NTSD.Test
             out LF2Character partner)
         {
             int partnerOid = 15 - selfOid;
-            var world = new SimulationWorld();
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+            var world = new SimulationWorld(runtimeCharacterConfigs);
             self = CreateCharacter($"SelfCheck_Oid{selfOid}_Candidate", selfOid, wrappers[selfOid].characterData);
             partner = CreateCharacter($"SelfCheck_Oid{partnerOid}_Candidate", partnerOid, wrappers[partnerOid].characterData);
             self.SetRuntimeSlotIndex(selfSlot);
@@ -22758,13 +22830,8 @@ namespace NTSD.Test
         private static void CheckOid5152SplitSuccessAndOddTruncate()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
-            try
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
 
-                SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+            SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
                 partner.FrameDelay = -6;
                 partner.KnockbackVx = 6.5;
                 partner.KnockbackVy = -3.5;
@@ -22827,13 +22894,8 @@ namespace NTSD.Test
                 Expect(partner.ItrRest.Arest == 6 && partner.ItrRest.GetVrest(0) == 8 &&
                        partner.ItrRest.GetVrest(19) == 11,
                     "oid 51 split Reset must preserve external partner arest and all vrest keys");
-                Expect(self.Runtime.Dir != partner.Runtime.Dir,
-                    "split success must face revived partner opposite to self");
-            }
-            finally
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
-            }
+            Expect(self.Runtime.Dir != partner.Runtime.Dir,
+                "split success must face revived partner opposite to self");
         }
 
         private static void SeedStaleOid5152PartnerEffectState(LF2Character partner, int deadBlinkCount)
@@ -22865,13 +22927,8 @@ namespace NTSD.Test
         private static void CheckOid5152SplitFailurePartialRecovery()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
-            try
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
 
-                SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+            SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
                 self.Health.PP = 123;
                 self.Health.HP = 180;
                 self.Health.HPBound = 180;
@@ -22889,25 +22946,18 @@ namespace NTSD.Test
                     "split partial recovery must not apply frame112, PP0 or HP halving");
                 Expect(self.Frame.D != null && !self.FrameCache.HasFrame(290) && self.Frame.D.wait == 1,
                     "split partial recovery must leave self frame data reloaded against original DAT EmptyFrame when frame 290 is absent");
-                Expect(partner.Runtime.OidMergeDormant && world.ObjectCount == 1,
-                    "split partial recovery must not revive dormant partner or increment ObjectCount");
-            }
-            finally
-            {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
-            }
+            Expect(partner.Runtime.OidMergeDormant && world.ObjectCount == 1,
+                "split partial recovery must not revive dormant partner or increment ObjectCount");
         }
 
         private static void CheckOid5152DjaReleaseTriggersSameTickSplit()
         {
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
             try
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid =>
-                    wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 LF2Character self = CreateCharacter("SelfCheck_Oid51_Dja", 7, wrappers[7].characterData);
                 LF2Character partner = CreateCharacter("SelfCheck_Oid8_Dormant", 8, wrappers[8].characterData);
                 self.SetRuntimeSlotIndex(0);
@@ -23028,7 +23078,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -23124,11 +23174,11 @@ namespace NTSD.Test
 
         private static void CheckRespawnPassWithStoredCountAndEffectSpawn()
         {
-            System.Func<SimulationWorld, LF2Entity, LF2Entity> previousOverride = SimulationWorld.RespawnEffectSpawnOverride;
             RespawnSelfCheckEffectEntity spawned = null;
+            var world = new SimulationWorld();
             try
             {
-                SimulationWorld.RespawnEffectSpawnOverride = (world, source) =>
+                world.SetRespawnEffectSpawnOverrideForSelfCheck((activeWorld, source) =>
                 {
                     spawned = new RespawnSelfCheckEffectEntity();
                     spawned.BindData(998, BuildRespawnEffectData());
@@ -23138,11 +23188,10 @@ namespace NTSD.Test
                     spawned.Runtime.SetVelocity(0.0, 0.0, 0.0);
                     spawned.Runtime.SyncIntegerPosition();
                     spawned.SetRuntimeSlotIndex(25);
-                    world.Register(spawned);
+                    activeWorld.Register(spawned);
                     return spawned;
-                };
+                });
 
-                var world = new SimulationWorld();
                 LF2Character dead = CreateCharacter("SelfCheck_Respawn_WithCount", 0x1E, BuildRespawnCharacterData("SelfCheck_Respawn_WithCount"));
                 dead.SetRuntimeSlotIndex(0);
                 world.Register(dead);
@@ -23190,7 +23239,7 @@ namespace NTSD.Test
             }
             finally
             {
-                SimulationWorld.RespawnEffectSpawnOverride = previousOverride;
+                world.SetRespawnEffectSpawnOverrideForSelfCheck(null);
             }
         }
 
@@ -24721,19 +24770,19 @@ namespace NTSD.Test
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StageSlotSelection");
             var stageTypes = new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character };
             var stageWrappers = new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper };
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == stageOid ? stageWrapper : null);
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(stageTypes, stageWrappers);
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
                 var spawnMethod = typeof(SimulationWorld).GetMethod(
                     "SpawnStageImmediateEntrySlot",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 Expect(spawnMethod != null, "GT-14 stage slot fixture reflection contract changed");
                 var spawn = new BattleStageSpawnData { Id = stageOid, Act = 0, Hp = 300, X = 100, Y = -20 };
 
-                var slot21World = new SimulationWorld();
+                var slot21World = new SimulationWorld(runtimeCharacterConfigs);
                 using (new TemporarySimulationDriverWorld(slot21World))
                 {
                     var occupied20 = new DynamicCurrentDatSlotSelfCheckEntity(25000, 9, LF2ObjectType.Character);
@@ -24744,7 +24793,7 @@ namespace NTSD.Test
                         "GT-14 stage spawn must use slot 21 when slot 20 is occupied");
                 }
 
-                var fullStageWorld = new SimulationWorld();
+                var fullStageWorld = new SimulationWorld(runtimeCharacterConfigs);
                 for (int slot = 20; slot < 400; slot++)
                 {
                     var occupied = new DynamicCurrentDatSlotSelfCheckEntity(26000 + slot, 10, LF2ObjectType.Character);
@@ -24758,7 +24807,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -24780,16 +24829,15 @@ namespace NTSD.Test
         {
             const int stageOid = 984;
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_Audit7StageRest");
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == stageOid ? stageWrapper : null);
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
                     new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
                     new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                 var released = new DynamicCurrentDatSlotSelfCheckEntity(28020, 10, LF2ObjectType.Character);
                 released.SetRequiredRuntimeSlot(20);
@@ -24839,7 +24887,7 @@ namespace NTSD.Test
 
                     int rendererCountBeforeRejectedStage = GetObjectPoolActiveCount();
                     int logicCountBeforeRejectedStage = LF2ReferencePool.Instance.ActiveCount;
-                    var rejectedStageWorld = new SimulationWorld();
+                    var rejectedStageWorld = new SimulationWorld(runtimeCharacterConfigs);
                     rejectedStageWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                     RuntimeRestStore rejectedStageStore = rejectedStageWorld.RuntimeRestStoreForServices;
                     Expect(rejectedStageStore.TryAcquireBinding(
@@ -24865,7 +24913,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -24885,16 +24933,15 @@ namespace NTSD.Test
         {
             const int stageOid = 201;
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StageImmediate");
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == stageOid ? stageWrapper : null);
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
                     new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
                     new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 world.Runtime.Match.BattleGameModeId = 1;
                 world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                 world.StageCampaigns.Add(new BattleStageCampaignData
@@ -24975,7 +25022,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -25022,7 +25069,13 @@ namespace NTSD.Test
                    world.Runtime.Stage.XMaxOverride == 900,
                 "stage production bootstrap must advance pre-wave to wave zero and apply its bound");
 
-            OPointCreateTask task = SimulationWorld.BuildStageSpawnTask(spawn, 10, -20, 200, "right");
+            var stageSpawnTaskConfigurator = new StageSpawnTaskConfigurator();
+            OPointCreateTask task = stageSpawnTaskConfigurator.CreateCold(
+                spawn,
+                10,
+                -20,
+                200,
+                "right");
             Expect(task.preserveActionZero && task.opoint.action == 0,
                 "stage factory task must preserve authored action zero");
 
@@ -25151,7 +25204,15 @@ namespace NTSD.Test
                     stageSeriesId = 27,
                     seed = 0x2718,
                 };
-                var world = new SimulationWorld();
+                BattleRuntimeWorldSettings worldSettings =
+                    BattleRuntimeProfileProductionSource.Resolve(GameConfig.Instance);
+                BattleAiExecutionProfile aiExecutionProfile =
+                    BattleAiExecutionProfileProductionSource.Resolve(GameConfig.Instance);
+                var world = new SimulationWorld(
+                    worldSettings.Profile,
+                    worldSettings.InitialRuntimeSlotCapacity,
+                    worldSettings.CollisionBroadphase);
+                world.ConfigureAiExecutionProfile(aiExecutionProfile);
                 using (new TemporarySimulationDriverWorld(world))
                 {
                     SimulationTickDriver.Instance.ApplyMatchConfig(config);
@@ -25260,16 +25321,15 @@ namespace NTSD.Test
         {
             const int stageOid = 202;
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StagePositive");
-            System.Func<int, LF2CharacterDataWrapper> previousResolver = LF2Entity.RuntimeCharacterConfigResolverOverride;
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == stageOid ? stageWrapper : null);
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
                     new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
                     new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
-                LF2Entity.RuntimeCharacterConfigResolverOverride = oid => oid == stageOid ? stageWrapper : null;
-
-                var world = new SimulationWorld();
+                var world = new SimulationWorld(runtimeCharacterConfigs);
                 world.Runtime.Match.BattleGameModeId = 2;
                 LF2Character factorCharacter = CreateCharacter(
                     "SelfCheck_StageFactor",
@@ -25340,7 +25400,7 @@ namespace NTSD.Test
             }
             finally
             {
-                LF2Entity.RuntimeCharacterConfigResolverOverride = previousResolver;
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
             }
         }
 
@@ -26372,7 +26432,9 @@ namespace NTSD.Test
             out LF2Character self,
             out LF2Character partner)
         {
-            var world = new SimulationWorld();
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+            var world = new SimulationWorld(runtimeCharacterConfigs);
             self = CreateCharacter("SelfCheck_Oid7_Merged", 7, wrappers[7].characterData);
             partner = CreateCharacter("SelfCheck_Oid8_Merged", 8, wrappers[8].characterData);
             self.SetRuntimeSlotIndex(0);
@@ -26635,6 +26697,25 @@ namespace NTSD.Test
                 centery = centery,
                 cpoint = cpoint
             };
+        }
+
+        private static void CheckPerWorldPpModeOwnership()
+        {
+            var firstWorld = new SimulationWorld();
+            var secondWorld = new SimulationWorld();
+
+            Expect(firstWorld.PpMode && secondWorld.PpMode,
+                "new worlds must enable PP mode by default");
+
+            firstWorld.PpMode = false;
+            Expect(!firstWorld.PpMode,
+                "PP mode must be writable on the owning world");
+            Expect(secondWorld.PpMode,
+                "changing one world's PP mode must not affect another world");
+
+            firstWorld.Runtime.Reset();
+            Expect(firstWorld.PpMode,
+                "resetting a world must restore the default PP mode");
         }
 
         private static void Expect(bool condition, string message)
@@ -28202,7 +28283,7 @@ namespace NTSD.Test
                 if (!ownsState)
                     return;
 
-                availableField.SetValue(pool, new LinkedList<GameObject>());
+                availableField.SetValue(pool, new Queue<GameObject>());
                 activeField.SetValue(pool, new HashSet<GameObject>());
                 releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
                 spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
@@ -28216,7 +28297,7 @@ namespace NTSD.Test
                     if (ownsState)
                     {
                         var objects = new HashSet<GameObject>();
-                        if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                        if (availableField.GetValue(pool) is Queue<GameObject> available)
                         {
                             foreach (GameObject item in available)
                                 if (item != null) objects.Add(item);
@@ -28303,7 +28384,7 @@ namespace NTSD.Test
                 originalSpritePool = spritePoolField.GetValue(pool);
                 originalCachedPrefab = cachedPrefabField.GetValue(pool);
 
-                availableField.SetValue(pool, new LinkedList<GameObject>());
+                availableField.SetValue(pool, new Queue<GameObject>());
                 activeField.SetValue(pool, new HashSet<GameObject>());
                 releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
                 spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
@@ -28315,7 +28396,7 @@ namespace NTSD.Test
                 get
                 {
                     var objects = new List<GameObject>();
-                    if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                    if (availableField.GetValue(pool) is Queue<GameObject> available)
                     {
                         foreach (GameObject item in available)
                             objects.Add(item);
@@ -28338,7 +28419,7 @@ namespace NTSD.Test
                 var objects = new HashSet<GameObject>();
                 try
                 {
-                    if (availableField.GetValue(pool) is LinkedList<GameObject> available)
+                    if (availableField.GetValue(pool) is Queue<GameObject> available)
                     {
                         foreach (GameObject item in available)
                             if (item != null) objects.Add(item);

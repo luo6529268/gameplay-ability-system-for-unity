@@ -79,9 +79,204 @@ namespace NTSD.Simulation
             public readonly Dictionary<int, int>[] Rows = new Dictionary<int, int>[PageSize];
         }
 
+        /// <summary>
+        /// Preallocated sparse rows for extended desktop worlds. Nodes live in
+        /// contiguous arrays and are linked by integer indices, so insertion and
+        /// removal reuse storage without allocating managed objects during battle.
+        /// Each row remains sorted by attacker slot for deterministic traversal.
+        /// </summary>
+        private sealed class SparseVRestTable
+        {
+            private int[] rowHeads;
+            private int[] attackerSlots;
+            private int[] values;
+            private int[] nextIndices;
+            private int freeHead;
+
+            internal SparseVRestTable(int rowCapacity, int entryCapacity)
+            {
+                rowHeads = new int[rowCapacity];
+                Array.Fill(rowHeads, -1);
+                attackerSlots = new int[entryCapacity];
+                values = new int[entryCapacity];
+                nextIndices = new int[entryCapacity];
+                InitializeFreeRange(0, entryCapacity, -1);
+            }
+
+            internal int EntryCapacity => values.Length;
+
+            internal bool TryGet(int victimSlot, int attackerSlot, out int value)
+            {
+                int node = rowHeads[victimSlot];
+                while (node >= 0 && attackerSlots[node] < attackerSlot)
+                    node = nextIndices[node];
+
+                if (node >= 0 && attackerSlots[node] == attackerSlot)
+                {
+                    value = values[node];
+                    return true;
+                }
+
+                value = 0;
+                return false;
+            }
+
+            internal bool TrySet(
+                int victimSlot,
+                int attackerSlot,
+                int value,
+                out bool added,
+                out bool removed)
+            {
+                added = false;
+                removed = false;
+                int previous = -1;
+                int node = rowHeads[victimSlot];
+                while (node >= 0 && attackerSlots[node] < attackerSlot)
+                {
+                    previous = node;
+                    node = nextIndices[node];
+                }
+
+                if (node >= 0 && attackerSlots[node] == attackerSlot)
+                {
+                    if (value > 0)
+                    {
+                        values[node] = value;
+                        return true;
+                    }
+
+                    int next = nextIndices[node];
+                    if (previous < 0)
+                        rowHeads[victimSlot] = next;
+                    else
+                        nextIndices[previous] = next;
+                    ReleaseNode(node);
+                    removed = true;
+                    return true;
+                }
+
+                if (value <= 0)
+                    return true;
+                if (freeHead < 0)
+                    return false;
+
+                int acquired = freeHead;
+                freeHead = nextIndices[acquired];
+                attackerSlots[acquired] = attackerSlot;
+                values[acquired] = value;
+                nextIndices[acquired] = node;
+                if (previous < 0)
+                    rowHeads[victimSlot] = acquired;
+                else
+                    nextIndices[previous] = acquired;
+                added = true;
+                return true;
+            }
+
+            internal int ClearRow(int victimSlot)
+            {
+                int removed = 0;
+                int node = rowHeads[victimSlot];
+                rowHeads[victimSlot] = -1;
+                while (node >= 0)
+                {
+                    int next = nextIndices[node];
+                    ReleaseNode(node);
+                    removed++;
+                    node = next;
+                }
+
+                return removed;
+            }
+
+            internal void ClearAll()
+            {
+                Array.Fill(rowHeads, -1);
+                Array.Clear(attackerSlots, 0, attackerSlots.Length);
+                Array.Clear(values, 0, values.Length);
+                InitializeFreeRange(0, nextIndices.Length, -1);
+            }
+
+            internal bool HasRow(int victimSlot)
+            {
+                return rowHeads[victimSlot] >= 0;
+            }
+
+            internal int GetFirstNode(int victimSlot)
+            {
+                return rowHeads[victimSlot];
+            }
+
+            internal int GetNextNode(int node)
+            {
+                return nextIndices[node];
+            }
+
+            internal int GetAttackerSlot(int node)
+            {
+                return attackerSlots[node];
+            }
+
+            internal int GetValue(int node)
+            {
+                return values[node];
+            }
+
+            internal void Grow(int rowCapacity, int entryCapacity)
+            {
+                if (rowCapacity > rowHeads.Length)
+                {
+                    int oldRowCapacity = rowHeads.Length;
+                    Array.Resize(ref rowHeads, rowCapacity);
+                    Array.Fill(rowHeads, -1, oldRowCapacity, rowCapacity - oldRowCapacity);
+                }
+
+                if (entryCapacity <= values.Length)
+                    return;
+
+                int oldEntryCapacity = values.Length;
+                Array.Resize(ref attackerSlots, entryCapacity);
+                Array.Resize(ref values, entryCapacity);
+                Array.Resize(ref nextIndices, entryCapacity);
+                InitializeFreeRange(oldEntryCapacity, entryCapacity, freeHead);
+            }
+
+            private void InitializeFreeRange(int start, int end, int tail)
+            {
+                if (end <= start)
+                {
+                    freeHead = tail;
+                    return;
+                }
+
+                for (int index = start; index < end - 1; index++)
+                    nextIndices[index] = index + 1;
+                nextIndices[end - 1] = tail;
+                freeHead = start;
+            }
+
+            private void ReleaseNode(int node)
+            {
+                attackerSlots[node] = 0;
+                values[node] = 0;
+                nextIndices[node] = freeHead;
+                freeHead = node;
+            }
+        }
+
+        private const int MaximumDenseBattleCapacity = 2048;
+        private const int DefaultSparseEntriesPerRuntimeSlot = 32;
+        private const int MinimumSparseEntryCapacity = 128;
+
         private int[][] aRestPages;
         private VRestPage[] vRestPages;
-        private readonly Dictionary<int, int> bindingTokensByVictim = new Dictionary<int, int>();
+        private int[] bindingTokensByVictim;
+        private int[] denseVRestValues;
+        private int[] denseVRestRowEntryCounts;
+        private SparseVRestTable sparseVRestTable;
+        private bool preparedForBattle;
+        private bool capacitySealed;
         private int[] collisionEligibilityStamp;
         private int collisionEligibilityEpoch;
         private readonly List<int> collisionTickScratch;
@@ -98,6 +293,7 @@ namespace NTSD.Simulation
             int pageCount = GetPageCount(logicalCapacity);
             aRestPages = new int[pageCount][];
             vRestPages = new VRestPage[pageCount];
+            bindingTokensByVictim = new int[logicalCapacity];
             collisionEligibilityStamp = new int[logicalCapacity];
             collisionTickScratch = new List<int>(logicalCapacity);
             activeVRestRowIndices = new int[logicalCapacity];
@@ -111,11 +307,143 @@ namespace NTSD.Simulation
         public int VRestRowCount { get; private set; }
         public int MaterializedARestPageCount { get; private set; }
         public int MaterializedVRestPageCount { get; private set; }
+        public bool IsCapacitySealed => capacitySealed;
+        public bool UsesDenseBattleStorage => denseVRestValues != null;
+        public bool UsesPreallocatedSparseBattleStorage => sparseVRestTable != null;
+        public int PreparedSparseVRestEntryCapacity =>
+            sparseVRestTable?.EntryCapacity ?? 0;
+        public long RejectedVRestWriteCount { get; private set; }
+
+        internal void AppendDeterministicChecksum(ref BattleChecksum64Builder builder)
+        {
+            builder.AddInt32(LogicalCapacity);
+            builder.AddInt32(ARestEntryCount);
+            for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+            {
+                int value = GetARest(attackerSlot);
+                if (value == 0)
+                    continue;
+
+                builder.AddInt32(attackerSlot);
+                builder.AddInt32(value);
+            }
+
+            builder.AddInt32(VRestEntryCount);
+            builder.AddInt32(VRestRowCount);
+            ulong unorderedEntries = 0UL;
+            for (int index = 0; index < activeVRestVictimSlots.Count; index++)
+            {
+                int victimSlot = activeVRestVictimSlots[index];
+                if (denseVRestValues != null)
+                {
+                    int rowStart = victimSlot * LogicalCapacity;
+                    for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+                    {
+                        int value = denseVRestValues[rowStart + attackerSlot];
+                        if (value != 0)
+                        {
+                            unorderedEntries ^= MixRestEntry(
+                                victimSlot,
+                                attackerSlot,
+                                value);
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (sparseVRestTable != null)
+                {
+                    for (int node = sparseVRestTable.GetFirstNode(victimSlot);
+                         node >= 0;
+                         node = sparseVRestTable.GetNextNode(node))
+                    {
+                        int value = sparseVRestTable.GetValue(node);
+                        if (value == 0)
+                            continue;
+
+                        unorderedEntries ^= MixRestEntry(
+                            victimSlot,
+                            sparseVRestTable.GetAttackerSlot(node),
+                            value);
+                    }
+
+                    continue;
+                }
+
+                VRestPage page = vRestPages[victimSlot / PageSize];
+                Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+                if (row == null)
+                    continue;
+
+                foreach (KeyValuePair<int, int> pair in row)
+                {
+                    if (pair.Value != 0)
+                    {
+                        unorderedEntries ^= MixRestEntry(
+                            victimSlot,
+                            pair.Key,
+                            pair.Value);
+                    }
+                }
+            }
+
+            builder.AddUInt64(unorderedEntries);
+        }
+
+        private static ulong MixRestEntry(int victimSlot, int attackerSlot, int value)
+        {
+            unchecked
+            {
+                ulong mixed = (uint)victimSlot;
+                mixed = (mixed << 32) | (uint)attackerSlot;
+                mixed ^= (ulong)(uint)value * 0x9e3779b185ebca87UL;
+                mixed ^= mixed >> 30;
+                mixed *= 0xbf58476d1ce4e5b9UL;
+                mixed ^= mixed >> 27;
+                mixed *= 0x94d049bb133111ebUL;
+                mixed ^= mixed >> 31;
+                return mixed;
+            }
+        }
+
+        public void PrepareForBattle()
+        {
+            if (capacitySealed || preparedForBattle)
+                return;
+
+            for (int pageIndex = 0; pageIndex < aRestPages.Length; pageIndex++)
+            {
+                if (aRestPages[pageIndex] != null)
+                    continue;
+
+                aRestPages[pageIndex] = new int[PageSize];
+                MaterializedARestPageCount++;
+            }
+
+            if (LogicalCapacity <= MaximumDenseBattleCapacity)
+                PrepareDenseVRestStorage();
+            else
+                PrepareSparseVRestStorage(DefaultSparseEntryCapacity(LogicalCapacity));
+
+            preparedForBattle = true;
+        }
+
+        public void SealCapacity()
+        {
+            PrepareForBattle();
+            capacitySealed = true;
+        }
+
+        public void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
 
         public bool TryAcquireBinding(int victimSlot, out RuntimeRestBindingHandle handle)
         {
             handle = default;
-            if (!IsAddressable(victimSlot) || bindingTokensByVictim.ContainsKey(victimSlot))
+            if (!IsAddressable(victimSlot) || bindingTokensByVictim[victimSlot] != 0)
                 return false;
 
             int token = nextBindingToken++;
@@ -129,8 +457,8 @@ namespace NTSD.Simulation
         public bool IsBindingValid(RuntimeRestBindingHandle handle)
         {
             return handle.Owner == this &&
-                   bindingTokensByVictim.TryGetValue(handle.BoundVictimSlot, out int token) &&
-                   token == handle.Token;
+                   IsAddressable(handle.BoundVictimSlot) &&
+                   bindingTokensByVictim[handle.BoundVictimSlot] == handle.Token;
         }
 
         public bool ReleaseBinding(RuntimeRestBindingHandle handle)
@@ -138,7 +466,7 @@ namespace NTSD.Simulation
             if (!IsBindingValid(handle))
                 return false;
 
-            bindingTokensByVictim.Remove(handle.BoundVictimSlot);
+            bindingTokensByVictim[handle.BoundVictimSlot] = 0;
             return true;
         }
 
@@ -190,6 +518,16 @@ namespace NTSD.Simulation
             if (!IsAddressable(victimSlot) || !IsAddressable(attackerSlot))
                 return 0;
 
+            if (denseVRestValues != null)
+                return denseVRestValues[DenseVRestIndex(victimSlot, attackerSlot)];
+
+            if (sparseVRestTable != null)
+            {
+                return sparseVRestTable.TryGet(victimSlot, attackerSlot, out int sparseValue)
+                    ? sparseValue
+                    : 0;
+            }
+
             VRestPage page = vRestPages[victimSlot / PageSize];
             Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
             return row != null && row.TryGetValue(attackerSlot, out int value) ? value : 0;
@@ -199,6 +537,43 @@ namespace NTSD.Simulation
         {
             if (!IsAddressable(victimSlot) || !IsAddressable(attackerSlot))
                 return false;
+
+            if (denseVRestValues != null)
+                return SetDenseVRest(victimSlot, attackerSlot, value);
+
+            if (sparseVRestTable != null)
+            {
+                bool rowWasActive = sparseVRestTable.HasRow(victimSlot);
+                if (!sparseVRestTable.TrySet(
+                        victimSlot,
+                        attackerSlot,
+                        Math.Max(0, value),
+                        out bool added,
+                        out bool removed))
+                {
+                    RejectedVRestWriteCount++;
+                    return false;
+                }
+
+                if (added)
+                    VRestEntryCount++;
+                else if (removed)
+                    VRestEntryCount--;
+
+                bool rowIsActive = sparseVRestTable.HasRow(victimSlot);
+                if (!rowWasActive && rowIsActive)
+                {
+                    VRestRowCount++;
+                    AddActiveVRestRow(victimSlot);
+                }
+                else if (rowWasActive && !rowIsActive)
+                {
+                    VRestRowCount--;
+                    RemoveActiveVRestRow(victimSlot);
+                }
+
+                return true;
+            }
 
             int pageIndex = victimSlot / PageSize;
             int rowIndex = victimSlot % PageSize;
@@ -223,6 +598,12 @@ namespace NTSD.Simulation
 
             if (page == null)
             {
+                if (capacitySealed)
+                {
+                    RejectedVRestWriteCount++;
+                    return false;
+                }
+
                 page = new VRestPage();
                 vRestPages[pageIndex] = page;
                 MaterializedVRestPageCount++;
@@ -230,13 +611,26 @@ namespace NTSD.Simulation
 
             if (row == null)
             {
+                if (capacitySealed)
+                {
+                    RejectedVRestWriteCount++;
+                    return false;
+                }
+
                 row = new Dictionary<int, int>();
                 page.Rows[rowIndex] = row;
                 VRestRowCount++;
                 AddActiveVRestRow(victimSlot);
             }
 
-            if (!row.ContainsKey(attackerSlot))
+            bool addsEntry = !row.ContainsKey(attackerSlot);
+            if (addsEntry && capacitySealed)
+            {
+                RejectedVRestWriteCount++;
+                return false;
+            }
+
+            if (addsEntry)
                 VRestEntryCount++;
 
             row[attackerSlot] = value;
@@ -251,6 +645,30 @@ namespace NTSD.Simulation
             InvalidateBinding(slot);
             SetARest(slot, 0);
             ClearVictimRowOnly(slot);
+
+            if (denseVRestValues != null)
+            {
+                for (int victimSlot = 0; victimSlot < LogicalCapacity; victimSlot++)
+                    SetDenseVRest(victimSlot, slot, 0);
+                return true;
+            }
+
+            if (sparseVRestTable != null)
+            {
+                int activeRowIndex = 0;
+                while (activeRowIndex < activeVRestVictimSlots.Count)
+                {
+                    int victimSlot = activeVRestVictimSlots[activeRowIndex];
+                    SetVRest(victimSlot, slot, 0);
+                    if (activeRowIndex < activeVRestVictimSlots.Count &&
+                        activeVRestVictimSlots[activeRowIndex] == victimSlot)
+                    {
+                        activeRowIndex++;
+                    }
+                }
+
+                return true;
+            }
 
             for (int pageIndex = 0; pageIndex < vRestPages.Length; pageIndex++)
             {
@@ -279,14 +697,40 @@ namespace NTSD.Simulation
 
         public void ResetWorld()
         {
-            bindingTokensByVictim.Clear();
-            Array.Clear(aRestPages, 0, aRestPages.Length);
-            Array.Clear(vRestPages, 0, vRestPages.Length);
+            Array.Clear(bindingTokensByVictim, 0, bindingTokensByVictim.Length);
+            if (preparedForBattle)
+            {
+                for (int pageIndex = 0; pageIndex < aRestPages.Length; pageIndex++)
+                {
+                    int[] page = aRestPages[pageIndex];
+                    if (page != null)
+                        Array.Clear(page, 0, page.Length);
+                }
+
+                if (denseVRestValues != null)
+                {
+                    Array.Clear(denseVRestValues, 0, denseVRestValues.Length);
+                    Array.Clear(denseVRestRowEntryCounts, 0, denseVRestRowEntryCounts.Length);
+                }
+                else if (sparseVRestTable != null)
+                {
+                    sparseVRestTable.ClearAll();
+                }
+                else
+                {
+                    ClearSparseVRestStorageRetainingRows();
+                }
+            }
+            else
+            {
+                Array.Clear(aRestPages, 0, aRestPages.Length);
+                Array.Clear(vRestPages, 0, vRestPages.Length);
+                MaterializedARestPageCount = 0;
+                MaterializedVRestPageCount = 0;
+            }
             ARestEntryCount = 0;
             VRestEntryCount = 0;
             VRestRowCount = 0;
-            MaterializedARestPageCount = 0;
-            MaterializedVRestPageCount = 0;
             activeVRestVictimSlots.Clear();
             Array.Fill(activeVRestRowIndices, -1);
         }
@@ -297,6 +741,8 @@ namespace NTSD.Simulation
                 return false;
             if (newLogicalCapacity == LogicalCapacity)
                 return true;
+            if (capacitySealed || denseVRestValues != null)
+                return false;
 
             int newPageCount = GetPageCount(newLogicalCapacity);
             if (newPageCount != aRestPages.Length)
@@ -324,6 +770,14 @@ namespace NTSD.Simulation
             if (activeVRestVictimSlots.Capacity < newLogicalCapacity)
                 activeVRestVictimSlots.Capacity = newLogicalCapacity;
 
+            var grownBindingTokens = new int[newLogicalCapacity];
+            Array.Copy(bindingTokensByVictim, grownBindingTokens, bindingTokensByVictim.Length);
+            bindingTokensByVictim = grownBindingTokens;
+
+            sparseVRestTable?.Grow(
+                newLogicalCapacity,
+                DefaultSparseEntryCapacity(newLogicalCapacity));
+
             LogicalCapacity = newLogicalCapacity;
             return true;
         }
@@ -342,6 +796,33 @@ namespace NTSD.Simulation
 
             for (int victimSlot = 0; victimSlot < LogicalCapacity; victimSlot++)
             {
+                if (denseVRestValues != null)
+                {
+                    for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+                    {
+                        int value = denseVRestValues[DenseVRestIndex(victimSlot, attackerSlot)];
+                        if (value > 0)
+                            vRestEntries.Add(new VRestEntry(victimSlot, attackerSlot, value));
+                    }
+
+                    continue;
+                }
+
+                if (sparseVRestTable != null)
+                {
+                    for (int node = sparseVRestTable.GetFirstNode(victimSlot);
+                         node >= 0;
+                         node = sparseVRestTable.GetNextNode(node))
+                    {
+                        vRestEntries.Add(new VRestEntry(
+                            victimSlot,
+                            sparseVRestTable.GetAttackerSlot(node),
+                            sparseVRestTable.GetValue(node)));
+                    }
+
+                    continue;
+                }
+
                 VRestPage page = vRestPages[victimSlot / PageSize];
                 Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
                 if (row == null)
@@ -420,6 +901,35 @@ namespace NTSD.Simulation
                 return false;
 
             TickARest(victimSlot);
+            if (denseVRestValues != null)
+            {
+                int rowStart = victimSlot * LogicalCapacity;
+                for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+                {
+                    int value = denseVRestValues[rowStart + attackerSlot];
+                    if (value > 0)
+                        SetDenseVRest(victimSlot, attackerSlot, value - 1);
+                }
+
+                return true;
+            }
+
+            if (sparseVRestTable != null)
+            {
+                int node = sparseVRestTable.GetFirstNode(victimSlot);
+                while (node >= 0)
+                {
+                    int next = sparseVRestTable.GetNextNode(node);
+                    int attackerSlot = sparseVRestTable.GetAttackerSlot(node);
+                    int value = sparseVRestTable.GetValue(node);
+                    if (value > 0)
+                        SetVRest(victimSlot, attackerSlot, value - 1);
+                    node = next;
+                }
+
+                return true;
+            }
+
             VRestPage page = vRestPages[victimSlot / PageSize];
             Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
             if (row == null || row.Count == 0)
@@ -471,6 +981,59 @@ namespace NTSD.Simulation
 
                 VRestPage page = vRestPages[victimSlot / PageSize];
                 Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+                if (denseVRestValues != null)
+                {
+                    int rowStart = victimSlot * LogicalCapacity;
+                    for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+                    {
+                        if (attackerSlot == victimSlot ||
+                            collisionEligibilityStamp[attackerSlot] != collisionEligibilityEpoch)
+                        {
+                            continue;
+                        }
+
+                        int value = denseVRestValues[rowStart + attackerSlot];
+                        if (value > 0)
+                            SetDenseVRest(victimSlot, attackerSlot, value - 1);
+                    }
+
+                    if (activeRowIndex < activeVRestVictimSlots.Count &&
+                        activeVRestVictimSlots[activeRowIndex] == victimSlot)
+                    {
+                        activeRowIndex++;
+                    }
+
+                    continue;
+                }
+
+                if (sparseVRestTable != null)
+                {
+                    int node = sparseVRestTable.GetFirstNode(victimSlot);
+                    while (node >= 0)
+                    {
+                        int next = sparseVRestTable.GetNextNode(node);
+                        int attackerSlot = sparseVRestTable.GetAttackerSlot(node);
+                        if (attackerSlot != victimSlot &&
+                            collisionEligibilityStamp[attackerSlot] ==
+                            collisionEligibilityEpoch)
+                        {
+                            int value = sparseVRestTable.GetValue(node);
+                            if (value > 0)
+                                SetVRest(victimSlot, attackerSlot, value - 1);
+                        }
+
+                        node = next;
+                    }
+
+                    if (activeRowIndex < activeVRestVictimSlots.Count &&
+                        activeVRestVictimSlots[activeRowIndex] == victimSlot)
+                    {
+                        activeRowIndex++;
+                    }
+
+                    continue;
+                }
+
                 if (row == null || row.Count == 0)
                 {
                     RemoveActiveVRestRow(victimSlot);
@@ -518,27 +1081,27 @@ namespace NTSD.Simulation
             if (!IsAddressable(victimSlot))
                 return false;
 
-            Dictionary<int, int> normalizedVrest = null;
             if (vrestByAttacker != null)
             {
-                normalizedVrest = new Dictionary<int, int>(vrestByAttacker.Count);
                 foreach (KeyValuePair<int, int> pair in vrestByAttacker)
                 {
                     if (pair.Value <= 0)
                         continue;
                     if (!IsAddressable(pair.Key))
                         return false;
-                    normalizedVrest[pair.Key] = pair.Value;
                 }
             }
 
             SetARest(victimSlot, arest);
             ClearVictimRowOnlyUnchecked(victimSlot);
-            if (normalizedVrest == null)
+            if (vrestByAttacker == null)
                 return true;
 
-            foreach (KeyValuePair<int, int> pair in normalizedVrest)
-                SetVRest(victimSlot, pair.Key, pair.Value);
+            foreach (KeyValuePair<int, int> pair in vrestByAttacker)
+            {
+                if (pair.Value > 0 && !SetVRest(victimSlot, pair.Key, pair.Value))
+                    return false;
+            }
             return true;
         }
 
@@ -547,6 +1110,32 @@ namespace NTSD.Simulation
             var values = new Dictionary<int, int>();
             if (!IsAddressable(victimSlot))
                 return values;
+
+            if (denseVRestValues != null)
+            {
+                int rowStart = victimSlot * LogicalCapacity;
+                for (int attackerSlot = 0; attackerSlot < LogicalCapacity; attackerSlot++)
+                {
+                    int value = denseVRestValues[rowStart + attackerSlot];
+                    if (value > 0)
+                        values[attackerSlot] = value;
+                }
+
+                return values;
+            }
+
+            if (sparseVRestTable != null)
+            {
+                for (int node = sparseVRestTable.GetFirstNode(victimSlot);
+                     node >= 0;
+                     node = sparseVRestTable.GetNextNode(node))
+                {
+                    values[sparseVRestTable.GetAttackerSlot(node)] =
+                        sparseVRestTable.GetValue(node);
+                }
+
+                return values;
+            }
 
             VRestPage page = vRestPages[victimSlot / PageSize];
             Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
@@ -559,6 +1148,33 @@ namespace NTSD.Simulation
 
         private void ClearVictimRowOnlyUnchecked(int victimSlot)
         {
+            if (denseVRestValues != null)
+            {
+                int rowStart = victimSlot * LogicalCapacity;
+                int removedCount = denseVRestRowEntryCounts[victimSlot];
+                if (removedCount == 0)
+                    return;
+
+                Array.Clear(denseVRestValues, rowStart, LogicalCapacity);
+                denseVRestRowEntryCounts[victimSlot] = 0;
+                VRestEntryCount -= removedCount;
+                VRestRowCount--;
+                RemoveActiveVRestRow(victimSlot);
+                return;
+            }
+
+            if (sparseVRestTable != null)
+            {
+                int removedCount = sparseVRestTable.ClearRow(victimSlot);
+                if (removedCount == 0)
+                    return;
+
+                VRestEntryCount -= removedCount;
+                VRestRowCount--;
+                RemoveActiveVRestRow(victimSlot);
+                return;
+            }
+
             VRestPage page = vRestPages[victimSlot / PageSize];
             int rowIndex = victimSlot % PageSize;
             Dictionary<int, int> row = page?.Rows[rowIndex];
@@ -573,7 +1189,7 @@ namespace NTSD.Simulation
 
         private void InvalidateBinding(int victimSlot)
         {
-            bindingTokensByVictim.Remove(victimSlot);
+            bindingTokensByVictim[victimSlot] = 0;
         }
 
         private void AddActiveVRestRow(int victimSlot)
@@ -596,6 +1212,124 @@ namespace NTSD.Simulation
             activeVRestRowIndices[movedVictimSlot] = index;
             activeVRestVictimSlots.RemoveAt(lastIndex);
             activeVRestRowIndices[victimSlot] = -1;
+        }
+
+        private void PrepareDenseVRestStorage()
+        {
+            int denseLength = checked(LogicalCapacity * LogicalCapacity);
+            var values = new int[denseLength];
+            var rowEntryCounts = new int[LogicalCapacity];
+
+            for (int victimSlot = 0; victimSlot < LogicalCapacity; victimSlot++)
+            {
+                VRestPage page = vRestPages[victimSlot / PageSize];
+                Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+                if (row == null)
+                    continue;
+
+                int rowStart = victimSlot * LogicalCapacity;
+                foreach (KeyValuePair<int, int> pair in row)
+                {
+                    if (pair.Value <= 0)
+                        continue;
+
+                    values[rowStart + pair.Key] = pair.Value;
+                    rowEntryCounts[victimSlot]++;
+                }
+            }
+
+            denseVRestValues = values;
+            denseVRestRowEntryCounts = rowEntryCounts;
+            Array.Clear(vRestPages, 0, vRestPages.Length);
+            MaterializedVRestPageCount = 0;
+        }
+
+        private void PrepareSparseVRestStorage(int entryCapacity)
+        {
+            var prepared = new SparseVRestTable(LogicalCapacity, entryCapacity);
+            for (int victimSlot = 0; victimSlot < LogicalCapacity; victimSlot++)
+            {
+                VRestPage page = vRestPages[victimSlot / PageSize];
+                Dictionary<int, int> row = page?.Rows[victimSlot % PageSize];
+                if (row == null)
+                    continue;
+
+                foreach (KeyValuePair<int, int> pair in row)
+                {
+                    if (pair.Value <= 0)
+                        continue;
+                    if (!prepared.TrySet(
+                            victimSlot,
+                            pair.Key,
+                            pair.Value,
+                            out _,
+                            out _))
+                    {
+                        throw new InvalidOperationException(
+                            "Prepared sparse VRest capacity is smaller than the existing state.");
+                    }
+                }
+            }
+
+            sparseVRestTable = prepared;
+            Array.Clear(vRestPages, 0, vRestPages.Length);
+            MaterializedVRestPageCount = 0;
+        }
+
+        private static int DefaultSparseEntryCapacity(int logicalCapacity)
+        {
+            return Math.Max(
+                MinimumSparseEntryCapacity,
+                checked(logicalCapacity * DefaultSparseEntriesPerRuntimeSlot));
+        }
+
+        private int DenseVRestIndex(int victimSlot, int attackerSlot)
+        {
+            return victimSlot * LogicalCapacity + attackerSlot;
+        }
+
+        private bool SetDenseVRest(int victimSlot, int attackerSlot, int value)
+        {
+            int index = DenseVRestIndex(victimSlot, attackerSlot);
+            int oldValue = denseVRestValues[index];
+            int storedValue = Math.Max(0, value);
+            if (oldValue == storedValue)
+                return true;
+
+            denseVRestValues[index] = storedValue;
+            if (oldValue == 0)
+            {
+                VRestEntryCount++;
+                if (denseVRestRowEntryCounts[victimSlot]++ == 0)
+                {
+                    VRestRowCount++;
+                    AddActiveVRestRow(victimSlot);
+                }
+            }
+            else if (storedValue == 0)
+            {
+                VRestEntryCount--;
+                if (--denseVRestRowEntryCounts[victimSlot] == 0)
+                {
+                    VRestRowCount--;
+                    RemoveActiveVRestRow(victimSlot);
+                }
+            }
+
+            return true;
+        }
+
+        private void ClearSparseVRestStorageRetainingRows()
+        {
+            for (int pageIndex = 0; pageIndex < vRestPages.Length; pageIndex++)
+            {
+                VRestPage page = vRestPages[pageIndex];
+                if (page == null)
+                    continue;
+
+                for (int rowIndex = 0; rowIndex < page.Rows.Length; rowIndex++)
+                    page.Rows[rowIndex]?.Clear();
+            }
         }
 
         private void AdvanceCollisionEligibilityEpoch()

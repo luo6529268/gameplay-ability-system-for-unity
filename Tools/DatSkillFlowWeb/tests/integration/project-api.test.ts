@@ -159,7 +159,7 @@ function narutoDat(): Buffer {
     return encryptDatPayload(Buffer.alloc(123, 0x41), plaintext);
 }
 
-function nativePreview(startFrame = 300, ticksRequested = 30): unknown {
+function nativePreview(startFrame = 300, ticksRequested = 30, rootOid = 2): unknown {
     return {
         metadata: {
             runtime: "ntsd_cpp",
@@ -176,7 +176,7 @@ function nativePreview(startFrame = 300, ticksRequested = 30): unknown {
             camera_vel: 0,
             bg: { width: 1000, z_min: 0, z_max: 500, bound_left: 0, bound_right: 1000 },
             entities: [{
-                slot: 0, oid: 2, frame: startFrame, pic: 0, facing: 0,
+                slot: 0, oid: rootOid, frame: startFrame, pic: 0, facing: 0,
                 x: 320, y: 0, z: 500, x_int: 320, y_int: 0, z_int: 500,
                 v: { x: 0, y: 0, z: 0 }, render_offset_x: 0, frame_delay: 0,
                 team: 1, target: 1, holder: -1, link: 0, ai: false,
@@ -245,7 +245,7 @@ describe("native DAT preview output bounds", () => {
             },
         });
         const plaintext = Buffer.from("name: Naruto\n", "latin1");
-        const scenario = { startFrame: 265, initialFrame: 0, ticks: 120 };
+        const scenario = { rootOid: 2, startFrame: 265, initialFrame: 0, ticks: 120 };
 
         const [first, concurrent] = await Promise.all([
             runner.preview(plaintext, scenario),
@@ -260,6 +260,8 @@ describe("native DAT preview output bounds", () => {
         await runner.preview(plaintext, { ...scenario, startFrame: 271 });
         await runner.preview(Buffer.from("name: Edited Naruto\n", "latin1"), scenario);
         assert.equal(executions, 3);
+        await runner.preview(plaintext, { ...scenario, rootOid: 3 });
+        assert.equal(executions, 4, "the selected root character participates in the Native cache key");
     });
 
     it("passes the selected entry, real initial frame, and deterministic input plan to Native", async () => {
@@ -282,6 +284,7 @@ describe("native DAT preview output bounds", () => {
         });
 
         await runner.preview(Buffer.from("name: Naruto\n", "latin1"), {
+            rootOid: 3,
             startFrame: 265,
             initialFrame: 0,
             ticks: 120,
@@ -296,6 +299,10 @@ describe("native DAT preview output bounds", () => {
         assert.deepEqual(capturedArguments.slice(gameRootIndex, gameRootIndex + 2), [
             "--game-root", "J:\\QQFile\\NTSD 2.4.1",
         ]);
+        const previewDatIndex = capturedArguments.indexOf("--preview-dat");
+        assert.ok(previewDatIndex >= 0 && capturedArguments[previewDatIndex + 1]?.endsWith("preview-character.dat"));
+        const rootOidIndex = capturedArguments.indexOf("--root-oid");
+        assert.deepEqual(capturedArguments.slice(rootOidIndex, rootOidIndex + 2), ["--root-oid", "3"]);
         assert.deepEqual(capturedArguments.slice(capturedArguments.indexOf("--start-frame")), [
             "--start-frame", "0",
             "--entry-frame", "265",
@@ -355,6 +362,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assets.sealStartupAuthorization();
         const previewInputs: Buffer[] = [];
         const previewOptions: Array<{
+            rootOid?: number;
             startFrame?: number;
             initialFrame?: number;
             ticks?: number;
@@ -368,6 +376,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             idFactory: () => "a".repeat(32),
             previewRunner: {
                 preview: async (plaintext: Uint8Array, options?: {
+                    rootOid?: number;
                     startFrame?: number;
                     initialFrame?: number;
                     ticks?: number;
@@ -435,19 +444,15 @@ describe("Naruto project DAT HTTP vertical slice", () => {
 
         const catalogResponse = await fetch(`${origin}/api/project`);
         const catalogText = await catalogResponse.text();
-        const catalog = JSON.parse(catalogText) as { data: { catalogRevision: number; objects: Array<{ objectKey: string; oid: number; type: number; availablePrimary: boolean }> } };
+        const catalog = JSON.parse(catalogText) as { data: { catalogRevision: number; objects: Array<{ objectKey: string; oid: number; type: number }> } };
         assert.equal(catalogResponse.status, 200);
         assert.equal(catalogResponse.headers.get("cache-control"), "no-store");
-        assert.deepEqual(catalog.data.objects.map((entry) => entry.oid), [2, 4]);
-        assert.equal(catalog.data.objects[0]?.availablePrimary, true);
+        assert.deepEqual(catalog.data.objects.map((entry) => entry.oid), [2]);
         assert.equal(catalogText.includes(primaryRoot), false);
         assert.equal(catalogText.includes(assetRoot), false);
         assert.equal(catalogText.includes(dataTxtPath), false);
 
         const objectKey = catalog.data.objects[0]!.objectKey;
-        assert.equal((await post(origin, token, "/api/project/open", {
-            objectKey: catalog.data.objects[1]!.objectKey,
-        })).status, 404, "native preview is explicitly limited to Naruto OID 2");
         assert.equal((await post(origin, undefined, "/api/project/open", { objectKey })).status, 403);
         assert.equal((await post(origin, token, "/api/project/open", { objectKey }, "http://attacker.invalid")).status, 403);
         assert.equal((await post(origin, token, "/api/project/open", { objectKey, path: datPath })).status, 400);
@@ -647,6 +652,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(preview.data.preview.metadata.startFrame, 265);
         assert.equal(preview.data.preview.metadata.ticksRequested, 8);
         assert.deepEqual(previewOptions.at(-1), {
+            rootOid: 2,
             startFrame: 265,
             initialFrame: 0,
             ticks: 8,
@@ -808,6 +814,144 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         })).status, 404);
     });
 
+    it("catalogs only type-0 DAT entries and opens a non-Naruto root character", async () => {
+        const primaryRoot = resolve("project-api-multi-character-primary");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, Buffer.from([
+            "<object>\n",
+            "id: 2 type: 0 file: Assets\\NTSD\\Config\\2.dat\n",
+            "id: 3 type: 0 file: Assets\\NTSD\\Config\\3.dat\n",
+            "id: 4 type: 3 file: Assets\\NTSD\\Config\\4.dat\n",
+            "<object_end>\n",
+        ].join(""), "latin1"));
+        native.set(primaryRoot, "Assets/NTSD/Config/2.dat", narutoDat());
+        native.set(primaryRoot, "Assets/NTSD/Config/3.dat", narutoDat());
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        primary.sealStartupAuthorization();
+        const previewRootOids: number[] = [];
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "c".repeat(32),
+            previewRunner: {
+                preview: async (_plaintext, options) => {
+                    const rootOid = options?.rootOid ?? 2;
+                    previewRootOids.push(rootOid);
+                    return nativePreview(options?.startFrame, options?.ticks, rootOid);
+                },
+            },
+        });
+
+        const catalog = await project.catalog();
+        assert.deepEqual(catalog.objects.map((entry) => entry.oid), [2, 3]);
+        assert.ok(catalog.objects.every((entry) => entry.type === 0));
+        const kakashi = catalog.objects.find((entry) => entry.oid === 3)!;
+        const opened = await project.open(kakashi.objectKey);
+        assert.equal(opened.oid, 3);
+        assert.equal(opened.type, 0);
+        assert.equal(opened.preview.ticks[0]?.entities[0]?.oid, 3);
+        assert.deepEqual(previewRootOids, [3]);
+        await project.close({ sessionId: opened.sessionId });
+    });
+
+    it("renews a prepared session when the browser claims it after Native warmup", async () => {
+        const primaryRoot = resolve("project-api-prepared-session-primary");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const datPath = "Assets/NTSD/Config/2.dat";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, catalogBytes(datPath));
+        native.set(primaryRoot, datPath, narutoDat());
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        primary.sealStartupAuthorization();
+        let now = 1_000;
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "d".repeat(32),
+            sessionOptions: { idleTtlMs: 10, now: () => now },
+            previewRunner: {
+                preview: async (_plaintext, options) => nativePreview(options?.startFrame, options?.ticks),
+            },
+        });
+
+        const prepared = await project.prepareDefaultSession();
+        assert.equal(prepared.scenarios, 0, "base-state and runtime-only frames must not trigger Native warmup");
+        now += 9;
+        const opened = await project.open(prepared.objectKey);
+        const pic = opened.fields.find((field) => field.key === "pic")!;
+        now += 9;
+        const edited = await project.edit({
+            sessionId: opened.sessionId,
+            fieldId: pic.fieldId,
+            value: Number(pic.value) + 1,
+            expectedRevision: opened.revision,
+        });
+
+        assert.equal(edited.revision, opened.revision + 1);
+        await project.close({ sessionId: opened.sessionId });
+    });
+
+    it("publishes the prepared session before verified entry warmup completes", async () => {
+        const primaryRoot = resolve("project-api-background-warmup-primary");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const datPath = "Assets/NTSD/Config/2.dat";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, catalogBytes(datPath));
+        native.set(primaryRoot, datPath, encryptDatPayload(Buffer.alloc(123, 0x41), Buffer.from([
+            "<frame> 0 standing\n",
+            "pic: 0 state: 0 wait: 1 next: 999 hit_a: 300\n",
+            "<frame_end>\n",
+            "<frame> 300 skill\n",
+            "pic: 0 state: 3 wait: 1 next: 999\n",
+            "<frame_end>\n",
+        ].join(""), "latin1")));
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        primary.sealStartupAuthorization();
+        let releaseWarmup!: (value: unknown) => void;
+        const warmupGate = new Promise<unknown>((resolveWarmup) => { releaseWarmup = resolveWarmup; });
+        let warmupStarted!: () => void;
+        const warmupStartedPromise = new Promise<void>((resolveStarted) => { warmupStarted = resolveStarted; });
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "e".repeat(32),
+            previewRunner: {
+                preview: async (_plaintext, options) => {
+                    if ((options?.inputPlan?.length ?? 0) > 0) {
+                        warmupStarted();
+                        return await warmupGate;
+                    }
+                    return nativePreview(options?.startFrame, options?.ticks);
+                },
+            },
+        });
+
+        const prepared = await Promise.race([
+            project.prepareDefaultSession(),
+            new Promise<never>((_resolve, reject) => setTimeout(() => reject(new Error("preparation blocked on warmup")), 1_000)),
+        ]);
+        await warmupStartedPromise;
+        assert.equal(prepared.scenarios, 1);
+        let warmupSettled = false;
+        void prepared.warmup.then(() => { warmupSettled = true; });
+        await Promise.resolve();
+        assert.equal(warmupSettled, false);
+
+        releaseWarmup(nativePreview(300, 120));
+        const warmup = await prepared.warmup;
+        assert.equal(warmup.scenarios, 1);
+        assert.equal(warmup.failed, 0);
+        const opened = await project.open(prepared.objectKey);
+        await project.close({ sessionId: opened.sessionId });
+    });
+
     it("opens fallback Naruto as an explicit read-only session", async () => {
         const primaryRoot = resolve("project-api-readonly-primary");
         const assetRoot = resolve("project-api-readonly-assets");
@@ -839,10 +983,9 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         const token = getApplicationServerSecurity(server).token;
 
         const catalog = await (await fetch(`${origin}/api/project`)).json() as { data: {
-            objects: Array<{ objectKey: string; oid: number; availablePrimary: boolean }>;
+            objects: Array<{ objectKey: string; oid: number }>;
         } };
         const naruto = catalog.data.objects.find((entry) => entry.oid === 2)!;
-        assert.equal(naruto.availablePrimary, false);
         const openedResponse = await post(origin, token, "/api/project/open", { objectKey: naruto.objectKey });
         const opened = await openedResponse.json() as { data: {
             sessionId: string;

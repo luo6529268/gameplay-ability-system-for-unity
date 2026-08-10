@@ -19,9 +19,15 @@ namespace NTSD.Simulation
         private readonly List<IncrementalSpatialEntry> aiInputGroundSpatialEntries =
             new List<IncrementalSpatialEntry>(128);
         private readonly Dictionary<int, AiGroundTeamPartition> aiInputGroundTeamPartitions =
-            new Dictionary<int, AiGroundTeamPartition>(8);
+            new Dictionary<int, AiGroundTeamPartition>(2);
         private readonly List<AiGroundTeamPartition> aiInputActiveGroundTeamPartitions =
-            new List<AiGroundTeamPartition>(8);
+            new List<AiGroundTeamPartition>(2);
+        private readonly AiGroundTeamPartition[] aiInputGroundTeamPartitionPool =
+        {
+            new AiGroundTeamPartition(),
+            new AiGroundTeamPartition(),
+        };
+        private bool aiInputGroundTeamPartitionOverflow;
         private readonly LooseQuadtreeBroadphase aiInputAirSpatialBroadphase =
             new LooseQuadtreeBroadphase();
         private readonly List<IncrementalSpatialEntry> aiInputAirSpatialEntries =
@@ -119,16 +125,17 @@ namespace NTSD.Simulation
 
         private sealed class AiGroundTeamPartition
         {
-            internal AiGroundTeamPartition(int team)
-            {
-                Team = team;
-            }
-
-            internal int Team { get; }
+            internal int Team { get; private set; }
             internal LooseQuadtreeBroadphase Broadphase { get; } =
                 new LooseQuadtreeBroadphase();
             internal List<IncrementalSpatialEntry> Entries { get; } =
                 new List<IncrementalSpatialEntry>(32);
+
+            internal void ResetForTeam(int team)
+            {
+                Team = team;
+                Entries.Clear();
+            }
         }
 
         private struct AiInputContext
@@ -900,6 +907,8 @@ namespace NTSD.Simulation
             for (int index = 0; index < aiInputActiveGroundTeamPartitions.Count; index++)
                 aiInputActiveGroundTeamPartitions[index].Entries.Clear();
             aiInputActiveGroundTeamPartitions.Clear();
+            aiInputGroundTeamPartitions.Clear();
+            aiInputGroundTeamPartitionOverflow = false;
             aiInputGroundTeamPartitionsValid = false;
         }
 
@@ -907,12 +916,18 @@ namespace NTSD.Simulation
         {
             if (!aiInputGroundTeamPartitions.TryGetValue(team, out AiGroundTeamPartition partition))
             {
-                partition = new AiGroundTeamPartition(team);
-                aiInputGroundTeamPartitions.Add(team, partition);
-            }
+                int partitionIndex = aiInputActiveGroundTeamPartitions.Count;
+                if (partitionIndex >= aiInputGroundTeamPartitionPool.Length)
+                {
+                    aiInputGroundTeamPartitionOverflow = true;
+                    return null;
+                }
 
-            if (partition.Entries.Count == 0)
+                partition = aiInputGroundTeamPartitionPool[partitionIndex];
+                partition.ResetForTeam(team);
+                aiInputGroundTeamPartitions.Add(team, partition);
                 aiInputActiveGroundTeamPartitions.Add(partition);
+            }
             return partition;
         }
 
@@ -925,7 +940,7 @@ namespace NTSD.Simulation
 
         private void SynchronizeAiGroundTeamPartitions(in SpatialAabbXZ preferredRoot)
         {
-            if (aiInputActiveGroundTeamPartitions.Count > 2)
+            if (aiInputGroundTeamPartitionOverflow)
             {
                 InvalidateAiGroundTeamPartitions();
                 return;
@@ -1246,7 +1261,9 @@ namespace NTSD.Simulation
                 if (groundRole)
                 {
                     aiInputGroundSpatialEntries.Add(entry);
-                    GetAiGroundTeamPartition(Team(entity)).Entries.Add(entry);
+                    AiGroundTeamPartition partition =
+                        GetAiGroundTeamPartition(Team(entity));
+                    partition?.Entries.Add(entry);
                 }
                 if (airRole)
                 {

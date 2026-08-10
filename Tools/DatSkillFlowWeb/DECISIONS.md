@@ -21,6 +21,7 @@
 | DEC-012 | 复用临时浏览器并限制实例，使用后清零进程 | Confirmed | 2026-08-07 | 验收、资源管理、电脑性能 |
 | DEC-013 | Trace 按派生对象类别分别结束 | Confirmed | 2026-08-07 | Native Trace、opoint、武器投射物、预览 |
 | DEC-014 | 技能编辑器是主体，Native Trace 只是预览支撑 | Confirmed | 2026-08-07 | 产品范围、预览、网页架构 |
+| DEC-015 | 左侧按基础状态、输入技能、全部 Frame 导航，单帧只定位完整动作回放 | Confirmed | 2026-08-09 | 信息架构、预览、时间线 |
 
 ## Decision Detail
 
@@ -216,6 +217,17 @@
 - Consequences: REQ-019 属于预览支撑能力；所有 Trace 字段和结束条件都必须服务于编辑器表现、定位和验证；`ntsd_cpp` 权威逻辑保持只读参考，不作为网页功能迁移目标。
 - Affected requirements: REQ-001、REQ-004、REQ-005、REQ-011、REQ-019。
 - Revisit condition: 用户明确提出完整战斗模拟产品需求。
+
+### DEC-015: 左侧按基础状态、输入技能、全部 Frame 导航，单帧只定位完整动作回放
+
+- Status: Confirmed
+- Date: 2026-08-09
+- Context: 左栏同时展示入口表、Flow 表和 Flow 图，DAT 关系与运行表现混在一起；单独选择中间 Frame 还可能绕过真实输入/状态初始化。
+- Decision: 左栏默认只提供“基础状态 / 输入技能 / 全部 Frame”三类导航和筛选；中间始终是不可由玩家控制的完整 Native 战斗场景；右侧帧参数检查器暂时保持原样；底部改为根实体真实 Native Tick/Frame 时间线。选择单个 Frame 时，先按 DAT `next` 链找到最早的完整动作入口，运行完整场景后再定位该 Frame；找不到入口时拒绝从孤立 Frame 启动。旧 Flow 表和 SVG 保留为兼容代码，但默认隐藏且不参与普通渲染。
+- Rationale: 新用户首先看到“状态/技能 → 完整表现 → 当前帧参数”的直接关系，同时避免 F212 等中间帧缺少 Native 初始化，并减少切换时对隐藏 Flow 的重复 DOM/SVG 渲染。
+- Consequences: “全部 Frame”不是新的运行入口集合；输入技能页同时容纳 DAT 输入入口和其他可播放动作；运行时间线按连续根实体 Frame 分段，重复回访形成新段，根实体缺失时不伪造段。
+- Affected requirements: REQ-001、REQ-002、REQ-003、REQ-004、REQ-007、REQ-009、REQ-011、REQ-017、REQ-019。
+- Revisit condition: 用户确认需要把 Flow 作为独立高级编辑页恢复，或 Native 提供比根实体 Frame 更高层的动作实例标识。
 
 
 - Record decisions that affect scope, architecture, public interfaces, data formats, compatibility, performance budgets or security.

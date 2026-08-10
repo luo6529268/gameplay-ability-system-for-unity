@@ -505,12 +505,16 @@ namespace NTSD.Animation.LF2Objects
         private readonly LF2Entity _victim;
         private readonly LF2LivingObject _livingVictim;
         private readonly LF2HitCountersModule _hitCounters;
+        private readonly InteractionArea _runtimeItr = new InteractionArea();
 
-        public LF2CharacterDatHitResolver(LF2Entity victim)
+        public LF2CharacterDatHitResolver(
+            LF2Entity victim,
+            LF2HitCountersModule hitCounters)
         {
             _victim = victim;
             _livingVictim = victim as LF2LivingObject;
-            _hitCounters = ResolveHitCounters(victim);
+            _hitCounters = hitCounters ??
+                throw new System.ArgumentNullException(nameof(hitCounters));
         }
 
         internal static bool CanResolveTarget(LF2Entity target)
@@ -525,7 +529,7 @@ namespace NTSD.Animation.LF2Objects
             if (!CanResolveTarget(target))
                 return false;
 
-            return new LF2CharacterDatHitResolver(target).ResolveHit(itr, attacker, attackerPos, vol);
+            return target.TryResolveCharacterDatHit(itr, attacker, attackerPos, vol);
         }
 
         public bool ResolveHit(InteractionArea itr, LF2Entity attacker, Vector3 attackerPos, PhysicsState.BattleVolume vol)
@@ -538,7 +542,8 @@ namespace NTSD.Animation.LF2Objects
                 if (attacker.WeaponCount <= 0)
                     return false;
 
-                itr = itr.ShallowCopy();
+                _runtimeItr.CopyFrom(itr);
+                itr = _runtimeItr;
                 itr.kind = 0;
                 if ((attacker.Runtime.Vx > 0.0 && attacker.Dirh() < 0) ||
                     (attacker.Runtime.Vx < 0.0 && attacker.Dirh() > 0))
@@ -563,26 +568,21 @@ namespace NTSD.Animation.LF2Objects
                             : null;
                         if (sourceWPoint != null)
                         {
-                            itr = new InteractionArea
-                            {
-                                kind = 0,
-                                x = itr.x,
-                                y = itr.y,
-                                w = itr.w,
-                                h = itr.h,
-                                zwidth = sourceWPoint.cover,
-                                dvx = sourceWPoint.dvx,
-                                dvy = sourceWPoint.dvy,
-                                dvz = sourceWPoint.dvz,
-                                injury = sourceWPoint.injury,
-                                fall = sourceWPoint.fall,
-                                vaction = sourceWPoint.vaction,
-                                arest = sourceWPoint.arest,
-                                vrest = sourceWPoint.vrest,
-                                effect = sourceWPoint.effect,
-                                kill = sourceWPoint.kill,
-                                bdefend = sourceWPoint.bdefend,
-                            };
+                            _runtimeItr.CopyFrom(itr);
+                            itr = _runtimeItr;
+                            itr.kind = 0;
+                            itr.zwidth = sourceWPoint.cover;
+                            itr.dvx = sourceWPoint.dvx;
+                            itr.dvy = sourceWPoint.dvy;
+                            itr.dvz = sourceWPoint.dvz;
+                            itr.injury = sourceWPoint.injury;
+                            itr.fall = sourceWPoint.fall;
+                            itr.vaction = sourceWPoint.vaction;
+                            itr.arest = sourceWPoint.arest;
+                            itr.vrest = sourceWPoint.vrest;
+                            itr.effect = sourceWPoint.effect;
+                            itr.kill = sourceWPoint.kill;
+                            itr.bdefend = sourceWPoint.bdefend;
                         }
                     }
                 }
@@ -911,25 +911,6 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return acceptHit;
-        }
-
-        private static LF2HitCountersModule ResolveHitCounters(LF2Entity victim)
-        {
-            if (victim is LF2Character character)
-                return character.HitCounters;
-
-            NTSDEntityRuntime runtime = victim.Runtime;
-            int fall = runtime?.Fall ?? 0;
-            int bdefend = runtime?.Bdefend ?? 0;
-            int attackExempt = runtime?.AttackExempt ?? 0;
-            int hitStateCount = runtime?.HitStateCount ?? 0;
-            var counters = new LF2HitCountersModule();
-            counters.BindRuntime(runtime);
-            counters.SetFall(fall);
-            counters.SetBdefend(bdefend);
-            counters.SetAttackExempt(attackExempt);
-            counters.SetHitStateCount(hitStateCount);
-            return counters;
         }
 
         private bool PassBaseHit(LF2Entity attacker)

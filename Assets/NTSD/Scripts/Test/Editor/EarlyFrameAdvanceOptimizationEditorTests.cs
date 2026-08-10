@@ -20,13 +20,9 @@ namespace NTSD.Test
                     BindingFlags.Instance |
                     BindingFlags.Public |
                     BindingFlags.NonPublic)
+                .Where(field => !field.IsNotSerialized)
                 .OrderBy(field => field.Name, StringComparer.Ordinal)
                 .ToArray();
-        private static readonly FieldInfo RuntimeConfigResolverField =
-            typeof(LF2Entity).GetField(
-                "RuntimeCharacterConfigResolverOverride",
-                BindingFlags.Static | BindingFlags.NonPublic);
-
         [Test]
         public void NeutralExactCharacters_SkipSnapshotsAndMatchForcedLegacy()
         {
@@ -128,17 +124,18 @@ namespace NTSD.Test
             const int replacementOid = 9000;
             LF2CharacterDataWrapper replacement =
                 Wrapper(replacementOid, LF2ObjectType.Other, 0);
-            using var resolver =
-                new RuntimeConfigResolverScope(
-                    oid => oid == replacementOid ? replacement : null);
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == replacementOid ? replacement : null);
             Scenario fast =
                 CreateState501Scenario(
                     replacementOid,
-                    forceLegacy: false);
+                    forceLegacy: false,
+                    runtimeCharacterConfigs);
             Scenario legacy =
                 CreateState501Scenario(
                     replacementOid,
-                    forceLegacy: true);
+                    forceLegacy: true,
+                    runtimeCharacterConfigs);
 
             fast.World.EarlyFrameAdvanceSpecialsAll(4);
             legacy.World.EarlyFrameAdvanceSpecialsAll(4);
@@ -299,9 +296,12 @@ namespace NTSD.Test
 
         private static Scenario CreateState501Scenario(
             int replacementOid,
-            bool forceLegacy)
+            bool forceLegacy,
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs)
         {
-            SimulationWorld world = CreateWorld(forceLegacy);
+            SimulationWorld world = CreateWorld(
+                forceLegacy,
+                runtimeCharacterConfigs);
             LF2Character childBefore =
                 CreateCharacter(world, 31, 0, 0, 1, 0, 0);
             LF2Character owner =
@@ -338,11 +338,15 @@ namespace NTSD.Test
                 });
         }
 
-        private static SimulationWorld CreateWorld(bool forceLegacy)
+        private static SimulationWorld CreateWorld(
+            bool forceLegacy,
+            RuntimeCharacterConfigResolver runtimeCharacterConfigs = null)
         {
             return new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
-                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity)
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity,
+                CollisionBroadphaseBackend.BruteForce,
+                runtimeCharacterConfigs)
             {
                 ForceLegacyEarlyFrameAdvanceForDiagnostics = forceLegacy,
             };
@@ -516,24 +520,6 @@ namespace NTSD.Test
 
             internal SimulationWorld World { get; }
             internal List<LF2Character> Entities { get; }
-        }
-
-        private sealed class RuntimeConfigResolverScope : IDisposable
-        {
-            private readonly object previous;
-
-            internal RuntimeConfigResolverScope(
-                Func<int, LF2CharacterDataWrapper> resolver)
-            {
-                Assert.That(RuntimeConfigResolverField, Is.Not.Null);
-                previous = RuntimeConfigResolverField.GetValue(null);
-                RuntimeConfigResolverField.SetValue(null, resolver);
-            }
-
-            public void Dispose()
-            {
-                RuntimeConfigResolverField.SetValue(null, previous);
-            }
         }
 
         private sealed class DisabledLoggingScope : IDisposable

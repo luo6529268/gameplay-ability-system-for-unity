@@ -84,6 +84,12 @@ namespace NTSD.Animation.Rendering.Editor
             "NTSD.BattleRenderingAcceptance.Completed";
 
         private static bool processing;
+        private static readonly string projectRoot =
+            Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+        private static readonly string RequestAbsolutePath =
+            Path.GetFullPath(Path.Combine(projectRoot, RequestFile));
+        private static bool requestPending = File.Exists(RequestAbsolutePath);
+        private static bool polling;
 
         internal enum RequestAction
         {
@@ -95,10 +101,11 @@ namespace NTSD.Animation.Rendering.Editor
 
         static BattleRenderingAcceptanceRequestProcessor()
         {
-            EditorApplication.update += PollRequest;
+            if (requestPending)
+                StartPolling();
         }
 
-        internal static string ProjectRoot => Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+        internal static string ProjectRoot => projectRoot;
 
         internal static string ProjectPath(string path)
         {
@@ -114,6 +121,8 @@ namespace NTSD.Animation.Rendering.Editor
             string path = ProjectPath(RequestFile);
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ProjectPath("Temp"));
             File.WriteAllText(path, JsonUtility.ToJson(request), new UTF8Encoding(false));
+            requestPending = true;
+            StartPolling();
         }
 
         internal static int GetRequiredWarmupFrames(BattleRenderingAcceptanceRequest request)
@@ -152,17 +161,22 @@ namespace NTSD.Animation.Rendering.Editor
         {
             if (processing || EditorApplication.isCompiling || EditorApplication.isUpdating)
                 return;
-            string requestPath = ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (!requestPending)
             {
-                ClearSessionRequest();
-                return;
+                if (EditorApplication.isPlayingOrWillChangePlaymode)
+                    return;
+                requestPending = File.Exists(RequestAbsolutePath);
+                if (!requestPending)
+                {
+                    ClearSessionRequest();
+                    return;
+                }
             }
 
             processing = true;
             try
             {
-                string requestJson = File.ReadAllText(requestPath, Encoding.UTF8);
+                string requestJson = File.ReadAllText(RequestAbsolutePath, Encoding.UTF8);
                 EnsureSessionRequest(requestJson);
                 BattleRenderingAcceptanceRequest request =
                     JsonUtility.FromJson<BattleRenderingAcceptanceRequest>(requestJson);
@@ -171,7 +185,7 @@ namespace NTSD.Animation.Rendering.Editor
 
                 if (SessionState.GetBool(SessionCompletedKey, false))
                 {
-                    if (TryDelete(requestPath))
+                    if (TryDelete(RequestAbsolutePath))
                         ClearSessionRequest();
                     return;
                 }
@@ -194,7 +208,7 @@ namespace NTSD.Animation.Rendering.Editor
                     case RequestAction.Execute:
                         ProcessRequest(request);
                         SessionState.SetBool(SessionCompletedKey, true);
-                        if (TryDelete(requestPath))
+                        if (TryDelete(RequestAbsolutePath))
                             ClearSessionRequest();
                         if (request.enterPlayMode &&
                             request.exitPlayModeAfterRun &&
@@ -211,7 +225,7 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 WriteRequestFailure(exception);
                 SessionState.SetBool(SessionCompletedKey, true);
-                if (TryDelete(requestPath))
+                if (TryDelete(RequestAbsolutePath))
                     ClearSessionRequest();
             }
             finally
@@ -270,9 +284,29 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static void ClearSessionRequest()
         {
+            requestPending = false;
+            StopPolling();
             SessionState.EraseString(SessionRequestJsonKey);
             SessionState.EraseInt(SessionWarmupFramesKey);
             SessionState.EraseBool(SessionCompletedKey);
+        }
+
+        private static void StartPolling()
+        {
+            if (polling)
+                return;
+
+            EditorApplication.update += PollRequest;
+            polling = true;
+        }
+
+        private static void StopPolling()
+        {
+            if (!polling)
+                return;
+
+            EditorApplication.update -= PollRequest;
+            polling = false;
         }
 
         private static void WriteRequestFailure(Exception exception)

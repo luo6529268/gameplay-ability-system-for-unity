@@ -32,7 +32,7 @@ namespace NTSD.Animation.LF2Objects
     /// 2. 把输入、状态机、受击、抓取、武器链接等模块装配起来。
     /// 3. 在每个战斗 tick 中，对外暴露角色该执行的主要入口。
     /// </summary>
-    public partial class LF2Character : LF2LivingObject
+    public class LF2Character : LF2LivingObject
     {
         // ========== ILF2Object 实现 ==========
 
@@ -60,6 +60,8 @@ namespace NTSD.Animation.LF2Objects
         private readonly LF2CharacterStateResolver _stateResolver;
         private readonly LF2CharacterDamageStateResolver _damageStateResolver;
         private readonly LF2CharacterWeaponLinkResolver _weaponLinkResolver;
+        private readonly LF2CharacterLateRuntimeModule _lateRuntimeModule;
+        private readonly CharacterInputModule _pooledInputController;
 
         // ========== 武器持有 ==========
 
@@ -71,9 +73,8 @@ namespace NTSD.Animation.LF2Objects
         public Transform EntityTransform { get; private set; }
         // ========== 物理计算 ==========
 
-        private CharacterMechanics _mech;
+        private readonly CharacterMechanics _mech;
         private float _mass = NTSDGlobal.Default.Machanics.Mass;
-        private Func<Vector2, bool> _cachedIsPointWalkable;
         // ========== 抓取系统字段 ==========
 
         // 抓取持续计数。C++ release 抓取成功时写抓取者 caught_duration=300，
@@ -103,6 +104,8 @@ namespace NTSD.Animation.LF2Objects
             _stateResolver = new LF2CharacterStateResolver(this);
             _damageStateResolver = new LF2CharacterDamageStateResolver(this);
             _weaponLinkResolver = new LF2CharacterWeaponLinkResolver(this);
+            _lateRuntimeModule = new LF2CharacterLateRuntimeModule(this);
+            _mech = new CharacterMechanics();
 
             // 基类字段初始化
             ItrRest = new LF2ItrRestTracker();
@@ -116,7 +119,8 @@ namespace NTSD.Animation.LF2Objects
             _hitCounters.BindRuntime(Runtime);
             Sprite = new LF2Sprite();
             Trans = new FrameTransistor(this);
-            Controller = new CharacterInputModule();
+            _pooledInputController = new CharacterInputModule();
+            Controller = _pooledInputController;
 
             // 角色状态分发固定写在 switch 中，不再保留运行时 handler 表。
         }
@@ -132,8 +136,7 @@ namespace NTSD.Animation.LF2Objects
                 GetSpriteWidthPxForCollision(),
                 _mass,
                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity,
-                _cachedIsPointWalkable
+                NTSDGlobal.Gameplay.Gravity
             );
 
             var stepResult = _mech.Step(ctx);
@@ -736,7 +739,6 @@ namespace NTSD.Animation.LF2Objects
                     var frameData = Frame.D;
                     if (frameData.next == LF2StandardFrames.LoopToStart && Runtime.Vy < 0)
                     {
-                        NTSD.Tools.Log.Info("[State {0}:{1}] -> TransitionTo: Frame {2} ({3})", 3, "Attack", LF2StandardFrames.JumpingAir, "air attack return");
                         Trans.SetNext(LF2StandardFrames.JumpingAir);
                     }
                     return false;
@@ -874,7 +876,8 @@ namespace NTSD.Animation.LF2Objects
             AiControlled = true;
             // opoint 生成的角色不能绑定玩家输入，但必须拥有独立的逻辑输入缓冲，
             // 否则 release 风格生成的 AI 角色会被标记为 AiControlled 却无法接收帧输入。
-            Controller = new CharacterInputModule();
+            _pooledInputController.ResetForPoolReuse();
+            Controller = _pooledInputController;
             _preserveOpointActionZero = task.preserveActionZero;
             _initializedFromOpoint = true;
         }
@@ -902,13 +905,6 @@ namespace NTSD.Animation.LF2Objects
 
         public void ModuleInitialize()
         {
-            _mech = new CharacterMechanics();
-            _cachedIsPointWalkable = point =>
-            {
-                SimulationWorld world = Match;
-                return world == null || world.IsGroundPointWalkable(point);
-            };
-
             Runtime.X = 0f;
             Runtime.Y = 0f;
             Runtime.Z = 0f;
@@ -934,13 +930,8 @@ namespace NTSD.Animation.LF2Objects
             _hitCounters?.Reset();
             ItrRest?.Reset();
             Runtime.Reset();
+            ResetReusableRuntimeComponents();
             FrameCache.Clear();
-            Frame.N = 0;
-            Frame.D = null;
-            Frame.PN = 0;
-            Frame.Prev = 0;
-            Frame.Prev2 = 0;
-            Frame.Prev2D = null;
             _heldWeapon = null;
             Catching = null;
 
@@ -951,10 +942,14 @@ namespace NTSD.Animation.LF2Objects
             _initializedFromOpoint = false;
             _preserveOpointActionZero = false;
             AiControlled = false;
-            if (Controller is CharacterInputModule inputModule)
-                inputModule.ModuleUnbind();
+            if (Controller is CharacterInputModule inputModule &&
+                !ReferenceEquals(inputModule, _pooledInputController))
+            {
+                inputModule.ResetForPoolReuse();
+            }
 
-            Controller = new CharacterInputModule();
+            _pooledInputController.ResetForPoolReuse();
+            Controller = _pooledInputController;
             ResetStateRuntime();
         }
 
@@ -1303,6 +1298,12 @@ namespace NTSD.Animation.LF2Objects
             base.RunLateDeathOpointPreCleanupPhase();
         }
 
+        internal override void RunLateTailBeforePrevFrame()
+        {
+            _lateRuntimeModule.RunLateCharacterCleanup();
+            base.RunLateTailBeforePrevFrame();
+        }
+
         internal void ForceDropHeldWeaponForLateDeathInternal()
         {
             LF2WeaponBase weapon = GetHeldWeaponBaseInternal();
@@ -1634,6 +1635,11 @@ namespace NTSD.Animation.LF2Objects
         public bool ReleaseHeldObjectByWPoint(LF2Entity held, WeaponPoint holderWPoint, out WeaponActResult result)
         {
             return _weaponLinkResolver.ReleaseHeldObjectByWPoint(held, holderWPoint, out result);
+        }
+
+        public bool DropHeldObjectByWPoint(WeaponPoint holderWPoint)
+        {
+            return _weaponLinkResolver.DropHeldObjectByWPoint(holderWPoint);
         }
 
         internal bool TryDropHeldWeaponFallbackRandomly()

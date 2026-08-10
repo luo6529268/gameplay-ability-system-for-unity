@@ -225,6 +225,218 @@ namespace NTSD.Test
             factory.FlushTasks();
         }
 
+        [Test]
+        public void W05C_SealedProductionOpointSpawnAndRelease_DoesNotAllocate()
+        {
+            LF2ObjectPointFactory factory = RequireFactoryAndPools(out LF2ObjectPool pool);
+            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            bool restoreObjectPoolSeal = pool.IsBattleCapacitySealed;
+            bool restoreReferencePoolSeal = referencePool.IsBattleCapacitySealed;
+
+            pool.UnsealBattleCapacity();
+            referencePool.UnsealBattleCapacity();
+            referencePool.PrewarmTasks<OPointCreateTask>(8);
+            referencePool.PrepareObjectCapacity(LF2ObjectType.Other, 8);
+
+            try
+            {
+                using var configs = new RuntimeObjectConfigScope(SpawnOid, BuildSpawnData());
+                using var isolatedPool = new IsolatedObjectPoolScope(pool);
+                using var driver = new SimulationDriverWorldScope();
+
+                var world = new SimulationWorld();
+                driver.SetWorld(world);
+                var spawner = new OpointSpawner(SpawnOid, "zero-gc");
+                world.Register(spawner);
+
+                factory.ProcessOpointSpawn(spawner);
+                LF2Entity warmup = FindSpawn(world);
+                Assert.That(warmup, Is.Not.Null);
+                warmup.FreeEntityLikeExe();
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+
+                pool.SealBattleCapacity();
+                referencePool.SealBattleCapacity();
+
+                bool allSpawnsSucceeded = true;
+                _ = GC.GetAllocatedBytesForCurrentThread();
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 256; iteration++)
+                {
+                    factory.ProcessOpointSpawn(spawner);
+                    LF2Entity spawned = FindSpawn(world);
+                    if (spawned == null)
+                    {
+                        allSpawnsSucceeded = false;
+                        continue;
+                    }
+
+                    spawned.FreeEntityLikeExe();
+                }
+                long allocatedBytes =
+                    GC.GetAllocatedBytesForCurrentThread() - before;
+
+                Assert.That(allocatedBytes, Is.Zero);
+                Assert.That(allSpawnsSucceeded, Is.True);
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+                Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.EqualTo(1));
+            }
+            finally
+            {
+                if (!restoreObjectPoolSeal)
+                    pool.UnsealBattleCapacity();
+                else
+                    pool.SealBattleCapacity();
+
+                if (!restoreReferencePoolSeal)
+                    referencePool.UnsealBattleCapacity();
+                else
+                    referencePool.SealBattleCapacity();
+            }
+        }
+
+        [Test]
+        public void W05D_SealedProductionSixObjectOpointSpawnAndRelease_DoesNotAllocate()
+        {
+            const int spawnCount = 6;
+            LF2ObjectPointFactory factory = RequireFactoryAndPools(out LF2ObjectPool pool);
+            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            bool restoreObjectPoolSeal = pool.IsBattleCapacitySealed;
+            bool restoreReferencePoolSeal = referencePool.IsBattleCapacitySealed;
+
+            pool.UnsealBattleCapacity();
+            referencePool.UnsealBattleCapacity();
+            referencePool.PrewarmTasks<OPointCreateTask>(spawnCount + 2);
+            referencePool.PrepareObjectCapacity(LF2ObjectType.Other, spawnCount + 2);
+
+            try
+            {
+                using var configs = new RuntimeObjectConfigScope(SpawnOid, BuildSpawnData());
+                using var isolatedPool = new IsolatedObjectPoolScope(pool);
+                using var driver = new SimulationDriverWorldScope();
+
+                var world = new SimulationWorld();
+                driver.SetWorld(world);
+                var spawner = new OpointSpawner(SpawnOid, "six-zero-gc", spawnCount * 10);
+                var spawnedEntities = new LF2Entity[spawnCount];
+                world.Register(spawner);
+
+                factory.ProcessOpointSpawn(spawner);
+                Assert.That(CollectSpawns(world, spawnedEntities), Is.EqualTo(spawnCount));
+                ReleaseSpawns(spawnedEntities);
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+
+                pool.SealBattleCapacity();
+                referencePool.SealBattleCapacity();
+
+                bool allSpawnsSucceeded = true;
+                _ = GC.GetAllocatedBytesForCurrentThread();
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 256; iteration++)
+                {
+                    factory.ProcessOpointSpawn(spawner);
+                    if (CollectSpawns(world, spawnedEntities) != spawnCount)
+                        allSpawnsSucceeded = false;
+                    ReleaseSpawns(spawnedEntities);
+                }
+                long allocatedBytes =
+                    GC.GetAllocatedBytesForCurrentThread() - before;
+
+                Assert.That(allocatedBytes, Is.Zero);
+                Assert.That(allSpawnsSucceeded, Is.True);
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+                Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.EqualTo(1));
+            }
+            finally
+            {
+                if (!restoreObjectPoolSeal)
+                    pool.UnsealBattleCapacity();
+                else
+                    pool.SealBattleCapacity();
+
+                if (!restoreReferencePoolSeal)
+                    referencePool.UnsealBattleCapacity();
+                else
+                    referencePool.SealBattleCapacity();
+            }
+        }
+
+        [Test]
+        public void W05E_SealedProductionDeathCleanupAndPoolReturn_DoesNotAllocate()
+        {
+            LF2ObjectPointFactory factory = RequireFactoryAndPools(out LF2ObjectPool pool);
+            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            bool restoreObjectPoolSeal = pool.IsBattleCapacitySealed;
+            bool restoreReferencePoolSeal = referencePool.IsBattleCapacitySealed;
+
+            pool.UnsealBattleCapacity();
+            referencePool.UnsealBattleCapacity();
+            referencePool.PrewarmTasks<OPointCreateTask>(8);
+            referencePool.PrepareObjectCapacity(LF2ObjectType.Other, 8);
+
+            try
+            {
+                using var configs = new RuntimeObjectConfigScope(
+                    SpawnOid,
+                    BuildDeathCleanupSpawnData());
+                using var isolatedPool = new IsolatedObjectPoolScope(pool);
+                using var driver = new SimulationDriverWorldScope();
+
+                var world = new SimulationWorld();
+                driver.SetWorld(world);
+                var spawner = new OpointSpawner(SpawnOid, "death-cleanup-zero-gc");
+                world.Register(spawner);
+
+                factory.ProcessOpointSpawn(spawner);
+                LF2Entity warmup = FindSpawn(world);
+                Assert.That(warmup, Is.Not.Null);
+                PrepareDeathCleanup(warmup);
+                world.PostFrameAdvanceDeathCleanupAll(0);
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+
+                pool.SealBattleCapacity();
+                referencePool.SealBattleCapacity();
+
+                bool allCleanupCyclesSucceeded = true;
+                _ = GC.GetAllocatedBytesForCurrentThread();
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 256; iteration++)
+                {
+                    factory.ProcessOpointSpawn(spawner);
+                    LF2Entity spawned = FindSpawn(world);
+                    if (spawned == null)
+                    {
+                        allCleanupCyclesSucceeded = false;
+                        continue;
+                    }
+
+                    PrepareDeathCleanup(spawned);
+                    world.PostFrameAdvanceDeathCleanupAll(iteration + 1);
+                    if (FindSpawn(world) != null || pool.ActiveObjectCountForAcceptance != 0)
+                        allCleanupCyclesSucceeded = false;
+                }
+                long allocatedBytes =
+                    GC.GetAllocatedBytesForCurrentThread() - before;
+
+                Assert.That(allocatedBytes, Is.Zero);
+                Assert.That(allCleanupCyclesSucceeded, Is.True);
+                Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+                Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.EqualTo(1));
+            }
+            finally
+            {
+                if (!restoreObjectPoolSeal)
+                    pool.UnsealBattleCapacity();
+                else
+                    pool.SealBattleCapacity();
+
+                if (!restoreReferencePoolSeal)
+                    referencePool.UnsealBattleCapacity();
+                else
+                    referencePool.SealBattleCapacity();
+            }
+        }
+
         private static LF2ObjectPointFactory RequireFactoryAndPools(out LF2ObjectPool pool)
         {
             LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
@@ -244,6 +456,42 @@ namespace NTSD.Test
                     return entity;
             }
             return null;
+        }
+
+        private static int CollectSpawns(SimulationWorld world, LF2Entity[] destination)
+        {
+            int count = 0;
+            for (int index = 0; index < destination.Length; index++)
+                destination[index] = null;
+
+            for (int slot = 50;
+                 slot < world.RuntimeSlotCapacityForDiagnostics && count < destination.Length;
+                 slot++)
+            {
+                LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
+                if (entity?.ObjectId == SpawnOid)
+                    destination[count++] = entity;
+            }
+
+            return count;
+        }
+
+        private static void ReleaseSpawns(LF2Entity[] spawnedEntities)
+        {
+            for (int index = 0; index < spawnedEntities.Length; index++)
+            {
+                LF2Entity entity = spawnedEntities[index];
+                spawnedEntities[index] = null;
+                entity?.FreeEntityLikeExe();
+            }
+        }
+
+        private static void PrepareDeathCleanup(LF2Entity entity)
+        {
+            entity.RelationTeam = 5;
+            entity.Health.HP = 0;
+            entity.HP2Orig = 1;
+            entity.HitStun = 2;
         }
 
         private static bool ContainsCommand(BattlePresentationFrame frame, RuntimeEntityHandle handle)
@@ -301,6 +549,26 @@ namespace NTSD.Test
             };
         }
 
+        private static LF2CharacterData BuildDeathCleanupSpawnData()
+        {
+            return new LF2CharacterData
+            {
+                name = "W05ProductionDeathCleanup",
+                type_sub = SpawnOid,
+                frames = new List<LF2FrameData>
+                {
+                    new LF2FrameData
+                    {
+                        frameId = 0,
+                        state = LF2States.Lying,
+                        wait = 100,
+                        next = 0,
+                        pic = 0,
+                    },
+                },
+            };
+        }
+
         private class DynamicSlotOccupant : LF2OtherObject
         {
             public DynamicSlotOccupant(int stableId)
@@ -315,7 +583,7 @@ namespace NTSD.Test
 
         private sealed class OpointSpawner : DynamicSlotOccupant
         {
-            public OpointSpawner(int spawnOid, string label)
+            public OpointSpawner(int spawnOid, string label, int facing = 0)
                 : base(label.GetHashCode())
             {
                 Name = $"W05OpointSpawner_{label}";
@@ -334,7 +602,7 @@ namespace NTSD.Test
                         kind = 1,
                         oid = spawnOid,
                         action = 0,
-                        facing = 0,
+                        facing = facing,
                     },
                 };
                 FrameCache.Load(new LF2CharacterDataWrapper(ObjectId, new LF2CharacterData
@@ -500,9 +768,9 @@ namespace NTSD.Test
                 originalConfiguredObjectPrefab = configuredGameConfig != null
                     ? configuredGameConfig.LF2ObjectPrefab
                     : null;
-                availableField.SetValue(pool, new LinkedList<GameObject>());
-                activeField.SetValue(pool, new HashSet<GameObject>());
-                releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
+                availableField.SetValue(pool, new Queue<GameObject>(8));
+                activeField.SetValue(pool, new HashSet<GameObject>(8));
+                releaseMapField.SetValue(pool, new Dictionary<GameObject, float>(8));
                 spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
                 if (configuredGameConfig != null)
                     configuredGameConfig.LF2ObjectPrefab = null;
@@ -527,7 +795,7 @@ namespace NTSD.Test
 
             private static void Collect(object source, HashSet<GameObject> objects)
             {
-                if (source is LinkedList<GameObject> available)
+                if (source is Queue<GameObject> available)
                 {
                     foreach (GameObject item in available)
                         if (item != null) objects.Add(item);

@@ -10,21 +10,18 @@ namespace NTSD.Load
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            resourceLoader = NTSD_ResourceLoader.Instance;
         }
 
-        private async void Update()
+        private void Update()
         {
             if (resourceLoader == null)
-            {
                 resourceLoader = NTSD_ResourceLoader.Instance;
-            }
 
-            if (resourceLoader == null)
-            {
+            if (resourceLoader == null || !resourceLoader.HasQueuedTasks)
                 return;
-            }
 
-            await resourceLoader.ProcessFrame();
+            resourceLoader.ProcessFrame().Forget();
         }
     }
 }

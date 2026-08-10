@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 
@@ -73,7 +72,7 @@ namespace NTSD.Input
 
         public void UpdateFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Entity owner)
         {
-            List<SimInputEvent> events = null;
+            SimInputEventBatch events = default;
             bool hasEvents = inputBuffer != null &&
                              inputBuffer.TryDequeueAll(tickIndex, out events);
             bool hasCompletePacket = false;

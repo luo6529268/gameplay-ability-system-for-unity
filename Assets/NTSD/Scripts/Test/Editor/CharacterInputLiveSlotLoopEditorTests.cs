@@ -1,7 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
@@ -11,17 +10,6 @@ namespace NTSD.Test
 {
     public sealed class CharacterInputLiveSlotLoopEditorTests
     {
-        private const BindingFlags StaticMembers =
-            BindingFlags.Static |
-            BindingFlags.Public |
-            BindingFlags.NonPublic;
-
-        [TearDown]
-        public void TearDown()
-        {
-            SetMutationHook(null);
-        }
-
         [Test]
         public void CharacterInputAll_LiveAscendingSlots_AdmitsHighNewbornAndDefersRecycledLowSlot()
         {
@@ -33,7 +21,7 @@ namespace NTSD.Test
             LF2Character highNewborn = null;
             var visited = new List<LF2Entity>(4);
 
-            SetMutationHook((activeWorld, entity) =>
+            SetMutationHook(world, (activeWorld, entity) =>
             {
                 visited.Add(entity);
                 if (!ReferenceEquals(entity, original))
@@ -63,7 +51,7 @@ namespace NTSD.Test
             LF2Character trigger = RegisterCharacter(world, 0, 300);
             LF2Character removed = RegisterCharacter(world, 1, 301);
 
-            SetMutationHook((activeWorld, entity) =>
+            SetMutationHook(world, (activeWorld, entity) =>
             {
                 if (!ReferenceEquals(entity, trigger))
                     return;
@@ -76,7 +64,7 @@ namespace NTSD.Test
                 () => world.CharacterInputAll(2));
             Assert.That(exception.Message, Is.EqualTo("character-input-mutation-probe"));
 
-            SetMutationHook(null);
+            SetMutationHook(world, null);
             LF2Character replacement = CreateCharacter(1, 401);
             Assert.DoesNotThrow(() => world.Register(replacement));
             Assert.That(replacement.Runtime.SlotIndex, Is.EqualTo(1));
@@ -133,13 +121,11 @@ namespace NTSD.Test
             return character;
         }
 
-        private static void SetMutationHook(Action<SimulationWorld, LF2Entity> hook)
+        private static void SetMutationHook(
+            SimulationWorld world,
+            Action<SimulationWorld, LF2Entity> hook)
         {
-            FieldInfo field = typeof(SimulationWorld).GetField(
-                "CharacterInputPassMutationOverrideForSelfCheck",
-                StaticMembers);
-            Assert.That(field, Is.Not.Null);
-            field.SetValue(null, hook);
+            world.SetCharacterInputPassMutationOverrideForSelfCheck(hook);
         }
 
         private sealed class EmptyController : ILF2Controller

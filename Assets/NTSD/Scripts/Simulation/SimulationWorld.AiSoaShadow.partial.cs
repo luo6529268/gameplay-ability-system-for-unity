@@ -1827,8 +1827,9 @@ namespace NTSD.Simulation
             int inputPhase,
             out AiSoANearestResult result)
         {
-            BattleAiInputDetailDiagnostics diagnostics = battleAiInputDetailDiagnostics;
-            if (diagnostics != null && diagnostics.Enabled)
+            BattleAiInputDetailDiagnostics diagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            if (diagnostics != null)
             {
                 diagnostics.BeginPhase(BattleAiInputDetailPhase.CandidateNearest);
                 try
@@ -1884,8 +1885,9 @@ namespace NTSD.Simulation
             bool sameZLane,
             out AiSoASpecialResult result)
         {
-            BattleAiInputDetailDiagnostics diagnostics = battleAiInputDetailDiagnostics;
-            if (diagnostics != null && diagnostics.Enabled)
+            BattleAiInputDetailDiagnostics diagnostics =
+                ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            if (diagnostics != null)
             {
                 diagnostics.BeginPhase(BattleAiInputDetailPhase.CandidateSpecial);
                 try

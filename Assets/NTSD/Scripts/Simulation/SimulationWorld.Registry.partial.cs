@@ -4,7 +4,6 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.LevelEditor;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace NTSD.Simulation
@@ -14,24 +13,25 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
-        /// <summary>同一 SimOrder 的对象桶；只有桶内容变化后才延迟重新排序。</summary>
-        private class Bucket
+        private sealed class RuntimeStableIdComparer : IComparer<ISimObject>
         {
-            public List<ISimObject> items = new List<ISimObject>();
-            public bool dirty = false;
-
-            public void EnsureSorted(System.Func<ISimObject, int> stableIdSelector)
+            public int Compare(ISimObject left, ISimObject right)
             {
-                if (dirty)
-                {
-                    items = items.OrderBy(stableIdSelector).ToList();
-                    dirty = false;
-                }
+                int leftStableId = left is LF2Entity leftEntity
+                    ? leftEntity.Runtime.StableId
+                    : left?.StableId ?? int.MinValue;
+                int rightStableId = right is LF2Entity rightEntity
+                    ? rightEntity.Runtime.StableId
+                    : right?.StableId ?? int.MinValue;
+                return leftStableId.CompareTo(rightStableId);
             }
         }
 
-        /// <summary>按 SimOrder 建立的模拟桶，SortedDictionary 保证 pass 顺序。</summary>
-        private SortedDictionary<int, Bucket> _buckets = new SortedDictionary<int, Bucket>();
+        /// <summary>
+        /// Compatibility lookup for diagnostics. Ordered traversal and bucket
+        /// lifetime are owned by objectBucketRegistry.
+        /// </summary>
+        private readonly Dictionary<int, SimulationObjectBucket> _buckets;
         /// <summary>注册对象时注入的模拟上下文。</summary>
         private SimContext _context;
         /// <summary>给没有显式运行时 ID 的对象自动分配 StableId。</summary>
@@ -42,10 +42,13 @@ namespace NTSD.Simulation
         private readonly BattleRuntimeProfile activeRuntimeProfile;
         private readonly RuntimeSlotTable _runtimeSlots;
         private readonly RuntimeRestStore _runtimeRestStore;
+        private readonly IComparer<ISimObject> runtimeStableIdComparer =
+            new RuntimeStableIdComparer();
         private readonly int maxActiveRuntimeEntities;
         /// <summary>遍历桶快照期间延迟处理的注销请求。</summary>
-        private readonly List<ISimObject> _pendingUnregister = new List<ISimObject>();
-        private readonly List<LF2Entity> _pendingSlotReleasedDestroy = new List<LF2Entity>();
+        private List<ISimObject> _pendingUnregister => battleBuffers.PendingUnregister;
+        private List<LF2Entity> _pendingSlotReleasedDestroy =>
+            battleBuffers.PendingSlotReleasedDestroy;
         private Dictionary<ISimObject, int> structuralPendingUnregisterSlots;
         private IBattleParityStructuralEventSink structuralEventSink;
         private int structuralEventTick;
@@ -56,7 +59,7 @@ namespace NTSD.Simulation
         private ulong pendingDestroyScanOccupancyEpoch;
         /// <summary>世界正在遍历模拟对象时为 true。</summary>
         private bool _ticking = false;
-        private readonly List<LF2Entity> _entityScratch = new List<LF2Entity>(128);
+        private List<LF2Entity> _entityScratch => battleBuffers.EntityScratch;
 #if UNITY_EDITOR
         private readonly HashSet<LF2Entity> activeRuntimeEntitySnapshotSeen =
             new HashSet<LF2Entity>();
@@ -67,8 +70,10 @@ namespace NTSD.Simulation
         private int _cameraVel;
 
         public int ReleaseCameraX => _cameraX;
+        internal int ReleaseCameraVelocityForServices => _cameraVel;
         internal bool IsUnityFixedWorldCameraStateClear => _cameraX == 0 && _cameraVel == 0;
         internal int RuntimeSlotCapacity => _runtimeSlots.LogicalCapacity;
+        internal RuntimeSlotTable RuntimeSlotTableForModules => _runtimeSlots;
         internal int MaxRuntimeSlotsForServices => RuntimeSlotCapacity;
         internal int DynamicRuntimeSlotStartForServices => DynamicRuntimeSlotStart;
         internal BattleRuntimeProfile RuntimeProfileForServices => activeRuntimeProfile;
@@ -84,9 +89,24 @@ namespace NTSD.Simulation
         public long PendingDestroyFullScanCount { get; private set; }
         public long PendingDestroySkipCount { get; private set; }
         public long PendingDestroyVisitedEntityCount { get; private set; }
+        public long NullRegistrationRejectCountForDiagnostics { get; private set; }
+        public long BucketCapacityRejectCountForDiagnostics { get; private set; }
+        public long DuplicateRegistrationRejectCountForDiagnostics { get; private set; }
+        public long RuntimeSlotCapacityRejectCountForDiagnostics { get; private set; }
+        public long RuntimeRestBindRejectCountForDiagnostics { get; private set; }
+        public long StableIdRegistrationRejectCountForDiagnostics { get; private set; }
+        public long MissingUnregisterCountForDiagnostics { get; private set; }
+        public long RuntimeSlotReleaseRejectCountForDiagnostics { get; private set; }
+        public long RejectedVRestWriteCountForDiagnostics =>
+            _runtimeRestStore.RejectedVRestWriteCount;
+        public long RejectedSoundEventCountForDiagnostics =>
+            battleBuffers.RejectedSoundEventCount;
         public bool ForceLegacyPendingDestroyScanForDiagnostics { get; set; }
         public bool EnableRegistryLifecycleLoggingForDiagnostics { get; set; } = false;
         internal RuntimeRestStore RuntimeRestStoreForServices => _runtimeRestStore;
+        internal RuntimeSlotTable RuntimeSlotsForServices => _runtimeSlots;
+        internal IBattleParityStructuralEventSink StructuralEventSinkForServices =>
+            structuralEventSink;
 
         public void SetStructuralEventSinkForDiagnostics(
             IBattleParityStructuralEventSink sink,
@@ -168,16 +188,14 @@ namespace NTSD.Simulation
                 : "general";
         }
 
-        private int GetRuntimeStableId(ISimObject obj)
-        {
-            return obj is LF2Entity entity ? entity.Runtime.StableId : obj.StableId;
-        }
-
         private bool ContainsRegisteredEntityStableId(int stableId)
         {
-            foreach (KeyValuePair<int, Bucket> pair in _buckets)
+            for (int bucketIndex = 0;
+                 bucketIndex < objectBucketRegistry.OrderedCount;
+                 bucketIndex++)
             {
-                List<ISimObject> items = pair.Value.items;
+                List<ISimObject> items =
+                    objectBucketRegistry.GetOrderedBucket(bucketIndex).items;
                 for (int i = 0; i < items.Count; i++)
                 {
                     if (items[i] is LF2Entity entity &&
@@ -211,11 +229,6 @@ namespace NTSD.Simulation
                 entity.RefreshRuntimeSnapshot();
         }
 
-        private List<int> GetBucketKeySnapshot()
-        {
-            return _buckets.Count > 0 ? new List<int>(_buckets.Keys) : null;
-        }
-
         public ILF2SceneQuery SceneQuery { get; private set; }
         public INTSDItrKindService ItrKindService { get; private set; }
         public DeterministicRng Rng { get; private set; }
@@ -228,10 +241,21 @@ namespace NTSD.Simulation
         {
         }
 
+        internal SimulationWorld(
+            RuntimeCharacterConfigResolver characterConfigResolver)
+            : this(
+                BattleRuntimeProfile.Authority400,
+                AuthorityRuntimeSlotCapacity,
+                CollisionBroadphaseBackend.BruteForce,
+                characterConfigResolver)
+        {
+        }
+
         public SimulationWorld(
             BattleRuntimeProfile runtimeProfile,
             int runtimeSlotCapacity,
-            CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
+            CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce,
+            RuntimeCharacterConfigResolver characterConfigResolver = null)
         {
             if (runtimeSlotCapacity < DynamicRuntimeSlotStart)
                 throw new System.ArgumentOutOfRangeException(nameof(runtimeSlotCapacity),
@@ -249,8 +273,27 @@ namespace NTSD.Simulation
             maxActiveRuntimeEntities = runtimeProfile == BattleRuntimeProfile.MobileExtended
                 ? BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities
                 : int.MaxValue;
+            objectBucketRegistry = new SimulationObjectBucketRegistry();
+            _buckets = objectBucketRegistry.LookupForCompatibility;
             _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
             _runtimeRestStore = new RuntimeRestStore(runtimeSlotCapacity);
+            battleBuffers = new SimulationBattleBufferModule(runtimeSlotCapacity);
+            runtimeCapacityModule = new SimulationRuntimeCapacityModule(
+                _runtimeSlots,
+                _runtimeRestStore,
+                battleBuffers,
+                objectBucketRegistry);
+            frameInputModule = new SimulationFrameInputModule(this);
+            stageSpawnTaskConfigurator = new StageSpawnTaskConfigurator();
+            runtimeCharacterConfigs =
+                characterConfigResolver ?? new RuntimeCharacterConfigResolver();
+            entityTraversal = new SimulationEntityTraversal(this, _runtimeSlots);
+            queryAndLinkModule = new SimulationQueryAndLinkModule(this);
+            randomWeaponDropBuffer = new SimulationRandomWeaponDropBuffer();
+            lockstepChecksumModule = new BattleLockstepChecksumModule();
+            stageWaveModule = new SimulationStageWaveModule(this);
+            stageRenderModule = new SimulationStageRenderModule(this);
+            paritySnapshotModule = new BattleParitySnapshotModule(this);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             InitializeAiSoASensingRows(runtimeSlotCapacity);
             _context = new SimContext(this);
@@ -380,7 +423,7 @@ namespace NTSD.Simulation
         public void ResetRuntimeState()
         {
             EnsureAiSensingModeAvailableBeforeTick();
-            _battlePresentation.Reset();
+            stageRenderModule.Reset();
             ResetRegisteredObjects();
 
             Runtime ??= new BattleRuntimeState();
@@ -401,22 +444,22 @@ namespace NTSD.Simulation
         {
             (SceneQuery as BruteForceSceneQuery)?.ResetFormalSpatialBroadphase();
 
-            var registeredObjects = new HashSet<ISimObject>();
-            List<int> bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys != null)
+            HashSet<ISimObject> registeredObjects =
+                battleBuffers.RegisteredObjectResetSet;
+            registeredObjects.Clear();
+            for (int bucketIndex = 0;
+                 bucketIndex < objectBucketRegistry.OrderedCount;
+                 bucketIndex++)
             {
-                for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
+                SimulationObjectBucket bucket =
+                    objectBucketRegistry.GetOrderedBucket(bucketIndex);
+                for (int itemIndex = 0;
+                     itemIndex < bucket.items.Count;
+                     itemIndex++)
                 {
-                    int key = bucketKeys[keyIndex];
-                    if (!_buckets.TryGetValue(key, out Bucket bucket))
-                        continue;
-
-                    for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
-                    {
-                        ISimObject item = bucket.items[itemIndex];
-                        if (item != null)
-                            registeredObjects.Add(item);
-                    }
+                    ISimObject item = bucket.items[itemIndex];
+                    if (item != null)
+                        registeredObjects.Add(item);
                 }
             }
 
@@ -435,6 +478,7 @@ namespace NTSD.Simulation
                     entity.Renderer);
                 entity.ItrRest?.Unbind(false);
                 entity.ItrRest?.Reset();
+                entity.Runtime?.BindWorldMutationTracker(null);
                 entity.Reset();
                 entity.Runtime?.Reset();
                 entity.SetRuntimeSlotIndex(-1);
@@ -457,9 +501,10 @@ namespace NTSD.Simulation
                 entity.Sprite?.HideShadow();
             }
 
-            _buckets.Clear();
+            objectBucketRegistry.Clear();
             _runtimeSlots.Reset();
             _runtimeRestStore.ResetWorld();
+            registeredObjects.Clear();
         }
 
         public int CurrentTickIndex => Runtime?.Flow?.CurrentTickIndex ?? 0;
@@ -562,7 +607,9 @@ namespace NTSD.Simulation
         {
             if (obj == null)
             {
-                Debug.LogError("[SimulationWorld] Cannot register null object");
+                NullRegistrationRejectCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                    Debug.LogError("[SimulationWorld] Cannot register null object");
                 return;
             }
 
@@ -573,15 +620,32 @@ namespace NTSD.Simulation
                 UnregisterImmediate(obj);
 
             int simOrder = obj.SimOrder;
-            if (!_buckets.TryGetValue(simOrder, out Bucket bucket))
+            if (!_buckets.TryGetValue(simOrder, out SimulationObjectBucket bucket))
             {
-                bucket = new Bucket();
-                _buckets[simOrder] = bucket;
+                bucket = objectBucketRegistry.GetOrCreate(simOrder);
+                if (bucket == null)
+                {
+                    BucketCapacityRejectCountForDiagnostics++;
+                    if (!runtimeCapacityModule.IsSealed)
+                    {
+                        Debug.LogError(
+                            $"[SimulationWorld] Registration rejected because the sealed " +
+                            $"simulation bucket pool is exhausted: SimOrder={simOrder}, " +
+                            $"StableId={obj.StableId}");
+                    }
+                    return;
+                }
             }
 
             if (bucket.items.Contains(obj))
             {
-                Debug.LogWarning($"[SimulationWorld] Object already registered: SimOrder={simOrder}, StableId={obj.StableId}");
+                DuplicateRegistrationRejectCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                {
+                    Debug.LogWarning(
+                        $"[SimulationWorld] Object already registered: " +
+                        $"SimOrder={simOrder}, StableId={obj.StableId}");
+                }
                 return;
             }
 
@@ -594,13 +658,20 @@ namespace NTSD.Simulation
                 registeredEntity.ClearRequiredRuntimeSlot();
                 if (runtimeSlot < 0)
                 {
-                    if (bucket.items.Count == 0)
-                        _buckets.Remove(simOrder);
-                    Debug.LogWarning(
-                        $"[SimulationWorld] Runtime slot exhausted; registration rejected: " +
-                        $"StableId={registeredEntity.StableId}, Type={registeredEntity.GetType().Name}");
+                    objectBucketRegistry.RemoveIfEmpty(simOrder, bucket);
+                    RuntimeSlotCapacityRejectCountForDiagnostics++;
+                    if (!runtimeCapacityModule.IsSealed)
+                    {
+                        Debug.LogWarning(
+                            $"[SimulationWorld] Runtime slot exhausted; registration rejected: " +
+                            $"StableId={registeredEntity.StableId}, " +
+                            $"Type={registeredEntity.GetType().Name}");
+                    }
                     return;
                 }
+
+                registeredEntity.Runtime?.BindWorldMutationTracker(
+                    runtimeMutationTracker);
 
                 ResetRawRuntimeSlotState(runtimeSlot);
                 if (registeredEntity.Runtime.SpawnSemantic != (int)ReleaseSpawnSemantic.StageSpawnAt)
@@ -608,12 +679,15 @@ namespace NTSD.Simulation
                     if (!ResetCooldownsForRuntimeSlot(runtimeSlot, registeredEntity))
                     {
                         RollbackRuntimeSlotRegistration(registeredEntity, runtimeSlot);
-                        if (bucket.items.Count == 0)
-                            _buckets.Remove(simOrder);
-                        Debug.LogError(
-                            $"[SimulationWorld] Runtime rest bind failed; registration rejected: " +
-                            $"Slot={runtimeSlot}, StableId={registeredEntity.StableId}, " +
-                            $"Type={registeredEntity.GetType().Name}");
+                        objectBucketRegistry.RemoveIfEmpty(simOrder, bucket);
+                        RuntimeRestBindRejectCountForDiagnostics++;
+                        if (!runtimeCapacityModule.IsSealed)
+                        {
+                            Debug.LogError(
+                                $"[SimulationWorld] Runtime rest bind failed; registration rejected: " +
+                                $"Slot={runtimeSlot}, StableId={registeredEntity.StableId}, " +
+                                $"Type={registeredEntity.GetType().Name}");
+                        }
                         return;
                     }
                 }
@@ -625,11 +699,15 @@ namespace NTSD.Simulation
                         requestedStableId == int.MaxValue)
                     {
                         RollbackRuntimeSlotRegistration(registeredEntity, runtimeSlot);
-                        if (bucket.items.Count == 0)
-                            _buckets.Remove(simOrder);
-                        Debug.LogError(
-                            $"[SimulationWorld] StableId registration rejected: " +
-                            $"StableId={requestedStableId}, Type={registeredEntity.GetType().Name}");
+                        objectBucketRegistry.RemoveIfEmpty(simOrder, bucket);
+                        StableIdRegistrationRejectCountForDiagnostics++;
+                        if (!runtimeCapacityModule.IsSealed)
+                        {
+                            Debug.LogError(
+                                $"[SimulationWorld] StableId registration rejected: " +
+                                $"StableId={requestedStableId}, " +
+                                $"Type={registeredEntity.GetType().Name}");
+                        }
                         return;
                     }
 
@@ -682,7 +760,9 @@ namespace NTSD.Simulation
         {
             if (obj == null)
             {
-                Debug.LogError("[SimulationWorld] Cannot unregister null object");
+                MissingUnregisterCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                    Debug.LogError("[SimulationWorld] Cannot unregister null object");
                 return;
             }
 
@@ -722,32 +802,37 @@ namespace NTSD.Simulation
         private void UnregisterImmediate(ISimObject obj)
         {
             int bucketKey = obj.SimOrder;
-            _buckets.TryGetValue(bucketKey, out Bucket bucket);
+            _buckets.TryGetValue(bucketKey, out SimulationObjectBucket bucket);
             if (bucket == null || !bucket.items.Contains(obj))
             {
                 bucket = null;
-                List<int> bucketKeys = GetBucketKeySnapshot();
-                if (bucketKeys != null)
+                for (int bucketIndex = 0;
+                     bucketIndex < objectBucketRegistry.OrderedCount;
+                     bucketIndex++)
                 {
-                    for (int i = 0; i < bucketKeys.Count; i++)
+                    SimulationObjectBucket candidateBucket =
+                        objectBucketRegistry.GetOrderedBucket(bucketIndex);
+                    if (candidateBucket == null ||
+                        !candidateBucket.items.Contains(obj))
                     {
-                        int candidateKey = bucketKeys[i];
-                        if (!_buckets.TryGetValue(candidateKey, out Bucket candidateBucket) ||
-                            !candidateBucket.items.Contains(obj))
-                        {
-                            continue;
-                        }
-
-                        bucketKey = candidateKey;
-                        bucket = candidateBucket;
-                        break;
+                        continue;
                     }
+
+                    bucketKey = candidateBucket.SimOrder;
+                    bucket = candidateBucket;
+                    break;
                 }
             }
 
             if (bucket == null)
             {
-                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
+                MissingUnregisterCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                {
+                    Debug.LogWarning(
+                        $"[SimulationWorld] Object not found in buckets: " +
+                        $"CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
+                }
                 return;
             }
 
@@ -760,15 +845,20 @@ namespace NTSD.Simulation
 
             if (!bucket.items.Remove(obj))
             {
-                Debug.LogWarning($"[SimulationWorld] Object not found in buckets: CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
+                MissingUnregisterCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                {
+                    Debug.LogWarning(
+                        $"[SimulationWorld] Object not found in buckets: " +
+                        $"CurrentSimOrder={obj.SimOrder}, StableId={obj.StableId}");
+                }
                 return;
             }
 
             bucket.dirty = true;
             obj.OnRemoved(_context);
 
-            if (bucket.items.Count == 0)
-                _buckets.Remove(bucketKey);
+            objectBucketRegistry.RemoveIfEmpty(bucketKey, bucket);
 
             if (EnableRegistryLifecycleLoggingForDiagnostics)
             {
@@ -983,6 +1073,8 @@ namespace NTSD.Simulation
         {
             if (minimumCapacity <= RuntimeSlotCapacity)
                 return true;
+            if (!runtimeCapacityModule.TryAuthorizeGrowth())
+                return false;
             if (activeRuntimeProfile != BattleRuntimeProfile.DesktopExtended ||
                 minimumCapacity > int.MaxValue)
             {
@@ -1013,8 +1105,7 @@ namespace NTSD.Simulation
 
         private void ReleasePendingDestroySlots()
         {
-            long mutationEpoch =
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+            long mutationEpoch = runtimeMutationTracker.PendingFlushDestroyEpoch;
             ulong occupancyEpoch = _runtimeSlots.OccupancyEpoch;
             if (!ForceLegacyPendingDestroyScanForDiagnostics &&
                 pendingDestroyScanCacheValid &&
@@ -1026,43 +1117,31 @@ namespace NTSD.Simulation
             }
 
             PendingDestroyFullScanCount++;
-            List<int> bucketKeys = GetBucketKeySnapshot();
-            if (bucketKeys != null)
+            for (int slot = 0; slot < _runtimeSlots.LogicalCapacity; slot++)
             {
-                for (int keyIndex = 0; keyIndex < bucketKeys.Count; keyIndex++)
+                LF2Entity entity = _runtimeSlots.GetCurrentOccupant(slot);
+                if (entity == null)
+                    continue;
+
+                PendingDestroyVisitedEntityCount++;
+                if (entity.Runtime == null ||
+                    !entity.Runtime.PendingFlushDestroy)
                 {
-                    int key = bucketKeys[keyIndex];
-                    if (!_buckets.TryGetValue(key, out Bucket bucket))
-                        continue;
+                    continue;
+                }
 
-                    for (int itemIndex = 0; itemIndex < bucket.items.Count; itemIndex++)
-                    {
-                        if (bucket.items[itemIndex] is not LF2Entity entity)
-                            continue;
+                if (entity.Runtime.SlotIndex != slot)
+                    continue;
 
-                        PendingDestroyVisitedEntityCount++;
-                        if (entity.Runtime == null ||
-                            !entity.Runtime.PendingFlushDestroy)
-                        {
-                            continue;
-                        }
-
-                        int slot = entity.Runtime.SlotIndex;
-                        if (slot < 0 || slot >= RuntimeSlotCapacity)
-                            continue;
-
-                        if (object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity) &&
-                            ReleaseRuntimeSlotAndClearPresentationBinding(entity) &&
-                            !_pendingSlotReleasedDestroy.Contains(entity))
-                        {
-                            _pendingSlotReleasedDestroy.Add(entity);
-                        }
-                    }
+                if (ReleaseRuntimeSlotAndClearPresentationBinding(entity) &&
+                    !_pendingSlotReleasedDestroy.Contains(entity))
+                {
+                    _pendingSlotReleasedDestroy.Add(entity);
                 }
             }
 
             long completedMutationEpoch =
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+                runtimeMutationTracker.PendingFlushDestroyEpoch;
             pendingDestroyScanMutationEpoch = completedMutationEpoch;
             pendingDestroyScanOccupancyEpoch = _runtimeSlots.OccupancyEpoch;
             pendingDestroyScanCacheValid = mutationEpoch == completedMutationEpoch;
@@ -1076,19 +1155,27 @@ namespace NTSD.Simulation
             if (slot >= RuntimeSlotCapacity ||
                 !object.ReferenceEquals(_runtimeSlots.GetCurrentOccupant(slot), entity))
             {
-                Debug.LogError(
-                    $"[SimulationWorld] Refusing runtime slot release without the matching claim: " +
-                    $"EntitySlot={slot}, StableId={entity.StableId}");
+                RuntimeSlotReleaseRejectCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                {
+                    Debug.LogError(
+                        $"[SimulationWorld] Refusing runtime slot release without the matching claim: " +
+                        $"EntitySlot={slot}, StableId={entity.StableId}");
+                }
                 return false;
             }
 
             bool wasBound = entity.ItrRest?.IsBound == true;
             if (wasBound && entity.ItrRest.BoundVictimSlot != slot)
             {
-                Debug.LogError(
-                    $"[SimulationWorld] Refusing runtime slot release with a mismatched rest binding: " +
-                    $"EntitySlot={slot}, BoundVictimSlot={entity.ItrRest.BoundVictimSlot}, " +
-                    $"StableId={entity.StableId}");
+                RuntimeSlotReleaseRejectCountForDiagnostics++;
+                if (!runtimeCapacityModule.IsSealed)
+                {
+                    Debug.LogError(
+                        $"[SimulationWorld] Refusing runtime slot release with a mismatched rest binding: " +
+                        $"EntitySlot={slot}, BoundVictimSlot={entity.ItrRest.BoundVictimSlot}, " +
+                        $"StableId={entity.StableId}");
+                }
                 return false;
             }
             if (wasBound && !entity.ItrRest.Unbind(false))
@@ -1098,9 +1185,13 @@ namespace NTSD.Simulation
             {
                 if (wasBound && !entity.ItrRest.Bind(_runtimeRestStore, slot, false))
                 {
-                    Debug.LogError(
-                        $"[SimulationWorld] Failed to restore runtime rest binding after slot release rollback: " +
-                        $"Slot={slot}, StableId={entity.StableId}");
+                    RuntimeSlotReleaseRejectCountForDiagnostics++;
+                    if (!runtimeCapacityModule.IsSealed)
+                    {
+                        Debug.LogError(
+                            $"[SimulationWorld] Failed to restore runtime rest binding after slot release rollback: " +
+                            $"Slot={slot}, StableId={entity.StableId}");
+                    }
                 }
                 return false;
             }
@@ -1117,6 +1208,7 @@ namespace NTSD.Simulation
                     StructuralSourceKind(entity),
                     slot);
             }
+            entity.Runtime?.BindWorldMutationTracker(null);
             entity.SetRuntimeSlotIndex(-1);
             return true;
         }
@@ -1150,6 +1242,7 @@ namespace NTSD.Simulation
                     entity.Renderer);
                 _runtimeSlots.Release(runtimeSlot, entity);
             }
+            entity?.Runtime?.BindWorldMutationTracker(null);
             entity?.SetRuntimeSlotIndex(-1);
         }
 
@@ -1182,12 +1275,15 @@ namespace NTSD.Simulation
             get
             {
                 int count = 0;
-                var bucketKeys = GetBucketKeySnapshot();
-                if (bucketKeys == null) return 0;
-
-                foreach (int simOrder in bucketKeys)
+                for (int bucketIndex = 0;
+                     bucketIndex < objectBucketRegistry.OrderedCount;
+                     bucketIndex++)
                 {
-                    if (!_buckets.TryGetValue(simOrder, out Bucket bucket)) continue;
+                    SimulationObjectBucket bucket =
+                        objectBucketRegistry.GetOrderedBucket(bucketIndex);
+                    if (bucket == null)
+                        continue;
+
                     for (int i = 0; i < bucket.items.Count; i++)
                     {
                         ISimObject obj = bucket.items[i];

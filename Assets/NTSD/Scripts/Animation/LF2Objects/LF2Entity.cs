@@ -22,15 +22,65 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public abstract class LF2Entity : ILF2Entity
     {
-        protected static readonly List<LF2Entity> N30HistoryGateScratch = new List<LF2Entity>(32);
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
+        private readonly CharacterMechanics sharedCharacterDatMechanics =
+            new CharacterMechanics();
         private int requiredRuntimeSlot = -1;
         private SimulationWorld dataObjectTypeCacheWorld;
         private int dataObjectTypeCacheTick = -1;
         private int dataObjectTypeCacheObjectId = -1;
         private ObjectDefinition dataObjectTypeCacheDefinition;
         private int dataObjectTypeCacheFallback;
-        internal static System.Func<int, LF2CharacterDataWrapper> RuntimeCharacterConfigResolverOverride;
+        private readonly LF2HitCountersModule characterDatHitCounters;
+        private readonly LF2CharacterDatHitResolver characterDatHitResolver;
+        private readonly LF2CharacterDatInteractionResolver characterDatInteractionResolver;
+        private static readonly (
+            int oid,
+            int frameId,
+            int xOff,
+            int yOff,
+            int zOff,
+            double vzDelta,
+            int facing)[] HitFa11SpawnCatalog =
+        {
+            (211, 109,    0,    0,  0,  0.0, 2),
+            (221,  81,    0, -100,  0,  0.0, 2),
+            (212, 100,   80,   -3,  0, -7.0, 0),
+            (212, 100,  100,   -3,  0,  0.0, 0),
+            (212, 100,   80,   -3,  0,  7.0, 0),
+            (212, 100,  -80,   -3,  0, -7.0, 1),
+            (212, 100, -100,   -3,  0,  0.0, 1),
+            (212, 100,  -80,   -3,  0,  7.0, 1),
+            (211,  50,  -30,   -1, -5,  0.0, 1),
+            (211,  50,   30,   -1, -5,  0.0, 1),
+            (211,  50,  -30,   -1,  2,  0.0, 0),
+            (211,  50,   30,   -1,  2,  0.0, 0),
+            (211,  50,    0,   -1, -9,  0.0, 1),
+            (211,  50,    0,   -1,  6,  0.0, 0),
+        };
+        protected LF2Entity()
+        {
+            characterDatHitCounters = new LF2HitCountersModule();
+            characterDatHitCounters.BindRuntime(Runtime);
+            characterDatHitResolver = new LF2CharacterDatHitResolver(
+                this,
+                characterDatHitCounters);
+            characterDatInteractionResolver = new LF2CharacterDatInteractionResolver(this);
+        }
+
+        internal bool TryResolveCharacterDatHit(
+            InteractionArea itr,
+            LF2Entity attacker,
+            Vector3 attackerPos,
+            PhysicsState.BattleVolume volume)
+        {
+            return characterDatHitResolver.ResolveHit(itr, attacker, attackerPos, volume);
+        }
+
+        internal void ConsumeCharacterDatInteractionCandidates()
+        {
+            characterDatInteractionResolver.TryConsumeUnifiedStep7CandidateSequence();
+        }
 
 
         /// <summary>对象名称。</summary>
@@ -104,7 +154,8 @@ namespace NTSD.Animation.LF2Objects
 
         public PhysicsState PS { get; protected set; } = new PhysicsState();
 
-        private static readonly DeterministicRng FallbackRng = new DeterministicRng(0x4E545344u);
+        private readonly DeterministicRng fallbackRng =
+            new DeterministicRng(0x4E545344u);
 
         /// <summary>C++ release 实体类型值。</summary>
         public virtual int ReleaseEntityType => ObjectType;
@@ -144,6 +195,7 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>成功注册后所属的战斗世界。</summary>
         private SimulationWorld registeredWorld;
+        private RuntimeCharacterConfigResolver selfCheckCharacterConfigResolver;
 
         public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
 
@@ -343,7 +395,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected bool IsPpModeEnabled()
         {
-            return Match?.PpMode ?? NTSDGlobal.MPEnabled;
+            return Match?.PpMode ?? true;
         }
 
         public int HitCount
@@ -765,6 +817,8 @@ namespace NTSD.Animation.LF2Objects
                 int frame = BrokenWeaponFragmentFrame(sourceOid, i);
 
                 var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
                 task.opoint = new ObjectPoint
                 {
                     oid = 999,
@@ -864,7 +918,7 @@ namespace NTSD.Animation.LF2Objects
         {
             var rng = Match?.Rng;
             if (rng != null) return rng.NextInt(minInclusive, maxExclusive);
-            return FallbackRng.NextInt(minInclusive, maxExclusive);
+            return fallbackRng.NextInt(minInclusive, maxExclusive);
         }
 
         /// <summary>检查 itr arest 冷却是否允许攻击。</summary>
@@ -1288,12 +1342,11 @@ namespace NTSD.Animation.LF2Objects
             if (factory == null || referencePool == null || Match == null)
                 return;
 
-            var enemies = new List<int>(8);
-            CollectActiveEnemyCharacterSlots(enemies);
+            int enemyCount = CountActiveEnemyCharacters();
 
             int count = 3;
-            if (enemies.Count > 4)
-                count = (enemies.Count - 3) / 2 + 3;
+            if (enemyCount > 4)
+                count = (enemyCount - 3) / 2 + 3;
 
             if (ResolveRuntimeCharacterConfig(225)?.characterData == null)
             {
@@ -1310,11 +1363,13 @@ namespace NTSD.Animation.LF2Objects
                 double directVx = RandInt(0, 21) - 11;
                 double directVy = 3.0 - RandInt(0, 24) * 0.25;
                 double directVz = 3.0 - RandInt(0, 24) * 0.25;
-                int ownerSlot = enemies.Count > 0
-                    ? enemies[RandInt(0, enemies.Count)]
+                int ownerSlot = enemyCount > 0
+                    ? FindNthActiveEnemyCharacterSlot(RandInt(0, enemyCount))
                     : GetRuntimeSlotOrNegative(this);
 
                 OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
                 task.opoint = new ObjectPoint
                 {
                     oid = 225,
@@ -1366,9 +1421,6 @@ namespace NTSD.Animation.LF2Objects
             if (factory == null || referencePool == null || Match == null)
                 return;
 
-            var enemies = new List<int>(8);
-            CollectActiveEnemyCharacterSlots(enemies);
-
             int max = hitFa == 9 ? 10 : 7;
             int maxPerLaterPass = hitFa == 9 ? 4 : 0;
             int attemptCount = 0;
@@ -1377,14 +1429,15 @@ namespace NTSD.Animation.LF2Objects
 
             do
             {
-                for (int i = 0; i < enemies.Count; i++)
+                for (int enemySlot = 0;
+                     enemySlot < Match.MaxRuntimeSlotsForServices;
+                     enemySlot++)
                 {
                     if (!(attemptCount < maxPerLaterPass || loopCount == 0))
                         continue;
 
-                    int enemySlot = enemies[i];
                     LF2Entity target = Match.FindEntityByRuntimeSlotForQuery(enemySlot);
-                    if (target == null)
+                    if (!IsActiveEnemyCharacter(target))
                         continue;
 
                     attemptCount++;
@@ -1418,6 +1471,8 @@ namespace NTSD.Animation.LF2Objects
                     }
 
                     OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+                    if (task == null)
+                        return;
                     task.opoint = new ObjectPoint
                     {
                         oid = oid,
@@ -1475,25 +1530,47 @@ namespace NTSD.Animation.LF2Objects
             Runtime.PendingFlushDestroy = true;
         }
 
-        private void CollectActiveEnemyCharacterSlots(List<int> slots)
+        private bool IsActiveEnemyCharacter(LF2Entity candidate)
         {
-            slots.Clear();
-            if (Match == null)
-                return;
+            return !IsDeadLikeFrameLogicTarget(candidate) &&
+                   IsCharacterFrameLogicTarget(candidate) &&
+                   ResolveFrameLogicRelationIdentity(candidate) !=
+                   ResolveFrameLogicRelationIdentity();
+        }
 
-            int selfTeam = ResolveFrameLogicRelationIdentity();
+        private int CountActiveEnemyCharacters()
+        {
+            if (Match == null)
+                return 0;
+
+            int count = 0;
             for (int slot = 0; slot < Match.MaxRuntimeSlotsForServices; slot++)
             {
                 LF2Entity candidate = Match.FindEntityByRuntimeSlotForQuery(slot);
-                if (IsDeadLikeFrameLogicTarget(candidate) ||
-                    !IsCharacterFrameLogicTarget(candidate) ||
-                    ResolveFrameLogicRelationIdentity(candidate) == selfTeam)
-                {
-                    continue;
-                }
-
-                slots.Add(slot);
+                if (IsActiveEnemyCharacter(candidate))
+                    count++;
             }
+
+            return count;
+        }
+
+        private int FindNthActiveEnemyCharacterSlot(int targetOrdinal)
+        {
+            if (Match == null || targetOrdinal < 0)
+                return -1;
+
+            int ordinal = 0;
+            for (int slot = 0; slot < Match.MaxRuntimeSlotsForServices; slot++)
+            {
+                LF2Entity candidate = Match.FindEntityByRuntimeSlotForQuery(slot);
+                if (!IsActiveEnemyCharacter(candidate))
+                    continue;
+                if (ordinal == targetOrdinal)
+                    return slot;
+                ordinal++;
+            }
+
+            return -1;
         }
 
         private int FindFirstAvailableFrameLogicSlot()
@@ -1725,8 +1802,7 @@ namespace NTSD.Animation.LF2Objects
             if (factory == null || referencePool == null)
                 return;
 
-            var enemies = new List<int>(8);
-            CollectActiveEnemyCharacterSlots(enemies);
+            int enemyCount = CountActiveEnemyCharacters();
 
             int freeSlot = FindFirstAvailableFrameLogicSlot();
             if (freeSlot < 0)
@@ -1742,13 +1818,18 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int chosenTarget = enemies.Count == 0
+            int chosenTarget = enemyCount == 0
                 ? GetRuntimeSlotOrNegative(this)
-                : enemies[RandInt(0, enemies.Count)];
+                : FindNthActiveEnemyCharacterSlot(RandInt(0, enemyCount));
 
             int spawnYInt = Runtime.YInt + RandInt(0, 7) - 3;
             double spawnVz = 3.0 - RandInt(0, 24) * 0.25 + Runtime.Vz;
             OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+            if (task == null)
+            {
+                Runtime.PendingFlushDestroy = true;
+                return;
+            }
             task.opoint = new ObjectPoint
             {
                 oid = spawnOid,
@@ -1811,6 +1892,8 @@ namespace NTSD.Animation.LF2Objects
                     continue;
 
                 OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
                 task.opoint = new ObjectPoint
                 {
                     oid = 219,
@@ -1856,27 +1939,9 @@ namespace NTSD.Animation.LF2Objects
             if (factory == null || referencePool == null)
                 return;
 
-            (int oid, int frameId, int xOff, int yOff, int zOff, double vzDelta, int facing)[] spawns =
+            for (int i = 0; i < HitFa11SpawnCatalog.Length; i++)
             {
-                (211, 109,    0,    0,  0,  0.0, 2),
-                (221,  81,    0, -100,  0,  0.0, 2),
-                (212, 100,   80,   -3,  0, -7.0, 0),
-                (212, 100,  100,   -3,  0,  0.0, 0),
-                (212, 100,   80,   -3,  0,  7.0, 0),
-                (212, 100,  -80,   -3,  0, -7.0, 1),
-                (212, 100, -100,   -3,  0,  0.0, 1),
-                (212, 100,  -80,   -3,  0,  7.0, 1),
-                (211,  50,  -30,   -1, -5,  0.0, 1),
-                (211,  50,   30,   -1, -5,  0.0, 1),
-                (211,  50,  -30,   -1,  2,  0.0, 0),
-                (211,  50,   30,   -1,  2,  0.0, 0),
-                (211,  50,    0,   -1, -9,  0.0, 1),
-                (211,  50,    0,   -1,  6,  0.0, 0),
-            };
-
-            for (int i = 0; i < spawns.Length; i++)
-            {
-                var spawn = spawns[i];
+                var spawn = HitFa11SpawnCatalog[i];
                 if (ResolveRuntimeCharacterConfig(spawn.oid)?.characterData == null)
                     continue;
 
@@ -1891,6 +1956,8 @@ namespace NTSD.Animation.LF2Objects
                 int spawnY = Runtime.YInt + spawn.yOff;
                 int spawnZ = Runtime.ZInt + spawn.zOff;
                 OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
                 task.opoint = new ObjectPoint
                 {
                     oid = spawn.oid,
@@ -1958,6 +2025,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             task.opoint = new ObjectPoint
             {
                 oid = cloneOid,
@@ -2066,14 +2135,13 @@ namespace NTSD.Animation.LF2Objects
 
             if (needScan)
             {
-                var allObjects = new List<LF2Entity>(16);
-                Match.GetAllEntities(allObjects);
-
                 int bestDist = 10000;
                 int bestSlot = -1;
-                for (int i = 0; i < allObjects.Count; i++)
+                for (int slot = 0;
+                     slot < Match.MaxRuntimeSlotsForServices;
+                     slot++)
                 {
-                    LF2Entity obj = allObjects[i];
+                    LF2Entity obj = Match.FindEntityByRuntimeSlotForQuery(slot);
                     if (obj == null || ReferenceEquals(obj, this))
                         continue;
                     if (IsDeadLikeFrameLogicTarget(obj))
@@ -3537,9 +3605,19 @@ namespace NTSD.Animation.LF2Objects
 
             int slotIndex = Runtime?.SlotIndex ?? -1;
             OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             ConfigureLateN30SpawnTask(task, slotIndex, frameVal);
 
-            LF2Entity spawned = factory.CreateObjectImmediate(task);
+            LF2Entity spawned;
+            try
+            {
+                spawned = factory.CreateObjectImmediate(task);
+            }
+            finally
+            {
+                LF2ReferencePool.Instance.Recycle(task);
+            }
             if (spawned == null)
                 return;
 
@@ -3619,38 +3697,30 @@ namespace NTSD.Animation.LF2Objects
             int spawnZ = spawned?.Runtime?.ZInt ?? Runtime?.ZInt ?? 0;
 
             bool enabled = frameVal == 102;
-            N30HistoryGateScratch.Clear();
-            world.GetAllEntities(N30HistoryGateScratch);
-
-            try
+            for (int slot = 0;
+                 slot < world.MaxRuntimeSlotsForServices;
+                 slot++)
             {
-                for (int i = 0; i < N30HistoryGateScratch.Count; i++)
+                LF2Entity teammate = world.FindEntityByRuntimeSlotForQuery(slot);
+                if (teammate == null || teammate.Runtime == null || teammate.Health == null)
+                    continue;
+                if (teammate.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+                    continue;
+                if (teammate.Health.HP <= 0)
+                    continue;
+                int teammateTeam = frameVal == 100 ? teammate.RelationTeam : ResolveN30HistoryGateTeam(teammate);
+                if (teammateTeam != sourceTeam)
+                    continue;
+
+                if (frameVal == 100)
                 {
-                    LF2Entity teammate = N30HistoryGateScratch[i];
-                    if (teammate == null || teammate.Runtime == null || teammate.Health == null)
-                        continue;
-                    if (teammate.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                        continue;
-                    if (teammate.Health.HP <= 0)
-                        continue;
-                    int teammateTeam = frameVal == 100 ? teammate.RelationTeam : ResolveN30HistoryGateTeam(teammate);
-                    if (teammateTeam != sourceTeam)
-                        continue;
-
-                    if (frameVal == 100)
-                    {
-                        teammate.Runtime.Unk3FC = spawnX + (world.Rng.NextRaw() % 0x51) - 0x28;
-                        teammate.Runtime.Unk400 = spawnZ + (world.Rng.NextRaw() % 0x51) - 0x28;
-                    }
-                    else
-                    {
-                        teammate.Runtime.SetInputHistoryGate(enabled);
-                    }
+                    teammate.Runtime.Unk3FC = spawnX + (world.Rng.NextRaw() % 0x51) - 0x28;
+                    teammate.Runtime.Unk400 = spawnZ + (world.Rng.NextRaw() % 0x51) - 0x28;
                 }
-            }
-            finally
-            {
-                N30HistoryGateScratch.Clear();
+                else
+                {
+                    teammate.Runtime.SetInputHistoryGate(enabled);
+                }
             }
         }
 
@@ -3979,6 +4049,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             task.opoint = new ObjectPoint
             {
                 oid = 999,
@@ -4098,11 +4170,23 @@ namespace NTSD.Animation.LF2Objects
             RefreshRuntimeSnapshot();
         }
 
-        internal static LF2CharacterDataWrapper ResolveRuntimeCharacterConfig(int targetObjectId)
+        internal void SetRuntimeCharacterConfigResolverForSelfCheck(
+            RuntimeCharacterConfigResolver resolver)
         {
-            LF2CharacterDataWrapper overrideWrapper = RuntimeCharacterConfigResolverOverride?.Invoke(targetObjectId);
-            if (overrideWrapper != null)
-                return overrideWrapper;
+            selfCheckCharacterConfigResolver = resolver;
+        }
+
+        internal RuntimeCharacterConfigResolver
+            RuntimeCharacterConfigResolverForSelfCheck =>
+                selfCheckCharacterConfigResolver;
+
+        internal LF2CharacterDataWrapper ResolveRuntimeCharacterConfig(int targetObjectId)
+        {
+            RuntimeCharacterConfigResolver resolver =
+                selfCheckCharacterConfigResolver ??
+                registeredWorld?.RuntimeCharacterConfigs;
+            if (resolver != null)
+                return resolver.Resolve(targetObjectId);
 
             return CharacterAnimtorManager.Instance?.GetCharacterConfig(targetObjectId);
         }
@@ -4510,6 +4594,32 @@ namespace NTSD.Animation.LF2Objects
             Runtime.RenderOffsetX = 0f;
         }
 
+        /// <summary>
+        /// Resets the logic-only reference components that are owned for the complete
+        /// lifetime of a pooled entity. Presentation bindings are deliberately excluded:
+        /// an in-place formal Entity::reset (for example oid 51 splitting back to 8/7)
+        /// must preserve its renderer and sprite catalog. LF2ObjectRenderer.ResetState
+        /// owns the separate pool-release presentation reset.
+        /// </summary>
+        protected void ResetReusableRuntimeComponents()
+        {
+            PS?.Reset();
+
+            if (Frame != null)
+            {
+                Frame.PN = 0;
+                Frame.Prev = 0;
+                Frame.N = 0;
+                Frame.D = null;
+                Frame.Prev2 = 0;
+                Frame.Prev2D = null;
+            }
+
+            Effect?.Reset();
+            ItrRest?.Reset();
+            Trans?.Reset();
+        }
+
         public void ApplyInitialRuntimePosition(OPointCreateTask task)
         {
             if (task == null)
@@ -4880,15 +4990,15 @@ namespace NTSD.Animation.LF2Objects
 
         private void PropagateCpointThrowTransformToOwnedObjects(LF2CharacterDataWrapper wrapper, int targetObjectId)
         {
-            var objects = new List<LF2Entity>();
-            Match?.GetAllEntities(objects);
             int selfSlotIndex = Runtime?.SlotIndex ?? -1;
-            if (selfSlotIndex < 0)
+            if (Match == null || selfSlotIndex < 0)
                 return;
 
-            for (int i = 0; i < objects.Count; i++)
+            for (int slot = 0;
+                 slot < Match.MaxRuntimeSlotsForServices;
+                 slot++)
             {
-                LF2Entity entity = objects[i];
+                LF2Entity entity = Match.FindEntityByRuntimeSlotForQuery(slot);
                 if (entity == null || entity == this)
                     continue;
                 if (!(Match?.IsActiveForCurrentPassInternal(entity) ?? false))
@@ -5226,21 +5336,16 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             float mass = NTSDGlobal.Default.Machanics.Mass;
-            var mechanics = new CharacterMechanics();
             var context = new CharacterMechanicsContext(
                 Runtime,
                 Frame?.D,
                 GetSpriteWidthPxForCollision(),
                 mass,
                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity,
-                point =>
-                {
-                    SimulationWorld world = Match;
-                    return world == null || world.IsGroundPointWalkable(point);
-                });
+                NTSDGlobal.Gameplay.Gravity);
 
-            MechanicsStepResult stepResult = mechanics.Step(context);
+            MechanicsStepResult stepResult =
+                sharedCharacterDatMechanics.Step(context);
             if (ShouldResolveCharacterLanding(stepResult))
                 ApplySharedCharacterDatLandingIfNeeded(stepResult.verticalVelocityBeforeLanding);
 
@@ -5931,6 +6036,33 @@ namespace NTSD.Animation.LF2Objects
         public void RefreshRuntimeSnapshot()
         {
             RefreshRuntimeFromEntity();
+        }
+
+        /// <summary>
+        /// CharacterInput 只需要把仍由实体组件持有的帧/生命值镜像回 Runtime。
+        /// 输入、速度、朝向、target 与 transition setters 已经直接写 Runtime；这里避免
+        /// 对每个角色重复刷新本 pass 不可能改变的身份、队伍、owner 与统计字段。
+        /// </summary>
+        internal void RefreshRuntimeSnapshotAfterCharacterInput()
+        {
+            if (Runtime == null)
+                return;
+
+            Runtime.Frame = Frame?.N ?? 0;
+            Runtime.WaitCounter = Trans?.WaitCounter ?? 0;
+            Runtime.NextFrame = Trans?.Next ?? 0;
+
+            if (Health == null)
+                return;
+
+            Runtime.HP = Health.HP;
+            Runtime.MP = Health.MP;
+            Runtime.PP = Health.PP;
+            Runtime.PPMax = Health.MaxPP;
+            Runtime.PPBound = Health.PPBound;
+            Runtime.HPLost = Health.HPLost;
+            Runtime.HPBound = Health.HPBound;
+            Runtime.MPMax = Health.MaxMP;
         }
 
         internal bool IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp()

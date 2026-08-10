@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace NTSD.Animation.Rendering
         [SerializeField] private LF2ObjectRenderer ownerRenderer;
 
         private RuntimeEntityHandle runtimeHandle = RuntimeEntityHandle.Invalid;
+        private readonly List<LF2ObjectRenderer> ownerResolveScratch =
+            new List<LF2ObjectRenderer>(2);
 
         public BattleCentralPresentationMountRole Role => role;
         public BattleCentralPresentationMountPurpose Purpose => purpose;
@@ -101,17 +104,21 @@ namespace NTSD.Animation.Rendering
             Transform directParent = transform.parent;
             for (int childIndex = 0; childIndex < directParent.childCount; childIndex++)
             {
-                LF2ObjectRenderer[] renderers =
-                    directParent.GetChild(childIndex).GetComponents<LF2ObjectRenderer>();
-                for (int rendererIndex = 0; rendererIndex < renderers.Length; rendererIndex++)
+                ownerResolveScratch.Clear();
+                directParent.GetChild(childIndex).GetComponents(ownerResolveScratch);
+                for (int rendererIndex = 0; rendererIndex < ownerResolveScratch.Count; rendererIndex++)
                 {
                     if (candidate != null)
+                    {
+                        ownerResolveScratch.Clear();
                         return;
+                    }
 
-                    candidate = renderers[rendererIndex];
+                    candidate = ownerResolveScratch[rendererIndex];
                 }
             }
 
+            ownerResolveScratch.Clear();
             ownerRenderer = candidate;
         }
 

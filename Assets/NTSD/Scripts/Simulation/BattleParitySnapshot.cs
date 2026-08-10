@@ -546,9 +546,59 @@ namespace NTSD.Simulation
         }
     }
 
-    public partial class SimulationWorld
+    internal sealed class BattleParitySnapshotModule
     {
-        public BattleParityFrameSnapshot CaptureParityFrameSnapshot(
+        private readonly SimulationWorld world;
+
+        internal BattleParitySnapshotModule(SimulationWorld world)
+        {
+            this.world = world ?? throw new ArgumentNullException(nameof(world));
+        }
+
+        private const int AuthorityRuntimeSlotCapacity =
+            SimulationWorld.AuthorityRuntimeSlotCapacity;
+
+        private BattleRuntimeProfile RuntimeProfileForServices =>
+            world.RuntimeProfileForServices;
+        private int RuntimeSlotCapacity => world.RuntimeSlotCapacityForDiagnostics;
+        private DeterministicRng Rng => world.Rng;
+        private int[] DamageStats => world.DamageStats;
+        private int[] KillStats => world.KillStats;
+        private int ObjectCount => world.ObjectCount;
+        private RuntimeSlotTable _runtimeSlots => world.RuntimeSlotTableForModules;
+        private RuntimeRestStore _runtimeRestStore => world.RuntimeRestStoreForServices;
+        private BattleRuntimeState Runtime => world.Runtime;
+        private int _cameraVel => world.ReleaseCameraVelocityForServices;
+        private int _cameraX => world.ReleaseCameraX;
+        private bool PpMode => world.PpMode;
+        private List<PendingSoundEvent> PendingSounds => world.PendingSounds;
+
+        private bool IsActiveForCurrentPass(ISimObject value)
+        {
+            return world.IsActiveForCurrentPassInternal(value);
+        }
+
+        private LF2Entity FindEntityByRuntimeSlotIncludingDormant(int runtimeSlot)
+        {
+            return world.FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
+        }
+
+        private NTSDEntityRuntime GetRawRuntimeSlotState(int runtimeSlot)
+        {
+            return world.GetRawRuntimeSlotState(runtimeSlot);
+        }
+
+        private int GetRawRestArest(int attackerSlot)
+        {
+            return _runtimeRestStore.GetARest(attackerSlot);
+        }
+
+        private int GetRawRestVrest(int victimSlot, int attackerSlot)
+        {
+            return _runtimeRestStore.GetVRest(victimSlot, attackerSlot);
+        }
+
+        internal BattleParityFrameSnapshot CaptureParityFrameSnapshot(
             int tickIndex,
             FrameInputSet frameInput = null,
             bool includeFullDomains = false,
@@ -633,7 +683,7 @@ namespace NTSD.Simulation
         /// Captures the capacity-aware checksum used by MobileExtended and
         /// DesktopExtended worlds. It must not be used as a v3 parity trace.
         /// </summary>
-        public BattleExtendedChecksumSnapshot CaptureExtendedChecksumSnapshot(
+        internal BattleExtendedChecksumSnapshot CaptureExtendedChecksumSnapshot(
             int tickIndex,
             FrameInputSet frameInput = null)
         {
@@ -709,7 +759,7 @@ namespace NTSD.Simulation
         /// Unlike the diagnostic parity snapshots, this projection excludes only the
         /// four presentation-finalized hit-record fields.
         /// </summary>
-        public BattleLockstepChecksumSnapshot CaptureLockstepChecksumSnapshot(
+        internal BattleLockstepChecksumSnapshot CaptureLockstepChecksumSnapshot(
             int tickIndex,
             FrameInputSet frameInput = null,
             IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null)

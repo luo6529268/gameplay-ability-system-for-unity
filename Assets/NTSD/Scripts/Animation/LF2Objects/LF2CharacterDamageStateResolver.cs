@@ -1,5 +1,4 @@
 using NTSD.Simulation;
-using NTSD.Tools;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
@@ -26,36 +25,26 @@ namespace NTSD.Animation.LF2Objects
             switch (eventType)
             {
                 case "TU":
-                    Log.Info("[State {0}:TU] ", eventType);
-
                     if (_character.CurrentFrameId == LF2StandardFrames.Rowing ||
                         _character.CurrentFrameId == LF2StandardFrames.RowingBack)
                     {
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", "frame hold");
                         _character.Runtime.Vy = 0f;
                     }
                     return false;
 
                 case "frame":
-                    Log.Info("[State {0}:frame] ", eventType);
-
                     if (_character.CurrentFrameId == LF2StandardFrames.Rowing ||
                         _character.CurrentFrameId == LF2StandardFrames.RowingBack)
                     {
-                        Log.Info("[State {0}:{1}] -> Branch: {2}", 6, "Rowing", "set rowing wait");
                         _character.Trans.SetWait(LF2StateConstants.RowingWaitTime);
                         return true;
                     }
                     return false;
 
                 case "fall_onto_ground":
-                    Log.Info("[State {0}:fall_onto_ground] ", eventType);
-
                     if (_character.CurrentFrameId == LF2StandardFrames.Rowing1 ||
                         _character.CurrentFrameId == LF2StandardFrames.RowingBack1)
                     {
-                        Log.Info("rowing end land");
-                        Log.Info("ImmediateFrame: Frame {0} ({1})", LF2StandardFrames.Crouch, "land to crouch");
                         _character.ImmediateFrame(LF2StandardFrames.Crouch);
                         return true;
                     }
@@ -115,17 +104,17 @@ namespace NTSD.Animation.LF2Objects
             if (curState == LF2States.Burning)
             {
                 _character.BrokenEffectCreate(302);
-                StateFalling("fell_onto_ground", vyBeforeLand);
+                HandleFallingGroundEvent(vyBeforeLand);
                 return;
             }
 
             if (curState == LF2States.Rowing &&
-                StateRowing("fall_onto_ground", vyBeforeLand))
+                StateRowing("fall_onto_ground", null))
             {
                 return;
             }
 
-            StateFalling("fall_onto_ground", vyBeforeLand);
+            HandleFallingGroundEvent(vyBeforeLand);
         }
 
         /// <summary>
@@ -144,7 +133,7 @@ namespace NTSD.Animation.LF2Objects
 
                 case "fell_onto_ground":
                 case "fall_onto_ground":
-                    return HandleFallingGroundEvent(eventData);
+                    return HandleFallingGroundEvent(ResolveLandingVelocity(eventData));
 
                 default:
                     return false;
@@ -379,13 +368,20 @@ namespace NTSD.Animation.LF2Objects
         /// 摔到地面时的最终结算。
         /// 这里决定是弹起、躺地，还是回到普通蹲伏。
         /// </summary>
-        private bool HandleFallingGroundEvent(object eventData)
+        private double ResolveLandingVelocity(object eventData)
         {
             // P0-f-2b B2-1: landing Vy is now double (CharacterMechanics.verticalVelocityBeforeLanding double).
             // Accept double (primary, new path) AND float (defensive: any residual boxed-float caller) so the
             // unbox never silently falls back to Runtime.Vy on a type mismatch. Fallback unchanged otherwise.
-            double vy = eventData is double landedVy ? landedVy
-                        : (eventData is float landedVyF ? landedVyF : _character.Runtime.Vy);
+            return eventData is double landedVy
+                ? landedVy
+                : eventData is float landedVyF
+                    ? landedVyF
+                    : _character.Runtime.Vy;
+        }
+
+        private bool HandleFallingGroundEvent(double vy)
+        {
             _character.Runtime.Y = 0f;
             _character.Runtime.Vy = 0f;
             int curState = _character.GetState();

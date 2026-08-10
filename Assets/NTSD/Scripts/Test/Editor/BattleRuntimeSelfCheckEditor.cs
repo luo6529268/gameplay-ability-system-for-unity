@@ -18,6 +18,8 @@ namespace NTSD.EditorTools
         private const string ResultFile = "Temp/NTSD_BattleRuntimeSelfCheck.result";
         private static bool requestRunInProgress;
         private static bool staleResultDeleteWarningLogged;
+        private static readonly string RequestAbsolutePath = ProjectPath(RequestFile);
+        private static readonly string ResultAbsolutePath = ProjectPath(ResultFile);
 
         static BattleRuntimeSelfCheckEditor()
         {
@@ -37,22 +39,22 @@ namespace NTSD.EditorTools
 
         private static void PollRequest()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
             if (requestRunInProgress)
                 return;
 
-            string requestPath = ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (!File.Exists(RequestAbsolutePath))
             {
                 staleResultDeleteWarningLogged = false;
                 return;
             }
 
             // A pending request invalidates any result left by an earlier run.
-            string resultPath = ProjectPath(ResultFile);
             try
             {
-                if (File.Exists(resultPath))
-                    File.Delete(resultPath);
+                if (File.Exists(ResultAbsolutePath))
+                    File.Delete(ResultAbsolutePath);
                 staleResultDeleteWarningLogged = false;
             }
             catch (Exception ex)
@@ -73,7 +75,7 @@ namespace NTSD.EditorTools
             {
                 try
                 {
-                    File.Delete(requestPath);
+                    File.Delete(RequestAbsolutePath);
                 }
                 catch (Exception ex)
                 {
@@ -111,7 +113,7 @@ namespace NTSD.EditorTools
 
         private static void WriteResult(string content)
         {
-            File.WriteAllText(ProjectPath(ResultFile), content);
+            File.WriteAllText(ResultAbsolutePath, content);
         }
 
         private static string ProjectPath(string relativePath)

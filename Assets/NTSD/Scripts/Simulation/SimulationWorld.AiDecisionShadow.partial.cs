@@ -330,6 +330,7 @@ namespace NTSD.Simulation
         private bool aiUnifiedMoveModeFirst10Valid;
         private AiUnifiedSnapshotExecutionState aiUnifiedSnapshotPublishedState;
         private AiUnifiedSnapshotExecutionState aiUnifiedSnapshotScratchState;
+        private AiUnifiedSnapshotExecutionState aiUnifiedSnapshotStandbyState;
         private AiSoASensingRows aiUnifiedSnapshotLegacySoARows;
         private AiSoASensingRows aiUnifiedSnapshotLegacyDecisionRows;
         private AiDecisionSnapshot aiUnifiedSnapshotLegacySharedSnapshot;
@@ -1076,7 +1077,7 @@ namespace NTSD.Simulation
         private AiDecisionAvailability ValidateAiDecisionIndexedCanonicalCommit(
             LF2Entity self,
             AiDecisionSnapshot snapshot,
-            AiDecisionWitness witness)
+            in AiDecisionWitness witness)
         {
 #if UNITY_INCLUDE_TESTS
             if (aiDecisionIndexedCanonicalPreCommitFailureForSelfCheck !=
@@ -1099,13 +1100,31 @@ namespace NTSD.Simulation
                 return AiDecisionAvailability.EpochMismatch;
             }
             int selfSlot = snapshot.SelfSlot;
-            if (self?.Runtime == null || self.Runtime.SlotIndex != selfSlot ||
-                !TryGetCurrentRuntimeHandle(
-                    selfSlot,
-                    self,
-                    out RuntimeEntityHandle selfHandle) ||
-                selfHandle.Generation != snapshot.SelfGeneration ||
+            bool unifiedFastValidation =
+                AiUnifiedSnapshotExecutionOwnsCurrentPass &&
+                aiUnifiedSnapshotExecutionCommittedThisPass &&
+                aiUnifiedSnapshotPublishedState != null &&
+                ReferenceEquals(
+                    aiUnifiedSnapshotPublishedState.Rows,
+                    rows);
+            if (self?.Runtime == null ||
+                selfSlot < 0 ||
+                selfSlot >= rows.Capacity ||
+                self.Runtime.SlotIndex != selfSlot ||
                 rows.Generation[selfSlot] != snapshot.SelfGeneration)
+            {
+                return AiDecisionAvailability.GenerationMismatch;
+            }
+            if (unifiedFastValidation)
+            {
+                if (aiUnifiedSnapshotPublishedState.FallbackSlots[selfSlot] != self)
+                    return AiDecisionAvailability.GenerationMismatch;
+            }
+            else if (!TryGetCurrentRuntimeHandle(
+                         selfSlot,
+                         self,
+                         out RuntimeEntityHandle selfHandle) ||
+                     selfHandle.Generation != snapshot.SelfGeneration)
             {
                 return AiDecisionAvailability.GenerationMismatch;
             }
@@ -1128,13 +1147,25 @@ namespace NTSD.Simulation
             if (selectedSlot >= 0 && selectedSlot < rows.Capacity &&
                 rows.Included[selectedSlot])
             {
-                RuntimeEntityHandle selectedHandle = new RuntimeEntityHandle(
-                    selectedSlot,
-                    rows.Generation[selectedSlot]);
-                if (!TryResolveRuntimeHandle(
-                        selectedHandle,
-                        out LF2Entity selected) ||
-                    selected?.Runtime == null ||
+                LF2Entity selected;
+                if (unifiedFastValidation)
+                {
+                    selected = aiUnifiedSnapshotPublishedState.FallbackSlots[selectedSlot];
+                }
+                else
+                {
+                    RuntimeEntityHandle selectedHandle = new RuntimeEntityHandle(
+                        selectedSlot,
+                        rows.Generation[selectedSlot]);
+                    if (!TryResolveRuntimeHandle(
+                            selectedHandle,
+                            out selected))
+                    {
+                        return AiDecisionAvailability.GenerationMismatch;
+                    }
+                }
+
+                if (selected?.Runtime == null ||
                     selected.Runtime.StableId != rows.Identity[selectedSlot])
                 {
                     return AiDecisionAvailability.GenerationMismatch;
@@ -1145,9 +1176,9 @@ namespace NTSD.Simulation
 
         private void ApplyAiDecisionIndexedCanonicalCommit(
             NTSDEntityRuntime runtime,
-            AiDecisionWitness witness)
+            in AiDecisionWitness witness)
         {
-            AiDecisionInputState input = witness.Input;
+            ref readonly AiDecisionInputState input = ref witness.Input;
             int[] history = runtime.InputHistory;
             history[0] = input.History0;
             history[1] = input.History1;
@@ -1190,7 +1221,7 @@ namespace NTSD.Simulation
             runtime.Unk3FC = input.Unk3FC;
             runtime.Unk400 = input.Unk400;
 
-            AiDecisionWorldState world = witness.World;
+            ref readonly AiDecisionWorldState world = ref witness.World;
             BattleFlowRuntimeState flow = Runtime.Flow;
             flow.AiDifficulty = world.FlowAiDifficulty;
             flow.AiRand3 = world.FlowRand3;
@@ -1540,16 +1571,38 @@ namespace NTSD.Simulation
                     epoch,
                     AiDecisionAvailability.SelfNotIncluded);
             }
-            if (!TryGetCurrentRuntimeHandle(
-                    selfSlot,
-                    self,
-                    out RuntimeEntityHandle selfHandle) ||
-                rows.Generation[selfSlot] != selfHandle.Generation)
+
+            uint selfGeneration;
+            bool unifiedFastCapture =
+                AiUnifiedSnapshotExecutionOwnsCurrentPass &&
+                aiUnifiedSnapshotPublishedState != null &&
+                ReferenceEquals(aiUnifiedSnapshotPublishedState.Rows, rows);
+            if (unifiedFastCapture)
+            {
+                selfGeneration = rows.Generation[selfSlot];
+                if (selfGeneration == 0 ||
+                    aiUnifiedSnapshotPublishedState.FallbackSlots[selfSlot] != self)
+                {
+                    return ResetRejectedAiDecisionSnapshot(
+                        snapshot,
+                        epoch,
+                        AiDecisionAvailability.GenerationMismatch);
+                }
+            }
+            else if (!TryGetCurrentRuntimeHandle(
+                         selfSlot,
+                         self,
+                         out RuntimeEntityHandle selfHandle) ||
+                     rows.Generation[selfSlot] != selfHandle.Generation)
             {
                 return ResetRejectedAiDecisionSnapshot(
                     snapshot,
                     epoch,
                     AiDecisionAvailability.GenerationMismatch);
+            }
+            else
+            {
+                selfGeneration = selfHandle.Generation;
             }
             if (rows.Identity[selfSlot] != self.Runtime.StableId)
             {
@@ -1567,7 +1620,7 @@ namespace NTSD.Simulation
             }
 
             snapshot.SelfSlot = selfSlot;
-            snapshot.SelfGeneration = selfHandle.Generation;
+            snapshot.SelfGeneration = selfGeneration;
             snapshot.SelfStableId = self.Runtime.StableId;
             snapshot.OccupancyEpoch = epoch;
             snapshot.World = CaptureAiDecisionWorldState();
@@ -2136,7 +2189,7 @@ namespace NTSD.Simulation
                 stage = AiUnifiedSnapshotExceptionStage.Validate;
                 ThrowAiUnifiedSnapshotExceptionForSelfCheck(stage);
                 candidate.MoveModeFirst10Valid = true;
-                if (!ValidateAiUnifiedSnapshotExecutionState(
+                if (!ValidateAiUnifiedSnapshotExecutionPreCommit(
                         candidate,
                         capacity,
                         epoch))
@@ -2192,7 +2245,15 @@ namespace NTSD.Simulation
             AiUnifiedSnapshotExecutionState previous =
                 aiUnifiedSnapshotPublishedState;
             aiUnifiedSnapshotPublishedState = candidate;
-            aiUnifiedSnapshotScratchState = previous;
+            if (previous != null)
+            {
+                aiUnifiedSnapshotScratchState = previous;
+            }
+            else
+            {
+                aiUnifiedSnapshotScratchState = aiUnifiedSnapshotStandbyState;
+                aiUnifiedSnapshotStandbyState = null;
+            }
 
             aiSoASensingRows = candidate.Rows;
             aiDecisionSharedRows = candidate.Rows;
@@ -2282,17 +2343,10 @@ namespace NTSD.Simulation
             int slot = Slot(entity);
             if (slot < 0 || slot >= published.MoveModeFirst10Present.Length)
             {
-                for (int index = 0;
-                     index < published.MoveModeFirst10Present.Length;
-                     index++)
-                {
-                    if (ReferenceEquals(published.FallbackSlots[index], entity))
-                    {
-                        published.MoveModeFirst10Valid = false;
-                        aiMoveModeFirst10Valid = false;
-                        break;
-                    }
-                }
+                // The committed pass already validated slot ownership, generation,
+                // stable id and FallbackSlots[slot] before reaching this observer.
+                // A live entity whose authoritative slot is outside the first-ten
+                // window therefore cannot also own one of those first-ten entries.
                 return;
             }
 
@@ -2319,6 +2373,38 @@ namespace NTSD.Simulation
                 published.MoveModeFirst10Valid = false;
                 aiMoveModeFirst10Valid = false;
             }
+        }
+
+        private bool ValidateAiUnifiedSnapshotExecutionPreCommit(
+            AiUnifiedSnapshotExecutionState candidate,
+            int capacity,
+            ulong epoch)
+        {
+            if (candidate == null ||
+                candidate.ExpectedCapacity != capacity ||
+                candidate.Capacity != capacity ||
+                candidate.Epoch != epoch ||
+                candidate.Rows == null ||
+                candidate.Rows.CapturedOccupancyEpoch != epoch ||
+                candidate.FallbackSlots == null ||
+                candidate.FallbackSlots.Length != capacity ||
+                candidate.SoASensingBoundaryFlags == null ||
+                candidate.SoASensingBoundaryFlags.Length != capacity ||
+                candidate.DecisionBoundaryFlags == null ||
+                candidate.DecisionBoundaryFlags.Length != capacity ||
+                RuntimeSlotCapacity != capacity ||
+                RuntimeSlotOccupancyEpochForServices != epoch ||
+                !candidate.MoveModeFirst10Valid ||
+                !AiSensingKernel.AreIndexesReady(candidate.Rows))
+            {
+                return false;
+            }
+
+            // Capture, index construction and this commit gate all run on the
+            // simulation thread without a callback or yield between them. The
+            // deep validator below remains the self-check/diagnostic oracle;
+            // production does not rescan the runtime slot table a second time.
+            return true;
         }
 
         private bool ValidateAiUnifiedSnapshotExecutionState(
@@ -2873,19 +2959,23 @@ namespace NTSD.Simulation
 
                 int slot = entity.Runtime.SlotIndex;
                 AiSoASensingRows rows = published.Rows;
+                // The unified pass is single-threaded and guarded by the occupancy
+                // epoch above.  The published fallback array is the same slot->entity
+                // table captured for this pass, so reference/generation checks here are
+                // equivalent to another RuntimeSlotTable lookup without reopening the
+                // slot page for every character.
                 if (slot < 0 ||
                     slot >= rows.Capacity ||
                     !rows.Included[slot] ||
-                    !TryGetCurrentRuntimeHandle(
-                        slot,
-                        entity,
-                        out RuntimeEntityHandle handle) ||
-                    rows.Generation[slot] != handle.Generation ||
+                    published.FallbackSlots[slot] != entity ||
+                    rows.Generation[slot] == 0 ||
                     rows.Identity[slot] != entity.Runtime.StableId)
                 {
                     throw new InvalidOperationException(
                         "Unified AI snapshot authority row identity changed after commit.");
                 }
+
+                uint generation = rows.Generation[slot];
 
                 int previousX = rows.X[slot];
                 int previousTeam = rows.Team[slot];
@@ -2897,13 +2987,26 @@ namespace NTSD.Simulation
                 bool wasLivingCharacter = IsLivingCharacterAiSoARow(rows, slot);
                 stage = AiUnifiedSnapshotExceptionStage.RefreshCapture;
                 ThrowAiUnifiedSnapshotExceptionForSelfCheck(stage);
-                if (!TryCaptureAiSoASensingRow(
+                bool forceFullPostRefresh =
+                    ForceFullCharacterInputPostRefreshForDiagnostics;
+#if UNITY_INCLUDE_TESTS
+                forceFullPostRefresh |=
+                    runtimeHooks.CharacterInputPassMutationOverride != null;
+#endif
+                bool captured = forceFullPostRefresh
+                    ? TryCaptureAiSoASensingRow(
                         rows,
                         entity,
                         slot,
-                        handle.Generation,
+                        generation,
                         false,
-                        true))
+                        true)
+                    : TryRefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(
+                        rows,
+                        entity,
+                        slot,
+                        generation);
+                if (!captured)
                 {
                     throw new InvalidOperationException(
                         "Unified AI snapshot authority could not refresh a committed row.");
@@ -2942,23 +3045,10 @@ namespace NTSD.Simulation
                 if (teamProductsChanged)
                     BuildAiSoASensingTeamSummaries(rows);
 
-                RecordAiUnifiedSnapshotMutationWitness(
-                    published.Epoch,
-                    slot,
-                    handle.Generation,
-                    entity.Runtime.StableId,
-                    roleProductsChanged,
-                    teamProductsChanged,
-                    previousX,
-                    rows.X[slot],
-                    previousTeam,
-                    rows.Team[slot],
-                    PackAiUnifiedSnapshotRoleFlags(wasGroundRole, wasAirRole),
-                    PackAiUnifiedSnapshotRoleFlags(isGroundRole, isAirRole),
-                    wasLivingCharacter,
-                    isLivingCharacter,
-                    previousHp,
-                    rows.Hp[slot]);
+                // Mutation witnesses belong to the duplicate shadow comparison.
+                // UnifiedAuthority requires that shadow mode to be disabled, so
+                // recording a witness here only copied diagnostic state that no
+                // consumer can read during this pass.
                 ObserveAiUnifiedSnapshotExecutionMoveModeFirst10Mutation(
                     published,
                     entity);
@@ -2974,6 +3064,45 @@ namespace NTSD.Simulation
                     "Unified AI snapshot authority hard breach after commit; same-tick fallback is forbidden.",
                     exception);
             }
+        }
+
+        private static bool TryRefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(
+            AiSoASensingRows rows,
+            LF2Entity entity,
+            int slot,
+            uint generation)
+        {
+            NTSDEntityRuntime runtime = entity?.Runtime;
+            if (rows == null ||
+                runtime == null ||
+                generation == 0 ||
+                slot < 0 ||
+                slot >= rows.Capacity ||
+                runtime.SlotIndex != slot)
+            {
+                return false;
+            }
+
+            rows.InputHistoryGate[slot] = runtime.HasInputHistoryGate();
+            rows.X[slot] = runtime.XInt;
+            rows.Y[slot] = runtime.YInt;
+            rows.Z[slot] = runtime.ZInt;
+            rows.Hp[slot] = runtime.HP;
+            rows.Hp3[slot] = runtime.HP3;
+            rows.HpMax[slot] = runtime.HPBound;
+            rows.Pp[slot] = runtime.PP;
+            rows.Team[slot] = runtime.RelationTeam;
+            rows.State[slot] = entity.GetState();
+            rows.Frame[slot] = runtime.Frame;
+            rows.LinkState[slot] = runtime.LinkState;
+            rows.KillCount[slot] = runtime.KillCount;
+            rows.CachedTargetSlot[slot] = runtime.Unk360;
+            rows.CoordinateTargetX[slot] = runtime.Unk3FC;
+            rows.Vx[slot] = runtime.Vx;
+            rows.Facing[slot] = runtime.Dir == "left" ? 1 : 0;
+            rows.TargetSlot[slot] = runtime.TargetSlotIndex;
+            rows.HitStop[slot] = runtime.HitStop;
+                return true;
         }
 
         private void RefreshAiUnifiedSnapshotShadowRowAfterCharacterInputCore(

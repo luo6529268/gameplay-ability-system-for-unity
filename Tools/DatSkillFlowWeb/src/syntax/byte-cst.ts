@@ -279,11 +279,29 @@ export function isSignedInt32(value: unknown): value is number {
         && value <= INT32_MAX;
 }
 
+export function parseNativeInt32Token(rawValue: Uint8Array | string): number | undefined {
+    const rawText = typeof rawValue === "string"
+        ? rawValue
+        : Buffer.from(rawValue).toString("latin1");
+    if (!/^[+-]?\d+$/.test(rawText)) return undefined;
+
+    const negative = rawText.startsWith("-");
+    const unsigned = rawText.startsWith("+") || negative ? rawText.slice(1) : rawText;
+    const digits = unsigned.replace(/^0+(?=\d)/, "");
+    const boundary = negative ? "2147483648" : "2147483647";
+    if (digits.length > boundary.length || (digits.length === boundary.length && digits > boundary)) {
+        return negative ? INT32_MIN : INT32_MAX;
+    }
+
+    const parsed = Number(digits);
+    return parsed === 0 ? 0 : negative ? -parsed : parsed;
+}
+
 function parseIntegerPair(raw: Buffer): readonly [number, number] | undefined {
     const match = /^[+-]?\d+[ \t]+[+-]?\d+$/.exec(raw.toString("latin1"));
     if (match === null) return undefined;
-    const values = raw.toString("latin1").split(/[ \t]+/).map((value) => Number(value));
-    if (values.length !== 2 || values.some((value) => !isSignedInt32(value))) return undefined;
+    const values = raw.toString("latin1").split(/[ \t]+/).map(parseNativeInt32Token);
+    if (values.length !== 2 || values.some((value) => value === undefined)) return undefined;
     return [values[0]!, values[1]!] as const;
 }
 

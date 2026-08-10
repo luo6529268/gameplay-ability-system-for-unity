@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MoreMountains.Tools;
 using NTSD.App;
+using NTSD.Animation;
 using NTSD.Animation.Rendering;
 using NTSD.Simulation.Lockstep;
 using NTSD.Simulation.Presentation;
@@ -43,8 +44,11 @@ namespace NTSD.Simulation
         [Tooltip("联机帧同步预留：推进前是否要求该逻辑帧的输入已经准备好。")]
         public bool requireInputFrameReady = false;
 
-        [Tooltip("在每个逻辑 tick 尾部生成 canonical battle snapshot 和分域 checksum。")]
+        [Tooltip("在每个逻辑 tick 尾部生成无分配的 64 位战局校验值。")]
         public bool enableFrameChecksum = false;
+
+        [Tooltip("诊断工具专用：同时生成会分配托管内存的完整 canonical/JSON 快照。正式战斗必须关闭。")]
+        public bool captureFullFrameSnapshotForDiagnostics = false;
 
         public void Normalize()
         {
@@ -52,6 +56,13 @@ namespace NTSD.Simulation
                 maxCatchUpTicksPerFrame = 1;
             if (maxBacklogTicks < maxCatchUpTicksPerFrame) maxBacklogTicks = maxCatchUpTicksPerFrame;
             if (inputDelayTicks < 0) inputDelayTicks = 0;
+        }
+
+        public bool DisableAllocatingDiagnosticsForFormalBattle()
+        {
+            bool changed = captureFullFrameSnapshotForDiagnostics;
+            captureFullFrameSnapshotForDiagnostics = false;
+            return changed;
         }
     }
 
@@ -118,6 +129,8 @@ namespace NTSD.Simulation
 
         private float _timeAccumulator = 0f;
         private int _tickIndex = 0;
+        private ulong _lastFrameChecksumValue;
+        private bool _hasFrameChecksum;
 
         private SimulationWorld _world;
         private NTSDBattleTickSystem _battleTickSystem;
@@ -129,19 +142,32 @@ namespace NTSD.Simulation
             BattleAiExecutionProfile.LegacyCanonical;
 
         private int _sparkRenderFrame = 0;
-        private ISimulationFrameInputProvider _frameInputProvider = new LocalSimulationFrameInputProvider();
-        private FrameInputSet _lastAppliedFrameInput = FrameInputSet.Empty(0);
+        private readonly LocalSimulationFrameInputProvider _localFrameInputProvider =
+            new LocalSimulationFrameInputProvider();
+        private readonly FrameInputSet _emptyLastAppliedFrameInput =
+            FrameInputSet.Empty(0);
+        private ISimulationFrameInputProvider _frameInputProvider;
+        private FrameInputSet _lastAppliedFrameInput;
         private BattleParityFrameSnapshot _lastFrameSnapshot;
         private IBattleChecksumSnapshot _lastChecksumSnapshot;
         private ISimulationSoundPresentationSink _soundPresentationSinkForDiagnostics;
         private long _dispatchedSoundEventCount;
         private long _suppressedSoundEventCount;
+        private long _formalBattleDiagnosticsSuppressedCount;
+        private long _rejectedLatePresentationComponentCreateCount;
+        private readonly BattleRuntimeAllocationGate _allocationGate =
+            new BattleRuntimeAllocationGate();
+        private readonly BattleManagedMemoryBoundary _managedMemoryBoundary =
+            new BattleManagedMemoryBoundary();
+        private BattleManagedMemoryFrameBeginProbe _managedMemoryFrameBeginProbe;
+        private BattleManagedMemoryFrameEndProbe _managedMemoryFrameEndProbe;
 
         protected override void OnSingletonAwake()
         {
             paused = startPaused;
             lockstepSettings ??= new LockstepSimulationSettings();
             lockstepSettings.Normalize();
+            _frameInputProvider ??= _localFrameInputProvider;
 
             CreateProductionWorld();
 
@@ -150,40 +176,48 @@ namespace NTSD.Simulation
 
         private void Update()
         {
-            if (paused || _world == null || lockstepSettings.driveMode == SimulationDriveMode.Manual)
+            _managedMemoryBoundary.BeginDriverUpdate();
+            try
             {
+                if (paused || _world == null || lockstepSettings.driveMode == SimulationDriveMode.Manual)
+                {
+                    RefreshInspectorState();
+                    return;
+                }
+
+                float delta = lockstepSettings.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+                _timeAccumulator += delta;
+
+                int maxBacklogTicks = Mathf.Max(lockstepSettings.maxBacklogTicks, lockstepSettings.maxCatchUpTicksPerFrame);
+                float maxAccumulator = SimulationConstants.SIM_DT * maxBacklogTicks;
+                if (_timeAccumulator > maxAccumulator)
+                    _timeAccumulator = maxAccumulator;
+
+                int catchUpTicks = 0;
+                while (_timeAccumulator >= SimulationConstants.SIM_DT &&
+                       catchUpTicks < lockstepSettings.maxCatchUpTicksPerFrame)
+                {
+                    int nextTickIndex = _tickIndex + 1;
+                    if (!CanAdvanceTick(nextTickIndex))
+                        break;
+
+                    _timeAccumulator -= SimulationConstants.SIM_DT;
+                    bool buildPresentation = ShouldBuildPresentationForCatchUpTick(
+                        lockstepSettings.driveMode,
+                        lockstepSettings.requireInputFrameReady,
+                        _timeAccumulator,
+                        catchUpTicks,
+                        lockstepSettings.maxCatchUpTicksPerFrame);
+                    StepOneTickInternal(nextTickIndex, buildPresentation);
+                    catchUpTicks++;
+                }
+
                 RefreshInspectorState();
-                return;
             }
-
-            float delta = lockstepSettings.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-            _timeAccumulator += delta;
-
-            int maxBacklogTicks = Mathf.Max(lockstepSettings.maxBacklogTicks, lockstepSettings.maxCatchUpTicksPerFrame);
-            float maxAccumulator = SimulationConstants.SIM_DT * maxBacklogTicks;
-            if (_timeAccumulator > maxAccumulator)
-                _timeAccumulator = maxAccumulator;
-
-            int catchUpTicks = 0;
-            while (_timeAccumulator >= SimulationConstants.SIM_DT &&
-                   catchUpTicks < lockstepSettings.maxCatchUpTicksPerFrame)
+            finally
             {
-                int nextTickIndex = _tickIndex + 1;
-                if (!CanAdvanceTick(nextTickIndex))
-                    break;
-
-                _timeAccumulator -= SimulationConstants.SIM_DT;
-                bool buildPresentation = ShouldBuildPresentationForCatchUpTick(
-                    lockstepSettings.driveMode,
-                    lockstepSettings.requireInputFrameReady,
-                    _timeAccumulator,
-                    catchUpTicks,
-                    lockstepSettings.maxCatchUpTicksPerFrame);
-                StepOneTickInternal(nextTickIndex, buildPresentation);
-                catchUpTicks++;
+                _managedMemoryBoundary.ObserveAfterDriverUpdate(_tickIndex);
             }
-
-            RefreshInspectorState();
         }
 
         private void FixedUpdate()
@@ -193,22 +227,46 @@ namespace NTSD.Simulation
 
         private void LateUpdate()
         {
-            if (_world == null)
-                return;
-
-            if (_overlayRenderer == null)
-                _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
-            _overlayRenderer.RenderAll(_world);
-
-            if (_sparkRenderer == null)
+            _managedMemoryBoundary.BeginPresentation();
+            try
             {
-                _sparkRenderer = AppManager.Instance?.SparkRenderer;
-                if (_sparkRenderer == null)
-                    _sparkRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.SparkRenderer>();
-            }
+                if (_world == null)
+                    return;
 
-            _sparkRenderer.RenderAll(_world);
-            _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                if (_overlayRenderer == null)
+                {
+                    if (_managedMemoryBoundary.BattleWindowOpen)
+                    {
+                        _rejectedLatePresentationComponentCreateCount++;
+                        return;
+                    }
+
+                    _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
+                }
+                _overlayRenderer.RenderAll(_world);
+
+                if (_sparkRenderer == null)
+                {
+                    _sparkRenderer = AppManager.Instance?.SparkRenderer;
+                    if (_sparkRenderer == null)
+                    {
+                        if (_managedMemoryBoundary.BattleWindowOpen)
+                        {
+                            _rejectedLatePresentationComponentCreateCount++;
+                            return;
+                        }
+
+                        _sparkRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.SparkRenderer>();
+                    }
+                }
+
+                _sparkRenderer.RenderAll(_world);
+                _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+            }
+            finally
+            {
+                _managedMemoryBoundary.ObserveAfterPresentation(_tickIndex);
+            }
         }
 
         private bool CanAdvanceTick(int tickIndex)
@@ -250,26 +308,34 @@ namespace NTSD.Simulation
                 return false;
 
             int tickIndex = frameInput.TickIndex;
-            _tickIndex = tickIndex;
-            _sparkRenderFrame = tickIndex;
-            if (_world.Runtime?.Flow != null)
+            _managedMemoryBoundary.BeginTick();
+            try
             {
-                _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
+                _tickIndex = tickIndex;
+                _sparkRenderFrame = tickIndex;
+                if (_world.Runtime?.Flow != null)
+                {
+                    _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
+                }
+
+                if (debugLogPerTick)
+                    Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
+
+                _lastAppliedFrameInput = frameInput;
+                _world.ApplyFrameInputSet(frameInput);
+                _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
+                CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
+                DispatchPendingSoundsAfterChecksum();
+
+                if (debugLogPerTick)
+                    Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
+
+                return true;
             }
-
-            if (debugLogPerTick)
-                Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
-
-            _lastAppliedFrameInput = frameInput;
-            _world.ApplyFrameInputSet(frameInput);
-            _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
-            CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
-            DispatchPendingSoundsAfterChecksum();
-
-            if (debugLogPerTick)
-                Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
-
-            return true;
+            finally
+            {
+                _managedMemoryBoundary.ObserveAfterTick(tickIndex);
+            }
         }
 
         private void CaptureFrameChecksumIfNeeded(int tickIndex, FrameInputSet frameInput)
@@ -279,12 +345,25 @@ namespace NTSD.Simulation
                 _lastFrameSnapshot = null;
                 _lastChecksumSnapshot = null;
                 lastFrameChecksum = string.Empty;
+                _lastFrameChecksumValue = 0UL;
+                _hasFrameChecksum = false;
                 return;
             }
 
-            _lastChecksumSnapshot = CaptureSupportedChecksumSnapshot(_world, tickIndex, frameInput);
-            _lastFrameSnapshot = _lastChecksumSnapshot as BattleParityFrameSnapshot;
-            lastFrameChecksum = _lastChecksumSnapshot?.OverallChecksum ?? string.Empty;
+            _lastFrameChecksumValue = _world.CaptureRuntimeChecksum64(tickIndex, frameInput);
+            _hasFrameChecksum = true;
+
+            if (lockstepSettings.captureFullFrameSnapshotForDiagnostics)
+            {
+                _lastChecksumSnapshot = CaptureSupportedChecksumSnapshot(_world, tickIndex, frameInput);
+                _lastFrameSnapshot = _lastChecksumSnapshot as BattleParityFrameSnapshot;
+                lastFrameChecksum = _lastChecksumSnapshot?.OverallChecksum ?? string.Empty;
+                return;
+            }
+
+            _lastFrameSnapshot = null;
+            _lastChecksumSnapshot = null;
+            lastFrameChecksum = string.Empty;
         }
 
         private void DispatchPendingSoundsAfterChecksum()
@@ -365,10 +444,12 @@ namespace NTSD.Simulation
         public SimulationWorld World => _world;
         public int SparkRenderFrame => _sparkRenderFrame;
         public int CurrentTickIndex => _tickIndex;
-        public FrameInputSet LastAppliedFrameInput => _lastAppliedFrameInput;
+        public FrameInputSet LastAppliedFrameInput =>
+            _lastAppliedFrameInput ?? _emptyLastAppliedFrameInput;
         public BattleParityFrameSnapshot LastFrameSnapshot => _lastFrameSnapshot;
         public IBattleChecksumSnapshot LastChecksumSnapshot => _lastChecksumSnapshot;
-        public bool HasFrameChecksum => _lastChecksumSnapshot != null;
+        public bool HasFrameChecksum => _hasFrameChecksum;
+        public ulong LastFrameChecksumValue => _lastFrameChecksumValue;
         public string LastFrameChecksum => lastFrameChecksum;
         public BattlePresentationBackendMode PresentationBackendMode => _presentationBackendMode;
         public BattleAiExecutionProfile AiExecutionProfile => _aiExecutionProfile;
@@ -376,16 +457,114 @@ namespace NTSD.Simulation
             suppressSoundPresentationForDiagnostics;
         public long DispatchedSoundEventCountForDiagnostics => _dispatchedSoundEventCount;
         public long SuppressedSoundEventCountForDiagnostics => _suppressedSoundEventCount;
+        public long FormalBattleDiagnosticsSuppressedCount =>
+            _formalBattleDiagnosticsSuppressedCount;
+        public long RejectedLatePresentationComponentCreateCount =>
+            _rejectedLatePresentationComponentCreateCount;
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
         public LockstepSimulationSettings Settings => lockstepSettings;
 
         public bool IsPaused => paused;
+        public BattleRuntimeAllocationGate AllocationGate => _allocationGate;
+        public BattleManagedMemoryBoundary ManagedMemoryBoundary =>
+            _managedMemoryBoundary;
 
         public void SetPaused(bool value)
         {
             paused = value;
+        }
+
+        public void BeginBattleAllocationSeal()
+        {
+            if (_world == null)
+                return;
+
+            if (lockstepSettings.DisableAllocatingDiagnosticsForFormalBattle())
+                _formalBattleDiagnosticsSuppressedCount++;
+            if (debugLogPerTick)
+            {
+                debugLogPerTick = false;
+                _formalBattleDiagnosticsSuppressedCount++;
+            }
+
+            int maximumBodyCount = 1;
+            int maximumItrCount = 1;
+            CharacterAnimtorManager.Instance?.GetMaximumBattleCollisionRectCounts(
+                out maximumBodyCount,
+                out maximumItrCount);
+
+            _allocationGate.PrepareNonUnityCapacity(_world.MaxRuntimeSlotsForServices);
+            _world.RuntimeCapacity.PrepareForBattle();
+            _world.BattleBuffersForServices.Prepare(
+                _world.MaxRuntimeSlotsForServices,
+                _world.ObjectCount);
+            _world.PrepareBattleHotPathCapacity(
+                maximumBodyCount,
+                maximumItrCount);
+            PreparePresentationHotPathCapacity(_world.MaxRuntimeSlotsForServices);
+            AppManager.Instance?.SoundPlayer?.PrepareBattlePresentationHotPath();
+            _world.PrepareEnabledBattleDiagnosticsHotPath();
+            _world.RuntimeCapacity.Seal();
+            _allocationGate.Seal();
+            _managedMemoryBoundary.CompleteLoadingAndOpenBattleWindow();
+        }
+
+        private void PreparePresentationHotPathCapacity(int entityCapacity)
+        {
+            if (_managedMemoryFrameBeginProbe == null)
+            {
+                _managedMemoryFrameBeginProbe =
+                    gameObject.GetComponent<BattleManagedMemoryFrameBeginProbe>() ??
+                    gameObject.AddComponent<BattleManagedMemoryFrameBeginProbe>();
+            }
+            if (_managedMemoryFrameEndProbe == null)
+            {
+                _managedMemoryFrameEndProbe =
+                    gameObject.GetComponent<BattleManagedMemoryFrameEndProbe>() ??
+                    gameObject.AddComponent<BattleManagedMemoryFrameEndProbe>();
+            }
+            _managedMemoryFrameBeginProbe.Bind(this, _managedMemoryBoundary);
+            _managedMemoryFrameEndProbe.Bind(this, _managedMemoryBoundary);
+
+            if (_overlayRenderer == null)
+            {
+                _overlayRenderer =
+                    gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
+            }
+
+            if (_sparkRenderer == null)
+            {
+                _sparkRenderer = AppManager.Instance?.SparkRenderer;
+                if (_sparkRenderer == null)
+                {
+                    _sparkRenderer =
+                        gameObject.MMGetOrAddComponent<NTSD.Animation.SparkRenderer>();
+                }
+            }
+
+            int normalizedEntityCapacity = Mathf.Max(0, entityCapacity);
+            _overlayRenderer.PrepareCapacity(normalizedEntityCapacity);
+            _sparkRenderer.PrepareCapacity(
+                checked(
+                    normalizedEntityCapacity *
+                    NTSD.Animation.LF2Objects.LF2Entity.MaxHitRecordSlots));
+            BattleSpriteCatalog spriteCatalog =
+                CharacterAnimtorManager.Instance?.SpriteCatalog ?? BattleSpriteCatalog.Empty;
+            BattleCentralRenderSystem.PrepareBattleCapacity(
+                BattlePresentationCoordinator.CalculateMaximumCommandCapacity(
+                    normalizedEntityCapacity),
+                spriteCatalog.Count);
+        }
+
+        public void EndBattleAllocationSeal()
+        {
+            _managedMemoryBoundary.CloseBattleWindow();
+            _allocationGate.Unseal();
+            _world?.RuntimeCapacity.Unseal();
+            _world?.Runtime?.EnsureStageSpawnBuffers().Unseal();
+            BattleCentralRenderSystem.EndBattleCapacitySeal();
         }
 
         public void SetSoundPresentationSuppressedForDiagnostics(bool value)
@@ -410,6 +589,7 @@ namespace NTSD.Simulation
 
         public void ApplyMatchConfig(MatchConfig config)
         {
+            EndBattleAllocationSeal();
             if (!EnsureProductionConfigurationFromSources())
                 return;
 
@@ -443,10 +623,10 @@ namespace NTSD.Simulation
             _frameInputProvider = provider ??
                 (lockstepSettings.driveMode == SimulationDriveMode.LocalFreeRun &&
                  !lockstepSettings.requireInputFrameReady
-                    ? new LocalSimulationFrameInputProvider()
+                    ? _localFrameInputProvider
                     : null);
             _frameInputProvider?.Reset();
-            _lastAppliedFrameInput = FrameInputSet.Empty(_tickIndex);
+            ResetLastAppliedFrameInput(_tickIndex);
         }
 
         public BattleLockstepSession CreateStrictLockstepSession(
@@ -493,6 +673,7 @@ namespace NTSD.Simulation
 
         public void UnbindWorld()
         {
+            EndBattleAllocationSeal();
             if (_world != null)
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
@@ -502,6 +683,7 @@ namespace NTSD.Simulation
 
         public void RecreateWorld()
         {
+            EndBattleAllocationSeal();
             CreateProductionWorld();
             ResetDriverStateAfterWorldCreation();
         }
@@ -553,14 +735,24 @@ namespace NTSD.Simulation
             _tickIndex = 0;
             _timeAccumulator = 0f;
             _sparkRenderFrame = 0;
-            _lastAppliedFrameInput = FrameInputSet.Empty(0);
+            ResetLastAppliedFrameInput(0);
             _lastFrameSnapshot = null;
             _lastChecksumSnapshot = null;
             lastFrameChecksum = string.Empty;
+            _lastFrameChecksumValue = 0UL;
+            _hasFrameChecksum = false;
             _dispatchedSoundEventCount = 0;
             _suppressedSoundEventCount = 0;
+            _formalBattleDiagnosticsSuppressedCount = 0;
+            _rejectedLatePresentationComponentCreateCount = 0;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
+        }
+
+        private void ResetLastAppliedFrameInput(int tickIndex)
+        {
+            _emptyLastAppliedFrameInput.ResetPreallocated(tickIndex, null);
+            _lastAppliedFrameInput = _emptyLastAppliedFrameInput;
         }
 
         private void CreateProductionWorld()
@@ -689,6 +881,7 @@ namespace NTSD.Simulation
 
         protected override void OnSingletonDestroyed()
         {
+            EndBattleAllocationSeal();
             BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = null;

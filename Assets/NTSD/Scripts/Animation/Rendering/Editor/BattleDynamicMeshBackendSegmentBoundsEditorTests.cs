@@ -182,6 +182,32 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(after - before, Is.EqualTo(0));
         }
 
+        [Test]
+        public void PrepareCapacity_PreventsManagedBackendGrowthDuringFirstBuild()
+        {
+            using var backend = new BattleDynamicMeshBackend();
+            var frame = new BattlePresentationFrame();
+            var resolver = new VariantResolver();
+            const int commandCount = 128;
+
+            backend.PrepareCapacity(commandCount);
+            FrameAccess.Reset(frame, 1);
+            for (int index = 0; index < commandCount; index++)
+            {
+                FrameAccess.AddCommand(frame, CreateCommand(
+                    index,
+                    index,
+                    new Vector3(index, index % 11, index % 7),
+                    new Vector2(12f, 16f),
+                    new Vector2(0.5f, 0.5f)));
+            }
+
+            backend.Build(frame, resolver, BattleCentralDrawMode.StrictOrderedDraw);
+
+            Assert.That(backend.Diagnostics.CapacityGrowthCount, Is.Zero);
+            Assert.That(backend.SegmentCount, Is.EqualTo(commandCount));
+        }
+
         private static void AssertAllSegmentBoundsMatchLegacy(
             BattlePresentationFrame frame,
             BattleDynamicMeshBackend backend)

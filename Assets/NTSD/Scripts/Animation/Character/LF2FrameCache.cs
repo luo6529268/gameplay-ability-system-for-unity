@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-
 namespace NTSD.Animation
 {
     /// <summary>
     /// LF2 帧数据缓存（数据层，不继承 Mono）。
-    /// 将 CharacterID/Wrapper 解析后的 frameId 索引与 frameName 分组从 Animator 中剥离，避免 Animator 承担数据管理职责。
+    /// 运行时仅维护无分配的 frameId 数组索引；描述性的 frameName 分组留在
+    /// Loading/Editor 数据层，不再为每次 opoint 生成重复创建 Dictionary/List。
     /// </summary>
     public sealed class LF2FrameCache
     {
@@ -15,8 +13,7 @@ namespace NTSD.Animation
 
         public LF2CharacterDataWrapper Wrapper { get; private set; }
 
-        private LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
-        private readonly Dictionary<string, List<LF2FrameData>> _framesByName = new Dictionary<string, List<LF2FrameData>>();
+        private readonly LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
 
         public void Clear()
         {
@@ -24,7 +21,6 @@ namespace NTSD.Animation
             for (int i = 0; i < _frames.Length; i++)
                 _frames[i] = null;
 
-            _framesByName.Clear();
         }
 
         public void Load(LF2CharacterDataWrapper wrapper)
@@ -44,15 +40,6 @@ namespace NTSD.Animation
                     _frames[frameData.frameId] = frameData;
                 }
 
-                if (_framesByName.TryGetValue(frameData.frameName, out List<LF2FrameData> list))
-                {
-                    list.Add(frameData);
-                }
-                else
-                {
-                    list = new List<LF2FrameData>(5) { frameData };
-                    _framesByName.Add(frameData.frameName, list);
-                }
             }
         }
 
@@ -65,11 +52,6 @@ namespace NTSD.Animation
         public bool HasFrame(int frameId)
         {
             return (uint)frameId < (uint)_frames.Length && _frames[frameId] != null;
-        }
-
-        public bool TryGetFramesByName(string frameName, out List<LF2FrameData> frames)
-        {
-            return _framesByName.TryGetValue(frameName, out frames);
         }
 
         public int GetFirstFrameByState(int targetState)

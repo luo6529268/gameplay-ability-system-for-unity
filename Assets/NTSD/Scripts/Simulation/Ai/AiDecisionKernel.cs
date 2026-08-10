@@ -592,7 +592,7 @@ namespace NTSD.Simulation
             }
         }
 
-        private static Context CreateCoordinateContext(AiDecisionWorldState world)
+        private static Context CreateCoordinateContext(in AiDecisionWorldState world)
         {
             return new Context
             {
@@ -1226,7 +1226,7 @@ namespace NTSD.Simulation
             int targetState,
             bool sameZLane,
             bool specialProximity,
-            AiDecisionWorldState world,
+            in AiDecisionWorldState world,
             ref AiDecisionInputState input,
             ref RngClone rng,
             ref AiDecisionWitness witness)
@@ -1601,9 +1601,9 @@ namespace NTSD.Simulation
 
         private static void Publish(
             ref AiDecisionWitness witness,
-            AiDecisionInputState input,
-            AiDecisionWorldState world,
-            RngClone rng)
+            in AiDecisionInputState input,
+            in AiDecisionWorldState world,
+            in RngClone rng)
         {
             witness.Input = input;
             witness.World = world;

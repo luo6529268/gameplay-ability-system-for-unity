@@ -32,6 +32,7 @@ namespace NTSD.EditorTools
         private const int KnownButtonMask = 0x7F;
 
         private static bool requestRunInProgress;
+        private static readonly string RequestAbsolutePath = ProjectPath(RequestFile);
 
         static BattleParityTraceEditor()
         {
@@ -66,17 +67,18 @@ namespace NTSD.EditorTools
 
         private static void PollRequest()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
             if (requestRunInProgress || EditorApplication.isCompiling || EditorApplication.isUpdating)
                 return;
 
-            string requestPath = ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (!File.Exists(RequestAbsolutePath))
                 return;
 
             requestRunInProgress = true;
             try
             {
-                string json = File.ReadAllText(requestPath, Encoding.UTF8);
+                string json = File.ReadAllText(RequestAbsolutePath, Encoding.UTF8);
                 TraceRequest request = JsonUtility.FromJson<TraceRequest>(json) ?? new TraceRequest();
                 string scenarioPath = string.IsNullOrWhiteSpace(request.scenarioPath)
                     ? DefaultScenario
@@ -94,7 +96,7 @@ namespace NTSD.EditorTools
             {
                 try
                 {
-                    File.Delete(requestPath);
+                    File.Delete(RequestAbsolutePath);
                 }
                 catch (Exception ex)
                 {
@@ -175,6 +177,7 @@ namespace NTSD.EditorTools
             {
                 driveMode = SimulationDriveMode.Manual,
                 enableFrameChecksum = true,
+                captureFullFrameSnapshotForDiagnostics = true,
             });
             driver.SetFrameInputProvider(provider);
             driver.SetPaused(false);

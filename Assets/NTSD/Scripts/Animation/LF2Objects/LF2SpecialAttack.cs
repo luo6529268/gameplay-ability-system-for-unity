@@ -24,6 +24,7 @@ namespace NTSD.Animation.LF2Objects
         // ========== 配置字段 ==========
         private LF2LivingObject _parent;
         private int _lastState = -1;
+        public long InvalidInitTaskTypeCountForDiagnostics { get; private set; }
 
         // ========== 状态机字段 ==========
         public bool NoBounce { get; set; }
@@ -34,23 +35,28 @@ namespace NTSD.Animation.LF2Objects
         public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.SpecialAttack;
         internal override bool UsesDynamicRuntimeSlot() => true;
 
+        public LF2SpecialAttack()
+        {
+            ItrRest = new LF2ItrRestTracker();
+            Sprite = new LF2Sprite();
+            Trans = new FrameTransistor(this);
+            PS.BindRuntime(Runtime);
+            Health.BindRuntime(Runtime);
+        }
+
         public override void RunFrameLogicBeforeAdvance()
             => base.RunFrameLogicBeforeAdvance();
 
         public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
         {
-            PS = new PhysicsState();
             PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
-            Trans = new FrameTransistor(this);
-            Frame = new LF2FrameInfo();
-            Effect = new LF2EffectState();
-            ItrRest = new LF2ItrRestTracker();
-            Sprite = new LF2Sprite();
 
             if (!(taskBase is OPointCreateTask task))
             {
-                Log.Error("[LF2SpecialAttack] Invalid task type");
+                InvalidInitTaskTypeCountForDiagnostics++;
+                if (Match?.RuntimeCapacity.IsSealed != true)
+                    Log.Error("[LF2SpecialAttack] Invalid task type");
                 return;
             }
 
@@ -182,6 +188,8 @@ namespace NTSD.Animation.LF2Objects
             _parent = null;
             TrackerParent = null;
             Runtime.Reset();
+            ResetReusableRuntimeComponents();
+            FrameCache.Clear();
             ObjectId = 0;
             Team = 0;
             Health.HP = 0;
@@ -1206,6 +1214,8 @@ namespace NTSD.Animation.LF2Objects
         {
             if (op.oid <= 0) return;
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             task.opoint = op;
             task.parent = this;
             task.team = Team;
@@ -1220,6 +1230,8 @@ namespace NTSD.Animation.LF2Objects
         {
             var op = new ObjectPoint { oid = oid, action = 0, facing = 0 };
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             task.opoint = op;
             task.parent = source;
             task.team = source?.Team ?? 0;

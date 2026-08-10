@@ -174,6 +174,7 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public abstract class LF2LivingObject : LF2Entity
     {
+        public long InvalidFrameTransitionCountForDiagnostics { get; private set; }
 
         #region 基础模块字段
 
@@ -282,7 +283,8 @@ namespace NTSD.Animation.LF2Objects
         public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
         {
             int prevFn = Frame.N;
-            Log.LogState(Name, "Frame", $"{Frame.N} -> {targetFrameId}");
+            if (Log.StateLogEnabled && Match?.RuntimeCapacity.IsSealed != true)
+                Log.LogState(Name, "Frame", $"{Frame.N} -> {targetFrameId}");
             Frame.PN = Frame.N;
             Frame.N = targetFrameId;
             AttackingCounter = 0;
@@ -290,7 +292,9 @@ namespace NTSD.Animation.LF2Objects
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null)
             {
-                Log.Warn("[LF2Character] Invalid frame ID: {0}", targetFrameId);
+                InvalidFrameTransitionCountForDiagnostics++;
+                if (Match?.RuntimeCapacity.IsSealed != true)
+                    Log.Warn("[LF2Character] Invalid frame ID: {0}", targetFrameId);
                 return;
             }
 

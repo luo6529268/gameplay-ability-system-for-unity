@@ -44,7 +44,14 @@ namespace NTSD.Animation
 
         // ========== 任务队列（统一链表） ==========
         // 对应 C++ release 中一帧内延迟处理的 opoint 创建请求。
-        private readonly LinkedList<LF2TaskBase> _taskQueue = new LinkedList<LF2TaskBase>();
+        private readonly LF2TaskRingBuffer _taskQueue = new LF2TaskRingBuffer(
+            BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+
+        public int PendingTaskCountForDiagnostics => _taskQueue.Count;
+        public int TaskQueueCapacityForDiagnostics => _taskQueue.Capacity;
+        public long RejectedTaskCountForDiagnostics => _taskQueue.RejectedEnqueueCount;
+        public long UnknownTaskTypeCountForDiagnostics { get; private set; }
+        public long MissingObjectDefinitionCountForDiagnostics { get; private set; }
 
         protected override void Awake()
         {
@@ -68,12 +75,29 @@ namespace NTSD.Animation
         // ========== Enqueue API ==========
         public void EnqueueCreateObject(OPointCreateTask task)
         {
-            _taskQueue.AddLast(task);
+            if (!_taskQueue.TryEnqueue(task))
+                LF2ReferencePool.Instance?.Recycle(task);
         }
 
         public void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task)
         {
-            _taskQueue.AddLast(task);
+            if (!_taskQueue.TryEnqueue(task))
+                LF2ReferencePool.Instance?.Recycle(task);
+        }
+
+        public void PrepareTaskQueueCapacity(int capacity)
+        {
+            _taskQueue.EnsureCapacity(capacity);
+        }
+
+        public void SealBattleTaskCapacity()
+        {
+            _taskQueue.SealCapacity();
+        }
+
+        public void UnsealBattleTaskCapacity()
+        {
+            _taskQueue.UnsealCapacity();
         }
 
         // ========== FlushTasks（处理队列） ==========
@@ -86,12 +110,10 @@ namespace NTSD.Animation
             int taskCount = _taskQueue.Count;
             for (int i = 0; i < taskCount; i++)
             {
-                var node = _taskQueue.First;
-                if (node == null)
+                if (!_taskQueue.TryDequeue(out LF2TaskBase task))
                     break;
 
-                _taskQueue.RemoveFirst();
-                ProcessTask(node.Value);
+                ProcessTask(task);
             }
         }
 
@@ -112,7 +134,9 @@ namespace NTSD.Animation
                     break;
 
                 default:
-                    Log.Warn($"[LF2ObjectPointFactory] Unknown task type: {task.TaskType}");
+                    UnknownTaskTypeCountForDiagnostics++;
+                    if (!_taskQueue.CapacitySealed)
+                        Log.Warn($"[LF2ObjectPointFactory] Unknown task type: {task.TaskType}");
                     break;
             }
 
@@ -192,6 +216,8 @@ namespace NTSD.Animation
                 spawnOp.facing = facingMode;
 
                 OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
                 task.opoint = spawnOp;
                 task.parent = spawner;
                 task.team = spawner.Team;
@@ -327,7 +353,9 @@ namespace NTSD.Animation
             var def = GameDataManager.Instance?.GetObjectById(oid);
             if (def == null)
             {
-                Log.Error($"[Factory] Object {oid} not exists");
+                MissingObjectDefinitionCountForDiagnostics++;
+                if (!_taskQueue.CapacitySealed)
+                    Log.Error($"[Factory] Object {oid} not exists");
                 return null;
             }
 
@@ -341,7 +369,11 @@ namespace NTSD.Animation
             var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
             if (EntityModel == null)
             {
-                Log.Error("[Factory] Failed to get object from pool");
+                if (LF2ObjectPool.Instance != null &&
+                    !LF2ObjectPool.Instance.IsBattleCapacitySealed)
+                {
+                    Log.Error("[Factory] Failed to get object from pool");
+                }
                 return null;
             }
 
@@ -349,7 +381,11 @@ namespace NTSD.Animation
             ILF2Object logicObject = CreateLogicObject(objType, oid);
             if (logicObject == null)
             {
-                Log.Error($"[Factory] Failed to get logic object from pool, type={objType}, oid={oid}");
+                if (LF2ReferencePool.Instance != null &&
+                    !LF2ReferencePool.Instance.IsBattleCapacitySealed)
+                {
+                    Log.Error($"[Factory] Failed to get logic object from pool, type={objType}, oid={oid}");
+                }
                 LF2ObjectPool.Instance.Release(EntityModel);
                 return null;
             }
@@ -434,7 +470,9 @@ namespace NTSD.Animation
             var def = GameDataManager.Instance?.GetObjectById(oid);
             if (def == null)
             {
-                Log.Error($"[Factory] Object {oid} not exists");
+                MissingObjectDefinitionCountForDiagnostics++;
+                if (!_taskQueue.CapacitySealed)
+                    Log.Error($"[Factory] Object {oid} not exists");
                 return;
             }
 
@@ -445,19 +483,11 @@ namespace NTSD.Animation
             int objType = def.type;
 
             // C++ release 对齐 0x004225B6：dvz_i = i * 10.0 / (count-1) - 5.0，固定范围 [-5, +5]
-            List<float> vzArray = ListPool<float>.Get();
-            if (task.number == 1)
+            for (int spawnIndex = 0; spawnIndex < task.number; spawnIndex++)
             {
-                vzArray.Add(0f);
-            }
-            else
-            {
-                for (int i = 0; i < task.number; i++)
-                    vzArray.Add(i * 10f / (task.number - 1) - 5f);
-            }
-
-            foreach (float vz in vzArray)
-            {
+                float vz = task.number == 1
+                    ? 0f
+                    : spawnIndex * 10f / (task.number - 1) - 5f;
                 var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
                 if (EntityModel == null) break;
 
@@ -479,6 +509,11 @@ namespace NTSD.Animation
                 spawnedChar?.ModuleInitialize();
 
                 var singleTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                if (singleTask == null)
+                {
+                    ReleaseRejectedSpawn(EntityModel, logicObject);
+                    break;
+                }
                 singleTask.opoint = task.opoint;
                 singleTask.parent = task.parent;
                 singleTask.team   = task.team;
@@ -533,7 +568,6 @@ namespace NTSD.Animation
                 LF2ReferencePool.Instance?.Recycle(singleTask);
             }
 
-            ListPool<float>.Release(vzArray);
         }
 
         /// <summary>

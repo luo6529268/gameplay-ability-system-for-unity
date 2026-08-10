@@ -5,6 +5,7 @@ using NTSD.Animation.LF2Objects;
 using NTSD.Animation.Rendering;
 using NTSD.Tools;
 using NTSD.App;
+using NTSD.Simulation;
 using Cysharp.Threading.Tasks;
 
 namespace NTSD.Animation
@@ -21,7 +22,10 @@ namespace NTSD.Animation
         [SerializeField] private Transform _spriteRoot;
 
         // ========== 池数据结构 ==========
-        private LinkedList<GameObject> _availableObjects;
+        private const int DefaultBattlePoolCapacity =
+            BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity;
+
+        private Queue<GameObject> _availableObjects;
         private HashSet<GameObject> _activeObjects;
         private Dictionary<GameObject, float> _releaseTimeMap;
         private float _lastCheckTime;
@@ -29,6 +33,11 @@ namespace NTSD.Animation
         private Stack<SpriteRenderer> _spritePool;
         private Material _spriteDefaultSharedMaterial;
         private bool _runtimeStateInvalidationLogged;
+        private bool _battleCapacitySealed;
+        private int _preparedObjectCapacity;
+        private int _preparedSpriteCapacity;
+        private long _rejectedObjectFetchCount;
+        private long _rejectedSpriteFetchCount;
 
         // ========== 配置快捷访问 ==========
         private static GameConfig Cfg => GameConfig.Instance;
@@ -48,9 +57,9 @@ namespace NTSD.Animation
             base.Awake();
             NormalizeTransform(transform);
 
-            _availableObjects = new LinkedList<GameObject>();
-            _activeObjects = new HashSet<GameObject>();
-            _releaseTimeMap = new Dictionary<GameObject, float>();
+            _availableObjects = new Queue<GameObject>(DefaultBattlePoolCapacity);
+            _activeObjects = new HashSet<GameObject>(DefaultBattlePoolCapacity);
+            _releaseTimeMap = new Dictionary<GameObject, float>(DefaultBattlePoolCapacity);
             _spritePool = new Stack<SpriteRenderer>(32);
             _runtimeStateInvalidationLogged = false;
 
@@ -59,21 +68,12 @@ namespace NTSD.Animation
 
             for (int i = 0; i < (Cfg?.PoolInitialSize ?? 0); i++)
                 CreateNewObject();
+            _preparedObjectCapacity = _availableObjects.Count;
 
             int spritePoolSize = Cfg?.PoolInitialSpritePoolSize ?? 16;
             for (int i = 0; i < spritePoolSize; i++)
-            {
-                var go = new GameObject("Spark");
-                go.layer = LayerMask.NameToLayer("Battle");
-                Transform parent = _spriteRoot != null ? _spriteRoot : transform;
-                go.transform.SetParent(parent, false);
-                var sr = go.AddComponent<SpriteRenderer>();
-                CaptureOrApplySpriteDefaultMaterial(sr);
-                LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
-                sr.sortingLayerName = "Object";
-                sr.gameObject.SetActive(false);
-                _spritePool.Push(sr);
-            }
+                CreateNewSpriteRenderer();
+            _preparedSpriteCapacity = _spritePool.Count;
         }
 
         // ========== 核心方法 ==========
@@ -132,7 +132,7 @@ namespace NTSD.Animation
                 return null;
             }
 
-            _availableObjects.AddLast(go);
+            _availableObjects.Enqueue(go);
             return r;
         }
 
@@ -145,6 +145,12 @@ namespace NTSD.Animation
             EntityModel = null;
             if (_availableObjects.Count == 0)
             {
+                if (_battleCapacitySealed)
+                {
+                    _rejectedObjectFetchCount++;
+                    return null;
+                }
+
                 if (_activeObjects.Count >= maxPoolSize)
                     Log.Warn("[LF2ObjectPool] Pool over limit: active={0}/{1}, expanding.", _activeObjects.Count, maxPoolSize);
                 CreateNewObject();
@@ -155,8 +161,7 @@ namespace NTSD.Animation
                 }
             }
 
-            go = _availableObjects.First.Value;
-            _availableObjects.RemoveFirst();
+            go = _availableObjects.Dequeue();
 
             Transform activeParent = _activeRoot != null ? _activeRoot : this.transform;
             go.transform.SetParent(activeParent, false);
@@ -179,14 +184,78 @@ namespace NTSD.Animation
         /// </summary>
         public async UniTask PrewarmAsync(int count)
         {
+            if (_battleCapacitySealed || count <= 0)
+                return;
+
+            BattleCentralPresentationMountRegistry.PrepareCapacity(
+                _availableObjects.Count + _activeObjects.Count + count);
             for (int i = 0; i < count; i++)
             {
                 CreateNewObject();
                 // 每实例化 5 个对象让出一帧，确保 Loading 动画不卡顿
                 if (i % 5 == 0) await UniTask.Yield();
             }
+            _preparedObjectCapacity = Mathf.Max(
+                _preparedObjectCapacity,
+                _availableObjects.Count + _activeObjects.Count);
             Log.Info("[LF2ObjectPool] Bulk Prewarm: {0} GameObjects", count);
         }
+
+        public async UniTask PrepareCapacityAsync(int targetObjectCount, int targetSpriteCount)
+        {
+            if (_battleCapacitySealed)
+                return;
+
+            int normalizedObjectTarget = Mathf.Max(0, targetObjectCount);
+            BattleCentralPresentationMountRegistry.PrepareCapacity(normalizedObjectTarget);
+            int currentObjectCount = _availableObjects.Count + _activeObjects.Count;
+            int missingObjects = normalizedObjectTarget - currentObjectCount;
+            if (missingObjects > 0)
+            {
+                _activeObjects.EnsureCapacity(normalizedObjectTarget);
+                _releaseTimeMap.EnsureCapacity(normalizedObjectTarget);
+                for (int i = 0; i < missingObjects; i++)
+                {
+                    CreateNewObject();
+                    if ((i + 1) % 5 == 0)
+                        await UniTask.Yield();
+                }
+            }
+
+            int normalizedSpriteTarget = Mathf.Max(0, targetSpriteCount);
+            int missingSprites = normalizedSpriteTarget - _spritePool.Count;
+            for (int i = 0; i < missingSprites; i++)
+            {
+                CreateNewSpriteRenderer();
+                if ((i + 1) % 5 == 0)
+                    await UniTask.Yield();
+            }
+
+            _preparedObjectCapacity = Mathf.Max(_preparedObjectCapacity, normalizedObjectTarget);
+            _preparedSpriteCapacity = Mathf.Max(_preparedSpriteCapacity, normalizedSpriteTarget);
+        }
+
+        public void SealBattleCapacity()
+        {
+            _battleCapacitySealed = true;
+            BattleCentralPresentationMountRegistry.SealCapacity();
+        }
+
+        public void UnsealBattleCapacity()
+        {
+            _battleCapacitySealed = false;
+            BattleCentralPresentationMountRegistry.UnsealCapacity();
+        }
+
+        public bool IsBattleCapacitySealed => _battleCapacitySealed;
+        public int PreparedObjectCapacity => _preparedObjectCapacity;
+        public int PreparedSpriteCapacity => _preparedSpriteCapacity;
+        public long RejectedObjectFetchCount => _rejectedObjectFetchCount;
+        public long RejectedSpriteFetchCount => _rejectedSpriteFetchCount;
+        public long RejectedMountRegistrationCountForDiagnostics =>
+            BattleCentralPresentationMountRegistry.RejectedMountRegistrationCount;
+        public long RejectedMountOwnerBindingCountForDiagnostics =>
+            BattleCentralPresentationMountRegistry.RejectedOwnerBindingCount;
 
         /// <summary>归还对象到池</summary>
         public void Release(LF2ObjectRenderer r)
@@ -203,7 +272,7 @@ namespace NTSD.Animation
 
             go.SetActive(false);
             _activeObjects.Remove(go);
-            _availableObjects.AddLast(go);
+            _availableObjects.Enqueue(go);
             _releaseTimeMap[go] = Time.time;
         }
 
@@ -224,7 +293,10 @@ namespace NTSD.Animation
                 return;
             }
 
-            int initialSize = Cfg?.PoolInitialSize ?? 0;
+            if (_battleCapacitySealed)
+                return;
+
+            int initialSize = Mathf.Max(Cfg?.PoolInitialSize ?? 0, _preparedObjectCapacity);
             float expireTime = Cfg?.PoolExpireTimeSeconds ?? 120f;
             float checkInterval = Cfg?.PoolCheckIntervalSeconds ?? 10f;
 
@@ -237,28 +309,28 @@ namespace NTSD.Animation
             if (Time.time - _lastCheckTime < checkInterval) return;
             _lastCheckTime = Time.time;
 
-            var node = _availableObjects.First;
-            while (node != null)
+            int availableCount = _availableObjects.Count;
+            int removableCount = availableCount - initialSize;
+            int removedCount = 0;
+            for (int i = 0; i < availableCount; i++)
             {
-                var next = node.Next;
-                var obj = node.Value;
+                GameObject obj = _availableObjects.Dequeue();
 
-                if (_releaseTimeMap.TryGetValue(obj, out float t) &&
+                if (removedCount < removableCount &&
+                    _releaseTimeMap.TryGetValue(obj, out float t) &&
                     Time.time - t >= expireTime)
                 {
-                    _availableObjects.Remove(node);
                     _releaseTimeMap.Remove(obj);
                     Destroy(obj);
-
-                    if (_availableObjects.Count <= initialSize)
-                    {
-                        _releaseTimeMap.Clear();
-                        break;
-                    }
+                    removedCount++;
+                    continue;
                 }
 
-                node = next;
+                _availableObjects.Enqueue(obj);
             }
+
+            if (_availableObjects.Count <= initialSize)
+                _releaseTimeMap.Clear();
         }
 
         // ========== Bucket B：SpriteRenderer 桶 ==========
@@ -268,6 +340,23 @@ namespace NTSD.Animation
         /// 池空时创建新 GameObject 并挂载 SpriteRenderer，统一挂在 _spriteRoot 下（Inspector 指定，null 时挂在本对象上）。
         /// 取出后 SetActive(true)，不注册 SimulationWorld。
         /// </summary>
+        private SpriteRenderer CreateNewSpriteRenderer()
+        {
+            var go = new GameObject("Spark");
+            go.layer = LayerMask.NameToLayer("Battle");
+            Transform parent = _spriteRoot != null ? _spriteRoot : transform;
+            go.transform.SetParent(parent, false);
+            var renderer = go.AddComponent<SpriteRenderer>();
+            CaptureOrApplySpriteDefaultMaterial(renderer);
+            LF2ObjectRenderer.NormalizeSpriteRendererState(
+                renderer,
+                _spriteDefaultSharedMaterial);
+            renderer.sortingLayerName = "Object";
+            renderer.gameObject.SetActive(false);
+            _spritePool.Push(renderer);
+            return renderer;
+        }
+
         public SpriteRenderer GetSprite()
         {
             SpriteRenderer sr;
@@ -277,6 +366,12 @@ namespace NTSD.Animation
             }
             else
             {
+                if (_battleCapacitySealed)
+                {
+                    _rejectedSpriteFetchCount++;
+                    return null;
+                }
+
                 var go = new GameObject("Spark");
                 go.layer = LayerMask.NameToLayer("Battle");
                 // 挂到场景根节点，避免父节点 inactive 导致无法显示

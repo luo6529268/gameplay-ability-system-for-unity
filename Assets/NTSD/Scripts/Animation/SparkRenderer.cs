@@ -80,6 +80,14 @@ namespace NTSD.Animation
             world.BattlePresentation.CompleteLegacyFrame();
         }
 
+        internal void PrepareCapacity(int hitRecordCapacity)
+        {
+            if (hitRecordCapacity > _activeThisFrame.Capacity)
+                _activeThisFrame.Capacity = hitRecordCapacity;
+            if (hitRecordCapacity > _activePools.Capacity)
+                _activePools.Capacity = hitRecordCapacity;
+        }
+
         // ========== 私有实现 ==========
 
         /// <summary>

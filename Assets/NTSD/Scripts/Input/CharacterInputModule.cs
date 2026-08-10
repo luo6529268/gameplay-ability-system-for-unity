@@ -86,8 +86,9 @@ namespace NTSD.Game
 
         public void ModuleUnbind()
         {
-            if (!_inputBound) return;
-            UnbindInputEvents();
+            if (_inputBound)
+                UnbindInputEvents();
+
             _inputBound = false;
             _currentMoveInput = Vector2.zero;
             _lastDirectionMask = FuncKeyMask.None;
@@ -98,6 +99,17 @@ namespace NTSD.Game
             _isAttacking = false;
             _isJumping = false;
             _isDefending = false;
+        }
+
+        public void ResetForPoolReuse()
+        {
+            ModuleUnbind();
+            _explicitInputId = -1;
+            _inputActionMap = null;
+            MoveAction = null;
+            AttackAction = null;
+            JumpAction = null;
+            DefendAction = null;
         }
 
         private void BindActionMap()

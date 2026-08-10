@@ -21,6 +21,24 @@ namespace NTSD.Animation.Rendering.Editor
         private const string ReportWriteMarkerName =
             "NTSD.ProductionEntityStress.WriteReport";
 
+        [MenuItem("NTSD/Battle Diagnostics/Start Live GC Alloc Capture")]
+        private static void StartLiveGcAllocCapture()
+        {
+            ProfilerDriver.ClearAllFrames();
+            ProfilerDriver.profileEditor = true;
+            ProfilerDriver.enabled = true;
+            UnityEngine.Profiling.Profiler.enableAllocationCallstacks = true;
+            Debug.Log("[ProductionEntityStress] Live GC.Alloc capture started.");
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Stop Live GC Alloc Capture and Dump")]
+        private static void StopLiveGcAllocCaptureAndDump()
+        {
+            ProfilerDriver.enabled = false;
+            DumpRecentGcAllocCallstacks();
+            UnityEngine.Profiling.Profiler.enableAllocationCallstacks = false;
+        }
+
         private sealed class AllocationAggregate
         {
             internal string Key;

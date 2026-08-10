@@ -260,6 +260,43 @@ namespace NTSD.Animation
         public int throwvy = 0;
         public int throwinjury = 0;
 
+        public void CopyFrom(InteractionArea source)
+        {
+            if (source == null)
+                throw new System.ArgumentNullException(nameof(source));
+
+            kind = source.kind;
+            x = source.x;
+            y = source.y;
+            w = source.w;
+            h = source.h;
+            zwidth = source.zwidth;
+            dvx = source.dvx;
+            dvy = source.dvy;
+            dvz = source.dvz;
+            injury = source.injury;
+            fall = source.fall;
+            vaction = source.vaction;
+            arest = source.arest;
+            vrest = source.vrest;
+            effect = source.effect;
+            kill = source.kill;
+            bdefend = source.bdefend;
+            rawProperties = source.rawProperties;
+            catchingact = source.catchingact;
+            caughtact = source.caughtact;
+            attacking = source.attacking;
+            throwvz = source.throwvz;
+            catchingact2 = source.catchingact2;
+            caughtact2 = source.caughtact2;
+            respond = source.respond;
+            pickingact = source.pickingact;
+            pickedact = source.pickedact;
+            throwvx = source.throwvx;
+            throwvy = source.throwvy;
+            throwinjury = source.throwinjury;
+        }
+
         public InteractionArea ShallowCopy() => (InteractionArea)MemberwiseClone();
     }
 

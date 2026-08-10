@@ -491,6 +491,39 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void Resolve_ColdPreparedEntityTemplates_AllocateZeroBytesAfterCapacitySeal()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: true);
+            BattleRenderCommand first = fixture.CreateCommand(0);
+            BattleRenderCommand second = fixture.CreateCommand(1);
+
+            var warmupResolver = new BattleCatalogCentralResourceResolver();
+            warmupResolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+            AssertResolved(warmupResolver, first);
+
+            fixture.Resolver.PrepareCapacity(
+                fixture.Catalog.Count,
+                fixture.Catalog.Count);
+            fixture.Resolver.SealCapacity();
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            AssertResolved(fixture.Resolver, first);
+            AssertResolved(fixture.Resolver, second);
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+            Assert.That(fixture.Resolver.SealedCapacityCacheSkips, Is.Zero);
+        }
+
+        [Test]
         public void Resolve_DestroyedEntityAndCommonResourcesInvalidateTheWholeGeneration()
         {
             using var fixture = new ResolverFixture(includeArrayBinding: false);

@@ -22,7 +22,7 @@ export interface ProjectObjectView {
     readonly objectKey: string;
     readonly oid: number;
     readonly type: number;
-    readonly availablePrimary: boolean;
+    readonly displayName: string;
 }
 
 export interface ProjectCatalogView {

@@ -70,7 +70,7 @@ if (startupWorkspace !== undefined) {
         assetRegistry: assetWorkspace,
         dataTxtLogicalPath: cliArguments.dataTxt,
     });
-    process.stdout.write("Preparing DAT project and Native skill previews...\n");
+    process.stdout.write("Preparing DAT catalog and editable character session...\n");
     let lastReported = 0;
     const prepared = await projectDatService.prepareDefaultSession((completed, total) => {
         const percent = total === 0 ? 100 : Math.floor(completed * 100 / total);
@@ -80,9 +80,17 @@ if (startupWorkspace !== undefined) {
         }
     });
     process.stdout.write(
-        `DAT preparation complete: ${prepared.scenarios - prepared.failed}/${prepared.scenarios} previews, `
-        + `${prepared.assets - prepared.assetFailures}/${prepared.assets} assets in ${prepared.elapsedMs} ms.\n`,
+        `DAT project ready in ${prepared.elapsedMs} ms; `
+        + `${prepared.scenarios} verified entry previews continue warming in the background.\n`,
     );
+    void prepared.warmup.then((warmup) => {
+        process.stdout.write(
+            `DAT preparation complete: ${warmup.scenarios - warmup.failed}/${warmup.scenarios} previews, `
+            + `${warmup.assets - warmup.assetFailures}/${warmup.assets} assets in ${warmup.elapsedMs} ms.\n`,
+        );
+    }).catch((error: unknown) => {
+        process.stderr.write(`Background DAT preview warmup failed: ${error instanceof Error ? error.message : String(error)}\n`);
+    });
     const startupRoot = workspace.getStartupRootGrant();
     if (startupRoot === undefined) {
         throw new Error("The project skill service requires an authorized startup workspace.");

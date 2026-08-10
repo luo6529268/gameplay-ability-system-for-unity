@@ -29,10 +29,11 @@ namespace NTSD.Load
         }
         public int MaxTasksPerFrame { get; set; } = 4;
 
-        private readonly LinkedList<NTSD_LoadTask> tasks = new LinkedList<NTSD_LoadTask>();
         private readonly Dictionary<string, object> cache = new Dictionary<string, object>();
         private readonly Dictionary<string, NTSD_ResourceRequest> requests = new Dictionary<string, NTSD_ResourceRequest>();
         private readonly SortedDictionary<int, LinkedList<NTSD_LoadTask>> priorityBuckets = new SortedDictionary<int, LinkedList<NTSD_LoadTask>>();
+        private readonly List<KeyValuePair<int, LinkedList<NTSD_LoadTask>>> priorityBucketSnapshot =
+            new List<KeyValuePair<int, LinkedList<NTSD_LoadTask>>>(8);
         private readonly Dictionary<NTSD_ResourceDomain, DomainStats> _domainStats = new Dictionary<NTSD_ResourceDomain, DomainStats>();
 
         public event System.Action<NTSD_LoadTask> TaskStarted;
@@ -41,6 +42,9 @@ namespace NTSD.Load
         public event System.Action AllTasksCompleted;
 
         private bool isRunning;
+        private int queuedTaskCount;
+
+        public bool HasQueuedTasks => queuedTaskCount > 0;
 
         public void AddTask(NTSD_LoadTask task)
         {
@@ -86,7 +90,6 @@ namespace NTSD.Load
             missStats.TotalTasks++;
             missStats.CacheMisses++;
 
-            tasks.AddLast(task);
             AddToBucket(task);
         }
 
@@ -183,78 +186,97 @@ namespace NTSD.Load
         }
 
 
-        public async UniTask ProcessFrame()
+        public UniTask ProcessFrame()
         {
-            if (isRunning)
+            if (isRunning || queuedTaskCount <= 0)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
-            isRunning = true;
-            int processed = 0;
-
-            foreach (var bucket in EnumerateBucketsDescending())
-            {
-                var list = bucket.Value;
-                if (list == null || list.Count == 0)
-                {
-                    continue;
-                }
-
-                var node = list.Last;
-                while (node != null)
-                {
-                    if (processed >= MaxTasksPerFrame)
-                    {
-                        isRunning = false;
-                        return;
-                    }
-
-                    var task = node.Value;
-                    var prev = node.Previous;
-                    if (task == null)
-                    {
-                        list.Remove(node);
-                        node = prev;
-                        continue;
-                    }
-
-                    if (task.IsCancelled)
-                    {
-                        task.Status = NTSD_LoadTaskStatus.Cancelled;
-                        list.Remove(node);
-                        node = prev;
-                        continue;
-                    }
-
-                    if (task.IsPaused)
-                    {
-                        continue;
-                    }
-
-                    await ExecuteTask(task);
-                    list.Remove(node);
-                    processed++;
-
-                    node = prev;
-                }
-            }
-
-            if (priorityBuckets.Count == 0)
-            {
-                AllTasksCompleted?.Invoke();
-            }
-
-            isRunning = false;
+            return ProcessQueuedTasksAsync();
         }
 
-        private IEnumerable<KeyValuePair<int, LinkedList<NTSD_LoadTask>>> EnumerateBucketsDescending()
+        private async UniTask ProcessQueuedTasksAsync()
         {
-            var pairs = new List<KeyValuePair<int, LinkedList<NTSD_LoadTask>>>(priorityBuckets);
-            for (int i = pairs.Count - 1; i >= 0; i--)
+            isRunning = true;
+            int processed = 0;
+            bool completedAllTasks = false;
+
+            priorityBucketSnapshot.Clear();
+            foreach (var bucket in priorityBuckets)
+                priorityBucketSnapshot.Add(bucket);
+
+            try
             {
-                yield return pairs[i];
+                for (int bucketIndex = priorityBucketSnapshot.Count - 1; bucketIndex >= 0; bucketIndex--)
+                {
+                    KeyValuePair<int, LinkedList<NTSD_LoadTask>> bucket = priorityBucketSnapshot[bucketIndex];
+                    LinkedList<NTSD_LoadTask> list = bucket.Value;
+                    if (list == null || list.Count == 0)
+                    {
+                        priorityBuckets.Remove(bucket.Key);
+                        continue;
+                    }
+
+                    LinkedListNode<NTSD_LoadTask> node = list.Last;
+                    while (node != null)
+                    {
+                        if (processed >= MaxTasksPerFrame)
+                            return;
+
+                        NTSD_LoadTask task = node.Value;
+                        LinkedListNode<NTSD_LoadTask> previous = node.Previous;
+                        if (task == null)
+                        {
+                            RemoveQueuedNode(list, node);
+                            node = previous;
+                            continue;
+                        }
+
+                        if (task.IsCancelled)
+                        {
+                            task.Status = NTSD_LoadTaskStatus.Cancelled;
+                            RemoveQueuedNode(list, node);
+                            node = previous;
+                            continue;
+                        }
+
+                        if (task.IsPaused)
+                        {
+                            node = previous;
+                            continue;
+                        }
+
+                        await ExecuteTask(task);
+                        RemoveQueuedNode(list, node);
+                        processed++;
+
+                        node = previous;
+                    }
+
+                    if (list.Count == 0)
+                        priorityBuckets.Remove(bucket.Key);
+                }
+
+                completedAllTasks = queuedTaskCount == 0;
             }
+            finally
+            {
+                priorityBucketSnapshot.Clear();
+                isRunning = false;
+            }
+
+            if (completedAllTasks)
+                AllTasksCompleted?.Invoke();
+        }
+
+        private void RemoveQueuedNode(
+            LinkedList<NTSD_LoadTask> list,
+            LinkedListNode<NTSD_LoadTask> node)
+        {
+            list.Remove(node);
+            if (queuedTaskCount > 0)
+                queuedTaskCount--;
         }
 
         public void CacheResult(string cacheKey, object result)
@@ -361,12 +383,7 @@ namespace NTSD.Load
         /// </summary>
         public int GetQueuedTaskCount()
         {
-            int count = 0;
-            foreach (var bucket in priorityBuckets.Values)
-            {
-                count += bucket.Count;
-            }
-            return count;
+            return queuedTaskCount;
         }
 
         /// <summary>
@@ -388,6 +405,7 @@ namespace NTSD.Load
             }
 
             list.AddLast(task);
+            queuedTaskCount++;
         }
 
         private async UniTask ExecuteTask(NTSD_LoadTask task)

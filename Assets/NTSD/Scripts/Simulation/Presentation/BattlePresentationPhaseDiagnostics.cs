@@ -139,39 +139,3 @@ namespace NTSD.Simulation.Presentation
         }
     }
 }
-
-namespace NTSD.Simulation
-{
-    public partial class SimulationWorld
-    {
-        private BattlePresentationPhaseDiagnostics battlePresentationPhaseDiagnostics;
-
-        public bool BattlePresentationPhaseDiagnosticsAllocatedForDiagnostics =>
-            battlePresentationPhaseDiagnostics != null;
-
-        public BattlePresentationPhaseDiagnostics
-            ActiveBattlePresentationPhaseDiagnosticsForDiagnostics =>
-                battlePresentationPhaseDiagnostics != null &&
-                battlePresentationPhaseDiagnostics.Enabled
-                    ? battlePresentationPhaseDiagnostics
-                    : null;
-
-        public BattlePresentationPhaseDiagnostics
-            EnableBattlePresentationPhaseDiagnosticsForDiagnostics()
-        {
-            if (battlePresentationPhaseDiagnostics == null)
-            {
-                battlePresentationPhaseDiagnostics =
-                    new BattlePresentationPhaseDiagnostics();
-            }
-
-            battlePresentationPhaseDiagnostics.SetEnabled(true);
-            return battlePresentationPhaseDiagnostics;
-        }
-
-        public void DisableBattlePresentationPhaseDiagnosticsForDiagnostics()
-        {
-            battlePresentationPhaseDiagnostics?.SetEnabled(false);
-        }
-    }
-}

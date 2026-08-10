@@ -300,6 +300,9 @@ namespace NTSD.Animation.Rendering
             new BattleCentralResourceTemplate[BattleCommonVisualCatalog.WordSheetCount];
         private int initializedSparkTemplateCount;
         private int initializedWordTemplateCount;
+        private int preparedEntityTemplateLimit;
+        private int preparedTrustedResourceLimit;
+        private bool capacitySealed;
         private bool hasConfiguration;
 
         public int ConfigureCalls { get; private set; }
@@ -309,6 +312,40 @@ namespace NTSD.Animation.Rendering
         public int DestroyedResourceInvalidations { get; private set; }
         public int TrustedResourceCacheHits { get; private set; }
         public int TrustedResourceCacheMisses { get; private set; }
+        public int SealedCapacityCacheSkips { get; private set; }
+
+        public void PrepareCapacity(int entityTemplateCapacity, int trustedResourceCapacity)
+        {
+            if (entityTemplateCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(entityTemplateCapacity));
+            if (trustedResourceCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(trustedResourceCapacity));
+
+            entityTemplates.EnsureCapacity(entityTemplateCapacity);
+            trustedResources.EnsureCapacity(trustedResourceCapacity);
+            preparedEntityTemplateLimit = Math.Max(
+                preparedEntityTemplateLimit,
+                entityTemplateCapacity);
+            preparedTrustedResourceLimit = Math.Max(
+                preparedTrustedResourceLimit,
+                trustedResourceCapacity);
+        }
+
+        public void SealCapacity()
+        {
+            preparedEntityTemplateLimit = Math.Max(
+                preparedEntityTemplateLimit,
+                entityTemplates.Count);
+            preparedTrustedResourceLimit = Math.Max(
+                preparedTrustedResourceLimit,
+                trustedResources.Count);
+            capacitySealed = true;
+        }
+
+        public void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
 
         public void Configure(BattleSpriteCatalog value, Material sharedMaterial)
         {
@@ -426,7 +463,16 @@ namespace NTSD.Animation.Rendering
                  !template.MatchesConfiguredMaterial(fallbackMaterial, arrayMaterial)))
             {
                 template = BuildEntityTemplate(key);
-                entityTemplates[key] = template;
+                if (hasTemplate ||
+                    !capacitySealed ||
+                    entityTemplates.Count < preparedEntityTemplateLimit)
+                {
+                    entityTemplates[key] = template;
+                }
+                else
+                {
+                    SealedCapacityCacheSkips++;
+                }
                 matchesTrustedIdentity = template.MatchesTrustedIdentity(command);
             }
 
@@ -691,6 +737,14 @@ namespace NTSD.Animation.Rendering
                 status != BattleCentralResourceStatus.Resolved ||
                 !resource.HasDrawableResource)
             {
+                return;
+            }
+
+            if (capacitySealed &&
+                !trustedResources.ContainsKey(identity) &&
+                trustedResources.Count >= preparedTrustedResourceLimit)
+            {
+                SealedCapacityCacheSkips++;
                 return;
             }
 

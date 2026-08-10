@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Tools;
+using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
 using NTSD.Tools;
 
 namespace NTSD.Animation.LF2Objects
@@ -23,8 +25,15 @@ namespace NTSD.Animation.LF2Objects
 
         // ========== 逻辑对象池（LF2LivingObject 子类，实现 ILF2Object）==========
 
-        private Dictionary<LF2ObjectType, LinkedList<ILF2Object>> _availablePools;
+        private const int DefaultAvailableQueueCapacity =
+            BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity;
+
+        private Dictionary<LF2ObjectType, Queue<ILF2Object>> _availablePools;
         private HashSet<ILF2Object> _activeObjects;
+        private bool _battleCapacitySealed;
+        private long _rejectedLogicObjectFetchCount;
+        private long _rejectedTaskFetchCount;
+        private long _rejectedUnknownTaskRecycleCount;
 
         // ========== 初始化 ==========
 
@@ -39,23 +48,28 @@ namespace NTSD.Animation.LF2Objects
 
         private void EnsureLogicPoolsInitialized()
         {
-            _availablePools ??= new Dictionary<LF2ObjectType, LinkedList<ILF2Object>>();
-            _activeObjects ??= new HashSet<ILF2Object>();
+            _availablePools ??= new Dictionary<LF2ObjectType, Queue<ILF2Object>>(7);
+            _activeObjects ??= new HashSet<ILF2Object>(DefaultAvailableQueueCapacity);
 
             if (!_availablePools.ContainsKey(LF2ObjectType.LightWeapon))
-                _availablePools[LF2ObjectType.LightWeapon] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.LightWeapon] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.HeavyWeapon))
-                _availablePools[LF2ObjectType.HeavyWeapon] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.HeavyWeapon] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.SpecialAttack))
-                _availablePools[LF2ObjectType.SpecialAttack] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.SpecialAttack] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.ThrowWeapon))
-                _availablePools[LF2ObjectType.ThrowWeapon] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.ThrowWeapon] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.Drink))
-                _availablePools[LF2ObjectType.Drink] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.Drink] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.Character))
-                _availablePools[LF2ObjectType.Character] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.Character] = CreateAvailableQueue();
             if (!_availablePools.ContainsKey(LF2ObjectType.Other))
-                _availablePools[LF2ObjectType.Other] = new LinkedList<ILF2Object>();
+                _availablePools[LF2ObjectType.Other] = CreateAvailableQueue();
+        }
+
+        private static Queue<ILF2Object> CreateAvailableQueue()
+        {
+            return new Queue<ILF2Object>(DefaultAvailableQueueCapacity);
         }
 
         private void PrewarmPool()
@@ -82,7 +96,7 @@ namespace NTSD.Animation.LF2Objects
         {
             var obj = CreateNewObject(objectType);
             if (obj != null && _availablePools.TryGetValue(objectType, out var pool))
-                pool.AddLast(obj);
+                pool.Enqueue(obj);
         }
 
         private ILF2Object CreateNewObject(LF2ObjectType objectType)
@@ -128,11 +142,16 @@ namespace NTSD.Animation.LF2Objects
 
             if (_availablePools.TryGetValue(objectType, out var pool) && pool.Count > 0)
             {
-                obj = pool.First.Value;
-                pool.RemoveFirst();
+                obj = pool.Dequeue();
             }
             else
             {
+                if (_battleCapacitySealed)
+                {
+                    _rejectedLogicObjectFetchCount++;
+                    return null;
+                }
+
                 obj = CreateNewObject(objectType);
             }
 
@@ -161,7 +180,7 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             if (_availablePools.TryGetValue(obj.ObjectTypeEnum, out var pool))
-                pool.AddLast(obj);
+                pool.Enqueue(obj);
         }
 
         /// <summary>
@@ -169,12 +188,54 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Prewarm(LF2ObjectType type, int count)
         {
+            if (_battleCapacitySealed || count <= 0)
+                return;
+
             for (int i = 0; i < count; i++)
             {
                 AddToPool(type);
             }
             Log.Info("[LF2ReferencePool] Bulk Prewarm: {0} x {1}", type, count);
         }
+
+        public void PrepareObjectCapacity(LF2ObjectType type, int targetTotalCount)
+        {
+            if (_battleCapacitySealed || targetTotalCount <= 0)
+                return;
+
+            EnsureLogicPoolsInitialized();
+            int totalCount = GetAvailableCount(type);
+            foreach (ILF2Object activeObject in _activeObjects)
+            {
+                if (activeObject != null && activeObject.ObjectTypeEnum == type)
+                    totalCount++;
+            }
+
+            int missing = targetTotalCount - totalCount;
+            for (int i = 0; i < missing; i++)
+                AddToPool(type);
+
+            _activeObjects.EnsureCapacity(targetTotalCount);
+        }
+
+        public void SealBattleCapacity()
+        {
+            _battleCapacitySealed = true;
+        }
+
+        public void UnsealBattleCapacity()
+        {
+            _battleCapacitySealed = false;
+        }
+
+        public bool IsBattleCapacitySealed => _battleCapacitySealed;
+        public long RejectedLogicObjectFetchCount => _rejectedLogicObjectFetchCount;
+        public long RejectedTaskFetchCount => _rejectedTaskFetchCount;
+        public long RejectedUnknownTaskRecycleCount => _rejectedUnknownTaskRecycleCount;
+        public int AvailableCreateTaskCountForDiagnostics =>
+            _createTaskPool?.Count ?? 0;
+        public int AvailableCreateMultipleTaskCountForDiagnostics =>
+            _createMultipleTaskPool?.Count ?? 0;
 
         // ========== 查询 ==========
 
@@ -187,19 +248,74 @@ namespace NTSD.Animation.LF2Objects
             return 0;
         }
 
-        // ========== 通用引用池（ILF2Recyclable，按 Type 自动分桶）==========
+        // The battle runtime currently owns exactly two recyclable task kinds.
+        // Keep them in typed stacks so the sealed hot path does not require a
+        // mutable Type dictionary or create a new bucket during recycling.
+        private Stack<OPointCreateTask> _createTaskPool;
+        private Stack<OPointCreateMultipleTask> _createMultipleTaskPool;
 
-        private Dictionary<System.Type, Stack<ILF2Recyclable>> _genericPool = new();
+        public void PrewarmTasks<T>(int count)
+            where T : class, ILF2Recyclable, new()
+        {
+            if (_battleCapacitySealed || count <= 0)
+                return;
+
+            if (typeof(T) == typeof(OPointCreateTask))
+            {
+                if (_createTaskPool == null)
+                    _createTaskPool = new Stack<OPointCreateTask>(count);
+
+                int missing = count - _createTaskPool.Count;
+                for (int i = 0; i < missing; i++)
+                {
+                    var task = new OPointCreateTask();
+                    task.Clear();
+                    _createTaskPool.Push(task);
+                }
+                return;
+            }
+
+            if (typeof(T) == typeof(OPointCreateMultipleTask))
+            {
+                if (_createMultipleTaskPool == null)
+                    _createMultipleTaskPool = new Stack<OPointCreateMultipleTask>(count);
+
+                int missing = count - _createMultipleTaskPool.Count;
+                for (int i = 0; i < missing; i++)
+                {
+                    var task = new OPointCreateMultipleTask();
+                    task.Clear();
+                    _createMultipleTaskPool.Push(task);
+                }
+            }
+        }
 
         public T Fetch<T>() where T : class, ILF2Recyclable, new()
         {
-            var type = typeof(T);
-            if (_genericPool.TryGetValue(type, out var stack) && stack.Count > 0)
+            if (typeof(T) == typeof(OPointCreateTask) &&
+                _createTaskPool != null &&
+                _createTaskPool.Count > 0)
             {
-                var obj = (T)stack.Pop();
+                T obj = _createTaskPool.Pop() as T;
                 obj.IsFromPool = true;
                 return obj;
             }
+
+            if (typeof(T) == typeof(OPointCreateMultipleTask) &&
+                _createMultipleTaskPool != null &&
+                _createMultipleTaskPool.Count > 0)
+            {
+                T obj = _createMultipleTaskPool.Pop() as T;
+                obj.IsFromPool = true;
+                return obj;
+            }
+
+            if (_battleCapacitySealed)
+            {
+                _rejectedTaskFetchCount++;
+                return null;
+            }
+
             return new T { IsFromPool = true };
         }
 
@@ -208,10 +324,38 @@ namespace NTSD.Animation.LF2Objects
             if (obj == null || !obj.IsFromPool) return;
             obj.IsFromPool = false;
             obj.Clear();
-            var type = obj.GetType();
-            if (!_genericPool.TryGetValue(type, out var stack))
-                _genericPool[type] = stack = new Stack<ILF2Recyclable>();
-            stack.Push(obj);
+
+            if (obj is OPointCreateTask createTask)
+            {
+                if (_createTaskPool == null)
+                {
+                    if (_battleCapacitySealed)
+                    {
+                        _rejectedUnknownTaskRecycleCount++;
+                        return;
+                    }
+                    _createTaskPool = new Stack<OPointCreateTask>();
+                }
+                _createTaskPool.Push(createTask);
+                return;
+            }
+
+            if (obj is OPointCreateMultipleTask createMultipleTask)
+            {
+                if (_createMultipleTaskPool == null)
+                {
+                    if (_battleCapacitySealed)
+                    {
+                        _rejectedUnknownTaskRecycleCount++;
+                        return;
+                    }
+                    _createMultipleTaskPool = new Stack<OPointCreateMultipleTask>();
+                }
+                _createMultipleTaskPool.Push(createMultipleTask);
+                return;
+            }
+
+            _rejectedUnknownTaskRecycleCount++;
         }
     }
 }

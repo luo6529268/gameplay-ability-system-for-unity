@@ -10,11 +10,24 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class NTSDEntityRuntime
     {
-        private static long pendingFlushDestroyMutationEpoch;
         private int pendingFlushDestroy;
+        private long pendingFlushDestroyMutationEpoch;
+        [NonSerialized] private SimulationWorldMutationTracker worldMutationTracker;
 
-        public static long PendingFlushDestroyMutationEpochForDiagnostics =>
+        public long PendingFlushDestroyMutationEpochForDiagnostics =>
             Volatile.Read(ref pendingFlushDestroyMutationEpoch);
+
+        internal void BindWorldMutationTracker(
+            SimulationWorldMutationTracker mutationTracker)
+        {
+            if (ReferenceEquals(worldMutationTracker, mutationTracker))
+                return;
+
+            SimulationWorldMutationTracker previous = worldMutationTracker;
+            worldMutationTracker = mutationTracker;
+            previous?.NotifyPendingFlushDestroyMutation();
+            mutationTracker?.NotifyPendingFlushDestroyMutation();
+        }
 
         public int SlotIndex = -1;
         public int StableId;
@@ -173,7 +186,10 @@ namespace NTSD.Simulation
             {
                 int next = value ? 1 : 0;
                 if (Interlocked.Exchange(ref pendingFlushDestroy, next) != next)
+                {
                     Interlocked.Increment(ref pendingFlushDestroyMutationEpoch);
+                    worldMutationTracker?.NotifyPendingFlushDestroyMutation();
+                }
             }
         }
 

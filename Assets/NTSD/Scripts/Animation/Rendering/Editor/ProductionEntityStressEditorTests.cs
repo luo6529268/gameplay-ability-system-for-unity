@@ -18,6 +18,275 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class ProductionEntityStressEditorTests
     {
+        private sealed class RingBufferTask : LF2TaskBase
+        {
+            public RingBufferTask(int id)
+            {
+                Id = id;
+            }
+
+            public int Id { get; }
+            public override LF2TaskType TaskType => LF2TaskType.CreateObject;
+        }
+
+        [Test]
+        public void TaskRingBuffer_PreservesFifoAcrossWrapAndResize()
+        {
+            var buffer = new LF2TaskRingBuffer(2);
+            var first = new RingBufferTask(1);
+            var second = new RingBufferTask(2);
+            var third = new RingBufferTask(3);
+            var fourth = new RingBufferTask(4);
+
+            Assert.That(buffer.TryEnqueue(first), Is.True);
+            Assert.That(buffer.TryEnqueue(second), Is.True);
+            Assert.That(buffer.TryDequeue(out LF2TaskBase dequeued), Is.True);
+            Assert.That(dequeued, Is.SameAs(first));
+
+            Assert.That(buffer.TryEnqueue(third), Is.True);
+            Assert.That(buffer.TryEnqueue(fourth), Is.True);
+            Assert.That(buffer.Capacity, Is.EqualTo(4));
+
+            Assert.That(buffer.TryDequeue(out dequeued), Is.True);
+            Assert.That(dequeued, Is.SameAs(second));
+            Assert.That(buffer.TryDequeue(out dequeued), Is.True);
+            Assert.That(dequeued, Is.SameAs(third));
+            Assert.That(buffer.TryDequeue(out dequeued), Is.True);
+            Assert.That(dequeued, Is.SameAs(fourth));
+            Assert.That(buffer.TryDequeue(out _), Is.False);
+        }
+
+        [Test]
+        public void TaskRingBuffer_SealedCapacityRejectsWithoutAllocating()
+        {
+            var buffer = new LF2TaskRingBuffer(1);
+            var accepted = new RingBufferTask(1);
+            var rejected = new RingBufferTask(2);
+            Assert.That(buffer.TryEnqueue(accepted), Is.True);
+            buffer.SealCapacity();
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            bool enqueued = buffer.TryEnqueue(rejected);
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(enqueued, Is.False);
+            Assert.That(buffer.RejectedEnqueueCount, Is.EqualTo(1));
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+            Assert.That(buffer.TryDequeue(out LF2TaskBase dequeued), Is.True);
+            Assert.That(dequeued, Is.SameAs(accepted));
+        }
+
+        [Test]
+        public void RuntimeCapacitySeal_PreMaterializesSlotsAndRejectsGrowthWithoutAllocating()
+        {
+            var slots = new RuntimeSlotTable(1050, 20, 50);
+            var rest = new RuntimeRestStore(1050);
+            var capacity = new SimulationRuntimeCapacityModule(slots, rest);
+            capacity.Seal();
+
+            Assert.That(slots.MaterializedPageCount, Is.EqualTo(5));
+            Assert.That(rest.UsesDenseBattleStorage, Is.True);
+
+            _ = slots.GetRawRuntime(1049);
+            _ = capacity.TryAuthorizeGrowth();
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            NTSDEntityRuntime runtime = slots.GetRawRuntime(1049);
+            bool growthAuthorized = capacity.TryAuthorizeGrowth();
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(runtime, Is.Not.Null);
+            Assert.That(growthAuthorized, Is.False);
+            Assert.That(capacity.RejectedGrowthCount, Is.EqualTo(2));
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+        }
+
+        [Test]
+        public void RuntimeRestStore_SealedHitAndTickPathDoesNotAllocate()
+        {
+            var rest = new RuntimeRestStore(1050);
+            rest.PrepareForBattle();
+            rest.SealCapacity();
+            rest.SetVRest(100, 200, 3);
+            rest.SetVRest(100, 200, 0);
+
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            for (int attackerSlot = 200; attackerSlot < 264; attackerSlot++)
+                rest.SetVRest(100, attackerSlot, 3);
+            rest.TickVictim(100);
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(rest.VRestEntryCount, Is.EqualTo(64));
+            Assert.That(rest.GetVRest(100, 200), Is.EqualTo(2));
+            Assert.That(rest.RejectedVRestWriteCount, Is.Zero);
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+        }
+
+        [Test]
+        public void RuntimeRestStore_ExtendedSparseSealedInsertRemoveAndTickDoesNotAllocate()
+        {
+            const int capacity = 4096;
+            var rest = new RuntimeRestStore(capacity);
+            rest.SetVRest(3100, 17, 4);
+            rest.PrepareForBattle();
+            rest.SealCapacity();
+
+            Assert.That(rest.UsesDenseBattleStorage, Is.False);
+            Assert.That(rest.UsesPreallocatedSparseBattleStorage, Is.True);
+            Assert.That(
+                rest.PreparedSparseVRestEntryCapacity,
+                Is.GreaterThanOrEqualTo(capacity * 32));
+
+            for (int attackerSlot = 2000; attackerSlot < 2064; attackerSlot++)
+                rest.SetVRest(3000, attackerSlot, 3);
+            rest.TickVictim(3000);
+
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            for (int repeat = 0; repeat < 16; repeat++)
+            {
+                for (int attackerSlot = 2000; attackerSlot < 2064; attackerSlot++)
+                    rest.SetVRest(3000, attackerSlot, 0);
+                for (int attackerSlot = 2064; attackerSlot < 2128; attackerSlot++)
+                    rest.SetVRest(3000, attackerSlot, 3);
+                rest.TickVictim(3000);
+                for (int attackerSlot = 2064; attackerSlot < 2128; attackerSlot++)
+                    rest.SetVRest(3000, attackerSlot, 0);
+                for (int attackerSlot = 2000; attackerSlot < 2064; attackerSlot++)
+                    rest.SetVRest(3000, attackerSlot, 3);
+            }
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(rest.GetVRest(3100, 17), Is.EqualTo(4));
+            Assert.That(rest.VRestEntryCount, Is.EqualTo(65));
+            Assert.That(rest.VRestRowCount, Is.EqualTo(2));
+            Assert.That(rest.RejectedVRestWriteCount, Is.Zero);
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+        }
+
+        [Test]
+        public void BattleBuffer_SealedSoundQueueUsesPreparedStorageAndRejectsOverflowWithoutAllocating()
+        {
+            var buffers = new SimulationBattleBufferModule(64);
+            buffers.Seal();
+            buffers.TryQueueSound(new PendingSoundEvent("warm", 0, 0));
+            buffers.PendingSounds.Clear();
+
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 1024; i++)
+                buffers.TryQueueSound(new PendingSoundEvent("steady", i, 1));
+            bool overflowAccepted = buffers.TryQueueSound(
+                new PendingSoundEvent("overflow", 1024, 1));
+            long allocatedAfter = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(buffers.PendingSounds, Has.Count.EqualTo(1024));
+            Assert.That(overflowAccepted, Is.False);
+            Assert.That(buffers.RejectedSoundEventCount, Is.EqualTo(1));
+            Assert.That(allocatedAfter - allocatedBefore, Is.Zero);
+        }
+
+        [Test]
+        public void ZeroGcGate_DefaultsOnAndCanBeExplicitlyDisabled()
+        {
+            ProductionEntityStressConfig required =
+                ProductionEntityStressConfig.FromRequest(
+                    new ProductionEntityStressRequest(),
+                    ".");
+            ProductionEntityStressConfig disabled =
+                ProductionEntityStressConfig.FromRequest(
+                    new ProductionEntityStressRequest
+                    {
+                        requireZeroGcAfterWarmup = false,
+                    },
+                    ".");
+
+            Assert.That(required.RequireZeroGcAfterWarmup, Is.True);
+            Assert.That(disabled.RequireZeroGcAfterWarmup, Is.False);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildWorkload(required),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildWorkload(disabled)));
+        }
+
+        [Test]
+        public void ZeroGcGate_RejectsCollectionsEvenWhenAllocatedByteDeltaIsZero()
+        {
+            var gate = new ProductionEntityStressZeroGcGateAccumulator();
+            var report = new ProductionEntityStressReport();
+
+            gate.Record(
+                logicTick: 31,
+                allocatedBytes: 0L,
+                generation0Collections: 0,
+                generation1Collections: 0,
+                generation2Collections: 0);
+            gate.Populate(report, required: true);
+
+            Assert.That(gate.HasPassed(required: true), Is.True);
+            Assert.That(report.zeroGcGatePassed, Is.True);
+            Assert.That(report.zeroGcGateObservedSteadyTickCount, Is.EqualTo(1));
+
+            gate.Record(
+                logicTick: 32,
+                allocatedBytes: 0L,
+                generation0Collections: 1,
+                generation1Collections: 0,
+                generation2Collections: 0);
+            gate.Populate(report, required: true);
+
+            Assert.That(gate.HasPassed(required: true), Is.False);
+            Assert.That(report.zeroGcGatePassed, Is.False);
+            Assert.That(report.zeroGcGateViolatingTickCount, Is.Zero);
+            Assert.That(report.zeroGcGateCollectionViolatingTickCount, Is.EqualTo(1));
+            Assert.That(report.zeroGcGateFirstCollectionLogicTick, Is.EqualTo(32));
+            Assert.That(report.zeroGcGateGeneration0CollectionCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ZeroGcGatePolicy_RejectsCollectionObservedOutsideMeasuredTick()
+        {
+            var report = new ProductionEntityStressReport
+            {
+                zeroGcGatePassed = true,
+                zeroGcGateObservedSteadyTickCount = 1800,
+                managedMemoryCollectionViolation = true,
+            };
+
+            Assert.That(
+                ProductionEntityStressZeroGcGatePolicy.HasPassed(report, required: true),
+                Is.False);
+
+            report.managedMemoryCollectionViolation = false;
+            Assert.That(
+                ProductionEntityStressZeroGcGatePolicy.HasPassed(report, required: true),
+                Is.True);
+            Assert.That(
+                ProductionEntityStressZeroGcGatePolicy.HasPassed(report, required: false),
+                Is.True);
+        }
+
+        [Test]
+        public void ZeroGcGatePolicy_PlayerLoopEnvelopeIsObservationalInEditorAndHardInPlayer()
+        {
+            var report = new ProductionEntityStressReport
+            {
+                zeroGcGatePassed = true,
+                zeroGcGateObservedSteadyTickCount = 1800,
+                managedMemoryPlayerLoopAllocationViolation = true,
+                managedMemoryPlayerLoopEnvelopeHardGateSupported = false,
+            };
+
+            Assert.That(
+                ProductionEntityStressZeroGcGatePolicy.HasPassed(report, required: true),
+                Is.True,
+                "Editor PlayerLoop observations include Editor-owned callbacks and remain evidence only.");
+
+            report.managedMemoryPlayerLoopEnvelopeHardGateSupported = true;
+            Assert.That(
+                ProductionEntityStressZeroGcGatePolicy.HasPassed(report, required: true),
+                Is.False,
+                "A Player build must reject any allocation inside the full battle frame envelope.");
+        }
+
         [Test]
         public void ProfilerFrameGcPolicy_StartsOnlyForFormalPostWarmupCandidate()
         {
@@ -4877,6 +5146,7 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [TestCase("dispersed", ProductionEntityStressMode.Dispersed1000)]
+        [TestCase("combat", ProductionEntityStressMode.Combat1000)]
         [TestCase("concentrated", ProductionEntityStressMode.Concentrated1000)]
         public void ProductionModes_RequestOneThousandEntities(
             string action,
@@ -4900,6 +5170,104 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(config.Mode, Is.EqualTo(expectedMode));
             Assert.That(config.EntityCount, Is.EqualTo(1000));
             Assert.That(config.AutoCleanup, Is.False);
+        }
+
+        [Test]
+        public void CombatZeroGcRequest_UsesOneThousandAiAndLongFormalWindow()
+        {
+            ProductionEntityStressRequest request =
+                ProductionEntityStressWindow.CreateCombatZeroGcRequest(
+                    "Temp/combat1000-zero-gc.json");
+            ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
+                request,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(config.Mode, Is.EqualTo(ProductionEntityStressMode.Combat1000));
+            Assert.That(config.EntityCount, Is.EqualTo(1000));
+            Assert.That(config.InputMode, Is.EqualTo(ProductionEntityStressInputMode.Ai));
+            Assert.That(config.WarmupTicks, Is.EqualTo(120));
+            Assert.That(config.SampleTicks, Is.EqualTo(1800));
+            Assert.That(config.ShouldAutoStopWhenSampled, Is.True);
+            Assert.That(config.RequireZeroGcAfterWarmup, Is.True);
+        }
+
+        [TestCase("legacy", BattleAiExecutionProfile.LegacyCanonical)]
+        [TestCase(
+            "data-oriented-canonical",
+            BattleAiExecutionProfile.DataOrientedCanonical)]
+        public void CombatCapacityPressureSmokeRequest_ChangesOnlyTheAiExecutionProfile(
+            string profile,
+            BattleAiExecutionProfile expectedProfile)
+        {
+            ProductionEntityStressRequest request =
+                ProductionEntityStressWindow.CreateCombatCapacityPressureSmokeRequest(
+                    $"Temp/combat1000-{profile}.json",
+                    profile);
+            ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
+                request,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(config.Mode, Is.EqualTo(ProductionEntityStressMode.Combat1000));
+            Assert.That(config.EntityCount, Is.EqualTo(1000));
+            Assert.That(config.InputMode, Is.EqualTo(ProductionEntityStressInputMode.Ai));
+            Assert.That(config.WarmupTicks, Is.EqualTo(30));
+            Assert.That(config.SampleTicks, Is.EqualTo(180));
+            Assert.That(config.SpawnBatchSize, Is.EqualTo(100));
+            Assert.That(config.ShouldAutoStopWhenSampled, Is.True);
+            Assert.That(config.RequireZeroGcAfterWarmup, Is.True);
+            Assert.That(config.AiExecutionProfile, Is.EqualTo(expectedProfile));
+            Assert.That(config.EnablePhaseTiming, Is.True);
+            Assert.That(config.EnablePresentationTiming, Is.True);
+            Assert.That(config.EnableDetailPhaseTiming, Is.True);
+        }
+
+        [Test]
+        public void CombatPerformanceSmokeRequest_DisablesNestedTimingButKeepsTheRuntimeGate()
+        {
+            ProductionEntityStressRequest request =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/combat1000-data-oriented-performance.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
+                request,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(
+                config.AiExecutionProfile,
+                Is.EqualTo(BattleAiExecutionProfile.DataOrientedCanonical));
+            Assert.That(config.EntityCount, Is.EqualTo(1000));
+            Assert.That(config.WarmupTicks, Is.EqualTo(30));
+            Assert.That(config.SampleTicks, Is.EqualTo(180));
+            Assert.That(config.RequireZeroGcAfterWarmup, Is.True);
+            Assert.That(config.EnablePhaseTiming, Is.False);
+            Assert.That(config.EnablePresentationTiming, Is.False);
+            Assert.That(config.EnableDetailPhaseTiming, Is.False);
+        }
+
+        [Test]
+        public void CombatSteadyStateRequest_UsesLongDataOrientedZeroGcGateWithoutTimingOverhead()
+        {
+            ProductionEntityStressRequest request =
+                ProductionEntityStressWindow.CreateCombatSteadyStateRequest(
+                    "Temp/combat1000-data-oriented-steady-state.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
+                request,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(
+                config.AiExecutionProfile,
+                Is.EqualTo(BattleAiExecutionProfile.DataOrientedCanonical));
+            Assert.That(config.EntityCount, Is.EqualTo(1000));
+            Assert.That(config.InputMode, Is.EqualTo(ProductionEntityStressInputMode.Ai));
+            Assert.That(config.WarmupTicks, Is.EqualTo(120));
+            Assert.That(config.SampleTicks, Is.EqualTo(1800));
+            Assert.That(config.SpawnBatchSize, Is.EqualTo(100));
+            Assert.That(config.ShouldAutoStopWhenSampled, Is.True);
+            Assert.That(config.RequireZeroGcAfterWarmup, Is.True);
+            Assert.That(config.EnablePhaseTiming, Is.False);
+            Assert.That(config.EnablePresentationTiming, Is.False);
+            Assert.That(config.EnableDetailPhaseTiming, Is.False);
         }
 
         [Test]
@@ -4954,6 +5322,36 @@ namespace NTSD.Animation.Rendering.Editor
 
             Assert.That(Vector3.Distance(dispersedFirst, dispersedLast), Is.GreaterThan(700f));
             Assert.That(Vector3.Distance(concentratedFirst, concentratedLast), Is.LessThan(40f));
+        }
+
+        [Test]
+        public void CombatSpawnLayout_CreatesAuthorityRangeGroupsWithoutOneCellPileup()
+        {
+            Vector3 first = ProductionEntityStressRunner.BuildSpawnPosition(
+                ProductionEntityStressMode.Combat1000,
+                0,
+                1000);
+            Vector3 firstOpponent = ProductionEntityStressRunner.BuildSpawnPosition(
+                ProductionEntityStressMode.Combat1000,
+                1,
+                1000);
+            Vector3 sameSideNextLane = ProductionEntityStressRunner.BuildSpawnPosition(
+                ProductionEntityStressMode.Combat1000,
+                2,
+                1000);
+            Vector3 nextGroup = ProductionEntityStressRunner.BuildSpawnPosition(
+                ProductionEntityStressMode.Combat1000,
+                20,
+                1000);
+            Vector3 last = ProductionEntityStressRunner.BuildSpawnPosition(
+                ProductionEntityStressMode.Combat1000,
+                999,
+                1000);
+
+            Assert.That(Vector3.Distance(first, firstOpponent), Is.EqualTo(120f).Within(0.001f));
+            Assert.That(Vector3.Distance(first, sameSideNextLane), Is.EqualTo(1f).Within(0.001f));
+            Assert.That(Vector3.Distance(first, nextGroup), Is.EqualTo(160f).Within(0.001f));
+            Assert.That(Vector3.Distance(first, last), Is.GreaterThan(700f));
         }
 
         [Test]
@@ -5609,6 +6007,30 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(snapshot[0], Is.SameAs(low));
             Assert.That(snapshot[1], Is.SameAs(derived));
             Assert.That(snapshot[2], Is.SameAs(high));
+        }
+
+        [Test]
+        public void SimulationBucketTraversal_ObjectCountAndPairVRestAllocateNoManagedMemory()
+        {
+            CreateActiveRuntimeEntitySnapshotFixture(
+                out SimulationWorld world,
+                out _,
+                out _,
+                out _,
+                out _);
+
+            _ = world.ObjectCount;
+            world.TickCollisionPairVRestAll();
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < 16; iteration++)
+            {
+                _ = world.ObjectCount;
+                world.TickCollisionPairVRestAll();
+            }
+            long allocatedBytes =
+                GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+
+            Assert.That(allocatedBytes, Is.Zero);
         }
 
         [Test]

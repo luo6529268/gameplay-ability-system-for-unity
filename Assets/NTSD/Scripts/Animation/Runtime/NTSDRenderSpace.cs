@@ -66,6 +66,7 @@ namespace NTSD.Animation
         private static bool _boundaryViewportOverrideEnabledForSelfCheck;
         private static bool _boundaryViewportOverrideHasBoundsForSelfCheck;
         private static Rect _boundaryViewportOverrideForSelfCheck;
+        private static readonly Camera[] WorldCameraSearchBuffer = new Camera[16];
 
         public static Camera WorldCamera
         {
@@ -77,10 +78,14 @@ namespace NTSD.Animation
                 if (_cachedWorldCamera != null && _cachedWorldCamera.isActiveAndEnabled)
                     return _cachedWorldCamera;
 
-                Camera[] cameras = Camera.allCameras;
-                for (int i = 0; i < cameras.Length; i++)
+                int cameraCount = Camera.allCamerasCount;
+                if (cameraCount > WorldCameraSearchBuffer.Length)
+                    return null;
+
+                cameraCount = Camera.GetAllCameras(WorldCameraSearchBuffer);
+                for (int i = 0; i < cameraCount; i++)
                 {
-                    Camera camera = cameras[i];
+                    Camera camera = WorldCameraSearchBuffer[i];
                     if (camera != null && camera.isActiveAndEnabled && camera.name == "ScenesCamera")
                     {
                         _cachedWorldCamera = camera;
@@ -92,9 +97,9 @@ namespace NTSD.Animation
                 if (battleLayer >= 0)
                 {
                     int battleMask = 1 << battleLayer;
-                    for (int i = 0; i < cameras.Length; i++)
+                    for (int i = 0; i < cameraCount; i++)
                     {
-                        Camera camera = cameras[i];
+                        Camera camera = WorldCameraSearchBuffer[i];
                         if (camera != null && camera.isActiveAndEnabled && (camera.cullingMask & battleMask) != 0)
                         {
                             _cachedWorldCamera = camera;

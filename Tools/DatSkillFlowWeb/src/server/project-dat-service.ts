@@ -15,6 +15,7 @@ import {
     DatSessionService,
     type DatSessionBeforeCommit,
     type DatSessionEmission,
+    type DatSessionServiceOptions,
     type DatSessionView,
 } from "./dat-session-service.js";
 import type {
@@ -38,7 +39,7 @@ import { WorkspaceRegistry, WorkspaceSecurityError } from "./workspace-registry.
 
 const DEFAULT_START_FRAME = 300;
 const DEFAULT_TICKS = 30;
-const NARUTO_OID = 2;
+const DEFAULT_CHARACTER_OID = 2;
 const MAX_PREVIEW_OUTPUT_BYTES = 8 * 1024 * 1024;
 const MAX_NATIVE_PREVIEW_CACHE_ENTRIES = 128;
 const MAX_SESSION_PREVIEW_CACHE_ENTRIES = 128;
@@ -79,6 +80,7 @@ export interface NativeDatPreviewRunner {
 }
 
 interface NativePreviewOptions {
+    readonly rootOid?: number;
     readonly startFrame?: number;
     readonly initialFrame?: number;
     readonly ticks?: number;
@@ -93,14 +95,15 @@ export interface ProjectDatServiceOptions {
     readonly safeSave?: SafeSaveService;
     readonly assetBmpDirectories?: readonly string[];
     readonly idFactory?: () => string;
+    readonly sessionOptions?: DatSessionServiceOptions;
 }
 
 interface CatalogObject {
     objectKey: string;
     oid: number;
     type: number;
+    displayName: string;
     candidates: readonly DataTxtEntry[];
-    availablePrimary: boolean;
 }
 
 interface SessionBinding {
@@ -198,11 +201,17 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
     }
 
     async preview(plaintext: Uint8Array, options: NativePreviewOptions = {}): Promise<unknown> {
+        const rootOid = boundedInteger(
+            options.rootOid === undefined ? DEFAULT_CHARACTER_OID : options.rootOid,
+            0,
+            MAX_CATALOG_OIDS - 1,
+            "rootOid",
+        );
         const startFrame = boundedInteger(options.startFrame === undefined ? DEFAULT_START_FRAME : options.startFrame, 0, 599, "startFrame");
         const initialFrame = boundedInteger(options.initialFrame === undefined ? startFrame : options.initialFrame, 0, 599, "initialFrame");
         const ticks = boundedInteger(options.ticks === undefined ? DEFAULT_TICKS : options.ticks, 1, 1800, "ticks");
         const inputPlan = options.inputPlan ?? [];
-        const cacheKey = nativePreviewCacheKey(plaintext, { startFrame, initialFrame, ticks, inputPlan });
+        const cacheKey = nativePreviewCacheKey(plaintext, { rootOid, startFrame, initialFrame, ticks, inputPlan });
         const cached = this.#cache.get(cacheKey);
         if (cached !== undefined) {
             this.#cache.delete(cacheKey);
@@ -214,7 +223,7 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
             if (oldest === undefined) break;
             this.#cache.delete(oldest);
         }
-        const pending = this.#run(plaintext, startFrame, initialFrame, ticks, inputPlan);
+        const pending = this.#run(plaintext, rootOid, startFrame, initialFrame, ticks, inputPlan);
         this.#cache.set(cacheKey, pending);
         try {
             return await pending;
@@ -226,19 +235,21 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
 
     async #run(
         plaintext: Uint8Array,
+        rootOid: number,
         startFrame: number,
         initialFrame: number,
         ticks: number,
         inputPlan: readonly NativePreviewInputStep[],
     ): Promise<unknown> {
         const directory = await mkdtemp(join(tmpdir(), "dat-skill-flow-preview-"));
-        const datPath = join(directory, "naruto.dat");
+        const datPath = join(directory, "preview-character.dat");
         const outputPath = join(directory, "preview.json");
         try {
             await writeFile(datPath, Buffer.from(plaintext), { flag: "wx" });
             await new Promise<void>((resolveRun, rejectRun) => {
                 const arguments_ = [
-                    "--naruto-dat", datPath,
+                    "--preview-dat", datPath,
+                    "--root-oid", String(rootOid),
                     "--game-root", this.#gameRoot,
                     "--output", outputPath,
                     "--start-frame", String(initialFrame),
@@ -308,8 +319,8 @@ export class ProjectDatService {
     ) {
         this.#primary = options.primaryRegistry;
         this.#assets = options.assetRegistry;
-        this.#primarySessions = new DatSessionService(this.#primary);
-        this.#assetSessions = this.#assets === undefined ? undefined : new DatSessionService(this.#assets);
+        this.#primarySessions = new DatSessionService(this.#primary, options.sessionOptions);
+        this.#assetSessions = this.#assets === undefined ? undefined : new DatSessionService(this.#assets, options.sessionOptions);
         this.#safeSave = options.safeSave === undefined ? new SafeSaveService(this.#primary) : options.safeSave;
         this.#previewRunner = options.previewRunner === undefined ? new CppNativeDatPreviewRunner() : options.previewRunner;
         this.#idFactory = options.idFactory === undefined ? (() => randomBytes(32).toString("base64url")) : options.idFactory;
@@ -349,104 +360,138 @@ export class ProjectDatService {
     ): Promise<{
         objectKey: string;
         scenarios: number;
-        failed: number;
         assets: number;
-        assetFailures: number;
         elapsedMs: number;
+        warmup: Promise<{
+            scenarios: number;
+            failed: number;
+            assets: number;
+            assetFailures: number;
+            elapsedMs: number;
+        }>;
     }> {
         const started = Date.now();
-        const object = this.#catalogObjects.find((candidate) => candidate.oid === NARUTO_OID);
+        const object = this.#catalogObjects.find((candidate) => candidate.oid === DEFAULT_CHARACTER_OID);
         if (object === undefined) {
             throw new ProjectDatError("object-unavailable", "Naruto OID 2 is unavailable for startup preparation.");
         }
-        const view = await this.open(object.objectKey);
+        const view = await this.open(object.objectKey, { deferPreview: true });
         this.#preparedSessions.set(object.objectKey, view);
         const binding = this.#requireSession(view.sessionId);
         const emission = await binding.service.emit(view.sessionId, view.revision)
             .catch((error) => { throw mapSessionError(error); });
         const scenarios = deriveSkillEntries(view.frames, view.oid)
+            .filter((entry) => entry.category === "input" || entry.category === "engine" || entry.nativeInputPlan !== undefined)
             .map((entry) => buildSkillPreviewScenario(view.frames, entry));
         const unique = [...new Map(scenarios.map((scenario) => [previewOptionsKey(scenario), scenario])).values()];
-        let completed = 0;
-        let failed = 0;
-        let nextIndex = 0;
-        const workers = Array.from({ length: Math.min(PREVIEW_WARMUP_CONCURRENCY, unique.length) }, async () => {
-            while (nextIndex < unique.length) {
-                const index = nextIndex;
-                nextIndex += 1;
-                try {
-                    const raw = await this.#previewRunner.preview(emission.plaintext, unique[index]!);
-                    const sanitized = sanitizePreview(raw);
-                    for (const resource of sanitized.renderResources) {
-                        for (const range of resource.ranges) {
-                            await this.#resolveSpriteAsset(binding, range.file);
+        const warmup = (async () => {
+            const warmupStarted = Date.now();
+            let completed = 0;
+            let failed = 0;
+            let nextIndex = 0;
+            const workers = Array.from({ length: Math.min(PREVIEW_WARMUP_CONCURRENCY, unique.length) }, async () => {
+                while (nextIndex < unique.length) {
+                    const index = nextIndex;
+                    nextIndex += 1;
+                    try {
+                        const raw = await this.#previewRunner.preview(emission.plaintext, {
+                            ...unique[index]!,
+                            rootOid: binding.oid,
+                        });
+                        const sanitized = sanitizePreview(raw);
+                        for (const resource of sanitized.renderResources) {
+                            for (const range of resource.ranges) {
+                                await this.#resolveSpriteAsset(binding, range.file);
+                            }
                         }
+                        await this.#loadStageAssets(binding, sanitized.preview.metadata.stage);
+                    } catch {
+                        failed += 1;
+                    } finally {
+                        completed += 1;
+                        onProgress?.(completed, unique.length);
                     }
-                    await this.#loadStageAssets(binding, sanitized.preview.metadata.stage);
-                } catch {
-                    failed += 1;
-                } finally {
-                    completed += 1;
-                    onProgress?.(completed, unique.length);
                 }
-            }
-        });
-        await Promise.all(workers);
-        const assetBindings = [...binding.assetIdsByPath.values()]
-            .map((assetId) => this.#assetBindings.get(assetId))
-            .filter((asset): asset is AssetBinding => asset !== undefined);
-        let assetFailures = 0;
-        nextIndex = 0;
-        const assetWorkers = Array.from({ length: Math.min(8, assetBindings.length) }, async () => {
-            while (nextIndex < assetBindings.length) {
-                const index = nextIndex;
-                nextIndex += 1;
-                try {
-                    await this.#loadAssetBytes(assetBindings[index]!);
-                } catch {
-                    assetFailures += 1;
+            });
+            await Promise.all(workers);
+            const assetBindings = [...binding.assetIdsByPath.values()]
+                .map((assetId) => this.#assetBindings.get(assetId))
+                .filter((asset): asset is AssetBinding => asset !== undefined);
+            let assetFailures = 0;
+            nextIndex = 0;
+            const assetWorkers = Array.from({ length: Math.min(8, assetBindings.length) }, async () => {
+                while (nextIndex < assetBindings.length) {
+                    const index = nextIndex;
+                    nextIndex += 1;
+                    try {
+                        await this.#loadAssetBytes(assetBindings[index]!);
+                    } catch {
+                        assetFailures += 1;
+                    }
                 }
-            }
-        });
-        await Promise.all(assetWorkers);
+            });
+            await Promise.all(assetWorkers);
+            return {
+                scenarios: unique.length,
+                failed,
+                assets: assetBindings.length,
+                assetFailures,
+                elapsedMs: Date.now() - warmupStarted,
+            };
+        })();
         return {
             objectKey: object.objectKey,
             scenarios: unique.length,
-            failed,
-            assets: assetBindings.length,
-            assetFailures,
+            assets: binding.assetIdsByPath.size,
             elapsedMs: Date.now() - started,
+            warmup,
         };
     }
 
     async catalog(): Promise<ProjectCatalogView> {
         await this.#refreshCatalog(true);
-        const objects = this.#catalogObjects.map((object) => ({
-            objectKey: object.objectKey,
-            oid: object.oid,
-            type: object.type,
-            availablePrimary: object.availablePrimary,
-        }));
+        const objects = this.#catalogObjects
+            .filter((object) => object.type === 0)
+            .map((object) => ({
+                objectKey: object.objectKey,
+                oid: object.oid,
+                type: object.type,
+                displayName: object.displayName,
+            }));
         return {
             catalogRevision: this.#catalogRevision,
             objects,
         };
     }
 
-    async open(objectKey: string): Promise<ProjectSessionView> {
+    async open(
+        objectKey: string,
+        options: { readonly deferPreview?: boolean } = {},
+    ): Promise<ProjectSessionView> {
         await this.#refreshCatalog();
         const objectKeyValidated = requireOpaqueId(objectKey, "objectKey");
         const object = this.#catalogObjects.find((candidate) => candidate.objectKey === objectKeyValidated);
         if (object === undefined) {
             throw new ProjectDatError("unknown-object", "The project object is unknown.");
         }
-        if (object.oid !== NARUTO_OID) {
-            throw new ProjectDatError("object-unavailable", "Native preview currently supports Naruto OID 2 only.");
+        if (object.type !== 0) {
+            throw new ProjectDatError("object-unavailable", "Only data.txt type-0 character DATs can be opened in the character editor.");
         }
         const prepared = this.#preparedSessions.get(objectKeyValidated);
         if (prepared !== undefined) {
             this.#preparedSessions.delete(objectKeyValidated);
-            if (this.#sessions.has(prepared.sessionId)) return prepared;
+            const binding = this.#sessions.get(prepared.sessionId);
+            if (binding !== undefined) {
+                try {
+                    await binding.service.emit(prepared.sessionId, prepared.revision);
+                    return prepared;
+                } catch (error) {
+                    await binding.service.close(prepared.sessionId).catch(() => undefined);
+                    this.#releaseBinding(prepared.sessionId, binding);
+                    const mapped = mapSessionError(error);
+                    if (mapped.code !== "unknown-session") throw mapped;
+                }
+            }
         }
         const opened = await this.#openCandidate(object.candidates);
         if (opened === undefined) throw new ProjectDatError("object-unavailable", "The selected DAT object is unavailable.");
@@ -470,7 +515,9 @@ export class ProjectDatService {
         };
         this.#sessions.set(session.sessionId, binding);
         try {
-            return await this.#buildSessionView(session, binding);
+            return options.deferPreview === true
+                ? await this.#buildDeferredSessionView(session, binding, object)
+                : await this.#buildSessionView(session, binding);
         } catch (error) {
             await opened.service.close(session.sessionId);
             this.#releaseBinding(session.sessionId, binding);
@@ -649,27 +696,16 @@ export class ProjectDatService {
             else candidates.push(candidate);
         }
 
-        const prepared: CatalogObject[] = [];
-        for (const candidates of candidatesByOid.values()) {
+        const prepared = [...candidatesByOid.values()].map((candidates): CatalogObject => {
             const first = candidates[0]!;
-            let availablePrimary = false;
-            if (first.id === NARUTO_OID) {
-                for (const candidate of candidates) {
-                    if (diagnoseResourcePath(candidate.file) !== undefined) continue;
-                    if (await this.#canOpen(this.#primary, this.#primaryRootId, candidate.file)) {
-                        availablePrimary = true;
-                        break;
-                    }
-                }
-            }
-            prepared.push({
+            return {
                 objectKey: this.#newId(),
                 oid: first.id,
                 type: first.type!,
+                displayName: datCatalogDisplayName(first.file),
                 candidates,
-                availablePrimary,
-            });
-        }
+            };
+        });
         this.#catalogObjects = prepared;
     }
 
@@ -725,6 +761,44 @@ export class ProjectDatService {
                 severity: diagnostic.severity,
                 message: diagnostic.message.replace(/(?:[A-Za-z]:[\\/]|\.\.[\\/])\S*/g, "[redacted]"),
             })),
+        };
+    }
+
+    async #buildDeferredSessionView(
+        session: DatSessionView,
+        binding: SessionBinding,
+        object: CatalogObject,
+    ): Promise<ProjectSessionView> {
+        const primaryResource = await this.#projectPreviewObject(binding, object, session.projection);
+        const preview = deferredNativePreview(primaryResource);
+        return {
+            sessionId: session.sessionId,
+            revision: session.revision,
+            dirty: session.dirty,
+            writable: binding.writable,
+            oid: binding.oid,
+            type: binding.type,
+            name: session.projection.top.name,
+            spriteRanges: primaryResource.spriteRanges,
+            previewObjects: preview.resources,
+            frames: session.projection.frames.map(copySafeFrame),
+            fields: session.fields.filter((field) => ![
+                "head", "small", "file", "sound", "weapon_hit_sound", "weapon_drop_sound", "weapon_broken_sound",
+            ].includes(field.key)),
+            structureCapabilities: session.structureCapabilities,
+            preview,
+            diagnostics: [
+                ...session.diagnostics.map((diagnostic) => ({
+                    code: diagnostic.code,
+                    severity: diagnostic.severity,
+                    message: diagnostic.message.replace(/(?:[A-Za-z]:[\\/]|\.\.[\\/])\S*/g, "[redacted]"),
+                })),
+                {
+                    code: "preview-warming",
+                    severity: "warning" as const,
+                    message: "Native action previews are warming in the background; selecting an entry reuses the prepared result.",
+                },
+            ],
         };
     }
 
@@ -820,11 +894,12 @@ export class ProjectDatService {
         revision: number,
         options?: NativePreviewOptions,
     ): Promise<NativePreviewView> {
+        const effectiveOptions: NativePreviewOptions = { ...options, rootOid: binding.oid };
         const prefix = `${revision}:`;
         for (const key of binding.previewByKey.keys()) {
             if (!key.startsWith(prefix)) binding.previewByKey.delete(key);
         }
-        const cacheKey = `${prefix}${previewOptionsKey(options)}`;
+        const cacheKey = `${prefix}${previewOptionsKey(effectiveOptions)}`;
         const cached = binding.previewByKey.get(cacheKey);
         if (cached !== undefined) {
             binding.previewByKey.delete(cacheKey);
@@ -836,7 +911,7 @@ export class ProjectDatService {
             if (oldest === undefined) break;
             binding.previewByKey.delete(oldest);
         }
-        const pending = this.#createPreview(plaintext, binding, options);
+        const pending = this.#createPreview(plaintext, binding, effectiveOptions);
         binding.previewByKey.set(cacheKey, pending);
         try {
             return await pending;
@@ -878,7 +953,7 @@ export class ProjectDatService {
             }, resources, objectTypes, binding.oid);
         } catch (error) {
             if (error instanceof ProjectDatError) throw error;
-            throw new ProjectDatError("preview-failed", "The native Naruto preview failed.", { cause: error });
+            throw new ProjectDatError("preview-failed", "The native character preview failed.", { cause: error });
         }
     }
 
@@ -1039,13 +1114,6 @@ export class ProjectDatService {
         }
     }
 
-    async #canOpen(registry: WorkspaceRegistry, rootId: string, path: string): Promise<boolean> {
-        const opened = await this.#tryOpenDocument(registry, rootId, path);
-        if (opened === undefined) return false;
-        registry.closeDocument(opened.documentId);
-        return true;
-    }
-
     #requireSession(sessionId: string): SessionBinding {
         const binding = this.#sessions.get(sessionId);
         if (binding === undefined) throw new ProjectDatError("unknown-session", "The project session is unknown.");
@@ -1120,16 +1188,24 @@ export class ProjectDatService {
 }
 
 function previewOptionsKey(options: NativePreviewOptions = {}): string {
+    const rootOid = options.rootOid ?? DEFAULT_CHARACTER_OID;
     const startFrame = options.startFrame ?? DEFAULT_START_FRAME;
     const initialFrame = options.initialFrame ?? startFrame;
     const ticks = options.ticks ?? DEFAULT_TICKS;
     const inputPlan = options.inputPlan ?? [];
     return JSON.stringify({
+        rootOid,
         startFrame,
         initialFrame,
         ticks,
         inputPlan: inputPlan.map((step) => ({ tick: step.tick, keys: [...step.keys] })),
     });
+}
+
+function datCatalogDisplayName(rawPath: string): string {
+    const fileName = basename(rawPath.replaceAll("\\", "/"));
+    const displayName = fileName.replace(/\.dat$/i, "").trim();
+    return displayName === "" ? "未命名角色" : displayName;
 }
 
 function nativePreviewCacheKey(plaintext: Uint8Array, options: NativePreviewOptions): string {
@@ -1279,6 +1355,35 @@ function sanitizeTick(value: unknown): NativePreviewTickView {
             boundLeft: finite(bg.bound_left, "bg.bound_left"), boundRight: finite(bg.bound_right, "bg.bound_right"),
         },
         entities: sanitizedEntities,
+    };
+}
+
+function deferredNativePreview(primaryResource: ProjectPreviewObjectView): NativePreviewView {
+    return {
+        metadata: {
+            runtime: "ntsd_cpp",
+            tickDriver: "SimulationTickDriver",
+            renderer: "none",
+            seed: 0,
+            startFrame: 0,
+            ticksRequested: 0,
+            stage: { index: 0, name: "Preview warming", width: 1600, zMin: 0, zMax: 1000 },
+            initial: {
+                p1: { x: 0, y: 0, z: 0 },
+                p2: { x: 0, y: 0, z: 0 },
+            },
+        },
+        ticks: [],
+        resources: [primaryResource],
+        trace: {
+            rootSkillEndedTick: null,
+            progressEndTick: null,
+            playbackEndTick: 0,
+            status: "timeout",
+            pendingProjectiles: [],
+            entities: [],
+            events: [],
+        },
     };
 }
 

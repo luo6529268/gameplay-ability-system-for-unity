@@ -1,76 +1,77 @@
-using NTSD.App;
-
 namespace NTSD.Animation.LF2Objects
 {
-    public partial class LF2OtherObject
+    internal sealed class LF2OtherObjectFrameModule
     {
-        public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
-        {
-            Frame.PN = Frame.N;
-            Frame.N = targetFrameId;
+        private readonly LF2OtherObject owner;
 
-            LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
+        public LF2OtherObjectFrameModule(LF2OtherObject owner)
+        {
+            this.owner = owner;
+        }
+
+        public void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
+        {
+            owner.Frame.PN = owner.Frame.N;
+            owner.Frame.N = targetFrameId;
+
+            LF2FrameData targetFrame = owner.FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null)
                 return;
 
-            Frame.D = targetFrame;
-            Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
-            FrameEvent();
+            owner.Frame.D = targetFrame;
+            owner.Trans.SyncDirectFrameData(owner.Frame.D.wait, owner.Frame.D.next);
 
-            if (!string.IsNullOrEmpty(Frame.D.sound))
-                PlaySound(Frame.D.sound);
+            if (!string.IsNullOrEmpty(owner.Frame.D.sound))
+                owner.QueueBattleSound(owner.Frame.D.sound);
 
-            if (switchDirAfterTrans && PS != null)
-                SwitchDir(PS.dir == "right" ? "left" : "right");
+            if (switchDirAfterTrans && owner.PS != null)
+                owner.SwitchDir(owner.PS.dir == "right" ? "left" : "right");
         }
 
-        public override void SimFrameTick(int tickIndex)
+        public void SimFrameTick(int tickIndex)
         {
-            RunCommonFrameTick();
+            owner.RunCommonFrameTickFromModule();
         }
 
-        protected override bool ApplyObjectSpecificFrameTickBeforeWaitAdvance()
+        public bool ApplyObjectSpecificFrameTickBeforeWaitAdvance()
         {
-            return Frame?.D != null && PS != null;
+            return owner.Frame?.D != null && owner.PS != null;
         }
 
-        public override void SimTU(int tickIndex)
+        public void SimTU(int tickIndex)
         {
-            int dataType = GetCurrentDataObjectTypeForSimulation();
+            int dataType = owner.GetCurrentDataObjectTypeForSimulation();
             if (dataType == (int)LF2ObjectType.Character)
             {
-                RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
+                owner.RunSharedCharacterFrameAdvanceFromModule(tickIndex);
                 return;
             }
 
-            RunSharedNonCharacterDatFrameAdvance();
+            owner.RunSharedNonCharacterFrameAdvanceFromModule();
         }
 
-        protected override bool FrameEvent()
+        public bool FrameEvent()
         {
-            return Frame?.D != null;
+            return owner.Frame?.D != null;
         }
 
-        private void SetFrameDirect(int frameId, int waitCounter = int.MinValue)
+        public void SetFrameDirect(int frameId, int waitCounter = int.MinValue)
         {
-            if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)
+            if (frameId >= 0 && owner.FrameCache?.HasFrame(frameId) != true)
                 return;
 
-            Frame.PN = Frame.N;
-            Frame.N = frameId;
-            Frame.D = FrameCache.GetFrameDataById(frameId);
-            AttackingCounter = 0;
+            owner.Frame.PN = owner.Frame.N;
+            owner.Frame.N = frameId;
+            owner.Frame.D = owner.FrameCache.GetFrameDataById(frameId);
+            owner.AttackingCounter = 0;
 
-            if (Frame.D != null && Trans != null)
-                Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next, waitCounter);
-        }
-
-        private static void PlaySound(string soundId)
-        {
-            if (string.IsNullOrEmpty(soundId))
-                return;
-
-            AppManager.Instance?.SoundPlayer?.PlaySfx(soundId);
+            if (owner.Frame.D != null && owner.Trans != null)
+            {
+                owner.Trans.SyncDirectFrameData(
+                    owner.Frame.D.wait,
+                    owner.Frame.D.next,
+                    waitCounter);
+            }
         }
     }
 }

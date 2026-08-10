@@ -15,6 +15,17 @@ namespace NTSD.Animation
     {
         private GameDataConfig cachedConfig;
         private Dictionary<int, ObjectDefinition> objectLookup;
+        private readonly Dictionary<int, List<ObjectDefinition>> objectsByTypeLookup =
+            new Dictionary<int, List<ObjectDefinition>>();
+        private readonly Dictionary<int, BackgroundDefinition> backgroundLookup =
+            new Dictionary<int, BackgroundDefinition>();
+        private readonly List<ObjectDefinition> emptyObjectDefinitions =
+            new List<ObjectDefinition>(0);
+
+        public long UnloadedObjectQueryCountForDiagnostics { get; private set; }
+        public long UnloadedTypeQueryCountForDiagnostics { get; private set; }
+        public long UnloadedObjectListQueryCountForDiagnostics { get; private set; }
+        public long UnloadedBackgroundQueryCountForDiagnostics { get; private set; }
 
         protected override void InitializeSingleton()
         {
@@ -43,10 +54,25 @@ namespace NTSD.Animation
 
                 // 构建查找表
                 objectLookup = new Dictionary<int, ObjectDefinition>(cachedConfig.objects.Count);
+                objectsByTypeLookup.Clear();
                 foreach (var obj in cachedConfig.objects)
                 {
                     objectLookup[obj.id] = obj;
+
+                    if (!objectsByTypeLookup.TryGetValue(
+                            obj.type,
+                            out List<ObjectDefinition> typedObjects))
+                    {
+                        typedObjects = new List<ObjectDefinition>();
+                        objectsByTypeLookup.Add(obj.type, typedObjects);
+                    }
+                    typedObjects.Add(obj);
                 }
+
+                backgroundLookup.Clear();
+                backgroundLookup.EnsureCapacity(cachedConfig.backgrounds.Count);
+                foreach (BackgroundDefinition background in cachedConfig.backgrounds)
+                    backgroundLookup[background.id] = background;
 
                 Debug.Log($"<color=green>✅ GameDataManager 加载成功: 对象={cachedConfig.objects.Count}, 背景={cachedConfig.backgrounds.Count}</color>");
             }
@@ -63,7 +89,7 @@ namespace NTSD.Animation
         {
             if (cachedConfig == null || objectLookup == null)
             {
-                Debug.LogWarning("<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>");
+                UnloadedObjectQueryCountForDiagnostics++;
                 return null;
             }
 
@@ -82,11 +108,15 @@ namespace NTSD.Animation
         {
             if (cachedConfig == null)
             {
-                Debug.LogWarning("<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>");
-                return new List<ObjectDefinition>();
+                UnloadedTypeQueryCountForDiagnostics++;
+                return emptyObjectDefinitions;
             }
 
-            return cachedConfig.objects.FindAll(o => o.type == type);
+            return objectsByTypeLookup.TryGetValue(
+                type,
+                out List<ObjectDefinition> objects)
+                ? objects
+                : emptyObjectDefinitions;
         }
 
         /// <summary>
@@ -96,8 +126,8 @@ namespace NTSD.Animation
         {
             if (cachedConfig == null)
             {
-                Debug.LogWarning("<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>");
-                return new List<ObjectDefinition>();
+                UnloadedObjectListQueryCountForDiagnostics++;
+                return emptyObjectDefinitions;
             }
 
             return cachedConfig.objects;
@@ -110,11 +140,13 @@ namespace NTSD.Animation
         {
             if (cachedConfig == null)
             {
-                Debug.LogWarning("<color=yellow>⚠️ GameDataManager 未加载，请先调用 LoadDataFile()</color>");
+                UnloadedBackgroundQueryCountForDiagnostics++;
                 return null;
             }
 
-            return cachedConfig.backgrounds.Find(b => b.id == id);
+            return backgroundLookup.TryGetValue(id, out BackgroundDefinition background)
+                ? background
+                : null;
         }
 
         /// <summary>

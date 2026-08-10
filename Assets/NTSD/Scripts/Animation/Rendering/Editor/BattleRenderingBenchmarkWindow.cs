@@ -82,6 +82,8 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static BattleRenderingBenchmarkRunner runner;
         private static bool requestInProgress;
+        private static readonly string RequestAbsolutePath = ProjectPath(RequestFile);
+        private static bool requestPending = File.Exists(RequestAbsolutePath);
 
         static BattleRenderingBenchmarkRequestProcessor()
         {
@@ -104,6 +106,7 @@ namespace NTSD.Animation.Rendering.Editor
             string path = ProjectPath(RequestFile);
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ProjectPath("Temp"));
             File.WriteAllText(path, JsonUtility.ToJson(request), new UTF8Encoding(false));
+            requestPending = true;
         }
 
         private static void PollRequest()
@@ -132,6 +135,8 @@ namespace NTSD.Animation.Rendering.Editor
         {
             if (!isPlaying)
             {
+                if (!requestPending)
+                    requestPending = File.Exists(RequestAbsolutePath);
                 AbortCurrentRunner("Benchmark aborted because the Editor is not in Play Mode.");
                 return;
             }
@@ -139,18 +144,18 @@ namespace NTSD.Animation.Rendering.Editor
             if (requestInProgress || runner != null)
                 return;
 
-            string requestPath = ProjectPath(RequestFile);
-            if (!File.Exists(requestPath))
+            if (!requestPending)
                 return;
 
             requestInProgress = true;
             try
             {
-                ProcessRequest(requestPath);
+                ProcessRequest(RequestAbsolutePath);
             }
             finally
             {
-                TryDelete(requestPath);
+                TryDelete(RequestAbsolutePath);
+                requestPending = false;
                 requestInProgress = false;
             }
         }

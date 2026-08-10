@@ -5,7 +5,7 @@ import { describe, it } from "node:test";
 
 describe("project-backed client contract", () => {
     it("uses project DTO endpoints rather than the Gate2 fixture", async () => {
-        const [html, main, projectClient, previewRenderer, editorSupport, latestScheduler, skillEntries, panelLayout] = await Promise.all([
+        const [html, main, projectClient, previewRenderer, editorSupport, latestScheduler, skillEntries, panelLayout, styles] = await Promise.all([
             readFile(resolve("index.html"), "utf8"),
             readFile(resolve("src/client/main.ts"), "utf8"),
             readFile(resolve("src/client/project-client.ts"), "utf8"),
@@ -14,6 +14,7 @@ describe("project-backed client contract", () => {
             readFile(resolve("src/client/latest-task-scheduler.ts"), "utf8"),
             readFile(resolve("src/client/skill-entries.ts"), "utf8"),
             readFile(resolve("src/client/panel-layout.ts"), "utf8"),
+            readFile(resolve("src/client/styles.css"), "utf8"),
         ]);
         const clientSource = `${main}\n${projectClient}\n${previewRenderer}\n${editorSupport}\n${latestScheduler}\n${skillEntries}\n${panelLayout}`;
 
@@ -22,7 +23,10 @@ describe("project-backed client contract", () => {
         assert.match(html, /NTSD DAT 技能流程编辑器/);
         assert.match(html, /正在连接本地服务/);
         assert.match(html, /覆盖 DAT 文件/);
-        assert.match(html, /状态与技能入口/);
+        assert.match(html, /Frame 与技能/);
+        assert.match(html, /基础状态/);
+        assert.match(html, /技能入口/);
+        assert.match(html, /全部 Frame/);
         assert.match(html, /当前技能帧流程/);
         assert.match(html, /帧属性检查/);
         assert.match(main, /已载入/);
@@ -38,19 +42,20 @@ describe("project-backed client contract", () => {
         assert.match(clientSource, /findFrameFieldCapability/);
         assert.match(clientSource, /frameOccurrence/);
         assert.match(main, /input\.disabled\s*=\s*capability\s*===\s*undefined/);
-        assert.match(main, /fieldDraft \|\| project\.dirty/);
+        assert.match(main, /fieldDraft \|\| previousProject\.dirty/);
         assert.match(main, /objectSwitchQueue\.then/);
         assert.match(main, /createLatestTaskScheduler/);
         assert.match(latestScheduler, /pending\?\.resolve\(\{ status: "superseded" \}\)/);
         assert.match(clientSource, /primaryPreviewEntity/);
         assert.doesNotMatch(`${main}\n${previewRenderer}`, /find\(\(entity\) => entity\.oid === 2\) \?\?/);
-        assert.match(main, /option\.disabled = oid !== 2/);
+        assert.match(main, /number\(record\(value\)\.type, -1\) === 0/);
+        assert.doesNotMatch(main, /option\.disabled\s*=\s*oid !== 2/);
         assert.match(main, /number\(Number\(option\?\.dataset\.oid\)\)/);
         assert.match(main, /input\.valueAsNumber/);
         assert.match(main, /Number\.isSafeInteger/);
         assert.match(main, /INT32_MIN/);
         assert.match(main, /frameSelect\.disabled = selectionLocked/);
-        assert.equal((main.match(/if \(isSelectionLocked\(\)\) return/g) ?? []).length, 3);
+        assert.equal((main.match(/if \(isSelectionLocked\(\)\) return/g) ?? []).length, 4);
         assert.match(main, /!dirty \|\| actionBusy\.save \|\| isSelectionLocked\(\)/);
         assert.match(main, /actionBusy\.edit \|\| project\?\.writable !== true/);
         assert.match(main, /project\?\.writable !== true/);
@@ -61,7 +66,7 @@ describe("project-backed client contract", () => {
         assert.match(main, /runExclusiveAction/);
         assert.match(main, /Object\.values\(actionBusy\)\.some\(Boolean\)/);
         assert.match(main, /syncFlowEdgeEditor\(currentFlow\(\)\)/);
-        assert.match(main, /if \(kind === "edit"\) renderFlow\(\)/);
+        assert.match(main, /if \(kind === "edit"\) renderTimelineSegments\(\)/);
         assert.match(main, /event\.persisted/);
         assert.match(main, /beforeunload/);
         assert.equal((html.match(/aria-busy="false"/g) ?? []).length, 3);
@@ -72,13 +77,15 @@ describe("project-backed client contract", () => {
         assert.match(main, /normalizePreviewStage/);
         for (const id of [
             "object-select", "frame-select", "frame-editor", "sprite-canvas", "play-toggle", "step-once", "reset-timeline",
-            "skill-list", "flow-list", "block-select", "timeline-segments", "edit-skill", "show-hidden-skills",
+            "skill-list", "frame-browser-list", "entry-search", "entry-tab-base", "entry-tab-input", "entry-tab-all",
+            "flow-list", "block-select", "timeline-segments", "edit-skill", "show-hidden-skills",
             "skill-name", "skill-group", "skill-order", "skill-pinned", "skill-hidden", "skill-notes",
             "flow-svg", "flow-edge-target",
             "apply-flow-edge", "copy-frame", "delete-frame", "new-block", "copy-block", "delete-block", "grid-four",
             "editor-grid", "left-panel-separator", "right-panel-separator",
         ]) assert.match(html, new RegExp(`id="${id}"`));
-        assert.match(main, /deriveSkillEntries\(project\.frames, project\.oid, skillState\.metadata\)/);
+        assert.match(main, /buildFrameEntryCatalog\(project\.frames, project\.oid, skillState\.metadata\)/);
+        assert.match(main, /frameEntryCatalog\.entries/);
         assert.match(main, /entriesByStartFrame\(skillState\.skills\)/);
         assert.match(skillEntries, /if \(rawTarget === 0\) continue/);
         assert.match(skillEntries, /target = frameById\.get\(rawTarget\)/);
@@ -110,9 +117,18 @@ describe("project-backed client contract", () => {
         assert.match(main, /aria-valuetext/);
         assert.match(panelLayout, /middleMinimumForWidth/);
         assert.match(panelLayout, /resizePanelWidths/);
-        assert.match(main, /buildSkillTimeline/);
+        assert.match(main, /buildRuntimeFrameTimeline/);
         assert.match(main, /renderFlowSvg/);
-        assert.match(html, /DAT wait 视觉轴/);
+        assert.match(html, /完整动作回放/);
+        assert.doesNotMatch(html, /DAT wait 视觉轴/);
+        assert.match(html, /class="panel-section flow-section" hidden aria-hidden="true"/);
+        assert.match(styles, /\.flow-section\[hidden\]\s*\{\s*display:\s*none;\s*\}/);
+        const frameSelection = main.match(/async function selectFrame\([\s\S]*?\n}\nasync function previewFrameWithinCompleteAction/)?.[0] ?? "";
+        assert.match(frameSelection, /render\(\);/);
+        assert.match(frameSelection, /previewFrameWithinCompleteAction\(frame\)/);
+        assert.doesNotMatch(frameSelection, /preview\(frameId\)/);
+        assert.match(frameSelection, /已立即显示/);
+        assert.match(main, /未从该 Frame 单独启动/);
         assert.match(html, /重定向已有字段/);
         assert.doesNotMatch(html, />\s*0 毫秒\s*</);
     });

@@ -16,15 +16,42 @@ namespace NTSD.Animation.LF2Objects
             this.weapon = weapon;
         }
 
+        public void Drop(double dvx, double dvy)
+        {
+            LF2Entity holder = weapon.ResolveRuntimeHolderEntityForOwnedModule();
+            weapon.Team = 0;
+            weapon.ForceClearHolder();
+
+            if (holder?.Runtime != null)
+            {
+                holder.Runtime.LinkState = 0;
+                holder.Runtime.TargetSlotIndex = -1;
+                holder.Runtime.HeldWeaponStableId = -1;
+                holder.Runtime.ThrowFrameGuard = -1;
+            }
+
+            weapon.Runtime.WeaponState = 0;
+            weapon.ImmediateFrame(weapon.BattleRandInt(0, 16));
+            weapon.Runtime.WeaponState = 0;
+            weapon.Runtime.Vx = dvx * (1.0 / 3.0);
+            weapon.Runtime.Vy = dvy;
+
+            if (weapon.Runtime.Y < -2.0)
+                weapon.Runtime.Y = -2.0;
+
+            weapon.Runtime.Zz = 0f;
+            weapon.PS.zz = 0;
+        }
+
         public WeaponActResult Act(LF2Entity holder, WeaponPoint wpoint, Vector3 holdpoint)
         {
-            var result = new WeaponActResult();
+            WeaponActResult result = default;
             if (weapon.Frame.D == null)
                 return result;
 
             if (holder?.Frame?.D?.state == 17)
             {
-                ProcessDrinkConsumption(holder, result);
+                ProcessDrinkConsumption(holder, ref result);
                 if (result.ForceDrop)
                     return result;
             }
@@ -43,7 +70,7 @@ namespace NTSD.Animation.LF2Objects
 
             int heldState = frame?.state ?? -1;
             if (heldState == LF2States.Falling || heldState == LF2States.BeingCaught)
-                DropHeldWeaponFromDamagedFrame(holder, result);
+                DropHeldWeaponFromDamagedFrame(holder, ref result);
 
             if (wpoint.dvx != 0)
             {
@@ -97,7 +124,9 @@ namespace NTSD.Animation.LF2Objects
             weapon.OnThrownInternal();
         }
 
-        private void DropHeldWeaponFromDamagedFrame(LF2Entity holder, WeaponActResult result)
+        private void DropHeldWeaponFromDamagedFrame(
+            LF2Entity holder,
+            ref WeaponActResult result)
         {
             if (holder?.PS == null || weapon.PS == null)
                 return;
@@ -163,7 +192,9 @@ namespace NTSD.Animation.LF2Objects
             weapon.Runtime.SyncIntegerPosition();
         }
 
-        public void ProcessDrinkConsumption(LF2Entity holder, WeaponActResult result)
+        public void ProcessDrinkConsumption(
+            LF2Entity holder,
+            ref WeaponActResult result)
         {
             if (holder?.Health == null)
                 return;
@@ -245,7 +276,7 @@ namespace NTSD.Animation.LF2Objects
             LF2FrameData holderFrame = holder.Frame.D;
             holderWPoint ??= holderFrame.wpoints != null && holderFrame.wpoints.Count > 0
                 ? holderFrame.wpoints[0]
-                : new WeaponPoint();
+                : null;
 
             Vector3 holdpoint = CalculateHoldPoint(holder, holderWPoint);
             SyncHeldFrameAndPosition(holder, held, holderWPoint, holdpoint);
@@ -258,7 +289,7 @@ namespace NTSD.Animation.LF2Objects
             WeaponPoint holderWPoint,
             out WeaponActResult result)
         {
-            result = new WeaponActResult();
+            result = default;
             if (holder?.Runtime == null || holder.PS == null || holder.Frame?.D == null)
                 return false;
             if (held?.Runtime == null || held.PS == null || holderWPoint == null)
@@ -320,10 +351,12 @@ namespace NTSD.Animation.LF2Objects
             int holderX = holder.Runtime.XInt;
             int holderY = holder.Runtime.YInt;
             int holderZ = holder.Runtime.ZInt;
+            int wpointX = wpoint?.x ?? 0;
+            int wpointY = wpoint?.y ?? 0;
             float x = holder.Runtime.Dir == "right"
-                ? holderX - frame.centerx + wpoint.x
-                : holderX + frame.centerx - wpoint.x;
-            float y = holderY - frame.centery + wpoint.y;
+                ? holderX - frame.centerx + wpointX
+                : holderX + frame.centerx - wpointX;
+            float y = holderY - frame.centery + wpointY;
             return new Vector3(x, y, holderZ);
         }
 
@@ -333,7 +366,7 @@ namespace NTSD.Animation.LF2Objects
             WeaponPoint holderWPoint,
             Vector3 holdpoint)
         {
-            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.weaponact);
+            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint?.weaponact ?? 0);
             held.SwitchDir(holder.Runtime.Dir);
             held.FrameDelay = holder.FrameDelay;
 
@@ -353,7 +386,7 @@ namespace NTSD.Animation.LF2Objects
             held.Runtime.Z = holder.Runtime.ZInt;
             held.Runtime.Zz = 0f;
 
-            if (holderWPoint.cover == 0)
+            if ((holderWPoint?.cover ?? 0) == 0)
             {
                 held.Runtime.Z += 1.0;
                 held.Runtime.Y -= 1.0;

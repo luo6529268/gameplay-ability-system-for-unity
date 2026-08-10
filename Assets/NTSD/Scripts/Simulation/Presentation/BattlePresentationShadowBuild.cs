@@ -97,119 +97,17 @@ namespace NTSD.Simulation.Presentation
         public const string AlphaContractTag = "NTSDAlphaContract";
         public const string PremultipliedAlphaContract = "PremultipliedSpriteAlpha";
 
-        private static readonly int ColorId = Shader.PropertyToID("_Color");
-        private static readonly Dictionary<int, MaterialClassificationCacheEntry>
-            ClassificationByMaterialId =
-                new Dictionary<int, MaterialClassificationCacheEntry>(8);
-
-        private enum SupportedShaderKind : byte
-        {
-            Unsupported = 0,
-            BuiltInSprite = 1,
-            CentralTexture = 2,
-            CentralArray = 3,
-        }
-
-        private sealed class MaterialClassificationCacheEntry
-        {
-            internal Material Material;
-            internal Shader Shader;
-            internal SupportedShaderKind ShaderKind;
-            internal bool AlphaContractSupported;
-        }
+        private static readonly BattleSpriteMaterialClassifier Classifier =
+            new BattleSpriteMaterialClassifier();
 
         public static BattleSpriteMaterialSemantic Classify(Material material)
         {
-            MaterialClassificationCacheEntry entry = GetClassificationEntry(material);
-            return ClassifyCurrentMaterialState(material, entry);
+            return Classifier.Classify(material);
         }
 
         public static bool IsDeclaredCentralMaterial(Material material, bool textureArray)
         {
-            MaterialClassificationCacheEntry entry = GetClassificationEntry(material);
-            if (entry == null)
-                return false;
-
-            SupportedShaderKind expectedKind = textureArray
-                ? SupportedShaderKind.CentralArray
-                : SupportedShaderKind.CentralTexture;
-            return entry.ShaderKind == expectedKind &&
-                   ClassifyCurrentMaterialState(material, entry) ==
-                   BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
-        }
-
-        private static MaterialClassificationCacheEntry GetClassificationEntry(
-            Material material)
-        {
-            if (material == null)
-                return null;
-
-            Shader shader = material.shader;
-            if (shader == null)
-                return null;
-
-            int materialId = material.GetInstanceID();
-            if (ClassificationByMaterialId.TryGetValue(
-                    materialId,
-                    out MaterialClassificationCacheEntry cached) &&
-                object.ReferenceEquals(cached.Material, material) &&
-                object.ReferenceEquals(cached.Shader, shader))
-            {
-                return cached;
-            }
-
-            string shaderName = shader.name;
-            SupportedShaderKind shaderKind = SupportedShaderKind.Unsupported;
-            if (shaderName == BuiltInSpriteShaderName)
-                shaderKind = SupportedShaderKind.BuiltInSprite;
-            else if (shaderName == CentralTextureShaderName)
-                shaderKind = SupportedShaderKind.CentralTexture;
-            else if (shaderName == CentralArrayShaderName)
-                shaderKind = SupportedShaderKind.CentralArray;
-
-            bool alphaContractSupported =
-                shaderKind == SupportedShaderKind.BuiltInSprite ||
-                (shaderKind != SupportedShaderKind.Unsupported &&
-                 material.GetTag(AlphaContractTag, false, string.Empty) ==
-                 PremultipliedAlphaContract);
-            cached = new MaterialClassificationCacheEntry
-            {
-                Material = material,
-                Shader = shader,
-                ShaderKind = shaderKind,
-                AlphaContractSupported = alphaContractSupported,
-            };
-            ClassificationByMaterialId[materialId] = cached;
-            return cached;
-        }
-
-        private static BattleSpriteMaterialSemantic ClassifyCurrentMaterialState(
-            Material material,
-            MaterialClassificationCacheEntry entry)
-        {
-            if (material == null || entry == null ||
-                entry.ShaderKind == SupportedShaderKind.Unsupported ||
-                !entry.AlphaContractSupported)
-            {
-                return BattleSpriteMaterialSemantic.Unsupported;
-            }
-
-            if (!material.HasProperty(ColorId) || !IsWhite(material.GetColor(ColorId)) ||
-                material.IsKeywordEnabled("PIXELSNAP_ON"))
-            {
-                return BattleSpriteMaterialSemantic.Unsupported;
-            }
-
-            return BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
-        }
-
-        private static bool IsWhite(Color color)
-        {
-            const float epsilon = 0.000001f;
-            return Mathf.Abs(color.r - 1f) <= epsilon &&
-                   Mathf.Abs(color.g - 1f) <= epsilon &&
-                   Mathf.Abs(color.b - 1f) <= epsilon &&
-                   Mathf.Abs(color.a - 1f) <= epsilon;
+            return Classifier.IsDeclaredCentralMaterial(material, textureArray);
         }
     }
 
@@ -392,6 +290,12 @@ namespace NTSD.Simulation.Presentation
         {
             EnsureCapacity(ref hitRecords, HitRecordCount + 1);
             hitRecords[HitRecordCount++] = hitRecord;
+        }
+
+        internal void PrepareCapacity(int ownerCapacity, int hitRecordCapacity)
+        {
+            EnsureCapacity(ref owners, ownerCapacity);
+            EnsureCapacity(ref hitRecords, hitRecordCapacity);
         }
 
         internal void RetainPublicationBinding(
@@ -913,6 +817,16 @@ namespace NTSD.Simulation.Presentation
         internal void EnsureHitRecordCapacity(int required) => EnsureCapacity(ref hitRecords, required);
         internal void EnsureCommandCapacity(int required) => EnsureCapacity(ref commands, required);
 
+        internal void PrepareCapacity(
+            int entityCapacity,
+            int hitRecordCapacity,
+            int commandCapacity)
+        {
+            EnsureEntityCapacity(entityCapacity);
+            EnsureHitRecordCapacity(hitRecordCapacity);
+            EnsureCommandCapacity(commandCapacity);
+        }
+
         internal void AddEntity(in BattlePresentationEntitySnapshot entity)
         {
             EnsureEntityCapacity(EntityCount + 1);
@@ -1108,6 +1022,8 @@ namespace NTSD.Simulation.Presentation
             new ProfilerMarker("NTSD.BattlePresentation.CaptureEntities");
         private static readonly ProfilerMarker BuildCommandsMarker =
             new ProfilerMarker("NTSD.BattlePresentation.BuildCommands");
+        private readonly BattleSpriteMaterialClassifier materialClassifier =
+            new BattleSpriteMaterialClassifier();
         private readonly BattlePresentationFrame frameA = new BattlePresentationFrame();
         private readonly BattlePresentationFrame frameB = new BattlePresentationFrame();
         private readonly BattleHitRecordPresentationCycle hitRecordCycleA =
@@ -1119,6 +1035,9 @@ namespace NTSD.Simulation.Presentation
         private LF2Entity[] entitySortDestination = new LF2Entity[128];
         private uint[] entitySortKeySource = new uint[128];
         private uint[] entitySortKeyDestination = new uint[128];
+        private RuntimeEntityHandle[] entityHandleCache =
+            new RuntimeEntityHandle[128];
+        private int[] entityHandleCacheEpochs = new int[128];
         private readonly int[] entitySortBuckets = new int[256];
         private readonly BattleEntityOverlayGlyph[] overlayGlyphScratch =
             new BattleEntityOverlayGlyph[32];
@@ -1142,6 +1061,7 @@ namespace NTSD.Simulation.Presentation
         private int finalizedHitRecordCycleId;
         private int legacyProbeCount;
         private int probeSequence;
+        private int entityHandleCacheEpoch = 1;
         private bool awaitingLegacyCompletion;
 
         private readonly struct SpriteCaptureCacheEntry
@@ -1175,6 +1095,43 @@ namespace NTSD.Simulation.Presentation
         public bool IsCapturingLegacyProbes => awaitingLegacyCompletion;
         internal int LastHitRecordOwnerLookupCount { get; private set; }
 
+        public void PrepareCapacity(int entityCapacity)
+        {
+            if (entityCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(entityCapacity));
+
+            int hitRecordCapacity = checked(
+                entityCapacity * LF2Entity.MaxHitRecordSlots);
+            int commandCapacity = CalculateMaximumCommandCapacity(entityCapacity);
+
+            if (entityScratch.Capacity < entityCapacity)
+                entityScratch.Capacity = entityCapacity;
+            EnsureEntitySortCapacity(entityCapacity);
+            EnsureEntityHandleCacheCapacity(entityCapacity);
+            spriteCaptureCache.EnsureCapacity(entityCapacity);
+
+            frameA.PrepareCapacity(
+                entityCapacity,
+                hitRecordCapacity,
+                commandCapacity);
+            frameB.PrepareCapacity(
+                entityCapacity,
+                hitRecordCapacity,
+                commandCapacity);
+            hitRecordCycleA.PrepareCapacity(entityCapacity, hitRecordCapacity);
+            hitRecordCycleB.PrepareCapacity(entityCapacity, hitRecordCapacity);
+        }
+
+        internal static int CalculateMaximumCommandCapacity(int entityCapacity)
+        {
+            if (entityCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(entityCapacity));
+
+            return checked(
+                entityCapacity * MaximumCommandsPerEntityWithoutHitRecords +
+                entityCapacity * LF2Entity.MaxHitRecordSlots);
+        }
+
         public void SetMode(BattlePresentationBackendMode value)
         {
             BattlePresentationBackendResolver.ValidateAvailable(value);
@@ -1190,6 +1147,7 @@ namespace NTSD.Simulation.Presentation
 
         public void BeginFrame(SimulationWorld world, int tickIndex)
         {
+            AdvanceEntityHandleCacheEpoch();
             if (world == null)
                 return;
 
@@ -1206,6 +1164,7 @@ namespace NTSD.Simulation.Presentation
                     {
                         world.GetPresentationEntitiesNoAlloc(entityScratch);
                         SortEntitiesByZPreservingSlotOrder(entityScratch);
+                        EnsureEntityHandleCacheCapacity(entityScratch.Count);
                         world.RecordPresentationEntityScanAndSortForDiagnostics();
                         if (mode == BattlePresentationBackendMode.CentralOnly)
                         {
@@ -1397,6 +1356,7 @@ namespace NTSD.Simulation.Presentation
             probeSequence = 0;
             awaitingLegacyCompletion = false;
             LastHitRecordOwnerLookupCount = 0;
+            AdvanceEntityHandleCacheEpoch();
             Diagnostics.Status = BattlePresentationParityStatus.None;
             Diagnostics.TickIndex = 0;
             Diagnostics.ExpectedCount = 0;
@@ -1481,7 +1441,7 @@ namespace NTSD.Simulation.Presentation
                 renderer.flipX,
                 renderer.flipY,
                 renderer.maskInteraction,
-                BattleSpriteMaterialContract.Classify(material));
+                materialClassifier.Classify(material));
             bool matchesPublishedBinding = binding?.MatchesSprite(sprite) == true;
             BattleSpriteValueDescriptor descriptor = matchesPublishedBinding
                 ? new BattleSpriteValueDescriptor(
@@ -1536,7 +1496,7 @@ namespace NTSD.Simulation.Presentation
                 renderer.flipX,
                 renderer.flipY,
                 renderer.maskInteraction,
-                BattleSpriteMaterialContract.Classify(material));
+                materialClassifier.Classify(material));
             bool matchesPublishedBinding = binding != null &&
                                          binding.Key == command.SpriteDescriptor.LogicalResourceKey &&
                                          binding.MatchesSprite(sprite);
@@ -1598,10 +1558,16 @@ namespace NTSD.Simulation.Presentation
                 if (entity == null || runtime == null || slot < 0 ||
                     runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
                     tickIndex < runtime.FirstPresentationTick ||
-                    !world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                    !world.TryGetCurrentRuntimeHandle(
+                        slot,
+                        entity,
+                        out RuntimeEntityHandle handle))
                 {
                     continue;
                 }
+
+                entityHandleCache[index] = handle;
+                entityHandleCacheEpochs[index] = entityHandleCacheEpoch;
 
                 int sampledCount = Math.Min(entity.HitRecordCount, LF2Entity.MaxHitRecordSlots);
                 if (sampledCount <= 0)
@@ -1696,10 +1662,12 @@ namespace NTSD.Simulation.Presentation
                         if (entity == null || runtime == null || slot < 0 ||
                             runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
                             tickIndex < runtime.FirstPresentationTick ||
-                            !world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                            entityHandleCacheEpochs[i] != entityHandleCacheEpoch)
                         {
                             continue;
                         }
+
+                        RuntimeEntityHandle handle = entityHandleCache[i];
 
                         LF2FrameData currentFrame = entity.Frame?.D;
                         int visualDataId = LF2Entity.ResolveCurrentDataObjectId(entity);
@@ -1735,7 +1703,9 @@ namespace NTSD.Simulation.Presentation
                         }
 
                         int holderSlot = runtime.HolderStableId;
-                        LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(holderSlot);
+                        LF2Entity holder = holderSlot >= 0
+                            ? world.FindEntityByRuntimeSlotForQuery(holderSlot)
+                            : null;
                         Vector2 heldVisualAttachmentOffsetPixels =
                             LF2ObjectRenderer.ResolveHeldVisualAttachmentOffsetPixels(
                                 runtime,
@@ -2730,6 +2700,33 @@ namespace NTSD.Simulation.Presentation
             Array.Resize(ref entitySortDestination, capacity);
             Array.Resize(ref entitySortKeySource, capacity);
             Array.Resize(ref entitySortKeyDestination, capacity);
+        }
+
+        private void EnsureEntityHandleCacheCapacity(int required)
+        {
+            if (required <= entityHandleCache.Length)
+                return;
+
+            int capacity = entityHandleCache.Length;
+            while (capacity < required)
+                capacity = checked(capacity * 2);
+            Array.Resize(ref entityHandleCache, capacity);
+            Array.Resize(ref entityHandleCacheEpochs, capacity);
+        }
+
+        private void AdvanceEntityHandleCacheEpoch()
+        {
+            if (entityHandleCacheEpoch == int.MaxValue)
+            {
+                Array.Clear(
+                    entityHandleCacheEpochs,
+                    0,
+                    entityHandleCacheEpochs.Length);
+                entityHandleCacheEpoch = 1;
+                return;
+            }
+
+            entityHandleCacheEpoch++;
         }
 
         private void EnsureLegacyProbeCapacity(int required)

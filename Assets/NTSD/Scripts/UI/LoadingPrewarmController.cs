@@ -2,9 +2,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
+using NTSD.App;
 using TMPro;
 using System.Collections.Generic;
 using NTSD.Load;
+using NTSD.Simulation;
 
 namespace NTSD.UI
 {
@@ -181,10 +184,20 @@ namespace NTSD.UI
                 Execute = async (task, _) =>
                 {
                     onProgressText?.Invoke("Prewarming Entity Slots...");
+                    BattleRuntimeWorldSettings runtimeSettings =
+                        BattleRuntimeProfileProductionSource.Resolve(GameConfig.Instance);
+                    int reservedCapacity = runtimeSettings.InitialRuntimeSlotCapacity;
+                    LF2ReferencePool.Instance.PrewarmTasks<OPointCreateTask>(reservedCapacity);
+                    LF2ReferencePool.Instance.PrewarmTasks<OPointCreateMultipleTask>(reservedCapacity);
                     // 对齐反汇编 SceneManager_Init: 预分配 400 个实体逻辑对象
-                    LF2ReferencePool.Instance.Prewarm(LF2ObjectType.Character, 400);
+                    LF2ReferencePool.Instance.PrepareObjectCapacity(
+                        LF2ObjectType.Character,
+                        reservedCapacity);
                     // 同时异步预分配 400 个实体 GameObject 实例
-                    await LF2ObjectPool.Instance.PrewarmAsync(400);
+                    LF2ObjectPointFactory.Instance?.PrepareTaskQueueCapacity(reservedCapacity);
+                    await LF2ObjectPool.Instance.PrepareCapacityAsync(
+                        reservedCapacity,
+                        reservedCapacity);
                     task.Result = true;
                 }
             };

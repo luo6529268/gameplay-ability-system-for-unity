@@ -31,12 +31,14 @@ function Invoke-Preview(
     [int]$EntryFrame,
     [int]$InitialFrame,
     [string]$InputPlan,
-    [int]$Ticks
+    [int]$Ticks,
+    [int]$RootOid = 2
 ) {
     $output = Join-Path $artifactRoot "$Name.json"
     $arguments = @(
         "--output", $output,
         "--game-root", $gameRoot,
+        "--root-oid", [string]$RootOid,
         "--ticks", [string]$Ticks,
         "--start-frame", [string]$InitialFrame,
         "--entry-frame", [string]$EntryFrame
@@ -71,6 +73,25 @@ Assert-True (Test-Path -LiteralPath (Join-Path $gameRoot "data\data.txt") -PathT
     "NTSD 2.4.1 data.txt is unavailable: $gameRoot"
 Assert-True (Test-Path -LiteralPath $executable -PathType Leaf) "Native preview adapter is unavailable: $executable"
 New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null
+
+$walkingPlan = (@(2..32 | ForEach-Object { "${_}:D" }) -join ",")
+$walking = Invoke-Preview "f5-walking" 5 0 $walkingPlan 45
+$walkingP1 = @($walking.ticks | ForEach-Object { $_.entities | Where-Object slot -eq 0 | Select-Object -First 1 })
+$walkingFrames = @($walkingP1.frame)
+Assert-True ($walkingFrames -contains 5 -and $walkingFrames -contains 6 `
+    -and $walkingFrames -contains 7 -and $walkingFrames -contains 8) `
+    "F5 walking did not cycle through the Native-controlled walking frames."
+Assert-True ([double]$walkingP1[-1].x -gt [double]$walkingP1[0].x) `
+    "F5 walking input did not move the character."
+
+$runningPlan = "2:D," + (@(4..32 | ForEach-Object { "${_}:D" }) -join ",")
+$running = Invoke-Preview "f9-running" 9 0 $runningPlan 45
+$runningP1 = @($running.ticks | ForEach-Object { $_.entities | Where-Object slot -eq 0 | Select-Object -First 1 })
+$runningFrames = @($runningP1.frame)
+Assert-True ($runningFrames -contains 9 -and $runningFrames -contains 10 -and $runningFrames -contains 11) `
+    "F9 running did not cycle through the Native-controlled running frames."
+Assert-True ([double]$runningP1[-1].x -gt [double]$runningP1[0].x) `
+    "F9 running input did not move the character."
 
 $jump = Invoke-Preview "f210" 210 0 "2:K" 90
 Assert-FullCatalog $jump "F210"
@@ -138,8 +159,16 @@ $projectileRenderResource = $projectile.render_resources | Where-Object oid -eq 
 Assert-True ($null -ne $projectileRenderResource -and [int]$projectileRenderResource.type -eq 4) `
     "F263/OID 121 did not preserve its data.txt type-4 weapon behavior."
 
+$kakashi = Invoke-Preview "oid3-kakashi" 0 0 "" 5 3
+Assert-FullCatalog $kakashi "OID 3"
+$kakashiRoot = $kakashi.ticks[0].entities | Where-Object slot -eq 0 | Select-Object -First 1
+Assert-True ([int]$kakashi.metadata.root_oid -eq 3 -and [int]$kakashiRoot.oid -eq 3) `
+    "The Native preview did not seed the selected type-0 OID as the root character."
+
 Write-Output "Native preview acceptance passed."
+Write-Output "F5/F9 used held/double-tap Native input and produced moving walking/running cycles."
 Write-Output "F210 minimum y: $jumpMinimumY; first F212 vy: $($firstF212.v.y)"
 Write-Output "F265 minimum y: $((($cloneJumpP1.y | Measure-Object -Minimum).Minimum)); OID 33 observed."
 Write-Output "F271 OID 205 type-3 chain produced drawable OID 33 clones; F263 OID 121 remained type 4."
+Write-Output "OID 3 Kakashi was seeded as a generic type-0 root character."
 Write-Output "Artifacts: $artifactRoot"

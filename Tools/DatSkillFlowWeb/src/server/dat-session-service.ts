@@ -25,7 +25,7 @@ import type {
     SpriteRangeProjection,
     WPointProjection,
 } from "../model/dat-projection.js";
-import { isSignedInt32, type DatBlockType, type DatFieldCst } from "../syntax/byte-cst.js";
+import { isSignedInt32, parseNativeInt32Token, type DatBlockType, type DatFieldCst } from "../syntax/byte-cst.js";
 import type { DataDiagnostic } from "../syntax/data-diagnostic.js";
 import { DAT_ENVELOPE_PREFIX_LENGTH } from "../syntax/dat-envelope.js";
 import type {
@@ -315,12 +315,15 @@ function collectFields(
                 if (field.scalarKind !== "number" || numericValue === undefined || !Number.isFinite(numericValue)) {
                     throw new DatSessionError(failureCode, `Numeric DAT field ${field.key} is not a complete finite scalar.`);
                 }
-                if (semanticKind === "integer"
-                    && (!/^[+-]?\d+$/.test(field.rawValue.toString("latin1"))
-                        || !isSignedInt32(numericValue))) {
-                    throw new DatSessionError(failureCode, `Integer DAT field ${field.key} is outside the signed 32-bit contract.`);
+                if (semanticKind === "integer") {
+                    const nativeInteger = parseNativeInt32Token(field.rawValue);
+                    if (nativeInteger === undefined) {
+                        throw new DatSessionError(failureCode, `Integer DAT field ${field.key} is not a complete Native integer token.`);
+                    }
+                    value = nativeInteger;
+                } else {
+                    value = numericValue;
                 }
-                value = numericValue;
             }
             const location = { ...base, occurrence };
             descriptors.push({
@@ -532,7 +535,7 @@ export class DatSessionService {
         requiredId(sessionId, "sessionId");
         requiredRevision(expectedRevision);
         return await this.#enqueue(sessionId, () => {
-            const session = this.#requireSession(sessionId);
+            const session = this.#requireSessionForTrustedEmission(sessionId);
             session.lastAccess = this.#clock();
             if (session.revision !== expectedRevision) {
                 throw new DatSessionError("revision-conflict", "The DAT session revision is stale.");
@@ -1128,6 +1131,15 @@ export class DatSessionService {
             throw new DatSessionError("expired", "The DAT session has expired.");
         }
         return session;
+    }
+
+    #requireSessionForTrustedEmission(sessionId: string): SessionState {
+        const session = this.#sessions.get(sessionId);
+        if (session !== undefined) return session;
+        if (this.#expiredSessionIds.has(sessionId)) {
+            throw new DatSessionError("expired", "The DAT session has expired.");
+        }
+        throw new DatSessionError("unknown-session", "The DAT session is unknown.");
     }
 
     #release(session: SessionState, expired: boolean): void {

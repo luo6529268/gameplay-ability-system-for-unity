@@ -31,7 +31,9 @@ namespace NTSD.Simulation.Spatial
             public int Child1 = -1;
             public int Child2 = -1;
             public int Child3 = -1;
-            public readonly List<int> Entries = new List<int>(DefaultLeafCapacity + 1);
+            public int FirstEntryIndex = -1;
+            public int LastEntryIndex = -1;
+            public int EntryCount;
 
             public bool HasChildren => Child0 >= 0;
 
@@ -45,7 +47,14 @@ namespace NTSD.Simulation.Spatial
                 Child1 = -1;
                 Child2 = -1;
                 Child3 = -1;
-                Entries.Clear();
+                ClearEntries();
+            }
+
+            public void ClearEntries()
+            {
+                FirstEntryIndex = -1;
+                LastEntryIndex = -1;
+                EntryCount = 0;
             }
 
             public int ChildAt(int index)
@@ -70,7 +79,9 @@ namespace NTSD.Simulation.Spatial
             public int Child1 = -1;
             public int Child2 = -1;
             public int Child3 = -1;
-            public readonly List<int> Entries = new List<int>(DefaultLeafCapacity + 1);
+            public int FirstRecordIndex = -1;
+            public int LastRecordIndex = -1;
+            public int EntryCount;
 
             public bool HasChildren => Child0 >= 0;
 
@@ -84,7 +95,14 @@ namespace NTSD.Simulation.Spatial
                 Child1 = -1;
                 Child2 = -1;
                 Child3 = -1;
-                Entries.Clear();
+                ClearEntries();
+            }
+
+            public void ClearEntries()
+            {
+                FirstRecordIndex = -1;
+                LastRecordIndex = -1;
+                EntryCount = 0;
             }
 
             public int ChildAt(int index)
@@ -104,6 +122,8 @@ namespace NTSD.Simulation.Spatial
             public RuntimeEntityHandle Handle;
             public SpatialAabbXZ Bounds;
             public int NodeIndex = -1;
+            public int PreviousNodeRecordIndex = -1;
+            public int NextNodeRecordIndex = -1;
             public int ValidationToken;
             public bool Active;
 
@@ -112,6 +132,8 @@ namespace NTSD.Simulation.Spatial
                 Handle = handle;
                 Bounds = bounds;
                 NodeIndex = -1;
+                PreviousNodeRecordIndex = -1;
+                NextNodeRecordIndex = -1;
                 ValidationToken = 0;
                 Active = true;
             }
@@ -121,6 +143,8 @@ namespace NTSD.Simulation.Spatial
                 Handle = RuntimeEntityHandle.Invalid;
                 Bounds = default;
                 NodeIndex = -1;
+                PreviousNodeRecordIndex = -1;
+                NextNodeRecordIndex = -1;
                 ValidationToken = 0;
                 Active = false;
             }
@@ -138,6 +162,7 @@ namespace NTSD.Simulation.Spatial
         private readonly int maxDepth;
         private Node[] nodes = new Node[16];
         private SpatialBroadphaseEntry[] entries = new SpatialBroadphaseEntry[32];
+        private int[] entryNextIndices = new int[32];
         private int nodeCount;
         private int entryCount;
         private IncrementalNode[] incrementalNodes = new IncrementalNode[16];
@@ -171,9 +196,44 @@ namespace NTSD.Simulation.Spatial
             this.maxDepth = maxDepth;
         }
 
+        /// <summary>
+        /// Reserves the managed storage used by the broadphase before battle starts.
+        /// It does not publish an index and therefore does not change query results.
+        /// </summary>
+        public void PrepareCapacity(int entryCapacity)
+        {
+            if (entryCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(entryCapacity));
+
+            int normalizedEntryCapacity = Math.Max(32, entryCapacity);
+            int nodeCapacity = checked(
+                Math.Max(16, normalizedEntryCapacity * 4 + 1));
+
+            EnsureEntryCapacity(normalizedEntryCapacity);
+            EnsureNodeCapacity(nodeCapacity);
+            EnsureIncrementalRecordCapacity(normalizedEntryCapacity);
+            EnsureIncrementalNodeCapacity(nodeCapacity);
+            EnsureNearestNodeQueueCapacity(nodeCapacity);
+
+            incrementalHandleToRecord.EnsureCapacity(normalizedEntryCapacity);
+            incrementalDesiredHandles.EnsureCapacity(normalizedEntryCapacity);
+            incrementalDesiredSlots.EnsureCapacity(normalizedEntryCapacity);
+            if (incrementalStaleRecords.Capacity < normalizedEntryCapacity)
+                incrementalStaleRecords.Capacity = normalizedEntryCapacity;
+
+            for (int index = 0; index < nodeCapacity; index++)
+            {
+                nodes[index] ??= new Node();
+                incrementalNodes[index] ??= new IncrementalNode();
+            }
+            for (int index = 0; index < normalizedEntryCapacity; index++)
+                incrementalRecords[index] ??= new IncrementalRecord();
+
+        }
+
         internal int NodeCount => nodeCount;
         internal int EntryCount => entryCount;
-        internal int RootRetainedEntryCount => nodeCount > 0 ? nodes[0].Entries.Count : 0;
+        internal int RootRetainedEntryCount => nodeCount > 0 ? nodes[0].EntryCount : 0;
         internal int MaximumObservedDepth { get; private set; }
         internal long RootMinX => nodeCount > 0 ? nodes[0].MinX : 0;
         internal long RootMinZ => nodeCount > 0 ? nodes[0].MinZ : 0;
@@ -386,9 +446,12 @@ namespace NTSD.Simulation.Spatial
                     if (node == null)
                         return false;
 
-                    for (int i = 0; i < node.Entries.Count; i++)
+                    int recordIndex = node.FirstRecordIndex;
+                    int visitedInNode = 0;
+                    while (recordIndex >= 0)
                     {
-                        int recordIndex = node.Entries[i];
+                        if (++visitedInNode > node.EntryCount)
+                            return false;
                         if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
                             return false;
 
@@ -399,6 +462,7 @@ namespace NTSD.Simulation.Spatial
                         {
                             return false;
                         }
+                        recordIndex = record.NextNodeRecordIndex;
 
                         visitedRecordCount++;
                         int deltaX = SaturatingAbsDifference(record.Bounds.MinX, pointX);
@@ -429,7 +493,11 @@ namespace NTSD.Simulation.Spatial
                             nearestDistance = distance;
                             nearestHandle = record.Handle;
                         }
+
                     }
+
+                    if (visitedInNode != node.EntryCount)
+                        return false;
 
                     if (!node.HasChildren)
                         continue;
@@ -551,7 +619,7 @@ namespace NTSD.Simulation.Spatial
         public void ResetIncremental()
         {
             for (int i = 0; i < incrementalNodeCount; i++)
-                incrementalNodes[i]?.Entries.Clear();
+                incrementalNodes[i]?.ClearEntries();
             for (int i = 0; i < incrementalRecordCount; i++)
                 incrementalRecords[i]?.Release();
 
@@ -746,7 +814,7 @@ namespace NTSD.Simulation.Spatial
         {
             int previousCount = incrementalActiveCount;
             for (int i = 0; i < incrementalNodeCount; i++)
-                incrementalNodes[i]?.Entries.Clear();
+                incrementalNodes[i]?.ClearEntries();
             for (int i = 0; i < incrementalRecordCount; i++)
                 incrementalRecords[i]?.Release();
 
@@ -848,19 +916,75 @@ namespace NTSD.Simulation.Spatial
             if (nodeIndex < 0 || nodeIndex >= incrementalNodeCount)
                 return false;
 
-            List<int> nodeEntries = incrementalNodes[nodeIndex].Entries;
-            for (int i = 0; i < nodeEntries.Count; i++)
-            {
-                if (nodeEntries[i] != recordIndex)
-                    continue;
+            if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
+                return false;
 
-                int last = nodeEntries.Count - 1;
-                nodeEntries[i] = nodeEntries[last];
-                nodeEntries.RemoveAt(last);
-                return true;
+            IncrementalNode node = incrementalNodes[nodeIndex];
+            IncrementalRecord record = incrementalRecords[recordIndex];
+            if (node == null || record == null || !record.Active ||
+                record.NodeIndex != nodeIndex || node.EntryCount <= 0)
+            {
+                return false;
             }
 
-            return false;
+            int previousRecordIndex = record.PreviousNodeRecordIndex;
+            int nextRecordIndex = record.NextNodeRecordIndex;
+            IncrementalRecord previous = null;
+            IncrementalRecord next = null;
+            if (previousRecordIndex >= 0)
+            {
+                if (previousRecordIndex >= incrementalRecordCount)
+                    return false;
+                previous = incrementalRecords[previousRecordIndex];
+                if (previous == null || !previous.Active ||
+                    previous.NodeIndex != nodeIndex ||
+                    previous.NextNodeRecordIndex != recordIndex)
+                {
+                    return false;
+                }
+            }
+            else if (node.FirstRecordIndex != recordIndex)
+            {
+                return false;
+            }
+
+            if (nextRecordIndex >= 0)
+            {
+                if (nextRecordIndex >= incrementalRecordCount)
+                    return false;
+                next = incrementalRecords[nextRecordIndex];
+                if (next == null || !next.Active ||
+                    next.NodeIndex != nodeIndex ||
+                    next.PreviousNodeRecordIndex != recordIndex)
+                {
+                    return false;
+                }
+            }
+            else if (node.LastRecordIndex != recordIndex)
+            {
+                return false;
+            }
+
+            if (previous != null)
+                previous.NextNodeRecordIndex = nextRecordIndex;
+            else
+                node.FirstRecordIndex = nextRecordIndex;
+            if (next != null)
+                next.PreviousNodeRecordIndex = previousRecordIndex;
+            else
+                node.LastRecordIndex = previousRecordIndex;
+
+            node.EntryCount--;
+            if (node.EntryCount == 0)
+            {
+                node.FirstRecordIndex = -1;
+                node.LastRecordIndex = -1;
+            }
+
+            record.NodeIndex = -1;
+            record.PreviousNodeRecordIndex = -1;
+            record.NextNodeRecordIndex = -1;
+            return true;
         }
 
         private void InsertIncremental(int nodeIndex, int recordIndex)
@@ -877,13 +1001,41 @@ namespace NTSD.Simulation.Spatial
                 }
             }
 
-            node.Entries.Add(recordIndex);
-            record.NodeIndex = nodeIndex;
-            if (!node.HasChildren && node.Entries.Count > leafCapacity &&
+            AppendRecordIndexToNode(nodeIndex, recordIndex);
+            if (!node.HasChildren && node.EntryCount > leafCapacity &&
                 node.Depth < maxDepth && node.Side > 1)
             {
                 SplitIncremental(nodeIndex);
             }
+        }
+
+        private void AppendRecordIndexToNode(int nodeIndex, int recordIndex)
+        {
+            IncrementalNode node = incrementalNodes[nodeIndex];
+            IncrementalRecord record = incrementalRecords[recordIndex];
+            if (record == null || !record.Active || record.NodeIndex >= 0 ||
+                record.PreviousNodeRecordIndex >= 0 ||
+                record.NextNodeRecordIndex >= 0)
+            {
+                throw new InvalidOperationException(
+                    "Incremental quadtree record is already linked to a node.");
+            }
+
+            int previousRecordIndex = node.LastRecordIndex;
+            record.NodeIndex = nodeIndex;
+            record.PreviousNodeRecordIndex = previousRecordIndex;
+            if (previousRecordIndex >= 0)
+            {
+                incrementalRecords[previousRecordIndex].NextNodeRecordIndex =
+                    recordIndex;
+            }
+            else
+            {
+                node.FirstRecordIndex = recordIndex;
+            }
+
+            node.LastRecordIndex = recordIndex;
+            node.EntryCount++;
         }
 
         private void SplitIncremental(int nodeIndex)
@@ -903,26 +1055,40 @@ namespace NTSD.Simulation.Spatial
                 childSide,
                 depth);
 
-            int write = 0;
-            for (int i = 0; i < node.Entries.Count; i++)
+            int originalEntryCount = node.EntryCount;
+            int visited = 0;
+            int recordIndex = node.FirstRecordIndex;
+            while (recordIndex >= 0)
             {
-                int recordIndex = node.Entries[i];
+                if (++visited > originalEntryCount)
+                {
+                    throw new InvalidOperationException(
+                        "Incremental quadtree node membership contains a cycle.");
+                }
+
+                IncrementalRecord record = incrementalRecords[recordIndex];
+                int nextRecordIndex = record.NextNodeRecordIndex;
                 int childIndex = ResolveContainingIncrementalChild(
                     node,
-                    incrementalRecords[recordIndex].Bounds);
+                    record.Bounds);
                 if (childIndex >= 0)
                 {
+                    if (!RemoveRecordIndexFromNode(nodeIndex, recordIndex))
+                    {
+                        throw new InvalidOperationException(
+                            "Incremental quadtree split could not detach a record.");
+                    }
                     InsertIncremental(childIndex, recordIndex);
                 }
-                else
-                {
-                    node.Entries[write++] = recordIndex;
-                    incrementalRecords[recordIndex].NodeIndex = nodeIndex;
-                }
+
+                recordIndex = nextRecordIndex;
             }
 
-            if (write < node.Entries.Count)
-                node.Entries.RemoveRange(write, node.Entries.Count - write);
+            if (visited != originalEntryCount)
+            {
+                throw new InvalidOperationException(
+                    "Incremental quadtree node membership count is stale.");
+            }
         }
 
         private int ResolveContainingIncrementalChild(
@@ -954,18 +1120,25 @@ namespace NTSD.Simulation.Spatial
             if (!OverlapsNodeLooseBounds(node, query))
                 return;
 
-            for (int i = 0; i < node.Entries.Count; i++)
+            int recordIndex = node.FirstRecordIndex;
+            int visited = 0;
+            while (recordIndex >= 0)
             {
-                int recordIndex = node.Entries[i];
+                if (++visited > node.EntryCount)
+                    throw new InvalidOperationException("Incremental quadtree node membership contains a cycle.");
                 if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
                     throw new InvalidOperationException("Incremental quadtree contains an invalid entry index.");
 
                 IncrementalRecord record = incrementalRecords[recordIndex];
                 if (record == null || !record.Active || record.NodeIndex != nodeIndex)
                     throw new InvalidOperationException("Incremental quadtree entry mapping is stale.");
+                recordIndex = record.NextNodeRecordIndex;
                 if (record.Bounds.Overlaps(query))
                     result.Add(record.Handle);
             }
+
+            if (visited != node.EntryCount)
+                throw new InvalidOperationException("Incremental quadtree node membership count is stale.");
 
             if (!node.HasChildren)
                 return;
@@ -1005,6 +1178,14 @@ namespace NTSD.Simulation.Spatial
                 IncrementalNode node = incrementalNodes[nodeIndex];
                 if (node == null)
                     return false;
+                if (node.EntryCount < 0 ||
+                    (node.EntryCount == 0 &&
+                     (node.FirstRecordIndex >= 0 || node.LastRecordIndex >= 0)) ||
+                    (node.EntryCount > 0 &&
+                     (node.FirstRecordIndex < 0 || node.LastRecordIndex < 0)))
+                {
+                    return false;
+                }
                 if (node.HasChildren &&
                     (node.Child0 < 0 || node.Child1 < 0 || node.Child2 < 0 || node.Child3 < 0 ||
                      node.Child0 >= incrementalNodeCount || node.Child1 >= incrementalNodeCount ||
@@ -1013,20 +1194,33 @@ namespace NTSD.Simulation.Spatial
                     return false;
                 }
 
-                for (int entryIndex = 0; entryIndex < node.Entries.Count; entryIndex++)
+                int nodeVisited = 0;
+                int previousRecordIndex = -1;
+                int recordIndex = node.FirstRecordIndex;
+                while (recordIndex >= 0)
                 {
-                    int recordIndex = node.Entries[entryIndex];
+                    if (++nodeVisited > node.EntryCount)
+                        return false;
                     if (recordIndex < 0 || recordIndex >= incrementalRecordCount)
                         return false;
                     IncrementalRecord record = incrementalRecords[recordIndex];
                     if (record == null || !record.Active || record.NodeIndex != nodeIndex ||
+                        record.PreviousNodeRecordIndex != previousRecordIndex ||
                         record.ValidationToken == token || !record.Bounds.IsValid)
                     {
                         return false;
                     }
 
                     record.ValidationToken = token;
+                    previousRecordIndex = recordIndex;
+                    recordIndex = record.NextNodeRecordIndex;
                     visited++;
+                }
+
+                if (nodeVisited != node.EntryCount ||
+                    previousRecordIndex != node.LastRecordIndex)
+                {
+                    return false;
                 }
             }
 
@@ -1097,7 +1291,9 @@ namespace NTSD.Simulation.Spatial
                 if (!entry.Bounds.IsValid)
                     continue;
 
-                entries[entryCount++] = entry;
+                entries[entryCount] = entry;
+                entryNextIndices[entryCount] = -1;
+                entryCount++;
                 if (entry.Bounds.MinX < minX) minX = entry.Bounds.MinX;
                 if (entry.Bounds.MinZ < minZ) minZ = entry.Bounds.MinZ;
                 if (entry.Bounds.MaxX > maxX) maxX = entry.Bounds.MaxX;
@@ -1131,11 +1327,14 @@ namespace NTSD.Simulation.Spatial
             if (!OverlapsNodeLooseBounds(node, query))
                 return;
 
-            for (int i = 0; i < node.Entries.Count; i++)
+            int entryIndex = node.FirstEntryIndex;
+            for (int visited = 0; visited < node.EntryCount; visited++)
             {
-                int entryIndex = node.Entries[i];
+                if ((uint)entryIndex >= (uint)entryCount)
+                    break;
                 if (entries[entryIndex].Bounds.Overlaps(query))
                     result.Add(entries[entryIndex].InputIndex);
+                entryIndex = entryNextIndices[entryIndex];
             }
 
             if (!node.HasChildren)
@@ -1160,8 +1359,8 @@ namespace NTSD.Simulation.Spatial
                 }
             }
 
-            node.Entries.Add(entryIndex);
-            if (!node.HasChildren && node.Entries.Count > leafCapacity && node.Depth < maxDepth && node.Side > 1)
+            AppendEntry(node, entryIndex);
+            if (!node.HasChildren && node.EntryCount > leafCapacity && node.Depth < maxDepth && node.Side > 1)
                 Split(nodeIndex);
         }
 
@@ -1178,19 +1377,35 @@ namespace NTSD.Simulation.Spatial
             node.Child2 = CreateNode(node.MinX, node.MinZ + childSide, childSide, depth);
             node.Child3 = CreateNode(node.MinX + childSide, node.MinZ + childSide, childSide, depth);
 
-            int write = 0;
-            for (int i = 0; i < node.Entries.Count; i++)
+            int entryIndex = node.FirstEntryIndex;
+            int retainedCount = node.EntryCount;
+            node.ClearEntries();
+            for (int visited = 0; visited < retainedCount; visited++)
             {
-                int entryIndex = node.Entries[i];
+                if ((uint)entryIndex >= (uint)entryCount)
+                    break;
+
+                int nextEntryIndex = entryNextIndices[entryIndex];
+                entryNextIndices[entryIndex] = -1;
                 int childIndex = ResolveContainingChild(node, entries[entryIndex].Bounds);
                 if (childIndex >= 0)
                     Insert(childIndex, entryIndex);
                 else
-                    node.Entries[write++] = entryIndex;
+                    AppendEntry(node, entryIndex);
+                entryIndex = nextEntryIndex;
             }
+        }
 
-            if (write < node.Entries.Count)
-                node.Entries.RemoveRange(write, node.Entries.Count - write);
+        private void AppendEntry(Node node, int entryIndex)
+        {
+            entryNextIndices[entryIndex] = -1;
+            if (node.LastEntryIndex >= 0)
+                entryNextIndices[node.LastEntryIndex] = entryIndex;
+            else
+                node.FirstEntryIndex = entryIndex;
+
+            node.LastEntryIndex = entryIndex;
+            node.EntryCount++;
         }
 
         private int ResolveContainingChild(Node node, in SpatialAabbXZ bounds)
@@ -1291,6 +1506,7 @@ namespace NTSD.Simulation.Spatial
             while (capacity < required)
                 capacity *= 2;
             Array.Resize(ref entries, capacity);
+            Array.Resize(ref entryNextIndices, capacity);
         }
 
         private static void ResolveRoot(

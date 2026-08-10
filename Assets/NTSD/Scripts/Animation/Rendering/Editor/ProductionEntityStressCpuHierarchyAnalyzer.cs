@@ -22,8 +22,14 @@ namespace NTSD.Animation.Rendering.Editor
         private const string AllocationMarkerName = "GC.Alloc";
         private const string ReportWriteMarkerName =
             "NTSD.ProductionEntityStress.WriteReport";
+        private const string StopAndDumpSessionKey =
+            "NTSD.ProductionEntityStress.StopAndDumpAtSampleCompletion";
         private const string RequestPath =
             "Temp/NTSD_ProductionEntityStress.profiler-analysis.request";
+        private static readonly string AbsoluteRequestPath = Path.GetFullPath(
+            Path.Combine(Application.dataPath, "..", RequestPath));
+        private static readonly string AbsoluteSavedProfilePath = Path.GetFullPath(
+            Path.Combine(Application.dataPath, "..", SavedProfilePath));
 
         static ProductionEntityStressCpuHierarchyAnalyzer()
         {
@@ -33,16 +39,16 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static void PollRequest()
         {
-            string absolutePath = Path.GetFullPath(
-                Path.Combine(Application.dataPath, "..", RequestPath));
-            if (!File.Exists(absolutePath))
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+            if (!File.Exists(AbsoluteRequestPath))
                 return;
 
             string request;
             try
             {
-                request = File.ReadAllText(absolutePath).Trim();
-                File.Delete(absolutePath);
+                request = File.ReadAllText(AbsoluteRequestPath).Trim();
+                File.Delete(AbsoluteRequestPath);
             }
             catch (Exception exception)
             {
@@ -94,15 +100,14 @@ namespace NTSD.Animation.Rendering.Editor
         [MenuItem("NTSD/Battle Diagnostics/Load 1000 AI CPU Profile and Dump")]
         private static void LoadSavedProfileAndDump()
         {
-            string absolutePath = Path.GetFullPath(
-                Path.Combine(Application.dataPath, "..", SavedProfilePath));
-            if (!File.Exists(absolutePath))
+            if (!File.Exists(AbsoluteSavedProfilePath))
             {
-                Debug.LogWarning($"[ProductionEntityStress] Saved Profiler capture was not found: {absolutePath}");
+                Debug.LogWarning(
+                    $"[ProductionEntityStress] Saved Profiler capture was not found: {AbsoluteSavedProfilePath}");
                 return;
             }
 
-            ProfilerDriver.LoadProfile(absolutePath, false);
+            ProfilerDriver.LoadProfile(AbsoluteSavedProfilePath, false);
             EditorApplication.delayCall += DumpLoadedProfileAndClear;
         }
 
@@ -322,6 +327,32 @@ namespace NTSD.Animation.Rendering.Editor
             Directory.CreateDirectory(Path.GetDirectoryName(absoluteOutputPath));
             File.WriteAllText(absoluteOutputPath, builder.ToString(), new UTF8Encoding(false));
             Debug.Log($"[ProductionEntityStress] CPU hierarchy written to {absoluteOutputPath}");
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Stop Profiler and Dump Current 1000 AI CPU Hierarchy")]
+        private static void StopProfilerAndDumpCurrentProfile()
+        {
+            ProfilerDriver.enabled = false;
+            DumpLoadedProfile();
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Arm CPU Hierarchy Dump at Stress Sample Completion")]
+        private static void ArmDumpAtStressSampleCompletion()
+        {
+            SessionState.SetBool(StopAndDumpSessionKey, true);
+            ProfilerDriver.enabled = true;
+            Debug.Log(
+                "[ProductionEntityStress] CPU hierarchy capture armed for the next completed stress sample.");
+        }
+
+        internal static void StopAndDumpIfArmedAtSampleCompletion()
+        {
+            if (!SessionState.GetBool(StopAndDumpSessionKey, false))
+                return;
+
+            SessionState.SetBool(StopAndDumpSessionKey, false);
+            ProfilerDriver.enabled = false;
+            EditorApplication.delayCall += DumpLoadedProfile;
         }
 
         private static double CalculateSelfMilliseconds(

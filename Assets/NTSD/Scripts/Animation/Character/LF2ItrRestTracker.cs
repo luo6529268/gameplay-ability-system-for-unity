@@ -20,6 +20,7 @@ namespace NTSD.Animation
         private readonly Dictionary<int, int> _vrestByAttacker = new Dictionary<int, int>();
         private RuntimeRestStore _boundStore;
         private RuntimeRestBindingHandle _bindingHandle;
+        private int preserveStateAcrossOwnerResetDepth;
 
         public bool IsBound => EnsureActiveBinding();
         public int BoundVictimSlot => EnsureActiveBinding() ? _bindingHandle.BoundVictimSlot : -1;
@@ -95,6 +96,9 @@ namespace NTSD.Animation
 
         public void Reset()
         {
+            if (preserveStateAcrossOwnerResetDepth > 0)
+                return;
+
             if (EnsureActiveBinding())
             {
                 _boundStore.SetARest(_bindingHandle.BoundVictimSlot, 0);
@@ -103,6 +107,17 @@ namespace NTSD.Animation
             }
             _arest = 0;
             _vrestByAttacker.Clear();
+        }
+
+        internal void BeginPreserveStateAcrossOwnerReset()
+        {
+            preserveStateAcrossOwnerResetDepth++;
+        }
+
+        internal void EndPreserveStateAcrossOwnerReset()
+        {
+            if (preserveStateAcrossOwnerResetDepth > 0)
+                preserveStateAcrossOwnerResetDepth--;
         }
 
         public StateSnapshot CaptureState()
@@ -129,31 +144,25 @@ namespace NTSD.Animation
                 return;
 
             int restoredArest = snapshot.Arest > 0 ? snapshot.Arest : 0;
-            var restoredVrest = new Dictionary<int, int>();
-            if (snapshot.VrestByAttacker != null)
-            {
-                foreach (KeyValuePair<int, int> pair in snapshot.VrestByAttacker)
-                {
-                    if (pair.Value > 0)
-                        restoredVrest[pair.Key] = pair.Value;
-                }
-            }
-
             bool isBound = EnsureActiveBinding();
             if (isBound)
             {
                 _boundStore.ReplaceVictimState(
                     _bindingHandle.BoundVictimSlot,
                     restoredArest,
-                    restoredVrest);
+                    snapshot.VrestByAttacker);
+                return;
             }
 
-            if (!isBound)
+            _arest = restoredArest;
+            _vrestByAttacker.Clear();
+            if (snapshot.VrestByAttacker != null)
             {
-                _arest = restoredArest;
-                _vrestByAttacker.Clear();
-                foreach (KeyValuePair<int, int> pair in restoredVrest)
-                    _vrestByAttacker[pair.Key] = pair.Value;
+                foreach (KeyValuePair<int, int> pair in snapshot.VrestByAttacker)
+                {
+                    if (pair.Value > 0)
+                        _vrestByAttacker[pair.Key] = pair.Value;
+                }
             }
         }
 

@@ -33,20 +33,10 @@ namespace NTSD.Animation
                 return;
 
             if (actResult.NeedsKind3Drop)
-            {
-                var dropPoint = new WeaponPoint
-                {
-                    kind = 3,
-                    x = wpoint.x,
-                    y = wpoint.y,
-                    weaponact = wpoint.weaponact,
-                    cover = wpoint.cover
-                };
-                ProcessDropPoint(character, dropPoint);
-            }
+                character.DropHeldObjectByWPoint(wpoint);
 
             var ar = actResult.AttackResult;
-            if (ar != null && ar.HitUid != 0 && ar.ARest > 0)
+            if (ar.HitUid != 0 && ar.ARest > 0)
                 character.ItrRest.Arest = ar.ARest;
         }
 

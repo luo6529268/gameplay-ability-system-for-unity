@@ -26,7 +26,7 @@
       </header>
 
       <nav class="mobile-tabs" aria-label="编辑器区域">
-        <button type="button" data-tab-target="left-panel" aria-pressed="false">技能</button>
+        <button type="button" data-tab-target="left-panel" aria-pressed="false">Frame</button>
         <button type="button" data-tab-target="preview-panel" aria-pressed="true">预览</button>
         <button type="button" data-tab-target="inspector-panel" aria-pressed="false">属性</button>
         <button type="button" data-tab-target="timeline-panel" aria-pressed="false">时间轴</button>
@@ -34,25 +34,37 @@
 
       <section id="editor-grid" class="editor-grid" aria-label="DAT 编辑工作区">
         <aside id="left-panel" class="panel left-panel" data-mobile-panel>
-          <section class="panel-section skills-section">
+          <section class="panel-section entry-browser-section">
             <div class="section-heading">
-              <h2>状态与技能入口</h2>
+              <div><h2>Frame 与技能</h2><p>入口按真实触发播放；全部 Frame 可检查内部与交互分支</p></div>
               <span id="skill-count" class="count-badge">0</span>
+            </div>
+            <div class="entry-tabs" role="tablist" aria-label="Frame 与技能分类">
+              <button id="entry-tab-base" type="button" role="tab" data-entry-tab="base" aria-selected="true">基础状态</button>
+              <button id="entry-tab-input" type="button" role="tab" data-entry-tab="input" aria-selected="false">技能入口</button>
+              <button id="entry-tab-all" type="button" role="tab" data-entry-tab="all" aria-selected="false">全部 Frame</button>
+            </div>
+            <label class="entry-search"><span>筛选</span><input id="entry-search" type="search" placeholder="名称、触发键或 Frame 号" /></label>
+            <div id="skill-browser-wrap" class="table-wrap skill-table-wrap">
+              <table class="data-table entry-table">
+                <thead><tr><th>名称</th><th>首帧</th><th>段帧数</th><th>触发</th></tr></thead>
+                <tbody id="skill-list"></tbody>
+              </table>
+            </div>
+            <div id="frame-browser-wrap" class="table-wrap frame-browser-wrap" hidden>
+              <table class="data-table entry-table frame-browser-table">
+                <thead><tr><th>Frame</th><th>名称 / 语义</th><th>状态</th><th>关联入口 / 来源</th></tr></thead>
+                <tbody id="frame-browser-list"></tbody>
+              </table>
             </div>
             <div class="toolbar-row entry-toolbar">
               <button id="edit-skill" class="button button-quiet" type="button" disabled>编辑显示信息</button>
               <label><input id="show-hidden-skills" type="checkbox" /> 显示隐藏入口</label>
             </div>
-            <div class="table-wrap skill-table-wrap">
-              <table class="data-table">
-                <thead><tr><th>名称</th><th>首帧</th><th>段帧数</th><th>触发</th></tr></thead>
-                <tbody id="skill-list"></tbody>
-              </table>
-            </div>
             <p id="skill-empty" class="empty-state">当前 DAT 未识别到可用入口。</p>
           </section>
 
-          <section class="panel-section flow-section">
+          <section class="panel-section flow-section" hidden aria-hidden="true">
             <div class="section-heading">
               <h2 id="flow-title">当前技能帧流程</h2>
               <span id="flow-count" class="count-badge">0</span>
@@ -87,6 +99,13 @@
           tabindex="0"></div>
 
         <section id="preview-panel" class="panel preview-panel is-mobile-active" data-mobile-panel aria-busy="false">
+          <div class="preview-context">
+            <div>
+              <h1 id="preview-action-title">等待选择动作</h1>
+              <p id="preview-action-summary">预览区域会按 Native 战斗规则播放完整动作</p>
+            </div>
+            <span id="preview-mode-badge" class="preview-mode-badge">完整动作</span>
+          </div>
           <div class="preview-toolbar">
             <div class="toolbar-group">
               <span class="toolbar-label">缩放</span>
@@ -111,8 +130,8 @@
             <canvas id="sprite-canvas" data-testid="sprite-canvas" width="794" height="550" tabindex="0" aria-label="DAT 精灵与可编辑几何预览"></canvas>
             <div class="preview-hud">
               <span id="play-state" class="play-state">已暂停</span>
-              <span>当前帧 <strong id="frame-readout">-</strong></span>
-              <span>/ <span id="preview-frame-count">0</span></span>
+              <span>当前 Frame <strong id="frame-readout">-</strong></span>
+              <span>Tick <strong id="tick-readout">0</strong> / <span id="preview-frame-count">0</span></span>
               <span>朝向 <strong id="facing-readout">右</strong></span>
             </div>
           </div>
@@ -162,17 +181,16 @@
           </div>
           <div class="timeline-content">
             <div class="timeline-meta">
-              <span>DAT wait 视觉轴</span>
-              <strong id="tick-readout">0</strong>
-              <span id="time-readout">原生预览采样 0</span>
-              <span id="dat-wait-readout">0 DAT wait 视觉单位</span>
+              <strong>完整动作回放</strong>
+              <span id="time-readout">Tick 0 / 0</span>
+              <span id="dat-wait-readout">0 个 Native Tick</span>
               <label class="loop-control"><input id="loop-enabled" type="checkbox" /> 循环</label>
             </div>
             <input id="timeline-seek" class="timeline-seek" type="range" min="0" max="0" value="0" />
-            <div id="timeline-segments" class="timeline-segments" aria-label="技能时间轴节点"></div>
+            <div id="timeline-segments" class="timeline-segments" aria-label="完整动作 Native Frame 时间轴"></div>
             <div id="timeline-markers" class="timeline-markers" aria-hidden="true"></div>
           </div>
-          <label class="frame-jump">跳转到帧
+          <label class="frame-jump">定位 Frame
             <select id="frame-select"></select>
           </label>
         </section>

@@ -83,14 +83,16 @@ describe("one-click launcher contract", () => {
         assert.match(launcher, /DAT Skill Flow Web build is up to date\./);
     });
 
-    it("prepares DAT previews and assets before publishing the listener", async () => {
+    it("publishes after the editable session while verified entry previews keep warming in the background", async () => {
         const cli = await readFile(resolve("src/server/cli.ts"), "utf8");
         const preparation = cli.indexOf("prepareDefaultSession");
         const listener = cli.indexOf("const origin = await listenLoopback");
 
         assert.ok(preparation >= 0);
         assert.ok(listener > preparation);
-        assert.match(cli, /Preparing DAT project and Native skill previews/);
+        assert.match(cli, /Preparing DAT catalog and editable character session/);
+        assert.match(cli, /prepared\.warmup\.then/);
+        assert.match(cli, /continue warming in the background/);
         assert.match(cli, /DAT preparation complete/);
     });
 });

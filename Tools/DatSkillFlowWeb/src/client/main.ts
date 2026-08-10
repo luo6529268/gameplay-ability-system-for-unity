@@ -11,17 +11,22 @@ import {
     type SkillFlowEdge,
     type SkillFlowGraph,
 } from "./skill-flow.js";
+import {
+    buildCompleteActionIndex,
+    nextDistanceToFrame,
+} from "./complete-action-selection.js";
 import { renderFlowSvg } from "./flow-svg.js";
 import {
+    buildFrameEntryCatalog,
     buildSkillPreviewScenario,
-    deriveSkillEntries,
     entriesByStartFrame,
+    type FrameEntryCatalog,
     type SkillDisplayMetadata,
     type SkillEntry,
     type SkillPreviewInputStep,
     type SkillPreviewScenario,
 } from "./skill-entries.js";
-import { buildSkillTimeline } from "./skill-timeline.js";
+import { buildRuntimeFrameTimeline } from "./runtime-frame-timeline.js";
 import {
     draftOverlayGeometry,
     hitResizeHandle,
@@ -61,9 +66,11 @@ import {
     frameFieldLabels,
     frameGroups,
     list,
-    localizedRequestError,
+    localizedResponseError,
     number,
     parseBlockSelection,
+    projectResponseCode,
+    projectSessionRecoveryDecision,
     record,
     text,
     type BlockSelection,
@@ -108,6 +115,21 @@ interface PreviewIntent {
     readonly ticks: number;
 }
 type ExclusiveAction = "skill" | "edit" | "save";
+type EntryBrowserTab = "base" | "input" | "all";
+
+class ApiRequestError extends Error {
+    readonly statusCode: number;
+    readonly path: string;
+    readonly projectCode: string;
+
+    constructor(message: string, statusCode: number, path: string, projectCode: string) {
+        super(message);
+        this.name = "ApiRequestError";
+        this.statusCode = statusCode;
+        this.path = path;
+        this.projectCode = projectCode;
+    }
+}
 
 const select = <T extends Element>(id: string): T | null => document.querySelector<T>(`#${id}`);
 const status = select<HTMLElement>("server-status");
@@ -135,6 +157,9 @@ let skillState: SkillState = {
     skills: [],
 };
 let selectedSkillIndex = -1;
+let frameEntryCatalog: FrameEntryCatalog | undefined;
+let activeEntryTab: EntryBrowserTab = "base";
+let entrySearchQuery = "";
 let selectedBlock: BlockSelection = { type: "frame" };
 let selectedFrameOccurrence: number | undefined;
 let fieldDraft: FieldDraft | undefined;
@@ -151,6 +176,7 @@ let objectSwitchQueue = Promise.resolve();
 let currentGeometry: readonly OverlayGeometry[] = [];
 let highlightedFrameOccurrence: number | undefined;
 let flowCacheProjectKey = "";
+let completeActionCacheProjectKey = "";
 let frameFieldCacheProjectKey = "";
 let selectedFlowEdgeId: string | undefined;
 let disposeFlowSvg: (() => void) | undefined;
@@ -175,6 +201,7 @@ let splitterInteraction: {
     readonly startWidths: PanelWidths;
 } | undefined;
 const flowCache = new Map<number, SkillFlowGraph>();
+let completeActionOwnerIndex: ReadonlyMap<number, number> = new Map();
 const frameFieldsByLocator = new Map<string, FieldCapability>();
 const visibleOverlays = new Set<OverlayType>(allOverlayTypes);
 const images = new Map<string, HTMLImageElement>();
@@ -189,8 +216,18 @@ async function request(path: string, init?: RequestInit, stateChanging = false):
     if (stateChanging) { headers["Content-Type"] = "application/json"; if (stateToken) headers[tokenHeader] = stateToken; }
     const response = await fetch(path, { ...init, headers });
     const body = record(await response.json());
-    if (!response.ok) throw new Error(localizedRequestError(response.status, path));
+    if (!response.ok) {
+        throw new ApiRequestError(
+            localizedResponseError(response.status, path, body),
+            response.status,
+            path,
+            projectResponseCode(body),
+        );
+    }
     return body;
+}
+function isUnknownProjectSessionError(error: unknown): error is ApiRequestError {
+    return error instanceof ApiRequestError && error.projectCode === "unknown-session";
 }
 async function closeProjectSession(sessionId: string, keepalive = false): Promise<void> {
     await request("/api/project/close", {
@@ -342,7 +379,10 @@ const previewScheduler = createLatestTaskScheduler<PreviewIntent, Json>(
     syncPreviewBusy,
 );
 function primaryEntity(): TickEntity | undefined { return primaryPreviewEntity(project?.nativeTicks[tickIndex]?.entities ?? []); }
-function currentFrame(): Frame | undefined { const primary = primaryEntity(), selected = project?.frames.find((frame) => frame.occurrence === selectedFrameOccurrence); if (selected && (!primary || selected.frameId === primary.frame)) return selected; return lastFrameForId(project?.frames ?? [], primary?.frame); }
+function currentFrame(): Frame | undefined {
+    return project?.frames.find((frame) => frame.occurrence === selectedFrameOccurrence)
+        ?? currentRuntimeFrame();
+}
 function currentRuntimeFrame(): Frame | undefined { return lastFrameForId(project?.frames ?? [], primaryEntity()?.frame); }
 function playbackEndIndex(): number {
     const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
@@ -564,6 +604,7 @@ function syncSkillActionState(): void {
     const editSkill = select<HTMLButtonElement>("edit-skill");
     if (!editSkill) return;
     editSkill.disabled = project?.writable !== true
+        || activeEntryTab === "all"
         || selectedSkillIndex < 0
         || isSelectionLocked()
         || skillState.sidecarStatus === "invalid";
@@ -586,7 +627,7 @@ function syncActionState(): void {
         if (control) control.disabled = selectionLocked;
     }
     document.querySelectorAll<HTMLButtonElement>(".timeline-segment").forEach((button) => button.disabled = selectionLocked);
-    document.querySelectorAll<HTMLElement>("#skill-list tr, #flow-list tr").forEach((row) => row.ariaDisabled = String(selectionLocked));
+    document.querySelectorAll<HTMLElement>("#skill-list tr, #frame-browser-list tr, #flow-list tr").forEach((row) => row.ariaDisabled = String(selectionLocked));
     if (seek) seek.disabled = selectionLocked;
     syncFlowEdgeEditor(currentFlow());
     if (frameEditor) frameEditor.ariaBusy = String(actionBusy.edit);
@@ -629,37 +670,58 @@ async function runExclusiveAction<T>(kind: ExclusiveAction, operation: () => Pro
     } finally {
         actionBusy[kind] = false;
         syncActionState();
-        if (kind === "edit") renderFlow();
+        if (kind === "edit") renderTimelineSegments();
     }
 }
 function syncFrameSelectionIndicators(frame: Frame | undefined): void {
-    if (highlightedFrameOccurrence === frame?.occurrence) return;
-    highlightedFrameOccurrence = frame?.occurrence;
-    document.querySelectorAll<HTMLElement>("[data-frame-occurrence]").forEach((element) => {
-        element.classList.toggle("is-selected", Number(element.dataset.frameOccurrence) === frame?.occurrence);
+    if (highlightedFrameOccurrence !== frame?.occurrence) {
+        highlightedFrameOccurrence = frame?.occurrence;
+        document.querySelectorAll<HTMLElement>("[data-frame-occurrence]").forEach((element) => {
+            element.classList.toggle("is-selected", Number(element.dataset.frameOccurrence) === frame?.occurrence);
+        });
+    }
+    document.querySelectorAll<HTMLElement>("[data-runtime-start-tick]").forEach((element) => {
+        const start = Number(element.dataset.runtimeStartTick);
+        const end = Number(element.dataset.runtimeEndTick);
+        element.classList.toggle("is-selected", tickIndex >= start && tickIndex <= end);
     });
 }
+function syncPreviewContext(frame: Frame | undefined): void {
+    const skill = selectedSkill();
+    setText("preview-action-title", skill
+        ? `${skill.displayName} · F${skill.startFrame}`
+        : frame ? `F${frame.frameId} · ${frame.label || "未命名 Frame"}` : "等待选择动作");
+    setText("preview-action-summary", skill
+        ? `按 Native 战斗规则从真实入口播放 · 当前定位 F${frame?.frameId ?? skill.startFrame}`
+        : "选择入口播放完整动作，选择单帧不会创建孤立运行状态");
+    setText("preview-mode-badge", activeEntryTab === "all" ? "Frame 定位" : "完整动作");
+}
 function syncReadOnlyUi(): void {
-    const primary = primaryEntity(), frame = currentFrame(), count = project?.nativeTicks.length ?? 0;
-    const frameKey = frame === undefined ? "" : `${frame.frameId}:${frame.occurrence}`;
+    const primary = primaryEntity();
+    const inspectedFrame = currentFrame();
+    const runtimeFrame = currentRuntimeFrame();
+    const count = project?.nativeTicks.length ?? 0;
+    const frameKey = inspectedFrame === undefined ? "" : `${inspectedFrame.frameId}:${inspectedFrame.occurrence}`;
     setText("tick-readout", String(tickIndex));
-    setText("frame-readout", frame ? String(frame.frameId) : "-");
+    setText("frame-readout", runtimeFrame ? String(runtimeFrame.frameId) : "-");
     const progressEnd = progressEndIndex();
     const playbackEnd = playbackEndIndex();
-    setText("time-readout", progressEnd >= 0
-        ? `原生预览采样 ${tickIndex} / 主体结束 ${progressEnd} / 尾迹 ${playbackEnd}`
-        : `原生预览采样 ${tickIndex} / 主体未结束`);
-    setText("preview-frame-count", String(count));
+    setText("time-readout", `Tick ${tickIndex} / ${playbackEnd}`);
+    setText("dat-wait-readout", progressEnd >= 0
+        ? `${count} 个 Native Tick · 主体结束 ${progressEnd} · 尾迹 ${playbackEnd}`
+        : `${count} 个 Native Tick · 主体尚未结束`);
+    setText("preview-frame-count", String(playbackEnd));
     const rootEnded = progressEnd >= 0 && tickIndex >= progressEnd;
     setText("play-state", primary
-        ? playing ? rootEnded ? "主体结束，播放尾迹" : "播放中" : rootEnded ? "主体已结束" : "已暂停"
+        ? playing ? rootEnded ? "完整动作：播放尾迹" : "完整动作：播放中" : rootEnded ? "完整动作：主体已结束" : "完整动作：已暂停"
         : "主实体不可用");
     setText("facing-readout", primary ? number(primary.facing) === 1 ? "左" : "右" : "—");
-    if (frameSelect && frame) frameSelect.value = String(frame.occurrence);
+    if (frameSelect && inspectedFrame) frameSelect.value = String(inspectedFrame.occurrence);
     if (renderedFrameKey !== frameKey) { renderedFrameKey = frameKey; populateBlockSelect(); renderFields(); }
     if (seek) { seek.max = String(Math.max(0, count - 1)); seek.value = String(tickIndex); }
     if (playButton) { playButton.textContent = playing ? "Ⅱ" : "▶"; playButton.ariaPressed = String(playing); }
-    syncFrameSelectionIndicators(frame);
+    syncPreviewContext(inspectedFrame);
+    syncFrameSelectionIndicators(inspectedFrame);
 }
 function update(): void { syncReadOnlyUi(); requestPreviewRender(); }
 function drawPreview(): void {
@@ -690,10 +752,12 @@ function selectedSkill(): ProjectSkill | undefined {
 function rebuildSkillEntries(preferredStartFrame = selectedSkill()?.startFrame): void {
     if (!project) {
         skillState.skills = [];
+        frameEntryCatalog = undefined;
         selectedSkillIndex = -1;
         return;
     }
-    skillState.skills = [...deriveSkillEntries(project.frames, project.oid, skillState.metadata)];
+    frameEntryCatalog = buildFrameEntryCatalog(project.frames, project.oid, skillState.metadata);
+    skillState.skills = [...frameEntryCatalog.entries];
     selectedSkillIndex = preferredStartFrame === undefined
         ? -1
         : skillState.skills.findIndex((entry) => entry.startFrame === preferredStartFrame);
@@ -724,12 +788,134 @@ function currentFlow(): SkillFlowGraph | undefined {
     const skill = selectedSkill();
     return skill ? skillFlow(skill.startFrame) : undefined;
 }
+function latestCatalogFrames(): readonly Frame[] {
+    const latestById = new Map<number, Frame>();
+    for (const frame of project?.frames ?? []) latestById.set(frame.frameId, frame);
+    return [...latestById.values()].sort((left, right) => left.frameId - right.frameId);
+}
+function completeActionIndexForFrame(frame: Frame, preferredIndex = selectedSkillIndex): number {
+    const catalogItem = frameEntryCatalog?.byOccurrence.get(frame.occurrence);
+    if (catalogItem?.effective === false) return -1;
+    const preferred = skillState.skills[preferredIndex];
+    if (preferred?.oid === activeProjectOid() && catalogItem?.ownerStartFrames.includes(preferred.startFrame)) {
+        return preferredIndex;
+    }
+    for (const ownerStartFrame of catalogItem?.ownerStartFrames ?? []) {
+        const index = skillState.skills.findIndex((skill) => (
+            skill.oid === activeProjectOid() && skill.startFrame === ownerStartFrame
+        ));
+        if (index >= 0) return index;
+    }
+    if (preferred?.oid === activeProjectOid()
+        && nextDistanceToFrame(skillFlow(preferred.startFrame), frame.occurrence) >= 0) return preferredIndex;
+    const cacheKey = `${project?.sessionId}:${project?.revision}:${skillState.revision}:${skillState.etag}:${activeProjectOid()}`;
+    if (completeActionCacheProjectKey !== cacheKey) {
+        completeActionCacheProjectKey = cacheKey;
+        completeActionOwnerIndex = buildCompleteActionIndex(
+            skillState.skills,
+            activeProjectOid(),
+            (skill) => skillFlow(skill.startFrame),
+        );
+    }
+    return completeActionOwnerIndex.get(frame.occurrence) ?? -1;
+}
+function skillMatchesQuery(skill: SkillEntry, query: string): boolean {
+    if (query === "") return true;
+    return [
+        skill.displayName,
+        skill.label,
+        skill.group,
+        skill.notes,
+        skill.nativeTrigger ?? "",
+        String(skill.startFrame),
+        ...skill.triggers.map((trigger) => trigger.key),
+    ].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
+}
+function renderFrameBrowser(): number {
+    const body = select<HTMLTableSectionElement>("frame-browser-list");
+    if (!body) return 0;
+    const catalogItems = [...(frameEntryCatalog?.frames ?? [])]
+        .sort((left, right) => left.frame.frameId - right.frame.frameId || left.frame.occurrence - right.frame.occurrence);
+    const rows = catalogItems.flatMap((item): HTMLTableRowElement[] => {
+        const frame = item.frame as Frame;
+        const actionIndex = completeActionIndexForFrame(frame, -1);
+        const action = skillState.skills[actionIndex];
+        const referenceSummary = item.references
+            .slice(0, 2)
+            .map((reference) => `F${reference.sourceFrame} ${reference.field}`)
+            .join(" · ");
+        const haystack = [
+            frame.frameId,
+            frame.label,
+            frame.state,
+            item.roleLabel,
+            action?.displayName ?? "",
+            referenceSummary,
+        ]
+            .join(" ").toLocaleLowerCase("zh-CN");
+        if (entrySearchQuery !== "" && !haystack.includes(entrySearchQuery)) return [];
+        const row = document.createElement("tr");
+        row.dataset.frameOccurrence = String(frame.occurrence);
+        row.dataset.frameRole = item.role;
+        if (frame.occurrence === selectedFrameOccurrence) row.classList.add("is-selected");
+        if (!item.effective) row.classList.add("is-overridden-frame");
+        const frameId = document.createElement("td");
+        const label = document.createElement("td");
+        const state = document.createElement("td");
+        const owner = document.createElement("td");
+        frameId.textContent = `F${frame.frameId}`;
+        if (item.definitionCount > 1) frameId.textContent += ` #${frame.occurrence}`;
+        label.textContent = `${frame.label || `frame_${frame.frameId}`} · ${item.roleLabel}`;
+        state.textContent = item.effective ? String(frame.state) : `${frame.state} · 已覆盖`;
+        owner.textContent = action?.displayName
+            ?? (referenceSummary || (item.effective ? "尚无可重放入口" : `当前采用 occurrence ${item.effectiveOccurrence}`));
+        owner.title = [
+            item.roleLabel,
+            action ? `关联入口：${action.displayName}（F${action.startFrame}）` : "没有可安全播放的完整动作入口",
+            referenceSummary ? `来源：${referenceSummary}` : "",
+            item.definitionCount > 1 ? `同号定义 ${item.definitionCount} 个；Native 采用最后一个 occurrence ${item.effectiveOccurrence}` : "",
+        ].filter(Boolean).join("\n");
+        row.append(frameId, label, state, owner);
+        row.addEventListener("click", () => {
+            if (!isSelectionLocked()) reportOperation(selectFrame(frame.frameId, frame.occurrence, true), "完整动作预览失败。");
+        });
+        return [row];
+    });
+    body.replaceChildren(...rows);
+    return rows.length;
+}
 function renderSkillList(): void {
     const body = select<HTMLTableSectionElement>("skill-list");
     if (!body) return;
+    document.querySelectorAll<HTMLButtonElement>("[data-entry-tab]").forEach((button) => {
+        button.ariaSelected = String(button.dataset.entryTab === activeEntryTab);
+    });
+    const skillBrowser = select<HTMLElement>("skill-browser-wrap");
+    const frameBrowser = select<HTMLElement>("frame-browser-wrap");
+    const entryToolbar = document.querySelector<HTMLElement>(".entry-toolbar");
+    if (skillBrowser) skillBrowser.hidden = activeEntryTab === "all";
+    if (frameBrowser) frameBrowser.hidden = activeEntryTab !== "all";
+    if (entryToolbar) entryToolbar.hidden = activeEntryTab === "all";
+    if (activeEntryTab === "all") {
+        body.replaceChildren();
+        const count = renderFrameBrowser();
+        setText("skill-count", String(count));
+        const empty = select<HTMLElement>("skill-empty");
+        if (empty) {
+            empty.hidden = count > 0;
+            empty.textContent = "没有符合筛选条件的 Frame。";
+        }
+        syncSkillActionState();
+        return;
+    }
     const showHidden = select<HTMLInputElement>("show-hidden-skills")?.checked === true;
     const visibleSkills = skillState.skills.flatMap((skill, index) => (
-        skill.oid === activeProjectOid() && (!skill.hidden || showHidden) ? [index] : []
+        skill.oid === activeProjectOid()
+            && (!skill.hidden || showHidden)
+            && (activeEntryTab === "base" ? skill.category === "base" : skill.category !== "base")
+            && skillMatchesQuery(skill, entrySearchQuery)
+            ? [index]
+            : []
     ));
     const rows: HTMLTableRowElement[] = [];
     let lastGroup = "";
@@ -758,7 +944,9 @@ function renderSkillList(): void {
             : `${skill.displayName}（DAT: ${skill.label}）`;
         frame.textContent = String(skill.startFrame);
         count.textContent = String(skill.segmentFrameCount);
-        trigger.textContent = skill.triggers.map((item) => item.key).join(" · ") || "—";
+        trigger.textContent = skill.triggers.map((item) => item.key).join(" · ")
+            || skill.nativeTrigger
+            || "—";
         row.append(name, frame, count, trigger);
         row.addEventListener("click", () => {
             if (!isSelectionLocked()) reportOperation(selectSkill(index), "技能预览失败。");
@@ -767,7 +955,11 @@ function renderSkillList(): void {
     }
     body.replaceChildren(...rows);
     setText("skill-count", String(visibleSkills.length));
-    select<HTMLElement>("skill-empty")!.hidden = visibleSkills.length > 0;
+    const empty = select<HTMLElement>("skill-empty");
+    if (empty) {
+        empty.hidden = visibleSkills.length > 0;
+        empty.textContent = "当前分类没有符合条件的入口。";
+    }
     syncSkillActionState();
 }
 function flowSummary(edges: readonly SkillFlowEdge[]): string {
@@ -894,30 +1086,38 @@ function renderFlow(): void {
     syncFlowEdgeEditor(graph, editableFields);
     renderTimelineSegments(graph);
 }
-function renderTimelineSegments(graph = currentFlow()): void {
+function renderTimelineSegments(_graph = currentFlow()): void {
     const container = select<HTMLElement>("timeline-segments"), markers = select<HTMLElement>("timeline-markers");
     if (!container || !markers) return;
-    const timeline = graph && project
-        ? buildSkillTimeline(graph, project.frames)
-        : { segments: [], totalUnits: 0 };
-    setText("dat-wait-readout", `${timeline.totalUnits} DAT wait 视觉单位`);
+    const timeline = buildRuntimeFrameTimeline(project?.nativeTicks ?? []);
+    const totalTicks = timeline.segments.reduce((sum, segment) => sum + segment.tickCount, 0);
+    setText("dat-wait-readout", `${totalTicks} 个 Native Tick`);
     container.replaceChildren(...timeline.segments.map((segment) => {
-        const { node, wait } = segment;
         const button = document.createElement("button");
-        button.type = "button"; button.className = "timeline-segment"; button.dataset.frameOccurrence = String(node.occurrence);
-        button.textContent = `${node.frameId} · ${wait}`;
-        button.title = `帧 ${node.frameId}，DAT wait 视觉单位 ${wait}`;
-        button.style.flex = `${wait} 1 0`;
+        const frame = lastFrameForId(project?.frames ?? [], segment.frameId);
+        button.type = "button";
+        button.className = "timeline-segment";
+        button.dataset.runtimeStartTick = String(segment.startTick);
+        button.dataset.runtimeEndTick = String(segment.endTick);
+        if (frame) button.dataset.frameOccurrence = String(frame.occurrence);
+        button.textContent = `F${segment.frameId} · ${segment.tickCount} Tick`;
+        button.title = `Frame ${segment.frameId}，Tick ${segment.startTick}–${segment.endTick}`;
+        button.style.flex = `${segment.tickCount} 1 0`;
         button.disabled = actionBusy.edit;
         button.addEventListener("click", () => {
-            if (!isSelectionLocked()) reportOperation(selectFrame(node.frameId, node.occurrence, true), "预览失败。");
+            if (isSelectionLocked()) return;
+            tickIndex = Math.max(0, Math.min(playbackEndIndex(), segment.startTick));
+            selectedFrameOccurrence = frame?.occurrence;
+            selectedBlock = { type: "frame" };
+            renderedFrameKey = "";
+            update();
         });
         return button;
     }));
     markers.replaceChildren(...timeline.segments.map((segment) => {
         const marker = document.createElement("span");
         marker.className = "timeline-marker";
-        marker.style.left = `${segment.startUnit / Math.max(1, timeline.totalUnits) * 100}%`;
+        marker.style.left = `${segment.startTick / Math.max(1, playbackEndIndex()) * 100}%`;
         return marker;
     }));
 }
@@ -1037,7 +1237,14 @@ function renderFields(): void {
         syncDraftActions();
         return;
     }
-    setText("inspector-context", `帧 ${frame.frameId} · occurrence ${frame.occurrence}`);
+    const catalogItem = frameEntryCatalog?.byOccurrence.get(frame.occurrence);
+    const duplicateText = (catalogItem?.definitionCount ?? 1) > 1
+        ? ` · 同号定义 ${catalogItem!.definitionCount} 个${catalogItem!.effective ? "，当前生效" : `，已被 occurrence ${catalogItem!.effectiveOccurrence} 覆盖`}`
+        : "";
+    setText(
+        "inspector-context",
+        `帧 ${frame.frameId} · occurrence ${frame.occurrence} · ${catalogItem?.roleLabel ?? "未分类"}${duplicateText}`,
+    );
     const groups = selectedBlock.type === "frame" ? frameGroups : [{ title: `${blockLabel(selectedBlock.type)} #${(selectedBlock.index ?? 0) + 1}`, keys: blockEntries(frame, selectedBlock).map(([key]) => key) }];
     for (const group of groups) {
         const fieldset = document.createElement("fieldset"); fieldset.className = "field-group";
@@ -1054,10 +1261,12 @@ function renderFields(): void {
 }
 function render(): void {
     if (!project) return;
-    frameSelect?.replaceChildren(...project.frames.map((frame) => new Option(`帧 ${frame.frameId} · occurrence ${frame.occurrence}`, String(frame.occurrence))));
-    renderSkillList(); renderFlow(); populateBlockSelect(); renderFields(); syncActionState(); update();
+    frameSelect?.replaceChildren(...latestCatalogFrames().map((frame) => (
+        new Option(`F${frame.frameId} · ${frame.label || `state ${frame.state}`}`, String(frame.occurrence))
+    )));
+    renderSkillList(); renderTimelineSegments(); populateBlockSelect(); renderFields(); syncActionState(); update();
 }
-async function preview(selection: number | SkillPreviewScenario): Promise<void> {
+async function preview(selection: number | SkillPreviewScenario, allowSessionRecovery = true): Promise<void> {
     if (!project) return;
     const scenario = typeof selection === "number"
         ? { startFrame: selection, ticks: 30 }
@@ -1072,7 +1281,37 @@ async function preview(selection: number | SkillPreviewScenario): Promise<void> 
         commitPreview(intent, cached);
         return;
     }
-    const result = await previewScheduler.schedule(intent);
+    let result: Awaited<ReturnType<typeof previewScheduler.schedule>>;
+    try {
+        result = await previewScheduler.schedule(intent);
+    } catch (error) {
+        if (isUnknownProjectSessionError(error)) {
+            const recovery = projectSessionRecoveryDecision(
+                error.projectCode,
+                project?.dirty === true,
+                fieldDraft !== undefined,
+                loadedObjectKey,
+            );
+            if (recovery === "preserve-dirty") {
+                throw new Error("项目会话已经失效；当前页面有未保存修改，为避免丢失修改，未自动重新载入。", { cause: error });
+            }
+            if (recovery === "retry" && allowSessionRecovery && project) {
+                const objectKey = loadedObjectKey;
+                const oid = project.oid;
+                status!.textContent = "会话已过期，正在重新载入当前角色…";
+                diagnostics!.textContent = "正在恢复项目会话并重试本次完整动作。";
+                await open(objectKey, oid);
+                selectedSkillIndex = skillState.skills.findIndex((entry) => (
+                    entry.oid === project?.oid && entry.startFrame === scenario.startFrame
+                ));
+                renderSkillList();
+                await preview(scenario, false);
+                diagnostics!.textContent = "项目会话已自动恢复，本次完整动作已更新。";
+                return;
+            }
+        }
+        throw error;
+    }
     if (result.status !== "committed" || project?.sessionId !== intent.sessionId || project.revision !== intent.revision) return;
     commitPreview(intent, result.value);
 }
@@ -1156,23 +1395,43 @@ async function saveSkillMetadata(metadata: readonly SkillDisplayMetadata[]): Pro
     skillState.metadata = [...metadata];
 }
 async function open(objectKey: string, oid: number): Promise<void> {
-    if (project?.sessionId) {
-        if ((fieldDraft || project.dirty) && !window.confirm("当前项目有未应用或未保存修改。确定放弃并切换对象吗？")) {
+    if (playing) setPlaying(false);
+    const previousProject = project;
+    if (previousProject?.sessionId) {
+        if ((fieldDraft || previousProject.dirty) && !window.confirm("当前项目有未应用或未保存修改。确定放弃并切换对象吗？")) {
             if (objectSelect) objectSelect.value = loadedObjectKey;
             return;
         }
-        clearDraft();
-        previewScheduler.invalidate();
-        await closeProjectSession(project.sessionId);
-        project = undefined;
-        images.clear();
-        colorKeyImages.clear();
-        requestPreviewRender();
     }
-    previewResponseCache.clear();
+    if (status) {
+        status.dataset.state = "loading";
+        status.textContent = `正在载入 OID ${oid}…`;
+    }
+    previewScheduler.invalidate();
     const response = await request("/api/project/open", { method: "POST", body: JSON.stringify({ objectKey }) }, true);
-    project = normalize(response); loadedObjectKey = objectKey; tickIndex = 0; selectedBlock = { type: "frame" };
+    const nextProject = normalize(response);
+    let closeWarning = "";
+    if (previousProject?.sessionId) {
+        try {
+            await closeProjectSession(previousProject.sessionId);
+        } catch (error) {
+            if (!isUnknownProjectSessionError(error)) {
+                closeWarning = `旧角色会话关闭失败，将由服务端自动回收：${errorText(error, "未知错误")}`;
+            }
+        }
+    }
+    clearDraft();
+    project = nextProject;
+    loadedObjectKey = objectKey;
+    tickIndex = 0;
+    selectedBlock = { type: "frame" };
+    images.clear();
+    colorKeyImages.clear();
+    previewResponseCache.clear();
+    const loadedOption = [...(objectSelect?.options ?? [])].find((option) => option.value === objectKey);
+    if (loadedOption) loadedOption.textContent = `OID ${project.oid} · ${project.name || "未命名角色"}`;
     rebuildSkillEntries();
+    selectedSkillIndex = -1;
     selectedFrameOccurrence = lastFrameForId(project.frames, primaryPreviewEntity(project.nativeTicks[0]?.entities ?? [])?.frame)?.occurrence;
     status!.dataset.state = "connected"; status!.textContent = `已载入 ${project.name} / OID ${oid}${project.writable ? "" : "（只读）"}`;
     const sidecarNotice = skillState.sidecarStatus === "invalid"
@@ -1180,16 +1439,24 @@ async function open(objectKey: string, oid: number): Promise<void> {
         : skillState.sidecarStatus === "legacy"
             ? "已读取旧版技能 sidecar；下次编辑显示信息时会迁移。"
             : "";
-    diagnostics!.textContent = sidecarNotice || (project.writable
+    diagnostics!.textContent = closeWarning || sidecarNotice || (project.writable
         ? "项目数据已载入，可以选择技能、播放、查看叠加层或编辑当前帧。"
         : "项目仅存在于 fallback 资源中，当前会话为只读预览。");
     render();
-    if (selectedSkillIndex >= 0) await selectSkill(selectedSkillIndex);
 }
 function switchObject(objectKey: string, oid: number): void {
     const operation = objectSwitchQueue.then(() => open(objectKey, oid));
     objectSwitchQueue = operation.catch(() => undefined);
     void operation.catch((error) => {
+        if (project?.sessionId && loadedObjectKey !== "") {
+            if (objectSelect) objectSelect.value = loadedObjectKey;
+            status!.dataset.state = "connected";
+            status!.textContent = `仍在 ${project.name} / OID ${project.oid}${project.writable ? "" : "（只读）"}`;
+            diagnostics!.textContent = `角色切换失败，当前项目已保留。${errorText(error, "项目载入失败。")}`;
+            requestPreviewRender();
+            return;
+        }
+        status!.dataset.state = "error";
         status!.textContent = "项目不可用";
         diagnostics!.textContent = errorText(error, "项目载入失败。");
     });
@@ -1200,11 +1467,12 @@ async function start(): Promise<void> {
         stateToken = text(security.token ?? bootstrap.stateToken ?? bootstrap.token);
         tokenHeader = text(security.tokenHeader ?? bootstrap.tokenHeader) || tokenHeader;
         const [listing] = await Promise.all([request("/api/project"), loadSkills()]);
-        const choices = list(record(listing.data).objects ?? record(listing.data).entries);
+        const choices = list(record(listing.data).objects ?? record(listing.data).entries)
+            .filter((value) => number(record(value).type, -1) === 0);
         objectSelect?.replaceChildren(...choices.map((value) => {
-            const item = record(value), oid = number(item.oid), option = new Option(`OID ${oid}${oid === 2 ? " · Naruto" : " · 暂未接入预览"}`, text(item.objectKey), false, oid === 2);
+            const item = record(value), oid = number(item.oid), displayName = text(item.displayName) || `OID ${oid}`;
+            const option = new Option(`OID ${oid} · ${displayName}`, text(item.objectKey), false, oid === 2);
             option.dataset.oid = String(oid);
-            option.disabled = oid !== 2;
             return option;
         }));
         const selected = objectSelect?.selectedOptions[0];
@@ -1217,29 +1485,80 @@ async function start(): Promise<void> {
 async function selectFrame(frameId: number, occurrence: number, refreshPreview: boolean): Promise<void> {
     if (isSelectionLocked()) return;
     selectedFrameOccurrence = occurrence; selectedBlock = { type: "frame" }; renderedFrameKey = "";
-    if (refreshPreview) {
-        const graphContainsFrame = currentFlow()?.nodes.some((node) => (
-            node.kind === "frame" && node.occurrence === occurrence
-        )) === true;
-        const skill = graphContainsFrame ? selectedSkill() : undefined;
-        await preview(skill && project
-            ? buildSkillPreviewScenario(project.frames, skill)
-            : frameId);
-    } else {
-        render();
+    const frame = project?.frames.find((candidate) => candidate.occurrence === occurrence)
+        ?? lastFrameForId(project?.frames ?? [], frameId);
+    render();
+    if (!refreshPreview || !frame) return;
+    const catalogItem = frameEntryCatalog?.byOccurrence.get(frame.occurrence);
+    if (catalogItem?.effective === false) {
+        diagnostics!.textContent = `已立即显示 F${frame.frameId} 的历史定义 occurrence ${frame.occurrence}；Native 实际采用 occurrence ${catalogItem.effectiveOccurrence}，因此不为该覆盖定义启动预览。`;
+        return;
     }
+    if ((catalogItem?.ownerStartFrames.length ?? 0) === 0) {
+        diagnostics!.textContent = `已立即显示 F${frame.frameId} 参数；该 Frame 当前被分类为“${catalogItem?.roleLabel ?? "未解析运行帧"}”，尚无可验证的真实入口，因此未伪造独立预览。`;
+        return;
+    }
+    const selected = selectedSkill();
+    const cachedTick = selected !== undefined && catalogItem?.ownerStartFrames.includes(selected.startFrame)
+        ? project?.nativeTicks.findIndex((tick) => primaryPreviewEntity(tick.entities)?.frame === frame.frameId) ?? -1
+        : -1;
+    if (cachedTick >= 0) {
+        tickIndex = cachedTick;
+        diagnostics!.textContent = `已从当前完整动作缓存瞬间定位到 F${frame.frameId}。`;
+        update();
+        return;
+    }
+    diagnostics!.textContent = `已立即显示 F${frame.frameId} 参数；正在从关联真实入口生成或复用完整动作回放。`;
+    await previewFrameWithinCompleteAction(frame);
+}
+async function previewFrameWithinCompleteAction(frame: Frame, preferredIndex = selectedSkillIndex): Promise<boolean> {
+    if (!project) return false;
+    const actionIndex = completeActionIndexForFrame(frame, preferredIndex);
+    const skill = skillState.skills[actionIndex];
+    if (!skill || skill.oid !== project.oid) {
+        diagnostics!.textContent = `F${frame.frameId} 未找到所属真实入口；参数已显示，但为避免伪造运行状态，未从该 Frame 单独启动。`;
+        render();
+        return false;
+    }
+    const previousSkillIndex = selectedSkillIndex;
+    selectedSkillIndex = actionIndex;
+    renderSkillList();
+    renderTimelineSegments();
+    try {
+        await preview(buildSkillPreviewScenario(project.frames, skill));
+    } catch (error) {
+        selectedSkillIndex = previousSkillIndex;
+        renderSkillList();
+        renderTimelineSegments();
+        update();
+        throw error;
+    }
+    const runtimeTick = project.nativeTicks.findIndex((tick) => (
+        primaryPreviewEntity(tick.entities)?.frame === frame.frameId
+    ));
+    if (runtimeTick < 0) {
+        const catalogItem = frameEntryCatalog?.byOccurrence.get(frame.occurrence);
+        const runtimeSource = catalogItem?.references.find((reference) => reference.kind === "runtime");
+        diagnostics!.textContent = runtimeSource === undefined
+            ? `完整动作“${skill.displayName}”已运行，但 Native Trace 没有到达 F${frame.frameId}；参数选择保持不变。`
+            : `F${frame.frameId} 参数已显示；它由 F${runtimeSource.sourceFrame} 的 ${runtimeSource.field} 在碰撞/持有等运行上下文中进入，本次无该上下文，所以 Trace 未到达该分支。`;
+        render();
+        return false;
+    }
+    tickIndex = runtimeTick;
+    selectedFrameOccurrence = frame.occurrence;
+    selectedBlock = { type: "frame" };
+    renderedFrameKey = "";
+    render();
+    return true;
 }
 async function selectSkill(index: number): Promise<void> {
     if (isSelectionLocked()) return;
     const skill = skillState.skills[index];
     if (!skill || !project || skill.oid !== project.oid) return;
-    selectedSkillIndex = index; renderSkillList(); renderFlow();
     const frame = lastFrameForId(project.frames, skill.startFrame);
     if (frame) {
-        selectedFrameOccurrence = frame.occurrence;
-        selectedBlock = { type: "frame" };
-        renderedFrameKey = "";
-        await preview(buildSkillPreviewScenario(project.frames, skill));
+        await previewFrameWithinCompleteAction(frame, -1);
     }
     else diagnostics!.textContent = `入口“${skill.displayName}”的起始帧 ${skill.startFrame} 不存在。`;
 }
@@ -1351,7 +1670,8 @@ async function applyBatchEdits(
         diagnostics!.textContent = "修改已应用到当前会话，尚未覆盖 DAT 文件。";
         render();
         try {
-            await preview(previewFrameId);
+            const previewFrame = lastFrameForId(project!.frames, previewFrameId);
+            if (previewFrame) await previewFrameWithinCompleteAction(previewFrame);
         } catch (error) {
             if (diagnostics) diagnostics.textContent = `修改已应用，但${errorText(error, "预览刷新失败。")}`;
         }
@@ -1443,7 +1763,7 @@ async function applyStructureEdit(
         render();
         if (selectedFrame) {
             try {
-                await preview(selectedFrame.frameId);
+                await previewFrameWithinCompleteAction(selectedFrame);
             } catch (error) {
                 diagnostics!.textContent = `结构已修改，但${errorText(error, "预览刷新失败。")}`;
             }
@@ -1480,6 +1800,17 @@ select("step-back")?.addEventListener("click", () => { tickIndex = Math.max(0, t
 select("jump-end")?.addEventListener("click", () => { tickIndex = playbackEndIndex(); update(); });
 select("edit-skill")?.addEventListener("click", openSkillDialog);
 select("show-hidden-skills")?.addEventListener("change", renderSkillList);
+document.querySelectorAll<HTMLButtonElement>("[data-entry-tab]").forEach((button) => button.addEventListener("click", () => {
+    const tab = button.dataset.entryTab;
+    if (tab !== "base" && tab !== "input" && tab !== "all") return;
+    activeEntryTab = tab;
+    renderSkillList();
+    update();
+}));
+select<HTMLInputElement>("entry-search")?.addEventListener("input", (event) => {
+    entrySearchQuery = (event.currentTarget as HTMLInputElement).value.trim().toLocaleLowerCase("zh-CN");
+    renderSkillList();
+});
 select<HTMLFormElement>("skill-form")?.addEventListener("submit", (event) => void submitSkillForm(event).catch((error) => diagnostics!.textContent = errorText(error, "技能保存失败。")));
 select<HTMLFormElement>("frame-editor")?.addEventListener("submit", (event) => { event.preventDefault(); void applyDraft().catch((error) => diagnostics!.textContent = errorText(error, "修改失败。")); });
 select("discard-draft")?.addEventListener("click", () => { clearDraft(); renderFields(); });

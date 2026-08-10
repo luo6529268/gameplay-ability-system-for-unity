@@ -103,6 +103,60 @@ namespace NTSD.Test
             Assert.That(lockstepBeforeJson, Does.Not.Contain("hitRecordZ"));
         }
 
+        [TestCase(BattleRuntimeProfile.Authority400)]
+        [TestCase(BattleRuntimeProfile.MobileExtended)]
+        public void RuntimeChecksum_RepeatedAfterWarmup_DoesNotAllocate(
+            BattleRuntimeProfile profile)
+        {
+            SimulationWorld world = CreateWorld(profile);
+            var entity = new LockstepFixtureEntity(7002);
+            entity.SetRequiredRuntimeSlot(20);
+            world.Register(entity);
+            var players = new[]
+            {
+                new SimulationPlayerInput(
+                    0,
+                    SimulationInputButtons.Right | SimulationInputButtons.Attack,
+                    SimulationInputButtons.Attack),
+            };
+            var frameInput = new FrameInputSet(42, players);
+
+            ulong expected = world.CaptureRuntimeChecksum64(42, frameInput);
+            GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            ulong actual = 0UL;
+            for (int index = 0; index < 256; index++)
+                actual = world.CaptureRuntimeChecksum64(42, frameInput);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(actual, Is.EqualTo(expected));
+            Assert.That(allocated, Is.Zero,
+                "fixed-tick checksum capture must not allocate managed memory");
+        }
+
+        [TestCase(BattleRuntimeProfile.Authority400)]
+        [TestCase(BattleRuntimeProfile.MobileExtended)]
+        public void RuntimeChecksum_TracksLogicButIgnoresPresentationHitRecords(
+            BattleRuntimeProfile profile)
+        {
+            SimulationWorld world = CreateWorld(profile);
+            var entity = new LockstepFixtureEntity(7003);
+            entity.SetRequiredRuntimeSlot(20);
+            world.Register(entity);
+            var frameInput = new FrameInputSet(43);
+
+            ulong before = world.CaptureRuntimeChecksum64(43, frameInput);
+            entity.AddHitRecord(0, 333, 444);
+            ulong afterPresentation = world.CaptureRuntimeChecksum64(43, frameInput);
+            entity.Runtime.HP--;
+            ulong afterLogic = world.CaptureRuntimeChecksum64(43, frameInput);
+
+            Assert.That(afterPresentation, Is.EqualTo(before),
+                "presentation-finalized hit records are outside lockstep truth");
+            Assert.That(afterLogic, Is.Not.EqualTo(afterPresentation),
+                "a logical HP mutation must be witnessed by the runtime checksum");
+        }
+
         private static SimulationWorld CreateWorld(BattleRuntimeProfile profile)
         {
             return profile == BattleRuntimeProfile.Authority400

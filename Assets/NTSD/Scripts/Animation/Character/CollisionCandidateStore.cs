@@ -226,6 +226,13 @@ namespace NTSD.Animation
         internal bool IsBuilding => building;
         internal bool IsVisible => visible;
 
+        internal bool PrepareCapacity(int runtimeCapacity)
+        {
+            if (building || visible)
+                return false;
+            return runtimeCapacity > 0 && EnsureCapacity(runtimeCapacity);
+        }
+
         internal void AbortBuild()
         {
             building = false;

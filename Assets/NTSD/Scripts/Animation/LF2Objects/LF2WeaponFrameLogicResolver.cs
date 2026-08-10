@@ -20,6 +20,24 @@ namespace NTSD.Animation.LF2Objects
             _weapon = weapon;
         }
 
+        public bool ApplyBeforeWaitAdvance()
+        {
+            LF2FrameData frame = _weapon.Frame?.D;
+            if (frame == null || _weapon.Runtime == null)
+                return false;
+
+            if (_weapon.WeaponType == 2 &&
+                frame.state == LF2States.HeavyWeaponInSky &&
+                _weapon.Runtime.YInt == 0 &&
+                System.Math.Abs(_weapon.Runtime.Vx) < 0.1)
+            {
+                _weapon.SetFrameTickDirectForOwnedModule(20);
+                return _weapon.Frame?.D != null;
+            }
+
+            return true;
+        }
+
         // 每个逻辑帧先在这里做一次“武器专属预处理”，
         // 然后外层才会进入统一的 frame advance / dynamics 流程。
         public void RunWeaponFrameLogicBeforeAdvance()

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using NTSD.Simulation;
 using NTSD.Tools;
@@ -35,8 +34,6 @@ namespace NTSD.Animation
         public readonly float mass;
         public readonly float minSpeed;
         public readonly double gravity; // P0-f-2a: double sim gravity
-        public readonly Func<Vector2, bool> isPointWalkable;
-        public readonly Action<string> logWarning;
 
         public CharacterMechanicsContext(
             NTSDEntityRuntime runtime,
@@ -44,9 +41,7 @@ namespace NTSD.Animation
             float spriteWidthPx,
             float mass,
             float minSpeed,
-            double gravity,
-            Func<Vector2, bool> isPointWalkable,
-            Action<string> logWarning = null)
+            double gravity)
         {
             Runtime = runtime;
             this.frameData = frameData;
@@ -54,8 +49,6 @@ namespace NTSD.Animation
             this.mass = mass;
             this.minSpeed = minSpeed;
             this.gravity = gravity;
-            this.isPointWalkable = isPointWalkable;
-            this.logWarning = logWarning;
         }
     }
 

@@ -1,36 +1,26 @@
 ﻿using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.Rendering;
-using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.LevelEditor;
 using NTSD.Simulation.Presentation;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace NTSD.Simulation
 {
-    /// <summary>
-    /// SimulationWorld 的关卡边界、摄像机和渲染相关 pass。
-    /// </summary>
-    public partial class SimulationWorld
+    internal sealed class SimulationStageRenderModule
     {
-        // These are presentation-only Unity sorting sub-orders. P1 renders Shadow,
-        // Entity, and HitRecord; Overlay remains a reserved P3 slot until it has a
-        // production consumer.
-        internal const int PresentationShadowSubOrder = 0;
-        internal const int PresentationEntitySubOrder = 1;
-        internal const int PresentationReservedOverlaySubOrder = 2;
-        internal const int PresentationHitRecordSubOrder = 3;
         private const int PresentationSubOrderCount = 4;
-
-        // Legacy SpriteRenderer sortingOrder is a signed 16-bit value. Reserving
-        // four contiguous presentation positions per entity leaves 8192 published
-        // entities before a positive sorting order would overflow. Central rendering
-        // removes this temporary legacy-backend limit.
-        internal const int LegacySpriteRendererMaxPresentationEntities =
-            (short.MaxValue + 1) / PresentationSubOrderCount;
+        private const int PresentationShadowSubOrder =
+            SimulationWorld.PresentationShadowSubOrder;
+        private const int PresentationEntitySubOrder =
+            SimulationWorld.PresentationEntitySubOrder;
+        private const int PresentationHitRecordSubOrder =
+            SimulationWorld.PresentationHitRecordSubOrder;
+        private const int LegacySpriteRendererMaxPresentationEntities =
+            SimulationWorld.LegacySpriteRendererMaxPresentationEntities;
+        private readonly SimulationWorld world;
 
         private PresentationRenderOrder[] _presentationRenderOrders =
             new PresentationRenderOrder[128];
@@ -46,15 +36,41 @@ namespace NTSD.Simulation
         private BattlePixelFramePlan _currentPixelFramePlan;
         private bool skipLateRendererUpdateForDiagnostics;
 
-        public BattlePresentationCoordinator BattlePresentation => _battlePresentation;
-        public BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
-        public int LateRendererUpdateInvocationCountForDiagnostics { get; private set; }
-        public int PresentationRenderOrderBuildCountForDiagnostics { get; private set; }
-        public int PresentationRenderOrderReusePublishCountForDiagnostics { get; private set; }
-        public int PresentationEntityScanAndSortCountForDiagnostics { get; private set; }
-        public bool SkipLateRendererUpdateForDiagnostics =>
+        internal SimulationStageRenderModule(SimulationWorld world)
+        {
+            this.world = world ?? throw new System.ArgumentNullException(nameof(world));
+        }
+
+        internal void Reset()
+        {
+            _battlePresentation.Reset();
+            _currentPixelFramePlan = default;
+            _presentationRenderScratch.Clear();
+            _rendererSnapshotScratch.Clear();
+            _presentationRenderOrderCount = 0;
+            _hasExplicitStageRuntimeSnapshot = false;
+            skipLateRendererUpdateForDiagnostics = false;
+        }
+
+        internal void PrepareCapacity(int entityCapacity, int registeredCapacity)
+        {
+            if (_presentationRenderScratch.Capacity < entityCapacity)
+                _presentationRenderScratch.Capacity = entityCapacity;
+            if (_rendererSnapshotScratch.Capacity < registeredCapacity)
+                _rendererSnapshotScratch.Capacity = registeredCapacity;
+            EnsurePresentationRenderOrderCapacity(entityCapacity);
+            _battlePresentation.PrepareCapacity(entityCapacity);
+        }
+
+        internal BattlePresentationCoordinator BattlePresentation => _battlePresentation;
+        internal BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
+        internal int LateRendererUpdateInvocationCountForDiagnostics { get; private set; }
+        internal int PresentationRenderOrderBuildCountForDiagnostics { get; private set; }
+        internal int PresentationRenderOrderReusePublishCountForDiagnostics { get; private set; }
+        internal int PresentationEntityScanAndSortCountForDiagnostics { get; private set; }
+        internal bool SkipLateRendererUpdateForDiagnostics =>
             skipLateRendererUpdateForDiagnostics;
-        public long SkippedLateRendererUpdateTickCountForDiagnostics { get; private set; }
+        internal long SkippedLateRendererUpdateTickCountForDiagnostics { get; private set; }
 
         public bool ConfigureSkipLateRendererUpdateForDiagnostics(
             bool requested,
@@ -107,11 +123,21 @@ namespace NTSD.Simulation
             int perspectiveNear,
             int perspectiveFar)
         {
-            Runtime?.Stage?.SetSceneSnapshot(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
+            world.Runtime?.Stage?.SetSceneSnapshot(
+                stageWidth,
+                zMin,
+                zMax,
+                perspectiveNear,
+                perspectiveFar);
             _hasExplicitStageRuntimeSnapshot = true;
         }
 
-        private static void ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar)
+        internal static void ResolveUnityStageRuntime(
+            out int stageWidth,
+            out int zMin,
+            out int zMax,
+            out int perspectiveNear,
+            out int perspectiveFar)
         {
             var cfg = NTSD.App.GameConfig.Instance;
             stageWidth = cfg != null ? Mathf.Max(cfg.BattleStageWidthPx, NTSDRenderSpace.SourceScreenWidth) : 800;
@@ -144,37 +170,42 @@ namespace NTSD.Simulation
                 return;
 
             ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar);
-            Runtime?.Stage?.SetSceneSnapshot(stageWidth, zMin, zMax, perspectiveNear, perspectiveFar);
+            world.Runtime?.Stage?.SetSceneSnapshot(
+                stageWidth,
+                zMin,
+                zMax,
+                perspectiveNear,
+                perspectiveFar);
         }
 
         public void ClampCharacterZToStageBoundsAll()
         {
             RefreshStageRuntimeSnapshotFromScene();
-            float zMin = Runtime?.Stage?.ZMin ?? 180;
-            float zMax = Runtime?.Stage?.ZMax ?? 350;
+            float zMin = world.Runtime?.Stage?.ZMin ?? 180;
+            float zMax = world.Runtime?.Stage?.ZMax ?? 350;
             if (zMax < zMin)
                 return;
 
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in world.ActiveEntitiesByRuntimeSlotForModule)
             {
                 if (!entity.IsStageBoundedCharacter() || entity.PS == null)
-                    return;
+                    continue;
 
                 if (entity.PS.z > zMax) entity.PS.z = zMax;
                 if (entity.PS.z < zMin) entity.PS.z = zMin;
                 entity.Runtime.ZInt = (int)entity.Runtime.Z;
-                RefreshRuntimeSnapshot(entity);
-            });
+                entity.RefreshRuntimeSnapshot();
+            }
         }
 
         public void ApplyPreFrameBoundsAll()
         {
             RefreshStageRuntimeSnapshotFromScene();
-            int stageWidthPx = Runtime?.Stage?.StageWidthPx ?? 800;
-            int baseStageWidthPx = Runtime?.Stage?.BaseStageWidthPx ?? 800;
-            int xMaxOverride = Runtime?.Stage?.XMaxOverride ?? 0;
-            int stageZMin = Runtime?.Stage?.ZMin ?? 180;
-            int stageZMax = Runtime?.Stage?.ZMax ?? 350;
+            int stageWidthPx = world.Runtime?.Stage?.StageWidthPx ?? 800;
+            int baseStageWidthPx = world.Runtime?.Stage?.BaseStageWidthPx ?? 800;
+            int xMaxOverride = world.Runtime?.Stage?.XMaxOverride ?? 0;
+            int stageZMin = world.Runtime?.Stage?.ZMin ?? 180;
+            int stageZMax = world.Runtime?.Stage?.ZMax ?? 350;
 
             float zMin = stageZMin;
             float zMax = stageZMax;
@@ -182,17 +213,17 @@ namespace NTSD.Simulation
             if (zMax < zMin || baseStageWidth <= 0f)
                 return;
 
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in world.ActiveEntitiesByRuntimeSlotForModule)
             {
-                if (entity == null || entity.PS == null)
-                    return;
+                if (entity.PS == null)
+                    continue;
 
                 entity.ApplyPreFrameZBounds(zMin, zMax);
 
                 bool destroyed = entity.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride);
                 if (!destroyed)
-                    RefreshRuntimeSnapshot(entity);
-            });
+                    entity.RefreshRuntimeSnapshot();
+            }
 
             ResetUnityFixedWorldRenderOffsets();
         }
@@ -205,7 +236,7 @@ namespace NTSD.Simulation
         public void RenderDispatchAll(int tickIndex, bool buildPresentation)
         {
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
-                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             bool publishPresentation =
                 buildPresentation ||
                 _battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly;
@@ -222,14 +253,14 @@ namespace NTSD.Simulation
                 }
 
                 detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderBeginFrame);
-                _battlePresentation.BeginFrame(this, tickIndex);
+                _battlePresentation.BeginFrame(world, tickIndex);
                 detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderBeginFrame);
 
-                BattleCentralRenderSystem.QueueLatestPublishedFrame(this);
+                BattleCentralRenderSystem.QueueLatestPublishedFrame(world);
                 if (!Application.isPlaying || Application.isBatchMode)
-                    BattleCentralRenderSystem.FlushLatestPublishedFrame(this);
+                    BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
 
-                if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(this))
+                if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
                 {
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
@@ -259,10 +290,10 @@ namespace NTSD.Simulation
                 return;
 
             destination.Clear();
-            for (int slot = 0; slot < RuntimeSlotCapacity; slot++)
+            for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
             {
-                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(slot);
-                if (entity != null && IsActiveForCurrentPassInternal(entity))
+                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(slot);
+                if (entity != null && world.IsActiveForCurrentPassInternal(entity))
                     destination.Add(entity);
             }
         }
@@ -276,7 +307,7 @@ namespace NTSD.Simulation
             }
 
             int slot = entity.Runtime.SlotIndex;
-            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+            if (!world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
                 return;
 
             BattleCommonVisualBinding shadowBinding =
@@ -313,7 +344,7 @@ namespace NTSD.Simulation
             }
 
             int slot = entity.Runtime.SlotIndex;
-            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+            if (!world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
                 return;
 
             BattleSpriteValueDescriptor descriptor = CaptureRendererDescriptor(
@@ -359,7 +390,7 @@ namespace NTSD.Simulation
             }
 
             int slot = entity.Runtime.SlotIndex;
-            if (!TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+            if (!world.TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
                 return;
 
             BattleVisualResourceKey sparkKey = default;
@@ -491,7 +522,7 @@ namespace NTSD.Simulation
             if (sortedEntities == null)
                 return;
 
-            EnsurePresentationRenderOrderCapacity(RuntimeSlotCapacity);
+            EnsurePresentationRenderOrderCapacity(world.RuntimeSlotCapacityForDiagnostics);
 
             int rank = 0;
             for (int i = 0; i < sortedEntities.Count; i++)
@@ -499,7 +530,10 @@ namespace NTSD.Simulation
                 LF2Entity entity = sortedEntities[i];
                 int slot = entity?.Runtime?.SlotIndex ?? -1;
                 if (entity == null || slot < 0 ||
-                    !TryGetCurrentRuntimeHandle(slot, entity, out RuntimeEntityHandle handle))
+                    !world.TryGetCurrentRuntimeHandle(
+                        slot,
+                        entity,
+                        out RuntimeEntityHandle handle))
                 {
                     continue;
                 }
@@ -564,7 +598,7 @@ namespace NTSD.Simulation
                 slot < _presentationRenderOrders.Length &&
                 _presentationRenderOrderEpochs[slot] == _presentationRenderOrderEpoch &&
                 TryGetPublishedPresentationRenderOrder(slot, out PresentationRenderOrder published) &&
-                TryResolveRuntimeHandle(published.Handle, out LF2Entity current) &&
+                world.TryResolveRuntimeHandle(published.Handle, out LF2Entity current) &&
                 ReferenceEquals(current, entity))
             {
                 return checked(published.Rank * PresentationSubOrderCount +
@@ -575,7 +609,7 @@ namespace NTSD.Simulation
             // the same active map on demand rather than deriving a Unity order from a
             // sparse runtime slot. An unregistered/stale entity remains isolated at
             // its requested sub-order until it is published by a later render pass.
-            if (entity != null && IsActiveForCurrentPass(entity))
+            if (entity != null && world.IsActiveForCurrentPassInternal(entity))
             {
                 BuildPresentationRenderOrder();
                 slot = entity.Runtime?.SlotIndex ?? -1;
@@ -583,7 +617,7 @@ namespace NTSD.Simulation
                     slot < _presentationRenderOrders.Length &&
                     _presentationRenderOrderEpochs[slot] == _presentationRenderOrderEpoch &&
                     TryGetPublishedPresentationRenderOrder(slot, out published) &&
-                    TryResolveRuntimeHandle(published.Handle, out current) &&
+                    world.TryResolveRuntimeHandle(published.Handle, out current) &&
                     ReferenceEquals(current, entity))
                 {
                     return checked(published.Rank * PresentationSubOrderCount +
@@ -630,35 +664,23 @@ namespace NTSD.Simulation
         {
             // Unity battle scenes use fixed world coordinates. Keep entity, shadow,
             // and spark presentation independent from character-driven camera math.
-            _cameraX = 0;
-            _cameraVel = 0;
-            GetAllEntities(_entityScratch);
-            for (int i = 0; i < _entityScratch.Count; i++)
+            world.ResetUnityFixedWorldCameraStateForModule();
+            world.GetAllEntities(_presentationRenderScratch);
+            for (int i = 0; i < _presentationRenderScratch.Count; i++)
             {
-                LF2Entity entity = _entityScratch[i];
+                LF2Entity entity = _presentationRenderScratch[i];
                 if (entity?.Runtime == null)
                     continue;
 
                 entity.Runtime.RenderOffsetX = 0f;
             }
 
-            _entityScratch.Clear();
+            _presentationRenderScratch.Clear();
         }
 
         private List<ISimObject> BuildRendererSnapshot()
         {
-            _rendererSnapshotScratch.Clear();
-            if (_buckets.TryGetValue(SimOrderConstants.Renderer, out Bucket bucket))
-            {
-                bucket.EnsureSorted(GetRuntimeStableId);
-                for (int i = 0; i < bucket.items.Count; i++)
-                {
-                    if (bucket.items[i] is LF2Entity) continue;
-                    if (bucket.items[i] is LF2ObjectRenderer)
-                        _rendererSnapshotScratch.Add(bucket.items[i]);
-                }
-            }
-
+            world.GetNonEntityRendererObjectsForModule(_rendererSnapshotScratch);
             return _rendererSnapshotScratch;
         }
 
@@ -669,7 +691,7 @@ namespace NTSD.Simulation
             for (int i = 0; i < snapshot.Count; i++)
             {
                 ISimObject obj = snapshot[i];
-                if (obj == null || !IsActiveForCurrentPass(obj))
+                if (obj == null || !world.IsActiveForCurrentPassInternal(obj))
                     continue;
 
                 obj.SimLateTick(tickIndex);
@@ -678,7 +700,7 @@ namespace NTSD.Simulation
 
         public void UpdateBattleResultsFlow()
         {
-            BattleRuntimeState battle = Runtime;
+            BattleRuntimeState battle = world.Runtime;
             if (battle?.Match?.BattleGameModeId != 1)
                 return;
 
@@ -691,8 +713,10 @@ namespace NTSD.Simulation
             if (rosterSlots == null)
                 return;
 
-            int[] teamIds = { -1, -1 };
-            int[] alive = new int[2];
+            int firstTeamId = -1;
+            int secondTeamId = -1;
+            int firstTeamAlive = 0;
+            int secondTeamAlive = 0;
             int teamCount = 0;
             int slotCount = rosterSlots.Length < 8 ? rosterSlots.Length : 8;
 
@@ -702,7 +726,8 @@ namespace NTSD.Simulation
                 if (rosterSlot == null)
                     continue;
 
-                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(rosterSlot.RuntimeSlotIndex);
+                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(
+                    rosterSlot.RuntimeSlotIndex);
                 if (entity == null ||
                     entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                 {
@@ -713,7 +738,7 @@ namespace NTSD.Simulation
                 // skips only when the slot state is dormant and the bound entity is
                 // inactive. An active entity must remain eligible even when its
                 // roster metadata has already been marked inactive.
-                if (!rosterSlot.Active && !IsActiveForCurrentPass(entity))
+                if (!rosterSlot.Active && !world.IsActiveForCurrentPassInternal(entity))
                     continue;
 
                 int team = entity.RelationTeam != 0 ? entity.RelationTeam : rosterSlot.Team;
@@ -721,43 +746,57 @@ namespace NTSD.Simulation
                     continue;
 
                 int bucket = -1;
-                for (int i = 0; i < teamCount; i++)
+                if (teamCount > 0 && firstTeamId == team)
                 {
-                    if (teamIds[i] == team)
-                    {
-                        bucket = i;
-                        break;
-                    }
+                    bucket = 0;
+                }
+                else if (teamCount > 1 && secondTeamId == team)
+                {
+                    bucket = 1;
+                }
+                else if (teamCount == 0)
+                {
+                    firstTeamId = team;
+                    teamCount = 1;
+                    bucket = 0;
+                }
+                else if (teamCount == 1)
+                {
+                    secondTeamId = team;
+                    teamCount = 2;
+                    bucket = 1;
                 }
 
-                if (bucket < 0 && teamCount < teamIds.Length)
+                if (bucket >= 0 &&
+                    world.IsActiveForCurrentPassInternal(entity) &&
+                    entity.Health != null &&
+                    entity.Health.HP > 0)
                 {
-                    bucket = teamCount;
-                    teamIds[teamCount++] = team;
+                    if (bucket == 0)
+                        firstTeamAlive++;
+                    else
+                        secondTeamAlive++;
                 }
-
-                if (bucket >= 0 && IsActiveForCurrentPass(entity) && entity.Health != null && entity.Health.HP > 0)
-                    alive[bucket]++;
             }
 
-            if (alive[0] > 0 && alive[1] > 0)
+            if (firstTeamAlive > 0 && secondTeamAlive > 0)
                 results.HadBoth = true;
 
             if (!results.HadBoth || teamCount < 2)
                 return;
 
             results.EnsureTeamIds();
-            if (alive[0] > 0 && alive[1] > 0)
+            if (firstTeamAlive > 0 && secondTeamAlive > 0)
             {
                 results.BattleEndPhase = 0;
                 results.PendingWinner = -2;
                 results.TeamCount = teamCount;
-                results.TeamIds[0] = teamIds[0];
-                results.TeamIds[1] = teamIds[1];
+                results.TeamIds[0] = firstTeamId;
+                results.TeamIds[1] = secondTeamId;
                 return;
             }
 
-            int decidedWinner = alive[0] > 0 ? 0 : alive[1] > 0 ? 1 : -1;
+            int decidedWinner = firstTeamAlive > 0 ? 0 : secondTeamAlive > 0 ? 1 : -1;
             if (results.BattleEndPhase == 0)
             {
                 results.BattleEndPhase = 1;
@@ -769,11 +808,15 @@ namespace NTSD.Simulation
             }
 
             results.TeamCount = teamCount;
-            results.TeamIds[0] = teamIds[0];
-            results.TeamIds[1] = teamIds[1];
+            results.TeamIds[0] = firstTeamId;
+            results.TeamIds[1] = secondTeamId;
 
             if (results.BattleEndPhase >= 11)
-                results.ActivateSummary(results.PendingWinner, teamCount, teamIds[0], teamIds[1]);
+                results.ActivateSummary(
+                    results.PendingWinner,
+                    teamCount,
+                    firstTeamId,
+                    secondTeamId);
         }
     }
 }

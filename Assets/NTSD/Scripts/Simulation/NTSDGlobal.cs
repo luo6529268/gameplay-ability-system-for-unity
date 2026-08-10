@@ -193,12 +193,6 @@ namespace NTSD.Simulation
            public const int Timeout = 10; // 连招超时时间。
         }
 
-        /// <summary>
-        /// 全局 MP 消耗开关，对应 C++ release 的 g_pp_mode / dword_446970。
-        /// true 表示启用 MP/PP 消耗；false 表示跳过消耗逻辑。
-        /// </summary>
-        public static bool MPEnabled = true;
-
         public static class Sound
         {
             public const string DefendGuard = "Battle/Defend/Guard";

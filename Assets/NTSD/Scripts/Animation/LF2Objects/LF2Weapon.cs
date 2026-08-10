@@ -17,6 +17,10 @@ namespace NTSD.Animation.LF2Objects
     public class LF2Weapon : LF2WeaponBase
     {
         private int _poolWeaponType;
+        private readonly InteractionArea landingSplashInteraction =
+            new InteractionArea();
+        private readonly InteractionArea heldAttackInteraction =
+            new InteractionArea();
 
         // 这里复用 runtime 里的计数槽，保存武器飞行/耐久相关的即时状态。
         private int FlightCounter
@@ -286,7 +290,31 @@ namespace NTSD.Animation.LF2Objects
                         int hurt = ws != 0 ? (1000 / ws) : 10;
                         if (frameD.bodies != null)
                         {
-                            var itr = new InteractionArea { kind = 0, injury = hurt, dvx = 3, dvy = 7, fall = 70, vrest = 10, arest = 0 };
+                            InteractionArea itr = landingSplashInteraction;
+                            itr.kind = 0;
+                            itr.dvx = 3;
+                            itr.dvy = 7;
+                            itr.dvz = 0;
+                            itr.injury = hurt;
+                            itr.fall = 70;
+                            itr.vaction = 0;
+                            itr.arest = 0;
+                            itr.vrest = 10;
+                            itr.effect = 0;
+                            itr.kill = 0;
+                            itr.bdefend = 0;
+                            itr.catchingact = null;
+                            itr.caughtact = null;
+                            itr.attacking = 0;
+                            itr.throwvz = 0;
+                            itr.catchingact2 = null;
+                            itr.caughtact2 = null;
+                            itr.respond = 0;
+                            itr.pickingact = 0;
+                            itr.pickedact = 0;
+                            itr.throwvx = 0;
+                            itr.throwvy = 0;
+                            itr.throwinjury = 0;
                             for (int bodyIndex = 0; bodyIndex < frameD.bodies.Count; bodyIndex++)
                             {
                                 if (!BruteForceSceneQuery.TryBuildBodyBattleVolume(
@@ -674,7 +702,7 @@ namespace NTSD.Animation.LF2Objects
         // wpoint 会先被翻译成 itr，再通过场景查询命中角色并调用角色 Hit。
         protected override WeaponAttackResult ProcessAttack(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
         {
-            var result = new WeaponAttackResult();
+            WeaponAttackResult result = default;
             if (wpoint.attacking <= 0) return result;
 
             var entry = GetStrengthEntry(wpoint.attacking);
@@ -684,17 +712,31 @@ namespace NTSD.Animation.LF2Objects
             if (sceneQuery == null || frame == null) return result;
             if (frame.bodies == null || frame.bodies.Count == 0) return result;
 
-            var itr = new InteractionArea
-            {
-                kind = 0,
-                dvx  = entry.dvx,
-                dvy  = entry.dvy,
-                fall = entry.fall,
-                vrest = entry.vrest,
-                arest = entry.arest,
-                injury = entry.injury,
-                effect = entry.effect,
-            };
+            InteractionArea itr = heldAttackInteraction;
+            itr.kind = 0;
+            itr.dvx = entry.dvx;
+            itr.dvy = entry.dvy;
+            itr.dvz = 0;
+            itr.injury = entry.injury;
+            itr.fall = entry.fall;
+            itr.vaction = 0;
+            itr.arest = entry.arest;
+            itr.vrest = entry.vrest;
+            itr.effect = entry.effect;
+            itr.kill = 0;
+            itr.bdefend = 0;
+            itr.catchingact = null;
+            itr.caughtact = null;
+            itr.attacking = 0;
+            itr.throwvz = 0;
+            itr.catchingact2 = null;
+            itr.caughtact2 = null;
+            itr.respond = 0;
+            itr.pickingact = 0;
+            itr.pickedact = 0;
+            itr.throwvx = 0;
+            itr.throwvy = 0;
+            itr.throwinjury = 0;
 
             if (holder != null && holder.Runtime.Dir == "left")
                 itr.dvx = -itr.dvx;

@@ -16,7 +16,7 @@ namespace NTSD.Tools
         /// <summary>
         /// 详细日志开关，关闭时只输出 Warning 和 Error
         /// </summary>
-        public static bool Verbose = true;
+        public static bool Verbose = false;
 
         /// <summary>
         /// 日志前缀
@@ -113,7 +113,7 @@ namespace NTSD.Tools
         }
 
         /// <summary>全局状态日志开关</summary>
-        public static bool StateLogEnabled = true;
+        public static bool StateLogEnabled = false;
 
         /// <summary>检测到 Error 级别日志时自动暂停（关闭 StateLogEnabled），防止关键帧被冲掉</summary>
         public static bool AutoPauseOnError = false;

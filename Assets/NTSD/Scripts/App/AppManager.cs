@@ -11,6 +11,7 @@ using NTSD.Simulation;
 using MoreMountains.TopDownEngine;
 using System.Collections;
 using MoreMountains.Tools;
+using Cysharp.Threading.Tasks;
 
 namespace NTSD.App
 {
@@ -95,38 +96,48 @@ namespace NTSD.App
         {
             if (scene.name == battleSceneName)
             {
-                StartCoroutine(DelayedInitializeBattle(scene));
+                InitializeBattleAsync(scene).Forget();
             }
         }
 
-        private IEnumerator DelayedInitializeBattle(Scene scene)
+        private async UniTaskVoid InitializeBattleAsync(Scene scene)
         {
-            yield return null;
-            InitializeBattle(scene);
-        }
-
-        private void InitializeBattle(Scene scene)
-        {
-            InitializeBattleSingletons();
-
-            var bootstrap = FindBattleBootstrap(scene);
-            bootstrap?.EnablePresentation();
-
-            SceneManager.SetActiveScene(scene);
-
-            SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
-
-            // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
-            SetupBattleCharacters(scene);
-
-            if (SimulationTickDriver.Instance != null)
+            await UniTask.Yield();
+            try
             {
-                SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
-                SimulationTickDriver.Instance.SetPaused(false);
-            }
+                InitializeBattleSingletons();
 
-            state = AppFlowState.BattleRunning;
-            EnsureSingleEventSystem();
+                var bootstrap = FindBattleBootstrap(scene);
+                bootstrap?.EnablePresentation();
+
+                SceneManager.SetActiveScene(scene);
+
+                SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
+
+                // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
+                SetupBattleCharacters(scene);
+
+                if (soundPlayer != null)
+                {
+                    await soundPlayer.PrepareBattleCuesAsync(
+                        CharacterAnimtorManager.Instance);
+                }
+
+                if (SimulationTickDriver.Instance != null)
+                {
+                    SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
+                    SimulationTickDriver.Instance.BeginBattleAllocationSeal();
+                    SimulationTickDriver.Instance.SetPaused(false);
+                }
+
+                state = AppFlowState.BattleRunning;
+                EnsureSingleEventSystem();
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogError(
+                    $"[AppManager] Battle initialization failed: {exception}");
+            }
         }
 
         private void InitializeBattleSingletons()
@@ -270,6 +281,7 @@ namespace NTSD.App
             if (SimulationTickDriver.Instance != null)
             {
                 SimulationTickDriver.Instance.SetPaused(true);
+                SimulationTickDriver.Instance.EndBattleAllocationSeal();
                 SimulationTickDriver.Instance.UnbindWorld();
             }
 

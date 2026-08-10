@@ -1324,3 +1324,8 @@ R-GP-01 freshness：authority source `2026-07-18 00:11:23` < authority DLL `00:1
 - 诚实状态：该优化已晋升，但 1000 AI 未稳定 30 Hz。best forward Avg `31.063709 ms`、P95 `37.637035 ms`，reverse P95 `45.88688 ms`。
 - 后续 SoA slice 应优先处理 CharacterInput Avg `9.188 ms`（Remaining `5.223 ms`）、CandidateCollect Avg/P95 `3.878/9.405 ms`、Late FrameTick `2.377 ms`、FrameAdvance `2.05 ms`。
 - T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+## 2026-08-10 — 战斗运行时内存与结构约束
+
+- 零 GC、池/容量、数据结构、mutable static 与剩余 partial 迁移的专项清单已记录在 `Assets/NTSD/Docs/battle-zero-gc-and-structure-plan.md`。
+- 该专项只改变 Unity host 的内存和所有权实现，不改变唯一权威 C# 的战斗规则、pass 顺序和可观察结果。
+- T8 默认 `stage.dat` 部署继续排除；Android 真机验收继续由用户处理。

@@ -4,134 +4,146 @@ using NTSD.Tools;
 
 namespace NTSD.Animation.LF2Objects
 {
-    public partial class LF2OtherObject
+    internal sealed class LF2OtherObjectLifecycleModule
     {
-        public override void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
+        private readonly LF2OtherObject owner;
+        private readonly LF2OtherObjectFrameModule frameModule;
+
+        public long InvalidTaskTypeCountForDiagnostics { get; private set; }
+
+        public LF2OtherObjectLifecycleModule(
+            LF2OtherObject owner,
+            LF2OtherObjectFrameModule frameModule)
         {
-            PS = new PhysicsState();
-            PS.BindRuntime(Runtime);
-            Health.BindRuntime(Runtime);
-            Trans = new FrameTransistor(this);
-            Frame = new LF2FrameInfo();
-            Effect = new LF2EffectState();
-            ItrRest = new LF2ItrRestTracker();
-            Sprite = new LF2Sprite();
-            Renderer = renderer;
-            GrabbedBy = 0;
+            this.owner = owner;
+            this.frameModule = frameModule;
+        }
+
+        public void Init(LF2TaskBase taskBase, LF2ObjectRenderer renderer)
+        {
+            owner.PS.BindRuntime(owner.Runtime);
+            owner.Health.BindRuntime(owner.Runtime);
+            owner.AssignRendererFromLifecycle(renderer);
+            owner.GrabbedBy = 0;
 
             if (taskBase is not OPointCreateTask task)
             {
-                Log.Error("[LF2OtherObject] Invalid task type");
+                InvalidTaskTypeCountForDiagnostics++;
+                if (owner.Match?.RuntimeCapacity.IsSealed != true)
+                    Log.Error("[LF2OtherObject] Invalid task type");
                 return;
             }
 
-            Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
+            owner.Runtime.SpawnSemantic = (int)task.releaseSpawnSemantic;
 
             InitializeParent(task);
-            ApplyInitialRuntimePosition(task);
+            owner.ApplyInitialRuntimePosition(task);
             InitializeDirection(task);
             InitializeFrame(task);
             InitializeVelocity(task);
             InitializeHealth();
 
-            SimulationTickDriver.Instance?.World?.Register(this);
+            SimulationTickDriver.Instance?.World?.Register(owner);
         }
 
-        public override void Reset()
+        public void Reset()
         {
-            FrameCache.Clear();
-            ResetPooledEntityState();
-            Runtime.Reset();
-            ObjectId = 0;
-            Team = 0;
-            RelationTeam = 0;
-            Health.HP = 0;
-            Health.HPBound = 0;
-            Health.HP3 = 0;
-            Health.MP = 0;
-            Health.PP = 0;
-            Health.MaxPP = 0;
-            Health.PPBound = 0;
-            Health.MaxMP = 0;
-            GrabbedBy = 0;
-            HolderCopySlot = -1;
-            OwnerId = -1;
-            RelationOwnerSlot = -1;
-            OwnerEntityIndex = -1;
-            SpawnerEntityIndex = -1;
-            TrackerFlag = 0;
-            TrackerParent = null;
-            Runtime.LinkState = 0;
-            Runtime.TargetSlotIndex = -1;
-            Runtime.HeldWeaponStableId = -1;
-            Runtime.HolderStableId = -1;
-            Runtime.PickerStableId = -1;
-            ResetSpark();
-            ResetStableId();
+            owner.FrameCache.Clear();
+            owner.ResetPooledEntityState();
+            owner.Runtime.Reset();
+            owner.ResetReusableRuntimeComponentsFromLifecycle();
+            owner.ObjectId = 0;
+            owner.Team = 0;
+            owner.RelationTeam = 0;
+            owner.Health.HP = 0;
+            owner.Health.HPBound = 0;
+            owner.Health.HP3 = 0;
+            owner.Health.MP = 0;
+            owner.Health.PP = 0;
+            owner.Health.MaxPP = 0;
+            owner.Health.PPBound = 0;
+            owner.Health.MaxMP = 0;
+            owner.GrabbedBy = 0;
+            owner.HolderCopySlot = -1;
+            owner.OwnerId = -1;
+            owner.RelationOwnerSlot = -1;
+            owner.OwnerEntityIndex = -1;
+            owner.SpawnerEntityIndex = -1;
+            owner.TrackerFlag = 0;
+            owner.TrackerParent = null;
+            owner.Runtime.LinkState = 0;
+            owner.Runtime.TargetSlotIndex = -1;
+            owner.Runtime.HeldWeaponStableId = -1;
+            owner.Runtime.HolderStableId = -1;
+            owner.Runtime.PickerStableId = -1;
+            owner.ResetSparkFromLifecycle();
+            owner.ResetStableIdFromLifecycle();
         }
 
         private void InitializeParent(OPointCreateTask task)
         {
-            ObjectId = task.opoint.oid;
-            Team = 0;
-            RelationTeam = 0;
-            HolderCopySlot = -1;
-            OwnerId = -1;
-            RelationOwnerSlot = -1;
-            OwnerEntityIndex = -1;
-            SpawnerEntityIndex = -1;
+            owner.ObjectId = task.opoint.oid;
+            owner.Team = 0;
+            owner.RelationTeam = 0;
+            owner.HolderCopySlot = -1;
+            owner.OwnerId = -1;
+            owner.RelationOwnerSlot = -1;
+            owner.OwnerEntityIndex = -1;
+            owner.SpawnerEntityIndex = -1;
         }
 
         private void InitializeDirection(OPointCreateTask task)
         {
-            string dir = CalculateDirection(task.opoint.facing, task.dir);
-            SwitchDir(string.IsNullOrEmpty(dir) ? "right" : dir);
+            string dir = owner.CalculateDirectionFromLifecycle(
+                task.opoint.facing,
+                task.dir);
+            owner.SwitchDir(string.IsNullOrEmpty(dir) ? "right" : dir);
         }
 
         private void InitializeFrame(OPointCreateTask task)
         {
-            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(ObjectId);
-            FrameCache.Load(wrapper);
+            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(owner.ObjectId);
+            owner.FrameCache.Load(wrapper);
 
             int action = task.opoint.action;
-            if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))
+            if (action == 0 && !task.preserveActionZero && !owner.FrameCache.HasFrame(0))
                 action = 999;
 
-            Frame.PN = 0;
-            Frame.Prev = 0;
-            Frame.Prev2 = action;
-            Frame.D = FrameCache.GetFrameDataById(action);
-            Frame.Prev2D = Frame.D;
-            SetFrameDirect(action, 0);
+            owner.Frame.PN = 0;
+            owner.Frame.Prev = 0;
+            owner.Frame.Prev2 = action;
+            owner.Frame.D = owner.FrameCache.GetFrameDataById(action);
+            owner.Frame.Prev2D = owner.Frame.D;
+            frameModule.SetFrameDirect(action, 0);
         }
 
         private void InitializeVelocity(OPointCreateTask task)
         {
             if (task.useDirectVelocity)
             {
-                PS.vx = task.directVx;
-                PS.vy = task.directVy;
-                PS.vz = task.directVz;
+                owner.PS.vx = task.directVx;
+                owner.PS.vy = task.directVy;
+                owner.PS.vz = task.directVz;
                 return;
             }
 
-            PS.vx = Dirh() * task.opoint.dvx;
-            PS.vy = task.opoint.dvy;
-            PS.vz = task.IsLateOpointSpawn ? 0f : task.dvz;
+            owner.PS.vx = owner.Dirh() * task.opoint.dvx;
+            owner.PS.vy = task.opoint.dvy;
+            owner.PS.vz = task.IsLateOpointSpawn ? 0f : task.dvz;
         }
 
         private void InitializeHealth()
         {
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(owner.ObjectId);
             int hp = charData?.weapon_hp > 0 ? charData.weapon_hp : NTSDGlobal.Default.Health.HpFull;
-            Health.HP = hp;
-            Health.HPBound = hp;
-            Health.HP3 = hp;
-            Health.MP = NTSDGlobal.Default.Health.MpFull;
-            Health.PP = NTSDGlobal.Default.Health.MpFull;
-            Health.MaxPP = NTSDGlobal.Default.Health.MpFull;
-            Health.PPBound = NTSDGlobal.Default.Health.MpFull;
-            Health.MaxMP = NTSDGlobal.Default.Health.MpFull;
+            owner.Health.HP = hp;
+            owner.Health.HPBound = hp;
+            owner.Health.HP3 = hp;
+            owner.Health.MP = NTSDGlobal.Default.Health.MpFull;
+            owner.Health.PP = NTSDGlobal.Default.Health.MpFull;
+            owner.Health.MaxPP = NTSDGlobal.Default.Health.MpFull;
+            owner.Health.PPBound = NTSDGlobal.Default.Health.MpFull;
+            owner.Health.MaxMP = NTSDGlobal.Default.Health.MpFull;
         }
 
     }

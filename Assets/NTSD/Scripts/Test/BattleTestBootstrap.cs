@@ -117,6 +117,13 @@ namespace NTSD.Test
             await LoadCharacterDataAsync();
             if (this == null) return;
 
+            if (AppManager.Instance?.SoundPlayer != null)
+            {
+                await AppManager.Instance.SoundPlayer.PrepareBattleCuesAsync(
+                    CharacterAnimtorManager.Instance);
+                if (this == null) return;
+            }
+
             // 4. 启用 BattleBootstrap 表现层
             var bootstrap = FindObjectOfType<App.BattleBootstrap>(true);
             if (bootstrap != null)
@@ -151,6 +158,7 @@ namespace NTSD.Test
 
                 if (SimulationTickDriver.Instance != null)
                 {
+                    SimulationTickDriver.Instance.BeginBattleAllocationSeal();
                     SimulationTickDriver.Instance.SetPaused(false);
                     Debug.Log("[BattleTestBootstrap] SimulationTickDriver resumed.");
                 }

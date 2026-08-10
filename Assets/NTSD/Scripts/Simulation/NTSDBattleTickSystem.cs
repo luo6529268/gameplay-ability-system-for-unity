@@ -69,6 +69,11 @@ namespace NTSD.Simulation
             activePhase != BattleTickPhase.Count;
         public BattleTickPhase ActivePhaseForDiagnostics => activePhase;
 
+        internal static void PrepareProfilerMarkers()
+        {
+            _ = PhaseProfilerMarkers.All.Length;
+        }
+
         public void SetEnabled(bool enabled)
         {
             if (Enabled)
@@ -181,29 +186,6 @@ namespace NTSD.Simulation
             PhaseProfilerMarkers.All[(int)phase].End();
             activePhase = BattleTickPhase.Count;
             activePhaseTimestamp = 0;
-        }
-    }
-
-    public partial class SimulationWorld
-    {
-        private BattleTickPhaseDiagnostics battleTickPhaseDiagnostics;
-
-        public BattleTickPhaseDiagnostics ActiveBattleTickPhaseDiagnosticsForDiagnostics =>
-            battleTickPhaseDiagnostics != null && battleTickPhaseDiagnostics.Enabled
-                ? battleTickPhaseDiagnostics
-                : null;
-
-        public BattleTickPhaseDiagnostics EnableBattleTickPhaseDiagnosticsForDiagnostics()
-        {
-            if (battleTickPhaseDiagnostics == null)
-                battleTickPhaseDiagnostics = new BattleTickPhaseDiagnostics();
-            battleTickPhaseDiagnostics.SetEnabled(true);
-            return battleTickPhaseDiagnostics;
-        }
-
-        public void DisableBattleTickPhaseDiagnosticsForDiagnostics()
-        {
-            battleTickPhaseDiagnostics?.SetEnabled(false);
         }
     }
 

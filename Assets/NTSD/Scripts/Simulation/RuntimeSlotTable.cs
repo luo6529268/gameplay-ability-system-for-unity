@@ -80,6 +80,18 @@ namespace NTSD.Simulation
         public int MaterializedPageCount { get; private set; }
         public ulong OccupancyEpoch => occupancyEpoch;
 
+        public void PrepareAllPages()
+        {
+            for (int pageIndex = 0; pageIndex < pages.Length; pageIndex++)
+            {
+                if (pages[pageIndex] != null)
+                    continue;
+
+                pages[pageIndex] = new Page();
+                MaterializedPageCount++;
+            }
+        }
+
         public bool GrowTo(int newLogicalCapacity)
         {
             if (newLogicalCapacity < LogicalCapacity)

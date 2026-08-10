@@ -4,20 +4,25 @@
 
 ## Snapshot
 
-- Updated: 2026-08-08
+- Updated: 2026-08-09
 - Brief maturity: `Validated`
 - Requirement gate: `Ready`
-- Project phase: 阶段 8，Native 技能 Trace DTO、OID 分类、多 OID 资源投影和浏览器 E3 视觉验收均已完成
-- Active task: 从技能成功触发开始生成真实 C++ 逻辑 tick；主体、分身和投射物按类别结束
+- Project phase: 阶段 8；Native Trace/多 OID 资源投影保持完成，新的 Frame/技能信息架构已完成源码、测试和构建，新的浏览器 E4 待用户侧权限放行
+- Active task: 左侧三类导航、完整动作默认回放、单 Frame 定位和真实 Native Frame 时间线
 - Active requirement IDs: REQ-001 至 REQ-019
 - Current branch or workspace: `feat/dat-skill-flow-editor` / `Tools/DatSkillFlowWeb`
-- Current build ID or revision: `20260808115824286-7edd5b5c6b1f4c0d97e943bb9f1df4d6`
-- Open P0-P2 issues: 无已确认代码缺陷；本轮未重新启动已失败过的自动化浏览器，因此新的启动/切换性能改动尚未取得浏览器 E4 截图。
-- Next required action: 用户直接运行一键启动进行视觉确认；若仍有表现差异，再基于该次操作录像定向复现。
+- Current build ID or revision: `20260809124314266-f46efa5daf1943c48896247cf7e1519c`
+- Open P0-P2 issues: 无已确认代码缺陷；本轮唯一一次自动化浏览器导航被本地安全权限拒绝，因此新的三类导航和完整动作时间线尚未取得浏览器 E4 截图。
+- Next required action: 用户直接运行一键启动确认新布局；重点检查“全部 Frame”选择 F212 时标题回到 F210 完整跳跃动作、底部出现 F210/F211/F212 Native Tick 段。
 
 ## Completed
 
-- 启动阶段从真实 DAT 派生并预热 86 个 Native 技能场景，同时安全读取并缓存 31 个当前战斗资源；浏览器只在服务完成准备后打开。
+- 左栏默认收敛为“基础状态 / 输入技能 / 全部 Frame”三类导航和统一筛选；旧 Flow 表/SVG 默认隐藏且普通 render 不再构建其 DOM/SVG。
+- 单 Frame 选择不再直接调用 raw frame preview：先按真实 DAT `next` 链选择最早完整动作入口，Native 回放后再定位目标 Frame；F210→F211→F212 有聚焦回归，找不到入口时拒绝伪造起点。
+- 底部 DAT wait 视觉轴替换为根实体真实 Native Tick/Frame 分段；连续相同 Frame 合并，离开后回访生成新段，root 缺失时不伪造 Frame。
+- 中间预览明确显示完整动作标题/入口/当前 Frame，仍是不可由玩家控制的战斗场景；右侧帧参数检查器保持原有 capability 和编辑合同。
+- 本轮完整测试 340 项：339 通过、0 失败、1 跳过；最终聚焦测试 12/12 通过，最终 build `20260809124314266-f46efa5daf1943c48896247cf7e1519c`。
+- 启动阶段从真实 DAT 派生并预热 86 个 Native 技能场景，同时安全读取并缓存 45 个当前战斗资源；浏览器只在服务完成准备后打开。
 - `CppNativeDatPreviewRunner`、项目会话和客户端分别按 DAT 内容、revision 与完整 preview intent 做有界 LRU/并发去重；编辑后自动进入新 key，不复用旧 revision。
 - 每次技能/Frame 预览不再同步刷新 `data.txt`；显式 catalog 读取仍执行新鲜度检查并保持外部变更失效语义。
 - C++ `render_resources` 直接提供 OID 33/121/205 等实体的 object type、frame center 和 sprite range；服务端不再为同一 Trace 重读辅助 DAT 猜测渲染资源。
@@ -93,7 +98,7 @@
 
 ## Blocked
 
-- 无。
+- 新 UI 的浏览器 E4 视觉验收被本地浏览器对 `http://127.0.0.1:10042/` 的安全权限拒绝；按单实例约束未重试、未切换浏览器或绕过权限。源码、构建、自动测试和服务预热不受此阻塞。
 
 ## Confirmed Constraints
 
@@ -132,24 +137,25 @@
 - DEC-010: 跨入口 `hit_*` 是可点击叶节点；`next` 继续展开当前流程。
 - DEC-012: 复用临时浏览器并限制实例，使用后清零进程。
 - DEC-013: Trace 按派生对象类别分别结束；分身不等待 AI，武器/投射物继续到权威完成。
+- DEC-015: 左侧三类导航；单 Frame 只定位完整动作回放；底部使用真实 Native Frame 时间线。
 
 ## Validation
 
-- Last build command and result: PowerShell 直接运行 `npm-cli.js test`，332 passed / 0 failed / 1 skipped；build ID `20260808115824286-7edd5b5c6b1f4c0d97e943bb9f1df4d6`。
-- Last startup command and result: `start-local.ps1 -Mode Project -ValidateOnly -NoBrowser` 通过；一次真实 Node 冷启动计时在服务代码执行前被本机 `ncrypto::CSPRNG` 断言阻塞，任务创建的 PID 139600 已退出并清理，因此本轮没有新的服务就绪耗时或浏览器视觉证据。
+- Last build command and result: PowerShell 通过 Node 的 npm CLI 运行完整 `npm test`，339 passed / 0 failed / 1 skipped；随后最终 build 和聚焦 12/12 通过，build ID `20260809124314266-f46efa5daf1943c48896247cf7e1519c`。
+- Last startup command and result: `start-local.ps1 -Mode Project -NoBuild -NoBrowser` 成功；86/86 Native 预览、45/45 资源完成，Native 预览阶段 27.520 秒，服务就绪于随机回环地址 `http://127.0.0.1:10042/`。
 - Automated test environment: Node integration/unit tests、PowerShell 5.1 parser、tuistory PTY、正式/测试 launcher 服务、既有独立 Edge/CDP 证据。
-- Highest evidence level reached: 用户可见编辑器核心流程 E4；显式 DAT 覆盖、恢复备份和重启持久化达到 E5。
+- Highest evidence level reached: 历史编辑器核心流程 E4、显式 DAT 覆盖/恢复/重启 E5；本轮三类导航改动仅达到构建、自动测试和服务就绪，新的浏览器 E4 未完成。
 - Evidence locations: `ACCEPTANCE.md`、`artifacts/acceptance-20260806-4037ab3a/`、Factory 当前会话浏览器/测试日志。
 - Runtime, console or network errors: 最终自动入口页面 `errors` 和 `console` 均为空；standing→F300 后预览、选择和 Flow 一致。
-- Started processes and cleanup result: REQ-017 最终 Node 服务、Edge profile 对应进程、CDP 9231 和临时 profile 均为 0/不存在；临时正式 sidecar 已删除；用户此前启动的测试服务未触碰。
+- Started processes and cleanup result: 本轮服务监听端口 10042 已停止；唯一 in-app Browser 会话已 `finalize` 且未成功导航；未启动或结束用户普通 Chrome/Edge。
 - External dist restoration: 已恢复 build `20260806232034560-c9ee0125ea734d98a762056770e672a7` 和 manifest SHA-256 `322446D69A55B81D531FDBF183C4AE67F324A13B7BF2B9EA877E85E80E271F53`；build/backup 名称集合与任务前快照完全一致。
-- Remaining verification: 用户通过一键启动在真实 Web Canvas 中确认 F271 的计时条之后出现 6 个 Naruto 分身；本轮仅完成 Native Trace、真实 BMP 哈希/内容核对和 Canvas draw-call 自动化回归，没有新的浏览器截图。
+- Remaining verification: 用户通过一键启动在真实 Web Canvas 中确认三类导航、F212 的 F210 完整入口、F271 分身和 Native Frame 时间线；本轮没有新的浏览器截图，不得把新 UI 标记为 E4 通过。
 
 ## Next Actions
 
-1. 用 CLI/Node/PowerShell 取得 F300 分身和 Frame 263 投射物的真实输出，核对 DTO 分类与结束 tick。
-2. 完成真实多 OID BMP capability 的非浏览器 renderer 验证。
-3. 若用户要求 E4，再复用单个可用临时浏览器并在使用后清零。
+1. 用户运行一键启动，对三类导航和完整动作时间线做真实 Canvas 视觉确认。
+2. 在“全部 Frame”选择 F212，确认从 F210/F211 初始化并定位到 F212；再检查 F265 和 F271。
+3. 若浏览器权限恢复，只复用一个实例补齐 E4 截图并在结束后清理。
 
 ## Recovery Checkpoint
 

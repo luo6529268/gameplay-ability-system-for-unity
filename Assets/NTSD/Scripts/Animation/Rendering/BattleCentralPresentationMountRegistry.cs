@@ -11,21 +11,110 @@ namespace NTSD.Animation.Rendering
     /// </summary>
     internal static class BattleCentralPresentationMountRegistry
     {
-        private static readonly List<BattleCentralPresentationMount> ActiveMounts =
+        private static readonly BattleCentralPresentationMountRegistryState State =
+            new BattleCentralPresentationMountRegistryState();
+
+        internal static long RejectedMountRegistrationCount =>
+            State.RejectedMountRegistrationCount;
+        internal static long RejectedOwnerBindingCount =>
+            State.RejectedOwnerBindingCount;
+        internal static bool IsCapacitySealed => State.IsCapacitySealed;
+        internal static int OwnerRuntimeBindingCountForSelfCheck =>
+            State.OwnerRuntimeBindingCountForSelfCheck;
+
+        internal static void PrepareCapacity(int ownerCapacity) =>
+            State.PrepareCapacity(ownerCapacity);
+        internal static void SealCapacity() => State.SealCapacity();
+        internal static void UnsealCapacity() => State.UnsealCapacity();
+        internal static void Register(BattleCentralPresentationMount mount) =>
+            State.Register(mount);
+        internal static void Unregister(BattleCentralPresentationMount mount) =>
+            State.Unregister(mount);
+        internal static void BindOwnerRuntime(
+            LF2ObjectRenderer ownerRenderer,
+            RuntimeEntityHandle runtimeHandle) =>
+            State.BindOwnerRuntime(ownerRenderer, runtimeHandle);
+        internal static void ResetOwnerRuntimeBinding(
+            LF2ObjectRenderer ownerRenderer) =>
+            State.ResetOwnerRuntimeBinding(ownerRenderer);
+        internal static void RemoveOwnerRuntimeBinding(
+            LF2ObjectRenderer ownerRenderer) =>
+            State.RemoveOwnerRuntimeBinding(ownerRenderer);
+        internal static bool HasOwnerRuntimeBindingForAcceptance(int ownerInstanceId) =>
+            State.HasOwnerRuntimeBindingForAcceptance(ownerInstanceId);
+        internal static bool HasValidOwnerRuntimeBindingForAcceptance(int ownerInstanceId) =>
+            State.HasValidOwnerRuntimeBindingForAcceptance(ownerInstanceId);
+        internal static bool HasOwnerRuntimeBindingForSelfCheck(int ownerInstanceId) =>
+            State.HasOwnerRuntimeBindingForSelfCheck(ownerInstanceId);
+        internal static void ResetAllRuntimeBindings() =>
+            State.ResetAllRuntimeBindings();
+        internal static void ValidateActiveMounts() => State.ValidateActiveMounts();
+        internal static bool ValidateActiveMounts(out string error) =>
+            State.ValidateActiveMounts(out error);
+    }
+
+    /// <summary>
+    /// Owns the mutable mount registry state. The static compatibility surface above
+    /// contains no mutable collections and can be removed once all Unity callbacks
+    /// receive an explicit central-render runtime owner.
+    /// </summary>
+    internal sealed class BattleCentralPresentationMountRegistryState
+    {
+        private readonly List<BattleCentralPresentationMount> activeMounts =
             new List<BattleCentralPresentationMount>(32);
 
-        private static readonly Dictionary<int, OwnerRuntimeBinding> OwnerRuntimeBindings =
+        private readonly Dictionary<int, OwnerRuntimeBinding> ownerRuntimeBindings =
             new Dictionary<int, OwnerRuntimeBinding>(32);
 
-        private static readonly List<int> StaleOwnerInstanceIds = new List<int>(8);
+        private readonly List<int> ownerInstanceIds = new List<int>(32);
 
-        internal static void Register(BattleCentralPresentationMount mount)
+        private int preparedMountCapacity = 32;
+        private int preparedOwnerCapacity = 32;
+        private bool capacitySealed;
+
+        internal long RejectedMountRegistrationCount { get; private set; }
+        internal long RejectedOwnerBindingCount { get; private set; }
+        internal bool IsCapacitySealed => capacitySealed;
+
+        internal void PrepareCapacity(int ownerCapacity)
         {
-            if (mount == null || ActiveMounts.Contains(mount))
+            if (capacitySealed)
+                return;
+
+            int normalizedOwnerCapacity = Math.Max(ownerCapacity, ownerRuntimeBindings.Count);
+            int normalizedMountCapacity = Math.Max(normalizedOwnerCapacity * 2, activeMounts.Count);
+            ownerRuntimeBindings.EnsureCapacity(normalizedOwnerCapacity);
+            if (ownerInstanceIds.Capacity < normalizedOwnerCapacity)
+                ownerInstanceIds.Capacity = normalizedOwnerCapacity;
+            if (activeMounts.Capacity < normalizedMountCapacity)
+                activeMounts.Capacity = normalizedMountCapacity;
+            preparedOwnerCapacity = Math.Max(preparedOwnerCapacity, normalizedOwnerCapacity);
+            preparedMountCapacity = Math.Max(preparedMountCapacity, normalizedMountCapacity);
+        }
+
+        internal void SealCapacity()
+        {
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
+
+        internal void Register(BattleCentralPresentationMount mount)
+        {
+            if (mount == null || activeMounts.Contains(mount))
                 return;
 
             PruneDestroyedEntries();
-            ActiveMounts.Add(mount);
+            if (capacitySealed && activeMounts.Count >= preparedMountCapacity)
+            {
+                RejectedMountRegistrationCount++;
+                return;
+            }
+
+            activeMounts.Add(mount);
             if (IsConfigurationValid(mount) &&
                 TryGetOwnerRuntimeBinding(mount.OwnerRenderer, out RuntimeEntityHandle runtimeHandle))
             {
@@ -33,20 +122,20 @@ namespace NTSD.Animation.Rendering
             }
         }
 
-        internal static void Unregister(BattleCentralPresentationMount mount)
+        internal void Unregister(BattleCentralPresentationMount mount)
         {
             if (ReferenceEquals(mount, null))
                 return;
 
             mount.SetRuntimeHandle(RuntimeEntityHandle.Invalid);
-            for (int index = ActiveMounts.Count - 1; index >= 0; index--)
+            for (int index = activeMounts.Count - 1; index >= 0; index--)
             {
-                if (ReferenceEquals(ActiveMounts[index], mount))
-                    ActiveMounts.RemoveAt(index);
+                if (ReferenceEquals(activeMounts[index], mount))
+                    activeMounts.RemoveAt(index);
             }
         }
 
-        internal static void BindOwnerRuntime(
+        internal void BindOwnerRuntime(
             LF2ObjectRenderer ownerRenderer,
             RuntimeEntityHandle runtimeHandle)
         {
@@ -54,7 +143,8 @@ namespace NTSD.Animation.Rendering
                 return;
 
             PruneDestroyedEntries();
-            CacheOwnerRuntimeBinding(ownerRenderer, runtimeHandle);
+            if (!CacheOwnerRuntimeBinding(ownerRenderer, runtimeHandle))
+                return;
 
             // EntityModel is mounted on the renderer itself. Bind it directly as well as
             // through ActiveMounts so a pool activation that misses OnEnable registration
@@ -69,9 +159,9 @@ namespace NTSD.Animation.Rendering
                     : RuntimeEntityHandle.Invalid);
             }
 
-            for (int index = 0; index < ActiveMounts.Count; index++)
+            for (int index = 0; index < activeMounts.Count; index++)
             {
-                BattleCentralPresentationMount mount = ActiveMounts[index];
+                BattleCentralPresentationMount mount = activeMounts[index];
                 if (mount.OwnerRenderer == ownerRenderer)
                     mount.SetRuntimeHandle(IsConfigurationValid(mount)
                         ? runtimeHandle
@@ -79,29 +169,30 @@ namespace NTSD.Animation.Rendering
             }
         }
 
-        internal static void ResetOwnerRuntimeBinding(LF2ObjectRenderer ownerRenderer)
+        internal void ResetOwnerRuntimeBinding(LF2ObjectRenderer ownerRenderer)
         {
             BindOwnerRuntime(ownerRenderer, RuntimeEntityHandle.Invalid);
         }
 
-        internal static void RemoveOwnerRuntimeBinding(LF2ObjectRenderer ownerRenderer)
+        internal void RemoveOwnerRuntimeBinding(LF2ObjectRenderer ownerRenderer)
         {
             if (ReferenceEquals(ownerRenderer, null))
                 return;
 
             int instanceId = ownerRenderer.GetInstanceID();
-            if (OwnerRuntimeBindings.TryGetValue(instanceId, out OwnerRuntimeBinding binding) &&
+            if (ownerRuntimeBindings.TryGetValue(instanceId, out OwnerRuntimeBinding binding) &&
                 ReferenceEquals(binding.OwnerRenderer, ownerRenderer))
             {
-                OwnerRuntimeBindings.Remove(instanceId);
+                ownerRuntimeBindings.Remove(instanceId);
+                RemoveOwnerInstanceId(instanceId);
             }
 
-            for (int index = ActiveMounts.Count - 1; index >= 0; index--)
+            for (int index = activeMounts.Count - 1; index >= 0; index--)
             {
-                BattleCentralPresentationMount mount = ActiveMounts[index];
+                BattleCentralPresentationMount mount = activeMounts[index];
                 if (mount == null)
                 {
-                    ActiveMounts.RemoveAt(index);
+                    activeMounts.RemoveAt(index);
                     continue;
                 }
 
@@ -112,47 +203,58 @@ namespace NTSD.Animation.Rendering
             }
         }
 
-        internal static int OwnerRuntimeBindingCountForSelfCheck => OwnerRuntimeBindings.Count;
+        internal int OwnerRuntimeBindingCountForSelfCheck => ownerRuntimeBindings.Count;
 
-        internal static bool HasOwnerRuntimeBindingForAcceptance(int ownerInstanceId)
+        internal bool HasOwnerRuntimeBindingForAcceptance(int ownerInstanceId)
         {
-            return OwnerRuntimeBindings.ContainsKey(ownerInstanceId);
+            return ownerRuntimeBindings.ContainsKey(ownerInstanceId);
         }
 
-        internal static bool HasValidOwnerRuntimeBindingForAcceptance(int ownerInstanceId)
+        internal bool HasValidOwnerRuntimeBindingForAcceptance(int ownerInstanceId)
         {
-            return OwnerRuntimeBindings.TryGetValue(ownerInstanceId, out OwnerRuntimeBinding binding) &&
+            return ownerRuntimeBindings.TryGetValue(ownerInstanceId, out OwnerRuntimeBinding binding) &&
                    binding.OwnerRenderer != null &&
                    binding.Handle.IsValid;
         }
 
-        internal static bool HasOwnerRuntimeBindingForSelfCheck(int ownerInstanceId)
+        internal bool HasOwnerRuntimeBindingForSelfCheck(int ownerInstanceId)
         {
             return HasOwnerRuntimeBindingForAcceptance(ownerInstanceId);
         }
 
-        internal static void ResetAllRuntimeBindings()
+        internal void ResetAllRuntimeBindings()
         {
             PruneDestroyedEntries();
-            foreach (int ownerInstanceId in OwnerRuntimeBindings.Keys)
-                OwnerRuntimeBindings[ownerInstanceId].Handle = RuntimeEntityHandle.Invalid;
-            for (int index = 0; index < ActiveMounts.Count; index++)
-                ActiveMounts[index].SetRuntimeHandle(RuntimeEntityHandle.Invalid);
+            for (int index = 0; index < ownerInstanceIds.Count; index++)
+            {
+                int ownerInstanceId = ownerInstanceIds[index];
+                if (!ownerRuntimeBindings.TryGetValue(
+                        ownerInstanceId,
+                        out OwnerRuntimeBinding binding))
+                {
+                    continue;
+                }
+
+                binding.Handle = RuntimeEntityHandle.Invalid;
+                ownerRuntimeBindings[ownerInstanceId] = binding;
+            }
+            for (int index = 0; index < activeMounts.Count; index++)
+                activeMounts[index].SetRuntimeHandle(RuntimeEntityHandle.Invalid);
         }
 
-        internal static void ValidateActiveMounts()
+        internal void ValidateActiveMounts()
         {
             if (!ValidateActiveMounts(out string error))
                 throw new InvalidOperationException(error);
         }
 
-        internal static bool ValidateActiveMounts(out string error)
+        internal bool ValidateActiveMounts(out string error)
         {
             PruneDestroyedEntries();
             var seenOwnerPurposes = new HashSet<OwnerPurposeKey>();
-            for (int index = 0; index < ActiveMounts.Count; index++)
+            for (int index = 0; index < activeMounts.Count; index++)
             {
-                BattleCentralPresentationMount mount = ActiveMounts[index];
+                BattleCentralPresentationMount mount = activeMounts[index];
                 if (!IsConfigurationValid(mount))
                 {
                     error = DescribeInvalidConfiguration(mount);
@@ -212,22 +314,41 @@ namespace NTSD.Animation.Rendering
             return $"Battle central presentation mount '{name}' {detail}";
         }
 
-        private static void CacheOwnerRuntimeBinding(
+        private bool CacheOwnerRuntimeBinding(
             LF2ObjectRenderer ownerRenderer,
             RuntimeEntityHandle runtimeHandle)
         {
             int instanceId = ownerRenderer.GetInstanceID();
-            if (OwnerRuntimeBindings.TryGetValue(instanceId, out OwnerRuntimeBinding binding) &&
-                ReferenceEquals(binding.OwnerRenderer, ownerRenderer))
+            bool hasExistingBinding = ownerRuntimeBindings.TryGetValue(
+                instanceId,
+                out OwnerRuntimeBinding binding);
+            if (hasExistingBinding && ReferenceEquals(binding.OwnerRenderer, ownerRenderer))
             {
                 binding.Handle = runtimeHandle;
-                return;
+                ownerRuntimeBindings[instanceId] = binding;
+                return true;
             }
 
-            OwnerRuntimeBindings[instanceId] = new OwnerRuntimeBinding(ownerRenderer, runtimeHandle);
+            if (hasExistingBinding)
+            {
+                ownerRuntimeBindings[instanceId] =
+                    new OwnerRuntimeBinding(ownerRenderer, runtimeHandle);
+                return true;
+            }
+
+            if (capacitySealed && ownerRuntimeBindings.Count >= preparedOwnerCapacity)
+            {
+                RejectedOwnerBindingCount++;
+                return false;
+            }
+
+            ownerRuntimeBindings[instanceId] =
+                new OwnerRuntimeBinding(ownerRenderer, runtimeHandle);
+            ownerInstanceIds.Add(instanceId);
+            return true;
         }
 
-        private static bool TryGetOwnerRuntimeBinding(
+        private bool TryGetOwnerRuntimeBinding(
             LF2ObjectRenderer ownerRenderer,
             out RuntimeEntityHandle runtimeHandle)
         {
@@ -236,7 +357,7 @@ namespace NTSD.Animation.Rendering
                 return false;
 
             int instanceId = ownerRenderer.GetInstanceID();
-            if (!OwnerRuntimeBindings.TryGetValue(instanceId, out OwnerRuntimeBinding binding) ||
+            if (!ownerRuntimeBindings.TryGetValue(instanceId, out OwnerRuntimeBinding binding) ||
                 !ReferenceEquals(binding.OwnerRenderer, ownerRenderer))
             {
                 return false;
@@ -246,26 +367,50 @@ namespace NTSD.Animation.Rendering
             return runtimeHandle.IsValid;
         }
 
-        private static void PruneDestroyedEntries()
+        private void PruneDestroyedEntries()
         {
-            for (int index = ActiveMounts.Count - 1; index >= 0; index--)
+            for (int index = activeMounts.Count - 1; index >= 0; index--)
             {
-                if (ActiveMounts[index] == null)
-                    ActiveMounts.RemoveAt(index);
+                if (activeMounts[index] == null)
+                    activeMounts.RemoveAt(index);
             }
 
-            StaleOwnerInstanceIds.Clear();
-            foreach (KeyValuePair<int, OwnerRuntimeBinding> pair in OwnerRuntimeBindings)
+            for (int index = ownerInstanceIds.Count - 1; index >= 0; index--)
             {
-                if (pair.Value.OwnerRenderer == null)
-                    StaleOwnerInstanceIds.Add(pair.Key);
-            }
+                int instanceId = ownerInstanceIds[index];
+                if (ownerRuntimeBindings.TryGetValue(
+                        instanceId,
+                        out OwnerRuntimeBinding binding) &&
+                    binding.OwnerRenderer != null)
+                {
+                    continue;
+                }
 
-            for (int index = 0; index < StaleOwnerInstanceIds.Count; index++)
-                OwnerRuntimeBindings.Remove(StaleOwnerInstanceIds[index]);
+                ownerRuntimeBindings.Remove(instanceId);
+                RemoveOwnerInstanceIdAt(index);
+            }
         }
 
-        private sealed class OwnerRuntimeBinding
+        private void RemoveOwnerInstanceId(int instanceId)
+        {
+            for (int index = ownerInstanceIds.Count - 1; index >= 0; index--)
+            {
+                if (ownerInstanceIds[index] != instanceId)
+                    continue;
+
+                RemoveOwnerInstanceIdAt(index);
+                return;
+            }
+        }
+
+        private void RemoveOwnerInstanceIdAt(int index)
+        {
+            int lastIndex = ownerInstanceIds.Count - 1;
+            ownerInstanceIds[index] = ownerInstanceIds[lastIndex];
+            ownerInstanceIds.RemoveAt(lastIndex);
+        }
+
+        private struct OwnerRuntimeBinding
         {
             public OwnerRuntimeBinding(LF2ObjectRenderer ownerRenderer, RuntimeEntityHandle handle)
             {
@@ -273,7 +418,7 @@ namespace NTSD.Animation.Rendering
                 Handle = handle;
             }
 
-            public LF2ObjectRenderer OwnerRenderer { get; }
+            public LF2ObjectRenderer OwnerRenderer { get; private set; }
             public RuntimeEntityHandle Handle { get; set; }
         }
 

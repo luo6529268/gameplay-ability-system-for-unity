@@ -14,13 +14,10 @@ namespace NTSD.Simulation
     /// </summary>
     public partial class SimulationWorld
     {
-        internal static System.Func<SimulationWorld, LF2Entity, LF2Entity> RespawnEffectSpawnOverride;
-#if UNITY_INCLUDE_TESTS
-        internal static System.Action<SimulationWorld, LF2Entity> CharacterInputPassMutationOverrideForSelfCheck;
-#endif
         internal int LastCollisionPairVRestEligibilityVisitCount { get; private set; }
 
         public bool ForceLegacyPreInteractionForDiagnostics { get; set; }
+        public bool ForceFullCharacterInputPostRefreshForDiagnostics { get; set; }
         public int LastPreInteractionScannedCountForDiagnostics { get; private set; }
         public int LastPreInteractionExecutedCountForDiagnostics { get; private set; }
         public int LastPreInteractionProofSkipCountForDiagnostics { get; private set; }
@@ -40,37 +37,6 @@ namespace NTSD.Simulation
         public bool LastEarlyStateHandlePathUsedForDiagnostics { get; private set; }
         public int LastEarlyStateHandleFallbackCountForDiagnostics { get; private set; }
 
-        private void RunDeferredMutationEntityPass(System.Action<LF2Entity> action)
-        {
-            if (action == null)
-                return;
-
-            _ticking = true;
-            try
-            {
-                // Keep the authority live ascending-slot semantics, but do not wrap
-                // every pass action in a second capturing delegate. New occupants
-                // above the cursor remain visible to this pass; recycled lower slots
-                // still wait for the next pass.
-                for (int runtimeSlot = 0;
-                     runtimeSlot < _runtimeSlots.LogicalCapacity;
-                     runtimeSlot++)
-                {
-                    LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
-                    if (entity == null || !IsActiveForCurrentPass(entity))
-                        continue;
-
-                    action(entity);
-                }
-            }
-            finally
-            {
-                _ticking = false;
-                FlushPendingUnregister();
-                FlushPendingEntityDestroy();
-            }
-        }
-
         public void PostCooldownInputAll(int tickIndex)
         {
             PostCooldownHumanInputAll(tickIndex);
@@ -85,28 +51,40 @@ namespace NTSD.Simulation
         public void PostCooldownHumanInputAll(int tickIndex)
         {
             RefreshActiveHumanRosterInputBindings();
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                if (!IsBoundActiveHumanRosterInputEntity(entity) ||
-                    !entity.TryGetSharedInputControllerForSimulation(out _))
-                    return;
-                entity.RunHumanInputPollPhase(tickIndex);
-                if (IsActiveForCurrentPass(entity))
-                    RefreshRuntimeSnapshot(entity);
-            });
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    if (!IsBoundActiveHumanRosterInputEntity(entity) ||
+                        !entity.TryGetSharedInputControllerForSimulation(out _))
+                    {
+                        continue;
+                    }
+
+                    entity.RunHumanInputPollPhase(tickIndex);
+                    if (IsActiveForCurrentPass(entity))
+                        RefreshRuntimeSnapshot(entity);
+                }
+            }
         }
 
         public void ClearBattleEntryInputAll()
         {
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                if (entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                    return;
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    if (entity.GetCurrentDataObjectTypeForSimulation() !=
+                        (int)LF2ObjectType.Character)
+                    {
+                        continue;
+                    }
 
-                entity.ClearBattleEntryInputState();
-                if (IsActiveForCurrentPass(entity))
-                    RefreshRuntimeSnapshot(entity);
-            });
+                    entity.ClearBattleEntryInputState();
+                    if (IsActiveForCurrentPass(entity))
+                        RefreshRuntimeSnapshot(entity);
+                }
+            }
         }
 
         public void AiInputAndComboAll(int tickIndex)
@@ -122,41 +100,47 @@ namespace NTSD.Simulation
             CompleteAiUnifiedSnapshotShadowInitialComparison();
             try
             {
-                RunDeferredMutationEntityPass(entity =>
+                using (BeginDeferredMutationEntityPass())
                 {
-                    if (!entity.AiControlled || entity.GetCurrentDataObjectTypeForSimulation() != 0)
-                        return;
-                    BeginAiUnifiedSnapshotExecutionConsumer(entity);
-                    entity.RunCharacterInputPhase(tickIndex);
-#if UNITY_INCLUDE_TESTS
-                    if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
-                        ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
-#endif
-                    if (IsActiveForCurrentPass(entity))
-                        RefreshRuntimeSnapshot(entity);
-                    if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                     {
-                        ObserveAiCandidateCharacterInputMutation(entity);
-                        RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
-                    }
-                    else
-                    {
-                        if (AiDecisionRequiresSharedRows)
-                            RefreshAiDecisionSharedRowAfterCharacterInput(entity);
-                        if (aiSensingMode == AiSensingMode.SoAAiSensing)
+                        if (!entity.AiControlled ||
+                            entity.GetCurrentDataObjectTypeForSimulation() != 0)
                         {
-                            ObserveAiCandidateCharacterInputMutation(entity);
-                            RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                            continue;
+                        }
+
+                        BeginAiUnifiedSnapshotExecutionConsumer(entity);
+                        entity.RunCharacterInputPhase(tickIndex);
+#if UNITY_INCLUDE_TESTS
+                        if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
+                            ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
+#endif
+                        if (IsActiveForCurrentPass(entity))
+                            RefreshRuntimeSnapshot(entity);
+                        if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
+                        {
+                            RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
                         }
                         else
                         {
-                            ObserveAiTeamHpSummaryMutation(entity);
+                            if (AiDecisionRequiresSharedRows)
+                                RefreshAiDecisionSharedRowAfterCharacterInput(entity);
+                            if (aiSensingMode == AiSensingMode.SoAAiSensing)
+                            {
+                                ObserveAiCandidateCharacterInputMutation(entity);
+                                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                            }
+                            else
+                            {
+                                ObserveAiTeamHpSummaryMutation(entity);
+                            }
+                            if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
+                                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+                            RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
                         }
-                        if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
-                            RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
-                        RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
                     }
-                });
+                }
             }
             finally
             {
@@ -190,16 +174,10 @@ namespace NTSD.Simulation
                 BattleTickDetailPhase.CharacterInputEntityInputPass);
             try
             {
-                _ticking = true;
-                try
+                using (BeginDeferredMutationEntityPass())
                 {
-                    for (int runtimeSlot = 0;
-                         runtimeSlot < _runtimeSlots.LogicalCapacity;
-                         runtimeSlot++)
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                     {
-                        LF2Entity entity = _runtimeSlots.GetCurrentOccupant(runtimeSlot);
-                        if (entity == null || !IsActiveForCurrentPass(entity))
-                            continue;
                         if (entity.GetCurrentDataObjectTypeForSimulation() !=
                             (int)LF2ObjectType.Character)
                         {
@@ -211,13 +189,22 @@ namespace NTSD.Simulation
 #if UNITY_INCLUDE_TESTS
                         if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
                             ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
-                        CharacterInputPassMutationOverrideForSelfCheck?.Invoke(this, entity);
+                        runtimeHooks.CharacterInputPassMutationOverride?.Invoke(this, entity);
 #endif
                         if (IsActiveForCurrentPass(entity))
                         {
                             aiDetailDiagnostics?.BeginPhase(
                                 BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
-                            RefreshRuntimeSnapshot(entity);
+                            bool forceFullPostRefresh =
+                                ForceFullCharacterInputPostRefreshForDiagnostics;
+#if UNITY_INCLUDE_TESTS
+                            forceFullPostRefresh |=
+                                runtimeHooks.CharacterInputPassMutationOverride != null;
+#endif
+                            if (forceFullPostRefresh)
+                                RefreshRuntimeSnapshot(entity);
+                            else
+                                entity.RefreshRuntimeSnapshotAfterCharacterInput();
                             aiDetailDiagnostics?.RecordRefresh();
                             aiDetailDiagnostics?.EndPhase(
                                 BattleAiInputDetailPhase.RefreshRuntimeSnapshot);
@@ -226,7 +213,6 @@ namespace NTSD.Simulation
                         {
                             aiDetailDiagnostics?.BeginPhase(
                                 BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh);
-                            ObserveAiCandidateCharacterInputMutation(entity);
                             RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
                             aiDetailDiagnostics?.EndPhase(
                                 BattleAiInputDetailPhase.UnifiedSnapshotExecutionRowRefresh);
@@ -249,12 +235,6 @@ namespace NTSD.Simulation
                             RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
                         }
                     }
-                }
-                finally
-                {
-                    _ticking = false;
-                    FlushPendingUnregister();
-                    FlushPendingEntityDestroy();
                 }
             }
             finally
@@ -320,7 +300,7 @@ namespace NTSD.Simulation
             if (!PassesOid5152HpGate(self))
                 return false;
 
-            LF2CharacterDataWrapper oid51Wrapper = LF2Entity.ResolveRuntimeCharacterConfig(51);
+            LF2CharacterDataWrapper oid51Wrapper = runtimeCharacterConfigs.Resolve(51);
             if (oid51Wrapper == null)
                 return false;
 
@@ -410,7 +390,7 @@ namespace NTSD.Simulation
                 return false;
 
             int originalOid = self.Runtime.Unk330;
-            if (LF2Entity.ResolveRuntimeCharacterConfig(originalOid) == null)
+            if (runtimeCharacterConfigs.Resolve(originalOid) == null)
                 return false;
 
             int aggregateHp = self.Health.HP;
@@ -434,14 +414,13 @@ namespace NTSD.Simulation
                 return true;
 
             LF2Entity partner = FindEntityByRuntimeSlotIncludingDormant(partnerSlot);
-            if (partner == null || LF2Entity.ResolveRuntimeCharacterConfig(partnerOid) == null)
+            if (partner == null || runtimeCharacterConfigs.Resolve(partnerOid) == null)
                 return true;
 
             int halfHp = aggregateHp / 2;
             int halfHpBound = aggregateHpBound / 2;
             int partnerStableId = partner.Runtime.StableId;
             int partnerRuntimeSlot = partner.Runtime.SlotIndex;
-            LF2ItrRestTracker.StateSnapshot partnerRestState = partner.ItrRest?.CaptureState();
 
             self.TryApplyRuntimeIdentity(originalOid, 112, false, out _);
             self.Health.HP = halfHp;
@@ -455,7 +434,16 @@ namespace NTSD.Simulation
             self.Runtime.Dir = preservedDir;
             self.RefreshRuntimeSnapshot();
 
-            partner.Reset();
+            LF2ItrRestTracker partnerRest = partner.ItrRest;
+            partnerRest?.BeginPreserveStateAcrossOwnerReset();
+            try
+            {
+                partner.Reset();
+            }
+            finally
+            {
+                partnerRest?.EndPreserveStateAcrossOwnerReset();
+            }
             // LF2Character.Reset has pool-specific defaults that differ from formal Entity::reset.
             partner.FrameDelay = 0;
             partner.KnockbackVx = 0.1;
@@ -472,7 +460,6 @@ namespace NTSD.Simulation
                 partner.Frame.Prev2 = 0;
                 partner.Frame.Prev2D = null;
             }
-            partner.ItrRest?.RestoreState(partnerRestState);
             partner.Runtime.StableId = partnerStableId;
             partner.SetRuntimeSlotIndex(partnerRuntimeSlot);
             partner.Runtime.OidMergeDormant = false;
@@ -510,14 +497,13 @@ namespace NTSD.Simulation
 
         public void SerialTickAll(int tickIndex)
         {
-            _ticking = true;
-            try
+            using (BeginDeferredMutationEntityPass())
             {
                 // C# authority GameTick scans active slots in ascending order and completes
                 // one entity before advancing to the next slot. The dynamic scan lets a
                 // flushed producer in a later slot participate this tick; a reused lower slot
                 // waits until the next tick.
-                ForEachEntityByRuntimeSlot(entity =>
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
                     // C# authority GameTick clears current action/direction keys immediately
                     // before each active entity enters frame advance. Prev*, cooldowns,
@@ -526,21 +512,15 @@ namespace NTSD.Simulation
                     entity.Runtime?.ClearDirectionalInputKeys();
                     entity.SimTransit(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
-                        return;
+                        continue;
 
                     entity.SimTU(tickIndex);
                     if (!IsActiveForCurrentPass(entity))
-                        return;
+                        continue;
                     RefreshRuntimeSnapshot(entity);
-                });
+                }
 
                 CleanupState9998Entities();
-            }
-            finally
-            {
-                _ticking = false;
-                FlushPendingUnregister();
-                FlushPendingEntityDestroy();
             }
         }
 
@@ -690,7 +670,8 @@ namespace NTSD.Simulation
             if (entity == null)
                 return null;
 
-            LF2Entity overrideSpawned = RespawnEffectSpawnOverride?.Invoke(this, entity);
+            LF2Entity overrideSpawned =
+                runtimeHooks.RespawnEffectSpawnOverride?.Invoke(this, entity);
             if (overrideSpawned != null)
                 return overrideSpawned;
 
@@ -699,6 +680,8 @@ namespace NTSD.Simulation
                 return null;
 
             OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return null;
             task.opoint = new ObjectPoint { oid = 998, kind = 0, action = 6, facing = 0 };
             task.parent = null;
             task.team = 0;
@@ -722,7 +705,15 @@ namespace NTSD.Simulation
             task.suppressLateFrameTickThisTick = false;
             task.deferFrameTickToNextTick = false;
 
-            LF2Entity spawned = factory.CreateObjectImmediate(task);
+            LF2Entity spawned;
+            try
+            {
+                spawned = factory.CreateObjectImmediate(task);
+            }
+            finally
+            {
+                LF2ReferencePool.Instance.Recycle(task);
+            }
             if (spawned == null)
                 return null;
 
@@ -1032,8 +1023,7 @@ namespace NTSD.Simulation
             }
 
             LF2CharacterDataWrapper wrapper =
-                LF2Entity.ResolveRuntimeCharacterConfig(
-                    entity.TransformTargetObjectId);
+                runtimeCharacterConfigs.Resolve(entity.TransformTargetObjectId);
             if (wrapper == null)
                 return;
 
@@ -1076,20 +1066,26 @@ namespace NTSD.Simulation
 
         public void FrameLogicBeforeAdvanceAll(int tickIndex)
         {
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                LF2FrameData frame = entity.Frame?.D;
-                if (frame == null ||
-                    frame.hit_Fa <= 0 ||
-                    entity.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
-                    return;
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    LF2FrameData frame = entity.Frame?.D;
+                    if (frame == null ||
+                        frame.hit_Fa <= 0 ||
+                        entity.GetCurrentDataObjectTypeForSimulation() ==
+                        (int)LF2ObjectType.Character)
+                    {
+                        continue;
+                    }
 
-                entity.RunFrameLogicBeforeAdvance();
-                FlushQueuedObjectPointTasks();
-                if (!IsActiveForCurrentPass(entity))
-                    return;
-                RefreshRuntimeSnapshot(entity);
-            });
+                    entity.RunFrameLogicBeforeAdvance();
+                    FlushQueuedObjectPointTasks();
+                    if (!IsActiveForCurrentPass(entity))
+                        continue;
+                    RefreshRuntimeSnapshot(entity);
+                }
+            }
         }
 
         internal int FindFirstFreeFrameLogicRuntimeSlot()
@@ -1099,18 +1095,25 @@ namespace NTSD.Simulation
 
         public void CaptureCollisionFrameSnapshotsAll()
         {
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                if (entity.Runtime != null && entity.Runtime.SuppressCollisionCandidateUntilTick > 0)
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
-                    int currentTick = CurrentTickIndex;
-                    if (currentTick < entity.Runtime.SuppressCollisionCandidateUntilTick)
-                        return;
-                }
+                    if (entity.Runtime != null &&
+                        entity.Runtime.SuppressCollisionCandidateUntilTick > 0)
+                    {
+                        int currentTick = CurrentTickIndex;
+                        if (currentTick <
+                            entity.Runtime.SuppressCollisionCandidateUntilTick)
+                        {
+                            continue;
+                        }
+                    }
 
-                entity.CaptureCollisionFrameSnapshot();
-                RefreshRuntimeSnapshot(entity);
-            });
+                    entity.CaptureCollisionFrameSnapshot();
+                    RefreshRuntimeSnapshot(entity);
+                }
+            }
 
         }
 
@@ -1124,9 +1127,12 @@ namespace NTSD.Simulation
         {
             _runtimeRestStore.BeginCollisionPairVRestEligibility();
             int visitedItems = 0;
-            foreach (KeyValuePair<int, Bucket> pair in _buckets)
+            for (int bucketIndex = 0;
+                 bucketIndex < objectBucketRegistry.OrderedCount;
+                 bucketIndex++)
             {
-                List<ISimObject> items = pair.Value.items;
+                List<ISimObject> items =
+                    objectBucketRegistry.GetOrderedBucket(bucketIndex).items;
                 for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
                 {
                     visitedItems++;
@@ -1437,10 +1443,10 @@ namespace NTSD.Simulation
 
         public void EntityPostFrameTailAll(int tickIndex)
         {
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
-                if (entity == null || entity.Health == null)
-                    return;
+                if (entity.Health == null)
+                    continue;
 
                 if (entity.HealTimer / 1000 == 1 && entity.Health.HP > 0)
                 {
@@ -1487,15 +1493,16 @@ namespace NTSD.Simulation
                 entity.Runtime.TransientMp3 = 1000;
                 entity.Runtime.TransientMp4 = 1000;
                 RefreshRuntimeSnapshot(entity);
-            });
+            }
 
         }
 
         public void FramePostProcessAll()
         {
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
-                if (entity.FrameDelay != 0) return;
+                if (entity.FrameDelay != 0)
+                    continue;
 
                 if (entity.HitCount > 0)
                 {
@@ -1509,17 +1516,17 @@ namespace NTSD.Simulation
                 entity.KnockbackVz = 0f;
                 entity.HitCount = 0;
                 RefreshRuntimeSnapshot(entity);
-            });
+            }
         }
 
         public void VrestTickAll(int tickIndex)
         {
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
                 entity.ItrRest?.TickArest();
                 ClearAttackExemptIfCurrentFrameCannotHit(entity);
                 RefreshRuntimeSnapshot(entity);
-            });
+            }
         }
 
         private void ClearAttackExemptIfCurrentFrameCannotHit(LF2Entity entity)
@@ -1559,32 +1566,48 @@ namespace NTSD.Simulation
 
         public void PostInteractionTickAll(int tickIndex)
         {
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                if (!entity.SupportsPostInteractionPhase()) return;
-                if (entity.Runtime != null && tickIndex < entity.Runtime.SuppressPostInteractionUntilTick)
-                    return;
-                entity.SimPostInteraction(tickIndex);
-                if (!IsActiveForCurrentPass(entity))
-                    return;
-                RefreshRuntimeSnapshot(entity);
-            });
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    if (!entity.SupportsPostInteractionPhase())
+                        continue;
+                    if (entity.Runtime != null &&
+                        tickIndex < entity.Runtime.SuppressPostInteractionUntilTick)
+                    {
+                        continue;
+                    }
+
+                    entity.SimPostInteraction(tickIndex);
+                    if (!IsActiveForCurrentPass(entity))
+                        continue;
+                    RefreshRuntimeSnapshot(entity);
+                }
+            }
         }
 
         public void ObjectInteractionTickAll(int tickIndex)
         {
-            RunDeferredMutationEntityPass(entity =>
+            using (BeginDeferredMutationEntityPass())
             {
-                if (!entity.SupportsObjectInteractionPhase()) return;
-                if (entity.Runtime != null && tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
-                    return;
-                entity.SimObjectInteraction(tickIndex);
-                if (entity is LF2SpecialAttack)
-                    FlushQueuedObjectPointTasks();
-                if (!IsActiveForCurrentPass(entity))
-                    return;
-                RefreshRuntimeSnapshot(entity);
-            });
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    if (!entity.SupportsObjectInteractionPhase())
+                        continue;
+                    if (entity.Runtime != null &&
+                        tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
+                    {
+                        continue;
+                    }
+
+                    entity.SimObjectInteraction(tickIndex);
+                    if (entity is LF2SpecialAttack)
+                        FlushQueuedObjectPointTasks();
+                    if (!IsActiveForCurrentPass(entity))
+                        continue;
+                    RefreshRuntimeSnapshot(entity);
+                }
+            }
         }
 
         public void PreInteractionTickAll(int tickIndex)
@@ -1700,7 +1723,7 @@ namespace NTSD.Simulation
             int claimedCount = _runtimeSlots.ClaimedCount;
             ulong occupancyEpoch = _runtimeSlots.OccupancyEpoch;
             long pendingDestroyEpoch =
-                NTSDEntityRuntime.PendingFlushDestroyMutationEpochForDiagnostics;
+                runtimeMutationTracker.PendingFlushDestroyEpoch;
             int pendingUnregisterCount = _pendingUnregister.Count;
 
             for (int runtimeSlot = 0; runtimeSlot < logicalCapacity; runtimeSlot++)
@@ -1746,8 +1769,7 @@ namespace NTSD.Simulation
                    claimedCount == _runtimeSlots.ClaimedCount &&
                    occupancyEpoch == _runtimeSlots.OccupancyEpoch &&
                    pendingDestroyEpoch ==
-                       NTSDEntityRuntime
-                           .PendingFlushDestroyMutationEpochForDiagnostics &&
+                        runtimeMutationTracker.PendingFlushDestroyEpoch &&
                    pendingUnregisterCount == _pendingUnregister.Count;
         }
 
@@ -1785,11 +1807,11 @@ namespace NTSD.Simulation
         public void RandomWeaponDropTickAll(int tickIndex)
         {
             int weaponCount = 0;
-            ForEachEntityByRuntimeSlot(entity =>
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
                 if (entity.CountsAsRandomWeaponDropCandidate())
                     weaponCount++;
-            });
+            }
             if (weaponCount >= 4) return;
             if (Rng.NextInt(0, 200) != 0) return;
 
@@ -1800,22 +1822,22 @@ namespace NTSD.Simulation
             var dataManager = GameDataManager.Instance;
             if (manager == null || dataManager == null) return;
 
-            var candidates = new List<int>();
-            var seenOids = new HashSet<int>();
+            SimulationRandomWeaponDropBuffer candidates = randomWeaponDropBuffer;
+            candidates.Reset();
             List<ObjectDefinition> loadedObjects = dataManager.GetAllObjects();
             for (int i = 0; i < loadedObjects.Count; i++)
             {
                 int oid = loadedObjects[i].id;
-                if (!seenOids.Add(oid)) continue;
-                if (oid < 100 || oid >= 200) continue;
+                if (!candidates.TryMarkUnique(oid)) continue;
                 var wrapper = manager.GetCharacterConfig(oid);
                 if (wrapper == null) continue;
                 if (oid == 122 || oid == 123)
                 {
-                    if (Rng.NextInt(0, 2) == 0) continue;
-                    if (BattleGameModeId >= 1 && BattleGameModeId <= 4) continue;
+                    if (Rng.NextInt(0, 2) == 0 ||
+                        (BattleGameModeId >= 1 && BattleGameModeId <= 4))
+                        continue;
                 }
-                candidates.Add(oid);
+                candidates.TryAdd(oid);
             }
             if (candidates.Count == 0) return;
 
@@ -1842,6 +1864,8 @@ namespace NTSD.Simulation
             const double lf2Y = -500.0;
 
             OPointCreateTask spawnTask = referencePool.Fetch<OPointCreateTask>();
+            if (spawnTask == null)
+                return;
             spawnTask.opoint = new ObjectPoint
             {
                 oid = selectedOid,
@@ -1915,14 +1939,14 @@ namespace NTSD.Simulation
             }
             else if (mode2Request == 2)
             {
-                ForEachEntityByRuntimeSlot(entity =>
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
                     if (!entity.CountsAsRandomWeaponDropCandidate())
-                        return;
+                        continue;
 
                     entity.Runtime.WeaponFlightCounter = -1;
                     RefreshRuntimeSnapshot(entity);
-                });
+                }
             }
 
             SetMode2Request(0);
@@ -1934,7 +1958,8 @@ namespace NTSD.Simulation
             if (manager == null)
                 return;
 
-            var candidates = new List<int>();
+            SimulationRandomWeaponDropBuffer candidates = randomWeaponDropBuffer;
+            candidates.Reset();
             for (int oid = 100; oid < 200; oid++)
             {
                 var wrapper = manager.GetCharacterConfig(oid);
@@ -1944,7 +1969,7 @@ namespace NTSD.Simulation
                 if (oid == 122 && Rng.NextInt(0, 2) == 0)
                     continue;
 
-                candidates.Add(oid);
+                candidates.TryAdd(oid);
             }
 
             if (candidates.Count == 0)
@@ -2007,7 +2032,13 @@ namespace NTSD.Simulation
                 if (flyFrame < 0)
                     flyFrame = minFrame != int.MaxValue ? minFrame : 0;
 
-                var spawnTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+                if (referencePool == null)
+                    break;
+
+                OPointCreateTask spawnTask = referencePool.Fetch<OPointCreateTask>();
+                if (spawnTask == null)
+                    break;
                 spawnTask.opoint = new ObjectPoint
                 {
                     oid = oid,
@@ -2025,7 +2056,14 @@ namespace NTSD.Simulation
                 spawnTask.z = lf2Z;
                 spawnTask.dir = "right";
                 spawnTask.dvz = 0f;
-                factory.CreateObjectImmediate(spawnTask);
+                try
+                {
+                    factory.CreateObjectImmediate(spawnTask);
+                }
+                finally
+                {
+                    referencePool.Recycle(spawnTask);
+                }
             }
         }
 

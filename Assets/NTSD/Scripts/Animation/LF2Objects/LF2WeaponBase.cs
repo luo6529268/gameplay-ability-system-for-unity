@@ -20,7 +20,7 @@ namespace NTSD.Animation.LF2Objects
     /// 2. 被扔出去后怎么飞行、落地。
     /// 3. 落在地上后怎么等待再次拾取或被破坏。
     /// </summary>
-    public abstract partial class LF2WeaponBase : LF2Entity
+    public abstract class LF2WeaponBase : LF2Entity
     {
         // ========== 武器专属字段（不在 LF2Entity 的） ==========
 
@@ -51,6 +51,7 @@ namespace NTSD.Animation.LF2Objects
         // 持有诊断：只在每次新持有时打印一次赋值前后快照，之后不再重复。
         private bool _heldDiagPrinted;
         private bool _lateBreakEffectsHandled;
+        public long InvalidInitTaskTypeCountForDiagnostics { get; private set; }
 
         // 本帧重力累加量，由 WeaponFlightPhysics 计算，WeaponDynamics 在 y+=vy 后使用
         // 对齐 C++ release 0x4164BD：gravity 在 y 更新后、新 y<0 时才加入 vy
@@ -96,6 +97,11 @@ namespace NTSD.Animation.LF2Objects
             _heldStateResolver = new LF2WeaponHeldStateResolver(this);
             _releaseFlowResolver = new LF2WeaponReleaseFlowResolver(this);
             _frameLogicResolver = new LF2WeaponFrameLogicResolver(this);
+            ItrRest = new LF2ItrRestTracker();
+            Sprite = new LF2Sprite();
+            Trans = new FrameTransistor(this);
+            PS.BindRuntime(Runtime);
+            Health.BindRuntime(Runtime);
         }
 
         protected LF2Entity GetRuntimeHolderEntity()
@@ -116,6 +122,16 @@ namespace NTSD.Animation.LF2Objects
         protected LF2LivingObject GetRuntimeHolder()
         {
             return GetRuntimeHolderEntity() as LF2LivingObject;
+        }
+
+        internal LF2Entity ResolveRuntimeHolderEntityForOwnedModule()
+        {
+            return GetRuntimeHolderEntity();
+        }
+
+        public virtual void Drop(double dvx, double dvy)
+        {
+            _heldStateResolver.Drop(dvx, dvy);
         }
 
         protected virtual void OnHealthInitialized(LF2CharacterData charData) { }
@@ -286,7 +302,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual WeaponAttackResult ProcessAttack(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
         {
-            return new WeaponAttackResult();
+            return default;
         }
 
         // 武器处于持有状态时，每帧同步和动作分发的主入口。
@@ -378,15 +394,12 @@ namespace NTSD.Animation.LF2Objects
         {
             PS.BindRuntime(Runtime);
             Health.BindRuntime(Runtime);
-            Trans = new FrameTransistor(this);
-            Frame = new LF2FrameInfo();
-            Effect = new LF2EffectState();
-            ItrRest = new LF2ItrRestTracker();
-            Sprite = new LF2Sprite();
 
             if (taskBase is not OPointCreateTask task)
             {
-                Log.Error($"[{GetType().Name}] Invalid task type");
+                InvalidInitTaskTypeCountForDiagnostics++;
+                if (Match?.RuntimeCapacity.IsSealed != true)
+                    Log.Error($"[{GetType().Name}] Invalid task type");
                 return;
             }
 
@@ -408,6 +421,7 @@ namespace NTSD.Animation.LF2Objects
             FrameCache.Clear();
             ResetPooledEntityState();
             Runtime.Reset();
+            ResetReusableRuntimeComponents();
             _lateBreakEffectsHandled = false;
             ObjectId = 0;
             Team = 0;
@@ -563,6 +577,16 @@ namespace NTSD.Animation.LF2Objects
         public void ForceClearHolder(bool preserveRuntimeOwnerFields)
         {
             _releaseFlowResolver.ForceClearHolder(preserveRuntimeOwnerFields);
+        }
+
+        protected override bool ApplyObjectSpecificFrameTickBeforeWaitAdvance()
+        {
+            return _frameLogicResolver.ApplyBeforeWaitAdvance();
+        }
+
+        internal void SetFrameTickDirectForOwnedModule(int frameId)
+        {
+            SetFrameTickDirect(frameId);
         }
 
         // 供 LF2WeaponHeldStateResolver 调用受保护的 CoincideXYWithWPoint（:332）
@@ -734,9 +758,11 @@ namespace NTSD.Animation.LF2Objects
             Runtime.WeaponDropHurt = WeaponDropHurt;
         }
 
-        protected virtual void ProcessDrinkConsumption(LF2Entity holder, WeaponActResult result)
+        protected virtual void ProcessDrinkConsumption(
+            LF2Entity holder,
+            ref WeaponActResult result)
         {
-            _heldStateResolver.ProcessDrinkConsumption(holder, result);
+            _heldStateResolver.ProcessDrinkConsumption(holder, ref result);
         }
 
         protected WeaponStrengthEntry GetStrengthEntry(int attackingIndex)
@@ -744,7 +770,14 @@ namespace NTSD.Animation.LF2Objects
             if (_weaponStrengthList == null || attackingIndex <= 0)
                 return null;
 
-            return _weaponStrengthList.Find(entry => entry.index == attackingIndex);
+            for (int index = 0; index < _weaponStrengthList.Count; index++)
+            {
+                WeaponStrengthEntry entry = _weaponStrengthList[index];
+                if (entry != null && entry.index == attackingIndex)
+                    return entry;
+            }
+
+            return null;
         }
 
         protected void InitializeParent(OPointCreateTask task)
@@ -937,7 +970,7 @@ namespace NTSD.Animation.LF2Objects
 
     }
 
-    public class WeaponActResult
+    public struct WeaponActResult
     {
         public bool Thrown;
         public bool ForceDrop;
@@ -945,7 +978,7 @@ namespace NTSD.Animation.LF2Objects
         public WeaponAttackResult AttackResult;
     }
 
-    public class WeaponAttackResult
+    public struct WeaponAttackResult
     {
         public int VRest;
         public int ARest;

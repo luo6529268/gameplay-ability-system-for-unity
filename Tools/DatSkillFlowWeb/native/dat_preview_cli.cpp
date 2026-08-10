@@ -129,6 +129,7 @@ bool load_preview_stage_background(GameWorld& world,
 bool initialize_preview_world(GameWorld& world,
                               const Options& options,
                               const std::string& game_root,
+                              int root_oid,
                               StageInfo& stage_info,
                               PreviewCatalogStats& catalog_stats) {
     clear_rest_arrays();
@@ -142,14 +143,14 @@ bool initialize_preview_world(GameWorld& world,
     for (const PreviewCatalogEntry& entry : catalog) {
         if (world.has_char(entry.oid)) continue;
         const std::string full_path = preview_game_path(game_root, entry.file);
-        const bool loaded = entry.oid == 2 && !options.naruto_dat.empty()
+        const bool loaded = entry.oid == root_oid && !options.naruto_dat.empty()
             ? load_plaintext_char(world, entry.oid, options.naruto_dat.c_str(), entry.type)
             : load_encrypted_char(world, entry.oid, full_path.c_str(), entry.type);
         if (loaded) ++catalog_stats.loaded;
         else ++catalog_stats.failed;
     }
 
-    if (!world.has_char(1) || !world.has_char(2) ||
+    if (!world.has_char(1) || !world.has_char(root_oid) ||
         !load_preview_stage_background(world, game_root, options.stage, stage_info)) {
         return false;
     }
@@ -167,7 +168,7 @@ bool initialize_preview_world(GameWorld& world,
     world.camera_vel = 0;
 
     Entity& p1 = world.objects[0];
-    seed_character(p1, 0, 2, world.get_char(2), 1, 0, 0, options.p1_x, options.p1_y, options.p1_z);
+    seed_character(p1, 0, root_oid, world.get_char(root_oid), 1, 0, 0, options.p1_x, options.p1_y, options.p1_z);
     p1.frame = p1.prev_frame = p1.prev_frame2 = options.start_frame;
     p1.wait_counter = options.start_frame;
     p1.attacking = 0;
@@ -278,6 +279,7 @@ bool parse_preview_options(int argc,
                            char** argv,
                            Options& options,
                            std::string& game_root,
+                           int& root_oid,
                            int& entry_frame,
                            std::vector<PreviewInputStep>& steps) {
     std::vector<char*> legacy_args;
@@ -285,6 +287,7 @@ bool parse_preview_options(int argc,
     legacy_args.push_back(argv[0]);
     const char* input_plan = nullptr;
     game_root = DEFAULT_PREVIEW_GAME_ROOT;
+    root_oid = 2;
     entry_frame = -1;
 
     for (int i = 1; i < argc; ++i) {
@@ -294,6 +297,20 @@ bool parse_preview_options(int argc,
                 !parse_int(value, entry_frame) || entry_frame < 0 || entry_frame > 599) {
                 return false;
             }
+            continue;
+        }
+        if (std::strcmp(argv[i], "--root-oid") == 0) {
+            const char* value = nullptr;
+            if (!read_option_value(argc, argv, i, argv[i], value) ||
+                !parse_int(value, root_oid) || root_oid < 0 || root_oid > 999) {
+                return false;
+            }
+            continue;
+        }
+        if (std::strcmp(argv[i], "--preview-dat") == 0) {
+            const char* value = nullptr;
+            if (!read_option_value(argc, argv, i, argv[i], value) || !value || !*value) return false;
+            options.naruto_dat = value;
             continue;
         }
         if (std::strcmp(argv[i], "--input-plan") == 0) {
@@ -418,14 +435,15 @@ void write_preview_render_resources(FILE* output,
 int main(int argc, char** argv) {
     Options options;
     std::string game_root;
+    int root_oid = 2;
     int entry_frame = -1;
     std::vector<PreviewInputStep> input_steps;
-    if (!parse_preview_options(argc, argv, options, game_root, entry_frame, input_steps)) return 2;
+    if (!parse_preview_options(argc, argv, options, game_root, root_oid, entry_frame, input_steps)) return 2;
 
     GameWorld world;
     StageInfo stage_info;
     PreviewCatalogStats catalog_stats;
-    if (!initialize_preview_world(world, options, game_root, stage_info, catalog_stats)) {
+    if (!initialize_preview_world(world, options, game_root, root_oid, stage_info, catalog_stats)) {
         std::fprintf(stderr, "Failed to load required DAT data or stage background.\n");
         return 3;
     }
@@ -462,7 +480,7 @@ int main(int argc, char** argv) {
     write_input_metadata(output, options.start_frame, entry_frame, input_steps);
     std::fprintf(output, ",\"catalog\":{\"entries\":%d,\"loaded\":%d,\"failed\":%d}",
                  catalog_stats.entries, catalog_stats.loaded, catalog_stats.failed);
-    std::fputs(",\"naruto_dat_override\":", output);
+    std::fprintf(output, ",\"root_oid\":%d,\"preview_dat_override\":", root_oid);
     if (options.naruto_dat.empty()) std::fputs("null", output);
     else write_json_string(output, options.naruto_dat);
     std::fputs(",\"initial\":{\"p1\":{\"x\":", output);

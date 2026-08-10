@@ -12,6 +12,45 @@ namespace NTSD.Test
 {
     public sealed class LooseQuadtreeNearestEditorTests
     {
+        [Test]
+        public void Rebuild_PreparedDeepRetainedEntries_PreservesOrderAndAllocatesZeroBytes()
+        {
+            const int entryCount = 512;
+            var preferredRoot = new SpatialAabbXZ(-4096, -4096, 4096, 4096);
+            var retainedBounds = new SpatialAabbXZ(0, 0, 2, 2);
+            var entries = new List<SpatialBroadphaseEntry>(entryCount);
+            for (int index = 0; index < entryCount; index++)
+            {
+                entries.Add(new SpatialBroadphaseEntry(
+                    index,
+                    index,
+                    retainedBounds));
+            }
+
+            var warmup = new LooseQuadtreeBroadphase(1, 8);
+            warmup.PrepareCapacity(1);
+            warmup.Rebuild(entries.GetRange(0, 1), preferredRoot);
+
+            var tree = new LooseQuadtreeBroadphase(1, 8);
+            tree.PrepareCapacity(entryCount);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            tree.Rebuild(entries, preferredRoot);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero,
+                "A prepared rebuild must not grow per-node managed containers.");
+
+            var results = new List<int>(entryCount);
+            tree.Query(new SpatialAabbXZ(-1, -1, 3, 3), results);
+            Assert.That(results.Count, Is.EqualTo(entryCount));
+            for (int index = 0; index < entryCount; index++)
+                Assert.That(results[index], Is.EqualTo(index));
+        }
+
         private struct SlotFilter : IIncrementalPointNearestFilter
         {
             public bool[] AcceptedSlots;
@@ -309,6 +348,46 @@ namespace NTSD.Test
                 target,
                 1,
                 -3), Is.True, "phase-one revived air role mutation");
+        }
+
+        [Test]
+        public void IncrementalMembership_ConcentratedRemoveReinsertAllocatesNoManagedMemory()
+        {
+            const int count = 1000;
+            var entries = new List<IncrementalSpatialEntry>(count);
+            var sharedBounds = new SpatialAabbXZ(-8, -8, 8, 8);
+            for (int slot = 0; slot < count; slot++)
+            {
+                entries.Add(new IncrementalSpatialEntry(
+                    new RuntimeEntityHandle(slot, 1),
+                    sharedBounds));
+            }
+
+            var tree = new LooseQuadtreeBroadphase();
+            tree.PrepareCapacity(count);
+            Assert.That(tree.Synchronize(
+                entries,
+                new SpatialAabbXZ(-256, -256, 256, 256)).Succeeded, Is.True);
+
+            RuntimeEntityHandle recycled = entries[0].Handle;
+            Assert.That(tree.TryRemoveIncremental(recycled), Is.True);
+            Assert.That(tree.TryUpsertIncremental(recycled, sharedBounds), Is.True);
+
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < 256; iteration++)
+            {
+                if (!tree.TryRemoveIncremental(recycled) ||
+                    !tree.TryUpsertIncremental(recycled, sharedBounds))
+                {
+                    Assert.Fail("Concentrated incremental membership mutation failed.");
+                }
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+
+            var result = new List<RuntimeEntityHandle>(count);
+            tree.QueryHandles(sharedBounds, result);
+            Assert.That(after - before, Is.EqualTo(0));
+            Assert.That(result.Count, Is.EqualTo(count));
         }
 
         [Test]

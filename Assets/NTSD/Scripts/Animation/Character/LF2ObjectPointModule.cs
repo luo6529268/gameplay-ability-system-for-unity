@@ -27,6 +27,7 @@ namespace NTSD.Animation
     public sealed class LF2ObjectPointModule
     {
         public ILF2ObjectPointFactory Factory { get; private set; }
+        public long MissingFactoryCountForDiagnostics { get; private set; }
 
         public void SetFactory(ILF2ObjectPointFactory factory)
         {
@@ -44,7 +45,9 @@ namespace NTSD.Animation
             if (animator == null) return;
             if (Factory == null)
             {
-                Debug.LogWarning($"[OPointModule] Factory is null for {animator?.Name}");
+                MissingFactoryCountForDiagnostics++;
+                if (animator.Match?.RuntimeCapacity.IsSealed != true)
+                    Debug.LogWarning($"[OPointModule] Factory is null for {animator.Name}");
                 return;
             }
 
@@ -111,6 +114,8 @@ namespace NTSD.Animation
             Vector3 pos = MakePoint(animator, op);
 
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            if (task == null)
+                return;
             task.opoint = op;
             task.parent = animator;
             task.team = animator.Team;
@@ -127,6 +132,8 @@ namespace NTSD.Animation
             Vector3 pos = MakePoint(animator, op);
 
             var task = LF2ReferencePool.Instance.Fetch<OPointCreateMultipleTask>();
+            if (task == null)
+                return;
             task.opoint = op;
             task.parent = animator;
             task.team = animator.Team;

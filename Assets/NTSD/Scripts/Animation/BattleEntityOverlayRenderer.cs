@@ -24,6 +24,12 @@ namespace NTSD.Animation
             ReleaseActiveRenderers();
         }
 
+        internal void PrepareCapacity(int commandCapacity)
+        {
+            if (commandCapacity > activeRenderers.Capacity)
+                activeRenderers.Capacity = commandCapacity;
+        }
+
         public void RenderAll(SimulationWorld world)
         {
             ReleaseActiveRenderers();

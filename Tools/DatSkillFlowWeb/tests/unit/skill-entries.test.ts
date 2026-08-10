@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import {
     authoredTraceStartFrame,
+    buildFrameEntryCatalog,
     buildSkillPreviewScenario,
     deriveSkillEntries,
 } from "../../src/client/skill-entries.js";
@@ -89,6 +90,35 @@ describe("automatic DAT skill entries", () => {
         assert.equal(authoredTraceStartFrame([frame(212, 0, "jump")], 212), 212);
     });
 
+    it("previews walking and running through the Native input state machine instead of next=999", () => {
+        const frames = [
+            frame(0, 0, "standing", { state: 0, next: 999 }),
+            frame(5, 1, "walking", { state: 1, next: 999 }),
+            frame(9, 2, "running", { state: 2, next: 999 }),
+        ];
+        const entries = deriveSkillEntries(frames, 2);
+        const walking = entries.find((entry) => entry.startFrame === 5)!;
+        const running = entries.find((entry) => entry.startFrame === 9)!;
+
+        assert.equal(walking.category, "base");
+        assert.equal(walking.nativeTrigger, "Native：按住 D 行走");
+        const walkingScenario = buildSkillPreviewScenario(frames, walking);
+        assert.equal(walkingScenario.initialFrame, 0);
+        assert.deepEqual(walkingScenario.inputPlan.slice(0, 2), [
+            { tick: 2, keys: ["D"] },
+            { tick: 3, keys: ["D"] },
+        ]);
+        assert.deepEqual(walkingScenario.inputPlan.at(-1), { tick: 32, keys: ["D"] });
+
+        assert.equal(running.category, "base");
+        const runningScenario = buildSkillPreviewScenario(frames, running);
+        assert.deepEqual(runningScenario.inputPlan.slice(0, 3), [
+            { tick: 2, keys: ["D"] },
+            { tick: 4, keys: ["D"] },
+            { tick: 5, keys: ["D"] },
+        ]);
+    });
+
     it("drives F265 and F271 from their DAT trigger source with physical input timing", () => {
         const frames = [
             frame(0, 0, "idle", { state: 0, hit_Ua: 265, hit_Dj: 271 }),
@@ -127,7 +157,7 @@ describe("automatic DAT skill entries", () => {
         });
     });
 
-    it("coalesces contiguous labels and keeps separated equal labels as distinct entries", () => {
+    it("coalesces base-state labels without promoting arbitrary action segments to entries", () => {
         const entries = deriveSkillEntries([
             frame(0, 0, "standing", { state: 0, next: 1 }),
             frame(1, 1, "standing", { state: 0, next: 2 }),
@@ -143,10 +173,7 @@ describe("automatic DAT skill entries", () => {
 
         assert.equal(entries.find((entry) => entry.startFrame === 0)?.segmentFrameCount, 4);
         assert.equal(entries.find((entry) => entry.startFrame === 5)?.segmentFrameCount, 2);
-        assert.deepEqual(
-            entries.filter((entry) => entry.label === "punch").map((entry) => entry.startFrame),
-            [60, 65],
-        );
+        assert.deepEqual(entries.filter((entry) => entry.label === "punch"), []);
         assert.equal(entries.find((entry) => entry.startFrame === 0)?.category, "base");
     });
 
@@ -170,11 +197,14 @@ describe("automatic DAT skill entries", () => {
         }]);
         assert.equal(rasenganshuriken?.segmentFrameCount, 2);
         assert.equal(entries.find((entry) => entry.startFrame === 294)?.category, "input");
-        assert.equal(entries.some((entry) => entry.startFrame === 291), true);
+        assert.equal(entries.some((entry) => entry.startFrame === 291), false);
     });
 
     it("applies sidecar presentation metadata without creating DAT entries", () => {
-        const source = [frame(300, 0, "rasenganshuriken", { state: 15 })];
+        const source = [
+            frame(0, 0, "standing", { state: 0, hit_Uj: 300 }),
+            frame(300, 1, "rasenganshuriken", { state: 15 }),
+        ];
         const entries = deriveSkillEntries(source, 2, [{
             oid: 2,
             startFrame: 300,
@@ -190,10 +220,81 @@ describe("automatic DAT skill entries", () => {
             displayName: "DAT 中不存在",
         }]);
 
-        assert.equal(entries.length, 1);
-        assert.equal(entries[0]?.displayName, "螺旋手里剑");
-        assert.equal(entries[0]?.group, "奥义");
-        assert.equal(entries[0]?.hidden, true);
-        assert.equal(source[0]?.label, "rasenganshuriken");
+        const skill = entries.find((entry) => entry.startFrame === 300);
+        assert.equal(skill?.displayName, "螺旋手里剑");
+        assert.equal(skill?.group, "奥义");
+        assert.equal(skill?.hidden, true);
+        assert.equal(source[1]?.label, "rasenganshuriken");
+        assert.equal(entries.some((entry) => entry.startFrame === 123), false);
+    });
+
+    it("classifies duplicate catching frames globally and links their runtime branch to the real input entry", () => {
+        const catchingItr = {
+            kind: 3, x: 0, y: 0, w: 1, h: 1, dvx: 0, dvy: 0, fall: 0, bdefend: 0,
+            injury: 0, arest: 0, vrest: 0, effect: 0, attacking: 0, catchingact: 120,
+            catchingact2: 0, caughtact: 0, caughtact2: 0, respond: 0, pickingact: 0, pickedact: 0,
+            throwvx: 0, throwvy: 0, zwidth: 15, throwvz: 0, throwinjury: 0,
+        };
+        const catalog = buildFrameEntryCatalog([
+            frame(0, 0, "standing", { state: 0, hit_Fa: 240 }),
+            frame(120, 1, "catching", { next: 122 }),
+            frame(122, 2, "catching", { next: 123 }),
+            frame(123, 3, "catching-old", { next: 999 }),
+            frame(123, 4, "catching", { next: 124 }),
+            frame(124, 5, "catching", { next: 999 }),
+            frame(240, 6, "rasengan", { next: 258 }),
+            frame(258, 7, "rasengan", { next: 999, itrs: [catchingItr] }),
+        ], 2);
+
+        assert.deepEqual(catalog.entries.map((entry) => entry.startFrame), [0, 240]);
+        const old123 = catalog.byOccurrence.get(3)!;
+        const effective123 = catalog.byOccurrence.get(4)!;
+        assert.equal(old123.role, "overridden");
+        assert.equal(old123.definitionCount, 2);
+        assert.equal(effective123.effective, true);
+        assert.equal(effective123.definitionCount, 2);
+        assert.equal(effective123.role, "runtime-branch");
+        assert.deepEqual(effective123.ownerStartFrames, [240]);
+        const catching = catalog.byOccurrence.get(1)!;
+        assert.equal(catching.role, "runtime-branch");
+        assert.deepEqual(catching.ownerStartFrames, [240]);
+        assert.deepEqual(catching.references.map((reference) => [reference.sourceFrame, reference.field]), [
+            [258, "itr[0].catchingact"],
+        ]);
+        assert.equal(catalog.entries.some((entry) => [120, 123, 124].includes(entry.startFrame)), false);
+    });
+
+    it("offers only verified deterministic Native code entries and drives them from idle input", () => {
+        const frames = [
+            frame(0, 0, "standing", { state: 0 }),
+            frame(60, 1, "punch"),
+            frame(90, 2, "dash attack", { state: 3 }),
+            frame(102, 3, "running defend", { state: 7 }),
+            frame(110, 4, "defend", { state: 7 }),
+            frame(210, 5, "jump", { state: 4, next: 211 }),
+            frame(211, 6, "jump", { state: 4, next: 212 }),
+            frame(212, 7, "jump", { state: 4 }),
+            frame(213, 8, "dash", { state: 5 }),
+        ];
+        const entries = deriveSkillEntries(frames, 2);
+        assert.equal(entries.some((entry) => entry.startFrame === 60), false);
+        assert.deepEqual(
+            entries.filter((entry) => entry.category === "engine").map((entry) => entry.startFrame),
+            [90, 102, 110, 210, 213],
+        );
+        assert.equal(entries.find((entry) => entry.startFrame === 110)?.category, "engine");
+        assert.deepEqual(buildSkillPreviewScenario(
+            frames,
+            entries.find((entry) => entry.startFrame === 90)!,
+        ).inputPlan.at(-1), { tick: 12, keys: ["D", "J"] });
+        const jump = entries.find((entry) => entry.startFrame === 210)!;
+        assert.equal(jump.category, "engine");
+        assert.equal(jump.nativeTrigger, "Native：K 跳跃");
+        assert.deepEqual(buildSkillPreviewScenario(frames, jump), {
+            startFrame: 210,
+            initialFrame: 0,
+            inputPlan: [{ tick: 2, keys: ["K"] }],
+            ticks: 120,
+        });
     });
 });

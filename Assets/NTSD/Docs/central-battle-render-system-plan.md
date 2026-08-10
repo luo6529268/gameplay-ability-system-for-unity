@@ -809,6 +809,17 @@ CentralOnly
 
 截至 2026-07-20，R1-R2C-4、B0、B1-B1.3、B2A 与 B2B 已完成代码层实施和既定验证。B2B generation-aware incremental backend 的 fresh chain 为 source `22:43:57` < DLL `22:46:36` < result `22:47:04` **PASS**，dotnet **0 errors**，architect final **PASS / no blocker**。该段“即时 weapon/body query、AI 查询、Extended parity schema 仍是后续任务”为 B2B 历史状态，已由 B2C 替代；B2C 最新 full self-check `2026-07-21 00:48:06` **PASS**、dotnet **0 errors / 42 existing warnings**，但未执行 Play Mode、性能或 fresh Architect PASS。生产默认仍为 `BruteForce`，集中式渲染与 T8 默认 `stage.dat` 部署仍暂缓。
 
+## 18. 2026-08-09 — 1000 AI 热循环与中央 Mesh 高水位优化复测
+
+- **增量 AI 快照刷新：**CharacterInput 后的运行时镜像刷新改为只同步本 tick 会变化的 frame/wait/HP/MP/PP 等字段；UnifiedAuthority 的提交校验复用已发布的 `slot -> entity/generation/identity` 数组，不再对每个 AI 重复解析 `RuntimeSlotTable`。完整刷新仍保留为诊断/对照路径。聚焦 parity 测试 `11c2127339394f6b9524eceaa7407ebf` 为 `1/1 PASS`；Unity refresh/compile 成功，未出现新的 `CS` 编译错误。
+- **模拟-only 基线（p113）：**同种子、1000 个生产 AI、warmup 30/sample 100、强制 sweep，逻辑 tick Avg/P95/Max=`21.168987/26.236925/28.5895 ms`；Editor frame Avg/P95/Max=`28.988946/46.160299/217.8702 ms`；核心 tick allocation=`0 B`；lockstep hash=`d39a52af14a8c7f558e3ec26dac86740e3b39d63e12c882aa8fa85d584143ef1`；清理 `restored=true`。该样本表明战斗模拟热循环本身已低于 30 Hz 的 P95 门槛，但不代表完整 Game 帧稳定。
+- **完整表现基线（p114，Mesh 尾部优化前）：**逻辑 tick Avg/P95/Max=`34.132236/55.206165/79.7751 ms`；Editor frame Avg/P95/Max=`57.423442/91.889846/438.9619 ms`；生成 3006 个 presentation commands；hash 与 p113 一致，cleanup 正常。
+- **阶段明细（p115）：**该样本启用了详细计时，存在诊断开销，数值只用于归因。主要阶段 Avg：CharacterInput `7.183 ms`、RenderDispatch `6.203 ms`、CandidateCollect `5.869 ms`、LateEntityUpdate `4.251 ms`。表现明细中 `RenderPrepareFrame/LegacyCapacityGuard=5.442 ms`、`BeginFrame=5.331 ms`、`BuildCommands=2.783 ms`、`ResolveCommands=2.610 ms`、`WriteQuads=1.656 ms`；该次 hash 不同仅因采样期间推进的 tick 数不同，不能据此判为锁步差异。
+- **中央 Mesh 修改：**`BattleDynamicMeshBackend.Upload` 不再每帧把上一帧整个活动 submesh 前缀逐个写成 inert，只清理真正失效的尾部，活动前缀随后直接覆盖；物理 submesh 高水位、descriptor/index 范围和尾部清理契约不变。聚焦测试 `5f94e269f3e9450699b11da46bdf10a0` 为 `1/1 PASS`。
+- **完整表现复测（p116/p117，Mesh 尾部优化后）：**p116 逻辑 tick Avg/P95/Max=`25.766937/31.019265/32.5922 ms`，Editor frame Avg/P95/Max=`42.618139/67.091432/256.229997 ms`；p117 重复样本为 `26.479747/32.42429/35.7732 ms` 与 `43.683248/63.464321/262.176394 ms`。两次均为 3006 commands、hash=`d39a52af...`、cleanup `restored=true`、active/world/slot 清零。
+- **当前结论：**模拟-only 两组关键样本的 tick P95 已低于 `33.333 ms`，完整表现样本的 Editor frame P95 仍为 `63–67 ms`，因此“稳定 30 FPS”仍未达成。当前证据支持继续优化表现快照/命令构建/Renderer backend 和 Editor/测试壳层，不足以据此启动整体自研 ECS 迁移；ECS 方向保持待证据决策。
+- **验收边界：**本轮 fresh `BattleRuntimeSelfCheck` 实际运行失败于既有 `BATTLE-AUDIT7-F1: ApplyMatchConfig must retain the loaded campaign at pre-wave -1 without applying phase zero`（`BattleRuntimeSelfCheck.cs:26643`），该调用链与本轮 AI 快照和 Mesh 尾部优化无关；因此当前不能宣称完整 self-check 通过。T8 默认 `stage.dat` 部署和 Android 真机验证仍按用户要求排除。
+
 ## 17. Central Presentation Mount v1（2026-07-22 历史快照，已由文档顶部 rendererless 收口取代）
 
 - **范围和实现状态：**已新增 `BattleCentralPresentationMount` 与 `BattleCentralPresentationMountRegistry`，并由 `LF2ObjectRenderer` 集成。该 v1 只完成 mount 的声明、注册，以及 generation-aware `RuntimeEntityHandle` 绑定；它没有加入渲染、资源加载、`Update`、渲染命令或任何战斗 runtime 改动。
@@ -816,3 +827,21 @@ CentralOnly
 - **明确未变更项（历史）：**此 v1 批次当时没有编辑 prefab，`Legacy` 表现路径仍保留；它不能单独表述为 CentralOnly 像素接管、资源接管或 Legacy 移除。该限制已由文档顶部的后续 rendererless prefab 接线和 Play Mode 验证取代。
 - **最终验证证据：**relevant source `2026-07-22 11:48:18` < Unity `Assembly-CSharp.dll` `11:49:08` < `Temp/NTSD_BattleRuntimeSelfCheck.result` **PASS** `11:50:11`。最终完整命令 `dotnet build Assembly-CSharp.csproj --no-restore /m:1` 完成，结果为 **0 errors / 42 existing warnings**。Architect closure 为 **PASS / no P0-P2**。Console 清空后仍有两类预期的 self-check-active Error：既有 mismatched release，以及新的 registration rollback；这明确不是 Console 0 errors，后续报告不得写成 0 errors。
 - **后续历史步骤：**当时计划在 `EntityObject` 的 `EntityModel` 与 `Shadow` nodes 挂载 mount component 并配置 `ownerRenderer`；该步骤已在本轮 rendererless 收口中完成。
+
+## 19. 2026-08-09 — 1000 AI 表现句柄缓存 A/B
+
+- `BattlePresentationShadowBuild.cs` 增加按当前排序索引复用的 `RuntimeEntityHandle` 帧内缓存。缓存只在 `BeginFrame` 内有效，每帧先重置，实体排序数量变化时扩容；因此不会跨帧、跨 generation 或跨排序顺序复用旧句柄。`holderSlot < 0` 也直接使用空 holder，避免无意义的查询；有实际 holder slot 的路径保持不变。
+- 聚焦 Editor 测试 `6fb939e7777e4009880824ea29be05c0`：`2/2 PASS`（多 hit record 的复用排序、休眠/待销毁/未来实体过滤）。`dotnet build Assembly-CSharp.csproj --no-restore --nologo`：`0 errors / 43 existing warnings`；`git diff --check` 通过。
+- p118 基线（同种子、1000 分散 AI、warmup 30/sample 60）：logic Avg/P95/Max=`27.867830/33.002170/36.143700 ms`；Editor frame=`44.291700/62.196185/88.395100 ms`；frame GC Avg/P95=`124504/625116 B`；lockstep hash=`0728b2662f9b91853c50240ba5af54433c574ed073009f4a7345fe2f35bfbdb7`。
+- p123（句柄缓存）：logic=`27.208958/33.038755/38.103000 ms`；Editor frame=`45.243109/73.757290/125.266105 ms`；frame GC=`108910.9/645535.1 B`；commands=`3000`，hash 与 p118 一致，cleanup 正常。
+- p124（同配置重复样本）：logic=`27.963562/33.743300/36.447400 ms`；Editor frame=`44.805037/60.036521/80.776200 ms`；frame GC=`133287.7/677109.45 B`；commands=`3000`，hash 与 p118 一致，cleanup 正常。
+- **结论：**句柄缓存保持行为/锁步一致，减少了重复查找，但 p123/p124 相对 p118 的差异处于样本噪声范围，不能宣称它解决了 30 FPS 问题。当前 steady tick 仍为 `0 B/tick`；主要阶段继续是 CharacterInput、Central materialization/BeginFrame、CandidateCollect 和 LateEntityUpdate。p122 的全局 OID 字典缓存因模拟-only Avg 从 `21.168987 ms` 变为 `21.837535 ms` 且无 hash 收益，已不保留。
+- 当前仍不能宣称完整 Editor 帧稳定 30 FPS；`BattleRuntimeSelfCheck` 仍受既有 `BATTLE-AUDIT7-F1` 阻塞，T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+
+## 20. 2026-08-09 — 1000 实体无输入归因对照
+
+- p125 使用与 p124 相同的 1000 分散实体、种子、中央表现和详细计时配置，但 `inputMode=none`，用于隔离 AI 输入/状态变化的成本。logic tick Avg/P95/Max=`21.572652/25.269870/27.440300 ms`；Editor frame=`35.693512/41.237081/67.448601 ms`；logic allocation=`0 B/tick`；frame GC Avg/P95=`91044.56/505359.80 B`。
+- 与 p124（1000 AI）对照：logic tick=`27.963562/33.743300/36.447400 ms`，Editor frame=`44.805037/60.036521/80.776200 ms`，logic allocation=`0 B/tick`。CharacterInput/EntityInputPass 从 `5.225420` 降到 `1.854843 ms`；CharacterInput 总阶段从 `6.046033` 降到 `2.692430 ms`；CandidateCollect 从 `3.917705` 降到 `1.558985 ms`。AI 运行时 detail 中 IndexedCanonical kernel/capture/commit 只在 AI 样本出现，说明差值来自 AI 决策和随后激活的候选/状态链，而不是单独的 Renderer `Update`。
+- p125 的 `collisionCandidateCountSum`、`broadphasePairCountSum` 均为 `0`；p124 分别为 `9087`、`266263`。这证明 AI 输入会改变实体状态，从而开启碰撞候选工作；不能把两者的全部差值归于单一函数。
+- **验收边界：**`inputMode=none` 不满足压力工具“AI authority roster”门，因此 p125 标记为 `StoppedWithResidue/harnessValidity=false`，只作归因实验，不作正式压力通过证据。teardown 结构化证据为 `restored=true`、`cleanupExceptionCount=0`、active GameObject/world entity/claimed slot 均为 `0`。
+- **结论：**无 AI 时完整 Editor P95 仍为约 `41 ms`，所以 Renderer/Editor 壳层仍有独立成本；AI 使逻辑和候选阶段再增加约 `6.4 ms` 与 `2.36 ms`。后续优化应拆成两条可测路径：AI kernel/输入状态更新，以及候选碰撞/状态变化；不再以“整体迁移 ECS”或“某个 Update 独占”作为未经验证的结论。

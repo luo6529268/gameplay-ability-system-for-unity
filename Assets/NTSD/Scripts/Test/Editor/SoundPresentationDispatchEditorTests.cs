@@ -1,5 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NTSD.Animation;
@@ -183,6 +184,132 @@ namespace NTSD.Test
             }
         }
 
+        [Test]
+        public void PreparedVoicePool_PlaybackSaturationAndUnknownCueRejection_DoNotAllocate()
+        {
+            const string preparedSoundId = "__TEST_PREPARED__\\pooled.wav";
+            const string unknownSoundId = "__TEST_UNKNOWN__\\missing.wav";
+            var host = new GameObject("PreparedSoundVoicePoolAllocationTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            AudioClip clip = null;
+            try
+            {
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                clip = AudioClip.Create(
+                    "PreparedSoundVoicePoolAllocationClip",
+                    44100,
+                    1,
+                    44100,
+                    false);
+                PrepareLoadedCue(player, preparedSoundId, clip);
+                InvokePrivate(player, "EnsureOneShotVoicePool");
+                SetPrivateField(player, "cachedListenerTransform", host.transform);
+
+                var sounds = new List<PendingSoundEvent>(1)
+                {
+                    new PendingSoundEvent(preparedSoundId, 0, 1),
+                };
+
+                player.PresentSounds(sounds);
+                long playCountBefore = player.PooledOneShotPlayCountForDiagnostics;
+                long dropCountBefore = player.OneShotVoiceLimitDropCountForDiagnostics;
+
+                _ = GC.GetAllocatedBytesForCurrentThread();
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 256; iteration++)
+                    player.PresentSounds(sounds);
+                long playbackAllocatedBytes =
+                    GC.GetAllocatedBytesForCurrentThread() - before;
+
+                Assert.That(playbackAllocatedBytes, Is.Zero);
+                Assert.That(
+                    player.PooledOneShotPlayCountForDiagnostics,
+                    Is.GreaterThan(playCountBefore));
+                Assert.That(
+                    player.OneShotVoiceLimitDropCountForDiagnostics,
+                    Is.GreaterThan(dropCountBefore));
+
+                SetPrivateField(player, "battleCatalogSealed", true);
+                var unknownSounds = new List<PendingSoundEvent>(1)
+                {
+                    new PendingSoundEvent(unknownSoundId, 0, 2),
+                };
+                long rejectionCountBefore =
+                    player.RejectedUnpreparedCueCountForDiagnostics;
+
+                _ = GC.GetAllocatedBytesForCurrentThread();
+                before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 256; iteration++)
+                    player.PresentSounds(unknownSounds);
+                long rejectionAllocatedBytes =
+                    GC.GetAllocatedBytesForCurrentThread() - before;
+
+                Assert.That(rejectionAllocatedBytes, Is.Zero);
+                Assert.That(
+                    player.RejectedUnpreparedCueCountForDiagnostics - rejectionCountBefore,
+                    Is.EqualTo(256));
+            }
+            finally
+            {
+                if (clip != null)
+                    UnityEngine.Object.DestroyImmediate(clip);
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        private static void PrepareLoadedCue(
+            NTSDSoundPlayer player,
+            string soundId,
+            AudioClip clip)
+        {
+            Assert.That(player.TryGetPreparedSingleFileWrapperForDiagnostics(
+                soundId,
+                out AudioClip[] clips), Is.True);
+            clips[0] = clip;
+
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            FieldInfo preparedCuesField = typeof(NTSDSoundPlayer).GetField(
+                "preparedCues",
+                flags);
+            Assert.That(preparedCuesField, Is.Not.Null);
+            var preparedCues = preparedCuesField.GetValue(player) as IDictionary;
+            Assert.That(preparedCues, Is.Not.Null);
+            object preparedCue = preparedCues[soundId];
+            Assert.That(preparedCue, Is.Not.Null);
+
+            FieldInfo isLoadedField = preparedCue.GetType().GetField("IsLoaded");
+            Assert.That(isLoadedField, Is.Not.Null);
+            isLoadedField.SetValue(preparedCue, true);
+
+            FieldInfo audioItemField = preparedCue.GetType().GetField("AudioItem");
+            Assert.That(audioItemField, Is.Not.Null);
+            var audioItem = audioItemField.GetValue(preparedCue) as AudioItem;
+            Assert.That(audioItem, Is.Not.Null);
+            audioItem.minTimeBetweenCall = 0f;
+            audioItem.lastTimePlayed = -1000f;
+        }
+
+        private static void InvokePrivate(object target, string methodName)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            MethodInfo method = target.GetType().GetMethod(methodName, flags);
+            Assert.That(method, Is.Not.Null);
+            method.Invoke(target, null);
+        }
+
+        private static void SetPrivateField(
+            object target,
+            string fieldName,
+            object value)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            FieldInfo field = target.GetType().GetField(fieldName, flags);
+            Assert.That(field, Is.Not.Null);
+            field.SetValue(target, value);
+        }
+
         private sealed class TickSoundEmitter : LF2Entity
         {
             private readonly SimulationWorld world;
@@ -269,6 +396,7 @@ namespace NTSD.Test
                     driveMode = SimulationDriveMode.Manual,
                     requireInputFrameReady = false,
                     enableFrameChecksum = true,
+                    captureFullFrameSnapshotForDiagnostics = true,
                 });
                 Driver.SetPaused(true);
             }

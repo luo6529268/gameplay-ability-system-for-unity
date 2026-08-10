@@ -64,7 +64,8 @@ namespace NTSD.LevelEditor
         /// <summary>
         /// 缓存的所有 BoundaryWall
         /// </summary>
-        private List<BoundaryWall> _boundaries = new List<BoundaryWall>();
+        private readonly List<BoundaryWall> _boundaries = new List<BoundaryWall>();
+        private readonly List<BoundaryWall> _enabledBoundaries = new List<BoundaryWall>();
 
         /// <summary>
         /// 是否已初始化
@@ -91,10 +92,12 @@ namespace NTSD.LevelEditor
         private void Update()
         {
             // 编辑器模式下支持自动刷新
-            if (_autoRefresh && Application.isEditor)
+#if UNITY_EDITOR
+            if (_autoRefresh && !Application.isPlaying)
             {
                 RefreshBoundaries();
             }
+#endif
         }
 
         // ==================== 公共 API ====================
@@ -417,10 +420,17 @@ namespace NTSD.LevelEditor
         public void RefreshBoundaries()
         {
             _boundaries.Clear();
+            _enabledBoundaries.Clear();
 
             // 查找场景中所有 BoundaryWall
             BoundaryWall[] foundBoundaries = FindObjectsOfType<BoundaryWall>();
             _boundaries.AddRange(foundBoundaries);
+            for (int index = 0; index < foundBoundaries.Length; index++)
+            {
+                BoundaryWall boundary = foundBoundaries[index];
+                if (boundary != null && boundary.IsEnabled)
+                    _enabledBoundaries.Add(boundary);
+            }
 
             _initialized = true;
 
@@ -516,7 +526,15 @@ namespace NTSD.LevelEditor
                     RefreshBoundaries();
                 }
 
-                return _boundaries.FindAll(b => b != null && b.IsEnabled);
+                _enabledBoundaries.Clear();
+                for (int index = 0; index < _boundaries.Count; index++)
+                {
+                    BoundaryWall boundary = _boundaries[index];
+                    if (boundary != null && boundary.IsEnabled)
+                        _enabledBoundaries.Add(boundary);
+                }
+
+                return _enabledBoundaries;
             }
         }
 
