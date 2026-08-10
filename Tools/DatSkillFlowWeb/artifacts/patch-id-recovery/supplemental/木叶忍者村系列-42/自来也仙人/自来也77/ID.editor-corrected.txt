@@ -1,0 +1,6 @@
+# Editor-local correction. The source package on J: is unchanged.
+# The source manifest repeats immNaru.dat for OID 81. Sibling manifests identify
+# immNaru_c.dat as OID 81, and all three DAT basenames exist in this package.
+id:  80  type: 0  file: data\immNaru.dat
+id:  81  type: 0  file: data\immNaru_c.dat
+id: 466  type: 3  file: data\immNaru_x.dat

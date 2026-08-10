@@ -20,7 +20,14 @@ export type ProjectDatErrorCode =
 
 export interface ProjectObjectView {
     readonly objectKey: string;
+    readonly effectiveId: string;
+    readonly packageId: string;
+    readonly packageLabel: string;
+    readonly sourceKind: "base" | "patch";
+    readonly manifestStatus: "base" | "source" | "supplemental" | "partial" | "conflict";
+    readonly diagnosticCount: number;
     readonly oid: number;
+    readonly sourceOid: number;
     readonly type: number;
     readonly displayName: string;
 }
@@ -184,7 +191,13 @@ export interface ProjectSessionView {
     readonly revision: number;
     readonly dirty: boolean;
     readonly writable: boolean;
+    readonly effectiveId: string;
+    readonly packageId: string;
+    readonly packageLabel: string;
+    readonly sourceKind: "base" | "patch";
+    readonly manifestStatus: "base" | "source" | "supplemental" | "partial" | "conflict";
     readonly oid: number;
+    readonly sourceOid: number;
     readonly type: number;
     readonly name: string;
     readonly spriteRanges: readonly ProjectSpriteRangeView[];

@@ -158,6 +158,7 @@ export interface DatSessionServiceOptions {
     readonly maxProjectionBytes?: number;
     readonly maxViewBytes?: number;
     readonly maxStringBytes?: number;
+    readonly numericReadMode?: "strict" | "native-compatible";
     readonly now?: () => number;
     readonly idFactory?: () => string;
 }

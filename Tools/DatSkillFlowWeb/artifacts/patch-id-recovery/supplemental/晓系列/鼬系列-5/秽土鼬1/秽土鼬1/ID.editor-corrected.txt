@@ -1,0 +1,10 @@
+# Editor-local correction. The source package on J: is unchanged.
+# Fixes "tupe" and restores OID 333 using the matching R-Itachi manifest plus
+# the Z-Itachi main DAT's explicit OID 333 reference.
+id:   0  type: 0  file: other\Z-itachi.dat
+id: 259  type: 3  file: other\Z-itachi-katon_big.dat
+id: 258  type: 3  file: other\Z-itachi_flame.dat
+id: 257  type: 3  file: other\Z-itachi_ball.dat
+id: 256  type: 3  file: other\chargen.dat
+id: 255  type: 3  file: other\Z-itachi-ball.dat
+id: 333  type: 3  file: data\amaterasudefend.dat

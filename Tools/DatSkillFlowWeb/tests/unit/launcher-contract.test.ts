@@ -31,7 +31,8 @@ describe("one-click launcher contract", () => {
         assert.ok(postSelectionPrerequisites > cancellation);
         const prerequisites = launcher.match(/function Assert-StartupPrerequisites \{([\s\S]*?)\n\}/);
         assert.ok(prerequisites);
-        assert.match(prerequisites[1]!, /Get-Command npm\.cmd/);
+        assert.match(prerequisites[1]!, /node_modules\\npm\\bin\\npm-cli\.js/);
+        assert.doesNotMatch(prerequisites[1]!, /Get-Command npm\.cmd/);
         assert.match(prerequisites[1]!, /scripts\\build\.mjs/);
         assert.match(prerequisites[1]!, /scripts\\start\.mjs/);
         assert.ok(launcher.indexOf("\n    Initialize-TestWorkspace", postSelectionPrerequisites) > postSelectionPrerequisites);
@@ -71,7 +72,8 @@ describe("one-click launcher contract", () => {
         assert.match(launcher, /Join-Path \$toolRoot "scripts\\build-native-preview\.ps1"/);
         assert.match(launcher, /\$assetWorkspace = "J:\\QQFile\\NTSD 2\.4\.1"/);
         assert.doesNotMatch(launcher, /\$previewExecutable\s*=\s*"J:\\QQFile/);
-        assert.ok(launcher.indexOf('& $previewBuildScript') < launcher.indexOf('& npm.cmd run build'));
+        assert.ok(launcher.indexOf('& $previewBuildScript') < launcher.indexOf('& $nodeExecutable $npmCli run build'));
+        assert.doesNotMatch(launcher, /npm\.cmd|cmd\.exe/);
         assert.match(launcher, /DAT_SKILL_FLOW_CPP_PREVIEW_EXECUTABLE/);
         assert.match(launcher, /DAT_SKILL_FLOW_CPP_GAME_ROOT/);
         const environmentSet = launcher.indexOf("SetEnvironmentVariable($previewEnvironmentName, $previewExecutable");
@@ -81,6 +83,19 @@ describe("one-click launcher contract", () => {
         assert.match(launcher, /function Test-WebBuildRequired/);
         assert.match(launcher, /if \(Test-WebBuildRequired\)/);
         assert.match(launcher, /DAT Skill Flow Web build is up to date\./);
+        assert.match(launcher, /build-patch-index\.ps1/);
+        assert.match(launcher, /"--patch-workspace", \$patchWorkspace/);
+        assert.match(launcher, /"--patch-index", \$patchIndexPath/);
+    });
+
+    it("registers a type-0 preview override whose OID is absent from the base data.txt", async () => {
+        const adapter = await readFile(resolve("native/dat_preview_cli.cpp"), "utf8");
+
+        assert.match(adapter, /bool root_catalog_entry = false;/);
+        assert.match(adapter, /if \(entry\.oid == root_oid\) root_catalog_entry = true;/);
+        assert.match(adapter, /if \(!root_catalog_entry && !options\.naruto_dat\.empty\(\)\)/);
+        assert.match(adapter, /load_plaintext_char\([\s\S]*?root_oid,[\s\S]*?ObjType::CHARACTER/);
+        assert.match(adapter, /if \(!root_override_loaded \|\| !world\.has_char\(1\) \|\| !world\.has_char\(root_oid\)/);
     });
 
     it("publishes after the editable session while verified entry previews keep warming in the background", async () => {

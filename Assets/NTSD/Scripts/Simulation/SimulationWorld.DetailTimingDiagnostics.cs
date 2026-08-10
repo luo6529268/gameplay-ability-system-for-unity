@@ -518,7 +518,9 @@ namespace NTSD.Simulation
         IndexedCanonicalKernel = 21,
         IndexedCanonicalCommitValidation = 22,
         IndexedCanonicalCommitApply = 23,
-        Count = 24,
+        IndexedCanonicalNearestSearch = 24,
+        IndexedCanonicalSpecialSearch = 25,
+        Count = 26,
     }
 
     /// <summary>
@@ -681,6 +683,10 @@ namespace NTSD.Simulation
                     return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalCommitValidation";
                 case BattleAiInputDetailPhase.IndexedCanonicalCommitApply:
                     return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalCommitApply";
+                case BattleAiInputDetailPhase.IndexedCanonicalNearestSearch:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalKernel/NearestSearch";
+                case BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch:
+                    return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalKernel/SpecialSearch";
                 default:
                     return string.Empty;
             }

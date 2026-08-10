@@ -4,6 +4,41 @@
 > 记录日期：2026-08-08  
 > 当前前置目标：先完成 `singleplayer-1000ai-performance-plan.md`
 
+## 2026-08-10：帧同步资料复核后的当前定调
+
+本节依据 `I:\GitHub\ZhiHu_MD\output\网络游戏` 中的帧同步、逻辑/表现分离、追帧、回滚、快照和网络协议资料，并结合当前代码重新审计后确定。资料中的具体项目经验只作为参考；与 NTSD 的 C# 权威战斗规则冲突时，以权威调用链为准。
+
+### 三种频率必须分离
+
+- **战斗逻辑频率：固定 30 Hz。** 这是 DAT、状态机、碰撞、输入窗口和 C# 权威 pass 的时间语义，不能为了性能或网络打包改成 15 Hz。
+- **服务器广播/网络打包频率：独立配置。** 未来可以 30 Hz 逐帧广播，也可以 15 Hz 每包携带两个连续的 30 Hz 权威输入帧；这只改变组包与发送节奏，不合并逻辑帧。
+- **Unity 渲染频率：跟随设备 60/90/120 Hz。** 表现读取前后两个已确认逻辑快照并插值，不反写逻辑状态。
+
+逻辑帧长度不是 CPU 预算。单个 30 Hz tick 持续超过 33.33 ms 是容量失败；追帧、降低网络发包频率或提高渲染帧率都不能修复该问题。
+
+### 当前实现的准确状态
+
+当前代码已经具备固定 30 Hz、稳定 pass 顺序、确定性 RNG、`FrameInputSet`、严格输入缓冲、手动逐 tick 入口和无分配 checksum，因此属于“可继续收敛为帧同步核心的运行时”。但下列闭环尚未完成，不能称为完整帧同步架构：
+
+1. `LocalFreeRun` 的人类输入仍由 `CharacterInputModule` 直接写角色 `SimInputBuffer`；本地 provider 返回空 `FrameInputSet`。单机实际输入不能只靠 `FrameInputSet` journal 完整重放。
+2. `SimulationTickDriver` 同时持有 Unity wall-clock 累积、模式判断、输入就绪判断、追帧循环和核心执行入口；本地、网络和回放策略尚未成为明确独立的 host policy。
+3. 表现最终在 `LateUpdate`/URP 绘制，但 C# 权威 `prePostprocessRender` 对应边界上的 `CaptureEntities + BuildCommands` 仍同步发生在逻辑 tick 内。当前只实现了绘制 API 分离，没有完成“逻辑发布快照、表现独立构建”。
+4. 现有 parity/checksum snapshot 用于比较，尚不是可版本化序列化并完整 `RestoreWorld` 的生产恢复快照。
+5. 权威运行时仍包含 `double` 战斗字段。是否能跨 Mono、IL2CPP、x64、ARM64 长时间逐帧一致尚无证据；不能仅凭同进程双世界 hash 宣称跨平台确定性。
+
+### 服务器接入前的当前实施顺序
+
+以下批次先服务单机确定性闭环和 1000 AI，不引入真实 transport：
+
+1. **L0 输入事实源闭环**：Unity 输入回调只采集本地意图；每个逻辑 tick 由 `LocalFrameInputCollector` 生成 canonical `FrameInputSet`。单机、回放、未来网络全部只通过 `ApplyFrameInputSet -> StepOneTick` 推进。
+2. **L1 host policy 拆分**：`OfflineLocalTickPolicy` 只按本地 wall clock 正常推进；`ManualReplayTickPolicy` 不读 wall clock；`NetworkLockstepTickPolicy` 未来只依据连续权威帧和服务器帧差追帧。三者共享唯一核心 step。
+3. **L2 逐帧 journal/checksum 验证**：录制单机完整输入帧，重置相同 seed 后无表现重放；逐 tick 输入 hash、核心 checksum、RNG 状态和最终 checksum 必须一致。
+4. **L3 表现发布边界**：保留 C# `prePostprocessRender` 的精确观察时点，但该时点只写入预分配的纯数据快照和确认事件；Sprite/资源解析、排序、command build、Mesh 提交在表现 host 中执行。追帧中间 tick 可不物化表现，但不能漏掉逻辑事件。
+5. **L4 恢复快照**：实现版本化 `BattleStateSnapshot` 的 capture/restore 往返，覆盖世界、实体/slot generation、RNG、rest、输入历史、stage、统计和待处理逻辑队列；不包含 Unity 对象。
+6. **L5 跨运行时确定性门禁**：同一 seed/journal 分别在 Editor Mono、Windows IL2CPP 和 Android ARM64 重放并逐 tick 比对。若 `double` 域实际分叉，再按字段域迁移到整数/定点数；不得在没有证据时一次性改写全部 C# 权威数值语义。
+
+真实服务器、ACK/冗余包、Jitter Buffer、快照下发和联网回滚从 S0 开始，排在 L0～L5 之后。格斗/ACT 手感是否最终需要预测回滚，要等 `BattleStateSnapshot` 可恢复和真实网络延迟测试完成后决定；当前不把回滚与基础帧同步混成同一批修改。
+
 ## 1. 目的与边界
 
 本文记录未来增加服务器后的架构和代码逻辑，避免单机阶段结束后重新调查。它不是当前 1000 AI / 30 FPS 的验收项，也不授权现在引入网络库或服务器依赖。

@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System.Reflection;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
@@ -19,6 +20,57 @@ namespace NTSD.Animation.Rendering.Editor
         public void TearDown()
         {
             BattleCentralRenderSystem.ResetRuntime();
+        }
+
+        [Test]
+        public void CentralSubmission_PrepareCapacity_PrewarmsFrozenFrameStorage()
+        {
+            const int entityCapacity = 1000;
+            int hitRecordCapacity = checked(
+                entityCapacity *
+                NTSD.Animation.LF2Objects.LF2Entity.MaxHitRecordSlots);
+            MethodInfo calculateCommandCapacity =
+                typeof(BattlePresentationCoordinator).GetMethod(
+                    "CalculateMaximumCommandCapacity",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(calculateCommandCapacity, Is.Not.Null);
+            int commandCapacity = (int)calculateCommandCapacity.Invoke(
+                null,
+                new object[] { entityCapacity });
+            ConstructorInfo submissionConstructor =
+                typeof(BattleCentralSubmission).GetConstructor(
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    new[] { typeof(BattleDynamicMeshBackend) },
+                    null);
+            Assert.That(submissionConstructor, Is.Not.Null);
+            var submission = (BattleCentralSubmission)submissionConstructor.Invoke(
+                new object[] { new BattleDynamicMeshBackend() });
+            MethodInfo prepareCapacity = typeof(BattleCentralSubmission).GetMethod(
+                "PrepareCapacity",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo captureFrame = typeof(BattleCentralSubmission).GetMethod(
+                "CaptureFrame",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(prepareCapacity, Is.Not.Null);
+            Assert.That(captureFrame, Is.Not.Null);
+
+            prepareCapacity.Invoke(
+                submission,
+                new object[]
+                {
+                    entityCapacity,
+                    hitRecordCapacity,
+                    commandCapacity,
+                });
+            var source = new BattlePresentationFrame();
+            var captured = (BattlePresentationFrame)captureFrame.Invoke(
+                submission,
+                new object[] { source, null });
+
+            Assert.That(captured.EntityCapacity, Is.GreaterThanOrEqualTo(entityCapacity));
+            Assert.That(captured.HitRecordCapacity, Is.GreaterThanOrEqualTo(hitRecordCapacity));
+            Assert.That(captured.CommandCapacity, Is.GreaterThanOrEqualTo(commandCapacity));
         }
 
         [Test]

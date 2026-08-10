@@ -1,0 +1,5 @@
+# Editor-local synthetic manifest. The source package on J: is unchanged.
+# No source registration was found. Source OID 0 is used as a package-local
+# Native preview identity; the editor's globally unique identity is packageId + OID.
+# The DAT does not self-reference an unknown historical character OID.
+id: 0  type: 0  file: other\1.dat

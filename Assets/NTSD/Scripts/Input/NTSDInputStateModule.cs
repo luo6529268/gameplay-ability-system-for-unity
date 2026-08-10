@@ -139,11 +139,28 @@ namespace NTSD.Input
             if (character == null || character.Frame?.D == null)
                 return false;
 
+            bool result = ApplyFrameInputCore(character);
+            SyncToRuntime(character.Runtime);
+            return result;
+        }
+
+        internal bool ApplyFrameInputFromSynchronizedRuntimeProgress(
+            LF2Entity character)
+        {
+            if (character == null || character.Frame?.D == null)
+                return false;
+
+            bool result = ApplyFrameInputCore(character);
+            SyncProgressToRuntime(character.Runtime);
+            return result;
+        }
+
+        private bool ApplyFrameInputCore(LF2Entity character)
+        {
             bool result = ApplyComboFrameInput(character);
             result |= ApplyDirectFrameInput(character);
             if (character is LF2Character realCharacter)
                 result |= realCharacter.ProcessReleaseInput();
-            SyncToRuntime(character.Runtime);
             return result;
         }
 
@@ -194,6 +211,31 @@ namespace NTSD.Input
             _comboDUJ = runtime.ComboDuj;
             _comboDDJ = runtime.ComboDdj;
             _comboDJA = runtime.ComboDja;
+        }
+
+        private void SyncProgressToRuntime(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            runtime.CdRight = _cdRight;
+            runtime.CdLeft = _cdLeft;
+            runtime.CdUp = _cdUp;
+            runtime.CdDown = _cdDown;
+            runtime.CdAttack = _cdAttack;
+            runtime.CdJump = _cdJump;
+            runtime.CdDefend = _cdDefend;
+            runtime.CdDefendLock = _cdDefendLock;
+
+            runtime.ComboDra = _comboDRA;
+            runtime.ComboDla = _comboDLA;
+            runtime.ComboDua = _comboDUA;
+            runtime.ComboDda = _comboDDA;
+            runtime.ComboDrj = _comboDRJ;
+            runtime.ComboDlj = _comboDLJ;
+            runtime.ComboDuj = _comboDUJ;
+            runtime.ComboDdj = _comboDDJ;
+            runtime.ComboDja = _comboDJA;
         }
 
         public void OnStateExit()

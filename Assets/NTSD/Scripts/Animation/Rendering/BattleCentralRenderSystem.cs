@@ -119,16 +119,28 @@ namespace NTSD.Animation.Rendering
             Volatile.Read(ref lastMaterializedPublishedTick);
 
         internal static void PrepareBattleCapacity(
+            int entityCapacity,
             int commandCapacity,
             int catalogEntryCapacity)
         {
+            if (entityCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(entityCapacity));
             if (commandCapacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(commandCapacity));
             if (catalogEntryCapacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(catalogEntryCapacity));
 
+            int hitRecordCapacity = checked(
+                entityCapacity *
+                NTSD.Animation.LF2Objects.LF2Entity.MaxHitRecordSlots);
             for (int index = 0; index < Backends.Length; index++)
+            {
                 Backends[index].PrepareCapacity(commandCapacity);
+                SlotSubmissions[index].PrepareCapacity(
+                    entityCapacity,
+                    hitRecordCapacity,
+                    commandCapacity);
+            }
 
             int trustedResourceCapacity = checked(
                 catalogEntryCapacity + MaximumCommonTrustedResourceCount);

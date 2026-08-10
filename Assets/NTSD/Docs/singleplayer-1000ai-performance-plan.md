@@ -4,6 +4,26 @@
 > 起始日期：2026-08-08  
 > 当前优先级：高于服务器、真实网络、联机追帧、断线恢复和 Android 真机验证
 
+> 2026-08-10 调整：在继续改变战斗热循环结构前，先完成 `future-server-lockstep-architecture.md` 中 L0～L3 的单机帧同步闭环。该调整不降低 1000 AI / 30 FPS 目标，也不提前实施真实服务器；目的是保证后续性能改动始终作用于唯一的确定性 step，并把表现成本从逻辑预算中正确分离。
+
+## 2026-08-10：AI、中央表现与周边搜索归因结果
+
+本轮在同一 1000 AI 生产负载、相同逻辑输入和相同最终确定性 hash 下，完成了三项独立归因。详细诊断中的逐段 `Stopwatch` 只用于比较同一诊断模式下的阶段成本，不能把它的绝对帧率当作最终 30 FPS 门禁。
+
+- **AI 输入同步 A/B：**旧 full-sync 预热样本为 `27.179 ms/tick`，progress-only 同步为 `26.270 ms/tick`，约改善 `3.3%`。两者最终 hash 一致且 sampled GC 为 0，因此保留该修改；它是有效的小幅优化，不是容量问题的单一解法。
+- **中央资源缓存 A/B：**可信资源缓存由通用字典查询改为预热的引用身份开放寻址表。同一详细负载中 `Render/PrepareFrame/LegacyCapacityGuard` 从 `4.6951` 降至 `3.9834 ms/tick`，约减少 `0.712 ms`（`-15.16%`）；`ResolveCommands` 从 `2.3745` 降至 `2.0409 ms`，`WriteQuads` 从 `1.2161` 降至 `1.0231 ms`。两轮均为 180 sampled ticks、3004 commands、`0 B` sampled GC、相同最终 hash，teardown 完整恢复。报告为 `Temp/NTSD_ProductionEntityStress.combat1000.capacity-pressure-before-central-20260810.json` 与 `Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-capacity-pressure-smoke.json`。
+- **AI 周边目标搜索：**最近目标查询为 `0.6522 ms/tick`，特殊对象扫描为 `0.1687 ms/tick`，合计约 `0.821 ms/tick`，约占详细模式完整 tick 的 `2.9%`。最近目标查询 180000 次共访问 1411230 个索引行，平均每个 AI 约 `7.84` 行；特殊扫描使用预建 `SpecialSlots`，当前全角色负载的特殊 slot visit 为 0。该路径已经是 X 排序/角色/队伍索引查询，并非每个 AI 全表扫描；它不是当前第一瓶颈。
+
+最新详细报告 `Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-capacity-pressure-smoke.json` 为 180 sampled ticks，Avg/P95=`28.023/34.365 ms`，sampled GC=`0 B/tick`，最终 hash=`b8a07be2e5ed9e94f150f4b6e0e426e6e8d23630c69e5fe05a39636e63707821`，teardown=`restored`。非详细报告 `Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-performance-smoke.json` 为 Avg/P95=`28.299/37.233 ms`。平均值进入 30 Hz 预算，但 P95 仍超过 `33.33 ms`，因此 1000 AI 稳定 30 FPS 门禁仍未关闭。
+
+当前详细阶段排序为：`CharacterInput=5.960 ms`、`RenderDispatch=4.111 ms`、`CandidateCollect=3.582 ms`（P95=`8.450 ms`，波动最大）、`LateEntityUpdate=3.207 ms`、`FrameAdvance=1.922 ms`。下一步不再盲改 AI 搜索或中央表现，而由关闭 Deep Profile 的 Unity Profiler 实帧采样确认：
+
+1. `CandidateCollect/ParticipantBodyItrBuild`、`DirectBroadphase`、`PairExactLoop` 的实际尖峰来源；
+2. `CharacterInput/EntityInputPass` 的正式模式成本；
+3. `RenderDispatch` 与 `LateEntityUpdate` 在非诊断模式下的自耗时与调用次数。
+
+fresh 验证：Unity 脚本刷新编译成功；central/detail focused EditMode job `7a13f401bd114a24ba80e735d8f0356c` 为 `35/35 passed`；AI focused job `3b06a13e6ed343559cb25d48c221fc24` 为 `58/58 passed`；`BattleRuntimeSelfCheck` 于 `2026-08-10 21:05:56` 返回 `PASS`。T8 默认 `stage.dat` 与 Android 真机验证继续排除。
+
 ## 1. 当前目标
 
 先完成稳定的单机战斗运行时，并让 1000 个真实生产 AI 实体在目标场景中稳定运行到 30 FPS，同时保持权威 C# 战斗逻辑的规则、字段、副作用和 pass 顺序不变。

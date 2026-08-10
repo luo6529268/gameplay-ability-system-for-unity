@@ -150,6 +150,7 @@ interface RawProtocolResult {
 
 const bootstrap = String.raw`
 $ErrorActionPreference = 'Stop'
+[Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 $protocolStream = [Console]::OpenStandardInput()
 function Read-BootstrapExact([System.IO.Stream] $Stream, [byte[]] $Buffer) {
     $offset = 0

@@ -159,6 +159,17 @@ function narutoDat(): Buffer {
     return encryptDatPayload(Buffer.alloc(123, 0x41), plaintext);
 }
 
+function patchCharacterDat(): Buffer {
+    return encryptDatPayload(Buffer.alloc(123, 0x41), Buffer.from([
+        "name: Patch Hero\n",
+        "file(0-0): sprites\\hero.bmp w: 1 h: 1 row: 1 col: 1\n",
+        "<frame> 0 idle\n",
+        "pic: 0 state: 0 wait: 1 next: 0\n",
+        "wpoint:\n kind: 1 dvx: 5 trailing dvy:\n wpoint_end:\n",
+        "<frame_end>\n",
+    ].join(""), "latin1"));
+}
+
 function nativePreview(startFrame = 300, ticksRequested = 30, rootOid = 2): unknown {
     return {
         metadata: {
@@ -854,6 +865,69 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.equal(opened.type, 0);
         assert.equal(opened.preview.ticks[0]?.entities[0]?.oid, 3);
         assert.deepEqual(previewRootOids, [3]);
+        await project.close({ sessionId: opened.sessionId });
+    });
+
+    it("scopes duplicate source OIDs by package, keeps dependencies internal, and prefers package sprites", async () => {
+        const primaryRoot = resolve("project-api-patch-primary");
+        const patchRoot = resolve("project-api-patch-library");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, catalogBytes("Assets/NTSD/Config/2.dat"));
+        native.set(primaryRoot, "Assets/NTSD/Config/2.dat", narutoDat());
+        native.set(patchRoot, "series/pack/hero.dat", patchCharacterDat());
+        native.set(patchRoot, "series/pack/effect.dat", patchCharacterDat());
+        native.set(patchRoot, "series/pack/sprites/hero.bmp", syntheticBmp(24, 2, 2));
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        const patches = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        await patches.authorizeStartupRoot(patchRoot);
+        primary.sealStartupAuthorization();
+        patches.sealStartupAuthorization();
+        let idSequence = 0;
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            patchRegistry: patches,
+            patchIndex: {
+                schemaVersion: 1,
+                packages: [{
+                    packageId: "patch-pack",
+                    relativeDirectory: "series/pack",
+                    label: "Patch Pack",
+                    status: "source",
+                    records: [
+                        { oid: 2, type: 0, file: "hero.dat", logicalPath: "series/pack/hero.dat", manifestSource: "source" },
+                        { oid: 205, type: 3, file: "effect.dat", logicalPath: "series/pack/effect.dat", manifestSource: "source" },
+                    ],
+                    datFiles: ["series/pack/hero.dat", "series/pack/effect.dat"],
+                    bmpFiles: ["series/pack/sprites/hero.bmp"],
+                    diagnostics: [],
+                }],
+            },
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => `patch${++idSequence}`.padEnd(32, "x"),
+            previewRunner: { preview: async (_plaintext, options) => nativePreview(options?.startFrame, options?.ticks, options?.rootOid) },
+        });
+
+        const catalog = await project.catalog();
+        const oidTwo = catalog.objects.filter((entry) => entry.oid === 2);
+        assert.equal(oidTwo.length, 2);
+        assert.equal(new Set(oidTwo.map((entry) => entry.effectiveId)).size, 2);
+        assert.equal(catalog.objects.some((entry) => entry.oid === 205), false);
+        const patchCharacter = oidTwo.find((entry) => entry.packageId === "patch-pack")!;
+        const opened = await project.open(patchCharacter.objectKey);
+        assert.equal(opened.sourceOid, 2);
+        assert.equal(opened.packageId, "patch-pack");
+        assert.equal(opened.writable, false);
+        assert.deepEqual(
+            [opened.frames[0]?.wpoints[0]?.dvx, opened.frames[0]?.wpoints[0]?.dvy],
+            [5, 0],
+        );
+        assert.match(opened.diagnostics.map((item) => item.code).join(","), /patch-native-base-dependencies/);
+        assert.equal((await project.asset(opened.spriteRanges[0]!.assetId)).bytes.byteLength, syntheticBmp(24, 2, 2).byteLength);
+        assert.ok(native.reads.some((read) => read.root === patchRoot && read.logicalPath === "series/pack/hero.dat"));
+        assert.ok(native.reads.some((read) => read.root === patchRoot && read.logicalPath === "series/pack/sprites/hero.bmp"));
         await project.close({ sessionId: opened.sessionId });
     });
 

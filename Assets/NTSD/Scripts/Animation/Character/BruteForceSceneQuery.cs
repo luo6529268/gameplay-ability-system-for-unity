@@ -3110,7 +3110,7 @@ namespace NTSD.Animation
                     itrEntryIndex));
             }
 
-            _roleFormalSweepEvents.Sort(RoleAwareSweepEventComparer.Instance);
+            SortRoleAwareSweepEvents(_roleFormalSweepEvents);
             long xCandidateCount = 0;
             long fullOverlapCheckCount = 0;
             for (int eventIndex = 0;
@@ -4378,8 +4378,154 @@ namespace NTSD.Animation
             if (values.Count < 2)
                 return;
 
-            values.Sort();
+            SortLongs(values);
             DeduplicateSorted(values);
+        }
+
+        private static void SortLongs(List<long> values)
+        {
+            QuickSortLongs(values, 0, values.Count - 1);
+        }
+
+        private static void QuickSortLongs(List<long> values, int left, int right)
+        {
+            while (left < right)
+            {
+                int low = left;
+                int high = right;
+                long pivot = Median(
+                    values[left],
+                    values[left + ((right - left) >> 1)],
+                    values[right]);
+                while (low <= high)
+                {
+                    while (values[low] < pivot)
+                        low++;
+                    while (values[high] > pivot)
+                        high--;
+                    if (low > high)
+                        break;
+
+                    long value = values[low];
+                    values[low] = values[high];
+                    values[high] = value;
+                    low++;
+                    high--;
+                }
+
+                if (high - left < right - low)
+                {
+                    if (left < high)
+                        QuickSortLongs(values, left, high);
+                    left = low;
+                }
+                else
+                {
+                    if (low < right)
+                        QuickSortLongs(values, low, right);
+                    right = high;
+                }
+            }
+        }
+
+        private static long Median(long first, long second, long third)
+        {
+            if (first > second)
+            {
+                long value = first;
+                first = second;
+                second = value;
+            }
+            if (second > third)
+            {
+                second = third;
+                if (first > second)
+                    second = first;
+            }
+            return second;
+        }
+
+        private static void SortRoleAwareSweepEvents(
+            List<RoleAwareSweepEvent> values)
+        {
+            QuickSortRoleAwareSweepEvents(values, 0, values.Count - 1);
+        }
+
+        private static void QuickSortRoleAwareSweepEvents(
+            List<RoleAwareSweepEvent> values,
+            int left,
+            int right)
+        {
+            while (left < right)
+            {
+                int low = left;
+                int high = right;
+                RoleAwareSweepEvent pivot = MedianRoleAwareSweepEvent(
+                    values[left],
+                    values[left + ((right - left) >> 1)],
+                    values[right]);
+                while (low <= high)
+                {
+                    while (CompareRoleAwareSweepEvents(values[low], pivot) < 0)
+                        low++;
+                    while (CompareRoleAwareSweepEvents(values[high], pivot) > 0)
+                        high--;
+                    if (low > high)
+                        break;
+
+                    RoleAwareSweepEvent value = values[low];
+                    values[low] = values[high];
+                    values[high] = value;
+                    low++;
+                    high--;
+                }
+
+                if (high - left < right - low)
+                {
+                    if (left < high)
+                        QuickSortRoleAwareSweepEvents(values, left, high);
+                    left = low;
+                }
+                else
+                {
+                    if (low < right)
+                        QuickSortRoleAwareSweepEvents(values, low, right);
+                    right = high;
+                }
+            }
+        }
+
+        private static RoleAwareSweepEvent MedianRoleAwareSweepEvent(
+            RoleAwareSweepEvent first,
+            RoleAwareSweepEvent second,
+            RoleAwareSweepEvent third)
+        {
+            if (CompareRoleAwareSweepEvents(first, second) > 0)
+            {
+                RoleAwareSweepEvent value = first;
+                first = second;
+                second = value;
+            }
+            if (CompareRoleAwareSweepEvents(second, third) > 0)
+            {
+                second = third;
+                if (CompareRoleAwareSweepEvents(first, second) > 0)
+                    second = first;
+            }
+            return second;
+        }
+
+        private static int CompareRoleAwareSweepEvents(
+            RoleAwareSweepEvent left,
+            RoleAwareSweepEvent right)
+        {
+            int xComparison = left.X.CompareTo(right.X);
+            if (xComparison != 0)
+                return xComparison;
+            int kindComparison = ((byte)left.Kind).CompareTo((byte)right.Kind);
+            return kindComparison != 0
+                ? kindComparison
+                : left.EntryIndex.CompareTo(right.EntryIndex);
         }
 
         private static void DeduplicateSorted(List<long> values)

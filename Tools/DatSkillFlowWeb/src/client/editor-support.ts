@@ -93,7 +93,10 @@ export function localizedRequestError(statusCode: number, path: string): string 
 }
 
 export function localizedResponseError(statusCode: number, path: string, payload: unknown): string {
-    const localized = localizedRequestError(statusCode, path);
+    const projectCode = projectResponseCode(payload);
+    const localized = projectCode === "preview-failed"
+        ? "原生战斗预览初始化失败，无法切换角色。"
+        : localizedRequestError(statusCode, path);
     const detail = list(record(payload).diagnostics)
         .map((value) => text(record(value).message).trim())
         .find((value) => value !== "");

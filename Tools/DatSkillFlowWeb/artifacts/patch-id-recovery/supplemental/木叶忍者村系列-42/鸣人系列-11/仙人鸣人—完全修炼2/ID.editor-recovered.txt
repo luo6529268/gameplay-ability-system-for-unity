@@ -1,0 +1,9 @@
+# Editor-local recovered manifest. The source package on J: is unchanged.
+# OIDs 466/464 are inherited from the previous package version: Nf1/Nf2 retain
+# every old auxiliary frame and extend the old DATs with additional frames.
+id:  59  type: 0  file: other\Kyubi_4.dat
+id:  58  type: 0  file: other\Kyubi_3.dat
+id:  71  type: 0  file: other\Narutodr.dat
+id:  70  type: 0  file: other\immNarutodr.dat
+id: 466  type: 3  file: other\Nf1.dat
+id: 464  type: 3  file: other\Nf2.dat

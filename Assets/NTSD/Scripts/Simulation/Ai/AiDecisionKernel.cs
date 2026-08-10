@@ -90,6 +90,21 @@ namespace NTSD.Simulation
             bool captureRngTrace,
             ref AiDecisionWitness witness)
         {
+            return TryEvaluate(
+                snapshot,
+                policy,
+                captureRngTrace,
+                null,
+                ref witness);
+        }
+
+        internal static bool TryEvaluate(
+            AiDecisionSnapshot snapshot,
+            AiDecisionEvaluationPolicy policy,
+            bool captureRngTrace,
+            BattleAiInputDetailDiagnostics diagnostics,
+            ref AiDecisionWitness witness)
+        {
             witness = default;
             if (snapshot == null || snapshot.Rows == null)
             {
@@ -185,12 +200,43 @@ namespace NTSD.Simulation
 
             Context ai = CreateContext(rows, self, ref world, ref witness);
             AiSensingNearestResult nearest;
-            if (!AiSensingKernel.TryFindNearest(
+            bool measureIndexedSensing =
+                policy == AiDecisionEvaluationPolicy.Indexed &&
+                diagnostics != null &&
+                diagnostics.Enabled;
+            bool nearestAvailable;
+            if (measureIndexedSensing)
+            {
+                diagnostics.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalNearestSearch);
+                try
+                {
+                    nearestAvailable = AiSensingKernel.TryFindNearest(
+                        rows,
+                        self,
+                        ai.InputPhase,
+                        policy,
+                        out nearest);
+                }
+                finally
+                {
+                    diagnostics.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalNearestSearch);
+                }
+                diagnostics.RecordPhaseCall(
+                    BattleAiInputDetailPhase.IndexedCanonicalNearestSearch);
+                diagnostics.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.IndexedCanonicalNearestSearch,
+                    nearest.GroundRowVisits + nearest.AirRowVisits);
+            }
+            else
+            {
+                nearestAvailable = AiSensingKernel.TryFindNearest(
                     rows,
                     self,
                     ai.InputPhase,
                     policy,
-                    out nearest))
+                    out nearest);
+            }
+            if (!nearestAvailable)
             {
                 witness.Availability = AiDecisionAvailability.SelfNotIncluded;
                 Publish(ref witness, input, world, rng);
@@ -237,7 +283,36 @@ namespace NTSD.Simulation
             bool specialDown = false;
             int specialBestDistance = 10000;
             int specialFlags = 0;
-            if (AiSensingKernel.TryScanSpecial(
+            AiSensingSpecialResult special;
+            bool specialAvailable;
+            if (measureIndexedSensing)
+            {
+                diagnostics.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch);
+                try
+                {
+                    specialAvailable = AiSensingKernel.TryScanSpecial(
+                        rows,
+                        self,
+                        ai.InputPhase,
+                        selected,
+                        bestDistance,
+                        sameZLane,
+                        policy,
+                        out special);
+                }
+                finally
+                {
+                    diagnostics.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch);
+                }
+                diagnostics.RecordPhaseCall(
+                    BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch);
+                diagnostics.RecordPhaseSlotVisits(
+                    BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch,
+                    special.SlotVisits);
+            }
+            else
+            {
+                specialAvailable = AiSensingKernel.TryScanSpecial(
                     rows,
                     self,
                     ai.InputPhase,
@@ -245,7 +320,9 @@ namespace NTSD.Simulation
                     bestDistance,
                     sameZLane,
                     policy,
-                    out AiSensingSpecialResult special))
+                    out special);
+            }
+            if (specialAvailable)
             {
                 selected = special.SelectedSlot;
                 specialBestDistance = special.BestDist;

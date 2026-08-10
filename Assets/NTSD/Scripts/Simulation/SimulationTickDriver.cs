@@ -81,18 +81,86 @@ namespace NTSD.Simulation
 
     public sealed class LocalSimulationFrameInputProvider : ISimulationFrameInputProvider
     {
-        private readonly FrameInputSet emptyFrame = FrameInputSet.Empty(0);
+        private const int MaximumLocalPlayerSlots = 8;
+        private readonly SimulationPlayerInput[] capturedPlayers =
+            new SimulationPlayerInput[MaximumLocalPlayerSlots];
+        private readonly SimulationInputButtons[] previousButtonsBySlot =
+            new SimulationInputButtons[MaximumLocalPlayerSlots];
+        private readonly bool[] previousSlotActive = new bool[MaximumLocalPlayerSlots];
+        private readonly bool[] currentSlotActive = new bool[MaximumLocalPlayerSlots];
+        private readonly FrameInputSet capturedFrame = FrameInputSet.Empty(0);
+        private SimulationWorld world;
+        private bool canonicalFrameCaptured;
 
         public bool IsFrameInputReady(int tickIndex) => true;
         public FrameInputSet GetFrameInput(int tickIndex)
         {
-            emptyFrame.ResetPreallocated(tickIndex, null);
-            return emptyFrame;
+            int playerCount = 0;
+            canonicalFrameCaptured = world != null &&
+                world.TryCaptureLocalFrameInput(
+                    tickIndex,
+                    capturedPlayers,
+                    out playerCount);
+            if (!canonicalFrameCaptured)
+            {
+                capturedFrame.ResetPreallocated(tickIndex, null);
+                return capturedFrame;
+            }
+
+            System.Array.Clear(currentSlotActive, 0, currentSlotActive.Length);
+            for (int index = 0; index < playerCount; index++)
+            {
+                SimulationPlayerInput captured = capturedPlayers[index];
+                int playerSlot = captured.PlayerSlot;
+                SimulationInputButtons previous =
+                    (uint)playerSlot < (uint)previousButtonsBySlot.Length &&
+                    previousSlotActive[playerSlot]
+                        ? previousButtonsBySlot[playerSlot]
+                        : SimulationInputButtons.None;
+                SimulationInputButtons current = captured.Buttons;
+                capturedPlayers[index] = new SimulationPlayerInput(
+                    playerSlot,
+                    current,
+                    current & ~previous,
+                    previous & ~current);
+
+                if ((uint)playerSlot < (uint)previousButtonsBySlot.Length)
+                {
+                    previousButtonsBySlot[playerSlot] = current;
+                    currentSlotActive[playerSlot] = true;
+                }
+            }
+
+            for (int playerSlot = 0; playerSlot < previousSlotActive.Length; playerSlot++)
+            {
+                previousSlotActive[playerSlot] = currentSlotActive[playerSlot];
+                if (!currentSlotActive[playerSlot])
+                    previousButtonsBySlot[playerSlot] = SimulationInputButtons.None;
+            }
+
+            capturedFrame.ResetPreallocated(tickIndex, capturedPlayers, playerCount);
+            return capturedFrame;
+        }
+
+        public void BeforeSimTick(int tickIndex)
+        {
+            if (canonicalFrameCaptured)
+                world?.DiscardDirectLocalInputTick(tickIndex);
         }
 
         public void Reset()
         {
-            emptyFrame.ResetPreallocated(0, null);
+            capturedFrame.ResetPreallocated(0, null);
+            System.Array.Clear(previousButtonsBySlot, 0, previousButtonsBySlot.Length);
+            System.Array.Clear(previousSlotActive, 0, previousSlotActive.Length);
+            System.Array.Clear(currentSlotActive, 0, currentSlotActive.Length);
+            canonicalFrameCaptured = false;
+        }
+
+        internal void BindWorld(SimulationWorld nextWorld)
+        {
+            world = nextWorld;
+            Reset();
         }
     }
 
@@ -131,6 +199,13 @@ namespace NTSD.Simulation
         private int _tickIndex = 0;
         private ulong _lastFrameChecksumValue;
         private bool _hasFrameChecksum;
+        private readonly OfflineLocalTickPolicy _offlineLocalTickPolicy =
+            new OfflineLocalTickPolicy();
+        private readonly ManualReplayTickPolicy _manualReplayTickPolicy =
+            new ManualReplayTickPolicy();
+        private readonly NetworkLockstepTickPolicy _networkLockstepTickPolicy =
+            new NetworkLockstepTickPolicy();
+        private SimulationTickHostPolicy _tickHostPolicy;
 
         private SimulationWorld _world;
         private NTSDBattleTickSystem _battleTickSystem;
@@ -168,6 +243,7 @@ namespace NTSD.Simulation
             lockstepSettings ??= new LockstepSimulationSettings();
             lockstepSettings.Normalize();
             _frameInputProvider ??= _localFrameInputProvider;
+            SelectTickHostPolicy(resetSelectedPolicy: true);
 
             CreateProductionWorld();
 
@@ -179,36 +255,40 @@ namespace NTSD.Simulation
             _managedMemoryBoundary.BeginDriverUpdate();
             try
             {
-                if (paused || _world == null || lockstepSettings.driveMode == SimulationDriveMode.Manual)
+                if (paused || _world == null)
                 {
                     RefreshInspectorState();
                     return;
                 }
 
-                float delta = lockstepSettings.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-                _timeAccumulator += delta;
-
-                int maxBacklogTicks = Mathf.Max(lockstepSettings.maxBacklogTicks, lockstepSettings.maxCatchUpTicksPerFrame);
-                float maxAccumulator = SimulationConstants.SIM_DT * maxBacklogTicks;
-                if (_timeAccumulator > maxAccumulator)
-                    _timeAccumulator = maxAccumulator;
+                SimulationTickHostPolicy policy = SelectTickHostPolicy(
+                    resetSelectedPolicy: false);
+                float elapsedSeconds = policy.UsesWallClock
+                    ? (lockstepSettings.useUnscaledTime
+                        ? Time.unscaledDeltaTime
+                        : Time.deltaTime)
+                    : 0f;
+                policy.BeginUpdate(elapsedSeconds, lockstepSettings);
+                _timeAccumulator = policy.Accumulator;
 
                 int catchUpTicks = 0;
-                while (_timeAccumulator >= SimulationConstants.SIM_DT &&
-                       catchUpTicks < lockstepSettings.maxCatchUpTicksPerFrame)
+                while (policy.ShouldAttemptAutomaticTick(
+                           catchUpTicks,
+                           lockstepSettings))
                 {
                     int nextTickIndex = _tickIndex + 1;
                     if (!CanAdvanceTick(nextTickIndex))
                         break;
 
-                    _timeAccumulator -= SimulationConstants.SIM_DT;
-                    bool buildPresentation = ShouldBuildPresentationForCatchUpTick(
-                        lockstepSettings.driveMode,
-                        lockstepSettings.requireInputFrameReady,
-                        _timeAccumulator,
+                    bool buildPresentation =
+                        policy.ShouldBuildPresentationForNextTick(
                         catchUpTicks,
-                        lockstepSettings.maxCatchUpTicksPerFrame);
-                    StepOneTickInternal(nextTickIndex, buildPresentation);
+                        lockstepSettings);
+                    if (!StepOneTickInternal(nextTickIndex, buildPresentation))
+                        break;
+
+                    policy.CommitAutomaticTick();
+                    _timeAccumulator = policy.Accumulator;
                     catchUpTicks++;
                 }
 
@@ -553,6 +633,7 @@ namespace NTSD.Simulation
             BattleSpriteCatalog spriteCatalog =
                 CharacterAnimtorManager.Instance?.SpriteCatalog ?? BattleSpriteCatalog.Empty;
             BattleCentralRenderSystem.PrepareBattleCapacity(
+                normalizedEntityCapacity,
                 BattlePresentationCoordinator.CalculateMaximumCommandCapacity(
                     normalizedEntityCapacity),
                 spriteCatalog.Count);
@@ -585,6 +666,9 @@ namespace NTSD.Simulation
 
             lockstepSettings = settings;
             lockstepSettings.Normalize();
+            SelectTickHostPolicy(resetSelectedPolicy: true);
+            _timeAccumulator = _tickHostPolicy.Accumulator;
+            RefreshInspectorState();
         }
 
         public void ApplyMatchConfig(MatchConfig config)
@@ -678,6 +762,7 @@ namespace NTSD.Simulation
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = null;
+            _localFrameInputProvider.BindWorld(null);
             _battleTickSystem = null;
         }
 
@@ -733,6 +818,10 @@ namespace NTSD.Simulation
         private void ResetDriverStateAfterWorldCreation()
         {
             _tickIndex = 0;
+            _offlineLocalTickPolicy.Reset();
+            _manualReplayTickPolicy.Reset();
+            _networkLockstepTickPolicy.Reset();
+            SelectTickHostPolicy(resetSelectedPolicy: false);
             _timeAccumulator = 0f;
             _sparkRenderFrame = 0;
             ResetLastAppliedFrameInput(0);
@@ -747,6 +836,36 @@ namespace NTSD.Simulation
             _rejectedLatePresentationComponentCreateCount = 0;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
+        }
+
+        private SimulationTickHostPolicy SelectTickHostPolicy(
+            bool resetSelectedPolicy)
+        {
+            SimulationTickHostPolicy selected;
+            if (lockstepSettings.driveMode == SimulationDriveMode.Manual)
+            {
+                selected = _manualReplayTickPolicy;
+            }
+            else if (lockstepSettings.driveMode == SimulationDriveMode.LockstepBuffered ||
+                     lockstepSettings.requireInputFrameReady)
+            {
+                selected = _networkLockstepTickPolicy;
+            }
+            else
+            {
+                selected = _offlineLocalTickPolicy;
+            }
+
+            if (!ReferenceEquals(_tickHostPolicy, selected))
+            {
+                _tickHostPolicy?.Reset();
+                _tickHostPolicy = selected;
+                resetSelectedPolicy = true;
+            }
+
+            if (resetSelectedPolicy)
+                _tickHostPolicy.Reset();
+            return _tickHostPolicy;
         }
 
         private void ResetLastAppliedFrameInput(int tickIndex)
@@ -782,6 +901,7 @@ namespace NTSD.Simulation
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = nextWorld;
+            _localFrameInputProvider.BindWorld(_world);
             _presentationBackendMode = presentationMode;
             _aiExecutionProfile = aiExecutionProfile;
             effectiveAiExecutionProfile = aiExecutionProfile.ToString();
@@ -885,6 +1005,7 @@ namespace NTSD.Simulation
             BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
             _world = null;
+            _localFrameInputProvider.BindWorld(null);
             _battleTickSystem = null;
         }
     }

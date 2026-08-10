@@ -31,6 +31,18 @@ describe("editor request errors", () => {
         );
     });
 
+    it("does not misreport a Native character initialization failure as an invalid image", () => {
+        assert.equal(
+            localizedResponseError(422, "/api/project/open", {
+                diagnostics: [{
+                    message: "The native character preview failed.",
+                    details: { projectCode: "preview-failed" },
+                }],
+            }),
+            "原生战斗预览初始化失败，无法切换角色。 The native character preview failed.",
+        );
+    });
+
     it("extracts the structured project error code used for session recovery", () => {
         assert.equal(projectResponseCode({
             diagnostics: [{ details: { projectCode: "unknown-session" } }],

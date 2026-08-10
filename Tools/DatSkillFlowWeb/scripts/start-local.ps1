@@ -14,6 +14,10 @@ $toolRoot = Split-Path -Parent $PSScriptRoot
 $repositoryRoot = (Resolve-Path (Join-Path $toolRoot "..\..")).Path
 $dataTxtPath = Join-Path $repositoryRoot "Assets\NTSD\Config\data.txt"
 $assetWorkspace = "J:\QQFile\NTSD 2.4.1"
+$patchWorkspace = "J:\QQFile\NTSD2.4大量人物补丁（2）"
+$patchIndexScript = Join-Path $toolRoot "scripts\build-patch-index.ps1"
+$patchIndexPath = Join-Path $env:LOCALAPPDATA "DatSkillFlowWeb\patch-index.json"
+$patchSupplementalRoot = Join-Path $toolRoot "artifacts\patch-id-recovery\supplemental"
 $previewExecutable = Join-Path $toolRoot "native\bin\dat_preview_cli.exe"
 $previewBuildScript = Join-Path $toolRoot "scripts\build-native-preview.ps1"
 $testWorkspace = Join-Path $env:LOCALAPPDATA "DatSkillFlowWeb\test-workspace"
@@ -133,12 +137,13 @@ function Assert-StartupPrerequisites {
     Assert-NodeVersion
     Assert-FileExists $dataTxtPath "Project data.txt"
     Assert-DirectoryExists $assetWorkspace "NTSD asset workspace"
+    Assert-DirectoryExists $patchWorkspace "NTSD patch workspace"
+    Assert-FileExists $patchIndexScript "Patch package index builder"
     Assert-FileExists (Join-Path $toolRoot "package.json") "Package manifest"
     Assert-FileExists (Join-Path $toolRoot "scripts\start.mjs") "Server entry point"
     if (-not $NoBuild) {
-        if ($null -eq (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
-            Stop-WithMessage "npm.cmd was not found."
-        }
+        $nodeExecutable = (Get-Command node).Source
+        Assert-FileExists (Join-Path (Split-Path -Parent $nodeExecutable) "node_modules\npm\bin\npm-cli.js") "npm JavaScript entry"
         Assert-FileExists (Join-Path $toolRoot "scripts\build.mjs") "Build script"
         Assert-FileExists $previewBuildScript "Native preview build script"
     }
@@ -189,6 +194,13 @@ Write-Host "可写技能 sidecar：$sidecarPath"
 $process = $null
 Push-Location $toolRoot
 try {
+    Write-Host "正在索引补丁包（只读扫描 J 盘）..."
+    & $patchIndexScript -LibraryRoot $patchWorkspace -OutputPath $patchIndexPath -SupplementalRoot $patchSupplementalRoot
+    if ($LASTEXITCODE -ne 0) {
+        Stop-WithMessage "Patch package indexing failed with exit code $LASTEXITCODE."
+    }
+    Assert-FileExists $patchIndexPath "Patch package index"
+
     if (-not $NoBuild) {
         Write-Host "Building C++ battle preview adapter..."
         & $previewBuildScript
@@ -199,7 +211,9 @@ try {
 
         if (Test-WebBuildRequired) {
             Write-Host "Building DAT Skill Flow Web..."
-            & npm.cmd run build
+            $nodeExecutable = (Get-Command node).Source
+            $npmCli = Join-Path (Split-Path -Parent $nodeExecutable) "node_modules\npm\bin\npm-cli.js"
+            & $nodeExecutable $npmCli run build
             if ($LASTEXITCODE -ne 0) {
                 Stop-WithMessage "Build failed with exit code $LASTEXITCODE."
             }
@@ -216,6 +230,8 @@ try {
         "--workspace", $workspace,
         "--data-txt", "Assets/NTSD/Config/data.txt",
         "--asset-workspace", $assetWorkspace,
+        "--patch-workspace", $patchWorkspace,
+        "--patch-index", $patchIndexPath,
         "--port", "0"
     )
     $processInfo = New-Object System.Diagnostics.ProcessStartInfo

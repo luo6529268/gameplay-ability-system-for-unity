@@ -69,6 +69,59 @@ namespace NTSD.Simulation
             }
         }
 
+        public bool TryCaptureLocalFrameInput(
+            int tickIndex,
+            SimulationPlayerInput[] destination,
+            out int playerCount)
+        {
+            playerCount = 0;
+            BattleSlotRuntimeState[] rosterSlots = world.Runtime?.Roster?.Slots;
+            if (rosterSlots == null)
+                return true;
+
+            for (int playerSlot = 0; playerSlot < rosterSlots.Length; playerSlot++)
+            {
+                BattleSlotRuntimeState rosterSlot = rosterSlots[playerSlot];
+                if (rosterSlot?.Active != true || !rosterSlot.IsHuman)
+                    continue;
+
+                if (destination == null || playerCount >= destination.Length ||
+                    !TryResolveRosterInputEntity(playerSlot, out LF2Entity entity) ||
+                    !entity.TryGetSharedInputControllerForSimulation(out ILF2Controller controller) ||
+                    controller is not ILocalFrameInputSource localSource)
+                {
+                    playerCount = 0;
+                    return false;
+                }
+
+                destination[playerCount++] = new SimulationPlayerInput(
+                    playerSlot,
+                    localSource.CaptureHeldSimulationButtons());
+            }
+
+            return true;
+        }
+
+        public void DiscardDirectLocalInputTick(int tickIndex)
+        {
+            BattleSlotRuntimeState[] rosterSlots = world.Runtime?.Roster?.Slots;
+            if (rosterSlots == null)
+                return;
+
+            for (int playerSlot = 0; playerSlot < rosterSlots.Length; playerSlot++)
+            {
+                BattleSlotRuntimeState rosterSlot = rosterSlots[playerSlot];
+                if (rosterSlot?.Active != true || !rosterSlot.IsHuman ||
+                    !TryResolveRosterInputEntity(playerSlot, out LF2Entity entity) ||
+                    !entity.TryGetSharedInputControllerForSimulation(out ILF2Controller controller))
+                {
+                    continue;
+                }
+
+                controller.InputBuffer?.DiscardTick(tickIndex);
+            }
+        }
+
         public bool TryResolveRosterInputEntity(int playerSlot, out LF2Entity entity)
         {
             return TryResolveRosterEntity(playerSlot, requireHuman: true, out entity);

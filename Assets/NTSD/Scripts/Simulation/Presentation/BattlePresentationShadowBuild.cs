@@ -1889,6 +1889,19 @@ namespace NTSD.Simulation.Presentation
             }
             NTSDRenderSpace.ViewportTransformSnapshot viewportTransform =
                 NTSDRenderSpace.CaptureViewportTransform();
+            BattleCommonVisualBinding commonShadow = frame.CommonShadowBinding;
+            bool hasCommonShadow = commonShadow != null;
+            BattleSpriteValueDescriptor commonShadowDescriptor = hasCommonShadow
+                ? new BattleSpriteValueDescriptor(
+                    true,
+                    true,
+                    commonShadow.SpriteInstanceId,
+                    commonShadow.TextureInstanceId,
+                    commonShadow.MaterialInstanceId,
+                    commonShadow.PixelRect,
+                    commonShadow.Pivot,
+                    BattleVisualResourceKey.CommonShadow)
+                : default;
             bool collectDetailTimings = detailDiagnostics != null;
             long shadowElapsedTicks = 0;
             long entityElapsedTicks = 0;
@@ -1907,11 +1920,10 @@ namespace NTSD.Simulation.Presentation
                 bool drawShadow = entity.ShadowVisible && entity.HasCurrentFrame &&
                                   entity.State != 3005 && entity.State != 9997 &&
                                   entity.LinkState >= 0 && entity.ObjectId != 223 &&
-                                  entity.ObjectId != 224 && frame.CommonShadowBinding != null &&
+                                  entity.ObjectId != 224 && hasCommonShadow &&
                                   LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop);
                 if (drawShadow)
                 {
-                    BattleCommonVisualBinding shadow = frame.CommonShadowBinding;
                     Vector3 shadowPosition = viewportTransform.ScreenPixelToWorld(
                         entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
                         entity.ZInt,
@@ -1927,21 +1939,13 @@ namespace NTSD.Simulation.Presentation
                         baseOrder,
                         ObjectSortingLayerId,
                         localSequence++,
-                        viewportTransform.SnapWorldPosition(shadowPosition),
-                        shadow.PixelSize,
-                        shadow.Pivot,
-                        shadow.NormalizedUv,
-                        shadow.RenderState,
-                        new BattleSpriteValueDescriptor(
-                            true,
-                            true,
-                            shadow.SpriteInstanceId,
-                            shadow.TextureInstanceId,
-                            shadow.MaterialInstanceId,
-                            shadow.PixelRect,
-                            shadow.Pivot,
-                            BattleVisualResourceKey.CommonShadow),
-                        shadow));
+                        shadowPosition,
+                        commonShadow.PixelSize,
+                        commonShadow.Pivot,
+                        commonShadow.NormalizedUv,
+                        commonShadow.RenderState,
+                        commonShadowDescriptor,
+                        commonShadow));
                 }
                 if (collectDetailTimings)
                 {

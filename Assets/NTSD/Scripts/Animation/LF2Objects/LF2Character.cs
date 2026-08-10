@@ -686,7 +686,10 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         protected override void ComboUpdate()
         {
-            ApplyFrameInputFromLocalState();
+            if (AiControlled)
+                InputState?.ApplyFrameInputFromSynchronizedRuntimeProgress(this);
+            else
+                ApplyFrameInputFromLocalState();
         }
 
         internal void RunTuCoreForSelfCheck()
@@ -791,7 +794,7 @@ namespace NTSD.Animation.LF2Objects
                     diagnostics?.EndPhase(BattleAiInputDetailPhase.RemainingAiDecision);
                 }
                 diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
-                InputState?.SyncFromRuntime(Runtime);
+                InputState?.SyncProgressFromRuntime(Runtime);
                 diagnostics?.EndPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
             }
 

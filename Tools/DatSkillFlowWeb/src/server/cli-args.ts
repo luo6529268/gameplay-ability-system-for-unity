@@ -4,11 +4,22 @@ export interface CliArguments {
     readonly workspace?: string;
     readonly dataTxt?: string;
     readonly assetWorkspace?: string;
+    readonly patchWorkspace?: string;
+    readonly patchIndex?: string;
     readonly port?: string;
     readonly allowTestRootGrant: boolean;
 }
 
-const valueFlags = new Set(["--root", "--manifest", "--workspace", "--data-txt", "--asset-workspace", "--port"]);
+const valueFlags = new Set([
+    "--root",
+    "--manifest",
+    "--workspace",
+    "--data-txt",
+    "--asset-workspace",
+    "--patch-workspace",
+    "--patch-index",
+    "--port",
+]);
 
 export function parsePortValue(raw: string): number {
     if (!/^(?:0|[1-9]\d*)$/.test(raw)) throw new Error(`Invalid port: ${raw}`);
@@ -36,8 +47,11 @@ export function parseCliArguments(argv: readonly string[]): CliArguments {
         values.set(argument, value);
     }
 
-    if (!values.has("--workspace") && (values.has("--data-txt") || values.has("--asset-workspace"))) {
-        throw new Error("Each of --data-txt and --asset-workspace requires --workspace.");
+    if (!values.has("--workspace") && (values.has("--data-txt") || values.has("--asset-workspace") || values.has("--patch-workspace") || values.has("--patch-index"))) {
+        throw new Error("Each project-data option requires --workspace.");
+    }
+    if (values.has("--patch-workspace") !== values.has("--patch-index")) {
+        throw new Error("--patch-workspace and --patch-index must be provided together.");
     }
 
     return Object.freeze({
@@ -46,6 +60,8 @@ export function parseCliArguments(argv: readonly string[]): CliArguments {
         ...(values.has("--workspace") ? { workspace: values.get("--workspace")! } : {}),
         ...(values.has("--data-txt") ? { dataTxt: values.get("--data-txt")! } : {}),
         ...(values.has("--asset-workspace") ? { assetWorkspace: values.get("--asset-workspace")! } : {}),
+        ...(values.has("--patch-workspace") ? { patchWorkspace: values.get("--patch-workspace")! } : {}),
+        ...(values.has("--patch-index") ? { patchIndex: values.get("--patch-index")! } : {}),
         ...(values.has("--port") ? { port: values.get("--port")! } : {}),
         allowTestRootGrant,
     });

@@ -76,7 +76,7 @@ describe("project-backed client contract", () => {
         assert.match(previewRenderer, /stageParallaxOffset/);
         assert.match(main, /normalizePreviewStage/);
         for (const id of [
-            "object-select", "frame-select", "frame-editor", "sprite-canvas", "play-toggle", "step-once", "reset-timeline",
+            "package-select", "object-select", "frame-select", "frame-editor", "sprite-canvas", "play-toggle", "step-once", "reset-timeline",
             "skill-list", "frame-browser-list", "entry-search", "entry-tab-base", "entry-tab-input", "entry-tab-all",
             "flow-list", "block-select", "timeline-segments", "edit-skill", "show-hidden-skills",
             "skill-name", "skill-group", "skill-order", "skill-pinned", "skill-hidden", "skill-notes",
@@ -84,7 +84,8 @@ describe("project-backed client contract", () => {
             "apply-flow-edge", "copy-frame", "delete-frame", "new-block", "copy-block", "delete-block", "grid-four",
             "editor-grid", "left-panel-separator", "right-panel-separator",
         ]) assert.match(html, new RegExp(`id="${id}"`));
-        assert.match(main, /buildFrameEntryCatalog\(project\.frames, project\.oid, skillState\.metadata\)/);
+        assert.match(main, /project\.sourceKind === "base" \? skillState\.metadata : \[\]/);
+        assert.match(main, /buildFrameEntryCatalog/);
         assert.match(main, /frameEntryCatalog\.entries/);
         assert.match(main, /entriesByStartFrame\(skillState\.skills\)/);
         assert.match(skillEntries, /if \(rawTarget === 0\) continue/);

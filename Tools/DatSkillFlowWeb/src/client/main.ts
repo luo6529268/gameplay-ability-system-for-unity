@@ -92,6 +92,10 @@ interface ProjectState {
     name: string;
     dirty: boolean;
     writable: boolean;
+    packageId: string;
+    packageLabel: string;
+    sourceKind: "base" | "patch";
+    manifestStatus: string;
     frames: Frame[];
     ranges: Json[];
     nativeTicks: NativeTick[];
@@ -105,6 +109,16 @@ interface ProjectState {
     assets: Map<string, string>;
     fields: FieldCapability[];
     structures: FrameStructureCapability[];
+}
+interface CatalogChoice {
+    readonly objectKey: string;
+    readonly oid: number;
+    readonly packageId: string;
+    readonly packageLabel: string;
+    readonly sourceKind: "base" | "patch";
+    readonly manifestStatus: string;
+    readonly diagnosticCount: number;
+    readonly displayName: string;
 }
 interface PreviewIntent {
     readonly sessionId: string;
@@ -136,6 +150,7 @@ const status = select<HTMLElement>("server-status");
 const diagnostics = select<HTMLElement>("diagnostics");
 const canvas = select<HTMLCanvasElement>("sprite-canvas");
 const objectSelect = select<HTMLSelectElement>("object-select");
+const packageSelect = select<HTMLSelectElement>("package-select");
 const frameSelect = select<HTMLSelectElement>("frame-select");
 const seek = select<HTMLInputElement>("timeline-seek");
 const loop = select<HTMLInputElement>("loop-enabled");
@@ -149,6 +164,7 @@ const rightPanelSeparator = select<HTMLElement>("right-panel-separator");
 const mobilePanelQuery = window.matchMedia(`(max-width: ${MOBILE_PANEL_MAXIMUM}px)`);
 
 let project: ProjectState | undefined;
+let catalogChoices: CatalogChoice[] = [];
 let skillState: SkillState = {
     revision: 0,
     etag: "",
@@ -298,6 +314,10 @@ function normalize(payload: Json): ProjectState {
         name: text(session.name ?? data.name ?? "项目"),
         dirty: session.dirty === true || data.dirty === true,
         writable: session.writable === true || data.writable === true,
+        packageId: text(session.packageId ?? data.packageId, "ntsd-2.4.1"),
+        packageLabel: text(session.packageLabel ?? data.packageLabel, "NTSD 2.4.1"),
+        sourceKind: text(session.sourceKind ?? data.sourceKind) === "patch" ? "patch" : "base",
+        manifestStatus: text(session.manifestStatus ?? data.manifestStatus, "base"),
         frames,
         ranges: list(projection.spriteRanges ?? session.spriteRanges ?? data.spriteRanges).map(record),
         nativeTicks: ticks,
@@ -746,6 +766,7 @@ function activeProjectOid(): number {
     return project?.oid ?? number(Number(objectSelect?.selectedOptions[0]?.dataset.oid), 2);
 }
 function selectedSkill(): ProjectSkill | undefined {
+    if (project?.sourceKind === "patch") return undefined;
     const skill = skillState.skills[selectedSkillIndex];
     return skill?.oid === activeProjectOid() ? skill : undefined;
 }
@@ -756,7 +777,11 @@ function rebuildSkillEntries(preferredStartFrame = selectedSkill()?.startFrame):
         selectedSkillIndex = -1;
         return;
     }
-    frameEntryCatalog = buildFrameEntryCatalog(project.frames, project.oid, skillState.metadata);
+    frameEntryCatalog = buildFrameEntryCatalog(
+        project.frames,
+        project.oid,
+        project.sourceKind === "base" ? skillState.metadata : [],
+    );
     skillState.skills = [...frameEntryCatalog.entries];
     selectedSkillIndex = preferredStartFrame === undefined
         ? -1
@@ -1400,12 +1425,15 @@ async function open(objectKey: string, oid: number): Promise<void> {
     if (previousProject?.sessionId) {
         if ((fieldDraft || previousProject.dirty) && !window.confirm("当前项目有未应用或未保存修改。确定放弃并切换对象吗？")) {
             if (objectSelect) objectSelect.value = loadedObjectKey;
+            if (packageSelect) packageSelect.value = previousProject.packageId;
+            populateCharacterChoices(previousProject.packageId, loadedObjectKey);
             return;
         }
     }
     if (status) {
         status.dataset.state = "loading";
-        status.textContent = `正在载入 OID ${oid}…`;
+        const packageLabel = catalogChoices.find((choice) => choice.objectKey === objectKey)?.packageLabel;
+        status.textContent = `正在载入 ${packageLabel ? `${packageLabel} / ` : ""}OID ${oid}…`;
     }
     previewScheduler.invalidate();
     const response = await request("/api/project/open", { method: "POST", body: JSON.stringify({ objectKey }) }, true);
@@ -1422,6 +1450,7 @@ async function open(objectKey: string, oid: number): Promise<void> {
     }
     clearDraft();
     project = nextProject;
+    if (packageSelect) packageSelect.value = project.packageId;
     loadedObjectKey = objectKey;
     tickIndex = 0;
     selectedBlock = { type: "frame" };
@@ -1433,22 +1462,50 @@ async function open(objectKey: string, oid: number): Promise<void> {
     rebuildSkillEntries();
     selectedSkillIndex = -1;
     selectedFrameOccurrence = lastFrameForId(project.frames, primaryPreviewEntity(project.nativeTicks[0]?.entities ?? [])?.frame)?.occurrence;
-    status!.dataset.state = "connected"; status!.textContent = `已载入 ${project.name} / OID ${oid}${project.writable ? "" : "（只读）"}`;
+    status!.dataset.state = "connected"; status!.textContent = `已载入 ${project.packageLabel} / ${project.name} / OID ${oid}${project.writable ? "" : "（只读）"}`;
     const sidecarNotice = skillState.sidecarStatus === "invalid"
         ? "技能 sidecar 无效，已忽略；DAT 自动入口仍可使用。"
         : skillState.sidecarStatus === "legacy"
             ? "已读取旧版技能 sidecar；下次编辑显示信息时会迁移。"
             : "";
-    diagnostics!.textContent = closeWarning || sidecarNotice || (project.writable
+    const patchNotice = project.sourceKind === "patch"
+        ? `补丁包 ${project.packageLabel} 已按包作用域加载（${project.manifestStatus}）；角色和依赖保留原始 OID，当前会话只读。`
+        : "";
+    diagnostics!.textContent = closeWarning || patchNotice || sidecarNotice || (project.writable
         ? "项目数据已载入，可以选择技能、播放、查看叠加层或编辑当前帧。"
         : "项目仅存在于 fallback 资源中，当前会话为只读预览。");
     render();
+}
+
+function populateCharacterChoices(packageId: string, preferredObjectKey = ""): CatalogChoice | undefined {
+    const choices = catalogChoices.filter((choice) => choice.packageId === packageId);
+    const preferred = choices.find((choice) => choice.objectKey === preferredObjectKey)
+        ?? choices.find((choice) => choice.sourceKind === "base" && choice.oid === 2)
+        ?? choices[0];
+    objectSelect?.replaceChildren(...choices.map((choice) => {
+        const statusSuffix = choice.manifestStatus === "base" || choice.manifestStatus === "source"
+            ? ""
+            : ` · ${choice.manifestStatus}`;
+        const diagnosticSuffix = choice.diagnosticCount > 0 ? ` · ${choice.diagnosticCount} 项诊断` : "";
+        const option = new Option(
+            `OID ${choice.oid} · ${choice.displayName}${statusSuffix}${diagnosticSuffix}`,
+            choice.objectKey,
+            false,
+            choice.objectKey === preferred?.objectKey,
+        );
+        option.dataset.oid = String(choice.oid);
+        return option;
+    }));
+    if (preferred !== undefined && objectSelect) objectSelect.value = preferred.objectKey;
+    return preferred;
 }
 function switchObject(objectKey: string, oid: number): void {
     const operation = objectSwitchQueue.then(() => open(objectKey, oid));
     objectSwitchQueue = operation.catch(() => undefined);
     void operation.catch((error) => {
         if (project?.sessionId && loadedObjectKey !== "") {
+            if (packageSelect) packageSelect.value = project.packageId;
+            populateCharacterChoices(project.packageId, loadedObjectKey);
             if (objectSelect) objectSelect.value = loadedObjectKey;
             status!.dataset.state = "connected";
             status!.textContent = `仍在 ${project.name} / OID ${project.oid}${project.writable ? "" : "（只读）"}`;
@@ -1467,16 +1524,37 @@ async function start(): Promise<void> {
         stateToken = text(security.token ?? bootstrap.stateToken ?? bootstrap.token);
         tokenHeader = text(security.tokenHeader ?? bootstrap.tokenHeader) || tokenHeader;
         const [listing] = await Promise.all([request("/api/project"), loadSkills()]);
-        const choices = list(record(listing.data).objects ?? record(listing.data).entries)
-            .filter((value) => number(record(value).type, -1) === 0);
-        objectSelect?.replaceChildren(...choices.map((value) => {
-            const item = record(value), oid = number(item.oid), displayName = text(item.displayName) || `OID ${oid}`;
-            const option = new Option(`OID ${oid} · ${displayName}`, text(item.objectKey), false, oid === 2);
-            option.dataset.oid = String(oid);
-            return option;
-        }));
-        const selected = objectSelect?.selectedOptions[0];
-        await open(objectSelect?.value || "", number(Number(selected?.dataset.oid), 2));
+        catalogChoices = list(record(listing.data).objects ?? record(listing.data).entries)
+            .filter((value) => number(record(value).type, -1) === 0)
+            .flatMap((value): CatalogChoice[] => {
+                const item = record(value);
+                const objectKey = text(item.objectKey);
+                if (!objectKey) return [];
+                const oid = number(item.sourceOid ?? item.oid);
+                return [{
+                    objectKey,
+                    oid,
+                    packageId: text(item.packageId, "ntsd-2.4.1"),
+                    packageLabel: text(item.packageLabel, "NTSD 2.4.1"),
+                    sourceKind: text(item.sourceKind) === "patch" ? "patch" : "base",
+                    manifestStatus: text(item.manifestStatus, "base"),
+                    diagnosticCount: number(item.diagnosticCount),
+                    displayName: text(item.displayName) || `OID ${oid}`,
+                }];
+            });
+        const packages = [...new Map(catalogChoices.map((choice) => [choice.packageId, choice])).values()]
+            .sort((left, right) => Number(left.sourceKind === "patch") - Number(right.sourceKind === "patch")
+                || left.packageLabel.localeCompare(right.packageLabel, "zh-CN"));
+        packageSelect?.replaceChildren(...packages.map((item) => new Option(
+            `${item.sourceKind === "base" ? "基础版" : "补丁包"} · ${item.packageLabel}`,
+            item.packageId,
+            false,
+            item.sourceKind === "base",
+        )));
+        const initialPackageId = packageSelect?.value || packages[0]?.packageId || "";
+        const selected = populateCharacterChoices(initialPackageId);
+        if (selected === undefined) throw new Error("当前数据包没有可预览的 type-0 角色。");
+        await open(selected.objectKey, selected.oid);
     } catch (error) {
         status!.dataset.state = "error"; status!.textContent = "项目不可用";
         diagnostics!.textContent = errorText(error, "项目载入失败。");
@@ -1787,6 +1865,10 @@ async function saveProject(): Promise<void> {
 objectSelect?.addEventListener("change", () => {
     const option = objectSelect.selectedOptions[0];
     switchObject(objectSelect.value, number(Number(option?.dataset.oid)));
+});
+packageSelect?.addEventListener("change", () => {
+    const selected = populateCharacterChoices(packageSelect.value);
+    if (selected !== undefined) switchObject(selected.objectKey, selected.oid);
 });
 frameSelect?.addEventListener("change", () => {
     const frame = project?.frames.find((candidate) => candidate.occurrence === Number(frameSelect.value));

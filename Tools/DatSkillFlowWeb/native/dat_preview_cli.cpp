@@ -140,17 +140,31 @@ bool initialize_preview_world(GameWorld& world,
     catalog_stats.entries = static_cast<int>(catalog.size());
     if (catalog.empty()) return false;
 
+    bool root_catalog_entry = false;
+    bool root_override_loaded = options.naruto_dat.empty();
     for (const PreviewCatalogEntry& entry : catalog) {
+        if (entry.oid == root_oid) root_catalog_entry = true;
         if (world.has_char(entry.oid)) continue;
         const std::string full_path = preview_game_path(game_root, entry.file);
-        const bool loaded = entry.oid == root_oid && !options.naruto_dat.empty()
+        const bool uses_root_override = entry.oid == root_oid && !options.naruto_dat.empty();
+        const bool loaded = uses_root_override
             ? load_plaintext_char(world, entry.oid, options.naruto_dat.c_str(), entry.type)
             : load_encrypted_char(world, entry.oid, full_path.c_str(), entry.type);
+        if (uses_root_override) root_override_loaded = loaded;
         if (loaded) ++catalog_stats.loaded;
         else ++catalog_stats.failed;
     }
 
-    if (!world.has_char(1) || !world.has_char(root_oid) ||
+    if (!root_catalog_entry && !options.naruto_dat.empty()) {
+        root_override_loaded = load_plaintext_char(
+            world,
+            root_oid,
+            options.naruto_dat.c_str(),
+            ObjType::CHARACTER
+        );
+    }
+
+    if (!root_override_loaded || !world.has_char(1) || !world.has_char(root_oid) ||
         !load_preview_stage_background(world, game_root, options.stage, stage_info)) {
         return false;
     }

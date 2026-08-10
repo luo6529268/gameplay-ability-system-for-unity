@@ -11,6 +11,7 @@ import { WorkspaceRegistry } from "./workspace-registry.js";
 import { parseCliArguments, parsePortValue } from "./cli-args.js";
 import { ProjectDatService } from "./project-dat-service.js";
 import { ProjectSkillService } from "./project-skill-service.js";
+import { loadPatchPackageIndex } from "./patch-package-index.js";
 
 const PINNED_MANIFEST_PATH_ENV = "DAT_SKILL_FLOW_PINNED_MANIFEST_PATH";
 
@@ -18,6 +19,7 @@ const cliArguments = parseCliArguments(process.argv.slice(2));
 const staticRoot = resolve(cliArguments.root ?? "dist");
 const startupWorkspace = cliArguments.workspace;
 const startupAssetWorkspace = cliArguments.assetWorkspace;
+const startupPatchWorkspace = cliArguments.patchWorkspace;
 const manifestPath = resolve(process.env[PINNED_MANIFEST_PATH_ENV] ?? cliArguments.manifest ?? "dist/build-manifest.json");
 const allowAbsoluteRootGrant = cliArguments.allowTestRootGrant;
 const rawPort = cliArguments.port ?? process.env.PORT ?? "4173";
@@ -61,6 +63,17 @@ if (assetWorkspace !== undefined) {
     assetWorkspace.sealStartupAuthorization();
 }
 
+const patchWorkspace = startupPatchWorkspace === undefined
+    ? undefined
+    : new WorkspaceRegistry({ allowAbsoluteRootGrant, nativeClient });
+if (patchWorkspace !== undefined) {
+    await patchWorkspace.authorizeStartupRoot(startupPatchWorkspace);
+    patchWorkspace.sealStartupAuthorization();
+}
+const patchIndex = cliArguments.patchIndex === undefined
+    ? undefined
+    : await loadPatchPackageIndex(resolve(cliArguments.patchIndex));
+
 const safeSave = new SafeSaveService(workspace, { nativeClient });
 let projectDatService: ProjectDatService | undefined;
 let projectSkillService: ProjectSkillService | undefined;
@@ -68,6 +81,8 @@ if (startupWorkspace !== undefined) {
     projectDatService = await ProjectDatService.initialize({
         primaryRegistry: workspace,
         assetRegistry: assetWorkspace,
+        patchRegistry: patchWorkspace,
+        patchIndex,
         dataTxtLogicalPath: cliArguments.dataTxt,
     });
     process.stdout.write("Preparing DAT catalog and editable character session...\n");

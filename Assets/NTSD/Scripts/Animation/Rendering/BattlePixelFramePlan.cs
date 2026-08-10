@@ -100,6 +100,23 @@ namespace NTSD.Animation.Rendering
             return frozenFrame;
         }
 
+        internal void PrepareCapacity(
+            int entityCapacity,
+            int hitRecordCapacity,
+            int commandCapacity)
+        {
+            if (!IsReusable)
+            {
+                throw new InvalidOperationException(
+                    "Cannot resize a central submission while it is published or leased.");
+            }
+
+            frozenFrame.PrepareCapacity(
+                entityCapacity,
+                hitRecordCapacity,
+                commandCapacity);
+        }
+
         internal void Publish(
             SimulationWorld world,
             BattlePresentationFrame capturedFrame,

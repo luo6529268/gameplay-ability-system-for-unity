@@ -1,0 +1,35 @@
+// dat-skill-flow-build:20260810155208426-a41c901aad6e47afb8a1dd96da1b078d
+                           
+                  
+                
+ 
+
+                                
+                              
+                          
+                            
+                    
+                        
+                       
+                       
+                        
+                            
+                    
+
+                                 
+                             
+                                  
+                    
+                    
+                      
+                  
+                                                        
+ 
+
+export function dataDiagnostic(
+    code                    ,
+    message        ,
+    details                                                        = {},
+)                 {
+    return { code, severity: "error", message, ...details };
+}

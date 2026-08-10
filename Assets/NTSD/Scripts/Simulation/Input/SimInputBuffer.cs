@@ -154,6 +154,22 @@ namespace NTSD.Simulation
             return true;
         }
 
+        internal void DiscardTick(int tickIndex)
+        {
+            if (tickIndex < 0)
+                return;
+
+            currentTickIndex = tickIndex;
+            int frameIndex = tickIndex % tickCapacity;
+            if (tickTags[frameIndex] != tickIndex)
+                return;
+
+            if (eventCounts[frameIndex] != 0)
+                bufferedTickCount--;
+            tickTags[frameIndex] = -1;
+            eventCounts[frameIndex] = 0;
+        }
+
         public void Clear()
         {
             Array.Fill(tickTags, -1);

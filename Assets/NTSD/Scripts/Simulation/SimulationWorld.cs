@@ -491,6 +491,22 @@ namespace NTSD.Simulation
             frameInputModule.ApplyFrameInputSet(frameInput);
         }
 
+        internal bool TryCaptureLocalFrameInput(
+            int tickIndex,
+            SimulationPlayerInput[] destination,
+            out int playerCount)
+        {
+            return frameInputModule.TryCaptureLocalFrameInput(
+                tickIndex,
+                destination,
+                out playerCount);
+        }
+
+        internal void DiscardDirectLocalInputTick(int tickIndex)
+        {
+            frameInputModule.DiscardDirectLocalInputTick(tickIndex);
+        }
+
         internal bool TryResolveRosterInputEntity(int playerSlot, out LF2Entity entity)
         {
             return frameInputModule.TryResolveRosterInputEntity(playerSlot, out entity);

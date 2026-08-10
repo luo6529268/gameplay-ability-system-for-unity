@@ -229,6 +229,17 @@
 - Affected requirements: REQ-001、REQ-002、REQ-003、REQ-004、REQ-007、REQ-009、REQ-011、REQ-017、REQ-019。
 - Revisit condition: 用户确认需要把 Flow 作为独立高级编辑页恢复，或 Native 提供比根实体 Frame 更高层的动作实例标识。
 
+### DEC-016: 补丁角色使用包作用域身份，保留 DAT 原始 OID
+
+- Status: Confirmed
+- Date: 2026-08-10
+- Context: `NTSD2.4大量人物补丁（2）` 中不同包会重复使用同一 OID；把 OID 全局重编号会破坏 DAT `opoint`、Native catalog 和对象资源引用。补丁包还可能使用任意名称的清单、错误拼写 `tupe/tpye`，或依赖编辑器补充清单。
+- Decision: 启动控制台先以只读方式扫描补丁库并生成有界 JSON 索引；编辑器身份采用 `packageId + sourceOid`，传给 Native 和 DAT 内部的仍是 `sourceOid`。API 只公开 `type == 0` 的角色入口，但包内其他 type 的 DAT 与 BMP 保留为依赖目录。补丁会话只读，基础 NTSD 2.4.1 仍是默认包和 Native 未覆盖依赖的回退源。
+- Rationale: 同时满足跨包 OID 唯一、DAT/Native 语义不变、角色列表清晰和坏包隔离；单个缺失路径或冲突只产生包级诊断，不使整个项目不可用。
+- Consequences: 顶部 UI 使用“数据包 → 角色”两级选择；sidecar 显示元数据暂时只应用于基础包，防止同 OID 串包；包内精灵按路径后缀和唯一 basename 优先解析；Native 依赖覆盖尚未完整实现时必须显示诊断，不能声称补丁行为完全等同独立游戏包。
+- Affected requirements: REQ-001、REQ-004、REQ-005、REQ-011、REQ-016、REQ-019。
+- Revisit condition: Native preview CLI 提供正式的多根 catalog/overlay 输入合同，或 sidecar schema 升级为包作用域身份。
+
 
 - Record decisions that affect scope, architecture, public interfaces, data formats, compatibility, performance budgets or security.
 - Do not silently replace a confirmed decision.

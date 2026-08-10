@@ -1,0 +1,5 @@
+# Editor-local partial recovery. The source package on J: is unchanged.
+# deidara.dat is a type-0 Deidara replacement and references source OID 10.
+id: 10  type: 0  file: chars\deidara.dat
+# deidaraballs.dat, deidaraballs2.dat, and deidaraballs3.dat are retained as
+# unresolved auxiliary DATs. Their original OIDs cannot be proven from this package.

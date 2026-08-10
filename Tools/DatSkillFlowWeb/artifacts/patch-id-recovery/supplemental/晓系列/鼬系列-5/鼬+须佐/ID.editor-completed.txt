@@ -1,0 +1,6 @@
+# Editor-local completion. The source package on J: is unchanged.
+# OID 9 (Itachi) and OID 17 (Kisame) come from NTSD 2.4.1 data.txt and match
+# the type-0 DAT names/metadata. OID 499 is preserved from the package ID.txt.
+id:   9  type: 0  file: chars\Itachiex.dat
+id:  17  type: 0  file: chars\k.dat
+id: 499  type: 3  file: chars\ball.dat

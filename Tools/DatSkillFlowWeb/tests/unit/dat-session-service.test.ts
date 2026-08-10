@@ -476,6 +476,32 @@ describe("server-owned DAT session core", () => {
         assert.equal((await reloadFixture.registry.readDocument(reloadFixture.documentId)).externallyModified, true);
     });
 
+    it("reads legacy numeric prefixes only in explicit Native-compatible sessions", async () => {
+        const source = Buffer.from(datSource().toString("latin1").replace(
+            "cpoint:\n",
+            "wpoint:\n kind: 1 dvx: 5 trailing dvy:\n wpoint_end:\ncpoint:\n",
+        ), "latin1");
+        const strict = await fixture(source);
+        await rejectsCode(strict.service.openDocument(strict.documentId, "plaintext"), "invalid-request");
+
+        const compatible = await fixture(source, { numericReadMode: "native-compatible" });
+        const opened = await compatible.service.openDocument(compatible.documentId, "plaintext");
+        const wpoint = opened.projection.frames[0]?.wpoints[0];
+        const dvx = opened.fields.find((field) => field.blockType === "wpoint" && field.key === "dvx")!;
+        const dvy = opened.fields.find((field) => field.blockType === "wpoint" && field.key === "dvy")!;
+
+        assert.deepEqual([wpoint?.dvx, wpoint?.dvy, dvx.value, dvy.value], [5, 0, 5, 0]);
+        assert.deepEqual((await compatible.service.emit(opened.sessionId, opened.revision)).plaintext, source);
+
+        const edited = await compatible.service.edit({
+            sessionId: opened.sessionId,
+            fieldId: dvy.fieldId,
+            value: -7,
+            expectedRevision: opened.revision,
+        });
+        assert.match((await compatible.service.emit(edited.sessionId, edited.revision)).plaintext.toString("latin1"), /dvy:\s*-7/);
+    });
+
     it("locates duplicate frames, blocks, fields, and edits ITR pairs atomically", async () => {
         const source = duplicateLocatorSource();
         const { service, documentId } = await fixture(source);

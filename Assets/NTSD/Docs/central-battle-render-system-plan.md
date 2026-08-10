@@ -1,5 +1,13 @@
 # 集中式战斗渲染系统方案
 
+## 2026-08-10：可信资源缓存优化与当前证据边界
+
+- 中央 renderer 的可信资源解析缓存已由通用 `Dictionary<object, BattleCentralResolvedResource>` 改为预热、引用身份、开放寻址的专用缓存；外部或身份不可信输入仍保持既有 fail-closed 校验边界。
+- 同一 1000 AI 详细负载中，`Render/PrepareFrame/LegacyCapacityGuard` 从 `4.6951` 降至 `3.9834 ms/tick`（约 `-0.712 ms / -15.16%`），`ResolveCommands` 从 `2.3745` 降至 `2.0409 ms`，`WriteQuads` 从 `1.2161` 降至 `1.0231 ms`，frozen submission copy 从 `0.1340` 降至 `0.0897 ms`。
+- 修复前后均为 180 sampled ticks、3004 commands、`0 B` sampled GC、相同最终 lockstep hash `b8a07be2e5ed9e94f150f4b6e0e426e6e8d23630c69e5fe05a39636e63707821`，teardown 完整恢复。报告分别为 `Temp/NTSD_ProductionEntityStress.combat1000.capacity-pressure-before-central-20260810.json` 与 `Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-capacity-pressure-smoke.json`。
+- 该结果只证明资源缓存阶段约 `0.71 ms/tick` 的直接收益。整 tick 报告受 Editor 和系统抖动影响，不能把跨轮全部差值归因于本修改；详细模式还会按命令调用 `Stopwatch`，其绝对帧率不能作为正式门禁。
+- 下一次真实场景采样应关闭 Deep Profile 与 Call Stacks，并分别展开 `RenderDispatch`、`BattlePresentation.BuildCommands`、`CaptureEntities` 和中央提交节点。只有非诊断模式仍显示表现链为主热点时，才继续扩大中央渲染改动。
+
 ## 2026-08-08：1000 AI 追帧循环 CPU 预算 A/B
 
 - **问题闭环：**Profiler 中 `ProductionEntityStressRunner.Update -> StepMeasuredTick -> Driver.StepOneTick` 的高耗时不等于 harness 自身另有一段隐藏业务循环；它是外层 accumulator 在同一 Unity 帧最多连续执行 4 个完整战斗 tick。单 tick 已接近或超过 `33.33 ms` 时，这会把一个可见帧放大到约 `4 × tick` 的停顿。

@@ -984,6 +984,7 @@ namespace NTSD.Simulation
                     aiDecisionIndexedSnapshot,
                     AiDecisionEvaluationPolicy.Indexed,
                     captureOracleTrace,
+                    diagnostics,
                     ref indexedWitness);
             }
             catch (Exception exception)

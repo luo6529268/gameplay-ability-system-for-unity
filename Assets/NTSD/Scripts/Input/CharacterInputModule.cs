@@ -16,7 +16,7 @@ namespace NTSD.Game
     /// - 不直接驱动动作、状态或帧切换，连招和帧播放由角色逻辑处理。
     ///
     /// </summary>
-    public sealed class CharacterInputModule: ILF2Controller
+    public sealed class CharacterInputModule: ILF2Controller, ILocalFrameInputSource
     {
         private int _explicitInputId = -1;
         private bool _inputBound;
@@ -59,6 +59,22 @@ namespace NTSD.Game
         bool ILF2Controller.IsDefend => _isDefending;
 
         public SimInputBuffer InputBuffer { get ; set; }
+
+        SimulationInputButtons ILocalFrameInputSource.CaptureHeldSimulationButtons()
+        {
+            SimulationInputButtons buttons = SimulationInputButtons.None;
+            if (_rightPressed) buttons |= SimulationInputButtons.Right;
+            if (_leftPressed) buttons |= SimulationInputButtons.Left;
+            if (_topPressed) buttons |= SimulationInputButtons.Up;
+            if (_downPressed) buttons |= SimulationInputButtons.Down;
+
+            // Unity action names describe the physical layout. The existing NTSD input
+            // contract crosses these three actions when they enter the logical key buffer.
+            if (_isDefending) buttons |= SimulationInputButtons.Attack;
+            if (_isAttacking) buttons |= SimulationInputButtons.Jump;
+            if (_isJumping) buttons |= SimulationInputButtons.Defend;
+            return buttons;
+        }
 
         public CharacterInputModule() 
         {

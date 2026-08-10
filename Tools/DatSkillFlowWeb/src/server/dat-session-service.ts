@@ -162,6 +162,8 @@ interface Limits {
     maxStringBytes: number;
 }
 
+type NumericReadMode = "strict" | "native-compatible";
+
 const MOVEMENT_DOUBLE_FIELDS = new Set([
     "walking_speed", "walking_speedz", "running_speed", "running_speedz",
     "heavy_walking_speed", "heavy_walking_speedz", "heavy_running_speed", "heavy_running_speedz",
@@ -279,9 +281,36 @@ function authorityKind(
     return BLOCK_INTEGER_FIELDS[location.blockType].has(field.key) ? "integer" : undefined;
 }
 
+function nativeIntegerPrefix(rawValue: Uint8Array): { value: number; next: number } {
+    const text = Buffer.from(rawValue).toString("latin1");
+    const whitespace = /^[\x00-\x20]*/.exec(text)?.[0].length ?? 0;
+    const token = /^[+-]?\d+/.exec(text.slice(whitespace))?.[0];
+    if (token === undefined) return { value: 0, next: whitespace };
+    return {
+        value: parseNativeInt32Token(token) ?? 0,
+        next: whitespace + token.length,
+    };
+}
+
+function nativeIntegerPair(rawValue: Uint8Array): readonly [number, number] {
+    const raw = Buffer.from(rawValue);
+    const first = nativeIntegerPrefix(raw);
+    const second = nativeIntegerPrefix(raw.subarray(first.next));
+    return [first.value, second.value];
+}
+
+function nativeNumberPrefix(rawValue: Uint8Array): number {
+    const text = Buffer.from(rawValue).toString("latin1");
+    const token = /^[\x00-\x20]*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)/.exec(text)?.[1];
+    if (token === undefined) return 0;
+    const value = Number(token);
+    return Number.isFinite(value) ? value : 0;
+}
+
 function collectFields(
     document: LosslessDatDocument,
     failureCode: "invalid-request" | "reload-failed",
+    numericReadMode: NumericReadMode,
 ): FieldDescriptor[] {
     const descriptors: FieldDescriptor[] = [];
     const append = (fields: readonly DatFieldCst[], base: Omit<FieldLocation, "occurrence">): void => {
@@ -293,10 +322,17 @@ function collectFields(
             if (semanticKind === undefined) continue;
             let value: DatSessionFieldValue;
             if (semanticKind === "integer-pair") {
-                if (field.integerPairValue === undefined) {
+                const integerPairValue = numericReadMode === "native-compatible"
+                    ? nativeIntegerPair(field.rawValue)
+                    : field.integerPairValue;
+                if (integerPairValue === undefined) {
                     throw new DatSessionError(failureCode, `ITR field ${field.key} requires exactly two signed 32-bit integers.`);
                 }
-                value = field.integerPairValue;
+                if (numericReadMode === "native-compatible") {
+                    field.scalarKind = "number";
+                    field.integerPairValue = integerPairValue;
+                }
+                value = integerPairValue;
                 descriptors.push({
                     field,
                     kind: semanticKind,
@@ -311,12 +347,21 @@ function collectFields(
                     throw new DatSessionError(failureCode, `String DAT field ${field.key} is not a safe Latin-1 scalar.`);
                 }
             } else {
-                const numericValue = field.numericValue;
-                if (field.scalarKind !== "number" || numericValue === undefined || !Number.isFinite(numericValue)) {
+                const numericValue = numericReadMode === "native-compatible"
+                    ? semanticKind === "integer" ? nativeIntegerPrefix(field.rawValue).value : nativeNumberPrefix(field.rawValue)
+                    : field.numericValue;
+                if (numericValue === undefined || !Number.isFinite(numericValue)
+                    || (numericReadMode === "strict" && field.scalarKind !== "number")) {
                     throw new DatSessionError(failureCode, `Numeric DAT field ${field.key} is not a complete finite scalar.`);
                 }
+                if (numericReadMode === "native-compatible") {
+                    field.scalarKind = "number";
+                    field.numericValue = numericValue;
+                }
                 if (semanticKind === "integer") {
-                    const nativeInteger = parseNativeInt32Token(field.rawValue);
+                    const nativeInteger = numericReadMode === "native-compatible"
+                        ? numericValue
+                        : parseNativeInt32Token(field.rawValue);
                     if (nativeInteger === undefined) {
                         throw new DatSessionError(failureCode, `Integer DAT field ${field.key} is not a complete Native integer token.`);
                     }
@@ -434,6 +479,7 @@ export class DatSessionService {
     readonly #limits: Limits;
     readonly #now: () => number;
     readonly #idFactory: () => string;
+    readonly #numericReadMode: NumericReadMode;
     readonly #sessions = new Map<string, SessionState>();
     readonly #queues = new Map<string, Promise<void>>();
     readonly #expiredSessionIds = new Map<string, number>();
@@ -458,6 +504,10 @@ export class DatSessionService {
         };
         this.#now = options.now ?? Date.now;
         this.#idFactory = options.idFactory ?? (() => randomBytes(32).toString("base64url"));
+        this.#numericReadMode = options.numericReadMode ?? "strict";
+        if (this.#numericReadMode !== "strict" && this.#numericReadMode !== "native-compatible") {
+            throw new RangeError("numericReadMode must be strict or native-compatible.");
+        }
     }
 
     // inputFormat must be supplied by trusted server-side project metadata, never by an HTTP/client payload.
@@ -651,7 +701,7 @@ export class DatSessionService {
         const document = format === "encrypted"
             ? LosslessDatDocument.fromEncrypted(bytes)
             : LosslessDatDocument.fromPlaintext(bytes);
-        const descriptors = collectFields(document, failureCode);
+        const descriptors = collectFields(document, failureCode, this.#numericReadMode);
         if (descriptors.length === 0) {
             throw new DatSessionError(failureCode, "The selected bytes contain no editable DAT fields for the declared format.");
         }

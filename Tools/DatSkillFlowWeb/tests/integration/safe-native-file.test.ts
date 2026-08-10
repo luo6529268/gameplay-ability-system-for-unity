@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
     mkdtemp,
     lstat,
+    mkdir,
     readFile,
     rename,
     symlink,
@@ -54,6 +55,26 @@ describe("Windows handle-safe file transactions", windowsOnly, () => {
 
         assert.equal(result.bytes.length, bytes.length);
         assert.deepEqual(result.bytes, bytes);
+    });
+
+    it("round-trips Unicode workspace and logical paths through the native protocol", async () => {
+        const root = await temporaryRoot("中文补丁");
+        const relativeDirectory = join("木叶忍者村系列-42", "鸣人系列-11", "真.鸣人6尾");
+        await mkdir(join(root, relativeDirectory), { recursive: true });
+        await writeFile(join(root, relativeDirectory, "角色.dat"), "unicode-patch");
+        const client = nativeClient();
+        const registry = new WorkspaceRegistry({ allowAbsoluteRootGrant: true, nativeClient: client });
+        const { rootId } = await registry.grantAbsoluteRoot(root);
+
+        assert.equal(registry.getRootDescriptor(rootId).canonicalPath.toLowerCase(), resolve(root).toLowerCase());
+        const opened = await registry.openDocument(
+            rootId,
+            "木叶忍者村系列-42/鸣人系列-11/真.鸣人6尾/角色.dat",
+        );
+        const read = await registry.readDocument(opened.documentId);
+
+        assert.equal(opened.logicalPath, "木叶忍者村系列-42/鸣人系列-11/真.鸣人6尾/角色.dat");
+        assert.equal(read.bytes.toString("utf8"), "unicode-patch");
     });
 
     it("reads from a validated handle and creates a new file without overwriting", async () => {

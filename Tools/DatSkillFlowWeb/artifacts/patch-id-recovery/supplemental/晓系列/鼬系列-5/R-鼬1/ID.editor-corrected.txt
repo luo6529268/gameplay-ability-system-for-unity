@@ -1,0 +1,12 @@
+# Editor-local syntax correction. The source package on J: is unchanged.
+# The original main entry uses "tupe" instead of "type".
+id:   0  type: 0  file: other\R-itachi.dat
+id: 259  type: 3  file: other\amaterasu_katon.dat
+id: 259  type: 3  file: other\R-itachi-katon_big.dat
+id: 258  type: 3  file: other\R-itachi_flame.dat
+id: 257  type: 3  file: other\R-itachi_ball.dat
+id: 256  type: 3  file: other\chargen.dat
+id: 255  type: 3  file: other\R-itachi-ball.dat
+id: 333  type: 3  file: data\amaterasudefend.dat
+# The duplicate source OID 259 is preserved and flagged in REPORT.md; there is
+# insufficient evidence to choose one file or invent a replacement OID.

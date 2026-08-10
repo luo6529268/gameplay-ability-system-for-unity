@@ -1,0 +1,5 @@
+# Editor-local correction. The source package on J: is unchanged.
+# The source manifest declares zetsu.dat, but the actual type-0 character DAT is jie.dat.
+id: 26  type: 0  file: other\jie.dat
+# jieX0.dat is intentionally not assigned: no explicit registration or DAT opoint
+# reference proves its source OID.

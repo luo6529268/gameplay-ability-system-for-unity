@@ -14,18 +14,22 @@ describe("CLI argument parsing", () => {
     });
 
     it("parses supported values and preserves workspace text for registry validation", () => {
-        assert.deepEqual(parseCliArguments(["--root", "assets", "--manifest", "manifest.json", "--workspace", "C:\\unsafe\\later", "--data-txt", "Assets/NTSD/Config/data.txt", "--asset-workspace", "J:\\game", "--port", "0", "--allow-test-root-grant"]), {
+        assert.deepEqual(parseCliArguments(["--root", "assets", "--manifest", "manifest.json", "--workspace", "C:\\unsafe\\later", "--data-txt", "Assets/NTSD/Config/data.txt", "--asset-workspace", "J:\\game", "--patch-workspace", "J:\\patches", "--patch-index", "C:\\cache\\patch-index.json", "--port", "0", "--allow-test-root-grant"]), {
             root: "assets",
             manifest: "manifest.json",
             workspace: "C:\\unsafe\\later",
             dataTxt: "Assets/NTSD/Config/data.txt",
             assetWorkspace: "J:\\game",
+            patchWorkspace: "J:\\patches",
+            patchIndex: "C:\\cache\\patch-index.json",
             port: "0",
             allowTestRootGrant: true,
         });
         assert.equal(parseCliArguments(["--workspace", "C:\\repo"]).dataTxt, undefined);
         assert.throws(() => parseCliArguments(["--data-txt", "data/data.txt"]), /requires --workspace/);
         assert.throws(() => parseCliArguments(["--asset-workspace", "J:\\game"]), /requires --workspace/);
+        assert.throws(() => parseCliArguments(["--workspace", "C:\\repo", "--patch-workspace", "J:\\patches"]), /provided together/);
+        assert.throws(() => parseCliArguments(["--workspace", "C:\\repo", "--patch-index", "C:\\cache\\patch-index.json"]), /provided together/);
     });
 
     for (const argv of [
@@ -34,6 +38,8 @@ describe("CLI argument parsing", () => {
         ["--workspace", "--root", "dist"],
         ["--data-txt", "--root", "dist"],
         ["--asset-workspace", "--root", "dist"],
+        ["--patch-workspace", "--root", "dist"],
+        ["--patch-index", "--root", "dist"],
         ["--allow-test-root-grant", "--allow-test-root-grant"],
         ["--allow-test-root-grant", "true"],
         ["--unknown"],

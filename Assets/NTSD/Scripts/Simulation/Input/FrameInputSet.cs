@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NTSD.Simulation
@@ -14,6 +15,15 @@ namespace NTSD.Simulation
         Attack = 1 << 4,
         Jump = 1 << 5,
         Defend = 1 << 6,
+    }
+
+    /// <summary>
+    /// Unity 本地输入采集器暴露给逻辑帧组装层的只读边界。
+    /// 返回值使用 NTSD 逻辑按键语义，不暴露 InputAction 或 Unity 对象。
+    /// </summary>
+    public interface ILocalFrameInputSource
+    {
+        SimulationInputButtons CaptureHeldSimulationButtons();
     }
 
     [Serializable]
@@ -48,8 +58,47 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class FrameInputSet
     {
+        private sealed class PreallocatedPlayerList : IReadOnlyList<SimulationPlayerInput>
+        {
+            private SimulationPlayerInput[] buffer = Array.Empty<SimulationPlayerInput>();
+
+            public int Count { get; private set; }
+
+            public SimulationPlayerInput this[int index]
+            {
+                get
+                {
+                    if ((uint)index >= (uint)Count)
+                        throw new ArgumentOutOfRangeException(nameof(index));
+                    return buffer[index];
+                }
+            }
+
+            public void Reset(SimulationPlayerInput[] nextBuffer, int count)
+            {
+                if (count < 0 || count > (nextBuffer?.Length ?? 0))
+                    throw new ArgumentOutOfRangeException(nameof(count));
+
+                buffer = nextBuffer ?? Array.Empty<SimulationPlayerInput>();
+                Count = count;
+            }
+
+            public IEnumerator<SimulationPlayerInput> GetEnumerator()
+            {
+                for (int index = 0; index < Count; index++)
+                    yield return buffer[index];
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
         private static readonly IReadOnlyList<SimulationPlayerInput> NoPlayers =
             Array.Empty<SimulationPlayerInput>();
+        private readonly PreallocatedPlayerList preallocatedPlayers =
+            new PreallocatedPlayerList();
 
         public FrameInputSet(int tickIndex, IReadOnlyList<SimulationPlayerInput> players = null)
         {
@@ -62,8 +111,23 @@ namespace NTSD.Simulation
 
         internal void ResetPreallocated(int tickIndex, SimulationPlayerInput[] players)
         {
+            ResetPreallocated(tickIndex, players, players?.Length ?? 0);
+        }
+
+        internal void ResetPreallocated(
+            int tickIndex,
+            SimulationPlayerInput[] players,
+            int playerCount)
+        {
             TickIndex = tickIndex;
-            Players = players ?? NoPlayers;
+            if (players == null || playerCount == 0)
+            {
+                Players = NoPlayers;
+                return;
+            }
+
+            preallocatedPlayers.Reset(players, playerCount);
+            Players = preallocatedPlayers;
         }
 
         public bool IsCanonicalFor(int expectedTick, IReadOnlyList<int> canonicalPlayerSlots)

@@ -34,6 +34,7 @@ import type {
     ProjectSessionView,
 } from "./project-dat-contract.js";
 import { enrichNativePreview } from "./native-preview-trace.js";
+import type { PatchManifestStatus, PatchPackageIndex } from "./patch-package-index.js";
 import { SafeSaveError, SafeSaveService } from "./safe-save.js";
 import { WorkspaceRegistry, WorkspaceSecurityError } from "./workspace-registry.js";
 
@@ -90,6 +91,8 @@ interface NativePreviewOptions {
 export interface ProjectDatServiceOptions {
     readonly primaryRegistry: WorkspaceRegistry;
     readonly assetRegistry?: WorkspaceRegistry;
+    readonly patchRegistry?: WorkspaceRegistry;
+    readonly patchIndex?: PatchPackageIndex;
     readonly dataTxtLogicalPath?: string;
     readonly previewRunner?: NativeDatPreviewRunner;
     readonly safeSave?: SafeSaveService;
@@ -103,7 +106,18 @@ interface CatalogObject {
     oid: number;
     type: number;
     displayName: string;
-    candidates: readonly DataTxtEntry[];
+    packageId: string;
+    packageLabel: string;
+    sourceKind: "base" | "patch";
+    manifestStatus: "base" | PatchManifestStatus;
+    diagnosticCount: number;
+    candidates: readonly CatalogCandidate[];
+    patchBmpPaths: ReadonlyMap<string, readonly string[]>;
+}
+
+interface CatalogCandidate {
+    readonly sourceKind: "base" | "patch";
+    readonly logicalPath: string;
 }
 
 interface SessionBinding {
@@ -114,6 +128,12 @@ interface SessionBinding {
     logicalPath: string;
     oid: number;
     type: number;
+    packageId: string;
+    packageLabel: string;
+    sourceKind: "base" | "patch";
+    manifestStatus: "base" | PatchManifestStatus;
+    packageDiagnosticCount: number;
+    patchBmpPaths: ReadonlyMap<string, readonly string[]>;
     writable: boolean;
     assetIdsByPath: Map<string, string>;
     previewResourcesByOid: Map<number, ProjectPreviewObjectView>;
@@ -293,8 +313,10 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
 export class ProjectDatService {
     readonly #primary: WorkspaceRegistry;
     readonly #assets?: WorkspaceRegistry;
+    readonly #patches?: WorkspaceRegistry;
     readonly #primarySessions: DatSessionService;
     readonly #assetSessions?: DatSessionService;
+    readonly #patchSessions?: DatSessionService;
     readonly #safeSave: SafeSaveService;
     readonly #previewRunner: NativeDatPreviewRunner;
     readonly #idFactory: () => string;
@@ -302,6 +324,8 @@ export class ProjectDatService {
     readonly #dataDocumentId: string;
     readonly #primaryRootId: string;
     readonly #assetRootId?: string;
+    readonly #patchRootId?: string;
+    readonly #patchIndex?: PatchPackageIndex;
     readonly #sessions = new Map<string, SessionBinding>();
     readonly #assetBindings = new Map<string, AssetBinding>();
     readonly #queues = new Map<string, Promise<void>>();
@@ -316,11 +340,17 @@ export class ProjectDatService {
         dataDocumentId: string,
         primaryRootId: string,
         assetRootId: string | undefined,
+        patchRootId: string | undefined,
     ) {
         this.#primary = options.primaryRegistry;
         this.#assets = options.assetRegistry;
+        this.#patches = options.patchRegistry;
         this.#primarySessions = new DatSessionService(this.#primary, options.sessionOptions);
         this.#assetSessions = this.#assets === undefined ? undefined : new DatSessionService(this.#assets, options.sessionOptions);
+        this.#patchSessions = this.#patches === undefined ? undefined : new DatSessionService(this.#patches, {
+            ...options.sessionOptions,
+            numericReadMode: "native-compatible",
+        });
         this.#safeSave = options.safeSave === undefined ? new SafeSaveService(this.#primary) : options.safeSave;
         this.#previewRunner = options.previewRunner === undefined ? new CppNativeDatPreviewRunner() : options.previewRunner;
         this.#idFactory = options.idFactory === undefined ? (() => randomBytes(32).toString("base64url")) : options.idFactory;
@@ -330,6 +360,8 @@ export class ProjectDatService {
         this.#dataDocumentId = dataDocumentId;
         this.#primaryRootId = primaryRootId;
         this.#assetRootId = assetRootId;
+        this.#patchRootId = patchRootId;
+        this.#patchIndex = options.patchIndex;
     }
 
     static async initialize(options: ProjectDatServiceOptions): Promise<ProjectDatService> {
@@ -348,7 +380,15 @@ export class ProjectDatService {
         if (options.assetRegistry !== undefined && assetRootId === undefined) {
             throw new ProjectDatError("project-disabled", "The asset workspace is not configured.");
         }
-        const service = new ProjectDatService(options, dataDocument.documentId, primaryRootId, assetRootId);
+        if ((options.patchRegistry === undefined) !== (options.patchIndex === undefined)) {
+            throw new ProjectDatError("project-disabled", "The patch workspace and patch index must be configured together.");
+        }
+        const patchRoot = options.patchRegistry?.getStartupRootGrant();
+        const patchRootId = patchRoot?.rootId;
+        if (options.patchRegistry !== undefined && patchRootId === undefined) {
+            throw new ProjectDatError("project-disabled", "The patch workspace is not configured.");
+        }
+        const service = new ProjectDatService(options, dataDocument.documentId, primaryRootId, assetRootId, patchRootId);
         const read = await options.primaryRegistry.readDocument(dataDocument.documentId);
         await service.#replaceCatalog(read.bytes);
         service.#catalogRefreshAfter = Date.now() + CATALOG_REFRESH_INTERVAL_MS;
@@ -371,7 +411,9 @@ export class ProjectDatService {
         }>;
     }> {
         const started = Date.now();
-        const object = this.#catalogObjects.find((candidate) => candidate.oid === DEFAULT_CHARACTER_OID);
+        const object = this.#catalogObjects.find((candidate) => (
+            candidate.sourceKind === "base" && candidate.oid === DEFAULT_CHARACTER_OID
+        ));
         if (object === undefined) {
             throw new ProjectDatError("object-unavailable", "Naruto OID 2 is unavailable for startup preparation.");
         }
@@ -454,7 +496,14 @@ export class ProjectDatService {
             .filter((object) => object.type === 0)
             .map((object) => ({
                 objectKey: object.objectKey,
+                effectiveId: `${object.packageId}:${object.oid}`,
+                packageId: object.packageId,
+                packageLabel: object.packageLabel,
+                sourceKind: object.sourceKind,
+                manifestStatus: object.manifestStatus,
+                diagnosticCount: object.diagnosticCount,
                 oid: object.oid,
+                sourceOid: object.oid,
                 type: object.type,
                 displayName: object.displayName,
             }));
@@ -507,6 +556,12 @@ export class ProjectDatService {
             sessionId: session.sessionId,
             oid: object.oid,
             type: object.type,
+            packageId: object.packageId,
+            packageLabel: object.packageLabel,
+            sourceKind: object.sourceKind,
+            manifestStatus: object.manifestStatus,
+            packageDiagnosticCount: object.diagnosticCount,
+            patchBmpPaths: object.patchBmpPaths,
             writable: opened.registry === this.#primary,
             assetIdsByPath: new Map(),
             previewResourcesByOid: new Map(),
@@ -703,21 +758,70 @@ export class ProjectDatService {
                 oid: first.id,
                 type: first.type!,
                 displayName: datCatalogDisplayName(first.file),
-                candidates,
+                packageId: "ntsd-2.4.1",
+                packageLabel: "NTSD 2.4.1",
+                sourceKind: "base",
+                manifestStatus: "base",
+                diagnosticCount: 0,
+                candidates: candidates.map((candidate) => ({ sourceKind: "base", logicalPath: candidate.file })),
+                patchBmpPaths: new Map(),
             };
         });
+        if (this.#patchIndex !== undefined) {
+            for (const patchPackage of this.#patchIndex.packages) {
+                const bmpPaths = new Map<string, string[]>();
+                for (const logicalPath of patchPackage.bmpFiles) {
+                    const key = basename(logicalPath.replaceAll("\\", "/")).toLowerCase();
+                    const existing = bmpPaths.get(key);
+                    if (existing === undefined) bmpPaths.set(key, [logicalPath]);
+                    else existing.push(logicalPath);
+                }
+                const recordsByOid = new Map<number, Array<(typeof patchPackage.records)[number]>>();
+                const packageRecords = [...patchPackage.records].sort((left, right) => (
+                    Number(right.manifestSource === "supplemental") - Number(left.manifestSource === "supplemental")
+                    || Number(right.type === 0) - Number(left.type === 0)
+                ));
+                for (const record of packageRecords) {
+                    const existing = recordsByOid.get(record.oid);
+                    if (existing === undefined) recordsByOid.set(record.oid, [record]);
+                    else existing.push(record);
+                }
+                for (const records of recordsByOid.values()) {
+                    const first = records[0]!;
+                    prepared.push({
+                        objectKey: this.#newId(),
+                        oid: first.oid,
+                        type: first.type,
+                        displayName: datCatalogDisplayName(first.file),
+                        packageId: patchPackage.packageId,
+                        packageLabel: patchPackage.label,
+                        sourceKind: "patch",
+                        manifestStatus: patchPackage.status,
+                        diagnosticCount: patchPackage.diagnostics.length,
+                        candidates: records.map((record) => ({ sourceKind: "patch", logicalPath: record.logicalPath })),
+                        patchBmpPaths: bmpPaths,
+                    });
+                }
+            }
+        }
         this.#catalogObjects = prepared;
     }
 
-    async #openCandidate(candidates: readonly DataTxtEntry[]): Promise<OpenedCandidate | undefined> {
+    async #openCandidate(candidates: readonly CatalogCandidate[]): Promise<OpenedCandidate | undefined> {
         for (const candidate of candidates) {
-            if (diagnoseResourcePath(candidate.file) !== undefined) continue;
-            const primary = await this.#tryOpen(this.#primary, this.#primarySessions, this.#primaryRootId, candidate.file);
+            if (diagnoseResourcePath(candidate.logicalPath) !== undefined) continue;
+            if (candidate.sourceKind === "patch") {
+                if (this.#patches === undefined || this.#patchSessions === undefined || this.#patchRootId === undefined) continue;
+                const patch = await this.#tryOpen(this.#patches, this.#patchSessions, this.#patchRootId, candidate.logicalPath);
+                if (patch !== undefined) return patch;
+                continue;
+            }
+            const primary = await this.#tryOpen(this.#primary, this.#primarySessions, this.#primaryRootId, candidate.logicalPath);
             if (primary !== undefined) return primary;
             if (this.#assets !== undefined && this.#assetSessions !== undefined && this.#assetRootId !== undefined) {
-                const fallback = await this.#tryOpen(this.#assets, this.#assetSessions, this.#assetRootId, candidate.file);
+                const fallback = await this.#tryOpen(this.#assets, this.#assetSessions, this.#assetRootId, candidate.logicalPath);
                 if (fallback !== undefined) return fallback;
-                for (const fallbackPath of this.#fallbackDatPaths(candidate.file)) {
+                for (const fallbackPath of this.#fallbackDatPaths(candidate.logicalPath)) {
                     const fallbackByName = await this.#tryOpen(this.#assets, this.#assetSessions, this.#assetRootId, fallbackPath);
                     if (fallbackByName !== undefined) return fallbackByName;
                 }
@@ -745,7 +849,13 @@ export class ProjectDatService {
             revision: session.revision,
             dirty: session.dirty,
             writable: binding.writable,
+            effectiveId: `${binding.packageId}:${binding.oid}`,
+            packageId: binding.packageId,
+            packageLabel: binding.packageLabel,
+            sourceKind: binding.sourceKind,
+            manifestStatus: binding.manifestStatus,
             oid: binding.oid,
+            sourceOid: binding.oid,
             type: binding.type,
             name: session.projection.top.name,
             spriteRanges: primaryResources?.spriteRanges ?? [],
@@ -756,11 +866,7 @@ export class ProjectDatService {
             ].includes(field.key)),
             structureCapabilities: session.structureCapabilities,
             preview,
-            diagnostics: session.diagnostics.map((diagnostic) => ({
-                code: diagnostic.code,
-                severity: diagnostic.severity,
-                message: diagnostic.message.replace(/(?:[A-Za-z]:[\\/]|\.\.[\\/])\S*/g, "[redacted]"),
-            })),
+            diagnostics: this.#sessionDiagnostics(session, binding),
         };
     }
 
@@ -776,7 +882,13 @@ export class ProjectDatService {
             revision: session.revision,
             dirty: session.dirty,
             writable: binding.writable,
+            effectiveId: `${binding.packageId}:${binding.oid}`,
+            packageId: binding.packageId,
+            packageLabel: binding.packageLabel,
+            sourceKind: binding.sourceKind,
+            manifestStatus: binding.manifestStatus,
             oid: binding.oid,
+            sourceOid: binding.oid,
             type: binding.type,
             name: session.projection.top.name,
             spriteRanges: primaryResource.spriteRanges,
@@ -788,11 +900,7 @@ export class ProjectDatService {
             structureCapabilities: session.structureCapabilities,
             preview,
             diagnostics: [
-                ...session.diagnostics.map((diagnostic) => ({
-                    code: diagnostic.code,
-                    severity: diagnostic.severity,
-                    message: diagnostic.message.replace(/(?:[A-Za-z]:[\\/]|\.\.[\\/])\S*/g, "[redacted]"),
-                })),
+                ...this.#sessionDiagnostics(session, binding),
                 {
                     code: "preview-warming",
                     severity: "warning" as const,
@@ -800,6 +908,29 @@ export class ProjectDatService {
                 },
             ],
         };
+    }
+
+    #sessionDiagnostics(session: DatSessionView, binding: SessionBinding): ProjectSessionView["diagnostics"] {
+        const diagnostics: ProjectSessionView["diagnostics"][number][] = session.diagnostics.map((diagnostic) => ({
+            code: diagnostic.code,
+            severity: diagnostic.severity,
+            message: diagnostic.message.replace(/(?:[A-Za-z]:[\\/]|\.\.[\\/])\S*/g, "[redacted]"),
+        }));
+        if (binding.sourceKind === "patch") {
+            diagnostics.push({
+                code: "patch-native-base-dependencies",
+                severity: "warning",
+                message: "补丁角色 DAT 已按包作用域加载；Native 运行时的未覆盖依赖仍从 NTSD 2.4.1 解析，包内精灵资源会优先显示。",
+            });
+            if (binding.packageDiagnosticCount > 0) {
+                diagnostics.push({
+                    code: "patch-package-diagnostics",
+                    severity: "warning",
+                    message: `该补丁包还有 ${binding.packageDiagnosticCount} 项清单诊断，请在正式编辑前核对。`,
+                });
+            }
+        }
+        return diagnostics;
     }
 
     async #resolveSpriteAsset(binding: SessionBinding, rawPath: string): Promise<{ assetId: string } | undefined> {
@@ -814,11 +945,22 @@ export class ProjectDatService {
         const existing = binding.assetIdsByPath.get(pathKey);
         if (existing !== undefined) return { assetId: existing };
         const exactCandidates: AssetCandidate[] = [];
+        const name = basename(rawPath.replaceAll("\\", "/"));
+        if (binding.sourceKind === "patch" && this.#patches !== undefined && this.#patchRootId !== undefined) {
+            const rawSuffix = rawPath.replaceAll("\\", "/").toLowerCase();
+            const matches = binding.patchBmpPaths.get(name.toLowerCase()) ?? [];
+            const orderedMatches = [
+                ...matches.filter((logicalPath) => logicalPath.toLowerCase().endsWith(rawSuffix)),
+                ...matches.filter((logicalPath) => !logicalPath.toLowerCase().endsWith(rawSuffix)),
+            ];
+            for (const logicalPath of orderedMatches) {
+                exactCandidates.push({ registry: this.#patches, rootId: this.#patchRootId, logicalPath });
+            }
+        }
         if (this.#assets !== undefined && this.#assetRootId !== undefined) {
             exactCandidates.push({ registry: this.#assets, rootId: this.#assetRootId, logicalPath: rawPath });
         }
         exactCandidates.push({ registry: this.#primary, rootId: this.#primaryRootId, logicalPath: rawPath });
-        const name = basename(rawPath.replaceAll("\\", "/"));
         const fallbackCandidates: AssetCandidate[] = [];
         if (/^[^/\\\0]+\.bmp$/i.test(name)
             && this.#assets !== undefined
@@ -940,7 +1082,7 @@ export class ProjectDatService {
             );
             const stage = await this.#loadStageAssets(binding, rawPreview.metadata.stage);
             const objectTypes = new Map([
-                ...this.#catalogObjects.map((object): readonly [number, number] => [object.oid, object.type]),
+                ...this.#objectsForBinding(binding).map((object): readonly [number, number] => [object.oid, object.type]),
                 ...sanitized.renderResources.map((resource): readonly [number, number] => [resource.oid, resource.type]),
             ]);
             return enrichNativePreview({
@@ -996,7 +1138,7 @@ export class ProjectDatService {
                 resources.push(await this.#projectNativePreviewObject(binding, native));
                 continue;
             }
-            const object = this.#catalogObjects.find((candidate) => candidate.oid === oid);
+            const object = this.#resolveCatalogObject(binding, oid);
             if (object === undefined) continue;
             if (oid === binding.oid) {
                 resources.push(await this.#projectPreviewObject(binding, object, primaryProjection));
@@ -1006,6 +1148,21 @@ export class ProjectDatService {
             if (resource !== undefined) resources.push(resource);
         }
         return resources;
+    }
+
+    #objectsForBinding(binding: SessionBinding): readonly CatalogObject[] {
+        const packageObjects = this.#catalogObjects.filter((object) => object.packageId === binding.packageId);
+        if (binding.sourceKind === "base") return packageObjects;
+        const packageOids = new Set(packageObjects.map((object) => object.oid));
+        return [
+            ...this.#catalogObjects.filter((object) => object.sourceKind === "base" && !packageOids.has(object.oid)),
+            ...packageObjects,
+        ];
+    }
+
+    #resolveCatalogObject(binding: SessionBinding, oid: number): CatalogObject | undefined {
+        return this.#catalogObjects.find((object) => object.packageId === binding.packageId && object.oid === oid)
+            ?? this.#catalogObjects.find((object) => object.sourceKind === "base" && object.oid === oid);
     }
 
     async #projectNativePreviewObject(
@@ -1137,6 +1294,7 @@ export class ProjectDatService {
         const expiredSessionIds = [
             ...this.#primarySessions.sweepExpiredSessionIds(),
             ...(this.#assetSessions?.sweepExpiredSessionIds() ?? []),
+            ...(this.#patchSessions?.sweepExpiredSessionIds() ?? []),
         ];
         for (const sessionId of expiredSessionIds) {
             const binding = this.#sessions.get(sessionId);

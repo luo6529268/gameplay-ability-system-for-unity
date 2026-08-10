@@ -59,6 +59,8 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 .brand-mark { color: var(--yellow); font-size: 22px; line-height: 1; text-shadow: 0 0 14px rgb(232 184 40 / 35%); }
 .object-picker { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; }
 .object-picker select { min-width: 0; flex: 1; }
+.package-picker { max-width: 310px; }
+.package-picker select { min-width: 190px; }
 #server-status {
     position: relative;
     margin: 0;

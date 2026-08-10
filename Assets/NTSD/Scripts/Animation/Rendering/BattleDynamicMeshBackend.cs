@@ -538,15 +538,17 @@ namespace NTSD.Animation.Rendering
                 float v0 = command.FlipY ? uv.yMax : uv.yMin;
                 float v1 = command.FlipY ? uv.yMin : uv.yMax;
                 int vertex = quadIndex * VerticesPerQuad;
-                vertices[vertex] = CreateVertex(left, bottom, z, u0, v0, resource);
-                vertices[vertex + 1] = CreateVertex(left, top, z, u0, v1, resource);
-                vertices[vertex + 2] = CreateVertex(right, bottom, z, u1, v0, resource);
-                vertices[vertex + 3] = CreateVertex(right, top, z, u1, v1, resource);
+                Color32 color = resource.Color;
+                float atlasSlice = resource.AtlasSlice;
+                WriteVertex(ref vertices[vertex], left, bottom, z, u0, v0, color, atlasSlice);
+                WriteVertex(ref vertices[vertex + 1], left, top, z, u0, v1, color, atlasSlice);
+                WriteVertex(ref vertices[vertex + 2], right, bottom, z, u1, v0, color, atlasSlice);
+                WriteVertex(ref vertices[vertex + 3], right, top, z, u1, v1, color, atlasSlice);
 
-                float minX = Mathf.Min(left, right);
-                float minY = Mathf.Min(bottom, top);
-                float maxX = Mathf.Max(left, right);
-                float maxY = Mathf.Max(bottom, top);
+                float minX = left <= right ? left : right;
+                float minY = bottom <= top ? bottom : top;
+                float maxX = left >= right ? left : right;
+                float maxY = bottom >= top ? bottom : top;
                 quadBounds = default;
                 quadBounds.Set(minX, minY, z, maxX, maxY, z);
                 Encapsulate(minX, minY, z, maxX, maxY, z);
@@ -750,21 +752,23 @@ namespace NTSD.Animation.Rendering
                     MeshUpdateFlags.DontNotifyMeshUsers);
             }
 
-            private static BattleQuadVertex CreateVertex(
+            private static void WriteVertex(
+                ref BattleQuadVertex vertex,
                 float x,
                 float y,
                 float z,
                 float u,
                 float v,
-                in BattleCentralResolvedResource resource)
+                Color32 color,
+                float atlasSlice)
             {
-                return new BattleQuadVertex
-                {
-                    Position = new Vector3(x, y, z),
-                    Color = resource.Color,
-                    Uv = new Vector2(u, v),
-                    AtlasSlice = resource.AtlasSlice,
-                };
+                vertex.Position.x = x;
+                vertex.Position.y = y;
+                vertex.Position.z = z;
+                vertex.Color = color;
+                vertex.Uv.x = u;
+                vertex.Uv.y = v;
+                vertex.AtlasSlice = atlasSlice;
             }
 
             private void Encapsulate(

@@ -276,9 +276,8 @@ namespace NTSD.Animation.Rendering
 
         private readonly Dictionary<BattleSpriteKey, BattleCentralResourceTemplate> entityTemplates =
             new Dictionary<BattleSpriteKey, BattleCentralResourceTemplate>(InitialEntityTemplateCapacity);
-        private readonly Dictionary<object, BattleCentralResolvedResource> trustedResources =
-            new Dictionary<object, BattleCentralResolvedResource>(
-                ReferenceIdentityComparer.Instance);
+        private readonly TrustedResourceCache trustedResources =
+            new TrustedResourceCache();
         private readonly BattleCentralResourceTemplate[] sparkTemplates =
             new BattleCentralResourceTemplate[BattleCommonVisualCatalog.SparkFrameCount];
         private readonly int[] initializedSparkTemplateSlots =
@@ -322,7 +321,7 @@ namespace NTSD.Animation.Rendering
                 throw new ArgumentOutOfRangeException(nameof(trustedResourceCapacity));
 
             entityTemplates.EnsureCapacity(entityTemplateCapacity);
-            trustedResources.EnsureCapacity(trustedResourceCapacity);
+            trustedResources.PrepareCapacity(trustedResourceCapacity);
             preparedEntityTemplateLimit = Math.Max(
                 preparedEntityTemplateLimit,
                 entityTemplateCapacity);
@@ -748,7 +747,8 @@ namespace NTSD.Animation.Rendering
                 return;
             }
 
-            trustedResources[identity] = resource;
+            if (!trustedResources.Set(identity, in resource, !capacitySealed))
+                SealedCapacityCacheSkips++;
         }
 
         private BattleCentralResourceTemplate BuildEntityTemplate(BattleSpriteKey key)
@@ -868,19 +868,129 @@ namespace NTSD.Animation.Rendering
             initializedWordTemplateCount = 0;
         }
 
-        private sealed class ReferenceIdentityComparer : IEqualityComparer<object>
+        private sealed class TrustedResourceCache
         {
-            internal static readonly ReferenceIdentityComparer Instance =
-                new ReferenceIdentityComparer();
+            private const int MinimumCapacity = 4;
+            private object[] keys = Array.Empty<object>();
+            private BattleCentralResolvedResource[] values =
+                Array.Empty<BattleCentralResolvedResource>();
 
-            public new bool Equals(object left, object right)
+            public int Count { get; private set; }
+
+            public void PrepareCapacity(int entryCapacity)
             {
-                return ReferenceEquals(left, right);
+                if (entryCapacity < 0)
+                    throw new ArgumentOutOfRangeException(nameof(entryCapacity));
+
+                int requiredCapacity = MinimumCapacity;
+                int requiredSlots = checked(Math.Max(1, entryCapacity) * 2);
+                while (requiredCapacity < requiredSlots)
+                    requiredCapacity = checked(requiredCapacity * 2);
+                if (requiredCapacity <= keys.Length)
+                    return;
+
+                Resize(requiredCapacity);
             }
 
-            public int GetHashCode(object value)
+            public bool TryGetValue(
+                object key,
+                out BattleCentralResolvedResource value)
             {
-                return RuntimeHelpers.GetHashCode(value);
+                if (key == null || keys.Length == 0)
+                {
+                    value = default;
+                    return false;
+                }
+
+                int mask = keys.Length - 1;
+                int slot = RuntimeHelpers.GetHashCode(key) & mask;
+                for (int probes = 0; probes < keys.Length; probes++)
+                {
+                    object candidate = keys[slot];
+                    if (candidate == null)
+                    {
+                        value = default;
+                        return false;
+                    }
+                    if (ReferenceEquals(candidate, key))
+                    {
+                        value = values[slot];
+                        return true;
+                    }
+                    slot = (slot + 1) & mask;
+                }
+
+                value = default;
+                return false;
+            }
+
+            public bool ContainsKey(object key)
+            {
+                return TryGetValue(key, out _);
+            }
+
+            public bool Set(
+                object key,
+                in BattleCentralResolvedResource value,
+                bool allowGrowth)
+            {
+                if (key == null)
+                    return false;
+                if (keys.Length == 0 || checked((Count + 1) * 2) > keys.Length)
+                {
+                    if (!allowGrowth)
+                        return false;
+                    PrepareCapacity(Count + 1);
+                }
+
+                int mask = keys.Length - 1;
+                int slot = RuntimeHelpers.GetHashCode(key) & mask;
+                for (int probes = 0; probes < keys.Length; probes++)
+                {
+                    object candidate = keys[slot];
+                    if (candidate == null)
+                    {
+                        keys[slot] = key;
+                        values[slot] = value;
+                        Count++;
+                        return true;
+                    }
+                    if (ReferenceEquals(candidate, key))
+                    {
+                        values[slot] = value;
+                        return true;
+                    }
+                    slot = (slot + 1) & mask;
+                }
+
+                return false;
+            }
+
+            public void Clear()
+            {
+                if (Count == 0)
+                    return;
+                Array.Clear(keys, 0, keys.Length);
+                Array.Clear(values, 0, values.Length);
+                Count = 0;
+            }
+
+            private void Resize(int capacity)
+            {
+                object[] previousKeys = keys;
+                BattleCentralResolvedResource[] previousValues = values;
+                keys = new object[capacity];
+                values = new BattleCentralResolvedResource[capacity];
+                int previousCount = Count;
+                Count = 0;
+                for (int index = 0; index < previousKeys.Length; index++)
+                {
+                    object key = previousKeys[index];
+                    if (key != null && !Set(key, in previousValues[index], false))
+                        throw new InvalidOperationException("Trusted resource cache rehash failed.");
+                }
+                if (Count != previousCount)
+                    throw new InvalidOperationException("Trusted resource cache count changed during rehash.");
             }
         }
 
