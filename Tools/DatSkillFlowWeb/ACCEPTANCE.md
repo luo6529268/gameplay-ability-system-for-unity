@@ -49,6 +49,7 @@
 | REQ-017 | DAT 自动入口、精确 hit_* 目标首帧与可点击跨技能链接 | VAL-017 | E4 | Pure graph tests plus real Naruto browser workflow | Passed |
 | REQ-018 | 桌面左/中/右区域通过两条分隔条安全调宽 | VAL-018 | E4 | Pure layout tests plus real pointer/keyboard/resize browser workflow | Passed |
 | REQ-019 | Native Trace 区分主体结束、分身释放确认和投射物完成 | VAL-019 | E3 | DTO/lineage tests plus real F300/Frame 263 CLI/service trace and 1440×900 browser screenshots | Passed |
+| REQ-020 | Canvas 拖动设置 P1/P2 Native 起始站位 | VAL-024 | E4 | Pointer/contract tests, real Native coordinate injection, and user Canvas confirmation | Pending E4 |
 
 ## Validation Entry
 
@@ -374,6 +375,91 @@
 - Cleanup result: Passed；测试服务、CDP、临时 Chrome profile 和 agent-browser session 均已清理。
 - Status: Passed
 - Known limitations: 当前 runner 仍固定 `startFrame + ticks`，不支持 per-tick input；分类依赖 catalog 对应 OID，未知 OID 明确标记为 `unknown` 并使用 fallback。
+
+### VAL-020: 基础状态上下文与完整动作融合
+
+- Linked requirements: REQ-002、REQ-003、REQ-017
+- Purpose: 验证基础状态不会因多个 `hit_*` 路线重复铺满左栏，并确认内部阶段只在证据充分时折叠到完整动作。
+- Preconditions: 当前 DAT projection 含 standing/walking/running 状态段、`next` 链和 `hit_*` 跳转来源。
+- Command or procedure: 构建入口目录并分别检查基础上下文、完整动作和全部 Frame；运行共享内部阶段、直接基础路线以及真实预览入口选择的自动化回归。
+- Build ID or revision: `20260811034854877-dbcee6f9cfde4d6b8294265c5b3e1b4d`
+- Evidence level: E2
+- Expected result: 基础状态每种上下文只显示一项；完整动作显示全部真实入口路线；没有独立路线的内部目标折叠为动作内阶段；共享目标可归属多个动作；有直接基础路线的目标不得被吞并；全部 Frame 保留逐帧检查。
+- Actual result: `skill-entries.ts` 已输出 `baseContexts`、`routes`、`actionRole`、`internalStages` 和 `parentStartFrames`；客户端三页签按上下文、根动作和原始 Frame 分别渲染，并显示入口路线与内部阶段详情。动作结构中的起点和内部阶段现为可点击按钮；内部阶段选择从父动作真实入口开始，使用当前 Native Trace 定位来源 Frame，并逐层追加物理输入。Native CLI 定向验证中，`F271 -> hit_a -> F355 -> hit_d -> F356` 分别在 Tick 15、16、17 出现。完整套件 375 项中 374 passed / 0 failed / 1 skipped；内部阶段与动作聚合聚焦测试 20 项全部通过。
+- Evidence location: `src/client/skill-entries.ts`、`src/client/complete-action-selection.ts`、`src/client/main.ts`、`index.html`、`src/client/styles.css`、`tests/unit/skill-entries.test.ts`、`tests/unit/complete-action-selection.test.ts`、`tests/unit/client-project-contract.test.ts`、本次 Native CLI Trace 输出。
+- Environment: Windows / PowerShell / Node 24
+- Started processes: 仅顺序 Node build/test 子进程；未启动浏览器或本地预览服务。
+- Cleanup result: Passed；测试进程已正常退出，未创建浏览器实例；构建生成物按项目约定保留且未清理。
+- Status: Pending E4；源码、自动化和 Native CLI 定向验证已通过，正式项目浏览器点击/视觉验收待用户运行一键启动确认。
+- Known limitations: 需要碰撞对象、抓取关系、目标选择或跨 DAT 变身等额外运行时前置条件的分支，仍须相应 scenario/transform runtime 合同；缺少真实前置条件时界面只报告未到达，不会伪造目标 Frame。正式浏览器视觉交互仍待用户侧一键启动确认。
+
+### VAL-021: 完整动作入口与结束边界
+
+- Linked requirements: REQ-004、REQ-011、REQ-017、REQ-019
+- Purpose: 验证组合输入准备不会在真实动作入口之前结束回放，并验证补丁零等待入口和未命中入口的状态合同。
+- Preconditions: 当前完整动作目录可提供所选根动作拥有的有效 Frame；Native Trace 包含 root slot 0。
+- Command or procedure: 运行 `F0 → F110 → F0 → F347`、零等待 `F235 → F236` 和未命中入口的聚焦测试；通过正式服务对 immNarutodr F347、阿斯玛 F240、二尾 F235、水月 F250 运行 120 Tick Native Trace；运行完整 `npm test`。
+- Build ID or revision: `20260811051216032-67dc7ec75f9d46bbab121e892e507e45`
+- Evidence level: E2
+- Expected result: 动作入口前没有 completion；入口首帧被跳过时通过所属后继 Frame 记录真实开始；未命中返回 `entry-not-reached`；客户端不裁到动作开始之前。
+- Actual result: 聚焦测试 11/11 通过；完整套件 379 项中 378 passed / 0 failed / 1 skipped。真实服务中 immNarutodr 在 Tick 18 进入 F347，随后运行 F348–F389 到 Tick 120，没有再使用 Tick 17 的准备 idle；二尾 F235 在 Tick 15 开始、Tick 23 结束；水月 F250 在 Tick 15 开始、主体 Tick 29 结束、尾迹 Tick 39 结束；阿斯玛 F240 在 Tick 15 开始并按 DAT 持续循环 F242/F243，正确显示 `timeout` 而非伪报完成。
+- Evidence location: `src/server/native-preview-trace.ts`、`src/server/project-dat-service.ts`、`src/client/project-client.ts`、`src/client/main.ts`、`tests/unit/native-preview-trace.test.ts`、`tests/unit/project-client.test.ts` 和本次正式服务 Trace 输出。
+- Environment: Windows / PowerShell / Node 24 / workspace Native CLI / NTSD 2.4.1 runtime resources
+- Started processes: 两个顺序 loopback Node 验证服务；视觉阶段只创建一个 in-app Browser 测试标签，没有创建第二个浏览器实例。
+- Cleanup result: Passed；两个验证服务均已停止；浏览器导航被本地权限策略拒绝后没有重试或切换浏览器，测试标签/实例已 finalize；未触碰用户普通 Chrome/Edge。
+- Status: Pending E4；源码、自动化和真实 Native 服务 Trace 已通过，Web Canvas 视觉播放待用户运行一键启动确认。
+- Known limitations: 需要碰撞、目标、抓取或跨 DAT 变身才能进入的分支，仍可能报告 `entry-not-reached`；这类场景需要单独补齐运行前置条件，不能由动作生命周期层伪造。
+
+### VAL-022: 补丁包 opoint 完整目录与投掷实体
+
+- Linked requirements: REQ-011、REQ-019
+- Purpose: 验证补丁角色的 opoint 能解析同 package 中基础 `data.txt` 不存在的 OID，并把真实投掷实体交给 Canvas 资源链路。
+- Preconditions: `仙人鸣人—完全修炼` 包、NTSD 2.4.1 运行资源、workspace Native CLI 可读。
+- Command or procedure: 从 OID 70 `immNarutodr` 的 F327 真实输入入口运行 120 Tick；断言 F343/F346、OID 466 生成、速度/位移、type 3 和 `rasenhandjian.bmp`；运行完整 `npm test`。
+- Build ID or revision: `20260811064417029-9d9cb31234734a139b8e6157ac0f4d15`
+- Evidence level: E3
+- Expected result: F343 的两个蓄力实体和 F346 的投掷实体均使用 OID 466；投掷实体按 DAT `dvx=15` 前移，并有可绘制资源。
+- Actual result: package overlay 6/6 DAT 成功加载，总 catalog `loaded=142, failed=0`；根实体到达 F343/F346，F346 在 Tick 86 生成 slot 52 / OID 466，首个快照 `v.x=15`，下一快照 X 前移；Native `render_resources` 返回 type 3、F0 pic 70 和 `rasenhandjian.bmp`。完整测试 380 项中 379 passed / 0 failed / 1 skipped。
+- Evidence location: `native/dat_preview_cli.cpp`、`src/server/project-dat-service.ts`、`tests/integration/project-api.test.ts`、`artifacts/native-regression-20260811-throw-overlay/`。
+- Environment: Windows / PowerShell / Node 24 / workspace Native CLI / NTSD 2.4.1 runtime resources
+- Started processes: 顺序 Native CLI 与 Node build/test 子进程；未启动新浏览器。
+- Cleanup result: Passed；测试进程已自然退出，未结束用户 Chrome/Edge；生成的 Native JSON 验收物按要求保留。
+- Status: Pending E4；Native/API/资源合同已验证，但本轮没有新的浏览器 Canvas 视觉验收，不宣称视觉已通过。
+- Known limitations: 只覆盖当前 package 的目录；跨 package 依赖必须有显式数据模型，不会按 OID 在全补丁库中猜测匹配。
+
+### VAL-023: Data Changer 补丁 DAT 格式识别与正式服务 OID 466 链路
+
+- Linked requirements: REQ-011、REQ-019
+- Purpose: 防止 Data Changer 加密封套中的普通文本被误当成 DAT 明文字段，并确保真实补丁包目录经 `ProjectDatService` 进入 Native 后仍能生成 opoint 实体。
+- Preconditions: `仙人鸣人—完全修炼` 包、NTSD 2.4.1 运行资源和 workspace Native CLI 可读。
+- Command or procedure: 使用真实 123 字节 Data Changer banner 做单元/集成回归；通过正式 `ProjectDatService` 打开 OID 70，从 F327 运行 120 Tick，并核对 Trace、实体快照及 OID 466 的 BMP capability 哈希；运行完整 `npm test` 和 `git diff --check`。
+- Build ID or revision: `20260811074840342-60868528b9bc4ea59dc5cd6fac8e2ecb`
+- Evidence level: E3
+- Expected result: 补丁包 6 个 DAT 均以正确明文交给 Native；F343 生成两个蓄力 OID 466，F346 生成投掷 OID 466；投掷物使用补丁包资源并延长播放尾迹。
+- Actual result: 根动作 Tick 18 进入 F327、Tick 97 结束；OID 466 在 Tick 76 生成 slot 50/51，在 Tick 86 生成 slot 52，首帧为 F1/pic 71、`v.x=15`，随后 X 前移并持续到 Tick 120。`immNarutodr.bmp`、`rasenhandjian.bmp`、`rasenhandjian-fa.bmp` 的服务资源 SHA-256 与补丁源文件完全一致。完整测试 381 项中 380 passed / 0 failed / 1 skipped。
+- Evidence location: `src/server/project-dat-service.ts`、`tests/unit/project-dat-preview.test.ts`、`tests/integration/project-api.test.ts` 及本轮正式服务 Trace 输出。
+- Environment: Windows / PowerShell / Node 24 / workspace Native CLI / NTSD 2.4.1 runtime resources
+- Started processes: 仅顺序 Node build/test 与 Native CLI 子进程；未启动新的浏览器实例。
+- Cleanup result: Passed；测试与 Native CLI 子进程均自然退出，未结束用户 Chrome/Edge。
+- Status: Pending E4；Native/API/资源链路已验证，但当前修复尚未由用户重启一键启动后在 Web Canvas 目视确认。
+- Known limitations: 真实 Canvas 视觉结果仍需用户侧重启当前旧服务后确认；跨 package 依赖仍必须显式建模，不按全补丁库 OID 猜测。
+
+### VAL-024: 双角色起始站位拖动与 Native 重放
+
+- Linked requirements: REQ-020
+- Purpose: 验证站位拖动改变真实 Native 世界初始状态，而不是只移动 Canvas 图片。
+- Preconditions: P1/P2 sprite range 可解析，当前完整动作已生成，workspace Native CLI 可运行。
+- Command or procedure: 开启“拖动站位”，分别命中 P1/P2 精灵并拖动；断言 Canvas delta 映射 X/Z、Y 不变和 stage 边界夹取；检查 API、两级缓存键与六个 CLI 坐标参数；用真实 OID 70 DAT 注入 P1 `(210,0,350)`、P2 `(650,0,470)` 并读取 Tick 0；运行完整 `npm test`。
+- Build ID or revision: `20260811081412844-8a4fe6f0b8b240d4931e7a078547bde7`
+- Evidence level: E3
+- Expected result: P1/P2 松开后重新运行完整动作；Native metadata.initial 与 Tick 0 slot 0/1 坐标等于请求值；相同站位复用缓存，不同站位生成新 Trace；重置恢复默认值。
+- Actual result: 真实 CLI metadata 和 Tick 0 均返回 P1 `(210,0,350)`、P2 `(650,0,470)`；定向测试 30/30 通过；完整测试 383 项中 382 passed / 0 failed / 1 skipped。Canvas 目视交互待用户重启一键启动后确认。
+- Evidence location: `src/client/main.ts`、`src/client/project-client.ts`、`src/client/preview-renderer.ts`、`src/server/project-dat-service.ts`、`tests/unit/project-client.test.ts`、`tests/unit/preview-renderer.test.ts`、`tests/integration/project-api.test.ts`。
+- Environment: Windows / PowerShell / Node 24 / workspace Native CLI
+- Started processes: 顺序 Node build/test 和单次 Native CLI 验证；未启动浏览器。
+- Cleanup result: Passed；测试与 CLI 子进程均已退出，没有结束用户浏览器。
+- Status: Pending E4；源码、API、Native 和自动化已通过，正式 Canvas 拖动仍待用户目视确认。
+- Known limitations: 当前只编辑每次预览的起始站位，不提供播放中实时搬运角色，也不写入 DAT/sidecar。
 
 ## Test Layers
 

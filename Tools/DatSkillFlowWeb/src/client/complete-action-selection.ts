@@ -71,3 +71,39 @@ export function buildCompleteActionIndex(
     }
     return new Map([...fallback, ...[...candidates].map(([occurrence, candidate]) => [occurrence, candidate.index] as const)]);
 }
+
+export function buildInternalStageChain(
+    parent: SkillEntry,
+    target: SkillEntry,
+    entries: readonly SkillEntry[],
+    sourceBelongsTo: (entry: SkillEntry, sourceFrame: number) => boolean,
+): readonly SkillEntry[] | undefined {
+    if (parent.actionRole !== "root"
+        || target.actionRole !== "internal"
+        || !target.parentStartFrames.includes(parent.startFrame)) return undefined;
+    const internalEntries = entries.filter((entry) => (
+        entry.actionRole === "internal"
+        && entry.parentStartFrames.includes(parent.startFrame)
+    ));
+    const visiting = new Set<number>();
+    const visit = (stage: SkillEntry): readonly SkillEntry[] | undefined => {
+        if (visiting.has(stage.startFrame)) return undefined;
+        visiting.add(stage.startFrame);
+        try {
+            for (const route of stage.routes) {
+                if (sourceBelongsTo(parent, route.sourceFrame)) return Object.freeze([stage]);
+                for (const prerequisite of internalEntries) {
+                    if (prerequisite.startFrame === stage.startFrame
+                        || !sourceBelongsTo(prerequisite, route.sourceFrame)) continue;
+                    const chain = visit(prerequisite);
+                    if (chain !== undefined) return Object.freeze([...chain, stage]);
+                }
+            }
+            return undefined;
+        }
+        finally {
+            visiting.delete(stage.startFrame);
+        }
+    };
+    return visit(target);
+}

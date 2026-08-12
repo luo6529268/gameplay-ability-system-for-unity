@@ -1,5 +1,6 @@
 using NTSD.App;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
@@ -60,6 +61,61 @@ namespace NTSD.Animation.LF2Objects
                    currentFrame.bodies[0].x > 1000 &&
                    futureFrame?.bodies != null &&
                    futureFrame.bodies.Count > 0;
+        }
+
+        internal static BattleHitCandidateDisposition ResolveCandidateDisposition(
+            LF2Entity victim,
+            InteractionArea itr,
+            bool consumeGateAccepted)
+        {
+            if (!consumeGateAccepted)
+                return BattleHitCandidateDisposition.RejectedByConsumeGate;
+            if (itr == null)
+                return BattleHitCandidateDisposition.Unsupported;
+
+            int victimOid = victim?.FrameCache?.Wrapper?.characterId ??
+                victim?.ObjectId ?? -1;
+            if (itr.kind == 0 && victimOid == 300)
+                return BattleHitCandidateDisposition.Oid300Redirect;
+
+            switch (itr.kind)
+            {
+                case 0:
+                case 9:
+                    return BattleHitCandidateDisposition.Damage;
+                case 6:
+                    return BattleHitCandidateDisposition.HitConfirm;
+                case 8:
+                    return BattleHitCandidateDisposition.Kind8;
+                case 14:
+                    return BattleHitCandidateDisposition.Kind14;
+                case 15:
+                case 16:
+                    return BattleHitCandidateDisposition.Kind15Or16;
+                case 10:
+                case 11:
+                    return BattleHitCandidateDisposition.Kind10Or11;
+                case 1:
+                    return BattleHitCandidateDisposition.Kind1Grab;
+                case 3:
+                    return BattleHitCandidateDisposition.Kind3Grab;
+                case 2:
+                case 7:
+                    return BattleHitCandidateDisposition.Pickup;
+                default:
+                    return BattleHitCandidateDisposition.Unsupported;
+            }
+        }
+
+        internal static bool IsAttackDisposition(
+            BattleHitCandidateDisposition disposition)
+        {
+            return disposition == BattleHitCandidateDisposition.Oid300Redirect ||
+                   disposition == BattleHitCandidateDisposition.Damage ||
+                   disposition == BattleHitCandidateDisposition.Kind8 ||
+                   disposition == BattleHitCandidateDisposition.Kind14 ||
+                   disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                   disposition == BattleHitCandidateDisposition.Kind10Or11;
         }
 
         internal static float ResolveStandardDamageKnockbackX(LF2Entity attacker, LF2Entity victim, InteractionArea itr, bool knockback, float defaultDvx)
@@ -140,6 +196,16 @@ namespace NTSD.Animation.LF2Objects
                 victim.KnockbackVx = 10f;
             else if (victim.KnockbackVx < 0f && victim.KnockbackVx > -10f)
                 victim.KnockbackVx = -10f;
+        }
+
+        internal static bool ShouldSkipOid100KnockbackTail(
+            LF2Entity victim,
+            InteractionArea itr,
+            bool knockback)
+        {
+            return victim?.Runtime != null && itr != null &&
+                   knockback && victim.Runtime.Vx > -5f && victim.Runtime.Vx < 5f &&
+                   itr.dvx == 0f;
         }
 
         internal static LF2CharacterData ResolveCharacterData(LF2Entity entity)
@@ -832,11 +898,17 @@ namespace NTSD.Animation.LF2Objects
                 bool addedNonKnockdownDvx = false;
                 if (!defended)
                 {
+                    bool skipOid100KnockbackTail =
+                        LF2HitResolveRuntimeData.ShouldSkipOid100KnockbackTail(
+                            _victim,
+                            itr,
+                            isKnockdown);
                     float resolvedDvx = LF2HitResolveRuntimeData.ResolveStandardDamageKnockbackX(attacker, _victim, itr, isKnockdown, effectDvx);
                     if (isKnockdown)
                     {
                         _victim.KnockbackVx += resolvedDvx;
-                        LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_victim);
+                        if (!skipOid100KnockbackTail)
+                            LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_victim);
                         bool facingRight = _victim.Dirh() > 0;
                         int fallFrame = facingRight
                             ? (_victim.KnockbackVx <= 0.0 ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack)
@@ -846,11 +918,13 @@ namespace NTSD.Animation.LF2Objects
                     else if (resolvedDvx != 0f)
                     {
                         _victim.KnockbackVx += resolvedDvx;
-                        LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_victim);
                         if (!hitCountAlreadyRecorded)
                             _victim.HitCount++;
                         addedNonKnockdownDvx = true;
                     }
+
+                    if (!isKnockdown && !skipOid100KnockbackTail)
+                        LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_victim);
                 }
 
                 if (ResolveAttackerState(attacker) == LF2States.WeaponThrowing)
@@ -899,15 +973,6 @@ namespace NTSD.Animation.LF2Objects
             if (acceptHit && itr.kind == 0)
             {
                 SpawnSpark(itr, attacker, attackerPos, vol);
-            }
-
-            // BMD-058: oid 5/52 victim vitals reset (baseline ~L20069)
-            if (acceptHit && (_victim.ObjectId == 5 || _victim.ObjectId == 52) && _victim.Health != null)
-            {
-                _victim.Health.HP = 10;
-                _victim.Health.HP3 = 10;
-                _victim.Health.HPBound = 10;
-                _victim.Health.PP = 5;
             }
 
             return acceptHit;
@@ -975,11 +1040,13 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyWhirlwindCharacterForce(LF2Entity attacker)
         {
-            _victim.KnockbackVx = (float)(_victim.Runtime.Vx + (_victim.GetRuntimeXInt() > attacker.GetRuntimeXInt() ? -1f : 1f));
+            _victim.KnockbackVx = _victim.Runtime.Vx +
+                (_victim.Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
             _victim.Runtime.Vx = _victim.KnockbackVx;
-            _victim.KnockbackVz = (float)(_victim.Runtime.Vz + (_victim.GetRenderZInt() > attacker.GetRenderZInt() ? -0.5f : 0.5f));
+            _victim.KnockbackVz = _victim.Runtime.Vz +
+                (_victim.Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
             _victim.Runtime.Vz = _victim.KnockbackVz;
-            ApplyAirStep(3.0f);
+            ApplyAirStep(3.0);
             _victim.RefreshRuntimeSnapshot();
         }
 
@@ -995,7 +1062,6 @@ namespace NTSD.Animation.LF2Objects
                 heldTarget.Runtime.LinkState != -2 ||
                 !heldTarget.Runtime.IsActivelyHeldBySlot(holderSlot))
             {
-                _victim.Runtime.LinkState = 0;
                 return;
             }
 
@@ -1011,7 +1077,7 @@ namespace NTSD.Animation.LF2Objects
             _victim.RefreshRuntimeSnapshot();
         }
 
-        private void ApplyAirStep(float vyStep)
+        private void ApplyAirStep(double vyStep)
         {
             if (_victim.GetRuntimeYInt() >= -2)
             {
@@ -1024,7 +1090,7 @@ namespace NTSD.Animation.LF2Objects
             if (_victim.Runtime.Vy > -6f)
             {
                 _victim.Runtime.Vy -= vyStep;
-                _victim.KnockbackVy = (float)_victim.Runtime.Vy;
+                _victim.KnockbackVy = _victim.Runtime.Vy;
             }
         }
 

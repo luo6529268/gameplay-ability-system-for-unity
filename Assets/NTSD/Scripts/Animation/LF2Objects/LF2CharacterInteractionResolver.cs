@@ -4,6 +4,7 @@ using NTSD.Extensions;
 using NTSD.Input;
 using NTSD.LevelEditor;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Tools;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,16 @@ namespace NTSD.Animation.LF2Objects
                 if (itr == null)
                     continue;
 
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyPreprocess == true)
+                {
+                    _character.Match.ObserveBattleHitExecutionPlanLegacyPreprocess(
+                        _character,
+                        target,
+                        itr,
+                        zeroAttackerHpOnConsume,
+                        releaseHeavyHeldTargetOnConsume);
+                }
+
                 hitInfo = new SceneQueryHit(
                     target,
                     hitInfo.BodyX,
@@ -75,29 +86,116 @@ namespace NTSD.Animation.LF2Objects
                     zeroAttackerHpOnConsume,
                     releaseHeavyHeldTargetOnConsume);
 
-                if (!CanConsumeRecordedCandidate(target))
+                bool canConsume = CanConsumeRecordedCandidate(target);
+                BattleHitCandidateDisposition disposition =
+                    LF2HitResolveRuntimeData.ResolveCandidateDisposition(
+                        target,
+                        itr,
+                        canConsume);
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDisposition == true)
+                {
+                    _character.Match.ObserveBattleHitExecutionPlanLegacyDisposition(
+                        _character,
+                        target,
+                        itr,
+                        disposition);
+                }
+
+                if (!canConsume ||
+                    disposition == BattleHitCandidateDisposition.Unsupported)
                     continue;
 
-                if (kindService.IsPreInteractionKind(itr.kind))
+                if (disposition == BattleHitCandidateDisposition.Kind1Grab ||
+                    disposition == BattleHitCandidateDisposition.Kind3Grab ||
+                    disposition == BattleHitCandidateDisposition.Pickup)
                 {
+                    bool observePreInteractionWriterEffect =
+                        _character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                    if (observePreInteractionWriterEffect)
+                    {
+                        _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            _character,
+                            target,
+                            itr,
+                            disposition);
+                    }
                     TryApplyPreInteraction(itr, target);
+                    if (observePreInteractionWriterEffect)
+                    {
+                        _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                            _character,
+                            target);
+                    }
                     continue;
                 }
 
-                if (itr.kind == 6)
+                if (disposition == BattleHitCandidateDisposition.HitConfirm)
                 {
+                    if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            _character,
+                            target,
+                            itr,
+                            disposition);
+                    }
                     target.HitConfirmCounter = 3;
+                    if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                            _character,
+                            target);
+                    }
                     continue;
                 }
 
-                if (!kindService.IsAttackKind(itr.kind))
+                if (!LF2HitResolveRuntimeData.IsAttackDisposition(disposition))
                     continue;
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    _character.Match.PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
+                        _character,
+                        target);
+                }
                 _character.ApplyReleaseSceneQueryConsumeEffectsInternal(hitInfo);
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    _character.Match.ObserveBattleHitExecutionPlanLegacyConsumeEffects(
+                        _character,
+                        target);
+                }
                 var attackerPos = new Vector3((float)_character.PS.x, (float)_character.PS.y, (float)_character.PS.z);
                 _character.CurrentItrIndex = itrIndex;
                 bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
                     target,
                     itr);
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    _character.Match.PrepareBattleHitExecutionPlanLegacyDispatchObservation(
+                        _character,
+                        target,
+                        itr);
+                }
+                bool observeWriterEffect =
+                    (disposition == BattleHitCandidateDisposition.Kind8 ||
+                     disposition == BattleHitCandidateDisposition.Kind14 ||
+                     disposition == BattleHitCandidateDisposition.Kind10Or11 ||
+                     disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                     (disposition == BattleHitCandidateDisposition.Damage &&
+                      _character.Match?.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
+                          _character,
+                          target,
+                          itr,
+                          disposition) == true)) &&
+                    _character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                if (observeWriterEffect)
+                {
+                    _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                        _character,
+                        target,
+                        itr,
+                        disposition);
+                }
                 int targetDataType = target.GetCurrentDataObjectTypeForSimulation();
                 bool hit;
                 if (targetDataType == (int)LF2ObjectType.Character)
@@ -123,6 +221,19 @@ namespace NTSD.Animation.LF2Objects
                 else
                 {
                     hit = false;
+                }
+                if (observeWriterEffect)
+                {
+                    _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                        _character,
+                        target);
+                }
+                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    _character.Match.ObserveBattleHitExecutionPlanLegacyDispatch(
+                        _character,
+                        hit,
+                        hit && abortAfterSuccessfulHit);
                 }
                 if (!hit)
                     continue;
@@ -163,7 +274,7 @@ namespace NTSD.Animation.LF2Objects
             switch (itr.kind)
             {
                 case 1:
-                    return target is LF2LivingObject lo1 && HandlePreInteractionKind(itr, lo1);
+                    return TryApplyKind1Grab(_character, target, itr);
                 case 3:
                     return TryApplyKind3Grab(_character, target, itr);
                 case 2:

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 
 import { parseBmpMetadata } from "../assets/bmp.js";
-import { buildSkillPreviewScenario, deriveSkillEntries } from "../client/skill-entries.js";
+import { buildFrameEntryCatalog, buildSkillPreviewScenario, deriveSkillEntries } from "../client/skill-entries.js";
 import { LosslessDatDocument } from "../model/dat-document.js";
 import type { DatProjection } from "../model/dat-projection.js";
 import { DataTxtDocument, diagnoseResourcePath, type DataTxtEntry } from "../project/data-txt.js";
@@ -20,6 +20,7 @@ import {
 } from "./dat-session-service.js";
 import type {
     NativePreviewEntityView,
+    NativePreviewInitialPositions,
     NativePreviewInputKey,
     NativePreviewInputStep,
     NativePreviewTickView,
@@ -42,6 +43,7 @@ const DEFAULT_START_FRAME = 300;
 const DEFAULT_TICKS = 30;
 const DEFAULT_CHARACTER_OID = 2;
 const MAX_PREVIEW_OUTPUT_BYTES = 8 * 1024 * 1024;
+const MAX_NATIVE_PREVIEW_CATALOG_BYTES = 256 * 1024 * 1024;
 const MAX_NATIVE_PREVIEW_CACHE_ENTRIES = 128;
 const MAX_SESSION_PREVIEW_CACHE_ENTRIES = 128;
 const CATALOG_REFRESH_INTERVAL_MS = 30_000;
@@ -53,17 +55,41 @@ const DEFAULT_CPP_EXECUTABLE = process.env.DAT_SKILL_FLOW_CPP_PREVIEW_EXECUTABLE
     ?? "J:\\QQFile\\NTSD2.4\\ntsd_cpp\\dat_preview_cli.exe";
 
 export function previewDatProjection(bytes: Uint8Array): DatProjection {
+    return previewDatDocument(bytes).projection;
+}
+
+function previewDatDocument(bytes: Uint8Array): LosslessDatDocument {
     const input = Buffer.from(bytes);
     let offset = 0;
     if (input.length >= 3 && input[0] === 0xef && input[1] === 0xbb && input[2] === 0xbf) offset = 3;
     const plainBytes = input.subarray(offset);
     const plaintext = LosslessDatDocument.fromPlaintext(plainBytes);
-    if (plaintext.cst.topFields.length > 0
-        || plaintext.cst.spriteRanges.length > 0
-        || plaintext.cst.frames.length > 0) {
-        return plaintext.projection;
+    if (input.length <= 123) return plaintext;
+
+    const encrypted = LosslessDatDocument.fromEncrypted(input);
+    if (encrypted.cst.frames.length !== plaintext.cst.frames.length) {
+        return encrypted.cst.frames.length > plaintext.cst.frames.length ? encrypted : plaintext;
     }
-    return LosslessDatDocument.fromEncrypted(input).projection;
+    if (encrypted.cst.spriteRanges.length !== plaintext.cst.spriteRanges.length) {
+        return encrypted.cst.spriteRanges.length > plaintext.cst.spriteRanges.length ? encrypted : plaintext;
+    }
+    return plaintext;
+}
+
+export function previewDatPlaintext(bytes: Uint8Array): Buffer {
+    return Buffer.from(previewDatDocument(bytes).emitPlaintext());
+}
+
+export function completeActionFrameIds(
+    frames: DatProjection["frames"],
+    oid: number,
+    startFrame: number,
+): ReadonlySet<number> {
+    const catalog = buildFrameEntryCatalog(frames, oid);
+    const ownedFrames = catalog.frames
+        .filter((item) => item.effective && item.ownerStartFrames.includes(startFrame))
+        .map((item) => item.frame.frameId);
+    return new Set(ownedFrames.length > 0 ? ownedFrames : [startFrame]);
 }
 
 export class ProjectDatError extends Error {
@@ -80,12 +106,20 @@ export interface NativeDatPreviewRunner {
     preview(plaintext: Uint8Array, options?: NativePreviewOptions): Promise<unknown>;
 }
 
+export interface NativePreviewCatalogEntry {
+    readonly oid: number;
+    readonly type: number;
+    readonly plaintext: Uint8Array;
+}
+
 interface NativePreviewOptions {
     readonly rootOid?: number;
     readonly startFrame?: number;
     readonly initialFrame?: number;
     readonly ticks?: number;
     readonly inputPlan?: readonly NativePreviewInputStep[];
+    readonly initial?: NativePreviewInitialPositions;
+    readonly catalogEntries?: readonly NativePreviewCatalogEntry[];
 }
 
 export interface ProjectDatServiceOptions {
@@ -139,6 +173,7 @@ interface SessionBinding {
     previewResourcesByOid: Map<number, ProjectPreviewObjectView>;
     unavailablePreviewOids: Set<number>;
     previewByKey: Map<string, Promise<NativePreviewView>>;
+    nativePreviewCatalog?: Promise<readonly NativePreviewCatalogEntry[]>;
 }
 
 interface AssetCandidate {
@@ -231,7 +266,13 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
         const initialFrame = boundedInteger(options.initialFrame === undefined ? startFrame : options.initialFrame, 0, 599, "initialFrame");
         const ticks = boundedInteger(options.ticks === undefined ? DEFAULT_TICKS : options.ticks, 1, 1800, "ticks");
         const inputPlan = options.inputPlan ?? [];
-        const cacheKey = nativePreviewCacheKey(plaintext, { rootOid, startFrame, initialFrame, ticks, inputPlan });
+        const initial = options.initial ?? {
+            p1: { x: 320, y: 0, z: 500 },
+            p2: { x: 360, y: 0, z: 501 },
+        };
+        const catalogEntries = normalizedNativePreviewCatalog(options.catalogEntries);
+        const normalizedOptions = { rootOid, startFrame, initialFrame, ticks, inputPlan, initial, catalogEntries };
+        const cacheKey = nativePreviewCacheKey(plaintext, normalizedOptions);
         const cached = this.#cache.get(cacheKey);
         if (cached !== undefined) {
             this.#cache.delete(cacheKey);
@@ -243,7 +284,7 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
             if (oldest === undefined) break;
             this.#cache.delete(oldest);
         }
-        const pending = this.#run(plaintext, rootOid, startFrame, initialFrame, ticks, inputPlan);
+        const pending = this.#run(plaintext, rootOid, startFrame, initialFrame, ticks, inputPlan, initial, catalogEntries);
         this.#cache.set(cacheKey, pending);
         try {
             return await pending;
@@ -260,12 +301,25 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
         initialFrame: number,
         ticks: number,
         inputPlan: readonly NativePreviewInputStep[],
+        initial: NativePreviewInitialPositions,
+        catalogEntries: readonly NativePreviewCatalogEntry[],
     ): Promise<unknown> {
         const directory = await mkdtemp(join(tmpdir(), "dat-skill-flow-preview-"));
         const datPath = join(directory, "preview-character.dat");
+        const catalogPath = join(directory, "preview-catalog.txt");
         const outputPath = join(directory, "preview.json");
         try {
             await writeFile(datPath, Buffer.from(plaintext), { flag: "wx" });
+            if (catalogEntries.length > 0) {
+                const lines = ["<object>\n"];
+                for (const entry of catalogEntries) {
+                    const fileName = `preview-object-${entry.oid}.dat`;
+                    await writeFile(join(directory, fileName), Buffer.from(entry.plaintext), { flag: "wx" });
+                    lines.push(`id: ${entry.oid} type: ${entry.type} format: plaintext file: ${fileName}\n`);
+                }
+                lines.push("<object_end>\n");
+                await writeFile(catalogPath, Buffer.from(lines.join(""), "ascii"), { flag: "wx" });
+            }
             await new Promise<void>((resolveRun, rejectRun) => {
                 const arguments_ = [
                     "--preview-dat", datPath,
@@ -275,7 +329,16 @@ export class CppNativeDatPreviewRunner implements NativeDatPreviewRunner {
                     "--start-frame", String(initialFrame),
                     "--entry-frame", String(startFrame),
                     "--ticks", String(ticks),
+                    "--p1-x", String(initial.p1.x),
+                    "--p1-y", String(initial.p1.y),
+                    "--p1-z", String(initial.p1.z),
+                    "--p2-x", String(initial.p2.x),
+                    "--p2-y", String(initial.p2.y),
+                    "--p2-z", String(initial.p2.z),
                 ];
+                if (catalogEntries.length > 0) {
+                    arguments_.push("--preview-catalog", catalogPath, "--preview-catalog-root", directory);
+                }
                 if (inputPlan.length > 0) {
                     arguments_.push("--input-plan", inputPlan.map((step) => `${step.tick}:${step.keys.join("+")}`).join(","));
                 }
@@ -634,7 +697,7 @@ export class ProjectDatService {
         const request = exactRecord(
             input,
             ["sessionId", "expectedRevision", "startFrame", "ticks"],
-            ["initialFrame", "inputPlan"],
+            ["initialFrame", "inputPlan", "initial"],
         );
         const sessionId = requireOpaqueId(request.sessionId, "sessionId");
         const expectedRevision = boundedInteger(request.expectedRevision, 0, Number.MAX_SAFE_INTEGER, "expectedRevision");
@@ -644,6 +707,7 @@ export class ProjectDatService {
             : boundedInteger(request.initialFrame, 0, 599, "initialFrame");
         const ticks = boundedInteger(request.ticks, 1, 1800, "ticks");
         const inputPlan = previewInputPlan(request.inputPlan, ticks);
+        const initial = request.initial === undefined ? undefined : previewInitialPositions(request.initial);
         return await this.#enqueue(sessionId, async () => {
             const binding = this.#requireSession(sessionId);
             const emission = await binding.service.emit(sessionId, expectedRevision).catch((error) => { throw mapSessionError(error); });
@@ -651,7 +715,7 @@ export class ProjectDatService {
                 sessionId,
                 revision: emission.revision,
                 preview: await this.#runPreview(emission.plaintext, binding, emission.revision, {
-                    startFrame, initialFrame, ticks, inputPlan,
+                    startFrame, initialFrame, ticks, inputPlan, ...(initial === undefined ? {} : { initial }),
                 }),
             };
         });
@@ -1070,7 +1134,11 @@ export class ProjectDatService {
     ): Promise<NativePreviewView> {
         try {
             const primary = LosslessDatDocument.fromPlaintext(plaintext).projection;
-            const sanitized = sanitizePreview(await this.#previewRunner.preview(Buffer.from(plaintext), options));
+            const catalogEntries = await this.#nativePreviewCatalog(binding);
+            const nativeOptions = catalogEntries.length === 0
+                ? options
+                : { ...options, catalogEntries };
+            const sanitized = sanitizePreview(await this.#previewRunner.preview(Buffer.from(plaintext), nativeOptions));
             const rawPreview = sanitized.preview;
             const objectOids = new Set(rawPreview.ticks.flatMap((tick) => tick.entities.map((entity) => entity.oid)));
             objectOids.add(binding.oid);
@@ -1085,6 +1153,11 @@ export class ProjectDatService {
                 ...this.#objectsForBinding(binding).map((object): readonly [number, number] => [object.oid, object.type]),
                 ...sanitized.renderResources.map((resource): readonly [number, number] => [resource.oid, resource.type]),
             ]);
+            const actionFrameIds = completeActionFrameIds(
+                primary.frames,
+                binding.oid,
+                rawPreview.metadata.startFrame,
+            );
             return enrichNativePreview({
                 ...rawPreview,
                 metadata: {
@@ -1092,10 +1165,44 @@ export class ProjectDatService {
                     stage,
                 },
                 resources,
-            }, resources, objectTypes, binding.oid);
+            }, resources, objectTypes, binding.oid, actionFrameIds);
         } catch (error) {
             if (error instanceof ProjectDatError) throw error;
             throw new ProjectDatError("preview-failed", "The native character preview failed.", { cause: error });
+        }
+    }
+
+    async #nativePreviewCatalog(binding: SessionBinding): Promise<readonly NativePreviewCatalogEntry[]> {
+        if (binding.sourceKind !== "patch") return [];
+        if (binding.nativePreviewCatalog !== undefined) return await binding.nativePreviewCatalog;
+        const packageObjects = this.#catalogObjects
+            .filter((object) => object.packageId === binding.packageId)
+            .sort((left, right) => left.oid - right.oid);
+        const pending = (async (): Promise<readonly NativePreviewCatalogEntry[]> => {
+            const loaded = await Promise.all(packageObjects.map(async (object) => {
+                const opened = await this.#openCandidate(object.candidates);
+                if (opened === undefined) return undefined;
+                try {
+                    const document = await opened.registry.readDocument(opened.documentId);
+                    return {
+                        oid: object.oid,
+                        type: object.type,
+                        plaintext: previewDatPlaintext(document.bytes),
+                    } satisfies NativePreviewCatalogEntry;
+                } catch {
+                    return undefined;
+                } finally {
+                    opened.registry.closeDocument(opened.documentId);
+                }
+            }));
+            return loaded.filter((entry): entry is NativePreviewCatalogEntry => entry !== undefined);
+        })();
+        binding.nativePreviewCatalog = pending;
+        try {
+            return await pending;
+        } catch (error) {
+            if (binding.nativePreviewCatalog === pending) binding.nativePreviewCatalog = undefined;
+            throw error;
         }
     }
 
@@ -1351,11 +1458,16 @@ function previewOptionsKey(options: NativePreviewOptions = {}): string {
     const initialFrame = options.initialFrame ?? startFrame;
     const ticks = options.ticks ?? DEFAULT_TICKS;
     const inputPlan = options.inputPlan ?? [];
+    const initial = options.initial ?? {
+        p1: { x: 320, y: 0, z: 500 },
+        p2: { x: 360, y: 0, z: 501 },
+    };
     return JSON.stringify({
         rootOid,
         startFrame,
         initialFrame,
         ticks,
+        initial,
         inputPlan: inputPlan.map((step) => ({ tick: step.tick, keys: [...step.keys] })),
     });
 }
@@ -1367,8 +1479,42 @@ function datCatalogDisplayName(rawPath: string): string {
 }
 
 function nativePreviewCacheKey(plaintext: Uint8Array, options: NativePreviewOptions): string {
-    const digest = createHash("sha256").update(plaintext).digest("hex");
+    const hash = createHash("sha256").update(plaintext);
+    for (const entry of options.catalogEntries ?? []) {
+        hash.update(`\0${entry.oid}:${entry.type}:${entry.plaintext.byteLength}\0`, "ascii");
+        hash.update(entry.plaintext);
+    }
+    const digest = hash.digest("hex");
     return `${digest}:${previewOptionsKey(options)}`;
+}
+
+function normalizedNativePreviewCatalog(
+    value: readonly NativePreviewCatalogEntry[] | undefined,
+): readonly NativePreviewCatalogEntry[] {
+    if (value === undefined || value.length === 0) return [];
+    if (value.length > MAX_CATALOG_OIDS) {
+        throw new ProjectDatError("preview-failed", "Native preview catalog exceeds its object limit.");
+    }
+    const seenOids = new Set<number>();
+    let totalBytes = 0;
+    const entries = value.map((entry, index): NativePreviewCatalogEntry => {
+        const oid = boundedInteger(entry.oid, 0, MAX_CATALOG_OIDS - 1, `catalogEntries[${index}].oid`);
+        const type = boundedInteger(entry.type, 0, 255, `catalogEntries[${index}].type`);
+        if (seenOids.has(oid)) {
+            throw new ProjectDatError("preview-failed", "Native preview catalog contains duplicate OIDs.");
+        }
+        seenOids.add(oid);
+        const plaintext = Buffer.from(entry.plaintext);
+        if (plaintext.byteLength === 0) {
+            throw new ProjectDatError("preview-failed", "Native preview catalog contains an empty DAT.");
+        }
+        totalBytes += plaintext.byteLength;
+        if (totalBytes > MAX_NATIVE_PREVIEW_CATALOG_BYTES) {
+            throw new ProjectDatError("preview-failed", "Native preview catalog exceeds its byte limit.");
+        }
+        return { oid, type, plaintext };
+    });
+    return entries.sort((left, right) => left.oid - right.oid);
 }
 
 function exactRecord(
@@ -1389,6 +1535,19 @@ function exactRecord(
 }
 
 const PREVIEW_INPUT_KEYS = new Set<NativePreviewInputKey>(["A", "D", "W", "S", "J", "K", "L"]);
+
+function previewInitialPositions(value: unknown): NativePreviewInitialPositions {
+    const initial = exactRecord(value, ["p1", "p2"]);
+    const position = (raw: unknown, name: string): NativePreviewInitialPositions["p1"] => {
+        const item = exactRecord(raw, ["x", "y", "z"]);
+        return {
+            x: requestFinite(item.x, `${name}.x`),
+            y: requestFinite(item.y, `${name}.y`),
+            z: requestFinite(item.z, `${name}.z`),
+        };
+    };
+    return { p1: position(initial.p1, "initial.p1"), p2: position(initial.p2, "initial.p2") };
+}
 
 function previewInputPlan(value: unknown, ticks: number): readonly NativePreviewInputStep[] {
     if (value === undefined) return [];
@@ -1430,6 +1589,13 @@ function boundedInteger(value: unknown, minimum: number, maximum: number, name: 
         throw new ProjectDatError("invalid-request", `${name} is outside its supported integer range.`);
     }
     return value;
+}
+
+function requestFinite(value: unknown, name: string): number {
+    if (typeof value !== "number" || !Number.isFinite(value) || Math.abs(value) > 1_000_000) {
+        throw new ProjectDatError("invalid-request", `${name} is outside its supported finite range.`);
+    }
+    return value === 0 ? 0 : value;
 }
 
 function finite(value: unknown, name: string): number {
@@ -1534,6 +1700,8 @@ function deferredNativePreview(primaryResource: ProjectPreviewObjectView): Nativ
         ticks: [],
         resources: [primaryResource],
         trace: {
+            rootSkillStartedTick: null,
+            rootSkillEntryFrame: null,
             rootSkillEndedTick: null,
             progressEndTick: null,
             playbackEndTick: 0,
@@ -1580,6 +1748,8 @@ function sanitizePreview(value: unknown): SanitizedNativePreview {
         },
         resources: [],
         trace: {
+            rootSkillStartedTick: null,
+            rootSkillEntryFrame: null,
             rootSkillEndedTick: null,
             progressEndTick: null,
             playbackEndTick: Math.max(0, ticks.length - 1),

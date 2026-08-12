@@ -35,6 +35,8 @@ namespace NTSD.Simulation
             new BattlePresentationCoordinator();
         private BattlePixelFramePlan _currentPixelFramePlan;
         private bool skipLateRendererUpdateForDiagnostics;
+        private bool forceLegacyPerPassStageRefreshForDiagnostics;
+        private int preparedStageRuntimeTick = int.MinValue;
 
         internal SimulationStageRenderModule(SimulationWorld world)
         {
@@ -50,6 +52,12 @@ namespace NTSD.Simulation
             _presentationRenderOrderCount = 0;
             _hasExplicitStageRuntimeSnapshot = false;
             skipLateRendererUpdateForDiagnostics = false;
+            forceLegacyPerPassStageRefreshForDiagnostics = false;
+            preparedStageRuntimeTick = int.MinValue;
+            StageRuntimeSceneRefreshCountForDiagnostics = 0;
+            StageRuntimeHostPrepareCountForDiagnostics = 0;
+            StageRuntimeHostReuseCountForDiagnostics = 0;
+            StageRuntimeLegacyPerPassRefreshCountForDiagnostics = 0;
         }
 
         internal void PrepareCapacity(int entityCapacity, int registeredCapacity)
@@ -65,12 +73,19 @@ namespace NTSD.Simulation
         internal BattlePresentationCoordinator BattlePresentation => _battlePresentation;
         internal BattlePixelFramePlan CurrentPixelFramePlan => _currentPixelFramePlan;
         internal int LateRendererUpdateInvocationCountForDiagnostics { get; private set; }
+        internal long CentralOnlyRendererShellBypassCountForDiagnostics { get; private set; }
         internal int PresentationRenderOrderBuildCountForDiagnostics { get; private set; }
         internal int PresentationRenderOrderReusePublishCountForDiagnostics { get; private set; }
         internal int PresentationEntityScanAndSortCountForDiagnostics { get; private set; }
         internal bool SkipLateRendererUpdateForDiagnostics =>
             skipLateRendererUpdateForDiagnostics;
         internal long SkippedLateRendererUpdateTickCountForDiagnostics { get; private set; }
+        internal bool ForceLegacyPerPassStageRefreshForDiagnostics =>
+            forceLegacyPerPassStageRefreshForDiagnostics;
+        internal long StageRuntimeSceneRefreshCountForDiagnostics { get; private set; }
+        internal long StageRuntimeHostPrepareCountForDiagnostics { get; private set; }
+        internal long StageRuntimeHostReuseCountForDiagnostics { get; private set; }
+        internal long StageRuntimeLegacyPerPassRefreshCountForDiagnostics { get; private set; }
 
         public bool ConfigureSkipLateRendererUpdateForDiagnostics(
             bool requested,
@@ -92,6 +107,38 @@ namespace NTSD.Simulation
             skipLateRendererUpdateForDiagnostics = previous;
         }
 
+        internal bool ConfigureLegacyPerPassStageRefreshForDiagnostics(bool requested)
+        {
+            bool previous = forceLegacyPerPassStageRefreshForDiagnostics;
+            forceLegacyPerPassStageRefreshForDiagnostics = requested;
+            preparedStageRuntimeTick = int.MinValue;
+            return previous;
+        }
+
+        internal void PrepareStageRuntimeSnapshotForTick(int tickIndex)
+        {
+            if (forceLegacyPerPassStageRefreshForDiagnostics)
+                return;
+            if (preparedStageRuntimeTick == tickIndex)
+            {
+                StageRuntimeHostReuseCountForDiagnostics++;
+                return;
+            }
+
+            RefreshStageRuntimeSnapshotFromScene();
+            preparedStageRuntimeTick = tickIndex;
+            StageRuntimeHostPrepareCountForDiagnostics++;
+        }
+
+        internal void PrepareStageRuntimeForKernelPass()
+        {
+            if (!forceLegacyPerPassStageRefreshForDiagnostics)
+                return;
+
+            RefreshStageRuntimeSnapshotFromScene();
+            StageRuntimeLegacyPerPassRefreshCountForDiagnostics++;
+        }
+
         internal void PublishPixelFramePlan(BattlePixelFramePlan plan)
         {
             _currentPixelFramePlan = plan;
@@ -100,6 +147,20 @@ namespace NTSD.Simulation
         public void SetBattlePresentationBackend(BattlePresentationBackendMode mode)
         {
             _battlePresentation.SetMode(mode);
+            RefreshLegacyRendererSuppressionForBackend(mode);
+        }
+
+        private void RefreshLegacyRendererSuppressionForBackend(
+            BattlePresentationBackendMode mode)
+        {
+            bool suppressLegacyRenderer =
+                mode == BattlePresentationBackendMode.CentralOnly;
+            List<ISimObject> renderers = BuildRendererSnapshot();
+            for (int index = 0; index < renderers.Count; index++)
+            {
+                if (renderers[index] is LF2ObjectRenderer renderer)
+                    renderer.RefreshLegacyRendererSuppression(suppressLegacyRenderer);
+            }
         }
 
         private readonly struct PresentationRenderOrder
@@ -130,6 +191,7 @@ namespace NTSD.Simulation
                 perspectiveNear,
                 perspectiveFar);
             _hasExplicitStageRuntimeSnapshot = true;
+            preparedStageRuntimeTick = int.MinValue;
         }
 
         internal static void ResolveUnityStageRuntime(
@@ -176,11 +238,11 @@ namespace NTSD.Simulation
                 zMax,
                 perspectiveNear,
                 perspectiveFar);
+            StageRuntimeSceneRefreshCountForDiagnostics++;
         }
 
         public void ClampCharacterZToStageBoundsAll()
         {
-            RefreshStageRuntimeSnapshotFromScene();
             float zMin = world.Runtime?.Stage?.ZMin ?? 180;
             float zMax = world.Runtime?.Stage?.ZMax ?? 350;
             if (zMax < zMin)
@@ -200,7 +262,6 @@ namespace NTSD.Simulation
 
         public void ApplyPreFrameBoundsAll()
         {
-            RefreshStageRuntimeSnapshotFromScene();
             int stageWidthPx = world.Runtime?.Stage?.StageWidthPx ?? 800;
             int baseStageWidthPx = world.Runtime?.Stage?.BaseStageWidthPx ?? 800;
             int xMaxOverride = world.Runtime?.Stage?.XMaxOverride ?? 0;
@@ -242,9 +303,9 @@ namespace NTSD.Simulation
                 _battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly;
             if (publishPresentation)
             {
-                // CentralOnly publishes the map from BattlePresentationCoordinator's
-                // already sorted capture list. Legacy paths retain their independent
-                // pre-publication order build because their materializers consume it.
+                BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                    world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+                presentationDiagnostics?.BeginTick(tickIndex);
                 if (_battlePresentation.Mode != BattlePresentationBackendMode.CentralOnly)
                 {
                     detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderPresentationOrder);
@@ -253,22 +314,49 @@ namespace NTSD.Simulation
                 }
 
                 detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderBeginFrame);
-                _battlePresentation.BeginFrame(world, tickIndex);
-                detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderBeginFrame);
-
-                BattleCentralRenderSystem.QueueLatestPublishedFrame(world);
-                if (!Application.isPlaying || Application.isBatchMode)
-                    BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
-
-                if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.BeginFrameTotal);
+                try
                 {
-                    detailDiagnostics?.BeginPhase(
-                        BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
-                    ValidateLegacySpriteRendererPresentationCapacity(
-                        _presentationRenderOrderCount);
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                    _battlePresentation.BeginFrame(world, tickIndex);
                 }
+                finally
+                {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.BeginFrameTotal);
+                    detailDiagnostics?.EndPhase(BattleTickDetailPhase.RenderBeginFrame);
+                }
+
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.QueueLatestPublishedFrame);
+                try
+                {
+                    BattleCentralRenderSystem.QueueLatestPublishedFrame(world);
+                }
+                finally
+                {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.QueueLatestPublishedFrame);
+                }
+            }
+
+            if (!Application.isPlaying || Application.isBatchMode)
+                PresentLatestFrame(tickIndex);
+        }
+
+        internal void PresentLatestFrame(int tickIndex)
+        {
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
+            if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
+            {
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                ValidateLegacySpriteRendererPresentationCapacity(
+                    _presentationRenderOrderCount);
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
             }
 
             detailDiagnostics?.BeginPhase(BattleTickDetailPhase.RenderLateRendererUpdate);
@@ -500,8 +588,20 @@ namespace NTSD.Simulation
         {
             PresentationRenderOrderBuildCountForDiagnostics++;
             PresentationEntityScanAndSortCountForDiagnostics++;
-            GetPresentationEntitiesNoAlloc(_presentationRenderScratch);
-            _presentationRenderScratch.Sort(PresentationOrderComparison);
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.RenderOrderCollectAndSort);
+            try
+            {
+                GetPresentationEntitiesNoAlloc(_presentationRenderScratch);
+                _presentationRenderScratch.Sort(PresentationOrderComparison);
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.RenderOrderCollectAndSort);
+            }
             PublishPresentationRenderOrderFromSortedEntities(_presentationRenderScratch);
             _presentationRenderScratch.Clear();
         }
@@ -515,6 +615,12 @@ namespace NTSD.Simulation
             IReadOnlyList<LF2Entity> sortedEntities,
             bool reusesCoordinatorSort = false)
         {
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.RenderOrderRankMapFill);
+            try
+            {
             if (reusesCoordinatorSort)
                 PresentationRenderOrderReusePublishCountForDiagnostics++;
             AdvancePresentationRenderOrderEpoch();
@@ -543,6 +649,55 @@ namespace NTSD.Simulation
                 _presentationRenderOrderEpochs[slot] = _presentationRenderOrderEpoch;
                 _presentationRenderOrderCount++;
                 rank++;
+            }
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.RenderOrderRankMapFill);
+            }
+        }
+
+        internal void PublishPresentationRenderOrderFromFrame(
+            BattlePresentationFrame frame,
+            bool reusesCoordinatorSort = false)
+        {
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.RenderOrderRankMapFill);
+            try
+            {
+            if (reusesCoordinatorSort)
+            {
+                PresentationRenderOrderReusePublishCountForDiagnostics++;
+                PresentationEntityScanAndSortCountForDiagnostics++;
+            }
+            AdvancePresentationRenderOrderEpoch();
+            _presentationRenderOrderCount = 0;
+            if (frame == null)
+                return;
+
+            EnsurePresentationRenderOrderCapacity(world.RuntimeSlotCapacityForDiagnostics);
+            for (int rank = 0; rank < frame.EntityCount; rank++)
+            {
+                ref readonly BattlePresentationEntitySnapshot entity =
+                    ref frame.GetEntityRef(rank);
+                int slot = entity.RuntimeSlot;
+                if (slot < 0)
+                    continue;
+
+                EnsurePresentationRenderOrderCapacity(slot + 1);
+                _presentationRenderOrders[slot] =
+                    new PresentationRenderOrder(entity.Handle, rank);
+                _presentationRenderOrderEpochs[slot] = _presentationRenderOrderEpoch;
+                _presentationRenderOrderCount++;
+            }
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.RenderOrderRankMapFill);
             }
         }
 
@@ -686,6 +841,16 @@ namespace NTSD.Simulation
 
         private void LateRendererUpdateAll(int tickIndex)
         {
+            if (_battlePresentation.Mode == BattlePresentationBackendMode.CentralOnly)
+            {
+                // CentralOnly captures the required entity visibility, frame, facing,
+                // position, shadow and local-offset facts directly into the published
+                // frame. Re-running every LF2ObjectRenderer only rewrites the same
+                // managed presentation state and never contributes a central command.
+                CentralOnlyRendererShellBypassCountForDiagnostics++;
+                return;
+            }
+
             LateRendererUpdateInvocationCountForDiagnostics++;
             var snapshot = BuildRendererSnapshot();
             for (int i = 0; i < snapshot.Count; i++)

@@ -20,6 +20,7 @@ namespace NTSD.Test
                     BindingFlags.Instance |
                     BindingFlags.Public |
                     BindingFlags.NonPublic)
+                .Where(field => field.Name != "worldMutationTracker")
                 .OrderBy(field => field.Name, StringComparer.Ordinal)
                 .ToArray();
         private static readonly FieldInfo HeldWeaponField =
@@ -95,6 +96,49 @@ namespace NTSD.Test
             Assert.That(
                 GetHeldWeaponReference(fast.Entities[4]),
                 Is.Null);
+        }
+
+        [Test]
+        public void NonNeutralParticipantFiltering_SkipsOnlyProvenNoOpsAndMatchesLegacy()
+        {
+            using var logging = new DisabledLoggingScope();
+            Scenario filtered = CreateNonNeutralScenario(
+                forceLegacy: false,
+                enableParticipantFiltering: true);
+            Scenario legacy = CreateNonNeutralScenario(forceLegacy: true);
+
+            filtered.World.PreInteractionTickAll(17);
+            legacy.World.PreInteractionTickAll(17);
+
+            AssertScenariosEquivalent(filtered, legacy, 17);
+            Assert.That(
+                filtered.World
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.False);
+            Assert.That(
+                filtered.World.LastPreInteractionExecutedCountForDiagnostics,
+                Is.EqualTo(5));
+            Assert.That(
+                filtered.World.LastPreInteractionProofSkipCountForDiagnostics,
+                Is.EqualTo(10));
+            Assert.That(
+                filtered.World
+                    .LastPreInteractionCpointCheckProofSkipCountForDiagnostics,
+                Is.EqualTo(4));
+            Assert.That(
+                filtered.World
+                    .LastPreInteractionMismatchTailProofSkipCountForDiagnostics,
+                Is.EqualTo(4));
+            Assert.That(
+                filtered.World
+                    .LastPreInteractionHeldSyncProofSkipCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                legacy.World.LastPreInteractionExecutedCountForDiagnostics,
+                Is.EqualTo(15));
+            AssertHeldLinkCleared(filtered.Entities[2]);
+            AssertHeldLinkCleared(filtered.Entities[3]);
+            AssertHeldLinkCleared(filtered.Entities[4]);
         }
 
         [Test]
@@ -275,9 +319,13 @@ namespace NTSD.Test
             return new Scenario(world, entities);
         }
 
-        private static Scenario CreateNonNeutralScenario(bool forceLegacy)
+        private static Scenario CreateNonNeutralScenario(
+            bool forceLegacy,
+            bool enableParticipantFiltering = false)
         {
-            SimulationWorld world = CreateWorld(forceLegacy);
+            SimulationWorld world = CreateWorld(
+                forceLegacy,
+                enableParticipantFiltering);
             var entities = new List<LF2Character>
             {
                 CreateCharacter<LF2Character>(
@@ -310,13 +358,17 @@ namespace NTSD.Test
             return new Scenario(world, entities);
         }
 
-        private static SimulationWorld CreateWorld(bool forceLegacy)
+        private static SimulationWorld CreateWorld(
+            bool forceLegacy,
+            bool enableParticipantFiltering = false)
         {
             return new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
                 BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity)
             {
                 ForceLegacyPreInteractionForDiagnostics = forceLegacy,
+                ForceLegacyPreInteractionParticipantFilteringForDiagnostics =
+                    !enableParticipantFiltering,
             };
         }
 

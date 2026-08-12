@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import {
     authoredTraceStartFrame,
     buildFrameEntryCatalog,
+    buildInternalStagePreviewScenario,
     buildSkillPreviewScenario,
     deriveSkillEntries,
 } from "../../src/client/skill-entries.js";
@@ -296,5 +297,132 @@ describe("automatic DAT skill entries", () => {
             inputPlan: [{ tick: 2, keys: ["K"] }],
             ticks: 120,
         });
+    });
+
+    it("keeps base contexts separate while folding action-only hit targets into their complete action", () => {
+        const catalog = buildFrameEntryCatalog([
+            frame(0, 0, "standing", { state: 0, hit_d: 250 }),
+            frame(5, 1, "walking", { state: 1, hit_d: 250 }),
+            frame(149, 2, "standing", { state: 0, hit_a: 250 }),
+            frame(250, 3, "big", { next: 251 }),
+            frame(251, 4, "big", { hit_a: 252 }),
+            frame(252, 5, "big", { next: 253 }),
+            frame(253, 6, "big", { hit_j: 254 }),
+            frame(254, 7, "big finish"),
+        ], 27);
+
+        const action = catalog.entries.find((entry) => entry.startFrame === 250)!;
+        assert.equal(action.actionRole, "root");
+        assert.deepEqual(action.routes.map((route) => [route.sourceFrame, route.key]), [
+            [0, "hit_d"],
+            [149, "hit_a"],
+            [5, "hit_d"],
+        ]);
+        assert.deepEqual(action.internalStages.map((stage) => stage.startFrame), [252, 254]);
+        assert.equal(catalog.entries.find((entry) => entry.startFrame === 252)?.actionRole, "internal");
+        assert.deepEqual(catalog.entries.find((entry) => entry.startFrame === 254)?.parentStartFrames, [250]);
+        assert.deepEqual(catalog.byOccurrence.get(7)?.ownerStartFrames, [250]);
+
+        assert.deepEqual(catalog.baseContexts.map((context) => ({
+            state: context.state,
+            primary: context.primaryStartFrame,
+            variants: context.variantStartFrames,
+            actions: context.actionStartFrames,
+        })), [{
+            state: 0,
+            primary: 0,
+            variants: [0, 149],
+            actions: [250],
+        }, {
+            state: 1,
+            primary: 5,
+            variants: [5],
+            actions: [250],
+        }]);
+    });
+
+    it("keeps a shared internal hit stage attached to every complete action owner", () => {
+        const catalog = buildFrameEntryCatalog([
+            frame(0, 0, "standing", { state: 0, hit_a: 240, hit_d: 260 }),
+            frame(240, 1, "skill a", { next: 241 }),
+            frame(241, 2, "skill a", { hit_j: 300 }),
+            frame(260, 3, "skill b", { next: 261 }),
+            frame(261, 4, "skill b", { hit_j: 300 }),
+            frame(300, 5, "shared finish"),
+        ], 27);
+
+        const shared = catalog.entries.find((entry) => entry.startFrame === 300)!;
+        assert.equal(shared.actionRole, "internal");
+        assert.deepEqual(shared.parentStartFrames, [240, 260]);
+        assert.deepEqual(catalog.entries.find((entry) => entry.startFrame === 240)?.internalStages.map((stage) => stage.startFrame), [300]);
+        assert.deepEqual(catalog.entries.find((entry) => entry.startFrame === 260)?.internalStages.map((stage) => stage.startFrame), [300]);
+    });
+
+    it("does not fold a hit target that also has a direct base-state route", () => {
+        const catalog = buildFrameEntryCatalog([
+            frame(0, 0, "standing", { state: 0, hit_a: 240, hit_j: 300 }),
+            frame(240, 1, "skill a", { next: 241 }),
+            frame(241, 2, "skill a", { hit_j: 300 }),
+            frame(300, 3, "independent finish"),
+        ], 27);
+
+        const independent = catalog.entries.find((entry) => entry.startFrame === 300)!;
+        assert.equal(independent.actionRole, "root");
+        assert.deepEqual(independent.routes.map((route) => route.sourceFrame), [0, 241]);
+        assert.deepEqual(catalog.entries.find((entry) => entry.startFrame === 240)?.internalStages, []);
+    });
+
+    it("builds an internal hit branch from the parent real entry and the observed source tick", () => {
+        const frames = [
+            frame(0, 0, "standing", { state: 0, hit_Dj: 271 }),
+            frame(271, 1, "clone", { next: 272, hit_a: 355, hit_d: 356 }),
+            frame(272, 2, "clone", { next: 0 }),
+            frame(355, 3, "clone_hell", { next: 0 }),
+            frame(356, 4, "clone", { next: 0 }),
+        ];
+        const catalog = buildFrameEntryCatalog(frames, 2);
+        const parent = catalog.entries.find((entry) => entry.startFrame === 271)!;
+        const stage = catalog.entries.find((entry) => entry.startFrame === 355)!;
+        const parentScenario = buildSkillPreviewScenario(frames, parent);
+        const branch = buildInternalStagePreviewScenario(parentScenario, stage, [
+            { tick: 0, frame: 0 },
+            { tick: 14, frame: 271 },
+            { tick: 15, frame: 271 },
+            { tick: 16, frame: 272 },
+        ]);
+
+        assert.equal(stage.actionRole, "internal");
+        assert.equal(branch?.route.sourceFrame, 271);
+        assert.equal(branch?.route.key, "hit_a");
+        assert.equal(branch?.triggerTick, 15);
+        assert.deepEqual(branch?.scenario, {
+            startFrame: 271,
+            initialFrame: 0,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["S"] },
+                { tick: 6, keys: ["K"] },
+                { tick: 15, keys: ["J"] },
+            ],
+            ticks: 120,
+        });
+    });
+
+    it("does not invent an internal branch when the parent trace never reaches its source frame", () => {
+        const frames = [
+            frame(0, 0, "standing", { state: 0, hit_a: 240 }),
+            frame(240, 1, "skill", { next: 241 }),
+            frame(241, 2, "skill", { hit_j: 300 }),
+            frame(300, 3, "finish"),
+        ];
+        const catalog = buildFrameEntryCatalog(frames, 2);
+        const parent = catalog.entries.find((entry) => entry.startFrame === 240)!;
+        const stage = catalog.entries.find((entry) => entry.startFrame === 300)!;
+
+        assert.equal(buildInternalStagePreviewScenario(
+            buildSkillPreviewScenario(frames, parent),
+            stage,
+            [{ tick: 0, frame: 0 }, { tick: 10, frame: 240 }],
+        ), undefined);
     });
 });

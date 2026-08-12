@@ -3,10 +3,14 @@
 > 状态：未来设计，当前不实施  
 > 记录日期：2026-08-08  
 > 当前前置目标：先完成 `singleplayer-1000ai-performance-plan.md`
+> 上位统一方案：`unified-battle-lockstep-ecs-server-architecture-plan.md`
+> 知识来源与取舍：`lockstep-knowledge-base-audit.md`
 
 ## 2026-08-10：帧同步资料复核后的当前定调
 
 本节依据 `I:\GitHub\ZhiHu_MD\output\网络游戏` 中的帧同步、逻辑/表现分离、追帧、回滚、快照和网络协议资料，并结合当前代码重新审计后确定。资料中的具体项目经验只作为参考；与 NTSD 的 C# 权威战斗规则冲突时，以权威调用链为准。
+
+2026-08-11 已完成全目录审计：96 个 Markdown、24 份正文，去重并合并同文变体后为 19 个独立主题。本文件只保留未来服务器细节；统一架构决策和明确拒绝项以上位方案与知识审计为准。
 
 ### 三种频率必须分离
 
@@ -259,6 +263,15 @@ OnRoomFrameDeadline(frame N)
 - 建议策略为：短暂 grace 内沿用上一帧 held 状态且 edges 为 0，超过断线阈值后切换为 neutral 或服务器 AI 托管。
 - grace、neutral 和托管切换点必须属于服务器规则并进入 checksum/回放记录。
 
+### 7.4 权威帧锁定与重复包
+
+- 首个合法 `(sessionId, frame, playerSlot)` 输入进入未锁定 inbox；
+- 相同内容的重复包幂等接受；
+- 同 key 不同内容是协议冲突，拒绝并记录，不能以后到覆盖先到；
+- frame deadline 后由服务器补齐并锁定完整 `FrameInputSet`；
+- 锁定、模拟或广播后，迟到输入不能修改历史；
+- 客户端收到重复权威帧时遵循同一规则，同帧不同内容立即进入 `Faulted`。
+
 ## 8. 客户端推进与追帧
 
 客户端维护：
@@ -269,6 +282,20 @@ highestReceivedServerFrame
 highestContiguousReadyFrame
 targetBufferFrames
 ```
+
+缓冲状态固定为：
+
+```text
+Priming
+  -> Running
+  -> WaitingForGap
+  -> CatchingUp
+  -> RecoveringSnapshot
+  -> Running
+  -> Faulted / Ending
+```
+
+`highestReceivedServerFrame` 可能有洞，只供诊断和补发；实际推进只能使用 `highestContiguousReadyFrame`。`Priming` 先建立目标缓冲，`WaitingForGap` 不跳帧，`CatchingUp` 只处理真实连续积压，`RecoveringSnapshot` 处理超出历史窗口或 checksum 分叉。
 
 正常执行目标：
 
@@ -333,26 +360,57 @@ targetExecutionFrame = highestContiguousReadyFrame - targetBufferFrames
 6. 重建当前表现快照并恢复正常缓冲运行
 ```
 
+正常战斗只广播输入帧。服务器快照只用于 bootstrap、重连、严重 desync、观战或晚加入，不周期性覆盖客户端位置、HP、Buff 来维持“表面一致”。客户端本地磁盘快照可作诊断缓存，但不是服务器可信的权威恢复源。
+
+### 10.4 安全与反作弊假设
+
+- 加密只保护传输，不证明客户端诚实；
+- 客户端提交输入意图，不能提交命中、伤害或最终位置作为权威结果；
+- 服务器同核运行的 checksum 是基准，不能靠两个或多个客户端多数投票决定真相；
+- 高频帧协议必须校验 session、player、schema、frame window、序号、包长和输入范围；
+- 纯帧同步客户端通常持有完整战斗信息，透视风险不能用 checksum 或加密宣称消除。
+
 ## 11. 服务器承载与部署路线
+
+### 当前阶段冻结边界
+
+本节记录未来设计，不代表当前已经开始服务器实施。当前只执行统一方案的 U0～U9：完成单机 BattleKernel、确定性、零 GC、Snapshot/Restore 和 1000 AI 性能验收，同时只保留未来服务器所需的纯 C# 接口边界。
+
+- U9 完成前不实现服务器业务、ACK、Jitter Buffer、房间、登录、匹配或重连；
+- U9 完成前不选择或接入具体网络库；
+- U9 验收完成后必须等待用户明确确认，不能自动进入 S0；
+- S0 获批后只做同进程、内存直连的服务器与多客户端世界，不使用真实 Socket；
+- transport 和独立进程选型必须等待同核模拟、权威帧、checksum 与恢复合同获得证据。
 
 ### S0：同进程 Loopback
 
 - 在 Unity Editor 内运行内存版服务器帧时钟和多个客户端世界。
-- 不接真实 Socket，先证明输入、顺序、checksum 和恢复协议。
+- 不接真实 Socket，先证明 StartBarrier、权威帧锁定、输入顺序和 checksum。
 
-### S1：独立进程原型
+### S1：内存网络语义
+
+- 实现 Jitter Buffer、ACK、冗余帧、重复、冲突、乱序、缺帧和 frame deadline。
+- 仍使用内存 transport，把协议语义与具体网络库分开证明。
+
+### S2：恢复闭环
+
+- 完成 `FrameHistoryRing + SnapshotRing + ChecksumHistory`。
+- 证明断线、严重落后和 desync 均可通过快照 + 后续输入重放恢复。
+- 在本阶段末根据真实冲突场景决定是否需要客户端预测回滚。
+
+### S3：独立进程原型
 
 - 先选择最低迁移成本的 C# host。
 - 若 Battle Core 仍依赖 Unity 程序集，可先使用 Unity Dedicated Server/headless build 验证房间循环。
 - 长期目标是把共享确定性核心收敛到不需要表现层的 C# assembly，让普通 .NET 服务器也能复用。
 
-### S2：真实网络
+### S4：真实网络
 
 - 接控制面和数据面 transport。
 - 注入延迟、抖动、丢包、重复和乱序。
 - 完成 ACK、冗余帧、checksum 和恢复闭环。
 
-### S3：房间扩展
+### S5：房间扩展
 
 - 单房间保持确定性串行。
 - 多房间分配到多个 worker/process。
@@ -549,4 +607,4 @@ Room worker 在 frame deadline(N)
 5. 单机模式与网络模式的调度配置不能通过同一默认值互相污染。
 6. 1000 AI 单 tick 有明确 CPU/GC 预算；服务器不会因禁用渲染就掩盖核心超预算。
 
-达到这些门禁后再实现 S0；S0 通过后才选 transport 和部署形态。这样当前优化结果可以直接成为服务器共享核心，而不是未来再做一次战斗架构迁移。
+达到这些门禁、完成 U9 验收并取得用户明确批准后，才实现 S0；S0 通过后才评估 transport 和部署形态。这样当前优化结果可以直接成为服务器共享核心，而不是未来再做一次战斗架构迁移。

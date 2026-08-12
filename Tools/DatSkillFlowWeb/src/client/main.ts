@@ -3,8 +3,12 @@ import {
     findFrameFieldCapability,
     lastFrameForId,
     mergePreview,
+    movePreviewPosition,
+    nativePreviewPlaybackBounds,
     previewIntentCacheKey,
     primaryPreviewEntity,
+    type PreviewInitialPositions,
+    type PreviewPosition,
 } from "./project-client.js";
 import {
     buildSkillFlow,
@@ -13,11 +17,13 @@ import {
 } from "./skill-flow.js";
 import {
     buildCompleteActionIndex,
+    buildInternalStageChain,
     nextDistanceToFrame,
 } from "./complete-action-selection.js";
 import { renderFlowSvg } from "./flow-svg.js";
 import {
     buildFrameEntryCatalog,
+    buildInternalStagePreviewScenario,
     buildSkillPreviewScenario,
     entriesByStartFrame,
     type FrameEntryCatalog,
@@ -42,7 +48,10 @@ import {
 } from "./overlay-geometry.js";
 import {
     drawPreviewCanvas,
+    hitTestPreviewActor,
     preloadPreviewObjectAssets,
+    previewActorHitAreas,
+    type PreviewActorHitArea,
     type PreviewStage,
     type PreviewEntity,
     type PreviewTick,
@@ -100,6 +109,7 @@ interface ProjectState {
     ranges: Json[];
     nativeTicks: NativeTick[];
     nativeTrace: Json;
+    nativeInitial: PreviewInitialPositions;
     previewObjects: readonly {
         oid: number;
         frames: Frame[];
@@ -126,6 +136,7 @@ interface PreviewIntent {
     readonly startFrame: number;
     readonly initialFrame?: number;
     readonly inputPlan?: readonly SkillPreviewInputStep[];
+    readonly initial?: PreviewInitialPositions;
     readonly ticks: number;
 }
 type ExclusiveAction = "skill" | "edit" | "save";
@@ -197,6 +208,18 @@ let frameFieldCacheProjectKey = "";
 let selectedFlowEdgeId: string | undefined;
 let disposeFlowSvg: (() => void) | undefined;
 let canvasDraftGeometry: OverlayGeometry | undefined;
+let positionMode = false;
+let scenePositions: PreviewInitialPositions | undefined;
+let lastPreviewScenario: SkillPreviewScenario | { readonly startFrame: number; readonly ticks: number } | undefined;
+let currentActorHitAreas: readonly PreviewActorHitArea[] = [];
+let actorPositionInteraction: {
+    readonly pointerId: number;
+    readonly slot: 0 | 1;
+    readonly startX: number;
+    readonly startY: number;
+    readonly startPosition: PreviewPosition;
+    draftPosition: PreviewPosition;
+} | undefined;
 let canvasInteraction: {
     pointerId: number;
     startX: number;
@@ -255,6 +278,19 @@ async function closeProjectSession(sessionId: string, keepalive = false): Promis
 function normalize(payload: Json): ProjectState {
     const data = record(payload.data), session = record(data.document ?? data.session ?? data.project ?? data), projection = record(session.projection ?? data.projection);
     const preview = record(session.nativePreview ?? session.preview ?? session.trace ?? data.nativePreview ?? data.preview ?? data.trace);
+    const rawInitial = record(record(preview.metadata).initial);
+    const initialPosition = (value: unknown, fallback: PreviewPosition): PreviewPosition => {
+        const item = record(value);
+        return {
+            x: number(item.x, fallback.x),
+            y: number(item.y, fallback.y),
+            z: number(item.z, fallback.z),
+        };
+    };
+    const nativeInitial: PreviewInitialPositions = {
+        p1: initialPosition(rawInitial.p1, { x: 320, y: 0, z: 500 }),
+        p2: initialPosition(rawInitial.p2, { x: 360, y: 0, z: 501 }),
+    };
     const stage = normalizePreviewStage(record(preview.metadata).stage);
     const frames = list(projection.frames ?? session.frames).map((value, index) => ({ ...record(value), frameId: number(record(value).frameId ?? record(value).id, index), occurrence: number(record(value).occurrence, index) })) as Frame[];
     const assets = new Map<string, string>();
@@ -322,6 +358,7 @@ function normalize(payload: Json): ProjectState {
         ranges: list(projection.spriteRanges ?? session.spriteRanges ?? data.spriteRanges).map(record),
         nativeTicks: ticks,
         nativeTrace: record(preview.trace),
+        nativeInitial,
         previewObjects,
         ...(stage === undefined ? {} : { stage }),
         assets,
@@ -390,6 +427,7 @@ const previewScheduler = createLatestTaskScheduler<PreviewIntent, Json>(
                 startFrame: intent.startFrame,
                 ...(intent.initialFrame === undefined ? {} : { initialFrame: intent.initialFrame }),
                 ...(intent.inputPlan === undefined ? {} : { inputPlan: intent.inputPlan }),
+                ...(intent.initial === undefined ? {} : { initial: intent.initial }),
                 ticks: intent.ticks,
             }),
         }, true);
@@ -404,14 +442,14 @@ function currentFrame(): Frame | undefined {
         ?? currentRuntimeFrame();
 }
 function currentRuntimeFrame(): Frame | undefined { return lastFrameForId(project?.frames ?? [], primaryEntity()?.frame); }
+function actionStartIndex(): number {
+    return nativePreviewPlaybackBounds(project?.nativeTrace, project?.nativeTicks.length ?? 0).actionStart;
+}
 function playbackEndIndex(): number {
-    const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
-    return Math.min(last, Math.max(0, Math.trunc(number(project?.nativeTrace.playbackEndTick, last))));
+    return nativePreviewPlaybackBounds(project?.nativeTrace, project?.nativeTicks.length ?? 0).playbackEnd;
 }
 function progressEndIndex(): number {
-    const last = Math.max(0, (project?.nativeTicks.length ?? 1) - 1);
-    const value = number(project?.nativeTrace.progressEndTick, -1);
-    return value < 0 ? -1 : Math.min(last, Math.max(0, Math.trunc(value)));
+    return nativePreviewPlaybackBounds(project?.nativeTrace, project?.nativeTicks.length ?? 0).progressEnd;
 }
 function fieldCapability(frame: Frame, key: string, block: BlockSelection): FieldCapability | undefined {
     const runtime = lastFrameForId(project?.frames ?? [], frame.frameId);
@@ -618,7 +656,8 @@ function isActionBusy(): boolean {
 function isSelectionLocked(): boolean {
     return isActionBusy()
         || fieldDraft !== undefined
-        || canvasInteraction !== undefined;
+        || canvasInteraction !== undefined
+        || actorPositionInteraction !== undefined;
 }
 function syncSkillActionState(): void {
     const editSkill = select<HTMLButtonElement>("edit-skill");
@@ -726,14 +765,20 @@ function syncReadOnlyUi(): void {
     setText("frame-readout", runtimeFrame ? String(runtimeFrame.frameId) : "-");
     const progressEnd = progressEndIndex();
     const playbackEnd = playbackEndIndex();
+    const actionStart = actionStartIndex();
+    const traceStatus = text(project?.nativeTrace.status);
     setText("time-readout", `Tick ${tickIndex} / ${playbackEnd}`);
-    setText("dat-wait-readout", progressEnd >= 0
-        ? `${count} 个 Native Tick · 主体结束 ${progressEnd} · 尾迹 ${playbackEnd}`
-        : `${count} 个 Native Tick · 主体尚未结束`);
+    setText("dat-wait-readout", actionStart < 0
+        ? `${count} 个 Native Tick · 未进入目标动作`
+        : progressEnd >= 0
+            ? `${count} 个 Native Tick · 入口 ${actionStart} · 主体结束 ${progressEnd} · 尾迹 ${playbackEnd}`
+            : `${count} 个 Native Tick · 入口 ${actionStart} · 主体尚未结束`);
     setText("preview-frame-count", String(playbackEnd));
     const rootEnded = progressEnd >= 0 && tickIndex >= progressEnd;
     setText("play-state", primary
-        ? playing ? rootEnded ? "完整动作：播放尾迹" : "完整动作：播放中" : rootEnded ? "完整动作：主体已结束" : "完整动作：已暂停"
+        ? traceStatus === "entry-not-reached"
+            ? "完整动作：入口未命中"
+            : playing ? rootEnded ? "完整动作：播放尾迹" : "完整动作：播放中" : rootEnded ? "完整动作：主体已结束" : "完整动作：已暂停"
         : "主实体不可用");
     setText("facing-readout", primary ? number(primary.facing) === 1 ? "左" : "右" : "—");
     if (frameSelect && inspectedFrame) frameSelect.value = String(inspectedFrame.occurrence);
@@ -743,18 +788,68 @@ function syncReadOnlyUi(): void {
     syncPreviewContext(inspectedFrame);
     syncFrameSelectionIndicators(inspectedFrame);
 }
-function update(): void { syncReadOnlyUi(); requestPreviewRender(); }
+function activeScenePositions(): PreviewInitialPositions {
+    const base = scenePositions ?? project?.nativeInitial ?? {
+        p1: { x: 320, y: 0, z: 500 },
+        p2: { x: 360, y: 0, z: 501 },
+    };
+    const interaction = actorPositionInteraction;
+    if (interaction === undefined) return base;
+    return interaction.slot === 0
+        ? { ...base, p1: interaction.draftPosition }
+        : { ...base, p2: interaction.draftPosition };
+}
+function positionedPreviewTick(): NativeTick | undefined {
+    const tick = project?.nativeTicks[tickIndex];
+    if (!tick || !positionMode || tickIndex !== 0) return tick;
+    const initial = activeScenePositions();
+    return {
+        ...tick,
+        entities: tick.entities.map((entity) => {
+            const position = entity.slot === 0 ? initial.p1 : entity.slot === 1 ? initial.p2 : undefined;
+            if (position === undefined) return entity;
+            return {
+                ...entity,
+                x: position.x,
+                y: position.y,
+                z: position.z,
+                xInt: Math.trunc(position.x),
+                yInt: Math.trunc(position.y),
+                zInt: Math.trunc(position.z),
+                displayZ: Math.trunc(position.z),
+            };
+        }),
+    };
+}
+function syncPositionUi(): void {
+    const toggle = select<HTMLButtonElement>("position-mode");
+    const reset = select<HTMLButtonElement>("reset-positions");
+    if (toggle) {
+        toggle.ariaPressed = String(positionMode);
+        toggle.classList.toggle("is-active", positionMode);
+        toggle.disabled = !project || project.nativeTicks.length === 0;
+    }
+    if (reset) reset.disabled = !project || scenePositions === undefined;
+    const initial = activeScenePositions();
+    setText("position-readout", `P1 (${Math.round(initial.p1.x)}, ${Math.round(initial.p1.z)}) · P2 (${Math.round(initial.p2.x)}, ${Math.round(initial.p2.z)})`);
+    canvas?.classList.toggle("is-positioning", positionMode);
+}
+function update(): void { syncReadOnlyUi(); syncPositionUi(); requestPreviewRender(); }
 function drawPreview(): void {
     if (!canvas || !project) return;
+    const tick = positionedPreviewTick();
+    currentActorHitAreas = previewActorHitAreas(project, tick, currentRuntimeFrame());
     currentGeometry = drawPreviewCanvas({
         canvas,
         project,
-        tick: project.nativeTicks[tickIndex],
+        tick,
         runtimeFrame: currentRuntimeFrame(),
         images,
         colorKeyImages,
         visibleOverlays,
         draftGeometry: canvasDraftGeometry,
+        positionMode,
+        selectedPositionSlot: actorPositionInteraction?.slot,
         requestRender: requestPreviewRender,
     });
 }
@@ -766,7 +861,6 @@ function activeProjectOid(): number {
     return project?.oid ?? number(Number(objectSelect?.selectedOptions[0]?.dataset.oid), 2);
 }
 function selectedSkill(): ProjectSkill | undefined {
-    if (project?.sourceKind === "patch") return undefined;
     const skill = skillState.skills[selectedSkillIndex];
     return skill?.oid === activeProjectOid() ? skill : undefined;
 }
@@ -786,8 +880,10 @@ function rebuildSkillEntries(preferredStartFrame = selectedSkill()?.startFrame):
     selectedSkillIndex = preferredStartFrame === undefined
         ? -1
         : skillState.skills.findIndex((entry) => entry.startFrame === preferredStartFrame);
-    if (selectedSkillIndex < 0 || skillState.skills[selectedSkillIndex]?.hidden === true) {
-        selectedSkillIndex = skillState.skills.findIndex((entry) => !entry.hidden);
+    if (selectedSkillIndex < 0
+        || skillState.skills[selectedSkillIndex]?.hidden === true
+        || skillState.skills[selectedSkillIndex]?.actionRole === "internal") {
+        selectedSkillIndex = skillState.skills.findIndex((entry) => !entry.hidden && entry.actionRole !== "internal");
     }
 }
 function skillFlow(startFrame: number): SkillFlowGraph | undefined {
@@ -854,7 +950,121 @@ function skillMatchesQuery(skill: SkillEntry, query: string): boolean {
         skill.nativeTrigger ?? "",
         String(skill.startFrame),
         ...skill.triggers.map((trigger) => trigger.key),
+        ...skill.routes.flatMap((route) => [route.sourceLabel, String(route.sourceFrame), route.key]),
+        ...skill.internalStages.flatMap((stage) => [stage.label, String(stage.startFrame)]),
     ].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
+}
+
+function skillRouteLabels(skill: SkillEntry): readonly string[] {
+    return [...new Set(skill.routes.map((route) => (
+        `${route.sourceLabel} F${route.sourceFrame} · ${route.key}`
+    )))];
+}
+
+function compactSkillRouteSummary(skill: SkillEntry): string {
+    const routes = skillRouteLabels(skill);
+    if (routes.length === 0) return skill.nativeTrigger ?? "—";
+    return `${routes.slice(0, 2).join(" / ")}${routes.length > 2 ? ` +${routes.length - 2}` : ""}`;
+}
+
+function setEntryTableHeadings(labels: readonly [string, string, string, string]): void {
+    setText("entry-heading-name", labels[0]);
+    setText("entry-heading-frame", labels[1]);
+    setText("entry-heading-count", labels[2]);
+    setText("entry-heading-trigger", labels[3]);
+}
+
+function renderActionContextDetail(): void {
+    const detail = select<HTMLElement>("action-context-detail");
+    if (!detail || activeEntryTab === "all") {
+        if (detail) detail.hidden = true;
+        return;
+    }
+    const selected = selectedSkill();
+    if (activeEntryTab === "base") {
+        const context = frameEntryCatalog?.baseContexts.find((candidate) => (
+            selected !== undefined && candidate.variantStartFrames.includes(selected.startFrame)
+        )) ?? frameEntryCatalog?.baseContexts[0];
+        if (context === undefined) {
+            detail.hidden = true;
+            return;
+        }
+        const actions = context.actionStartFrames
+            .map((startFrame) => skillState.skills.find((skill) => skill.startFrame === startFrame))
+            .filter((skill): skill is SkillEntry => skill !== undefined);
+        const title = document.createElement("div");
+        title.className = "action-context-detail-title";
+        title.textContent = `${context.label} · ${context.variantStartFrames.length} 个状态变体`;
+        const variants = document.createElement("div");
+        variants.className = "action-context-detail-line";
+        variants.textContent = `Frame：${context.variantStartFrames.map((frame) => `F${frame}`).join("、")}`;
+        const routes = document.createElement("div");
+        routes.className = "action-context-chips";
+        routes.append(...actions.slice(0, 8).map((skill) => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "action-context-chip";
+            chip.textContent = `${skill.displayName} · ${skill.routes.find((route) => route.sourceState === context.state)?.key ?? "入口"}`;
+            chip.title = `播放完整动作 ${skill.displayName}（F${skill.startFrame}）`;
+            chip.addEventListener("click", () => {
+                const index = skillState.skills.indexOf(skill);
+                if (index >= 0 && !isSelectionLocked()) reportOperation(selectSkill(index), "完整动作预览失败。");
+            });
+            return chip;
+        }));
+        if (actions.length > 8) {
+            const more = document.createElement("span");
+            more.textContent = `另有 ${actions.length - 8} 个动作`;
+            routes.append(more);
+        }
+        detail.replaceChildren(title, variants, routes);
+        detail.hidden = false;
+        return;
+    }
+    if (selected === undefined || selected.actionRole !== "root") {
+        detail.hidden = true;
+        return;
+    }
+    const title = document.createElement("div");
+    title.className = "action-context-detail-title";
+    title.textContent = `${selected.displayName} · 完整动作结构`;
+    const routeLine = document.createElement("div");
+    routeLine.className = "action-context-detail-line";
+    routeLine.textContent = `入口路线：${compactSkillRouteSummary(selected)}`;
+    const stages = document.createElement("div");
+    stages.className = "action-context-chips";
+    const rootStage = document.createElement("button");
+    rootStage.type = "button";
+    rootStage.className = "action-context-chip is-root-stage";
+    rootStage.textContent = `起点 F${selected.startFrame}`;
+    rootStage.title = `从真实入口重新播放 ${selected.displayName}`;
+    rootStage.addEventListener("click", () => {
+        const index = skillState.skills.indexOf(selected);
+        if (index >= 0 && !isSelectionLocked()) reportOperation(selectSkill(index), "完整动作预览失败。");
+    });
+    stages.append(rootStage, ...selected.internalStages.map((stage) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "action-context-chip";
+        chip.textContent = `${stage.label} F${stage.startFrame} · ${stage.triggers.map((trigger) => trigger.key).join("/")}`;
+        const stageEntry = skillState.skills.find((skill) => (
+            skill.startFrame === stage.startFrame && skill.actionRole === "internal"
+        ));
+        const stageFrame = lastFrameForId(project?.frames ?? [], stage.startFrame);
+        chip.disabled = stageEntry === undefined || stageFrame === undefined;
+        chip.classList.toggle("is-selected", stageFrame?.occurrence === selectedFrameOccurrence);
+        chip.title = stageEntry === undefined
+            ? `F${stage.startFrame} 没有可执行的内部阶段入口`
+            : `从 ${selected.displayName} 的真实入口执行到来源 Frame，再触发 ${stage.triggers.map((trigger) => trigger.key).join("/")}`;
+        chip.addEventListener("click", () => {
+            if (stageEntry !== undefined && !isSelectionLocked()) {
+                reportOperation(selectInternalStage(selected, stageEntry), "内部 hit_* 阶段预览失败。");
+            }
+        });
+        return chip;
+    }));
+    detail.replaceChildren(title, routeLine, stages);
+    detail.hidden = false;
 }
 function renderFrameBrowser(): number {
     const body = select<HTMLTableSectionElement>("frame-browser-list");
@@ -922,6 +1132,7 @@ function renderSkillList(): void {
     if (frameBrowser) frameBrowser.hidden = activeEntryTab !== "all";
     if (entryToolbar) entryToolbar.hidden = activeEntryTab === "all";
     if (activeEntryTab === "all") {
+        setEntryTableHeadings(["名称", "首帧", "段帧数", "触发"]);
         body.replaceChildren();
         const count = renderFrameBrowser();
         setText("skill-count", String(count));
@@ -930,14 +1141,67 @@ function renderSkillList(): void {
             empty.hidden = count > 0;
             empty.textContent = "没有符合筛选条件的 Frame。";
         }
+        renderActionContextDetail();
         syncSkillActionState();
         return;
     }
     const showHidden = select<HTMLInputElement>("show-hidden-skills")?.checked === true;
+    if (activeEntryTab === "base") {
+        setEntryTableHeadings(["基础状态", "代表帧", "状态帧", "可用动作"]);
+        const contexts = (frameEntryCatalog?.baseContexts ?? []).filter((context) => {
+            const entries = context.variantStartFrames
+                .map((startFrame) => skillState.skills.find((skill) => skill.startFrame === startFrame))
+                .filter((skill): skill is SkillEntry => skill !== undefined);
+            if (!showHidden && entries.every((entry) => entry.hidden)) return false;
+            if (entrySearchQuery === "") return true;
+            const actionNames = context.actionStartFrames
+                .map((startFrame) => skillState.skills.find((skill) => skill.startFrame === startFrame)?.displayName ?? "");
+            return [
+                context.label,
+                context.state,
+                ...context.variantStartFrames,
+                ...actionNames,
+            ].join(" ").toLocaleLowerCase("zh-CN").includes(entrySearchQuery);
+        });
+        const selected = selectedSkill();
+        const rows = contexts.map((context): HTMLTableRowElement => {
+            const row = document.createElement("tr");
+            if (selected !== undefined && context.variantStartFrames.includes(selected.startFrame)) {
+                row.classList.add("is-selected");
+            }
+            const name = document.createElement("td");
+            const frame = document.createElement("td");
+            const count = document.createElement("td");
+            const trigger = document.createElement("td");
+            name.textContent = context.label;
+            frame.textContent = `F${context.primaryStartFrame}${context.variantStartFrames.length > 1 ? ` +${context.variantStartFrames.length - 1}` : ""}`;
+            count.textContent = String(context.frameCount);
+            trigger.textContent = `${context.actionStartFrames.length} 动作 · ${context.routeCount} 路线`;
+            trigger.title = `状态变体：${context.variantStartFrames.map((value) => `F${value}`).join("、")}`;
+            row.append(name, frame, count, trigger);
+            row.addEventListener("click", () => {
+                const index = skillState.skills.findIndex((skill) => skill.startFrame === context.primaryStartFrame);
+                if (index >= 0 && !isSelectionLocked()) reportOperation(selectSkill(index), "基础状态预览失败。");
+            });
+            return row;
+        });
+        body.replaceChildren(...rows);
+        setText("skill-count", String(contexts.length));
+        const empty = select<HTMLElement>("skill-empty");
+        if (empty) {
+            empty.hidden = contexts.length > 0;
+            empty.textContent = "当前 DAT 没有符合条件的基础状态。";
+        }
+        renderActionContextDetail();
+        syncSkillActionState();
+        return;
+    }
+    setEntryTableHeadings(["完整动作", "首帧", "结构", "入口路线"]);
     const visibleSkills = skillState.skills.flatMap((skill, index) => (
         skill.oid === activeProjectOid()
             && (!skill.hidden || showHidden)
-            && (activeEntryTab === "base" ? skill.category === "base" : skill.category !== "base")
+            && skill.category !== "base"
+            && skill.actionRole === "root"
             && skillMatchesQuery(skill, entrySearchQuery)
             ? [index]
             : []
@@ -964,14 +1228,21 @@ function renderSkillList(): void {
         const count = document.createElement("td");
         const trigger = document.createElement("td");
         name.textContent = `${skill.pinned ? "★ " : ""}${skill.displayName}`;
+        if (skill.internalStages.length > 0) {
+            const detail = document.createElement("small");
+            detail.className = "entry-row-detail";
+            detail.textContent = `包含 ${skill.internalStages.length} 个内部输入阶段`;
+            name.append(detail);
+        }
         name.title = skill.displayName === skill.label
             ? skill.label
             : `${skill.displayName}（DAT: ${skill.label}）`;
         frame.textContent = String(skill.startFrame);
-        count.textContent = String(skill.segmentFrameCount);
-        trigger.textContent = skill.triggers.map((item) => item.key).join(" · ")
-            || skill.nativeTrigger
-            || "—";
+        count.textContent = skill.internalStages.length > 0
+            ? `${skill.internalStages.length + 1} 阶段`
+            : `${skill.segmentFrameCount} 帧`;
+        trigger.textContent = compactSkillRouteSummary(skill);
+        trigger.title = skillRouteLabels(skill).join("\n") || skill.nativeTrigger || "";
         row.append(name, frame, count, trigger);
         row.addEventListener("click", () => {
             if (!isSelectionLocked()) reportOperation(selectSkill(index), "技能预览失败。");
@@ -983,8 +1254,9 @@ function renderSkillList(): void {
     const empty = select<HTMLElement>("skill-empty");
     if (empty) {
         empty.hidden = visibleSkills.length > 0;
-        empty.textContent = "当前分类没有符合条件的入口。";
+        empty.textContent = "当前分类没有符合条件的完整动作。";
     }
+    renderActionContextDetail();
     syncSkillActionState();
 }
 function flowSummary(edges: readonly SkillFlowEdge[]): string {
@@ -1238,7 +1510,7 @@ function clearDraft(): void {
 function syncDraftActions(): void {
     const apply = select<HTMLButtonElement>("apply-draft"), topApply = select<HTMLButtonElement>("apply-session");
     const discard = select<HTMLButtonElement>("discard-draft");
-    const editorLocked = isActionBusy() || canvasInteraction !== undefined;
+    const editorLocked = isActionBusy() || canvasInteraction !== undefined || actorPositionInteraction !== undefined;
     const canApply = project?.writable === true && fieldDraft?.valid === true && fieldDraft.value !== undefined && !editorLocked;
     if (apply) {
         apply.textContent = actionBusy.edit ? "应用中…" : "应用本次修改";
@@ -1296,10 +1568,12 @@ async function preview(selection: number | SkillPreviewScenario, allowSessionRec
     const scenario = typeof selection === "number"
         ? { startFrame: selection, ticks: 30 }
         : selection;
+    lastPreviewScenario = scenario;
     const intent: PreviewIntent = {
         sessionId: project.sessionId,
         revision: project.revision,
         ...scenario,
+        ...(scenePositions === undefined ? {} : { initial: scenePositions }),
     };
     const cached = previewResponseCache.get(previewIntentCacheKey(intent));
     if (cached !== undefined) {
@@ -1343,7 +1617,11 @@ async function preview(selection: number | SkillPreviewScenario, allowSessionRec
 function commitPreview(intent: PreviewIntent, payload: Json): void {
     if (project?.sessionId !== intent.sessionId || project.revision !== intent.revision) return;
     const partial = normalize(payload);
-    project = mergePreview(project, partial.revision, partial.nativeTicks, partial.nativeTrace, partial.previewObjects) as ProjectState;
+    project = Object.freeze({
+        ...mergePreview(project, partial.revision, partial.nativeTicks, partial.nativeTrace, partial.previewObjects),
+        nativeInitial: partial.nativeInitial,
+    }) as ProjectState;
+    scenePositions = partial.nativeInitial;
     tickIndex = 0;
     render();
     void preloadPreviewObjectAssets(partial, images, requestPreviewRender).catch(() => undefined);
@@ -1449,6 +1727,11 @@ async function open(objectKey: string, oid: number): Promise<void> {
         }
     }
     clearDraft();
+    positionMode = false;
+    scenePositions = undefined;
+    lastPreviewScenario = undefined;
+    actorPositionInteraction = undefined;
+    currentActorHitAreas = [];
     project = nextProject;
     if (packageSelect) packageSelect.value = project.packageId;
     loadedObjectKey = objectKey;
@@ -1629,6 +1912,74 @@ async function previewFrameWithinCompleteAction(frame: Frame, preferredIndex = s
     renderedFrameKey = "";
     render();
     return true;
+}
+async function selectInternalStage(parent: SkillEntry, stage: SkillEntry): Promise<void> {
+    if (!project || isSelectionLocked()) return;
+    const frame = lastFrameForId(project.frames, stage.startFrame);
+    if (frame === undefined) {
+        diagnostics!.textContent = `内部阶段“${stage.displayName}”的 F${stage.startFrame} 不存在。`;
+        return;
+    }
+
+    selectedFrameOccurrence = frame.occurrence;
+    selectedBlock = { type: "frame" };
+    renderedFrameKey = "";
+    render();
+    diagnostics!.textContent = `已立即显示 F${stage.startFrame} 参数；正在从“${parent.displayName}”真实入口定位其 hit_* 来源 Tick。`;
+
+    const parentScenario = buildSkillPreviewScenario(project.frames, parent);
+    await preview(parentScenario);
+    const stageChain = buildInternalStageChain(
+        parent,
+        stage,
+        skillState.skills,
+        (candidate, sourceFrame) => {
+            const source = lastFrameForId(project?.frames ?? [], sourceFrame);
+            return source !== undefined
+                && nextDistanceToFrame(skillFlow(candidate.startFrame), source.occurrence) >= 0;
+        },
+    );
+    if (stageChain === undefined) {
+        diagnostics!.textContent = `F${stage.startFrame} 参数已显示；未找到从父动作到该 hit_* 阶段的无环依赖链，因此没有伪造内部起点。`;
+        render();
+        return;
+    }
+
+    let scenario = parentScenario;
+    for (const [chainIndex, chainStage] of stageChain.entries()) {
+        const planned = buildInternalStagePreviewScenario(
+            scenario,
+            chainStage,
+            project.nativeTicks.map((tick) => ({
+                tick: tick.tick,
+                frame: primaryPreviewEntity(tick.entities)?.frame,
+            })),
+        );
+        if (planned === undefined) {
+            diagnostics!.textContent = `F${stage.startFrame} 参数已显示；Trace 未到达内部阶段 F${chainStage.startFrame} 的任何 hit_* 来源 Frame，因此没有伪造分支。`;
+            render();
+            return;
+        }
+        scenario = planned.scenario;
+        diagnostics!.textContent = `已在 F${planned.route.sourceFrame} 后的 Native Tick ${planned.triggerTick} 注入 ${planned.route.key}，正在执行第 ${chainIndex + 1}/${stageChain.length} 段分支。`;
+        await preview(scenario);
+    }
+
+    const runtimeTick = project.nativeTicks.findIndex((tick) => (
+        primaryPreviewEntity(tick.entities)?.frame === stage.startFrame
+    ));
+    if (runtimeTick < 0) {
+        diagnostics!.textContent = `已从真实入口执行 ${stageChain.length} 段 hit_* 依赖链，但 Native Trace 未到达 F${stage.startFrame}；参数选择保持不变。`;
+        render();
+        return;
+    }
+
+    tickIndex = runtimeTick;
+    selectedFrameOccurrence = frame.occurrence;
+    selectedBlock = { type: "frame" };
+    renderedFrameKey = "";
+    diagnostics!.textContent = `已从“${parent.displayName}”真实入口执行 ${stageChain.length} 段 hit_* 依赖链，并定位到 F${stage.startFrame}。`;
+    render();
 }
 async function selectSkill(index: number): Promise<void> {
     if (isSelectionLocked()) return;
@@ -1914,6 +2265,27 @@ function setZoom(value: number): void {
     zoom = Math.max(.5, Math.min(2, Math.round(value * 10) / 10));
     canvas?.style.setProperty("--preview-zoom", String(zoom)); setText("zoom-readout", `${Math.round(zoom * 100)}%`);
 }
+select("position-mode")?.addEventListener("click", () => {
+    if (!project || project.nativeTicks.length === 0 || isSelectionLocked()) return;
+    positionMode = !positionMode;
+    if (positionMode) {
+        setPlaying(false);
+        tickIndex = 0;
+        scenePositions ??= project.nativeInitial;
+        diagnostics!.textContent = "站位拖动已开启：拖动 P1 或 P2 调整地面 X/Z 起始坐标，松开后会重新运行完整 Native 预览。";
+    }
+    update();
+});
+select("reset-positions")?.addEventListener("click", () => {
+    if (!project || lastPreviewScenario === undefined || isSelectionLocked()) return;
+    setPlaying(false);
+    tickIndex = 0;
+    scenePositions = undefined;
+    diagnostics!.textContent = "正在恢复 Native 默认站位并重新生成完整动作……";
+    void preview(lastPreviewScenario).catch((error) => {
+        diagnostics!.textContent = errorText(error, "恢复默认站位失败。");
+    });
+});
 document.querySelectorAll<HTMLButtonElement>("[data-overlay]").forEach((button) => button.addEventListener("click", () => {
     const type = button.dataset.overlay as OverlayType;
     if (visibleOverlays.has(type)) visibleOverlays.delete(type); else visibleOverlays.add(type);
@@ -1960,7 +2332,82 @@ function finishCanvasInteraction(pointerId = canvasInteraction?.pointerId): void
     syncActionState();
     requestPreviewRender();
 }
+function finishActorPositionInteraction(pointerId = actorPositionInteraction?.pointerId): void {
+    actorPositionInteraction = undefined;
+    if (pointerId !== undefined) {
+        try { canvas?.releasePointerCapture(pointerId); } catch {}
+    }
+    syncActionState();
+    update();
+}
+function positionBounds(): { width: number; zMin: number; zMax: number } {
+    const background = project?.nativeTicks[0]?.background;
+    return {
+        width: Math.max(0, number(project?.stage?.width ?? background?.width, canvas?.width ?? 794)),
+        zMin: number(project?.stage?.zMin ?? background?.zMin),
+        zMax: number(project?.stage?.zMax ?? background?.zMax, canvas?.height ?? 550),
+    };
+}
+function beginActorPositionInteraction(event: PointerEvent): boolean {
+    if (!positionMode || !project || event.button !== 0 || isActionBusy() || fieldDraft !== undefined) return false;
+    const point = canvasPoint(event);
+    const hit = hitTestPreviewActor(currentActorHitAreas, point.x, point.y);
+    if (hit === undefined) return true;
+    const initial = activeScenePositions();
+    const startPosition = hit.slot === 0 ? initial.p1 : initial.p2;
+    actorPositionInteraction = {
+        pointerId: event.pointerId,
+        slot: hit.slot,
+        startX: point.x,
+        startY: point.y,
+        startPosition,
+        draftPosition: startPosition,
+    };
+    canvas?.focus();
+    canvas?.setPointerCapture(event.pointerId);
+    syncActionState();
+    requestPreviewRender();
+    return true;
+}
+function moveActorPositionInteraction(event: PointerEvent): boolean {
+    const interaction = actorPositionInteraction;
+    if (interaction === undefined || interaction.pointerId !== event.pointerId) return false;
+    const point = canvasPoint(event);
+    interaction.draftPosition = movePreviewPosition(
+        interaction.startPosition,
+        point.x - interaction.startX,
+        point.y - interaction.startY,
+        positionBounds(),
+    );
+    syncPositionUi();
+    requestPreviewRender();
+    return true;
+}
+function commitActorPositionInteraction(event: PointerEvent): boolean {
+    const interaction = actorPositionInteraction;
+    if (interaction === undefined || interaction.pointerId !== event.pointerId) return false;
+    moveActorPositionInteraction(event);
+    const base = scenePositions ?? project?.nativeInitial;
+    if (base !== undefined) {
+        scenePositions = interaction.slot === 0
+            ? { ...base, p1: interaction.draftPosition }
+            : { ...base, p2: interaction.draftPosition };
+    }
+    const movedSlot = interaction.slot;
+    finishActorPositionInteraction(event.pointerId);
+    diagnostics!.textContent = `正在按新的 P${movedSlot + 1} 起始站位重新运行完整 Native 预览……`;
+    if (lastPreviewScenario !== undefined) {
+        void preview(lastPreviewScenario).catch((error) => {
+            diagnostics!.textContent = errorText(error, "角色站位更新失败。");
+        });
+    }
+    return true;
+}
 canvas?.addEventListener("pointerdown", (event) => {
+    if (beginActorPositionInteraction(event)) {
+        event.preventDefault();
+        return;
+    }
     if (!blockSelect || isSelectionLocked()) return;
     const point = canvasPoint(event);
     const hit = hitTestOverlay(currentGeometry, point.x, point.y);
@@ -1992,6 +2439,10 @@ canvas?.addEventListener("pointerdown", (event) => {
     syncActionState();
 });
 canvas?.addEventListener("pointermove", (event) => {
+    if (moveActorPositionInteraction(event)) {
+        event.preventDefault();
+        return;
+    }
     const interaction = canvasInteraction;
     if (!interaction || interaction.pointerId !== event.pointerId) return;
     const point = canvasPoint(event);
@@ -2002,6 +2453,10 @@ canvas?.addEventListener("pointermove", (event) => {
     requestPreviewRender();
 });
 canvas?.addEventListener("pointerup", (event) => {
+    if (commitActorPositionInteraction(event)) {
+        event.preventDefault();
+        return;
+    }
     const interaction = canvasInteraction;
     if (!interaction || interaction.pointerId !== event.pointerId) return;
     finishCanvasInteraction(event.pointerId);
@@ -2020,10 +2475,14 @@ canvas?.addEventListener("pointerup", (event) => {
         value: next[key as keyof typeof next]!,
     })), currentFrame()?.frameId ?? 0), "画布几何修改失败。");
 });
-canvas?.addEventListener("pointercancel", (event) => finishCanvasInteraction(event.pointerId));
+canvas?.addEventListener("pointercancel", (event) => {
+    if (actorPositionInteraction?.pointerId === event.pointerId) finishActorPositionInteraction(event.pointerId);
+    else finishCanvasInteraction(event.pointerId);
+});
 canvas?.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-        finishCanvasInteraction();
+        if (actorPositionInteraction !== undefined) finishActorPositionInteraction();
+        else finishCanvasInteraction();
         return;
     }
     if (actionBusy.edit || project?.writable !== true || fieldDraft !== undefined || selectedBlock.type === "frame") return;

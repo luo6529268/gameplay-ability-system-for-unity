@@ -6,6 +6,8 @@ import {
     findFrameFieldCapability,
     lastFrameForId,
     mergePreview,
+    movePreviewPosition,
+    nativePreviewPlaybackBounds,
     previewIntentCacheKey,
     primaryPreviewEntity,
     spritePlacement,
@@ -23,6 +25,13 @@ describe("project client helpers", () => {
         };
         assert.equal(previewIntentCacheKey(base), previewIntentCacheKey({ ...base }));
         assert.notEqual(previewIntentCacheKey(base), previewIntentCacheKey({ ...base, startFrame: 271 }));
+        assert.notEqual(previewIntentCacheKey(base), previewIntentCacheKey({
+            ...base,
+            initial: {
+                p1: { x: 200, y: 0, z: 300 },
+                p2: { x: 500, y: 0, z: 400 },
+            },
+        }));
 
         const cache = new BoundedLruCache<string, number>(2);
         cache.set("jump", 1);
@@ -43,9 +52,54 @@ describe("project client helpers", () => {
         assert.deepEqual(merged.nativeTicks, [{ tick: 1 }]);
     });
 
+    it("never clips playback to a completion tick before the selected action starts", () => {
+        assert.deepEqual(nativePreviewPlaybackBounds({
+            rootSkillStartedTick: 18,
+            progressEndTick: 17,
+            playbackEndTick: 17,
+        }, 121), {
+            actionStart: 18,
+            progressEnd: -1,
+            playbackEnd: 120,
+        });
+        assert.deepEqual(nativePreviewPlaybackBounds({
+            rootSkillStartedTick: null,
+            progressEndTick: 14,
+            playbackEndTick: 14,
+        }, 121), {
+            actionStart: -1,
+            progressEnd: -1,
+            playbackEnd: 120,
+        });
+        assert.deepEqual(nativePreviewPlaybackBounds({
+            rootSkillStartedTick: 15,
+            progressEndTick: 29,
+            playbackEndTick: 36,
+        }, 121), {
+            actionStart: 15,
+            progressEnd: 29,
+            playbackEnd: 36,
+        });
+    });
+
     it("uses C++ renderer sprite placement and facing mirror", () => {
         assert.deepEqual(spritePlacement({ xInt: 100, yInt: 20, zInt: 30, renderOffsetX: 4, cameraX: 10, centerX: 12, centerY: 7, width: 40, facing: 0 }), { x: 82, y: 43, mirror: false });
         assert.deepEqual(spritePlacement({ xInt: 100, yInt: 20, zInt: 30, renderOffsetX: 4, cameraX: 10, centerX: 12, centerY: 7, width: 40, facing: 1 }), { x: 66, y: 43, mirror: true });
+    });
+
+    it("maps canvas dragging to bounded Native X/Z positions without changing height", () => {
+        assert.deepEqual(movePreviewPosition(
+            { x: 320, y: -15, z: 500 },
+            42.4,
+            -80.6,
+            { width: 1000, zMin: 200, zMax: 550 },
+        ), { x: 362, y: -15, z: 419 });
+        assert.deepEqual(movePreviewPosition(
+            { x: 980, y: 0, z: 540 },
+            200,
+            100,
+            { width: 1000, zMin: 200, zMax: 550 },
+        ), { x: 1000, y: 0, z: 550 });
     });
 
     it("selects the Native preview primary entity only by stable slot zero", () => {

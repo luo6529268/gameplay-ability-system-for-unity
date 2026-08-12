@@ -10,7 +10,7 @@ namespace NTSD.Animation.Rendering.Editor
     public sealed class BattleAiExecutionProfileEditorTests
     {
         [Test]
-        public void Resolver_CommandLineOverridesConfigAndDefaultIsLegacyOnEveryPlatform()
+        public void Resolver_CommandLineOverridesConfigAndDefaultIsDataOrientedOnEveryPlatform()
         {
             GameConfig config = ScriptableObject.CreateInstance<GameConfig>();
             try
@@ -31,7 +31,7 @@ namespace NTSD.Animation.Rendering.Editor
                 config.BattleAiExecutionProfileName = string.Empty;
                 Assert.That(
                     BattleAiExecutionProfileProductionSource.Resolve(config, Array.Empty<string>()),
-                    Is.EqualTo(BattleAiExecutionProfile.LegacyCanonical));
+                    Is.EqualTo(BattleAiExecutionProfile.DataOrientedCanonical));
             }
             finally
             {

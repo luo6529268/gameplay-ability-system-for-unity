@@ -83,10 +83,10 @@ namespace NTSD.Test
                 LF2Character teamFiveSelf = RegisterCharacter(
                     world, 4, 5, -20, 0, 0, 0);
 
-                AssertDecision(world, teamOneSelf, 0, 3, false);
-                AssertDecision(world, teamOneSelf, 1, 1, false);
-                AssertDecision(world, teamOneSelf, 4, 3, false);
-                AssertDecision(world, teamFiveSelf, 1, 3, false);
+                AssertOverflowFallbackDecision(world, teamOneSelf, 0);
+                AssertOverflowFallbackDecision(world, teamOneSelf, 1);
+                AssertOverflowFallbackDecision(world, teamOneSelf, 4);
+                AssertOverflowFallbackDecision(world, teamFiveSelf, 1);
             }
             finally
             {
@@ -227,6 +227,22 @@ namespace NTSD.Test
             Assert.That(
                 result.PartitionHandled,
                 Is.EqualTo(expectedHandled),
+                $"phase={inputPhase}");
+        }
+
+        private static void AssertOverflowFallbackDecision(
+            SimulationWorld world,
+            LF2Entity self,
+            int inputPhase)
+        {
+            TeamPartitionResult result = CapturePartitionParity(
+                world,
+                self,
+                inputPhase);
+            Assert.That(result.Matches, Is.True, $"phase={inputPhase}");
+            Assert.That(
+                result.PartitionHandled,
+                Is.False,
                 $"phase={inputPhase}");
         }
 

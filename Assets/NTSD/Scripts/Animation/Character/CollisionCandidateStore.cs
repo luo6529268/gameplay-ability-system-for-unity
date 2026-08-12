@@ -207,6 +207,8 @@ namespace NTSD.Animation
         private int[] counts;
         private uint[] attackerGenerations;
         private uint[] rowEpochs;
+        private int[] nonEmptyAttackerSlots;
+        private int nonEmptyAttackerCount;
         private uint currentEpoch;
         private bool building;
         private bool visible;
@@ -220,6 +222,7 @@ namespace NTSD.Animation
             counts = Array.Empty<int>();
             attackerGenerations = Array.Empty<uint>();
             rowEpochs = Array.Empty<uint>();
+            nonEmptyAttackerSlots = Array.Empty<int>();
         }
 
         internal int RuntimeCapacity => counts.Length;
@@ -253,6 +256,7 @@ namespace NTSD.Animation
                 return false;
 
             AdvanceEpoch();
+            nonEmptyAttackerCount = 0;
             building = true;
             diagnostics.RecordBuildTick();
             return true;
@@ -329,7 +333,11 @@ namespace NTSD.Animation
 
             entries[slot * HitCandidateMax + candidateIndex] = entry;
             if (candidateIndex == count)
+            {
+                if (count == 0)
+                    nonEmptyAttackerSlots[nonEmptyAttackerCount++] = slot;
                 counts[slot] = count + 1;
+            }
             return true;
         }
 
@@ -351,8 +359,36 @@ namespace NTSD.Animation
             }
 
             entries[slot * HitCandidateMax] = entry;
+            if (counts[slot] == 0)
+                nonEmptyAttackerSlots[nonEmptyAttackerCount++] = slot;
             counts[slot] = 1;
             return true;
+        }
+
+        internal int VisibleNonEmptyAttackerCount =>
+            visible && !building ? nonEmptyAttackerCount : 0;
+
+        internal bool TryGetVisibleNonEmptyAttackerHandle(
+            int index,
+            out RuntimeEntityHandle attackerHandle)
+        {
+            attackerHandle = RuntimeEntityHandle.Invalid;
+            if (!visible || building || index < 0 || index >= nonEmptyAttackerCount)
+                return false;
+
+            int slot = nonEmptyAttackerSlots[index];
+            if (slot < 0 ||
+                slot >= counts.Length ||
+                rowEpochs[slot] != currentEpoch ||
+                counts[slot] <= 0)
+            {
+                return false;
+            }
+
+            attackerHandle = new RuntimeEntityHandle(
+                slot,
+                attackerGenerations[slot]);
+            return attackerHandle.IsValid;
         }
 
         internal bool TryGetBuildingAttackerRowForCompare(
@@ -451,10 +487,13 @@ namespace NTSD.Animation
                 var grownCounts = new int[runtimeCapacity];
                 var grownAttackerGenerations = new uint[runtimeCapacity];
                 var grownRowEpochs = new uint[runtimeCapacity];
+                var grownNonEmptyAttackerSlots = new int[runtimeCapacity];
                 entries = grownEntries;
                 counts = grownCounts;
                 attackerGenerations = grownAttackerGenerations;
                 rowEpochs = grownRowEpochs;
+                nonEmptyAttackerSlots = grownNonEmptyAttackerSlots;
+                nonEmptyAttackerCount = 0;
                 currentEpoch = 0;
                 return true;
             }

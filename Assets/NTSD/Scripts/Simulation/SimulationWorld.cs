@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.Rendering;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
 
@@ -44,6 +46,13 @@ namespace NTSD.Simulation
         private readonly BattleParitySnapshotModule paritySnapshotModule;
         private readonly RuntimeCharacterConfigResolver runtimeCharacterConfigs;
         private readonly BattleLockstepChecksumModule lockstepChecksumModule;
+        private readonly BattleEcsShadowModule battleEcsShadowModule;
+        private readonly BattleEcsCooldownPass battleEcsCooldownPass;
+        private readonly BattleEcsCharacterStageZPass battleEcsCharacterStageZPass;
+        private readonly BattleEcsFramePostProcessPass battleEcsFramePostProcessPass;
+        private readonly BattleEcsPositiveLinkValidationPass
+            battleEcsPositiveLinkValidationPass;
+        private readonly BattleEcsHitExecutionPlan battleEcsHitExecutionPlan;
         private readonly SimulationDiagnosticsModule diagnosticsModule =
             new SimulationDiagnosticsModule();
         private readonly SimulationWorldMutationTracker runtimeMutationTracker =
@@ -64,12 +73,361 @@ namespace NTSD.Simulation
         }
         public List<PendingSoundEvent> PendingSounds => battleBuffers.PendingSounds;
         public long QueuedSoundEventCountForDiagnostics { get; private set; }
+        public BattleEcsCapacityProfile BattleEcsCapacityProfileForDiagnostics =>
+            battleEcsShadowModule.CapacityProfile;
+        public BattleEcsShadowMode BattleEcsShadowModeForDiagnostics =>
+            battleEcsShadowModule.Mode;
+        public BattleEcsShadowDiagnostics BattleEcsShadowDiagnosticsForDiagnostics =>
+            battleEcsShadowModule.Diagnostics;
+        public BattleEcsCooldownPassMode BattleEcsCooldownPassModeForDiagnostics =>
+            battleEcsCooldownPass.Mode;
+        public BattleEcsCooldownPassDiagnostics BattleEcsCooldownPassDiagnosticsForDiagnostics =>
+            battleEcsCooldownPass.Diagnostics;
+        public BattleEcsCharacterStageZPassMode BattleEcsCharacterStageZPassModeForDiagnostics =>
+            battleEcsCharacterStageZPass.Mode;
+        public BattleEcsCharacterStageZPassDiagnostics BattleEcsCharacterStageZPassDiagnosticsForDiagnostics =>
+            battleEcsCharacterStageZPass.Diagnostics;
+        public BattleEcsFramePostProcessPassMode BattleEcsFramePostProcessPassModeForDiagnostics =>
+            battleEcsFramePostProcessPass.Mode;
+        public BattleEcsFramePostProcessPassDiagnostics BattleEcsFramePostProcessPassDiagnosticsForDiagnostics =>
+            battleEcsFramePostProcessPass.Diagnostics;
+        public BattleEcsPositiveLinkValidationPassMode
+            BattleEcsPositiveLinkValidationPassModeForDiagnostics =>
+                battleEcsPositiveLinkValidationPass.Mode;
+        public BattleEcsPositiveLinkValidationPassDiagnostics
+            BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics =>
+                battleEcsPositiveLinkValidationPass.Diagnostics;
+        public BattleHitExecutionPlanMode
+            BattleHitExecutionPlanModeForDiagnostics =>
+                battleEcsHitExecutionPlan.Mode;
+        public BattleHitExecutionPlanDiagnostics
+            BattleHitExecutionPlanDiagnosticsForDiagnostics =>
+                battleEcsHitExecutionPlan.Diagnostics;
         public SimulationRuntimeCapacityModule RuntimeCapacity => runtimeCapacityModule;
         internal SimulationBattleBufferModule BattleBuffersForServices => battleBuffers;
         internal RuntimeCharacterConfigResolver RuntimeCharacterConfigs =>
             runtimeCharacterConfigs;
         internal StageSpawnTaskConfigurator StageSpawnTaskConfigurator =>
             stageSpawnTaskConfigurator;
+
+        public void ConfigureBattleEcsShadowForDiagnostics(BattleEcsShadowMode mode)
+        {
+            if (_ticking)
+                throw new System.InvalidOperationException(
+                    "The ECS migration shadow cannot be reconfigured during a battle tick.");
+
+            battleEcsShadowModule.SetMode(mode);
+        }
+
+        public void CaptureBattleEcsShadowForDiagnostics(int tickIndex)
+        {
+            if (_ticking)
+                throw new System.InvalidOperationException(
+                    "The ECS migration shadow cannot be captured during a battle tick.");
+
+            battleEcsShadowModule.Capture(tickIndex);
+        }
+
+        public bool ValidateBattleEcsShadowForDiagnostics()
+        {
+            if (_ticking)
+                throw new System.InvalidOperationException(
+                    "The ECS migration shadow cannot be validated during a battle tick.");
+
+            return battleEcsShadowModule.Validate();
+        }
+
+        public bool TryGetBattleEcsShadowEntityForDiagnostics(
+            int slot,
+            out BattleEcsShadowEntityView view)
+        {
+            return battleEcsShadowModule.TryGetEntityView(slot, out view);
+        }
+
+        public int FindNextBattleEcsActiveSlotForDiagnostics(int startSlot)
+        {
+            return battleEcsShadowModule.FindNextActiveSlot(startSlot);
+        }
+
+        internal void RefreshBattleEcsShadowAfterTick(int tickIndex)
+        {
+            battleEcsShadowModule.CaptureAndCompareNoThrow(tickIndex);
+        }
+
+        public void ConfigureBattleEcsCooldownPassForDiagnostics(
+            BattleEcsCooldownPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The cooldown canonical writer can only change at a reset boundary.");
+            }
+
+            battleEcsCooldownPass.SetMode(mode);
+        }
+
+        internal void RunBattleEcsCooldownPass(int tickIndex)
+        {
+            battleEcsCooldownPass.Execute(tickIndex);
+        }
+
+        public void ConfigureBattleEcsCharacterStageZPassForDiagnostics(
+            BattleEcsCharacterStageZPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character stage-Z canonical writer can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterStageZPass.SetMode(mode);
+        }
+
+        public void ConfigureBattleEcsFramePostProcessPassForDiagnostics(
+            BattleEcsFramePostProcessPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The frame-postprocess canonical writer can only change at a reset boundary.");
+            }
+
+            battleEcsFramePostProcessPass.SetMode(mode);
+        }
+
+        internal void RunBattleEcsFramePostProcessPass()
+        {
+            battleEcsFramePostProcessPass.Execute();
+        }
+
+        public void ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
+            BattleEcsPositiveLinkValidationPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The positive-link canonical writer can only change at a reset boundary.");
+            }
+
+            battleEcsPositiveLinkValidationPass.SetMode(mode);
+        }
+
+        internal void RestoreBattleEcsPositiveLinkValidationPassForDiagnostics(
+            BattleEcsPositiveLinkValidationPassMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The positive-link canonical writer can only be restored after all runtime slots are released.");
+            }
+
+            battleEcsPositiveLinkValidationPass.SetMode(mode);
+        }
+
+        public void ConfigureBattleHitExecutionPlanForDiagnostics(
+            BattleHitExecutionPlanMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The hit execution-plan shadow can only change at a reset boundary.");
+            }
+
+            battleEcsHitExecutionPlan.SetMode(mode);
+        }
+
+        public bool TryGetBattleHitExecutionPlanEntryForDiagnostics(
+            int index,
+            out BattleHitExecutionPlanEntryView entry)
+        {
+            return battleEcsHitExecutionPlan.TryGetEntry(index, out entry);
+        }
+
+        internal void CaptureBattleHitExecutionPlanPass(
+            int tickIndex,
+            BattleHitExecutionPass pass)
+        {
+            battleEcsHitExecutionPlan.CapturePass(tickIndex, pass);
+        }
+
+        internal bool BeginBattleHitExecutionPlanLegacyObservation(
+            int tickIndex,
+            BattleHitExecutionPass pass)
+        {
+            return battleEcsHitExecutionPlan.BeginLegacyObservationPass(
+                tickIndex,
+                pass);
+        }
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyCandidateRead =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyCandidateRead;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyPreprocess =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyPreprocess;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyConsumeEffects;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyDisposition =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyDisposition;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyDispatch =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyDispatch;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyWriterEffect =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyWriterEffect;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyLifecycleEffect =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyLifecycleEffect;
+
+        internal bool CanProjectBattleHitExecutionPlanLegacyWriterEffect(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            return battleEcsHitExecutionPlan.CanProjectLegacyWriterEffect(
+                attacker,
+                target,
+                resolvedItr,
+                disposition);
+        }
+
+        internal bool CanProjectBattleHitExecutionPlanLegacyLifecycleEffect(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            return battleEcsHitExecutionPlan.CanProjectLegacyLifecycleEffect(
+                attacker,
+                target,
+                resolvedItr,
+                disposition);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyCandidateRead(
+            RuntimeEntityHandle attackerHandle,
+            int candidateOrdinal,
+            in SceneQueryHit hit)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyCandidateRead(
+                attackerHandle,
+                candidateOrdinal,
+                hit);
+        }
+
+        internal void EndBattleHitExecutionPlanLegacyObservation()
+        {
+            battleEcsHitExecutionPlan.EndLegacyObservationPass();
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyPreprocess(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            bool zeroAttackerHpOnConsume,
+            bool releaseHeavyHeldTargetOnConsume)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyPreprocess(
+                attacker,
+                target,
+                resolvedItr,
+                zeroAttackerHpOnConsume,
+                releaseHeavyHeldTargetOnConsume);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyDisposition(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyDisposition(
+                attacker,
+                target,
+                resolvedItr,
+                disposition);
+        }
+
+        internal void PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
+            LF2Entity attacker,
+            LF2Entity target)
+        {
+            battleEcsHitExecutionPlan.PrepareLegacyConsumeEffectsObservation(
+                attacker,
+                target);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyConsumeEffects(
+            LF2Entity attacker,
+            LF2Entity target)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyConsumeEffects(
+                attacker,
+                target);
+        }
+
+        internal void PrepareBattleHitExecutionPlanLegacyDispatchObservation(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr)
+        {
+            battleEcsHitExecutionPlan.PrepareLegacyDispatchObservation(
+                attacker,
+                target,
+                resolvedItr);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyDispatch(
+            LF2Entity attacker,
+            bool dispatchSucceeded,
+            bool terminatedRemainingCandidates)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyDispatch(
+                attacker,
+                dispatchSucceeded,
+                terminatedRemainingCandidates);
+        }
+
+        internal void PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            battleEcsHitExecutionPlan.PrepareLegacyWriterEffectObservation(
+                attacker,
+                target,
+                resolvedItr,
+                disposition);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyWriterEffect(
+            LF2Entity attacker,
+            LF2Entity target)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyWriterEffect(attacker, target);
+        }
+
+        internal void PrepareBattleHitExecutionPlanLegacyLifecycleEffectObservation(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            battleEcsHitExecutionPlan.PrepareLegacyLifecycleEffectObservation(
+                attacker,
+                target,
+                resolvedItr,
+                disposition);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyLifecycleEffect(
+            LF2Entity attacker)
+        {
+            battleEcsHitExecutionPlan.ObserveLegacyLifecycleEffect(attacker);
+        }
 
         internal const int PresentationShadowSubOrder = 0;
         internal const int PresentationEntitySubOrder = 1;
@@ -88,6 +446,9 @@ namespace NTSD.Simulation
 
         public int LateRendererUpdateInvocationCountForDiagnostics =>
             stageRenderModule.LateRendererUpdateInvocationCountForDiagnostics;
+
+        public long CentralOnlyRendererShellBypassCountForDiagnostics =>
+            stageRenderModule.CentralOnlyRendererShellBypassCountForDiagnostics;
 
         public int PresentationRenderOrderBuildCountForDiagnostics =>
             stageRenderModule.PresentationRenderOrderBuildCountForDiagnostics;
@@ -153,6 +514,28 @@ namespace NTSD.Simulation
             stageRenderModule.RefreshStageRuntimeSnapshotFromScene();
         }
 
+        public void PrepareStageRuntimeSnapshotForTick(int tickIndex)
+        {
+            stageRenderModule.PrepareStageRuntimeSnapshotForTick(tickIndex);
+        }
+
+        public bool ConfigureLegacyPerPassStageRefreshForDiagnostics(bool requested)
+        {
+            return stageRenderModule.ConfigureLegacyPerPassStageRefreshForDiagnostics(
+                requested);
+        }
+
+        public bool ForceLegacyPerPassStageRefreshForDiagnostics =>
+            stageRenderModule.ForceLegacyPerPassStageRefreshForDiagnostics;
+        public long StageRuntimeSceneRefreshCountForDiagnostics =>
+            stageRenderModule.StageRuntimeSceneRefreshCountForDiagnostics;
+        public long StageRuntimeHostPrepareCountForDiagnostics =>
+            stageRenderModule.StageRuntimeHostPrepareCountForDiagnostics;
+        public long StageRuntimeHostReuseCountForDiagnostics =>
+            stageRenderModule.StageRuntimeHostReuseCountForDiagnostics;
+        public long StageRuntimeLegacyPerPassRefreshCountForDiagnostics =>
+            stageRenderModule.StageRuntimeLegacyPerPassRefreshCountForDiagnostics;
+
         private static void ResolveUnityStageRuntime(
             out int stageWidth,
             out int zMin,
@@ -170,11 +553,18 @@ namespace NTSD.Simulation
 
         public void ClampCharacterZToStageBoundsAll()
         {
+            stageRenderModule.PrepareStageRuntimeForKernelPass();
+            battleEcsCharacterStageZPass.Execute();
+        }
+
+        internal void RunLegacyCharacterZStageBounds()
+        {
             stageRenderModule.ClampCharacterZToStageBoundsAll();
         }
 
         public void ApplyPreFrameBoundsAll()
         {
+            stageRenderModule.PrepareStageRuntimeForKernelPass();
             stageRenderModule.ApplyPreFrameBoundsAll();
         }
 
@@ -186,6 +576,11 @@ namespace NTSD.Simulation
         public void RenderDispatchAll(int tickIndex, bool buildPresentation)
         {
             stageRenderModule.RenderDispatchAll(tickIndex, buildPresentation);
+        }
+
+        internal void PresentLatestFrame(int tickIndex)
+        {
+            stageRenderModule.PresentLatestFrame(tickIndex);
         }
 
         internal static bool RequiresLegacySpriteRendererCapacityGuard(
@@ -231,6 +626,15 @@ namespace NTSD.Simulation
         {
             stageRenderModule.PublishPresentationRenderOrderFromSortedEntities(
                 sortedEntities,
+                reusesCoordinatorSort);
+        }
+
+        internal void PublishPresentationRenderOrderFromFrame(
+            BattlePresentationFrame frame,
+            bool reusesCoordinatorSort = false)
+        {
+            stageRenderModule.PublishPresentationRenderOrderFromFrame(
+                frame,
                 reusesCoordinatorSort);
         }
 
@@ -549,7 +953,12 @@ namespace NTSD.Simulation
 
         public void ValidateHeldLinksAll(int tickIndex)
         {
-            queryAndLinkModule.ValidateHeldLinksAll(tickIndex);
+            battleEcsPositiveLinkValidationPass.Execute(tickIndex);
+        }
+
+        internal void RunLegacyPositiveLinkValidation(int tickIndex)
+        {
+            queryAndLinkModule.RunLegacyPositiveLinkValidation(tickIndex);
         }
 
         public LF2Entity FindEntityByRuntimeSlotForQuery(int runtimeSlot)

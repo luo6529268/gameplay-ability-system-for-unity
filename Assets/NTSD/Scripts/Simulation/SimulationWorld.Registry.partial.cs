@@ -4,6 +4,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.LevelEditor;
 using System.Collections.Generic;
+using NTSD.Simulation.Ecs;
 using UnityEngine;
 
 namespace NTSD.Simulation
@@ -276,7 +277,15 @@ namespace NTSD.Simulation
             objectBucketRegistry = new SimulationObjectBucketRegistry();
             _buckets = objectBucketRegistry.LookupForCompatibility;
             _runtimeSlots = new RuntimeSlotTable(runtimeSlotCapacity, 20, DynamicRuntimeSlotStart);
+            battleEcsShadowModule = new BattleEcsShadowModule(
+                this,
+                new BattleEcsCapacityProfile(runtimeProfile, runtimeSlotCapacity));
             _runtimeRestStore = new RuntimeRestStore(runtimeSlotCapacity);
+            battleEcsCooldownPass = new BattleEcsCooldownPass(
+                this,
+                _runtimeSlots,
+                _runtimeRestStore,
+                runtimeSlotCapacity);
             battleBuffers = new SimulationBattleBufferModule(runtimeSlotCapacity);
             runtimeCapacityModule = new SimulationRuntimeCapacityModule(
                 _runtimeSlots,
@@ -293,6 +302,22 @@ namespace NTSD.Simulation
             lockstepChecksumModule = new BattleLockstepChecksumModule();
             stageWaveModule = new SimulationStageWaveModule(this);
             stageRenderModule = new SimulationStageRenderModule(this);
+            battleEcsCharacterStageZPass = new BattleEcsCharacterStageZPass(
+                this,
+                _runtimeSlots,
+                runtimeSlotCapacity);
+            battleEcsFramePostProcessPass = new BattleEcsFramePostProcessPass(
+                this,
+                _runtimeSlots,
+                runtimeSlotCapacity);
+            battleEcsPositiveLinkValidationPass =
+                new BattleEcsPositiveLinkValidationPass(
+                    this,
+                    _runtimeSlots,
+                    runtimeSlotCapacity);
+            battleEcsHitExecutionPlan = new BattleEcsHitExecutionPlan(
+                this,
+                runtimeSlotCapacity);
             paritySnapshotModule = new BattleParitySnapshotModule(this);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             InitializeAiSoASensingRows(runtimeSlotCapacity);
@@ -425,6 +450,12 @@ namespace NTSD.Simulation
             EnsureAiSensingModeAvailableBeforeTick();
             stageRenderModule.Reset();
             ResetRegisteredObjects();
+            battleEcsShadowModule.Reset();
+            battleEcsCooldownPass.Reset();
+            battleEcsCharacterStageZPass.Reset();
+            battleEcsFramePostProcessPass.Reset();
+            battleEcsPositiveLinkValidationPass.Reset();
+            battleEcsHitExecutionPlan.Reset();
 
             Runtime ??= new BattleRuntimeState();
             Runtime.Reset();

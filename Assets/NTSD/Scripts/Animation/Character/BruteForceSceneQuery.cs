@@ -4630,11 +4630,133 @@ namespace NTSD.Animation
                 legacyCandidates = cached;
             }
 
+            RuntimeEntityHandle legacyAttackerHandle = RuntimeEntityHandle.Invalid;
+            if (_world.ShouldObserveBattleHitExecutionPlanLegacyCandidateRead)
+            {
+                int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
+                _world.TryGetCurrentRuntimeHandle(
+                    attackerSlot,
+                    attacker,
+                    out legacyAttackerHandle);
+            }
+
             candidates = CreateCollisionCandidateRange(
                 legacyCandidates,
-                RuntimeEntityHandle.Invalid,
+                legacyAttackerHandle,
                 legacyCandidates.Count,
                 storeAuthority: false);
+            return true;
+        }
+
+        internal bool TryProveLegacyRuntimeCandidateCountsForCurrentTick()
+        {
+            if (!_consumeCandidateCache ||
+                _candidateConsumptionSource !=
+                    CollisionCandidateConsumptionSource.LegacyOracle ||
+                _formalCollectionAborted)
+            {
+                return false;
+            }
+
+            long cachedCandidateCount = 0;
+            foreach (KeyValuePair<LF2Entity, List<SceneQueryHit>> pair in
+                     _candidateCache)
+            {
+                NTSDEntityRuntime runtime = pair.Key?.Runtime;
+                List<SceneQueryHit> candidates = pair.Value;
+                if (runtime == null || candidates == null ||
+                    runtime.HitCandidateCount < 0 ||
+                    !_world.TryGetCurrentRuntimeHandle(
+                        runtime.SlotIndex,
+                        pair.Key,
+                        out _) ||
+                    runtime.HitCandidateCount != candidates.Count)
+                {
+                    return false;
+                }
+
+                cachedCandidateCount += candidates.Count;
+            }
+
+            long runtimeCandidateCount = 0;
+            int runtimeCapacity = _world.MaxRuntimeSlotsForServices;
+            for (int runtimeSlot = 0; runtimeSlot < runtimeCapacity; runtimeSlot++)
+            {
+                LF2Entity entity =
+                    _world.FindEntityByRuntimeSlotForQuery(runtimeSlot);
+                if (entity == null)
+                    continue;
+
+                NTSDEntityRuntime runtime = entity?.Runtime;
+                if (runtime == null || runtime.HitCandidateCount < 0)
+                    return false;
+
+                runtimeCandidateCount += runtime.HitCandidateCount;
+            }
+
+            return runtimeCandidateCount == cachedCandidateCount;
+        }
+
+        internal bool TryProveNoObjectInteractionCandidatesForCurrentTick()
+        {
+            if (!_consumeCandidateCache)
+                return false;
+
+            if (_candidateConsumptionSource ==
+                CollisionCandidateConsumptionSource.StoreAuthority)
+            {
+                if (!_candidateStoreShadow.IsVisible)
+                    return false;
+
+                int nonEmptyAttackerCount =
+                    _candidateStoreShadow.VisibleNonEmptyAttackerCount;
+                for (int index = 0; index < nonEmptyAttackerCount; index++)
+                {
+                    if (!_candidateStoreShadow.TryGetVisibleNonEmptyAttackerHandle(
+                            index,
+                            out RuntimeEntityHandle attackerHandle))
+                    {
+                        return false;
+                    }
+
+                    // A destroyed or replaced generation cannot consume the old row.
+                    if (!_world.TryResolveRuntimeHandle(attackerHandle, out LF2Entity attacker))
+                        continue;
+                    if (attacker.SupportsObjectInteractionPhase())
+                        return false;
+                }
+
+                return true;
+            }
+
+            if (_candidateConsumptionSource !=
+                CollisionCandidateConsumptionSource.LegacyOracle)
+            {
+                return false;
+            }
+
+            foreach (KeyValuePair<LF2Entity, List<SceneQueryHit>> pair in _candidateCache)
+            {
+                LF2Entity attacker = pair.Key;
+                List<SceneQueryHit> hits = pair.Value;
+                if (attacker == null || hits == null || hits.Count == 0)
+                    continue;
+
+                int attackerSlot = attacker.Runtime?.SlotIndex ?? -1;
+                if (!_world.TryGetCurrentRuntimeHandle(
+                        attackerSlot,
+                        attacker,
+                        out _))
+                {
+                    continue;
+                }
+
+                // Resolve current DAT type here, after character-hit consumption,
+                // so runtime transforms cannot reuse a stale collection-time role.
+                if (attacker.SupportsObjectInteractionPhase())
+                    return false;
+            }
+
             return true;
         }
 
@@ -4667,6 +4789,13 @@ namespace NTSD.Animation
                     return false;
 
                 hit = legacyCandidates[candidateIndex];
+                if (_world.ShouldObserveBattleHitExecutionPlanLegacyCandidateRead)
+                {
+                    _world.ObserveBattleHitExecutionPlanLegacyCandidateRead(
+                        attackerHandle,
+                        candidateIndex,
+                        hit);
+                }
                 return true;
             }
 
@@ -4698,6 +4827,13 @@ namespace NTSD.Animation
                 entry.RuntimeItr,
                 entry.ZeroAttackerHpOnConsume,
                 entry.ReleaseHeavyHeldTargetOnConsume);
+            if (_world.ShouldObserveBattleHitExecutionPlanLegacyCandidateRead)
+            {
+                _world.ObserveBattleHitExecutionPlanLegacyCandidateRead(
+                    attackerHandle,
+                    candidateIndex,
+                    hit);
+            }
             return true;
         }
 
@@ -5564,7 +5700,12 @@ namespace NTSD.Animation
                     itr.dvx = -itr.dvx;
             }
 
-            if (target.Runtime != null && target.Runtime.LinkState == 2 && itr.kind == 0)
+            bool kindAllowsHeavyHeldRelease =
+                sourceItr.kind == 0 ||
+                (sourceItr.kind == 4 && attacker.WeaponCount > 0);
+            if (target.Runtime != null &&
+                target.Runtime.LinkState == 2 &&
+                kindAllowsHeavyHeldRelease)
             {
                 int heldTargetSlot = target.Runtime.TargetSlotIndex;
                 if (heldTargetSlot >= 0)

@@ -416,17 +416,17 @@ namespace NTSD.Animation.LF2Objects
                 if (ObjectId == 201 || ObjectId == 202)
                     return false;
 
-                const float kFluteVxzFactor = 0.93457943f;
+                const double kFluteVxzFactor = 0.9345794392523364;
                 int curState = Frame?.D?.state ?? -1;
                 bool isLight = WeaponType == 1 || WeaponType == 4 || WeaponType == 6;
                 int inSkyState = isLight ? LF2States.WeaponInSky : LF2States.HeavyWeaponInSky;
                 if (curState != inSkyState)
                     SetFrameDirect(0);
-                KnockbackVx = (float)(Runtime.Vx * kFluteVxzFactor);
+                KnockbackVx = Runtime.Vx * kFluteVxzFactor;
                 Runtime.Vx = KnockbackVx;
-                KnockbackVz = (float)(Runtime.Vz * kFluteVxzFactor);
+                KnockbackVz = Runtime.Vz * kFluteVxzFactor;
                 Runtime.Vz = KnockbackVz;
-                ApplyWeaponAirStep(isLight ? 3f : 2.3f);
+                ApplyWeaponAirStep(isLight ? 3.0 : 2.3);
                 FluteWeight = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
                 return true;
             }
@@ -444,7 +444,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private void ApplyWeaponAirStep(float vyStep)
+        private void ApplyWeaponAirStep(double vyStep)
         {
             if (GetRuntimeYInt() >= -2)
             {
@@ -457,7 +457,7 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime.Vy > -6f)
             {
                 Runtime.Vy -= vyStep;
-                KnockbackVy = (float)Runtime.Vy;
+                KnockbackVy = Runtime.Vy;
             }
         }
 
@@ -506,6 +506,8 @@ namespace NTSD.Animation.LF2Objects
                 // Step 2: ApplyStandardDamageKnockbackX —— 计算 victim.KnockbackVx
                 bool attackerState2000 = (attacker.Frame?.D?.state ?? -1) == LF2States.HeavyWeaponInSky;
                 float dvx = itr.dvx;
+                bool skipOid100KnockbackTail =
+                    knockback && Runtime.Vx > -5f && Runtime.Vx < 5f && dvx == 0f;
 
                 // C# baseline: knockback 且 Vx 接近0 且 dvx==0 时用固定速度
                 if (knockback && Runtime.Vx > -5f && Runtime.Vx < 5f && dvx == 0f)
@@ -553,6 +555,9 @@ namespace NTSD.Animation.LF2Objects
                 {
                     KnockbackVx += attacker.Runtime.Dir == "right" ? dvx : -dvx;
                 }
+
+                if (!skipOid100KnockbackTail)
+                    LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(this);
 
                 // Step 3: knockback 时设置击飞速度和帧；否则走原有轻/重击帧逻辑
                 if (knockback)

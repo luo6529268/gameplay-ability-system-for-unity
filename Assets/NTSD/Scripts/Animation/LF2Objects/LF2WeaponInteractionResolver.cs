@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Extensions;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -65,6 +66,16 @@ namespace NTSD.Animation.LF2Objects
                     out releaseHeavyHeldTargetOnConsume);
                 if (itr == null) continue;
 
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyPreprocess == true)
+                {
+                    _weapon.Match.ObserveBattleHitExecutionPlanLegacyPreprocess(
+                        _weapon,
+                        target,
+                        itr,
+                        zeroAttackerHpOnConsume,
+                        releaseHeavyHeldTargetOnConsume);
+                }
+
                 hitInfo = new SceneQueryHit(
                     target,
                     hitInfo.BodyX,
@@ -73,12 +84,125 @@ namespace NTSD.Animation.LF2Objects
                     zeroAttackerHpOnConsume,
                     releaseHeavyHeldTargetOnConsume);
 
-                if (!CanConsumeRecordedCandidate(target)) continue;
+                bool canConsume = CanConsumeRecordedCandidate(target);
+                BattleHitCandidateDisposition disposition =
+                    LF2HitResolveRuntimeData.ResolveCandidateDisposition(
+                        target,
+                        itr,
+                        canConsume);
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyDisposition == true)
+                {
+                    _weapon.Match.ObserveBattleHitExecutionPlanLegacyDisposition(
+                        _weapon,
+                        target,
+                        itr,
+                        disposition);
+                }
+
+                if (!canConsume ||
+                    disposition == BattleHitCandidateDisposition.Unsupported)
+                    continue;
+                if (disposition == BattleHitCandidateDisposition.HitConfirm)
+                {
+                    if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        _weapon.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            _weapon,
+                            target,
+                            itr,
+                            disposition);
+                    }
+                    target.HitConfirmCounter = 3;
+                    if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        _weapon.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                            _weapon,
+                            target);
+                    }
+                    continue;
+                }
+                if (disposition == BattleHitCandidateDisposition.Kind1Grab ||
+                    disposition == BattleHitCandidateDisposition.Kind3Grab ||
+                    disposition == BattleHitCandidateDisposition.Pickup)
+                {
+                    bool observePreInteractionWriterEffect =
+                        _weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                    if (observePreInteractionWriterEffect)
+                    {
+                        _weapon.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            _weapon,
+                            target,
+                            itr,
+                            disposition);
+                    }
+                    DispatchInteractionByKind(kindService, itr, target);
+                    if (observePreInteractionWriterEffect)
+                    {
+                        _weapon.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                            _weapon,
+                            target);
+                    }
+                    continue;
+                }
+
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    _weapon.Match.PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
+                        _weapon,
+                        target);
+                }
                 _weapon.ApplyReleaseSceneQueryConsumeEffectsInternal(hitInfo);
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    _weapon.Match.ObserveBattleHitExecutionPlanLegacyConsumeEffects(
+                        _weapon,
+                        target);
+                }
                 bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
                     target,
                     itr);
-                if (!DispatchInteractionByKind(kindService, itr, target)) continue;
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    _weapon.Match.PrepareBattleHitExecutionPlanLegacyDispatchObservation(
+                        _weapon,
+                        target,
+                        itr);
+                }
+                bool observeWriterEffect =
+                    (disposition == BattleHitCandidateDisposition.Kind8 ||
+                     disposition == BattleHitCandidateDisposition.Kind14 ||
+                     disposition == BattleHitCandidateDisposition.Kind10Or11 ||
+                     disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                     (disposition == BattleHitCandidateDisposition.Damage &&
+                      _weapon.Match?.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
+                          _weapon,
+                          target,
+                          itr,
+                          disposition) == true)) &&
+                    _weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                if (observeWriterEffect)
+                {
+                    _weapon.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                        _weapon,
+                        target,
+                        itr,
+                        disposition);
+                }
+                bool dispatched = DispatchInteractionByKind(kindService, itr, target);
+                if (observeWriterEffect)
+                {
+                    _weapon.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
+                        _weapon,
+                        target);
+                }
+                if (_weapon.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    _weapon.Match.ObserveBattleHitExecutionPlanLegacyDispatch(
+                        _weapon,
+                        dispatched,
+                        dispatched && abortAfterSuccessfulHit);
+                }
+                if (!dispatched) continue;
                 if (abortAfterSuccessfulHit)
                     return;
 

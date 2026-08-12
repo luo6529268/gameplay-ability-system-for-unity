@@ -41,10 +41,12 @@ Loopback Server
 ### 启动准备与即时切换
 
 - CLI 在发布 loopback listener 前创建默认 OID 2 会话，从当前 DAT 自动入口派生全部 preview scenario，并以最多 4 个 Native 任务并行预热。控制台必须输出进度和最终成功数。
-- Native 原始结果按 `sha256(plaintext) + startFrame + initialFrame + inputPlan + ticks` 有界缓存；同 key 的并发请求共享同一个 Promise，失败结果必须移除。
+- Native 原始结果按 `sha256(root plaintext + package catalog OID/type/plaintext bytes) + startFrame + initialFrame + inputPlan + ticks` 有界缓存；同 key 的并发请求共享同一个 Promise，失败结果必须移除。
 - 会话结果再按 `session revision + 完整 preview intent` 有界缓存；DAT 编辑产生新 revision 时清除旧 revision 结果。客户端只缓存已完成 JSON，重复选择直接提交，不显示等待态。
 - Native CLI 的 `render_resources` 是预览实体 frame/type/center/sprite range 的直接来源。只有旧版或测试 runner 未提供对应 OID 时，服务才回退到 catalog/DAT projection。
 - Native CLI 必须像正式 LoadingScene 一样遍历运行数据根 `J:\QQFile\NTSD 2.4.1\data\data.txt` 的完整 `<object>` 段并按条目原始 `type` 注册 DAT；不得用手写 OID 子集或把 type 3/4 折叠成武器枚举。完整 catalog 只属于 Native 运行时，`render_resources` 仅输出本次 Trace 实际出现的 OID，避免扩大 API 响应。
+- 补丁包会话必须将同一 package 的完整 OID/type/DAT 目录传给 Native CLI；目录以 OID 覆盖基础 `data.txt`，但不得引入其他 package 的同 OID 对象。服务端先在授权根内读取/解密，再以短生命纯文本目录传入 CLI，不向 Native 暴露未授权路径。
+- DAT 只有在解密/读取与 C++ 解析全部成功后才能提交到 `GameWorld` OID 目录；失败加载不得留下默认 `CharData` 导致 opoint 生成 OID 0 幽灵实体。
 - `J:\QQFile\NTSD2.4\ntsd_cpp` 只提供 C++ 源码、头文件和链接对象。Native `--game-root` 与一键启动的 `asset-workspace` 必须统一为 `J:\QQFile\NTSD 2.4.1`，禁止从 C++ 工作目录的 `..\data`/`..\chars` 隐式加载另一版本。
 - 项目打开阶段只为安全、可归一化的 BMP 路径签发 opaque asset capability，不做逐图同步文件读取。首次 asset GET 在已授权 root 内执行 handle-safe 读取，并把字节限制在当前 session；关闭 session 后 capability 与缓存同时失效。
 - 启动预热会解析所有 Native scenario 的 render resource 和 stage path，并在控制台阶段读取默认会话所需资源。这样页面打开只传输准备好的 session，技能切换只做本地/内存命中和 localhost JSON 传输。
@@ -228,12 +230,22 @@ Projection 默认值没有 capability 时必须显示为只读“DAT 未编写/�
 
 ## 7. 技能流程合同
 
-入口先从每个 frame ID 的最后 occurrence 自动派生：
+底层精确入口先从每个 frame ID 的最后 occurrence 自动派生：
 
 - frame ID 连续且标题相同的记录合并为一个标题段；相同标题的非连续段保持独立。
-- 每个非零 `hit_*` 的有效目标是精确入口，目标帧即技能首帧，并汇总所有来源 frame/字段。
+- 每个非零 `hit_*` 的有效目标是精确入口，目标帧即底层首帧，并汇总所有来源 frame/字段。
 - 无普通 `next` 前驱的标题段保持为独立动作入口。
-- 基础 state 段、输入目标和其他动作使用固定默认分组；sidecar 只可覆盖显示、排序、置顶和隐藏。
+- sidecar 只可覆盖显示、排序、置顶和隐藏，不创建或改变 DAT 关系。
+
+正式左侧在底层精确入口上增加完整动作归属层：
+
+- state 0/1/2 的入口按 standing/walking/running 基础上下文聚合，保留所有变体 Frame 和可发起动作统计。
+- 非基础入口先保留为动作根；如果它的全部有效来源都位于其他动作的 `next` 链内，且没有基础状态直达或未归属的外部来源，则降为内部阶段。
+- 内部阶段沿自身 `next` 链继续归属父动作；嵌套内部输入递归传播完整动作根。
+- 同一内部阶段可同时归属多个完整动作，不任意选择唯一父级。
+- 只要目标还存在一条基础状态直达路线，就保持独立完整动作，不因其他内部来源而被吞并。
+- 标题只用于显示和连续段识别，不作为内部融合的唯一证据。
+- “全部 Frame”继续显示被覆盖 occurrence、运行时分支、精确 `hit_*` 来源和完整动作归属。
 
 从所选入口的 `startFrame` 遍历有效 DAT 帧：
 

@@ -346,6 +346,9 @@ namespace NTSD.Animation.Rendering
 
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            int presentationTick = Volatile.Read(ref pendingPublishedTick);
             bool deferredTimingStarted = deferDetailTiming &&
                                          detailDiagnostics?.BeginDeferredRenderMaterialization() == true;
             try
@@ -356,6 +359,8 @@ namespace NTSD.Animation.Rendering
 
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.PresentationPublishTotal);
                 BattlePixelFramePlan plan;
                 try
                 {
@@ -363,6 +368,8 @@ namespace NTSD.Animation.Rendering
                 }
                 finally
                 {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.PresentationPublishTotal);
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
                 }
@@ -374,6 +381,7 @@ namespace NTSD.Animation.Rendering
             }
             finally
             {
+                presentationDiagnostics?.CompleteTick(presentationTick);
                 if (deferredTimingStarted)
                     detailDiagnostics.EndDeferredRenderMaterialization();
                 Volatile.Write(ref materializationInProgress, 0);
@@ -434,6 +442,33 @@ namespace NTSD.Animation.Rendering
                     : CommitLegacyPlan(world, frame, mode, simulationTick, reason);
             }
 
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattleCentralSubmission stagingSubmission = SlotSubmissions[backendIndex];
+            BattlePresentationFrame buildFrame;
+            try
+            {
+                buildFrame = frame != null
+                    ? stagingSubmission.CaptureFrame(frame, detailDiagnostics)
+                    : null;
+                if (buildFrame != null &&
+                    mode == BattlePresentationBackendMode.CentralOnly)
+                {
+                    world.BattlePresentation.MaterializePresentationOrder(
+                        world,
+                        buildFrame);
+                }
+            }
+            catch (Exception exception)
+            {
+                stagingBackend.Clear();
+                string reason =
+                    $"Presentation snapshot materialization failed: {exception.GetType().Name}: {exception.Message}";
+                return mode == BattlePresentationBackendMode.CentralOnly
+                    ? CommitCentralFailurePlan(world, simulationTick, reason)
+                    : CommitLegacyPlan(world, frame, mode, simulationTick, reason);
+            }
+
             bool rendererReady = TryValidateActiveRenderer(out string rendererReason);
             bool frameReady = frame != null;
             bool commonReady = commonVisualCatalog.IsComplete;
@@ -450,12 +485,24 @@ namespace NTSD.Animation.Rendering
 
             try
             {
-                BattleTickDetailPhaseDiagnostics detailDiagnostics =
-                    world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
-                BattleCentralSubmission stagingSubmission = SlotSubmissions[backendIndex];
-                BattlePresentationFrame buildFrame = frame != null
-                    ? stagingSubmission.CaptureFrame(frame, detailDiagnostics)
-                    : null;
+                if (buildFrame != null)
+                {
+                    BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                        world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+                    presentationDiagnostics?.BeginPhase(
+                        BattlePresentationPhase.BeginFrameBuildCommands);
+                    try
+                    {
+                        world.BattlePresentation.MaterializeCommands(
+                            buildFrame,
+                            detailDiagnostics);
+                    }
+                    finally
+                    {
+                        presentationDiagnostics?.EndPhase(
+                            BattlePresentationPhase.BeginFrameBuildCommands);
+                    }
+                }
                 BattleSpriteCatalog buildCatalog = buildFrame?.BoundCatalog ?? catalog;
                 BattleCommonVisualCatalog buildCommonVisualCatalog =
                     buildFrame?.CommonVisualCatalog ?? commonVisualCatalog;
@@ -687,6 +734,8 @@ namespace NTSD.Animation.Rendering
             CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
             BattleCentralSubmission submission = SlotSubmissions[backendIndex];
             BattlePresentationFrame capturedFrame = submission.CaptureFrame(frame);
+            world.BattlePresentation.MaterializePresentationOrder(world, capturedFrame);
+            world.BattlePresentation.MaterializeCommands(capturedFrame, null);
             CatalogResolver.Configure(
                 capturedFrame.BoundCatalog,
                 capturedFrame.CommonVisualCatalog,

@@ -4,7 +4,9 @@ import { describe, it } from "node:test";
 import {
     drawPreviewCanvas,
     effectivePreviewPic,
+    hitTestPreviewActor,
     preloadPreviewObjectAssets,
+    previewActorHitAreas,
     previewObjectAssetIds,
     sortPreviewEntities,
     spriteSheetColumnCount,
@@ -25,6 +27,37 @@ describe("preview renderer sprite ranges", () => {
     it("prefers the Native effective render pic over the DAT frame pic", () => {
         assert.equal(effectivePreviewPic({ renderPic: 140, pic: 12, frame: 300, oid: 2, slot: 0, x: 0, y: 0, z: 0 }, { pic: 12 } as Frame), 140);
         assert.equal(effectivePreviewPic({ pic: 12, frame: 300, oid: 2, slot: 0, x: 0, y: 0, z: 0 }, { pic: 12 } as Frame), 12);
+    });
+
+    it("exposes exact P1/P2 sprite hit areas for position dragging", () => {
+        const frame = { frameId: 0, occurrence: 0, pic: 0, state: 0, centerx: 10, centery: 20 } as Frame;
+        const project = {
+            frames: [frame],
+            ranges: [{ frameLo: 0, frameHi: 0, w: 40, h: 60, row: 1, col: 1 }],
+            assets: new Map<string, string>(),
+            previewObjects: [{
+                oid: 1,
+                frames: [frame],
+                ranges: [{ frameLo: 0, frameHi: 0, w: 40, h: 60, row: 1, col: 1 }],
+            }],
+        };
+        const tick = {
+            tick: 0,
+            cameraX: 5,
+            entities: [
+                { slot: 0, oid: 2, frame: 0, pic: 0, x: 100, y: 0, z: 200, xInt: 100, yInt: 0, zInt: 200, facing: 0, renderOffsetX: 0, hitStop: 0 },
+                { slot: 1, oid: 1, frame: 0, pic: 0, x: 220, y: 0, z: 240, xInt: 220, yInt: 0, zInt: 240, facing: 0, renderOffsetX: 0, hitStop: 0 },
+            ],
+        };
+
+        const areas = previewActorHitAreas(project, tick, frame);
+        assert.deepEqual(areas, [
+            { slot: 0, x1: 85, y1: 180, x2: 125, y2: 240 },
+            { slot: 1, x1: 205, y1: 220, x2: 245, y2: 280 },
+        ]);
+        assert.equal(hitTestPreviewActor(areas, 100, 200)?.slot, 0);
+        assert.equal(hitTestPreviewActor(areas, 230, 250)?.slot, 1);
+        assert.equal(hitTestPreviewActor(areas, 400, 400), undefined);
     });
 
     it("sorts scene entities by Native z_int while preserving equal-z slot order", () => {

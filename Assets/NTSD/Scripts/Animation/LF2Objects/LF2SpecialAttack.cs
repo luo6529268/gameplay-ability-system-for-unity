@@ -5,6 +5,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.Tools;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -254,6 +255,8 @@ namespace NTSD.Animation.LF2Objects
 
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);
+            if (Runtime != null)
+                Runtime.Frame = frameId;
             AttackingCounter = 0;
             if (Frame.D != null && Trans != null)
             {
@@ -336,8 +339,18 @@ namespace NTSD.Animation.LF2Objects
                     frame.itrs[itrIndex],
                     out bool zeroAttackerHpOnConsume,
                     out bool releaseHeavyHeldTargetOnConsume);
-                if (runtimeItr == null || !CanConsumeRecordedCandidate(target))
+                if (runtimeItr == null)
                     continue;
+
+                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyPreprocess == true)
+                {
+                    Match.ObserveBattleHitExecutionPlanLegacyPreprocess(
+                        this,
+                        target,
+                        runtimeItr,
+                        zeroAttackerHpOnConsume,
+                        releaseHeavyHeldTargetOnConsume);
+                }
 
                 var hitInfo = new SceneQueryHit(
                     target,
@@ -347,11 +360,134 @@ namespace NTSD.Animation.LF2Objects
                     zeroAttackerHpOnConsume,
                     releaseHeavyHeldTargetOnConsume);
 
+                bool canConsume = CanConsumeRecordedCandidate(target);
+                BattleHitCandidateDisposition disposition =
+                    LF2HitResolveRuntimeData.ResolveCandidateDisposition(
+                        target,
+                        runtimeItr,
+                        canConsume);
+                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyDisposition == true)
+                {
+                    Match.ObserveBattleHitExecutionPlanLegacyDisposition(
+                        this,
+                        target,
+                        runtimeItr,
+                        disposition);
+                }
+
+                if (!canConsume ||
+                    disposition == BattleHitCandidateDisposition.Unsupported)
+                    continue;
+                if (disposition == BattleHitCandidateDisposition.HitConfirm)
+                {
+                    if (Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            this,
+                            target,
+                            runtimeItr,
+                            disposition);
+                    }
+                    target.HitConfirmCounter = 3;
+                    if (Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
+                    {
+                        Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
+                    }
+                    continue;
+                }
+                if (disposition == BattleHitCandidateDisposition.Kind1Grab ||
+                    disposition == BattleHitCandidateDisposition.Kind3Grab ||
+                    disposition == BattleHitCandidateDisposition.Pickup)
+                {
+                    bool observePreInteractionWriterEffect =
+                        Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                    if (observePreInteractionWriterEffect)
+                    {
+                        Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                            this,
+                            target,
+                            runtimeItr,
+                            disposition);
+                    }
+                    DispatchInteractionByKind(kindService, runtimeItr, target);
+                    if (observePreInteractionWriterEffect)
+                        Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
+                    continue;
+                }
+
+                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    Match.PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
+                        this,
+                        target);
+                }
                 ApplyReleaseSceneQueryConsumeEffects(hitInfo);
+                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
+                {
+                    Match.ObserveBattleHitExecutionPlanLegacyConsumeEffects(
+                        this,
+                        target);
+                }
                 bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
                     target,
                     runtimeItr);
-                if (!DispatchInteractionByKind(kindService, runtimeItr, target))
+                SimulationWorld observationWorld = Match;
+                if (observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    observationWorld.PrepareBattleHitExecutionPlanLegacyDispatchObservation(
+                        this,
+                        target,
+                        runtimeItr);
+                }
+                bool observeWriterEffect =
+                    (disposition == BattleHitCandidateDisposition.Kind8 ||
+                     disposition == BattleHitCandidateDisposition.Kind14 ||
+                     disposition == BattleHitCandidateDisposition.Kind10Or11 ||
+                     disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                     (disposition == BattleHitCandidateDisposition.Damage &&
+                      Match?.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
+                          this,
+                          target,
+                          runtimeItr,
+                          disposition) == true)) &&
+                    Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
+                bool observeLifecycleEffect =
+                    disposition == BattleHitCandidateDisposition.Damage &&
+                    observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyLifecycleEffect == true &&
+                    observationWorld.CanProjectBattleHitExecutionPlanLegacyLifecycleEffect(
+                        this,
+                        target,
+                        runtimeItr,
+                        disposition);
+                if (observeWriterEffect)
+                {
+                    Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
+                        this,
+                        target,
+                        runtimeItr,
+                        disposition);
+                }
+                if (observeLifecycleEffect)
+                {
+                    observationWorld.PrepareBattleHitExecutionPlanLegacyLifecycleEffectObservation(
+                        this,
+                        target,
+                        runtimeItr,
+                        disposition);
+                }
+                bool dispatched = DispatchInteractionByKind(kindService, runtimeItr, target);
+                if (observeWriterEffect)
+                    Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
+                if (observeLifecycleEffect)
+                    observationWorld.ObserveBattleHitExecutionPlanLegacyLifecycleEffect(this);
+                if (observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
+                {
+                    observationWorld.ObserveBattleHitExecutionPlanLegacyDispatch(
+                        this,
+                        dispatched,
+                        dispatched && abortAfterSuccessfulHit);
+                }
+                if (!dispatched)
                     continue;
 
                 if (abortAfterSuccessfulHit)
@@ -659,11 +795,16 @@ namespace NTSD.Animation.LF2Objects
                 itr,
                 knockback,
                 defaultDvx);
+            bool skipOid100KnockbackTail =
+                LF2HitResolveRuntimeData.ShouldSkipOid100KnockbackTail(
+                    this,
+                    itr,
+                    knockback);
             if (resolvedDvx != 0f)
-            {
                 KnockbackVx += resolvedDvx;
+
+            if (!skipOid100KnockbackTail)
                 LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(this);
-            }
 
             ApplyState3000ObjectHurtTail(attacker);
 

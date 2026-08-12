@@ -59,7 +59,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Driver_CatchUpDispatchesEveryTickAfterChecksumWithoutDropOrDuplication()
+        public void Driver_CatchUpPublishesEveryTickAndPresentationHostDispatchesOnceWithoutDropOrDuplication()
         {
             using var scope = new DriverScope();
             var sink = new RecordingSoundSink(scope.Driver);
@@ -85,16 +85,20 @@ namespace NTSD.Test
                     ignorePaused: true,
                     buildPresentation: buildPresentation), Is.True);
             }
+            Assert.That(scope.Driver.PendingPublishedSoundEventCountForDiagnostics,
+                Is.EqualTo(catchUpTickCount));
+            scope.Driver.FlushPublishedSoundEventsForTesting();
 
             Assert.That(presentationFlags, Is.EqualTo(new[] { false, false, true }));
-            Assert.That(sink.Batches, Has.Count.EqualTo(catchUpTickCount));
-            Assert.That(sink.Batches[0], Has.Length.EqualTo(1));
+            Assert.That(sink.Batches, Has.Count.EqualTo(1));
+            Assert.That(sink.Batches[0], Has.Length.EqualTo(catchUpTickCount));
             Assert.That(sink.Batches[0][0].Cue, Is.EqualTo("SFX_TICK_1"));
-            Assert.That(sink.Batches[1][0].Cue, Is.EqualTo("SFX_TICK_2"));
-            Assert.That(sink.Batches[2][0].Cue, Is.EqualTo("SFX_TICK_3"));
-            Assert.That(sink.ChecksumWasReady, Is.EqualTo(new[] { true, true, true }));
+            Assert.That(sink.Batches[0][1].Cue, Is.EqualTo("SFX_TICK_2"));
+            Assert.That(sink.Batches[0][2].Cue, Is.EqualTo("SFX_TICK_3"));
+            Assert.That(sink.ChecksumWasReady, Is.EqualTo(new[] { true }));
             Assert.That(scope.Driver.DispatchedSoundEventCountForDiagnostics, Is.EqualTo(3));
             Assert.That(scope.Driver.SuppressedSoundEventCountForDiagnostics, Is.Zero);
+            Assert.That(scope.Driver.RejectedPublishedSoundEventCountForDiagnostics, Is.Zero);
             Assert.That(scope.Driver.World.QueuedSoundEventCountForDiagnostics, Is.EqualTo(3));
         }
 
@@ -111,6 +115,7 @@ namespace NTSD.Test
                 FrameInputSet.Empty(1),
                 ignorePaused: true,
                 buildPresentation: false), Is.True);
+            scope.Driver.FlushPublishedSoundEventsForTesting();
 
             Assert.That(sink.Batches, Is.Empty);
             Assert.That(scope.Driver.World.PendingSounds, Has.Count.EqualTo(1));
@@ -135,6 +140,7 @@ namespace NTSD.Test
                     FrameInputSet.Empty(1),
                     ignorePaused: true,
                     buildPresentation: false), Is.True);
+                dispatched.Driver.FlushPublishedSoundEventsForTesting();
                 dispatchedSnapshot = dispatched.Driver.LastChecksumSnapshot.ToJson();
             }
 
@@ -147,6 +153,7 @@ namespace NTSD.Test
                 FrameInputSet.Empty(1),
                 ignorePaused: true,
                 buildPresentation: false), Is.True);
+            suppressed.Driver.FlushPublishedSoundEventsForTesting();
 
             Assert.That(suppressed.Driver.LastChecksumSnapshot.ToJson(),
                 Is.EqualTo(dispatchedSnapshot));
@@ -360,7 +367,8 @@ namespace NTSD.Test
                 Batches.Add(copy);
                 ChecksumWasReady.Add(
                     driver.LastChecksumSnapshot != null &&
-                    driver.LastChecksumSnapshot.Tick == copy[0].Tick);
+                    copy.Length > 0 &&
+                    driver.LastChecksumSnapshot.Tick == copy[copy.Length - 1].Tick);
             }
         }
 

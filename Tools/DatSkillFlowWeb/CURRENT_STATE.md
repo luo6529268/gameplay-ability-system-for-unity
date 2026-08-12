@@ -4,37 +4,42 @@
 
 ## Snapshot
 
-- Updated: 2026-08-09
+- Updated: 2026-08-11
 - Brief maturity: `Validated`
 - Requirement gate: `Ready`
-- Project phase: 阶段 8；Native Trace/多 OID 资源投影保持完成，新的 Frame/技能信息架构已完成源码、测试和构建，新的浏览器 E4 待用户侧权限放行
-- Active task: 左侧三类导航、完整动作默认回放、单 Frame 定位和真实 Native Frame 时间线
-- Active requirement IDs: REQ-001 至 REQ-019
+- Project phase: 阶段 8；Native Trace/多 OID 资源投影保持完成，左侧“基础状态 / 完整动作 / 全部 Frame”信息架构及保守动作融合已完成源码、测试和构建，新的浏览器 E4 待用户侧确认
+- Active task: 补丁包完整 DAT 目录覆盖与 opoint 多实体预览
+- Active requirement IDs: REQ-001 至 REQ-020
 - Current branch or workspace: `feat/dat-skill-flow-editor` / `Tools/DatSkillFlowWeb`
-- Current build ID or revision: `20260809124314266-f46efa5daf1943c48896247cf7e1519c`
-- Open P0-P2 issues: 无已确认代码缺陷；本轮唯一一次自动化浏览器导航被本地安全权限拒绝，因此新的三类导航和完整动作时间线尚未取得浏览器 E4 截图。
-- Next required action: 用户直接运行一键启动确认新布局；重点检查“全部 Frame”选择 F212 时标题回到 F210 完整跳跃动作、底部出现 F210/F211/F212 Native Tick 段。
+- Current build ID or revision: `20260811081412844-8a4fe6f0b8b240d4931e7a078547bde7`
+- Open P0-P2 issues: 无已确认代码缺陷；基础状态/完整动作融合已取得自动化证据，但本轮未启动浏览器，因此尚未取得正式项目 E4 视觉证据。
+- Next required action: 用户直接运行一键启动确认新布局；重点检查基础状态只显示 standing/walking/running 上下文、完整动作显示多入口路线与动作内阶段、全部 Frame 仍可逐帧定位。
 
 ## Completed
 
-- 左栏默认收敛为“基础状态 / 输入技能 / 全部 Frame”三类导航和统一筛选；旧 Flow 表/SVG 默认隐藏且普通 render 不再构建其 DOM/SVG。
+- 新增 P1/P2 起始站位拖动模式：Canvas 精确命中两名角色，横向映射 Native X、纵向映射地面 Z、保持 Y 并夹取 stage 边界；松开后以新站位重新运行当前完整动作，切换技能沿用站位，切换角色或“重置”恢复 Native 默认值。真实 OID 70 CLI 验证 P1 `(210,0,350)`、P2 `(650,0,470)` 与 Tick 0 完全一致；完整测试 383 项：382 通过、0 失败、1 跳过。浏览器 E4 待用户确认。
+- 修复补丁 DAT 格式识别：Data Changer 的 123 字节加密封套含有 `file` 文本，旧逻辑因此把加密 DAT 误判为明文，导致 package-local overlay 在正式服务链路中无法被 Native 解析。现在按真实 frame/sprite range 结构选择明文或解密文档；正式 `ProjectDatService` 已验证 immNarutodr F327 在 Tick 76/86 生成 OID 466，Tick 86 投掷实体 `v.x=15`，播放尾迹延续到 Tick 120，三组关键资源哈希与补丁包 BMP 一致。完整测试 381 项：380 通过、0 失败、1 跳过。
+- 左栏默认收敛为“基础状态 / 完整动作 / 全部 Frame”三类导航和统一筛选；standing/walking/running 作为上下文合并展示，不再按每个 `hit_*` 重复生成技能行。
+- 完整动作保留每条真实入口路线，并仅把没有直接基础入口、没有外部入口且可由动作链归属的 `hit_*` 目标折叠为动作内阶段；共享阶段可同时显示在多个父动作中，存在直接基础路线的目标继续保持独立动作。
 - 单 Frame 选择不再直接调用 raw frame preview：先按真实 DAT `next` 链选择最早完整动作入口，Native 回放后再定位目标 Frame；F210→F211→F212 有聚焦回归，找不到入口时拒绝伪造起点。
 - 底部 DAT wait 视觉轴替换为根实体真实 Native Tick/Frame 分段；连续相同 Frame 合并，离开后回访生成新段，root 缺失时不伪造 Frame。
 - 中间预览明确显示完整动作标题/入口/当前 Frame，仍是不可由玩家控制的战斗场景；右侧帧参数检查器保持原有 capability 和编辑合同。
-- 本轮完整测试 340 项：339 通过、0 失败、1 跳过；最终聚焦测试 12/12 通过，最终 build `20260809124314266-f46efa5daf1943c48896247cf7e1519c`。
+- 动作结构中的起点和内部 `hit_*` 阶段均为可点击按钮；点击内部阶段时先从父动作真实入口回放，再依据当前 Native Trace 的来源 Frame 逐层追加输入并定位目标，不把内部 Frame 伪造成预览起点。Naruto F271 的嵌套链已验证为 `standing F0 -> F271 -> F355 -> F356`。
+- 本轮完整测试 375 项：374 通过、0 失败、1 跳过；内部阶段与动作聚合聚焦测试 20/20 通过，最终 build `20260811034854877-dbcee6f9cfde4d6b8294265c5b3e1b4d`。
 - 启动阶段从真实 DAT 派生并预热 86 个 Native 技能场景，同时安全读取并缓存 45 个当前战斗资源；浏览器只在服务完成准备后打开。
-- `CppNativeDatPreviewRunner`、项目会话和客户端分别按 DAT 内容、revision 与完整 preview intent 做有界 LRU/并发去重；编辑后自动进入新 key，不复用旧 revision。
+- `CppNativeDatPreviewRunner`、项目会话和客户端分别按根 DAT、补丁包目录内所有 DAT 字节、revision 与完整 preview intent 做有界 LRU/并发去重；编辑或依赖 DAT 改变后自动进入新 key，不复用旧结果。
 - 每次技能/Frame 预览不再同步刷新 `data.txt`；显式 catalog 读取仍执行新鲜度检查并保持外部变更失效语义。
 - C++ `render_resources` 直接提供 OID 33/121/205 等实体的 object type、frame center 和 sprite range；服务端不再为同一 Trace 重读辅助 DAT 猜测渲染资源。
 - BMP capability 在项目响应中保持 opaque；项目打开不再逐图同步探测，首次 `/api/assets/:id` 仍通过已授权 root 做 handle-safe 读取，随后只在当前会话内复用字节。
 - 真实链路基线从项目打开 75.7 秒、切换 1.4–1.5 秒，降为准备后项目打开 15.2ms、F265 首次切换 29.4ms、重复切换 3.9ms；预热资源响应 2.8ms。
 - Native preview 的 C++ 源码/对象来自 `J:\QQFile\NTSD2.4\ntsd_cpp`，但运行数据根显式固定为 `J:\QQFile\NTSD 2.4.1`；CLI 按该版本的 `data\data.txt` 全量加载 137 个 object DAT 并保留原始 type。响应仅投影本次 Trace 实际出现的 OID 资源，避免把完整 catalog 重复传给浏览器。
+- 补丁包会话将当前 package 的全部 OID/type/DAT 作为 package-local overlay 传入 Native，同 OID 覆盖基础 `data.txt`，包内独有 OID 也可由 opoint 生成。`immNarutodr F327 -> F343/F346 -> OID 466` 已验证：F346 投掷实体在 Tick 86 出现，初始 `dvx=15`，并解析 `rasenhandjian.bmp`。
 - F271 已验证真实链路：Naruto F271/F272 生成 type-3 OID 205，OID 205 从 F99 推进到 F325+，随后生成 6 个进入可绘制帧的 OID 33 分身；不再落入旧 type-2 的 F69/F70 循环。
 - 一键启动的只读 asset workspace 与 Native `--game-root` 均使用 `J:\QQFile\NTSD 2.4.1`，不得从 C++ 源码目录的父级推导运行 DAT/BMP。
-- 完整自动测试 333 项：332 通过、0 失败、1 跳过；F210/F211/F212、F265/OID 33、F271/OID 205 -> OID 33、F263/OID 121 Native 定向验收通过。
+- 完整自动测试 380 项：379 通过、0 失败、1 跳过；真实补丁包 F327/OID 466 回归、F210/F211/F212、F265/OID 33、F271/OID 205 -> OID 33 Native 定向验收通过。
 
 - 接入真实 `data.txt`、DAT、BMP、项目会话、编辑、预览、保存和关闭 API。
-- Native preview 明确限制为 Naruto OID 2。
+- Native preview 支持基础 `data.txt` 中所有 type 0 角色和当前补丁 package 内的 type 0 角色；跨 package 依赖仍不会隐式混入。
 - 修复 `project-client.js` 缺失于浏览器静态白名单导致页面永远停在初始状态的问题。
 - 补齐 session `dirty` 响应合同。
 - 真实服务链路通过：静态模块 200、137 个 OID、Naruto 打开、字段编辑、Native preview 和关闭。
@@ -87,6 +92,7 @@
 - 实现 REQ-019 网页侧 Trace DTO：按 catalog `type` 映射 root/actor/clone/projectile/unknown，记录逐 tick lineage、spawn/despawn、rootSkillEnded、分身释放、投射物落地/失效和 `timeout`/`persistent`。
 - 服务端按 Native 输出中的 OID 加载对应 DAT frame/range/BMP capability；客户端按 OID 选择真实资源，不再把非 OID 2 实体固定绘制为 fallback。
 - 客户端主体进度在 root 结束处停止，播放边界继续覆盖投射物尾迹；slot reuse 在新 lineage 前显式结束旧 lineage。
+- 修复完整动作提前结束：输入准备的 `F110 → F0` 不再触发主体结束；服务端用完整动作 Frame 归属记录真实入口 Tick/Frame，支持零等待首帧被跳过；未进入目标动作返回 `entry-not-reached`；客户端拒绝动作开始前的进度和播放终点。
 - 新增 `tests/unit/native-preview-trace.test.ts`，覆盖 raw object type、root/clone/projectile 分类和 slot reuse。
 - 当前完整测试 313 项：312 通过、0 失败、1 跳过；build `20260807122548278-e9b45dbba5944cc7942d1feca662b133`。
 - 真实 Native 服务链路已验证：F300 返回 OID 33/204/216 的 203/116/83 帧资源并分类为 clone/projectile；Frame 263 返回 OID 121 武器，两个 lineage 均以 `landed` 完成。
@@ -138,18 +144,19 @@
 - DEC-012: 复用临时浏览器并限制实例，使用后清零进程。
 - DEC-013: Trace 按派生对象类别分别结束；分身不等待 AI，武器/投射物继续到权威完成。
 - DEC-015: 左侧三类导航；单 Frame 只定位完整动作回放；底部使用真实 Native Frame 时间线。
+- DEC-018: 完整动作进入所属 Frame 链后才允许判定结束；入口未命中不得伪报完成。
 
 ## Validation
 
-- Last build command and result: PowerShell 通过 Node 的 npm CLI 运行完整 `npm test`，339 passed / 0 failed / 1 skipped；随后最终 build 和聚焦 12/12 通过，build ID `20260809124314266-f46efa5daf1943c48896247cf7e1519c`。
+- Last build command and result: PowerShell 通过 Node 的 npm CLI 运行完整 `npm test`，378 passed / 0 failed / 1 skipped；聚焦生命周期/客户端边界测试 11/11 通过；build ID `20260811051216032-67dc7ec75f9d46bbab121e892e507e45`。
 - Last startup command and result: `start-local.ps1 -Mode Project -NoBuild -NoBrowser` 成功；86/86 Native 预览、45/45 资源完成，Native 预览阶段 27.520 秒，服务就绪于随机回环地址 `http://127.0.0.1:10042/`。
 - Automated test environment: Node integration/unit tests、PowerShell 5.1 parser、tuistory PTY、正式/测试 launcher 服务、既有独立 Edge/CDP 证据。
 - Highest evidence level reached: 历史编辑器核心流程 E4、显式 DAT 覆盖/恢复/重启 E5；本轮三类导航改动仅达到构建、自动测试和服务就绪，新的浏览器 E4 未完成。
 - Evidence locations: `ACCEPTANCE.md`、`artifacts/acceptance-20260806-4037ab3a/`、Factory 当前会话浏览器/测试日志。
 - Runtime, console or network errors: 最终自动入口页面 `errors` 和 `console` 均为空；standing→F300 后预览、选择和 Flow 一致。
-- Started processes and cleanup result: 本轮服务监听端口 10042 已停止；唯一 in-app Browser 会话已 `finalize` 且未成功导航；未启动或结束用户普通 Chrome/Edge。
+- Started processes and cleanup result: 本轮真实补丁验证服务监听端口 43821，完成后由命令超时边界停止；最终视觉验收服务监听端口 43822，并在浏览器权限拒绝后主动停止。只创建一个 in-app Browser 测试标签，导航被权限策略拒绝后立即 finalize；未启动或结束用户普通 Chrome/Edge。
 - External dist restoration: 已恢复 build `20260806232034560-c9ee0125ea734d98a762056770e672a7` 和 manifest SHA-256 `322446D69A55B81D531FDBF183C4AE67F324A13B7BF2B9EA877E85E80E271F53`；build/backup 名称集合与任务前快照完全一致。
-- Remaining verification: 用户通过一键启动在真实 Web Canvas 中确认三类导航、F212 的 F210 完整入口、F271 分身和 Native Frame 时间线；本轮没有新的浏览器截图，不得把新 UI 标记为 E4 通过。
+- Remaining verification: 用户通过一键启动在真实 Web Canvas 中确认三类导航、F212 的 F210 完整入口、F271 分身、Native Frame 时间线以及 immNarutodr F347 的完整播放；本轮没有新的浏览器截图，不得把新 UI 或本次生命周期修复标记为 E4 通过。
 
 ## Next Actions
 

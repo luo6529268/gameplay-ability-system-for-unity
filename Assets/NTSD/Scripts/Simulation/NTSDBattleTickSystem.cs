@@ -254,6 +254,7 @@ namespace NTSD.Simulation
                 world.EndDataObjectTypeTickCache();
                 detailDiagnostics?.EndTick();
                 diagnostics?.EndTick();
+                world.RefreshBattleEcsShadowAfterTick(tickIndex);
             }
         }
 
@@ -367,7 +368,7 @@ namespace NTSD.Simulation
 
         private void TickCooldowns(int tickIndex)
         {
-            world.VrestTickAll(tickIndex);
+            world.RunBattleEcsCooldownPass(tickIndex);
         }
 
         private void PostCooldownHumanInput(int tickIndex)
@@ -464,7 +465,7 @@ namespace NTSD.Simulation
 
         private void FramePostProcess()
         {
-            world.FramePostProcessAll();
+            world.RunBattleEcsFramePostProcessPass();
         }
 
         private void CurrentWaveStage(int tickIndex)

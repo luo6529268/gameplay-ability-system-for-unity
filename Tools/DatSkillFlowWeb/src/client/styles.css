@@ -169,7 +169,7 @@ body.is-resizing-panels {
     user-select: none;
 }
 .panel-section { min-height: 0; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; border-bottom: 1px solid var(--line); }
-.entry-browser-section { grid-template-rows: auto auto auto minmax(0, 1fr) auto auto; }
+.entry-browser-section { grid-template-rows: auto auto auto minmax(0, 1fr) auto auto auto; }
 .flow-section { grid-template-rows: auto minmax(100px, .9fr) minmax(120px, 1.1fr) auto; }
 .flow-section[hidden] { display: none; }
 .section-heading { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px; border-bottom: 1px solid var(--line); }
@@ -269,6 +269,77 @@ body.is-resizing-panels {
 .frame-browser-table tr[data-frame-role="unresolved"] td:nth-child(2) { color: #d6a36f; }
 .frame-browser-table tr.is-overridden-frame { opacity: .58; }
 .frame-browser-table tr.is-overridden-frame td:first-child { color: #ef8a82; text-decoration: line-through; }
+.entry-row-detail {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 1.35;
+}
+.action-context-detail {
+    min-height: 0;
+    padding: 8px 10px 9px;
+    border-top: 1px solid var(--line);
+    background: #10171d;
+}
+.action-context-detail-title {
+    color: var(--yellow);
+    font-size: 10px;
+    font-weight: 700;
+}
+.action-context-detail-line {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 9px;
+    line-height: 1.4;
+}
+.action-context-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+.action-context-chips span,
+.action-context-chip {
+    max-width: 100%;
+    padding: 3px 5px;
+    overflow: hidden;
+    border: 1px solid #33424d;
+    border-radius: 3px;
+    color: #b7c4ce;
+    background: #151e25;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.action-context-chip {
+    min-width: 0;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: inherit;
+    text-align: left;
+}
+.action-context-chip:hover:not(:disabled),
+.action-context-chip:focus-visible {
+    border-color: var(--cyan);
+    color: #dff;
+    background: #10272b;
+}
+.action-context-chip:disabled {
+    cursor: not-allowed;
+    opacity: .52;
+}
+.action-context-chip.is-selected {
+    border-color: var(--cyan);
+    color: #dff;
+    box-shadow: inset 0 -2px 0 var(--cyan);
+}
+.action-context-chip.is-root-stage {
+    border-color: #74601e;
+    color: #ffe39a;
+    background: #282313;
+}
 
 .preview-context {
     min-width: 0;
@@ -313,8 +384,13 @@ body.is-resizing-panels {
 #zoom-readout { min-width: 42px; color: #d8dde2; font-size: 10px; text-align: center; }
 .overlay-toolbar button { min-width: 27px; min-height: 25px; padding: 2px 5px; font-size: 9px; }
 .overlay-toolbar button[aria-pressed="true"] { border-color: var(--cyan); color: #d5ffff; background: #144448; }
+.position-toolbar button { min-height: 25px; padding: 2px 8px; font-size: 9px; }
+.position-toolbar button.is-active { border-color: var(--amber); color: #fff1a8; background: #4b3b0e; }
+.position-readout { color: #aeb7c0; font-size: 9px; white-space: nowrap; }
 .preview-stage { position: relative; min-height: 0; overflow: auto; background-color: #0d1218; background-image: linear-gradient(rgb(70 82 94 / 17%) 1px, transparent 1px), linear-gradient(90deg, rgb(70 82 94 / 17%) 1px, transparent 1px); background-size: 32px 32px; }
 #sprite-canvas { position: absolute; inset: 50% auto auto 50%; display: block; width: min(100%, 794px); height: auto; border: 0; background: transparent; transform: translate(-50%, -50%) scale(var(--preview-zoom, 1)); transform-origin: center; image-rendering: pixelated; touch-action: none; }
+#sprite-canvas.is-positioning { cursor: grab; }
+#sprite-canvas.is-positioning:active { cursor: grabbing; }
 #sprite-canvas:focus-visible { outline: 2px solid var(--cyan); }
 .preview-hud { position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 10px; padding: 6px 9px; border: 1px solid #33404a; border-radius: 3px; background: rgb(8 13 18 / 90%); color: #aeb7c0; font-size: 10px; pointer-events: none; }
 .preview-hud strong { color: var(--cyan); font-size: 17px; }

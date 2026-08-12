@@ -49,7 +49,17 @@ export interface PreviewRenderInput {
     readonly colorKeyImages: Map<string, HTMLCanvasElement>;
     readonly visibleOverlays: ReadonlySet<OverlayType>;
     readonly draftGeometry?: OverlayGeometry;
+    readonly positionMode?: boolean;
+    readonly selectedPositionSlot?: 0 | 1;
     readonly requestRender: () => void;
+}
+
+export interface PreviewActorHitArea {
+    readonly slot: 0 | 1;
+    readonly x1: number;
+    readonly y1: number;
+    readonly x2: number;
+    readonly y2: number;
 }
 
 type ImageFactory = () => HTMLImageElement;
@@ -291,6 +301,78 @@ export function sortPreviewEntities(entities: readonly PreviewEntity[]): Preview
         number(left.zInt ?? left.z) - number(right.zInt ?? right.z));
 }
 
+export function previewActorHitAreas(
+    project: PreviewProject,
+    tick: PreviewTick | undefined,
+    runtimeFrame: Frame | undefined,
+): readonly PreviewActorHitArea[] {
+    if (tick === undefined) return [];
+    const primary = primaryPreviewEntity(tick.entities);
+    const resourcesByOid = new Map((project.previewObjects ?? []).map((resource) => [resource.oid, resource]));
+    return tick.entities.flatMap((entity): PreviewActorHitArea[] => {
+        if (entity.slot !== 0 && entity.slot !== 1) return [];
+        const hitStop = number(entity.hitStop);
+        if (hitStop <= -25 || Math.abs(hitStop) % 4 >= 2) return [];
+        const isPrimary = entity === primary;
+        const resource = resourcesByOid.get(entity.oid);
+        const frames = resource?.frames ?? (isPrimary ? project.frames : []);
+        const ranges = resource?.ranges ?? (isPrimary ? project.ranges : []);
+        const frame = isPrimary ? runtimeFrame ?? lastFrameForId(frames, entity.frame) : lastFrameForId(frames, entity.frame);
+        const pic = effectivePreviewPic(entity, frame);
+        const range = ranges.find((candidate) => (
+            pic >= number(candidate.frameLo ?? candidate.frame_lo)
+            && pic <= number(candidate.frameHi ?? candidate.frame_hi, -1)
+        ));
+        const width = number(range?.w), height = number(range?.h);
+        if (!frame || !range || pic === 999 || width <= 0 || height <= 0) return [];
+        const placement = spritePlacement({
+            xInt: number(entity.xInt ?? entity.x),
+            yInt: number(entity.yInt ?? entity.y),
+            zInt: number(entity.displayZ ?? entity.zInt ?? entity.z),
+            renderOffsetX: number(entity.renderOffsetX),
+            cameraX: tick.cameraX,
+            centerX: number(frame.centerx),
+            centerY: number(frame.centery),
+            width,
+            facing: number(entity.facing),
+        });
+        const x1 = frame.state === 9997 ? Math.max(0, Math.min(714, placement.x)) : placement.x;
+        return [{ slot: entity.slot, x1, y1: placement.y, x2: x1 + width, y2: placement.y + height }];
+    });
+}
+
+export function hitTestPreviewActor(
+    areas: readonly PreviewActorHitArea[],
+    x: number,
+    y: number,
+): PreviewActorHitArea | undefined {
+    for (let index = areas.length - 1; index >= 0; index -= 1) {
+        const area = areas[index]!;
+        if (x >= area.x1 && x <= area.x2 && y >= area.y1 && y <= area.y2) return area;
+    }
+    return undefined;
+}
+
+function drawPositionHandles(
+    context: CanvasRenderingContext2D,
+    areas: readonly PreviewActorHitArea[],
+    selectedSlot: 0 | 1 | undefined,
+): void {
+    context.save();
+    context.font = "bold 11px sans-serif";
+    context.textBaseline = "bottom";
+    for (const area of areas) {
+        const color = area.slot === 0 ? "#32d6d9" : "#ffca3a";
+        context.strokeStyle = selectedSlot === area.slot ? "#ffffff" : color;
+        context.fillStyle = color;
+        context.lineWidth = selectedSlot === area.slot ? 2 : 1;
+        context.setLineDash(selectedSlot === area.slot ? [5, 3] : []);
+        context.strokeRect(area.x1 - 2, area.y1 - 2, area.x2 - area.x1 + 4, area.y2 - area.y1 + 4);
+        context.fillText(area.slot === 0 ? "P1" : "P2", area.x1, area.y1 - 4);
+    }
+    context.restore();
+}
+
 export function stageParallaxOffset(
     stageWidth: number,
     viewportWidth: number,
@@ -382,5 +464,8 @@ export function drawPreviewCanvas(input: PreviewRenderInput): readonly OverlayGe
     }
     drawGeometry(context, geometry);
     if (input.draftGeometry !== undefined) drawDraftGeometry(context, input.draftGeometry);
+    if (input.positionMode) {
+        drawPositionHandles(context, previewActorHitAreas(input.project, input.tick, input.runtimeFrame), input.selectedPositionSlot);
+    }
     return geometry;
 }

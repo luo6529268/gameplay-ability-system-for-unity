@@ -464,6 +464,101 @@ namespace NTSD.Simulation.Presentation
         public Vector2 LocalOffsetPixels { get; }
         public int FrameId { get; }
         internal object TrustedResourceIdentity { get; }
+
+        internal BattlePresentationEntitySnapshot WithResolvedSprite(
+            float pixelWidth,
+            float pixelHeight,
+            Rect normalizedUv,
+            Vector2 pivot,
+            bool hasCatalogKey,
+            BattleSpriteValueDescriptor spriteDescriptor,
+            object trustedResourceIdentity)
+        {
+            return new BattlePresentationEntitySnapshot(
+                Handle,
+                StableId,
+                ObjectId,
+                CurrentDatObjectId,
+                EffectivePic,
+                ZInt,
+                RuntimeSlot,
+                PresentationBaseOrder,
+                HitStop,
+                HasCurrentFrame,
+                State,
+                LinkState,
+                HP2Orig,
+                RelationTeam,
+                CurrentDatObjType,
+                XInt,
+                YInt,
+                DisplayZ,
+                RenderOffsetX,
+                CameraX,
+                FrameDelay,
+                CenterX,
+                CenterY,
+                pixelWidth,
+                pixelHeight,
+                HeldVisualAttachmentOffsetPixels,
+                normalizedUv,
+                pivot,
+                FlipX,
+                hasCatalogKey,
+                spriteDescriptor,
+                HitRecordStart,
+                HitRecordCount,
+                EntityVisible,
+                ShadowVisible,
+                LocalOffsetPixels,
+                FrameId,
+                trustedResourceIdentity);
+        }
+
+        internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
+            int presentationBaseOrder)
+        {
+            return new BattlePresentationEntitySnapshot(
+                Handle,
+                StableId,
+                ObjectId,
+                CurrentDatObjectId,
+                EffectivePic,
+                ZInt,
+                RuntimeSlot,
+                presentationBaseOrder,
+                HitStop,
+                HasCurrentFrame,
+                State,
+                LinkState,
+                HP2Orig,
+                RelationTeam,
+                CurrentDatObjType,
+                XInt,
+                YInt,
+                DisplayZ,
+                RenderOffsetX,
+                CameraX,
+                FrameDelay,
+                CenterX,
+                CenterY,
+                PixelWidth,
+                PixelHeight,
+                HeldVisualAttachmentOffsetPixels,
+                NormalizedUv,
+                Pivot,
+                FlipX,
+                HasCatalogKey,
+                SpriteDescriptor,
+                HitRecordStart,
+                HitRecordCount,
+                EntityVisible,
+                ShadowVisible,
+                LocalOffsetPixels,
+                FrameId,
+                TrustedResourceIdentity);
+        }
+
     }
 
     public readonly struct BattleRenderCommand
@@ -658,6 +753,8 @@ namespace NTSD.Simulation.Presentation
         public int EntityCount { get; internal set; }
         public int HitRecordCount { get; internal set; }
         public int CommandCount { get; internal set; }
+        public bool PresentationOrderMaterialized { get; internal set; }
+        public bool CommandsMaterialized { get; internal set; }
         public int OverlayUnsupportedCount { get; internal set; }
         internal bool RequiresCatalogPublicationBinding { get; set; }
         public BattleCommonVisualCatalog CommonVisualCatalog { get; internal set; } =
@@ -743,6 +840,8 @@ namespace NTSD.Simulation.Presentation
                     EntityCount = source.EntityCount;
                     HitRecordCount = source.HitRecordCount;
                     CommandCount = source.CommandCount;
+                    PresentationOrderMaterialized = source.PresentationOrderMaterialized;
+                    CommandsMaterialized = source.CommandsMaterialized;
                     OverlayUnsupportedCount = source.OverlayUnsupportedCount;
                     RequiresCatalogPublicationBinding =
                         source.RequiresCatalogPublicationBinding;
@@ -769,6 +868,8 @@ namespace NTSD.Simulation.Presentation
             EntityCount = 0;
             HitRecordCount = 0;
             CommandCount = 0;
+            PresentationOrderMaterialized = false;
+            CommandsMaterialized = false;
             OverlayUnsupportedCount = 0;
             RequiresCatalogPublicationBinding = false;
             Array.Clear(slotLabelChars, 0, slotLabelChars.Length);
@@ -831,6 +932,24 @@ namespace NTSD.Simulation.Presentation
         {
             EnsureEntityCapacity(EntityCount + 1);
             entities[EntityCount++] = entity;
+        }
+
+        internal void SetEntity(
+            int index,
+            in BattlePresentationEntitySnapshot entity)
+        {
+            if ((uint)index >= (uint)EntityCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            entities[index] = entity;
+        }
+
+        internal void SortEntities(
+            IComparer<BattlePresentationEntitySnapshot> comparer)
+        {
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+            if (EntityCount > 1)
+                Array.Sort(entities, 0, EntityCount, comparer);
         }
 
         internal void AddHitRecord(in BattlePresentationHitRecordSnapshot hitRecord)
@@ -1022,6 +1141,10 @@ namespace NTSD.Simulation.Presentation
             new ProfilerMarker("NTSD.BattlePresentation.CaptureEntities");
         private static readonly ProfilerMarker BuildCommandsMarker =
             new ProfilerMarker("NTSD.BattlePresentation.BuildCommands");
+        private static readonly IComparer<BattlePresentationEntitySnapshot>
+            PresentationSnapshotComparer =
+                Comparer<BattlePresentationEntitySnapshot>.Create(
+                    ComparePresentationSnapshots);
         private readonly BattleSpriteMaterialClassifier materialClassifier =
             new BattleSpriteMaterialClassifier();
         private readonly BattlePresentationFrame frameA = new BattlePresentationFrame();
@@ -1156,26 +1279,34 @@ namespace NTSD.Simulation.Presentation
             {
                 BattleTickDetailPhaseDiagnostics detailDiagnostics =
                     world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                    world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.RenderBeginFrameSortEntities);
+                if (mode != BattlePresentationBackendMode.CentralOnly)
+                {
+                    presentationDiagnostics?.BeginPhase(
+                        BattlePresentationPhase.BeginFrameSortEntities);
+                }
                 try
                 {
                     using (SortEntitiesMarker.Auto())
                     {
                         world.GetPresentationEntitiesNoAlloc(entityScratch);
-                        SortEntitiesByZPreservingSlotOrder(entityScratch);
+                        if (mode != BattlePresentationBackendMode.CentralOnly)
+                            SortEntitiesByZPreservingSlotOrder(entityScratch);
                         EnsureEntityHandleCacheCapacity(entityScratch.Count);
-                        world.RecordPresentationEntityScanAndSortForDiagnostics();
-                        if (mode == BattlePresentationBackendMode.CentralOnly)
-                        {
-                            world.PublishPresentationRenderOrderFromSortedEntities(
-                                entityScratch,
-                                reusesCoordinatorSort: true);
-                        }
+                        if (mode != BattlePresentationBackendMode.CentralOnly)
+                            world.RecordPresentationEntityScanAndSortForDiagnostics();
                     }
                 }
                 finally
                 {
+                    if (mode != BattlePresentationBackendMode.CentralOnly)
+                    {
+                        presentationDiagnostics?.EndPhase(
+                            BattlePresentationPhase.BeginFrameSortEntities);
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.RenderBeginFrameSortEntities);
                 }
@@ -1192,6 +1323,8 @@ namespace NTSD.Simulation.Presentation
                 nextHitRecordCycleId = cycleId;
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.RenderBeginFrameCaptureHitRecords);
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.BeginFrameCaptureHitRecords);
                 try
                 {
                     using (CaptureHitRecordsMarker.Auto())
@@ -1207,6 +1340,8 @@ namespace NTSD.Simulation.Presentation
                 }
                 finally
                 {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.BeginFrameCaptureHitRecords);
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.RenderBeginFrameCaptureHitRecords);
                 }
@@ -1242,7 +1377,8 @@ namespace NTSD.Simulation.Presentation
                         tickIndex,
                         commonVisualCatalog,
                         writeCycle,
-                        manager);
+                        manager,
+                        buildCommands: false);
                     awaitingLegacyCompletion = false;
                     legacyProbeCount = 0;
                     return;
@@ -1585,7 +1721,10 @@ namespace NTSD.Simulation.Presentation
                     runtime.StableId,
                     runtime.ZInt,
                     slot,
-                    entity.GetRenderSortingOrder() - SimulationWorld.PresentationEntitySubOrder,
+                    mode == BattlePresentationBackendMode.CentralOnly
+                        ? checked(index * 4)
+                        : entity.GetRenderSortingOrder() -
+                          SimulationWorld.PresentationEntitySubOrder,
                     entity.GetRenderOffsetX(),
                     world.ReleaseCameraX,
                     hitRecordStart,
@@ -1599,7 +1738,8 @@ namespace NTSD.Simulation.Presentation
             int tickIndex,
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
-            CharacterAnimtorManager manager)
+            CharacterAnimtorManager manager,
+            bool buildCommands = true)
         {
             BattlePresentationFrame previousFrame = PublishedFrame;
             BattlePresentationFrame writeFrame = ReferenceEquals(previousFrame, frameA) ? frameB : frameA;
@@ -1610,17 +1750,49 @@ namespace NTSD.Simulation.Presentation
                 commonVisualCatalog,
                 hitRecordCycle,
                 writeFrame,
-                manager);
-            if (writeFrame.RequiresCatalogPublicationBinding)
+                manager,
+                buildCommands);
+            if (!buildCommands && writeFrame.EntityCount > 0 &&
+                manager != null &&
+                !ReferenceEquals(manager.SpriteCatalog, BattleSpriteCatalog.Empty))
             {
-                writeFrame.RetainPublicationBinding(
-                    manager,
-                    manager?.SpriteCatalog,
-                    previousFrame);
+                // The logic publication stores only logical sprite keys. Retain the
+                // catalog generation so the presentation host can resolve those keys
+                // after the tick without observing a newer loading generation.
+                writeFrame.RequiresCatalogPublicationBinding = true;
+            }
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.RequiresPublicationBinding);
+            try
+            {
+                if (writeFrame.RequiresCatalogPublicationBinding)
+                {
+                    writeFrame.RetainPublicationBinding(
+                        manager,
+                        manager?.SpriteCatalog,
+                        previousFrame);
+                }
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.RequiresPublicationBinding);
             }
 
-            Interlocked.Exchange(ref publishedFrame, writeFrame);
-            previousFrame?.ReleasePublicationBinding();
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.PublishSwapAndRelease);
+            try
+            {
+                Interlocked.Exchange(ref publishedFrame, writeFrame);
+                previousFrame?.ReleasePublicationBinding();
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.PublishSwapAndRelease);
+            }
         }
 
         private void CaptureAndBuild(
@@ -1630,12 +1802,17 @@ namespace NTSD.Simulation.Presentation
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
             BattlePresentationFrame frame,
-            CharacterAnimtorManager manager)
+            CharacterAnimtorManager manager,
+            bool buildCommands)
         {
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
             detailDiagnostics?.BeginPhase(
                 BattleTickDetailPhase.RenderBeginFrameCaptureEntities);
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.BeginFrameCaptureEntities);
             try
             {
                 using (CaptureEntitiesMarker.Auto())
@@ -1672,13 +1849,19 @@ namespace NTSD.Simulation.Presentation
                         LF2FrameData currentFrame = entity.Frame?.D;
                         int visualDataId = LF2Entity.ResolveCurrentDataObjectId(entity);
                         int effectivePic = entity.GetRenderPicIndex();
-                        ResolveSpriteCapture(
-                            manager,
-                            visualDataId,
-                            effectivePic,
-                            out BattleSpriteEntry entry,
-                            out bool hasCatalogKey,
-                            out BattleSpriteValueDescriptor spriteDescriptor);
+                        BattleSpriteEntry entry = null;
+                        bool hasCatalogKey = false;
+                        BattleSpriteValueDescriptor spriteDescriptor = default;
+                        if (buildCommands)
+                        {
+                            ResolveSpriteCapture(
+                                manager,
+                                visualDataId,
+                                effectivePic,
+                                out entry,
+                                out hasCatalogKey,
+                                out spriteDescriptor);
+                        }
                         int currentDataType = entity.GetCurrentDataObjectTypeForSimulation();
                         int hitRecordStart = frame.HitRecordCount;
                         int sourceHitRecordCount = 0;
@@ -1725,7 +1908,10 @@ namespace NTSD.Simulation.Presentation
                             effectivePic,
                             runtime.ZInt,
                             slot,
-                            entity.GetRenderSortingOrder() - SimulationWorld.PresentationEntitySubOrder,
+                            buildCommands
+                                ? entity.GetRenderSortingOrder() -
+                                  SimulationWorld.PresentationEntitySubOrder
+                                : checked(i * 4),
                             runtime.HitStop,
                             currentFrame != null,
                             currentFrame?.state ?? -1,
@@ -1756,15 +1942,51 @@ namespace NTSD.Simulation.Presentation
                             localOffsetPixels,
                             currentFrame?.frameId ?? -1,
                             hasCatalogKey ? entry : null));
+                        if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
+                            frame.RequiresCatalogPublicationBinding = true;
                     }
                 }
             }
             finally
             {
                 spriteCaptureCache.Clear();
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.BeginFrameCaptureEntities);
                 detailDiagnostics?.EndPhase(
                     BattleTickDetailPhase.RenderBeginFrameCaptureEntities);
             }
+
+            if (buildCommands)
+            {
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.RenderBeginFrameBuildCommands);
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.BeginFrameBuildCommands);
+                try
+                {
+                    using (BuildCommandsMarker.Auto())
+                    {
+                        BuildCommands(frame, detailDiagnostics);
+                    }
+                }
+                finally
+                {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.BeginFrameBuildCommands);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.RenderBeginFrameBuildCommands);
+                }
+            }
+        }
+
+        internal void MaterializeCommands(
+            BattlePresentationFrame frame,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics)
+        {
+            if (frame == null)
+                throw new ArgumentNullException(nameof(frame));
+            if (frame.CommandsMaterialized)
+                return;
 
             detailDiagnostics?.BeginPhase(
                 BattleTickDetailPhase.RenderBeginFrameBuildCommands);
@@ -1772,6 +1994,9 @@ namespace NTSD.Simulation.Presentation
             {
                 using (BuildCommandsMarker.Auto())
                 {
+                    frame.CommandCount = 0;
+                    frame.RequiresCatalogPublicationBinding = false;
+                    ResolveDeferredSpriteCaptures(frame);
                     BuildCommands(frame, detailDiagnostics);
                 }
             }
@@ -1782,6 +2007,59 @@ namespace NTSD.Simulation.Presentation
             }
         }
 
+        internal void MaterializePresentationOrder(
+            SimulationWorld world,
+            BattlePresentationFrame frame)
+        {
+            if (world == null)
+                throw new ArgumentNullException(nameof(world));
+            if (frame == null)
+                throw new ArgumentNullException(nameof(frame));
+            if (frame.PresentationOrderMaterialized)
+                return;
+
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.BeginFrameSortEntities);
+            try
+            {
+                frame.SortEntities(PresentationSnapshotComparer);
+                for (int index = 0; index < frame.EntityCount; index++)
+                {
+                    ref readonly BattlePresentationEntitySnapshot source =
+                        ref frame.GetEntityRef(index);
+                    BattlePresentationEntitySnapshot ordered =
+                        source.WithPresentationBaseOrder(checked(index * 4));
+                    frame.SetEntity(index, in ordered);
+                }
+                frame.PresentationOrderMaterialized = true;
+                world.PublishPresentationRenderOrderFromFrame(
+                    frame,
+                    reusesCoordinatorSort: true);
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.BeginFrameSortEntities);
+            }
+        }
+
+        private static int ComparePresentationSnapshots(
+            BattlePresentationEntitySnapshot left,
+            BattlePresentationEntitySnapshot right)
+        {
+            int zComparison = left.ZInt.CompareTo(right.ZInt);
+            if (zComparison != 0)
+                return zComparison;
+
+            int slotComparison = left.RuntimeSlot.CompareTo(right.RuntimeSlot);
+            if (slotComparison != 0)
+                return slotComparison;
+
+            return left.StableId.CompareTo(right.StableId);
+        }
+
         private void ResolveSpriteCapture(
             CharacterAnimtorManager manager,
             int visualDataId,
@@ -1790,7 +2068,58 @@ namespace NTSD.Simulation.Presentation
             out bool hasCatalogKey,
             out BattleSpriteValueDescriptor descriptor)
         {
-            if (manager == null || effectivePic < 0 || effectivePic == 999)
+            ResolveSpriteCapture(
+                manager?.SpriteCatalog,
+                visualDataId,
+                effectivePic,
+                out entry,
+                out hasCatalogKey,
+                out descriptor);
+        }
+
+        private void ResolveDeferredSpriteCaptures(BattlePresentationFrame frame)
+        {
+            spriteCaptureCache.Clear();
+            try
+            {
+                for (int index = 0; index < frame.EntityCount; index++)
+                {
+                    ref readonly BattlePresentationEntitySnapshot source =
+                        ref frame.GetEntityRef(index);
+                    ResolveSpriteCapture(
+                        frame.BoundCatalog,
+                        source.VisualDataId,
+                        source.EffectivePic,
+                        out BattleSpriteEntry entry,
+                        out bool hasCatalogKey,
+                        out BattleSpriteValueDescriptor descriptor);
+                    BattlePresentationEntitySnapshot resolved =
+                        source.WithResolvedSprite(
+                            entry?.PixelWidth ?? 0f,
+                            entry?.PixelHeight ?? 0f,
+                            entry?.NormalizedUv ?? Rect.zero,
+                            entry?.Pivot ?? new Vector2(0.5f, 0f),
+                            hasCatalogKey,
+                            descriptor,
+                            hasCatalogKey ? entry : null);
+                    frame.SetEntity(index, in resolved);
+                }
+            }
+            finally
+            {
+                spriteCaptureCache.Clear();
+            }
+        }
+
+        private void ResolveSpriteCapture(
+            BattleSpriteCatalog catalog,
+            int visualDataId,
+            int effectivePic,
+            out BattleSpriteEntry entry,
+            out bool hasCatalogKey,
+            out BattleSpriteValueDescriptor descriptor)
+        {
+            if (catalog == null || effectivePic < 0 || effectivePic == 999)
             {
                 entry = null;
                 hasCatalogKey = false;
@@ -1807,10 +2136,7 @@ namespace NTSD.Simulation.Presentation
                 return;
             }
 
-            hasCatalogKey = manager.TryGetSpriteEntry(
-                visualDataId,
-                effectivePic,
-                out entry);
+            hasCatalogKey = catalog.TryGet(visualDataId, effectivePic, out entry);
             Sprite catalogSprite = entry?.LegacySprite;
             Texture2D catalogTexture = entry?.SharedTexture;
             descriptor = new BattleSpriteValueDescriptor(
@@ -2211,6 +2537,7 @@ namespace NTSD.Simulation.Presentation
                 }
             }
             writer.Commit();
+            frame.CommandsMaterialized = true;
             if (collectDetailTimings)
             {
                 detailDiagnostics.RecordPhaseElapsed(

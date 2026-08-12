@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { previewDatProjection } from "../../src/server/project-dat-service.js";
+import { previewDatPlaintext, previewDatProjection } from "../../src/server/project-dat-service.js";
 import { encryptDatPayload } from "../../src/syntax/dat-envelope.js";
 
 const plaintext = Buffer.from([
@@ -18,5 +18,17 @@ describe("native preview DAT format selection", () => {
 
         assert.equal(plainProjection.frames.length, 1);
         assert.equal(encryptedProjection.frames.length, 1);
+    });
+
+    it("does not mistake a Data Changer envelope banner containing file text for plaintext DAT", () => {
+        const banner = Buffer.from(
+            "This data file was created with Jiquera Mondilano's Data Changer, download for free at http://jiquera.web1000.com          ",
+            "latin1",
+        );
+        assert.equal(banner.length, 123);
+        const encrypted = encryptDatPayload(banner, plaintext);
+
+        assert.equal(previewDatProjection(encrypted).frames.length, 1);
+        assert.deepEqual(previewDatPlaintext(encrypted), plaintext);
     });
 });

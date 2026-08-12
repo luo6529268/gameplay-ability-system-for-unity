@@ -251,8 +251,14 @@ namespace NTSD.Animation.LF2Objects
                     itr,
                     isKnockdown,
                     efDvx);
+                bool skipOid100KnockbackTail =
+                    LF2HitResolveRuntimeData.ShouldSkipOid100KnockbackTail(
+                        _character,
+                        itr,
+                        isKnockdown);
                 _character.KnockbackVx += resolvedDvx;
-                LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_character);
+                if (!skipOid100KnockbackTail)
+                    LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(_character);
                 efDvx = 0f;
                 if (isKnockdown)
                 {
@@ -319,7 +325,7 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 _character.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                _character.FluteForce();
+                ApplyFluteCharacterForce();
 
                 if (_character.KillCount == -1 &&
                     (_character.Match?.CurrentTickIndex ?? 0) % 12 == 0 &&
@@ -506,12 +512,25 @@ namespace NTSD.Animation.LF2Objects
             if (attacker == null || _character.Runtime == null)
                 return;
 
-            _character.KnockbackVx = (float)(_character.Runtime.Vx + (_character.GetRuntimeXInt() > attacker.GetRuntimeXInt() ? -1f : 1f));
+            _character.KnockbackVx = _character.Runtime.Vx +
+                (_character.Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
             _character.Runtime.Vx = _character.KnockbackVx;
-            _character.KnockbackVz = (float)(_character.Runtime.Vz + (_character.GetRenderZInt() > attacker.GetRenderZInt() ? -0.5f : 0.5f));
+            _character.KnockbackVz = _character.Runtime.Vz +
+                (_character.Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
             _character.Runtime.Vz = _character.KnockbackVz;
-            ApplyWhirlwindAirStep(3.0f);
+            ApplyWhirlwindAirStep(3.0);
             _character.RefreshRuntimeSnapshot();
+        }
+
+        private void ApplyFluteCharacterForce()
+        {
+            const double factor = 0.9345794392523364;
+            _character.KnockbackVx = _character.Runtime.Vx * factor;
+            _character.Runtime.Vx = _character.KnockbackVx;
+            _character.KnockbackVz = _character.Runtime.Vz * factor;
+            _character.Runtime.Vz = _character.KnockbackVz;
+            _character.ImmediateFrame(182);
+            ApplyWhirlwindAirStep(3.0);
         }
 
         private void ReleaseHeldTargetOnKind16(LF2Entity attacker)
@@ -526,7 +545,6 @@ namespace NTSD.Animation.LF2Objects
                 heldTarget.Runtime.LinkState != -2 ||
                 !heldTarget.Runtime.IsActivelyHeldBySlot(holderSlot))
             {
-                _character.Runtime.LinkState = 0;
                 return;
             }
 
@@ -542,7 +560,7 @@ namespace NTSD.Animation.LF2Objects
             _character.RefreshRuntimeSnapshot();
         }
 
-        private void ApplyWhirlwindAirStep(float vyStep)
+        private void ApplyWhirlwindAirStep(double vyStep)
         {
             if (_character.GetRuntimeYInt() >= -2)
             {
@@ -555,7 +573,7 @@ namespace NTSD.Animation.LF2Objects
             if (_character.Runtime.Vy > -6f)
             {
                 _character.Runtime.Vy -= vyStep;
-                _character.KnockbackVy = (float)_character.Runtime.Vy;
+                _character.KnockbackVy = _character.Runtime.Vy;
             }
         }
 

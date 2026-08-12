@@ -44,7 +44,37 @@ export interface PreviewIntentIdentity {
         readonly tick: number;
         readonly keys: readonly string[];
     }[];
+    readonly initial?: PreviewInitialPositions;
     readonly ticks: number;
+}
+
+export interface PreviewPosition {
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+}
+
+export interface PreviewInitialPositions {
+    readonly p1: PreviewPosition;
+    readonly p2: PreviewPosition;
+}
+
+export interface PreviewPositionBounds {
+    readonly width: number;
+    readonly zMin: number;
+    readonly zMax: number;
+}
+
+export interface NativePreviewPlaybackBounds {
+    readonly actionStart: number;
+    readonly progressEnd: number;
+    readonly playbackEnd: number;
+}
+
+interface NativePreviewPlaybackTrace {
+    readonly rootSkillStartedTick?: unknown;
+    readonly progressEndTick?: unknown;
+    readonly playbackEndTick?: unknown;
 }
 
 export class BoundedLruCache<K, V> {
@@ -92,7 +122,44 @@ export function previewIntentCacheKey(intent: PreviewIntentIdentity): string {
         startFrame: intent.startFrame,
         initialFrame: intent.initialFrame ?? intent.startFrame,
         ticks: intent.ticks,
+        initial: intent.initial,
         inputPlan: (intent.inputPlan ?? []).map((step) => ({ tick: step.tick, keys: [...step.keys] })),
+    });
+}
+
+export function movePreviewPosition(
+    position: PreviewPosition,
+    deltaCanvasX: number,
+    deltaCanvasY: number,
+    bounds: PreviewPositionBounds,
+): PreviewPosition {
+    const clamp = (value: number, minimum: number, maximum: number): number => (
+        Math.min(Math.max(value, minimum), maximum)
+    );
+    return Object.freeze({
+        x: clamp(Math.round(position.x + deltaCanvasX), 0, Math.max(0, bounds.width)),
+        y: position.y,
+        z: clamp(Math.round(position.z + deltaCanvasY), Math.min(bounds.zMin, bounds.zMax), Math.max(bounds.zMin, bounds.zMax)),
+    });
+}
+
+export function nativePreviewPlaybackBounds(
+    trace: NativePreviewPlaybackTrace | undefined,
+    tickCount: number,
+): NativePreviewPlaybackBounds {
+    const last = Math.max(0, Math.trunc(Number.isFinite(tickCount) ? tickCount : 0) - 1);
+    const clamp = (value: number): number => Math.min(last, Math.max(0, Math.trunc(value)));
+    const tick = (value: unknown, fallback: number): number => (
+        typeof value === "number" && Number.isFinite(value) ? value : fallback
+    );
+    const startValue = tick(trace?.rootSkillStartedTick, -1);
+    const actionStart = startValue < 0 ? -1 : clamp(startValue);
+    const rawPlaybackEnd = clamp(tick(trace?.playbackEndTick, last));
+    const progressValue = tick(trace?.progressEndTick, -1);
+    return Object.freeze({
+        actionStart,
+        progressEnd: actionStart < 0 || progressValue < actionStart ? -1 : clamp(progressValue),
+        playbackEnd: actionStart < 0 || rawPlaybackEnd < actionStart ? last : rawPlaybackEnd,
     });
 }
 

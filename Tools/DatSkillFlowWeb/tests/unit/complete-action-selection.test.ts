@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { selectCompleteActionIndex } from "../../src/client/complete-action-selection.js";
+import {
+    buildInternalStageChain,
+    nextDistanceToFrame,
+    selectCompleteActionIndex,
+} from "../../src/client/complete-action-selection.js";
 import type { SkillEntry } from "../../src/client/skill-entries.js";
 import type { SkillFlowEdge, SkillFlowFrameNode, SkillFlowGraph } from "../../src/client/skill-flow.js";
 
@@ -13,14 +17,18 @@ function skill(startFrame: number): SkillEntry {
         startOccurrence: startFrame,
         label: `frame_${startFrame}`,
         displayName: `F${startFrame}`,
-        category: "action",
+        category: "input",
         group: "其他动作",
         order: startFrame,
         pinned: false,
         hidden: false,
         notes: "",
         segmentFrameCount: 1,
+        actionRole: "root",
         triggers: [],
+        routes: [],
+        parentStartFrames: [],
+        internalStages: [],
     };
 }
 
@@ -67,5 +75,87 @@ describe("complete action selection", () => {
         const skills = [skill(100)];
 
         assert.equal(selectCompleteActionIndex(skills, 2, 999, () => chain(100, 101)), -1);
+    });
+
+    it("orders nested internal hit stages from the real parent next-chain", () => {
+        const parent = {
+            ...skill(271),
+            actionRole: "root" as const,
+        };
+        const first = {
+            ...skill(355),
+            actionRole: "internal" as const,
+            routes: [{
+                key: "hit_a" as const,
+                sourceFrame: 271,
+                sourceOccurrence: 271,
+                sourceLabel: "clone",
+                sourceState: 3,
+                sourceKind: "action" as const,
+            }],
+            parentStartFrames: [271],
+        };
+        const second = {
+            ...skill(356),
+            actionRole: "internal" as const,
+            routes: [{
+                key: "hit_d" as const,
+                sourceFrame: 355,
+                sourceOccurrence: 355,
+                sourceLabel: "clone_hell",
+                sourceState: 3,
+                sourceKind: "action" as const,
+            }],
+            parentStartFrames: [271],
+        };
+        const graphs = new Map([
+            [271, chain(271, 272, 273, 274)],
+            [355, chain(355, 357, 358)],
+            [356, chain(356, 359)],
+        ]);
+
+        assert.deepEqual(buildInternalStageChain(
+            parent,
+            second,
+            [parent, first, second],
+            (entry, sourceFrame) => nextDistanceToFrame(graphs.get(entry.startFrame), sourceFrame) >= 0,
+        )?.map((entry) => entry.startFrame), [355, 356]);
+    });
+
+    it("rejects a cyclic internal hit dependency", () => {
+        const parent = skill(271);
+        const first = {
+            ...skill(355),
+            actionRole: "internal" as const,
+            routes: [{
+                key: "hit_a" as const,
+                sourceFrame: 356,
+                sourceOccurrence: 356,
+                sourceLabel: "cycle_b",
+                sourceState: 3,
+                sourceKind: "action" as const,
+            }],
+            parentStartFrames: [271],
+        };
+        const second = {
+            ...skill(356),
+            actionRole: "internal" as const,
+            routes: [{
+                key: "hit_d" as const,
+                sourceFrame: 355,
+                sourceOccurrence: 355,
+                sourceLabel: "cycle_a",
+                sourceState: 3,
+                sourceKind: "action" as const,
+            }],
+            parentStartFrames: [271],
+        };
+
+        assert.equal(buildInternalStageChain(
+            parent,
+            first,
+            [parent, first, second],
+            (entry, sourceFrame) => entry.startFrame === sourceFrame,
+        ), undefined);
     });
 });

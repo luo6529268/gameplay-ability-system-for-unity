@@ -1,6 +1,7 @@
 # NTSD 联机帧同步（Lockstep）框架布置方案（核对清单）
 
 > **已废弃（2026-08-08）：**本文包含 `FixedUpdate` 驱动等过时事实，不再作为当前计划或实现依据，也不会继续维护。
+> 统一架构与迁移总方案：`Assets/NTSD/Docs/unified-battle-lockstep-ecs-server-architecture-plan.md`
 > 当前单机主计划：`Assets/NTSD/Docs/singleplayer-1000ai-performance-plan.md`
 > 未来服务器架构备忘：`Assets/NTSD/Docs/future-server-lockstep-architecture.md`
 

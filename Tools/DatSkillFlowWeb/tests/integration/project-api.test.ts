@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
 import type { Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -10,6 +11,7 @@ import { encryptDatPayload } from "../../src/syntax/dat-envelope.js";
 import {
     CppNativeDatPreviewRunner,
     ProjectDatService,
+    previewDatPlaintext,
 } from "../../src/server/project-dat-service.js";
 import {
     createApplicationServer,
@@ -27,6 +29,21 @@ import { WorkspaceRegistry } from "../../src/server/workspace-registry.js";
 import { syntheticBmp } from "../unit/gate1a-fixtures.js";
 
 const servers: Server[] = [];
+const nativePatchPackageRoot = "J:\\QQFile\\NTSD2.4大量人物补丁（2）\\木叶忍者村系列-42\\鸣人系列-11\\仙人鸣人—完全修炼";
+const nativePatchCppRoot = "J:\\QQFile\\NTSD2.4\\ntsd_cpp";
+const nativePatchGameRoot = "J:\\QQFile\\NTSD 2.4.1";
+const nativePatchPreviewExecutable = resolve("native", "bin", "dat_preview_cli.exe");
+const nativePatchObjects = [
+    { oid: 58, type: 0, file: "Kyubi_3.dat" },
+    { oid: 59, type: 0, file: "Kyubi_4.dat" },
+    { oid: 70, type: 0, file: "immNarutodr.dat" },
+    { oid: 71, type: 0, file: "Narutodr.dat" },
+    { oid: 464, type: 3, file: "Kyubi_Na_imm.dat" },
+    { oid: 466, type: 3, file: "imm_Na_Kyubi.dat" },
+] as const;
+const canRunNativePatchRegression = existsSync(nativePatchPreviewExecutable)
+    && existsSync(join(nativePatchCppRoot, "SDL2.dll"))
+    && nativePatchObjects.every((object) => existsSync(join(nativePatchPackageRoot, object.file)));
 
 function normalized(path: string): string {
     return path.replaceAll("\\", "/");
@@ -159,8 +176,17 @@ function narutoDat(): Buffer {
     return encryptDatPayload(Buffer.alloc(123, 0x41), plaintext);
 }
 
+function dataChangerEnvelope(): Buffer {
+    const banner = Buffer.from(
+        "This data file was created with Jiquera Mondilano's Data Changer, download for free at http://jiquera.web1000.com          ",
+        "latin1",
+    );
+    assert.equal(banner.length, 123);
+    return banner;
+}
+
 function patchCharacterDat(): Buffer {
-    return encryptDatPayload(Buffer.alloc(123, 0x41), Buffer.from([
+    return encryptDatPayload(dataChangerEnvelope(), Buffer.from([
         "name: Patch Hero\n",
         "file(0-0): sprites\\hero.bmp w: 1 h: 1 row: 1 col: 1\n",
         "<frame> 0 idle\n",
@@ -273,10 +299,21 @@ describe("native DAT preview output bounds", () => {
         assert.equal(executions, 3);
         await runner.preview(plaintext, { ...scenario, rootOid: 3 });
         assert.equal(executions, 4, "the selected root character participates in the Native cache key");
+        const catalogEntries = [{ oid: 466, type: 3, plaintext: Buffer.from("name: effect\n", "latin1") }];
+        await runner.preview(plaintext, { ...scenario, catalogEntries });
+        await runner.preview(plaintext, { ...scenario, catalogEntries });
+        assert.equal(executions, 5, "identical package catalogs share Native output");
+        await runner.preview(plaintext, {
+            ...scenario,
+            catalogEntries: [{ ...catalogEntries[0]!, plaintext: Buffer.from("name: edited effect\n", "latin1") }],
+        });
+        assert.equal(executions, 6, "package DAT bytes participate in the Native cache key");
     });
 
     it("passes the selected entry, real initial frame, and deterministic input plan to Native", async () => {
         let capturedArguments: readonly string[] = [];
+        let capturedCatalog = "";
+        let capturedDependency = "";
         const runner = new CppNativeDatPreviewRunner({
             executable: "preview-test.exe",
             workingDirectory: tmpdir(),
@@ -287,10 +324,23 @@ describe("native DAT preview output bounds", () => {
                     callback(new Error("missing preview output path"), "", "");
                     return;
                 }
-                void writeFile(outputPath, "{}", "utf8").then(
-                    () => callback(null, "", ""),
-                    (error: unknown) => callback(error instanceof Error ? error : new Error(String(error)), "", ""),
-                );
+                void (async () => {
+                    const catalogIndex = args.indexOf("--preview-catalog");
+                    const catalogRootIndex = args.indexOf("--preview-catalog-root");
+                    if (catalogIndex >= 0 && catalogRootIndex >= 0) {
+                        capturedCatalog = await readFile(args[catalogIndex + 1]!, "ascii");
+                        capturedDependency = await readFile(
+                            join(args[catalogRootIndex + 1]!, "preview-object-466.dat"),
+                            "latin1",
+                        );
+                    }
+                    await writeFile(outputPath, "{}", "utf8");
+                    callback(null, "", "");
+                })().catch((error: unknown) => callback(
+                    error instanceof Error ? error : new Error(String(error)),
+                    "",
+                    "",
+                ));
             },
         });
 
@@ -304,6 +354,15 @@ describe("native DAT preview output bounds", () => {
                 { tick: 4, keys: ["W"] },
                 { tick: 6, keys: ["J"] },
             ],
+            initial: {
+                p1: { x: 280, y: 0, z: 420 },
+                p2: { x: 510, y: 0, z: 460 },
+            },
+            catalogEntries: [{
+                oid: 466,
+                type: 3,
+                plaintext: Buffer.from("name: Patch Effect\n", "latin1"),
+            }],
         });
 
         const gameRootIndex = capturedArguments.indexOf("--game-root");
@@ -318,8 +377,18 @@ describe("native DAT preview output bounds", () => {
             "--start-frame", "0",
             "--entry-frame", "265",
             "--ticks", "120",
+            "--p1-x", "280",
+            "--p1-y", "0",
+            "--p1-z", "420",
+            "--p2-x", "510",
+            "--p2-y", "0",
+            "--p2-z", "460",
+            "--preview-catalog", capturedArguments[capturedArguments.indexOf("--preview-catalog") + 1],
+            "--preview-catalog-root", capturedArguments[capturedArguments.indexOf("--preview-catalog-root") + 1],
             "--input-plan", "2:L,4:W,6:J",
         ]);
+        assert.match(capturedCatalog, /id: 466 type: 3 format: plaintext file: preview-object-466\.dat/);
+        assert.equal(capturedDependency, "name: Patch Effect\n");
     });
 
     it("rejects output larger than 8 MiB before parsing it", async () => {
@@ -348,6 +417,74 @@ describe("native DAT preview output bounds", () => {
             runner.preview(Buffer.from("name: Naruto\n", "latin1")),
             /Native preview output exceeds its limit/,
         );
+    });
+
+    it("loads the complete patch catalog and spawns the F346 thrown OID 466 entity", {
+        skip: !canRunNativePatchRegression,
+    }, async () => {
+        const catalogEntries = await Promise.all(nativePatchObjects.map(async (object) => ({
+            oid: object.oid,
+            type: object.type,
+            plaintext: previewDatPlaintext(
+                await readFile(join(nativePatchPackageRoot, object.file)),
+            ),
+        })));
+        const root = catalogEntries.find((entry) => entry.oid === 70);
+        assert.ok(root);
+
+        const runner = new CppNativeDatPreviewRunner({
+            executable: nativePatchPreviewExecutable,
+            workingDirectory: nativePatchCppRoot,
+            gameRoot: nativePatchGameRoot,
+        });
+        const output = await runner.preview(root.plaintext, {
+            rootOid: 70,
+            startFrame: 327,
+            initialFrame: 0,
+            ticks: 120,
+            inputPlan: [
+                { tick: 2, keys: ["L"] },
+                { tick: 4, keys: ["W"] },
+                { tick: 6, keys: ["K"] },
+            ],
+            catalogEntries,
+        }) as {
+            metadata: { catalog: { overlay_entries: number; failed: number } };
+            ticks: Array<{
+                tick: number;
+                entities: Array<{
+                    slot: number;
+                    oid: number;
+                    frame: number;
+                    x_int: number;
+                    v: { x: number };
+                }>;
+            }>;
+            render_resources: Array<{
+                oid: number;
+                type: number;
+                ranges: Array<{ file: string }>;
+                frames: Array<{ frame_id: number; pic: number }>;
+            }>;
+        };
+
+        assert.equal(output.metadata.catalog.overlay_entries, nativePatchObjects.length);
+        assert.equal(output.metadata.catalog.failed, 0);
+        const rootFrames = output.ticks.flatMap((tick) => tick.entities)
+            .filter((entity) => entity.slot === 0)
+            .map((entity) => entity.frame);
+        assert.ok(rootFrames.includes(343), "the skill did not reach its buildup opoint frame");
+        assert.ok(rootFrames.includes(346), "the skill did not reach its thrown opoint frame");
+        const thrown = output.ticks.flatMap((tick) => tick.entities.map((entity) => ({ tick: tick.tick, ...entity })))
+            .filter((entity) => entity.slot === 52 && entity.oid === 466);
+        assert.ok(thrown.length > 1, "F346 did not create the package-defined OID 466 entity");
+        assert.equal(thrown[0]!.tick, 86);
+        assert.equal(thrown[0]!.v.x, 15);
+        assert.ok(thrown[1]!.x_int > thrown[0]!.x_int, "the thrown entity did not move forward");
+        const resource = output.render_resources.find((item) => item.oid === 466);
+        assert.equal(resource?.type, 3);
+        assert.ok(resource?.ranges.some((range) => range.file.endsWith("rasenhandjian.bmp")));
+        assert.equal(resource?.frames.find((frame) => frame.frame_id === 0)?.pic, 70);
     });
 });
 
@@ -378,6 +515,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             initialFrame?: number;
             ticks?: number;
             inputPlan?: readonly { tick: number; keys: readonly ("A" | "D" | "W" | "S" | "J" | "K" | "L")[] }[];
+            initial?: { p1: { x: number; y: number; z: number }; p2: { x: number; y: number; z: number } };
         } | undefined> = [];
         let previewEntityTransform: ((entities: Array<Record<string, unknown>>) => unknown[]) | undefined;
         const project = await ProjectDatService.initialize({
@@ -392,6 +530,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                     initialFrame?: number;
                     ticks?: number;
                     inputPlan?: readonly { tick: number; keys: readonly ("A" | "D" | "W" | "S" | "J" | "K" | "L")[] }[];
+                    initial?: { p1: { x: number; y: number; z: number }; p2: { x: number; y: number; z: number } };
                 }) => {
                     const input = Buffer.from(plaintext);
                     previewInputs.push(input);
@@ -411,6 +550,10 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                             seed: 1,
                             start_frame: options?.startFrame ?? 300,
                             ticks_requested: options?.ticks ?? 30,
+                            initial: options?.initial ?? {
+                                p1: { x: 320, y: 0, z: 500 },
+                                p2: { x: 360, y: 0, z: 501 },
+                            },
                             naruto_dat_override: `${primaryRoot}/secret-preview.dat`,
                             stage: { index: 0, data_path: "data/stage.dat", name: "Stage", width: 1000, z_min: 0, z_max: 500 },
                         },
@@ -656,6 +799,10 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                 { tick: 4, keys: ["W"] },
                 { tick: 6, keys: ["J"] },
             ],
+            initial: {
+                p1: { x: 250, y: 0, z: 320 },
+                p2: { x: 700, y: 0, z: 410 },
+            },
             ticks: 8,
         });
         const preview = await previewResponse.json() as { data: { preview: { metadata: { startFrame: number; ticksRequested: number } } } };
@@ -672,6 +819,10 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                 { tick: 4, keys: ["W"] },
                 { tick: 6, keys: ["J"] },
             ],
+            initial: {
+                p1: { x: 250, y: 0, z: 320 },
+                p2: { x: 700, y: 0, z: 410 },
+            },
         });
         const previewCallsAfterFirst = previewOptions.length;
         assert.equal((await post(origin, token, "/api/project/preview", {
@@ -684,6 +835,10 @@ describe("Naruto project DAT HTTP vertical slice", () => {
                 { tick: 4, keys: ["W"] },
                 { tick: 6, keys: ["J"] },
             ],
+            initial: {
+                p1: { x: 250, y: 0, z: 320 },
+                p2: { x: 700, y: 0, z: 410 },
+            },
             ticks: 8,
         })).status, 200);
         assert.equal(previewOptions.length, previewCallsAfterFirst, "identical session previews reuse their completed result");
@@ -705,6 +860,23 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             startFrame: 265,
             initialFrame: 0,
             inputPlan: [{ tick: 2, keys: ["X"] }],
+            ticks: 8,
+        })).status, 400);
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+            startFrame: 265,
+            initial: {
+                p1: { x: 1_000_001, y: 0, z: 320 },
+                p2: { x: 700, y: 0, z: 410 },
+            },
+            ticks: 8,
+        })).status, 400);
+        assert.equal((await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: 5,
+            startFrame: 265,
+            initial: { p1: { x: 250, y: 0, z: 320 } },
             ticks: 8,
         })).status, 400);
         assert.equal((await post(origin, token, "/api/project/preview", {
@@ -886,6 +1058,7 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         primary.sealStartupAuthorization();
         patches.sealStartupAuthorization();
         let idSequence = 0;
+        const nativeCatalogs: Array<readonly { oid: number; type: number; plaintext: Uint8Array }[]> = [];
         const project = await ProjectDatService.initialize({
             primaryRegistry: primary,
             patchRegistry: patches,
@@ -907,7 +1080,12 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             },
             dataTxtLogicalPath: dataTxtPath,
             idFactory: () => `patch${++idSequence}`.padEnd(32, "x"),
-            previewRunner: { preview: async (_plaintext, options) => nativePreview(options?.startFrame, options?.ticks, options?.rootOid) },
+            previewRunner: {
+                preview: async (_plaintext, options) => {
+                    nativeCatalogs.push(options?.catalogEntries ?? []);
+                    return nativePreview(options?.startFrame, options?.ticks, options?.rootOid);
+                },
+            },
         });
 
         const catalog = await project.catalog();
@@ -927,6 +1105,8 @@ describe("Naruto project DAT HTTP vertical slice", () => {
         assert.match(opened.diagnostics.map((item) => item.code).join(","), /patch-native-base-dependencies/);
         assert.equal((await project.asset(opened.spriteRanges[0]!.assetId)).bytes.byteLength, syntheticBmp(24, 2, 2).byteLength);
         assert.ok(native.reads.some((read) => read.root === patchRoot && read.logicalPath === "series/pack/hero.dat"));
+        assert.deepEqual(nativeCatalogs[0]?.map((entry) => [entry.oid, entry.type]), [[2, 0], [205, 3]]);
+        assert.match(Buffer.from(nativeCatalogs[0]?.find((entry) => entry.oid === 205)?.plaintext ?? []).toString("latin1"), /name: Patch Hero/);
         assert.ok(native.reads.some((read) => read.root === patchRoot && read.logicalPath === "series/pack/sprites/hero.bmp"));
         await project.close({ sessionId: opened.sessionId });
     });

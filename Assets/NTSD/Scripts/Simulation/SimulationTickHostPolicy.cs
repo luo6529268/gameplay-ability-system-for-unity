@@ -60,7 +60,7 @@ namespace NTSD.Simulation
             LockstepSimulationSettings settings)
         {
             return settings != null &&
-                   ticksAlreadyExecuted < settings.maxCatchUpTicksPerFrame &&
+                   ticksAlreadyExecuted == 0 &&
                    accumulator >= SimulationConstants.SIM_DT;
         }
 
@@ -68,12 +68,7 @@ namespace NTSD.Simulation
             int ticksAlreadyExecuted,
             LockstepSimulationSettings settings)
         {
-            if (settings == null)
-                return true;
-
-            float remainingAfterNextTick = accumulator - SimulationConstants.SIM_DT;
-            return remainingAfterNextTick < SimulationConstants.SIM_DT ||
-                   ticksAlreadyExecuted + 1 >= settings.maxCatchUpTicksPerFrame;
+            return true;
         }
 
         public override void CommitAutomaticTick()

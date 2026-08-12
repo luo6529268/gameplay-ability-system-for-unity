@@ -25,7 +25,7 @@ describe("project-backed client contract", () => {
         assert.match(html, /覆盖 DAT 文件/);
         assert.match(html, /Frame 与技能/);
         assert.match(html, /基础状态/);
-        assert.match(html, /技能入口/);
+        assert.match(html, /完整动作/);
         assert.match(html, /全部 Frame/);
         assert.match(html, /当前技能帧流程/);
         assert.match(html, /帧属性检查/);
@@ -82,10 +82,16 @@ describe("project-backed client contract", () => {
             "skill-name", "skill-group", "skill-order", "skill-pinned", "skill-hidden", "skill-notes",
             "flow-svg", "flow-edge-target",
             "apply-flow-edge", "copy-frame", "delete-frame", "new-block", "copy-block", "delete-block", "grid-four",
+            "position-mode", "reset-positions", "position-readout",
             "editor-grid", "left-panel-separator", "right-panel-separator",
         ]) assert.match(html, new RegExp(`id="${id}"`));
         assert.match(main, /project\.sourceKind === "base" \? skillState\.metadata : \[\]/);
         assert.match(main, /buildFrameEntryCatalog/);
+        assert.match(main, /buildInternalStagePreviewScenario/);
+        assert.match(main, /buildInternalStageChain/);
+        assert.match(main, /selectInternalStage\(selected, stageEntry\)/);
+        assert.match(main, /document\.createElement\("button"\)/);
+        assert.match(styles, /\.action-context-chip:hover:not\(:disabled\)/);
         assert.match(main, /frameEntryCatalog\.entries/);
         assert.match(main, /entriesByStartFrame\(skillState\.skills\)/);
         assert.match(skillEntries, /if \(rawTarget === 0\) continue/);
@@ -99,14 +105,18 @@ describe("project-backed client contract", () => {
         assert.match(selectionLock, /isActionBusy\(\)/);
         assert.match(selectionLock, /fieldDraft !== undefined/);
         assert.match(selectionLock, /canvasInteraction !== undefined/);
+        assert.match(selectionLock, /actorPositionInteraction !== undefined/);
         assert.match(main, /objectSelect\.disabled = selectionLocked/);
-        assert.match(main, /const editorLocked = isActionBusy\(\) \|\| canvasInteraction !== undefined/);
+        assert.match(main, /const editorLocked = isActionBusy\(\) \|\| canvasInteraction !== undefined \|\| actorPositionInteraction !== undefined/);
         assert.match(main, /new TextEncoder\(\)\.encode\(value\)\.byteLength/);
         assert.match(main, /validateSkillText\(nameInput, 256/);
         assert.match(main, /validateSkillText\(notesInput, 4096/);
         assert.match(main, /applyBatchEdits/);
         assert.match(main, /canvas\.setPointerCapture/);
         assert.match(main, /canvasDraftGeometry/);
+        assert.match(main, /hitTestPreviewActor/);
+        assert.match(main, /movePreviewPosition/);
+        assert.match(main, /lastPreviewScenario/);
         assert.match(main, /resizeDatRect/);
         assert.match(main, /separator\.setPointerCapture/);
         assert.match(main, /hasPointerCapture/);

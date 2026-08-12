@@ -27,6 +27,7 @@
 | REQ-017 | DAT 自动状态/技能入口与跨技能链接 | User / 2026-08-07 design confirmation | Confirmed | P0 | Validated | VAL-017 |
 | REQ-018 | 桌面三栏可拖动调宽 | User / 2026-08-07 explicit request | Confirmed | P1 | Validated | VAL-018 |
 | REQ-019 | Native 技能 Trace 按主体、分身和投射物分类运行 | User / 2026-08-07 clarification | Confirmed | P0 | Planned | VAL-019 |
+| REQ-020 | Canvas 拖动设置 P1/P2 Native 起始站位 | User / 2026-08-11 | Confirmed | P0 | Implemented | VAL-024 |
 
 ## Requirement Detail
 
@@ -271,18 +272,18 @@
 - Validation ID: VAL-016
 - Status: Validated
 
-### REQ-017: DAT 自动状态/技能入口与跨技能链接
+### REQ-017: DAT 自动基础上下文、完整动作与内部阶段
 
-- Statement: 左侧状态与技能入口必须直接从当前 DAT 自动派生；连续同标题 frame 段合并为一项，非零 `hit_*` 的有效目标帧作为精确技能首帧，同标题但不连续的段保持独立；无普通 `next` 前驱的动作段仍可见。
-- Rationale: 正式项目即使没有 sidecar，也应自动显示 `standing · F0`、`walking · F5`、`rasengan · F240` 等真实 DAT 入口，不能要求用户重复录入 DAT 已包含的信息。
-- Source: 用户于 2026-08-07 提出并确认混合入口、跨技能链接和纯展示 sidecar 方案。
+- Statement: 左侧基础状态和完整动作必须直接从当前 DAT 自动派生。底层保留每个非零有效 `hit_*` 精确目标；正式列表将 state 0/1/2 聚合为 standing/walking/running 上下文，并只把没有基础直达或独立外部来源、仅由其他动作内部触发的目标融合为内部阶段。
+- Rationale: 正式项目即使没有 sidecar，也应自动表达“基础状态 → 输入路线 → 完整动作 → 内部阶段”，避免 standing 变体和连续技后段被平铺为同级技能，也避免沿 standing 全量展开导致动作边界消失。
+- Source: 用户于 2026-08-07 确认 DAT 自动入口；2026-08-11 明确要求融合被拆开的 `hit_*` 链，并重新平衡 standing/walking 的多入口展示。
 - Evidence: `Confirmed`
 - Preconditions: 当前对象 DAT 已解密并投影 frame 标题、state、next 和 `hit_*`。
 - Inputs: frame 标题段、frame ID/occurrence、state、next、全部受支持 `hit_*`，以及可选 sidecar 展示覆盖。
-- Outputs: 分组的自动入口列表；从所选入口开始的当前流程；可点击但默认不继续展开的跨技能目标卡。
-- Invariants: `hit_*` 的技能首帧是跳转后的目标帧；`next` 继续展开当前流程；值 `0` 不得被解释为 frame 0 入口；sidecar 不得创建入口或改变 DAT。
+- Outputs: 聚合的基础状态上下文；只显示动作根的完整动作列表；每个动作的多条入口路线、内部阶段和共享父动作归属；全部 Frame 的精确底层关系。
+- Invariants: `hit_*` 精确目标仍是底层入口身份；值 `0` 不得被解释为 frame 0 入口；sidecar 不得创建入口或改变 DAT；标题相同不能单独作为融合依据；拥有基础状态直达路线的目标不能被内部融合；共享内部阶段不得任意只归属一个父动作。
 - Dependencies: REQ-002、REQ-003、REQ-006、REQ-015。
-- Acceptance: Naruto 无 sidecar 时至少自动显示 `standing · F0` 和 `rasenganshuriken · F300`；选择 standing 时 `next` 展开 0→1→2→3，`hit_Uj:300` 显示为跨技能目标且不展开 301；点击目标切换到 F300 流程；sidecar 别名只改变显示。
+- Acceptance: standing 的多个 state-0 变体聚合为一个基础上下文并统计可用动作；普通基础直达技能保持独立完整动作；只从动作内部进入的第二段/第三段不再平铺，而显示在父动作详情；共享内部阶段关联全部父动作；同时拥有基础直达入口的目标保持独立；sidecar 别名仍只改变显示。
 - Validation ID: VAL-017
 - Status: Validated
 
@@ -301,20 +302,35 @@
 - Validation ID: VAL-018
 - Status: Validated
 
-### REQ-019: Native 技能 Trace 按主体、分身和投射物分类运行
+### REQ-019: Native 技能 Trace 按动作入口、主体、分身和投射物分类运行
 
-- Statement: 预览从技能已成功触发开始，按 `ntsd_cpp` 真实逻辑 tick 运行；主体回到有效地面 idle 时结束主体技能进度；opoint 生成的角色/分身只需确认成功释放和首个有效快照；武器/投射物必须继续处理飞行、地面、碰撞和权威失效路径。
+- Statement: 预览从真实输入准备开始，按 `ntsd_cpp` 真实逻辑 tick 运行；只有主体进入所选完整动作拥有的 Frame 链后，才允许在其回到有效地面 idle 时结束主体技能进度；opoint 生成的角色/分身只需确认成功释放和首个有效快照；武器/投射物必须继续处理飞行、地面、碰撞和权威失效路径。
 - Rationale: 分身后续属于 AI，不应拖长技能结束；投掷武器的轨迹和落地碰撞仍是技能可观察结果，不能因主体 idle 被截断。
 - Source: 用户于 2026-08-07 对 Naruto 分身技能和 Frame 263 投掷武器场景的明确澄清。
 - Evidence: `Confirmed`
 - Preconditions: `ntsd_cpp` 可读取 root 与派生 OID 的 DAT；网页能按 Native entity 的 OID 加载对应 DAT/catalog 的 `rawObjectType`，并读取 Native 逐 tick entity 和必要状态字段。
 - Inputs: 已成功触发的 root start frame、DAT/C++ runner seed、Native logical tick。
 - Outputs: root actor 状态、opoint 生成事件、角色分身首个有效快照、投射物逐 tick 世界 Trace、分类完成原因。
-- Invariants: 不调用 UI 键盘模拟；不把 DAT `wait` 当作 Native tick；不等待角色分身 AI 生命周期；不提前截断武器/投射物；slot 释放和复用不混淆 lineage。
+- Invariants: 不调用 UI 键盘模拟；输入准备阶段返回 idle 不得结束尚未进入的动作；零等待首帧被 Native 跳过时可由同一动作拥有的后继 Frame 识别入口；未进入动作时必须报告 `entry-not-reached`；不把 DAT `wait` 当作 Native tick；不等待角色分身 AI 生命周期；不提前截断武器/投射物；slot 释放和复用不混淆 lineage。
 - Dependencies: REQ-004、REQ-005、REQ-011、`ntsd_cpp` runner、multi-OID DAT/BMP resource projection、OID catalog object-type mapping。
-- Acceptance: F300 能显示 opoint 生成的分身；主体回 idle 后网页进度停止；Frame 263 类投射物继续显示飞行、落地/碰撞或权威失效；Trace 缺少完成条件时明确报告 `timeout`/`persistent`，不伪造完成。
+- Acceptance: `F0 → F110 → F0 → 目标动作` 不会在目标入口前结束；Native 从零等待入口直接推进到所属后继 Frame 时仍能识别动作开始；F300 能显示 opoint 生成的分身；主体回 idle 后网页进度停止；Frame 263 类投射物继续显示飞行、落地/碰撞或权威失效；Trace 缺少完成条件时明确报告 `entry-not-reached`/`timeout`/`persistent`，不伪造完成。
 - Validation ID: VAL-019
 - Status: Planned
+
+### REQ-020: Canvas 拖动设置双角色 Native 起始站位
+
+- Statement: 用户可在独立的站位拖动模式中拖动预览场景里的 P1 与 P2；松开后以新的起始坐标重新运行当前完整动作。
+- Rationale: 技能命中、opoint 生成、抓取和投射物表现都依赖双方相对位置，只在 Canvas 上平移图片不能用于可信参数预览。
+- Source: 用户于 2026-08-11 明确要求增加“通过拖动控制场景中两个角色的位置”。
+- Evidence: `Confirmed`
+- Preconditions: 当前角色已生成至少一段 Native 预览，Tick 0 含 slot 0/1，双方精灵资源可解析。
+- Inputs: P1/P2 精灵命中区域、pointer delta、stage width/zMin/zMax、当前完整动作 scenario。
+- Outputs: P1/P2 的 Native `initial` X/Y/Z、重新生成的完整 Trace、同步站位读数。
+- Invariants: Canvas 横向拖动映射世界 X，纵向拖动映射地面 Z；Y 高度保持不变；X/Z 夹取在 stage 边界；站位不写入 DAT/sidecar；切换技能沿用当前站位，切换角色重置；站位模式不触发 DAT 几何编辑；位置必须参与客户端、会话和 Native 缓存键。
+- Dependencies: REQ-004、REQ-005、REQ-014、REQ-019、Native `--p1-x/y/z` 与 `--p2-x/y/z`。
+- Acceptance: 精确命中 P1/P2 精灵；拖动中本地即时反馈；松开后 API 严格接收两组有限坐标并重新运行；Native metadata 与 Tick 0 slot 0/1 坐标等于请求值；重置恢复 Native 默认站位。
+- Validation ID: VAL-024
+- Status: Implemented; browser E4 pending
 
 ## Non-Goals
 
@@ -322,7 +338,7 @@
 |---|---|---|---|
 | NREQ-001 | 脱离 DAT 标题、state 和跳转关系凭空生成技能语义或中文名称 | 容易误判 NTSD 数据 | 有额外权威元数据来源时 |
 | NREQ-002 | 第一阶段完整运行 `opoint/wpoint/cpoint` 语义 | 当前 Native runner 合同不足 | `ntsd_cpp` 提供对应可观察输出后 |
-| NREQ-003 | 第一阶段双角色战斗预览 | 超出最小垂直切片 | 单角色和几何叠加达到 E4 后 |
+| NREQ-003 | 历史上排除双角色可控战斗；现由 REQ-020 仅开放双方起始站位拖动 | 不开放实时玩家控制，只允许重新生成确定性 Native 预览 | 需要实时双人输入或训练场控制器时重新评审 |
 | NREQ-004 | 虚构搜索、撤销、全局保存等未接线按钮 | 违反真实可用原则 | 有正式需求和完整实现时 |
 
 ## Open Questions

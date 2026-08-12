@@ -9,6 +9,7 @@ using NTSD.App;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Presentation;
 using NTSD.Simulation.Spatial;
 using Unity.Profiling;
@@ -88,6 +89,14 @@ namespace NTSD.Animation.Rendering.Editor
         public bool forceRoleAwareNestedDirect;
         public bool forceRoleAwareSweepDirect;
         public bool forceFullCharacterInputPostRefresh;
+        public bool forceLegacyEmptyCharacterHitConsume;
+        public bool forceLegacyCharacterRuntimeCandidateCountGate;
+        public bool forceLegacyEmptyObjectHitConsume;
+        public bool forceLegacyPerPassStageRefresh;
+        public bool forceLegacyPreInteraction;
+        public bool forceLegacyPreInteractionParticipantFiltering;
+        public bool forceLegacyLateTailNoOp;
+        public string positiveLinkValidationMode = "legacy";
         public string outputPath = "Temp/NTSD_ProductionEntityStress.dispersed.json";
     }
 
@@ -139,7 +148,16 @@ namespace NTSD.Animation.Rendering.Editor
             bool usesLegacyAiConfigurationCompatibility = true,
             float catchUpCpuBudgetMs = 0f,
             bool forceFullCharacterInputPostRefresh = false,
-            bool requireZeroGcAfterWarmup = true)
+            bool requireZeroGcAfterWarmup = true,
+            bool forceLegacyEmptyCharacterHitConsume = false,
+            bool forceLegacyEmptyObjectHitConsume = false,
+            bool forceLegacyPerPassStageRefresh = false,
+            bool forceLegacyPreInteraction = false,
+            bool forceLegacyLateTailNoOp = false,
+            BattleEcsPositiveLinkValidationPassMode positiveLinkValidationMode =
+                BattleEcsPositiveLinkValidationPassMode.Legacy,
+            bool forceLegacyCharacterRuntimeCandidateCountGate = false,
+            bool forceLegacyPreInteractionParticipantFiltering = false)
         {
             Mode = mode;
             InputMode = inputMode;
@@ -205,6 +223,18 @@ namespace NTSD.Animation.Rendering.Editor
             ForceRoleAwareSweepDirect = forceRoleAwareSweepDirect;
             ForceFullCharacterInputPostRefresh = forceFullCharacterInputPostRefresh;
             RequireZeroGcAfterWarmup = requireZeroGcAfterWarmup;
+            ForceLegacyEmptyCharacterHitConsume =
+                forceLegacyEmptyCharacterHitConsume;
+            ForceLegacyCharacterRuntimeCandidateCountGate =
+                forceLegacyCharacterRuntimeCandidateCountGate;
+            ForceLegacyEmptyObjectHitConsume =
+                forceLegacyEmptyObjectHitConsume;
+            ForceLegacyPerPassStageRefresh = forceLegacyPerPassStageRefresh;
+            ForceLegacyPreInteraction = forceLegacyPreInteraction;
+            ForceLegacyPreInteractionParticipantFiltering =
+                forceLegacyPreInteractionParticipantFiltering;
+            ForceLegacyLateTailNoOp = forceLegacyLateTailNoOp;
+            PositiveLinkValidationMode = positiveLinkValidationMode;
             OutputPath = outputPath ?? string.Empty;
             if (UsesLegacyAiConfigurationCompatibility &&
                 AiSensingMode == AiSensingMode.SoAAiSensing &&
@@ -338,6 +368,15 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool ForceRoleAwareSweepDirect { get; }
         internal bool ForceFullCharacterInputPostRefresh { get; }
         internal bool RequireZeroGcAfterWarmup { get; }
+        internal bool ForceLegacyEmptyCharacterHitConsume { get; }
+        internal bool ForceLegacyCharacterRuntimeCandidateCountGate { get; }
+        internal bool ForceLegacyEmptyObjectHitConsume { get; }
+        internal bool ForceLegacyPerPassStageRefresh { get; }
+        internal bool ForceLegacyPreInteraction { get; }
+        internal bool ForceLegacyPreInteractionParticipantFiltering { get; }
+        internal bool ForceLegacyLateTailNoOp { get; }
+        internal BattleEcsPositiveLinkValidationPassMode
+            PositiveLinkValidationMode { get; }
         internal string OutputPath { get; }
         internal bool AutoCleanup => Mode == ProductionEntityStressMode.Smoke50;
         internal bool AutoStopWhenSampled { get; }
@@ -466,7 +505,16 @@ namespace NTSD.Animation.Rendering.Editor
                 usesLegacyAiConfigurationCompatibility,
                 request.catchUpCpuBudgetMs,
                 request.forceFullCharacterInputPostRefresh,
-                request.requireZeroGcAfterWarmup);
+                request.requireZeroGcAfterWarmup,
+                request.forceLegacyEmptyCharacterHitConsume,
+                request.forceLegacyEmptyObjectHitConsume,
+                request.forceLegacyPerPassStageRefresh,
+                request.forceLegacyPreInteraction,
+                request.forceLegacyLateTailNoOp,
+                ParsePositiveLinkValidationMode(
+                    request.positiveLinkValidationMode),
+                request.forceLegacyCharacterRuntimeCandidateCountGate,
+                request.forceLegacyPreInteractionParticipantFiltering);
         }
 
         internal static BattleAiExecutionProfile ParseAiExecutionProfile(string value)
@@ -524,6 +572,45 @@ namespace NTSD.Animation.Rendering.Editor
                     throw new ArgumentException(
                         $"Unknown AI decision execution mode '{value}'. Expected legacy or indexed-canonical.",
                         nameof(value));
+            }
+        }
+
+        internal static BattleEcsPositiveLinkValidationPassMode
+            ParsePositiveLinkValidationMode(string value)
+        {
+            string normalized = (value ?? string.Empty).Trim().ToLowerInvariant();
+            switch (normalized)
+            {
+                case "":
+                case "legacy":
+                    return BattleEcsPositiveLinkValidationPassMode.Legacy;
+                case "shadow":
+                case "shadow-compare":
+                    return BattleEcsPositiveLinkValidationPassMode.ShadowCompare;
+                case "data":
+                case "data-oriented":
+                    return BattleEcsPositiveLinkValidationPassMode.DataOriented;
+                default:
+                    throw new ArgumentException(
+                        $"Unknown positive-link validation mode '{value}'. " +
+                        "Expected legacy, shadow, or data-oriented.",
+                        nameof(value));
+            }
+        }
+
+        internal static string FormatPositiveLinkValidationMode(
+            BattleEcsPositiveLinkValidationPassMode mode)
+        {
+            switch (mode)
+            {
+                case BattleEcsPositiveLinkValidationPassMode.Legacy:
+                    return "legacy";
+                case BattleEcsPositiveLinkValidationPassMode.ShadowCompare:
+                    return "shadow";
+                case BattleEcsPositiveLinkValidationPassMode.DataOriented:
+                    return "data-oriented";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
         }
 
@@ -1038,6 +1125,56 @@ namespace NTSD.Animation.Rendering.Editor
         public bool forceFullCharacterInputPostRefreshRequested;
         public bool forceFullCharacterInputPostRefreshApplied;
         public bool forceFullCharacterInputPostRefreshRestored;
+        public bool forceLegacyEmptyCharacterHitConsumeRequested;
+        public bool forceLegacyEmptyCharacterHitConsumeApplied;
+        public bool forceLegacyEmptyCharacterHitConsumeRestored;
+        public bool forceLegacyCharacterRuntimeCandidateCountGateRequested;
+        public bool forceLegacyCharacterRuntimeCandidateCountGateApplied;
+        public bool forceLegacyCharacterRuntimeCandidateCountGateRestored;
+        public long characterRuntimeCandidateCountGateAppliedCount;
+        public long characterRuntimeCandidateCountGateFallbackCount;
+        public long emptyCharacterHitConsumeSkipCount;
+        public long characterHitConsumeExecutedCount;
+        public bool forceLegacyEmptyObjectHitConsumeRequested;
+        public bool forceLegacyEmptyObjectHitConsumeApplied;
+        public bool forceLegacyEmptyObjectHitConsumeRestored;
+        public long emptyObjectHitConsumeSkipCount;
+        public long objectHitConsumeExecutedCount;
+        public bool forceLegacyPerPassStageRefreshRequested;
+        public bool forceLegacyPerPassStageRefreshApplied;
+        public bool forceLegacyPerPassStageRefreshRestored;
+        public long stageRuntimeSceneRefreshCount;
+        public long stageRuntimeHostPrepareCount;
+        public long stageRuntimeHostReuseCount;
+        public long stageRuntimeLegacyPerPassRefreshCount;
+        public bool forceLegacyPreInteractionRequested;
+        public bool forceLegacyPreInteractionApplied;
+        public bool forceLegacyPreInteractionRestored;
+        public bool forceLegacyPreInteractionParticipantFilteringRequested;
+        public bool forceLegacyPreInteractionParticipantFilteringApplied;
+        public bool forceLegacyPreInteractionParticipantFilteringRestored;
+        public long preInteractionWholePassProofSucceededTickCount;
+        public long preInteractionWholePassParticipantCount;
+        public long preInteractionExecutedCount;
+        public long preInteractionProofSkipCount;
+        public long preInteractionSnapshotSkipCount;
+        public long preInteractionFailClosedCount;
+        public long preInteractionCpointCheckProofSkipCount;
+        public long preInteractionMismatchTailProofSkipCount;
+        public long preInteractionHeldSyncProofSkipCount;
+        public bool forceLegacyLateTailNoOpRequested;
+        public bool forceLegacyLateTailNoOpApplied;
+        public bool forceLegacyLateTailNoOpRestored;
+        public string positiveLinkValidationRequestedMode;
+        public string positiveLinkValidationEffectiveMode;
+        public bool positiveLinkValidationRestored;
+        public long positiveLinkValidationRunCount;
+        public long positiveLinkValidationSlotVisitCount;
+        public long positiveLinkValidationKeptCount;
+        public long positiveLinkValidationClearedCount;
+        public long positiveLinkValidationMismatchCount;
+        public long lateTailNoOpSkipCount;
+        public long lateTailExecutedCount;
         public long aiUnifiedSnapshotExecutionBuildCount;
         public long aiUnifiedSnapshotExecutionSlotVisitCount;
         public long aiUnifiedSnapshotExecutionRefreshCount;
@@ -3066,7 +3203,7 @@ namespace NTSD.Animation.Rendering.Editor
         {
             string canonical = string.Join(
                 "|",
-                "implementation-config-v6",
+                "implementation-config-v9",
                 "ai-execution-profile-" +
                 ProductionEntityStressConfig.FormatAiExecutionProfile(
                     config.AiExecutionProfile),
@@ -3102,6 +3239,21 @@ namespace NTSD.Animation.Rendering.Editor
                 config.EnableCollisionRoleZeroItrFastPath
                     ? "role-zero-itr-fastpath-on"
                     : "role-zero-itr-fastpath-off",
+                config.ForceLegacyEmptyCharacterHitConsume
+                    ? "empty-character-hit-proof-off"
+                    : "empty-character-hit-proof-on",
+                config.ForceLegacyCharacterRuntimeCandidateCountGate
+                    ? "character-runtime-candidate-count-gate-off"
+                    : "character-runtime-candidate-count-gate-on",
+                config.ForceLegacyEmptyObjectHitConsume
+                    ? "empty-object-hit-proof-off"
+                    : "empty-object-hit-proof-on",
+                config.ForceLegacyPreInteractionParticipantFiltering
+                    ? "pre-interaction-participant-filter-off"
+                    : "pre-interaction-participant-filter-on",
+                "positive-link-validation-" +
+                ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
+                    config.PositiveLinkValidationMode),
                 config.SkipLateRendererUpdate
                     ? "skip-late-renderer-update-on"
                     : "skip-late-renderer-update-off",
@@ -3652,6 +3804,19 @@ namespace NTSD.Animation.Rendering.Editor
         private AiUnifiedSnapshotShadowMode previousUnifiedAiSnapshotShadowMode;
         private AiUnifiedSnapshotExecutionMode previousAiUnifiedSnapshotExecutionMode;
         private bool previousForceFullCharacterInputPostRefresh;
+        private bool previousForceLegacyEmptyCharacterHitConsume;
+        private bool previousForceLegacyCharacterRuntimeCandidateCountGate;
+        private bool previousForceLegacyEmptyObjectHitConsume;
+        private bool previousForceLegacyPerPassStageRefresh;
+        private long stageRuntimeSceneRefreshCountBaseline;
+        private long stageRuntimeHostPrepareCountBaseline;
+        private long stageRuntimeHostReuseCountBaseline;
+        private long stageRuntimeLegacyPerPassRefreshCountBaseline;
+        private bool previousForceLegacyPreInteraction;
+        private bool previousForceLegacyPreInteractionParticipantFiltering;
+        private bool previousForceLegacyLateTailNoOp;
+        private BattleEcsPositiveLinkValidationPassMode
+            previousPositiveLinkValidationMode;
         private bool previousSkipLateRendererUpdate;
         private long skipLateRendererUpdateTickCountBaseline;
         private bool previousSoundPresentationSuppressed;
@@ -3985,6 +4150,23 @@ namespace NTSD.Animation.Rendering.Editor
                     config.AiUnifiedSnapshotExecutionMode.ToString(),
                 forceFullCharacterInputPostRefreshRequested =
                     config.ForceFullCharacterInputPostRefresh,
+                forceLegacyEmptyCharacterHitConsumeRequested =
+                    config.ForceLegacyEmptyCharacterHitConsume,
+                forceLegacyCharacterRuntimeCandidateCountGateRequested =
+                    config.ForceLegacyCharacterRuntimeCandidateCountGate,
+                forceLegacyEmptyObjectHitConsumeRequested =
+                    config.ForceLegacyEmptyObjectHitConsume,
+                forceLegacyPerPassStageRefreshRequested =
+                    config.ForceLegacyPerPassStageRefresh,
+                forceLegacyPreInteractionRequested =
+                    config.ForceLegacyPreInteraction,
+                forceLegacyPreInteractionParticipantFilteringRequested =
+                    config.ForceLegacyPreInteractionParticipantFiltering,
+                forceLegacyLateTailNoOpRequested =
+                    config.ForceLegacyLateTailNoOp,
+                positiveLinkValidationRequestedMode =
+                    ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
+                        config.PositiveLinkValidationMode),
                 aiUnifiedSnapshotExecutionFirstFailureStage =
                     AiUnifiedSnapshotExceptionStage.None.ToString(),
                 aiUnifiedSnapshotExecutionFirstFailureType = string.Empty,
@@ -4185,6 +4367,62 @@ namespace NTSD.Animation.Rendering.Editor
                 config.ForceFullCharacterInputPostRefresh;
             report.forceFullCharacterInputPostRefreshApplied =
                 world.ForceFullCharacterInputPostRefreshForDiagnostics;
+            previousForceLegacyEmptyCharacterHitConsume =
+                world.ForceLegacyEmptyCharacterHitConsumeForDiagnostics;
+            world.ForceLegacyEmptyCharacterHitConsumeForDiagnostics =
+                config.ForceLegacyEmptyCharacterHitConsume;
+            report.forceLegacyEmptyCharacterHitConsumeApplied =
+                world.ForceLegacyEmptyCharacterHitConsumeForDiagnostics;
+            previousForceLegacyCharacterRuntimeCandidateCountGate =
+                world.ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics;
+            world.ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics =
+                config.ForceLegacyCharacterRuntimeCandidateCountGate;
+            report.forceLegacyCharacterRuntimeCandidateCountGateApplied =
+                world.ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics;
+            previousForceLegacyEmptyObjectHitConsume =
+                world.ForceLegacyEmptyObjectHitConsumeForDiagnostics;
+            world.ForceLegacyEmptyObjectHitConsumeForDiagnostics =
+                config.ForceLegacyEmptyObjectHitConsume;
+            report.forceLegacyEmptyObjectHitConsumeApplied =
+                world.ForceLegacyEmptyObjectHitConsumeForDiagnostics;
+            previousForceLegacyPerPassStageRefresh =
+                world.ConfigureLegacyPerPassStageRefreshForDiagnostics(
+                    config.ForceLegacyPerPassStageRefresh);
+            report.forceLegacyPerPassStageRefreshApplied =
+                world.ForceLegacyPerPassStageRefreshForDiagnostics;
+            stageRuntimeSceneRefreshCountBaseline =
+                world.StageRuntimeSceneRefreshCountForDiagnostics;
+            stageRuntimeHostPrepareCountBaseline =
+                world.StageRuntimeHostPrepareCountForDiagnostics;
+            stageRuntimeHostReuseCountBaseline =
+                world.StageRuntimeHostReuseCountForDiagnostics;
+            stageRuntimeLegacyPerPassRefreshCountBaseline =
+                world.StageRuntimeLegacyPerPassRefreshCountForDiagnostics;
+            previousForceLegacyPreInteraction =
+                world.ForceLegacyPreInteractionForDiagnostics;
+            world.ForceLegacyPreInteractionForDiagnostics =
+                config.ForceLegacyPreInteraction;
+            report.forceLegacyPreInteractionApplied =
+                world.ForceLegacyPreInteractionForDiagnostics;
+            previousForceLegacyPreInteractionParticipantFiltering =
+                world.ForceLegacyPreInteractionParticipantFilteringForDiagnostics;
+            world.ForceLegacyPreInteractionParticipantFilteringForDiagnostics =
+                config.ForceLegacyPreInteractionParticipantFiltering;
+            report.forceLegacyPreInteractionParticipantFilteringApplied =
+                world.ForceLegacyPreInteractionParticipantFilteringForDiagnostics;
+            previousForceLegacyLateTailNoOp =
+                world.ForceLegacyLateTailNoOpForDiagnostics;
+            world.ForceLegacyLateTailNoOpForDiagnostics =
+                config.ForceLegacyLateTailNoOp;
+            report.forceLegacyLateTailNoOpApplied =
+                world.ForceLegacyLateTailNoOpForDiagnostics;
+            previousPositiveLinkValidationMode =
+                world.BattleEcsPositiveLinkValidationPassModeForDiagnostics;
+            world.ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
+                config.PositiveLinkValidationMode);
+            report.positiveLinkValidationEffectiveMode =
+                ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
+                    world.BattleEcsPositiveLinkValidationPassModeForDiagnostics);
             world.ResetAiDecisionShadowDiagnostics();
             world.ResetAiUnifiedSnapshotShadowDiagnostics();
             world.ResetAiUnifiedSnapshotExecutionDiagnostics();
@@ -4884,6 +5122,60 @@ namespace NTSD.Animation.Rendering.Editor
         private void CaptureProductionCounters()
         {
             CaptureManagedMemoryBoundaryCounters();
+
+            if (world != null)
+            {
+                report.emptyCharacterHitConsumeSkipCount +=
+                    world.LastEmptyCharacterHitConsumeSkipCountForDiagnostics;
+                report.characterHitConsumeExecutedCount +=
+                    world.LastCharacterHitConsumeExecutedCountForDiagnostics;
+                report.characterRuntimeCandidateCountGateAppliedCount +=
+                    world.LastCharacterRuntimeCandidateCountGateAppliedForDiagnostics;
+                report.characterRuntimeCandidateCountGateFallbackCount +=
+                    world.LastCharacterRuntimeCandidateCountGateFallbackForDiagnostics;
+                report.emptyObjectHitConsumeSkipCount +=
+                    world.LastEmptyObjectHitConsumeSkipCountForDiagnostics;
+                report.objectHitConsumeExecutedCount +=
+                    world.LastObjectHitConsumeExecutedCountForDiagnostics;
+                report.stageRuntimeSceneRefreshCount = Math.Max(
+                    0L,
+                    world.StageRuntimeSceneRefreshCountForDiagnostics -
+                    stageRuntimeSceneRefreshCountBaseline);
+                report.stageRuntimeHostPrepareCount = Math.Max(
+                    0L,
+                    world.StageRuntimeHostPrepareCountForDiagnostics -
+                    stageRuntimeHostPrepareCountBaseline);
+                report.stageRuntimeHostReuseCount = Math.Max(
+                    0L,
+                    world.StageRuntimeHostReuseCountForDiagnostics -
+                    stageRuntimeHostReuseCountBaseline);
+                report.stageRuntimeLegacyPerPassRefreshCount = Math.Max(
+                    0L,
+                    world.StageRuntimeLegacyPerPassRefreshCountForDiagnostics -
+                    stageRuntimeLegacyPerPassRefreshCountBaseline);
+                if (world.LastPreInteractionWholePassProofSucceededForDiagnostics)
+                    report.preInteractionWholePassProofSucceededTickCount++;
+                report.preInteractionWholePassParticipantCount +=
+                    world.LastPreInteractionWholePassParticipantCountForDiagnostics;
+                report.preInteractionExecutedCount +=
+                    world.LastPreInteractionExecutedCountForDiagnostics;
+                report.preInteractionProofSkipCount +=
+                    world.LastPreInteractionProofSkipCountForDiagnostics;
+                report.preInteractionSnapshotSkipCount +=
+                    world.LastPreInteractionSnapshotSkipCountForDiagnostics;
+                report.preInteractionFailClosedCount +=
+                    world.LastPreInteractionFailClosedCountForDiagnostics;
+                report.preInteractionCpointCheckProofSkipCount +=
+                    world.LastPreInteractionCpointCheckProofSkipCountForDiagnostics;
+                report.preInteractionMismatchTailProofSkipCount +=
+                    world.LastPreInteractionMismatchTailProofSkipCountForDiagnostics;
+                report.preInteractionHeldSyncProofSkipCount +=
+                    world.LastPreInteractionHeldSyncProofSkipCountForDiagnostics;
+                report.lateTailNoOpSkipCount +=
+                    world.LastLateTailNoOpSkipCountForDiagnostics;
+                report.lateTailExecutedCount +=
+                    world.LastLateTailExecutedCountForDiagnostics;
+            }
 
             BattlePresentationFrame publishedFrame =
                 world?.BattlePresentation?.PublishedFrame;
@@ -7677,6 +7969,100 @@ namespace NTSD.Animation.Rendering.Editor
                             report.forceFullCharacterInputPostRefreshRestored =
                                 world.ForceFullCharacterInputPostRefreshForDiagnostics ==
                                 previousForceFullCharacterInputPostRefresh;
+                        });
+                    journal.Attempt(
+                        "restore-empty-character-hit-consume-mode",
+                        () =>
+                        {
+                            world.ForceLegacyEmptyCharacterHitConsumeForDiagnostics =
+                                previousForceLegacyEmptyCharacterHitConsume;
+                            report.forceLegacyEmptyCharacterHitConsumeRestored =
+                                world.ForceLegacyEmptyCharacterHitConsumeForDiagnostics ==
+                                previousForceLegacyEmptyCharacterHitConsume;
+                        });
+                    journal.Attempt(
+                        "restore-character-runtime-candidate-count-gate",
+                        () =>
+                        {
+                            world.ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics =
+                                previousForceLegacyCharacterRuntimeCandidateCountGate;
+                            report.forceLegacyCharacterRuntimeCandidateCountGateRestored =
+                                world.ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics ==
+                                previousForceLegacyCharacterRuntimeCandidateCountGate;
+                        });
+                    journal.Attempt(
+                        "restore-empty-object-hit-consume-mode",
+                        () =>
+                        {
+                            world.ForceLegacyEmptyObjectHitConsumeForDiagnostics =
+                                previousForceLegacyEmptyObjectHitConsume;
+                            report.forceLegacyEmptyObjectHitConsumeRestored =
+                                world.ForceLegacyEmptyObjectHitConsumeForDiagnostics ==
+                                previousForceLegacyEmptyObjectHitConsume;
+                        });
+                    journal.Attempt(
+                        "restore-stage-runtime-refresh-mode",
+                        () =>
+                        {
+                            world.ConfigureLegacyPerPassStageRefreshForDiagnostics(
+                                previousForceLegacyPerPassStageRefresh);
+                            report.forceLegacyPerPassStageRefreshRestored =
+                                world.ForceLegacyPerPassStageRefreshForDiagnostics ==
+                                previousForceLegacyPerPassStageRefresh;
+                        });
+                    journal.Attempt(
+                        "restore-pre-interaction-mode",
+                        () =>
+                        {
+                            world.ForceLegacyPreInteractionForDiagnostics =
+                                previousForceLegacyPreInteraction;
+                            report.forceLegacyPreInteractionRestored =
+                                world.ForceLegacyPreInteractionForDiagnostics ==
+                                previousForceLegacyPreInteraction;
+                        });
+                    journal.Attempt(
+                        "restore-pre-interaction-participant-filtering-mode",
+                        () =>
+                        {
+                            world.ForceLegacyPreInteractionParticipantFilteringForDiagnostics =
+                                previousForceLegacyPreInteractionParticipantFiltering;
+                            report.forceLegacyPreInteractionParticipantFilteringRestored =
+                                world.ForceLegacyPreInteractionParticipantFilteringForDiagnostics ==
+                                previousForceLegacyPreInteractionParticipantFiltering;
+                        });
+                    journal.Attempt(
+                        "restore-late-tail-noop-mode",
+                        () =>
+                        {
+                            world.ForceLegacyLateTailNoOpForDiagnostics =
+                                previousForceLegacyLateTailNoOp;
+                            report.forceLegacyLateTailNoOpRestored =
+                                world.ForceLegacyLateTailNoOpForDiagnostics ==
+                                previousForceLegacyLateTailNoOp;
+                        });
+                    journal.Attempt(
+                        "capture-positive-link-validation-diagnostics",
+                        () =>
+                        {
+                            BattleEcsPositiveLinkValidationPassDiagnostics diagnostics =
+                                world.BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics;
+                            report.positiveLinkValidationRunCount = diagnostics.RunCount;
+                            report.positiveLinkValidationSlotVisitCount =
+                                diagnostics.SlotVisitCount;
+                            report.positiveLinkValidationKeptCount = diagnostics.KeptCount;
+                            report.positiveLinkValidationClearedCount = diagnostics.ClearedCount;
+                            report.positiveLinkValidationMismatchCount =
+                                diagnostics.MismatchCount;
+                        });
+                    journal.Attempt(
+                        "restore-positive-link-validation-mode",
+                        () =>
+                        {
+                            world.RestoreBattleEcsPositiveLinkValidationPassForDiagnostics(
+                                previousPositiveLinkValidationMode);
+                            report.positiveLinkValidationRestored =
+                                world.BattleEcsPositiveLinkValidationPassModeForDiagnostics ==
+                                previousPositiveLinkValidationMode;
                         });
                     journal.Attempt(
                         "restore-ai-decision-shadow-mode",

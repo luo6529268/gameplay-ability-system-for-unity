@@ -16,12 +16,13 @@
 | DEC-006 | GPT 图作为修正后的视觉方向稿 | Confirmed | 2026-08-06 | 信息架构、视觉 |
 | DEC-007 | itr 成对动作字段原子编辑 | Confirmed | 2026-08-06 | DAT capability、检查器、保存 |
 | DEC-008 | 启动时选择正式项目或测试副本 | Confirmed | 2026-08-07 | 启动、安全边界 |
-| DEC-009 | 使用 DAT 混合自动入口，sidecar 仅影响显示 | Confirmed | 2026-08-07 | 技能模型、sidecar、UI |
-| DEC-010 | 跨技能 hit_* 使用可点击叶节点 | Confirmed | 2026-08-07 | Flow、导航 |
+| DEC-009 | 使用 DAT 混合自动入口，sidecar 仅影响显示 | Superseded by DEC-017 | 2026-08-07 | 技能模型、sidecar、UI |
+| DEC-010 | 跨技能 hit_* 使用可点击叶节点 | Superseded by DEC-017 | 2026-08-07 | Flow、导航 |
 | DEC-012 | 复用临时浏览器并限制实例，使用后清零进程 | Confirmed | 2026-08-07 | 验收、资源管理、电脑性能 |
 | DEC-013 | Trace 按派生对象类别分别结束 | Confirmed | 2026-08-07 | Native Trace、opoint、武器投射物、预览 |
 | DEC-014 | 技能编辑器是主体，Native Trace 只是预览支撑 | Confirmed | 2026-08-07 | 产品范围、预览、网页架构 |
-| DEC-015 | 左侧按基础状态、输入技能、全部 Frame 导航，单帧只定位完整动作回放 | Confirmed | 2026-08-09 | 信息架构、预览、时间线 |
+| DEC-015 | 左侧按基础状态、输入技能、全部 Frame 导航，单帧只定位完整动作回放 | Superseded by DEC-017 | 2026-08-09 | 信息架构、预览、时间线 |
+| DEC-017 | 左侧按基础上下文、完整动作、全部 Frame 导航，动作内部 hit_* 保守融合 | Confirmed | 2026-08-11 | 技能模型、导航、预览、Frame 归属 |
 
 ## Decision Detail
 
@@ -156,7 +157,7 @@
 
 ### DEC-009: 使用 DAT 混合自动入口，sidecar 仅影响显示
 
-- Status: Confirmed
+- Status: Superseded by DEC-017
 - Date: 2026-08-07
 - Context: 正式 Naruto DAT 已包含 frame 标题、state、next 和 `hit_*`，不应要求 sidecar 重复定义入口与首帧。
 - Decision: 每个 frame ID 使用最后 occurrence；同标题且 frame ID 连续的段合并，非连续同标题保持独立；每个非零有效 `hit_*` 目标成为精确入口。
@@ -166,7 +167,7 @@
 
 ### DEC-010: 跨技能 hit_* 使用可点击叶节点
 
-- Status: Confirmed
+- Status: Superseded by DEC-017
 - Date: 2026-08-07
 - Context: 在 standing Flow 中完整展开 F300 技能会吞并其他技能并使图失控。
 - Decision: `next` 继续展开当前流程；指向其他自动入口的 `hit_*` 只显示可点击目标卡，点击后切换到目标入口。
@@ -220,7 +221,7 @@
 
 ### DEC-015: 左侧按基础状态、输入技能、全部 Frame 导航，单帧只定位完整动作回放
 
-- Status: Confirmed
+- Status: Superseded by DEC-017
 - Date: 2026-08-09
 - Context: 左栏同时展示入口表、Flow 表和 Flow 图，DAT 关系与运行表现混在一起；单独选择中间 Frame 还可能绕过真实输入/状态初始化。
 - Decision: 左栏默认只提供“基础状态 / 输入技能 / 全部 Frame”三类导航和筛选；中间始终是不可由玩家控制的完整 Native 战斗场景；右侧帧参数检查器暂时保持原样；底部改为根实体真实 Native Tick/Frame 时间线。选择单个 Frame 时，先按 DAT `next` 链找到最早的完整动作入口，运行完整场景后再定位该 Frame；找不到入口时拒绝从孤立 Frame 启动。旧 Flow 表和 SVG 保留为兼容代码，但默认隐藏且不参与普通渲染。
@@ -239,6 +240,28 @@
 - Consequences: 顶部 UI 使用“数据包 → 角色”两级选择；sidecar 显示元数据暂时只应用于基础包，防止同 OID 串包；包内精灵按路径后缀和唯一 basename 优先解析；Native 依赖覆盖尚未完整实现时必须显示诊断，不能声称补丁行为完全等同独立游戏包。
 - Affected requirements: REQ-001、REQ-004、REQ-005、REQ-011、REQ-016、REQ-019。
 - Revisit condition: Native preview CLI 提供正式的多根 catalog/overlay 输入合同，或 sidecar schema 升级为包作用域身份。
+
+### DEC-017: 左侧按基础上下文、完整动作、全部 Frame 导航，动作内部 hit_* 保守融合
+
+- Status: Confirmed
+- Date: 2026-08-11
+- Context: 把每个非零 `hit_*` 目标平铺为入口，会把 standing/walking 变体、连续技第二段和变身中间段都显示成同级技能；但把所有可追溯到 standing 的 Frame 全量展开又会把角色动作合成一张失控的大图。
+- Decision: 底层继续保留每个精确 `hit_*` 目标，供 sidecar、旧 Flow、Frame 定位和兼容代码使用；正式左栏改为“基础状态 / 完整动作 / 全部 Frame”。state 0/1/2 按 standing/walking/running 上下文聚合。只有当目标的全部有效入口都来自其他动作的 `next` 链、且没有基础状态直达或独立外部来源时，才标记为内部阶段并归属到完整动作根。共享内部阶段可归属多个根；同时存在基础直达路线的目标保持独立完整动作。
+- Rationale: 用户先看到“从什么状态、通过什么路线、播放哪个完整动作”，同时保留不同入口可能携带的速度、朝向和 Native 状态差异；融合规则有明确证据边界，不依赖标题相同或 Naruto 特例。
+- Consequences: 完整动作列表只显示动作根并汇总多条来源路线和内部阶段；基础状态详情显示状态变体与可发起动作；全部 Frame 继续暴露底层定义。动作内部多段输入的自动执行、跨 DAT 资源切换和变身 Trace 连续性仍需独立场景合同，不能仅凭 UI 归属推断为已完成。
+- Affected requirements: REQ-001、REQ-002、REQ-003、REQ-004、REQ-007、REQ-009、REQ-011、REQ-017、REQ-019。
+- Revisit condition: Native 提供高层动作实例标识，或实际 DAT 证明当前保守归属规则无法区分共享动作与内部阶段。
+
+### DEC-018: 完整动作必须先进入所属 Frame 链，之后才能判定结束
+
+- Status: Confirmed
+- Date: 2026-08-11
+- Context: 组合输入会先经过 `F110 defend` 等 Native 准备状态，再短暂回到 `state 0`，下一 Tick 才进入所选动作。旧 Trace 把准备状态视为动作开始，并把入口前的 idle 视为动作结束，导致 F347 等动作只播放前置输入。部分补丁的零等待入口还会在首个快照前从 F235 推进到 F236。
+- Decision: 服务端从当前完整动作目录取得所选根动作拥有的有效 Frame 集合。只有 root 首次进入该集合后，Trace 才记录 `rootSkillStartedTick` 并允许判定主体结束；实际命中的后继 Frame 记录为 `rootSkillEntryFrame`。运行到上限仍未进入动作时返回 `entry-not-reached`，不得把准备阶段伪报为完成。客户端拒绝任何早于动作开始的进度/播放终点。
+- Rationale: 同时覆盖普通组合输入、零等待首帧和补丁包差异，不对角色、OID 或 Frame 编号写特例。
+- Consequences: 主体仍在动作链中循环时状态为 `timeout` 并播放完整 Trace；主体结束后的投射物尾迹继续遵循 DEC-013。入口未命中会保留准备 Trace 供诊断，但界面明确显示“入口未命中”。
+- Affected requirements: REQ-004、REQ-011、REQ-017、REQ-019。
+- Revisit condition: Native runner 直接输出稳定的高层动作实例开始/结束标识。
 
 
 - Record decisions that affect scope, architecture, public interfaces, data formats, compatibility, performance budgets or security.

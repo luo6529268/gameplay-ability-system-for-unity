@@ -1034,6 +1034,8 @@ namespace NTSD.Animation.LF2Objects
             Frame.PN = Frame.N;
             Frame.N = frameId;
             Frame.D = targetFrame;
+            if (Runtime != null)
+                Runtime.Frame = frameId;
             AttackingCounter = 0;
 
             if (Frame.D != null && Frame.D.pic >= 0)
@@ -4135,6 +4137,8 @@ namespace NTSD.Animation.LF2Objects
             Frame.D = FrameCache?.GetFrameDataById(frameId);
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
+            if (Runtime != null)
+                Runtime.Frame = frameId;
         }
 
         public virtual void DirectWriteFrameImmediateWaitReset(int frameId)
@@ -6084,6 +6088,16 @@ namespace NTSD.Animation.LF2Objects
         }
 
         protected virtual void RefreshRuntimeFromEntity()
+        {
+            RefreshBaseRuntimeFromEntity();
+        }
+
+        internal void RefreshBaseRuntimeSnapshotForStageBounds()
+        {
+            RefreshBaseRuntimeFromEntity();
+        }
+
+        private void RefreshBaseRuntimeFromEntity()
         {
             int currentDataType = GetCurrentDataObjectTypeForSimulation();
 

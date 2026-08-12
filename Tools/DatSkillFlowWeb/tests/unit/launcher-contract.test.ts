@@ -94,7 +94,7 @@ describe("one-click launcher contract", () => {
         assert.match(adapter, /bool root_catalog_entry = false;/);
         assert.match(adapter, /if \(entry\.oid == root_oid\) root_catalog_entry = true;/);
         assert.match(adapter, /if \(!root_catalog_entry && !options\.naruto_dat\.empty\(\)\)/);
-        assert.match(adapter, /load_plaintext_char\([\s\S]*?root_oid,[\s\S]*?ObjType::CHARACTER/);
+        assert.match(adapter, /load_preview_plaintext_char\([\s\S]*?root_oid,[\s\S]*?ObjType::CHARACTER/);
         assert.match(adapter, /if \(!root_override_loaded \|\| !world\.has_char\(1\) \|\| !world\.has_char\(root_oid\)/);
     });
 

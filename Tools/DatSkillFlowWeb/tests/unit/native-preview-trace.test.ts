@@ -10,6 +10,11 @@ import type {
 const resources: readonly ProjectPreviewObjectView[] = [
     { oid: 2, type: 0, name: "Naruto", spriteRanges: [], frames: [
         { frameId: 300, occurrence: 0, label: "", pic: 0, state: 1, wait: 1, next: 0 } as never,
+        { frameId: 347, occurrence: 0, label: "bigrasengan", pic: 0, state: 3, wait: 1, next: 348 } as never,
+        { frameId: 348, occurrence: 0, label: "bigrasengan", pic: 0, state: 3, wait: 1, next: 0 } as never,
+        { frameId: 235, occurrence: 0, label: "entry", pic: 0, state: 3, wait: 0, next: 236 } as never,
+        { frameId: 236, occurrence: 0, label: "entry", pic: 0, state: 3, wait: 1, next: 0 } as never,
+        { frameId: 110, occurrence: 0, label: "defend", pic: 0, state: 7, wait: 1, next: 0 } as never,
         { frameId: 0, occurrence: 0, label: "", pic: 0, state: 0, wait: 1, next: 0 } as never,
     ] },
     { oid: 33, type: 0, name: "Naruto Clone", spriteRanges: [], frames: [] },
@@ -41,6 +46,7 @@ function preview(): NativePreviewView {
         ],
         resources,
         trace: {
+            rootSkillStartedTick: null, rootSkillEntryFrame: null,
             rootSkillEndedTick: null, progressEndTick: null, playbackEndTick: 0, status: "timeout",
             pendingProjectiles: [], entities: [], events: [],
         },
@@ -59,6 +65,8 @@ describe("native preview trace classification", () => {
         const result = enrichNativePreview(preview(), resources, new Map([
             [2, 0], [33, 0], [204, 1], [216, 2],
         ]), 2);
+        assert.equal(result.trace.rootSkillStartedTick, 0);
+        assert.equal(result.trace.rootSkillEntryFrame, 300);
         assert.equal(result.trace.rootSkillEndedTick, 1);
         assert.equal(result.trace.progressEndTick, 1);
         assert.equal(result.trace.playbackEndTick, 2);
@@ -68,5 +76,65 @@ describe("native preview trace classification", () => {
         assert.equal(result.trace.entities.find((item) => item.oid === 204)?.completion, "landed");
         assert.equal(result.trace.entities.filter((item) => item.slot === 50).length, 2);
         assert.equal(result.trace.events.filter((item) => item.kind === "spawn").length, 4);
+    });
+
+    it("does not complete during input preparation before the selected action starts", () => {
+        const source = preview();
+        const result = enrichNativePreview({
+            ...source,
+            metadata: { ...source.metadata, startFrame: 347, ticksRequested: 5 },
+            ticks: [
+                { ...source.ticks[0]!, tick: 0, entities: [entity(0, 2, 0, 0, 0)] },
+                { ...source.ticks[0]!, tick: 1, entities: [entity(0, 2, 110, 0, 0)] },
+                { ...source.ticks[0]!, tick: 2, entities: [entity(0, 2, 0, 0, 0)] },
+                { ...source.ticks[0]!, tick: 3, entities: [entity(0, 2, 347, 0, 0)] },
+                { ...source.ticks[0]!, tick: 4, entities: [entity(0, 2, 348, 0, 0)] },
+                { ...source.ticks[0]!, tick: 5, entities: [entity(0, 2, 0, 0, 0)] },
+            ],
+        }, resources, new Map([[2, 0]]), 2, new Set([347, 348]));
+
+        assert.equal(result.trace.rootSkillStartedTick, 3);
+        assert.equal(result.trace.rootSkillEntryFrame, 347);
+        assert.equal(result.trace.rootSkillEndedTick, 5);
+        assert.equal(result.trace.playbackEndTick, 5);
+        assert.equal(result.trace.status, "complete");
+    });
+
+    it("recognizes an action when Native advances past its zero-wait entry frame", () => {
+        const source = preview();
+        const result = enrichNativePreview({
+            ...source,
+            metadata: { ...source.metadata, startFrame: 235, ticksRequested: 4 },
+            ticks: [
+                { ...source.ticks[0]!, tick: 0, entities: [entity(0, 2, 0, 0, 0)] },
+                { ...source.ticks[0]!, tick: 1, entities: [entity(0, 2, 110, 0, 0)] },
+                { ...source.ticks[0]!, tick: 2, entities: [entity(0, 2, 0, 0, 0)] },
+                { ...source.ticks[0]!, tick: 3, entities: [entity(0, 2, 236, 0, 0)] },
+                { ...source.ticks[0]!, tick: 4, entities: [entity(0, 2, 0, 0, 0)] },
+            ],
+        }, resources, new Map([[2, 0]]), 2, new Set([235, 236]));
+
+        assert.equal(result.trace.rootSkillStartedTick, 3);
+        assert.equal(result.trace.rootSkillEntryFrame, 236);
+        assert.equal(result.trace.rootSkillEndedTick, 4);
+        assert.equal(result.trace.status, "complete");
+    });
+
+    it("reports an entry miss instead of completing the preparation trace", () => {
+        const source = preview();
+        const result = enrichNativePreview({
+            ...source,
+            metadata: { ...source.metadata, startFrame: 347, ticksRequested: 2 },
+            ticks: [
+                { ...source.ticks[0]!, tick: 0, entities: [entity(0, 2, 0, 0, 0)] },
+                { ...source.ticks[0]!, tick: 1, entities: [entity(0, 2, 110, 0, 0)] },
+                { ...source.ticks[0]!, tick: 2, entities: [entity(0, 2, 0, 0, 0)] },
+            ],
+        }, resources, new Map([[2, 0]]), 2, new Set([347, 348]));
+
+        assert.equal(result.trace.rootSkillStartedTick, null);
+        assert.equal(result.trace.rootSkillEndedTick, null);
+        assert.equal(result.trace.playbackEndTick, 2);
+        assert.equal(result.trace.status, "entry-not-reached");
     });
 });

@@ -32,7 +32,7 @@ namespace NTSD.Simulation
         [Tooltip("使用 unscaledDeltaTime 驱动外层逻辑时钟，避免 Time.timeScale 影响帧同步规则。")]
         public bool useUnscaledTime = true;
 
-        [Tooltip("单个 Unity 渲染帧最多执行多少个逻辑帧。单机默认 1；大于 1 仅用于显式追帧或吞吐诊断。")]
+        [Tooltip("显式追帧或吞吐诊断的单帧逻辑预算。普通 LocalFreeRun 始终每个 Unity Update 最多自动执行 1 tick。")]
         public int maxCatchUpTicksPerFrame = DefaultMaxTicksPerFrame;
 
         [Tooltip("最多保留多少个逻辑帧的时间积压，超过后丢弃外层积压但不改变单个逻辑帧步长。")]
@@ -226,8 +226,12 @@ namespace NTSD.Simulation
         private BattleParityFrameSnapshot _lastFrameSnapshot;
         private IBattleChecksumSnapshot _lastChecksumSnapshot;
         private ISimulationSoundPresentationSink _soundPresentationSinkForDiagnostics;
+        private readonly List<PendingSoundEvent> _publishedSoundEvents =
+            new List<PendingSoundEvent>(256);
+        private int _publishedSoundEventLimit = 256;
         private long _dispatchedSoundEventCount;
         private long _suppressedSoundEventCount;
+        private long _rejectedPublishedSoundEventCount;
         private long _formalBattleDiagnosticsSuppressedCount;
         private long _rejectedLatePresentationComponentCreateCount;
         private readonly BattleRuntimeAllocationGate _allocationGate =
@@ -313,6 +317,9 @@ namespace NTSD.Simulation
                 if (_world == null)
                     return;
 
+                _world.PresentLatestFrame(_tickIndex);
+                DispatchPublishedSounds();
+
                 if (_overlayRenderer == null)
                 {
                     if (_managedMemoryBoundary.BattleWindowOpen)
@@ -388,6 +395,7 @@ namespace NTSD.Simulation
                 return false;
 
             int tickIndex = frameInput.TickIndex;
+            _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
             _managedMemoryBoundary.BeginTick();
             try
             {
@@ -405,7 +413,7 @@ namespace NTSD.Simulation
                 _world.ApplyFrameInputSet(frameInput);
                 _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
                 CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
-                DispatchPendingSoundsAfterChecksum();
+                PublishPendingSoundsAfterChecksum();
 
                 if (debugLogPerTick)
                     Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
@@ -446,26 +454,47 @@ namespace NTSD.Simulation
             lastFrameChecksum = string.Empty;
         }
 
-        private void DispatchPendingSoundsAfterChecksum()
+        private void PublishPendingSoundsAfterChecksum()
         {
             IReadOnlyList<PendingSoundEvent> sounds = _world?.PendingSounds;
             int soundCount = sounds?.Count ?? 0;
             if (soundCount == 0)
                 return;
 
-            if (suppressSoundPresentationForDiagnostics)
+            int available = _publishedSoundEventLimit - _publishedSoundEvents.Count;
+            int publishCount = Mathf.Clamp(available, 0, soundCount);
+            for (int index = 0; index < publishCount; index++)
+                _publishedSoundEvents.Add(sounds[index]);
+            if (publishCount < soundCount)
+                _rejectedPublishedSoundEventCount += soundCount - publishCount;
+        }
+
+        private void DispatchPublishedSounds()
+        {
+            int soundCount = _publishedSoundEvents.Count;
+            if (soundCount == 0)
+                return;
+
+            try
             {
-                _suppressedSoundEventCount += soundCount;
-                return;
+                if (suppressSoundPresentationForDiagnostics)
+                {
+                    _suppressedSoundEventCount += soundCount;
+                    return;
+                }
+
+                ISimulationSoundPresentationSink sink =
+                    _soundPresentationSinkForDiagnostics ?? AppManager.Instance?.SoundPlayer;
+                if (sink == null)
+                    return;
+
+                sink.PresentSounds(_publishedSoundEvents);
+                _dispatchedSoundEventCount += soundCount;
             }
-
-            ISimulationSoundPresentationSink sink =
-                _soundPresentationSinkForDiagnostics ?? AppManager.Instance?.SoundPlayer;
-            if (sink == null)
-                return;
-
-            sink.PresentSounds(sounds);
-            _dispatchedSoundEventCount += soundCount;
+            finally
+            {
+                _publishedSoundEvents.Clear();
+            }
         }
 
         internal static bool SupportsAuthorityFrameChecksum(SimulationWorld world)
@@ -537,6 +566,10 @@ namespace NTSD.Simulation
             suppressSoundPresentationForDiagnostics;
         public long DispatchedSoundEventCountForDiagnostics => _dispatchedSoundEventCount;
         public long SuppressedSoundEventCountForDiagnostics => _suppressedSoundEventCount;
+        public long RejectedPublishedSoundEventCountForDiagnostics =>
+            _rejectedPublishedSoundEventCount;
+        public int PendingPublishedSoundEventCountForDiagnostics =>
+            _publishedSoundEvents.Count;
         public long FormalBattleDiagnosticsSuppressedCount =>
             _formalBattleDiagnosticsSuppressedCount;
         public long RejectedLatePresentationComponentCreateCount =>
@@ -625,6 +658,15 @@ namespace NTSD.Simulation
             }
 
             int normalizedEntityCapacity = Mathf.Max(0, entityCapacity);
+            int presentationTicks = Mathf.Max(1, lockstepSettings.maxBacklogTicks);
+            long desiredPublishedSoundCapacity = System.Math.Max(
+                256L,
+                (long)normalizedEntityCapacity * 16L * presentationTicks);
+            _publishedSoundEventLimit = (int)System.Math.Min(
+                1_048_576L,
+                desiredPublishedSoundCapacity);
+            if (_publishedSoundEvents.Capacity < _publishedSoundEventLimit)
+                _publishedSoundEvents.Capacity = _publishedSoundEventLimit;
             _overlayRenderer.PrepareCapacity(normalizedEntityCapacity);
             _sparkRenderer.PrepareCapacity(
                 checked(
@@ -674,6 +716,7 @@ namespace NTSD.Simulation
         public void ApplyMatchConfig(MatchConfig config)
         {
             EndBattleAllocationSeal();
+            _publishedSoundEvents.Clear();
             if (!EnsureProductionConfigurationFromSources())
                 return;
 
@@ -758,6 +801,7 @@ namespace NTSD.Simulation
         public void UnbindWorld()
         {
             EndBattleAllocationSeal();
+            _publishedSoundEvents.Clear();
             if (_world != null)
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
@@ -832,11 +876,20 @@ namespace NTSD.Simulation
             _hasFrameChecksum = false;
             _dispatchedSoundEventCount = 0;
             _suppressedSoundEventCount = 0;
+            _rejectedPublishedSoundEventCount = 0;
+            _publishedSoundEvents.Clear();
             _formalBattleDiagnosticsSuppressedCount = 0;
             _rejectedLatePresentationComponentCreateCount = 0;
             _frameInputProvider?.Reset();
             RefreshInspectorState();
         }
+
+#if UNITY_EDITOR
+        internal void FlushPublishedSoundEventsForTesting()
+        {
+            DispatchPublishedSounds();
+        }
+#endif
 
         private SimulationTickHostPolicy SelectTickHostPolicy(
             bool resetSelectedPolicy)

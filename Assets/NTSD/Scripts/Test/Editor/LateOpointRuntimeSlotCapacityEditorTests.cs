@@ -212,7 +212,7 @@ namespace NTSD.Test
                 originalSpritePool = spritePoolField.GetValue(pool);
                 originalCachedPrefab = cachedPrefabField.GetValue(pool);
 
-                availableField.SetValue(pool, new LinkedList<GameObject>());
+                availableField.SetValue(pool, new Queue<GameObject>());
                 activeField.SetValue(pool, new HashSet<GameObject>());
                 releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
                 spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
@@ -236,7 +236,7 @@ namespace NTSD.Test
 
             private static void Collect(object source, HashSet<GameObject> objects)
             {
-                if (source is LinkedList<GameObject> available)
+                if (source is Queue<GameObject> available)
                 {
                     foreach (GameObject item in available)
                         if (item != null) objects.Add(item);

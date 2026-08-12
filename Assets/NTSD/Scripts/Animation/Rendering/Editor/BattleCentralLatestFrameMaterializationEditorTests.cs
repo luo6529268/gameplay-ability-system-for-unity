@@ -94,7 +94,34 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
-        public void CentralIntermediateTick_SkipsPublicationButStillRunsLateRendererUpdate()
+        public void CentralOnly_CapturesBeforeMaterializingCommands()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+
+            world.BattlePresentation.BeginFrame(world, 91);
+            BattlePresentationFrame captured = world.BattlePresentation.PublishedFrame;
+
+            Assert.That(captured, Is.Not.Null);
+            Assert.That(captured.TickIndex, Is.EqualTo(91));
+            Assert.That(captured.PresentationOrderMaterialized, Is.False,
+                "the logic observation point must not sort presentation data");
+            Assert.That(captured.CommandsMaterialized, Is.False,
+                "the logic observation point must publish data without building render commands");
+
+            BattlePixelFramePlan plan =
+                BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+
+            Assert.That(plan.IsValid, Is.True);
+            Assert.That(plan.CapturedFrame, Is.Not.Null);
+            Assert.That(plan.CapturedFrame.PresentationOrderMaterialized, Is.True);
+            Assert.That(plan.CapturedFrame.CommandsMaterialized, Is.True);
+            Assert.That(captured.CommandsMaterialized, Is.False,
+                "the immutable logic publication must not be mutated by the presentation host");
+        }
+
+        [Test]
+        public void CentralIntermediateTick_SkipsPublicationAndRendererShellLatePass()
         {
             var world = new SimulationWorld();
             world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
@@ -102,6 +129,7 @@ namespace NTSD.Animation.Rendering.Editor
             world.RenderDispatchAll(101);
             BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
             int lateUpdateCount = world.LateRendererUpdateInvocationCountForDiagnostics;
+            long bypassCount = world.CentralOnlyRendererShellBypassCountForDiagnostics;
 
             world.RenderDispatchAll(102, buildPresentation: false);
 
@@ -109,7 +137,10 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(world.BattlePresentation.PublishedFrame.TickIndex, Is.EqualTo(101));
             Assert.That(
                 world.LateRendererUpdateInvocationCountForDiagnostics,
-                Is.EqualTo(lateUpdateCount + 1));
+                Is.EqualTo(lateUpdateCount));
+            Assert.That(
+                world.CentralOnlyRendererShellBypassCountForDiagnostics,
+                Is.EqualTo(bypassCount + 1));
 
             world.RenderDispatchAll(103, buildPresentation: true);
 
@@ -117,7 +148,10 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(world.BattlePresentation.PublishedFrame.TickIndex, Is.EqualTo(103));
             Assert.That(
                 world.LateRendererUpdateInvocationCountForDiagnostics,
-                Is.EqualTo(lateUpdateCount + 2));
+                Is.EqualTo(lateUpdateCount));
+            Assert.That(
+                world.CentralOnlyRendererShellBypassCountForDiagnostics,
+                Is.EqualTo(bypassCount + 2));
         }
 
         [TestCase(BattlePresentationBackendMode.LegacyOnly)]
@@ -160,9 +194,15 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(catchUpFrame.CommandCount, Is.EqualTo(directFrame.CommandCount));
             Assert.That(
                 catchUpWorld.LateRendererUpdateInvocationCountForDiagnostics,
-                Is.EqualTo(4));
+                Is.Zero);
             Assert.That(
                 directWorld.LateRendererUpdateInvocationCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                catchUpWorld.CentralOnlyRendererShellBypassCountForDiagnostics,
+                Is.EqualTo(4));
+            Assert.That(
+                directWorld.CentralOnlyRendererShellBypassCountForDiagnostics,
                 Is.EqualTo(1));
         }
 

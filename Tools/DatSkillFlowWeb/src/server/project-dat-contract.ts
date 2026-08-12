@@ -177,10 +177,12 @@ export interface NativePreviewTraceEventView {
 }
 
 export interface NativePreviewTraceView {
+    readonly rootSkillStartedTick: number | null;
+    readonly rootSkillEntryFrame: number | null;
     readonly rootSkillEndedTick: number | null;
     readonly progressEndTick: number | null;
     readonly playbackEndTick: number;
-    readonly status: "complete" | "timeout" | "persistent";
+    readonly status: "complete" | "entry-not-reached" | "timeout" | "persistent";
     readonly pendingProjectiles: readonly string[];
     readonly entities: readonly NativePreviewTraceEntityView[];
     readonly events: readonly NativePreviewTraceEventView[];
@@ -219,7 +221,19 @@ export interface ProjectPreviewRequest {
     readonly startFrame: number;
     readonly initialFrame?: number;
     readonly inputPlan?: readonly NativePreviewInputStep[];
+    readonly initial?: NativePreviewInitialPositions;
     readonly ticks: number;
+}
+
+export interface NativePreviewPosition {
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+}
+
+export interface NativePreviewInitialPositions {
+    readonly p1: NativePreviewPosition;
+    readonly p2: NativePreviewPosition;
 }
 
 export interface ProjectPreviewResponse {

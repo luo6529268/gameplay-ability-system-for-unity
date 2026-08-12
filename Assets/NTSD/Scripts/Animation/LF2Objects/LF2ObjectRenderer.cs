@@ -171,6 +171,9 @@ namespace NTSD.Animation.LF2Objects
             _logicObject = logicObject as LF2Entity;
             _renderFrameCount = 0;
             _logicObject?.Init(task, this);
+            RefreshLegacyRendererSuppression(
+                BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(
+                    _logicObject?.Match));
             BattleCentralPresentationMountRegistry.BindOwnerRuntime(
                 this,
                 ResolveCurrentRuntimeHandle(_logicObject));
@@ -248,6 +251,11 @@ namespace NTSD.Animation.LF2Objects
             if (_shadowRenderer != null)
                 _shadowRenderer.sortingLayerName = "Object";
             _logicObject?.SetShadowRenderer(shadowRenderer);
+        }
+
+        internal void RefreshLegacyRendererSuppression(bool suppressed)
+        {
+            _logicObject?.Sprite?.SetLegacyRendererSuppressed(suppressed);
         }
 
         /// <summary>

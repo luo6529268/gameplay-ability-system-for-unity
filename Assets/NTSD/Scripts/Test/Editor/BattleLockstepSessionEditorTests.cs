@@ -140,6 +140,145 @@ namespace NTSD.Test
             Assert.That(session.TryAdvanceBuffered(), Is.False);
         }
 
+        [Test]
+        public void ReplayingTheSameJournalProducesIdenticalPerTickChecksums()
+        {
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            FrameInputSet[] recordedFrames;
+            ulong[] expectedChecksums;
+            using (var source = new DriverScope())
+            {
+                source.Driver.ApplySettings(ManualChecksumSettings());
+                var session = new BattleLockstepSession(
+                    source.Driver,
+                    identity,
+                    0,
+                    8,
+                    8);
+                FrameInputSet[] inputs =
+                {
+                    CanonicalFrame(
+                        1,
+                        SimulationInputButtons.Left,
+                        SimulationInputButtons.Jump),
+                    CanonicalFrame(
+                        2,
+                        SimulationInputButtons.Left | SimulationInputButtons.Attack,
+                        SimulationInputButtons.None),
+                    CanonicalFrame(
+                        3,
+                        SimulationInputButtons.None,
+                        SimulationInputButtons.Defend),
+                };
+                expectedChecksums = new ulong[inputs.Length];
+                for (int index = 0; index < inputs.Length; index++)
+                {
+                    Assert.That(
+                        session.TryAdvanceManual(
+                            inputs[index],
+                            buildPresentation: false),
+                        Is.True);
+                    expectedChecksums[index] = source.Driver.LastFrameChecksumValue;
+                }
+
+                recordedFrames = CopyJournal(session.Journal);
+            }
+
+            using var replay = new DriverScope();
+            replay.Driver.ApplySettings(ManualChecksumSettings());
+            var replaySession = new BattleLockstepSession(
+                replay.Driver,
+                identity,
+                0,
+                8,
+                8);
+            for (int index = 0; index < recordedFrames.Length; index++)
+            {
+                Assert.That(
+                    replaySession.TryAdvanceManual(
+                        recordedFrames[index],
+                        buildPresentation: false),
+                    Is.True);
+                Assert.That(
+                    replay.Driver.LastFrameChecksumValue,
+                    Is.EqualTo(expectedChecksums[index]),
+                    $"tick={index + 1}");
+            }
+        }
+
+        [Test]
+        public void PresentationPublicationDoesNotChangeCanonicalTickChecksum()
+        {
+            ulong withoutPresentation;
+            using (var logicOnly = new DriverScope())
+            {
+                logicOnly.Driver.ApplySettings(ManualChecksumSettings());
+                Assert.That(
+                    logicOnly.Driver.StepOneTick(
+                        CanonicalFrame(
+                            1,
+                            SimulationInputButtons.Left | SimulationInputButtons.Attack,
+                            SimulationInputButtons.Defend),
+                        ignorePaused: true,
+                        buildPresentation: false),
+                    Is.True);
+                withoutPresentation = logicOnly.Driver.LastFrameChecksumValue;
+            }
+
+            using var published = new DriverScope();
+            published.Driver.ApplySettings(ManualChecksumSettings());
+            Assert.That(
+                published.Driver.StepOneTick(
+                    CanonicalFrame(
+                        1,
+                        SimulationInputButtons.Left | SimulationInputButtons.Attack,
+                        SimulationInputButtons.Defend),
+                    ignorePaused: true,
+                    buildPresentation: true),
+                Is.True);
+
+            Assert.That(
+                published.Driver.LastFrameChecksumValue,
+                Is.EqualTo(withoutPresentation));
+        }
+
+        private static LockstepSimulationSettings ManualChecksumSettings()
+        {
+            return new LockstepSimulationSettings
+            {
+                driveMode = SimulationDriveMode.Manual,
+                enableFrameChecksum = true,
+                captureFullFrameSnapshotForDiagnostics = false,
+            };
+        }
+
+        private static FrameInputSet CanonicalFrame(
+            int tick,
+            SimulationInputButtons playerTwo,
+            SimulationInputButtons playerFive)
+        {
+            return new FrameInputSet(tick, new[]
+            {
+                new SimulationPlayerInput(2, playerTwo),
+                new SimulationPlayerInput(5, playerFive),
+            });
+        }
+
+        private static FrameInputSet[] CopyJournal(LockstepReplayJournal journal)
+        {
+            var result = new FrameInputSet[journal.Count];
+            for (int frameIndex = 0; frameIndex < journal.Count; frameIndex++)
+            {
+                FrameInputSet source = journal[frameIndex];
+                var players = new SimulationPlayerInput[source.Players.Count];
+                for (int playerIndex = 0; playerIndex < players.Length; playerIndex++)
+                    players[playerIndex] = source.Players[playerIndex];
+                result[frameIndex] = new FrameInputSet(source.TickIndex, players);
+            }
+            return result;
+        }
+
         private static TickWitness RunBuffered()
         {
             using var scope = new DriverScope();

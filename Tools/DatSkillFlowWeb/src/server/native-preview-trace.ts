@@ -19,7 +19,7 @@ interface MutableTraceEntity {
     completedTick: number | null;
     completion: Completion;
     sawAirborneProjectile: boolean;
-    sawNonIdleRoot: boolean;
+    sawNonIdleActionRoot: boolean;
 }
 
 export function objectKind(
@@ -40,11 +40,14 @@ export function enrichNativePreview(
     resources: readonly ProjectPreviewObjectView[],
     objectTypes: ReadonlyMap<number, number>,
     rootOid: number,
+    actionFrameIds: ReadonlySet<number> = new Set([preview.metadata.startFrame]),
 ): NativePreviewView {
     const resourcesByOid = new Map(resources.map((resource) => [resource.oid, resource]));
     const entities = new Map<string, MutableTraceEntity>();
     const activeBySlot = new Map<number, MutableTraceEntity>();
     const events: NativePreviewTraceEventView[] = [];
+    let rootSkillStartedTick: number | null = null;
+    let rootSkillEntryFrame: number | null = null;
     let rootSkillEndedTick: number | null = null;
 
     const ticks = preview.ticks.map((tick) => {
@@ -86,7 +89,17 @@ export function enrichNativePreview(
                 lineage.sawAirborneProjectile = true;
             }
             const frame = resource?.frames.find((candidate) => candidate.frameId === entity.frame);
-            if (kind === "root" && frame?.state !== 0) lineage.sawNonIdleRoot = true;
+            if (kind === "root"
+                && rootSkillStartedTick === null
+                && actionFrameIds.has(entity.frame)) {
+                rootSkillStartedTick = tick.tick;
+                rootSkillEntryFrame = entity.frame;
+            }
+            if (kind === "root"
+                && rootSkillStartedTick !== null
+                && frame?.state !== 0) {
+                lineage.sawNonIdleActionRoot = true;
+            }
             if (kind === "projectile"
                 && lineage.completedTick === null
                 && lineage.sawAirborneProjectile
@@ -97,8 +110,10 @@ export function enrichNativePreview(
             }
             if (kind === "root"
                 && rootSkillEndedTick === null
-                && tick.tick > 0
-                && lineage.sawNonIdleRoot
+                && rootSkillStartedTick !== null
+                && tick.tick > rootSkillStartedTick
+                && lineage.sawNonIdleActionRoot
+                && !actionFrameIds.has(entity.frame)
                 && isRootEnded(entity, resource)) {
                 rootSkillEndedTick = tick.tick;
                 lineage.completedTick = tick.tick;
@@ -147,14 +162,18 @@ export function enrichNativePreview(
     const playbackEndTick = pendingProjectiles.length > 0
         ? lastTick
         : Math.max(rootSkillEndedTick ?? lastTick, projectileEndTick);
-    const status = rootSkillEndedTick === null
-        ? "timeout"
-        : pendingProjectiles.length > 0 ? "persistent" : "complete";
+    const status = rootSkillStartedTick === null
+        ? "entry-not-reached"
+        : rootSkillEndedTick === null
+            ? "timeout"
+            : pendingProjectiles.length > 0 ? "persistent" : "complete";
 
     return {
         ...preview,
         ticks,
         trace: {
+            rootSkillStartedTick,
+            rootSkillEntryFrame,
             rootSkillEndedTick,
             progressEndTick: rootSkillEndedTick,
             playbackEndTick,
@@ -182,7 +201,7 @@ function createLineage(
         completedTick: null,
         completion: "unknown",
         sawAirborneProjectile: false,
-        sawNonIdleRoot: false,
+        sawNonIdleActionRoot: false,
     };
 }
 

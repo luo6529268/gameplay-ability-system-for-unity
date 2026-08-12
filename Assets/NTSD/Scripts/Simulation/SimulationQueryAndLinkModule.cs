@@ -88,7 +88,7 @@ namespace NTSD.Simulation
             }
         }
 
-        internal void ValidateHeldLinksAll(int tickIndex)
+        internal void RunLegacyPositiveLinkValidation(int tickIndex)
         {
             IBattleParityStructuralEventSink eventSink =
                 world.StructuralEventSinkForServices;

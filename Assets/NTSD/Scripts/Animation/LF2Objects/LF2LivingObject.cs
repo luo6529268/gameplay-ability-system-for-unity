@@ -496,6 +496,8 @@ namespace NTSD.Animation.LF2Objects
             Frame.PN = Frame.N;
             Frame.N  = frameId;
             Frame.D = targetFrame;
+            if (Runtime != null)
+                Runtime.Frame = frameId;
             AttackingCounter = 0;
 
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);

@@ -572,6 +572,7 @@ namespace NTSD.Animation.Rendering.Editor
                 FrameInputSet.Empty(1),
                 ignorePaused: true,
                 buildPresentation: false), Is.True);
+            scope.Driver.FlushPublishedSoundEventsForTesting();
             ProductionEntityStressRunner.CaptureSoundPresentationSuppressionForReport(
                 report,
                 scope.Driver,
@@ -761,7 +762,8 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(request.skipLateRendererUpdate, Is.False);
             Assert.That(config.SkipLateRendererUpdate, Is.False);
             Assert.That(world.SkipLateRendererUpdateForDiagnostics, Is.False);
-            Assert.That(world.LateRendererUpdateInvocationCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LateRendererUpdateInvocationCountForDiagnostics, Is.Zero);
+            Assert.That(world.CentralOnlyRendererShellBypassCountForDiagnostics, Is.EqualTo(1));
             Assert.That(report.skipLateRendererUpdateRequested, Is.False);
             Assert.That(report.skipLateRendererUpdateConfigured, Is.False);
             Assert.That(report.skipLateRendererUpdateApplied, Is.False);
@@ -832,8 +834,9 @@ namespace NTSD.Animation.Rendering.Editor
                     baseline), Is.True);
 
             world.RenderDispatchAll(3, buildPresentation: false);
-            Assert.That(world.LateRendererUpdateInvocationCountForDiagnostics, Is.EqualTo(1),
-                "restoration must re-enable only the skipped presentation call");
+            Assert.That(world.LateRendererUpdateInvocationCountForDiagnostics, Is.Zero);
+            Assert.That(world.CentralOnlyRendererShellBypassCountForDiagnostics, Is.EqualTo(1),
+                "restoration must re-enable the CentralOnly host pass without scanning renderer shells");
         }
 
         [Test]
@@ -872,6 +875,8 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(actual.Hashes.Events, Is.EqualTo(expected.Hashes.Events));
             Assert.That(actual.OverallChecksum, Is.EqualTo(expected.OverallChecksum));
             Assert.That(baselineWorld.LateRendererUpdateInvocationCountForDiagnostics,
+                Is.Zero);
+            Assert.That(baselineWorld.CentralOnlyRendererShellBypassCountForDiagnostics,
                 Is.EqualTo(1));
             Assert.That(skippedWorld.LateRendererUpdateInvocationCountForDiagnostics,
                 Is.Zero);
@@ -4734,6 +4739,30 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(
                 report.presentationTimings,
                 Has.Count.EqualTo(BattlePresentationPhaseDiagnostics.PhaseCount));
+        }
+
+        [Test]
+        public void PresentationTiming_NextTickDoesNotEraseLastCompletedSample()
+        {
+            var recorder = new BattlePresentationPhaseDiagnostics();
+            recorder.SetEnabled(true);
+            recorder.BeginTick(7);
+            recorder.BeginPhase(BattlePresentationPhase.PresentationPublishTotal);
+            Thread.SpinWait(1000);
+            recorder.EndPhase(BattlePresentationPhase.PresentationPublishTotal);
+            recorder.CompleteTick(7);
+            long completed = recorder.GetLastElapsedTimestampTicks(
+                BattlePresentationPhase.PresentationPublishTotal);
+
+            recorder.BeginTick(8);
+
+            Assert.That(completed, Is.GreaterThan(0));
+            Assert.That(
+                recorder.GetLastElapsedTimestampTicks(
+                    BattlePresentationPhase.PresentationPublishTotal),
+                Is.EqualTo(completed));
+            Assert.That(recorder.LastCompletedTickIndex, Is.EqualTo(7));
+            Assert.That(recorder.CompletedSampleSequence, Is.EqualTo(1));
         }
 
         [Test]

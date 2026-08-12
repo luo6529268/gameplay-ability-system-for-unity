@@ -5,9 +5,12 @@
 #include "input_handler.h"
 
 #include <algorithm>
+#include <fstream>
+#include <iterator>
 #include <map>
 #include <set>
 #include <sstream>
+#include <utility>
 
 namespace {
 
@@ -20,12 +23,14 @@ struct PreviewCatalogEntry {
     int oid = -1;
     int type = 0;
     std::string file;
+    bool plaintext = false;
 };
 
 struct PreviewCatalogStats {
     int entries = 0;
     int loaded = 0;
     int failed = 0;
+    int overlay_entries = 0;
 };
 
 const char* DEFAULT_PREVIEW_GAME_ROOT = "J:\\QQFile\\NTSD 2.4.1";
@@ -34,6 +39,49 @@ std::string preview_game_path(const std::string& game_root, const std::string& r
     if (game_root.empty()) return relative_path;
     const char last = game_root.back();
     return last == '\\' || last == '/' ? game_root + relative_path : game_root + "\\" + relative_path;
+}
+
+bool preview_path_is_absolute(const std::string& path) {
+    return (path.size() >= 3 &&
+               ((path[0] >= 'A' && path[0] <= 'Z') || (path[0] >= 'a' && path[0] <= 'z')) &&
+               path[1] == ':' && (path[2] == '\\' || path[2] == '/'))
+        || (path.size() >= 2 &&
+               ((path[0] == '\\' && path[1] == '\\') || (path[0] == '/' && path[1] == '/')));
+}
+
+std::string preview_catalog_path(const std::string& game_root, const std::string& path) {
+    return preview_path_is_absolute(path) ? path : preview_game_path(game_root, path);
+}
+
+bool commit_preview_char(GameWorld& world,
+                         int oid,
+                         int obj_type,
+                         const std::vector<uint8_t>& raw) {
+    if (raw.empty()) return false;
+
+    CharData parsed;
+    if (!DatParser::parse(raw, parsed)) return false;
+
+    CharData* data = world.alloc_char(oid);
+    if (!data) return false;
+    parsed.oid = oid;
+    parsed.obj_type = obj_type;
+    *data = std::move(parsed);
+    return true;
+}
+
+bool load_preview_encrypted_char(GameWorld& world, int oid, const char* path, int obj_type) {
+    return commit_preview_char(world, oid, obj_type, dat_decrypt(path));
+}
+
+bool load_preview_plaintext_char(GameWorld& world, int oid, const char* path, int obj_type) {
+    std::ifstream input(path, std::ios::binary);
+    if (!input) return false;
+    const std::vector<uint8_t> raw(
+        (std::istreambuf_iterator<char>(input)),
+        std::istreambuf_iterator<char>()
+    );
+    return commit_preview_char(world, oid, obj_type, raw);
 }
 
 std::vector<PreviewCatalogEntry> parse_preview_catalog(const char* path) {
@@ -70,7 +118,11 @@ std::vector<PreviewCatalogEntry> parse_preview_catalog(const char* path) {
         }
         while (length > 0 && (file[length - 1] == ' ' || file[length - 1] == '\t')) --length;
         file[length] = '\0';
-        if (oid >= 0 && file[0]) entries.push_back({oid, type, file});
+        const char* format_cursor = std::strstr(cursor, "format:");
+        char format[16] = {};
+        const bool plaintext = format_cursor && std::sscanf(format_cursor, "format: %15s", format) == 1
+            && std::strcmp(format, "plaintext") == 0;
+        if (oid >= 0 && file[0]) entries.push_back({oid, type, file, plaintext});
     }
     std::fclose(input);
     return entries;
@@ -129,6 +181,8 @@ bool load_preview_stage_background(GameWorld& world,
 bool initialize_preview_world(GameWorld& world,
                               const Options& options,
                               const std::string& game_root,
+                              const std::string& overlay_catalog_path,
+                              const std::string& overlay_catalog_root,
                               int root_oid,
                               StageInfo& stage_info,
                               PreviewCatalogStats& catalog_stats) {
@@ -137,26 +191,56 @@ bool initialize_preview_world(GameWorld& world,
 
     const std::string data_path = preview_game_path(game_root, "data\\data.txt");
     const std::vector<PreviewCatalogEntry> catalog = parse_preview_catalog(data_path.c_str());
-    catalog_stats.entries = static_cast<int>(catalog.size());
     if (catalog.empty()) return false;
+
+    std::map<int, PreviewCatalogEntry> overlay_by_oid;
+    if (!overlay_catalog_path.empty()) {
+        for (const PreviewCatalogEntry& entry : parse_preview_catalog(overlay_catalog_path.c_str())) {
+            overlay_by_oid[entry.oid] = entry;
+        }
+    }
+    catalog_stats.overlay_entries = static_cast<int>(overlay_by_oid.size());
+    catalog_stats.entries = catalog_stats.overlay_entries;
+    for (const PreviewCatalogEntry& entry : catalog) {
+        if (overlay_by_oid.count(entry.oid) == 0) ++catalog_stats.entries;
+    }
 
     bool root_catalog_entry = false;
     bool root_override_loaded = options.naruto_dat.empty();
     for (const PreviewCatalogEntry& entry : catalog) {
+        if (overlay_by_oid.count(entry.oid) != 0) continue;
         if (entry.oid == root_oid) root_catalog_entry = true;
         if (world.has_char(entry.oid)) continue;
         const std::string full_path = preview_game_path(game_root, entry.file);
         const bool uses_root_override = entry.oid == root_oid && !options.naruto_dat.empty();
         const bool loaded = uses_root_override
-            ? load_plaintext_char(world, entry.oid, options.naruto_dat.c_str(), entry.type)
-            : load_encrypted_char(world, entry.oid, full_path.c_str(), entry.type);
+            ? load_preview_plaintext_char(world, entry.oid, options.naruto_dat.c_str(), entry.type)
+            : load_preview_encrypted_char(world, entry.oid, full_path.c_str(), entry.type);
+        if (uses_root_override) root_override_loaded = loaded;
+        if (loaded) ++catalog_stats.loaded;
+        else ++catalog_stats.failed;
+    }
+
+    for (const auto& item : overlay_by_oid) {
+        const PreviewCatalogEntry& entry = item.second;
+        if (entry.oid == root_oid) root_catalog_entry = true;
+        const std::string full_path = preview_catalog_path(
+            overlay_catalog_root.empty() ? game_root : overlay_catalog_root,
+            entry.file
+        );
+        const bool uses_root_override = entry.oid == root_oid && !options.naruto_dat.empty();
+        const bool loaded = uses_root_override
+            ? load_preview_plaintext_char(world, entry.oid, options.naruto_dat.c_str(), entry.type)
+            : entry.plaintext
+                ? load_preview_plaintext_char(world, entry.oid, full_path.c_str(), entry.type)
+                : load_preview_encrypted_char(world, entry.oid, full_path.c_str(), entry.type);
         if (uses_root_override) root_override_loaded = loaded;
         if (loaded) ++catalog_stats.loaded;
         else ++catalog_stats.failed;
     }
 
     if (!root_catalog_entry && !options.naruto_dat.empty()) {
-        root_override_loaded = load_plaintext_char(
+        root_override_loaded = load_preview_plaintext_char(
             world,
             root_oid,
             options.naruto_dat.c_str(),
@@ -293,6 +377,8 @@ bool parse_preview_options(int argc,
                            char** argv,
                            Options& options,
                            std::string& game_root,
+                           std::string& preview_catalog,
+                           std::string& preview_catalog_root,
                            int& root_oid,
                            int& entry_frame,
                            std::vector<PreviewInputStep>& steps) {
@@ -301,6 +387,8 @@ bool parse_preview_options(int argc,
     legacy_args.push_back(argv[0]);
     const char* input_plan = nullptr;
     game_root = DEFAULT_PREVIEW_GAME_ROOT;
+    preview_catalog.clear();
+    preview_catalog_root.clear();
     root_oid = 2;
     entry_frame = -1;
 
@@ -325,6 +413,18 @@ bool parse_preview_options(int argc,
             const char* value = nullptr;
             if (!read_option_value(argc, argv, i, argv[i], value) || !value || !*value) return false;
             options.naruto_dat = value;
+            continue;
+        }
+        if (std::strcmp(argv[i], "--preview-catalog") == 0) {
+            const char* value = nullptr;
+            if (!read_option_value(argc, argv, i, argv[i], value) || !value || !*value) return false;
+            preview_catalog = value;
+            continue;
+        }
+        if (std::strcmp(argv[i], "--preview-catalog-root") == 0) {
+            const char* value = nullptr;
+            if (!read_option_value(argc, argv, i, argv[i], value) || !value || !*value) return false;
+            preview_catalog_root = value;
             continue;
         }
         if (std::strcmp(argv[i], "--input-plan") == 0) {
@@ -449,15 +549,19 @@ void write_preview_render_resources(FILE* output,
 int main(int argc, char** argv) {
     Options options;
     std::string game_root;
+    std::string preview_catalog;
+    std::string preview_catalog_root;
     int root_oid = 2;
     int entry_frame = -1;
     std::vector<PreviewInputStep> input_steps;
-    if (!parse_preview_options(argc, argv, options, game_root, root_oid, entry_frame, input_steps)) return 2;
+    if (!parse_preview_options(argc, argv, options, game_root, preview_catalog, preview_catalog_root,
+                               root_oid, entry_frame, input_steps)) return 2;
 
     GameWorld world;
     StageInfo stage_info;
     PreviewCatalogStats catalog_stats;
-    if (!initialize_preview_world(world, options, game_root, root_oid, stage_info, catalog_stats)) {
+    if (!initialize_preview_world(world, options, game_root, preview_catalog, preview_catalog_root,
+                                  root_oid, stage_info, catalog_stats)) {
         std::fprintf(stderr, "Failed to load required DAT data or stage background.\n");
         return 3;
     }
@@ -492,8 +596,10 @@ int main(int argc, char** argv) {
     }
     std::fputs("]}}", output);
     write_input_metadata(output, options.start_frame, entry_frame, input_steps);
-    std::fprintf(output, ",\"catalog\":{\"entries\":%d,\"loaded\":%d,\"failed\":%d}",
-                 catalog_stats.entries, catalog_stats.loaded, catalog_stats.failed);
+    std::fprintf(output,
+                 ",\"catalog\":{\"entries\":%d,\"loaded\":%d,\"failed\":%d,\"overlay_entries\":%d}",
+                 catalog_stats.entries, catalog_stats.loaded, catalog_stats.failed,
+                 catalog_stats.overlay_entries);
     std::fprintf(output, ",\"root_oid\":%d,\"preview_dat_override\":", root_oid);
     if (options.naruto_dat.empty()) std::fputs("null", output);
     else write_json_string(output, options.naruto_dat);

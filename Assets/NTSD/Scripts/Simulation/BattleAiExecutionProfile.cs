@@ -21,7 +21,7 @@ namespace NTSD.Simulation
                 return ParseRequired(explicitOverride, nameof(explicitOverride));
             if (!string.IsNullOrWhiteSpace(configuredProfile))
                 return ParseRequired(configuredProfile, nameof(configuredProfile));
-            return BattleAiExecutionProfile.LegacyCanonical;
+            return BattleAiExecutionProfile.DataOrientedCanonical;
         }
 
         public static bool TryParse(string value, out BattleAiExecutionProfile profile)

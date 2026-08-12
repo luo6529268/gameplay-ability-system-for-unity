@@ -35,6 +35,16 @@ namespace NTSD.Simulation
         internal WeaponPoint DefaultHeldObjectWeaponPoint { get; }
         public bool IsSealed => isSealed;
         public long RejectedSoundEventCount { get; private set; }
+        internal bool CanQueueSoundWithoutRejection =>
+            !isSealed || PendingSounds.Count < soundEventLimit;
+
+        internal bool CanQueueSoundsWithoutRejection(int count)
+        {
+            if (count <= 0 || !isSealed)
+                return true;
+
+            return PendingSounds.Count <= soundEventLimit - count;
+        }
 
         public void Prepare(int runtimeCapacity, int registeredObjectCount)
         {

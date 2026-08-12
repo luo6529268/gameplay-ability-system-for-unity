@@ -28,6 +28,8 @@ namespace NTSD.Simulation.Presentation
     {
         private readonly long[] elapsedTimestampTicks =
             new long[(int)BattlePresentationPhase.Count];
+        private readonly long[] completedElapsedTimestampTicks =
+            new long[(int)BattlePresentationPhase.Count];
         private readonly BattlePresentationPhase[] activePhases =
             new BattlePresentationPhase[4];
         private readonly long[] activePhaseTimestamps = new long[4];
@@ -48,6 +50,10 @@ namespace NTSD.Simulation.Presentation
             LastCompletedTickIndex = -1;
             CompletedSampleSequence = 0;
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
+            Array.Clear(
+                completedElapsedTimestampTicks,
+                0,
+                completedElapsedTimestampTicks.Length);
             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
         }
 
@@ -96,6 +102,10 @@ namespace NTSD.Simulation.Presentation
                 return;
 
             LastCompletedTickIndex = tickIndex;
+            Array.Copy(
+                elapsedTimestampTicks,
+                completedElapsedTimestampTicks,
+                elapsedTimestampTicks.Length);
             CompletedSampleSequence++;
             activeTickIndex = -1;
         }
@@ -103,7 +113,7 @@ namespace NTSD.Simulation.Presentation
         public long GetLastElapsedTimestampTicks(BattlePresentationPhase phase)
         {
             return (uint)phase < (uint)BattlePresentationPhase.Count
-                ? elapsedTimestampTicks[(int)phase]
+                ? completedElapsedTimestampTicks[(int)phase]
                 : 0;
         }
 

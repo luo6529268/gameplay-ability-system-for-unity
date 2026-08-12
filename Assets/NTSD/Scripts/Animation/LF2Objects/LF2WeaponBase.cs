@@ -326,13 +326,13 @@ namespace NTSD.Animation.LF2Objects
                     return;
                 if (state != LF2States.WeaponInSky)
                     SetFrameDirect(0);
-                ApplyWhirlwindVelocity(attacker, 3f);
+                ApplyWhirlwindVelocity(attacker, 3.0);
             }
             else if (heavyLike)
             {
                 if (state != LF2States.HeavyWeaponInSky)
                     SetFrameDirect(0);
-                ApplyWhirlwindVelocity(attacker, 2.3f);
+                ApplyWhirlwindVelocity(attacker, 2.3);
             }
         }
 
@@ -863,12 +863,14 @@ namespace NTSD.Animation.LF2Objects
             OnHealthInitialized(charData);
         }
 
-        private void ApplyWhirlwindVelocity(LF2Entity attacker, float vyDelta)
+        private void ApplyWhirlwindVelocity(LF2Entity attacker, double vyDelta)
         {
-            KnockbackVx = (float)(Runtime.Vx + (Runtime.X > attacker.Runtime.X ? -1f : 1f));
+            KnockbackVx = Runtime.Vx +
+                (Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
             Runtime.Vx = KnockbackVx;
 
-            KnockbackVz = (float)(Runtime.Vz + (Runtime.Z > attacker.Runtime.Z ? -0.5f : 0.5f));
+            KnockbackVz = Runtime.Vz +
+                (Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
             Runtime.Vz = KnockbackVz;
 
             if (GetRuntimeYInt() >= -2)
@@ -881,7 +883,7 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime.Vy > -6f)
             {
                 Runtime.Vy -= vyDelta;
-                KnockbackVy = (float)Runtime.Vy;
+                KnockbackVy = Runtime.Vy;
             }
         }
 
@@ -905,6 +907,8 @@ namespace NTSD.Animation.LF2Objects
 
             Frame.N = frameId;
             Frame.D = FrameCache.GetFrameDataById(frameId);
+            if (Runtime != null)
+                Runtime.Frame = frameId;
             AttackingCounter = 0;
             if (Frame.D != null && Trans != null)
                 Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next, waitCounter);

@@ -35,6 +35,7 @@ export interface FrameCatalogItem {
 
 export interface FrameEntryCatalog {
     readonly entries: readonly SkillEntry[];
+    readonly baseContexts: readonly BaseStateContext[];
     readonly frames: readonly FrameCatalogItem[];
     readonly byOccurrence: ReadonlyMap<number, FrameCatalogItem>;
 }
@@ -55,6 +56,34 @@ export interface SkillEntryTrigger {
     readonly sourceFrames: readonly number[];
 }
 
+export type SkillEntryActionRole = "context" | "root" | "internal";
+
+export interface SkillEntryRoute {
+    readonly key: SkillEntryHitKey;
+    readonly sourceFrame: number;
+    readonly sourceOccurrence: number;
+    readonly sourceLabel: string;
+    readonly sourceState: number;
+    readonly sourceKind: "base" | "action";
+}
+
+export interface SkillEntryInternalStage {
+    readonly startFrame: number;
+    readonly label: string;
+    readonly triggers: readonly SkillEntryTrigger[];
+}
+
+export interface BaseStateContext {
+    readonly id: string;
+    readonly state: 0 | 1 | 2;
+    readonly label: string;
+    readonly primaryStartFrame: number;
+    readonly variantStartFrames: readonly number[];
+    readonly frameCount: number;
+    readonly actionStartFrames: readonly number[];
+    readonly routeCount: number;
+}
+
 export interface SkillEntry {
     readonly id: string;
     readonly oid: number;
@@ -69,7 +98,12 @@ export interface SkillEntry {
     readonly hidden: boolean;
     readonly notes: string;
     readonly segmentFrameCount: number;
+    readonly baseState?: 0 | 1 | 2;
+    readonly actionRole: SkillEntryActionRole;
     readonly triggers: readonly SkillEntryTrigger[];
+    readonly routes: readonly SkillEntryRoute[];
+    readonly parentStartFrames: readonly number[];
+    readonly internalStages: readonly SkillEntryInternalStage[];
     readonly nativeTrigger?: string;
     readonly nativeInputPlan?: readonly SkillPreviewInputStep[];
 }
@@ -86,6 +120,17 @@ export interface SkillPreviewScenario {
     readonly initialFrame: number;
     readonly inputPlan: readonly SkillPreviewInputStep[];
     readonly ticks: number;
+}
+
+export interface SkillPreviewRootTick {
+    readonly tick: number;
+    readonly frame?: number;
+}
+
+export interface SkillInternalStageScenario {
+    readonly scenario: SkillPreviewScenario;
+    readonly route: SkillEntryRoute;
+    readonly triggerTick: number;
 }
 
 interface FrameSegment {
@@ -109,6 +154,7 @@ interface EntryCandidate {
     readonly frame: DatFrameProjection;
     segmentFrameCount: number;
     readonly triggerSources: Map<SkillEntryHitKey, Set<number>>;
+    baseState?: 0 | 1 | 2;
     nativeCategory?: SkillEntryCategory;
     nativeTrigger?: string;
     nativeInputPlan?: readonly SkillPreviewInputStep[];
@@ -248,18 +294,17 @@ export function buildSkillPreviewScenario(
     entry: SkillEntry,
 ): SkillPreviewScenario {
     const runtimeFrameIds = new Set(latestRuntimeFrames(frames).map((frame) => frame.frameId));
-    const trigger = entry.triggers.find((candidate) => (
-        candidate.sourceFrames.some((frameId) => runtimeFrameIds.has(frameId))
-    ));
-    if (trigger !== undefined) {
-        const initialFrame = trigger.sourceFrames.find((frameId) => runtimeFrameIds.has(frameId))!;
-        const inputPlan = HIT_KEY_INPUTS[trigger.key].map((key, index) => Object.freeze({
+    const route = entry.routes.find((candidate) => (
+        candidate.sourceKind === "base" && runtimeFrameIds.has(candidate.sourceFrame)
+    )) ?? entry.routes.find((candidate) => runtimeFrameIds.has(candidate.sourceFrame));
+    if (route !== undefined) {
+        const inputPlan = HIT_KEY_INPUTS[route.key].map((key, index) => Object.freeze({
             tick: 2 + index * 2,
             keys: Object.freeze([key]),
         }));
         return Object.freeze({
             startFrame: entry.startFrame,
-            initialFrame,
+            initialFrame: route.sourceFrame,
             inputPlan: Object.freeze(inputPlan),
             ticks: 120,
         });
@@ -281,6 +326,50 @@ export function buildSkillPreviewScenario(
         inputPlan: Object.freeze([]),
         ticks: 120,
     });
+}
+
+function mergePreviewInputSteps(
+    base: readonly SkillPreviewInputStep[],
+    injected: readonly SkillPreviewInputStep[],
+): readonly SkillPreviewInputStep[] {
+    const keysByTick = new Map<number, SkillPreviewInputKey[]>();
+    for (const step of [...base, ...injected]) {
+        const keys = keysByTick.get(step.tick) ?? [];
+        for (const key of step.keys) {
+            if (!keys.includes(key)) keys.push(key);
+        }
+        keysByTick.set(step.tick, keys);
+    }
+    return Object.freeze([...keysByTick.entries()]
+        .sort(([left], [right]) => left - right)
+        .map(([tick, keys]) => Object.freeze({ tick, keys: Object.freeze(keys) })));
+}
+
+export function buildInternalStagePreviewScenario(
+    parentScenario: SkillPreviewScenario,
+    stage: SkillEntry,
+    rootTicks: readonly SkillPreviewRootTick[],
+): SkillInternalStageScenario | undefined {
+    if (stage.actionRole !== "internal") return undefined;
+    for (const route of stage.routes) {
+        const sourceTick = rootTicks.find((tick) => tick.frame === route.sourceFrame);
+        if (sourceTick === undefined) continue;
+        const triggerTick = sourceTick.tick + 1;
+        const injected = HIT_KEY_INPUTS[route.key].map((key, index) => Object.freeze({
+            tick: triggerTick + index * 2,
+            keys: Object.freeze([key]),
+        }));
+        if ((injected.at(-1)?.tick ?? triggerTick) > parentScenario.ticks) continue;
+        return Object.freeze({
+            scenario: Object.freeze({
+                ...parentScenario,
+                inputPlan: mergePreviewInputSteps(parentScenario.inputPlan, injected),
+            }),
+            route,
+            triggerTick,
+        });
+    }
+    return undefined;
 }
 
 export function authoredTraceStartFrame(
@@ -316,16 +405,19 @@ function candidateFor(
     candidates: Map<number, EntryCandidate>,
     frame: DatFrameProjection,
     segmentFrameCount: number,
+    baseState?: 0 | 1 | 2,
 ): EntryCandidate {
     const existing = candidates.get(frame.frameId);
     if (existing !== undefined) {
         existing.segmentFrameCount = Math.max(existing.segmentFrameCount, segmentFrameCount);
+        if (baseState !== undefined) existing.baseState = baseState;
         return existing;
     }
     const candidate: EntryCandidate = {
         frame,
         segmentFrameCount,
         triggerSources: new Map(),
+        baseState,
     };
     candidates.set(frame.frameId, candidate);
     return candidate;
@@ -340,6 +432,7 @@ function metadataFor(
 }
 
 function categoryFor(candidate: EntryCandidate): SkillEntryCategory {
+    if (candidate.baseState !== undefined) return "base";
     if (candidate.triggerSources.size > 0) return "input";
     return candidate.nativeCategory ?? "base";
 }
@@ -439,7 +532,7 @@ function buildEntries(
         segment.frames.forEach((frame) => segmentByOccurrence.set(frame.occurrence, segment));
         const start = segment.frames[0]!;
         if (start.state === 0 || start.state === 1 || start.state === 2) {
-            candidateFor(candidates, start, segment.frames.length);
+            candidateFor(candidates, start, segment.frames.length, start.state);
         }
     }
 
@@ -490,6 +583,28 @@ function buildEntries(
                 sourceFrames: Object.freeze([...sources].sort((left, right) => left - right)),
             }];
         });
+        const routes = triggers.flatMap((trigger): SkillEntryRoute[] => (
+            trigger.sourceFrames.flatMap((sourceFrame): SkillEntryRoute[] => {
+                const source = frameById.get(sourceFrame);
+                if (source === undefined) return [];
+                return [Object.freeze({
+                    key: trigger.key,
+                    sourceFrame,
+                    sourceOccurrence: source.occurrence,
+                    sourceLabel: source.label.trim() || `frame_${source.frameId}`,
+                    sourceState: source.state,
+                    sourceKind: source.state === 0 || source.state === 1 || source.state === 2
+                        ? "base"
+                        : "action",
+                })];
+            })
+        ));
+        routes.sort((left, right) => (
+            Number(left.sourceKind !== "base") - Number(right.sourceKind !== "base")
+            || left.sourceState - right.sourceState
+            || left.sourceFrame - right.sourceFrame
+            || SKILL_ENTRY_HIT_KEYS.indexOf(left.key) - SKILL_ENTRY_HIT_KEYS.indexOf(right.key)
+        ));
         return Object.freeze({
             id: `entry:${oid}:${candidate.frame.frameId}`,
             oid,
@@ -504,7 +619,12 @@ function buildEntries(
             hidden: override?.hidden === true,
             notes: override?.notes ?? "",
             segmentFrameCount: candidate.segmentFrameCount,
+            baseState: candidate.baseState,
+            actionRole: candidate.baseState === undefined ? "root" : "context",
             triggers: Object.freeze(triggers.map((trigger) => Object.freeze(trigger))),
+            routes: Object.freeze(routes),
+            parentStartFrames: Object.freeze([]),
+            internalStages: Object.freeze([]),
             nativeTrigger: candidate.nativeTrigger,
             nativeInputPlan: candidate.nativeInputPlan,
         });
@@ -519,12 +639,175 @@ function buildEntries(
     return Object.freeze(entries);
 }
 
+function nextChainOwners(
+    entries: readonly SkillEntry[],
+    frameById: ReadonlyMap<number, DatFrameProjection>,
+): Map<number, Set<number>> {
+    const owners = new Map<number, Set<number>>();
+    for (const entry of entries) {
+        addNextChainOwner(entry.startFrame, entry.startFrame, frameById, owners);
+    }
+    return owners;
+}
+
+function classifyCompleteActions(
+    entries: readonly SkillEntry[],
+    frameById: ReadonlyMap<number, DatFrameProjection>,
+): readonly SkillEntry[] {
+    const structuralOwners = nextChainOwners(entries, frameById);
+    const entryByStartFrame = new Map(entries.map((entry) => [entry.startFrame, entry]));
+    return Object.freeze(entries.map((entry): SkillEntry => {
+        if (entry.category === "base") {
+            return Object.freeze({ ...entry, actionRole: "context", parentStartFrames: Object.freeze([]) });
+        }
+        if (entry.category !== "input" || entry.routes.length === 0) {
+            return Object.freeze({ ...entry, actionRole: "root", parentStartFrames: Object.freeze([]) });
+        }
+
+        let hasBaseSource = false;
+        let hasExternalSource = false;
+        const parentStartFrames = new Set<number>();
+        for (const route of entry.routes) {
+            const sourceOwners = [...(structuralOwners.get(route.sourceFrame) ?? [])]
+                .filter((owner) => owner !== entry.startFrame);
+            if (route.sourceKind === "base"
+                || sourceOwners.some((owner) => entryByStartFrame.get(owner)?.category === "base")) {
+                hasBaseSource = true;
+            }
+            const actionOwners = sourceOwners.filter((owner) => entryByStartFrame.get(owner)?.category !== "base");
+            actionOwners.forEach((owner) => parentStartFrames.add(owner));
+            if (route.sourceKind !== "base" && sourceOwners.length === 0) hasExternalSource = true;
+        }
+        const actionRole: SkillEntryActionRole = !hasBaseSource
+            && !hasExternalSource
+            && parentStartFrames.size > 0
+            ? "internal"
+            : "root";
+        return Object.freeze({
+            ...entry,
+            actionRole,
+            parentStartFrames: Object.freeze([...parentStartFrames].sort((left, right) => left - right)),
+        });
+    }));
+}
+
+function buildCompleteActionOwners(
+    entries: readonly SkillEntry[],
+    references: readonly IndexedReference[],
+    frameById: ReadonlyMap<number, DatFrameProjection>,
+): { readonly ownersByFrame: Map<number, Set<number>>; readonly runtimeBranchFrames: Set<number> } {
+    const ownersByFrame = new Map<number, Set<number>>();
+    for (const entry of entries) {
+        if (entry.actionRole !== "internal") {
+            addNextChainOwner(entry.startFrame, entry.startFrame, frameById, ownersByFrame);
+        }
+    }
+    const entryByStartFrame = new Map(entries.map((entry) => [entry.startFrame, entry]));
+    const runtimeBranchFrames = new Set<number>();
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const reference of references) {
+            const targetEntry = entryByStartFrame.get(reference.targetFrame);
+            const followsCompleteAction = reference.kind === "runtime"
+                || (reference.kind === "input" && targetEntry?.actionRole === "internal");
+            if (!followsCompleteAction) continue;
+            const sourceOwners = ownersByFrame.get(reference.sourceFrame);
+            if (sourceOwners === undefined) continue;
+            for (const owner of sourceOwners) {
+                changed = addNextChainOwner(
+                    reference.targetFrame,
+                    owner,
+                    frameById,
+                    ownersByFrame,
+                    reference.kind === "runtime" ? runtimeBranchFrames : undefined,
+                ) || changed;
+            }
+        }
+    }
+    return { ownersByFrame, runtimeBranchFrames };
+}
+
+function attachCompleteActionRelations(
+    entries: readonly SkillEntry[],
+    ownersByFrame: ReadonlyMap<number, ReadonlySet<number>>,
+): readonly SkillEntry[] {
+    const internalEntries = entries.filter((entry) => entry.actionRole === "internal");
+    const rootStarts = new Set(entries.filter((entry) => entry.actionRole === "root").map((entry) => entry.startFrame));
+    return Object.freeze(entries.map((entry): SkillEntry => {
+        const completeOwners = [...(ownersByFrame.get(entry.startFrame) ?? [])]
+            .filter((owner) => rootStarts.has(owner) && owner !== entry.startFrame)
+            .sort((left, right) => left - right);
+        const internalStages = entry.actionRole === "root"
+            ? internalEntries
+                .filter((candidate) => ownersByFrame.get(candidate.startFrame)?.has(entry.startFrame) === true)
+                .map((candidate): SkillEntryInternalStage => Object.freeze({
+                    startFrame: candidate.startFrame,
+                    label: candidate.displayName,
+                    triggers: candidate.triggers,
+                }))
+                .sort((left, right) => left.startFrame - right.startFrame)
+            : [];
+        return Object.freeze({
+            ...entry,
+            parentStartFrames: entry.actionRole === "internal"
+                ? Object.freeze(completeOwners)
+                : entry.parentStartFrames,
+            internalStages: Object.freeze(internalStages),
+        });
+    }));
+}
+
+const BASE_CONTEXT_LABELS: Readonly<Record<0 | 1 | 2, string>> = Object.freeze({
+    0: "standing",
+    1: "walking",
+    2: "running",
+});
+
+const BASE_CONTEXT_PREFERRED_FRAMES: Readonly<Record<0 | 1 | 2, number>> = Object.freeze({
+    0: 0,
+    1: 5,
+    2: 9,
+});
+
+function buildBaseStateContexts(entries: readonly SkillEntry[]): readonly BaseStateContext[] {
+    const result: BaseStateContext[] = [];
+    for (const state of [0, 1, 2] as const) {
+        const variants = entries
+            .filter((entry) => entry.actionRole === "context" && entry.baseState === state)
+            .sort((left, right) => left.startFrame - right.startFrame);
+        if (variants.length === 0) continue;
+        const preferred = variants.find((entry) => entry.startFrame === BASE_CONTEXT_PREFERRED_FRAMES[state])
+            ?? variants[0]!;
+        const actions = entries.filter((entry) => (
+            entry.actionRole === "root"
+            && entry.category !== "base"
+            && entry.routes.some((route) => route.sourceKind === "base" && route.sourceState === state)
+        ));
+        const actionStartFrames = [...new Set(actions.map((entry) => entry.startFrame))].sort((left, right) => left - right);
+        const routeCount = actions.reduce((count, entry) => count + entry.routes.filter((route) => (
+            route.sourceKind === "base" && route.sourceState === state
+        )).length, 0);
+        result.push(Object.freeze({
+            id: `base-state:${state}`,
+            state,
+            label: BASE_CONTEXT_LABELS[state],
+            primaryStartFrame: preferred.startFrame,
+            variantStartFrames: Object.freeze(variants.map((entry) => entry.startFrame)),
+            frameCount: variants.reduce((count, entry) => count + entry.segmentFrameCount, 0),
+            actionStartFrames: Object.freeze(actionStartFrames),
+            routeCount,
+        }));
+    }
+    return Object.freeze(result);
+}
+
 export function buildFrameEntryCatalog(
     frames: readonly DatFrameProjection[],
     oid: number,
     metadata: readonly SkillDisplayMetadata[] = [],
 ): FrameEntryCatalog {
-    const entries = buildEntries(frames, oid, metadata);
+    const preliminaryEntries = buildEntries(frames, oid, metadata);
     const runtimeFrames = latestRuntimeFrames(frames);
     const frameById = new Map(runtimeFrames.map((frame) => [frame.frameId, frame]));
     const references = collectFrameReferences(runtimeFrames, frameById);
@@ -535,29 +818,14 @@ export function buildFrameEntryCatalog(
         else referencesByTarget.set(reference.targetFrame, [reference]);
     }
 
-    const ownersByFrame = new Map<number, Set<number>>();
-    for (const entry of entries) {
-        addNextChainOwner(entry.startFrame, entry.startFrame, frameById, ownersByFrame);
-    }
-    const runtimeBranchFrames = new Set<number>();
-    let changed = true;
-    while (changed) {
-        changed = false;
-        for (const reference of references) {
-            if (reference.kind !== "runtime") continue;
-            const sourceOwners = ownersByFrame.get(reference.sourceFrame);
-            if (sourceOwners === undefined) continue;
-            for (const owner of sourceOwners) {
-                changed = addNextChainOwner(
-                    reference.targetFrame,
-                    owner,
-                    frameById,
-                    ownersByFrame,
-                    runtimeBranchFrames,
-                ) || changed;
-            }
-        }
-    }
+    const classifiedEntries = classifyCompleteActions(preliminaryEntries, frameById);
+    const { ownersByFrame, runtimeBranchFrames } = buildCompleteActionOwners(
+        classifiedEntries,
+        references,
+        frameById,
+    );
+    const entries = attachCompleteActionRelations(classifiedEntries, ownersByFrame);
+    const baseContexts = buildBaseStateContexts(entries);
 
     const entryByStartFrame = new Map(entries.map((entry) => [entry.startFrame, entry]));
     const definitionsById = new Map<number, DatFrameProjection[]>();
@@ -574,6 +842,7 @@ export function buildFrameEntryCatalog(
         const entry = effective ? entryByStartFrame.get(frame.frameId) : undefined;
         let role: FrameCatalogRole;
         if (!effective) role = "overridden";
+        else if (entry?.actionRole === "internal") role = "internal";
         else if (entry?.category === "base") role = "base-entry";
         else if (entry?.category === "input") role = "input-entry";
         else if (entry?.category === "engine") role = "engine-entry";
@@ -601,6 +870,7 @@ export function buildFrameEntryCatalog(
     const byOccurrence = new Map(catalogFrames.map((item) => [item.frame.occurrence, item]));
     return Object.freeze({
         entries,
+        baseContexts,
         frames: Object.freeze(catalogFrames),
         byOccurrence,
     });
