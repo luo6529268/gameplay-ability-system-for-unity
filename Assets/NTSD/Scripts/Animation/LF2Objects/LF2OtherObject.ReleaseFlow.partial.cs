@@ -12,7 +12,7 @@ namespace NTSD.Animation.LF2Objects
         public void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
         {
             owner.Frame.PN = owner.Frame.N;
-            owner.Frame.N = targetFrameId;
+            owner.WriteCurrentFrameId(targetFrameId);
 
             LF2FrameData targetFrame = owner.FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null)
@@ -61,7 +61,7 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             owner.Frame.PN = owner.Frame.N;
-            owner.Frame.N = frameId;
+            owner.WriteCurrentFrameId(frameId);
             owner.Frame.D = owner.FrameCache.GetFrameDataById(frameId);
             owner.AttackingCounter = 0;
 

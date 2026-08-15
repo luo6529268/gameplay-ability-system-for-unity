@@ -2,6 +2,7 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Input;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,11 +21,10 @@ namespace NTSD.Animation.LF2Objects
     /// - LF2LivingObject：更像战斗单位的公共能力
     /// - LF2Character / LF2WeaponBase / LF2SpecialAttack：具体对象类型
     /// </summary>
-    public abstract class LF2Entity : ILF2Entity
+    public abstract class LF2Entity : ILF2Entity, ILF2FrameCacheObserver
     {
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
-        private readonly CharacterMechanics sharedCharacterDatMechanics =
-            new CharacterMechanics();
+        private CharacterMechanics compatibilityCharacterMechanics;
         private int requiredRuntimeSlot = -1;
         private SimulationWorld dataObjectTypeCacheWorld;
         private int dataObjectTypeCacheTick = -1;
@@ -60,6 +60,8 @@ namespace NTSD.Animation.LF2Objects
         };
         protected LF2Entity()
         {
+            FrameCache = new LF2FrameCache(this);
+            Frame.BindRuntime(Runtime);
             characterDatHitCounters = new LF2HitCountersModule();
             characterDatHitCounters.BindRuntime(Runtime);
             characterDatHitResolver = new LF2CharacterDatHitResolver(
@@ -82,6 +84,21 @@ namespace NTSD.Animation.LF2Objects
             characterDatInteractionResolver.TryConsumeUnifiedStep7CandidateSequence();
         }
 
+        internal virtual bool TryGetBattleHitCandidateConsumer(
+            BattleHitExecutionPass pass,
+            out IBattleHitCandidateConsumer consumer)
+        {
+            if (pass == BattleHitExecutionPass.Character &&
+                UsesCharacterDatInteractionPhase())
+            {
+                consumer = characterDatInteractionResolver;
+                return true;
+            }
+
+            consumer = null;
+            return false;
+        }
+
 
         /// <summary>对象名称。</summary>
         public string Name { get; set; }
@@ -90,14 +107,22 @@ namespace NTSD.Animation.LF2Objects
         public int StableId
         {
             get => Runtime.StableId;
-            protected set => Runtime.StableId = value;
+            protected set
+            {
+                Runtime.StableId = value;
+                PublishIdentityMetadataForSimulation();
+            }
         }
 
         /// <summary>对象 ID。</summary>
         public int ObjectId
         {
             get => Runtime.ObjectId;
-            set => Runtime.ObjectId = value;
+            set
+            {
+                Runtime.ObjectId = value;
+                PublishIdentityMetadataForSimulation();
+            }
         }
 
         /// <summary>队伍 ID。</summary>
@@ -179,7 +204,7 @@ namespace NTSD.Animation.LF2Objects
         public LF2FrameInfo Frame { get; protected set; } = new LF2FrameInfo();
 
         /// <summary>当前对象对应的 DAT 帧数据缓存。</summary>
-        public LF2FrameCache FrameCache { get; protected set; } = new LF2FrameCache();
+        public LF2FrameCache FrameCache { get; protected set; }
 
         /// <summary>帧切换控制器。负责 wait/next/frame jump 等帧推进细节。</summary>
         public FrameTransistor Trans { get; protected set; }
@@ -198,6 +223,21 @@ namespace NTSD.Animation.LF2Objects
         private RuntimeCharacterConfigResolver selfCheckCharacterConfigResolver;
 
         public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
+        internal SimulationWorld RegisteredWorldForSimulation => registeredWorld;
+
+        void ILF2FrameCacheObserver.OnFrameCacheIdentityChanged()
+        {
+            PublishIdentityMetadataForSimulation();
+        }
+
+        private void PublishIdentityMetadataForSimulation()
+        {
+            InvalidateDataObjectTypeTickCache();
+            int currentDataType = GetCurrentDataObjectTypeForSimulation();
+            Runtime.ObjType = ResolveReferenceRuntimeObjTypeFromDataType(currentDataType);
+            Runtime.EntityType = currentDataType;
+            registeredWorld?.IdentityWriter.SyncFromEntity(this);
+        }
 
 
 
@@ -634,6 +674,9 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>读取指定命中记录 Z 锚点。</summary>
         public int GetHitRecordZ(int slotIndex) => _hitRecordZ[slotIndex];
 
+        internal int GetHitRecordLastAdvanceTickForSnapshot(int slotIndex)
+            => _hitRecordLastAdvanceTick[slotIndex];
+
         /// <summary>命中记录成功渲染后推进年龄。</summary>
         public void AdvanceHitRecord(int slotIndex, int tickIndex)
         {
@@ -738,7 +781,7 @@ namespace NTSD.Animation.LF2Objects
             Sprite?.SwitchLR(nextDir);
         }
 
-        public virtual int Dirh() => Runtime.Dir == "left" ? -1 : 1;
+        public virtual int Dirh() => Runtime?.IsFacingLeft == true ? -1 : 1;
 
         public virtual int Dirv() => 1;
 
@@ -1005,6 +1048,12 @@ namespace NTSD.Animation.LF2Objects
             if (attacker?.Runtime == null || Runtime == null)
                 return;
 
+            if (RegisteredWorldForSimulation?.BoundaryWriter
+                    .TryApplyKind14DirectionalBlock(attacker, this) == true)
+            {
+                return;
+            }
+
             int attackerX = attacker.Runtime.XInt;
             int attackerZ = attacker.Runtime.ZInt;
             int victimX = Runtime.XInt;
@@ -1032,16 +1081,28 @@ namespace NTSD.Animation.LF2Objects
             if (targetFrame == null) return;
 
             Frame.PN = Frame.N;
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             AttackingCounter = 0;
 
             if (Frame.D != null && Frame.D.pic >= 0)
                 Sprite?.ShowPic(Frame.D.pic);
 
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
+        }
+
+        /// <summary>
+        /// 写入当前逻辑帧的唯一兼容入口。权威 C# 只有一个 Entity.Frame；
+        /// Unity 迁移期的 Frame.N 与 Runtime.Frame 必须在同一写入点立即一致。
+        /// </summary>
+        protected internal void WriteCurrentFrameId(int frameId)
+        {
+            if (Frame == null)
+                return;
+
+            Frame.N = frameId;
+            if (Runtime != null)
+                Runtime.Frame = frameId;
         }
 
         /// <summary>按帧 ID 获取帧数据。</summary>
@@ -1087,6 +1148,18 @@ namespace NTSD.Animation.LF2Objects
 
         /// <summary>FrameTransistor 检测到 next=1000 时调用，子类可实现销毁逻辑。</summary>
         public virtual void OnTransitDestroy()
+        {
+            SimulationWorld world = registeredWorld;
+            if (world != null)
+            {
+                world.StructuralWriter.Destroy(this);
+                return;
+            }
+
+            DestroyEntityLikeExeCoreForStructuralWriter();
+        }
+
+        internal virtual void DestroyEntityLikeExeCoreForStructuralWriter()
         {
             DestroyEvent();
             Destroy();
@@ -2482,7 +2555,10 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void ClearBattleEntryInputState()
         {
-            Runtime?.ResetInputState();
+            if (registeredWorld != null)
+                registeredWorld.CharacterInputWriter.ResetInputState(Runtime);
+            else
+                Runtime?.ResetInputState();
             sharedCharacterDatInputModule.Reset();
         }
 
@@ -2581,6 +2657,15 @@ namespace NTSD.Animation.LF2Objects
         {
             if (Runtime == null)
                 return;
+
+            if (AiControlled && registeredWorld != null)
+            {
+                registeredWorld.CharacterInputActionResolver.ApplyFrameInputFromRuntimeProgress(
+                    this,
+                    registeredWorld.CharacterInputWriter,
+                    registeredWorld.ActiveBattleAiInputDetailDiagnosticsForDiagnostics);
+                return;
+            }
 
             sharedCharacterDatInputModule.SyncFromRuntime(Runtime);
             sharedCharacterDatInputModule.ApplyFrameInput(this);
@@ -3330,7 +3415,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetFrame == null)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Runtime.FrameWaitCounter = 0;
             Frame.D = targetFrame;
             Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
@@ -3346,7 +3431,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetFrame == null)
                 return false;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
             Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, Trans?.WaitCounter ?? 0);
             Runtime.NextFrame = targetFrame.next;
@@ -3413,95 +3498,6 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private void ApplySharedRuntimeInputEvent(FuncKeyMask key, bool down, bool forceFreshEdge = false)
-        {
-            if (forceFreshEdge && down)
-                ForceSharedRuntimePreviousState(key);
-
-            switch (key)
-            {
-                case FuncKeyMask.right: Runtime.KeyRight = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.left: Runtime.KeyLeft = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.up: Runtime.KeyUp = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.down: Runtime.KeyDown = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.att: Runtime.KeyAttack = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.jump: Runtime.KeyJump = down ? (byte)1 : (byte)0; break;
-                case FuncKeyMask.def: Runtime.KeyDefend = down ? (byte)1 : (byte)0; break;
-            }
-
-            if (!down)
-                return;
-
-            // shared character-DAT 输入镜像也要保持 reference 的交叉 cooldown 语义：
-            // attack -> CdDefend, defend -> CdJump, jump -> CdAttack。
-            switch (key)
-            {
-                case FuncKeyMask.right:
-                    if (Runtime.PrevRight == 0)
-                    {
-                        Runtime.CdRight = 5;
-                        Runtime.PushInputHistory(6);
-                    }
-                    break;
-                case FuncKeyMask.left:
-                    if (Runtime.PrevLeft == 0)
-                    {
-                        Runtime.CdLeft = 5;
-                        Runtime.PushInputHistory(4);
-                    }
-                    break;
-                case FuncKeyMask.up:
-                    if (Runtime.PrevUp == 0)
-                    {
-                        Runtime.CdUp = 5;
-                        Runtime.PushInputHistory(8);
-                    }
-                    break;
-                case FuncKeyMask.down:
-                    if (Runtime.PrevDown == 0)
-                    {
-                        Runtime.CdDown = 5;
-                        Runtime.PushInputHistory(2);
-                    }
-                    break;
-                case FuncKeyMask.att:
-                    if (Runtime.PrevAttack == 0)
-                    {
-                        Runtime.CdDefend = 5;
-                        Runtime.PushInputHistory(9);
-                    }
-                    break;
-                case FuncKeyMask.jump:
-                    if (Runtime.PrevJump == 0)
-                    {
-                        Runtime.CdAttack = 5;
-                        Runtime.PushInputHistory(5);
-                    }
-                    break;
-                case FuncKeyMask.def:
-                    if (Runtime.PrevDefend == 0)
-                    {
-                        Runtime.CdJump = 5;
-                        Runtime.PushInputHistory(0);
-                    }
-                    break;
-            }
-        }
-
-        private void ForceSharedRuntimePreviousState(FuncKeyMask key)
-        {
-            switch (key)
-            {
-                case FuncKeyMask.right: Runtime.PrevRight = 0; break;
-                case FuncKeyMask.left: Runtime.PrevLeft = 0; break;
-                case FuncKeyMask.up: Runtime.PrevUp = 0; break;
-                case FuncKeyMask.down: Runtime.PrevDown = 0; break;
-                case FuncKeyMask.att: Runtime.PrevAttack = 0; break;
-                case FuncKeyMask.jump: Runtime.PrevJump = 0; break;
-                case FuncKeyMask.def: Runtime.PrevDefend = 0; break;
-            }
-        }
-
         /// <summary>
         /// 供“当前 DAT 是 Character”的通用输入消费链使用的 DJA guard。
         /// 这层判断只依赖共享 runtime / frame 数据，不要求 CLR 类型真的是 LF2Character。
@@ -3524,6 +3520,14 @@ namespace NTSD.Animation.LF2Objects
         /// 参考 C# `DoFrameJump(...)`，用于当前 DAT 已经是 Character 的任意实体。
         /// </summary>
         internal bool TryCharacterDatInputFrameJump(int frameId)
+        {
+            SimulationWorld world = RegisteredWorldForSimulation;
+            return world != null
+                ? world.CharacterActionWriter.TryCharacterDatInputFrameJump(this, frameId)
+                : TryCharacterDatInputFrameJumpCompatibility(frameId);
+        }
+
+        internal bool TryCharacterDatInputFrameJumpCompatibility(int frameId)
         {
             bool flipFacing = false;
             if (frameId < 0)
@@ -3599,7 +3603,10 @@ namespace NTSD.Animation.LF2Objects
             if (!TryResolveLateN30InputTriggerCode(out int frameVal))
                 return;
 
-            Runtime?.ClearInputHistoryTail();
+            if (registeredWorld != null)
+                registeredWorld.CharacterInputWriter.ClearInputHistoryTail(Runtime);
+            else
+                Runtime?.ClearInputHistoryTail();
 
             LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
             if (factory == null)
@@ -3716,12 +3723,18 @@ namespace NTSD.Animation.LF2Objects
 
                 if (frameVal == 100)
                 {
-                    teammate.Runtime.Unk3FC = spawnX + (world.Rng.NextRaw() % 0x51) - 0x28;
-                    teammate.Runtime.Unk400 = spawnZ + (world.Rng.NextRaw() % 0x51) - 0x28;
+                    int targetX = spawnX + (world.Rng.NextRaw() % 0x51) - 0x28;
+                    int targetZ = spawnZ + (world.Rng.NextRaw() % 0x51) - 0x28;
+                    world.AiInputWriter.SetCoordinateTarget(
+                        teammate.Runtime,
+                        targetX,
+                        targetZ);
                 }
                 else
                 {
-                    teammate.Runtime.SetInputHistoryGate(enabled);
+                    world.CharacterInputWriter.SetInputHistoryGate(
+                        teammate.Runtime,
+                        enabled);
                 }
             }
         }
@@ -4096,6 +4109,18 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void FreeEntityLikeExe()
         {
+            SimulationWorld world = registeredWorld;
+            if (world != null)
+            {
+                world.StructuralWriter.Free(this);
+                return;
+            }
+
+            FreeEntityLikeExeCoreForStructuralWriter();
+        }
+
+        internal void FreeEntityLikeExeCoreForStructuralWriter()
+        {
             Sprite?.Hide();
             Sprite?.HideShadow();
             if (Renderer != null)
@@ -4120,12 +4145,10 @@ namespace NTSD.Animation.LF2Objects
             if (Frame == null)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = FrameCache?.GetFrameDataById(frameId);
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
-            if (Runtime != null)
-                Runtime.Frame = frameId;
         }
 
         internal void DirectWriteHeldFramePreserveWaitCounter(int frameId)
@@ -4133,12 +4156,10 @@ namespace NTSD.Animation.LF2Objects
             if (Frame == null)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = FrameCache?.GetFrameDataById(frameId);
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
-            if (Runtime != null)
-                Runtime.Frame = frameId;
         }
 
         public virtual void DirectWriteFrameImmediateWaitReset(int frameId)
@@ -4212,7 +4233,7 @@ namespace NTSD.Animation.LF2Objects
             if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
                 EnsureSharedCharacterDatControllerForSimulation();
 
-            Frame.N = targetFrameId;
+            WriteCurrentFrameId(targetFrameId);
             Frame.D = FrameCache.GetFrameDataById(targetFrameId);
             if (Frame.D != null)
             {
@@ -4473,7 +4494,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void QueueBattleSound(string soundId)
         {
-            if (string.IsNullOrEmpty(soundId))
+            if (string.IsNullOrWhiteSpace(soundId))
                 return;
 
             Match?.QueueSound(soundId, GetRuntimeXInt());
@@ -4507,7 +4528,7 @@ namespace NTSD.Animation.LF2Objects
                    semantic == (int)ReleaseSpawnSemantic.TransitionEffect;
         }
 
-        protected virtual bool IsBlockedByReleaseLinkOrCaughtCpoint()
+        protected internal virtual bool IsBlockedByReleaseLinkOrCaughtCpoint()
         {
             return Runtime.LinkState < 0;
         }
@@ -4613,7 +4634,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 Frame.PN = 0;
                 Frame.Prev = 0;
-                Frame.N = 0;
+                WriteCurrentFrameId(0);
                 Frame.D = null;
                 Frame.Prev2 = 0;
                 Frame.Prev2D = null;
@@ -4653,135 +4674,22 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual void RunCpointCheckStep10()
         {
-            // step10 cpoint 维护是 battle loop 的交互阶段逻辑。
-            // 它读取的是 collision snapshot / runtime link / cpoint 数据，
-            // 不属于角色本地 `DispatchCurrentStateEvent(...)` 的 state 事件。
-            LF2FrameData catcherFrame = GetCollisionFrameData();
-            CatchPoint cpoint = catcherFrame?.cpoint;
-            if (cpoint == null || cpoint.kind != 1 || FrameDelay < 0)
-                return;
-
-            LF2Entity victim = Match?.FindEntityByRuntimeSlotForQuery(CaughtSlotIndex);
-            if (victim == null || victim.Frame == null)
-            {
-                DirectWriteFrameImmediateWaitReset(0);
-                return;
-            }
-
-            LF2FrameData victimFrame = victim.GetCollisionFrameData();
-            if (victim.CatcherSlotIndex != (Runtime?.SlotIndex ?? -1) ||
-                victimFrame?.cpoint == null ||
-                victimFrame.cpoint.kind != 2)
-            {
-                DirectWriteFrameImmediateWaitReset(0);
-                return;
-            }
-
-            if (catcherFrame.state == LF2States.Catching)
-                SyncCaughtByCpointStep10(victim, catcherFrame, cpoint);
-
-            if (cpoint.decrease > 0)
-            {
-                Runtime.CaughtDuration -= cpoint.decrease;
-            }
-            else if (cpoint.decrease < 0)
-            {
-                Runtime.CaughtDuration += cpoint.decrease;
-                if (Runtime.CaughtDuration < 0)
-                {
-                    DirectWriteFrameImmediateWaitReset(0);
-                    victim.DirectWriteFrameImmediateWaitReset(181);
-                    HitCount = 1;
-                    victim.HitCount = 1;
-                    victim.KnockbackVx = GetReleaseXInt() > victim.GetReleaseXInt() ? -4f : 4f;
-                    victim.KnockbackVy = -3f;
-                    victim.Runtime.Vx = victim.KnockbackVx;
-                    victim.Runtime.Vy = victim.KnockbackVy;
-                    return;
-                }
-            }
-
-            RunCpointActionSelectionStep10(cpoint, victim);
-
-            if (cpoint.throwvx != 0)
-                ApplyCpointThrowStep10(cpoint, victim, catcherFrame);
-
-            ApplyCpointDirControlStep10(cpoint);
+            Match?.CpointWriter.RunKind1(Match, this);
         }
 
         public virtual void RunCpointMismatchTailStep10()
         {
-            // 这里是 step10 的 mismatch 收尾，
-            // 仍然属于 pass 级交互维护，不是 frame/TU/state_entry 一类本地事件。
-            CatchPoint cpoint = Frame?.D?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
-                return;
-
-            bool valid = false;
-            LF2Entity catcher = Match?.FindEntityByRuntimeSlotForQuery(CatcherSlotIndex);
-            if (catcher != null && catcher.CaughtSlotIndex == (Runtime?.SlotIndex ?? -1))
-            {
-                CatchPoint catcherCpoint = catcher.Frame?.D?.cpoint;
-                valid = catcherCpoint != null && catcherCpoint.kind == 1;
-            }
-
-            if (valid)
-                return;
-
-            SetCpointRawFramePreserveWait(212);
-            Runtime.Vy = -3f;
-            if (Runtime.Y > -2f)
-                Runtime.Y = -2f;
-            RefreshRuntimeSnapshot();
+            Match?.CpointWriter.RunKind2Validation(Match, this);
         }
 
         public virtual void RunWeaponSyncHeldStep10()
         {
-            LF2FrameData currentFrame = Frame?.D;
-            CatchPoint cpoint = currentFrame?.cpoint;
-            if (currentFrame == null || cpoint == null || cpoint.kind != 1 || currentFrame.state != LF2States.Catching)
-                return;
-
-            LF2Entity victim = Match?.FindEntityByRuntimeSlotForQuery(CaughtSlotIndex);
-            if (victim == null || victim.CatcherSlotIndex != (Runtime?.SlotIndex ?? -1))
-                return;
-
-            LF2FrameData victimFrame = victim.Frame?.D;
-            if (victimFrame?.cpoint == null || victimFrame.cpoint.kind != 2)
-                return;
-
-            SyncCaughtByCpointStep10(victim, currentFrame, cpoint);
+            Match?.CpointWriter.SyncHeldCpoint(Match, this);
         }
 
         public virtual void ClearHitCandidateCarriers()
         {
             HitConfirm2 = 0;
-        }
-
-        protected virtual void RunCpointActionSelectionStep10(CatchPoint cpoint, LF2Entity victimEntity)
-        {
-            if (Runtime == null || cpoint == null || victimEntity == null)
-                return;
-
-            bool attackReady = IsSharedCharacterDatAttackInputReadyInternal();
-            bool jumpReady = IsSharedCharacterDatJumpInputReadyInternal();
-
-            if (attackReady && cpoint.aaction != 0)
-            {
-                bool dirOk = (Runtime.KeyLeft == 0 && Runtime.KeyRight == 0) || cpoint.taction == 0;
-                if (dirOk)
-                    ApplySharedCpointActionStep10(cpoint.aaction, victimEntity);
-            }
-
-            if (attackReady && cpoint.taction != 0)
-            {
-                bool anyDir = Runtime.KeyLeft != 0 || Runtime.KeyRight != 0 || Runtime.KeyUp != 0 || Runtime.KeyDown != 0;
-                if (anyDir)
-                    ApplySharedCpointActionStep10(cpoint.taction, victimEntity);
-            }
-
-            if (jumpReady && cpoint.jaction != 0)
-                ApplySharedCpointActionStep10(cpoint.jaction, victimEntity);
         }
 
         protected virtual void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity)
@@ -4837,7 +4745,7 @@ namespace NTSD.Animation.LF2Objects
             victimEntity.SetCpointRawPrevFrame2(cpoint.vaction);
         }
 
-        protected void ApplyCpointThrowTransformToSelfAndOwnedObjects(LF2Entity victimEntity)
+        internal void ApplyCpointThrowTransformToSelfAndOwnedObjects(LF2Entity victimEntity)
         {
             if (victimEntity == null)
                 return;
@@ -4867,66 +4775,6 @@ namespace NTSD.Animation.LF2Objects
                 victim.Runtime.Vz = -cpoint.throwvz;
             else if (Runtime.KeyUp == 0 && Runtime.KeyDown != 0)
                 victim.Runtime.Vz = cpoint.throwvz;
-        }
-
-        protected virtual void ApplyCpointDirControlStep10(CatchPoint cpoint)
-        {
-            if (Runtime == null || cpoint == null || AttackingCounter != 2)
-                return;
-
-            if (cpoint.dircontrol == 1)
-            {
-                if (Runtime.KeyRight != 0 && Runtime.KeyLeft == 0)
-                    SwitchDir("right");
-                else if (Runtime.KeyRight == 0 && Runtime.KeyLeft != 0)
-                    SwitchDir("left");
-            }
-            else if (cpoint.dircontrol == -1)
-            {
-                if (Runtime.KeyRight != 0 && Runtime.KeyLeft == 0)
-                    SwitchDir("left");
-                else if (Runtime.KeyRight == 0 && Runtime.KeyLeft != 0)
-                    SwitchDir("right");
-            }
-        }
-
-        protected virtual void ApplyCpointHeldInjuryStep10(LF2Entity victimEntity, int injury)
-        {
-            if (victimEntity == null || victimEntity.Health == null)
-                return;
-
-            if (injury > 0)
-            {
-                int actualInjury = injury;
-                if (victimEntity.FallDamageDiv > 0)
-                    actualInjury = injury * 100 / victimEntity.FallDamageDiv;
-
-                if (victimEntity.Health.HP > 0 &&
-                    actualInjury >= victimEntity.Health.HP &&
-                    victimEntity.KillCount == -1)
-                {
-                    LF2Entity holder = Match?.FindEntityByRuntimeSlotForQuery(HolderCopySlot);
-                    if (holder != null)
-                        holder.KillStat++;
-
-                }
-
-                victimEntity.Health.HP -= actualInjury;
-                victimEntity.Health.HPBound -= actualInjury / 3;
-                victimEntity.ComboCountVic += actualInjury;
-                AttackingCounter = 1;
-                FrameDelay = 2;
-                victimEntity.FrameDelay = -3;
-                LF2Entity comboHolder = Match?.FindEntityByRuntimeSlotForQuery(HolderCopySlot);
-                if (comboHolder != null)
-                    comboHolder.ComboCountAtk += actualInjury;
-
-                return;
-            }
-
-            victimEntity.Health.HP += injury;
-            victimEntity.Health.HPBound += injury / 3;
-            AttackingCounter = 1;
         }
 
         internal bool HasStep10ThrowTransformVictimData(LF2Entity victimEntity)
@@ -4967,18 +4815,6 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             return !requireDefendLockOpen || Runtime.CdDefendLock <= 0;
-        }
-
-        private void ApplySharedCpointActionStep10(int actionFrame, LF2Entity victim)
-        {
-            if (victim == null)
-                return;
-
-            ApplySignedImmediateFrameWaitReset(actionFrame);
-            int victimAction = Frame?.D?.cpoint?.vaction ?? 0;
-            victim.DirectWriteFrameImmediateWaitReset(victimAction);
-            victim.AttackingCounter = 0;
-            AttackingCounter = 0;
         }
 
         internal void ApplySignedCpointActionFramePreserveWait(int frameId)
@@ -5067,30 +4903,6 @@ namespace NTSD.Animation.LF2Objects
             victimEntity.RefreshRuntimeSnapshot();
         }
 
-        private void SyncCaughtByCpointStep10(LF2Entity victim, LF2FrameData catcherFrame, CatchPoint cpoint)
-        {
-            if (victim == null || cpoint == null)
-                return;
-
-            if ((cpoint.hurtable == 0 || (victim.FrameDelay == 0 && cpoint.hurtable == 1)) &&
-                cpoint.vaction != 0)
-            {
-                victim.DirectWriteFrameImmediateWaitReset(cpoint.vaction);
-            }
-
-            if (victim.Frame?.N < 0)
-            {
-                victim.SwitchDir(victim.Runtime.Dir == "left" ? "right" : "left");
-                victim.SetCpointRawFramePreserveWait(-victim.Frame.N);
-            }
-
-            int injury = cpoint.injury;
-            if (injury != 0 && AttackingCounter == 0)
-                ApplyCpointHeldInjuryStep10(victim, injury);
-
-            SyncCpointHeldPositionStep10(victim, catcherFrame, cpoint);
-        }
-
         internal void SetCpointRawFramePreserveWait(int frameId)
             => SetCpointRawFramePreserveWait(frameId, null);
 
@@ -5105,7 +4917,7 @@ namespace NTSD.Animation.LF2Objects
             LF2FrameData targetFrame = sourceFrameMatches
                 ? sourceFrame
                 : FrameCache.GetFrameDataById(frameId);
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
             if (targetFrame != null)
                 Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, Trans?.WaitCounter ?? 0);
@@ -5194,7 +5006,7 @@ namespace NTSD.Animation.LF2Objects
         /// C# 基准工程 FrameTick.Tick 的公共计数器衰减段。
         /// 该段位于 cpoint kind=2 早退之前，所有实体都要按同一顺序执行。
         /// </summary>
-        private void RunReleaseFrameTickCounters()
+        internal void RunReleaseFrameTickCounters()
         {
             // AttackExempt is now decremented in RunCommonFrameTick before LinkState guard (BMD-062)
 
@@ -5238,6 +5050,11 @@ namespace NTSD.Animation.LF2Objects
             HitStun = 15;
         }
 
+        internal void ApplyCaughtExitHitStopForWorldPass(int previousFrameId)
+        {
+            ApplyCommonCaughtExitHitStop(previousFrameId);
+        }
+
         protected virtual bool IsFrameTickLeftPressed() => Runtime?.KeyLeft != 0;
 
         protected virtual bool IsFrameTickRightPressed() => Runtime?.KeyRight != 0;
@@ -5266,6 +5083,11 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Vz = -characterData.jump_distancez;
             else if (IsFrameTickDownPressed() && !IsFrameTickUpPressed())
                 Runtime.Vz = characterData.jump_distancez;
+        }
+
+        internal void ApplyFrame212JumpInitForWorldPass()
+        {
+            ApplyFrame212JumpInit();
         }
 
         /// <summary>
@@ -5308,7 +5130,12 @@ namespace NTSD.Animation.LF2Objects
                 SetFrameTickImmediateRawDirect(turnNext);
         }
 
-        protected bool TryEnterReleaseFrameAdvanceAfterDelay()
+        internal void ApplyFrameTickPpDisplayForWorldPass()
+        {
+            ApplyCommonFrameTickPpDisplayPostAdvance();
+        }
+
+        protected internal bool TryEnterReleaseFrameAdvanceAfterDelay()
         {
             if (ThrowFrameGuard >= 0 && ThrowFrameGuard == (Frame?.N ?? -1))
                 return false;
@@ -5348,10 +5175,21 @@ namespace NTSD.Animation.LF2Objects
                 NTSDGlobal.Gameplay.MinSpeed,
                 NTSDGlobal.Gameplay.Gravity);
 
-            MechanicsStepResult stepResult =
-                sharedCharacterDatMechanics.Step(context);
+            BattleMechanicsStepResult stepResult =
+                ResolveCharacterMechanics().StepBattleLogic(context);
+            if (Frame?.D != null && context.spriteWidthPx > 0f)
+            {
+                Runtime.UpdateSpriteOrigin(
+                    Frame.D.centerx,
+                    Frame.D.centery,
+                    context.spriteWidthPx);
+            }
+            RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
             if (ShouldResolveCharacterLanding(stepResult))
-                ApplySharedCharacterDatLandingIfNeeded(stepResult.verticalVelocityBeforeLanding);
+            {
+                ApplySharedCharacterDatLandingIfNeeded(
+                    stepResult.VerticalVelocityBeforeLanding);
+            }
 
             Runtime.SyncIntegerPosition();
             PromoteSharedCharacterDatState12AirborneFrameIfNeeded(tickIndex);
@@ -5360,9 +5198,19 @@ namespace NTSD.Animation.LF2Objects
 
         }
 
-        protected bool ShouldResolveCharacterLanding(MechanicsStepResult stepResult)
+        protected CharacterMechanics ResolveCharacterMechanics()
         {
-            return stepResult.landed;
+            SimulationWorld world = RegisteredWorldForSimulation;
+            if (world != null)
+                return world.CharacterMechanicsForServices;
+
+            compatibilityCharacterMechanics ??= new CharacterMechanics();
+            return compatibilityCharacterMechanics;
+        }
+
+        internal bool ShouldResolveCharacterLanding(BattleMechanicsStepResult stepResult)
+        {
+            return stepResult.Landed;
         }
 
         protected bool RunSharedNonCharacterDatFrameAdvance()
@@ -5403,6 +5251,7 @@ namespace NTSD.Animation.LF2Objects
 
             double gravity = ResolveCurrentDatWeaponGravity(dataType, frame.state);
             bool landed = CharacterMechanics.WeaponDynamics(Runtime, gravity, out double landingVy);
+            RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
             ApplyCurrentDatNonCharacterLanding(dataType, frame, landingVy, landed);
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
@@ -5724,7 +5573,7 @@ namespace NTSD.Animation.LF2Objects
             SetFrameTickDirect(LF2StandardFrames.Fire2);
         }
 
-        protected void ResetWeaponCountOutsideState12FrameAdvanceTail()
+        protected internal void ResetWeaponCountOutsideState12FrameAdvanceTail()
         {
             LF2FrameData frame = Frame?.D;
             if (frame == null || frame.state != LF2States.Falling)
@@ -5742,10 +5591,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             if (targetFrame != null)
                 Trans?.SyncDirectFrameData(targetFrame.wait, targetFrame.next, waitCounter);
         }
@@ -5889,7 +5736,12 @@ namespace NTSD.Animation.LF2Objects
 
             int currentFrame = Frame?.N ?? -1;
             if (currentFrame == 110 || currentFrame == 114)
-                Runtime.CdDefendLock = 3;
+            {
+                if (registeredWorld != null)
+                    registeredWorld.CharacterInputWriter.SetDefendLock(Runtime, 3);
+                else
+                    Runtime.CdDefendLock = 3;
+            }
             if (currentFrame == 202)
                 HitStun = 20;
 
@@ -5910,15 +5762,13 @@ namespace NTSD.Animation.LF2Objects
             if (Frame == null)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = FrameCache?.GetFrameDataById(frameId);
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
         }
 
-        private void SetFrameTickImmediateRawDirect(int frameId)
+        internal void SetFrameTickImmediateRawDirect(int frameId)
         {
             SetFrameTickRawDirect(frameId);
             if (Runtime != null)
@@ -6023,11 +5873,15 @@ namespace NTSD.Animation.LF2Objects
             StableId = stableId;
         }
 
+        internal void RestoreStableIdAfterLifecycleReset(int stableId)
+        {
+            StableId = stableId;
+        }
+
         /// <summary>重置稳定 ID。</summary>
         protected void ResetStableId()
         {
             StableId = 0;
-            Runtime.StableId = 0;
         }
 
         /// <summary>写入运行时槽位索引。</summary>
@@ -6043,30 +5897,66 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// CharacterInput 只需要把仍由实体组件持有的帧/生命值镜像回 Runtime。
-        /// 输入、速度、朝向、target 与 transition setters 已经直接写 Runtime；这里避免
-        /// 对每个角色重复刷新本 pass 不可能改变的身份、队伍、owner 与统计字段。
+        /// FrameAdvance 的正式角色 writer 已经把 frame、transition、health、motion
+        /// 与计数状态直接写入 Runtime。exact 生产角色无需在同一 pass 尾部重新复制
+        /// 整个对象快照；未知派生类型仍保留虚拟刷新作为兼容边界。
+        /// </summary>
+        internal bool RefreshRuntimeSnapshotAfterFrameAdvance()
+        {
+            if (GetType() == typeof(LF2Character))
+                return false;
+
+            RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        /// <summary>
+        /// 权威碰撞冻结 pass 只把当前 Frame 冻结到 PrevFrame2。exact 生产角色的
+        /// CaptureCollisionFrameSnapshot 已原子更新 Frame.Prev2、Prev2D 与
+        /// Runtime.PrevFrame2，无需随后重建整份 Runtime；未知派生类型保留虚拟回退。
+        /// </summary>
+        internal bool RefreshRuntimeSnapshotAfterCollisionSnapshot()
+        {
+            if (GetType() == typeof(LF2Character))
+                return false;
+
+            RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        /// <summary>
+        /// Frame post-process 与 entity post-frame tail 只修改已经直接绑定 Runtime 的
+        /// motion、hit accumulator、health、timer 与 transient 字段。exact 生产角色无需在
+        /// pass 尾部再次复制整份对象快照；未知派生类型保留虚拟刷新，避免绕过扩展副作用。
+        /// </summary>
+        internal bool RefreshRuntimeSnapshotAfterPostFrameMaintenance()
+        {
+            if (GetType() == typeof(LF2Character))
+                return false;
+
+            RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        /// <summary>
+        /// CharacterInput 的 frame、transition 与 health 写入口已经直接更新 Runtime。
+        /// 保留该空入口作为 U6 迁移期的调用边界，避免默认路径再逐实体复制一遍同一真值；
+        /// 强制 Legacy A/B 仍由 SimulationWorld 直接调用完整 RefreshRuntimeSnapshot。
         /// </summary>
         internal void RefreshRuntimeSnapshotAfterCharacterInput()
         {
-            if (Runtime == null)
-                return;
+        }
 
-            Runtime.Frame = Frame?.N ?? 0;
-            Runtime.WaitCounter = Trans?.WaitCounter ?? 0;
-            Runtime.NextFrame = Trans?.Next ?? 0;
-
-            if (Health == null)
-                return;
-
-            Runtime.HP = Health.HP;
-            Runtime.MP = Health.MP;
-            Runtime.PP = Health.PP;
-            Runtime.PPMax = Health.MaxPP;
-            Runtime.PPBound = Health.PPBound;
-            Runtime.HPLost = Health.HPLost;
-            Runtime.HPBound = Health.HPBound;
-            Runtime.MPMax = Health.MaxMP;
+        /// <summary>
+        /// LateEntityUpdate 的生产角色写入口已经把身份、frame、transition、health 与
+        /// 计数状态直接写入 Runtime。仅当 exact LF2Character 的最小非别名字段也仍然
+        /// 与 Runtime 一致时，才允许省略 pass 尾部的整份对象快照；未知派生类型或
+        /// 发现陈旧字段时继续走完整刷新，保持扩展与异常路径 fail-closed。
+        /// </summary>
+        internal bool RequiresRuntimeSnapshotAfterLateEntityUpdate()
+        {
+            return GetType() != typeof(LF2Character) ||
+                   !IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp();
         }
 
         internal bool IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp()
@@ -6088,11 +5978,6 @@ namespace NTSD.Animation.LF2Objects
         }
 
         protected virtual void RefreshRuntimeFromEntity()
-        {
-            RefreshBaseRuntimeFromEntity();
-        }
-
-        internal void RefreshBaseRuntimeSnapshotForStageBounds()
         {
             RefreshBaseRuntimeFromEntity();
         }

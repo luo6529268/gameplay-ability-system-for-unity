@@ -1,5 +1,7 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Simulation
 {
@@ -13,6 +15,12 @@ namespace NTSD.Simulation
         private int pendingFlushDestroy;
         private long pendingFlushDestroyMutationEpoch;
         [NonSerialized] private SimulationWorldMutationTracker worldMutationTracker;
+        [NonSerialized] private BattleFrameMotionStore frameMotionStore;
+        [NonSerialized] private int frameMotionStoreSlot = -1;
+        [NonSerialized] private BattleRelationLinkStore relationLinkStore;
+        [NonSerialized] private int relationLinkStoreSlot = -1;
+        [NonSerialized] private BattleVitalStore vitalStore;
+        [NonSerialized] private int vitalStoreSlot = -1;
 
         public long PendingFlushDestroyMutationEpochForDiagnostics =>
             Volatile.Read(ref pendingFlushDestroyMutationEpoch);
@@ -29,6 +37,65 @@ namespace NTSD.Simulation
             mutationTracker?.NotifyPendingFlushDestroyMutation();
         }
 
+        internal void BindFrameMotionStore(
+            BattleFrameMotionStore store,
+            int slot)
+        {
+            frameMotionStore = store;
+            frameMotionStoreSlot = store != null ? slot : -1;
+        }
+
+        internal void UnbindFrameMotionStore(
+            BattleFrameMotionStore store,
+            int slot)
+        {
+            if (!ReferenceEquals(frameMotionStore, store) ||
+                frameMotionStoreSlot != slot)
+            {
+                return;
+            }
+
+            frameMotionStore = null;
+            frameMotionStoreSlot = -1;
+        }
+
+        internal void BindRelationLinkStore(
+            BattleRelationLinkStore store,
+            int slot)
+        {
+            relationLinkStore = store;
+            relationLinkStoreSlot = store != null ? slot : -1;
+        }
+
+        internal void UnbindRelationLinkStore(
+            BattleRelationLinkStore store,
+            int slot)
+        {
+            if (!ReferenceEquals(relationLinkStore, store) ||
+                relationLinkStoreSlot != slot)
+            {
+                return;
+            }
+
+            relationLinkStore = null;
+            relationLinkStoreSlot = -1;
+        }
+
+        internal void BindVitalStore(BattleVitalStore store, int slot)
+        {
+            vitalStore = store;
+            vitalStoreSlot = store != null ? slot : -1;
+        }
+
+        internal void UnbindVitalStore(BattleVitalStore store, int slot)
+        {
+            if (!ReferenceEquals(vitalStore, store) || vitalStoreSlot != slot)
+                return;
+
+            vitalStore = null;
+            vitalStoreSlot = -1;
+        }
+
         public int SlotIndex = -1;
         public int StableId;
         public int ObjectId;
@@ -39,14 +106,14 @@ namespace NTSD.Simulation
         public int TransformTargetObjectId = -1;
 
         public int Team;
-        public int RelationTeam;
+        private int relationTeam;
         public int OwnerSlotIndex = -1;
         public int OwnerStableId = -1;
         public int RelationOwnerSlotIndex = -1;
         public int SpawnerSlotIndex = -1;
         public int GrabbedBy;
-        public int LinkState;
-        public int TargetSlotIndex = -1;
+        private int linkState;
+        private int targetSlotIndex = -1;
         public int CaughtSlotIndex = -1;
         public int CatcherSlotIndex = -1;
         public int HeldWeaponStableId = -1;
@@ -102,25 +169,86 @@ namespace NTSD.Simulation
         public double X;
         public double Y;
         public double Z;
-        public int XInt;
-        public int YInt;
-        public int ZInt;
-        public double Vx;
+        private int xInt;
+        private int yInt;
+        private int zInt;
+        private double vx;
         public double Vy;
         public double Vz;
+        private byte facingLeft;
+        private int frame;
+        private int frameState;
+        private int hitStop;
+
+        public int XInt
+        {
+            get => xInt;
+            set => SetFrameMotionValue(ref xInt, value, RuntimeFrameMotionField.XInt);
+        }
+
+        public int YInt
+        {
+            get => yInt;
+            set => SetFrameMotionValue(ref yInt, value, RuntimeFrameMotionField.YInt);
+        }
+
+        public int ZInt
+        {
+            get => zInt;
+            set => SetFrameMotionValue(ref zInt, value, RuntimeFrameMotionField.ZInt);
+        }
+
+        public double Vx
+        {
+            get => vx;
+            set => SetFrameMotionValue(ref vx, value, RuntimeFrameMotionField.Vx);
+        }
+
         public float SpriteX;
         public float SpriteY;
         public float SpriteZ;
         public double Type3VisualZOffset;
         public float RenderOffsetX;
-        public string Dir = "right";
+        public string Dir
+        {
+            get => facingLeft != 0 ? "left" : "right";
+            set
+            {
+                byte nextFacingLeft = value == "left" ? (byte)1 : (byte)0;
+                if (facingLeft == nextFacingLeft)
+                    return;
+
+                facingLeft = nextFacingLeft;
+                frameMotionStore?.CaptureFacing(
+                    frameMotionStoreSlot,
+                    facingLeft != 0);
+            }
+        }
+
+        public bool IsFacingLeft => facingLeft != 0;
+
+        public bool IsFacingRight => facingLeft == 0;
         public float Zz;
         public bool XBoundPositive;
         public bool XBoundNegative;
         public bool ZBoundPositive;
         public bool ZBoundNegative;
 
-        public int Frame;
+        public int Frame
+        {
+            get => frame;
+            set => SetFrameMotionValue(ref frame, value, RuntimeFrameMotionField.Frame);
+        }
+
+        internal int FrameState
+        {
+            get => frameState;
+            set => SetFrameMotionValue(
+                ref frameState,
+                value,
+                RuntimeFrameMotionField.State);
+        }
+
         public int PrevFrame2;
         public int FirstPresentationTick;
         public int SpawnSemantic;
@@ -136,7 +264,15 @@ namespace NTSD.Simulation
         public int NextFrame;
         public int AttackingCounter;
         public int FrameDelay;
-        public int HitStop;
+
+        public int HitStop
+        {
+            get => hitStop;
+            set => SetFrameMotionValue(
+                ref hitStop,
+                value,
+                RuntimeFrameMotionField.HitStop);
+        }
         public double KnockbackVx = 0.1;
         public double KnockbackVy = 0.1;
         public double KnockbackVz = 0.1;
@@ -150,7 +286,7 @@ namespace NTSD.Simulation
         public int HitConfirm2;
         public int HealTimer;
         public int CatchTimer;
-        public int KillCount = -1;
+        private int killCount = -1;
         public int ComboCountVic;
         public int ComboCountAtk;
         public int KillStat;
@@ -193,19 +329,140 @@ namespace NTSD.Simulation
             }
         }
 
-        public int HP = 500;
-        public int HPBound = 500;
-        public int HP3 = 500;
+        private int hp = 500;
+        private int hpBound = 500;
+        private int hp3 = 500;
         public int HPOrig;
         public int HP2Orig;
         public int RespawnCount;
         public int HPLost;
         public int MP = 500;
         public int MPMax = 500;
-        public int PP = 500;
+        private int pp = 500;
         public int PPMax = 500;
         public int PPBound = 500;
         public int PpDisplay;
+
+        public int HP
+        {
+            get => hp;
+            set => SetVitalValue(ref hp, value, RuntimeVitalField.Hp);
+        }
+
+        public int HPBound
+        {
+            get => hpBound;
+            set => SetVitalValue(ref hpBound, value, RuntimeVitalField.HpBound);
+        }
+
+        public int HP3
+        {
+            get => hp3;
+            set => SetVitalValue(ref hp3, value, RuntimeVitalField.Hp3);
+        }
+
+        public int PP
+        {
+            get => pp;
+            set => SetVitalValue(ref pp, value, RuntimeVitalField.Pp);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetVitalValue(
+            ref int field,
+            int value,
+            RuntimeVitalField changedField)
+        {
+            if (field == value)
+                return;
+
+            field = value;
+            vitalStore?.CaptureChangedField(vitalStoreSlot, changedField, value);
+        }
+
+        public int RelationTeam
+        {
+            get => relationTeam;
+            set => SetRelationLinkValue(
+                ref relationTeam,
+                value,
+                RuntimeRelationLinkField.RelationTeam);
+        }
+
+        public int LinkState
+        {
+            get => linkState;
+            set => SetRelationLinkValue(
+                ref linkState,
+                value,
+                RuntimeRelationLinkField.LinkState);
+        }
+
+        public int KillCount
+        {
+            get => killCount;
+            set => SetRelationLinkValue(
+                ref killCount,
+                value,
+                RuntimeRelationLinkField.KillCount);
+        }
+
+        public int TargetSlotIndex
+        {
+            get => targetSlotIndex;
+            set => SetRelationLinkValue(
+                ref targetSlotIndex,
+                value,
+                RuntimeRelationLinkField.TargetSlot);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetRelationLinkValue(
+            ref int field,
+            int value,
+            RuntimeRelationLinkField changedField)
+        {
+            if (field == value)
+                return;
+
+            field = value;
+            relationLinkStore?.CaptureChangedField(
+                relationLinkStoreSlot,
+                changedField,
+                value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetFrameMotionValue(
+            ref double field,
+            double value,
+            RuntimeFrameMotionField changedField)
+        {
+            if (field.Equals(value))
+                return;
+
+            field = value;
+            frameMotionStore?.CaptureChangedField(
+                frameMotionStoreSlot,
+                changedField,
+                value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetFrameMotionValue(
+            ref int field,
+            int value,
+            RuntimeFrameMotionField changedField)
+        {
+            if (field == value)
+                return;
+
+            field = value;
+            frameMotionStore?.CaptureChangedField(
+                frameMotionStoreSlot,
+                changedField,
+                value);
+        }
 
         public void SetPosition(double x, double y, double z)
         {
@@ -223,9 +480,21 @@ namespace NTSD.Simulation
 
         public void SyncIntegerPosition()
         {
-            XInt = (int)X;
-            YInt = (int)Y;
-            ZInt = (int)Z;
+            int nextX = (int)X;
+            int nextY = (int)Y;
+            int nextZ = (int)Z;
+
+            if (xInt == nextX && yInt == nextY && zInt == nextZ)
+                return;
+
+            xInt = nextX;
+            yInt = nextY;
+            zInt = nextZ;
+            frameMotionStore?.CaptureIntegerPosition(
+                frameMotionStoreSlot,
+                nextX,
+                nextY,
+                nextZ);
         }
 
         public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)
@@ -349,6 +618,185 @@ namespace NTSD.Simulation
                 InputHistory = new int[6];
         }
 
+        internal bool HasCanonicalSnapshotStorage =>
+            InputHistory != null && InputHistory.Length == 6;
+
+        internal bool TryCopyCanonicalStateTo(NTSDEntityRuntime destination)
+        {
+            if (destination == null ||
+                !HasCanonicalSnapshotStorage ||
+                !destination.HasCanonicalSnapshotStorage)
+            {
+                return false;
+            }
+
+            destination.pendingFlushDestroy =
+                Volatile.Read(ref pendingFlushDestroy);
+            destination.pendingFlushDestroyMutationEpoch =
+                Volatile.Read(ref pendingFlushDestroyMutationEpoch);
+            destination.SlotIndex = SlotIndex;
+            destination.StableId = StableId;
+            destination.ObjectId = ObjectId;
+            destination.ObjType = ObjType;
+            destination.EntityType = EntityType;
+            destination.TransformOriginalObjectId = TransformOriginalObjectId;
+            destination.TransformTargetObjectId = TransformTargetObjectId;
+            destination.Team = Team;
+            destination.relationTeam = relationTeam;
+            destination.OwnerSlotIndex = OwnerSlotIndex;
+            destination.OwnerStableId = OwnerStableId;
+            destination.RelationOwnerSlotIndex = RelationOwnerSlotIndex;
+            destination.SpawnerSlotIndex = SpawnerSlotIndex;
+            destination.GrabbedBy = GrabbedBy;
+            destination.linkState = linkState;
+            destination.targetSlotIndex = targetSlotIndex;
+            destination.CaughtSlotIndex = CaughtSlotIndex;
+            destination.CatcherSlotIndex = CatcherSlotIndex;
+            destination.HeldWeaponStableId = HeldWeaponStableId;
+            destination.ThrowFrameGuard = ThrowFrameGuard;
+            destination.ReleaseTick = ReleaseTick;
+            destination.CaughtDuration = CaughtDuration;
+            destination.PickupCount = PickupCount;
+            destination.CaughtFrontFlag = CaughtFrontFlag;
+            destination.CatchingStateTU = CatchingStateTU;
+            destination.JumpAttackLock = JumpAttackLock;
+            destination.AnimCounter = AnimCounter;
+            destination.AnimSub = AnimSub;
+            destination.LateSpecialTargetX = LateSpecialTargetX;
+            destination.LateSpecialTargetZ = LateSpecialTargetZ;
+            Array.Copy(InputHistory, destination.InputHistory, InputHistory.Length);
+            destination.CdAttack = CdAttack;
+            destination.CdJump = CdJump;
+            destination.CdDefend = CdDefend;
+            destination.CdDefendLock = CdDefendLock;
+            destination.CdRight = CdRight;
+            destination.CdLeft = CdLeft;
+            destination.CdUp = CdUp;
+            destination.CdDown = CdDown;
+            destination.ComboDra = ComboDra;
+            destination.ComboDla = ComboDla;
+            destination.ComboDua = ComboDua;
+            destination.ComboDda = ComboDda;
+            destination.ComboDrj = ComboDrj;
+            destination.ComboDlj = ComboDlj;
+            destination.ComboDuj = ComboDuj;
+            destination.ComboDdj = ComboDdj;
+            destination.ComboDja = ComboDja;
+            destination.PrevUp = PrevUp;
+            destination.PrevDown = PrevDown;
+            destination.PrevLeft = PrevLeft;
+            destination.PrevRight = PrevRight;
+            destination.PrevJump = PrevJump;
+            destination.PrevDefend = PrevDefend;
+            destination.PrevAttack = PrevAttack;
+            destination.KeyUp = KeyUp;
+            destination.KeyDown = KeyDown;
+            destination.KeyLeft = KeyLeft;
+            destination.KeyRight = KeyRight;
+            destination.KeyAttack = KeyAttack;
+            destination.KeyJump = KeyJump;
+            destination.KeyDefend = KeyDefend;
+            destination.HolderStableId = HolderStableId;
+            destination.HolderCopySlotIndex = HolderCopySlotIndex;
+            destination.PickerStableId = PickerStableId;
+            destination.TrackerFlag = TrackerFlag;
+            destination.AiControlled = AiControlled;
+            destination.X = X;
+            destination.Y = Y;
+            destination.Z = Z;
+            destination.xInt = xInt;
+            destination.yInt = yInt;
+            destination.zInt = zInt;
+            destination.vx = vx;
+            destination.Vy = Vy;
+            destination.Vz = Vz;
+            destination.facingLeft = facingLeft;
+            destination.frame = frame;
+            destination.frameState = frameState;
+            destination.hitStop = hitStop;
+            destination.SpriteX = SpriteX;
+            destination.SpriteY = SpriteY;
+            destination.SpriteZ = SpriteZ;
+            destination.Type3VisualZOffset = Type3VisualZOffset;
+            destination.RenderOffsetX = RenderOffsetX;
+            destination.Zz = Zz;
+            destination.XBoundPositive = XBoundPositive;
+            destination.XBoundNegative = XBoundNegative;
+            destination.ZBoundPositive = ZBoundPositive;
+            destination.ZBoundNegative = ZBoundNegative;
+            destination.PrevFrame2 = PrevFrame2;
+            destination.FirstPresentationTick = FirstPresentationTick;
+            destination.SpawnSemantic = SpawnSemantic;
+            destination.SuppressFrameTickUntilTick = SuppressFrameTickUntilTick;
+            destination.SuppressLateFrameTickUntilTick = SuppressLateFrameTickUntilTick;
+            destination.SuppressPostInteractionUntilTick = SuppressPostInteractionUntilTick;
+            destination.SuppressObjectInteractionUntilTick = SuppressObjectInteractionUntilTick;
+            destination.SuppressPreInteractionUntilTick = SuppressPreInteractionUntilTick;
+            destination.SuppressCollisionCandidateUntilTick = SuppressCollisionCandidateUntilTick;
+            destination.RenderPicOffset = RenderPicOffset;
+            destination.WaitCounter = WaitCounter;
+            destination.FrameWaitCounter = FrameWaitCounter;
+            destination.NextFrame = NextFrame;
+            destination.AttackingCounter = AttackingCounter;
+            destination.FrameDelay = FrameDelay;
+            destination.KnockbackVx = KnockbackVx;
+            destination.KnockbackVy = KnockbackVy;
+            destination.KnockbackVz = KnockbackVz;
+            destination.ShakeTimer = ShakeTimer;
+            destination.AttackExempt = AttackExempt;
+            destination.HitStateCount = HitStateCount;
+            destination.Fall = Fall;
+            destination.Bdefend = Bdefend;
+            destination.HitCount = HitCount;
+            destination.HitConfirmEa = HitConfirmEa;
+            destination.HitConfirm2 = HitConfirm2;
+            destination.HealTimer = HealTimer;
+            destination.CatchTimer = CatchTimer;
+            destination.killCount = killCount;
+            destination.ComboCountVic = ComboCountVic;
+            destination.ComboCountAtk = ComboCountAtk;
+            destination.KillStat = KillStat;
+            destination.Unk328 = Unk328;
+            destination.Unk32C = Unk32C;
+            destination.Unk330 = Unk330;
+            destination.Unk334 = Unk334;
+            destination.Unk338 = Unk338;
+            destination.Unk344 = Unk344;
+            destination.Unk360 = Unk360;
+            destination.Unk3FC = Unk3FC;
+            destination.Unk400 = Unk400;
+            destination.ShotCount = ShotCount;
+            destination.WeaponCount = WeaponCount;
+            destination.FallDamageDiv = FallDamageDiv;
+            destination.WeaponFlightCounter = WeaponFlightCounter;
+            destination.WeaponDropHurt = WeaponDropHurt;
+            destination.WeaponState = WeaponState;
+            destination.Blink = Blink;
+            destination.HitCandidateCount = HitCandidateCount;
+            destination.HitCandidateNearestDistance = HitCandidateNearestDistance;
+            destination.HitCandidateKind1Distance = HitCandidateKind1Distance;
+            destination.HitCandidateExtraDistance = HitCandidateExtraDistance;
+            destination.TransientMp = TransientMp;
+            destination.TransientMp2 = TransientMp2;
+            destination.TransientMp3 = TransientMp3;
+            destination.TransientMp4 = TransientMp4;
+            destination.OidMergeDormant = OidMergeDormant;
+            destination.hp = hp;
+            destination.hpBound = hpBound;
+            destination.hp3 = hp3;
+            destination.HPOrig = HPOrig;
+            destination.HP2Orig = HP2Orig;
+            destination.RespawnCount = RespawnCount;
+            destination.HPLost = HPLost;
+            destination.MP = MP;
+            destination.MPMax = MPMax;
+            destination.pp = pp;
+            destination.PPMax = PPMax;
+            destination.PPBound = PPBound;
+            destination.PpDisplay = PpDisplay;
+            return true;
+        }
+
         public void Reset()
         {
             SlotIndex = -1;
@@ -437,6 +885,7 @@ namespace NTSD.Simulation
             Zz = 0f;
             ClearBounds();
             Frame = 0;
+            FrameState = 0;
             PrevFrame2 = 0;
             FirstPresentationTick = 0;
             SpawnSemantic = 0;

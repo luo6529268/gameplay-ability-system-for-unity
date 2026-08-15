@@ -10,6 +10,7 @@ using NTSD.DatParser;
 using NTSD.Game;
 using NTSD.Input;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Presentation;
 using NTSD.Simulation.Spatial;
 using UnityEngine;
@@ -407,6 +408,7 @@ namespace NTSD.Test
                    authorityTable.TryResolve(handle399, out LF2Entity resolved399) &&
                    ReferenceEquals(resolved399, entity399),
                 "runtime entity handles must resolve only their current claimed occupants");
+
             Expect(authorityTable.GetRawRuntime(255) != null &&
                    !ReferenceEquals(authorityTable.GetRawRuntime(255), entity255.Runtime),
                 "runtime slot entries must own independent raw runtime storage");
@@ -1938,14 +1940,16 @@ namespace NTSD.Test
                 BuildCollisionAuditData("SelfCheck_LooseQuadtreeKind5", kind5Frame));
             kind5Entity.Runtime.SetPosition(100, 0, 30);
             kind5Entity.Runtime.SyncIntegerPosition();
-            kind5Entity.PS.dir = "right";
+            kind5Entity.Runtime.Dir = "right";
+            kind5Entity.PS.dir = "left";
             Expect(BruteForceSceneQuery.TryBuildCollisionBroadphaseAabb(
                        kind5Entity,
                        kind5Frame,
                        out SpatialAabbXZ rightKind5Bounds) &&
                    rightKind5Bounds.Equals(new SpatialAabbXZ(60, 15, 80, 45)),
                 "shadow broadphase bounds must include kind5 and default zwidth=15 from the collision snapshot");
-            kind5Entity.PS.dir = "left";
+            kind5Entity.Runtime.Dir = "left";
+            kind5Entity.PS.dir = "right";
             Expect(BruteForceSceneQuery.TryBuildCollisionBroadphaseAabb(
                        kind5Entity,
                        kind5Frame,
@@ -2268,13 +2272,15 @@ namespace NTSD.Test
             world.Register(holder);
             world.Register(attacker);
 
-            var resolveHolder = typeof(LF2SpecialAttack).GetMethod(
+            var resolveHolder = typeof(BattleDamageWriter).GetMethod(
                 "ResolveActiveHolder",
                 System.Reflection.BindingFlags.Static |
                 System.Reflection.BindingFlags.NonPublic);
             Expect(resolveHolder != null,
-                "extended service boundary fixture must retain the special-attack holder resolver");
-            LF2Entity resolvedHolder = resolveHolder.Invoke(null, new object[] { attacker }) as LF2Entity;
+                "extended service boundary fixture must retain the canonical damage-writer holder resolver");
+            LF2Entity resolvedHolder = resolveHolder.Invoke(
+                null,
+                new object[] { world, attacker }) as LF2Entity;
             Expect(ReferenceEquals(resolvedHolder, holder),
                 "special-attack holder resolution must accept the final slot of an extended world");
 
@@ -2299,13 +2305,13 @@ namespace NTSD.Test
             };
             using (new TemporaryRuntimeObjectConfigs(karasuTypes, karasuWrappers))
             {
-                var replaceKarasu = typeof(LF2SpecialAttack).GetMethod(
+                var replaceKarasu = typeof(BattleDamageWriter).GetMethod(
                     "ReplaceWithActiveKarasuData",
-                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.Static |
                     System.Reflection.BindingFlags.NonPublic);
                 Expect(replaceKarasu != null,
-                    "extended service boundary fixture must retain the Karasu replacement helper");
-                replaceKarasu.Invoke(attacker, null);
+                    "extended service boundary fixture must retain the canonical damage-writer Karasu replacement helper");
+                replaceKarasu.Invoke(null, new object[] { world, attacker });
             }
 
             Expect(attacker.ObjectId == 209,
@@ -11732,7 +11738,8 @@ namespace NTSD.Test
                 weaponOid: 990,
                 weaponType: (int)LF2ObjectType.LightWeapon,
                 wpoint: new WeaponPoint { weaponact = 0, dvx = 8, dvy = -3 },
-                release: (holder, weapon, wpoint) => weapon.Act(holder, wpoint, Vector3.zero),
+                release: (_, holder, weapon, wpoint) =>
+                    weapon.Act(holder, wpoint, Vector3.zero),
                 expectedReleaseTick: 37);
             RunAudit7WeaponReleaseTickCase(
                 "Kind3",
@@ -11742,8 +11749,8 @@ namespace NTSD.Test
                 weaponOid: 991,
                 weaponType: (int)LF2ObjectType.LightWeapon,
                 wpoint: new WeaponPoint { weaponact = 0, kind = 3 },
-                release: (holder, weapon, wpoint) =>
-                    LF2HeldObjectRuntime.RunStep12(holder, weapon, wpoint, out _),
+                release: (world, holder, weapon, wpoint) =>
+                    world.HeldObjectWriter.RunStep12(holder, weapon, wpoint, out _),
                 expectedReleaseTick: 41);
             RunAudit7WeaponReleaseTickCase(
                 "Consume",
@@ -11754,7 +11761,8 @@ namespace NTSD.Test
                 weaponType: (int)LF2ObjectType.Drink,
                 wpoint: new WeaponPoint { weaponact = 0 },
                 beforeRelease: weapon => weapon.Health.HP = 1,
-                release: (holder, weapon, wpoint) => weapon.Act(holder, wpoint, Vector3.zero),
+                release: (_, holder, weapon, wpoint) =>
+                    weapon.Act(holder, wpoint, Vector3.zero),
                 expectedReleaseTick: 43);
             RunAudit7WeaponReleaseTickCase(
                 "DamagedDrop",
@@ -11765,7 +11773,8 @@ namespace NTSD.Test
                 weaponType: (int)LF2ObjectType.LightWeapon,
                 wpoint: new WeaponPoint { weaponact = 0 },
                 beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
-                release: (holder, weapon, wpoint) => weapon.Act(holder, wpoint, Vector3.zero),
+                release: (_, holder, weapon, wpoint) =>
+                    weapon.Act(holder, wpoint, Vector3.zero),
                 expectedReleaseTick: preservedTick);
             RunAudit7WeaponReleaseTickCase(
                 "CharacterDropWeapon",
@@ -11776,7 +11785,7 @@ namespace NTSD.Test
                 weaponType: (int)LF2ObjectType.LightWeapon,
                 wpoint: new WeaponPoint(),
                 beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
-                release: (holder, weapon, _) => holder.DropWeapon(6f, -2f),
+                release: (_, holder, weapon, wpoint) => holder.DropWeapon(6f, -2f),
                 expectedReleaseTick: preservedTick);
         }
 
@@ -11841,7 +11850,11 @@ namespace NTSD.Test
             held.Runtime.ReleaseTick = previousReleaseTick;
             held.GrabbedBy = -1;
 
-            bool ran = LF2HeldObjectRuntime.RunStep12(holder, held, wpoint, out WeaponActResult result);
+            bool ran = world.HeldObjectWriter.RunStep12(
+                holder,
+                held,
+                wpoint,
+                out WeaponActResult result);
 
             Expect(ran && result.ForceDrop == expectDamagedDrop,
                 $"BATTLE-AUDIT9-LP-01: generic held {label} must enter the expected production release path");
@@ -11871,7 +11884,7 @@ namespace NTSD.Test
             int weaponType,
             WeaponPoint wpoint,
             Action<HeldActSelfCheckWeapon> beforeRelease = null,
-            Action<LF2Character, HeldActSelfCheckWeapon, WeaponPoint> release = null,
+            Action<SimulationWorld, LF2Character, HeldActSelfCheckWeapon, WeaponPoint> release = null,
             int expectedReleaseTick = -1)
         {
             LF2FrameData holderFrame = Frame(0, holderState, 1, 0, 0, 0);
@@ -11918,7 +11931,7 @@ namespace NTSD.Test
             holder.Runtime.ThrowFrameGuard = 31;
             beforeRelease?.Invoke(weapon);
 
-            release?.Invoke(holder, weapon, wpoint);
+            release?.Invoke(world, holder, weapon, wpoint);
 
             bool consume = label == "Consume";
             bool forceDrop = label == "CharacterDropWeapon";
@@ -12242,7 +12255,11 @@ namespace NTSD.Test
             held.Runtime.HolderStableId = 10;
             held.GrabbedBy = -1;
 
-            bool ran = LF2HeldObjectRuntime.RunStep12(holder, held, holderWPoint, out WeaponActResult result);
+            bool ran = world.HeldObjectWriter.RunStep12(
+                holder,
+                held,
+                holderWPoint,
+                out WeaponActResult result);
 
             Expect(ran, $"BATTLE-AUDIT3-12: generic held step12 fixture {label} must enter production runtime");
             verify(held, result);
@@ -12905,6 +12922,8 @@ namespace NTSD.Test
             var attacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
             attacker.BindData("SelfCheck_Audit4NonLivingAttacker", 944, hitData);
             LF2Character victim = CreateCharacter("SelfCheck_Audit4RealVictim", 2, hitData);
+            cleanupWorld.Register(attacker);
+            cleanupWorld.Register(victim);
             attacker.SwitchDir("right");
             victim.SwitchDir("right");
             victim.FallCounter = 20;
@@ -12917,6 +12936,7 @@ namespace NTSD.Test
 
             var sharedVictim = new FlowSelfCheckEntity(LF2ObjectType.Character);
             sharedVictim.BindData("SelfCheck_Audit4SharedVictim", 3, hitData);
+            cleanupWorld.Register(sharedVictim);
             sharedVictim.Health.HP = 100;
             sharedVictim.Health.HPBound = 100;
             sharedVictim.FallCounter = 20;
@@ -12937,6 +12957,8 @@ namespace NTSD.Test
             flyingWeapon.Trans.SetWait(flyingWeapon.Frame.D.wait, 61);
             LF2Character flyingVictim = CreateCharacter(
                 "SelfCheck_Audit4FlyingWeaponVictim", 8, hitData);
+            cleanupWorld.Register(flyingWeapon);
+            cleanupWorld.Register(flyingVictim);
             flyingVictim.SwitchDir("right");
             bool flyingHit = flyingVictim.Hit(
                 new InteractionArea { kind = 0, injury = 1, fall = 1, dvx = 4, arest = 4, vrest = 0 },
@@ -12950,6 +12972,8 @@ namespace NTSD.Test
 
             var sparkAttacker = CreateCharacter("SelfCheck_Audit4SparkAttacker", 4, hitData);
             var sparkVictim = CreateCharacter("SelfCheck_Audit4SparkVictim", 5, hitData);
+            cleanupWorld.Register(sparkAttacker);
+            cleanupWorld.Register(sparkVictim);
             sparkAttacker.Runtime.ZInt = 20;
             sparkVictim.Runtime.ZInt = 10;
             var sparkItr = MakeInteractionItr(kind: 0, vrest: 0, injury: 1, dvx: 1);
@@ -14000,8 +14024,11 @@ namespace NTSD.Test
             grabbed.HoldWeapon(heldMarker);
             int heldSlot = grabbed.Runtime.HeldWeaponStableId;
 
-            bool grabbedResult = LF2CharacterInteractionResolver.TryApplyKind3Grab(grabber, grabbed,
-                new InteractionArea { kind = 3, catchingact = new[] { 297 }, caughtact = new[] { 130 } });
+            bool grabbedResult = grabWorld.InteractionWriter.TryApplyGrab(
+                grabber,
+                grabbed,
+                new InteractionArea { kind = 3, catchingact = new[] { 297 }, caughtact = new[] { 130 } },
+                3);
             Expect(grabbedResult && grabber.Frame.N == 297 && grabbed.Frame.N == 130 &&
                    grabber.Trans.WaitCounter == 41 && grabbed.Trans.WaitCounter == 52,
                 "BATTLE-AUDIT4-NARUTO: kind3 must raw-write 297/130 while preserving wait counters");
@@ -14020,8 +14047,11 @@ namespace NTSD.Test
             sharedGrabbed.Runtime.SetPosition(150.0, 0.0, 0.0);
             sharedGrabbed.Runtime.SyncIntegerPosition();
             grabber.CaughtSlotIndex = -1;
-            bool sharedGrab = LF2CharacterInteractionResolver.TryApplyKind3Grab(grabber, sharedGrabbed,
-                new InteractionArea { kind = 3, catchingact = new[] { 297 }, caughtact = new[] { 130 } });
+            bool sharedGrab = grabWorld.InteractionWriter.TryApplyGrab(
+                grabber,
+                sharedGrabbed,
+                new InteractionArea { kind = 3, catchingact = new[] { 297 }, caughtact = new[] { 130 } },
+                3);
             Expect(sharedGrab && sharedGrabbed.Frame.N == 130 &&
                    sharedGrabbed.CatcherSlotIndex == grabber.Runtime.SlotIndex,
                 "BATTLE-AUDIT4-NARUTO: kind3 must accept a current character-DAT shell");
@@ -14671,6 +14701,9 @@ namespace NTSD.Test
             specialVictim.BindData("SelfCheck_Audit4SpecialVictim", 210, specialData);
             var specialAttacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
             specialAttacker.BindData("SelfCheck_Audit4SpecialAttacker", 948, BuildAudit4StandardHitData("SelfCheck_Audit4SpecialAttacker"));
+            var specialDamageWorld = new SimulationWorld();
+            specialDamageWorld.Register(specialVictim);
+            specialDamageWorld.Register(specialAttacker);
             specialVictim.KnockbackVx = -3.0;
             bool specialHit = specialVictim.Hit(new InteractionArea { kind = 0, effect = 2 }, specialAttacker);
             Expect(specialHit && specialVictim.Frame.N == 203 && specialVictim.Runtime.Dir == "left" &&
@@ -14804,10 +14837,19 @@ namespace NTSD.Test
                 FlowSelfCheckEntity attacker = Attacker(world, "SelfCheck_C25_Attacker");
                 AlternateDamageSelfCheckWeapon victim = Weapon(world, "SelfCheck_C25_RawKind9", 983, 1);
                 int flightBefore = victim.Runtime.WeaponFlightCounter;
-                Expect(!victim.Hit(Itr(kind: 9, injury: 9), attacker) &&
+                int hpBefore = victim.Health.HP;
+                int frameBefore = victim.Frame.N;
+                int fallBefore = victim.FallCounter;
+                int hitCountBefore = victim.HitCount;
+                Expect(victim.Hit(Itr(kind: 9, injury: 9, effect: 5), attacker) &&
                        victim.Runtime.WeaponFlightCounter == flightBefore &&
-                       world.PendingSounds.Count == 0,
-                    "BATTLE-C25: an unconverted kind9 must not enter ordinary weapon hurt");
+                       victim.Health.HP == hpBefore &&
+                       victim.Frame.N == frameBefore &&
+                       victim.FallCounter == fallBefore &&
+                       victim.HitCount == hitCountBefore &&
+                       world.PendingSounds.Count == 1 &&
+                       world.PendingSounds[0].Cue == "SFX_004",
+                    "BATTLE-C25: an unconverted kind9 must record only its effect sound without entering ordinary weapon hurt");
             }
 
             {
@@ -15014,13 +15056,13 @@ namespace NTSD.Test
             bool Dispatch(LF2SpecialAttack attacker, SimulationWorld world, InteractionArea itr, LF2Entity target)
                 => (bool)dispatch.Invoke(attacker, new object[] { world.ItrKindService, itr, target });
 
-            System.Reflection.MethodInfo objectHurtTail = typeof(LF2SpecialAttack).GetMethod(
-                "ApplyObjectHurtTail",
-                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            Expect(objectHurtTail != null, "BATTLE-C30: focused matrix requires the production object-hurt tail");
+            System.Reflection.MethodInfo objectHurtTail = typeof(BattleDamageWriter).GetMethod(
+                "ApplySpecialObjectHurtTail",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Expect(objectHurtTail != null, "BATTLE-C30: focused matrix requires the canonical damage-writer object-hurt tail");
 
             void ApplyObjectHurtTail(LF2SpecialAttack victim, LF2Entity attacker, InteractionArea itr)
-                => objectHurtTail.Invoke(victim, new object[] { attacker, itr });
+                => objectHurtTail.Invoke(null, new object[] { victim.Match ?? attacker.Match, attacker, victim, itr });
 
             CurrentDatSelfCheckSpecialAttack C30Victim(
                 SimulationWorld world,
@@ -15826,7 +15868,12 @@ namespace NTSD.Test
                 effect = 0,
             };
 
-            LF2AlternateDamageResolver.ApplyAlternateDamage(attacker, victim, victim.HitCounters, itr);
+            world.DamageWriter.ApplyAlternateDamage(
+                world,
+                attacker,
+                victim,
+                victim.HitCounters,
+                itr);
             victim.RecordKind0Hit(attacker, itr);
 
             Expect(victim.Health.HP == 0 && victim.Health.HPBound == 100,
@@ -16328,7 +16375,12 @@ namespace NTSD.Test
             Expect(LF2Entity.ResolveCurrentDataObjectType(guardVictim) == (int)LF2ObjectType.LightWeapon,
                 "alternate damage guard fixture must expose a formally configured non-character current DAT");
 
-            LF2AlternateDamageResolver.ApplyAlternateDamage(guardAttacker, guardVictim, null, itr);
+            guardWorld.DamageWriter.ApplyAlternateDamage(
+                guardWorld,
+                guardAttacker,
+                guardVictim,
+                null,
+                itr);
 
             Expect(guardVictim.Health.HP == 100 && guardVictim.Health.HPBound == 100,
                 "alternate damage must reject a non-character DAT victim");
@@ -16572,6 +16624,14 @@ namespace NTSD.Test
 
             Expect(highSlotSpawner.Spawned.LateTickCount == 1,
                 "the deferred lower-slot entity must execute exactly once on the next late pass");
+
+            var cachedFactoryWorld = new SimulationWorld();
+            cachedFactoryWorld.Register(new MutationSelfCheckEntity(20));
+            cachedFactoryWorld.Register(new MutationSelfCheckEntity(21));
+            cachedFactoryWorld.LateEntityUpdateAll(5);
+            Expect(cachedFactoryWorld.LastLateOpointFlushCountForDiagnostics == 2 &&
+                   cachedFactoryWorld.LastLateOpointFactoryResolveCountForDiagnostics == 1,
+                "LateEntityUpdate must preserve both per-entity opoint flush boundaries while resolving the pass-stable factory once");
 
             GameObject pendingMountRoot = null;
             try
@@ -21079,8 +21139,8 @@ namespace NTSD.Test
                    human.Runtime.TransientMp4 == 24,
                 "BATTLE-AUDIT7-F6: results-active tick must skip late/post-tail carrier cleanup");
             Expect(world.Runtime.Results.Phase == 200 && world.Runtime.Results.Winner == 0 &&
-                   world.Runtime.Results.Timer == 0,
-                "BATTLE-AUDIT7-F6: active results state must remain the sole results-flow truth");
+                   world.Runtime.Results.Timer == 1,
+                "BATTLE-AUDIT7-F6: active results state must advance exactly once through the dedicated results tick");
         }
 
         private static void CheckBattleResultsSlotAndRelationContracts()
@@ -21124,6 +21184,103 @@ namespace NTSD.Test
 
             CheckBattleResultsNonAliveCase("Dormant", makeFirstInactive: entity => entity.Runtime.OidMergeDormant = true);
             CheckBattleResultsNonAliveCase("ZeroHp", makeFirstInactive: entity => entity.Health.HP = 0);
+            CheckBattleResultsActiveStateMachineContracts();
+        }
+
+        private static void CheckBattleResultsActiveStateMachineContracts()
+        {
+            SimulationWorld world = CreateBattleResultsWorld();
+            FlowSelfCheckEntity controller = RegisterBattleResultsEntity(
+                world, "ActiveController", runtimeSlot: 0, relationTeam: 1, hp: 100);
+            FlowSelfCheckEntity second = RegisterBattleResultsEntity(
+                world, "ActiveSecond", runtimeSlot: 1, relationTeam: 2, hp: 100);
+            BindBattleResultsRosterSlot(world, 0, controller, active: true, rosterTeam: 1);
+            BindBattleResultsRosterSlot(world, 1, second, active: true, rosterTeam: 2);
+            BattleResultsRuntimeState results = world.Runtime.Results;
+
+            results.ActivateSummary(0, 2, 1, 2);
+            controller.Runtime.KeyAttack = 1;
+            controller.Runtime.PrevAttack = 0;
+            world.PendingSounds.Clear();
+            world.RunActiveBattleResultsTick();
+            Expect(results.Phase == 202 && results.SettingsCursor == 2 &&
+                   results.Timer == 1 && world.PendingSounds.Count == 1 &&
+                   world.PendingSounds[0].Cue == "SFX_001",
+                "FW-RESULT-02: summary attack edge must enter settings and advance the results timer once");
+
+            controller.Runtime.PrevAttack = 1;
+            world.PendingSounds.Clear();
+            world.RunActiveBattleResultsTick();
+            Expect(results.Phase == 202 && results.Timer == 2 && world.PendingSounds.Count == 0,
+                "FW-RESULT-02: a held attack must not retrigger a results action without a new edge");
+
+            ClearBattleResultsInput(controller.Runtime);
+            results.Phase = 201;
+            world.PendingSounds.Clear();
+            world.RunActiveBattleResultsTick();
+            Expect(results.Phase == 202 && results.SettingsCursor == 2 &&
+                   world.PendingSounds.Count == 1 && world.PendingSounds[0].Cue == "SFX_004",
+                "FW-RESULT-02: phase 201 must enter authority settings phase 202");
+
+            ClearBattleResultsInput(controller.Runtime);
+            results.Phase = 200;
+            results.Cursor = 5;
+            controller.Runtime.KeyAttack = 1;
+            world.PendingSounds.Clear();
+            world.RunActiveBattleResultsTick();
+            Expect(results.Phase == 210 && results.TableCursor == 10 &&
+                   world.PendingSounds.Count == 1 && world.PendingSounds[0].Cue == "SFX_002",
+                "FW-RESULT-02: summary table action must snapshot and enter phase 210");
+
+            ClearBattleResultsInput(controller.Runtime);
+            controller.Runtime.KeyJump = 1;
+            world.PendingSounds.Clear();
+            world.RunActiveBattleResultsTick();
+            Expect(results.Phase == 200 && world.PendingSounds.Count == 1 &&
+                   world.PendingSounds[0].Cue == "SFX_006",
+                "FW-RESULT-02: phase 210 jump edge must restore the table and return to summary");
+
+            ClearBattleResultsInput(controller.Runtime);
+            results.Phase = 202;
+            results.SettingsCursor = 4;
+            world.Runtime.Match.Difficulty = 0;
+            controller.Runtime.KeyAttack = 1;
+            world.RunActiveBattleResultsTick();
+            Expect(world.Runtime.Match.Difficulty == 2,
+                "FW-RESULT-02: settings difficulty action must wrap 0 to 2 after decrement");
+
+            ClearBattleResultsInput(controller.Runtime);
+            results.Phase = 202;
+            results.SettingsCursor = 3;
+            world.Runtime.Match.StageIdx = 2;
+            world.Runtime.Match.RuntimeStageCount = 3;
+            controller.Runtime.KeyAttack = 1;
+            world.RunActiveBattleResultsTick();
+            Expect(world.Runtime.Match.StageIdx == 0x64 && world.Runtime.Match.RandomStage == 1,
+                "FW-RESULT-02: final concrete stage must advance to the authority random-stage sentinel");
+
+            ClearBattleResultsInput(controller.Runtime);
+            results.Phase = 202;
+            results.SettingsCursor = 0;
+            results.ResultMultiplier[0] = 150;
+            results.ResultMultiplier[1] = 200;
+            results.ResultRow1Values[0, 0] = 7;
+            results.ResultRow2Values[0, 0] = 3;
+            controller.Runtime.KeyAttack = 1;
+            world.RunActiveBattleResultsTick();
+            Expect(results.PendingHostAction == BattleResultsRuntimeState.HostActionRematch &&
+                   controller.FallDamageDiv == 150 && second.FallDamageDiv == 200 &&
+                   world.Runtime.ReserveCommittedTotal[0, 0] == 10 &&
+                   world.Runtime.ReserveCommittedHp[0, 0] == 7,
+                "FW-RESULT-02: rematch action must commit result rows, update fall damage and publish host intent");
+        }
+
+        private static void ClearBattleResultsInput(NTSDEntityRuntime runtime)
+        {
+            runtime.KeyLeft = runtime.KeyRight = runtime.KeyUp = runtime.KeyDown = 0;
+            runtime.KeyAttack = runtime.KeyJump = runtime.KeyDefend = 0;
+            runtime.PrevLeft = runtime.PrevRight = runtime.PrevUp = runtime.PrevDown = 0;
+            runtime.PrevAttack = runtime.PrevJump = runtime.PrevDefend = 0;
         }
 
         private static void CheckBattleResultsNonAliveCase(
@@ -22458,7 +22615,12 @@ namespace NTSD.Test
             };
 
             arrange(attacker, victim, itr);
-            LF2AlternateDamageResolver.ApplyAlternateDamage(attacker, victim, victim.HitCounters, itr);
+            world.DamageWriter.ApplyAlternateDamage(
+                world,
+                attacker,
+                victim,
+                victim.HitCounters,
+                itr);
             verify(attacker, victim, itr);
         }
 

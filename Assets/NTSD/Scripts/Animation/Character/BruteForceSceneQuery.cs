@@ -30,6 +30,10 @@ namespace NTSD.Animation
         private readonly CollisionBroadphaseBackend _collisionBroadphase;
         private readonly List<SceneQueryHit> _tmpHitResult = new List<SceneQueryHit>(16);
         private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
+        private readonly List<LF2Entity> _collisionSnapshotAllEntities =
+            new List<LF2Entity>(128);
+        private readonly List<LF2Entity> _collisionSnapshotRoleEntities =
+            new List<LF2Entity>(128);
         private readonly List<SceneQueryHit> _emptyCandidateHits = new List<SceneQueryHit>(0);
         private readonly Dictionary<LF2Entity, List<SceneQueryHit>> _candidateCache =
             new Dictionary<LF2Entity, List<SceneQueryHit>>();
@@ -56,10 +60,8 @@ namespace NTSD.Animation
             new RoleAwareCollisionShadowDiagnostics();
         private readonly LooseQuadtreeBroadphase _roleFormalBroadphase =
             new LooseQuadtreeBroadphase();
-        private readonly List<RoleAwareFormalParticipant> _roleFormalParticipants =
-            new List<RoleAwareFormalParticipant>(128);
-        private RoleAwareFormalParticipant[] _roleFormalParticipantReadBuffer =
-            new RoleAwareFormalParticipant[128];
+        private readonly RoleAwareFormalParticipantBuffer _roleFormalParticipants =
+            new RoleAwareFormalParticipantBuffer(128);
         private byte[] _roleFormalParticipantRoleFlags = new byte[128];
         private readonly Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>
             _roleFormalBodyTemplates =
@@ -109,6 +111,13 @@ namespace NTSD.Animation
         private int[] _formalAuthorityPairSortOffsets = Array.Empty<int>();
         private readonly Dictionary<int, int> _formalSlotToOrdinal = new Dictionary<int, int>();
         private readonly HashSet<int> _formalSeenSlots = new HashSet<int>();
+        private int[] _formalDenseSlotToOrdinal = Array.Empty<int>();
+        private int[] _formalDenseSlotStamps = Array.Empty<int>();
+        private int _formalDenseSlotStamp;
+        private int _formalDenseMappedCount;
+        private int _formalDenseSeenCount;
+        private long _totalFormalDenseSlotParticipantCount;
+        private long _totalFormalLegacySlotParticipantCount;
         private readonly LooseQuadtreeBroadphase _immediateBroadphase = new LooseQuadtreeBroadphase();
         private readonly List<SpatialBroadphaseEntry> _immediateEntries =
             new List<SpatialBroadphaseEntry>(128);
@@ -164,6 +173,13 @@ namespace NTSD.Animation
         private long _totalRoleAwareSweepFullOverlapCheckCount;
         private bool _forceRoleAwareNestedDirectForDiagnostics;
         private bool _forceRoleAwareSweepDirectForDiagnostics;
+        private bool _collisionSnapshotRoleRosterBuilding;
+        private bool _collisionSnapshotRoleRosterValid;
+        private int _collisionSnapshotRoleRosterTick = -1;
+        private ulong _collisionSnapshotRoleRosterOccupancyEpoch;
+        private bool _collisionSnapshotRoleRosterAppliedForCurrentTick;
+        private int _lastCollisionSnapshotRoleRosterAppliedCount;
+        private int _lastCollisionSnapshotRoleRosterFallbackCount;
         public bool ShadowBroadphaseDiagnosticsEnabled { get; set; }
         public bool CollisionCandidateStoreShadowDiagnosticsEnabled { get; set; }
         public bool CollisionCandidateStoreAuthorityEnabled { get; set; }
@@ -195,9 +211,12 @@ namespace NTSD.Animation
         public int CandidateListPoolCountForDiagnostics => _candidateListPool.Count;
         public int ActiveCandidateListCountForDiagnostics => _candidateCache.Count;
         public CollisionFormalCollectorMode FormalCollectorMode { get; set; }
+        public bool ForceLegacyCollisionSnapshotRoleRosterForDiagnostics { get; set; }
         public bool ForceLegacyRoleBodyBuildForDiagnostics { get; set; }
+        public bool ForceLegacyFormalItrWorldRectReuseForDiagnostics { get; set; }
         public bool ForceRoleAwareTreeForDiagnostics { get; set; }
         public bool ForceRoleAwareDirectForDiagnostics { get; set; }
+        public bool ForceLegacyFormalSlotMapForDiagnostics { get; set; }
         public bool ForceRoleAwareNestedDirectForDiagnostics
         {
             get => _forceRoleAwareNestedDirectForDiagnostics;
@@ -784,6 +803,14 @@ namespace NTSD.Animation
             _lastRoleAwareBodyTemplateHitCount;
         public int LastRoleAwareBodyTemplateFallbackCountForDiagnostics =>
             _lastRoleAwareBodyTemplateFallbackCount;
+        public int LastCollisionSnapshotRoleRosterAppliedCountForDiagnostics =>
+            _lastCollisionSnapshotRoleRosterAppliedCount;
+        public int LastCollisionSnapshotRoleRosterFallbackCountForDiagnostics =>
+            _lastCollisionSnapshotRoleRosterFallbackCount;
+        public int CollisionSnapshotRoleRosterCountForDiagnostics =>
+            _collisionSnapshotRoleEntities.Count;
+        public int CollisionSnapshotAllRosterCountForDiagnostics =>
+            _collisionSnapshotAllEntities.Count;
         public long LastRoleAwareDirectComparisonCountForDiagnostics =>
             _lastRoleAwareDirectComparisonCount;
         public long TotalRoleAwareDirectComparisonCountForDiagnostics =>
@@ -833,6 +860,10 @@ namespace NTSD.Animation
             _totalRoleAwareSweepXCandidateCount;
         public long TotalRoleAwareSweepFullOverlapCheckCountForDiagnostics =>
             _totalRoleAwareSweepFullOverlapCheckCount;
+        public long TotalFormalDenseSlotParticipantCountForDiagnostics =>
+            _totalFormalDenseSlotParticipantCount;
+        public long TotalFormalLegacySlotParticipantCountForDiagnostics =>
+            _totalFormalLegacySlotParticipantCount;
         public BruteForceSceneQuery(
             SimulationWorld world,
             CollisionBroadphaseBackend collisionBroadphase = CollisionBroadphaseBackend.BruteForce)
@@ -861,18 +892,14 @@ namespace NTSD.Animation
 
             EnsureListCapacity(_tmpHitResult, HitCandidateMax);
             EnsureListCapacity(_tmpAllObjects, entityCapacity);
+            EnsureListCapacity(_collisionSnapshotAllEntities, entityCapacity);
+            EnsureListCapacity(_collisionSnapshotRoleEntities, entityCapacity);
             _candidateCache.EnsureCapacity(entityCapacity);
             while (_candidateListPool.Count < entityCapacity)
                 _candidateListPool.Push(new List<SceneQueryHit>(HitCandidateMax));
             _candidateStoreShadow.PrepareCapacity(entityCapacity);
 
-            EnsureListCapacity(_roleFormalParticipants, entityCapacity);
-            if (_roleFormalParticipantReadBuffer.Length < entityCapacity)
-            {
-                Array.Resize(
-                    ref _roleFormalParticipantReadBuffer,
-                    entityCapacity);
-            }
+            _roleFormalParticipants.EnsureCapacity(entityCapacity);
             if (_roleFormalParticipantRoleFlags.Length < entityCapacity)
             {
                 Array.Resize(
@@ -921,6 +948,9 @@ namespace NTSD.Animation
             }
             _formalSlotToOrdinal.EnsureCapacity(entityCapacity);
             _formalSeenSlots.EnsureCapacity(entityCapacity);
+            EnsureFormalDenseSlotCapacity(Math.Max(
+                entityCapacity,
+                _world.MaxRuntimeSlotsForServices));
 
             EnsureListCapacity(_immediateEntries, entityCapacity);
             EnsureListCapacity(_immediateQueryIndices, entityCapacity);
@@ -978,7 +1008,125 @@ namespace NTSD.Animation
             _formalBroadphase.ResetIncremental();
             _roleFormalBroadphase.ResetIncremental();
             _immediateBroadphase.ResetIncremental();
+            InvalidateCollisionSnapshotRoleRoster();
             FormalSpatialSynchronizeResult = default;
+        }
+
+        internal void BeginCollisionSnapshotRoleRoster(int tickIndex)
+        {
+            _collisionSnapshotAllEntities.Clear();
+            _collisionSnapshotRoleEntities.Clear();
+            _collisionSnapshotRoleRosterTick = tickIndex;
+            _collisionSnapshotRoleRosterOccupancyEpoch =
+                _world.RuntimeSlotOccupancyEpochForServices;
+            _collisionSnapshotRoleRosterBuilding = true;
+            _collisionSnapshotRoleRosterValid = false;
+        }
+
+        internal void ObserveCollisionSnapshotEntity(LF2Entity entity, int tickIndex)
+        {
+            if (!CanObserveCollisionSnapshotRosterEntity(entity, tickIndex))
+                return;
+
+            _collisionSnapshotAllEntities.Add(entity);
+        }
+
+        internal void ObserveCollisionSnapshotRole(LF2Entity entity, int tickIndex)
+        {
+            if (!CanObserveCollisionSnapshotRosterEntity(entity, tickIndex))
+                return;
+
+            if (IsCollisionCandidateSuppressed(entity, tickIndex))
+                return;
+
+            // The role-aware formal collector deliberately retains inert rows.
+            // Missing/non-indexable body geometry participates in its conservative
+            // fallback contract, even though the narrow phase will reject a hit.
+            _collisionSnapshotRoleEntities.Add(entity);
+        }
+
+        private bool CanObserveCollisionSnapshotRosterEntity(
+            LF2Entity entity,
+            int tickIndex)
+        {
+            if (!_collisionSnapshotRoleRosterBuilding ||
+                tickIndex != _collisionSnapshotRoleRosterTick)
+            {
+                InvalidateCollisionSnapshotRoleRoster();
+                return false;
+            }
+
+            if (entity == null || entity.PS == null ||
+                IsPendingFlushDestroy(entity))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        internal void CompleteCollisionSnapshotRoleRoster(
+            int tickIndex,
+            bool completed)
+        {
+            if (!completed || !_collisionSnapshotRoleRosterBuilding ||
+                tickIndex != _collisionSnapshotRoleRosterTick ||
+                _collisionSnapshotAllEntities.Count <
+                    _collisionSnapshotRoleEntities.Count ||
+                _collisionSnapshotRoleRosterOccupancyEpoch !=
+                    _world.RuntimeSlotOccupancyEpochForServices)
+            {
+                InvalidateCollisionSnapshotRoleRoster();
+                return;
+            }
+
+            _collisionSnapshotRoleRosterBuilding = false;
+            _collisionSnapshotRoleRosterValid = true;
+        }
+
+        private void InvalidateCollisionSnapshotRoleRoster()
+        {
+            _collisionSnapshotRoleRosterBuilding = false;
+            _collisionSnapshotRoleRosterValid = false;
+            _collisionSnapshotRoleRosterTick = -1;
+            _collisionSnapshotRoleRosterOccupancyEpoch = 0;
+            _collisionSnapshotRoleRosterAppliedForCurrentTick = false;
+            _collisionSnapshotAllEntities.Clear();
+            _collisionSnapshotRoleEntities.Clear();
+        }
+
+        private bool TryPopulateCollisionSnapshotRoleRoster(
+            List<LF2Entity> destination,
+            int tickIndex)
+        {
+            _lastCollisionSnapshotRoleRosterAppliedCount = 0;
+            _collisionSnapshotRoleRosterAppliedForCurrentTick = false;
+            if (ForceLegacyCollisionSnapshotRoleRosterForDiagnostics ||
+                !_collisionSnapshotRoleRosterValid ||
+                _collisionSnapshotRoleRosterBuilding ||
+                tickIndex != _collisionSnapshotRoleRosterTick ||
+                _collisionSnapshotRoleRosterOccupancyEpoch !=
+                    _world.RuntimeSlotOccupancyEpochForServices ||
+                _collisionSnapshotAllEntities.Count <
+                    _collisionSnapshotRoleEntities.Count)
+            {
+                _lastCollisionSnapshotRoleRosterFallbackCount++;
+                return false;
+            }
+
+            destination.Clear();
+            for (int index = 0;
+                 index < _collisionSnapshotAllEntities.Count;
+                 index++)
+            {
+                LF2Entity entity = _collisionSnapshotAllEntities[index];
+                destination.Add(entity);
+            }
+
+            _collisionSnapshotRoleRosterAppliedForCurrentTick = true;
+            _lastCollisionSnapshotRoleRosterAppliedCount =
+                _collisionSnapshotRoleEntities.Count;
+            return true;
         }
 
         private bool TryGetImmediateSpatialTargets(
@@ -1404,7 +1552,12 @@ namespace NTSD.Animation
                 collectorMode = ResolveFormalCollectorMode();
                 LastFormalCollectorModeForDiagnostics = collectorMode;
 
-                _world.GetAllEntities(_tmpAllObjects);
+                if (!TryPopulateCollisionSnapshotRoleRoster(
+                        _tmpAllObjects,
+                        currentTick))
+                {
+                    _world.GetAllEntities(_tmpAllObjects);
+                }
                 ResetCandidateCollectionState();
 
                 for (int i = 0; i < _tmpAllObjects.Count; i++)
@@ -1974,8 +2127,7 @@ namespace NTSD.Animation
             _formalFallbackOrdinals.Clear();
             _formalPairKeys.Clear();
             _formalAuthorityPairKeys.Clear();
-            _formalSlotToOrdinal.Clear();
-            _formalSeenSlots.Clear();
+            BeginFormalSlotMap();
 
             for (int i = 0; i < _tmpAllObjects.Count; i++)
             {
@@ -1989,12 +2141,12 @@ namespace NTSD.Animation
                 if (runtimeSlot < 0 ||
                     runtimeSlot >= _world.MaxRuntimeSlotsForServices ||
                     !ReferenceEquals(_world.FindEntityByRuntimeSlotForQuery(runtimeSlot), entity) ||
-                    !_formalSeenSlots.Add(runtimeSlot) ||
+                    !TryMarkFormalSlotSeen(runtimeSlot) ||
                     !_world.TryGetCurrentRuntimeHandle(runtimeSlot, entity, out RuntimeEntityHandle handle))
                 {
                     return AbortFormalSpatialIndex();
                 }
-                _formalSlotToOrdinal.Add(runtimeSlot, _formalParticipants.Count);
+                AddFormalSlotOrdinal(runtimeSlot, _formalParticipants.Count);
                 _formalParticipants.Add(entity);
                 _formalParticipantHandles.Add(handle);
             }
@@ -2065,7 +2217,7 @@ namespace NTSD.Animation
                         }
 
                         int otherRuntimeSlot = otherHandle.Slot;
-                        if (!_formalSlotToOrdinal.TryGetValue(otherRuntimeSlot, out int mappedOrdinal) ||
+                        if (!TryGetFormalSlotOrdinal(otherRuntimeSlot, out int mappedOrdinal) ||
                             mappedOrdinal < 0 || mappedOrdinal >= participantCount ||
                             !ReferenceEquals(_formalParticipants[mappedOrdinal], otherEntity) ||
                             _formalParticipantHandles[mappedOrdinal] != otherHandle)
@@ -2101,8 +2253,8 @@ namespace NTSD.Animation
                 long pairKey = _formalPairKeys[pairIndex];
                 int firstSlot = (int)(pairKey >> 32);
                 int secondSlot = (int)(pairKey & 0xffffffffL);
-                if (!_formalSlotToOrdinal.TryGetValue(firstSlot, out int firstOrdinal) ||
-                    !_formalSlotToOrdinal.TryGetValue(secondSlot, out int secondOrdinal) ||
+                if (!TryGetFormalSlotOrdinal(firstSlot, out int firstOrdinal) ||
+                    !TryGetFormalSlotOrdinal(secondSlot, out int secondOrdinal) ||
                     firstOrdinal == secondOrdinal)
                 {
                     return AbortFormalSpatialIndex();
@@ -2158,7 +2310,7 @@ namespace NTSD.Animation
 
             try
             {
-                _roleFormalParticipants.Clear();
+                _roleFormalParticipants.BeginBuild();
                 _roleFormalBodyTemplates.Clear();
                 _roleFormalItrEntries.Clear();
                 _roleFormalExactItrRects.Clear();
@@ -2177,19 +2329,21 @@ namespace NTSD.Animation
                 _formalIncrementalEntries.Clear();
                 _formalQueryHandles.Clear();
                 _formalAuthorityPairKeys.Clear();
-                _formalSlotToOrdinal.Clear();
-                _formalSeenSlots.Clear();
+                BeginFormalSlotMap();
 
+                List<LF2Entity> participantSource =
+                    _collisionSnapshotRoleRosterAppliedForCurrentTick
+                        ? _collisionSnapshotRoleEntities
+                        : _tmpAllObjects;
                 for (int authorityOrdinal = 0;
-                     authorityOrdinal < _tmpAllObjects.Count;
+                     authorityOrdinal < participantSource.Count;
                      authorityOrdinal++)
                 {
-                    LF2Entity entity = _tmpAllObjects[authorityOrdinal];
-                    if (entity == null || entity.PS == null ||
+                    LF2Entity entity = participantSource[authorityOrdinal];
+                    if (entity == null ||
+                        entity.PS == null ||
                         IsPendingFlushDestroy(entity))
-                    {
                         continue;
-                    }
                     if (IsCollisionCandidateSuppressed(entity, currentTick))
                         continue;
 
@@ -2199,7 +2353,7 @@ namespace NTSD.Animation
                         !ReferenceEquals(
                             _world.FindEntityByRuntimeSlotForQuery(runtimeSlot),
                             entity) ||
-                        !_formalSeenSlots.Add(runtimeSlot) ||
+                        !TryMarkFormalSlotSeen(runtimeSlot) ||
                         !_world.TryGetCurrentRuntimeHandle(
                             runtimeSlot,
                             entity,
@@ -2207,14 +2361,12 @@ namespace NTSD.Animation
                     {
                         return AbortFormalSpatialIndex();
                     }
-
-                    LF2FrameData currentFrame = GetAuthoredCurrentFrame(entity);
-                    LF2FrameData collisionFrame = entity.GetCollisionFrameData();
-                    var participant = new RoleAwareFormalParticipant(
-                        entity,
-                        currentFrame,
-                        collisionFrame,
-                        handle);
+                    RoleAwareFormalParticipant participant =
+                        new RoleAwareFormalParticipant(
+                            entity,
+                            GetAuthoredCurrentFrame(entity),
+                            entity.GetCollisionFrameData(),
+                            handle);
                     int participantOrdinal = _roleFormalParticipants.Count;
 
                     BuildRoleAwareFormalBodyState(
@@ -2229,6 +2381,9 @@ namespace NTSD.Animation
                             indexableBodyBounds));
                     }
 
+                    LF2FrameData collisionFrame = participant.CollisionFrame;
+                    participant.FormalItrEntryOffset = _roleFormalItrEntries.Count;
+                    participant.FormalItrEntryCount = 0;
                     if (collisionFrame?.itrs != null)
                     {
                         for (int itrIndex = 0;
@@ -2244,14 +2399,18 @@ namespace NTSD.Animation
                                     entity,
                                     collisionFrame,
                                     itr,
-                                    out SpatialAabbXZ itrBounds))
+                                    out SpatialAabbXZ itrBounds,
+                                    out WorldRect itrWorldRect))
                             {
-                                _roleFormalItrEntries.Add(new RoleAwareFormalItrEntry(
-                                    participantOrdinal,
-                                    handle,
-                                    itrIndex,
-                                    itr,
-                                    itrBounds));
+                                _roleFormalItrEntries.Add(
+                                    new RoleAwareFormalItrEntry(
+                                        participantOrdinal,
+                                        handle,
+                                        itrIndex,
+                                        itr,
+                                        itrBounds,
+                                        itrWorldRect));
+                                participant.FormalItrEntryCount++;
                             }
                             else
                             {
@@ -2268,12 +2427,13 @@ namespace NTSD.Animation
                     {
                         directInputSafe = false;
                     }
-                    _formalSlotToOrdinal.Add(runtimeSlot, participantOrdinal);
-                    _roleFormalParticipants.Add(participant);
+                    AddFormalSlotOrdinal(runtimeSlot, participantOrdinal);
+                    _roleFormalParticipants.Add(in participant);
                 }
             }
             finally
             {
+                _roleFormalParticipants.CompleteBuild();
                 if (participantBuildDiagnostics != null)
                 {
                     participantBuildDiagnostics.EndPhase(
@@ -2282,15 +2442,16 @@ namespace NTSD.Animation
             }
 
             int participantCount = _roleFormalParticipants.Count;
+            int diagnosticParticipantCount = participantCount;
             if (TryCompleteCollisionRoleZeroItrFastPath(
-                    participantCount,
+                    diagnosticParticipantCount,
                     roleFormalBodyEntryCount))
             {
                 return true;
             }
 
             InitializeRoleAwareFormalExactTracking(participantCount);
-            _lastRoleAwareParticipantCount = participantCount;
+            _lastRoleAwareParticipantCount = diagnosticParticipantCount;
             _lastRoleAwareInertParticipantCount =
                 CountRoleAwareFormalInertParticipants();
             BattleTickDetailPhaseDiagnostics inputValidationDiagnostics =
@@ -2460,7 +2621,7 @@ namespace NTSD.Animation
                             {
                                 RuntimeEntityHandle bodyHandle =
                                     _formalQueryHandles[resultIndex];
-                                if (!_formalSlotToOrdinal.TryGetValue(
+                                if (!TryGetFormalSlotOrdinal(
                                         bodyHandle.Slot,
                                         out int bodyParticipantOrdinal) ||
                                     !TryValidateRoleAwareParticipant(
@@ -2513,6 +2674,9 @@ namespace NTSD.Animation
                 }
             }
 
+            if (!TryPrepareRoleAwareFormalParticipantRoleFlags(participantCount))
+                return AbortFormalSpatialIndex();
+
             BattleTickDetailPhaseDiagnostics sortDiagnostics =
                 _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             if (sortDiagnostics != null)
@@ -2521,11 +2685,13 @@ namespace NTSD.Animation
                     BattleTickDetailPhase.CandidateCollectSortDeduplicate);
             }
 
+            bool exactRequirementsCollected;
             try
             {
-                SortAndDeduplicateAuthorityOrdinalPairs(
-                    _formalAuthorityPairKeys,
-                    participantCount);
+                exactRequirementsCollected =
+                    SortAndDeduplicateAuthorityOrdinalPairs(
+                        _formalAuthorityPairKeys,
+                        participantCount);
             }
             finally
             {
@@ -2541,17 +2707,13 @@ namespace NTSD.Animation
                 return AbortFormalSpatialIndex();
             }
 
-            if (!TryPrepareRoleAwareFormalParticipantRoleFlags(participantCount) ||
-                !TryCollectRoleAwareFormalExactRequirements(participantCount) ||
+            if (!exactRequirementsCollected ||
                 !TryBuildRequiredRoleAwareFormalExactCaches(participantCount) ||
                 roleAwareOccupancyEpoch !=
                     _world.RuntimeSlotOccupancyEpochForServices)
             {
                 return AbortFormalSpatialIndex();
             }
-            if (!TryPrepareRoleAwareFormalParticipantReadBuffer(participantCount))
-                return AbortFormalSpatialIndex();
-
             _formalFallbackParticipantCount = CountRoleAwareFormalFallbackParticipants();
             _lastFormalPairCount = _formalAuthorityPairKeys.Count;
             _lastRoleAwareBodyEntryCount = roleFormalBodyEntryCount;
@@ -2584,9 +2746,9 @@ namespace NTSD.Animation
                         }
 
                         ref readonly RoleAwareFormalParticipant firstParticipant =
-                            ref _roleFormalParticipantReadBuffer[firstOrdinal];
+                            ref _roleFormalParticipants[firstOrdinal];
                         ref readonly RoleAwareFormalParticipant secondParticipant =
-                            ref _roleFormalParticipantReadBuffer[secondOrdinal];
+                            ref _roleFormalParticipants[secondOrdinal];
                         LF2Entity first = firstParticipant.Entity;
                         LF2Entity second = secondParticipant.Entity;
 #if UNITY_INCLUDE_TESTS
@@ -2662,13 +2824,6 @@ namespace NTSD.Animation
             {
                 return AbortFormalSpatialIndex();
             }
-            finally
-            {
-                Array.Clear(
-                    _roleFormalParticipantReadBuffer,
-                    0,
-                    participantCount);
-            }
 
             if (roleAwareOccupancyEpoch !=
                 _world.RuntimeSlotOccupancyEpochForServices)
@@ -2676,33 +2831,6 @@ namespace NTSD.Animation
                 return AbortFormalSpatialIndex();
             }
 
-            return true;
-        }
-
-        private bool TryPrepareRoleAwareFormalParticipantReadBuffer(
-            int participantCount)
-        {
-            if (participantCount > _roleFormalParticipantReadBuffer.Length)
-            {
-                SimulationRuntimeCapacityModule runtimeCapacity =
-                    _world?.RuntimeCapacity;
-                if (runtimeCapacity != null &&
-                    !runtimeCapacity.TryAuthorizeGrowth())
-                {
-                    return false;
-                }
-
-                int nextCapacity = Math.Max(
-                    participantCount,
-                    checked(_roleFormalParticipantReadBuffer.Length * 2));
-                Array.Resize(
-                    ref _roleFormalParticipantReadBuffer,
-                    nextCapacity);
-            }
-
-            _roleFormalParticipants.CopyTo(
-                _roleFormalParticipantReadBuffer,
-                0);
             return true;
         }
 
@@ -2780,45 +2908,6 @@ namespace NTSD.Animation
             LockCollisionCandidateConsumptionSource();
             _consumeCandidateCache = true;
             _collisionRoleZeroItrEarlyReturnAppliedForCurrentTick = true;
-            return true;
-        }
-
-        private bool TryCollectRoleAwareFormalExactRequirements(
-            int participantCount)
-        {
-            if (_roleFormalExactRequiredRoles.Count != participantCount)
-                return false;
-
-            for (int pairIndex = 0;
-                 pairIndex < _formalAuthorityPairKeys.Count;
-                 pairIndex++)
-            {
-                long pairKey = _formalAuthorityPairKeys[pairIndex];
-                int firstOrdinal = (int)(pairKey >> 32);
-                int secondOrdinal = (int)(pairKey & 0xffffffffL);
-                if (firstOrdinal < 0 ||
-                    secondOrdinal <= firstOrdinal ||
-                    secondOrdinal >= participantCount)
-                {
-                    return false;
-                }
-
-                byte firstRoleFlags =
-                    _roleFormalParticipantRoleFlags[firstOrdinal];
-                byte secondRoleFlags =
-                    _roleFormalParticipantRoleFlags[secondOrdinal];
-                AddRoleAwareFormalExactDirectionRequirement(
-                    firstOrdinal,
-                    firstRoleFlags,
-                    secondOrdinal,
-                    secondRoleFlags);
-                AddRoleAwareFormalExactDirectionRequirement(
-                    secondOrdinal,
-                    secondRoleFlags,
-                    firstOrdinal,
-                    firstRoleFlags);
-            }
-
             return true;
         }
 
@@ -2903,8 +2992,8 @@ namespace NTSD.Animation
             return expectedOccupancyEpoch ==
                        _world.RuntimeSlotOccupancyEpochForServices &&
                    participantCount == _roleFormalParticipants.Count &&
-                   participantCount == _formalSlotToOrdinal.Count &&
-                   participantCount == _formalSeenSlots.Count &&
+                   participantCount == FormalSlotMapCount &&
+                   participantCount == FormalSeenSlotCount &&
                    participantCount == _roleFormalExactRequiredRoles.Count &&
                    _roleFormalBodyOrdinals.Count <= participantCount &&
                    _roleFormalFallbackBodyOrdinals.Count <=
@@ -2991,7 +3080,7 @@ namespace NTSD.Animation
                 IncrementalSpatialEntry bodyEntry =
                     _formalIncrementalEntries[bodyEntryIndex];
                 if (!bodyEntry.Bounds.IsValid ||
-                    !_formalSlotToOrdinal.TryGetValue(
+                    !TryGetFormalSlotOrdinal(
                         bodyEntry.Handle.Slot,
                         out int bodyParticipantOrdinal) ||
                     !TryValidateRoleAwareParticipant(
@@ -3051,7 +3140,7 @@ namespace NTSD.Animation
                         continue;
 
                     int bodyParticipantOrdinal =
-                        _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                        GetFormalSlotOrdinal(bodyEntry.Handle.Slot);
                     AddAuthorityOrdinalPair(
                         itrEntry.ParticipantOrdinal,
                         bodyParticipantOrdinal);
@@ -3138,7 +3227,7 @@ namespace NTSD.Animation
                         IncrementalSpatialEntry bodyEntry =
                             _formalIncrementalEntries[sweepEvent.EntryIndex];
                         int bodyParticipantOrdinal =
-                            _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                            GetFormalSlotOrdinal(bodyEntry.Handle.Slot);
                         for (int activeIndex = 0;
                              activeIndex < _roleFormalSweepActiveItrIndices.Count;
                              activeIndex++)
@@ -3176,7 +3265,7 @@ namespace NTSD.Animation
                             if (!itrEntry.Bounds.Overlaps(bodyEntry.Bounds))
                                 continue;
                             int bodyParticipantOrdinal =
-                                _formalSlotToOrdinal[bodyEntry.Handle.Slot];
+                                GetFormalSlotOrdinal(bodyEntry.Handle.Slot);
                             AddAuthorityOrdinalPair(
                                 itrEntry.ParticipantOrdinal,
                                 bodyParticipantOrdinal);
@@ -3246,6 +3335,124 @@ namespace NTSD.Animation
             activeIndices.RemoveAt(lastPosition);
             positions[lastEntryIndex] = position;
             positions[entryIndex] = -1;
+        }
+
+        private int FormalSlotMapCount =>
+            ForceLegacyFormalSlotMapForDiagnostics
+                ? _formalSlotToOrdinal.Count
+                : _formalDenseMappedCount;
+
+        private int FormalSeenSlotCount =>
+            ForceLegacyFormalSlotMapForDiagnostics
+                ? _formalSeenSlots.Count
+                : _formalDenseSeenCount;
+
+        private void BeginFormalSlotMap()
+        {
+            if (ForceLegacyFormalSlotMapForDiagnostics)
+            {
+                _formalSlotToOrdinal.Clear();
+                _formalSeenSlots.Clear();
+                return;
+            }
+
+            EnsureFormalDenseSlotCapacity(_world.MaxRuntimeSlotsForServices);
+            if (_formalDenseSlotStamp == int.MaxValue)
+            {
+                Array.Clear(
+                    _formalDenseSlotStamps,
+                    0,
+                    _formalDenseSlotStamps.Length);
+                _formalDenseSlotStamp = 1;
+            }
+            else
+            {
+                _formalDenseSlotStamp++;
+            }
+
+            _formalDenseMappedCount = 0;
+            _formalDenseSeenCount = 0;
+        }
+
+        private void EnsureFormalDenseSlotCapacity(int requiredCapacity)
+        {
+            if (requiredCapacity <= _formalDenseSlotToOrdinal.Length)
+                return;
+
+            Array.Resize(ref _formalDenseSlotToOrdinal, requiredCapacity);
+            Array.Resize(ref _formalDenseSlotStamps, requiredCapacity);
+        }
+
+        private bool TryMarkFormalSlotSeen(int runtimeSlot)
+        {
+            if (ForceLegacyFormalSlotMapForDiagnostics)
+                return _formalSeenSlots.Add(runtimeSlot);
+
+            if ((uint)runtimeSlot >= (uint)_formalDenseSlotStamps.Length ||
+                _formalDenseSlotStamps[runtimeSlot] == _formalDenseSlotStamp)
+            {
+                return false;
+            }
+
+            _formalDenseSlotStamps[runtimeSlot] = _formalDenseSlotStamp;
+            _formalDenseSlotToOrdinal[runtimeSlot] = -1;
+            _formalDenseSeenCount++;
+            return true;
+        }
+
+        private void AddFormalSlotOrdinal(int runtimeSlot, int participantOrdinal)
+        {
+            if (ForceLegacyFormalSlotMapForDiagnostics)
+            {
+                _formalSlotToOrdinal.Add(runtimeSlot, participantOrdinal);
+                _totalFormalLegacySlotParticipantCount = SaturatingIncrement(
+                    _totalFormalLegacySlotParticipantCount);
+                return;
+            }
+
+            if ((uint)runtimeSlot >= (uint)_formalDenseSlotStamps.Length ||
+                _formalDenseSlotStamps[runtimeSlot] != _formalDenseSlotStamp ||
+                _formalDenseSlotToOrdinal[runtimeSlot] >= 0)
+            {
+                throw new InvalidOperationException(
+                    $"Formal collision slot {runtimeSlot} was not marked exactly once.");
+            }
+
+            _formalDenseSlotToOrdinal[runtimeSlot] = participantOrdinal;
+            _formalDenseMappedCount++;
+            _totalFormalDenseSlotParticipantCount = SaturatingIncrement(
+                _totalFormalDenseSlotParticipantCount);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool TryGetFormalSlotOrdinal(int runtimeSlot, out int participantOrdinal)
+        {
+            if (ForceLegacyFormalSlotMapForDiagnostics)
+            {
+                return _formalSlotToOrdinal.TryGetValue(
+                    runtimeSlot,
+                    out participantOrdinal);
+            }
+
+            if ((uint)runtimeSlot < (uint)_formalDenseSlotStamps.Length &&
+                _formalDenseSlotStamps[runtimeSlot] == _formalDenseSlotStamp)
+            {
+                participantOrdinal = _formalDenseSlotToOrdinal[runtimeSlot];
+                return participantOrdinal >= 0;
+            }
+
+            participantOrdinal = -1;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFormalSlotOrdinal(int runtimeSlot)
+        {
+            if (TryGetFormalSlotOrdinal(runtimeSlot, out int participantOrdinal))
+                return participantOrdinal;
+
+            throw new KeyNotFoundException(
+                $"Formal collision slot {runtimeSlot} is not registered.");
         }
 
         private static long SaturatingIncrement(long value) =>
@@ -3392,11 +3599,8 @@ namespace NTSD.Animation
         {
             hasIndexableBody = false;
             indexableBodyBounds = default;
-            LF2Entity entity = participant.Entity;
             LF2FrameData frame = participant.Frame;
-            if (entity?.Runtime == null ||
-                entity.PS == null ||
-                frame == null ||
+            if (frame == null ||
                 !ReferenceEquals(frame.bodies, template.SourceBodies) ||
                 (frame.bodies?.Count ?? 0) != template.SourceBodyCount ||
                 frame.centerx != template.SourceCenterX ||
@@ -3409,11 +3613,17 @@ namespace NTSD.Animation
             if (!participant.HasBody)
                 return true;
 
+            LF2Entity entity = participant.Entity;
+            if (entity?.Runtime == null || entity.PS == null)
+            {
+                return false;
+            }
+
             int entityX = entity.Runtime.XInt;
             if (entityX == int.MinValue || entityX == int.MaxValue)
                 return false;
 
-            bool facingLeft = entity.PS.dir == "left";
+            bool facingLeft = entity.Runtime.IsFacingLeft;
             long minX = (long)entityX +
                         (facingLeft ? template.LeftMinX : template.RightMinX);
             long maxX = (long)entityX +
@@ -3635,7 +3845,7 @@ namespace NTSD.Animation
             participant.CollisionX = entity.Runtime.XInt;
             participant.CollisionY = entity.Runtime.YInt;
             participant.CollisionZ = CollisionZInt(entity, collisionFrame);
-            participant.FacingLeft = entity.PS.dir == "left";
+            participant.FacingLeft = entity.Runtime.IsFacingLeft;
             participant.DataObjectType = GetCurrentDataObjectType(entity);
             participant.CurrentDataObjectId =
                 LF2Entity.ResolveCurrentDataObjectId(entity);
@@ -3663,20 +3873,40 @@ namespace NTSD.Animation
             List<InteractionArea> itrs = collisionFrame?.itrs;
             if (itrs != null)
             {
+                int formalItrCursor = participant.FormalItrEntryOffset;
+                int formalItrEnd = formalItrCursor + participant.FormalItrEntryCount;
                 for (int itrIndex = 0; itrIndex < itrs.Count; itrIndex++)
                 {
                     InteractionArea itr = itrs[itrIndex];
                     if (itr == null)
                         continue;
 
+                    WorldRect worldRect;
+                    if (!ForceLegacyFormalItrWorldRectReuseForDiagnostics &&
+                        formalItrCursor < formalItrEnd &&
+                        formalItrCursor < _roleFormalItrEntries.Count &&
+                        _roleFormalItrEntries[formalItrCursor].ItrIndex == itrIndex &&
+                        ReferenceEquals(
+                            _roleFormalItrEntries[formalItrCursor].Itr,
+                            itr))
+                    {
+                        worldRect =
+                            _roleFormalItrEntries[formalItrCursor].WorldRect;
+                        formalItrCursor++;
+                    }
+                    else
+                    {
+                        worldRect = ItrWorldRect(
+                            participant.Entity,
+                            collisionFrame,
+                            itr);
+                    }
+
                     _roleFormalExactItrRects.Add(
                         new RoleAwareFormalExactItrRectEntry(
                             itr,
                             itrIndex,
-                            ItrWorldRect(
-                                participant.Entity,
-                                collisionFrame,
-                                itr)));
+                            worldRect));
                     participant.ExactItrRectCount++;
                     _lastRoleAwareExactItrRectBuildCount++;
                 }
@@ -4296,7 +4526,7 @@ namespace NTSD.Animation
             return true;
         }
 
-        private void SortAndDeduplicateAuthorityOrdinalPairs(
+        private bool SortAndDeduplicateAuthorityOrdinalPairs(
             List<long> values,
             int participantCount)
         {
@@ -4307,8 +4537,10 @@ namespace NTSD.Animation
                 participantCount > _formalAuthorityPairSortOffsets.Length ||
                 valueCount > _formalAuthorityPairSortScratch.Length)
             {
-                SortAndDeduplicate(values);
-                return;
+                SortLongs(values);
+                return FinishAuthorityOrdinalPairDeduplication(
+                    values,
+                    participantCount);
             }
 
             Array.Clear(
@@ -4325,8 +4557,10 @@ namespace NTSD.Animation
                     secondOrdinal < 0 ||
                     secondOrdinal >= participantCount)
                 {
-                    SortAndDeduplicate(values);
-                    return;
+                    SortLongs(values);
+                    return FinishAuthorityOrdinalPairDeduplication(
+                        values,
+                        participantCount);
                 }
 
                 _formalAuthorityPairSortCounts[secondOrdinal]++;
@@ -4360,7 +4594,67 @@ namespace NTSD.Animation
                 values[_formalAuthorityPairSortOffsets[firstOrdinal]++] = value;
             }
 
-            DeduplicateSorted(values);
+            return FinishAuthorityOrdinalPairDeduplication(
+                values,
+                participantCount);
+        }
+
+        private bool FinishAuthorityOrdinalPairDeduplication(
+            List<long> values,
+            int participantCount)
+        {
+            return DeduplicateSortedAuthorityPairsAndCollectExactRequirements(
+                values,
+                participantCount);
+        }
+
+        private bool DeduplicateSortedAuthorityPairsAndCollectExactRequirements(
+            List<long> values,
+            int participantCount)
+        {
+            int valueCount = values.Count;
+            if (valueCount == 0)
+                return true;
+
+            int write = 0;
+            long previous = -1;
+            for (int read = 0; read < valueCount; read++)
+            {
+                long value = values[read];
+                if (write > 0 && value == previous)
+                    continue;
+
+                int firstOrdinal = (int)(value >> 32);
+                int secondOrdinal = (int)(value & 0xffffffffL);
+                if (firstOrdinal < 0 ||
+                    secondOrdinal <= firstOrdinal ||
+                    secondOrdinal >= participantCount)
+                {
+                    return false;
+                }
+
+                byte firstRoleFlags =
+                    _roleFormalParticipantRoleFlags[firstOrdinal];
+                byte secondRoleFlags =
+                    _roleFormalParticipantRoleFlags[secondOrdinal];
+                AddRoleAwareFormalExactDirectionRequirement(
+                    firstOrdinal,
+                    firstRoleFlags,
+                    secondOrdinal,
+                    secondRoleFlags);
+                AddRoleAwareFormalExactDirectionRequirement(
+                    secondOrdinal,
+                    secondRoleFlags,
+                    firstOrdinal,
+                    firstRoleFlags);
+
+                values[write++] = value;
+                previous = value;
+            }
+
+            if (write < valueCount)
+                values.RemoveRange(write, valueCount - write);
+            return true;
         }
 
         private void BuildCountingSortOffsets(int participantCount)
@@ -5150,7 +5444,7 @@ namespace NTSD.Animation
             if (!participant.HasExactCommonCache ||
                 entity.Runtime.XInt != participant.CollisionX ||
                 entity.Runtime.YInt != participant.CollisionY ||
-                (entity.PS.dir == "left") != participant.FacingLeft ||
+                entity.Runtime.IsFacingLeft != participant.FacingLeft ||
                 CollisionZInt(entity, participant.CollisionFrame) !=
                     participant.CollisionZ)
             {
@@ -6402,7 +6696,9 @@ namespace NTSD.Animation
 
         private static bool SameFacing(LF2Entity a, LF2Entity b)
         {
-            return a?.PS != null && b?.PS != null && a.PS.dir == b.PS.dir;
+            return a?.PS != null &&
+                   b?.PS != null &&
+                   IsEntityFacingLeft(a) == IsEntityFacingLeft(b);
         }
 
         private static bool IsReleaseWeaponType(int type)
@@ -6830,7 +7126,23 @@ namespace NTSD.Animation
             InteractionArea itr,
             out SpatialAabbXZ bounds)
         {
+            return TryBuildFormalItrAabb(
+                attacker,
+                frame,
+                itr,
+                out bounds,
+                out _);
+        }
+
+        private static bool TryBuildFormalItrAabb(
+            LF2Entity attacker,
+            LF2FrameData frame,
+            InteractionArea itr,
+            out SpatialAabbXZ bounds,
+            out WorldRect worldRect)
+        {
             bounds = default;
+            worldRect = default;
             if (attacker == null || frame == null || itr == null ||
                 !IsReleaseItrGeometry(itr))
             {
@@ -6838,6 +7150,7 @@ namespace NTSD.Animation
             }
 
             WorldRect rect = ItrWorldRect(attacker, frame, itr);
+            worldRect = rect;
             BuildConservativeNonEmptyXRange(
                 rect.X1,
                 rect.X2,
@@ -7000,7 +7313,7 @@ namespace NTSD.Animation
         {
             int x = entity.Runtime != null ? entity.Runtime.XInt : (int)entity.PS.x;
             int y = entity.Runtime != null ? entity.Runtime.YInt : (int)entity.PS.y;
-            bool facingLeft = entity.PS.dir == "left";
+            bool facingLeft = IsEntityFacingLeft(entity);
 
             int x1;
             int x2;
@@ -7026,7 +7339,7 @@ namespace NTSD.Animation
         {
             int x = entity.Runtime != null ? entity.Runtime.XInt : (int)entity.PS.x;
             int y = entity.Runtime != null ? entity.Runtime.YInt : (int)entity.PS.y;
-            bool facingLeft = entity.PS.dir == "left";
+            bool facingLeft = IsEntityFacingLeft(entity);
 
             int x1;
             int x2;
@@ -7046,6 +7359,14 @@ namespace NTSD.Animation
             return new WorldRect(x1, y1, x2, y2);
         }
 
+        private static bool IsEntityFacingLeft(LF2Entity entity)
+        {
+            if (entity?.Runtime != null)
+                return entity.Runtime.IsFacingLeft;
+
+            return entity?.PS?.dir == "left";
+        }
+
         private static bool BodyIsReleaseFullHeight(BodyBox body)
         {
             return body != null && body.y == int.MinValue && body.x < -100 && body.w >= 900;
@@ -7059,6 +7380,20 @@ namespace NTSD.Animation
             for (int i = 0; i < frame.bodies.Count; i++)
             {
                 if (IsReleaseBody(frame.bodies[i]))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasAnyReleaseItr(LF2FrameData frame)
+        {
+            if (frame?.itrs == null || frame.itrs.Count == 0)
+                return false;
+
+            for (int i = 0; i < frame.itrs.Count; i++)
+            {
+                if (IsReleaseItrGeometry(frame.itrs[i]))
                     return true;
             }
 
@@ -7270,6 +7605,8 @@ namespace NTSD.Animation
                 ? CurrentItrCount
                 : collisionFrame?.itrs?.Count ?? 0;
             CollisionBodyCount = collisionFrame?.bodies?.Count ?? 0;
+            FormalItrEntryOffset = 0;
+            FormalItrEntryCount = 0;
             ExactItrRectOffset = 0;
             ExactItrRectCount = 0;
             ExactBodyRectOffset = 0;
@@ -7306,6 +7643,8 @@ namespace NTSD.Animation
         public int CurrentItrCount { get; set; }
         public int CollisionItrCount { get; set; }
         public int CollisionBodyCount { get; set; }
+        public int FormalItrEntryOffset { get; set; }
+        public int FormalItrEntryCount { get; set; }
         public int ExactItrRectOffset { get; set; }
         public int ExactItrRectCount { get; set; }
         public int ExactBodyRectOffset { get; set; }
@@ -7405,13 +7744,15 @@ namespace NTSD.Animation
             RuntimeEntityHandle handle,
             int itrIndex,
             InteractionArea itr,
-            in SpatialAabbXZ bounds)
+            in SpatialAabbXZ bounds,
+            in WorldRect worldRect)
         {
             ParticipantOrdinal = participantOrdinal;
             Handle = handle;
             ItrIndex = itrIndex;
             Itr = itr;
             Bounds = bounds;
+            WorldRect = worldRect;
         }
 
         public int ParticipantOrdinal { get; }
@@ -7419,6 +7760,7 @@ namespace NTSD.Animation
         public int ItrIndex { get; }
         public InteractionArea Itr { get; }
         public SpatialAabbXZ Bounds { get; }
+        public WorldRect WorldRect { get; }
     }
 
     internal enum RoleAwareSweepEventKind : byte

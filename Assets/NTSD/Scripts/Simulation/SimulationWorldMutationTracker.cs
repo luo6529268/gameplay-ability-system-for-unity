@@ -2,6 +2,18 @@ using System.Threading;
 
 namespace NTSD.Simulation
 {
+    internal enum RuntimeFrameMotionField : byte
+    {
+        XInt,
+        YInt,
+        ZInt,
+        Vx,
+        Facing,
+        Frame,
+        State,
+        HitStop,
+    }
+
     /// <summary>
     /// Owns mutation epochs that invalidate caches for one simulation world.
     /// Runtimes notify this tracker without allocating delegates or sharing state

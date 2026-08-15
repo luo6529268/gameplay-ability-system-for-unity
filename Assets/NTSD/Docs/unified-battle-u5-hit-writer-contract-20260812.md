@@ -1,7 +1,7 @@
 # U5 命中 writer 权威契约与只读执行计划影子（2026-08-12）
 
 > 对应总计划：`unified-battle-lockstep-ecs-server-architecture-plan.md`
-> 当前结论：权威命中消费边界已经闭合，并建立了默认关闭、固定容量、零分配的只读执行计划影子；`ShadowCompare` 已逐项验证正式 character/object 旧链实际读取的候选、当前 pair preprocess、全部权威 kind 的消费 disposition、kind9/重武器预消费副作用、实际 dispatch 回报、OID300 只终止当前攻击者剩余候选的语义，以及 kind `6/8/14/1/3/2/7/10/11/15/16` 的精确状态副作用。damage `0/9` 已覆盖标准角色四档硬直/倒地、标准角色致死统计与强制倒地、alternate 非致死/致死分支、标准武器类型 `1/2/4/6` 的 effect0/effect4 分支，以及 type3 基础尾链、state3005/3006 同步、D1 直接/活动身份替换和 effect `0/2/3/5/21/22/23/30/5005/5999/6033`。OID `0xD6` 对角色命中后攻击者 HP 归零的字段投影，以及 OID `0xC9` 命中角色后释放自身 runtime slot 的独立生命周期投影均已写入并通过独立 C# 编译，但两者的 Unity 定向测试尚被 Editor 原生 AssetDatabase 崩溃阻断；正式 hit writer 仍由现有 Unity 对象路径唯一持有，本阶段尚未宣称 writer 已迁移。
+> 当前结论：权威命中消费边界已经闭合，并建立了默认关闭、固定容量、零分配的只读执行计划影子；`ShadowCompare` 已逐项验证正式 character/object 链实际读取的候选、pair preprocess、全部权威 kind/disposition、预消费副作用、dispatch、OID300 abort、可达 effect、声音和生命周期。DataOriented frozen-plan 调度保持行为/hash/0 B，但正式 A/B 未达到 10% 晋升门槛，默认仍为 `Disabled`。kind `1/3/2/7`、held、cpoint 与全部 damage 原子事务现已分别迁入 world-owned writer；opoint/结构生命周期也已进入 `BattleStructuralWriter`。U5 最终联合回归为 220/220 PASS，完整 self-check fresh PASS。
 
 ## 1. 权威 C# 边界
 
@@ -64,6 +64,8 @@
 
 ## 3. 当前验证证据
 
+**最新证据覆盖说明（2026-08-12 13:56）：**本节下方保留的早期 job、独立编译和 Editor 崩溃记录属于排障历史；涉及 OID `0xD6`、OID `0xC9`、OID `5/52`、OID100、历史帧/cpoint、state1002/2000/3000、active-holder 与 held-pair vRest 的当前状态，以最新 Unity job `0c79401c82684ad6ac9168cf77a4244e` 的 118/118 PASS 和 fresh 完整 self-check PASS 为准，不再标记为“Unity 运行时未验证”。
+
 - Unity fresh compile：0 error；
 - `dotnet build Assembly-CSharp.csproj --no-restore`：0 error；
 - `BattleHitExecutionPlanEditorTests`：alternate 致死补齐后 96/96 PASS，job `562ce635bbf64029a5b1319f45ec6dcd`；
@@ -74,28 +76,41 @@
 - effect20 对非角色 DAT 在权威 `CollisionCollect` 中即被拒绝，无法进入 type3 special-attack writer；执行计划已据此从可达支持集合排除该输入，没有用直接调用绕过碰撞前置条件；
 - oracle 实际检出并修复 weapon/special/held 三条直接切帧原语未同步 `Runtime.Frame` 的生产双帧镜像遗漏；
 - OID `100` 的正式武器命中尾链已按权威 C# 修复；该修复包含在上述 96/96、112/112 和 fresh self-check 证据中；
+- OID `100` 的角色、DAT 角色与特殊攻击三条正式命中链已补齐权威分支顺序：当击退成立、目标水平击退处于 `(-5, 5)` 且 `dvx == 0` 时，只追加固定方向的 `5` 并立即返回，不得再进入 OID100 的 `2.5x`、最小 `10` 与 `SFX_039` 尾链；除此以外即使解析后的 `dvx == 0` 也仍执行该尾链。正/反两组 shadow 用例已写入，Editor C# 工程独立编译通过，但尚无新的 Unity 运行时结果；
 - kind9 定向验证覆盖 preprocess 把 kind9 投影为 kind0、消费时 attacker HP 归零；重武器定向验证覆盖 target/held 双向 link 释放、两组 vRest `45/30`、随机 frame `0..5`、`Vy=-1` 和 RNG state/call count；
 - 测试夹具为重武器补齐 frame `0..5`，避免用缺失 DAT 帧造成 `ImmediateFrame` 假阴性；正式生产代码没有为测试改变帧回退语义；
 - 测试同时核对 shadow 捕获前后 extended checksum 与 RNG 不变。
-- OID `0xD6` 的只读投影和定向测试已加入：预期在标准角色伤害完成后将特殊攻击者 HP 置零，同时保留目标扣血和 hit record。`dotnet build Assembly-CSharp.csproj --no-restore` 已于本轮以 `EXIT=0` 通过；但启动该定向 Unity 测试时 Editor 因 `MDB_READERS_FULL: Environment maxreaders limit reached` 原生崩溃，测试 job `1402bf42fcab4fea86ceaa01d1babd82` 未产生可采信结果，因此本项仍是“逻辑已写、编译通过、Unity 运行时未验证”，不能写成 PASS；
-- OID `0xC9` 已按权威 `FreeEntity(attackerSlot)` 建模为独立生命周期输出，而不是普通字段快照：命中角色后必须令旧 handle 失效、slot 变为未占用、generation 精确递增一次、slot occupant 变为 `null`，且攻击者 `Runtime.SlotIndex` 清为 `-1`；观察 world 在 dispatch 前保存，避免正式 free 清空 `Match` 后漏掉观察。正向、缺失观察和未释放伪完成三类聚焦测试已写入；`dotnet build Assembly-CSharp-Editor.csproj --no-restore /m:1 /v:q` 已通过，但 Unity Editor 当前尚未恢复，所以只能记为“逻辑已写、编译通过、Unity 运行时未验证”；
+- OID `0xD6` 的只读投影已按正式 `ObjectInteractionTickAll` 对象命中 pass 完成 Unity 定向验证：标准角色伤害后特殊攻击者 HP 归零，同时目标扣血和 hit record 保留；
+- OID `0xC9` 已按权威 `FreeEntity(attackerSlot)` 建模为独立生命周期输出，而不是普通字段快照：命中角色后旧 handle 失效、slot 未占用、generation 精确递增一次、slot occupant 为 `null`，且攻击者 `Runtime.SlotIndex` 清为 `-1`；观察 world 在 dispatch 前保存，正向、缺失观察和未释放伪完成三类聚焦测试均已进入最新 Unity PASS；
+- OID `5/52` 已确认只在权威 opoint 创建阶段把新对象的 `HP/HPMax/HP3` 初始化为 `10`、`PP` 初始化为 `5`，不能在每次命中时重复重置。Unity DAT 角色命中链中错误的逐次重置已移除，shadow 用例同时断言正常扣减 `HP/HPBound` 且 `HP3/PP` 保持不变；该用例已进入最新 Unity PASS；
+- 标准角色伤害 shadow 已补齐两条历史帧分支：上一帧为 `Frozen` 或碰撞快照 `PrevFrame2` 为 `Falling` 时必须强制进入 fall80 倒地路径；有效 reciprocal catcher/link 且 `PrevFrame2.cpoint.kind == 2` 时，按双方朝向选择 `fronthurtact/backhurtact`。测试夹具先把历史/被抓帧作为正式碰撞快照，再切回受击时当前帧，避免手写 `PrevFrame2` 被快照 pass 覆盖；两组均已进入最新 Unity PASS；
+- 标准 damage 的攻击者状态尾链已继续闭合：`state1002` 先消费反弹帧 RNG，再消费 hit-record 的两次 RNG；`state2000` 按双方 X 相对位置决定击退；`state3000` 在 hit-record 前切 frame 10、清 `Attacking/Vx`，标准分支读取 frame10 的 `dvz`。alternate damage 另行覆盖 `state1002` 的 `Vz *= -2/3`、`state2000` 的朝目标移动 X/Z 速度衰减和不改 `Vz` 的 `state3000` 尾链；对应聚焦用例已进入最新 Unity PASS；
+- active holder 与 `HolderCopy` 已在 writer-effect 快照中拆成两个独立契约：前者由 `LinkState < 0 + HolderStableId` 决定并接收攻击者命中后的 `FrameDelay`，后者只承担 kill/combo 统计归属。standard/alternate/object damage 的只读投影均按该边界比较，不再因为攻击者被持有而整体排除；
+- type3 通用标准尾链现与权威分支一致：active 非角色攻击者固定选择 frame20；character 或 held 非角色攻击者只在 effect2/20 选择 frame20，否则 frame30。有效 holder 提供 relation/holder-copy 并接收 FrameDelay，失效 holder 不再错误回退到攻击者自身；OID8/D1/D5 仅在专用 Karasu 替换条件成立时走 identity projector，其余目标回退标准尾链；
+- type3 object-hurt 前段已覆盖 HP<=0/空中目标、`PrevFrame` Frozen、`PrevFrame2` Falling 的 fall 计算/复位，以及 state1002 在 hit-record 前消费 RNG 并写反弹速度、state3000 写 frame10/清 `Attacking/Vx`/读取 frame10.dvz 的顺序；
+- 权威击飞还要求在受击者持有另一实体时写 `heldTarget -> attacker = 45` 与 `victim -> heldTarget = 30` 两个方向的 vRest。核验实际发现 `LF2CharacterHitResolver` 与 `LF2CharacterDatHitResolver` 漏写，`LF2SpecialAttack` 的关系门槛又比权威更严格；三条正式 consumer 现统一调用 `LF2HitResolveRuntimeData.ApplyKnockdownHeldPairVrest`，只校验 active slot 与 `heldTarget.HolderStableId == victimSlot`，不额外要求权威没有的 held negative-link gate。shadow 为两个方向使用独立字段，相关聚焦用例与 active-holder FrameDelay 均已进入最新 Unity PASS；
+- 正式 `LF2Weapon.ApplyHitEffects` 同样曾漏掉上述 held-pair vRest；现已在权威击飞帧写入后调用同一 helper。valid relation 精确写 `heldTarget -> attacker = 45` 与 `victim -> heldTarget = 30`，holder 不匹配时保持 `0/0`，两组 shadow 均为零差异；
+- 标准对象 damage 的只读投影已移除普通负 link 武器、空中武器和 `bdefend=100` 的人工排除：耐久在 `bdefend=100` 时精确写 `-1`，空中重武器低 fall 使用随机 frame `0..5`，type4/6 先走 `abs(Vx) * 0.55` 动态击退而不是错误落入 effect22/23，普通负 link 只保持关系且仍完整结算；
+- type3 普通尾链不再局限于 standing/state1002/state2000，也不再排除 `bdefend=100`；除 state3005/3006 继续由专用同步投影处理外，其他目标 state 都按权威先执行 object-hurt，再由 kind0 type3 tail 覆盖 frame/relation/motion；
+- 最新 `dotnet build Assembly-CSharp-Editor.csproj --no-restore -v:minimal`：0 error、76 个既有 warning；本条只证明脚本编译，不替代 Unity 运行时测试。
 - OID300 定向验证覆盖三个同 pass 候选：第一个攻击者成功 redirect 后只跳过自身第二候选，下一个攻击者仍继续命中；OID300 HP 按权威 C# 保持不变，伪造 abort termination 会 fail closed；
 - 命中计划、碰撞/命中见证、character/object 空候选路径与 PreInteraction 关联回归：69/69 PASS，job `9492705296da4e4a83ee2d349fb8ed4e`；其中明确覆盖 `CharacterHit -> RandomDrop -> ObjectHit` 边界；
 - `dotnet build Assembly-CSharp-Editor.csproj --no-restore /m:1 /v:q`：0 error；
 - Unity fresh compile：0 C# error；
 - 完整 `BattleRuntimeSelfCheck`：结果文件于 `2026-08-12 05:15:46` fresh PASS，请求文件已被实际消费。
+- 最新聚焦 job `b5beed1352a24bc3ab9abff9f42d33e7`：`BattleHitExecutionPlanEditorTests` 165/165 PASS，0 failed、0 skipped，耗时 4.300 s；
+- 上一轮完整 `BattleRuntimeSelfCheck`：`Temp/NTSD_BattleRuntimeSelfCheck.result` 于 `2026-08-12 14:25:36` fresh 返回 `PASS`；本批最终 self-check 将在继续闭合 writer 后重新运行。
 
-上述已通过证据证明候选输入、旧 writer 的实际候选读取、preprocess、全部权威 kind disposition、已覆盖预消费副作用、全部非 damage kind 的基础状态副作用、damage 主要基础分支、alternate 致死、type3 D1 身份/状态同步、dispatch 与 OID300 abort 边界一致，且默认关闭的只读影子没有破坏现有 writer；fresh 联合回归与完整 self-check 已通过。它们仍不构成 OID `0xD6`/`0xC9` 的 Unity 运行时结果、复杂特殊 effect、character-DAT type3 effect tail、正式事件/opoint/其余生命周期或正式 writer 已迁移的证据。
+上述证据证明候选输入、正式 writer 的实际候选读取、preprocess、全部权威 kind disposition、预消费副作用、全部非 damage kind、damage 分支、可达 effect、声音、dispatch 与 OID300 abort 边界一致，且默认关闭的只读影子没有破坏生产 writer；OID `0xD6`、OID `0xC9`、OID `5/52`、OID100、历史帧/cpoint、state1002/2000/3000、active-holder 与 held-pair vRest 已完成 Unity 聚焦验证。W05A～W05E 的 opoint/生命周期合同已接入分段 `BattleStructuralWriter`，全部可达 damage 已迁入 `BattleDamageWriter`。最新联合 EditMode job `b55c2edd04964be7b784f7bec65ab0f5` 为 220/220 PASS，完整 `BattleRuntimeSelfCheck` 于 `2026-08-12 20:34:10` fresh PASS。
 
-## 4. 下一道门禁
+## 4. 后续门禁
 
-下一步仍不是直接让执行计划扣血。候选读取、preprocess、全部 kind 的消费 disposition 与当前两类预消费副作用门已关闭；下一道门禁是在不改变 writer 的前提下继续闭合正式 dispatch 结果和状态写入：
+U5 的命中/交互/生命周期 writer 所有权已经关闭，后续进入 U6：
 
-1. 先恢复 Unity 后完成 OID `0xD6` 与 OID `0xC9` 的定向运行验证；C9 的 `FreeEntity(attackerSlot)` 已建模为独立生命周期输出，运行门禁必须同时验证旧 handle、槽位占用、generation、occupant 和 runtime slot，而不能只看对象是否不可见；
-2. 继续闭合 damage `0/9` 的剩余特殊死亡条件、特殊 effect、character-DAT type3 effect tail 与剩余 effect 变换；已经关闭的标准致死、alternate 致死、非 damage kind和 D1 identity 分支不重复迁移；
-3. 对已覆盖的 HP/HPMax、kill/combo/damage 统计、frame/frame delay、速度、fall、朝向和 aRest/vRest 补齐复杂分支与 fresh 联合门禁；
-4. 再闭合声音/正式事件、opoint、spawn/destroy/free/unregister/generation 输出；
-5. slot 复用和结构变化时继续保持 target slot 权威语义，generation 只作诊断；
-6. 只有完整 writer 数据契约、事件/opoint/生命周期输出全部闭合后，才允许在 ResetWorld 边界切换单一 canonical writer。
+1. 只在 ResetWorld/初始化边界切换 canonical SoA 真值，不允许同 tick 双 writer；
+2. 保持 HP/HPMax、统计、frame/frame delay、速度、fall、朝向、aRest/vRest、RNG、事件与结构命令顺序为不可拆分事务；
+3. 对象 resolver 逐步退为 adapter，不能在 SoA writer 之外继续拥有隐藏战斗真值；
+4. slot 复用与结构变化继续保持 C# target-slot 语义，generation 只用于 Unity 身份和 stale-handle 防护；
+5. U6 每批仍需 checksum、聚焦测试、fresh self-check 与 1000 AI/零 GC 门禁，不能用 U5 证据替代。
 
-本记录关闭的是“迁移前的权威合同与稳定输入计划”子项，不关闭 U5 的真实 hit writer、cpoint/held/link writer、opoint 或结构生命周期任务。
+interaction/held、cpoint、damage、结构生命周期与 battle results 的最终记录分别见同日期 U5 文档。本记录只关闭 U5，不宣称 U6 的 SoA 真值迁移或 U9 性能验收完成。

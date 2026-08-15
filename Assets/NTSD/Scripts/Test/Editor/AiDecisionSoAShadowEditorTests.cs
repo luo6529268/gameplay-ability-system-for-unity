@@ -526,6 +526,71 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void UnifiedAuthority_DirectCanonicalInputMatchesSnapshotCopyAcrossTicks()
+        {
+            var copied = new SimulationWorld();
+            var direct = new SimulationWorld();
+            copied.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            direct.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            direct.ConfigureAiDecisionOwnedInputModeForDiagnostics(
+                AiDecisionOwnedInputMode.CanonicalStoreDirect);
+
+            int[] slots = { 0, 3, 7 };
+            var copiedCharacters = new LF2Character[slots.Length];
+            var directCharacters = new LF2Character[slots.Length];
+            for (int index = 0; index < slots.Length; index++)
+            {
+                copiedCharacters[index] = RegisterCharacter(
+                    copied,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 80,
+                    0,
+                    0,
+                    index == 1 ? 9 : 2,
+                    true);
+                directCharacters[index] = RegisterCharacter(
+                    direct,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 80,
+                    0,
+                    0,
+                    index == 1 ? 9 : 2,
+                    true);
+            }
+            copied.Runtime.Flow.InputPhase = 2;
+            direct.Runtime.Flow.InputPhase = 2;
+            copied.Rng.Seed(0xD1EC7u);
+            direct.Rng.Seed(0xD1EC7u);
+
+            for (int tick = 2; tick < 18; tick++)
+            {
+                copied.CharacterInputAll(tick);
+                direct.CharacterInputAll(tick);
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    AssertDecisionStateEqual(
+                        copied,
+                        copiedCharacters[index],
+                        direct,
+                        directCharacters[index]);
+                }
+            }
+
+            Assert.That(
+                direct.AiDecisionIndexedCanonicalCommittedCountForDiagnostics,
+                Is.EqualTo(copied.AiDecisionIndexedCanonicalCommittedCountForDiagnostics));
+            Assert.That(
+                direct.AiDecisionIndexedCanonicalFallbackCountForDiagnostics,
+                Is.Zero);
+        }
+
+        [Test]
         public void IndexedCanonical_PreCommitFailureFallsBackWithoutPartialWrites()
         {
             var legacy = new SimulationWorld();
@@ -942,6 +1007,9 @@ namespace NTSD.Test
                 Is.EqualTo(1));
             Assert.That(unified.AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics,
                 Is.EqualTo(1));
+            Assert.That(
+                unified.AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics,
+                Is.EqualTo(slots.Length));
             Assert.That(unified.AiUnifiedSnapshotExecutionReadCountForDiagnostics,
                 Is.EqualTo(slots.Length));
             Assert.That(unified.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
@@ -957,7 +1025,10 @@ namespace NTSD.Test
         [Test]
         public void UnifiedAuthority_IncrementalPostInputRefreshMatchesFullRefreshAcrossTicks()
         {
-            var incremental = new SimulationWorld();
+            var incremental = new SimulationWorld
+            {
+                ValidateIncrementalAiUnifiedRowForDiagnostics = true,
+            };
             var full = new SimulationWorld
             {
                 ForceFullCharacterInputPostRefreshForDiagnostics = true,
@@ -1018,6 +1089,178 @@ namespace NTSD.Test
                     Is.True,
                     $"full published snapshot must remain internally valid at tick {tick}");
             }
+
+            Assert.That(
+                incremental.AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics,
+                Is.EqualTo(30L * slots.Length));
+        }
+
+        [Test]
+        public void UnifiedAuthority_NoPendingRefreshSkipMatchesLegacyRefreshAcrossTicks()
+        {
+            var baseline = new SimulationWorld();
+            var skipped = new SimulationWorld
+            {
+                AiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics = true,
+            };
+            int[] slots = { 20, 23, 27 };
+            var baselineCharacters = new LF2Character[slots.Length];
+            var skippedCharacters = new LF2Character[slots.Length];
+            for (int index = 0; index < slots.Length; index++)
+            {
+                baselineCharacters[index] = RegisterCharacter(
+                    baseline,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    0,
+                    0,
+                    2,
+                    false);
+                skippedCharacters[index] = RegisterCharacter(
+                    skipped,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    0,
+                    0,
+                    2,
+                    false);
+            }
+            ConfigureGateBWorld(baseline, unifiedAuthority: true, 0x5A1Fu);
+            ConfigureGateBWorld(skipped, unifiedAuthority: true, 0x5A1Fu);
+
+            for (int tick = 2; tick < 18; tick++)
+            {
+                baseline.CharacterInputAll(tick);
+                skipped.CharacterInputAll(tick);
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    AssertDecisionStateEqual(
+                        baseline,
+                        baselineCharacters[index],
+                        skipped,
+                        skippedCharacters[index]);
+                    AssertEntityObservableStateEqual(
+                        baselineCharacters[index],
+                        skippedCharacters[index]);
+                }
+
+                Assert.That(
+                    skipped.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                    Is.True,
+                    $"no-pending skip must preserve the published snapshot at tick {tick}");
+            }
+
+            Assert.That(
+                skipped.AiUnifiedSnapshotExecutionNoPendingRefreshSkipCountForDiagnostics,
+                Is.GreaterThan(0));
+            Assert.That(
+                skipped.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
+                Is.EqualTo(baseline.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics));
+        }
+
+        [Test]
+        public void UnifiedAuthority_RollingSnapshotMatchesForcedFullRebuildAcrossTicks()
+        {
+            var rolling = new SimulationWorld
+            {
+                ValidateIncrementalAiUnifiedRowForDiagnostics = true,
+            };
+            var full = new SimulationWorld
+            {
+                ForceFullAiUnifiedSnapshotRebuildForDiagnostics = true,
+            };
+            int[] slots = { 0, 3, 7, 20 };
+            var rollingCharacters = new LF2Character[slots.Length];
+            var fullCharacters = new LF2Character[slots.Length];
+            for (int index = 0; index < slots.Length; index++)
+            {
+                int state = index == 1 ? 9 : index == 3 ? 14 : 2;
+                rollingCharacters[index] = RegisterCharacter(
+                    rolling,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    index == 3 ? 12 : 0,
+                    0,
+                    state,
+                    true);
+                fullCharacters[index] = RegisterCharacter(
+                    full,
+                    slots[index],
+                    index + 1,
+                    index & 1,
+                    index * 60,
+                    index == 3 ? 12 : 0,
+                    0,
+                    state,
+                    true);
+            }
+            ConfigureGateBWorld(rolling, unifiedAuthority: true, 0xC011u);
+            ConfigureGateBWorld(full, unifiedAuthority: true, 0xC011u);
+
+            for (int tick = 2; tick < 32; tick++)
+            {
+                rolling.CharacterInputAll(tick);
+                full.CharacterInputAll(tick);
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    AssertDecisionStateEqual(
+                        full,
+                        fullCharacters[index],
+                        rolling,
+                        rollingCharacters[index]);
+                    AssertEntityObservableStateEqual(
+                        fullCharacters[index],
+                        rollingCharacters[index]);
+                }
+
+                int directZ = tick * 3;
+                rollingCharacters[1].Runtime.ZInt = directZ;
+                fullCharacters[1].Runtime.ZInt = directZ;
+            }
+
+            Assert.That(
+                rolling.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                Is.EqualTo(29));
+            Assert.That(
+                full.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                rolling.AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics,
+                Is.EqualTo(slots.Length));
+            Assert.That(
+                full.AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics,
+                Is.EqualTo(30L * slots.Length));
+        }
+
+        [Test]
+        public void UnifiedAuthority_OccupancyEpochChangeForcesCompleteRebuild()
+        {
+            var world = new SimulationWorld();
+            RegisterCharacter(world, 0, 1, 1, 10, 0, 0, 2, true);
+            LF2Character replaced =
+                RegisterCharacter(world, 3, 2, 2, 90, 0, 0, 9, true);
+            ConfigureGateBWorld(world, unifiedAuthority: true, 0xE09Cu);
+
+            world.CharacterInputAll(2);
+            world.Unregister(replaced);
+            RegisterCharacter(world, 3, 3, 2, 120, 0, 0, 9, true);
+            world.CharacterInputAll(3);
+
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics,
+                Is.EqualTo(4));
+            Assert.That(
+                world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                Is.True);
         }
 
         [Test]
@@ -1153,6 +1396,7 @@ namespace NTSD.Test
             LF2Character role = RegisterCharacter(world, 3, 2, 2, 90, 0, 0, 9, false);
             LF2Character special = RegisterCharacter(world, 20, 0xC8, 1, 180, 0, 0, 1000, false);
             first.Runtime.XBoundPositive = true;
+            world.BoundaryWriter.SyncConsumedFlags(first.Runtime);
             ConfigureGateBWorld(world, unifiedAuthority: true, 0x5150u);
             Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(
                 3, role, out RuntimeEntityHandle roleHandle), Is.True);

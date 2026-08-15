@@ -1,6 +1,7 @@
 using System;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -8,6 +9,11 @@ namespace NTSD.Animation.Rendering
 {
     public sealed class BattleDynamicMeshBackend : IDisposable
     {
+        private static readonly ProfilerMarker ResolveAndWriteCommandsMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.Mesh.ResolveAndWriteCommands");
+        private static readonly ProfilerMarker UploadChunksMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.Mesh.UploadChunks");
+
         public const int QuadsPerChunk = 4096;
         public const int VerticesPerQuad = 4;
         public const int IndicesPerQuad = 6;
@@ -108,7 +114,8 @@ namespace NTSD.Animation.Rendering
             BattlePresentationFrame frame,
             IBattleCentralResourceResolver resolver,
             BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks,
-            BattleTickDetailPhaseDiagnostics detailDiagnostics = null)
+            BattleTickDetailPhaseDiagnostics detailDiagnostics = null,
+            BattlePresentationPhaseDiagnostics presentationDiagnostics = null)
         {
             if (disposed)
                 throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
@@ -133,108 +140,151 @@ namespace NTSD.Animation.Rendering
             int openFirstQuad = -1;
             int openQuadCount = 0;
             BattleCentralResolvedResource openSegmentResource = default;
+            BattleCatalogCentralResourceResolver preparedCatalogResolver =
+                resolver as BattleCatalogCentralResourceResolver;
+            bool collectPresentationTimings = presentationDiagnostics != null;
+            long resolveCommandsElapsedTicks = 0;
+            long writeQuadsElapsedTicks = 0;
 
-            for (int commandIndex = 0; commandIndex < commandCount; commandIndex++)
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.MeshResolveAndWriteCommands);
+            try
             {
-                ref readonly BattleRenderCommand command =
-                    ref frame.GetCommandRef(commandIndex);
-                BattleCentralResolvedResource resource;
-                BattleCentralResourceStatus status;
-                detailDiagnostics?.BeginPhase(
-                    BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
-                try
+                using (ResolveAndWriteCommandsMarker.Auto())
                 {
-                    status = resolver.Resolve(command, out resource);
-                }
-                finally
-                {
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
-                }
-                if (status != BattleCentralResourceStatus.Resolved)
-                {
-                    if (status == BattleCentralResourceStatus.UnsupportedCategory)
-                        diagnostics.UnsupportedCategoryCount++;
-                    else if (status == BattleCentralResourceStatus.UnsupportedRenderState)
-                        diagnostics.UnsupportedRenderStateCount++;
-                    else
-                        diagnostics.UnresolvedCommandCount++;
-                    if (diagnostics.FirstUnresolvedCommandIndex < 0)
+                    for (int commandIndex = 0; commandIndex < commandCount; commandIndex++)
                     {
-                        diagnostics.FirstUnresolvedCommandIndex = commandIndex;
-                        diagnostics.FirstUnresolvedCommandType = command.Type;
-                        diagnostics.FirstUnresolvedStatus = status;
-                    }
-                    // An unresolved command still occupies an authoritative position
-                    // in the P3 stream. Never batch resolved commands across it.
-                    if (hasOpenSegment)
-                    {
-                        CommitSegment(
-                            openSegmentIndex,
-                            openChunkIndex,
-                            openSubMeshIndex,
-                            openFirstCommandIndex,
-                            openFirstQuad,
-                            openQuadCount,
-                            openSegmentResource);
-                        hasOpenSegment = false;
-                    }
-                    continue;
-                }
+                        ref readonly BattleRenderCommand command =
+                            ref frame.GetCommandRef(commandIndex);
+                        BattleCentralResolvedResource resource;
+                        BattleCentralResourceStatus status;
+                        long resolveStartedAt = collectPresentationTimings
+                            ? System.Diagnostics.Stopwatch.GetTimestamp()
+                            : 0;
+                        detailDiagnostics?.BeginPhase(
+                            BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                        try
+                        {
+                            status = preparedCatalogResolver != null
+                                ? preparedCatalogResolver.ResolvePrepared(command, out resource)
+                                : resolver.Resolve(command, out resource);
+                        }
+                        finally
+                        {
+                            detailDiagnostics?.EndPhase(
+                                BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                        }
+                        if (collectPresentationTimings)
+                        {
+                            resolveCommandsElapsedTicks +=
+                                System.Diagnostics.Stopwatch.GetTimestamp() - resolveStartedAt;
+                        }
+                        if (status != BattleCentralResourceStatus.Resolved)
+                        {
+                            if (status == BattleCentralResourceStatus.UnsupportedCategory)
+                                diagnostics.UnsupportedCategoryCount++;
+                            else if (status == BattleCentralResourceStatus.UnsupportedRenderState)
+                                diagnostics.UnsupportedRenderStateCount++;
+                            else
+                                diagnostics.UnresolvedCommandCount++;
+                            if (diagnostics.FirstUnresolvedCommandIndex < 0)
+                            {
+                                diagnostics.FirstUnresolvedCommandIndex = commandIndex;
+                                diagnostics.FirstUnresolvedCommandType = command.Type;
+                                diagnostics.FirstUnresolvedStatus = status;
+                            }
+                            // An unresolved command still occupies an authoritative position
+                            // in the P3 stream. Never batch resolved commands across it.
+                            if (hasOpenSegment)
+                            {
+                                CommitSegment(
+                                    openSegmentIndex,
+                                    openChunkIndex,
+                                    openSubMeshIndex,
+                                    openFirstCommandIndex,
+                                    openFirstQuad,
+                                    openQuadCount,
+                                    openSegmentResource);
+                                hasOpenSegment = false;
+                            }
+                            continue;
+                        }
 
-                int chunkIndex = resolvedCount / QuadsPerChunk;
-                int quadIndex = resolvedCount % QuadsPerChunk;
-                EnsureChunk(chunkIndex);
-                BattleMeshChunk chunk = chunks[chunkIndex];
-                bool strict = drawMode == BattleCentralDrawMode.StrictOrderedDraw;
-                bool canAppend = !strict && hasOpenSegment && openChunkIndex == chunkIndex &&
-                                 IsCompatible(openSegmentResource, resource) &&
-                                 openFirstQuad + openQuadCount == quadIndex;
-                if (!canAppend)
-                {
-                    if (hasOpenSegment)
-                    {
-                        CommitSegment(
-                            openSegmentIndex,
-                            openChunkIndex,
-                            openSubMeshIndex,
-                            openFirstCommandIndex,
-                            openFirstQuad,
-                            openQuadCount,
-                            openSegmentResource);
-                    }
-                    EnsureSegmentCapacity(segmentCount + 1);
-                    openSegmentIndex = segmentCount++;
-                    openChunkIndex = chunkIndex;
-                    openSubMeshIndex = chunk.PendingSegmentCount++;
-                    openFirstCommandIndex = commandIndex;
-                    openFirstQuad = quadIndex;
-                    openQuadCount = 0;
-                    openSegmentResource = resource;
-                    hasOpenSegment = true;
-                }
-                detailDiagnostics?.BeginPhase(
-                    BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
-                try
-                {
-                    chunk.WriteQuad(
-                        quadIndex,
-                        command,
-                        resource,
-                        out SegmentBoundsAccumulator quadBounds);
-                    if (canAppend)
-                        segmentBounds[openSegmentIndex].Encapsulate(quadBounds);
-                    else
-                        segmentBounds[openSegmentIndex] = quadBounds;
-                }
-                finally
-                {
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
-                }
+                        int chunkIndex = resolvedCount / QuadsPerChunk;
+                        int quadIndex = resolvedCount % QuadsPerChunk;
+                        EnsureChunk(chunkIndex);
+                        BattleMeshChunk chunk = chunks[chunkIndex];
+                        bool strict = drawMode == BattleCentralDrawMode.StrictOrderedDraw;
+                        bool canAppend = !strict && hasOpenSegment && openChunkIndex == chunkIndex &&
+                                         IsCompatible(openSegmentResource, resource) &&
+                                         openFirstQuad + openQuadCount == quadIndex;
+                        if (!canAppend)
+                        {
+                            if (hasOpenSegment)
+                            {
+                                CommitSegment(
+                                    openSegmentIndex,
+                                    openChunkIndex,
+                                    openSubMeshIndex,
+                                    openFirstCommandIndex,
+                                    openFirstQuad,
+                                    openQuadCount,
+                                    openSegmentResource);
+                            }
+                            EnsureSegmentCapacity(segmentCount + 1);
+                            openSegmentIndex = segmentCount++;
+                            openChunkIndex = chunkIndex;
+                            openSubMeshIndex = chunk.PendingSegmentCount++;
+                            openFirstCommandIndex = commandIndex;
+                            openFirstQuad = quadIndex;
+                            openQuadCount = 0;
+                            openSegmentResource = resource;
+                            hasOpenSegment = true;
+                        }
+                        detailDiagnostics?.BeginPhase(
+                            BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
+                        long writeStartedAt = collectPresentationTimings
+                            ? System.Diagnostics.Stopwatch.GetTimestamp()
+                            : 0;
+                        try
+                        {
+                            SegmentBoundsAccumulator quadBounds;
+                            chunk.WriteQuad(
+                                quadIndex,
+                                command,
+                                resource,
+                                out quadBounds);
+                            if (canAppend)
+                                segmentBounds[openSegmentIndex].Encapsulate(quadBounds);
+                            else
+                                segmentBounds[openSegmentIndex] = quadBounds;
+                        }
+                        finally
+                        {
+                            detailDiagnostics?.EndPhase(
+                                BattleTickDetailPhase.RenderPrepareFrameWriteQuads);
+                        }
+                        if (collectPresentationTimings)
+                        {
+                            writeQuadsElapsedTicks +=
+                                System.Diagnostics.Stopwatch.GetTimestamp() - writeStartedAt;
+                        }
 
-                openQuadCount++;
-                resolvedCount++;
+                        openQuadCount++;
+                        resolvedCount++;
+                    }
+                }
+            }
+            finally
+            {
+                presentationDiagnostics?.RecordPhaseElapsed(
+                    BattlePresentationPhase.MeshResolveCommands,
+                    resolveCommandsElapsedTicks);
+                presentationDiagnostics?.RecordPhaseElapsed(
+                    BattlePresentationPhase.MeshWriteQuads,
+                    writeQuadsElapsedTicks);
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.MeshResolveAndWriteCommands);
             }
 
             if (hasOpenSegment)
@@ -251,18 +301,33 @@ namespace NTSD.Animation.Rendering
 
             activeChunkCount = resolvedCount == 0 ? 0 : (resolvedCount + QuadsPerChunk - 1) / QuadsPerChunk;
             int segmentCursor = 0;
-            for (int chunkIndex = 0; chunkIndex < activeChunkCount; chunkIndex++)
+            presentationDiagnostics?.BeginPhase(
+                BattlePresentationPhase.MeshUploadChunks);
+            try
             {
-                BattleMeshChunk chunk = chunks[chunkIndex];
-                int activeQuads = Math.Min(QuadsPerChunk, resolvedCount - chunkIndex * QuadsPerChunk);
-                chunk.Upload(
-                    chunkIndex,
-                    activeQuads,
-                    segments,
-                    segmentBounds,
-                    ref segmentCursor,
-                    segmentCount,
-                    detailDiagnostics);
+                using (UploadChunksMarker.Auto())
+                {
+                    for (int chunkIndex = 0; chunkIndex < activeChunkCount; chunkIndex++)
+                    {
+                        BattleMeshChunk chunk = chunks[chunkIndex];
+                        int activeQuads = Math.Min(
+                            QuadsPerChunk,
+                            resolvedCount - chunkIndex * QuadsPerChunk);
+                        chunk.Upload(
+                            chunkIndex,
+                            activeQuads,
+                            segments,
+                            segmentBounds,
+                            ref segmentCursor,
+                            segmentCount,
+                            detailDiagnostics);
+                    }
+                }
+            }
+            finally
+            {
+                presentationDiagnostics?.EndPhase(
+                    BattlePresentationPhase.MeshUploadChunks);
             }
             for (int chunkIndex = activeChunkCount; chunkIndex < dirtyChunkCount; chunkIndex++)
             {

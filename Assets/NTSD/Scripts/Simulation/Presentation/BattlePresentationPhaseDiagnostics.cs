@@ -17,7 +17,22 @@ namespace NTSD.Simulation.Presentation
         QueueLatestPublishedFrame = 8,
         PresentationPublishTotal = 9,
         BeginFrameTotal = 10,
-        Count = 11,
+        ResolveDeferredSpriteCaptures = 11,
+        BuildCommandsCore = 12,
+        CaptureSubmissionFrame = 13,
+        MaterializePresentationOrder = 14,
+        MaterializeCommands = 15,
+        ConfigureResolver = 16,
+        MeshResolveAndWriteCommands = 17,
+        MeshUploadChunks = 18,
+        PublishSubmission = 19,
+        MeshResolveCommands = 20,
+        MeshWriteQuads = 21,
+        BuildCommandsShadow = 22,
+        BuildCommandsEntity = 23,
+        BuildCommandsOverlay = 24,
+        BuildCommandsHitRecord = 25,
+        Count = 26,
     }
 
     /// <summary>
@@ -117,6 +132,19 @@ namespace NTSD.Simulation.Presentation
                 : 0;
         }
 
+        public void RecordPhaseElapsed(
+            BattlePresentationPhase phase,
+            long elapsedTicks)
+        {
+            if (!Enabled || activeTickIndex < 0 || elapsedTicks <= 0 ||
+                (uint)phase >= (uint)BattlePresentationPhase.Count)
+            {
+                return;
+            }
+
+            elapsedTimestampTicks[(int)phase] += elapsedTicks;
+        }
+
         public static string GetPhaseName(BattlePresentationPhase phase)
         {
             switch (phase)
@@ -143,6 +171,36 @@ namespace NTSD.Simulation.Presentation
                     return "RenderDispatch/PresentationPublishTotal";
                 case BattlePresentationPhase.BeginFrameTotal:
                     return "RenderDispatch/BeginFrameTotal";
+                case BattlePresentationPhase.ResolveDeferredSpriteCaptures:
+                    return "BeginFrame/BuildCommands/ResolveDeferredSpriteCaptures";
+                case BattlePresentationPhase.BuildCommandsCore:
+                    return "BeginFrame/BuildCommands/Core";
+                case BattlePresentationPhase.CaptureSubmissionFrame:
+                    return "Materialize/CaptureSubmissionFrame";
+                case BattlePresentationPhase.MaterializePresentationOrder:
+                    return "Materialize/PresentationOrder";
+                case BattlePresentationPhase.MaterializeCommands:
+                    return "Materialize/BuildCommands";
+                case BattlePresentationPhase.ConfigureResolver:
+                    return "Materialize/ConfigureResolver";
+                case BattlePresentationPhase.MeshResolveAndWriteCommands:
+                    return "Materialize/Mesh/ResolveAndWriteCommands";
+                case BattlePresentationPhase.MeshUploadChunks:
+                    return "Materialize/Mesh/UploadChunks";
+                case BattlePresentationPhase.PublishSubmission:
+                    return "Materialize/PublishSubmission";
+                case BattlePresentationPhase.MeshResolveCommands:
+                    return "Materialize/Mesh/ResolveCommands";
+                case BattlePresentationPhase.MeshWriteQuads:
+                    return "Materialize/Mesh/WriteQuads";
+                case BattlePresentationPhase.BuildCommandsShadow:
+                    return "BeginFrame/BuildCommands/Core/Shadow";
+                case BattlePresentationPhase.BuildCommandsEntity:
+                    return "BeginFrame/BuildCommands/Core/Entity";
+                case BattlePresentationPhase.BuildCommandsOverlay:
+                    return "BeginFrame/BuildCommands/Core/Overlay";
+                case BattlePresentationPhase.BuildCommandsHitRecord:
+                    return "BeginFrame/BuildCommands/Core/HitRecord";
                 default:
                     return string.Empty;
             }

@@ -46,17 +46,69 @@ namespace NTSD.Simulation
         private readonly BattleParitySnapshotModule paritySnapshotModule;
         private readonly RuntimeCharacterConfigResolver runtimeCharacterConfigs;
         private readonly BattleLockstepChecksumModule lockstepChecksumModule;
+        private readonly BattleWorldCoreScalarSnapshotModule
+            battleWorldCoreScalarSnapshotModule;
+        private readonly BattleWorldRosterResultsSnapshotModule
+            battleWorldRosterResultsSnapshotModule;
+        private readonly BattleWorldStageSpawnSnapshotModule
+            battleWorldStageSpawnSnapshotModule;
+        private readonly BattleWorldRuntimeSlotSnapshotModule
+            battleWorldRuntimeSlotSnapshotModule;
+        private readonly BattleWorldEntityRuntimeSnapshotModule
+            battleWorldEntityRuntimeSnapshotModule;
+        private readonly BattleWorldEntityBaseShellSnapshotModule
+            battleWorldEntityBaseShellSnapshotModule;
+        private readonly BattleWorldLivingShellSnapshotModule
+            battleWorldLivingShellSnapshotModule;
+        private readonly BattleWorldCharacterShellSnapshotModule
+            battleWorldCharacterShellSnapshotModule;
+        private readonly BattleWorldWeaponShellSnapshotModule
+            battleWorldWeaponShellSnapshotModule;
+        private readonly BattleWorldSpecialOtherShellSnapshotModule
+            battleWorldSpecialOtherShellSnapshotModule;
+        private readonly BattleWorldPendingEventSnapshotModule
+            battleWorldPendingEventSnapshotModule;
+        private readonly BattleWorldRestSnapshotModule
+            battleWorldRestSnapshotModule;
         private readonly BattleEcsShadowModule battleEcsShadowModule;
         private readonly BattleEcsCooldownPass battleEcsCooldownPass;
         private readonly BattleEcsCharacterStageZPass battleEcsCharacterStageZPass;
+        private readonly BattleEcsCharacterPreFrameBoundsPass
+            battleEcsCharacterPreFrameBoundsPass;
         private readonly BattleEcsFramePostProcessPass battleEcsFramePostProcessPass;
         private readonly BattleEcsPositiveLinkValidationPass
             battleEcsPositiveLinkValidationPass;
+        private readonly BattleEcsCharacterFrameAdvancePass
+            battleEcsCharacterFrameAdvancePass;
+        private readonly BattleEcsCharacterRecoveryPass
+            battleEcsCharacterRecoveryPass;
+        private readonly BattleEcsCharacterFrameTickPass
+            battleEcsCharacterFrameTickPass;
+        private readonly BattleEcsCharacterInputPass
+            battleEcsCharacterInputPass;
+        private readonly BattleEcsCharacterPostFrameTailPass
+            battleEcsCharacterPostFrameTailPass;
         private readonly BattleEcsHitExecutionPlan battleEcsHitExecutionPlan;
+        private readonly BattleAiUnifiedRowPublisher battleAiUnifiedRowPublisher;
+        private readonly BattleIdentityWriter battleIdentityWriter;
+        private readonly BattleCharacterInputActionResolver battleCharacterInputActionResolver;
+        private readonly BattleCharacterInputWriter battleCharacterInputWriter;
+        private readonly BattleFrameMotionWriter battleFrameMotionWriter;
+        private readonly BattleRelationLinkWriter battleRelationLinkWriter;
+        private readonly BattleVitalWriter battleVitalWriter;
+        private readonly BattleCharacterActionWriter battleCharacterActionWriter;
+        private readonly BattleAiInputWriter battleAiInputWriter;
+        private readonly BattleBoundaryWriter battleBoundaryWriter;
+        private readonly BattleInteractionWriter battleInteractionWriter;
+        private readonly BattleHeldObjectWriter battleHeldObjectWriter;
+        private readonly BattleCpointWriter battleCpointWriter;
+        private readonly BattleDamageWriter battleDamageWriter;
+        private readonly BattleStructuralWriter battleStructuralWriter;
+        private readonly BattleResultsWriter battleResultsWriter;
+        private readonly CharacterMechanics characterMechanics;
         private readonly SimulationDiagnosticsModule diagnosticsModule =
             new SimulationDiagnosticsModule();
-        private readonly SimulationWorldMutationTracker runtimeMutationTracker =
-            new SimulationWorldMutationTracker();
+        private readonly SimulationWorldMutationTracker runtimeMutationTracker;
         private readonly SimulationWorldHooks runtimeHooks =
             new SimulationWorldHooks();
 
@@ -87,6 +139,12 @@ namespace NTSD.Simulation
             battleEcsCharacterStageZPass.Mode;
         public BattleEcsCharacterStageZPassDiagnostics BattleEcsCharacterStageZPassDiagnosticsForDiagnostics =>
             battleEcsCharacterStageZPass.Diagnostics;
+        public BattleEcsCharacterPreFrameBoundsPassMode
+            BattleEcsCharacterPreFrameBoundsPassModeForDiagnostics =>
+                battleEcsCharacterPreFrameBoundsPass.Mode;
+        public BattleEcsCharacterPreFrameBoundsPassDiagnostics
+            BattleEcsCharacterPreFrameBoundsPassDiagnosticsForDiagnostics =>
+                battleEcsCharacterPreFrameBoundsPass.Diagnostics;
         public BattleEcsFramePostProcessPassMode BattleEcsFramePostProcessPassModeForDiagnostics =>
             battleEcsFramePostProcessPass.Mode;
         public BattleEcsFramePostProcessPassDiagnostics BattleEcsFramePostProcessPassDiagnosticsForDiagnostics =>
@@ -97,6 +155,36 @@ namespace NTSD.Simulation
         public BattleEcsPositiveLinkValidationPassDiagnostics
             BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics =>
                 battleEcsPositiveLinkValidationPass.Diagnostics;
+        public BattleEcsCharacterFrameAdvancePassMode
+            BattleEcsCharacterFrameAdvancePassModeForDiagnostics =>
+                battleEcsCharacterFrameAdvancePass.Mode;
+        public BattleEcsCharacterFrameAdvancePassDiagnostics
+            BattleEcsCharacterFrameAdvancePassDiagnosticsForDiagnostics =>
+                battleEcsCharacterFrameAdvancePass.Diagnostics;
+        public BattleEcsCharacterRecoveryPassMode
+            BattleEcsCharacterRecoveryPassModeForDiagnostics =>
+                battleEcsCharacterRecoveryPass.Mode;
+        public BattleEcsCharacterRecoveryPassDiagnostics
+            BattleEcsCharacterRecoveryPassDiagnosticsForDiagnostics =>
+                battleEcsCharacterRecoveryPass.Diagnostics;
+        public BattleEcsCharacterFrameTickPassMode
+            BattleEcsCharacterFrameTickPassModeForDiagnostics =>
+                battleEcsCharacterFrameTickPass.Mode;
+        public BattleEcsCharacterFrameTickPassDiagnostics
+            BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics =>
+                battleEcsCharacterFrameTickPass.Diagnostics;
+        public BattleEcsCharacterInputPassMode
+            BattleEcsCharacterInputPassModeForDiagnostics =>
+                battleEcsCharacterInputPass.Mode;
+        public BattleEcsCharacterInputPassDiagnostics
+            BattleEcsCharacterInputPassDiagnosticsForDiagnostics =>
+                battleEcsCharacterInputPass.Diagnostics;
+        public BattleEcsCharacterPostFrameTailPassMode
+            BattleEcsCharacterPostFrameTailPassModeForDiagnostics =>
+                battleEcsCharacterPostFrameTailPass.Mode;
+        public BattleEcsCharacterPostFrameTailPassDiagnostics
+            BattleEcsCharacterPostFrameTailPassDiagnosticsForDiagnostics =>
+                battleEcsCharacterPostFrameTailPass.Diagnostics;
         public BattleHitExecutionPlanMode
             BattleHitExecutionPlanModeForDiagnostics =>
                 battleEcsHitExecutionPlan.Mode;
@@ -109,6 +197,216 @@ namespace NTSD.Simulation
             runtimeCharacterConfigs;
         internal StageSpawnTaskConfigurator StageSpawnTaskConfigurator =>
             stageSpawnTaskConfigurator;
+        internal BattleCharacterInputActionResolver CharacterInputActionResolver =>
+            battleCharacterInputActionResolver;
+        internal BattleIdentityWriter IdentityWriter => battleIdentityWriter;
+        internal BattleCharacterInputWriter CharacterInputWriter =>
+            battleCharacterInputWriter;
+
+        internal BattleWorldCoreScalarSnapshot CaptureWorldCoreScalarSnapshot(
+            Lockstep.LockstepSessionIdentity identity)
+        {
+            return battleWorldCoreScalarSnapshotModule.Capture(identity);
+        }
+
+        internal bool TryCaptureWorldRosterResultsSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldRosterResultsSnapshotBuffer destination)
+        {
+            return battleWorldRosterResultsSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredStageSpawnSnapshotEntryCapacity =>
+            battleWorldStageSpawnSnapshotModule.RequiredEntryCapacity;
+
+        internal bool TryCaptureWorldStageSpawnSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldStageSpawnSnapshotBuffer destination)
+        {
+            return battleWorldStageSpawnSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredRuntimeSlotSnapshotCapacity =>
+            battleWorldRuntimeSlotSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldRuntimeSlotSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldRuntimeSlotSnapshotBuffer destination)
+        {
+            return battleWorldRuntimeSlotSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredEntityRuntimeSnapshotCapacity =>
+            battleWorldEntityRuntimeSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldEntityRuntimeSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldEntityRuntimeSnapshotBuffer destination)
+        {
+            return battleWorldEntityRuntimeSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredEntityBaseShellSnapshotCapacity =>
+            battleWorldEntityBaseShellSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldEntityBaseShellSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldEntityBaseShellSnapshotBuffer destination)
+        {
+            return battleWorldEntityBaseShellSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredLivingShellSnapshotCapacity =>
+            battleWorldLivingShellSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldLivingShellSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldLivingShellSnapshotBuffer destination)
+        {
+            return battleWorldLivingShellSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredCharacterShellSnapshotCapacity =>
+            battleWorldCharacterShellSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldCharacterShellSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldCharacterShellSnapshotBuffer destination)
+        {
+            return battleWorldCharacterShellSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredWeaponShellSnapshotCapacity =>
+            battleWorldWeaponShellSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldWeaponShellSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldWeaponShellSnapshotBuffer destination)
+        {
+            return battleWorldWeaponShellSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal int RequiredSpecialOtherShellSnapshotCapacity =>
+            battleWorldSpecialOtherShellSnapshotModule.SlotCapacity;
+
+        internal bool TryCaptureWorldSpecialOtherShellSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldSpecialOtherShellSnapshotBuffer destination)
+        {
+            return battleWorldSpecialOtherShellSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal BattleWorldPendingEventSnapshotBuffer
+            CreateWorldPendingEventSnapshotBufferForBootstrap()
+        {
+            return battleWorldPendingEventSnapshotModule.CreateBufferForBootstrap();
+        }
+
+        internal bool TryCaptureWorldPendingEventSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldPendingEventSnapshotBuffer destination)
+        {
+            return battleWorldPendingEventSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+
+        internal BattleWorldRestSnapshotBuffer
+            CreateWorldRestSnapshotBufferForBootstrap()
+        {
+            return battleWorldRestSnapshotModule.CreateBufferForBootstrap();
+        }
+
+        internal bool TryCaptureWorldRestSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleWorldRestSnapshotBuffer destination)
+        {
+            return battleWorldRestSnapshotModule.TryCapture(
+                identity,
+                tick,
+                destination);
+        }
+        internal BattleFrameMotionWriter FrameMotionWriter =>
+            battleFrameMotionWriter;
+        internal BattleRelationLinkWriter RelationLinkWriter =>
+            battleRelationLinkWriter;
+        public int PositiveLinkIndexCountForDiagnostics =>
+            battleRelationLinkWriter.PositiveLinkCount;
+        internal BattleVitalWriter VitalWriter => battleVitalWriter;
+        internal BattleCharacterActionWriter CharacterActionWriter =>
+            battleCharacterActionWriter;
+        internal BattleAiInputWriter AiInputWriter => battleAiInputWriter;
+        internal BattleBoundaryWriter BoundaryWriter => battleBoundaryWriter;
+        internal BattleInteractionWriter InteractionWriter => battleInteractionWriter;
+        internal BattleHeldObjectWriter HeldObjectWriter => battleHeldObjectWriter;
+        internal BattleCpointWriter CpointWriter => battleCpointWriter;
+        internal BattleDamageWriter DamageWriter => battleDamageWriter;
+        internal BattleStructuralWriter StructuralWriter => battleStructuralWriter;
+        internal BattleResultsWriter ResultsWriter => battleResultsWriter;
+        internal CharacterMechanics CharacterMechanicsForServices =>
+            characterMechanics;
+        public BattleStructuralWriterDiagnostics StructuralWriterDiagnosticsForDiagnostics =>
+            battleStructuralWriter.Diagnostics;
+
+        public bool TryGetFrameMotionStateForDiagnostics(
+            LF2Entity entity,
+            out BattleFrameMotionStateView view)
+        {
+            return battleFrameMotionWriter.TryGetState(entity?.Runtime, out view);
+        }
+
+        public bool TryGetRelationLinkStateForDiagnostics(
+            LF2Entity entity,
+            out BattleRelationLinkStateView view)
+        {
+            return battleRelationLinkWriter.TryGetState(entity?.Runtime, out view);
+        }
+
+        public bool TryGetVitalStateForDiagnostics(
+            LF2Entity entity,
+            out BattleVitalStateView view)
+        {
+            return battleVitalWriter.TryGetState(entity?.Runtime, out view);
+        }
 
         public void ConfigureBattleEcsShadowForDiagnostics(BattleEcsShadowMode mode)
         {
@@ -183,6 +481,40 @@ namespace NTSD.Simulation
             battleEcsCharacterStageZPass.SetMode(mode);
         }
 
+        public void ConfigureBattleEcsCharacterPreFrameBoundsPassForDiagnostics(
+            BattleEcsCharacterPreFrameBoundsPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character PreFrame bounds writer can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterPreFrameBoundsPass.SetMode(mode);
+        }
+
+        internal void RestoreBattleEcsCharacterPreFrameBoundsPassForDiagnostics(
+            BattleEcsCharacterPreFrameBoundsPassMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character PreFrame bounds writer can only be restored after all runtime slots are released.");
+            }
+
+            battleEcsCharacterPreFrameBoundsPass.SetMode(mode);
+        }
+
+        internal void RunBattleEcsCharacterPreFrameBoundsPass()
+        {
+            battleEcsCharacterPreFrameBoundsPass.Execute();
+        }
+
+        internal void RunLegacyPreFrameBoundsAll()
+        {
+            stageRenderModule.RunLegacyPreFrameBoundsAll();
+        }
+
         public void ConfigureBattleEcsFramePostProcessPassForDiagnostics(
             BattleEcsFramePostProcessPassMode mode)
         {
@@ -212,6 +544,90 @@ namespace NTSD.Simulation
             battleEcsPositiveLinkValidationPass.SetMode(mode);
         }
 
+        public void ConfigureBattleEcsCharacterFrameAdvancePassForDiagnostics(
+            BattleEcsCharacterFrameAdvancePassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character FrameAdvance pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterFrameAdvancePass.SetMode(mode);
+        }
+
+        public void ConfigureBattleEcsCharacterRecoveryPassForDiagnostics(
+            BattleEcsCharacterRecoveryPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character recovery pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterRecoveryPass.SetMode(mode);
+        }
+
+        public void ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(
+            BattleEcsCharacterFrameTickPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character FrameTick pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterFrameTickPass.SetMode(mode);
+        }
+
+        public void ConfigureBattleEcsCharacterInputPassForDiagnostics(
+            BattleEcsCharacterInputPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character input pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterInputPass.SetMode(mode);
+        }
+
+        internal void RestoreBattleEcsCharacterFrameTickPassForDiagnostics(
+            BattleEcsCharacterFrameTickPassMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character FrameTick pass can only be restored after all runtime slots are released.");
+            }
+
+            battleEcsCharacterFrameTickPass.SetMode(mode);
+        }
+
+        public void ConfigureBattleEcsCharacterPostFrameTailPassForDiagnostics(
+            BattleEcsCharacterPostFrameTailPassMode mode)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character post-frame tail pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterPostFrameTailPass.SetMode(mode);
+        }
+
+        internal void RestoreBattleEcsCharacterPostFrameTailPassForDiagnostics(
+            BattleEcsCharacterPostFrameTailPassMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character post-frame tail pass can only be restored after all runtime slots are released.");
+            }
+
+            battleEcsCharacterPostFrameTailPass.SetMode(mode);
+        }
+
         internal void RestoreBattleEcsPositiveLinkValidationPassForDiagnostics(
             BattleEcsPositiveLinkValidationPassMode mode)
         {
@@ -236,6 +652,18 @@ namespace NTSD.Simulation
             battleEcsHitExecutionPlan.SetMode(mode);
         }
 
+        internal void RestoreBattleHitExecutionPlanForDiagnostics(
+            BattleHitExecutionPlanMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The hit execution plan can only be restored after all runtime slots are released.");
+            }
+
+            battleEcsHitExecutionPlan.SetMode(mode);
+        }
+
         public bool TryGetBattleHitExecutionPlanEntryForDiagnostics(
             int index,
             out BattleHitExecutionPlanEntryView entry)
@@ -245,9 +673,15 @@ namespace NTSD.Simulation
 
         internal void CaptureBattleHitExecutionPlanPass(
             int tickIndex,
-            BattleHitExecutionPass pass)
+            BattleHitExecutionPass pass,
+            bool skipProvenEmptyBaseCharacters = false,
+            bool passProvenEmpty = false)
         {
-            battleEcsHitExecutionPlan.CapturePass(tickIndex, pass);
+            battleEcsHitExecutionPlan.CapturePass(
+                tickIndex,
+                pass,
+                skipProvenEmptyBaseCharacters,
+                passProvenEmpty);
         }
 
         internal bool BeginBattleHitExecutionPlanLegacyObservation(
@@ -662,7 +1096,12 @@ namespace NTSD.Simulation
 
         public void UpdateBattleResultsFlow()
         {
-            stageRenderModule.UpdateBattleResultsFlow();
+            battleResultsWriter.UpdateSummaryActivation();
+        }
+
+        internal void RunActiveBattleResultsTick()
+        {
+            battleResultsWriter.RunActiveTick();
         }
 
         internal void ResetUnityFixedWorldCameraStateForModule()
@@ -870,7 +1309,7 @@ namespace NTSD.Simulation
 
         public void QueueSound(string soundId, int worldX)
         {
-            if (string.IsNullOrEmpty(soundId))
+            if (string.IsNullOrWhiteSpace(soundId))
                 return;
 
             if (battleBuffers.TryQueueSound(

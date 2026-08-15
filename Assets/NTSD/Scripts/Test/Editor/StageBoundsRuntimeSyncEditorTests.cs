@@ -118,7 +118,10 @@ namespace NTSD.Test
             Assert.That(replacement.Runtime.SlotIndex, Is.EqualTo(reusedSlot));
             replacement.Team = 9;
             replacement.Health.HP = 321;
+            // Mirror the canonical frame writer contract. Stage bounds owns
+            // only Z/ZInt and must not repair unrelated compatibility fields.
             replacement.Frame.N = 77;
+            replacement.Runtime.Frame = 77;
             replacement.PS.z = 410.75;
 
             world.ClampCharacterZToStageBoundsAll();

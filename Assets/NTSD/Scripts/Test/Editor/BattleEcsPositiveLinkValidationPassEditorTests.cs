@@ -11,18 +11,18 @@ namespace NTSD.Test
     public sealed class BattleEcsPositiveLinkValidationPassEditorTests
     {
         [Test]
-        public void DefaultMode_RemainsLegacyAndCannotSwitchAfterResetBoundary()
+        public void DefaultMode_IsDataOrientedAndCannotSwitchAfterResetBoundary()
         {
             var world = new SimulationWorld();
 
             Assert.That(
                 world.BattleEcsPositiveLinkValidationPassModeForDiagnostics,
-                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.Legacy));
+                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.DataOriented));
 
             world.AdvanceBattleFlowTick(1);
             Assert.Throws<InvalidOperationException>(() =>
                 world.ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
-                    BattleEcsPositiveLinkValidationPassMode.DataOriented));
+                    BattleEcsPositiveLinkValidationPassMode.Legacy));
         }
 
         [Test]
@@ -104,6 +104,51 @@ namespace NTSD.Test
             Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(-1));
             Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
             Assert.That(target.Runtime.HolderStableId, Is.EqualTo(77));
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void PositiveLinkIndex_TracksWritesAndRejectsReleasedGeneration()
+        {
+            var world = new SimulationWorld();
+            LF2Character released = Register(world, 8, 180);
+
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
+            released.Runtime.LinkState = 2;
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.EqualTo(1));
+
+            released.Runtime.LinkState = 0;
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
+            released.Runtime.LinkState = 1;
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.EqualTo(1));
+
+            world.Unregister(released);
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
+
+            LF2Character replacement = Register(world, 8, 181);
+            Assert.That(replacement.Runtime.LinkState, Is.Zero);
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void DataOrientedWriter_ConsumesIndexedLinksInRuntimeSlotOrder()
+        {
+            var world = new SimulationWorld();
+            LF2Character high = Register(world, 9, 190);
+            LF2Character low = Register(world, 2, 191);
+            SetPositiveLink(high, 99);
+            SetPositiveLink(low, 99);
+            var events = new BattleParityStructuralEventBuffer(16);
+            world.SetStructuralEventSinkForDiagnostics(events, 0, "fixture-setup");
+            world.ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
+                BattleEcsPositiveLinkValidationPassMode.DataOriented);
+
+            world.ValidateHeldLinksAll(21);
+
+            Assert.That(events.Events.Count, Is.EqualTo(2));
+            Assert.That(events.Events[0].ActorSlot, Is.EqualTo(2));
+            Assert.That(events.Events[1].ActorSlot, Is.EqualTo(9));
+            Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
         }
 
         [Test]

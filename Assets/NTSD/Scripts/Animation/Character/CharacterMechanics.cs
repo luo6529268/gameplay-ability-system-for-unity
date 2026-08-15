@@ -85,6 +85,27 @@ namespace NTSD.Animation
     }
 
     /// <summary>
+    /// Battle-kernel result for one character mechanics step. Unity presentation
+    /// coordinates are intentionally excluded from the production hot path.
+    /// </summary>
+    internal readonly struct BattleMechanicsStepResult
+    {
+        internal BattleMechanicsStepResult(
+            BoundaryResolveMode boundaryMode,
+            bool landed,
+            double verticalVelocityBeforeLanding)
+        {
+            BoundaryMode = boundaryMode;
+            Landed = landed;
+            VerticalVelocityBeforeLanding = verticalVelocityBeforeLanding;
+        }
+
+        internal BoundaryResolveMode BoundaryMode { get; }
+        internal bool Landed { get; }
+        internal double VerticalVelocityBeforeLanding { get; }
+    }
+
+    /// <summary>
     /// 对齐正式版逻辑的角色和简单 LF2 对象物理计算层。
     /// 角色移动会消费碰撞/边界逻辑设置的分轴边界标志，然后处理垂直位移，
     /// 最后根据地面或空中状态应用摩擦或重力。
@@ -139,10 +160,51 @@ namespace NTSD.Animation
         // 这是理解“位置为什么这么变”的核心入口。
         public MechanicsStepResult Step(in CharacterMechanicsContext ctx)
         {
+            BattleMechanicsStepResult battleResult = StepBattleLogic(ctx);
+            NTSDEntityRuntime runtime = ctx.Runtime;
+            if (runtime == null)
+            {
+                return new MechanicsStepResult(
+                    true,
+                    Vector2.zero,
+                    0f,
+                    battleResult.BoundaryMode,
+                    battleResult.Landed,
+                    battleResult.VerticalVelocityBeforeLanding);
+            }
+
+            if (ctx.frameData != null && ctx.spriteWidthPx > 0f)
+            {
+                runtime.UpdateSpriteOrigin(
+                    ctx.frameData.centerx,
+                    ctx.frameData.centery,
+                    ctx.spriteWidthPx);
+            }
+
+            Vector2 groundPlanePos = NTSDRenderSpace.GroundPixelToWorld(
+                (float)runtime.X,
+                (float)runtime.Z);
+            float visualYOffset =
+                (float)((-runtime.Y) / SimulationConstants.PIXELS_PER_UNIT);
+            return new MechanicsStepResult(
+                runtime.Y == 0,
+                groundPlanePos,
+                visualYOffset,
+                battleResult.BoundaryMode,
+                battleResult.Landed,
+                battleResult.VerticalVelocityBeforeLanding);
+        }
+
+        internal BattleMechanicsStepResult StepBattleLogic(
+            in CharacterMechanicsContext ctx)
+        {
             var runtime = ctx.Runtime;
             if (runtime == null)
             {
-                return new MechanicsStepResult(true, Vector2.zero, 0f, BoundaryResolveMode.None);
+                return new BattleMechanicsStepResult(
+                    BoundaryResolveMode.None,
+                    false,
+                    0.0);
             }
 
             BoundaryResolveMode boundaryMode = BoundaryResolveMode.None;
@@ -181,11 +243,6 @@ namespace NTSD.Animation
             if (landed)
                 runtime.Y = 0.0;
 
-            if (ctx.frameData != null && ctx.spriteWidthPx > 0f)
-            {
-                runtime.UpdateSpriteOrigin(ctx.frameData.centerx, ctx.frameData.centery, ctx.spriteWidthPx);
-            }
-
             if (runtime.Y < -0.0001)
             {
                 runtime.Vy += ctx.gravity;
@@ -193,14 +250,7 @@ namespace NTSD.Animation
 
 
 
-            Vector2 groundPlanePos = NTSDRenderSpace.GroundPixelToWorld((float)runtime.X, (float)runtime.Z);
-            float visualYOffset = (float)((-runtime.Y) / SimulationConstants.PIXELS_PER_UNIT);
-            bool grounded = (runtime.Y == 0);
-
-            return new MechanicsStepResult(
-                grounded,
-                groundPlanePos,
-                visualYOffset,
+            return new BattleMechanicsStepResult(
                 boundaryMode,
                 landed,
                 vyBeforeVerticalMove

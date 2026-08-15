@@ -58,7 +58,7 @@ namespace NTSD.Simulation.Ecs
     }
 
     /// <summary>
-    /// U5 positive-link migration slice. This pass preserves the authority slot
+    /// U5/U6 positive-link migration slice. This pass preserves the authority slot
     /// order and reads the live runtime written by cpoint/weapon synchronization
     /// earlier in the same tick; the end-of-tick ECS shadow is not used as truth.
     /// </summary>
@@ -72,7 +72,7 @@ namespace NTSD.Simulation.Ecs
         private readonly int[] expectedTargetSlot;
         private readonly int[] expectedHeldWeaponStableId;
         private BattleEcsPositiveLinkValidationPassMode mode =
-            BattleEcsPositiveLinkValidationPassMode.Legacy;
+            BattleEcsPositiveLinkValidationPassMode.DataOriented;
         private long runCount;
         private long slotVisitCount;
         private long validationCount;
@@ -187,13 +187,27 @@ namespace NTSD.Simulation.Ecs
                     "positive-link-validation");
             }
 
-            for (int slot = 0; slot < runtimeSlots.LogicalCapacity; slot++)
+            BattleRelationLinkWriter relationLinkWriter =
+                world.RelationLinkWriter;
+            for (int slot = relationLinkWriter.FindNextPositiveLinkSlot(0);
+                 slot >= 0;
+                 slot = relationLinkWriter.FindNextPositiveLinkSlot(slot + 1))
             {
+                if (!relationLinkWriter.TryGetPositiveLinkHandle(
+                        slot,
+                        out RuntimeEntityHandle indexedHandle))
+                {
+                    continue;
+                }
+
                 RuntimeSlotTable.ReadOnlySlotView view =
                     runtimeSlots.GetReadOnlyView(slot);
                 LF2Entity holder = view.Entity;
-                if (!TryResolveParticipant(view, holder, out int holderSlot))
+                if (view.Generation != indexedHandle.Generation ||
+                    !TryResolveParticipant(view, holder, out int holderSlot))
+                {
                     continue;
+                }
 
                 NTSDEntityRuntime runtime = holder.Runtime;
                 int targetRuntimeSlot = runtime.TargetSlotIndex;

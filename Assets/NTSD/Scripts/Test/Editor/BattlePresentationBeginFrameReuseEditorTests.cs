@@ -1,5 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System.Collections.Generic;
+using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
@@ -137,6 +138,91 @@ namespace NTSD.Test
                 "CentralOnly must publish the map from the one coordinator sort");
             Assert.That(world.PresentationEntityScanAndSortCountForDiagnostics, Is.EqualTo(1),
                 "CentralOnly must scan and sort presentation entities exactly once per dispatch");
+            Assert.That(
+                world.BattlePresentation.StableSlotRadixPresentationOrderCountForDiagnostics,
+                Is.EqualTo(1),
+                "slot-ordered CentralOnly captures must materialize the same order through the allocation-free radix path");
+            Assert.That(
+                world.BattlePresentation.ComparisonPresentationOrderFallbackCountForDiagnostics,
+                Is.Zero);
+        }
+
+        [Test]
+        public void CentralOnly_StableSlotRadixPreservesSignedZAndSlotTieBreakExtremes()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            List<PresentationFixtureEntity> entities = RegisterFixtures(
+                world,
+                (521, 8, int.MaxValue),
+                (522, 2, 0),
+                (523, 9, int.MinValue),
+                (524, 4, -1),
+                (525, 1, 0),
+                (526, 6, int.MinValue));
+
+            world.RenderDispatchAll(42);
+
+            List<PresentationFixtureEntity> expected = BuildReferenceTraversal(entities, 42);
+            for (int rank = 0; rank < expected.Count; rank++)
+            {
+                Assert.That(
+                    expected[rank].GetRenderSortingOrder(),
+                    Is.EqualTo(rank * 4 + 1));
+            }
+            Assert.That(
+                world.BattlePresentation.StableSlotRadixPresentationOrderCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                world.BattlePresentation.ComparisonPresentationOrderFallbackCountForDiagnostics,
+                Is.Zero);
+        }
+
+        [Test]
+        public void CentralOnly_IndexedMaterializationPreservesFrozenRankContractWithoutMovingWideRows()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            RegisterFixtures(
+                world,
+                (531, 8, 200),
+                (532, 2, 240),
+                (533, 4, 180));
+
+            world.BattlePresentation.BeginFrame(world, 43);
+            BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
+            Assert.That(published.PresentationOrderMaterialized, Is.False);
+            Assert.That(published.GetEntity(0).RuntimeSlot, Is.EqualTo(2));
+            Assert.That(published.GetEntity(1).RuntimeSlot, Is.EqualTo(4));
+            Assert.That(published.GetEntity(2).RuntimeSlot, Is.EqualTo(8));
+
+            var frozen = new BattlePresentationFrame();
+            frozen.CopyFrom(published);
+            world.BattlePresentation.MaterializePresentationOrder(world, frozen);
+
+            Assert.That(frozen.PresentationOrderMaterialized, Is.True);
+            Assert.That(frozen.GetEntity(0).RuntimeSlot, Is.EqualTo(4));
+            Assert.That(frozen.GetEntity(0).PresentationBaseOrder, Is.EqualTo(0));
+            Assert.That(frozen.GetEntity(1).RuntimeSlot, Is.EqualTo(8));
+            Assert.That(frozen.GetEntity(1).PresentationBaseOrder, Is.EqualTo(4));
+            Assert.That(frozen.GetEntity(2).RuntimeSlot, Is.EqualTo(2));
+            Assert.That(frozen.GetEntity(2).PresentationBaseOrder, Is.EqualTo(8));
+
+            FieldInfo entitiesField = typeof(BattlePresentationFrame).GetField(
+                "entities",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(entitiesField, Is.Not.Null);
+            var physicalRows =
+                (BattlePresentationEntitySnapshot[])entitiesField.GetValue(frozen);
+            Assert.That(physicalRows[0].RuntimeSlot, Is.EqualTo(2));
+            Assert.That(physicalRows[1].RuntimeSlot, Is.EqualTo(4));
+            Assert.That(physicalRows[2].RuntimeSlot, Is.EqualTo(8));
+
+            var copied = new BattlePresentationFrame();
+            copied.CopyFrom(frozen);
+            Assert.That(copied.GetEntity(0).RuntimeSlot, Is.EqualTo(4));
+            Assert.That(copied.GetEntity(1).RuntimeSlot, Is.EqualTo(8));
+            Assert.That(copied.GetEntity(2).RuntimeSlot, Is.EqualTo(2));
         }
 
         [TestCase(BattlePresentationBackendMode.LegacyOnly)]

@@ -278,6 +278,10 @@ namespace NTSD.Animation.Rendering
             new Dictionary<BattleSpriteKey, BattleCentralResourceTemplate>(InitialEntityTemplateCapacity);
         private readonly TrustedResourceCache trustedResources =
             new TrustedResourceCache();
+        private readonly object[] preparedHotResourceIdentities = new object[4];
+        private readonly BattleCentralResolvedResource[] preparedHotResources =
+            new BattleCentralResolvedResource[4];
+        private readonly bool[] preparedHotResourceValid = new bool[4];
         private readonly BattleCentralResourceTemplate[] sparkTemplates =
             new BattleCentralResourceTemplate[BattleCommonVisualCatalog.SparkFrameCount];
         private readonly int[] initializedSparkTemplateSlots =
@@ -311,6 +315,7 @@ namespace NTSD.Animation.Rendering
         public int DestroyedResourceInvalidations { get; private set; }
         public int TrustedResourceCacheHits { get; private set; }
         public int TrustedResourceCacheMisses { get; private set; }
+        public int PreparedHotResourceCacheHits { get; private set; }
         public int SealedCapacityCacheSkips { get; private set; }
 
         public void PrepareCapacity(int entityTemplateCapacity, int trustedResourceCapacity)
@@ -381,11 +386,13 @@ namespace NTSD.Animation.Rendering
                 BattleSpriteMaterialContract.IsDeclaredCentralMaterial(
                     sharedArrayMaterial,
                     true);
+            bool hasDestroyedTrustedResource = trustedResources.HasDestroyedResource();
             bool hasDestroyedMaterial =
                 IsDestroyedUnityObject(sharedFallbackMaterial) ||
                 IsDestroyedUnityObject(sharedArrayMaterial);
             if (hasConfiguration &&
                 !hasDestroyedMaterial &&
+                !hasDestroyedTrustedResource &&
                 ReferenceEquals(catalog, nextCatalog) &&
                 ReferenceEquals(commonVisualCatalog, nextCommonVisualCatalog) &&
                 ReferenceEquals(fallbackMaterial, sharedFallbackMaterial) &&
@@ -396,6 +403,9 @@ namespace NTSD.Animation.Rendering
                 NoOpHits++;
                 return;
             }
+
+            if (hasDestroyedTrustedResource)
+                DestroyedResourceInvalidations++;
 
             ClearTemplates();
             catalog = nextCatalog;
@@ -413,14 +423,94 @@ namespace NTSD.Animation.Rendering
             in BattleRenderCommand command,
             out BattleCentralResolvedResource resource)
         {
+            return ResolveCore(command, out resource, validateCachedResource: true);
+        }
+
+        internal BattleCentralResourceStatus ResolvePrepared(
+            in BattleRenderCommand command,
+            out BattleCentralResolvedResource resource)
+        {
+            if (!command.RenderState.IsSupported)
+            {
+                resource = default;
+                return BattleCentralResourceStatus.UnsupportedRenderState;
+            }
+
+            BattleSpriteValueDescriptor descriptor = command.SpriteDescriptor;
+            if (!descriptor.HasLogicalResourceKey ||
+                !MatchesPreparedResourceKind(
+                    command.Type,
+                    descriptor.LogicalResourceKey))
+            {
+                resource = default;
+                return BattleCentralResourceStatus.UnresolvedVisual;
+            }
+
+            int hotResourceIndex = (int)command.Type;
+            object trustedIdentity = command.TrustedResourceIdentity;
+            if (trustedIdentity != null &&
+                (uint)hotResourceIndex < (uint)preparedHotResources.Length &&
+                preparedHotResourceValid[hotResourceIndex] &&
+                ReferenceEquals(
+                    preparedHotResourceIdentities[hotResourceIndex],
+                    trustedIdentity))
+            {
+                PreparedHotResourceCacheHits++;
+                resource = preparedHotResources[hotResourceIndex].WithColor(command.Color);
+                return BattleCentralResourceStatus.Resolved;
+            }
+
+            // Configure() validates every warmed Unity resource once for this
+            // presentation frame. Commands carrying a trusted catalog identity
+            // are emitted only by BattlePresentationSystem, so the backend can
+            // reuse the resolved immutable binding after validating its public
+            // command envelope. Cold/custom commands still use ResolveCore.
+            if (TryResolveTrustedResource(
+                    command,
+                    out resource,
+                    validateCachedResource: false))
+            {
+                if ((uint)hotResourceIndex < (uint)preparedHotResources.Length)
+                {
+                    preparedHotResourceIdentities[hotResourceIndex] = trustedIdentity;
+                    preparedHotResources[hotResourceIndex] = resource;
+                    preparedHotResourceValid[hotResourceIndex] = true;
+                }
+                return BattleCentralResourceStatus.Resolved;
+            }
+
+            return ResolveCore(command, out resource, validateCachedResource: false);
+        }
+
+        private static bool MatchesPreparedResourceKind(
+            BattleRenderCommandType commandType,
+            BattleVisualResourceKey key)
+        {
+            return commandType switch
+            {
+                BattleRenderCommandType.Entity => key.IsEntitySprite,
+                BattleRenderCommandType.Shadow =>
+                    key.Kind == BattleVisualResourceKind.CommonShadow,
+                BattleRenderCommandType.HitRecord => key.IsCommonSpark,
+                BattleRenderCommandType.OverlayGlyph =>
+                    key.IsCommonWordGlyph || key.IsCommonSpecialCom,
+                _ => false,
+            };
+        }
+
+        private BattleCentralResourceStatus ResolveCore(
+            in BattleRenderCommand command,
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource)
+        {
             if (command.Type == BattleRenderCommandType.Shadow)
-                return ResolveCommonShadow(command, out resource);
+                return ResolveCommonShadow(command, out resource, validateCachedResource);
 
             if (command.Type == BattleRenderCommandType.HitRecord)
-                return ResolveCommonSpark(command, out resource);
+                return ResolveCommonSpark(command, out resource, validateCachedResource);
 
             if (command.Type == BattleRenderCommandType.OverlayGlyph)
-                return ResolveCommonWordGlyph(command, out resource);
+                return ResolveCommonWordGlyph(command, out resource, validateCachedResource);
 
             if (command.Type != BattleRenderCommandType.Entity)
             {
@@ -441,7 +531,7 @@ namespace NTSD.Animation.Rendering
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            if (TryResolveTrustedResource(command, out resource))
+            if (TryResolveTrustedResource(command, out resource, validateCachedResource))
                 return BattleCentralResourceStatus.Resolved;
 
             BattleSpriteKey key = command.SpriteDescriptor.LogicalResourceKey.EntitySpriteKey;
@@ -484,7 +574,8 @@ namespace NTSD.Animation.Rendering
 
         private BattleCentralResourceStatus ResolveCommonWordGlyph(
             in BattleRenderCommand command,
-            out BattleCentralResolvedResource resource)
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource)
         {
             if (!command.RenderState.IsSupported)
             {
@@ -499,7 +590,10 @@ namespace NTSD.Animation.Rendering
 
             BattleVisualResourceKey key = command.SpriteDescriptor.LogicalResourceKey;
             if (key.IsCommonSpecialCom)
-                return ResolveCommonSpecialCom(in command, out resource);
+                return ResolveCommonSpecialCom(
+                    in command,
+                    out resource,
+                    validateCachedResource);
             if (!key.IsCommonWordGlyph)
             {
                 resource = default;
@@ -515,7 +609,7 @@ namespace NTSD.Animation.Rendering
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            if (TryResolveTrustedResource(command, out resource))
+            if (TryResolveTrustedResource(command, out resource, validateCachedResource))
                 return BattleCentralResourceStatus.Resolved;
 
             BattleCentralResourceTemplate template = wordTemplates[sheetIndex][charCode];
@@ -550,7 +644,8 @@ namespace NTSD.Animation.Rendering
 
         private BattleCentralResourceStatus ResolveCommonSpecialCom(
             in BattleRenderCommand command,
-            out BattleCentralResolvedResource resource)
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource)
         {
             int sheetIndex =
                 command.SpriteDescriptor.LogicalResourceKey.CommonWordSheetIndex;
@@ -559,7 +654,7 @@ namespace NTSD.Animation.Rendering
                 resource = default;
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
-            if (TryResolveTrustedResource(command, out resource))
+            if (TryResolveTrustedResource(command, out resource, validateCachedResource))
                 return BattleCentralResourceStatus.Resolved;
 
             BattleCentralResourceTemplate template = comLabelTemplates[sheetIndex];
@@ -593,7 +688,8 @@ namespace NTSD.Animation.Rendering
 
         private BattleCentralResourceStatus ResolveCommonShadow(
             in BattleRenderCommand command,
-            out BattleCentralResolvedResource resource)
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource)
         {
             if (!command.RenderState.IsSupported)
             {
@@ -607,7 +703,7 @@ namespace NTSD.Animation.Rendering
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            if (TryResolveTrustedResource(command, out resource))
+            if (TryResolveTrustedResource(command, out resource, validateCachedResource))
                 return BattleCentralResourceStatus.Resolved;
 
             bool matchesTrustedIdentity = shadowTemplate.MatchesTrustedIdentity(command);
@@ -639,7 +735,8 @@ namespace NTSD.Animation.Rendering
 
         private BattleCentralResourceStatus ResolveCommonSpark(
             in BattleRenderCommand command,
-            out BattleCentralResolvedResource resource)
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource)
         {
             if (!command.RenderState.IsSupported)
             {
@@ -660,7 +757,7 @@ namespace NTSD.Animation.Rendering
                 return BattleCentralResourceStatus.UnresolvedVisual;
             }
 
-            if (TryResolveTrustedResource(command, out resource))
+            if (TryResolveTrustedResource(command, out resource, validateCachedResource))
                 return BattleCentralResourceStatus.Resolved;
 
             BattleCentralResourceTemplate template = sparkTemplates[pic];
@@ -697,7 +794,8 @@ namespace NTSD.Animation.Rendering
 
         private bool TryResolveTrustedResource(
             in BattleRenderCommand command,
-            out BattleCentralResolvedResource resource)
+            out BattleCentralResolvedResource resource,
+            bool validateCachedResource = true)
         {
             object identity = command.TrustedResourceIdentity;
             if (identity == null)
@@ -706,14 +804,16 @@ namespace NTSD.Animation.Rendering
                 return false;
             }
 
-            if (!trustedResources.TryGetValue(identity, out BattleCentralResolvedResource cached))
+            if (!trustedResources.TryGetValue(
+                    identity,
+                    out BattleCentralResolvedResource cached))
             {
                 TrustedResourceCacheMisses++;
                 resource = default;
                 return false;
             }
 
-            if (!cached.HasDrawableResource)
+            if (validateCachedResource && !cached.HasDrawableResource)
             {
                 InvalidateDestroyedResourceGeneration();
                 TrustedResourceCacheMisses++;
@@ -851,6 +951,14 @@ namespace NTSD.Animation.Rendering
             AdvanceBindingGeneration();
             entityTemplates.Clear();
             trustedResources.Clear();
+            Array.Clear(
+                preparedHotResourceIdentities,
+                0,
+                preparedHotResourceIdentities.Length);
+            Array.Clear(
+                preparedHotResourceValid,
+                0,
+                preparedHotResourceValid.Length);
             shadowTemplate = default;
             Array.Clear(comLabelTemplates, 0, comLabelTemplates.Length);
 
@@ -927,6 +1035,17 @@ namespace NTSD.Animation.Rendering
             public bool ContainsKey(object key)
             {
                 return TryGetValue(key, out _);
+            }
+
+            public bool HasDestroyedResource()
+            {
+                for (int index = 0; index < keys.Length; index++)
+                {
+                    if (keys[index] != null && !values[index].HasDrawableResource)
+                        return true;
+                }
+
+                return false;
             }
 
             public bool Set(

@@ -254,6 +254,146 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void DataOrientedScheduling_MatchesLegacyCharacterAndObjectWriters()
+        {
+            Scenario legacy = CreateScenario();
+            Scenario dataOriented = CreateScenario();
+            dataOriented.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.DataOriented);
+
+            legacy.World.PostInteractionTickAll(701);
+            legacy.World.ObjectInteractionTickAll(701);
+            dataOriented.World.PostInteractionTickAll(701);
+            dataOriented.World.ObjectInteractionTickAll(701);
+
+            Assert.That(
+                dataOriented.World.CaptureExtendedChecksumSnapshot(701).OverallChecksum,
+                Is.EqualTo(
+                    legacy.World.CaptureExtendedChecksumSnapshot(701).OverallChecksum));
+            Assert.That(
+                dataOriented.CharacterVictim.Health.HP,
+                Is.EqualTo(legacy.CharacterVictim.Health.HP));
+            Assert.That(
+                dataOriented.ObjectVictim.Health.HP,
+                Is.EqualTo(legacy.ObjectVictim.Health.HP));
+
+            BattleHitExecutionPlanDiagnostics diagnostics = dataOriented.World
+                .BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(diagnostics.Mode, Is.EqualTo(BattleHitExecutionPlanMode.DataOriented));
+            Assert.That(diagnostics.CurrentTickPlanValid, Is.True, DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.CharacterPassCaptureCount, Is.EqualTo(1));
+            Assert.That(diagnostics.ObjectPassCaptureCount, Is.EqualTo(1));
+            Assert.That(diagnostics.ObservationPassCount, Is.Zero);
+            Assert.That(diagnostics.FailureCount, Is.Zero);
+        }
+
+        [Test]
+        public void DataOrientedScheduling_ConsumesFrozenStoreRowsOnlyOnce()
+        {
+            Scenario scenario = CreateScenario();
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.DataOriented);
+            var sceneQuery = (BruteForceSceneQuery)scenario.World.SceneQuery;
+            scenario.World.EndCollisionCandidateConsumption();
+            sceneQuery.CollisionCandidateStoreAuthorityEnabled = true;
+            sceneQuery.CollisionCandidateStoreLegacyOracleInterval = 0;
+            scenario.World.CaptureCollisionFrameSnapshotsAll();
+            scenario.World.CollectCollisionCandidatesAll();
+
+            CollisionCandidateStoreAuthorityDiagnostics diagnostics =
+                sceneQuery.CollisionCandidateStoreAuthorityDiagnostics;
+            long rangeReadsBefore = diagnostics.RangeReadCount;
+            long entryReadsBefore = diagnostics.EntryReadCount;
+
+            scenario.World.PostInteractionTickAll(702);
+            scenario.World.ObjectInteractionTickAll(702);
+
+            Assert.That(diagnostics.RangeReadCount - rangeReadsBefore, Is.EqualTo(4));
+            Assert.That(diagnostics.EntryReadCount - entryReadsBefore, Is.EqualTo(2));
+            Assert.That(
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics
+                    .CurrentTickPlanValid,
+                Is.True);
+        }
+
+        [Test]
+        public void DataOrientedScheduling_OidC9LifecycleMatchesLegacy()
+        {
+            CreateOidC9LifecycleScenario(
+                out SimulationWorld legacyWorld,
+                out _,
+                out TypedCharacter legacyTarget);
+            CreateOidC9LifecycleScenario(
+                out SimulationWorld dataWorld,
+                out _,
+                out TypedCharacter dataTarget);
+            dataWorld.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.DataOriented);
+
+            legacyWorld.ObjectInteractionTickAll(703);
+            dataWorld.ObjectInteractionTickAll(703);
+
+            Assert.That(dataTarget.Health.HP, Is.EqualTo(legacyTarget.Health.HP));
+            Assert.That(
+                dataWorld.FindEntityByRuntimeSlotForQuery(0),
+                Is.EqualTo(legacyWorld.FindEntityByRuntimeSlotForQuery(0)));
+            Assert.That(
+                dataWorld.CaptureExtendedChecksumSnapshot(703).OverallChecksum,
+                Is.EqualTo(
+                    legacyWorld.CaptureExtendedChecksumSnapshot(703)
+                        .OverallChecksum));
+            Assert.That(
+                dataWorld.BattleHitExecutionPlanDiagnosticsForDiagnostics
+                    .CurrentTickPlanValid,
+                Is.True);
+        }
+
+        [Test]
+        public void WarmedDataOrientedDirectCandidateConsumption_AllocatesNoManagedMemory()
+        {
+            Scenario scenario = CreateScenario();
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.DataOriented);
+
+            for (int tick = 720; tick < 752; tick++)
+            {
+                scenario.World.PostInteractionTickAll(tick);
+                scenario.World.ObjectInteractionTickAll(tick);
+            }
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int tick = 800; tick < 1312; tick++)
+            {
+                scenario.World.PostInteractionTickAll(tick);
+                scenario.World.ObjectInteractionTickAll(tick);
+            }
+            long after = GC.GetAllocatedBytesForCurrentThread();
+
+            Assert.That(
+                after - before,
+                Is.Zero,
+                $"DataOriented direct consumption allocated {after - before} bytes.");
+            Assert.That(
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics
+                    .CurrentTickPlanValid,
+                Is.True);
+        }
+
+        [Test]
+        public void DataOrientedScheduling_ModeCannotChangeAfterResetBoundary()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.DataOriented);
+            world.AdvanceBattleFlowTick(1);
+
+            Assert.Throws<InvalidOperationException>(() =>
+                world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                    BattleHitExecutionPlanMode.Disabled));
+        }
+
+        [Test]
         public void WarmedShadowCompareCandidateRead_AllocatesNoManagedMemory()
         {
             Scenario scenario = CreateScenario();
@@ -765,6 +905,9 @@ namespace NTSD.Test
         [TestCase(0, false, 10, 22, LF2StandardFrames.Injured, 20, -0.9, "SFX_001")]
         [TestCase(0, false, 10, 23, LF2StandardFrames.Injured, 20, -0.9, "SFX_001")]
         [TestCase(0, false, 10, 30, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 6, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 7000, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
+        [TestCase(9, true, 10, 4, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_011")]
         public void ShadowCompare_StandardCharacterDamageWriterEffectMatchesAuthorityState(
             int sourceKind,
             bool expectAttackerHpZero,
@@ -839,7 +982,8 @@ namespace NTSD.Test
                 Is.EqualTo(expectedKnockbackVx).Within(0.0000001));
             Assert.That(
                 scenario.CharacterVictim.KnockbackVy,
-                Is.EqualTo(fall > 60 ? -6.9 : 0.1).Within(0.0000001));
+                Is.EqualTo(expectedFrame == LF2StandardFrames.FallingBack ? -6.9 : 0.1)
+                    .Within(0.0000001));
             Assert.That(scenario.CharacterAttacker.FrameDelay, Is.EqualTo(3));
             Assert.That(scenario.CharacterVictim.FrameDelay, Is.EqualTo(-3));
             Assert.That(scenario.CharacterAttacker.AttackExempt, Is.EqualTo(2));
@@ -865,16 +1009,101 @@ namespace NTSD.Test
                 Is.EqualTo(expectedEffectCue));
             Assert.That(
                 scenario.World.PendingSounds[1].Cue,
-                Is.EqualTo(fall > 60 ? "SFX_006" : "SFX_001"));
+                Is.EqualTo(
+                    expectedFrame == LF2StandardFrames.FallingBack
+                        ? "SFX_006"
+                        : "SFX_001"));
             if (effect == 1)
             {
                 Assert.That(
                     scenario.World.PendingSounds[2].Cue,
-                    Is.EqualTo(fall > 60 ? "SFX_033" : "SFX_032"));
+                    Is.EqualTo(
+                        expectedFrame == LF2StandardFrames.FallingBack
+                            ? "SFX_033"
+                            : "SFX_032"));
                 Assert.That(
                     scenario.World.PendingSounds[3].Cue,
-                    Is.EqualTo(fall > 60 ? "SFX_006" : "SFX_001"));
+                    Is.EqualTo(
+                        expectedFrame == LF2StandardFrames.FallingBack
+                            ? "SFX_006"
+                            : "SFX_001"));
             }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ShadowCompare_Effect30AcceptsCustomFrozenStateOutsideReservedFrames(
+            bool useCharacterDatResolver)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanCustomFreezeAttacker",
+                7286,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Entity target = useCharacterDatResolver
+                ? CreateSpecialAttackEntity(
+                    world,
+                    "HitPlanCustomFreezeDatTarget",
+                    0xD1,
+                    1,
+                    2,
+                    10,
+                    d1IdentityUsesCharacterDat: true)
+                : CreateEntity(
+                    world,
+                    "HitPlanCustomFreezeTarget",
+                    7287,
+                    1,
+                    LF2ObjectType.Character,
+                    2,
+                    10,
+                    hasItr: false,
+                    hasBody: true);
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 1;
+            itr.effect = 30;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Frame.D.state = LF2States.Frozen;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0x44556677u);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(
+                attacker.Runtime.HitCandidateCount,
+                Is.EqualTo(1),
+                "The authority collision filter reserves effect 30 only for frame ids 200..202, not every DAT frame whose state is Frozen.");
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(812);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
         }
 
         [TestCase(5, 0)]
@@ -945,6 +1174,445 @@ namespace NTSD.Test
                 Is.EqualTo(77),
                 "OID 5/52 spawn vitals are initialized once by FrameTick/opoint and must not be reapplied after a hit.");
             Assert.That(target.Health.PP, Is.EqualTo(66));
+        }
+
+        [TestCase(false, LF2States.Frozen)]
+        [TestCase(true, LF2States.Falling)]
+        public void ShadowCompare_PreviousStateForcesStandardCharacterKnockdown(
+            bool usePrevious2,
+            int previousState)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanForcedFallAttacker",
+                7284,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            var historyFrame = new LF2FrameData
+            {
+                frameId = 50,
+                state = previousState,
+                wait = 1,
+                next = 50,
+                centerx = 0,
+                centery = 0,
+            };
+            historyFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanForcedFallTarget",
+                7285,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true,
+                extraFrame: historyFrame);
+            if (usePrevious2)
+            {
+                target.Frame.N = historyFrame.frameId;
+                target.Frame.D = historyFrame;
+                target.Runtime.Frame = historyFrame.frameId;
+            }
+            else
+            {
+                target.Frame.Prev = historyFrame.frameId;
+            }
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 1;
+            itr.dvy = 0;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.FallCounter = 0;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0x66778899u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            if (usePrevious2)
+            {
+                target.Frame.N = 0;
+                target.Frame.D = target.GetFrameDataById(0);
+                target.Runtime.Frame = 0;
+            }
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(884 + previousState);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+            Assert.That(target.FallCounter, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.FallingBack));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(LF2StandardFrames.FallingBack));
+            Assert.That(target.KnockbackVx, Is.EqualTo(1.1).Within(0.0000001));
+            Assert.That(target.KnockbackVy, Is.EqualTo(-6.9).Within(0.0000001));
+        }
+
+        [TestCase(false, 230)]
+        [TestCase(true, 232)]
+        public void ShadowCompare_CaughtVictimUsesPreviousCpointHurtFrame(
+            bool sameFacing,
+            int expectedHurtFrame)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanCaughtHurtAttacker",
+                7286,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            var caughtFrame = new LF2FrameData
+            {
+                frameId = 50,
+                state = LF2States.BeingCaught,
+                wait = 1,
+                next = 50,
+                centerx = 0,
+                centery = 0,
+                cpoint = new CatchPoint
+                {
+                    kind = 2,
+                    fronthurtact = 230,
+                    backhurtact = 232,
+                },
+            };
+            caughtFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
+            var hurtFrame = new LF2FrameData
+            {
+                frameId = expectedHurtFrame,
+                state = LF2States.BeingCaught,
+                wait = 1,
+                next = expectedHurtFrame,
+                centerx = 0,
+                centery = 0,
+            };
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanCaughtHurtTarget",
+                7287,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true,
+                extraFrame: caughtFrame,
+                secondExtraFrame: hurtFrame);
+            TypedCharacter catcher = CreateEntity(
+                world,
+                "HitPlanCaughtHurtCatcher",
+                7288,
+                2,
+                LF2ObjectType.Character,
+                2,
+                100,
+                hasItr: false,
+                hasBody: false);
+            target.Frame.N = caughtFrame.frameId;
+            target.Frame.D = caughtFrame;
+            target.Runtime.Frame = caughtFrame.frameId;
+            target.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+            catcher.CaughtSlotIndex = target.Runtime.SlotIndex;
+            attacker.Runtime.Dir = "right";
+            target.Runtime.Dir = sameFacing ? "right" : "left";
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 1;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0x778899AAu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            target.Frame.N = 0;
+            target.Frame.D = target.GetFrameDataById(0);
+            target.Runtime.Frame = 0;
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                attacker.Runtime.HitCandidateCount,
+                Is.EqualTo(1),
+                "caught-victim fixture must collect the character hit candidate");
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(930 + expectedHurtFrame);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(
+                diagnostics.ObservedWriterEffectCount,
+                Is.EqualTo(1),
+                "caught-victim hit must produce one writer-effect observation");
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(expectedHurtFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedHurtFrame));
+            Assert.That(target.CatcherSlotIndex, Is.EqualTo(catcher.Runtime.SlotIndex));
+            Assert.That(catcher.CaughtSlotIndex, Is.EqualTo(target.Runtime.SlotIndex));
+        }
+
+        [Test]
+        public void ShadowCompare_State3000StandardDamageResetsAttackerFromFrame10()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            var frame10 = new LF2FrameData
+            {
+                frameId = 10,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 10,
+                centerx = 0,
+                centery = 0,
+                dvz = 3,
+            };
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanState3000Attacker",
+                7289,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                extraFrame: frame10);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanState3000Target",
+                7290,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            attacker.Frame.D.state = LF2States.ProjectileFlying;
+            attacker.Runtime.Vx = 6.5;
+            attacker.Runtime.Vz = -8.5;
+            attacker.AttackingCounter = 7;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 1;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0x8899AABBu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3010);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.EqualTo(10));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
+            Assert.That(attacker.AttackingCounter, Is.Zero);
+            Assert.That(attacker.Runtime.Vx, Is.Zero);
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(3.0).Within(0.0000001));
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+        }
+
+        [Test]
+        public void ShadowCompare_State1002StandardDamageConsumesBounceRngBeforeHitRecord()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanState1002Attacker",
+                7291,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                includeAttackFrames0To15: true);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanState1002Target",
+                7292,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            attacker.Frame.D.state = LF2States.WeaponThrowing;
+            attacker.Runtime.Vx = 6.5;
+            attacker.Runtime.Vy = 4.5;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0x99AABBCCu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(1002);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.InRange(0, 15));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(attacker.Frame.N));
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(-1.05).Within(0.0000001));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(-4.0).Within(0.0000001));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(3));
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+        }
+
+        [Test]
+        public void ShadowCompare_State2000StandardDamageUsesRelativeXForKnockback()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanState2000Attacker",
+                7293,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanState2000Target",
+                7294,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            attacker.Frame.D.state = LF2States.HeavyWeaponInSky;
+            attacker.Runtime.Dir = "left";
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            world.Rng.Seed(0xAABBCCDDu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(2000);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+            Assert.That(target.KnockbackVx, Is.EqualTo(2.1).Within(0.0000001));
+            Assert.That(attacker.Runtime.Dir, Is.EqualTo("left"));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -1073,6 +1741,8 @@ namespace NTSD.Test
                 0,
                 1,
                 0);
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_D6_BROKEN";
             TypedCharacter target = CreateEntity(
                 world,
                 "HitPlanOidD6Target",
@@ -1107,23 +1777,44 @@ namespace NTSD.Test
 
             world.CaptureCollisionFrameSnapshotsAll();
             world.CollectCollisionCandidatesAll();
-            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            Assert.That(
+                attacker.Runtime.HitCandidateCount,
+                Is.EqualTo(1),
+                "OID D6 fixture must collect the character hit candidate");
             world.ConfigureBattleHitExecutionPlanForDiagnostics(
                 BattleHitExecutionPlanMode.ShadowCompare);
 
-            world.PostInteractionTickAll(775);
+            world.ObjectInteractionTickAll(775);
 
             BattleHitExecutionPlanDiagnostics diagnostics =
                 world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
             Assert.That(
+                world.TryGetBattleHitExecutionPlanEntryForDiagnostics(
+                    0,
+                    out BattleHitExecutionPlanEntryView d6Entry),
+                Is.True);
+            Assert.That(
                 diagnostics.CurrentTickPlanValid,
                 Is.True,
                 DescribeDiagnostics(diagnostics));
-            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(
+                d6Entry.ExpectedDisposition,
+                Is.EqualTo(BattleHitCandidateDisposition.Damage));
+            Assert.That(
+                d6Entry.ObservedDisposition,
+                Is.EqualTo(BattleHitCandidateDisposition.Damage));
+            Assert.That(
+                diagnostics.ObservedWriterEffectCount,
+                Is.EqualTo(1),
+                "OID D6 hit must produce one writer-effect observation");
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
             Assert.That(attacker.Health.HP, Is.Zero);
             Assert.That(target.Health.HP, Is.EqualTo(90));
             Assert.That(target.HitRecordCount, Is.EqualTo(1));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(3));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("CUSTOM_D6_BROKEN"));
+            Assert.That(world.PendingSounds[2].Cue, Is.EqualTo("SFX_001"));
         }
 
         [Test]
@@ -1339,22 +2030,1215 @@ namespace NTSD.Test
             Assert.That(world.PendingSounds[0].WorldX, Is.EqualTo(target.Runtime.XInt));
         }
 
-        [TestCase(LF2ObjectType.LightWeapon, 10, 0, false)]
-        [TestCase(LF2ObjectType.HeavyWeapon, 10, 0, false)]
-        [TestCase(LF2ObjectType.HeavyWeapon, 50, 0, false)]
-        [TestCase(LF2ObjectType.ThrowWeapon, 10, 0, false)]
-        [TestCase(LF2ObjectType.Drink, 10, 0, false)]
-        [TestCase(LF2ObjectType.LightWeapon, 10, 4, false)]
-        [TestCase(LF2ObjectType.HeavyWeapon, 10, 4, false)]
-        [TestCase(LF2ObjectType.ThrowWeapon, 10, 4, false)]
-        [TestCase(LF2ObjectType.Drink, 10, 4, false)]
-        [TestCase(LF2ObjectType.ThrowWeapon, 10, 0, true)]
+        [Test]
+        public void ShadowCompare_AlternateDamageSupportsSpecialAttackerAndAirTarget()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanAlternateAirSpecialAttacker",
+                7603,
+                0,
+                1,
+                0);
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_ALTERNATE_BROKEN";
+            attacker.Frame.D.itrs.Add(new InteractionArea
+            {
+                kind = 0,
+                x = -30,
+                y = -10,
+                w = 60,
+                h = 20,
+                zwidth = 15,
+                injury = 50,
+                fall = 10,
+                dvx = 4,
+                effect = 1,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            });
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanAlternateAirTarget",
+                37,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.FallDamageDiv = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            target.Runtime.SetPosition(10, -5, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.RefreshRuntimeSnapshot();
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(786);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(95));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(
+                world.PendingSounds[0].Cue,
+                Is.EqualTo("CUSTOM_ALTERNATE_BROKEN"));
+            Assert.That(
+                world.PendingSounds[0].WorldX,
+                Is.EqualTo(attacker.Runtime.XInt));
+        }
+
+        [Test]
+        public void ShadowCompare_AlternateDamageProjectsDefendBrokenFrame()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanAlternateDefendBreakAttacker",
+                7604,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            var defendFrame = new LF2FrameData
+            {
+                frameId = 7,
+                state = LF2States.Defending,
+                wait = 1,
+                next = 7,
+            };
+            var defendBrokenFrame = new LF2FrameData
+            {
+                frameId = LF2StandardFrames.DefendBroken,
+                state = LF2States.Standing,
+                wait = 1,
+                next = LF2StandardFrames.DefendBroken,
+            };
+            defendFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanAlternateDefendBreakTarget",
+                37,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true,
+                extraFrame: defendFrame,
+                secondExtraFrame: defendBrokenFrame);
+            target.DirectWriteFramePreserveWaitCounter(defendFrame.frameId);
+            target.RefreshRuntimeSnapshot();
+            target.HitStateCount = 15;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.dvx = -2;
+            itr.effect = 0;
+            itr.bdefend = 20;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(787);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.HitStateCount, Is.EqualTo(35));
+            Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.DefendBroken));
+            Assert.That(
+                target.Runtime.Frame,
+                Is.EqualTo(LF2StandardFrames.DefendBroken));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_017"));
+        }
+
+        [Test]
+        public void ShadowCompare_StandardDamageSupportsOrdinarySpecialAttackerAndAirTarget()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanStandardAirSpecialAttacker",
+                7605,
+                0,
+                1,
+                0);
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_STANDARD_BROKEN";
+            attacker.Frame.D.itrs.Add(new InteractionArea
+            {
+                kind = 0,
+                x = -30,
+                y = -10,
+                w = 60,
+                h = 20,
+                zwidth = 15,
+                injury = 10,
+                fall = 25,
+                dvx = 2,
+                dvy = 0,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            });
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanStandardAirTarget",
+                38,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            target.Runtime.SetPosition(10, -5, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.RefreshRuntimeSnapshot();
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(788);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(90));
+            Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.FallingBack));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(LF2StandardFrames.FallingBack));
+            Assert.That(target.FallCounter, Is.Zero);
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(3));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("CUSTOM_STANDARD_BROKEN"));
+            Assert.That(world.PendingSounds[2].Cue, Is.EqualTo("SFX_006"));
+        }
+
+        [TestCase(LF2States.WeaponThrowing, -1.05, -4.0, -4.0, 2.1, 3)]
+        [TestCase(LF2States.HeavyWeaponInSky, 3.2, 2.0, 2.4, 4.1, 2)]
+        [TestCase(LF2States.ProjectileFlying, 0.0, 2.0, 6.0, 2.1, 2)]
+        public void ShadowCompare_AlternateDamageAppliesAttackerStateTailBeforeHitRecord(
+            int attackerState,
+            double expectedAttackerVx,
+            double expectedAttackerVy,
+            double expectedAttackerVz,
+            double expectedTargetKnockbackVx,
+            int expectedRngCalls)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2FrameData frame10 = attackerState == LF2States.ProjectileFlying
+                ? new LF2FrameData
+                {
+                    frameId = 10,
+                    state = LF2States.Standing,
+                    wait = 1,
+                    next = 10,
+                    centerx = 0,
+                    centery = 0,
+                }
+                : null;
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanAlternateStateTailAttacker",
+                7283,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                extraFrame: frame10,
+                includeAttackFrames0To15:
+                    attackerState == LF2States.WeaponThrowing);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanAlternateStateTailTarget",
+                37,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            attacker.Frame.D.state = attackerState;
+            attacker.Runtime.Vx = 8.0;
+            attacker.Runtime.Vy = 2.0;
+            attacker.Runtime.Vz = 6.0;
+            attacker.AttackingCounter = 7;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.FallDamageDiv = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            target.HitStateCount = 0;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.dvx = 4;
+            itr.effect = 0;
+            itr.bdefend = 1;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x55667788u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3020 + attackerState);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(
+                attacker.Runtime.Vx,
+                Is.EqualTo(expectedAttackerVx).Within(0.0000001));
+            Assert.That(
+                attacker.Runtime.Vy,
+                Is.EqualTo(expectedAttackerVy).Within(0.0000001));
+            Assert.That(
+                attacker.Runtime.Vz,
+                Is.EqualTo(expectedAttackerVz).Within(0.0000001));
+            Assert.That(
+                target.KnockbackVx,
+                Is.EqualTo(expectedTargetKnockbackVx).Within(0.0000001));
+            Assert.That(target.Health.HP, Is.EqualTo(99));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(expectedRngCalls));
+
+            if (attackerState == LF2States.WeaponThrowing)
+            {
+                Assert.That(attacker.Frame.N, Is.InRange(0, 15));
+                Assert.That(attacker.Runtime.Frame, Is.EqualTo(attacker.Frame.N));
+            }
+            else if (attackerState == LF2States.ProjectileFlying)
+            {
+                Assert.That(attacker.Frame.N, Is.EqualTo(10));
+                Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
+                Assert.That(attacker.AttackingCounter, Is.Zero);
+            }
+            else
+            {
+                Assert.That(attacker.Frame.N, Is.Zero);
+                Assert.That(attacker.Runtime.Frame, Is.Zero);
+                Assert.That(attacker.AttackingCounter, Is.EqualTo(7));
+            }
+        }
+
+        [TestCase(false, 90)]
+        [TestCase(true, 99)]
+        public void ShadowCompare_DamagePropagatesFrameDelayToActiveHolder(
+            bool alternateDamage,
+            int expectedTargetHp)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanActiveHolderAttacker",
+                7284,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanActiveHolderTarget",
+                alternateDamage ? 37 : 7285,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            TypedCharacter activeHolder = CreateEntity(
+                world,
+                "HitPlanActiveHolder",
+                7286,
+                2,
+                LF2ObjectType.Character,
+                1,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            attacker.Runtime.LinkState = -1;
+            attacker.Runtime.HolderStableId = activeHolder.Runtime.SlotIndex;
+            attacker.FrameDelay = 0;
+            activeHolder.FrameDelay = 11;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.FallDamageDiv = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+            target.HitStateCount = 0;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.bdefend = 1;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x66778899u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(alternateDamage ? 3041 : 3040);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(activeHolder.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.Health.HP, Is.EqualTo(expectedTargetHp));
+            Assert.That(attacker.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(
+                attacker.Runtime.HolderStableId,
+                Is.EqualTo(activeHolder.Runtime.SlotIndex));
+        }
+
+        [Test]
+        public void ShadowCompare_KnockdownWritesHeldPairVrestWithoutReleasingLink()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanHeldPairRestAttacker",
+                7287,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanHeldPairRestTarget",
+                7288,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            TypedCharacter heldTarget = CreateEntity(
+                world,
+                "HitPlanHeldPairRestHeldTarget",
+                7289,
+                2,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            target.Runtime.LinkState = 2;
+            target.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
+            target.Runtime.HeldWeaponStableId = heldTarget.Runtime.SlotIndex;
+            heldTarget.Runtime.LinkState = 0;
+            heldTarget.Runtime.HolderStableId = target.Runtime.SlotIndex;
+            target.Health.HP = 100;
+            target.Health.HPBound = 100;
+            target.KillCount = -1;
+            target.Unk344 = 1;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 70;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x778899AAu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3050);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(
+                world.GetRawRestVrest(
+                    heldTarget.Runtime.SlotIndex,
+                    attacker.Runtime.SlotIndex),
+                Is.EqualTo(45));
+            Assert.That(
+                world.GetRawRestVrest(
+                    target.Runtime.SlotIndex,
+                    heldTarget.Runtime.SlotIndex),
+                Is.EqualTo(30));
+            Assert.That(
+                world.GetRawRestVrest(
+                    target.Runtime.SlotIndex,
+                    attacker.Runtime.SlotIndex),
+                Is.EqualTo(3));
+            Assert.That(target.Runtime.LinkState, Is.EqualTo(2));
+            Assert.That(heldTarget.Runtime.LinkState, Is.Zero);
+            Assert.That(
+                heldTarget.Runtime.HolderStableId,
+                Is.EqualTo(target.Runtime.SlotIndex));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamagePropagatesFrameDelayToActiveHolder()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectActiveHolderAttacker",
+                7290,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectActiveHolderTarget",
+                7291,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            TypedCharacter activeHolder = CreateEntity(
+                world,
+                "HitPlanObjectActiveHolder",
+                7292,
+                2,
+                LF2ObjectType.Character,
+                1,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            attacker.Runtime.LinkState = -1;
+            attacker.Runtime.HolderStableId = activeHolder.Runtime.SlotIndex;
+            attacker.FrameDelay = 0;
+            activeHolder.FrameDelay = 11;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x8899AABBu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3060);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(activeHolder.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(attacker.Runtime.LinkState, Is.EqualTo(-1));
+        }
+
+        [TestCase(true, 45, 30)]
+        [TestCase(false, 0, 0)]
+        public void ShadowCompare_ObjectKnockdownWritesHeldPairVrestOnlyForAuthorityRelation(
+            bool authorityRelation,
+            int expectedHeldAgainstAttacker,
+            int expectedTargetAgainstHeld)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectHeldPairAttacker",
+                7293,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectHeldPairTarget",
+                7294,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            TypedCharacter heldTarget = CreateEntity(
+                world,
+                "HitPlanObjectHeldPairHeldTarget",
+                7295,
+                2,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            target.Runtime.LinkState = 2;
+            target.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
+            target.Runtime.HeldWeaponStableId = heldTarget.Runtime.SlotIndex;
+            heldTarget.Runtime.HolderStableId = authorityRelation
+                ? target.Runtime.SlotIndex
+                : 999;
+            target.Runtime.WeaponFlightCounter = 100;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x98A9BACBu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3065);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(
+                world.GetRawRestVrest(
+                    heldTarget.Runtime.SlotIndex,
+                    attacker.Runtime.SlotIndex),
+                Is.EqualTo(expectedHeldAgainstAttacker));
+            Assert.That(
+                world.GetRawRestVrest(
+                    target.Runtime.SlotIndex,
+                    heldTarget.Runtime.SlotIndex),
+                Is.EqualTo(expectedTargetAgainstHeld));
+            Assert.That(
+                world.GetRawRestVrest(
+                    target.Runtime.SlotIndex,
+                    attacker.Runtime.SlotIndex),
+                Is.EqualTo(3));
+            Assert.That(target.Runtime.LinkState, Is.EqualTo(2));
+            Assert.That(
+                heldTarget.Runtime.HolderStableId,
+                Is.EqualTo(authorityRelation ? target.Runtime.SlotIndex : 999));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageSupportsBdefend100DurabilityBreak()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectBdefendAttacker",
+                7296,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectBdefendTarget",
+                7297,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.bdefend = 100;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xA9BACBDCu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3066);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageSupportsAirborneHeavyWeaponRandomFrame()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectAirHeavyAttacker",
+                7298,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectAirHeavyTarget",
+                7299,
+                1,
+                LF2ObjectType.HeavyWeapon,
+                2,
+                10);
+            target.Runtime.Y = -10.0;
+            target.Runtime.YInt = -10;
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xBACBDCEDu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3067);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.InRange(0, 5));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(target.Frame.N));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageProjectsFlyingWeaponDynamicKnockback()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectFlyingKnockbackAttacker",
+                7300,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectFlyingKnockbackTarget",
+                7301,
+                1,
+                LF2ObjectType.ThrowWeapon,
+                2,
+                10);
+            target.Runtime.SetVelocity(-20.0, 0.0, 0.0);
+            target.KnockbackVx = 0.0;
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 5;
+            itr.effect = 22;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xCBDCEFF0u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3068);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.KnockbackVx, Is.EqualTo(-11.0).Within(0.0001));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageSupportsHeldOrdinaryWeaponTarget()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectHeldTargetAttacker",
+                7302,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectHeldTarget",
+                7303,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanObjectHeldTargetHolder",
+                7304,
+                2,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            target.Runtime.LinkState = -1;
+            target.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xDCEFF102u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3069);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(
+                target.Runtime.HolderStableId,
+                Is.EqualTo(holder.Runtime.SlotIndex));
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(90));
+        }
+
+        [Test]
+        public void ShadowCompare_Type3DamageSupportsArbitraryStateAndBdefend100()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanType3ArbitraryStateAttacker",
+                7305,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3ArbitraryStateTarget",
+                7306,
+                1,
+                2,
+                10);
+            target.Frame.D.state = 1234;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.effect = 0;
+            itr.bdefend = 100;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xEFF10213u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3070);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(target.HitStateCount, Is.EqualTo(45));
+        }
+
+        [Test]
+        public void ShadowCompare_Type3State1002UsesDirectionalEffectBeforeMotionReset()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanType3State1002DirectionalAttacker",
+                7307,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                includeAttackFrames0To15: true);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3State1002DirectionalTarget",
+                7308,
+                1,
+                2,
+                10);
+            attacker.Frame.D.state = LF2States.WeaponThrowing;
+            target.KnockbackVx = 0.0;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.effect = 22;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xF1021324u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3071);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(1.5).Within(0.0001));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(-4.0).Within(0.0001));
+            Assert.That(target.KnockbackVx, Is.Zero);
+        }
+
+        [Test]
+        public void ShadowCompare_NonConvertedKind9WeaponOnlyRecordsEffectSound()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanKind9WeaponAttacker",
+                7293,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanKind9WeaponTarget",
+                7294,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 9;
+            itr.injury = 99;
+            itr.fall = 70;
+            itr.dvx = 5;
+            itr.dvy = 6;
+            itr.effect = 5;
+            itr.arest = 2;
+            itr.vrest = 3;
+            target.Runtime.WeaponFlightCounter = 77;
+            world.Rng.Seed(0xAABBCCDDu);
+            int initialTargetFrame = target.Frame.N;
+            int initialTargetRuntimeFrame = target.Runtime.Frame;
+            int initialTargetHp = target.Health.HP;
+            int initialTargetHitConfirm2 = target.HitConfirm2;
+            int initialTargetHitCount = target.HitCount;
+            int initialTargetHitStateCount = target.HitStateCount;
+            int initialTargetFall = target.FallCounter;
+            double initialTargetKnockbackVx = target.KnockbackVx;
+            double initialTargetKnockbackVy = target.KnockbackVy;
+            double initialTargetKnockbackVz = target.KnockbackVz;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3065);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(initialTargetHp));
+            Assert.That(target.Frame.N, Is.EqualTo(initialTargetFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(initialTargetRuntimeFrame));
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(77));
+            Assert.That(target.HitConfirm2, Is.EqualTo(initialTargetHitConfirm2));
+            Assert.That(target.HitCount, Is.EqualTo(initialTargetHitCount));
+            Assert.That(target.HitStateCount, Is.EqualTo(initialTargetHitStateCount));
+            Assert.That(target.FallCounter, Is.EqualTo(initialTargetFall));
+            Assert.That(target.KnockbackVx, Is.EqualTo(initialTargetKnockbackVx));
+            Assert.That(target.KnockbackVy, Is.EqualTo(initialTargetKnockbackVy));
+            Assert.That(target.KnockbackVz, Is.EqualTo(initialTargetKnockbackVz));
+            Assert.That(target.HitRecordCount, Is.Zero);
+            Assert.That(attacker.FrameDelay, Is.Zero);
+            Assert.That(attacker.AttackExempt, Is.Zero);
+            Assert.That(attacker.ItrRest.Arest, Is.Zero);
+            Assert.That(world.GetRawRestVrest(1, 0), Is.Zero);
+            Assert.That(world.Rng.State, Is.EqualTo(0xAABBCCDDu));
+            Assert.That(world.Rng.CallCount, Is.Zero);
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_004"));
+        }
+
+        [Test]
+        public void ShadowCompare_State2000ObjectDamageKeepsAttackerVelocity()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanState2000ObjectAttacker",
+                7293,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanState2000ObjectTarget",
+                7294,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            attacker.Frame.D.state = LF2States.HeavyWeaponInSky;
+            attacker.Runtime.Dir = "left";
+            attacker.Runtime.Vx = 8.0;
+            attacker.Runtime.Vz = 6.0;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 2;
+            itr.effect = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x99AABBCCu);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3070);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.KnockbackVx, Is.EqualTo(2.1).Within(0.0000001));
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(8.0).Within(0.0000001));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(6.0).Within(0.0000001));
+            Assert.That(attacker.Runtime.Dir, Is.EqualTo("left"));
+        }
+
+        [TestCase(LF2ObjectType.LightWeapon, 10, 0, -1)]
+        [TestCase(LF2ObjectType.HeavyWeapon, 10, 0, -1)]
+        [TestCase(LF2ObjectType.HeavyWeapon, 50, 0, -1)]
+        [TestCase(LF2ObjectType.ThrowWeapon, 10, 0, -1)]
+        [TestCase(LF2ObjectType.Drink, 10, 0, -1)]
+        [TestCase(LF2ObjectType.LightWeapon, 10, 4, -1)]
+        [TestCase(LF2ObjectType.HeavyWeapon, 10, 4, -1)]
+        [TestCase(LF2ObjectType.ThrowWeapon, 10, 4, -1)]
+        [TestCase(LF2ObjectType.Drink, 10, 4, -1)]
+        [TestCase(LF2ObjectType.ThrowWeapon, 10, 0, 1)]
+        [TestCase(LF2ObjectType.ThrowWeapon, 10, 0, 0)]
         public void ShadowCompare_StandardObjectDamageWriterEffectMatchesAuthorityState(
             LF2ObjectType targetType,
             int fall,
             int effect,
-            bool oid100Held)
+            int oid100Dvx)
         {
+            bool oid100Held = oid100Dvx >= 0;
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
                 BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
@@ -1376,11 +3260,13 @@ namespace NTSD.Test
                 targetType,
                 2,
                 10);
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_OBJECT_HIT";
             InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
             itr.kind = 0;
             itr.injury = 10;
             itr.fall = fall;
-            itr.dvx = oid100Held ? 1 : 0;
+            itr.dvx = oid100Held ? oid100Dvx : 0;
             itr.dvy = 0;
             itr.effect = effect;
             itr.bdefend = 0;
@@ -1440,7 +3326,8 @@ namespace NTSD.Test
             Assert.That(target.FallCounter, Is.Zero);
             Assert.That(
                 target.KnockbackVx,
-                Is.EqualTo(oid100Held ? 10.0 : 5.1).Within(0.0000001));
+                Is.EqualTo(oid100Held && oid100Dvx != 0 ? 10.0 : 5.1)
+                    .Within(0.0000001));
             Assert.That(
                 target.KnockbackVy,
                 Is.EqualTo(heavyLowFallHitCount ? 0.1 : -6.9).Within(0.0000001));
@@ -1465,20 +3352,34 @@ namespace NTSD.Test
             Assert.That(world.Rng.CallCount, Is.EqualTo(heavyLowFall ? 2 : 3));
             Assert.That(
                 world.PendingSounds.Count,
-                Is.EqualTo((targetType == LF2ObjectType.Drink ? 0 : 1) +
-                           (oid100Held ? 1 : 0)));
-            if (world.PendingSounds.Count > 0)
+                Is.EqualTo((targetType == LF2ObjectType.Drink ? 0 : 1) + 1 +
+                           (oid100Held && oid100Dvx != 0 ? 1 : 0)));
+            int customHitSoundIndex = 0;
+            if (targetType != LF2ObjectType.Drink)
+            {
                 Assert.That(
                     world.PendingSounds[0].Cue,
                     Is.EqualTo(effect == 4 ? "SFX_011" : "SFX_001"));
-            if (oid100Held)
-                Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("SFX_039"));
+                customHitSoundIndex++;
+            }
+            Assert.That(
+                world.PendingSounds[customHitSoundIndex].Cue,
+                Is.EqualTo("CUSTOM_OBJECT_HIT"));
+            if (oid100Held && oid100Dvx != 0)
+            {
+                Assert.That(
+                    world.PendingSounds[customHitSoundIndex + 1].Cue,
+                    Is.EqualTo("SFX_039"));
+            }
         }
 
         [TestCase(0, 30, 100, 1, "SFX_001")]
+        [TestCase(1, 30, 100, 1, "SFX_002")]
         [TestCase(2, 20, 100, 1, "SFX_006")]
         [TestCase(3, 30, 100, 1, "SFX_010")]
+        [TestCase(4, 30, 100, 1, "SFX_011")]
         [TestCase(5, 30, 100, 1, "SFX_004")]
+        [TestCase(6, 30, 100, 1, "SFX_001")]
         [TestCase(21, 30, 100, 1, "SFX_001")]
         [TestCase(22, 30, 100, 1, "SFX_001")]
         [TestCase(23, 30, 100, 2, "SFX_068")]
@@ -1486,6 +3387,7 @@ namespace NTSD.Test
         [TestCase(5005, 30, 95, 1, "SFX_001")]
         [TestCase(5999, 30, 0, 1, "SFX_001")]
         [TestCase(6033, 33, 100, 1, "SFX_001")]
+        [TestCase(7000, 30, 100, 1, "SFX_001")]
         public void ShadowCompare_StandardType3DamageWriterEffectMatchesAuthorityState(
             int effect,
             int expectedFrame,
@@ -1513,6 +3415,8 @@ namespace NTSD.Test
                 1,
                 2,
                 10);
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_TYPE3_HIT";
             TypedCharacter holder = CreateEntity(
                 world,
                 "HitPlanType3Holder",
@@ -1580,7 +3484,7 @@ namespace NTSD.Test
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
-            Assert.That(target.FallCounter, Is.EqualTo(10));
+            Assert.That(target.FallCounter, Is.EqualTo(effect == 4 ? 90 : 10));
             Assert.That(target.Health.PP, Is.EqualTo(expectedPp));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
@@ -1590,13 +3494,1206 @@ namespace NTSD.Test
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
             Assert.That(target.HitRecordCount, Is.EqualTo(1));
-            Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
+            Assert.That(target.GetHitRecordAge(0), Is.EqualTo(effect == 1 ? 30 : 10));
             Assert.That(target.GetHitRecordX(0), Is.EqualTo(expectedHitX));
             Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
             Assert.That(world.Rng.State, Is.EqualTo(secondRngState));
             Assert.That(world.Rng.CallCount, Is.EqualTo(2));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(expectedSoundCount));
-            Assert.That(world.PendingSounds[expectedSoundCount - 1].Cue, Is.EqualTo(expectedLastCue));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(expectedSoundCount + 1));
+            Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("CUSTOM_TYPE3_HIT"));
+            if (expectedSoundCount > 1)
+            {
+                Assert.That(
+                    world.PendingSounds[expectedSoundCount].Cue,
+                    Is.EqualTo(expectedLastCue));
+            }
+        }
+
+        [Test]
+        public void ShadowCompare_StandardType3DamageSupportsActiveSpecialAttacker()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3ActiveSpecialAttacker",
+                7606,
+                0,
+                1,
+                0);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3ActiveSpecialTarget",
+                7607,
+                1,
+                2,
+                10);
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_TYPE3_ATTACKER_BROKEN";
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_TYPE3_TARGET_HIT";
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                dvx = 3,
+                dvy = 4,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+            target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+            target.KnockbackVx = 5.0;
+            target.KnockbackVy = 6.0;
+            target.KnockbackVz = 7.0;
+            target.AttackingCounter = 9;
+            world.Rng.Seed(0x10293847u);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(795);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(20));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(20));
+            Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(attacker.HolderCopySlot));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.AttackingCounter, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.Zero);
+            Assert.That(target.Runtime.Vy, Is.Zero);
+            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.KnockbackVx, Is.Zero);
+            Assert.That(target.KnockbackVy, Is.Zero);
+            Assert.That(target.KnockbackVz, Is.Zero);
+            Assert.That(target.FallCounter, Is.EqualTo(10));
+            Assert.That(target.HitCount, Is.EqualTo(1));
+            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3));
+            Assert.That(attacker.AttackExempt, Is.EqualTo(2));
+            Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
+            Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(3));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(
+                world.PendingSounds[1].Cue,
+                Is.EqualTo("CUSTOM_TYPE3_ATTACKER_BROKEN"));
+            Assert.That(
+                world.PendingSounds[2].Cue,
+                Is.EqualTo("CUSTOM_TYPE3_TARGET_HIT"));
+        }
+
+        [Test]
+        public void ShadowCompare_StandardType3DamageSupportsHeldSpecialAttacker()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3HeldSpecialAttacker",
+                7608,
+                0,
+                1,
+                0);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3HeldSpecialTarget",
+                7609,
+                1,
+                2,
+                10);
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanType3HeldSpecialHolder",
+                7610,
+                2,
+                LF2ObjectType.Character,
+                4,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            holder.HolderCopySlot = 88;
+            holder.FrameDelay = 11;
+            attacker.HolderCopySlot = 77;
+            attacker.Runtime.LinkState = -1;
+            attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_HELD_TYPE3_ATTACKER_BROKEN";
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_HELD_TYPE3_TARGET_HIT";
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                dvx = 3,
+                dvy = 4,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+            world.Rng.Seed(0x56473829u);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(796);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(target.RelationTeam, Is.EqualTo(holder.RelationTeam));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(holder.HolderCopySlot));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.AttackingCounter, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.Zero);
+            Assert.That(target.Runtime.Vy, Is.Zero);
+            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.KnockbackVx, Is.Zero);
+            Assert.That(target.KnockbackVy, Is.Zero);
+            Assert.That(target.KnockbackVz, Is.Zero);
+            Assert.That(target.FallCounter, Is.EqualTo(10));
+            Assert.That(target.HitCount, Is.EqualTo(1));
+            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(holder.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3));
+            Assert.That(attacker.AttackExempt, Is.EqualTo(2));
+            Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
+            Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(3));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(
+                world.PendingSounds[1].Cue,
+                Is.EqualTo("CUSTOM_HELD_TYPE3_ATTACKER_BROKEN"));
+            Assert.That(
+                world.PendingSounds[2].Cue,
+                Is.EqualTo("CUSTOM_HELD_TYPE3_TARGET_HIT"));
+        }
+
+        [Test]
+        public void ShadowCompare_HeldType3WithMissingHolderPreservesTargetRelation()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3MissingHolderAttacker",
+                7611,
+                0,
+                1,
+                0);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3MissingHolderTarget",
+                7612,
+                1,
+                2,
+                10);
+            attacker.HolderCopySlot = 77;
+            attacker.Runtime.LinkState = -1;
+            attacker.Runtime.HolderStableId = 999;
+            target.HolderCopySlot = 66;
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                dvx = 3,
+                dvy = 4,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(797);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(target.RelationTeam, Is.EqualTo(2));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3));
+        }
+
+        [TestCase(8, false, 30)]
+        [TestCase(0xD1, false, 20)]
+        [TestCase(0xD5, true, 30)]
+        public void ShadowCompare_Type3IdentityOidsUseStandardTailForOrdinaryTarget(
+            int attackerOid,
+            bool heldByCharacter,
+            int expectedFrame)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2Entity attacker;
+            InteractionArea itr;
+            if (attackerOid == 8)
+            {
+                attacker = CreateEntity(
+                    world,
+                    "HitPlanOrdinaryType3Oid8Attacker",
+                    attackerOid,
+                    0,
+                    LF2ObjectType.Character,
+                    1,
+                    0,
+                    hasItr: true,
+                    hasBody: false);
+                itr = attacker.GetCollisionFrameData().itrs[0];
+            }
+            else
+            {
+                LF2SpecialAttack specialAttacker = CreateSpecialAttackEntity(
+                    world,
+                    "HitPlanOrdinaryType3IdentityAttacker",
+                    attackerOid,
+                    0,
+                    1,
+                    0);
+                itr = new InteractionArea
+                {
+                    x = -10,
+                    y = -10,
+                    w = 30,
+                    h = 20,
+                    zwidth = 12,
+                };
+                specialAttacker.Frame.D.itrs.Add(itr);
+                attacker = specialAttacker;
+            }
+
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanOrdinaryType3IdentityTarget",
+                7613,
+                1,
+                2,
+                10);
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanOrdinaryType3IdentityHolder",
+                7614,
+                2,
+                LF2ObjectType.Character,
+                4,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            holder.HolderCopySlot = 88;
+            if (heldByCharacter)
+            {
+                attacker.Runtime.LinkState = -1;
+                attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            }
+
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            if (attackerOid == 8)
+                world.PostInteractionTickAll(798);
+            else
+                world.ObjectInteractionTickAll(798);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.ObjectId, Is.EqualTo(7613));
+            Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(
+                target.RelationTeam,
+                Is.EqualTo(heldByCharacter
+                    ? holder.RelationTeam
+                    : attacker.RelationTeam));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ShadowCompare_StandardType3DamageSupportsDeadAirTarget()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanDeadAirType3Attacker",
+                7615,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanDeadAirType3Target",
+                7616,
+                1,
+                2,
+                10);
+            target.Health.HP = 0;
+            target.Runtime.SetPosition(10, -5, 0);
+            target.Runtime.SyncIntegerPosition();
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(799);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Health.HP, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(target.FallCounter, Is.EqualTo(90));
+        }
+
+        [TestCase(false, LF2States.Frozen)]
+        [TestCase(true, LF2States.Falling)]
+        public void ShadowCompare_PreviousStateForcesType3FallReset(
+            bool usePrevious2,
+            int previousState)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanHistoricType3Attacker",
+                7617,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanHistoricType3Target",
+                7618,
+                1,
+                2,
+                10);
+            var historyFrame = new LF2FrameData
+            {
+                frameId = 50,
+                state = previousState,
+                wait = 1,
+                next = 50,
+                centerx = 0,
+                centery = 0,
+            };
+            historyFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
+            target.FrameCache.Wrapper.characterData.frames.Add(historyFrame);
+            target.FrameCache.Load(target.FrameCache.Wrapper);
+            target.Frame.D = target.GetFrameDataById(0);
+            if (usePrevious2)
+            {
+                target.Frame.N = historyFrame.frameId;
+                target.Frame.D = target.GetFrameDataById(historyFrame.frameId);
+                target.Runtime.Frame = historyFrame.frameId;
+            }
+            else
+            {
+                target.Frame.Prev = historyFrame.frameId;
+            }
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            if (usePrevious2)
+            {
+                target.Frame.N = 0;
+                target.Frame.D = target.GetFrameDataById(0);
+                target.Runtime.Frame = 0;
+            }
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(800 + previousState);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(target.FallCounter, Is.Zero);
+        }
+
+        [Test]
+        public void ShadowCompare_Type3DamageProjectsState3000AttackerTail()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3State3000Attacker",
+                7619,
+                0,
+                1,
+                0);
+            var frame10 = new LF2FrameData
+            {
+                frameId = 10,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 10,
+                centerx = 0,
+                centery = 0,
+                dvz = 7,
+            };
+            attacker.FrameCache.Wrapper.characterData.frames.Add(frame10);
+            attacker.FrameCache.Load(attacker.FrameCache.Wrapper);
+            attacker.Frame.D = attacker.GetFrameDataById(0);
+            attacker.Frame.D.state = LF2States.ProjectileFlying;
+            attacker.AttackingCounter = 9;
+            attacker.Runtime.SetVelocity(6.0, 0.0, 5.0);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                dvx = 3,
+                dvy = 4,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3State3000Target",
+                7620,
+                1,
+                2,
+                10);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(813);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.EqualTo(10));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
+            Assert.That(attacker.AttackingCounter, Is.Zero);
+            Assert.That(attacker.Runtime.Vx, Is.Zero);
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(7.0));
+            Assert.That(target.Frame.N, Is.EqualTo(20));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(20));
+        }
+
+        [Test]
+        public void ShadowCompare_Type3DamageProjectsState1002AttackerTail()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanType3State1002Attacker",
+                7621,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                includeAttackFrames0To15: true);
+            attacker.Frame.D.state = LF2States.WeaponThrowing;
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3State1002Target",
+                7622,
+                1,
+                2,
+                10);
+            target.KnockbackVx = 0.0;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xA1B2C3D4u);
+            uint firstRngState;
+            unchecked
+            {
+                firstRngState = 0xA1B2C3D4u * 0x343FDu + 0x269EC3u;
+            }
+            int expectedFrame =
+                (int)((firstRngState >> 16) & 0x7FFFu) % 16;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(814);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(-1.5));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(-4.0));
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void ShadowCompare_StandardObjectDamageSupportsSpecialAttacker()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanObjectSpecialAttacker",
+                7623,
+                0,
+                1,
+                0);
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_OBJECT_ATTACKER_BROKEN";
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                dvx = 3,
+                dvy = 4,
+                effect = 0,
+                bdefend = 0,
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectSpecialTarget",
+                7624,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_OBJECT_SPECIAL_TARGET_HIT";
+            target.Runtime.WeaponFlightCounter = 100;
+            world.Rng.Seed(0xB1C2D3E4u);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(815);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.HitCount, Is.EqualTo(1));
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(90));
+            Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(3));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(3));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(
+                world.PendingSounds[1].Cue,
+                Is.EqualTo("CUSTOM_OBJECT_ATTACKER_BROKEN"));
+            Assert.That(
+                world.PendingSounds[2].Cue,
+                Is.EqualTo("CUSTOM_OBJECT_SPECIAL_TARGET_HIT"));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageProjectsState1002AttackerTail()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectState1002Attacker",
+                7625,
+                0,
+                LF2ObjectType.SpecialAttack,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                includeAttackFrames0To15: true);
+            attacker.Frame.D.state = LF2States.WeaponThrowing;
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectState1002Target",
+                7626,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            target.KnockbackVx = 0.0;
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0xC1D2E3F4u);
+            uint firstRngState;
+            unchecked
+            {
+                firstRngState = 0xC1D2E3F4u * 0x343FDu + 0x269EC3u;
+            }
+            int expectedFrame =
+                (int)((firstRngState >> 16) & 0x7FFFu) % 16;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(816);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(-1.5));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(-4.0));
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(90));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void ShadowCompare_ObjectDamageProjectsState3000AttackerTail()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            var frame10 = new LF2FrameData
+            {
+                frameId = 10,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 10,
+                centerx = 0,
+                centery = 0,
+                dvz = 7,
+            };
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectState3000Attacker",
+                7627,
+                0,
+                LF2ObjectType.SpecialAttack,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false,
+                extraFrame: frame10);
+            attacker.Frame.D.state = LF2States.ProjectileFlying;
+            attacker.AttackingCounter = 9;
+            attacker.Runtime.SetVelocity(6.0, 0.0, 5.0);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectState3000Target",
+                7628,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = 0;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(817);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Frame.N, Is.EqualTo(10));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
+            Assert.That(attacker.AttackingCounter, Is.Zero);
+            Assert.That(attacker.Runtime.Vx, Is.Zero);
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(7.0));
+            Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(90));
+        }
+
+        [TestCase(100, 0, 3.0, "SFX_001")]
+        [TestCase(7629, 22, -3.0, "SFX_001")]
+        [TestCase(7630, 23, -3.0, "SFX_001")]
+        public void ShadowCompare_ObjectDamageSupportsActiveOid100AndDirectionalEffects(
+            int targetOid,
+            int effect,
+            double expectedKnockbackVx,
+            string expectedCue)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanObjectDirectionalAttacker",
+                7631,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "HitPlanObjectDirectionalTarget",
+                targetOid,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            target.KnockbackVx = 0.0;
+            target.Runtime.WeaponFlightCounter = 100;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = effect;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(818 + effect);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(
+                target.KnockbackVx,
+                Is.EqualTo(expectedKnockbackVx).Within(0.0000001));
+            Assert.That(target.Runtime.LinkState, Is.Zero);
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(expectedCue));
+        }
+
+        [TestCase(LF2States.Standing, 30, true)]
+        [TestCase(LF2States.ObjectFlying, 40, false)]
+        public void ShadowCompare_Type3Kind9WriterEffectMatchesAuthorityState(
+            int targetState,
+            int expectedFrame,
+            bool expectRelationCopy)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanType3Kind9Attacker",
+                7310,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3Kind9Target",
+                7311,
+                1,
+                2,
+                10);
+            target.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                "CUSTOM_TYPE3_BROKEN";
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanType3Kind9Holder",
+                7312,
+                2,
+                LF2ObjectType.Character,
+                1,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            target.Frame.D.state = targetState;
+            target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+            target.KnockbackVx = 5.0;
+            target.KnockbackVy = 6.0;
+            target.KnockbackVz = 7.0;
+            target.AttackingCounter = 9;
+            target.Runtime.AnimCounter = 99;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 9;
+            itr.effect = 3;
+            itr.arest = 2;
+            itr.vrest = 3;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(782);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(2));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_010"));
+            Assert.That(
+                world.PendingSounds[1].Cue,
+                Is.EqualTo("CUSTOM_TYPE3_BROKEN"));
+
+            if (expectRelationCopy)
+            {
+                Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+                Assert.That(target.HolderCopySlot, Is.EqualTo(holder.Runtime.SlotIndex));
+                Assert.That(target.AttackingCounter, Is.Zero);
+                Assert.That(target.Runtime.Vx, Is.Zero);
+                Assert.That(target.Runtime.Vy, Is.Zero);
+                Assert.That(target.Runtime.Vz, Is.Zero);
+                Assert.That(target.KnockbackVx, Is.Zero);
+                Assert.That(target.KnockbackVy, Is.Zero);
+                Assert.That(target.KnockbackVz, Is.Zero);
+                Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+            }
+            else
+            {
+                Assert.That(target.RelationTeam, Is.EqualTo(2));
+                Assert.That(target.HolderCopySlot, Is.Not.EqualTo(holder.Runtime.SlotIndex));
+                Assert.That(target.AttackingCounter, Is.EqualTo(9));
+                Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
+                Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
+                Assert.That(target.Runtime.Vz, Is.EqualTo(4.0));
+                Assert.That(target.KnockbackVx, Is.EqualTo(5.0));
+                Assert.That(target.KnockbackVy, Is.EqualTo(6.0));
+                Assert.That(target.KnockbackVz, Is.EqualTo(7.0));
+                Assert.That(target.Runtime.AnimCounter, Is.EqualTo(99));
+            }
+        }
+
+        [TestCase(LF2States.WeaponThrowing, 20, 20, 10, "SFX_001")]
+        [TestCase(LF2States.HeavyWeaponInSky, 4, 30, 90, "SFX_011")]
+        public void ShadowCompare_ConvertedKind9Type3WriterEffectMatchesAuthorityState(
+            int targetState,
+            int effect,
+            int expectedFrame,
+            int expectedFall,
+            string expectedCue)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanConvertedKind9Type3Attacker",
+                7313,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanConvertedKind9Type3Target",
+                7314,
+                1,
+                2,
+                10);
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanConvertedKind9Type3Holder",
+                7315,
+                2,
+                LF2ObjectType.Character,
+                1,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            target.Frame.D.state = targetState;
+            target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+            target.KnockbackVx = 5.0;
+            target.KnockbackVy = 6.0;
+            target.KnockbackVz = 7.0;
+            target.AttackingCounter = 9;
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 9;
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = effect;
+            itr.arest = 2;
+            itr.vrest = 3;
+            world.Rng.Seed(0x1234ABCDu);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(783 + effect);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.Health.HP, Is.EqualTo(100));
+            Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(holder.Runtime.SlotIndex));
+            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.AttackingCounter, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.Zero);
+            Assert.That(target.Runtime.Vy, Is.Zero);
+            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.KnockbackVx, Is.Zero);
+            Assert.That(target.KnockbackVy, Is.Zero);
+            Assert.That(target.KnockbackVz, Is.Zero);
+            Assert.That(target.FallCounter, Is.EqualTo(expectedFall));
+            Assert.That(target.HitCount, Is.EqualTo(1));
+            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3));
+            Assert.That(attacker.AttackExempt, Is.EqualTo(2));
+            Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
+            Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
+            Assert.That(target.HitRecordCount, Is.EqualTo(1));
+            Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(expectedCue));
         }
 
         [TestCase(LF2States.ObjectFlying)]
@@ -2022,6 +5119,188 @@ namespace NTSD.Test
             Assert.That(world.Rng.CallCount, Is.EqualTo(2));
             Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+        }
+
+        [TestCase(8, false, 0, 3, 0, 200, "SFX_065", 2)]
+        [TestCase(8, false, 0, 30, 13, 30, "SFX_001", 1)]
+        [TestCase(8, false, 0, 21, 0, 203, "SFX_068", 2)]
+        [TestCase(8, false, 0, 5005, 0, 30, "SFX_001", 1)]
+        [TestCase(8, false, 0, 6033, 0, 33, "SFX_001", 1)]
+        [TestCase(8, false, 0, 23, 0, 30, "SFX_068", 2)]
+        [TestCase(0xD5, true, 0, 2, 0, 203, "SFX_068", 2)]
+        [TestCase(0xD5, true, 9, 20, 0, 203, "SFX_068", 2)]
+        public void ShadowCompare_Type3ActiveCharacterDatEffectTailMatchesAuthorityState(
+            int attackerOid,
+            bool heldByCharacter,
+            int sourceKind,
+            int effect,
+            int replacementPrevState,
+            int expectedFrame,
+            string expectedLastSound,
+            int expectedSoundCount)
+        {
+            LF2CharacterDataWrapper d1Wrapper = null;
+            var runtimeConfigs = new RuntimeCharacterConfigResolver(
+                oid => oid == 0xD1 ? d1Wrapper : null);
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity,
+                characterConfigResolver: runtimeConfigs);
+            LF2Entity attacker;
+            InteractionArea itr;
+            if (heldByCharacter)
+            {
+                LF2SpecialAttack specialAttacker = CreateSpecialAttackEntity(
+                    world,
+                    "HitPlanType3D5CharacterDatAttacker",
+                    attackerOid,
+                    0,
+                    1,
+                    0);
+                itr = new InteractionArea
+                {
+                    kind = sourceKind,
+                    x = -10,
+                    y = -10,
+                    w = 30,
+                    h = 20,
+                    zwidth = 12,
+                };
+                specialAttacker.Frame.D.itrs.Add(itr);
+                attacker = specialAttacker;
+            }
+            else
+            {
+                attacker = CreateEntity(
+                    world,
+                    "HitPlanType3Oid8CharacterDatAttacker",
+                    attackerOid,
+                    0,
+                    LF2ObjectType.Character,
+                    1,
+                    0,
+                    hasItr: true,
+                    hasBody: false);
+                itr = attacker.GetCollisionFrameData().itrs[0];
+                itr.kind = sourceKind;
+            }
+
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3ActiveCharacterDatTarget",
+                0xC8,
+                1,
+                2,
+                10,
+                d1IdentityUsesCharacterDat: true);
+            target.FrameCache.Wrapper.characterData.weapon_hit_sound =
+                "CUSTOM_ACTIVE_TYPE3_HIT";
+            if (attacker is LF2SpecialAttack)
+            {
+                attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
+                    "CUSTOM_ACTIVE_TYPE3_BROKEN";
+            }
+            TypedCharacter holder = CreateEntity(
+                world,
+                "HitPlanType3D5CharacterDatHolder",
+                7602,
+                2,
+                LF2ObjectType.Character,
+                4,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            LF2SpecialAttack d1Source = CreateSpecialAttackEntity(
+                world,
+                "HitPlanType3D1CharacterDatSource",
+                0xD1,
+                3,
+                5,
+                1000,
+                d1IdentityUsesCharacterDat: true);
+            d1Wrapper = d1Source.FrameCache.Wrapper;
+            d1Wrapper.characterData.weapon_hp = 17;
+            d1Source.WeaponCount = 17;
+            int replacementFrame = heldByCharacter && (effect == 2 || effect == 20)
+                ? 20
+                : 30;
+            d1Source.GetFrameDataById(replacementFrame).state = replacementPrevState;
+            if (sourceKind == 9 && effect == 20)
+                target.Frame.D.state = LF2States.WeaponThrowing;
+
+            attacker.HolderCopySlot = 77;
+            holder.HolderCopySlot = 88;
+            if (heldByCharacter)
+            {
+                attacker.Runtime.LinkState = -1;
+                attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            }
+
+            itr.injury = 10;
+            itr.fall = 10;
+            itr.dvx = 3;
+            itr.dvy = 4;
+            itr.effect = effect;
+            itr.bdefend = 0;
+            itr.arest = 2;
+            itr.vrest = 3;
+            int initialPp = target.Health.PP;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            if (heldByCharacter)
+                world.ObjectInteractionTickAll(785);
+            else
+                world.PostInteractionTickAll(785);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.ObjectId, Is.EqualTo(0xD1));
+            Assert.That(target.FrameCache.Wrapper.characterId, Is.EqualTo(0xD1));
+            Assert.That(
+                target.GetCurrentDataObjectTypeForSimulation(),
+                Is.EqualTo((int)LF2ObjectType.Character));
+            Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
+            Assert.That(target.Frame.Prev, Is.EqualTo(replacementFrame));
+            Assert.That(target.WeaponCount, Is.EqualTo(17));
+            Assert.That(
+                target.Health.PP,
+                Is.EqualTo(effect >= 5000 && effect < 6000
+                    ? Math.Max(0, initialPp - (effect - 5000))
+                    : initialPp));
+            if (expectedFrame == 203)
+                Assert.That(target.Dirh(), Is.EqualTo(-1));
+            int customSoundCount = heldByCharacter ? 2 : 1;
+            Assert.That(
+                world.PendingSounds.Count,
+                Is.EqualTo(expectedSoundCount + customSoundCount));
+            int customHitIndex = heldByCharacter ? 2 : 1;
+            if (heldByCharacter)
+            {
+                Assert.That(
+                    world.PendingSounds[1].Cue,
+                    Is.EqualTo("CUSTOM_ACTIVE_TYPE3_BROKEN"));
+            }
+            Assert.That(
+                world.PendingSounds[customHitIndex].Cue,
+                Is.EqualTo("CUSTOM_ACTIVE_TYPE3_HIT"));
+            if (expectedSoundCount > 1)
+            {
+                Assert.That(
+                    world.PendingSounds[expectedSoundCount + customSoundCount - 1].Cue,
+                    Is.EqualTo(expectedLastSound));
+            }
         }
 
         [Test]
@@ -2585,6 +5864,318 @@ namespace NTSD.Test
             Assert.That(staleHeldTarget.Runtime.LinkState, Is.EqualTo(-2));
             Assert.That(world.Rng.State, Is.EqualTo(0x87654321u));
             Assert.That(world.Rng.CallCount, Is.Zero);
+        }
+
+        [Test]
+        public void WarmedAlternateDamageWriter_AllocatesNoManagedMemory()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "AlternateWriterAllocationAttacker",
+                7250,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: false,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "AlternateWriterAllocationTarget",
+                7251,
+                1,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 0,
+                bdefend = 0,
+                dvx = 0,
+                arest = 0,
+                vrest = 0,
+                effect = 0,
+            };
+            target.Health.HP = 500;
+            target.Health.HPBound = 500;
+            target.KillCount = 0;
+
+            for (int i = 0; i < 32; i++)
+            {
+                world.DamageWriter.ApplyAlternateDamage(
+                    world,
+                    attacker,
+                    target,
+                    target.HitCounters,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+            {
+                world.DamageWriter.ApplyAlternateDamage(
+                    world,
+                    attacker,
+                    target,
+                    target.HitCounters,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
+        }
+
+        [Test]
+        public void WarmedStandardCharacterDamageWriter_AllocatesNoManagedMemory()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "StandardWriterAllocationAttacker",
+                7252,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: false,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "StandardWriterAllocationTarget",
+                7253,
+                1,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            var itr = new InteractionArea
+            {
+                kind = 9,
+                injury = 0,
+                fall = 0,
+                dvx = 0,
+                dvy = 0,
+                arest = 0,
+                vrest = 0,
+                effect = 0,
+            };
+            target.Health.HP = 500;
+            target.Health.HPBound = 500;
+            target.KillCount = 0;
+
+            for (int i = 0; i < 32; i++)
+            {
+                world.DamageWriter.ApplyStandardCharacterDamage(
+                    world,
+                    attacker,
+                    target,
+                    target.HitCounters,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+            {
+                world.DamageWriter.ApplyStandardCharacterDamage(
+                    world,
+                    attacker,
+                    target,
+                    target.HitCounters,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
+        }
+
+        [Test]
+        public void FullKind0HitRecordCapacity_DoesNotAdvanceBattleRng()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "FullHitRecordAttacker",
+                7254,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: false,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "FullHitRecordTarget",
+                7255,
+                1,
+                LF2ObjectType.Character,
+                2,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                fall = 60,
+                effect = 0,
+            };
+            attacker.Runtime.ZInt = 0;
+            target.Runtime.ZInt = 1;
+            world.Rng.Seed(0xD00DFEEDu);
+
+            for (int i = 0; i < LF2Entity.MaxHitRecordSlots; i++)
+                target.RecordKind0Hit(attacker, itr);
+
+            Assert.That(
+                target.HitRecordCount,
+                Is.EqualTo(LF2Entity.MaxHitRecordSlots));
+            uint stateBeforeRejectedRecord = world.Rng.State;
+            ulong callsBeforeRejectedRecord = world.Rng.CallCount;
+
+            target.RecordKind0Hit(attacker, itr);
+
+            Assert.That(target.HitRecordCount, Is.EqualTo(LF2Entity.MaxHitRecordSlots));
+            Assert.That(world.Rng.State, Is.EqualTo(stateBeforeRejectedRecord));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(callsBeforeRejectedRecord));
+        }
+
+        [Test]
+        public void WarmedWeaponDamageWriter_AllocatesNoManagedMemory()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "WeaponWriterAllocationAttacker",
+                7256,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: false,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "WeaponWriterAllocationTarget",
+                7257,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                1000);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 0,
+                fall = 0,
+                dvx = 0,
+                dvy = 0,
+                arest = 0,
+                vrest = 0,
+                effect = 0,
+            };
+
+            for (int i = 0; i < 32; i++)
+            {
+                world.DamageWriter.ApplyWeaponDamage(
+                    world,
+                    attacker,
+                    target,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+            {
+                world.DamageWriter.ApplyWeaponDamage(
+                    world,
+                    attacker,
+                    target,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
+        }
+
+        [Test]
+        public void WarmedSpecialAttackDamageWriter_AllocatesNoManagedMemory()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "SpecialWriterAllocationAttacker",
+                7258,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: false,
+                hasBody: false);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "SpecialWriterAllocationTarget",
+                7259,
+                1,
+                2,
+                1000);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                injury = 0,
+                fall = 0,
+                dvx = 0,
+                dvy = 0,
+                arest = 0,
+                vrest = 0,
+                effect = 0,
+            };
+
+            for (int i = 0; i < 32; i++)
+            {
+                world.DamageWriter.ApplySpecialAttackDamage(
+                    world,
+                    attacker,
+                    target,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+            {
+                world.DamageWriter.ApplySpecialAttackDamage(
+                    world,
+                    attacker,
+                    target,
+                    itr);
+                world.PendingSounds.Clear();
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
         }
 
         [Test]
@@ -3286,7 +6877,9 @@ namespace NTSD.Test
             int x,
             bool hasItr,
             bool hasBody,
-            LF2FrameData extraFrame = null)
+            LF2FrameData extraFrame = null,
+            LF2FrameData secondExtraFrame = null,
+            bool includeAttackFrames0To15 = false)
         {
             LF2FrameData frame = new LF2FrameData
             {
@@ -3339,6 +6932,23 @@ namespace NTSD.Test
             var frames = new List<LF2FrameData> { frame };
             if (extraFrame != null)
                 frames.Add(extraFrame);
+            if (secondExtraFrame != null)
+                frames.Add(secondExtraFrame);
+            if (includeAttackFrames0To15)
+            {
+                for (int frameId = 1; frameId < 16; frameId++)
+                {
+                    frames.Add(new LF2FrameData
+                    {
+                        frameId = frameId,
+                        state = LF2States.Standing,
+                        wait = 1,
+                        next = frameId,
+                        centerx = 0,
+                        centery = 0,
+                    });
+                }
+            }
             if (objectType == LF2ObjectType.HeavyWeapon)
             {
                 for (int frameId = 1; frameId < 6; frameId++)
@@ -3482,7 +7092,8 @@ namespace NTSD.Test
             int objectId,
             int slot,
             int team,
-            int x)
+            int x,
+            bool d1IdentityUsesCharacterDat = false)
         {
             var frame0 = new LF2FrameData
             {
@@ -3537,17 +7148,44 @@ namespace NTSD.Test
                 centerx = 0,
                 centery = 0,
             };
+            var frame200 = new LF2FrameData
+            {
+                frameId = 200,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 200,
+                centerx = 0,
+                centery = 0,
+            };
+            var frame203 = new LF2FrameData
+            {
+                frameId = 203,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 203,
+                centerx = 0,
+                centery = 0,
+            };
             var data = new LF2CharacterData
             {
                 name = name,
                 type_sub = objectId,
-                frames = new List<LF2FrameData> { frame0, frame20, frame30, frame33, frame40 },
+                frames = new List<LF2FrameData>
+                {
+                    frame0,
+                    frame20,
+                    frame30,
+                    frame33,
+                    frame40,
+                    frame200,
+                    frame203,
+                },
             };
-            var specialAttack = new LF2SpecialAttack
-            {
-                Name = name,
-                ObjectId = objectId,
-            };
+            LF2SpecialAttack specialAttack = d1IdentityUsesCharacterDat
+                ? new D1CharacterDatSpecialAttack()
+                : new LF2SpecialAttack();
+            specialAttack.Name = name;
+            specialAttack.ObjectId = objectId;
             specialAttack.FrameCache.Load(
                 new LF2CharacterDataWrapper(objectId, data));
             specialAttack.Frame.D = specialAttack.FrameCache.GetFrameDataById(0);
@@ -3571,6 +7209,16 @@ namespace NTSD.Test
             return specialAttack;
         }
 
+        private sealed class D1CharacterDatSpecialAttack : LF2SpecialAttack
+        {
+            public override int GetCurrentDataObjectTypeForSimulation()
+            {
+                return ObjectId == 0xD1
+                    ? (int)LF2ObjectType.Character
+                    : (int)LF2ObjectType.SpecialAttack;
+            }
+        }
+
         private sealed class TypedCharacter : LF2Character
         {
             private readonly LF2ObjectType objectType;
@@ -3584,6 +7232,7 @@ namespace NTSD.Test
             {
                 return (int)objectType;
             }
+
         }
 
         private readonly struct Scenario

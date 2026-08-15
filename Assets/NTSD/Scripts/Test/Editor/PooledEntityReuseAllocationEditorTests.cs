@@ -14,6 +14,41 @@ namespace NTSD.Test.Editor
     public sealed class PooledEntityReuseAllocationEditorTests
     {
         [Test]
+        [Category("U6FacingCanonical")]
+        public void RuntimeFacing_UsesValueOwnerAndKeepsPhysicsAsOneWayMirror()
+        {
+            var runtime = new NTSDEntityRuntime();
+            var character = new LF2Character();
+
+            runtime.Dir = "left";
+            Assert.That(runtime.IsFacingLeft, Is.True);
+            Assert.That(runtime.Dir, Is.EqualTo("left"));
+
+            runtime.Dir = "unexpected";
+            Assert.That(runtime.IsFacingRight, Is.True);
+            Assert.That(runtime.Dir, Is.EqualTo("right"));
+
+            character.SwitchDir("left");
+            Assert.That(character.Runtime.IsFacingLeft, Is.True);
+            Assert.That(character.PS.dir, Is.EqualTo("left"));
+
+            character.PS.dir = "right";
+            Assert.That(character.Runtime.IsFacingLeft, Is.True,
+                "The Unity physics mirror must not write back into battle truth.");
+
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < 4096; iteration++)
+            {
+                runtime.Dir = (iteration & 1) == 0 ? "right" : "left";
+                _ = runtime.IsFacingLeft;
+                _ = runtime.Dir;
+            }
+            long allocatedBytes = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocatedBytes, Is.Zero);
+        }
+
+        [Test]
         public void FrameCache_RepeatedDatLoad_DoesNotAllocateAfterConstruction()
         {
             var data = new LF2CharacterData();
@@ -817,6 +852,7 @@ namespace NTSD.Test.Editor
             world.PendingSounds.Clear();
 
             bool allEventsQueued = true;
+            bool allFramesMirrored = true;
             _ = GC.GetAllocatedBytesForCurrentThread();
             long before = GC.GetAllocatedBytesForCurrentThread();
             for (int iteration = 0; iteration < 256; iteration++)
@@ -825,12 +861,15 @@ namespace NTSD.Test.Editor
                 entity.OnFrameTransit(iteration & 1, switchDirAfterTrans: false);
                 if (world.PendingSounds.Count != 1)
                     allEventsQueued = false;
+                if (entity.Runtime.Frame != entity.Frame.N)
+                    allFramesMirrored = false;
             }
             long allocatedBytes =
                 GC.GetAllocatedBytesForCurrentThread() - before;
 
             Assert.That(allocatedBytes, Is.Zero);
             Assert.That(allEventsQueued, Is.True);
+            Assert.That(allFramesMirrored, Is.True);
             Assert.That(world.PendingSounds[0].WorldX, Is.EqualTo(123));
         }
 
@@ -946,6 +985,7 @@ namespace NTSD.Test.Editor
             Assert.That(
                 character.InvalidFrameTransitionCountForDiagnostics,
                 Is.EqualTo(257));
+            Assert.That(character.Runtime.Frame, Is.EqualTo(character.Frame.N));
             Assert.That(
                 other.InvalidInitTaskTypeCountForDiagnostics,
                 Is.EqualTo(257));

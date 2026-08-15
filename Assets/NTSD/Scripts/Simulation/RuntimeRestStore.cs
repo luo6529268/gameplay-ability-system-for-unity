@@ -314,6 +314,87 @@ namespace NTSD.Simulation
             sparseVRestTable?.EntryCapacity ?? 0;
         public long RejectedVRestWriteCount { get; private set; }
 
+        internal bool TryCopyCanonicalStateTo(
+            BattleWorldRestSnapshotBuffer destination,
+            out int aRestEntryCount,
+            out int vRestEntryCount,
+            out int vRestRowCount)
+        {
+            aRestEntryCount = 0;
+            vRestEntryCount = 0;
+            vRestRowCount = 0;
+            if (destination == null ||
+                !preparedForBattle ||
+                destination.LogicalCapacity != LogicalCapacity)
+            {
+                return false;
+            }
+
+            bool usesDense = denseVRestValues != null;
+            if (usesDense !=
+                (destination.StorageMode == BattleRestSnapshotStorageMode.Dense))
+            {
+                return false;
+            }
+            if (usesDense &&
+                destination.DenseVRestValues.Length != denseVRestValues.Length)
+            {
+                return false;
+            }
+            if (!usesDense &&
+                (sparseVRestTable == null ||
+                 destination.SparseEntryCapacity < VRestEntryCount))
+            {
+                return false;
+            }
+
+            int[] destinationARest = destination.ARestValues;
+            for (int attackerSlot = 0;
+                 attackerSlot < LogicalCapacity;
+                 attackerSlot++)
+            {
+                destinationARest[attackerSlot] = GetARest(attackerSlot);
+            }
+
+            if (usesDense)
+            {
+                Array.Copy(
+                    denseVRestValues,
+                    destination.DenseVRestValues,
+                    denseVRestValues.Length);
+            }
+            else
+            {
+                int destinationIndex = 0;
+                for (int victimSlot = 0;
+                     victimSlot < LogicalCapacity;
+                     victimSlot++)
+                {
+                    for (int node = sparseVRestTable.GetFirstNode(victimSlot);
+                         node >= 0;
+                         node = sparseVRestTable.GetNextNode(node))
+                    {
+                        destination.SparseVictimSlots[destinationIndex] = victimSlot;
+                        destination.SparseAttackerSlots[destinationIndex] =
+                            sparseVRestTable.GetAttackerSlot(node);
+                        destination.SparseValues[destinationIndex] =
+                            sparseVRestTable.GetValue(node);
+                        destinationIndex++;
+                    }
+                }
+
+                if (destinationIndex != VRestEntryCount)
+                {
+                    return false;
+                }
+            }
+
+            aRestEntryCount = ARestEntryCount;
+            vRestEntryCount = VRestEntryCount;
+            vRestRowCount = VRestRowCount;
+            return true;
+        }
+
         internal void AppendDeterministicChecksum(ref BattleChecksum64Builder builder)
         {
             builder.AddInt32(LogicalCapacity);

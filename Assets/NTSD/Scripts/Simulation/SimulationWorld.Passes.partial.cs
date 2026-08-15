@@ -18,6 +18,11 @@ namespace NTSD.Simulation
         internal int LastCollisionPairVRestEligibilityVisitCount { get; private set; }
 
         public bool ForceLegacyPreInteractionForDiagnostics { get; set; }
+        public bool ForceLegacyPreInteractionCrossPassProofForDiagnostics
+        {
+            get;
+            set;
+        }
         public bool ForceLegacyPreInteractionParticipantFilteringForDiagnostics
         {
             get;
@@ -32,6 +37,14 @@ namespace NTSD.Simulation
         public bool ForceLegacyEmptyObjectHitConsumeForDiagnostics { get; set; }
         public bool ForceLegacyLateTailNoOpForDiagnostics { get; set; } = true;
         public bool ForceFullCharacterInputPostRefreshForDiagnostics { get; set; }
+        public bool ForceFullAiUnifiedSnapshotRebuildForDiagnostics { get; set; }
+        public bool ValidateIncrementalAiUnifiedRowForDiagnostics { get; set; }
+        public long LastAiProjectionPublicationCountForDiagnostics =>
+            battleCharacterInputWriter
+                .LastAiProjectionPublicationCountForDiagnostics;
+        public long LastAiProjectionPublicationSkipCountForDiagnostics =>
+            battleCharacterInputWriter
+                .LastAiProjectionPublicationSkipCountForDiagnostics;
         public int LastPreInteractionScannedCountForDiagnostics { get; private set; }
         public int LastPreInteractionExecutedCountForDiagnostics { get; private set; }
         public int LastPreInteractionProofSkipCountForDiagnostics { get; private set; }
@@ -42,6 +55,15 @@ namespace NTSD.Simulation
         public int LastPreInteractionHeldSyncProofSkipCountForDiagnostics { get; private set; }
         public bool LastPreInteractionWholePassProofSucceededForDiagnostics { get; private set; }
         public int LastPreInteractionWholePassParticipantCountForDiagnostics { get; private set; }
+        public bool LastPreInteractionCrossPassProofUsedForDiagnostics { get; private set; }
+        private int preInteractionCrossPassProofTick = -1;
+        private int preInteractionCrossPassProofParticipantCount;
+        private int preInteractionCrossPassProofLogicalCapacity;
+        private int preInteractionCrossPassProofClaimedCount;
+        private ulong preInteractionCrossPassProofOccupancyEpoch;
+        private long preInteractionCrossPassProofPendingDestroyEpoch;
+        private int preInteractionCrossPassProofPendingUnregisterCount;
+        private bool preInteractionCrossPassProofValid;
         public int LastEmptyCharacterHitConsumeSkipCountForDiagnostics { get; private set; }
         public int LastCharacterHitConsumeExecutedCountForDiagnostics { get; private set; }
         public int LastCharacterRuntimeCandidateCountGateAppliedForDiagnostics
@@ -58,6 +80,26 @@ namespace NTSD.Simulation
         public int LastObjectHitConsumeExecutedCountForDiagnostics { get; private set; }
         public int LastLateTailNoOpSkipCountForDiagnostics { get; private set; }
         public int LastLateTailExecutedCountForDiagnostics { get; private set; }
+        public int LastLateOpointFactoryResolveCountForDiagnostics { get; private set; }
+        public int LastLateOpointFlushCountForDiagnostics { get; private set; }
+        public bool ForceLegacyLateCommonNoOpGatesForDiagnostics { get; set; }
+        public bool ForceLegacyPostFrameRuntimeSnapshotForDiagnostics { get; set; }
+        public int LastFramePostProcessRuntimeSnapshotSkipCountForDiagnostics { get; private set; }
+        public int LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics { get; private set; }
+        public int LastLateStateSpecialNoOpSkipCountForDiagnostics { get; private set; }
+        public int LastLateRecoveryNoOpSkipCountForDiagnostics { get; private set; }
+        public int LastLateDeathOpointNoOpSkipCountForDiagnostics { get; private set; }
+        public int LastLateCleanupNoOpSkipCountForDiagnostics { get; private set; }
+        public int LastCharacterInputProgressCommitCountForDiagnostics
+        {
+            get;
+            private set;
+        }
+        public int LastCharacterInputProgressCommitSkipCountForDiagnostics
+        {
+            get;
+            private set;
+        }
         private readonly List<RuntimeEntityHandle> earlyState500Handles =
             new List<RuntimeEntityHandle>(16);
         private readonly List<RuntimeEntityHandle> earlyState501Handles =
@@ -186,6 +228,9 @@ namespace NTSD.Simulation
             if (tickIndex <= 1)
                 return;
 
+            LastCharacterInputProgressCommitCountForDiagnostics = 0;
+            LastCharacterInputProgressCommitSkipCountForDiagnostics = 0;
+            battleCharacterInputWriter.ResetAiProjectionPublicationDiagnostics();
             EnsureAiSensingModeAvailableBeforeTick();
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
@@ -216,7 +261,8 @@ namespace NTSD.Simulation
                         }
 
                         BeginAiUnifiedSnapshotExecutionConsumer(entity);
-                        entity.RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
+                        if (!battleEcsCharacterInputPass.TryExecute(entity, tickIndex))
+                            entity.RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
 #if UNITY_INCLUDE_TESTS
                         if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
                             ApplyAiDecisionSharedPostLegacyMutationForSelfCheck(entity);
@@ -280,6 +326,14 @@ namespace NTSD.Simulation
                 detailDiagnostics?.EndPhase(
                     BattleTickDetailPhase.CharacterInputSnapshotClear);
             }
+        }
+
+        internal void RecordCharacterInputProgressCommitForDiagnostics(bool committed)
+        {
+            if (committed)
+                LastCharacterInputProgressCommitCountForDiagnostics++;
+            else
+                LastCharacterInputProgressCommitSkipCountForDiagnostics++;
         }
 
         public void Oid5152RuntimeMaintenanceAll(int tickIndex)
@@ -491,7 +545,7 @@ namespace NTSD.Simulation
                 partner.Frame.Prev2 = 0;
                 partner.Frame.Prev2D = null;
             }
-            partner.Runtime.StableId = partnerStableId;
+            partner.RestoreStableIdAfterLifecycleReset(partnerStableId);
             partner.SetRuntimeSlotIndex(partnerRuntimeSlot);
             partner.Runtime.OidMergeDormant = false;
             partner.TryApplyRuntimeIdentity(partnerOid, 112, true, out _);
@@ -528,6 +582,8 @@ namespace NTSD.Simulation
 
         public void SerialTickAll(int tickIndex)
         {
+            BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             using (BeginDeferredMutationEntityPass())
             {
                 // C# authority GameTick scans active slots in ascending order and completes
@@ -539,19 +595,39 @@ namespace NTSD.Simulation
                     // C# authority GameTick clears current action/direction keys immediately
                     // before each active entity enters frame advance. Prev*, cooldowns,
                     // combo state, and input history remain untouched.
-                    entity.Runtime?.ClearActionInputKeys();
-                    entity.Runtime?.ClearDirectionalInputKeys();
-                    entity.SimTransit(tickIndex);
+                    battleCharacterInputWriter.ClearCurrentKeys(entity.Runtime);
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.FrameAdvanceTransit);
+                    if (!battleEcsCharacterFrameAdvancePass.TryExecute(
+                            entity,
+                            tickIndex))
+                    {
+                        entity.SimTransit(tickIndex);
+                    }
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.FrameAdvanceTransit);
                     if (!IsActiveForCurrentPass(entity))
                         continue;
 
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.FrameAdvanceEntityUpdate);
                     entity.SimTU(tickIndex);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.FrameAdvanceEntityUpdate);
                     if (!IsActiveForCurrentPass(entity))
                         continue;
-                    RefreshRuntimeSnapshot(entity);
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.FrameAdvanceRuntimeSnapshot);
+                    entity.RefreshRuntimeSnapshotAfterFrameAdvance();
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.FrameAdvanceRuntimeSnapshot);
                 }
 
+                detailDiagnostics?.BeginPhase(
+                    BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
                 CleanupState9998Entities();
+                detailDiagnostics?.EndPhase(
+                    BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
             }
         }
 
@@ -578,11 +654,20 @@ namespace NTSD.Simulation
                 entity?.Runtime?.SyncIntegerPosition();
             }
 
+            bool canPublishPreInteractionNoOpProof = true;
+            int preInteractionParticipantCount = 0;
             for (int i = 0; i < _entityScratch.Count; i++)
             {
                 LF2Entity entity = _entityScratch[i];
                 if (!PassesRespawnGate(entity))
+                {
+                    CapturePreInteractionNoOpParticipant(
+                        entity,
+                        tickIndex,
+                        ref canPublishPreInteractionNoOpProof,
+                        ref preInteractionParticipantCount);
                     continue;
+                }
 
                 if (entity.RespawnCount <= 0)
                 {
@@ -595,9 +680,59 @@ namespace NTSD.Simulation
 
                 if (IsActiveForCurrentPass(entity))
                     RefreshRuntimeSnapshot(entity);
+
+                CapturePreInteractionNoOpParticipant(
+                    entity,
+                    tickIndex,
+                    ref canPublishPreInteractionNoOpProof,
+                    ref preInteractionParticipantCount);
             }
 
+            PublishPreInteractionCrossPassProof(
+                tickIndex,
+                canPublishPreInteractionNoOpProof,
+                preInteractionParticipantCount);
             _entityScratch.Clear();
+        }
+
+        private void CapturePreInteractionNoOpParticipant(
+            LF2Entity entity,
+            int tickIndex,
+            ref bool proofValid,
+            ref int participantCount)
+        {
+            if (entity?.Runtime == null)
+            {
+                proofValid = false;
+                return;
+            }
+
+            if (entity.Runtime.SuppressPreInteractionUntilTick > tickIndex ||
+                !IsActiveForCurrentPass(entity))
+            {
+                return;
+            }
+
+            participantCount++;
+            if (proofValid && !TryProveNeutralPreInteractionParticipant(entity))
+                proofValid = false;
+        }
+
+        private void PublishPreInteractionCrossPassProof(
+            int tickIndex,
+            bool proofValid,
+            int participantCount)
+        {
+            preInteractionCrossPassProofTick = tickIndex;
+            preInteractionCrossPassProofParticipantCount = participantCount;
+            preInteractionCrossPassProofLogicalCapacity = _runtimeSlots.LogicalCapacity;
+            preInteractionCrossPassProofClaimedCount = _runtimeSlots.ClaimedCount;
+            preInteractionCrossPassProofOccupancyEpoch = _runtimeSlots.OccupancyEpoch;
+            preInteractionCrossPassProofPendingDestroyEpoch =
+                runtimeMutationTracker.PendingFlushDestroyEpoch;
+            preInteractionCrossPassProofPendingUnregisterCount =
+                _pendingUnregister.Count;
+            preInteractionCrossPassProofValid = proofValid;
         }
 
         private bool PassesRespawnGate(LF2Entity entity)
@@ -1126,24 +1261,42 @@ namespace NTSD.Simulation
 
         public void CaptureCollisionFrameSnapshotsAll()
         {
-            using (BeginDeferredMutationEntityPass())
+            BruteForceSceneQuery bruteForce = SceneQuery as BruteForceSceneQuery;
+            int currentTick = CurrentTickIndex;
+            bool completed = false;
+            bruteForce?.BeginCollisionSnapshotRoleRoster(currentTick);
+            try
             {
-                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                using (BeginDeferredMutationEntityPass())
                 {
-                    if (entity.Runtime != null &&
-                        entity.Runtime.SuppressCollisionCandidateUntilTick > 0)
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                     {
-                        int currentTick = CurrentTickIndex;
-                        if (currentTick <
-                            entity.Runtime.SuppressCollisionCandidateUntilTick)
+                        bruteForce?.ObserveCollisionSnapshotEntity(
+                            entity,
+                            currentTick);
+                        if (entity.Runtime != null &&
+                            entity.Runtime.SuppressCollisionCandidateUntilTick > 0 &&
+                            currentTick <
+                                entity.Runtime.SuppressCollisionCandidateUntilTick)
                         {
                             continue;
                         }
-                    }
 
-                    entity.CaptureCollisionFrameSnapshot();
-                    RefreshRuntimeSnapshot(entity);
+                        entity.CaptureCollisionFrameSnapshot();
+                        entity.RefreshRuntimeSnapshotAfterCollisionSnapshot();
+                        bruteForce?.ObserveCollisionSnapshotRole(
+                            entity,
+                            currentTick);
+                    }
                 }
+
+                completed = true;
+            }
+            finally
+            {
+                bruteForce?.CompleteCollisionSnapshotRoleRoster(
+                    currentTick,
+                    completed);
             }
         }
 
@@ -1199,6 +1352,12 @@ namespace NTSD.Simulation
         {
             LastLateTailNoOpSkipCountForDiagnostics = 0;
             LastLateTailExecutedCountForDiagnostics = 0;
+            LastLateOpointFactoryResolveCountForDiagnostics = 0;
+            LastLateOpointFlushCountForDiagnostics = 0;
+            LastLateStateSpecialNoOpSkipCountForDiagnostics = 0;
+            LastLateRecoveryNoOpSkipCountForDiagnostics = 0;
+            LastLateDeathOpointNoOpSkipCountForDiagnostics = 0;
+            LastLateCleanupNoOpSkipCountForDiagnostics = 0;
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             // The production object-point factory is pass-stable. Resolve it lazily so an
@@ -1215,8 +1374,6 @@ namespace NTSD.Simulation
                     LF2Entity obj = FindEntityByRuntimeSlotCurrent(runtimeSlot);
 
                     if (obj == null)
-                        continue;
-                    if (!IsActiveForCurrentPass(obj))
                         continue;
 
                     if (structuralEventSink != null)
@@ -1235,24 +1392,44 @@ namespace NTSD.Simulation
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityStateSpecial);
-                    obj.RunStateSpecialPreCollision();
-                    if (!IsActiveForCurrentPass(obj))
+                    if (CanSkipExactCharacterLateStateSpecial(obj))
                     {
-                        detailDiagnostics?.EndPhase(
-                            BattleTickDetailPhase.LateEntityStateSpecial);
-                        continue;
+                        LastLateStateSpecialNoOpSkipCountForDiagnostics++;
+                    }
+                    else
+                    {
+                        obj.RunStateSpecialPreCollision();
+                        if (!IsActiveForCurrentPass(obj))
+                        {
+                            detailDiagnostics?.EndPhase(
+                                BattleTickDetailPhase.LateEntityStateSpecial);
+                            continue;
+                        }
                     }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityStateSpecial);
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityRecovery);
-                    obj.RunPreCollisionRecoveryPhase(tickIndex);
-                    if (!IsActiveForCurrentPass(obj))
+                    BattleEcsCharacterRecoveryResult recoveryResult =
+                        ForceLegacyLateCommonNoOpGatesForDiagnostics
+                            ? BattleEcsCharacterRecoveryResult.CompatibilityFallback
+                            : battleEcsCharacterRecoveryPass.Execute(obj, tickIndex);
+                    if (recoveryResult ==
+                        BattleEcsCharacterRecoveryResult.ProvenNoOp)
                     {
-                        detailDiagnostics?.EndPhase(
-                            BattleTickDetailPhase.LateEntityRecovery);
-                        continue;
+                        LastLateRecoveryNoOpSkipCountForDiagnostics++;
+                    }
+                    else if (recoveryResult ==
+                             BattleEcsCharacterRecoveryResult.CompatibilityFallback)
+                    {
+                        obj.RunPreCollisionRecoveryPhase(tickIndex);
+                        if (!IsActiveForCurrentPass(obj))
+                        {
+                            detailDiagnostics?.EndPhase(
+                                BattleTickDetailPhase.LateEntityRecovery);
+                            continue;
+                        }
                     }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityRecovery);
@@ -1262,7 +1439,8 @@ namespace NTSD.Simulation
                     if (obj.Runtime == null ||
                         tickIndex >= obj.Runtime.SuppressLateFrameTickUntilTick)
                     {
-                        obj.SimFrameTick(tickIndex);
+                        if (!battleEcsCharacterFrameTickPass.TryExecute(obj))
+                            obj.SimFrameTick(tickIndex);
                     }
                     if (!IsActiveForCurrentPass(obj))
                     {
@@ -1289,7 +1467,11 @@ namespace NTSD.Simulation
                     if (exitedLateFrameTick)
                     {
                         if (obj is LF2SpecialAttack)
-                            FlushQueuedObjectPointTasks();
+                        {
+                            FlushLateQueuedObjectPointTasks(
+                                ref opointFactory,
+                                ref opointFactoryResolved);
+                        }
                         detailDiagnostics?.EndPhase(
                             BattleTickDetailPhase.LateEntityFrameExit);
                         continue;
@@ -1299,12 +1481,19 @@ namespace NTSD.Simulation
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityDeathOpoint);
-                    obj.RunLateDeathOpointPreCleanupPhase();
-                    if (!IsActiveForCurrentPass(obj))
+                    if (CanSkipExactCharacterLateDeathOpoint(obj))
                     {
-                        detailDiagnostics?.EndPhase(
-                            BattleTickDetailPhase.LateEntityDeathOpoint);
-                        continue;
+                        LastLateDeathOpointNoOpSkipCountForDiagnostics++;
+                    }
+                    else
+                    {
+                        obj.RunLateDeathOpointPreCleanupPhase();
+                        if (!IsActiveForCurrentPass(obj))
+                        {
+                            detailDiagnostics?.EndPhase(
+                                BattleTickDetailPhase.LateEntityDeathOpoint);
+                            continue;
+                        }
                     }
                     if (LateRuntimeSnapshotModeForDiagnostics ==
                         BattleLateRuntimeSnapshotMode.LegacyThree)
@@ -1323,14 +1512,22 @@ namespace NTSD.Simulation
                     {
                         opointFactory = LF2ObjectPointFactory.Instance;
                         opointFactoryResolved = true;
+                        LastLateOpointFactoryResolveCountForDiagnostics++;
                     }
                     LF2FrameData opointFrame = obj.Frame?.D;
                     bool frameHasOpoint = opointFrame != null &&
                         ((opointFrame.opoints != null && opointFrame.opoints.Count > 0) ||
                          opointFrame.opoint.HasValue);
+                    bool processedOpoint = false;
                     if (opointFactory != null && frameHasOpoint)
-                        opointFactory.ProcessOpointSpawnAlignedToCpp(obj);
-                    if (!IsActiveForCurrentPass(obj))
+                    {
+                        battleStructuralWriter.ProcessLateOpointSegment(
+                            opointFactory,
+                            obj,
+                            tickIndex);
+                        processedOpoint = true;
+                    }
+                    if (processedOpoint && !IsActiveForCurrentPass(obj))
                     {
                         detailDiagnostics?.EndPhase(
                             BattleTickDetailPhase.LateEntityOpointProcess);
@@ -1341,14 +1538,26 @@ namespace NTSD.Simulation
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityCleanup);
-                    bool completedLateCleanup = obj.TryRunLatePostOpointCleanupPhase();
+                    bool completedLateCleanup;
+                    if (CanSkipExactCharacterLateCleanup(obj))
+                    {
+                        LastLateCleanupNoOpSkipCountForDiagnostics++;
+                        completedLateCleanup = false;
+                    }
+                    else
+                    {
+                        completedLateCleanup =
+                            obj.TryRunLatePostOpointCleanupPhase();
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityCleanup);
                     if (completedLateCleanup)
                     {
                         detailDiagnostics?.BeginPhase(
                             BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
-                        FlushQueuedObjectPointTasks();
+                        FlushLateQueuedObjectPointTasks(
+                            ref opointFactory,
+                            ref opointFactoryResolved);
                         detailDiagnostics?.EndPhase(
                             BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                         continue;
@@ -1366,7 +1575,9 @@ namespace NTSD.Simulation
                         LastLateTailExecutedCountForDiagnostics++;
                         obj.RunLateTailBeforePrevFrame();
                     }
-                    FlushQueuedObjectPointTasks();
+                    FlushLateQueuedObjectPointTasks(
+                        ref opointFactory,
+                        ref opointFactoryResolved);
                     if (!IsActiveForCurrentPass(obj))
                     {
                         detailDiagnostics?.EndPhase(
@@ -1374,10 +1585,15 @@ namespace NTSD.Simulation
                         continue;
                     }
 
-                    RefreshLateRuntimeSnapshot(
-                        obj,
-                        BattleLateRuntimeSnapshotStage.TailAndQueuedFlush,
-                        detailDiagnostics);
+                    if (LateRuntimeSnapshotModeForDiagnostics ==
+                            BattleLateRuntimeSnapshotMode.LegacyThree ||
+                        obj.RequiresRuntimeSnapshotAfterLateEntityUpdate())
+                    {
+                        RefreshLateRuntimeSnapshot(
+                            obj,
+                            BattleLateRuntimeSnapshotStage.TailAndQueuedFlush,
+                            detailDiagnostics);
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
                     detailDiagnostics?.BeginPhase(
@@ -1399,6 +1615,64 @@ namespace NTSD.Simulation
                 detailDiagnostics?.EndPhase(
                     BattleTickDetailPhase.LateEntityFinalPendingFlush);
             }
+        }
+
+        private bool CanSkipExactCharacterLateStateSpecial(LF2Entity entity)
+        {
+            if (ForceLegacyLateCommonNoOpGatesForDiagnostics ||
+                entity?.GetType() != typeof(LF2Character))
+            {
+                return false;
+            }
+
+            int state = entity.Frame?.D?.state ?? -1;
+            return state != 9995 &&
+                   (state < 4000 || state >= 5000) &&
+                   (state < 8000 || state >= 9000);
+        }
+
+        private bool CanSkipExactCharacterLateDeathOpoint(LF2Entity entity)
+        {
+            if (ForceLegacyLateCommonNoOpGatesForDiagnostics ||
+                entity?.GetType() != typeof(LF2Character))
+            {
+                return false;
+            }
+
+            return entity.GetCurrentDataObjectTypeForSimulation() !=
+                       (int)LF2ObjectType.Character ||
+                   entity.Health == null ||
+                   entity.Health.HP > 0 ||
+                   entity.Runtime == null;
+        }
+
+        private bool CanSkipExactCharacterLateCleanup(LF2Entity entity)
+        {
+            if (ForceLegacyLateCommonNoOpGatesForDiagnostics ||
+                entity?.GetType() != typeof(LF2Character))
+            {
+                return false;
+            }
+
+            return entity.GetCurrentDataObjectTypeForSimulation() ==
+                       (int)LF2ObjectType.Character ||
+                   entity.Runtime == null ||
+                   entity.Runtime.WeaponFlightCounter >= 0;
+        }
+
+        private void FlushLateQueuedObjectPointTasks(
+            ref LF2ObjectPointFactory opointFactory,
+            ref bool opointFactoryResolved)
+        {
+            LastLateOpointFlushCountForDiagnostics++;
+            if (!opointFactoryResolved)
+            {
+                opointFactory = LF2ObjectPointFactory.Instance;
+                opointFactoryResolved = true;
+                LastLateOpointFactoryResolveCountForDiagnostics++;
+            }
+
+            opointFactory?.FlushTasks();
         }
 
         private static bool CanSkipExactCharacterLateTail(LF2Entity entity)
@@ -1512,10 +1786,17 @@ namespace NTSD.Simulation
 
         public void EntityPostFrameTailAll(int tickIndex)
         {
+            LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics = 0;
             foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
                 if (entity.Health == null)
                     continue;
+
+                if (battleEcsCharacterPostFrameTailPass.TryExecute(entity))
+                {
+                    LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics++;
+                    continue;
+                }
 
                 if (entity.HealTimer / 1000 == 1 && entity.Health.HP > 0)
                 {
@@ -1561,13 +1842,21 @@ namespace NTSD.Simulation
                 entity.Runtime.TransientMp2 = 1000;
                 entity.Runtime.TransientMp3 = 1000;
                 entity.Runtime.TransientMp4 = 1000;
-                RefreshRuntimeSnapshot(entity);
+                if (ForceLegacyPostFrameRuntimeSnapshotForDiagnostics)
+                {
+                    RefreshRuntimeSnapshot(entity);
+                }
+                else if (!entity.RefreshRuntimeSnapshotAfterPostFrameMaintenance())
+                {
+                    LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics++;
+                }
             }
 
         }
 
         public void FramePostProcessAll()
         {
+            LastFramePostProcessRuntimeSnapshotSkipCountForDiagnostics = 0;
             foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
                 if (entity.FrameDelay != 0)
@@ -1584,7 +1873,14 @@ namespace NTSD.Simulation
                 entity.KnockbackVx = 0f;
                 entity.KnockbackVy = 0f;
                 entity.KnockbackVz = 0f;
-                RefreshRuntimeSnapshot(entity);
+                if (ForceLegacyPostFrameRuntimeSnapshotForDiagnostics)
+                {
+                    RefreshRuntimeSnapshot(entity);
+                }
+                else if (!entity.RefreshRuntimeSnapshotAfterPostFrameMaintenance())
+                {
+                    LastFramePostProcessRuntimeSnapshotSkipCountForDiagnostics++;
+                }
             }
         }
 
@@ -1635,13 +1931,6 @@ namespace NTSD.Simulation
 
         public void PostInteractionTickAll(int tickIndex)
         {
-            CaptureBattleHitExecutionPlanPass(
-                tickIndex,
-                BattleHitExecutionPass.Character);
-            bool observeLegacyConsumption =
-                BeginBattleHitExecutionPlanLegacyObservation(
-                    tickIndex,
-                    BattleHitExecutionPass.Character);
             LastEmptyCharacterHitConsumeSkipCountForDiagnostics = 0;
             LastCharacterHitConsumeExecutedCountForDiagnostics = 0;
             LastCharacterRuntimeCandidateCountGateAppliedForDiagnostics = 0;
@@ -1656,37 +1945,115 @@ namespace NTSD.Simulation
             else if (!ForceLegacyEmptyCharacterHitConsumeForDiagnostics &&
                      !ForceLegacyCharacterRuntimeCandidateCountGateForDiagnostics)
                 LastCharacterRuntimeCandidateCountGateFallbackForDiagnostics = 1;
+            CaptureBattleHitExecutionPlanPass(
+                tickIndex,
+                BattleHitExecutionPass.Character,
+                runtimeCandidateCountGate);
+            bool observeLegacyConsumption =
+                BeginBattleHitExecutionPlanLegacyObservation(
+                    tickIndex,
+                    BattleHitExecutionPass.Character);
 
             using (BeginDeferredMutationEntityPass())
             {
-                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                if (battleEcsHitExecutionPlan.TryValidateDataOrientedPass(
+                        tickIndex,
+                        BattleHitExecutionPass.Character))
                 {
-                    if (!entity.SupportsPostInteractionPhase())
-                        continue;
-                    if (entity.Runtime != null &&
-                        tickIndex < entity.Runtime.SuppressPostInteractionUntilTick)
+                    int participantCount = battleEcsHitExecutionPlan
+                        .GetDataOrientedParticipantCount(BattleHitExecutionPass.Character);
+                    for (int participantIndex = 0;
+                         participantIndex < participantCount;
+                         participantIndex++)
                     {
-                        continue;
+                        if (battleEcsHitExecutionPlan.TryGetDataOrientedParticipant(
+                                BattleHitExecutionPass.Character,
+                                participantIndex,
+                                out LF2Entity entity,
+                                out CollisionCandidateRange candidates))
+                        {
+                            ConsumeDataOrientedCharacterHitParticipant(
+                                entity,
+                                tickIndex,
+                                in candidates);
+                        }
                     }
-
-                    if (!ForceLegacyEmptyCharacterHitConsumeForDiagnostics &&
-                        CanSkipEmptyCharacterHitConsume(
+                }
+                else
+                {
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                    {
+                        ConsumeCharacterHitParticipant(
                             entity,
-                            runtimeCandidateCountGate))
-                    {
-                        LastEmptyCharacterHitConsumeSkipCountForDiagnostics++;
-                        continue;
+                            tickIndex,
+                            runtimeCandidateCountGate);
                     }
-
-                    LastCharacterHitConsumeExecutedCountForDiagnostics++;
-                    entity.SimPostInteraction(tickIndex);
-                    if (!IsActiveForCurrentPass(entity))
-                        continue;
-                    RefreshRuntimeSnapshot(entity);
                 }
             }
             if (observeLegacyConsumption)
                 EndBattleHitExecutionPlanLegacyObservation();
+        }
+
+        private void ConsumeCharacterHitParticipant(
+            LF2Entity entity,
+            int tickIndex,
+            bool runtimeCandidateCountGate)
+        {
+            if (entity == null || !entity.SupportsPostInteractionPhase())
+                return;
+            if (entity.Runtime != null &&
+                tickIndex < entity.Runtime.SuppressPostInteractionUntilTick)
+            {
+                return;
+            }
+
+            if (!ForceLegacyEmptyCharacterHitConsumeForDiagnostics &&
+                CanSkipEmptyCharacterHitConsume(entity, runtimeCandidateCountGate))
+            {
+                LastEmptyCharacterHitConsumeSkipCountForDiagnostics++;
+                return;
+            }
+
+            LastCharacterHitConsumeExecutedCountForDiagnostics++;
+            entity.SimPostInteraction(tickIndex);
+            if (IsActiveForCurrentPass(entity))
+                RefreshRuntimeSnapshot(entity);
+        }
+
+        private void ConsumeDataOrientedCharacterHitParticipant(
+            LF2Entity entity,
+            int tickIndex,
+            in CollisionCandidateRange candidates)
+        {
+            if (entity == null || !entity.SupportsPostInteractionPhase())
+                return;
+            if (entity.Runtime != null &&
+                tickIndex < entity.Runtime.SuppressPostInteractionUntilTick)
+            {
+                return;
+            }
+
+            if (!ForceLegacyEmptyCharacterHitConsumeForDiagnostics &&
+                candidates.Count == 0 &&
+                entity.GetType() == typeof(LF2Character) &&
+                entity.IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp())
+            {
+                LastEmptyCharacterHitConsumeSkipCountForDiagnostics++;
+                return;
+            }
+
+            LastCharacterHitConsumeExecutedCountForDiagnostics++;
+            if (entity.TryGetBattleHitCandidateConsumer(
+                    BattleHitExecutionPass.Character,
+                    out IBattleHitCandidateConsumer consumer))
+            {
+                BattleHitCandidateSequenceRunner.TryConsumeCaptured(
+                    consumer,
+                    in candidates);
+            }
+
+            if (IsActiveForCurrentPass(entity))
+                RefreshRuntimeSnapshot(entity);
         }
 
         private bool CanSkipEmptyCharacterHitConsume(
@@ -1716,9 +2083,15 @@ namespace NTSD.Simulation
 
         public void ObjectInteractionTickAll(int tickIndex)
         {
+            bool passProvenEmpty =
+                !ForceLegacyEmptyObjectHitConsumeForDiagnostics &&
+                CanUseEmptyObjectInteractionProof() &&
+                SceneQuery is BruteForceSceneQuery sceneQuery &&
+                sceneQuery.TryProveNoObjectInteractionCandidatesForCurrentTick();
             CaptureBattleHitExecutionPlanPass(
                 tickIndex,
-                BattleHitExecutionPass.Object);
+                BattleHitExecutionPass.Object,
+                passProvenEmpty: passProvenEmpty);
             bool observeLegacyConsumption =
                 BeginBattleHitExecutionPlanLegacyObservation(
                     tickIndex,
@@ -1726,10 +2099,7 @@ namespace NTSD.Simulation
             LastEmptyObjectHitConsumeSkipCountForDiagnostics = 0;
             LastObjectHitConsumeExecutedCountForDiagnostics = 0;
 
-            if (!ForceLegacyEmptyObjectHitConsumeForDiagnostics &&
-                CanUseEmptyObjectInteractionProof() &&
-                SceneQuery is BruteForceSceneQuery sceneQuery &&
-                sceneQuery.TryProveNoObjectInteractionCandidatesForCurrentTick())
+            if (passProvenEmpty)
             {
                 LastEmptyObjectHitConsumeSkipCountForDiagnostics = 1;
                 if (observeLegacyConsumption)
@@ -1739,27 +2109,84 @@ namespace NTSD.Simulation
 
             using (BeginDeferredMutationEntityPass())
             {
-                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                if (battleEcsHitExecutionPlan.TryValidateDataOrientedPass(
+                        tickIndex,
+                        BattleHitExecutionPass.Object))
                 {
-                    if (!entity.SupportsObjectInteractionPhase())
-                        continue;
-                    if (entity.Runtime != null &&
-                        tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
+                    int participantCount = battleEcsHitExecutionPlan
+                        .GetDataOrientedParticipantCount(BattleHitExecutionPass.Object);
+                    for (int participantIndex = 0;
+                         participantIndex < participantCount;
+                         participantIndex++)
                     {
-                        continue;
+                        if (battleEcsHitExecutionPlan.TryGetDataOrientedParticipant(
+                                BattleHitExecutionPass.Object,
+                                participantIndex,
+                                out LF2Entity entity,
+                                out CollisionCandidateRange candidates))
+                        {
+                            ConsumeDataOrientedObjectHitParticipant(
+                                entity,
+                                tickIndex,
+                                in candidates);
+                        }
                     }
-
-                    LastObjectHitConsumeExecutedCountForDiagnostics++;
-                    entity.SimObjectInteraction(tickIndex);
-                    if (entity is LF2SpecialAttack)
-                        FlushQueuedObjectPointTasks();
-                    if (!IsActiveForCurrentPass(entity))
-                        continue;
-                    RefreshRuntimeSnapshot(entity);
+                }
+                else
+                {
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                        ConsumeObjectHitParticipant(entity, tickIndex);
                 }
             }
             if (observeLegacyConsumption)
                 EndBattleHitExecutionPlanLegacyObservation();
+        }
+
+        private void ConsumeObjectHitParticipant(LF2Entity entity, int tickIndex)
+        {
+            if (entity == null || !entity.SupportsObjectInteractionPhase())
+                return;
+            if (entity.Runtime != null &&
+                tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
+            {
+                return;
+            }
+
+            LastObjectHitConsumeExecutedCountForDiagnostics++;
+            entity.SimObjectInteraction(tickIndex);
+            if (entity is LF2SpecialAttack)
+                FlushQueuedObjectPointTasks();
+            if (IsActiveForCurrentPass(entity))
+                RefreshRuntimeSnapshot(entity);
+        }
+
+        private void ConsumeDataOrientedObjectHitParticipant(
+            LF2Entity entity,
+            int tickIndex,
+            in CollisionCandidateRange candidates)
+        {
+            if (entity == null || !entity.SupportsObjectInteractionPhase())
+                return;
+            if (entity.Runtime != null &&
+                tickIndex < entity.Runtime.SuppressObjectInteractionUntilTick)
+            {
+                return;
+            }
+
+            LastObjectHitConsumeExecutedCountForDiagnostics++;
+            if (entity.TryGetBattleHitCandidateConsumer(
+                    BattleHitExecutionPass.Object,
+                    out IBattleHitCandidateConsumer consumer))
+            {
+                BattleHitCandidateSequenceRunner.TryConsumeCaptured(
+                    consumer,
+                    in candidates);
+            }
+
+            if (entity is LF2SpecialAttack)
+                FlushQueuedObjectPointTasks();
+            if (IsActiveForCurrentPass(entity))
+                RefreshRuntimeSnapshot(entity);
         }
 
         private bool CanUseEmptyObjectInteractionProof()
@@ -1797,29 +2224,29 @@ namespace NTSD.Simulation
             LastPreInteractionHeldSyncProofSkipCountForDiagnostics = 0;
             LastPreInteractionWholePassProofSucceededForDiagnostics = false;
             LastPreInteractionWholePassParticipantCountForDiagnostics = 0;
+            LastPreInteractionCrossPassProofUsedForDiagnostics = false;
 
             _ticking = true;
             try
             {
                 if (!ForceLegacyPreInteractionForDiagnostics &&
+                    !ForceLegacyPreInteractionCrossPassProofForDiagnostics &&
+                    TryUsePreInteractionCrossPassProof(
+                        tickIndex,
+                        out int crossPassParticipantCount))
+                {
+                    LastPreInteractionCrossPassProofUsedForDiagnostics = true;
+                    ApplyWholePreInteractionNoOpDiagnostics(
+                        crossPassParticipantCount);
+                    return;
+                }
+
+                if (!ForceLegacyPreInteractionForDiagnostics &&
                     TryProveWholePreInteractionPassNoOp(
                         tickIndex,
                         out int participantCount))
                 {
-                    LastPreInteractionWholePassProofSucceededForDiagnostics = true;
-                    LastPreInteractionWholePassParticipantCountForDiagnostics =
-                        participantCount;
-                    LastPreInteractionScannedCountForDiagnostics = participantCount;
-                    LastPreInteractionProofSkipCountForDiagnostics =
-                        participantCount * 3;
-                    LastPreInteractionSnapshotSkipCountForDiagnostics =
-                        participantCount * 3;
-                    LastPreInteractionCpointCheckProofSkipCountForDiagnostics =
-                        participantCount;
-                    LastPreInteractionMismatchTailProofSkipCountForDiagnostics =
-                        participantCount;
-                    LastPreInteractionHeldSyncProofSkipCountForDiagnostics =
-                        participantCount;
+                    ApplyWholePreInteractionNoOpDiagnostics(participantCount);
                     return;
                 }
 
@@ -1917,6 +2344,47 @@ namespace NTSD.Simulation
                 FlushPendingUnregister();
                 FlushPendingEntityDestroy();
             }
+        }
+
+        private bool TryUsePreInteractionCrossPassProof(
+            int tickIndex,
+            out int participantCount)
+        {
+            participantCount = 0;
+            if (!preInteractionCrossPassProofValid ||
+                preInteractionCrossPassProofTick != tickIndex ||
+                preInteractionCrossPassProofLogicalCapacity !=
+                    _runtimeSlots.LogicalCapacity ||
+                preInteractionCrossPassProofClaimedCount !=
+                    _runtimeSlots.ClaimedCount ||
+                preInteractionCrossPassProofOccupancyEpoch !=
+                    _runtimeSlots.OccupancyEpoch ||
+                preInteractionCrossPassProofPendingDestroyEpoch !=
+                    runtimeMutationTracker.PendingFlushDestroyEpoch ||
+                preInteractionCrossPassProofPendingUnregisterCount !=
+                    _pendingUnregister.Count)
+            {
+                return false;
+            }
+
+            participantCount = preInteractionCrossPassProofParticipantCount;
+            return true;
+        }
+
+        private void ApplyWholePreInteractionNoOpDiagnostics(int participantCount)
+        {
+            LastPreInteractionWholePassProofSucceededForDiagnostics = true;
+            LastPreInteractionWholePassParticipantCountForDiagnostics =
+                participantCount;
+            LastPreInteractionScannedCountForDiagnostics = participantCount;
+            LastPreInteractionProofSkipCountForDiagnostics = participantCount * 3;
+            LastPreInteractionSnapshotSkipCountForDiagnostics = participantCount * 3;
+            LastPreInteractionCpointCheckProofSkipCountForDiagnostics =
+                participantCount;
+            LastPreInteractionMismatchTailProofSkipCountForDiagnostics =
+                participantCount;
+            LastPreInteractionHeldSyncProofSkipCountForDiagnostics =
+                participantCount;
         }
 
         private static bool CanSkipCpointCheckParticipant(LF2Entity entity)
@@ -2368,8 +2836,7 @@ namespace NTSD.Simulation
             if (mode == 4 || mode == 5)
             {
                 int exitFrame = mode == 4 ? 1100 : 1200;
-                entity.Frame.N = exitFrame;
-                entity.Runtime.Frame = exitFrame;
+                entity.WriteCurrentFrameId(exitFrame);
             }
 
             BattleTickDetailPhaseDiagnostics diagnostics =
@@ -2457,10 +2924,9 @@ namespace NTSD.Simulation
                         frames = new List<LF2FrameData> { frame },
                     }));
                 Frame.D = frame;
-                Frame.N = 0;
+                WriteCurrentFrameId(0);
                 Frame.PN = 0;
                 Frame.Prev = 0;
-                Runtime.Frame = 0;
                 Runtime.PrevFrame2 = 0;
             }
 
@@ -2539,9 +3005,8 @@ namespace NTSD.Simulation
                     }));
                 Frame.D = frame;
                 Frame.PN = 0;
-                Frame.N = 0;
+                WriteCurrentFrameId(0);
                 Frame.Prev = 0;
-                Runtime.Frame = 0;
                 Runtime.PrevFrame2 = 0;
                 Health.HP = 1;
                 Health.HPBound = 1;

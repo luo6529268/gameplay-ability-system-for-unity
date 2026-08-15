@@ -437,9 +437,68 @@ namespace NTSD.Test
         }
     }
 
+    [Category("U6RoleAwareFormal")]
     public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
     {
         private const uint CollectionSeed = 0x41C64E6Du;
+
+        [Test]
+        public void Formal_CollisionGeometryUsesRuntimeFacingWhenPhysicsMirrorIsStale()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_RuntimeFacingAttacker",
+                3400,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 10,
+                        y = -10,
+                        w = 10,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleFormal_RuntimeFacingTarget",
+                3401,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -20,
+                        y = -10,
+                        w = 10,
+                        h = 20,
+                    }));
+            Register(world, attacker, 0, 1, 100);
+            Register(world, target, 1, 2, 100);
+
+            attacker.Runtime.Dir = "left";
+            attacker.PS.dir = "right";
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+
+            AssertRunsEqual(brute, role);
+            Assert.That(brute.Sequences[0], Has.Count.EqualTo(1));
+            Assert.That(brute.Sequences[0][0].TargetSlot, Is.EqualTo(1));
+            Assert.That(attacker.Runtime.IsFacingLeft, Is.True);
+            Assert.That(attacker.PS.dir, Is.EqualTo("right"));
+        }
 
         [Test]
         public void Formal_DefaultConfiguredBruteForceBackendRemainsBrute()
@@ -2556,6 +2615,99 @@ namespace NTSD.Test
             Assert.That(cached.FormalPairCount, Is.EqualTo(1));
             Assert.That(cached.Counts, Is.EqualTo(new[] { expectedCandidateCount }));
             Assert.That(cached.CollectionAborted, Is.False);
+        }
+
+        [Test]
+        [Category("U6Slice57")]
+        // Covers the exact-cache product-reuse boundary independently from performance A/B.
+        public void Formal_ExactItrWorldRectReuseMatchesLegacyBuildOrderAndCandidates()
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = -24,
+                    y = -12,
+                    w = 48,
+                    h = 24,
+                    zwidth = 15,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -12,
+                    y = -12,
+                    w = 24,
+                    h = 24,
+                });
+            attackerFrame.itrs.Add(null);
+            attackerFrame.itrs.Add(new InteractionArea
+            {
+                kind = 5,
+                vrest = 0,
+                x = 7,
+                y = int.MinValue,
+                w = 13,
+                h = 19,
+                zwidth = 23,
+            });
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -16,
+                    y = -16,
+                    w = 32,
+                    h = 32,
+                });
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_ExactItrReuseAttacker",
+                3352,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_ExactItrReuseTarget",
+                3353,
+                targetFrame);
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun legacy;
+            CandidateRun reused;
+            try
+            {
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = true;
+                legacy = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker,
+                    target);
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = false;
+                reused = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker,
+                    target);
+            }
+            finally
+            {
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = false;
+                query.ForceRoleAwareDirectForDiagnostics = false;
+            }
+
+            AssertRunsEqual(legacy, reused);
+            Assert.That(reused.CollectionAborted, Is.False);
+            Assert.That(
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics,
+                Is.False);
         }
 
         [Test]

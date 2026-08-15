@@ -26,6 +26,7 @@ namespace NTSD.Animation
         public long UnloadedTypeQueryCountForDiagnostics { get; private set; }
         public long UnloadedObjectListQueryCountForDiagnostics { get; private set; }
         public long UnloadedBackgroundQueryCountForDiagnostics { get; private set; }
+        public int BackgroundCount => cachedConfig?.backgrounds?.Count ?? 0;
 
         protected override void InitializeSingleton()
         {

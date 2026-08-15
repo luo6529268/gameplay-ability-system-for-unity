@@ -65,7 +65,7 @@ namespace NTSD.Simulation.Ecs
         private readonly long[] expectedZBits;
         private readonly int[] expectedZInt;
         private BattleEcsCharacterStageZPassMode mode =
-            BattleEcsCharacterStageZPassMode.Legacy;
+            BattleEcsCharacterStageZPassMode.DataOriented;
         private long runCount;
         private long slotVisitCount;
         private long validationCount;
@@ -179,17 +179,16 @@ namespace NTSD.Simulation.Ecs
                     continue;
 
                 NTSDEntityRuntime runtime = entity.Runtime;
-                runtime.Z = ClampZ(runtime.Z, zMin, zMax);
-                runtime.ZInt = (int)runtime.Z;
+                double clampedZ = ClampZ(runtime.Z, zMin, zMax);
+                runtime.Z = clampedZ;
+                runtime.ZInt = (int)clampedZ;
 
-                // Preserve the legacy pass' complete base-runtime synchronization.
-                // Exact production characters can use the non-virtual base path;
-                // derived/custom characters retain their virtual refresh contract.
-                if (entity.GetType() == typeof(LF2Character))
-                {
-                    entity.RefreshBaseRuntimeSnapshotForStageBounds();
-                }
-                else
+                // The C# authority pass writes only Z/ZInt. Exact production
+                // characters keep those values directly in Runtime/PhysicsState,
+                // so repairing unrelated compatibility fields here is duplicate
+                // work and hides missing canonical writers. Unknown derived types
+                // retain their virtual refresh contract as a fail-closed boundary.
+                if (entity.GetType() != typeof(LF2Character))
                 {
                     entity.RefreshRuntimeSnapshot();
                     derivedTypeFallbackCount++;

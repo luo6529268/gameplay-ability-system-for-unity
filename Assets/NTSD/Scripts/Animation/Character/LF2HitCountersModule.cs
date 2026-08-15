@@ -19,6 +19,9 @@ namespace NTSD.Animation
         private float _fallAccum;
         private float _bdefendAccum;
 
+        internal float FallRecoveryAccumForSnapshot => _fallAccum;
+        internal float BdefendRecoveryAccumForSnapshot => _bdefendAccum;
+
         public int Fall => _runtime?.Fall ?? _fall;
         public int Bdefend => _runtime?.Bdefend ?? _bdefend;
 

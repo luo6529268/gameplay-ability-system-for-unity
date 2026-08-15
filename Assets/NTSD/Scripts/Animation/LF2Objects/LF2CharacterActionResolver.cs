@@ -16,14 +16,28 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     internal sealed class LF2CharacterActionResolver
     {
-        private readonly LF2Character _character;
+        private LF2Character _character;
 
-        public LF2CharacterActionResolver(LF2Character character)
+        public bool ProcessReleaseInput(LF2Character character)
         {
+            if (character == null)
+                return false;
+            if (_character != null)
+                throw new System.InvalidOperationException(
+                    "The world-owned character action resolver cannot be re-entered.");
+
             _character = character;
+            try
+            {
+                return ProcessReleaseInputCore();
+            }
+            finally
+            {
+                _character = null;
+            }
         }
 
-        public bool ProcessReleaseInput()
+        private bool ProcessReleaseInputCore()
         {
             if (_character.Frame?.D == null || _character.PS == null)
                 return false;

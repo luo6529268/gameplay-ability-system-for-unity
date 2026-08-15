@@ -33,6 +33,7 @@ namespace NTSD.Animation.Rendering.Editor
         private bool enablePhaseTiming;
         private bool enablePresentationTiming;
         private bool enableDetailPhaseTiming;
+        private bool enableFrameTiming;
         private string outputPath = "Temp/NTSD_ProductionEntityStress.dispersed.json";
         private string status = "就绪。启动请求将进入播放模式，并让 1000 实体压力测试保持可见，直到执行清理。";
         private static readonly string[] FormalCollectorModes =
@@ -128,6 +129,17 @@ namespace NTSD.Animation.Rendering.Editor
                     "data-oriented-canonical"));
         }
 
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Legacy Formal Slot Map Capacity Pressure A-B")]
+        public static void RunCombatDataOrientedLegacyFormalSlotMapCapacityPressureFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-legacy-formal-slot-map-capacity-pressure.json",
+                    "data-oriented-canonical");
+            request.forceLegacyFormalSlotMap = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
         [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Performance Smoke")]
         public static void RunCombatDataOrientedPerformanceSmokeFromMenu()
         {
@@ -135,6 +147,141 @@ namespace NTSD.Animation.Rendering.Editor
                 CreateCombatPerformanceSmokeRequest(
                     "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-performance-smoke.json",
                     "data-oriented-canonical"));
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Phase Timing Smoke")]
+        public static void RunCombatDataOrientedPhaseTimingSmokeFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-phase-timing-smoke.json",
+                    "data-oriented-canonical");
+            request.enablePhaseTiming = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Late Common NoOp Candidate")]
+        public static void RunCombatU6LateCommonNoOpCandidateFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-late-common-noop-candidate.json",
+                    "data-oriented-canonical");
+            request.forceLegacyLateCommonNoOpGates = false;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Late Common NoOp Legacy A-B")]
+        public static void RunCombatU6LateCommonNoOpLegacyFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-late-common-noop-legacy.json",
+                    "data-oriented-canonical");
+            request.forceLegacyLateCommonNoOpGates = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Force Role-Aware Sweep A-B")]
+        public static void RunCombatU6ForceRoleAwareSweepFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-force-role-aware-sweep.json",
+                    "data-oriented-canonical");
+            request.forceRoleAwareSweepDirect = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Force Role-Aware Tree A-B")]
+        public static void RunCombatU6ForceRoleAwareTreeFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-force-role-aware-tree.json",
+                    "data-oriented-canonical");
+            request.forceRoleAwareTree = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Positive Link Index Candidate")]
+        public static void RunCombatU6PositiveLinkIndexCandidateFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-positive-link-index-candidate.json",
+                    "data-oriented-canonical");
+            request.positiveLinkValidationMode = "data-oriented";
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Positive Link Index Legacy A-B")]
+        public static void RunCombatU6PositiveLinkIndexLegacyFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-positive-link-index-legacy.json",
+                    "data-oriented-canonical");
+            request.positiveLinkValidationMode = "legacy";
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Completed Frame Timing Diagnostic")]
+        public static void RunCombatCompletedFrameTimingDiagnosticFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.completed-frame-timing.json",
+                    "data-oriented-canonical");
+            request.sampleTicks = 180;
+            request.enableFrameTiming = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Completed Frame Timing Sound Suppressed A-B")]
+        public static void RunCombatCompletedFrameTimingSoundSuppressedFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.completed-frame-sound-suppressed.json",
+                    "data-oriented-canonical");
+            request.sampleTicks = 180;
+            request.enableFrameTiming = true;
+            request.soundPresentationMode = "suppress";
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Full Character Input Refresh A-B")]
+        public static void RunCombatDataOrientedFullCharacterInputRefreshFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-full-character-input-refresh.json",
+                    "data-oriented-canonical");
+            request.forceFullCharacterInputPostRefresh = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Full Unified Snapshot Rebuild A-B")]
+        public static void RunCombatDataOrientedFullUnifiedSnapshotRebuildFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatCapacityPressureSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-full-unified-snapshot-rebuild.json",
+                    "data-oriented-canonical");
+            request.forceFullAiUnifiedSnapshotRebuild = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Legacy Formal Slot Map A-B")]
+        public static void RunCombatDataOrientedLegacyFormalSlotMapFromMenu()
+        {
+            ProductionEntityStressRequest request =
+                CreateCombatPerformanceSmokeRequest(
+                    "Temp/NTSD_ProductionEntityStress.combat1000.data-oriented-legacy-formal-slot-map.json",
+                    "data-oriented-canonical");
+            request.forceLegacyFormalSlotMap = true;
+            ProductionEntityStressRequestProcessor.WriteRequest(request);
         }
 
         [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Data Oriented Steady State Gate")]
@@ -295,6 +442,9 @@ namespace NTSD.Animation.Rendering.Editor
             enableDetailPhaseTiming = EditorGUILayout.Toggle(
                 "详细阶段计时",
                 enableDetailPhaseTiming);
+            enableFrameTiming = EditorGUILayout.Toggle(
+                "完整帧 CPU/渲染/GPU 计时",
+                enableFrameTiming);
             outputPath = EditorGUILayout.TextField("报告路径", outputPath);
 
             EditorGUILayout.Space();
@@ -384,6 +534,7 @@ namespace NTSD.Animation.Rendering.Editor
                     enablePhaseTiming = enablePhaseTiming,
                     enablePresentationTiming = enablePresentationTiming,
                     enableDetailPhaseTiming = enableDetailPhaseTiming,
+                    enableFrameTiming = enableFrameTiming,
                     simulationOnly = simulationOnly,
                     soundPresentationMode =
                         SoundPresentationModes[soundPresentationModeIndex],
@@ -495,6 +646,7 @@ namespace NTSD.Animation.Rendering.Editor
                 maxSaturationDrainTicks = 300,
                 aiExecutionProfile = "legacy",
                 lateRuntimeSnapshotMode = "consolidated-final",
+                forceLegacyLateTailNoOp = true,
                 formalCollectorMode = "configured",
                 outputPath = reportPath,
             };
@@ -518,6 +670,7 @@ namespace NTSD.Animation.Rendering.Editor
                 seed = 0x4E545344u,
                 aiExecutionProfile = "legacy",
                 lateRuntimeSnapshotMode = "consolidated-final",
+                forceLegacyLateTailNoOp = true,
                 formalCollectorMode = "configured",
                 outputPath = reportPath,
             };
@@ -725,6 +878,21 @@ namespace NTSD.Animation.Rendering.Editor
 
             NotifyRunStopped();
             CompleteRequest(ProductionEntityStressPaths.RequestAbsolutePath);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Process Pending Request")]
+        internal static void ProcessPendingRequestFromMenu()
+        {
+            requestPending = File.Exists(ProductionEntityStressPaths.RequestAbsolutePath);
+            if (!requestPending)
+            {
+                Debug.LogWarning(
+                    "[ProductionEntityStress] No pending request file was found.");
+                return;
+            }
+
+            StartPolling();
+            PollRequest();
         }
 
         internal static bool ShouldEnterPlayMode(string action, bool isPlaying)

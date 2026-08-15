@@ -85,6 +85,13 @@ namespace NTSD.Test
             Assert.That(scope.Driver.LastAppliedFrameInput.TickIndex, Is.EqualTo(1));
             Assert.That(scope.Driver.LastAppliedFrameInput.Players[0].PlayerSlot, Is.EqualTo(2));
             Assert.That(scope.Driver.LastAppliedFrameInput.Players[1].PlayerSlot, Is.EqualTo(5));
+            Assert.That(session.FrameHistory.TryGet(1, out LockstepFrameHistoryEntry entry), Is.True);
+            Assert.That(entry.InputHash, Is.EqualTo(scope.Driver.LastAppliedFrameInput.GetCanonicalHash64()));
+            Assert.That(session.ChecksumHistory.TryGet(
+                1,
+                out LockstepChecksumHistoryEntry checksumEntry), Is.True);
+            Assert.That(checksumEntry.InputHash, Is.EqualTo(entry.InputHash));
+            Assert.That(checksumEntry.HasStateChecksum, Is.False);
         }
 
         [Test]
@@ -137,6 +144,8 @@ namespace NTSD.Test
 
             Assert.That(session.Buffer.BufferedFrameCount, Is.Zero);
             Assert.That(session.Journal.Count, Is.Zero);
+            Assert.That(session.FrameHistory.Count, Is.Zero);
+            Assert.That(session.ChecksumHistory.Count, Is.Zero);
             Assert.That(session.TryAdvanceBuffered(), Is.False);
         }
 
@@ -180,6 +189,12 @@ namespace NTSD.Test
                             buildPresentation: false),
                         Is.True);
                     expectedChecksums[index] = source.Driver.LastFrameChecksumValue;
+                    Assert.That(session.ChecksumHistory.TryGet(
+                        index + 1,
+                        out LockstepChecksumHistoryEntry checksumEntry), Is.True);
+                    Assert.That(checksumEntry.HasStateChecksum, Is.True);
+                    Assert.That(checksumEntry.StateChecksum,
+                        Is.EqualTo(expectedChecksums[index]));
                 }
 
                 recordedFrames = CopyJournal(session.Journal);

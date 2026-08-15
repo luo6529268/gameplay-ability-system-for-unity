@@ -141,50 +141,6 @@ namespace NTSD.Animation.LF2Objects
             return defaultDvx;
         }
 
-        internal static void ApplyStandardCharacterDamage(
-            LF2Entity attacker,
-            LF2Entity victim,
-            int injury)
-        {
-            if (attacker == null || victim?.Health == null)
-                return;
-
-            SimulationWorld world = victim.Match ?? attacker.Match;
-            int originalHp = victim.Health.HP;
-            if (originalHp > 0 && injury >= originalHp && victim.KillCount == -1)
-            {
-                LF2Entity holder = ResolveHolderCopyEntity(attacker);
-                if (holder != null)
-                    holder.KillStat++;
-
-                int killStatIndex = victim.Unk344;
-                if (world?.KillStats != null &&
-                    killStatIndex > 0 &&
-                    killStatIndex < world.KillStats.Length)
-                {
-                    world.KillStats[killStatIndex]++;
-                }
-            }
-
-            victim.Health.HP -= injury;
-            victim.Health.HPBound -= injury / 3;
-            victim.ComboCountVic += injury;
-            if (victim.KillCount == -1)
-            {
-                LF2Entity holder = ResolveHolderCopyEntity(attacker);
-                if (holder != null)
-                    holder.ComboCountAtk += injury;
-            }
-
-            int damageStatIndex = victim.Unk344;
-            if (world?.DamageStats != null &&
-                damageStatIndex > 0 &&
-                damageStatIndex < world.DamageStats.Length)
-            {
-                world.DamageStats[damageStatIndex] += injury;
-            }
-        }
-
         internal static void ApplyOid100KnockbackTail(LF2Entity victim)
         {
             if (victim?.ObjectId != 100 || victim.Runtime == null || victim.Runtime.LinkState >= 0)
@@ -206,6 +162,76 @@ namespace NTSD.Animation.LF2Objects
             return victim?.Runtime != null && itr != null &&
                    knockback && victim.Runtime.Vx > -5f && victim.Runtime.Vx < 5f &&
                    itr.dvx == 0f;
+        }
+
+        internal static void ApplyKnockdownHeldPairVrest(
+            LF2Entity victim,
+            LF2Entity attacker)
+        {
+            if (victim?.Runtime == null || attacker?.Runtime == null ||
+                victim.Runtime.LinkState <= 0)
+            {
+                return;
+            }
+
+            int victimSlot = victim.Runtime.SlotIndex;
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int heldTargetSlot = victim.Runtime.ResolveActiveHeldSlotIndex();
+            if (victimSlot < 0 || attackerSlot < 0 || heldTargetSlot < 0)
+                return;
+
+            LF2Entity heldTarget = victim.Match?.FindEntityByRuntimeSlotForQuery(
+                heldTargetSlot);
+            if (heldTarget?.Runtime == null ||
+                heldTarget.Runtime.HolderStableId != victimSlot)
+            {
+                return;
+            }
+
+            heldTarget.ItrRest?.SetVrest(attackerSlot, 45);
+            victim.ItrRest?.SetVrest(heldTargetSlot, 30);
+        }
+
+        internal static void ApplyActiveHolderFrameDelay(LF2Entity attacker)
+        {
+            if (attacker?.Runtime == null || attacker.Runtime.LinkState >= 0)
+                return;
+
+            int holderSlot = attacker.Runtime.ResolveActiveHolderSlotIndex();
+            LF2Entity holder = holderSlot >= 0
+                ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
+                : null;
+            if (holder != null)
+                holder.FrameDelay = attacker.FrameDelay;
+        }
+
+        internal static void ApplyCaughtVictimHurtFrame(
+            LF2Entity victim,
+            LF2Entity attacker,
+            int fallCounter)
+        {
+            if (fallCounter == 80 || victim?.Runtime == null || attacker == null)
+                return;
+
+            LF2FrameData previousFrame = victim.GetFrameDataById(
+                victim.Runtime.PrevFrame2);
+            CatchPoint cpoint = previousFrame?.cpoint;
+            if (cpoint == null || cpoint.kind != 2)
+                return;
+
+            int catcherSlot = victim.CatcherSlotIndex;
+            int victimSlot = victim.Runtime.SlotIndex;
+            LF2Entity catcher = catcherSlot >= 0
+                ? victim.Match?.FindEntityByRuntimeSlotForQuery(catcherSlot)
+                : null;
+            if (catcher == null || catcher.CaughtSlotIndex != victimSlot)
+                return;
+
+            int hurtFrame = victim.Dirh() != attacker.Dirh()
+                ? cpoint.fronthurtact
+                : cpoint.backhurtact;
+            if (hurtFrame != 0)
+                victim.DirectWriteRawFramePreserveWaitCounter(hurtFrame);
         }
 
         internal static LF2CharacterData ResolveCharacterData(LF2Entity entity)
@@ -346,224 +372,6 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        internal static void ApplyAlternateDamage(
-            LF2Entity attacker,
-            LF2Entity victim,
-            LF2HitCountersModule victimHitCounters,
-            InteractionArea itr)
-        {
-            if (attacker == null ||
-                victim == null ||
-                victim.Health == null ||
-                itr == null ||
-                LF2HitResolveRuntimeData.ResolveCharacterData(victim) == null ||
-                victim.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-            {
-                return;
-            }
-
-            SimulationWorld world = victim.Match ?? attacker.Match;
-            RecordLeadSound(attacker, victim);
-
-            int injury = itr.injury;
-            if (victim.FallDamageDiv > 0)
-                injury = injury * 100 / victim.FallDamageDiv;
-
-            int reducedInjury = injury / 10;
-            if (victim.Health.HP > 0 && reducedInjury >= victim.Health.HP && victim.KillCount == -1)
-            {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(attacker);
-                if (holder != null)
-                    holder.KillStat++;
-
-                int killStatIndex = victim.Unk344;
-                if (world?.KillStats != null && killStatIndex > 0 && killStatIndex < world.KillStats.Length)
-                    world.KillStats[killStatIndex]++;
-            }
-
-            victim.Health.HP -= reducedInjury;
-            victim.Health.HPBound -= reducedInjury / 3;
-            victim.ComboCountVic += reducedInjury;
-            if (victim.KillCount == -1)
-            {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(attacker);
-                if (holder != null)
-                    holder.ComboCountAtk += reducedInjury;
-            }
-
-            int damageStatIndex = victim.Unk344;
-            if (world?.DamageStats != null && damageStatIndex > 0 && damageStatIndex < world.DamageStats.Length)
-                world.DamageStats[damageStatIndex] += reducedInjury;
-
-            if (victim.Health.HP <= 0)
-                victim.FallCounter = 80;
-
-            victim.AttackingCounter = 0;
-            if (victimHitCounters != null)
-                victimHitCounters.AddHitStateCount(itr.bdefend);
-            else
-                victim.HitStateCount += itr.bdefend;
-            victim.HitCount++;
-            attacker.FrameDelay = 3;
-            victim.FrameDelay = -5;
-
-            int victimPrev2Frame = victim.Runtime?.PrevFrame2 ?? 0;
-            int victimPrev2State = victim.GetFrameDataById(victimPrev2Frame)?.state ?? 0;
-            if (victim.GetRuntimeYInt() == 0)
-            {
-                int hitStateCount = victimHitCounters?.HitStateCount ?? victim.HitStateCount;
-                if (hitStateCount > 30 && victimPrev2State == LF2States.Defending)
-                    victim.DirectWriteFramePreserveWaitCounter(LF2StandardFrames.DefendBroken);
-                else if ((victim.Frame?.N ?? 0) == LF2StandardFrames.Defend)
-                    victim.DirectWriteFramePreserveWaitCounter(LF2StandardFrames.Defend1);
-
-                ApplyGroundKnockback(attacker, victim, itr);
-            }
-            else
-            {
-                ApplyAirKnockback(attacker, victim, itr);
-            }
-
-            attacker.Runtime.AttackExempt = itr.arest < 4 && itr.vrest == 0
-                ? 4
-                : Mathf.Min(itr.arest, 12);
-            if (itr.vrest > 0)
-            {
-                int attackerSlot = attacker.Runtime?.SlotIndex ?? -1;
-                if (attackerSlot >= 0)
-                {
-                    int vrest = itr.vrest > 4 ? Mathf.Min(itr.vrest, 12) : 4;
-                    victim.ItrRest?.SetVrest(attackerSlot, vrest);
-                }
-            }
-
-            if ((attacker.Runtime?.LinkState ?? 0) < 0)
-            {
-                int holderSlot = attacker.Runtime.ResolveActiveHolderSlotIndex();
-                LF2Entity holder = holderSlot >= 0
-                    ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
-                    : null;
-                if (holder != null)
-                    holder.FrameDelay = attacker.FrameDelay;
-            }
-
-            if (FrameStateIs(attacker, LF2States.WeaponThrowing))
-            {
-                attacker.DirectWriteFramePreserveWaitCounter(attacker.BattleRandInt(0, 16));
-                attacker.Runtime.Vx = victim.KnockbackVx * -0.5;
-                attacker.Runtime.Vy = -4.0;
-                attacker.Runtime.Vz *= -0.6666666666666666;
-            }
-
-            DampenState2000Attacker(attacker, victim);
-            ApplyState3000Tail(attacker);
-        }
-
-        private static void RecordLeadSound(LF2Entity attacker, LF2Entity victim)
-        {
-            LF2CharacterData attackerData = LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
-            LF2CharacterData victimData = LF2HitResolveRuntimeData.ResolveCharacterData(victim);
-            if (attackerData == null || victimData == null)
-                return;
-
-            if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack)
-            {
-                if (!string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
-                    attacker.QueueBattleSound(attackerData.weapon_broken_sound);
-                return;
-            }
-
-            victim.QueueBattleSound(victim.ObjectId == 37 || victim.ObjectId == 6
-                ? "SFX_017"
-                : "SFX_002");
-        }
-
-        private static bool FrameStateIs(LF2Entity entity, int state)
-        {
-            return entity?.Frame?.D?.state == state;
-        }
-
-        private static void ApplyGroundKnockback(LF2Entity attacker, LF2Entity victim, InteractionArea itr)
-        {
-            if (victim.FallCounter == 80 &&
-                victim.Runtime.Vx < 3.0 &&
-                victim.Runtime.Vx > -3.0 &&
-                itr.dvx == 0)
-            {
-                if (FrameStateIs(attacker, LF2States.HeavyWeaponInSky))
-                    victim.KnockbackVx += attacker.GetRuntimeXInt() < victim.GetRuntimeXInt() ? 6.0 : -6.0;
-                else
-                    victim.KnockbackVx += attacker.Dirh() > 0 ? 3.0 : -3.0;
-                return;
-            }
-
-            if (FrameStateIs(attacker, LF2States.HeavyWeaponInSky))
-            {
-                victim.KnockbackVx += attacker.GetRuntimeXInt() < victim.GetRuntimeXInt()
-                    ? itr.dvx
-                    : -itr.dvx;
-            }
-            else if (itr.effect == 22 || itr.effect == 23)
-            {
-                victim.KnockbackVx += victim.GetRuntimeXInt() <= attacker.GetRuntimeXInt()
-                    ? itr.dvx
-                    : -itr.dvx;
-            }
-            else
-            {
-                int halfDvx = itr.dvx / 2;
-                victim.KnockbackVx += attacker.Dirh() > 0 ? halfDvx : -halfDvx;
-            }
-        }
-
-        private static void ApplyAirKnockback(LF2Entity attacker, LF2Entity victim, InteractionArea itr)
-        {
-            if (victim.FallCounter == 80 &&
-                victim.Runtime.Vx < 6.0 &&
-                victim.Runtime.Vx > -6.0 &&
-                itr.dvx < 6)
-            {
-                victim.KnockbackVx += attacker.Dirh() > 0 ? 6.0 : -6.0;
-            }
-            else if (itr.effect == 22 || itr.effect == 23)
-            {
-                victim.KnockbackVx += victim.GetRuntimeXInt() <= attacker.GetRuntimeXInt()
-                    ? itr.dvx
-                    : -itr.dvx;
-            }
-            else
-            {
-                victim.KnockbackVx += attacker.Dirh() > 0 ? itr.dvx : -itr.dvx;
-            }
-        }
-
-        private static void DampenState2000Attacker(LF2Entity attacker, LF2Entity victim)
-        {
-            if (!FrameStateIs(attacker, LF2States.HeavyWeaponInSky))
-                return;
-
-            bool movingTowardVictim = false;
-            if (attacker.GetRuntimeXInt() > victim.GetRuntimeXInt())
-                movingTowardVictim = attacker.Runtime.Vx < 0.0;
-            else if (attacker.GetRuntimeXInt() < victim.GetRuntimeXInt())
-                movingTowardVictim = attacker.Runtime.Vx > 0.0;
-
-            if (!movingTowardVictim)
-                return;
-
-            attacker.Runtime.Vx *= 0.4;
-            attacker.Runtime.Vz *= 0.4;
-        }
-
-        private static void ApplyState3000Tail(LF2Entity attacker)
-        {
-            if (!FrameStateIs(attacker, LF2States.ProjectileFlying))
-                return;
-
-            attacker.DirectWriteFramePreserveWaitCounter(10);
-            attacker.AttackingCounter = 0;
-            attacker.Runtime.Vx = 0.0;
-        }
     }
 
     internal sealed class LF2CharacterDatHitResolver
@@ -659,7 +467,6 @@ namespace NTSD.Animation.LF2Objects
             bool isKnockdown = false;
             float effectDvx = 0f;
             float effectDvy = 0f;
-            float baseKnockbackDvx = 0f;
             int injury = 0;
             int effectNum = 0;
             bool hitCountAlreadyRecorded = false;
@@ -677,28 +484,24 @@ namespace NTSD.Animation.LF2Objects
 
                 effectNum = itr.effect;
 
-                if (victimState == LF2States.Frozen && effectNum == 30)
-                    return false;
-
-                if ((victimState == LF2States.Burning || victimState == LF2States.FirenSpecific) &&
-                    (effectNum == 20 || effectNum == 21))
-                    return false;
-
                 if (itr.kind != 9 && LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, _victim, itr))
                 {
-                    LF2AlternateDamageResolver.ApplyAlternateDamage(attacker, _victim, _hitCounters, itr);
+                    SimulationWorld world = _victim.Match ?? attacker.Match;
+                    world.DamageWriter.ApplyAlternateDamage(
+                        world,
+                        attacker,
+                        _victim,
+                        _hitCounters,
+                        itr);
                     _victim.RecordKind0Hit(attacker, itr);
                     return true;
                 }
 
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
-
-                injury += itr.injury;
-                _hitCounters.SetHitStateCount(45);
-
                 int currentVictimOid = _victim.FrameCache?.Wrapper?.characterId ?? _victim.ObjectId;
                 if (currentVictimOid == 300)
                 {
+                    LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+                    _hitCounters.SetHitStateCount(45);
                     LF2FrameData frameNow = _victim.Frame?.D;
                     LF2FrameData futureFrame = _victim.GetFrameDataById((_victim.Frame?.N ?? 0) + 6);
                     int currentBodyX = (frameNow?.bodies != null && frameNow.bodies.Count > 0)
@@ -719,15 +522,17 @@ namespace NTSD.Animation.LF2Objects
                     return true;
                 }
 
-                baseKnockbackDvx = effectDvx;
-                LF2HitResolveRuntimeData.ApplyStandardCharacterDamage(attacker, _victim, injury);
-                standardDamageApplied = true;
-                _victim.HitCount++;
-                isKnockdown |= HitFall(injury, ref effectDvx, ref effectDvy, itr, attacker);
-                hitCountAlreadyRecorded = true;
-
-                if (itr.kind != 9)
-                    LF2HitResolveRuntimeData.RecordStandardHurtSounds(attacker, _victim, itr, isKnockdown);
+                SimulationWorld standardWorld = _victim.Match ?? attacker.Match;
+                bool standardDamageSucceeded =
+                    standardWorld?.DamageWriter.ApplyStandardCharacterDamage(
+                        standardWorld,
+                        attacker,
+                        _victim,
+                        _hitCounters,
+                        itr) == true;
+                if (standardDamageSucceeded && itr.kind == 0)
+                    _victim.RecordKind0Hit(attacker, itr);
+                return standardDamageSucceeded;
             }
 
             // kind 7: 正常状态下的抓取发起——只建立双方抓取关系，不写帧，不扣血。
@@ -805,54 +610,12 @@ namespace NTSD.Animation.LF2Objects
             }
             else if (itr.kind == 16)
             {
-                int adjustedInjury = itr.injury;
-                if (_victim.FallDamageDiv > 0)
-                    adjustedInjury = itr.injury * 100 / _victim.FallDamageDiv;
-
-                if (_victim.Health.HP > 0 && adjustedInjury >= _victim.Health.HP && _victim.KillCount == -1)
-                {
-                    LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(attacker);
-                    if (holder != null)
-                        holder.KillStat++;
-
-                    SimulationWorld world = _victim.Match ?? attacker?.Match;
-                    int killStatIndex = _victim.Unk344;
-                    if (world?.KillStats != null &&
-                        killStatIndex > 0 &&
-                        killStatIndex < world.KillStats.Length)
-                    {
-                        world.KillStats[killStatIndex]++;
-                    }
-                }
-
-                _victim.Health.HP -= adjustedInjury;
-                _victim.Health.HPBound -= adjustedInjury / 3;
-                _victim.ComboCountVic += adjustedInjury;
-                if (_victim.KillCount == -1)
-                {
-                    LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(attacker);
-                    if (holder != null)
-                        holder.ComboCountAtk += adjustedInjury;
-                }
-
-                SimulationWorld damageWorld = _victim.Match ?? attacker?.Match;
-                int damageStatIndex = _victim.Unk344;
-                if (damageWorld?.DamageStats != null &&
-                    damageStatIndex > 0 &&
-                    damageStatIndex < damageWorld.DamageStats.Length)
-                {
-                    damageWorld.DamageStats[damageStatIndex] += adjustedInjury;
-                }
-                _victim.ImmediateFrame(LF2StandardFrames.MpDrain);
-                _victim.AttackingCounter = 0;
-
-                int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
-                if (attackerSlot >= 0)
-                    _victim.ItrVrestUpdate(attackerSlot, itr, true);
-
-                ReleaseHeldTargetOnKind16(attacker);
-                _victim.QueueBattleSound("SFX_065");
-                return true;
+                SimulationWorld world = _victim.Match ?? attacker?.Match;
+                return world?.DamageWriter.ApplyKind16(
+                    world,
+                    attacker,
+                    _victim,
+                    itr) == true;
             }
 
             if (acceptHit)
@@ -879,15 +642,7 @@ namespace NTSD.Animation.LF2Objects
                     attacker.FrameDelay = 3;
                 _victim.FrameDelay = -3;
 
-                if ((attacker.Runtime?.LinkState ?? 0) < 0)
-                {
-                    int holderSlot = attacker.Runtime.ResolveActiveHolderSlotIndex();
-                    LF2Entity attackerParent = holderSlot >= 0
-                        ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
-                        : null;
-                    if (attackerParent != null)
-                        attackerParent.FrameDelay = attacker.FrameDelay;
-                }
+                LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
 
                 if (!isKnockdown && _victim.Runtime.Vy == 0f &&
                     _hitCounters.HitStateCount >= 30 && itr.kind == 7)
@@ -914,6 +669,9 @@ namespace NTSD.Animation.LF2Objects
                             ? (_victim.KnockbackVx <= 0.0 ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack)
                             : (_victim.KnockbackVx >= 0.0 ? LF2StandardFrames.FallingFront : LF2StandardFrames.FallingBack);
                         _victim.DirectWriteFramePreserveWaitCounter(fallFrame);
+                        LF2HitResolveRuntimeData.ApplyKnockdownHeldPairVrest(
+                            _victim,
+                            attacker);
                     }
                     else if (resolvedDvx != 0f)
                     {
@@ -1010,6 +768,12 @@ namespace NTSD.Animation.LF2Objects
             if (attacker?.Runtime == null || _victim.Runtime == null)
                 return;
 
+            if (_victim.RegisteredWorldForSimulation?.BoundaryWriter
+                    .TryApplyKind14DirectionalBlock(attacker, _victim) == true)
+            {
+                return;
+            }
+
             int attackerX = attacker.Runtime.XInt;
             int attackerZ = attacker.Runtime.ZInt;
             int victimX = _victim.Runtime.XInt;
@@ -1050,33 +814,6 @@ namespace NTSD.Animation.LF2Objects
             _victim.RefreshRuntimeSnapshot();
         }
 
-        private void ReleaseHeldTargetOnKind16(LF2Entity attacker)
-        {
-            int heldTargetSlot = _victim.Runtime?.ResolveActiveHeldSlotIndex() ?? -1;
-            if (_victim.Runtime == null || _victim.Runtime.LinkState != 2 || heldTargetSlot < 0)
-                return;
-
-            LF2Entity heldTarget = _victim.Match?.FindEntityByRuntimeSlotForQuery(heldTargetSlot);
-            int holderSlot = _victim.Runtime.SlotIndex;
-            if (heldTarget?.Runtime == null ||
-                heldTarget.Runtime.LinkState != -2 ||
-                !heldTarget.Runtime.IsActivelyHeldBySlot(holderSlot))
-            {
-                return;
-            }
-
-            if (attacker?.Runtime != null)
-                attacker.ItrRest?.SetVrest(heldTargetSlot, 45);
-
-            _victim.ItrRest?.SetVrest(heldTargetSlot, 30);
-            _victim.Runtime.LinkState = 0;
-            heldTarget.Runtime.LinkState = 0;
-            heldTarget.ImmediateFrame(heldTarget.BattleRandInt(0, 6));
-            heldTarget.Runtime.Vy = -1f;
-            heldTarget.RefreshRuntimeSnapshot();
-            _victim.RefreshRuntimeSnapshot();
-        }
-
         private void ApplyAirStep(double vyStep)
         {
             if (_victim.GetRuntimeYInt() >= -2)
@@ -1106,8 +843,9 @@ namespace NTSD.Animation.LF2Objects
         {
             int fallInc = itr.fall != 0 ? itr.fall : NTSDGlobal.Default.Fall.Value;
             int prevState = _victim.GetFrameDataById(_victim.Frame?.Prev ?? 0)?.state ?? 0;
-            int prev2State = _victim.Frame?.Prev2D?.state
-                ?? _victim.GetFrameDataById(_victim.Runtime?.PrevFrame2 ?? 0)?.state
+            int prev2State = _victim.GetFrameDataById(
+                    _victim.Runtime?.PrevFrame2 ?? 0)?.state
+                ?? _victim.Frame?.Prev2D?.state
                 ?? 0;
 
             bool forceKnockback = _victim.Health.HP <= 0 ||
@@ -1310,27 +1048,10 @@ namespace NTSD.Animation.LF2Objects
 
         private void ApplyCaughtVictimHurtFrame(LF2Entity attacker)
         {
-            if (_hitCounters.Fall == 80 || _victim.Runtime == null || attacker == null)
-                return;
-
-            LF2FrameData previousFrame = _victim.GetFrameDataById(_victim.Runtime.PrevFrame2);
-            CatchPoint cpoint = previousFrame?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
-                return;
-
-            int catcherSlot = _victim.CatcherSlotIndex;
-            int victimSlot = _victim.Runtime.SlotIndex;
-            LF2Entity catcher = catcherSlot >= 0
-                ? _victim.Match?.FindEntityByRuntimeSlotForQuery(catcherSlot)
-                : null;
-            if (catcher == null || catcher.CaughtSlotIndex != victimSlot)
-                return;
-
-            int hurtFrame = _victim.Dirh() != attacker.Dirh()
-                ? cpoint.fronthurtact
-                : cpoint.backhurtact;
-            if (hurtFrame != 0)
-                _victim.DirectWriteRawFramePreserveWaitCounter(hurtFrame);
+            LF2HitResolveRuntimeData.ApplyCaughtVictimHurtFrame(
+                _victim,
+                attacker,
+                _hitCounters.Fall);
         }
 
         private void HitPostEffect(int effectNum, PhysicsState.BattleVolume rect, float effectDvx, float effectDvy, bool defended, Vector3 attackerPos, int victimState)

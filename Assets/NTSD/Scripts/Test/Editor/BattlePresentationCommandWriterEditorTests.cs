@@ -28,6 +28,10 @@ namespace NTSD.Test
             typeof(BattlePresentationFrame).GetField(
                 "slotLabelState",
                 BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly FieldInfo BoundCatalogField =
+            typeof(BattlePresentationFrame).GetField(
+                "boundCatalog",
+                BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly ConstructorInfo BindingConstructor =
             typeof(BattleCommonVisualBinding).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
@@ -363,6 +367,101 @@ namespace NTSD.Test
             Assert.That(frame.GetCommand(0).EffectivePic, Is.EqualTo('C'));
             Assert.That(frame.GetCommand(1).EffectivePic, Is.EqualTo('o'));
             Assert.That(frame.GetCommand(2).EffectivePic, Is.EqualTo('m'));
+        }
+
+        [Test]
+        public void DeferredSpriteMaterialization_BuildsCommandWithoutMutatingFrozenSnapshot()
+        {
+            Texture2D texture = null;
+            Sprite sprite = null;
+            try
+            {
+                texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
+                sprite = Sprite.Create(
+                    texture,
+                    new Rect(2f, 3f, 8f, 10f),
+                    new Vector2(0.5f, 0f));
+                var builder = new BattleSpriteCatalogBuilder();
+                builder.Add(
+                    901,
+                    2,
+                    "deferred-test.bmp",
+                    texture,
+                    new Rect(2f, 3f, 8f, 10f),
+                    sprite);
+                BattleSpriteCatalog spriteCatalog = builder.Publish();
+
+                var frame = new BattlePresentationFrame();
+                Reset(frame, CreateCatalog(0));
+                Assert.That(BoundCatalogField, Is.Not.Null);
+                BoundCatalogField.SetValue(frame, spriteCatalog);
+                AddEntity(frame, new BattlePresentationEntitySnapshot(
+                    new RuntimeEntityHandle(20, 7),
+                    100,
+                    901,
+                    901,
+                    2,
+                    180,
+                    20,
+                    80,
+                    0,
+                    false,
+                    0,
+                    0,
+                    100,
+                    0,
+                    0,
+                    120,
+                    0,
+                    180f,
+                    0f,
+                    0,
+                    0,
+                    4f,
+                    10f,
+                    0f,
+                    0f,
+                    Vector2.zero,
+                    Rect.zero,
+                    Vector2.zero,
+                    false,
+                    false,
+                    default,
+                    0,
+                    0,
+                    true,
+                    false));
+                BattlePresentationEntitySnapshot frozenBefore = frame.GetEntity(0);
+                var coordinator = new BattlePresentationCoordinator();
+                coordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+
+                coordinator.MaterializeCommands(frame, null);
+
+                BattlePresentationEntitySnapshot frozenAfter = frame.GetEntity(0);
+                Assert.That(frozenAfter.PixelWidth, Is.EqualTo(frozenBefore.PixelWidth));
+                Assert.That(frozenAfter.PixelHeight, Is.EqualTo(frozenBefore.PixelHeight));
+                Assert.That(frozenAfter.NormalizedUv, Is.EqualTo(frozenBefore.NormalizedUv));
+                Assert.That(frozenAfter.Pivot, Is.EqualTo(frozenBefore.Pivot));
+                Assert.That(frozenAfter.HasCatalogKey, Is.EqualTo(frozenBefore.HasCatalogKey));
+                Assert.That(frame.CommandCount, Is.EqualTo(1));
+                BattleRenderCommand command = frame.GetCommand(0);
+                Assert.That(command.Type, Is.EqualTo(BattleRenderCommandType.Entity));
+                Assert.That(command.Size, Is.EqualTo(new Vector2(8f, 10f)));
+                Assert.That(command.NormalizedUv,
+                    Is.EqualTo(new Rect(2f / 16f, 3f / 16f, 8f / 16f, 10f / 16f)));
+                Assert.That(command.Pivot, Is.EqualTo(new Vector2(0.5f, 0f)));
+                Assert.That(command.SpriteDescriptor.LogicalResourceKey,
+                    Is.EqualTo(BattleVisualResourceKey.FromEntity(
+                        new BattleSpriteKey(901, 2))));
+                Assert.That(frame.RequiresCatalogPublicationBinding, Is.True);
+            }
+            finally
+            {
+                if (sprite != null)
+                    UnityEngine.Object.DestroyImmediate(sprite);
+                if (texture != null)
+                    UnityEngine.Object.DestroyImmediate(texture);
+            }
         }
 
         private static List<BattleRenderCommand> BuildReference(

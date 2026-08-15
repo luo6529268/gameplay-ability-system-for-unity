@@ -107,6 +107,152 @@ namespace NTSD.Test
             Assert.That(world.LastLateTailNoOpSkipCountForDiagnostics, Is.EqualTo(32));
         }
 
+        [Test]
+        public void ConsolidatedFinal_ExactCharacterSkipsOnlyRedundantFinalSnapshot()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            CreateCharacter<LF2Character>(world, 701, previousState: 0);
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            diagnostics.BeginTick(30);
+
+            world.LateEntityUpdateAll(30);
+
+            Assert.That(
+                diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.TailAndQueuedFlush),
+                Is.Zero);
+        }
+
+        [Test]
+        public void ConsolidatedFinal_DerivedCharacterRetainsFinalSnapshotFallback()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            CreateCharacter<ProbeCharacter>(world, 702, previousState: 0);
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            diagnostics.BeginTick(31);
+
+            world.LateEntityUpdateAll(31);
+
+            Assert.That(
+                diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.TailAndQueuedFlush),
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void LegacyThree_ExactCharacterRetainsFinalSnapshotOracle()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            world.LateRuntimeSnapshotModeForDiagnostics =
+                BattleLateRuntimeSnapshotMode.LegacyThree;
+            CreateCharacter<LF2Character>(world, 703, previousState: 0);
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            diagnostics.BeginTick(32);
+
+            world.LateEntityUpdateAll(32);
+
+            Assert.That(
+                diagnostics.GetLastLateRuntimeSnapshotCallCount(
+                    BattleLateRuntimeSnapshotStage.TailAndQueuedFlush),
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void NeutralExactCharacter_SkipsAllProvenLateCommonNoOps()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: true);
+            world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            CreateCharacter<LF2Character>(world, 801, previousState: 0);
+
+            world.LateEntityUpdateAll(5);
+
+            Assert.That(world.LastLateStateSpecialNoOpSkipCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LastLateCleanupNoOpSkipCountForDiagnostics, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void RecoveryPeriodAndSpecialState_FailClosedToAuthorityMethods()
+        {
+            SimulationWorld recoveryWorld = CreateWorld(forceLegacy: true);
+            recoveryWorld.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            CreateCharacter<LF2Character>(recoveryWorld, 802, previousState: 0);
+
+            recoveryWorld.LateEntityUpdateAll(NTSDGlobal.Gameplay.PpRecoverPeriod);
+
+            Assert.That(recoveryWorld.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.Zero);
+
+            SimulationWorld stateWorld = CreateWorld(forceLegacy: true);
+            stateWorld.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            LF2Character stateCharacter =
+                CreateCharacter<LF2Character>(stateWorld, 803, previousState: 0);
+            stateCharacter.Frame.D.state = 4000;
+            stateCharacter.RefreshRuntimeSnapshot();
+
+            stateWorld.LateEntityUpdateAll(5);
+
+            Assert.That(stateWorld.LastLateStateSpecialNoOpSkipCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void DeadExactCharacter_FailsClosedToAuthorityDeathOpoint()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: true);
+            world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            LF2Character character =
+                CreateCharacter<LF2Character>(world, 804, previousState: 0);
+            character.Health.HP = 0;
+
+            world.LateEntityUpdateAll(5);
+
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void DerivedCharacter_PreservesAllLateCommonVirtualCalls()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: true);
+            world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            ProbeCharacter character =
+                CreateCharacter<ProbeCharacter>(world, 805, previousState: 0);
+
+            world.LateEntityUpdateAll(5);
+
+            Assert.That(world.LastLateStateSpecialNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(world.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(world.LastLateCleanupNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(character.StateSpecialCallCount, Is.EqualTo(1));
+            Assert.That(character.RecoveryCallCount, Is.EqualTo(1));
+            Assert.That(character.DeathOpointCallCount, Is.EqualTo(1));
+            Assert.That(character.CleanupCallCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WarmedLateCommonNoOpGates_AllocateNoManagedMemory()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: true);
+            world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
+            for (int i = 0; i < 32; i++)
+                CreateCharacter<LF2Character>(world, 900 + i, previousState: 0);
+
+            world.LateEntityUpdateAll(5);
+            long before = GC.GetAllocatedBytesForCurrentThread();
+
+            world.LateEntityUpdateAll(7);
+
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+            Assert.That(world.LastLateStateSpecialNoOpSkipCountForDiagnostics, Is.EqualTo(32));
+            Assert.That(world.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.EqualTo(32));
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.EqualTo(32));
+            Assert.That(world.LastLateCleanupNoOpSkipCountForDiagnostics, Is.EqualTo(32));
+        }
+
         private static SimulationWorld CreateWorld(bool forceLegacy)
         {
             return new SimulationWorld(
@@ -174,6 +320,34 @@ namespace NTSD.Test
         private sealed class ProbeCharacter : LF2Character
         {
             internal int TailCallCount { get; private set; }
+            internal int StateSpecialCallCount { get; private set; }
+            internal int RecoveryCallCount { get; private set; }
+            internal int DeathOpointCallCount { get; private set; }
+            internal int CleanupCallCount { get; private set; }
+
+            public override void RunStateSpecialPreCollision()
+            {
+                StateSpecialCallCount++;
+                base.RunStateSpecialPreCollision();
+            }
+
+            internal override void RunPreCollisionRecoveryPhase(int tickIndex)
+            {
+                RecoveryCallCount++;
+                base.RunPreCollisionRecoveryPhase(tickIndex);
+            }
+
+            internal override void RunLateDeathOpointPreCleanupPhase()
+            {
+                DeathOpointCallCount++;
+                base.RunLateDeathOpointPreCleanupPhase();
+            }
+
+            internal override bool TryRunLatePostOpointCleanupPhase()
+            {
+                CleanupCallCount++;
+                return base.TryRunLatePostOpointCleanupPhase();
+            }
 
             internal override void RunLateTailBeforePrevFrame()
             {

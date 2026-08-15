@@ -12,6 +12,25 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public class LF2FrameInfo
     {
+        private NTSDEntityRuntime runtime;
+        private LF2FrameData data;
+
+        public LF2FrameInfo()
+        {
+        }
+
+        internal LF2FrameInfo(NTSDEntityRuntime runtime)
+        {
+            BindRuntime(runtime);
+        }
+
+        internal void BindRuntime(NTSDEntityRuntime nextRuntime)
+        {
+            runtime = nextRuntime;
+            if (runtime != null)
+                runtime.FrameState = data?.state ?? 0;
+        }
+
         /// <summary>上一帧编号。</summary>
         public int PN { get; set; } = 0;
 
@@ -22,7 +41,16 @@ namespace NTSD.Animation.LF2Objects
         public int N { get; set; } = 0;
 
         /// <summary>当前帧 DAT 数据。</summary>
-        public LF2FrameData D { get; set; }
+        public LF2FrameData D
+        {
+            get => data;
+            set
+            {
+                data = value;
+                if (runtime != null)
+                    runtime.FrameState = value?.state ?? 0;
+            }
+        }
 
         /// <summary>C++ release prev_frame2：全局碰撞 pass 开始前快照的帧编号。</summary>
         public int Prev2 { get; set; } = 0;
@@ -286,7 +314,7 @@ namespace NTSD.Animation.LF2Objects
             if (Log.StateLogEnabled && Match?.RuntimeCapacity.IsSealed != true)
                 Log.LogState(Name, "Frame", $"{Frame.N} -> {targetFrameId}");
             Frame.PN = Frame.N;
-            Frame.N = targetFrameId;
+            WriteCurrentFrameId(targetFrameId);
             AttackingCounter = 0;
 
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
@@ -494,10 +522,8 @@ namespace NTSD.Animation.LF2Objects
             if (targetFrame == null) return;
 
             Frame.PN = Frame.N;
-            Frame.N  = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             AttackingCounter = 0;
 
             Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next);
@@ -523,6 +549,11 @@ namespace NTSD.Animation.LF2Objects
         /// next=1000 时的销毁流程：触发 destroy 事件、隐藏对象、释放渲染器和逻辑对象。
         /// </summary>
         public override void OnTransitDestroy()
+        {
+            base.OnTransitDestroy();
+        }
+
+        internal override void DestroyEntityLikeExeCoreForStructuralWriter()
         {
             DestroyEvent();
             Destroy();

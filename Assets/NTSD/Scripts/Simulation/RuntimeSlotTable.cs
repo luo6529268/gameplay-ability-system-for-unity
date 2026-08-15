@@ -34,30 +34,23 @@ namespace NTSD.Simulation
             public NTSDEntityRuntime RawRuntime { get; }
         }
 
-        private sealed class Entry
-        {
-            public readonly NTSDEntityRuntime RawRuntime = new NTSDEntityRuntime();
-            public LF2Entity Entity;
-            public uint Generation;
-            public bool Claimed;
-
-            public Entry()
-            {
-                RawRuntime.Reset();
-            }
-        }
-
         private sealed class Page
         {
-            public readonly Entry[] Entries = CreateEntries();
+            public readonly NTSDEntityRuntime[] RawRuntimes = CreateRawRuntimes();
+            public readonly LF2Entity[] Entities = new LF2Entity[PageSize];
+            public readonly uint[] Generations = new uint[PageSize];
 
-            private static Entry[] CreateEntries()
+            private static NTSDEntityRuntime[] CreateRawRuntimes()
             {
-                var entries = new Entry[PageSize];
-                for (int i = 0; i < entries.Length; i++)
-                    entries[i] = new Entry();
+                var runtimes = new NTSDEntityRuntime[PageSize];
+                for (int i = 0; i < runtimes.Length; i++)
+                {
+                    NTSDEntityRuntime runtime = new NTSDEntityRuntime();
+                    runtime.Reset();
+                    runtimes[i] = runtime;
+                }
 
-                return entries;
+                return runtimes;
             }
         }
 
@@ -127,13 +120,14 @@ namespace NTSD.Simulation
             if (!IsAddressable(slot))
                 throw new ArgumentOutOfRangeException(nameof(slot));
 
-            Entry entry = GetEntry(slot, false);
+            Page page = GetPage(slot, false);
+            int pageOffset = slot % PageSize;
             return new ReadOnlySlotView(
                 slot,
                 allocator.IsClaimed(slot),
-                entry?.Generation ?? 0u,
-                entry?.Entity,
-                entry?.RawRuntime);
+                page?.Generations[pageOffset] ?? 0u,
+                page?.Entities[pageOffset],
+                page?.RawRuntimes[pageOffset]);
         }
 
         public int PeekLowest(int startSlot, int endSlotExclusive)
@@ -147,11 +141,14 @@ namespace NTSD.Simulation
             if (entity == null || !allocator.ClaimRequired(slot))
                 return false;
 
-            Entry entry = GetEntry(slot, true);
-            entry.Generation = NextGeneration(entry.Generation);
-            entry.Entity = entity;
-            entry.Claimed = true;
-            handle = new RuntimeEntityHandle(slot, entry.Generation);
+            Page page = GetPage(slot, true);
+            int pageOffset = slot % PageSize;
+            page.Generations[pageOffset] = NextGeneration(
+                page.Generations[pageOffset]);
+            page.Entities[pageOffset] = entity;
+            handle = new RuntimeEntityHandle(
+                slot,
+                page.Generations[pageOffset]);
             AdvanceOccupancyEpoch();
             return true;
         }
@@ -166,21 +163,24 @@ namespace NTSD.Simulation
             if (slot < 0)
                 return -1;
 
-            Entry entry = GetEntry(slot, true);
-            entry.Generation = NextGeneration(entry.Generation);
-            entry.Entity = entity;
-            entry.Claimed = true;
-            handle = new RuntimeEntityHandle(slot, entry.Generation);
+            Page page = GetPage(slot, true);
+            int pageOffset = slot % PageSize;
+            page.Generations[pageOffset] = NextGeneration(
+                page.Generations[pageOffset]);
+            page.Entities[pageOffset] = entity;
+            handle = new RuntimeEntityHandle(
+                slot,
+                page.Generations[pageOffset]);
             AdvanceOccupancyEpoch();
             return slot;
         }
 
         public bool Release(RuntimeEntityHandle handle)
         {
-            if (!TryGetMatchingEntry(handle, out Entry entry))
+            if (!TryGetMatchingSlot(handle, out Page page, out int pageOffset))
                 return false;
 
-            return ReleaseEntry(handle.Slot, entry);
+            return ReleaseSlot(handle.Slot, page, pageOffset);
         }
 
         public bool Release(int slot, LF2Entity expectedEntity)
@@ -188,11 +188,15 @@ namespace NTSD.Simulation
             if (expectedEntity == null || !IsAddressable(slot) || !allocator.IsClaimed(slot))
                 return false;
 
-            Entry entry = GetEntry(slot, false);
-            if (entry == null || !entry.Claimed || !ReferenceEquals(entry.Entity, expectedEntity))
+            Page page = GetPage(slot, false);
+            int pageOffset = slot % PageSize;
+            if (page == null ||
+                !ReferenceEquals(page.Entities[pageOffset], expectedEntity))
+            {
                 return false;
+            }
 
-            return ReleaseEntry(slot, entry);
+            return ReleaseSlot(slot, page, pageOffset);
         }
 
         // World passes intentionally resolve the current occupant by slot. Long-lived
@@ -202,8 +206,8 @@ namespace NTSD.Simulation
             if (!IsAddressable(slot) || !allocator.IsClaimed(slot))
                 return null;
 
-            Entry entry = GetEntry(slot, false);
-            return entry != null && entry.Claimed ? entry.Entity : null;
+            Page page = GetPage(slot, false);
+            return page?.Entities[slot % PageSize];
         }
 
         public bool TryGetCurrentOccupant(int slot, out LF2Entity entity)
@@ -225,27 +229,27 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            Entry entry = GetEntry(slot, false);
-            if (entry == null ||
-                !entry.Claimed ||
-                entry.Generation == 0 ||
-                !ReferenceEquals(entry.Entity, expectedEntity))
+            Page page = GetPage(slot, false);
+            int pageOffset = slot % PageSize;
+            if (page == null ||
+                page.Generations[pageOffset] == 0 ||
+                !ReferenceEquals(page.Entities[pageOffset], expectedEntity))
             {
                 return false;
             }
 
-            handle = new RuntimeEntityHandle(slot, entry.Generation);
+            handle = new RuntimeEntityHandle(slot, page.Generations[pageOffset]);
             return handle.IsValid;
         }
 
-        private bool ReleaseEntry(int slot, Entry entry)
+        private bool ReleaseSlot(int slot, Page page, int pageOffset)
         {
             if (!allocator.Release(slot))
                 return false;
 
-            entry.Entity = null;
-            entry.Claimed = false;
-            entry.Generation = NextGeneration(entry.Generation);
+            page.Entities[pageOffset] = null;
+            page.Generations[pageOffset] = NextGeneration(
+                page.Generations[pageOffset]);
             AdvanceOccupancyEpoch();
             return true;
         }
@@ -253,16 +257,20 @@ namespace NTSD.Simulation
         public bool TryResolve(RuntimeEntityHandle handle, out LF2Entity entity)
         {
             entity = null;
-            if (!TryGetMatchingEntry(handle, out Entry entry))
+            if (!TryGetMatchingSlot(handle, out Page page, out int pageOffset))
                 return false;
 
-            entity = entry.Entity;
+            entity = page.Entities[pageOffset];
             return entity != null;
         }
 
         public NTSDEntityRuntime GetRawRuntime(int slot)
         {
-            return IsAddressable(slot) ? GetEntry(slot, true).RawRuntime : null;
+            if (!IsAddressable(slot))
+                return null;
+
+            Page page = GetPage(slot, true);
+            return page.RawRuntimes[slot % PageSize];
         }
 
         public void Reset()
@@ -274,33 +282,39 @@ namespace NTSD.Simulation
                 if (page == null)
                     continue;
 
-                for (int entryIndex = 0; entryIndex < page.Entries.Length; entryIndex++)
+                for (int pageOffset = 0; pageOffset < PageSize; pageOffset++)
                 {
-                    int slot = pageIndex * PageSize + entryIndex;
+                    int slot = pageIndex * PageSize + pageOffset;
                     if (slot >= LogicalCapacity)
                         break;
 
-                    Entry entry = page.Entries[entryIndex];
-                    entry.Entity = null;
-                    entry.RawRuntime.Reset();
-                    entry.Claimed = false;
-                    entry.Generation = NextGeneration(entry.Generation);
+                    page.Entities[pageOffset] = null;
+                    page.RawRuntimes[pageOffset].Reset();
+                    page.Generations[pageOffset] = NextGeneration(
+                        page.Generations[pageOffset]);
                 }
             }
             AdvanceOccupancyEpoch();
         }
 
-        private bool TryGetMatchingEntry(RuntimeEntityHandle handle, out Entry entry)
+        private bool TryGetMatchingSlot(
+            RuntimeEntityHandle handle,
+            out Page page,
+            out int pageOffset)
         {
-            entry = null;
+            page = null;
+            pageOffset = -1;
             if (!handle.IsValid || !IsAddressable(handle.Slot) || !allocator.IsClaimed(handle.Slot))
                 return false;
 
-            entry = GetEntry(handle.Slot, false);
-            return entry != null && entry.Claimed && entry.Generation == handle.Generation;
+            page = GetPage(handle.Slot, false);
+            pageOffset = handle.Slot % PageSize;
+            return page != null &&
+                   page.Generations[pageOffset] == handle.Generation &&
+                   page.Entities[pageOffset] != null;
         }
 
-        private Entry GetEntry(int slot, bool materialize)
+        private Page GetPage(int slot, bool materialize)
         {
             if (!IsAddressable(slot))
                 return null;
@@ -314,7 +328,7 @@ namespace NTSD.Simulation
                 MaterializedPageCount++;
             }
 
-            return page?.Entries[slot % PageSize];
+            return page;
         }
 
         private static uint NextGeneration(uint generation)

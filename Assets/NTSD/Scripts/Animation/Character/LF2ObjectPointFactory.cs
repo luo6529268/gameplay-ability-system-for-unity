@@ -4,6 +4,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Tools;
 using NTSD.Extensions;
 using MoreMountains.Tools;
@@ -126,11 +127,15 @@ namespace NTSD.Animation
             switch (task.TaskType)
             {
                 case LF2TaskType.CreateObject:
-                    ProcessCreateObject((OPointCreateTask)task);
+                    ProcessCreateObject(
+                        (OPointCreateTask)task,
+                        BattleStructuralPlaybackBoundary.CurrentPassSegment);
                     break;
 
                 case LF2TaskType.CreateMultipleObjects:
-                    ProcessCreateMultipleObjects((OPointCreateMultipleTask)task);
+                    ProcessCreateMultipleObjects(
+                        (OPointCreateMultipleTask)task,
+                        BattleStructuralPlaybackBoundary.CurrentPassSegment);
                     break;
 
                 default:
@@ -154,6 +159,21 @@ namespace NTSD.Animation
         /// 普通 DAT opoint 不再由 FrameEvent 提前触发，避免和正式版时序错位。
         /// </summary>
         public void ProcessOpointSpawn(LF2Entity spawner)
+        {
+            SimulationWorld world = spawner?.Match;
+            if (world != null)
+            {
+                world.StructuralWriter.ProcessLateOpointSegment(
+                    this,
+                    spawner,
+                    world.CurrentTickIndex);
+                return;
+            }
+
+            ProcessOpointSpawnCoreForStructuralWriter(spawner);
+        }
+
+        internal void ProcessOpointSpawnCoreForStructuralWriter(LF2Entity spawner)
         {
             if (spawner == null || spawner.PS == null) return;
 
@@ -229,7 +249,9 @@ namespace NTSD.Animation
                 task.releaseOpointSpawn = true;
                 task.requiredRuntimeSlot = requiredRuntimeSlot;
 
-                LF2Entity spawned = ProcessCreateObject(task);
+                LF2Entity spawned = ProcessCreateObject(
+                    task,
+                    BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
                 LF2ReferencePool.Instance?.Recycle(task);
                 if (spawned == null) continue;
 
@@ -343,7 +365,17 @@ namespace NTSD.Animation
             }
         }
 
-        private LF2Entity ProcessCreateObject(OPointCreateTask task)
+        private LF2Entity ProcessCreateObject(
+            OPointCreateTask task,
+            BattleStructuralPlaybackBoundary boundary)
+        {
+            SimulationWorld world = task?.parent?.Match ?? SimulationTickDriver.Instance?.World;
+            return world != null
+                ? world.StructuralWriter.Spawn(this, task, boundary)
+                : MaterializeObjectForStructuralWriter(task);
+        }
+
+        internal LF2Entity MaterializeObjectForStructuralWriter(OPointCreateTask task)
         {
             // 1. 检查 oid
             int oid = task.opoint.oid;
@@ -454,7 +486,9 @@ namespace NTSD.Animation
 
         public LF2Entity CreateObjectImmediate(OPointCreateTask task)
         {
-            return ProcessCreateObject(task);
+            return ProcessCreateObject(
+                task,
+                BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
         }
 
         // ========== 多对象创建 ==========
@@ -462,7 +496,22 @@ namespace NTSD.Animation
         /// <summary>
         /// 处理多对象创建任务，对齐 C++ release 的 opoint 多对象散射路径。
         /// </summary>
-        private void ProcessCreateMultipleObjects(OPointCreateMultipleTask task)
+        private void ProcessCreateMultipleObjects(
+            OPointCreateMultipleTask task,
+            BattleStructuralPlaybackBoundary boundary)
+        {
+            SimulationWorld world = task?.parent?.Match ?? SimulationTickDriver.Instance?.World;
+            if (world != null)
+            {
+                world.StructuralWriter.SpawnMultiple(this, task, boundary);
+                return;
+            }
+
+            MaterializeMultipleObjectsForStructuralWriter(task);
+        }
+
+        internal void MaterializeMultipleObjectsForStructuralWriter(
+            OPointCreateMultipleTask task)
         {
             int oid = task.opoint.oid;
             if (oid <= 0 || task.number <= 0) return;

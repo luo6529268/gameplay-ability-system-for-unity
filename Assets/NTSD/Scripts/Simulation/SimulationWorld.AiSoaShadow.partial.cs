@@ -55,6 +55,8 @@ namespace NTSD.Simulation
         private AiSoASensingShadowMismatch aiSoASensingPendingFirstMismatch;
         private BattleAiExecutionProfile aiExecutionProfile =
             BattleAiExecutionProfile.LegacyCanonical;
+        private AiDecisionOwnedInputMode aiDecisionOwnedInputMode =
+            AiDecisionOwnedInputMode.SnapshotCopy;
         private bool aiSoACandidateExecutionEnabled;
         private bool aiSoACandidatePassLatchedToLegacy;
         private bool aiSoACandidateForceNearestFailureForSelfCheck;
@@ -103,6 +105,25 @@ namespace NTSD.Simulation
         }
 
         public BattleAiExecutionProfile AiExecutionProfile => aiExecutionProfile;
+        public AiDecisionOwnedInputMode AiDecisionOwnedInputModeForDiagnostics =>
+            aiDecisionOwnedInputMode;
+
+        public void ConfigureAiDecisionOwnedInputModeForDiagnostics(
+            AiDecisionOwnedInputMode mode)
+        {
+            if (_ticking || ObjectCount != 0 || ClaimedRuntimeSlotCountForServices != 0)
+            {
+                throw new InvalidOperationException(
+                    "The AI owned-input mode must be configured before entities are registered.");
+            }
+            if (mode != AiDecisionOwnedInputMode.SnapshotCopy &&
+                mode != AiDecisionOwnedInputMode.CanonicalStoreDirect)
+            {
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+
+            aiDecisionOwnedInputMode = mode;
+        }
 
         public void ConfigureAiExecutionProfile(BattleAiExecutionProfile profile)
         {

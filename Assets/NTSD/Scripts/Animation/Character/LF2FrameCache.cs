@@ -1,5 +1,10 @@
 namespace NTSD.Animation
 {
+    internal interface ILF2FrameCacheObserver
+    {
+        void OnFrameCacheIdentityChanged();
+    }
+
     /// <summary>
     /// LF2 帧数据缓存（数据层，不继承 Mono）。
     /// 运行时仅维护无分配的 frameId 数组索引；描述性的 frameName 分组留在
@@ -14,33 +19,50 @@ namespace NTSD.Animation
         public LF2CharacterDataWrapper Wrapper { get; private set; }
 
         private readonly LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
+        private readonly ILF2FrameCacheObserver observer;
+
+        public LF2FrameCache()
+        {
+        }
+
+        internal LF2FrameCache(ILF2FrameCacheObserver observer)
+        {
+            this.observer = observer;
+        }
 
         public void Clear()
         {
-            Wrapper = null;
-            for (int i = 0; i < _frames.Length; i++)
-                _frames[i] = null;
-
+            ClearCore();
+            observer?.OnFrameCacheIdentityChanged();
         }
 
         public void Load(LF2CharacterDataWrapper wrapper)
         {
-            Clear();
+            ClearCore();
             Wrapper = wrapper;
 
             var frames = wrapper?.characterData?.frames;
-            if (frames == null) return;
- 
-            foreach (var frameData in frames)
+            if (frames != null)
             {
-                if (frameData == null) continue;
-
-                if ((uint)frameData.frameId < MaxFrameIdExclusive)
+                foreach (var frameData in frames)
                 {
-                    _frames[frameData.frameId] = frameData;
-                }
+                    if (frameData == null) continue;
 
+                    if ((uint)frameData.frameId < MaxFrameIdExclusive)
+                    {
+                        _frames[frameData.frameId] = frameData;
+                    }
+                }
             }
+
+            observer?.OnFrameCacheIdentityChanged();
+        }
+
+        private void ClearCore()
+        {
+            Wrapper = null;
+            for (int i = 0; i < _frames.Length; i++)
+                _frames[i] = null;
         }
 
         public LF2FrameData GetFrameDataById(int frameId)

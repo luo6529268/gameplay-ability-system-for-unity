@@ -9,6 +9,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.Rendering;
 using NTSD.App;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
 using UnityEngine;
@@ -113,8 +114,9 @@ namespace NTSD.Test
             world.Register(reuseProducer);
 
             world.RenderDispatchAll(40);
-            BattlePresentationFrame tick40Frame = world.BattlePresentation.PublishedFrame;
-            Assert.That(tick40Frame.TickIndex, Is.EqualTo(40),
+            BattlePresentationFrame tick40PublishedFrame = world.BattlePresentation.PublishedFrame;
+            BattlePresentationFrame tick40RenderedFrame = MaterializeCentralFrame(world);
+            Assert.That(tick40PublishedFrame.TickIndex, Is.EqualTo(40),
                 "W05B-A01: RenderDispatch(T) must publish tick 40");
 
             world.LateEntityUpdateAll(40);
@@ -135,13 +137,14 @@ namespace NTSD.Test
                 "W05B-A07: the first spawn handle must be valid");
             LF2ObjectRenderer reusedRenderer = first.Renderer;
             AssertMountsBound(reusedRenderer, oldHandle, "W05B-A08");
-            Assert.That(world.BattlePresentation.PublishedFrame, Is.SameAs(tick40Frame),
+            Assert.That(world.BattlePresentation.PublishedFrame, Is.SameAs(tick40PublishedFrame),
                 "W05B-A09: late update must not replace the published tick-40 frame");
-            Assert.That(ContainsCommand(tick40Frame, oldHandle), Is.False,
+            Assert.That(ContainsCommand(tick40RenderedFrame, oldHandle), Is.False,
                 "W05B-A10: late opoint must not mutate the frame already published by RenderDispatch(T)");
 
             world.RenderDispatchAll(41);
-            Assert.That(ContainsCommand(world.BattlePresentation.PublishedFrame, oldHandle), Is.True,
+            BattlePresentationFrame tick41RenderedFrame = MaterializeCentralFrame(world);
+            Assert.That(ContainsCommand(tick41RenderedFrame, oldHandle), Is.True,
                 "W05B-A11: the first central entity command must appear at RenderDispatch(T+1)");
 
             int activeBeforeRelease = pool.ActiveObjectCountForAcceptance;
@@ -172,14 +175,14 @@ namespace NTSD.Test
             Assert.That(world.TryResolveRuntimeHandleForDiagnostics(oldHandle, out _), Is.False,
                 "W05B-A22: acquiring a replacement must not resurrect the old generation");
 
-            BattlePresentationFrame stillTick41 = world.BattlePresentation.PublishedFrame;
+            BattlePresentationFrame stillTick41 = tick41RenderedFrame;
             Assert.That(ContainsCommand(stillTick41, oldHandle), Is.True,
                 "W05B-A23: published frames are immutable snapshots until the next dispatch");
             Assert.That(ContainsCommand(stillTick41, replacementHandle), Is.False,
                 "W05B-A24: the replacement must remain absent before RenderDispatch(T+2)");
 
             world.RenderDispatchAll(42);
-            BattlePresentationFrame tick42Frame = world.BattlePresentation.PublishedFrame;
+            BattlePresentationFrame tick42Frame = MaterializeCentralFrame(world);
             Assert.That(ContainsCommand(tick42Frame, oldHandle), Is.False,
                 "W05B-A25: same-slot reuse must not emit a ghost command for the old generation");
             Assert.That(ContainsCommand(tick42Frame, replacementHandle), Is.True,
@@ -437,6 +440,92 @@ namespace NTSD.Test
             }
         }
 
+        [Test]
+        public void W05F_WorldOwnedStructuralWriter_PreservesLateBoundaryAndGenerationLifecycle()
+        {
+            LF2ObjectPointFactory factory = RequireFactoryAndPools(out LF2ObjectPool pool);
+            using var configs = new RuntimeObjectConfigScope(SpawnOid, BuildSpawnData());
+            using var isolatedPool = new IsolatedObjectPoolScope(pool);
+            using var driver = new SimulationDriverWorldScope();
+
+            var world = new SimulationWorld();
+            driver.SetWorld(world);
+            var spawner = new OpointSpawner(SpawnOid, "structural-writer");
+            world.Register(spawner);
+            Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(
+                spawner.Runtime.SlotIndex,
+                spawner,
+                out RuntimeEntityHandle spawnerHandle), Is.True);
+
+            BattleStructuralWriterDiagnostics before =
+                world.StructuralWriterDiagnosticsForDiagnostics;
+            factory.ProcessOpointSpawn(spawner);
+            LF2Entity spawned = FindSpawn(world);
+            Assert.That(spawned, Is.Not.Null);
+            Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(
+                spawned.Runtime.SlotIndex,
+                spawned,
+                out RuntimeEntityHandle spawnedHandle), Is.True);
+
+            BattleStructuralWriterDiagnostics afterSpawn =
+                world.StructuralWriterDiagnosticsForDiagnostics;
+            Assert.That(afterSpawn.SpawnCount, Is.EqualTo(before.SpawnCount + 1));
+            Assert.That(afterSpawn.RegisterCount, Is.GreaterThan(before.RegisterCount));
+            Assert.That(afterSpawn.GenerationClaimCount,
+                Is.EqualTo(before.GenerationClaimCount + 1));
+            Assert.That(afterSpawn.LastSpawnBoundary,
+                Is.EqualTo(BattleStructuralPlaybackBoundary.CurrentEntityImmediate));
+            Assert.That(afterSpawn.LastSpawnSource, Is.EqualTo(spawnerHandle));
+            Assert.That(afterSpawn.LastSpawnAuthorityOrdinal, Is.GreaterThan(0));
+
+            spawned.FreeEntityLikeExe();
+            BattleStructuralWriterDiagnostics afterFree =
+                world.StructuralWriterDiagnosticsForDiagnostics;
+            Assert.That(afterFree.FreeCount, Is.EqualTo(afterSpawn.FreeCount + 1));
+            Assert.That(afterFree.UnregisterCount,
+                Is.GreaterThan(afterSpawn.UnregisterCount));
+            Assert.That(afterFree.GenerationReleaseCount,
+                Is.EqualTo(afterSpawn.GenerationReleaseCount + 1));
+            Assert.That(world.TryResolveRuntimeHandleForDiagnostics(spawnedHandle, out _),
+                Is.False);
+            Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+        }
+
+        [Test]
+        public void W05G_TransitDestroy_UsesStructuralWriterAndInvalidatesGeneration()
+        {
+            LF2ObjectPointFactory factory = RequireFactoryAndPools(out LF2ObjectPool pool);
+            using var configs = new RuntimeObjectConfigScope(SpawnOid, BuildSpawnData());
+            using var isolatedPool = new IsolatedObjectPoolScope(pool);
+            using var driver = new SimulationDriverWorldScope();
+
+            var world = new SimulationWorld();
+            driver.SetWorld(world);
+            var spawner = new OpointSpawner(SpawnOid, "structural-destroy");
+            world.Register(spawner);
+            factory.ProcessOpointSpawn(spawner);
+            LF2Entity spawned = FindSpawn(world);
+            Assert.That(spawned, Is.Not.Null);
+            Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(
+                spawned.Runtime.SlotIndex,
+                spawned,
+                out RuntimeEntityHandle spawnedHandle), Is.True);
+
+            BattleStructuralWriterDiagnostics before =
+                world.StructuralWriterDiagnosticsForDiagnostics;
+            spawned.OnTransitDestroy();
+            BattleStructuralWriterDiagnostics after =
+                world.StructuralWriterDiagnosticsForDiagnostics;
+
+            Assert.That(after.DestroyCount, Is.EqualTo(before.DestroyCount + 1));
+            Assert.That(after.UnregisterCount, Is.GreaterThan(before.UnregisterCount));
+            Assert.That(after.GenerationReleaseCount,
+                Is.EqualTo(before.GenerationReleaseCount + 1));
+            Assert.That(world.TryResolveRuntimeHandleForDiagnostics(spawnedHandle, out _),
+                Is.False);
+            Assert.That(pool.ActiveObjectCountForAcceptance, Is.Zero);
+        }
+
         private static LF2ObjectPointFactory RequireFactoryAndPools(out LF2ObjectPool pool)
         {
             LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
@@ -505,6 +594,19 @@ namespace NTSD.Test
                     return true;
             }
             return false;
+        }
+
+        private static BattlePresentationFrame MaterializeCentralFrame(SimulationWorld world)
+        {
+            BattlePixelFramePlan plan =
+                BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+            Assert.That(plan.IsValid, Is.True,
+                "W05B: the central presentation host must publish a valid pixel plan");
+            Assert.That(plan.UsesCentralPixels, Is.True,
+                "W05B: the materialized pixel plan must retain central ownership");
+            Assert.That(plan.CapturedFrame, Is.Not.Null,
+                "W05B: central ownership requires an immutable materialized frame");
+            return plan.CapturedFrame;
         }
 
         private static void AssertMountsBound(

@@ -105,6 +105,47 @@ namespace NTSD.Simulation
             BattleAiInputDetailDiagnostics diagnostics,
             ref AiDecisionWitness witness)
         {
+            if (snapshot == null)
+            {
+                witness = default;
+                witness.Availability = AiDecisionAvailability.SnapshotMissing;
+                return false;
+            }
+
+            return TryEvaluateCore(
+                snapshot,
+                in snapshot.Input,
+                policy,
+                captureRngTrace,
+                diagnostics,
+                ref witness);
+        }
+
+        internal static bool TryEvaluateCanonicalInput(
+            AiDecisionSnapshot snapshot,
+            in AiDecisionInputState canonicalInput,
+            AiDecisionEvaluationPolicy policy,
+            bool captureRngTrace,
+            BattleAiInputDetailDiagnostics diagnostics,
+            ref AiDecisionWitness witness)
+        {
+            return TryEvaluateCore(
+                snapshot,
+                in canonicalInput,
+                policy,
+                captureRngTrace,
+                diagnostics,
+                ref witness);
+        }
+
+        private static bool TryEvaluateCore(
+            AiDecisionSnapshot snapshot,
+            in AiDecisionInputState ownedInput,
+            AiDecisionEvaluationPolicy policy,
+            bool captureRngTrace,
+            BattleAiInputDetailDiagnostics diagnostics,
+            ref AiDecisionWitness witness)
+        {
             witness = default;
             if (snapshot == null || snapshot.Rows == null)
             {
@@ -125,6 +166,7 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.SelfSlotInvalid,
                     ref witness);
             }
@@ -132,6 +174,7 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.SelfNotIncluded,
                     ref witness);
             }
@@ -139,6 +182,7 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.EpochMismatch,
                     ref witness);
             }
@@ -147,6 +191,7 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.GenerationMismatch,
                     ref witness);
             }
@@ -154,6 +199,7 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.StableIdMismatch,
                     ref witness);
             }
@@ -162,12 +208,13 @@ namespace NTSD.Simulation
             {
                 return RejectBeforeEvaluation(
                     snapshot,
+                    in ownedInput,
                     AiDecisionAvailability.IndexesNotReady,
                     ref witness);
             }
 
             witness.Availability = AiDecisionAvailability.Available;
-            AiDecisionInputState input = snapshot.Input;
+            AiDecisionInputState input = ownedInput;
             AiDecisionWorldState world = snapshot.World;
             var rng = new RngClone
             {
@@ -1695,11 +1742,12 @@ namespace NTSD.Simulation
 
         private static bool RejectBeforeEvaluation(
             AiDecisionSnapshot snapshot,
+            in AiDecisionInputState ownedInput,
             AiDecisionAvailability availability,
             ref AiDecisionWitness witness)
         {
             witness.Availability = availability;
-            witness.Input = snapshot.Input;
+            witness.Input = ownedInput;
             witness.World = snapshot.World;
             witness.RngState = snapshot.RngState;
             witness.RngCalls = snapshot.RngCalls;

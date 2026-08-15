@@ -18,7 +18,7 @@ namespace NTSD.Animation.LF2Objects
     /// 负责按 step6 记录的 candidate 顺序逐条消费碰撞候选，并按 itr.kind 分派
     /// 攻击、抓取、拾取等类型；以及作为被抓方响应抓取者的 CaughtA 请求。
     /// </summary>
-    internal sealed class LF2CharacterInteractionResolver
+    internal sealed class LF2CharacterInteractionResolver : IBattleHitCandidateConsumer
     {
         private readonly LF2Character _character;
 
@@ -34,215 +34,62 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public bool TryConsumeUnifiedStep7CandidateSequence()
         {
-            LF2FrameData frame = _character.GetCollisionFrameData();
-            var sceneQuery = _character.Match?.SceneQuery;
-            var kindService = _character.Match?.ItrKindService;
-            if (frame?.itrs == null || sceneQuery == null || kindService == null)
+            return BattleHitCandidateSequenceRunner.TryConsume(this);
+        }
+
+        LF2Entity IBattleHitCandidateConsumer.Attacker => _character;
+
+        void IBattleHitCandidateConsumer.ApplyConsumeEffects(in SceneQueryHit hit)
+        {
+            _character.ApplyReleaseSceneQueryConsumeEffectsInternal(hit);
+        }
+
+        void IBattleHitCandidateConsumer.BeforeDispatch(int itrIndex)
+        {
+            _character.CurrentItrIndex = itrIndex;
+        }
+
+        bool IBattleHitCandidateConsumer.Dispatch(
+            INTSDItrKindService kindService,
+            InteractionArea itr,
+            LF2Entity target)
+        {
+            if (itr.kind == 1 || itr.kind == 2 || itr.kind == 3 || itr.kind == 7)
+                return TryApplyPreInteraction(itr, target);
+
+            if (kindService == null || !kindService.IsAttackKind(itr.kind))
                 return false;
 
-            if (!sceneQuery.TryGetCollisionCandidateRange(_character, out var candidates))
-                return false;
-
-            int candidateLimit = candidates.Count;
-            for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
+            var attackerPos = new Vector3(
+                (float)_character.PS.x,
+                (float)_character.PS.y,
+                (float)_character.PS.z);
+            int targetDataType = target.GetCurrentDataObjectTypeForSimulation();
+            if (targetDataType == (int)LF2ObjectType.Character)
             {
-                if (!candidates.TryGet(candidateIndex, out SceneQueryHit hitInfo))
-                    continue;
-                int itrIndex = hitInfo.ItrIndex;
-                if (IsReleaseInvalidCandidateItrIndex(itrIndex, frame))
-                    continue;
-
-                LF2Entity target = hitInfo.ResolveCurrentTarget(_character.Match);
-                if (target == null)
-                    continue;
-
-                bool zeroAttackerHpOnConsume;
-                bool releaseHeavyHeldTargetOnConsume;
-                InteractionArea itr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
-                    _character,
-                    target,
-                    frame,
-                    frame.itrs[itrIndex],
-                    out zeroAttackerHpOnConsume,
-                    out releaseHeavyHeldTargetOnConsume);
-                if (itr == null)
-                    continue;
-
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyPreprocess == true)
-                {
-                    _character.Match.ObserveBattleHitExecutionPlanLegacyPreprocess(
-                        _character,
-                        target,
-                        itr,
-                        zeroAttackerHpOnConsume,
-                        releaseHeavyHeldTargetOnConsume);
-                }
-
-                hitInfo = new SceneQueryHit(
-                    target,
-                    hitInfo.BodyX,
-                    hitInfo.ItrIndex,
-                    itr,
-                    zeroAttackerHpOnConsume,
-                    releaseHeavyHeldTargetOnConsume);
-
-                bool canConsume = CanConsumeRecordedCandidate(target);
-                BattleHitCandidateDisposition disposition =
-                    LF2HitResolveRuntimeData.ResolveCandidateDisposition(
-                        target,
-                        itr,
-                        canConsume);
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDisposition == true)
-                {
-                    _character.Match.ObserveBattleHitExecutionPlanLegacyDisposition(
-                        _character,
-                        target,
-                        itr,
-                        disposition);
-                }
-
-                if (!canConsume ||
-                    disposition == BattleHitCandidateDisposition.Unsupported)
-                    continue;
-
-                if (disposition == BattleHitCandidateDisposition.Kind1Grab ||
-                    disposition == BattleHitCandidateDisposition.Kind3Grab ||
-                    disposition == BattleHitCandidateDisposition.Pickup)
-                {
-                    bool observePreInteractionWriterEffect =
-                        _character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
-                    if (observePreInteractionWriterEffect)
-                    {
-                        _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                            _character,
-                            target,
-                            itr,
-                            disposition);
-                    }
-                    TryApplyPreInteraction(itr, target);
-                    if (observePreInteractionWriterEffect)
-                    {
-                        _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
-                            _character,
-                            target);
-                    }
-                    continue;
-                }
-
-                if (disposition == BattleHitCandidateDisposition.HitConfirm)
-                {
-                    if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
-                    {
-                        _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                            _character,
-                            target,
-                            itr,
-                            disposition);
-                    }
-                    target.HitConfirmCounter = 3;
-                    if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
-                    {
-                        _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
-                            _character,
-                            target);
-                    }
-                    continue;
-                }
-
-                if (!LF2HitResolveRuntimeData.IsAttackDisposition(disposition))
-                    continue;
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
-                {
-                    _character.Match.PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
-                        _character,
-                        target);
-                }
-                _character.ApplyReleaseSceneQueryConsumeEffectsInternal(hitInfo);
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
-                {
-                    _character.Match.ObserveBattleHitExecutionPlanLegacyConsumeEffects(
-                        _character,
-                        target);
-                }
-                var attackerPos = new Vector3((float)_character.PS.x, (float)_character.PS.y, (float)_character.PS.z);
-                _character.CurrentItrIndex = itrIndex;
-                bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
-                    target,
-                    itr);
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
-                {
-                    _character.Match.PrepareBattleHitExecutionPlanLegacyDispatchObservation(
-                        _character,
-                        target,
-                        itr);
-                }
-                bool observeWriterEffect =
-                    (disposition == BattleHitCandidateDisposition.Kind8 ||
-                     disposition == BattleHitCandidateDisposition.Kind14 ||
-                     disposition == BattleHitCandidateDisposition.Kind10Or11 ||
-                     disposition == BattleHitCandidateDisposition.Kind15Or16 ||
-                     (disposition == BattleHitCandidateDisposition.Damage &&
-                      _character.Match?.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
-                          _character,
+                return target is LF2Character living
+                    ? living.Hit(itr, _character, attackerPos, default)
+                    : LF2CharacterDatHitResolver.CanResolveTarget(target) &&
+                      LF2CharacterDatHitResolver.TryResolveHit(
                           target,
                           itr,
-                          disposition) == true)) &&
-                    _character.Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
-                if (observeWriterEffect)
-                {
-                    _character.Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                        _character,
-                        target,
-                        itr,
-                        disposition);
-                }
-                int targetDataType = target.GetCurrentDataObjectTypeForSimulation();
-                bool hit;
-                if (targetDataType == (int)LF2ObjectType.Character)
-                {
-                    hit = target is LF2Character living
-                        ? living.Hit(itr, _character, attackerPos, default)
-                        : LF2CharacterDatHitResolver.CanResolveTarget(target) &&
-                          LF2CharacterDatHitResolver.TryResolveHit(target, itr, _character, attackerPos, default);
-                }
-                else if ((targetDataType == (int)LF2ObjectType.LightWeapon ||
-                          targetDataType == (int)LF2ObjectType.HeavyWeapon ||
-                          targetDataType == (int)LF2ObjectType.ThrowWeapon ||
-                          targetDataType == (int)LF2ObjectType.Drink) &&
-                         target is LF2WeaponBase weapon)
-                {
-                    hit = weapon.Hit(itr, _character);
-                }
-                else if (targetDataType == (int)LF2ObjectType.SpecialAttack &&
-                         target is LF2SpecialAttack specialAttack)
-                {
-                    hit = specialAttack.Hit(itr, _character);
-                }
-                else
-                {
-                    hit = false;
-                }
-                if (observeWriterEffect)
-                {
-                    _character.Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(
-                        _character,
-                        target);
-                }
-                if (_character.Match?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
-                {
-                    _character.Match.ObserveBattleHitExecutionPlanLegacyDispatch(
-                        _character,
-                        hit,
-                        hit && abortAfterSuccessfulHit);
-                }
-                if (!hit)
-                    continue;
-                if (abortAfterSuccessfulHit)
-                    return true;
-
+                          _character,
+                          attackerPos,
+                          default);
             }
 
-            return true;
+            if ((targetDataType == (int)LF2ObjectType.LightWeapon ||
+                 targetDataType == (int)LF2ObjectType.HeavyWeapon ||
+                 targetDataType == (int)LF2ObjectType.ThrowWeapon ||
+                 targetDataType == (int)LF2ObjectType.Drink) &&
+                target is LF2WeaponBase weapon)
+            {
+                return weapon.Hit(itr, _character);
+            }
+
+            return targetDataType == (int)LF2ObjectType.SpecialAttack &&
+                   target is LF2SpecialAttack specialAttack &&
+                   specialAttack.Hit(itr, _character);
         }
 
         private static bool IsReleaseInvalidCandidateItrIndex(int itrIndex, LF2FrameData collisionFrame)
@@ -274,9 +121,17 @@ namespace NTSD.Animation.LF2Objects
             switch (itr.kind)
             {
                 case 1:
-                    return TryApplyKind1Grab(_character, target, itr);
+                    return _character.Match?.InteractionWriter.TryApplyGrab(
+                        _character,
+                        target,
+                        itr,
+                        1) ?? false;
                 case 3:
-                    return TryApplyKind3Grab(_character, target, itr);
+                    return _character.Match?.InteractionWriter.TryApplyGrab(
+                        _character,
+                        target,
+                        itr,
+                        3) ?? false;
                 case 2:
                     return HandlePreInteractionKind2(itr, target);
                 case 7:
@@ -284,115 +139,6 @@ namespace NTSD.Animation.LF2Objects
                 default:
                     return false;
             }
-        }
-
-        internal static bool TryApplyKind3Grab(LF2Entity attacker, LF2Entity victim, InteractionArea itr)
-        {
-            if (attacker?.Runtime == null || victim?.Runtime == null || itr == null)
-                return false;
-            if (LF2Entity.ResolveCurrentDataObjectType(victim) != (int)LF2ObjectType.Character)
-                return false;
-
-            int catchingFrame = itr.catchingact != null && itr.catchingact.Length > 0
-                ? itr.catchingact[0]
-                : LF2StandardFrames.Catching;
-            int caughtFrame = itr.caughtact != null && itr.caughtact.Length > 0
-                ? itr.caughtact[0]
-                : LF2StandardFrames.PickedCaught;
-
-            attacker.Runtime.Vx = 0.0;
-            victim.Runtime.Vx = 0.0;
-
-            int attackerXInt = attacker.Runtime.XInt;
-            int attackerYInt = attacker.Runtime.YInt;
-            int victimXInt = victim.Runtime.XInt;
-            bool attackerFacesLeft = attackerXInt > victimXInt;
-            attacker.SwitchDir(attackerFacesLeft ? "left" : "right");
-            victim.SwitchDir(attackerFacesLeft ? "right" : "left");
-
-            attacker.SetCpointRawFramePreserveWait(catchingFrame);
-            victim.SetCpointRawFramePreserveWait(caughtFrame);
-
-            attacker.Runtime.X = attackerXInt;
-            attacker.Runtime.Y = attackerYInt;
-            AlignKind3GrabPair(attacker, victim, attackerXInt, attackerYInt, victimXInt);
-
-            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
-            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
-            attacker.Runtime.CaughtDuration = 300;
-            victim.FallCounter = 0;
-            attacker.RefreshRuntimeSnapshot();
-            victim.RefreshRuntimeSnapshot();
-            return true;
-        }
-
-        internal static bool TryApplyKind1Grab(LF2Entity attacker, LF2Entity victim, InteractionArea itr)
-        {
-            if (attacker?.Runtime == null || victim?.Runtime == null || itr == null)
-                return false;
-            if (LF2Entity.ResolveCurrentDataObjectType(victim) != (int)LF2ObjectType.Character)
-                return false;
-
-            int catchingFrame = itr.catchingact != null && itr.catchingact.Length > 0
-                ? itr.catchingact[0]
-                : LF2StandardFrames.Catching;
-            int caughtFrame = itr.caughtact != null && itr.caughtact.Length > 0
-                ? itr.caughtact[0]
-                : LF2StandardFrames.PickedCaught;
-
-            attacker.Runtime.Vx = 0.0;
-            victim.Runtime.Vx = 0.0;
-
-            int attackerXInt = attacker.Runtime.XInt;
-            int attackerYInt = attacker.Runtime.YInt;
-            int victimXInt = victim.Runtime.XInt;
-            bool attackerFacesLeft = attackerXInt > victimXInt;
-            attacker.SwitchDir(attackerFacesLeft ? "left" : "right");
-            victim.SwitchDir(attackerFacesLeft ? "right" : "left");
-
-            attacker.SetCpointRawFramePreserveWait(catchingFrame);
-            victim.SetCpointRawFramePreserveWait(caughtFrame);
-
-            victim.Runtime.X = victimXInt;
-            victim.Runtime.Y = victim.Runtime.YInt;
-            AlignKind3GrabPair(attacker, victim, attackerXInt, attackerYInt, victimXInt);
-
-            attacker.CaughtSlotIndex = victim.Runtime.SlotIndex;
-            victim.CatcherSlotIndex = attacker.Runtime.SlotIndex;
-            attacker.Runtime.CaughtDuration = 300;
-            victim.FallCounter = 0;
-            attacker.RefreshRuntimeSnapshot();
-            victim.RefreshRuntimeSnapshot();
-            return true;
-        }
-
-        private static void AlignKind3GrabPair(
-            LF2Entity attacker,
-            LF2Entity victim,
-            int attackerXInt,
-            int attackerYInt,
-            int victimXInt)
-        {
-            LF2FrameData attackerFrame = attacker.Frame?.D;
-            LF2FrameData victimFrame = victim.Frame?.D;
-
-            int attackerWact = attackerFrame?.cpoint?.x ?? 0;
-            int victimWact = victimFrame?.cpoint?.x ?? 0;
-            int attackerCx = attackerFrame?.centerx ?? 0;
-            int attackerCy = attackerFrame?.centery ?? 0;
-            int victimCx = victimFrame?.centerx ?? 0;
-            int victimCy = victimFrame?.centery ?? 0;
-
-            victim.Runtime.X = attacker.Runtime.Dir == "right"
-                ? attackerXInt - attackerCx - victimCx + attackerWact + victimWact
-                : attackerCx + victimCx + attackerXInt - attackerWact - victimWact;
-            victim.Runtime.Y = victimCy - attackerCy + attackerYInt;
-
-            double lerp = (victimXInt - victim.Runtime.X) * 0.5;
-            victim.Runtime.X += lerp;
-            attacker.Runtime.X += lerp;
-            victim.Runtime.XInt = (int)victim.Runtime.X;
-            attacker.Runtime.XInt = (int)attacker.Runtime.X;
         }
 
         /// <summary>
@@ -510,10 +256,10 @@ namespace NTSD.Animation.LF2Objects
                     return false;
             }
 
-            if (!LF2CharacterDatInteractionResolver.TryApplyCurrentDatPickupCandidate(
+            if (!(_character.Match?.InteractionWriter.TryApplyPickup(
                     _character,
                     target,
-                    itr.kind))
+                    itr.kind) ?? false))
                 return false;
 
             _character.HeldWeaponReferenceInternal = target;

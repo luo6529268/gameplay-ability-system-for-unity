@@ -10,13 +10,13 @@ namespace NTSD.Test
     public sealed class BattleEcsCharacterStageZPassEditorTests
     {
         [Test]
-        public void DefaultMode_RemainsLegacyWhenPromotionGateFailsAndCannotSwitchAfterResetBoundary()
+        public void DefaultMode_IsDataOrientedAfterCanonicalWriterClosureAndCannotSwitchAfterResetBoundary()
         {
             var world = CreateWorld();
 
             Assert.That(
                 world.BattleEcsCharacterStageZPassModeForDiagnostics,
-                Is.EqualTo(BattleEcsCharacterStageZPassMode.Legacy));
+                Is.EqualTo(BattleEcsCharacterStageZPassMode.DataOriented));
 
             world.AdvanceBattleFlowTick(1);
             Assert.Throws<InvalidOperationException>(() =>

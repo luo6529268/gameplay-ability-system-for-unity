@@ -4,6 +4,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Extensions;
 using NTSD.App;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Tools;
 using UnityEngine;
 
@@ -57,6 +58,12 @@ namespace NTSD.Animation.LF2Objects
         // 对齐 C++ release 0x4164BD：gravity 在 y 更新后、新 y<0 时才加入 vy
         protected double _gravityToAdd; // P0-f-2a: double sim gravity accumulator
         protected double _lastLandingVyBeforeClamp; // P0-f-2b B1: float→double (landing Vy snapshot, no truncation)
+
+        internal bool LateBreakEffectsHandledForSnapshot =>
+            _lateBreakEffectsHandled;
+        internal double GravityToAddForSnapshot => _gravityToAdd;
+        internal double LastLandingVyBeforeClampForSnapshot =>
+            _lastLandingVyBeforeClamp;
 
         // ========== 武器数据 ==========
         public int WeaponDropHurt
@@ -468,7 +475,7 @@ namespace NTSD.Animation.LF2Objects
         public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans)
         {
             Frame.PN = Frame.N;
-            Frame.N = targetFrameId;
+            WriteCurrentFrameId(targetFrameId);
 
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null)
@@ -905,10 +912,8 @@ namespace NTSD.Animation.LF2Objects
             if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = FrameCache.GetFrameDataById(frameId);
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             AttackingCounter = 0;
             if (Frame.D != null && Trans != null)
                 Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next, waitCounter);
@@ -937,6 +942,7 @@ namespace NTSD.Animation.LF2Objects
                     _gravityToAdd = 0f;
                     WeaponFlightPhysics();
                     bool landed = CharacterMechanics.WeaponDynamics(Runtime, _gravityToAdd, out _lastLandingVyBeforeClamp);
+                    RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
 
                     if (Runtime.Y < -0.0001)
                         OnInFlightFrameUpdate();
@@ -965,6 +971,20 @@ namespace NTSD.Animation.LF2Objects
             // Step 9 consumes the candidates frozen by step 6. Held/link state,
             // frame delay, and attack-exempt gates belong to collection, not here.
             Interaction();
+        }
+
+        internal override bool TryGetBattleHitCandidateConsumer(
+            BattleHitExecutionPass pass,
+            out IBattleHitCandidateConsumer consumer)
+        {
+            if (pass == BattleHitExecutionPass.Object &&
+                !UsesCharacterDatInteractionPhase())
+            {
+                consumer = _interactionResolver;
+                return true;
+            }
+
+            return base.TryGetBattleHitCandidateConsumer(pass, out consumer);
         }
 
         private void RunDiePhase()

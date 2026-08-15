@@ -54,7 +54,11 @@ namespace NTSD.Simulation
         RenderBuildCommandsEntity = 37,
         RenderBuildCommandsOverlay = 38,
         RenderBuildCommandsHitRecord = 39,
-        Count = 40,
+        FrameAdvanceTransit = 40,
+        FrameAdvanceEntityUpdate = 41,
+        FrameAdvanceRuntimeSnapshot = 42,
+        FrameAdvanceState9998Cleanup = 43,
+        Count = 44,
     }
 
     /// <summary>
@@ -438,6 +442,14 @@ namespace NTSD.Simulation
                     return "Render/BeginFrame/BuildCommands/Overlay";
                 case BattleTickDetailPhase.RenderBuildCommandsHitRecord:
                     return "Render/BeginFrame/BuildCommands/HitRecord";
+                case BattleTickDetailPhase.FrameAdvanceTransit:
+                    return "FrameAdvance/Transit";
+                case BattleTickDetailPhase.FrameAdvanceEntityUpdate:
+                    return "FrameAdvance/EntityUpdate";
+                case BattleTickDetailPhase.FrameAdvanceRuntimeSnapshot:
+                    return "FrameAdvance/RefreshRuntimeSnapshot";
+                case BattleTickDetailPhase.FrameAdvanceState9998Cleanup:
+                    return "FrameAdvance/State9998Cleanup";
                 default:
                     return string.Empty;
             }
@@ -520,7 +532,11 @@ namespace NTSD.Simulation
         IndexedCanonicalCommitApply = 23,
         IndexedCanonicalNearestSearch = 24,
         IndexedCanonicalSpecialSearch = 25,
-        Count = 26,
+        ActionProgressCapture = 26,
+        ActionComboDirectResolve = 27,
+        ActionReleaseResolve = 28,
+        ActionProgressCommit = 29,
+        Count = 30,
     }
 
     /// <summary>
@@ -687,6 +703,14 @@ namespace NTSD.Simulation
                     return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalKernel/NearestSearch";
                 case BattleAiInputDetailPhase.IndexedCanonicalSpecialSearch:
                     return "CharacterInput/AI/RemainingAiDecision/IndexedCanonicalKernel/SpecialSearch";
+                case BattleAiInputDetailPhase.ActionProgressCapture:
+                    return "CharacterInput/AI/ComboUpdate/ProgressCapture";
+                case BattleAiInputDetailPhase.ActionComboDirectResolve:
+                    return "CharacterInput/AI/ComboUpdate/ComboDirectResolve";
+                case BattleAiInputDetailPhase.ActionReleaseResolve:
+                    return "CharacterInput/AI/ComboUpdate/ReleaseResolve";
+                case BattleAiInputDetailPhase.ActionProgressCommit:
+                    return "CharacterInput/AI/ComboUpdate/ProgressCommit";
                 default:
                     return string.Empty;
             }

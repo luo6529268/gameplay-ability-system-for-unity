@@ -17,6 +17,7 @@ namespace NTSD.Animation.LF2Objects
     public class LF2Weapon : LF2WeaponBase
     {
         private int _poolWeaponType;
+        internal int PoolWeaponTypeForSnapshot => _poolWeaponType;
         private readonly InteractionArea landingSplashInteraction =
             new InteractionArea();
         private readonly InteractionArea heldAttackInteraction =
@@ -403,6 +404,12 @@ namespace NTSD.Animation.LF2Objects
                     return false;
             }
 
+            if (itr.kind == 9)
+            {
+                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+                return true;
+            }
+
             if (itr.kind == 14)
             {
                 ApplyKind14DirectionalBlockFrom(attacker);
@@ -440,8 +447,12 @@ namespace NTSD.Animation.LF2Objects
             if (itr.kind != 0)
                 return false;
 
-            ApplyHitEffects(itr, attacker);
-            return true;
+            SimulationWorld world = Match ?? attacker.Match;
+            return world?.DamageWriter.ApplyWeaponDamage(
+                world,
+                attacker,
+                this,
+                itr) == true;
         }
 
         private void ApplyWeaponAirStep(double vyStep)
@@ -458,248 +469,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 Runtime.Vy -= vyStep;
                 KnockbackVy = Runtime.Vy;
-            }
-        }
-
-        // 这里真正写入受击结果：
-        // 扣耐久、设置 vrest、计算击退、切受击帧，并处理攻击者的后摇/僵直。
-        private void ApplyHitEffects(InteractionArea itr, LF2Entity attacker)
-        {
-            int wt = GetCurrentDataObjectTypeForSimulation();
-            bool lightThrow = wt == 1;
-            bool heavyLike = wt == 2;
-            bool flyingA = wt == 4;
-            bool flyingB = wt == 6;
-            bool flyingLike = flyingA || flyingB;
-            bool damageableWeapon = lightThrow || heavyLike || flyingLike;
-            int attackerKey = attacker?.Runtime?.SlotIndex ?? -1;
-            int itrArest = itr.arest < 4 && itr.vrest == 0 ? 4 : itr.arest;
-
-            if (damageableWeapon)
-            {
-                HitConfirm2 = 1;
-                if (itr.bdefend == 100)
-                    FlightCounter = -1;
-                else
-                    FlightCounter -= itr.injury;
-            }
-
-            if (attacker != null)
-            {
-                RelationTeam = attacker.RelationTeam;
-
-                // ── C# baseline: ApplyObjectHurtTail + ApplyStandardDamageKnockbackX ──
-                if (wt != 2 || itr.fall > 40)
-                    HitCount++;
-
-                FallCounter += itr.fall != 0 ? itr.fall : 20;
-
-                if (damageableWeapon)
-                    FallCounter = 80;
-
-                bool knockback = FallCounter > 60 && wt != (int)LF2ObjectType.SpecialAttack;
-
-                if (!flyingB)
-                    LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
-                LF2HitResolveRuntimeData.RecordStandardHurtSounds(attacker, this, itr, knockback);
-
-                // Step 2: ApplyStandardDamageKnockbackX —— 计算 victim.KnockbackVx
-                bool attackerState2000 = (attacker.Frame?.D?.state ?? -1) == LF2States.HeavyWeaponInSky;
-                float dvx = itr.dvx;
-                bool skipOid100KnockbackTail =
-                    knockback && Runtime.Vx > -5f && Runtime.Vx < 5f && dvx == 0f;
-
-                // C# baseline: knockback 且 Vx 接近0 且 dvx==0 时用固定速度
-                if (knockback && Runtime.Vx > -5f && Runtime.Vx < 5f && dvx == 0f)
-                {
-                    KnockbackVx += attackerState2000
-                        ? 5f
-                        : (attacker.Runtime.Dir == "right" ? 5f : -5f);
-                }
-                // C# baseline: state=2000 且有 dvx
-                else if (attackerState2000 && dvx != 0f)
-                {
-                    KnockbackVx += attacker.Runtime.X < Runtime.X ? dvx : -dvx;
-                }
-                // C# baseline: FlyingA/FlyingB 特殊逻辑——根据当前 Vx 动态调整
-                else if (flyingLike)
-                {
-                    double scaled = System.Math.Abs(Runtime.Vx) * 0.55f;
-
-                    if (dvx > scaled)
-                    {
-                        KnockbackVx += attacker.Runtime.Dir == "right" ? dvx : -dvx;
-                    }
-                    else if (attacker.Runtime.Dir == "right")
-                    {
-                        if (KnockbackVx > 0f)
-                            KnockbackVx += dvx;
-                        else if (Runtime.Vx < 0f)
-                            KnockbackVx = (float)(-scaled);
-                    }
-                    else
-                    {
-                        if (KnockbackVx < 0f)
-                            KnockbackVx -= dvx;
-                        else if (Runtime.Vx > 0f)
-                            KnockbackVx = (float)(-scaled);
-                    }
-                }
-                // C# baseline: effect=22/23 特殊处理
-                else if (itr.effect == 22 || itr.effect == 23)
-                {
-                    KnockbackVx += Runtime.X <= attacker.Runtime.X ? dvx : -dvx;
-                }
-                // C# baseline: 常规 dvx 处理
-                else if (dvx != 0f)
-                {
-                    KnockbackVx += attacker.Runtime.Dir == "right" ? dvx : -dvx;
-                }
-
-                if (!skipOid100KnockbackTail)
-                    LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(this);
-
-                // Step 3: knockback 时设置击飞速度和帧；否则走原有轻/重击帧逻辑
-                if (knockback)
-                {
-                    if ((wt != (int)LF2ObjectType.HeavyWeapon &&
-                         wt != (int)LF2ObjectType.SpecialAttack) ||
-                        itr.fall > 40)
-                    {
-                        KnockbackVy += itr.dvy != 0 ? (float)itr.dvy : -7f;
-                    }
-                    if ((int)(KnockbackVy + Runtime.YInt) > 0) KnockbackVy = 12f;
-
-                    int facing = Runtime.Dir == "left" ? 1 : 0;
-                    int hitFrame = facing == 0
-                        ? (KnockbackVx <= 0f ? 180 : 186)
-                        : (KnockbackVx >= 0f ? 180 : 186);
-                    SetFrameDirect(hitFrame);
-
-                    FallCounter = 0; // C# baseline: victim.Fall = 80 then victim.Fall = 0
-                }
-                else
-                {
-                    // 非 knockback：保留原有帧逻辑
-                    if (heavyLike)
-                    {
-                        SwitchDir(attacker.Runtime.Dir ?? Runtime.Dir);
-                        if (itr.fall <= 40 && GetRuntimeYInt() >= 0 && itr.effect != 4)
-                            ImmediateFrame(20);
-                        else
-                            ImmediateFrame(RandInt(0, 6));
-                    }
-                    else if (lightThrow || flyingLike)
-                    {
-                        ImmediateFrame(RandInt(0, 16));
-                    }
-                }
-
-                HitStateCount = 45;
-                if (attacker.FrameDelay >= 0)
-                    attacker.FrameDelay = 3;
-                FrameDelay = -3;
-                attacker.AttackExempt = itrArest;
-                if (attacker.ItrRest != null)
-                    attacker.ItrRest.Arest = itrArest;
-                if (attackerKey >= 0 && itr.vrest > 0)
-                    ItrRest?.SetVrest(attackerKey, itr.vrest);
-            }
-
-            ApplyAttackerResponse(attacker);
-            if (attacker != null && itr.kind == 0)
-            {
-                ApplyKind0VictimObjectTail(itr, attacker);
-                RecordKind0Hit(attacker, itr);
-            }
-        }
-
-        private void ApplyKind0VictimObjectTail(InteractionArea itr, LF2Entity attacker)
-        {
-            int wt = GetCurrentDataObjectTypeForSimulation();
-            int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
-            if (wt == 1)
-            {
-                HitConfirm2 = 1;
-                SetFrameDirect(RandInt(0, 16));
-                RelationTeam = attacker.RelationTeam;
-                return;
-            }
-
-            if (wt == 4 || wt == 6)
-            {
-                if (attackerSlot >= 0)
-                    attacker.ItrRest?.SetVrest(attackerSlot, 30);
-                HitConfirm2 = 1;
-                SetFrameDirect(RandInt(0, 16));
-                RelationTeam = attacker.RelationTeam;
-                return;
-            }
-
-            if (wt == 2)
-            {
-                HitConfirm2 = 1;
-                int vrest = itr.fall <= 40 && itr.effect != 4 ? 3 : 19;
-                if (attackerSlot >= 0 && attacker.Runtime.LinkState == -2)
-                {
-                    int holderSlot = attacker.Runtime.HolderStableId;
-                    LF2Entity holder = Match?.FindEntityByRuntimeSlotForQuery(holderSlot);
-                    holder?.ItrRest?.SetVrest(attackerSlot, vrest);
-                }
-                else if (attackerSlot >= 0 &&
-                         attacker.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.HeavyWeapon)
-                {
-                    attacker.ItrRest?.SetVrest(attackerSlot, vrest);
-                }
-
-                SwitchDir(attacker.Runtime.Dir);
-                if (itr.fall <= 40 && GetRuntimeYInt() >= 0 && itr.effect != 4)
-                    SetFrameDirect(20);
-                else
-                    SetFrameDirect(RandInt(0, 6));
-                RelationTeam = attacker.RelationTeam;
-            }
-        }
-
-        // 武器受击后，攻击者自己也可能被反弹、减速或改帧。
-        private void ApplyAttackerResponse(LF2Entity attacker)
-        {
-            if (attacker?.Runtime == null) return;
-
-            int attackerState = attacker.Frame?.D?.state ?? -1;
-            if (attackerState == LF2States.WeaponThrowing)
-            {
-                attacker.ImmediateFrame(RandInt(0, 16));
-
-                // C# baseline: attacker.Vx = victim.KnockbackVx * -0.5
-                // KnockbackVx 已在 ApplyHitEffects 里按 ApplyStandardDamageKnockbackX 正确累积
-                attacker.Runtime.Vx = -(KnockbackVx * 0.5f);
-                attacker.Runtime.Vy = -4f;
-
-                int attackerWt = attacker.GetCurrentDataObjectTypeForSimulation();
-                if (attackerWt == 4 && GetCurrentDataObjectTypeForSimulation() == 4)
-                    attacker.KnockbackVx = -KnockbackVx;
-            }
-
-            attackerState = attacker.Frame?.D?.state ?? -1;
-            if (attackerState == LF2States.HeavyWeaponInSky)
-            {
-                bool flyingToward = (attacker.Runtime.X > Runtime.X && attacker.Runtime.Vx < 0f)
-                                 || (attacker.Runtime.X < Runtime.X && attacker.Runtime.Vx > 0f);
-                if (flyingToward)
-                {
-                    attacker.Runtime.Vx *= 0.4f;
-                    attacker.Runtime.Vz *= 0.4f;
-                }
-            }
-
-            attackerState = attacker.Frame?.D?.state ?? -1;
-            if (attackerState == LF2States.ProjectileFlying)
-            {
-                attacker.ImmediateFrame(10);
-                attacker.AttackingCounter = 0;
-                attacker.Runtime.Vx = 0f;
-                attacker.Runtime.Vz = attacker.Frame?.D?.dvz ?? 0;
             }
         }
 

@@ -184,6 +184,44 @@ namespace NTSD.Simulation.Presentation
             return true;
         }
 
+        public static bool TryGetComCompositeLayout(
+            in BattleEntityOverlayRuntimeSlot entity,
+            out int labelX,
+            out int labelY,
+            out int sheetIndex)
+        {
+            if (entity.HP2Orig > 1 || entity.HitStop <= -25)
+            {
+                labelX = 0;
+                labelY = 0;
+                sheetIndex = 0;
+                return false;
+            }
+
+            if (IsSpecialCom(in entity))
+            {
+                sheetIndex = 5;
+                ResolveLabelOrigin(in entity, 3, out labelX, out labelY);
+                return true;
+            }
+
+            bool usesGenericCom =
+                (entity.SlotIndex < 0 || entity.SlotIndex >= SlotCount) &&
+                (entity.SlotIndex < 20 ||
+                 entity.RelationTeam != 5 && entity.ObjType == 0);
+            if (!usesGenericCom)
+            {
+                labelX = 0;
+                labelY = 0;
+                sheetIndex = 0;
+                return false;
+            }
+
+            sheetIndex = ResolveRelationSheet(entity.RelationTeam);
+            ResolveLabelOrigin(in entity, 3, out labelX, out labelY);
+            return true;
+        }
+
         private static int GetLabelLength(
             in BattleEntityOverlayRuntimeSlot entity,
             char[,] slotLabelChars,

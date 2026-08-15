@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        private const int SchemaVersion = 2;
+        internal const int CurrentSchemaVersion = 3;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -161,7 +161,7 @@ namespace NTSD.Simulation
                 return 0UL;
 
             builder.Reset();
-            builder.AddInt32(SchemaVersion);
+            builder.AddInt32(CurrentSchemaVersion);
             builder.AddInt32(tickIndex);
             AppendInput(frameInput, tickIndex);
             AppendMetadata(world, tickIndex);
@@ -221,6 +221,9 @@ namespace NTSD.Simulation
             builder.AddInt32(match?.BattleGameModeId ?? 0);
             builder.AddInt32(match?.BackgroundId ?? -1);
             builder.AddInt32(match?.Difficulty ?? 2);
+            builder.AddInt32(match?.StageIdx ?? 0);
+            builder.AddInt32(match?.RandomStage ?? 0);
+            builder.AddInt32(match?.RuntimeStageCount ?? 0);
             builder.AddInt32(match?.Seed ?? 0);
             builder.AddBoolean(match?.PpMode ?? true);
 
@@ -245,6 +248,9 @@ namespace NTSD.Simulation
             builder.AddInt32(flow?.AiRand20 ?? 0);
             builder.AddInt32(flow?.AiMoveMode ?? 0);
             builder.AddInt32(flow?.AiStageTargetX ?? 0);
+            builder.AddInt32(flow?.BattleExitCountdown ?? 0);
+            builder.AddInt32(flow?.RouteOutRequest ?? 0);
+            builder.AddInt32(flow?.Mode2Request ?? 0);
             builder.AddInt32(flow?.BattleStepMode ?? 0);
             builder.AddInt32(flow?.BattleStepGate ?? 0);
             builder.AddInt32(flow?.DjaGuardGlobal44F224 ?? 0);
@@ -274,6 +280,28 @@ namespace NTSD.Simulation
             builder.AddInt32(results?.TeamCount ?? 0);
             builder.AddIntArray(results?.TeamIds);
             builder.AddInt32(results?.PendingHostAction ?? 0);
+            builder.AddInt32(results?.Cursor ?? 6);
+            builder.AddInt32(results?.SettingsCursor ?? 2);
+            builder.AddInt32(results?.TableCursor ?? 10);
+            builder.AddInt32(results?.TableSide ?? 0);
+            builder.AddInt32(results?.ResultSubcursor ?? 2);
+            builder.AddIntArray(results?.ResultMultiplier);
+            AppendFixedMatrix(results?.ResultRow1Values, 2, 11);
+            AppendFixedMatrix(results?.ResultRow2Values, 2, 11);
+            AppendFixedMatrix(results?.ResultCommittedTotal, 2, 11);
+            AppendFixedMatrix(results?.ResultCommittedHp, 2, 11);
+            builder.AddIntArray(results?.ResultSelectedTroop);
+            builder.AddIntArray(results?.ResultSelectedIcon);
+            builder.AddIntArray(results?.ResultTableTop);
+            builder.AddIntArray(results?.ResultTableBottom);
+            builder.AddInt32(results?.ResultTableSavedTop ?? -1);
+            builder.AddInt32(results?.ResultTableSavedBottom ?? -1);
+            AppendFixedMatrix(results?.ResultBackupRow1Values, 2, 11);
+            AppendFixedMatrix(results?.ResultBackupRow2Values, 2, 11);
+
+            builder.AddBoolean(battle?.ReserveOwnerValid ?? false);
+            AppendFixedMatrix(battle?.ReserveCommittedTotal, 2, 11);
+            AppendFixedMatrix(battle?.ReserveCommittedHp, 2, 11);
 
             builder.AddInt32(progression?.StageSeriesIdx ?? 0);
             builder.AddInt32(progression?.WaveIdx ?? -1);
@@ -292,6 +320,18 @@ namespace NTSD.Simulation
             builder.AddInt32(runtimeSlotListCount);
             for (int index = 0; index < runtimeSlotListCount; index++)
                 builder.AddIntArray(runtimeSlots[index]);
+        }
+
+        private void AppendFixedMatrix(int[,] matrix, int rows, int columns)
+        {
+            bool valid = matrix != null &&
+                         matrix.GetLength(0) == rows &&
+                         matrix.GetLength(1) == columns;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                    builder.AddInt32(valid ? matrix[row, column] : 0);
+            }
         }
 
         private void AppendSlots(SimulationWorld world)

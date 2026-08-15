@@ -1227,9 +1227,9 @@ namespace NTSD.Simulation
                 ("match", DictionaryOf(
                     ("difficulty", (object)match.Difficulty),
                     ("gameMode", match.BattleGameModeId),
-                    ("randomStage", match.BackgroundId),
+                    ("randomStage", match.RandomStage),
                     ("seed", match.Seed),
-                    ("stageIdx", progression.StageSeriesIdx))),
+                    ("stageIdx", match.StageIdx))),
                 ("roster", DictionaryOf(
                     ("activeSlotCount", (object)roster.ActiveSlotCount),
                     ("slots", rosterSlots))),
@@ -1274,7 +1274,7 @@ namespace NTSD.Simulation
                 ("frameMod12", flow.FrameMod12),
                 ("frameToggle", flow.FrameToggle),
                 ("gameMode", match.BattleGameModeId),
-                ("gameMode2", match.LocalGameModeId),
+                ("gameMode2", flow.Mode2Request),
                 ("gameTick", flow.CurrentTickIndex),
                 ("humanInputPolledExternally", flow.HumanInputPolledExternally),
                 ("initStats", 0),
@@ -1283,13 +1283,13 @@ namespace NTSD.Simulation
                 ("objectCount", ObjectCount),
                 ("paused", false),
                 ("ppMode", PpMode),
-                ("randomStage", match.BackgroundId),
-                ("reserveCommittedHp", ZeroMatrix(2, 11)),
-                ("reserveCommittedTotal", ZeroMatrix(2, 11)),
+                ("randomStage", match.RandomStage),
+                ("reserveCommittedHp", CloneMatrix(battle.ReserveCommittedHp, 2, 11)),
+                ("reserveCommittedTotal", CloneMatrix(battle.ReserveCommittedTotal, 2, 11)),
                 ("reserveLiveCount", ZeroMatrix(2, 11)),
                 ("reserveMissingCount", ZeroMatrix(2, 11)),
                 ("reserveOidTable", new[] { 30, 31, 33, 34, 39, 32, 35, 36, 37, 122, 123 }),
-                ("reserveOwnerValid", false),
+                ("reserveOwnerValid", battle.ReserveOwnerValid),
                 ("results", DictionaryOf(
                     ("battleEndPhase", (object)results.BattleEndPhase),
                     ("hadBoth", results.HadBoth),
@@ -1302,7 +1302,7 @@ namespace NTSD.Simulation
                     ("winner", results.Winner))),
                 ("runtime", runtimeDomain),
                 ("stageAiInputCarrier", 0),
-                ("stageIdx", progression.StageSeriesIdx),
+                ("stageIdx", match.StageIdx),
                 ("stageProgression", DictionaryOf(
                     ("round", (object)progression.Round),
                     ("roundMax", progression.RoundMax),
@@ -1474,6 +1474,25 @@ namespace NTSD.Simulation
             var result = new object[rows];
             for (int i = 0; i < rows; i++)
                 result[i] = new int[columns];
+            return result;
+        }
+
+        private static object[] CloneMatrix(int[,] values, int rows, int columns)
+        {
+            var result = new object[rows];
+            bool valid = values != null &&
+                         values.GetLength(0) == rows &&
+                         values.GetLength(1) == columns;
+            for (int row = 0; row < rows; row++)
+            {
+                var copy = new int[columns];
+                if (valid)
+                {
+                    for (int column = 0; column < columns; column++)
+                        copy[column] = values[row, column];
+                }
+                result[row] = copy;
+            }
             return result;
         }
 

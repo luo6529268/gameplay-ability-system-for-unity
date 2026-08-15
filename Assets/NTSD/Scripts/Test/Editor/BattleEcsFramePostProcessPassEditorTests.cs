@@ -49,6 +49,52 @@ namespace NTSD.Test
             Assert.That(entity.Runtime.KnockbackVx, Is.Zero);
             Assert.That(entity.Runtime.KnockbackVy, Is.Zero);
             Assert.That(entity.Runtime.KnockbackVz, Is.Zero);
+            Assert.That(
+                world.LastFramePostProcessRuntimeSnapshotSkipCountForDiagnostics,
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ForcedLegacyRuntimeSnapshot_DisablesExactCharacterPostFrameSkip()
+        {
+            var world = new SimulationWorld
+            {
+                ForceLegacyPostFrameRuntimeSnapshotForDiagnostics = true,
+            };
+            LF2Character entity = RegisterCharacter(world, 50);
+            ConfigureRuntime(entity.Runtime, 0, 2, 0, 0, 0, 9, -6, 3);
+
+            world.FramePostProcessAll();
+
+            Assert.That(
+                world.LastFramePostProcessRuntimeSnapshotSkipCountForDiagnostics,
+                Is.Zero);
+            Assert.That(entity.Runtime.Vx, Is.EqualTo(6.0));
+            Assert.That(entity.Runtime.Vy, Is.EqualTo(-4.0));
+            Assert.That(entity.Runtime.Vz, Is.EqualTo(2.0));
+        }
+
+        [Test]
+        public void EntityPostFrameTail_ExactCharacterSkipsOnlyRedundantWideSnapshot()
+        {
+            var world = new SimulationWorld();
+            LF2Character entity = RegisterCharacter(world, 50);
+            entity.Health.HP = 400;
+            entity.Health.HPBound = 500;
+            entity.HealTimer = 1001;
+            entity.CatchTimer = 0;
+
+            world.EntityPostFrameTailAll(1);
+
+            Assert.That(entity.HealTimer, Is.Zero);
+            Assert.That(entity.Runtime.HealTimer, Is.Zero);
+            Assert.That(entity.Runtime.TransientMp, Is.Zero);
+            Assert.That(entity.Runtime.TransientMp2, Is.EqualTo(1000));
+            Assert.That(entity.Runtime.TransientMp3, Is.EqualTo(1000));
+            Assert.That(entity.Runtime.TransientMp4, Is.EqualTo(1000));
+            Assert.That(
+                world.LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics,
+                Is.EqualTo(1));
         }
 
         [Test]

@@ -1,5 +1,6 @@
 using System;
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Simulation
 {
@@ -344,6 +345,7 @@ namespace NTSD.Simulation
         private int[] aiUnifiedSnapshotLegacyMoveModeFirst10Z;
         private bool aiUnifiedSnapshotExecutionCommittedThisPass;
         private bool aiUnifiedSnapshotExecutionConsumerStartedThisPass;
+        private bool aiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics = true;
         private ulong aiUnifiedSnapshotPassEpoch;
         private bool aiUnifiedSnapshotPassAvailable;
         private bool aiUnifiedSnapshotPassFailureRecorded;
@@ -494,6 +496,21 @@ namespace NTSD.Simulation
             }
         }
 
+        public bool AiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics
+        {
+            get => aiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics;
+            set
+            {
+                if (_ticking)
+                {
+                    throw new InvalidOperationException(
+                        "Unified AI no-pending refresh mode cannot change while a simulation pass is running.");
+                }
+
+                aiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics = value;
+            }
+        }
+
         public int AiDecisionIndexedCanonicalFullOracleSampleInterval
         {
             get => aiDecisionIndexedCanonicalFullOracleSampleInterval;
@@ -553,8 +570,29 @@ namespace NTSD.Simulation
         public long AiUnifiedSnapshotShadowMutationWitnessComparedCountForDiagnostics { get; private set; }
         public long AiUnifiedSnapshotShadowRefreshDerivedFullLoopEntryVisitCountForDiagnostics { get; private set; }
         public long AiUnifiedSnapshotExecutionBuildCountForDiagnostics { get; private set; }
+        public long AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics { get; private set; }
+        public long AiUnifiedSnapshotExecutionRollForwardDirtySlotCountForDiagnostics
+        {
+            get;
+            private set;
+        }
         public long AiUnifiedSnapshotExecutionSlotVisitCountForDiagnostics { get; private set; }
+        public long AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics
+        {
+            get;
+            private set;
+        }
         public long AiUnifiedSnapshotExecutionRefreshCountForDiagnostics { get; private set; }
+        public long AiUnifiedSnapshotExecutionNoPendingRefreshSkipCountForDiagnostics
+        {
+            get;
+            private set;
+        }
+        public long AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics
+        {
+            get;
+            private set;
+        }
         public long AiUnifiedSnapshotExecutionReadCountForDiagnostics { get; private set; }
         public long AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics { get; private set; }
         public long AiUnifiedSnapshotExecutionPreCommitFailureCountForDiagnostics { get; private set; }
@@ -684,8 +722,13 @@ namespace NTSD.Simulation
             }
 
             AiUnifiedSnapshotExecutionBuildCountForDiagnostics = 0;
+            AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics = 0;
+            AiUnifiedSnapshotExecutionRollForwardDirtySlotCountForDiagnostics = 0;
             AiUnifiedSnapshotExecutionSlotVisitCountForDiagnostics = 0;
+            AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics = 0;
             AiUnifiedSnapshotExecutionRefreshCountForDiagnostics = 0;
+            AiUnifiedSnapshotExecutionNoPendingRefreshSkipCountForDiagnostics = 0;
+            AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics = 0;
             AiUnifiedSnapshotExecutionReadCountForDiagnostics = 0;
             AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics = 0;
             AiUnifiedSnapshotExecutionPreCommitFailureCountForDiagnostics = 0;
@@ -980,12 +1023,29 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalKernel);
             try
             {
-                indexedAvailable = AiDecisionKernel.TryEvaluate(
-                    aiDecisionIndexedSnapshot,
-                    AiDecisionEvaluationPolicy.Indexed,
-                    captureOracleTrace,
-                    diagnostics,
-                    ref indexedWitness);
+                if (aiDecisionOwnedInputMode ==
+                        AiDecisionOwnedInputMode.CanonicalStoreDirect &&
+                    aiExecutionProfile ==
+                        BattleAiExecutionProfile.DataOrientedCanonical)
+                {
+                    indexedAvailable =
+                        battleCharacterInputWriter.TryEvaluateCanonicalDecision(
+                            self.Runtime,
+                            aiDecisionIndexedSnapshot,
+                            AiDecisionEvaluationPolicy.Indexed,
+                            captureOracleTrace,
+                            diagnostics,
+                            ref indexedWitness);
+                }
+                else
+                {
+                    indexedAvailable = AiDecisionKernel.TryEvaluate(
+                        aiDecisionIndexedSnapshot,
+                        AiDecisionEvaluationPolicy.Indexed,
+                        captureOracleTrace,
+                        diagnostics,
+                        ref indexedWitness);
+                }
             }
             catch (Exception exception)
             {
@@ -1010,6 +1070,16 @@ namespace NTSD.Simulation
             {
                 AiDecisionIndexedCanonicalFullOracleSampleCountForDiagnostics++;
                 aiDecisionSharedSnapshot.CopyOwnedFrom(aiDecisionIndexedSnapshot);
+                if (aiDecisionOwnedInputMode ==
+                        AiDecisionOwnedInputMode.CanonicalStoreDirect &&
+                    !battleCharacterInputWriter.TryCaptureCanonicalState(
+                        self.Runtime,
+                        out aiDecisionSharedSnapshot.Input))
+                {
+                    RecordAiDecisionIndexedCanonicalFallback(
+                        AiDecisionAvailability.SnapshotMissing);
+                    return false;
+                }
                 AiDecisionWitness fullWitness = default;
                 bool fullAvailable = AiDecisionKernel.TryEvaluate(
                     aiDecisionSharedSnapshot,
@@ -1065,7 +1135,9 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalCommitApply);
             try
             {
-                ApplyAiDecisionIndexedCanonicalCommit(self.Runtime, indexedWitness);
+                battleAiInputWriter.CommitIndexedCanonicalDecision(
+                    self.Runtime,
+                    indexedWitness);
             }
             finally
             {
@@ -1091,6 +1163,27 @@ namespace NTSD.Simulation
                 return failure;
             }
 #endif
+            if (AiUnifiedSnapshotExecutionOwnsCurrentPass &&
+                aiUnifiedSnapshotExecutionCommittedThisPass &&
+                aiUnifiedSnapshotPublishedState != null &&
+                ReferenceEquals(
+                    snapshot,
+                    aiUnifiedSnapshotPublishedState.IndexedSnapshot) &&
+                ReferenceEquals(
+                    snapshot.Rows,
+                    aiUnifiedSnapshotPublishedState.Rows) &&
+                self?.Runtime != null &&
+                Rng != null &&
+                Runtime?.Flow != null)
+            {
+                // The unified pass owns the immutable row snapshot for the whole
+                // synchronous kernel call. Capture already proved the self handle,
+                // and the value-only kernel cannot mutate occupancy or selected
+                // handles before this commit. Repeating those checks here only
+                // rescans the same generation/identity data for every AI.
+                return AiDecisionAvailability.Available;
+            }
+
             AiSoASensingRows rows = aiDecisionSharedRows;
             if (!aiDecisionSharedPassAvailable || rows == null ||
                 !ReferenceEquals(snapshot.Rows, rows) ||
@@ -1173,65 +1266,6 @@ namespace NTSD.Simulation
                 }
             }
             return AiDecisionAvailability.Available;
-        }
-
-        private void ApplyAiDecisionIndexedCanonicalCommit(
-            NTSDEntityRuntime runtime,
-            in AiDecisionWitness witness)
-        {
-            ref readonly AiDecisionInputState input = ref witness.Input;
-            int[] history = runtime.InputHistory;
-            history[0] = input.History0;
-            history[1] = input.History1;
-            history[2] = input.History2;
-            history[3] = input.History3;
-            history[4] = input.History4;
-            history[5] = input.History5;
-            runtime.CdAttack = input.CdAttack;
-            runtime.CdJump = input.CdJump;
-            runtime.CdDefend = input.CdDefend;
-            runtime.CdDefendLock = input.CdDefendLock;
-            runtime.CdRight = input.CdRight;
-            runtime.CdLeft = input.CdLeft;
-            runtime.CdUp = input.CdUp;
-            runtime.CdDown = input.CdDown;
-            runtime.ComboDra = input.ComboDra;
-            runtime.ComboDla = input.ComboDla;
-            runtime.ComboDua = input.ComboDua;
-            runtime.ComboDda = input.ComboDda;
-            runtime.ComboDrj = input.ComboDrj;
-            runtime.ComboDlj = input.ComboDlj;
-            runtime.ComboDuj = input.ComboDuj;
-            runtime.ComboDdj = input.ComboDdj;
-            runtime.ComboDja = input.ComboDja;
-            runtime.PrevUp = input.PrevUp;
-            runtime.PrevDown = input.PrevDown;
-            runtime.PrevLeft = input.PrevLeft;
-            runtime.PrevRight = input.PrevRight;
-            runtime.PrevJump = input.PrevJump;
-            runtime.PrevDefend = input.PrevDefend;
-            runtime.PrevAttack = input.PrevAttack;
-            runtime.KeyUp = input.KeyUp;
-            runtime.KeyDown = input.KeyDown;
-            runtime.KeyLeft = input.KeyLeft;
-            runtime.KeyRight = input.KeyRight;
-            runtime.KeyAttack = input.KeyAttack;
-            runtime.KeyJump = input.KeyJump;
-            runtime.KeyDefend = input.KeyDefend;
-            runtime.Unk360 = input.Unk360;
-            runtime.Unk3FC = input.Unk3FC;
-            runtime.Unk400 = input.Unk400;
-
-            ref readonly AiDecisionWorldState world = ref witness.World;
-            BattleFlowRuntimeState flow = Runtime.Flow;
-            flow.AiDifficulty = world.FlowAiDifficulty;
-            flow.AiRand3 = world.FlowRand3;
-            flow.AiRand5 = world.FlowRand5;
-            flow.AiRand15 = world.FlowRand15;
-            flow.AiRand20 = world.FlowRand20;
-            flow.AiMoveMode = world.FlowMoveMode;
-            flow.AiStageTargetX = world.FlowStageTargetX;
-            Rng.RestoreState(witness.RngState, witness.RngCalls);
         }
 
         private void RecordAiDecisionIndexedCanonicalFallback(
@@ -1336,7 +1370,9 @@ namespace NTSD.Simulation
                 return AiDecisionAvailability.GenerationMismatch;
             if (rows.Identity[selfSlot] != self.Runtime.StableId)
                 return AiDecisionAvailability.StableIdMismatch;
-            if (!TryCaptureAiDecisionInputState(self.Runtime, out snapshot.Input))
+            if (!TryCaptureAiDecisionInputStateForCurrentProfile(
+                    self.Runtime,
+                    out snapshot.Input))
                 return AiDecisionAvailability.SnapshotMissing;
 
             snapshot.SelfSlot = selfSlot;
@@ -1540,6 +1576,55 @@ namespace NTSD.Simulation
             LF2Entity self,
             AiDecisionSnapshot snapshot)
         {
+            AiUnifiedSnapshotExecutionState unifiedState =
+                aiUnifiedSnapshotPublishedState;
+            if (AiUnifiedSnapshotExecutionOwnsCurrentPass &&
+                unifiedState != null &&
+                snapshot != null &&
+                ReferenceEquals(snapshot, unifiedState.IndexedSnapshot) &&
+                ReferenceEquals(snapshot.Rows, unifiedState.Rows))
+            {
+                NTSDEntityRuntime runtime = self?.Runtime;
+                int slot = runtime?.SlotIndex ?? -1;
+                AiSoASensingRows unifiedRows = unifiedState.Rows;
+                if ((uint)slot >= (uint)unifiedRows.Capacity ||
+                    unifiedState.FallbackSlots[slot] != self ||
+                    unifiedRows.Generation[slot] == 0)
+                {
+                    return ResetRejectedAiDecisionSnapshot(
+                        snapshot,
+                        unifiedState.Epoch,
+                        AiDecisionAvailability.GenerationMismatch);
+                }
+                bool directCanonicalInput =
+                    aiExecutionProfile ==
+                        BattleAiExecutionProfile.DataOrientedCanonical &&
+                    aiDecisionOwnedInputMode ==
+                        AiDecisionOwnedInputMode.CanonicalStoreDirect;
+                if (directCanonicalInput
+                        ? !battleCharacterInputWriter.CanEvaluateCanonicalDecision(runtime)
+                        : !TryCaptureAiDecisionInputStateForCurrentProfile(
+                            runtime,
+                            out snapshot.Input))
+                {
+                    return ResetRejectedAiDecisionSnapshot(
+                        snapshot,
+                        unifiedState.Epoch,
+                        AiDecisionAvailability.SnapshotMissing);
+                }
+
+                snapshot.SelfSlot = slot;
+                snapshot.SelfGeneration = unifiedRows.Generation[slot];
+                snapshot.SelfStableId = unifiedRows.Identity[slot];
+                snapshot.OccupancyEpoch = unifiedState.Epoch;
+                snapshot.World = CaptureAiDecisionWorldState();
+                snapshot.RngState = Rng?.State ?? 0;
+                snapshot.RngCalls = Rng?.CallCount ?? 0;
+                snapshot.RngTraceCount = 0;
+                snapshot.RngTraceOverflow = false;
+                return AiDecisionAvailability.Available;
+            }
+
             if (!aiDecisionSharedPassAvailable ||
                 self?.Runtime == null ||
                 snapshot == null ||
@@ -1612,7 +1697,9 @@ namespace NTSD.Simulation
                     epoch,
                     AiDecisionAvailability.StableIdMismatch);
             }
-            if (!TryCaptureAiDecisionInputState(self.Runtime, out snapshot.Input))
+            if (!TryCaptureAiDecisionInputStateForCurrentProfile(
+                    self.Runtime,
+                    out snapshot.Input))
             {
                 return ResetRejectedAiDecisionSnapshot(
                     snapshot,
@@ -1934,6 +2021,21 @@ namespace NTSD.Simulation
             };
         }
 
+        private bool TryCaptureAiDecisionInputStateForCurrentProfile(
+            NTSDEntityRuntime runtime,
+            out AiDecisionInputState input)
+        {
+            if (aiExecutionProfile ==
+                BattleAiExecutionProfile.DataOrientedCanonical)
+            {
+                return battleCharacterInputWriter.TryCaptureCanonicalState(
+                    runtime,
+                    out input);
+            }
+
+            return TryCaptureAiDecisionInputState(runtime, out input);
+        }
+
         private static bool TryCaptureAiDecisionInputState(
             NTSDEntityRuntime runtime,
             out AiDecisionInputState input)
@@ -2090,8 +2192,14 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            EndAiUnifiedSnapshotExecutionPass();
             AiUnifiedSnapshotExecutionBuildCountForDiagnostics++;
+            if (!ForceFullAiUnifiedSnapshotRebuildForDiagnostics &&
+                TryRollForwardAiUnifiedSnapshotExecutionPass())
+            {
+                return true;
+            }
+
+            EndAiUnifiedSnapshotExecutionPass();
             AiUnifiedSnapshotExceptionStage stage =
                 AiUnifiedSnapshotExceptionStage.Prepare;
             try
@@ -2155,29 +2263,29 @@ namespace NTSD.Simulation
                         continue;
 
                     candidate.FallbackSlots[slot] = entity;
-                    if (slot < candidate.MoveModeFirst10Present.Length)
-                    {
-                        CaptureAiUnifiedMoveModeScratchCandidate(
-                            candidate,
-                            slot,
-                            entity,
-                            view.Generation);
-                    }
-                    if (!TryCaptureAiSoASensingRow(
+                    if (!TryCaptureAiUnifiedAuthorityRowFromCanonicalStores(
                             rows,
                             entity,
                             slot,
                             view.Generation,
-                            true))
+                            true,
+                            out int decisionFlags))
                     {
                         throw new InvalidOperationException(
                             "Unified AI snapshot authority could not capture an active row.");
                     }
+                    AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics++;
+                    if (slot < candidate.MoveModeFirst10Present.Length)
+                    {
+                        CaptureAiUnifiedMoveModeScratchCandidate(
+                            candidate,
+                            rows,
+                            slot,
+                            view.Generation);
+                    }
 
-                    int sensingFlags = CaptureAiSoASensingBoundaryFlags(runtime);
-                    int decisionFlags = CaptureAiDecisionBoundaryFlags(runtime);
-                    rows.BoundaryFlags[slot] = sensingFlags;
-                    candidate.SoASensingBoundaryFlags[slot] = sensingFlags;
+                    candidate.SoASensingBoundaryFlags[slot] =
+                        rows.BoundaryFlags[slot];
                     candidate.DecisionBoundaryFlags[slot] = decisionFlags;
                 }
 
@@ -2240,6 +2348,83 @@ namespace NTSD.Simulation
                 new AiUnifiedSnapshotExecutionState(capacity);
         }
 
+        private bool TryRollForwardAiUnifiedSnapshotExecutionPass()
+        {
+            AiUnifiedSnapshotExecutionState published =
+                aiUnifiedSnapshotPublishedState;
+            int capacity = RuntimeSlotCapacity;
+            ulong epoch = RuntimeSlotOccupancyEpochForServices;
+            if (!battleAiUnifiedRowPublisher.Active ||
+                published == null ||
+                capacity <= 0 ||
+                published.Capacity != capacity ||
+                published.Epoch != epoch ||
+                battleAiUnifiedRowPublisher.Epoch != epoch)
+            {
+                return false;
+            }
+
+            try
+            {
+                AiSoASensingRows rows = published.Rows;
+                int dirtySlotCount =
+                    battleAiUnifiedRowPublisher.PendingSlotCount;
+                bool roleProductsChanged = false;
+                bool teamProductsChanged = false;
+                for (int index = 0; index < dirtySlotCount; index++)
+                {
+                    int slot = battleAiUnifiedRowPublisher.GetPendingSlot(index);
+                    if ((uint)slot >= (uint)capacity ||
+                        !rows.Included[slot] ||
+                        rows.Generation[slot] == 0 ||
+                        !battleAiUnifiedRowPublisher.TryCommitPending(
+                            slot,
+                            rows.Generation[slot],
+                            out bool slotRoleProductsChanged,
+                            out bool slotTeamProductsChanged))
+                    {
+                        throw new InvalidOperationException(
+                            "Unified AI rolling snapshot observed a stale dirty slot.");
+                    }
+
+                    roleProductsChanged |= slotRoleProductsChanged;
+                    teamProductsChanged |= slotTeamProductsChanged;
+                }
+
+                if (roleProductsChanged)
+                    BuildAiSoASensingRoleIndexes(rows);
+                if (teamProductsChanged)
+                    BuildAiSoASensingTeamSummaries(rows);
+
+                RebuildAiUnifiedMoveModeFirst10Product(published);
+                if (ValidateIncrementalAiUnifiedRowForDiagnostics &&
+                    !ValidateAiUnifiedSnapshotExecutionPreCommit(
+                        published,
+                        capacity,
+                        epoch))
+                {
+                    throw new InvalidOperationException(
+                        "Unified AI rolling snapshot validation failed.");
+                }
+
+                ActivateAiUnifiedSnapshotExecutionPass(published);
+                AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics++;
+                AiUnifiedSnapshotExecutionRollForwardDirtySlotCountForDiagnostics +=
+                    dirtySlotCount;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                RecordAiUnifiedSnapshotExecutionFailure(
+                    AiUnifiedSnapshotExceptionStage.Prepare,
+                    exception,
+                    false);
+                AiUnifiedSnapshotExecutionPreCommitFailureCountForDiagnostics++;
+                AiUnifiedSnapshotExecutionPreCommitFallbackCountForDiagnostics++;
+                return false;
+            }
+        }
+
         private void CommitAiUnifiedSnapshotExecutionPass(
             AiUnifiedSnapshotExecutionState candidate)
         {
@@ -2255,6 +2440,13 @@ namespace NTSD.Simulation
                 aiUnifiedSnapshotScratchState = aiUnifiedSnapshotStandbyState;
                 aiUnifiedSnapshotStandbyState = null;
             }
+
+            ActivateAiUnifiedSnapshotExecutionPass(candidate);
+        }
+
+        private void ActivateAiUnifiedSnapshotExecutionPass(
+            AiUnifiedSnapshotExecutionState candidate)
+        {
 
             aiSoASensingRows = candidate.Rows;
             aiDecisionSharedRows = candidate.Rows;
@@ -2275,6 +2467,35 @@ namespace NTSD.Simulation
             aiMoveModeSecondZ = candidate.MoveModeSecondZ;
             aiMoveModeFirst10Valid = candidate.MoveModeFirst10Valid;
 
+            AiSoASensingRows rows = candidate.Rows;
+            battleAiUnifiedRowPublisher.BeginPass(
+                candidate.Epoch,
+                rows.Included,
+                rows.Generation,
+                rows.DataObjectType,
+                rows.InputHistoryGate,
+                rows.X,
+                rows.Y,
+                rows.Z,
+                rows.Hp,
+                rows.Hp3,
+                rows.HpMax,
+                rows.Pp,
+                rows.Team,
+                rows.State,
+                rows.Frame,
+                rows.LinkState,
+                rows.KillCount,
+                rows.CachedTargetSlot,
+                rows.CoordinateTargetX,
+                rows.Vx,
+                rows.Facing,
+                rows.TargetSlot,
+                rows.HitStop,
+                rows.BoundaryFlags,
+                candidate.SoASensingBoundaryFlags,
+                candidate.DecisionBoundaryFlags);
+
             aiUnifiedSnapshotExecutionCommittedThisPass = true;
             aiUnifiedSnapshotExecutionConsumerStartedThisPass = false;
             aiSoASensingSnapshotEpoch = candidate.Epoch;
@@ -2288,22 +2509,56 @@ namespace NTSD.Simulation
             AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics++;
         }
 
+        private void RebuildAiUnifiedMoveModeFirst10Product(
+            AiUnifiedSnapshotExecutionState candidate)
+        {
+            Array.Clear(candidate.MoveModeFirst10Present, 0, 10);
+            Array.Clear(candidate.MoveModeFirst10Eligible, 0, 10);
+            Array.Clear(candidate.MoveModeFirst10Generation, 0, 10);
+            Array.Clear(candidate.MoveModeFirst10Hp, 0, 10);
+            Array.Clear(candidate.MoveModeFirst10X, 0, 10);
+            Array.Clear(candidate.MoveModeFirst10Z, 0, 10);
+            candidate.MoveModeTopSlot = -1;
+            candidate.MoveModeTopX = -1;
+            candidate.MoveModeTopZ = 0;
+            candidate.MoveModeSecondSlot = -1;
+            candidate.MoveModeSecondX = -1;
+            candidate.MoveModeSecondZ = 0;
+
+            AiSoASensingRows rows = candidate.Rows;
+            int limit = rows.Capacity < 10 ? rows.Capacity : 10;
+            for (int slot = 0; slot < limit; slot++)
+            {
+                if (!rows.Included[slot])
+                    continue;
+                CaptureAiUnifiedMoveModeScratchCandidate(
+                    candidate,
+                    rows,
+                    slot,
+                    rows.Generation[slot]);
+            }
+            candidate.MoveModeFirst10Valid = true;
+        }
+
         private void CaptureAiUnifiedMoveModeScratchCandidate(
             AiUnifiedSnapshotExecutionState candidate,
+            AiSoASensingRows rows,
             int slot,
-            LF2Entity entity,
             uint generation)
         {
             candidate.MoveModeFirst10Present[slot] = true;
             candidate.MoveModeFirst10Generation[slot] = generation;
-            candidate.MoveModeFirst10Hp[slot] = Hp(entity);
-            bool eligible = IsLivingCharacterDat(entity);
+            int hp = rows.Hp[slot];
+            candidate.MoveModeFirst10Hp[slot] = hp;
+            bool eligible = rows.DataObjectType[slot] ==
+                                (int)LF2ObjectType.Character &&
+                            hp > 0;
             candidate.MoveModeFirst10Eligible[slot] = eligible;
             if (!eligible)
                 return;
 
-            int x = X(entity);
-            int z = Z(entity);
+            int x = rows.X[slot];
+            int z = rows.Z[slot];
             candidate.MoveModeFirst10X[slot] = x;
             candidate.MoveModeFirst10Z[slot] = z;
             if (x <= -1)
@@ -2330,18 +2585,20 @@ namespace NTSD.Simulation
 
         private void ObserveAiUnifiedSnapshotExecutionMoveModeFirst10Mutation(
             AiUnifiedSnapshotExecutionState published,
-            LF2Entity entity)
+            LF2Entity entity,
+            int slot,
+            uint generation)
         {
             if (!published.MoveModeFirst10Valid)
                 return;
-            if (entity?.Runtime == null)
+            AiSoASensingRows rows = published.Rows;
+            if (entity == null || rows == null)
             {
                 published.MoveModeFirst10Valid = false;
                 aiMoveModeFirst10Valid = false;
                 return;
             }
 
-            int slot = Slot(entity);
             if (slot < 0 || slot >= published.MoveModeFirst10Present.Length)
             {
                 // The committed pass already validated slot ownership, generation,
@@ -2353,23 +2610,25 @@ namespace NTSD.Simulation
 
             if (!published.MoveModeFirst10Present[slot] ||
                 !ReferenceEquals(published.FallbackSlots[slot], entity) ||
-                !TryGetCurrentRuntimeHandle(
-                    slot,
-                    entity,
-                    out RuntimeEntityHandle handle) ||
-                handle.Generation != published.MoveModeFirst10Generation[slot] ||
-                Hp(entity) != published.MoveModeFirst10Hp[slot])
+                rows.Generation[slot] != generation ||
+                generation != published.MoveModeFirst10Generation[slot] ||
+                rows.Hp[slot] != published.MoveModeFirst10Hp[slot] ||
+                !battleIdentityWriter.TryCaptureAiProjection(
+                    new RuntimeEntityHandle(slot, generation),
+                    out BattleIdentityAiProjection identity))
             {
                 published.MoveModeFirst10Valid = false;
                 aiMoveModeFirst10Valid = false;
                 return;
             }
 
-            bool eligible = IsLivingCharacterDat(entity);
+            bool eligible = identity.DataObjectType ==
+                                (int)LF2ObjectType.Character &&
+                            rows.Hp[slot] > 0;
             if (eligible != published.MoveModeFirst10Eligible[slot] ||
                 eligible &&
-                (X(entity) != published.MoveModeFirst10X[slot] ||
-                 Z(entity) != published.MoveModeFirst10Z[slot]))
+                (rows.X[slot] != published.MoveModeFirst10X[slot] ||
+                 rows.Z[slot] != published.MoveModeFirst10Z[slot]))
             {
                 published.MoveModeFirst10Valid = false;
                 aiMoveModeFirst10Valid = false;
@@ -2592,6 +2851,13 @@ namespace NTSD.Simulation
         }
 
         private void EndAiUnifiedSnapshotExecutionPass()
+        {
+            battleAiUnifiedRowPublisher.EndPass();
+            aiUnifiedSnapshotExecutionCommittedThisPass = false;
+            aiUnifiedSnapshotExecutionConsumerStartedThisPass = false;
+        }
+
+        private void SuspendAiUnifiedSnapshotExecutionPass()
         {
             aiUnifiedSnapshotExecutionCommittedThisPass = false;
             aiUnifiedSnapshotExecutionConsumerStartedThisPass = false;
@@ -2978,14 +3244,6 @@ namespace NTSD.Simulation
 
                 uint generation = rows.Generation[slot];
 
-                int previousX = rows.X[slot];
-                int previousTeam = rows.Team[slot];
-                int previousHp = rows.Hp[slot];
-                int previousObjectId = rows.ObjectId[slot];
-                bool previousSpecialMember = rows.SpecialScanMember[slot];
-                bool wasGroundRole = IsGroundAiSoARoleMember(rows, slot);
-                bool wasAirRole = IsAirAiSoARoleMember(rows, slot);
-                bool wasLivingCharacter = IsLivingCharacterAiSoARow(rows, slot);
                 stage = AiUnifiedSnapshotExceptionStage.RefreshCapture;
                 ThrowAiUnifiedSnapshotExceptionForSelfCheck(stage);
                 bool forceFullPostRefresh =
@@ -2994,51 +3252,107 @@ namespace NTSD.Simulation
                 forceFullPostRefresh |=
                     runtimeHooks.CharacterInputPassMutationOverride != null;
 #endif
-                bool captured = forceFullPostRefresh
-                    ? TryCaptureAiSoASensingRow(
+                if (aiUnifiedSnapshotNoPendingRefreshSkipForDiagnostics &&
+                    !ValidateIncrementalAiUnifiedRowForDiagnostics &&
+                    !forceFullPostRefresh &&
+                    slot >= published.MoveModeFirst10Present.Length &&
+                    !battleAiUnifiedRowPublisher.HasPendingValues(
+                        slot,
+                        generation))
+                {
+                    AiUnifiedSnapshotExecutionNoPendingRefreshSkipCountForDiagnostics++;
+                    AiUnifiedSnapshotExecutionRefreshCountForDiagnostics++;
+                    return;
+                }
+
+                bool roleProductsChanged;
+                bool teamProductsChanged;
+                bool captured;
+                if (forceFullPostRefresh)
+                {
+                    int previousX = rows.X[slot];
+                    int previousTeam = rows.Team[slot];
+                    int previousHp = rows.Hp[slot];
+                    int previousObjectId = rows.ObjectId[slot];
+                    bool previousSpecialMember = rows.SpecialScanMember[slot];
+                    bool wasGroundRole = IsGroundAiSoARoleMember(rows, slot);
+                    bool wasAirRole = IsAirAiSoARoleMember(rows, slot);
+                    bool wasLivingCharacter = IsLivingCharacterAiSoARow(rows, slot);
+                    captured = TryCaptureAiSoASensingRow(
                         rows,
                         entity,
                         slot,
                         generation,
                         false,
-                        true)
-                    : TryRefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(
-                        rows,
-                        entity,
+                        true);
+                    bool currentSpecialMember =
+                        slot >= 20 && IsAiSpecialScanObjectId(rows.ObjectId[slot]);
+                    if (previousObjectId != rows.ObjectId[slot] ||
+                        previousSpecialMember != currentSpecialMember)
+                    {
+                        throw new InvalidOperationException(
+                            "Unified AI snapshot authority special membership changed after commit.");
+                    }
+
+                    bool isGroundRole = IsGroundAiSoARoleMember(rows, slot);
+                    bool isAirRole = IsAirAiSoARoleMember(rows, slot);
+                    roleProductsChanged = previousX != rows.X[slot] ||
+                                          previousTeam != rows.Team[slot] ||
+                                          wasGroundRole != isGroundRole ||
+                                          wasAirRole != isAirRole;
+                    bool isLivingCharacter = IsLivingCharacterAiSoARow(rows, slot);
+                    teamProductsChanged =
+                        wasLivingCharacter != isLivingCharacter ||
+                        previousTeam != rows.Team[slot] ||
+                        previousHp != rows.Hp[slot];
+
+                    if (!battleAiUnifiedRowPublisher.TryDiscardPending(
+                            slot,
+                            generation))
+                    {
+                        captured = false;
+                    }
+
+                    int sensingFlags = CaptureAiSoASensingBoundaryFlags(
+                        entity.Runtime);
+                    int decisionFlags = CaptureAiDecisionBoundaryFlags(
+                        entity.Runtime);
+                    rows.BoundaryFlags[slot] = sensingFlags;
+                    published.SoASensingBoundaryFlags[slot] = sensingFlags;
+                    published.DecisionBoundaryFlags[slot] = decisionFlags;
+                }
+                else
+                {
+                    captured = battleAiUnifiedRowPublisher.TryCommitPending(
                         slot,
-                        generation);
+                        generation,
+                        out roleProductsChanged,
+                        out teamProductsChanged);
+                    if (captured && ValidateIncrementalAiUnifiedRowForDiagnostics)
+                    {
+                        captured = TryValidateAiUnifiedSnapshotExecutionRowAfterCharacterInput(
+                            published,
+                            rows,
+                            entity,
+                            slot,
+                            generation);
+                        AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics++;
+                    }
+                }
                 if (!captured)
                 {
                     throw new InvalidOperationException(
                         "Unified AI snapshot authority could not refresh a committed row.");
                 }
 
-                bool currentSpecialMember =
+                bool expectedSpecialMember =
                     slot >= 20 && IsAiSpecialScanObjectId(rows.ObjectId[slot]);
-                if (previousObjectId != rows.ObjectId[slot] ||
-                    previousSpecialMember != currentSpecialMember)
+                if (rows.SpecialScanMember[slot] != expectedSpecialMember)
                 {
                     throw new InvalidOperationException(
                         "Unified AI snapshot authority special membership changed after commit.");
                 }
 
-                int sensingFlags = CaptureAiSoASensingBoundaryFlags(entity.Runtime);
-                int decisionFlags = CaptureAiDecisionBoundaryFlags(entity.Runtime);
-                rows.BoundaryFlags[slot] = sensingFlags;
-                published.SoASensingBoundaryFlags[slot] = sensingFlags;
-                published.DecisionBoundaryFlags[slot] = decisionFlags;
-
-                bool isGroundRole = IsGroundAiSoARoleMember(rows, slot);
-                bool isAirRole = IsAirAiSoARoleMember(rows, slot);
-                bool roleProductsChanged = previousX != rows.X[slot] ||
-                                           previousTeam != rows.Team[slot] ||
-                                           wasGroundRole != isGroundRole ||
-                                           wasAirRole != isAirRole;
-                bool isLivingCharacter = IsLivingCharacterAiSoARow(rows, slot);
-                bool teamProductsChanged =
-                    wasLivingCharacter != isLivingCharacter ||
-                    previousTeam != rows.Team[slot] ||
-                    previousHp != rows.Hp[slot];
                 stage = AiUnifiedSnapshotExceptionStage.RefreshBuildIndexes;
                 ThrowAiUnifiedSnapshotExceptionForSelfCheck(stage);
                 if (roleProductsChanged)
@@ -3052,7 +3366,9 @@ namespace NTSD.Simulation
                 // consumer can read during this pass.
                 ObserveAiUnifiedSnapshotExecutionMoveModeFirst10Mutation(
                     published,
-                    entity);
+                    entity,
+                    slot,
+                    generation);
                 AiUnifiedSnapshotExecutionRefreshCountForDiagnostics++;
             }
             catch (Exception exception)
@@ -3067,14 +3383,16 @@ namespace NTSD.Simulation
             }
         }
 
-        private static bool TryRefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(
+        private bool TryValidateAiUnifiedSnapshotExecutionRowAfterCharacterInput(
+            AiUnifiedSnapshotExecutionState published,
             AiSoASensingRows rows,
             LF2Entity entity,
             int slot,
             uint generation)
         {
             NTSDEntityRuntime runtime = entity?.Runtime;
-            if (rows == null ||
+            if (published == null ||
+                rows == null ||
                 runtime == null ||
                 generation == 0 ||
                 slot < 0 ||
@@ -3084,26 +3402,152 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            rows.InputHistoryGate[slot] = runtime.HasInputHistoryGate();
-            rows.X[slot] = runtime.XInt;
-            rows.Y[slot] = runtime.YInt;
-            rows.Z[slot] = runtime.ZInt;
-            rows.Hp[slot] = runtime.HP;
-            rows.Hp3[slot] = runtime.HP3;
-            rows.HpMax[slot] = runtime.HPBound;
-            rows.Pp[slot] = runtime.PP;
-            rows.Team[slot] = runtime.RelationTeam;
-            rows.State[slot] = entity.GetState();
-            rows.Frame[slot] = runtime.Frame;
-            rows.LinkState[slot] = runtime.LinkState;
-            rows.KillCount[slot] = runtime.KillCount;
-            rows.CachedTargetSlot[slot] = runtime.Unk360;
-            rows.CoordinateTargetX[slot] = runtime.Unk3FC;
-            rows.Vx[slot] = runtime.Vx;
-            rows.Facing[slot] = runtime.Dir == "left" ? 1 : 0;
-            rows.TargetSlot[slot] = runtime.TargetSlotIndex;
-            rows.HitStop[slot] = runtime.HitStop;
-                return true;
+            if (!battleFrameMotionWriter.TryCaptureAiProjection(
+                    runtime,
+                    out BattleFrameMotionAiProjection frameMotion))
+            {
+                return false;
+            }
+
+            if (!TryGetCurrentRuntimeHandle(
+                    slot,
+                    entity,
+                    out RuntimeEntityHandle handle) ||
+                handle.Generation != generation ||
+                !battleIdentityWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleIdentityAiProjection identity))
+            {
+                return false;
+            }
+
+            if (!battleCharacterInputWriter.TryCaptureAiProjection(
+                    runtime,
+                    out BattleCharacterInputAiProjection input))
+            {
+                return false;
+            }
+
+            if (!battleRelationLinkWriter.TryCaptureAiProjection(
+                    runtime,
+                    out BattleRelationLinkAiProjection relationLink))
+            {
+                return false;
+            }
+
+            if (!battleVitalWriter.TryCaptureAiProjection(
+                    runtime,
+                    out BattleVitalAiProjection vital))
+            {
+                return false;
+            }
+
+            return rows.Identity[slot] == identity.StableId &&
+                   rows.ObjectId[slot] == identity.ObjectId &&
+                   rows.DataObjectType[slot] == identity.DataObjectType &&
+                   rows.InputHistoryGate[slot] == input.InputHistoryGate &&
+                   rows.X[slot] == frameMotion.X &&
+                   rows.Y[slot] == frameMotion.Y &&
+                   rows.Z[slot] == frameMotion.Z &&
+                   rows.Hp[slot] == vital.Hp &&
+                   rows.Hp3[slot] == vital.Hp3 &&
+                   rows.HpMax[slot] == vital.HpBound &&
+                   rows.Pp[slot] == vital.Pp &&
+                   rows.Team[slot] == relationLink.RelationTeam &&
+                   rows.State[slot] == frameMotion.State &&
+                   rows.Frame[slot] == frameMotion.Frame &&
+                   rows.LinkState[slot] == relationLink.LinkState &&
+                   rows.KillCount[slot] == relationLink.KillCount &&
+                   rows.CachedTargetSlot[slot] == input.CachedTargetSlot &&
+                   rows.CoordinateTargetX[slot] == input.CoordinateTargetX &&
+                   rows.Vx[slot].Equals(frameMotion.Vx) &&
+                   rows.Facing[slot] == frameMotion.Facing &&
+                   rows.TargetSlot[slot] == relationLink.TargetSlot &&
+                   rows.HitStop[slot] == frameMotion.HitStop &&
+                   rows.BoundaryFlags[slot] ==
+                       BattleAiUnifiedRowPublisher.ToSensingBoundaryFlags(
+                           input.DecisionBoundaryFlags) &&
+                   published.SoASensingBoundaryFlags[slot] ==
+                       rows.BoundaryFlags[slot] &&
+                   published.DecisionBoundaryFlags[slot] ==
+                       input.DecisionBoundaryFlags;
+        }
+
+        private bool TryCaptureAiUnifiedAuthorityRowFromCanonicalStores(
+            AiSoASensingRows rows,
+            LF2Entity entity,
+            int slot,
+            uint generation,
+            bool captureSpecialMembership,
+            out int decisionBoundaryFlags)
+        {
+            decisionBoundaryFlags = 0;
+            NTSDEntityRuntime runtime = entity?.Runtime;
+            var handle = new RuntimeEntityHandle(slot, generation);
+            if (rows == null ||
+                runtime == null ||
+                !handle.IsValid ||
+                slot < 0 ||
+                slot >= rows.Capacity ||
+                runtime.SlotIndex != slot ||
+                !battleIdentityWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleIdentityAiProjection identity) ||
+                !battleFrameMotionWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleFrameMotionAiProjection frameMotion) ||
+                !battleCharacterInputWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleCharacterInputAiProjection input) ||
+                !battleRelationLinkWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleRelationLinkAiProjection relationLink) ||
+                !battleVitalWriter.TryCaptureAiProjection(
+                    handle,
+                    out BattleVitalAiProjection vital))
+            {
+                return false;
+            }
+
+            int objectId = identity.ObjectId;
+            rows.Included[slot] = true;
+            if (captureSpecialMembership)
+            {
+                bool specialScanMember =
+                    slot >= 20 && IsAiSpecialScanObjectId(objectId);
+                rows.SpecialScanMember[slot] = specialScanMember;
+                if (specialScanMember)
+                    rows.SpecialSlots[rows.SpecialSlotCount++] = slot;
+            }
+
+            rows.InputHistoryGate[slot] = input.InputHistoryGate;
+            rows.Generation[slot] = generation;
+            rows.Identity[slot] = identity.StableId;
+            rows.ObjectId[slot] = objectId;
+            rows.DataObjectType[slot] = identity.DataObjectType;
+            rows.X[slot] = frameMotion.X;
+            rows.Y[slot] = frameMotion.Y;
+            rows.Z[slot] = frameMotion.Z;
+            rows.Hp[slot] = vital.Hp;
+            rows.Hp3[slot] = vital.Hp3;
+            rows.HpMax[slot] = vital.HpBound;
+            rows.Pp[slot] = vital.Pp;
+            rows.Team[slot] = relationLink.RelationTeam;
+            rows.State[slot] = frameMotion.State;
+            rows.Frame[slot] = frameMotion.Frame;
+            rows.LinkState[slot] = relationLink.LinkState;
+            rows.KillCount[slot] = relationLink.KillCount;
+            rows.CachedTargetSlot[slot] = input.CachedTargetSlot;
+            rows.CoordinateTargetX[slot] = input.CoordinateTargetX;
+            rows.Vx[slot] = frameMotion.Vx;
+            rows.Facing[slot] = frameMotion.Facing;
+            rows.TargetSlot[slot] = relationLink.TargetSlot;
+            rows.HitStop[slot] = frameMotion.HitStop;
+            decisionBoundaryFlags = input.DecisionBoundaryFlags;
+            rows.BoundaryFlags[slot] =
+                BattleAiUnifiedRowPublisher.ToSensingBoundaryFlags(
+                    decisionBoundaryFlags);
+            return true;
         }
 
         private void RefreshAiUnifiedSnapshotShadowRowAfterCharacterInputCore(

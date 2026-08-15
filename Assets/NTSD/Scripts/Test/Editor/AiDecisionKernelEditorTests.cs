@@ -8,6 +8,219 @@ namespace NTSD.Test
     public sealed class AiDecisionKernelEditorTests
     {
         [Test]
+        public void CharacterInputWriter_SeparatesFullAndProgressTransactions()
+        {
+            var world = new SimulationWorld();
+            var runtime = new NTSDEntityRuntime();
+            runtime.Reset();
+            runtime.KeyRight = 9;
+            runtime.PrevLeft = 8;
+            AiDecisionInputState input = new AiDecisionInputState
+            {
+                CdAttack = 1,
+                CdJump = 2,
+                CdDefend = 3,
+                CdDefendLock = 4,
+                CdRight = 5,
+                CdLeft = 6,
+                CdUp = 7,
+                CdDown = 8,
+                ComboDra = 1,
+                ComboDla = 2,
+                ComboDua = 3,
+                ComboDda = 4,
+                ComboDrj = 5,
+                ComboDlj = 6,
+                ComboDuj = 7,
+                ComboDdj = 8,
+                ComboDja = 9,
+                PrevUp = 1,
+                PrevDown = 2,
+                PrevLeft = 3,
+                PrevRight = 4,
+                PrevJump = 5,
+                PrevDefend = 6,
+                PrevAttack = 7,
+                KeyUp = 7,
+                KeyDown = 6,
+                KeyLeft = 5,
+                KeyRight = 4,
+                KeyAttack = 3,
+                KeyJump = 2,
+                KeyDefend = 1,
+            };
+
+            world.CharacterInputWriter.CommitProgressState(runtime, input);
+
+            Assert.That(runtime.KeyRight, Is.EqualTo(9));
+            Assert.That(runtime.PrevLeft, Is.EqualTo(8));
+            Assert.That(
+                new[]
+                {
+                    runtime.CdAttack, runtime.CdJump, runtime.CdDefend,
+                    runtime.CdDefendLock, runtime.CdRight, runtime.CdLeft,
+                    runtime.CdUp, runtime.CdDown,
+                },
+                Is.EqualTo(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 }));
+            Assert.That(runtime.ComboDja, Is.EqualTo(9));
+
+            world.CharacterInputWriter.CommitFullState(runtime, input);
+
+            Assert.That(
+                new[]
+                {
+                    runtime.PrevUp, runtime.PrevDown, runtime.PrevLeft,
+                    runtime.PrevRight, runtime.PrevJump, runtime.PrevDefend,
+                    runtime.PrevAttack, runtime.KeyUp, runtime.KeyDown,
+                    runtime.KeyLeft, runtime.KeyRight, runtime.KeyAttack,
+                    runtime.KeyJump, runtime.KeyDefend,
+                },
+                Is.EqualTo(new byte[] { 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1 }));
+        }
+
+        [Test]
+        public void CharacterInputWriter_OwnsInputLifecycleTransactions()
+        {
+            var world = new SimulationWorld();
+            var runtime = new NTSDEntityRuntime();
+            runtime.Reset();
+            runtime.KeyRight = 1;
+            runtime.KeyAttack = 1;
+
+            world.CharacterInputWriter.RollAndClearCurrentKeys(runtime);
+
+            Assert.That(runtime.PrevRight, Is.EqualTo(1));
+            Assert.That(runtime.PrevAttack, Is.EqualTo(1));
+            Assert.That(runtime.KeyRight, Is.EqualTo(0));
+            Assert.That(runtime.KeyAttack, Is.EqualTo(0));
+
+            runtime.PrevRight = 0;
+            runtime.PrevDefend = 0;
+            runtime.KeyRight = 1;
+            runtime.KeyDefend = 1;
+            world.CharacterInputWriter.ApplyInputEdges(runtime);
+
+            Assert.That(runtime.CdRight, Is.EqualTo(5));
+            Assert.That(runtime.CdJump, Is.EqualTo(5));
+            Assert.That(runtime.InputHistory, Is.EqualTo(new[] { 0, 0, 0, 0, 6, 0 }));
+
+            world.CharacterInputWriter.SetInputHistoryGate(runtime, true);
+            world.CharacterInputWriter.ClearInputHistoryTail(runtime);
+            Assert.That(runtime.InputHistory, Is.EqualTo(new[] { 1, 0, 0, 0, 0, 0 }));
+
+            world.CharacterInputWriter.SetDefendLock(runtime, 4);
+            world.CharacterInputWriter.ResetInputState(runtime);
+            Assert.That(runtime.CdDefendLock, Is.EqualTo(0));
+            Assert.That(runtime.InputHistory, Is.EqualTo(new[] { 0, 0, 0, 0, 0, 0 }));
+            Assert.That(runtime.KeyRight, Is.EqualTo(0));
+            Assert.That(runtime.PrevRight, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AiInputWriter_CommitsDecisionInputFlowAndRngAsOneTransaction()
+        {
+            var world = new SimulationWorld();
+            var runtime = new NTSDEntityRuntime();
+            runtime.Reset();
+            AiDecisionWitness witness = new AiDecisionWitness
+            {
+                Input = new AiDecisionInputState
+                {
+                    History0 = 1,
+                    History1 = 2,
+                    History2 = 3,
+                    History3 = 4,
+                    History4 = 5,
+                    History5 = 6,
+                    CdAttack = 1,
+                    CdJump = 2,
+                    CdDefend = 3,
+                    CdDefendLock = 4,
+                    CdRight = 5,
+                    CdLeft = 6,
+                    CdUp = 7,
+                    CdDown = 8,
+                    ComboDra = 1,
+                    ComboDla = 2,
+                    ComboDua = 3,
+                    ComboDda = 4,
+                    ComboDrj = 5,
+                    ComboDlj = 6,
+                    ComboDuj = 7,
+                    ComboDdj = 8,
+                    ComboDja = 9,
+                    PrevUp = 1,
+                    PrevDown = 2,
+                    PrevLeft = 3,
+                    PrevRight = 4,
+                    PrevJump = 5,
+                    PrevDefend = 6,
+                    PrevAttack = 7,
+                    KeyUp = 7,
+                    KeyDown = 6,
+                    KeyLeft = 5,
+                    KeyRight = 4,
+                    KeyAttack = 3,
+                    KeyJump = 2,
+                    KeyDefend = 1,
+                    Unk360 = 17,
+                    Unk3FC = 271,
+                    Unk400 = 314,
+                },
+                World = new AiDecisionWorldState
+                {
+                    FlowAiDifficulty = 2,
+                    FlowRand3 = 6,
+                    FlowRand5 = 10,
+                    FlowRand15 = 30,
+                    FlowRand20 = 40,
+                    FlowMoveMode = 1,
+                    FlowStageTargetX = 777,
+                },
+                RngState = 0xA11CEu,
+                RngCalls = 29,
+            };
+
+            world.AiInputWriter.CommitIndexedCanonicalDecision(runtime, witness);
+
+            Assert.That(runtime.InputHistory, Is.EqualTo(new[] { 1, 2, 3, 4, 5, 6 }));
+            Assert.That(
+                new[]
+                {
+                    runtime.CdAttack, runtime.CdJump, runtime.CdDefend,
+                    runtime.CdDefendLock, runtime.CdRight, runtime.CdLeft,
+                    runtime.CdUp, runtime.CdDown,
+                },
+                Is.EqualTo(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 }));
+            Assert.That(
+                new[]
+                {
+                    runtime.ComboDra, runtime.ComboDla, runtime.ComboDua,
+                    runtime.ComboDda, runtime.ComboDrj, runtime.ComboDlj,
+                    runtime.ComboDuj, runtime.ComboDdj, runtime.ComboDja,
+                },
+                Is.EqualTo(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
+            Assert.That(
+                new[]
+                {
+                    runtime.PrevUp, runtime.PrevDown, runtime.PrevLeft,
+                    runtime.PrevRight, runtime.PrevJump, runtime.PrevDefend,
+                    runtime.PrevAttack, runtime.KeyUp, runtime.KeyDown,
+                    runtime.KeyLeft, runtime.KeyRight, runtime.KeyAttack,
+                    runtime.KeyJump, runtime.KeyDefend,
+                },
+                Is.EqualTo(new byte[] { 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1 }));
+            Assert.That(
+                new[] { runtime.Unk360, runtime.Unk3FC, runtime.Unk400 },
+                Is.EqualTo(new[] { 17, 271, 314 }));
+            Assert.That(world.Runtime.Flow.AiDifficulty, Is.EqualTo(2));
+            Assert.That(world.Runtime.Flow.AiMoveMode, Is.EqualTo(1));
+            Assert.That(world.Runtime.Flow.AiStageTargetX, Is.EqualTo(777));
+            Assert.That(world.Rng.State, Is.EqualTo(0xA11CEu));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(29));
+        }
+
+        [Test]
         public void CoordinateBranch_UsesPriorSharedFlowAndPreservesIt()
         {
             AiDecisionSnapshot snapshot = CreateSnapshot(2, 41);
@@ -37,6 +250,58 @@ namespace NTSD.Test
             Assert.That(witness.World.FlowMoveMode, Is.EqualTo(1));
             Assert.That(witness.World.FlowStageTargetX, Is.EqualTo(777));
             Assert.That(witness.RngCalls, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CanonicalInputOverload_ConsumesOwnedRowWithoutSnapshotCopy()
+        {
+            AiDecisionSnapshot snapshot = CreateSnapshot(2, 42);
+            SetCharacter(snapshot.Rows, 0, 1000, 1, 7, 0, 0, 0, 2);
+            snapshot.SelfSlot = 0;
+            snapshot.SelfGeneration = 1;
+            snapshot.SelfStableId = 1000;
+            snapshot.Input.Unk3FC = -1000;
+            snapshot.World.FlowAiDifficulty = 2;
+            snapshot.World.FlowRand3 = 6;
+            snapshot.World.FlowRand5 = 10;
+            snapshot.World.FlowRand15 = 30;
+            snapshot.World.FlowRand20 = 40;
+            snapshot.World.FlowMoveMode = 1;
+            snapshot.World.FlowStageTargetX = 777;
+            snapshot.RngState = 0x1234u;
+            AiDecisionInputState canonicalInput = snapshot.Input;
+            canonicalInput.Unk3FC = 400;
+            canonicalInput.Unk400 = 0;
+
+            AiDecisionWitness witness = default;
+            Assert.That(
+                AiDecisionKernel.TryEvaluateCanonicalInput(
+                    snapshot,
+                    in canonicalInput,
+                    AiDecisionEvaluationPolicy.FullScan,
+                    true,
+                    null,
+                    ref witness),
+                Is.True);
+
+            Assert.That(witness.Exit, Is.EqualTo(AiDecisionExit.Coordinate));
+            Assert.That(witness.Input.Unk3FC, Is.EqualTo(400));
+            Assert.That(snapshot.Input.Unk3FC, Is.EqualTo(-1000));
+        }
+
+        [Test]
+        public void OwnedInputMode_DefaultsToSnapshotCopyAndRequiresResetBoundary()
+        {
+            var world = new SimulationWorld();
+            Assert.That(
+                world.AiDecisionOwnedInputModeForDiagnostics,
+                Is.EqualTo(AiDecisionOwnedInputMode.SnapshotCopy));
+
+            world.ConfigureAiDecisionOwnedInputModeForDiagnostics(
+                AiDecisionOwnedInputMode.CanonicalStoreDirect);
+            Assert.That(
+                world.AiDecisionOwnedInputModeForDiagnostics,
+                Is.EqualTo(AiDecisionOwnedInputMode.CanonicalStoreDirect));
         }
 
         [Test]

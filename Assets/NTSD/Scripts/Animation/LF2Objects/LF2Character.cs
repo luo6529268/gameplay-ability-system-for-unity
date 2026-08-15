@@ -4,6 +4,7 @@ using NTSD.Game;
 using NTSD.Input;
 using NTSD.LevelEditor;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Tools;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace NTSD.Animation.LF2Objects
         private readonly LF2HitCountersModule _hitCounters;
         public override LF2HitCountersModule HitCounters => _hitCounters;
         private readonly LF2CharacterHitResolver _hitResolver;
-        private readonly LF2CharacterActionResolver _actionResolver;
+        private LF2CharacterActionResolver compatibilityActionResolver;
         private readonly LF2CharacterCatchResolver _catchResolver;
         private readonly LF2CharacterInteractionResolver _interactionResolver;
         private readonly LF2CharacterStateResolver _stateResolver;
@@ -73,8 +74,12 @@ namespace NTSD.Animation.LF2Objects
         public Transform EntityTransform { get; private set; }
         // ========== 物理计算 ==========
 
-        private readonly CharacterMechanics _mech;
         private float _mass = NTSDGlobal.Default.Machanics.Mass;
+
+        internal float MassForFrameAdvance => _mass;
+        internal bool InitializedFromOpointForSnapshot => _initializedFromOpoint;
+        internal bool PreserveOpointActionZeroForSnapshot =>
+            _preserveOpointActionZero;
         // ========== 抓取系统字段 ==========
 
         // 抓取持续计数。C++ release 抓取成功时写抓取者 caught_duration=300，
@@ -98,20 +103,18 @@ namespace NTSD.Animation.LF2Objects
             InputState = new NTSDInputStateModule();
             _hitCounters = new LF2HitCountersModule();
             _hitResolver = new LF2CharacterHitResolver(this);
-            _actionResolver = new LF2CharacterActionResolver(this);
             _catchResolver = new LF2CharacterCatchResolver(this);
             _interactionResolver = new LF2CharacterInteractionResolver(this);
             _stateResolver = new LF2CharacterStateResolver(this);
             _damageStateResolver = new LF2CharacterDamageStateResolver(this);
             _weaponLinkResolver = new LF2CharacterWeaponLinkResolver(this);
             _lateRuntimeModule = new LF2CharacterLateRuntimeModule(this);
-            _mech = new CharacterMechanics();
 
             // 基类字段初始化
             ItrRest = new LF2ItrRestTracker();
             
             
-            Frame = new LF2FrameInfo();
+            Frame = new LF2FrameInfo(Runtime);
             Effect = new LF2EffectState();
             Health = new LF2Health();
             PS.BindRuntime(Runtime);
@@ -130,23 +133,40 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ApplyDynamics()
         {
+            bool useCanonicalBattlePath =
+                RegisteredWorldForSimulation != null &&
+                GetType() == typeof(LF2Character);
+            float spriteWidthPx = useCanonicalBattlePath
+                ? 0f
+                : GetSpriteWidthPxForCollision();
             var ctx = new CharacterMechanicsContext(
                 Runtime,
                 Frame.D,
-                GetSpriteWidthPxForCollision(),
+                spriteWidthPx,
                 _mass,
                 NTSDGlobal.Gameplay.MinSpeed,
                 NTSDGlobal.Gameplay.Gravity
             );
 
-            var stepResult = _mech.Step(ctx);
+            BattleMechanicsStepResult stepResult =
+                ResolveCharacterMechanics().StepBattleLogic(ctx);
+            if (!useCanonicalBattlePath && Frame?.D != null && spriteWidthPx > 0f)
+                Runtime.UpdateSpriteOrigin(Frame.D.centerx, Frame.D.centery, spriteWidthPx);
+            RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
             if (ShouldResolveCharacterLanding(stepResult))
             {
-                HandleLandingEvent(stepResult.verticalVelocityBeforeLanding);
-
-                float spriteWidthPx = GetSpriteWidthPxForCollision();
-                if (Frame?.D != null && spriteWidthPx > 0f)
-                    Runtime.UpdateSpriteOrigin(Frame.D.centerx, Frame.D.centery, spriteWidthPx);
+                HandleLandingEvent(stepResult.VerticalVelocityBeforeLanding);
+                if (!useCanonicalBattlePath)
+                {
+                    spriteWidthPx = GetSpriteWidthPxForCollision();
+                    if (Frame?.D != null && spriteWidthPx > 0f)
+                    {
+                        Runtime.UpdateSpriteOrigin(
+                            Frame.D.centerx,
+                            Frame.D.centery,
+                            spriteWidthPx);
+                    }
+                }
             }
 
             Runtime.SyncIntegerPosition();
@@ -182,8 +202,20 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool ProcessReleaseInput()
         {
-            return _actionResolver.ProcessReleaseInput();
+            SimulationWorld world = RegisteredWorldForSimulation;
+            return world != null
+                ? world.CharacterActionWriter.ProcessReleaseInput(this)
+                : ProcessReleaseInputCompatibility();
         }
+
+        internal bool ProcessReleaseInputCompatibility()
+        {
+            compatibilityActionResolver ??= new LF2CharacterActionResolver();
+            return compatibilityActionResolver.ProcessReleaseInput(this);
+        }
+
+        internal bool HasCompatibilityActionResolverForDiagnostics =>
+            compatibilityActionResolver != null;
 
         /// <summary>
         /// 共享输入快照读取入口。
@@ -326,7 +358,11 @@ namespace NTSD.Animation.LF2Objects
 
         internal void SetDefendLockInternal(byte value)
         {
-            Runtime.CdDefendLock = value;
+            SimulationWorld world = RegisteredWorldForSimulation;
+            if (world != null)
+                world.CharacterInputWriter.SetDefendLock(Runtime, value);
+            else
+                Runtime.CdDefendLock = value;
         }
 
         internal void SetInputFrameDirectInternal(int frameId)
@@ -566,16 +602,6 @@ namespace NTSD.Animation.LF2Objects
             CaughtFront = value;
         }
 
-        internal void ApplyCpointThrowStep10BaseInternal(CatchPoint cpoint, LF2Entity victimEntity)
-        {
-            base.ApplyCpointThrowStep10(cpoint, victimEntity);
-        }
-
-        internal void ApplyCpointThrowStep10BaseInternal(CatchPoint cpoint, LF2Entity victimEntity, LF2FrameData throwFrameSnapshot)
-        {
-            base.ApplyCpointThrowStep10(cpoint, victimEntity, throwFrameSnapshot);
-        }
-
         internal int RandIntInternal(int minInclusive, int maxExclusive)
         {
             return RandInt(minInclusive, maxExclusive);
@@ -687,9 +713,22 @@ namespace NTSD.Animation.LF2Objects
         protected override void ComboUpdate()
         {
             if (AiControlled)
+            {
+                SimulationWorld world = RegisteredWorldForSimulation;
+                if (world != null)
+                {
+                    world.CharacterInputActionResolver.ApplyFrameInputFromRuntimeProgress(
+                        this,
+                        world.CharacterInputWriter,
+                        world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics);
+                    return;
+                }
+
                 InputState?.ApplyFrameInputFromSynchronizedRuntimeProgress(this);
-            else
-                ApplyFrameInputFromLocalState();
+                return;
+            }
+
+            ApplyFrameInputFromLocalState();
         }
 
         internal void RunTuCoreForSelfCheck()
@@ -793,9 +832,12 @@ namespace NTSD.Animation.LF2Objects
                 {
                     diagnostics?.EndPhase(BattleAiInputDetailPhase.RemainingAiDecision);
                 }
-                diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
-                InputState?.SyncProgressFromRuntime(Runtime);
-                diagnostics?.EndPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
+                if (RegisteredWorldForSimulation == null)
+                {
+                    diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
+                    InputState?.SyncProgressFromRuntime(Runtime);
+                    diagnostics?.EndPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
+                }
             }
 
             BattleAiInputDetailDiagnostics comboDiagnostics =
@@ -803,7 +845,12 @@ namespace NTSD.Animation.LF2Objects
             comboDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ComboUpdate);
             ComboUpdate();
             comboDiagnostics?.EndPhase(BattleAiInputDetailPhase.ComboUpdate);
-            ApplyNonCharacterFrameVelocityForFrameAdvance();
+            SimulationWorld world = RegisteredWorldForSimulation;
+            if (world == null ||
+                !world.CharacterActionWriter.TryApplyExactCharacterFrameVelocityTail(this))
+            {
+                ApplyNonCharacterFrameVelocityForFrameAdvance();
+            }
         }
 
         internal override void ClearBattleEntryInputState()
@@ -864,7 +911,7 @@ namespace NTSD.Animation.LF2Objects
             Frame.PN = 0;
             Frame.Prev = 0;
             Frame.Prev2 = action;
-            Frame.N = action;
+            WriteCurrentFrameId(action);
             Frame.D = FrameCache?.GetFrameDataById(action);
             Frame.Prev2D = Frame.D;
             if (Frame.D != null)
@@ -968,6 +1015,11 @@ namespace NTSD.Animation.LF2Objects
 
         public override void OnTransitDestroy()
         {
+            base.OnTransitDestroy();
+        }
+
+        internal override void DestroyEntityLikeExeCoreForStructuralWriter()
+        {
             DestroyEvent();
 
             if (Renderer != null)
@@ -1003,17 +1055,17 @@ namespace NTSD.Animation.LF2Objects
             {
                 Frame.D = FrameCache.GetFrameDataById(0);
                 Frame.PN = 0;
-                Frame.N = 0;
+                WriteCurrentFrameId(0);
             }
             else
             {
                 if (Frame.N == 0 && !_preserveOpointActionZero && !FrameCache.HasFrame(0))
-                    Frame.N = 999;
+                    WriteCurrentFrameId(999);
 
                 Frame.D = FrameCache.GetFrameDataById(Frame.N);
                 if (Frame.D == null)
                 {
-                    Frame.N = 0;
+                    WriteCurrentFrameId(0);
                     Frame.PN = 0;
                     Frame.D = FrameCache.GetFrameDataById(0);
                 }
@@ -1089,7 +1141,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private void PromoteState12AirborneFrameIfNeeded(int tickIndex)
+        internal void PromoteState12AirborneFrameIfNeeded(int tickIndex)
         {
             LF2FrameData frame = Frame?.D;
             if (frame == null)
@@ -1140,7 +1192,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private void PromoteBurningAirborneFrame205IfNeeded()
+        internal void PromoteBurningAirborneFrame205IfNeeded()
         {
             LF2FrameData frame = Frame?.D;
             if (frame == null)
@@ -1341,42 +1393,6 @@ namespace NTSD.Animation.LF2Objects
             return _catchResolver.StateBeingCaught(eventType, eventData);
         }
 
-        protected override void RunCpointActionSelectionStep10(CatchPoint cpoint, LF2Entity victimEntity)
-        {
-            _catchResolver.RunCpointActionSelectionStep10(cpoint, victimEntity);
-        }
-
-        protected override void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity)
-        {
-            _catchResolver.ApplyCpointThrowStep10(cpoint, victimEntity);
-        }
-
-        protected override void ApplyCpointThrowStep10(CatchPoint cpoint, LF2Entity victimEntity, LF2FrameData throwFrameSnapshot)
-        {
-            _catchResolver.ApplyCpointThrowStep10(cpoint, victimEntity, throwFrameSnapshot);
-        }
-
-        protected override void SetVictimThrowVzStep10(CatchPoint cpoint, LF2Entity victim)
-        {
-            _catchResolver.SetVictimThrowVzStep10(cpoint, victim);
-        }
-
-        protected override void ApplyCpointDirControlStep10(CatchPoint cpoint)
-        {
-            _catchResolver.ApplyCpointDirControlStep10(cpoint);
-        }
-
-        protected override void ApplyCpointHeldInjuryStep10(LF2Entity victimEntity, int injury)
-        {
-            _catchResolver.ApplyCpointHeldInjuryStep10(victimEntity, injury);
-        }
-
-        protected override void SyncCpointHeldPositionStep10(LF2Entity victimEntity, LF2FrameData catcherFrame, CatchPoint catcherCpoint)
-        {
-            _catchResolver.SyncCpointHeldPositionStep10(victimEntity, catcherFrame, catcherCpoint);
-            victimEntity?.Runtime.SyncIntegerPosition();
-        }
-
         private bool State_Standing(string eventType, object eventData)
         {
             return _stateResolver.StateStanding(eventType, eventData);
@@ -1536,6 +1552,23 @@ namespace NTSD.Animation.LF2Objects
             _interactionResolver.TryConsumeUnifiedStep7CandidateSequence();
         }
 
+        internal override bool TryGetBattleHitCandidateConsumer(
+            BattleHitExecutionPass pass,
+            out IBattleHitCandidateConsumer consumer)
+        {
+            bool participates = pass == BattleHitExecutionPass.Character
+                ? UsesCharacterDatInteractionPhase()
+                : !UsesCharacterDatInteractionPhase();
+            if (participates)
+            {
+                consumer = _interactionResolver;
+                return true;
+            }
+
+            consumer = null;
+            return false;
+        }
+
         /// <summary>
         /// 跑动受击/翻滚类状态转发到 DamageStateResolver。
         /// LF2Character 本身只保留路由职责，具体规则集中在 resolver 里。
@@ -1560,6 +1593,11 @@ namespace NTSD.Animation.LF2Objects
         private void HandleLandingEvent(double vyBeforeLand) // P0-f-2b B2-1: float→double
         {
             _damageStateResolver.HandleLandingEvent(vyBeforeLand);
+        }
+
+        internal void HandleLandingEventForFrameAdvance(double vyBeforeLand)
+        {
+            HandleLandingEvent(vyBeforeLand);
         }
 
         /// <summary>

@@ -1,12 +1,27 @@
 #if UNITY_EDITOR
 using NUnit.Framework;
 using NTSD.Animation.Rendering.Editor;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Test.Editor
 {
     // The gate samples counters only after warmup so setup capacity growth is allowed.
     public sealed class ProductionEntityStressCapacityPressureEditorTests
     {
+        [Test]
+        public void PositiveLinkValidationMode_DefaultsToDataOrientedAndKeepsLegacyOverride()
+        {
+            Assert.That(
+                ProductionEntityStressConfig.ParsePositiveLinkValidationMode(null),
+                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressConfig.ParsePositiveLinkValidationMode(""),
+                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressConfig.ParsePositiveLinkValidationMode("legacy"),
+                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.Legacy));
+        }
+
         [Test]
         public void StableCounters_RecordWithoutAllocatingOrFailingGate()
         {

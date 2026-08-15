@@ -157,6 +157,28 @@ namespace NTSD.Test
                 "a logical HP mutation must be witnessed by the runtime checksum");
         }
 
+        [Test]
+        public void RuntimeChecksum_TracksBattleResultsAndReserveTruth()
+        {
+            var world = new SimulationWorld();
+            FrameInputSet input = FrameInputSet.Empty(44);
+            ulong before = world.CaptureRuntimeChecksum64(44, input);
+
+            world.Runtime.Results.ActivateSummary(0, 2, 1, 2);
+            world.Runtime.Results.Cursor = 5;
+            world.Runtime.Results.ResultRow1Values[0, 0] = 7;
+            world.Runtime.Match.StageIdx = 3;
+            world.Runtime.Match.RandomStage = 1;
+            world.SetMode2Request(9);
+            world.Runtime.ReserveOwnerValid = true;
+            world.Runtime.ReserveCommittedTotal[0, 0] = 10;
+            world.Runtime.ReserveCommittedHp[0, 0] = 7;
+
+            ulong after = world.CaptureRuntimeChecksum64(44, input);
+            Assert.That(after, Is.Not.EqualTo(before),
+                "results UI state, stage selection, host request and committed reserve rows are lockstep truth");
+        }
+
         private static SimulationWorld CreateWorld(BattleRuntimeProfile profile)
         {
             return profile == BattleRuntimeProfile.Authority400

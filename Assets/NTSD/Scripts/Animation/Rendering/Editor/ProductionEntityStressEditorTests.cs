@@ -10,6 +10,7 @@ using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.EditorTools;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -18,6 +19,44 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class ProductionEntityStressEditorTests
     {
+        [Test]
+        public void CharacterFrameTickModeRequest_ParsesLegacyAndDataOriented()
+        {
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterFrameTickMode("legacy"),
+                Is.EqualTo(BattleEcsCharacterFrameTickPassMode.Legacy));
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterFrameTickMode("data-oriented"),
+                Is.EqualTo(BattleEcsCharacterFrameTickPassMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressConfig.FormatCharacterFrameTickMode(
+                    BattleEcsCharacterFrameTickPassMode.DataOriented),
+                Is.EqualTo("data-oriented"));
+            Assert.Throws<ArgumentException>(() =>
+                ProductionEntityStressConfig.ParseCharacterFrameTickMode("unknown"));
+        }
+
+        [Test]
+        public void CharacterPostFrameTailModeRequest_ParsesLegacyAndDataOriented()
+        {
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterPostFrameTailMode(string.Empty),
+                Is.EqualTo(BattleEcsCharacterPostFrameTailPassMode.Legacy));
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterPostFrameTailMode("legacy"),
+                Is.EqualTo(BattleEcsCharacterPostFrameTailPassMode.Legacy));
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterPostFrameTailMode(
+                    "data-oriented"),
+                Is.EqualTo(BattleEcsCharacterPostFrameTailPassMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressConfig.FormatCharacterPostFrameTailMode(
+                    BattleEcsCharacterPostFrameTailPassMode.DataOriented),
+                Is.EqualTo("data-oriented"));
+            Assert.Throws<ArgumentException>(() =>
+                ProductionEntityStressConfig.ParseCharacterPostFrameTailMode("unknown"));
+        }
+
         private sealed class RingBufferTask : LF2TaskBase
         {
             public RingBufferTask(int id)
@@ -1282,13 +1321,32 @@ namespace NTSD.Animation.Rendering.Editor
                 Is.True);
 
             report.harnessValidity = true;
+            report.collisionCandidateStoreAuthorityRangeReadCount = 2;
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
+                    report,
+                    CollisionCandidateStoreValidationPhase.Final),
+                Is.True,
+                "a non-empty candidate consumer legitimately reads once for the empty gate and again for consumption");
+
+            report.harnessValidity = true;
+            report.collisionCandidateStoreAuthorityRangeReadCount = 0;
             report.collisionCandidateConsumerEntityTicks = 0;
             Assert.That(
                 ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
                     report,
                     CollisionCandidateStoreValidationPhase.Final),
+                Is.True,
+                "an empty fixture with no candidate consumers requires no authority range reads");
+
+            report.harnessValidity = true;
+            report.collisionCandidateConsumerEntityTicks = 1;
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
+                    report,
+                    CollisionCandidateStoreValidationPhase.Final),
                 Is.False,
-                "range reads must still match the independent strict consumer count");
+                "authority range reads must cover every independent candidate consumer");
         }
 
         [TestCase(0, 0, 10)]
@@ -2428,7 +2486,7 @@ namespace NTSD.Animation.Rendering.Editor
                 "CandidateCollect/PairExactLoop",
             };
 
-            Assert.That(BattleTickDetailPhaseDiagnostics.PhaseCount, Is.EqualTo(40));
+            Assert.That(BattleTickDetailPhaseDiagnostics.PhaseCount, Is.EqualTo(44));
             for (int phaseIndex = 0; phaseIndex < phases.Length; phaseIndex++)
             {
                 Assert.That(
@@ -2515,6 +2573,45 @@ namespace NTSD.Animation.Rendering.Editor
                     recorder.GetLastElapsedTimestampTicks(broadphase),
                     Is.GreaterThan(0));
             }
+        }
+
+        [Test]
+        public void FormalSlotMap_DenseStampedAndLegacyProduceIdenticalCandidatesAndRng()
+        {
+            CreateCandidateCollectTimingFixture(
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character attacker);
+
+            query.ForceLegacyFormalSlotMapForDiagnostics = false;
+            CandidateCollectTimingRun dense = RunCandidateCollectTimingFixture(
+                world,
+                query,
+                attacker,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                forceDirect: true,
+                forceTree: false);
+
+            Assert.That(
+                query.TotalFormalDenseSlotParticipantCountForDiagnostics,
+                Is.GreaterThan(0));
+            Assert.That(
+                query.TotalFormalLegacySlotParticipantCountForDiagnostics,
+                Is.Zero);
+
+            query.ForceLegacyFormalSlotMapForDiagnostics = true;
+            CandidateCollectTimingRun legacy = RunCandidateCollectTimingFixture(
+                world,
+                query,
+                attacker,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                forceDirect: true,
+                forceTree: false);
+
+            AssertCandidateCollectTimingRunsEqual(dense, legacy);
+            Assert.That(
+                query.TotalFormalLegacySlotParticipantCountForDiagnostics,
+                Is.GreaterThan(0));
         }
 
         [Test]
@@ -3294,6 +3391,8 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionSlotVisitCount\":61950"));
             Assert.That(json, Does.Contain(
+                "\"aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount\":59000"));
+            Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionRefreshCount\":59000"));
             Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionReadCount\":59000"));
@@ -3311,6 +3410,27 @@ namespace NTSD.Animation.Rendering.Editor
                 "\"aiUnifiedSnapshotExecutionAuthoritySuccess\":true"));
             Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionRollbackObserved\":false"));
+        }
+
+        [Test]
+        public void UnifiedAiSnapshotAuthority_RollingTerminalClosurePasses()
+        {
+            ProductionEntityStressReport report =
+                CreateValidAiUnifiedSnapshotAuthorityReport();
+            report.forceFullAiUnifiedSnapshotRebuildApplied = false;
+            report.aiUnifiedSnapshotExecutionRollForwardCount = 58;
+            report.aiUnifiedSnapshotExecutionRollForwardDirtySlotCount = 38000;
+            report.aiUnifiedSnapshotExecutionSlotVisitCount = 1050;
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount = 1000;
+
+            Assert.That(
+                ProductionEntityStressRunner
+                    .EvaluateAiUnifiedSnapshotAuthorityValidityForReport(
+                        report,
+                        terminal: true),
+                Is.True);
+            Assert.That(report.aiUnifiedSnapshotExecutionAuthoritySuccess, Is.True);
+            Assert.That(report.harnessValidity, Is.True);
         }
 
         [Test]
@@ -3387,6 +3507,9 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(
                     report.aiUnifiedSnapshotExecutionSlotVisitCount,
                     Is.EqualTo(BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity));
+                Assert.That(
+                    report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount,
+                    Is.EqualTo(1));
                 Assert.That(report.aiUnifiedSnapshotExecutionCommittedPassCount,
                     Is.EqualTo(1));
                 Assert.That(report.aiUnifiedSnapshotExecutionRefreshCount, Is.EqualTo(1));
@@ -3451,6 +3574,7 @@ namespace NTSD.Animation.Rendering.Editor
 
         [TestCase("build")]
         [TestCase("slot")]
+        [TestCase("initial-capture")]
         [TestCase("refresh")]
         [TestCase("read")]
         [TestCase("commit")]
@@ -3466,6 +3590,9 @@ namespace NTSD.Animation.Rendering.Editor
                     break;
                 case "slot":
                     report.aiUnifiedSnapshotExecutionSlotVisitCount--;
+                    break;
+                case "initial-capture":
+                    report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount--;
                     break;
                 case "refresh":
                     report.aiUnifiedSnapshotExecutionRefreshCount--;
@@ -3599,6 +3726,8 @@ namespace NTSD.Animation.Rendering.Editor
                 CreateValidAiUnifiedSnapshotAuthorityReport();
             report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
             report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                58L * 1000L;
             report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
@@ -3652,6 +3781,8 @@ namespace NTSD.Animation.Rendering.Editor
                 CreateValidAiUnifiedSnapshotAuthorityReport();
             report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
             report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                58L * 1000L;
             report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
@@ -3674,6 +3805,8 @@ namespace NTSD.Animation.Rendering.Editor
                 CreateValidAiUnifiedSnapshotAuthorityReport();
             report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
             report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                58L * 1000L;
             report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
@@ -3746,6 +3879,8 @@ namespace NTSD.Animation.Rendering.Editor
             report.aiUnifiedSnapshotExecutionRestored = false;
             report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
             report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                58L * 1000L;
             report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
@@ -4126,6 +4261,8 @@ namespace NTSD.Animation.Rendering.Editor
                 aiUnifiedSnapshotExecutionRestored = true,
                 aiUnifiedSnapshotExecutionBuildCount = observedPasses,
                 aiUnifiedSnapshotExecutionSlotVisitCount = observedPasses * 1050,
+                aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                    refreshAndReadCount,
                 aiUnifiedSnapshotExecutionRefreshCount = refreshAndReadCount,
                 aiUnifiedSnapshotExecutionReadCount = refreshAndReadCount,
                 aiUnifiedSnapshotExecutionCommittedPassCount = observedPasses,
@@ -4312,6 +4449,7 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(request.enablePhaseTiming, Is.False);
             Assert.That(request.enablePresentationTiming, Is.False);
             Assert.That(request.enableDetailPhaseTiming, Is.False);
+            Assert.That(request.enableFrameTiming, Is.False);
             Assert.That(request.aiSensingMode, Is.EqualTo("legacy"));
             Assert.That(request.allowUnsafeAiSoACandidate, Is.False);
             Assert.That(request.maxCatchUpTicksPerFrame, Is.EqualTo(1));
@@ -4694,6 +4832,7 @@ namespace NTSD.Animation.Rendering.Editor
                 action = "dispersed",
                 enablePhaseTiming = true,
                 enablePresentationTiming = true,
+                enableFrameTiming = true,
                 outputPath = "Temp/timing-enabled.json",
             };
             ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
@@ -4704,13 +4843,57 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(config.EnablePhaseTiming, Is.True);
             Assert.That(config.EnablePresentationTiming, Is.True);
             Assert.That(config.EnableDetailPhaseTiming, Is.False);
+            Assert.That(config.EnableFrameTiming, Is.True);
 
             ProductionEntityStressPhaseTimingCollector.PopulateDisabledReport(report);
             ProductionEntityStressPresentationTimingCollector.PopulateDisabledReport(report);
+            ProductionEntityStressFrameTimingCollector.PopulateDisabledReport(report);
             Assert.That(report.phaseTimingEnabled, Is.False);
             Assert.That(report.phaseTimings, Is.Empty);
             Assert.That(report.presentationTimingEnabled, Is.False);
             Assert.That(report.presentationTimings, Is.Empty);
+            Assert.That(report.frameTimingEnabled, Is.False);
+            Assert.That(report.completedFrameCpuMilliseconds.available, Is.False);
+        }
+
+        [Test]
+        public void FrameTimingCollector_StartPolicyRejectsOverlapAndUnsupportedTargets()
+        {
+            Assert.That(
+                ProductionEntityStressFrameTimingCollector.CanStart(
+                    disposed: false,
+                    supported: true,
+                    activeWindow: false,
+                    pendingTiming: false),
+                Is.True);
+            Assert.That(
+                ProductionEntityStressFrameTimingCollector.CanStart(
+                    disposed: true,
+                    supported: true,
+                    activeWindow: false,
+                    pendingTiming: false),
+                Is.False);
+            Assert.That(
+                ProductionEntityStressFrameTimingCollector.CanStart(
+                    disposed: false,
+                    supported: false,
+                    activeWindow: false,
+                    pendingTiming: false),
+                Is.False);
+            Assert.That(
+                ProductionEntityStressFrameTimingCollector.CanStart(
+                    disposed: false,
+                    supported: true,
+                    activeWindow: true,
+                    pendingTiming: false),
+                Is.False);
+            Assert.That(
+                ProductionEntityStressFrameTimingCollector.CanStart(
+                    disposed: false,
+                    supported: true,
+                    activeWindow: false,
+                    pendingTiming: true),
+                Is.False);
         }
 
         [Test]
@@ -4898,6 +5081,37 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(
                 ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
                 Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+        }
+
+        [Test]
+        public void LateCommonNoOpGateToggle_IsImplementationDistinctAndPreservesWorkload()
+        {
+            ProductionEntityStressConfig candidate = ProductionEntityStressConfig.FromRequest(
+                new ProductionEntityStressRequest
+                {
+                    action = "smoke",
+                    forceLegacyLateCommonNoOpGates = false,
+                    outputPath = "Temp/late-common-noop-candidate.json",
+                },
+                ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy = ProductionEntityStressConfig.FromRequest(
+                new ProductionEntityStressRequest
+                {
+                    action = "smoke",
+                    forceLegacyLateCommonNoOpGates = true,
+                    outputPath = "Temp/late-common-noop-legacy.json",
+                },
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(candidate.ForceLegacyLateCommonNoOpGates, Is.False);
+            Assert.That(legacy.ForceLegacyLateCommonNoOpGates, Is.True);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildWorkload(candidate),
+                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
         }
 
         [Test]
@@ -5271,6 +5485,178 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(config.EnablePhaseTiming, Is.False);
             Assert.That(config.EnablePresentationTiming, Is.False);
             Assert.That(config.EnableDetailPhaseTiming, Is.False);
+        }
+
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        public void PeriodicReportWritePolicy_DoesNotSerializeInsideStrictZeroGcBattle(
+            bool requireZeroGcAfterWarmup,
+            bool expected)
+        {
+            Assert.That(
+                ProductionEntityStressReportWritePolicy
+                    .AllowsPeriodicWriteDuringBattle(requireZeroGcAfterWarmup),
+                Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void FormalSlotMap_LegacyABRequestIsAppliedReportedAndFingerprinted()
+        {
+            ProductionEntityStressRequest denseRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/formal-slot-map-dense.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressRequest legacyRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/formal-slot-map-legacy.json",
+                    "data-oriented-canonical");
+            legacyRequest.forceLegacyFormalSlotMap = true;
+
+            ProductionEntityStressConfig dense = ProductionEntityStressConfig.FromRequest(
+                denseRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy = ProductionEntityStressConfig.FromRequest(
+                legacyRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            var world = new SimulationWorld();
+            BruteForceSceneQuery query =
+                ProductionEntityStressRunner.ApplyFormalCollectorModeForDiagnostics(
+                    world,
+                    legacy.FormalCollectorMode);
+            var report = new ProductionEntityStressReport();
+
+            ProductionEntityStressRunner.ApplyRoleAwareBroadphaseDiagnosticsForDiagnostics(
+                query,
+                legacy,
+                report);
+
+            Assert.That(dense.ForceLegacyFormalSlotMap, Is.False);
+            Assert.That(legacy.ForceLegacyFormalSlotMap, Is.True);
+            Assert.That(query.ForceLegacyFormalSlotMapForDiagnostics, Is.True);
+            Assert.That(report.forceLegacyFormalSlotMapRequested, Is.True);
+            Assert.That(report.forceLegacyFormalSlotMapApplied, Is.True);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(dense),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+        }
+
+        [Test]
+        public void CollisionSnapshotRoleRoster_LegacyABRequestIsAppliedReportedAndFingerprinted()
+        {
+            ProductionEntityStressRequest candidateRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/collision-snapshot-roster-candidate.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressRequest legacyRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/collision-snapshot-roster-legacy.json",
+                    "data-oriented-canonical");
+            legacyRequest.forceLegacyCollisionSnapshotRoleRoster = true;
+
+            ProductionEntityStressConfig candidate = ProductionEntityStressConfig.FromRequest(
+                candidateRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy = ProductionEntityStressConfig.FromRequest(
+                legacyRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            var world = new SimulationWorld();
+            BruteForceSceneQuery query =
+                ProductionEntityStressRunner.ApplyFormalCollectorModeForDiagnostics(
+                    world,
+                    legacy.FormalCollectorMode);
+            var report = new ProductionEntityStressReport();
+
+            ProductionEntityStressRunner.ApplyRoleAwareBroadphaseDiagnosticsForDiagnostics(
+                query,
+                legacy,
+                report);
+
+            Assert.That(candidate.ForceLegacyCollisionSnapshotRoleRoster, Is.False);
+            Assert.That(legacy.ForceLegacyCollisionSnapshotRoleRoster, Is.True);
+            Assert.That(
+                query.ForceLegacyCollisionSnapshotRoleRosterForDiagnostics,
+                Is.True);
+            Assert.That(
+                report.forceLegacyCollisionSnapshotRoleRosterRequested,
+                Is.True);
+            Assert.That(
+                report.forceLegacyCollisionSnapshotRoleRosterApplied,
+                Is.True);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+        }
+
+        [Test]
+        public void RoleBodyTemplate_LegacyABRequestIsAppliedReportedAndFingerprinted()
+        {
+            ProductionEntityStressRequest candidateRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/role-body-template-candidate.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressRequest legacyRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/role-body-template-legacy.json",
+                    "data-oriented-canonical");
+            legacyRequest.forceLegacyRoleBodyBuild = true;
+
+            ProductionEntityStressConfig candidate = ProductionEntityStressConfig.FromRequest(
+                candidateRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy = ProductionEntityStressConfig.FromRequest(
+                legacyRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            var world = new SimulationWorld();
+            BruteForceSceneQuery query =
+                ProductionEntityStressRunner.ApplyFormalCollectorModeForDiagnostics(
+                    world,
+                    legacy.FormalCollectorMode);
+            var report = new ProductionEntityStressReport();
+
+            ProductionEntityStressRunner.ApplyRoleAwareBroadphaseDiagnosticsForDiagnostics(
+                query,
+                legacy,
+                report);
+
+            Assert.That(candidate.ForceLegacyRoleBodyBuild, Is.False);
+            Assert.That(legacy.ForceLegacyRoleBodyBuild, Is.True);
+            Assert.That(query.ForceLegacyRoleBodyBuildForDiagnostics, Is.True);
+            Assert.That(report.forceLegacyRoleBodyBuildRequested, Is.True);
+            Assert.That(report.forceLegacyRoleBodyBuildApplied, Is.True);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+        }
+
+        [Test]
+        public void PostFrameRuntimeSnapshot_LegacyABRequestIsParsedAndFingerprinted()
+        {
+            ProductionEntityStressRequest candidateRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/post-frame-runtime-snapshot-candidate.json",
+                    "data-oriented-canonical");
+            ProductionEntityStressRequest legacyRequest =
+                ProductionEntityStressWindow.CreateCombatPerformanceSmokeRequest(
+                    "Temp/post-frame-runtime-snapshot-legacy.json",
+                    "data-oriented-canonical");
+            legacyRequest.forceLegacyPostFrameRuntimeSnapshot = true;
+
+            ProductionEntityStressConfig candidate = ProductionEntityStressConfig.FromRequest(
+                candidateRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy = ProductionEntityStressConfig.FromRequest(
+                legacyRequest,
+                ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(candidate.ForceLegacyPostFrameRuntimeSnapshot, Is.False);
+            Assert.That(legacy.ForceLegacyPostFrameRuntimeSnapshot, Is.True);
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
         }
 
         [Test]
@@ -5762,6 +6148,50 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void HitExecutionPlanMode_IsParsedAndImplementationFingerprinted()
+        {
+            var legacyRequest = new ProductionEntityStressRequest
+            {
+                action = "dispersed100",
+                entityCount = 100,
+                hitExecutionPlanMode = "disabled",
+                outputPath = "Temp/hit-plan-legacy.json",
+            };
+            var dataRequest = new ProductionEntityStressRequest
+            {
+                action = legacyRequest.action,
+                entityCount = legacyRequest.entityCount,
+                hitExecutionPlanMode = "data-oriented",
+                outputPath = "Temp/hit-plan-data.json",
+            };
+
+            ProductionEntityStressConfig legacy =
+                ProductionEntityStressConfig.FromRequest(
+                    legacyRequest,
+                    ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig data =
+                ProductionEntityStressConfig.FromRequest(
+                    dataRequest,
+                    ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(
+                legacy.HitExecutionPlanMode,
+                Is.EqualTo(BattleHitExecutionPlanMode.Disabled));
+            Assert.That(
+                data.HitExecutionPlanMode,
+                Is.EqualTo(BattleHitExecutionPlanMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildWorkload(data),
+                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(data),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+            Assert.Throws<ArgumentException>(() =>
+                ProductionEntityStressConfig.ParseHitExecutionPlanMode("unknown"));
+        }
+
+        [Test]
         public void RunStatusPolicy_CleanupPreservesSaturationBlockedResult()
         {
             Assert.That(
@@ -6124,6 +6554,52 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(currentFilter, Is.EqualTo(LogType.Warning));
             Assert.That(report.applied, Is.False);
             Assert.That(report.restored, Is.True);
+        }
+
+        [Test]
+        public void CharacterPreFrameBoundsMode_DefaultsToDataAndSeparatesLegacyFingerprint()
+        {
+            ProductionEntityStressRequest legacyJson =
+                JsonUtility.FromJson<ProductionEntityStressRequest>("{}");
+            ProductionEntityStressConfig data =
+                ProductionEntityStressConfig.FromRequest(
+                    legacyJson,
+                    ProductionEntityStressPaths.ProjectRoot);
+            ProductionEntityStressConfig legacy =
+                ProductionEntityStressConfig.FromRequest(
+                    new ProductionEntityStressRequest
+                    {
+                        characterPreFrameBoundsMode = "legacy",
+                    },
+                    ProductionEntityStressPaths.ProjectRoot);
+
+            Assert.That(
+                legacyJson.characterPreFrameBoundsMode,
+                Is.EqualTo("data-oriented"));
+            Assert.That(
+                data.CharacterPreFrameBoundsMode,
+                Is.EqualTo(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented));
+            Assert.That(
+                legacy.CharacterPreFrameBoundsMode,
+                Is.EqualTo(BattleEcsCharacterPreFrameBoundsPassMode.Legacy));
+            Assert.That(
+                ProductionEntityStressFingerprint.BuildImplementationConfig(data),
+                Is.Not.EqualTo(
+                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+        }
+
+        [Test]
+        public void CharacterPreFrameBoundsMode_InvalidValueFailsFast()
+        {
+            ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+                ProductionEntityStressConfig.FromRequest(
+                    new ProductionEntityStressRequest
+                    {
+                        characterPreFrameBoundsMode = "hybrid",
+                    },
+                    ProductionEntityStressPaths.ProjectRoot));
+
+            Assert.That(exception.Message, Does.Contain("legacy or data-oriented"));
         }
 
         private static void CreateCandidateCollectTimingFixture(

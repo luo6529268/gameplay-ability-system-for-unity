@@ -1752,7 +1752,7 @@ namespace NTSD.Animation.Rendering
                 centerx = 8,
                 centery = 8,
             };
-            Frame.N = 0;
+            WriteCurrentFrameId(0);
             Frame.PN = 0;
             Frame.Prev = 0;
             Runtime.X = x;

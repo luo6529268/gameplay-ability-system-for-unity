@@ -345,7 +345,15 @@ namespace NTSD.Simulation
         {
             bool usedUnifiedAuthority =
                 AiUnifiedSnapshotExecutionFallbackForbidden;
-            EndAiUnifiedSnapshotExecutionPass();
+            bool preserveRollingSnapshot =
+                aiUnifiedSnapshotExecutionMode ==
+                    AiUnifiedSnapshotExecutionMode.UnifiedAuthority &&
+                aiUnifiedSnapshotPublishedState != null &&
+                battleAiUnifiedRowPublisher.Active;
+            if (preserveRollingSnapshot)
+                SuspendAiUnifiedSnapshotExecutionPass();
+            else
+                EndAiUnifiedSnapshotExecutionPass();
             if (usedUnifiedAuthority)
                 RestoreAiUnifiedSnapshotLegacyConsumerBuffers();
             EndAiUnifiedSnapshotShadowPass();
@@ -2026,7 +2034,7 @@ namespace NTSD.Simulation
         {
             diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.InputEdges);
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.InputEdges);
-            input.ApplyInputEdges();
+            battleCharacterInputWriter.ApplyInputEdges(input);
             CompleteAiSoADecisionRemainderInput();
             diagnostics?.EndPhase(BattleAiInputDetailPhase.InputEdges);
             if (!completePostSpecialMainDecision || diagnostics == null)
@@ -5125,11 +5133,9 @@ namespace NTSD.Simulation
                 self.Runtime.KeyAttack = 1;
         }
 
-        private static void RollAndClearAiKeys(NTSDEntityRuntime input)
+        private void RollAndClearAiKeys(NTSDEntityRuntime input)
         {
-            input.RollInputFromCurrent();
-            input.ClearDirectionalInputKeys();
-            input.ClearActionInputKeys();
+            battleCharacterInputWriter.RollAndClearCurrentKeys(input);
         }
 
         private void MoveTowardCoordinate(LF2Entity self, AiInputContext ai)
@@ -5631,7 +5637,7 @@ namespace NTSD.Simulation
                 Abs(Z(target) - Z(self)) < 10 && Rand(ai.Rand5 + 7) == 0 && targetState != 14) input.KeyJump = 1;
             if (heldOid != 122 && heldOid != 123) return true;
 
-            input.ClearActionInputKeys(); input.ClearDirectionalInputKeys();
+            battleCharacterInputWriter.ClearCurrentKeys(input);
             if (selfState == 17 && sameZLane && !specialObjectProximity && HitStop(self) != 0)
             { input.KeyAttack = 1; return false; }
             if (HasInputHistoryGate(self) && (Abs(Z(self) - Z(target)) > 150 || Abs(X(self) - X(target)) > 240)) return false;

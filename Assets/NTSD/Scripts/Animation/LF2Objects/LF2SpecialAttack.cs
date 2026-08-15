@@ -14,7 +14,7 @@ namespace NTSD.Animation.LF2Objects
     /// 复刻基准是 C++ release 工程中的 Entity_FrameLogic、Entity_AI_Update 和 opoint 生成流程；
     /// Unity 这里只保留对象池、渲染引用和分层调度适配。
     /// </summary>
-    public class LF2SpecialAttack : LF2Entity
+    public class LF2SpecialAttack : LF2Entity, IBattleHitCandidateConsumer
     {
         // ========== 技能专属字段（不在 LF2Entity 的） ==========
 
@@ -25,6 +25,8 @@ namespace NTSD.Animation.LF2Objects
         // ========== 配置字段 ==========
         private LF2LivingObject _parent;
         private int _lastState = -1;
+        internal LF2LivingObject ParentForSnapshot => _parent;
+        internal int LastStateForSnapshot => _lastState;
         public long InvalidInitTaskTypeCountForDiagnostics { get; private set; }
 
         // ========== 状态机字段 ==========
@@ -211,7 +213,7 @@ namespace NTSD.Animation.LF2Objects
         public override void OnFrameTransit(int targetFrameId, bool switchDirAfterTrans, int oldLock)
         {
             Frame.PN = Frame.N;
-            Frame.N = targetFrameId;
+            WriteCurrentFrameId(targetFrameId);
 
             LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);
             if (targetFrame == null) return;
@@ -253,10 +255,8 @@ namespace NTSD.Animation.LF2Objects
             if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)
                 return;
 
-            Frame.N = frameId;
+            WriteCurrentFrameId(frameId);
             Frame.D = FrameCache.GetFrameDataById(frameId);
-            if (Runtime != null)
-                Runtime.Frame = frameId;
             AttackingCounter = 0;
             if (Frame.D != null && Trans != null)
             {
@@ -313,186 +313,40 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void Interaction()
         {
-            LF2FrameData frame = GetCollisionFrameData();
-            var sceneQuery = Match?.SceneQuery;
-            var kindService = Match?.ItrKindService;
-            if (frame?.itrs == null || sceneQuery == null || kindService == null) return;
-            if (!sceneQuery.TryGetCollisionCandidateRange(this, out var candidates))
-                return;
+            BattleHitCandidateSequenceRunner.TryConsume(this);
+        }
 
-            int candidateLimit = candidates.Count;
-            for (int candidateIndex = 0; candidateIndex < candidateLimit; candidateIndex++)
+        internal override bool TryGetBattleHitCandidateConsumer(
+            BattleHitExecutionPass pass,
+            out IBattleHitCandidateConsumer consumer)
+        {
+            if (pass == BattleHitExecutionPass.Object &&
+                !UsesCharacterDatInteractionPhase())
             {
-                if (!candidates.TryGet(candidateIndex, out SceneQueryHit candidate))
-                    continue;
-                int itrIndex = candidate.ItrIndex;
-                if (itrIndex < 0 || itrIndex >= frame.itrs.Count)
-                    continue;
-
-                LF2Entity target = candidate.ResolveCurrentTarget(Match);
-                if (target == null)
-                    continue;
-                InteractionArea runtimeItr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
-                    this,
-                    target,
-                    frame,
-                    frame.itrs[itrIndex],
-                    out bool zeroAttackerHpOnConsume,
-                    out bool releaseHeavyHeldTargetOnConsume);
-                if (runtimeItr == null)
-                    continue;
-
-                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyPreprocess == true)
-                {
-                    Match.ObserveBattleHitExecutionPlanLegacyPreprocess(
-                        this,
-                        target,
-                        runtimeItr,
-                        zeroAttackerHpOnConsume,
-                        releaseHeavyHeldTargetOnConsume);
-                }
-
-                var hitInfo = new SceneQueryHit(
-                    target,
-                    candidate.BodyX,
-                    itrIndex,
-                    runtimeItr,
-                    zeroAttackerHpOnConsume,
-                    releaseHeavyHeldTargetOnConsume);
-
-                bool canConsume = CanConsumeRecordedCandidate(target);
-                BattleHitCandidateDisposition disposition =
-                    LF2HitResolveRuntimeData.ResolveCandidateDisposition(
-                        target,
-                        runtimeItr,
-                        canConsume);
-                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyDisposition == true)
-                {
-                    Match.ObserveBattleHitExecutionPlanLegacyDisposition(
-                        this,
-                        target,
-                        runtimeItr,
-                        disposition);
-                }
-
-                if (!canConsume ||
-                    disposition == BattleHitCandidateDisposition.Unsupported)
-                    continue;
-                if (disposition == BattleHitCandidateDisposition.HitConfirm)
-                {
-                    if (Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
-                    {
-                        Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                            this,
-                            target,
-                            runtimeItr,
-                            disposition);
-                    }
-                    target.HitConfirmCounter = 3;
-                    if (Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true)
-                    {
-                        Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
-                    }
-                    continue;
-                }
-                if (disposition == BattleHitCandidateDisposition.Kind1Grab ||
-                    disposition == BattleHitCandidateDisposition.Kind3Grab ||
-                    disposition == BattleHitCandidateDisposition.Pickup)
-                {
-                    bool observePreInteractionWriterEffect =
-                        Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
-                    if (observePreInteractionWriterEffect)
-                    {
-                        Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                            this,
-                            target,
-                            runtimeItr,
-                            disposition);
-                    }
-                    DispatchInteractionByKind(kindService, runtimeItr, target);
-                    if (observePreInteractionWriterEffect)
-                        Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
-                    continue;
-                }
-
-                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
-                {
-                    Match.PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
-                        this,
-                        target);
-                }
-                ApplyReleaseSceneQueryConsumeEffects(hitInfo);
-                if (Match?.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects == true)
-                {
-                    Match.ObserveBattleHitExecutionPlanLegacyConsumeEffects(
-                        this,
-                        target);
-                }
-                bool abortAfterSuccessfulHit = LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
-                    target,
-                    runtimeItr);
-                SimulationWorld observationWorld = Match;
-                if (observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
-                {
-                    observationWorld.PrepareBattleHitExecutionPlanLegacyDispatchObservation(
-                        this,
-                        target,
-                        runtimeItr);
-                }
-                bool observeWriterEffect =
-                    (disposition == BattleHitCandidateDisposition.Kind8 ||
-                     disposition == BattleHitCandidateDisposition.Kind14 ||
-                     disposition == BattleHitCandidateDisposition.Kind10Or11 ||
-                     disposition == BattleHitCandidateDisposition.Kind15Or16 ||
-                     (disposition == BattleHitCandidateDisposition.Damage &&
-                      Match?.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
-                          this,
-                          target,
-                          runtimeItr,
-                          disposition) == true)) &&
-                    Match?.ShouldObserveBattleHitExecutionPlanLegacyWriterEffect == true;
-                bool observeLifecycleEffect =
-                    disposition == BattleHitCandidateDisposition.Damage &&
-                    observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyLifecycleEffect == true &&
-                    observationWorld.CanProjectBattleHitExecutionPlanLegacyLifecycleEffect(
-                        this,
-                        target,
-                        runtimeItr,
-                        disposition);
-                if (observeWriterEffect)
-                {
-                    Match.PrepareBattleHitExecutionPlanLegacyWriterEffectObservation(
-                        this,
-                        target,
-                        runtimeItr,
-                        disposition);
-                }
-                if (observeLifecycleEffect)
-                {
-                    observationWorld.PrepareBattleHitExecutionPlanLegacyLifecycleEffectObservation(
-                        this,
-                        target,
-                        runtimeItr,
-                        disposition);
-                }
-                bool dispatched = DispatchInteractionByKind(kindService, runtimeItr, target);
-                if (observeWriterEffect)
-                    Match.ObserveBattleHitExecutionPlanLegacyWriterEffect(this, target);
-                if (observeLifecycleEffect)
-                    observationWorld.ObserveBattleHitExecutionPlanLegacyLifecycleEffect(this);
-                if (observationWorld?.ShouldObserveBattleHitExecutionPlanLegacyDispatch == true)
-                {
-                    observationWorld.ObserveBattleHitExecutionPlanLegacyDispatch(
-                        this,
-                        dispatched,
-                        dispatched && abortAfterSuccessfulHit);
-                }
-                if (!dispatched)
-                    continue;
-
-                if (abortAfterSuccessfulHit)
-                    return;
+                consumer = this;
+                return true;
             }
+
+            return base.TryGetBattleHitCandidateConsumer(pass, out consumer);
+        }
+
+        LF2Entity IBattleHitCandidateConsumer.Attacker => this;
+
+        void IBattleHitCandidateConsumer.ApplyConsumeEffects(in SceneQueryHit hit)
+        {
+            ApplyReleaseSceneQueryConsumeEffects(hit);
+        }
+
+        void IBattleHitCandidateConsumer.BeforeDispatch(int itrIndex)
+        {
+        }
+
+        bool IBattleHitCandidateConsumer.Dispatch(
+            INTSDItrKindService kindService,
+            InteractionArea itr,
+            LF2Entity target)
+        {
+            return DispatchInteractionByKind(kindService, itr, target);
         }
 
         private bool CanConsumeRecordedCandidate(LF2Entity target)
@@ -524,12 +378,20 @@ namespace NTSD.Animation.LF2Objects
             switch (itr.kind)
             {
                 case 1:
-                    return LF2CharacterInteractionResolver.TryApplyKind1Grab(this, target, itr);
+                    return Match?.InteractionWriter.TryApplyGrab(
+                        this,
+                        target,
+                        itr,
+                        1) ?? false;
                 case 2:
                 case 7:
                     return TryApplyPickupCandidate(itr, target);
                 case 3:
-                    return LF2CharacterInteractionResolver.TryApplyKind3Grab(this, target, itr);
+                    return Match?.InteractionWriter.TryApplyGrab(
+                        this,
+                        target,
+                        itr,
+                        3) ?? false;
                 default:
                     return false;
             }
@@ -687,35 +549,12 @@ namespace NTSD.Animation.LF2Objects
 
             if (itr.kind == 9)
             {
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
-                LF2CharacterData charData = FrameCache?.Wrapper?.characterData;
-                if (!string.IsNullOrEmpty(charData?.weapon_broken_sound))
-                    PlaySound(charData.weapon_broken_sound);
-
-                attacker.FrameDelay = -3;
-
-                int curState = GetState();
-                if (curState == LF2States.ObjectFlying) // 3005
-                {
-                    HitConfirm2 = 1;
-                    DirectWriteRawFramePreserveWaitCounter(40);
-                }
-                else
-                {
-                    RelationTeam = attacker.RelationTeam;
-                    HolderCopySlot = attacker.HolderCopySlot;
-                    HitConfirm2 = 1;
-                    DirectWriteRawFramePreserveWaitCounter(30);
-                    AttackingCounter = 0;
-                    KnockbackVx = 0.0;
-                    KnockbackVy = 0.0;
-                    KnockbackVz = 0.0;
-                    Runtime.Vx = 0.0;
-                    Runtime.Vy = 0.0;
-                    Runtime.Vz = 0.0;
-                    Runtime.AnimCounter = attacker.Runtime.SlotIndex;
-                }
-                return true;
+                SimulationWorld world = Match ?? attacker.Match;
+                return world?.DamageWriter.ApplySpecialAttackDamage(
+                    world,
+                    attacker,
+                    this,
+                    itr) == true;
             }
 
             if (itr.kind == 14)
@@ -727,238 +566,24 @@ namespace NTSD.Animation.LF2Objects
             if (itr.kind != 0)
                 return false;
 
-            LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
-            ApplyObjectHurtTail(attacker, itr);
-            ApplyKind0Type3Tail(attacker, itr);
-            RecordKind0Hit(attacker, itr);
-            return true;
-        }
-
-        private void ApplyObjectHurtTail(LF2Entity attacker, InteractionArea itr)
-        {
-            int victimType = GetCurrentDataObjectTypeForSimulation();
-            int attackerSlot = attacker.Runtime.SlotIndex;
-            int itrArest = itr.arest < 4 && itr.vrest == 0 ? 4 : itr.arest;
-
-            if ((Health?.HP ?? 0) <= 0 || itr.effect == 4)
-                FallCounter = 80;
-
-            if (victimType != (int)LF2ObjectType.HeavyWeapon || itr.fall > 40)
-                HitCount++;
-
-            FallCounter += itr.fall != 0 ? itr.fall : 20;
-            if (ShouldForceFall80())
-                FallCounter = 80;
-
-            bool knockback = false;
-            if (FallCounter > 60 && victimType != (int)LF2ObjectType.SpecialAttack)
-            {
-                FallCounter = 80;
-                knockback = true;
-            }
-            else if (victimType != (int)LF2ObjectType.SpecialAttack)
-            {
-                if (FallCounter > 50)
-                {
-                    FallCounter = 60;
-                    DirectWriteRawFramePreserveWaitCounter(226);
-                    if (GetRuntimeYInt() < 0)
-                    {
-                        FallCounter = 80;
-                        knockback = true;
-                    }
-                }
-                else if (FallCounter > 30)
-                {
-                    FallCounter = 40;
-                    DirectWriteRawFramePreserveWaitCounter(Dirh() != attacker.Dirh() ? 222 : 224);
-                    if (GetRuntimeYInt() < 0)
-                    {
-                        FallCounter = 80;
-                        knockback = true;
-                    }
-                }
-                else if (FallCounter > 10)
-                {
-                    FallCounter = 20;
-                    DirectWriteRawFramePreserveWaitCounter(220);
-                    if (GetRuntimeYInt() < 0)
-                        DirectWriteRawFramePreserveWaitCounter(Dirh() != attacker.Dirh() ? 222 : 224);
-                }
-            }
-
-            LF2HitResolveRuntimeData.RecordStandardHurtSounds(attacker, this, itr, knockback);
-            float defaultDvx = itr.dvx != 0 ? attacker.Dirh() * itr.dvx : 0f;
-            float resolvedDvx = LF2HitResolveRuntimeData.ResolveStandardDamageKnockbackX(
+            SimulationWorld damageWorld = Match ?? attacker.Match;
+            return damageWorld?.DamageWriter.ApplySpecialAttackDamage(
+                damageWorld,
                 attacker,
                 this,
-                itr,
-                knockback,
-                defaultDvx);
-            bool skipOid100KnockbackTail =
-                LF2HitResolveRuntimeData.ShouldSkipOid100KnockbackTail(
-                    this,
-                    itr,
-                    knockback);
-            if (resolvedDvx != 0f)
-                KnockbackVx += resolvedDvx;
-
-            if (!skipOid100KnockbackTail)
-                LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(this);
-
-            ApplyState3000ObjectHurtTail(attacker);
-
-            if (knockback)
-            {
-                if ((victimType != (int)LF2ObjectType.HeavyWeapon &&
-                     victimType != (int)LF2ObjectType.SpecialAttack) ||
-                    itr.fall > 40)
-                {
-                    KnockbackVy += itr.dvy != 0 ? itr.dvy : -7.0;
-                }
-
-                if ((int)(KnockbackVy + GetRuntimeYInt()) > 0)
-                    KnockbackVy = 12.0;
-
-                int fallFrame = Dirh() > 0
-                    ? (KnockbackVx <= 0.0 ? 180 : 186)
-                    : (KnockbackVx >= 0.0 ? 180 : 186);
-                DirectWriteRawFramePreserveWaitCounter(fallFrame);
-                ApplyKnockdownHeldPairVrest(attacker);
-            }
-
-            HitStateCount = 45;
-            if (attacker.FrameDelay >= 0)
-                attacker.FrameDelay = 3;
-            FrameDelay = -3;
-            attacker.AttackExempt = itrArest;
-            if (attacker.ItrRest != null)
-                attacker.ItrRest.Arest = itrArest;
-            if (attackerSlot >= 0 && itr.vrest > 0)
-                ItrRest?.SetVrest(attackerSlot, itr.vrest);
-
-            ApplyCaughtVictimHurtFrame(attacker);
-
-            if (FallCounter == 80)
-                FallCounter = 0;
-
-            if (attacker.Runtime.LinkState < 0)
-            {
-                int holderSlot = attacker.Runtime.ResolveActiveHolderSlotIndex();
-                LF2Entity holder = holderSlot >= 0
-                    ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
-                    : null;
-                if (holder != null)
-                    holder.FrameDelay = attacker.FrameDelay;
-            }
-
-            if (attacker.GetState() == LF2States.WeaponThrowing)
-            {
-                attacker.DirectWriteRawFramePreserveWaitCounter(attacker.BattleRandInt(0, 16));
-                attacker.Runtime.Vx = KnockbackVx * -0.5;
-                attacker.Runtime.Vy = -4.0;
-                if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.ThrowWeapon &&
-                    victimType == (int)LF2ObjectType.ThrowWeapon)
-                {
-                    attacker.KnockbackVx = -KnockbackVx;
-                }
-            }
-        }
-
-        private bool ShouldForceFall80()
-        {
-            LF2FrameData previousFrame = GetFrameDataById(Frame?.Prev ?? 0);
-            if (previousFrame?.state == 13)
-                return true;
-
-            LF2FrameData previousFrame2 = GetFrameDataById(Runtime.PrevFrame2);
-            if (previousFrame2?.state == 12)
-                return true;
-
-            int victimType = GetCurrentDataObjectTypeForSimulation();
-            return victimType == (int)LF2ObjectType.LightWeapon ||
-                   victimType == (int)LF2ObjectType.HeavyWeapon ||
-                   victimType == (int)LF2ObjectType.ThrowWeapon ||
-                   victimType == (int)LF2ObjectType.Drink;
-        }
-
-        private void ApplyState3000ObjectHurtTail(LF2Entity attacker)
-        {
-            if (attacker == null || attacker.GetState() != LF2States.ProjectileFlying)
-                return;
-
-            int attackerOid = attacker.FrameCache?.Wrapper?.characterId ?? attacker.ObjectId;
-            int victimOid = FrameCache?.Wrapper?.characterId ?? ObjectId;
-            int victimType = GetCurrentDataObjectTypeForSimulation();
-            bool nonCharacterVictim = victimType != (int)LF2ObjectType.Character;
-            bool skipReset = nonCharacterVictim && attackerOid == 209 &&
-                (victimOid == 200 ||
-                 victimOid == 203 ||
-                 victimOid == 205 ||
-                 victimOid == 206 ||
-                 victimOid == 207 ||
-                 victimOid == 215 ||
-                 victimOid == 216 ||
-                 (victimOid == 209 && Frame.N == 40));
-            if (skipReset)
-                return;
-
-            attacker.DirectWriteRawFramePreserveWaitCounter(10);
-            attacker.AttackingCounter = 0;
-            attacker.Runtime.Vx = 0.0;
-            LF2FrameData frame10 = attacker.GetFrameDataById(10);
-            if (frame10 != null)
-                attacker.Runtime.Vz = frame10.dvz;
-        }
-
-        private void ApplyKnockdownHeldPairVrest(LF2Entity attacker)
-        {
-            if (attacker?.Runtime == null || Runtime.LinkState <= 0)
-                return;
-
-            int attackerSlot = attacker.Runtime.SlotIndex;
-            int victimSlot = Runtime.SlotIndex;
-            int heldTargetSlot = Runtime.ResolveActiveHeldSlotIndex();
-            if (attackerSlot < 0 || victimSlot < 0 || heldTargetSlot < 0)
-                return;
-
-            LF2Entity heldTarget = Match?.FindEntityByRuntimeSlotForQuery(heldTargetSlot);
-            if (heldTarget?.Runtime == null || !heldTarget.Runtime.IsActivelyHeldBySlot(victimSlot))
-                return;
-
-            heldTarget.ItrRest?.SetVrest(attackerSlot, 45);
-            ItrRest?.SetVrest(heldTargetSlot, 30);
-        }
-
-        private void ApplyCaughtVictimHurtFrame(LF2Entity attacker)
-        {
-            if (FallCounter == 80 || Runtime == null || attacker == null)
-                return;
-
-            LF2FrameData previousFrame2 = GetFrameDataById(Runtime.PrevFrame2);
-            CatchPoint cpoint = previousFrame2?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
-                return;
-
-            int catcherSlot = CatcherSlotIndex;
-            int victimSlot = Runtime.SlotIndex;
-            LF2Entity catcher = catcherSlot >= 0
-                ? Match?.FindEntityByRuntimeSlotForQuery(catcherSlot)
-                : null;
-            if (catcher == null || catcher.CaughtSlotIndex != victimSlot)
-                return;
-
-            int hurtFrame = Dirh() != attacker.Dirh()
-                ? cpoint.fronthurtact
-                : cpoint.backhurtact;
-            if (hurtFrame != 0)
-                DirectWriteRawFramePreserveWaitCounter(hurtFrame);
+                itr) == true;
         }
 
         private void ApplySpecialKind14DirectionalBlockFrom(LF2Entity attacker)
         {
             if (attacker?.Runtime == null || Runtime == null)
                 return;
+
+            if (RegisteredWorldForSimulation?.BoundaryWriter
+                    .TryApplyKind14DirectionalBlock(attacker, this) == true)
+            {
+                return;
+            }
 
             int attackerX = attacker.Runtime.XInt;
             int attackerZ = attacker.Runtime.ZInt;
@@ -991,210 +616,6 @@ namespace NTSD.Animation.LF2Objects
                 FreeEntityLikeExe();
             else if (currentOid == 214 && Health != null)
                 Health.HP = 0;
-        }
-
-        private void ApplyKind0Type3Tail(LF2Entity attacker, InteractionArea itr)
-        {
-            int victimState = GetState();
-            int attackerState = attacker.GetState();
-            bool skipToStateSync = victimState == LF2States.ObjectFlying ||
-                                   (victimState == LF2States.ObjectExpanding &&
-                                    attackerState == LF2States.ObjectFlying);
-
-            if (!skipToStateSync)
-            {
-                LF2Entity attackerHolder = ResolveActiveHolder(attacker);
-                CopyRelation(attackerHolder ?? attacker, this);
-                HitConfirm2 = 1;
-                ResetType3HitMotion(this);
-
-                if (attacker.ObjectId == 209 && IsKarasuOid(ObjectId))
-                {
-                    CopyRelation(attacker, this);
-                    if (TryApplyRuntimeIdentity(attacker.ObjectId, 40, false, out _))
-                    {
-                        Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, 40);
-                        Frame.Prev = 40;
-                    }
-                    skipToStateSync = true;
-                }
-                else
-                {
-                    bool frame20 = false;
-                    bool checkEffectGate;
-                    if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
-                    {
-                        checkEffectGate = true;
-                    }
-                    else if (attacker.Runtime.LinkState >= 0)
-                    {
-                        frame20 = true;
-                        checkEffectGate = false;
-                    }
-                    else
-                    {
-                        checkEffectGate = true;
-                    }
-
-                    if (checkEffectGate && (itr.effect == 2 || itr.effect == 20))
-                        frame20 = true;
-
-                    DirectWriteHeldFramePreserveWaitCounter(frame20 ? 20 : 30);
-                    if (frame20)
-                    {
-                        if (attacker.Runtime.LinkState < 0)
-                        {
-                            if (attacker.ObjectId == 213 && IsKarasuOid(ObjectId))
-                                ReplaceWithActiveKarasuData();
-                            CopyRelation(attackerHolder, this);
-                        }
-                    }
-                    else
-                    {
-                        if (attacker.ObjectId == 8 && IsKarasuOid(ObjectId))
-                            ReplaceWithActiveKarasuData();
-
-                        if (attacker.Runtime.LinkState < 0)
-                        {
-                            if (attacker.ObjectId == 213 && IsKarasuOid(ObjectId))
-                                ReplaceWithActiveKarasuData();
-                            CopyRelation(attackerHolder, this);
-                        }
-                    }
-                }
-            }
-
-            victimState = GetState();
-            attackerState = attacker.GetState();
-            if ((victimState == LF2States.ObjectFlying && attackerState == LF2States.ObjectFlying) ||
-                (victimState == LF2States.ObjectExpanding && attackerState == LF2States.ObjectExpanding))
-            {
-                DirectWriteHeldFramePreserveWaitCounter(20);
-                ResetType3HitMotion(this);
-                attacker.DirectWriteHeldFramePreserveWaitCounter(20);
-                ResetType3HitMotion(attacker);
-
-                if (attacker.Runtime.LinkState < 0)
-                {
-                    LF2Entity holder = ResolveActiveHolder(attacker);
-                    if (holder != null && holder.FrameDelay > 0)
-                        holder.FrameDelay = -holder.FrameDelay;
-                }
-                else if (attacker.FrameDelay > 0)
-                {
-                    attacker.FrameDelay = -attacker.FrameDelay;
-                }
-            }
-
-            ApplyType3EffectTail(itr.effect);
-        }
-
-        private void ApplyType3EffectTail(int effect)
-        {
-            LF2FrameData prevFrame = GetFrameDataById(Frame?.Prev ?? 0);
-            int prevState = prevFrame?.state ?? 0;
-            bool characterDat = GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character;
-
-            if (effect == 3 || effect == 30)
-            {
-                if (characterDat && prevState != 13)
-                {
-                    DirectWriteHeldFramePreserveWaitCounter(200);
-                    AttackingCounter = 0;
-                    Match?.QueueSound("SFX_065", Runtime.XInt);
-                }
-            }
-            else if (effect >= 5000 && effect < 6000)
-            {
-                int nextPp = (Health?.PP ?? 0) - (effect - 5000);
-                if (Health != null)
-                    Health.PP = nextPp < 0 ? 0 : nextPp;
-            }
-            else if (effect >= 6000 && effect < 7000)
-            {
-                DirectWriteHeldFramePreserveWaitCounter(effect - 6000);
-            }
-            else if (effect == 2 || effect == 21 || effect == 22)
-            {
-                if (characterDat)
-                    ApplyType3BurningEffect();
-            }
-            else if (effect == 20)
-            {
-                if (characterDat && prevState != 18)
-                    ApplyType3BurningEffect();
-            }
-            else if (effect == 23)
-            {
-                Match?.QueueSound("SFX_068", Runtime.XInt);
-            }
-        }
-
-        private void ApplyType3BurningEffect()
-        {
-            DirectWriteHeldFramePreserveWaitCounter(203);
-            AttackingCounter = 0;
-            SwitchDir(KnockbackVx < 0.0 ? "right" : "left");
-            Match?.QueueSound("SFX_068", Runtime.XInt);
-        }
-
-        private static void ResetType3HitMotion(LF2Entity entity)
-        {
-            entity.AttackingCounter = 0;
-            entity.KnockbackVx = 0.0;
-            entity.KnockbackVy = 0.0;
-            entity.KnockbackVz = 0.0;
-            entity.Runtime.Vx = 0.0;
-            entity.Runtime.Vy = 0.0;
-            entity.Runtime.Vz = 0.0;
-        }
-
-        private static void CopyRelation(LF2Entity source, LF2Entity target)
-        {
-            if (source == null || target == null)
-                return;
-
-            target.RelationTeam = source.RelationTeam;
-            target.HolderCopySlot = source.HolderCopySlot;
-        }
-
-        private static LF2Entity ResolveActiveHolder(LF2Entity entity)
-        {
-            if (entity?.Match == null)
-                return null;
-
-            int holderSlot = entity.Runtime.HolderStableId;
-            if (holderSlot < 0 || holderSlot >= entity.Match.MaxRuntimeSlotsForServices)
-                return null;
-
-            return entity.Match.FindEntityByRuntimeSlotForQuery(holderSlot);
-        }
-
-        private static bool IsKarasuOid(int oid)
-        {
-            return oid == 200 || oid == 203 || oid == 205 || oid == 206 ||
-                   oid == 207 || oid == 215 || oid == 216;
-        }
-
-        private void ReplaceWithActiveKarasuData()
-        {
-            if (Match == null)
-                return;
-
-            for (int slot = 0; slot < Match.MaxRuntimeSlotsForServices; slot++)
-            {
-                LF2Entity candidate = Match.FindEntityByRuntimeSlotForQuery(slot);
-                if (candidate == null || candidate.ObjectId != 209)
-                    continue;
-
-                int frameId = Frame?.N ?? 0;
-                if (TryApplyRuntimeIdentity(209, frameId, false, out _) && Frame?.D != null)
-                {
-                    Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, frameId);
-                    Frame.Prev = frameId;
-                }
-                return;
-            }
         }
 
         private bool Hit_State3000(LF2Entity attacker, InteractionArea itr)

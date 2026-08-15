@@ -233,7 +233,7 @@ namespace NTSD.Simulation
                     PostCooldownHumanInput(tickIndex);
                     diagnostics?.EndPhase(BattleTickPhase.HumanInput);
                     diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
-                    BattleResultsFlow();
+                    world.RunActiveBattleResultsTick();
                     diagnostics?.EndPhase(BattleTickPhase.BattleResults);
                     return;
                 }

@@ -6,6 +6,7 @@ using NTSD.Animation.Rendering;
 using NTSD.Simulation.Lockstep;
 using NTSD.Simulation.Presentation;
 using NTSD.Tools;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace NTSD.Simulation
@@ -171,6 +172,19 @@ namespace NTSD.Simulation
     /// </summary>
     public class SimulationTickDriver : SingletonBehaviour<SimulationTickDriver>
     {
+        private static readonly ProfilerMarker LatePresentationMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.LateUpdate");
+        private static readonly ProfilerMarker PresentLatestFrameMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.PresentLatestFrame");
+        private static readonly ProfilerMarker DispatchSoundsMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.DispatchSounds");
+        private static readonly ProfilerMarker LegacyOverlayMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.LegacyOverlayMaterializer");
+        private static readonly ProfilerMarker LegacySparkMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.LegacySparkMaterializer");
+        private static readonly ProfilerMarker FinalizeHitRecordMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.FinalizeHitRecordCycle");
+
         [Tooltip("记录每个模拟 tick 的开始和结束。")]
         [SerializeField] private bool debugLogPerTick = false;
 
@@ -311,14 +325,18 @@ namespace NTSD.Simulation
 
         private void LateUpdate()
         {
+            using ProfilerMarker.AutoScope latePresentationScope =
+                LatePresentationMarker.Auto();
             _managedMemoryBoundary.BeginPresentation();
             try
             {
                 if (_world == null)
                     return;
 
-                _world.PresentLatestFrame(_tickIndex);
-                DispatchPublishedSounds();
+                using (PresentLatestFrameMarker.Auto())
+                    _world.PresentLatestFrame(_tickIndex);
+                using (DispatchSoundsMarker.Auto())
+                    DispatchPublishedSounds();
 
                 if (_overlayRenderer == null)
                 {
@@ -330,7 +348,8 @@ namespace NTSD.Simulation
 
                     _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
                 }
-                _overlayRenderer.RenderAll(_world);
+                using (LegacyOverlayMarker.Auto())
+                    _overlayRenderer.RenderAll(_world);
 
                 if (_sparkRenderer == null)
                 {
@@ -347,8 +366,10 @@ namespace NTSD.Simulation
                     }
                 }
 
-                _sparkRenderer.RenderAll(_world);
-                _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                using (LegacySparkMarker.Auto())
+                    _sparkRenderer.RenderAll(_world);
+                using (FinalizeHitRecordMarker.Auto())
+                    _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
             }
             finally
             {
@@ -729,6 +750,12 @@ namespace NTSD.Simulation
                 matchState.BattleGameModeId = config?.gameMode?.battleGameModeId ?? 1;
                 matchState.BackgroundId = config?.backgroundId ?? -1;
                 matchState.Difficulty = config?.difficulty ?? 2;
+                matchState.StageIdx = config != null && config.backgroundId >= 0
+                    ? config.backgroundId
+                    : 0;
+                matchState.RandomStage = 0;
+                matchState.RuntimeStageCount =
+                    GameDataManager.TryGetInstance()?.BackgroundCount ?? 0;
                 matchState.Seed = config?.seed ?? 0;
             }
 

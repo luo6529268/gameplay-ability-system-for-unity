@@ -300,7 +300,7 @@ namespace NTSD.Animation.Rendering.Editor
                 Is.Zero);
             Assert.That(
                 BattleTickDetailPhaseDiagnostics.PhaseCount,
-                Is.EqualTo(40));
+                Is.EqualTo(44));
             Assert.That(
                 report.detailPhaseTimings[
                     (int)BattleTickDetailPhase.RenderBuildCommandsOverlay].phase,

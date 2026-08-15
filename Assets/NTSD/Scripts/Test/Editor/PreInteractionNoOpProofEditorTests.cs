@@ -20,7 +20,7 @@ namespace NTSD.Test
                     BindingFlags.Instance |
                     BindingFlags.Public |
                     BindingFlags.NonPublic)
-                .Where(field => field.Name != "worldMutationTracker")
+                .Where(field => !field.IsNotSerialized)
                 .OrderBy(field => field.Name, StringComparer.Ordinal)
                 .ToArray();
         private static readonly FieldInfo HeldWeaponField =
@@ -67,6 +67,93 @@ namespace NTSD.Test
             Assert.That(
                 legacy.World.LastPreInteractionProofSkipCountForDiagnostics,
                 Is.Zero);
+        }
+
+        [Test]
+        [Category("NTSD_U6PreInteractionCrossPass")]
+        public void PostFrameProof_NeutralExactCharactersMatchesFullScanOracle()
+        {
+            using var logging = new DisabledLoggingScope();
+            Scenario cached = CreateNeutralScenario(32, forceLegacy: false);
+            Scenario fullScan = CreateNeutralScenario(32, forceLegacy: false);
+            fullScan.World.ForceLegacyPreInteractionCrossPassProofForDiagnostics =
+                true;
+
+            cached.World.PostFrameAdvanceDeathCleanupAll(21);
+            fullScan.World.PostFrameAdvanceDeathCleanupAll(21);
+            cached.World.PreInteractionTickAll(21);
+            fullScan.World.PreInteractionTickAll(21);
+
+            AssertScenariosEquivalent(cached, fullScan, 21);
+            Assert.That(
+                cached.World
+                    .LastPreInteractionCrossPassProofUsedForDiagnostics,
+                Is.True);
+            Assert.That(
+                fullScan.World
+                    .LastPreInteractionCrossPassProofUsedForDiagnostics,
+                Is.False);
+            Assert.That(
+                cached.World
+                    .LastPreInteractionWholePassParticipantCountForDiagnostics,
+                Is.EqualTo(32));
+            Assert.That(
+                fullScan.World
+                    .LastPreInteractionWholePassParticipantCountForDiagnostics,
+                Is.EqualTo(32));
+        }
+
+        [Test]
+        [Category("NTSD_U6PreInteractionCrossPass")]
+        public void PostFrameProof_OccupancyChangeFailsClosedToFullScan()
+        {
+            using var logging = new DisabledLoggingScope();
+            Scenario scenario = CreateNeutralScenario(1, forceLegacy: false);
+
+            scenario.World.PostFrameAdvanceDeathCleanupAll(22);
+            CreateCharacter<LF2Character>(
+                scenario.World,
+                2001,
+                Frame(0, 0, null));
+            scenario.World.PreInteractionTickAll(22);
+
+            Assert.That(
+                scenario.World
+                    .LastPreInteractionCrossPassProofUsedForDiagnostics,
+                Is.False);
+            Assert.That(
+                scenario.World
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.True);
+            Assert.That(
+                scenario.World
+                    .LastPreInteractionWholePassParticipantCountForDiagnostics,
+                Is.EqualTo(2));
+        }
+
+        [Test]
+        [Category("NTSD_U6PreInteractionCrossPass")]
+        public void PostFrameProof_NonNeutralParticipantFailsClosed()
+        {
+            using var logging = new DisabledLoggingScope();
+            Scenario scenario = CreateNonNeutralScenario(
+                forceLegacy: false,
+                enableParticipantFiltering: true);
+
+            scenario.World.PostFrameAdvanceDeathCleanupAll(23);
+            scenario.World.PreInteractionTickAll(23);
+
+            Assert.That(
+                scenario.World
+                    .LastPreInteractionCrossPassProofUsedForDiagnostics,
+                Is.False);
+            Assert.That(
+                scenario.World
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.False);
+            AssertHeldLinkCleared(scenario.Entities[2]);
+            AssertHeldLinkCleared(scenario.Entities[3]);
+            AssertHeldLinkCleared(scenario.Entities[4]);
         }
 
         [Test]
@@ -199,6 +286,80 @@ namespace NTSD.Test
             Assert.That(
                 world.LastPreInteractionExecutedCountForDiagnostics,
                 Is.EqualTo(3));
+        }
+
+        [Test]
+        public void Kind2Writer_InvalidLink_AppliesAuthorityFallback()
+        {
+            using var logging = new DisabledLoggingScope();
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            LF2Character victim = CreateCharacter<LF2Character>(
+                world,
+                35,
+                Frame(0, LF2States.BeingCaught, new CatchPoint { kind = 2 }));
+            victim.Runtime.Y = 7.5;
+            victim.Runtime.Vy = 9.0;
+            victim.Runtime.FrameWaitCounter = 17;
+
+            victim.RunCpointMismatchTailStep10();
+
+            Assert.That(victim.Frame.N, Is.EqualTo(212));
+            Assert.That(victim.Runtime.FrameWaitCounter, Is.EqualTo(17));
+            Assert.That(victim.Runtime.Vy, Is.EqualTo(-3.0));
+            Assert.That(victim.Runtime.Y, Is.EqualTo(-2.0));
+        }
+
+        [Test]
+        public void Kind2Writer_ReciprocalKind1Link_PreservesVictim()
+        {
+            using var logging = new DisabledLoggingScope();
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            LF2Character catcher = CreateCharacter<LF2Character>(
+                world,
+                36,
+                Frame(0, LF2States.Catching, new CatchPoint { kind = 1 }));
+            LF2Character victim = CreateCharacter<LF2Character>(
+                world,
+                37,
+                Frame(0, LF2States.BeingCaught, new CatchPoint { kind = 2 }));
+            catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+            victim.Runtime.Y = 7.5;
+            victim.Runtime.Vy = 9.0;
+
+            victim.RunCpointMismatchTailStep10();
+
+            Assert.That(victim.Frame.N, Is.Zero);
+            Assert.That(victim.Runtime.Vy, Is.EqualTo(9.0));
+            Assert.That(victim.Runtime.Y, Is.EqualTo(7.5));
+        }
+
+        [Test]
+        public void WarmedKind1Writer_AllocatesNoManagedMemory()
+        {
+            using var logging = new DisabledLoggingScope();
+            SimulationWorld world = CreateWorld(forceLegacy: false);
+            LF2Character catcher = CreateCharacter<LF2Character>(
+                world,
+                38,
+                Frame(0, LF2States.Catching, new CatchPoint { kind = 1 }));
+            LF2Character victim = CreateCharacter<LF2Character>(
+                world,
+                39,
+                Frame(0, LF2States.BeingCaught, new CatchPoint { kind = 2 }));
+            catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+
+            for (int i = 0; i < 32; i++)
+                catcher.RunCpointCheckStep10();
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+                catcher.RunCpointCheckStep10();
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
         }
 
         [Test]

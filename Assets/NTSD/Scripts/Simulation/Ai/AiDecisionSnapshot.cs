@@ -21,6 +21,12 @@ namespace NTSD.Simulation
         Indexed = 1,
     }
 
+    public enum AiDecisionOwnedInputMode
+    {
+        SnapshotCopy = 0,
+        CanonicalStoreDirect = 1,
+    }
+
     public enum AiDecisionExit
     {
         None = 0,

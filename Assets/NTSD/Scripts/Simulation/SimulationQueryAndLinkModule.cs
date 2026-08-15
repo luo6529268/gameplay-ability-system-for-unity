@@ -67,7 +67,7 @@ namespace NTSD.Simulation
                     ? holderFrame.wpoints[0]
                     : world.BattleBuffersForServices.DefaultHeldObjectWeaponPoint;
 
-                if (!LF2HeldObjectRuntime.RunStep12(
+                if (!world.HeldObjectWriter.RunStep12(
                         holder,
                         held,
                         wpoint,

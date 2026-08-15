@@ -262,6 +262,12 @@ namespace NTSD.Simulation
 
         public void ApplyPreFrameBoundsAll()
         {
+            world.RunBattleEcsCharacterPreFrameBoundsPass();
+            ResetUnityFixedWorldRenderOffsets();
+        }
+
+        internal void RunLegacyPreFrameBoundsAll()
+        {
             int stageWidthPx = world.Runtime?.Stage?.StageWidthPx ?? 800;
             int baseStageWidthPx = world.Runtime?.Stage?.BaseStageWidthPx ?? 800;
             int xMaxOverride = world.Runtime?.Stage?.XMaxOverride ?? 0;
@@ -286,7 +292,6 @@ namespace NTSD.Simulation
                     entity.RefreshRuntimeSnapshot();
             }
 
-            ResetUnityFixedWorldRenderOffsets();
         }
 
         public void RenderDispatchAll(int tickIndex)
@@ -863,125 +868,5 @@ namespace NTSD.Simulation
             }
         }
 
-        public void UpdateBattleResultsFlow()
-        {
-            BattleRuntimeState battle = world.Runtime;
-            if (battle?.Match?.BattleGameModeId != 1)
-                return;
-
-            battle.Results ??= new BattleResultsRuntimeState();
-            BattleResultsRuntimeState results = battle.Results;
-            if (results.IsActive)
-                return;
-
-            BattleSlotRuntimeState[] rosterSlots = battle.Roster?.Slots;
-            if (rosterSlots == null)
-                return;
-
-            int firstTeamId = -1;
-            int secondTeamId = -1;
-            int firstTeamAlive = 0;
-            int secondTeamAlive = 0;
-            int teamCount = 0;
-            int slotCount = rosterSlots.Length < 8 ? rosterSlots.Length : 8;
-
-            for (int slotIndex = 0; slotIndex < slotCount; slotIndex++)
-            {
-                BattleSlotRuntimeState rosterSlot = rosterSlots[slotIndex];
-                if (rosterSlot == null)
-                    continue;
-
-                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(
-                    rosterSlot.RuntimeSlotIndex);
-                if (entity == null ||
-                    entity.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                {
-                    continue;
-                }
-
-                // Authority GameTick keeps a fixed 0..7 slot in the result scan and
-                // skips only when the slot state is dormant and the bound entity is
-                // inactive. An active entity must remain eligible even when its
-                // roster metadata has already been marked inactive.
-                if (!rosterSlot.Active && !world.IsActiveForCurrentPassInternal(entity))
-                    continue;
-
-                int team = entity.RelationTeam != 0 ? entity.RelationTeam : rosterSlot.Team;
-                if (team == 0)
-                    continue;
-
-                int bucket = -1;
-                if (teamCount > 0 && firstTeamId == team)
-                {
-                    bucket = 0;
-                }
-                else if (teamCount > 1 && secondTeamId == team)
-                {
-                    bucket = 1;
-                }
-                else if (teamCount == 0)
-                {
-                    firstTeamId = team;
-                    teamCount = 1;
-                    bucket = 0;
-                }
-                else if (teamCount == 1)
-                {
-                    secondTeamId = team;
-                    teamCount = 2;
-                    bucket = 1;
-                }
-
-                if (bucket >= 0 &&
-                    world.IsActiveForCurrentPassInternal(entity) &&
-                    entity.Health != null &&
-                    entity.Health.HP > 0)
-                {
-                    if (bucket == 0)
-                        firstTeamAlive++;
-                    else
-                        secondTeamAlive++;
-                }
-            }
-
-            if (firstTeamAlive > 0 && secondTeamAlive > 0)
-                results.HadBoth = true;
-
-            if (!results.HadBoth || teamCount < 2)
-                return;
-
-            results.EnsureTeamIds();
-            if (firstTeamAlive > 0 && secondTeamAlive > 0)
-            {
-                results.BattleEndPhase = 0;
-                results.PendingWinner = -2;
-                results.TeamCount = teamCount;
-                results.TeamIds[0] = firstTeamId;
-                results.TeamIds[1] = secondTeamId;
-                return;
-            }
-
-            int decidedWinner = firstTeamAlive > 0 ? 0 : secondTeamAlive > 0 ? 1 : -1;
-            if (results.BattleEndPhase == 0)
-            {
-                results.BattleEndPhase = 1;
-                results.PendingWinner = decidedWinner;
-            }
-            else
-            {
-                results.BattleEndPhase++;
-            }
-
-            results.TeamCount = teamCount;
-            results.TeamIds[0] = firstTeamId;
-            results.TeamIds[1] = secondTeamId;
-
-            if (results.BattleEndPhase >= 11)
-                results.ActivateSummary(
-                    results.PendingWinner,
-                    teamCount,
-                    firstTeamId,
-                    secondTeamId);
-        }
     }
 }

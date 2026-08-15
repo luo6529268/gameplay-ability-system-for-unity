@@ -3,6 +3,7 @@ using System.Threading;
 using NTSD.App;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -31,6 +32,21 @@ namespace NTSD.Animation.Rendering
 
     public static class BattleCentralRenderSystem
     {
+        private static readonly ProfilerMarker MaterializeFrameMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.MaterializeFrame");
+        private static readonly ProfilerMarker CaptureSubmissionFrameMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.CaptureSubmissionFrame");
+        private static readonly ProfilerMarker MaterializeOrderMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.MaterializeOrder");
+        private static readonly ProfilerMarker MaterializeCommandsMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.MaterializeCommands");
+        private static readonly ProfilerMarker ConfigureResolverMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.ConfigureResolver");
+        private static readonly ProfilerMarker BuildMeshMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.BuildMesh");
+        private static readonly ProfilerMarker PublishSubmissionMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.PublishSubmission");
+
         private const int RendererObservationMaxAgeFrames = 2;
         private const int MaximumCommonTrustedResourceCount =
             1 +
@@ -390,6 +406,8 @@ namespace NTSD.Animation.Rendering
 
         private static BattlePixelFramePlan PrepareFrameImmediate(SimulationWorld world)
         {
+            using ProfilerMarker.AutoScope materializeFrameScope =
+                MaterializeFrameMarker.Auto();
             BattlePresentationBackendMode mode =
                 world?.BattlePresentation?.Mode ?? BattlePresentationBackendMode.CentralOnly;
             BattlePresentationFrame frame = world?.BattlePresentation?.PublishedFrame;
@@ -444,19 +462,47 @@ namespace NTSD.Animation.Rendering
 
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            BattlePresentationPhaseDiagnostics presentationDiagnostics =
+                world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
             BattleCentralSubmission stagingSubmission = SlotSubmissions[backendIndex];
             BattlePresentationFrame buildFrame;
             try
             {
-                buildFrame = frame != null
-                    ? stagingSubmission.CaptureFrame(frame, detailDiagnostics)
-                    : null;
+                using (CaptureSubmissionFrameMarker.Auto())
+                {
+                    presentationDiagnostics?.BeginPhase(
+                        BattlePresentationPhase.CaptureSubmissionFrame);
+                    try
+                    {
+                        buildFrame = frame != null
+                            ? stagingSubmission.CaptureFrame(frame, detailDiagnostics)
+                            : null;
+                    }
+                    finally
+                    {
+                        presentationDiagnostics?.EndPhase(
+                            BattlePresentationPhase.CaptureSubmissionFrame);
+                    }
+                }
                 if (buildFrame != null &&
                     mode == BattlePresentationBackendMode.CentralOnly)
                 {
-                    world.BattlePresentation.MaterializePresentationOrder(
-                        world,
-                        buildFrame);
+                    using (MaterializeOrderMarker.Auto())
+                    {
+                        presentationDiagnostics?.BeginPhase(
+                            BattlePresentationPhase.MaterializePresentationOrder);
+                        try
+                        {
+                            world.BattlePresentation.MaterializePresentationOrder(
+                                world,
+                                buildFrame);
+                        }
+                        finally
+                        {
+                            presentationDiagnostics?.EndPhase(
+                                BattlePresentationPhase.MaterializePresentationOrder);
+                        }
+                    }
                 }
             }
             catch (Exception exception)
@@ -487,15 +533,27 @@ namespace NTSD.Animation.Rendering
             {
                 if (buildFrame != null)
                 {
-                    BattlePresentationPhaseDiagnostics presentationDiagnostics =
-                        world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
                     presentationDiagnostics?.BeginPhase(
                         BattlePresentationPhase.BeginFrameBuildCommands);
                     try
                     {
-                        world.BattlePresentation.MaterializeCommands(
-                            buildFrame,
-                            detailDiagnostics);
+                        using (MaterializeCommandsMarker.Auto())
+                        {
+                            presentationDiagnostics?.BeginPhase(
+                                BattlePresentationPhase.MaterializeCommands);
+                            try
+                            {
+                                world.BattlePresentation.MaterializeCommands(
+                                    buildFrame,
+                                    detailDiagnostics,
+                                    presentationDiagnostics);
+                            }
+                            finally
+                            {
+                                presentationDiagnostics?.EndPhase(
+                                    BattlePresentationPhase.MaterializeCommands);
+                            }
+                        }
                     }
                     finally
                     {
@@ -506,16 +564,33 @@ namespace NTSD.Animation.Rendering
                 BattleSpriteCatalog buildCatalog = buildFrame?.BoundCatalog ?? catalog;
                 BattleCommonVisualCatalog buildCommonVisualCatalog =
                     buildFrame?.CommonVisualCatalog ?? commonVisualCatalog;
-                CatalogResolver.Configure(
-                    buildCatalog,
-                    buildCommonVisualCatalog,
-                    featureMaterial,
-                    featureArrayMaterial);
-                stagingBackend.Build(
-                    buildFrame,
-                    CatalogResolver,
-                    drawMode,
-                    detailDiagnostics);
+                using (ConfigureResolverMarker.Auto())
+                {
+                    presentationDiagnostics?.BeginPhase(
+                        BattlePresentationPhase.ConfigureResolver);
+                    try
+                    {
+                        CatalogResolver.Configure(
+                            buildCatalog,
+                            buildCommonVisualCatalog,
+                            featureMaterial,
+                            featureArrayMaterial);
+                    }
+                    finally
+                    {
+                        presentationDiagnostics?.EndPhase(
+                            BattlePresentationPhase.ConfigureResolver);
+                    }
+                }
+                using (BuildMeshMarker.Auto())
+                {
+                    stagingBackend.Build(
+                        buildFrame,
+                        CatalogResolver,
+                        drawMode,
+                        detailDiagnostics,
+                        presentationDiagnostics);
+                }
                 lastBuiltBackend = stagingBackend;
                 lastAttemptedBuildDiagnostics = AttemptedBuildDiagnostics.Capture(
                     stagingBackend,
@@ -562,13 +637,26 @@ namespace NTSD.Animation.Rendering
             int generation = NextGeneration();
             BattleCentralSubmission submission = SlotSubmissions[backendIndex];
             BattlePresentationFrame capturedFrame = stagingBackend.BuiltFrame;
-            submission.Publish(
-                world,
-                capturedFrame,
-                simulationTick,
-                generation,
-                manager,
-                capturedFrame.BoundCatalog);
+            using (PublishSubmissionMarker.Auto())
+            {
+                presentationDiagnostics?.BeginPhase(
+                    BattlePresentationPhase.PublishSubmission);
+                try
+                {
+                    submission.Publish(
+                        world,
+                        capturedFrame,
+                        simulationTick,
+                        generation,
+                        manager,
+                        capturedFrame.BoundCatalog);
+                }
+                finally
+                {
+                    presentationDiagnostics?.EndPhase(
+                        BattlePresentationPhase.PublishSubmission);
+                }
+            }
             var plan = new BattlePixelFramePlan(
                 world,
                 capturedFrame,

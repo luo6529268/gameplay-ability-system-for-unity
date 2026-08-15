@@ -102,6 +102,138 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void ResolvePrepared_WarmedTrustedResources_MatchStrictResolveForAllTemplateKinds()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: true);
+            using var common = new CommonFixture("prepared-cached");
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                common.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            BattleRenderCommand[] commands =
+            {
+                fixture.CreateCommand(0),
+                fixture.CreateCommand(1),
+                common.CreateShadowCommand(),
+                common.CreateSparkCommand(),
+                common.CreateWordCommand(),
+            };
+
+            for (int commandIndex = 0; commandIndex < commands.Length; commandIndex++)
+            {
+                Assert.That(
+                    fixture.Resolver.Resolve(
+                        commands[commandIndex],
+                        out BattleCentralResolvedResource expected),
+                    Is.EqualTo(BattleCentralResourceStatus.Resolved));
+                Assert.That(
+                    fixture.Resolver.ResolvePrepared(
+                        commands[commandIndex],
+                        out BattleCentralResolvedResource actual),
+                    Is.EqualTo(BattleCentralResourceStatus.Resolved));
+                AssertResourcesEqual(expected, actual);
+            }
+        }
+
+        [Test]
+        public void ResolvePrepared_RepeatedTrustedType_UsesHotResourceAndCurrentColor()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            BattleRenderCommand first = fixture.CreateTrustedCommand(0, Color.white);
+            BattleRenderCommand tinted = fixture.CreateTrustedCommand(0, Color.red);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            Assert.That(
+                fixture.Resolver.Resolve(first, out _),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            int trustedHitsBefore = fixture.Resolver.TrustedResourceCacheHits;
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(first, out _),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(
+                fixture.Resolver.TrustedResourceCacheHits,
+                Is.EqualTo(trustedHitsBefore + 1));
+
+            int hotHitsBefore = fixture.Resolver.PreparedHotResourceCacheHits;
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(
+                    tinted,
+                    out BattleCentralResolvedResource resolved),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(
+                fixture.Resolver.PreparedHotResourceCacheHits,
+                Is.EqualTo(hotHitsBefore + 1));
+            Assert.That(resolved.Color, Is.EqualTo((Color32)Color.red));
+        }
+
+        [Test]
+        public void ResolvePrepared_DestroyedResourceDetectedByConfigure_FailsClosed()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            BattleRenderCommand command = fixture.CreateCommand(0);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+            AssertResolved(fixture.Resolver, command);
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(command, out _),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(command, out _),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            int hotHitsBeforeInvalidation =
+                fixture.Resolver.PreparedHotResourceCacheHits;
+
+            UnityEngine.Object.DestroyImmediate(fixture.SourceTexture);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(command, out _),
+                Is.EqualTo(BattleCentralResourceStatus.UnresolvedVisual));
+            Assert.That(
+                fixture.Resolver.PreparedHotResourceCacheHits,
+                Is.EqualTo(hotHitsBeforeInvalidation));
+            Assert.That(fixture.Resolver.DestroyedResourceInvalidations, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ResolvePrepared_WarmedTrustedIdentity_StillValidatesCommandEnvelope()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            BattleRenderCommand valid = fixture.CreateTrustedCommand(0, Color.white);
+            fixture.Resolver.Configure(
+                fixture.Catalog,
+                fixture.Valid2DMaterial,
+                fixture.ValidArrayMaterial);
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(valid, out _),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+
+            BattleRenderCommand unsupported = fixture.CreateMutatedTrustedCommand(
+                0,
+                SignatureMutation.MaterialSemantic);
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(unsupported, out _),
+                Is.EqualTo(BattleCentralResourceStatus.UnsupportedRenderState));
+
+            BattleRenderCommand missingLogicalKey = fixture.CreateMutatedTrustedCommand(
+                0,
+                SignatureMutation.MissingLogicalKey);
+            Assert.That(
+                fixture.Resolver.ResolvePrepared(missingLogicalKey, out _),
+                Is.EqualTo(BattleCentralResourceStatus.UnresolvedVisual));
+        }
+
+        [Test]
         public void Resolve_CommonSpecialCom_UsesPublishedBindingAndTrustedCache()
         {
             using var fixture = new ResolverFixture(includeArrayBinding: true);
@@ -896,7 +1028,28 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(
                     Catalog.TryGet(17, effectivePic, out BattleSpriteEntry entry),
                     Is.True);
-                BattleRenderCommand source = CreateCommand(effectivePic, color);
+                return CreateTrustedCommand(
+                    CreateCommand(effectivePic, color),
+                    entry);
+            }
+
+            public BattleRenderCommand CreateMutatedTrustedCommand(
+                int effectivePic,
+                SignatureMutation mutation)
+            {
+                Assert.That(
+                    Catalog.TryGet(17, effectivePic, out BattleSpriteEntry entry),
+                    Is.True);
+                BattleRenderCommand source = MutateEntityCommand(
+                    CreateCommand(effectivePic),
+                    mutation);
+                return CreateTrustedCommand(source, entry);
+            }
+
+            private static BattleRenderCommand CreateTrustedCommand(
+                in BattleRenderCommand source,
+                BattleSpriteEntry entry)
+            {
                 object boxedCommand = Activator.CreateInstance(
                     typeof(BattleRenderCommand),
                     BindingFlags.Instance | BindingFlags.NonPublic,
