@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -65,10 +65,12 @@ namespace NTSD.Animation.Rendering.Editor
         public bool enableCollisionRoleZeroItrFastPath;
         public int legacyOracleInterval = 1;
         public bool simulationOnly;
+        public bool useDedicatedSimulationWorker;
         public string soundPresentationMode = "inherit";
         public bool skipLateRendererUpdate;
         public bool autoStopWhenSampled;
         public bool requireZeroGcAfterWarmup = true;
+        public bool requireU6ProductionOwnershipAudit;
         public uint seed = 0x4E545344u;
         public string aiExecutionProfile = "";
         // Legacy compatibility fields for request files written before the atomic
@@ -107,6 +109,7 @@ namespace NTSD.Animation.Rendering.Editor
         public bool forceLegacyLateCommonNoOpGates;
         public bool forceLegacyPostFrameRuntimeSnapshot;
         public string positiveLinkValidationMode = "data-oriented";
+        public string characterInputPassMode = "data-oriented";
         public string characterFrameTickMode = "data-oriented";
         public string characterPostFrameTailMode = "legacy";
         public string hitExecutionPlanMode = "disabled";
@@ -184,10 +187,14 @@ namespace NTSD.Animation.Rendering.Editor
             bool forceLegacyRoleBodyBuild = false,
             bool forceLegacyFormalItrWorldRectReuse = false,
             bool forceLegacyPreInteractionCrossPassProof = false,
+            BattleEcsCharacterInputPassMode characterInputPassMode =
+                BattleEcsCharacterInputPassMode.DataOriented,
             BattleEcsCharacterFrameTickPassMode characterFrameTickMode =
                 BattleEcsCharacterFrameTickPassMode.DataOriented,
             BattleEcsCharacterPostFrameTailPassMode characterPostFrameTailMode =
-                BattleEcsCharacterPostFrameTailPassMode.Legacy)
+                BattleEcsCharacterPostFrameTailPassMode.Legacy,
+            bool useDedicatedSimulationWorker = false,
+            bool requireU6ProductionOwnershipAudit = false)
         {
             Mode = mode;
             InputMode = inputMode;
@@ -280,9 +287,12 @@ namespace NTSD.Animation.Rendering.Editor
             ForceLegacyPostFrameRuntimeSnapshot =
                 forceLegacyPostFrameRuntimeSnapshot;
             PositiveLinkValidationMode = positiveLinkValidationMode;
+            CharacterInputPassMode = characterInputPassMode;
             CharacterFrameTickMode = characterFrameTickMode;
             CharacterPostFrameTailMode = characterPostFrameTailMode;
             HitExecutionPlanMode = hitExecutionPlanMode;
+            UseDedicatedSimulationWorker = useDedicatedSimulationWorker;
+            RequireU6ProductionOwnershipAudit = requireU6ProductionOwnershipAudit;
             OutputPath = outputPath ?? string.Empty;
             if (UsesLegacyAiConfigurationCompatibility &&
                 AiSensingMode == AiSensingMode.SoAAiSensing &&
@@ -384,6 +394,7 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool EnableCollisionRoleZeroItrFastPath { get; }
         internal int LegacyOracleInterval { get; }
         internal bool SimulationOnly { get; }
+        internal bool UseDedicatedSimulationWorker { get; }
         internal ProductionEntityStressSoundPresentationMode SoundPresentationMode { get; }
         internal bool SuppressSoundPresentation =>
             SoundPresentationMode == ProductionEntityStressSoundPresentationMode.Suppress ||
@@ -422,6 +433,7 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool ForceFullCharacterInputPostRefresh { get; }
         internal bool ForceFullAiUnifiedSnapshotRebuild { get; }
         internal bool RequireZeroGcAfterWarmup { get; }
+        internal bool RequireU6ProductionOwnershipAudit { get; }
         internal bool ForceLegacyEmptyCharacterHitConsume { get; }
         internal bool ForceLegacyCharacterRuntimeCandidateCountGate { get; }
         internal bool ForceLegacyEmptyObjectHitConsume { get; }
@@ -436,6 +448,7 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool ForceLegacyPostFrameRuntimeSnapshot { get; }
         internal BattleEcsPositiveLinkValidationPassMode
             PositiveLinkValidationMode { get; }
+        internal BattleEcsCharacterInputPassMode CharacterInputPassMode { get; }
         internal BattleEcsCharacterFrameTickPassMode CharacterFrameTickMode { get; }
         internal BattleEcsCharacterPostFrameTailPassMode
             CharacterPostFrameTailMode { get; }
@@ -590,9 +603,12 @@ namespace NTSD.Animation.Rendering.Editor
                 request.forceLegacyRoleBodyBuild,
                 request.forceLegacyFormalItrWorldRectReuse,
                 request.forceLegacyPreInteractionCrossPassProof,
+                ParseCharacterInputPassMode(request.characterInputPassMode),
                 ParseCharacterFrameTickMode(request.characterFrameTickMode),
                 ParseCharacterPostFrameTailMode(
-                    request.characterPostFrameTailMode));
+                    request.characterPostFrameTailMode),
+                request.useDedicatedSimulationWorker,
+                request.requireU6ProductionOwnershipAudit);
         }
 
         internal static BattleAiExecutionProfile ParseAiExecutionProfile(string value)
@@ -709,6 +725,40 @@ namespace NTSD.Animation.Rendering.Editor
                         $"Unknown character FrameTick mode '{value}'. " +
                         "Expected legacy or data-oriented.",
                         nameof(value));
+            }
+        }
+
+        internal static BattleEcsCharacterInputPassMode
+            ParseCharacterInputPassMode(string value)
+        {
+            string normalized = (value ?? string.Empty).Trim().ToLowerInvariant();
+            switch (normalized)
+            {
+                case "":
+                case "data":
+                case "data-oriented":
+                    return BattleEcsCharacterInputPassMode.DataOriented;
+                case "legacy":
+                    return BattleEcsCharacterInputPassMode.Legacy;
+                default:
+                    throw new ArgumentException(
+                        $"Unknown character input pass mode '{value}'. " +
+                        "Expected legacy or data-oriented.",
+                        nameof(value));
+            }
+        }
+
+        internal static string FormatCharacterInputPassMode(
+            BattleEcsCharacterInputPassMode mode)
+        {
+            switch (mode)
+            {
+                case BattleEcsCharacterInputPassMode.Legacy:
+                    return "legacy";
+                case BattleEcsCharacterInputPassMode.DataOriented:
+                    return "data-oriented";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
         }
 
@@ -1269,6 +1319,13 @@ namespace NTSD.Animation.Rendering.Editor
         public long objectPoolObjectFetchRejectDelta;
         public long objectPoolSpriteFetchRejectDelta;
         public long referencePoolLogicObjectFetchRejectDelta;
+        public long referencePoolCharacterFetchRejectDelta;
+        public long referencePoolLightWeaponFetchRejectDelta;
+        public long referencePoolHeavyWeaponFetchRejectDelta;
+        public long referencePoolSpecialAttackFetchRejectDelta;
+        public long referencePoolThrowWeaponFetchRejectDelta;
+        public long referencePoolOtherFetchRejectDelta;
+        public long referencePoolDrinkFetchRejectDelta;
         public long referencePoolTaskFetchRejectDelta;
         public long referencePoolUnknownTaskRecycleRejectDelta;
         public long opointTaskQueueRejectDelta;
@@ -1442,6 +1499,15 @@ namespace NTSD.Animation.Rendering.Editor
         public long characterRecoveryExactCharacterCount;
         public long characterRecoveryProvenNoOpCount;
         public long characterRecoveryCompatibilityFallbackCount;
+        public string characterInputPassMode;
+        public string characterInputPassRequestedMode;
+        public string characterInputPassEffectiveMode;
+        public bool characterInputPassRestored;
+        public long characterInputPassRunCount;
+        public long characterInputPassExactCharacterCount;
+        public long characterInputPassCompatibilityFallbackCount;
+        public long characterInputPassUnityCompatibilityShellCount;
+        public long characterInputPassUnexpectedFallbackCount;
         public string characterFrameTickMode;
         public string characterFrameTickRequestedMode;
         public string characterFrameTickEffectiveMode;
@@ -1501,6 +1567,14 @@ namespace NTSD.Animation.Rendering.Editor
         public string lateRuntimeSnapshotEffectiveMode;
         public bool allowUnsafeAiSoACandidate;
         public bool simulationOnly;
+        public bool dedicatedSimulationWorkerRequested;
+        public bool dedicatedSimulationWorkerActiveAfterPrewarm;
+        public long dedicatedSimulationWorkerSubmittedTickCount;
+        public long dedicatedSimulationWorkerCompletedTickCount;
+        public string dedicatedSimulationWorkerIneligibilityReason;
+        public string dedicatedSimulationWorkerLastSubmissionFailureReason;
+        public string dedicatedSimulationWorkerFailure;
+        public string logicTickTimingScope;
         public bool skipLateRendererUpdateRequested;
         public bool skipLateRendererUpdateConfigured;
         public bool skipLateRendererUpdateApplied;
@@ -1517,6 +1591,21 @@ namespace NTSD.Animation.Rendering.Editor
         public bool autoStopWhenSampled;
         public bool zeroGcGateRequired;
         public bool zeroGcGatePassed;
+        public string u6ProductionOwnershipSchema;
+        public bool u6ProductionOwnershipAuditRequired;
+        public bool u6ProductionOwnershipConfigurationPassed;
+        public string u6ProductionOwnershipConfigurationFailure;
+        public int u6ProductionCanonicalOwnerCount;
+        public int u6ProductionRetainedMeasuredOracleCount;
+        public int u6ProductionUnityCompatibilityShellCount;
+        public long u6ProductionCanonicalPassRunCount;
+        public long u6ProductionRetainedLegacyPassRunCount;
+        public long u6ProductionUnityCompatibilityShellRunCount;
+        public long u6ProductionDataOrientedCompatibilityFallbackCount;
+        public long u6ProductionCanonicalMismatchCount;
+        public long u6ProductionReplacedLegacyAiActivityCount;
+        public bool u6ProductionOwnershipRuntimeEvidencePassed;
+        public string u6ProductionOwnershipRuntimeFailure;
         public ProductionEntityStressCapacityPressureReport capacityPressure =
             new ProductionEntityStressCapacityPressureReport();
         public string zeroGcGateScope;
@@ -1800,6 +1889,24 @@ namespace NTSD.Animation.Rendering.Editor
         public ProductionEntityStressMetricSummary logicTickAllocatedBytes;
         public ProductionEntityStressMetricSummary profilerFrameGcAllocatedBytes;
         public ProductionEntityStressMetricSummary profilerFrameMainThreadGcAllocEventCount;
+        public ProductionEntityStressMetricSummary profilerFrameSetPassCallCount;
+        public ProductionEntityStressMetricSummary centralFrameSourceCommandCount;
+        public ProductionEntityStressMetricSummary centralFrameResolvedCommandCount;
+        public ProductionEntityStressMetricSummary centralFrameActiveChunkCount;
+        public ProductionEntityStressMetricSummary centralFrameSegmentCount;
+        public ProductionEntityStressMetricSummary centralFrameSubmissionDrawCount;
+        public int centralFrameEvidenceAcceptedFrameCount;
+        public int centralFeatureAvailableFrameCount;
+        public int centralMaterialAvailableFrameCount;
+        public int centralImmutableFrameAvailableFrameCount;
+        public int centralCategoryOwnershipReadyFrameCount;
+        public int centralFrameSubmissionReadyFrameCount;
+        public int centralFrameSubmittedPixelsFrameCount;
+        public int centralRegisteredFeatureCountPeak;
+        public int centralLastSimulationTick;
+        public int centralLastDisplayTick;
+        public string centralLastReason;
+        public string centralLastRefusalReason;
         public bool frameTimingEnabled;
         public bool frameTimingSupported;
         public string frameTimingSource;
@@ -1818,6 +1925,8 @@ namespace NTSD.Animation.Rendering.Editor
         public string profilerFrameGcAllocatedBytesRecorderUnitType;
         public string profilerFrameMainThreadGcAllocRecorderCategory;
         public string profilerFrameMainThreadGcAllocRecorderUnitType;
+        public string profilerFrameSetPassRecorderCategory;
+        public string profilerFrameSetPassRecorderUnitType;
         public string profilerFrameGcEvidenceAlignment;
         public int profilerFrameGcCandidateWindowCount;
         public int profilerFrameGcAcceptedFrameCount;
@@ -1832,6 +1941,10 @@ namespace NTSD.Animation.Rendering.Editor
         public int profilerFrameMainThreadGcAllocDiscardedWindowCount;
         public int profilerFrameMainThreadGcAllocTrailingIncompleteFrameCount;
         public string profilerFrameMainThreadGcAllocLastDiscardReason;
+        public int profilerFrameSetPassAcceptedFrameCount;
+        public int profilerFrameSetPassDiscardedWindowCount;
+        public int profilerFrameSetPassTrailingIncompleteFrameCount;
+        public string profilerFrameSetPassLastDiscardReason;
         public ProductionEntityStressAllocationRegionMetrics
             allocationPostTickTimingCollectors;
         public ProductionEntityStressAllocationRegionMetrics
@@ -2048,11 +2161,12 @@ namespace NTSD.Animation.Rendering.Editor
             int nonSteadyLogicTickCountAtStart,
             int logicTickCountAtStop,
             int sampledLogicTickCountAtStop,
-            int nonSteadyLogicTickCountAtStop)
+            int nonSteadyLogicTickCountAtStop,
+            bool allowZeroTickSteadyFrame = false)
         {
             int executed = logicTickCountAtStop - logicTickCountAtStart;
             int sampled = sampledLogicTickCountAtStop - sampledLogicTickCountAtStart;
-            return executed > 0 &&
+            return (executed > 0 || allowZeroTickSteadyFrame && executed == 0) &&
                    sampled == executed &&
                    nonSteadyLogicTickCountAtStop == nonSteadyLogicTickCountAtStart;
         }
@@ -2130,6 +2244,7 @@ namespace NTSD.Animation.Rendering.Editor
     {
         internal const string GcAllocatedMarker = "GC Allocated In Frame";
         internal const string GcAllocMarker = "GC.Alloc";
+        internal const string SetPassCallsMarker = "SetPass Calls Count";
         internal const string GcAllocatedSource =
             "ProfilerRecorder Memory/GC Allocated In Frame; one value per completed Profiler frame.";
         internal const string GcAllocEventSource =
@@ -2137,12 +2252,17 @@ namespace NTSD.Animation.Rendering.Editor
             "the recorder is constructed and started by the runner on Unity's main thread; " +
             "the exact handle has UnitType Bytes, while the reported metric is " +
             "ProfilerRecorderSample.Count events per completed Profiler frame.";
+        internal const string SetPassCallsSource =
+            "Continuously running ProfilerRecorder Render/SetPass Calls Count; LastValue is read " +
+            "at the next MonoBehaviour.Update for the previously completed rendered frame.";
         internal const string Alignment =
-            "Recorder windows start immediately before a candidate formal logic-tick batch and stop " +
-            "at the beginning of the next MonoBehaviour.Update. Only windows whose logic ticks all " +
-            "passed the production steady-state sample gate are retained. Each exact recorder is " +
-            "accepted independently, so an unavailable GC.Alloc event marker cannot invalidate the " +
-            "whole-frame GC byte metric. Report generation and teardown run only after Stop.";
+            "GC recorder windows start immediately before a candidate formal logic-tick batch and " +
+            "stop at the beginning of the next MonoBehaviour.Update. SetPass remains continuously " +
+            "running because Unity commits the render counter after Update; the next Update reads " +
+            "LastValue for that completed rendered frame. Only windows whose logic ticks all passed " +
+            "the production steady-state sample gate are retained. Each exact recorder is accepted " +
+            "independently, so an unavailable marker cannot invalidate another metric. Report " +
+            "generation and teardown run only after Stop.";
 
         private const int RecorderCapacity = 8;
         private readonly List<ProfilerRecorderSample> gcAllocatedBuffer =
@@ -2153,23 +2273,43 @@ namespace NTSD.Animation.Rendering.Editor
             new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
         private readonly List<double> gcAllocEventCountSamples =
             new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> setPassCallCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> centralSourceCommandCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> centralResolvedCommandCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> centralActiveChunkCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> centralSegmentCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
+        private readonly List<double> centralSubmissionDrawCountSamples =
+            new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
         private ProfilerRecorder gcAllocatedRecorder;
         private ProfilerRecorder gcAllocEventRecorder;
+        private ProfilerRecorder setPassCallsRecorder;
         private bool gcAllocatedConstructed;
         private bool gcAllocEventConstructed;
+        private bool setPassCallsConstructed;
+        private bool setPassCallsStarted;
         private bool gcAllocatedValid;
         private bool gcAllocEventValid;
+        private bool setPassCallsValid;
         private bool active;
         private bool disposed;
         private int logicTickCountAtStart;
         private int sampledLogicTickCountAtStart;
         private int nonSteadyLogicTickCountAtStart;
+        private bool allowZeroTickSteadyFrame;
         private string gcAllocatedUnavailableReason = string.Empty;
         private string gcAllocEventUnavailableReason = string.Empty;
+        private string setPassCallsUnavailableReason = string.Empty;
         private string gcAllocatedCategory = string.Empty;
         private string gcAllocEventCategory = string.Empty;
+        private string setPassCallsCategory = string.Empty;
         private string gcAllocatedUnitType = string.Empty;
         private string gcAllocEventUnitType = string.Empty;
+        private string setPassCallsUnitType = string.Empty;
         private int gcAllocatedAcceptedFrameCount;
         private int gcAllocatedDiscardedWindowCount;
         private int gcAllocatedTrailingIncompleteFrameCount;
@@ -2178,6 +2318,22 @@ namespace NTSD.Animation.Rendering.Editor
         private int gcAllocEventDiscardedWindowCount;
         private int gcAllocEventTrailingIncompleteFrameCount;
         private string gcAllocEventLastDiscardReason = string.Empty;
+        private int setPassCallsAcceptedFrameCount;
+        private int setPassCallsDiscardedWindowCount;
+        private int setPassCallsTrailingIncompleteFrameCount;
+        private string setPassCallsLastDiscardReason = string.Empty;
+        private int centralFrameEvidenceAcceptedFrameCount;
+        private int centralFeatureAvailableFrameCount;
+        private int centralMaterialAvailableFrameCount;
+        private int centralImmutableFrameAvailableFrameCount;
+        private int centralCategoryOwnershipReadyFrameCount;
+        private int centralFrameSubmissionReadyFrameCount;
+        private int centralFrameSubmittedPixelsFrameCount;
+        private int centralRegisteredFeatureCountPeak;
+        private int centralLastSimulationTick;
+        private int centralLastDisplayTick;
+        private string centralLastReason = string.Empty;
+        private string centralLastRefusalReason = string.Empty;
 
         internal ProductionEntityStressProfilerFrameGcCollector()
         {
@@ -2201,6 +2357,15 @@ namespace NTSD.Animation.Rendering.Editor
                 out gcAllocEventCategory,
                 out gcAllocEventUnitType,
                 out gcAllocEventUnavailableReason);
+            bool setPassCallsHandleValid = TryFindPreferredExactHandle(
+                handles,
+                ProfilerCategory.Render,
+                SetPassCallsMarker,
+                ProfilerMarkerDataUnit.Count,
+                out ProfilerRecorderHandle setPassCallsHandle,
+                out setPassCallsCategory,
+                out setPassCallsUnitType,
+                out setPassCallsUnavailableReason);
 
             if (gcAllocatedHandleValid)
             {
@@ -2250,6 +2415,35 @@ namespace NTSD.Animation.Rendering.Editor
                         exception.GetType().Name;
                 }
             }
+
+            if (setPassCallsHandleValid)
+            {
+                try
+                {
+                    setPassCallsRecorder = new ProfilerRecorder(
+                        setPassCallsHandle,
+                        RecorderCapacity,
+                        ProfilerRecorderOptions.Default);
+                    setPassCallsConstructed = true;
+                    setPassCallsValid = setPassCallsRecorder.Valid;
+                    if (!setPassCallsValid)
+                    {
+                        setPassCallsUnavailableReason =
+                            "The exact Render/SetPass Calls Count recorder was invalid.";
+                    }
+                    else
+                    {
+                        setPassCallsRecorder.Start();
+                        setPassCallsStarted = true;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    setPassCallsUnavailableReason =
+                        "SetPass Calls Count recorder construction failed: " +
+                        exception.GetType().Name;
+                }
+            }
         }
 
         internal bool Active => active;
@@ -2262,9 +2456,15 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool StartCandidate(
             int logicTickCount,
             int sampledLogicTickCount,
-            int nonSteadyLogicTickCount)
+            int nonSteadyLogicTickCount,
+            bool allowZeroTickSteadyFrame = false)
         {
-            if (!CanStart(disposed, active, gcAllocatedValid, gcAllocEventValid))
+            if (!CanStart(
+                    disposed,
+                    active,
+                    gcAllocatedValid,
+                    gcAllocEventValid,
+                    setPassCallsValid))
                 return false;
 
             if (gcAllocatedValid)
@@ -2274,6 +2474,7 @@ namespace NTSD.Animation.Rendering.Editor
             logicTickCountAtStart = logicTickCount;
             sampledLogicTickCountAtStart = sampledLogicTickCount;
             nonSteadyLogicTickCountAtStart = nonSteadyLogicTickCount;
+            this.allowZeroTickSteadyFrame = allowZeroTickSteadyFrame;
             CandidateWindowCount++;
             if (gcAllocatedValid)
                 gcAllocatedRecorder.Start();
@@ -2287,9 +2488,11 @@ namespace NTSD.Animation.Rendering.Editor
             bool disposed,
             bool active,
             bool gcAllocatedValid,
-            bool gcAllocEventValid)
+            bool gcAllocEventValid,
+            bool setPassCallsValid = false)
         {
-            return !disposed && !active && (gcAllocatedValid || gcAllocEventValid);
+            return !disposed && !active &&
+                   (gcAllocatedValid || gcAllocEventValid || setPassCallsValid);
         }
 
         internal void StopAndCollect(
@@ -2331,7 +2534,8 @@ namespace NTSD.Animation.Rendering.Editor
                     nonSteadyLogicTickCountAtStart,
                     logicTickCount,
                     sampledLogicTickCount,
-                    nonSteadyLogicTickCount))
+                    nonSteadyLogicTickCount,
+                    allowZeroTickSteadyFrame))
             {
                 DiscardedWindowCount++;
                 LastDiscardReason =
@@ -2397,17 +2601,32 @@ namespace NTSD.Animation.Rendering.Editor
                     acceptedThisWindow = Math.Max(acceptedThisWindow, count);
                 }
             }
+            if (setPassCallsValid)
+            {
+                AddRollingSample(
+                    setPassCallCountSamples,
+                    Math.Max(0L, setPassCallsRecorder.LastValue));
+                setPassCallsAcceptedFrameCount++;
+                acceptedThisWindow = Math.Max(acceptedThisWindow, 1);
+            }
+
+            CaptureCentralRenderEvidence();
+            acceptedThisWindow = Math.Max(acceptedThisWindow, 1);
 
             AcceptedFrameCount += acceptedThisWindow;
             TrailingIncompleteFrameCount = Math.Max(
                 gcAllocatedTrailingIncompleteFrameCount,
-                gcAllocEventTrailingIncompleteFrameCount);
+                Math.Max(
+                    gcAllocEventTrailingIncompleteFrameCount,
+                    setPassCallsTrailingIncompleteFrameCount));
             if (acceptedThisWindow == 0)
             {
                 DiscardedWindowCount++;
                 LastDiscardReason = !string.IsNullOrEmpty(gcAllocatedLastDiscardReason)
                     ? gcAllocatedLastDiscardReason
-                    : gcAllocEventLastDiscardReason;
+                    : !string.IsNullOrEmpty(gcAllocEventLastDiscardReason)
+                        ? gcAllocEventLastDiscardReason
+                        : setPassCallsLastDiscardReason;
             }
         }
 
@@ -2420,6 +2639,8 @@ namespace NTSD.Animation.Rendering.Editor
             report.profilerFrameGcAllocatedBytesRecorderUnitType = gcAllocatedUnitType;
             report.profilerFrameMainThreadGcAllocRecorderCategory = gcAllocEventCategory;
             report.profilerFrameMainThreadGcAllocRecorderUnitType = gcAllocEventUnitType;
+            report.profilerFrameSetPassRecorderCategory = setPassCallsCategory;
+            report.profilerFrameSetPassRecorderUnitType = setPassCallsUnitType;
             report.profilerFrameGcEvidenceAlignment = Alignment;
             report.profilerFrameGcCandidateWindowCount = CandidateWindowCount;
             report.profilerFrameGcAcceptedFrameCount = AcceptedFrameCount;
@@ -2443,6 +2664,14 @@ namespace NTSD.Animation.Rendering.Editor
                 gcAllocEventTrailingIncompleteFrameCount;
             report.profilerFrameMainThreadGcAllocLastDiscardReason =
                 gcAllocEventLastDiscardReason;
+            report.profilerFrameSetPassAcceptedFrameCount =
+                setPassCallsAcceptedFrameCount;
+            report.profilerFrameSetPassDiscardedWindowCount =
+                setPassCallsDiscardedWindowCount;
+            report.profilerFrameSetPassTrailingIncompleteFrameCount =
+                setPassCallsTrailingIncompleteFrameCount;
+            report.profilerFrameSetPassLastDiscardReason =
+                setPassCallsLastDiscardReason;
             report.profilerFrameGcAllocatedBytes = BuildMetric(
                 gcAllocatedBytesSamples,
                 "bytes",
@@ -2453,6 +2682,71 @@ namespace NTSD.Animation.Rendering.Editor
                 "count",
                 GcAllocEventSource + " Resolved category: " + gcAllocEventCategory + ".",
                 gcAllocEventValid ? string.Empty : gcAllocEventUnavailableReason);
+            report.profilerFrameSetPassCallCount = BuildMetric(
+                setPassCallCountSamples,
+                "count",
+                SetPassCallsSource + " Resolved category: " + setPassCallsCategory + ".",
+                setPassCallsValid ? string.Empty : setPassCallsUnavailableReason);
+            const string centralEvidenceSource =
+                "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update " +
+                "after the rendered frame; values are actual central command, segment and " +
+                "render-pass submission counters, not Unity Statistics SetPass estimates.";
+            report.centralFrameSourceCommandCount = BuildMetric(
+                centralSourceCommandCountSamples,
+                "count",
+                centralEvidenceSource,
+                string.Empty);
+            report.centralFrameResolvedCommandCount = BuildMetric(
+                centralResolvedCommandCountSamples,
+                "count",
+                centralEvidenceSource,
+                string.Empty);
+            report.centralFrameActiveChunkCount = BuildMetric(
+                centralActiveChunkCountSamples,
+                "count",
+                centralEvidenceSource,
+                string.Empty);
+            report.centralFrameSegmentCount = BuildMetric(
+                centralSegmentCountSamples,
+                "count",
+                centralEvidenceSource,
+                string.Empty);
+            report.centralFrameSubmissionDrawCount = BuildMetric(
+                centralSubmissionDrawCountSamples,
+                "count",
+                centralEvidenceSource,
+                string.Empty);
+            report.centralFrameEvidenceAcceptedFrameCount =
+                centralFrameEvidenceAcceptedFrameCount;
+            report.centralFeatureAvailableFrameCount =
+                centralFeatureAvailableFrameCount;
+            report.centralMaterialAvailableFrameCount =
+                centralMaterialAvailableFrameCount;
+            report.centralImmutableFrameAvailableFrameCount =
+                centralImmutableFrameAvailableFrameCount;
+            report.centralCategoryOwnershipReadyFrameCount =
+                centralCategoryOwnershipReadyFrameCount;
+            report.centralFrameSubmissionReadyFrameCount =
+                centralFrameSubmissionReadyFrameCount;
+            report.centralFrameSubmittedPixelsFrameCount =
+                centralFrameSubmittedPixelsFrameCount;
+            report.centralRegisteredFeatureCountPeak = centralRegisteredFeatureCountPeak;
+            report.centralLastSimulationTick = centralLastSimulationTick;
+            report.centralLastDisplayTick = centralLastDisplayTick;
+            report.centralLastReason = centralLastReason;
+            report.centralLastRefusalReason = centralLastRefusalReason;
+            if (report.profilerFrameSetPassCallCount.available &&
+                report.profilerFrameSetPassCallCount.sampleCount > 0 &&
+                report.profilerFrameSetPassCallCount.maximum <= 0d &&
+                report.centralFrameSubmissionDrawCount.available &&
+                report.centralFrameSubmissionDrawCount.maximum > 0d)
+            {
+                report.profilerFrameSetPassCallCount.available = false;
+                report.profilerFrameSetPassCallCount.unavailableReason =
+                    "Unity returned only zero for Render/SetPass Calls Count while the " +
+                    "central render pass recorded positive draw submissions. This Unity " +
+                    "2022 Windows Player counter is therefore not usable as SetPass evidence.";
+            }
         }
 
         public void Dispose()
@@ -2467,10 +2761,17 @@ namespace NTSD.Animation.Rendering.Editor
                     gcAllocEventRecorder.Stop();
                 active = false;
             }
+            if (setPassCallsStarted)
+            {
+                setPassCallsRecorder.Stop();
+                setPassCallsStarted = false;
+            }
             if (gcAllocatedConstructed)
                 gcAllocatedRecorder.Dispose();
             if (gcAllocEventConstructed)
                 gcAllocEventRecorder.Dispose();
+            if (setPassCallsConstructed)
+                setPassCallsRecorder.Dispose();
             disposed = true;
         }
 
@@ -2490,6 +2791,58 @@ namespace NTSD.Animation.Rendering.Editor
                 if (trailingIncomplete)
                     gcAllocEventTrailingIncompleteFrameCount++;
             }
+            if (setPassCallsValid)
+            {
+                setPassCallsDiscardedWindowCount++;
+                setPassCallsLastDiscardReason = reason;
+                if (trailingIncomplete)
+                    setPassCallsTrailingIncompleteFrameCount++;
+            }
+        }
+
+        private void CaptureCentralRenderEvidence()
+        {
+            BattleDynamicMeshBackend backend = BattleCentralRenderSystem.MeshBackend;
+            BattleCentralBuildDiagnostics diagnostics = backend?.Diagnostics;
+            BattleCentralRuntimeDiagnostics runtime = BattleCentralRenderSystem.Diagnostics;
+            if (diagnostics == null || runtime == null)
+                return;
+
+            AddRollingSample(
+                centralSourceCommandCountSamples,
+                Math.Max(0, diagnostics.SourceCommandCount));
+            AddRollingSample(
+                centralResolvedCommandCountSamples,
+                Math.Max(0, diagnostics.ResolvedCommandCount));
+            AddRollingSample(
+                centralActiveChunkCountSamples,
+                Math.Max(0, diagnostics.ActiveChunkCount));
+            AddRollingSample(
+                centralSegmentCountSamples,
+                Math.Max(0, diagnostics.SegmentCount));
+            AddRollingSample(
+                centralSubmissionDrawCountSamples,
+                Math.Max(0, runtime.LastSubmissionDrawCount));
+            centralFrameEvidenceAcceptedFrameCount++;
+            if (runtime.FeatureAvailable)
+                centralFeatureAvailableFrameCount++;
+            if (runtime.MaterialAvailable)
+                centralMaterialAvailableFrameCount++;
+            if (runtime.FrameAvailable)
+                centralImmutableFrameAvailableFrameCount++;
+            if (runtime.AllCategoryOwnershipReady)
+                centralCategoryOwnershipReadyFrameCount++;
+            if (runtime.SubmissionReady)
+                centralFrameSubmissionReadyFrameCount++;
+            if (runtime.SubmittedPixelsLastFrame)
+                centralFrameSubmittedPixelsFrameCount++;
+            centralRegisteredFeatureCountPeak = Math.Max(
+                centralRegisteredFeatureCountPeak,
+                BattleCentralRenderSystem.RegisteredFeatureCount);
+            centralLastSimulationTick = runtime.SimulationTick;
+            centralLastDisplayTick = runtime.DisplayTick;
+            centralLastReason = runtime.Reason ?? string.Empty;
+            centralLastRefusalReason = runtime.RefusalReason ?? string.Empty;
         }
 
         private static bool TryFindExactHandle(
@@ -2653,7 +3006,6 @@ namespace NTSD.Animation.Rendering.Editor
             new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
         private readonly List<double> gpuFrameSamples =
             new List<double>(ProductionEntityStressRunner.MaximumRetainedSamples);
-        private readonly bool graphicsMultiThreaded;
         private bool supported;
         private bool activeWindow;
         private bool pendingTiming;
@@ -2661,13 +3013,13 @@ namespace NTSD.Animation.Rendering.Editor
         private int logicTickCountAtStart;
         private int sampledLogicTickCountAtStart;
         private int nonSteadyLogicTickCountAtStart;
+        private bool allowZeroTickSteadyFrame;
         private int drainAttempts;
         private ulong timingWatermark;
         private string unavailableReason = string.Empty;
 
         internal ProductionEntityStressFrameTimingCollector()
         {
-            graphicsMultiThreaded = SystemInfo.graphicsMultiThreaded;
             supported = Application.isPlaying && FrameTimingManager.IsFeatureEnabled();
             if (!Application.isPlaying)
             {
@@ -2692,7 +3044,8 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool StartCandidate(
             int logicTickCount,
             int sampledLogicTickCount,
-            int nonSteadyLogicTickCount)
+            int nonSteadyLogicTickCount,
+            bool allowZeroTickSteadyFrame = false)
         {
             if (!CanStart(disposed, supported, activeWindow, pendingTiming))
                 return false;
@@ -2703,6 +3056,7 @@ namespace NTSD.Animation.Rendering.Editor
                 logicTickCountAtStart = logicTickCount;
                 sampledLogicTickCountAtStart = sampledLogicTickCount;
                 nonSteadyLogicTickCountAtStart = nonSteadyLogicTickCount;
+                this.allowZeroTickSteadyFrame = allowZeroTickSteadyFrame;
                 drainAttempts = 0;
                 CandidateWindowCount++;
                 FrameTimingManager.CaptureFrameTimings();
@@ -2751,7 +3105,8 @@ namespace NTSD.Animation.Rendering.Editor
                     nonSteadyLogicTickCountAtStart,
                     logicTickCount,
                     sampledLogicTickCount,
-                    nonSteadyLogicTickCount))
+                    nonSteadyLogicTickCount,
+                    allowZeroTickSteadyFrame))
             {
                 DiscardWindow(
                     ProductionEntityStressProfilerFrameSamplePolicy
@@ -2782,12 +3137,9 @@ namespace NTSD.Animation.Rendering.Editor
                     AddPositiveSample(
                         mainThreadSamples,
                         timing.cpuMainThreadFrameTime);
-                    if (graphicsMultiThreaded)
-                    {
-                        AddPositiveSample(
-                            renderThreadSamples,
-                            timing.cpuRenderThreadFrameTime);
-                    }
+                    AddPositiveSample(
+                        renderThreadSamples,
+                        timing.cpuRenderThreadFrameTime);
                     AddPositiveSample(gpuFrameSamples, timing.gpuFrameTime);
                     AcceptedFrameCount++;
                     pendingTiming = false;
@@ -2836,10 +3188,7 @@ namespace NTSD.Animation.Rendering.Editor
                 "FrameTiming.cpuMainThreadFrameTime");
             report.completedFrameRenderThreadMilliseconds = BuildMetric(
                 renderThreadSamples,
-                "FrameTiming.cpuRenderThreadFrameTime",
-                graphicsMultiThreaded
-                    ? string.Empty
-                    : "Graphics jobs are not multithreaded on this execution target.");
+                "FrameTiming.cpuRenderThreadFrameTime");
             report.completedFrameGpuMilliseconds = BuildMetric(
                 gpuFrameSamples,
                 "FrameTiming.gpuFrameTime");
@@ -3845,7 +4194,10 @@ namespace NTSD.Animation.Rendering.Editor
         {
             string canonical = string.Join(
                 "|",
-                "implementation-config-v21",
+                "implementation-config-v22",
+                config.UseDedicatedSimulationWorker
+                    ? "simulation-owner-dedicated-worker"
+                    : "simulation-owner-main-thread-manual",
                 "ai-execution-profile-" +
                 ProductionEntityStressConfig.FormatAiExecutionProfile(
                     config.AiExecutionProfile),
@@ -3929,6 +4281,9 @@ namespace NTSD.Animation.Rendering.Editor
                 "positive-link-validation-" +
                 ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
                     config.PositiveLinkValidationMode),
+                "character-input-pass-" +
+                ProductionEntityStressConfig.FormatCharacterInputPassMode(
+                    config.CharacterInputPassMode),
                 "character-frame-tick-" +
                 ProductionEntityStressConfig.FormatCharacterFrameTickMode(
                     config.CharacterFrameTickMode),
@@ -4159,6 +4514,13 @@ namespace NTSD.Animation.Rendering.Editor
         internal long ObjectPoolObjectFetchReject;
         internal long ObjectPoolSpriteFetchReject;
         internal long ReferencePoolLogicObjectFetchReject;
+        internal long ReferencePoolCharacterFetchReject;
+        internal long ReferencePoolLightWeaponFetchReject;
+        internal long ReferencePoolHeavyWeaponFetchReject;
+        internal long ReferencePoolSpecialAttackFetchReject;
+        internal long ReferencePoolThrowWeaponFetchReject;
+        internal long ReferencePoolOtherFetchReject;
+        internal long ReferencePoolDrinkFetchReject;
         internal long ReferencePoolTaskFetchReject;
         internal long ReferencePoolUnknownTaskRecycleReject;
         internal long OpointTaskQueueReject;
@@ -4269,6 +4631,27 @@ namespace NTSD.Animation.Rendering.Editor
                 current.ReferencePoolLogicObjectFetchReject,
                 previous.ReferencePoolLogicObjectFetchReject, 1UL << 15,
                 ref criticalTickTotal, ref criticalTickMask);
+            AccumulateDiagnostic(ref report.referencePoolCharacterFetchRejectDelta,
+                current.ReferencePoolCharacterFetchReject,
+                previous.ReferencePoolCharacterFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolLightWeaponFetchRejectDelta,
+                current.ReferencePoolLightWeaponFetchReject,
+                previous.ReferencePoolLightWeaponFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolHeavyWeaponFetchRejectDelta,
+                current.ReferencePoolHeavyWeaponFetchReject,
+                previous.ReferencePoolHeavyWeaponFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolSpecialAttackFetchRejectDelta,
+                current.ReferencePoolSpecialAttackFetchReject,
+                previous.ReferencePoolSpecialAttackFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolThrowWeaponFetchRejectDelta,
+                current.ReferencePoolThrowWeaponFetchReject,
+                previous.ReferencePoolThrowWeaponFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolOtherFetchRejectDelta,
+                current.ReferencePoolOtherFetchReject,
+                previous.ReferencePoolOtherFetchReject);
+            AccumulateDiagnostic(ref report.referencePoolDrinkFetchRejectDelta,
+                current.ReferencePoolDrinkFetchReject,
+                previous.ReferencePoolDrinkFetchReject);
             Accumulate(ref report.referencePoolTaskFetchRejectDelta,
                 current.ReferencePoolTaskFetchReject,
                 previous.ReferencePoolTaskFetchReject, 1UL << 16,
@@ -4362,6 +4745,15 @@ namespace NTSD.Animation.Rendering.Editor
             reportValue += delta;
             tickTotal += delta;
             tickMask |= sourceBit;
+        }
+
+        private static void AccumulateDiagnostic(
+            ref long reportValue,
+            long current,
+            long previousValue)
+        {
+            if (current > previousValue)
+                reportValue += current - previousValue;
         }
     }
 
@@ -4457,6 +4849,8 @@ namespace NTSD.Animation.Rendering.Editor
             new ProductionEntityStressZeroGcGateAccumulator();
         private readonly ProductionEntityStressCapacityPressureAccumulator
             capacityPressure = new ProductionEntityStressCapacityPressureAccumulator();
+        private readonly BattleProductionOwnershipInventory
+            u6ProductionOwnershipInventory = new BattleProductionOwnershipInventory();
         private ProductionEntityStressProfilerFrameGcCollector profilerFrameGcCollector;
         private ProductionEntityStressFrameTimingCollector frameTimingCollector;
 
@@ -4508,6 +4902,7 @@ namespace NTSD.Animation.Rendering.Editor
         private bool previousForceLegacyPostFrameRuntimeSnapshot;
         private BattleEcsPositiveLinkValidationPassMode
             previousPositiveLinkValidationMode;
+        private BattleEcsCharacterInputPassMode previousCharacterInputPassMode;
         private BattleEcsCharacterFrameTickPassMode previousCharacterFrameTickMode;
         private BattleEcsCharacterPostFrameTailPassMode
             previousCharacterPostFrameTailMode;
@@ -4536,6 +4931,16 @@ namespace NTSD.Animation.Rendering.Editor
         private bool cleanupInProgress;
         private bool terminalCpuDiagnosticsFlushPending;
         private bool driverConfigurationChanged;
+        private bool dedicatedWorkerTickPending;
+        private bool dedicatedWorkerPendingBuildPresentation;
+        private bool dedicatedWorkerPendingRosterMutation;
+        private int dedicatedWorkerExpectedTickIndex;
+        private int dedicatedWorkerPoolCapacityBeforeTick;
+        private int dedicatedWorkerGeneration0CollectionsBefore;
+        private int dedicatedWorkerGeneration1CollectionsBefore;
+        private int dedicatedWorkerGeneration2CollectionsBefore;
+        private long dedicatedWorkerAllocatedBytesBefore;
+        private long dedicatedWorkerSubmittedAt;
         [SerializeField, HideInInspector]
         private bool preserveRequestProcessorStateOnDestroy;
 
@@ -4567,6 +4972,13 @@ namespace NTSD.Animation.Rendering.Editor
 
         internal static bool AreProductionServicesReady()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (NTSD.Test.BattleTestBootstrap.SuppressEntityCreationForProductionStress &&
+                !NTSD.Test.BattleTestBootstrap.ProductionStressServicesReady)
+            {
+                return false;
+            }
+#endif
             CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
             GameDataManager dataManager = GameDataManager.Instance;
             return SimulationTickDriver.Instance?.World != null &&
@@ -4873,6 +5285,9 @@ namespace NTSD.Animation.Rendering.Editor
                 positiveLinkValidationRequestedMode =
                     ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
                         config.PositiveLinkValidationMode),
+                characterInputPassRequestedMode =
+                    ProductionEntityStressConfig.FormatCharacterInputPassMode(
+                        config.CharacterInputPassMode),
                 characterFrameTickRequestedMode =
                     ProductionEntityStressConfig.FormatCharacterFrameTickMode(
                         config.CharacterFrameTickMode),
@@ -4933,6 +5348,11 @@ namespace NTSD.Animation.Rendering.Editor
                 collisionRoleZeroItrFastPathRequested =
                     config.EnableCollisionRoleZeroItrFastPath,
                 simulationOnly = config.SimulationOnly,
+                dedicatedSimulationWorkerRequested =
+                    config.UseDedicatedSimulationWorker,
+                logicTickTimingScope = config.UseDedicatedSimulationWorker
+                    ? "Dedicated worker execution elapsed time; main-thread presentation and publication latency are reported by frame timing."
+                    : "Synchronous SimulationTickDriver.StepOneTick elapsed time on the Unity main thread.",
                 skipLateRendererUpdateRequested = config.SkipLateRendererUpdate,
                 soundPresentationModeRequested =
                     ProductionEntityStressConfig.FormatSoundPresentationMode(
@@ -4944,6 +5364,13 @@ namespace NTSD.Animation.Rendering.Editor
                 autoStopWhenSampled = config.ShouldAutoStopWhenSampled,
                 zeroGcGateRequired = config.RequireZeroGcAfterWarmup,
                 zeroGcGatePassed = true,
+                u6ProductionOwnershipSchema =
+                    BattleProductionOwnershipInventory.Schema,
+                u6ProductionOwnershipAuditRequired =
+                    config.RequireU6ProductionOwnershipAudit,
+                u6ProductionOwnershipConfigurationFailure =
+                    BattleProductionOwnershipFailure.None.ToString(),
+                u6ProductionOwnershipRuntimeFailure = string.Empty,
                 zeroGcGateScope =
                     "Main-thread allocation and GC.CollectionCount(0..2) gates for steady SimulationTickDriver.StepOneTick plus the formal battle memory boundary around driver Update non-tick work, LateUpdate presentation, and the early-Update through URP endFrameRendering PlayerLoop envelope. The envelope is observational in Editor because Editor callbacks share the main thread and is a hard gate in Player builds; stress diagnostics and report serialization are excluded from the narrow tick gate.",
                 startedUtc = DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture),
@@ -5060,6 +5487,8 @@ namespace NTSD.Animation.Rendering.Editor
                 throw new InvalidOperationException(
                     "Diagnostic world did not apply MobileExtended(1050) + LooseQuadtree before registration.");
             }
+            objectPool.PrepareObjectCapacityImmediateForDiagnostics(
+                world.MaxRuntimeSlotsForServices);
             previousSkipLateRendererUpdate = ApplySkipLateRendererUpdateForDiagnostics(
                 world,
                 config,
@@ -5185,6 +5614,15 @@ namespace NTSD.Animation.Rendering.Editor
                 world.BattleEcsCharacterFrameAdvancePassModeForDiagnostics.ToString();
             report.characterRecoveryMode =
                 world.BattleEcsCharacterRecoveryPassModeForDiagnostics.ToString();
+            previousCharacterInputPassMode =
+                world.BattleEcsCharacterInputPassModeForDiagnostics;
+            world.ConfigureBattleEcsCharacterInputPassForDiagnostics(
+                config.CharacterInputPassMode);
+            report.characterInputPassMode =
+                world.BattleEcsCharacterInputPassModeForDiagnostics.ToString();
+            report.characterInputPassEffectiveMode =
+                ProductionEntityStressConfig.FormatCharacterInputPassMode(
+                    world.BattleEcsCharacterInputPassModeForDiagnostics);
             previousCharacterFrameTickMode =
                 world.BattleEcsCharacterFrameTickPassModeForDiagnostics;
             world.ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(
@@ -5231,6 +5669,7 @@ namespace NTSD.Animation.Rendering.Editor
                     world,
                     config,
                     report);
+            CaptureU6ProductionOwnershipConfiguration();
             report.rosterFingerprint = ProductionEntityStressFingerprint.BuildRoster(
                 config.Mode,
                 config.EntityCount,
@@ -5301,7 +5740,9 @@ namespace NTSD.Animation.Rendering.Editor
             }
             driver.ApplySettings(new LockstepSimulationSettings
             {
-                driveMode = SimulationDriveMode.Manual,
+                driveMode = config.UseDedicatedSimulationWorker
+                    ? SimulationDriveMode.LocalFreeRun
+                    : SimulationDriveMode.Manual,
                 useUnscaledTime = true,
                 maxCatchUpTicksPerFrame = config.MaxCatchUpTicksPerFrame,
                 maxBacklogTicks = config.MaxBacklogTicks,
@@ -5347,6 +5788,17 @@ namespace NTSD.Animation.Rendering.Editor
                         {
                             initialPopulationComplete = true;
                             driver.BeginBattleAllocationSeal();
+                            report.dedicatedSimulationWorkerActiveAfterPrewarm =
+                                driver.DedicatedSimulationWorkerActiveForDiagnostics;
+                            report.dedicatedSimulationWorkerIneligibilityReason =
+                                driver.DedicatedSimulationWorkerIneligibilityReasonForDiagnostics;
+                            if (config.UseDedicatedSimulationWorker &&
+                                !report.dedicatedSimulationWorkerActiveAfterPrewarm)
+                            {
+                                throw new InvalidOperationException(
+                                    "The formal dedicated simulation worker was requested but did not start: " +
+                                    report.dedicatedSimulationWorkerIneligibilityReason);
+                            }
                             accumulator = 0f;
                             report.status = "Running";
                             report.replenishmentState = "Stable";
@@ -5454,86 +5906,99 @@ namespace NTSD.Animation.Rendering.Editor
                         profilerFrameGcCollector?.StartCandidate(
                             report.logicTicksExecuted,
                             report.sampledLogicTicks,
-                            report.nonSteadyLogicTicks);
+                            report.nonSteadyLogicTicks,
+                            config.UseDedicatedSimulationWorker);
                         frameTimingCollector?.StartCandidate(
                             report.logicTicksExecuted,
                             report.sampledLogicTicks,
-                            report.nonSteadyLogicTicks);
+                            report.nonSteadyLogicTicks,
+                            config.UseDedicatedSimulationWorker);
                     }
-                    while (accumulator >= SimulationConstants.SIM_DT &&
-                           ticksThisFrame < config.MaxCatchUpTicksPerFrame &&
-                           ShouldExecuteCatchUpTickForStressSample(
-                               config.ShouldAutoStopWhenSampled,
-                               report.sampledLogicTicks,
-                               config.SampleTicks))
+                    if (config.UseDedicatedSimulationWorker)
                     {
-                        double elapsedCatchUpMs =
-                            (Stopwatch.GetTimestamp() - catchUpStartedAt) * 1000d /
-                            Stopwatch.Frequency;
-                        if (ShouldDeferCatchUpTickForCpuBudget(
-                                config.CatchUpCpuBudgetMs,
-                                ticksThisFrame,
-                                elapsedCatchUpMs,
-                                previousTickMs))
+                        ProcessDedicatedSimulationWorkerTick(
+                            ref ticksThisFrame,
+                            ref sampledSteadyTickThisUpdate,
+                            ref sampledTickElapsedTicks,
+                            ref sampledTickAllocatedBytes);
+                    }
+                    else
+                    {
+                        while (accumulator >= SimulationConstants.SIM_DT &&
+                               ticksThisFrame < config.MaxCatchUpTicksPerFrame &&
+                               ShouldExecuteCatchUpTickForStressSample(
+                                   config.ShouldAutoStopWhenSampled,
+                                   report.sampledLogicTicks,
+                                   config.SampleTicks))
                         {
-                            report.framesLimitedByCatchUpCpuBudget++;
-                            break;
-                        }
-
-                        accumulator -= SimulationConstants.SIM_DT;
-                        bool buildPresentation = config.LimitsCatchUpByCpuBudget
-                            ? !config.SimulationOnly
-                            : ResolveBuildPresentationForStressTick(
-                                config.SimulationOnly,
-                                accumulator,
-                                ticksThisFrame,
-                                config.MaxCatchUpTicksPerFrame);
-                        long tickStartedAt = Stopwatch.GetTimestamp();
-                        long tickAllocatedBefore = GC.GetAllocatedBytesForCurrentThread();
-                        int sampledLogicTicksBefore = report.sampledLogicTicks;
-                        StepMeasuredTick(
-                            buildPresentation,
-                            rosterMutationPendingForNextTick);
-                        long tickElapsedTicks = Stopwatch.GetTimestamp() - tickStartedAt;
-                        previousTickMs =
-                            tickElapsedTicks * 1000d /
-                            Stopwatch.Frequency;
-                        if (report.sampledLogicTicks > sampledLogicTicksBefore)
-                        {
-                            sampledSteadyTickThisUpdate = true;
-                            sampledTickElapsedTicks += tickElapsedTicks;
-                            sampledTickAllocatedBytes += Math.Max(
-                                0L,
-                                GC.GetAllocatedBytesForCurrentThread() - tickAllocatedBefore);
-                        }
-                        rosterMutationPendingForNextTick = false;
-                        ticksThisFrame++;
-                        if (saturationDrainActive)
-                        {
-                            report.currentSaturationDrainTicks++;
-                            report.saturationDrainTickCount++;
-                            RefreshRosterAndCapacityDiagnosticsMeasured();
-                            ProductionEntityStressReplenishmentAction drainAction =
-                                ProductionEntityStressReplenishmentPolicy.Evaluate(
-                                    report.baseRosterActiveCount,
-                                    config.EntityCount,
-                                    report.totalActiveRuntimeEntityCount,
-                                    report.totalClaimedRuntimeSlotCount,
-                                    BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities,
-                                    report.currentSaturationDrainTicks,
-                                    config.MaxSaturationDrainTicks);
-                            if (drainAction ==
-                                ProductionEntityStressReplenishmentAction.Attempt)
+                            double elapsedCatchUpMs =
+                                (Stopwatch.GetTimestamp() - catchUpStartedAt) * 1000d /
+                                Stopwatch.Frequency;
+                            if (ShouldDeferCatchUpTickForCpuBudget(
+                                    config.CatchUpCpuBudgetMs,
+                                    ticksThisFrame,
+                                    elapsedCatchUpMs,
+                                    previousTickMs))
                             {
-                                saturationDrainActive = false;
-                                report.replenishmentState = "ReplenishmentPending";
+                                report.framesLimitedByCatchUpCpuBudget++;
                                 break;
                             }
-                            if (drainAction == ProductionEntityStressReplenishmentAction
-                                    .SaturationBlockedReplenishment)
+
+                            accumulator -= SimulationConstants.SIM_DT;
+                            bool buildPresentation = config.LimitsCatchUpByCpuBudget
+                                ? !config.SimulationOnly
+                                : ResolveBuildPresentationForStressTick(
+                                    config.SimulationOnly,
+                                    accumulator,
+                                    ticksThisFrame,
+                                    config.MaxCatchUpTicksPerFrame);
+                            long tickStartedAt = Stopwatch.GetTimestamp();
+                            long tickAllocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+                            int sampledLogicTicksBefore = report.sampledLogicTicks;
+                            StepMeasuredTick(
+                                buildPresentation,
+                                rosterMutationPendingForNextTick);
+                            long tickElapsedTicks = Stopwatch.GetTimestamp() - tickStartedAt;
+                            previousTickMs =
+                                tickElapsedTicks * 1000d /
+                                Stopwatch.Frequency;
+                            if (report.sampledLogicTicks > sampledLogicTicksBefore)
                             {
-                                saturationBlocked = true;
-                                break;
+                                sampledSteadyTickThisUpdate = true;
+                                sampledTickElapsedTicks += tickElapsedTicks;
+                                sampledTickAllocatedBytes += Math.Max(
+                                    0L,
+                                    GC.GetAllocatedBytesForCurrentThread() - tickAllocatedBefore);
+                            }
+                            rosterMutationPendingForNextTick = false;
+                            ticksThisFrame++;
+                            if (saturationDrainActive)
+                            {
+                                report.currentSaturationDrainTicks++;
+                                report.saturationDrainTickCount++;
+                                RefreshRosterAndCapacityDiagnosticsMeasured();
+                                ProductionEntityStressReplenishmentAction drainAction =
+                                    ProductionEntityStressReplenishmentPolicy.Evaluate(
+                                        report.baseRosterActiveCount,
+                                        config.EntityCount,
+                                        report.totalActiveRuntimeEntityCount,
+                                        report.totalClaimedRuntimeSlotCount,
+                                        BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities,
+                                        report.currentSaturationDrainTicks,
+                                        config.MaxSaturationDrainTicks);
+                                if (drainAction ==
+                                    ProductionEntityStressReplenishmentAction.Attempt)
+                                {
+                                    saturationDrainActive = false;
+                                    report.replenishmentState = "ReplenishmentPending";
+                                    break;
+                                }
+                                if (drainAction == ProductionEntityStressReplenishmentAction
+                                        .SaturationBlockedReplenishment)
+                                {
+                                    saturationBlocked = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -5571,7 +6036,7 @@ namespace NTSD.Animation.Rendering.Editor
                     if (config.ShouldAutoStopWhenSampled &&
                         report.sampledLogicTicks >= config.SampleTicks)
                     {
-                        ProductionEntityStressCpuHierarchyAnalyzer
+                        ProductionEntityStressEditorBridge
                             .StopAndDumpIfArmedAtSampleCompletion();
                         StopAndCleanup(config.AutoCleanup
                             ? "smoke-complete"
@@ -5595,7 +6060,7 @@ namespace NTSD.Animation.Rendering.Editor
                     }
                     finally
                     {
-                        ProductionEntityStressRequestProcessor.NotifyRunStopped();
+                        NotifyRequestProcessorRunStopped();
                         Destroy(gameObject);
                     }
                 }
@@ -5643,7 +6108,7 @@ namespace NTSD.Animation.Rendering.Editor
             if (cleaned)
             {
                 if (!preserveRequestProcessorStateOnDestroy)
-                    ProductionEntityStressRequestProcessor.NotifyRunStopped();
+                    NotifyRequestProcessorRunStopped();
                 return;
             }
 
@@ -5653,8 +6118,11 @@ namespace NTSD.Animation.Rendering.Editor
                                                   report.sampledLogicTicks >= config.SampleTicks &&
                                                   string.IsNullOrEmpty(report.failure);
                 bool zeroGcGateValid = EvaluateZeroGcGateAtTerminal();
+                bool u6OwnershipGateValid =
+                    EvaluateU6ProductionOwnershipAtTerminal();
                 CleanupInternal(reason, true);
                 bool success = report.harnessValidity && zeroGcGateValid &&
+                               u6OwnershipGateValid &&
                                report.teardown.restored &&
                                (!config.ShouldAutoStopWhenSampled || requestedSamplingCompleted);
                 report.status = config.AutoCleanup
@@ -5671,7 +6139,7 @@ namespace NTSD.Animation.Rendering.Editor
             finally
             {
                 if (!preserveRequestProcessorStateOnDestroy)
-                    ProductionEntityStressRequestProcessor.NotifyRunStopped();
+                    NotifyRequestProcessorRunStopped();
                 Destroy(gameObject);
             }
         }
@@ -5711,7 +6179,7 @@ namespace NTSD.Animation.Rendering.Editor
             }
             finally
             {
-                ProductionEntityStressRequestProcessor.NotifyRunStopped();
+                NotifyRequestProcessorRunStopped();
                 Destroy(gameObject);
             }
         }
@@ -5725,17 +6193,7 @@ namespace NTSD.Animation.Rendering.Editor
                 StepMeasuredTickProfilerMarker.Auto();
             try
             {
-                if (!capacityPressure.BaselineCaptured &&
-                    report.logicTicksExecuted >= config.WarmupTicks)
-                {
-                    ProductionEntityStressCapacityPressureSnapshot baseline =
-                        CaptureCapacityPressureSnapshot();
-                    capacityPressure.Begin(
-                        in baseline,
-                        report.capacityPressure,
-                        config.RequireZeroGcAfterWarmup);
-                }
-
+                PrepareMeasuredTickCapacityBaseline();
                 ApplyScriptedMoveVelocityForNextTick();
                 long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
                 int generation0CollectionsBefore = GC.CollectionCount(0);
@@ -5778,127 +6236,15 @@ namespace NTSD.Animation.Rendering.Editor
                     throw new InvalidOperationException(
                         "Production SimulationTickDriver refused a manual tick.");
                 }
-
-                report.logicTicksExecuted++;
-                int baseRosterActiveCount = CountActiveBaseRoster(out int baseAiActiveCount);
-                report.baseRosterActiveCount = baseRosterActiveCount;
-                report.baseAiActiveCount = baseAiActiveCount;
-                bool poolExpandedDuringTick =
-                    GetObjectPoolCapacityForDiagnostics() > poolCapacityBeforeTick;
-                bool isSteadyStateSample =
-                    ProductionEntityStressSamplePolicy.IsSteadyStateSample(
-                        report.logicTicksExecuted,
-                        config.WarmupTicks,
-                        baseRosterActiveCount,
-                        config.EntityCount,
-                        rosterMutatedDuringTick,
-                        poolExpandedDuringTick);
-                long postTickTimingCollectorsAllocatedBefore =
-                    GC.GetAllocatedBytesForCurrentThread();
-                long postTickTimingCollectorsTimestamp = Stopwatch.GetTimestamp();
-                ProfilerMarker.AutoScope postTickTimingCollectorsProfilerScope =
-                    PostTickTimingCollectorsProfilerMarker.Auto();
-                try
-                {
-                    if (isSteadyStateSample)
-                    {
-                        phaseTimingCollector?.CaptureAfterTick(
-                            phaseTimingDiagnostics,
-                            elapsedMs,
-                            report.logicTicksExecuted,
-                            config.WarmupTicks);
-                        presentationTimingCollector?.CaptureAfterTick(
-                            presentationTimingDiagnostics,
-                            report.logicTicksExecuted,
-                            config.WarmupTicks);
-                        if (config.EnableDetailPhaseTiming)
-                        {
-                            detailPhaseTimingCollector.CaptureAfterTick(
-                                detailPhaseTimingDiagnostics,
-                                aiInputDetailDiagnostics,
-                                report.logicTicksExecuted,
-                                config.WarmupTicks);
-                        }
-                    }
-                }
-                finally
-                {
-                    postTickTimingCollectorsProfilerScope.Dispose();
-                    RecordAllocationBytesForReport(
-                        report,
-                        ProductionEntityStressAllocationRegion
-                            .PostTickTimingCollectors,
-                        GC.GetAllocatedBytesForCurrentThread() -
-                        postTickTimingCollectorsAllocatedBefore);
-                    RecordCpuElapsedTicksForReport(
-                        report,
-                        ProductionEntityStressCpuRegion.PostTickTimingCollectors,
-                        Stopwatch.GetTimestamp() -
-                        postTickTimingCollectorsTimestamp);
-                }
-                if (report.logicTicksExecuted <= config.WarmupTicks)
-                {
-                    report.warmupTicksCompleted = report.logicTicksExecuted;
-                }
-                else if (isSteadyStateSample)
-                {
-                    logicTickTimingCollector.AddSample(elapsedMs, buildPresentation);
-                    AddRollingSample(allocationSamples, allocatedBytes);
-                    zeroGcGate.Record(
-                        report.logicTicksExecuted,
-                        allocatedBytes,
-                        generation0Collections,
-                        generation1Collections,
-                        generation2Collections);
-                    zeroGcGate.Populate(report, config.RequireZeroGcAfterWarmup);
-                    report.sampledLogicTicks++;
-                }
-                else
-                {
-                    report.nonSteadyLogicTicks++;
-                    if (baseRosterActiveCount != config.EntityCount)
-                        report.sampleRejectedForIncompleteBaseRoster++;
-                    if (rosterMutatedDuringTick)
-                        report.sampleRejectedForRosterMutation++;
-                    if (poolExpandedDuringTick)
-                        report.sampleRejectedForPoolExpansion++;
-                }
-
-                if (report.logicTicksExecuted > config.WarmupTicks)
-                {
-                    ProductionEntityStressCapacityPressureSnapshot currentPressure =
-                        CaptureCapacityPressureSnapshot();
-                    capacityPressure.Record(
-                        report.logicTicksExecuted,
-                        in currentPressure,
-                        report.capacityPressure);
-                }
-
-                long captureProductionCountersAllocatedBefore =
-                    GC.GetAllocatedBytesForCurrentThread();
-                long captureProductionCountersTimestamp = Stopwatch.GetTimestamp();
-                ProfilerMarker.AutoScope captureProductionCountersProfilerScope =
-                    CaptureProductionCountersProfilerMarker.Auto();
-                try
-                {
-                    CaptureProductionCounters();
-                }
-                finally
-                {
-                    captureProductionCountersProfilerScope.Dispose();
-                    RecordAllocationBytesForReport(
-                        report,
-                        ProductionEntityStressAllocationRegion
-                            .CaptureProductionCountersTotal,
-                        GC.GetAllocatedBytesForCurrentThread() -
-                        captureProductionCountersAllocatedBefore);
-                    RecordCpuElapsedTicksForReport(
-                        report,
-                        ProductionEntityStressCpuRegion
-                            .CaptureProductionCountersTotal,
-                        Stopwatch.GetTimestamp() -
-                        captureProductionCountersTimestamp);
-                }
+                CompleteMeasuredTick(
+                    buildPresentation,
+                    rosterMutatedDuringTick,
+                    poolCapacityBeforeTick,
+                    elapsedMs,
+                    allocatedBytes,
+                    generation0Collections,
+                    generation1Collections,
+                    generation2Collections);
             }
             finally
             {
@@ -5907,6 +6253,294 @@ namespace NTSD.Animation.Rendering.Editor
                     report,
                     ProductionEntityStressCpuRegion.StepMeasuredTickTotal,
                     Stopwatch.GetTimestamp() - stepMeasuredTickTimestamp);
+            }
+        }
+
+        private void ProcessDedicatedSimulationWorkerTick(
+            ref int ticksThisFrame,
+            ref bool sampledSteadyTickThisUpdate,
+            ref long sampledTickElapsedTicks,
+            ref long sampledTickAllocatedBytes)
+        {
+            Exception workerFailure =
+                driver.DedicatedSimulationWorkerFailureForDiagnostics;
+            if (workerFailure != null)
+            {
+                report.dedicatedSimulationWorkerFailure = workerFailure.ToString();
+                throw new InvalidOperationException(
+                    "The dedicated simulation worker failed during the stress run.",
+                    workerFailure);
+            }
+
+            if (dedicatedWorkerTickPending)
+            {
+                if (driver.CurrentTickIndex < dedicatedWorkerExpectedTickIndex ||
+                    driver.DedicatedSimulationWorkerTickInFlightForDiagnostics)
+                {
+                    double pendingMilliseconds =
+                        (Stopwatch.GetTimestamp() - dedicatedWorkerSubmittedAt) *
+                        1000d / Stopwatch.Frequency;
+                    if (pendingMilliseconds > 10000d)
+                    {
+                        throw new TimeoutException(
+                            "The dedicated simulation worker did not publish and acknowledge tick " +
+                            dedicatedWorkerExpectedTickIndex + " within ten seconds.");
+                    }
+                    return;
+                }
+                if (driver.CurrentTickIndex != dedicatedWorkerExpectedTickIndex)
+                {
+                    throw new InvalidOperationException(
+                        "The dedicated simulation worker completed an unexpected tick. " +
+                        $"Expected {dedicatedWorkerExpectedTickIndex}, observed {driver.CurrentTickIndex}.");
+                }
+
+                long completionStartedAt = Stopwatch.GetTimestamp();
+                long completionAllocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+                int sampledLogicTicksBefore = report.sampledLogicTicks;
+                long executionElapsedTicks =
+                    driver.DedicatedSimulationWorkerLastExecutionElapsedTimestampTicksForDiagnostics;
+                if (executionElapsedTicks <= 0L)
+                {
+                    throw new InvalidOperationException(
+                        "The dedicated simulation worker publication did not contain a valid execution duration.");
+                }
+
+                long allocatedBytes = Math.Max(
+                    0L,
+                    driver.ManagedMemoryBoundary.AllocatedBytes -
+                    dedicatedWorkerAllocatedBytesBefore);
+                CompleteMeasuredTick(
+                    dedicatedWorkerPendingBuildPresentation,
+                    dedicatedWorkerPendingRosterMutation,
+                    dedicatedWorkerPoolCapacityBeforeTick,
+                    executionElapsedTicks * 1000d / Stopwatch.Frequency,
+                    allocatedBytes,
+                    GC.CollectionCount(0) - dedicatedWorkerGeneration0CollectionsBefore,
+                    GC.CollectionCount(1) - dedicatedWorkerGeneration1CollectionsBefore,
+                    GC.CollectionCount(2) - dedicatedWorkerGeneration2CollectionsBefore);
+                report.dedicatedSimulationWorkerCompletedTickCount++;
+                dedicatedWorkerTickPending = false;
+                ticksThisFrame++;
+
+                if (report.sampledLogicTicks > sampledLogicTicksBefore)
+                {
+                    sampledSteadyTickThisUpdate = true;
+                    sampledTickElapsedTicks +=
+                        Stopwatch.GetTimestamp() - completionStartedAt;
+                    sampledTickAllocatedBytes += Math.Max(
+                        0L,
+                        GC.GetAllocatedBytesForCurrentThread() - completionAllocatedBefore);
+                }
+
+                if (saturationDrainActive)
+                {
+                    report.currentSaturationDrainTicks++;
+                    report.saturationDrainTickCount++;
+                    RefreshRosterAndCapacityDiagnosticsMeasured();
+                    ProductionEntityStressReplenishmentAction drainAction =
+                        ProductionEntityStressReplenishmentPolicy.Evaluate(
+                            report.baseRosterActiveCount,
+                            config.EntityCount,
+                            report.totalActiveRuntimeEntityCount,
+                            report.totalClaimedRuntimeSlotCount,
+                            BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities,
+                            report.currentSaturationDrainTicks,
+                            config.MaxSaturationDrainTicks);
+                    if (drainAction == ProductionEntityStressReplenishmentAction.Attempt)
+                    {
+                        saturationDrainActive = false;
+                        report.replenishmentState = "ReplenishmentPending";
+                    }
+                    else if (drainAction == ProductionEntityStressReplenishmentAction
+                                 .SaturationBlockedReplenishment)
+                    {
+                        saturationBlocked = true;
+                    }
+                }
+                return;
+            }
+
+            if (accumulator < SimulationConstants.SIM_DT ||
+                !ShouldExecuteCatchUpTickForStressSample(
+                    config.ShouldAutoStopWhenSampled,
+                    report.sampledLogicTicks,
+                    config.SampleTicks))
+            {
+                return;
+            }
+
+            PrepareMeasuredTickCapacityBaseline();
+            ApplyScriptedMoveVelocityForNextTick();
+            dedicatedWorkerPendingBuildPresentation = !config.SimulationOnly;
+            dedicatedWorkerPendingRosterMutation = rosterMutationPendingForNextTick;
+            dedicatedWorkerExpectedTickIndex = driver.CurrentTickIndex + 1;
+            dedicatedWorkerPoolCapacityBeforeTick = GetObjectPoolCapacityForDiagnostics();
+            dedicatedWorkerGeneration0CollectionsBefore = GC.CollectionCount(0);
+            dedicatedWorkerGeneration1CollectionsBefore = GC.CollectionCount(1);
+            dedicatedWorkerGeneration2CollectionsBefore = GC.CollectionCount(2);
+            dedicatedWorkerAllocatedBytesBefore =
+                driver.ManagedMemoryBoundary.AllocatedBytes;
+            dedicatedWorkerSubmittedAt = Stopwatch.GetTimestamp();
+            if (!driver.TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+                    dedicatedWorkerPendingBuildPresentation))
+            {
+                report.dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    driver.DedicatedSimulationWorkerLastSubmissionFailureReasonForDiagnostics;
+                throw new InvalidOperationException(
+                    "The formal dedicated simulation worker rejected stress tick " +
+                    dedicatedWorkerExpectedTickIndex + ": " +
+                    report.dedicatedSimulationWorkerLastSubmissionFailureReason);
+            }
+
+            report.dedicatedSimulationWorkerSubmittedTickCount++;
+            report.dedicatedSimulationWorkerLastSubmissionFailureReason = string.Empty;
+            dedicatedWorkerTickPending = true;
+            rosterMutationPendingForNextTick = false;
+            accumulator -= SimulationConstants.SIM_DT;
+        }
+
+        private void PrepareMeasuredTickCapacityBaseline()
+        {
+            if (capacityPressure.BaselineCaptured ||
+                report.logicTicksExecuted < config.WarmupTicks)
+            {
+                return;
+            }
+
+            ProductionEntityStressCapacityPressureSnapshot baseline =
+                CaptureCapacityPressureSnapshot();
+            capacityPressure.Begin(
+                in baseline,
+                report.capacityPressure,
+                config.RequireZeroGcAfterWarmup);
+        }
+
+        private void CompleteMeasuredTick(
+            bool buildPresentation,
+            bool rosterMutatedDuringTick,
+            int poolCapacityBeforeTick,
+            double elapsedMs,
+            long allocatedBytes,
+            int generation0Collections,
+            int generation1Collections,
+            int generation2Collections)
+        {
+            report.logicTicksExecuted++;
+            int baseRosterActiveCount = CountActiveBaseRoster(out int baseAiActiveCount);
+            report.baseRosterActiveCount = baseRosterActiveCount;
+            report.baseAiActiveCount = baseAiActiveCount;
+            bool poolExpandedDuringTick =
+                GetObjectPoolCapacityForDiagnostics() > poolCapacityBeforeTick;
+            bool isSteadyStateSample =
+                ProductionEntityStressSamplePolicy.IsSteadyStateSample(
+                    report.logicTicksExecuted,
+                    config.WarmupTicks,
+                    baseRosterActiveCount,
+                    config.EntityCount,
+                    rosterMutatedDuringTick,
+                    poolExpandedDuringTick);
+            long postTickTimingCollectorsAllocatedBefore =
+                GC.GetAllocatedBytesForCurrentThread();
+            long postTickTimingCollectorsTimestamp = Stopwatch.GetTimestamp();
+            ProfilerMarker.AutoScope postTickTimingCollectorsProfilerScope =
+                PostTickTimingCollectorsProfilerMarker.Auto();
+            try
+            {
+                if (isSteadyStateSample)
+                {
+                    phaseTimingCollector?.CaptureAfterTick(
+                        phaseTimingDiagnostics,
+                        elapsedMs,
+                        report.logicTicksExecuted,
+                        config.WarmupTicks);
+                    presentationTimingCollector?.CaptureAfterTick(
+                        presentationTimingDiagnostics,
+                        report.logicTicksExecuted,
+                        config.WarmupTicks);
+                    if (config.EnableDetailPhaseTiming)
+                    {
+                        detailPhaseTimingCollector.CaptureAfterTick(
+                            detailPhaseTimingDiagnostics,
+                            aiInputDetailDiagnostics,
+                            report.logicTicksExecuted,
+                            config.WarmupTicks);
+                    }
+                }
+            }
+            finally
+            {
+                postTickTimingCollectorsProfilerScope.Dispose();
+                RecordAllocationBytesForReport(
+                    report,
+                    ProductionEntityStressAllocationRegion.PostTickTimingCollectors,
+                    GC.GetAllocatedBytesForCurrentThread() -
+                    postTickTimingCollectorsAllocatedBefore);
+                RecordCpuElapsedTicksForReport(
+                    report,
+                    ProductionEntityStressCpuRegion.PostTickTimingCollectors,
+                    Stopwatch.GetTimestamp() - postTickTimingCollectorsTimestamp);
+            }
+
+            if (report.logicTicksExecuted <= config.WarmupTicks)
+            {
+                report.warmupTicksCompleted = report.logicTicksExecuted;
+            }
+            else if (isSteadyStateSample)
+            {
+                logicTickTimingCollector.AddSample(elapsedMs, buildPresentation);
+                AddRollingSample(allocationSamples, allocatedBytes);
+                zeroGcGate.Record(
+                    report.logicTicksExecuted,
+                    allocatedBytes,
+                    generation0Collections,
+                    generation1Collections,
+                    generation2Collections);
+                zeroGcGate.Populate(report, config.RequireZeroGcAfterWarmup);
+                report.sampledLogicTicks++;
+            }
+            else
+            {
+                report.nonSteadyLogicTicks++;
+                if (baseRosterActiveCount != config.EntityCount)
+                    report.sampleRejectedForIncompleteBaseRoster++;
+                if (rosterMutatedDuringTick)
+                    report.sampleRejectedForRosterMutation++;
+                if (poolExpandedDuringTick)
+                    report.sampleRejectedForPoolExpansion++;
+            }
+
+            if (report.logicTicksExecuted > config.WarmupTicks)
+            {
+                ProductionEntityStressCapacityPressureSnapshot currentPressure =
+                    CaptureCapacityPressureSnapshot();
+                capacityPressure.Record(
+                    report.logicTicksExecuted,
+                    in currentPressure,
+                    report.capacityPressure);
+            }
+
+            long captureProductionCountersAllocatedBefore =
+                GC.GetAllocatedBytesForCurrentThread();
+            long captureProductionCountersTimestamp = Stopwatch.GetTimestamp();
+            ProfilerMarker.AutoScope captureProductionCountersProfilerScope =
+                CaptureProductionCountersProfilerMarker.Auto();
+            try
+            {
+                CaptureProductionCounters();
+            }
+            finally
+            {
+                captureProductionCountersProfilerScope.Dispose();
+                RecordAllocationBytesForReport(
+                    report,
+                    ProductionEntityStressAllocationRegion.CaptureProductionCountersTotal,
+                    GC.GetAllocatedBytesForCurrentThread() -
+                    captureProductionCountersAllocatedBefore);
+                RecordCpuElapsedTicksForReport(
+                    report,
+                    ProductionEntityStressCpuRegion.CaptureProductionCountersTotal,
+                    Stopwatch.GetTimestamp() - captureProductionCountersTimestamp);
             }
         }
 
@@ -6286,6 +6920,27 @@ namespace NTSD.Animation.Rendering.Editor
                 objectPool?.RejectedSpriteFetchCount ?? 0L;
             snapshot.ReferencePoolLogicObjectFetchReject =
                 referencePool?.RejectedLogicObjectFetchCount ?? 0L;
+            snapshot.ReferencePoolCharacterFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.Character) ?? 0L;
+            snapshot.ReferencePoolLightWeaponFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.LightWeapon) ?? 0L;
+            snapshot.ReferencePoolHeavyWeaponFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.HeavyWeapon) ?? 0L;
+            snapshot.ReferencePoolSpecialAttackFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.SpecialAttack) ?? 0L;
+            snapshot.ReferencePoolThrowWeaponFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.ThrowWeapon) ?? 0L;
+            snapshot.ReferencePoolOtherFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.Other) ?? 0L;
+            snapshot.ReferencePoolDrinkFetchReject =
+                referencePool?.GetRejectedLogicObjectFetchCountForDiagnostics(
+                    LF2ObjectType.Drink) ?? 0L;
             snapshot.ReferencePoolTaskFetchReject =
                 referencePool?.RejectedTaskFetchCount ?? 0L;
             snapshot.ReferencePoolUnknownTaskRecycleReject =
@@ -7968,7 +8623,23 @@ namespace NTSD.Animation.Rendering.Editor
             // SimulationWorld.CharacterInputAll intentionally skips tick indices 0 and 1.
             // The report increments logicTicksExecuted after each successful driver step, so
             // Legacy build/mutation diagnostics can first be required after the second step.
-            return targetReport != null && targetReport.logicTicksExecuted > 1;
+            return targetReport != null &&
+                   targetReport.logicTicksExecuted > 1 &&
+                   IsAiEvidenceApplicableForDiagnostics(targetReport);
+        }
+
+        internal static bool IsAiEvidenceApplicableForDiagnostics(
+            ProductionEntityStressReport targetReport)
+        {
+            return targetReport != null &&
+                   !string.Equals(
+                       targetReport.inputMode,
+                       "none",
+                       StringComparison.OrdinalIgnoreCase) &&
+                   !string.Equals(
+                       targetReport.inputMode,
+                       "move",
+                       StringComparison.OrdinalIgnoreCase);
         }
 
         internal static long ResolveExpectedUnifiedAiSnapshotObservedPassCount(
@@ -8092,8 +8763,9 @@ namespace NTSD.Animation.Rendering.Editor
                 return true;
             }
 
-            bool evidenceRequired = terminal ||
-                                    HasExecutedAiEntityInputPassForDiagnostics(targetReport);
+            bool evidenceRequired =
+                IsAiEvidenceApplicableForDiagnostics(targetReport) &&
+                (terminal || HasExecutedAiEntityInputPassForDiagnostics(targetReport));
             bool valid = string.Equals(
                              targetReport.aiUnifiedSnapshotExecutionEffectiveMode,
                              AiUnifiedSnapshotExecutionMode.UnifiedAuthority.ToString(),
@@ -8144,7 +8816,8 @@ namespace NTSD.Animation.Rendering.Editor
                         (!targetReport.forceFullAiUnifiedSnapshotRebuildApplied ||
                          rollForwardCount == 0);
                     long expectedFullBuildSlotVisits = 0;
-                    long expectedInitialCapture = 0;
+                    long minimumInitialCapture = 0;
+                    long maximumInitialCapture = 0;
                     bool fullBuildCountsValid =
                         TryMultiplyNonNegative(
                             fullBuildCount,
@@ -8153,7 +8826,11 @@ namespace NTSD.Animation.Rendering.Editor
                         TryMultiplyNonNegative(
                             fullBuildCount,
                             targetReport.requestedEntityCount,
-                            out expectedInitialCapture);
+                            out minimumInitialCapture) &&
+                        TryMultiplyNonNegative(
+                            fullBuildCount,
+                            targetReport.runtimeSlotCapacity,
+                            out maximumInitialCapture);
                     valid = valid &&
                             rollForwardCountsValid &&
                             fullBuildCountsValid &&
@@ -8163,8 +8840,11 @@ namespace NTSD.Animation.Rendering.Editor
                             targetReport.aiUnifiedSnapshotExecutionSlotVisitCount ==
                             expectedFullBuildSlotVisits &&
                             targetReport
-                                .aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount ==
-                            expectedInitialCapture &&
+                                .aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount >=
+                            minimumInitialCapture &&
+                            targetReport
+                                .aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount <=
+                            maximumInitialCapture &&
                             targetReport.aiUnifiedSnapshotExecutionRefreshCount ==
                             expectedRefreshAndRead &&
                             targetReport.aiUnifiedSnapshotExecutionReadCount ==
@@ -8310,8 +8990,9 @@ namespace NTSD.Animation.Rendering.Editor
             if (!shadowRequested && !indexedCanonicalRequested && !unifiedRequested)
                 return true;
 
-            bool evidenceRequired = terminal ||
-                                    HasExecutedAiEntityInputPassForDiagnostics(targetReport);
+            bool evidenceRequired =
+                IsAiEvidenceApplicableForDiagnostics(targetReport) &&
+                (terminal || HasExecutedAiEntityInputPassForDiagnostics(targetReport));
             bool valid = (!deepRequested || targetReport.aiDecisionSoAShadowApplied) &&
                          (!sharedRequested || targetReport.aiDecisionSharedShadowApplied) &&
                          (!unifiedRequested || targetReport.unifiedAiSnapshotShadowApplied);
@@ -9090,6 +9771,32 @@ namespace NTSD.Animation.Rendering.Editor
                                 diagnostics.CompatibilityFallbackCount;
                         });
                     journal.Attempt(
+                        "capture-character-input-pass-diagnostics",
+                        () =>
+                        {
+                            BattleEcsCharacterInputPassDiagnostics diagnostics =
+                                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics;
+                            report.characterInputPassRunCount = diagnostics.RunCount;
+                            report.characterInputPassExactCharacterCount =
+                                diagnostics.ExactCharacterCount;
+                            report.characterInputPassCompatibilityFallbackCount =
+                                diagnostics.CompatibilityFallbackCount;
+                            report.characterInputPassUnityCompatibilityShellCount =
+                                diagnostics.UnityCompatibilityShellCount;
+                            report.characterInputPassUnexpectedFallbackCount =
+                                diagnostics.UnexpectedFallbackCount;
+                        });
+                    journal.Attempt(
+                        "restore-character-input-pass-mode",
+                        () =>
+                        {
+                            world.RestoreBattleEcsCharacterInputPassForDiagnostics(
+                                previousCharacterInputPassMode);
+                            report.characterInputPassRestored =
+                                world.BattleEcsCharacterInputPassModeForDiagnostics ==
+                                previousCharacterInputPassMode;
+                        });
+                    journal.Attempt(
                         "capture-character-frame-tick-diagnostics",
                         () =>
                         {
@@ -9379,8 +10086,13 @@ namespace NTSD.Animation.Rendering.Editor
                         report?.teardown?.evidence ??
                         "Production stress runner was destroyed before terminal cleanup.");
                 }
-                ProductionEntityStressRequestProcessor.NotifyRunStopped();
+                NotifyRequestProcessorRunStopped();
             }
+        }
+
+        private static void NotifyRequestProcessorRunStopped()
+        {
+            ProductionEntityStressEditorBridge.NotifyRunStopped();
         }
 
         private void RefreshReportCounts()
@@ -9633,6 +10345,12 @@ namespace NTSD.Animation.Rendering.Editor
             if (world == null || !driverConfigurationChanged || report == null)
                 return;
 
+            // Cleanup runs from Update, before the synchronous path's LateUpdate
+            // presentation-consumption boundary. The dedicated worker cannot expose
+            // completion until that same boundary has finalized. Normalize both paths
+            // before capturing the diagnostic/full snapshot.
+            world.BattlePresentation.FinalizePublishedHitRecordCycle(world);
+
             IBattleChecksumSnapshot snapshot;
             switch (world.RuntimeProfileForDiagnostics)
             {
@@ -9833,6 +10551,136 @@ namespace NTSD.Animation.Rendering.Editor
             return sum > int.MaxValue ? int.MaxValue : (int)sum;
         }
 
+        private void CaptureU6ProductionOwnershipConfiguration()
+        {
+            BattleProductionOwnershipConfiguration ownership =
+                u6ProductionOwnershipInventory.Evaluate(world);
+            report.u6ProductionOwnershipConfigurationPassed = ownership.Passed;
+            report.u6ProductionOwnershipConfigurationFailure =
+                ownership.Failure.ToString();
+            report.u6ProductionCanonicalOwnerCount = ownership.CanonicalOwnerCount;
+            report.u6ProductionRetainedMeasuredOracleCount =
+                ownership.RetainedMeasuredOracleCount;
+            report.u6ProductionUnityCompatibilityShellCount =
+                ownership.UnityCompatibilityShellCount;
+
+            if (config.RequireU6ProductionOwnershipAudit && !ownership.Passed)
+            {
+                throw new InvalidOperationException(
+                    "U6ProductionOwnershipConfigurationFailed:" + ownership.Failure);
+            }
+        }
+
+        private bool EvaluateU6ProductionOwnershipAtTerminal()
+        {
+            if (!config.RequireU6ProductionOwnershipAudit)
+            {
+                report.u6ProductionOwnershipRuntimeEvidencePassed = true;
+                report.u6ProductionOwnershipRuntimeFailure = "NotRequired";
+                return true;
+            }
+
+            CaptureU6ProductionOwnershipRuntimeCounters();
+            string failure = string.Empty;
+            if (!report.u6ProductionOwnershipConfigurationPassed)
+                failure = "Configuration";
+            else if (report.sampledLogicTicks <= 0)
+                failure = "NoSampledLogicTicks";
+            else if (report.u6ProductionCanonicalPassRunCount <= 0)
+                failure = "CanonicalPassesInactive";
+            else if (report.u6ProductionDataOrientedCompatibilityFallbackCount != 0)
+                failure = "DataOrientedCompatibilityFallback";
+            else if (report.u6ProductionCanonicalMismatchCount != 0)
+                failure = "CanonicalMismatch";
+            else if (report.u6ProductionReplacedLegacyAiActivityCount != 0)
+                failure = "ReplacedLegacyAiActivity";
+            else if (report.aiUnifiedSnapshotExecutionPreCommitFallbackCount != 0 ||
+                     report.aiUnifiedSnapshotExecutionPostCommitHardBreachCount != 0)
+            {
+                failure = "UnifiedAiAuthorityFailure";
+            }
+            else if (!report.zeroGcGatePassed || report.managedMemoryCollectionViolation)
+                failure = "ManagedMemoryGate";
+            else if (!report.capacityPressure.passed)
+                failure = "CapacityPressureGate";
+
+            report.u6ProductionOwnershipRuntimeFailure = failure;
+            report.u6ProductionOwnershipRuntimeEvidencePassed =
+                string.IsNullOrEmpty(failure);
+            if (report.u6ProductionOwnershipRuntimeEvidencePassed)
+                return true;
+
+            report.harnessValidity = false;
+            if (string.IsNullOrEmpty(report.failure))
+                report.failure = "U6ProductionOwnershipRuntimeFailed:" + failure;
+            return false;
+        }
+
+        private void CaptureU6ProductionOwnershipRuntimeCounters()
+        {
+            if (world == null)
+                return;
+
+            BattleEcsCooldownPassDiagnostics cooldown =
+                world.BattleEcsCooldownPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterStageZPassDiagnostics stageZ =
+                world.BattleEcsCharacterStageZPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterPreFrameBoundsPassDiagnostics preFrameBounds =
+                world.BattleEcsCharacterPreFrameBoundsPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterFrameAdvancePassDiagnostics frameAdvance =
+                world.BattleEcsCharacterFrameAdvancePassDiagnosticsForDiagnostics;
+            BattleEcsCharacterRecoveryPassDiagnostics recovery =
+                world.BattleEcsCharacterRecoveryPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterFrameTickPassDiagnostics frameTick =
+                world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterInputPassDiagnostics input =
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics;
+            BattleEcsPositiveLinkValidationPassDiagnostics positiveLink =
+                world.BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics;
+            BattleEcsFramePostProcessPassDiagnostics framePostProcess =
+                world.BattleEcsFramePostProcessPassDiagnosticsForDiagnostics;
+            BattleEcsCharacterPostFrameTailPassDiagnostics postFrameTail =
+                world.BattleEcsCharacterPostFrameTailPassDiagnosticsForDiagnostics;
+
+            report.u6ProductionCanonicalPassRunCount =
+                cooldown.RunCount +
+                stageZ.RunCount +
+                preFrameBounds.RunCount +
+                frameAdvance.RunCount +
+                recovery.RunCount +
+                frameTick.RunCount +
+                input.RunCount +
+                positiveLink.RunCount +
+                world.AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics;
+            report.u6ProductionRetainedLegacyPassRunCount =
+                framePostProcess.RunCount + postFrameTail.RunCount;
+            report.u6ProductionUnityCompatibilityShellRunCount =
+                stageZ.DerivedTypeFallbackCount +
+                preFrameBounds.CompatibilityFallbackCount +
+                frameAdvance.CompatibilityFallbackCount +
+                recovery.CompatibilityFallbackCount +
+                frameTick.CompatibilityFallbackCount +
+                input.UnityCompatibilityShellCount;
+            report.u6ProductionDataOrientedCompatibilityFallbackCount =
+                cooldown.TrackerFallbackCount +
+                input.UnexpectedFallbackCount;
+            report.u6ProductionCanonicalMismatchCount =
+                cooldown.MismatchCount +
+                stageZ.MismatchCount +
+                positiveLink.MismatchCount;
+            report.u6ProductionReplacedLegacyAiActivityCount =
+                report.aiUnifiedSnapshotExecutionLegacyFusedSensingBuildCount +
+                report.aiUnifiedSnapshotExecutionLegacyDecisionSharedBuildCount +
+                report.aiUnifiedSnapshotExecutionLegacyShadowBuildCount +
+                report.aiUnifiedSnapshotExecutionLegacyNearestFactsBuildCount +
+                report.aiUnifiedSnapshotExecutionLegacySnapshotIndexBuildCount +
+                report.aiUnifiedSnapshotExecutionLegacyQuadtreeSyncCount +
+                report.aiUnifiedSnapshotExecutionLegacyDecisionSharedRefreshCount +
+                report.aiUnifiedSnapshotExecutionLegacyShadowRefreshCount +
+                report.aiUnifiedSnapshotExecutionLegacySnapshotMutationCount +
+                report.aiUnifiedSnapshotExecutionLegacyCandidateRefreshCount;
+        }
+
         private bool EvaluateZeroGcGateAtTerminal()
         {
             zeroGcGate.Populate(report, config.RequireZeroGcAfterWarmup);
@@ -9952,6 +10800,22 @@ namespace NTSD.Animation.Rendering.Editor
             if (samples.Count >= MaximumRetainedSamples)
                 samples.RemoveAt(0);
             samples.Add(value);
+        }
+    }
+
+    internal static class ProductionEntityStressEditorBridge
+    {
+        internal static Action StopAndDumpIfArmedAtSampleCompletionAction;
+        internal static Action NotifyRunStoppedAction;
+
+        internal static void StopAndDumpIfArmedAtSampleCompletion()
+        {
+            StopAndDumpIfArmedAtSampleCompletionAction?.Invoke();
+        }
+
+        internal static void NotifyRunStopped()
+        {
+            NotifyRunStoppedAction?.Invoke();
         }
     }
 

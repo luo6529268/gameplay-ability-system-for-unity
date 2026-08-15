@@ -147,6 +147,56 @@ namespace NTSD.Simulation
             return true;
         }
 
+        internal bool TryRestoreTo(BattleRuntimeState runtime)
+        {
+            if (SchemaVersion != CurrentSchemaVersion ||
+                runtime?.StageSpawnRuntimeTargetTotal == null ||
+                runtime.StageSpawnRuntimeEntryCount == null ||
+                runtime.StageSpawnRuntimeSpawnedTotal == null ||
+                runtime.StageSpawnRuntimeSlots == null)
+            {
+                return false;
+            }
+
+            StageSpawnRuntimeBufferPool pool = runtime.EnsureStageSpawnBuffers();
+            pool.Recycle(runtime.StageSpawnRuntimeSlots);
+            for (int entryIndex = 0; entryIndex < ActiveEntryCount; entryIndex++)
+            {
+                int[] rented = pool.Rent();
+                if (rented == null)
+                    return false;
+                runtime.StageSpawnRuntimeSlots.Add(rented);
+            }
+
+            runtime.StageSpawnRuntimeTargetTotal.Clear();
+            runtime.StageSpawnRuntimeEntryCount.Clear();
+            runtime.StageSpawnRuntimeSpawnedTotal.Clear();
+            for (int entryIndex = 0; entryIndex < ActiveEntryCount; entryIndex++)
+            {
+                runtime.StageSpawnRuntimeTargetTotal.Add(targetTotals[entryIndex]);
+                runtime.StageSpawnRuntimeEntryCount.Add(entryCounts[entryIndex]);
+                runtime.StageSpawnRuntimeSpawnedTotal.Add(spawnedTotals[entryIndex]);
+                int[] destination = runtime.StageSpawnRuntimeSlots[entryIndex];
+                if (destination == null ||
+                    destination.Length != StageSpawnRuntimeBufferPool.SlotsPerSpawnEntry)
+                {
+                    return false;
+                }
+
+                int sourceBase =
+                    entryIndex * StageSpawnRuntimeBufferPool.SlotsPerSpawnEntry;
+                for (int slotIndex = 0;
+                     slotIndex < StageSpawnRuntimeBufferPool.SlotsPerSpawnEntry;
+                     slotIndex++)
+                {
+                    destination[slotIndex] = runtimeSlots[sourceBase + slotIndex];
+                }
+            }
+
+            runtime.StageSpawnRuntimeWave = RuntimeWave;
+            return true;
+        }
+
         private bool HasCanonicalSource(
             BattleRuntimeState runtime,
             out int activeEntryCount)

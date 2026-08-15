@@ -62,6 +62,7 @@ namespace NTSD.Simulation
         public const int CurrentSchemaVersion = 1;
 
         private readonly BattleRuntimeSlotSnapshot[] slots;
+        private readonly LF2Entity[] localEntityShells;
 
         public BattleWorldRuntimeSlotSnapshotBuffer(int slotCapacity)
         {
@@ -72,6 +73,7 @@ namespace NTSD.Simulation
 
             SlotCapacity = slotCapacity;
             slots = new BattleRuntimeSlotSnapshot[slotCapacity];
+            localEntityShells = new LF2Entity[slotCapacity];
         }
 
         public int SlotCapacity { get; }
@@ -89,6 +91,42 @@ namespace NTSD.Simulation
             }
 
             return slots[runtimeSlot];
+        }
+
+        internal bool TryGetLocalEntityShell(
+            int runtimeSlot,
+            out LF2Entity entity)
+        {
+            entity = null;
+            if ((uint)runtimeSlot >= (uint)SlotCapacity ||
+                !slots[runtimeSlot].Claimed)
+            {
+                return false;
+            }
+
+            entity = localEntityShells[runtimeSlot];
+            return entity != null;
+        }
+
+        internal void ClearLocalEntityShellsForTransfer()
+        {
+            Array.Clear(localEntityShells, 0, localEntityShells.Length);
+        }
+
+        internal bool TrySetLocalEntityShellForRestore(
+            int runtimeSlot,
+            LF2Entity entity)
+        {
+            if ((uint)runtimeSlot >= (uint)SlotCapacity ||
+                entity == null ||
+                !slots[runtimeSlot].Claimed ||
+                ResolveEntityKind(entity) != slots[runtimeSlot].EntityKind)
+            {
+                return false;
+            }
+
+            localEntityShells[runtimeSlot] = entity;
+            return true;
         }
 
         internal bool TryCapture(
@@ -111,6 +149,7 @@ namespace NTSD.Simulation
                     source.GetReadOnlyView(runtimeSlot);
                 if (!view.Claimed)
                 {
+                    localEntityShells[runtimeSlot] = null;
                     slots[runtimeSlot] = new BattleRuntimeSlotSnapshot(
                         false,
                         view.Generation,
@@ -126,6 +165,7 @@ namespace NTSD.Simulation
                 }
 
                 LF2Entity entity = view.Entity;
+                localEntityShells[runtimeSlot] = entity;
                 NTSDEntityRuntime runtime = entity.Runtime;
                 slots[runtimeSlot] = new BattleRuntimeSlotSnapshot(
                     true,
@@ -181,7 +221,7 @@ namespace NTSD.Simulation
             return observedClaimedCount == source.ClaimedCount;
         }
 
-        private static BattleRuntimeEntityKind ResolveEntityKind(LF2Entity entity)
+        internal static BattleRuntimeEntityKind ResolveEntityKind(LF2Entity entity)
         {
             if (entity is LF2Character)
             {

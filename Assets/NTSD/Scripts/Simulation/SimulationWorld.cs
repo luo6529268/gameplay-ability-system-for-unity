@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -45,6 +46,10 @@ namespace NTSD.Simulation
         private readonly SimulationStageRenderModule stageRenderModule;
         private readonly BattleParitySnapshotModule paritySnapshotModule;
         private readonly RuntimeCharacterConfigResolver runtimeCharacterConfigs;
+        private readonly BattleRuntimeDataCatalog runtimeDataCatalog;
+        private BattleLogicReferencePool logicReferencePool;
+        private readonly BattleLogicEntityFactory logicEntityFactory;
+        private readonly BattleLogicObjectPointRuntime logicObjectPointRuntime;
         private readonly BattleLockstepChecksumModule lockstepChecksumModule;
         private readonly BattleWorldCoreScalarSnapshotModule
             battleWorldCoreScalarSnapshotModule;
@@ -70,6 +75,8 @@ namespace NTSD.Simulation
             battleWorldPendingEventSnapshotModule;
         private readonly BattleWorldRestSnapshotModule
             battleWorldRestSnapshotModule;
+        private readonly BattleStateSnapshotRestoreModule
+            battleStateSnapshotRestoreModule;
         private readonly BattleEcsShadowModule battleEcsShadowModule;
         private readonly BattleEcsCooldownPass battleEcsCooldownPass;
         private readonly BattleEcsCharacterStageZPass battleEcsCharacterStageZPass;
@@ -111,6 +118,7 @@ namespace NTSD.Simulation
         private readonly SimulationWorldMutationTracker runtimeMutationTracker;
         private readonly SimulationWorldHooks runtimeHooks =
             new SimulationWorldHooks();
+        private bool logicOnlyEntityMaterialization;
 
         internal int ActiveDataObjectTypeCacheTick { get; private set; } = -1;
 
@@ -193,8 +201,65 @@ namespace NTSD.Simulation
                 battleEcsHitExecutionPlan.Diagnostics;
         public SimulationRuntimeCapacityModule RuntimeCapacity => runtimeCapacityModule;
         internal SimulationBattleBufferModule BattleBuffersForServices => battleBuffers;
+        internal SimulationObjectBucketRegistry ObjectBucketRegistryForSnapshotRestore =>
+            objectBucketRegistry;
         internal RuntimeCharacterConfigResolver RuntimeCharacterConfigs =>
             runtimeCharacterConfigs;
+        internal BattleRuntimeDataCatalog RuntimeDataCatalog => runtimeDataCatalog;
+        internal BattleLogicReferencePool LogicReferencePool => logicReferencePool;
+        internal BattleLogicEntityFactory LogicEntityFactory => logicEntityFactory;
+        internal BattleLogicObjectPointRuntime LogicObjectPointRuntime =>
+            logicObjectPointRuntime;
+        internal bool UsesLogicOnlyEntityMaterialization =>
+            logicOnlyEntityMaterialization;
+
+        internal ILF2ObjectPointFactory ResolveObjectPointFactoryForSimulation()
+        {
+            // The branch order is intentional: a worker-owned logic world must
+            // never evaluate the Unity singleton fallback.
+            return logicOnlyEntityMaterialization
+                ? logicObjectPointRuntime
+                : LF2ObjectPointFactory.Instance;
+        }
+
+        internal void SetLogicOnlyEntityMaterialization(bool enabled)
+        {
+            if (_ticking)
+            {
+                throw new InvalidOperationException(
+                    "Entity materialization mode cannot change during a battle tick.");
+            }
+            logicOnlyEntityMaterialization = enabled;
+        }
+
+        internal void BindLogicReferencePool(BattleLogicReferencePool pool)
+        {
+            if (pool == null)
+                throw new ArgumentNullException(nameof(pool));
+            if (ObjectCount != 0 || ClaimedRuntimeSlotCountForServices != 0)
+            {
+                throw new InvalidOperationException(
+                    "The simulation logic pool must be bound before entities register.");
+            }
+            logicReferencePool = pool;
+        }
+
+        internal void PrepareRuntimeDataCatalogForBattle(
+            IReadOnlyList<ObjectDefinition> definitions,
+            Func<int, LF2CharacterDataWrapper> configResolver,
+            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog = default)
+        {
+            runtimeDataCatalog.Prepare(
+                definitions,
+                configResolver,
+                hitRecordLifecycleCatalog);
+            runtimeDataCatalog.Seal();
+        }
+
+        internal void UnsealRuntimeDataCatalog()
+        {
+            runtimeDataCatalog.Unseal();
+        }
         internal StageSpawnTaskConfigurator StageSpawnTaskConfigurator =>
             stageSpawnTaskConfigurator;
         internal BattleCharacterInputActionResolver CharacterInputActionResolver =>
@@ -365,6 +430,172 @@ namespace NTSD.Simulation
                 tick,
                 destination);
         }
+
+        internal BattleStateSnapshotBuffer CreateBattleStateSnapshotBufferForBootstrap()
+        {
+            return new BattleStateSnapshotBuffer(
+                new BattleWorldRosterResultsSnapshotBuffer(),
+                new BattleWorldStageSpawnSnapshotBuffer(
+                    RequiredStageSpawnSnapshotEntryCapacity),
+                new BattleWorldRuntimeSlotSnapshotBuffer(
+                    RequiredRuntimeSlotSnapshotCapacity),
+                new BattleWorldEntityRuntimeSnapshotBuffer(
+                    RequiredEntityRuntimeSnapshotCapacity),
+                new BattleWorldEntityBaseShellSnapshotBuffer(
+                    RequiredEntityBaseShellSnapshotCapacity),
+                new BattleWorldLivingShellSnapshotBuffer(
+                    RequiredLivingShellSnapshotCapacity),
+                new BattleWorldCharacterShellSnapshotBuffer(
+                    RequiredCharacterShellSnapshotCapacity),
+                new BattleWorldWeaponShellSnapshotBuffer(
+                    RequiredWeaponShellSnapshotCapacity),
+                new BattleWorldSpecialOtherShellSnapshotBuffer(
+                    RequiredSpecialOtherShellSnapshotCapacity),
+                CreateWorldPendingEventSnapshotBufferForBootstrap(),
+                CreateWorldRestSnapshotBufferForBootstrap());
+        }
+
+        internal bool TryCaptureBattleStateSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            int tick,
+            BattleStateSnapshotBuffer destination)
+        {
+            if (identity == null)
+                throw new ArgumentNullException(nameof(identity));
+            if (destination == null)
+                throw new ArgumentNullException(nameof(destination));
+
+            destination.Invalidate();
+            BattleWorldCoreScalarSnapshot core =
+                CaptureWorldCoreScalarSnapshot(identity);
+            if (!TryCaptureWorldRosterResultsSnapshot(
+                    identity,
+                    tick,
+                    destination.RosterResults) ||
+                !TryCaptureWorldStageSpawnSnapshot(
+                    identity,
+                    tick,
+                    destination.StageSpawn) ||
+                !TryCaptureWorldRuntimeSlotSnapshot(
+                    identity,
+                    tick,
+                    destination.RuntimeSlots) ||
+                !TryCaptureWorldEntityRuntimeSnapshot(
+                    identity,
+                    tick,
+                    destination.EntityRuntime) ||
+                !TryCaptureWorldEntityBaseShellSnapshot(
+                    identity,
+                    tick,
+                    destination.EntityBaseShell) ||
+                !TryCaptureWorldLivingShellSnapshot(
+                    identity,
+                    tick,
+                    destination.LivingShell) ||
+                !TryCaptureWorldCharacterShellSnapshot(
+                    identity,
+                    tick,
+                    destination.CharacterShell) ||
+                !TryCaptureWorldWeaponShellSnapshot(
+                    identity,
+                    tick,
+                    destination.WeaponShell) ||
+                !TryCaptureWorldSpecialOtherShellSnapshot(
+                    identity,
+                    tick,
+                    destination.SpecialOtherShell) ||
+                !TryCaptureWorldPendingEventSnapshot(
+                    identity,
+                    tick,
+                    destination.PendingEvents) ||
+                !TryCaptureWorldRestSnapshot(
+                    identity,
+                    tick,
+                    destination.Rest))
+            {
+                return false;
+            }
+
+            return destination.TryPublish(core, identity, tick);
+        }
+
+        internal bool TryRestoreBattleStateSnapshot(
+            Lockstep.LockstepSessionIdentity identity,
+            BattleStateSnapshotBuffer snapshot,
+            out BattleStateSnapshotRestoreFailure failure)
+        {
+            return battleStateSnapshotRestoreModule.TryRestoreBattleStateSnapshot(
+                identity,
+                snapshot,
+                out failure);
+        }
+
+        internal void RestoreSnapshotOwnerScalars(
+            int releaseCameraX,
+            int releaseCameraVelocity,
+            int nextAutoStableId)
+        {
+            _cameraX = releaseCameraX;
+            _cameraVel = releaseCameraVelocity;
+            _nextAutoStableId = nextAutoStableId;
+        }
+
+        internal bool RebuildDerivedStateAfterSnapshotRestore()
+        {
+            (SceneQuery as BruteForceSceneQuery)?.ResetFormalSpatialBroadphase();
+            battleAiUnifiedRowPublisher.EndPass();
+            battleIdentityWriter.Reset();
+            battleCharacterInputWriter.Reset();
+            battleFrameMotionWriter.Reset();
+            battleRelationLinkWriter.Reset();
+            battleVitalWriter.Reset();
+
+            for (int runtimeSlot = 0;
+                 runtimeSlot < RuntimeSlotCapacity;
+                 runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view =
+                    _runtimeSlots.GetReadOnlyView(runtimeSlot);
+                if (!view.Claimed)
+                    continue;
+
+                LF2Entity entity = view.Entity;
+                RuntimeEntityHandle handle =
+                    new RuntimeEntityHandle(runtimeSlot, view.Generation);
+                entity.Runtime.BindWorldMutationTracker(runtimeMutationTracker);
+                battleCharacterInputWriter.Bind(entity.Runtime, handle);
+                battleIdentityWriter.Bind(entity, handle);
+                battleFrameMotionWriter.Bind(entity.Runtime, handle);
+                battleRelationLinkWriter.Bind(entity.Runtime, handle);
+                battleVitalWriter.Bind(entity.Runtime, handle);
+                BattleCentralPresentationMountRegistry.BindOwnerRuntime(
+                    entity.Renderer,
+                    handle);
+            }
+
+            battleEcsShadowModule.Reset();
+            battleEcsCooldownPass.Reset();
+            battleEcsCharacterStageZPass.Reset();
+            battleEcsCharacterPreFrameBoundsPass.Reset();
+            battleEcsFramePostProcessPass.Reset();
+            battleEcsPositiveLinkValidationPass.Reset();
+            battleEcsCharacterFrameAdvancePass.Reset();
+            battleEcsCharacterRecoveryPass.Reset();
+            battleEcsCharacterFrameTickPass.Reset();
+            battleEcsCharacterInputPass.Reset();
+            battleEcsCharacterPostFrameTailPass.Reset();
+            battleEcsHitExecutionPlan.Reset();
+            ResetAiAirSpatialIndex();
+            InvalidateAiAirRoleSnapshot();
+            ResetAiMoveModeFirst10Snapshot();
+            ResetAiUnifiedMoveModeFirst10Snapshot();
+            InvalidateAiDecisionSharedPass(AiDecisionAvailability.SnapshotMissing);
+            InvalidateAiUnifiedSnapshotShadowPass();
+            pendingDestroyScanCacheValid = false;
+            BattlePresentation.Reset();
+            return true;
+        }
+
         internal BattleFrameMotionWriter FrameMotionWriter =>
             battleFrameMotionWriter;
         internal BattleRelationLinkWriter RelationLinkWriter =>
@@ -587,6 +818,18 @@ namespace NTSD.Simulation
             {
                 throw new System.InvalidOperationException(
                     "The character input pass can only change at a reset boundary.");
+            }
+
+            battleEcsCharacterInputPass.SetMode(mode);
+        }
+
+        internal void RestoreBattleEcsCharacterInputPassForDiagnostics(
+            BattleEcsCharacterInputPassMode mode)
+        {
+            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
+            {
+                throw new System.InvalidOperationException(
+                    "The character input pass can only be restored after all runtime slots are released.");
             }
 
             battleEcsCharacterInputPass.SetMode(mode);
@@ -1010,6 +1253,11 @@ namespace NTSD.Simulation
         public void RenderDispatchAll(int tickIndex, bool buildPresentation)
         {
             stageRenderModule.RenderDispatchAll(tickIndex, buildPresentation);
+        }
+
+        internal void CaptureSimulationWorkerPresentationFrame(int tickIndex)
+        {
+            stageRenderModule.CaptureSimulationWorkerPresentationFrame(tickIndex);
         }
 
         internal void PresentLatestFrame(int tickIndex)

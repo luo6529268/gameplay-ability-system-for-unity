@@ -1,4 +1,5 @@
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Tasks
@@ -19,6 +20,7 @@ namespace NTSD.Animation.LF2Tasks
 
         public ObjectPoint opoint;
         public LF2Entity parent;
+        public SimulationWorld targetWorld;
         public int team;
         public Vector3 pos;
         public float z;
@@ -73,7 +75,7 @@ namespace NTSD.Animation.LF2Tasks
         public bool IsFromPool { get; set; }
         public void Clear()
         {
-            opoint = default; parent = null; team = 0;
+            opoint = default; parent = null; targetWorld = null; team = 0;
             pos = Vector3.zero; z = 0f; dir = null; dvz = 0f;
             requiredRuntimeSlot = -1;
             useDirectRuntimePosition = false; directX = 0.0; directY = 0.0; directZ = 0.0;

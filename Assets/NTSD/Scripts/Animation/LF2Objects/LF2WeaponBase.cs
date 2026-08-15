@@ -65,6 +65,22 @@ namespace NTSD.Animation.LF2Objects
         internal double LastLandingVyBeforeClampForSnapshot =>
             _lastLandingVyBeforeClamp;
 
+        internal bool TryRestoreWeaponShellForSnapshot(
+            in BattleWeaponShellSnapshot state)
+        {
+            if (state.HasPoolWeaponType != (this is LF2Weapon))
+                return false;
+
+            _lateBreakEffectsHandled = state.LateBreakEffectsHandled;
+            InvalidInitTaskTypeCountForDiagnostics =
+                state.InvalidInitTaskTypeCount;
+            _gravityToAdd = state.GravityToAdd;
+            _lastLandingVyBeforeClamp = state.LastLandingVyBeforeClamp;
+            if (this is LF2Weapon concrete)
+                concrete.RestorePoolWeaponTypeForSnapshot(state.PoolWeaponType);
+            return true;
+        }
+
         // ========== 武器数据 ==========
         public int WeaponDropHurt
         {
@@ -420,7 +436,10 @@ namespace NTSD.Animation.LF2Objects
             InitializeHealth();
 
             Renderer = renderer;
-            SimulationTickDriver.Instance?.World?.Register(this);
+            SimulationWorld world = task.targetWorld ??
+                                    task.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
+            world?.Register(this);
         }
 
         public override void Reset()
@@ -827,7 +846,7 @@ namespace NTSD.Animation.LF2Objects
         protected void InitializeFrame(OPointCreateTask task)
         {
             int action = task.opoint.action;
-            var wrapper = CharacterAnimtorManager.Instance.GetCharacterConfig(ObjectId);
+            LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
             if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))
                 action = 999;
@@ -856,7 +875,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected void InitializeHealth()
         {
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            LF2CharacterData charData = ResolveRuntimeCharacterData(ObjectId);
             Health.HP = 500;
             Health.HPBound = 500;
             Health.HP3 = 500;

@@ -80,6 +80,19 @@ namespace NTSD.Animation.LF2Objects
         internal bool InitializedFromOpointForSnapshot => _initializedFromOpoint;
         internal bool PreserveOpointActionZeroForSnapshot =>
             _preserveOpointActionZero;
+
+        internal bool TryRestoreCharacterShellForSnapshot(
+            in BattleCharacterShellSnapshot state,
+            ILF2Object heldWeapon)
+        {
+            _heldWeapon = heldWeapon;
+            _mass = state.Mass;
+            _deadBlinkCount = state.DeadBlinkCount;
+            _initializedFromOpoint = state.InitializedFromOpoint;
+            _preserveOpointActionZero = state.PreserveOpointActionZero;
+            InputState?.SyncFromRuntime(Runtime);
+            return true;
+        }
         // ========== 抓取系统字段 ==========
 
         // 抓取持续计数。C++ release 抓取成功时写抓取者 caught_duration=300，
@@ -1037,7 +1050,7 @@ namespace NTSD.Animation.LF2Objects
                 Destroy();
             }
 
-            LF2ReferencePool.Instance?.Release(this);
+            ResolveLogicReferencePool()?.Release(this);
         }
 
         public override void DirectWriteFramePreserveWaitCounter(int frameId)
@@ -1047,7 +1060,10 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.FrameWaitCounter = 0;
         }
 
-        public void ModuleBind(LF2CharacterDataWrapper frameDataWrapper, int characterId)
+        public void ModuleBind(
+            LF2CharacterDataWrapper frameDataWrapper,
+            int characterId,
+            SimulationWorld targetWorld = null)
         {
             FrameCache.Load(frameDataWrapper);
 
@@ -1080,7 +1096,7 @@ namespace NTSD.Animation.LF2Objects
 
             _mass = NTSDSpec.GetMassOrDefault(characterId);
 
-            SimulationTickDriver.Instance?.World?.Register(this);
+            (targetWorld ?? SimulationTickDriver.Instance?.World)?.Register(this);
 
             if (!_initializedFromOpoint)
                 HolderCopySlot = 99;

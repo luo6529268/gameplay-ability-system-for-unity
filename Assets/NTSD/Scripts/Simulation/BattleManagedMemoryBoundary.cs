@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Scripting;
@@ -25,6 +26,8 @@ namespace NTSD.Simulation
         private bool ownsGcModeOverride;
         private bool tickObservationOpen;
         private long tickAllocationBaseline;
+        private bool simulationWorkerTickObservationOpen;
+        private long simulationWorkerTickAllocationBaseline;
         private long allocatedBytes;
         private int allocationViolationCount;
         private int firstAllocationTick;
@@ -166,6 +169,8 @@ namespace NTSD.Simulation
             firstCollectionTick = 0;
             tickObservationOpen = false;
             tickAllocationBaseline = 0;
+            simulationWorkerTickObservationOpen = false;
+            simulationWorkerTickAllocationBaseline = 0;
             allocatedBytes = 0;
             allocationViolationCount = 0;
             firstAllocationTick = 0;
@@ -326,6 +331,37 @@ namespace NTSD.Simulation
             ObserveCollections(tickIndex);
         }
 
+        /// <summary>
+        /// Opens the allocation envelope on the dedicated simulation thread. This
+        /// is separate from the main-thread Update envelope so worker allocations
+        /// are not subtracted from, or attributed to, Unity host work.
+        /// </summary>
+        internal void BeginSimulationWorkerTick()
+        {
+            if (!battleWindowOpen || simulationWorkerTickObservationOpen)
+                return;
+
+            simulationWorkerTickAllocationBaseline = ReadAllocatedBytes();
+            simulationWorkerTickObservationOpen = true;
+        }
+
+        internal void ObserveAfterSimulationWorkerTick(int tickIndex)
+        {
+            if (!battleWindowOpen || !simulationWorkerTickObservationOpen)
+                return;
+
+            long tickAllocatedBytes = Math.Max(
+                0L,
+                ReadAllocatedBytes() - simulationWorkerTickAllocationBaseline);
+            simulationWorkerTickObservationOpen = false;
+            if (tickAllocatedBytes <= 0)
+                return;
+
+            Interlocked.Add(ref allocatedBytes, tickAllocatedBytes);
+            Interlocked.Increment(ref allocationViolationCount);
+            Interlocked.CompareExchange(ref firstAllocationTick, tickIndex, 0);
+        }
+
         private void ObserveCollections(int tickIndex)
         {
             generation0Collections = Math.Max(
@@ -349,6 +385,7 @@ namespace NTSD.Simulation
 
             battleWindowOpen = false;
             tickObservationOpen = false;
+            simulationWorkerTickObservationOpen = false;
             driverUpdateObservationOpen = false;
             presentationObservationOpen = false;
             playerLoopObservationOpen = false;

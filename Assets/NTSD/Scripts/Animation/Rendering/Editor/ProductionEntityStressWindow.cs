@@ -846,6 +846,8 @@ namespace NTSD.Animation.Rendering.Editor
 
         static ProductionEntityStressRequestProcessor()
         {
+            ProductionEntityStressEditorBridge.NotifyRunStoppedAction =
+                NotifyRunStopped;
             ConfigureBootstrapSuppressionFromPendingRequest();
             AssemblyReloadEvents.beforeAssemblyReload += BeforeAssemblyReload;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;

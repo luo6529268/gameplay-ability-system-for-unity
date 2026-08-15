@@ -19,7 +19,9 @@ namespace NTSD.Simulation.Lockstep
             int futureFrameCapacity,
             int journalCapacity,
             int frameHistoryCapacity = 0,
-            int checksumHistoryCapacity = 0)
+            int checksumHistoryCapacity = 0,
+            int snapshotIntervalTicks = 0,
+            int snapshotCapacity = 0)
         {
             this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
             this.identity = identity ?? throw new ArgumentNullException(nameof(identity));
@@ -52,6 +54,24 @@ namespace NTSD.Simulation.Lockstep
                 identity,
                 resolvedChecksumHistoryCapacity);
             ChecksumHistory.Reset(currentTick);
+            if ((snapshotIntervalTicks == 0) != (snapshotCapacity == 0))
+            {
+                throw new ArgumentException(
+                    "Snapshot interval and capacity must either both be zero or both be positive.");
+            }
+            if (snapshotIntervalTicks < 0)
+                throw new ArgumentOutOfRangeException(nameof(snapshotIntervalTicks));
+            if (snapshotCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(snapshotCapacity));
+            if (snapshotIntervalTicks > 0)
+            {
+                SnapshotRing = new LockstepSnapshotRing(
+                    identity,
+                    driver.World,
+                    snapshotIntervalTicks,
+                    snapshotCapacity);
+                SnapshotRing.Reset(currentTick);
+            }
             bootstrapComplete = inputDelayTicks == 0;
             Status = LockstepSessionStatus.WaitingForInput;
             LastReason = LockstepProtocolReason.None;
@@ -62,6 +82,8 @@ namespace NTSD.Simulation.Lockstep
         public LockstepReplayJournal Journal { get; }
         public LockstepFrameHistoryRing FrameHistory { get; }
         public LockstepChecksumHistoryRing ChecksumHistory { get; }
+        public LockstepSnapshotRing SnapshotRing { get; }
+        public bool HasSnapshotRing => SnapshotRing != null;
         public int CurrentTick => currentTick;
         public int InputDelayTicks => inputDelayTicks;
         public bool BootstrapComplete => bootstrapComplete;
@@ -482,6 +504,167 @@ namespace NTSD.Simulation.Lockstep
                 destination);
         }
 
+        public BattleStateSnapshotBuffer CreateBattleStateSnapshotBufferForBootstrap()
+        {
+            if (protocolErrorLatched || driver.World == null)
+            {
+                return null;
+            }
+
+            return driver.World.CreateBattleStateSnapshotBufferForBootstrap();
+        }
+
+        public bool TryCaptureBattleStateSnapshot(
+            BattleStateSnapshotBuffer destination)
+        {
+            if (destination == null)
+            {
+                throw new ArgumentNullException(nameof(destination));
+            }
+
+            if (protocolErrorLatched || driver.World == null)
+            {
+                destination.Invalidate();
+                return false;
+            }
+            if (driver.CurrentTickIndex != currentTick)
+            {
+                SetStatus(
+                    LockstepSessionStatus.ProtocolError,
+                    LockstepProtocolReason.DriverTickMismatch);
+                return false;
+            }
+
+            return driver.World.TryCaptureBattleStateSnapshot(
+                identity,
+                currentTick,
+                destination);
+        }
+
+        public bool TryRestoreAndReplay(
+            BattleStateSnapshotBuffer snapshot,
+            bool ignorePaused = true,
+            bool buildPresentation = false)
+        {
+            if (protocolErrorLatched)
+                return false;
+            if (!ValidateDriverBoundary(ignorePaused))
+                return false;
+            if (snapshot == null || !snapshot.IsValid ||
+                snapshot.ProtocolSchemaVersion != identity.SchemaVersion ||
+                snapshot.IdentityFingerprint != identity.IdentityFingerprint ||
+                snapshot.CapturedTick < 0 || snapshot.CapturedTick > currentTick)
+            {
+                SetStatus(
+                    LockstepSessionStatus.ProtocolError,
+                    LockstepProtocolReason.SnapshotRestoreFailed);
+                return false;
+            }
+
+            int restoreTick = snapshot.CapturedTick;
+            int replayTargetTick = currentTick;
+            if (!ValidateReplayHistory(restoreTick, replayTargetTick))
+                return false;
+            if (!driver.TryRestoreBattleStateSnapshot(
+                    identity,
+                    snapshot,
+                    out _))
+            {
+                SetStatus(
+                    LockstepSessionStatus.ProtocolError,
+                    LockstepProtocolReason.SnapshotRestoreFailed);
+                return false;
+            }
+
+            for (int tick = restoreTick + 1; tick <= replayTargetTick; tick++)
+            {
+                FrameHistory.TryGet(tick, out LockstepFrameHistoryEntry frameEntry);
+                ChecksumHistory.TryGet(
+                    tick,
+                    out LockstepChecksumHistoryEntry checksumEntry);
+                if (!driver.StepOneTick(
+                        frameEntry.Frame,
+                        ignorePaused,
+                        buildPresentation))
+                {
+                    SetStatus(
+                        LockstepSessionStatus.ProtocolError,
+                        LockstepProtocolReason.DriverRejectedFrame);
+                    return false;
+                }
+                if (!driver.HasFrameChecksum ||
+                    driver.LastFrameChecksumValue != checksumEntry.StateChecksum)
+                {
+                    SetStatus(
+                        LockstepSessionStatus.ProtocolError,
+                        LockstepProtocolReason.ReplayChecksumMismatch);
+                    return false;
+                }
+            }
+
+            currentTick = replayTargetTick;
+            Buffer.Reset(currentTick);
+            SetStatus(LockstepSessionStatus.Advanced, LockstepProtocolReason.None);
+            return true;
+        }
+
+        private bool ValidateReplayHistory(int restoreTick, int replayTargetTick)
+        {
+            if (restoreTick == replayTargetTick)
+                return true;
+            if (!driver.Settings.enableFrameChecksum)
+            {
+                SetStatus(
+                    LockstepSessionStatus.ProtocolError,
+                    LockstepProtocolReason.ReplayHistoryUnavailable);
+                return false;
+            }
+
+            for (int tick = restoreTick + 1; tick <= replayTargetTick; tick++)
+            {
+                if (!FrameHistory.TryGet(
+                        tick,
+                        out LockstepFrameHistoryEntry frameEntry) ||
+                    !ChecksumHistory.TryGet(
+                        tick,
+                        out LockstepChecksumHistoryEntry checksumEntry))
+                {
+                    SetStatus(
+                        LockstepSessionStatus.ProtocolError,
+                        LockstepProtocolReason.ReplayHistoryUnavailable);
+                    return false;
+                }
+                if (frameEntry.SchemaVersion != identity.SchemaVersion ||
+                    frameEntry.IdentityFingerprint != identity.IdentityFingerprint ||
+                    checksumEntry.ProtocolSchemaVersion != identity.SchemaVersion ||
+                    checksumEntry.IdentityFingerprint != identity.IdentityFingerprint ||
+                    frameEntry.TickIndex != tick || checksumEntry.TickIndex != tick ||
+                    frameEntry.Frame == null ||
+                    !frameEntry.Frame.IsCanonicalFor(
+                        tick,
+                        identity.CanonicalPlayerSlots) ||
+                    frameEntry.InputHash != frameEntry.Frame.GetCanonicalHash64() ||
+                    checksumEntry.InputHash != frameEntry.InputHash)
+                {
+                    SetStatus(
+                        LockstepSessionStatus.ProtocolError,
+                        LockstepProtocolReason.ReplayInputMismatch);
+                    return false;
+                }
+                if (!checksumEntry.HasStateChecksum ||
+                    checksumEntry.ChecksumSchemaVersion !=
+                        BattleLockstepChecksumModule.CurrentSchemaVersion)
+                {
+                    SetStatus(
+                        LockstepSessionStatus.ProtocolError,
+                        LockstepProtocolReason.ReplayHistoryUnavailable);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public LockstepProtocolReason SubmitLocal(
             int playerSlot,
             SimulationInputButtons buttons,
@@ -623,6 +806,7 @@ namespace NTSD.Simulation.Lockstep
             Journal.Reset(currentTick);
             FrameHistory.Reset(currentTick);
             ChecksumHistory.Reset(currentTick);
+            SnapshotRing?.Reset(currentTick);
             bootstrapComplete = inputDelayTicks == 0;
             protocolErrorLatched = false;
             SetStatus(LockstepSessionStatus.WaitingForInput, LockstepProtocolReason.None);
@@ -658,6 +842,13 @@ namespace NTSD.Simulation.Lockstep
                     checksumSchemaVersion,
                     driver.LastFrameChecksumValue,
                     out reason))
+            {
+                SetStatus(LockstepSessionStatus.ProtocolError, reason);
+                return false;
+            }
+            if (SnapshotRing != null &&
+                SnapshotRing.ShouldCapture(frame.TickIndex) &&
+                !SnapshotRing.TryCaptureNext(frame.TickIndex, out reason))
             {
                 SetStatus(LockstepSessionStatus.ProtocolError, reason);
                 return false;

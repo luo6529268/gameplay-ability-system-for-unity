@@ -15,18 +15,24 @@ namespace NTSD.Simulation.Ecs
             BattleEcsCharacterInputPassMode mode,
             long runCount,
             long exactCharacterCount,
-            long compatibilityFallbackCount)
+            long compatibilityFallbackCount,
+            long unityCompatibilityShellCount,
+            long unexpectedFallbackCount)
         {
             Mode = mode;
             RunCount = runCount;
             ExactCharacterCount = exactCharacterCount;
             CompatibilityFallbackCount = compatibilityFallbackCount;
+            UnityCompatibilityShellCount = unityCompatibilityShellCount;
+            UnexpectedFallbackCount = unexpectedFallbackCount;
         }
 
         public BattleEcsCharacterInputPassMode Mode { get; }
         public long RunCount { get; }
         public long ExactCharacterCount { get; }
         public long CompatibilityFallbackCount { get; }
+        public long UnityCompatibilityShellCount { get; }
+        public long UnexpectedFallbackCount { get; }
     }
 
     /// <summary>
@@ -38,10 +44,12 @@ namespace NTSD.Simulation.Ecs
         private readonly SimulationWorld world;
         // The mode remains reset-boundary configurable so production A/B can retain the same code path.
         private BattleEcsCharacterInputPassMode mode =
-            BattleEcsCharacterInputPassMode.Legacy;
+            BattleEcsCharacterInputPassMode.DataOriented;
         private long runCount;
         private long exactCharacterCount;
         private long compatibilityFallbackCount;
+        private long unityCompatibilityShellCount;
+        private long unexpectedFallbackCount;
 
         internal BattleEcsCharacterInputPass(SimulationWorld world)
         {
@@ -55,7 +63,9 @@ namespace NTSD.Simulation.Ecs
                 mode,
                 runCount,
                 exactCharacterCount,
-                compatibilityFallbackCount);
+                compatibilityFallbackCount,
+                unityCompatibilityShellCount,
+                unexpectedFallbackCount);
 
         internal void SetMode(BattleEcsCharacterInputPassMode requestedMode)
         {
@@ -73,11 +83,19 @@ namespace NTSD.Simulation.Ecs
             runCount++;
             if (mode == BattleEcsCharacterInputPassMode.Legacy ||
                 entity == null ||
-                entity.GetType() != typeof(LF2Character) ||
                 entity.GetCurrentDataObjectTypeForSimulation() !=
                     (int)LF2ObjectType.Character)
             {
                 compatibilityFallbackCount++;
+                unexpectedFallbackCount++;
+                return false;
+            }
+
+            if (entity.GetType() != typeof(LF2Character) ||
+                !entity.AiControlled)
+            {
+                compatibilityFallbackCount++;
+                unityCompatibilityShellCount++;
                 return false;
             }
 
@@ -125,6 +143,8 @@ namespace NTSD.Simulation.Ecs
             runCount = 0;
             exactCharacterCount = 0;
             compatibilityFallbackCount = 0;
+            unityCompatibilityShellCount = 0;
+            unexpectedFallbackCount = 0;
         }
     }
 }

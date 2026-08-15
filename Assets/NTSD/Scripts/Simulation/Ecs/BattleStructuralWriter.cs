@@ -4,6 +4,15 @@ using NTSD.Animation.LF2Tasks;
 
 namespace NTSD.Simulation.Ecs
 {
+    internal interface IBattleObjectPointStructuralMaterializer
+    {
+        void FlushTasks();
+        void ProcessOpointSpawnCoreForStructuralWriter(LF2Entity spawner);
+        LF2Entity MaterializeObjectForStructuralWriter(OPointCreateTask task);
+        void MaterializeMultipleObjectsForStructuralWriter(
+            OPointCreateMultipleTask task);
+    }
+
     public enum BattleStructuralCommandType
     {
         None = 0,
@@ -182,7 +191,7 @@ namespace NTSD.Simulation.Ecs
                 lastCommand);
 
         internal void ProcessLateOpointSegment(
-            LF2ObjectPointFactory factory,
+            IBattleObjectPointStructuralMaterializer factory,
             LF2Entity spawner,
             int tickIndex)
         {
@@ -205,13 +214,14 @@ namespace NTSD.Simulation.Ecs
         }
 
         internal LF2Entity Spawn(
-            LF2ObjectPointFactory factory,
+            IBattleObjectPointStructuralMaterializer factory,
             OPointCreateTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
             if (factory == null || task == null)
                 return null;
 
+            task.targetWorld = world;
             RuntimeEntityHandle source = ResolveSource(task.parent);
             BattleStructuralCommand command = Record(
                 BattleStructuralCommandType.Spawn,
@@ -227,13 +237,14 @@ namespace NTSD.Simulation.Ecs
         }
 
         internal void SpawnMultiple(
-            LF2ObjectPointFactory factory,
+            IBattleObjectPointStructuralMaterializer factory,
             OPointCreateMultipleTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
             if (factory == null || task == null)
                 return;
 
+            task.targetWorld = world;
             RuntimeEntityHandle source = ResolveSource(task.parent);
             BattleStructuralCommand command = Record(
                 BattleStructuralCommandType.SpawnMultiple,

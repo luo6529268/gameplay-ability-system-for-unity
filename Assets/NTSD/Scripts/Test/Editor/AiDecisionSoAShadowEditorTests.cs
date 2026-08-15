@@ -1249,7 +1249,9 @@ namespace NTSD.Test
 
             world.CharacterInputAll(2);
             world.Unregister(replaced);
-            RegisterCharacter(world, 3, 3, 2, 120, 0, 0, 9, true);
+            LF2Character replacement =
+                RegisterCharacter(world, 3, 3, 2, 120, 0, 0, 9, true);
+            Assert.DoesNotThrow(() => replacement.Runtime.LinkState = 1);
             world.CharacterInputAll(3);
 
             Assert.That(

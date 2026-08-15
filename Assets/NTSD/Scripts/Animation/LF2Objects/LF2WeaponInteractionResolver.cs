@@ -101,7 +101,8 @@ namespace NTSD.Animation.LF2Objects
         {
             int pickerLink;
             int currentDataOid = LF2Entity.ResolveCurrentDataObjectId(_weapon);
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(currentDataOid);
+            LF2CharacterData charData =
+                _weapon.ResolveRuntimeCharacterData(currentDataOid);
             int typeSub = charData?.type_sub ?? 0;
             if (typeSub == 0x78 || typeSub == 0x7C)
                 pickerLink = 101;

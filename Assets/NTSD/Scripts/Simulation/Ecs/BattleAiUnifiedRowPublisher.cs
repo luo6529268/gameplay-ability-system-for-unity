@@ -232,6 +232,14 @@ namespace NTSD.Simulation.Ecs
             pendingSlotCount = 0;
         }
 
+        internal void InvalidateAfterOccupancyChange()
+        {
+            if (!active)
+                return;
+
+            EndPass();
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal int GetPendingSlot(int index)
         {

@@ -422,7 +422,8 @@ namespace NTSD.Animation.LF2Objects
             if (weapon is not LF2WeaponBase weaponBase)
                 return 0;
 
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(weaponBase.ObjectId);
+            LF2CharacterData charData =
+                weaponBase.ResolveRuntimeCharacterData(weaponBase.ObjectId);
             int typeSub = charData?.type_sub ?? 0;
 
             // C++ release 拾取路径：特殊 type_sub 优先，其次按武器 entity_type 写角色 link_state。

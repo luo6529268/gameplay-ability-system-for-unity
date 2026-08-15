@@ -225,6 +225,21 @@ namespace NTSD.Animation.LF2Objects
         public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
         internal SimulationWorld RegisteredWorldForSimulation => registeredWorld;
 
+        internal BattleLogicReferencePool ResolveLogicReferencePool()
+        {
+            return registeredWorld?.LogicReferencePool ??
+                   SimulationTickDriver.Instance?.World?.LogicReferencePool ??
+                   LF2ReferencePool.Instance?.SimulationCore;
+        }
+
+        internal ILF2ObjectPointFactory ResolveObjectPointFactoryForSimulation()
+        {
+            SimulationWorld world = registeredWorld;
+            return world != null
+                ? world.ResolveObjectPointFactoryForSimulation()
+                : LF2ObjectPointFactory.Instance;
+        }
+
         void ILF2FrameCacheObserver.OnFrameCacheIdentityChanged()
         {
             PublishIdentityMetadataForSimulation();
@@ -677,6 +692,101 @@ namespace NTSD.Animation.LF2Objects
         internal int GetHitRecordLastAdvanceTickForSnapshot(int slotIndex)
             => _hitRecordLastAdvanceTick[slotIndex];
 
+        internal bool TryRestoreBaseShellForSnapshot(
+            in BattleEntityBaseShellSnapshot state,
+            BattleWorldEntityBaseShellSnapshotBuffer source,
+            int runtimeSlot,
+            LF2Entity trackerParent)
+        {
+            if (source == null ||
+                Frame == null ||
+                Trans == null ||
+                Effect == null ||
+                PS == null ||
+                state.RequiredRuntimeSlot != -1 ||
+                state.HitRecordCount < 0 ||
+                state.HitRecordCount > MaxHitRecordSlots)
+            {
+                return false;
+            }
+
+            LF2FrameData currentData = state.FrameDataId < 0
+                ? null
+                : GetFrameDataById(state.FrameDataId);
+            LF2FrameData collisionData = state.CollisionFrameDataId < 0
+                ? null
+                : GetFrameDataById(state.CollisionFrameDataId);
+            if ((state.FrameDataId >= 0 && currentData == null) ||
+                (state.CollisionFrameDataId >= 0 && collisionData == null))
+            {
+                return false;
+            }
+
+            ClearRequiredRuntimeSlot();
+            CurrentItrIndex = state.CurrentItrIndex;
+            TrackerParent = trackerParent;
+            Frame.PN = state.FramePreviousNumber;
+            Frame.Prev = state.FramePreviousTick;
+            WriteCurrentFrameId(state.FrameNumber);
+            Frame.D = currentData;
+            Frame.Prev2 = state.CollisionPreviousFrame;
+            Frame.Prev2D = collisionData;
+            Trans.SyncDirectFrameData(
+                state.TransistorWait,
+                state.TransistorNext,
+                state.TransistorWaitCounter);
+
+            Effect.Num = state.EffectNumber;
+            Effect.Dvx = state.EffectDvx;
+            Effect.Dvy = state.EffectDvy;
+            Effect.Stuck = state.EffectStuck;
+            Effect.Oscillate = state.EffectOscillate;
+            Effect.Blink = state.EffectBlink;
+            Effect.Super = state.EffectSuper;
+            Effect.TimeIn = state.EffectTimeIn;
+            Effect.TimeOut = state.EffectTimeOut;
+            Effect.OscillateDirection = state.EffectOscillateDirection;
+            Effect.BlinkCounter = state.EffectBlinkCounter;
+
+            PS.groundY = state.PhysicsGroundY;
+            PS.dir = state.PhysicsFacingLeft ? "left" : "right";
+            PS.fric = state.PhysicsFriction;
+            PS.zz = state.PhysicsDepthOffset;
+            PS.zBoundPositive = state.PhysicsZBoundPositive;
+            PS.zBoundNegative = state.PhysicsZBoundNegative;
+            PS.xBoundPositive = state.PhysicsXBoundPositive;
+            PS.xBoundNegative = state.PhysicsXBoundNegative;
+
+            HitRecordCount = state.HitRecordCount;
+            for (int recordIndex = 0;
+                 recordIndex < MaxHitRecordSlots;
+                 recordIndex++)
+            {
+                if (recordIndex < state.HitRecordCount)
+                {
+                    _hitRecordDamage[recordIndex] =
+                        source.GetHitRecordDamage(runtimeSlot, recordIndex);
+                    _hitRecordX[recordIndex] =
+                        source.GetHitRecordX(runtimeSlot, recordIndex);
+                    _hitRecordZ[recordIndex] =
+                        source.GetHitRecordZ(runtimeSlot, recordIndex);
+                    _hitRecordLastAdvanceTick[recordIndex] =
+                        source.GetHitRecordLastAdvanceTick(
+                            runtimeSlot,
+                            recordIndex);
+                }
+                else
+                {
+                    _hitRecordDamage[recordIndex] = 0;
+                    _hitRecordX[recordIndex] = 0;
+                    _hitRecordZ[recordIndex] = 0;
+                    _hitRecordLastAdvanceTick[recordIndex] = 0;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>命中记录成功渲染后推进年龄。</summary>
         public void AdvanceHitRecord(int slotIndex, int tickIndex)
         {
@@ -778,7 +888,13 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Dir = nextDir;
             if (PS != null)
                 PS.dir = nextDir;
-            Sprite?.SwitchLR(nextDir);
+            if (Sprite == null)
+                return;
+
+            if (BattleSimulationExecutionContext.IsSimulationWorkerThread)
+                Sprite.SwitchLRManagedOnly(nextDir);
+            else
+                Sprite.SwitchLR(nextDir);
         }
 
         public virtual int Dirh() => Runtime?.IsFacingLeft == true ? -1 : 1;
@@ -848,7 +964,7 @@ namespace NTSD.Animation.LF2Objects
             int count = BrokenWeaponFragmentCount(sourceOid);
             if (count <= 0 || Runtime == null) return;
 
-            var factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
             if (factory == null) return;
 
             for (int i = 0; i < count; i++)
@@ -859,7 +975,8 @@ namespace NTSD.Animation.LF2Objects
                 float vy = BrokenWeaponFragmentVy(sourceOid, i);
                 int frame = BrokenWeaponFragmentFrame(sourceOid, i);
 
-                var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
+                var task = referencePool?.Fetch<OPointCreateTask>();
                 if (task == null)
                     break;
                 task.opoint = new ObjectPoint
@@ -1172,7 +1289,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 UnregisterFromWorld();
             }
-            LF2ReferencePool.Instance?.Release(this);
+            ResolveLogicReferencePool()?.Release(this);
         }
 
         // FrameTransistor 真正执行换帧时，会先走到这里。
@@ -1203,6 +1320,13 @@ namespace NTSD.Animation.LF2Objects
             InvalidateDataObjectTypeTickCache();
             TrackerParent = null;
             Runtime.SlotIndex = -1;
+        }
+
+        internal void BindRegisteredWorldForSnapshotRestore(
+            SimulationWorld world)
+        {
+            registeredWorld = world;
+            InvalidateDataObjectTypeTickCache();
         }
 
         internal LF2Entity ResolveTrackerParentFromRuntime()
@@ -1412,8 +1536,8 @@ namespace NTSD.Animation.LF2Objects
 
         private void RunHitFa8FrameLogic()
         {
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null || Match == null)
                 return;
 
@@ -1491,8 +1615,8 @@ namespace NTSD.Animation.LF2Objects
 
         private void RunHitFa6Or9FrameLogic(int hitFa)
         {
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null || Match == null)
                 return;
 
@@ -1654,8 +1778,8 @@ namespace NTSD.Animation.LF2Objects
         }
 
         private static LF2Entity PublishFrameLogicObjectImmediate(
-            LF2ObjectPointFactory factory,
-            LF2ReferencePool referencePool,
+            ILF2ObjectPointFactory factory,
+            BattleLogicReferencePool referencePool,
             OPointCreateTask task,
             int requiredSlot)
         {
@@ -1872,8 +1996,8 @@ namespace NTSD.Animation.LF2Objects
             if (Match == null)
                 return;
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null)
                 return;
 
@@ -1944,8 +2068,8 @@ namespace NTSD.Animation.LF2Objects
             if (Match == null)
                 return;
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null)
                 return;
 
@@ -2009,8 +2133,8 @@ namespace NTSD.Animation.LF2Objects
             if (Match == null)
                 return;
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null)
                 return;
 
@@ -2094,8 +2218,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             int cloneOid = FrameCache.Wrapper.characterId;
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             if (factory == null || referencePool == null || ResolveRuntimeCharacterConfig(cloneOid)?.characterData == null)
                 return;
 
@@ -3608,12 +3732,13 @@ namespace NTSD.Animation.LF2Objects
             else
                 Runtime?.ClearInputHistoryTail();
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
             if (factory == null)
                 return;
 
             int slotIndex = Runtime?.SlotIndex ?? -1;
-            OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
+            OPointCreateTask task = referencePool?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
             ConfigureLateN30SpawnTask(task, slotIndex, frameVal);
@@ -3625,7 +3750,7 @@ namespace NTSD.Animation.LF2Objects
             }
             finally
             {
-                LF2ReferencePool.Instance.Recycle(task);
+                referencePool.Recycle(task);
             }
             if (spawned == null)
                 return;
@@ -3949,7 +4074,7 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             bool spawned = false;
-            bool hasEffectResources = LF2ObjectPointFactory.Instance != null &&
+            bool hasEffectResources = ResolveObjectPointFactoryForSimulation() != null &&
                                       ResolveRuntimeCharacterConfig(999) != null;
             int availableSlots = 0;
             bool availableSlotsCalculated = false;
@@ -4059,11 +4184,11 @@ namespace NTSD.Animation.LF2Objects
 
         private void SpawnTransitionEffect(int frameId, double x, double y, double vx, double vy)
         {
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
             if (factory == null)
                 return;
 
-            OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            OPointCreateTask task = ResolveLogicReferencePool()?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
             task.opoint = new ObjectPoint
@@ -4121,6 +4246,10 @@ namespace NTSD.Animation.LF2Objects
 
         internal void FreeEntityLikeExeCoreForStructuralWriter()
         {
+            // UnregisterFromWorld clears registeredWorld through OnRemoved. Capture the
+            // world-owned pool first so logic-only worker teardown never falls through
+            // to the Unity singleton lookup after the entity has been detached.
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             Sprite?.Hide();
             Sprite?.HideShadow();
             if (Renderer != null)
@@ -4132,7 +4261,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 UnregisterFromWorld();
             }
-            LF2ReferencePool.Instance?.Release(this);
+            referencePool?.Release(this);
         }
 
         public virtual void DirectWriteFramePreserveWaitCounter(int frameId)
@@ -4214,6 +4343,11 @@ namespace NTSD.Animation.LF2Objects
                 return resolver.Resolve(targetObjectId);
 
             return CharacterAnimtorManager.Instance?.GetCharacterConfig(targetObjectId);
+        }
+
+        internal LF2CharacterData ResolveRuntimeCharacterData(int targetObjectId)
+        {
+            return ResolveRuntimeCharacterConfig(targetObjectId)?.characterData;
         }
 
         internal bool TryApplyRuntimeIdentity(
@@ -4304,7 +4438,10 @@ namespace NTSD.Animation.LF2Objects
                 return entity.dataObjectTypeCacheDefinition?.type ?? fallbackType;
             }
 
-            ObjectDefinition definition = GameDataManager.Instance?.GetObjectById(wrapperOid);
+            BattleRuntimeDataCatalog catalog = world?.RuntimeDataCatalog;
+            ObjectDefinition definition = catalog?.GetObjectDefinition(wrapperOid);
+            if (definition == null && catalog?.IsSealedForBattle != true)
+                definition = GameDataManager.Instance?.GetObjectById(wrapperOid);
             if (activeTick >= 0)
             {
                 entity.dataObjectTypeCacheWorld = world;

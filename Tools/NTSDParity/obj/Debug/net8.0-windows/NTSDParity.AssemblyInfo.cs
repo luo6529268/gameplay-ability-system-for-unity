@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NTSDParity")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+342fbcedf94669a2e3db8198c64846d56668baba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc1d5d7bcd087fecdd2955cfb0b1d92bd6109c95")]
 [assembly: System.Reflection.AssemblyProductAttribute("NTSDParity")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NTSDParity")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

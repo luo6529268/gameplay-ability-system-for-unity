@@ -297,6 +297,75 @@ namespace NTSD.Simulation
             AdvanceOccupancyEpoch();
         }
 
+        internal bool TryRestoreSnapshotTopology(
+            BattleWorldRuntimeSlotSnapshotBuffer snapshot)
+        {
+            if (snapshot == null ||
+                snapshot.SchemaVersion !=
+                    BattleWorldRuntimeSlotSnapshotBuffer.CurrentSchemaVersion ||
+                snapshot.SlotCapacity != LogicalCapacity)
+            {
+                return false;
+            }
+
+            for (int slot = 0; slot < LogicalCapacity; slot++)
+            {
+                BattleRuntimeSlotSnapshot state = snapshot.GetSlot(slot);
+                if (state.Claimed &&
+                    (!snapshot.TryGetLocalEntityShell(slot, out LF2Entity entity) ||
+                     entity == null ||
+                     state.Generation == 0))
+                {
+                    return false;
+                }
+            }
+
+            allocator.Reset();
+            for (int slot = 0; slot < LogicalCapacity; slot++)
+            {
+                BattleRuntimeSlotSnapshot state = snapshot.GetSlot(slot);
+                Page page = GetPage(slot, state.Claimed);
+                if (page == null)
+                    continue;
+
+                int pageOffset = slot % PageSize;
+                page.Entities[pageOffset] = null;
+                page.Generations[pageOffset] = state.Generation;
+                if (!state.Claimed)
+                    continue;
+
+                if (!allocator.ClaimRequired(slot) ||
+                    !snapshot.TryGetLocalEntityShell(slot, out LF2Entity entity))
+                {
+                    return false;
+                }
+                page.Entities[pageOffset] = entity;
+            }
+
+            AdvanceOccupancyEpoch();
+            return allocator.ClaimedCount == snapshot.ClaimedCount;
+        }
+
+        internal void ClearTopologyForSnapshotShellMaterialization()
+        {
+            allocator.Reset();
+            for (int pageIndex = 0; pageIndex < pages.Length; pageIndex++)
+            {
+                Page page = pages[pageIndex];
+                if (page == null)
+                    continue;
+
+                for (int pageOffset = 0; pageOffset < PageSize; pageOffset++)
+                {
+                    int slot = pageIndex * PageSize + pageOffset;
+                    if (slot >= LogicalCapacity)
+                        break;
+                    page.Entities[pageOffset] = null;
+                }
+            }
+            AdvanceOccupancyEpoch();
+        }
+
         private bool TryGetMatchingSlot(
             RuntimeEntityHandle handle,
             out Page page,

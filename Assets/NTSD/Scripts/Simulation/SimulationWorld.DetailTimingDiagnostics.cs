@@ -109,6 +109,9 @@ namespace NTSD.Simulation
         private readonly BattleTickDetailPhase[] activePhases =
             new BattleTickDetailPhase[8];
         private readonly long[] activePhaseTimestamps = new long[8];
+        private readonly BattleTickDetailPhase[] deferredRenderActivePhases =
+            new BattleTickDetailPhase[8];
+        private readonly long[] deferredRenderActivePhaseTimestamps = new long[8];
         private readonly long[] lateRuntimeSnapshotElapsedTimestampTicks =
             new long[(int)BattleLateRuntimeSnapshotStage.Count];
         private readonly long[] lateRuntimeSnapshotCallCounts =
@@ -117,12 +120,16 @@ namespace NTSD.Simulation
             new BattleLateRuntimeSnapshotStage[4];
         private readonly long[] activeLateRuntimeSnapshotTimestamps = new long[4];
         private int activePhaseDepth;
+        private int deferredRenderActivePhaseDepth;
         private int activeLateRuntimeSnapshotDepth;
         private int deferredRenderMaterializationDepth;
+        private int deferredRenderThreadId;
+        private int simulationThreadId;
+        private volatile bool enabled;
 
         public static int PhaseCount => (int)BattleTickDetailPhase.Count;
         public static long TimestampFrequency => Stopwatch.Frequency;
-        public bool Enabled { get; private set; }
+        public bool Enabled => enabled;
         public int LastTickIndex { get; private set; } = -1;
         public int ActivePhaseDepthForDiagnostics => activePhaseDepth;
         public BattleTickDetailPhase ActivePhaseForDiagnostics =>
@@ -138,12 +145,21 @@ namespace NTSD.Simulation
         public void SetEnabled(bool enabled)
         {
             if (Enabled)
+            {
                 EndTick();
-            Enabled = enabled;
+                while (deferredRenderActivePhaseDepth > 0)
+                    EndDeferredRenderActivePhase();
+            }
+            this.enabled = enabled;
             activePhaseDepth = 0;
+            deferredRenderActivePhaseDepth = 0;
             LastTickIndex = -1;
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
+            Array.Clear(
+                deferredRenderActivePhaseTimestamps,
+                0,
+                deferredRenderActivePhaseTimestamps.Length);
             Array.Clear(
                 lateRuntimeSnapshotElapsedTimestampTicks,
                 0,
@@ -154,6 +170,8 @@ namespace NTSD.Simulation
                 0,
                 activeLateRuntimeSnapshotTimestamps.Length);
             deferredRenderMaterializationDepth = 0;
+            deferredRenderThreadId = 0;
+            simulationThreadId = 0;
             activeLateRuntimeSnapshotDepth = 0;
             for (int index = 0; index < deferredRenderElapsedTimestampTicks.Length; index++)
                 Interlocked.Exchange(ref deferredRenderElapsedTimestampTicks[index], 0);
@@ -165,6 +183,9 @@ namespace NTSD.Simulation
                 return;
 
             EndTick();
+            Volatile.Write(
+                ref simulationThreadId,
+                Thread.CurrentThread.ManagedThreadId);
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
             Array.Clear(
@@ -178,7 +199,6 @@ namespace NTSD.Simulation
                 activeLateRuntimeSnapshotTimestamps.Length);
             activePhaseDepth = 0;
             activeLateRuntimeSnapshotDepth = 0;
-            deferredRenderMaterializationDepth = 0;
             for (int index = 0; index < deferredRenderElapsedTimestampTicks.Length; index++)
             {
                 elapsedTimestampTicks[index] =
@@ -192,26 +212,65 @@ namespace NTSD.Simulation
             if (!Enabled)
                 return false;
 
+            int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+            int ownerThreadId = Volatile.Read(ref deferredRenderThreadId);
+            if (ownerThreadId == 0)
+            {
+                ownerThreadId = Interlocked.CompareExchange(
+                    ref deferredRenderThreadId,
+                    currentThreadId,
+                    0);
+                if (ownerThreadId == 0)
+                    ownerThreadId = currentThreadId;
+            }
+            if (ownerThreadId != currentThreadId)
+                return false;
+
             deferredRenderMaterializationDepth++;
             return true;
         }
 
         public void EndDeferredRenderMaterialization()
         {
-            if (!Enabled || deferredRenderMaterializationDepth <= 0)
-                return;
-
-            deferredRenderMaterializationDepth--;
-        }
-
-        public void BeginPhase(BattleTickDetailPhase phase)
-        {
-            if (!Enabled || (uint)phase >= (uint)BattleTickDetailPhase.Count ||
-                activePhaseDepth >= activePhases.Length)
+            if (!Enabled ||
+                Volatile.Read(ref deferredRenderThreadId) !=
+                    Thread.CurrentThread.ManagedThreadId ||
+                deferredRenderMaterializationDepth <= 0)
             {
                 return;
             }
 
+            deferredRenderMaterializationDepth--;
+            if (deferredRenderMaterializationDepth != 0)
+                return;
+
+            while (deferredRenderActivePhaseDepth > 0)
+                EndDeferredRenderActivePhase();
+            Volatile.Write(ref deferredRenderThreadId, 0);
+        }
+
+        public void BeginPhase(BattleTickDetailPhase phase)
+        {
+            if (!Enabled || (uint)phase >= (uint)BattleTickDetailPhase.Count)
+            {
+                return;
+            }
+
+            if (IsPresentationThread())
+            {
+                if (deferredRenderActivePhaseDepth >= deferredRenderActivePhases.Length)
+                    return;
+
+                deferredRenderActivePhases[deferredRenderActivePhaseDepth] = phase;
+                deferredRenderActivePhaseTimestamps[deferredRenderActivePhaseDepth] =
+                    Stopwatch.GetTimestamp();
+                PhaseProfilerMarkers.All[(int)phase].Begin();
+                deferredRenderActivePhaseDepth++;
+                return;
+            }
+
+            if (activePhaseDepth >= activePhases.Length)
+                return;
             activePhases[activePhaseDepth] = phase;
             activePhaseTimestamps[activePhaseDepth] = Stopwatch.GetTimestamp();
             PhaseProfilerMarkers.All[(int)phase].Begin();
@@ -220,6 +279,19 @@ namespace NTSD.Simulation
 
         public void EndPhase(BattleTickDetailPhase phase)
         {
+            if (IsPresentationThread())
+            {
+                if (deferredRenderActivePhaseDepth == 0 ||
+                    deferredRenderActivePhases[deferredRenderActivePhaseDepth - 1] !=
+                        phase)
+                {
+                    return;
+                }
+
+                EndDeferredRenderActivePhase();
+                return;
+            }
+
             if (!Enabled || activePhaseDepth == 0 ||
                 activePhases[activePhaseDepth - 1] != phase)
             {
@@ -238,7 +310,6 @@ namespace NTSD.Simulation
                 EndActivePhase();
             while (activeLateRuntimeSnapshotDepth > 0)
                 EndActiveLateRuntimeSnapshot();
-            deferredRenderMaterializationDepth = 0;
         }
 
         public void RecordDeferredPhaseElapsed(
@@ -471,18 +542,36 @@ namespace NTSD.Simulation
             long elapsed = Stopwatch.GetTimestamp() -
                            activePhaseTimestamps[activePhaseDepth];
             PhaseProfilerMarkers.All[(int)phase].End();
-            if (deferredRenderMaterializationDepth > 0 &&
-                IsDeferredMaterializationPhase(phase))
-            {
-                Interlocked.Add(
-                    ref deferredRenderElapsedTimestampTicks[(int)phase],
-                    elapsed);
-            }
-            else
-            {
-                elapsedTimestampTicks[(int)phase] += elapsed;
-            }
+            elapsedTimestampTicks[(int)phase] += elapsed;
             activePhaseTimestamps[activePhaseDepth] = 0;
+        }
+
+        private void EndDeferredRenderActivePhase()
+        {
+            deferredRenderActivePhaseDepth--;
+            BattleTickDetailPhase phase =
+                deferredRenderActivePhases[deferredRenderActivePhaseDepth];
+            long elapsed = Stopwatch.GetTimestamp() -
+                           deferredRenderActivePhaseTimestamps[
+                               deferredRenderActivePhaseDepth];
+            PhaseProfilerMarkers.All[(int)phase].End();
+            Interlocked.Add(
+                ref deferredRenderElapsedTimestampTicks[(int)phase],
+                elapsed);
+            deferredRenderActivePhaseTimestamps[deferredRenderActivePhaseDepth] = 0;
+        }
+
+        private bool IsPresentationThread()
+        {
+            int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+            if (deferredRenderMaterializationDepth > 0 &&
+                Volatile.Read(ref deferredRenderThreadId) == currentThreadId)
+            {
+                return true;
+            }
+
+            int ownerThreadId = Volatile.Read(ref simulationThreadId);
+            return ownerThreadId != 0 && ownerThreadId != currentThreadId;
         }
 
         private void EndActiveLateRuntimeSnapshot()
@@ -496,12 +585,6 @@ namespace NTSD.Simulation
             activeLateRuntimeSnapshotTimestamps[activeLateRuntimeSnapshotDepth] = 0;
         }
 
-        private static bool IsDeferredMaterializationPhase(BattleTickDetailPhase phase)
-        {
-            return phase == BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard ||
-                   phase >= BattleTickDetailPhase.RenderPrepareFrameFrozenFrameCopy &&
-                   phase <= BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes;
-        }
     }
 
     public enum BattleAiInputDetailPhase

@@ -11,6 +11,14 @@ namespace NTSD.Animation.LF2Objects
 
         public long InvalidTaskTypeCountForDiagnostics { get; private set; }
 
+        internal bool TryRestoreInvalidTaskTypeCountForSnapshot(long value)
+        {
+            if (value < 0)
+                return false;
+            InvalidTaskTypeCountForDiagnostics = value;
+            return true;
+        }
+
         public LF2OtherObjectLifecycleModule(
             LF2OtherObject owner,
             LF2OtherObjectFrameModule frameModule)
@@ -43,7 +51,10 @@ namespace NTSD.Animation.LF2Objects
             InitializeVelocity(task);
             InitializeHealth();
 
-            SimulationTickDriver.Instance?.World?.Register(owner);
+            SimulationWorld world = task.targetWorld ??
+                                    task.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
+            world?.Register(owner);
         }
 
         public void Reset()
@@ -102,7 +113,8 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializeFrame(OPointCreateTask task)
         {
-            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(owner.ObjectId);
+            LF2CharacterDataWrapper wrapper =
+                owner.ResolveRuntimeCharacterConfig(owner.ObjectId);
             owner.FrameCache.Load(wrapper);
 
             int action = task.opoint.action;
@@ -134,7 +146,8 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializeHealth()
         {
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(owner.ObjectId);
+            LF2CharacterData charData =
+                owner.ResolveRuntimeCharacterData(owner.ObjectId);
             int hp = charData?.weapon_hp > 0 ? charData.weapon_hp : NTSDGlobal.Default.Health.HpFull;
             owner.Health.HP = hp;
             owner.Health.HPBound = hp;

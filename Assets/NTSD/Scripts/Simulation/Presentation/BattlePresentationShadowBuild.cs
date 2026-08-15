@@ -251,7 +251,8 @@ namespace NTSD.Simulation.Presentation
         public int HitRecordCount { get; private set; }
         public BattleCommonVisualCatalog CommonVisualCatalog { get; private set; } =
             BattleCommonVisualCatalog.Empty;
-        public bool HasValidSparkPublication => CommonVisualCatalog.IsSparkValid;
+        public BattleHitRecordLifecycleCatalog LifecycleCatalog { get; private set; }
+        public bool HasValidSparkPublication => LifecycleCatalog.IsAvailable;
 
         public BattleHitRecordOwnerSnapshot GetOwner(int index)
         {
@@ -272,12 +273,37 @@ namespace NTSD.Simulation.Presentation
             int tickIndex,
             BattleCommonVisualCatalog commonVisualCatalog)
         {
+            ResetCore(
+                cycleId,
+                tickIndex,
+                commonVisualCatalog,
+                commonVisualCatalog?.IsSparkValid == true
+                    ? BattleHitRecordLifecycleCatalog.Available
+                    : BattleHitRecordLifecycleCatalog.Unavailable);
+        }
+
+        internal void ResetWithLifecycle(
+            int cycleId,
+            int tickIndex,
+            BattleCommonVisualCatalog commonVisualCatalog,
+            BattleHitRecordLifecycleCatalog lifecycleCatalog)
+        {
+            ResetCore(cycleId, tickIndex, commonVisualCatalog, lifecycleCatalog);
+        }
+
+        private void ResetCore(
+            int cycleId,
+            int tickIndex,
+            BattleCommonVisualCatalog commonVisualCatalog,
+            BattleHitRecordLifecycleCatalog lifecycleCatalog)
+        {
             ReleasePublicationBinding();
             CycleId = cycleId;
             TickIndex = tickIndex;
             OwnerCount = 0;
             HitRecordCount = 0;
             CommonVisualCatalog = commonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
+            LifecycleCatalog = lifecycleCatalog;
         }
 
         internal void AddOwner(in BattleHitRecordOwnerSnapshot owner)
@@ -926,6 +952,26 @@ namespace NTSD.Simulation.Presentation
             boundCatalog = nextCatalog;
         }
 
+        internal void BindHostResources(
+            CharacterAnimtorManager manager,
+            BattleSpriteCatalog catalog,
+            BattleCommonVisualCatalog commonVisualCatalog)
+        {
+            if (bindingManager != null ||
+                !ReferenceEquals(boundCatalog, BattleSpriteCatalog.Empty))
+            {
+                throw new InvalidOperationException(
+                    "Presentation host resources are already bound to this frame.");
+            }
+
+            BattleCommonVisualCatalog nextCommonVisualCatalog =
+                commonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
+            CommonVisualCatalog = nextCommonVisualCatalog;
+            CommonShadowBinding = nextCommonVisualCatalog.Shadow;
+            CommonShadowDiagnostic = nextCommonVisualCatalog.Diagnostic;
+            RetainPublicationBinding(manager, catalog, null);
+        }
+
         internal void ReleasePublicationBinding()
         {
             CharacterAnimtorManager manager = bindingManager;
@@ -1319,6 +1365,46 @@ namespace NTSD.Simulation.Presentation
 
         public void BeginFrame(SimulationWorld world, int tickIndex)
         {
+            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
+            BattleCommonVisualCatalog commonVisualCatalog =
+                manager?.CommonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
+            BeginFrameCore(
+                world,
+                tickIndex,
+                manager,
+                commonVisualCatalog,
+                commonVisualCatalog.IsSparkValid
+                    ? BattleHitRecordLifecycleCatalog.Available
+                    : BattleHitRecordLifecycleCatalog.Unavailable,
+                retainPublicationResources: true);
+        }
+
+        internal void BeginSimulationWorkerFrame(SimulationWorld world, int tickIndex)
+        {
+            if (mode != BattlePresentationBackendMode.CentralOnly)
+            {
+                throw new InvalidOperationException(
+                    "The simulation worker can publish logical presentation snapshots only in CentralOnly mode.");
+            }
+
+            BeginFrameCore(
+                world,
+                tickIndex,
+                null,
+                BattleCommonVisualCatalog.Empty,
+                world.RuntimeDataCatalog?.HitRecordLifecycleCatalog ??
+                BattleHitRecordLifecycleCatalog.Unavailable,
+                retainPublicationResources: false);
+        }
+
+        private void BeginFrameCore(
+            SimulationWorld world,
+            int tickIndex,
+            CharacterAnimtorManager manager,
+            BattleCommonVisualCatalog commonVisualCatalog,
+            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog,
+            bool retainPublicationResources)
+        {
             AdvanceEntityHandleCacheEpoch();
             if (world == null)
                 return;
@@ -1360,9 +1446,6 @@ namespace NTSD.Simulation.Presentation
                         BattleTickDetailPhase.RenderBeginFrameSortEntities);
                 }
 
-                CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
-                BattleCommonVisualCatalog commonVisualCatalog =
-                    manager?.CommonVisualCatalog ?? BattleCommonVisualCatalog.Empty;
                 BattleHitRecordPresentationCycle previousCycle = PublishedHitRecordCycle;
                 BattleHitRecordPresentationCycle writeCycle =
                     ReferenceEquals(previousCycle, hitRecordCycleA)
@@ -1384,6 +1467,7 @@ namespace NTSD.Simulation.Presentation
                             tickIndex,
                             cycleId,
                             commonVisualCatalog,
+                            hitRecordLifecycleCatalog,
                             writeCycle);
                     }
                 }
@@ -1394,7 +1478,8 @@ namespace NTSD.Simulation.Presentation
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.RenderBeginFrameCaptureHitRecords);
                 }
-                if (writeCycle.HitRecordCount > 0 && commonVisualCatalog.IsSparkValid)
+                if (retainPublicationResources &&
+                    writeCycle.HitRecordCount > 0 && commonVisualCatalog.IsSparkValid)
                 {
                     writeCycle.RetainPublicationBinding(
                         manager,
@@ -1427,7 +1512,8 @@ namespace NTSD.Simulation.Presentation
                         commonVisualCatalog,
                         writeCycle,
                         manager,
-                        buildCommands: false);
+                        buildCommands: false,
+                        retainPublicationResources: retainPublicationResources);
                     awaitingLegacyCompletion = false;
                     legacyProbeCount = 0;
                     return;
@@ -1498,7 +1584,7 @@ namespace NTSD.Simulation.Presentation
                     {
                         BattlePresentationHitRecordSnapshot hit = cycle.GetHitRecord(
                             owner.HitRecordStart + hitIndex);
-                        if (BattleCommonVisualCatalog.TryResolveSparkAge(hit.Age, out _))
+                        if (cycle.LifecycleCatalog.TryResolveAge(hit.Age, out _))
                         {
                             entity.AdvanceHitRecordFromPresentation(hitIndex, hit.Age);
                             changed = true;
@@ -1732,9 +1818,14 @@ namespace NTSD.Simulation.Presentation
             int tickIndex,
             int cycleId,
             BattleCommonVisualCatalog commonVisualCatalog,
+            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog,
             BattleHitRecordPresentationCycle cycle)
         {
-            cycle.Reset(cycleId, tickIndex, commonVisualCatalog);
+            cycle.ResetWithLifecycle(
+                cycleId,
+                tickIndex,
+                commonVisualCatalog,
+                hitRecordLifecycleCatalog);
             for (int index = 0; index < sortedEntities.Count; index++)
             {
                 LF2Entity entity = sortedEntities[index];
@@ -1788,7 +1879,8 @@ namespace NTSD.Simulation.Presentation
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
             CharacterAnimtorManager manager,
-            bool buildCommands = true)
+            bool buildCommands = true,
+            bool retainPublicationResources = true)
         {
             BattlePresentationFrame previousFrame = PublishedFrame;
             BattlePresentationFrame writeFrame = ReferenceEquals(previousFrame, frameA) ? frameB : frameA;
@@ -1801,7 +1893,8 @@ namespace NTSD.Simulation.Presentation
                 writeFrame,
                 manager,
                 buildCommands);
-            if (!buildCommands && writeFrame.EntityCount > 0 &&
+            if (retainPublicationResources && !buildCommands &&
+                writeFrame.EntityCount > 0 &&
                 manager != null &&
                 !ReferenceEquals(manager.SpriteCatalog, BattleSpriteCatalog.Empty))
             {
@@ -1816,7 +1909,8 @@ namespace NTSD.Simulation.Presentation
                 BattlePresentationPhase.RequiresPublicationBinding);
             try
             {
-                if (writeFrame.RequiresCatalogPublicationBinding)
+                if (retainPublicationResources &&
+                    writeFrame.RequiresCatalogPublicationBinding)
                 {
                     writeFrame.RetainPublicationBinding(
                         manager,

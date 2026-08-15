@@ -40,7 +40,6 @@ namespace NTSD.Test
             var kb = Keyboard.current;
             if (kb == null)
             {
-                Debug.LogWarning("[WeaponSpawner] Keyboard.current is null");
                 return;
             }
 

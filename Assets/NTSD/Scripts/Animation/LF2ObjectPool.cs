@@ -235,6 +235,25 @@ namespace NTSD.Animation
             _preparedSpriteCapacity = Mathf.Max(_preparedSpriteCapacity, normalizedSpriteTarget);
         }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        internal void PrepareObjectCapacityImmediateForDiagnostics(int targetObjectCount)
+        {
+            if (_battleCapacitySealed)
+            {
+                throw new System.InvalidOperationException(
+                    "Cannot prepare diagnostic object capacity after the battle seal is active.");
+            }
+
+            int normalizedTarget = Mathf.Max(0, targetObjectCount);
+            BattleCentralPresentationMountRegistry.PrepareCapacity(normalizedTarget);
+            _activeObjects.EnsureCapacity(normalizedTarget);
+            _releaseTimeMap.EnsureCapacity(normalizedTarget);
+            while (_availableObjects.Count + _activeObjects.Count < normalizedTarget)
+                CreateNewObject();
+            _preparedObjectCapacity = Mathf.Max(_preparedObjectCapacity, normalizedTarget);
+        }
+#endif
+
         public void SealBattleCapacity()
         {
             _battleCapacitySealed = true;

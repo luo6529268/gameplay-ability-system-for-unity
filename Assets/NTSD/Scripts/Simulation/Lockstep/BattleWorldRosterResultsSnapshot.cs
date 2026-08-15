@@ -269,6 +269,70 @@ namespace NTSD.Simulation
             return true;
         }
 
+        internal bool TryRestoreTo(BattleRuntimeState runtime)
+        {
+            if (SchemaVersion != CurrentSchemaVersion ||
+                !HasCanonicalFixedBuffers(runtime))
+            {
+                return false;
+            }
+
+            BattleRosterRuntimeState roster = runtime.Roster;
+            BattleResultsRuntimeState results = runtime.Results;
+            BattleSlotLabelRuntimeState labels = runtime.SlotLabels;
+            for (int index = 0; index < RosterSlotCount; index++)
+            {
+                BattleRosterSlotSnapshot source = rosterSlots[index];
+                BattleSlotRuntimeState destination = roster.Slots[index];
+                destination.Active = source.Active;
+                destination.IsHuman = source.IsHuman;
+                destination.CharacterId = source.CharacterId;
+                destination.Team = source.Team;
+                destination.InputId = source.InputId;
+                destination.AiId = source.AiId;
+                destination.RuntimeSlotIndex = source.RuntimeSlotIndex;
+                destination.StableId = source.StableId;
+            }
+
+            roster.ActiveSlotCount = ActiveRosterSlotCount;
+            results.Phase = ResultsPhase;
+            results.Cursor = ResultsCursor;
+            results.SettingsCursor = ResultsSettingsCursor;
+            results.TableCursor = ResultsTableCursor;
+            results.TableSide = ResultsTableSide;
+            results.ResultSubcursor = ResultsSubcursor;
+            results.ResultTableSavedTop = ResultsTableSavedTop;
+            results.ResultTableSavedBottom = ResultsTableSavedBottom;
+            results.Timer = ResultsTimer;
+            results.Winner = ResultsWinner;
+            results.HadBoth = ResultsHadBoth;
+            results.BattleEndPhase = ResultsBattleEndPhase;
+            results.PendingWinner = ResultsPendingWinner;
+            results.TeamCount = ResultsTeamCount;
+            results.PendingHostAction = ResultsPendingHostAction;
+
+            CopyArray(resultTeamIds, results.TeamIds);
+            CopyArray(resultMultiplier, results.ResultMultiplier);
+            CopyArray(resultSelectedTroop, results.ResultSelectedTroop);
+            CopyArray(resultSelectedIcon, results.ResultSelectedIcon);
+            CopyArray(resultTableTop, results.ResultTableTop);
+            CopyArray(resultTableBottom, results.ResultTableBottom);
+            RestoreMatrix(resultRow1Values, results.ResultRow1Values);
+            RestoreMatrix(resultRow2Values, results.ResultRow2Values);
+            RestoreMatrix(resultCommittedTotal, results.ResultCommittedTotal);
+            RestoreMatrix(resultCommittedHp, results.ResultCommittedHp);
+            RestoreMatrix(resultBackupRow1Values, results.ResultBackupRow1Values);
+            RestoreMatrix(resultBackupRow2Values, results.ResultBackupRow2Values);
+            RestoreLabels(slotLabels, labels.BattleSlotLabels);
+            CopyArray(slotLabelStates, labels.BattleSlotLabelState);
+            CopyArray(killStats, runtime.KillStats);
+            CopyArray(damageStats, runtime.DamageStats);
+            RestoreMatrix(reserveCommittedTotal, runtime.ReserveCommittedTotal);
+            RestoreMatrix(reserveCommittedHp, runtime.ReserveCommittedHp);
+            runtime.ReserveOwnerValid = ReserveOwnerValid;
+            return true;
+        }
+
         private static bool HasCanonicalFixedBuffers(BattleRuntimeState runtime)
         {
             if (runtime?.Roster?.Slots == null ||
@@ -361,6 +425,33 @@ namespace NTSD.Simulation
                     destination[
                         slot * BattleSlotLabelRuntimeState.CharacterCapacity +
                         characterIndex] = source[slot, characterIndex];
+                }
+            }
+        }
+
+        private static void RestoreMatrix(int[] source, int[,] destination)
+        {
+            for (int side = 0; side < ResultSideCount; side++)
+            {
+                for (int column = 0; column < ResultColumnCount; column++)
+                {
+                    destination[side, column] =
+                        source[side * ResultColumnCount + column];
+                }
+            }
+        }
+
+        private static void RestoreLabels(char[] source, char[,] destination)
+        {
+            for (int slot = 0; slot < BattleSlotLabelRuntimeState.SlotCount; slot++)
+            {
+                for (int characterIndex = 0;
+                     characterIndex < BattleSlotLabelRuntimeState.CharacterCapacity;
+                     characterIndex++)
+                {
+                    destination[slot, characterIndex] = source[
+                        slot * BattleSlotLabelRuntimeState.CharacterCapacity +
+                        characterIndex];
                 }
             }
         }

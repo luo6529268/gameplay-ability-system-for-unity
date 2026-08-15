@@ -11,6 +11,7 @@ namespace NTSD.Simulation
     public sealed class RuntimeCharacterConfigResolver
     {
         private Func<int, LF2CharacterDataWrapper> overrideResolver;
+        private BattleRuntimeDataCatalog runtimeDataCatalog;
 
         public RuntimeCharacterConfigResolver()
         {
@@ -28,7 +29,16 @@ namespace NTSD.Simulation
             if (wrapper != null)
                 return wrapper;
 
+            wrapper = runtimeDataCatalog?.GetCharacterConfig(objectId);
+            if (wrapper != null || runtimeDataCatalog?.IsSealedForBattle == true)
+                return wrapper;
+
             return CharacterAnimtorManager.Instance?.GetCharacterConfig(objectId);
+        }
+
+        internal void BindRuntimeDataCatalog(BattleRuntimeDataCatalog catalog)
+        {
+            runtimeDataCatalog = catalog;
         }
 
         internal void SetOverrideForSelfCheck(

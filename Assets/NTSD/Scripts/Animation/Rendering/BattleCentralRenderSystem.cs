@@ -477,6 +477,17 @@ namespace NTSD.Animation.Rendering
                         buildFrame = frame != null
                             ? stagingSubmission.CaptureFrame(frame, detailDiagnostics)
                             : null;
+                        if (buildFrame != null &&
+                            mode == BattlePresentationBackendMode.CentralOnly &&
+                            ReferenceEquals(
+                                buildFrame.BoundCatalog,
+                                BattleSpriteCatalog.Empty))
+                        {
+                            buildFrame.BindHostResources(
+                                manager,
+                                catalog,
+                                commonVisualCatalog);
+                        }
                     }
                     finally
                     {
@@ -1616,13 +1627,23 @@ namespace NTSD.Animation.Rendering
             }
             try
             {
-                if (!worldCamera.TryGetComponent(out UniversalAdditionalCameraData cameraData) ||
-                    cameraData.scriptableRenderer == null ||
-                    !ReferenceEquals(cameraData.scriptableRenderer, observedRenderer))
+                if (!worldCamera.TryGetComponent(out UniversalAdditionalCameraData cameraData))
                 {
-                    reason = "The battle world camera is not using the renderer that invoked BattleRenderFeature.";
+                    reason = "The battle world camera is missing UniversalAdditionalCameraData.";
                     return false;
                 }
+                if (cameraData.scriptableRenderer == null)
+                {
+                    reason = "The battle world camera has no active URP renderer.";
+                    return false;
+                }
+
+                // The ScriptableRenderer passed to AddRenderPasses is the render-time
+                // authority for this exact base camera. Unity Player does not guarantee
+                // that UniversalAdditionalCameraData.scriptableRenderer exposes the same
+                // managed reference identity, so ReferenceEquals here would reject a
+                // renderer that has already invoked this feature for the bound camera.
+                // The owner/camera/age checks below retain the fail-closed route proof.
             }
             catch (Exception exception)
             {

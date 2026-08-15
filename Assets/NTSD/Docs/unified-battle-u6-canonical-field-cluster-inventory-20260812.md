@@ -2656,3 +2656,44 @@ dirty，又会先引入新的跨模块维护合同，不能在没有 A/B 与完�
 切片只形成“保留现有边界”的审计结论，不新增 dirty 快照、直接实体引用或隐藏实验开关，也不进行 1000 AI 复测。
 该结果不计入 U6 性能收益，不关闭 U6/U9；后续中央表现优化只能针对已实测的 command resolve/mesh 写入完整产品，
 或在 U8 建立正式双缓冲 publication 合同时统一处理。S0、T8 默认 `stage.dat` 与 Android 真机边界不变。
+
+## 67. exact AI CharacterInput 正式 pass（第七十五切片，2026-08-15，已晋升）
+
+第七十一候选失败后没有把不等价实现强行晋升。最终实现重新以权威 C# `InputRuntime.ApplyCharacterInput` 的顺序为边界，
+只对 exact `LF2Character`、AI controlled 且当前 DAT 类型为 Character 的实体进入 `BattleEcsCharacterInputPass`：先按既有
+IndexedCanonical 入口准备 AI 输入，再调用共享 action resolver 提交组合/direct-frame 状态，最后通过 world-owned action
+writer 应用 frame velocity tail。`LinkState < 0` 保持原早退；human、未知派生类型、非 Character DAT 与不可读输入继续
+fail-closed 到原虚调用路径，不形成半个 pass 混写。生产默认改为 `DataOriented`，Legacy 只保留为 reset-boundary A/B oracle。
+
+同 seed `1314149188`、1000 个真实生产 AI、专用 simulation worker、30 warmup + 180 sample 的相邻报告为：
+
+- Legacy：`Temp/NTSD_ProductionEntityStress.u6-character-input-legacy-worker-30x180-seed4e545344-20260815.json`，
+  logic average/P95/P99/max `17.1991/21.1432/23.6634/24.5767 ms`；
+- DataOriented：`Temp/NTSD_ProductionEntityStress.u6-character-input-data-worker-30x180-seed4e545344-20260815.json`，
+  logic average/P95/P99/max `17.1323/22.2910/23.2966/24.1557 ms`。
+
+两轮 parity overall 均为 `601b7208e1ea5fce764d1bd88cd56127f1754682f6997d215733d5090a07532b`，lockstep
+overall 均为 `4378ba4c0c56c3f17ea3327b91ffdf4af39e1d1c20152b5c92c4dda7d3867063`；正式 tick 均为
+`0 B`、Gen0/1/2 collection 0。Legacy 运行记录 `209000` 个 compatibility fallback；DataOriented 记录 `209000`
+个 exact execution、0 fallback。聚焦行为、human/派生 fail-closed、live slot 顺序和 warm zero-allocation 已进入 fresh
+联合 job `b00b0ab9b234469eb1dea618ee285552`，该 job 连同 U7/U8 用例为 `54/54 PASS`。
+
+候选平均值没有回退，P99/max 略好，P95 有约 `1.15 ms` 波动；因此本切片按 canonical owner 闭合、行为等价和零 GC
+晋升，不宣称显著 FPS 提升。它关闭 exact AI 的 CharacterInput 对象编排，不关闭 human/派生兼容壳，也不等于 U6/U9
+整体完成。
+
+## 68. U6 退出审计口径（2026-08-15，执行中）
+
+U6 的退出门不是“所有枚举都必须显示 DataOriented”，而是：
+
+1. 高频战斗 writer/read product 由 world-owned、slot + generation 约束的数据持有者唯一拥有；
+2. `LF2Character/LF2Weapon/LF2OtherObject` 只保留 Unity host、资源绑定、派生兼容和低频边界，不再由每实体
+   `MonoBehaviour.Update` 独立推进战斗；
+3. 经完整 parity 或性能门否决的 Legacy 候选不得为追求标签而重新晋升；这些路径必须标清为低频兼容、负实验 oracle
+   或尚未迁移的真缺口；
+4. 正式 Player 的 steady window 不发生战斗热路径 managed allocation、容器扩容、pool/capacity rejection；
+5. U9 五场景报告证明生产默认路径的实际执行计数与上述所有权清单一致。
+
+按此口径，`FramePostProcess`、`CharacterPostFrameTail` 与 hit frozen-plan 的 Legacy 默认本身不是自动失败：它们已有
+权威等价候选但性能门否决，继续保留可能比机械数据化更正确。真正未闭合的是可执行生产清单和 Player 证据；该清单
+完成并经 U9 验证前，U6 仍保持“执行中”。

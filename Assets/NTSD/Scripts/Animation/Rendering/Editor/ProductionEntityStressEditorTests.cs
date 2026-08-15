@@ -37,6 +37,23 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void CharacterInputPassModeRequest_ParsesLegacyAndDataOriented()
+        {
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterInputPassMode("legacy"),
+                Is.EqualTo(BattleEcsCharacterInputPassMode.Legacy));
+            Assert.That(
+                ProductionEntityStressConfig.ParseCharacterInputPassMode("data-oriented"),
+                Is.EqualTo(BattleEcsCharacterInputPassMode.DataOriented));
+            Assert.That(
+                ProductionEntityStressConfig.FormatCharacterInputPassMode(
+                    BattleEcsCharacterInputPassMode.DataOriented),
+                Is.EqualTo("data-oriented"));
+            Assert.Throws<ArgumentException>(() =>
+                ProductionEntityStressConfig.ParseCharacterInputPassMode("unknown"));
+        }
+
+        [Test]
         public void CharacterPostFrameTailModeRequest_ParsesLegacyAndDataOriented()
         {
             Assert.That(
@@ -436,6 +453,22 @@ namespace NTSD.Animation.Rendering.Editor
                 logicTickCountAtStop: 120,
                 sampledLogicTickCountAtStop: 0,
                 nonSteadyLogicTickCountAtStop: 0), Is.False);
+            Assert.That(ProductionEntityStressProfilerFrameSamplePolicy.IsFormalWindow(
+                logicTickCountAtStart: 120,
+                sampledLogicTickCountAtStart: 0,
+                nonSteadyLogicTickCountAtStart: 0,
+                logicTickCountAtStop: 120,
+                sampledLogicTickCountAtStop: 0,
+                nonSteadyLogicTickCountAtStop: 0,
+                allowZeroTickSteadyFrame: true), Is.True);
+            Assert.That(ProductionEntityStressProfilerFrameSamplePolicy.IsFormalWindow(
+                logicTickCountAtStart: 120,
+                sampledLogicTickCountAtStart: 0,
+                nonSteadyLogicTickCountAtStart: 0,
+                logicTickCountAtStop: 120,
+                sampledLogicTickCountAtStop: 0,
+                nonSteadyLogicTickCountAtStop: 1,
+                allowZeroTickSteadyFrame: true), Is.False);
         }
 
         [Test]
@@ -511,6 +544,12 @@ namespace NTSD.Animation.Rendering.Editor
                 active: false,
                 gcAllocatedValid: false,
                 gcAllocEventValid: false), Is.False);
+            Assert.That(ProductionEntityStressProfilerFrameGcCollector.CanStart(
+                disposed: false,
+                active: false,
+                gcAllocatedValid: false,
+                gcAllocEventValid: false,
+                setPassCallsValid: true), Is.True);
             Assert.That(ProductionEntityStressProfilerFrameGcCollector.CanStart(
                 disposed: true,
                 active: false,
@@ -3434,6 +3473,42 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void UnifiedAiSnapshotAuthority_FullBuildAllowsTransientActiveRows()
+        {
+            ProductionEntityStressReport report =
+                CreateValidAiUnifiedSnapshotAuthorityReport();
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount += 12;
+
+            Assert.That(
+                ProductionEntityStressRunner
+                    .EvaluateAiUnifiedSnapshotAuthorityValidityForReport(
+                        report,
+                        terminal: true),
+                Is.True,
+                "The initial full snapshot captures every active runtime row, including transient combat entities that do not consume the base AI input pass.");
+            Assert.That(report.aiUnifiedSnapshotExecutionAuthoritySuccess, Is.True);
+            Assert.That(report.harnessValidity, Is.True);
+        }
+
+        [Test]
+        public void UnifiedAiSnapshotAuthority_InitialCaptureAboveRuntimeCapacityFails()
+        {
+            ProductionEntityStressReport report =
+                CreateValidAiUnifiedSnapshotAuthorityReport();
+            report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
+                report.aiUnifiedSnapshotExecutionBuildCount *
+                report.runtimeSlotCapacity + 1;
+
+            Assert.That(
+                ProductionEntityStressRunner
+                    .EvaluateAiUnifiedSnapshotAuthorityValidityForReport(
+                        report,
+                        terminal: true),
+                Is.False);
+            Assert.That(report.harnessValidity, Is.False);
+        }
+
+        [Test]
         public void UnifiedAiSnapshotAuthority_CaptureMapsRuntimeDiagnosticsIntoReport()
         {
             ProductionEntityStressConfig config = ProductionEntityStressConfig.FromRequest(
@@ -4785,6 +4860,31 @@ namespace NTSD.Animation.Rendering.Editor
                     AiSensingMode.SoAShadowAiSensing),
                 Is.True,
                 "Shadow mode intentionally runs both implementations and is not an A/B gate.");
+        }
+
+        [TestCase("none")]
+        [TestCase("move")]
+        public void AiDiagnostics_ExplicitNonAiInputModesDoNotRequireAiPassEvidence(
+            string inputMode)
+        {
+            var report = new ProductionEntityStressReport
+            {
+                harnessValidity = true,
+                inputMode = inputMode,
+                logicTicksExecuted = 60,
+                aiDecisionSharedShadowRequested = true,
+                aiDecisionSharedShadowApplied = true,
+            };
+
+            Assert.That(
+                ProductionEntityStressRunner.HasExecutedAiEntityInputPassForDiagnostics(report),
+                Is.False);
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateAiDecisionShadowValidityForReport(
+                    report,
+                    terminal: true),
+                Is.True);
+            Assert.That(report.harnessValidity, Is.True);
         }
 
         [Test]

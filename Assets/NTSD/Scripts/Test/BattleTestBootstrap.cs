@@ -25,7 +25,7 @@ namespace NTSD.Test
     /// </summary>
     public class BattleTestBootstrap : MonoBehaviour
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         public static bool SuppressEntityCreationForProductionStress { get; set; }
         public static bool ProductionStressServicesReady { get; private set; }
 #endif
@@ -57,13 +57,13 @@ namespace NTSD.Test
 
         private async void Start()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (SuppressEntityCreationForProductionStress)
                 ProductionStressServicesReady = false;
 #endif
             if (App.AppManager.Instance != null)
             {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
                 if (SuppressEntityCreationForProductionStress)
                     ProductionStressServicesReady = true;
 #endif
@@ -135,7 +135,7 @@ namespace NTSD.Test
             // 5. 设置当前场景为活动场景
             SceneManager.SetActiveScene(gameObject.scene);
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (SuppressEntityCreationForProductionStress)
             {
                 ProductionStressServicesReady = true;

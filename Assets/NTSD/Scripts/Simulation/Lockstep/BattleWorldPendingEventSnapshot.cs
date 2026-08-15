@@ -86,6 +86,25 @@ namespace NTSD.Simulation
             CapturedTick = tick;
             return true;
         }
+
+        internal bool TryRestoreTo(SimulationBattleBufferModule destination)
+        {
+            if (SchemaVersion != CurrentSchemaVersion ||
+                destination == null ||
+                PendingUnregisterCount != 0 ||
+                PendingSlotReleasedDestroyCount != 0 ||
+                destination.PendingUnregister.Count != 0 ||
+                destination.PendingSlotReleasedDestroy.Count != 0 ||
+                destination.PendingSounds.Capacity < SoundCount)
+            {
+                return false;
+            }
+
+            destination.PendingSounds.Clear();
+            for (int index = 0; index < SoundCount; index++)
+                destination.PendingSounds.Add(sounds[index]);
+            return true;
+        }
     }
 
     internal sealed class BattleWorldPendingEventSnapshotModule

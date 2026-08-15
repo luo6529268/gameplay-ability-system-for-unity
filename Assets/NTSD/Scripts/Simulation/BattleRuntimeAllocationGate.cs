@@ -17,46 +17,52 @@ namespace NTSD.Simulation
         public bool IsSealed => isSealed;
         public int ReservedRuntimeCapacity => reservedRuntimeCapacity;
 
-        public void PrepareNonUnityCapacity(int requestedRuntimeCapacity)
+        internal void PrepareNonUnityCapacity(
+            int requestedRuntimeCapacity,
+            SimulationWorld world)
         {
             if (isSealed || requestedRuntimeCapacity <= 0)
                 return;
 
             reservedRuntimeCapacity = requestedRuntimeCapacity;
+            BattleLogicReferencePool logicReferencePool =
+                world?.LogicReferencePool;
 
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
-            if (referencePool != null)
+            if (logicReferencePool != null)
             {
-                referencePool.PrepareObjectCapacity(
-                    LF2ObjectType.Character,
+                logicReferencePool.PrepareBattleEntityShellCapacity(
                     requestedRuntimeCapacity);
-                referencePool.PrewarmTasks<OPointCreateTask>(requestedRuntimeCapacity);
-                referencePool.PrewarmTasks<OPointCreateMultipleTask>(requestedRuntimeCapacity);
+                logicReferencePool.PrewarmTasks<OPointCreateTask>(requestedRuntimeCapacity);
+                logicReferencePool.PrewarmTasks<OPointCreateMultipleTask>(requestedRuntimeCapacity);
             }
 
             LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
             factory?.PrepareTaskQueueCapacity(requestedRuntimeCapacity);
+            world?.LogicObjectPointRuntime?.PrepareTaskQueueCapacity(
+                requestedRuntimeCapacity);
         }
 
-        public void Seal()
+        internal void Seal(SimulationWorld world)
         {
             if (isSealed)
                 return;
 
-            LF2ReferencePool.Instance?.SealBattleCapacity();
+            world?.LogicReferencePool?.SealBattleCapacity();
+            world?.LogicObjectPointRuntime?.SealBattleTaskCapacity();
             LF2ObjectPool.Instance?.SealBattleCapacity();
             LF2ObjectPointFactory.Instance?.SealBattleTaskCapacity();
             isSealed = true;
         }
 
-        public void Unseal()
+        internal void Unseal(SimulationWorld world)
         {
             if (!isSealed)
                 return;
 
             LF2ObjectPointFactory.Instance?.UnsealBattleTaskCapacity();
             LF2ObjectPool.Instance?.UnsealBattleCapacity();
-            LF2ReferencePool.Instance?.UnsealBattleCapacity();
+            world?.LogicObjectPointRuntime?.UnsealBattleTaskCapacity();
+            world?.LogicReferencePool?.UnsealBattleCapacity();
             isSealed = false;
         }
     }

@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using NUnit.Framework;
+using NTSD.Animation.LF2Objects;
 using NTSD.Animation.Rendering.Editor;
 using NTSD.Simulation.Ecs;
 
@@ -79,6 +80,55 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void LogicPoolPerTypeDiagnostics_DoNotDoubleCountCapacityFailure()
+        {
+            var accumulator = new ProductionEntityStressCapacityPressureAccumulator();
+            var report = new ProductionEntityStressCapacityPressureReport();
+            var baseline = new ProductionEntityStressCapacityPressureSnapshot();
+            accumulator.Begin(in baseline, report, required: true);
+            var current = new ProductionEntityStressCapacityPressureSnapshot
+            {
+                ReferencePoolLogicObjectFetchReject = 3,
+                ReferencePoolSpecialAttackFetchReject = 2,
+                ReferencePoolOtherFetchReject = 1,
+            };
+
+            accumulator.Record(121, in current, report);
+
+            Assert.That(report.capacityCriticalDelta, Is.EqualTo(3L));
+            Assert.That(report.referencePoolLogicObjectFetchRejectDelta, Is.EqualTo(3L));
+            Assert.That(report.referencePoolSpecialAttackFetchRejectDelta, Is.EqualTo(2L));
+            Assert.That(report.referencePoolOtherFetchRejectDelta, Is.EqualTo(1L));
+        }
+
+        [Test]
+        public void LogicPoolBattleCapacity_ReservesEveryConcreteEntityFamily()
+        {
+            AssertLogicPoolFamilyCapacity(LF2ObjectType.Character);
+            AssertLogicPoolFamilyCapacity(LF2ObjectType.SpecialAttack);
+            AssertLogicPoolFamilyCapacity(LF2ObjectType.Other);
+            AssertLogicPoolFamilyCapacity(LF2ObjectType.HeavyWeapon);
+        }
+
+        [Test]
+        public void LogicPoolWeaponFamily_ReusesOneSharedShellBudgetAndRetagsOnFetch()
+        {
+            var pool = new NTSD.Simulation.BattleLogicReferencePool();
+            pool.PrepareBattleEntityShellCapacity(1);
+            pool.SealBattleCapacity();
+
+            ILF2Object heavy = pool.Get(LF2ObjectType.HeavyWeapon, 100);
+            Assert.That(heavy, Is.Not.Null);
+            Assert.That(heavy.ObjectTypeEnum, Is.EqualTo(LF2ObjectType.HeavyWeapon));
+            pool.Release(heavy);
+
+            ILF2Object drink = pool.Get(LF2ObjectType.Drink, 101);
+            Assert.That(drink, Is.SameAs(heavy));
+            Assert.That(drink.ObjectTypeEnum, Is.EqualTo(LF2ObjectType.Drink));
+            Assert.That(drink.ObjectId, Is.EqualTo(101));
+        }
+
+        [Test]
         public void PresentationThrottleAlone_DoesNotFailMemoryCapacityGate()
         {
             var accumulator = new ProductionEntityStressCapacityPressureAccumulator();
@@ -125,6 +175,19 @@ namespace NTSD.Test.Editor
             Assert.That(report.passed, Is.False);
             Assert.That(report.inputEventRejectDelta, Is.EqualTo(1L));
             Assert.That(report.firstViolatingLogicTick, Is.EqualTo(122));
+        }
+
+        private static void AssertLogicPoolFamilyCapacity(LF2ObjectType objectType)
+        {
+            var pool = new NTSD.Simulation.BattleLogicReferencePool();
+            pool.PrepareBattleEntityShellCapacity(3);
+            pool.SealBattleCapacity();
+
+            Assert.That(pool.Get(objectType, 1), Is.Not.Null);
+            Assert.That(pool.Get(objectType, 2), Is.Not.Null);
+            Assert.That(pool.Get(objectType, 3), Is.Not.Null);
+            Assert.That(pool.Get(objectType, 4), Is.Null);
+            Assert.That(pool.GetRejectedLogicObjectFetchCount(objectType), Is.EqualTo(1L));
         }
     }
 }

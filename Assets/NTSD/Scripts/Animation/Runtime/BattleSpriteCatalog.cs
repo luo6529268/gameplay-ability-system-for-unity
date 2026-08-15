@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NTSD.Animation.Rendering;
+using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
 
@@ -576,16 +577,7 @@ namespace NTSD.Animation
 
         public static bool TryResolveSparkAge(int age, out int pic)
         {
-            pic = -1;
-            if (age >= 0 && age < 5)
-                pic = age;
-            else if (age >= 10 && age < 15)
-                pic = age - 5;
-            else if (age >= 20 && age < 29)
-                pic = (age - 20) / 2 + 10;
-            else if (age >= 30 && age < 39)
-                pic = (age - 30) / 2 + 15;
-            return pic >= 0 && pic < SparkFrameCount;
+            return BattleHitRecordLifecycleCatalog.Available.TryResolveAge(age, out pic);
         }
 
         public static Rect GetSparkPixelRect(int pic)

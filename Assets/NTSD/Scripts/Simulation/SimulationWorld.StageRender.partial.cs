@@ -349,6 +349,11 @@ namespace NTSD.Simulation
                 PresentLatestFrame(tickIndex);
         }
 
+        internal void CaptureSimulationWorkerPresentationFrame(int tickIndex)
+        {
+            _battlePresentation.BeginSimulationWorkerFrame(world, tickIndex);
+        }
+
         internal void PresentLatestFrame(int tickIndex)
         {
             BattleTickDetailPhaseDiagnostics detailDiagnostics =

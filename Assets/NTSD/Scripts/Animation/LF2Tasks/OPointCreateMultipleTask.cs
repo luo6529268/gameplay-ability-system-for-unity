@@ -1,4 +1,5 @@
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Tasks
@@ -9,6 +10,7 @@ namespace NTSD.Animation.LF2Tasks
 
         public ObjectPoint opoint;
         public LF2Entity parent;
+        public SimulationWorld targetWorld;
         public int team;
         public Vector3 pos;
         public float z;
@@ -33,6 +35,7 @@ namespace NTSD.Animation.LF2Tasks
         {
             opoint = default;
             parent = null;
+            targetWorld = null;
             team = 0;
             pos = Vector3.zero;
             z = 0f;

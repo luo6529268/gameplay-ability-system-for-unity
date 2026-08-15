@@ -27,6 +27,11 @@ namespace NTSD.Simulation.Lockstep
         DriverTickMismatch = 20,
         DriverRejectedFrame = 21,
         SnapshotRecoveryPendingL1 = 22,
+        SnapshotCaptureFailed = 23,
+        SnapshotRestoreFailed = 24,
+        ReplayHistoryUnavailable = 25,
+        ReplayInputMismatch = 26,
+        ReplayChecksumMismatch = 27,
     }
 
     public enum LockstepSessionStatus : byte

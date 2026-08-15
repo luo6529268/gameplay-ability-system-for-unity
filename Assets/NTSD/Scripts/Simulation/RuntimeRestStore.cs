@@ -395,6 +395,66 @@ namespace NTSD.Simulation
             return true;
         }
 
+        internal bool TryRestoreCanonicalStateFrom(
+            BattleWorldRestSnapshotBuffer source)
+        {
+            if (source == null ||
+                source.SchemaVersion != BattleWorldRestSnapshotBuffer.CurrentSchemaVersion ||
+                source.LogicalCapacity != LogicalCapacity ||
+                !preparedForBattle ||
+                (denseVRestValues != null) !=
+                    (source.StorageMode == BattleRestSnapshotStorageMode.Dense) ||
+                (denseVRestValues == null &&
+                 (sparseVRestTable == null ||
+                  source.VRestEntryCount > sparseVRestTable.EntryCapacity)))
+            {
+                return false;
+            }
+
+            ResetWorld();
+            for (int slot = 0; slot < LogicalCapacity; slot++)
+            {
+                int value = source.GetARest(slot);
+                if (value > 0 && !SetARest(slot, value))
+                    return false;
+            }
+
+            if (denseVRestValues != null)
+            {
+                for (int victimSlot = 0; victimSlot < LogicalCapacity; victimSlot++)
+                {
+                    for (int attackerSlot = 0;
+                         attackerSlot < LogicalCapacity;
+                         attackerSlot++)
+                    {
+                        int value = source.GetVRest(victimSlot, attackerSlot);
+                        if (value > 0 &&
+                            !SetVRest(victimSlot, attackerSlot, value))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int index = 0; index < source.VRestEntryCount; index++)
+                {
+                    if (!SetVRest(
+                            source.SparseVictimSlots[index],
+                            source.SparseAttackerSlots[index],
+                            source.SparseValues[index]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return ARestEntryCount == source.ARestEntryCount &&
+                   VRestEntryCount == source.VRestEntryCount &&
+                   VRestRowCount == source.VRestRowCount;
+        }
+
         internal void AppendDeterministicChecksum(ref BattleChecksum64Builder builder)
         {
             builder.AddInt32(LogicalCapacity);

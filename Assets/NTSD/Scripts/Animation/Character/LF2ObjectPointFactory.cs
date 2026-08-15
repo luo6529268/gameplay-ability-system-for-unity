@@ -17,7 +17,9 @@ namespace NTSD.Animation
     /// C++ release 在 frame_advance/process_opoint_spawn 中创建对象；
     /// Unity 通过任务队列延迟到确定的模拟阶段统一创建。
     /// </summary>
-    public class LF2ObjectPointFactory : MMSingleton<LF2ObjectPointFactory>, ILF2ObjectPointFactory
+    public class LF2ObjectPointFactory : MMSingleton<LF2ObjectPointFactory>,
+        ILF2ObjectPointFactory,
+        IBattleObjectPointStructuralMaterializer
     {
         [Header("Prefab 映射 - OID 优先")]
         [SerializeField] private List<OidPrefabEntry> _oidPrefabs = new List<OidPrefabEntry>();
@@ -77,13 +79,13 @@ namespace NTSD.Animation
         public void EnqueueCreateObject(OPointCreateTask task)
         {
             if (!_taskQueue.TryEnqueue(task))
-                LF2ReferencePool.Instance?.Recycle(task);
+                ResolveReferencePool(task?.targetWorld ?? task?.parent?.Match)?.Recycle(task);
         }
 
         public void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task)
         {
             if (!_taskQueue.TryEnqueue(task))
-                LF2ReferencePool.Instance?.Recycle(task);
+                ResolveReferencePool(task?.targetWorld ?? task?.parent?.Match)?.Recycle(task);
         }
 
         public void PrepareTaskQueueCapacity(int capacity)
@@ -146,7 +148,7 @@ namespace NTSD.Animation
             }
 
             if (task is ILF2Recyclable recyclable)
-                LF2ReferencePool.Instance?.Recycle(recyclable);
+                ResolveReferencePoolForTask(task)?.Recycle(recyclable);
         }
 
         // ========== 单对象创建 ==========
@@ -235,7 +237,9 @@ namespace NTSD.Animation
                 ObjectPoint spawnOp = op;
                 spawnOp.facing = facingMode;
 
-                OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                BattleLogicReferencePool referencePool =
+                    ResolveReferencePool(spawner.Match);
+                OPointCreateTask task = referencePool?.Fetch<OPointCreateTask>();
                 if (task == null)
                     break;
                 task.opoint = spawnOp;
@@ -252,7 +256,7 @@ namespace NTSD.Animation
                 LF2Entity spawned = ProcessCreateObject(
                     task,
                     BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
-                LF2ReferencePool.Instance?.Recycle(task);
+                referencePool?.Recycle(task);
                 if (spawned == null) continue;
 
                 if (op.kind != 2)
@@ -304,30 +308,15 @@ namespace NTSD.Animation
             task.initialRuntimeZ = (int)spawnZ;
         }
 
+        void IBattleObjectPointStructuralMaterializer
+            .ProcessOpointSpawnCoreForStructuralWriter(LF2Entity spawner)
+        {
+            ProcessOpointSpawnCoreForStructuralWriter(spawner);
+        }
+
         public static void PrepareFinalRuntimePositionForCreation(OPointCreateTask task)
         {
-            if (task == null)
-                return;
-
-            double x = task.useDirectRuntimePosition ? task.directX : task.pos.x;
-            double y = task.useDirectRuntimePosition ? task.directY : task.pos.y;
-            double z = task.useDirectRuntimePosition ? task.directZ : task.z;
-            if (!task.skipPostInitZOffset)
-                z += 1.0;
-
-            task.useDirectRuntimePosition = true;
-            task.directX = x;
-            task.directY = y;
-            task.directZ = z;
-            task.skipPostInitZOffset = true;
-
-            if (!task.useInitialRuntimeIntPosition)
-            {
-                task.useInitialRuntimeIntPosition = true;
-                task.initialRuntimeX = (int)x;
-                task.initialRuntimeY = (int)y;
-                task.initialRuntimeZ = (int)z;
-            }
+            BattleLogicEntityFactory.PrepareFinalRuntimePosition(task);
         }
 
         private static void ApplyMultiSpawnExemptAndVrest(List<LF2Entity> spawned)
@@ -369,7 +358,9 @@ namespace NTSD.Animation
             OPointCreateTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
-            SimulationWorld world = task?.parent?.Match ?? SimulationTickDriver.Instance?.World;
+            SimulationWorld world = task?.targetWorld ??
+                                    task?.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
             return world != null
                 ? world.StructuralWriter.Spawn(this, task, boundary)
                 : MaterializeObjectForStructuralWriter(task);
@@ -377,12 +368,26 @@ namespace NTSD.Animation
 
         internal LF2Entity MaterializeObjectForStructuralWriter(OPointCreateTask task)
         {
+            SimulationWorld requestedWorld = task?.targetWorld ?? task?.parent?.Match;
+            if (requestedWorld?.UsesLogicOnlyEntityMaterialization == true)
+            {
+                LF2Entity logicEntity = requestedWorld.LogicEntityFactory.Create(
+                    task,
+                    out BattleLogicEntityCreationFailure failure);
+                if (failure == BattleLogicEntityCreationFailure.MissingObjectDefinition)
+                    MissingObjectDefinitionCountForDiagnostics++;
+                return logicEntity;
+            }
+
+            SimulationWorld world = task?.targetWorld ??
+                                    task?.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
             // 1. 检查 oid
             int oid = task.opoint.oid;
             if (oid <= 0) return null;
 
             // 2. 获取对象定义
-            var def = GameDataManager.Instance?.GetObjectById(oid);
+            var def = ResolveObjectDefinition(world, oid);
             if (def == null)
             {
                 MissingObjectDefinitionCountForDiagnostics++;
@@ -391,7 +396,7 @@ namespace NTSD.Animation
                 return null;
             }
 
-            LF2CharacterDataWrapper combatData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+            LF2CharacterDataWrapper combatData = ResolveCharacterConfig(world, oid);
             if (combatData?.characterData == null)
                 return null;
 
@@ -410,11 +415,12 @@ namespace NTSD.Animation
             }
 
             // 5. 从逻辑对象池获取逻辑对象
-            ILF2Object logicObject = CreateLogicObject(objType, oid);
+            BattleLogicReferencePool referencePool = ResolveReferencePool(world);
+            ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid);
             if (logicObject == null)
             {
-                if (LF2ReferencePool.Instance != null &&
-                    !LF2ReferencePool.Instance.IsBattleCapacitySealed)
+                if (referencePool != null &&
+                    !referencePool.IsBattleCapacitySealed)
                 {
                     Log.Error($"[Factory] Failed to get logic object from pool, type={objType}, oid={oid}");
                 }
@@ -425,7 +431,7 @@ namespace NTSD.Animation
             // 5.1 武器对象注入 weapon_strength_list
             if (logicObject is LF2WeaponBase weaponBase)
             {
-                var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+                var charData = ResolveCharacterData(world, oid);
                 if (charData?.weapon_strength_list?.Count > 0)
                     weaponBase.SetWeaponStrengthList(charData.weapon_strength_list);
             }
@@ -442,15 +448,15 @@ namespace NTSD.Animation
 
             if (spawnedChar != null)
             {
-                var charFrameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+                var charFrameData = ResolveCharacterConfig(world, oid);
                 if (charFrameData != null)
-                    spawnedChar.ModuleBind(charFrameData, oid);
+                    spawnedChar.ModuleBind(charFrameData, oid, world);
                 spawnedChar.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
             }
 
             if (logicObject is LF2Entity registeredLiving && registeredLiving.Runtime.SlotIndex < 0)
             {
-                ReleaseRejectedSpawn(EntityModel, logicObject);
+                ReleaseRejectedSpawn(EntityModel, logicObject, referencePool);
                 return null;
             }
 
@@ -491,6 +497,12 @@ namespace NTSD.Animation
                 BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
         }
 
+        LF2Entity IBattleObjectPointStructuralMaterializer
+            .MaterializeObjectForStructuralWriter(OPointCreateTask task)
+        {
+            return MaterializeObjectForStructuralWriter(task);
+        }
+
         // ========== 多对象创建 ==========
 
         /// <summary>
@@ -500,7 +512,9 @@ namespace NTSD.Animation
             OPointCreateMultipleTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
-            SimulationWorld world = task?.parent?.Match ?? SimulationTickDriver.Instance?.World;
+            SimulationWorld world = task?.targetWorld ??
+                                    task?.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
             if (world != null)
             {
                 world.StructuralWriter.SpawnMultiple(this, task, boundary);
@@ -513,10 +527,20 @@ namespace NTSD.Animation
         internal void MaterializeMultipleObjectsForStructuralWriter(
             OPointCreateMultipleTask task)
         {
+            SimulationWorld requestedWorld = task?.targetWorld ?? task?.parent?.Match;
+            if (requestedWorld?.UsesLogicOnlyEntityMaterialization == true)
+            {
+                MaterializeMultipleLogicObjects(requestedWorld, task);
+                return;
+            }
+
+            SimulationWorld world = task?.targetWorld ??
+                                    task?.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
             int oid = task.opoint.oid;
             if (oid <= 0 || task.number <= 0) return;
 
-            var def = GameDataManager.Instance?.GetObjectById(oid);
+            var def = ResolveObjectDefinition(world, oid);
             if (def == null)
             {
                 MissingObjectDefinitionCountForDiagnostics++;
@@ -525,7 +549,7 @@ namespace NTSD.Animation
                 return;
             }
 
-            LF2CharacterDataWrapper combatData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+            LF2CharacterDataWrapper combatData = ResolveCharacterConfig(world, oid);
             if (combatData?.characterData == null)
                 return;
 
@@ -540,7 +564,8 @@ namespace NTSD.Animation
                 var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
                 if (EntityModel == null) break;
 
-                ILF2Object logicObject = CreateLogicObject(objType, oid);
+                BattleLogicReferencePool referencePool = ResolveReferencePool(world);
+                ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid);
                 if (logicObject == null)
                 {
                     LF2ObjectPool.Instance.Release(EntityModel);
@@ -549,7 +574,7 @@ namespace NTSD.Animation
 
                 if (logicObject is LF2WeaponBase wb)
                 {
-                    var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+                    var charData = ResolveCharacterData(world, oid);
                     if (charData?.weapon_strength_list?.Count > 0)
                         wb.SetWeaponStrengthList(charData.weapon_strength_list);
                 }
@@ -557,14 +582,15 @@ namespace NTSD.Animation
                 var spawnedChar = logicObject as LF2Character;
                 spawnedChar?.ModuleInitialize();
 
-                var singleTask = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                var singleTask = referencePool?.Fetch<OPointCreateTask>();
                 if (singleTask == null)
                 {
-                    ReleaseRejectedSpawn(EntityModel, logicObject);
+                    ReleaseRejectedSpawn(EntityModel, logicObject, referencePool);
                     break;
                 }
                 singleTask.opoint = task.opoint;
                 singleTask.parent = task.parent;
+                singleTask.targetWorld = world;
                 singleTask.team   = task.team;
                 singleTask.pos    = task.pos;
                 singleTask.z      = task.z;
@@ -586,16 +612,16 @@ namespace NTSD.Animation
 
                 if (spawnedChar != null)
                 {
-                    var charFrameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(oid);
+                    var charFrameData = ResolveCharacterConfig(world, oid);
                     if (charFrameData != null)
-                        spawnedChar.ModuleBind(charFrameData, oid);
+                        spawnedChar.ModuleBind(charFrameData, oid, world);
                     spawnedChar.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 }
 
                 if (logicObject is LF2Entity registeredLiving && registeredLiving.Runtime.SlotIndex < 0)
                 {
-                    ReleaseRejectedSpawn(EntityModel, logicObject);
-                    LF2ReferencePool.Instance?.Recycle(singleTask);
+                    ReleaseRejectedSpawn(EntityModel, logicObject, referencePool);
+                    referencePool?.Recycle(singleTask);
                     continue;
                 }
 
@@ -614,9 +640,62 @@ namespace NTSD.Animation
                     ApplyDirectVelocity(living, singleTask);
                 }
 
-                LF2ReferencePool.Instance?.Recycle(singleTask);
+                referencePool?.Recycle(singleTask);
             }
 
+        }
+
+        void IBattleObjectPointStructuralMaterializer
+            .MaterializeMultipleObjectsForStructuralWriter(
+                OPointCreateMultipleTask task)
+        {
+            MaterializeMultipleObjectsForStructuralWriter(task);
+        }
+
+        private void MaterializeMultipleLogicObjects(
+            SimulationWorld world,
+            OPointCreateMultipleTask task)
+        {
+            if (task == null || task.number <= 0)
+                return;
+
+            BattleLogicReferencePool referencePool = ResolveReferencePool(world);
+            for (int spawnIndex = 0; spawnIndex < task.number; spawnIndex++)
+            {
+                float spreadDvz = task.number == 1
+                    ? 0f
+                    : spawnIndex * 10f / (task.number - 1) - 5f;
+                OPointCreateTask singleTask = referencePool?.Fetch<OPointCreateTask>();
+                if (singleTask == null)
+                    break;
+
+                singleTask.opoint = task.opoint;
+                singleTask.parent = task.parent;
+                singleTask.targetWorld = world;
+                singleTask.team = task.team;
+                singleTask.pos = task.pos;
+                singleTask.z = task.z;
+                singleTask.dir = task.dir;
+                singleTask.dvz = spreadDvz;
+                singleTask.useDirectVelocity = task.useDirectVelocity;
+                singleTask.directVx = task.directVx;
+                singleTask.directVy = task.directVy;
+                singleTask.directVz = task.directVz;
+                singleTask.preserveActionZero = task.preserveActionZero;
+                singleTask.skipPostInitZOffset = false;
+                singleTask.ownerEntityIndex = task.ownerEntityIndex;
+                singleTask.frameDelay = task.frameDelay;
+                singleTask.attackExempt = task.attackExempt;
+                singleTask.releaseOpointSpawn = task.releaseOpointSpawn;
+
+                world.LogicEntityFactory.Create(
+                    singleTask,
+                    out BattleLogicEntityCreationFailure failure,
+                    spreadDvz);
+                if (failure == BattleLogicEntityCreationFailure.MissingObjectDefinition)
+                    MissingObjectDefinitionCountForDiagnostics++;
+                referencePool.Recycle(singleTask);
+            }
         }
 
         /// <summary>
@@ -733,7 +812,10 @@ namespace NTSD.Animation
             spawned.ItrRest?.SetVrest(linkedSlot, 10);
         }
 
-        internal static void ReleaseRejectedSpawn(LF2ObjectRenderer renderer, ILF2Object logicObject)
+        internal static void ReleaseRejectedSpawn(
+            LF2ObjectRenderer renderer,
+            ILF2Object logicObject,
+            BattleLogicReferencePool referencePool = null)
         {
             if (renderer != null)
             {
@@ -744,7 +826,9 @@ namespace NTSD.Animation
                 entity.UnregisterFromWorld();
                 entity.Reset();
             }
-            LF2ReferencePool.Instance?.Release(logicObject);
+            (referencePool ??
+             (logicObject as LF2Entity)?.Match?.LogicReferencePool ??
+             LF2ReferencePool.Instance?.SimulationCore)?.Release(logicObject);
         }
 
         private static void ApplyDirectVelocity(LF2Entity living, OPointCreateTask task)
@@ -799,12 +883,67 @@ namespace NTSD.Animation
         /// 创建逻辑对象（从逻辑对象池获取）
         /// 根据 C++ release 对象 type 映射到 Unity 逻辑对象池。
         /// </summary>
-        private ILF2Object CreateLogicObject(int objectType, int oid)
+        private static ILF2Object CreateLogicObject(
+            BattleLogicReferencePool referencePool,
+            int objectType,
+            int oid)
         {
             // 将 int type 映射到 LF2ObjectType 枚举
             LF2ObjectType objTypeEnum = (LF2ObjectType)objectType;
             // 从逻辑对象池获取对象（池会自动处理 ObjectId 赋值）
-            return LF2ReferencePool.Instance.Get(objTypeEnum, oid);
+            return referencePool?.Get(objTypeEnum, oid);
+        }
+
+        private static BattleLogicReferencePool ResolveReferencePool(
+            SimulationWorld world)
+        {
+            return world?.LogicReferencePool ??
+                   LF2ReferencePool.Instance?.SimulationCore;
+        }
+
+        private static BattleLogicReferencePool ResolveReferencePoolForTask(
+            LF2TaskBase task)
+        {
+            if (task is OPointCreateTask createTask)
+            {
+                return ResolveReferencePool(
+                    createTask.targetWorld ?? createTask.parent?.Match);
+            }
+            if (task is OPointCreateMultipleTask multipleTask)
+            {
+                return ResolveReferencePool(
+                    multipleTask.targetWorld ?? multipleTask.parent?.Match);
+            }
+            return LF2ReferencePool.Instance?.SimulationCore;
+        }
+
+        private static ObjectDefinition ResolveObjectDefinition(
+            SimulationWorld world,
+            int objectId)
+        {
+            BattleRuntimeDataCatalog catalog = world?.RuntimeDataCatalog;
+            ObjectDefinition definition = catalog?.GetObjectDefinition(objectId);
+            if (definition != null || catalog?.IsSealedForBattle == true)
+                return definition;
+            return GameDataManager.Instance?.GetObjectById(objectId);
+        }
+
+        private static LF2CharacterDataWrapper ResolveCharacterConfig(
+            SimulationWorld world,
+            int objectId)
+        {
+            BattleRuntimeDataCatalog catalog = world?.RuntimeDataCatalog;
+            LF2CharacterDataWrapper config = catalog?.GetCharacterConfig(objectId);
+            if (config != null || catalog?.IsSealedForBattle == true)
+                return config;
+            return CharacterAnimtorManager.Instance?.GetCharacterConfig(objectId);
+        }
+
+        private static LF2CharacterData ResolveCharacterData(
+            SimulationWorld world,
+            int objectId)
+        {
+            return ResolveCharacterConfig(world, objectId)?.characterData;
         }
     }
 }

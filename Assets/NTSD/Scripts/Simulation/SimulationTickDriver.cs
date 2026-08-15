@@ -2,6 +2,7 @@
 using MoreMountains.Tools;
 using NTSD.App;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 using NTSD.Animation.Rendering;
 using NTSD.Simulation.Lockstep;
 using NTSD.Simulation.Presentation;
@@ -194,6 +195,10 @@ namespace NTSD.Simulation
         [Header("帧同步时钟")]
         [SerializeField] private LockstepSimulationSettings lockstepSettings = new LockstepSimulationSettings();
 
+        [Header("单机 Simulation Worker")]
+        [Tooltip("正式 CentralOnly 单机战斗完成预热后，将 BattleKernel 固定到专用线程；Unity 主线程只消费已发布表现。")]
+        [SerializeField] private bool useDedicatedSimulationWorker = true;
+
         [Header("调试信息（只读）")]
         [SerializeField][MMReadOnly] private int currentTickIndex = 0;
         [SerializeField][MMReadOnly] private float timeAccumulator = 0f;
@@ -204,6 +209,8 @@ namespace NTSD.Simulation
         [SerializeField][MMReadOnly] private string lastFrameChecksum = string.Empty;
         [SerializeField][MMReadOnly] private string effectiveAiExecutionProfile =
             nameof(BattleAiExecutionProfile.LegacyCanonical);
+        [SerializeField][MMReadOnly] private bool dedicatedSimulationWorkerActive;
+        [SerializeField][MMReadOnly] private bool dedicatedSimulationWorkerTickInFlight;
 
         [Header("Sound Presentation Diagnostics")]
         [Tooltip("Diagnostic-only switch. Logical sound events and checksums are still recorded when presentation is suppressed.")]
@@ -254,6 +261,27 @@ namespace NTSD.Simulation
             new BattleManagedMemoryBoundary();
         private BattleManagedMemoryFrameBeginProbe _managedMemoryFrameBeginProbe;
         private BattleManagedMemoryFrameEndProbe _managedMemoryFrameEndProbe;
+        private const int MaximumSimulationWorkerPlayerSlots = 8;
+        private DedicatedBattleSimulationWorker _simulationWorker;
+        private readonly SimulationPlayerInput[] _simulationWorkerSubmittedPlayers =
+            new SimulationPlayerInput[MaximumSimulationWorkerPlayerSlots];
+        private readonly FrameInputSet _simulationWorkerSubmittedFrameInput =
+            FrameInputSet.Empty(0);
+        private readonly SimulationPlayerInput[] _simulationWorkerCompletedPlayers =
+            new SimulationPlayerInput[MaximumSimulationWorkerPlayerSlots];
+        private readonly FrameInputSet _simulationWorkerCompletedFrameInput =
+            FrameInputSet.Empty(0);
+        private ISimulationFrameInputProvider _simulationWorkerSubmittedProvider;
+        private bool _simulationWorkerTickInFlight;
+        private bool _simulationWorkerPresentationAwaitingAcknowledgement;
+        private int _simulationWorkerSubmittedTick;
+        private long _simulationWorkerConsumedSequence;
+        private long _simulationWorkerPendingAcknowledgementSequence;
+        private long _simulationWorkerAcknowledgementSubmittedSequence;
+        private bool _simulationWorkerFailureReported;
+        private string _dedicatedSimulationWorkerIneligibilityReason = string.Empty;
+        private string _dedicatedSimulationWorkerLastSubmissionFailureReason = string.Empty;
+        private long _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks;
 
         protected override void OnSingletonAwake()
         {
@@ -273,6 +301,15 @@ namespace NTSD.Simulation
             _managedMemoryBoundary.BeginDriverUpdate();
             try
             {
+                TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+                ConsumeDedicatedSimulationWorkerPublication();
+                TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+                if (PauseForDedicatedSimulationWorkerFailure())
+                {
+                    RefreshInspectorState();
+                    return;
+                }
+
                 if (paused || _world == null)
                 {
                     RefreshInspectorState();
@@ -330,6 +367,8 @@ namespace NTSD.Simulation
             _managedMemoryBoundary.BeginPresentation();
             try
             {
+                ConsumeDedicatedSimulationWorkerPublication();
+                PauseForDedicatedSimulationWorkerFailure();
                 if (_world == null)
                     return;
 
@@ -368,17 +407,28 @@ namespace NTSD.Simulation
 
                 using (LegacySparkMarker.Auto())
                     _sparkRenderer.RenderAll(_world);
-                using (FinalizeHitRecordMarker.Auto())
-                    _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                if (_simulationWorker == null)
+                {
+                    using (FinalizeHitRecordMarker.Auto())
+                        _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                }
             }
             finally
             {
+                AcknowledgeDedicatedSimulationWorkerPresentation();
                 _managedMemoryBoundary.ObserveAfterPresentation(_tickIndex);
             }
         }
 
         private bool CanAdvanceTick(int tickIndex)
         {
+            TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+            if (_simulationWorkerTickInFlight ||
+                _simulationWorkerPresentationAwaitingAcknowledgement)
+            {
+                return false;
+            }
+
             if (lockstepSettings.driveMode != SimulationDriveMode.LockstepBuffered &&
                 !lockstepSettings.requireInputFrameReady)
             {
@@ -404,6 +454,20 @@ namespace NTSD.Simulation
                 return false;
 
             provider.BeforeSimTick(tickIndex);
+            if (ShouldSubmitToDedicatedSimulationWorker())
+            {
+                if (TrySubmitDedicatedSimulationWorkerTick(
+                        frameInput,
+                        buildPresentation,
+                        provider))
+                {
+                    return true;
+                }
+
+                if (PauseForDedicatedSimulationWorkerFailure())
+                    return false;
+            }
+
             bool stepped = StepOneTickInternal(frameInput, buildPresentation);
             if (stepped)
                 provider.AfterSimTick(tickIndex);
@@ -518,6 +582,221 @@ namespace NTSD.Simulation
             }
         }
 
+        private bool ShouldSubmitToDedicatedSimulationWorker()
+        {
+            TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+            return _simulationWorker != null &&
+                   _simulationWorker.IsRunning &&
+                   _simulationWorker.Failure == null &&
+                   !_simulationWorkerTickInFlight &&
+                   !_simulationWorkerPresentationAwaitingAcknowledgement &&
+                   lockstepSettings.driveMode == SimulationDriveMode.LocalFreeRun &&
+                   !lockstepSettings.requireInputFrameReady &&
+                   !lockstepSettings.captureFullFrameSnapshotForDiagnostics;
+        }
+
+        private bool TrySubmitDedicatedSimulationWorkerTick(
+            FrameInputSet frameInput,
+            bool buildPresentation,
+            ISimulationFrameInputProvider provider)
+        {
+            if (!ShouldSubmitToDedicatedSimulationWorker())
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "worker-is-not-ready-for-submission";
+                return false;
+            }
+            if (frameInput == null)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "frame-input-is-null";
+                return false;
+            }
+            if (frameInput.Players == null)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "frame-input-player-list-is-null";
+                return false;
+            }
+            if (frameInput.Players.Count > MaximumSimulationWorkerPlayerSlots)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "frame-input-player-count-exceeds-worker-capacity";
+                return false;
+            }
+
+            int tickIndex = frameInput.TickIndex;
+            _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
+            BattleSimulationStageSnapshot stage =
+                BattleSimulationStageSnapshot.Capture(_world.Runtime?.Stage);
+            if (!_simulationWorker.TrySubmit(
+                    frameInput,
+                    buildPresentation,
+                    in stage))
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    _simulationWorker.Failure == null
+                        ? "worker-input-queue-rejected-request"
+                        : "worker-failed-before-request-enqueue";
+                return false;
+            }
+
+            CopyFrameInput(
+                frameInput,
+                _simulationWorkerSubmittedFrameInput,
+                _simulationWorkerSubmittedPlayers);
+            _simulationWorkerSubmittedProvider = provider;
+            _simulationWorkerSubmittedTick = tickIndex;
+            _simulationWorkerTickInFlight = true;
+            dedicatedSimulationWorkerTickInFlight = true;
+            _dedicatedSimulationWorkerLastSubmissionFailureReason = string.Empty;
+            if (debugLogPerTick)
+            {
+                Log.Info(
+                    $"[SimulationTickDriver] ========== SimTick {tickIndex} SUBMITTED ==========");
+            }
+            return true;
+        }
+
+        private bool ConsumeDedicatedSimulationWorkerPublication()
+        {
+            if (_simulationWorker == null || !_simulationWorkerTickInFlight)
+                return false;
+
+            long consumedSequence = _simulationWorkerConsumedSequence;
+            if (!_simulationWorker.TryReadLatest(
+                    ref consumedSequence,
+                    out BattleSimulationTickPublication publication))
+            {
+                return false;
+            }
+
+            if (publication.TickIndex != _simulationWorkerSubmittedTick)
+            {
+                paused = true;
+                if (!_simulationWorkerFailureReported)
+                {
+                    _simulationWorkerFailureReported = true;
+                    Debug.LogError(
+                        "[SimulationTickDriver] Dedicated simulation worker published " +
+                        $"tick {publication.TickIndex}, expected {_simulationWorkerSubmittedTick}. " +
+                        "Simulation has been paused to avoid advancing a torn world.");
+                }
+                return false;
+            }
+
+            _simulationWorkerConsumedSequence = consumedSequence;
+            _simulationWorkerPendingAcknowledgementSequence = consumedSequence;
+            _simulationWorkerAcknowledgementSubmittedSequence = 0;
+            CopyFrameInput(
+                _simulationWorkerSubmittedFrameInput,
+                _simulationWorkerCompletedFrameInput,
+                _simulationWorkerCompletedPlayers);
+            _lastAppliedFrameInput = _simulationWorkerCompletedFrameInput;
+            _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks =
+                publication.ExecutionElapsedTimestampTicks;
+            _tickIndex = publication.TickIndex;
+            _sparkRenderFrame = publication.TickIndex;
+            if (_world.Runtime?.Flow != null)
+                _world.Runtime.Flow.SparkRenderFrame = publication.TickIndex;
+
+            _lastFrameSnapshot = null;
+            _lastChecksumSnapshot = null;
+            lastFrameChecksum = string.Empty;
+            _hasFrameChecksum = publication.HasStateChecksum;
+            _lastFrameChecksumValue = publication.HasStateChecksum
+                ? publication.StateChecksum
+                : 0UL;
+            PublishPendingSoundsAfterChecksum();
+            _simulationWorkerSubmittedProvider?.AfterSimTick(publication.TickIndex);
+            _simulationWorkerSubmittedProvider = null;
+            _simulationWorkerPresentationAwaitingAcknowledgement =
+                publication.HasPresentationFrame;
+
+            if (debugLogPerTick)
+            {
+                Log.Info(
+                    $"[SimulationTickDriver] ========== SimTick {publication.TickIndex} PUBLISHED ==========");
+            }
+
+            if (!_simulationWorkerPresentationAwaitingAcknowledgement)
+                AcknowledgeDedicatedSimulationWorkerPresentation();
+            return true;
+        }
+
+        private void AcknowledgeDedicatedSimulationWorkerPresentation()
+        {
+            long sequence = _simulationWorkerPendingAcknowledgementSequence;
+            if (_simulationWorker == null || sequence <= 0)
+                return;
+
+            if (_simulationWorkerAcknowledgementSubmittedSequence < sequence)
+            {
+                _simulationWorker.AcknowledgePresentationConsumed(sequence);
+                _simulationWorkerAcknowledgementSubmittedSequence = sequence;
+            }
+            _simulationWorkerPresentationAwaitingAcknowledgement = false;
+            TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+        }
+
+        private bool TryCompleteDedicatedSimulationWorkerPresentationConsumption()
+        {
+            long sequence = _simulationWorkerPendingAcknowledgementSequence;
+            if (_simulationWorker == null || sequence <= 0 ||
+                _simulationWorkerAcknowledgementSubmittedSequence < sequence ||
+                !_simulationWorker.IsPresentationConsumptionFinalized(sequence))
+            {
+                return false;
+            }
+
+            _simulationWorkerPendingAcknowledgementSequence = 0;
+            _simulationWorkerAcknowledgementSubmittedSequence = 0;
+            _simulationWorkerPresentationAwaitingAcknowledgement = false;
+            _simulationWorkerTickInFlight = false;
+            _simulationWorkerSubmittedTick = 0;
+            dedicatedSimulationWorkerTickInFlight = false;
+            return true;
+        }
+
+        private bool PauseForDedicatedSimulationWorkerFailure()
+        {
+            System.Exception failure = _simulationWorker?.Failure;
+            if (failure == null)
+                return false;
+
+            paused = true;
+            if (!_simulationWorkerFailureReported)
+            {
+                _simulationWorkerFailureReported = true;
+                Debug.LogError(
+                    "[SimulationTickDriver] Dedicated simulation worker failed. " +
+                    "Simulation has been paused; the world will not fall back after a partial tick.\n" +
+                    failure);
+            }
+            return true;
+        }
+
+        private static void CopyFrameInput(
+            FrameInputSet source,
+            FrameInputSet destination,
+            SimulationPlayerInput[] destinationPlayers)
+        {
+            int playerCount = source?.Players?.Count ?? 0;
+            if (destination == null || destinationPlayers == null ||
+                playerCount > destinationPlayers.Length)
+            {
+                throw new System.InvalidOperationException(
+                    "The preallocated simulation input copy is too small.");
+            }
+
+            for (int index = 0; index < playerCount; index++)
+                destinationPlayers[index] = source.Players[index];
+            destination.ResetPreallocated(
+                source?.TickIndex ?? 0,
+                destinationPlayers,
+                playerCount);
+        }
+
         internal static bool SupportsAuthorityFrameChecksum(SimulationWorld world)
         {
             return world != null &&
@@ -595,6 +874,24 @@ namespace NTSD.Simulation
             _formalBattleDiagnosticsSuppressedCount;
         public long RejectedLatePresentationComponentCreateCount =>
             _rejectedLatePresentationComponentCreateCount;
+        public bool DedicatedSimulationWorkerActiveForDiagnostics =>
+            _simulationWorker != null && _simulationWorker.IsRunning;
+        public bool DedicatedSimulationWorkerTickInFlightForDiagnostics
+        {
+            get
+            {
+                TryCompleteDedicatedSimulationWorkerPresentationConsumption();
+                return _simulationWorkerTickInFlight;
+            }
+        }
+        public System.Exception DedicatedSimulationWorkerFailureForDiagnostics =>
+            _simulationWorker?.Failure;
+        public string DedicatedSimulationWorkerIneligibilityReasonForDiagnostics =>
+            _dedicatedSimulationWorkerIneligibilityReason;
+        public string DedicatedSimulationWorkerLastSubmissionFailureReasonForDiagnostics =>
+            _dedicatedSimulationWorkerLastSubmissionFailureReason;
+        public long DedicatedSimulationWorkerLastExecutionElapsedTimestampTicksForDiagnostics =>
+            _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks;
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
@@ -608,6 +905,60 @@ namespace NTSD.Simulation
         public void SetPaused(bool value)
         {
             paused = value;
+        }
+
+        /// <summary>
+        /// Schedules exactly one paused LocalFreeRun tick through the production
+        /// dedicated-worker path. This is intentionally separate from StepOneTick,
+        /// whose explicit/manual contract remains synchronous and stops the worker.
+        /// </summary>
+        public bool TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+            bool buildPresentation = true)
+        {
+            if (!paused)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "diagnostic-worker-step-requires-paused-driver";
+                return false;
+            }
+            if (!ShouldSubmitToDedicatedSimulationWorker())
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "worker-is-not-ready-for-diagnostic-submission";
+                return false;
+            }
+
+            int tickIndex = _tickIndex + 1;
+            if (!CanAdvanceTick(tickIndex))
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "next-diagnostic-tick-is-not-advanceable";
+                return false;
+            }
+
+            ISimulationFrameInputProvider provider = _frameInputProvider;
+            if (provider == null)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "frame-input-provider-is-null";
+                return false;
+            }
+
+            FrameInputSet frameInput = provider.GetFrameInput(tickIndex);
+            if (frameInput == null || frameInput.TickIndex != tickIndex)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "frame-input-provider-returned-an-invalid-tick";
+                return false;
+            }
+
+            provider.BeforeSimTick(tickIndex);
+            bool submitted = TrySubmitDedicatedSimulationWorkerTick(
+                frameInput,
+                buildPresentation,
+                provider);
+            RefreshInspectorState();
+            return submitted;
         }
 
         public void BeginBattleAllocationSeal()
@@ -625,11 +976,27 @@ namespace NTSD.Simulation
 
             int maximumBodyCount = 1;
             int maximumItrCount = 1;
-            CharacterAnimtorManager.Instance?.GetMaximumBattleCollisionRectCounts(
+            CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
+            GameDataManager dataManager = GameDataManager.TryGetInstance();
+            IReadOnlyList<ObjectDefinition> definitions = dataManager?.GetAllObjects();
+            if (animatorManager != null && definitions != null && definitions.Count > 0)
+            {
+                _world.UnsealRuntimeDataCatalog();
+                _world.PrepareRuntimeDataCatalogForBattle(
+                    definitions,
+                    animatorManager.GetCharacterConfig,
+                    animatorManager.CommonVisualCatalog?.IsSparkValid == true
+                        ? BattleHitRecordLifecycleCatalog.Available
+                        : BattleHitRecordLifecycleCatalog.Unavailable);
+            }
+
+            animatorManager?.GetMaximumBattleCollisionRectCounts(
                 out maximumBodyCount,
                 out maximumItrCount);
 
-            _allocationGate.PrepareNonUnityCapacity(_world.MaxRuntimeSlotsForServices);
+            _allocationGate.PrepareNonUnityCapacity(
+                _world.MaxRuntimeSlotsForServices,
+                _world);
             _world.RuntimeCapacity.PrepareForBattle();
             _world.BattleBuffersForServices.Prepare(
                 _world.MaxRuntimeSlotsForServices,
@@ -641,8 +1008,108 @@ namespace NTSD.Simulation
             AppManager.Instance?.SoundPlayer?.PrepareBattlePresentationHotPath();
             _world.PrepareEnabledBattleDiagnosticsHotPath();
             _world.RuntimeCapacity.Seal();
-            _allocationGate.Seal();
+            _allocationGate.Seal(_world);
+            _world.SetLogicOnlyEntityMaterialization(
+                _presentationBackendMode == BattlePresentationBackendMode.CentralOnly &&
+                _world.RuntimeDataCatalog?.IsReady == true);
+            StartDedicatedSimulationWorkerIfEligible();
             _managedMemoryBoundary.CompleteLoadingAndOpenBattleWindow();
+        }
+
+        private void StartDedicatedSimulationWorkerIfEligible()
+        {
+            StopDedicatedSimulationWorker(resetLogicOnlyMaterialization: false);
+            _dedicatedSimulationWorkerIneligibilityReason =
+                ResolveDedicatedSimulationWorkerIneligibilityReason();
+            _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks = 0L;
+            if (!string.IsNullOrEmpty(_dedicatedSimulationWorkerIneligibilityReason))
+            {
+                RefreshDedicatedSimulationWorkerInspectorState();
+                return;
+            }
+
+            _world.SetLogicOnlyEntityMaterialization(true);
+            var executor = new BattleWorldSimulationTickExecutor(
+                _world,
+                _battleTickSystem,
+                lockstepSettings.enableFrameChecksum,
+                _managedMemoryBoundary);
+            _simulationWorker = new DedicatedBattleSimulationWorker(
+                inputCapacity: 1,
+                maximumPlayerCount: MaximumSimulationWorkerPlayerSlots,
+                executor: executor);
+            try
+            {
+                _simulationWorker.Start();
+                _simulationWorkerFailureReported = false;
+            }
+            catch
+            {
+                _simulationWorker.Dispose();
+                _simulationWorker = null;
+                RefreshDedicatedSimulationWorkerInspectorState();
+                throw;
+            }
+            _dedicatedSimulationWorkerIneligibilityReason = string.Empty;
+            RefreshDedicatedSimulationWorkerInspectorState();
+        }
+
+        private string ResolveDedicatedSimulationWorkerIneligibilityReason()
+        {
+            if (!useDedicatedSimulationWorker)
+                return "disabled-by-driver-configuration";
+            if (_world == null)
+                return "world-not-created";
+            if (_battleTickSystem == null)
+                return "battle-tick-system-not-created";
+            if (_presentationBackendMode != BattlePresentationBackendMode.CentralOnly)
+                return "presentation-backend-is-not-central-only";
+            if (lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+                return "drive-mode-is-not-local-free-run";
+            if (lockstepSettings.requireInputFrameReady)
+                return "input-ready-gate-is-enabled";
+            if (lockstepSettings.captureFullFrameSnapshotForDiagnostics)
+                return "allocating-full-frame-snapshot-is-enabled";
+            if (_world.ForceLegacyPerPassStageRefreshForDiagnostics)
+                return "legacy-per-pass-stage-refresh-is-enabled";
+            if (_world.RuntimeDataCatalog?.IsReady != true)
+                return "runtime-data-catalog-is-not-ready";
+            return string.Empty;
+        }
+
+        private void StopDedicatedSimulationWorker(
+            bool resetLogicOnlyMaterialization = true)
+        {
+            DedicatedBattleSimulationWorker worker = _simulationWorker;
+            if (worker != null)
+            {
+                worker.Stop();
+                worker.Dispose();
+            }
+
+            _simulationWorker = null;
+            _simulationWorkerSubmittedProvider = null;
+            _simulationWorkerTickInFlight = false;
+            _simulationWorkerPresentationAwaitingAcknowledgement = false;
+            _simulationWorkerSubmittedTick = 0;
+            _simulationWorkerConsumedSequence = 0;
+            _simulationWorkerPendingAcknowledgementSequence = 0;
+            _simulationWorkerAcknowledgementSubmittedSequence = 0;
+            _simulationWorkerSubmittedFrameInput.ResetPreallocated(0, null);
+            _simulationWorkerCompletedFrameInput.ResetPreallocated(0, null);
+            dedicatedSimulationWorkerTickInFlight = false;
+            if (resetLogicOnlyMaterialization && !_allocationGate.IsSealed)
+                _world?.SetLogicOnlyEntityMaterialization(false);
+            if (_world != null)
+                _world.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+            RefreshDedicatedSimulationWorkerInspectorState();
+        }
+
+        private void RefreshDedicatedSimulationWorkerInspectorState()
+        {
+            dedicatedSimulationWorkerActive =
+                _simulationWorker != null && _simulationWorker.IsRunning;
+            dedicatedSimulationWorkerTickInFlight = _simulationWorkerTickInFlight;
         }
 
         private void PreparePresentationHotPathCapacity(int entityCapacity)
@@ -704,9 +1171,12 @@ namespace NTSD.Simulation
 
         public void EndBattleAllocationSeal()
         {
+            StopDedicatedSimulationWorker(resetLogicOnlyMaterialization: false);
             _managedMemoryBoundary.CloseBattleWindow();
-            _allocationGate.Unseal();
+            _allocationGate.Unseal(_world);
+            _world?.SetLogicOnlyEntityMaterialization(false);
             _world?.RuntimeCapacity.Unseal();
+            _world?.UnsealRuntimeDataCatalog();
             _world?.Runtime?.EnsureStageSpawnBuffers().Unseal();
             BattleCentralRenderSystem.EndBattleCapacitySeal();
         }
@@ -727,6 +1197,7 @@ namespace NTSD.Simulation
             if (settings == null)
                 return;
 
+            StopDedicatedSimulationWorker();
             lockstepSettings = settings;
             lockstepSettings.Normalize();
             SelectTickHostPolicy(resetSelectedPolicy: true);
@@ -774,6 +1245,7 @@ namespace NTSD.Simulation
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)
         {
+            StopDedicatedSimulationWorker();
             _frameInputProvider = provider ??
                 (lockstepSettings.driveMode == SimulationDriveMode.LocalFreeRun &&
                  !lockstepSettings.requireInputFrameReady
@@ -786,7 +1258,9 @@ namespace NTSD.Simulation
         public BattleLockstepSession CreateStrictLockstepSession(
             LockstepSessionIdentity identity,
             int futureFrameCapacity,
-            int journalCapacity)
+            int journalCapacity,
+            int snapshotIntervalTicks = 0,
+            int snapshotCapacity = 0)
         {
             lockstepSettings.Normalize();
             return new BattleLockstepSession(
@@ -794,7 +1268,9 @@ namespace NTSD.Simulation
                 identity,
                 lockstepSettings.inputDelayTicks,
                 futureFrameCapacity,
-                journalCapacity);
+                journalCapacity,
+                snapshotIntervalTicks: snapshotIntervalTicks,
+                snapshotCapacity: snapshotCapacity);
         }
 
         public bool StepOneTick(
@@ -805,6 +1281,7 @@ namespace NTSD.Simulation
             if (!ignorePaused && paused)
                 return false;
 
+            StopDedicatedSimulationWorker();
             bool stepped = StepOneTickInternal(frameInput, buildPresentation);
             RefreshInspectorState();
             return stepped;
@@ -820,9 +1297,44 @@ namespace NTSD.Simulation
             if (!ignorePaused && paused)
                 return false;
 
+            StopDedicatedSimulationWorker();
             bool stepped = StepOneTickInternal(_tickIndex + 1, buildPresentation);
             RefreshInspectorState();
             return stepped;
+        }
+
+        public bool TryRestoreBattleStateSnapshot(
+            LockstepSessionIdentity identity,
+            BattleStateSnapshotBuffer snapshot,
+            out BattleStateSnapshotRestoreFailure failure)
+        {
+            StopDedicatedSimulationWorker();
+            if (_world == null)
+            {
+                failure = BattleStateSnapshotRestoreFailure.WorldConfigurationMismatch;
+                return false;
+            }
+            if (!_world.TryRestoreBattleStateSnapshot(identity, snapshot, out failure))
+            {
+                return false;
+            }
+
+            _tickIndex = snapshot.CapturedTick;
+            _sparkRenderFrame = snapshot.Core.Flow.SparkRenderFrame;
+            _offlineLocalTickPolicy.Reset();
+            _manualReplayTickPolicy.Reset();
+            _networkLockstepTickPolicy.Reset();
+            SelectTickHostPolicy(resetSelectedPolicy: false);
+            _timeAccumulator = 0f;
+            ResetLastAppliedFrameInput(_tickIndex);
+            _lastFrameSnapshot = null;
+            _lastChecksumSnapshot = null;
+            lastFrameChecksum = string.Empty;
+            _lastFrameChecksumValue = 0UL;
+            _hasFrameChecksum = false;
+            _publishedSoundEvents.Clear();
+            RefreshInspectorState();
+            return true;
         }
 
         public void UnbindWorld()
@@ -844,7 +1356,7 @@ namespace NTSD.Simulation
             ResetDriverStateAfterWorldCreation();
         }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         public bool TryConfigureEmptyDiagnosticWorld(
             BattleRuntimeWorldSettings settings,
             out string failureReason)
@@ -970,11 +1482,13 @@ namespace NTSD.Simulation
             BattlePresentationBackendMode presentationMode,
             BattleAiExecutionProfile aiExecutionProfile)
         {
+            StopDedicatedSimulationWorker();
             BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
             var nextWorld = new SimulationWorld(
                 settings.Profile,
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
+            nextWorld.BindLogicReferencePool(LF2ReferencePool.Instance.SimulationCore);
             nextWorld.ConfigureAiExecutionProfile(aiExecutionProfile);
             nextWorld.SetBattlePresentationBackend(presentationMode);
             if (_world != null)

@@ -16,6 +16,9 @@ namespace NTSD.Animation
         /// <summary>入队多个对象创建任务。</summary>
         void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task);
 
+        /// <summary>在当前结构写入边界立即创建一个纯逻辑或 Unity 实体。</summary>
+        LF2Entity CreateObjectImmediate(OPointCreateTask task);
+
         /// <summary>处理队列中的所有任务并清空。</summary>
         void FlushTasks();
     }
@@ -113,7 +116,9 @@ namespace NTSD.Animation
         {
             Vector3 pos = MakePoint(animator, op);
 
-            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            BattleLogicReferencePool referencePool =
+                animator.ResolveLogicReferencePool();
+            var task = referencePool?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
             task.opoint = op;
@@ -131,7 +136,9 @@ namespace NTSD.Animation
         {
             Vector3 pos = MakePoint(animator, op);
 
-            var task = LF2ReferencePool.Instance.Fetch<OPointCreateMultipleTask>();
+            BattleLogicReferencePool referencePool =
+                animator.ResolveLogicReferencePool();
+            var task = referencePool?.Fetch<OPointCreateMultipleTask>();
             if (task == null)
                 return;
             task.opoint = op;

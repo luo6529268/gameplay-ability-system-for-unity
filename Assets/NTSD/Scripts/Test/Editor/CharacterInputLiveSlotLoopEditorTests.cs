@@ -12,13 +12,40 @@ namespace NTSD.Test
     public sealed class CharacterInputLiveSlotLoopEditorTests
     {
         [Test]
-        public void CharacterInputPass_DefaultsToLegacyAfterPerformanceGateRejection()
+        public void CharacterInputPass_DefaultsToDataOrientedForExactAiCharacters()
         {
             var world = new SimulationWorld();
 
             Assert.That(
                 world.BattleEcsCharacterInputPassModeForDiagnostics,
-                Is.EqualTo(BattleEcsCharacterInputPassMode.Legacy));
+                Is.EqualTo(BattleEcsCharacterInputPassMode.DataOriented));
+        }
+
+        [Test]
+        public void CharacterInputPass_HumanCharacterFailsClosedToLocalInputPath()
+        {
+            var world = new SimulationWorld();
+            LF2Character character = RegisterCharacter(world, 0, 480);
+            character.AiControlled = false;
+
+            world.CharacterInputAll(2);
+
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .ExactCharacterCount,
+                Is.Zero);
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .CompatibilityFallbackCount,
+                Is.EqualTo(1));
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnityCompatibilityShellCount,
+                Is.EqualTo(1));
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnexpectedFallbackCount,
+                Is.Zero);
         }
 
         [Test]
@@ -43,6 +70,35 @@ namespace NTSD.Test
                 world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
                     .CompatibilityFallbackCount,
                 Is.EqualTo(1));
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnityCompatibilityShellCount,
+                Is.EqualTo(1));
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnexpectedFallbackCount,
+                Is.Zero);
+        }
+
+        [Test]
+        public void CharacterInputPass_LegacyModeCountsUnexpectedFallback()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleEcsCharacterInputPassForDiagnostics(
+                BattleEcsCharacterInputPassMode.Legacy);
+            LF2Character character = RegisterCharacter(world, 0, 482);
+            character.AiControlled = true;
+
+            world.CharacterInputAll(2);
+
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnityCompatibilityShellCount,
+                Is.Zero);
+            Assert.That(
+                world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics
+                    .UnexpectedFallbackCount,
+                Is.EqualTo(1));
         }
 
         [Test]
@@ -52,7 +108,10 @@ namespace NTSD.Test
             world.ConfigureBattleEcsCharacterInputPassForDiagnostics(
                 BattleEcsCharacterInputPassMode.DataOriented);
             for (int slot = 0; slot < 32; slot++)
-                RegisterCharacter(world, slot, 600 + slot);
+            {
+                LF2Character character = RegisterCharacter(world, slot, 600 + slot);
+                character.AiControlled = true;
+            }
 
             for (int index = 0; index < 8; index++)
                 world.CharacterInputAll(index + 2);

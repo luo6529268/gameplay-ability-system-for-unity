@@ -29,6 +29,21 @@ namespace NTSD.Animation.LF2Objects
         internal int LastStateForSnapshot => _lastState;
         public long InvalidInitTaskTypeCountForDiagnostics { get; private set; }
 
+        internal bool TryRestoreSpecialShellForSnapshot(
+            in BattleSpecialOtherShellSnapshot state,
+            LF2LivingObject parent)
+        {
+            if (state.Kind != BattleSpecialOtherShellKind.SpecialAttack)
+                return false;
+
+            _parent = parent;
+            _lastState = state.LastState;
+            NoBounce = state.NoBounce;
+            InvalidInitTaskTypeCountForDiagnostics =
+                state.InvalidInitTaskTypeCount;
+            return true;
+        }
+
         // ========== 状态机字段 ==========
         public bool NoBounce { get; set; }
 
@@ -73,7 +88,10 @@ namespace NTSD.Animation.LF2Objects
             InitializeHealth();
 
             Renderer = renderer;
-            SimulationTickDriver.Instance?.World?.Register(this);
+            SimulationWorld world = task.targetWorld ??
+                                    task.parent?.Match ??
+                                    SimulationTickDriver.Instance?.World;
+            world?.Register(this);
         }
 
         protected override bool StateEntryEvent() => DispatchCurrentStateEvent("state_entry");
@@ -662,7 +680,8 @@ namespace NTSD.Animation.LF2Objects
                     {
                         // 0x0042DC73: target.data=attacker.data
                         // 0x0042DC80: target.[+70h/74h/78h]=40
-                        var karasuWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(209);
+                        LF2CharacterDataWrapper karasuWrapper =
+                            ResolveRuntimeCharacterConfig(209);
                         if (karasuWrapper != null)
                         {
                             Team = attackerSpecial.Team;
@@ -677,7 +696,8 @@ namespace NTSD.Animation.LF2Objects
                     if (attackerSpecial.ObjectId == 213 && isValidTarget)
                     {
                         // target.team 和 target.[+354h] 继承 attacker.TrackerParent 的对应值。
-                        var karasuWrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(209);
+                        LF2CharacterDataWrapper karasuWrapper =
+                            ResolveRuntimeCharacterConfig(209);
                         if (karasuWrapper != null)
                         {
                             int savedFrame = Frame.N;
@@ -775,7 +795,7 @@ namespace NTSD.Animation.LF2Objects
         public void CreateObject(ObjectPoint op)
         {
             if (op.oid <= 0) return;
-            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            var task = ResolveLogicReferencePool()?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
             task.opoint = op;
@@ -785,13 +805,13 @@ namespace NTSD.Animation.LF2Objects
             task.z = (float)PS.z;
             task.dir = PS.dir;
             task.dvz = 0;
-            LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
+            ResolveObjectPointFactoryForSimulation()?.EnqueueCreateObject(task);
         }
 
         public void CreateObjectAt(int oid, LF2SpecialAttack source)
         {
             var op = new ObjectPoint { oid = oid, action = 0, facing = 0 };
-            var task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            var task = ResolveLogicReferencePool()?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
             task.opoint = op;
@@ -801,7 +821,7 @@ namespace NTSD.Animation.LF2Objects
             task.z = (float)(source?.PS?.z ?? 0);
             task.dir = source?.PS?.dir ?? "right";
             task.dvz = 0;
-            LF2ObjectPointFactory.Instance?.EnqueueCreateObject(task);
+            ResolveObjectPointFactoryForSimulation()?.EnqueueCreateObject(task);
         }
 
         private Vector3 MakeObjectPoint(ObjectPoint op)
@@ -851,7 +871,7 @@ namespace NTSD.Animation.LF2Objects
 
         private void InitializeFrame(OPointCreateTask task)
         {
-            var wrapper = CharacterAnimtorManager.Instance?.GetCharacterConfig(ObjectId);
+            LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
             int action = task.opoint.action;
             if (action == 0 && !FrameCache.HasFrame(0))

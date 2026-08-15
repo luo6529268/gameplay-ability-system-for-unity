@@ -62,7 +62,7 @@ namespace NTSD.Simulation
         private bool _ticking = false;
         internal bool IsTickingForStructuralWriter => _ticking;
         private List<LF2Entity> _entityScratch => battleBuffers.EntityScratch;
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         private readonly HashSet<LF2Entity> activeRuntimeEntitySnapshotSeen =
             new HashSet<LF2Entity>();
         private readonly System.Comparison<LF2Entity>
@@ -298,6 +298,13 @@ namespace NTSD.Simulation
             stageSpawnTaskConfigurator = new StageSpawnTaskConfigurator();
             runtimeCharacterConfigs =
                 characterConfigResolver ?? new RuntimeCharacterConfigResolver();
+            runtimeDataCatalog = new BattleRuntimeDataCatalog();
+            logicReferencePool = new BattleLogicReferencePool();
+            logicEntityFactory = new BattleLogicEntityFactory(this);
+            logicObjectPointRuntime = new BattleLogicObjectPointRuntime(
+                this,
+                runtimeSlotCapacity);
+            runtimeCharacterConfigs.BindRuntimeDataCatalog(runtimeDataCatalog);
             entityTraversal = new SimulationEntityTraversal(this, _runtimeSlots);
             queryAndLinkModule = new SimulationQueryAndLinkModule(this);
             randomWeaponDropBuffer = new SimulationRandomWeaponDropBuffer();
@@ -326,6 +333,8 @@ namespace NTSD.Simulation
                 new BattleWorldPendingEventSnapshotModule(this, battleBuffers);
             battleWorldRestSnapshotModule =
                 new BattleWorldRestSnapshotModule(_runtimeRestStore);
+            battleStateSnapshotRestoreModule =
+                new BattleStateSnapshotRestoreModule(this);
             stageWaveModule = new SimulationStageWaveModule(this);
             stageRenderModule = new SimulationStageRenderModule(this);
             battleEcsCharacterStageZPass = new BattleEcsCharacterStageZPass(
@@ -398,7 +407,7 @@ namespace NTSD.Simulation
             Rng = new DeterministicRng(0x4E545344u);
             Runtime = new BattleRuntimeState();
             Runtime.Reset();
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             activeRuntimeEntitySnapshotComparison = CompareRuntimeSlotOrder;
 #endif
         }
@@ -436,7 +445,7 @@ namespace NTSD.Simulation
             return _runtimeSlots.TryResolve(handle, out entity);
         }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         /// <summary>
         /// Returns currently claimed, pass-active runtime entities by resolving a fresh
         /// generation-checked handle for every runtime slot. This intentionally does
@@ -788,6 +797,7 @@ namespace NTSD.Simulation
                     }
                     return;
                 }
+                battleAiUnifiedRowPublisher.InvalidateAfterOccupancyChange();
                 battleStructuralWriter.RecordGenerationClaim(
                     registeredEntity,
                     runtimeSlot);
@@ -1342,6 +1352,8 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            battleAiUnifiedRowPublisher.InvalidateAfterOccupancyChange();
+
             battleIdentityWriter.Release(releasedHandle);
             battleCharacterInputWriter.Release(releasedHandle);
             battleFrameMotionWriter.Release(releasedHandle);
@@ -1416,6 +1428,7 @@ namespace NTSD.Simulation
                     entity.Renderer);
                 if (_runtimeSlots.Release(runtimeSlot, entity))
                 {
+                    battleAiUnifiedRowPublisher.InvalidateAfterOccupancyChange();
                     battleIdentityWriter.Release(releasedHandle);
                     battleCharacterInputWriter.Release(releasedHandle);
                     battleFrameMotionWriter.Release(releasedHandle);

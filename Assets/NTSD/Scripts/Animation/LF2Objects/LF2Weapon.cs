@@ -18,6 +18,10 @@ namespace NTSD.Animation.LF2Objects
     {
         private int _poolWeaponType;
         internal int PoolWeaponTypeForSnapshot => _poolWeaponType;
+        internal void RestorePoolWeaponTypeForSnapshot(int value)
+        {
+            _poolWeaponType = value;
+        }
         private readonly InteractionArea landingSplashInteraction =
             new InteractionArea();
         private readonly InteractionArea heldAttackInteraction =
@@ -157,7 +161,7 @@ namespace NTSD.Animation.LF2Objects
 
         protected override void OnThrown()
         {
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            LF2CharacterData charData = ResolveRuntimeCharacterData(ObjectId);
             FlightCounter = charData?.weapon_hp ?? 0;
         }
 
@@ -166,7 +170,7 @@ namespace NTSD.Animation.LF2Objects
         protected override void WeaponFlightPhysics()
         {
             int wt = WeaponType;
-            var charData = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            LF2CharacterData charData = ResolveRuntimeCharacterData(ObjectId);
             int typeSub = charData?.type_sub ?? 0;
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
@@ -265,7 +269,7 @@ namespace NTSD.Animation.LF2Objects
             if (ApplyCurrentDatNonCharacterLanding(wt, Frame?.D, oldVy, crossedGround: true))
                 return;
 
-            var cd = CharacterAnimtorManager.Instance?.GetCharacterData(ObjectId);
+            LF2CharacterData cd = ResolveRuntimeCharacterData(ObjectId);
 
             int fstateLand = Frame?.D?.state ?? -1;
             int fnumLand = Frame?.N ?? 0;

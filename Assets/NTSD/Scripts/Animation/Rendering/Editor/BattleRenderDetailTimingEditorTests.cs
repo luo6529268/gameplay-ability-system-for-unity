@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using NTSD.Simulation;
@@ -213,6 +214,63 @@ namespace NTSD.Animation.Rendering.Editor
                 recorder.GetLastElapsedTimestampTicks(
                     BattleTickDetailPhase.RenderPrepareFrameResolveCommands),
                 Is.Zero);
+        }
+
+        [Test]
+        public void DeferredMaterializationAndSimulationPhasesUseIndependentThreadLanes()
+        {
+            var recorder = new BattleTickDetailPhaseDiagnostics();
+            recorder.SetEnabled(true);
+            Exception workerFailure = null;
+            using var start = new ManualResetEventSlim(false);
+            using var workerReady = new ManualResetEventSlim(false);
+            var worker = new Thread(() =>
+            {
+                try
+                {
+                    start.Wait();
+                    recorder.BeginTick(37);
+                    workerReady.Set();
+                    for (int index = 0; index < 2000; index++)
+                    {
+                        recorder.BeginPhase(BattleTickDetailPhase.LateEntityCleanup);
+                        recorder.EndPhase(BattleTickDetailPhase.LateEntityCleanup);
+                    }
+                    recorder.EndTick();
+                }
+                catch (Exception exception)
+                {
+                    workerFailure = exception;
+                    workerReady.Set();
+                }
+            });
+            worker.Start();
+            start.Set();
+            Assert.That(workerReady.Wait(5000), Is.True);
+
+            for (int index = 0; index < 2000; index++)
+            {
+                Assert.That(recorder.BeginDeferredRenderMaterialization(), Is.True);
+                recorder.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                recorder.BeginPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                recorder.EndPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameResolveCommands);
+                recorder.EndPhase(
+                    BattleTickDetailPhase.RenderPrepareFrameAndLegacyCapacityGuard);
+                recorder.EndDeferredRenderMaterialization();
+            }
+
+            Assert.That(worker.Join(5000), Is.True);
+            Assert.That(workerFailure, Is.Null);
+            Assert.That(recorder.ActivePhaseDepthForDiagnostics, Is.Zero);
+
+            recorder.BeginTick(38);
+            Assert.That(
+                recorder.GetLastElapsedTimestampTicks(
+                    BattleTickDetailPhase.RenderPrepareFrameResolveCommands),
+                Is.GreaterThan(0));
         }
 
         [Test]

@@ -22,6 +22,14 @@ namespace NTSD.Animation
         internal float FallRecoveryAccumForSnapshot => _fallAccum;
         internal float BdefendRecoveryAccumForSnapshot => _bdefendAccum;
 
+        internal void RestoreRecoveryAccumulatorsForSnapshot(
+            float fallAccum,
+            float bdefendAccum)
+        {
+            _fallAccum = fallAccum;
+            _bdefendAccum = bdefendAccum;
+        }
+
         public int Fall => _runtime?.Fall ?? _fall;
         public int Bdefend => _runtime?.Bdefend ?? _bdefend;
 

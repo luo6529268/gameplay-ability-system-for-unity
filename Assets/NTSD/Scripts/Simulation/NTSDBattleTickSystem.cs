@@ -210,6 +210,19 @@ namespace NTSD.Simulation
 
         public void RunReleaseTick(int tickIndex, bool buildPresentation)
         {
+            RunTick(tickIndex, buildPresentation, simulationWorker: false);
+        }
+
+        internal void RunSimulationWorkerTick(int tickIndex, bool buildPresentation)
+        {
+            RunTick(tickIndex, buildPresentation, simulationWorker: true);
+        }
+
+        private void RunTick(
+            int tickIndex,
+            bool buildPresentation,
+            bool simulationWorker)
+        {
             if (world == null) return;
 
             BattleTickPhaseDiagnostics diagnostics =
@@ -247,7 +260,11 @@ namespace NTSD.Simulation
                 if (!RunFrameAdvancePhase(tickIndex, diagnostics))
                     return;
                 RunInteractionPhase(tickIndex, diagnostics);
-                RunPresentationAndCleanupPhase(tickIndex, buildPresentation, diagnostics);
+                RunPresentationAndCleanupPhase(
+                    tickIndex,
+                    buildPresentation,
+                    simulationWorker,
+                    diagnostics);
             }
             finally
             {
@@ -338,6 +355,7 @@ namespace NTSD.Simulation
         private void RunPresentationAndCleanupPhase(
             int tickIndex,
             bool buildPresentation,
+            bool simulationWorker,
             BattleTickPhaseDiagnostics diagnostics)
         {
             diagnostics?.BeginPhase(BattleTickPhase.PreFrameBounds);
@@ -347,7 +365,7 @@ namespace NTSD.Simulation
             CurrentWaveStage(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.Stage);
             diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
-            RenderDispatch(tickIndex, buildPresentation);
+            RenderDispatch(tickIndex, buildPresentation, simulationWorker);
             diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
             diagnostics?.BeginPhase(BattleTickPhase.FramePostProcess);
             FramePostProcess();
@@ -473,8 +491,18 @@ namespace NTSD.Simulation
             world.CurrentWaveStageTickAll();
         }
 
-        private void RenderDispatch(int tickIndex, bool buildPresentation)
+        private void RenderDispatch(
+            int tickIndex,
+            bool buildPresentation,
+            bool simulationWorker)
         {
+            if (simulationWorker)
+            {
+                if (buildPresentation)
+                    world.CaptureSimulationWorkerPresentationFrame(tickIndex);
+                return;
+            }
+
             world.RenderDispatchAll(tickIndex, buildPresentation);
         }
 

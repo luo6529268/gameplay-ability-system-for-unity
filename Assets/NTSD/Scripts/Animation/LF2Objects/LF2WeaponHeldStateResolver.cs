@@ -199,7 +199,8 @@ namespace NTSD.Animation.LF2Objects
             if (holder?.Health == null)
                 return;
 
-            LF2CharacterData charData = CharacterAnimtorManager.Instance?.GetCharacterData(weapon.ObjectId);
+            LF2CharacterData charData =
+                weapon.ResolveRuntimeCharacterData(weapon.ObjectId);
             int typeSub = charData?.type_sub ?? 0;
 
             if (typeSub == 0x7A)

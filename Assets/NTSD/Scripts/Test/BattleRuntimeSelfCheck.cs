@@ -1033,20 +1033,27 @@ namespace NTSD.Test
                     bool queryModuleOwner = path.EndsWith(
                         "/SimulationQueryAndLinkModule.cs",
                         StringComparison.Ordinal);
+                    bool snapshotRestoreOwner = path.EndsWith(
+                        "/Lockstep/BattleStateSnapshotRestore.cs",
+                        StringComparison.Ordinal);
                     bool usesOwnedStore =
                         (registryOwner && call.Contains(
                             "_runtimeRestStore",
                             StringComparison.Ordinal)) ||
                         (queryModuleOwner && call.Contains(
                             "restStore",
+                            StringComparison.Ordinal)) ||
+                        (snapshotRestoreOwner && call.Contains(
+                            "_runtimeRestStore",
                             StringComparison.Ordinal));
-                    Expect((registryOwner || queryModuleOwner) && usesOwnedStore &&
+                    Expect((registryOwner || queryModuleOwner || snapshotRestoreOwner) &&
+                           usesOwnedStore &&
                            System.Text.RegularExpressions.Regex.IsMatch(call, @",\s*false\s*\)$"),
                         $"B1.2 production Bind must be store-first and owned by the SimulationWorld lifecycle: {path}: {call}");
                 }
             }
-            Expect(productionBindCallCount == 3,
-                "B1.2 production binding must remain limited to ordinary reset/rebind, release rollback, and StageSpawnAt restore");
+            Expect(productionBindCallCount == 4,
+                "B1.2 production binding must remain limited to ordinary reset/rebind, release rollback, StageSpawnAt restore, and snapshot restore");
         }
 
         private static void CheckProductionRuntimeRestStoreLifecycleContracts()
@@ -24945,6 +24952,10 @@ namespace NTSD.Test
                 var spawn = new BattleStageSpawnData { Id = stageOid, Act = 0, Hp = 300, X = 100, Y = -20 };
 
                 var slot21World = new SimulationWorld(runtimeCharacterConfigs);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    slot21World,
+                    stageTypes,
+                    stageWrappers);
                 using (new TemporarySimulationDriverWorld(slot21World))
                 {
                     var occupied20 = new DynamicCurrentDatSlotSelfCheckEntity(25000, 9, LF2ObjectType.Character);
@@ -24956,6 +24967,10 @@ namespace NTSD.Test
                 }
 
                 var fullStageWorld = new SimulationWorld(runtimeCharacterConfigs);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    fullStageWorld,
+                    stageTypes,
+                    stageWrappers);
                 for (int slot = 20; slot < 400; slot++)
                 {
                     var occupied = new DynamicCurrentDatSlotSelfCheckEntity(26000 + slot, 10, LF2ObjectType.Character);
@@ -24987,19 +25002,54 @@ namespace NTSD.Test
             world.Register(entity);
         }
 
+        private static void PrepareRuntimeDataCatalogForSelfCheck(
+            SimulationWorld world,
+            IReadOnlyDictionary<int, int> objectTypes,
+            IReadOnlyDictionary<int, LF2CharacterDataWrapper> wrappers)
+        {
+            var definitions = new List<ObjectDefinition>(objectTypes.Count);
+            foreach (KeyValuePair<int, int> pair in objectTypes)
+            {
+                definitions.Add(new ObjectDefinition(
+                    pair.Key,
+                    pair.Value,
+                    "self-check.dat"));
+            }
+
+            world.PrepareRuntimeDataCatalogForBattle(
+                definitions,
+                oid => wrappers.TryGetValue(
+                    oid,
+                    out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+        }
+
         private static void CheckAudit7StageSpawnRestPreservation()
         {
             const int stageOid = 984;
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_Audit7StageRest");
             var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
                 oid => oid == stageOid ? stageWrapper : null);
+            var stageTypes = new Dictionary<int, int>
+            {
+                [stageOid] = (int)LF2ObjectType.Character,
+            };
+            var stageWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [stageOid] = stageWrapper,
+            };
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
-                    new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
-                    new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
+                    stageTypes,
+                    stageWrappers);
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
                 var world = new SimulationWorld(runtimeCharacterConfigs);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    world,
+                    stageTypes,
+                    stageWrappers);
                 world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                 var released = new DynamicCurrentDatSlotSelfCheckEntity(28020, 10, LF2ObjectType.Character);
                 released.SetRequiredRuntimeSlot(20);
@@ -25050,6 +25100,10 @@ namespace NTSD.Test
                     int rendererCountBeforeRejectedStage = GetObjectPoolActiveCount();
                     int logicCountBeforeRejectedStage = LF2ReferencePool.Instance.ActiveCount;
                     var rejectedStageWorld = new SimulationWorld(runtimeCharacterConfigs);
+                    PrepareRuntimeDataCatalogForSelfCheck(
+                        rejectedStageWorld,
+                        stageTypes,
+                        stageWrappers);
                     rejectedStageWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                     RuntimeRestStore rejectedStageStore = rejectedStageWorld.RuntimeRestStoreForServices;
                     Expect(rejectedStageStore.TryAcquireBinding(
@@ -25097,13 +25151,25 @@ namespace NTSD.Test
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StageImmediate");
             var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
                 oid => oid == stageOid ? stageWrapper : null);
+            var stageTypes = new Dictionary<int, int>
+            {
+                [stageOid] = (int)LF2ObjectType.Character,
+            };
+            var stageWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [stageOid] = stageWrapper,
+            };
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
-                    new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
-                    new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
+                    stageTypes,
+                    stageWrappers);
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
                 var world = new SimulationWorld(runtimeCharacterConfigs);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    world,
+                    stageTypes,
+                    stageWrappers);
                 world.Runtime.Match.BattleGameModeId = 1;
                 world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                 world.StageCampaigns.Add(new BattleStageCampaignData
@@ -25485,13 +25551,25 @@ namespace NTSD.Test
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_StagePositive");
             var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(
                 oid => oid == stageOid ? stageWrapper : null);
+            var stageTypes = new Dictionary<int, int>
+            {
+                [stageOid] = (int)LF2ObjectType.Character,
+            };
+            var stageWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [stageOid] = stageWrapper,
+            };
             try
             {
                 using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
-                    new Dictionary<int, int> { [stageOid] = (int)LF2ObjectType.Character },
-                    new Dictionary<int, LF2CharacterDataWrapper> { [stageOid] = stageWrapper });
+                    stageTypes,
+                    stageWrappers);
                 using var objectPoolState = new TemporaryObjectPoolInitialization();
                 var world = new SimulationWorld(runtimeCharacterConfigs);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    world,
+                    stageTypes,
+                    stageWrappers);
                 world.Runtime.Match.BattleGameModeId = 2;
                 LF2Character factorCharacter = CreateCharacter(
                     "SelfCheck_StageFactor",

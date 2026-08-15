@@ -118,6 +118,12 @@ namespace NTSD.Simulation
 
         public void FlushQueuedObjectPointTasks()
         {
+            if (UsesLogicOnlyEntityMaterialization)
+            {
+                logicObjectPointRuntime.FlushTasks();
+                return;
+            }
+
             LF2ObjectPointFactory.Instance?.FlushTasks();
         }
 
@@ -841,11 +847,11 @@ namespace NTSD.Simulation
             if (overrideSpawned != null)
                 return overrideSpawned;
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
             if (factory == null)
                 return null;
 
-            OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            OPointCreateTask task = logicReferencePool?.Fetch<OPointCreateTask>();
             if (task == null)
                 return null;
             task.opoint = new ObjectPoint { oid = 998, kind = 0, action = 6, facing = 0 };
@@ -870,6 +876,7 @@ namespace NTSD.Simulation
             task.deferPresentationToNextTick = false;
             task.suppressLateFrameTickThisTick = false;
             task.deferFrameTickToNextTick = false;
+            task.targetWorld = this;
 
             LF2Entity spawned;
             try
@@ -878,7 +885,7 @@ namespace NTSD.Simulation
             }
             finally
             {
-                LF2ReferencePool.Instance.Recycle(task);
+                logicReferencePool.Recycle(task);
             }
             if (spawned == null)
                 return null;
@@ -1362,7 +1369,7 @@ namespace NTSD.Simulation
                 ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             // The production object-point factory is pass-stable. Resolve it lazily so an
             // empty LateEntityUpdateAll invocation retains the existing no-auto-create behavior.
-            LF2ObjectPointFactory opointFactory = null;
+            IBattleObjectPointStructuralMaterializer opointFactory = null;
             bool opointFactoryResolved = false;
             if (structuralEventSink != null)
                 SetStructuralEventContextForDiagnostics(tickIndex, "late-entity-update");
@@ -1508,16 +1515,18 @@ namespace NTSD.Simulation
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityOpointProcess);
-                    if (!opointFactoryResolved)
-                    {
-                        opointFactory = LF2ObjectPointFactory.Instance;
-                        opointFactoryResolved = true;
-                        LastLateOpointFactoryResolveCountForDiagnostics++;
-                    }
                     LF2FrameData opointFrame = obj.Frame?.D;
                     bool frameHasOpoint = opointFrame != null &&
                         ((opointFrame.opoints != null && opointFrame.opoints.Count > 0) ||
                          opointFrame.opoint.HasValue);
+                    if (frameHasOpoint && !opointFactoryResolved)
+                    {
+                        opointFactory = UsesLogicOnlyEntityMaterialization
+                            ? logicObjectPointRuntime
+                            : LF2ObjectPointFactory.Instance;
+                        opointFactoryResolved = true;
+                        LastLateOpointFactoryResolveCountForDiagnostics++;
+                    }
                     bool processedOpoint = false;
                     if (opointFactory != null && frameHasOpoint)
                     {
@@ -1661,13 +1670,15 @@ namespace NTSD.Simulation
         }
 
         private void FlushLateQueuedObjectPointTasks(
-            ref LF2ObjectPointFactory opointFactory,
+            ref IBattleObjectPointStructuralMaterializer opointFactory,
             ref bool opointFactoryResolved)
         {
             LastLateOpointFlushCountForDiagnostics++;
             if (!opointFactoryResolved)
             {
-                opointFactory = LF2ObjectPointFactory.Instance;
+                opointFactory = UsesLogicOnlyEntityMaterialization
+                    ? logicObjectPointRuntime
+                    : LF2ObjectPointFactory.Instance;
                 opointFactoryResolved = true;
                 LastLateOpointFactoryResolveCountForDiagnostics++;
             }
@@ -2544,18 +2555,26 @@ namespace NTSD.Simulation
             int freeSlot = FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, RuntimeSlotCapacity);
             if (freeSlot < 0) return;
 
-            var manager = CharacterAnimtorManager.Instance;
-            var dataManager = GameDataManager.Instance;
-            if (manager == null || dataManager == null) return;
+            bool useRuntimeCatalog = runtimeDataCatalog.IsReady;
+            CharacterAnimtorManager manager = useRuntimeCatalog
+                ? null
+                : CharacterAnimtorManager.Instance;
+            IReadOnlyList<ObjectDefinition> loadedObjects = useRuntimeCatalog
+                ? runtimeDataCatalog.ObjectDefinitions
+                : GameDataManager.Instance?.GetAllObjects();
+            if (loadedObjects == null) return;
 
             SimulationRandomWeaponDropBuffer candidates = randomWeaponDropBuffer;
             candidates.Reset();
-            List<ObjectDefinition> loadedObjects = dataManager.GetAllObjects();
             for (int i = 0; i < loadedObjects.Count; i++)
             {
-                int oid = loadedObjects[i].id;
+                ObjectDefinition definition = loadedObjects[i];
+                if (definition == null) continue;
+                int oid = definition.id;
                 if (!candidates.TryMarkUnique(oid)) continue;
-                var wrapper = manager.GetCharacterConfig(oid);
+                LF2CharacterDataWrapper wrapper = useRuntimeCatalog
+                    ? runtimeDataCatalog.GetCharacterConfig(oid)
+                    : manager?.GetCharacterConfig(oid);
                 if (wrapper == null) continue;
                 if (oid == 122 || oid == 123)
                 {
@@ -2568,8 +2587,8 @@ namespace NTSD.Simulation
             if (candidates.Count == 0) return;
 
             int selectedOid = candidates[Rng.NextInt(0, candidates.Count)];
-            var factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = logicReferencePool;
             if (factory == null || referencePool == null) return;
 
             BattleStageRuntimeState stage = Runtime?.Stage;
@@ -2624,6 +2643,7 @@ namespace NTSD.Simulation
             spawnTask.initialRuntimeX = (int)lf2X;
             spawnTask.initialRuntimeY = (int)lf2Y;
             spawnTask.initialRuntimeZ = (int)lf2Z;
+            spawnTask.targetWorld = this;
 
             LF2Entity spawned;
             try
@@ -2680,15 +2700,20 @@ namespace NTSD.Simulation
 
         private void SpawnMode2RandomWeapons()
         {
-            var manager = CharacterAnimtorManager.Instance;
-            if (manager == null)
+            bool useRuntimeCatalog = runtimeDataCatalog.IsReady;
+            CharacterAnimtorManager manager = useRuntimeCatalog
+                ? null
+                : CharacterAnimtorManager.Instance;
+            if (!useRuntimeCatalog && manager == null)
                 return;
 
             SimulationRandomWeaponDropBuffer candidates = randomWeaponDropBuffer;
             candidates.Reset();
             for (int oid = 100; oid < 200; oid++)
             {
-                var wrapper = manager.GetCharacterConfig(oid);
+                LF2CharacterDataWrapper wrapper = useRuntimeCatalog
+                    ? runtimeDataCatalog.GetCharacterConfig(oid)
+                    : manager.GetCharacterConfig(oid);
                 if (wrapper == null)
                     continue;
 
@@ -2701,11 +2726,14 @@ namespace NTSD.Simulation
             if (candidates.Count == 0)
                 return;
 
-            ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out _, out _);
+            BattleStageRuntimeState stage = Runtime?.Stage;
+            int stageWidth = stage?.BaseStageWidthPx ?? 800;
+            int zMin = stage?.ZMin ?? 180;
+            int zMax = stage?.ZMax ?? 350;
             if (stageWidth <= 60 || zMax - zMin <= 60)
                 return;
 
-            var factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory = ResolveObjectPointFactoryForSimulation();
             if (factory == null)
                 return;
 
@@ -2734,7 +2762,9 @@ namespace NTSD.Simulation
                 float lf2Z = r3 * ((zMax - zMin - 60) / 30) + r4 + zMin + 30;
                 const float lf2Y = -500f;
 
-                var charData = CharacterAnimtorManager.Instance?.GetCharacterData(oid);
+                LF2CharacterData charData = useRuntimeCatalog
+                    ? runtimeDataCatalog.GetCharacterData(oid)
+                    : manager.GetCharacterData(oid);
                 int flyFrame = -1;
                 int minFrame = int.MaxValue;
                 if (charData?.frames != null)
@@ -2758,7 +2788,7 @@ namespace NTSD.Simulation
                 if (flyFrame < 0)
                     flyFrame = minFrame != int.MaxValue ? minFrame : 0;
 
-                LF2ReferencePool referencePool = LF2ReferencePool.Instance;
+                BattleLogicReferencePool referencePool = logicReferencePool;
                 if (referencePool == null)
                     break;
 
@@ -2782,6 +2812,7 @@ namespace NTSD.Simulation
                 spawnTask.z = lf2Z;
                 spawnTask.dir = "right";
                 spawnTask.dvz = 0f;
+                spawnTask.targetWorld = this;
                 try
                 {
                     factory.CreateObjectImmediate(spawnTask);

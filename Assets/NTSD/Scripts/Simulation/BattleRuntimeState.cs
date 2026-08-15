@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NTSD.App;
-using UnityEngine;
 
 namespace NTSD.Simulation
 {
@@ -70,9 +69,9 @@ namespace NTSD.Simulation
 
         public void SetSceneSnapshot(int stageWidthPx, int zMin, int zMax, int perspectiveNear, int perspectiveFar)
         {
-            BaseStageWidthPx = Mathf.Max(stageWidthPx, 1);
+            BaseStageWidthPx = Math.Max(stageWidthPx, 1);
             ZMin = zMin;
-            ZMax = Mathf.Max(zMax, zMin + 1);
+            ZMax = Math.Max(zMax, zMin + 1);
             PerspectiveNear = perspectiveNear;
             PerspectiveFar = perspectiveFar;
             RebuildActiveStageBounds();
@@ -82,7 +81,7 @@ namespace NTSD.Simulation
         {
             if (bound > 0)
             {
-                XMaxOverride = Mathf.Max(bound, 1);
+                XMaxOverride = Math.Max(bound, 1);
                 CameraMaxOverride = XMaxOverride - 794;
             }
             else
@@ -104,8 +103,8 @@ namespace NTSD.Simulation
         private void RebuildActiveStageBounds()
         {
             StageWidthPx = XMaxOverride > 0
-                ? Mathf.Max(XMaxOverride, 1)
-                : Mathf.Max(BaseStageWidthPx, 1);
+                ? Math.Max(XMaxOverride, 1)
+                : Math.Max(BaseStageWidthPx, 1);
         }
     }
 

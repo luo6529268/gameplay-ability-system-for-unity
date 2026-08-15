@@ -1,5 +1,6 @@
 using System;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
@@ -46,11 +47,13 @@ namespace NTSD.Animation.LF2Objects
 
             Array.Clear(history, 0, history.Length);
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
+            ILF2ObjectPointFactory factory =
+                owner.ResolveObjectPointFactoryForSimulation();
             if (factory == null || owner.PS == null)
                 return;
 
-            OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+            BattleLogicReferencePool referencePool = owner.ResolveLogicReferencePool();
+            OPointCreateTask task = referencePool?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
 
@@ -91,7 +94,7 @@ namespace NTSD.Animation.LF2Objects
             }
             finally
             {
-                LF2ReferencePool.Instance.Recycle(task);
+                referencePool.Recycle(task);
             }
         }
     }

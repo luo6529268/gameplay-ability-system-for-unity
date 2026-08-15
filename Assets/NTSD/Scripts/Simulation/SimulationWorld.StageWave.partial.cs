@@ -40,6 +40,10 @@ namespace NTSD.Simulation
         private DeterministicRng Rng => world.Rng;
         private RuntimeCharacterConfigResolver RuntimeCharacterConfigs =>
             world.RuntimeCharacterConfigs;
+        private BattleRuntimeDataCatalog RuntimeDataCatalog =>
+            world.RuntimeDataCatalog;
+        private BattleLogicReferencePool LogicReferencePool =>
+            world.LogicReferencePool;
         private StageSpawnTaskConfigurator StageSpawnTaskConfigurator =>
             world.StageSpawnTaskConfigurator;
 
@@ -490,9 +494,8 @@ namespace NTSD.Simulation
             if (requiredRuntimeSlot < 0)
                 return -1;
 
-            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
-            GameDataManager dataManager = GameDataManager.Instance;
-            if (manager?.GetCharacterConfig(spawn.Id) == null || dataManager?.GetObjectById(spawn.Id) == null)
+            if (RuntimeCharacterConfigs.Resolve(spawn.Id) == null ||
+                RuntimeDataCatalog.GetObjectDefinition(spawn.Id) == null)
                 return -1;
 
             BattleStageRuntimeState stage = Runtime?.Stage;
@@ -593,10 +596,9 @@ namespace NTSD.Simulation
             entity.HolderCopySlot = entity.Runtime?.SlotIndex ?? -1;
         }
 
-        private static bool IsStageRuntimeAllocationSealed()
+        private bool IsStageRuntimeAllocationSealed()
         {
-            return LF2ReferencePool.Instance?.IsBattleCapacitySealed == true ||
-                   LF2ObjectPool.Instance?.IsBattleCapacitySealed == true;
+            return LogicReferencePool?.IsBattleCapacitySealed == true;
         }
 
         private LF2Entity TrySpawnStageEntityWithFactory(
@@ -608,11 +610,10 @@ namespace NTSD.Simulation
             int hp,
             int requiredRuntimeSlot)
         {
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            LF2ReferencePool referencePool = LF2ReferencePool.Instance;
-            LF2ObjectPool objectPool = LF2ObjectPool.Instance;
-            CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
-            if (factory == null || referencePool == null || objectPool == null || manager == null)
+            ILF2ObjectPointFactory factory =
+                world.ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = LogicReferencePool;
+            if (factory == null || referencePool == null)
                 return null;
 
             OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
@@ -634,6 +635,7 @@ namespace NTSD.Simulation
                 task.initialRuntimeX = spawnX;
                 task.initialRuntimeY = spawnY;
                 task.initialRuntimeZ = spawnZ;
+                task.targetWorld = world;
                 entity = factory.CreateObjectImmediate(task);
             }
             finally
@@ -663,7 +665,7 @@ namespace NTSD.Simulation
             if (wrapper == null)
                 return null;
 
-            ObjectDefinition definition = GameDataManager.Instance?.GetObjectById(spawn.Id);
+            ObjectDefinition definition = RuntimeDataCatalog.GetObjectDefinition(spawn.Id);
             int objectType = definition?.type ?? (int)LF2ObjectType.Character;
             if (objectType != (int)LF2ObjectType.Character)
                 return null;
@@ -680,7 +682,7 @@ namespace NTSD.Simulation
             character.ModuleInitialize();
             character.SetRequiredRuntimeSlot(requiredRuntimeSlot);
             character.Init(task, null);
-            character.ModuleBind(wrapper, spawn.Id);
+            character.ModuleBind(wrapper, spawn.Id, world);
             if (character.Match == null)
             {
                 if (character.RequiredRuntimeSlot != requiredRuntimeSlot)

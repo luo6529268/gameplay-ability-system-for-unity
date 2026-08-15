@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
 
 namespace NTSD.Animation.LF2Objects
 {
@@ -28,6 +29,14 @@ namespace NTSD.Animation.LF2Objects
         public NTSDEntityCategory EntityCategory => NTSDEntityCategory.Effect;
         public long InvalidInitTaskTypeCountForDiagnostics =>
             lifecycleModule.InvalidTaskTypeCountForDiagnostics;
+
+        internal bool TryRestoreOtherShellForSnapshot(
+            in BattleSpecialOtherShellSnapshot state)
+        {
+            return state.Kind == BattleSpecialOtherShellKind.OtherObject &&
+                   lifecycleModule.TryRestoreInvalidTaskTypeCountForSnapshot(
+                       state.InvalidInitTaskTypeCount);
+        }
         internal override bool UsesDynamicRuntimeSlot() => true;
 
         public override LF2ItrRestTracker ItrRest { get; protected set; }

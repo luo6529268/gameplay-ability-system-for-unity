@@ -204,6 +204,25 @@ namespace NTSD.Animation.LF2Objects
     {
         public long InvalidFrameTransitionCountForDiagnostics { get; private set; }
 
+        internal bool TryRestoreLivingShellForSnapshot(
+            in BattleLivingShellSnapshot state,
+            LF2LivingObject catching,
+            LF2LivingObject attacker)
+        {
+            if (HitCounters == null)
+                return false;
+
+            InvalidFrameTransitionCountForDiagnostics =
+                state.InvalidFrameTransitionCount;
+            Catching = catching;
+            Dead = state.Dead;
+            Attacker = attacker;
+            HitCounters.RestoreRecoveryAccumulatorsForSnapshot(
+                state.FallRecoveryAccum,
+                state.BdefendRecoveryAccum);
+            return true;
+        }
+
         #region 基础模块字段
 
         /// <summary>生命和资源状态。</summary>
@@ -567,7 +586,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 UnregisterFromWorld();
             }
-            LF2ReferencePool.Instance?.Release(this);
+            ResolveLogicReferencePool()?.Release(this);
         }
 
         #endregion

@@ -33,6 +33,9 @@ namespace NTSD.Animation.Rendering.Editor
 
         static ProductionEntityStressCpuHierarchyAnalyzer()
         {
+            ProductionEntityStressEditorBridge
+                .StopAndDumpIfArmedAtSampleCompletionAction =
+                StopAndDumpIfArmedAtSampleCompletion;
             EditorApplication.update -= PollRequest;
             EditorApplication.update += PollRequest;
         }
