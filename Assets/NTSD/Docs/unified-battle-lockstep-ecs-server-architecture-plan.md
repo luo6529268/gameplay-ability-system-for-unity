@@ -1,7 +1,9 @@
 # NTSD 统一战斗内核、帧同步、自研 ECS 与未来服务器架构方案
 
 > 建立日期：2026-08-11
-> **2026-08-15 单机阶段最新状态（覆盖下方保留的历史进度流水）**：U0～U6、U8、U9 已完成实现与当前可执行验收；U7 的 snapshot/restore/replay、纯值 transfer/factory、Windows Mono Player correctness gate 已完成，但 Windows IL2CPP gate 因本机所有 Unity 2022.3 安装均缺少 Windows IL2CPP Player variation 而保持“外部工具链待验证”，不能冒充通过。最新 U8 Windows Player worker/synchronous 300 tick 十域 hash 完全一致，正式 tick 0 B、三代 collection 0。U9 五个 Windows Player 场景均完成 300 tick 预热 + 1800 tick 正式采样，完整渲染平均 `55.80～59.11 FPS`，最坏 Concentrated1000 的逻辑 average/P95/P99/max 为 `4.3253/5.8677/8.5765/10.4058 ms`；五场景 SetPass 均为 7、中央 draw 均为 1、四条 managed-memory 边界 0 B、容量拒绝 0、cleanup 全恢复。Authority400 fresh full/full diagnostic 为 6/6 `equal-diagnostic`、`firstDifference=null`；fresh self-check 为 `2026-08-15 21:29:11 PASS`。完整证据见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。S0～S5 未开始；Windows IL2CPP、T8 默认 `stage.dat`、Android 真机不被伪装为本轮已验证项。
+> **2026-08-15 单机阶段最新状态（覆盖下方保留的历史进度流水）**：U0～U6、U8、U9 已完成实现与当前可执行验收；U7 的 snapshot/restore/replay、纯值 transfer/factory、Windows Mono Player correctness gate 已完成，但 Windows IL2CPP gate 仍保持“外部工具链待验证”，不能冒充通过。Windows IL2CPP 模块现已安装并成功完成 IL2CPP C++ 生成、MSVC 编译和 Player 构建，但当前 `2022.3.40f1c1 (0bae6c114c78)` Editor 被混装了国际版 `2022.3.40f1 (cbdda657d2f0)` IL2CPP Player variation；真实 Player 启动日志为 `Expected version: 2022.3.40f1`、`Actual version: 2022.3.40f1c1`，在加载 PlayerSettings 前退出，因而仍没有可执行 IL2CPP correctness 报告。最新 U8 Windows Player worker/synchronous 300 tick 十域 hash 完全一致，正式 tick 0 B、三代 collection 0。U9 五个 Windows Player 场景均完成 300 tick 预热 + 1800 tick 正式采样，完整渲染平均 `55.80～59.11 FPS`，最坏 Concentrated1000 的逻辑 average/P95/P99/max 为 `4.3253/5.8677/8.5765/10.4058 ms`；五场景 SetPass 均为 7、中央 draw 均为 1、四条 managed-memory 边界 0 B、容量拒绝 0、cleanup 全恢复。Authority400 fresh full/full diagnostic 为 6/6 `equal-diagnostic`、`firstDifference=null`；fresh self-check 为 `2026-08-15 21:29:11 PASS`。完整证据见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。S0～S5 未开始；Windows IL2CPP、T8 默认 `stage.dat`、Android 真机不被伪装为本轮已验证项。
+> **2026-08-15 23:36 fresh 门禁补充**：强制 Unity 脚本刷新后未发现 `error CS`；U7 snapshot/restore/ring/session/checksum/runtime-validation 扩大聚焦 job `992fe9182af749118696ae3e511157ff` 为 `33/33 PASS`；`BattleRuntimeSelfCheck` 结果文件于 `23:36:40` 写入 `PASS`。当前唯一未关闭项仍是匹配发行版的真实 Windows IL2CPP Player 跨运行时比较；该证据不替代 IL2CPP 报告，也不授权进入 S0。
+> **2026-08-16 Editor 发行版定调**：用户明确只使用 Unity 国际版，不需要中国版 `f1c1`。当前正在运行的 `D:\Unity\HubEditor\2022.3.40f1\Editor\Unity.exe` 实际 ProductVersion 为中国版 `2022.3.40f1c1_0bae6c114c78`，项目 `ProjectVersion.txt` 也已记录为 `2022.3.40f1c1 (0bae6c114c78)`；目录名中的 `2022.3.40f1` 不能证明它是国际版。U7 后续只接受完整国际版 Editor `2022.3.40f1 (cbdda657d2f0)` 与相同 revision 的 Windows IL2CPP Player，不再寻找或安装 `0bae6c114c78` 中国版 IL2CPP 模块。切换主项目前必须关闭当前 Editor，并避免两套 Editor 同时写同一个 `Library`；不得仅手工修改 `ProjectVersion.txt` 冒充迁移完成。
 > 当前状态：U0～U5 已完成，U6 正在执行。Registry page-SoA、CharacterInput generation-owned store、world-owned input/action writers、AI-only target/boundary、frame-id 原子网关与 CharacterInput 后重复 12 字段回拷删除均已完成。第九至十三切片把 unified AI row 消费的 frame/motion、input target、relation/link、vital 与 DAT state 接入 slot + generation-owned canonical stores；第十四切片新增 world-owned `BattleAiUnifiedRowPublisher`，以 staged dirty + post-CharacterInput 原子提交移除正式路径每实体 19 字段重读/复制，立即写 row 的 `42.2450 ms/tick` 负实验已撤回。第十五至十七切片依次把初始 row 的 19 个战斗字段、directional boundary 与 identity/object type 迁到 generation-owned stores。第十八切片令 UnifiedAuthority 的 first-ten move-mode 初始构建直接复用已捕获的 canonical row，并在 post-CharacterInput 失效检查中读取当前 generation identity store 与 publisher 提交后的 HP/X/Z row，不再二次读取实体字段；Legacy、shadow、deep validator 与强制 full Runtime oracle 保留。fresh Unity 编译 0 C# error、423/423 扩大聚焦测试、`2026-08-13 04:43:39` self-check PASS；1000 AI 增量路径 average/P95/P99/max 为 `21.8479/26.0178/27.8500/29.0220 ms`，强制 full oracle 为 `23.1703/28.1723/31.4818/32.4411 ms`，两者 battle parity/lockstep hash 完全一致，正式 tick 0 B、Gen0/1/2 collection 0、209000/209000 canonical capture、hard breach 0、teardown 完整恢复。该切片只按所有权与等价证据保留，不把约 5.7% 的短样本差距宣称为稳定收益。U6 尚需继续处理实体边界遍历、派生索引维护及完整 frame/motion/lifecycle 对象式热循环，U6/U9 均未完成；服务器 S0、T8 默认 `stage.dat` 与 Android 真机仍不进入当前阶段。
 > 2026-08-15 最新总状态：U7 已形成可用的本地进程快照、同 runtime 实体拓扑恢复及 journal replay 闭环；新增聚合 `BattleStateSnapshotBuffer`、`LockstepSnapshotRing`、精确恢复器及明确 failure code。恢复可以重建快照时的 claimed slot、generation、实体关系、aRest/vRest、pending event，并能撤销快照后新增实体或恢复快照后被删除的实体。fresh Unity 聚焦 job `6204af59a8c64d5ea96d034f2c886a18` 为 `8/8 PASS`，其中 warm exact restore 为 `0 B`。当前实现仍通过本地快照保存的逻辑 shell 引用恢复拓扑，尚未完成跨进程纯值 entity factory、Windows IL2CPP 门禁与 U8 专用 worker；因此 U7 只标记为“本地恢复闭环已验证，跨运行时门禁未完成”，U8/U9 未完成，服务器 S0 仍不得启动。
 > 2026-08-15 后续状态校正：U7 已补齐纯值 transfer/factory 门禁，并在真实 Windows Mono Player 中完成 snapshot -> mutate topology -> restore -> journal replay。报告 `Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report.json` 为 `Passed`，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`，`pureValueTransferPassed=true`、`restoreReplayPassed=true`。Windows IL2CPP Player 尚不能执行的原因是当前 Unity 安装缺少 Windows IL2CPP Player 模块；这属于外部工具链阻塞，不能伪装成通过，也不授权进入服务器阶段。Burst 1.8.16 的 Windows hash cache 另有损坏头，Mono correctness gate 曾临时关闭 Burst AOT 后运行并已立即恢复项目设置；该证据不能代替正常 Burst 配置下的 U9 性能报告。
@@ -1124,17 +1126,22 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 ### U7：生产 Snapshot、Restore 与跨运行时门禁
 
-状态：单机功能实现与本地/Windows Mono Player correctness gate 已完成；Windows IL2CPP gate 因本机所有 Unity 2022.3 安装均缺少 Windows IL2CPP Player variation 而外部阻塞。最新 `Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report-final.json` 为 `Passed`，纯值 transfer/factory 与 restore + journal replay 通过，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`。聚焦 snapshot/restore/ring/session/checksum 测试为 29/29 PASS。未把缺失的 IL2CPP 结果写成通过，也未把未来服务器 runtime 纳入当前单机实现。
+状态：单机功能实现与本地/Windows Mono Player correctness gate 已完成；Windows IL2CPP gate 因当前中国版 Editor 与 Unity Hub 安装的国际版 Windows IL2CPP Player variation 发行版不匹配而外部阻塞。最新 `Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report-final.json` 为 `Passed`，纯值 transfer/factory 与 restore + journal replay 通过，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`。fresh 扩大聚焦 snapshot/restore/ring/session/checksum/runtime-validation 测试为 33/33 PASS。未把无法启动的 IL2CPP Player 或 Windows Mono 结果写成 IL2CPP 通过，也未把未来服务器 runtime 纳入当前单机实现。
 
-> 2026-08-15 U7 工具链复核：已逐一检查本机 `D:\Unity\HubEditor` 下所有 Unity 安装的
-> `windowsstandalonesupport/Variations`，所有 2022.3 版本均只有 Mono variation；Unity Hub 本地缓存也没有可直接复用的
-> Windows IL2CPP 安装包。当前项目实际运行在 `2022.3.40f1c1 (0bae6c114c78)`，项目侧一键门禁现已在
-> `BattleSinglePlayerRuntimeValidationBuild` 中增加精确 variation 预检。真实 Editor 执行菜单
-> `NTSD/Battle Architecture/U7/Build And Run Windows IL2CPP Gate` 时，会在进入 `BuildPipeline` 前报告实际目录和已安装
-> variation；本次结果为 `mono`、两组 win32 Mono 和两组 win64 Mono，确认缺少 IL2CPP，而不是战斗代码构建失败。
-> `Assembly-CSharp-Editor.csproj` fresh build 为 0 error，Unity Console 亦为 0 个脚本编译错误。必须为这一精确 Editor
-> 版本安装 `Windows Build Support (IL2CPP)` 后，才能运行并关闭跨运行时 checksum/restore/replay 门禁；不能用目录中
-> 单独存在的通用 `il2cpp.exe`、其他 Unity 版本的 Player variation 或 Windows Mono 报告替代。IL2CPP Player 自身通过后，
+> 2026-08-15 U7 工具链复核：Windows IL2CPP 模块已经安装，真实门禁也已完成 IL2CPP C++ 生成、MSVC 编译并产出
+> `GameAssembly.dll`；阻塞不再是“模块缺失”。当前项目和 Editor 是中国版 `2022.3.40f1c1 (0bae6c114c78)`，但 Unity Hub
+> 安装的四套 win32/win64 development/nondevelopment IL2CPP `UnityPlayer.dll` 全部是国际版
+> `2022.3.40f1 (cbdda657d2f0)`。该 Player 启动时报告 `Expected version: 2022.3.40f1`、
+> `Actual version: 2022.3.40f1c1`，在 U7 runtime bootstrap 前退出。Unity Hub 日志进一步证明：Hub 查询
+> `2022.3.40f1c1` 时得到 `0 releases retrieved`，随后实际执行的安装包是
+> `UnitySetup-Windows-IL2CPP-Support-for-Editor-2022.3.40f1.exe`。因此这是 Editor/Player 发行版混装，不是战斗代码失败。
+> `BattleSinglePlayerRuntimeValidationBuild` 已增加每套 IL2CPP Player 精确 `ProductVersion` 预检；`2026-08-15 23:28`
+> 在真实 Editor 再次执行 `NTSD/Battle Architecture/U7/Build And Run Windows IL2CPP Gate`，门禁按设计在进入
+> `BuildPipeline` 前 fail-fast，并完整列出四套 `cbdda657d2f0` variation。必须安装与 `0bae6c114c78` 精确匹配的
+> Windows Build Support (IL2CPP)，或用与 `cbdda657d2f0` 匹配的完整国际版 Editor 重新构建，才能关闭跨运行时
+> checksum/restore/replay 门禁。用户已于 `2026-08-16` 明确只使用国际版，因此后续固定采用完整国际版 Editor
+> `2022.3.40f1 (cbdda657d2f0)` 与同 revision Windows IL2CPP Player，不再寻找中国版模块；不能用替换 `UnityPlayer.dll`、
+> 修改 `ProjectVersion.txt` 或版本字符串、通用 `il2cpp.exe` 或 Windows Mono 报告替代。IL2CPP Player 自身通过后，
 > 同一菜单还会自动读取 Windows Mono 报告，对 Unity 版本、平台、source/restored/replay checksum、恢复 slot、stable id 和
 > generation 做逐项跨运行时比较；因此后续不会把“两个 runtime 各自通过”误报成“两个 runtime 结果一致”。
 

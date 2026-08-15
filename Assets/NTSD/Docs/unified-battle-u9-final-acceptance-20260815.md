@@ -4,16 +4,16 @@
 
 U9 的 Windows Mono Player 正式矩阵已通过，U6 的生产所有权退出门与 U8 的 worker/synchronous 等价门也随本轮证据关闭。
 
-本轮只完成单机阶段，不实现服务器业务。S0～S5、Socket、ACK、Jitter Buffer、房间、登录与重连均未开始。T8 默认 `stage.dat` 和 Android 真机仍按用户要求排除。Windows IL2CPP Player gate 因本机 Unity 安装缺少 Windows IL2CPP Player variation 而未运行，不能把 Windows Mono 结果冒充 IL2CPP 结果。
+本轮只完成单机阶段，不实现服务器业务。S0～S5、Socket、ACK、Jitter Buffer、房间、登录与重连均未开始。T8 默认 `stage.dat` 和 Android 真机仍按用户要求排除。Windows IL2CPP Player 模块现已存在且真实构建成功，但安装包版本与当前中国版 Editor 不匹配，Player 无法进入 U7 runtime bootstrap；不能把 Windows Mono 结果或“构建成功”冒充 IL2CPP correctness 通过。
 
 ## 2. 最新构建与正确性门
 
 - Unity 脚本编译：0 C# error；Windows Mono Player 的 `Assembly-CSharp.dll` 更新时间为 `2026-08-15 21:30:03`，晚于最终代码修复；
 - U6 聚焦：CharacterInput 37/37 PASS，生产所有权 6/6 PASS；
-- U7 聚焦：snapshot、restore、ring、session、checksum 合计 29/29 PASS；
+- U7 fresh 扩大聚焦：snapshot、restore、ring、session、checksum、runtime validation 合计 33/33 PASS，job `992fe9182af749118696ae3e511157ff`；
 - U8 聚焦：worker boundary、单机 runtime validation、lockstep checksum 合计 25/25 PASS；
 - 完整 EditMode job：1265 项中 1264 PASS；唯一失败来自 UnityMCP `NetworkStream disposed` Error 日志注入，对应 `BattleRenderingBenchmarkEditorTests.LeakCheck...` 独立重跑 1/1 PASS，不记录为代码断言失败，也不把受污染 job 写成干净全量 PASS；
-- `BattleRuntimeSelfCheck`：`2026-08-15 21:29:11 PASS`；
+- `BattleRuntimeSelfCheck`：`2026-08-15 23:36:40 PASS`；
 - Authority400 fresh full/full diagnostic：权威 C# `Temp/NTSDParity/u9-final-authority-20260815.jsonl` 与 Unity `u9-final-unity-authority-dat-diagnostic-20260815.jsonl` 比较为 6/6 `equal-diagnostic`、`firstDifference=null`、manifest 相同，见 `u9-final-compare-authority-dat-diagnostic-20260815.json`。该夹具因 Unity DAT 适配边界而明确不是 production certificate。
 
 ## 3. U7 Snapshot/Restore 边界
@@ -27,7 +27,9 @@ U9 的 Windows Mono Player 正式矩阵已通过，U6 的生产所有权退出�
 - replay checksum：`3DEB30C4D190E5FB`；
 - warm exact restore：0 B。
 
-Windows IL2CPP 没有可执行报告。检查到 `D:\Unity\HubEditor` 下的 2022.3.4f1c1、2022.3.34f1、2022.3.40f1、2022.3.59f1c1 等安装只有 Windows Mono player variations，没有 Windows IL2CPP player variation。这是外部工具链待验证项。
+Windows IL2CPP 仍没有可执行 correctness 报告。`2026-08-15 23:15` 的真实门禁已经成功生成 `GameAssembly.dll` 并完成 Windows IL2CPP Player 构建；为绕过本机 Burst 1.8.16 损坏 hash cache 和 MSVC 对巨大 Unity 生成 C++ 的 `C1001`，门禁构建临时关闭 Burst AOT、使用 `OptimizeSize + Debug` IL2CPP 编译配置，并在 `finally` 中恢复项目原设置。最终 Player 日志确认真正阻塞为版本混装：Editor/项目数据是 `2022.3.40f1c1 (0bae6c114c78)`，新装的四套 win32/win64 development/nondevelopment IL2CPP `UnityPlayer.dll` 全部是国际版 `2022.3.40f1 (cbdda657d2f0)`；启动报 `Expected version: 2022.3.40f1`、`Actual version: 2022.3.40f1c1`，在加载 PlayerSettings 前退出。Unity Hub 日志显示它查询 `2022.3.40f1c1` 时得到 `0 releases retrieved`，实际安装的是 `UnitySetup-Windows-IL2CPP-Support-for-Editor-2022.3.40f1.exe`；用户再次执行安装后，四套 Player 的 ProductVersion 仍是 `cbdda657d2f0`。U7 菜单前置检查已升级为核验每个 IL2CPP Player 的精确 `ProductVersion`；`2026-08-15 23:28` 再次从真实 Editor 执行门禁时，已在进入 BuildPipeline 前按设计 fail-fast。只有安装 `2022.3.40f1c1 (0bae6c114c78)` 精确匹配的 Windows Build Support (IL2CPP)，或用匹配国际版 Editor 完整重新构建，才能继续关闭本门禁；替换 DLL 或伪造版本字符串不能作为验收。
+
+`2026-08-16` 用户进一步明确只使用国际版，不需要中国版。因此本报告不再把安装 `0bae6c114c78` 中国版模块列为后续路线；唯一有效路线是安装完整国际版 Editor `2022.3.40f1 (cbdda657d2f0)`，与现有国际版 Windows IL2CPP Player 组成同 revision 工具链后重新构建。当前运行中的目录虽然名为 `D:\Unity\HubEditor\2022.3.40f1`，其中 `Unity.exe` 的 ProductVersion 实际为 `2022.3.40f1c1_0bae6c114c78`，并不是所需国际版。切换时不得让两套 Editor 同时写同一个 `Library`，也不得只改项目版本字符串代替真实迁移与运行验证。
 
 ## 4. U8 Worker 与同步等价门
 

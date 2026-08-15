@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -97,11 +98,32 @@ namespace NTSD.Test
             ScriptingImplementation previousBackend =
                 PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone);
             bool previousFrameTimingStats = PlayerSettings.enableFrameTimingStats;
+            Il2CppCodeGeneration previousIl2CppCodeGeneration =
+                PlayerSettings.GetIl2CppCodeGeneration(NamedBuildTarget.Standalone);
+            Il2CppCompilerConfiguration previousIl2CppCompilerConfiguration =
+                PlayerSettings.GetIl2CppCompilerConfiguration(
+                    BuildTargetGroup.Standalone);
+            string burstSettingsPath = Path.Combine(
+                projectRoot,
+                "ProjectSettings",
+                "BurstAotSettings_StandaloneWindows.json");
+            byte[] previousBurstSettings = backend == ScriptingImplementation.IL2CPP
+                ? DisableBurstForRuntimeValidationBuild(burstSettingsPath)
+                : null;
             try
             {
                 PlayerSettings.SetScriptingBackend(
                     BuildTargetGroup.Standalone,
                     backend);
+                if (backend == ScriptingImplementation.IL2CPP)
+                {
+                    PlayerSettings.SetIl2CppCodeGeneration(
+                        NamedBuildTarget.Standalone,
+                        Il2CppCodeGeneration.OptimizeSize);
+                    PlayerSettings.SetIl2CppCompilerConfiguration(
+                        BuildTargetGroup.Standalone,
+                        Il2CppCompilerConfiguration.Debug);
+                }
                 PlayerSettings.enableFrameTimingStats = true;
                 BuildReport buildReport = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
@@ -125,6 +147,16 @@ namespace NTSD.Test
                 PlayerSettings.SetScriptingBackend(
                     BuildTargetGroup.Standalone,
                     previousBackend);
+                PlayerSettings.SetIl2CppCodeGeneration(
+                    NamedBuildTarget.Standalone,
+                    previousIl2CppCodeGeneration);
+                PlayerSettings.SetIl2CppCompilerConfiguration(
+                    BuildTargetGroup.Standalone,
+                    previousIl2CppCompilerConfiguration);
+                if (previousBurstSettings != null)
+                {
+                    File.WriteAllBytes(burstSettingsPath, previousBurstSettings);
+                }
             }
 
             var startInfo = new ProcessStartInfo
@@ -212,12 +244,32 @@ namespace NTSD.Test
             string[] variations = Directory.Exists(variationsDirectory)
                 ? Directory.GetDirectories(variationsDirectory)
                 : Array.Empty<string>();
+            var installedIl2CppPlayers = new System.Collections.Generic.List<string>();
             for (int i = 0; i < variations.Length; i++)
             {
                 string variationName = Path.GetFileName(variations[i]);
                 if (variationName.IndexOf(
                         "il2cpp",
-                        StringComparison.OrdinalIgnoreCase) >= 0)
+                        StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                string unityPlayerPath = Path.Combine(
+                    variations[i],
+                    "UnityPlayer.dll");
+                string productVersion = File.Exists(unityPlayerPath)
+                    ? FileVersionInfo.GetVersionInfo(unityPlayerPath).ProductVersion
+                    : string.Empty;
+                installedIl2CppPlayers.Add(
+                    variationName + "=" +
+                    (string.IsNullOrEmpty(productVersion)
+                        ? "<missing version>"
+                        : productVersion));
+                if (!string.IsNullOrEmpty(productVersion) &&
+                    productVersion.StartsWith(
+                        Application.unityVersion + " ",
+                        StringComparison.Ordinal))
                 {
                     return;
                 }
@@ -231,11 +283,12 @@ namespace NTSD.Test
 
             throw new InvalidOperationException(
                 "U7 Windows " + backendName + " gate cannot run because Unity " +
-                Application.unityVersion +
-                " has no Windows IL2CPP Player variation. Install Windows Build " +
-                "Support (IL2CPP) for this exact Editor version. Variations path=" +
+                Application.unityVersion + " has no matching Windows IL2CPP Player " +
+                "variation. Install Windows Build Support (IL2CPP) for this exact " +
+                "Editor distribution and revision. Variations path=" +
                 variationsDirectory + ", installed=[" +
-                string.Join(", ", installedVariationNames) + "].");
+                string.Join(", ", installedVariationNames) + "], il2cppPlayers=[" +
+                string.Join(", ", installedIl2CppPlayers) + "].");
         }
 
         private static void ValidateCrossRuntimeParity(
@@ -336,6 +389,27 @@ namespace NTSD.Test
                     ", win64=" + importer.GetCompatibleWithPlatform(
                         BuildTarget.StandaloneWindows64) + ".");
             }
+        }
+
+        private static byte[] DisableBurstForRuntimeValidationBuild(
+            string settingsPath)
+        {
+            byte[] previous = File.ReadAllBytes(settingsPath);
+            string json = File.ReadAllText(settingsPath);
+            const string enabled = "\"EnableBurstCompilation\": true";
+            const string disabled = "\"EnableBurstCompilation\": false";
+            if (!json.Contains(enabled))
+            {
+                throw new InvalidOperationException(
+                    "U7 runtime validation could not locate the Windows Burst " +
+                    "AOT setting. Path=" + settingsPath + ".");
+            }
+
+            File.WriteAllText(settingsPath, json.Replace(enabled, disabled));
+            Debug.Log(
+                "[BattleSinglePlayerRuntimeValidation] Burst AOT is disabled " +
+                "only for the U7 IL2CPP validation build and will be restored.");
+            return previous;
         }
 
         private static string Quote(string value)
