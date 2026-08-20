@@ -5,7 +5,7 @@
 ## 1. 目标与边界
 
 本计划只处理 Unity NTSD 战斗运行时的托管内存、运行时所有权和代码结构，不改变
-`J:\QQFile\NTSD2.4\ntsd_release_C#` 定义的战斗规则、pass 顺序、输入、RNG、碰撞、
+`J:\QQFile\NTSD2.4\ntsd_release` release live path 定义的战斗规则、pass 顺序、输入、RNG、碰撞、
 命中或对象生命周期结果。T8 默认 `stage.dat` 部署和 Android 真机验收继续排除。
 
 “战斗期间不能触发 GC”拆成四个可验证合同：

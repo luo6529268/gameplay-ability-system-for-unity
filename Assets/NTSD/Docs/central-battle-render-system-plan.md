@@ -1,5 +1,7 @@
 # 集中式战斗渲染系统方案
 
+> **2026-08-20 表现权威迁移**：渲染重构不改变战斗真值，但其 render handoff、实体/阴影/hit-record 顺序、`x_int/y_int/z_int`、camera/perspective carrier 与最终可观察战斗画面，必须以 `J:\QQFile\NTSD2.4\ntsd_release\src\render\renderer.cpp` 和 live `game_tick(...)` handoff 为准。此前“C# authority”措辞只保留为历史记录；中央渲染 batching、Texture2DArray 和动态 Mesh 不得成为改变 C++ release 可观察表现的理由。
+
 ## 2026-08-10：可信资源缓存优化与当前证据边界
 
 - 中央 renderer 的可信资源解析缓存已由通用 `Dictionary<object, BattleCentralResolvedResource>` 改为预热、引用身份、开放寻址的专用缓存；外部或身份不可信输入仍保持既有 fail-closed 校验边界。

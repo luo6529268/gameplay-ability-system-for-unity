@@ -1,4 +1,8 @@
-# NTSD C# 工程 vs Unity 工程 — 战斗逻辑差异与对齐清单
+# NTSD C++ Release vs Unity — 战斗逻辑差异与对齐清单
+
+> **2026-08-20 权威迁移声明（覆盖本文全部“C# 唯一权威”表述）**：战斗场景与战斗 runtime 的唯一行为基准改为 `J:\QQFile\NTSD2.4\ntsd_release` 中实际参与 `ntsd_new.exe` release 构建的 C++ live path，入口为 `src/entity/game_tick.cpp` 的 `game_tick(...)`。`ntsd_release_C#` 降为历史移植辅助与交叉检查来源；本文此前以 C# 为 authority 的状态、通过记录、差异关闭和 Play Mode 结论均保留为历史回归证据，**不能**作为 C++ release 对齐完成的证明。本文文件名保留，避免断开历史链接；后续新增和重开项均按 C++ → Unity 记录。
+
+> **当前重新对齐目标**：保持 Unity 已有 `SimulationTickDriver`、`SimulationWorld`、slot/generation、SoA/ECS、对象池、中央渲染和 worker 架构；不做整体重写。每项改动必须先以 C++ 同 seed、同输入、同 tick trace 证明行为，再验证 fast path 开启后的等价性、0 GC 和性能，不允许用 C# self-check 或性能 hash 替代 C++ 场景表现验收。
 
 ## 2026-08-08：压力工具追帧预算与 1000 AI 实测
 

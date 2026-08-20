@@ -1,4 +1,8 @@
-# 接手文档 — NTSD C# → Unity 战斗逻辑对齐（Codex 无缝接手版）
+# 接手文档 — NTSD C++ Release → Unity 战斗逻辑对齐（Codex 无缝接手版）
+
+> **2026-08-20 接手定调（覆盖本文全部“C# 唯一权威”表述）**：唯一 gameplay authority 是 `J:\QQFile\NTSD2.4\ntsd_release` 的 release live runtime，而非 `ntsd_release_C#`。以 `src/entity/game_tick.cpp` 的 `game_tick(...)` 及其正式构建的 frame/physics/collision/weapon/cpoint/input/renderer 模块为准。C#、旧 self-check、旧 Architect 结论和原有 Play Mode 记录只作为历史移植/回归材料；与 C++ release live path 冲突时必须以 C++ 为准。
+
+> **当前工作边界**：不废弃现有 Unity 架构或性能成果；按“C++ pass trace → Unity legacy/fallback 对照 → Unity fast path 对照 → 真实 Play Mode”逐模块收口。不得把 C++ 的 debug probe 当规则本身，但可用其观察 release live path。
 
 ## 2026-08-08：1000 AI catch-up CPU 预算接手状态
 

@@ -3,7 +3,7 @@
 > 审计日期：2026-08-11  
 > 知识库范围：`I:\GitHub\ZhiHu_MD\output\网络游戏` 及其全部子目录  
 > 适用项目：`Assets/NTSD` 战斗运行时、未来帧同步客户端与战斗服务器  
-> 战斗逻辑唯一权威：`J:\QQFile\NTSD2.4\ntsd_release_C#`  
+> 战斗逻辑唯一权威：`J:\QQFile\NTSD2.4\ntsd_release` 的 release live path；`ntsd_release_C#` 仅为历史辅助来源
 > 上位方案：`Assets/NTSD/Docs/unified-battle-lockstep-ecs-server-architecture-plan.md`
 
 ## 1. 审计目的
@@ -12,7 +12,7 @@
 
 1. `网络游戏` 知识库中哪些资料已经纳入 NTSD 架构判断；
 2. 哪些通用经验可以直接采用，哪些必须结合 NTSD 约束后采用；
-3. 哪些结论属于其他网络模型、存在明显风险或与 C# 权威冲突，不能写入 NTSD 的正式方案。
+3. 哪些结论属于其他网络模型、存在明显风险或与 C++ release 权威冲突，不能写入 NTSD 的正式方案。
 
 知识库只提供网络与工程方法，不定义 NTSD 战斗规则。移动、输入、技能、碰撞、命中、opoint、生命周期和 pass 顺序仍只以权威 C# 调用链为准。
 

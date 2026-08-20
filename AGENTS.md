@@ -4,11 +4,11 @@
 
 本仓库是基于 EX Gameplay Ability System 的 Unity NTSD 战斗运行时复刻项目。
 
-- Unity 版本：`2022.3.4f1c1`
+- Unity 版本：以项目当前 `ProjectSettings/ProjectVersion.txt` 为准
 - Unity 实现目录：`Assets/NTSD/Scripts/`
 - 当前工作范围：战斗场景与战斗 runtime
-- 唯一战斗逻辑权威：`J:\QQFile\NTSD2.4\ntsd_release_C#`
-- Unity 是实现目标；权威工程用于判定规则、顺序、字段和可观察行为
+- 唯一战斗逻辑权威：`J:\QQFile\NTSD2.4\ntsd_release` 的正式 release live runtime
+- Unity 是实现目标；C++ release runtime 用于判定规则、顺序、字段和可观察行为；`ntsd_release_C#` 仅保留为历史移植辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
 
@@ -17,46 +17,50 @@
 处理战斗逻辑时，按以下优先级判断：
 
 1. 用户在当前任务中的明确要求。
-2. `J:\QQFile\NTSD2.4\ntsd_release_C#` 中可定位的正式 C# 行为。
-3. Unity 当前实现与测试，只用于确认现状和验证移植结果，不能反过来定义权威行为。
-4. 项目文档和历史记录，只用于任务跟踪；与权威 C# 源码冲突时必须更新文档，不能修改权威结论。
+2. `J:\QQFile\NTSD2.4\ntsd_release` 中实际参与 release 构建并运行到 `ntsd_new.exe` 的 C++ battle runtime 行为。
+3. `J:\QQFile\NTSD2.4\ntsd_release_C#` 的正式 C# 行为，只能用于定位历史移植意图、命名和交叉检查；与 C++ release live path 冲突时必须以 C++ 为准。
+4. Unity 当前实现与测试，只用于确认现状和验证移植结果，不能反过来定义权威行为。
+5. 项目文档和历史记录，只用于任务跟踪；与权威 C++ release 源码冲突时必须更新文档，不能修改权威结论。
 
-除上述 C# 目录之外的旧实现、历史资料和旧对齐结论，都不能作为当前战斗逻辑依据。用户没有明确要求历史比较时，不要读取、引用或据此实现。不要因为 Unity 现有行为更方便而偏离 C#；也不要把旧项目中的名称机械替换成并不存在的 C# 类型、字段或方法。
+只有 C++ release 的 live path 才能定义当前战斗规则。未参与 release 构建的实验代码、备份文件、debug probe、diagnostic、反汇编记录和旧对齐结论都不能作为 authority。用户没有明确要求历史比较时，不要以 C#、反汇编或旧实现补写 C++ 未确认的行为。不要因为 Unity 或 C# 现有行为更方便而偏离 C++；也不要把 C++ 的统一 `Entity` 字段名称机械替换成并不存在的 Unity 类型、字段或方法。
 
-无法在权威 C# 工程中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 C# 一致。
+无法在权威 C++ release live path 中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 C++ release 一致。
 
-### 2.1 历史定向例外（严格限于用户指定事项）
+### 2.1 C# 工程的保留用途与边界
 
-`J:\QQFile\NTSD2.4\ntsd_release_C#` 仍是唯一的一般战斗逻辑权威。不得将 C++、反汇编、旧实现、历史日志或表现结果提升为一般权威，或据此扩展其他规则。
+`J:\QQFile\NTSD2.4\ntsd_release_C#` 不是当前 gameplay authority。它可以用于：
 
-仅在用户明确指定并且文档记录了范围时，允许把以下历史材料作为单一问题的定向对照：
+- 识别既有 Unity 移植的字段命名和历史意图；
+- 对照 C++ 已确认行为的第二实现；
+- 补充 C++ 源码中尚未读到的调用者线索；
+- 维护历史自检和已有回归夹具。
 
-- Naruto 防下攻的已指定历史定向例外；
-- 跳跃水平动量（frame 211 -> 212）的已指定历史定向例外。
+它不得用于覆盖 C++ release 的 pass 顺序、输入时点、碰撞/命中结果、对象生命周期、镜头/render handoff 或最终可观察表现。历史文档中“C# 唯一权威”及 C++ 定向例外的表述均视为已废止的历史上下文。
 
-这些例外只用于其已记录的行为核验，不改变 C# 的一般优先级，也不授权对相邻技能、输入、物理或 pass 顺序作类推。
-
-## 3. C# 权威入口
+## 3. C++ release 权威入口
 
 开始对齐前，先从与问题最接近的入口追踪实际调用链，不要根据方法名猜测语义。
 
 | 领域 | 权威入口 |
 |------|----------|
-| 战斗主循环与 pass 顺序 | `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Simulation\GameTick.cs` |
-| 碰撞后的命中结算 | `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Interaction\HitResolve.cs` |
-| 帧推进与帧内规则 | `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Frame\FrameTick.cs` |
-| 输入、组合键与 AI 输入链 | `J:\QQFile\NTSD2.4\ntsd_release_C#\src\BattleCore\Input\InputRuntime.cs` |
+| 战斗主循环与 pass 顺序 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\game_tick.cpp` 的 live `game_tick(...)` |
+| 帧推进、物理、opoint 与对象生命周期 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\frame_advance.cpp`、`physics.cpp` |
+| 碰撞候选、命中与对象交互 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\collision_collect.cpp`、`collision.cpp`、`hit.cpp` |
+| 武器、cpoint、持有/投掷 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\weapon.cpp`、`cpoint.cpp` |
+| 输入、组合键与 AI 输入链 | `J:\QQFile\NTSD2.4\ntsd_release\src\input\input_handler.cpp` |
+| 战斗 render handoff 与场景表现 | `J:\QQFile\NTSD2.4\ntsd_release\src\render\renderer.cpp` |
 
 这些文件是定位入口，不代表只需要查看这四个文件。实现具体行为时，应继续追踪它们调用的数据模型、resolver、碰撞、对象生成、状态统计和实体生命周期代码，直到字段读写与调用顺序完整闭合。
 
 ### 对齐工作顺序
 
-1. 在权威 C# 中定位入口、调用者、被调用者和字段定义。
+1. 在权威 C++ release live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `Makefile` 的 release 构建。
 2. 记录完整前置条件、分支顺序、常量、状态写入、统计副作用和对象生命周期副作用。
 3. 在 Unity 中定位对应 pass、实体类型、runtime 字段与表现层接口。
 4. 先补齐数据契约，再整体移植行为；不得只搬局部扣血、位移或生成片段。
-5. 验证编译、自动自检和目标场景行为。
-6. 只在获得对应证据后更新对齐文档状态。
+5. 先以同 seed、同输入、同 tick 的 C++/Unity trace 验证，再执行编译、自动自检和目标场景行为验证。
+6. 性能 fast path、SoA/ECS writer、缓存和 no-op skip 只有在关闭前后均与 C++ trace 一致时才能提升为默认路径。
+7. 只在获得对应证据后更新对齐文档状态。
 
 ## 4. 战斗范围
 
@@ -242,14 +246,16 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 
 - `Assets/NTSD/Docs/csharp-vs-unity-battle-alignment.md`
 - `Assets/NTSD/Docs/HANDOFF-codex-battle-alignment.md`
+- `Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md`
 
 记录差异时至少写明：
 
-- 权威 C# 文件、类型和方法。
+- 权威 C++ release 文件、类型、函数和 release build 参与性。
 - Unity 对应文件、类型和方法。
 - 前置条件与可复现输入。
 - 预期结果、实际结果和差异。
 - 数据契约或 pass 顺序依赖。
+- C++/Unity trace 的 first-difference 证据，以及 legacy/fallback 与 optimized path 的验证状态。
 - 当前状态与验证证据。
 
 不要在 `AGENTS.md` 维护逐次实现流水账。长期有效的规则留在这里；具体任务状态、差异清单和测试结果写入上述对齐文档。发现旧文档与本文件的唯一权威规则冲突时，应在当前任务范围内更正该文档，不能继续传播旧结论。
@@ -282,7 +288,7 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 
 交付战斗逻辑任务前逐项确认：
 
-- 权威依据来自 `ntsd_release_C#` 的真实调用链。
+- 权威依据来自 `ntsd_release` 的真实 release live 调用链；C++ debug probe 只可辅助观察，不能定义规则。
 - Unity 实现没有把表现状态当作逻辑真相。
 - 编译为 0 error。
 - 相关 `BattleRuntimeSelfCheck` 已实际运行并通过，或已诚实报告阻塞。
