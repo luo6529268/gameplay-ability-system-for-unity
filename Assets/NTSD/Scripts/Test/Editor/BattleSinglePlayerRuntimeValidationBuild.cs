@@ -41,6 +41,18 @@ namespace NTSD.Test
             RequestBuild("Mono");
         }
 
+        [MenuItem("NTSD/Battle Architecture/U7/Restore Production Build Settings")]
+        internal static void RestoreProductionBuildSettings()
+        {
+            PlayerSettings.enableFrameTimingStats = false;
+            PlayerSettings.SetScriptingBackend(
+                BuildTargetGroup.Standalone,
+                ScriptingImplementation.IL2CPP);
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "[BattleSinglePlayerRuntimeValidation] Restored production build settings.");
+        }
+
         private static void RequestBuild(string backendName)
         {
             SessionState.SetString(PendingBackendKey, backendName);
@@ -107,9 +119,8 @@ namespace NTSD.Test
                 projectRoot,
                 "ProjectSettings",
                 "BurstAotSettings_StandaloneWindows.json");
-            byte[] previousBurstSettings = backend == ScriptingImplementation.IL2CPP
-                ? DisableBurstForRuntimeValidationBuild(burstSettingsPath)
-                : null;
+            byte[] previousBurstSettings =
+                DisableBurstForRuntimeValidationBuild(burstSettingsPath);
             try
             {
                 PlayerSettings.SetScriptingBackend(
@@ -157,6 +168,7 @@ namespace NTSD.Test
                 {
                     File.WriteAllBytes(burstSettingsPath, previousBurstSettings);
                 }
+                AssetDatabase.SaveAssets();
             }
 
             var startInfo = new ProcessStartInfo

@@ -76,18 +76,6 @@ namespace NTSD.Animation
             public Color32[] ProcessedPixels;
         }
 
-        private sealed class WordsPublicationStaging
-        {
-            public Texture2D[] Textures;
-            public Sprite[][] GlyphSprites;
-            public string[] SourcePaths;
-            public Color32[][] ProcessedPixels;
-            public Texture2D ComLabelsTexture;
-            public Sprite[] ComLabelSprites;
-            public string ComLabelsSourcePath;
-            public Color32[] ComLabelsProcessedPixels;
-        }
-
         [ShowInInspector, ReadOnly]
         [DictionaryDrawerSettings(
             KeyLabel = "角色ID",
@@ -957,7 +945,6 @@ namespace NTSD.Animation
             BattleAtlasPolicyDecision atlasPolicyDecision = null;
             BattleAtlasDiagnosticInputs atlasDiagnosticInputs = null;
             SparkPublicationStaging stagedSpark = null;
-            WordsPublicationStaging stagedWords = null;
             BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
@@ -974,47 +961,6 @@ namespace NTSD.Animation
                         stagedCreatedSprites.Add(sparkSprite);
                 }
 
-                stagedWords = await BuildWordsPublicationAsync(invocation);
-                if (stagedWords == null || stagedWords.Textures == null ||
-                    stagedWords.GlyphSprites == null || stagedWords.ProcessedPixels == null ||
-                    stagedWords.SourcePaths == null)
-                {
-                    throw new InvalidOperationException(
-                        "WORDS0.bmp through WORDS5.bmp could not be decoded into the common glyph publication.");
-                }
-
-                foreach (Texture2D wordsTexture in stagedWords.Textures)
-                {
-                    if (wordsTexture == null)
-                        throw new InvalidOperationException("WORDS publication contains a missing texture.");
-                    stagedTextures.Add(wordsTexture);
-                    stagedResources.Add(wordsTexture);
-                }
-
-                foreach (Sprite[] glyphs in stagedWords.GlyphSprites)
-                {
-                    if (glyphs == null)
-                        throw new InvalidOperationException("WORDS publication contains a missing glyph page.");
-                    foreach (Sprite glyph in glyphs)
-                    {
-                        if (glyph != null)
-                            stagedCreatedSprites.Add(glyph);
-                    }
-                }
-                if (stagedWords.ComLabelsTexture == null ||
-                    stagedWords.ComLabelSprites == null ||
-                    stagedWords.ComLabelSprites.Length != BattleCommonVisualCatalog.WordSheetCount ||
-                    stagedWords.ComLabelsProcessedPixels == null ||
-                    string.IsNullOrWhiteSpace(stagedWords.ComLabelsSourcePath))
-                {
-                    throw new InvalidOperationException(
-                        "WORDS publication contains no generated Com-label bindings.");
-                }
-                stagedTextures.Add(stagedWords.ComLabelsTexture);
-                stagedResources.Add(stagedWords.ComLabelsTexture);
-                foreach (Sprite comLabelSprite in stagedWords.ComLabelSprites)
-                    stagedCreatedSprites.Add(comLabelSprite);
-
                 await UniTask.SwitchToMainThread();
                 if (!CanCompleteSpritePrewarmInvocation(invocation))
                 {
@@ -1025,24 +971,17 @@ namespace NTSD.Animation
                 commonVisualCatalog = BattleCommonVisualCatalog.Build(
                     NTSD.App.GameConfig.Instance?.ShadowPrefab,
                     stagedSpark.Texture,
-                    stagedSpark.Sprites,
-                    stagedWords.Textures,
-                    stagedWords.GlyphSprites,
-                    stagedWords.ComLabelsTexture,
-                    stagedWords.ComLabelSprites);
-                if (!commonVisualCatalog.IsComplete)
+                    stagedSpark.Sprites);
+                if (!commonVisualCatalog.IsRuntimeReady)
                     throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
 
                 var commonSourcePaths =
                     new Dictionary<BattleVisualResourceKey, string>(
-                        1 + BattleCommonVisualCatalog.SparkFrameCount +
-                        BattleCommonVisualCatalog.WordSheetCount *
-                        BattleCommonVisualCatalog.WordGlyphsPerSheet + 1);
+                        1 + BattleCommonVisualCatalog.SparkFrameCount);
                 var forcedCommonSource2DPaths = new List<string>();
                 if (!TryAppendCommonAtlasSources(
                         commonVisualCatalog,
                         stagedSpark,
-                        stagedWords,
                         stagedAtlasSources,
                         commonSourcePaths,
                         forcedCommonSource2DPaths,
@@ -1229,288 +1168,18 @@ namespace NTSD.Animation
                 UnityEngine.Object.DestroyImmediate(texture);
         }
 
-        private async UniTask<WordsPublicationStaging> BuildWordsPublicationAsync(int invocation)
-        {
-            var bmpData = new BMPLoader.BmpData[BattleCommonVisualCatalog.WordSheetCount];
-            var sourcePaths = new string[BattleCommonVisualCatalog.WordSheetCount];
-            for (int sheetIndex = 0; sheetIndex < bmpData.Length; sheetIndex++)
-            {
-                int capturedSheetIndex = sheetIndex;
-                string wordsPath = Path.Combine(
-                    Application.dataPath,
-                    "NTSD", "Sprite", "UIPanels", $"WORDS{capturedSheetIndex}.bmp");
-                sourcePaths[capturedSheetIndex] = wordsPath;
-                bmpData[capturedSheetIndex] = await UniTask.RunOnThreadPool(
-                    () => BMPLoader.LoadBmpData(wordsPath));
-                if (bmpData[capturedSheetIndex] == null || bmpData[capturedSheetIndex].Pixels == null ||
-                    bmpData[capturedSheetIndex].Width != BattleCommonVisualCatalog.WordTextureWidth ||
-                    bmpData[capturedSheetIndex].Height != BattleCommonVisualCatalog.WordTextureHeight ||
-                    !CanCompleteSpritePrewarmInvocation(invocation))
-                {
-                    return null;
-                }
-            }
-
-            var transparency = new TransparentColorData
-            {
-                targetColor = Color.black,
-                colorTolerance = 0f
-            };
-            var processedPixels = new Color32[BattleCommonVisualCatalog.WordSheetCount][];
-            for (int sheetIndex = 0; sheetIndex < processedPixels.Length; sheetIndex++)
-            {
-                int capturedSheetIndex = sheetIndex;
-                processedPixels[capturedSheetIndex] = await UniTask.RunOnThreadPool(() =>
-                {
-                    Color[] colors = RuntimeSpriteProcessor.ProcessColorTransparencyPixels(
-                        bmpData[capturedSheetIndex].Pixels,
-                        transparency,
-                        out _);
-                    return ConvertToColor32(colors);
-                });
-                if (processedPixels[capturedSheetIndex] == null ||
-                    processedPixels[capturedSheetIndex].Length !=
-                    bmpData[capturedSheetIndex].Width * bmpData[capturedSheetIndex].Height ||
-                    !CanCompleteSpritePrewarmInvocation(invocation))
-                {
-                    return null;
-                }
-            }
-
-            await UniTask.SwitchToMainThread();
-            if (!CanCompleteSpritePrewarmInvocation(invocation))
-                return null;
-
-            Texture2D[] textures = new Texture2D[BattleCommonVisualCatalog.WordSheetCount];
-            Sprite[][] glyphSprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount][];
-            Texture2D comLabelsTexture = null;
-            Sprite[] comLabelSprites = null;
-            bool transfersOwnership = false;
-            try
-            {
-                for (int sheetIndex = 0; sheetIndex < textures.Length; sheetIndex++)
-                {
-                    if (!CanCompleteSpritePrewarmInvocation(invocation))
-                        return null;
-
-                    Texture2D texture = new Texture2D(
-                        bmpData[sheetIndex].Width,
-                        bmpData[sheetIndex].Height,
-                        TextureFormat.RGBA32,
-                        false);
-                    texture.filterMode = FilterMode.Point;
-                    texture.wrapMode = TextureWrapMode.Clamp;
-                    texture.SetPixels32(processedPixels[sheetIndex]);
-                    texture.Apply(false, true);
-                    texture.name = $"WORDS{sheetIndex}";
-                    textures[sheetIndex] = texture;
-
-                    var glyphs = new Sprite[BattleCommonVisualCatalog.WordGlyphsPerSheet];
-                    for (int charCode = 0; charCode < glyphs.Length; charCode++)
-                    {
-                        if (!CanCompleteSpritePrewarmInvocation(invocation))
-                            return null;
-
-                        Sprite glyph = Sprite.Create(
-                            texture,
-                            BattleCommonVisualCatalog.GetWordGlyphPixelRect(charCode),
-                            BattleCommonVisualCatalog.GetWordGlyphPivotNormalized(),
-                            100f,
-                            0,
-                            SpriteMeshType.FullRect);
-                        glyph.name = $"words_{sheetIndex:D1}_{charCode:D3}";
-                        glyphs[charCode] = glyph;
-                    }
-
-                    glyphSprites[sheetIndex] = glyphs;
-                }
-
-                Color32[] comLabelsPixels = BuildComLabelsPixels(processedPixels);
-                comLabelsTexture = new Texture2D(
-                    BattleCommonVisualCatalog.SpecialComWidth,
-                    BattleCommonVisualCatalog.ComLabelsTextureHeight,
-                    TextureFormat.RGBA32,
-                    false)
-                {
-                    filterMode = FilterMode.Point,
-                    wrapMode = TextureWrapMode.Clamp,
-                    name = "WORDS_COM_LABELS",
-                };
-                comLabelsTexture.SetPixels32(comLabelsPixels);
-                comLabelsTexture.Apply(false, true);
-                comLabelSprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount];
-                for (int sheetIndex = 0; sheetIndex < comLabelSprites.Length; sheetIndex++)
-                {
-                    Sprite comLabelSprite = Sprite.Create(
-                        comLabelsTexture,
-                        BattleCommonVisualCatalog.GetComLabelPixelRect(sheetIndex),
-                        BattleCommonVisualCatalog.GetSpecialComPivotNormalized(),
-                        100f,
-                        0,
-                        SpriteMeshType.FullRect);
-                    comLabelSprite.name = $"words_{sheetIndex}_com_label";
-                    comLabelSprites[sheetIndex] = comLabelSprite;
-                }
-
-                if (!CanCompleteSpritePrewarmInvocation(invocation))
-                    return null;
-
-                transfersOwnership = true;
-                return new WordsPublicationStaging
-                {
-                    Textures = textures,
-                    GlyphSprites = glyphSprites,
-                    SourcePaths = sourcePaths,
-                    ProcessedPixels = processedPixels,
-                    ComLabelsTexture = comLabelsTexture,
-                    ComLabelSprites = comLabelSprites,
-                    ComLabelsSourcePath = sourcePaths[0] + ".com-labels.generated",
-                    ComLabelsProcessedPixels = comLabelsPixels,
-                };
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError($"Failed to create the common WORDS publication: {exception.Message}");
-                return null;
-            }
-            finally
-            {
-                if (!transfersOwnership)
-                    DestroyWordsPublicationStaging(
-                        textures,
-                        glyphSprites,
-                        comLabelsTexture,
-                        comLabelSprites);
-            }
-        }
-
-        private static Color32[] BuildComLabelsPixels(Color32[][] wordSheetPixels)
-        {
-            int sourceWidth = BattleCommonVisualCatalog.WordTextureWidth;
-            int sourceHeight = BattleCommonVisualCatalog.WordTextureHeight;
-            if (wordSheetPixels == null ||
-                wordSheetPixels.Length != BattleCommonVisualCatalog.WordSheetCount)
-            {
-                throw new InvalidOperationException(
-                    "All WORDS sheet pixels are required for Com-label publication.");
-            }
-
-            var result = new Color32[
-                BattleCommonVisualCatalog.SpecialComWidth *
-                BattleCommonVisualCatalog.ComLabelsTextureHeight];
-            int[] charCodes = { 'C', 'o', 'm' };
-            for (int sheetIndex = 0;
-                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
-                 sheetIndex++)
-            {
-                Color32[] sourcePixels = wordSheetPixels[sheetIndex];
-                if (sourcePixels == null || sourcePixels.Length != sourceWidth * sourceHeight)
-                {
-                    throw new InvalidOperationException(
-                        $"WORDS{sheetIndex} pixels are unavailable for Com-label publication.");
-                }
-
-                int destinationY = sheetIndex * BattleCommonVisualCatalog.SpecialComHeight;
-                for (int glyphIndex = 0; glyphIndex < charCodes.Length; glyphIndex++)
-                {
-                    Rect rect = BattleCommonVisualCatalog.GetWordGlyphPixelRect(
-                        charCodes[glyphIndex]);
-                    int sourceX = (int)rect.x;
-                    int sourceY = (int)rect.y;
-                    int destinationX = glyphIndex *
-                        NTSD.Simulation.Presentation.BattleEntityOverlayLayout.GlyphAdvance;
-                    for (int row = 0; row < BattleCommonVisualCatalog.SpecialComHeight; row++)
-                    {
-                        Array.Copy(
-                            sourcePixels,
-                            (sourceY + row) * sourceWidth + sourceX,
-                            result,
-                            (destinationY + row) * BattleCommonVisualCatalog.SpecialComWidth +
-                            destinationX,
-                            BattleCommonVisualCatalog.WordGlyphWidth);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private static void DestroyWordsPublicationStaging(
-            Texture2D[] textures,
-            Sprite[][] glyphSprites,
-            Texture2D comLabelsTexture,
-            Sprite[] comLabelSprites)
-        {
-            if (glyphSprites != null)
-            {
-                foreach (Sprite[] glyphs in glyphSprites)
-                {
-                    if (glyphs == null)
-                        continue;
-                    foreach (Sprite glyph in glyphs)
-                    {
-                        if (glyph == null)
-                            continue;
-                        if (Application.isPlaying)
-                            UnityEngine.Object.Destroy(glyph);
-                        else
-                            UnityEngine.Object.DestroyImmediate(glyph);
-                    }
-                }
-            }
-
-            if (textures != null)
-            {
-                foreach (Texture2D texture in textures)
-                {
-                    if (texture == null)
-                        continue;
-                    if (Application.isPlaying)
-                        UnityEngine.Object.Destroy(texture);
-                    else
-                        UnityEngine.Object.DestroyImmediate(texture);
-                }
-            }
-
-            if (comLabelSprites != null)
-            {
-                foreach (Sprite comLabelSprite in comLabelSprites)
-                {
-                    if (comLabelSprite == null)
-                        continue;
-                    if (Application.isPlaying)
-                        UnityEngine.Object.Destroy(comLabelSprite);
-                    else
-                        UnityEngine.Object.DestroyImmediate(comLabelSprite);
-                }
-            }
-            if (comLabelsTexture != null)
-            {
-                if (Application.isPlaying)
-                    UnityEngine.Object.Destroy(comLabelsTexture);
-                else
-                    UnityEngine.Object.DestroyImmediate(comLabelsTexture);
-            }
-        }
-
         private static bool TryAppendCommonAtlasSources(
             BattleCommonVisualCatalog commonCatalog,
             SparkPublicationStaging spark,
-            WordsPublicationStaging words,
             ICollection<BattleAtlasSourcePixels> sources,
             IDictionary<BattleVisualResourceKey, string> sourcePaths,
             ICollection<string> forcedSourceTexture2DPaths,
             out string diagnostic)
         {
             diagnostic = string.Empty;
-            if (commonCatalog == null || !commonCatalog.IsComplete ||
+            if (commonCatalog == null || !commonCatalog.IsRuntimeReady ||
                 spark?.Texture == null || spark.ProcessedPixels == null ||
                 string.IsNullOrWhiteSpace(spark.SourcePath) ||
-                words?.Textures == null || words.GlyphSprites == null ||
-                words.ProcessedPixels == null || words.SourcePaths == null ||
-                words.ComLabelsTexture == null || words.ComLabelSprites == null ||
-                words.ComLabelSprites.Length != BattleCommonVisualCatalog.WordSheetCount ||
-                words.ComLabelsProcessedPixels == null ||
-                string.IsNullOrWhiteSpace(words.ComLabelsSourcePath) ||
                 sources == null || sourcePaths == null || forcedSourceTexture2DPaths == null)
             {
                 diagnostic = "Complete common staging data is required for unified atlas publication.";
@@ -1530,66 +1199,6 @@ namespace NTSD.Animation
                 spark.ProcessedPixels));
             for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
                 sourcePaths[BattleVisualResourceKey.CommonSpark(pic)] = spark.SourcePath;
-
-            if (words.Textures.Length != BattleCommonVisualCatalog.WordSheetCount ||
-                words.ProcessedPixels.Length != BattleCommonVisualCatalog.WordSheetCount ||
-                words.SourcePaths.Length != BattleCommonVisualCatalog.WordSheetCount)
-            {
-                diagnostic = "WORDS staging arrays do not contain all six source sheets.";
-                return false;
-            }
-
-            for (int sheetIndex = 0;
-                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
-                 sheetIndex++)
-            {
-                Texture2D texture = words.Textures[sheetIndex];
-                Color32[] pixels = words.ProcessedPixels[sheetIndex];
-                string path = words.SourcePaths[sheetIndex];
-                if (texture == null || pixels == null || string.IsNullOrWhiteSpace(path) ||
-                    pixels.Length != texture.width * texture.height)
-                {
-                    diagnostic = $"WORDS{sheetIndex} processed pixels do not match the published descriptor texture.";
-                    return false;
-                }
-
-                sources.Add(new BattleAtlasSourcePixels(path, texture.width, texture.height, pixels));
-                for (int charCode = 0;
-                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
-                     charCode++)
-                {
-                    sourcePaths[BattleVisualResourceKey.CommonWordGlyph(sheetIndex, charCode)] = path;
-                }
-            }
-
-            if (!commonCatalog.IsComLabelsComplete ||
-                words.ComLabelsProcessedPixels.Length !=
-                BattleCommonVisualCatalog.SpecialComWidth *
-                BattleCommonVisualCatalog.ComLabelsTextureHeight)
-            {
-                diagnostic = "Com-label staging does not match the common visual catalog.";
-                return false;
-            }
-            sources.Add(new BattleAtlasSourcePixels(
-                words.ComLabelsSourcePath,
-                BattleCommonVisualCatalog.SpecialComWidth,
-                BattleCommonVisualCatalog.ComLabelsTextureHeight,
-                words.ComLabelsProcessedPixels));
-            for (int sheetIndex = 0;
-                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
-                 sheetIndex++)
-            {
-                if (!commonCatalog.TryGetComLabel(
-                        sheetIndex,
-                        out BattleCommonVisualBinding comLabel) ||
-                    comLabel.Texture != words.ComLabelsTexture)
-                {
-                    diagnostic = $"Com-label binding {sheetIndex} does not match the staging texture.";
-                    return false;
-                }
-                sourcePaths[BattleVisualResourceKey.CommonComLabel(sheetIndex)] =
-                    words.ComLabelsSourcePath;
-            }
 
             BattleCommonVisualBinding shadow = commonCatalog.Shadow;
             Texture2D shadowTexture = shadow?.Texture;
@@ -2098,9 +1707,9 @@ namespace NTSD.Animation
             diagnostic = string.Empty;
             policyDecision = null;
             diagnosticInputs = null;
-            if (!boundCommonCatalog.IsComplete)
+            if (!boundCommonCatalog.IsRuntimeReady)
             {
-                diagnostic = "Unified atlas publication requires a complete common visual catalog.";
+                diagnostic = "Unified atlas publication requires a runtime-ready common visual catalog.";
                 return false;
             }
             if (commonSourcePaths == null)
@@ -2442,9 +2051,9 @@ namespace NTSD.Animation
             out string diagnostic)
         {
             diagnostic = string.Empty;
-            if (catalog == null || !catalog.IsComplete)
+            if (catalog == null || !catalog.IsRuntimeReady)
             {
-                diagnostic = "A complete common visual catalog is required for SourceTexture2D retention.";
+                diagnostic = "A runtime-ready common visual catalog is required for SourceTexture2D retention.";
                 return false;
             }
 
@@ -2473,25 +2082,28 @@ namespace NTSD.Animation
                 }
             }
 
-            for (int sheetIndex = 0;
-                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
-                 sheetIndex++)
+            if (catalog.IsWordsValid)
             {
-                for (int charCode = 0;
-                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
-                     charCode++)
+                for (int sheetIndex = 0;
+                     sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                     sheetIndex++)
                 {
-                    if (!catalog.TryGetWordGlyph(
-                            sheetIndex,
-                            charCode,
-                            out BattleCommonVisualBinding glyph) ||
-                        !CanRetainCommonSourceTexture2D(
-                            glyph,
-                            sourcePaths,
-                            excludedPaths,
-                            out diagnostic))
+                    for (int charCode = 0;
+                         charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                         charCode++)
                     {
-                        return false;
+                        if (!catalog.TryGetWordGlyph(
+                                sheetIndex,
+                                charCode,
+                                out BattleCommonVisualBinding glyph) ||
+                            !CanRetainCommonSourceTexture2D(
+                                glyph,
+                                sourcePaths,
+                                excludedPaths,
+                                out diagnostic))
+                        {
+                            return false;
+                        }
                     }
                 }
             }

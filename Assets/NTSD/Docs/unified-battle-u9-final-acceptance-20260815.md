@@ -2,46 +2,52 @@
 
 ## 1. 结论
 
-U9 的 Windows Mono Player 正式矩阵已通过，U6 的生产所有权退出门与 U8 的 worker/synchronous 等价门也随本轮证据关闭。
+U9 的 Windows Mono Player 正式矩阵已通过，U6 的生产所有权退出门与 U8 的 worker/synchronous 等价门也随本轮证据关闭。`2026-08-20` 针对当前工作树、渲染资源迁移和相机修改又重新构建 Player，并重跑 U7、U8 和完整 U9 五场景矩阵；下方表格与路径已更新为这次 fresh 证据。
 
-本轮只完成单机阶段，不实现服务器业务。S0～S5、Socket、ACK、Jitter Buffer、房间、登录与重连均未开始。T8 默认 `stage.dat` 和 Android 真机仍按用户要求排除。Windows IL2CPP Player 模块现已存在且真实构建成功，但安装包版本与当前中国版 Editor 不匹配，Player 无法进入 U7 runtime bootstrap；不能把 Windows Mono 结果或“构建成功”冒充 IL2CPP correctness 通过。
+本轮只完成单机阶段，不实现服务器业务。S0～S5、Socket、ACK、Jitter Buffer、房间、登录与重连均未开始。T8 默认 `stage.dat` 和 Android 真机仍按用户要求排除。`2026-08-16` 项目迁移到国际版 `Unity 2022.3.62f3 (96770f904ca7)` 后，匹配 revision 的 Windows Mono 与 IL2CPP correctness gate 已全部真实运行并通过，旧的中国版 Editor/国际版 Player variation 混装阻塞已经关闭。
 
 ## 2. 最新构建与正确性门
 
-- Unity 脚本编译：0 C# error；Windows Mono Player 的 `Assembly-CSharp.dll` 更新时间为 `2026-08-15 21:30:03`，晚于最终代码修复；
+- Unity 脚本编译与 Windows Mono Development Player 构建：`2026-08-20` 当前代码真实构建通过；
 - U6 聚焦：CharacterInput 37/37 PASS，生产所有权 6/6 PASS；
-- U7 fresh 扩大聚焦：snapshot、restore、ring、session、checksum、runtime validation 合计 33/33 PASS，job `992fe9182af749118696ae3e511157ff`；
+- U7 fresh 扩大聚焦：snapshot、restore、ring、session、checksum、runtime validation 合计 39/39 PASS，job `f0e76a50c9064e239ea1c2f438be465b`；
 - U8 聚焦：worker boundary、单机 runtime validation、lockstep checksum 合计 25/25 PASS；
-- 完整 EditMode job：1265 项中 1264 PASS；唯一失败来自 UnityMCP `NetworkStream disposed` Error 日志注入，对应 `BattleRenderingBenchmarkEditorTests.LeakCheck...` 独立重跑 1/1 PASS，不记录为代码断言失败，也不把受污染 job 写成干净全量 PASS；
-- `BattleRuntimeSelfCheck`：`2026-08-15 23:36:40 PASS`；
+- 完整 EditMode job：`126790e9345043bd83c1e5a81b1f38a5`，`1265/1265 PASS`、0 failed、0 skipped，耗时 `168.0734563 s`；此前受 UnityMCP `NetworkStream disposed` 日志污染的 job 不纳入本结论；
+- `BattleRuntimeSelfCheck`：`2026-08-20 12:14:11 PASS`；
 - Authority400 fresh full/full diagnostic：权威 C# `Temp/NTSDParity/u9-final-authority-20260815.jsonl` 与 Unity `u9-final-unity-authority-dat-diagnostic-20260815.jsonl` 比较为 6/6 `equal-diagnostic`、`firstDifference=null`、manifest 相同，见 `u9-final-compare-authority-dat-diagnostic-20260815.json`。该夹具因 Unity DAT 适配边界而明确不是 production certificate。
 
 ## 3. U7 Snapshot/Restore 边界
 
-最新 Windows Mono Player 报告：`Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report-final.json`。
+最新 Windows Player 报告：`Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report.json` 与 `Temp/U7-Windows-IL2CPP/IL2CPP/u7-runtime-report.json`。
 
 - 状态：`Passed`；
 - pure value transfer/factory：通过；
 - snapshot -> mutate topology -> restore -> journal replay：通过；
 - source/restored checksum：`2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`；
 - replay checksum：`3DEB30C4D190E5FB`；
-- warm exact restore：0 B。
+- warm exact restore：0 B；
+- Unity 版本：两者均为 `2022.3.62f3`；
+- 平台：两者均为 `WindowsPlayer`；
+- 恢复 `(slot, stableId, generation)`：两者均为 `(3, 100, 1)`；
+- Mono/IL2CPP 上述字段及 source/restored/replay checksum 逐项相同。
 
-Windows IL2CPP 仍没有可执行 correctness 报告。`2026-08-15 23:15` 的真实门禁已经成功生成 `GameAssembly.dll` 并完成 Windows IL2CPP Player 构建；为绕过本机 Burst 1.8.16 损坏 hash cache 和 MSVC 对巨大 Unity 生成 C++ 的 `C1001`，门禁构建临时关闭 Burst AOT、使用 `OptimizeSize + Debug` IL2CPP 编译配置，并在 `finally` 中恢复项目原设置。最终 Player 日志确认真正阻塞为版本混装：Editor/项目数据是 `2022.3.40f1c1 (0bae6c114c78)`，新装的四套 win32/win64 development/nondevelopment IL2CPP `UnityPlayer.dll` 全部是国际版 `2022.3.40f1 (cbdda657d2f0)`；启动报 `Expected version: 2022.3.40f1`、`Actual version: 2022.3.40f1c1`，在加载 PlayerSettings 前退出。Unity Hub 日志显示它查询 `2022.3.40f1c1` 时得到 `0 releases retrieved`，实际安装的是 `UnitySetup-Windows-IL2CPP-Support-for-Editor-2022.3.40f1.exe`；用户再次执行安装后，四套 Player 的 ProductVersion 仍是 `cbdda657d2f0`。U7 菜单前置检查已升级为核验每个 IL2CPP Player 的精确 `ProductVersion`；`2026-08-15 23:28` 再次从真实 Editor 执行门禁时，已在进入 BuildPipeline 前按设计 fail-fast。只有安装 `2022.3.40f1c1 (0bae6c114c78)` 精确匹配的 Windows Build Support (IL2CPP)，或用匹配国际版 Editor 完整重新构建，才能继续关闭本门禁；替换 DLL 或伪造版本字符串不能作为验收。
+`2026-08-20 12:08～12:11`，国际版 `Unity 2022.3.62f3 (96770f904ca7)` 使用同 revision 的 Windows Mono 与 IL2CPP Player variation 再次完成真实 CleanBuildCache 构建、启动和 runtime bootstrap。两份报告状态均为 `Passed`，交叉运行时比较全部通过。为隔离本机 Burst Windows hash cache，正确性门禁对两个后端一致地临时关闭 Burst AOT；门禁结束后 Standalone 后端恢复为 IL2CPP，Frame Timing Stats 恢复为关闭，Burst 恢复为开启。
 
-`2026-08-16` 用户进一步明确只使用国际版，不需要中国版。因此本报告不再把安装 `0bae6c114c78` 中国版模块列为后续路线；唯一有效路线是安装完整国际版 Editor `2022.3.40f1 (cbdda657d2f0)`，与现有国际版 Windows IL2CPP Player 组成同 revision 工具链后重新构建。当前运行中的目录虽然名为 `D:\Unity\HubEditor\2022.3.40f1`，其中 `Unity.exe` 的 ProductVersion 实际为 `2022.3.40f1c1_0bae6c114c78`，并不是所需国际版。切换时不得让两套 Editor 同时写同一个 `Library`，也不得只改项目版本字符串代替真实迁移与运行验证。
+`2026-08-15` 的旧版本混装故障记录保留如下，但不再代表当前状态：当时中国版 `2022.3.40f1c1 (0bae6c114c78)` Editor 与国际版 `2022.3.40f1 (cbdda657d2f0)` Player variation 不一致，导致 Player 在 runtime bootstrap 前退出。该问题最终通过完整迁移到同 revision 的国际版 `2022.3.62f3` Editor 与模块解决，没有替换 DLL、伪造版本字符串或手改 `ProjectVersion.txt`。
+
+`2026-08-16` 用户明确只使用国际版，不需要中国版；项目随后以完整国际版 `D:\Unity\HubEditor\2022.3.62f3\Editor\Unity.exe` 打开并完成上述跨运行时门禁。旧 Editor 不再作为项目验证环境。
 
 ## 4. U8 Worker 与同步等价门
 
 报告：
 
-- `Temp/U9-Windows-Player/Reports/u8-worker-combat1000-30x300-final.json`；
-- `Temp/U9-Windows-Player/Reports/u8-sync-combat1000-30x300-final.json`。
+- `Temp/U9-Windows-Player/Reports-2022.3.62f3/u8-worker-combat1000-30x300.json`；
+- `Temp/U9-Windows-Player/Reports-2022.3.62f3/u8-sync-combat1000-30x300.json`。
 
 | 模式 | 正式 tick | Average | P95 | P99 | Max | Central draw | Tick alloc | Gen0/1/2 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Dedicated worker | 300 | 4.3539 ms | 5.7763 ms | 6.5023 ms | 7.9603 ms | 1 | 0 B | 0/0/0 |
-| Synchronous | 300 | 4.1795 ms | 5.4246 ms | 6.4738 ms | 7.4542 ms | 1 | 0 B | 0/0/0 |
+| Dedicated worker | 300 | 4.2995 ms | 5.7216 ms | 6.3513 ms | 9.0103 ms | 1 | 0 B | 0/0/0 |
+| Synchronous | 300 | 4.0190 ms | 5.2066 ms | 5.8594 ms | 8.4089 ms | 1 | 0 B | 0/0/0 |
 
 两份报告使用相同 seed、负载与采样口径；workload fingerprint 相同。overall、world、slots、aRest、vRest、RNG、input、stats、events、metadata 十域最终 hash 全部一致。implementation config fingerprint 因“是否启用 dedicated worker”配置位而不同，这是对照变量，不是状态分叉。
 
@@ -59,19 +65,21 @@ Windows IL2CPP 仍没有可执行 correctness 报告。`2026-08-15 23:15` 的真
 
 | 场景 | Logic Avg | Logic P95 | Logic P99 | Logic Max | 完整帧 Avg | 平均 FPS | SetPass | Central draw |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Idle1000 | 2.8514 ms | 3.9232 ms | 5.6346 ms | 7.3894 ms | 17.9221 ms | 55.80 | 7 | 1 |
-| Move1000 | 2.8540 ms | 3.7321 ms | 4.2448 ms | 5.6814 ms | 17.0388 ms | 58.69 | 7 | 1 |
-| Dispersed1000 | 3.6808 ms | 4.4386 ms | 5.5952 ms | 6.6915 ms | 16.9167 ms | 59.11 | 7 | 1 |
-| Combat1000 | 3.6604 ms | 4.5215 ms | 5.5222 ms | 7.4254 ms | 16.9778 ms | 58.90 | 7 | 1 |
-| Concentrated1000 | 4.3253 ms | 5.8677 ms | 8.5765 ms | 10.4058 ms | 17.8285 ms | 56.09 | 7 | 1 |
+| Idle1000 | 3.4161 ms | 6.5989 ms | 12.1378 ms | 16.7198 ms | 16.6725 ms | 59.98 | 6 | 1 |
+| Move1000 | 2.7957 ms | 3.9235 ms | 4.9547 ms | 6.7520 ms | 16.7091 ms | 59.85 | 6 | 1 |
+| Dispersed1000 | 3.9128 ms | 5.0592 ms | 5.9115 ms | 9.9178 ms | 16.6725 ms | 59.98 | 6 | 1 |
+| Combat1000 | 3.8269 ms | 5.1214 ms | 6.3258 ms | 9.6252 ms | 16.6725 ms | 59.98 | 6 | 1 |
+| Concentrated1000 | 4.2915 ms | 5.5420 ms | 7.4755 ms | 15.4023 ms | 16.6726 ms | 59.98 | 6 | 1 |
 
-完整报告位于 `Temp/U9-Windows-Player/Reports/`：
+`2026-08-20` 当前工作树使用新构建的可见 640×360 Windows Mono Development Player 重跑完整五场景矩阵。所有场景均 `StoppedCleanly`、1800/1800 正式 tick、worker `2100/2100`、SetPass=6、中央 draw=1；完整帧平均约 `59.85～59.98 FPS`。构建工具为规避本机 Burst hash cache 临时关闭 Burst AOT，并在构建后恢复开启；因此本表如实记录该 Development Player 配置，不把它描述为单独的 Burst 性能基准。
 
-- `idle1000-rendered-60s.json`；
-- `move1000-rendered-60s.json`；
-- `dispersed1000-rendered-60s.json`；
-- `combat1000-rendered-60s.json`；
-- `concentrated1000-rendered-60s.json`。
+完整报告位于 `Temp/U9-Windows-Player/Reports-2022.3.62f3/`：
+
+- `u9-idle1000-60s.json`；
+- `u9-move1000-60s.json`；
+- `u9-dispersed1000-60s.json`；
+- `u9-combat1000-60s.json`；
+- `u9-concentrated1000-60s.json`。
 
 五份报告共同满足：
 
@@ -84,7 +92,7 @@ Windows IL2CPP 仍没有可执行 correctness 报告。`2026-08-15 23:15` 的真
 - 中央 Renderer Feature 有实际像素提交证据，draw 为 1；
 - teardown 后 active GameObject、world entity、claimed slot、active object pool、active reference pool 均恢复为 0，cleanup exception 为 0。
 
-各独立 Player 进程在资源加载前后累计记录了 backlog clamp/drop；该计数包含正式采样前的 BMP、图集与音频预加载长帧，不属于 1800 tick 正式窗口。正式窗口的 capacity pressure/rejection gate 为 0 violation，且 `maxCatchUpTicksPerFrame=1`，没有在单机采样中执行每帧四个完整 tick 的追帧行为。
+各独立 Player 进程在资源加载前后累计记录了 backlog clamp/drop；本轮仅 Move1000 在正式窗口外累计 `droppedBacklogTicks=4`，其余为 0。该计数属于资源加载/预热长帧，不属于 1800 tick 正式窗口；五场景正式 `capacityPressure` 均为 1800 tick、0 violation、`totalRejectedOrDroppedDelta=0`，且 `maxCatchUpTicksPerFrame=1`，没有在单机采样中执行每帧四个完整 tick 的追帧行为。
 
 ## 6. 可见窗口与隐藏窗口诊断
 
@@ -95,8 +103,8 @@ Windows IL2CPP 仍没有可执行 correctness 报告。`2026-08-15 23:15` 的真
 ## 7. 阶段边界
 
 - U6：按生产 canonical owner、Unity shell/fail-closed compatibility、A/B 否决 Legacy 三类路径完成退出审计；
-- U7：单机 snapshot/restore/replay 功能与 Windows Mono correctness 完成，Windows IL2CPP 外部待验证；
+- U7：单机 snapshot/restore/replay、Windows Mono 与 Windows IL2CPP 跨运行时 correctness 全部完成；
 - U8：dedicated worker 生产接线与同步等价门完成；
 - U9：Windows Mono Player 1000 AI / 30 FPS 容量目标完成；
 - S0～S5：未开始。必须由用户再次明确确认后才能进入 S0；
-- T8 默认 `stage.dat`、Android 真机、Windows IL2CPP 不被本报告伪装为已验证。
+- T8 默认 `stage.dat`、Android 真机继续排除；Windows IL2CPP 已有真实通过报告，不再属于排除项。

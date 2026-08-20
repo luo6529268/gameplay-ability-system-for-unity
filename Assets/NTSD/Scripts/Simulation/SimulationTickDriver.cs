@@ -179,8 +179,6 @@ namespace NTSD.Simulation
             new ProfilerMarker("NTSD.BattlePresentation.PresentLatestFrame");
         private static readonly ProfilerMarker DispatchSoundsMarker =
             new ProfilerMarker("NTSD.BattlePresentation.DispatchSounds");
-        private static readonly ProfilerMarker LegacyOverlayMarker =
-            new ProfilerMarker("NTSD.BattlePresentation.LegacyOverlayMaterializer");
         private static readonly ProfilerMarker LegacySparkMarker =
             new ProfilerMarker("NTSD.BattlePresentation.LegacySparkMaterializer");
         private static readonly ProfilerMarker FinalizeHitRecordMarker =
@@ -231,7 +229,6 @@ namespace NTSD.Simulation
         private SimulationWorld _world;
         private NTSDBattleTickSystem _battleTickSystem;
         private NTSD.Animation.SparkRenderer _sparkRenderer;
-        private NTSD.Animation.BattleEntityOverlayRenderer _overlayRenderer;
         private BattlePresentationBackendMode _presentationBackendMode =
             BattlePresentationBackendMode.CentralOnly;
         private BattleAiExecutionProfile _aiExecutionProfile =
@@ -376,19 +373,6 @@ namespace NTSD.Simulation
                     _world.PresentLatestFrame(_tickIndex);
                 using (DispatchSoundsMarker.Auto())
                     DispatchPublishedSounds();
-
-                if (_overlayRenderer == null)
-                {
-                    if (_managedMemoryBoundary.BattleWindowOpen)
-                    {
-                        _rejectedLatePresentationComponentCreateCount++;
-                        return;
-                    }
-
-                    _overlayRenderer = gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
-                }
-                using (LegacyOverlayMarker.Auto())
-                    _overlayRenderer.RenderAll(_world);
 
                 if (_sparkRenderer == null)
                 {
@@ -1129,12 +1113,6 @@ namespace NTSD.Simulation
             _managedMemoryFrameBeginProbe.Bind(this, _managedMemoryBoundary);
             _managedMemoryFrameEndProbe.Bind(this, _managedMemoryBoundary);
 
-            if (_overlayRenderer == null)
-            {
-                _overlayRenderer =
-                    gameObject.MMGetOrAddComponent<NTSD.Animation.BattleEntityOverlayRenderer>();
-            }
-
             if (_sparkRenderer == null)
             {
                 _sparkRenderer = AppManager.Instance?.SparkRenderer;
@@ -1155,7 +1133,6 @@ namespace NTSD.Simulation
                 desiredPublishedSoundCapacity);
             if (_publishedSoundEvents.Capacity < _publishedSoundEventLimit)
                 _publishedSoundEvents.Capacity = _publishedSoundEventLimit;
-            _overlayRenderer.PrepareCapacity(normalizedEntityCapacity);
             _sparkRenderer.PrepareCapacity(
                 checked(
                     normalizedEntityCapacity *

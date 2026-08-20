@@ -1,7 +1,10 @@
 # NTSD 统一战斗内核、帧同步、自研 ECS 与未来服务器架构方案
 
 > 建立日期：2026-08-11
-> **2026-08-15 单机阶段最新状态（覆盖下方保留的历史进度流水）**：U0～U6、U8、U9 已完成实现与当前可执行验收；U7 的 snapshot/restore/replay、纯值 transfer/factory、Windows Mono Player correctness gate 已完成，但 Windows IL2CPP gate 仍保持“外部工具链待验证”，不能冒充通过。Windows IL2CPP 模块现已安装并成功完成 IL2CPP C++ 生成、MSVC 编译和 Player 构建，但当前 `2022.3.40f1c1 (0bae6c114c78)` Editor 被混装了国际版 `2022.3.40f1 (cbdda657d2f0)` IL2CPP Player variation；真实 Player 启动日志为 `Expected version: 2022.3.40f1`、`Actual version: 2022.3.40f1c1`，在加载 PlayerSettings 前退出，因而仍没有可执行 IL2CPP correctness 报告。最新 U8 Windows Player worker/synchronous 300 tick 十域 hash 完全一致，正式 tick 0 B、三代 collection 0。U9 五个 Windows Player 场景均完成 300 tick 预热 + 1800 tick 正式采样，完整渲染平均 `55.80～59.11 FPS`，最坏 Concentrated1000 的逻辑 average/P95/P99/max 为 `4.3253/5.8677/8.5765/10.4058 ms`；五场景 SetPass 均为 7、中央 draw 均为 1、四条 managed-memory 边界 0 B、容量拒绝 0、cleanup 全恢复。Authority400 fresh full/full diagnostic 为 6/6 `equal-diagnostic`、`firstDifference=null`；fresh self-check 为 `2026-08-15 21:29:11 PASS`。完整证据见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。S0～S5 未开始；Windows IL2CPP、T8 默认 `stage.dat`、Android 真机不被伪装为本轮已验证项。
+> **2026-08-20 当前工作树最终复验（覆盖下方全部历史进度与旧 Temp 路径）**：国际版 `Unity 2022.3.62f3 (96770f904ca7)` 已对当前代码重新完成 Windows Mono Player 构建、U7 Mono/IL2CPP correctness、U8 worker/synchronous 对照和 U9 五场景正式矩阵。干净全量 EditMode job `126790e9345043bd83c1e5a81b1f38a5` 为 `1265/1265 PASS`，`BattleRuntimeSelfCheck` 最终于 `2026-08-20 12:14:11` 写入 `PASS`。U7 两份 fresh 报告均为 `Passed`，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`，replay checksum 均为 `3DEB30C4D190E5FB`，恢复 `(slot, stableId, generation)` 均为 `(3, 100, 1)`。U8 两份 300 tick 报告的 parity/lockstep 十域 hash 完全一致、0 B、中央 draw=1、cleanup 通过。U9 Idle/Move/Dispersed/Combat/Concentrated 均为 1000 个真实生产实体、300 tick 预热 + 1800 tick 正式采样；完整帧平均 `16.6681～16.7091 ms`（约 `59.85～59.99 FPS`），逻辑 P95 为 `3.9235～6.5989 ms`，SetPass=6、中央 draw=1，四条 managed-memory 边界和 Gen0/1/2 均为 0，正式容量拒绝为 0，U6 mismatch 为 0，worker `2100/2100`，teardown 全恢复。当前证据位于 `Temp/U7-Windows-IL2CPP/` 与 `Temp/U9-Windows-Player/Reports-2022.3.62f3/`。U0～U9 单机范围据此关闭；S0～S9、服务器业务、Socket、ACK、Jitter Buffer、房间、登录、重连、T8 默认 `stage.dat` 与 Android 真机均未进入。
+> **2026-08-16 U7 最终关闭（覆盖下方历史阻塞记录）**：项目已由国际版 `Unity 2022.3.62f3 (96770f904ca7)` 打开，Windows Mono 与 IL2CPP Player variation 均为同一版本和 revision。真实 Windows Mono/IL2CPP correctness gate 均写出 `Passed` 报告；两者 `sourceChecksum`、`restoredChecksum`、`replayChecksum`、恢复 slot、stable id、generation 逐项相同，纯值 transfer/factory 与 snapshot -> mutate topology -> restore -> journal replay 均通过。最终聚焦 EditMode job `f0e76a50c9064e239ea1c2f438be465b` 为 `39/39 PASS`，`BattleRuntimeSelfCheck` 最终于 `2026-08-17 00:01:11` 写入 `PASS`。门禁构建对 Mono 与 IL2CPP 一致地临时关闭 Burst AOT，以隔离本机 Burst 1.8.21 损坏的 Windows hash cache；`finally` 会恢复 Burst、后端、IL2CPP 配置与 Frame Timing Stats，并保存 ProjectSettings。正常 Burst 配置下的 U9 性能证据仍单独成立。至此 U0～U9 单机计划按既定范围关闭；服务器阶段现按 S0～S9 细分且仍未开始，必须由用户再次确认后才能进入，T8 默认 `stage.dat` 与 Android 真机继续排除。
+> **2026-08-16 Unity 升级后 U9 复验**：新构建的可见 Windows Mono Player 使用 1000 个真实 Combat1000 生产实体、300 tick 预热 + 1800 tick 正式采样、dedicated worker、中央渲染、零 GC 与 U6 所有权硬门禁。报告 `Temp/NTSD_U9_2022.3.62f3_combat1000.report.json` 为 `StoppedCleanly`；完整渲染 CPU average/P95 为 `19.0828/25.0888 ms`，约 `52.40 FPS`，逻辑 tick average/P95/P99/max 为 `3.6580/4.7643/6.4356/10.3933 ms`。SetPass 恒为 6、中央 draw 恒为 1；tick/driver/presentation/PlayerLoop 分配均为 0 B，Gen0/1/2 collection 均为 0，容量拒绝/丢弃为 0，worker `2100/2100` 完成，cleanup 将 1000 个活动 GameObject、1000 个 world entity 与 1000 个 claimed slot 全部恢复为 0。升级后仍满足 1000 AI / 30 FPS 正式容量目标。
+> **2026-08-15 单机阶段最新状态（覆盖下方保留的历史进度流水）**：U0～U6、U8、U9 已完成实现与当前可执行验收；U7 的 snapshot/restore/replay、纯值 transfer/factory、Windows Mono Player correctness gate 已完成，但 Windows IL2CPP gate 仍保持“外部工具链待验证”，不能冒充通过。Windows IL2CPP 模块现已安装并成功完成 IL2CPP C++ 生成、MSVC 编译和 Player 构建，但当前 `2022.3.40f1c1 (0bae6c114c78)` Editor 被混装了国际版 `2022.3.40f1 (cbdda657d2f0)` IL2CPP Player variation；真实 Player 启动日志为 `Expected version: 2022.3.40f1`、`Actual version: 2022.3.40f1c1`，在加载 PlayerSettings 前退出，因而仍没有可执行 IL2CPP correctness 报告。最新 U8 Windows Player worker/synchronous 300 tick 十域 hash 完全一致，正式 tick 0 B、三代 collection 0。U9 五个 Windows Player 场景均完成 300 tick 预热 + 1800 tick 正式采样，完整渲染平均 `55.80～59.11 FPS`，最坏 Concentrated1000 的逻辑 average/P95/P99/max 为 `4.3253/5.8677/8.5765/10.4058 ms`；五场景 SetPass 均为 7、中央 draw 均为 1、四条 managed-memory 边界 0 B、容量拒绝 0、cleanup 全恢复。Authority400 fresh full/full diagnostic 为 6/6 `equal-diagnostic`、`firstDifference=null`；fresh self-check 为 `2026-08-15 21:29:11 PASS`。完整证据见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。服务器阶段现按 S0～S9 细分且未开始；Windows IL2CPP、T8 默认 `stage.dat`、Android 真机不被伪装为本轮已验证项。
 > **2026-08-15 23:36 fresh 门禁补充**：强制 Unity 脚本刷新后未发现 `error CS`；U7 snapshot/restore/ring/session/checksum/runtime-validation 扩大聚焦 job `992fe9182af749118696ae3e511157ff` 为 `33/33 PASS`；`BattleRuntimeSelfCheck` 结果文件于 `23:36:40` 写入 `PASS`。当前唯一未关闭项仍是匹配发行版的真实 Windows IL2CPP Player 跨运行时比较；该证据不替代 IL2CPP 报告，也不授权进入 S0。
 > **2026-08-16 Editor 发行版定调**：用户明确只使用 Unity 国际版，不需要中国版 `f1c1`。当前正在运行的 `D:\Unity\HubEditor\2022.3.40f1\Editor\Unity.exe` 实际 ProductVersion 为中国版 `2022.3.40f1c1_0bae6c114c78`，项目 `ProjectVersion.txt` 也已记录为 `2022.3.40f1c1 (0bae6c114c78)`；目录名中的 `2022.3.40f1` 不能证明它是国际版。U7 后续只接受完整国际版 Editor `2022.3.40f1 (cbdda657d2f0)` 与相同 revision 的 Windows IL2CPP Player，不再寻找或安装 `0bae6c114c78` 中国版 IL2CPP 模块。切换主项目前必须关闭当前 Editor，并避免两套 Editor 同时写同一个 `Library`；不得仅手工修改 `ProjectVersion.txt` 冒充迁移完成。
 > 当前状态：U0～U5 已完成，U6 正在执行。Registry page-SoA、CharacterInput generation-owned store、world-owned input/action writers、AI-only target/boundary、frame-id 原子网关与 CharacterInput 后重复 12 字段回拷删除均已完成。第九至十三切片把 unified AI row 消费的 frame/motion、input target、relation/link、vital 与 DAT state 接入 slot + generation-owned canonical stores；第十四切片新增 world-owned `BattleAiUnifiedRowPublisher`，以 staged dirty + post-CharacterInput 原子提交移除正式路径每实体 19 字段重读/复制，立即写 row 的 `42.2450 ms/tick` 负实验已撤回。第十五至十七切片依次把初始 row 的 19 个战斗字段、directional boundary 与 identity/object type 迁到 generation-owned stores。第十八切片令 UnifiedAuthority 的 first-ten move-mode 初始构建直接复用已捕获的 canonical row，并在 post-CharacterInput 失效检查中读取当前 generation identity store 与 publisher 提交后的 HP/X/Z row，不再二次读取实体字段；Legacy、shadow、deep validator 与强制 full Runtime oracle 保留。fresh Unity 编译 0 C# error、423/423 扩大聚焦测试、`2026-08-13 04:43:39` self-check PASS；1000 AI 增量路径 average/P95/P99/max 为 `21.8479/26.0178/27.8500/29.0220 ms`，强制 full oracle 为 `23.1703/28.1723/31.4818/32.4411 ms`，两者 battle parity/lockstep hash 完全一致，正式 tick 0 B、Gen0/1/2 collection 0、209000/209000 canonical capture、hard breach 0、teardown 完整恢复。该切片只按所有权与等价证据保留，不把约 5.7% 的短样本差距宣称为稳定收益。U6 尚需继续处理实体边界遍历、派生索引维护及完整 frame/motion/lifecycle 对象式热循环，U6/U9 均未完成；服务器 S0、T8 默认 `stage.dat` 与 Android 真机仍不进入当前阶段。
@@ -1126,7 +1129,9 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 ### U7：生产 Snapshot、Restore 与跨运行时门禁
 
-状态：单机功能实现与本地/Windows Mono Player correctness gate 已完成；Windows IL2CPP gate 因当前中国版 Editor 与 Unity Hub 安装的国际版 Windows IL2CPP Player variation 发行版不匹配而外部阻塞。最新 `Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report-final.json` 为 `Passed`，纯值 transfer/factory 与 restore + journal replay 通过，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`。fresh 扩大聚焦 snapshot/restore/ring/session/checksum/runtime-validation 测试为 33/33 PASS。未把无法启动的 IL2CPP Player 或 Windows Mono 结果写成 IL2CPP 通过，也未把未来服务器 runtime 纳入当前单机实现。
+状态：已完成。`2026-08-20` 在国际版 `Unity 2022.3.62f3 (96770f904ca7)` 下重新生成的 Windows Mono 与 IL2CPP gate 均为 `Passed`，报告分别位于 `Temp/U7-Windows-IL2CPP/Mono/u7-runtime-report.json` 与 `Temp/U7-Windows-IL2CPP/IL2CPP/u7-runtime-report.json`。两套 Player 的 Unity 版本、平台、source/restored/replay checksum、恢复 slot、stable id、generation 完全一致；纯值 transfer/factory 与 restore + journal replay 均通过。相关回归包含在 fresh 全量 EditMode `1265/1265 PASS` 中，`BattleRuntimeSelfCheck` 于 `2026-08-20 12:14:11` fresh PASS。未来服务器 runtime 仍不在当前单机实现范围内。
+
+> 2026-08-20 U7 fresh 关闭证据：Mono 与 IL2CPP 的 source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`，replay checksum 均为 `3DEB30C4D190E5FB`，恢复 `(slot, stableId, generation)` 均为 `(3, 100, 1)`。门禁结束后 Burst 已恢复开启、Standalone 已恢复 IL2CPP、Frame Timing Stats 已恢复关闭。下方 2026-08-15 的版本混装说明仅保留为历史故障记录，不再代表当前状态。
 
 > 2026-08-15 U7 工具链复核：Windows IL2CPP 模块已经安装，真实门禁也已完成 IL2CPP C++ 生成、MSVC 编译并产出
 > `GameAssembly.dll`；阻塞不再是“模块缺失”。当前项目和 Editor 是中国版 `2022.3.40f1c1 (0bae6c114c78)`，但 Unity Hub
@@ -1154,7 +1159,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 ### U8：专用 Simulation Worker 与 60/120 Hz 表现
 
-状态：已完成。生产接线、线程所有权、固定容量 input queue、双槽 publication、ack/finalize 与失败停机已通过 25/25 聚焦测试；最新 Windows Player worker/synchronous 各 300 tick 正式对照的 overall/world/slots/aRest/vRest/RNG/input/stats/events/metadata 十域 hash 全部一致。worker average/P95 为 `4.3539/5.7763 ms`，同步为 `4.1795/5.4246 ms`；两者中央 draw 为 1、正式 tick 0 B、三代 collection 0、U6 审计和 cleanup 均通过。报告见 `Temp/U9-Windows-Player/Reports/u8-worker-combat1000-30x300-final.json` 与 `u8-sync-combat1000-30x300-final.json`。
+状态：已完成。生产接线、线程所有权、固定容量 input queue、双槽 publication、ack/finalize 与失败停机均由 fresh 全量 EditMode `1265/1265 PASS` 覆盖；`2026-08-20` Windows Player worker/synchronous 各 300 tick 正式对照的 overall/world/slots/aRest/vRest/RNG/input/stats/events/metadata parity 与 lockstep hash 全部一致。worker average/P95/P99/max 为 `4.2995/5.7216/6.3513/9.0103 ms`，同步为 `4.0190/5.2066/5.8594/8.4089 ms`；两者中央 draw=1、正式 tick 0 B、Gen0/1/2=0、U6 审计和 cleanup 均通过。报告见 `Temp/U9-Windows-Player/Reports-2022.3.62f3/u8-worker-combat1000-30x300.json` 与 `u8-sync-combat1000-30x300.json`。
 
 - BattleKernel 移出 Unity 主线程；
 - 固定所有权的输入队列与双缓冲 publication；
@@ -1164,23 +1169,107 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 ### U9：1000 AI 正式验收
 
-状态：已完成 Windows Mono Player 正式验收。Player runtime bootstrap 已位于运行时程序集；Idle/Move/Dispersed/Combat/Concentrated 五场景均完成 300 tick 预热 + 1800 tick 正式采样，1000 个真实实体、AI/移动/碰撞/命中/opoint/生命周期及中央渲染均走生产路径。五场景逻辑 P95 为 `3.9232/3.7321/4.4386/4.5215/5.8677 ms`，完整渲染平均为 `55.80/58.69/59.11/58.90/56.09 FPS`；SetPass 均为 7、中央 draw 均为 1、正式 tick/driver/presentation/PlayerLoop 均 0 B、Gen0/1/2 collection 0、容量拒绝 0、worker failure 0、cleanup 全恢复。Dispersed1000 与 Combat1000 均超过 30 FPS，单机 1000 AI / 30 FPS 容量目标关闭。完整证据与边界见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。
+状态：已完成 Windows Mono Player 正式验收。`2026-08-20` 当前代码重新构建后，Idle/Move/Dispersed/Combat/Concentrated 五场景均完成 300 tick 预热 + 1800 tick 正式采样，1000 个真实实体、AI/移动/碰撞/命中/opoint/生命周期及中央渲染均走生产路径。五场景逻辑 average/P95/P99/max 分别为 `3.4161/6.5989/12.1378/16.7198`、`2.7957/3.9235/4.9547/6.7520`、`3.9128/5.0592/5.9115/9.9178`、`3.8269/5.1214/6.3258/9.6252`、`4.2915/5.5420/7.4755/15.4023 ms`；完整帧平均约 `59.85～59.98 FPS`。SetPass 均为 6、中央 draw 均为 1、正式 tick/driver/presentation/PlayerLoop 均 0 B、Gen0/1/2 collection 0、正式容量拒绝 0、worker failure 0、cleanup 全恢复。Dispersed1000 与 Combat1000 均超过 30 FPS，单机 1000 AI / 30 FPS 容量目标关闭。fresh 报告位于 `Temp/U9-Windows-Player/Reports-2022.3.62f3/`，完整证据与边界见 `Docs/unified-battle-u9-final-acceptance-20260815.md`。
 
 - Idle/Move/Dispersed/Combat/Concentrated 矩阵；
 - Editor 趋势 + Windows Player 正式报告；
 - 60 秒以上、P95、GC、SetPass、Render Thread、拒绝计数、checksum、cleanup；
 - `Dispersed1000` 与 `Combat1000` 达到 30 FPS 后才关闭单机容量目标。
 
-### S0～S5：服务器实施
+### S0～S9：服务器实施
 
-- S0：同进程服务器 + 多客户端世界，无 Socket；验证 StartBarrier、权威帧不可变、严格连续消费和双端 checksum；
-- S1：内存 transport 的 Jitter Buffer、ACK、冗余帧、重复、冲突、缺帧和 frame deadline；
-- S2：服务器快照、历史帧、desync 与重连恢复闭环；在本阶段末才决定是否需要预测回滚；
-- S3：独立 headless/.NET 进程与共享协议程序集；
-- S4：真实 transport，注入延迟、抖动、丢包、重复、乱序、断线和重连；
-- S5：多房间 worker/process 调度、监控、容量、回放审计和部署扩展。
+状态：仅完成方案细化，代码均未开始。服务器阶段仍须由用户明确确认后才能进入；本节不是对服务器、Socket、ACK、Jitter Buffer、房间、登录或重连已实现的声明。
 
-服务器阶段只在 U9 完成且用户再次确认后开始。S0 先做同进程内存原型；S0～S2 证明权威帧、协议语义和恢复合同后，才进入独立进程与真实 transport。任何阶段都不得反向创建第二套战斗循环。
+#### 外部案例评估后的保留与排除
+
+`dudu502/LittleBee` 与后续 `littlebee_libs` 只作为服务器框架案例，不改变 C# 权威战斗规则。可吸收的设计是：服务器在帧边界组装并排序命令、客户端/服务器/回放共享模拟入口、先做同进程本地服务器、使用快照加历史帧恢复，以及 Common/Client/Server 程序集分层。以下实现不得移入 NTSD：
+
+- 用 `DateTime.Now + Thread.Sleep + while` 决定权威逻辑帧或进行无界追帧；
+- 每 tick 深拷贝全部引用型 Component 并重建 `List/Dictionary` 快照；
+- 用引用型 `Dictionary<Type, List<AbstractComponent>>` 取代已经验证的 slot + generation、SoA 与固定容量 ring；
+- 信任客户端本地快照、把可靠 UDP 当成应用层 ACK/Jitter 合同，或用外部定点库改写现有 C# 战斗数值语义；
+- 复制原始 LittleBee 代码。原仓库未提供明确许可证；如未来评估 MIT 的 `littlebee_libs`，也只能在许可证、归属和技术门禁全部满足后单独批准。
+
+#### S0：同进程权威服务器骨架
+
+- 无 Socket、无网络库，使用显式内存 loopback；
+- 同一进程创建一个服务器 BattleWorld 和至少两个客户端 BattleWorld；
+- StartBarrier 固化 session identity、资源/规则 fingerprint、seed、roster 与 canonical player slot；
+- 服务器和客户端都只能调用现有 `StepOneTick(FrameInputSet)`，不得创建第二套技能、伤害或生命周期循环；
+- 每个服务器 tick 都产生完整、不可变、连续的权威帧，包括没有玩家操作的空帧；
+- 验收要求：固定输入脚本下服务器与全部客户端连续 N 帧十域 checksum 一致，重复运行结果一致，单机 host policy 不受影响。
+
+#### S1：应用层权威帧协议与组装器
+
+- 定义 transport-agnostic 的 `InputSubmission`、`AuthoritativeFrameEnvelope`、`FrameAck`、`ServerProgress` 和稳定错误码；
+- 服务器按 `(session, tick, canonical player slot)` 去重和排序，同一键第一次合法内容胜出，冲突内容进入证据而不能覆盖；
+- 明确 input deadline、缺失输入补齐原因、帧锁定、广播和历史入 ring 的原子边界；
+- transport、RPC、Unity 类型和网络库对象不得进入 BattleKernel 或 `FrameInputSet`；
+- 验收要求：乱序提交、重复提交、冲突提交、迟到提交、空输入和 roster 变化边界均得到确定结果。
+
+#### S2：内存弱网、ACK 与 Jitter Buffer 状态机
+
+- 在内存 transport 中可重复注入延迟、抖动、丢包、重复、乱序和暂时断流；
+- 应用层维护 server/client sequence、ACK、冗余帧窗口、ready-frame 区间、缺帧请求和确认进度；
+- 客户端只能连续消费已经 ready 的权威帧，不能跨洞推进，也不能用后到内容修改已锁定帧；
+- 追帧必须同时受连续 ready 数量、单帧 CPU 预算和最大追帧数约束；单机 `OfflineLocal` 继续保持既定的一次外层 Update 最多自动推进一个 tick；
+- 验收要求：可重复弱网脚本下不丢失攻击/技能边沿、不重复消费、不无限积压、不出现墙钟驱动的爆发式多 tick。
+
+#### S3：服务器权威快照、desync 与恢复闭环
+
+- 服务器维护 `FrameHistoryRing`、`SnapshotRing` 和 `ChecksumHistory` 的统一 schema/session 生命周期；
+- 客户端周期上报校验结果，服务器同核运行结果是权威，checksum mismatch 保存 witness 并进入明确状态机；
+- 恢复包由服务器快照、快照 tick/checksum、后续连续权威帧和目标 tick 组成；客户端磁盘快照只能作为非权威缓存提示；
+- 覆盖严重落后、desync、断线重连、观战加入和回放起点，但不在本阶段引入真实 Socket；
+- 验收要求：snapshot -> mutate/desync -> restore -> history replay 后，服务器与客户端最终十域 hash、slot/generation 和事件游标一致。
+
+#### S4：预测与回滚决策门
+
+- A/B 测量 `ConfirmedOnly`、仅本地即时表现反馈、输入回显和有限本地玩家预测；
+- 默认保持 `ConfirmedOnly`，只有输入延迟、回滚成本、错误预测率和表现收益达到预先批准阈值时才实现逻辑预测；
+- 若启用预测，只允许在可恢复快照窗口内影响受控本地域，远端实体和战斗结果仍以权威帧为准；
+- 音频、粒子、镜头和 UI 使用确认事件游标，不得因回滚重复播放；
+- 本阶段允许以“证据表明无需预测”关闭，不强制为了完整性实现 GGPO 式回滚。
+
+#### S5：共享程序集与独立进程门禁
+
+- 拆分 `Battle.Protocol`、`Battle.Kernel`、`Battle.ClientAdapter` 和 `Battle.ServerHost`，保持单向依赖；
+- BattleKernel 和协议程序集不得引用 `UnityEngine`、GameObject、Transform、Renderer 或 transport 实现；
+- 启动 headless/.NET 同核服务器进程，复用相同 schema、factory、checksum、snapshot 与 `StepOneTick`；
+- Mono、IL2CPP 与服务器 runtime 使用同一固定 journal 做跨运行时对照；
+- 验收要求：进程内与独立进程结果一致，序列化往返不改变排序、默认值、generation 或 checksum。
+
+#### S6：真实 transport 选择与接入
+
+- 只有 S0～S5 关闭后，才按移动端支持、可靠/不可靠通道、拥塞、MTU、分片、加密接线、维护状态和许可证选择 UDP/KCP/ENet/LiteNetLib 或其他实现；
+- transport 只承载 S1 已冻结的应用层消息，不拥有 tick、ACK 语义、Jitter 状态或 BattleWorld；
+- 先在 localhost/局域网验证，再进入公网和移动网络；
+- 更换 transport 的 A/B 必须复用同一弱网脚本、权威帧记录和 checksum witness。
+
+#### S7：真实弱网、断线重连与长时稳定性
+
+- 在真实 transport 上注入延迟、抖动、丢包、重复、乱序、短断流、长断线和客户端进程重启；
+- 验证重连身份、session/fingerprint、快照选择、历史补发、追帧预算、事件去重和失败降级；
+- 覆盖前后台切换、移动网络切换、暂停恢复和长局内历史截断；
+- 正式窗口继续要求 BattleKernel/协议热路径无非预期分配、无 Gen0/1/2 collection，并保存 P50/P95/P99、带宽和恢复时间。
+
+#### S8：多房间调度、安全与可观测性
+
+- 明确一个 worker/process 承载多少房间，房间隔离、崩溃域、资源上限、背压和优雅停机；
+- 建立 tick lag、ready depth、jitter depth、rollback/restore、checksum mismatch、带宽、快照大小和容量拒绝指标；
+- 服务器验证输入合法性、频率、玩家所有权和 session identity；客户端上报结果不能成为战斗权威；
+- 回放和 checksum witness 可审计，敏感数据、日志和快照有保留/清理策略；
+- 容量测试分别覆盖多房间常规负载与单房间高实体负载，不用平均值掩盖最坏房间。
+
+#### S9：服务器阶段最终验收与发布门
+
+- 完成确定性、弱网、恢复、长时 soak、进程崩溃、容量、协议兼容和升级/降级矩阵；
+- Windows 客户端 Mono/IL2CPP 与服务器 runtime 的固定 journal、snapshot、restore/replay 和 checksum 全部一致；
+- 以目标部署平台的正式 Player/headless 构建报告为准，不用 Editor 或 simulation-only 数据替代；
+- Android 真机仍由用户执行并提供结果，除非后续明确授权 Codex 负责；T8 默认 `stage.dat` 继续排除；
+- 只有 S0～S9 的 fresh 证据齐全，才能声明服务器帧同步阶段完成。
+
+服务器阶段的硬顺序为 `S0 -> S1 -> S2 -> S3 -> S4 -> S5 -> S6 -> S7 -> S8 -> S9`。S0～S3 先证明权威帧、应用层协议、弱网状态机和服务器恢复合同；S4 单独决定预测边界；S5 完成进程拆分后，S6 才允许选择真实 transport。任何阶段都不得反向创建第二套战斗循环，或用网络/状态覆盖掩盖 BattleKernel 分叉。
 
 ## 20. 每阶段统一验收门
 
@@ -1231,7 +1320,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - 客户端专用 simulation worker 在各移动设备上的线程与热预算；
 - 哪些已证明跨运行时分叉的字段迁移到定点数。
 
-这些决策不阻塞 U0～U3。必须根据新鲜测量和确定性证据决定，不能凭通用 ECS 或网络经验直接写死。
+这些决策不阻塞 S0：真实 transport 延后到 S6 选择，input delay/frame deadline 在 S1～S2 用内存弱网测量，预测与回滚在 S4 单独决策。必须根据新鲜测量和确定性证据决定，不能凭通用 ECS 或网络经验直接写死。
 
 ## 23. 明确禁止的网络与恢复设计
 
@@ -1248,7 +1337,10 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 9. 信任客户端磁盘快照作为权威恢复状态；
 10. 用动态 dt、无限 while 追帧、AI 降频或跳过战斗 pass 处理性能不足；
 11. 把 FPS/Source 式 lag compensation 或 UE 状态复制直接混入基础 lockstep；
-12. 在 S0 前绑定具体网络库，或让 RPC/transport 类型进入 BattleKernel。
+12. 在 S6 前绑定具体网络库，或让 RPC/transport 类型进入 BattleKernel；
+13. 每 tick 深拷贝整个引用型 Component 世界并重建 `List/Dictionary` 作为生产快照；
+14. 用 transport 的可靠通道代替应用层 sequence、ACK、Jitter、deadline、冲突和幂等合同；
+15. 为套用外部帧同步框架而替换已经通过 C# 权威对照和跨运行时门禁的战斗数值语义。
 
 完整来源与理由见 `Docs/lockstep-knowledge-base-audit.md`。
 
@@ -1267,7 +1359,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 9. T8 默认 `stage.dat` 与 Android 真机继续排除。
 10. 正常战斗输入同步与恢复快照同步严格分开，权威帧锁定后不可变。
 11. U0～U9 只保留服务器所需接口边界，不实现服务器业务、ACK、Jitter Buffer、房间、登录或重连，也不选择网络库。
-12. 用户批准进入服务器阶段后按 S0～S5 推进；S0 只做无 Socket 的同进程内存 loopback，证明协议与恢复后再选择 transport。
+12. 用户批准进入服务器阶段后按 S0～S9 推进；S0 只做无 Socket 的同进程内存 loopback，S0～S5 依次证明权威帧、应用层协议、弱网、恢复、预测边界和进程拆分，S6 才选择 transport，S7～S9 完成真实弱网、多房间和最终发布验收。
 
 用户确认该定调后，第一个实际执行批次是 U0：审查并验证当前工作树中已经存在的候选修改，建立可重复基线，而不是继续叠加新的 ECS 代码。
 > U6 2026-08-13 20:24 更新：第三十七切片把 `ProcessReleaseInput` 使用的

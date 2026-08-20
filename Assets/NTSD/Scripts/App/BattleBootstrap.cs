@@ -37,13 +37,26 @@ namespace NTSD.App
         private void SetPresentationEnabled(bool enabled)
         {
             if (worldCamera != null) worldCamera.enabled = enabled;
-            if (uiCamera != null) uiCamera.enabled = enabled;
+            if (uiCamera != null)
+            {
+                bool usesOverlayCanvas = battleCanvas != null &&
+                    battleCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
+                uiCamera.enabled = enabled && !usesOverlayCanvas;
+            }
             if (battleCanvas != null) battleCanvas.enabled = enabled;
         }
 
         private void EnsureBattleCanvasCamera()
         {
-            if (battleCanvas == null || uiCamera == null) return;
+            if (battleCanvas == null)
+                return;
+            if (battleCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                battleCanvas.worldCamera = null;
+                return;
+            }
+            if (uiCamera == null)
+                return;
 
             battleCanvas.renderMode = RenderMode.ScreenSpaceCamera;
             battleCanvas.worldCamera = uiCamera;

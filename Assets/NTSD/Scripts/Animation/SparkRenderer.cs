@@ -156,7 +156,10 @@ namespace NTSD.Animation
 
                 float screenX = hit.AnchorX + owner.RenderOffsetX - owner.CameraX;
                 float screenY = hit.AnchorZ;
-                Vector3 unityPos = NTSDRenderSpace.ScreenPixelToWorld(screenX, screenY, 0f);
+                Vector3 unityPos = NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                    screenX,
+                    screenY,
+                    0f);
 
                 SpriteRenderer sr = pool?.GetSprite();
                 if (sr == null)

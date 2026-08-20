@@ -564,8 +564,11 @@ namespace NTSD.Animation.LF2Objects
                 int renderOffsetX = (int)GetRenderOffsetX();
                 float shadowCenterX = GetRuntimeXInt() + renderOffsetX - cameraX;
                 float shadowCenterY = GetRenderZInt();
-                Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(shadowCenterX, shadowCenterY, t.position.z);
-                t.position = NTSDRenderSpace.SnapWorldPosition(worldPos);
+                Vector3 worldPos = NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                    shadowCenterX,
+                    shadowCenterY,
+                    t.position.z);
+                t.position = NTSDRenderSpace.SnapPresentationWorldPosition(worldPos);
             }
 
             Match?.RecordLegacyShadowProbe(this, ShadowRenderer);

@@ -532,7 +532,10 @@ namespace NTSD.Animation.LF2Objects
 
             Transform rootTransform = transform.parent != null ? transform.parent : transform;
             rootTransform.localScale = NTSDRenderSpace.RenderScale;
-            Vector3 worldPos = NTSDRenderSpace.ScreenPixelToWorld(pivot.x, pivot.y, rootTransform.position.z);
+            Vector3 worldPos = NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                pivot.x,
+                pivot.y,
+                rootTransform.position.z);
             rootTransform.position = worldPos;
 
             if (_visualTransform != null && _visualTransform != rootTransform)

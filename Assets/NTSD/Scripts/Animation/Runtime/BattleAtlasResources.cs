@@ -315,9 +315,9 @@ namespace NTSD.Animation
                 diagnostic = "Common catalog, atlas plan, atlas resources, and source paths are required.";
                 return false;
             }
-            if (!sourceCatalog.IsComplete)
+            if (!sourceCatalog.IsRuntimeReady)
             {
-                diagnostic = "A complete common visual catalog is required for atlas binding.";
+                diagnostic = "A runtime-ready common visual catalog is required for atlas binding.";
                 return false;
             }
 
@@ -331,8 +331,6 @@ namespace NTSD.Animation
             var bindings =
                 new Dictionary<BattleVisualResourceKey, BattleSpriteCentralBinding>(
                     1 + BattleCommonVisualCatalog.SparkFrameCount +
-                    BattleCommonVisualCatalog.WordSheetCount *
-                    BattleCommonVisualCatalog.WordGlyphsPerSheet +
                     sourceCatalog.ComLabels.Count);
             if (!TryBindCommonVisual(
                     sourceCatalog.Shadow,
@@ -362,28 +360,31 @@ namespace NTSD.Animation
                 }
             }
 
-            for (int sheetIndex = 0;
-                 sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
-                 sheetIndex++)
+            if (sourceCatalog.IsWordsValid)
             {
-                for (int charCode = 0;
-                     charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
-                     charCode++)
+                for (int sheetIndex = 0;
+                     sheetIndex < BattleCommonVisualCatalog.WordSheetCount;
+                     sheetIndex++)
                 {
-                    if (!sourceCatalog.TryGetWordGlyph(
-                            sheetIndex,
-                            charCode,
-                            out BattleCommonVisualBinding glyph) ||
-                        !TryBindCommonVisual(
-                            glyph,
-                            plan,
-                            resources,
-                            sourcePaths,
-                            excludedPaths,
-                            bindings,
-                            out diagnostic))
+                    for (int charCode = 0;
+                         charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                         charCode++)
                     {
-                        return false;
+                        if (!sourceCatalog.TryGetWordGlyph(
+                                sheetIndex,
+                                charCode,
+                                out BattleCommonVisualBinding glyph) ||
+                            !TryBindCommonVisual(
+                                glyph,
+                                plan,
+                                resources,
+                                sourcePaths,
+                                excludedPaths,
+                                bindings,
+                                out diagnostic))
+                        {
+                            return false;
+                        }
                     }
                 }
             }

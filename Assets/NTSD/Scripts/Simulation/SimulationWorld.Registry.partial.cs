@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace NTSD.Simulation
 {
-    /// <summary>
+    /// <summary>title
     /// SimulationWorld 注册、运行时槽位和基础上下文。
     /// </summary>
     public partial class SimulationWorld

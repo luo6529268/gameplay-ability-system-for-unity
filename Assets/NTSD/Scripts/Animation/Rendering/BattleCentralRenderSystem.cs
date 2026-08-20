@@ -528,7 +528,7 @@ namespace NTSD.Animation.Rendering
 
             bool rendererReady = TryValidateActiveRenderer(out string rendererReason);
             bool frameReady = frame != null;
-            bool commonReady = commonVisualCatalog.IsComplete;
+            bool commonReady = commonVisualCatalog.IsRuntimeReady;
             if (mode == BattlePresentationBackendMode.CentralOnly &&
                 (!rendererReady || !frameReady || !commonReady))
             {
@@ -536,7 +536,7 @@ namespace NTSD.Animation.Rendering
                     ? rendererReason
                     : !frameReady
                         ? "No current immutable presentation frame is available."
-                        : "The common shadow, spark, or WORDS catalog is incomplete.";
+                        : "The common shadow or spark catalog is incomplete.";
                 return CommitCentralFailurePlan(world, simulationTick, reason);
             }
 

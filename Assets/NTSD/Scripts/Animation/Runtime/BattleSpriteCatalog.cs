@@ -478,6 +478,7 @@ namespace NTSD.Animation
             }
         }
         public bool IsValid => IsShadowValid;
+        public bool IsRuntimeReady => IsShadowValid && IsSparkValid;
         public bool IsComplete => IsShadowValid && IsSparkValid && IsWordsValid;
         public bool IsSpecialComValid => SpecialCom != null;
         public bool IsComLabelsComplete =>
@@ -997,8 +998,9 @@ namespace NTSD.Animation
         {
             if (bindings == null)
                 throw new ArgumentNullException(nameof(bindings));
-            if (!IsComplete)
-                throw new InvalidOperationException("A complete common visual catalog is required before central bindings can be published.");
+            if (!IsRuntimeReady)
+                throw new InvalidOperationException(
+                    "A runtime-ready common visual catalog is required before central bindings can be published.");
 
             BattleCommonVisualBinding remappedShadow = RemapBinding(Shadow, bindings);
             var remappedSparks = new BattleCommonVisualBinding[sparks.Length];

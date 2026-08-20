@@ -66,6 +66,8 @@ namespace NTSD.Animation
         private static bool _boundaryViewportOverrideEnabledForSelfCheck;
         private static bool _boundaryViewportOverrideHasBoundsForSelfCheck;
         private static Rect _boundaryViewportOverrideForSelfCheck;
+        private static Object _presentationCameraOffsetOwner;
+        private static Vector3 _presentationCameraOffset;
         private static readonly Camera[] WorldCameraSearchBuffer = new Camera[16];
 
         public static Camera WorldCamera
@@ -117,6 +119,25 @@ namespace NTSD.Animation
         public const float BattleVisualScale = 1.5f;
         public static Vector3 RenderScale => Vector3.one * BattleVisualScale;
         internal static Camera BoundWorldCameraForSelfCheck => _boundWorldCamera;
+        public static Vector3 PresentationCameraOffset => _presentationCameraOffset;
+
+        public static void SetPresentationCameraOffset(Object owner, Vector3 cameraOffset)
+        {
+            if (owner == null)
+                return;
+
+            _presentationCameraOffsetOwner = owner;
+            _presentationCameraOffset = cameraOffset;
+        }
+
+        public static void ClearPresentationCameraOffset(Object owner)
+        {
+            if (owner == null || _presentationCameraOffsetOwner != owner)
+                return;
+
+            _presentationCameraOffsetOwner = null;
+            _presentationCameraOffset = Vector3.zero;
+        }
 
         public static void BindWorldCamera(Camera camera)
         {
@@ -159,6 +180,9 @@ namespace NTSD.Animation
         public static ViewportTransformSnapshot CaptureViewportTransform()
         {
             GetViewport(out float left, out float top);
+            if (!TryGetBoundaryViewport(out _))
+                left -= _presentationCameraOffset.x;
+            top -= _presentationCameraOffset.y;
             return new ViewportTransformSnapshot(
                 left,
                 top,
@@ -173,6 +197,18 @@ namespace NTSD.Animation
                 left + screenX * UnitsPerPixelX,
                 top - screenY * UnitsPerPixelY,
                 z);
+        }
+
+        public static Vector3 ScreenPixelToPresentationWorld(
+            float screenX,
+            float screenY,
+            float z = 0f)
+        {
+            Vector3 worldPosition = ScreenPixelToWorld(screenX, screenY, z);
+            if (!TryGetBoundaryViewport(out _))
+                worldPosition.x -= _presentationCameraOffset.x;
+            worldPosition.y -= _presentationCameraOffset.y;
+            return worldPosition;
         }
 
         public static Vector2 WorldToScreenPixel(Vector3 worldPos)
@@ -252,6 +288,12 @@ namespace NTSD.Animation
                 left + Mathf.Round((worldPos.x - left) / UnitsPerPixelX) * UnitsPerPixelX,
                 top - Mathf.Round((top - worldPos.y) / UnitsPerPixelY) * UnitsPerPixelY,
                 worldPos.z);
+        }
+
+        public static Vector3 SnapPresentationWorldPosition(Vector3 worldPos)
+        {
+            ViewportTransformSnapshot viewport = CaptureViewportTransform();
+            return viewport.SnapWorldPosition(worldPos);
         }
 
         private static void GetViewport(out float left, out float top)

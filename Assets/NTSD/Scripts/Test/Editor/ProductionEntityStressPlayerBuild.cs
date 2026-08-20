@@ -67,6 +67,7 @@ namespace NTSD.Test
                     BuildTargetGroup.Standalone,
                     previousBackend);
                 File.WriteAllBytes(burstSettingsPath, previousBurstSettings);
+                AssetDatabase.SaveAssets();
             }
         }
 
@@ -123,13 +124,6 @@ namespace NTSD.Test
             Directory.CreateDirectory(destinationDirectory);
 
             CopyRequiredFile(sourceDirectory, destinationDirectory, "SPARK.bmp");
-            for (int page = 0; page < 6; page++)
-            {
-                CopyRequiredFile(
-                    sourceDirectory,
-                    destinationDirectory,
-                    $"WORDS{page}.bmp");
-            }
         }
 
         private static void CopyTreeByExtension(
