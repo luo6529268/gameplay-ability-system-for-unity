@@ -237,7 +237,9 @@ namespace NTSD.Animation.LF2Objects
                 _character.Runtime.Vx = 7f;
             if (_character.Runtime.Vx < -7f)
                 _character.Runtime.Vx = -7f;
-            _character.ImmediateFrame(LF2StandardFrames.FallingFront5);
+            // C++ physics F04 writes only core.frame here. Do not update PN or clear
+            // attacking before the later frame_tick observes the new frame.
+            _character.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront5);
         }
 
         /// <summary>
@@ -406,24 +408,24 @@ namespace NTSD.Animation.LF2Objects
                                            curState != LF2States.Burning)
                             ? LF2StandardFrames.FallingBack5
                             : LF2StandardFrames.FallingFront5;
-                        _character.ImmediateFrame(bounceFrame);
+                        // C++ F04 bounce branches write core.frame but leave attacking
+                        // for the later frame_tick mismatch path to clear.
+                        _character.DirectWriteRawFramePreserveWaitCounter(bounceFrame);
                     }
                     else
                     {
                         _character.Runtime.Vx *= 0.3333333333333333; // P0-f-2b B2-2: VALUE-BUG 1f/3f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
-                        _character.AttackingCounter = 0;
                         int landFrame = (_character.Frame.N >= LF2StandardFrames.FallingBack)
                             ? LF2StandardFrames.LyingBack
                             : LF2StandardFrames.Lying;
-                        _character.ImmediateFrame(landFrame);
+                        _character.DirectWriteRawFramePreserveWaitCounter(landFrame);
+                        _character.AttackingCounter = 0;
                     }
                 }
             }
             else
             {
                 _character.Runtime.Vx *= 0.3333333333333333; // P0-f-2b B2-2: VALUE-BUG 1f/3f→0.3333333333333333 (baseline Physics.cs Vx*=0.3333333333333333)
-                _character.AttackingCounter = 0;
-
                 int landFrame;
                 int curFrameState = _character.GetState();
                 if (curFrameState == LF2States.CustomSkill1)
@@ -433,7 +435,8 @@ namespace NTSD.Animation.LF2Objects
                 else
                     landFrame = LF2StandardFrames.Crouch2;
 
-                _character.ImmediateFrame(landFrame);
+                _character.DirectWriteRawFramePreserveWaitCounter(landFrame);
+                _character.AttackingCounter = 0;
             }
 
             return true;

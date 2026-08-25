@@ -2,6 +2,8 @@
 
 日期：2026-06-04
 
+> **2026-08-20 R0 权威迁移声明（覆盖本文历史“已按 C++ 语义/已验证”表述的最终裁决含义）**：唯一行为权威是 `J:\QQFile\NTSD2.4\ntsd_release` 中参与 `ntsd_new.exe` release 构建的 live battle runtime，主入口为 `src/entity/game_tick.cpp` 的 `game_tick(...)`。本文的编译、自检、Play Mode 与旧 C#/反汇编对照记录保留为历史回归证据；它们不单独证明 C++ release 对齐。后续任何差异关闭都必须补充对应 C++ release live 调用链，以及 C++ trace、Unity fallback、Unity optimized path 和必要 Play Mode 的证据边界。
+
 ## 范围
 
 当前 Unity 复刻范围只覆盖战斗场景运行时：固定 tick/pass、输入/AI、帧推进/状态、实体位移与逻辑 X 边界、碰撞/命中、武器/cpoint/opoint、死亡复活、波次与实体生命周期。菜单、选人、加载、HUD/结算、camera/background/render、audio playback、network、replay/rollback 和编辑器预览不作为本轮验证目标。
@@ -10,7 +12,7 @@
 
 - `J:\QQFile\NTSD2.4\ntsd_release`
 - 不使用 C++ Debug 宏路径作为正式战斗逻辑依据。
-- 不再把反汇编文档作为 Unity 当前实现的直接基准；C++ release 是 Unity 复刻的中间还原工程。
+- 不再把反汇编文档作为 Unity 当前实现的直接基准；C++ release live path 是 Unity 战斗行为的最终裁决来源，而不是中间还原工程。
 
 ## 当前处理状态
 

@@ -926,7 +926,7 @@ namespace NTSD.Animation.Rendering.Editor
             bool pendingStartRequest,
             bool isPlaying,
             bool managedRuntimeWasValid,
-            bool managedRuntimeExpected,
+            bool bootstrapReportedReady,
             bool managedRuntimeIsValid,
             bool restartTransitionPending,
             int restartCount)
@@ -937,7 +937,7 @@ namespace NTSD.Animation.Rendering.Editor
                 return ProductionEntityStressPlayRestartDecision.RecordHealthyRuntime;
             if (restartTransitionPending)
                 return ProductionEntityStressPlayRestartDecision.WaitForRestartTransition;
-            if (!managedRuntimeWasValid && !managedRuntimeExpected && restartCount == 0)
+            if (!managedRuntimeWasValid && !bootstrapReportedReady)
                 return ProductionEntityStressPlayRestartDecision.WaitForInitialServices;
             return restartCount < PlayRestartLimitForDiagnostics
                 ? ProductionEntityStressPlayRestartDecision.RestartPlayMode
@@ -1191,7 +1191,7 @@ namespace NTSD.Animation.Rendering.Editor
                         true,
                         true,
                         SessionState.GetBool(SessionManagedRuntimeObservedKey, false),
-                        managedRuntime.HasServiceFootprint,
+                        BattleTestBootstrap.ProductionStressServicesReady,
                         managedRuntime.IsValid,
                         SessionState.GetBool(SessionPlayRestartPendingKey, false),
                         SessionState.GetInt(SessionPlayRestartCountKey, 0));

@@ -1,5 +1,6 @@
 using UnityEngine;
 using NTSD.Animation;
+using NTSD.LevelEditor;
 
 namespace NTSD.App
 {
@@ -21,6 +22,106 @@ namespace NTSD.App
         [Header("Battle UI")]
         [SerializeField] private Canvas battleCanvas;
 
+        [Header("Battle Map Configuration")]
+        [Tooltip("Optional MapId catalog. Leave both Catalog and Map Id empty to keep the legacy Scene BoundaryWall fallback.")]
+        [SerializeField] private BattleMapCatalog mapCatalog;
+        [SerializeField] private string mapId = "";
+        [SerializeField] private BoundaryWallManager boundaryManager;
+        [SerializeField] private SpriteRenderer backgroundRenderer;
+
+        private bool mapConfigurationPrepared;
+        private string preparedMapId = string.Empty;
+        private Sprite previousBackgroundSprite;
+        private BoundaryWallManager preparedBoundaryManager;
+        private BattleMapBoundaryDefinition preparedBoundaryDefinition;
+
+        public bool IsMapConfigurationPrepared => mapConfigurationPrepared;
+        public string PreparedMapId => preparedMapId;
+
+        public bool TryPrepareMapConfiguration(out string failure)
+        {
+            bool hasCatalog = mapCatalog != null;
+            bool hasMapId = !string.IsNullOrWhiteSpace(mapId);
+            if (!hasCatalog && !hasMapId)
+            {
+                failure = string.Empty;
+                return true;
+            }
+
+            if (!hasCatalog || !hasMapId)
+            {
+                failure = "Map Catalog and Map Id must be configured together.";
+                return false;
+            }
+
+            if (mapConfigurationPrepared)
+            {
+                if (string.Equals(preparedMapId, mapId, System.StringComparison.Ordinal))
+                {
+                    failure = string.Empty;
+                    return true;
+                }
+
+                failure = "A different map is already prepared for this battle bootstrap.";
+                return false;
+            }
+
+            if (!mapCatalog.TryResolve(mapId, out BattleMapCatalog.Entry entry, out failure))
+                return false;
+
+            if (boundaryManager == null)
+            {
+                failure = "Assign a BoundaryWallManager before preparing a configured map.";
+                return false;
+            }
+
+            if (backgroundRenderer == null)
+            {
+                failure = "Assign the world background SpriteRenderer before preparing a configured map.";
+                return false;
+            }
+
+            Sprite mapBackgroundSprite = entry.PresentationDefinition.BackgroundSprite;
+            if (mapBackgroundSprite == null)
+            {
+                failure = "The resolved map presentation has no background sprite.";
+                return false;
+            }
+
+            if (!boundaryManager.TryLoadBoundaryDefinition(entry.BoundaryDefinition, out failure))
+                return false;
+
+            previousBackgroundSprite = backgroundRenderer.sprite;
+            backgroundRenderer.sprite = mapBackgroundSprite;
+            preparedBoundaryManager = boundaryManager;
+            preparedBoundaryDefinition = entry.BoundaryDefinition;
+            preparedMapId = mapId;
+            mapConfigurationPrepared = true;
+            failure = string.Empty;
+            return true;
+        }
+
+        public void ClearPreparedMapConfiguration()
+        {
+            if (!mapConfigurationPrepared)
+                return;
+
+            if (preparedBoundaryManager != null &&
+                preparedBoundaryManager.LoadedBoundaryDefinition == preparedBoundaryDefinition)
+            {
+                preparedBoundaryManager.ClearLoadedBoundaryDefinition();
+            }
+
+            if (backgroundRenderer != null)
+                backgroundRenderer.sprite = previousBackgroundSprite;
+
+            mapConfigurationPrepared = false;
+            preparedMapId = string.Empty;
+            previousBackgroundSprite = null;
+            preparedBoundaryManager = null;
+            preparedBoundaryDefinition = null;
+        }
+
         public void EnablePresentation()
         {
             SetPresentationEnabled(true);
@@ -32,6 +133,7 @@ namespace NTSD.App
         {
             NTSDRenderSpace.ClearBoundWorldCamera(worldCamera);
             SetPresentationEnabled(false);
+            ClearPreparedMapConfiguration();
         }
 
         private void SetPresentationEnabled(bool enabled)

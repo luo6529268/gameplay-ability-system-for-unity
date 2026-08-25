@@ -22,6 +22,7 @@ const startupAssetWorkspace = cliArguments.assetWorkspace;
 const startupPatchWorkspace = cliArguments.patchWorkspace;
 const manifestPath = resolve(process.env[PINNED_MANIFEST_PATH_ENV] ?? cliArguments.manifest ?? "dist/build-manifest.json");
 const allowAbsoluteRootGrant = cliArguments.allowTestRootGrant;
+const readOnly = cliArguments.readOnly;
 const rawPort = cliArguments.port ?? process.env.PORT ?? "4173";
 const port = parsePortValue(rawPort);
 
@@ -124,6 +125,7 @@ const server = createApplicationServer({
     safeSave,
     projectDatService,
     projectSkillService,
+    readOnly,
 });
 const origin = await listenLoopback(server, port);
 process.stdout.write(`Dat Skill Flow server listening at ${origin}\n`);

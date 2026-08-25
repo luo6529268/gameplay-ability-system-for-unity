@@ -25,7 +25,7 @@ describe("one-click launcher contract", () => {
 
         const modeResolution = launcher.indexOf("$launchMode = Resolve-LaunchMode");
         const cancellation = launcher.indexOf("已取消启动。");
-        const postSelectionPrerequisites = launcher.indexOf("\nAssert-StartupPrerequisites\n", modeResolution);
+        const postSelectionPrerequisites = launcher.indexOf("Assert-StartupPrerequisites", cancellation);
         assert.ok(modeResolution >= 0);
         assert.ok(cancellation > modeResolution);
         assert.ok(postSelectionPrerequisites > cancellation);
@@ -37,11 +37,11 @@ describe("one-click launcher contract", () => {
         assert.match(prerequisites[1]!, /scripts\\start\.mjs/);
         assert.ok(launcher.indexOf("\n    Initialize-TestWorkspace", postSelectionPrerequisites) > postSelectionPrerequisites);
 
-        const projectBranch = launcher.match(/if \(\$launchMode -eq "Project"\) \{([\s\S]*?)\n\}\nelse \{/);
+        const projectBranch = launcher.match(/if \(\$launchMode -eq "Project"\) \{\r?\n([\s\S]*?)\r?\n\}\r?\nelse \{/);
         assert.ok(projectBranch);
         assert.doesNotMatch(projectBranch[1]!, /Copy-Item|Remove-Item|Initialize-TestWorkspace/);
 
-        const testInitializer = launcher.match(/function Initialize-TestWorkspace \{([\s\S]*?)\n\}/);
+        const testInitializer = launcher.match(/function Initialize-TestWorkspace \{\r?\n([\s\S]*?)\r?\n\}/);
         assert.ok(testInitializer);
         assert.match(launcher, /\[switch\]\$ResetWorkspace/);
         assert.match(testInitializer[1]!, /if \(\$ResetWorkspace -and \(Test-Path -LiteralPath \$testWorkspace\)\)/);
@@ -59,7 +59,7 @@ describe("one-click launcher contract", () => {
         assert.match(launcher, /\$process\.Kill\(\)/);
 
         const readyCheck = launcher.indexOf("Dat Skill Flow server listening at");
-        const browserOpen = launcher.indexOf("Start-Process $url");
+        const browserOpen = launcher.indexOf('Start-Process ("$url$OpenPath")');
         assert.ok(readyCheck >= 0);
         assert.ok(browserOpen > readyCheck);
         assert.match(launcher, /One-click startup prerequisites passed\./);
@@ -76,6 +76,8 @@ describe("one-click launcher contract", () => {
         assert.doesNotMatch(launcher, /npm\.cmd|cmd\.exe/);
         assert.match(launcher, /DAT_SKILL_FLOW_CPP_PREVIEW_EXECUTABLE/);
         assert.match(launcher, /DAT_SKILL_FLOW_CPP_GAME_ROOT/);
+        assert.match(launcher, /\[switch\]\$ReadOnly/);
+        assert.match(launcher, /\$nodeArguments \+= "--read-only"/);
         const environmentSet = launcher.indexOf("SetEnvironmentVariable($previewEnvironmentName, $previewExecutable");
         const processStart = launcher.indexOf("[System.Diagnostics.Process]::Start($processInfo)");
         const environmentRestore = launcher.indexOf("SetEnvironmentVariable($previewEnvironmentName, $previousPreviewExecutable");

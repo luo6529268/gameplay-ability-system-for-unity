@@ -386,7 +386,8 @@ namespace NTSD.Animation.LF2Objects
         internal void UpdateLocalInputStateFromControllerBuffer(int tickIndex)
         {
             // Local callbacks enqueue edges only. Keep the held-state mirror across ticks;
-            // frame advance clears Runtime keys after input has been applied, as in authority.
+            // this tick's Runtime keys remain visible through frame advance and late frame
+            // tick. The next human poll or AI producer owns its own roll/clear boundary.
             // Cooldowns and combo progress may still be changed by later runtime passes.
             InputState?.SyncProgressFromRuntime(Runtime);
             InputState?.PollFromBuffer(Controller?.InputBuffer, tickIndex, this);
@@ -818,7 +819,9 @@ namespace NTSD.Animation.LF2Objects
 
         internal override void RunCharacterInputPhase(int tickIndex)
         {
-            if (Runtime == null || Runtime.LinkState < 0)
+            // Alignment contract R3-HOLD-INP-001: do not replace C++ apply_input's
+            // state-local relation gates with a whole-character negative-link skip.
+            if (Runtime == null)
                 return;
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
                 return;
@@ -828,7 +831,7 @@ namespace NTSD.Animation.LF2Objects
 
         internal override void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
         {
-            if (Runtime == null || Runtime.LinkState < 0)
+            if (Runtime == null)
                 return;
 
             if (AiControlled)
@@ -923,10 +926,10 @@ namespace NTSD.Animation.LF2Objects
             int action = task.opoint.action;
             Frame.PN = 0;
             Frame.Prev = 0;
-            Frame.Prev2 = action;
+            Frame.Prev2 = 0;
             WriteCurrentFrameId(action);
             Frame.D = FrameCache?.GetFrameDataById(action);
-            Frame.Prev2D = Frame.D;
+            Frame.Prev2D = FrameCache?.GetFrameDataById(0);
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, 0);
 
@@ -1085,6 +1088,10 @@ namespace NTSD.Animation.LF2Objects
                     Frame.PN = 0;
                     Frame.D = FrameCache.GetFrameDataById(0);
                 }
+
+                // Alignment contract: R5-OP-001. Opoint birth keeps the reset
+                // collision-history id until the next collision snapshot.
+                Frame.Prev2D = FrameCache.GetFrameDataById(Frame.Prev2);
             }
 
             if (Frame.D != null)

@@ -798,7 +798,7 @@ namespace NTSD.Animation.LF2Objects
             _victim.Runtime.Vx = _victim.KnockbackVx;
             _victim.KnockbackVz = _victim.Runtime.Vz * factor;
             _victim.Runtime.Vz = _victim.KnockbackVz;
-            _victim.ImmediateFrame(182);
+            _victim.DirectWriteRawFramePreserveWaitCounter(182);
             ApplyAirStep(3.0f);
         }
 

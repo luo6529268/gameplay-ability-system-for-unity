@@ -26,6 +26,28 @@ namespace NTSD.App
         [Tooltip("Central battle draw policy. Empty uses the renderer feature default. Valid values: Auto, OrderedChunks, StrictOrderedDraw.")]
         public string BattleDrawModeName = "";
 
+        [Header("Battle Function Keys")]
+        [Tooltip("F7/F8/F9 are denied when no exact gameModeId + battleGameModeId rule matches. Physical keys are consumed only by LocalFreeRun.")]
+        public BattleFunctionKeyModeRule[] BattleFunctionKeyModeRules =
+            new BattleFunctionKeyModeRule[0];
+
+        public BattleFunctionKeyCommand ResolveBattleFunctionKeyCommands(
+            int localGameModeId,
+            int battleGameModeId)
+        {
+            if (BattleFunctionKeyModeRules == null)
+                return BattleFunctionKeyCommand.None;
+
+            for (int index = 0; index < BattleFunctionKeyModeRules.Length; index++)
+            {
+                BattleFunctionKeyModeRule rule = BattleFunctionKeyModeRules[index];
+                if (rule != null && rule.Matches(localGameModeId, battleGameModeId))
+                    return rule.GetAllowedCommands();
+            }
+
+            return BattleFunctionKeyCommand.None;
+        }
+
         #region 单例访问
 
         private static GameConfig _instance;

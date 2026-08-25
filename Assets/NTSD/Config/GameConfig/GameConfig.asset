@@ -19,6 +19,12 @@ MonoBehaviour:
   BattlePresentationBackendName: CentralOnly
   BattleAtlasModeName: ''
   BattleDrawModeName: ''
+  BattleFunctionKeyModeRules:
+  - gameModeId: 0
+    battleGameModeId: 1
+    enableF7: 1
+    enableF8: 1
+    enableF9: 1
   ShadowPrefab: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
   LF2ObjectPrefab: {fileID: 8065137006895327203, guid: 9c107ede7c04d83469572b66618c3680, type: 3}
   PoolInitialSize: 10

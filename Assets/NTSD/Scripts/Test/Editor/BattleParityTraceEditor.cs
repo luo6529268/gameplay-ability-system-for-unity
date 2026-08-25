@@ -312,13 +312,13 @@ namespace NTSD.EditorTools
                 world.ValidateHeldLinksAll(3);
 
                 if (holder.Runtime.LinkState != 0 ||
-                    holder.Runtime.TargetSlotIndex != -1 ||
-                    holder.Runtime.HeldWeaponStableId != -1 ||
+                    holder.Runtime.TargetSlotIndex != 1 ||
+                    holder.Runtime.HeldWeaponStableId != 1 ||
                     target.Runtime.HolderStableId != 2 ||
                     target.Runtime.LinkState != 0)
                 {
                     throw new InvalidOperationException(
-                        "Unity W07 structural fixture did not preserve target reverse fields while clearing the mismatched holder link.");
+                        "Unity W07 structural fixture did not preserve forward/reverse relation fields while clearing only the mismatched holder link state.");
                 }
                 return events;
             }

@@ -81,14 +81,13 @@ namespace NTSD.Animation.LF2Objects
                 if (isHeavyThrow)
                 {
                     weapon.DirectWriteHeldFramePreserveWaitCounter(40);
-                    ThrowHeldWeapon(holder, wpoint);
+                    ThrowHeldWeapon(holder, wpoint, stampSpawnerSlot: true);
                     result.Thrown = true;
                 }
                 else if (isLightThrow)
                 {
                     weapon.DirectWriteHeldFramePreserveWaitCounter(weapon.BattleRandInt(0, 6));
-                    weapon.FrameDelay = 1;
-                    ThrowHeldWeapon(holder, wpoint);
+                    ThrowHeldWeapon(holder, wpoint, stampSpawnerSlot: false);
                     result.Thrown = true;
                 }
                 else
@@ -101,7 +100,7 @@ namespace NTSD.Animation.LF2Objects
             return result;
         }
 
-        private void ThrowHeldWeapon(LF2Entity holder, WeaponPoint wpoint)
+        private void ThrowHeldWeapon(LF2Entity holder, WeaponPoint wpoint, bool stampSpawnerSlot)
         {
             weapon.Runtime.WeaponState = LF2States.WeaponThrowing;
             weapon.Runtime.Vx = weapon.Dirh() * wpoint.dvx;
@@ -117,10 +116,10 @@ namespace NTSD.Animation.LF2Objects
                     weapon.Runtime.Vz = wpoint.dvz;
             }
 
-            weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
+            if (stampSpawnerSlot)
+                weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
             weapon.PS.zz = 0;
             weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
-            weapon.PickerStableId = holder.Runtime?.SlotIndex ?? -1;
             weapon.OnThrownInternal();
         }
 

@@ -641,33 +641,17 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool TryApplyHit(InteractionArea itr, LF2Entity target)
         {
-            int targetDataType = target?.GetCurrentDataObjectTypeForSimulation() ?? -1;
-            if (targetDataType == (int)LF2ObjectType.Character && PS != null)
-            {
-                var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
-                if (target is LF2Character character)
-                    return character.Hit(itr, this, attackerPos, default);
+            if (itr == null || target == null || PS == null)
+                return false;
 
-                return LF2CharacterDatHitResolver.CanResolveTarget(target) &&
-                       LF2CharacterDatHitResolver.TryResolveHit(target, itr, this, attackerPos, default);
-            }
-
-            if ((targetDataType == (int)LF2ObjectType.LightWeapon ||
-                 targetDataType == (int)LF2ObjectType.HeavyWeapon ||
-                 targetDataType == (int)LF2ObjectType.ThrowWeapon ||
-                 targetDataType == (int)LF2ObjectType.Drink) &&
-                target is LF2WeaponBase weapon)
-            {
-                return weapon.Hit(itr, this);
-            }
-
-            if (targetDataType == (int)LF2ObjectType.SpecialAttack &&
-                target is LF2SpecialAttack specialAttack)
-            {
-                return specialAttack.Hit(itr, this);
-            }
-
-            return false;
+            SimulationWorld world = Match ?? target.Match;
+            var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
+            return world?.DamageWriter.TryApplyCurrentDatTargetHit(
+                world,
+                this,
+                target,
+                itr,
+                attackerPos) == true;
         }
 
         internal bool HandlePreInteractionKind1(InteractionArea itr, LF2Entity target)
@@ -853,8 +837,8 @@ namespace NTSD.Animation.LF2Objects
             Frame.D = FrameCache.GetFrameDataById(action);
             Frame.PN = 0;
             Frame.Prev = 0;
-            Frame.Prev2 = action;
-            Frame.Prev2D = Frame.D;
+            Frame.Prev2 = 0;
+            Frame.Prev2D = FrameCache.GetFrameDataById(0);
             SetFrameDirect(action, 0);
         }
 

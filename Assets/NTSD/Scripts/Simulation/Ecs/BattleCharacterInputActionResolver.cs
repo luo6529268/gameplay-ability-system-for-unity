@@ -145,20 +145,13 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            byte comboDra = input.ComboDra;
-            byte comboDla = input.ComboDla;
-            byte comboDua = input.ComboDua;
-            byte comboDda = input.ComboDda;
-            byte comboDrj = input.ComboDrj;
-            byte comboDlj = input.ComboDlj;
-            byte comboDuj = input.ComboDuj;
-            byte comboDdj = input.ComboDdj;
-            byte comboDja = input.ComboDja;
             bool result = false;
 
+            // Alignment contract: R3-COMBO-001. Each C++ combo wrapper mutates
+            // its entity field by reference, including on incomplete/early-return paths.
             result |= RunCombo(
                 character,
-                ref comboDra,
+                ref input.ComboDra,
                 input.CdRight,
                 ComboMode.Right,
                 input.CdAttack,
@@ -168,7 +161,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDla,
+                ref input.ComboDla,
                 input.CdLeft,
                 ComboMode.Left,
                 input.CdAttack,
@@ -178,7 +171,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDua,
+                ref input.ComboDua,
                 input.CdUp,
                 ComboMode.Up,
                 input.CdAttack,
@@ -188,7 +181,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDda,
+                ref input.ComboDda,
                 input.CdDown,
                 ComboMode.Down,
                 input.CdAttack,
@@ -198,7 +191,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDrj,
+                ref input.ComboDrj,
                 input.CdRight,
                 ComboMode.Right,
                 input.CdJump,
@@ -208,7 +201,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDlj,
+                ref input.ComboDlj,
                 input.CdLeft,
                 ComboMode.Left,
                 input.CdJump,
@@ -218,7 +211,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDuj,
+                ref input.ComboDuj,
                 input.CdUp,
                 ComboMode.Up,
                 input.CdJump,
@@ -228,7 +221,7 @@ namespace NTSD.Simulation.Ecs
                 ref input);
             result |= RunCombo(
                 character,
-                ref comboDdj,
+                ref input.ComboDdj,
                 input.CdDown,
                 ComboMode.Down,
                 input.CdJump,
@@ -239,13 +232,13 @@ namespace NTSD.Simulation.Ecs
 
             bool djaAdvanced = false;
             AdvanceCombo(
-                ref comboDja,
+                ref input.ComboDja,
                 input.CdJump,
                 ComboMode.Jump,
                 input.CdAttack,
                 ref djaAdvanced,
                 in input);
-            if (character.Frame?.D == null || comboDja != 3)
+            if (character.Frame?.D == null || input.ComboDja != 3)
                 return result;
 
             int targetFrame = character.Frame.D.hit_ja;
@@ -255,7 +248,7 @@ namespace NTSD.Simulation.Ecs
             if (targetFrame != 0 && character.CanEnterCharacterDatInputFrameJump())
             {
                 bool jumped = character.TryCharacterDatInputFrameJump(targetFrame);
-                comboDja = 0;
+                input.ComboDja = 0;
                 if (jumped)
                     ClearActionAndDirectionCooldowns(ref input);
                 return true;
@@ -268,17 +261,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             if (ComboInterrupted(ComboMode.Attack, djaAdvanced, in input))
-                comboDja = 0;
-
-            input.ComboDra = comboDra;
-            input.ComboDla = comboDla;
-            input.ComboDua = comboDua;
-            input.ComboDda = comboDda;
-            input.ComboDrj = comboDrj;
-            input.ComboDlj = comboDlj;
-            input.ComboDuj = comboDuj;
-            input.ComboDdj = comboDdj;
-            input.ComboDja = comboDja;
+                input.ComboDja = 0;
             return result;
         }
 

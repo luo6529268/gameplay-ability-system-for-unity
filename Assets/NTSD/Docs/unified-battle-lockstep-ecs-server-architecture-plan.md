@@ -1,6 +1,7 @@
 # NTSD 统一战斗内核、帧同步、自研 ECS 与未来服务器架构方案
 
 > 建立日期：2026-08-11
+> **2026-08-24 权威修正**：本文早期使用的“C# 权威”“权威 C#”和“C# 单一真值”均为历史移植上下文，不再定义战斗规则。唯一规则 authority 为 `J:\QQFile\NTSD2.4\ntsd_release` 中参与 release 构建并运行到 `ntsd_new.exe` 的 C++ live runtime；`ntsd_release_C#` 仅用于历史意图、命名和交叉检查。下方所有保留的 C# 测试/迁移记录只说明当时的辅助验证，不可替代 C++ release trace。
 > **2026-08-20 C++ authority migration（覆盖本文“C# authority”措辞）**：`J:\QQFile\NTSD2.4\ntsd_release` 的 release live `game_tick(...)` 是 Unity 战斗行为唯一权威。U0～U9 的架构、性能、Mono/IL2CPP、worker、零 GC 与 1000 AI 结果继续有效，但它们只证明 Unity 内核的性能/确定性与当时的 C# 基线；不再自动证明 C++ release 场景行为已对齐。后续任何保持或提升 ECS/fast path 的决定必须增加 C++ trace 等价门禁。
 > **2026-08-20 当前工作树最终复验（覆盖下方全部历史进度与旧 Temp 路径）**：国际版 `Unity 2022.3.62f3 (96770f904ca7)` 已对当前代码重新完成 Windows Mono Player 构建、U7 Mono/IL2CPP correctness、U8 worker/synchronous 对照和 U9 五场景正式矩阵。干净全量 EditMode job `126790e9345043bd83c1e5a81b1f38a5` 为 `1265/1265 PASS`，`BattleRuntimeSelfCheck` 最终于 `2026-08-20 12:14:11` 写入 `PASS`。U7 两份 fresh 报告均为 `Passed`，source/restored checksum 均为 `2f92a339254225de11790c2d4eb8fc51f36e7cdd6245a891d25f041ef17ac093`，replay checksum 均为 `3DEB30C4D190E5FB`，恢复 `(slot, stableId, generation)` 均为 `(3, 100, 1)`。U8 两份 300 tick 报告的 parity/lockstep 十域 hash 完全一致、0 B、中央 draw=1、cleanup 通过。U9 Idle/Move/Dispersed/Combat/Concentrated 均为 1000 个真实生产实体、300 tick 预热 + 1800 tick 正式采样；完整帧平均 `16.6681～16.7091 ms`（约 `59.85～59.99 FPS`），逻辑 P95 为 `3.9235～6.5989 ms`，SetPass=6、中央 draw=1，四条 managed-memory 边界和 Gen0/1/2 均为 0，正式容量拒绝为 0，U6 mismatch 为 0，worker `2100/2100`，teardown 全恢复。当前证据位于 `Temp/U7-Windows-IL2CPP/` 与 `Temp/U9-Windows-Player/Reports-2022.3.62f3/`。U0～U9 单机范围据此关闭；S0～S9、服务器业务、Socket、ACK、Jitter Buffer、房间、登录、重连、T8 默认 `stage.dat` 与 Android 真机均未进入。
 > **2026-08-16 U7 最终关闭（覆盖下方历史阻塞记录）**：项目已由国际版 `Unity 2022.3.62f3 (96770f904ca7)` 打开，Windows Mono 与 IL2CPP Player variation 均为同一版本和 revision。真实 Windows Mono/IL2CPP correctness gate 均写出 `Passed` 报告；两者 `sourceChecksum`、`restoredChecksum`、`replayChecksum`、恢复 slot、stable id、generation 逐项相同，纯值 transfer/factory 与 snapshot -> mutate topology -> restore -> journal replay 均通过。最终聚焦 EditMode job `f0e76a50c9064e239ea1c2f438be465b` 为 `39/39 PASS`，`BattleRuntimeSelfCheck` 最终于 `2026-08-17 00:01:11` 写入 `PASS`。门禁构建对 Mono 与 IL2CPP 一致地临时关闭 Burst AOT，以隔离本机 Burst 1.8.21 损坏的 Windows hash cache；`finally` 会恢复 Burst、后端、IL2CPP 配置与 Frame Timing Stats，并保存 ProjectSettings。正常 Burst 配置下的 U9 性能证据仍单独成立。至此 U0～U9 单机计划按既定范围关闭；服务器阶段现按 S0～S9 细分且仍未开始，必须由用户再次确认后才能进入，T8 默认 `stage.dat` 与 Android 真机继续排除。
@@ -53,19 +54,22 @@
 | `Docs/singleplayer-1000ai-performance-plan.md` | 性能基线、Profiler 归因和 1000 AI 验收证据 |
 | `Docs/battle-runtime-zero-gc-architecture-plan.md` | 零 GC、池、容器、static 与 partial 治理证据 |
 | `Docs/central-battle-render-system-plan.md` | 中央表现、Texture2DArray、Mesh、排序与 SetPass 证据 |
-| `Docs/future-server-lockstep-architecture.md` | 服务器协议、房间、追帧、恢复与部署细节 |
+| `Docs/future-server-lockstep-architecture.md` | 历史服务器架构备忘与背景资料；不再是 S0～S9 的当前详细实施合同 |
+| `Docs/server-lockstep-s0-s9-design.md` | S0～S9 的唯一详细设计合同、每阶段解决方案、故障边界与关闭证据 |
+| `Docs/server-lockstep-s0-s9-progress.md` | S0～S9 的当前状态、证据、阻塞、问题台账和实际 Change ID 链接 |
 | `Docs/lockstep-knowledge-base-audit.md` | `网络游戏` 知识库来源覆盖、取舍和拒绝项 |
 | `.omc/plans/battle-kernel-ecs-lockstep-migration-20260727.md` | 既有 ECS shadow 实验、历史基线和未关闭合同 |
-| `Docs/csharp-vs-unity-battle-alignment.md` | C# 权威到 Unity 的战斗差异与验收证据 |
+| `Docs/csharp-vs-unity-battle-alignment.md` | 历史 C# 移植辅助、命名交叉检查与 Unity 差异记录；不再定义规则 authority |
 | `Docs/HANDOFF-codex-battle-alignment.md` | 当前实现进度与后续交接 |
 
 发生冲突时按以下优先级处理：
 
 1. 用户当前明确要求；
-2. 权威 C# 的实际调用链；
+2. C++ release live runtime 的实际调用链和同 tick trace；
 3. 本文确定的架构边界和实施顺序；
 4. 各专项文档的测量证据；
-5. 历史计划和旧结论。
+5. `ntsd_release_C#` 的历史辅助交叉检查；
+6. 历史计划和旧结论。
 
 ### 1.1 ECS 知识库取舍依据
 
@@ -86,7 +90,7 @@
 审计后确定的总原则是：
 
 1. NTSD 正常战斗只同步并授权输入，结果由同一 BattleKernel 计算；
-2. 服务器运行相同 C# 内核，不另写伤害、命中或生命周期规则；
+2. 服务器运行同一套 C# BattleKernel 实现，但其伤害、命中、生命周期和 pass 规则必须由 C++ release live runtime 约束，不另写第二套规则；
 3. 状态同步只用于 bootstrap、快照恢复、晚加入、观战和诊断，不在正常 tick 覆盖 HP/位置；
 4. 逻辑 30 Hz、网络组包频率和 Unity 渲染频率相互独立；
 5. 权威帧一旦锁定不可修改，重复包只允许幂等接受；
@@ -94,7 +98,7 @@
 7. 预表现只能表达输入与意图，扣血、命中、opoint、控制和死亡只来自确认逻辑；
 8. ECS 解决数据布局与批量处理，不自动解决确定性、错误复杂度、网络抖动或持续超预算。
 
-知识库中的示例帧率、缓冲长度、transport、定点库和性能阈值均不是 NTSD 生产常量。任何与权威 C# 行为冲突的网络文章结论只记录为拒绝项，不进入实现。
+知识库中的示例帧率、缓冲长度、transport、定点库和性能阈值均不是 NTSD 生产常量。任何与 C++ release live runtime 行为冲突的网络文章结论只记录为拒绝项，不进入实现。
 
 当前工作树已经存在尚未统一验收的输入、host policy、AI、碰撞、零 GC 和表现优化。它们全部视为“候选实现”，进入第一个基线审计阶段；本文不假定这些修改已经完成，也不授权覆盖或回退用户改动。
 
@@ -124,7 +128,7 @@
 必须达到的结果：
 
 1. 单机、回放、客户端和服务器都调用同一个 `StepOneTick(FrameInputSet)` 战斗入口。
-2. C# 权威的规则、pass 顺序、slot 顺序、RNG、opoint 可见边界和可观察结果保持不变。
+2. C++ release live runtime 的规则、pass 顺序、slot 顺序、RNG、opoint 可见边界和可观察结果保持不变。
 3. 战斗真值由纯 C# 数据世界持有，不依赖 Unity Transform、Physics、Renderer、Time 或异步资源完成顺序。
 4. 高频战斗循环使用连续数据、预分配容器和显式顺序，不在正式战斗窗口产生托管分配。
 5. Unity 只负责输入采样、资源、GameObject 壳、中央表现、音频和编辑器接线。
@@ -579,7 +583,7 @@ AI 目标查询采用：
 - role/bounds 无法证明时走等价 fallback；
 - broadphase 只减少不可能相交的 pair，不能删除真实有效 pair；
 - 最终 pair/candidate 按权威 ordinal 排序和消费；
-- A 攻击 B 与 B 攻击 A 的方向检查按 C# 权威保留。
+- A 攻击 B 与 B 攻击 A 的方向检查按 C++ release live runtime 保留。
 
 `Concentrated1000` 若确实产生 499,500 个真实有效实体对，任何 ECS 或四叉树都不能把真实输出工作量变成 O(N)。该场景用于报告极限复杂度，不在未改变玩法合同的情况下预先承诺 30 FPS。
 
@@ -1010,16 +1014,16 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - `aRest` 的 canonical writer 已由 U4 `BattleEcsCooldownPass` 接管；`vRest` 当前已经由 `RuntimeRestStore` 按 handle/generation 保存并由权威 pair pass 消费。U5 不新增第二套 rest writer，后续只继续核验真实 hit/cpoint/opoint 对 rest 的写入与可见边界；
 - 正向 link validation 已完成 live-runtime 数据候选、6 项聚焦测试、243 项联合回归、fresh self-check 与 1000 AI A/B；十域最终 hash 完全一致且正式 tick 为 `0 B`，但目标 pass average/P95 分别慢 50.73%/27.80%，因此生产默认保持 Legacy；完整证据见 `Docs/unified-battle-u5-positive-link-validation-assessment-20260811.md`；
 - 该评估只拒绝当前逐 slot 数据候选，不能据此声明真实 cpoint/held/link writer 已迁移；统一 canonical link store 必须与真实 writer 的同 tick 可见性一起处理，不能读取 tick-end shadow；
-- character/object hit 的权威 writer 合同已经从 C# `GameTick -> HitResolver -> HitResolve` 闭合；完整原子边界包含 `PrevFrame2`、slot/candidate 顺序、abort residual、preprocess、RNG、所有 kind、伤害统计、rest/link、声音/事件、opoint 与生命周期，禁止只迁移扣血片段；
+- 历史 C# `GameTick -> HitResolver -> HitResolve` 闭合只保留为迁移辅助；当前 character/object hit writer 合同必须重新以 C++ release live path 的 `game_tick -> collision_collect/collision -> hit` trace 闭合。完整原子边界包含 `PrevFrame2`、slot/candidate 顺序、abort residual、preprocess、RNG、所有 kind、伤害统计、rest/link、声音/事件、opoint 与生命周期，禁止只迁移扣血片段；
 - Unity 已加入默认 `Disabled`、固定容量、只读的 `BattleEcsHitExecutionPlan` 影子；显式 `ShadowCapture` 时在两个正式 pass 前冻结 attacker/candidate/itr 顺序，任何输入不可读均 fail closed，target generation 只作诊断而不新增权威判定；
 - `ShadowCompare` 已在正式旧 writer 消费期间逐项核对 pass、attacker handle、candidate ordinal、target slot、itr index/fingerprint 与原始 consume 标志；Legacy range 只在该诊断模式开启时补取 attacker handle，默认路径不增加 handle 查询；多读、少读和内容不一致均 fail closed；
 - 当前 pair preprocess 及预消费副作用影子已经接入四条真实 consumer 链，只在旧 `ApplyReleaseSceneQueryConsumeEffects` 前后观察；计划使用 preprocess 后的实际投影，不错误复用碰撞冻结时的原始标志；
 - kind9 已闭合 kind9→kind0、attacker HP 归零；重武器已闭合 target/held link、两组 vRest、随机 frame、Vy 与 RNG state/call count。影子默认关闭、不替代 writer、不推进 RNG，预热后为 `0 B`；
 - dispatch 只读观察已接入 character、DAT character、weapon 与 special attack 四条真实 consumer；独立 OID300 投影验证成功 redirect 只终止当前 attacker 的剩余候选，下一个 attacker 必须继续，伪造终止 fail closed；
 - 全部权威 kind 的独立 disposition 投影已经接入并覆盖 `0/9/6/8/14/15/16/10/11/1/3/2/7`、未转换 `4/5` 与未知 kind；未转换 kind4 现按权威 no-op，kind5 替换不再倒灌触发前序 held release，weapon/special 的 kind6 现只写 hit-confirm 后返回；错误或缺失 disposition 均 fail closed；
-- writer-effect 只读 oracle 已闭合 kind `6/8/14/1/3/2/7/10/11/15/16` 的精确状态变化，且明确不把 Unity dispatch `bool` 当成 C# 权威成功语义；kind1 oracle 实际检出并修正旧 character consumer 未写双方速度、朝向、抓取对位、槽位与持续时间的差异；无效/过期 kind16 link 也按权威保持原状态；
+- writer-effect 只读 oracle 已闭合 kind `6/8/14/1/3/2/7/10/11/15/16` 的精确状态变化；历史 C# 成功语义只作辅助，Unity dispatch `bool` 也不得被当成 C++ release 权威成功语义。kind1 oracle 实际检出并修正旧 character consumer 未写双方速度、朝向、抓取对位、槽位与持续时间的差异；无效/过期 kind16 link 仍须按 C++ release trace 保持原状态；
 - damage `0/9` 的精确 oracle 已覆盖标准角色 HP/HPMax/统计、轻中重硬直与倒地、标准致死时 HPBound/combo/kill/damage stats/强制 fall、X/Y 击退、rest、RNG、声音和 hit-record，alternate 非致死/致死，以及标准武器类型 `1/2/4/6` 的 hit-confirm2、weapon HP、effect0/effect4 声音、随机帧、vRest 与 heavy low-fall 分支；type3 已覆盖 object-hurt、relation/holder-copy、motion 清零、rest、hit-record、state3005/3006 同步、D1 直接/活动身份替换，以及 effect `0/2/3/5/21/22/23/30/5005/5999/6033` 的 frame、主/追加声音、PP 扣减与下限；effect20 对非角色 DAT 由权威碰撞收集前置拒绝，未伪造为可达 writer 输入；
-- damage oracle 实际检出并修复 `LF2WeaponBase.SetFrameDirect`、`LF2SpecialAttack.SetFrameDirect` 与公共 `DirectWriteHeldFramePreserveWaitCounter` 未同步 `Runtime.Frame` 的双帧镜像遗漏；这些修复恢复的是 C# 单一 Frame 真值，不改变权威切帧时序；
+- damage oracle 实际检出并修复 `LF2WeaponBase.SetFrameDirect`、`LF2SpecialAttack.SetFrameDirect` 与公共 `DirectWriteHeldFramePreserveWaitCounter` 未同步 `Runtime.Frame` 的双帧镜像遗漏；该历史 C# 镜像不再自行定义规则，修复仅在 C++ release trace 同样确认 frame 真值和切帧时序后才能作为默认路径；
 - 权威源码全量检索确认 `AbortRemainingHitPairs = true` 只有 `ApplyOid300SpecialHit` 一处，因此 abort 来源与只跳过同 attacker 的边界已经关闭；
 - 命中计划在 alternate 致死补齐后聚焦测试 96/96 PASS（job `562ce635bbf64029a5b1319f45ec6dcd`）；命中计划、character/object 空候选与碰撞命中见证联合回归 112/112 PASS（job `798b5f79820c400cbe61497a1de3c186`），完整 `BattleRuntimeSelfCheck` 于 `2026-08-12 08:52:47` fresh PASS，并保留 `CharacterHit -> RandomDrop -> ObjectHit` 边界；
 - OID `0xD6` 对角色命中后攻击者 HP 归零，以及 OID `0xC9` 的 `FreeEntity(attackerSlot)` 生命周期 shadow 均已在恢复后的 Unity 中完成定向运行验证。D6 用例按正式对象命中 pass 消费；C9 同时核对旧 handle 失效、slot 未占用、generation 精确递增一次、occupant 清空及攻击者 runtime slot 清为 `-1`；完整证据见 `Docs/unified-battle-u5-hit-writer-contract-20260812.md`；
@@ -1179,23 +1183,35 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 ### S0～S9：服务器实施
 
-状态：仅完成方案细化，代码均未开始。服务器阶段仍须由用户明确确认后才能进入；本节不是对服务器、Socket、ACK、Jitter Buffer、房间、登录或重连已实现的声明。
+状态：仅完成方案细化，代码均未开始。S0～S5 建立的是权威战斗服务器核心与独立运行边界，不等于已经完成登录、全国匹配、网关、持久化或运维后台；本节不是对服务器、Socket、ACK、Jitter Buffer、房间、登录或重连已实现的声明。
+
+> **详细设计与后续留痕分离**：从 2026-08-24 起，本节保留冻结的上位阶段摘要和历史快照，不再作为每日实施台账或协议细节的维护位置。S0～S9 的唯一详细设计、失败处置与关闭合同见 `Docs/server-lockstep-s0-s9-design.md`；实际进度、证据、阻塞、问题和 Change ID 只追加到 `Docs/server-lockstep-s0-s9-progress.md`。不得在本文件重复写每日服务器实施流水，避免总览与执行台账漂移。
 
 #### 外部案例评估后的保留与排除
 
-`dudu502/LittleBee` 与后续 `littlebee_libs` 只作为服务器框架案例，不改变 C# 权威战斗规则。可吸收的设计是：服务器在帧边界组装并排序命令、客户端/服务器/回放共享模拟入口、先做同进程本地服务器、使用快照加历史帧恢复，以及 Common/Client/Server 程序集分层。以下实现不得移入 NTSD：
+`dudu502/LittleBee` 与后续 `littlebee_libs` 只作为服务器框架案例，不改变 C++ release live runtime 的权威战斗规则。可吸收的设计是：服务器在帧边界组装并排序命令、客户端/服务器/回放共享模拟入口、先做同进程本地服务器、使用快照加历史帧恢复，以及 Common/Client/Server 程序集分层。以下实现不得移入 NTSD：
 
 - 用 `DateTime.Now + Thread.Sleep + while` 决定权威逻辑帧或进行无界追帧；
 - 每 tick 深拷贝全部引用型 Component 并重建 `List/Dictionary` 快照；
 - 用引用型 `Dictionary<Type, List<AbstractComponent>>` 取代已经验证的 slot + generation、SoA 与固定容量 ring；
-- 信任客户端本地快照、把可靠 UDP 当成应用层 ACK/Jitter 合同，或用外部定点库改写现有 C# 战斗数值语义；
+- 信任客户端本地快照、把可靠 UDP 当成应用层 ACK/Jitter 合同，或用外部定点库改写已经对齐 C++ release live runtime 的战斗数值语义；
 - 复制原始 LittleBee 代码。原仓库未提供明确许可证；如未来评估 MIT 的 `littlebee_libs`，也只能在许可证、归属和技术门禁全部满足后单独批准。
+
+#### 单慢客户端不得无限阻塞全局的协议合同
+
+- NTSD 不采用“每个权威 tick 无限等待所有玩家输入”的纯等待式 lockstep；服务器在每个 frame deadline 到达时必须锁定并广播完整权威帧，健康客户端不得因单个客户端的网络或设备卡顿无限停止；
+- `StartBarrier` 固化全房间的 `InputDelayFrames`、frame deadline、连续缺失 grace、最大缺失时长和 `MissingInputPolicy`；这些参数不能由单个客户端在运行中改变，只能通过已广播、指定未来 tick 生效的 session policy transition 修改；
+- 每个锁定帧必须记录每个 player slot 的输入来源：真实输入、重复幂等输入、短暂缺失填充、持续缺失 neutral、托管或断线；迟到输入永远不能改写已锁定帧；
+- 缺失填充不得伪造新的 `pressed` 或 `released` 边沿。方向/持续按住是否允许短期沿用、连续缺失到 neutral/托管/对局规则的精确阈值，必须先由 C++ release live input trace 和产品规则共同确认；未确认前保持显式待决，不得凭常见网络做法写成战斗规则；
+- 客户端长期落后时只允许其自身进入 grace、neutral、恢复或断线状态；恢复使用服务器 snapshot + 连续 authority frame replay，不能让其他客户端回退到该客户端过去的网络状态；
+- 这条合同不覆盖服务器自身超预算：若 Battle Server 的固定 tick 不能在预算内完成，影响的是整个房间，必须由 S8 容量调度和扩容解决，不能误报为“慢客户端问题”。
 
 #### S0：同进程权威服务器骨架
 
 - 无 Socket、无网络库，使用显式内存 loopback；
 - 同一进程创建一个服务器 BattleWorld 和至少两个客户端 BattleWorld；
 - StartBarrier 固化 session identity、资源/规则 fingerprint、seed、roster 与 canonical player slot；
+- StartBarrier 同时承载但不在 S0 调参的 session-wide input-delay/deadline/missing-input policy，保证后续所有客户端观察同一策略版本；
 - 服务器和客户端都只能调用现有 `StepOneTick(FrameInputSet)`，不得创建第二套技能、伤害或生命周期循环；
 - 每个服务器 tick 都产生完整、不可变、连续的权威帧，包括没有玩家操作的空帧；
 - 验收要求：固定输入脚本下服务器与全部客户端连续 N 帧十域 checksum 一致，重复运行结果一致，单机 host policy 不受影响。
@@ -1204,9 +1220,11 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 - 定义 transport-agnostic 的 `InputSubmission`、`AuthoritativeFrameEnvelope`、`FrameAck`、`ServerProgress` 和稳定错误码；
 - 服务器按 `(session, tick, canonical player slot)` 去重和排序，同一键第一次合法内容胜出，冲突内容进入证据而不能覆盖；
-- 明确 input deadline、缺失输入补齐原因、帧锁定、广播和历史入 ring 的原子边界；
+- 明确 future target tick、session-wide input delay、input deadline、缺失输入补齐原因、帧锁定、广播和历史入 ring 的原子边界；
+- deadline 到达即锁定完整帧，不等待单个 player slot；`AuthoritativeFrameEnvelope` 为每个 slot 写入 `InputSource/FillReason`，迟到输入只能得到确定的接受到未来合法 target 或拒绝结果，绝不能回填历史帧；
+- `MissingInputPolicy` 的短暂缺失与持续缺失状态必须分离；前者禁止伪造 pressed/released，后者必须具有 neutral、托管或按模式结束对局的明确且可审计策略；
 - transport、RPC、Unity 类型和网络库对象不得进入 BattleKernel 或 `FrameInputSet`；
-- 验收要求：乱序提交、重复提交、冲突提交、迟到提交、空输入和 roster 变化边界均得到确定结果。
+- 验收要求：乱序提交、重复提交、冲突提交、迟到提交、空输入、roster 变化和单 slot 缺失边界均得到确定结果；同一输入脚本和 policy version 必须生成相同 authority frame history。
 
 #### S2：内存弱网、ACK 与 Jitter Buffer 状态机
 
@@ -1214,7 +1232,8 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - 应用层维护 server/client sequence、ACK、冗余帧窗口、ready-frame 区间、缺帧请求和确认进度；
 - 客户端只能连续消费已经 ready 的权威帧，不能跨洞推进，也不能用后到内容修改已锁定帧；
 - 追帧必须同时受连续 ready 数量、单帧 CPU 预算和最大追帧数约束；单机 `OfflineLocal` 继续保持既定的一次外层 Update 最多自动推进一个 tick；
-- 验收要求：可重复弱网脚本下不丢失攻击/技能边沿、不重复消费、不无限积压、不出现墙钟驱动的爆发式多 tick。
+- 必须包含“一名客户端输入黑洞/极端抖动、其余客户端健康”的可重复场景：服务器 authority tick 和健康客户端的连续 confirmed tick 仍按 deadline 前进，只有故障客户端进入 grace/neutral/recovery；
+- 验收要求：可重复弱网脚本下不丢失 deadline 前的攻击/技能边沿、不重复消费、不无限积压、不出现墙钟驱动的爆发式多 tick；单慢客户端不能造成健康客户端无限停帧。
 
 #### S3：服务器权威快照、desync 与恢复闭环
 
@@ -1222,7 +1241,8 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - 客户端周期上报校验结果，服务器同核运行结果是权威，checksum mismatch 保存 witness 并进入明确状态机；
 - 恢复包由服务器快照、快照 tick/checksum、后续连续权威帧和目标 tick 组成；客户端磁盘快照只能作为非权威缓存提示；
 - 覆盖严重落后、desync、断线重连、观战加入和回放起点，但不在本阶段引入真实 Socket；
-- 验收要求：snapshot -> mutate/desync -> restore -> history replay 后，服务器与客户端最终十域 hash、slot/generation 和事件游标一致。
+- 故障客户端恢复只能补齐其自身到当前 authority tick；其重连或 snapshot replay 不得修改健康客户端已经锁定、消费或确认的 authority frame；
+- 验收要求：snapshot -> mutate/desync -> restore -> history replay 后，服务器与客户端最终十域 hash、slot/generation 和事件游标一致；单客户端恢复期间健康客户端持续推进。
 
 #### S4：预测与回滚决策门
 
@@ -1230,7 +1250,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - 默认保持 `ConfirmedOnly`，只有输入延迟、回滚成本、错误预测率和表现收益达到预先批准阈值时才实现逻辑预测；
 - 若启用预测，只允许在可恢复快照窗口内影响受控本地域，远端实体和战斗结果仍以权威帧为准；
 - 音频、粒子、镜头和 UI 使用确认事件游标，不得因回滚重复播放；
-- 本阶段允许以“证据表明无需预测”关闭，不强制为了完整性实现 GGPO 式回滚。
+- 预测不能被用作重新引入“所有人等待最慢玩家”或“迟到输入修改锁定帧”的理由；本阶段允许以“证据表明无需预测”关闭，不强制为了完整性实现 GGPO 式回滚。
 
 #### S5：共享程序集与独立进程门禁
 
@@ -1252,12 +1272,16 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 - 在真实 transport 上注入延迟、抖动、丢包、重复、乱序、短断流、长断线和客户端进程重启；
 - 验证重连身份、session/fingerprint、快照选择、历史补发、追帧预算、事件去重和失败降级；
 - 覆盖前后台切换、移动网络切换、暂停恢复和长局内历史截断；
-- 正式窗口继续要求 BattleKernel/协议热路径无非预期分配、无 Gen0/1/2 collection，并保存 P50/P95/P99、带宽和恢复时间。
+- 必须在真实公网验证单一客户端持续高延迟、输入黑洞、设备卡顿和断线时，其余健康客户端不发生无限等待；同时记录该故障客户端进入 grace/neutral/recovery 的时刻与最终恢复/结束结果；
+- 正式窗口继续要求 BattleKernel/协议热路径无非预期分配、无 Gen0/1/2 collection，并保存 P50/P95/P99、带宽、恢复时间和单慢客户端影响范围。
 
 #### S8：多房间调度、安全与可观测性
 
+- 建立控制面 `Gateway/Auth -> Matchmaker -> Room Allocator -> Battle Server`；它只处理身份、队列、区域/延迟策略、roster、房间分配与连接令牌，绝不拥有 `StepOneTick`、伤害、命中或战斗结果；
+- 初期允许单地域公网部署；全国服务再按延迟、容量和故障域扩展多个 Battle Server 区域，客户端通过稳定域名进入 Gateway，不在客户端硬编码单台 Battle Server IP；
 - 明确一个 worker/process 承载多少房间，房间隔离、崩溃域、资源上限、背压和优雅停机；
 - 建立 tick lag、ready depth、jitter depth、rollback/restore、checksum mismatch、带宽、快照大小和容量拒绝指标；
+- 将“服务端 tick 超预算”和“单客户端缺失输入”分开监控、告警和扩容：前者影响整房间，后者只能进入该 player slot 的降级状态，不能被同一指标或同一补救策略掩盖；
 - 服务器验证输入合法性、频率、玩家所有权和 session identity；客户端上报结果不能成为战斗权威；
 - 回放和 checksum witness 可审计，敏感数据、日志和快照有保留/清理策略；
 - 容量测试分别覆盖多房间常规负载与单房间高实体负载，不用平均值掩盖最坏房间。
@@ -1266,6 +1290,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 - 完成确定性、弱网、恢复、长时 soak、进程崩溃、容量、协议兼容和升级/降级矩阵；
 - Windows 客户端 Mono/IL2CPP 与服务器 runtime 的固定 journal、snapshot、restore/replay 和 checksum 全部一致；
+- 正式矩阵必须包含一名持续慢客户端、短断流客户端、长断线客户端和服务器超预算的四类故障；前三类不得让健康客户端无限等待，最后一类必须被容量/降载/拒绝新房间策略明确检测与处置；
 - 以目标部署平台的正式 Player/headless 构建报告为准，不用 Editor 或 simulation-only 数据替代；
 - Android 真机仍由用户执行并提供结果，除非后续明确授权 Codex 负责；T8 默认 `stage.dat` 继续排除；
 - 只有 S0～S9 的 fresh 证据齐全，才能声明服务器帧同步阶段完成。
@@ -1341,7 +1366,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 12. 在 S6 前绑定具体网络库，或让 RPC/transport 类型进入 BattleKernel；
 13. 每 tick 深拷贝整个引用型 Component 世界并重建 `List/Dictionary` 作为生产快照；
 14. 用 transport 的可靠通道代替应用层 sequence、ACK、Jitter、deadline、冲突和幂等合同；
-15. 为套用外部帧同步框架而替换已经通过 C# 权威对照和跨运行时门禁的战斗数值语义。
+15. 为套用外部帧同步框架而替换已经通过 C++ release live trace 对照和跨运行时门禁的战斗数值语义。
 
 完整来源与理由见 `Docs/lockstep-knowledge-base-audit.md`。
 
@@ -1349,7 +1374,7 @@ ECS 是第 4 项的结构基础，也帮助前 2、3 项，但不能代替空间
 
 建议批准以下定调后开始 U0：
 
-1. 战斗逻辑仍以 C# 权威工程为唯一规则依据。
+1. 战斗逻辑仍以 C++ release live runtime 为唯一规则依据；C# 只用于历史移植辅助与交叉检查。
 2. 使用 NTSD 专用“Direct SoA + Bitset + Sparse Set + Pool/Ring + Loose Quadtree”混合 ECS。
 3. 不使用 Unity DOTS，不实现通用 Archetype ECS。
 4. 新内核不新增 partial，不使用全局可变 static 保存战斗会话状态。

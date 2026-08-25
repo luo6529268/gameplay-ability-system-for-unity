@@ -288,72 +288,9 @@ namespace NTSD.Animation.LF2Objects
                     else if (Runtime.Vx < -7.0) Runtime.Vx = -7.0;
 
 
-                    var sceneQuery = Match?.SceneQuery;
-                    var frameD = Frame?.D;
-                    if (sceneQuery != null && frameD != null)
-                    {
-                        int hurt = ws != 0 ? (1000 / ws) : 10;
-                        if (frameD.bodies != null)
-                        {
-                            InteractionArea itr = landingSplashInteraction;
-                            itr.kind = 0;
-                            itr.dvx = 3;
-                            itr.dvy = 7;
-                            itr.dvz = 0;
-                            itr.injury = hurt;
-                            itr.fall = 70;
-                            itr.vaction = 0;
-                            itr.arest = 0;
-                            itr.vrest = 10;
-                            itr.effect = 0;
-                            itr.kill = 0;
-                            itr.bdefend = 0;
-                            itr.catchingact = null;
-                            itr.caughtact = null;
-                            itr.attacking = 0;
-                            itr.throwvz = 0;
-                            itr.catchingact2 = null;
-                            itr.caughtact2 = null;
-                            itr.respond = 0;
-                            itr.pickingact = 0;
-                            itr.pickedact = 0;
-                            itr.throwvx = 0;
-                            itr.throwvy = 0;
-                            itr.throwinjury = 0;
-                            for (int bodyIndex = 0; bodyIndex < frameD.bodies.Count; bodyIndex++)
-                            {
-                                if (!BruteForceSceneQuery.TryBuildBodyBattleVolume(
-                                        this,
-                                        frameD,
-                                        frameD.bodies[bodyIndex],
-                                        out PhysicsState.BattleVolume bvol))
-                                {
-                                    continue;
-                                }
-
-                                var hits = sceneQuery.QueryBodyHits(this, frameD, itr, bvol);
-                                foreach (var hit in hits)
-                                {
-                                    var t = hit.Target;
-                                    if (t == null || t.RelationTeam == RelationTeam) continue;
-
-                                    int targetType = t.GetCurrentDataObjectTypeForSimulation();
-                                    if (targetType != (int)LF2ObjectType.Character)
-                                        continue;
-
-                                    Vector3 attackerPos = new UnityEngine.Vector3((float)Runtime.X, (float)Runtime.Y, (float)Runtime.Z);
-                                    if (t is LF2Character character)
-                                    {
-                                        character.Hit(itr, this, attackerPos, bvol);
-                                    }
-                                    else if (LF2CharacterDatHitResolver.CanResolveTarget(t))
-                                    {
-                                        LF2CharacterDatHitResolver.TryResolveHit(t, itr, this, attackerPos, bvol);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    // R4-COL-004B: C++ release physics landing mutates this weapon only.
+                    // Target interaction remains exclusively in the later frozen
+                    // candidate/consume path; do not run a second immediate body scan here.
                     return;
                 }
                 else

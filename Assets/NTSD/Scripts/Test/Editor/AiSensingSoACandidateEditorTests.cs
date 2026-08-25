@@ -497,16 +497,31 @@ namespace NTSD.Test
             Assert.That(candidate.AiSoADecisionRemainderHardFailureCountForDiagnostics, Is.Zero);
         }
 
-        [TestCase("dead")]
-        [TestCase("coordinate")]
-        public void DecisionRemainder_IneligibleCharacterInput_DoesNotCountAttempt(
-            string condition)
+        [Test]
+        public void DecisionRemainder_DeadCharacterInput_RemainsEligible()
         {
             SimulationWorld candidate = CreateCacheWorld(out LF2Character self);
-            if (condition == "dead")
-                self.Runtime.HP = 0;
-            else
-                self.Runtime.Unk3FC = 0;
+            self.Runtime.HP = 0;
+            EnableCandidate(candidate);
+            EnableDecisionRemainder(candidate);
+
+            candidate.CharacterInputAll(2);
+
+            Assert.That(candidate.AiSoADecisionRemainderEligibleAttemptCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(candidate.AiSoADecisionRemainderAppliedCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(candidate.AiSoADecisionRemainderContextBindCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(candidate.AiSoADecisionRemainderFallbackCountForDiagnostics, Is.Zero);
+            Assert.That(candidate.AiSoADecisionRemainderHardFailureCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void DecisionRemainder_CoordinateCharacterInput_DoesNotCountAttempt()
+        {
+            SimulationWorld candidate = CreateCacheWorld(out LF2Character self);
+            self.Runtime.Unk3FC = 0;
             EnableCandidate(candidate);
             EnableDecisionRemainder(candidate);
 

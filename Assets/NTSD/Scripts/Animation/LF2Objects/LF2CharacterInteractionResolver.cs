@@ -64,32 +64,13 @@ namespace NTSD.Animation.LF2Objects
                 (float)_character.PS.x,
                 (float)_character.PS.y,
                 (float)_character.PS.z);
-            int targetDataType = target.GetCurrentDataObjectTypeForSimulation();
-            if (targetDataType == (int)LF2ObjectType.Character)
-            {
-                return target is LF2Character living
-                    ? living.Hit(itr, _character, attackerPos, default)
-                    : LF2CharacterDatHitResolver.CanResolveTarget(target) &&
-                      LF2CharacterDatHitResolver.TryResolveHit(
-                          target,
-                          itr,
-                          _character,
-                          attackerPos,
-                          default);
-            }
-
-            if ((targetDataType == (int)LF2ObjectType.LightWeapon ||
-                 targetDataType == (int)LF2ObjectType.HeavyWeapon ||
-                 targetDataType == (int)LF2ObjectType.ThrowWeapon ||
-                 targetDataType == (int)LF2ObjectType.Drink) &&
-                target is LF2WeaponBase weapon)
-            {
-                return weapon.Hit(itr, _character);
-            }
-
-            return targetDataType == (int)LF2ObjectType.SpecialAttack &&
-                   target is LF2SpecialAttack specialAttack &&
-                   specialAttack.Hit(itr, _character);
+            SimulationWorld world = _character.Match ?? target.Match;
+            return world?.DamageWriter.TryApplyCurrentDatTargetHit(
+                world,
+                _character,
+                target,
+                itr,
+                attackerPos) == true;
         }
 
         private static bool IsReleaseInvalidCandidateItrIndex(int itrIndex, LF2FrameData collisionFrame)

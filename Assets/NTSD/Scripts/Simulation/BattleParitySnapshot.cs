@@ -1277,7 +1277,7 @@ namespace NTSD.Simulation
                 ("gameMode2", flow.Mode2Request),
                 ("gameTick", flow.CurrentTickIndex),
                 ("humanInputPolledExternally", flow.HumanInputPolledExternally),
-                ("initStats", 0),
+                ("initStats", flow.InitStatsRequest),
                 ("inputPhase", flow.InputPhase),
                 ("needClearInput", flow.NeedClearInput),
                 ("objectCount", ObjectCount),

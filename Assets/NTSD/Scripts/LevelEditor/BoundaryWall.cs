@@ -250,6 +250,124 @@ namespace NTSD.LevelEditor
         // ==================== Runtime API ====================
 
         /// <summary>
+        /// Copies an exported boundary's world X/Y vertices into this wall without
+        /// changing the existing polygon query implementation.
+        /// </summary>
+        public bool TryApplyWorldBoundaryData(BoundaryData boundaryData, out string failure)
+        {
+            if (boundaryData == null || boundaryData.polygons == null || boundaryData.polygons.Count == 0)
+            {
+                failure = "Boundary data must contain at least one polygon.";
+                return false;
+            }
+
+            var copiedPolygons = new List<BoundaryPolygon>(boundaryData.polygons.Count);
+            for (int polygonIndex = 0; polygonIndex < boundaryData.polygons.Count; polygonIndex++)
+            {
+                PolygonData polygonData = boundaryData.polygons[polygonIndex];
+                if (polygonData == null ||
+                    polygonData.verticesWorld == null ||
+                    polygonData.verticesWorld.Count < 3)
+                {
+                    failure = "Boundary data contains a polygon with fewer than three world vertices.";
+                    return false;
+                }
+
+                var localVertices = new List<Vector2>(polygonData.verticesWorld.Count);
+                for (int vertexIndex = 0; vertexIndex < polygonData.verticesWorld.Count; vertexIndex++)
+                {
+                    Vector2Data worldVertex = polygonData.verticesWorld[vertexIndex];
+                    if (worldVertex == null ||
+                        float.IsNaN(worldVertex.x) ||
+                        float.IsInfinity(worldVertex.x) ||
+                        float.IsNaN(worldVertex.y) ||
+                        float.IsInfinity(worldVertex.y))
+                    {
+                        failure = "Boundary data contains a non-finite world vertex.";
+                        return false;
+                    }
+
+                    Vector3 localVertex = transform.InverseTransformPoint(
+                        new Vector3(worldVertex.x, worldVertex.y, transform.position.z));
+                    localVertices.Add(new Vector2(localVertex.x, localVertex.y));
+                }
+
+                Color color = _polygons != null &&
+                    polygonIndex < _polygons.Count && _polygons[polygonIndex] != null
+                    ? _polygons[polygonIndex].color
+                    : new Color(0f, 1f, 0f, 0.3f);
+                copiedPolygons.Add(new BoundaryPolygon
+                {
+                    name = polygonData.name ?? string.Empty,
+                    vertices = localVertices,
+                    color = color,
+                });
+            }
+
+            _boundaryName = boundaryData.boundaryName ?? string.Empty;
+            _polygons = copiedPolygons;
+            _activePolygonIndex = 0;
+            _isEnabled = true;
+            failure = string.Empty;
+            return true;
+        }
+
+#if UNITY_EDITOR
+        public bool TryCaptureWorldBoundaryData(
+            out BoundaryData boundaryData,
+            out string failure)
+        {
+            boundaryData = null;
+            if (!_isEnabled)
+            {
+                failure = "Disabled BoundaryWall cannot be captured for authoring.";
+                return false;
+            }
+
+            if (_polygons == null || _polygons.Count == 0)
+            {
+                failure = "BoundaryWall must contain at least one polygon.";
+                return false;
+            }
+
+            var capturedBoundary = new BoundaryData
+            {
+                boundaryName = _boundaryName,
+                polygons = new List<PolygonData>(_polygons.Count),
+            };
+            for (int polygonIndex = 0; polygonIndex < _polygons.Count; polygonIndex++)
+            {
+                BoundaryPolygon polygon = _polygons[polygonIndex];
+                if (!TryGetWorldVertices(polygon, _worldVertexBuffer))
+                {
+                    failure = "BoundaryWall contains a polygon with fewer than three vertices.";
+                    return false;
+                }
+
+                var capturedPolygon = new PolygonData
+                {
+                    name = polygon.name,
+                    verticesWorld = new List<Vector2Data>(_worldVertexBuffer.Count),
+                };
+                for (int vertexIndex = 0; vertexIndex < _worldVertexBuffer.Count; vertexIndex++)
+                {
+                    capturedPolygon.verticesWorld.Add(new Vector2Data
+                    {
+                        x = _worldVertexBuffer[vertexIndex].x,
+                        y = _worldVertexBuffer[vertexIndex].y,
+                    });
+                }
+
+                capturedBoundary.polygons.Add(capturedPolygon);
+            }
+
+            boundaryData = capturedBoundary;
+            failure = string.Empty;
+            return true;
+        }
+#endif
+
+        /// <summary>
         /// 检测点是否在任意一个多边形内（并集语义）
         /// </summary>
         public bool ContainsPoint(Vector2 worldPoint)

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sprite Cadence Lab</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #15171a;
+            color: #eff3f8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #15171a;
+            color: #eff3f8;
+        }
+
+        main {
+            width: min(1120px, calc(100% - 32px));
+            margin: 24px auto 40px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 600;
+        }
+
+        p {
+            line-height: 1.55;
+        }
+
+        .muted {
+            color: #aeb8c6;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 20px 0 12px;
+        }
+
+        button,
+        label.toggle {
+            min-height: 38px;
+            border: 1px solid #465264;
+            border-radius: 8px;
+            background: #222833;
+            color: #eff3f8;
+            padding: 8px 12px;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:hover,
+        label.toggle:hover {
+            border-color: #78a9ff;
+        }
+
+        button[aria-pressed="true"] {
+            border-color: #78a9ff;
+            background: #1f4f8f;
+        }
+
+        label.toggle {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input {
+            accent-color: #78a9ff;
+        }
+
+        .sequence {
+            margin: 0 0 12px;
+            min-height: 24px;
+            color: #d8e4f6;
+            font-family: Consolas, "Cascadia Mono", monospace;
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+        }
+
+        .live-caption {
+            min-height: 26px;
+            margin: 10px 0 18px;
+            color: #d8e4f6;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .preview-card {
+            min-width: 0;
+        }
+
+        .preview-card h2 {
+            margin: 0 0 8px;
+            color: #d8e4f6;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .preview-caption {
+            min-height: 72px;
+            margin: 8px 0 0;
+            color: #aeb8c6;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            border: 1px solid #465264;
+            border-radius: 10px;
+            background: #090b0d;
+        }
+
+        .live-stage {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-height: 280px;
+            overflow: hidden;
+            border: 1px solid #465264;
+            border-radius: 10px;
+            background: #090b0d;
+        }
+
+        .live-stage::after {
+            position: absolute;
+            right: 0;
+            bottom: 42px;
+            left: 0;
+            height: 2px;
+            background: #78a9ff;
+            content: "";
+        }
+
+        .live-stage-title {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 2;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sprite-viewport {
+            position: relative;
+            z-index: 1;
+            width: min(296px, calc(100% - 12px));
+            height: 286px;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .live-sprite {
+            position: absolute;
+            display: block;
+            max-width: none;
+            visibility: hidden;
+            image-rendering: pixelated;
+        }
+
+        .live-stage.is-ready .live-sprite {
+            visibility: visible;
+        }
+
+        .live-status {
+            position: absolute;
+            z-index: 3;
+            max-width: calc(100% - 32px);
+            color: #aeb8c6;
+            text-align: center;
+        }
+
+        .live-stage.is-ready .live-status {
+            display: none;
+        }
+
+        .caption {
+            min-height: 26px;
+            margin: 10px 0 0;
+            color: #aeb8c6;
+        }
+
+        .contract {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-left: 3px solid #78a9ff;
+            background: #1b212a;
+            color: #d8e4f6;
+        }
+
+        code {
+            color: #a9d0ff;
+            font-family: Consolas, "Cascadia Mono", monospace;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                width: min(100% - 20px, 1120px);
+                margin-top: 12px;
+            }
+
+            .controls {
+                gap: 8px;
+            }
+
+            button,
+            label.toggle {
+                flex: 1 1 140px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 900px) {
+            .comparison-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>DAT wait 驱动的 30 / 60 / 120 Hz 显示采样</h1>
+        <p class="muted">四张 Naruto 行走源帧。fixture 对应现有 <code>naruto_clone.dat</code> 的 F5–F8：每张均为 <code>wait: 3</code>。沿用 DatSkillFlowWeb 的 <code>attacking &gt; wait</code> 规则，因此每张姿势实际保持 4 个 33 ms 逻辑 tick，而不是错误地每 tick 换图。</p>
+
+        <section class="controls" aria-label="采样模式控制">
+            <button type="button" data-rate="30" aria-pressed="false">下方明细：30 Hz</button>
+            <button type="button" data-rate="60" aria-pressed="true">下方明细：60 Hz</button>
+            <button type="button" data-rate="120" aria-pressed="false">下方明细：120 Hz</button>
+            <button type="button" data-speed="1" aria-pressed="true">正常速度</button>
+            <button type="button" data-speed="0.1" aria-pressed="false">慢放 ×0.1</button>
+            <button id="playButton" type="button" aria-pressed="false">播放动画</button>
+            <label class="toggle" for="wrongMode">
+                <input id="wrongMode" type="checkbox">
+                错误对照：按显示帧推进图片
+            </label>
+        </section>
+
+        <section class="comparison-grid" aria-label="30、60、120 Hz 并列 Sprite 播放预览">
+            <article class="preview-card" data-preview-rate="30">
+                <h2>30 Hz 显示</h2>
+                <section class="live-stage" role="img" aria-label="30 Hz 显示下的 Naruto 四帧 Sprite 动画">
+                    <div class="live-stage-title">每逻辑 tick：1 次显示采样</div>
+                    <div class="sprite-viewport" aria-hidden="true">
+                        <img class="live-sprite" alt="">
+                    </div>
+                    <div class="live-status">正在载入 Naruto 四格源图…</div>
+                </section>
+                <p class="preview-caption" aria-live="polite"></p>
+            </article>
+            <article class="preview-card" data-preview-rate="60">
+                <h2>60 Hz 显示</h2>
+                <section class="live-stage" role="img" aria-label="60 Hz 显示下的 Naruto 四帧 Sprite 动画">
+                    <div class="live-stage-title">每逻辑 tick：2 次显示采样</div>
+                    <div class="sprite-viewport" aria-hidden="true">
+                        <img class="live-sprite" alt="">
+                    </div>
+                    <div class="live-status">正在载入 Naruto 四格源图…</div>
+                </section>
+                <p class="preview-caption" aria-live="polite"></p>
+            </article>
+            <article class="preview-card" data-preview-rate="120">
+                <h2>120 Hz 显示</h2>
+                <section class="live-stage" role="img" aria-label="120 Hz 显示下的 Naruto 四帧 Sprite 动画">
+                    <div class="live-stage-title">每逻辑 tick：4 次显示采样</div>
+                    <div class="sprite-viewport" aria-hidden="true">
+                        <img class="live-sprite" alt="">
+                    </div>
+                    <div class="live-status">正在载入 Naruto 四格源图…</div>
+                </section>
+                <p class="preview-caption" aria-live="polite"></p>
+            </article>
+        </section>
+        <p id="liveCaption" class="live-caption" aria-live="polite"></p>
+        <p id="sequence" class="sequence" aria-live="polite"></p>
+        <canvas id="stage" role="img" aria-label="四张源帧在不同显示刷新率下的虚拟显示样本"></canvas>
+        <p id="caption" class="caption" aria-live="polite"></p>
+
+        <div class="contract">
+            <strong>未来 Unity 表现层的契约：</strong>
+            <code>frameId/sourceRect 仅由逻辑快照决定；render refresh 只重复采样当前图片。</code>
+            位置、挂点和阴影可以插值；Sprite 姿势不能由 <code>Update</code>、<code>LateUpdate</code> 或显示刷新率推进。
+        </div>
+    </main>
+
+    <script>
+        (() => {
+            const nominalLogicHz = 30;
+            const logicTickMs = 33;
+            const sourceFrames = [
+                { name: "A", frameId: 5, wait: 3, x: 4, y: 34, width: 218, height: 212 },
+                { name: "B", frameId: 6, wait: 3, x: 234, y: 34, width: 218, height: 212 },
+                { name: "C", frameId: 7, wait: 3, x: 464, y: 34, width: 218, height: 212 },
+                { name: "D", frameId: 8, wait: 3, x: 694, y: 34, width: 218, height: 212 }
+            ];
+
+            const canvas = document.getElementById("stage");
+            const context = canvas.getContext("2d");
+            const comparisonPreviews = Array.from(document.querySelectorAll("[data-preview-rate]")).map((card) => ({
+                displayHz: Number(card.dataset.previewRate),
+                stage: card.querySelector(".live-stage"),
+                sheet: card.querySelector(".live-sprite"),
+                status: card.querySelector(".live-status"),
+                caption: card.querySelector(".preview-caption")
+            }));
+            const sheet = comparisonPreviews[0].sheet;
+            const sequence = document.getElementById("sequence");
+            const caption = document.getElementById("caption");
+            const liveCaption = document.getElementById("liveCaption");
+            const playButton = document.getElementById("playButton");
+            const wrongMode = document.getElementById("wrongMode");
+            const rateButtons = Array.from(document.querySelectorAll("[data-rate]"));
+            const speedButtons = Array.from(document.querySelectorAll("[data-speed]"));
+
+            const state = {
+                displayHz: 60,
+                running: false,
+                incorrectMode: false,
+                elapsedMs: 0,
+                previewElapsedMs: 0,
+                previewSpeed: 1,
+                lastFrameMs: performance.now(),
+                sheetReady: false,
+                sheetLoadError: ""
+            };
+
+            function logicTicksForFrame(frame) {
+                return frame.wait + 1;
+            }
+
+            function totalLogicTicks() {
+                return sourceFrames.reduce((total, frame) => total + logicTicksForFrame(frame), 0);
+            }
+
+            function samplesPerLogicTick(displayHz = state.displayHz) {
+                return displayHz / nominalLogicHz;
+            }
+
+            function totalSamples(displayHz = state.displayHz) {
+                return totalLogicTicks() * samplesPerLogicTick(displayHz);
+            }
+
+            function sourceIndexAtLogicTick(logicTickIndex) {
+                let remainingTicks = logicTickIndex % totalLogicTicks();
+                for (let index = 0; index < sourceFrames.length; index += 1) {
+                    const ticks = logicTicksForFrame(sourceFrames[index]);
+                    if (remainingTicks < ticks) return index;
+                    remainingTicks -= ticks;
+                }
+                return sourceFrames.length - 1;
+            }
+
+            function sourceIndexAtSample(sampleIndex, displayHz = state.displayHz) {
+                if (state.incorrectMode) {
+                    return sampleIndex % sourceFrames.length;
+                }
+
+                let remainingSamples = sampleIndex % totalSamples(displayHz);
+                for (let index = 0; index < sourceFrames.length; index += 1) {
+                    const frameSamples = logicTicksForFrame(sourceFrames[index]) * samplesPerLogicTick(displayHz);
+                    if (remainingSamples < frameSamples) return index;
+                    remainingSamples -= frameSamples;
+                }
+                return sourceFrames.length - 1;
+            }
+
+            function sequenceNames(displayHz = state.displayHz) {
+                const names = [];
+                for (let sampleIndex = 0; sampleIndex < totalSamples(displayHz); sampleIndex += 1) {
+                    names.push(sourceFrames[sourceIndexAtSample(sampleIndex, displayHz)].name);
+                }
+                return names;
+            }
+
+            function resetRateButtons() {
+                rateButtons.forEach((button) => {
+                    const active = Number(button.dataset.rate) === state.displayHz;
+                    button.setAttribute("aria-pressed", String(active));
+                });
+            }
+
+            function resetSpeedButtons() {
+                speedButtons.forEach((button) => {
+                    const active = Number(button.dataset.speed) === state.previewSpeed;
+                    button.setAttribute("aria-pressed", String(active));
+                });
+            }
+
+            function resizeCanvas() {
+                const cssWidth = Math.max(320, Math.floor(canvas.getBoundingClientRect().width));
+                const cssHeight = Math.max(260, Math.min(420, Math.round(cssWidth * 0.38)));
+                const ratio = Math.min(window.devicePixelRatio || 1, 2);
+                canvas.width = Math.floor(cssWidth * ratio);
+                canvas.height = Math.floor(cssHeight * ratio);
+                canvas.style.height = `${cssHeight}px`;
+                context.setTransform(ratio, 0, 0, ratio, 0, 0);
+                return { cssWidth, cssHeight };
+            }
+
+            function currentTimelineState(displayHz = state.displayHz) {
+                const logicTicks = totalLogicTicks();
+                const cycleMs = logicTicks * logicTickMs;
+                const cycleElapsedMs = state.previewElapsedMs % cycleMs;
+                const logicTick = Math.min(logicTicks - 1, Math.floor(cycleElapsedMs / logicTickMs));
+
+                if (state.incorrectMode) {
+                    const displaySample = Math.floor(cycleElapsedMs / (1000 / displayHz));
+                    return {
+                        logicTick,
+                        sampleIndex: displaySample % totalSamples(displayHz),
+                        sourceIndex: displaySample % sourceFrames.length
+                    };
+                }
+
+                return {
+                    logicTick,
+                    sampleIndex: Math.min(totalSamples(displayHz) - 1, logicTick * samplesPerLogicTick(displayHz)),
+                    sourceIndex: sourceIndexAtLogicTick(logicTick)
+                };
+            }
+
+            function imageReady(image = sheet) {
+                return image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
+            }
+
+            function renderPreviewComparisons() {
+                const summary = [];
+                for (const preview of comparisonPreviews) {
+                    const total = totalSamples(preview.displayHz);
+                    const timeline = currentTimelineState(preview.displayHz);
+                    const frame = sourceFrames[timeline.sourceIndex];
+                    const scale = 1.35;
+                    const ready = imageReady(preview.sheet);
+                    preview.stage.classList.toggle("is-ready", ready);
+
+                    if (ready) {
+                        preview.sheet.style.width = `${preview.sheet.naturalWidth * scale}px`;
+                        preview.sheet.style.height = `${preview.sheet.naturalHeight * scale}px`;
+                        preview.sheet.style.left = `${-frame.x * scale}px`;
+                        preview.sheet.style.top = `${-frame.y * scale}px`;
+                    } else {
+                        preview.status.textContent = state.sheetLoadError || "正在载入 Naruto 四格源图…";
+                    }
+
+                    preview.caption.textContent = state.incorrectMode
+                        ? `错误：r${timeline.sampleIndex + 1}/${total}，F${frame.frameId} / ${frame.name}；每个 ${preview.displayHz} Hz 显示样本都会推进图片。`
+                        : `正确：tick ${timeline.logicTick + 1}/${totalLogicTicks()}，F${frame.frameId} / ${frame.name}；同一姿势只被显示 ${samplesPerLogicTick(preview.displayHz)} 次/tick。`;
+                    summary.push(`${preview.displayHz} Hz → F${frame.frameId} / ${frame.name}`);
+                }
+
+                state.sheetReady = imageReady();
+                liveCaption.textContent = state.incorrectMode
+                    ? `错误对照：三个窗口各自按显示样本推进图片，因此会出现不同帧和不同速度。`
+                    : `正确对照：三个窗口共享逻辑 tick ${currentTimelineState(30).logicTick + 1}/${totalLogicTicks()}，所以姿势必须同步；差别仅是 30/60/120 Hz 对当前姿势的重复显示次数。${summary.join("；")}`;
+            }
+
+            function render() {
+                const { cssWidth, cssHeight } = resizeCanvas();
+                const total = totalSamples();
+                const sequenceItems = sequenceNames();
+                const padding = 18;
+                const titleY = 24;
+                const top = 48;
+                const bottom = 16;
+                const laneHeight = cssHeight - top - bottom;
+                const usableWidth = cssWidth - padding * 2;
+                const cellWidth = usableWidth / total;
+                const timeline = currentTimelineState();
+                const activeSample = timeline.sampleIndex;
+
+                context.clearRect(0, 0, cssWidth, cssHeight);
+                context.fillStyle = "#090b0d";
+                context.fillRect(0, 0, cssWidth, cssHeight);
+                context.fillStyle = "#eff3f8";
+                context.font = "600 14px Segoe UI, Microsoft YaHei, sans-serif";
+                context.textAlign = "left";
+                context.textBaseline = "middle";
+                context.fillText(`4 张 DAT 姿势 × 4 tick = ${totalLogicTicks()} tick / ${totalLogicTicks() * logicTickMs} ms；${total} 个 ${state.displayHz} Hz 虚拟显示样本`, padding, titleY);
+
+                for (let sampleIndex = 0; sampleIndex < total; sampleIndex += 1) {
+                    const x = padding + sampleIndex * cellWidth;
+                    const frameIndex = sourceIndexAtSample(sampleIndex);
+                    const frame = sourceFrames[frameIndex];
+                    const isActive = sampleIndex === activeSample;
+                    const logicBoundary = !state.incorrectMode
+                        && sampleIndex > 0
+                        && sourceIndexAtSample(sampleIndex - 1) !== frameIndex;
+
+                    context.fillStyle = isActive ? "#1f4f8f" : "#171d25";
+                    context.fillRect(x + 1, top, Math.max(1, cellWidth - 2), laneHeight);
+
+                    if (logicBoundary) {
+                        context.fillStyle = "#78a9ff";
+                        context.fillRect(x - 1, top, 2, laneHeight);
+                    }
+
+                if (imageReady()) {
+                        const maxWidth = Math.max(18, cellWidth - 12);
+                        const maxHeight = laneHeight - 54;
+                        const scale = Math.min(maxWidth / frame.width, maxHeight / frame.height);
+                        const drawWidth = Math.max(1, Math.floor(frame.width * scale));
+                        const drawHeight = Math.max(1, Math.floor(frame.height * scale));
+                        const drawX = Math.floor(x + (cellWidth - drawWidth) / 2);
+                        const drawY = Math.floor(top + 14 + (maxHeight - drawHeight) / 2);
+                        context.imageSmoothingEnabled = false;
+                        context.drawImage(sheet, frame.x, frame.y, frame.width, frame.height, drawX, drawY, drawWidth, drawHeight);
+                    }
+
+                    context.fillStyle = "#eff3f8";
+                    context.textAlign = "center";
+                    context.textBaseline = "alphabetic";
+                    context.font = "600 13px Consolas, Cascadia Mono, monospace";
+                    context.fillText(frame.name, x + cellWidth / 2, top + laneHeight - 26);
+                    context.fillStyle = "#aeb8c6";
+                    context.font = "12px Consolas, Cascadia Mono, monospace";
+                    context.fillText(`r${sampleIndex + 1}`, x + cellWidth / 2, top + laneHeight - 8);
+                }
+
+                context.strokeStyle = "#465264";
+                context.lineWidth = 1;
+                context.strokeRect(padding + 0.5, top + 0.5, usableWidth - 1, laneHeight - 1);
+
+                if (!imageReady()) {
+                    context.fillStyle = "#aeb8c6";
+                    context.textAlign = "center";
+                    context.textBaseline = "middle";
+                    context.font = "16px Segoe UI, Microsoft YaHei, sans-serif";
+                    context.fillText(state.sheetLoadError || "正在载入 Naruto 四格源图…", cssWidth / 2, cssHeight / 2);
+                }
+
+                const activeFrame = sourceFrames[timeline.sourceIndex];
+                const wrongSpeedMultiplier = (totalLogicTicks() * samplesPerLogicTick()) / sourceFrames.length;
+                sequence.textContent = state.incorrectMode
+                    ? `${state.displayHz} Hz 错误推进：${sequenceItems.join("  ")}`
+                    : `${state.displayHz} Hz 正确采样：${sequenceItems.join("  ")}`;
+                caption.textContent = state.incorrectMode
+                    ? `当前 r${activeSample + 1}/${total} 使用 F${activeFrame.frameId} / ${activeFrame.name}。错误模式按显示帧推进图片；相对 DAT wait: 3 的正确节奏，它会错误地以 ${wrongSpeedMultiplier} 倍速度循环。`
+                    : `当前 r${activeSample + 1}/${total} 使用 F${activeFrame.frameId} / ${activeFrame.name}。DatSkillFlowWeb 每 33 ms 推进一个逻辑 tick，而该姿势必须先经历 ${logicTicksForFrame(activeFrame)} 个 tick 才允许切换。`;
+            }
+
+            function animationLoop(nowMs) {
+                const elapsed = Math.min(100, nowMs - state.lastFrameMs);
+                state.lastFrameMs = nowMs;
+                if (state.running) {
+                    state.elapsedMs += elapsed;
+                    state.previewElapsedMs += elapsed * state.previewSpeed;
+                }
+                renderPreviewComparisons();
+                render();
+                requestAnimationFrame(animationLoop);
+            }
+
+            rateButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    state.displayHz = Number(button.dataset.rate);
+                    state.elapsedMs = 0;
+                    state.previewElapsedMs = 0;
+                    resetRateButtons();
+                    renderPreviewComparisons();
+                    render();
+                });
+            });
+
+            speedButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    state.previewSpeed = Number(button.dataset.speed);
+                    resetSpeedButtons();
+                    renderPreviewComparisons();
+                });
+            });
+
+            playButton.addEventListener("click", () => {
+                state.running = !state.running;
+                playButton.textContent = state.running ? "暂停播放" : "播放动画";
+                playButton.setAttribute("aria-pressed", String(state.running));
+            });
+
+            wrongMode.addEventListener("change", () => {
+                state.incorrectMode = wrongMode.checked;
+                state.elapsedMs = 0;
+                state.previewElapsedMs = 0;
+                renderPreviewComparisons();
+                render();
+            });
+
+            const sourceUrl = new URL("Naruto_4frames_source.png", window.location.href).href;
+            for (const preview of comparisonPreviews) {
+                preview.sheet.addEventListener("load", () => {
+                    state.sheetLoadError = "";
+                    renderPreviewComparisons();
+                    render();
+                });
+
+                preview.sheet.addEventListener("error", () => {
+                    const message = "无法读取 Naruto_4frames_source.png；请使用 Start-SpriteCadenceLab.cmd 打开本实验室。";
+                    state.sheetReady = false;
+                    state.sheetLoadError = message;
+                    caption.textContent = message;
+                    liveCaption.textContent = message;
+                    renderPreviewComparisons();
+                    render();
+                });
+
+                preview.sheet.src = sourceUrl;
+            }
+
+            const resizeObserver = new ResizeObserver(() => {
+                renderPreviewComparisons();
+                render();
+            });
+            resizeObserver.observe(canvas);
+            comparisonPreviews.forEach((preview) => resizeObserver.observe(preview.stage));
+            resetRateButtons();
+            resetSpeedButtons();
+            requestAnimationFrame(animationLoop);
+        })();
+    </script>
+</body>
+</html>

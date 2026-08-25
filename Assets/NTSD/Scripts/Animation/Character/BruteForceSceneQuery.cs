@@ -3849,9 +3849,10 @@ namespace NTSD.Animation
             participant.DataObjectType = GetCurrentDataObjectType(entity);
             participant.CurrentDataObjectId =
                 LF2Entity.ResolveCurrentDataObjectId(entity);
+            // Alignment contract: R4-COL-004A. C++ collision_collect has no
+            // oid999/presentation-semantic base rejection before geometry.
             participant.PairCollectionBaseAllowed =
-                !IsPendingFlushDestroy(entity) &&
-                !IsPureTransitionSmoke(entity);
+                !IsPendingFlushDestroy(entity);
             participant.AttackPairCollectionBaseAllowed =
                 participant.PairCollectionBaseAllowed &&
                 entity.AttackExempt <= 0;
@@ -6240,16 +6241,12 @@ namespace NTSD.Animation
 
         private static bool IsLeftPressed(LF2Entity entity)
         {
-            if (entity is LF2Character character)
-                return character.Runtime.KeyLeft != 0;
-            return false;
+            return entity?.Runtime?.KeyLeft != 0;
         }
 
         private static bool IsRightPressed(LF2Entity entity)
         {
-            if (entity is LF2Character character)
-                return character.Runtime.KeyRight != 0;
-            return false;
+            return entity?.Runtime?.KeyRight != 0;
         }
 
         internal static bool IsReleaseConsumerPairBlocked(LF2Entity attacker, LF2Entity target)
@@ -6285,8 +6282,8 @@ namespace NTSD.Animation
                 return false;
             if (IsPendingFlushDestroy(attacker) || IsPendingFlushDestroy(target))
                 return false;
-            if (IsPureTransitionSmoke(attacker) || IsPureTransitionSmoke(target))
-                return false;
+            // Alignment contract: R4-COL-004A. Valid geometry reaches the
+            // regular C++ kind/team/effect/select chain regardless of oid999.
             if (attacker.AttackExempt > 0)
                 return false;
 

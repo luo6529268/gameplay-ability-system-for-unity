@@ -2911,6 +2911,10 @@ namespace NTSD.Simulation.Ecs
             int attackerSlot = attacker.Runtime.SlotIndex;
             int targetSlot = target.Runtime.SlotIndex;
 
+            ProjectWeaponNormalVitalAndStatWrites(
+                target,
+                resolvedItr.injury,
+                ref projection);
             projection.TargetHitConfirm2 = 1;
             projection.TargetWeaponFlightCounter = resolvedItr.bdefend == 100
                 ? -1
@@ -3154,6 +3158,9 @@ namespace NTSD.Simulation.Ecs
             int attackerSlot = attacker.Runtime.SlotIndex;
             int targetSlot = target.Runtime.SlotIndex;
 
+            ProjectType3NormalVitalAndStatWrites(
+                resolvedItr.injury,
+                ref projection);
             if (projection.TargetHp <= 0 || resolvedItr.effect == 4)
                 projection.TargetFall = 80;
 
@@ -3373,6 +3380,9 @@ namespace NTSD.Simulation.Ecs
             int attackerSlot = attacker.Runtime.SlotIndex;
             int targetSlot = target.Runtime.SlotIndex;
 
+            ProjectType3NormalVitalAndStatWrites(
+                resolvedItr.injury,
+                ref projection);
             projection.TargetHitCount++;
             projection.TargetFall += resolvedItr.fall != 0
                 ? resolvedItr.fall
@@ -3457,6 +3467,9 @@ namespace NTSD.Simulation.Ecs
             LF2CharacterData attackerData =
                 LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
 
+            ProjectType3NormalVitalAndStatWrites(
+                resolvedItr.injury,
+                ref projection);
             projection.TargetHitCount++;
             projection.TargetFall += resolvedItr.fall != 0
                 ? resolvedItr.fall
@@ -3579,6 +3592,9 @@ namespace NTSD.Simulation.Ecs
             if (sourceReplacementFrame == null)
                 return false;
 
+            ProjectType3NormalVitalAndStatWrites(
+                resolvedItr.injury,
+                ref projection);
             projection.TargetHitCount++;
             projection.TargetFall += resolvedItr.fall != 0
                 ? resolvedItr.fall
@@ -3731,6 +3747,45 @@ namespace NTSD.Simulation.Ecs
         {
             return oid == 0xC8 || oid == 0xCB || oid == 0xCD || oid == 0xCE ||
                    oid == 0xCF || oid == 0xD7 || oid == 0xD8;
+        }
+
+        private static void ProjectType3NormalVitalAndStatWrites(
+            int injury,
+            ref WriterEffectSnapshot projection)
+        {
+            projection.TargetHp -= injury;
+            projection.TargetHpBound -= injury / 3;
+            projection.TargetComboCountVic += injury;
+            if (projection.TargetDamageStat != int.MinValue)
+                projection.TargetDamageStat += injury;
+        }
+
+        private static void ProjectWeaponNormalVitalAndStatWrites(
+            LF2Entity target,
+            int rawInjury,
+            ref WriterEffectSnapshot projection)
+        {
+            int targetType = target.GetCurrentDataObjectTypeForSimulation();
+            bool normalVitalWeapon =
+                targetType == (int)LF2ObjectType.LightWeapon ||
+                targetType == (int)LF2ObjectType.HeavyWeapon ||
+                targetType == (int)LF2ObjectType.ThrowWeapon;
+            if (!normalVitalWeapon)
+                return;
+
+            int adjustedInjury = rawInjury;
+            if (target.FallDamageDiv > 0)
+                adjustedInjury = rawInjury * 100 / target.FallDamageDiv;
+
+            projection.TargetHp -= adjustedInjury;
+            projection.TargetHpBound -= adjustedInjury / 3;
+            projection.TargetComboCountVic += adjustedInjury;
+            if (target.Unk344 >= 1 &&
+                target.Unk344 <= 2 &&
+                projection.TargetDamageStat != int.MinValue)
+            {
+                projection.TargetDamageStat += adjustedInjury;
+            }
         }
 
         private static bool IsSupportedType3Effect(int effect)

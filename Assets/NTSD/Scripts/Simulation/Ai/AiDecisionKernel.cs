@@ -4,9 +4,6 @@ namespace NTSD.Simulation
 {
     public static class AiDecisionKernel
     {
-        private const ulong RngHashOffset = 1469598103934665603UL;
-        private const ulong RngHashPrime = 1099511628211UL;
-
         private struct Context
         {
             public int Difficulty;
@@ -17,56 +14,6 @@ namespace NTSD.Simulation
             public int MoveMode;
             public int StageTargetX;
             public int InputPhase;
-        }
-
-        private struct RngClone
-        {
-            public uint State;
-            public ulong Calls;
-            public ulong OrderHash;
-            public int DrawCount;
-            public bool CaptureTrace;
-            public int[] Moduli;
-            public int[] RawValues;
-            public int[] Values;
-            public bool TraceOverflow;
-
-            public int Rand(int modulus)
-            {
-                unchecked
-                {
-                    State = State * 0x343FDu + 0x269EC3u;
-                    Calls++;
-                }
-
-                int raw = (int)((State >> 16) & 0x7FFFu);
-                int normalizedModulus = Math.Max(1, modulus);
-                int value = raw % normalizedModulus;
-                if (CaptureTrace && DrawCount < Moduli.Length)
-                {
-                    Moduli[DrawCount] = modulus;
-                    RawValues[DrawCount] = raw;
-                    Values[DrawCount] = value;
-                }
-                else if (CaptureTrace)
-                {
-                    TraceOverflow = true;
-                }
-                if (CaptureTrace)
-                {
-                    unchecked
-                    {
-                        OrderHash ^= (uint)modulus;
-                        OrderHash *= RngHashPrime;
-                        OrderHash ^= (uint)raw;
-                        OrderHash *= RngHashPrime;
-                        OrderHash ^= (uint)value;
-                        OrderHash *= RngHashPrime;
-                    }
-                }
-                DrawCount++;
-                return value;
-            }
         }
 
         public static bool TryEvaluate(
@@ -216,24 +163,16 @@ namespace NTSD.Simulation
             witness.Availability = AiDecisionAvailability.Available;
             AiDecisionInputState input = ownedInput;
             AiDecisionWorldState world = snapshot.World;
-            var rng = new RngClone
-            {
-                State = snapshot.RngState,
-                Calls = snapshot.RngCalls,
-                OrderHash = RngHashOffset,
-                CaptureTrace = captureRngTrace,
-                Moduli = snapshot.RngTraceModuli,
-                RawValues = snapshot.RngTraceRaw,
-                Values = snapshot.RngTraceValues,
-            };
+            var rng = new AiDecisionRandomStream(
+                snapshot.RngState,
+                snapshot.RngCalls,
+                captureRngTrace,
+                snapshot.RngTraceModuli,
+                snapshot.RngTraceRaw,
+                snapshot.RngTraceValues);
 
-            if (rows.Hp[self] <= 0)
-            {
-                witness.Exit = AiDecisionExit.InvalidSelf;
-                Publish(ref witness, input, world, rng);
-                return true;
-            }
-
+            // Alignment contract R3-AI-LIFE-001: C++ prepare_ai_input has no
+            // self-HP early return; later death/respawn passes own that lifecycle.
             if (input.Unk3FC > -1000)
             {
                 Context coordinate = CreateCoordinateContext(world);
@@ -549,28 +488,81 @@ namespace NTSD.Simulation
 
             if (rng.Rand(ai.Rand5 + 1) == 0)
             {
-                if (UpdateFirstDecision(rows, self, target, bestDistance, specialProximity, ref input, ref rng) ||
-                    UpdateTeammateGuardDecision(rows, self, bestDistance, sameZLane, ref input, ref witness) ||
-                    UpdateOid1ComboDecision(rows, self, target, targetState, ref input, ref rng) ||
-                    UpdateCloseOid1Decision(rows, self, target, ref input, ref rng) ||
-                    UpdateOid4ComboDecision(rows, self, target, ref input, ref rng) ||
-                    UpdateOid5ComboDecision(rows, self, target, ref input, ref rng))
+                int characterDecisionPosition = 0;
+                if (UpdateFirstDecision(
+                        rows,
+                        self,
+                        target,
+                        bestDistance,
+                        specialProximity,
+                        ref input,
+                        ref rng))
                 {
+                    characterDecisionPosition = 1;
+                }
+                else if (UpdateTeammateGuardDecision(
+                             rows,
+                             self,
+                             bestDistance,
+                             sameZLane,
+                             ref input,
+                             ref witness))
+                {
+                    characterDecisionPosition = 2;
+                }
+                else if (UpdateOid1ComboDecision(
+                             rows,
+                             self,
+                             target,
+                             targetState,
+                             ref input,
+                             ref rng))
+                {
+                    characterDecisionPosition = 3;
+                }
+                else if (UpdateCloseOid1Decision(rows, self, target, ref input, ref rng))
+                {
+                    characterDecisionPosition = 4;
+                }
+                else if (UpdateOid4ComboDecision(rows, self, target, ref input, ref rng))
+                {
+                    characterDecisionPosition = 5;
+                }
+                else if (UpdateOid5ComboDecision(rows, self, target, ref input, ref rng))
+                {
+                    characterDecisionPosition = 6;
+                }
+                else
+                {
+                    var characterContext = new AiCharacterDecisionContext(
+                        ai.MoveMode,
+                        ai.StageTargetX);
+                    if (snapshot.CharacterDecisionModule.TryEvaluatePositions7Through39(
+                            rows,
+                            self,
+                            target,
+                            targetState,
+                            bestDistance,
+                            sameZLane,
+                            in characterContext,
+                            ref input,
+                            ref rng,
+                            out int matchedPosition,
+                            out int characterRowVisits))
+                    {
+                        characterDecisionPosition = matchedPosition;
+                    }
+                    witness.RowVisits += characterRowVisits;
+                }
+
+                if (characterDecisionPosition != 0)
+                {
+                    witness.CharacterDecisionPosition = characterDecisionPosition;
                     ApplyInputEdges(ref input);
                     witness.Exit = AiDecisionExit.FirstDecision;
                     Publish(ref witness, input, world, rng);
                     return true;
                 }
-            }
-
-            if (UpdateOid33_19_16PredictedDuaDecision(rows, self, target, targetState, ref input, ref rng) ||
-                UpdateOid52_1_2_21PreLabel591Decision(rows, self, target, targetState, ref input, ref rng) ||
-                UpdateLabel591Oid51_2_18_7Decision(rows, self, target, ref input, ref rng))
-            {
-                ApplyInputEdges(ref input);
-                witness.Exit = AiDecisionExit.PredictedDecision;
-                Publish(ref witness, input, world, rng);
-                return true;
             }
 
             bool closeOrFree =
@@ -844,7 +836,7 @@ namespace NTSD.Simulation
             int self,
             Context ai,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             if (input.Unk3FC <= -1000 || input.Unk400 <= -1000)
                 return;
@@ -888,7 +880,7 @@ namespace NTSD.Simulation
             Context ai,
             int selfState,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             if (rows.X[self] > rows.X[target] + 6)
             {
@@ -938,7 +930,7 @@ namespace NTSD.Simulation
             int targetState,
             Context ai,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             if (targetState != 3000)
                 return false;
@@ -957,129 +949,6 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private static bool UpdateOid33_19_16PredictedDuaDecision(
-            AiSensingSnapshot rows,
-            int self,
-            int target,
-            int targetState,
-            ref AiDecisionInputState input,
-            ref RngClone rng)
-        {
-            int oid = rows.ObjectId[self];
-            if (oid != 33 && oid != 19 && oid != 16)
-                return false;
-            if (rng.Rand(5) != 0 && targetState != 16 && targetState != 8)
-                return false;
-            bool facing =
-                (rows.Facing[self] == 0 && rows.X[self] < rows.X[target]) ||
-                (rows.Facing[self] == 1 && rows.X[self] > rows.X[target]);
-            if (Abs(rows.X[target] + (int)rows.Vx[self] - rows.X[self]) < 60 &&
-                Abs(rows.Z[target] - rows.Z[self]) < 7 &&
-                rows.Pp[self] > 150 &&
-                facing)
-            {
-                input.ComboDua = 3;
-                return true;
-            }
-            return false;
-        }
-
-        private static bool UpdateOid52_1_2_21PreLabel591Decision(
-            AiSensingSnapshot rows,
-            int self,
-            int target,
-            int targetState,
-            ref AiDecisionInputState input,
-            ref RngClone rng)
-        {
-            int oid = rows.ObjectId[self];
-            if (oid != 52 && oid != 1 && oid != 2 && oid != 21)
-                return false;
-            int dx = Abs(rows.X[target] - rows.X[self]);
-            int dz = Abs(rows.Z[target] - rows.Z[self]);
-            if (targetState == 3 && rows.Pp[self] > 125 && rng.Rand(10) == 0 && dx < 120 && dz < 10)
-            {
-                input.ComboDja = 3;
-                return true;
-            }
-            if (rows.Pp[self] > 125 && rng.Rand(5) == 0 && dx < 100 && dz < 30)
-            {
-                if (rows.X[target] > rows.X[self])
-                    input.ComboDuj = 3;
-                return true;
-            }
-            if (rows.Pp[self] > 125 && rng.Rand(14) == 0 && dx < 700 && dz < 150)
-            {
-                if (rows.X[target] > rows.X[self])
-                    input.ComboDra = 3;
-                else
-                    input.ComboDla = 3;
-                return true;
-            }
-            if (rows.Pp[self] > 125 && rng.Rand(5) == 0 && dz < 20)
-            {
-                if (rows.X[target] > rows.X[self])
-                    input.ComboDrj = 3;
-                else
-                    input.ComboDlj = 3;
-                return true;
-            }
-            bool predictedGate = rng.Rand(5) == 0 || targetState == 16 || targetState == 8;
-            bool facing =
-                (rows.Facing[self] == 0 && rows.X[self] < rows.X[target]) ||
-                (rows.Facing[self] == 1 && rows.X[self] > rows.X[target]);
-            if (predictedGate &&
-                Abs(rows.X[target] + (int)rows.Vx[self] - rows.X[self]) < 100 &&
-                dz < 7 &&
-                rows.Pp[self] < 100 &&
-                facing)
-            {
-                input.ComboDua = 3;
-                return true;
-            }
-            return false;
-        }
-
-        private static bool UpdateLabel591Oid51_2_18_7Decision(
-            AiSensingSnapshot rows,
-            int self,
-            int target,
-            ref AiDecisionInputState input,
-            ref RngClone rng)
-        {
-            int oid = rows.ObjectId[self];
-            if (oid != 51 && oid != 2 && oid != 18 && oid != 7)
-                return false;
-            int dx = Abs(rows.X[target] - rows.X[self]);
-            int dz = Abs(rows.Z[target] - rows.Z[self]);
-            if (rows.Frame[self] > 265 && rows.Frame[self] < 280 &&
-                (dz > 13 || rows.DataObjectType[target] != 0))
-            {
-                input.PrevAttack = 0;
-                input.KeyAttack = 1;
-                return true;
-            }
-            if (rows.Pp[self] > 300 && rng.Rand(10) == 0 && dx < 300 && dz < 200)
-            {
-                input.ComboDuj = 3;
-                return true;
-            }
-            if (rows.Pp[self] > 300 && rng.Rand(10) == 0 && dx < 950)
-            {
-                input.ComboDua = 3;
-                return true;
-            }
-            if (rng.Rand(5) == 0 && rows.Pp[self] > 250 && dx < 1200 && dx > 40 && dz < 13)
-            {
-                if (rows.X[target] > rows.X[self])
-                    input.ComboDrj = 3;
-                else
-                    input.ComboDlj = 3;
-                return true;
-            }
-            return false;
-        }
-
         private static bool UpdateFirstDecision(
             AiSensingSnapshot rows,
             int self,
@@ -1087,7 +956,7 @@ namespace NTSD.Simulation
             int nearestTargetDistance,
             bool specialProximity,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             if (oid != 1 && oid != 2 && oid != 4 && oid != 5 && oid != 21)
@@ -1189,7 +1058,7 @@ namespace NTSD.Simulation
             int target,
             int targetState,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             if (oid != 1 && oid != 21 && oid != 17)
@@ -1231,7 +1100,7 @@ namespace NTSD.Simulation
             int self,
             int target,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             if (oid != 1 && oid != 21 && oid != 17)
@@ -1263,7 +1132,7 @@ namespace NTSD.Simulation
             int self,
             int target,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             if (oid != 4 && oid != 10 && oid != 19)
@@ -1302,7 +1171,7 @@ namespace NTSD.Simulation
             int self,
             int target,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             if (oid != 5 && oid != 19)
@@ -1352,7 +1221,7 @@ namespace NTSD.Simulation
             bool specialProximity,
             in AiDecisionWorldState world,
             ref AiDecisionInputState input,
-            ref RngClone rng,
+            ref AiDecisionRandomStream rng,
             ref AiDecisionWitness witness)
         {
             if (rng.Rand(ai.Rand3 + 1) > 0)
@@ -1532,7 +1401,7 @@ namespace NTSD.Simulation
             int selfState,
             int targetState,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             bool specialOid = IsSpecialOidForSubGate(rows.ObjectId[self]);
             if (rows.LinkState[self] == 0 &&
@@ -1582,7 +1451,7 @@ namespace NTSD.Simulation
             int selfState,
             int targetState,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             bool specialOid = IsSpecialOidForSubGate(rows.ObjectId[self]);
             if (targetState != 16 && specialOid && rows.LinkState[self] == 0)
@@ -1643,7 +1512,7 @@ namespace NTSD.Simulation
             bool specialLeft,
             bool specialRight,
             ref AiDecisionInputState input,
-            ref RngClone rng)
+            ref AiDecisionRandomStream rng)
         {
             int oid = rows.ObjectId[self];
             int predictedTargetX = rows.X[target] + 2 * (int)rows.Vx[target];
@@ -1727,7 +1596,7 @@ namespace NTSD.Simulation
             ref AiDecisionWitness witness,
             in AiDecisionInputState input,
             in AiDecisionWorldState world,
-            in RngClone rng)
+            in AiDecisionRandomStream rng)
         {
             witness.Input = input;
             witness.World = world;
@@ -1751,7 +1620,7 @@ namespace NTSD.Simulation
             witness.World = snapshot.World;
             witness.RngState = snapshot.RngState;
             witness.RngCalls = snapshot.RngCalls;
-            witness.RngOrderHash = RngHashOffset;
+            witness.RngOrderHash = AiDecisionRandomStream.HashOffset;
             return false;
         }
 

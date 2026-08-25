@@ -1321,6 +1321,25 @@ namespace NTSD.Animation
             Rect pixelRect,
             Sprite legacySprite)
         {
+            Add(
+                visualDataId,
+                effectivePic,
+                sourceSheetPath,
+                sharedTexture,
+                pixelRect,
+                new Vector2(0.5f, 0f),
+                legacySprite);
+        }
+
+        public void Add(
+            int visualDataId,
+            int effectivePic,
+            string sourceSheetPath,
+            Texture2D sharedTexture,
+            Rect pixelRect,
+            Vector2 pivot,
+            Sprite legacySprite)
+        {
             if (visualDataId < 0)
                 throw new ArgumentOutOfRangeException(nameof(visualDataId));
             if (effectivePic < 0)
@@ -1342,7 +1361,7 @@ namespace NTSD.Animation
                 sourceSheetPath,
                 sharedTexture,
                 pixelRect,
-                new Vector2(0.5f, 0f),
+                pivot,
                 legacySprite));
         }
 

@@ -211,7 +211,7 @@ namespace NTSD.Test
             Assert.That(character.Runtime.Frame, Is.EqualTo(1));
             Assert.That(character.Runtime.CdAttack, Is.EqualTo(0));
             Assert.That(character.Runtime.CdRight, Is.EqualTo(0));
-            Assert.That(character.Runtime.ComboDra, Is.EqualTo(2));
+            Assert.That(character.Runtime.ComboDra, Is.EqualTo(3));
         }
 
         [Test]
@@ -746,6 +746,7 @@ namespace NTSD.Test
             var team = new int[capacity];
             var state = new int[capacity];
             var frame = new int[capacity];
+            var hitJ = new int[capacity];
             var linkState = new int[capacity];
             var killCount = new int[capacity];
             var cachedTargetSlot = new[] { -1 };
@@ -773,6 +774,7 @@ namespace NTSD.Test
                 team,
                 state,
                 frame,
+                hitJ,
                 linkState,
                 killCount,
                 cachedTargetSlot,
@@ -830,6 +832,33 @@ namespace NTSD.Test
                 publisher.HasPendingValues(0, generation),
                 Is.False);
             Assert.That(cachedTargetSlot[0], Is.EqualTo(7));
+
+            publisher.PublishHitJ(0, generation, 290);
+            Assert.That(
+                publisher.TryCommitPending(0, generation, out _, out _),
+                Is.True);
+            Assert.That(hitJ[0], Is.EqualTo(290));
+
+            publisher.PublishHitJ(0, generation, 77);
+            Assert.That(
+                publisher.TryCommitPending(0, generation, out _, out _),
+                Is.True);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            bool allCommitted = true;
+            for (int iteration = 0; iteration < 512; iteration++)
+            {
+                publisher.PublishHitJ(0, generation, iteration);
+                allCommitted &= publisher.TryCommitPending(
+                    0,
+                    generation,
+                    out _,
+                    out _);
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allCommitted, Is.True);
+            Assert.That(allocated, Is.Zero);
+            Assert.That(hitJ[0], Is.EqualTo(511));
 
             publisher.EndPass();
         }

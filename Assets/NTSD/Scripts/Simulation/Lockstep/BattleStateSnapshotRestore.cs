@@ -612,6 +612,7 @@ namespace NTSD.Simulation
             Runtime.Flow.AiStageTargetX = flow.AiStageTargetX;
             Runtime.Flow.BattleExitCountdown = flow.BattleExitCountdown;
             Runtime.Flow.RouteOutRequest = flow.RouteOutRequest;
+            Runtime.Flow.InitStatsRequest = flow.InitStatsRequest;
             Runtime.Flow.Mode2Request = flow.Mode2Request;
             Runtime.Flow.BattleStepMode = flow.BattleStepMode;
             Runtime.Flow.BattleStepGate = flow.BattleStepGate;

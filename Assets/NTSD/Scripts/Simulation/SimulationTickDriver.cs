@@ -239,6 +239,8 @@ namespace NTSD.Simulation
             new LocalSimulationFrameInputProvider();
         private readonly FrameInputSet _emptyLastAppliedFrameInput =
             FrameInputSet.Empty(0);
+        private readonly BattleFunctionKeyInputLatch _battleFunctionKeyInputLatch =
+            new BattleFunctionKeyInputLatch();
         private ISimulationFrameInputProvider _frameInputProvider;
         private FrameInputSet _lastAppliedFrameInput;
         private BattleParityFrameSnapshot _lastFrameSnapshot;
@@ -312,6 +314,8 @@ namespace NTSD.Simulation
                     RefreshInspectorState();
                     return;
                 }
+
+                CaptureBattleFunctionKeyEdges();
 
                 SimulationTickHostPolicy policy = SelectTickHostPolicy(
                     resetSelectedPolicy: false);
@@ -438,6 +442,7 @@ namespace NTSD.Simulation
                 return false;
 
             provider.BeforeSimTick(tickIndex);
+            ApplyPendingBattleFunctionKeyCommandsForTick();
             if (ShouldSubmitToDedicatedSimulationWorker())
             {
                 if (TrySubmitDedicatedSimulationWorkerTick(
@@ -464,6 +469,7 @@ namespace NTSD.Simulation
                 return false;
 
             int tickIndex = frameInput.TickIndex;
+            ApplyPendingBattleFunctionKeyCommandsForTick();
             _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
             _managedMemoryBoundary.BeginTick();
             try
@@ -949,6 +955,8 @@ namespace NTSD.Simulation
         {
             if (_world == null)
                 return;
+            if (_allocationGate.IsSealed && _world.RuntimeCapacity.IsSealed)
+                return;
 
             if (lockstepSettings.DisableAllocatingDiagnosticsForFormalBattle())
                 _formalBattleDiagnosticsSuppressedCount++;
@@ -988,6 +996,7 @@ namespace NTSD.Simulation
             _world.PrepareBattleHotPathCapacity(
                 maximumBodyCount,
                 maximumItrCount);
+            BattleCentralRenderSystem.ResetRuntime();
             PreparePresentationHotPathCapacity(_world.MaxRuntimeSlotsForServices);
             AppManager.Instance?.SoundPlayer?.PrepareBattlePresentationHotPath();
             _world.PrepareEnabledBattleDiagnosticsHotPath();
@@ -1177,6 +1186,8 @@ namespace NTSD.Simulation
             StopDedicatedSimulationWorker();
             lockstepSettings = settings;
             lockstepSettings.Normalize();
+            if (lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+                _battleFunctionKeyInputLatch.Clear();
             SelectTickHostPolicy(resetSelectedPolicy: true);
             _timeAccumulator = _tickHostPolicy.Accumulator;
             RefreshInspectorState();
@@ -1184,6 +1195,7 @@ namespace NTSD.Simulation
 
         public void ApplyMatchConfig(MatchConfig config)
         {
+            _battleFunctionKeyInputLatch.Clear();
             EndBattleAllocationSeal();
             _publishedSoundEvents.Clear();
             if (!EnsureProductionConfigurationFromSources())
@@ -1218,6 +1230,38 @@ namespace NTSD.Simulation
             _world.ConfigureStageCampaigns(stageCampaigns, config?.stageSeriesId ?? 0, -1);
 
             _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
+        }
+
+        private void CaptureBattleFunctionKeyEdges()
+        {
+            BattleMatchRuntimeState match = _world?.Runtime?.Match;
+            _battleFunctionKeyInputLatch.CapturePhysicalEdges(
+                GameConfig.Instance,
+                match?.LocalGameModeId ?? 0,
+                match?.BattleGameModeId ?? 1,
+                lockstepSettings.driveMode);
+        }
+
+        private void ApplyPendingBattleFunctionKeyCommandsForTick()
+        {
+            if (_world == null ||
+                !_battleFunctionKeyInputLatch.TryConsume(
+                    out bool toggleInitializeStats,
+                    out int mode2Request))
+            {
+                return;
+            }
+
+            if (toggleInitializeStats)
+                _world.ToggleInitStatsRequest();
+            if (mode2Request != 0)
+                _world.SetMode2Request(mode2Request);
+        }
+
+        public void QueueBattleFunctionKeyCommandsForDiagnostics(
+            BattleFunctionKeyCommand commands)
+        {
+            _battleFunctionKeyInputLatch.QueueForDiagnostics(commands);
         }
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)

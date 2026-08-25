@@ -119,6 +119,7 @@ namespace NTSD.Simulation
         WitnessNewLiving = 58,
         WitnessOldHp = 59,
         WitnessNewHp = 60,
+        HitJ = 61,
     }
 
     public enum AiUnifiedSnapshotProductMutationKind
@@ -164,6 +165,7 @@ namespace NTSD.Simulation
         RngCalls = 6,
         RngOrder = 7,
         RngTraceOverflow = 8,
+        CharacterDecisionPosition = 9,
     }
 
     public enum AiDecisionShadowExceptionStage
@@ -192,6 +194,7 @@ namespace NTSD.Simulation
         RngDrawCount = 12,
         RngTraceOverflow = 13,
         RngTrace = 14,
+        CharacterDecisionPosition = 15,
     }
 
     public partial class SimulationWorld
@@ -294,6 +297,7 @@ namespace NTSD.Simulation
         private AiUnifiedSnapshotExecutionMode aiUnifiedSnapshotExecutionMode;
         private int aiDecisionIndexedCanonicalFullOracleSampleInterval;
         private AiDecisionSnapshot aiDecisionShadowSnapshot;
+        private AiDecisionSnapshot aiCharacterDecisionLegacyFallbackSnapshot;
         private AiDecisionSnapshot aiDecisionSharedSnapshot;
         private AiDecisionSnapshot aiDecisionIndexedSnapshot;
         private AiSoASensingRows aiDecisionSharedRows;
@@ -311,6 +315,10 @@ namespace NTSD.Simulation
         private int aiDecisionLegacyRngCount;
         private bool aiDecisionLegacyRngOverflow;
         private ulong aiDecisionLegacyRngOrderHash = AiDecisionRngHashOffset;
+        private int aiDecisionLegacyCharacterDecisionPosition;
+        private readonly int[] aiCharacterDecisionLegacyRngModuli = new int[256];
+        private readonly int[] aiCharacterDecisionLegacyRngRaw = new int[256];
+        private readonly int[] aiCharacterDecisionLegacyRngValues = new int[256];
         private Type aiDecisionShadowFirstExceptionType;
         private AiSoASensingRows aiUnifiedSnapshotRows;
         private int[] aiUnifiedSnapshotSoASensingBoundaryFlags;
@@ -525,9 +533,7 @@ namespace NTSD.Simulation
             }
         }
 
-        private bool AiDecisionRequiresSharedRows =>
-            aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow ||
-            aiDecisionExecutionMode == AiDecisionExecutionMode.IndexedCanonical;
+        private bool AiDecisionRequiresSharedRows => true;
 
         public long AiDecisionShadowEligibleCountForDiagnostics { get; private set; }
         public long AiDecisionShadowAvailableCountForDiagnostics { get; private set; }
@@ -837,6 +843,7 @@ namespace NTSD.Simulation
             aiDecisionLegacyRngCount = 0;
             aiDecisionLegacyRngOverflow = false;
             aiDecisionLegacyRngOrderHash = AiDecisionRngHashOffset;
+            aiDecisionLegacyCharacterDecisionPosition = 0;
             aiDecisionLegacyRngRecording = true;
             return true;
         }
@@ -940,6 +947,8 @@ namespace NTSD.Simulation
                 return AiDecisionIndexedMismatchReason.Availability;
             if (full.Exit != indexed.Exit)
                 return AiDecisionIndexedMismatchReason.Exit;
+            if (full.CharacterDecisionPosition != indexed.CharacterDecisionPosition)
+                return AiDecisionIndexedMismatchReason.CharacterDecisionPosition;
             if (!AiDecisionInputEquals(full.Input, indexed.Input))
                 return AiDecisionIndexedMismatchReason.Input;
             if (!AiDecisionWorldEquals(full.World, indexed.World))
@@ -1341,6 +1350,9 @@ namespace NTSD.Simulation
                 rows.Team[slot] = runtime.RelationTeam;
                 rows.State[slot] = entity.GetState();
                 rows.Frame[slot] = runtime.Frame;
+                rows.HitJ[slot] = CaptureAiCurrentFrameHitJ(
+                    entity,
+                    runtime.Frame);
                 rows.LinkState[slot] = runtime.LinkState;
                 rows.KillCount[slot] = runtime.KillCount;
                 rows.CachedTargetSlot[slot] = runtime.Unk360;
@@ -2140,6 +2152,11 @@ namespace NTSD.Simulation
                 return AiDecisionShadowMismatchReason.WorldFlow;
             if ((Rng?.State ?? 0) != aiDecisionShadowExpected.RngState)
                 return AiDecisionShadowMismatchReason.RngState;
+            if (aiDecisionLegacyCharacterDecisionPosition !=
+                aiDecisionShadowExpected.CharacterDecisionPosition)
+            {
+                return AiDecisionShadowMismatchReason.CharacterDecisionPosition;
+            }
             if ((Rng?.CallCount ?? 0) != aiDecisionShadowExpected.RngCalls)
                 return AiDecisionShadowMismatchReason.RngCalls;
             if (aiDecisionLegacyRngOverflow || aiDecisionShadowExpected.RngTraceOverflow)
@@ -2484,6 +2501,7 @@ namespace NTSD.Simulation
                 rows.Team,
                 rows.State,
                 rows.Frame,
+                rows.HitJ,
                 rows.LinkState,
                 rows.KillCount,
                 rows.CachedTargetSlot,
@@ -3456,6 +3474,7 @@ namespace NTSD.Simulation
                    rows.Team[slot] == relationLink.RelationTeam &&
                    rows.State[slot] == frameMotion.State &&
                    rows.Frame[slot] == frameMotion.Frame &&
+                   rows.HitJ[slot] == frameMotion.HitJ &&
                    rows.LinkState[slot] == relationLink.LinkState &&
                    rows.KillCount[slot] == relationLink.KillCount &&
                    rows.CachedTargetSlot[slot] == input.CachedTargetSlot &&
@@ -3535,6 +3554,7 @@ namespace NTSD.Simulation
             rows.Team[slot] = relationLink.RelationTeam;
             rows.State[slot] = frameMotion.State;
             rows.Frame[slot] = frameMotion.Frame;
+            rows.HitJ[slot] = frameMotion.HitJ;
             rows.LinkState[slot] = relationLink.LinkState;
             rows.KillCount[slot] = relationLink.KillCount;
             rows.CachedTargetSlot[slot] = input.CachedTargetSlot;
@@ -3878,6 +3898,7 @@ namespace NTSD.Simulation
                     !MatchAiUnifiedSnapshotValue(production.Team[slot], unified.Team[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Team, slot, ref mismatch) ||
                     !MatchAiUnifiedSnapshotValue(production.State[slot], unified.State[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.State, slot, ref mismatch) ||
                     !MatchAiUnifiedSnapshotValue(production.Frame[slot], unified.Frame[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Frame, slot, ref mismatch) ||
+                    !MatchAiUnifiedSnapshotValue(production.HitJ[slot], unified.HitJ[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.HitJ, slot, ref mismatch) ||
                     !MatchAiUnifiedSnapshotValue(production.LinkState[slot], unified.LinkState[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.LinkState, slot, ref mismatch) ||
                     !MatchAiUnifiedSnapshotValue(production.KillCount[slot], unified.KillCount[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.KillCount, slot, ref mismatch) ||
                     !MatchAiUnifiedSnapshotValue(production.CachedTargetSlot[slot], unified.CachedTargetSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CachedTargetSlot, slot, ref mismatch) ||
@@ -4015,6 +4036,7 @@ namespace NTSD.Simulation
                    MatchAiUnifiedSnapshotValue(production.Team[slot], unified.Team[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Team, slot, ref mismatch) &&
                    MatchAiUnifiedSnapshotValue(production.State[slot], unified.State[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.State, slot, ref mismatch) &&
                    MatchAiUnifiedSnapshotValue(production.Frame[slot], unified.Frame[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Frame, slot, ref mismatch) &&
+                   MatchAiUnifiedSnapshotValue(production.HitJ[slot], unified.HitJ[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.HitJ, slot, ref mismatch) &&
                    MatchAiUnifiedSnapshotValue(production.LinkState[slot], unified.LinkState[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.LinkState, slot, ref mismatch) &&
                    MatchAiUnifiedSnapshotValue(production.KillCount[slot], unified.KillCount[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.KillCount, slot, ref mismatch) &&
                    MatchAiUnifiedSnapshotValue(production.CachedTargetSlot[slot], unified.CachedTargetSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CachedTargetSlot, slot, ref mismatch) &&
@@ -4759,6 +4781,16 @@ namespace NTSD.Simulation
                 aiUnifiedSnapshotPublishedState;
             return published != null && slot >= 0 && slot < published.Capacity
                 ? published.Rows.Identity[slot]
+                : 0;
+        }
+
+        public int GetAiUnifiedSnapshotExecutionPublishedHitJForSelfCheck(
+            int slot)
+        {
+            AiUnifiedSnapshotExecutionState published =
+                aiUnifiedSnapshotPublishedState;
+            return published != null && slot >= 0 && slot < published.Capacity
+                ? published.Rows.HitJ[slot]
                 : 0;
         }
 

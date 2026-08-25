@@ -423,6 +423,42 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void CharacterFrameTick_DataOrientedState2000FacesFinalHorizontalVelocity()
+        {
+            var world = new SimulationWorld();
+            LF2Character positive = CreateFrameTickCharacter(
+                world, objectId: 7201, wait: 100, next: 0);
+            LF2Character zero = CreateFrameTickCharacter(
+                world, objectId: 7202, wait: 100, next: 0);
+            LF2Character negative = CreateFrameTickCharacter(
+                world, objectId: 7203, wait: 100, next: 0);
+
+            positive.Frame.D.state = LF2States.HeavyWeaponInSky;
+            zero.Frame.D.state = LF2States.HeavyWeaponInSky;
+            negative.Frame.D.state = LF2States.HeavyWeaponInSky;
+            positive.Runtime.Vx = 3.0;
+            zero.Runtime.Vx = 0.0;
+            negative.Runtime.Vx = -3.0;
+            positive.SwitchDir("left");
+            zero.SwitchDir("right");
+            negative.SwitchDir("right");
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(positive.Runtime.Dir, Is.EqualTo("right"));
+            Assert.That(zero.Runtime.Dir, Is.EqualTo("left"));
+            Assert.That(negative.Runtime.Dir, Is.EqualTo("left"));
+            Assert.That(
+                world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics
+                    .ExactCharacterCount,
+                Is.EqualTo(3));
+            Assert.That(
+                world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics
+                    .CompatibilityFallbackCount,
+                Is.Zero);
+        }
+
+        [Test]
         public void CharacterFrameTick_UnknownDerivedTypeFallsBackToVirtualPath()
         {
             var world = new SimulationWorld();

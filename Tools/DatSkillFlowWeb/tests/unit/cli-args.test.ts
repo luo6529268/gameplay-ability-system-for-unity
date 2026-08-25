@@ -14,7 +14,7 @@ describe("CLI argument parsing", () => {
     });
 
     it("parses supported values and preserves workspace text for registry validation", () => {
-        assert.deepEqual(parseCliArguments(["--root", "assets", "--manifest", "manifest.json", "--workspace", "C:\\unsafe\\later", "--data-txt", "Assets/NTSD/Config/data.txt", "--asset-workspace", "J:\\game", "--patch-workspace", "J:\\patches", "--patch-index", "C:\\cache\\patch-index.json", "--port", "0", "--allow-test-root-grant"]), {
+        assert.deepEqual(parseCliArguments(["--root", "assets", "--manifest", "manifest.json", "--workspace", "C:\\unsafe\\later", "--data-txt", "Assets/NTSD/Config/data.txt", "--asset-workspace", "J:\\game", "--patch-workspace", "J:\\patches", "--patch-index", "C:\\cache\\patch-index.json", "--port", "0", "--allow-test-root-grant", "--read-only"]), {
             root: "assets",
             manifest: "manifest.json",
             workspace: "C:\\unsafe\\later",
@@ -24,8 +24,11 @@ describe("CLI argument parsing", () => {
             patchIndex: "C:\\cache\\patch-index.json",
             port: "0",
             allowTestRootGrant: true,
+            readOnly: true,
         });
-        assert.equal(parseCliArguments(["--workspace", "C:\\repo"]).dataTxt, undefined);
+        const ordinary = parseCliArguments(["--workspace", "C:\\repo"]);
+        assert.equal(ordinary.dataTxt, undefined);
+        assert.equal(ordinary.readOnly, false);
         assert.throws(() => parseCliArguments(["--data-txt", "data/data.txt"]), /requires --workspace/);
         assert.throws(() => parseCliArguments(["--asset-workspace", "J:\\game"]), /requires --workspace/);
         assert.throws(() => parseCliArguments(["--workspace", "C:\\repo", "--patch-workspace", "J:\\patches"]), /provided together/);
@@ -42,6 +45,8 @@ describe("CLI argument parsing", () => {
         ["--patch-index", "--root", "dist"],
         ["--allow-test-root-grant", "--allow-test-root-grant"],
         ["--allow-test-root-grant", "true"],
+        ["--read-only", "--read-only"],
+        ["--read-only", "true"],
         ["--unknown"],
         ["--port", "12abc"],
         ["--port", "-1"],

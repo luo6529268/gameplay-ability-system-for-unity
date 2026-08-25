@@ -25,33 +25,35 @@ namespace NTSD.Simulation.Ecs
                 attacker.CaughtSlotIndex);
             if (victim?.Frame == null)
             {
-                attacker.DirectWriteFrameImmediateWaitReset(0);
+                attacker.DirectWriteRawFramePreserveWaitCounter(0);
                 return;
             }
 
             LF2FrameData victimFrame = victim.GetCollisionFrameData();
+            bool skipActions = false;
+            bool skipDecrease = false;
+            bool useFallbackFrameForThrow = false;
             if (victim.CatcherSlotIndex != attacker.Runtime.SlotIndex ||
                 victimFrame?.cpoint == null ||
                 victimFrame.cpoint.kind != 2)
             {
-                attacker.DirectWriteFrameImmediateWaitReset(0);
-                return;
+                attacker.DirectWriteRawFramePreserveWaitCounter(0);
+                skipActions = true;
+                skipDecrease = true;
+                useFallbackFrameForThrow = true;
             }
 
-            if (catcherFrame.state == LF2States.Catching)
-                SyncCaughtByCpoint(world, attacker, victim, catcherFrame, cpoint);
-
-            if (cpoint.decrease > 0)
+            if (!skipDecrease && cpoint.decrease > 0)
             {
                 attacker.Runtime.CaughtDuration -= cpoint.decrease;
             }
-            else if (cpoint.decrease < 0)
+            else if (!skipDecrease && cpoint.decrease < 0)
             {
                 attacker.Runtime.CaughtDuration += cpoint.decrease;
                 if (attacker.Runtime.CaughtDuration < 0)
                 {
-                    attacker.DirectWriteFrameImmediateWaitReset(0);
-                    victim.DirectWriteFrameImmediateWaitReset(181);
+                    attacker.DirectWriteRawFramePreserveWaitCounter(0);
+                    victim.DirectWriteRawFramePreserveWaitCounter(181);
                     attacker.HitCount = 1;
                     victim.HitCount = 1;
                     victim.KnockbackVx = attacker.Runtime.XInt > victim.Runtime.XInt
@@ -60,14 +62,21 @@ namespace NTSD.Simulation.Ecs
                     victim.KnockbackVy = -3f;
                     victim.Runtime.Vx = victim.KnockbackVx;
                     victim.Runtime.Vy = victim.KnockbackVy;
-                    return;
+                    skipActions = true;
+                    useFallbackFrameForThrow = true;
                 }
             }
 
-            RunActionSelection(attacker, victim, cpoint);
+            if (!skipActions)
+                RunActionSelection(attacker, victim, cpoint);
 
             if (cpoint.throwvx != 0)
-                ApplyThrow(attacker, victim, cpoint, catcherFrame);
+            {
+                LF2FrameData throwFrame = useFallbackFrameForThrow
+                    ? attacker.Frame?.D
+                    : catcherFrame;
+                ApplyThrow(attacker, victim, cpoint, throwFrame);
+            }
 
             ApplyDirControl(attacker, cpoint);
         }
@@ -174,9 +183,9 @@ namespace NTSD.Simulation.Ecs
             LF2Entity victim,
             int actionFrame)
         {
-            attacker.ApplySignedImmediateFrameWaitReset(actionFrame);
+            attacker.ApplySignedCpointFrame(actionFrame);
             int victimAction = attacker.Frame?.D?.cpoint?.vaction ?? 0;
-            victim.DirectWriteFrameImmediateWaitReset(victimAction);
+            victim.DirectWriteRawFramePreserveWaitCounter(victimAction);
             victim.AttackingCounter = 0;
             attacker.AttackingCounter = 0;
         }
@@ -192,7 +201,7 @@ namespace NTSD.Simulation.Ecs
                  (victim.FrameDelay == 0 && cpoint.hurtable == 1)) &&
                 cpoint.vaction != 0)
             {
-                victim.DirectWriteFrameImmediateWaitReset(cpoint.vaction);
+                victim.DirectWriteRawFramePreserveWaitCounter(cpoint.vaction);
             }
 
             if (victim.Frame?.N < 0)
@@ -232,6 +241,16 @@ namespace NTSD.Simulation.Ecs
                         attacker.HolderCopySlot);
                     if (holder != null)
                         holder.KillStat++;
+
+                    int killStatIndex = victim.Unk344;
+                    if (world != null &&
+                        world.KillStats != null &&
+                        killStatIndex > 0 &&
+                        killStatIndex < 3 &&
+                        killStatIndex < world.KillStats.Length)
+                    {
+                        world.KillStats[killStatIndex]++;
+                    }
                 }
 
                 victim.Health.HP -= actualInjury;
@@ -245,6 +264,16 @@ namespace NTSD.Simulation.Ecs
                     attacker.HolderCopySlot);
                 if (comboHolder != null)
                     comboHolder.ComboCountAtk += actualInjury;
+
+                int damageStatIndex = victim.Unk344;
+                if (world != null &&
+                    world.DamageStats != null &&
+                    damageStatIndex > 0 &&
+                    damageStatIndex < 3 &&
+                    damageStatIndex < world.DamageStats.Length)
+                {
+                    world.DamageStats[damageStatIndex] += actualInjury;
+                }
                 return;
             }
 

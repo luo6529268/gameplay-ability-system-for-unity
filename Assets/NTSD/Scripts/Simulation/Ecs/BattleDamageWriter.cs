@@ -6,6 +6,246 @@ namespace NTSD.Simulation.Ecs
 {
     internal sealed class BattleDamageWriter
     {
+        internal bool TryApplyCurrentDatTargetHit(
+            SimulationWorld world,
+            LF2Entity attacker,
+            LF2Entity victim,
+            InteractionArea itr,
+            Vector3 attackerPosition)
+        {
+            if (world == null || attacker?.Runtime == null ||
+                victim?.Runtime == null || itr == null)
+            {
+                return false;
+            }
+
+            int victimType = victim.GetCurrentDataObjectTypeForSimulation();
+            if (victimType == (int)LF2ObjectType.Character)
+            {
+                if (victim is LF2Character character)
+                    return character.Hit(
+                        itr,
+                        attacker,
+                        attackerPosition,
+                        default);
+
+                return LF2CharacterDatHitResolver.CanResolveTarget(victim) &&
+                       LF2CharacterDatHitResolver.TryResolveHit(
+                           victim,
+                           itr,
+                           attacker,
+                           attackerPosition,
+                           default);
+            }
+
+            if (victimType == (int)LF2ObjectType.LightWeapon ||
+                victimType == (int)LF2ObjectType.HeavyWeapon ||
+                victimType == (int)LF2ObjectType.ThrowWeapon ||
+                victimType == (int)LF2ObjectType.Drink)
+            {
+                if (victim is LF2Weapon weapon)
+                    return weapon.Hit(itr, attacker);
+
+                return ApplyGenericWeaponTypedHit(
+                    world,
+                    attacker,
+                    victim,
+                    itr,
+                    victimType);
+            }
+
+            if (victimType == (int)LF2ObjectType.SpecialAttack)
+            {
+                if (victim is LF2SpecialAttack specialAttack)
+                    return specialAttack.Hit(itr, attacker);
+
+                return ApplyGenericObjectTypedHit(
+                    world,
+                    attacker,
+                    victim,
+                    itr,
+                    allowKind9: true);
+            }
+
+            if (victimType == (int)LF2ObjectType.Other)
+            {
+                return ApplyGenericObjectTypedHit(
+                    world,
+                    attacker,
+                    victim,
+                    itr,
+                    allowKind9: false);
+            }
+
+            return false;
+        }
+
+        private bool ApplyGenericObjectTypedHit(
+            SimulationWorld world,
+            LF2Entity attacker,
+            LF2Entity victim,
+            InteractionArea itr,
+            bool allowKind9)
+        {
+            if (itr.kind == 14)
+            {
+                world.BoundaryWriter.TryApplyKind14DirectionalBlock(
+                    attacker,
+                    victim);
+                return allowKind9;
+            }
+
+            if (itr.kind == 9 && !allowKind9)
+                return false;
+            if (itr.kind != 0 && itr.kind != 9)
+                return false;
+
+            return ApplySpecialAttackDamage(world, attacker, victim, itr);
+        }
+
+        private bool ApplyGenericWeaponTypedHit(
+            SimulationWorld world,
+            LF2Entity attacker,
+            LF2Entity victim,
+            InteractionArea itr,
+            int victimType)
+        {
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            if (attackerSlot >= 0 &&
+                victim.ItrRest?.HasVrest(attackerSlot) == true)
+            {
+                return false;
+            }
+
+            if (itr.kind == 9)
+            {
+                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+                return true;
+            }
+
+            if (itr.kind == 14)
+            {
+                world.BoundaryWriter.TryApplyKind14DirectionalBlock(
+                    attacker,
+                    victim);
+                return false;
+            }
+
+            if (itr.kind == 10 || itr.kind == 11)
+            {
+                if (itr.kind == 11 && victim.WeaponCount >= 0)
+                    return false;
+                int victimOid = LF2Entity.ResolveCurrentDataObjectId(victim);
+                if (victimOid == 201 || victimOid == 202)
+                    return false;
+
+                const double velocityFactor = 0.9345794392523364;
+                bool lightLike =
+                    victimType == (int)LF2ObjectType.LightWeapon ||
+                    victimType == (int)LF2ObjectType.ThrowWeapon ||
+                    victimType == (int)LF2ObjectType.Drink;
+                int expectedState = lightLike
+                    ? LF2States.WeaponInSky
+                    : LF2States.HeavyWeaponInSky;
+                if (victim.GetState() != expectedState)
+                    victim.DirectWriteRawFramePreserveWaitCounter(0);
+
+                victim.KnockbackVx = victim.Runtime.Vx * velocityFactor;
+                victim.Runtime.Vx = victim.KnockbackVx;
+                victim.KnockbackVz = victim.Runtime.Vz * velocityFactor;
+                victim.Runtime.Vz = victim.KnockbackVz;
+                ApplyGenericWeaponAirStep(
+                    victim,
+                    lightLike ? 3.0 : 2.3);
+                victim.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
+                return true;
+            }
+
+            if (itr.kind == 15 || itr.kind == 16)
+            {
+                ApplyGenericWeaponWhirlwind(
+                    victim,
+                    attacker,
+                    victimType);
+                return true;
+            }
+
+            return itr.kind == 0 &&
+                   ApplyWeaponDamage(world, attacker, victim, itr);
+        }
+
+        private static void ApplyGenericWeaponAirStep(
+            LF2Entity victim,
+            double velocityStep)
+        {
+            if (victim.GetRuntimeYInt() >= -2)
+            {
+                victim.Runtime.Y = -2.0;
+                victim.Runtime.YInt = -2;
+                victim.Runtime.Vy = -6.0;
+                return;
+            }
+
+            if (victim.Runtime.Vy > -6.0)
+            {
+                victim.Runtime.Vy -= velocityStep;
+                victim.KnockbackVy = victim.Runtime.Vy;
+            }
+        }
+
+        private static void ApplyGenericWeaponWhirlwind(
+            LF2Entity victim,
+            LF2Entity attacker,
+            int victimType)
+        {
+            bool lightLike =
+                victimType == (int)LF2ObjectType.LightWeapon ||
+                victimType == (int)LF2ObjectType.ThrowWeapon ||
+                victimType == (int)LF2ObjectType.Drink;
+            bool heavyLike = victimType == (int)LF2ObjectType.HeavyWeapon;
+            if (lightLike)
+            {
+                int victimOid = LF2Entity.ResolveCurrentDataObjectId(victim);
+                if (victimOid == 201 || victimOid == 202)
+                    return;
+                if (victim.GetState() != LF2States.WeaponInSky)
+                    victim.DirectWriteRawFramePreserveWaitCounter(0);
+                ApplyGenericWeaponWhirlwindVelocity(victim, attacker, 3.0);
+            }
+            else if (heavyLike)
+            {
+                if (victim.GetState() != LF2States.HeavyWeaponInSky)
+                    victim.DirectWriteRawFramePreserveWaitCounter(0);
+                ApplyGenericWeaponWhirlwindVelocity(victim, attacker, 2.3);
+            }
+        }
+
+        private static void ApplyGenericWeaponWhirlwindVelocity(
+            LF2Entity victim,
+            LF2Entity attacker,
+            double verticalStep)
+        {
+            victim.KnockbackVx = victim.Runtime.Vx +
+                (victim.Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
+            victim.Runtime.Vx = victim.KnockbackVx;
+            victim.KnockbackVz = victim.Runtime.Vz +
+                (victim.Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
+            victim.Runtime.Vz = victim.KnockbackVz;
+
+            if (victim.GetRuntimeYInt() >= -2)
+            {
+                victim.Runtime.Y = -2.0;
+                victim.Runtime.YInt = -2;
+                victim.Runtime.Vy = -6.0;
+            }
+
+            if (victim.Runtime.Vy > -6.0)
+            {
+                victim.Runtime.Vy -= verticalStep;
+                victim.KnockbackVy = victim.Runtime.Vy;
+            }
+        }
+
         internal bool ApplyStandardCharacterDamage(
             SimulationWorld world,
             LF2Entity attacker,
@@ -169,7 +409,7 @@ namespace NTSD.Simulation.Ecs
                 world.DamageStats[damageStatIndex] += adjustedInjury;
 
             victim.QueueBattleSound("SFX_065");
-            victim.ImmediateFrame(LF2StandardFrames.MpDrain);
+            victim.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.MpDrain);
             victim.AttackingCounter = 0;
 
             int attackerSlot = attacker.Runtime.SlotIndex;
@@ -183,7 +423,7 @@ namespace NTSD.Simulation.Ecs
         internal bool ApplyWeaponDamage(
             SimulationWorld world,
             LF2Entity attacker,
-            LF2Weapon victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             if (world == null ||
@@ -202,19 +442,27 @@ namespace NTSD.Simulation.Ecs
             bool flyingB = victimType == (int)LF2ObjectType.Drink;
             bool flyingLike = flyingA || flyingB;
             bool damageableWeapon = lightThrow || heavyLike || flyingLike;
+            bool normalVitalWeapon = lightThrow || heavyLike || flyingA;
             int attackerSlot = attacker.Runtime.SlotIndex;
             int itrArest = LF2Entity.ResolveArestCooldown(itr.arest, itr.vrest);
 
+            if (!flyingB)
+                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+            if (normalVitalWeapon)
+                ApplyWeaponNormalVitalAndStatWrites(world, victim, itr.injury);
+
             if (damageableWeapon)
             {
-                victim.HitConfirm2 = 1;
                 if (itr.bdefend == 100)
                     victim.Runtime.WeaponFlightCounter = -1;
                 else
                     victim.Runtime.WeaponFlightCounter -= itr.injury;
             }
 
-            victim.RelationTeam = attacker.RelationTeam;
+            // Alignment contract R4-HIT-004: normal weapon type tails own the first
+            // hit-confirm/relation writes after the C++ hurt/reaction path completes.
+            if (!damageableWeapon)
+                victim.RelationTeam = attacker.RelationTeam;
             if (victimType != (int)LF2ObjectType.HeavyWeapon || itr.fall > 40)
                 victim.HitCount++;
 
@@ -224,8 +472,6 @@ namespace NTSD.Simulation.Ecs
 
             bool knockdown = victim.FallCounter > 60 &&
                 victimType != (int)LF2ObjectType.SpecialAttack;
-            if (!flyingB)
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
             LF2HitResolveRuntimeData.RecordStandardHurtSounds(
                 attacker,
                 victim,
@@ -258,6 +504,8 @@ namespace NTSD.Simulation.Ecs
             if (!skipOid100Tail)
                 LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(victim);
 
+            ApplyWeaponAttackerState3000PreKnockdown(attacker, victim);
+
             if (knockdown)
             {
                 if ((!heavyLike &&
@@ -277,7 +525,7 @@ namespace NTSD.Simulation.Ecs
                     : (victim.KnockbackVx >= 0.0
                         ? LF2StandardFrames.FallingFront
                         : LF2StandardFrames.FallingBack);
-                victim.SetFrameDirect(hitFrame);
+                victim.DirectWriteRawFramePreserveWaitCounter(hitFrame);
                 LF2HitResolveRuntimeData.ApplyKnockdownHeldPairVrest(
                     victim,
                     attacker);
@@ -313,7 +561,7 @@ namespace NTSD.Simulation.Ecs
             if (attackerSlot >= 0 && itr.vrest > 0)
                 victim.ItrRest?.SetVrest(attackerSlot, itr.vrest);
 
-            ApplyWeaponAttackerResponse(attacker, victim);
+            ApplyWeaponAttackerState1002Response(attacker, victim);
             ApplyKind0WeaponVictimTail(attacker, victim, itr);
             victim.RecordKind0Hit(attacker, itr);
             return true;
@@ -322,24 +570,29 @@ namespace NTSD.Simulation.Ecs
         internal bool ApplySpecialAttackDamage(
             SimulationWorld world,
             LF2Entity attacker,
-            LF2SpecialAttack victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             if (world == null ||
                 attacker?.Runtime == null ||
                 victim?.Runtime == null ||
+                victim.Health == null ||
                 itr == null)
             {
                 return false;
             }
 
+            int victimType = victim.GetCurrentDataObjectTypeForSimulation();
             if (itr.kind == 9)
             {
+                if (victimType != (int)LF2ObjectType.SpecialAttack)
+                    return false;
+
                 LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
                 LF2CharacterData victimData =
                     victim.FrameCache?.Wrapper?.characterData;
                 if (!string.IsNullOrEmpty(victimData?.weapon_broken_sound))
-                    victim.PlaySound(victimData.weapon_broken_sound);
+                    victim.QueueBattleSound(victimData.weapon_broken_sound);
 
                 attacker.FrameDelay = -3;
                 if (victim.GetState() == LF2States.ObjectFlying)
@@ -362,8 +615,10 @@ namespace NTSD.Simulation.Ecs
                 return false;
 
             LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+            ApplyType3NormalVitalAndStatWrites(world, victim, itr.injury);
             ApplySpecialObjectHurtTail(world, attacker, victim, itr);
-            ApplyKind0Type3Tail(world, attacker, victim, itr);
+            if (victimType == (int)LF2ObjectType.SpecialAttack)
+                ApplyKind0Type3Tail(world, attacker, victim, itr);
             victim.RecordKind0Hit(attacker, itr);
             return true;
         }
@@ -522,10 +777,48 @@ namespace NTSD.Simulation.Ecs
                 world.DamageStats[damageStatIndex] += injury;
         }
 
+        private static void ApplyType3NormalVitalAndStatWrites(
+            SimulationWorld world,
+            LF2Entity victim,
+            int injury)
+        {
+            // Alignment contract: R4-HIT-001. C++ normal type3 hurt shares only
+            // these public vital/stat writes; type0-only kill/holder score stays excluded.
+            victim.Health.HP -= injury;
+            victim.Health.HPBound -= injury / 3;
+            victim.ComboCountVic += injury;
+
+            int damageStatIndex = victim.Unk344;
+            if (damageStatIndex > 0 && damageStatIndex < world.DamageStats.Length)
+                world.DamageStats[damageStatIndex] += injury;
+        }
+
+        private static void ApplyWeaponNormalVitalAndStatWrites(
+            SimulationWorld world,
+            LF2Entity victim,
+            int rawInjury)
+        {
+            int adjustedInjury = rawInjury;
+            if (victim.FallDamageDiv > 0)
+                adjustedInjury = rawInjury * 100 / victim.FallDamageDiv;
+
+            victim.Health.HP -= adjustedInjury;
+            victim.Health.HPBound -= adjustedInjury / 3;
+            victim.ComboCountVic += adjustedInjury;
+
+            int damageStatIndex = victim.Unk344;
+            if (damageStatIndex >= 1 &&
+                damageStatIndex <= 2 &&
+                damageStatIndex < world.DamageStats.Length)
+            {
+                world.DamageStats[damageStatIndex] += adjustedInjury;
+            }
+        }
+
         private static void ApplySpecialObjectHurtTail(
             SimulationWorld world,
             LF2Entity attacker,
-            LF2SpecialAttack victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             int victimType = victim.GetCurrentDataObjectTypeForSimulation();
@@ -678,7 +971,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ApplySpecialState3000ObjectHurtTail(
             LF2Entity attacker,
-            LF2SpecialAttack victim)
+            LF2Entity victim)
         {
             if (!FrameStateIs(attacker, LF2States.ProjectileFlying))
                 return;
@@ -711,7 +1004,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ApplySpecialWeaponThrowingTail(
             LF2Entity attacker,
-            LF2SpecialAttack victim,
+            LF2Entity victim,
             int victimType)
         {
             if (!FrameStateIs(attacker, LF2States.WeaponThrowing))
@@ -732,7 +1025,7 @@ namespace NTSD.Simulation.Ecs
         private static void ApplyKind0Type3Tail(
             SimulationWorld world,
             LF2Entity attacker,
-            LF2SpecialAttack victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             int victimState = victim.GetState();
@@ -857,7 +1150,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ApplyType3EffectTail(
             SimulationWorld world,
-            LF2SpecialAttack victim,
+            LF2Entity victim,
             int effect)
         {
             LF2FrameData previousFrame = victim.GetFrameDataById(
@@ -906,7 +1199,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ApplyType3BurningEffect(
             SimulationWorld world,
-            LF2SpecialAttack victim)
+            LF2Entity victim)
         {
             victim.DirectWriteHeldFramePreserveWaitCounter(203);
             victim.AttackingCounter = 0;
@@ -956,7 +1249,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ReplaceWithActiveKarasuData(
             SimulationWorld world,
-            LF2SpecialAttack victim)
+            LF2Entity victim)
         {
             for (int slot = 0; slot < world.MaxRuntimeSlotsForServices; slot++)
             {
@@ -980,7 +1273,7 @@ namespace NTSD.Simulation.Ecs
 
         private static void ApplyKind0WeaponVictimTail(
             LF2Entity attacker,
-            LF2Weapon victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             int victimType = victim.GetCurrentDataObjectTypeForSimulation();
@@ -988,7 +1281,8 @@ namespace NTSD.Simulation.Ecs
             if (victimType == (int)LF2ObjectType.LightWeapon)
             {
                 victim.HitConfirm2 = 1;
-                victim.SetFrameDirect(victim.BattleRandInt(0, 16));
+                victim.DirectWriteRawFramePreserveWaitCounter(
+                    victim.BattleRandInt(0, 16));
                 victim.RelationTeam = attacker.RelationTeam;
                 return;
             }
@@ -999,7 +1293,8 @@ namespace NTSD.Simulation.Ecs
                 if (attackerSlot >= 0)
                     attacker.ItrRest?.SetVrest(attackerSlot, 30);
                 victim.HitConfirm2 = 1;
-                victim.SetFrameDirect(victim.BattleRandInt(0, 16));
+                victim.DirectWriteRawFramePreserveWaitCounter(
+                    victim.BattleRandInt(0, 16));
                 victim.RelationTeam = attacker.RelationTeam;
                 return;
             }
@@ -1028,18 +1323,19 @@ namespace NTSD.Simulation.Ecs
                 victim.GetRuntimeYInt() >= 0 &&
                 itr.effect != 4)
             {
-                victim.SetFrameDirect(20);
+                victim.DirectWriteRawFramePreserveWaitCounter(20);
             }
             else
             {
-                victim.SetFrameDirect(victim.BattleRandInt(0, 6));
+                victim.DirectWriteRawFramePreserveWaitCounter(
+                    victim.BattleRandInt(0, 6));
             }
             victim.RelationTeam = attacker.RelationTeam;
         }
 
         private static void ApplyFlyingWeaponKnockbackX(
             LF2Entity attacker,
-            LF2Weapon victim,
+            LF2Entity victim,
             InteractionArea itr)
         {
             bool attackerState2000 =
@@ -1076,34 +1372,51 @@ namespace NTSD.Simulation.Ecs
             }
         }
 
-        private static void ApplyWeaponAttackerResponse(
+        private static void ApplyWeaponAttackerState3000PreKnockdown(
             LF2Entity attacker,
-            LF2Weapon victim)
+            LF2Entity victim)
         {
-            int attackerState = attacker.Frame?.D?.state ?? -1;
-            if (attackerState == LF2States.WeaponThrowing)
-            {
-                attacker.ImmediateFrame(victim.BattleRandInt(0, 16));
-                attacker.Runtime.Vx = -(victim.KnockbackVx * 0.5);
-                attacker.Runtime.Vy = -4.0;
-
-                if (attacker.GetCurrentDataObjectTypeForSimulation() ==
-                        (int)LF2ObjectType.ThrowWeapon &&
-                    victim.GetCurrentDataObjectTypeForSimulation() ==
-                        (int)LF2ObjectType.ThrowWeapon)
-                {
-                    attacker.KnockbackVx = -victim.KnockbackVx;
-                }
-            }
-
-            attackerState = attacker.Frame?.D?.state ?? -1;
-            if (attackerState != LF2States.ProjectileFlying)
+            if (!FrameStateIs(attacker, LF2States.ProjectileFlying))
                 return;
 
-            attacker.ImmediateFrame(10);
+            int attackerOid = LF2Entity.ResolveCurrentDataObjectId(attacker);
+            int victimOid = LF2Entity.ResolveCurrentDataObjectId(victim);
+            bool nonCharacterVictim = victim.GetCurrentDataObjectTypeForSimulation() !=
+                (int)LF2ObjectType.Character;
+            bool skipReset = nonCharacterVictim &&
+                attackerOid == 209 &&
+                (IsKarasuOid(victimOid) ||
+                 (victimOid == 209 && (victim.Frame?.N ?? 0) == 40));
+            if (skipReset)
+                return;
+
+            attacker.DirectWriteRawFramePreserveWaitCounter(10);
             attacker.AttackingCounter = 0;
             attacker.Runtime.Vx = 0.0;
-            attacker.Runtime.Vz = attacker.Frame?.D?.dvz ?? 0;
+            LF2FrameData frame10 = attacker.GetFrameDataById(10);
+            if (frame10 != null)
+                attacker.Runtime.Vz = frame10.dvz;
+        }
+
+        private static void ApplyWeaponAttackerState1002Response(
+            LF2Entity attacker,
+            LF2Entity victim)
+        {
+            if (!FrameStateIs(attacker, LF2States.WeaponThrowing))
+                return;
+
+            attacker.DirectWriteRawFramePreserveWaitCounter(
+                attacker.BattleRandInt(0, 16));
+            attacker.Runtime.Vx = -(victim.KnockbackVx * 0.5);
+            attacker.Runtime.Vy = -4.0;
+
+            if (attacker.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.ThrowWeapon &&
+                victim.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.ThrowWeapon)
+            {
+                attacker.KnockbackVx = -victim.KnockbackVx;
+            }
         }
 
         private static bool ApplyStandardFall(

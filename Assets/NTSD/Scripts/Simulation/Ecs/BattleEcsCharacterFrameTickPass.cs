@@ -89,12 +89,6 @@ namespace NTSD.Simulation.Ecs
 
         private static void ExecuteExactCharacter(LF2Character character)
         {
-            if (character.ThrowFrameGuard >= 0 &&
-                character.ThrowFrameGuard == (character.Frame?.N ?? -1))
-            {
-                return;
-            }
-
             if (character.FrameDelay != 0)
                 return;
 
@@ -144,6 +138,10 @@ namespace NTSD.Simulation.Ecs
                     character.HitStun = 30;
                 character.AttackingCounter = 0;
             }
+
+            // Alignment contract: R8-MOV-005-001
+            if (state == LF2States.HeavyWeaponInSky)
+                character.SwitchDir(runtime.Vx > 0.0 ? "right" : "left");
 
             int wait = character.Trans?.Wait ?? frame.wait;
             if (character.AttackingCounter > wait)

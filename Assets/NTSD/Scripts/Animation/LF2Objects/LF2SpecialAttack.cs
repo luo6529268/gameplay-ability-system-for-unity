@@ -531,25 +531,17 @@ namespace NTSD.Animation.LF2Objects
 
         private bool TryApplyHit(InteractionArea itr, LF2Entity target)
         {
-            bool applied = false;
+            if (itr == null || target == null || PS == null)
+                return false;
 
-            int targetDataType = target?.GetCurrentDataObjectTypeForSimulation() ?? -1;
-            if (targetDataType == (int)LF2ObjectType.Character && PS != null)
-            {
-                var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
-                if (target is LF2Character character)
-                    applied = character.Hit(itr, this, attackerPos, default);
-                else if (LF2CharacterDatHitResolver.CanResolveTarget(target))
-                    applied = LF2CharacterDatHitResolver.TryResolveHit(target, itr, this, attackerPos, default);
-            }
-            else if (target is LF2WeaponBase weapon)
-            {
-                applied = weapon.Hit(itr, this);
-            }
-            else if (target is LF2SpecialAttack specialAttack)
-            {
-                applied = specialAttack.Hit(itr, this);
-            }
+            SimulationWorld world = Match ?? target.Match;
+            var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
+            bool applied = world?.DamageWriter.TryApplyCurrentDatTargetHit(
+                world,
+                this,
+                target,
+                itr,
+                attackerPos) == true;
 
             if (applied && itr.kind == 0)
                 ApplyPostHitSelfDestruct(target);
@@ -877,6 +869,8 @@ namespace NTSD.Animation.LF2Objects
             if (action == 0 && !FrameCache.HasFrame(0))
                 action = 999;
             Frame.D = FrameCache.GetFrameDataById(action);
+            Frame.Prev2 = 0;
+            Frame.Prev2D = FrameCache.GetFrameDataById(0);
             SetFrameDirect(action);
         }
 

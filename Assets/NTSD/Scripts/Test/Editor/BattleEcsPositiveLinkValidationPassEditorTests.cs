@@ -101,8 +101,8 @@ namespace NTSD.Test
             world.ValidateHeldLinksAll(1);
 
             Assert.That(holder.Runtime.LinkState, Is.Zero);
-            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(-1));
-            Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
+            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(1));
+            Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(1));
             Assert.That(target.Runtime.HolderStableId, Is.EqualTo(77));
             Assert.That(world.PositiveLinkIndexCountForDiagnostics, Is.Zero);
         }
@@ -176,8 +176,8 @@ namespace NTSD.Test
             Assert.That(value.Outcome, Is.EqualTo("cleared"));
             Assert.That(value.Reason, Is.EqualTo("holder-mismatch"));
             Assert.That(value.AfterLinkState, Is.Zero);
-            Assert.That(value.AfterTargetSlot, Is.EqualTo(-1));
-            Assert.That(value.AfterHeldWeaponSlot, Is.EqualTo(-1));
+            Assert.That(value.AfterTargetSlot, Is.EqualTo(1));
+            Assert.That(value.AfterHeldWeaponSlot, Is.EqualTo(1));
             Assert.That(value.TargetBeforeHolderSlot, Is.EqualTo(2));
             Assert.That(value.TargetAfterHolderSlot, Is.EqualTo(2));
         }
@@ -242,10 +242,10 @@ namespace NTSD.Test
             Assert.That(entities[0].Runtime.TargetSlotIndex, Is.EqualTo(1));
             Assert.That(entities[0].Runtime.HeldWeaponStableId, Is.EqualTo(1));
 
-            AssertCleared(entities[2]);
+            AssertInvalidatedPreservingForwardFields(entities[2], 3, 3);
             Assert.That(entities[3].Runtime.HolderStableId, Is.EqualTo(99));
-            AssertCleared(entities[4]);
-            AssertCleared(entities[5]);
+            AssertInvalidatedPreservingForwardFields(entities[4], 399, 399);
+            AssertInvalidatedPreservingForwardFields(entities[5], 6, 6);
             Assert.That(entities[6].Runtime.HolderStableId, Is.EqualTo(5));
         }
 
@@ -258,11 +258,14 @@ namespace NTSD.Test
             holder.Runtime.HeldWeaponStableId = targetSlot;
         }
 
-        private static void AssertCleared(LF2Character holder)
+        private static void AssertInvalidatedPreservingForwardFields(
+            LF2Character holder,
+            int targetSlot,
+            int heldWeaponStableId)
         {
             Assert.That(holder.Runtime.LinkState, Is.Zero);
-            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(-1));
-            Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
+            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(targetSlot));
+            Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(heldWeaponStableId));
         }
 
         private static LF2Character Register(

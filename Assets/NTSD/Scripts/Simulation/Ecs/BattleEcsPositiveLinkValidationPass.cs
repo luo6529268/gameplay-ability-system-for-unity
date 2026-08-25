@@ -168,10 +168,8 @@ namespace NTSD.Simulation.Ecs
                 expectedSlots.Set(slot);
                 expectedGenerations[slot] = view.Generation;
                 expectedLinkState[slot] = valid ? runtime.LinkState : 0;
-                expectedTargetSlot[slot] = valid ? runtime.TargetSlotIndex : -1;
-                expectedHeldWeaponStableId[slot] = valid
-                    ? runtime.HeldWeaponStableId
-                    : -1;
+                expectedTargetSlot[slot] = runtime.TargetSlotIndex;
+                expectedHeldWeaponStableId[slot] = runtime.HeldWeaponStableId;
                 slotVisitCount++;
             }
         }
@@ -235,8 +233,6 @@ namespace NTSD.Simulation.Ecs
                 if (!valid)
                 {
                     runtime.LinkState = 0;
-                    runtime.TargetSlotIndex = -1;
-                    runtime.HeldWeaponStableId = -1;
                     holder.RefreshRuntimeSnapshot();
                     clearedCount++;
                 }

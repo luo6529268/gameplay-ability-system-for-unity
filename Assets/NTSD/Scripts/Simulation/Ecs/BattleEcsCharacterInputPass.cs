@@ -102,7 +102,7 @@ namespace NTSD.Simulation.Ecs
             exactCharacterCount++;
             var character = (LF2Character)entity;
             NTSDEntityRuntime runtime = character.Runtime;
-            if (runtime == null || runtime.LinkState < 0)
+            if (runtime == null)
                 return true;
 
             BattleAiInputDetailDiagnostics diagnostics =

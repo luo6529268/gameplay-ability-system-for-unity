@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using NTSD.App;
 using NTSD.Simulation;
 using Unity.Profiling;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace NTSD.Animation.Rendering
         [SerializeField] private BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks;
 
         private BattleRenderPass pass;
+        private BattleBottomOverlayPass bottomOverlayPass;
 
         public Material Material => material;
         public Material ArrayMaterial => arrayMaterial;
@@ -39,6 +41,9 @@ namespace NTSD.Animation.Rendering
         {
             pass ??= new BattleRenderPass();
             pass.renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
+            bottomOverlayPass ??= new BattleBottomOverlayPass();
+            bottomOverlayPass.renderPassEvent =
+                (RenderPassEvent)((int)RenderPassEvent.AfterRenderingTransparents + 1);
             BattleCentralRenderSystem.RegisterFeature(this, material, arrayMaterial, drawMode);
         }
 
@@ -53,17 +58,32 @@ namespace NTSD.Animation.Rendering
                 this,
                 renderingData.cameraData.camera,
                 renderingData.cameraData.renderType);
-            if (renderer == null ||
-                !BattleCentralRenderSystem.TryAcquireSubmission(
-                    renderingData.cameraData.camera,
-                    renderingData.cameraData.renderType,
-                    out BattleCentralSubmission.BattleCentralSubmissionLease submissionLease))
+            if (renderer == null)
             {
                 return;
             }
 
-            pass.Setup(submissionLease);
-            renderer.EnqueuePass(pass);
+            if (BattleCentralRenderSystem.TryAcquireSubmission(
+                    renderingData.cameraData.camera,
+                    renderingData.cameraData.renderType,
+                    out BattleCentralSubmission.BattleCentralSubmissionLease submissionLease))
+            {
+                pass.Setup(submissionLease);
+                renderer.EnqueuePass(pass);
+            }
+
+            if (BattleBackgroundBottomOverlayPresenter.TryGetDraw(
+                    renderingData.cameraData.camera,
+                    out Mesh overlayMesh,
+                    out Material overlayMaterial,
+                    out MaterialPropertyBlock overlayProperties))
+            {
+                bottomOverlayPass.Setup(
+                    overlayMesh,
+                    overlayMaterial,
+                    overlayProperties);
+                renderer.EnqueuePass(bottomOverlayPass);
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -71,6 +91,61 @@ namespace NTSD.Animation.Rendering
             BattleCentralRenderSystem.UnregisterFeature(this);
             pass?.Dispose();
             pass = null;
+            bottomOverlayPass?.Dispose();
+            bottomOverlayPass = null;
+        }
+
+        private sealed class BattleBottomOverlayPass : ScriptableRenderPass
+        {
+            private Mesh mesh;
+            private Material material;
+            private MaterialPropertyBlock properties;
+
+            public void Setup(
+                Mesh valueMesh,
+                Material valueMaterial,
+                MaterialPropertyBlock valueProperties)
+            {
+                mesh = valueMesh;
+                material = valueMaterial;
+                properties = valueProperties;
+            }
+
+            public override void Execute(
+                ScriptableRenderContext context,
+                ref RenderingData renderingData)
+            {
+                if (mesh == null || material == null)
+                    return;
+
+                CommandBuffer commandBuffer = CommandBufferPool.Get(
+                    "NTSD Battle Bottom Overlay");
+                try
+                {
+                    commandBuffer.DrawMesh(
+                        mesh,
+                        Matrix4x4.identity,
+                        material,
+                        0,
+                        0,
+                        properties);
+                    context.ExecuteCommandBuffer(commandBuffer);
+                }
+                finally
+                {
+                    CommandBufferPool.Release(commandBuffer);
+                    mesh = null;
+                    material = null;
+                    properties = null;
+                }
+            }
+
+            public void Dispose()
+            {
+                mesh = null;
+                material = null;
+                properties = null;
+            }
         }
 
         private sealed class BattleRenderPass : ScriptableRenderPass

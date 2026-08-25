@@ -10,17 +10,52 @@ namespace NTSD.Test
     internal static class ProductionEntityStressPlayerBuild
     {
         internal const string ScenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
-        internal const string OutputDirectory = "Temp/U9-Windows-Player";
-        internal const string ExecutableName = "NTSD-U9-Windows-Mono.exe";
+        internal const string OutputRoot = "Temp/R8-Windows-Player";
+        internal const string MonoOutputDirectory = OutputRoot + "/Mono";
+        internal const string Il2CppOutputDirectory = OutputRoot + "/IL2CPP";
+        internal const string MonoExecutableName = "NTSD-R8-Windows-Mono.exe";
+        internal const string Il2CppExecutableName =
+            "NTSD-R8-Windows-IL2CPP.exe";
+
+        [MenuItem("NTSD/Battle Architecture/R8/Build Windows Mono Player")]
+        internal static void BuildWindowsMonoPlayer()
+        {
+            BuildWindowsPlayer(
+                ScriptingImplementation.Mono2x,
+                MonoOutputDirectory,
+                MonoExecutableName,
+                "Mono");
+        }
+
+        [MenuItem("NTSD/Battle Architecture/R8/Build Windows IL2CPP Player")]
+        internal static void BuildWindowsIl2CppPlayer()
+        {
+            BuildWindowsPlayer(
+                ScriptingImplementation.IL2CPP,
+                Il2CppOutputDirectory,
+                Il2CppExecutableName,
+                "IL2CPP");
+        }
 
         [MenuItem("NTSD/Battle Architecture/U9/Build Windows Mono Player")]
-        internal static void BuildWindowsMonoPlayer()
+        internal static void BuildLegacyU9WindowsMonoPlayer()
+        {
+            BuildWindowsMonoPlayer();
+        }
+
+        private static void BuildWindowsPlayer(
+            ScriptingImplementation backend,
+            string relativeOutputDirectory,
+            string executableName,
+            string backendLabel)
         {
             string projectRoot = Path.GetFullPath(
                 Path.Combine(Application.dataPath, ".."));
-            string outputDirectory = Path.Combine(projectRoot, OutputDirectory);
+            string outputDirectory = Path.Combine(
+                projectRoot,
+                relativeOutputDirectory);
             Directory.CreateDirectory(outputDirectory);
-            string executable = Path.Combine(outputDirectory, ExecutableName);
+            string executable = Path.Combine(outputDirectory, executableName);
 
             ScriptingImplementation previousBackend =
                 PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone);
@@ -36,9 +71,13 @@ namespace NTSD.Test
             {
                 PlayerSettings.SetScriptingBackend(
                     BuildTargetGroup.Standalone,
-                    ScriptingImplementation.Mono2x);
+                    backend);
                 PlayerSettings.enableFrameTimingStats = true;
                 PlayerSettings.runInBackground = true;
+
+                Debug.Log(
+                    "[ProductionEntityStressPlayerBuild] START: backend=" +
+                    backendLabel + ", output=" + executable);
                 BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
                     scenes = new[] { ScenePath },
@@ -49,7 +88,8 @@ namespace NTSD.Test
                 if (report.summary.result != BuildResult.Succeeded)
                 {
                     throw new InvalidOperationException(
-                        "U9 Windows Mono Player build failed: " +
+                        "R8 Windows " + backendLabel +
+                        " Player build failed: " +
                         report.summary.result + ", errors=" +
                         report.summary.totalErrors + ".");
                 }
@@ -57,7 +97,10 @@ namespace NTSD.Test
                 CopyRawBattleFiles(projectRoot, executable);
 
                 Debug.Log(
-                    "[ProductionEntityStressPlayerBuild] PASS: " + executable);
+                    "[ProductionEntityStressPlayerBuild] PASS: backend=" +
+                    backendLabel + ", output=" + executable +
+                    ", size=" + report.summary.totalSize +
+                    ", duration=" + report.summary.totalTime + ".");
             }
             finally
             {
@@ -80,7 +123,7 @@ namespace NTSD.Test
             if (!json.Contains(enabled))
             {
                 throw new InvalidOperationException(
-                    "U9 diagnostic build could not locate the Windows Burst setting.");
+                    "R8 diagnostic build could not locate the Windows Burst setting.");
             }
 
             File.WriteAllText(settingsPath, json.Replace(enabled, disabled));

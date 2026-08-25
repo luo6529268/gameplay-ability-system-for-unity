@@ -79,6 +79,7 @@ export interface ApplicationServerOptions {
     safeSaveOptions?: SafeSaveServiceOptions;
     projectDatService?: ProjectDatService;
     projectSkillService?: ProjectSkillService;
+    readOnly?: boolean;
 }
 
 interface StaticConfiguration {
@@ -507,6 +508,7 @@ async function handleApiRequest(
     safeSave: SafeSaveService,
     projectDatService: ProjectDatService | undefined,
     projectSkillService: ProjectSkillService | undefined,
+    readOnly: boolean,
 ): Promise<boolean> {
     if (pathname === "/api/health") {
         if (advertisesRequestBody(request)) {
@@ -707,6 +709,22 @@ async function handleApiRequest(
         sendJson(request, response, 403, {
             ok: false,
             diagnostics: [createDiagnostic("forbidden-request", "State-changing requests require the exact active Origin, Host, and process token.")],
+        });
+        return true;
+    }
+
+    const readOnlyBlockedRoute = pathname === "/api/workspace/grant"
+        || pathname === "/api/documents/open"
+        || pathname === "/api/project/edit"
+        || pathname === "/api/project/edit-batch"
+        || pathname === "/api/project/edit-structure"
+        || pathname === "/api/project/save"
+        || pathname === "/api/project/skills"
+        || /^\/api\/documents\/[A-Za-z0-9_-]{32,}\/(?:save-as|overwrite-challenge|overwrite)$/.test(pathname);
+    if (readOnly && readOnlyBlockedRoute) {
+        sendJson(request, response, 403, {
+            ok: false,
+            diagnostics: [createDiagnostic("read-only-mode", "This server was started for read-only render cadence playback.")],
         });
         return true;
     }
@@ -933,6 +951,7 @@ export function createApplicationServer(options: ApplicationServerOptions): Serv
                 safeSave,
                 options.projectDatService,
                 options.projectSkillService,
+                options.readOnly === true,
             )) {
                 return;
             }

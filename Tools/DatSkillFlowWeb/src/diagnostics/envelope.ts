@@ -14,6 +14,7 @@ export const diagnosticCodes = [
     "unsafe-save",
     "method-not-allowed",
     "forbidden-request",
+    "read-only-mode",
     "request-body-not-allowed",
     "not-found",
     "internal-error",

@@ -76,10 +76,22 @@ const stampedHtml = sourceHtml.replace(
 );
 await emit("index.html", stampedHtml);
 
+const sourceRenderCadenceHtml = await readFile(join(projectRoot, "render-cadence.html"), "utf8");
+const stampedRenderCadenceHtml = sourceRenderCadenceHtml.replace(
+    "<head>",
+    `<head>\n    <meta name="dat-skill-flow-build-id" content="${buildId}" />`,
+);
+await emit("render-cadence.html", stampedRenderCadenceHtml);
+
 const sourceCss = await readFile(join(projectRoot, "src/client/styles.css"));
 await emit("src/client/styles.css", Buffer.concat([
     Buffer.from(`/* dat-skill-flow-build:${buildId} */\n`),
     sourceCss,
+]));
+const renderCadenceStyles = await readFile(join(projectRoot, "src/client/render-cadence-styles.css"));
+await emit("src/client/render-cadence-styles.css", Buffer.concat([
+    Buffer.from(`/* dat-skill-flow-build:${buildId} */\n`),
+    renderCadenceStyles,
 ]));
 
 async function describeOutput(relativeBuildPath, manifestPath = toPortable(relativeBuildPath)) {
@@ -94,7 +106,7 @@ async function describeOutput(relativeBuildPath, manifestPath = toPortable(relat
 
 emittedPaths.sort((left, right) => left.localeCompare(right));
 const clientPaths = [
-    "index.html", "src/client/main.js", "src/client/canvas-geometry-edit.js", "src/client/complete-action-selection.js", "src/client/editor-support.js", "src/client/flow-layout.js", "src/client/flow-svg.js", "src/client/latest-task-scheduler.js", "src/client/panel-layout.js", "src/client/preview-renderer.js", "src/client/project-client.js", "src/client/runtime-frame-timeline.js", "src/client/skill-entries.js", "src/client/skill-flow.js", "src/client/skill-timeline.js", "src/client/overlay-geometry.js", "src/client/styles.css", "src/client/timeline-controller.js",
+    "index.html", "render-cadence.html", "src/client/main.js", "src/client/render-cadence-main.js", "src/client/render-cadence-sampler.js", "src/client/render-cadence-styles.css", "src/client/canvas-geometry-edit.js", "src/client/complete-action-selection.js", "src/client/editor-support.js", "src/client/flow-layout.js", "src/client/flow-svg.js", "src/client/latest-task-scheduler.js", "src/client/panel-layout.js", "src/client/preview-renderer.js", "src/client/project-client.js", "src/client/runtime-frame-timeline.js", "src/client/skill-entries.js", "src/client/skill-flow.js", "src/client/skill-timeline.js", "src/client/overlay-geometry.js", "src/client/styles.css", "src/client/timeline-controller.js",
     "src/presentation/camera.js", "src/presentation/index.js", "src/presentation/projection.js",
     "src/sim/canonical.js", "src/sim/catalog.js", "src/sim/constants.js", "src/sim/core.js", "src/sim/frame-tick.js",
     "src/sim/index.js", "src/sim/input.js", "src/sim/motion.js", "src/sim/opoint.js", "src/sim/rng.js", "src/sim/rules.js", "src/sim/timeline.js", "src/sim/types.js",

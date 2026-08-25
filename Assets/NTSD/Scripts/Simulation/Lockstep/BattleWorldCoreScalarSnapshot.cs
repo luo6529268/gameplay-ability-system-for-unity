@@ -102,6 +102,7 @@ namespace NTSD.Simulation
             AiStageTargetX = state?.AiStageTargetX ?? 0;
             BattleExitCountdown = state?.BattleExitCountdown ?? 0;
             RouteOutRequest = state?.RouteOutRequest ?? 0;
+            InitStatsRequest = state?.InitStatsRequest ?? 0;
             Mode2Request = state?.Mode2Request ?? 0;
             BattleStepMode = state?.BattleStepMode ?? 0;
             BattleStepGate = state?.BattleStepGate ?? 0;
@@ -125,6 +126,7 @@ namespace NTSD.Simulation
         public int AiStageTargetX { get; }
         public int BattleExitCountdown { get; }
         public int RouteOutRequest { get; }
+        public int InitStatsRequest { get; }
         public int Mode2Request { get; }
         public int BattleStepMode { get; }
         public int BattleStepGate { get; }
@@ -141,7 +143,7 @@ namespace NTSD.Simulation
     /// </summary>
     public readonly struct BattleWorldCoreScalarSnapshot
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 2;
 
         internal BattleWorldCoreScalarSnapshot(
             SimulationWorld world,

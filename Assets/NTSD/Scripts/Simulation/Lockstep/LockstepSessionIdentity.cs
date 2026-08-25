@@ -9,6 +9,7 @@ namespace NTSD.Simulation.Lockstep
         public const int MaxPlayerSlots = 64;
 
         private readonly int[] canonicalPlayerSlots;
+        private readonly IReadOnlyList<int> canonicalPlayerSlotView;
 
         public LockstepSessionIdentity(
             int schemaVersion,
@@ -45,6 +46,7 @@ namespace NTSD.Simulation.Lockstep
             }
 
             SchemaVersion = schemaVersion;
+            canonicalPlayerSlotView = Array.AsReadOnly(canonicalPlayerSlots);
             SessionId = sessionId;
             Seed = seed;
             CatalogFingerprint = catalogFingerprint;
@@ -60,7 +62,7 @@ namespace NTSD.Simulation.Lockstep
         public ulong StageFingerprint { get; }
         public ulong PlayerSetFingerprint { get; }
         public ulong IdentityFingerprint { get; }
-        public IReadOnlyList<int> CanonicalPlayerSlots => canonicalPlayerSlots;
+        public IReadOnlyList<int> CanonicalPlayerSlots => canonicalPlayerSlotView;
         public int PlayerCount => canonicalPlayerSlots.Length;
 
         public int FindPlayerIndex(int playerSlot)

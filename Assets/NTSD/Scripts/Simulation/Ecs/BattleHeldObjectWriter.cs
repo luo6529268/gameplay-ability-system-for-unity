@@ -79,7 +79,6 @@ namespace NTSD.Simulation.Ecs
                 if (heldType == (int)LF2ObjectType.HeavyWeapon)
                 {
                     held.DirectWriteHeldFramePreserveWaitCounter(holder.BattleRandInt(0, 6));
-                    held.FrameDelay = 1;
                     ThrowHeldObject(holder, held, holderWPoint);
                     result.Thrown = true;
                     return true;

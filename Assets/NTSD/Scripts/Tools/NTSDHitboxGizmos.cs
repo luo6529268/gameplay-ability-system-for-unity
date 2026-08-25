@@ -44,9 +44,7 @@ namespace NTSD.Tools
             if (showOnlySelected)
             {
                 GameObject selectedObject = Selection.activeGameObject;
-                LF2Entity selectedEntity = selectedObject != null
-                    ? selectedObject.GetComponentInParent<LF2Entity>()
-                    : null;
+                LF2Entity selectedEntity = ResolveSelectedEntity(selectedObject);
                 if (selectedEntity != null)
                     DrawEntity(selectedEntity);
                 return;
@@ -59,6 +57,18 @@ namespace NTSD.Tools
             foreach (var entity in _entities)
                 DrawEntity(entity);
         }
+
+#if UNITY_EDITOR
+        private static LF2Entity ResolveSelectedEntity(GameObject selectedObject)
+        {
+            if (selectedObject == null) return null;
+
+            LF2ObjectRenderer renderer =
+                selectedObject.GetComponentInParent<LF2ObjectRenderer>(true) ??
+                selectedObject.GetComponentInChildren<LF2ObjectRenderer>(true);
+            return renderer?.LogicObject as LF2Entity;
+        }
+#endif
 
         private void DrawEntity(LF2Entity entity)
         {

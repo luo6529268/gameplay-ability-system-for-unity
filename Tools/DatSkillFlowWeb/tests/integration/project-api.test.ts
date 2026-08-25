@@ -1289,4 +1289,81 @@ describe("Naruto project DAT HTTP vertical slice", () => {
             sessionId: opened.data.sessionId,
         })).status, 200);
     });
+
+    it("allows the read-only cadence open-preview-close lifecycle while rejecting mutations", async () => {
+        const primaryRoot = resolve("project-api-cadence-readonly-primary");
+        const dataTxtPath = "Assets/NTSD/Config/data.txt";
+        const datPath = "Assets/NTSD/Config/2.dat";
+        const native = new OverlayNativeClient();
+        native.set(primaryRoot, dataTxtPath, catalogBytes(datPath));
+        native.set(primaryRoot, datPath, narutoDat());
+
+        const primary = new WorkspaceRegistry({ nativeClient: native });
+        await primary.authorizeStartupRoot(primaryRoot);
+        primary.sealStartupAuthorization();
+        const previewRequests: Array<{ startFrame?: number; initialFrame?: number; ticks?: number }> = [];
+        const project = await ProjectDatService.initialize({
+            primaryRegistry: primary,
+            dataTxtLogicalPath: dataTxtPath,
+            idFactory: () => "c".repeat(32),
+            previewRunner: {
+                preview: async (_plaintext, options) => {
+                    previewRequests.push({
+                        startFrame: options?.startFrame,
+                        initialFrame: options?.initialFrame,
+                        ticks: options?.ticks,
+                    });
+                    return nativePreview(options?.startFrame, options?.ticks, options?.rootOid);
+                },
+            },
+        });
+        const staticFiles = await staticFixture();
+        const server = createApplicationServer({
+            ...staticFiles,
+            workspace: primary,
+            projectDatService: project,
+            readOnly: true,
+        });
+        servers.push(server);
+        const origin = await listenLoopback(server, 0);
+        const token = getApplicationServerSecurity(server).token;
+
+        const catalog = await (await fetch(`${origin}/api/project`)).json() as { data: {
+            objects: Array<{ objectKey: string; oid: number }>;
+        } };
+        const naruto = catalog.data.objects.find((entry) => entry.oid === 2)!;
+        const openedResponse = await post(origin, token, "/api/project/open", { objectKey: naruto.objectKey });
+        const opened = await openedResponse.json() as { data: { sessionId: string; revision: number } };
+        assert.equal(openedResponse.status, 200);
+
+        const previewResponse = await post(origin, token, "/api/project/preview", {
+            sessionId: opened.data.sessionId,
+            expectedRevision: opened.data.revision,
+            startFrame: 0,
+            initialFrame: 0,
+            ticks: 5,
+            inputPlan: [{ tick: 1, keys: ["J"] }],
+        });
+        assert.equal(previewResponse.status, 200);
+        assert.match(await previewResponse.text(), /"ticks"/);
+        assert.ok(previewRequests.some((request) => (
+            request.startFrame === 0 && request.initialFrame === 0 && request.ticks === 5
+        )));
+
+        for (const [path, body] of [
+            ["/api/project/edit", {}],
+            ["/api/project/edit-batch", {}],
+            ["/api/project/edit-structure", {}],
+            ["/api/project/save", {}],
+            ["/api/project/skills", {}],
+        ] as const) {
+            const response = await post(origin, token, path, body);
+            assert.equal(response.status, 403, path);
+            assert.match(await response.text(), /read-only-mode/);
+        }
+
+        assert.equal((await post(origin, token, "/api/project/close", {
+            sessionId: opened.data.sessionId,
+        })).status, 200);
+    });
 });

@@ -9,6 +9,7 @@ describe("diagnostic envelope", () => {
         "missing-asset",
         "unsupported-rule",
         "unsafe-save",
+        "read-only-mode",
     ] as const) {
         it(`represents ${code} without silently repairing data`, () => {
             const diagnostic = diagnosticEnvelopeSchema.parse({

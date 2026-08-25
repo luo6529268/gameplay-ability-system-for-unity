@@ -94,6 +94,22 @@ namespace NTSD.Animation.LF2Objects
             if (target == null)
                 return false;
 
+            // C++ release collision.cpp consumes a valid frozen pair by checking vrest first.
+            // A nonzero hit_confirm2 then aborts the whole attacker only for character DAT targets,
+            // before runtime ITR replacement or any writer is reached.
+            bool canConsume = CanConsumeRecordedCandidate(attacker, target);
+            if (!canConsume)
+                return false;
+
+            if (attacker.HitConfirm2 != 0 &&
+                target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+            {
+                return true;
+            }
+
+            if (BruteForceSceneQuery.IsReleaseConsumerPairBlocked(attacker, target))
+                return false;
+
             InteractionArea runtimeItr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
                 attacker,
                 target,
@@ -103,6 +119,18 @@ namespace NTSD.Animation.LF2Objects
                 out bool releaseHeavyHeldTargetOnConsume);
             if (runtimeItr == null)
                 return false;
+
+            // Alignment contract: R4-COL-003. C++ collision.cpp evaluates this only
+            // after its local kind5/4/9 runtime-itr conversions, then aborts the
+            // whole attacker before any disposition or writer observes this pair.
+            int targetCurrentState = target.Frame?.D?.state ?? 0;
+            if (runtimeItr.kind == 0 &&
+                runtimeItr.effect == 21 &&
+                (targetCurrentState == LF2States.Burning ||
+                 targetCurrentState == LF2States.FirenSpecific))
+            {
+                return true;
+            }
 
             if (world.ShouldObserveBattleHitExecutionPlanLegacyPreprocess)
             {
@@ -121,7 +149,6 @@ namespace NTSD.Animation.LF2Objects
                 runtimeItr,
                 zeroAttackerHpOnConsume,
                 releaseHeavyHeldTargetOnConsume);
-            bool canConsume = CanConsumeRecordedCandidate(attacker, target);
             BattleHitCandidateDisposition disposition =
                 LF2HitResolveRuntimeData.ResolveCandidateDisposition(
                     target,

@@ -123,9 +123,9 @@ namespace NTSD.Animation.LF2Objects
 
             owner.Frame.PN = 0;
             owner.Frame.Prev = 0;
-            owner.Frame.Prev2 = action;
+            owner.Frame.Prev2 = 0;
             owner.Frame.D = owner.FrameCache.GetFrameDataById(action);
-            owner.Frame.Prev2D = owner.Frame.D;
+            owner.Frame.Prev2D = owner.FrameCache.GetFrameDataById(0);
             frameModule.SetFrameDirect(action, 0);
         }
 

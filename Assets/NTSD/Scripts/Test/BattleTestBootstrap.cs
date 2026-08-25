@@ -124,16 +124,24 @@ namespace NTSD.Test
                 if (this == null) return;
             }
 
-            // 4. 启用 BattleBootstrap 表现层
+            // 4. 获取 BattleBootstrap；表现层必须在容量封印完成后才启用
             var bootstrap = FindObjectOfType<App.BattleBootstrap>(true);
-            if (bootstrap != null)
-            {
-                bootstrap.EnablePresentation();
-                Debug.Log("[BattleTestBootstrap] BattleBootstrap presentation enabled.");
-            }
 
             // 5. 设置当前场景为活动场景
             SceneManager.SetActiveScene(gameObject.scene);
+
+            if (bootstrap != null)
+            {
+                if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                {
+                    Debug.LogError(
+                        $"[BattleTestBootstrap] Battle map preparation failed before test entity setup: {mapFailure}");
+                    return;
+                }
+
+                if (bootstrap.IsMapConfigurationPrepared)
+                    simulationDriver.World?.RefreshStageRuntimeSnapshotFromScene();
+            }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (SuppressEntityCreationForProductionStress)
@@ -159,6 +167,11 @@ namespace NTSD.Test
                 if (SimulationTickDriver.Instance != null)
                 {
                     SimulationTickDriver.Instance.BeginBattleAllocationSeal();
+                    if (bootstrap != null)
+                    {
+                        bootstrap.EnablePresentation();
+                        Debug.Log("[BattleTestBootstrap] BattleBootstrap presentation enabled.");
+                    }
                     SimulationTickDriver.Instance.SetPaused(false);
                     Debug.Log("[BattleTestBootstrap] SimulationTickDriver resumed.");
                 }
@@ -195,7 +208,15 @@ namespace NTSD.Test
                 }
             }
 
-            if (kb.f7Key.wasPressedThisFrame)
+            BattleMatchRuntimeState match = SimulationTickDriver.Instance?.World?.Runtime?.Match;
+            BattleFunctionKeyCommand reservedCommands = GameConfig.Instance != null
+                ? GameConfig.Instance.ResolveBattleFunctionKeyCommands(
+                    match?.LocalGameModeId ?? 0,
+                    match?.BattleGameModeId ?? 1)
+                : BattleFunctionKeyCommand.None;
+            bool f7ReservedForBattle =
+                (reservedCommands & BattleFunctionKeyCommand.InitializeStats) != 0;
+            if (!f7ReservedForBattle && kb.f7Key.wasPressedThisFrame)
             {
                 forceRunningMode = !forceRunningMode;
                 if (forceRunningMode)

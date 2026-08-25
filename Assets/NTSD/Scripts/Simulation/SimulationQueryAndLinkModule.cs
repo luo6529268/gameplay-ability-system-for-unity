@@ -56,7 +56,6 @@ namespace NTSD.Simulation
                     holder.Runtime.TargetSlotIndex != GetRuntimeSlotOrder(held))
                 {
                     held.Runtime.LinkState = 0;
-                    held.Runtime.HolderStableId = -1;
                     held.RefreshRuntimeSnapshot();
                     continue;
                 }
@@ -141,8 +140,6 @@ namespace NTSD.Simulation
                 if (!valid)
                 {
                     holder.Runtime.LinkState = 0;
-                    holder.Runtime.TargetSlotIndex = -1;
-                    holder.Runtime.HeldWeaponStableId = -1;
                     holder.RefreshRuntimeSnapshot();
                 }
 

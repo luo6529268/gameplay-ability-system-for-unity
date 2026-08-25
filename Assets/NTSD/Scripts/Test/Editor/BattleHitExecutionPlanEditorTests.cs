@@ -3945,7 +3945,7 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.Health.HP, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(-10));
             Assert.That(target.Frame.N, Is.EqualTo(30));
             Assert.That(target.Runtime.Frame, Is.EqualTo(30));
             Assert.That(target.FallCounter, Is.EqualTo(90));

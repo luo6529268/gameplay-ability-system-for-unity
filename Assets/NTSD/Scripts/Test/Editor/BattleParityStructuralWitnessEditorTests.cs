@@ -50,7 +50,7 @@ namespace NTSD.Tests.Editor
         }
 
         [Test]
-        public void W07_RealPositiveLinkValidationKeepsThenClearsOnlyForwardFields()
+        public void W07_RealPositiveLinkValidationClearsOnlyLinkStateAndPreservesRelationFields()
         {
             BattleParityStructuralEventBuffer buffer =
                 BattleParityTraceEditor.RunStructuralWitnessFixture("W07");
@@ -73,8 +73,8 @@ namespace NTSD.Tests.Editor
             Assert.That(cleared.Outcome, Is.EqualTo("cleared"));
             Assert.That(cleared.Reason, Is.EqualTo("holder-mismatch"));
             Assert.That(cleared.AfterLinkState, Is.EqualTo(0));
-            Assert.That(cleared.AfterTargetSlot, Is.EqualTo(-1));
-            Assert.That(cleared.AfterHeldWeaponSlot, Is.EqualTo(-1));
+            Assert.That(cleared.AfterTargetSlot, Is.EqualTo(1));
+            Assert.That(cleared.AfterHeldWeaponSlot, Is.EqualTo(1));
             Assert.That(cleared.TargetBeforeHolderSlot, Is.EqualTo(2));
             Assert.That(cleared.TargetAfterHolderSlot, Is.EqualTo(2));
             Assert.That(cleared.TargetBeforeLinkState, Is.EqualTo(0));

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta name="dat-skill-flow-build-id" content="20260823083855744-d5b4f087baf74d67b4b825af90b1dade" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>NTSD 2.4.1 技能渲染帧率对比</title>
+    <link rel="stylesheet" href="/src/client/render-cadence-styles.css" />
+  </head>
+  <body>
+    <main class="cadence-shell">
+      <header class="cadence-header">
+        <div>
+          <p class="eyebrow">只读诊断入口 · 不提供 DAT / sidecar 编辑或保存</p>
+          <h1>NTSD 2.4.1 技能渲染帧率对比</h1>
+          <p class="subtitle">同一份 Native skill trace 同时以 30 / 60 / 120 Hz 呈现。Sprite 姿势保持逻辑离散；只对同 lineage 的纯表现位置与镜头做延后一 tick 的插值。</p>
+        </div>
+        <span class="readonly-badge">READ ONLY</span>
+      </header>
+
+      <section class="cadence-controls" aria-label="角色、技能与播放控制">
+        <label>数据包
+          <select id="cadence-package" aria-label="数据包"></select>
+        </label>
+        <label>角色
+          <select id="cadence-character" aria-label="角色"></select>
+        </label>
+        <label>技能 / 状态入口
+          <select id="cadence-skill" aria-label="技能或状态入口"></select>
+        </label>
+        <button id="cadence-replay" type="button">生成 Native 回放</button>
+        <button id="cadence-play" type="button" aria-pressed="false">播放</button>
+        <button id="cadence-reset" type="button">重置</button>
+        <label class="compact-label">速度
+          <select id="cadence-speed" aria-label="播放速度">
+            <option value="1">正常</option>
+            <option value="0.1">慢放 ×0.1</option>
+          </select>
+        </label>
+        <label class="loop-label"><input id="cadence-loop" type="checkbox" checked /> 循环</label>
+      </section>
+
+      <p id="cadence-status" class="cadence-status" role="status">正在连接只读本地服务……</p>
+      <p id="cadence-summary" class="cadence-summary">尚未生成技能 Native trace。</p>
+
+      <section class="cadence-grid" aria-label="三档并列渲染预览">
+        <article class="cadence-pane" data-cadence-rate="30">
+          <header>
+            <h2>30 Hz</h2>
+            <span>离散 Native snapshot</span>
+          </header>
+          <canvas width="794" height="550" aria-label="30 Hz 技能渲染预览"></canvas>
+          <p class="pane-readout" aria-live="polite"></p>
+        </article>
+        <article class="cadence-pane" data-cadence-rate="60">
+          <header>
+            <h2>60 Hz</h2>
+            <span>同 lineage 纯表现插值</span>
+          </header>
+          <canvas width="794" height="550" aria-label="60 Hz 技能渲染预览"></canvas>
+          <p class="pane-readout" aria-live="polite"></p>
+        </article>
+        <article class="cadence-pane" data-cadence-rate="120">
+          <header>
+            <h2>120 Hz</h2>
+            <span>同 lineage 纯表现插值</span>
+          </header>
+          <canvas width="794" height="550" aria-label="120 Hz 技能渲染预览"></canvas>
+          <p class="pane-readout" aria-live="polite"></p>
+        </article>
+      </section>
+
+      <section class="cadence-contract" aria-label="渲染对比合同">
+        <h2>对比合同</h2>
+        <ul>
+          <li>三栏使用同一份 `nativeTicks`：技能输入、DAT wait、Frame、命中、opoint 与对象生灭不因显示帧率改变。</li>
+          <li>30 Hz 直接显示离散 snapshot；60 / 120 Hz 仅插值同 lineage 的 `x/y/z`、`displayZ`、`renderOffsetX` 与 `cameraX`。</li>
+          <li>新出生、销毁、slot/OID/lineage 变化的对象不会跨快照插值；不会提前出现，也不会产生跨对象鬼影。</li>
+          <li>当前入口使用现有 `ntsd_cpp + NTSD 2.4.1` Native preview trace，仅用于表现诊断，不是 `ntsd_release` gameplay authority trace。</li>
+        </ul>
+      </section>
+    </main>
+    <script type="module" src="/src/client/render-cadence-main.js"></script>
+  </body>
+</html>

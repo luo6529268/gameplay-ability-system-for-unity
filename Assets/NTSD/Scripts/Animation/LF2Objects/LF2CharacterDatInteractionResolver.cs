@@ -95,19 +95,13 @@ namespace NTSD.Animation.LF2Objects
             if (kindService != null && kindService.IsAttackKind(itr.kind))
             {
                 Vector3 attackerPos = new Vector3((float)_attacker.Runtime.X, (float)_attacker.Runtime.Y, (float)_attacker.Runtime.Z);
-                int targetType = LF2Entity.ResolveCurrentDataObjectType(target);
-                if (targetType == (int)LF2ObjectType.Character)
-                {
-                    if (target is LF2Character character)
-                        return character.Hit(itr, _attacker, attackerPos, default);
-                    if (LF2CharacterDatHitResolver.CanResolveTarget(target))
-                        return LF2CharacterDatHitResolver.TryResolveHit(target, itr, _attacker, attackerPos, default);
-                }
-                if (target is LF2WeaponBase weapon)
-                    return weapon.Hit(itr, _attacker);
-                if (target is LF2SpecialAttack specialAttack)
-                    return specialAttack.Hit(itr, _attacker);
-                return target is LF2LivingObject livingTarget && livingTarget.Hit(itr, _attacker, attackerPos, default);
+                SimulationWorld world = _attacker.Match ?? target.Match;
+                return world?.DamageWriter.TryApplyCurrentDatTargetHit(
+                    world,
+                    _attacker,
+                    target,
+                    itr,
+                    attackerPos) == true;
             }
             return false;
         }

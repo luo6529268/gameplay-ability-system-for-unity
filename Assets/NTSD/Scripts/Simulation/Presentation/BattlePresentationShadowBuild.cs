@@ -1607,6 +1607,63 @@ namespace NTSD.Simulation.Presentation
             return changed;
         }
 
+        internal bool AdvanceHitRecordsWithoutPublication(
+            SimulationWorld world,
+            int tickIndex)
+        {
+            BattleHitRecordLifecycleCatalog lifecycleCatalog =
+                world?.RuntimeDataCatalog?.HitRecordLifecycleCatalog ??
+                BattleHitRecordLifecycleCatalog.Unavailable;
+            if (world == null || !lifecycleCatalog.IsAvailable)
+                return false;
+
+            bool changed = false;
+            entityScratch.Clear();
+            try
+            {
+                world.GetPresentationEntitiesNoAlloc(entityScratch);
+                for (int index = 0; index < entityScratch.Count; index++)
+                {
+                    LF2Entity entity = entityScratch[index];
+                    NTSDEntityRuntime runtime = entity?.Runtime;
+                    int slot = runtime?.SlotIndex ?? -1;
+                    if (entity == null || runtime == null || slot < 0 ||
+                        runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
+                        tickIndex < runtime.FirstPresentationTick ||
+                        !world.TryGetCurrentRuntimeHandle(slot, entity, out _))
+                    {
+                        continue;
+                    }
+
+                    int sampledCount = Math.Min(
+                        entity.HitRecordCount,
+                        LF2Entity.MaxHitRecordSlots);
+                    for (int hitIndex = 0; hitIndex < sampledCount; hitIndex++)
+                    {
+                        int age = entity.GetHitRecordAge(hitIndex);
+                        if (lifecycleCatalog.TryResolveAge(age, out _))
+                        {
+                            entity.AdvanceHitRecordFromPresentation(hitIndex, age);
+                            changed = true;
+                        }
+                        else if (hitIndex == sampledCount - 1)
+                        {
+                            changed |= entity.RemoveHitRecordTailFromPresentation(
+                                hitIndex,
+                                sampledCount,
+                                age);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                entityScratch.Clear();
+            }
+
+            return changed;
+        }
+
         public void ReleaseResources()
         {
             frameA.ReleasePublicationBinding();
@@ -2495,8 +2552,8 @@ namespace NTSD.Simulation.Presentation
                     : 0;
                 bool drawShadow = entity.ShadowVisible && entity.HasCurrentFrame &&
                                   entity.State != 3005 && entity.State != 9997 &&
-                                  entity.LinkState >= 0 && entity.ObjectId != 223 &&
-                                  entity.ObjectId != 224 && hasCommonShadow &&
+                                  entity.LinkState >= 0 && entity.CurrentDatObjectId != 223 &&
+                                  entity.CurrentDatObjectId != 224 && hasCommonShadow &&
                                   LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop);
                 if (drawShadow)
                 {

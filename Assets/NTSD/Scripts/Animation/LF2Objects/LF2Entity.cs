@@ -263,7 +263,7 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.FrameDelay = value;
         }
 
-        /// <summary>投掷后的同帧保护帧号，命中当前 frame 时直接跳过 frame advance / frame tick。</summary>
+        /// <summary>历史 held-release 字段；C++ release 当前只在 cleanup reset 为 -1，不参与 F03/F07 gate。</summary>
         public int ThrowFrameGuard
         {
             get => Runtime.ThrowFrameGuard;
@@ -531,7 +531,7 @@ namespace NTSD.Animation.LF2Objects
             bool hide = ShouldHideShadowForPresentation(
                 Frame?.D,
                 Runtime.LinkState,
-                ObjectId,
+                ResolveCurrentDataObjectId(this),
                 Runtime.HitStop);
 
             if (hide)
@@ -582,7 +582,7 @@ namespace NTSD.Animation.LF2Objects
             bool hide = ShouldHideShadowForPresentation(
                 Frame?.D,
                 Runtime.LinkState,
-                ObjectId,
+                ResolveCurrentDataObjectId(this),
                 Runtime.HitStop);
             Sprite?.SetShadowVisibleManagedOnly(!hide);
         }
@@ -590,16 +590,17 @@ namespace NTSD.Animation.LF2Objects
         internal static bool ShouldHideShadowForPresentation(
             LF2FrameData currentFrame,
             int linkState,
-            int objectId,
+            int currentDataObjectId,
             int hitStop)
         {
+            // Alignment contract: R6-PRES-003 — C++ shadow gate reads current char_data->oid.
             int state = currentFrame?.state ?? -1;
             return currentFrame == null
                 || state == 3005
                 || state == 9997
                 || linkState < 0
-                || objectId == 223
-                || objectId == 224
+                || currentDataObjectId == 223
+                || currentDataObjectId == 224
                 || !LF2ObjectRenderer.ShouldDrawShadowForHitStop(hitStop);
         }
 
@@ -2595,7 +2596,7 @@ namespace NTSD.Animation.LF2Objects
         /// pre-collision 阶段的公共 state 特判。
         /// 对齐参考 C# `RunStateSpecialPreCollision`：
         /// - state 4000..4999：切换到 `state - 4000` 对应对象并进入 frame 0
-        /// - state 8000..8999：切换到 `state - 8000` 对应对象并进入 frame 0，同时写入 140 hit stop
+        /// - state 8000..8999：切换到 `state - 8000` 对应对象并进入 frame 0，同时写入 140 render pic offset
         ///
         /// 这里仍然保持 Unity 当前架构边界：
         /// 只切换 `ObjectId + FrameCache`，不在这里改运行时 C# 实例类型。
@@ -2610,13 +2611,13 @@ namespace NTSD.Animation.LF2Objects
             if (state == 9995 && GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
             {
                 ApplyStateDataTransform(50, false);
-                return;
+                state = Frame?.D?.state ?? -1;
             }
 
             if (state >= 4000 && state < 5000)
             {
                 ApplyStateDataTransform(state - 4000, false);
-                return;
+                state = Frame?.D?.state ?? -1;
             }
 
             if (state >= 8000 && state < 9000)
@@ -2691,7 +2692,9 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void RunCharacterInputPhase(int tickIndex)
         {
-            if (Runtime == null || Runtime.LinkState < 0)
+            // Alignment contract R3-HOLD-INP-001: C++ calls apply_input for every active
+            // character DAT; relation restrictions stay in the downstream local state logic.
+            if (Runtime == null)
                 return;
 
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
@@ -2702,7 +2705,7 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
         {
-            if (Runtime == null || Runtime.LinkState < 0)
+            if (Runtime == null)
                 return;
 
             if (AiControlled)
@@ -4304,25 +4307,30 @@ namespace NTSD.Animation.LF2Objects
             SetFrameTickDirect(frameId);
         }
 
-        private void ApplyStateDataTransform(int targetObjectId, bool applyHitStop140)
+        private void ApplyStateDataTransform(int targetObjectId, bool applyRenderPicOffset140)
         {
             if (targetObjectId < 0)
                 return;
 
             LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(targetObjectId);
-            if (wrapper == null)
-                return;
+            if (wrapper != null)
+            {
+                ObjectId = targetObjectId;
+                FrameCache.Load(wrapper);
+                Runtime.WeaponFlightCounter = wrapper.characterData?.weapon_hp ?? 0;
 
-            ObjectId = targetObjectId;
-            FrameCache.Load(wrapper);
-            Runtime.WeaponFlightCounter = wrapper.characterData?.weapon_hp ?? 0;
+                if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                    EnsureSharedCharacterDatControllerForSimulation();
+            }
+
+            // Alignment contract: R7-LATE-001. C++ writes frame 0 even when the
+            // requested DAT is missing, then reloads state from the surviving identity.
             DirectWriteRawFramePreserveWaitCounter(0);
 
-            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
-                EnsureSharedCharacterDatControllerForSimulation();
-
-            if (applyHitStop140)
-                HitStun = 140;
+            // Alignment contract: R8-SPRITEMAP-001. C++ state8000 writes
+            // Entity::unk_318, which is consumed only as a render pic offset.
+            if (applyRenderPicOffset140)
+                Runtime.RenderPicOffset = 140;
 
             RefreshRuntimeSnapshot();
         }
@@ -4523,7 +4531,12 @@ namespace NTSD.Animation.LF2Objects
         public virtual int GetRenderPicIndex()
         {
             int pic = Frame?.D?.pic ?? -1;
-            return pic >= 0 ? pic + Runtime.RenderPicOffset : pic;
+            // C++ draw_entity tests the authored hidden sentinel before adding
+            // unk_318. A transformed hidden frame must remain hidden.
+            if (pic < 0 || pic == 999)
+                return pic;
+
+            return pic + Runtime.RenderPicOffset;
         }
 
         public virtual float GetDisplayZ()
@@ -5277,9 +5290,6 @@ namespace NTSD.Animation.LF2Objects
 
         protected internal bool TryEnterReleaseFrameAdvanceAfterDelay()
         {
-            if (ThrowFrameGuard >= 0 && ThrowFrameGuard == (Frame?.N ?? -1))
-                return false;
-
             if (FrameDelay > 0)
             {
                 FrameDelay--;
@@ -5564,10 +5574,11 @@ namespace NTSD.Animation.LF2Objects
                     Runtime.Y = 0.0;
                     Runtime.Vy = 0.0;
                     Runtime.Vx *= 0.3333333333333333;
-                    AttackingCounter = 0;
-                    ImmediateFrame(Frame.N >= LF2StandardFrames.FallingBack
+                    int fallingLandingFrame = Frame.N >= LF2StandardFrames.FallingBack
                         ? LF2StandardFrames.LyingBack
-                        : LF2StandardFrames.Lying);
+                        : LF2StandardFrames.Lying;
+                    DirectWriteRawFramePreserveWaitCounter(fallingLandingFrame);
+                    AttackingCounter = 0;
                 }
                 else
                 {
@@ -5577,9 +5588,10 @@ namespace NTSD.Animation.LF2Objects
                         Runtime.Vx = 7.0;
                     if (Runtime.Vx < -7.0)
                         Runtime.Vx = -7.0;
-                    ImmediateFrame(Frame.N >= LF2StandardFrames.FallingBack && frame.state != LF2States.Burning
+                    int bounceFrame = Frame.N >= LF2StandardFrames.FallingBack && frame.state != LF2States.Burning
                         ? LF2StandardFrames.FallingBack5
-                        : LF2StandardFrames.FallingFront5);
+                        : LF2StandardFrames.FallingFront5;
+                    DirectWriteRawFramePreserveWaitCounter(bounceFrame);
                 }
 
                 return;
@@ -5605,15 +5617,13 @@ namespace NTSD.Animation.LF2Objects
                     Runtime.Vx = 7.0;
                 if (Runtime.Vx < -7.0)
                     Runtime.Vx = -7.0;
-                ImmediateFrame(LF2StandardFrames.FallingFront5);
+                DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront5);
                 return;
             }
 
             Runtime.Y = 0.0;
             Runtime.Vy = 0.0;
             Runtime.Vx *= 0.3333333333333333;
-            AttackingCounter = 0;
-
             int landingFrame;
             if (frame.state == LF2States.CustomSkill1)
                 landingFrame = 94;
@@ -5622,7 +5632,8 @@ namespace NTSD.Animation.LF2Objects
             else
                 landingFrame = LF2StandardFrames.Crouch2;
 
-            ImmediateFrame(landingFrame);
+            DirectWriteRawFramePreserveWaitCounter(landingFrame);
+            AttackingCounter = 0;
         }
 
         private void ApplySharedCharacterDatLandingWeaponCountDamage()
@@ -5766,9 +5777,6 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool RunCommonFrameTick()
         {
-            if (ThrowFrameGuard >= 0 && ThrowFrameGuard == (Frame?.N ?? -1))
-                return false;
-
             int dataType = GetCurrentDataObjectTypeForSimulation();
             if (FrameDelay != 0 && dataType != (int)LF2ObjectType.SpecialAttack)
                 return false;

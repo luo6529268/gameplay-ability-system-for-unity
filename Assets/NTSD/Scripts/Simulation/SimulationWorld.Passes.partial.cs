@@ -56,14 +56,6 @@ namespace NTSD.Simulation
         public bool LastPreInteractionWholePassProofSucceededForDiagnostics { get; private set; }
         public int LastPreInteractionWholePassParticipantCountForDiagnostics { get; private set; }
         public bool LastPreInteractionCrossPassProofUsedForDiagnostics { get; private set; }
-        private int preInteractionCrossPassProofTick = -1;
-        private int preInteractionCrossPassProofParticipantCount;
-        private int preInteractionCrossPassProofLogicalCapacity;
-        private int preInteractionCrossPassProofClaimedCount;
-        private ulong preInteractionCrossPassProofOccupancyEpoch;
-        private long preInteractionCrossPassProofPendingDestroyEpoch;
-        private int preInteractionCrossPassProofPendingUnregisterCount;
-        private bool preInteractionCrossPassProofValid;
         public int LastEmptyCharacterHitConsumeSkipCountForDiagnostics { get; private set; }
         public int LastCharacterHitConsumeExecutedCountForDiagnostics { get; private set; }
         public int LastCharacterRuntimeCandidateCountGateAppliedForDiagnostics
@@ -457,6 +449,9 @@ namespace NTSD.Simulation
                 self.Runtime.ZInt = midpointZ;
 
                 partner.Runtime.Vy = 0f;
+                // Alignment contract: R8-AIROWGEN-001. Dormancy changes the
+                // unified snapshot Included set without releasing this handle.
+                battleAiUnifiedRowPublisher.InvalidateAfterRowMembershipChange();
                 partner.Runtime.OidMergeDormant = true;
 
                 self.TryApplyRuntimeIdentity(51, 290, false, out _);
@@ -512,6 +507,11 @@ namespace NTSD.Simulation
             int halfHpBound = aggregateHpBound / 2;
             int partnerStableId = partner.Runtime.StableId;
             int partnerRuntimeSlot = partner.Runtime.SlotIndex;
+
+            // Alignment contract: R8-AIROWGEN-001. The dormant partner is not
+            // present in the active unified row set. End that publication before
+            // reset writes through the still-bound original-generation stores.
+            battleAiUnifiedRowPublisher.InvalidateAfterRowMembershipChange();
 
             self.TryApplyRuntimeIdentity(originalOid, 112, false, out _);
             self.Health.HP = halfHp;
@@ -598,10 +598,10 @@ namespace NTSD.Simulation
                 // waits until the next tick.
                 foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
-                    // C# authority GameTick clears current action/direction keys immediately
-                    // before each active entity enters frame advance. Prev*, cooldowns,
-                    // combo state, and input history remain untouched.
-                    battleCharacterInputWriter.ClearCurrentKeys(entity.Runtime);
+                    // Alignment contract R3-FRAME-001A: human poll and AI preparation write
+                    // this tick's current keys before frame advance. C++ frame advance and
+                    // late frame tick still consume them, so only their source-specific input
+                    // producers or the battle-entry branch own any clear/roll boundary.
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.FrameAdvanceTransit);
                     if (!battleEcsCharacterFrameAdvancePass.TryExecute(
@@ -657,23 +657,8 @@ namespace NTSD.Simulation
             for (int i = 0; i < _entityScratch.Count; i++)
             {
                 LF2Entity entity = _entityScratch[i];
-                entity?.Runtime?.SyncIntegerPosition();
-            }
-
-            bool canPublishPreInteractionNoOpProof = true;
-            int preInteractionParticipantCount = 0;
-            for (int i = 0; i < _entityScratch.Count; i++)
-            {
-                LF2Entity entity = _entityScratch[i];
                 if (!PassesRespawnGate(entity))
-                {
-                    CapturePreInteractionNoOpParticipant(
-                        entity,
-                        tickIndex,
-                        ref canPublishPreInteractionNoOpProof,
-                        ref preInteractionParticipantCount);
                     continue;
-                }
 
                 if (entity.RespawnCount <= 0)
                 {
@@ -686,59 +671,9 @@ namespace NTSD.Simulation
 
                 if (IsActiveForCurrentPass(entity))
                     RefreshRuntimeSnapshot(entity);
-
-                CapturePreInteractionNoOpParticipant(
-                    entity,
-                    tickIndex,
-                    ref canPublishPreInteractionNoOpProof,
-                    ref preInteractionParticipantCount);
             }
 
-            PublishPreInteractionCrossPassProof(
-                tickIndex,
-                canPublishPreInteractionNoOpProof,
-                preInteractionParticipantCount);
             _entityScratch.Clear();
-        }
-
-        private void CapturePreInteractionNoOpParticipant(
-            LF2Entity entity,
-            int tickIndex,
-            ref bool proofValid,
-            ref int participantCount)
-        {
-            if (entity?.Runtime == null)
-            {
-                proofValid = false;
-                return;
-            }
-
-            if (entity.Runtime.SuppressPreInteractionUntilTick > tickIndex ||
-                !IsActiveForCurrentPass(entity))
-            {
-                return;
-            }
-
-            participantCount++;
-            if (proofValid && !TryProveNeutralPreInteractionParticipant(entity))
-                proofValid = false;
-        }
-
-        private void PublishPreInteractionCrossPassProof(
-            int tickIndex,
-            bool proofValid,
-            int participantCount)
-        {
-            preInteractionCrossPassProofTick = tickIndex;
-            preInteractionCrossPassProofParticipantCount = participantCount;
-            preInteractionCrossPassProofLogicalCapacity = _runtimeSlots.LogicalCapacity;
-            preInteractionCrossPassProofClaimedCount = _runtimeSlots.ClaimedCount;
-            preInteractionCrossPassProofOccupancyEpoch = _runtimeSlots.OccupancyEpoch;
-            preInteractionCrossPassProofPendingDestroyEpoch =
-                runtimeMutationTracker.PendingFlushDestroyEpoch;
-            preInteractionCrossPassProofPendingUnregisterCount =
-                _pendingUnregister.Count;
-            preInteractionCrossPassProofValid = proofValid;
         }
 
         private bool PassesRespawnGate(LF2Entity entity)
@@ -1412,6 +1347,8 @@ namespace NTSD.Simulation
                                 BattleTickDetailPhase.LateEntityStateSpecial);
                             continue;
                         }
+
+                        SpawnLateState9996Children(obj);
                     }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityStateSpecial);
@@ -1635,9 +1572,162 @@ namespace NTSD.Simulation
             }
 
             int state = entity.Frame?.D?.state ?? -1;
+            bool runsState9996Writer =
+                state == 9996 &&
+                entity.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character &&
+                entity.AttackingCounter == 1;
             return state != 9995 &&
                    (state < 4000 || state >= 5000) &&
-                   (state < 8000 || state >= 9000);
+                   (state < 8000 || state >= 9000) &&
+                   !runsState9996Writer;
+        }
+
+        private void SpawnLateState9996Children(LF2Entity spawner)
+        {
+            if (spawner?.Frame?.D?.state != 9996 ||
+                spawner.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character ||
+                spawner.AttackingCounter != 1)
+            {
+                return;
+            }
+
+            ILF2ObjectPointFactory factory =
+                ResolveObjectPointFactoryForSimulation();
+            BattleLogicReferencePool referencePool = logicReferencePool;
+            if (factory == null || referencePool == null)
+                return;
+
+            int spawnerSlot = spawner.Runtime?.SlotIndex ?? -1;
+            for (int spawnIndex = 0; spawnIndex < 5; spawnIndex++)
+            {
+                int freeSlot = FindFirstFreeRuntimeSlot(
+                    DynamicRuntimeSlotStart,
+                    RuntimeSlotCapacity);
+                if (freeSlot < 0)
+                    break;
+
+                int spawnOid = spawnIndex == 4 ? 218 : 217;
+                if (!CanMaterializeLateState9996Oid(spawnOid))
+                    continue;
+
+                OPointCreateTask task =
+                    referencePool.Fetch<OPointCreateTask>();
+                if (task == null)
+                    break;
+
+                int spawnX = spawner.Runtime.XInt + Rng.NextInt(0, 7) - 3;
+                int spawnY = spawner.Runtime.YInt + Rng.NextInt(0, 7) - 9;
+                int spawnZ = spawner.Runtime.ZInt + 1;
+                double spawnVy = -(Rng.NextInt(0, 15) / 2) - 5.0;
+                double spawnVz;
+                if (spawnIndex == 1 || spawnIndex == 3)
+                    spawnVz = -3.0 - Rng.NextInt(0, 2);
+                else if (spawnIndex == 4)
+                    spawnVz = 1.0;
+                else
+                    spawnVz = Rng.NextInt(0, 2) + 3.0;
+
+                double spawnVx;
+                if (spawnIndex >= 4)
+                    spawnVx = Rng.NextInt(0, 7) - 3.0;
+                else if (spawnIndex >= 2)
+                    spawnVx = Rng.NextInt(0, 3) + 10.0;
+                else
+                    spawnVx = -10.0 - Rng.NextInt(0, 3);
+
+                int spawnFrame = Rng.NextInt(0, 4);
+                int spawnFacing = Rng.NextInt(0, 2);
+                task.opoint = new ObjectPoint
+                {
+                    oid = spawnOid,
+                    kind = 0,
+                    action = spawnFrame,
+                    facing = spawnFacing,
+                };
+                task.parent = null;
+                task.targetWorld = this;
+                task.team = 0;
+                task.relationTeam = 0;
+                task.holderCopySlot = 99;
+                task.dir = "right";
+                task.requiredRuntimeSlot = freeSlot;
+                task.preserveActionZero = true;
+                task.skipPostInitZOffset = true;
+                task.useDirectRuntimePosition = true;
+                task.directX = spawnX;
+                task.directY = spawnY;
+                task.directZ = spawnZ;
+                task.useInitialRuntimeIntPosition = true;
+                task.initialRuntimeX = spawnX;
+                task.initialRuntimeY = spawnY;
+                task.initialRuntimeZ = spawnZ;
+                task.useDirectVelocity = true;
+                task.directVx = spawnVx;
+                task.directVy = spawnVy;
+                task.directVz = spawnVz;
+                task.attackExempt = 6;
+
+                LF2Entity spawned;
+                try
+                {
+                    spawned = factory.CreateObjectImmediate(task);
+                }
+                finally
+                {
+                    referencePool.Recycle(task);
+                }
+
+                if (spawned == null ||
+                    spawned.Runtime?.SlotIndex != freeSlot)
+                {
+                    break;
+                }
+
+                // Alignment contract: R7-LATE-001. This branch is a direct
+                // Entity::reset/init writer, not a relation-inheriting opoint.
+                spawned.SpawnerEntityIndex = spawnerSlot;
+                spawned.Team = 0;
+                spawned.RelationTeam = 0;
+                spawned.OwnerId = -1;
+                spawned.RelationOwnerSlot = -1;
+                spawned.OwnerEntityIndex = -1;
+                spawned.HolderCopySlot = 99;
+                spawned.KillCount = -1;
+                spawned.AttackExempt = 6;
+                ResetCooldownsForRuntimeSlot(freeSlot);
+                spawned.RefreshRuntimeSnapshot();
+            }
+        }
+
+        private bool CanMaterializeLateState9996Oid(int objectId)
+        {
+            LF2CharacterDataWrapper wrapper =
+                runtimeCharacterConfigs.Resolve(objectId);
+            if (wrapper?.characterData == null)
+                return false;
+
+            ObjectDefinition definition =
+                runtimeDataCatalog.GetObjectDefinition(objectId);
+            if (definition == null && !runtimeDataCatalog.IsSealedForBattle)
+            {
+                definition =
+                    GameDataManager.Instance?.GetObjectById(objectId);
+            }
+
+            return definition != null;
+        }
+
+        internal void RunLateStateSpecialPreCollisionForSelfCheck(
+            LF2Entity entity)
+        {
+            if (entity == null || !IsActiveForCurrentPass(entity))
+                return;
+
+            entity.RunStateSpecialPreCollision();
+            if (IsActiveForCurrentPass(entity))
+                SpawnLateState9996Children(entity);
         }
 
         private bool CanSkipExactCharacterLateDeathOpoint(LF2Entity entity)
@@ -1802,6 +1892,16 @@ namespace NTSD.Simulation
             {
                 if (entity.Health == null)
                     continue;
+
+                // Alignment contract: R8-FUNCTIONKEYMODE-001. C++ applies
+                // g_init_stats before heal/catch maintenance for every active entity.
+                if (InitStatsRequest == 1)
+                {
+                    entity.Health.HP3 = 500;
+                    entity.Health.HPBound = 500;
+                    entity.Health.HP = 500;
+                    entity.Health.PP = 500;
+                }
 
                 if (battleEcsCharacterPostFrameTailPass.TryExecute(entity))
                 {
@@ -2241,18 +2341,6 @@ namespace NTSD.Simulation
             try
             {
                 if (!ForceLegacyPreInteractionForDiagnostics &&
-                    !ForceLegacyPreInteractionCrossPassProofForDiagnostics &&
-                    TryUsePreInteractionCrossPassProof(
-                        tickIndex,
-                        out int crossPassParticipantCount))
-                {
-                    LastPreInteractionCrossPassProofUsedForDiagnostics = true;
-                    ApplyWholePreInteractionNoOpDiagnostics(
-                        crossPassParticipantCount);
-                    return;
-                }
-
-                if (!ForceLegacyPreInteractionForDiagnostics &&
                     TryProveWholePreInteractionPassNoOp(
                         tickIndex,
                         out int participantCount))
@@ -2355,31 +2443,6 @@ namespace NTSD.Simulation
                 FlushPendingUnregister();
                 FlushPendingEntityDestroy();
             }
-        }
-
-        private bool TryUsePreInteractionCrossPassProof(
-            int tickIndex,
-            out int participantCount)
-        {
-            participantCount = 0;
-            if (!preInteractionCrossPassProofValid ||
-                preInteractionCrossPassProofTick != tickIndex ||
-                preInteractionCrossPassProofLogicalCapacity !=
-                    _runtimeSlots.LogicalCapacity ||
-                preInteractionCrossPassProofClaimedCount !=
-                    _runtimeSlots.ClaimedCount ||
-                preInteractionCrossPassProofOccupancyEpoch !=
-                    _runtimeSlots.OccupancyEpoch ||
-                preInteractionCrossPassProofPendingDestroyEpoch !=
-                    runtimeMutationTracker.PendingFlushDestroyEpoch ||
-                preInteractionCrossPassProofPendingUnregisterCount !=
-                    _pendingUnregister.Count)
-            {
-                return false;
-            }
-
-            participantCount = preInteractionCrossPassProofParticipantCount;
-            return true;
         }
 
         private void ApplyWholePreInteractionNoOpDiagnostics(int participantCount)
@@ -2695,7 +2758,17 @@ namespace NTSD.Simulation
                 }
             }
 
+        }
+
+        internal void ClearFunctionKeyRequestsAfterPostFrameTail()
+        {
+            SetInitStatsRequest(0);
             SetMode2Request(0);
+        }
+
+        internal void ClearMode2RequestAfterPostFrameTail()
+        {
+            ClearFunctionKeyRequestsAfterPostFrameTail();
         }
 
         private void SpawnMode2RandomWeapons()

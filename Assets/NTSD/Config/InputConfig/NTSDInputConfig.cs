@@ -178,6 +178,33 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""91d2d409-e6e0-42a2-9767-f3c687dc8b84"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""333ce302-296b-4d94-b0d9-c53885d32438"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Defend"",
+                    ""type"": ""Button"",
+                    ""id"": ""1883ef22-38e2-40e9-a289-632c43f4159d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -235,6 +262,39 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a76a1749-72c1-4c2d-aabc-9c876b18e20c"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a02cda2-a1d5-4f4e-919c-a85ec2b0203b"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e30a908a-185d-4980-9bf7-94267f322efc"",
+                    ""path"": ""<Keyboard>/numpad3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Defend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -256,6 +316,9 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
         // Player_2
         m_Player_2 = asset.FindActionMap("Player_2", throwIfNotFound: true);
         m_Player_2_Move = m_Player_2.FindAction("Move", throwIfNotFound: true);
+        m_Player_2_Attack = m_Player_2.FindAction("Attack", throwIfNotFound: true);
+        m_Player_2_Jump = m_Player_2.FindAction("Jump", throwIfNotFound: true);
+        m_Player_2_Defend = m_Player_2.FindAction("Defend", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -388,11 +451,17 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player_2;
     private List<IPlayer_2Actions> m_Player_2ActionsCallbackInterfaces = new List<IPlayer_2Actions>();
     private readonly InputAction m_Player_2_Move;
+    private readonly InputAction m_Player_2_Attack;
+    private readonly InputAction m_Player_2_Jump;
+    private readonly InputAction m_Player_2_Defend;
     public struct Player_2Actions
     {
         private @NTSDInputConfig m_Wrapper;
         public Player_2Actions(@NTSDInputConfig wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_2_Move;
+        public InputAction @Attack => m_Wrapper.m_Player_2_Attack;
+        public InputAction @Jump => m_Wrapper.m_Player_2_Jump;
+        public InputAction @Defend => m_Wrapper.m_Player_2_Defend;
         public InputActionMap Get() { return m_Wrapper.m_Player_2; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -405,6 +474,15 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Defend.started += instance.OnDefend;
+            @Defend.performed += instance.OnDefend;
+            @Defend.canceled += instance.OnDefend;
         }
 
         private void UnregisterCallbacks(IPlayer_2Actions instance)
@@ -412,6 +490,15 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Defend.started -= instance.OnDefend;
+            @Defend.performed -= instance.OnDefend;
+            @Defend.canceled -= instance.OnDefend;
         }
 
         public void RemoveCallbacks(IPlayer_2Actions instance)
@@ -448,5 +535,8 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
     public interface IPlayer_2Actions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnDefend(InputAction.CallbackContext context);
     }
 }

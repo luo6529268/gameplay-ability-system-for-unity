@@ -565,7 +565,7 @@ namespace NTSD.Simulation
                 entity.Runtime.BindWorldMutationTracker(runtimeMutationTracker);
                 battleCharacterInputWriter.Bind(entity.Runtime, handle);
                 battleIdentityWriter.Bind(entity, handle);
-                battleFrameMotionWriter.Bind(entity.Runtime, handle);
+                battleFrameMotionWriter.Bind(entity, handle);
                 battleRelationLinkWriter.Bind(entity.Runtime, handle);
                 battleVitalWriter.Bind(entity.Runtime, handle);
                 BattleCentralPresentationMountRegistry.BindOwnerRuntime(
@@ -1790,6 +1790,12 @@ namespace NTSD.Simulation
                 aiDecisionShadowSnapshot.Rows.Capacity != capacity)
             {
                 aiDecisionShadowSnapshot = new AiDecisionSnapshot(capacity);
+            }
+            if (aiCharacterDecisionLegacyFallbackSnapshot == null ||
+                aiCharacterDecisionLegacyFallbackSnapshot.Rows.Capacity != capacity)
+            {
+                aiCharacterDecisionLegacyFallbackSnapshot =
+                    new AiDecisionSnapshot(capacity);
             }
 
             if (aiDecisionSharedRows == null ||

@@ -959,7 +959,11 @@ namespace NTSD.Simulation
                 if (specialScanMember)
                     rows.SpecialSlots[rows.SpecialSlotCount++] = slot;
             }
-            rows.InputHistoryGate[slot] = runtime.HasInputHistoryGate();
+            int[] inputHistory = runtime.InputHistory;
+            rows.InputHistoryGate[slot] =
+                inputHistory != null &&
+                inputHistory.Length == 6 &&
+                inputHistory[0] != 0;
             rows.Generation[slot] = generation;
             rows.Identity[slot] = runtime.StableId;
             rows.ObjectId[slot] = objectId;
@@ -974,6 +978,7 @@ namespace NTSD.Simulation
             rows.Team[slot] = runtime.RelationTeam;
             rows.State[slot] = entity.GetState();
             rows.Frame[slot] = runtime.Frame;
+            rows.HitJ[slot] = CaptureAiCurrentFrameHitJ(entity, runtime.Frame);
             rows.LinkState[slot] = runtime.LinkState;
             rows.KillCount[slot] = runtime.KillCount;
             rows.CachedTargetSlot[slot] = runtime.Unk360;
@@ -984,6 +989,13 @@ namespace NTSD.Simulation
             rows.HitStop[slot] = runtime.HitStop;
             rows.BoundaryFlags[slot] = CaptureAiSoASensingBoundaryFlags(runtime);
             return true;
+        }
+
+        private static int CaptureAiCurrentFrameHitJ(
+            LF2Entity entity,
+            int currentFrame)
+        {
+            return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;
         }
 
         private static int CaptureAiSoASensingBoundaryFlags(NTSDEntityRuntime runtime)

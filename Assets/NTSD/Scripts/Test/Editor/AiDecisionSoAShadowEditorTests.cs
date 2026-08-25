@@ -480,8 +480,8 @@ namespace NTSD.Test
             Assert.That(world.AiDecisionShadowMismatchCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionShadowCloneRngCallCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionShadowRowVisitCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics, Is.Zero);
+            Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics, Is.EqualTo(1));
             Assert.That(world.AiDecisionIndexedEligibleCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedAvailableCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedComparedCountForDiagnostics, Is.Zero);
@@ -621,6 +621,47 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void DataOrientedProfile_MatchesLegacyFullDispatcherForPosition38()
+        {
+            var legacy = new SimulationWorld();
+            var dataOriented = new SimulationWorld();
+            dataOriented.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            LF2Character legacySelf = RegisterCharacter(
+                legacy, 0, 52, 1, 0, 0, 0, 2, true);
+            LF2Character dataSelf = RegisterCharacter(
+                dataOriented, 0, 52, 1, 0, 0, 0, 2, true);
+            LF2Character legacyTarget = RegisterCharacter(
+                legacy, 1, 100, 2, 90, 0, 0, 3, false);
+            RegisterCharacter(dataOriented, 1, 100, 2, 90, 0, 0, 3, false);
+            legacy.Runtime.Flow.InputPhase = 2;
+            dataOriented.Runtime.Flow.InputPhase = 2;
+            legacySelf.Runtime.Unk360 = -1;
+            dataSelf.Runtime.Unk360 = -1;
+            legacy.Rng.Seed(27u);
+            dataOriented.Rng.Seed(27u);
+
+            legacy.CharacterInputAll(2);
+            dataOriented.CharacterInputAll(2);
+
+            Assert.That(legacySelf.Runtime.Unk360, Is.EqualTo(1));
+            Assert.That(legacyTarget.GetState(), Is.EqualTo(3));
+            Assert.That(legacySelf.Runtime.ComboDua, Is.EqualTo(3),
+                "the fixture must reach source-derived position38 predicted-DUA branch");
+            AssertDecisionStateEqual(
+                legacy,
+                legacySelf,
+                dataOriented,
+                dataSelf);
+            Assert.That(
+                dataOriented.AiDecisionIndexedCanonicalFallbackCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                dataOriented.AiDecisionIndexedCanonicalCommittedCountForDiagnostics,
+                Is.EqualTo(1));
+        }
+
+        [Test]
         public void IndexedCanonical_FullOracleUsesConfiguredLowFrequencySampling()
         {
             var world = new SimulationWorld();
@@ -643,7 +684,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void DeepShadow_RemainsPerAiOracleWithoutSharedBuild()
+        public void DeepShadow_RemainsPerAiOracleAlongsideSharedLegacyRows()
         {
             var world = new SimulationWorld();
             RegisterCharacter(world, 0, 1, 1, 0, 0, 0, 0, true);
@@ -655,8 +696,9 @@ namespace NTSD.Test
 
             world.CharacterInputAll(2);
 
-            Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics, Is.Zero);
+            Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics,
+                Is.GreaterThanOrEqualTo(2));
             Assert.That(world.AiDecisionIndexedEligibleCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedAvailableCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedComparedCountForDiagnostics, Is.Zero);
@@ -680,31 +722,45 @@ namespace NTSD.Test
             world.SetAiDecisionSharedPostLegacyStateMutationForSelfCheck(0, 14);
             world.ResetAiDecisionShadowDiagnostics();
 
-            world.CharacterInputAll(2);
+            LF2FrameData sharedEmptyFrame = GetSharedEmptyFrameForIsolation();
+            int originalEmptyFrameState = sharedEmptyFrame.state;
+            try
+            {
+                world.CharacterInputAll(2);
 
-            Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics,
-                Is.GreaterThanOrEqualTo(2));
-            Assert.That(world.AiDecisionShadowEligibleCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionShadowAvailableCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionShadowComparedCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionShadowMismatchCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionIndexedEligibleCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionIndexedAvailableCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionIndexedUnavailableCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionIndexedComparedCountForDiagnostics, Is.EqualTo(2));
-            Assert.That(world.AiDecisionIndexedMismatchCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionIndexedFullRowVisitCountForDiagnostics,
-                Is.GreaterThan(0));
-            Assert.That(world.AiDecisionIndexedRowVisitCountForDiagnostics,
-                Is.GreaterThan(0));
-            Assert.That(
-                world.AiDecisionIndexedFullRowVisitCountForDiagnostics,
-                Is.GreaterThan(world.AiDecisionIndexedRowVisitCountForDiagnostics),
-                "empty SpecialSlots must avoid the FullScan 20..capacity walk");
-            Assert.That(world.AiDecisionShadowLastExpectedForDiagnostics.InitialSelectedSlot,
-                Is.EqualTo(2),
-                "the high slot must see the low slot's post-legacy state 14 row");
+                Assert.That(low.Frame.D, Is.SameAs(sharedEmptyFrame),
+                    "the fixture must explicitly witness the shared missing-frame sentinel it mutates");
+                Assert.That(sharedEmptyFrame.state, Is.EqualTo(14));
+                Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
+                Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics,
+                    Is.GreaterThanOrEqualTo(2));
+                Assert.That(world.AiDecisionShadowEligibleCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionShadowAvailableCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionShadowComparedCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionShadowMismatchCountForDiagnostics, Is.Zero);
+                Assert.That(world.AiDecisionIndexedEligibleCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionIndexedAvailableCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionIndexedUnavailableCountForDiagnostics, Is.Zero);
+                Assert.That(world.AiDecisionIndexedComparedCountForDiagnostics, Is.EqualTo(2));
+                Assert.That(world.AiDecisionIndexedMismatchCountForDiagnostics, Is.Zero);
+                Assert.That(world.AiDecisionIndexedFullRowVisitCountForDiagnostics,
+                    Is.GreaterThan(0));
+                Assert.That(world.AiDecisionIndexedRowVisitCountForDiagnostics,
+                    Is.GreaterThan(0));
+                Assert.That(
+                    world.AiDecisionIndexedFullRowVisitCountForDiagnostics,
+                    Is.GreaterThan(world.AiDecisionIndexedRowVisitCountForDiagnostics),
+                    "empty SpecialSlots must avoid the FullScan 20..capacity walk");
+                Assert.That(world.AiDecisionShadowLastExpectedForDiagnostics.InitialSelectedSlot,
+                    Is.EqualTo(2),
+                    "the high slot must see the low slot's post-legacy state 14 row");
+            }
+            finally
+            {
+                sharedEmptyFrame.state = originalEmptyFrameState;
+            }
+
+            Assert.That(sharedEmptyFrame.state, Is.EqualTo(originalEmptyFrameState));
         }
 
         [TestCase(0, AiDecisionAvailability.EpochMismatch)]
@@ -871,10 +927,14 @@ namespace NTSD.Test
 
             world.CharacterInputAll(2);
 
-            Assert.That(world.AiDecisionShadowEligibleCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(world.AiDecisionShadowAvailableCountForDiagnostics, Is.Zero);
-            Assert.That(world.AiDecisionShadowUnavailableCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(world.AiDecisionShadowComparedCountForDiagnostics, Is.Zero);
+            Assert.That(world.AiDecisionShadowEligibleCountForDiagnostics, Is.EqualTo(1),
+                "eligible count");
+            Assert.That(world.AiDecisionShadowAvailableCountForDiagnostics, Is.Zero,
+                "available count");
+            Assert.That(world.AiDecisionShadowUnavailableCountForDiagnostics, Is.EqualTo(1),
+                "unavailable count");
+            Assert.That(world.AiDecisionShadowComparedCountForDiagnostics, Is.Zero,
+                "compared count");
             Assert.That(self.Runtime.InputHistory, Has.Length.EqualTo(6),
                 "the unavailable shadow must not prevent the authoritative legacy path");
         }
@@ -1274,19 +1334,38 @@ namespace NTSD.Test
             RegisterCharacter(world, 7, 3, 1, 180, 0, 0, 2, false);
             ConfigureGateBWorld(world, unifiedAuthority: true, 0xB17Au);
             world.AiDecisionShadowMode = AiDecisionShadowMode.SharedShadow;
-            world.SetAiDecisionSharedPostLegacyStateMutationForSelfCheck(0, 14);
+            world.SetCharacterInputPassMutationOverrideForSelfCheck((_, entity) =>
+            {
+                if (entity?.Runtime?.SlotIndex == 0 && entity.Frame?.D != null)
+                    entity.Frame.D.state = 14;
+            });
             world.SetAiUnifiedSnapshotExecutionVisibilityProbeForSelfCheck(0, 3, 3, 0);
 
-            world.CharacterInputAll(2);
+            LF2FrameData sharedEmptyFrame = GetSharedEmptyFrameForIsolation();
+            int originalEmptyFrameState = sharedEmptyFrame.state;
+            try
+            {
+                world.CharacterInputAll(2);
 
-            Assert.That(world.AiUnifiedSnapshotExecutionProbeStateAForTests,
-                Is.EqualTo(9),
-                "the low slot must observe the high slot before the later high-slot input");
-            Assert.That(world.AiUnifiedSnapshotExecutionProbeStateBForTests,
-                Is.EqualTo(14),
-                "the high slot must observe the low slot's post-input unified row refresh");
-            Assert.That(low.GetState(), Is.EqualTo(14));
-            Assert.That(high.GetState(), Is.EqualTo(9));
+                Assert.That(low.Frame.D, Is.SameAs(sharedEmptyFrame),
+                    "the unified refresh fixture must own its shared missing-frame mutation");
+                Assert.That(sharedEmptyFrame.state, Is.EqualTo(14));
+                Assert.That(world.AiUnifiedSnapshotExecutionProbeStateAForTests,
+                    Is.EqualTo(9),
+                    "the low slot must observe the high slot before the later high-slot input");
+                Assert.That(world.AiUnifiedSnapshotExecutionProbeStateBForTests,
+                    Is.EqualTo(14),
+                    "the high slot must observe the low slot's post-input unified row refresh");
+                Assert.That(low.GetState(), Is.EqualTo(14));
+                Assert.That(high.GetState(), Is.EqualTo(9));
+            }
+            finally
+            {
+                world.SetCharacterInputPassMutationOverrideForSelfCheck(null);
+                sharedEmptyFrame.state = originalEmptyFrameState;
+            }
+
+            Assert.That(sharedEmptyFrame.state, Is.EqualTo(originalEmptyFrameState));
         }
 
         [TestCase(AiUnifiedSnapshotExceptionStage.Prepare)]
@@ -1437,6 +1516,202 @@ namespace NTSD.Test
                 Is.True);
         }
 
+        [Test]
+        public void UnifiedAuthority_Oid5152MergeInvalidatesMembershipBeforeNextRollForward()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers =
+                BuildOid5152LifecycleWrappers();
+            var resolver = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            var world = new SimulationWorld(resolver);
+            LF2Character self = RegisterCharacter(
+                world, 0, 7, 5152, 520, 0, 572, 2, false);
+            LF2Character partner = RegisterCharacter(
+                world, 10, 8, 5152, 540, 0, 576, 2, false);
+            self.Health.HP = 80;
+            self.Health.HPBound = 100;
+            self.Health.HP3 = 250;
+            partner.Health.HP = 70;
+            partner.Health.HPBound = 90;
+            partner.Health.HP3 = 250;
+            ConfigureGateBWorld(world, unifiedAuthority: true, 0x5152u);
+
+            world.CharacterInputAll(2);
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionBuildCountForDiagnostics,
+                Is.EqualTo(1));
+
+            self.ImmediateFrame(0);
+            partner.ImmediateFrame(0);
+            self.RelationTeam = 5152;
+            partner.RelationTeam = 5152;
+            self.Health.HP = 80;
+            self.Health.HPBound = 100;
+            partner.Health.HP = 70;
+            partner.Health.HPBound = 90;
+            self.Runtime.Unk338 = 0;
+            partner.Runtime.Unk338 = 0;
+            self.Runtime.SetPosition(520, 0, 572);
+            partner.Runtime.SetPosition(540, 0, 576);
+            self.Runtime.SyncIntegerPosition();
+            partner.Runtime.SyncIntegerPosition();
+
+            world.Oid5152RuntimeMaintenanceAll(2);
+            Assert.That(self.ObjectId, Is.EqualTo(51));
+            Assert.That(partner.Runtime.OidMergeDormant, Is.True);
+
+            world.CharacterInputAll(3);
+
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                Is.Zero,
+                "Dormant row-membership changes must not roll the old Included set forward.");
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionBuildCountForDiagnostics,
+                Is.EqualTo(2),
+                "The first post-merge input pass must rebuild the unified snapshot.");
+            Assert.That(
+                world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                Is.True);
+        }
+
+        [Test]
+        public void UnifiedAuthority_Oid5152SplitReactivatesOriginalGenerationWithoutStaleRow()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers =
+                BuildOid5152LifecycleWrappers();
+            var resolver = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            var world = new SimulationWorld(resolver);
+            LF2Character self = RegisterCharacter(
+                world, 0, 7, 5152, 530, 0, 575, 2, false);
+            LF2Character partner = RegisterCharacter(
+                world, 10, 8, 5152, 540, 0, 576, 2, false);
+            Assert.That(self.TryApplyRuntimeIdentity(51, 290, true, out _), Is.True);
+            self.Runtime.Unk328 = 1;
+            self.Runtime.Unk32C = 10;
+            self.Runtime.Unk330 = 7;
+            self.Runtime.Unk334 = 8;
+            self.Runtime.Unk338 = 0;
+            self.Health.HP = 150;
+            self.Health.HPBound = 190;
+            self.Health.HP3 = 250;
+            self.Health.PP = 500;
+            partner.Runtime.OidMergeDormant = true;
+            ConfigureGateBWorld(world, unifiedAuthority: true, 0x5153u);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(0, self, out RuntimeEntityHandle selfHandle),
+                Is.True);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(10, partner, out RuntimeEntityHandle partnerHandle),
+                Is.True);
+
+            world.CharacterInputAll(2);
+            Assert.DoesNotThrow(() => world.Oid5152RuntimeMaintenanceAll(2));
+
+            Assert.That(self.ObjectId, Is.EqualTo(7));
+            Assert.That(partner.ObjectId, Is.EqualTo(8));
+            Assert.That(partner.Runtime.OidMergeDormant, Is.False);
+            Assert.That(
+                world.TryResolveRuntimeHandleForDiagnostics(selfHandle, out LF2Entity resolvedSelf) &&
+                ReferenceEquals(resolvedSelf, self),
+                Is.True);
+            Assert.That(
+                world.TryResolveRuntimeHandleForDiagnostics(partnerHandle, out LF2Entity resolvedPartner) &&
+                ReferenceEquals(resolvedPartner, partner),
+                Is.True);
+
+            world.CharacterInputAll(3);
+
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                world.AiUnifiedSnapshotExecutionBuildCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                Is.True);
+        }
+
+        [Test]
+        public void AiSensingHitJ_FollowsCurrentFrameAcrossInitialCaptureAndRefresh()
+        {
+            SimulationWorld world = CreateUnifiedCandidateWorld();
+            LF2Character character = RegisterCharacter(
+                world,
+                0,
+                11,
+                1,
+                10,
+                0,
+                0,
+                2,
+                false,
+                290,
+                77);
+
+            PrepareUnifiedManualPass(world);
+            Assert.That((int)Invoke(world, "HitJ", character), Is.EqualTo(290));
+
+            character.ImmediateFrame(1);
+            RefreshUnifiedManualPass(world, character);
+            Assert.That((int)Invoke(world, "HitJ", character), Is.EqualTo(77));
+            EndUnifiedManualPass(world);
+        }
+
+        [Test]
+        public void UnifiedAuthority_PublishesCurrentFrameHitJ()
+        {
+            var world = new SimulationWorld();
+            LF2Character character = RegisterCharacter(
+                world,
+                0,
+                5011,
+                1,
+                10,
+                0,
+                0,
+                2,
+                false,
+                290);
+            ConfigureGateBWorld(world, unifiedAuthority: true, 0x11A1u);
+
+            Assert.That(
+                character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0,
+                Is.EqualTo(290),
+                "the fixture must expose hit_j through the current logical frame before the pass");
+
+            world.CharacterInputAll(2);
+
+            int currentHitJ =
+                character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0;
+            Assert.That(
+                world.GetAiUnifiedSnapshotExecutionPublishedHitJForSelfCheck(0),
+                Is.EqualTo(currentHitJ),
+                "the published row must follow the post-input current logical frame DAT");
+            Assert.That(
+                world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                Is.True);
+        }
+
+        [Test]
+        public void AiSensingSnapshot_GrowCopiesHitJ()
+        {
+            var snapshot = new GrowableAiSensingSnapshot(1);
+            snapshot.HitJ[0] = 290;
+
+            GrowableAiSensingSnapshot grown = snapshot.Grow(4);
+
+            Assert.That(grown.Capacity, Is.EqualTo(4));
+            Assert.That(grown.HitJ[0], Is.EqualTo(290));
+            Assert.That(grown.HitJ[3], Is.Zero);
+        }
+
         private static void ConfigureGateBWorld(
             SimulationWorld world,
             bool unifiedAuthority,
@@ -1450,6 +1725,74 @@ namespace NTSD.Test
                 : AiUnifiedSnapshotExecutionMode.LegacySeparate;
             world.Runtime.Flow.InputPhase = 2;
             world.Rng.Seed(seed);
+        }
+
+        private static Dictionary<int, LF2CharacterDataWrapper>
+            BuildOid5152LifecycleWrappers()
+        {
+            return new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [7] = new LF2CharacterDataWrapper(
+                    7,
+                    BuildOid5152LifecycleData("Focused_Oid7", 7, false)),
+                [8] = new LF2CharacterDataWrapper(
+                    8,
+                    BuildOid5152LifecycleData("Focused_Oid8", 8, false)),
+                [51] = new LF2CharacterDataWrapper(
+                    51,
+                    BuildOid5152LifecycleData("Focused_Oid51", 51, true)),
+            };
+        }
+
+        private static LF2CharacterData BuildOid5152LifecycleData(
+            string name,
+            int oid,
+            bool merged)
+        {
+            var frames = new List<LF2FrameData>
+            {
+                new LF2FrameData
+                {
+                    frameId = 0,
+                    frameName = name + "_root",
+                    state = 2,
+                    wait = 100,
+                    next = 0,
+                    centerx = 39,
+                    centery = 79,
+                },
+                new LF2FrameData
+                {
+                    frameId = 112,
+                    frameName = name + "_split",
+                    state = 0,
+                    wait = 1,
+                    next = 112,
+                    centerx = 39,
+                    centery = 79,
+                },
+            };
+            if (merged)
+            {
+                frames.Add(new LF2FrameData
+                {
+                    frameId = 290,
+                    frameName = name + "_merged",
+                    state = 15,
+                    wait = 2,
+                    next = 999,
+                    centerx = 39,
+                    centery = 79,
+                    hit_ja = 0,
+                });
+            }
+
+            return new LF2CharacterData
+            {
+                name = name,
+                type_sub = (int)LF2ObjectType.Character,
+                frames = frames,
+            };
         }
 
         private static void AssertEntityObservableStateEqual(
@@ -1513,7 +1856,9 @@ namespace NTSD.Test
             int y,
             int z,
             int state,
-            bool aiControlled)
+            bool aiControlled,
+            int hitJ = 0,
+            int? secondHitJ = null)
         {
             var frame = new LF2FrameData
             {
@@ -1523,12 +1868,27 @@ namespace NTSD.Test
                 next = 0,
                 centerx = 0,
                 centery = 0,
+                hit_j = hitJ,
             };
+            var frames = new List<LF2FrameData> { frame };
+            if (secondHitJ.HasValue)
+            {
+                frames.Add(new LF2FrameData
+                {
+                    frameId = 1,
+                    state = state,
+                    wait = 100,
+                    next = 1,
+                    centerx = 0,
+                    centery = 0,
+                    hit_j = secondHitJ.Value,
+                });
+            }
             var data = new LF2CharacterData
             {
                 name = $"AiDecisionShadow_{slot}_{objectId}",
                 type_sub = (int)LF2ObjectType.Character,
-                frames = new List<LF2FrameData> { frame },
+                frames = frames,
             };
             var character = new LF2Character();
             character.ModuleInitialize();
@@ -1558,6 +1918,15 @@ namespace NTSD.Test
             return character;
         }
 
+        private static LF2FrameData GetSharedEmptyFrameForIsolation()
+        {
+            FieldInfo emptyFrameField = typeof(LF2FrameCache).GetField(
+                "EmptyFrame",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(emptyFrameField, Is.Not.Null);
+            return (LF2FrameData)emptyFrameField.GetValue(null);
+        }
+
         private static object Invoke(SimulationWorld world, string methodName, params object[] args)
         {
             MethodInfo method = typeof(SimulationWorld).GetMethod(methodName, InstanceMembers);
@@ -1580,15 +1949,15 @@ namespace NTSD.Test
             Assert.That(actual.Runtime.CdLeft, Is.EqualTo(expected.Runtime.CdLeft));
             Assert.That(actual.Runtime.CdUp, Is.EqualTo(expected.Runtime.CdUp));
             Assert.That(actual.Runtime.CdDown, Is.EqualTo(expected.Runtime.CdDown));
-            Assert.That(actual.Runtime.ComboDra, Is.EqualTo(expected.Runtime.ComboDra));
-            Assert.That(actual.Runtime.ComboDla, Is.EqualTo(expected.Runtime.ComboDla));
-            Assert.That(actual.Runtime.ComboDua, Is.EqualTo(expected.Runtime.ComboDua));
-            Assert.That(actual.Runtime.ComboDda, Is.EqualTo(expected.Runtime.ComboDda));
-            Assert.That(actual.Runtime.ComboDrj, Is.EqualTo(expected.Runtime.ComboDrj));
-            Assert.That(actual.Runtime.ComboDlj, Is.EqualTo(expected.Runtime.ComboDlj));
-            Assert.That(actual.Runtime.ComboDuj, Is.EqualTo(expected.Runtime.ComboDuj));
-            Assert.That(actual.Runtime.ComboDdj, Is.EqualTo(expected.Runtime.ComboDdj));
-            Assert.That(actual.Runtime.ComboDja, Is.EqualTo(expected.Runtime.ComboDja));
+            Assert.That(actual.Runtime.ComboDra, Is.EqualTo(expected.Runtime.ComboDra), "ComboDra");
+            Assert.That(actual.Runtime.ComboDla, Is.EqualTo(expected.Runtime.ComboDla), "ComboDla");
+            Assert.That(actual.Runtime.ComboDua, Is.EqualTo(expected.Runtime.ComboDua), "ComboDua");
+            Assert.That(actual.Runtime.ComboDda, Is.EqualTo(expected.Runtime.ComboDda), "ComboDda");
+            Assert.That(actual.Runtime.ComboDrj, Is.EqualTo(expected.Runtime.ComboDrj), "ComboDrj");
+            Assert.That(actual.Runtime.ComboDlj, Is.EqualTo(expected.Runtime.ComboDlj), "ComboDlj");
+            Assert.That(actual.Runtime.ComboDuj, Is.EqualTo(expected.Runtime.ComboDuj), "ComboDuj");
+            Assert.That(actual.Runtime.ComboDdj, Is.EqualTo(expected.Runtime.ComboDdj), "ComboDdj");
+            Assert.That(actual.Runtime.ComboDja, Is.EqualTo(expected.Runtime.ComboDja), "ComboDja");
             Assert.That(actual.Runtime.KeyUp, Is.EqualTo(expected.Runtime.KeyUp));
             Assert.That(actual.Runtime.KeyDown, Is.EqualTo(expected.Runtime.KeyDown));
             Assert.That(actual.Runtime.KeyLeft, Is.EqualTo(expected.Runtime.KeyLeft));
@@ -1631,6 +2000,21 @@ namespace NTSD.Test
             public (int dx, int dz) GetMoveInput() => (0, 0);
             public void SetInputID(int inputId)
             {
+            }
+        }
+
+        private sealed class GrowableAiSensingSnapshot : AiSensingSnapshot
+        {
+            internal GrowableAiSensingSnapshot(int capacity)
+                : base(capacity)
+            {
+            }
+
+            internal GrowableAiSensingSnapshot Grow(int capacity)
+            {
+                var grown = new GrowableAiSensingSnapshot(capacity);
+                CopyTo(grown);
+                return grown;
             }
         }
 

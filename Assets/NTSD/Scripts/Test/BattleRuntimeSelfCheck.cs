@@ -19,10 +19,13 @@ namespace NTSD.Test
 {
     /// <summary>
     /// 战斗运行时自检工具。
-    /// 只在测试场景或编辑器菜单中手动启用，用最小帧数据验证 C# authority 对齐过的关键战斗分支。
+    /// 只在测试场景或编辑器菜单中手动启用，用最小帧数据验证 C++ Release source contract
+    /// 已映射的关键战斗分支。
     /// </summary>
     public sealed class BattleRuntimeSelfCheck : MonoBehaviour
     {
+        private const int LateState9996SpawnStartSlot = 50;
+
         [Header("启动设置")]
         [Tooltip("进入 Play 后自动执行自检")]
         [SerializeField] private bool runOnStart = false;
@@ -98,22 +101,26 @@ namespace NTSD.Test
                 CheckCpointHeldSyncVactionMatrix();
                 CheckCpointThrowRawAndTransformMatrix();
                 CheckCpointDecreaseEscape();
-                CheckCpointEscapeAndMismatchEarlyReturn();
+                CheckCpointEscapeAndMismatchControlFlow();
                 CheckSharedDatCpointStep10StatsAndInputOrder();
+                CheckCpointGlobalStatMatrix();
+                CheckCpointInjuryPhaseOwnership();
                 CheckBattleFlowToggleAndTeleportMatrix();
                 CheckValidatePositiveLinksMatrix();
+                CheckInvalidNegativeHeldLinksRetainHolderSlot();
                 CheckHeldReferenceSlotReuseContracts();
                 CheckHeldWeaponActCoverOffsets();
                 CheckNarutoRasenganHeldPoseAndVisualAttachment();
                 CheckHeldWeaponActSkipsOrdinaryStrengthAttack();
                 CheckHeldKind5ConsumesFrozenCandidates();
                 CheckGenericHeldStep12ContinuationContracts();
-                CheckReleaseTickRunsHeldStep12Once();
+                CheckReleaseTickRunsHeldStep12Twice();
                 CheckAudit7WeaponReleaseTickContracts();
                 CheckAudit9GenericHeldReleaseTickContracts();
                 CheckLateHolderFrameChangeDefersHeldPose();
-                CheckReleaseTickCpointSyncPrecedesCandidates();
+                CheckReleaseTickCpointSyncFollowsCandidates();
                 CheckReleaseTickZClampPrecedesCandidates();
+                CheckReleaseTickMode2ResetFollowsEntityPostFrameTail();
                 CheckPreFrameXBoundsMatrix();
                 CheckRenderSpaceHorizontalOriginContracts();
                 CheckQueuedObjectPointPassBoundaries();
@@ -143,10 +150,18 @@ namespace NTSD.Test
                 CheckSpecialAttackStep4AndLateFrameTick();
                 CheckCurrentDatFrameLogicSharedRouting();
                 CheckFrameTickPpDisplayAndCurrentDatMatrix();
+                CheckThrowFrameGuardDoesNotGateReleasePasses();
                 CheckFrameLifecycleAuthorityBatchContracts();
-                CheckGameTickInputClearBoundaries();
+                CheckGameTickInputLifetimeBoundaries();
                 CheckFrameworkCooldownBeforeHumanInputOrder();
-                CheckAudit6InputPhaseOrder();
+                CheckReleaseTickCharacterInputPrecedesOid5152Maintenance();
+                CheckBattleStepGateSchedulerContracts();
+                CheckNegativeLinkCharacterInputEligibility();
+                 CheckDeadAiInputEligibility();
+                 CheckCanonicalFramePacketPollContract();
+                 CheckP1P2RosterInputRouting();
+                 CheckAiTargetFallbackIndexedContract();
+                 CheckAudit6InputPhaseOrder();
                 CheckGameTickCurrentDatDispatchMatrix();
                 CheckGameTickLateExitAndCleanupContracts();
                 CheckAudit11N30Code100Broadcast();
@@ -155,6 +170,7 @@ namespace NTSD.Test
                 CheckTransitionEffectDoublePrecision();
                 CheckPhysicsMovementAndVerticalBoundaryContracts();
                 CheckSharedCharacterLandingNumericAndDamageBoundaries();
+                CheckLandingRawFrameIntermediateState();
                 CheckStateTransformLandingMatrix();
                 CheckStateTransformInteractionPhaseRouting();
                 CheckSerialTickInterleaveAndFrameEdgeMatrix();
@@ -169,6 +185,12 @@ namespace NTSD.Test
                 CheckAudit7HitConfirmCarrierTail();
                 CheckHitResolveSpecialKindContracts();
                 CheckAudit4FrozenCandidateAndKind3Contracts();
+                CheckHitConfirm2AttackerAbortContracts();
+                CheckCaughtCpointConsumeGuardContracts();
+                CheckEffect21CurrentStateAttackerAbortContracts();
+                CheckOid999CandidateCollectionContracts();
+                CheckWeaponLandingDoesNotDirectlyHitOverlappingTarget();
+                CheckKind1NonCharacterTargetConsumeContracts();
                 CheckAudit4ArchitectDefectContracts();
                 CheckAudit4SpecialHeldAndOpointContracts();
                 CheckAlternateHurtTriggerMatrix();
@@ -179,6 +201,7 @@ namespace NTSD.Test
                 CheckAlternateDamageHeavyWeaponEntries();
                 CheckAlternateDamageInteractionVrest();
                 CheckSpecialAttackDamagePreprocess();
+                CheckType3SpecialAttackNormalVitalAndStatWrites();
                 CheckAudit7IronBallPreprocessContracts();
                 CheckOid5152MergeSuccessAndDormantIsolation();
                 CheckOid5152MergeCooldownOneTriggersSameTick();
@@ -188,6 +211,7 @@ namespace NTSD.Test
                 CheckOid5152SplitFailurePartialRecovery();
                 CheckOid5152DjaReleaseTriggersSameTickSplit();
                 CheckRespawnPassWithoutStoredCount();
+                CheckRespawnReadsPhysicsTailIntegerCoordinates();
                 CheckRespawnPassFreeEntityGate();
                 CheckRespawnPassWithStoredCountAndEffectSpawn();
                 CheckKind15CharacterWhirlwind();
@@ -2681,23 +2705,27 @@ namespace NTSD.Test
 
                 if (tick == 2)
                 {
-                    Expect(character.Runtime.KeyLeft == 0,
-                        $"C# authority frame-advance boundary must clear tick2 current left; " +
-                        $"keyLeft={character.Runtime.KeyLeft},frame={character.Frame.N}");
+                    Expect(character.Runtime.KeyLeft == 1 && character.Runtime.PrevLeft == 1 &&
+                           character.Runtime.CdLeft == 4 && character.Runtime.InputHistory[5] == 4,
+                        $"C++ current-key lifetime must retain tick2 held left after frame advance; " +
+                        $"keyLeft={character.Runtime.KeyLeft},prevLeft={character.Runtime.PrevLeft}," +
+                        $"cdLeft={character.Runtime.CdLeft},history={string.Join(",", character.Runtime.InputHistory)}");
                     Expect(character.Frame.N == LF2StandardFrames.WalkingStart &&
                            character.Runtime.Dir == "left",
-                        $"tick2 CharacterInput must consume left before the C# authority clear boundary; " +
+                        $"tick2 CharacterInput must consume the current held left before frame advance; " +
                         $"frame={character.Frame.N},dir={character.Runtime.Dir}");
                 }
 
                 if (tick == 3)
                 {
-                    Expect(character.Runtime.KeyLeft == 0 && character.Runtime.PrevLeft == 0 &&
-                           character.Runtime.CdLeft == 5 &&
-                           character.Runtime.InputHistory[3] == 4 &&
-                           character.Runtime.InputHistory[4] == 4 &&
+                    Expect(character.Runtime.KeyLeft == 1 && character.Runtime.PrevLeft == 1 &&
+                           character.Runtime.CdLeft == 3 &&
+                           character.Runtime.InputHistory[1] == 0 &&
+                           character.Runtime.InputHistory[2] == 0 &&
+                           character.Runtime.InputHistory[3] == 0 &&
+                           character.Runtime.InputHistory[4] == 0 &&
                            character.Runtime.InputHistory[5] == 4,
-                        $"complete held packet tick3 must rebuild the C# authority edge; " +
+                        $"complete held packet tick3 must preserve C++ held input without rebuilding an edge; " +
                         $"keyLeft={character.Runtime.KeyLeft},prevLeft={character.Runtime.PrevLeft}," +
                         $"cdLeft={character.Runtime.CdLeft}," +
                         $"history={string.Join(",", character.Runtime.InputHistory)}");
@@ -2705,14 +2733,14 @@ namespace NTSD.Test
             }
             Expect(rosterSlot.RuntimeSlotIndex == character.Runtime.SlotIndex,
                 "frame input must bind the roster player to the resolved fixed runtime slot");
-            Expect(character.Runtime.KeyLeft == 0 && character.Runtime.PrevLeft == 0 &&
-                   character.Runtime.CdLeft == 5 &&
-                   character.Runtime.InputHistory[1] == 4 &&
-                   character.Runtime.InputHistory[2] == 4 &&
-                   character.Runtime.InputHistory[3] == 4 &&
-                   character.Runtime.InputHistory[4] == 4 &&
+            Expect(character.Runtime.KeyLeft == 1 && character.Runtime.PrevLeft == 1 &&
+                   character.Runtime.CdLeft == 0 &&
+                   character.Runtime.InputHistory[1] == 0 &&
+                   character.Runtime.InputHistory[2] == 0 &&
+                   character.Runtime.InputHistory[3] == 0 &&
+                   character.Runtime.InputHistory[4] == 0 &&
                    character.Runtime.InputHistory[5] == 4,
-                $"six complete held-left packets must repeat the C# authority edge/history; " +
+                $"six complete held-left packets must retain one C++ press edge and allow cooldown to expire; " +
                 $"keyLeft={character.Runtime.KeyLeft},prevLeft={character.Runtime.PrevLeft}," +
                 $"cdLeft={character.Runtime.CdLeft}," +
                 $"history={string.Join(",", character.Runtime.InputHistory)}");
@@ -2724,8 +2752,9 @@ namespace NTSD.Test
             var sparseWorld = new SimulationWorld();
             sparseWorld.Register(sparseLocal);
             sparseWorld.SerialTickAll(1);
-            Expect(sparseLocal.Runtime.KeyLeft == 0,
-                "C# authority frame-advance boundary must clear sparse tick1 runtime left");
+            Expect(sparseLocal.Runtime.KeyLeft == 1 && sparseLocal.Runtime.PrevLeft == 0 &&
+                   sparseLocal.Runtime.CdLeft == 5,
+                "C++ frame-advance boundary must retain sparse tick1 current left until the next input poll");
             sparseLocal.RunHumanInputPollPhase(2);
             Expect(sparseLocal.Runtime.KeyLeft == 1 && sparseLocal.Runtime.PrevLeft == 1 &&
                    sparseLocal.Runtime.CdLeft == 4 &&
@@ -3451,9 +3480,9 @@ namespace NTSD.Test
             HoldDirectionForTicks(right, FuncKeyMask.right, 1, 6);
             EnqueueInputTick(right, 7, (FuncKeyMask.att, true));
             right.RunPostCooldownInputPhase(7);
-            Expect(right.Frame.N == 102 && right.Runtime.ComboDrj == 0 &&
+            Expect(right.Frame.N == 102 && right.Runtime.ComboDrj == 1 &&
                    right.Runtime.CdDefend == 0 && right.Runtime.CdRight == 0 && right.Runtime.CdJump == 0,
-                $"partial held-right+defend must not commit before the DJA fallthrough, while direct hit_d enters102 and clears cooldowns; " +
+                $"partial held-right+defend must persist DRJ step one before direct hit_d enters102 and clears cooldowns; " +
                 $"frame={right.Frame.N},combo={right.Runtime.ComboDrj},cdD={right.Runtime.CdDefend}," +
                 $"cdR={right.Runtime.CdRight},cdJ={right.Runtime.CdJump}");
             EnqueueInputTick(right, 8, (FuncKeyMask.def, true));
@@ -3467,9 +3496,9 @@ namespace NTSD.Test
             HoldDirectionForTicks(left, FuncKeyMask.left, 1, 6);
             EnqueueInputTick(left, 7, (FuncKeyMask.att, true));
             left.RunPostCooldownInputPhase(7);
-            Expect(left.Frame.N == 102 && left.Runtime.ComboDlj == 0 &&
+            Expect(left.Frame.N == 102 && left.Runtime.ComboDlj == 1 &&
                    left.Runtime.CdDefend == 0 && left.Runtime.CdLeft == 0 && left.Runtime.CdJump == 0,
-                $"partial held-left+defend must not commit before the DJA fallthrough, while direct hit_d enters102 and clears cooldowns; " +
+                $"partial held-left+defend must persist DLJ step one before direct hit_d enters102 and clears cooldowns; " +
                 $"frame={left.Frame.N},combo={left.Runtime.ComboDlj},cdD={left.Runtime.CdDefend}," +
                 $"cdL={left.Runtime.CdLeft},cdJ={left.Runtime.CdJump}");
             EnqueueInputTick(left, 8, (FuncKeyMask.def, true));
@@ -3566,7 +3595,7 @@ namespace NTSD.Test
             Expect(runtime.PrevRight == 1 && runtime.PrevLeft == 1 &&
                    runtime.PrevUp == 1 && runtime.PrevDown == 1 &&
                    runtime.PrevAttack == 1 && runtime.PrevDefend == 1 && runtime.PrevJump == 1,
-                "held polling must baseline edges from the prior physical held snapshot after frame advance clears runtime keys");
+                "held polling must baseline edges from the prior physical held snapshot after a test-only runtime clear");
             Expect(runtime.KeyRight == 1 && runtime.KeyLeft == 1 &&
                    runtime.KeyUp == 1 && runtime.KeyDown == 1 &&
                    runtime.KeyAttack == 1 && runtime.KeyDefend == 1 && runtime.KeyJump == 1 &&
@@ -3940,13 +3969,30 @@ namespace NTSD.Test
                 CharacterAnimtorManager.ResolveEffectiveGrid(normalInfo, 20, 30, out int swappedRow, out int swappedCol);
                 List<RuntimeSpriteProcessor.SpriteRectData> swappedRects =
                     RuntimeSpriteProcessor.BuildSpriteRectsFromTopLeft(20, 30, 9, 9, swappedRow, swappedCol);
-                Expect(normalRow == 2 && normalCol == 3 &&
-                       swappedRow == 3 && swappedCol == 2 &&
-                       swappedRects.Count == 6 &&
-                       swappedRects[0].Rect == new Rect(0f, 21f, 9f, 9f) &&
-                       swappedRects[2].Rect == new Rect(0f, 11f, 9f, 9f) &&
-                       swappedRects[5].Rect == new Rect(10f, 1f, 9f, 9f),
-                    "P2 grid mapping must preserve row/col swap, w+1/h+1 spacing and top-left to bottom-left Y conversion");
+                var cppRowInfo = new SpriteFileInfo("cpp-row.bmp", 40, 45, 230, 230, 3, 2);
+                CharacterAnimtorManager.ResolveEffectiveGrid(
+                    cppRowInfo,
+                    692,
+                    471,
+                    out int cppVerticalRows,
+                    out int cppHorizontalColumns);
+                Rect?[] cppRowRects = CharacterAnimtorManager.BuildIndexedSpriteRects(
+                    cppRowInfo,
+                    692,
+                    471,
+                    cppVerticalRows,
+                    cppHorizontalColumns);
+                Expect(normalRow == 3 && normalCol == 2 &&
+                        swappedRow == 3 && swappedCol == 2 &&
+                        swappedRects.Count == 6 &&
+                        swappedRects[0].Rect == new Rect(0f, 21f, 9f, 9f) &&
+                        swappedRects[2].Rect == new Rect(0f, 11f, 9f, 9f) &&
+                        swappedRects[5].Rect == new Rect(10f, 1f, 9f, 9f) &&
+                        cppVerticalRows == 2 && cppHorizontalColumns == 3 &&
+                        cppRowRects.Length == 6 &&
+                        cppRowRects[2] == new Rect(462f, 241f, 230f, 230f) &&
+                        cppRowRects[3] == new Rect(0f, 10f, 230f, 230f),
+                    "P2 grid mapping must use C++ DAT row as horizontal columns without physical-size inference");
 
                 bool duplicateRejected = false;
                 try
@@ -4124,7 +4170,7 @@ namespace NTSD.Test
                     SpriteMeshType.FullRect);
 
                 var fortyData = new LF2CharacterData();
-                fortyData.files.Add(new SpriteFileInfo("forty.bmp", 56, 100, 9, 9, 5, 8));
+                fortyData.files.Add(new SpriteFileInfo("forty.bmp", 56, 100, 9, 9, 8, 5));
                 var sixteenData = new LF2CharacterData();
                 sixteenData.files.Add(new SpriteFileInfo("sixteen.bmp", 0, 69, 9, 9, 4, 4));
                 var stagedConfigs = new Dictionary<int, LF2CharacterDataWrapper>
@@ -4177,20 +4223,33 @@ namespace NTSD.Test
                 CharacterAnimtorManager.ResolveEffectiveGrid(etc, 321, 84, out int etcRow, out int etcCol);
                 Rect?[] etcRects = CharacterAnimtorManager.BuildIndexedSpriteRects(
                     etc, 321, 84, etcRow, etcCol);
+                Vector2 etcClippedPivot = CharacterAnimtorManager.ComputeIndexedSpritePivot(
+                    etc,
+                    321,
+                    84,
+                    etcCol,
+                    7,
+                    etcRects[7].Value);
                 Expect(weapon6Row == 10 && weapon6Col == 10 &&
-                       System.Linq.Enumerable.Count(weapon6Rects, rect => rect.HasValue) == 40 &&
-                       weapon6Rects[0] == new Rect(0f, 150f, 48f, 48f) &&
-                       weapon6Rects[39] == new Rect(441f, 3f, 48f, 48f) &&
-                       !weapon6Rects[40].HasValue && !weapon6Rects[99].HasValue &&
-                       weapon3Row == 10 && weapon3Col == 10 &&
-                       System.Linq.Enumerable.Count(weapon3Rects, rect => rect.HasValue) == 7 &&
-                       weapon3Rects[6] == new Rect(354f, 1f, 58f, 58f) &&
-                       !weapon3Rects[7].HasValue && !weapon3Rects[10].HasValue &&
-                       etcRow == 4 && etcCol == 4 &&
-                       System.Linq.Enumerable.Count(etcRects, rect => rect.HasValue) == 4 &&
-                       etcRects[3] == new Rect(240f, 5f, 79f, 79f) &&
-                       !etcRects[4].HasValue,
-                    "partial production weapon6/weapon3/etc sheets must retain declared localPic indexing and expose out-of-bounds cells as holes");
+                        System.Linq.Enumerable.Count(weapon6Rects, rect => rect.HasValue) == 50 &&
+                        weapon6Rects[0] == new Rect(0f, 150f, 48f, 48f) &&
+                        weapon6Rects[39] == new Rect(441f, 3f, 48f, 48f) &&
+                        weapon6Rects[49] == new Rect(441f, 0f, 48f, 2f) &&
+                        !weapon6Rects[50].HasValue && !weapon6Rects[99].HasValue &&
+                        weapon3Row == 10 && weapon3Col == 10 &&
+                        System.Linq.Enumerable.Count(weapon3Rects, rect => rect.HasValue) == 8 &&
+                        weapon3Rects[6] == new Rect(354f, 1f, 58f, 58f) &&
+                        weapon3Rects[7] == new Rect(413f, 1f, 42f, 58f) &&
+                        !weapon3Rects[8].HasValue && !weapon3Rects[10].HasValue &&
+                        etcRow == 4 && etcCol == 4 &&
+                        etcRects.Length == 70 &&
+                        System.Linq.Enumerable.Count(etcRects, rect => rect.HasValue) == 8 &&
+                        etcRects[3] == new Rect(240f, 5f, 79f, 79f) &&
+                        etcRects[7] == new Rect(240f, 0f, 79f, 4f) &&
+                        !etcRects[8].HasValue && !etcRects[69].HasValue &&
+                        Mathf.Approximately(etcClippedPivot.x, 0.5f) &&
+                        Mathf.Approximately(etcClippedPivot.y, -18.75f),
+                    "partial production sheets must use declared-range indexing, clip source bounds and preserve full-frame placement through pivot");
 
                 Texture2D overwrittenTexture = new Texture2D(4, 4, TextureFormat.RGBA32, false);
                 Sprite overwrittenFirst = Sprite.Create(
@@ -5065,6 +5124,8 @@ namespace NTSD.Test
                 spriteCatalogField.SetValue(manager, originalSpriteCatalog);
             }
 
+            CheckHitRecordRenderDispatchWritebackContracts(data);
+
             const int ownerStressCount = 1000;
             var ownerStressWorld = new SimulationWorld(
                 BattleRuntimeProfile.DesktopExtended,
@@ -5089,6 +5150,87 @@ namespace NTSD.Test
                        ownerStressCount,
                 "1000 HitRecord owners must use one ordered cursor comparison per owner");
             ownerStressWorld.ResetRuntimeState();
+        }
+
+        private static void CheckHitRecordRenderDispatchWritebackContracts(
+            LF2CharacterData data)
+        {
+            const int objectId = 7100;
+            var definition = new ObjectDefinition(
+                objectId,
+                (int)LF2ObjectType.Character,
+                "self-check.dat");
+            var definitions = new List<ObjectDefinition> { definition };
+            var wrapper = new LF2CharacterDataWrapper(objectId, data);
+
+            var world = new SimulationWorld();
+            world.PrepareRuntimeDataCatalogForBattle(
+                definitions,
+                oid => oid == objectId ? wrapper : null,
+                BattleHitRecordLifecycleCatalog.Available);
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            var entity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            entity.BindData("SelfCheck_HitCycle_RenderWriteback", objectId, data);
+            entity.SetRequiredRuntimeSlot(20);
+            world.Register(entity);
+            entity.AddHitRecord(0, 10, 20);
+            entity.AddHitRecord(5, 11, 21);
+            entity.AddHitRecord(38, 12, 22);
+            entity.AddHitRecord(39, 13, 23);
+
+            var tickSystem = new NTSDBattleTickSystem(world);
+            tickSystem.RunReleaseTick(101, buildPresentation: false);
+            Expect(world.BattlePresentation.PublishedHitRecordCycle == null &&
+                   entity.HitRecordCount == 3 &&
+                   entity.GetHitRecordAge(0) == 1 &&
+                   entity.GetHitRecordAge(1) == 5 &&
+                   entity.GetHitRecordAge(2) == 39,
+                "R6-PRES-005: CentralOnly no-publication RenderDispatch must advance valid " +
+                "ages, retain an invalid non-tail and remove only the sampled invalid tail");
+
+            tickSystem.RunSimulationWorkerTick(102, buildPresentation: true);
+            BattleHitRecordPresentationCycle cycle =
+                world.BattlePresentation.PublishedHitRecordCycle;
+            Expect(cycle != null && cycle.OwnerCount == 1 && cycle.HitRecordCount == 3 &&
+                   cycle.GetHitRecord(0).Age == 1 &&
+                   cycle.GetHitRecord(1).Age == 5 &&
+                   cycle.GetHitRecord(2).Age == 39,
+                "R6-PRES-005: worker publication must freeze the C++ render sample " +
+                "before applying its lifecycle writeback");
+            Expect(entity.HitRecordCount == 2 &&
+                   entity.GetHitRecordAge(0) == 2 &&
+                   entity.GetHitRecordAge(1) == 5 &&
+                   !world.BattlePresentation.FinalizePublishedHitRecordCycle(world) &&
+                   entity.HitRecordCount == 2 && entity.GetHitRecordAge(0) == 2,
+                "R6-PRES-005: RenderDispatch must apply a published cycle once and the " +
+                "LateUpdate/worker acknowledgement fallback must remain idempotent");
+
+            var unavailableWorld = new SimulationWorld();
+            unavailableWorld.PrepareRuntimeDataCatalogForBattle(
+                definitions,
+                oid => oid == objectId ? wrapper : null,
+                BattleHitRecordLifecycleCatalog.Unavailable);
+            unavailableWorld.SetBattlePresentationBackend(
+                BattlePresentationBackendMode.CentralOnly);
+            var unavailableEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            unavailableEntity.BindData(
+                "SelfCheck_HitCycle_RenderWritebackUnavailable",
+                objectId,
+                data);
+            unavailableEntity.SetRequiredRuntimeSlot(21);
+            unavailableWorld.Register(unavailableEntity);
+            unavailableEntity.AddHitRecord(0, 30, 40);
+            unavailableEntity.AddHitRecord(39, 31, 41);
+
+            new NTSDBattleTickSystem(unavailableWorld).RunReleaseTick(
+                201,
+                buildPresentation: false);
+            Expect(unavailableWorld.BattlePresentation.PublishedHitRecordCycle == null &&
+                   unavailableEntity.HitRecordCount == 2 &&
+                   unavailableEntity.GetHitRecordAge(0) == 0 &&
+                   unavailableEntity.GetHitRecordAge(1) == 39,
+                "R6-PRES-005: an unavailable runtime Spark lifecycle must perform zero " +
+                "no-publication HitRecord writes");
         }
 
         private static void CheckBattleEntityOverlayLayoutContracts()
@@ -9070,11 +9212,13 @@ namespace NTSD.Test
 
                 var actual223 = new FlowSelfCheckEntity(LF2ObjectType.Character);
                 actual223.BindData("SelfCheck_ShadowActual223", 7300, normalData);
+                actual223.BindRendererlessSprite(manager.SpriteCatalog, 7300, 0);
                 actual223.ObjectId = 223;
                 actual223.SetRequiredRuntimeSlot(1);
                 world.Register(actual223);
                 var inverseIdentity = new FlowSelfCheckEntity(LF2ObjectType.Character);
                 inverseIdentity.BindData("SelfCheck_ShadowVisual223", 223, normalData);
+                inverseIdentity.BindRendererlessSprite(manager.SpriteCatalog, 223, 0);
                 inverseIdentity.ObjectId = 7300;
                 inverseIdentity.SetRequiredRuntimeSlot(2);
                 world.Register(inverseIdentity);
@@ -9103,9 +9247,14 @@ namespace NTSD.Test
                 world.Register(blinkVisible);
                 var actual224 = new FlowSelfCheckEntity(LF2ObjectType.Character);
                 actual224.BindData("SelfCheck_ShadowActual224", 7300, normalData);
+                actual224.BindRendererlessSprite(manager.SpriteCatalog, 7300, 0);
                 actual224.ObjectId = 224;
                 actual224.SetRequiredRuntimeSlot(8);
                 world.Register(actual224);
+
+                actual223.UpdateShadowManagedState();
+                inverseIdentity.UpdateShadowManagedState();
+                actual224.UpdateShadowManagedState();
 
                 IBattleChecksumSnapshot checksumBefore =
                     SimulationTickDriver.CaptureSupportedChecksumSnapshot(
@@ -9141,20 +9290,22 @@ namespace NTSD.Test
                     frame, 2, out BattlePresentationEntitySnapshot inverseSnapshot);
                 Expect(foundActual223Snapshot && actual223Snapshot.ObjectId == 223 &&
                        actual223Snapshot.CurrentDatObjectId == 7300 &&
-                       actual223Snapshot.VisualDataId == 7300,
+                       actual223Snapshot.VisualDataId == 7300 &&
+                       actual223Snapshot.ShadowVisible,
                     $"P7 actual-223 snapshot identity mismatch: found={foundActual223Snapshot}," +
                     $"object={actual223Snapshot.ObjectId},currentDat={actual223Snapshot.CurrentDatObjectId}," +
-                    $"visual={actual223Snapshot.VisualDataId}");
-                Expect(CountCommands(frame, 1, BattleRenderCommandType.Shadow) == 0,
-                    $"P7 actual ObjectId 223 must hide shadow; count={CountCommands(frame, 1, BattleRenderCommandType.Shadow)}");
+                    $"visual={actual223Snapshot.VisualDataId},shadowVisible={actual223Snapshot.ShadowVisible}");
+                Expect(CountCommands(frame, 1, BattleRenderCommandType.Shadow) == 1,
+                    $"P7 shell ObjectId 223 with current DAT 7300 must draw shadow; count={CountCommands(frame, 1, BattleRenderCommandType.Shadow)}");
                 Expect(foundInverseSnapshot && inverseSnapshot.ObjectId == 7300 &&
                        inverseSnapshot.CurrentDatObjectId == 223 &&
-                       inverseSnapshot.VisualDataId == 223,
+                       inverseSnapshot.VisualDataId == 223 &&
+                       !inverseSnapshot.ShadowVisible,
                     $"P7 inverse snapshot identity mismatch: found={foundInverseSnapshot}," +
                     $"object={inverseSnapshot.ObjectId},currentDat={inverseSnapshot.CurrentDatObjectId}," +
-                    $"visual={inverseSnapshot.VisualDataId}");
-                Expect(CountCommands(frame, 2, BattleRenderCommandType.Shadow) == 1,
-                    $"P7 VisualDataId 223 with actual ObjectId 7300 must draw shadow; count={CountCommands(frame, 2, BattleRenderCommandType.Shadow)}");
+                    $"visual={inverseSnapshot.VisualDataId},shadowVisible={inverseSnapshot.ShadowVisible}");
+                Expect(CountCommands(frame, 2, BattleRenderCommandType.Shadow) == 0,
+                    $"P7 current DAT 223 with shell ObjectId 7300 must hide shadow; count={CountCommands(frame, 2, BattleRenderCommandType.Shadow)}");
                 Expect(CountCommands(frame, 3, BattleRenderCommandType.Shadow) == 0,
                     $"P7 state 3005 must hide shadow; count={CountCommands(frame, 3, BattleRenderCommandType.Shadow)}");
                 Expect(CountCommands(frame, 4, BattleRenderCommandType.Shadow) == 0,
@@ -9169,10 +9320,11 @@ namespace NTSD.Test
                            frame, 8, out BattlePresentationEntitySnapshot actual224Snapshot) &&
                        actual224Snapshot.ObjectId == 224 && actual224Snapshot.VisualDataId == 7300 &&
                        actual224Snapshot.CurrentDatObjectId == 7300 &&
-                       CountCommands(frame, 8, BattleRenderCommandType.Shadow) == 0,
-                    $"P7 actual ObjectId 224 must hide shadow independently of VisualDataId; " +
+                       actual224Snapshot.ShadowVisible &&
+                       CountCommands(frame, 8, BattleRenderCommandType.Shadow) == 1,
+                    $"P7 shell ObjectId 224 with current DAT 7300 must draw shadow; " +
                     $"object={actual224Snapshot.ObjectId},currentDat={actual224Snapshot.CurrentDatObjectId}," +
-                    $"visual={actual224Snapshot.VisualDataId}," +
+                    $"visual={actual224Snapshot.VisualDataId},shadowVisible={actual224Snapshot.ShadowVisible}," +
                     $"count={CountCommands(frame, 8, BattleRenderCommandType.Shadow)}");
                 Expect(checksumBefore != null && checksumAfter != null &&
                        checksumBefore.OverallChecksum == checksumAfter.OverallChecksum,
@@ -10221,12 +10373,12 @@ namespace NTSD.Test
 
             Expect(attacker.CurrentFrameId == 100,
                 "live Controller jump must not trigger aaction when Runtime.KeyJump is clear");
-            Expect(victim.CurrentFrameId == 131,
-                "state9 cpoint step10 must synchronize the victim to vaction before input action selection");
-            Expect(attacker.Runtime.FrameWaitCounter == 17 && victim.Runtime.FrameWaitCounter == 0,
-                "state9 sync must preserve the unchanged catcher FWC and clear the victim FWC via SetFrameImmediate");
+            Expect(victim.CurrentFrameId == 130,
+                "prev-frame cpoint pass must not synchronize victim vaction before current-frame weapon sync");
+            Expect(attacker.Runtime.FrameWaitCounter == 17 && victim.Runtime.FrameWaitCounter == 18,
+                "state9 cpoint sync must preserve both runtime frame wait counters");
             Expect(attacker.Trans.WaitCounter == 7 && victim.Trans.WaitCounter == 8,
-                "state9 immediate sync must preserve the Unity Trans wait mirror while resetting only runtime FWC");
+                "state9 raw cpoint sync must preserve the Unity Trans wait mirror");
 
             controller.Jump = false;
             attacker.Runtime.KeyJump = 1;
@@ -10238,6 +10390,8 @@ namespace NTSD.Test
             Expect(victim.CurrentFrameId == 131, "aaction 目标帧 cpoint.vaction 应直接写入被抓者帧 131");
             Expect(attacker.Trans.WaitCounter == 7 && victim.Trans.WaitCounter == 8,
                 "aaction direct frame writes must preserve both wait counters");
+            Expect(attacker.Runtime.FrameWaitCounter == 17 && victim.Runtime.FrameWaitCounter == 18,
+                "aaction raw cpoint frame writes must preserve both runtime frame wait counters");
             Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0, "aaction 后双方 attacking 应清零");
 
             attacker.ImmediateFrame(100);
@@ -10279,10 +10433,10 @@ namespace NTSD.Test
 
             attacker.RunCpointCheckStep10();
 
-            Expect(attacker.CurrentFrameId == 160 && victim.CurrentFrameId == 131,
-                "live Controller defend must not trigger jaction, while state9 still performs its first held sync");
-            Expect(attacker.Runtime.FrameWaitCounter == 19 && victim.Runtime.FrameWaitCounter == 0,
-                "first held sync must preserve catcher FWC and clear victim FWC");
+            Expect(attacker.CurrentFrameId == 160 && victim.CurrentFrameId == 130,
+                "live Controller defend must not trigger jaction or perform early held sync in the cpoint pass");
+            Expect(attacker.Runtime.FrameWaitCounter == 19 && victim.Runtime.FrameWaitCounter == 20,
+                "first held sync must preserve both runtime frame wait counters");
 
             controller.Defend = false;
             attacker.Runtime.KeyDefend = 1;
@@ -10290,8 +10444,8 @@ namespace NTSD.Test
 
             Expect(attacker.CurrentFrameId == 120 && victim.CurrentFrameId == 131,
                 "jaction must use Runtime.KeyDefend + Runtime.CdJump");
-            Expect(attacker.Runtime.FrameWaitCounter == 0 && victim.Runtime.FrameWaitCounter == 0,
-                "jaction immediate frames must clear both runtime frame wait counters");
+            Expect(attacker.Runtime.FrameWaitCounter == 19 && victim.Runtime.FrameWaitCounter == 20,
+                "jaction raw cpoint frames must preserve both runtime frame wait counters");
         }
 
         private static void CheckCatchingThrow()
@@ -10386,6 +10540,7 @@ namespace NTSD.Test
             victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
             victim.FrameDelay = 0;
             victim.Trans.SetWait(victim.Frame.D.wait, 9);
+            victim.Runtime.FrameWaitCounter = 26;
             world.CaptureCollisionFrameSnapshotsAll();
 
             catcher.RunWeaponSyncHeldStep10();
@@ -10393,6 +10548,8 @@ namespace NTSD.Test
             Expect(victim.CurrentFrameId == 131, "被抓位置同步应按 catcher cpoint.vaction 写入被抓者帧");
             Expect(victim.Trans.WaitCounter == 9,
                 "being-caught vaction direct frame write must preserve the victim wait counter");
+            Expect(victim.Runtime.FrameWaitCounter == 26,
+                "being-caught vaction raw frame write must preserve the victim runtime frame wait counter");
             Expect(Nearly(victim.Runtime.X, 94f),
                 "held sync must use left-facing Runtime.Dir even when PS.dir is stale right");
             Expect(Nearly(victim.Runtime.Y, 20f), "被抓者 y 应按垂直坐标计算并应用 cover 修正");
@@ -10585,8 +10742,8 @@ namespace NTSD.Test
                         $"{label}: action-produced victim vaction must remain a raw negative frame without flipping");
                     Expect(attacker.Trans.WaitCounter == 7 && victim.Trans.WaitCounter == 8,
                         $"{label}: action frame writes must preserve both wait counters");
-                    Expect(attacker.Runtime.FrameWaitCounter == 0 && victim.Runtime.FrameWaitCounter == 0,
-                        $"{label}: C# immediate action frames must clear both runtime frame wait counters");
+                    Expect(attacker.Runtime.FrameWaitCounter == 17 && victim.Runtime.FrameWaitCounter == 18,
+                        $"{label}: raw action frames must preserve both runtime frame wait counters");
                     Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0,
                         $"{label}: action selection must explicitly clear both attacking counters");
                     Expect(attacker.Frame.Prev2 == 100 && victim.Frame.Prev2 == 130,
@@ -10641,14 +10798,14 @@ namespace NTSD.Test
                     string expectedDirection = vaction < 0 ? "left" : "right";
                     float expectedX = vaction < 0 ? 6f : (vaction == 0 ? 58f : 56f);
                     float expectedY = vaction == 0 ? 22f : 20f;
-                    int expectedFrameWaitCounter = vaction == 0 ? 17 : 0;
+                    int expectedFrameWaitCounter = 17;
                     string label = $"{(realCharacter ? "character" : "shared-DAT")} held vaction={vaction}";
                     Expect(victim.Frame.N == expectedFrame && victim.Runtime.Dir == expectedDirection,
                         $"{label}: nonzero vaction must resolve immediately; zero must preserve entering frame and facing");
                     Expect(victim.Trans.WaitCounter == 9,
                         $"{label}: held sync must preserve the victim wait counter");
                     Expect(victim.Runtime.FrameWaitCounter == expectedFrameWaitCounter && victim.Frame.Prev2 == 130,
-                        $"{label}: nonzero immediate frame clears runtime FWC while zero preserves it; Prev2 stays collision-stable; " +
+                        $"{label}: held CPoint frame writes must preserve runtime FWC; Prev2 stays collision-stable; " +
                         $"actualFWC={victim.Runtime.FrameWaitCounter}, transWait={victim.Trans.WaitCounter}, prev2={victim.Frame.Prev2}, " +
                         $"frame={victim.Frame.N}, dir={victim.Runtime.Dir}, pos=({victim.Runtime.X},{victim.Runtime.Y},{victim.Runtime.Z})");
                     Expect(Nearly(victim.Runtime.X, expectedX) && Nearly(victim.Runtime.Y, expectedY) && Nearly(victim.Runtime.Z, 3f),
@@ -10825,16 +10982,16 @@ namespace NTSD.Test
             Expect(victim.CurrentFrameId == 181, "decrease<0 escape must immediately put victim in frame 181");
             Expect(attacker.Trans.WaitCounter == 10 && victim.Trans.WaitCounter == 11,
                 "decrease escape raw frame writes must preserve both wait counters");
-            Expect(attacker.Runtime.FrameWaitCounter == 0 && victim.Runtime.FrameWaitCounter == 0,
-                "decrease escape immediate frames must clear both runtime frame wait counters");
+            Expect(attacker.Runtime.FrameWaitCounter == 14 && victim.Runtime.FrameWaitCounter == 15,
+                "decrease escape raw cpoint frames must preserve both runtime frame wait counters");
             Expect(attacker.Frame.D != null && attacker.Frame.D.frameId == 0 &&
                    victim.Frame.D != null && victim.Frame.D.frameId == 181,
                 "decrease escape raw frame writes must keep Frame.D synchronized");
             Expect(attacker.HitCount == 1 && victim.HitCount == 1,
                 "decrease<0 escape must arm both hit counters");
-            Expect(Nearly(victim.KnockbackVx, 4f) && Nearly(victim.KnockbackVy, -3f),
-                "decrease<0 escape must calculate authoritative knockback");
-            Expect(Nearly(victim.Runtime.Vx, 4f) && Nearly(victim.Runtime.Vy, -3f),
+            Expect(Nearly(victim.KnockbackVx, -4f) && Nearly(victim.KnockbackVy, -3f),
+                "decrease<0 escape must calculate C++ raw-position knockback before weapon-sync position ownership");
+            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f),
                 "decrease escape must publish victim velocity in the same cpoint pass");
             Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
                    victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
@@ -10842,11 +10999,11 @@ namespace NTSD.Test
 
             world.FramePostProcessAll();
 
-            Expect(Nearly(victim.Runtime.Vx, 4f) && Nearly(victim.Runtime.Vy, -3f) && victim.HitCount == 0,
+            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f) && victim.HitCount == 0,
                 $"FramePostProcess must not change already-published escape velocity; vx={victim.Runtime.Vx}, vy={victim.Runtime.Vy}, hitCount={victim.HitCount}");
         }
 
-        private static void CheckCpointEscapeAndMismatchEarlyReturn()
+        private static void CheckCpointEscapeAndMismatchControlFlow()
         {
             LF2CharacterData throwData = BuildCpointTailFrames(
                 decrease: -5,
@@ -10871,12 +11028,31 @@ namespace NTSD.Test
 
             thrower.RunCpointCheckStep10();
 
-            Expect(thrower.Frame.N == 0 && throwVictim.Frame.N == 181,
-                "CaughtDuration<0 must immediate-frame both entities and return before the throw tail");
-            Expect(thrower.Runtime.FrameWaitCounter == 0 && throwVictim.Runtime.FrameWaitCounter == 0,
-                "CaughtDuration<0 immediate frames must clear both runtime frame wait counters");
-            Expect(Nearly(throwVictim.Runtime.Vx, 4f) && Nearly(throwVictim.Runtime.Vy, -3f),
-                "CaughtDuration<0 must publish escape velocity instead of throw-tail velocity");
+            Expect(thrower.Frame.N == 0 &&
+                   thrower.Frame.Prev2 == 0 &&
+                   throwVictim.Frame.N == 132 &&
+                   throwVictim.Frame.Prev2 == 132,
+                "CaughtDuration<0 must skip actions but retain the C++ fallback-frame throw tail");
+            Expect(thrower.Runtime.FrameWaitCounter == 21 && throwVictim.Runtime.FrameWaitCounter == 22,
+                "CaughtDuration<0 raw cpoint frames must preserve both runtime frame wait counters");
+            Expect(thrower.HitCount == 1 && throwVictim.HitCount == 1 &&
+                   Nearly(throwVictim.KnockbackVx, -4f) &&
+                   Nearly(throwVictim.KnockbackVy, -3f) &&
+                   Nearly(throwVictim.Runtime.X, 7f) &&
+                   Nearly(throwVictim.Runtime.Y, -55f) &&
+                   Nearly(throwVictim.Runtime.Vx, 8f) &&
+                   Nearly(throwVictim.Runtime.Vy, -4f) &&
+                   Nearly(throwVictim.Runtime.Vz, 0f),
+                "escape throw tail must use fallback frame0 geometry while preserving step14 hit-count ownership");
+
+            throwWorld.FramePostProcessAll();
+
+            Expect(throwVictim.Frame.N == 132 &&
+                   thrower.HitCount == 0 &&
+                   throwVictim.HitCount == 0 &&
+                   Nearly(throwVictim.Runtime.Vx, -4f) &&
+                   Nearly(throwVictim.Runtime.Vy, -3f),
+                "FramePostProcess must consume the preserved escape hit count after the CPoint throw tail");
 
             LF2CharacterData dirData = BuildCpointTailFrames(
                 decrease: -5,
@@ -10898,8 +11074,33 @@ namespace NTSD.Test
 
             dirCatcher.RunCpointCheckStep10();
 
-            Expect(dirCatcher.Frame.N == 0 && dirVictim.Frame.N == 181 && dirCatcher.Runtime.Dir == "left",
-                "CaughtDuration<0 must return before dircontrol and preserve catcher facing");
+            Expect(dirCatcher.Frame.N == 0 &&
+                   dirVictim.Frame.N == 181 &&
+                   dirCatcher.HitCount == 1 &&
+                   dirVictim.HitCount == 1 &&
+                   dirCatcher.AttackingCounter == 2 &&
+                   dirCatcher.Runtime.Dir == "right",
+                "CaughtDuration<0 with no throw must retain the C++ dircontrol tail");
+
+            var missingWorld = new SimulationWorld();
+            LF2Entity missingCatcher = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_MissingCaughtSlot_Shared",
+                1,
+                BuildCpointTailFrames(0, 8, 0));
+            missingWorld.Register(missingCatcher);
+            missingCatcher.CaughtSlotIndex = 999;
+            missingCatcher.SetCpointRawFramePreserveWait(110);
+            missingCatcher.Trans.SetWait(missingCatcher.Frame.D.wait, 10);
+            missingCatcher.Runtime.FrameWaitCounter = 25;
+            missingWorld.CaptureCollisionFrameSnapshotsAll();
+
+            missingCatcher.RunCpointCheckStep10();
+
+            Expect(missingCatcher.Frame.N == 0 &&
+                   missingCatcher.Runtime.FrameWaitCounter == 25 &&
+                   missingCatcher.Trans.WaitCounter == 10,
+                "missing caught slot frame0 fallback must preserve the runtime and Trans wait counters");
 
             var mismatchWorld = new SimulationWorld();
             LF2Entity mismatchCatcher = CreateCpointMatrixEntity(false, "SelfCheck_MismatchThrow_Shared", 1, BuildCpointTailFrames(0, 8, 0));
@@ -10915,19 +11116,136 @@ namespace NTSD.Test
             mismatchVictim.Runtime.FrameWaitCounter = 24;
             mismatchVictim.Runtime.Vx = 2f;
             mismatchVictim.Runtime.Vy = -1f;
+            mismatchCatcher.Runtime.SetPosition(30f, 5f, 0f);
+            mismatchCatcher.Runtime.SyncIntegerPosition();
             mismatchWorld.CaptureCollisionFrameSnapshotsAll();
 
             mismatchCatcher.RunCpointCheckStep10();
 
-            Expect(mismatchCatcher.Frame.N == 0 && mismatchVictim.Frame.N == 130,
-                "cpoint mismatch must immediate-frame catcher and return before the throw tail");
+            Expect(mismatchCatcher.Frame.N == 0 &&
+                   mismatchCatcher.Frame.Prev2 == 0 &&
+                   mismatchVictim.Frame.N == 132 &&
+                   mismatchVictim.Frame.Prev2 == 132,
+                "active reciprocal mismatch must skip actions but retain the C++ throw tail from fallback frame0");
             Expect(mismatchCatcher.Frame.D != null && mismatchCatcher.Frame.D.frameId == 0 &&
                    mismatchCatcher.Trans.WaitCounter == 9,
                 "cpoint mismatch frame0 fallback must preserve wait and synchronize Frame.D");
-            Expect(mismatchCatcher.Runtime.FrameWaitCounter == 0 && mismatchVictim.Runtime.FrameWaitCounter == 24,
-                "cpoint mismatch immediate frame must clear only catcher runtime FWC");
-            Expect(Nearly(mismatchVictim.Runtime.Vx, 2f) && Nearly(mismatchVictim.Runtime.Vy, -1f),
-                "cpoint mismatch early return must not apply throw velocity");
+            Expect(mismatchCatcher.Runtime.FrameWaitCounter == 23 && mismatchVictim.Runtime.FrameWaitCounter == 24,
+                "cpoint mismatch raw frame must preserve both runtime frame wait counters");
+            Expect(Nearly(mismatchVictim.Runtime.X, 7f) &&
+                   Nearly(mismatchVictim.Runtime.Y, -50f) &&
+                   Nearly(mismatchVictim.Runtime.Vx, 8f) &&
+                   Nearly(mismatchVictim.Runtime.Vy, -4f) &&
+                   Nearly(mismatchVictim.Runtime.Vz, 0f),
+                "reciprocal mismatch throw must read fallback frame0 geometry and publish the C++ throw velocity");
+
+            var invalidPreviousWorld = new SimulationWorld();
+            LF2Entity invalidPreviousCatcher = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_InvalidPreviousThrow_Shared",
+                1,
+                BuildCpointTailFrames(0, 8, 0));
+            LF2Entity invalidPreviousVictim = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_InvalidPreviousThrowVictim_Shared",
+                2,
+                BuildCpointInvalidPreviousVictimFrames());
+            invalidPreviousWorld.Register(invalidPreviousCatcher);
+            invalidPreviousWorld.Register(invalidPreviousVictim);
+            LinkCpointEntities(invalidPreviousCatcher, invalidPreviousVictim);
+            invalidPreviousCatcher.SetCpointRawFramePreserveWait(110);
+            invalidPreviousVictim.SetCpointRawFramePreserveWait(130);
+            invalidPreviousCatcher.Runtime.SetPosition(30f, 5f, 0f);
+            invalidPreviousCatcher.Runtime.SyncIntegerPosition();
+            invalidPreviousCatcher.Runtime.FrameWaitCounter = 31;
+            invalidPreviousVictim.Runtime.FrameWaitCounter = 32;
+            invalidPreviousWorld.CaptureCollisionFrameSnapshotsAll();
+
+            invalidPreviousCatcher.RunCpointCheckStep10();
+
+            Expect(invalidPreviousCatcher.Frame.N == 0 &&
+                   invalidPreviousCatcher.Frame.Prev2 == 0 &&
+                   invalidPreviousVictim.Frame.N == 132 &&
+                   invalidPreviousVictim.Frame.Prev2 == 132,
+                "invalid victim previous cpoint must use the same fallback-frame throw tail as reciprocal mismatch");
+            Expect(invalidPreviousCatcher.Runtime.FrameWaitCounter == 31 &&
+                   invalidPreviousVictim.Runtime.FrameWaitCounter == 32 &&
+                   Nearly(invalidPreviousVictim.Runtime.X, 7f) &&
+                   Nearly(invalidPreviousVictim.Runtime.Y, -50f) &&
+                   Nearly(invalidPreviousVictim.Runtime.Vx, 8f) &&
+                   Nearly(invalidPreviousVictim.Runtime.Vy, -4f),
+                "invalid previous cpoint fallback throw must preserve FWC and use frame0 geometry");
+
+            var mismatchDirWorld = new SimulationWorld();
+            LF2Entity mismatchDirCatcher = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_MismatchDir_Shared",
+                1,
+                BuildCpointTailFrames(0, 0, 1));
+            LF2Entity mismatchDirVictim = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_MismatchDirVictim_Shared",
+                2,
+                BuildCpointMatrixVictimFrames());
+            mismatchDirWorld.Register(mismatchDirCatcher);
+            mismatchDirWorld.Register(mismatchDirVictim);
+            mismatchDirCatcher.CaughtSlotIndex = mismatchDirVictim.Runtime.SlotIndex;
+            mismatchDirVictim.CatcherSlotIndex = -1;
+            mismatchDirCatcher.SetCpointRawFramePreserveWait(110);
+            mismatchDirVictim.SetCpointRawFramePreserveWait(130);
+            mismatchDirCatcher.AttackingCounter = 2;
+            mismatchDirCatcher.SwitchDir("left");
+            mismatchDirCatcher.Runtime.KeyRight = 1;
+            mismatchDirCatcher.Runtime.FrameWaitCounter = 33;
+            mismatchDirVictim.Runtime.FrameWaitCounter = 34;
+            mismatchDirWorld.CaptureCollisionFrameSnapshotsAll();
+
+            mismatchDirCatcher.RunCpointCheckStep10();
+
+            Expect(mismatchDirCatcher.Frame.N == 0 &&
+                   mismatchDirVictim.Frame.N == 130 &&
+                   mismatchDirCatcher.AttackingCounter == 2 &&
+                   mismatchDirCatcher.Runtime.Dir == "right" &&
+                   mismatchDirCatcher.Runtime.FrameWaitCounter == 33 &&
+                   mismatchDirVictim.Runtime.FrameWaitCounter == 34,
+                "mismatch with no throw must skip actions but retain the C++ dircontrol tail");
+
+            var mismatchDecreaseWorld = new SimulationWorld();
+            LF2Entity mismatchDecreaseCatcher = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_MismatchDecrease_Shared",
+                1,
+                BuildCpointTailFrames(-5, 0, 0));
+            LF2Entity mismatchDecreaseVictim = CreateCpointMatrixEntity(
+                false,
+                "SelfCheck_MismatchDecreaseVictim_Shared",
+                2,
+                BuildCpointMatrixVictimFrames());
+            mismatchDecreaseWorld.Register(mismatchDecreaseCatcher);
+            mismatchDecreaseWorld.Register(mismatchDecreaseVictim);
+            mismatchDecreaseCatcher.CaughtSlotIndex = mismatchDecreaseVictim.Runtime.SlotIndex;
+            mismatchDecreaseVictim.CatcherSlotIndex = -1;
+            mismatchDecreaseCatcher.SetCpointRawFramePreserveWait(110);
+            mismatchDecreaseVictim.SetCpointRawFramePreserveWait(130);
+            mismatchDecreaseCatcher.Runtime.CaughtDuration = 3;
+            mismatchDecreaseCatcher.Runtime.FrameWaitCounter = 35;
+            mismatchDecreaseVictim.Runtime.FrameWaitCounter = 36;
+            mismatchDecreaseVictim.Runtime.Vx = 2f;
+            mismatchDecreaseVictim.Runtime.Vy = -1f;
+            mismatchDecreaseWorld.CaptureCollisionFrameSnapshotsAll();
+
+            mismatchDecreaseCatcher.RunCpointCheckStep10();
+
+            Expect(mismatchDecreaseCatcher.Frame.N == 0 &&
+                   mismatchDecreaseVictim.Frame.N == 130 &&
+                   mismatchDecreaseCatcher.Runtime.CaughtDuration == 3 &&
+                   mismatchDecreaseCatcher.HitCount == 0 &&
+                   mismatchDecreaseVictim.HitCount == 0 &&
+                   Nearly(mismatchDecreaseVictim.Runtime.Vx, 2f) &&
+                   Nearly(mismatchDecreaseVictim.Runtime.Vy, -1f) &&
+                   mismatchDecreaseCatcher.Runtime.FrameWaitCounter == 35 &&
+                   mismatchDecreaseVictim.Runtime.FrameWaitCounter == 36,
+                "mismatch must skip decrease escape and retain preexisting victim velocity/FWC");
         }
 
         private static void CheckSharedDatCpointStep10StatsAndInputOrder()
@@ -10950,18 +11268,25 @@ namespace NTSD.Test
             catcher.Runtime.CdJump = 5;
             catcher.Runtime.KeyRight = 1;
             catcher.SwitchDir("right");
+            catcher.Runtime.FrameWaitCounter = 27;
+            victim.Runtime.FrameWaitCounter = 28;
             world.CaptureCollisionFrameSnapshotsAll();
 
             catcher.RunCpointCheckStep10();
 
             Expect(catcher.Frame.N == 122 && victim.Frame.N == 133,
-                "simultaneous attack/direction/jump input must resolve taction before the final jaction");
+                "simultaneous attack/direction/jump input must resolve taction before the final jaction; " +
+                $"catcherFrame={catcher.Frame.N},victimFrame={victim.Frame.N}," +
+                $"catcherFWC={catcher.Runtime.FrameWaitCounter},victimFWC={victim.Runtime.FrameWaitCounter}," +
+                $"catcherDelay={catcher.FrameDelay},victimDelay={victim.FrameDelay}");
+            Expect(catcher.Runtime.FrameWaitCounter == 27 && victim.Runtime.FrameWaitCounter == 28,
+                "shared-DAT cpoint action chain must preserve the nonzero runtime frame wait counter sentinels");
             Expect(catcher.Runtime.Dir == "right",
                 "positive simultaneous cpoint actions must preserve shared-DAT shell facing");
-            Expect(victim.Health.HP == 470 && victim.ComboCountVic == 30,
-                "state9 RunCpointCheck must perform its first held sync exactly once before action selection");
+            Expect(victim.Health.HP == 500 && victim.ComboCountVic == 0,
+                "prev-frame cpoint action phase must not apply held injury before current-frame weapon sync");
             Expect(world.KillStats[1] == 0 && world.DamageStats[1] == 0,
-                "first held sync must not write world kill/damage statistic arrays");
+                "cpoint action phase must not write world kill/damage statistic arrays");
 
             catcher.SetCpointRawFramePreserveWait(100);
             victim.SetCpointRawFramePreserveWait(130);
@@ -10998,10 +11323,368 @@ namespace NTSD.Test
                 "shared-DAT held cpoint injury must apply HP and HPBound damage");
             Expect(victim.Health.HPLost == 7,
                 "held cpoint injury must not write the unrelated HPLost accumulator");
-            Expect(holder.KillStat == 1 && world.KillStats[1] == 7,
-                "lethal held cpoint injury must credit holder only and preserve world kill statistics");
-            Expect(holder.ComboCountAtk == 30 && victim.ComboCountVic == 30 && world.DamageStats[1] == 11,
-                "held cpoint injury must credit entity-local combo stats only and preserve world damage statistics");
+            Expect(holder.KillStat == 1 && world.KillStats[1] == 8,
+                "lethal held cpoint injury must credit holder and the valid global kill statistic");
+            Expect(holder.ComboCountAtk == 30 && victim.ComboCountVic == 30 && world.DamageStats[1] == 41,
+                "held cpoint injury must credit entity-local combo stats and the valid global damage statistic");
+        }
+
+        private static void CheckCpointGlobalStatMatrix()
+        {
+            RunCpointGlobalStatCase(
+                "NonLethalValidIndex",
+                injury: 30,
+                initialHp: 100,
+                statIndex: 1,
+                attackerAttacking: 0,
+                registerHolder: false,
+                expectedHp: 70,
+                expectedHolderKill: 0,
+                expectedHolderCombo: 0,
+                expectedKillStat1: 41,
+                expectedDamageStat1: 101);
+
+            RunCpointGlobalStatCase(
+                "LethalWithoutHolder",
+                injury: 30,
+                initialHp: 20,
+                statIndex: 1,
+                attackerAttacking: 0,
+                registerHolder: false,
+                expectedHp: -10,
+                expectedHolderKill: 0,
+                expectedHolderCombo: 0,
+                expectedKillStat1: 42,
+                expectedDamageStat1: 101);
+
+            RunCpointGlobalStatCase(
+                "InvalidZeroIndex",
+                injury: 30,
+                initialHp: 20,
+                statIndex: 0,
+                attackerAttacking: 0,
+                registerHolder: true,
+                expectedHp: -10,
+                expectedHolderKill: 1,
+                expectedHolderCombo: 30,
+                expectedKillStat1: 41,
+                expectedDamageStat1: 71);
+
+            RunCpointGlobalStatCase(
+                "InvalidThreeIndex",
+                injury: 30,
+                initialHp: 20,
+                statIndex: 3,
+                attackerAttacking: 0,
+                registerHolder: true,
+                expectedHp: -10,
+                expectedHolderKill: 1,
+                expectedHolderCombo: 30,
+                expectedKillStat1: 41,
+                expectedDamageStat1: 71);
+
+            RunCpointGlobalStatCase(
+                "NegativeInjury",
+                injury: -15,
+                initialHp: 100,
+                statIndex: 1,
+                attackerAttacking: 0,
+                registerHolder: true,
+                expectedHp: 85,
+                expectedHolderKill: 0,
+                expectedHolderCombo: 0,
+                expectedKillStat1: 41,
+                expectedDamageStat1: 71);
+
+            RunCpointGlobalStatCase(
+                "AlreadyAttacking",
+                injury: 30,
+                initialHp: 100,
+                statIndex: 1,
+                attackerAttacking: 1,
+                registerHolder: true,
+                expectedHp: 100,
+                expectedHolderKill: 0,
+                expectedHolderCombo: 0,
+                expectedKillStat1: 41,
+                expectedDamageStat1: 71);
+        }
+
+        private static void RunCpointGlobalStatCase(
+            string label,
+            int injury,
+            int initialHp,
+            int statIndex,
+            int attackerAttacking,
+            bool registerHolder,
+            int expectedHp,
+            int expectedHolderKill,
+            int expectedHolderCombo,
+            int expectedKillStat1,
+            int expectedDamageStat1)
+        {
+            SimulationWorld world = new SimulationWorld();
+            LF2CharacterData catcherData = BuildCpointGlobalStatFrames(injury);
+            LF2CharacterData victimData = BuildCpointMatrixVictimFrames();
+            LF2Entity attacker = CreateCpointMatrixEntity(
+                false,
+                $"SelfCheck_CpointGlobalStat_{label}_Attacker",
+                1,
+                catcherData);
+            LF2Entity victim = CreateCpointMatrixEntity(
+                false,
+                $"SelfCheck_CpointGlobalStat_{label}_Victim",
+                2,
+                victimData);
+            world.Register(attacker);
+            world.Register(victim);
+
+            LF2Entity holder = null;
+            if (registerHolder)
+            {
+                holder = CreateCpointMatrixEntity(
+                    false,
+                    $"SelfCheck_CpointGlobalStat_{label}_Holder",
+                    3,
+                    victimData);
+                world.Register(holder);
+                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            }
+            else
+            {
+                attacker.HolderCopySlot = -1;
+            }
+
+            LinkCpointEntities(attacker, victim);
+            attacker.SetCpointRawFramePreserveWait(100);
+            victim.SetCpointRawFramePreserveWait(130);
+            attacker.AttackingCounter = attackerAttacking;
+            victim.Health.HP = initialHp;
+            victim.Health.HPBound = initialHp;
+            victim.ComboCountVic = 0;
+            victim.KillCount = -1;
+            victim.Unk344 = statIndex;
+            world.KillStats[0] = 31;
+            world.KillStats[1] = 41;
+            world.KillStats[2] = 51;
+            world.DamageStats[0] = 61;
+            world.DamageStats[1] = 71;
+            world.DamageStats[2] = 81;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            attacker.RunWeaponSyncHeldStep10();
+
+            int expectedHpBound = injury > 0
+                ? initialHp - injury / 3
+                : initialHp + injury / 3;
+            bool injuryApplied = injury != 0 && attackerAttacking == 0;
+            if (!injuryApplied)
+                expectedHpBound = initialHp;
+
+            Expect(victim.Health.HP == expectedHp &&
+                   victim.Health.HPBound == expectedHpBound,
+                $"{label}: held cpoint injury health contract mismatch; hp={victim.Health.HP}, bound={victim.Health.HPBound}");
+            Expect((holder?.KillStat ?? 0) == expectedHolderKill &&
+                   (holder?.ComboCountAtk ?? 0) == expectedHolderCombo,
+                $"{label}: holder-local score must remain independent from global stat eligibility");
+            Expect(world.KillStats[0] == 31 &&
+                   world.KillStats[1] == expectedKillStat1 &&
+                   world.KillStats[2] == 51 &&
+                   world.DamageStats[0] == 61 &&
+                   world.DamageStats[1] == expectedDamageStat1 &&
+                   world.DamageStats[2] == 81,
+                $"{label}: CPoint global stat array contract mismatch; " +
+                $"kill=[{world.KillStats[0]},{world.KillStats[1]},{world.KillStats[2]}], " +
+                $"damage=[{world.DamageStats[0]},{world.DamageStats[1]},{world.DamageStats[2]}]");
+        }
+
+        private static LF2CharacterData BuildCpointGlobalStatFrames(
+            int injury)
+        {
+            return new LF2CharacterData
+            {
+                name = $"SelfCheck_CpointGlobalStat_Injury{injury}",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                    Frame(100, LF2States.Catching, 1, 100, 39, 79, new CatchPoint
+                    {
+                        kind = 1,
+                        vaction = 131,
+                        injury = injury,
+                        hurtable = 1,
+                    }),
+                },
+            };
+        }
+
+        private static void CheckCpointInjuryPhaseOwnership()
+        {
+            RunCpointInjuryPhaseCase(
+                "NoActionState9",
+                performTaction: false,
+                actionState: LF2States.Catching,
+                actionHasCpoint: true,
+                expectedAttackerFrame: 100,
+                expectedVictimFrame: 131,
+                expectInjury: true);
+
+            RunCpointInjuryPhaseCase(
+                "ActionToState9",
+                performTaction: true,
+                actionState: LF2States.Catching,
+                actionHasCpoint: true,
+                expectedAttackerFrame: 120,
+                expectedVictimFrame: 131,
+                expectInjury: true);
+
+            RunCpointInjuryPhaseCase(
+                "ActionToNonState9",
+                performTaction: true,
+                actionState: LF2States.Standing,
+                actionHasCpoint: false,
+                expectedAttackerFrame: 120,
+                expectedVictimFrame: 0,
+                expectInjury: false);
+        }
+
+        private static void RunCpointInjuryPhaseCase(
+            string label,
+            bool performTaction,
+            int actionState,
+            bool actionHasCpoint,
+            int expectedAttackerFrame,
+            int expectedVictimFrame,
+            bool expectInjury)
+        {
+            var sourceCpoint = new CatchPoint
+            {
+                kind = 1,
+                x = 20,
+                y = 30,
+                vaction = 131,
+                taction = 120,
+                injury = 30,
+                hurtable = 1,
+            };
+            CatchPoint actionCpoint = actionHasCpoint
+                ? new CatchPoint
+                {
+                    kind = 1,
+                    x = 20,
+                    y = 30,
+                    vaction = 131,
+                    injury = 30,
+                    hurtable = 1,
+                }
+                : null;
+            var attackerData = new LF2CharacterData
+            {
+                name = $"SelfCheck_CpointInjuryPhase_{label}_Attacker",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                    Frame(100, LF2States.Catching, 1, 100, 39, 79, sourceCpoint),
+                    Frame(120, actionState, 1, 120, 39, 79, actionCpoint),
+                },
+            };
+            SimulationWorld world = new SimulationWorld();
+            LF2Entity attacker = CreateCpointMatrixEntity(
+                false,
+                $"SelfCheck_CpointInjuryPhase_{label}_Attacker",
+                1,
+                attackerData);
+            LF2Entity victim = CreateCpointMatrixEntity(
+                false,
+                $"SelfCheck_CpointInjuryPhase_{label}_Victim",
+                2,
+                BuildCpointInjuryPhaseVictimFrames());
+            world.Register(attacker);
+            world.Register(victim);
+            LinkCpointEntities(attacker, victim);
+            attacker.SetCpointRawFramePreserveWait(100);
+            victim.SetCpointRawFramePreserveWait(130);
+            attacker.Runtime.SetPosition(50, 12, 4);
+            attacker.Runtime.SyncIntegerPosition();
+            victim.Runtime.SetPosition(0, 0, 0);
+            victim.Runtime.SyncIntegerPosition();
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 100;
+            victim.Unk344 = 0;
+            attacker.Runtime.KeyJump = performTaction ? (byte)1 : (byte)0;
+            attacker.Runtime.KeyRight = performTaction ? (byte)1 : (byte)0;
+            attacker.Runtime.CdAttack = 5;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            world.PreInteractionTickAll(1);
+
+            int expectedHealth = expectInjury ? 70 : 100;
+            int expectedHealthBound = expectInjury ? 90 : 100;
+            int expectedCombo = expectInjury ? 30 : 0;
+            int expectedAttacking = expectInjury ? 1 : 0;
+            int expectedAttackerDelay = expectInjury ? 2 : 0;
+            int expectedVictimDelay = expectInjury ? -3 : 0;
+
+            Expect(attacker.Frame.N == expectedAttackerFrame &&
+                   victim.Frame.N == expectedVictimFrame,
+                $"{label}: preinteraction must preserve the C++ frame phase boundary; " +
+                $"attacker={attacker.Frame.N},victim={victim.Frame.N}");
+            Expect(victim.Health.HP == expectedHealth &&
+                   victim.Health.HPBound == expectedHealthBound &&
+                   victim.ComboCountVic == expectedCombo,
+                $"{label}: injury must execute exactly at the current-frame weapon-sync owner; " +
+                $"hp={victim.Health.HP},bound={victim.Health.HPBound},combo={victim.ComboCountVic}");
+            Expect(attacker.AttackingCounter == expectedAttacking &&
+                   attacker.FrameDelay == expectedAttackerDelay &&
+                   victim.FrameDelay == expectedVictimDelay,
+                $"{label}: current-frame injury must own attacking/frame-delay writes; " +
+                $"attacking={attacker.AttackingCounter},attackerDelay={attacker.FrameDelay},victimDelay={victim.FrameDelay}");
+            Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
+                   victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
+                $"{label}: phase ownership must not invent cpoint link cleanup");
+            Expect(world.KillStats[1] == 0 && world.DamageStats[1] == 0,
+                $"{label}: D-CPT-004 must not preempt the separate D-CPT-002 global-stat contract");
+
+            if (expectInjury)
+            {
+                Expect(Nearly(victim.Runtime.X, 56f) &&
+                       Nearly(victim.Runtime.Y, 20f) &&
+                       Nearly(victim.Runtime.Z, 3f),
+                    $"{label}: only weapon-sync injury owner must publish current-frame held position");
+            }
+            else
+            {
+                Expect(Nearly(victim.Runtime.X, 0f) &&
+                       Nearly(victim.Runtime.Y, 0f) &&
+                       Nearly(victim.Runtime.Z, 0f),
+                    $"{label}: action to non-state9 must not publish held position or injury");
+            }
+        }
+
+        private static LF2CharacterData BuildCpointInjuryPhaseVictimFrames()
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_CpointInjuryPhaseVictim",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 39, 79),
+                    Frame(130, LF2States.BeingCaught, 1, 130, 35, 70, new CatchPoint
+                    {
+                        kind = 2,
+                        x = 8,
+                        y = 12,
+                        hurtable = 1,
+                    }),
+                    Frame(131, LF2States.BeingCaught, 1, 131, 34, 69, new CatchPoint
+                    {
+                        kind = 2,
+                        x = 9,
+                        y = 13,
+                        hurtable = 1,
+                    }),
+                },
+            };
         }
 
         private static LF2CharacterData BuildCpointTailFrames(int decrease, int throwVx, int dirControl)
@@ -11475,6 +12158,10 @@ namespace NTSD.Test
             heldWeapon.Runtime.HolderStableId = holderSlot;
             heldWeapon.HolderCopySlot = holderSlot;
 
+            // Keep the holder's Prev2 wpoint/ITR data available for kind5 replacement, but do not let
+            // this fixture create an unrelated holder->held-weapon candidate before the weapon's object pass.
+            holder.AttackExempt = 1;
+
             world.CaptureCollisionFrameSnapshotsAll();
             world.CollectCollisionCandidatesAll();
             var query = world.SceneQuery as BruteForceSceneQuery;
@@ -11487,6 +12174,8 @@ namespace NTSD.Test
             heldWeapon.FrameDelay = 3;
             heldWeapon.AttackExempt = 2;
             world.PostInteractionTickAll(1);
+            Expect(heldWeapon.HitConfirm2 == 0,
+                "BATTLE-AUDIT3-05 fixture must isolate kind5 from a preceding holder->weapon HitConfirm2 writer");
             world.ObjectInteractionTickAll(1);
             world.EndCollisionCandidateConsumption();
 
@@ -11555,11 +12244,12 @@ namespace NTSD.Test
                 new WeaponPoint { weaponact = 0, dvx = 9, dvy = -4 },
                 (held, result) =>
                 {
-                    Expect(result.Thrown && held.FrameDelay == 1,
-                        "BATTLE-AUDIT3-12: generic IronBall/heavy throw must write FrameDelay=1");
+                    Expect(result.Thrown && held.FrameDelay == -3,
+                        "R5-HOLD-001: generic type2 throw must retain the copied negative holder FrameDelay");
                     Expect(Nearly(held.Runtime.Vx, 9.0) && Nearly(held.Runtime.Vy, -4.0),
                         "BATTLE-AUDIT3-12: generic IronBall/heavy throw must apply authored velocity");
-                });
+                },
+                holderFrameDelay: -3);
 
             CheckWorldLevelRealWeaponStep12Contracts();
         }
@@ -11576,9 +12266,42 @@ namespace NTSD.Test
                            weapon.Runtime.WeaponState == LF2States.WeaponThrowing &&
                            Nearly(weapon.Runtime.Vx, 8.0) && Nearly(weapon.Runtime.Vy, -3.0),
                         "BATTLE-AUDIT3-12: world-level real LF2Weapon damaged release must continue into dvx throw");
+                    Expect(weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type1 held throw must stamp the holder runtime slot as spawner");
+                    Expect(weapon.PickerStableId == 71,
+                        "R5-HOLD-003: real type1 held throw must preserve its preexisting picker slot");
                     Expect(holder.Runtime.LinkState == 0 && weapon.Runtime.LinkState == 0,
                         "BATTLE-AUDIT3-12: world-level damaged dvx continuation must clear both real weapon links");
-                });
+                },
+                initialPickerStableId: 71);
+
+            RunWorldLevelRealWeaponStep12Case(
+                "SpawnerType4",
+                weaponType: 4,
+                new WeaponPoint { weaponact = 0, dvx = 8, dvy = -3 },
+                (holder, weapon) =>
+                {
+                    Expect(weapon.Frame.N == 40 &&
+                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type4 held throw must stamp the holder runtime slot as spawner");
+                    Expect(weapon.PickerStableId == 72,
+                        "R5-HOLD-003: real type4 held throw must preserve its preexisting picker slot");
+                },
+                initialPickerStableId: 72);
+
+            RunWorldLevelRealWeaponStep12Case(
+                "SpawnerType6",
+                weaponType: 6,
+                new WeaponPoint { weaponact = 0, dvx = 8, dvy = -3 },
+                (holder, weapon) =>
+                {
+                    Expect(weapon.Frame.N == 40 &&
+                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type6 held throw must stamp the holder runtime slot as spawner");
+                    Expect(weapon.PickerStableId == 73,
+                        "R5-HOLD-003: real type6 held throw must preserve its preexisting picker slot");
+                },
+                initialPickerStableId: 73);
 
             RunWorldLevelRealWeaponStep12Case(
                 "DamagedKind3",
@@ -11603,20 +12326,28 @@ namespace NTSD.Test
                 (holder, weapon) =>
                 {
                     Expect(weapon.Frame.N >= 0 && weapon.Frame.N < 6 &&
-                           weapon.FrameDelay == 1 &&
+                           weapon.FrameDelay == 7 &&
                            weapon.Runtime.WeaponState == LF2States.WeaponThrowing,
-                        "BATTLE-AUDIT3-12: world-level real IronBall throw must select a random frame and force FrameDelay=1");
+                        "R5-HOLD-001: world-level real type2 throw must select a random frame and retain the copied holder FrameDelay");
                     Expect(Nearly(weapon.Runtime.Vx, 9.0) && Nearly(weapon.Runtime.Vy, -4.0) &&
                            holder.Runtime.LinkState == 0 && weapon.Runtime.LinkState == 0,
                         "BATTLE-AUDIT3-12: world-level real IronBall throw must apply authored velocity and clear links");
-                });
+                    Expect(weapon.SpawnerEntityIndex == 77,
+                        "R5-HOLD-002: real type2 held throw must preserve its preexisting spawner slot instead of stamping holder");
+                    Expect(weapon.PickerStableId == 74,
+                        "R5-HOLD-003: real type2 held throw must preserve its preexisting picker slot");
+                },
+                initialSpawnerEntityIndex: 77,
+                initialPickerStableId: 74);
         }
 
         private static void RunWorldLevelRealWeaponStep12Case(
             string label,
             int weaponType,
             WeaponPoint holderWPoint,
-            Action<FlowSelfCheckEntity, HeldActSelfCheckWeapon> verify)
+            Action<FlowSelfCheckEntity, HeldActSelfCheckWeapon> verify,
+            int initialSpawnerEntityIndex = -1,
+            int initialPickerStableId = -1)
         {
             LF2FrameData holderFrame = Frame(0, LF2States.Standing, 100, 0, 39, 79);
             holderFrame.wpoints = new List<WeaponPoint> { holderWPoint };
@@ -11651,6 +12382,8 @@ namespace NTSD.Test
 
             var weapon = new HeldActSelfCheckWeapon();
             weapon.BindData(weaponData.name, 994, weaponType, weaponData);
+            weapon.SpawnerEntityIndex = initialSpawnerEntityIndex;
+            weapon.PickerStableId = initialPickerStableId;
             world.Register(holder);
             world.Register(weapon);
 
@@ -11668,7 +12401,7 @@ namespace NTSD.Test
             verify(holder, weapon);
         }
 
-        private static void CheckReleaseTickRunsHeldStep12Once()
+        private static void CheckReleaseTickRunsHeldStep12Twice()
         {
             const int drinkOid = 992;
             LF2FrameData holderFrame = Frame(0, LF2States.Charging, 0, 1, 0, 0);
@@ -11719,12 +12452,12 @@ namespace NTSD.Test
             var tickSystem = new NTSDBattleTickSystem(world);
             tickSystem.RunReleaseTick(1);
 
-            Expect(drink.Health.HP == 19,
-                $"BATTLE-AUDIT3-06: one release tick must run held step12 exactly once; HP={drink.Health.HP}");
+            Expect(drink.Health.HP == 18,
+                $"R2-SCHED-001: one release tick must run C++ T09 and T16 held scans; HP={drink.Health.HP}");
             Expect(holder.Frame.N == 1,
-                "BATTLE-AUDIT3-06: the once-per-tick fixture must really cross a late holder frame boundary");
+                "R2-SCHED-001: the two-held-pass fixture must really cross a late holder frame boundary");
             Expect(holder.Runtime.LinkState == 6 && drink.Runtime.LinkState == -1,
-                "BATTLE-AUDIT3-06: a nonempty drink must remain linked after its single held step12 pass");
+                "R2-SCHED-001: a nonempty drink must remain linked after both held scans");
         }
 
         private static void CheckLateHolderFrameChangeDefersHeldPose()
@@ -12119,7 +12852,7 @@ namespace NTSD.Test
             return NTSDRenderSpace.ScreenPixelToWorld(pivot.x, pivot.y, worldZ);
         }
 
-        private static void CheckReleaseTickCpointSyncPrecedesCandidates()
+        private static void CheckReleaseTickCpointSyncFollowsCandidates()
         {
             var world = new SimulationWorld();
             world.RefreshStageRuntimeSnapshotFromScene();
@@ -12174,15 +12907,19 @@ namespace NTSD.Test
             var tickSystem = new NTSDBattleTickSystem(world);
             tickSystem.RunReleaseTick(1);
 
-            Expect(victim.PostInteractionObserved && victim.ObservedFrame == 131 &&
-                   Nearly(victim.ObservedX, 56.0) && Nearly(victim.ObservedY, 20.0) &&
+            Expect(victim.PostInteractionObserved && victim.ObservedFrame == 130 &&
+                   Nearly(victim.ObservedX, -500.0) && Nearly(victim.ObservedY, 20.0) &&
                    Nearly(victim.ObservedZ, testZ),
-                "BATTLE-AUDIT3-07: cpoint held position/frame sync must be visible at candidate consumption; " +
+                "R2-SCHED-001: candidate consumption must observe the pre-T14 CPoint/WeaponSync state; " +
                 $"actual=observed:{victim.PostInteractionObserved},frame:{victim.ObservedFrame}," +
                 $"x:{victim.ObservedX},y:{victim.ObservedY},z:{victim.ObservedZ}");
+            Expect(victim.Frame.N == 131 &&
+                   Nearly(victim.Runtime.X, 56.0) && Nearly(victim.Runtime.Y, 20.0) &&
+                   Nearly(victim.Runtime.Z, testZ),
+                "R2-SCHED-001: T14 CPoint sync must still execute after candidate consumption");
             Expect(victim.ObservedCaughtSlot == 0 && catcher.CaughtSlotIndex == 1 &&
-                   victim.CandidateContainsExpectedTarget,
-                $"BATTLE-AUDIT3-07: cpoint links and held sync must be visible to snapshot/collect in the same tick; " +
+                   !victim.CandidateContainsExpectedTarget,
+                $"R2-SCHED-001: candidate collection must finish before the synced CPoint itr becomes visible; " +
                 $"observedCaughtSlot={victim.ObservedCaughtSlot}, catcherCaughtSlot={catcher.CaughtSlotIndex}, " +
                 $"candidateContainsExpected={victim.CandidateContainsExpectedTarget}");
         }
@@ -12233,11 +12970,32 @@ namespace NTSD.Test
                 "BATTLE-AUDIT3-08: candidate collection must use the pre-collect clamped character Z");
         }
 
+        private static void CheckReleaseTickMode2ResetFollowsEntityPostFrameTail()
+        {
+            var world = new SimulationWorld();
+            var tailProbe = new Mode2TailSelfCheckEntity();
+            world.Register(tailProbe);
+            world.SetMode2Request(2);
+
+            world.Mode2RandomWeaponDropTailAll(1);
+            Expect(world.Mode2Request == 2,
+                "R2-SCHED-002: mode2 request must remain visible after the mode2 tail and before entity post-frame tail");
+
+            world.EntityPostFrameTailAll(1);
+            Expect(tailProbe.Mode2RequestObservedAtCarrierClear == 2,
+                "R2-SCHED-002: entity post-frame tail must observe the active mode2 request before reset");
+
+            world.ClearMode2RequestAfterPostFrameTail();
+            Expect(world.Mode2Request == 0,
+                "R2-SCHED-002: mode2 request must clear after entity post-frame tail");
+        }
+
         private static void RunGenericHeldStep12Case(
             string label,
             LF2ObjectType heldType,
             WeaponPoint holderWPoint,
-            Action<HeldStep12SelfCheckEntity, WeaponActResult> verify)
+            Action<HeldStep12SelfCheckEntity, WeaponActResult> verify,
+            int holderFrameDelay = 0)
         {
             var world = new SimulationWorld();
             FlowSelfCheckEntity holder = CreateFlowSelfCheckEntity(
@@ -12249,6 +13007,7 @@ namespace NTSD.Test
                 0,
                 10);
             holder.Frame.D.wpoints = new List<WeaponPoint> { holderWPoint };
+            holder.FrameDelay = holderFrameDelay;
             var held = new HeldStep12SelfCheckEntity(heldType);
             held.BindData($"SelfCheck_HeldStep12_{label}_Held", 991, damagedFrame: 20);
             held.SetRuntimeSlotIndex(50);
@@ -12387,17 +13146,17 @@ namespace NTSD.Test
 
             Expect(negativeTargetHolder.Runtime.LinkState == 0 &&
                    negativeTargetHolder.Runtime.TargetSlotIndex == -1 &&
-                   negativeTargetHolder.Runtime.HeldWeaponStableId == -1,
-                "target slot -1 must clear all forward holder relation fields");
+                   negativeTargetHolder.Runtime.HeldWeaponStableId == 101,
+                "target slot -1 must clear only LinkState while preserving forward holder fields");
             Expect(highTargetHolder.Runtime.LinkState == 0 &&
-                   highTargetHolder.Runtime.TargetSlotIndex == -1 &&
-                   highTargetHolder.Runtime.HeldWeaponStableId == -1,
-                "target slot 400 must clear all forward holder relation fields");
+                   highTargetHolder.Runtime.TargetSlotIndex == 400 &&
+                   highTargetHolder.Runtime.HeldWeaponStableId == 102,
+                "target slot 400 must clear only LinkState while preserving forward holder fields");
             Expect(mismatchHolder.Runtime.LinkState == 0 &&
-                   mismatchHolder.Runtime.TargetSlotIndex == -1 &&
-                   mismatchHolder.Runtime.HeldWeaponStableId == -1 &&
+                   mismatchHolder.Runtime.TargetSlotIndex == 201 &&
+                   mismatchHolder.Runtime.HeldWeaponStableId == 103 &&
                    mismatchTarget.Runtime.HolderStableId == 199,
-                "holder mismatch must clear the forward relation without erasing another holder's reverse field");
+                "holder mismatch must clear only LinkState without erasing forward or reverse relation fields");
             Expect(zeroLink.Runtime.LinkState == 0 && zeroLink.Runtime.TargetSlotIndex == 400 &&
                    zeroLink.Runtime.HeldWeaponStableId == 104,
                 "link==0 entities must not be processed");
@@ -12425,15 +13184,70 @@ namespace NTSD.Test
             inactiveWorld.Unregister(inactiveTarget);
             inactiveWorld.ValidateHeldLinksAll(1);
             Expect(inactiveHolder.Runtime.LinkState == 0 &&
-                   inactiveHolder.Runtime.TargetSlotIndex == -1 &&
-                   inactiveHolder.Runtime.HeldWeaponStableId == -1,
-                "inactive target must clear all forward holder relation fields");
+                   inactiveHolder.Runtime.TargetSlotIndex == 13 &&
+                   inactiveHolder.Runtime.HeldWeaponStableId == 106,
+                "inactive target must clear only LinkState while preserving forward holder fields");
             Expect(inactiveTarget.Runtime.LinkState == -2 &&
                    inactiveTarget.Runtime.HolderStableId == 12 &&
                    inactiveTarget.Runtime.TargetSlotIndex == 12 &&
                    inactiveTarget.Runtime.HeldWeaponStableId == 107 &&
                    inactiveTarget.GrabbedBy == 12,
                 "inactive target reverse relation fields must remain unchanged when the holder is invalidated");
+        }
+
+        private static void CheckInvalidNegativeHeldLinksRetainHolderSlot()
+        {
+            var outOfRangeWorld = new SimulationWorld();
+            FlowSelfCheckEntity outOfRangeChild = CreateFlowSelfCheckEntity(
+                "SelfCheck_NegativeLink_OutOfRangeChild",
+                LF2ObjectType.Other,
+                LF2States.Standing,
+                0,
+                0,
+                0,
+                20);
+            outOfRangeChild.Runtime.LinkState = -1;
+            outOfRangeChild.Runtime.HolderStableId = 400;
+            outOfRangeWorld.Register(outOfRangeChild);
+
+            outOfRangeWorld.HeldObjectProcessAll(1);
+            Expect(outOfRangeChild.Runtime.LinkState == 0 &&
+                   outOfRangeChild.Runtime.HolderStableId == 400,
+                "R5-LINK-002: out-of-range negative child must clear only LinkState and retain HolderStableId");
+
+            outOfRangeWorld.HeldObjectProcessAll(2);
+            Expect(outOfRangeChild.Runtime.LinkState == 0 &&
+                   outOfRangeChild.Runtime.HolderStableId == 400,
+                "R5-LINK-002: second held pass must not re-clear the retained holder slot after LinkState reaches zero");
+
+            var mismatchWorld = new SimulationWorld();
+            FlowSelfCheckEntity mismatchHolder = CreateFlowSelfCheckEntity(
+                "SelfCheck_NegativeLink_MismatchHolder",
+                LF2ObjectType.Other,
+                LF2States.Standing,
+                0,
+                0,
+                0,
+                30);
+            FlowSelfCheckEntity mismatchChild = CreateFlowSelfCheckEntity(
+                "SelfCheck_NegativeLink_MismatchChild",
+                LF2ObjectType.Other,
+                LF2States.Standing,
+                0,
+                0,
+                0,
+                31);
+            mismatchHolder.Runtime.TargetSlotIndex = 32;
+            mismatchChild.Runtime.LinkState = -2;
+            mismatchChild.Runtime.HolderStableId = 30;
+            mismatchWorld.Register(mismatchHolder);
+            mismatchWorld.Register(mismatchChild);
+
+            mismatchWorld.HeldObjectProcessAll(1);
+            Expect(mismatchChild.Runtime.LinkState == 0 &&
+                   mismatchChild.Runtime.HolderStableId == 30 &&
+                   mismatchHolder.Runtime.TargetSlotIndex == 32,
+                "R5-LINK-002: active-holder target mismatch must preserve child HolderStableId and holder TargetSlotIndex");
         }
 
         private static void AdvanceFlowToEvenToggle(SimulationWorld world)
@@ -13948,6 +14762,15 @@ namespace NTSD.Test
                     victim.Unk344 = 1;
                     victim.WeaponCount = -1;
                     victim.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront);
+                    const int preservedPreviousFrame = 71;
+                    const int preservedAttackingCounter = 29;
+                    const int preservedWaitCounter = 17;
+                    victim.Frame.PN = preservedPreviousFrame;
+                    victim.AttackingCounter = preservedAttackingCounter;
+                    victim.Trans.SyncDirectFrameData(
+                        victim.Frame.D.wait,
+                        victim.Frame.D.next,
+                        preservedWaitCounter);
                     InteractionArea itr = new InteractionArea
                     {
                         kind = tick == 12 ? 10 : 11,
@@ -13959,9 +14782,889 @@ namespace NTSD.Test
                     int expectedCombo = tick == 12 ? 11 : 0;
                     Expect(accepted && victim.Health.HP == 100 && victim.Health.HPBound == 100 &&
                            victim.WeaponCount == -20 && holder.ComboCountAtk == expectedCombo &&
-                           world.DamageStats[1] == 11,
-                        $"C-20: {(actualCharacter ? "actual" : "shared")} kind{itr.kind} tick{tick} must write -20/stats without HP damage");
+                           world.DamageStats[1] == 11 &&
+                           victim.Frame.N == 182 && victim.Runtime.Frame == 182 &&
+                           ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(182)) &&
+                           victim.Frame.PN == preservedPreviousFrame &&
+                           victim.AttackingCounter == preservedAttackingCounter &&
+                           victim.Trans.WaitCounter == preservedWaitCounter,
+                        $"R4-HIT-02A: {(actualCharacter ? "actual" : "shared")} kind{itr.kind} tick{tick} must raw-write frame182 while preserving PN/attacking/wait; " +
+                        $"frame={victim.Frame.N}/{victim.Runtime.Frame}, pn={victim.Frame.PN}, attacking={victim.AttackingCounter}, wait={victim.Trans.WaitCounter}");
                 }
+            }
+        }
+
+        private static void CheckHitConfirm2AttackerAbortContracts()
+        {
+            CheckHitConfirm2AttackerAbortCase(exactCharacterRoute: true, hitConfirm2: true);
+            CheckHitConfirm2AttackerAbortCase(exactCharacterRoute: false, hitConfirm2: true);
+            CheckHitConfirm2AttackerAbortCase(exactCharacterRoute: true, hitConfirm2: false);
+            CheckHitConfirm2AttackerAbortCase(exactCharacterRoute: false, hitConfirm2: false);
+        }
+
+        private static void CheckHitConfirm2AttackerAbortCase(
+            bool exactCharacterRoute,
+            bool hitConfirm2)
+        {
+            string route = exactCharacterRoute ? "exact" : "shared";
+            string condition = hitConfirm2 ? "abort" : "continue";
+            InteractionArea itr = MakeInteractionItr(kind: 0, vrest: 1, injury: 10, dvx: 1);
+            LF2CharacterData attackerData = new LF2CharacterData
+            {
+                name = $"SelfCheck_HitConfirm2_{route}_{condition}_Attacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { InteractionFrame(itr) },
+            };
+
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_HitConfirm2_{route}_{condition}_Attacker",
+                1,
+                attackerData);
+            LF2Entity first = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_HitConfirm2_{route}_{condition}_First",
+                2,
+                BuildInteractionVictimData(
+                    $"SelfCheck_HitConfirm2_{route}_{condition}_First",
+                    2));
+            LF2Entity second = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_HitConfirm2_{route}_{condition}_Second",
+                3,
+                BuildInteractionVictimData(
+                    $"SelfCheck_HitConfirm2_{route}_{condition}_Second",
+                    3));
+            world.Register(attacker);
+            world.Register(first);
+            world.Register(second);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(first, 2, 0.0);
+            ConfigureCollisionAuditEntity(second, 2, 0.0);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(
+                    attacker,
+                    out candidates);
+            Expect(hasCandidates && candidates.Count == 2 &&
+                   candidates.TryGet(0, out SceneQueryHit firstCandidate) &&
+                   candidates.TryGet(1, out SceneQueryHit secondCandidate) &&
+                   ReferenceEquals(firstCandidate.ResolveCurrentTarget(world), first) &&
+                   ReferenceEquals(secondCandidate.ResolveCurrentTarget(world), second),
+                $"R4-COL-01 {route}/{condition}: fixture must preserve the two frozen character candidates in slot order; " +
+                $"count={(hasCandidates ? candidates.Count : -1)}");
+
+            int firstHp = first.Health.HP;
+            int secondHp = second.Health.HP;
+            attacker.HitConfirm2 = hitConfirm2 ? 1 : 0;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            if (hitConfirm2)
+            {
+                Expect(first.Health.HP == firstHp && second.Health.HP == secondHp &&
+                       attacker.HitConfirm2 == 1,
+                    $"R4-COL-01 {route}: C++ hit_confirm2 must abort the current attacker's entire character-target sequence " +
+                    $"before any writer; first={first.Health.HP}, second={second.Health.HP}, carrier={attacker.HitConfirm2}");
+                return;
+            }
+
+            Expect(first.Health.HP < firstHp && second.Health.HP < secondHp &&
+                   attacker.HitConfirm2 == 0,
+                $"R4-COL-01 {route}: a clear hit_confirm2 carrier must preserve normal two-target continuation; " +
+                $"first={first.Health.HP}, second={second.Health.HP}, carrier={attacker.HitConfirm2}");
+        }
+
+        private static LF2Entity CreateHitConfirm2FixtureEntity(
+            bool exactCharacterRoute,
+            string name,
+            int objectId,
+            LF2CharacterData data)
+        {
+            if (exactCharacterRoute)
+                return CreateCharacter(name, objectId, data);
+
+            var sharedEntity = new FlowSelfCheckEntity(LF2ObjectType.Character);
+            sharedEntity.BindData(name, objectId, data);
+            return sharedEntity;
+        }
+
+        private static void CheckCaughtCpointConsumeGuardContracts()
+        {
+            for (int routeIndex = 0; routeIndex < 2; routeIndex++)
+            {
+                bool exactCharacterRoute = routeIndex == 0;
+                RunCaughtCpointKind0ContinuationCase(exactCharacterRoute, catcherHurtable: 0);
+                RunCaughtCpointKind0ContinuationCase(exactCharacterRoute, catcherHurtable: 1);
+                RunCaughtCpointKind6ConsumeCase(exactCharacterRoute, catcherHurtable: 0);
+                RunCaughtCpointKind6ConsumeCase(exactCharacterRoute, catcherHurtable: 1);
+            }
+        }
+
+        private static void RunCaughtCpointKind0ContinuationCase(
+            bool exactCharacterRoute,
+            int catcherHurtable)
+        {
+            string route = exactCharacterRoute ? "exact" : "shared";
+            string condition = catcherHurtable == 0 ? "blocked" : "hurtable";
+            InteractionArea itr = MakeInteractionItr(kind: 0, vrest: 1, injury: 10, dvx: 1);
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Attacker",
+                1,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Attacker",
+                    itr,
+                    null,
+                    LF2States.Standing));
+            LF2Entity first = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_First",
+                2,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_First",
+                    null,
+                    new CatchPoint { kind = 2 },
+                    LF2States.BeingCaught));
+            LF2Entity second = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Second",
+                3,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Second",
+                    null,
+                    null,
+                    LF2States.Standing));
+            LF2Entity catcher = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Catcher",
+                4,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind0_{route}_{condition}_Catcher",
+                    null,
+                    new CatchPoint { kind = 1, hurtable = catcherHurtable },
+                    LF2States.Catching));
+            world.Register(attacker);
+            world.Register(first);
+            world.Register(second);
+            world.Register(catcher);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(first, 2, 0.0);
+            ConfigureCollisionAuditEntity(second, 2, 0.0);
+            ConfigureCollisionAuditEntity(catcher, 1, 10000.0);
+            first.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+            catcher.CaughtSlotIndex = attacker.Runtime.SlotIndex;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            bool expectedBlocked = catcherHurtable == 0;
+            Expect(BruteForceSceneQuery.IsReleaseConsumerPairBlocked(attacker, first) == expectedBlocked,
+                $"R4-COL-02 {route}/kind0/{condition}: C++ caught-cpoint helper must read target/catcher Prev2 and active reciprocal slots");
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            Expect(hasCandidates && candidates.Count == 2 &&
+                   candidates.TryGet(0, out SceneQueryHit firstCandidate) &&
+                   candidates.TryGet(1, out SceneQueryHit secondCandidate) &&
+                   ReferenceEquals(firstCandidate.ResolveCurrentTarget(world), first) &&
+                   ReferenceEquals(secondCandidate.ResolveCurrentTarget(world), second),
+                $"R4-COL-02 {route}/kind0/{condition}: fixture must preserve caught first and ordinary second candidates; " +
+                $"count={(hasCandidates ? candidates.Count : -1)}");
+
+            int firstHp = first.Health.HP;
+            int secondHp = second.Health.HP;
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            if (expectedBlocked)
+            {
+                Expect(first.Health.HP == firstHp &&
+                       first.ItrRest.GetVrest(attackerSlot) == 0 &&
+                       second.Health.HP < secondHp &&
+                       second.ItrRest.GetVrest(attackerSlot) > 0,
+                    $"R4-COL-02 {route}/kind0/blocked: C07-B must skip only caught first candidate and continue to second; " +
+                    $"firstHp={first.Health.HP}, firstVrest={first.ItrRest.GetVrest(attackerSlot)}, " +
+                    $"secondHp={second.Health.HP}, secondVrest={second.ItrRest.GetVrest(attackerSlot)}");
+                return;
+            }
+
+            Expect(first.Health.HP < firstHp && second.Health.HP < secondHp &&
+                   first.ItrRest.GetVrest(attackerSlot) > 0 &&
+                   second.ItrRest.GetVrest(attackerSlot) > 0,
+                $"R4-COL-02 {route}/kind0/hurtable: hurtable=1 must not suppress either candidate; " +
+                $"firstHp={first.Health.HP}, secondHp={second.Health.HP}");
+        }
+
+        private static void RunCaughtCpointKind6ConsumeCase(
+            bool exactCharacterRoute,
+            int catcherHurtable)
+        {
+            string route = exactCharacterRoute ? "exact" : "shared";
+            string condition = catcherHurtable == 0 ? "blocked" : "hurtable";
+            InteractionArea itr = MakeInteractionItr(kind: 6, vrest: 1, injury: 0, dvx: 0);
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Attacker",
+                11,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Attacker",
+                    itr,
+                    null,
+                    LF2States.Standing));
+            LF2Entity target = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Target",
+                12,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Target",
+                    null,
+                    new CatchPoint { kind = 2 },
+                    LF2States.BeingCaught));
+            LF2Entity catcher = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Catcher",
+                13,
+                BuildCaughtCpointConsumeData(
+                    $"SelfCheck_CaughtCpoint_Kind6_{route}_{condition}_Catcher",
+                    null,
+                    new CatchPoint { kind = 1, hurtable = catcherHurtable },
+                    LF2States.Catching));
+            world.Register(attacker);
+            world.Register(target);
+            world.Register(catcher);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 0.0);
+            ConfigureCollisionAuditEntity(catcher, 1, 10000.0);
+            target.CatcherSlotIndex = catcher.Runtime.SlotIndex;
+            catcher.CaughtSlotIndex = attacker.Runtime.SlotIndex;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            bool expectedBlocked = catcherHurtable == 0;
+            Expect(BruteForceSceneQuery.IsReleaseConsumerPairBlocked(attacker, target) == expectedBlocked,
+                $"R4-COL-02 {route}/kind6/{condition}: C++ caught-cpoint helper must preserve hurtable polarity");
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            Expect(hasCandidates && candidates.Count == 1 &&
+                   candidates.TryGet(0, out SceneQueryHit candidate) &&
+                   ReferenceEquals(candidate.ResolveCurrentTarget(world), target),
+                $"R4-COL-02 {route}/kind6/{condition}: fixture must preserve one frozen caught target candidate; " +
+                $"count={(hasCandidates ? candidates.Count : -1)}");
+
+            int hitConfirmBefore = target.HitConfirmCounter;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+            int expectedHitConfirm = expectedBlocked ? hitConfirmBefore : 3;
+            Expect(target.HitConfirmCounter == expectedHitConfirm,
+                $"R4-COL-02 {route}/kind6/{condition}: C07-B must gate the direct kind6 writer; " +
+                $"actual={target.HitConfirmCounter}, expected={expectedHitConfirm}");
+        }
+
+        private static LF2CharacterData BuildCaughtCpointConsumeData(
+            string name,
+            InteractionArea itr,
+            CatchPoint cpoint,
+            int state)
+        {
+            LF2FrameData frame = InteractionFrame(itr);
+            frame.state = state;
+            frame.cpoint = cpoint;
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData> { frame },
+            };
+        }
+
+        private static void CheckEffect21CurrentStateAttackerAbortContracts()
+        {
+            for (int routeIndex = 0; routeIndex < 2; routeIndex++)
+            {
+                bool exactCharacterRoute = routeIndex == 0;
+                RunEffect21CurrentStateAbortCase(
+                    exactCharacterRoute,
+                    LF2States.Burning,
+                    expectAttackerAbort: true);
+                RunEffect21CurrentStateAbortCase(
+                    exactCharacterRoute,
+                    LF2States.FirenSpecific,
+                    expectAttackerAbort: true);
+                RunEffect21CurrentStateAbortCase(
+                    exactCharacterRoute,
+                    LF2States.Standing,
+                    expectAttackerAbort: false);
+                RunEffect21RuntimeKind4PromotionAbortCase(exactCharacterRoute);
+            }
+        }
+
+        private static void RunEffect21CurrentStateAbortCase(
+            bool exactCharacterRoute,
+            int firstCurrentState,
+            bool expectAttackerAbort)
+        {
+            string route = exactCharacterRoute ? "exact" : "shared";
+            string stateLabel = firstCurrentState == LF2States.Burning
+                ? "state18"
+                : firstCurrentState == LF2States.FirenSpecific
+                    ? "state19"
+                    : "ordinary";
+            InteractionArea itr = MakeInteractionItr(kind: 0, vrest: 1, injury: 10, dvx: 1);
+            itr.effect = 21;
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_{route}_{stateLabel}_Attacker",
+                1,
+                BuildEffect21ConsumeData(
+                    $"SelfCheck_Effect21_{route}_{stateLabel}_Attacker",
+                    itr));
+            LF2Entity first = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_{route}_{stateLabel}_First",
+                2,
+                BuildEffect21ConsumeData(
+                    $"SelfCheck_Effect21_{route}_{stateLabel}_First",
+                    null));
+            LF2Entity second = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_{route}_{stateLabel}_Second",
+                3,
+                BuildEffect21ConsumeData(
+                    $"SelfCheck_Effect21_{route}_{stateLabel}_Second",
+                    null));
+            world.Register(attacker);
+            world.Register(first);
+            world.Register(second);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(first, 2, 0.0);
+            ConfigureCollisionAuditEntity(second, 2, 0.0);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            Expect(hasCandidates && candidates.Count == 2 &&
+                   candidates.TryGet(0, out SceneQueryHit firstCandidate) &&
+                   candidates.TryGet(1, out SceneQueryHit secondCandidate) &&
+                   ReferenceEquals(firstCandidate.ResolveCurrentTarget(world), first) &&
+                   ReferenceEquals(secondCandidate.ResolveCurrentTarget(world), second),
+                $"R4-COL-03 {route}/{stateLabel}: source kind0/effect21 fixture must freeze two normal candidates in slot order; " +
+                $"count={(hasCandidates ? candidates.Count : -1)}");
+
+            first.DirectWriteRawFramePreserveWaitCounter(
+                expectAttackerAbort ? firstCurrentState : 0);
+            Expect(first.Frame.Prev == 0 && first.Frame.D?.state == firstCurrentState,
+                $"R4-COL-03 {route}/{stateLabel}: only current target state may change after collection; " +
+                $"prev={first.Frame.Prev}, current={first.Frame.D?.state}");
+
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int firstHp = first.Health.HP;
+            int secondHp = second.Health.HP;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            if (expectAttackerAbort)
+            {
+                Expect(first.Health.HP == firstHp && second.Health.HP == secondHp &&
+                       first.ItrRest.GetVrest(attackerSlot) == 0 &&
+                       second.ItrRest.GetVrest(attackerSlot) == 0,
+                    $"R4-COL-03 {route}/{stateLabel}: C++ effect21 current-state gate must abort the entire frozen candidate sequence before writers; " +
+                    $"firstHp={first.Health.HP}, secondHp={second.Health.HP}, " +
+                    $"firstVrest={first.ItrRest.GetVrest(attackerSlot)}, secondVrest={second.ItrRest.GetVrest(attackerSlot)}");
+                return;
+            }
+
+            Expect(first.Health.HP < firstHp && second.Health.HP < secondHp &&
+                   first.ItrRest.GetVrest(attackerSlot) > 0 &&
+                   second.ItrRest.GetVrest(attackerSlot) > 0,
+                $"R4-COL-03 {route}/ordinary: a current state outside 18/19 must preserve normal two-candidate continuation; " +
+                $"firstHp={first.Health.HP}, secondHp={second.Health.HP}");
+        }
+
+        private static void RunEffect21RuntimeKind4PromotionAbortCase(bool exactCharacterRoute)
+        {
+            string route = exactCharacterRoute ? "exact" : "shared";
+            InteractionArea sourceItr = MakeInteractionItr(kind: 4, vrest: 1, injury: 10, dvx: 1);
+            sourceItr.effect = 21;
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_Kind4_{route}_Attacker",
+                11,
+                BuildEffect21ConsumeData($"SelfCheck_Effect21_Kind4_{route}_Attacker", sourceItr));
+            LF2Entity first = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_Kind4_{route}_First",
+                12,
+                BuildEffect21ConsumeData($"SelfCheck_Effect21_Kind4_{route}_First", null));
+            LF2Entity second = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute,
+                $"SelfCheck_Effect21_Kind4_{route}_Second",
+                13,
+                BuildEffect21ConsumeData($"SelfCheck_Effect21_Kind4_{route}_Second", null));
+            world.Register(attacker);
+            world.Register(first);
+            world.Register(second);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(first, 2, 0.0);
+            ConfigureCollisionAuditEntity(second, 2, 0.0);
+            attacker.WeaponCount = 1;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            Expect(hasCandidates && candidates.Count == 2,
+                $"R4-COL-03 {route}/kind4: source kind4 must freeze both candidates before its C++ local conversion; " +
+                $"count={(hasCandidates ? candidates.Count : -1)}");
+
+            first.DirectWriteRawFramePreserveWaitCounter(18);
+            InteractionArea runtimeItr = BruteForceSceneQuery.ResolveRuntimeItrForPair(
+                attacker,
+                first,
+                attacker.GetCollisionFrameData(),
+                sourceItr,
+                out _,
+                out _);
+            Expect(runtimeItr != null && runtimeItr.kind == 0 && runtimeItr.effect == 21,
+                $"R4-COL-03 {route}/kind4: C++ weapon-count local conversion must produce runtime kind0/effect21 before C07-C; " +
+                $"kind={runtimeItr?.kind}, effect={runtimeItr?.effect}");
+
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int firstHp = first.Health.HP;
+            int secondHp = second.Health.HP;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            Expect(first.Health.HP == firstHp && second.Health.HP == secondHp &&
+                   first.ItrRest.GetVrest(attackerSlot) == 0 &&
+                   second.ItrRest.GetVrest(attackerSlot) == 0,
+                $"R4-COL-03 {route}/kind4: C07-C must read transformed runtime itr and abort before any writer; " +
+                $"firstHp={first.Health.HP}, secondHp={second.Health.HP}");
+        }
+
+        private static LF2CharacterData BuildEffect21ConsumeData(
+            string name,
+            InteractionArea itr)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Effect21ConsumeFrame(0, LF2States.Standing, itr),
+                    Effect21ConsumeFrame(18, LF2States.Burning, null),
+                    Effect21ConsumeFrame(19, LF2States.FirenSpecific, null),
+                },
+            };
+        }
+
+        private static LF2FrameData Effect21ConsumeFrame(
+            int frameId,
+            int state,
+            InteractionArea itr)
+        {
+            LF2FrameData frame = Frame(frameId, state, 1, frameId, 0, 0);
+            frame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+            });
+            if (itr != null)
+                frame.itrs.Add(itr);
+            return frame;
+        }
+
+        private static void CheckOid999CandidateCollectionContracts()
+        {
+            RunOid999CandidateCollectionMatrix(oid999AsAttacker: false);
+            RunOid999CandidateCollectionMatrix(oid999AsAttacker: true);
+        }
+
+        private static void RunOid999CandidateCollectionMatrix(bool oid999AsAttacker)
+        {
+            Oid999CandidateCollectionResult brute = CollectOid999CandidateCollection(
+                oid999AsAttacker,
+                CollisionFormalCollectorMode.ForceBruteForce);
+            Oid999CandidateCollectionResult roleAware = CollectOid999CandidateCollection(
+                oid999AsAttacker,
+                CollisionFormalCollectorMode.ForceRoleAware);
+            string role = oid999AsAttacker ? "attacker" : "target";
+
+            Expect(brute.CandidateCount == 1 && roleAware.CandidateCount == 1 &&
+                   brute.TargetSlot == roleAware.TargetSlot &&
+                   brute.ItrIndex == roleAware.ItrIndex &&
+                   brute.RngState == roleAware.RngState &&
+                   brute.RngCallCount == roleAware.RngCallCount,
+                $"R4-COL-04A oid999/{role}: C++ normal candidate rules must retain valid geometry in brute and role-aware collection; " +
+                $"brute=({brute.CandidateCount},{brute.TargetSlot},{brute.ItrIndex},{brute.RngState},{brute.RngCallCount}) " +
+                $"role=({roleAware.CandidateCount},{roleAware.TargetSlot},{roleAware.ItrIndex},{roleAware.RngState},{roleAware.RngCallCount})");
+        }
+
+        private static Oid999CandidateCollectionResult CollectOid999CandidateCollection(
+            bool oid999AsAttacker,
+            CollisionFormalCollectorMode collectorMode)
+        {
+            InteractionArea attackItr = MakeInteractionItr(kind: 0, vrest: 1, injury: 10, dvx: 1);
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute: true,
+                oid999AsAttacker ? "SelfCheck_Oid999_Attacker" : "SelfCheck_Oid999_NormalAttacker",
+                oid999AsAttacker ? 999 : 1,
+                oid999AsAttacker
+                    ? BuildOid999CandidateCollectionData(attackItr, state3005: false)
+                    : BuildEffect21ConsumeData("SelfCheck_Oid999_NormalAttacker", attackItr));
+            LF2Entity target = CreateHitConfirm2FixtureEntity(
+                exactCharacterRoute: true,
+                oid999AsAttacker ? "SelfCheck_Oid999_NormalTarget" : "SelfCheck_Oid999_Target",
+                oid999AsAttacker ? 2 : 999,
+                oid999AsAttacker
+                    ? BuildEffect21ConsumeData("SelfCheck_Oid999_NormalTarget", null)
+                    : BuildOid999CandidateCollectionData(null, state3005: true));
+            world.Register(attacker);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 0.0);
+            if (oid999AsAttacker)
+            {
+                attacker.Runtime.SpawnSemantic =
+                    (int)ReleaseSpawnSemantic.TransitionEffect;
+            }
+
+            var query = world.SceneQuery as BruteForceSceneQuery;
+            Expect(query != null,
+                $"R4-COL-04A oid999/{(oid999AsAttacker ? "attacker" : "target")}: world must use BruteForceSceneQuery");
+            query.FormalCollectorMode = collectorMode;
+            query.ForceRoleAwareDirectForDiagnostics =
+                collectorMode == CollisionFormalCollectorMode.ForceRoleAware;
+            world.Rng.Seed(0x0D999004u);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            int targetSlot = -1;
+            int itrIndex = -1;
+            if (hasCandidates && candidates.Count == 1 && candidates.TryGet(0, out SceneQueryHit candidate))
+            {
+                targetSlot = candidate.ResolveCurrentTarget(world)?.Runtime?.SlotIndex ?? -1;
+                itrIndex = candidate.ItrIndex;
+            }
+
+            Expect(query.LastFormalCollectorModeForDiagnostics == collectorMode &&
+                   !query.LastFormalCollectionAbortedForDiagnostics,
+                $"R4-COL-04A oid999/{(oid999AsAttacker ? "attacker" : "target")}: requested collector must complete normally; " +
+                $"requested={collectorMode}, actual={query.LastFormalCollectorModeForDiagnostics}, aborted={query.LastFormalCollectionAbortedForDiagnostics}");
+
+            return new Oid999CandidateCollectionResult(
+                hasCandidates ? candidates.Count : -1,
+                targetSlot,
+                itrIndex,
+                world.Rng.State,
+                world.Rng.CallCount);
+        }
+
+        private static void CheckWeaponLandingDoesNotDirectlyHitOverlappingTarget()
+        {
+            InteractionArea authoredItr = MakeInteractionItr(kind: 0, vrest: 10, injury: 100, dvx: 3);
+            authoredItr.dvy = 7;
+            authoredItr.fall = 70;
+            LF2FrameData weaponFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Burning,
+                authoredItr,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            var weaponData = new LF2CharacterData
+            {
+                name = "SelfCheck_R4Col04BLandingWeapon",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { weaponFrame },
+            };
+            LF2FrameData targetFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Standing,
+                null,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            var targetData = new LF2CharacterData
+            {
+                name = "SelfCheck_R4Col04BLandingTarget",
+                type_sub = 2,
+                frames = new List<LF2FrameData> { targetFrame },
+            };
+
+            var world = new SimulationWorld();
+            AlternateDamageSelfCheckWeapon weapon = CreateSelfCheckWeapon(
+                "SelfCheck_R4Col04BLandingWeapon",
+                424,
+                weaponType: 0,
+                weaponData,
+                frameId: 0);
+            LF2Character target = CreateInteractionCharacter(
+                "SelfCheck_R4Col04BLandingTarget",
+                425,
+                targetData);
+            world.Register(weapon);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(weapon, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 0.0);
+            weapon.WeaponDropHurt = 10;
+            weapon.Runtime.Vy = 18.0;
+
+            bool builtVolume = BruteForceSceneQuery.TryBuildBodyBattleVolume(
+                weapon,
+                weaponFrame,
+                weaponFrame.bodies[0],
+                out PhysicsState.BattleVolume landingVolume);
+            Expect(builtVolume && world.SceneQuery != null,
+                "R4-COL-04B: focused landing fixture must expose a valid overlapping weapon body and scene query");
+            List<SceneQueryHit> immediateTargets = world.SceneQuery.QueryBodyHits(
+                weapon,
+                weaponFrame,
+                authoredItr,
+                landingVolume);
+            Expect(immediateTargets.Count == 1 &&
+                   ReferenceEquals(immediateTargets[0].Target, target),
+                "R4-COL-04B: precondition must prove the old immediate landing query could see the overlapping target");
+
+            int targetHpBefore = target.Health.HP;
+            int weaponHpBefore = weapon.Health.HP;
+            weapon.InvokeOnLandedForSelfCheck();
+
+            Expect(target.Health.HP == targetHpBefore,
+                "R4-COL-04B: C++ weapon landing must not directly write an overlapping target HP outside frozen collision consume");
+            Expect(weapon.Health.HP == weaponHpBefore - 100 &&
+                   Nearly(weapon.Runtime.Y, 0.0) &&
+                   Nearly(weapon.Runtime.Vy, -3.5),
+                "R4-COL-04B: removing the extra target writer must preserve the weapon's own landing damage and bounce fields");
+        }
+
+        private static void CheckKind1NonCharacterTargetConsumeContracts()
+        {
+            RunKind1NonCharacterTargetConsumeCase(kind: 1, expectCandidateAndGrab: true);
+            RunKind1NonCharacterTargetConsumeCase(kind: 3, expectCandidateAndGrab: false);
+            CheckKind1NonCharacterAttackerConsumeContract();
+        }
+
+        private static void CheckKind1NonCharacterAttackerConsumeContract()
+        {
+            InteractionArea sourceItr = MakeInteractionItr(1, vrest: 0, injury: 0, dvx: 0);
+            sourceItr.catchingact = new[] { 297 };
+            sourceItr.caughtact = new[] { 130 };
+            LF2FrameData attackerFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Standing,
+                sourceItr,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            LF2FrameData targetFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Injured2,
+                null,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            var attackerData = new LF2CharacterData
+            {
+                name = "SelfCheck_R8Col005B_WeaponAttacker",
+                type_sub = (int)LF2ObjectType.LightWeapon,
+                frames = new List<LF2FrameData>
+                {
+                    attackerFrame,
+                    Frame(297, LF2States.Catching, 1, 297, 0, 0),
+                },
+            };
+            var targetData = new LF2CharacterData
+            {
+                name = "SelfCheck_R8Col005B_CharacterTarget",
+                type_sub = (int)LF2ObjectType.Character,
+                frames = new List<LF2FrameData>
+                {
+                    targetFrame,
+                    Frame(130, LF2States.BeingCaught, 1, 130, 0, 0),
+                },
+            };
+
+            var world = new SimulationWorld();
+            var attacker = new AlternateDamageSelfCheckWeapon();
+            attacker.BindData(
+                attackerData.name,
+                481,
+                (int)LF2ObjectType.LightWeapon,
+                attackerData,
+                0);
+            LF2Character target = CreateInteractionCharacter(
+                targetData.name,
+                482,
+                targetData);
+            world.Register(attacker);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 10.0);
+            attacker.Runtime.KeyRight = 1;
+            attacker.Runtime.PrevRight = 0;
+            target.FallCounter = 6;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            Expect(hasCandidates && candidates.Count == 1,
+                "R8-COL-005B: generic weapon attacker runtime KeyRight must collect one kind1 candidate");
+
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int targetSlot = target.Runtime.SlotIndex;
+            world.ObjectInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            Expect(attacker.Frame.N == 297 && target.Frame.N == 130 &&
+                   attacker.CaughtSlotIndex == targetSlot &&
+                   target.CatcherSlotIndex == attackerSlot &&
+                   attacker.Runtime.CaughtDuration == 300 &&
+                   target.FallCounter == 0 &&
+                   target.GetHeldWeapon() == null,
+                "R8-COL-005B: weapon-attacker kind1 must use generic grab fields, not the pickup/held route");
+        }
+
+        private static void RunKind1NonCharacterTargetConsumeCase(
+            int kind,
+            bool expectCandidateAndGrab)
+        {
+            InteractionArea sourceItr = MakeInteractionItr(kind, vrest: 0, injury: 0, dvx: 0);
+            sourceItr.catchingact = new[] { 297 };
+            sourceItr.caughtact = new[] { 130 };
+            LF2FrameData attackerFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Standing,
+                sourceItr,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            LF2FrameData attackerCatchFrame = Frame(297, LF2States.Catching, 1, 297, 0, 0);
+            LF2FrameData targetFrame = BuildCollisionAuditFrame(
+                0,
+                LF2States.Injured2,
+                null,
+                new BodyBox { kind = 0, x = -20, y = -20, w = 40, h = 40 });
+            LF2FrameData targetCaughtFrame = Frame(130, LF2States.BeingCaught, 1, 130, 0, 0);
+            var attackerData = new LF2CharacterData
+            {
+                name = $"SelfCheck_R4Col05A_Kind{kind}_Attacker",
+                type_sub = 1,
+                frames = new List<LF2FrameData> { attackerFrame, attackerCatchFrame },
+            };
+            var targetData = new LF2CharacterData
+            {
+                name = $"SelfCheck_R4Col05A_Kind{kind}_NonCharacterTarget",
+                type_sub = 2,
+                frames = new List<LF2FrameData> { targetFrame, targetCaughtFrame },
+            };
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateInteractionCharacter(
+                attackerData.name,
+                460 + kind,
+                attackerData);
+            var target = new FlowSelfCheckEntity(LF2ObjectType.LightWeapon);
+            target.BindData(targetData.name, 470 + kind, targetData);
+            world.Register(attacker);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 10.0);
+            attacker.Runtime.KeyRight = 1;
+            attacker.Runtime.PrevRight = 0;
+            target.FallCounter = 6;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            CollisionCandidateRange candidates = default;
+            bool hasCandidates = world.SceneQuery != null &&
+                world.SceneQuery.TryGetCollisionCandidateRange(attacker, out candidates);
+            int candidateCount = hasCandidates ? candidates.Count : 0;
+            Expect(candidateCount == (expectCandidateAndGrab ? 1 : 0),
+                $"R4-COL-05A kind{kind}: C++ kind1 must retain, while kind3 must reject, a non-character target before consume; " +
+                $"candidateCount={candidateCount}");
+
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int targetSlot = target.Runtime.SlotIndex;
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            if (!expectCandidateAndGrab)
+            {
+                Expect(attacker.Frame.N == 0 && target.Frame.N == 0 &&
+                       attacker.CaughtSlotIndex < 0 && target.CatcherSlotIndex < 0 &&
+                       target.FallCounter == 6,
+                    "R4-COL-05A kind3: character-only target gate must preserve the non-character target state");
+                return;
+            }
+
+            Expect(attacker.Frame.N == 297 && target.Frame.N == 130 &&
+                   attacker.CaughtSlotIndex == targetSlot &&
+                   target.CatcherSlotIndex == attackerSlot &&
+                   attacker.Runtime.CaughtDuration == 300 && target.FallCounter == 0,
+                "R4-COL-05A kind1: common Entity consume must raw-write actions, relation, duration and fall for a non-character target");
+        }
+
+        private static LF2CharacterData BuildOid999CandidateCollectionData(
+            InteractionArea itr,
+            bool state3005)
+        {
+            LF2FrameData frame = Frame(
+                0,
+                state3005 ? 3005 : LF2States.Standing,
+                1,
+                state3005 ? 1000 : 0,
+                0,
+                0);
+            frame.pic = state3005 ? 999 : 0;
+            frame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+            });
+            if (itr != null)
+                frame.itrs.Add(itr);
+            return new LF2CharacterData
+            {
+                name = state3005
+                    ? "SelfCheck_Oid999_TransitionTarget"
+                    : "SelfCheck_Oid999_TransitionAttacker",
+                frames = new List<LF2FrameData> { frame },
+            };
+        }
+
+        private readonly struct Oid999CandidateCollectionResult
+        {
+            public readonly int CandidateCount;
+            public readonly int TargetSlot;
+            public readonly int ItrIndex;
+            public readonly uint RngState;
+            public readonly ulong RngCallCount;
+
+            public Oid999CandidateCollectionResult(
+                int candidateCount,
+                int targetSlot,
+                int itrIndex,
+                uint rngState,
+                ulong rngCallCount)
+            {
+                CandidateCount = candidateCount;
+                TargetSlot = targetSlot;
+                ItrIndex = itrIndex;
+                RngState = rngState;
+                RngCallCount = rngCallCount;
             }
         }
 
@@ -14070,6 +15773,10 @@ namespace NTSD.Test
                 CheckAudit4CurrentDatDispatchContracts();
                 CheckAudit4PendingFrameSoundContracts();
                 CheckWeaponHitResolveAuditContracts();
+                CheckWeaponVictimRawFrameWriterContract();
+                CheckWeaponAttackerRawFrameAndOrderingContract();
+                CheckWeaponVitalAndDurabilityContract();
+                CheckWeaponTailIdentityTimingContract();
                 CheckSpecialAttackHitResolveAuditContracts();
             }
 
@@ -14225,6 +15932,197 @@ namespace NTSD.Test
             CheckCurrentCharacterDatVictimDispatchMatrix(itr);
             CheckCurrentDatCollisionConsumeShellMatrix(itr);
             CheckCurrentDatIdentityMissingDefinitionFallback();
+            CheckCurrentDatTargetShellMismatchMatrix(itr);
+        }
+
+        private static void CheckCurrentDatTargetShellMismatchMatrix(
+            InteractionArea sourceItr)
+        {
+            string[] attackerLabels =
+            {
+                "Character",
+                "SharedCharacterDat",
+                "SpecialAttack",
+                "Weapon",
+            };
+            for (int attackerIndex = 0; attackerIndex < attackerLabels.Length; attackerIndex++)
+            {
+                InteractionArea itr = sourceItr.ShallowCopy();
+                var world = new SimulationWorld();
+                LF2Entity attacker = CreateCurrentDatTargetDispatchAttacker(
+                    attackerIndex,
+                    attackerLabels[attackerIndex],
+                    itr);
+                LF2CharacterData targetData = BuildCurrentDatMismatchTargetData(
+                    $"SelfCheck_R8Hit005_Type3_{attackerLabels[attackerIndex]}",
+                    LF2ObjectType.SpecialAttack);
+                var target = new CurrentDatSelfCheckWeapon(
+                    LF2ObjectType.SpecialAttack);
+                target.BindData(
+                    targetData.name,
+                    32200 + attackerIndex,
+                    (int)LF2ObjectType.LightWeapon,
+                    targetData,
+                    0);
+                world.Register(attacker);
+                world.Register(target);
+                ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+                ConfigureCollisionAuditEntity(target, 2, 0.0);
+                target.Runtime.WeaponFlightCounter = 77;
+
+                world.CaptureCollisionFrameSnapshotsAll();
+                world.CollectCollisionCandidatesAll();
+                if (attacker.SupportsPostInteractionPhase())
+                    world.PostInteractionTickAll(1);
+                else
+                    world.ObjectInteractionTickAll(1);
+                world.EndCollisionCandidateConsumption();
+
+                Expect(target.Health.HP == 90 &&
+                       target.Health.HPBound == 97 &&
+                       target.ComboCountVic == 10 &&
+                       target.Runtime.WeaponFlightCounter == 77 &&
+                       target.HitConfirm2 == 1,
+                    $"R8-HIT-005 {attackerLabels[attackerIndex]}: weapon CLR shell with current type3 DAT " +
+                    $"must use the type3 writer; hp={target.Health.HP}, hpBound={target.Health.HPBound}, " +
+                    $"combo={target.ComboCountVic}, durability={target.Runtime.WeaponFlightCounter}, " +
+                    $"hitConfirm2={target.HitConfirm2}");
+            }
+
+            CheckCurrentWeaponDatOnSpecialShell(sourceItr);
+            CheckCurrentOtherDatOnWeaponShell(sourceItr);
+        }
+
+        private static LF2Entity CreateCurrentDatTargetDispatchAttacker(
+            int attackerIndex,
+            string label,
+            InteractionArea itr)
+        {
+            LF2ObjectType dataType = attackerIndex switch
+            {
+                2 => LF2ObjectType.SpecialAttack,
+                3 => LF2ObjectType.LightWeapon,
+                _ => LF2ObjectType.Character,
+            };
+            var data = new LF2CharacterData
+            {
+                name = $"SelfCheck_R8Hit005_Attacker_{label}",
+                type_sub = (int)dataType,
+                frames = new List<LF2FrameData> { InteractionFrame(itr) },
+            };
+
+            switch (attackerIndex)
+            {
+                case 0:
+                    return CreateInteractionCharacter(data.name, 32100, data);
+                case 1:
+                    var shared = new FlowSelfCheckEntity(LF2ObjectType.Character);
+                    shared.BindData(data.name, 32101, data);
+                    return shared;
+                case 2:
+                    var special = new Audit4SelfCheckSpecialAttack();
+                    special.BindData(data.name, 210, data);
+                    return special;
+                default:
+                    var weapon = new AlternateDamageSelfCheckWeapon();
+                    weapon.BindData(
+                        data.name,
+                        32103,
+                        (int)LF2ObjectType.LightWeapon,
+                        data,
+                        0);
+                    return weapon;
+            }
+        }
+
+        private static LF2CharacterData BuildCurrentDatMismatchTargetData(
+            string name,
+            LF2ObjectType dataType)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                type_sub = (int)dataType,
+                frames = new List<LF2FrameData>
+                {
+                    InteractionFrame(null),
+                    Frame(20, LF2States.Standing, 100, 20, 0, 0),
+                    Frame(30, LF2States.Standing, 100, 30, 0, 0),
+                    Frame(40, LF2States.Standing, 100, 40, 0, 0),
+                },
+            };
+        }
+
+        private static void CheckCurrentWeaponDatOnSpecialShell(
+            InteractionArea sourceItr)
+        {
+            InteractionArea itr = sourceItr.ShallowCopy();
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateCurrentDatTargetDispatchAttacker(
+                0,
+                "WeaponTarget",
+                itr);
+            LF2CharacterData targetData = BuildCurrentDatMismatchTargetData(
+                "SelfCheck_R8Hit005_SpecialShellWeaponDat",
+                LF2ObjectType.LightWeapon);
+            var target = new CurrentDatSelfCheckSpecialAttack(
+                LF2ObjectType.LightWeapon);
+            target.BindData(targetData.name, 32300, targetData, 0);
+            world.Register(attacker);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 0.0);
+            target.Runtime.WeaponFlightCounter = 77;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            Expect(target.Health.HP == 90 &&
+                   target.Health.HPBound == 97 &&
+                   target.ComboCountVic == 10 &&
+                   target.Runtime.WeaponFlightCounter == 67 &&
+                   target.HitConfirm2 == 1,
+                "R8-HIT-005: SpecialAttack CLR shell with current weapon DAT must use weapon vital/durability/tail");
+        }
+
+        private static void CheckCurrentOtherDatOnWeaponShell(
+            InteractionArea sourceItr)
+        {
+            InteractionArea itr = sourceItr.ShallowCopy();
+            var world = new SimulationWorld();
+            LF2Entity attacker = CreateCurrentDatTargetDispatchAttacker(
+                0,
+                "OtherTarget",
+                itr);
+            LF2CharacterData targetData = BuildCurrentDatMismatchTargetData(
+                "SelfCheck_R8Hit005_WeaponShellOtherDat",
+                LF2ObjectType.Other);
+            var target = new CurrentDatSelfCheckWeapon(LF2ObjectType.Other);
+            target.BindData(
+                targetData.name,
+                32400,
+                (int)LF2ObjectType.LightWeapon,
+                targetData,
+                0);
+            world.Register(attacker);
+            world.Register(target);
+            ConfigureCollisionAuditEntity(attacker, 1, 0.0);
+            ConfigureCollisionAuditEntity(target, 2, 0.0);
+            target.Runtime.WeaponFlightCounter = 77;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            Expect(target.Health.HP == 90 &&
+                   target.Health.HPBound == 97 &&
+                   target.ComboCountVic == 10 &&
+                   target.Runtime.WeaponFlightCounter == 77 &&
+                   target.HitConfirm2 == 0,
+                "R8-HIT-005: weapon CLR shell with current type5 DAT must use common non-character hurt without weapon/type3 tails");
         }
 
         private static void CheckCurrentDatCollisionConsumeShellMatrix(InteractionArea itr)
@@ -14704,8 +16602,13 @@ namespace NTSD.Test
             specialData.frames.Add(Frame(30, LF2States.Standing, 5, 30, 0, 0));
             specialData.frames.Add(Frame(200, LF2States.Standing, 5, 200, 0, 0));
             specialData.frames.Add(Frame(203, LF2States.Burning, 5, 203, 0, 0));
-            var specialVictim = new SelfCheckCharacterDatShell();
-            specialVictim.BindData("SelfCheck_Audit4SpecialVictim", 210, specialData);
+            var specialVictim = new CurrentDatSelfCheckSpecialAttack(
+                LF2ObjectType.SpecialAttack);
+            specialVictim.BindData(
+                "SelfCheck_Audit4SpecialVictim",
+                210,
+                specialData,
+                0);
             var specialAttacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
             specialAttacker.BindData("SelfCheck_Audit4SpecialAttacker", 948, BuildAudit4StandardHitData("SelfCheck_Audit4SpecialAttacker"));
             var specialDamageWorld = new SimulationWorld();
@@ -14713,9 +16616,14 @@ namespace NTSD.Test
             specialDamageWorld.Register(specialAttacker);
             specialVictim.KnockbackVx = -3.0;
             bool specialHit = specialVictim.Hit(new InteractionArea { kind = 0, effect = 2 }, specialAttacker);
-            Expect(specialHit && specialVictim.Frame.N == 203 && specialVictim.Runtime.Dir == "left" &&
-                   specialVictim.AttackingCounter == 0,
-                "BATTLE-AUDIT4-04: type3 effect tail must enter burning frame and face after the ordered motion reset");
+            Expect(specialHit && specialVictim.Frame.N == 20 &&
+                   specialVictim.HitConfirm2 == 1 &&
+                   specialVictim.AttackingCounter == 0 &&
+                   Nearly(specialVictim.Runtime.Vx, 0.0) &&
+                   Nearly(specialVictim.Runtime.Vy, 0.0) &&
+                   Nearly(specialVictim.Runtime.Vz, 0.0),
+                "BATTLE-AUDIT4-04: current type3 effect2 must keep the type3 frame20/motion-reset tail; " +
+                "the C++ burning-frame branch requires current DAT to have changed to type0 before the effect switch");
 
             var selfDestructMethod = typeof(LF2SpecialAttack).GetMethod(
                 "ApplyPostHitSelfDestruct",
@@ -15021,6 +16929,727 @@ namespace NTSD.Test
                        Nearly(state3000Attacker.Runtime.Vz, 7.0),
                     "BATTLE-C27: state3000 attacker tail must enter frame10, clear attacking/Vx, and apply frame10 dvz");
             }
+        }
+
+        private static void CheckWeaponVictimRawFrameWriterContract()
+        {
+            const int preservedPn = 71;
+            const int preservedAttackingCounter = 29;
+            const int preservedWaitCounter = 17;
+            const uint seed = 0x5EED1234u;
+
+            LF2CharacterData WeaponData(string name)
+            {
+                var frames = new List<LF2FrameData>(227);
+                for (int frameId = 0; frameId <= 226; frameId++)
+                    frames.Add(Frame(frameId, LF2States.Standing, frameId + 1000, frameId, 0, 0));
+
+                return new LF2CharacterData
+                {
+                    name = name,
+                    weapon_hp = 100,
+                    frames = frames,
+                };
+            }
+
+            FlowSelfCheckEntity Attacker(SimulationWorld world, string name)
+            {
+                var attacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
+                attacker.BindData(name, 980, new LF2CharacterData
+                {
+                    name = name,
+                    frames = new List<LF2FrameData>
+                    {
+                        Frame(0, LF2States.Standing, 100, 0, 0, 0),
+                    },
+                });
+                world.Register(attacker);
+                attacker.SwitchDir("right");
+                attacker.RelationTeam = 13;
+                attacker.Runtime.SetPosition(0.0, 0.0, 0.0);
+                attacker.Runtime.SyncIntegerPosition();
+                return attacker;
+            }
+
+            void Verify(
+                string label,
+                int weaponType,
+                int victimY,
+                int expectedFixedFrame,
+                int randomUpperExclusive,
+                int expectedAttackerSelfVrest)
+            {
+                var world = new SimulationWorld();
+                world.Rng.Seed(seed);
+                FlowSelfCheckEntity attacker = Attacker(world, $"SelfCheck_R4Hit02C_{label}_Attacker");
+                AlternateDamageSelfCheckWeapon victim = CreateSelfCheckWeapon(
+                    $"SelfCheck_R4Hit02C_{label}_Victim",
+                    990 + weaponType,
+                    weaponType,
+                    WeaponData($"SelfCheck_R4Hit02C_{label}_Victim"),
+                    0);
+                victim.Runtime.WeaponFlightCounter = 100;
+                world.Register(victim);
+                victim.SwitchDir("right");
+                victim.Runtime.SetPosition(10.0, victimY, 0.0);
+                victim.Runtime.SyncIntegerPosition();
+                victim.Frame.PN = preservedPn;
+                victim.AttackingCounter = preservedAttackingCounter;
+                victim.Trans.SyncDirectFrameData(
+                    victim.Frame.D.wait,
+                    victim.Frame.D.next,
+                    preservedWaitCounter);
+
+                var expectedRng = new DeterministicRng(seed);
+                int expectedFrame = expectedFixedFrame;
+                if (randomUpperExclusive > 0)
+                    expectedFrame = expectedRng.NextInt(0, randomUpperExclusive);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+
+                int attackerSlot = attacker.Runtime.SlotIndex;
+                ulong rngBefore = world.Rng.CallCount;
+                bool accepted = victim.Hit(new InteractionArea
+                {
+                    kind = 0,
+                    fall = 20,
+                    injury = 1,
+                    arest = 4,
+                    vrest = 0,
+                    effect = 0,
+                }, attacker);
+                ulong rngDelta = world.Rng.CallCount - rngBefore;
+
+                Expect(accepted &&
+                       victim.Frame.N == expectedFrame &&
+                       victim.Runtime.Frame == expectedFrame &&
+                       ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&
+                       victim.Frame.PN == preservedPn &&
+                       victim.AttackingCounter == preservedAttackingCounter &&
+                       victim.Trans.WaitCounter == preservedWaitCounter &&
+                       rngDelta == expectedRng.CallCount &&
+                       victim.HitConfirm2 == 1 &&
+                       victim.RelationTeam == attacker.RelationTeam &&
+                       attacker.ItrRest.GetVrest(attackerSlot) == expectedAttackerSelfVrest,
+                    $"R4-HIT-02C {label}: normal weapon victim must retain raw 180/186 then raw final-frame side effects; " +
+                    $"frame={victim.Frame.N}/{victim.Runtime.Frame}, pn={victim.Frame.PN}, attacking={victim.AttackingCounter}, " +
+                    $"wait={victim.Trans.WaitCounter}, rngDelta={rngDelta}, hitConfirm2={victim.HitConfirm2}, " +
+                    $"relation={victim.RelationTeam}, selfVrest={attacker.ItrRest.GetVrest(attackerSlot)}");
+            }
+
+            Verify("type1", 1, 0, -1, 16, 0);
+            Verify("type4", 4, 0, -1, 16, 30);
+            Verify("type6", 6, 0, -1, 16, 30);
+            Verify("type2-ground", 2, 0, 20, 0, 3);
+            Verify("type2-air", 2, -1, -1, 6, 3);
+        }
+
+        private static void CheckWeaponAttackerRawFrameAndOrderingContract()
+        {
+            const int preservedPn = 71;
+            const int preservedAttackingCounter = 29;
+            const int preservedWaitCounter = 17;
+            const uint seed = 0x2D5EEDu;
+
+            LF2CharacterData AttackerData(
+                string name,
+                int initialState,
+                int frame10State,
+                int frame10Dvz)
+            {
+                var frames = new List<LF2FrameData>(16);
+                for (int frameId = 0; frameId <= 15; frameId++)
+                    frames.Add(Frame(frameId, LF2States.Standing, frameId + 1000, frameId, 0, 0));
+
+                frames[0].state = initialState;
+                frames[10].state = frame10State;
+                frames[10].dvz = frame10Dvz;
+                return new LF2CharacterData
+                {
+                    name = name,
+                    frames = frames,
+                };
+            }
+
+            LF2CharacterData WeaponData(string name)
+            {
+                var frames = new List<LF2FrameData>(227);
+                for (int frameId = 0; frameId <= 226; frameId++)
+                    frames.Add(Frame(frameId, LF2States.Standing, frameId + 2000, frameId, 0, 0));
+
+                return new LF2CharacterData
+                {
+                    name = name,
+                    weapon_hp = 100,
+                    frames = frames,
+                };
+            }
+
+            FlowSelfCheckEntity Attacker(
+                SimulationWorld world,
+                string name,
+                int objectId,
+                LF2ObjectType currentType,
+                int initialState,
+                int frame10State,
+                int frame10Dvz)
+            {
+                var attacker = new FlowSelfCheckEntity(currentType);
+                attacker.BindData(
+                    name,
+                    objectId,
+                    AttackerData(name, initialState, frame10State, frame10Dvz));
+                world.Register(attacker);
+                attacker.SwitchDir("right");
+                attacker.RelationTeam = 13;
+                attacker.Runtime.SetPosition(0.0, 0.0, 0.0);
+                attacker.Runtime.SyncIntegerPosition();
+                return attacker;
+            }
+
+            AlternateDamageSelfCheckWeapon Weapon(
+                SimulationWorld world,
+                string name,
+                int objectId,
+                int weaponType,
+                int frameId)
+            {
+                AlternateDamageSelfCheckWeapon weapon = CreateSelfCheckWeapon(
+                    name,
+                    objectId,
+                    weaponType,
+                    WeaponData(name),
+                    frameId);
+                weapon.Runtime.WeaponFlightCounter = 100;
+                weapon.SwitchDir("right");
+                weapon.Runtime.SetPosition(10.0, 0.0, 0.0);
+                weapon.Runtime.SyncIntegerPosition();
+                world.Register(weapon);
+                return weapon;
+            }
+
+            void PrepareAttacker(FlowSelfCheckEntity attacker)
+            {
+                attacker.Frame.PN = preservedPn;
+                attacker.AttackingCounter = preservedAttackingCounter;
+                attacker.Trans.SyncDirectFrameData(
+                    attacker.Frame.D.wait,
+                    attacker.Frame.D.next,
+                    preservedWaitCounter);
+                attacker.Runtime.SetVelocity(4.0, 6.0, 5.0);
+            }
+
+            bool Hit(AlternateDamageSelfCheckWeapon victim, FlowSelfCheckEntity attacker)
+            {
+                return victim.Hit(new InteractionArea
+                {
+                    kind = 0,
+                    fall = 20,
+                    injury = 1,
+                    arest = 4,
+                    vrest = 0,
+                    effect = 0,
+                }, attacker);
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(
+                    world,
+                    "SelfCheck_R4Hit02D_State1002",
+                    208,
+                    LF2ObjectType.Other,
+                    LF2States.WeaponThrowing,
+                    LF2States.Standing,
+                    9);
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit02D_State1002Victim",
+                    199,
+                    2,
+                    0);
+                victim.KnockbackVx = 8.0;
+                PrepareAttacker(attacker);
+                world.Rng.Seed(seed);
+                var expectedRng = new DeterministicRng(seed);
+                int expectedFrame = expectedRng.NextInt(0, 16);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+                bool accepted = Hit(victim, attacker);
+
+                Expect(accepted &&
+                       attacker.Frame.N == expectedFrame &&
+                       attacker.Runtime.Frame == expectedFrame &&
+                       ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(expectedFrame)) &&
+                       attacker.Frame.PN == preservedPn &&
+                       attacker.AttackingCounter == preservedAttackingCounter &&
+                       attacker.Trans.WaitCounter == preservedWaitCounter &&
+                       Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
+                       Nearly(attacker.Runtime.Vy, -4.0) &&
+                       Nearly(attacker.Runtime.Vz, 5.0) &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-02D state1002: raw random16 must preserve PN/attacking/wait before Vx/Vy response; " +
+                    $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
+                    $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
+                    $"rng={world.Rng.CallCount}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(
+                    world,
+                    "SelfCheck_R4Hit02D_Type4State1002",
+                    208,
+                    LF2ObjectType.ThrowWeapon,
+                    LF2States.WeaponThrowing,
+                    LF2States.Standing,
+                    9);
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit02D_Type4Victim",
+                    199,
+                    4,
+                    0);
+                victim.KnockbackVx = 8.0;
+                PrepareAttacker(attacker);
+                world.Rng.Seed(seed);
+                var expectedRng = new DeterministicRng(seed);
+                int expectedAttackerFrame = expectedRng.NextInt(0, 16);
+                int expectedVictimFrame = expectedRng.NextInt(0, 16);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+                bool accepted = Hit(victim, attacker);
+
+                Expect(accepted &&
+                       attacker.Frame.N == expectedAttackerFrame &&
+                       victim.Frame.N == expectedVictimFrame &&
+                       attacker.Frame.PN == preservedPn &&
+                       attacker.AttackingCounter == preservedAttackingCounter &&
+                       attacker.Trans.WaitCounter == preservedWaitCounter &&
+                       Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
+                       Nearly(attacker.Runtime.Vy, -4.0) &&
+                       Nearly(attacker.KnockbackVx, -victim.KnockbackVx) &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-02D type4 state1002: raw response must preserve side effects and type4 knockback; " +
+                    $"attackerFrame={attacker.Frame.N}, victimFrame={victim.Frame.N}, pn={attacker.Frame.PN}, " +
+                    $"attacking={attacker.AttackingCounter}, wait={attacker.Trans.WaitCounter}, " +
+                    $"knockback={attacker.KnockbackVx}/{victim.KnockbackVx}, rng={world.Rng.CallCount}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(
+                    world,
+                    "SelfCheck_R4Hit02D_State3000",
+                    208,
+                    LF2ObjectType.Other,
+                    LF2States.ProjectileFlying,
+                    LF2States.Standing,
+                    9);
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit02D_State3000Victim",
+                    199,
+                    2,
+                    0);
+                PrepareAttacker(attacker);
+                world.Rng.Seed(seed);
+                var expectedRng = new DeterministicRng(seed);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+                bool accepted = Hit(victim, attacker);
+
+                Expect(accepted &&
+                       attacker.Frame.N == 10 &&
+                       attacker.Runtime.Frame == 10 &&
+                       ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(10)) &&
+                       attacker.Frame.PN == preservedPn &&
+                       attacker.AttackingCounter == 0 &&
+                       attacker.Trans.WaitCounter == preservedWaitCounter &&
+                       Nearly(attacker.Runtime.Vx, 0.0) &&
+                       Nearly(attacker.Runtime.Vy, 6.0) &&
+                       Nearly(attacker.Runtime.Vz, 9.0) &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-02D state3000: pre-knockdown raw10 must preserve PN/wait/Vy and retain explicit attacking/Vx/Vz writes; " +
+                    $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
+                    $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
+                    $"rng={world.Rng.CallCount}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(
+                    world,
+                    "SelfCheck_R4Hit02D_State3000OrderWitness",
+                    208,
+                    LF2ObjectType.Other,
+                    LF2States.ProjectileFlying,
+                    LF2States.WeaponThrowing,
+                    11);
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit02D_State3000OrderWitnessVictim",
+                    199,
+                    2,
+                    0);
+                victim.KnockbackVx = 8.0;
+                PrepareAttacker(attacker);
+                world.Rng.Seed(seed);
+                var expectedRng = new DeterministicRng(seed);
+                int expectedFrame = expectedRng.NextInt(0, 16);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+                bool accepted = Hit(victim, attacker);
+
+                Expect(accepted &&
+                       attacker.Frame.N == expectedFrame &&
+                       attacker.Frame.PN == preservedPn &&
+                       attacker.AttackingCounter == 0 &&
+                       attacker.Trans.WaitCounter == preservedWaitCounter &&
+                       Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
+                       Nearly(attacker.Runtime.Vy, -4.0) &&
+                       Nearly(attacker.Runtime.Vz, 11.0) &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-02D order witness: C++ must evaluate state3000 before victim knockdown and state1002 after it; " +
+                    $"frame={attacker.Frame.N}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
+                    $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
+                    $"rng={world.Rng.CallCount}");
+            }
+
+            void VerifyState3000Skip(string label, int victimOid, int victimFrame)
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(
+                    world,
+                    $"SelfCheck_R4Hit02D_{label}Attacker",
+                    209,
+                    LF2ObjectType.Other,
+                    LF2States.ProjectileFlying,
+                    LF2States.Standing,
+                    9);
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    $"SelfCheck_R4Hit02D_{label}Victim",
+                    victimOid,
+                    2,
+                    victimFrame);
+                PrepareAttacker(attacker);
+                world.Rng.Seed(seed);
+                var expectedRng = new DeterministicRng(seed);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+                bool accepted = Hit(victim, attacker);
+
+                Expect(accepted &&
+                       attacker.Frame.N == 0 &&
+                       attacker.Runtime.Frame == 0 &&
+                       attacker.Frame.PN == preservedPn &&
+                       attacker.AttackingCounter == preservedAttackingCounter &&
+                       attacker.Trans.WaitCounter == preservedWaitCounter &&
+                       Nearly(attacker.Runtime.Vx, 4.0) &&
+                       Nearly(attacker.Runtime.Vy, 6.0) &&
+                       Nearly(attacker.Runtime.Vz, 5.0) &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-02D {label}: oid209 state3000 skipReset must inspect victim current DAT/frame before weapon knockdown; " +
+                    $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
+                    $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
+                    $"rng={world.Rng.CallCount}");
+            }
+
+            VerifyState3000Skip("oid209-karasu-skip", 200, 0);
+            VerifyState3000Skip("oid209-frame40-skip", 209, 40);
+        }
+
+        private static void CheckWeaponVitalAndDurabilityContract()
+        {
+            LF2CharacterData WeaponData(string name)
+            {
+                var frames = new List<LF2FrameData>(227);
+                for (int frameId = 0; frameId <= 226; frameId++)
+                    frames.Add(Frame(frameId, LF2States.Standing, frameId + 3000, frameId, 0, 0));
+
+                return new LF2CharacterData
+                {
+                    name = name,
+                    weapon_hp = 100,
+                    frames = frames,
+                };
+            }
+
+            FlowSelfCheckEntity Attacker(SimulationWorld world, string name)
+            {
+                var attacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
+                attacker.BindData(name, 980, new LF2CharacterData
+                {
+                    name = name,
+                    frames = new List<LF2FrameData>
+                    {
+                        Frame(0, LF2States.Standing, 100, 0, 0, 0),
+                    },
+                });
+                world.Register(attacker);
+                attacker.SwitchDir("right");
+                return attacker;
+            }
+
+            AlternateDamageSelfCheckWeapon Weapon(
+                SimulationWorld world,
+                string name,
+                int objectId,
+                int weaponType)
+            {
+                AlternateDamageSelfCheckWeapon weapon = CreateSelfCheckWeapon(
+                    name,
+                    objectId,
+                    weaponType,
+                    WeaponData(name),
+                    0);
+                weapon.Runtime.WeaponFlightCounter = 100;
+                weapon.SwitchDir("right");
+                world.Register(weapon);
+                return weapon;
+            }
+
+            bool Hit(
+                AlternateDamageSelfCheckWeapon victim,
+                FlowSelfCheckEntity attacker,
+                int injury,
+                int bdefend = 0)
+            {
+                return victim.Hit(new InteractionArea
+                {
+                    kind = 0,
+                    fall = 20,
+                    injury = injury,
+                    bdefend = bdefend,
+                    arest = 4,
+                    vrest = 0,
+                    effect = 0,
+                }, attacker);
+            }
+
+            foreach (int weaponType in new[] { 1, 2, 4 })
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(world, $"SelfCheck_R4Hit03_Type{weaponType}_Attacker");
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    $"SelfCheck_R4Hit03_Type{weaponType}_Victim",
+                    990 + weaponType,
+                    weaponType);
+                victim.Health.HP = 100;
+                victim.Health.HPBound = 100;
+                victim.Health.HPLost = 7;
+                victim.FallDamageDiv = 50;
+                victim.ComboCountVic = 0;
+                victim.Unk344 = 1;
+
+                Expect(Hit(victim, attacker, 10) &&
+                       victim.Health.HP == 80 &&
+                       victim.Health.HPBound == 94 &&
+                       victim.Health.HPLost == 7 &&
+                       victim.ComboCountVic == 20 &&
+                       world.DamageStats[1] == 20 &&
+                       victim.Runtime.WeaponFlightCounter == 90,
+                    $"R4-HIT-03 type{weaponType}: normal weapon hit must write scaled vital/stat before raw durability; " +
+                    $"hp={victim.Health.HP}/{victim.Health.HPBound}/{victim.Health.HPLost}, combo={victim.ComboCountVic}, " +
+                    $"damage={world.DamageStats[1]}, flight={victim.Runtime.WeaponFlightCounter}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity holder = Attacker(world, "SelfCheck_R4Hit03_LethalHolder");
+                FlowSelfCheckEntity attacker = Attacker(world, "SelfCheck_R4Hit03_LethalAttacker");
+                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit03_LethalType2",
+                    992,
+                    2);
+                victim.Health.HP = 5;
+                victim.Health.HPBound = 10;
+                victim.Health.HPLost = 7;
+                victim.FallDamageDiv = 200;
+                victim.KillCount = -1;
+                victim.ComboCountVic = 0;
+                victim.Unk344 = 1;
+
+                Expect(Hit(victim, attacker, 10) &&
+                       victim.Health.HP == 0 &&
+                       victim.Health.HPBound == 9 &&
+                       victim.Health.HPLost == 7 &&
+                       victim.ComboCountVic == 5 &&
+                       world.DamageStats[1] == 5 &&
+                       victim.Runtime.WeaponFlightCounter == 90 &&
+                       world.KillStats[1] == 0 &&
+                       holder.KillStat == 0 &&
+                       holder.ComboCountAtk == 0,
+                    $"R4-HIT-03 lethal type2: weapon vital must scale but exclude type0-only kill/holder score; " +
+                    $"hp={victim.Health.HP}/{victim.Health.HPBound}/{victim.Health.HPLost}, combo={victim.ComboCountVic}, " +
+                    $"damage={world.DamageStats[1]}, flight={victim.Runtime.WeaponFlightCounter}, " +
+                    $"kill={world.KillStats[1]}/{holder.KillStat}, holderCombo={holder.ComboCountAtk}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(world, "SelfCheck_R4Hit03_BdefendAttacker");
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit03_BdefendType4",
+                    994,
+                    4);
+                victim.Health.HP = 100;
+                victim.Health.HPBound = 100;
+                victim.FallDamageDiv = 50;
+                victim.Unk344 = 1;
+
+                Expect(Hit(victim, attacker, 10, 100) &&
+                       victim.Health.HP == 80 &&
+                       victim.Health.HPBound == 94 &&
+                       victim.ComboCountVic == 20 &&
+                       world.DamageStats[1] == 20 &&
+                       victim.Runtime.WeaponFlightCounter == -1,
+                    $"R4-HIT-03 type4 bdefend100: scaled vital must coexist with raw durability=-1; " +
+                    $"hp={victim.Health.HP}/{victim.Health.HPBound}, combo={victim.ComboCountVic}, " +
+                    $"damage={world.DamageStats[1]}, flight={victim.Runtime.WeaponFlightCounter}");
+            }
+
+            {
+                var world = new SimulationWorld();
+                FlowSelfCheckEntity attacker = Attacker(world, "SelfCheck_R4Hit03_Type6Attacker");
+                AlternateDamageSelfCheckWeapon victim = Weapon(
+                    world,
+                    "SelfCheck_R4Hit03_Type6Reaction",
+                    996,
+                    6);
+                victim.Health.HP = 100;
+                victim.Health.HPBound = 100;
+                victim.Health.HPLost = 7;
+                victim.FallDamageDiv = 50;
+                victim.ComboCountVic = 9;
+                victim.Unk344 = 1;
+
+                Expect(Hit(victim, attacker, 10) &&
+                       victim.Health.HP == 100 &&
+                       victim.Health.HPBound == 100 &&
+                       victim.Health.HPLost == 7 &&
+                       victim.ComboCountVic == 9 &&
+                       world.DamageStats[1] == 0 &&
+                       victim.Runtime.WeaponFlightCounter == 90,
+                    $"R4-HIT-03 type6: reaction route must retain vital/stat while applying raw durability only; " +
+                    $"hp={victim.Health.HP}/{victim.Health.HPBound}/{victim.Health.HPLost}, combo={victim.ComboCountVic}, " +
+                    $"damage={world.DamageStats[1]}, flight={victim.Runtime.WeaponFlightCounter}");
+            }
+        }
+
+        private static void CheckWeaponTailIdentityTimingContract()
+        {
+            const int preservedPn = 67;
+            const int preservedAttackingCounter = 31;
+            const int preservedWaitCounter = 19;
+            const uint seed = 0x4A11CEu;
+
+            LF2CharacterData WeaponData(string name)
+            {
+                var frames = new List<LF2FrameData>(227);
+                for (int frameId = 0; frameId <= 226; frameId++)
+                    frames.Add(Frame(frameId, LF2States.Standing, frameId + 3000, frameId, 0, 0));
+
+                return new LF2CharacterData
+                {
+                    name = name,
+                    weapon_hp = 100,
+                    frames = frames,
+                };
+            }
+
+            FlowSelfCheckEntity Attacker(SimulationWorld world, string name)
+            {
+                var attacker = new FlowSelfCheckEntity(LF2ObjectType.Other);
+                attacker.BindData(name, 982, new LF2CharacterData
+                {
+                    name = name,
+                    frames = new List<LF2FrameData>
+                    {
+                        Frame(0, LF2States.Standing, 100, 0, 0, 0),
+                    },
+                });
+                world.Register(attacker);
+                attacker.SwitchDir("right");
+                attacker.RelationTeam = 23;
+                attacker.Runtime.SetPosition(0.0, 0.0, 0.0);
+                attacker.Runtime.SyncIntegerPosition();
+                return attacker;
+            }
+
+            void Verify(
+                string label,
+                int weaponType,
+                int victimY,
+                int fixedFrame,
+                int randomUpperExclusive)
+            {
+                var world = new SimulationWorld();
+                world.Rng.Seed(seed);
+                FlowSelfCheckEntity attacker = Attacker(world, $"SelfCheck_R4Hit04_{label}_Attacker");
+                AlternateDamageSelfCheckWeapon victim = CreateSelfCheckWeapon(
+                    $"SelfCheck_R4Hit04_{label}_Victim",
+                    990 + weaponType,
+                    weaponType,
+                    WeaponData($"SelfCheck_R4Hit04_{label}_Victim"),
+                    0);
+                world.Register(victim);
+                victim.SwitchDir("right");
+                victim.RelationTeam = -23;
+                victim.HitConfirm2 = 0;
+                victim.Runtime.WeaponFlightCounter = 100;
+                victim.Runtime.SetPosition(10.0, victimY, 0.0);
+                victim.Runtime.SyncIntegerPosition();
+                victim.Frame.PN = preservedPn;
+                victim.AttackingCounter = preservedAttackingCounter;
+                victim.Trans.SyncDirectFrameData(
+                    victim.Frame.D.wait,
+                    victim.Frame.D.next,
+                    preservedWaitCounter);
+
+                var expectedRng = new DeterministicRng(seed);
+                int expectedFrame = fixedFrame;
+                if (randomUpperExclusive > 0)
+                    expectedFrame = expectedRng.NextInt(0, randomUpperExclusive);
+                expectedRng.NextInt(0, 9);
+                expectedRng.NextInt(0, 9);
+
+                bool accepted = victim.Hit(new InteractionArea
+                {
+                    kind = 0,
+                    fall = 20,
+                    injury = 1,
+                    arest = 4,
+                    vrest = 0,
+                    effect = 0,
+                }, attacker);
+
+                Expect(accepted &&
+                       victim.HitConfirm2 == 1 &&
+                       victim.RelationTeam == attacker.RelationTeam &&
+                       victim.Frame.N == expectedFrame &&
+                       victim.Runtime.Frame == expectedFrame &&
+                       ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&
+                       victim.Frame.PN == preservedPn &&
+                       victim.AttackingCounter == preservedAttackingCounter &&
+                       victim.Trans.WaitCounter == preservedWaitCounter &&
+                       victim.Runtime.WeaponFlightCounter == 99 &&
+                       world.Rng.CallCount == expectedRng.CallCount,
+                    $"R4-HIT-004 {label}: normal weapon tail must own final hit-confirm/relation after the hurt path; " +
+                    $"confirm={victim.HitConfirm2}, relation={victim.RelationTeam}, frame={victim.Frame.N}/{victim.Runtime.Frame}, " +
+                    $"pn={victim.Frame.PN}, attacking={victim.AttackingCounter}, wait={victim.Trans.WaitCounter}, " +
+                    $"flight={victim.Runtime.WeaponFlightCounter}, rng={world.Rng.CallCount}");
+            }
+
+            Verify("type1", 1, 0, -1, 16);
+            Verify("type2-ground", 2, 0, 20, 0);
+            Verify("type4", 4, 0, -1, 16);
+            Verify("type6", 6, 0, -1, 16);
         }
 
         private static void CheckSpecialAttackHitResolveAuditContracts()
@@ -16516,6 +19145,85 @@ namespace NTSD.Test
                 });
         }
 
+        private static void CheckType3SpecialAttackNormalVitalAndStatWrites()
+        {
+            const int attackerOid = 31898;
+            const int holderOid = 31899;
+            const int specialOid = 31900;
+            LF2CharacterData attackerData = BuildInteractionVictimData(
+                "SelfCheck_R4Hit01_Attacker",
+                attackerOid);
+            LF2CharacterData holderData = BuildInteractionVictimData(
+                "SelfCheck_R4Hit01_Holder",
+                holderOid);
+            var specialData = new LF2CharacterData
+            {
+                name = "SelfCheck_R4Hit01_Type3Target",
+                type_sub = specialOid,
+                frames = new List<LF2FrameData> { InteractionFrame(null) },
+            };
+
+            using var currentDatConfigs = new TemporaryRuntimeObjectConfigs(
+                new Dictionary<int, int>
+                {
+                    [attackerOid] = (int)LF2ObjectType.Character,
+                    [holderOid] = (int)LF2ObjectType.Character,
+                    [specialOid] = (int)LF2ObjectType.SpecialAttack,
+                },
+                new Dictionary<int, LF2CharacterDataWrapper>
+                {
+                    [attackerOid] = new LF2CharacterDataWrapper(attackerOid, attackerData),
+                    [holderOid] = new LF2CharacterDataWrapper(holderOid, holderData),
+                    [specialOid] = new LF2CharacterDataWrapper(specialOid, specialData),
+                });
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateInteractionCharacter(
+                "SelfCheck_R4Hit01_Attacker",
+                attackerOid,
+                attackerData);
+            LF2Character holder = CreateInteractionCharacter(
+                "SelfCheck_R4Hit01_Holder",
+                holderOid,
+                holderData);
+            var victim = new AlternateDamageSelfCheckSpecialAttack();
+            victim.BindData("SelfCheck_R4Hit01_Type3Target", specialOid, specialData);
+            world.Register(attacker);
+            world.Register(holder);
+            world.Register(victim);
+
+            attacker.Team = 1;
+            attacker.RelationTeam = 1;
+            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            holder.KillStat = 17;
+            holder.ComboCountAtk = 19;
+            victim.Team = 2;
+            victim.RelationTeam = 2;
+            victim.Health.HP = 8;
+            victim.Health.HPBound = 30;
+            victim.ComboCountVic = 4;
+            victim.KillCount = -1;
+            victim.Unk344 = 1;
+            victim.FallCounter = 0;
+            world.KillStats[1] = 23;
+            world.DamageStats[1] = 29;
+
+            InteractionArea itr = MakeInteractionItr(kind: 0, vrest: 0, injury: 10, dvx: 0);
+            itr.fall = 0;
+            bool applied = victim.Hit(itr, attacker);
+
+            Expect(applied,
+                "R4-HIT-001: type3 normal kind0 route must reach the typed special-attack damage writer");
+            Expect(victim.Health.HP == -2 && victim.Health.HPBound == 27 &&
+                   victim.ComboCountVic == 14 && world.DamageStats[1] == 39,
+                "R4-HIT-001: C++ normal type3 hit must write HP, HPBound, victim combo, and damage stat before the type3 tail");
+            Expect(victim.FallCounter == 100,
+                "R4-HIT-001: type3 tail must observe the newly reduced HP before applying the C++ fall accumulation");
+            Expect(holder.KillStat == 17 && holder.ComboCountAtk == 19 &&
+                   world.KillStats[1] == 23,
+                "R4-HIT-001: type3 normal damage must not apply the C++ type0-only kill or holder-combo score writes");
+        }
+
         private static void CheckAudit7IronBallPreprocessContracts()
         {
             var world = new SimulationWorld();
@@ -16631,6 +19339,15 @@ namespace NTSD.Test
 
             Expect(highSlotSpawner.Spawned.LateTickCount == 1,
                 "the deferred lower-slot entity must execute exactly once on the next late pass");
+
+            CheckExtendedLateMutationCursor(
+                BattleRuntimeProfile.MobileExtended,
+                1050,
+                "MobileExtended");
+            CheckExtendedLateMutationCursor(
+                BattleRuntimeProfile.DesktopExtended,
+                512,
+                "DesktopExtendedGrowth");
 
             var cachedFactoryWorld = new SimulationWorld();
             cachedFactoryWorld.Register(new MutationSelfCheckEntity(20));
@@ -17489,6 +20206,9 @@ namespace NTSD.Test
             int invalidBodyCount = 0;
             int zeroWidthPositiveHeightItrCount = 0;
             int otherNonPositiveItrCount = 0;
+            int negativeHeightPositiveWidthBodyCount = 0;
+            int unexpectedNegativeHeightBodyCount = 0;
+            int otherNonPositiveBodyCount = 0;
             int authoredOutOfRangeFrameCount = 0;
             var invalidGeometry = new List<string>();
 
@@ -17589,6 +20309,19 @@ namespace NTSD.Test
                             if (body == null || body.w <= 0 || body.h <= 0)
                             {
                                 invalidBodyCount++;
+                                if (body != null && body.w > 0 && body.h < 0)
+                                {
+                                    negativeHeightPositiveWidthBodyCount++;
+                                    if (body.kind != 0 || body.x != 39 || body.y != -555 ||
+                                        body.w != 21 || body.h != -999)
+                                    {
+                                        unexpectedNegativeHeightBodyCount++;
+                                    }
+                                }
+                                else
+                                {
+                                    otherNonPositiveBodyCount++;
+                                }
                                 invalidGeometry.Add(
                                     $"oid={definition.id}/frame={frameId}/bdy={entryIndex}/" +
                                     $"w={body?.w ?? 0}/h={body?.h ?? 0}");
@@ -17651,6 +20384,9 @@ namespace NTSD.Test
                 $"invalidItrs={invalidItrCount}, invalidBodies={invalidBodyCount}, " +
                 $"zeroWidthPositiveHeightItrs={zeroWidthPositiveHeightItrCount}, " +
                 $"otherNonPositiveItrs={otherNonPositiveItrCount}, " +
+                $"negativeHeightPositiveWidthBodies={negativeHeightPositiveWidthBodyCount}, " +
+                $"unexpectedNegativeHeightBodies={unexpectedNegativeHeightBodyCount}, " +
+                $"otherNonPositiveBodies={otherNonPositiveBodyCount}, " +
                 $"authoredOutOfRangeFrames={authoredOutOfRangeFrameCount}");
             Debug.Log(
                 $"[R-HC-02] oid999ResolvedFrames={oid999ResolvedFrameCount}, " +
@@ -17662,10 +20398,17 @@ namespace NTSD.Test
 
             Expect(zeroWidthPositiveHeightItrCount > 0,
                 "R-HC-01: Unity-adapted production data must retain the confirmed zero-width itr entries");
+            Expect(negativeHeightPositiveWidthBodyCount == 5 &&
+                   unexpectedNegativeHeightBodyCount == 0,
+                "R-HC-01: Unity-adapted production data must retain exactly the five confirmed " +
+                "x39/y-555/w21/h-999/kind0 raw inverted body entries");
             Expect(invalidItrCount == zeroWidthPositiveHeightItrCount &&
-                   otherNonPositiveItrCount == 0 && invalidBodyCount == 0,
+                   otherNonPositiveItrCount == 0 &&
+                   invalidBodyCount == negativeHeightPositiveWidthBodyCount &&
+                   otherNonPositiveBodyCount == 0,
                 $"R-HC-01: deployable resolved geometry contains an unclassified non-positive shape: {geometryDetails}");
             CheckZeroDimensionCollisionGeometry();
+            CheckNegativeHeightCollisionGeometry();
             Expect(oid999GatedValidItrCount == 0 && oid999GatedValidBodyCount == 0 &&
                    authoredOutOfRangeFrameCount == 0,
                 $"R-HC-02: IsPureTransitionSmoke can suppress valid resolved geometry: {gatedDetails}; " +
@@ -17728,10 +20471,61 @@ namespace NTSD.Test
                 "R-HC-01: a zero-width bdy line on the itr edge must fail strict authority overlap");
         }
 
+        private static void CheckNegativeHeightCollisionGeometry()
+        {
+            InteractionArea ordinaryItr =
+                MakeCollisionAuditItr(0, -20, -10, 40, 20, 20, vrest: 1);
+            InteractionArea enclosingItr =
+                MakeCollisionAuditItr(0, -20, -50, 40, 100, 20, vrest: 1);
+
+            List<SceneQueryHit> ordinaryRight = CollectZeroDimensionCollisionCase(
+                "NegativeHeightOrdinaryRight",
+                ordinaryItr,
+                MakeNegativeHeightBodyForSelfCheck());
+            Expect(ordinaryRight.Count == 0,
+                "R-HC-01: an ordinary itr must not overlap a raw inverted body");
+
+            List<SceneQueryHit> ordinaryLeft = CollectZeroDimensionCollisionCase(
+                "NegativeHeightOrdinaryLeft",
+                ordinaryItr.ShallowCopy(),
+                MakeNegativeHeightBodyForSelfCheck(),
+                targetFacingLeft: true);
+            Expect(ordinaryLeft.Count == 0,
+                "R-HC-01: an ordinary itr must not overlap a left-facing raw inverted body");
+
+            List<SceneQueryHit> enclosingRight = CollectZeroDimensionCollisionCase(
+                "NegativeHeightEnclosingRight",
+                enclosingItr,
+                MakeNegativeHeightBodyForSelfCheck());
+            Expect(enclosingRight.Count == 1,
+                "R-HC-01: an itr spanning both raw inverted body endpoints must satisfy C++ strict overlap");
+
+            List<SceneQueryHit> enclosingLeft = CollectZeroDimensionCollisionCase(
+                "NegativeHeightEnclosingLeft",
+                enclosingItr.ShallowCopy(),
+                MakeNegativeHeightBodyForSelfCheck(),
+                targetFacingLeft: true);
+            Expect(enclosingLeft.Count == 1,
+                "R-HC-01: left-facing raw inverted body overlap must preserve the C++ strict result");
+        }
+
+        private static BodyBox MakeNegativeHeightBodyForSelfCheck()
+        {
+            return new BodyBox
+            {
+                kind = 0,
+                x = 0,
+                y = 0,
+                w = 20,
+                h = -40,
+            };
+        }
+
         private static List<SceneQueryHit> CollectZeroDimensionCollisionCase(
             string label,
             InteractionArea itr,
-            BodyBox body)
+            BodyBox body,
+            bool targetFacingLeft = false)
         {
             LF2FrameData attackerFrame = BuildCollisionAuditFrame(0, LF2States.Standing, itr, null);
             LF2FrameData targetFrame = BuildCollisionAuditFrame(0, LF2States.Standing, null, body);
@@ -17745,6 +20539,8 @@ namespace NTSD.Test
                 BuildCollisionAuditData($"SelfCheck_RHC01_{label}_Target", targetFrame));
             var world = new SimulationWorld();
             RegisterCollisionAuditPair(world, attacker, target, 1, 2);
+            if (targetFacingLeft)
+                target.SwitchDir("left");
             return CollectCollisionAuditCandidates(world, attacker, captureSnapshots: true);
         }
 
@@ -19722,10 +22518,20 @@ namespace NTSD.Test
         {
             const int ordinaryOid = 630;
             const int weaponOid = 631;
+            const int characterOid = 642;
+            const int specialOid = 643;
+            const int ordinaryAction = 17;
+            const int weaponAction = 19;
+            const int characterAction = 23;
+            const int specialAction = 29;
             LF2CharacterData ordinaryData = BuildFrameLifecycleSpawnData(
-                "SelfCheck_OP_Ordinary", LF2ObjectType.Other, weaponHp: 0);
+                "SelfCheck_OP_Ordinary", LF2ObjectType.Other, weaponHp: 0, ordinaryAction);
             LF2CharacterData weaponData = BuildFrameLifecycleSpawnData(
-                "SelfCheck_OP_Weapon", LF2ObjectType.LightWeapon, weaponHp: 37);
+                "SelfCheck_OP_Weapon", LF2ObjectType.LightWeapon, weaponHp: 37, weaponAction);
+            LF2CharacterData characterData = BuildFrameLifecycleSpawnData(
+                "SelfCheck_OP_Character", LF2ObjectType.Character, weaponHp: 0, characterAction);
+            LF2CharacterData specialData = BuildFrameLifecycleSpawnData(
+                "SelfCheck_OP_Special", LF2ObjectType.SpecialAttack, weaponHp: 0, specialAction);
             LF2CharacterData oid5Data = BuildFrameLifecycleSpawnData(
                 "SelfCheck_OP_Oid5", LF2ObjectType.LightWeapon, weaponHp: 29);
             LF2CharacterData oid52Data = BuildFrameLifecycleSpawnData(
@@ -19735,6 +22541,8 @@ namespace NTSD.Test
                 {
                     [ordinaryOid] = (int)LF2ObjectType.Other,
                     [weaponOid] = (int)LF2ObjectType.LightWeapon,
+                    [characterOid] = (int)LF2ObjectType.Character,
+                    [specialOid] = (int)LF2ObjectType.SpecialAttack,
                     [5] = (int)LF2ObjectType.LightWeapon,
                     [52] = (int)LF2ObjectType.LightWeapon,
                     [640] = (int)LF2ObjectType.Other,
@@ -19744,6 +22552,8 @@ namespace NTSD.Test
                 {
                     [ordinaryOid] = new LF2CharacterDataWrapper(ordinaryOid, ordinaryData),
                     [weaponOid] = new LF2CharacterDataWrapper(weaponOid, weaponData),
+                    [characterOid] = new LF2CharacterDataWrapper(characterOid, characterData),
+                    [specialOid] = new LF2CharacterDataWrapper(specialOid, specialData),
                     [5] = new LF2CharacterDataWrapper(5, oid5Data),
                     [52] = new LF2CharacterDataWrapper(52, oid52Data),
                     [641] = new LF2CharacterDataWrapper(641, null),
@@ -19798,6 +22608,74 @@ namespace NTSD.Test
 
             var parent = new DynamicSlotSelfCheckEntity(634);
             world.Register(parent);
+
+            LF2Entity SpawnHistoryChild(int oid, int action)
+            {
+                OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
+                task.targetWorld = world;
+                task.opoint = new ObjectPoint
+                {
+                    kind = 1,
+                    oid = oid,
+                    action = action,
+                    facing = 0,
+                };
+                task.parent = parent;
+                task.pos = Vector3.zero;
+                task.dir = "right";
+                task.preserveActionZero = true;
+                LF2Entity child = LF2ObjectPointFactory.Instance.CreateObjectImmediate(task);
+                LF2ReferencePool.Instance.Recycle(task);
+                return child;
+            }
+
+            LF2Entity[] historyChildren =
+            {
+                SpawnHistoryChild(characterOid, characterAction),
+                SpawnHistoryChild(weaponOid, weaponAction),
+                SpawnHistoryChild(ordinaryOid, ordinaryAction),
+                SpawnHistoryChild(specialOid, specialAction),
+            };
+            int[] historyActions =
+            {
+                characterAction,
+                weaponAction,
+                ordinaryAction,
+                specialAction,
+            };
+            LF2ObjectType[] historyTypes =
+            {
+                LF2ObjectType.Character,
+                LF2ObjectType.LightWeapon,
+                LF2ObjectType.Other,
+                LF2ObjectType.SpecialAttack,
+            };
+            for (int index = 0; index < historyChildren.Length; index++)
+            {
+                LF2Entity child = historyChildren[index];
+                int action = historyActions[index];
+                Expect(child != null && child.ObjectTypeEnum == historyTypes[index] &&
+                       child.Runtime.SlotIndex >= world.DynamicRuntimeSlotStartForServices &&
+                       child.Frame.N == action && child.Frame.D?.frameId == action &&
+                       child.Frame.Prev2 == 0 && child.Frame.Prev2D?.frameId == 0 &&
+                       child.Runtime.PrevFrame2 == 0,
+                    $"OP-06/R5-OP-001: {historyTypes[index]} birth must keep current action {action} " +
+                    "while collision history remains reset frame zero");
+            }
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            for (int index = 0; index < historyChildren.Length; index++)
+            {
+                LF2Entity child = historyChildren[index];
+                int action = historyActions[index];
+                Expect(child.Frame.N == action && child.Frame.D?.frameId == action &&
+                       child.Frame.Prev2 == action && child.Frame.Prev2D?.frameId == action &&
+                       child.Runtime.PrevFrame2 == action,
+                    $"OP-06/R5-OP-001: {historyTypes[index]} next collision snapshot must mirror " +
+                    $"current action {action} into Prev2");
+                child.FreeEntityLikeExe();
+            }
+
             LF2CharacterData ordinarySpawnerData = BuildFrameLifecycleOpointSpawnerData(
                 "SelfCheck_OP03_Ordinary", LF2ObjectType.Other, ordinaryOid, kind: 1);
             var ordinarySpawner = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 635);
@@ -20110,7 +22988,7 @@ namespace NTSD.Test
             };
         }
 
-        private static void CheckGameTickInputClearBoundaries()
+        private static void CheckGameTickInputLifetimeBoundaries()
         {
             LF2FrameData clearRoot = Frame(0, LF2States.Standing, 100, 0, 39, 79);
             clearRoot.hit_a = 100;
@@ -20179,18 +23057,63 @@ namespace NTSD.Test
 
             serialWorld.SerialTickAll(2);
 
-            ExpectCurrentInputKeysCleared(serialReal.Runtime, "GT-02 real character");
-            ExpectCurrentInputKeysCleared(serialShared.Runtime, "GT-02 shared character-DAT shell");
-            ExpectCurrentInputKeysCleared(serialProbe.Runtime, "GT-02 current-DAT shell");
+            ExpectCurrentInputKeysRetained(serialReal.Runtime, "GT-02 real character");
+            ExpectCurrentInputKeysRetained(serialShared.Runtime, "GT-02 shared character-DAT shell");
+            ExpectCurrentInputKeysRetained(serialProbe.Runtime, "GT-02 current-DAT shell");
             Expect(serialProbe.TransitCount == 1 && serialProbe.TuCount == 1 &&
-                   serialProbe.CurrentKeysClearedBeforeTransit &&
+                   serialProbe.CurrentKeysVisibleBeforeTransit &&
                    serialProbe.PreviousKeysPreservedBeforeTransit,
-                "GT-02: C# authority must clear current keys and preserve previous keys before frame advance");
+                "GT-02: C++ frame advance must see this tick current keys while preserving previous keys");
 
-            CheckAuthorityFrame212JumpVelocityAfterInputClear();
+            CheckAuthorityFrame212JumpVelocityFromCurrentInput();
         }
 
-        private static void CheckAuthorityFrame212JumpVelocityAfterInputClear()
+        private static void CheckExtendedLateMutationCursor(
+            BattleRuntimeProfile profile,
+            int initialCapacity,
+            string label)
+        {
+            const int sourceSlot = 700;
+            const int laterChildSlot = 900;
+            const int lowerChildSlot = 600;
+
+            var laterWorld = new SimulationWorld(profile, initialCapacity);
+            var laterSpawner = new MutationSelfCheckEntity(
+                30,
+                registerDuringLate: true,
+                spawnRequiredRuntimeSlot: laterChildSlot);
+            laterSpawner.SetRequiredRuntimeSlot(sourceSlot);
+            laterWorld.Register(laterSpawner);
+            laterWorld.LateEntityUpdateAll(30);
+
+            Expect(laterSpawner.Runtime.SlotIndex == sourceSlot &&
+                   laterSpawner.Spawned != null &&
+                   laterSpawner.Spawned.Runtime.SlotIndex == laterChildSlot &&
+                   laterSpawner.Spawned.LateTickCount == 1 &&
+                   laterWorld.MaxRuntimeSlotsForServices > laterChildSlot,
+                $"R5-LIFE-01A: {label} must scan an extended newborn after the current >399 cursor in the same late pass");
+
+            var lowerWorld = new SimulationWorld(profile, initialCapacity);
+            var lowerSpawner = new MutationSelfCheckEntity(
+                31,
+                registerDuringLate: true,
+                spawnRequiredRuntimeSlot: lowerChildSlot);
+            lowerSpawner.SetRequiredRuntimeSlot(sourceSlot);
+            lowerWorld.Register(lowerSpawner);
+            lowerWorld.LateEntityUpdateAll(31);
+
+            Expect(lowerSpawner.Runtime.SlotIndex == sourceSlot &&
+                   lowerSpawner.Spawned != null &&
+                   lowerSpawner.Spawned.Runtime.SlotIndex == lowerChildSlot &&
+                   lowerSpawner.Spawned.LateTickCount == 0,
+                $"R5-LIFE-01A: {label} must defer an extended newborn placed behind the current >399 cursor");
+
+            lowerWorld.LateEntityUpdateAll(32);
+            Expect(lowerSpawner.Spawned.LateTickCount == 1,
+                $"R5-LIFE-01A: {label} deferred extended newborn must execute exactly once on the next late pass");
+        }
+
+        private static void CheckAuthorityFrame212JumpVelocityFromCurrentInput()
         {
             const float jumpHeight = -14.25f;
             const float jumpDistance = 9.5f;
@@ -20199,7 +23122,7 @@ namespace NTSD.Test
             LF2FrameData airborne = Frame(212, LF2States.Jump, 1, 212, 39, 79);
             var data = new LF2CharacterData
             {
-                name = "SelfCheck_AuthorityJumpVelocityAfterInputClear",
+                name = "SelfCheck_AuthorityJumpVelocityFromCurrentInput",
                 jump_height = jumpHeight,
                 jump_distance = jumpDistance,
                 jump_distancez = jumpDistanceZ,
@@ -20228,10 +23151,11 @@ namespace NTSD.Test
             directed.SimFrameTick(2);
 
             Expect(directed.Frame.N == 212 &&
-                   Nearly(directed.Runtime.Vx, 2.25) &&
+                   Nearly(directed.Runtime.Vx, jumpDistance) &&
                    Nearly(directed.Runtime.Vy, jumpHeight) &&
-                   Nearly(directed.Runtime.Vz, 1.5),
-                $"GT-03: C# authority input clear must prevent stale right/up from overriding frame 212 Vx/Vz; " +
+                   Nearly(directed.Runtime.Vz, -jumpDistanceZ) &&
+                   directed.Runtime.KeyRight == 1 && directed.Runtime.KeyUp == 1,
+                $"GT-03: C++ frame 212 must consume current right/up and override Vx/Vz; " +
                 $"frame={directed.Frame.N}, velocity=({directed.Runtime.Vx:R}," +
                 $"{directed.Runtime.Vy:R},{directed.Runtime.Vz:R})");
             Expect(directed.Runtime.PrevRight == 1 && directed.Runtime.PrevUp == 1 &&
@@ -20258,7 +23182,7 @@ namespace NTSD.Test
                    Nearly(inherited.Runtime.Vx, inheritedVx) &&
                    Nearly(inherited.Runtime.Vy, jumpHeight) &&
                    Nearly(inherited.Runtime.Vz, inheritedVz),
-                $"GT-03: C# authority frame 212 without a direction override must retain pre-jump Vx/Vz; " +
+                $"GT-03: C++ frame 212 without a direction override must retain pre-jump Vx/Vz; " +
                 $"frame={inherited.Frame.N}, velocity=({inherited.Runtime.Vx:R}," +
                 $"{inherited.Runtime.Vy:R},{inherited.Runtime.Vz:R})");
         }
@@ -20320,8 +23244,9 @@ namespace NTSD.Test
             Expect(localHeld.Runtime.KeyLeft == 1 && localHeld.Runtime.PrevLeft == 0,
                 "AUDIT6-01: local edge input must establish the held state on its target tick");
             localHeldWorld.SerialTickAll(2);
-            Expect(localHeld.Runtime.KeyLeft == 0,
-                "AUDIT6-01: C# authority frame advance must clear the current local input key");
+            Expect(localHeld.Runtime.KeyLeft == 1 && localHeld.Runtime.PrevLeft == 0 &&
+                   localHeld.Runtime.CdLeft == 5,
+                "AUDIT6-01: C++ frame advance must retain the current local input key until the next poll");
             localHeld.Runtime.CdDefendLock = 2;
 
             localHeldWorld.PostCooldownHumanInputAll(3);
@@ -20583,6 +23508,630 @@ namespace NTSD.Test
                 $"finalArest={character.ItrRest.Arest}, finalAttackExempt={character.AttackExempt}");
         }
 
+        private static void CheckReleaseTickCharacterInputPrecedesOid5152Maintenance()
+        {
+            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+            var runtimeCharacterConfigs = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+            try
+            {
+                var world = new SimulationWorld(runtimeCharacterConfigs);
+                var self = new Oid5152InputOrderSelfCheckCharacter();
+                self.BindData("SelfCheck_R3_InputBeforeOid", 7, wrappers[7].characterData);
+                LF2Character partner = CreateCharacter(
+                    "SelfCheck_R3_InputBeforeOidPartner",
+                    8,
+                    wrappers[8].characterData);
+                self.SetRuntimeSlotIndex(0);
+                partner.SetRuntimeSlotIndex(11);
+                world.Register(self);
+                world.Register(partner);
+
+                self.RelationTeam = 3;
+                partner.RelationTeam = 3;
+                self.Health.HP = 100;
+                self.Health.HPBound = 100;
+                self.Health.HP3 = 500;
+                partner.Health.HP = 100;
+                partner.Health.HPBound = 100;
+                partner.Health.HP3 = 500;
+                self.Runtime.SetPosition(120f, 0f, 5f);
+                partner.Runtime.SetPosition(100f, 0f, 5f);
+                self.Runtime.SyncIntegerPosition();
+                partner.Runtime.SyncIntegerPosition();
+                partner.ImmediateFrame(10);
+
+                Expect(self.CurrentFrameId == 0 && self.Frame.D?.state != 2,
+                    "R3-INP-01 precondition: oid7 must begin outside the merge state before CharacterInput");
+
+                new NTSDBattleTickSystem(world).RunReleaseTick(2);
+
+                Expect(self.CharacterInputPassCount == 1,
+                    $"R3-INP-01: focused character input writer must execute once; count={self.CharacterInputPassCount}");
+                Expect(self.ObjectId == 51 && self.CurrentFrameId == 290 &&
+                       partner.Runtime.OidMergeDormant && world.ObjectCount == 1,
+                    "R3-INP-01: normal release tick must run CharacterInput before OID maintenance so the same tick can merge oid7/8 into oid51");
+            }
+            finally
+            {
+                runtimeCharacterConfigs.SetOverrideForSelfCheck(null);
+            }
+        }
+
+        private static void CheckBattleStepGateSchedulerContracts()
+        {
+            LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_R3_StepGate",
+                frames = new List<LF2FrameData> { root },
+            };
+
+            SimulationWorld waitWorld = new SimulationWorld();
+            var waitCharacter = new BattleStepGateSelfCheckCharacter();
+            waitCharacter.BindData("SelfCheck_R3_F1Wait", 870, data);
+            waitCharacter.SetRuntimeSlotIndex(0);
+            waitWorld.Register(waitCharacter);
+            BindHumanRosterSlot(waitWorld, waitCharacter, 0);
+            waitCharacter.Runtime.Unk338 = 2;
+            waitCharacter.HitCount = 1;
+            waitCharacter.KnockbackVx = 3f;
+            waitWorld.Runtime.Flow.BattleStepMode = 1;
+
+            new NTSDBattleTickSystem(waitWorld).RunReleaseTick(2);
+
+            Expect(waitWorld.Runtime.Flow.BattleStepMode == 1 &&
+                   waitWorld.Runtime.Flow.BattleStepGate == 0,
+                "R3-INP-02: F1 wait must retain mode1 and reset the per-tick gate to zero");
+            Expect(waitCharacter.HumanPollCount == 0 && waitCharacter.CharacterInputPassCount == 0,
+                "R3-INP-02: F1 wait must skip the complete human/AI CharacterInput callback");
+            Expect(waitCharacter.Runtime.Unk338 == 1 &&
+                   waitWorld.BattlePresentation.PublishedFrame?.TickIndex == 2,
+                "R3-INP-02: F1 wait must still run OID maintenance and RenderDispatch before returning");
+            Expect(waitCharacter.HitCount == 1 && waitCharacter.LateFrameTickCount == 0,
+                "R3-INP-02: F1 wait must return after render before FramePostProcess and late entity update");
+
+            SimulationWorld stepWorld = new SimulationWorld();
+            var stepCharacter = new BattleStepGateSelfCheckCharacter();
+            stepCharacter.BindData("SelfCheck_R3_F2Step", 871, data);
+            stepCharacter.SetRuntimeSlotIndex(0);
+            stepWorld.Register(stepCharacter);
+            BindHumanRosterSlot(stepWorld, stepCharacter, 0);
+            stepCharacter.Runtime.Unk338 = 2;
+            stepCharacter.HitCount = 1;
+            stepCharacter.KnockbackVx = 3f;
+            stepWorld.Runtime.Flow.BattleStepMode = 2;
+
+            var stepTickSystem = new NTSDBattleTickSystem(stepWorld);
+            stepTickSystem.RunReleaseTick(2);
+
+            Expect(stepWorld.Runtime.Flow.BattleStepMode == 1 &&
+                   stepWorld.Runtime.Flow.BattleStepGate == 1 &&
+                   stepCharacter.HumanPollCount == 1 && stepCharacter.CharacterInputPassCount == 1,
+                "R3-INP-02: F2 mode2 must convert to a one-tick mode1/gate1 input advance");
+            Expect(stepCharacter.Runtime.Unk338 == 1 && stepCharacter.HitCount == 0 &&
+                   stepCharacter.LateFrameTickCount == 1 &&
+                   stepWorld.BattlePresentation.PublishedFrame?.TickIndex == 2,
+                "R3-INP-02: F2 one-step must run maintenance, RenderDispatch, FramePostProcess and late update");
+
+            stepTickSystem.RunReleaseTick(3);
+
+            Expect(stepWorld.Runtime.Flow.BattleStepMode == 1 &&
+                   stepWorld.Runtime.Flow.BattleStepGate == 0 &&
+                   stepCharacter.HumanPollCount == 1 && stepCharacter.CharacterInputPassCount == 1 &&
+                   stepCharacter.Runtime.Unk338 == 0 && stepCharacter.LateFrameTickCount == 1 &&
+                   stepWorld.BattlePresentation.PublishedFrame?.TickIndex == 3,
+                "R3-INP-02: the tick after F2 must return to F1 wait while retaining OID and render work");
+
+            SimulationWorld clearWorld = new SimulationWorld();
+            var clearCharacter = new BattleStepGateSelfCheckCharacter();
+            clearCharacter.BindData("SelfCheck_R3_EntryClear", 872, data);
+            clearCharacter.SetRuntimeSlotIndex(0);
+            clearWorld.Register(clearCharacter);
+            BindHumanRosterSlot(clearWorld, clearCharacter, 0);
+            clearCharacter.Runtime.Unk338 = 2;
+            clearCharacter.Runtime.KeyAttack = 1;
+            clearCharacter.HitCount = 1;
+            clearWorld.Runtime.Flow.BattleStepMode = 1;
+            clearWorld.SetNeedClearInput(true);
+
+            new NTSDBattleTickSystem(clearWorld).RunReleaseTick(2);
+
+            Expect(!clearWorld.NeedClearInput && clearWorld.Runtime.Flow.BattleStepGate == 0 &&
+                   clearCharacter.HumanPollCount == 1 && clearCharacter.CharacterInputPassCount == 0 &&
+                   clearCharacter.Runtime.Unk338 == 1 && clearCharacter.Runtime.KeyAttack == 0,
+                "R3-INP-02: Unity entry clear must retain its existing human-poll then M1-clear-return contract even while step mode waits");
+            Expect(clearCharacter.HitCount == 1 && clearCharacter.LateFrameTickCount == 0 &&
+                   clearWorld.BattlePresentation.PublishedFrame == null,
+                "R3-INP-02: entry clear must remain distinct from F1 wait and return before RenderDispatch");
+        }
+
+        private static void CheckNegativeLinkCharacterInputEligibility()
+        {
+            LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            root.hit_a = 10;
+            LF2FrameData directInputTarget = Frame(10, LF2States.Attack, 100, 10, 39, 79);
+            directInputTarget.dvx = 7;
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_R3_NegativeLinkInput",
+                frames = new List<LF2FrameData>
+                {
+                    root,
+                    directInputTarget,
+                },
+            };
+
+            var world = new SimulationWorld();
+            LF2Character holder = CreateCharacter("SelfCheck_R3_NegativeLinkHolder", 873, data);
+            LF2Character child = CreateCharacter("SelfCheck_R3_NegativeLinkChild", 874, data);
+            holder.SetRuntimeSlotIndex(0);
+            child.SetRuntimeSlotIndex(1);
+            world.Register(holder);
+            world.Register(child);
+            BindHumanRosterSlot(world, child, 0);
+
+            holder.Runtime.LinkState = 1;
+            holder.Runtime.TargetSlotIndex = child.Runtime.SlotIndex;
+            holder.Runtime.HeldWeaponStableId = child.Runtime.SlotIndex;
+            child.Runtime.LinkState = -1;
+            child.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+            child.Runtime.Dir = "right";
+            child.PS.dir = "right";
+            ((SelfCheckController)child.Controller).InputBuffer.EnqueueForTick(2, FuncKeyMask.jump, true);
+
+            world.PostCooldownHumanInputAll(2);
+            Expect(child.Runtime.LinkState < 0 && child.Runtime.CdAttack == 5 &&
+                   child.Runtime.KeyJump == 1,
+                "R3-HOLD-INP-01: the focused negative-link character relation must retain a valid direct-input edge before CharacterInput");
+
+            world.CharacterInputAll(2);
+            Expect(child.Frame.N == 10 && child.Runtime.CdAttack == 0 &&
+                   Nearly(child.Runtime.Vx, 7.0),
+                $"R3-HOLD-INP-01: negative-link LF2Character input must reach direct resolve and the resulting-frame velocity tail; " +
+                $"frame={child.Frame.N}, cdAttack={child.Runtime.CdAttack}, vx={child.Runtime.Vx:R}");
+
+            SelfCheckCharacterDatShell shared = CreateSharedInputShell(data, 0);
+            shared.Runtime.LinkState = -1;
+            shared.Runtime.KeyJump = 1;
+            shared.Runtime.CdAttack = 5;
+            shared.Runtime.Dir = "right";
+            shared.RunCharacterInputPhaseForKnownCharacterDat(2);
+            Expect(shared.Frame.N == 10 && shared.Runtime.CdAttack == 0 &&
+                   Nearly(shared.Runtime.Vx, 7.0),
+                $"R3-HOLD-INP-01: negative-link shared character-DAT input must not be blocked by the base compatibility entry; " +
+                $"frame={shared.Frame.N}, cdAttack={shared.Runtime.CdAttack}, vx={shared.Runtime.Vx:R}");
+        }
+
+        private static void CheckDeadAiInputEligibility()
+        {
+            AssertDeadAiNoTargetInputEligibility(
+                BattleAiExecutionProfile.LegacyCanonical,
+                "legacy");
+            AssertDeadAiNoTargetInputEligibility(
+                BattleAiExecutionProfile.DataOrientedCanonical,
+                "data-oriented");
+        }
+
+        private static void AssertDeadAiNoTargetInputEligibility(
+            BattleAiExecutionProfile profile,
+            string label)
+        {
+            LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = $"SelfCheck_R3_DeadAi_{label}",
+                frames = new List<LF2FrameData> { root },
+            };
+
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(profile);
+            LF2Character ai = CreateCharacter($"SelfCheck_R3_DeadAi_{label}", 875, data);
+            ai.SetRuntimeSlotIndex(0);
+            ai.AiControlled = true;
+            ai.RelationTeam = 1;
+            ai.Health.HP = 0;
+            ai.Runtime.KeyJump = 1;
+            ai.Runtime.PrevJump = 0;
+            ai.Runtime.CdAttack = 5;
+            world.Register(ai);
+
+            world.CharacterInputAll(2);
+
+            Expect(ai.Runtime.PrevJump == 1 && ai.Runtime.KeyJump == 0 &&
+                   ai.Runtime.CdAttack == 5 && ai.Frame.N == 0,
+                $"R3-AI-LIFE-01: {label} HP=0 no-target AI must run C++-style input roll/clear before death cleanup; " +
+                $"prevJump={ai.Runtime.PrevJump}, keyJump={ai.Runtime.KeyJump}, " +
+                $"cdAttack={ai.Runtime.CdAttack}, frame={ai.Frame.N}");
+        }
+
+        private static void CheckCanonicalFramePacketPollContract()
+        {
+            LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_R3_CanonicalFramePacket",
+                frames = new List<LF2FrameData> { root },
+            };
+
+            var world = new SimulationWorld();
+            LF2Character human = CreateCharacter("SelfCheck_R3_CanonicalFramePacket", 876, data);
+            human.SetRuntimeSlotIndex(0);
+            human.Runtime.InputHistory = new int[6];
+            human.InputState.SyncFromRuntime(human.Runtime);
+            world.Register(human);
+            BindHumanRosterSlot(world, human, 0);
+
+            SimulationInputButtons pressedButtons =
+                SimulationInputButtons.Right |
+                SimulationInputButtons.Attack |
+                SimulationInputButtons.Jump |
+                SimulationInputButtons.Defend;
+            world.ApplyFrameInputSet(new FrameInputSet(2, new[]
+            {
+                new SimulationPlayerInput(
+                    0,
+                    pressedButtons,
+                    pressedButtons,
+                    SimulationInputButtons.None),
+            }));
+            world.PostCooldownHumanInputAll(2);
+
+            Expect(human.Runtime.PrevRight == 0 && human.Runtime.KeyRight == 1 &&
+                   human.Runtime.PrevAttack == 0 && human.Runtime.KeyAttack == 1 &&
+                   human.Runtime.PrevDefend == 0 && human.Runtime.KeyDefend == 1 &&
+                   human.Runtime.PrevJump == 0 && human.Runtime.KeyJump == 1 &&
+                   human.Runtime.CdRight == 5 && human.Runtime.CdDefend == 5 &&
+                   human.Runtime.CdJump == 5 && human.Runtime.CdAttack == 5 &&
+                   human.Runtime.InputHistory[2] == 6 &&
+                   human.Runtime.InputHistory[3] == 9 &&
+                   human.Runtime.InputHistory[4] == 0 &&
+                   human.Runtime.InputHistory[5] == 5,
+                "R3-INP-03A: a complete press packet must mirror C++ poll current/prev/cooldown/history order " +
+                "right,attack,defend,jump");
+            int[] historyAfterPress = (int[])human.Runtime.InputHistory.Clone();
+
+            world.ApplyFrameInputSet(new FrameInputSet(3, new[]
+            {
+                new SimulationPlayerInput(
+                    0,
+                    pressedButtons,
+                    SimulationInputButtons.None,
+                    SimulationInputButtons.None),
+            }));
+            world.PostCooldownHumanInputAll(3);
+
+            Expect(human.Runtime.PrevRight == 1 && human.Runtime.KeyRight == 1 &&
+                   human.Runtime.PrevAttack == 1 && human.Runtime.KeyAttack == 1 &&
+                   human.Runtime.PrevDefend == 1 && human.Runtime.KeyDefend == 1 &&
+                   human.Runtime.PrevJump == 1 && human.Runtime.KeyJump == 1 &&
+                   human.Runtime.CdRight == 4 && human.Runtime.CdDefend == 4 &&
+                   human.Runtime.CdJump == 4 && human.Runtime.CdAttack == 4 &&
+                   System.Linq.Enumerable.SequenceEqual(
+                       historyAfterPress,
+                       human.Runtime.InputHistory),
+                "R3-INP-03A: repeating the complete held packet must only roll keys and decrement cooldowns without replaying history");
+
+            world.ApplyFrameInputSet(new FrameInputSet(4, new[]
+            {
+                new SimulationPlayerInput(
+                    0,
+                    SimulationInputButtons.None,
+                    SimulationInputButtons.None,
+                    pressedButtons),
+            }));
+            world.PostCooldownHumanInputAll(4);
+
+            Expect(human.Runtime.PrevRight == 1 && human.Runtime.KeyRight == 0 &&
+                   human.Runtime.PrevAttack == 1 && human.Runtime.KeyAttack == 0 &&
+                   human.Runtime.PrevDefend == 1 && human.Runtime.KeyDefend == 0 &&
+                   human.Runtime.PrevJump == 1 && human.Runtime.KeyJump == 0 &&
+                   human.Runtime.CdRight == 3 && human.Runtime.CdDefend == 3 &&
+                   human.Runtime.CdJump == 3 && human.Runtime.CdAttack == 3 &&
+                   System.Linq.Enumerable.SequenceEqual(
+                       historyAfterPress,
+                       human.Runtime.InputHistory),
+                "R3-INP-03A: a complete release packet must mirror C++ poll prev/current clearing without replaying history");
+        }
+
+        private static void CheckP1P2RosterInputRouting()
+        {
+            LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = "SelfCheck_R3_P1P2Routing",
+                frames = new List<LF2FrameData> { root },
+            };
+
+            var world = new SimulationWorld();
+            LF2Character p1 = CreateCharacter("SelfCheck_R3_P1", 877, data);
+            LF2Character p2 = CreateCharacter("SelfCheck_R3_P2", 878, data);
+            p1.SetRuntimeSlotIndex(0);
+            p2.SetRuntimeSlotIndex(1);
+            p1.Team = 1;
+            p2.Team = 2;
+            p1.RelationTeam = 1;
+            p2.RelationTeam = 2;
+            world.Register(p1);
+            world.Register(p2);
+            BattleSlotRuntimeState p1Roster = BindHumanRosterSlot(world, p1, 0);
+            BattleSlotRuntimeState p2Roster = BindHumanRosterSlot(world, p2, 1);
+
+            world.ApplyFrameInputSet(new FrameInputSet(2, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Right),
+                new SimulationPlayerInput(1, SimulationInputButtons.Jump),
+            }));
+            world.PostCooldownHumanInputAll(2);
+
+            Expect(p1.Runtime.KeyRight == 1 && p1.Runtime.PrevRight == 0 &&
+                   p1.Runtime.CdRight == 5 && p1.Runtime.InputHistory[5] == 6 &&
+                   p1.Runtime.KeyJump == 0 && p1.Runtime.CdAttack == 0,
+                "R3-INP-04: P1 roster player slot 0 must route only its right input to C++ authority runtime slot 0");
+            Expect(p2.Runtime.KeyJump == 1 && p2.Runtime.PrevJump == 0 &&
+                   p2.Runtime.CdAttack == 5 && p2.Runtime.InputHistory[5] == 5 &&
+                   p2.Runtime.KeyRight == 0 && p2.Runtime.CdRight == 0,
+                "R3-INP-04: P2 roster player slot 1 must route only its jump input to C++ authority runtime slot 1");
+            Expect(p1Roster.RuntimeSlotIndex == 0 &&
+                   p1Roster.StableId == p1.Runtime.StableId &&
+                   p2Roster.RuntimeSlotIndex == 1 &&
+                   p2Roster.StableId == p2.Runtime.StableId &&
+                   world.Runtime.Roster.ActiveSlotCount == 2,
+                   "R3-INP-04: fixed P1/P2 authority fixture must retain independent roster runtime-slot and stable-id bindings");
+        }
+
+        private static void CheckAiTargetFallbackIndexedContract()
+        {
+            AssertAiTargetSearchProfilePair(
+                inputPhase: 2,
+                selfTeam: 1,
+                candidateTeam: 2,
+                expectedSlot: 4,
+                expectedBestDistance: 100,
+                expectedSameZLane: true,
+                "phase2 foreign ground/air low-slot tie");
+            AssertAiTargetSearchProfilePair(
+                inputPhase: 1,
+                selfTeam: 1,
+                candidateTeam: 2,
+                expectedSlot: -1,
+                expectedBestDistance: 10000,
+                expectedSameZLane: false,
+                "phase1 non-team5 foreign rejection");
+            AssertAiTargetSearchProfilePair(
+                inputPhase: 1,
+                selfTeam: 1,
+                candidateTeam: 5,
+                expectedSlot: 4,
+                expectedBestDistance: 100,
+                expectedSameZLane: true,
+                "phase1 team5 candidate acceptance");
+            AssertAiTargetSearchProfilePair(
+                inputPhase: 1,
+                selfTeam: 5,
+                candidateTeam: 2,
+                expectedSlot: 4,
+                expectedBestDistance: 100,
+                expectedSameZLane: true,
+                "phase1 team5 self foreign acceptance");
+
+            int retainSeed = FindSeedForFirstRemainder(30, 1);
+            int refreshSeed = FindSeedForFirstRemainder(30, 0);
+            AssertAiTargetInputProfilePair(
+                retainSeed,
+                expectedCacheRoll: 1,
+                expectedTargetSlot: 7,
+                "cached living character retains when cache roll is nonzero");
+            AssertAiTargetInputProfilePair(
+                refreshSeed,
+                expectedCacheRoll: 0,
+                expectedTargetSlot: 4,
+                "cached living character refreshes to the low-slot air override when cache roll is zero");
+        }
+
+        private static void AssertAiTargetSearchProfilePair(
+            int inputPhase,
+            int selfTeam,
+            int candidateTeam,
+            int expectedSlot,
+            int expectedBestDistance,
+            bool expectedSameZLane,
+            string scenario)
+        {
+            SimulationWorld legacyWorld = BuildAiTargetProfileWorld(
+                BattleAiExecutionProfile.LegacyCanonical,
+                seed: 0xA17E,
+                inputPhase,
+                selfTeam,
+                candidateTeam,
+                cachedTargetSlot: -1,
+                out LF2Character legacySelf);
+            SimulationWorld indexedWorld = BuildAiTargetProfileWorld(
+                BattleAiExecutionProfile.DataOrientedCanonical,
+                seed: 0xA17E,
+                inputPhase,
+                selfTeam,
+                candidateTeam,
+                cachedTargetSlot: -1,
+                out LF2Character indexedSelf);
+
+            legacyWorld.CaptureAiNearestTargetForSelfCheck(
+                legacySelf,
+                inputPhase,
+                false,
+                out int legacySlot,
+                out int legacyBestDistance,
+                out bool legacySameZLane);
+            indexedWorld.CaptureAiNearestTargetForSelfCheck(
+                indexedSelf,
+                inputPhase,
+                false,
+                out int indexedSlot,
+                out int indexedBestDistance,
+                out bool indexedSameZLane);
+
+            Expect(legacySlot == expectedSlot &&
+                   legacyBestDistance == expectedBestDistance &&
+                   legacySameZLane == expectedSameZLane &&
+                   indexedSlot == expectedSlot &&
+                   indexedBestDistance == expectedBestDistance &&
+                   indexedSameZLane == expectedSameZLane,
+                $"R3-AI-TGT-01: {scenario} must preserve the C++ target selection contract; " +
+                $"legacy=({legacySlot},{legacyBestDistance},{legacySameZLane}), " +
+                $"indexed=({indexedSlot},{indexedBestDistance},{indexedSameZLane})");
+        }
+
+        private static void AssertAiTargetInputProfilePair(
+            int seed,
+            int expectedCacheRoll,
+            int expectedTargetSlot,
+            string scenario)
+        {
+            var seedProbe = new DeterministicRng(seed);
+            Expect(seedProbe.NextInt(0, 30) == expectedCacheRoll,
+                $"R3-AI-TGT-01: {scenario} fixture seed must select the planned Unity cache remainder");
+
+            SimulationWorld legacyWorld = BuildAiTargetProfileWorld(
+                BattleAiExecutionProfile.LegacyCanonical,
+                seed,
+                inputPhase: 2,
+                selfTeam: 1,
+                candidateTeam: 2,
+                cachedTargetSlot: 7,
+                out LF2Character legacySelf);
+            SimulationWorld indexedWorld = BuildAiTargetProfileWorld(
+                BattleAiExecutionProfile.DataOrientedCanonical,
+                seed,
+                inputPhase: 2,
+                selfTeam: 1,
+                candidateTeam: 2,
+                cachedTargetSlot: 7,
+                out LF2Character indexedSelf);
+
+            legacyWorld.CharacterInputAll(2);
+            indexedWorld.CharacterInputAll(2);
+
+            Expect(legacySelf.Runtime.Unk360 == expectedTargetSlot &&
+                   indexedSelf.Runtime.Unk360 == expectedTargetSlot &&
+                   AiInputSignature(legacySelf.Runtime) == AiInputSignature(indexedSelf.Runtime) &&
+                   legacyWorld.Rng.State == indexedWorld.Rng.State &&
+                   legacyWorld.Rng.CallCount == indexedWorld.Rng.CallCount,
+                $"R3-AI-TGT-01: {scenario} must preserve cache target, input observable state, RNG state, and RNG call count; " +
+                $"legacyTarget={legacySelf.Runtime.Unk360}, indexedTarget={indexedSelf.Runtime.Unk360}, " +
+                $"legacyRng=({legacyWorld.Rng.State},{legacyWorld.Rng.CallCount}), " +
+                $"indexedRng=({indexedWorld.Rng.State},{indexedWorld.Rng.CallCount})");
+        }
+
+        private static SimulationWorld BuildAiTargetProfileWorld(
+            BattleAiExecutionProfile profile,
+            int seed,
+            int inputPhase,
+            int selfTeam,
+            int candidateTeam,
+            int cachedTargetSlot,
+            out LF2Character self)
+        {
+            LF2FrameData standing = Frame(0, LF2States.Standing, 100, 0, 39, 79);
+            var data = new LF2CharacterData
+            {
+                name = $"SelfCheck_R3_AiTarget_{profile}",
+                frames = new List<LF2FrameData> { standing },
+            };
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            world.ConfigureAiExecutionProfile(profile);
+            world.Rng.Seed(seed);
+            world.Runtime.Match.Difficulty = 0;
+            world.Runtime.Flow.InputPhase = inputPhase;
+
+            self = CreateAiTargetProfileCharacter(
+                "SelfCheck_R3_AiTarget_Self",
+                875,
+                data,
+                0,
+                selfTeam,
+                0,
+                0,
+                0,
+                true);
+            CreateAiTargetProfileCharacter(
+                "SelfCheck_R3_AiTarget_GroundLow",
+                876,
+                data,
+                2,
+                candidateTeam,
+                100,
+                0,
+                0,
+                false);
+            CreateAiTargetProfileCharacter(
+                "SelfCheck_R3_AiTarget_AirLow",
+                877,
+                data,
+                4,
+                candidateTeam,
+                20,
+                -3,
+                35,
+                false);
+            CreateAiTargetProfileCharacter(
+                "SelfCheck_R3_AiTarget_AirHigh",
+                878,
+                data,
+                6,
+                candidateTeam,
+                -20,
+                -3,
+                35,
+                false);
+            CreateAiTargetProfileCharacter(
+                "SelfCheck_R3_AiTarget_GroundHigh",
+                879,
+                data,
+                7,
+                candidateTeam,
+                -100,
+                0,
+                0,
+                false);
+
+            Expect(world.CharacterInputWriter.TryCaptureCanonicalState(
+                       self.Runtime,
+                       out AiDecisionInputState canonicalInput),
+                "R3-AI-TGT-01: registered self must own a canonical input row before cache setup");
+            canonicalInput.Unk360 = cachedTargetSlot;
+            world.CharacterInputWriter.CommitAiDecisionState(self.Runtime, canonicalInput);
+            self.Runtime.Unk360 = cachedTargetSlot;
+            Expect(self.Runtime.Unk360 == cachedTargetSlot &&
+                   world.CharacterInputWriter.TryCaptureCanonicalState(
+                       self.Runtime,
+                       out AiDecisionInputState committedInput) &&
+                   committedInput.Unk360 == cachedTargetSlot,
+                "R3-AI-TGT-01: cache fixture must synchronize Runtime and canonical input-store state");
+            return world;
+
+            LF2Character CreateAiTargetProfileCharacter(
+                string name,
+                int objectId,
+                LF2CharacterData characterData,
+                int slot,
+                int team,
+                int x,
+                int y,
+                int z,
+                bool aiControlled)
+            {
+                LF2Character character = CreateCharacter(name, objectId, characterData);
+                character.SetRequiredRuntimeSlot(slot);
+                character.AiControlled = aiControlled;
+                character.Team = team;
+                character.RelationTeam = team;
+                character.Runtime.SetPosition(x, y, z);
+                character.Runtime.SyncIntegerPosition();
+                world.Register(character);
+                return character;
+            }
+        }
+
         private static void CheckGameTickCurrentDatDispatchMatrix()
         {
             const int sourceOid = 790;
@@ -20801,8 +24350,9 @@ namespace NTSD.Test
                     raw8000.AttackingCounter = 9;
                     raw8000.RunStateSpecialPreCollision();
                     Expect(raw8000.ObjectId == transform8000Oid && raw8000.Frame.N == 0 &&
-                           raw8000.AttackingCounter == 9 && raw8000.HitStun == 140,
-                        "GT-10: state8000 transform must preserve attacking and apply the authority HitStop=140 side effect");
+                           raw8000.AttackingCounter == 9 && raw8000.HitStun == 0 &&
+                           raw8000.Runtime.RenderPicOffset == 140,
+                        "GT-10: state8000 transform must preserve attacking, write render-pic offset 140, and not arm hit-stop");
 
                     LF2Character raw9995 = CreateCharacter(
                         "SelfCheck_GT10_9995", 802,
@@ -20965,28 +24515,11 @@ namespace NTSD.Test
                 $"objectCounts={state9998ObjectCountBeforeCleanup}->{state9998ObjectCountAfterCleanup}, " +
                 $"soundCounts={state9998SoundCountBeforeCleanup}->{state9998SoundCountAfterCleanup}");
 
-            LF2CharacterData state9996Data = new LF2CharacterData
-            {
-                name = "SelfCheck_GT11_State9996",
-                frames = new List<LF2FrameData>
-                {
-                    Frame(0, 9996, 100, 0, 39, 79),
-                },
-            };
-            var state9996World = new SimulationWorld();
-            LF2Character state9996 = CreateCharacter("SelfCheck_GT11_State9996", 782, state9996Data);
-            state9996.SwitchDir("left");
-            state9996.AttackingCounter = 1;
-            state9996World.Register(state9996);
-            uint stateBefore = state9996World.Rng.State;
-            ulong callsBefore = state9996World.Rng.CallCount;
-            int objectCountBefore = state9996World.ObjectCount;
-
-            state9996World.LateEntityUpdateAll(45);
-
-            Expect(state9996World.Rng.State == stateBefore && state9996World.Rng.CallCount == callsBefore &&
-                   state9996World.ObjectCount == objectCountBefore,
-                "GT-11: state9996 must consume no production RNG and spawn no extra objects");
+            CheckLateState9996FullSuccessContract();
+            CheckLateState9996MissingResourceContracts();
+            CheckLateState9996CapacityAndNoAllocationContract();
+            CheckLateState9996TransformChainContract();
+            CheckLateState9996CursorContract();
 
             var hpWorld = new SimulationWorld();
             var hpZeroOther = new LateLifecycleSelfCheckEntity(
@@ -21033,6 +24566,389 @@ namespace NTSD.Test
                     Frame(0, state, 0, next, 39, 79),
                 },
             };
+        }
+
+        private static void CheckLateState9996FullSuccessContract()
+        {
+            const uint seed = 0x13572468u;
+            SimulationWorld world = CreateLateState9996World(
+                true,
+                true,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                0,
+                false,
+                seed,
+                out LF2Character spawner);
+            int beforeCount = world.ObjectCount;
+            var expectedRng = new DeterministicRng(seed);
+
+            world.RunLateStateSpecialPreCollisionForSelfCheck(spawner);
+
+            Expect(world.ObjectCount == beforeCount + 5,
+                "GT-11: state9996 full-success writer must create five entities");
+            for (int spawnIndex = 0; spawnIndex < 5; spawnIndex++)
+            {
+                int expectedOid = spawnIndex == 4 ? 218 : 217;
+                int expectedX = spawner.Runtime.XInt + expectedRng.NextInt(0, 7) - 3;
+                int expectedY = spawner.Runtime.YInt + expectedRng.NextInt(0, 7) - 9;
+                int expectedZ = spawner.Runtime.ZInt + 1;
+                double expectedVy = -(expectedRng.NextInt(0, 15) / 2) - 5.0;
+                double expectedVz;
+                if (spawnIndex == 1 || spawnIndex == 3)
+                    expectedVz = -3.0 - expectedRng.NextInt(0, 2);
+                else if (spawnIndex == 4)
+                    expectedVz = 1.0;
+                else
+                    expectedVz = expectedRng.NextInt(0, 2) + 3.0;
+
+                double expectedVx;
+                if (spawnIndex >= 4)
+                    expectedVx = expectedRng.NextInt(0, 7) - 3.0;
+                else if (spawnIndex >= 2)
+                    expectedVx = expectedRng.NextInt(0, 3) + 10.0;
+                else
+                    expectedVx = -10.0 - expectedRng.NextInt(0, 3);
+
+                int expectedFrame = expectedRng.NextInt(0, 4);
+                int expectedFacing = expectedRng.NextInt(0, 2);
+                int expectedSlot = LateState9996SpawnStartSlot + spawnIndex;
+                LF2Entity child = world.FindEntityByRuntimeSlotIncludingPending(expectedSlot);
+                Expect(child != null && child.ObjectId == expectedOid,
+                    $"GT-11: state9996 child {spawnIndex} must occupy lowest slot {expectedSlot} with oid {expectedOid}");
+                Expect(child.Runtime.XInt == expectedX && child.Runtime.YInt == expectedY &&
+                       child.Runtime.ZInt == expectedZ && child.Runtime.X == expectedX &&
+                       child.Runtime.Y == expectedY && child.Runtime.Z == expectedZ,
+                    $"GT-11: state9996 child {spawnIndex} position/int mirror mismatch");
+                Expect(child.Runtime.Vx == expectedVx && child.Runtime.Vy == expectedVy &&
+                       child.Runtime.Vz == expectedVz,
+                    $"GT-11: state9996 child {spawnIndex} velocity/RNG order mismatch");
+                Expect(child.Frame.N == expectedFrame &&
+                       child.Runtime.Dir == (expectedFacing == 0 ? "right" : "left") &&
+                       child.AttackExempt == 6,
+                    $"GT-11: state9996 child {spawnIndex} frame/facing/attack-exempt mismatch");
+                Expect(child.SpawnerEntityIndex == spawner.Runtime.SlotIndex &&
+                       child.Team == 0 && child.RelationTeam == 0 &&
+                       child.OwnerId == -1 && child.RelationOwnerSlot == -1 &&
+                       child.OwnerEntityIndex == -1 && child.HolderCopySlot == 99 &&
+                       child.KillCount == -1,
+                    $"GT-11: state9996 child {spawnIndex} must keep direct-reset relation defaults");
+                Expect(child.Runtime.ObjType == 1 &&
+                       child.Runtime.EntityType == (int)LF2ObjectType.LightWeapon &&
+                       child.Runtime.WeaponFlightCounter == 700 + expectedOid,
+                    $"GT-11: state9996 child {spawnIndex} identity/weapon_hp mismatch");
+                Expect(world.TryGetCurrentRuntimeHandleForDiagnostics(
+                           expectedSlot,
+                           child,
+                           out RuntimeEntityHandle handle) &&
+                       handle.Generation != 0,
+                    $"GT-11: state9996 child {spawnIndex} must own a current slot generation");
+            }
+
+            Expect(expectedRng.CallCount == 34 &&
+                   world.Rng.CallCount == expectedRng.CallCount &&
+                   world.Rng.State == expectedRng.State,
+                "GT-11: five successful state9996 children must consume exactly 34 RNG calls");
+        }
+
+        private static void CheckLateState9996MissingResourceContracts()
+        {
+            const uint missing217Seed = 0x24681357u;
+            SimulationWorld missing217World = CreateLateState9996World(
+                false,
+                true,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                0,
+                false,
+                missing217Seed,
+                out LF2Character missing217Spawner);
+            var missing217Expected = new DeterministicRng(missing217Seed);
+            int missing217Before = missing217World.ObjectCount;
+            ConsumeLateState9996ExpectedChild(missing217Expected, 4);
+
+            missing217World.RunLateStateSpecialPreCollisionForSelfCheck(missing217Spawner);
+
+            LF2Entity oid218 = missing217World.FindEntityByRuntimeSlotIncludingPending(
+                LateState9996SpawnStartSlot);
+            Expect(missing217World.ObjectCount == missing217Before + 1 &&
+                   oid218?.ObjectId == 218 &&
+                   missing217World.Rng.CallCount == 6 &&
+                   missing217World.Rng.State == missing217Expected.State,
+                "GT-11: missing oid217 must retry the same free slot without RNG and only spawn oid218 with six calls");
+
+            const uint missing218Seed = 0x11223344u;
+            SimulationWorld missing218World = CreateLateState9996World(
+                true,
+                false,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                0,
+                false,
+                missing218Seed,
+                out LF2Character missing218Spawner);
+            var missing218Expected = new DeterministicRng(missing218Seed);
+            int missing218Before = missing218World.ObjectCount;
+            for (int i = 0; i < 4; i++)
+                ConsumeLateState9996ExpectedChild(missing218Expected, i);
+
+            missing218World.RunLateStateSpecialPreCollisionForSelfCheck(missing218Spawner);
+
+            Expect(missing218World.ObjectCount == missing218Before + 4 &&
+                   missing218World.Rng.CallCount == 28 &&
+                   missing218World.Rng.State == missing218Expected.State,
+                "GT-11: missing oid218 must preserve four oid217 children and consume exactly 28 calls");
+            for (int i = 0; i < 4; i++)
+            {
+                LF2Entity child = missing218World.FindEntityByRuntimeSlotIncludingPending(
+                    LateState9996SpawnStartSlot + i);
+                Expect(child?.ObjectId == 217,
+                    $"GT-11: missing oid218 child slot {i} must remain oid217");
+            }
+        }
+
+        private static void CheckLateState9996CapacityAndNoAllocationContract()
+        {
+            const uint seed = 0xA1B2C3D4u;
+            SimulationWorld world = CreateLateState9996World(
+                true,
+                true,
+                LateState9996SpawnStartSlot,
+                0,
+                false,
+                seed,
+                out LF2Character spawner);
+            int beforeCount = world.ObjectCount;
+            for (int i = 0; i < 32; i++)
+                world.RunLateStateSpecialPreCollisionForSelfCheck(spawner);
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long beforeAllocated = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 512; i++)
+                world.RunLateStateSpecialPreCollisionForSelfCheck(spawner);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - beforeAllocated;
+
+            Expect(world.ObjectCount == beforeCount && world.Rng.CallCount == 0,
+                "GT-11: exhausted slot50 tail must break before DAT lookup/RNG/spawn");
+            Expect(allocated == 0,
+                $"GT-11: warmed exhausted state9996 writer must allocate 0 B, actual={allocated}");
+        }
+
+        private static void CheckLateState9996TransformChainContract()
+        {
+            const uint seed = 0x55667788u;
+            SimulationWorld world = CreateLateState9996World(
+                true,
+                true,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                0,
+                true,
+                seed,
+                out LF2Character spawner);
+
+            world.RunLateStateSpecialPreCollisionForSelfCheck(spawner);
+
+            Expect(spawner.ObjectId == 901 && spawner.Frame.N == 0 &&
+                   spawner.Frame.D?.state == 9996 && spawner.HitStun == 0 &&
+                   spawner.Runtime.RenderPicOffset == 140 &&
+                   spawner.AttackingCounter == 1,
+                "GT-11: one state-special call must reload 9995->4000->8000->9996 while preserving attacking");
+            Expect(world.ObjectCount == 6 && world.Rng.CallCount == 34,
+                "GT-11: transform chain must reach and execute the state9996 structural writer in the same call");
+
+            LF2CharacterData missingTargetData = new LF2CharacterData
+            {
+                name = "SelfCheck_GT11_MissingTransformTarget",
+                type_sub = (int)LF2ObjectType.Character,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, 123, 100, 0, 39, 79),
+                    Frame(1, 8999, 100, 1, 39, 79),
+                },
+            };
+            var missing = CreateCharacter(
+                "SelfCheck_GT11_MissingTransformTarget",
+                902,
+                missingTargetData);
+            missing.Frame.N = 1;
+            missing.Frame.D = missing.FrameCache.GetFrameDataById(1);
+            missing.Trans.SyncDirectFrameData(100, 1, 27);
+            missing.SetRuntimeCharacterConfigResolverForSelfCheck(
+                new RuntimeCharacterConfigResolver(_ => null));
+
+            missing.RunStateSpecialPreCollision();
+
+            Expect(missing.ObjectId == 902 && missing.Frame.N == 0 &&
+                   missing.Frame.D?.state == 123 && missing.HitStun == 0 &&
+                   missing.Runtime.RenderPicOffset == 140 &&
+                   missing.Trans.WaitCounter == 27,
+                "GT-11: missing 8000 target DAT must retain identity, still write frame0/render-pic-offset140, and preserve wait counter");
+        }
+
+        private static void CheckLateState9996CursorContract()
+        {
+            SimulationWorld lowerParentWorld = CreateLateState9996World(
+                true,
+                true,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                49,
+                false,
+                0x10203040u,
+                out _);
+            lowerParentWorld.LateEntityUpdateAll(45);
+            for (int i = 0; i < 5; i++)
+            {
+                LF2Entity child = lowerParentWorld.FindEntityByRuntimeSlotIncludingPending(
+                    LateState9996SpawnStartSlot + i);
+                Expect(child?.AttackExempt == 5,
+                    $"GT-11: child slot {50 + i} above parent cursor must run late frame_tick in the spawn pass");
+            }
+
+            SimulationWorld higherParentWorld = CreateLateState9996World(
+                true,
+                true,
+                SimulationWorld.AuthorityRuntimeSlotCapacity,
+                60,
+                false,
+                0x10203040u,
+                out _);
+            higherParentWorld.LateEntityUpdateAll(46);
+            for (int i = 0; i < 5; i++)
+            {
+                LF2Entity child = higherParentWorld.FindEntityByRuntimeSlotIncludingPending(
+                    LateState9996SpawnStartSlot + i);
+                Expect(child?.AttackExempt == 6,
+                    $"GT-11: child slot {50 + i} below parent cursor must wait until the next late pass");
+            }
+        }
+
+        private static SimulationWorld CreateLateState9996World(
+            bool include217,
+            bool include218,
+            int runtimeSlotCapacity,
+            int spawnerSlot,
+            bool transformChain,
+            uint seed,
+            out LF2Character spawner)
+        {
+            const int sourceOid = 782;
+            var wrappers = new Dictionary<int, LF2CharacterDataWrapper>();
+            var definitions = new List<ObjectDefinition>();
+            LF2CharacterData sourceData = BuildGameTickCurrentDatData(
+                "SelfCheck_GT11_Source",
+                LF2ObjectType.Character,
+                transformChain ? 9995 : 9996);
+            wrappers[sourceOid] = new LF2CharacterDataWrapper(sourceOid, sourceData);
+            definitions.Add(new ObjectDefinition(
+                sourceOid,
+                (int)LF2ObjectType.Character,
+                "self-check.dat"));
+
+            if (transformChain)
+            {
+                AddLateState9996Config(50, LF2ObjectType.Character, 4900, 0);
+                AddLateState9996Config(900, LF2ObjectType.Other, 8901, 0);
+                AddLateState9996Config(901, LF2ObjectType.Character, 9996, 0);
+            }
+
+            if (include217)
+                AddLateState9996WeaponConfig(217);
+            if (include218)
+                AddLateState9996WeaponConfig(218);
+
+            BattleRuntimeProfile profile =
+                runtimeSlotCapacity == SimulationWorld.AuthorityRuntimeSlotCapacity
+                    ? BattleRuntimeProfile.Authority400
+                    : BattleRuntimeProfile.MobileExtended;
+            var resolver = new RuntimeCharacterConfigResolver(oid =>
+                wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            var world = new SimulationWorld(
+                profile,
+                runtimeSlotCapacity,
+                CollisionBroadphaseBackend.BruteForce,
+                resolver);
+            world.PrepareRuntimeDataCatalogForBattle(
+                definitions,
+                oid => wrappers.TryGetValue(oid, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            world.LogicReferencePool.Prewarm(LF2ObjectType.LightWeapon, 8);
+            world.LogicReferencePool.PrewarmTasks<OPointCreateTask>(2);
+            world.SetLogicOnlyEntityMaterialization(true);
+            world.Rng.Seed(seed);
+
+            spawner = CreateCharacter(
+                "SelfCheck_GT11_Source",
+                sourceOid,
+                sourceData);
+            spawner.SetRequiredRuntimeSlot(spawnerSlot);
+            spawner.Runtime.SetPosition(100.75, -20.25, 200.5);
+            spawner.Runtime.SyncIntegerPosition();
+            spawner.AttackingCounter = 1;
+            world.Register(spawner);
+            return world;
+
+            void AddLateState9996Config(
+                int oid,
+                LF2ObjectType type,
+                int state,
+                int weaponHp)
+            {
+                LF2CharacterData data = BuildGameTickCurrentDatData(
+                    $"SelfCheck_GT11_{oid}",
+                    type,
+                    state);
+                data.weapon_hp = weaponHp;
+                wrappers[oid] = new LF2CharacterDataWrapper(oid, data);
+                definitions.Add(new ObjectDefinition(
+                    oid,
+                    (int)type,
+                    "self-check.dat"));
+            }
+
+            void AddLateState9996WeaponConfig(int oid)
+            {
+                var data = new LF2CharacterData
+                {
+                    name = $"SelfCheck_GT11_Weapon_{oid}",
+                    type_sub = (int)LF2ObjectType.LightWeapon,
+                    weapon_hp = 700 + oid,
+                    frames = new List<LF2FrameData>(),
+                };
+                for (int frameId = 0; frameId < 4; frameId++)
+                {
+                    data.frames.Add(Frame(
+                        frameId,
+                        LF2States.WeaponInSky,
+                        100,
+                        frameId,
+                        39,
+                        79));
+                }
+                wrappers[oid] = new LF2CharacterDataWrapper(oid, data);
+                definitions.Add(new ObjectDefinition(
+                    oid,
+                    (int)LF2ObjectType.LightWeapon,
+                    "self-check.dat"));
+            }
+        }
+
+        private static void ConsumeLateState9996ExpectedChild(
+            DeterministicRng rng,
+            int spawnIndex)
+        {
+            rng.NextInt(0, 7);
+            rng.NextInt(0, 7);
+            rng.NextInt(0, 15);
+            if (spawnIndex != 4)
+                rng.NextInt(0, 2);
+            if (spawnIndex >= 4)
+                rng.NextInt(0, 7);
+            else if (spawnIndex >= 2)
+                rng.NextInt(0, 3);
+            else
+                rng.NextInt(0, 3);
+            rng.NextInt(0, 4);
+            rng.NextInt(0, 2);
         }
 
         private static void CheckAudit11N30Code100Broadcast()
@@ -21454,6 +25370,14 @@ namespace NTSD.Test
                 $"{label}: current runtime input keys must be clear");
         }
 
+        private static void ExpectCurrentInputKeysRetained(NTSDEntityRuntime runtime, string label)
+        {
+            Expect(runtime.KeyUp == 1 && runtime.KeyDown == 1 &&
+                   runtime.KeyLeft == 1 && runtime.KeyRight == 1 &&
+                   runtime.KeyAttack == 1 && runtime.KeyJump == 1 && runtime.KeyDefend == 1,
+                $"{label}: current runtime input keys must remain visible through frame advance");
+        }
+
         private static void CheckPhysicsMovementAndVerticalBoundaryContracts()
         {
             const double epsilon = 0.0001;
@@ -21760,6 +25684,180 @@ namespace NTSD.Test
                 $"hp={actualFrozen.Health.HP}, hpBound={actualFrozen.Health.HPBound}");
         }
 
+        private static void CheckLandingRawFrameIntermediateState()
+        {
+            CheckLandingRawFrameIntermediateStateForPath(false);
+            CheckLandingRawFrameIntermediateStateForPath(true);
+        }
+
+        private static void CheckLandingRawFrameIntermediateStateForPath(bool sharedCharacterDat)
+        {
+            string pathLabel = sharedCharacterDat ? "shared-character-DAT" : "exact-character";
+            int objectIdBase = sharedCharacterDat ? 780 : 775;
+
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-state12-low-front",
+                objectIdBase,
+                LF2States.Falling,
+                0,
+                2.0,
+                0.0,
+                LF2StandardFrames.Lying,
+                expectedAttacking: 0);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-state12-low-back",
+                objectIdBase + 1,
+                LF2States.Falling,
+                LF2StandardFrames.FallingBack,
+                2.0,
+                0.0,
+                LF2StandardFrames.LyingBack,
+                expectedAttacking: 0);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-state12-high",
+                objectIdBase + 2,
+                LF2States.Falling,
+                LF2StandardFrames.FallingBack,
+                12.0,
+                0.0,
+                LF2StandardFrames.FallingBack5,
+                expectedAttacking: 29);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-state18",
+                objectIdBase + 3,
+                LF2States.Burning,
+                LF2StandardFrames.FallingBack,
+                2.0,
+                0.0,
+                LF2StandardFrames.FallingFront5,
+                expectedAttacking: 29);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-state13-high",
+                objectIdBase + 4,
+                LF2States.Frozen,
+                0,
+                18.0,
+                0.0,
+                LF2StandardFrames.FallingFront5,
+                expectedAttacking: 29);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-ordinary-state100",
+                objectIdBase + 5,
+                LF2States.CustomSkill1,
+                0,
+                2.0,
+                0.0,
+                94,
+                expectedAttacking: 0);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-ordinary-frame212",
+                objectIdBase + 6,
+                LF2States.Standing,
+                LF2StandardFrames.JumpingAir,
+                2.0,
+                0.0,
+                LF2StandardFrames.Crouch,
+                expectedAttacking: 0);
+            CheckLandingRawFrameCase(
+                sharedCharacterDat,
+                $"{pathLabel}-ordinary-default",
+                objectIdBase + 7,
+                LF2States.Standing,
+                0,
+                2.0,
+                0.0,
+                LF2StandardFrames.Crouch2,
+                expectedAttacking: 0);
+        }
+
+        private static void CheckLandingRawFrameCase(
+            bool sharedCharacterDat,
+            string caseName,
+            int objectId,
+            int sourceState,
+            int sourceFrame,
+            double landingVy,
+            double vx,
+            int expectedFrame,
+            int expectedAttacking)
+        {
+            const int preservedPreviousFrame = 73;
+            const int preservedWaitCounter = 41;
+            LF2CharacterData data = BuildLandingRawFrameWriterData(caseName, sourceState);
+            LF2Entity entity;
+            if (sharedCharacterDat)
+            {
+                var shared = new SelfCheckCharacterDatShell();
+                shared.BindData(caseName, objectId, data);
+                entity = shared;
+            }
+            else
+            {
+                entity = CreateCharacter(caseName, objectId, data);
+            }
+
+            entity.DirectWriteRawFramePreserveWaitCounter(sourceFrame);
+            entity.Frame.PN = preservedPreviousFrame;
+            entity.AttackingCounter = 29;
+            entity.Trans.SyncDirectFrameData(
+                entity.Frame.D.wait,
+                entity.Frame.D.next,
+                preservedWaitCounter);
+            entity.Runtime.SetPosition(0.0, -1.0, 0.0);
+            entity.Runtime.SetVelocity(vx, landingVy, 0.0);
+            entity.Runtime.SyncIntegerPosition();
+
+            if (entity is LF2Character character)
+                character.ApplyDynamics();
+            else
+                entity.SimTU(1);
+
+            LF2FrameData targetFrame = entity.FrameCache.GetFrameDataById(expectedFrame);
+            Expect(entity.Frame.N == expectedFrame && entity.Runtime.Frame == expectedFrame &&
+                   entity.Frame.D == targetFrame,
+                $"R3-LAND-01 {caseName}: F04 must raw-write the C++ target frame without an immediate transit; " +
+                $"frame={entity.Frame.N}, runtimeFrame={entity.Runtime.Frame}, target={expectedFrame}");
+            Expect(entity.Frame.PN == preservedPreviousFrame,
+                $"R3-LAND-01 {caseName}: F04 raw landing write must preserve Frame.PN; " +
+                $"actual={entity.Frame.PN}, expected={preservedPreviousFrame}");
+            Expect(entity.AttackingCounter == expectedAttacking,
+                $"R3-LAND-01 {caseName}: F04 attacking write must follow the C++ branch; " +
+                $"actual={entity.AttackingCounter}, expected={expectedAttacking}");
+            Expect(entity.Trans.WaitCounter == preservedWaitCounter &&
+                   entity.Runtime.WaitCounter == preservedWaitCounter &&
+                   entity.Trans.Wait == targetFrame.wait && entity.Trans.Next == targetFrame.next,
+                $"R3-LAND-01 {caseName}: F04 must preserve wait_counter while loading target DAT wait/next; " +
+                $"waitCounter={entity.Trans.WaitCounter}, wait={entity.Trans.Wait}, next={entity.Trans.Next}");
+        }
+
+        private static LF2CharacterData BuildLandingRawFrameWriterData(string name, int sourceState)
+        {
+            return new LF2CharacterData
+            {
+                name = name,
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, sourceState, 3, 0, 39, 79),
+                    Frame(94, LF2States.Standing, 7, 94, 39, 79),
+                    Frame(LF2StandardFrames.FallingFront5, LF2States.Falling, 11, LF2StandardFrames.FallingFront5, 39, 79),
+                    Frame(LF2StandardFrames.FallingBack, sourceState, 5, LF2StandardFrames.FallingBack, 39, 79),
+                    Frame(LF2StandardFrames.FallingBack5, LF2States.Falling, 13, LF2StandardFrames.FallingBack5, 39, 79),
+                    Frame(LF2StandardFrames.JumpingAir, sourceState, 5, LF2StandardFrames.JumpingAir, 39, 79),
+                    Frame(LF2StandardFrames.Crouch, LF2States.StopRunning, 17, LF2StandardFrames.Crouch, 39, 79),
+                    Frame(LF2StandardFrames.Crouch2, LF2States.StopRunning, 19, LF2StandardFrames.Crouch2, 39, 79),
+                    Frame(LF2StandardFrames.Lying, LF2States.Lying, 23, LF2StandardFrames.Lying, 39, 79),
+                    Frame(LF2StandardFrames.LyingBack, LF2States.Lying, 29, LF2StandardFrames.LyingBack, 39, 79),
+                },
+            };
+        }
+
         private static LF2Character RunActualCharacterLandingDamageCase(
             string name,
             int objectId,
@@ -21932,9 +26030,9 @@ namespace NTSD.Test
                     drink.Runtime.WeaponState = 4326;
                     drink.Health.HP = 0;
                     bool drinkSurvivedLateCleanup = RunTransformedLandingPasses(drink, 5.0, 8.0, 4);
-                    Expect(drink.HitStun == 139,
-                        $"state8000 transform hit-stop must count down once in the following production late frame_tick; " +
-                        $"actual={drink.HitStun}, immediate=140");
+                    Expect(drink.HitStun == 0 && drink.Runtime.RenderPicOffset == 140,
+                        $"state8000 transform must preserve render-pic offset without arming hit-stop; " +
+                        $"hitStop={drink.HitStun}, renderPicOffset={drink.Runtime.RenderPicOffset}");
                     Expect(drink.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Drink &&
                            drink.Frame.N == 70 && drink.Runtime.WeaponFlightCounter == 0 &&
                            drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,
@@ -22097,9 +26195,9 @@ namespace NTSD.Test
         private static TransformedLandingSelfCheckEntity CreateTransformedLandingShell(
             RuntimeCharacterConfigResolver runtimeCharacterConfigs,
             int targetOid,
-            bool hitStopTransform)
+            bool renderPicOffsetTransform)
         {
-            int transformState = (hitStopTransform ? 8000 : 4000) + targetOid;
+            int transformState = (renderPicOffsetTransform ? 8000 : 4000) + targetOid;
             var shell = new TransformedLandingSelfCheckEntity();
             shell.SetRuntimeCharacterConfigResolverForSelfCheck(
                 runtimeCharacterConfigs);
@@ -22120,9 +26218,23 @@ namespace NTSD.Test
                 $"state transform must preserve the source WeaponCount for oid {targetOid}");
             Expect(shell.Runtime.WeaponFlightCounter == shell.FrameCache.Wrapper.characterData.weapon_hp,
                 $"state transform must initialize oid {targetOid} durability from target weapon_hp");
-            Expect(shell.HitStun == (hitStopTransform ? 140 : 0),
-                $"state transform immediate hit-stop mismatch for oid {targetOid}; " +
-                $"actual={shell.HitStun}, expected={(hitStopTransform ? 140 : 0)}");
+            int expectedRenderPicOffset = renderPicOffsetTransform ? 140 : 0;
+            Expect(shell.HitStun == 0 &&
+                   shell.Runtime.RenderPicOffset == expectedRenderPicOffset,
+                $"state transform render field mismatch for oid {targetOid}; " +
+                $"hitStop={shell.HitStun}, renderPicOffset={shell.Runtime.RenderPicOffset}, " +
+                $"expectedRenderPicOffset={expectedRenderPicOffset}");
+            Expect(shell.GetRenderPicIndex() == shell.Frame.D.pic + expectedRenderPicOffset,
+                $"state transform effective-pic mismatch for oid {targetOid}; " +
+                $"rawPic={shell.Frame.D.pic}, effectivePic={shell.GetRenderPicIndex()}, " +
+                $"expected={shell.Frame.D.pic + expectedRenderPicOffset}");
+
+            int originalPic = shell.Frame.D.pic;
+            shell.Frame.D.pic = 999;
+            Expect(shell.GetRenderPicIndex() == 999,
+                $"raw hidden pic must remain 999 before render offset for oid {targetOid}; " +
+                $"renderPicOffset={shell.Runtime.RenderPicOffset}, effectivePic={shell.GetRenderPicIndex()}");
+            shell.Frame.D.pic = originalPic;
             return shell;
         }
 
@@ -23204,10 +27316,9 @@ namespace NTSD.Test
 
                 Expect(djaOnly.Runtime.Unk338 == 77,
                     "missing DJA target must not fall through to the merged Unk338 release branch");
-                // HitJa returns before the authority commit, even though its local comboDja is cleared.
-                Expect((byte)GetPrivateField(djaOnly.InputState, "_comboDJA") == 3 &&
-                       djaOnly.Runtime.ComboDja == 3,
-                    "missing-target DJA attempt must retain entered private/runtime comboDJA progress");
+                Expect((byte)GetPrivateField(djaOnly.InputState, "_comboDJA") == 0 &&
+                       djaOnly.Runtime.ComboDja == 0,
+                    "missing-target DJA attempt must commit the C++ trigger-time comboDJA clear");
 
                 wrappers[51].characterData.frames.Add(Frame(300, 0, 1, 300, 39, 79));
                 LF2Character validDja = CreateCharacter("SelfCheck_Oid51_ValidDja", 51, wrappers[51].characterData);
@@ -23218,9 +27329,9 @@ namespace NTSD.Test
                 validDja.Runtime.ComboDja = 3;
                 validDja.ApplyFrameInputFromLocalState();
                 Expect(validDja.Frame.N == 300 && validDja.Runtime.Unk338 == 66 &&
-                       (byte)GetPrivateField(validDja.InputState, "_comboDJA") == 3 &&
-                       validDja.Runtime.ComboDja == 3,
-                    "valid merged DJA target must jump without committing private/runtime comboDJA progress");
+                       (byte)GetPrivateField(validDja.InputState, "_comboDJA") == 0 &&
+                       validDja.Runtime.ComboDja == 0,
+                    "valid merged DJA target must jump and commit the C++ trigger-time comboDJA clear");
 
                 SimulationWorld aiWorld = CreateOid5152MergedWorld(
                     wrappers, out LF2Character aiSelf, out LF2Character aiPartner);
@@ -23305,6 +27416,182 @@ namespace NTSD.Test
                 $"respawn no-count branch must respawn around same-relation teammates using release RNG offsets; " +
                 $"expected=({expectedX},{expectedZ}) actual=({dead.GetRuntimeXInt()},{dead.GetRenderZInt()}) " +
                 $"runtimeXZ=({dead.Runtime.X},{dead.Runtime.Z}) alliesXZ=({allyA.GetRuntimeXInt()},{allyA.GetRenderZInt()})/({allyB.GetRuntimeXInt()},{allyB.GetRenderZInt()})");
+        }
+
+        private static void CheckRespawnReadsPhysicsTailIntegerCoordinates()
+        {
+            var world = new SimulationWorld();
+            LF2CharacterData caughtData = BuildRespawnCharacterData(
+                "SelfCheck_Respawn_StaleInt_Caught");
+            caughtData.frames.Add(Frame(
+                6,
+                0,
+                1,
+                6,
+                39,
+                79,
+                new CatchPoint { kind = 2 }));
+
+            LF2Character dead = CreateCharacter(
+                "SelfCheck_Respawn_StaleInt_Dead",
+                1,
+                BuildRespawnCharacterData("SelfCheck_Respawn_StaleInt_Dead"));
+            LF2Character delayed = CreateCharacter(
+                "SelfCheck_Respawn_StaleInt_Delay",
+                2,
+                BuildRespawnCharacterData("SelfCheck_Respawn_StaleInt_Delay"));
+            LF2Character linked = CreateCharacter(
+                "SelfCheck_Respawn_StaleInt_Link",
+                3,
+                BuildRespawnCharacterData("SelfCheck_Respawn_StaleInt_Link"));
+            LF2Character caught = CreateCharacter(
+                "SelfCheck_Respawn_StaleInt_Caught",
+                4,
+                caughtData);
+            var sharedDelayed = new SelfCheckCharacterDatShell();
+            sharedDelayed.BindData(
+                "SelfCheck_Respawn_StaleInt_SharedDelay",
+                5,
+                BuildRespawnCharacterData("SelfCheck_Respawn_StaleInt_SharedDelay"));
+
+            dead.SetRuntimeSlotIndex(0);
+            delayed.SetRuntimeSlotIndex(1);
+            linked.SetRuntimeSlotIndex(2);
+            caught.SetRuntimeSlotIndex(3);
+            sharedDelayed.SetRuntimeSlotIndex(4);
+            world.Register(dead);
+            world.Register(delayed);
+            world.Register(linked);
+            world.Register(caught);
+            world.Register(sharedDelayed);
+
+            dead.RelationTeam = 5;
+            delayed.RelationTeam = 5;
+            linked.RelationTeam = 5;
+            caught.RelationTeam = 5;
+            sharedDelayed.RelationTeam = 5;
+
+            dead.ImmediateFrame(14);
+            dead.Health.HP = 0;
+            dead.Health.HP3 = 180;
+            dead.Health.HPBound = 60;
+            dead.HP2Orig = 3;
+            dead.HitStun = 3;
+            dead.FrameDelay = 1;
+            dead.Runtime.SetPosition(0.0, 0.0, 0.0);
+            dead.Runtime.SetVelocity(0.0, 0.0, 0.0);
+            dead.Runtime.SyncIntegerPosition();
+
+            delayed.FrameDelay = 1;
+            linked.Runtime.LinkState = -1;
+            caught.ImmediateFrame(6);
+            sharedDelayed.FrameDelay = 1;
+
+            delayed.Runtime.SetPosition(10.0, 0.0, 20.0);
+            delayed.Runtime.SyncIntegerPosition();
+            delayed.Runtime.SetPosition(110.75, 0.0, 120.75);
+
+            linked.Runtime.SetPosition(30.0, 0.0, 40.0);
+            linked.Runtime.SyncIntegerPosition();
+            linked.Runtime.SetPosition(230.75, 0.0, 240.75);
+
+            caught.Runtime.SetPosition(50.0, 0.0, 60.0);
+            caught.Runtime.SyncIntegerPosition();
+            caught.Runtime.SetPosition(350.75, 0.0, 360.75);
+
+            sharedDelayed.Runtime.SetPosition(70.0, 0.0, 80.0);
+            sharedDelayed.Runtime.SyncIntegerPosition();
+            sharedDelayed.Runtime.SetPosition(470.75, 0.0, 480.75);
+
+            world.SerialTickAll(1);
+
+            Expect(delayed.Runtime.XInt == 10 && delayed.Runtime.ZInt == 20 &&
+                   delayed.FrameDelay == 0,
+                "respawn stale-int fixture: exact frame-delay early return must preserve integer position while decrementing delay");
+            Expect(linked.Runtime.XInt == 30 && linked.Runtime.ZInt == 40 &&
+                   linked.Runtime.LinkState == -1,
+                "respawn stale-int fixture: exact negative-link early return must preserve integer position");
+            Expect(caught.Runtime.XInt == 50 && caught.Runtime.ZInt == 60 &&
+                   caught.CurrentFrameId == 6,
+                "respawn stale-int fixture: exact cpoint-kind2 early return must preserve integer position");
+            Expect(sharedDelayed.Runtime.XInt == 70 && sharedDelayed.Runtime.ZInt == 80 &&
+                   sharedDelayed.FrameDelay == 0,
+                "respawn stale-int fixture: shared character-DAT frame-delay early return must preserve integer position while decrementing delay");
+
+            DeterministicRng expectedRng = new DeterministicRng(0x4E545344u);
+            int expectedX = 40 + expectedRng.NextInt(0, 51) - 26;
+            int expectedZ = 50 + expectedRng.NextInt(0, 31) - 16;
+
+            world.PostFrameAdvanceDeathCleanupAll(1);
+
+            Expect(dead.GetRuntimeXInt() == expectedX && dead.GetRenderZInt() == expectedZ,
+                $"respawn stale-int fixture: no-count respawn must average F03 tail integers, not live doubles; " +
+                $"expected=({expectedX},{expectedZ}) actual=({dead.GetRuntimeXInt()},{dead.GetRenderZInt()}) " +
+                $"stale=(10,20)/(30,40)/(50,60)/(70,80)");
+            Expect(delayed.Runtime.XInt == 10 && linked.Runtime.XInt == 30 &&
+                   caught.Runtime.XInt == 50 && sharedDelayed.Runtime.XInt == 70,
+                "respawn stale-int fixture: respawn scan must not globally resynchronize F03 participants");
+        }
+
+        private static void CheckThrowFrameGuardDoesNotGateReleasePasses()
+        {
+            var advanceWorld = new SimulationWorld();
+            LF2Character exactAdvance = CreateCharacter(
+                "SelfCheck_ThrowGuard_ExactAdvance",
+                1,
+                BuildRespawnCharacterData("SelfCheck_ThrowGuard_ExactAdvance"));
+            var sharedAdvance = new SelfCheckCharacterDatShell();
+            sharedAdvance.BindData(
+                "SelfCheck_ThrowGuard_SharedAdvance",
+                2,
+                BuildRespawnCharacterData("SelfCheck_ThrowGuard_SharedAdvance"));
+            exactAdvance.SetRuntimeSlotIndex(0);
+            sharedAdvance.SetRuntimeSlotIndex(1);
+            advanceWorld.Register(exactAdvance);
+            advanceWorld.Register(sharedAdvance);
+
+            exactAdvance.Runtime.SetPosition(10.0, 0.0, 0.0);
+            exactAdvance.Runtime.SetVelocity(3.0, 0.0, 0.0);
+            exactAdvance.Runtime.SyncIntegerPosition();
+            exactAdvance.ThrowFrameGuard = exactAdvance.CurrentFrameId;
+
+            sharedAdvance.Runtime.SetPosition(10.0, 0.0, 0.0);
+            sharedAdvance.Runtime.SetVelocity(3.0, 0.0, 0.0);
+            sharedAdvance.Runtime.SyncIntegerPosition();
+            sharedAdvance.ThrowFrameGuard = sharedAdvance.Frame.N;
+
+            advanceWorld.SerialTickAll(1);
+
+            Expect(exactAdvance.Runtime.XInt == 13 && sharedAdvance.Runtime.XInt == 13,
+                $"R3-FRAME-02A: matching test-only ThrowFrameGuard must not suppress exact/shared F03 physics; " +
+                $"exact={exactAdvance.Runtime.XInt}, shared={sharedAdvance.Runtime.XInt}");
+            Expect(exactAdvance.Runtime.ThrowFrameGuard == 0 &&
+                   sharedAdvance.Runtime.ThrowFrameGuard == 0,
+                "R3-FRAME-02A: removing readers must not change the historical field or its cleanup ownership");
+
+            var frameTickWorld = new SimulationWorld();
+            LF2Character exactFrameTick = CreateCharacter(
+                "SelfCheck_ThrowGuard_ExactFrameTick",
+                3,
+                BuildRespawnCharacterData("SelfCheck_ThrowGuard_ExactFrameTick"));
+            var sharedFrameTick = new SelfCheckCharacterDatShell();
+            sharedFrameTick.BindData(
+                "SelfCheck_ThrowGuard_SharedFrameTick",
+                4,
+                BuildRespawnCharacterData("SelfCheck_ThrowGuard_SharedFrameTick"));
+            exactFrameTick.SetRuntimeSlotIndex(0);
+            sharedFrameTick.SetRuntimeSlotIndex(1);
+            frameTickWorld.Register(exactFrameTick);
+            frameTickWorld.Register(sharedFrameTick);
+            exactFrameTick.ThrowFrameGuard = exactFrameTick.CurrentFrameId;
+            sharedFrameTick.ThrowFrameGuard = sharedFrameTick.Frame.N;
+
+            frameTickWorld.LateEntityUpdateAll(1);
+
+            Expect(exactFrameTick.AttackingCounter == 1 &&
+                   sharedFrameTick.AttackingCounter == 1,
+                $"R3-FRAME-02A: matching test-only ThrowFrameGuard must not suppress exact/shared F07 counters; " +
+                $"exact={exactFrameTick.AttackingCounter}, shared={sharedFrameTick.AttackingCounter}");
         }
 
         private static void CheckRespawnPassFreeEntityGate()
@@ -23487,11 +27774,15 @@ namespace NTSD.Test
                    actual.ComboVictim == 80 && actual.KillStat == 1 && actual.ComboAttacker == 80 &&
                    actual.WorldKillStat == 1 && actual.WorldDamageStat == 80,
                 "C-21: kind16 lethal damage must update entity and world kill/damage statistics");
-            Expect(actual.Frame == LF2StandardFrames.MpDrain && actual.AttackingCounter == 0 &&
+            Expect(actual.Frame == LF2StandardFrames.MpDrain &&
+                   actual.RuntimeFrame == LF2StandardFrames.MpDrain &&
+                   actual.FrameDataId == LF2StandardFrames.MpDrain &&
+                   actual.PreviousPn == 71 && actual.WaitCounter == 17 &&
+                   actual.AttackingCounter == 0 &&
                    actual.VictimAttackerVrest == 12 && actual.AttackerHeldVrest == 45 &&
                    actual.VictimHeldVrest == 30 && actual.VictimLinkState == 0 &&
                    actual.HeldLinkState == 0 && Nearly(actual.HeldVy, -1.0),
-                "C-22: kind16 must write VRest[attacker,held]=45 and VRest[victim,held]=30 while preserving victim/attacker itr vrest");
+                "R4-HIT-02B: kind16 must raw-write frame200, preserve PN/wait, explicitly clear attacking, and retain vrest/held release");
         }
 
         private static Kind16CharacterSnapshot RunKind16CharacterCase(bool actualCharacter)
@@ -23522,6 +27813,12 @@ namespace NTSD.Test
             world.Register(victim);
             world.Register(heldTarget);
             heldTarget.DirectWriteRawFramePreserveWaitCounter(10);
+            victim.DirectWriteRawFramePreserveWaitCounter(10);
+            victim.Frame.PN = 71;
+            victim.Trans.SyncDirectFrameData(
+                victim.Frame.D.wait,
+                victim.Frame.D.next,
+                17);
 
             attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             victim.Health.HP = 70;
@@ -23554,6 +27851,10 @@ namespace NTSD.Test
                 WorldKillStat = world.KillStats[1],
                 WorldDamageStat = world.DamageStats[1],
                 Frame = victim.Frame.N,
+                RuntimeFrame = victim.Runtime.Frame,
+                FrameDataId = victim.Frame.D?.frameId ?? int.MinValue,
+                PreviousPn = victim.Frame.PN,
+                WaitCounter = victim.Trans.WaitCounter,
                 AttackingCounter = victim.AttackingCounter,
                 VictimAttackerVrest = victim.ItrRest.GetVrest(attacker.Runtime.SlotIndex),
                 AttackerHeldVrest = attacker.ItrRest.GetVrest(heldTarget.Runtime.SlotIndex),
@@ -23576,6 +27877,10 @@ namespace NTSD.Test
             public int WorldKillStat;
             public int WorldDamageStat;
             public int Frame;
+            public int RuntimeFrame;
+            public int FrameDataId;
+            public int PreviousPn;
+            public int WaitCounter;
             public int AttackingCounter;
             public int VictimAttackerVrest;
             public int AttackerHeldVrest;
@@ -23590,6 +27895,8 @@ namespace NTSD.Test
                        HpLost == other.HpLost && ComboVictim == other.ComboVictim && KillStat == other.KillStat &&
                        ComboAttacker == other.ComboAttacker && WorldKillStat == other.WorldKillStat &&
                        WorldDamageStat == other.WorldDamageStat && Frame == other.Frame &&
+                       RuntimeFrame == other.RuntimeFrame && FrameDataId == other.FrameDataId &&
+                       PreviousPn == other.PreviousPn && WaitCounter == other.WaitCounter &&
                        AttackingCounter == other.AttackingCounter && VictimAttackerVrest == other.VictimAttackerVrest &&
                        AttackerHeldVrest == other.AttackerHeldVrest && VictimHeldVrest == other.VictimHeldVrest &&
                        VictimLinkState == other.VictimLinkState && HeldLinkState == other.HeldLinkState &&
@@ -23599,7 +27906,8 @@ namespace NTSD.Test
             public override string ToString()
             {
                 return $"resolved={Resolved},hp={Hp}/{HpBound},lost={HpLost},combo={ComboAttacker}/{ComboVictim}," +
-                       $"stats={KillStat}/{WorldKillStat}/{WorldDamageStat},frame={Frame},attacking={AttackingCounter}," +
+                       $"stats={KillStat}/{WorldKillStat}/{WorldDamageStat},frame={Frame}/{RuntimeFrame}/{FrameDataId}," +
+                       $"pn={PreviousPn},wait={WaitCounter},attacking={AttackingCounter}," +
                        $"vrest={VictimAttackerVrest}/{AttackerHeldVrest}/{VictimHeldVrest}," +
                        $"links={VictimLinkState}/{HeldLinkState},heldVy={HeldVy}";
             }
@@ -23739,21 +28047,21 @@ namespace NTSD.Test
             w01Controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.left, true);
             w01.RunPostCooldownInputPhase(1);
             ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
-                "W01 Left must not commit local combo progress before the DJA fallthrough");
+                "W01 Left alone must not start a defend-led combo");
             w01.Runtime.ClearDirectionalInputKeys();
             w01.Runtime.ClearActionInputKeys();
 
             w01Controller.InputBuffer.EnqueueForTick(2, FuncKeyMask.att, true);
             w01.RunPostCooldownInputPhase(2);
-            ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
-                "W01 held Left+Attack must keep all nine runtime combo fields at authority zero");
+            ExpectComboLocalSeeds(w01, ordinaryValue: 1, djaValue: 1,
+                "W01 fresh defend edge must persist step one in all nine combo fields");
             w01.Runtime.ClearDirectionalInputKeys();
             w01.Runtime.ClearActionInputKeys();
 
             w01Controller.InputBuffer.EnqueueForTick(3, FuncKeyMask.left, false);
             w01.RunPostCooldownInputPhase(3);
-            ExpectComboLocalSeeds(w01, ordinaryValue: 0, djaValue: 0,
-                "W01 held Attack after Left release must keep all nine runtime combo fields at authority zero");
+            ExpectComboLocalSeeds(w01, ordinaryValue: 1, djaValue: 1,
+                "W01 release without a fresh interrupt must retain persisted combo progress");
 
             LF2Character partial = CreateCharacter(
                 "SelfCheck_ComboLocalPartial",
@@ -23762,8 +28070,8 @@ namespace NTSD.Test
             SetComboLocalSeeds(partial, ordinaryValue: 1, djaValue: 0);
             ((SelfCheckController)partial.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.att, true);
             partial.RunPostCooldownInputPhase(1);
-            ExpectComboLocalSeeds(partial, ordinaryValue: 1, djaValue: 0,
-                "an incomplete DJA must discard the entire local combo transaction");
+            ExpectComboLocalSeeds(partial, ordinaryValue: 0, djaValue: 1,
+                "a fresh defend edge must interrupt stale ordinary step one and start DJA step one");
 
             LF2CharacterData failedJumpData = BuildComboWrapperCharacterData(
                 "SelfCheck_ComboLocalFailedDjaJump", 399);
@@ -23777,8 +28085,8 @@ namespace NTSD.Test
             Expect(failedJump.Frame.N == 85,
                 $"BATTLE-AUDIT3-18 missing DJA target must skip 399 and continue through the running action tail to 85; " +
                 $"actual={failedJump.Frame.N}");
-            ExpectComboLocalSeeds(failedJump, ordinaryValue: 1, djaValue: 2,
-                "a HitJa early return must not commit local combo progress when the authored target frame is missing");
+            ExpectComboLocalSeeds(failedJump, ordinaryValue: 0, djaValue: 0,
+                "a missing HitJa target must retain prior wrapper interrupts and clear triggered DJA");
 
             LF2CharacterData unk328Data = BuildComboWrapperCharacterData(
                 "SelfCheck_ComboLocalUnk328", 300);
@@ -23795,8 +28103,8 @@ namespace NTSD.Test
             Expect(unk328.Frame.N == 85 && unk328.Runtime.Unk338 == 0,
                 $"BATTLE-AUDIT3-18 Unk328 branch must clear Unk338, skip 300, and continue to running action85; " +
                 $"frame={unk328.Frame.N},Unk338={unk328.Runtime.Unk338}");
-            ExpectComboLocalSeeds(unk328, ordinaryValue: 1, djaValue: 2,
-                "Unk328 early return must clear Unk338 without committing any local combo progress");
+            ExpectComboLocalSeeds(unk328, ordinaryValue: 0, djaValue: 3,
+                "Unk328 early return must retain prior wrapper interrupts and triggered DJA progress");
 
             LF2Character committed = CreateCharacter(
                 "SelfCheck_ComboLocalCommit",
@@ -23831,26 +28139,26 @@ namespace NTSD.Test
             // Physical L/S/K maps to internal att/down/def and therefore to CdDefend/CdDown/CdJump.
             controller.InputBuffer.EnqueueForTick(1, FuncKeyMask.att, true);
             naruto.RunPostCooldownInputPhase(1);
-            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0 &&
+            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 1 &&
                    naruto.Runtime.CdDefend == 5,
-                $"physical L must not commit an incomplete DDJ transaction; frame={naruto.Frame.N}," +
+                $"physical L must persist DDJ step one; frame={naruto.Frame.N}," +
                 $"combo={naruto.Runtime.ComboDdj},cdDefend={naruto.Runtime.CdDefend}");
             naruto.Runtime.ClearDirectionalInputKeys();
             naruto.Runtime.ClearActionInputKeys();
 
             controller.InputBuffer.EnqueueForTick(2, FuncKeyMask.down, true);
             naruto.RunPostCooldownInputPhase(2);
-            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0 &&
+            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 2 &&
                    naruto.Runtime.CdDown == 5,
-                $"physical S on the next logic tick cannot resume discarded DDJ local progress; frame={naruto.Frame.N}," +
+                $"physical S on the next logic tick must persist DDJ step two; frame={naruto.Frame.N}," +
                 $"combo={naruto.Runtime.ComboDdj},cdDown={naruto.Runtime.CdDown}");
             naruto.Runtime.ClearDirectionalInputKeys();
             naruto.Runtime.ClearActionInputKeys();
 
             controller.InputBuffer.EnqueueForTick(3, FuncKeyMask.def, true);
             naruto.RunPostCooldownInputPhase(3);
-            Expect(naruto.Frame.N == LF2StandardFrames.Defend && naruto.Runtime.ComboDdj == 0,
-                $"staggered physical L/S/K must not complete DDJ without a committed transaction; " +
+            Expect(naruto.Frame.N == 105 && naruto.Runtime.ComboDdj == 0,
+                $"staggered physical L/S/K must complete DDJ and clear the triggered combo; " +
                 $"frame={naruto.Frame.N},combo={naruto.Runtime.ComboDdj},cdJump={naruto.Runtime.CdJump}");
         }
 
@@ -23935,13 +28243,13 @@ namespace NTSD.Test
                 "Naruto DDJ regression requires the production CharacterAnimtorManager singleton");
 
             LF2CharacterDataWrapper narutoWrapper = LoadProductionDatWrapper(
-                animatorManager, 2, "Assets/NTSD/Config/AnimationConfig/Mingren/naruto.dat");
+                animatorManager, 2);
             LF2CharacterDataWrapper cloneWrapper = LoadProductionDatWrapper(
-                animatorManager, 33, "Assets/NTSD/Config/FrameConfig/naruto_clone.dat");
+                animatorManager, 33);
             LF2CharacterDataWrapper windWrapper = LoadProductionDatWrapper(
-                animatorManager, 204, "Assets/NTSD/Config/specialattack/wind.dat");
+                animatorManager, 204);
             LF2CharacterDataWrapper poisonWrapper = LoadProductionDatWrapper(
-                animatorManager, 205, "Assets/NTSD/Config/specialattack/poison.dat");
+                animatorManager, 205);
             Expect(narutoWrapper?.characterData != null &&
                    cloneWrapper?.characterData != null &&
                    windWrapper?.characterData != null &&
@@ -24501,6 +28809,26 @@ namespace NTSD.Test
 
         private static LF2CharacterDataWrapper LoadProductionDatWrapper(
             CharacterAnimtorManager animatorManager,
+            int objectId)
+        {
+            GameDataManager dataManager = GameDataManager.Instance;
+            ObjectDefinition definition = dataManager?.GetObjectById(objectId);
+            Expect(definition != null && !string.IsNullOrWhiteSpace(definition.file),
+                $"production DAT fixture catalog entry is missing: oid={objectId}");
+
+            string projectRelativePath = GameDataManager.ResolveObjectFilePath(
+                "Assets/NTSD/Config",
+                definition.file);
+            Expect(!string.IsNullOrWhiteSpace(projectRelativePath),
+                $"production DAT fixture catalog path is empty: oid={objectId}");
+            return LoadProductionDatWrapper(
+                animatorManager,
+                objectId,
+                projectRelativePath);
+        }
+
+        private static LF2CharacterDataWrapper LoadProductionDatWrapper(
+            CharacterAnimtorManager animatorManager,
             int objectId,
             string projectRelativePath)
         {
@@ -24554,8 +28882,7 @@ namespace NTSD.Test
                 "sprite file range check requires CharacterAnimtorManager");
             LF2CharacterData flash = LoadProductionDatWrapper(
                 animatorManager,
-                214,
-                "Assets/NTSD/Config/specialattack/flash.dat").characterData;
+                214).characterData;
             int[] expectedIndices = { 0, 14, 15, 16, 17, 18, 19, 20 };
             Expect(flash.files.Count == expectedIndices.Length,
                 "production flash DAT must expose its eight BMP sheet ranges");
@@ -24577,8 +28904,8 @@ namespace NTSD.Test
 
                 foreach (SpriteFileInfo file in flash.files)
                 {
-                    int textureWidth = file.col * (file.width + 1);
-                    int textureHeight = file.row * (file.height + 1);
+                    int textureWidth = file.row * (file.width + 1);
+                    int textureHeight = file.col * (file.height + 1);
                     var texture = new Texture2D(
                         textureWidth,
                         textureHeight,
@@ -24631,8 +28958,7 @@ namespace NTSD.Test
 
             LF2CharacterData naruto = LoadProductionDatWrapper(
                 animatorManager,
-                2,
-                "Assets/NTSD/Config/AnimationConfig/Mingren/naruto.dat").characterData;
+                2).characterData;
             Expect(Nearly(naruto.walking_speed, 4f) &&
                    Nearly(naruto.running_speed, 15f) &&
                    Nearly(naruto.running_speedz, 3.3f) &&
@@ -24644,15 +28970,13 @@ namespace NTSD.Test
 
             LF2CharacterData kakashi = LoadProductionDatWrapper(
                 animatorManager,
-                3,
-                "Assets/NTSD/Config/AnimationConfig/Kakashi/kakashi.dat").characterData;
+                3).characterData;
             Expect(Nearly(kakashi.running_speed, 18f) && Nearly(kakashi.rowing_distance, 30f),
                 "production Kakashi DAT movement headers must override defaults");
 
             LF2CharacterData sakura = LoadProductionDatWrapper(
                 animatorManager,
-                1,
-                "Assets/NTSD/Config/AnimationConfig/XiaoYing/sakura.dat").characterData;
+                1).characterData;
             Expect(Nearly(sakura.running_speed, 17f) &&
                    Nearly(sakura.heavy_walking_speed, 4f) &&
                    Nearly(sakura.rowing_distance, 30f),
@@ -24660,8 +28984,7 @@ namespace NTSD.Test
 
             LF2CharacterData sasuke = LoadProductionDatWrapper(
                 animatorManager,
-                11,
-                "Assets/NTSD/Config/AnimationConfig/ZuoZhu/sasuke.dat").characterData;
+                11).characterData;
             Expect(sasuke.walking_frame_rate == 4 &&
                    Nearly(sasuke.running_speed, 23.9f) &&
                    Nearly(sasuke.dash_height, -13.8f),
@@ -24669,15 +28992,13 @@ namespace NTSD.Test
 
             LF2CharacterData narutoClone = LoadProductionDatWrapper(
                 animatorManager,
-                33,
-                "Assets/NTSD/Config/FrameConfig/naruto_clone.dat").characterData;
+                33).characterData;
             Expect(Nearly(narutoClone.running_speed, 15f),
                 "plaintext Naruto clone DAT must use the same movement-header loading path");
 
             LF2CharacterData weapon4 = LoadProductionDatWrapper(
                 animatorManager,
-                120,
-                "Assets/NTSD/Config/chars/weapon4.dat").characterData;
+                120).characterData;
             Expect(weapon4.weapon_hp == 200 &&
                    weapon4.weapon_drop_hurt == 35 &&
                    weapon4.weapon_hit_sound == "data\\027.wav",
@@ -24781,8 +29102,8 @@ namespace NTSD.Test
             Expect(guarded.Frame.N == 85,
                 $"oid6 DjaGuard must block DJA frame300 but continue through the running action tail to85; " +
                 $"actual={guarded.Frame.N}");
-            ExpectComboLocalSeeds(guarded, ordinaryValue: 1, djaValue: 2,
-                "oid6 DjaGuard early return must discard the entire local combo transaction");
+            ExpectComboLocalSeeds(guarded, ordinaryValue: 0, djaValue: 3,
+                "oid6 DjaGuard must retain prior wrapper interrupts and the guarded DJA trigger state");
 
             LF2Character released = CreateCharacter("SelfCheck_Oid6_DjaRelease", 6, BuildComboWrapperCharacterData("SelfCheck_Oid6_DjaRelease", 300));
             released.SwitchDir("right");
@@ -24796,8 +29117,8 @@ namespace NTSD.Test
 
             Expect(released.Frame.N == 300 && released.Runtime.CdAttack == 0,
                 "oid6 DJA must frame jump and preserve its cooldown-clear side effect once the guard opens");
-            ExpectComboLocalSeeds(released, ordinaryValue: 1, djaValue: 2,
-                "successful HitJa frame-jump early return must not commit local combo progress");
+            ExpectComboLocalSeeds(released, ordinaryValue: 0, djaValue: 0,
+                "successful HitJa frame jump must retain prior wrapper interrupts and clear triggered DJA");
         }
 
         private static void CheckRandomWeaponDropAuthorityContract()
@@ -26785,6 +31106,20 @@ namespace NTSD.Test
             };
         }
 
+        private static LF2CharacterData BuildCpointInvalidPreviousVictimFrames()
+        {
+            return new LF2CharacterData
+            {
+                name = "SelfCheck_CpointInvalidPreviousVictim",
+                frames = new List<LF2FrameData>
+                {
+                    Frame(0, LF2States.Standing, 0, 0, 30, 60),
+                    Frame(130, LF2States.Standing, 3, 130, 35, 70),
+                    Frame(132, LF2States.Standing, 5, 132, 33, 68),
+                },
+            };
+        }
+
         private static LF2CharacterData BuildCpointThrowFrames(int nextFrame, int victimAction, int throwInjury)
         {
             return new LF2CharacterData
@@ -27078,6 +31413,67 @@ namespace NTSD.Test
             }
         }
 
+        private sealed class Oid5152InputOrderSelfCheckCharacter : LF2Character
+        {
+            public int CharacterInputPassCount { get; private set; }
+
+            public void BindData(string name, int objectId, LF2CharacterData data)
+            {
+                ModuleInitialize();
+                Name = name;
+                ObjectId = objectId;
+                Controller = new SelfCheckController();
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.N = 0;
+                Frame.PN = 0;
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Initialize(500, 500);
+                FrameDelay = 0;
+            }
+
+            internal override void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
+            {
+                CharacterInputPassCount++;
+                ImmediateFrame(10);
+            }
+        }
+
+        private sealed class BattleStepGateSelfCheckCharacter : LF2Character
+        {
+            public int HumanPollCount { get; private set; }
+            public int CharacterInputPassCount { get; private set; }
+            public int LateFrameTickCount { get; private set; }
+
+            public void BindData(string name, int objectId, LF2CharacterData data)
+            {
+                ModuleInitialize();
+                Name = name;
+                ObjectId = objectId;
+                Controller = new SelfCheckController();
+                FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+                Frame.N = 0;
+                Frame.PN = 0;
+                Frame.D = FrameCache.GetFrameDataById(0);
+                Initialize(500, 500);
+                FrameDelay = 0;
+            }
+
+            internal override void RunHumanInputPollPhase(int tickIndex)
+            {
+                HumanPollCount++;
+            }
+
+            internal override void RunCharacterInputPhaseForKnownCharacterDat(int tickIndex)
+            {
+                CharacterInputPassCount++;
+            }
+
+            public override void SimFrameTick(int tickIndex)
+            {
+                LateFrameTickCount++;
+            }
+        }
+
         private sealed class InteractionSelfCheckCharacter : LF2Character
         {
             public override float GetSpriteWidthPxForCollision() => 100f;
@@ -27270,11 +31666,37 @@ namespace NTSD.Test
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
         }
 
+        private sealed class Mode2TailSelfCheckEntity : LF2Entity
+        {
+            public int Mode2RequestObservedAtCarrierClear { get; private set; } = int.MinValue;
+
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+
+            public Mode2TailSelfCheckEntity()
+            {
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public override void ClearHitCandidateCarriers()
+            {
+                Mode2RequestObservedAtCarrierClear = Match?.Mode2Request ?? int.MinValue;
+                base.ClearHitCandidateCarriers();
+            }
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+
         private sealed class FrameAdvanceInputProbeEntity : LF2Entity
         {
             public int TransitCount { get; private set; }
             public int TuCount { get; private set; }
-            public bool CurrentKeysClearedBeforeTransit { get; private set; }
+            public bool CurrentKeysVisibleBeforeTransit { get; private set; }
             public bool PreviousKeysPreservedBeforeTransit { get; private set; }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
@@ -27290,9 +31712,9 @@ namespace NTSD.Test
             public override void SimTransit(int tickIndex)
             {
                 TransitCount++;
-                CurrentKeysClearedBeforeTransit = Runtime.KeyUp == 0 && Runtime.KeyDown == 0 &&
-                    Runtime.KeyLeft == 0 && Runtime.KeyRight == 0 &&
-                    Runtime.KeyAttack == 0 && Runtime.KeyJump == 0 && Runtime.KeyDefend == 0;
+                CurrentKeysVisibleBeforeTransit = Runtime.KeyUp == 1 && Runtime.KeyDown == 1 &&
+                    Runtime.KeyLeft == 1 && Runtime.KeyRight == 1 &&
+                    Runtime.KeyAttack == 1 && Runtime.KeyJump == 1 && Runtime.KeyDefend == 1;
                 PreviousKeysPreservedBeforeTransit = Runtime.PrevUp == 1 && Runtime.PrevDown == 1 &&
                     Runtime.PrevLeft == 1 && Runtime.PrevRight == 1 &&
                     Runtime.PrevAttack == 1 && Runtime.PrevJump == 1 && Runtime.PrevDefend == 1;
@@ -27533,6 +31955,11 @@ namespace NTSD.Test
                 Runtime.PrevFrame2 = frameId;
                 Health.HP = 500;
                 Health.HPBound = 500;
+            }
+
+            public void InvokeOnLandedForSelfCheck()
+            {
+                OnLanded();
             }
         }
 
@@ -29218,17 +33645,23 @@ namespace NTSD.Test
         {
             private readonly bool _registerDuringLate;
             private readonly bool _unregisterDuringLate;
+            private readonly int _spawnRequiredRuntimeSlot;
 
             public MutationSelfCheckEntity Spawned { get; private set; }
             public int LateTickCount { get; private set; }
             public Action OnUnregisterRequested { get; set; }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
-            public MutationSelfCheckEntity(int stableId, bool registerDuringLate = false, bool unregisterDuringLate = false)
+            public MutationSelfCheckEntity(
+                int stableId,
+                bool registerDuringLate = false,
+                bool unregisterDuringLate = false,
+                int spawnRequiredRuntimeSlot = -1)
             {
                 StableId = stableId;
                 _registerDuringLate = registerDuringLate;
                 _unregisterDuringLate = unregisterDuringLate;
+                _spawnRequiredRuntimeSlot = spawnRequiredRuntimeSlot;
             }
 
             public override void SimFrameTick(int tickIndex)
@@ -29238,6 +33671,8 @@ namespace NTSD.Test
                 if (_registerDuringLate && Spawned == null)
                 {
                     Spawned = new MutationSelfCheckEntity(1000 + StableId);
+                    if (_spawnRequiredRuntimeSlot >= 0)
+                        Spawned.SetRequiredRuntimeSlot(_spawnRequiredRuntimeSlot);
                     Match.Register(Spawned);
                 }
 

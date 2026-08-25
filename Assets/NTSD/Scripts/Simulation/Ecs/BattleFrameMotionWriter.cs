@@ -1,4 +1,5 @@
 using System;
+using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Simulation.Ecs
 {
@@ -18,9 +19,9 @@ namespace NTSD.Simulation.Ecs
             store = new BattleFrameMotionStore(capacity, unifiedRowPublisher);
         }
 
-        internal void Bind(NTSDEntityRuntime runtime, RuntimeEntityHandle handle)
+        internal void Bind(LF2Entity entity, RuntimeEntityHandle handle)
         {
-            store.Bind(runtime, handle);
+            store.Bind(entity, handle);
         }
 
         internal void Release(RuntimeEntityHandle handle)

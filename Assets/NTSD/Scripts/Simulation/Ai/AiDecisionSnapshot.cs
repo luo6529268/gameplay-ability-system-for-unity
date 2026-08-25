@@ -130,12 +130,14 @@ namespace NTSD.Simulation
             if (rows.Capacity < 1)
                 throw new ArgumentOutOfRangeException(nameof(rows));
             Rows = rows;
+            CharacterDecisionModule = new AiCharacterDecisionModule();
             RngTraceModuli = new int[256];
             RngTraceRaw = new int[256];
             RngTraceValues = new int[256];
         }
 
         public AiSensingSnapshot Rows { get; }
+        internal AiCharacterDecisionModule CharacterDecisionModule { get; }
         public int SelfSlot;
         public uint SelfGeneration;
         public int SelfStableId;
@@ -209,6 +211,7 @@ namespace NTSD.Simulation
         public int SpecialBestDistance;
         public int SpecialFlags;
         public int SelectedTargetHitStop;
+        public int CharacterDecisionPosition;
         public uint RngState;
         public ulong RngCalls;
         public ulong RngOrderHash;

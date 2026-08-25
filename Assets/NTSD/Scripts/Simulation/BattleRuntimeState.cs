@@ -301,6 +301,7 @@ namespace NTSD.Simulation
         public int AiStageTargetX;
         public int BattleExitCountdown;
         public int RouteOutRequest;
+        public int InitStatsRequest;
         public int Mode2Request;
         public int BattleStepMode;
         public int BattleStepGate;
@@ -325,6 +326,7 @@ namespace NTSD.Simulation
             AiStageTargetX = 0;
             BattleExitCountdown = 0;
             RouteOutRequest = 0;
+            InitStatsRequest = 0;
             Mode2Request = 0;
             BattleStepMode = 0;
             BattleStepGate = 0;

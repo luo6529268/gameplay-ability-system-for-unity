@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4767ce93226ebab46a02cf412e466423, type: 3}
+  m_Name: Desert01_Boundary
+  m_EditorClassIdentifier: 
+  mapId: desert_01
+  displayName: Desert 01
+  revision: 1
+  boundaries:
+  - boundaryName: "\u5173\u5361\u8FB9\u754C"
+    polygons:
+    - name: "\u591A\u8FB9\u5F62 1"
+      verticesWorld:
+      - x: -11.997465
+        y: -9.645119
+      - x: 8.405828
+        y: -9.582241
+      - x: 8.393546
+        y: -4.4153833
+      - x: -11.992707
+        y: -4.502331

@@ -76,8 +76,9 @@ namespace NTSD.Simulation
             result = default;
             if (useIndexed && requireReady && (rows == null || !rows.RoleIndexesReady))
                 return false;
+            // Alignment contract R3-AI-LIFE-001: C++ prepare_ai_input does not
+            // reject the active self by HP before its no-target roll/clear path.
             if (!IsIncluded(rows, selfSlot) ||
-                rows.Hp[selfSlot] <= 0 ||
                 rows.CoordinateTargetX[selfSlot] > -1000)
             {
                 return false;

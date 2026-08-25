@@ -81,7 +81,12 @@ namespace NTSD.Animation.LF2Objects
             switch (itr.kind)
             {
                 case 1:
-                    return _weapon.HandlePreInteractionKind1(itr, target);
+                    // Alignment contract: R8-COL-005B-001
+                    return _weapon.Match?.InteractionWriter.TryApplyGrab(
+                        _weapon,
+                        target,
+                        itr,
+                        1) ?? false;
                 case 2:
                     return _weapon.HandlePreInteractionKind2(itr, target);
                 case 3:

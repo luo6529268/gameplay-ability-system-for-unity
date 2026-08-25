@@ -7402,7 +7402,11 @@ namespace NTSD.Animation.Rendering.Editor
                         targetReport.collisionCandidateStoreAuthorityExpectedStoreOnlyTickCount &&
                         targetReport.collisionCandidateStoreAuthorityRangeReadCount >=
                         targetReport.collisionCandidateConsumerEntityTicks &&
-                        targetReport.collisionCandidateStoreAuthorityEntryReadCount ==
+                        // CaptureProductionCounters observes the carrier after both
+                        // consume passes. Candidates may already be cleared or
+                        // replaced there, so that count is only a lower bound for
+                        // the entries actually read during the frozen window.
+                        targetReport.collisionCandidateStoreAuthorityEntryReadCount >=
                         targetReport.collisionCandidateCountSum &&
                         (targetReport.collisionCandidateStoreLegacyOracleInterval != 0 ||
                          targetReport.collisionCandidateStoreAuthorityLegacyListCreatedOrWrittenCount == 0);

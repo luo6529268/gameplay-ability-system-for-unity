@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Simulation.Ecs
 {
@@ -13,6 +14,7 @@ namespace NTSD.Simulation.Ecs
             int facing,
             int frame,
             int state,
+            int hitJ,
             int hitStop)
         {
             X = x;
@@ -22,6 +24,7 @@ namespace NTSD.Simulation.Ecs
             Facing = facing;
             Frame = frame;
             State = state;
+            HitJ = hitJ;
             HitStop = hitStop;
         }
 
@@ -32,6 +35,7 @@ namespace NTSD.Simulation.Ecs
         internal int Facing { get; }
         internal int Frame { get; }
         internal int State { get; }
+        internal int HitJ { get; }
         internal int HitStop { get; }
     }
 
@@ -46,6 +50,7 @@ namespace NTSD.Simulation.Ecs
             int facing,
             int frame,
             int state,
+            int hitJ,
             int hitStop)
         {
             Handle = handle;
@@ -56,6 +61,7 @@ namespace NTSD.Simulation.Ecs
             Facing = facing;
             Frame = frame;
             State = state;
+            HitJ = hitJ;
             HitStop = hitStop;
         }
 
@@ -67,6 +73,7 @@ namespace NTSD.Simulation.Ecs
         public int Facing { get; }
         public int Frame { get; }
         public int State { get; }
+        public int HitJ { get; }
         public int HitStop { get; }
     }
 
@@ -78,6 +85,7 @@ namespace NTSD.Simulation.Ecs
     internal sealed class BattleFrameMotionStore
     {
         private readonly BattleAiUnifiedRowPublisher unifiedRowPublisher;
+        private LF2Entity[] entityOwners;
         private NTSDEntityRuntime[] owners;
         private uint[] generations;
         private int[] xInt;
@@ -87,6 +95,7 @@ namespace NTSD.Simulation.Ecs
         private byte[] facing;
         private int[] frame;
         private int[] state;
+        private int[] hitJ;
         private int[] hitStop;
 
         internal BattleFrameMotionStore(
@@ -98,6 +107,7 @@ namespace NTSD.Simulation.Ecs
 
             this.unifiedRowPublisher = unifiedRowPublisher ??
                 throw new ArgumentNullException(nameof(unifiedRowPublisher));
+            entityOwners = new LF2Entity[capacity];
             owners = new NTSDEntityRuntime[capacity];
             generations = new uint[capacity];
             xInt = new int[capacity];
@@ -107,11 +117,13 @@ namespace NTSD.Simulation.Ecs
             facing = new byte[capacity];
             frame = new int[capacity];
             state = new int[capacity];
+            hitJ = new int[capacity];
             hitStop = new int[capacity];
         }
 
-        internal void Bind(NTSDEntityRuntime runtime, RuntimeEntityHandle handle)
+        internal void Bind(LF2Entity entity, RuntimeEntityHandle handle)
         {
+            NTSDEntityRuntime runtime = entity?.Runtime;
             if (runtime == null ||
                 !handle.IsValid ||
                 handle.Slot >= owners.Length ||
@@ -122,9 +134,10 @@ namespace NTSD.Simulation.Ecs
             }
 
             int slot = handle.Slot;
+            entityOwners[slot] = entity;
             owners[slot] = runtime;
             generations[slot] = handle.Generation;
-            CaptureAll(slot, runtime);
+            CaptureAll(slot, entity, runtime);
             runtime.BindFrameMotionStore(this, slot);
         }
 
@@ -139,6 +152,7 @@ namespace NTSD.Simulation.Ecs
 
             int slot = handle.Slot;
             owners[slot]?.UnbindFrameMotionStore(this, slot);
+            entityOwners[slot] = null;
             owners[slot] = null;
             generations[slot] = 0;
             ClearSlot(slot);
@@ -152,6 +166,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             Array.Clear(owners, 0, owners.Length);
+            Array.Clear(entityOwners, 0, entityOwners.Length);
             Array.Clear(generations, 0, generations.Length);
             for (int slot = 0; slot < owners.Length; slot++)
                 ClearSlot(slot);
@@ -162,6 +177,7 @@ namespace NTSD.Simulation.Ecs
             if (capacity <= owners.Length)
                 return;
 
+            Array.Resize(ref entityOwners, capacity);
             Array.Resize(ref owners, capacity);
             Array.Resize(ref generations, capacity);
             Array.Resize(ref xInt, capacity);
@@ -171,6 +187,7 @@ namespace NTSD.Simulation.Ecs
             Array.Resize(ref facing, capacity);
             Array.Resize(ref frame, capacity);
             Array.Resize(ref state, capacity);
+            Array.Resize(ref hitJ, capacity);
             Array.Resize(ref hitStop, capacity);
         }
 
@@ -213,6 +230,7 @@ namespace NTSD.Simulation.Ecs
                     break;
                 case RuntimeFrameMotionField.Frame:
                     frame[slot] = value;
+                    hitJ[slot] = CaptureHitJ(entityOwners[slot], value);
                     break;
                 case RuntimeFrameMotionField.State:
                     state[slot] = value;
@@ -229,6 +247,13 @@ namespace NTSD.Simulation.Ecs
                 generations[slot],
                 field,
                 value);
+            if (field == RuntimeFrameMotionField.Frame)
+            {
+                unifiedRowPublisher.PublishHitJ(
+                    slot,
+                    generations[slot],
+                    hitJ[slot]);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -277,6 +302,7 @@ namespace NTSD.Simulation.Ecs
                 facing[slot],
                 frame[slot],
                 state[slot],
+                hitJ[slot],
                 hitStop[slot]);
             return true;
         }
@@ -299,6 +325,7 @@ namespace NTSD.Simulation.Ecs
                 facing[slot],
                 frame[slot],
                 state[slot],
+                hitJ[slot],
                 hitStop[slot]);
             return true;
         }
@@ -322,6 +349,7 @@ namespace NTSD.Simulation.Ecs
                 facing[slot],
                 frame[slot],
                 state[slot],
+                hitJ[slot],
                 hitStop[slot]);
             return true;
         }
@@ -343,7 +371,10 @@ namespace NTSD.Simulation.Ecs
                    generations[slot] == handle.Generation;
         }
 
-        private void CaptureAll(int slot, NTSDEntityRuntime runtime)
+        private void CaptureAll(
+            int slot,
+            LF2Entity entity,
+            NTSDEntityRuntime runtime)
         {
             xInt[slot] = runtime.XInt;
             yInt[slot] = runtime.YInt;
@@ -352,7 +383,14 @@ namespace NTSD.Simulation.Ecs
             facing[slot] = runtime.IsFacingLeft ? (byte)1 : (byte)0;
             frame[slot] = runtime.Frame;
             state[slot] = runtime.FrameState;
+            hitJ[slot] = CaptureHitJ(entity, runtime.Frame);
             hitStop[slot] = runtime.HitStop;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int CaptureHitJ(LF2Entity entity, int currentFrame)
+        {
+            return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;
         }
 
         private void ClearSlot(int slot)
@@ -362,6 +400,7 @@ namespace NTSD.Simulation.Ecs
             facing[slot] = 0;
             frame[slot] = 0;
             state[slot] = 0;
+            hitJ[slot] = 0;
             hitStop[slot] = 0;
         }
     }

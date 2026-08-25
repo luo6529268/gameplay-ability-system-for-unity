@@ -45,6 +45,7 @@ namespace NTSD.Simulation
             Team = new int[capacity];
             State = new int[capacity];
             Frame = new int[capacity];
+            HitJ = new int[capacity];
             LinkState = new int[capacity];
             KillCount = new int[capacity];
             CachedTargetSlot = new int[capacity];
@@ -90,6 +91,7 @@ namespace NTSD.Simulation
         public readonly int[] Team;
         public readonly int[] State;
         public readonly int[] Frame;
+        public readonly int[] HitJ;
         public readonly int[] LinkState;
         public readonly int[] KillCount;
         public readonly int[] CachedTargetSlot;
@@ -153,6 +155,7 @@ namespace NTSD.Simulation
             Array.Copy(Team, grown.Team, count);
             Array.Copy(State, grown.State, count);
             Array.Copy(Frame, grown.Frame, count);
+            Array.Copy(HitJ, grown.HitJ, count);
             Array.Copy(LinkState, grown.LinkState, count);
             Array.Copy(KillCount, grown.KillCount, count);
             Array.Copy(CachedTargetSlot, grown.CachedTargetSlot, count);

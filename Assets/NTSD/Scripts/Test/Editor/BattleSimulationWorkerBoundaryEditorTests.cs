@@ -639,11 +639,10 @@ namespace NTSD.Test
                 Is.True);
             Assert.That(publication.TickIndex, Is.EqualTo(2));
             Assert.That(publication.InputHash, Is.EqualTo(input.GetCanonicalHash64()));
-            // The authority frame-advance pass clears current keys after they have
-            // been consumed. Cooldowns and input history are the durable evidence
-            // that the canonical packet reached the complete input chain.
-            Assert.That(character.Runtime.KeyLeft, Is.Zero);
-            Assert.That(character.Runtime.KeyAttack, Is.Zero);
+            // C++ poll preserves this tick's held keys; only the previous held state
+            // moves into Prev*. Cooldowns/history prove that the new press was consumed.
+            Assert.That(character.Runtime.KeyLeft, Is.EqualTo(1));
+            Assert.That(character.Runtime.KeyAttack, Is.EqualTo(1));
             Assert.That(character.Runtime.PrevLeft, Is.Zero);
             Assert.That(character.Runtime.PrevAttack, Is.Zero);
             Assert.That(character.Runtime.CdLeft, Is.EqualTo(5));
@@ -984,6 +983,57 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void BeginBattleAllocationSealIsStrictNoOpAfterCentralSubmissionPublished()
+        {
+            BattleCentralRenderSystem.ResetRuntime();
+            using var scope = new DriverScope();
+            Simulation.SimulationTickDriver driver = scope.Driver;
+            Simulation.SimulationWorld world = driver.World;
+            bool battleSealStarted = false;
+            try
+            {
+                world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+                driver.ApplySettings(new Simulation.LockstepSimulationSettings
+                {
+                    driveMode = Simulation.SimulationDriveMode.Manual,
+                    requireInputFrameReady = false,
+                });
+
+                world.RenderDispatchAll(1);
+                BattlePixelFramePlan preSealPublished =
+                    BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+                Assert.That(preSealPublished.Submission, Is.Not.Null);
+                Assert.That(preSealPublished.Submission.IsRetired, Is.False);
+
+                Assert.DoesNotThrow(driver.BeginBattleAllocationSeal);
+                battleSealStarted = true;
+                Assert.That(preSealPublished.Submission.IsRetired, Is.True);
+                Assert.That(driver.AllocationGate.IsSealed, Is.True);
+                Assert.That(world.RuntimeCapacity.IsSealed, Is.True);
+
+                world.RenderDispatchAll(2);
+                BattlePixelFramePlan postSealPublished =
+                    BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+                Assert.That(postSealPublished.Submission, Is.Not.Null);
+                Assert.That(postSealPublished.Submission.IsRetired, Is.False);
+
+                Assert.DoesNotThrow(driver.BeginBattleAllocationSeal);
+                Assert.That(driver.AllocationGate.IsSealed, Is.True);
+                Assert.That(world.RuntimeCapacity.IsSealed, Is.True);
+                Assert.That(
+                    BattleCentralRenderSystem.CurrentPixelFramePlan.Generation,
+                    Is.EqualTo(postSealPublished.Generation));
+                Assert.That(postSealPublished.Submission.IsRetired, Is.False);
+            }
+            finally
+            {
+                if (battleSealStarted)
+                    driver.EndBattleAllocationSeal();
+                BattleCentralRenderSystem.ResetRuntime();
+            }
+        }
+
+        [Test]
         public void FormalLocalDriverSubmitsConsumesAndStopsDedicatedWorker()
         {
             using var scope = new DriverScope();
@@ -1061,6 +1111,168 @@ namespace NTSD.Test
             Assert.That(driver.DedicatedSimulationWorkerActiveForDiagnostics, Is.False);
             Assert.That(world.UsesLogicOnlyEntityMaterialization, Is.False);
             Assert.That(world.RuntimeDataCatalog.IsSealedForBattle, Is.False);
+        }
+
+        [Test]
+        public void FormalLocalDriverPublishesCentralFramesAcknowledgesAndAdvancesNextTick()
+        {
+            BattleCentralRenderSystem.ResetRuntime();
+            using var scope = new DriverScope();
+            Simulation.SimulationTickDriver driver = scope.Driver;
+            Simulation.SimulationWorld world = driver.World;
+            bool battleSealStarted = false;
+            try
+            {
+                var characterData = new LF2CharacterData();
+                characterData.frames.Add(new LF2FrameData
+                {
+                    frameId = 0,
+                    state = 0,
+                    pic = 0,
+                    wait = 1,
+                    next = 0,
+                });
+                var wrapper = new LF2CharacterDataWrapper(31999, characterData);
+                world.PrepareRuntimeDataCatalogForBattle(
+                    new[]
+                    {
+                        new ObjectDefinition(
+                            31999,
+                            (int)LF2ObjectType.Other,
+                            "formal-worker-central.dat"),
+                    },
+                    id => id == 31999 ? wrapper : null);
+                world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+                driver.SetFrameInputProvider(new EmptyFrameInputProvider());
+
+                driver.BeginBattleAllocationSeal();
+                battleSealStarted = true;
+                Assert.That(
+                    driver.DedicatedSimulationWorkerActiveForDiagnostics,
+                    Is.True,
+                    driver.DedicatedSimulationWorkerIneligibilityReasonForDiagnostics);
+
+                MethodInfo consumeMethod = typeof(Simulation.SimulationTickDriver).GetMethod(
+                    "ConsumeDedicatedSimulationWorkerPublication",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                MethodInfo acknowledgeMethod = typeof(Simulation.SimulationTickDriver).GetMethod(
+                    "AcknowledgeDedicatedSimulationWorkerPresentation",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(consumeMethod, Is.Not.Null);
+                Assert.That(acknowledgeMethod, Is.Not.Null);
+
+                Assert.That(
+                    driver.TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+                        buildPresentation: true),
+                    Is.True,
+                    driver.DedicatedSimulationWorkerLastSubmissionFailureReasonForDiagnostics);
+                Assert.That(
+                    SpinWait.SpinUntil(
+                        () =>
+                        {
+                            consumeMethod.Invoke(driver, null);
+                            return driver.CurrentTickIndex == 1 ||
+                                   driver.DedicatedSimulationWorkerFailureForDiagnostics != null;
+                        },
+                        2000),
+                    Is.True,
+                    "tick 1 worker publication was not consumed");
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics, Is.Null);
+
+                BattlePresentationFrame firstPublication =
+                    world.BattlePresentation.PublishedFrame;
+                Assert.That(firstPublication, Is.Not.Null);
+                Assert.That(firstPublication.TickIndex, Is.EqualTo(1));
+                Assert.That(firstPublication.PresentationOrderMaterialized, Is.False);
+                Assert.That(firstPublication.CommandsMaterialized, Is.False);
+                Assert.That(
+                    driver.TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+                        buildPresentation: true),
+                    Is.False,
+                    "the single-flight worker gate must reject tick 2 before tick 1 acknowledgement");
+
+                BattlePixelFramePlan firstReadyPlan =
+                    BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+                BattleCentralRenderSystem.QueueLatestPublishedFrameForSelfCheck(world);
+                BattlePixelFramePlan firstMaterializedPlan =
+                    BattleCentralRenderSystem.MaterializeLatestPublishedFrameForSelfCheck(2301);
+                Assert.That(firstReadyPlan.IsValid, Is.True);
+                Assert.That(firstMaterializedPlan.Generation, Is.EqualTo(firstReadyPlan.Generation));
+                Assert.That(firstMaterializedPlan.SimulationTick, Is.EqualTo(1));
+                Assert.That(firstMaterializedPlan.DisplayTick, Is.EqualTo(1));
+                Assert.That(firstMaterializedPlan.World, Is.SameAs(world));
+                Assert.That(firstMaterializedPlan.CapturedFrame, Is.Not.SameAs(firstPublication));
+                Assert.That(firstMaterializedPlan.CapturedFrame.CommandsMaterialized, Is.True);
+                Assert.That(firstPublication.CommandsMaterialized, Is.False,
+                    "the presentation host must not mutate the worker's frozen publication");
+
+                acknowledgeMethod.Invoke(driver, null);
+                Assert.That(
+                    SpinWait.SpinUntil(
+                        () => !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics ||
+                              driver.DedicatedSimulationWorkerFailureForDiagnostics != null,
+                        2000),
+                    Is.True,
+                    "tick 1 acknowledgement did not release the worker single-flight gate");
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics, Is.Null);
+
+                Assert.That(
+                    driver.TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+                        buildPresentation: true),
+                    Is.True,
+                    driver.DedicatedSimulationWorkerLastSubmissionFailureReasonForDiagnostics);
+                Assert.That(
+                    SpinWait.SpinUntil(
+                        () =>
+                        {
+                            consumeMethod.Invoke(driver, null);
+                            return driver.CurrentTickIndex == 2 ||
+                                   driver.DedicatedSimulationWorkerFailureForDiagnostics != null;
+                        },
+                        2000),
+                    Is.True,
+                    "tick 2 worker publication was not consumed");
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics, Is.Null);
+
+                BattlePresentationFrame secondPublication =
+                    world.BattlePresentation.PublishedFrame;
+                Assert.That(secondPublication, Is.Not.Null);
+                Assert.That(secondPublication, Is.Not.SameAs(firstPublication));
+                Assert.That(secondPublication.TickIndex, Is.EqualTo(2));
+                Assert.That(secondPublication.CommandsMaterialized, Is.False);
+
+                BattlePixelFramePlan secondReadyPlan =
+                    BattleCentralRenderSystem.PublishReadyCentralPlanForSelfCheck(world);
+                BattleCentralRenderSystem.QueueLatestPublishedFrameForSelfCheck(world);
+                BattlePixelFramePlan secondMaterializedPlan =
+                    BattleCentralRenderSystem.MaterializeLatestPublishedFrameForSelfCheck(2302);
+                Assert.That(secondReadyPlan.IsValid, Is.True);
+                Assert.That(secondMaterializedPlan.Generation, Is.EqualTo(secondReadyPlan.Generation));
+                Assert.That(
+                    secondMaterializedPlan.Generation,
+                    Is.Not.EqualTo(firstMaterializedPlan.Generation));
+                Assert.That(secondMaterializedPlan.SimulationTick, Is.EqualTo(2));
+                Assert.That(secondMaterializedPlan.DisplayTick, Is.EqualTo(2));
+                Assert.That(secondMaterializedPlan.CapturedFrame, Is.Not.SameAs(secondPublication));
+                Assert.That(secondMaterializedPlan.CapturedFrame.CommandsMaterialized, Is.True);
+                Assert.That(secondPublication.CommandsMaterialized, Is.False);
+
+                acknowledgeMethod.Invoke(driver, null);
+                Assert.That(
+                    SpinWait.SpinUntil(
+                        () => !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics ||
+                              driver.DedicatedSimulationWorkerFailureForDiagnostics != null,
+                        2000),
+                    Is.True,
+                    "tick 2 acknowledgement did not finalize presentation consumption");
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics, Is.Null);
+            }
+            finally
+            {
+                if (battleSealStarted)
+                    driver.EndBattleAllocationSeal();
+                BattleCentralRenderSystem.ResetRuntime();
+            }
         }
 
         [Test]

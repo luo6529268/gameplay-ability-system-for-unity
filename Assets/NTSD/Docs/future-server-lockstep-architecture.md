@@ -5,16 +5,18 @@
 > 当前前置目标：先完成 `singleplayer-1000ai-performance-plan.md`
 > 上位统一方案：`unified-battle-lockstep-ecs-server-architecture-plan.md`
 > 知识来源与取舍：`lockstep-knowledge-base-audit.md`
+> **2026-08-20 R0 权威迁移**：本文仅保留未来架构设计，不授权服务器实现；其中所有“C# authority/pass”描述均为历史基线。战斗 tick、输入、状态、碰撞、生命周期和 render handoff 的唯一规则来源是 `J:\QQFile\NTSD2.4\ntsd_release` 的 release live path；后续服务器设计必须从 C++ release trace 合同继承，不得把 C# 或 Unity checksum 作为最终行为裁决。
+> **2026-08-24 S0～S9 拆分**：当前 S0～S9 的唯一详细设计合同见 `server-lockstep-s0-s9-design.md`，当前实施进度与问题台账见 `server-lockstep-s0-s9-progress.md`。本文保留为历史架构备忘和背景资料；若与上述两份文档冲突，以 S0～S9 设计合同和 C++ release live authority 为准。
 
 ## 2026-08-10：帧同步资料复核后的当前定调
 
-本节依据 `I:\GitHub\ZhiHu_MD\output\网络游戏` 中的帧同步、逻辑/表现分离、追帧、回滚、快照和网络协议资料，并结合当前代码重新审计后确定。资料中的具体项目经验只作为参考；与 NTSD 的 C# 权威战斗规则冲突时，以权威调用链为准。
+本节依据 `I:\GitHub\ZhiHu_MD\output\网络游戏` 中的帧同步、逻辑/表现分离、追帧、回滚、快照和网络协议资料，并结合当前代码重新审计后确定。资料中的具体项目经验只作为参考；与 NTSD 的 C++ release live 战斗规则冲突时，以权威 C++ 调用链为准。
 
 2026-08-11 已完成全目录审计：96 个 Markdown、24 份正文，去重并合并同文变体后为 19 个独立主题。本文件只保留未来服务器细节；统一架构决策和明确拒绝项以上位方案与知识审计为准。
 
 ### 三种频率必须分离
 
-- **战斗逻辑频率：固定 30 Hz。** 这是 DAT、状态机、碰撞、输入窗口和 C# 权威 pass 的时间语义，不能为了性能或网络打包改成 15 Hz。
+- **战斗逻辑频率：固定 30 Hz。** 这是 DAT、状态机、碰撞、输入窗口和 C++ release live pass 的时间语义，不能为了性能或网络打包改成 15 Hz。
 - **服务器广播/网络打包频率：独立配置。** 未来可以 30 Hz 逐帧广播，也可以 15 Hz 每包携带两个连续的 30 Hz 权威输入帧；这只改变组包与发送节奏，不合并逻辑帧。
 - **Unity 渲染频率：跟随设备 60/90/120 Hz。** 表现读取前后两个已确认逻辑快照并插值，不反写逻辑状态。
 

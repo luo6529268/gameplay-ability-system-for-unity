@@ -872,7 +872,8 @@ namespace NTSD.Animation
 
             Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {stagedConfigs.Count}</color>");
 
-            var allFileInfos = new List<(int characterId, SpriteFileInfo fileInfo)>();
+            var allFileInfos =
+                new List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)>();
 
             foreach (var config in stagedConfigs.Values)
             {
@@ -882,9 +883,18 @@ namespace NTSD.Animation
                     : 0;
                 stagedSprites[characterId] = new List<Sprite>(new Sprite[totalSpriteCount]);
 
-                foreach (var fileInfo in config.characterData.files)
+                List<HashSet<int>> ownership = BuildFirstDeclaredSpriteOwnership(
+                    config.characterData.files);
+                for (int fileIndex = 0; fileIndex < config.characterData.files.Count; fileIndex++)
                 {
-                    allFileInfos.Add((characterId, fileInfo));
+                    HashSet<int> ownedEffectivePics = ownership[fileIndex];
+                    if (ownedEffectivePics.Count == 0)
+                        continue;
+
+                    allFileInfos.Add((
+                        characterId,
+                        config.characterData.files[fileIndex],
+                        ownedEffectivePics));
                 }
             }
 
@@ -897,12 +907,13 @@ namespace NTSD.Animation
             var uploadSemaphore = new System.Threading.SemaphoreSlim(1);
             var pendingTasks = new List<UniTask>();
 
-            foreach (var (characterId, fileInfo) in allFileInfos)
+            foreach (var (characterId, fileInfo, ownedEffectivePics) in allFileInfos)
             {
                 await cpuSemaphore.WaitAsync();
                 var task = ProcessAndCreateSpritesAsync(
                         characterId,
                         fileInfo,
+                        ownedEffectivePics,
                         stagedSprites,
                         stagedCreatedSprites,
                         stagedTextures,
@@ -1386,6 +1397,7 @@ namespace NTSD.Animation
         private async UniTask<int> ProcessAndCreateSpritesAsync(
             int characterId,
             SpriteFileInfo fileInfo,
+            ISet<int> ownedEffectivePics,
             Dictionary<int, List<Sprite>> stagedSprites,
             HashSet<Sprite> stagedCreatedSprites,
             HashSet<Texture2D> stagedTextures,
@@ -1474,11 +1486,20 @@ namespace NTSD.Animation
                     int targetIndex = fileInfo.startFrame + i;
                     if (targetIndex < 0 || targetIndex >= allSprites.Count || targetIndex > fileInfo.endFrame)
                         continue;
+                    if (ownedEffectivePics == null || !ownedEffectivePics.Contains(targetIndex))
+                        continue;
 
+                    Vector2 pivot = ComputeIndexedSpritePivot(
+                        fileInfo,
+                        textureWidth,
+                        textureHeight,
+                        col,
+                        i,
+                        spriteRect.Value);
                     Sprite sprite = Sprite.Create(
                         texture,
                         spriteRect.Value,
-                        new Vector2(0.5f, 0f),
+                        pivot,
                         100f,
                         0,
                         SpriteMeshType.FullRect
@@ -1519,13 +1540,23 @@ namespace NTSD.Animation
                 if (!spritesByVisualDataId.TryGetValue(visualDataId, out List<Sprite> sprites) || sprites == null)
                     continue;
 
-                foreach (SpriteFileInfo fileInfo in config.characterData.files)
+                List<SpriteFileInfo> files = config.characterData.files;
+                List<HashSet<int>> ownership = BuildFirstDeclaredSpriteOwnership(files);
+                for (int fileIndex = 0; fileIndex < files.Count; fileIndex++)
                 {
+                    SpriteFileInfo fileInfo = files[fileIndex];
+                    HashSet<int> ownedEffectivePics = ownership[fileIndex];
+                    if (ownedEffectivePics.Count == 0)
+                        continue;
+
                     int firstPic = Mathf.Max(0, fileInfo.startFrame);
                     int lastPic = Mathf.Min(fileInfo.endFrame, sprites.Count - 1);
                     Sprite firstSprite = null;
                     for (int pic = firstPic; pic <= lastPic && firstSprite == null; pic++)
-                        firstSprite = sprites[pic];
+                    {
+                        if (ownedEffectivePics.Contains(pic))
+                            firstSprite = sprites[pic];
+                    }
 
                     Texture2D texture = firstSprite != null ? firstSprite.texture : null;
                     if (texture == null)
@@ -1548,23 +1579,65 @@ namespace NTSD.Animation
                         int effectivePic = fileInfo.startFrame + localPic;
                         if (effectivePic < 0 || effectivePic >= sprites.Count)
                             continue;
+                        if (!ownedEffectivePics.Contains(effectivePic))
+                            continue;
 
                         Sprite legacySprite = sprites[effectivePic];
                         if (legacySprite == null || !rects[localPic].HasValue)
                             continue;
 
+                        Vector2 pivot = ComputeIndexedSpritePivot(
+                            fileInfo,
+                            texture.width,
+                            texture.height,
+                            col,
+                            localPic,
+                            rects[localPic].Value);
                         builder.Add(
                             visualDataId,
                             effectivePic,
                             fileInfo.filePath,
                             texture,
                             rects[localPic].Value,
+                            pivot,
                             legacySprite);
                     }
                 }
             }
 
             return builder.Publish();
+        }
+
+        internal static List<HashSet<int>> BuildFirstDeclaredSpriteOwnership(
+            IReadOnlyList<SpriteFileInfo> files)
+        {
+            int fileCount = files?.Count ?? 0;
+            var ownership = new List<HashSet<int>>(fileCount);
+            var claimedEffectivePics = new HashSet<int>();
+
+            for (int fileIndex = 0; fileIndex < fileCount; fileIndex++)
+            {
+                var ownedEffectivePics = new HashSet<int>();
+                ownership.Add(ownedEffectivePics);
+
+                SpriteFileInfo fileInfo = files[fileIndex];
+                if (fileInfo == null || fileInfo.endFrame < fileInfo.startFrame)
+                    continue;
+
+                int firstPic = Mathf.Max(0, fileInfo.startFrame);
+                int lastPic = fileInfo.endFrame;
+                for (int effectivePic = firstPic; effectivePic <= lastPic; effectivePic++)
+                {
+                    // Alignment contract: R8-SPRITERANGE-001. C++ renderer.cpp
+                    // scans DAT ranges in declaration order and stops at the first match.
+                    if (claimedEffectivePics.Add(effectivePic))
+                        ownedEffectivePics.Add(effectivePic);
+                    if (effectivePic == int.MaxValue)
+                        break;
+                }
+            }
+
+            return ownership;
         }
 
         internal static bool TryBuildCentralAtlasPublication(
@@ -2172,28 +2245,17 @@ namespace NTSD.Animation
             out int row,
             out int col)
         {
-            row = fileInfo.row;
-            col = fileInfo.col;
-
-            bool SizeMatches(int actual, int expected) => Mathf.Abs(actual - expected) <= 1;
-            int expectedWidth = fileInfo.col * (fileInfo.width + 1);
-            int expectedHeight = fileInfo.row * (fileInfo.height + 1);
-            if (SizeMatches(textureWidth, expectedWidth) && SizeMatches(textureHeight, expectedHeight))
-                return;
-
-            int swappedExpectedWidth = fileInfo.row * (fileInfo.width + 1);
-            int swappedExpectedHeight = fileInfo.col * (fileInfo.height + 1);
-            if (SizeMatches(textureWidth, swappedExpectedWidth) &&
-                SizeMatches(textureHeight, swappedExpectedHeight))
+            if (fileInfo == null)
             {
-                row = fileInfo.col;
-                col = fileInfo.row;
+                row = 0;
+                col = 0;
                 return;
             }
 
-            // Production DAT contains intentionally partial sheets. When neither
-            // full grid matches, retain the authored row/column interpretation;
-            // BuildIndexedSpriteRects leaves each out-of-bounds localPic as a hole.
+            // Alignment contract: R8-SPRITEMAP-003. C++ passes DAT row directly
+            // as SpriteSheet.cols; Unity's col output is the horizontal divisor.
+            row = fileInfo.col;
+            col = fileInfo.row;
         }
 
         internal static Rect?[] BuildIndexedSpriteRects(
@@ -2207,7 +2269,15 @@ namespace NTSD.Animation
                 fileInfo.width <= 0 || fileInfo.height <= 0)
                 return Array.Empty<Rect?>();
 
-            var rects = new Rect?[checked(row * col)];
+            int declaredCount = fileInfo.endFrame >= fileInfo.startFrame
+                ? checked(fileInfo.endFrame - fileInfo.startFrame + 1)
+                : 0;
+            if (declaredCount <= 0)
+                return Array.Empty<Rect?>();
+
+            // Alignment contract: R8-SPRITEMAP-004. C++ bounds localPic by the
+            // declared file range, not by DAT row*col, then clips during blit.
+            var rects = new Rect?[declaredCount];
             int cellWidth = fileInfo.width + 1;
             int cellHeight = fileInfo.height + 1;
             for (int localPic = 0; localPic < rects.Length; localPic++)
@@ -2216,15 +2286,47 @@ namespace NTSD.Animation
                 int column = localPic % col;
                 int x = column * cellWidth;
                 int y = textureHeight - (rowFromTop + 1) * cellHeight + 1;
-                if (x < 0 || y < 0 ||
-                    x + fileInfo.width > textureWidth ||
-                    y + fileInfo.height > textureHeight)
+                int clippedXMin = Mathf.Max(0, x);
+                int clippedYMin = Mathf.Max(0, y);
+                int clippedXMax = Mathf.Min(textureWidth, x + fileInfo.width);
+                int clippedYMax = Mathf.Min(textureHeight, y + fileInfo.height);
+                if (clippedXMin >= clippedXMax || clippedYMin >= clippedYMax)
                     continue;
 
-                rects[localPic] = new Rect(x, y, fileInfo.width, fileInfo.height);
+                rects[localPic] = new Rect(
+                    clippedXMin,
+                    clippedYMin,
+                    clippedXMax - clippedXMin,
+                    clippedYMax - clippedYMin);
             }
 
             return rects;
+        }
+
+        internal static Vector2 ComputeIndexedSpritePivot(
+            SpriteFileInfo fileInfo,
+            int textureWidth,
+            int textureHeight,
+            int horizontalColumns,
+            int localPic,
+            Rect clippedRect)
+        {
+            if (fileInfo == null || horizontalColumns <= 0 || localPic < 0 ||
+                clippedRect.width <= 0f || clippedRect.height <= 0f)
+            {
+                return new Vector2(0.5f, 0f);
+            }
+
+            int cellWidth = fileInfo.width + 1;
+            int cellHeight = fileInfo.height + 1;
+            int requestedX = (localPic % horizontalColumns) * cellWidth;
+            int requestedY = textureHeight -
+                             (localPic / horizontalColumns + 1) * cellHeight + 1;
+            float clippedOffsetX = clippedRect.x - requestedX;
+            float clippedOffsetY = clippedRect.y - requestedY;
+            return new Vector2(
+                (fileInfo.width * 0.5f - clippedOffsetX) / clippedRect.width,
+                -clippedOffsetY / clippedRect.height);
         }
 
         internal int BeginSpritePrewarmInvocation()

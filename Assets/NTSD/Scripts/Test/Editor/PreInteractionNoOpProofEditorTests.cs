@@ -71,36 +71,77 @@ namespace NTSD.Test
 
         [Test]
         [Category("NTSD_U6PreInteractionCrossPass")]
-        public void PostFrameProof_NeutralExactCharactersMatchesFullScanOracle()
+        public void PostFrameCheckpoint_NeutralExactCharactersUsesCurrentPointProof()
         {
             using var logging = new DisabledLoggingScope();
-            Scenario cached = CreateNeutralScenario(32, forceLegacy: false);
-            Scenario fullScan = CreateNeutralScenario(32, forceLegacy: false);
-            fullScan.World.ForceLegacyPreInteractionCrossPassProofForDiagnostics =
-                true;
+            Scenario currentPoint = CreateNeutralScenario(32, forceLegacy: false);
+            Scenario fullScan = CreateNeutralScenario(32, forceLegacy: true);
 
-            cached.World.PostFrameAdvanceDeathCleanupAll(21);
+            currentPoint.World.PostFrameAdvanceDeathCleanupAll(21);
             fullScan.World.PostFrameAdvanceDeathCleanupAll(21);
-            cached.World.PreInteractionTickAll(21);
+            currentPoint.World.PreInteractionTickAll(21);
             fullScan.World.PreInteractionTickAll(21);
 
-            AssertScenariosEquivalent(cached, fullScan, 21);
+            AssertScenariosEquivalent(currentPoint, fullScan, 21);
             Assert.That(
-                cached.World
+                currentPoint.World
                     .LastPreInteractionCrossPassProofUsedForDiagnostics,
-                Is.True);
+                Is.False);
             Assert.That(
                 fullScan.World
                     .LastPreInteractionCrossPassProofUsedForDiagnostics,
                 Is.False);
             Assert.That(
-                cached.World
+                currentPoint.World
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.True);
+            Assert.That(
+                currentPoint.World
                     .LastPreInteractionWholePassParticipantCountForDiagnostics,
                 Is.EqualTo(32));
             Assert.That(
                 fullScan.World
-                    .LastPreInteractionWholePassParticipantCountForDiagnostics,
-                Is.EqualTo(32));
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.False);
+            Assert.That(
+                currentPoint.World.LastPreInteractionExecutedCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                fullScan.World.LastPreInteractionExecutedCountForDiagnostics,
+                Is.EqualTo(96));
+        }
+
+        [Test]
+        [Category("NTSD_U6PreInteractionCrossPass")]
+        public void PostFrameCheckpoint_SameSlotKind2ContentMatchesFullScanOracle()
+        {
+            using var logging = new DisabledLoggingScope();
+            Scenario currentPoint = CreateNeutralScenario(1, forceLegacy: false);
+            Scenario fullScan = CreateNeutralScenario(1, forceLegacy: true);
+
+            currentPoint.World.PostFrameAdvanceDeathCleanupAll(24);
+            fullScan.World.PostFrameAdvanceDeathCleanupAll(24);
+            MakeCurrentFrameKind2Mismatch(currentPoint.Entities[0]);
+            MakeCurrentFrameKind2Mismatch(fullScan.Entities[0]);
+
+            currentPoint.World.PreInteractionTickAll(24);
+            fullScan.World.PreInteractionTickAll(24);
+
+            AssertScenariosEquivalent(currentPoint, fullScan, 24);
+            Assert.That(
+                currentPoint.World
+                    .LastPreInteractionCrossPassProofUsedForDiagnostics,
+                Is.False);
+            Assert.That(
+                currentPoint.World
+                    .LastPreInteractionWholePassProofSucceededForDiagnostics,
+                Is.False);
+            Assert.That(currentPoint.Entities[0].Frame.N, Is.EqualTo(212));
+            Assert.That(currentPoint.Entities[0].Runtime.Vy, Is.EqualTo(-3.0));
+            Assert.That(currentPoint.Entities[0].Runtime.Y, Is.EqualTo(-2.0));
+            Assert.That(
+                currentPoint.Entities[0].Runtime.FrameWaitCounter,
+                Is.EqualTo(17));
         }
 
         [Test]
@@ -643,6 +684,17 @@ namespace NTSD.Test
             character.Runtime.XInt = 999;
             character.Runtime.YInt = 999;
             character.Runtime.ZInt = 999;
+        }
+
+        private static void MakeCurrentFrameKind2Mismatch(
+            LF2Character character)
+        {
+            character.Frame.D.state = LF2States.BeingCaught;
+            character.Frame.D.cpoint = new CatchPoint { kind = 2 };
+            character.Runtime.Y = 7.5;
+            character.Runtime.Vy = 9.0;
+            character.Runtime.FrameWaitCounter = 17;
+            character.RefreshRuntimeSnapshot();
         }
 
         private static void AssertScenariosEquivalent(

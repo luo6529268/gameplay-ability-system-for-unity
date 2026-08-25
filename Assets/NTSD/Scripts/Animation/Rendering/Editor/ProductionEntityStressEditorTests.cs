@@ -1388,6 +1388,54 @@ namespace NTSD.Animation.Rendering.Editor
                 "authority range reads must cover every independent candidate consumer");
         }
 
+        [Test]
+        public void CollisionCandidateStoreAuthority_EntryReadsUsePostTickCountAsLowerBound()
+        {
+            var report = new ProductionEntityStressReport
+            {
+                harnessValidity = true,
+                logicTicksExecuted = 1,
+                collisionCandidateConsumerEntityTicks = 1,
+                collisionCandidateCountSum = 0,
+                collisionCandidateStoreAuthorityRequested = true,
+                collisionCandidateStoreAuthorityConfigured = true,
+                collisionCandidateStoreAuthorityApplied = true,
+                collisionCandidateStoreLegacyOracleInterval = 0,
+                collisionCandidateStoreAuthorityRequestedTickCount = 1,
+                collisionCandidateStoreAuthorityAppliedTickCount = 1,
+                collisionCandidateStoreAuthorityStoreOnlyTickCount = 1,
+                collisionCandidateStoreAuthorityExpectedStoreOnlyTickCount = 1,
+                collisionCandidateStoreShadowBuildTickCount = 1,
+                collisionCandidateStoreAuthorityRangeReadCount = 1,
+                collisionCandidateStoreAuthorityEntryReadCount = 1,
+            };
+
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
+                    report,
+                    CollisionCandidateStoreValidationPhase.Final),
+                Is.True,
+                "a consumed entry may be absent from the post-tick carrier count");
+
+            report.harnessValidity = true;
+            report.collisionCandidateCountSum = 1;
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
+                    report,
+                    CollisionCandidateStoreValidationPhase.Final),
+                Is.True);
+
+            report.harnessValidity = true;
+            report.failure = string.Empty;
+            report.collisionCandidateCountSum = 2;
+            Assert.That(
+                ProductionEntityStressRunner.EvaluateCollisionCandidateStoreAuthorityValidityForReport(
+                    report,
+                    CollisionCandidateStoreValidationPhase.Final),
+                Is.False,
+                "entry reads must still cover every candidate visible after the tick");
+        }
+
         [TestCase(0, 0, 10)]
         [TestCase(1, 10, 0)]
         [TestCase(3, 4, 6)]
@@ -1700,6 +1748,87 @@ namespace NTSD.Animation.Rendering.Editor
                     500d +
                     ProductionEntityStressRequestProcessor
                         .ServiceWaitTimeoutSecondsForDiagnostics));
+        }
+
+        [Test]
+        public void PlayRestartPolicy_WaitsForBootstrapBeforeClassifyingRuntimeInvalidation()
+        {
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: false,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: false,
+                    restartCount: 0),
+                Is.EqualTo(
+                    ProductionEntityStressPlayRestartDecision.WaitForInitialServices));
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: false,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: false,
+                    restartCount: 1),
+                Is.EqualTo(
+                    ProductionEntityStressPlayRestartDecision.WaitForInitialServices),
+                "A clean restart must still allow the new Play session to finish its initial bootstrap.");
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: true,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: false,
+                    restartCount: 0),
+                Is.EqualTo(ProductionEntityStressPlayRestartDecision.RestartPlayMode));
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: true,
+                    bootstrapReportedReady: false,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: false,
+                    restartCount: 0),
+                Is.EqualTo(ProductionEntityStressPlayRestartDecision.RestartPlayMode));
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: false,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: true,
+                    restartCount: 1),
+                Is.EqualTo(
+                    ProductionEntityStressPlayRestartDecision.WaitForRestartTransition));
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: true,
+                    managedRuntimeIsValid: false,
+                    restartTransitionPending: false,
+                    restartCount: 1),
+                Is.EqualTo(
+                    ProductionEntityStressPlayRestartDecision.RetryLimitExceeded));
+            Assert.That(
+                ProductionEntityStressRequestProcessor.EvaluatePlayRestartDecision(
+                    pendingStartRequest: true,
+                    isPlaying: true,
+                    managedRuntimeWasValid: false,
+                    bootstrapReportedReady: true,
+                    managedRuntimeIsValid: true,
+                    restartTransitionPending: false,
+                    restartCount: 0),
+                Is.EqualTo(
+                    ProductionEntityStressPlayRestartDecision.RecordHealthyRuntime));
         }
 
         [Test]

@@ -8,6 +8,7 @@ export interface CliArguments {
     readonly patchIndex?: string;
     readonly port?: string;
     readonly allowTestRootGrant: boolean;
+    readonly readOnly: boolean;
 }
 
 const valueFlags = new Set([
@@ -31,12 +32,18 @@ export function parsePortValue(raw: string): number {
 export function parseCliArguments(argv: readonly string[]): CliArguments {
     const values = new Map<string, string>();
     let allowTestRootGrant = false;
+    let readOnly = false;
 
     for (let index = 0; index < argv.length; index++) {
         const argument = argv[index]!;
         if (argument === "--allow-test-root-grant") {
             if (allowTestRootGrant) throw new Error("Duplicate CLI argument: --allow-test-root-grant");
             allowTestRootGrant = true;
+            continue;
+        }
+        if (argument === "--read-only") {
+            if (readOnly) throw new Error("Duplicate CLI argument: --read-only");
+            readOnly = true;
             continue;
         }
         if (!valueFlags.has(argument)) throw new Error(`Unknown CLI argument: ${argument}`);
@@ -64,5 +71,6 @@ export function parseCliArguments(argv: readonly string[]): CliArguments {
         ...(values.has("--patch-index") ? { patchIndex: values.get("--patch-index")! } : {}),
         ...(values.has("--port") ? { port: values.get("--port")! } : {}),
         allowTestRootGrant,
+        readOnly,
     });
 }

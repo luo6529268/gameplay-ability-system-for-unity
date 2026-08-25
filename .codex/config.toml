@@ -2,3 +2,6 @@ model_verbosity = "high"
 [mcp_servers.unityMCP]
 enabled = true
 default_tools_approval_mode = "approve"
+
+[sandbox_workspace_write]
+network_access = true

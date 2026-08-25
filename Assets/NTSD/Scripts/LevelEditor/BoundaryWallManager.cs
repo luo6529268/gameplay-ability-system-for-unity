@@ -57,6 +57,10 @@ namespace NTSD.LevelEditor
         [Tooltip("调试模式（输出详细日志）")]
         private bool _debugMode = false;
 
+        [Header("Map Boundary Authoring")]
+        [SerializeField]
+        private BattleMapBoundaryDefinition _authoringBoundaryDefinition;
+
         public List<CheckPoint> SpawnPoints;
 
         // ==================== 私有字段 ====================
@@ -66,12 +70,19 @@ namespace NTSD.LevelEditor
         /// </summary>
         private readonly List<BoundaryWall> _boundaries = new List<BoundaryWall>();
         private readonly List<BoundaryWall> _enabledBoundaries = new List<BoundaryWall>();
+        private readonly List<BoundaryWall> _loadedAssetBoundaries = new List<BoundaryWall>();
+        private BattleMapBoundaryDefinition _loadedBoundaryDefinition;
+        private bool _usesLoadedBoundaryDefinition;
 
         /// <summary>
         /// 是否已初始化
         /// </summary>
         private bool _initialized = false;
         private readonly List<Vector2> _runtimeVerticesBuffer = new List<Vector2>(32);
+
+        public bool UsesLoadedBoundaryDefinition => _usesLoadedBoundaryDefinition;
+        public BattleMapBoundaryDefinition LoadedBoundaryDefinition => _loadedBoundaryDefinition;
+        public BattleMapBoundaryDefinition AuthoringBoundaryDefinition => _authoringBoundaryDefinition;
 
         // ==================== Unity 生命周期 ====================
 
@@ -98,6 +109,11 @@ namespace NTSD.LevelEditor
                 RefreshBoundaries();
             }
 #endif
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseLoadedAssetBoundaries();
         }
 
         // ==================== 公共 API ====================
@@ -417,8 +433,73 @@ namespace NTSD.LevelEditor
             return true;
         }
 
+        /// <summary>
+        /// Explicitly replaces the current query source with transient BoundaryWall
+        /// carriers built from a validated map boundary asset. This is a load-time
+        /// operation; no Asset lookup or carrier creation occurs in query paths.
+        /// </summary>
+        public bool TryLoadBoundaryDefinition(
+            BattleMapBoundaryDefinition definition,
+            out string failure)
+        {
+            if (definition == null)
+            {
+                failure = "Boundary definition is required.";
+                return false;
+            }
+
+            if (!definition.TryValidate(out failure))
+                return false;
+
+            var pendingBoundaries = new List<BoundaryWall>(definition.Boundaries.Count);
+            for (int boundaryIndex = 0; boundaryIndex < definition.Boundaries.Count; boundaryIndex++)
+            {
+                BoundaryData boundaryData = definition.Boundaries[boundaryIndex];
+                GameObject carrierObject = new GameObject(
+                    "__BoundaryAssetRuntime_" + boundaryIndex.ToString("D2") + "_" +
+                    (boundaryData.boundaryName ?? "Boundary"));
+                carrierObject.hideFlags = HideFlags.DontSaveInEditor;
+                carrierObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                carrierObject.transform.localScale = Vector3.one;
+
+                BoundaryWall carrier = carrierObject.AddComponent<BoundaryWall>();
+                if (!carrier.TryApplyWorldBoundaryData(boundaryData, out failure))
+                {
+                    DestroyBoundaryCarriers(pendingBoundaries);
+                    DestroyBoundaryCarrier(carrier);
+                    return false;
+                }
+
+                pendingBoundaries.Add(carrier);
+            }
+
+            ReleaseLoadedAssetBoundaries();
+            _loadedAssetBoundaries.AddRange(pendingBoundaries);
+            _loadedBoundaryDefinition = definition;
+            _usesLoadedBoundaryDefinition = true;
+            RefreshLoadedBoundaryCache();
+            failure = string.Empty;
+            return true;
+        }
+
+        /// <summary>
+        /// Explicitly discards an Asset-backed query source and returns to the
+        /// existing Scene BoundaryWall discovery behavior.
+        /// </summary>
+        public void ClearLoadedBoundaryDefinition()
+        {
+            ReleaseLoadedAssetBoundaries();
+            RefreshBoundaries();
+        }
+
         public void RefreshBoundaries()
         {
+            if (_usesLoadedBoundaryDefinition)
+            {
+                RefreshLoadedBoundaryCache();
+                return;
+            }
+
             _boundaries.Clear();
             _enabledBoundaries.Clear();
 
@@ -437,6 +518,57 @@ namespace NTSD.LevelEditor
             if (_debugMode)
             {
                 Debug.Log($"[BoundaryWallManager] 刷新边界列表，找到 {_boundaries.Count} 个 BoundaryWall");
+            }
+        }
+
+        private void RefreshLoadedBoundaryCache()
+        {
+            _boundaries.Clear();
+            _enabledBoundaries.Clear();
+
+            for (int index = 0; index < _loadedAssetBoundaries.Count; index++)
+            {
+                BoundaryWall boundary = _loadedAssetBoundaries[index];
+                if (boundary == null)
+                    continue;
+
+                _boundaries.Add(boundary);
+                if (boundary.IsEnabled)
+                    _enabledBoundaries.Add(boundary);
+            }
+
+            _initialized = true;
+        }
+
+        private void ReleaseLoadedAssetBoundaries()
+        {
+            DestroyBoundaryCarriers(_loadedAssetBoundaries);
+            _loadedBoundaryDefinition = null;
+            _usesLoadedBoundaryDefinition = false;
+        }
+
+        private static void DestroyBoundaryCarriers(List<BoundaryWall> boundaries)
+        {
+            for (int index = boundaries.Count - 1; index >= 0; index--)
+            {
+                DestroyBoundaryCarrier(boundaries[index]);
+            }
+
+            boundaries.Clear();
+        }
+
+        private static void DestroyBoundaryCarrier(BoundaryWall boundary)
+        {
+            if (boundary == null)
+                return;
+
+            if (Application.isPlaying)
+            {
+                Destroy(boundary.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(boundary.gameObject);
             }
         }
 
@@ -557,6 +689,142 @@ namespace NTSD.LevelEditor
         // ==================== JSON 导出 ====================
 
 #if UNITY_EDITOR
+        public bool TryLoadAuthoringBoundaryDefinitionIntoScene(out string failure)
+        {
+            if (_authoringBoundaryDefinition == null)
+            {
+                failure = "Assign an authoring Boundary Definition before loading.";
+                return false;
+            }
+
+            if (!_authoringBoundaryDefinition.TryValidate(out failure))
+                return false;
+
+            if (!TryGetAuthoringSceneBoundaries(out List<BoundaryWall> sceneBoundaries, out failure))
+                return false;
+
+            if (sceneBoundaries.Count != _authoringBoundaryDefinition.Boundaries.Count)
+            {
+                failure = "Scene BoundaryWall count does not match the authoring Boundary Definition.";
+                return false;
+            }
+
+            for (int index = 0; index < sceneBoundaries.Count; index++)
+            {
+                string sceneName = sceneBoundaries[index].BoundaryName ?? string.Empty;
+                string assetName =
+                    _authoringBoundaryDefinition.Boundaries[index].boundaryName ?? string.Empty;
+                if (!string.Equals(sceneName, assetName, System.StringComparison.Ordinal))
+                {
+                    failure = "Scene BoundaryWall order/name does not match the authoring Boundary Definition.";
+                    return false;
+                }
+            }
+
+            Undo.RecordObjects(sceneBoundaries.ToArray(), "Load Map Boundary Asset");
+            for (int index = 0; index < sceneBoundaries.Count; index++)
+            {
+                if (!sceneBoundaries[index].TryApplyWorldBoundaryData(
+                        _authoringBoundaryDefinition.Boundaries[index],
+                        out failure))
+                {
+                    return false;
+                }
+
+                EditorUtility.SetDirty(sceneBoundaries[index]);
+            }
+
+            SceneView.RepaintAll();
+            failure = string.Empty;
+            return true;
+        }
+
+        public bool TryApplySceneBoundariesToAuthoringDefinition(out string failure)
+        {
+            if (_authoringBoundaryDefinition == null)
+            {
+                failure = "Assign an authoring Boundary Definition before applying.";
+                return false;
+            }
+
+            if (!TryGetAuthoringSceneBoundaries(out List<BoundaryWall> sceneBoundaries, out failure))
+                return false;
+
+            var capturedBoundaries = new List<BoundaryData>(sceneBoundaries.Count);
+            for (int index = 0; index < sceneBoundaries.Count; index++)
+            {
+                if (!sceneBoundaries[index].TryCaptureWorldBoundaryData(
+                        out BoundaryData capturedBoundary,
+                        out failure))
+                {
+                    return false;
+                }
+
+                capturedBoundaries.Add(capturedBoundary);
+            }
+
+            Undo.RecordObject(_authoringBoundaryDefinition, "Apply Scene Boundaries to Map Asset");
+            if (!_authoringBoundaryDefinition.TryReplaceBoundariesFromAuthoring(
+                    capturedBoundaries,
+                    out failure))
+            {
+                return false;
+            }
+
+            EditorUtility.SetDirty(_authoringBoundaryDefinition);
+            failure = string.Empty;
+            return true;
+        }
+
+        private bool TryGetAuthoringSceneBoundaries(
+            out List<BoundaryWall> sceneBoundaries,
+            out string failure)
+        {
+            sceneBoundaries = null;
+            if (Application.isPlaying)
+            {
+                failure = "Boundary authoring is only available in Edit Mode.";
+                return false;
+            }
+
+            if (_usesLoadedBoundaryDefinition)
+            {
+                failure = "Clear the loaded runtime Boundary Definition before authoring Scene walls.";
+                return false;
+            }
+
+            if (!_initialized)
+                RefreshBoundaries();
+
+            sceneBoundaries = new List<BoundaryWall>(_boundaries.Count);
+            for (int index = 0; index < _boundaries.Count; index++)
+            {
+                BoundaryWall boundary = _boundaries[index];
+                if (boundary != null && boundary.IsEnabled)
+                    sceneBoundaries.Add(boundary);
+            }
+
+            if (sceneBoundaries.Count == 0)
+            {
+                failure = "No enabled Scene BoundaryWall is available for authoring.";
+                return false;
+            }
+
+            sceneBoundaries.Sort(CompareAuthoringBoundaryOrder);
+            failure = string.Empty;
+            return true;
+        }
+
+        private static int CompareAuthoringBoundaryOrder(BoundaryWall left, BoundaryWall right)
+        {
+            string leftPath = GetHierarchySortPath(left.transform);
+            string rightPath = GetHierarchySortPath(right.transform);
+            int pathComparison = string.CompareOrdinal(leftPath, rightPath);
+            return pathComparison != 0
+                ? pathComparison
+                : string.CompareOrdinal(left.BoundaryName, right.BoundaryName);
+        }
+
         /// <summary>
         /// 导出边界数据到 JSON 文件
         /// </summary>
@@ -733,6 +1001,54 @@ namespace NTSD.LevelEditor
             if (GUILayout.Button("手动刷新边界列表"))
             {
                 manager.RefreshBoundaries();
+            }
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Map Boundary Authoring", EditorStyles.boldLabel);
+            BattleMapBoundaryDefinition authoringDefinition = manager.AuthoringBoundaryDefinition;
+            if (authoringDefinition == null)
+            {
+                EditorGUILayout.HelpBox(
+                    "Assign an Authoring Boundary Definition in the default inspector to enable explicit Load / Apply.",
+                    MessageType.Info);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("Map ID", authoringDefinition.MapId);
+                EditorGUILayout.LabelField("Revision", authoringDefinition.Revision.ToString());
+                using (new EditorGUI.DisabledScope(Application.isPlaying))
+                {
+                    if (GUILayout.Button("Load Boundary Asset Into Scene", GUILayout.Height(24)))
+                    {
+                        if (EditorUtility.DisplayDialog(
+                                "Load Map Boundary Asset",
+                                "This explicitly replaces matching Scene BoundaryWall vertices. The Scene is marked dirty but is not saved automatically.",
+                                "Load",
+                                "Cancel"))
+                        {
+                            if (!manager.TryLoadAuthoringBoundaryDefinitionIntoScene(out string failure))
+                            {
+                                EditorUtility.DisplayDialog("Load Boundary Asset Failed", failure, "OK");
+                            }
+                        }
+                    }
+
+                    if (GUILayout.Button("Apply Scene Boundaries To Asset", GUILayout.Height(24)))
+                    {
+                        if (EditorUtility.DisplayDialog(
+                                "Apply Scene Boundaries",
+                                "This explicitly replaces the selected Asset boundary data. The Asset is marked dirty but is not saved automatically.",
+                                "Apply",
+                                "Cancel"))
+                        {
+                            if (!manager.TryApplySceneBoundariesToAuthoringDefinition(out string failure))
+                            {
+                                EditorUtility.DisplayDialog("Apply Scene Boundaries Failed", failure, "OK");
+                            }
+                        }
+                    }
+                }
             }
 
             EditorGUILayout.Space();

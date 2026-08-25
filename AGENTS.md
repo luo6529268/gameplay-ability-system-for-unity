@@ -95,7 +95,7 @@
 - 对象池及资源异步加载
 - Inspector 配置与编辑器测试入口
 
-Unity 适配层不得改变权威 C# 的战斗结果：
+Unity 适配层不得改变权威 C++ release live path 的战斗结果：
 
 - `Transform`、Animator、Unity Physics 和渲染帧状态都不能成为逻辑真相。
 - 逻辑实体位置、速度、朝向、帧号、HP/PP、link/holder/target 等必须由战斗 runtime 维护。
@@ -106,7 +106,7 @@ Unity 适配层不得改变权威 C# 的战斗结果：
 
 ## 6. 主循环与固定逻辑帧
 
-战斗 pass 顺序只能以权威 C# 的 `GameTick.cs` 为准。旧文档中声称“主循环已经完全对齐”的结论不能代替重新核验。
+战斗 pass 顺序只能以权威 C++ release `game_tick.cpp` 的 live `game_tick(...)` 为准。C# `GameTick.cs` 只能作为历史移植辅助与交叉检查；旧文档中声称“主循环已经完全对齐”的结论不能代替重新核验。
 
 当前底层原则：
 
@@ -127,7 +127,7 @@ Unity 适配层不得改变权威 C# 的战斗结果：
 
 - 每个逻辑帧的输入必须是离散、可记录和可重放的数据。
 - 按下、按住、释放和组合键窗口必须分别映射，不能用渲染帧轮询替代逻辑帧边沿。
-- 输入消费顺序必须与权威 C# 一致，不能为了“更灵敏”而跨 pass 提前消费。
+- 输入消费顺序必须与权威 C++ release live path 一致，不能为了“更灵敏”而跨 pass 提前消费。
 - 后续 `FrameInputSet` 应包含该 tick 所有玩家的输入。
 - `LocalFreeRun`、`LockstepBuffered` 和 `Manual` 模式应共享同一个逻辑 tick 入口。
 - 回放入口最终需要支持 `ResetWorld(seed)`、逐 tick 输入、状态快照与 checksum。
@@ -152,7 +152,7 @@ T8 的 stage 战斗逻辑和生产接线可以继续验证，但默认 `stage.da
 1. **编译**：Unity 脚本编译为 0 error。
 2. **自动自检**：`BattleRuntimeSelfCheck` 能实际运行并通过目标检查。
 3. **定向运行时验证**：在真实战斗场景复现对应角色、输入、对象生成、命中或状态序列。
-4. **权威对照**：同一场景的可观察结果与 C# 调用链和字段变化一致。
+4. **权威对照**：同一场景的可观察结果与 C++ release live 调用链和字段变化一致。
 
 必须区分以下状态：
 
@@ -200,7 +200,7 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 - 避免每帧分配；使用现有池、缓存和复用容器。
 - 结构化 DAT/配置数据使用现有 parser 与数据模型，不做脆弱的字符串拼接解析。
 - 只在复杂时序或不明显契约处写简短注释，不给自解释代码增加旁白。
-- 新增字段前先在权威 C# 中确认语义、默认值、重置时机和所有读写方。
+- 新增字段前先在权威 C++ release live path 中确认语义、默认值、重置时机和所有读写方；C# 仅可辅助定位历史命名与调用线索。
 - 修复共享战斗行为时添加或更新聚焦的 self-check；高风险跨 pass 改动需要更广验证。
 
 ## 12. NTSD 模块结构
@@ -259,6 +259,18 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 - 当前状态与验证证据。
 
 不要在 `AGENTS.md` 维护逐次实现流水账。长期有效的规则留在这里；具体任务状态、差异清单和测试结果写入上述对齐文档。发现旧文档与本文件的唯一权威规则冲突时，应在当前任务范围内更正该文档，不能继续传播旧结论。
+
+### 13.1 脚本改动留痕与可恢复审计
+
+任何会修改项目自编写代码的任务（包括 battle/runtime、render、input、test、editor、shader、build 或工具脚本）都必须使用 `docs/ai/CHANGE-LEDGER.md` 和 `docs/ai/CHANGE-RECORDS/` 中的 Change Record；不得只依赖聊天记录、上下文摘要、commit message 或口头说明。
+
+- 一个闭合的行为改动使用一个唯一 Change ID；同一 Change ID 可以覆盖多个共同实现该行为的文件，但互不相关的行为必须拆分。
+- **修改任何脚本前**，先创建状态为 `PLANNED` 或 `IN_PROGRESS` 的 Change Record，写明 authority/需求来源、Unity 原状、受影响路径与符号、预期副作用、不可回退边界、验收标准和回滚方式。
+- **修改脚本后**，立即在 Record 中登记实际文件/符号、改前/改后职责、实际验证命令与结果、未验证项、风险与依赖；状态只能如实推进为 `CODE_WRITTEN`、`COMPILE_PASS`、`FOCUSED_TEST_PASS`、`RUNTIME_PENDING`、`VERIFIED`、`BLOCKED`、`ABANDONED`、`ROLLED_BACK` 或 `SUPERSEDED`。
+- 每个活跃或未关闭的 Change ID 必须同时出现在 Ledger、`docs/ai/STATE.md` 和当前 handoff 中。修订历史记录时追加 supersede/correction，不得删除或篡改旧事实。
+- 每次包含脚本改动的交付、提交前检查或 handoff 前，运行 `Tools/Validate-ChangeLedger.ps1`。若脚本 diff 没有被 Record 覆盖、Record 元数据不完整或状态/证据矛盾，不得把该改动报告为可交付。
+- 不要在每一行源代码加入流水账注释。只有 C++/Unity 适配时序、不可直观的字段合同或跨 pass 边界需要保留一行简短的 `Alignment contract: <Change-ID>` 注释；详细历史放在 Change Record。
+- Git hook 只能在用户明确批准后安装或启用；仓库内 validator 不得私自修改用户的 `.git/config`、`.git/hooks` 或 GitHub Desktop 工作流。
 
 ## 14. Future Mobile Rendering Note
 

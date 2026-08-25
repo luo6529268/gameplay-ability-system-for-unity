@@ -21,7 +21,11 @@ namespace NTSD.Simulation.Ecs
                 return false;
             if (kind != 1 && kind != 3)
                 return false;
-            if (LF2Entity.ResolveCurrentDataObjectType(victim) !=
+            // Alignment contract: R4-COL-005A. C++ gates kind3 (and kind8
+            // during collection) to character targets, but kind1 enters the
+            // common Entity grab writer without an extra target-type reject.
+            if (kind == 3 &&
+                LF2Entity.ResolveCurrentDataObjectType(victim) !=
                 (int)LF2ObjectType.Character)
             {
                 return false;

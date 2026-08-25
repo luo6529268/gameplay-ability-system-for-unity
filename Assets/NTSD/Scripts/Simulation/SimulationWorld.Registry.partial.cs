@@ -401,6 +401,8 @@ namespace NTSD.Simulation
             paritySnapshotModule = new BattleParitySnapshotModule(this);
             aiInputSlots = new LF2Entity[runtimeSlotCapacity];
             InitializeAiSoASensingRows(runtimeSlotCapacity);
+            aiCharacterDecisionLegacyFallbackSnapshot =
+                new AiDecisionSnapshot(runtimeSlotCapacity);
             _context = new SimContext(this);
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this, collisionBroadphase);
@@ -644,6 +646,7 @@ namespace NTSD.Simulation
         public int BattleExitCountdown => Runtime?.Flow?.BattleExitCountdown ?? 0;
         public int RouteOutRequest => Runtime?.Flow?.RouteOutRequest ?? 0;
         public int Mode2Request => Runtime?.Flow?.Mode2Request ?? 0;
+        public int InitStatsRequest => Runtime?.Flow?.InitStatsRequest ?? 0;
         public bool NeedClearInput => Runtime?.Flow?.NeedClearInput ?? false;
         public List<BattleStageCampaignData> StageCampaigns => Runtime?.StageCampaigns;
         public BattleStageProgressionState StageProgression => Runtime?.StageProgression;
@@ -682,6 +685,21 @@ namespace NTSD.Simulation
             Runtime ??= new BattleRuntimeState();
             Runtime.Flow ??= new BattleFlowRuntimeState();
             Runtime.Flow.Mode2Request = value;
+        }
+
+        public void ToggleInitStatsRequest()
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.Flow ??= new BattleFlowRuntimeState();
+            Runtime.Flow.InitStatsRequest = Runtime.Flow.InitStatsRequest == 0 ? 1 : 0;
+            Runtime.Flow.BattleExitCountdown = 0;
+        }
+
+        public void SetInitStatsRequest(int value)
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.Flow ??= new BattleFlowRuntimeState();
+            Runtime.Flow.InitStatsRequest = value != 0 ? 1 : 0;
         }
 
         public void SetNeedClearInput(bool value)
@@ -883,7 +901,7 @@ namespace NTSD.Simulation
                     addedEntity,
                     runtimeHandle);
                 battleFrameMotionWriter.Bind(
-                    addedEntity.Runtime,
+                    addedEntity,
                     runtimeHandle);
                 battleRelationLinkWriter.Bind(
                     addedEntity.Runtime,

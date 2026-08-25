@@ -30,6 +30,7 @@ namespace NTSD.Simulation.Ecs
         private const ulong TargetSlotBit = 1UL << 17;
         private const ulong HitStopBit = 1UL << 18;
         private const ulong DecisionBoundaryFlagsBit = 1UL << 19;
+        private const ulong HitJBit = 1UL << 20;
 
         private bool active;
         private ulong epoch;
@@ -48,6 +49,7 @@ namespace NTSD.Simulation.Ecs
         private int[] team;
         private int[] state;
         private int[] frame;
+        private int[] hitJ;
         private int[] linkState;
         private int[] killCount;
         private int[] cachedTargetSlot;
@@ -73,6 +75,7 @@ namespace NTSD.Simulation.Ecs
         private int[] pendingTeam;
         private int[] pendingState;
         private int[] pendingFrame;
+        private int[] pendingHitJ;
         private int[] pendingLinkState;
         private int[] pendingKillCount;
         private int[] pendingCachedTargetSlot;
@@ -115,6 +118,7 @@ namespace NTSD.Simulation.Ecs
             Array.Resize(ref pendingTeam, capacity);
             Array.Resize(ref pendingState, capacity);
             Array.Resize(ref pendingFrame, capacity);
+            Array.Resize(ref pendingHitJ, capacity);
             Array.Resize(ref pendingLinkState, capacity);
             Array.Resize(ref pendingKillCount, capacity);
             Array.Resize(ref pendingCachedTargetSlot, capacity);
@@ -143,6 +147,7 @@ namespace NTSD.Simulation.Ecs
             int[] rowTeam,
             int[] rowState,
             int[] rowFrame,
+            int[] rowHitJ,
             int[] rowLinkState,
             int[] rowKillCount,
             int[] rowCachedTargetSlot,
@@ -171,6 +176,7 @@ namespace NTSD.Simulation.Ecs
                 rowTeam?.Length != capacity ||
                 rowState?.Length != capacity ||
                 rowFrame?.Length != capacity ||
+                rowHitJ?.Length != capacity ||
                 rowLinkState?.Length != capacity ||
                 rowKillCount?.Length != capacity ||
                 rowCachedTargetSlot?.Length != capacity ||
@@ -211,6 +217,7 @@ namespace NTSD.Simulation.Ecs
             team = rowTeam;
             state = rowState;
             frame = rowFrame;
+            hitJ = rowHitJ;
             linkState = rowLinkState;
             killCount = rowKillCount;
             cachedTargetSlot = rowCachedTargetSlot;
@@ -233,6 +240,11 @@ namespace NTSD.Simulation.Ecs
         }
 
         internal void InvalidateAfterOccupancyChange()
+        {
+            InvalidateAfterRowMembershipChange();
+        }
+
+        internal void InvalidateAfterRowMembershipChange()
         {
             if (!active)
                 return;
@@ -315,6 +327,17 @@ namespace NTSD.Simulation.Ecs
             BeginPending(slot);
             pendingFacing[slot] = value;
             pendingMask[slot] |= FacingBit;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void PublishHitJ(int slot, uint generation, int value)
+        {
+            if (!active)
+                return;
+            ValidateRow(slot, generation);
+            BeginPending(slot);
+            pendingHitJ[slot] = value;
+            pendingMask[slot] |= HitJBit;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -468,6 +491,7 @@ namespace NTSD.Simulation.Ecs
             if ((mask & TeamBit) != 0) team[slot] = pendingTeam[slot];
             if ((mask & StateBit) != 0) state[slot] = pendingState[slot];
             if ((mask & FrameBit) != 0) frame[slot] = pendingFrame[slot];
+            if ((mask & HitJBit) != 0) hitJ[slot] = pendingHitJ[slot];
             if ((mask & LinkStateBit) != 0) linkState[slot] = pendingLinkState[slot];
             if ((mask & KillCountBit) != 0) killCount[slot] = pendingKillCount[slot];
             if ((mask & CachedTargetSlotBit) != 0)
@@ -591,6 +615,7 @@ namespace NTSD.Simulation.Ecs
             pendingTeam = new int[capacity];
             pendingState = new int[capacity];
             pendingFrame = new int[capacity];
+            pendingHitJ = new int[capacity];
             pendingLinkState = new int[capacity];
             pendingKillCount = new int[capacity];
             pendingCachedTargetSlot = new int[capacity];

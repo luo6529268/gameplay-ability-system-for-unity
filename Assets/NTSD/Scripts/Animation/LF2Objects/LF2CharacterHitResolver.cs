@@ -455,7 +455,7 @@ namespace NTSD.Animation.LF2Objects
             _character.Runtime.Vx = _character.KnockbackVx;
             _character.KnockbackVz = _character.Runtime.Vz * factor;
             _character.Runtime.Vz = _character.KnockbackVz;
-            _character.ImmediateFrame(182);
+            _character.DirectWriteRawFramePreserveWaitCounter(182);
             ApplyWhirlwindAirStep(3.0);
         }
 

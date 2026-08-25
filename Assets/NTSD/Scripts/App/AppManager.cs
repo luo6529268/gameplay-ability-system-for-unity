@@ -108,11 +108,22 @@ namespace NTSD.App
                 InitializeBattleSingletons();
 
                 var bootstrap = FindBattleBootstrap(scene);
-                bootstrap?.EnablePresentation();
 
                 SceneManager.SetActiveScene(scene);
 
                 SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
+
+                if (bootstrap != null)
+                {
+                    if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                    {
+                        throw new System.InvalidOperationException(
+                            $"[AppManager] Battle map preparation failed before character setup: {mapFailure}");
+                    }
+
+                    if (bootstrap.IsMapConfigurationPrepared)
+                        SimulationTickDriver.Instance?.World?.RefreshStageRuntimeSnapshotFromScene();
+                }
 
                 // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
                 SetupBattleCharacters(scene);
@@ -127,6 +138,7 @@ namespace NTSD.App
                 {
                     SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
                     SimulationTickDriver.Instance.BeginBattleAllocationSeal();
+                    bootstrap?.EnablePresentation();
                     SimulationTickDriver.Instance.SetPaused(false);
                 }
 

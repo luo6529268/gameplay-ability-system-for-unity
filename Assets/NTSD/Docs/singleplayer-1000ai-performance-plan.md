@@ -3,8 +3,27 @@
 > 状态：当前主计划  
 > 起始日期：2026-08-08  
 > 当前优先级：高于服务器、真实网络、联机追帧、断线恢复和 Android 真机验证
+> **2026-08-20 R0 权威迁移**：本文的性能、GC、checksum 和 Unity 内部 A/B 数据可继续作为性能回归证据，但不证明 C++ release 行为对齐。任何优化默认路径必须先满足 `J:\QQFile\NTSD2.4\ntsd_release` release live path 的 C++ trace、Unity fallback 与 Unity optimized 三向等价门禁。
 
 > 2026-08-10 调整：在继续改变战斗热循环结构前，先完成 `future-server-lockstep-architecture.md` 中 L0～L3 的单机帧同步闭环。该调整不降低 1000 AI / 30 FPS 目标，也不提前实施真实服务器；目的是保证后续性能改动始终作用于唯一的确定性 step，并把表现成本从逻辑预算中正确分离。
+
+## 2026-08-23：R8-WP01E current-build正式认证
+
+国际版Unity 2022.3.62f3、当前工作树、1000 production GameObject、MobileExtended、
+DataOrientedCanonical、LooseQuadtree、正式CentralOnly、每帧最多1 tick下：
+
+| Workload | Logic Avg/P95 | Visible frame Avg/P95 | Main/Render/GPU P95 | 0B/GC/capacity | Central |
+|---|---:|---:|---:|---:|---:|
+| Dispersed1000 120+1800 | 16.513 / 18.575ms | 9.490 / 25.525ms | 25.286 / 0.696 / 3.841ms | 0B、0/0/0 collection、critical0 | 1 draw、SetPass4 |
+| Combat1000 120+1800 | 16.313 / 19.044ms | 19.078 / 33.058ms | 26.901 / 1.015 / 2.841ms | 0B、0/0/0 collection、critical0 | 1 draw、SetPass≈4 |
+
+两组teardown完整恢复。DesktopExtended与池/slot/generation current-build focused为299/299 PASS；fresh
+Legacy/DataOriented 180-tick A/B的input、RNG、metadata、world、slots、aRest、vRest、stats、events、overall、
+workload、roster 12项hash全部相等。WP01E在Editor current-build范围通过30FPS门。
+
+Editor Profiler的完整帧仍含Editor-side allocation，但60秒窗口没有任何Gen collection，战斗tick/driver/
+presentation/player-loop边界均0B；Player hard gate必须在WP01F验证。Combat visible P95距33.333ms约0.275ms，
+Android真机不可从Editor外推。
 
 ## 2026-08-10：AI、中央表现与周边搜索归因结果
 

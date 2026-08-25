@@ -4,6 +4,9 @@ param(
     [switch]$NoBrowser,
     [switch]$ValidateOnly,
     [switch]$ResetWorkspace,
+    [switch]$ReadOnly,
+    [ValidatePattern('^/[A-Za-z0-9._/-]*$')]
+    [string]$OpenPath = "/",
     [ValidateSet("Project", "Test")]
     [string]$Mode
 )
@@ -66,6 +69,7 @@ function Test-WebBuildRequired {
     $manifestTime = (Get-Item -LiteralPath $manifestPath).LastWriteTimeUtc
     $inputs = @(
         Get-Item -LiteralPath (Join-Path $toolRoot "index.html")
+        Get-Item -LiteralPath (Join-Path $toolRoot "render-cadence.html")
         Get-Item -LiteralPath (Join-Path $toolRoot "package.json")
         Get-Item -LiteralPath (Join-Path $toolRoot "package-lock.json")
         Get-Item -LiteralPath (Join-Path $toolRoot "tsconfig.json")
@@ -168,6 +172,9 @@ if ($null -eq $launchMode) {
 if ($launchMode -eq "Project" -and $ResetWorkspace) {
     Stop-WithMessage "-ResetWorkspace is only valid with -Mode Test."
 }
+if ($OpenPath.Contains("..")) {
+    Stop-WithMessage "-OpenPath must stay inside the Dat Skill Flow Web static root."
+}
 Assert-StartupPrerequisites
 
 $workspace = $null
@@ -234,6 +241,9 @@ try {
         "--patch-index", $patchIndexPath,
         "--port", "0"
     )
+    if ($ReadOnly) {
+        $nodeArguments += "--read-only"
+    }
     $processInfo = New-Object System.Diagnostics.ProcessStartInfo
     $processInfo.FileName = (Get-Command node).Source
     $processInfo.Arguments = (($nodeArguments | ForEach-Object { ConvertTo-NativeArgument $_ }) -join " ")
@@ -272,10 +282,13 @@ try {
     }
 
     if (-not $NoBrowser) {
-        Start-Process $url
+        Start-Process ("$url$OpenPath")
     }
 
-    Write-Host "Editor ready at: $url"
+    Write-Host "Editor ready at: $url$OpenPath"
+    if ($ReadOnly) {
+        Write-Host "当前为只读渲染帧率对比模式：编辑、保存和技能 sidecar 写入已由服务器拒绝。"
+    }
     if ($launchMode -eq "Test") {
         Write-Host "Editable test copy: $testWorkspace"
         Write-Host "Use -Mode Test -ResetWorkspace to replace the test copy on the next launch."
