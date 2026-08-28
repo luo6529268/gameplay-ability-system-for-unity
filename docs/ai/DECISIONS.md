@@ -193,3 +193,22 @@
 - **决定**：新增一份按 MapId 保存的 Boundary Asset，数据形状和坐标单位对齐现有 BoundaryExportData、BoundaryData、PolygonData 与 world X/Y vertices；新增另一份按同 MapId 保存背景/表现资源的 Presentation Asset。加载选中 MapId 后，继续使用现有 BoundaryWall 和 BoundaryWallManager 的 polygon union、point contains、rect fully inside、edge epsilon、random walkable point 与 polygon outer-bounds 行为。
 - **实施边界**：本计划只改变 boundary 数据来源和 Editor/Bootstrap 配置流程。不得把 polygon 转成矩形，不得新写点包含或碰撞算法，不得改变移动、hit、opoint、AI、tick、Camera、背景表现、lockstep、fingerprint、服务器或 C++ 工程。Scene 顶点编辑和 Asset 保存必须显式 Load/Apply，不能自动互相覆盖。
 - **影响**：BATTLE-MAP-ASSET-ARCHITECTURE-001 和其 M0 至 M7 Task/Handoff 全部标为 SUPERSEDED BEFORE CODE。当前唯一执行计划是 BATTLE-MAP-BOUNDARY-ASSET-001，按 MAPCFG-001 至 MAPCFG-004 连续推进。
+
+## D-018 — 将地图背景并入 Boundary Asset，取消独立 Presentation Asset
+
+- **状态**：DECIDED（用户明确的当前架构修正；代码级验证进行中）。
+- **日期**：2026-08-26
+- **决定**：删除独立 `BattleMapPresentationDefinition` 与 `Desert01_Presentation.asset`；
+  `BattleMapBoundaryDefinition` 同时保存 `MapId`、边界几何和 `BackgroundSprite`；
+  `BattleMapCatalog.Entry` 只保留 `MapId` 与 Boundary Definition。
+- **数据边界**：地图资产的 `boundaries → polygons → verticesWorld` 不再保存 `boundaryName` 或
+  多边形 `name`。共享 `BoundaryData` / `PolygonData` 的字段暂作为 BoundaryWall、JSON 导出和
+  旧编辑器的兼容运行时合同保留，由加载适配层按稳定序号生成，不参与 MapId 解析、authoring 匹配或
+  边界几何判断。
+- **不变项**：不改变 BoundaryWall 多边形 union/contains/rect/random/Stage fallback 语义，不改变
+  tick、输入、RNG、checksum、Camera、背景表现规则、lockstep、服务器或 C++ authority；不部署默认
+  `stage.dat`。
+- **依据**：用户于 2026-08-26 明确确认“可以删除”，并要求 `Desert01_Boundary` 增加背景图以及删除
+  `boundaryName` 和 `Name`；当前执行记录为 `MAPCFG-005`。
+- **影响**：D-016 的“两份独立资产”选择和 D-017 中“新增 Presentation Asset”的部分被本决定
+  supersede；MAPCFG-001～004 的已执行验证保留为历史事实，当前资产数据合同由 MAPCFG-005 接管。

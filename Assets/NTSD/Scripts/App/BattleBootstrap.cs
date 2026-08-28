@@ -81,10 +81,10 @@ namespace NTSD.App
                 return false;
             }
 
-            Sprite mapBackgroundSprite = entry.PresentationDefinition.BackgroundSprite;
+            Sprite mapBackgroundSprite = entry.BoundaryDefinition.BackgroundSprite;
             if (mapBackgroundSprite == null)
             {
-                failure = "The resolved map presentation has no background sprite.";
+                failure = "The resolved map boundary has no background sprite.";
                 return false;
             }
 

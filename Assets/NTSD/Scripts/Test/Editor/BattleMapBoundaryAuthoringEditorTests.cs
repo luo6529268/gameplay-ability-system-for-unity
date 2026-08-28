@@ -26,8 +26,10 @@ namespace NTSD.Test.Editor
         [Test]
         public void ExplicitLoadAndApply_RoundTripsWorldDataWithoutSharingMutableVertices()
         {
-            BoundaryData assetAlpha = CreateRectangleBoundary("Alpha", -8f, -4f, -2f, 4f);
-            BoundaryData assetBeta = CreateRectangleBoundary("Beta", 3f, -3f, 9f, 5f);
+            BattleMapBoundaryDefinition.MapBoundaryData assetAlpha =
+                CreateMapRectangleBoundary(-8f, -4f, -2f, 4f);
+            BattleMapBoundaryDefinition.MapBoundaryData assetBeta =
+                CreateMapRectangleBoundary(3f, -3f, 9f, 5f);
             BattleMapBoundaryDefinition definition = CreateDefinition(
                 "desert_01",
                 assetAlpha,
@@ -48,35 +50,38 @@ namespace NTSD.Test.Editor
 
             Vector3 movedWorldVertex = sceneAlpha.GetWorldVertex(0, 0) + new Vector3(1.5f, -0.5f, 0f);
             sceneAlpha.SetWorldVertex(0, 0, movedWorldVertex);
-            Assert.That(definition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(-8f));
+            Assert.That(
+                definition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
+                Is.EqualTo(-8f));
 
             Assert.That(manager.TryApplySceneBoundariesToAuthoringDefinition(out string applyFailure), Is.True, applyFailure);
-            float appliedAssetX = definition.Boundaries[0].polygons[0].verticesWorld[0].x;
-            float appliedAssetY = definition.Boundaries[0].polygons[0].verticesWorld[0].y;
+            float appliedAssetX = definition.Boundaries[0].Polygons[0].VerticesWorld[0].x;
+            float appliedAssetY = definition.Boundaries[0].Polygons[0].VerticesWorld[0].y;
             Assert.That(appliedAssetX, Is.EqualTo(movedWorldVertex.x));
             Assert.That(appliedAssetY, Is.EqualTo(movedWorldVertex.y));
 
             sceneAlpha.SetWorldVertex(0, 0, movedWorldVertex + new Vector3(2f, 2f, 0f));
-            Assert.That(definition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(appliedAssetX));
-            Assert.That(definition.Boundaries[0].polygons[0].verticesWorld[0].y, Is.EqualTo(appliedAssetY));
+            Assert.That(
+                definition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
+                Is.EqualTo(appliedAssetX));
+            Assert.That(
+                definition.Boundaries[0].Polygons[0].VerticesWorld[0].y,
+                Is.EqualTo(appliedAssetY));
         }
 
         [Test]
-        public void ExplicitLoad_FailsClosedWhenSceneBoundaryNamesDoNotMatch()
+        public void ExplicitLoad_UsesStableBoundaryOrderWithoutNameMatching()
         {
-            BoundaryData assetBoundary = CreateRectangleBoundary("Expected", 1f, 1f, 5f, 5f);
+            BattleMapBoundaryDefinition.MapBoundaryData assetBoundary =
+                CreateMapRectangleBoundary(1f, 1f, 5f, 5f);
             BattleMapBoundaryDefinition definition = CreateDefinition("desert_01", assetBoundary);
             BoundaryWall sceneBoundary = CreateWall(
                 CreateRectangleBoundary("Actual", -5f, -5f, -1f, -1f),
                 Vector3.zero);
             BoundaryWallManager manager = CreateManager(definition, sceneBoundary);
-            Vector3 originalVertex = sceneBoundary.GetWorldVertex(0, 0);
-            float originalAssetVertex = definition.Boundaries[0].polygons[0].verticesWorld[0].x;
 
-            Assert.That(manager.TryLoadAuthoringBoundaryDefinitionIntoScene(out _), Is.False);
-
-            Assert.That(sceneBoundary.GetWorldVertex(0, 0), Is.EqualTo(originalVertex));
-            Assert.That(definition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(originalAssetVertex));
+            Assert.That(manager.TryLoadAuthoringBoundaryDefinitionIntoScene(out string failure), Is.True, failure);
+            Assert.That(sceneBoundary.GetWorldVertex(0, 0), Is.EqualTo(new Vector3(1f, 1f, 0f)));
         }
 
         [Test]
@@ -84,15 +89,15 @@ namespace NTSD.Test.Editor
         {
             BattleMapBoundaryDefinition authoringDefinition = CreateDefinition(
                 "authoring_01",
-                CreateRectangleBoundary("Authoring", -20f, -20f, -10f, -10f));
+                CreateMapRectangleBoundary(-20f, -20f, -10f, -10f));
             BattleMapBoundaryDefinition runtimeDefinition = CreateDefinition(
                 "runtime_01",
-                CreateRectangleBoundary("Runtime", 20f, 20f, 30f, 30f));
+                CreateMapRectangleBoundary(20f, 20f, 30f, 30f));
             BoundaryWall sceneBoundary = CreateWall(
                 CreateRectangleBoundary("Authoring", -30f, -30f, -25f, -25f),
                 Vector3.zero);
             BoundaryWallManager manager = CreateManager(authoringDefinition, sceneBoundary);
-            float authoringVertex = authoringDefinition.Boundaries[0].polygons[0].verticesWorld[0].x;
+            float authoringVertex = authoringDefinition.Boundaries[0].Polygons[0].VerticesWorld[0].x;
 
             Assert.That(manager.TryLoadBoundaryDefinition(runtimeDefinition, out string runtimeFailure), Is.True, runtimeFailure);
             Assert.That(manager.TryLoadAuthoringBoundaryDefinitionIntoScene(out _), Is.False);
@@ -100,7 +105,9 @@ namespace NTSD.Test.Editor
 
             Assert.That(manager.UsesLoadedBoundaryDefinition, Is.True);
             Assert.That(manager.LoadedBoundaryDefinition, Is.SameAs(runtimeDefinition));
-            Assert.That(authoringDefinition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(authoringVertex));
+            Assert.That(
+                authoringDefinition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
+                Is.EqualTo(authoringVertex));
             Assert.That(sceneBoundary.GetWorldVertex(0, 0).x, Is.EqualTo(-30f));
         }
 
@@ -131,15 +138,38 @@ namespace NTSD.Test.Editor
 
         private BattleMapBoundaryDefinition CreateDefinition(
             string mapId,
-            params BoundaryData[] boundaries)
+            params BattleMapBoundaryDefinition.MapBoundaryData[] boundaries)
         {
             BattleMapBoundaryDefinition definition =
                 Track(ScriptableObject.CreateInstance<BattleMapBoundaryDefinition>());
             SetPrivateField(definition, "mapId", mapId);
             SetPrivateField(definition, "displayName", mapId + " display");
             SetPrivateField(definition, "revision", 1);
-            SetPrivateField(definition, "boundaries", new List<BoundaryData>(boundaries));
+            SetPrivateField(
+                definition,
+                "boundaries",
+                new List<BattleMapBoundaryDefinition.MapBoundaryData>(boundaries));
             return definition;
+        }
+
+        private static BattleMapBoundaryDefinition.MapBoundaryData CreateMapRectangleBoundary(
+            float minX,
+            float minY,
+            float maxX,
+            float maxY)
+        {
+            return new BattleMapBoundaryDefinition.MapBoundaryData(
+                new List<BattleMapBoundaryDefinition.MapPolygonData>
+                {
+                    new BattleMapBoundaryDefinition.MapPolygonData(
+                        new List<Vector2Data>
+                        {
+                            new Vector2Data { x = minX, y = minY },
+                            new Vector2Data { x = maxX, y = minY },
+                            new Vector2Data { x = maxX, y = maxY },
+                            new Vector2Data { x = minX, y = maxY },
+                        }),
+                });
         }
 
         private static BoundaryData CreateRectangleBoundary(
@@ -169,24 +199,27 @@ namespace NTSD.Test.Editor
             };
         }
 
-        private static void AssertBoundaryEqual(BoundaryData expected, BoundaryData actual)
+        private static void AssertBoundaryEqual(
+            BattleMapBoundaryDefinition.MapBoundaryData expected,
+            BoundaryData actual)
         {
-            Assert.That(actual.boundaryName, Is.EqualTo(expected.boundaryName));
-            Assert.That(actual.polygons.Count, Is.EqualTo(expected.polygons.Count));
-            for (int polygonIndex = 0; polygonIndex < expected.polygons.Count; polygonIndex++)
+            Assert.That(actual.polygons.Count, Is.EqualTo(expected.Polygons.Count));
+            for (int polygonIndex = 0; polygonIndex < expected.Polygons.Count; polygonIndex++)
             {
-                PolygonData expectedPolygon = expected.polygons[polygonIndex];
+                BattleMapBoundaryDefinition.MapPolygonData expectedPolygon =
+                    expected.Polygons[polygonIndex];
                 PolygonData actualPolygon = actual.polygons[polygonIndex];
-                Assert.That(actualPolygon.name, Is.EqualTo(expectedPolygon.name));
-                Assert.That(actualPolygon.verticesWorld.Count, Is.EqualTo(expectedPolygon.verticesWorld.Count));
-                for (int vertexIndex = 0; vertexIndex < expectedPolygon.verticesWorld.Count; vertexIndex++)
+                Assert.That(
+                    actualPolygon.verticesWorld.Count,
+                    Is.EqualTo(expectedPolygon.VerticesWorld.Count));
+                for (int vertexIndex = 0; vertexIndex < expectedPolygon.VerticesWorld.Count; vertexIndex++)
                 {
                     Assert.That(
                         actualPolygon.verticesWorld[vertexIndex].x,
-                        Is.EqualTo(expectedPolygon.verticesWorld[vertexIndex].x));
+                        Is.EqualTo(expectedPolygon.VerticesWorld[vertexIndex].x));
                     Assert.That(
                         actualPolygon.verticesWorld[vertexIndex].y,
-                        Is.EqualTo(expectedPolygon.verticesWorld[vertexIndex].y));
+                        Is.EqualTo(expectedPolygon.VerticesWorld[vertexIndex].y));
                 }
             }
         }

@@ -9,15 +9,55 @@ namespace NTSD.LevelEditor
         menuName = "NTSD/Maps/Boundary Definition")]
     public sealed class BattleMapBoundaryDefinition : ScriptableObject
     {
+        [Serializable]
+        public sealed class MapBoundaryData
+        {
+            [SerializeField] private List<MapPolygonData> polygons = new List<MapPolygonData>();
+
+            public IReadOnlyList<MapPolygonData> Polygons => polygons;
+
+            public MapBoundaryData()
+            {
+            }
+
+            public MapBoundaryData(IReadOnlyList<MapPolygonData> sourcePolygons)
+            {
+                polygons = sourcePolygons == null
+                    ? null
+                    : new List<MapPolygonData>(sourcePolygons);
+            }
+        }
+
+        [Serializable]
+        public sealed class MapPolygonData
+        {
+            [SerializeField] private List<Vector2Data> verticesWorld = new List<Vector2Data>();
+
+            public IReadOnlyList<Vector2Data> VerticesWorld => verticesWorld;
+
+            public MapPolygonData()
+            {
+            }
+
+            public MapPolygonData(IReadOnlyList<Vector2Data> sourceVerticesWorld)
+            {
+                verticesWorld = sourceVerticesWorld == null
+                    ? null
+                    : new List<Vector2Data>(sourceVerticesWorld);
+            }
+        }
+
         [SerializeField] private string mapId = "";
         [SerializeField] private string displayName = "";
         [SerializeField, Min(0)] private int revision;
-        [SerializeField] private List<BoundaryData> boundaries = new List<BoundaryData>();
+        [SerializeField] private Sprite backgroundSprite;
+        [SerializeField] private List<MapBoundaryData> boundaries = new List<MapBoundaryData>();
 
         public string MapId => mapId;
         public string DisplayName => displayName;
         public int Revision => revision;
-        public IReadOnlyList<BoundaryData> Boundaries => boundaries;
+        public Sprite BackgroundSprite => backgroundSprite;
+        public IReadOnlyList<MapBoundaryData> Boundaries => boundaries;
 
         public bool TryValidate(out string failure)
         {
@@ -47,7 +87,7 @@ namespace NTSD.LevelEditor
                 return false;
             }
 
-            if (!TryCloneBoundaryCollection(sourceBoundaries, out List<BoundaryData> copiedBoundaries, out failure))
+            if (!TryCloneBoundaryCollection(sourceBoundaries, out List<MapBoundaryData> copiedBoundaries, out failure))
                 return false;
 
             if (!TryValidateBoundaryCollection(copiedBoundaries, out failure))
@@ -60,7 +100,7 @@ namespace NTSD.LevelEditor
 #endif
 
         private static bool TryValidateBoundaryCollection(
-            IReadOnlyList<BoundaryData> sourceBoundaries,
+            IReadOnlyList<MapBoundaryData> sourceBoundaries,
             out string failure)
         {
             if (sourceBoundaries == null || sourceBoundaries.Count == 0)
@@ -71,33 +111,33 @@ namespace NTSD.LevelEditor
 
             for (int boundaryIndex = 0; boundaryIndex < sourceBoundaries.Count; boundaryIndex++)
             {
-                BoundaryData boundary = sourceBoundaries[boundaryIndex];
+                MapBoundaryData boundary = sourceBoundaries[boundaryIndex];
                 if (boundary == null)
                 {
                     failure = "Boundary definition contains a null boundary.";
                     return false;
                 }
 
-                if (boundary.polygons == null || boundary.polygons.Count == 0)
+                if (boundary.Polygons == null || boundary.Polygons.Count == 0)
                 {
                     failure = "Boundary definition contains a boundary without polygons.";
                     return false;
                 }
 
-                for (int polygonIndex = 0; polygonIndex < boundary.polygons.Count; polygonIndex++)
+                for (int polygonIndex = 0; polygonIndex < boundary.Polygons.Count; polygonIndex++)
                 {
-                    PolygonData polygon = boundary.polygons[polygonIndex];
+                    MapPolygonData polygon = boundary.Polygons[polygonIndex];
                     if (polygon == null ||
-                        polygon.verticesWorld == null ||
-                        polygon.verticesWorld.Count < 3)
+                        polygon.VerticesWorld == null ||
+                        polygon.VerticesWorld.Count < 3)
                     {
                         failure = "Boundary definition contains a polygon with fewer than three world vertices.";
                         return false;
                     }
 
-                    for (int vertexIndex = 0; vertexIndex < polygon.verticesWorld.Count; vertexIndex++)
+                    for (int vertexIndex = 0; vertexIndex < polygon.VerticesWorld.Count; vertexIndex++)
                     {
-                        Vector2Data vertex = polygon.verticesWorld[vertexIndex];
+                        Vector2Data vertex = polygon.VerticesWorld[vertexIndex];
                         if (vertex == null ||
                             !BattleMapDefinitionValidation.IsFinite(vertex.x) ||
                             !BattleMapDefinitionValidation.IsFinite(vertex.y))
@@ -116,7 +156,7 @@ namespace NTSD.LevelEditor
 #if UNITY_EDITOR
         private static bool TryCloneBoundaryCollection(
             IReadOnlyList<BoundaryData> sourceBoundaries,
-            out List<BoundaryData> copiedBoundaries,
+            out List<MapBoundaryData> copiedBoundaries,
             out string failure)
         {
             copiedBoundaries = null;
@@ -126,7 +166,7 @@ namespace NTSD.LevelEditor
                 return false;
             }
 
-            copiedBoundaries = new List<BoundaryData>(sourceBoundaries.Count);
+            copiedBoundaries = new List<MapBoundaryData>(sourceBoundaries.Count);
             for (int boundaryIndex = 0; boundaryIndex < sourceBoundaries.Count; boundaryIndex++)
             {
                 BoundaryData sourceBoundary = sourceBoundaries[boundaryIndex];
@@ -136,11 +176,7 @@ namespace NTSD.LevelEditor
                     return false;
                 }
 
-                var copiedBoundary = new BoundaryData
-                {
-                    boundaryName = sourceBoundary.boundaryName,
-                    polygons = new List<PolygonData>(sourceBoundary.polygons.Count),
-                };
+                var copiedPolygons = new List<MapPolygonData>(sourceBoundary.polygons.Count);
                 for (int polygonIndex = 0; polygonIndex < sourceBoundary.polygons.Count; polygonIndex++)
                 {
                     PolygonData sourcePolygon = sourceBoundary.polygons[polygonIndex];
@@ -150,11 +186,7 @@ namespace NTSD.LevelEditor
                         return false;
                     }
 
-                    var copiedPolygon = new PolygonData
-                    {
-                        name = sourcePolygon.name,
-                        verticesWorld = new List<Vector2Data>(sourcePolygon.verticesWorld.Count),
-                    };
+                    var copiedVertices = new List<Vector2Data>(sourcePolygon.verticesWorld.Count);
                     for (int vertexIndex = 0; vertexIndex < sourcePolygon.verticesWorld.Count; vertexIndex++)
                     {
                         Vector2Data sourceVertex = sourcePolygon.verticesWorld[vertexIndex];
@@ -164,17 +196,17 @@ namespace NTSD.LevelEditor
                             return false;
                         }
 
-                        copiedPolygon.verticesWorld.Add(new Vector2Data
+                        copiedVertices.Add(new Vector2Data
                         {
                             x = sourceVertex.x,
                             y = sourceVertex.y,
                         });
                     }
 
-                    copiedBoundary.polygons.Add(copiedPolygon);
+                    copiedPolygons.Add(new MapPolygonData(copiedVertices));
                 }
 
-                copiedBoundaries.Add(copiedBoundary);
+                copiedBoundaries.Add(new MapBoundaryData(copiedPolygons));
             }
 
             failure = string.Empty;

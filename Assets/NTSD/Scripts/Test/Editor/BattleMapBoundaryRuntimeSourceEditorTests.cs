@@ -34,8 +34,8 @@ namespace NTSD.Test.Editor
             BoundaryWallManager manager = CreateManager(sourceLeft, sourceRight);
             BattleMapBoundaryDefinition definition = CreateDefinition(
                 "desert_01",
-                leftBoundary,
-                rightBoundary);
+                CreateMapRectangleBoundary(-10f, -4f, -2f, 4f),
+                CreateMapRectangleBoundary(2f, -2f, 8f, 6f));
 
             Vector2[] points =
             {
@@ -88,7 +88,9 @@ namespace NTSD.Test.Editor
             Assert.That(actualRandomResult, Is.EqualTo(expectedRandomResult));
             Assert.That(actualRandomPoint, Is.EqualTo(expectedRandomPoint));
             Assert.That(loadedRng.CallCount, Is.EqualTo(sourceRng.CallCount));
-            Assert.That(definition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(-10f));
+            Assert.That(
+                definition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
+                Is.EqualTo(-10f));
             Assert.That(sourceLeft.ContainsPointWorld(new Vector2(-6f, 0f)), Is.True);
         }
 
@@ -97,11 +99,10 @@ namespace NTSD.Test.Editor
         {
             BattleMapBoundaryDefinition activeDefinition = CreateDefinition(
                 "desert_01",
-                CreateRectangleBoundary("Active", 20f, 20f, 28f, 28f));
+                CreateMapRectangleBoundary(20f, 20f, 28f, 28f));
             BattleMapBoundaryDefinition invalidDefinition = CreateDefinition(
                 "broken_01",
-                CreateBoundary(
-                    "Broken",
+                CreateMapBoundary(
                     new Vector2Data { x = 40f, y = 40f },
                     new Vector2Data { x = 44f, y = 40f }));
             BoundaryWallManager manager = CreateManager();
@@ -109,7 +110,8 @@ namespace NTSD.Test.Editor
             Assert.That(manager.TryLoadBoundaryDefinition(activeDefinition, out string activeFailure), Is.True, activeFailure);
             bool activePointResult = manager.IsPointWalkable(new Vector2(24f, 24f));
             int activeBoundaryCount = manager.AllBoundaries.Count;
-            float originalInvalidVertexX = invalidDefinition.Boundaries[0].polygons[0].verticesWorld[0].x;
+            float originalInvalidVertexX =
+                invalidDefinition.Boundaries[0].Polygons[0].VerticesWorld[0].x;
 
             Assert.That(manager.TryLoadBoundaryDefinition(invalidDefinition, out _), Is.False);
 
@@ -117,7 +119,9 @@ namespace NTSD.Test.Editor
             Assert.That(manager.LoadedBoundaryDefinition, Is.SameAs(activeDefinition));
             Assert.That(manager.AllBoundaries.Count, Is.EqualTo(activeBoundaryCount));
             Assert.That(manager.IsPointWalkable(new Vector2(24f, 24f)), Is.EqualTo(activePointResult));
-            Assert.That(invalidDefinition.Boundaries[0].polygons[0].verticesWorld[0].x, Is.EqualTo(originalInvalidVertexX));
+            Assert.That(
+                invalidDefinition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
+                Is.EqualTo(originalInvalidVertexX));
         }
 
         [Test]
@@ -128,7 +132,7 @@ namespace NTSD.Test.Editor
             BoundaryWallManager manager = CreateManager(sceneWall);
             BattleMapBoundaryDefinition definition = CreateDefinition(
                 "asset_01",
-                CreateRectangleBoundary("Asset", 100f, 100f, 120f, 120f));
+                CreateMapRectangleBoundary(100f, 100f, 120f, 120f));
 
             Assert.That(manager.TryLoadBoundaryDefinition(definition, out string failure), Is.True, failure);
             Assert.That(manager.IsPointWalkable(new Vector2(-110f, -110f)), Is.False);
@@ -165,15 +169,42 @@ namespace NTSD.Test.Editor
 
         private BattleMapBoundaryDefinition CreateDefinition(
             string mapId,
-            params BoundaryData[] boundaries)
+            params BattleMapBoundaryDefinition.MapBoundaryData[] boundaries)
         {
             BattleMapBoundaryDefinition definition =
                 Track(ScriptableObject.CreateInstance<BattleMapBoundaryDefinition>());
             SetPrivateField(definition, "mapId", mapId);
             SetPrivateField(definition, "displayName", mapId + " display");
             SetPrivateField(definition, "revision", 1);
-            SetPrivateField(definition, "boundaries", new List<BoundaryData>(boundaries));
+            SetPrivateField(
+                definition,
+                "boundaries",
+                new List<BattleMapBoundaryDefinition.MapBoundaryData>(boundaries));
             return definition;
+        }
+
+        private static BattleMapBoundaryDefinition.MapBoundaryData CreateMapRectangleBoundary(
+            float minX,
+            float minY,
+            float maxX,
+            float maxY)
+        {
+            return CreateMapBoundary(
+                new Vector2Data { x = minX, y = minY },
+                new Vector2Data { x = maxX, y = minY },
+                new Vector2Data { x = maxX, y = maxY },
+                new Vector2Data { x = minX, y = maxY });
+        }
+
+        private static BattleMapBoundaryDefinition.MapBoundaryData CreateMapBoundary(
+            params Vector2Data[] vertices)
+        {
+            return new BattleMapBoundaryDefinition.MapBoundaryData(
+                new List<BattleMapBoundaryDefinition.MapPolygonData>
+                {
+                    new BattleMapBoundaryDefinition.MapPolygonData(
+                        new List<Vector2Data>(vertices)),
+                });
         }
 
         private static BoundaryData CreateRectangleBoundary(

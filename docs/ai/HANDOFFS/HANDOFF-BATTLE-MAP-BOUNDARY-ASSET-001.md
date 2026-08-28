@@ -1,8 +1,8 @@
 # Handoff — BATTLE-MAP-BOUNDARY-ASSET-001
 
-> 日期：2026-08-25  
-> 状态：P1 FOCUSED_TEST_PASS / P2 RUNTIME_PENDING / P3 FOCUSED_TEST_PASS / P4 RUNTIME_PENDING (DEPLOYMENT INPUT PENDING)  
-> 下一包：MAPCFG-004  
+> 日期：2026-08-26
+> 状态：P1 FOCUSED_TEST_PASS / P2 RUNTIME_PENDING / P3 FOCUSED_TEST_PASS / P4 RUNTIME_PENDING / MAPCFG-005 IN_PROGRESS (COMPILE PENDING)
+> 下一包：MAPCFG-005
 > 规范计划：Assets/NTSD/Docs/battle-map-boundary-asset-configuration-plan.md
 
 ## 正确的问题定义
@@ -28,11 +28,11 @@
 
 ## 架构
 
-1. BattleMapBoundaryDefinition：MapId、多个边界组、多个 world X/Y polygon；
-2. BattleMapPresentationDefinition：同 MapId、背景/表现资源；
-3. MapId 配对表：选择这两份资产；
-4. BoundaryWallManager：加载选中边界数据，但不改变现有几何判断；
-5. BoundaryWallEditor：显式 Load From Asset / Apply To Asset，使 Scene 编辑与运行时同源。
+1. BattleMapBoundaryDefinition：MapId、多个边界组、多个 world X/Y polygon，以及背景 Sprite；
+2. MapId Catalog：按 MapId 选择一份 Boundary Definition，不再配对 Presentation Definition；
+3. BoundaryWallManager：加载选中边界数据，但不改变现有几何判断；
+4. BoundaryWallEditor：显式 Load From Asset / Apply To Asset，使 Scene 编辑与运行时同源；
+5. 地图资产只保存几何序列，运行时适配层为既有 BoundaryWall 接口生成序号名称。
 
 ## 已确认的语义必须保留
 
@@ -116,7 +116,8 @@ Asset 能精确保留当前 JSON 世界顶点数据；MapId 配对错误 fail cl
 ### 固定边界
 
 - 用户必须显式点击 Load / Apply；没有自动同步、自动保存、自动创建/删除/重排 walls；
-- Load 按 stable hierarchy order + same group name preflight，name/count 不匹配完全失败；
+- MAPCFG-003 历史验证曾使用 stable hierarchy order + group name preflight；该名称匹配已由 MAPCFG-005
+  supersede，新地图资产的 Load 现在只按 stable hierarchy order + boundary count 对齐；
 - Apply 只 capture enabled Scene fallback walls 的 world X/Y 深复制；
 - active P2 runtime carrier source 未 clear 时，P3 必须拒绝作者操作；
 - P3 不接 MapId bootstrap/Bg/Camera/battle/network。
@@ -130,7 +131,7 @@ Asset 能精确保留当前 JSON 世界顶点数据；MapId 配对错误 fail cl
 - final ledger validator（104 Record / 139 governed diff covered）与scoped diff PASS；
 - P3 只完成可测试Editor bridge；用户真实Inspector click 与P4 production integration继续独立。
 
-## 当前包 MAPCFG-004
+## 已完成包 MAPCFG-004（合并前历史记录）
 
 ### Goal
 
@@ -148,13 +149,43 @@ Asset 能精确保留当前 JSON 世界顶点数据；MapId 配对错误 fail cl
 - 已写 `BattleBootstrap` optional prepare/clear、`AppManager`/`BattleTestBootstrap` 的 startup gate与 P4 focused in-memory tests；未写 Scene、Asset实例、背景资源、Camera、Transform、PPU、battle rule、C++或网络。
 - 空配置不改变当前 fallback，也不触发 P4 新增 Stage refresh；半配置或无效配置在 mutation 前 fail-close；只在成功装载实际 MapId 后 refresh Stage snapshot。
 - 保留既有 central-seal/F7 baseline，不拥有或重排其旧 diff。
-- Unity import/compile完成；P4 focused job `51942ac652474e6c9ba42427a93ba44a` 4/4 PASS，P1–P4 job `50c3e1586f5145e18b6d990662b920b0` 14/14 PASS，existing self-check于17:33:25 PASS。
+- Unity import/compile完成；P4 focused job `51942ac652474e6c9ba42427a93ba44a` 4/4 PASS，P1–P4 job `50c3e1586f5145e18b6d990662b920b0` 14/14 PASS，existing self-check于17:33:25 PASS（均为 MAPCFG-005 之前的程序集证据）。
 - `Tools/Validate-ChangeLedger.ps1` 已通过（105 Records / 141 governed diff covered）；P4 scoped diff也通过（仅既有 LF→CRLF 提示，无 whitespace error）。
 - 真实 Map Asset/Scene/Play验收仍缺用户的MapId与四个Inspector引用配置，当前不可宣称真实地图已部署。
 
 ### 后续验收
 
 同一几何的 source wall / Asset source 必须在 point、rect、deterministic random sample 和 Stage bounds 上一致；随后运行 Unity compile、focused tests、relevant self-check、validator 与 scoped diff。
+
+## 当前包 MAPCFG-005
+
+### Goal
+
+按用户确认收敛地图资产：删除独立 `BattleMapPresentationDefinition` 与 `Desert01_Presentation.asset`，将背景 Sprite 放入 `Desert01_Boundary.asset`，并让地图资产不再保存 `boundaryName` 或多边形 `name`。
+
+### 固定范围
+
+- Catalog Entry 只保留 `mapId` 与 `BattleMapBoundaryDefinition`；
+- `BattleBootstrap` 从 Boundary Definition 读取背景，并继续沿用现有 prepare/clear 时序；
+- 地图几何使用不带命名字段的 `MapBoundaryData` / `MapPolygonData`；
+- `BoundaryWallManager` 加载时生成稳定序号名，仅供既有运行时/JSON/编辑器兼容层使用；
+- 共享 `BoundaryData` / `PolygonData` 字段、既有 JSON 导出、战斗 tick、RNG、checksum、Camera、服务器和 C++ authority 不在本包删除或改变；
+- 不部署默认 `stage.dat`，不把当前代码级证据扩大为完整 Play Mode 验收。
+
+### 当前留痕
+
+- `MAPCFG-005` Task 和 Change Record 已在代码修改前建立，并已登记到 Ledger、STATE 与本 handoff；
+- 已修改 `BattleMapBoundaryDefinition`、`BattleMapCatalog`、`BattleBootstrap`、`BoundaryWallManager` 及四个 MAPCFG focused Editor test；
+- 已将 `Desert01_Boundary.asset` 改为单资产背景/几何结构，Catalog 指向 `desert_01` 边界资产；
+- 已删除 Presentation 脚本及 Desert01 Presentation 资源；
+- 本轮静态契约检查、`git diff --check` 和 Ledger 覆盖校验已通过；Unity 修复前实际编译日志发现 `BattleMapBoundaryDefinition.cs` 的 4 个 `CS0122`，已通过构造函数 deep-copy 修复；修复后复用 Unity Roslyn 参数的交叉编译退出码为 `0`，仅有工程既有 warnings。当前 Unity Editor 的正式程序集仍未刷新，本轮 focused tests/新程序集 self-check 尚待，不能宣称 `COMPILE_PASS` 或 `VERIFIED`。
+
+### 下一步
+
+1. 让当前 Unity Editor 刷新修复后的脚本并取得新的正式程序集与 0 C# error；
+2. 运行 MAPCFG-001～005 的 focused 回归，重点验证纯几何资产、序号名适配、Catalog resolve 和背景恢复；
+3. 运行当前 Editor 的 `BattleRuntimeSelfCheck` 与 `Tools/Validate-ChangeLedger.ps1`；
+4. 若代码级证据通过，再确认 `BattleBootstrap` 的真实 Scene 引用和 Play Mode 验收是否具备条件。
 
 ## 旧计划状态
 

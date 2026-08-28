@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: BattleMapCatalog
   m_EditorClassIdentifier: 
   entries:
-  - mapId: 
-    boundaryDefinition: {fileID: 0}
-    presentationDefinition: {fileID: 0}
+  - mapId: Sunagakure
+    boundaryDefinition: {fileID: 11400000, guid: cc7adb450e34fc541bd535156f92f078, type: 2}

@@ -30,13 +30,28 @@ namespace NTSD.Test.Editor
 
             Assert.That(definition.TryValidate(out string failure), Is.True, failure);
             Assert.That(definition.Boundaries.Count, Is.EqualTo(1));
-            Assert.That(definition.Boundaries[0].polygons.Count, Is.EqualTo(1));
+            Assert.That(definition.Boundaries[0].Polygons.Count, Is.EqualTo(1));
             Assert.That(
-                definition.Boundaries[0].polygons[0].verticesWorld[0].x,
+                definition.Boundaries[0].Polygons[0].VerticesWorld[0].x,
                 Is.EqualTo(3f));
             Assert.That(
-                definition.Boundaries[0].polygons[0].verticesWorld[2].y,
+                definition.Boundaries[0].Polygons[0].VerticesWorld[2].y,
                 Is.EqualTo(6f));
+        }
+
+        [Test]
+        public void BoundaryAssetGeometry_DoesNotSerializeLegacyNames()
+        {
+            Assert.That(
+                typeof(BattleMapBoundaryDefinition.MapBoundaryData).GetField(
+                    "boundaryName",
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
+                Is.Null);
+            Assert.That(
+                typeof(BattleMapBoundaryDefinition.MapPolygonData).GetField(
+                    "name",
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
+                Is.Null);
         }
 
         [Test]
@@ -61,16 +76,14 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void Catalog_ResolvesExactMatchingPairWithoutMutatingBoundaryData()
+        public void Catalog_ResolvesBoundaryAssetWithoutPresentationPairing()
         {
             BattleMapBoundaryDefinition boundary =
                 CreateBoundaryDefinition("desert_01", CreateValidBoundaryData(2f));
-            BattleMapPresentationDefinition presentation =
-                CreatePresentationDefinition("desert_01");
             BattleMapCatalog catalog =
-                CreateCatalog(CreateEntry("desert_01", boundary, presentation));
+                CreateCatalog(CreateEntry("desert_01", boundary));
 
-            float originalX = boundary.Boundaries[0].polygons[0].verticesWorld[0].x;
+            float originalX = boundary.Boundaries[0].Polygons[0].VerticesWorld[0].x;
             bool resolved = catalog.TryResolve(
                 "desert_01",
                 out BattleMapCatalog.Entry entry,
@@ -78,9 +91,8 @@ namespace NTSD.Test.Editor
 
             Assert.That(resolved, Is.True, failure);
             Assert.That(entry.BoundaryDefinition, Is.SameAs(boundary));
-            Assert.That(entry.PresentationDefinition, Is.SameAs(presentation));
             Assert.That(
-                boundary.Boundaries[0].polygons[0].verticesWorld[0].x,
+                boundary.Boundaries[0].Polygons[0].VerticesWorld[0].x,
                 Is.EqualTo(originalX));
         }
 
@@ -89,23 +101,19 @@ namespace NTSD.Test.Editor
         {
             BattleMapBoundaryDefinition desertBoundary =
                 CreateBoundaryDefinition("desert_01", CreateValidBoundaryData(0f));
-            BattleMapPresentationDefinition desertPresentation =
-                CreatePresentationDefinition("desert_01");
             BattleMapBoundaryDefinition forestBoundary =
                 CreateBoundaryDefinition("forest_01", CreateValidBoundaryData(10f));
-            BattleMapPresentationDefinition forestPresentation =
-                CreatePresentationDefinition("forest_01");
 
             BattleMapCatalog duplicateCatalog = CreateCatalog(
-                CreateEntry("desert_01", desertBoundary, desertPresentation),
-                CreateEntry("desert_01", forestBoundary, forestPresentation));
+                CreateEntry("desert_01", desertBoundary),
+                CreateEntry("desert_01", forestBoundary));
             Assert.That(duplicateCatalog.TryValidate(out _), Is.False);
             Assert.That(
                 duplicateCatalog.TryResolve("desert_01", out _, out _),
                 Is.False);
 
             BattleMapCatalog mismatchCatalog = CreateCatalog(
-                CreateEntry("desert_01", desertBoundary, forestPresentation));
+                CreateEntry("desert_01", forestBoundary));
             Assert.That(mismatchCatalog.TryValidate(out _), Is.False);
             Assert.That(
                 mismatchCatalog.TryResolve("desert_01", out _, out _),
@@ -114,7 +122,7 @@ namespace NTSD.Test.Editor
 
         private BattleMapBoundaryDefinition CreateBoundaryDefinition(
             string mapId,
-            List<BoundaryData> boundaries)
+            List<BattleMapBoundaryDefinition.MapBoundaryData> boundaries)
         {
             BattleMapBoundaryDefinition definition =
                 Track(ScriptableObject.CreateInstance<BattleMapBoundaryDefinition>());
@@ -122,15 +130,6 @@ namespace NTSD.Test.Editor
             SetPrivateField(definition, "displayName", mapId + " display");
             SetPrivateField(definition, "revision", 1);
             SetPrivateField(definition, "boundaries", boundaries);
-            return definition;
-        }
-
-        private BattleMapPresentationDefinition CreatePresentationDefinition(string mapId)
-        {
-            BattleMapPresentationDefinition definition =
-                Track(ScriptableObject.CreateInstance<BattleMapPresentationDefinition>());
-            SetPrivateField(definition, "mapId", mapId);
-            SetPrivateField(definition, "displayName", mapId + " presentation");
             return definition;
         }
 
@@ -144,17 +143,15 @@ namespace NTSD.Test.Editor
 
         private static BattleMapCatalog.Entry CreateEntry(
             string mapId,
-            BattleMapBoundaryDefinition boundary,
-            BattleMapPresentationDefinition presentation)
+            BattleMapBoundaryDefinition boundary)
         {
             var entry = new BattleMapCatalog.Entry();
             SetPrivateField(entry, "mapId", mapId);
             SetPrivateField(entry, "boundaryDefinition", boundary);
-            SetPrivateField(entry, "presentationDefinition", presentation);
             return entry;
         }
 
-        private static List<BoundaryData> CreateValidBoundaryData(float xOffset)
+        private static List<BattleMapBoundaryDefinition.MapBoundaryData> CreateValidBoundaryData(float xOffset)
         {
             return CreateBoundaryData(
                 new Vector2Data { x = xOffset, y = 0f },
@@ -163,22 +160,17 @@ namespace NTSD.Test.Editor
                 new Vector2Data { x = xOffset, y = 6f });
         }
 
-        private static List<BoundaryData> CreateBoundaryData(params Vector2Data[] vertices)
+        private static List<BattleMapBoundaryDefinition.MapBoundaryData> CreateBoundaryData(
+            params Vector2Data[] vertices)
         {
-            return new List<BoundaryData>
+            return new List<BattleMapBoundaryDefinition.MapBoundaryData>
             {
-                new BoundaryData
-                {
-                    boundaryName = "Main",
-                    polygons = new List<PolygonData>
+                new BattleMapBoundaryDefinition.MapBoundaryData(
+                    new List<BattleMapBoundaryDefinition.MapPolygonData>
                     {
-                        new PolygonData
-                        {
-                            name = "Walkable",
-                            verticesWorld = new List<Vector2Data>(vertices),
-                        },
-                    },
-                },
+                        new BattleMapBoundaryDefinition.MapPolygonData(
+                            new List<Vector2Data>(vertices)),
+                    }),
             };
         }
 

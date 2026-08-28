@@ -51,11 +51,10 @@ namespace NTSD.Test.Editor
             SpriteRenderer backgroundRenderer = CreateBackgroundRenderer(originalSprite);
             BattleMapBoundaryDefinition boundaryDefinition = CreateBoundaryDefinition(
                 "desert_01",
-                CreateRectangleBoundary("Main", -8f, -4f, 8f, 4f));
-            BattleMapPresentationDefinition presentationDefinition =
-                CreatePresentationDefinition("desert_01", mapSprite);
+                CreateRectangleBoundary(-8f, -4f, 8f, 4f));
+            SetPrivateField(boundaryDefinition, "backgroundSprite", mapSprite);
             BattleMapCatalog catalog = CreateCatalog(
-                CreateCatalogEntry("desert_01", boundaryDefinition, presentationDefinition));
+                CreateCatalogEntry("desert_01", boundaryDefinition));
             BattleBootstrap bootstrap = CreateBootstrap(
                 catalog,
                 "desert_01",
@@ -81,15 +80,12 @@ namespace NTSD.Test.Editor
         {
             BoundaryWallManager boundaryManager = CreateBoundaryManager();
             Sprite originalSprite = CreateSprite(Color.red);
-            Sprite mapSprite = CreateSprite(Color.green);
             SpriteRenderer backgroundRenderer = CreateBackgroundRenderer(originalSprite);
             BattleMapBoundaryDefinition boundaryDefinition = CreateBoundaryDefinition(
                 "desert_01",
-                CreateRectangleBoundary("Main", -8f, -4f, 8f, 4f));
-            BattleMapPresentationDefinition presentationDefinition =
-                CreatePresentationDefinition("desert_01", mapSprite);
+                CreateRectangleBoundary(-8f, -4f, 8f, 4f));
             BattleMapCatalog catalog = CreateCatalog(
-                CreateCatalogEntry("desert_01", boundaryDefinition, presentationDefinition));
+                CreateCatalogEntry("desert_01", boundaryDefinition));
             BattleBootstrap bootstrap = CreateBootstrap(
                 catalog,
                 "missing_01",
@@ -107,15 +103,12 @@ namespace NTSD.Test.Editor
         {
             BoundaryWallManager boundaryManager = CreateBoundaryManager();
             Sprite originalSprite = CreateSprite(Color.red);
-            Sprite mapSprite = CreateSprite(Color.green);
             SpriteRenderer backgroundRenderer = CreateBackgroundRenderer(originalSprite);
             BattleMapBoundaryDefinition boundaryDefinition = CreateBoundaryDefinition(
                 "desert_01",
-                CreateRectangleBoundary("Main", -8f, -4f, 8f, 4f));
-            BattleMapPresentationDefinition presentationDefinition =
-                CreatePresentationDefinition("desert_01", mapSprite);
+                CreateRectangleBoundary(-8f, -4f, 8f, 4f));
             BattleMapCatalog catalog = CreateCatalog(
-                CreateCatalogEntry("desert_01", boundaryDefinition, presentationDefinition));
+                CreateCatalogEntry("desert_01", boundaryDefinition));
             BattleBootstrap missingCatalogBootstrap = CreateBootstrap(
                 null,
                 "desert_01",
@@ -175,26 +168,17 @@ namespace NTSD.Test.Editor
 
         private BattleMapBoundaryDefinition CreateBoundaryDefinition(
             string mapId,
-            params BoundaryData[] boundaries)
+            params BattleMapBoundaryDefinition.MapBoundaryData[] boundaries)
         {
             BattleMapBoundaryDefinition definition =
                 Track(ScriptableObject.CreateInstance<BattleMapBoundaryDefinition>());
             SetPrivateField(definition, "mapId", mapId);
             SetPrivateField(definition, "displayName", mapId + " display");
             SetPrivateField(definition, "revision", 1);
-            SetPrivateField(definition, "boundaries", new List<BoundaryData>(boundaries));
-            return definition;
-        }
-
-        private BattleMapPresentationDefinition CreatePresentationDefinition(
-            string mapId,
-            Sprite backgroundSprite)
-        {
-            BattleMapPresentationDefinition definition =
-                Track(ScriptableObject.CreateInstance<BattleMapPresentationDefinition>());
-            SetPrivateField(definition, "mapId", mapId);
-            SetPrivateField(definition, "displayName", mapId + " display");
-            SetPrivateField(definition, "backgroundSprite", backgroundSprite);
+            SetPrivateField(
+                definition,
+                "boundaries",
+                new List<BattleMapBoundaryDefinition.MapBoundaryData>(boundaries));
             return definition;
         }
 
@@ -207,41 +191,32 @@ namespace NTSD.Test.Editor
 
         private static BattleMapCatalog.Entry CreateCatalogEntry(
             string mapId,
-            BattleMapBoundaryDefinition boundaryDefinition,
-            BattleMapPresentationDefinition presentationDefinition)
+            BattleMapBoundaryDefinition boundaryDefinition)
         {
             var entry = new BattleMapCatalog.Entry();
             SetPrivateField(entry, "mapId", mapId);
             SetPrivateField(entry, "boundaryDefinition", boundaryDefinition);
-            SetPrivateField(entry, "presentationDefinition", presentationDefinition);
             return entry;
         }
 
-        private static BoundaryData CreateRectangleBoundary(
-            string name,
+        private static BattleMapBoundaryDefinition.MapBoundaryData CreateRectangleBoundary(
             float minX,
             float minY,
             float maxX,
             float maxY)
         {
-            return new BoundaryData
-            {
-                boundaryName = name,
-                polygons = new List<PolygonData>
+            return new BattleMapBoundaryDefinition.MapBoundaryData(
+                new List<BattleMapBoundaryDefinition.MapPolygonData>
                 {
-                    new PolygonData
-                    {
-                        name = name + " Polygon",
-                        verticesWorld = new List<Vector2Data>
+                    new BattleMapBoundaryDefinition.MapPolygonData(
+                        new List<Vector2Data>
                         {
                             new Vector2Data { x = minX, y = minY },
                             new Vector2Data { x = maxX, y = minY },
                             new Vector2Data { x = maxX, y = maxY },
                             new Vector2Data { x = minX, y = maxY },
-                        },
-                    },
-                },
-            };
+                        }),
+                });
         }
 
         private T Track<T>(T target)

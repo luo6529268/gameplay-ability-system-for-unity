@@ -1,11 +1,14 @@
 # NTSD 长期项目状态
 
-> 最后更新：2026-08-25
+> 最后更新：2026-08-26
 > 状态口径：只记录已检查的事实、明确推断和未知项；不以聊天历史作为唯一项目记忆。
 
 
 ## 当前阶段
 
+- **2026-08-26 MAPCFG-005 已写入代码与资产**：`CODE_WRITTEN / COMPILE_PENDING`。用户确认删除 `Desert01_Presentation`，将背景图并入 `Desert01_Boundary`，并从地图资产数据中删除 `boundaryName` / 多边形 `name`。当前收敛为单一 Boundary Asset：`mapId/displayName/revision/backgroundSprite/boundaries(polygons/verticesWorld)`；加载到既有 `BoundaryWall` 时仅在内存生成序号名以保留共享运行时兼容接口。已修改 BoundaryDefinition/Catalog/Bootstrap/BoundaryWallManager、四个 MAPCFG focused Editor tests、Desert01/Catalog 资产，并删除独立 Presentation 脚本/资源。静态契约检查、`git diff --check` 和 MAPCFG-005 Ledger 覆盖校验已通过；Unity 正式程序集和 focused test 仍待。
+- **2026-08-26 MAPCFG-005 验证边界**：Unity Editor 修复前实际编译日志发现 `BattleMapBoundaryDefinition.cs` 4 个 `CS0122`，现已通过构造函数 deep-copy 修复；随后复用 Unity 生成的 Roslyn 参数完成交叉编译，退出码 `0`，输出仅有工程既有 warnings。当前 Unity Editor PID `37088` 的 `Assembly-CSharp*.dll` 仍停留在 2026-08-25 17:24:38/17:24:39，修复后的正式程序集尚未生成；22:52:28 的 `BattleRuntimeSelfCheck=PASS` 仍是旧程序集结果，不能计入本包。临时 dotnet wrapper 因生成工程所需 `Temp\\bin\\Debug` firstpass/package DLL 缺失而 CS0006，未进入项目源代码编译；该结果不作 compile 结论。不得把 MAPCFG-005 标为 `COMPILE_PASS`、`FOCUSED_TEST_PASS` 或 `VERIFIED`。
+- **2026-08-26 MAPCFG-005 范围边界**：不删除共享 `BoundaryData` / `PolygonData` 的历史兼容字段，不改 BoundaryWall 几何、tick、输入、RNG、checksum、Camera、服务器或 C++；删除仅限 Presentation 类型/资源及其 Catalog/runtime 引用，`Desert01_Boundary.asset` 不再保存名称字段。真实 Battle Scene/Play 验收仍需在代码级验证后单独判断。
 - **2026-08-25 MAPCFG-004 代码级验证完成**：`FOCUSED_TEST_PASS / RUNTIME_PENDING / DEPLOYMENT INPUT PENDING`。Unity import/compile 完成；P4 focused job `51942ac652474e6c9ba42427a93ba44a` 为4/4 PASS，P1–P4 cross-phase job `50c3e1586f5145e18b6d990662b920b0` 为14/14 PASS，既有 BattleRuntimeSelfCheck result 于17:33:25写入PASS。空配置继续零mutation且不触发 P4 Stage refresh；实际Map prepare才在角色创建前刷新Stage。没有创建真实Map Asset/MapId/Scene/Bg，也未跑Play/Player；当前只缺用户配置资产与引用后的真实Scene验收及本轮final governance。
 - **2026-08-25 MAPCFG-004 治理验证**：`RUNTIME_PENDING / DEPLOYMENT INPUT PENDING`。`Tools/Validate-ChangeLedger.ps1` 已通过（105 条 Record、141 个 governed code diff covered），P4 scoped diff也已通过（只有既有 LF→CRLF 提示、无 whitespace error）；当前仅等待用户配置真实 Map Asset/MapId/Inspector 引用后才可进行的 Scene/Play 验收。不得将当前证据写成真实地图已部署。
 - **2026-08-25 MAPCFG-004 代码已写**：`CODE_WRITTEN / COMPILE PENDING / DEPLOYMENT INPUT PENDING`。已新增 optional `BattleBootstrap` Catalog+MapId+Boundary manager+同一world Bg renderer 配置、prepare/clear、App/BattleTest 的 fail-close startup gate和四项内存 focused test。空配置仍为零 mutation 的 legacy fallback，且不触发 P4 新增 Stage refresh；只有实际 map prepare 成功时才会在角色创建前刷新 Stage snapshot。未写真实 Asset/MapId/Scene/Bg、Camera/Transform/PPU、DAT、C++、服务器或战斗规则；compile/test/self-check/治理验证均待。正式部署仍必须等待用户配置资产和引用。

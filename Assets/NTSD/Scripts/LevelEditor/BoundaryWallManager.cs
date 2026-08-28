@@ -454,7 +454,16 @@ namespace NTSD.LevelEditor
             var pendingBoundaries = new List<BoundaryWall>(definition.Boundaries.Count);
             for (int boundaryIndex = 0; boundaryIndex < definition.Boundaries.Count; boundaryIndex++)
             {
-                BoundaryData boundaryData = definition.Boundaries[boundaryIndex];
+                if (!TryCreateRuntimeBoundaryData(
+                        definition.Boundaries[boundaryIndex],
+                        boundaryIndex,
+                        out BoundaryData boundaryData,
+                        out failure))
+                {
+                    DestroyBoundaryCarriers(pendingBoundaries);
+                    return false;
+                }
+
                 GameObject carrierObject = new GameObject(
                     "__BoundaryAssetRuntime_" + boundaryIndex.ToString("D2") + "_" +
                     (boundaryData.boundaryName ?? "Boundary"));
@@ -686,6 +695,68 @@ namespace NTSD.LevelEditor
             }
         }
 
+        private static bool TryCreateRuntimeBoundaryData(
+            BattleMapBoundaryDefinition.MapBoundaryData mapBoundary,
+            int boundaryIndex,
+            out BoundaryData boundaryData,
+            out string failure)
+        {
+            boundaryData = null;
+            if (mapBoundary == null || mapBoundary.Polygons == null || mapBoundary.Polygons.Count == 0)
+            {
+                failure = "Map boundary data must contain at least one polygon.";
+                return false;
+            }
+
+            boundaryData = new BoundaryData
+            {
+                boundaryName = "Boundary " + (boundaryIndex + 1).ToString("D2"),
+                polygons = new List<PolygonData>(mapBoundary.Polygons.Count),
+            };
+            for (int polygonIndex = 0; polygonIndex < mapBoundary.Polygons.Count; polygonIndex++)
+            {
+                BattleMapBoundaryDefinition.MapPolygonData mapPolygon =
+                    mapBoundary.Polygons[polygonIndex];
+                if (mapPolygon == null ||
+                    mapPolygon.VerticesWorld == null ||
+                    mapPolygon.VerticesWorld.Count < 3)
+                {
+                    boundaryData = null;
+                    failure = "Map boundary data contains a polygon with fewer than three world vertices.";
+                    return false;
+                }
+
+                var polygonData = new PolygonData
+                {
+                    name = "Polygon " + (polygonIndex + 1).ToString("D2"),
+                    verticesWorld = new List<Vector2Data>(mapPolygon.VerticesWorld.Count),
+                };
+                for (int vertexIndex = 0; vertexIndex < mapPolygon.VerticesWorld.Count; vertexIndex++)
+                {
+                    Vector2Data mapVertex = mapPolygon.VerticesWorld[vertexIndex];
+                    if (mapVertex == null ||
+                        !BattleMapDefinitionValidation.IsFinite(mapVertex.x) ||
+                        !BattleMapDefinitionValidation.IsFinite(mapVertex.y))
+                    {
+                        boundaryData = null;
+                        failure = "Map boundary data contains a non-finite world vertex.";
+                        return false;
+                    }
+
+                    polygonData.verticesWorld.Add(new Vector2Data
+                    {
+                        x = mapVertex.x,
+                        y = mapVertex.y,
+                    });
+                }
+
+                boundaryData.polygons.Add(polygonData);
+            }
+
+            failure = string.Empty;
+            return true;
+        }
+
         // ==================== JSON 导出 ====================
 
 #if UNITY_EDITOR
@@ -709,23 +780,20 @@ namespace NTSD.LevelEditor
                 return false;
             }
 
-            for (int index = 0; index < sceneBoundaries.Count; index++)
-            {
-                string sceneName = sceneBoundaries[index].BoundaryName ?? string.Empty;
-                string assetName =
-                    _authoringBoundaryDefinition.Boundaries[index].boundaryName ?? string.Empty;
-                if (!string.Equals(sceneName, assetName, System.StringComparison.Ordinal))
-                {
-                    failure = "Scene BoundaryWall order/name does not match the authoring Boundary Definition.";
-                    return false;
-                }
-            }
-
             Undo.RecordObjects(sceneBoundaries.ToArray(), "Load Map Boundary Asset");
             for (int index = 0; index < sceneBoundaries.Count; index++)
             {
-                if (!sceneBoundaries[index].TryApplyWorldBoundaryData(
+                if (!TryCreateRuntimeBoundaryData(
                         _authoringBoundaryDefinition.Boundaries[index],
+                        index,
+                        out BoundaryData boundaryData,
+                        out failure))
+                {
+                    return false;
+                }
+
+                if (!sceneBoundaries[index].TryApplyWorldBoundaryData(
+                        boundaryData,
                         out failure))
                 {
                     return false;
@@ -1023,7 +1091,7 @@ namespace NTSD.LevelEditor
                     {
                         if (EditorUtility.DisplayDialog(
                                 "Load Map Boundary Asset",
-                                "This explicitly replaces matching Scene BoundaryWall vertices. The Scene is marked dirty but is not saved automatically.",
+                                "This explicitly replaces Scene BoundaryWall vertices in stable hierarchy order. The Scene is marked dirty but is not saved automatically.",
                                 "Load",
                                 "Cancel"))
                         {

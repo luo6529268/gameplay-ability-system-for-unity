@@ -14,11 +14,9 @@ namespace NTSD.LevelEditor
         {
             [SerializeField] private string mapId = "";
             [SerializeField] private BattleMapBoundaryDefinition boundaryDefinition;
-            [SerializeField] private BattleMapPresentationDefinition presentationDefinition;
 
             public string MapId => mapId;
             public BattleMapBoundaryDefinition BoundaryDefinition => boundaryDefinition;
-            public BattleMapPresentationDefinition PresentationDefinition => presentationDefinition;
         }
 
         [SerializeField] private List<Entry> entries = new List<Entry>();
@@ -97,26 +95,14 @@ namespace NTSD.LevelEditor
                 return false;
             }
 
-            if (entry.PresentationDefinition == null)
-            {
-                failure = "Map catalog entry has no presentation definition.";
-                return false;
-            }
-
             if (!entry.BoundaryDefinition.TryValidate(out failure))
-                return false;
-
-            if (!entry.PresentationDefinition.TryValidate(out failure))
                 return false;
 
             if (!BattleMapDefinitionValidation.MapIdsMatch(
                     entry.MapId,
-                    entry.BoundaryDefinition.MapId) ||
-                !BattleMapDefinitionValidation.MapIdsMatch(
-                    entry.MapId,
-                    entry.PresentationDefinition.MapId))
+                    entry.BoundaryDefinition.MapId))
             {
-                failure = "Map catalog entry MapId does not match its definitions.";
+                failure = "Map catalog entry MapId does not match its boundary definition.";
                 return false;
             }
 

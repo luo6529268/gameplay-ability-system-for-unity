@@ -1,19 +1,18 @@
 # BATTLE-MAP-BOUNDARY-ASSET-001 — Map ID 与 BoundaryWall 配置化总合同
 
-> 状态：PLANNED / NO CODE  
+> 状态：IN_PROGRESS / MAPCFG-005 CONSOLIDATION
 > 日期：2026-08-25  
 > 规范计划：Assets/NTSD/Docs/battle-map-boundary-asset-configuration-plan.md
 
 ## Goal
 
-将当前 BoundaryWall 和 BoundaryWallManager 已有的任意多边形可行走区域，从 Scene 固化数据改为按 MapId 选择的 Asset 数据；同时用另一份 Asset 保存同 MapId 的背景和表现资源。
+将当前 BoundaryWall 和 BoundaryWallManager 已有的任意多边形可行走区域，从 Scene 固化数据改为按 MapId 选择的单一 Boundary Asset；该 Asset 同时保存同一地图的背景资源。
 
 本任务复用现有 polygon 行为，不创建新的战斗物理规则。
 
 ## Scope
 
-- BattleMapBoundaryDefinition：MapId 和现有 BoundaryWall 语义的多边形世界顶点；
-- BattleMapPresentationDefinition：MapId 和背景/表现资源；
+- BattleMapBoundaryDefinition：MapId、边界几何和背景 Sprite；
 - 最小 MapId 配对表；
 - BoundaryWallManager 的数据源切换；
 - BoundaryWall Editor 的显式 Asset 往返；
@@ -38,10 +37,11 @@
 
 | 阶段 | ID | Goal | 当前状态 |
 |---|---|---|---|
-| P1 | MAPCFG-001 | 两类 Asset 与 Map ID 配对 | IN_PROGRESS / PRE-CODE |
-| P2 | MAPCFG-002 | Manager 从 Boundary Asset 加载、保持现有 API 行为 | NOT_STARTED |
-| P3 | MAPCFG-003 | Editor 显式加载/应用/预览 | NOT_STARTED |
-| P4 | MAPCFG-004 | Bootstrap Map ID 选择、背景资源与验收 | NOT_STARTED |
+| P1 | MAPCFG-001 | Boundary Asset 与 Map ID 配对 | FOCUSED_TEST_PASS |
+| P2 | MAPCFG-002 | Manager 从 Boundary Asset 加载、保持现有 API 行为 | RUNTIME_PENDING |
+| P3 | MAPCFG-003 | Editor 显式加载/应用/预览 | FOCUSED_TEST_PASS |
+| P4 | MAPCFG-004 | Bootstrap Map ID 选择、背景资源与验收 | RUNTIME_PENDING / DEPLOYMENT INPUT PENDING |
+| P5 | MAPCFG-005 | 合并 Boundary/Presentation 资产、移除地图名称字段依赖 | IN_PROGRESS |
 
 ## 验收总则
 
@@ -51,8 +51,8 @@
 4. Editor 中最终 Apply 的数据与 Play Mode 实际加载的数据相同；
 5. 每个脚本改动均有独立 Change Record、Ledger、State、Handoff 和 Validator 证据。
 
-## 下一包
+## 当前收口包
 
-MAPCFG-001。先只新增数据类型与纯数据校验，不接入 runtime，不保存场景，不修改现有 BoundaryWall 几何算法。
+MAPCFG-005。删除独立 Presentation 类型与 Desert01 Presentation 资源，将背景 Sprite 并入 Boundary Asset；地图资产只保留几何序列，不再序列化 boundaryName 或多边形 name。共享 JSON/BoundaryWall 运行时结构的兼容字段暂不删除。
 
-MAPCFG-001 已完成 pre-code 审计和 Change Record 留痕，接下来只允许写入数据类型与 focused Editor test。
+MAPCFG-005 已完成 pre-code 审计和 Change Record 留痕，当前只允许修改其列明的脚本、测试、地图资产和状态文档；完成 compile/focused test/self-check/validator 后再判断真实 Play 验收是否具备条件。
