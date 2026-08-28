@@ -2,7 +2,6 @@
   "dependencies": {
     "com.coplaydev.unity-mcp": "file:../../unity-mcp/MCPForUnity",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-    "com.exhard.exmaidforui": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "4.4.2",
