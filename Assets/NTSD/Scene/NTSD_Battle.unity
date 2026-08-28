@@ -5932,10 +5932,10 @@ MonoBehaviour:
   worldCamera: {fileID: 2051450407}
   uiCamera: {fileID: 916859858}
   battleCanvas: {fileID: 1947371492}
-  mapCatalog: {fileID: 0}
-  mapId: 
-  boundaryManager: {fileID: 0}
-  backgroundRenderer: {fileID: 0}
+  mapCatalog: {fileID: 11400000, guid: 79ce5ea586f3e6147a5a45bfa732a344, type: 2}
+  mapId: Sunagakure
+  boundaryManager: {fileID: 719159763}
+  backgroundRenderer: {fileID: 168004531}
 --- !u!4 &1914842846
 Transform:
   m_ObjectHideFlags: 0
