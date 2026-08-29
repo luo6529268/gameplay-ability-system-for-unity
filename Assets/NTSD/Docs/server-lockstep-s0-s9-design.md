@@ -11,6 +11,23 @@
 
 本文是 S0～S9 的唯一详细设计合同。上位统一方案只保留总览、单机阶段和跨计划边界；本文件定义服务器阶段的每一步要解决什么问题、采用什么方案、失败时如何处置、以什么证据关闭。
 
+> **阶段档案治理补充（2026-08-29）：** 本文继续拥有跨阶段架构、不变量、阶段顺序和退回规则；[`ServerLockstepStages/README.md`](ServerLockstepStages/README.md) 及 S0～S9 十份固定模板阶段档案承载逐阶段目标、玩家表现、数据顺序、Decision/Audit链接、实现包、边界、验收矩阵、退出条件和下一阶段移交。阶段档案是本设计的派生展开，不能覆盖或放宽本文；当前状态总账仍由 [`server-lockstep-s0-s9-progress.md`](server-lockstep-s0-s9-progress.md) 持有。
+
+阶段入口：
+
+| 阶段 | 独立阶段文档 |
+|---|---|
+| S0 | [`ServerLockstepStages/S0-formal-authority-baseline.md`](ServerLockstepStages/S0-formal-authority-baseline.md) |
+| S1 | [`ServerLockstepStages/S1-authority-input-protocol.md`](ServerLockstepStages/S1-authority-input-protocol.md) |
+| S2 | [`ServerLockstepStages/S2-weak-network-frame-delivery.md`](ServerLockstepStages/S2-weak-network-frame-delivery.md) |
+| S3 | [`ServerLockstepStages/S3-snapshot-history-recovery.md`](ServerLockstepStages/S3-snapshot-history-recovery.md) |
+| S4 | [`ServerLockstepStages/S4-presentation-prediction-decision.md`](ServerLockstepStages/S4-presentation-prediction-decision.md) |
+| S5 | [`ServerLockstepStages/S5-shared-kernel-independent-host.md`](ServerLockstepStages/S5-shared-kernel-independent-host.md) |
+| S6 | [`ServerLockstepStages/S6-real-transport.md`](ServerLockstepStages/S6-real-transport.md) |
+| S7 | [`ServerLockstepStages/S7-public-weak-network-runtime.md`](ServerLockstepStages/S7-public-weak-network-runtime.md) |
+| S8 | [`ServerLockstepStages/S8-control-plane-multi-room.md`](ServerLockstepStages/S8-control-plane-multi-room.md) |
+| S9 | [`ServerLockstepStages/S9-release-capacity-operations.md`](ServerLockstepStages/S9-release-capacity-operations.md) |
+
 服务器阶段的目标不是另写一套游戏，而是让同一套已经由 C++ release live runtime 约束的 C# `BattleKernel` 在 Unity Client 与独立 Server Host 上接受同一份 `FrameInputSet`、得到同一战斗结果。
 
 以下边界始终成立：
@@ -170,8 +187,8 @@ InputSubmission（当前输入 + 未确认冗余输入）
 |---|---|---|
 | `InputDelayFrames` | 客户端输入作用到未来权威帧的帧数 | S1/S2 测量后确定 |
 | `FrameDeadline` | 服务器锁定某权威帧的时间边界 | S1/S2 测量后确定 |
-| `GraceFrames` | 输入短暂缺失仍处于 grace 的上限 | C++ trace + 产品规则待定 |
-| `MaxMissingFrames` | 转入 neutral/托管/断线处置前的连续缺失上限 | 产品规则待定 |
+| `GraceFrames` | 连接/恢复仍处于 grace 的上限；不得解释成战斗 held carry | 数值仍待 S2 测量和版本化配置 |
+| `MaxMissingFrames` | 转入托管/断线处置前的连续缺失上限；human held carry 已固定为 0 | 数值仍待 S2 测量和模式配置 |
 | `MissingInputPolicy` | 短暂缺失、持续缺失、重连与模式差异的规则版本 | S1 定义、逐模式确认 |
 
 这些参数不能由单个客户端即时改变。若未来需要调整，只能由服务器广播新的 policy version，并指定一个全体客户端都能观察到的未来生效 tick。
@@ -189,7 +206,7 @@ ModeApprovedAiTakeover
 Disconnected
 ```
 
-任何缺失填充都不能凭空生成新的 `pressed` 或 `released` 边沿，特别是 J/K/L、方向组合、跳跃、防御和技能组合键。方向与持续按住状态是否可以短期沿用、何时转为 neutral、PvP 是否可托管、PVE 是否可 AI 接管，必须先分别满足：
+任何缺失填充都不能凭空生成新的 `pressed` 边沿。用户于 2026-08-29 以原版在线证据确认：human deadline missing 的 held carry 上限为 0，当前 Tick 解析为 neutral；neutral 相对上一 locked held 可以派生一次正常 `released`，但后续 neutral 不得重复。连接 grace、PvP 结果、PvE AI ownership barrier 和 recovery 仍必须分别满足：
 
 1. C++ release live `input_handler.cpp` 及关联 tick trace 已确认对 held/pressed/released 的真实消费语义；
 2. 用户已确认相应模式的产品规则；
@@ -280,7 +297,7 @@ Disconnected
 **方案**：
 
 - 定义 versioned、transport-agnostic 的 `InputSubmission`、`AuthoritativeFrameEnvelope`、`FrameAck`、`ServerProgress` 与稳定错误码；
-- `InputSubmission` 包含 session、player slot、client sequence、future target tick、完整 held/pressed/released 状态及已确认服务器进度；
+- human `InputSubmission` 包含 session、connection/owned slots、client sequence、future target tick、每个 owned slot 的完整 held mask及已确认服务器进度；locked held 是唯一 canonical human input，Server/formal Kernel 从前一 locked held 派生 pressed/released并写入不可变 authority history；Client edge若未来保留只可作可选诊断 witness；
 - 服务器按 `(session, target tick, canonical player slot)` 去重、排序、校验身份和 deadline；同一键的第一次合法内容胜出，冲突内容保留 witness 并拒绝覆盖；
 - deadline 到达后无条件锁定完整帧，每 slot 带 `InputSource/FillReason`；迟到输入只能被确定性拒绝或接受到尚未锁定的未来 target，永不回填历史帧；
 - protocol、RPC、Unity 类型与具体网络库不得进入 BattleKernel 或 `FrameInputSet`。

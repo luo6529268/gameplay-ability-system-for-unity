@@ -1127,6 +1127,24 @@ namespace NTSD.Simulation
             return IsActiveForCurrentPass(obj);
         }
 
+        internal bool HasUnityPresentationBindingsForDedicatedWorker()
+        {
+            for (int runtimeSlot = 0; runtimeSlot < RuntimeSlotCapacity; runtimeSlot++)
+            {
+                LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
+                if (entity == null)
+                    continue;
+
+                if (!ReferenceEquals(entity.Renderer, null) ||
+                    !ReferenceEquals(entity.ShadowRenderer, null))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private int AllocateStableId()
         {
             return _nextAutoStableId++;

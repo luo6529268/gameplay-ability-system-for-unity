@@ -1,9 +1,25 @@
 # NTSD S0～S9 服务器权威帧同步：进度、证据与问题台账
 
+> **总账入口（2026-08-29）：** 本文是 S0～S9 当前状态、阻塞和下一步的总账；详细阶段方案统一从 [`ServerLockstepStages/README.md`](ServerLockstepStages/README.md) 进入。Task Contract 只定义一个实现包，Change Record 只记录一次实际改动；Audit/Decision 继续是证据和用户决议的唯一来源。阶段档案创建未改变下表任何状态。
+
+| 阶段 | 当前状态（原样保留） | 阶段档案 | 当前正式门槛 |
+|---|---|---|---|
+| S0 | `FOCUSED_TEST_PASS / SELFCHECK_PASS / EXISTING_LOCKSTEP_PASS / WITNESS_IMPLEMENTATION_REQUIRED` | [S0](ServerLockstepStages/S0-formal-authority-baseline.md) | formal same-Kernel multi-world ten-domain/first-difference proof；Client当前冻结 |
+| S1 | `FORMAL_NOT_STARTED / SERVER_PREIMPLEMENTATION_EXISTS` | [S1](ServerLockstepStages/S1-authority-input-protocol.md) | S0 `VERIFIED`、formal Kernel/tick mapping、Client capture/wire |
+| S2 | `FORMAL_NOT_STARTED / SERVER_PREIMPLEMENTATION_EXISTS` | [S2](ServerLockstepStages/S2-weak-network-frame-delivery.md) | S1 `VERIFIED`、GP decisions、真实Client消费与弱网矩阵 |
+| S3 | `NOT_STARTED` | [S3](ServerLockstepStages/S3-snapshot-history-recovery.md) | S2 `VERIFIED`、formal snapshot/history/recovery contract |
+| S4 | `NOT_STARTED` | [S4](ServerLockstepStages/S4-presentation-prediction-decision.md) | S3 `VERIFIED`；预测不是必做功能 |
+| S5 | `NOT_STARTED` | [S5](ServerLockstepStages/S5-shared-kernel-independent-host.md) | S4 `VERIFIED`、shared formal Kernel、actor/atomic fault contract |
+| S6 | `NOT_STARTED` | [S6](ServerLockstepStages/S6-real-transport.md) | S5 `VERIFIED` 与授权 endpoint/security 环境 |
+| S7 | `NOT_STARTED` | [S7](ServerLockstepStages/S7-public-weak-network-runtime.md) | S6 `VERIFIED` 与授权公网/移动测试矩阵 |
+| S8 | `NOT_STARTED` | [S8](ServerLockstepStages/S8-control-plane-multi-room.md) | S7 `VERIFIED` 与产品/安全/资源决策 |
+| S9 | `NOT_STARTED` | [S9](ServerLockstepStages/S9-release-capacity-operations.md) | S0～S8新鲜证据与发布授权 |
+
+> **最新输入决议与实现结果（2026-08-29，优先于下方所有 pending 表述）：** 用户指定 Server [`NTSD28-ORIGINAL-ONLINE-LOCKSTEP-EVIDENCE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/NTSD28-ORIGINAL-ONLINE-LOCKSTEP-EVIDENCE-001.md) 及其 SHA-256 已核对的完整原版报告为 `S-PROTO-001` 和 human missing carry 决议。正式合同是 Client held-only、Server从previous/current locked held派生edge、首帧all-released、AI无Client owner；中央Server在deadline将缺失human解析为neutral，held carry上限0。`S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001`已在Server Protocol/BattleHost/tests范围关闭为`FOCUSED_TEST_PASS / SERVER_HUMAN_AUTHORITY_INPUT_READY / CLIENT_PAUSED / S1-S2-PREIMPLEMENTATION`；test-first、focused、Debug/Release十项目`0/0`、full Server tests、no-network local host和治理校验通过。不改Client/wire/transport/formal Kernel/recovery，不选择numeric grace/delay/deadline，也不晋升S1/S2 VERIFIED。
 > **最新 Server-first 状态同步（2026-08-25，优先于下方旧的“最近完成”表述）：** `S0-SERVER-BOOTSTRAP-NODE-IDENTITY-001 = FOCUSED_TEST_PASS / SERVER_BOOTSTRAP_NODE_IDENTITY_READY / S0_SERVER_FIRST_CORRECTION / CLIENT_PAUSED` 与 `S1-SERVER-POLICY-VERSION-VALUE-001 = FOCUSED_TEST_PASS / SERVER_POLICY_VERSION_VALUE_READY / S1_SERVER_FIRST_PREIMPLEMENTATION / CLIENT_PAUSED` 已关闭。前者使 Protocol-owned `NodeId` 成为本地 bootstrap/health 的有效身份事实；后者使既有 Model B/C1 的 `PolicyVersion` 成为 Protocol/BattleHost 强类型，并保留 `InputSubmission` 不含 policy field、activation/journal/ACK/ready 行为及已形成 `TargetTick`/`InputDelayFrames` 语义不变。两包均有 test-first、focused、Debug/Release 十项目 `0/0`、full Server tests、no-network local host、declared-path audit 和最终 Server workflow/Ledger 证据；它们均不闭合 formal S0/S1/S2，不授权 Client、wire、transport、snapshot/recovery、rebarrier、missing-input 或 battle-rule 修改。最新 Server 选择审计为 [`S0-S1-SERVER-FIRST-NEXT-SOURCE-AUDIT-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S0-S1-SERVER-FIRST-NEXT-SOURCE-AUDIT-001.md)：当前无活跃/READY 源码包，但 Server-first 总目标仍 active；只等待命名的 `S-PROTO-001`、`S-NET-001/002` 或 Client/formal-Kernel/S3/S5 gate，而非再次请求泛化 Server 授权。
 > 状态：最近完成`S1-SERVER-POLICY-ACTIVATION-SCHEDULE-001 = FOCUSED_TEST_PASS / SERVER_POLICY_ACTIVATION_SCHEDULE_READY / CLIENT-PAUSED / S1-PREIMPLEMENTATION`；用户已确认Model B，Server room/session以target authority tick解析future-effective policy activation并把resolved version写入immutable locked envelope history，`InputSubmission`仍不带per-submission `PolicyVersion`。它不选择capture、missing-input、AI、Kernel、Client、wire、InputDelay、rebarrier或recovery行为。前置 S1 tick/future bound、S2 redundancy-ingress capacity、disorder/gap/redundancy/ready buffer/ACK 与其他packages也均为 focused-test ready。本台账只追踪服务器阶段；它不把单机 U0～U9、C++→Unity 重新对齐、T8 默认 `stage.dat` 或 Android 真机任务误写为服务器已完成。  
 > 最新 C1 状态（2026-08-25，优先于上句“最近完成”历史措辞）：`S2-SERVER-CROSS-POLICY-ACTIVATION-JOURNAL-001 = FOCUSED_TEST_PASS / SERVER_CROSS_POLICY_JOURNAL_READY / CLIENT_PAUSED / S2-PREIMPLEMENTATION`。用户确认的Server-only C1实现activation journal独立cursor/ack、next-tick resolved `ServerProgress.PolicyVersion` 与acknowledged-prefix cross-policy gap/ready guard；test-first red、Debug/Release十项目`0/0`、full Server tests、no-network local host、declared C1 audit和final Ledger`24 / 78`均通过。它不闭合S2/S3，且不授权Client、wire、transport、snapshot/recovery、rebarrier、InputDelay或missing-input工作。  
-> 缺失输入决策状态（2026-08-25，只读）：Server [`PENDING-S1-S2-MISSING-INPUT-PRODUCT-CONTRACT-001.md`](../../../../NTSD_Server/docs/ai/DECISIONS/PENDING-S1-S2-MISSING-INPUT-PRODUCT-CONTRACT-001.md) 现明确 S-NET-001/002 仍需用户确认；现有 logical deadline、caller-owned policy interface 和 source/reason provenance 只证明机制，不选择 grace/max-missing、payload、neutral/carry、AI、disconnect/reconnect 或 mode 行为。该卡不授权任何 Client 或 Server 源码。  
+> 缺失输入与网络时间决策状态（2026-08-29，取代此前 pending 表述）：Server [`PENDING-S1-S2-MISSING-INPUT-PRODUCT-CONTRACT-001.md`](../../../../NTSD_Server/docs/ai/DECISIONS/PENDING-S1-S2-MISSING-INPUT-PRODUCT-CONTRACT-001.md) 已记录 held carry=0、deadline missing-neutral、PvP/PvE完整30秒后formal-Kernel AI barrier、比赛继续、GP-06可重连，以及约1秒short-grace测试候选；GP-01又确认固定30Hz与本局tick/delay语义、按Client动态冗余/补发/gap、连续消费、有界追帧和表现隔离。formal AI/ownership/recovery和production timing数值仍待实现或实测；这些确认不授权任何 Client 或 Server 源码。
 > 持久执行流程（2026-08-25）：Server [`S0-S9-EXECUTION-WORKFLOW.md`](../../../../NTSD_Server/docs/ai/S0-S9-EXECUTION-WORKFLOW.md) 与 [`S0-S9-NEXT-PACKAGE-QUEUE.md`](../../../../NTSD_Server/docs/ai/S0-S9-NEXT-PACKAGE-QUEUE.md) 是未来会话的唯一选包入口。每次先选最早 READY row；局部 GATED/DEFERRED 只阻断对应包，不得使整个 Server-first 目标失忆或被泛化暂停。  
 > 持久流程验证（2026-08-25）：Server GOVERNANCE-S0-S9-EXECUTION-WORKFLOW-001 已写入并验证只读 [`Validate-S0S9ExecutionWorkflow.ps1`](../../../../NTSD_Server/scripts/Validate-S0S9ExecutionWorkflow.ps1)。它检查 queue/anchor 一致性、最多一个 ACTIVE 和 no-READY 自洽性；每次 queue/交接更新后必须运行。它不代表任何 battle 或阶段 VERIFIED 证据。  
 > 详细设计合同：[server-lockstep-s0-s9-design.md](server-lockstep-s0-s9-design.md)。  
@@ -22,17 +38,17 @@
 
 | 字段 | 当前值 |
 |---|---|
-| 持续目标 | Server-first 持续推进；Client 仅暂停，不等于总目标暂停 |
+| 持续目标 | Server-first 持续推进；每个Server包必须声明`ClientImpact=NONE/AUDIT_REQUIRED/VERIFY_ONLY/MODIFY_REQUIRED`。Client门禁只阻塞相关包/阶段关闭，不暂停独立Server-only READY工作。 |
 | 当前服务器阶段 | `S0` formal close 仍待；同时进行用户目标授权的 `S1` Server-only preimplementation，绝不标记阶段 `VERIFIED` |
 | 阶段状态 | `S0_SERVER_ROOM_JOURNAL_READY / S0_FORMAL_CLIENT_PROOF_DEFERRED / S1_PREIMPLEMENTATION` |
-| 当前 Work Package | 无源码包活跃；最近完成为`S1-SERVER-POLICY-VERSION-VALUE-001 / FOCUSED_TEST_PASS / SERVER_POLICY_VERSION_VALUE_READY / S1_SERVER_FIRST_PREIMPLEMENTATION / CLIENT_PAUSED`。它将既有 Model B/C1 policy identity 收束为 Protocol/BattleHost 强类型，同时保留 `InputSubmission` 无 policy field、activation journal/cursor/ack、next-tick `ServerProgress` 和 acknowledged-prefix gap/ready 行为。test-first、focused、Debug/Release十项目`0/0`、full Server tests、no-network host、declared-path audit和final workflow/Ledger`31 / 51`均通过；不是formal S1/S2闭合。 |
-| 当前 Change ID | 无活跃 Server Change ID；最近关闭为`S1-SERVER-POLICY-VERSION-VALUE-001`，此前`S0-SERVER-BOOTSTRAP-NODE-IDENTITY-001`也已关闭。Client `S0-WITNESS-001` 保持既有 `CODE_WRITTEN / COMPILE_PENDING`，用户当前暂停其任何动作。 |
-| 下一项允许动作 | [`S0-S1-SERVER-FIRST-NEXT-SOURCE-AUDIT-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S0-S1-SERVER-FIRST-NEXT-SOURCE-AUDIT-001.md) 已确认当前没有可凭空扩展的 Server-only 源码包。下一触发是用户确认/修订 formal input `S-PROTO-001`（最早队列行），独立地确认`S-NET-001/002`，或取得 Client/formal-Kernel/S3/S5 的命名 gate；收到后直接将对应 queue row 标为 READY、建立独立 Task/Change Record 并实施，不再询问泛化 Server 范围。 |
+| 当前 Work Package | 无 ACTIVE/READY Server 源码包。最近关闭`S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001 / FOCUSED_TEST_PASS / SERVER_HUMAN_AUTHORITY_INPUT_READY / CLIENT-PAUSED / S1-S2-PREIMPLEMENTATION`。 |
+| 当前 Change ID | `S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001`。Client `S0-WITNESS-001` 保持既有 `CODE_WRITTEN / COMPILE_PENDING`并继续冻结。 |
+| 下一项允许动作 | 不再询问held-only或GP-01～GP-09。先按已确认产品合同为当前Server候选逐项标记ClientImpact并重整queue；再选最早合法的有界Server-only前置/包。order 2仍需formal Kernel AI ownership/state-hash/barrier与实测production timing；禁止hidden default、placeholder AI、未经授权Client/wire/transport扩张。 |
 | 当前外部阻塞 | S0 formal close 的 Client multi-world/ten-domain proof deferred；S2 formal close仍需真实 Client 连续消费、单客户端黑洞/极端抖动矩阵和用户批准的 grace/neutral/recovery 行为；S3/S5 又需 formal Kernel（当前 marker 为 false）。C++ release 只读审计确认其 `InputHandler::snapshot()` 是按键快照、`snapshot_phase210_table()` 是 UI/结算表，且 live RNG 为跨 input/game tick/collision/frame advance 的 global LCG，因此 formal snapshot 不能由 generic frame list 替代；字段级 inventory 见 `NTSD_Server/docs/ai/AUDITS/S3-FORMAL-SNAPSHOT-PREREQUISITE-001.md`。此外，sequence/history retention仍需版本化决定，而`S1-PROTOCOL-VERSION-EVOLUTION-PREREQUISITE-001`确认`ProtocolVersion=1`尚非有协商/ABI/rolling-upgrade/replay-supersede合同；三者均需formal/product/transport范围后才能实施。这些限制阶段 verified claim 和新源码范围，但不暂停 Server-first goal。C++ full-trace 观察链路仍为独立范围边界 |
 | 不允许做的事 | 不修改/编译/测试 Client；不接公网、不把 TestKernel 当正式 battle Kernel、不自行选择 neutral/carry/AI/断线规则、不宣称 S0/S1 `VERIFIED` |
 | 最新服务器验证 | 除既有 S0 room/journal、S1/S2 generic Server-only 覆盖外，`S0-SERVER-BOOTSTRAP-NODE-IDENTITY-001` 已使本地 host 输出`NodeId=local-node / BootstrapReady / Liveness=True / Readiness=True / NetworkListenerStarted=False`；`S1-SERVER-POLICY-VERSION-VALUE-001` 已通过 Model B/C1 Protocol/BattleHost 回归。两包的 Debug/Release 十项目均为`0 warnings / 0 errors`，Protocol/BattleHost/Architecture/Integration self-hosted Server tests、no-network local run、source audit 和最终 workflow/Ledger`31 / 51`均通过。它们都不是 Client/runtime/C++ battle 对齐或 S0/S1/S2 `VERIFIED`。 |
 
-持续目标的强制暂停条件：若下一项实现必须修改、编译、运行或验证 Unity Client，先在本台账新增 `CLIENT_INTEGRATION_REQUIRED` 条目，列出需要修改的文件、接口、原因、服务器侧已有证据和不修改客户端无法继续的具体门槛；随后停止实施并等待用户明确批准。不得借“共享代码”“顺手验证”或“只有一行”绕过该边界。
+持续目标的Client门禁：每个Server包先声明`ClientImpact`。若为`AUDIT_REQUIRED`，仅执行具名只读Client审计；若为`VERIFY_ONLY`或`MODIFY_REQUIRED`，先在本台账新增`CLIENT_INTEGRATION_REQUIRED`，列出文件/接口、原因、Server证据、最窄验收和回滚边界，再暂停该包并等待用户明确批准。该门禁不得暂停无关的Server-only READY包；不得借“共享代码”“顺手验证”或“只有一行”绕过授权边界。
 
 ### 0.1 每次恢复时必须执行的读取顺序
 
@@ -140,13 +156,13 @@ Ledger + 本 Resume Card 写入 Work Package / Change ID / 下一步
 
 | 决策 ID | 状态 | 决策内容 | 决定时机 | 证据要求 |
 |---|---|---|---|---|
-| `S-NET-001` | `PENDING_PRODUCT_RULE` | PvP 持续缺失输入后采用 neutral、托管还是按模式结束 | S1 前 | C++ input trace + 用户产品规则 |
-| `S-NET-002` | `PENDING_MEASUREMENT` | `InputDelayFrames`、deadline、grace 与最大缺失阈值 | S2 | 内存弱网与真实公网测量 |
+| `S-NET-001` | `PRODUCT_BEHAVIOR_CONFIRMED / ZERO_CARRY_NEUTRAL / FORMAL_LIFECYCLE_PENDING` | deadline missing human立即neutral且held carry=0；PvP与合作PvE均在完整30秒前保持human ownership，30秒后于versioned barrier由formal Kernel AI接管，比赛继续；玩家之后仍可经GP-06 recovery在future barrier取回 | S1/S2/S3/S5 | 当前包只覆盖neutral；AI ownership、30秒barrier、reconnect/recovery仍需formal Kernel与S3/S5实现证据 |
+| `S-NET-002` | `PRODUCT_DIRECTION_CONFIRMED / NUMERIC_MEASUREMENT_PENDING` | 固定30Hz与本局tick/delay语义，动态冗余/补发/gap、连续消费、有界追帧和表现隔离已由GP-01确认；held carry=0；short grace约1秒仅为测试候选；`InputDelayFrames`、deadline、production grace、冗余/gap/catch-up/history等数值仍由versioned配置与S2/公网测量决定 | S2 | Android/Windows内存弱网与中国大陆真实公网测量；禁止hidden default |
 | `S-NET-003` | `PENDING_MEASUREMENT` | 是否实施有限本地预测 | S4 | S3 恢复闭环、错预测率、体验与成本 A/B |
 | `S-NET-004` | `PENDING_EVALUATION` | 实际 battle transport 选型 | S6 | 移动端、MTU、拥塞、许可证、维护和协议等价测试 |
 | `S-NET-005` | `PENDING_DEPLOYMENT` | 首批公网节点的 region、OS、端口、安全组和部署方式 | S6 前 | 资源所有者授权与实际环境清单 |
 | `S-NET-006` | `PENDING_PRODUCT_RULE` | 全国匹配的地区优先、跨区兜底与队伍策略 | S8 | 用户规则、网络质量和容量数据 |
-| `S-PROTO-001` | `PARTIAL_SERVER_VALUE_READY / PENDING_FORMAL_CAPTURE_WIRE_DECISION` | formal `FrameInputSet` 的edge ownership：Server immutable human triple已实现，仍待决定Client capture/wire、malformed witness disposition与end-to-end formal integration | S1 formal input源码包前 | `S1-SERVER-HUMAN-FRAME-INPUT-VALUE-001` Server evidence；C++ release `InputHandler::poll` trace、上位设计和full Client/world contract；提案见`NTSD_Server/docs/ai/DECISIONS/PENDING-S1-FRAME-INPUT-EDGE-OWNERSHIP-001.md` |
+| `S-PROTO-001` | `CONFIRMED / SERVER_FOCUSED_TEST_PASS / CLIENT_WIRE_DEFERRED` | 原版和用户决议：human submission为owned-slot完整held，locked held唯一真值，Server/formal Kernel派生edge，首帧all-released，AI无Client owner；Client edge非mandatory canonical truth | Server-only held/ownership/edge/zero-carry范围已关闭；formal Kernel/Client/wire仍待 | `NTSD28-ORIGINAL-ONLINE-LOCKSTEP-EVIDENCE-001`、完整原版报告、`S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001` |
 | `S-PROTO-002` | `CONFIRMED / SERVER_SCHEDULE_FOCUSED_TEST_PASS` | 已确认 Model B：不加per-submission field，StartBarrier initial policy加Server session/authority-history future-effective activation schedule | 后续Client/wire、cross-version recovery或delay/rebarrier合同前 | `S1-SERVER-POLICY-ACTIVATION-SCHEDULE-001`：test-first red、Debug/Release十项目`0/0`、full self-hosted tests、no-network host、declared-source audit与Ledger`23 / 74`；不等于Client/transport/recovery或S1验证 |
 | `S-SRV-001` | `DESIGN_READY` | Server solution 的模块边界、强类型 ID、单向依赖与无 Common 杂物项目原则 | S5 | 模块依赖检查、编译和 architecture tests |
 | `S-SRV-002` | `DESIGN_READY` | 统一配置、结构化日志、错误边界、health/readiness 和命令化本地运行 | S5 | 干净环境命令链、错误配置 fail-fast、异常隔离测试 |
@@ -363,7 +379,7 @@ Ledger + 本 Resume Card 写入 Work Package / Change ID / 下一步
 - 观察到的 defect：现有 public `AuthorityFrameInputSource` 与 `MissingInputFillReason` 只做 broad missing/non-missing validation，可构造 cross-labelled pair（例如 persistent source + transient reason）或 unknown enum；这会污染 immutable authority-history 的审计标签。
 - 实现：`NTSD.Battle.Protocol` 现在唯一拥有 six-pair taxonomy validator；immutable slot input与generic `MissingInputResolution<TInput>` 都使用它，real/idempotent仍只接受`None`。不为任何 source 选择 payload、grace、neutral、AI、disconnect/reconnect或模式行为。
 - 回归与证据：six legal pairs、mismatched/unknown pair、既有transient deadline test均通过；Debug/Release各10项目`0 warnings / 0 errors`；focused Protocol/BattleHost与完整自托管chain通过；`run-local`仍为`BootstrapReady / SequentialSingleWriter / NetworkListenerStarted=False`；Ledger`15 / 70`和fixed-string scoped audit通过。
-- C++ source terms只能帮助确认当前发现的 local input path没有给出Server网络缺失策略；它不替代 C++ trace 或用户产品决定。`S-NET-001`/`S-NET-002`继续 pending，本包不是 S1 `VERIFIED`，也没有任何 Unity Client动作。
+- C++ source terms只能帮助确认当前发现的 local input path没有给出Server网络缺失策略；它不替代 C++ trace 或用户产品决定。当时 `S-NET-001`/`S-NET-002`仍为 pending；该历史状态已被 2026-08-29 的 held/zero-carry 与 GP-01、GP-03～GP-06 决议 supersede，当前以第4节决策表和文末最新记录为准。本包仍不是 S1 `VERIFIED`，也没有任何 Unity Client动作。
 
 ### 2026-08-25：S1 policy-version input-binding gate（只读）
 
@@ -474,7 +490,42 @@ Ledger + 本 Resume Card 写入 Work Package / Change ID / 下一步
 
 - `S-PROTO-002`已确认并由独立Server-only包关闭；它不再是当前阻塞。cross-policy history consumer合同现是该决策的后续边界；formal input capture/wire/tick mapping、missing-input、sequence/history/recovery与S5 actor/fault仍各自需要未批准的协议/产品/Client/formal Kernel合同；S6+ transport/public/control-plane亦未授权。
 - 状态：无活跃源码包。这不是S0～S9完成、不是Server构建/测试失败，也不是允许用placeholder DTO、queue、lock、recovery或Client操作绕过的暂停。
-- 清除方式：用户确认或修订`S-PROTO-001`、提供`S-NET-001/002`产品规则，或授权明确的Client/formal Kernel/S5 Host范围；随后先建立独立Task Contract和Change Record。`S-PROTO-002`仅在需要扩展为Client/wire/rebarrier/cross-version recovery时才需要新的版本化合同。
+- 当时的清除方式是确认`S-PROTO-001`、提供`S-NET-001/002`产品规则，或授权明确的Client/formal Kernel/S5 Host范围；held/zero-carry 与 GP-01～GP-09 产品方向现已由后续决议关闭。当前仍须以 queue/最新决策重新选取具名源码包；production timing实测、formal Kernel/S3/S5及Client范围各自保持独立门禁，随后先建立独立Task Contract和Change Record。`S-PROTO-002`仅在需要扩展为Client/wire/rebarrier/cross-version recovery时才需要新的版本化合同。
+
+### 2026-08-29：原版在线 held-only / zero-carry 决议与 Server 包启动
+
+- 用户指定 `NTSD_Server/docs/ai/AUDITS/NTSD28-ORIGINAL-ONLINE-LOCKSTEP-EVIDENCE-001.md` 为 `S-PROTO-001` 和 missing-input carry 的正式决议，不再询问 held-only。
+- 完整报告 `NTSD28_ORIGINAL_ONLINE_LOCKSTEP_REPORT.md` 已逐行读取；SHA-256 为 `D356EB8D9C555593134A887A5E0EE41BF636A54F22D6592ECC3EFFEAC627AEBD`，与审计声明一致。
+- 原版事实：八槽逐Tick wire只传current held；previous/current edge由消费端派生；同Tick屏障缺帧时阻塞/失败终止，没有carry、neutral、AI takeover或recovery。
+- 当前产品适配：中央Server、Android一human slot、Windows最多两human slots、room最多20 humans；deadline missing为neutral，held carry=0；formal AI/ownership barrier和snapshot/history reconnect保留后续包。
+- `S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001` 已完成并关闭为`FOCUSED_TEST_PASS / SERVER_HUMAN_AUTHORITY_INPUT_READY / CLIENT-PAUSED / S1-S2-PREIMPLEMENTATION`：原版bit、deep-immutable held-only submission、Android 1 / Windows 1～2 / room 20 human ownership、稳定1/2/8/20聚合、all-released baseline、locked edge与deadline zero-carry neutral均有聚焦证据；Debug/Release十项目`0 warnings / 0 errors`、full Server tests、no-network local host、workflow/Ledger与diff检查通过。
+- 未实现且不得误标完成：formal Kernel AI/state hash、PvP/PvE ownership barrier、numeric short grace/deadline/delay、Client capture/wire、snapshot/history recovery、transport、room actor/fault atomicity及S1/S2 `VERIFIED`。
+
+### 2026-08-29：GP-01 公开成熟帧同步证据与方案修订
+
+- `NTSD_Server/docs/ai/AUDITS/KING-OF-GLORY-PUBLIC-FRAME-SYNC-EVIDENCE-001.md` 保存了2017年腾讯TGDC/腾讯云等公开资料的可信度、历史方案和未知边界：固定频率输入序列、UDP应用层补发、Server内存帧历史、下行历史帧冗余、严格连续消费、有界追帧、逻辑/表现分离、插值、hash/录像/网络指标；不把历史公开约15Hz、5v5、前三帧冗余或2026当前未知实现照抄为NTSD事实。
+- `GP-01` 已从“对局中可能在LowLatency/Balanced/WeakNetwork间切换”的易误解方向修订为：30Hz、已形成TargetTick/InputDelay语义和deadline rule保持固定；每个Client可按ACK/丢包/jitter动态调整上/下行冗余与补发；Client严格补齐连续frame后有界追帧，严重落后走snapshot+history；表现插值不反写逻辑；deadline后故障human slot仍zero-carry neutral，健康玩家继续。
+- 已记录三点：不把NTSD逻辑改成15Hz；`P103`携带历史`F100..F103`不是预知未来；下行缺`F3`先由后续冗余/gap补齐再执行`F4`，上行迟到`F3`只能在deadline前采用。用户已于2026-08-29确认GP-01修订推荐方案；production数值仍须实测，且确认未授权源码。
+
+### 2026-08-29：GP-02 极短真实点击 Client capture 合同确认
+
+- 用户确认 GP-02 推荐方案：攻/跳/防和八方向数字键的有效极短 press 至少进入一个 30 Hz held tick；对角方向在同一 tick 原子提交双 bit；虚拟摇杆使用 deadzone/hysteresis/八方向量化，快速 flick只保存一个稳定方向，不逐个 latch 旋转中间扇区。
+- Android 多点触控、pointer ownership、cancel/失焦/后台清理、30/60/90/120Hz 表现帧率下相同 capture trace，以及 Android/Windows canonical held 等价性进入后续 Client 验收。Server held-only、Server-derived edge、zero-carry neutral、30Hz和battle rules不变。
+- 独立 Client 投影记录为`NTSD_Server/docs/ai/DECISIONS/ONLINE-GAMEPLAY-CLIENT-ADJUSTMENT-REGISTER-001.md / CONFIRMED_CLIENT_IMPACT / IMPLEMENTATION_DEFERRED`。该确认不授权 Client 源码、Scene、Input Actions、wire或transport修改，不改变S1及后续阶段状态。
+
+### 2026-08-29：GP-03 / GP-04 / GP-05 跨模式 30 秒后 Server AI 接管决议
+
+- 用户确认实时PvP与合作PvE都只在完整30秒 heartbeat timeout后由AI接管；30秒前保持human ownership并对每个deadline missing使用zero-carry neutral，short grace结束本身不触发任何模式的AI。
+- 30秒到达后，掉线human slot必须在明确且可审计的ownership barrier切为formal-Kernel `ServerAiOwner`，比赛继续；同一tick不得由Client和AI共同拥有。PvP不因timeout直接判负/移除，PvE不因timeout直接失败，最终都按正常模式战斗规则结束。
+- GP-04和GP-05据此关闭为CONFIRMED；旧的“PvP默认不由AI接管/30秒直接判负或移除”和“PvE short grace后立即AI接管”提案均被取代。仍待GP-06接管后human取回；short-grace生产值继续实测，input-silence timeout保留独立policy。该决议不授权formal AI、ownership journal/barrier、Client、wire、transport或recovery源码，也不改变S2/S3/S5阶段状态。
+- 用户随后确认GP-03无异议：第一版以约1秒作为显式short-grace测试候选，只将“网络不稳定”分类为正式重连/断线状态，不改变两种模式统一的30秒AI接管时点；生产值仍需Android/Windows及大陆移动网络实测。GP-03关闭为CONFIRMED，但不授权源码或阶段晋升。
+- 用户确认GP-06：实时PvP与合作PvE玩家即使晚于30秒、formal Server AI已经接管，只要对局仍在继续且identity可安全认证，仍允许重新连接；旧Client world必须丢弃，完成Server snapshot + contiguous authority history + checksum后，才可在future ownership barrier从AI手中取回。AI在recovery期间继续，同一tick不得双owner。GP-06关闭为CONFIRMED；S3实现、retention、identity与运行时验收仍NOT_STARTED/待证据。
+- GP-07新增`NTSD_Server/docs/ai/AUDITS/KING-OF-GLORY-PUBLIC-DESYNC-DISPOSITION-EVIDENCE-001.md`：历史王者公开分享与腾讯通用专利确认周期hash、mismatch通知、录像/日志保存、限定窗口函数参数对比、自动化/体验服定位；没有公开线上玩家的恢复次数、snapshot重同步或断开处置。NTSD“首次权威恢复一次、恢复后仍错则断开”仍是待用户确认的自有方案，不得冒充王者事实或据此授权S3源码。
+- 用户随后确认GP-07推荐方案：首次checksum mismatch保存first-difference证据，暂停目标Client human input并执行一次Server snapshot + contiguous authority history recovery；成功后future ownership barrier交回，同一次权威恢复后仍mismatch则断开当前Client session，继续允许按GP-06重新连接。Server/健康Client继续，禁止Client覆盖Server、无限恢复和单次mismatch自动认定作弊。GP-07关闭为CONFIRMED；S3仍NOT_STARTED。
+- GP-08新增`NTSD_Server/docs/ai/AUDITS/KING-OF-GLORY-PUBLIC-SERVER-FAULT-ISOLATION-EVIDENCE-001.md`：历史王者公开架构支持大厅/PvP/Proxy/房间等模块分离、故障模块自动屏蔽、在线扩容和限制影响面，可借鉴“单room故障不拖Host”；没有公开单局tick半执行后的rollback、迁移、恢复或玩家结果。用户随后确认NTSD自有处置：无法证明atomic completion时room立即fault并停止输入/tick，本局无效且不判任何玩家负，保存不可覆盖的first-fault witness，其他room与Host继续；在S3/S5完成snapshot、atomic commit/rollback和injected-fault证据前禁止自动恢复。GP-08关闭为CONFIRMED，但S5仍NOT_STARTED。
+- GP-09产品表现已确认：PvP与合作PvE均不支持普通玩家暂停authority world；“投降/主动退出”均为个人离场，不结束整局或团队对局，使用可靠、版本化、幂等room/session command，并复用missing-neutral、完整30秒后ownership barrier切给Server AI及GP-06可重连取回。原版global/function one-shot mask live consumer仍待只读审计，但它是工程证据项，不再要求用户选择未知bit。该记录不授权room command或Client/Server源码。
+- 用户已确认GP-01修订推荐方案，因此GP-01～GP-09产品表现现已全部冻结。GP-01的production InputDelay/deadline/redundancy/gap/catch-up/history数值仍须Android/Windows、中国大陆移动网络及1/2/8/20 human矩阵实测；全部GP确认不自动冻结数值、不授权源码，也不改变S0～S9阶段状态。
+- `NTSD_Server/docs/ai/DECISIONS/ONLINE-GAMEPLAY-CLIENT-ADJUSTMENT-REGISTER-001.md` 已完成全部GP的Client影响整合：去重为capture、连续authority-frame消费、连接/ownership生命周期、统一recovery、room disposition、表现与诊断owners，并按preflight→capture→frame consumer→ownership→recovery→room fault→presentation拆成未来候选包。该映射是文档结果，真实路径preflight、Client授权和所有源码包仍为PENDING/NONE READY。
 
 ## 8. 留痕完整性自检
 

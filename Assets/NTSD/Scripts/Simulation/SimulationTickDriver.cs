@@ -1067,6 +1067,8 @@ namespace NTSD.Simulation
                 return "legacy-per-pass-stage-refresh-is-enabled";
             if (_world.RuntimeDataCatalog?.IsReady != true)
                 return "runtime-data-catalog-is-not-ready";
+            if (_world.HasUnityPresentationBindingsForDedicatedWorker())
+                return "unity-presentation-bindings-are-still-attached";
             return string.Empty;
         }
 

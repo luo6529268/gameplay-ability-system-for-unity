@@ -4,6 +4,13 @@
 
 > **当前工作边界**：不废弃现有 Unity 架构或性能成果；按“C++ pass trace → Unity legacy/fallback 对照 → Unity fast path 对照 → 真实 Play Mode”逐模块收口。不得把 C++ 的 debug probe 当规则本身，但可用其观察 release live path。
 
+## 2026-08-29：WORKER-UNITY-BOUNDARY-001（生产 Play 阻塞修复）
+
+- 用户真实 Play 堆栈确认 Dedicated Worker 在实体 late destroy/free 时经 `LF2Sprite.ApplyEntityRendererVisibility` 触发 `EnsureRunningOnMainThread`，Driver 随后按 fail-closed 合同暂停；这与已还原的 2.5D 实验无关。
+- 根因是初始生产实体在 worker 启动前已经绑定 Unity Renderer，而 `SetLogicOnlyEntityMaterialization(true)` 只影响后续实体，现有资格检查没有拒绝该状态。
+- Change `WORKER-UNITY-BOUNDARY-001 / VERIFIED / SAFE-SYNC-FALLBACK` 已增加 Renderer-bound world 的 worker 资格拒绝并保留同步 tick。Unity worker整类job `881e133b32ae4d3f82043dc29ecec66d` 20/20 PASS；真实Play至tick2860保持unpaused/failure=null并已发生66次Free，原两类异常0条。该结论不声称Unity-bound worker或worker性能已恢复；后续重启必须单独处理主线程presentation detach/release所有权。
+- 权威记录：`docs/ai/CHANGE-RECORDS/WORKER-UNITY-BOUNDARY-001.md`。
+
 ## 2026-08-08：1000 AI catch-up CPU 预算接手状态
 
 - `ProductionEntityStressHarness` 已加入可关闭的 `catchUpCpuBudgetMs`：request 默认 `0` 保持历史吞吐口径，诊断 Window 默认 `33.33 ms`。首 tick 不会被预算阻止；后续 tick 依据本帧累计耗时和上一 tick 实测成本决定是否延后。报告/fingerprint 已包含预算与受限帧数，backlog/dropped tick 不隐藏。

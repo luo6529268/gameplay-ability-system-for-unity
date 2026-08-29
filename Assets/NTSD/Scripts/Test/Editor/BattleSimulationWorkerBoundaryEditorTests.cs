@@ -1332,6 +1332,68 @@ namespace NTSD.Test
             Assert.That(world.UsesLogicOnlyEntityMaterialization, Is.False);
         }
 
+        [Test]
+        public void FormalCentralBattleRejectsWorkerWhenEntityKeepsUnityRendererBinding()
+        {
+            const int objectId = 31996;
+            const int runtimeSlot = 50;
+            using var scope = new DriverScope();
+            Simulation.SimulationTickDriver driver = scope.Driver;
+            Simulation.SimulationWorld world = driver.World;
+            var characterData = new LF2CharacterData();
+            characterData.frames.Add(new LF2FrameData
+            {
+                frameId = 0,
+                state = 0,
+                pic = 0,
+                wait = 1,
+                next = 0,
+            });
+            var wrapper = new LF2CharacterDataWrapper(objectId, characterData);
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            world.PrepareRuntimeDataCatalogForBattle(
+                new[]
+                {
+                    new ObjectDefinition(
+                        objectId,
+                        (int)LF2ObjectType.Other,
+                        "renderer-bound-worker-gate.dat"),
+                },
+                id => id == objectId ? wrapper : null);
+            driver.SetFrameInputProvider(new EmptyFrameInputProvider());
+
+            var rendererHost = new GameObject("RendererBoundWorkerGate")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            rendererHost.SetActive(false);
+            LF2ObjectRenderer renderer = rendererHost.AddComponent<LF2ObjectRenderer>();
+            var entity = new WorkerHitRecordFixtureEntity(objectId);
+            entity.SetRequiredRuntimeSlot(runtimeSlot);
+            entity.BindRendererForWorkerGateTest(renderer);
+            world.Register(entity);
+            bool battleSealStarted = false;
+            try
+            {
+                driver.BeginBattleAllocationSeal();
+                battleSealStarted = true;
+
+                Assert.That(driver.DedicatedSimulationWorkerActiveForDiagnostics, Is.False);
+                Assert.That(
+                    driver.DedicatedSimulationWorkerIneligibilityReasonForDiagnostics,
+                    Is.EqualTo("unity-presentation-bindings-are-still-attached"));
+                Assert.That(world.UsesLogicOnlyEntityMaterialization, Is.True);
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics, Is.Null);
+            }
+            finally
+            {
+                if (battleSealStarted)
+                    driver.EndBattleAllocationSeal();
+                entity.UnregisterFromWorld();
+                UnityEngine.Object.DestroyImmediate(rendererHost);
+            }
+        }
+
         private static Simulation.FrameInputSet CreateSinglePlayerFrame(int tickIndex)
         {
             return new Simulation.FrameInputSet(
@@ -1411,6 +1473,11 @@ namespace NTSD.Test
 
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer)
             {
+            }
+
+            internal void BindRendererForWorkerGateTest(LF2ObjectRenderer renderer)
+            {
+                Renderer = renderer;
             }
         }
 
