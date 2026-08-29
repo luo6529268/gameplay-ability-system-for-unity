@@ -2,17 +2,17 @@
 
 <!-- CHANGE-RECORD
 id: S0-WITNESS-001
-status: CODE_WRITTEN
+status: COMPILE_PASS
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessBattleKernelHost.cs
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessLockstepAuthoritySession.cs
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessLockstepChecksumWitness.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs
 authority: User authorization on 2026-08-24; Assets/NTSD/Docs/server-lockstep-s0-s9-design.md §5 S0; C++ release live path remains the only battle-rule authority.
-evidence: CODE-WRITTEN / USER-APPROVED-CLIENT-WITNESS-SCOPE / BASELINE-S0-FOCUSED-5-OF-5-PASS / BASELINE-EXISTING-LOCKSTEP-9-OF-9-PASS / SELFCHECK-PASS / COMPILE-PENDING
+evidence: CODE-WRITTEN / USER-REAUTHORIZED-2026-08-29 / CLIENT-COMPILE-PASS / FRESH-SELFCHECK-PASS-2026-08-29T15-56-23Z / CURRENT-S0-7-AND-EXISTING-9-TESTRUNNER-PENDING
 -->
 
 > 创建日期：2026-08-24  
-> 状态：`CODE_WRITTEN / COMPILE_PENDING`  
+> 状态：`COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING`  
 > 类型：S0 lockstep diagnostics / test-only validation adapter  
 > 前置记录：`S0-INPROC-AUTHORITY-001`
 
@@ -30,7 +30,7 @@ evidence: CODE-WRITTEN / USER-APPROVED-CLIENT-WITNESS-SCOPE / BASELINE-S0-FOCUSE
 - 当前 `InProcessAuthorityDifference` 只记录 tick、replica、server/client input hash 与 aggregate state hash；无法记录 first differing domain、slot/generation、RNG state/call count 或 structured diagnostic snapshot。
 - `BattleLockstepChecksumSnapshot` 已有九个命名 hashes：`input`、`metadata`、`rng`、`world`、`slots`、`aRest`、`vRest`、`stats`、`events`，以及 `overall`。把这十个 checksum 值映射为设计中的“十域”是本包待锁定的适配合同，不是新的 battle rule。
 - 该 snapshot 构造 arrays/dictionaries/JSON/SHA strings，只能在首次 mismatch 后捕获；不得在每个 tick 捕获它。
-- 当前基线证据：S0 focused EditMode fixture 5/5、existing `BattleLockstepSessionEditorTests` fixture 9/9、`BattleRuntimeSelfCheck=PASS`；均不等价于本包完成。
+- 历史基线证据：扩展前的 S0 focused EditMode fixture 曾有 5/5 截图、existing `BattleLockstepSessionEditorTests` fixture 曾有 9/9 截图、`BattleRuntimeSelfCheck=PASS`；当前 S0 fixture 已扩展为 7 项，因此历史 5/5 不能代替本次 7/7 fresh evidence，且上述证据均不等价于本包完成。
 
 ## 3. 允许范围
 
@@ -78,6 +78,9 @@ evidence: CODE-WRITTEN / USER-APPROVED-CLIENT-WITNESS-SCOPE / BASELINE-S0-FOCUSE
 - 回滚仅删除本包新增 witness 文件、移除本包在两个 InProcess runtime 文件和 focused fixture的调用；保留本 Record、Task 与真实失败证据。不得回滚 `S0-INPROC-AUTHORITY-001`、其他用户改动或 Server 基础工程。
 
 ## 8. 当前实际状态
+
+- 2026-08-29：用户重新授权必要的 Client 源码修改并恢复 S0～S9；本 Record 恢复为 active validation。首步只获取 fresh Unity compile、当前 focused 7/7、existing lockstep 9/9 与 self-check；若失败，仅在本 Record 四个既有源码文件内修复，其他 authored script/Scene/资源继续排除。
+- 2026-08-29 fresh结果：witness `.meta`存在，当前Assembly-CSharp/Editor DLL于本日重建且晚于witness源码，最近Editor.log无C# error；existing Editor request于`15:56:23Z`写入SelfCheck `PASS`。当前S0 fixture实际为7项（历史截图只含扩展前5项），existing lockstep为9项；Computer Use运行时未批准Unity控制，TestRunner仍pending。
 
 - 已实际修改 `InProcessBattleKernelHost.cs`、`InProcessLockstepAuthoritySession.cs` 和 `InProcessLockstepAuthoritySessionEditorTests.cs`，并新增 `InProcessLockstepChecksumWitness.cs`。没有修改 `SimulationWorld`、`BattleParitySnapshot`、battle pass、Scene、资源、配置、网络或 Server 工程。
 - `InProcessBattleKernelHost` 的 structured snapshot capture 受 `currentTick` 边界检查保护，并仅由 first-mismatch branch 调用；其计数仅供 Editor fixture 确认一致 fast path 未走诊断 capture。

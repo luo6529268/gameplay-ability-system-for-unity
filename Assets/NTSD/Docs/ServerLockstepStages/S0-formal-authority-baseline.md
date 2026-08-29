@@ -63,7 +63,7 @@ Capture structured domain/slot/generation/RNG/event first difference
 | `S0-SERVER-ROOM-JOURNAL-001` | `FOCUSED_TEST_PASS` | Stable roster, append-only journal, sequential room owner | Cross-world battle result |
 | Existing Unity S0 focused fixture | screenshot 5/5 pass | Existing in-process fixture behavior | Required ten-domain/typed first difference |
 | Existing lockstep fixture | screenshot 9/9 pass | Existing lockstep regressions | Formal S0 exit gate |
-| `S0-WITNESS-001` | existing Client code-written state, frozen | Candidate witness implementation | Fresh compile/runtime/formal acceptance |
+| `S0-WITNESS-001` | `COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING` | Mismatch-only structured witness and real-entity three-world fixture | Current S0 7/7, existing lockstep 9/9 and formal classification |
 
 ## 7. Boundaries and forbidden shortcuts
 

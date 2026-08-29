@@ -96,7 +96,7 @@ Hand off measured node/network/capacity/recovery metrics, endpoint health contra
 ## 12. Current blockers and next lawful action
 
 - S6 is not started/verified.
-- GP decisions and real transport are incomplete.
+- GP-01～GP-09 product behavior is confirmed; executable Client/Server lifecycle, real transport, production numeric values and authorized public evidence remain incomplete.
 - No endpoint operation is authorized by this documentation package.
 
 ## 13. Revision history

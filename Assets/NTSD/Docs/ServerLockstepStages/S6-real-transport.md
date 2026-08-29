@@ -40,7 +40,7 @@ Application protocol continues to own:
 
 - `S-NET-004` transport selection remains pending evaluation.
 - Mature public historical frame-sync evidence supports evaluating UDP with application-layer sequence/cache/redundancy, but does not select an NTSD library or parameter: [`../../../../../NTSD_Server/docs/ai/AUDITS/KING-OF-GLORY-PUBLIC-FRAME-SYNC-EVIDENCE-001.md`](../../../../../NTSD_Server/docs/ai/AUDITS/KING-OF-GLORY-PUBLIC-FRAME-SYNC-EVIDENCE-001.md).
-- GP-01 may later freeze adaptive redundancy semantics before transport binding.
+- GP-01 now freezes fixed 30 Hz/formed tick-delay semantics plus adaptive per-Client redundancy/retransmission/gap behavior; exact production counts/timing remain measured before transport binding.
 
 ## 6. Candidate evaluation
 

@@ -1,5 +1,7 @@
 # NTSD 长期项目状态
 
+> **2026-08-29 S0-WITNESS-001 resumed:** `COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING`. Witness/meta已导入，current DLL晚于源码且无C# error；fresh self-check于15:56:23Z写入PASS。当前S0 fixture 7项、existing lockstep 9项尚待TestRunner；Computer Use未获Unity控制批准。范围仍限四个S0文件，不触碰用户Scene/地图/背景资源、Input Actions、30 Hz、battle rules、transport或recovery。
+
 > 最后更新：2026-08-26
 > 状态口径：只记录已检查的事实、明确推断和未知项；不以聊天历史作为唯一项目记忆。
 

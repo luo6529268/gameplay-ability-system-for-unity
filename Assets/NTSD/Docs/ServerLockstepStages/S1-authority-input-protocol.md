@@ -76,12 +76,17 @@ Existing Server-only evidence includes:
 - human-frame value and exhaustive edge derivation;
 - policy activation schedule and C1 activation journal/ACK-ready boundary;
 - formal held-only connection/ownership/zero-carry assembler package.
+- future-effective atomic human↔ServerAI ownership activation schedule/journal; no AI input/timer/Client integration.
+- caller-timed monotonic connection liveness and immutable first-timeout witness; no production clock/transport/barrier activation.
+- target-tick dynamic human slot subset admission, accepted-future-input overlap rejection and AI-owned lock `FormalAiKernelRequired`.
+- tracker-recorded timeout witness to caller-explicit connection-wide ownership request and causal journal.
+- same-call earliest safe barrier selection over next tick, activation tail and relevant pending TargetTick successor.
 
 Most recent applicable package:
 
 ```text
-S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001
-FOCUSED_TEST_PASS / SERVER_HUMAN_AUTHORITY_INPUT_READY
+S2-SERVER-EARLIEST-SAFE-OWNERSHIP-BARRIER-001
+FOCUSED_TEST_PASS / SERVER_EARLIEST_SAFE_OWNERSHIP_BARRIER_READY
 ```
 
 This is reusable preimplementation, not formal S1 closure.
@@ -105,6 +110,7 @@ This is reusable preimplementation, not formal S1 closure.
 | Frame lock/order | 1/2/8/20 arrival-order independent SlotId history | Server focused pass |
 | Deadline fill | missing neutral, zero carry, one release/no press | Server focused pass |
 | Policy history | resolved policy and activation journal witness | Server focused pass |
+| Ownership history | initial owner plus future human↔ServerAI barriers | Server focused pass; AI input/timer/Client pending |
 | Formal Kernel mapping | authority tick to C++ completed-world/input phase | Pending |
 | Client capture | real Android/Windows capture and short-tap contract | Product contract confirmed; implementation/runtime evidence pending and Client frozen |
 | Cross-world history | same formal worlds produce same authority history/checksum | Pending S0/S1 formal proof |
@@ -127,7 +133,7 @@ S1 must hand off frozen message/value schema, canonical equality, sequence ident
 
 ## 12. Current blockers and next lawful action
 
-- GP-01 remains user-confirmation pending.
+- GP-01～GP-09 product behavior is confirmed; production numeric parameters remain measured.
 - GP-02 product behavior is confirmed, but formal Kernel/tick mapping and actual Client capture/wire/runtime evidence remain missing.
 - S0 formal exit gate is not closed.
 - Do not create a production timing/transport package until the applicable Decision and formal dependency are ready.
@@ -136,3 +142,8 @@ S1 must hand off frozen message/value schema, canonical equality, sequence ident
 
 - 2026-08-29: dossier created; current held-only Server evidence reconciled; phase status unchanged.
 - 2026-08-29: GP-02 product contract linked as confirmed; Client implementation remains deferred and phase status unchanged.
+- 2026-08-29: Server-only ownership activation schedule/journal passed; formal AI input/state hash, timing, assembler/Client/recovery integration and phase status remain pending.
+- 2026-08-29: Server-only caller-timed connection liveness/first-timeout witness passed; production clock/transport, safe barrier admission, formal AI, recovery and phase status remain pending.
+- 2026-08-29: Server-only target-tick ownership-aware human admission and AI-owned lock fail-closed passed; formal AI/frame/checksum, Client, clock/transport, recovery and phase status remain pending.
+- 2026-08-29: Server-only recorded timeout→connection-wide ownership causality/journal passed; automatic tick planner, formal AI, Client, production clock/transport, recovery and phase status remain pending.
+- 2026-08-29: Server-only earliest-safe ownership barrier planner passed without elapsed-time conversion or input mutation; formal AI, Client, production clock/transport, recovery and phase status remain pending.

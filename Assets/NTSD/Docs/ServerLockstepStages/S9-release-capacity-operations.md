@@ -42,7 +42,7 @@ Required candidate bundle:
 - Same room cannot mix protocol/rule/catalog/stage incompatible versions.
 - Old builds may finish only explicitly compatible old rooms and cannot enter new incompatible rooms.
 - Android is self-distributed APK; Windows is independent EXE; detailed signing/update/release channel still requires operational decisions.
-- All GP gameplay decisions must be confirmed and reflected in executable acceptance tests before release.
+- GP-01～GP-09 are confirmed; all must still be reflected in executable acceptance tests before release.
 
 ## 6. Validation waves
 

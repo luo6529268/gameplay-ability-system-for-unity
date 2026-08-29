@@ -1,5 +1,7 @@
 # CODEX-CURRENT-HANDOFF
 
+> **当前授权/活跃包（2026-08-29）：** `S0-WITNESS-001 / COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING`。Current assemblies postdate witness source，fresh self-check于15:56:23Z为PASS；当前S0 fixture是7项、existing lockstep是9项。Computer Use未获Unity控制批准，需UI控制授权或用户手动运行。Scene/地图/背景用户改动、Input Actions、30 Hz、battle rules、transport与recovery不在范围。
+
 > 生成日期：2026-08-24  
 > 最后更新：2026-08-29
 > 用途：将旧 Codex 任务 `01a02f58-c229-7830-a50b-7406c1d7d061` 最近三天有效事实迁移到当前持续目标；后续不依赖旧会话。  
@@ -61,6 +63,7 @@
 - **S1 input-payload immutability boundary（2026-08-25，只读、非实现包）：** generic Server 的`ReadOnlyCollection`/record只保证collection structure；`InputSubmission<TInput>`、slot input、pending/locked/journal/ready owners与missing-policy结果都会直接保留opaque `TInput`，源码已明确将value/deep-copy semantics留给future formal input-contract owner。因此不能把“不可变frame”误写为payload deep immutability，也不能以reflection clone/default identity copy/JSON序列化自行解决。详见 Server [`S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md)。必须先在formal Kernel/S1输入范围定义canonical value、capture boundary、equality/hash/serialization、missing-policy关系与mutable-alias regression；本审计不修改任何Client或Server源码。
 
 - **S1 formal FrameInputSet shape boundary（2026-08-25，只读、非实现包）：** `ntsd_new.exe` release `Makefile`纳入`input_handler.cpp`与`game_tick.cpp`；live input basis是right/left/up/down/attack/jump/defend七个logical action，poll会从held state派生prev/rising edge/history/cooldown，AI则由world/input_phase/RNG在kernel内写入同一domain。SDL/Unity key binding、`InputHandler::snapshot()`、prev/history/cooldown/AI与post-`apply_input` state都不是raw Client intent。详见 Server [`S1-FORMAL-FRAME-INPUT-SHAPE-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S1-FORMAL-FRAME-INPUT-SHAPE-PREREQUISITE-001.md)。formal action value、capture/edge derivation、human/AI slot ownership、tick mapping与real-world replay仍待正式scope；本审计不修改任何Client或Server源码。
+- **Formal AI/state-hash Client gate（2026-08-29，已授权）：** 用户已授权必要Client源码并恢复S0～S9；当前先执行`S0-WITNESS-001` fresh validation。future `CLIENT-FORMAL-BATTLE-KERNEL-SHARED-OWNER-001`为`USER_AUTHORIZED / PACKAGE_NOT_STARTED`，仍须独立Task/Change；不能把AI放进Client submission、generic missing policy或复制Server实现。Scene/资源/Input Actions不在当前包。
 
 - **S5 single-writer room actor boundary（2026-08-25，只读、非实现包）：** 当前Server的`SequentialSingleWriter`只是`SequentialRoomExecutionBoundary`/`LocalBootstrapHost`输出的bootstrap metadata；没有运行中的room actor、mailbox、queue、scheduler或并发顺序证明，generic in-memory owners也未声明thread-safe。详见 Server [`S5-SINGLE-WRITER-ROOM-ACTOR-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S5-SINGLE-WRITER-ROOM-ACTOR-PREREQUISITE-001.md)。不能以临时`lock`/queue决定input/deadline/advance/fault顺序；formal S5 Host必须先定义operation order、backpressure、lifecycle、commit与fault isolation。此审计不改Client或Server源码。
 
@@ -92,7 +95,7 @@ SERVER_CODE_READY / CLIENT_INTEGRATION_PENDING
 
 ```text
 I:\GitHub\Unity_GAS\
-├─ gameplay-ability-system-for-unity\   # 现有 Unity Client；当前冻结
+├─ gameplay-ability-system-for-unity\   # Unity Client；S0-WITNESS具名范围已激活
 └─ NTSD_Server\                         # 独立 Server 根；Git/.NET 10 solution 已建立
 ```
 
@@ -249,7 +252,7 @@ S0～S9 的含义不可混淆：S0～S5 先建立“能正确运行一局权威 
 
 ## 7. 下一步执行顺序
 
-> **2026-08-29 优先更新：** 不重做下方历史 bootstrap 步骤。先读 Server `S0-S9-NEXT-PACKAGE-QUEUE.md`、`CURRENT-HANDOFF.md`、`STATE.md` 和 `S1-SERVER-FORMAL-FRAME-INPUT-CONTRACT-001` Record。当前没有 READY 源码包；下一包必须先获得 order 2 formal Kernel AI ownership/state-hash 与实测 numeric short-grace/deadline/delay 合同，或另行授权 S3 recovery/S5 Host。不要再询问 held-only，不要修改/编译/测试 Unity Client，不要自行添加 wire/transport。
+> **2026-08-29 优先更新：** 用户已授权必要Client源码并恢复S0～S9。当前最早包为Server `S0-FORMAL-MULTIWORLD-WITNESS-VALIDATION-001` / Client `S0-WITNESS-001`；先用现有Editor取得fresh compile、5/5、9/9和self-check。不要重做bootstrap、不要询问held-only、不要扩张到Scene/资源/Input Actions/transport/recovery。
 
 > **2026-08-25 执行更新：** 下方 bootstrap 步骤是历史完成记录，**不得重做**。Client 冻结仍然有效，但不会暂停 Server-first 总目标；S1/S2 的 Server-only packages以及最近`S2-SERVER-ACK-READY-GAP-TICK-RANGE-001`已各自在独立 .NET 范围通过。当前没有活跃 Server source package：先阅读 `NTSD_Server/docs/ai/CURRENT-HANDOFF.md`、`STATE.md`、Ledger、最新`TASKS/CHANGE-RECORDS/S2-SERVER-ACK-READY-GAP-TICK-RANGE-001.md`以及`AUDITS/S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md`、`AUDITS/S1-CLIENT-SEQUENCE-RETENTION-PREREQUISITE-001.md`、`AUDITS/S3-AUTHORITY-HISTORY-RETENTION-PREREQUISITE-001.md`、`AUDITS/S5-KERNEL-ROOM-FAULT-BOUNDARY-PREREQUISITE-001.md`，随后只做前置审计或创建有明确缺口的新 Server-only Change Record。不得修改任何 Client 源码，也不得用 generic/TestKernel绕过formal Kernel、snapshot/recovery、transport或产品规则门槛。
 

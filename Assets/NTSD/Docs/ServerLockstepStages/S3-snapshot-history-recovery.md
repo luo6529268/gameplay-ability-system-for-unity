@@ -145,5 +145,5 @@ Hand off frozen snapshot/history/checksum/recovery schema, retained-range contra
 
 - 2026-08-29: dossier created from existing prerequisite audits; status remains `NOT_STARTED`.
 - 2026-08-29: GP-06 post-30-second reconnect and future-barrier return linked as confirmed; S3 implementation remains `NOT_STARTED`.
-- 2026-08-29: GP-07 King of Glory/Tencent public detection/diagnostic evidence linked; exact NTSD player disposition remains pending and S3 status unchanged.
+- 2026-08-29: GP-07 King of Glory/Tencent public detection/diagnostic evidence linked; the user then confirmed one authority recovery attempt and current-session disconnect if the same recovery still mismatches. S3 implementation remains not started and status unchanged.
 - 2026-08-29: GP-07 confirmed one authority recovery attempt followed by current-session disconnect on repeat mismatch; S3 implementation remains `NOT_STARTED`.

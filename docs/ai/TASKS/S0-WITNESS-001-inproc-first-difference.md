@@ -1,6 +1,6 @@
 # Task Contract — S0-WITNESS-001
 
-> 状态：`PLANNED / USER_AUTHORIZED / CLIENT_CODE_SCOPE_LIMITED`  
+> 状态：`IN_PROGRESS / COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING / CLIENT_CODE_SCOPE_LIMITED`  
 > 所属阶段：服务器帧同步 `S0`  
 > 前置：`S0-INPROC-AUTHORITY-001` validation-only evidence complete to current scope
 
@@ -31,7 +31,7 @@
 2. 首次 mismatch 后得到固定域序、RNG、slot/generation 与双方 structured snapshots 的 witness；
 3. witness 后会话维持 fail closed，后续帧不覆盖首差；
 4. real-entity 的 server + 2 client worlds 在相同 seed/barrier/journal 下连续 N 帧一致；
-5. 5/5 S0 focused、9/9 existing lockstep、self-check 与本包新增 focused cases 按实际运行结果记录；
+5. 当前 7/7 S0 focused、9/9 existing lockstep 与 self-check 按实际运行结果记录；历史截图只有扩展前5项，不能替代当前7项；
 6. Change Ledger/Record/State/Handoff 与实际 diff 一致。
 
 ## 5. 当前限制
