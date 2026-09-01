@@ -255,9 +255,8 @@ namespace NTSD.Simulation.Ecs
                 if (holder != null && holderData != null)
                 {
                     LF2FrameData holderFrame = holder.Frame?.D;
-                    clear = holderFrame?.wpoints == null ||
-                            holderFrame.wpoints.Count == 0 ||
-                            holderFrame.wpoints[0].attacking == 0;
+                    clear = holderFrame == null ||
+                            holderFrame.PrimaryWeaponPoint.Attacking == 0;
                 }
             }
 

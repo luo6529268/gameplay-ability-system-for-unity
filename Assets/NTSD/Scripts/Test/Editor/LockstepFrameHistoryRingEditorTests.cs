@@ -75,7 +75,7 @@ namespace NTSD.Test
                     identity.CanonicalPlayerSlots[playerIndex],
                     SimulationInputButtons.None);
             }
-            var frame = new FrameInputSet(0, players);
+            FrameInputSet frame = FrameInputSetPreallocation.CreateReusable();
 
             frame.ResetPreallocated(1, players);
             Assert.That(history.TryRecordConsumed(frame, out _), Is.True);

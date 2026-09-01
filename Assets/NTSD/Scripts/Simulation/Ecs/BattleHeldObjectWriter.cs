@@ -13,7 +13,7 @@ namespace NTSD.Simulation.Ecs
         internal bool SyncHeldPose(
             LF2Entity holder,
             LF2Entity held,
-            WeaponPoint holderWPoint = null)
+            BattleWeaponPointValue? holderWPoint = null)
         {
             if (holder?.Runtime == null || holder.PS == null || holder.Frame?.D == null)
                 return false;
@@ -21,25 +21,24 @@ namespace NTSD.Simulation.Ecs
                 return false;
 
             LF2FrameData holderFrame = holder.Frame.D;
-            holderWPoint ??= holderFrame.wpoints != null && holderFrame.wpoints.Count > 0
-                ? holderFrame.wpoints[0]
-                : null;
+            BattleWeaponPointValue resolvedHolderWPoint =
+                holderWPoint ?? holderFrame.PrimaryWeaponPoint;
 
-            Vector3 holdpoint = CalculateHoldPoint(holder, holderWPoint);
-            SyncHeldFrameAndPosition(holder, held, holderWPoint, holdpoint);
+            Vector3 holdpoint = CalculateHoldPoint(holder, resolvedHolderWPoint);
+            SyncHeldFrameAndPosition(holder, held, resolvedHolderWPoint, holdpoint);
             return held.Frame?.D != null;
         }
 
         internal bool RunStep12(
             LF2Entity holder,
             LF2Entity held,
-            WeaponPoint holderWPoint,
+            BattleWeaponPointValue holderWPoint,
             out WeaponActResult result)
         {
             result = default;
             if (holder?.Runtime == null || holder.PS == null || holder.Frame?.D == null)
                 return false;
-            if (held?.Runtime == null || held.PS == null || holderWPoint == null)
+            if (held?.Runtime == null || held.PS == null)
                 return false;
 
             Vector3 holdpoint = CalculateHoldPoint(holder, holderWPoint);
@@ -49,7 +48,7 @@ namespace NTSD.Simulation.Ecs
                 if (result.Thrown)
                     return true;
 
-                if (holderWPoint.kind == 3)
+                if (holderWPoint.Kind == 3)
                     DropRandomly(holder, held);
                 return true;
             }
@@ -63,7 +62,7 @@ namespace NTSD.Simulation.Ecs
                 result.ForceDrop = true;
             }
 
-            if (holderWPoint.dvx != 0)
+            if (holderWPoint.Dvx != 0)
             {
                 int heldType = held.GetCurrentDataObjectTypeForSimulation();
                 if (heldType == (int)LF2ObjectType.LightWeapon ||
@@ -85,20 +84,22 @@ namespace NTSD.Simulation.Ecs
                 }
             }
 
-            if (holderWPoint.kind == 3)
+            if (holderWPoint.Kind == 3)
                 DropRandomly(holder, held);
 
             return true;
         }
 
-        private Vector3 CalculateHoldPoint(LF2Entity holder, WeaponPoint wpoint)
+        private Vector3 CalculateHoldPoint(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint)
         {
             LF2FrameData frame = holder.Frame.D;
             int holderX = holder.Runtime.XInt;
             int holderY = holder.Runtime.YInt;
             int holderZ = holder.Runtime.ZInt;
-            int wpointX = wpoint?.x ?? 0;
-            int wpointY = wpoint?.y ?? 0;
+            int wpointX = wpoint.X;
+            int wpointY = wpoint.Y;
             float x = holder.Runtime.Dir == "right"
                 ? holderX - frame.centerx + wpointX
                 : holderX + frame.centerx - wpointX;
@@ -109,21 +110,21 @@ namespace NTSD.Simulation.Ecs
         private void SyncHeldFrameAndPosition(
             LF2Entity holder,
             LF2Entity held,
-            WeaponPoint holderWPoint,
+            BattleWeaponPointValue holderWPoint,
             Vector3 holdpoint)
         {
-            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint?.weaponact ?? 0);
+            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);
             held.SwitchDir(holder.Runtime.Dir);
             held.FrameDelay = holder.FrameDelay;
 
             LF2FrameData heldFrame = held.Frame?.D;
-            WeaponPoint heldWPoint = heldFrame?.wpoints != null && heldFrame.wpoints.Count > 0
-                ? heldFrame.wpoints[0]
-                : null;
+            BattleWeaponPointValue heldWPoint = heldFrame != null
+                ? heldFrame.PrimaryWeaponPoint
+                : default;
             int heldCenterX = heldFrame?.centerx ?? 0;
             int heldCenterY = heldFrame?.centery ?? 0;
-            int heldWPointX = heldWPoint?.x ?? 0;
-            int heldWPointY = heldWPoint?.y ?? 0;
+            int heldWPointX = heldWPoint.X;
+            int heldWPointY = heldWPoint.Y;
 
             held.Runtime.X = held.Runtime.Dir == "right"
                 ? holdpoint.x + heldCenterX - heldWPointX
@@ -132,7 +133,7 @@ namespace NTSD.Simulation.Ecs
             held.Runtime.Z = holder.Runtime.ZInt;
             held.Runtime.Zz = 0f;
 
-            if ((holderWPoint?.cover ?? 0) == 0)
+            if (holderWPoint.Cover == 0)
             {
                 held.Runtime.Z += 1.0;
                 held.Runtime.Y -= 1.0;
@@ -167,15 +168,18 @@ namespace NTSD.Simulation.Ecs
             ClearLinks(holder, held);
         }
 
-        private void ThrowHeldObject(LF2Entity holder, LF2Entity held, WeaponPoint wpoint)
+        private void ThrowHeldObject(
+            LF2Entity holder,
+            LF2Entity held,
+            BattleWeaponPointValue wpoint)
         {
-            held.Runtime.Vx = holder.Runtime.Dir == "left" ? -wpoint.dvx : wpoint.dvx;
-            held.Runtime.Vy = wpoint.dvy;
+            held.Runtime.Vx = holder.Runtime.Dir == "left" ? -wpoint.Dvx : wpoint.Dvx;
+            held.Runtime.Vy = wpoint.Dvy;
             held.Runtime.Vz = 0.0;
             if (holder.Runtime.KeyUp != 0 && holder.Runtime.KeyDown == 0)
-                held.Runtime.Vz = -wpoint.dvz;
+                held.Runtime.Vz = -wpoint.Dvz;
             else if (holder.Runtime.KeyUp == 0 && holder.Runtime.KeyDown != 0)
-                held.Runtime.Vz = wpoint.dvz;
+                held.Runtime.Vz = wpoint.Dvz;
             held.Runtime.Zz = 0f;
             ClearLinks(holder, held, stampReleaseTick: true);
         }

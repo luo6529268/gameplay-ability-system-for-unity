@@ -29,7 +29,7 @@ namespace NTSD.Simulation.Lockstep
                 barrier,
                 replicaIndex,
                 journalCapacity,
-                CreateWorldForBarrier(barrier))
+                InProcessBattleWorldBootstrap.CreateWorldForBarrier(barrier))
         {
         }
 
@@ -45,26 +45,10 @@ namespace NTSD.Simulation.Lockstep
                 throw new ArgumentOutOfRangeException(nameof(replicaIndex));
             if (journalCapacity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(journalCapacity));
-            if (world.ObjectCount != 0 || world.ClaimedRuntimeSlotCountForServices != 0)
-            {
-                throw new ArgumentException(
-                    "An S0 kernel host requires a fresh world before the start barrier.",
-                    nameof(world));
-            }
-            if (world.RuntimeProfileForServices != barrier.WorldSettings.Profile ||
-                world.MaxRuntimeSlotsForServices !=
-                    barrier.WorldSettings.InitialRuntimeSlotCapacity ||
-                world.CollisionBroadphaseForServices !=
-                    barrier.WorldSettings.CollisionBroadphase)
-            {
-                throw new ArgumentException(
-                    "The world does not match the immutable start barrier settings.",
-                    nameof(world));
-            }
 
             ReplicaIndex = replicaIndex;
-            world.SetLogicOnlyEntityMaterialization(true);
-            ApplyStartBarrier();
+            // Alignment contract: CLIENT-FORMAL-KERNEL-WORLD-BOOTSTRAP-FACTORY-SEAM-001.
+            InProcessBattleWorldBootstrap.PrepareWorldForHost(this.barrier, this.world);
             tickSystem = new NTSDBattleTickSystem(world);
             Journal = new LockstepReplayJournal(barrier.Identity, journalCapacity);
             FrameHistory = new LockstepFrameHistoryRing(
@@ -154,9 +138,16 @@ namespace NTSD.Simulation.Lockstep
                 int tickIndex = frame.TickIndex;
                 world.Runtime.Flow.SparkRenderFrame = tickIndex;
                 world.ApplyFrameInputSet(frame);
-                tickSystem.RunSimulationWorkerTick(
+                BattleTickCompletion completion = tickSystem.RunSimulationWorkerTick(
                     tickIndex,
                     buildPresentation: false);
+                // Alignment contract: CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001.
+                // A partial C++-aligned pass chain is terminal and publishes no tick result.
+                if (completion != BattleTickCompletion.FullReturn)
+                {
+                    LatchFault(LockstepProtocolReason.DriverRejectedFrame, null);
+                    return false;
+                }
 
                 ulong inputHash = frame.GetCanonicalHash64();
                 ulong stateChecksum = world.CaptureRuntimeChecksum64(
@@ -186,38 +177,6 @@ namespace NTSD.Simulation.Lockstep
             {
                 LatchFault(LockstepProtocolReason.DriverRejectedFrame, exception);
                 return false;
-            }
-        }
-
-        private static SimulationWorld CreateWorldForBarrier(
-            LockstepStartBarrier barrier)
-        {
-            if (barrier == null)
-                throw new ArgumentNullException(nameof(barrier));
-
-            BattleRuntimeWorldSettings settings = barrier.WorldSettings;
-            return new SimulationWorld(
-                settings.Profile,
-                settings.InitialRuntimeSlotCapacity,
-                settings.CollisionBroadphase);
-        }
-
-        private void ApplyStartBarrier()
-        {
-            world.Rng.Seed(barrier.Identity.Seed);
-            world.Runtime.Match.Seed = unchecked((int)barrier.Identity.Seed);
-
-            BattleRosterRuntimeState roster = world.Runtime.Roster;
-            roster.Reset();
-            for (int index = 0; index < barrier.PlayerCount; index++)
-            {
-                int playerSlot = barrier.CanonicalPlayerSlots[index];
-                BattleSlotRuntimeState slot = roster.Slots[playerSlot];
-                slot.Active = true;
-                slot.IsHuman = true;
-                slot.Team = playerSlot + 1;
-                slot.InputId = playerSlot + 1;
-                roster.ActiveSlotCount++;
             }
         }
 

@@ -24,6 +24,7 @@ namespace NTSD.App
         BattleLoading,
         BattleRunning,
         BattlePaused,
+        BattleStopping,
     }
 
     public sealed class AppManager : SingletonBehaviour<AppManager>
@@ -89,7 +90,13 @@ namespace NTSD.App
 
         protected override void OnSingletonDestroyed()
         {
+            TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
             SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnApplicationQuit()
+        {
+            TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -103,11 +110,12 @@ namespace NTSD.App
         private async UniTaskVoid InitializeBattleAsync(Scene scene)
         {
             await UniTask.Yield();
+            BattleBootstrap bootstrap = null;
             try
             {
                 InitializeBattleSingletons();
 
-                var bootstrap = FindBattleBootstrap(scene);
+                bootstrap = FindBattleBootstrap(scene);
 
                 SceneManager.SetActiveScene(scene);
 
@@ -149,6 +157,7 @@ namespace NTSD.App
             {
                 Debug.LogError(
                     $"[AppManager] Battle initialization failed: {exception}");
+                TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
             }
         }
 
@@ -233,8 +242,8 @@ namespace NTSD.App
                 var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
                 var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, slot.characterId) as LF2Character;
 
-                int inputId = BattleRosterRuntimeState.ResolveInputId(slot.inputId, i);
-                int team = BattleRosterRuntimeState.ResolveBattleTeam(slot.team, i);
+                int inputId = BattleMatchConfigRuntimeAdapter.ResolveInputId(slot.inputId, i);
+                int team = BattleMatchConfigRuntimeAdapter.ResolveBattleTeam(slot.team, i);
 
                 lf2.Controller.SetInputID(inputId);
 
@@ -290,18 +299,16 @@ namespace NTSD.App
 
         public AsyncOperation UnloadBattle()
         {
-            if (SimulationTickDriver.Instance != null)
-            {
-                SimulationTickDriver.Instance.SetPaused(true);
-                SimulationTickDriver.Instance.EndBattleAllocationSeal();
-                SimulationTickDriver.Instance.UnbindWorld();
-            }
-
+            state = AppFlowState.BattleStopping;
             var scene = SceneManager.GetSceneByName(battleSceneName);
-            if (scene.IsValid() && scene.isLoaded)
+            if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
+                    out BattleRuntimeShutdownReport shutdownReport))
             {
-                var bootstrap = FindBattleBootstrap(scene);
-                bootstrap?.DisablePresentation();
+                Debug.LogError(
+                    "[AppManager] Battle Scene unload was refused because ordered " +
+                    $"shutdown stopped at {shutdownReport.CompletedStage}: " +
+                    shutdownReport.FailureReason);
+                return null;
             }
 
             NTSD.TimeWheel.TimeWheel.DestroySharedInstance();
@@ -327,6 +334,36 @@ namespace NTSD.App
             return op;
         }
 
+        public bool TryShutdownBattleRuntimeBeforeSceneDestroy(
+            out BattleRuntimeShutdownReport report)
+        {
+            Scene battleScene = SceneManager.GetSceneByName(battleSceneName);
+            BattleBootstrap bootstrap = battleScene.IsValid() && battleScene.isLoaded
+                ? FindBattleBootstrap(battleScene)
+                : null;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver == null)
+            {
+                bootstrap?.DisablePresentation();
+                report = default;
+                return bootstrap == null || bootstrap.IsRuntimeMapCleared;
+            }
+
+            report = driver.ShutdownBattleRuntime();
+            if (report.Status == BattleRuntimeShutdownStatus.Failed ||
+                (!report.RuntimeStagesCompleted &&
+                 report.Status != BattleRuntimeShutdownStatus.AlreadyStopped))
+            {
+                return false;
+            }
+
+            bootstrap?.DisablePresentation();
+            bool runtimeMapCleared = bootstrap == null || bootstrap.IsRuntimeMapCleared;
+            report = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(
+                runtimeMapCleared);
+            return report.IsComplete;
+        }
+
         public void SetMenuState(AppFlowState menuState)
         {
             state = menuState;
@@ -334,6 +371,8 @@ namespace NTSD.App
 
         public void SetBattlePaused(bool paused)
         {
+            if (state == AppFlowState.BattleStopping)
+                return;
             state = paused ? AppFlowState.BattlePaused : AppFlowState.BattleRunning;
         }
     }

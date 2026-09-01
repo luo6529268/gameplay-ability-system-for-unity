@@ -171,11 +171,7 @@ namespace NTSD.Simulation
                 throw new ArgumentNullException(nameof(destination));
             }
 
-            if (!store.TryCopyCanonicalStateTo(
-                    destination,
-                    out int aRestEntryCount,
-                    out int vRestEntryCount,
-                    out int vRestRowCount))
+            if (!TryCopyCanonicalState(store, destination))
             {
                 return false;
             }
@@ -183,10 +179,150 @@ namespace NTSD.Simulation
             destination.CommitCapture(
                 identity,
                 tick,
-                aRestEntryCount,
-                vRestEntryCount,
-                vRestRowCount);
+                store.ARestEntryCount,
+                store.VRestEntryCount,
+                store.VRestRowCount);
             return true;
+        }
+
+        internal static bool TryRestore(
+            RuntimeRestStore target,
+            BattleWorldRestSnapshotBuffer source)
+        {
+            if (target == null ||
+                source == null ||
+                source.SchemaVersion != BattleWorldRestSnapshotBuffer.CurrentSchemaVersion ||
+                source.LogicalCapacity != target.LogicalCapacity ||
+                !target.IsPreparedForBattle ||
+                target.UsesDenseBattleStorage !=
+                    (source.StorageMode == BattleRestSnapshotStorageMode.Dense) ||
+                (!target.UsesDenseBattleStorage &&
+                 (!target.UsesPreallocatedSparseBattleStorage ||
+                  source.VRestEntryCount >
+                      target.PreparedSparseVRestEntryCapacity)))
+            {
+                return false;
+            }
+
+            target.ResetWorld();
+            for (int slot = 0; slot < target.LogicalCapacity; slot++)
+            {
+                int value = source.GetARest(slot);
+                if (value > 0 && !target.SetARest(slot, value))
+                    return false;
+            }
+
+            if (target.UsesDenseBattleStorage)
+            {
+                for (int victimSlot = 0;
+                     victimSlot < target.LogicalCapacity;
+                     victimSlot++)
+                {
+                    for (int attackerSlot = 0;
+                         attackerSlot < target.LogicalCapacity;
+                         attackerSlot++)
+                    {
+                        int value = source.GetVRest(victimSlot, attackerSlot);
+                        if (value > 0 &&
+                            !target.SetVRest(victimSlot, attackerSlot, value))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int index = 0; index < source.VRestEntryCount; index++)
+                {
+                    if (!target.SetVRest(
+                            source.SparseVictimSlots[index],
+                            source.SparseAttackerSlots[index],
+                            source.SparseValues[index]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return target.ARestEntryCount == source.ARestEntryCount &&
+                   target.VRestEntryCount == source.VRestEntryCount &&
+                   target.VRestRowCount == source.VRestRowCount;
+        }
+
+        private static bool TryCopyCanonicalState(
+            RuntimeRestStore source,
+            BattleWorldRestSnapshotBuffer destination)
+        {
+            if (!source.IsPreparedForBattle ||
+                destination.LogicalCapacity != source.LogicalCapacity)
+            {
+                return false;
+            }
+
+            bool usesDense = source.UsesDenseBattleStorage;
+            if (usesDense !=
+                (destination.StorageMode == BattleRestSnapshotStorageMode.Dense))
+            {
+                return false;
+            }
+            if (usesDense &&
+                destination.DenseVRestValues.Length !=
+                    checked(source.LogicalCapacity * source.LogicalCapacity))
+            {
+                return false;
+            }
+            if (!usesDense &&
+                (!source.UsesPreallocatedSparseBattleStorage ||
+                 destination.SparseEntryCapacity < source.VRestEntryCount))
+            {
+                return false;
+            }
+
+            Array.Clear(
+                destination.ARestValues,
+                0,
+                destination.ARestValues.Length);
+            int copiedARestEntries = 0;
+            foreach (RuntimeRestStore.ARestEntry entry in
+                     source.EnumerateCanonicalARestEntries())
+            {
+                destination.ARestValues[entry.AttackerSlot] = entry.Value;
+                copiedARestEntries++;
+            }
+
+            int copiedVRestEntries = 0;
+            if (usesDense)
+            {
+                Array.Clear(
+                    destination.DenseVRestValues,
+                    0,
+                    destination.DenseVRestValues.Length);
+                foreach (RuntimeRestStore.VRestEntry entry in
+                         source.EnumerateCanonicalVRestEntries())
+                {
+                    destination.DenseVRestValues[
+                        entry.VictimSlot * source.LogicalCapacity +
+                        entry.AttackerSlot] = entry.Value;
+                    copiedVRestEntries++;
+                }
+            }
+            else
+            {
+                foreach (RuntimeRestStore.VRestEntry entry in
+                         source.EnumerateCanonicalVRestEntries())
+                {
+                    destination.SparseVictimSlots[copiedVRestEntries] =
+                        entry.VictimSlot;
+                    destination.SparseAttackerSlots[copiedVRestEntries] =
+                        entry.AttackerSlot;
+                    destination.SparseValues[copiedVRestEntries] = entry.Value;
+                    copiedVRestEntries++;
+                }
+            }
+
+            return copiedARestEntries == source.ARestEntryCount &&
+                   copiedVRestEntries == source.VRestEntryCount;
         }
     }
 }

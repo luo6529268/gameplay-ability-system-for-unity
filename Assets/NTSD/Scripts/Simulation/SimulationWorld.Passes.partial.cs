@@ -2030,9 +2030,8 @@ namespace NTSD.Simulation
                 if (holder != null && holderData != null)
                 {
                     LF2FrameData holderFrame = holder.Frame?.D;
-                    clear = holderFrame?.wpoints == null ||
-                            holderFrame.wpoints.Count == 0 ||
-                            holderFrame.wpoints[0].attacking == 0;
+                    clear = holderFrame == null ||
+                            holderFrame.PrimaryWeaponPoint.Attacking == 0;
                 }
             }
 
@@ -2470,8 +2469,12 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            CatchPoint cpoint = entity.GetCollisionFrameData()?.cpoint;
-            return cpoint == null || cpoint.kind != 1 || entity.FrameDelay < 0;
+            LF2FrameData frame = entity.GetCollisionFrameData();
+            return frame == null ||
+                   !frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue cpoint) ||
+                   cpoint.Kind != 1 ||
+                   entity.FrameDelay < 0;
         }
 
         private static bool CanSkipCpointMismatchTailParticipant(LF2Entity entity)
@@ -2483,8 +2486,11 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            CatchPoint cpoint = entity.Frame?.D?.cpoint;
-            return cpoint == null || cpoint.kind != 2;
+            LF2FrameData frame = entity.Frame?.D;
+            return frame == null ||
+                   !frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue cpoint) ||
+                   cpoint.Kind != 2;
         }
 
         private static bool CanSkipWeaponSyncHeldParticipant(LF2Entity entity)
@@ -2498,10 +2504,10 @@ namespace NTSD.Simulation
 
             var character = (LF2Character)entity;
             LF2FrameData frame = character.Frame?.D;
-            CatchPoint cpoint = frame?.cpoint;
             if (frame != null &&
-                cpoint != null &&
-                cpoint.kind == 1 &&
+                frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) &&
+                cpoint.Kind == 1 &&
                 frame.state == LF2States.Catching)
             {
                 return false;
@@ -2591,17 +2597,20 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            CatchPoint collisionCpoint =
-                character.GetCollisionFrameData()?.cpoint;
-            if (collisionCpoint != null &&
-                (collisionCpoint.kind == 1 || collisionCpoint.kind == 2))
+            LF2FrameData collisionFrame = character.GetCollisionFrameData();
+            if (collisionFrame != null &&
+                collisionFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue collisionCpoint) &&
+                (collisionCpoint.Kind == 1 || collisionCpoint.Kind == 2))
             {
                 return false;
             }
 
-            CatchPoint currentCpoint = character.Frame?.D?.cpoint;
-            return currentCpoint == null ||
-                   (currentCpoint.kind != 1 && currentCpoint.kind != 2);
+            LF2FrameData currentFrame = character.Frame?.D;
+            return currentFrame == null ||
+                   !currentFrame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue currentCpoint) ||
+                   (currentCpoint.Kind != 1 && currentCpoint.Kind != 2);
         }
 
         public void RandomWeaponDropTickAll(int tickIndex)

@@ -43,7 +43,10 @@ namespace NTSD.Animation.LF2Objects
             weapon.PS.zz = 0;
         }
 
-        public WeaponActResult Act(LF2Entity holder, WeaponPoint wpoint, Vector3 holdpoint)
+        public WeaponActResult Act(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            Vector3 holdpoint)
         {
             WeaponActResult result = default;
             if (weapon.Frame.D == null)
@@ -56,15 +59,15 @@ namespace NTSD.Animation.LF2Objects
                     return result;
             }
 
-            weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.weaponact);
+            weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.WeaponAct);
             weapon.SwitchDir(holder.Runtime.Dir);
             weapon.FrameDelay = holder.FrameDelay;
             weapon.Runtime.WeaponState = LF2States.WeaponOnHand;
 
             LF2FrameData frame = weapon.Frame.D;
-            WeaponPoint heldWPoint = frame?.wpoints != null && frame.wpoints.Count > 0
-                ? frame.wpoints[0]
-                : null;
+            BattleWeaponPointValue heldWPoint = frame != null
+                ? frame.PrimaryWeaponPoint
+                : default;
 
             ApplyHeldWPointSync(holder, wpoint, holdpoint, heldWPoint);
 
@@ -72,7 +75,7 @@ namespace NTSD.Animation.LF2Objects
             if (heldState == LF2States.Falling || heldState == LF2States.BeingCaught)
                 DropHeldWeaponFromDamagedFrame(holder, ref result);
 
-            if (wpoint.dvx != 0)
+            if (wpoint.Dvx != 0)
             {
                 int weaponType = weapon.WeaponType;
                 bool isHeavyThrow = weaponType == 1 || weaponType == 4 || weaponType == 6;
@@ -100,20 +103,23 @@ namespace NTSD.Animation.LF2Objects
             return result;
         }
 
-        private void ThrowHeldWeapon(LF2Entity holder, WeaponPoint wpoint, bool stampSpawnerSlot)
+        private void ThrowHeldWeapon(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            bool stampSpawnerSlot)
         {
             weapon.Runtime.WeaponState = LF2States.WeaponThrowing;
-            weapon.Runtime.Vx = weapon.Dirh() * wpoint.dvx;
-            weapon.Runtime.Vy = wpoint.dvy;
+            weapon.Runtime.Vx = weapon.Dirh() * wpoint.Dvx;
+            weapon.Runtime.Vy = wpoint.Dvy;
 
-            if (wpoint.dvz != 0)
+            if (wpoint.Dvz != 0)
             {
                 bool keyUp = holder.Runtime.KeyUp != 0;
                 bool keyDown = holder.Runtime.KeyDown != 0;
                 if (keyUp && !keyDown)
-                    weapon.Runtime.Vz = -wpoint.dvz;
+                    weapon.Runtime.Vz = -wpoint.Dvz;
                 else if (!keyUp && keyDown)
-                    weapon.Runtime.Vz = wpoint.dvz;
+                    weapon.Runtime.Vz = wpoint.Dvz;
             }
 
             if (stampSpawnerSlot)
@@ -159,14 +165,14 @@ namespace NTSD.Animation.LF2Objects
 
         public void ApplyHeldWPointSync(
             LF2Entity holder,
-            WeaponPoint holderWPoint,
+            BattleWeaponPointValue holderWPoint,
             Vector3 holdpoint,
-            WeaponPoint heldWPoint)
+            BattleWeaponPointValue heldWPoint)
         {
             if (holder?.PS == null || weapon.PS == null)
                 return;
 
-            int cover = holderWPoint.cover;
+            int cover = holderWPoint.Cover;
             // C# WeaponRuntime uses held Z directly for cover ordering. A second zz
             // offset would cancel that Z delta in Unity's sorting order.
             weapon.PS.zz = 0f;

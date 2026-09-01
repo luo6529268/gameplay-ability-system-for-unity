@@ -186,8 +186,8 @@ namespace NTSD.Animation.LF2Objects
             if (attackerFrame == null || victimFrame == null)
                 return;
 
-            int attackerWact = attackerFrame.cpoint?.x ?? 0;
-            int victimWact = victimFrame.cpoint?.x ?? 0;
+            int attackerWact = attackerFrame.PrimaryCatchPoint.X;
+            int victimWact = victimFrame.PrimaryCatchPoint.X;
             int attackerCx = attackerFrame.centerx;
             int attackerCy = attackerFrame.centery;
             int victimCx = victimFrame.centerx;

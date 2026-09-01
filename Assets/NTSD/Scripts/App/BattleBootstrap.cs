@@ -37,6 +37,8 @@ namespace NTSD.App
 
         public bool IsMapConfigurationPrepared => mapConfigurationPrepared;
         public string PreparedMapId => preparedMapId;
+        public bool IsRuntimeMapCleared =>
+            !mapConfigurationPrepared && preparedBoundaryManager == null;
 
         public bool TryPrepareMapConfiguration(out string failure)
         {
@@ -134,6 +136,11 @@ namespace NTSD.App
             NTSDRenderSpace.ClearBoundWorldCamera(worldCamera);
             SetPresentationEnabled(false);
             ClearPreparedMapConfiguration();
+        }
+
+        private void OnDisable()
+        {
+            DisablePresentation();
         }
 
         private void SetPresentationEnabled(bool enabled)

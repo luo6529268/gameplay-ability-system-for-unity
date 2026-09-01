@@ -35,7 +35,8 @@ namespace NTSD.Test
             Assert.That(queue.TryEnqueue(second), Is.True);
             Assert.That(queue.TryEnqueue(Simulation.FrameInputSet.Empty(12)), Is.False);
 
-            var destination = Simulation.FrameInputSet.Empty(0);
+            Simulation.FrameInputSet destination =
+                Simulation.FrameInputSetPreallocation.CreateReusable();
             var players = new Simulation.SimulationPlayerInput[2];
             Assert.That(queue.TryDequeue(destination, players), Is.True);
             Assert.That(destination.TickIndex, Is.EqualTo(10));
@@ -54,8 +55,15 @@ namespace NTSD.Test
             sourcePlayers[0] = new Simulation.SimulationPlayerInput(
                 1,
                 Simulation.SimulationInputButtons.Right);
-            var source = new Simulation.FrameInputSet(1, sourcePlayers);
-            var destination = Simulation.FrameInputSet.Empty(0);
+            Simulation.FrameInputSet source =
+                Simulation.FrameInputSetPreallocation.CreateReusable();
+            Simulation.FrameInputSetPreallocation.ResetPreallocated(
+                source,
+                1,
+                sourcePlayers,
+                1);
+            Simulation.FrameInputSet destination =
+                Simulation.FrameInputSetPreallocation.CreateReusable();
             var destinationPlayers = new Simulation.SimulationPlayerInput[1];
 
             Assert.That(queue.TryEnqueue(source), Is.True);
@@ -64,7 +72,11 @@ namespace NTSD.Test
             long before = GC.GetAllocatedBytesForCurrentThread();
             for (int tick = 2; tick <= 1025; tick++)
             {
-                source.ResetPreallocated(tick, sourcePlayers, 1);
+                Simulation.FrameInputSetPreallocation.ResetPreallocated(
+                    source,
+                    tick,
+                    sourcePlayers,
+                    1);
                 if (!queue.TryEnqueue(source) ||
                     !queue.TryDequeue(destination, destinationPlayers))
                 {
@@ -92,7 +104,8 @@ namespace NTSD.Test
                 390,
                 11,
                 29);
-            var destination = Simulation.FrameInputSet.Empty(0);
+            Simulation.FrameInputSet destination =
+                Simulation.FrameInputSetPreallocation.CreateReusable();
             var destinationPlayers = new Simulation.SimulationPlayerInput[1];
 
             Assert.That(
@@ -1514,13 +1527,16 @@ namespace NTSD.Test
             Simulation.ISimulationFrameInputProvider
         {
             private readonly Simulation.FrameInputSet frame =
-                Simulation.FrameInputSet.Empty(0);
+                Simulation.FrameInputSetPreallocation.CreateReusable();
 
             public bool IsFrameInputReady(int tickIndex) => true;
 
             public Simulation.FrameInputSet GetFrameInput(int tickIndex)
             {
-                frame.ResetPreallocated(tickIndex, null);
+                Simulation.FrameInputSetPreallocation.ResetPreallocated(
+                    frame,
+                    tickIndex,
+                    null);
                 return frame;
             }
         }

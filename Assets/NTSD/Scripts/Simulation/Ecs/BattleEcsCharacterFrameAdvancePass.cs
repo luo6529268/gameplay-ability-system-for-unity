@@ -99,7 +99,9 @@ namespace NTSD.Simulation.Ecs
                 return true;
 
             LF2FrameData frame = character.Frame?.D;
-            if (frame?.cpoint != null && frame.cpoint.kind == 2)
+            if (frame != null &&
+                frame.HasPrimaryCatchPoint &&
+                frame.PrimaryCatchPoint.Kind == 2)
                 return true;
 
             ExecuteCharacterDynamics(character, frame);

@@ -1442,7 +1442,15 @@ namespace NTSD.Animation
                 int col = actualCol;
 
                 var processedSheet = await UniTask.RunOnThreadPool(() =>
-                    RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels));
+                {
+                    Color32[] processed =
+                        RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels);
+                    RuntimeSpriteProcessor.ClearDetectedGridSeparatorAlpha(
+                        processed,
+                        textureWidth,
+                        textureHeight);
+                    return processed;
+                });
                 Rect?[] spriteRects = BuildIndexedSpriteRects(
                     fileInfo,
                     textureWidth,

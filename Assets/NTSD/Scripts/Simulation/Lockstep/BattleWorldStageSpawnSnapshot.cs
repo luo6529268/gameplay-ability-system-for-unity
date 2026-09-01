@@ -73,7 +73,7 @@ namespace NTSD.Simulation
         }
 
         public static int CalculateRequiredEntryCapacity(
-            IReadOnlyList<BattleStageCampaignData> campaigns)
+            BattleStageCampaignSet campaigns)
         {
             int maximum = 0;
             if (campaigns == null)
@@ -85,17 +85,13 @@ namespace NTSD.Simulation
                  campaignIndex < campaigns.Count;
                  campaignIndex++)
             {
-                BattleStageCampaignData campaign = campaigns[campaignIndex];
-                if (campaign?.Phases == null)
-                {
-                    continue;
-                }
+                BattleStageCampaignValue campaign = campaigns[campaignIndex];
 
                 for (int phaseIndex = 0;
                      phaseIndex < campaign.Phases.Count;
                      phaseIndex++)
                 {
-                    int count = campaign.Phases[phaseIndex]?.Spawns?.Count ?? 0;
+                    int count = campaign.Phases[phaseIndex].Spawns.Count;
                     if (count > maximum)
                     {
                         maximum = count;

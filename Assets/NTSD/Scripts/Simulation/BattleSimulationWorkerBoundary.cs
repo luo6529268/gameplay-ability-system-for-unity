@@ -128,7 +128,8 @@ namespace NTSD.Simulation
         private sealed class Cell
         {
             internal readonly SimulationPlayerInput[] Players;
-            internal readonly FrameInputSet Frame = FrameInputSet.Empty(0);
+            internal readonly FrameInputSet Frame =
+                FrameInputSetPreallocation.CreateReusable();
             internal BattleSimulationStageSnapshot Stage;
             internal bool BuildPresentation;
 
@@ -446,7 +447,8 @@ namespace NTSD.Simulation
         private readonly BattleSimulationPublicationBuffer publicationBuffer;
         private readonly IBattleSimulationTickExecutor executor;
         private readonly SimulationPlayerInput[] workerPlayers;
-        private readonly FrameInputSet workerFrame = FrameInputSet.Empty(0);
+        private readonly FrameInputSet workerFrame =
+            FrameInputSetPreallocation.CreateReusable();
         private readonly AutoResetEvent inputAvailable = new AutoResetEvent(false);
         private readonly AutoResetEvent publicationConsumed = new AutoResetEvent(false);
         private Thread workerThread;

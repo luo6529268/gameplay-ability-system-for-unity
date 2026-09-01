@@ -1280,7 +1280,7 @@ namespace NTSD.Animation
 
                 for (int b = 0; b < targetFrame.bodies.Count; b++)
                 {
-                    BodyBox body = targetFrame.bodies[b];
+                    BattleBodyBoxValue body = targetFrame.bodies[b];
                     if (!IsReleaseBody(body))
                         continue;
 
@@ -1289,7 +1289,7 @@ namespace NTSD.Animation
                     bool intersects = CollisionUtil.Intersect(vol, bodyVolume);
                     if (intersects)
                     {
-                        int bodyX = body.x;
+                        int bodyX = body.X;
                         _tmpHitResult.Add(new SceneQueryHit(target, bodyX));
                         break;
                     }
@@ -3516,7 +3516,7 @@ namespace NTSD.Animation
         private static RoleAwareFormalBodyTemplate BuildRoleAwareFormalBodyTemplate(
             LF2FrameData frame)
         {
-            List<BodyBox> bodies = frame?.bodies;
+            List<BattleBodyBoxValue> bodies = frame?.bodies;
             int bodyCount = bodies?.Count ?? 0;
             int centerX = frame?.centerx ?? 0;
             int releaseBodyCount = 0;
@@ -3531,24 +3531,24 @@ namespace NTSD.Animation
 
             for (int bodyIndex = 0; bodyIndex < bodyCount; bodyIndex++)
             {
-                BodyBox body = bodies[bodyIndex];
+                BattleBodyBoxValue body = bodies[bodyIndex];
                 if (!IsReleaseBody(body))
                     continue;
 
                 releaseBodyCount++;
-                if (body.x == int.MinValue ||
-                    body.x == int.MaxValue ||
-                    body.w <= 0 ||
-                    body.w == int.MaxValue)
+                if (body.X == int.MinValue ||
+                    body.X == int.MaxValue ||
+                    body.W <= 0 ||
+                    body.W == int.MaxValue)
                 {
                     fastProof = false;
                     continue;
                 }
 
-                long rightX1 = (long)-centerX + body.x;
-                long rightX2 = rightX1 + body.w;
-                long leftX2 = (long)centerX - body.x;
-                long leftX1 = leftX2 - body.w;
+                long rightX1 = (long)-centerX + body.X;
+                long rightX2 = rightX1 + body.W;
+                long leftX2 = (long)centerX - body.X;
+                long leftX1 = leftX2 - body.W;
                 if (rightX1 < RectMin ||
                     rightX2 > RectMax ||
                     leftX1 < RectMin ||
@@ -3668,7 +3668,7 @@ namespace NTSD.Animation
                  bodyIndex < frame.bodies.Count;
                  bodyIndex++)
             {
-                BodyBox body = frame.bodies[bodyIndex];
+                BattleBodyBoxValue body = frame.bodies[bodyIndex];
                 if (!IsReleaseBody(body))
                     continue;
 
@@ -3713,7 +3713,7 @@ namespace NTSD.Animation
 
             for (int bodyIndex = 0; bodyIndex < frame.bodies.Count; bodyIndex++)
             {
-                BodyBox body = frame.bodies[bodyIndex];
+                BattleBodyBoxValue body = frame.bodies[bodyIndex];
                 if (!IsReleaseBody(body) ||
                     !TryBuildFormalBodyAabb(
                         entity,
@@ -3936,18 +3936,18 @@ namespace NTSD.Animation
             LF2FrameData collisionFrame = participant.CollisionFrame;
             participant.ExactBodyRectOffset = _roleFormalExactBodyRects.Count;
             participant.ExactBodyRectCount = 0;
-            List<BodyBox> bodies = collisionFrame?.bodies;
+            List<BattleBodyBoxValue> bodies = collisionFrame?.bodies;
             if (bodies != null)
             {
                 for (int bodyIndex = 0; bodyIndex < bodies.Count; bodyIndex++)
                 {
-                    BodyBox body = bodies[bodyIndex];
+                    BattleBodyBoxValue body = bodies[bodyIndex];
                     if (!IsReleaseBody(body))
                         continue;
 
                     _roleFormalExactBodyRects.Add(
                         new RoleAwareFormalExactBodyRectEntry(
-                            body.x,
+                            body.X,
                             BodyWorldRect(
                                 participant.Entity,
                                 collisionFrame,
@@ -4221,7 +4221,7 @@ namespace NTSD.Animation
                 {
                     for (int bodyIndex = 0; bodyIndex < frame.bodies.Count; bodyIndex++)
                     {
-                        BodyBox body = frame.bodies[bodyIndex];
+                        BattleBodyBoxValue body = frame.bodies[bodyIndex];
                         if (!IsReleaseBody(body))
                             continue;
 
@@ -5937,9 +5937,7 @@ namespace NTSD.Animation
                         // kind=5 替换读取的是 holder 碰撞帧（prev2）的 wpoint.attacking，
                         // 不是 hit_j，也不是 1-based 索引。
                         int attackingItrIndex =
-                            holderFrame.wpoints != null && holderFrame.wpoints.Count > 0
-                                ? holderFrame.wpoints[0].attacking
-                                : 0;
+                            holderFrame.PrimaryWeaponPoint.Attacking;
                         int targetSlot = target.Runtime?.SlotIndex ?? -1;
                         if (attackingItrIndex > 0 &&
                             holderSlot != targetSlot &&
@@ -6392,8 +6390,10 @@ namespace NTSD.Animation
                 return false;
 
             LF2FrameData targetPrev2Frame = GetAuthoredPrev2Frame(target);
-            CatchPoint targetCpoint = targetPrev2Frame?.cpoint;
-            if (targetCpoint == null || targetCpoint.kind != 2)
+            if (targetPrev2Frame == null ||
+                !targetPrev2Frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue targetCpoint) ||
+                targetCpoint.Kind != 2)
                 return false;
 
             int catcherSlot = target.CatcherSlotIndex;
@@ -6404,8 +6404,11 @@ namespace NTSD.Animation
             if (catcher == null || catcher.CaughtSlotIndex != (attacker.Runtime?.SlotIndex ?? -1))
                 return false;
 
-            CatchPoint catcherPrev2Cpoint = GetAuthoredPrev2Frame(catcher)?.cpoint;
-            return catcherPrev2Cpoint == null || catcherPrev2Cpoint.hurtable == 0;
+            LF2FrameData catcherPrev2Frame = GetAuthoredPrev2Frame(catcher);
+            return catcherPrev2Frame == null ||
+                   !catcherPrev2Frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue catcherPrev2Cpoint) ||
+                   catcherPrev2Cpoint.Hurtable == 0;
         }
 
         private static bool IsPureTransitionSmoke(LF2Entity entity)
@@ -6733,13 +6736,13 @@ namespace NTSD.Animation
             WorldRect itrRect = ItrWorldRect(attacker, attackerCollisionFrame, itr);
             for (int b = 0; b < targetCollisionFrame.bodies.Count; b++)
             {
-                BodyBox body = targetCollisionFrame.bodies[b];
+                BattleBodyBoxValue body = targetCollisionFrame.bodies[b];
                 if (!IsReleaseBody(body)) continue;
 
                 WorldRect bodyRect = BodyWorldRect(target, targetCollisionFrame, body, collectSemantics: true);
                 if (!Overlap(itrRect, bodyRect)) continue;
 
-                bodyX = body.x;
+                bodyX = body.X;
                 return true;
             }
 
@@ -6760,7 +6763,7 @@ namespace NTSD.Animation
 
             for (int b = 0; b < targetCollisionFrame.bodies.Count; b++)
             {
-                BodyBox body = targetCollisionFrame.bodies[b];
+                BattleBodyBoxValue body = targetCollisionFrame.bodies[b];
                 if (!IsReleaseBody(body))
                     continue;
 
@@ -6769,7 +6772,7 @@ namespace NTSD.Animation
                 if (!CollisionUtil.Intersect(itrVolume, bodyVolume))
                     continue;
 
-                bodyX = body.x;
+                bodyX = body.X;
                 return true;
             }
 
@@ -6948,15 +6951,15 @@ namespace NTSD.Animation
             long maxY = 0;
             for (int i = 0; i < frame.bodies.Count; i++)
             {
-                BodyBox body = frame.bodies[i];
+                BattleBodyBoxValue body = frame.bodies[i];
                 if (!IsReleaseBody(body))
                     continue;
 
                 fullHeight |= BodyIsReleaseFullHeight(body);
-                long x1 = body.x;
-                long y1 = body.y;
-                long x2 = x1 + body.w;
-                long y2 = y1 + body.h;
+                long x1 = body.X;
+                long y1 = body.Y;
+                long x2 = x1 + body.W;
+                long y2 = y1 + body.H;
                 if (!found)
                 {
                     found = true;
@@ -7020,12 +7023,12 @@ namespace NTSD.Animation
                 fullHeight: false);
         }
 
-        private static WorldRect BodyWorldRect(LF2Entity entity, LF2FrameData frame, BodyBox body, bool collectSemantics)
+        private static WorldRect BodyWorldRect(LF2Entity entity, LF2FrameData frame, BattleBodyBoxValue body, bool collectSemantics)
         {
             return LocalRectWorldRect(
                 entity,
                 frame,
-                new LocalRect(body.x, body.y, body.w, body.h),
+                new LocalRect(body.X, body.Y, body.W, body.H),
                 fullHeight: collectSemantics && BodyIsReleaseFullHeight(body));
         }
 
@@ -7049,7 +7052,7 @@ namespace NTSD.Animation
             {
                 for (int i = 0; i < collisionFrame.bodies.Count; i++)
                 {
-                    BodyBox body = collisionFrame.bodies[i];
+                    BattleBodyBoxValue body = collisionFrame.bodies[i];
                     if (!IsReleaseBody(body))
                         continue;
 
@@ -7166,7 +7169,7 @@ namespace NTSD.Animation
         private static bool TryBuildShadowBodyAabb(
             LF2Entity target,
             LF2FrameData frame,
-            BodyBox body,
+            BattleBodyBoxValue body,
             out SpatialAabbXZ bounds)
         {
             bounds = default;
@@ -7187,7 +7190,7 @@ namespace NTSD.Animation
         private static bool TryBuildFormalBodyAabb(
             LF2Entity target,
             LF2FrameData frame,
-            BodyBox body,
+            BattleBodyBoxValue body,
             out SpatialAabbXZ bounds)
         {
             bounds = default;
@@ -7284,7 +7287,7 @@ namespace NTSD.Animation
         internal static bool TryBuildBodyBattleVolume(
             LF2Entity entity,
             LF2FrameData frame,
-            BodyBox body,
+            BattleBodyBoxValue body,
             out PhysicsState.BattleVolume volume)
         {
             volume = default;
@@ -7364,9 +7367,9 @@ namespace NTSD.Animation
             return entity?.PS?.dir == "left";
         }
 
-        private static bool BodyIsReleaseFullHeight(BodyBox body)
+        private static bool BodyIsReleaseFullHeight(BattleBodyBoxValue body)
         {
-            return body != null && body.y == int.MinValue && body.x < -100 && body.w >= 900;
+            return body.Y == int.MinValue && body.X < -100 && body.W >= 900;
         }
 
         private static bool HasAnyReleaseBody(LF2FrameData frame)
@@ -7397,9 +7400,9 @@ namespace NTSD.Animation
             return false;
         }
 
-        private static bool IsReleaseBody(BodyBox body)
+        private static bool IsReleaseBody(BattleBodyBoxValue body)
         {
-            return body != null;
+            return true;
         }
 
         private static bool IsReleaseItrForUnion(InteractionArea itr)
@@ -7685,7 +7688,7 @@ namespace NTSD.Animation
     internal readonly struct RoleAwareFormalBodyTemplate
     {
         public RoleAwareFormalBodyTemplate(
-            List<BodyBox> sourceBodies,
+            List<BattleBodyBoxValue> sourceBodies,
             int sourceBodyCount,
             int sourceCenterX,
             int releaseBodyCount,
@@ -7706,7 +7709,7 @@ namespace NTSD.Animation
             FastProof = fastProof;
         }
 
-        public List<BodyBox> SourceBodies { get; }
+        public List<BattleBodyBoxValue> SourceBodies { get; }
         public int SourceBodyCount { get; }
         public int SourceCenterX { get; }
         public int ReleaseBodyCount { get; }

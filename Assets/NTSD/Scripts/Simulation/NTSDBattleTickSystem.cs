@@ -39,6 +39,12 @@ namespace NTSD.Simulation
         Count = 29,
     }
 
+    internal enum BattleTickCompletion : byte
+    {
+        NotCompleted = 0,
+        FullReturn = 1,
+    }
+
     public sealed class BattleTickPhaseDiagnostics
     {
         private static class PhaseProfilerMarkers
@@ -211,20 +217,43 @@ namespace NTSD.Simulation
 
         public void RunReleaseTick(int tickIndex, bool buildPresentation)
         {
-            RunTick(tickIndex, buildPresentation, simulationWorker: false);
+            RunReleaseTick(
+                tickIndex,
+                buildPresentation,
+                world?.CurrentAppliedFrameInputForResults);
         }
 
-        internal void RunSimulationWorkerTick(int tickIndex, bool buildPresentation)
-        {
-            RunTick(tickIndex, buildPresentation, simulationWorker: true);
-        }
-
-        private void RunTick(
+        public void RunReleaseTick(
             int tickIndex,
             bool buildPresentation,
-            bool simulationWorker)
+            FrameInputSet frameInput)
         {
-            if (world == null) return;
+            RunTick(
+                tickIndex,
+                buildPresentation,
+                simulationWorker: false,
+                frameInput);
+        }
+
+        internal BattleTickCompletion RunSimulationWorkerTick(
+            int tickIndex,
+            bool buildPresentation)
+        {
+            return RunTick(
+                tickIndex,
+                buildPresentation,
+                simulationWorker: true,
+                world?.CurrentAppliedFrameInputForResults);
+        }
+
+        private BattleTickCompletion RunTick(
+            int tickIndex,
+            bool buildPresentation,
+            bool simulationWorker,
+            FrameInputSet frameInput)
+        {
+            if (world == null)
+                return BattleTickCompletion.NotCompleted;
 
             BattleTickPhaseDiagnostics diagnostics =
                 world.ActiveBattleTickPhaseDiagnosticsForDiagnostics;
@@ -241,37 +270,44 @@ namespace NTSD.Simulation
                 world.PendingSounds.Clear();
                 world.AdvanceBattleFlowTick(tickIndex);
                 diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
-                if (world.Runtime?.Results?.IsActive == true)
-                {
-                    diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
-                    PostCooldownHumanInput(tickIndex);
-                    diagnostics?.EndPhase(BattleTickPhase.HumanInput);
-                    diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
-                    world.RunActiveBattleResultsTick();
-                    diagnostics?.EndPhase(BattleTickPhase.BattleResults);
-                    return;
-                }
+                // Alignment contract: CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001.
+                // C++ runs the complete world tick before processing Results host input.
+                bool resultsActiveAtTickStart =
+                    world.Runtime?.Results?.IsActive == true;
 
                 diagnostics?.BeginPhase(BattleTickPhase.Cooldown);
                 TickCooldowns(tickIndex);
                 diagnostics?.EndPhase(BattleTickPhase.Cooldown);
                 bool stepWaitGate = PrepareBattleStepGateForTick();
-                if (!stepWaitGate || world.NeedClearInput)
+                if (!resultsActiveAtTickStart &&
+                    (!stepWaitGate || world.NeedClearInput))
                 {
                     diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
                     PostCooldownHumanInput(tickIndex);
                     diagnostics?.EndPhase(BattleTickPhase.HumanInput);
                 }
 
-                if (!RunFrameAdvancePhase(tickIndex, stepWaitGate, diagnostics))
-                    return;
+                if (!RunFrameAdvancePhase(
+                        tickIndex,
+                        stepWaitGate,
+                        diagnostics,
+                        allowBattleEntryInputClear: !resultsActiveAtTickStart))
+                {
+                    return BattleTickCompletion.NotCompleted;
+                }
                 RunInteractionPhase(tickIndex, diagnostics);
-                RunPresentationAndCleanupPhase(
+                return RunPresentationAndCleanupPhase(
                     tickIndex,
                     buildPresentation,
                     simulationWorker,
                     stepWaitGate,
-                    diagnostics);
+                    diagnostics,
+                    resultsActiveAtTickStart,
+                    frameInput != null && frameInput.TickIndex == tickIndex
+                        ? frameInput
+                        : null)
+                    ? BattleTickCompletion.FullReturn
+                    : BattleTickCompletion.NotCompleted;
             }
             finally
             {
@@ -285,9 +321,10 @@ namespace NTSD.Simulation
         private bool RunFrameAdvancePhase(
             int tickIndex,
             bool stepWaitGate,
-            BattleTickPhaseDiagnostics diagnostics)
+            BattleTickPhaseDiagnostics diagnostics,
+            bool allowBattleEntryInputClear)
         {
-            if (world.NeedClearInput)
+            if (allowBattleEntryInputClear && world.NeedClearInput)
             {
                 diagnostics?.BeginPhase(BattleTickPhase.RuntimeMaintenance);
                 Oid5152RuntimeMaintenance(tickIndex);
@@ -377,12 +414,14 @@ namespace NTSD.Simulation
             diagnostics?.EndPhase(BattleTickPhase.HeldProcess);
         }
 
-        private void RunPresentationAndCleanupPhase(
+        private bool RunPresentationAndCleanupPhase(
             int tickIndex,
             bool buildPresentation,
             bool simulationWorker,
             bool stepWaitGate,
-            BattleTickPhaseDiagnostics diagnostics)
+            BattleTickPhaseDiagnostics diagnostics,
+            bool resultsActiveAtTickStart,
+            FrameInputSet frameInput)
         {
             diagnostics?.BeginPhase(BattleTickPhase.PreFrameBounds);
             PreFrameBounds();
@@ -394,7 +433,7 @@ namespace NTSD.Simulation
             RenderDispatch(tickIndex, buildPresentation, simulationWorker);
             diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
             if (stepWaitGate)
-                return;
+                return false;
             diagnostics?.BeginPhase(BattleTickPhase.FramePostProcess);
             FramePostProcess();
             diagnostics?.EndPhase(BattleTickPhase.FramePostProcess);
@@ -411,8 +450,9 @@ namespace NTSD.Simulation
             // the mode2 and entity post-frame tails have both consumed it.
             ClearFunctionKeyRequestsAfterPostFrameTail();
             diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
-            BattleResultsFlow();
+            BattleResultsFlow(resultsActiveAtTickStart, frameInput);
             diagnostics?.EndPhase(BattleTickPhase.BattleResults);
+            return true;
         }
 
         private void TickCooldowns(int tickIndex)
@@ -601,8 +641,16 @@ namespace NTSD.Simulation
             world.ClearFunctionKeyRequestsAfterPostFrameTail();
         }
 
-        private void BattleResultsFlow()
+        private void BattleResultsFlow(
+            bool resultsActiveAtTickStart,
+            FrameInputSet frameInput)
         {
+            if (resultsActiveAtTickStart)
+            {
+                world.RunActiveBattleResultsTick(frameInput);
+                return;
+            }
+
             world.UpdateBattleResultsFlow();
         }
     }

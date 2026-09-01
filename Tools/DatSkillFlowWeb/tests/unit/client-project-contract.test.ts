@@ -83,6 +83,7 @@ describe("project-backed client contract", () => {
             "flow-svg", "flow-edge-target",
             "apply-flow-edge", "copy-frame", "delete-frame", "new-block", "copy-block", "delete-block", "grid-four",
             "position-mode", "reset-positions", "position-readout",
+            "presentation-rate", "presentation-readout",
             "editor-grid", "left-panel-separator", "right-panel-separator",
         ]) assert.match(html, new RegExp(`id="${id}"`));
         assert.match(main, /project\.sourceKind === "base" \? skillState\.metadata : \[\]/);
@@ -134,11 +135,18 @@ describe("project-backed client contract", () => {
         assert.doesNotMatch(html, /DAT wait 视觉轴/);
         assert.match(html, /class="panel-section flow-section" hidden aria-hidden="true"/);
         assert.match(styles, /\.flow-section\[hidden\]\s*\{\s*display:\s*none;\s*\}/);
-        const frameSelection = main.match(/async function selectFrame\([\s\S]*?\n}\nasync function previewFrameWithinCompleteAction/)?.[0] ?? "";
+        const frameSelection = main.match(/async function selectFrame\([\s\S]*?\r?\n}\r?\nasync function previewFrameWithinCompleteAction/)?.[0] ?? "";
         assert.match(frameSelection, /render\(\);/);
         assert.match(frameSelection, /previewFrameWithinCompleteAction\(frame\)/);
         assert.doesNotMatch(frameSelection, /preview\(frameId\)/);
         assert.match(frameSelection, /已立即显示/);
+        assert.match(html, /120Hz 平滑/);
+        assert.match(main, /samplePlaybackPresentation/);
+        assert.match(main, /presentationSample\.presentationTick/);
+        assert.match(main, /authorityTick/);
+        assert.match(main, /requestAnimationFrame\(advancePresentation\)/);
+        assert.match(styles, /\.presentation-rate-control/);
+        assert.match(styles, /\.presentation-readout/);
         assert.match(main, /未从该 Frame 单独启动/);
         assert.match(html, /重定向已有字段/);
         assert.doesNotMatch(html, />\s*0 毫秒\s*</);

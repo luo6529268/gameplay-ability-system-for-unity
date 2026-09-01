@@ -118,6 +118,14 @@
               <button id="zoom-in" class="icon-button" type="button" aria-label="放大">＋</button>
               <button id="fit-preview" class="button button-quiet" type="button">适应窗口</button>
             </div>
+            <label class="toolbar-group presentation-rate-control">
+              <span class="toolbar-label">表现</span>
+              <select id="presentation-rate" aria-label="预览表现频率">
+                <option value="30">30Hz 原始</option>
+                <option value="60">60Hz 平滑</option>
+                <option value="120" selected>120Hz 平滑</option>
+              </select>
+            </label>
             <div class="toolbar-group overlay-toolbar" aria-label="几何叠加层">
               <span class="toolbar-label">叠加</span>
               <button type="button" data-overlay="itr" aria-pressed="true">ITR</button>
@@ -142,6 +150,7 @@
               <span>当前 Frame <strong id="frame-readout">-</strong></span>
               <span>Tick <strong id="tick-readout">0</strong> / <span id="preview-frame-count">0</span></span>
               <span>朝向 <strong id="facing-readout">右</strong></span>
+              <span id="presentation-readout" class="presentation-readout">Native 30Hz · 离散 Tick</span>
             </div>
           </div>
           <p id="diagnostics" class="diagnostics" role="status">正在等待项目数据。</p>

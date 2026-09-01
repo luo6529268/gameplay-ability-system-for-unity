@@ -487,6 +487,54 @@ namespace NTSD.Animation
             return sourcePixels;
         }
 
+        internal static void ClearDetectedGridSeparatorAlpha(
+            Color32[] pixels,
+            int textureWidth,
+            int textureHeight)
+        {
+            if (pixels == null || textureWidth <= 0 || textureHeight <= 0 ||
+                pixels.Length != textureWidth * textureHeight)
+            {
+                return;
+            }
+
+            int rowThreshold = Mathf.Max(1, Mathf.CeilToInt(textureWidth * 0.65f));
+            for (int y = 0; y < textureHeight; y++)
+            {
+                int rowStart = y * textureWidth;
+                int greenCount = 0;
+                for (int x = 0; x < textureWidth; x++)
+                {
+                    if (IsGridSeparatorGreen(pixels[rowStart + x]))
+                        greenCount++;
+                }
+                if (greenCount < rowThreshold)
+                    continue;
+                for (int x = 0; x < textureWidth; x++)
+                    pixels[rowStart + x].a = 0;
+            }
+
+            int columnThreshold = Mathf.Max(1, Mathf.CeilToInt(textureHeight * 0.65f));
+            for (int x = 0; x < textureWidth; x++)
+            {
+                int greenCount = 0;
+                for (int y = 0; y < textureHeight; y++)
+                {
+                    if (IsGridSeparatorGreen(pixels[y * textureWidth + x]))
+                        greenCount++;
+                }
+                if (greenCount < columnThreshold)
+                    continue;
+                for (int y = 0; y < textureHeight; y++)
+                    pixels[y * textureWidth + x].a = 0;
+            }
+        }
+
+        private static bool IsGridSeparatorGreen(Color32 pixel)
+        {
+            return pixel.g > 200 && pixel.r < 40 && pixel.b < 40;
+        }
+
         public static List<SpriteRectData> BuildSpriteRectsFromTopLeft(int textureWidth, int textureHeight,
             int width, int height, int row, int col)
         {

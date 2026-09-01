@@ -100,7 +100,9 @@ namespace NTSD.Simulation.Ecs
                 return;
 
             LF2FrameData frame = character.Frame?.D;
-            if (frame == null || (frame.cpoint != null && frame.cpoint.kind == 2))
+            if (frame == null ||
+                (frame.HasPrimaryCatchPoint &&
+                 frame.PrimaryCatchPoint.Kind == 2))
                 return;
 
             character.RunReleaseFrameTickCounters();

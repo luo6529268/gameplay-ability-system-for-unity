@@ -162,6 +162,8 @@ namespace NTSD.Simulation.Ecs
         private int lastSpawnAuthorityOrdinal;
         private RuntimeEntityHandle lastSpawnSource;
         private BattleStructuralCommand lastCommand;
+        private bool acceptingStructuralCreates = true;
+        private long shutdownRejectedCreateCount;
 
         internal BattleStructuralWriter(SimulationWorld world)
         {
@@ -190,11 +192,31 @@ namespace NTSD.Simulation.Ecs
                 lastSpawnSource,
                 lastCommand);
 
+        internal bool AcceptingStructuralCreatesForDiagnostics =>
+            acceptingStructuralCreates;
+        internal long ShutdownRejectedCreateCountForDiagnostics =>
+            shutdownRejectedCreateCount;
+
+        internal void BeginBattlePreparation()
+        {
+            acceptingStructuralCreates = true;
+        }
+
+        internal void BeginBattleShutdown()
+        {
+            acceptingStructuralCreates = false;
+        }
+
         internal void ProcessLateOpointSegment(
             IBattleObjectPointStructuralMaterializer factory,
             LF2Entity spawner,
             int tickIndex)
         {
+            if (!acceptingStructuralCreates)
+            {
+                shutdownRejectedCreateCount++;
+                return;
+            }
             if (factory == null || spawner?.Runtime == null)
                 return;
 
@@ -218,6 +240,11 @@ namespace NTSD.Simulation.Ecs
             OPointCreateTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
+            if (!acceptingStructuralCreates)
+            {
+                shutdownRejectedCreateCount++;
+                return null;
+            }
             if (factory == null || task == null)
                 return null;
 
@@ -241,6 +268,11 @@ namespace NTSD.Simulation.Ecs
             OPointCreateMultipleTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
+            if (!acceptingStructuralCreates)
+            {
+                shutdownRejectedCreateCount++;
+                return;
+            }
             if (factory == null || task == null)
                 return;
 
@@ -261,6 +293,11 @@ namespace NTSD.Simulation.Ecs
 
         internal void Register(ISimObject obj)
         {
+            if (!acceptingStructuralCreates)
+            {
+                shutdownRejectedCreateCount++;
+                return;
+            }
             Record(
                 BattleStructuralCommandType.Register,
                 BattleStructuralPlaybackBoundary.CurrentEntityImmediate,

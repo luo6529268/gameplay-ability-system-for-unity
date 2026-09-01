@@ -5023,8 +5023,8 @@ namespace NTSD.Animation.LF2Objects
             int dy = catcherY - catcherFrame.centery + catcherCpoint.y;
 
             LF2FrameData victimCurrentFrame = victimEntity.Frame?.D;
-            int victimCpointX = victimCurrentFrame?.cpoint?.x ?? 0;
-            int victimCpointY = victimCurrentFrame?.cpoint?.y ?? 0;
+            int victimCpointX = victimCurrentFrame?.PrimaryCatchPoint.X ?? 0;
+            int victimCpointY = victimCurrentFrame?.PrimaryCatchPoint.Y ?? 0;
             int victimCenterX = victimCurrentFrame?.centerx ?? 0;
             int victimCenterY = victimCurrentFrame?.centery ?? 0;
 
@@ -5127,7 +5127,8 @@ namespace NTSD.Animation.LF2Objects
 
             RunReleaseFrameTickCounters();
 
-            if (Frame.D.cpoint != null && Frame.D.cpoint.kind == 2)
+            if (Frame.D.HasPrimaryCatchPoint &&
+                Frame.D.PrimaryCatchPoint.Kind == 2)
                 return false;
 
             return ApplyObjectSpecificFrameTickBeforeWaitAdvance();
@@ -5313,7 +5314,9 @@ namespace NTSD.Animation.LF2Objects
             if (IsBlockedByReleaseLinkOrCaughtCpoint())
                 return;
 
-            if (Frame?.D?.cpoint != null && Frame.D.cpoint.kind == 2)
+            if (Frame?.D != null &&
+                Frame.D.HasPrimaryCatchPoint &&
+                Frame.D.PrimaryCatchPoint.Kind == 2)
                 return;
 
             float mass = NTSDGlobal.Default.Machanics.Mass;
@@ -5369,7 +5372,9 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             if (IsBlockedByReleaseLinkOrCaughtCpoint())
                 return false;
-            if (Frame?.D?.cpoint != null && Frame.D.cpoint.kind == 2)
+            if (Frame?.D != null &&
+                Frame.D.HasPrimaryCatchPoint &&
+                Frame.D.PrimaryCatchPoint.Kind == 2)
                 return false;
 
             ApplyNonCharacterFrameVelocityForFrameAdvance();
@@ -5790,7 +5795,8 @@ namespace NTSD.Animation.LF2Objects
             LF2FrameData frame = Frame?.D;
             if (frame == null)
                 return false;
-            if (frame.cpoint != null && frame.cpoint.kind == 2)
+            if (frame.HasPrimaryCatchPoint &&
+                frame.PrimaryCatchPoint.Kind == 2)
                 return false;
 
             if (dataType == (int)LF2ObjectType.SpecialAttack && frame.hit_a > 0 && Health != null)

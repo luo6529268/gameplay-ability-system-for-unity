@@ -13,14 +13,23 @@ namespace NTSD.Animation.Rendering
         [SerializeField] private Material material;
         [SerializeField] private Material arrayMaterial;
         [SerializeField] private BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks;
+        [SerializeField] private bool disableRuntimeHealthBars;
+        [SerializeField] private BattleHealthBarStyle runtimeHealthBarStyle =
+            BattleHealthBarStyle.Default;
 
         private BattleRenderPass pass;
+        private BattleEditorPreviewPass editorPreviewPass;
         private BattleBottomOverlayPass bottomOverlayPass;
 
         public Material Material => material;
         public Material ArrayMaterial => arrayMaterial;
         public BattleCentralDrawMode DrawMode => drawMode;
         public RenderPassEvent InjectionPoint => RenderPassEvent.AfterRenderingTransparents;
+        internal bool RuntimeHealthBarsEnabled => !disableRuntimeHealthBars;
+        internal BattleHealthBarStyle RuntimeHealthBarStyle =>
+            runtimeHealthBarStyle.WidthPixels > 0f && runtimeHealthBarStyle.HeightPixels > 0f
+                ? runtimeHealthBarStyle
+                : BattleHealthBarStyle.Default;
 
         public void Configure(Material value, BattleCentralDrawMode mode)
         {
@@ -41,6 +50,8 @@ namespace NTSD.Animation.Rendering
         {
             pass ??= new BattleRenderPass();
             pass.renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
+            editorPreviewPass ??= new BattleEditorPreviewPass();
+            editorPreviewPass.renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
             bottomOverlayPass ??= new BattleBottomOverlayPass();
             bottomOverlayPass.renderPassEvent =
                 (RenderPassEvent)((int)RenderPassEvent.AfterRenderingTransparents + 1);
@@ -49,27 +60,38 @@ namespace NTSD.Animation.Rendering
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            BattleCentralRenderSystem.RecordFeatureCameraAvailability(
-                this,
-                renderer,
-                renderingData.cameraData.camera,
-                renderingData.cameraData.renderType);
-            BattleCentralRenderSystem.MaterializeLatestPublishedFrameForCamera(
-                this,
-                renderingData.cameraData.camera,
-                renderingData.cameraData.renderType);
             if (renderer == null)
             {
                 return;
             }
 
-            if (BattleCentralRenderSystem.TryAcquireSubmission(
-                    renderingData.cameraData.camera,
-                    renderingData.cameraData.renderType,
-                    out BattleCentralSubmission.BattleCentralSubmissionLease submissionLease))
+            if (Application.isPlaying)
             {
-                pass.Setup(submissionLease);
-                renderer.EnqueuePass(pass);
+                BattleCentralRenderSystem.RecordFeatureCameraAvailability(
+                    this,
+                    renderer,
+                    renderingData.cameraData.camera,
+                    renderingData.cameraData.renderType);
+                BattleCentralRenderSystem.MaterializeLatestPublishedFrameForCamera(
+                    this,
+                    renderingData.cameraData.camera,
+                    renderingData.cameraData.renderType);
+                if (BattleCentralRenderSystem.TryAcquireSubmission(
+                        renderingData.cameraData.camera,
+                        renderingData.cameraData.renderType,
+                        out BattleCentralSubmission.BattleCentralSubmissionLease submissionLease))
+                {
+                    pass.Setup(submissionLease, material);
+                    renderer.EnqueuePass(pass);
+                }
+            }
+            else if (BattleCentralRenderSystem.TryGetEditorPreview(
+                         renderingData.cameraData.camera,
+                         renderingData.cameraData.renderType,
+                         out BattleCentralEditorPreview preview))
+            {
+                editorPreviewPass.Setup(preview);
+                renderer.EnqueuePass(editorPreviewPass);
             }
 
             if (BattleBackgroundBottomOverlayPresenter.TryGetDraw(
@@ -91,6 +113,8 @@ namespace NTSD.Animation.Rendering
             BattleCentralRenderSystem.UnregisterFeature(this);
             pass?.Dispose();
             pass = null;
+            editorPreviewPass?.Dispose();
+            editorPreviewPass = null;
             bottomOverlayPass?.Dispose();
             bottomOverlayPass = null;
         }
@@ -148,6 +172,46 @@ namespace NTSD.Animation.Rendering
             }
         }
 
+        private sealed class BattleEditorPreviewPass : ScriptableRenderPass
+        {
+            private readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+            private BattleCentralEditorPreview preview;
+
+            public void Setup(BattleCentralEditorPreview value)
+            {
+                preview = value;
+            }
+
+            public override void Execute(
+                ScriptableRenderContext context,
+                ref RenderingData renderingData)
+            {
+                BattleCentralEditorPreview current = preview;
+                preview = null;
+                if (current == null || Application.isPlaying)
+                    return;
+
+                CommandBuffer commandBuffer = CommandBufferPool.Get(
+                    "NTSD Central Battle Editor Preview");
+                try
+                {
+                    int drawCount = current.AppendDrawCommands(commandBuffer, propertyBlock);
+                    if (drawCount > 0)
+                        context.ExecuteCommandBuffer(commandBuffer);
+                }
+                finally
+                {
+                    CommandBufferPool.Release(commandBuffer);
+                }
+            }
+
+            public void Dispose()
+            {
+                preview = null;
+                propertyBlock.Clear();
+            }
+        }
+
         private sealed class BattleRenderPass : ScriptableRenderPass
         {
             private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
@@ -156,11 +220,15 @@ namespace NTSD.Animation.Rendering
                 new ProfilerMarker("NTSD.BattlePresentation.ExecuteCommandBuffer");
             private readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
             private BattleCentralSubmission.BattleCentralSubmissionLease submissionLease;
+            private Material healthMaterial;
 
-            public void Setup(BattleCentralSubmission.BattleCentralSubmissionLease value)
+            public void Setup(
+                BattleCentralSubmission.BattleCentralSubmissionLease value,
+                Material valueHealthMaterial)
             {
                 submissionLease.Dispose();
                 submissionLease = value;
+                healthMaterial = valueHealthMaterial;
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -192,6 +260,21 @@ namespace NTSD.Animation.Rendering
                                 Matrix4x4.identity,
                                 segment.Material,
                                 segment.SubMeshIndex,
+                                0,
+                                propertyBlock);
+                            drawCount++;
+                        }
+                        BattleHealthBarBatchBackend healthBackend = lease.HealthBackend;
+                        if (healthBackend != null && healthBackend.ActiveBarCount > 0 &&
+                            healthBackend.Mesh != null && healthMaterial != null)
+                        {
+                            propertyBlock.Clear();
+                            propertyBlock.SetTexture(MainTexId, Texture2D.whiteTexture);
+                            commandBuffer.DrawMesh(
+                                healthBackend.Mesh,
+                                Matrix4x4.identity,
+                                healthMaterial,
+                                0,
                                 0,
                                 propertyBlock);
                             drawCount++;
@@ -235,6 +318,7 @@ namespace NTSD.Animation.Rendering
             {
                 submissionLease.Dispose();
                 submissionLease = default;
+                healthMaterial = null;
             }
         }
     }

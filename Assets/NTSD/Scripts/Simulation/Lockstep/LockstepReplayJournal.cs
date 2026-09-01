@@ -23,7 +23,7 @@ namespace NTSD.Simulation.Lockstep
             for (int i = 0; i < capacity; i++)
             {
                 inputStorage[i] = new SimulationPlayerInput[identity.PlayerCount];
-                frames[i] = new FrameInputSet(0, inputStorage[i]);
+                frames[i] = FrameInputSetPreallocation.CreateReusable();
             }
         }
 

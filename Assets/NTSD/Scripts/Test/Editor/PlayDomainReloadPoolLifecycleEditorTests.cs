@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using MoreMountains.Tools;
 using NTSD.Animation;
 using NTSD.Animation.Rendering.Editor;
+using NTSD.Simulation;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -49,6 +50,62 @@ namespace NTSD.Test
                     UnityEngine.Object.DestroyImmediate(unexpected.gameObject);
                 }
                 singletonField.SetValue(null, original);
+            }
+        }
+
+        [Test]
+        public void AllocationGateUnseal_DoesNotResolveOrAutoCreateFactoryOrPool()
+        {
+            const BindingFlags staticFlags = BindingFlags.Static | BindingFlags.NonPublic;
+            const BindingFlags instanceFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            FieldInfo poolSingletonField = typeof(MMSingleton<LF2ObjectPool>).GetField(
+                "_instance",
+                staticFlags);
+            FieldInfo factorySingletonField =
+                typeof(MMSingleton<LF2ObjectPointFactory>).GetField(
+                    "_instance",
+                    staticFlags);
+            FieldInfo sealedField = typeof(BattleRuntimeAllocationGate).GetField(
+                "isSealed",
+                instanceFlags);
+            MethodInfo unseal = typeof(BattleRuntimeAllocationGate).GetMethod(
+                "Unseal",
+                instanceFlags);
+            Assert.That(poolSingletonField, Is.Not.Null);
+            Assert.That(factorySingletonField, Is.Not.Null);
+            Assert.That(sealedField, Is.Not.Null);
+            Assert.That(unseal, Is.Not.Null);
+
+            LF2ObjectPool originalPool = poolSingletonField.GetValue(null) as LF2ObjectPool;
+            LF2ObjectPointFactory originalFactory =
+                factorySingletonField.GetValue(null) as LF2ObjectPointFactory;
+            int poolCountBefore = CountSceneComponents<LF2ObjectPool>();
+            int factoryCountBefore = CountSceneComponents<LF2ObjectPointFactory>();
+            try
+            {
+                poolSingletonField.SetValue(null, null);
+                factorySingletonField.SetValue(null, null);
+
+                var gate = new BattleRuntimeAllocationGate();
+                sealedField.SetValue(gate, true);
+                unseal.Invoke(gate, new object[] { null });
+
+                Assert.That(LF2ObjectPointFactory.TryGetInstance(), Is.Null,
+                    "teardown unseal must not resolve or create LF2ObjectPointFactory");
+                Assert.That(LF2ObjectPool.TryGetInstance(), Is.Null,
+                    "teardown unseal must not resolve or create LF2ObjectPool");
+                Assert.That(CountSceneComponents<LF2ObjectPointFactory>(),
+                    Is.EqualTo(factoryCountBefore));
+                Assert.That(CountSceneComponents<LF2ObjectPool>(),
+                    Is.EqualTo(poolCountBefore));
+                Assert.That((bool)sealedField.GetValue(gate), Is.False);
+            }
+            finally
+            {
+                DestroyUnexpectedAutoCreated(LF2ObjectPointFactory.TryGetInstance(), originalFactory);
+                DestroyUnexpectedAutoCreated(LF2ObjectPool.TryGetInstance(), originalPool);
+                factorySingletonField.SetValue(null, originalFactory);
+                poolSingletonField.SetValue(null, originalPool);
             }
         }
 
@@ -126,15 +183,30 @@ namespace NTSD.Test
 
         private static int CountScenePools()
         {
-            LF2ObjectPool[] pools = Resources.FindObjectsOfTypeAll<LF2ObjectPool>();
+            return CountSceneComponents<LF2ObjectPool>();
+        }
+
+        private static int CountSceneComponents<T>() where T : Component
+        {
+            T[] components = Resources.FindObjectsOfTypeAll<T>();
             int count = 0;
-            for (int index = 0; index < pools.Length; index++)
+            for (int index = 0; index < components.Length; index++)
             {
-                LF2ObjectPool pool = pools[index];
-                if (pool != null && pool.gameObject.scene.IsValid())
+                T component = components[index];
+                if (component != null && component.gameObject.scene.IsValid())
                     count++;
             }
             return count;
+        }
+
+        private static void DestroyUnexpectedAutoCreated<T>(T current, T original)
+            where T : Component
+        {
+            if (current != null && current != original &&
+                current.name == typeof(T).Name + "_AutoCreated")
+            {
+                UnityEngine.Object.DestroyImmediate(current.gameObject);
+            }
         }
 
         private static void SetPrivateField(object target, string name, object value)

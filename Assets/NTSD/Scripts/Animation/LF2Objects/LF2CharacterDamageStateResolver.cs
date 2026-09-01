@@ -90,8 +90,11 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void HandleLandingEvent(double vyBeforeLand) // P0-f-2b B2-1: float→double
         {
-            var cpoint = _character.Frame?.D?.cpoint;
-            if (cpoint != null && cpoint.kind == 2)
+            LF2FrameData frame = _character.Frame?.D;
+            if (frame != null &&
+                frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) &&
+                cpoint.Kind == 2)
                 return;
 
             int curState = _character.GetState();

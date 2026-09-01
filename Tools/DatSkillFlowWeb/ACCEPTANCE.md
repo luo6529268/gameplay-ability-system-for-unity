@@ -461,6 +461,17 @@
 - Status: Pending E4；源码、API、Native 和自动化已通过，正式 Canvas 拖动仍待用户目视确认。
 - Known limitations: 当前只编辑每次预览的起始站位，不提供播放中实时搬运角色，也不写入 DAT/sidecar。
 
+### VAL-025: 主预览高频表现与 authority overlay 分离
+
+- Linked requirements: REQ-004、REQ-011、REQ-015
+- Evidence level: E3 code/runtime-contract evidence；E4 visual pending
+- Preconditions: 同一 Native Trace 至少包含两个相邻 Tick；60/120Hz 模式使用同一 trace，不重新推进战斗逻辑。
+- Expected result: camera、sprite、shadow 对同 lineage 连续实体平滑；frame/pic/facing/lifecycle 离散；slot reuse、关系切换、非相邻 Tick 和 teleport fail closed；DAT overlay 与编辑 hit-test 仍位于 current Native authority Tick。
+- Automated evidence: build `20260830084617618-18ef901e469444d9b80e355a62838458`；focused 23/23；全部 unit 315 passed / 0 failed / 1 skipped；非构建 integration 78/78；manifest/server integration 25/25；Ledger validator PASS。
+- Runtime evidence: 现有 Native preview/API/asset integration 全部通过；本轮没有修改 Native CLI、DAT、server save 或 30Hz trace。
+- Remaining: 用户在真实 Canvas 对一个有连续位移和镜头移动的动作观察 30/60/120 三档；检查人物/阴影无回跳、overlay 保持离散、循环末帧无跳失。当前 localhost 浏览器权限拒绝，Codex 未完成 E4。
+- Status: Runtime Pending / E4 Blocked
+
 ## Test Layers
 
 ### Static

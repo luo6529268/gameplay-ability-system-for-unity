@@ -121,6 +121,46 @@ Unity 适配层不得改变权威 C++ release live path 的战斗结果：
 
 处理烟雾、武器、分身、opoint、hit spark 或命中时序问题时，优先检查 `GameTick.cs` 对应 pass 在 Unity 的映射与生成可见边界。处理输入响应、回放或联机预留时，再检查 `SimulationTickDriver` 与输入提供者。
 
+### 6.1 Battle Runtime 有序关闭强制契约
+
+战斗 Runtime 的关闭必须是显式、有序、幂等的事务；不得依赖 Unity 跨 GameObject 的 `OnDisable()` / `OnDestroy()` 顺序，也不得通过 Script Execution Order 伪造业务依赖。完整阶段合同、失败策略、新模块接入模板和验收矩阵见 `Assets/NTSD/Docs/battle-runtime-ordered-shutdown-contract.md`。
+
+以下主序列是长期强制顺序，任何模块不得局部重排：
+
+```text
+Running
+  ↓
+Stopping
+  ├─ 1. 禁止新的 tick 和输入
+  ├─ 2. 停止并 Join dedicated worker
+  ├─ 3. 关闭 OPoint / structural spawn 入口
+  ├─ 4. 解除 allocation seal
+  ├─ 5. 清空 presentation publication / central submission
+  ├─ 6. 丢弃并回收尚未执行的 OPoint 任务
+  ├─ 7. 回收角色/武器/特效 Renderer
+  ├─ 8. 清理 World 中剩余的 logic-only entity 和注册表
+  ├─ 9. 解绑并释放 SimulationWorld
+  ├─ 10. 将 LF2ObjectPool 置为 quiesced 状态
+  ├─ 11. 清理地图 runtime boundary carrier
+  ↓
+Stopped
+  ↓
+允许 Unity 销毁 Scene GameObject
+```
+
+强制不变量：
+
+- 进入 `Stopping` 后禁止任何新的 tick、输入消费、worker submit、OPoint/structural spawn、presentation publication 或服务自动创建；`ignorePaused` 不能绕过 `Stopping/Stopped`。
+- worker 未确认停止并 Join 前，不得清理 World、factory、pool 或 presentation；这是 hard gate。
+- Shutdown 时 pending OPoint task 必须丢弃并归还原 owner，禁止通过 `FlushTasks()` materialize 新实体。
+- Renderer 必须在关联 World 和 unregister/free/destroy cleanup 仍有效时归还；World object/slot 清零后才能真正解绑 `_world`。
+- `quiesced` 表示 pool 没有 active borrower、对象均 inactive、停止接单且无旧 World/Entity 绑定；不等同于无条件在 teardown 中批量 `Destroy()`。
+- 正常关闭由明确 lifecycle owner 编排；`OnDestroy()` 只允许调用同一幂等 fallback，禁止访问会创建对象的 singleton `.Instance`、启动异步工作、Flush spawn 或创建替代 manager/factory/pool。
+- 只有 hard postcondition 全部满足后才能标记 `Stopped` 并开始正常 Scene unload/GameObject destroy；失败时保持 `Stopping`、禁止恢复 gameplay，且不得用 `_world=null` 掩盖残留。
+- 任何新增 battle runtime manager、queue、worker、renderer、pool、cache 或 transient Scene object，必须在设计与 Change Record 中声明其停止接单阶段、依赖、drain/recycle 方法、幂等后置条件和 focused test。未声明关闭阶段的模块不得接入正式 Runtime。
+- 如确需改变顶层顺序，必须先更新完整合同和本节，给出依赖证明与 test-first 证据，并获得用户明确批准；普通 bugfix、重构或性能任务无权顺手调整。
+- 本节是目标架构合同，不代表当前代码已经完全实现。实现必须另建 Change ID，按风险运行 compile、focused、SelfCheck、真实 Play enter/exit/re-enter、零残留和 Scene dirty unchanged 验收后，才能报告完成。
+
 ## 7. 输入、回放与联机预留
 
 当前单机实现可以继续使用现有输入缓冲，但不得破坏后续固定帧输入边界：
@@ -271,6 +311,27 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 - 每次包含脚本改动的交付、提交前检查或 handoff 前，运行 `Tools/Validate-ChangeLedger.ps1`。若脚本 diff 没有被 Record 覆盖、Record 元数据不完整或状态/证据矛盾，不得把该改动报告为可交付。
 - 不要在每一行源代码加入流水账注释。只有 C++/Unity 适配时序、不可直观的字段合同或跨 pass 边界需要保留一行简短的 `Alignment contract: <Change-ID>` 注释；详细历史放在 Change Record。
 - Git hook 只能在用户明确批准后安装或启用；仓库内 validator 不得私自修改用户的 `.git/config`、`.git/hooks` 或 GitHub Desktop 工作流。
+
+### 13.2 S0-S9 governed standing Client authorization
+
+For the active NTSD Server S0-S9 roadmap, the user has granted standing
+authorization under
+`GOVERNANCE-S0-S9-STANDING-CLIENT-AUTHORIZATION-002`. A Client package may
+modify, compile, test and validate the exact declared paths without another
+package-local approval when it is selected by the upstream roadmap/Queue, has a
+named `CLIENT_INTEGRATION_REQUIRED` entry, and has an independent pre-change
+Task Contract and Change Record with invariants, validation and rollback.
+
+This standing authorization does not change C++ release battle authority or
+phase exit evidence. New direction remains required for battle-rule changes
+without C++ evidence, fixed 30 Hz, Scene/Input Actions, undeclared resources,
+`TargetTick`/`InputDelayFrames` semantics, transport/Socket, database/public
+network/control plane, snapshot/recovery policy, formal AI, S1 wire, formal
+marker promotion, destructive Git or external deployment. A local Client gate
+must not stop an unrelated Server-only READY package.
+
+The detailed decision and revocation contract is in the Server repository at
+`docs/ai/DECISIONS/S0-S9-STANDING-CLIENT-AUTHORIZATION-002.md`.
 
 ## 14. Future Mobile Rendering Note
 

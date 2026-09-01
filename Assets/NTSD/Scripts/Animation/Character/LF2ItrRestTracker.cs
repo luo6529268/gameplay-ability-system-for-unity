@@ -80,6 +80,28 @@ namespace NTSD.Animation
             return false;
         }
 
+        internal bool TryResetAndBind(RuntimeRestStore store, int victimSlot)
+        {
+            if (store == null || !store.IsAddressable(victimSlot))
+                return false;
+
+            if (_boundStore != null && EnsureActiveBinding())
+                return false;
+
+            if (!store.TryResetSlotAndAcquireBinding(
+                    victimSlot,
+                    out RuntimeRestBindingHandle handle))
+            {
+                return false;
+            }
+
+            _boundStore = store;
+            _bindingHandle = handle;
+            _arest = 0;
+            _vrestByAttacker.Clear();
+            return true;
+        }
+
         public bool Unbind(bool captureStoreState)
         {
             if (!EnsureActiveBinding())

@@ -36,6 +36,23 @@ namespace NTSD.Simulation
                    occupant.ItrRest.Bind(restStore, runtimeSlot, false);
         }
 
+        internal bool TryResetAndBindStageSpawnCooldowns(
+            int runtimeSlot,
+            LF2Entity occupant)
+        {
+            RuntimeSlotTable runtimeSlots = world.RuntimeSlotsForServices;
+            if (runtimeSlot < 0 || runtimeSlot >= runtimeSlots.LogicalCapacity)
+                return false;
+
+            RuntimeRestStore restStore = world.RuntimeRestStoreForServices;
+            if (occupant == null)
+                return false;
+            if (occupant.ItrRest == null)
+                return restStore.ResetSlot(runtimeSlot);
+
+            return occupant.ItrRest.TryResetAndBind(restStore, runtimeSlot);
+        }
+
         internal void HeldObjectProcessAll(int tickIndex)
         {
             RuntimeSlotTable runtimeSlots = world.RuntimeSlotsForServices;
@@ -61,9 +78,8 @@ namespace NTSD.Simulation
                 }
 
                 LF2FrameData holderFrame = holder.Frame?.D;
-                WeaponPoint wpoint = holderFrame?.wpoints != null &&
-                                     holderFrame.wpoints.Count > 0
-                    ? holderFrame.wpoints[0]
+                BattleWeaponPointValue wpoint = holderFrame != null
+                    ? holderFrame.PrimaryWeaponPoint
                     : world.BattleBuffersForServices.DefaultHeldObjectWeaponPoint;
 
                 if (!world.HeldObjectWriter.RunStep12(

@@ -34,7 +34,7 @@ namespace NTSD.Simulation.Lockstep
             for (int frameIndex = 0; frameIndex < frameCapacity; frameIndex++)
             {
                 canonicalInputs[frameIndex] = new SimulationPlayerInput[playerCount];
-                canonicalFrames[frameIndex] = new FrameInputSet(0, canonicalInputs[frameIndex]);
+                canonicalFrames[frameIndex] = FrameInputSetPreallocation.CreateReusable();
             }
 
             Reset(0);

@@ -590,27 +590,29 @@ namespace NTSD.Animation.LF2Objects
             if (heldRuntime == null || heldRuntime.LinkState >= 0 || heldRuntime.SlotIndex < 0 ||
                 holderRuntime == null || holderRuntime.SlotIndex != heldRuntime.HolderStableId ||
                 holderRuntime.TargetSlotIndex != heldRuntime.SlotIndex ||
-                holderFrame?.wpoints == null || holderFrame.wpoints.Count == 0 ||
-                heldFrame?.wpoints == null || heldFrame.wpoints.Count == 0)
+                holderFrame == null ||
+                (holderFrame.FormalWeaponPoints.Count == 0 &&
+                 (holderFrame.wpoints == null || holderFrame.wpoints.Count == 0)) ||
+                heldFrame == null ||
+                (heldFrame.FormalWeaponPoints.Count == 0 &&
+                 (heldFrame.wpoints == null || heldFrame.wpoints.Count == 0)))
             {
                 return Vector2.zero;
             }
 
-            WeaponPoint holderWPoint = holderFrame.wpoints[0];
-            WeaponPoint heldWPoint = heldFrame.wpoints[0];
-            if (holderWPoint == null || heldWPoint == null)
-                return Vector2.zero;
+            BattleWeaponPointValue holderWPoint = holderFrame.PrimaryWeaponPoint;
+            BattleWeaponPointValue heldWPoint = heldFrame.PrimaryWeaponPoint;
 
             return ComputeHeldVisualAttachmentOffsetPixels(
                 holderRuntime.Dir == "left",
                 holderFrame.centerx,
                 holderFrame.centery,
-                holderWPoint.x,
-                holderWPoint.y,
+                holderWPoint.X,
+                holderWPoint.Y,
                 heldFrame.centerx,
                 heldFrame.centery,
-                heldWPoint.x,
-                heldWPoint.y,
+                heldWPoint.X,
+                heldWPoint.Y,
                 visualScale);
         }
 

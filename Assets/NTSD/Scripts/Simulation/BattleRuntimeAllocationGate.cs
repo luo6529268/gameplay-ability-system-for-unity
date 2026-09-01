@@ -13,6 +13,8 @@ namespace NTSD.Simulation
     {
         private bool isSealed;
         private int reservedRuntimeCapacity;
+        private LF2ObjectPointFactory capturedFactory;
+        private LF2ObjectPool capturedObjectPool;
 
         public bool IsSealed => isSealed;
         public int ReservedRuntimeCapacity => reservedRuntimeCapacity;
@@ -36,8 +38,9 @@ namespace NTSD.Simulation
                 logicReferencePool.PrewarmTasks<OPointCreateMultipleTask>(requestedRuntimeCapacity);
             }
 
-            LF2ObjectPointFactory factory = LF2ObjectPointFactory.Instance;
-            factory?.PrepareTaskQueueCapacity(requestedRuntimeCapacity);
+            capturedFactory = LF2ObjectPointFactory.Instance;
+            capturedObjectPool = LF2ObjectPool.Instance;
+            capturedFactory?.PrepareTaskQueueCapacity(requestedRuntimeCapacity);
             world?.LogicObjectPointRuntime?.PrepareTaskQueueCapacity(
                 requestedRuntimeCapacity);
         }
@@ -49,20 +52,32 @@ namespace NTSD.Simulation
 
             world?.LogicReferencePool?.SealBattleCapacity();
             world?.LogicObjectPointRuntime?.SealBattleTaskCapacity();
-            LF2ObjectPool.Instance?.SealBattleCapacity();
-            LF2ObjectPointFactory.Instance?.SealBattleTaskCapacity();
+            capturedObjectPool ??= LF2ObjectPool.Instance;
+            capturedFactory ??= LF2ObjectPointFactory.Instance;
+            capturedObjectPool?.SealBattleCapacity();
+            capturedFactory?.SealBattleTaskCapacity();
             isSealed = true;
         }
 
         internal void Unseal(SimulationWorld world)
         {
             if (!isSealed)
+            {
+                capturedFactory = null;
+                capturedObjectPool = null;
                 return;
+            }
 
-            LF2ObjectPointFactory.Instance?.UnsealBattleTaskCapacity();
-            LF2ObjectPool.Instance?.UnsealBattleCapacity();
+            (capturedFactory != null
+                ? capturedFactory
+                : LF2ObjectPointFactory.TryGetInstance())?.UnsealBattleTaskCapacity();
+            (capturedObjectPool != null
+                ? capturedObjectPool
+                : LF2ObjectPool.TryGetInstance())?.UnsealBattleCapacity();
             world?.LogicObjectPointRuntime?.UnsealBattleTaskCapacity();
             world?.LogicReferencePool?.UnsealBattleCapacity();
+            capturedFactory = null;
+            capturedObjectPool = null;
             isSealed = false;
         }
     }

@@ -70,9 +70,12 @@ namespace NTSD.Animation.Rendering
         private int submittedTickIndex = -1;
         private int submittedDrawCount;
 
-        internal BattleCentralSubmission(BattleDynamicMeshBackend backend)
+        internal BattleCentralSubmission(
+            BattleDynamicMeshBackend backend,
+            BattleHealthBarBatchBackend healthBackend)
         {
             Backend = backend ?? throw new ArgumentNullException(nameof(backend));
+            HealthBackend = healthBackend ?? throw new ArgumentNullException(nameof(healthBackend));
         }
 
         public SimulationWorld World { get; private set; }
@@ -80,12 +83,17 @@ namespace NTSD.Animation.Rendering
         public int TickIndex { get; private set; }
         public int Generation { get; private set; }
         public BattleDynamicMeshBackend Backend { get; }
+        public BattleHealthBarBatchBackend HealthBackend { get; }
         public int BackendMutationVersion { get; private set; }
+        public int HealthBackendMutationVersion { get; private set; }
         public int ReadLeaseCount => Volatile.Read(ref readLeaseCount);
         public bool IsRetired => Volatile.Read(ref retired) != 0;
         internal bool IsBackendBuildCurrent =>
             Backend != null && Backend.MutationVersion == BackendMutationVersion &&
-            ReferenceEquals(Backend.BuiltFrame, CapturedFrame);
+            ReferenceEquals(Backend.BuiltFrame, CapturedFrame) &&
+            HealthBackend != null &&
+            HealthBackend.MutationVersion == HealthBackendMutationVersion &&
+            ReferenceEquals(HealthBackend.BuiltFrame, CapturedFrame);
         internal bool IsReusable => IsRetired && ReadLeaseCount == 0;
 
         internal BattlePresentationFrame CaptureFrame(
@@ -115,6 +123,8 @@ namespace NTSD.Animation.Rendering
                 entityCapacity,
                 hitRecordCapacity,
                 commandCapacity);
+            HealthBackend.PrepareCapacity(
+                Math.Min(entityCapacity, BattleHealthBarBatchBackend.MaximumBarsPerBatch));
         }
 
         internal void Publish(
@@ -128,7 +138,8 @@ namespace NTSD.Animation.Rendering
             if (!IsReusable)
                 throw new InvalidOperationException("Cannot publish into a leased central submission slot.");
             if (!ReferenceEquals(capturedFrame, frozenFrame) ||
-                !ReferenceEquals(Backend.BuiltFrame, frozenFrame))
+                !ReferenceEquals(Backend.BuiltFrame, frozenFrame) ||
+                !ReferenceEquals(HealthBackend.BuiltFrame, frozenFrame))
             {
                 throw new InvalidOperationException(
                     "A central submission must publish the independent frozen frame used by its backend build.");
@@ -140,6 +151,7 @@ namespace NTSD.Animation.Rendering
             TickIndex = tickIndex;
             Generation = generation;
             BackendMutationVersion = Backend.MutationVersion;
+            HealthBackendMutationVersion = HealthBackend.MutationVersion;
             catalogManager = manager;
             catalog = publishedCatalog ?? BattleSpriteCatalog.Empty;
             catalogManager?.RegisterRendererCatalogBinding(catalog);
@@ -252,6 +264,8 @@ namespace NTSD.Animation.Rendering
 
             public BattleCentralSubmission Submission => submission;
             public BattleDynamicMeshBackend Backend => IsValid ? submission.Backend : null;
+            public BattleHealthBarBatchBackend HealthBackend =>
+                IsValid ? submission.HealthBackend : null;
             public int TickIndex => IsValid ? submission.TickIndex : -1;
             public int Generation => generation;
             public bool IsValid => submission != null && token != 0 && submission.Generation == generation;

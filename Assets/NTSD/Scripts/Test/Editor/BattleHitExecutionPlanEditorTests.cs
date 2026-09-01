@@ -1309,6 +1309,8 @@ namespace NTSD.Test
                 cpoint = new CatchPoint
                 {
                     kind = 2,
+                    injury = 230,
+                    cover = 232,
                     fronthurtact = 230,
                     backhurtact = 232,
                 },

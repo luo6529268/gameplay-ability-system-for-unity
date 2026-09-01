@@ -44,12 +44,14 @@ export interface PreviewRenderInput {
     readonly canvas: HTMLCanvasElement;
     readonly project: PreviewProject;
     readonly tick: PreviewTick | undefined;
+    readonly authorityTick?: PreviewTick;
     readonly runtimeFrame: Frame | undefined;
     readonly images: Map<string, HTMLImageElement>;
     readonly colorKeyImages: Map<string, HTMLCanvasElement>;
     readonly visibleOverlays: ReadonlySet<OverlayType>;
     readonly draftGeometry?: OverlayGeometry;
     readonly positionMode?: boolean;
+    readonly showAxes?: boolean;
     readonly selectedPositionSlot?: 0 | 1;
     readonly requestRender: () => void;
 }
@@ -436,7 +438,29 @@ function drawEntity(
     }
     context.restore();
     if (entity !== primary || !frame) return [];
-    return buildOverlayGeometry(frame, { left: drawX, top: placement.y, width, height, mirror: placement.mirror })
+    const authorityTick = input.authorityTick ?? input.tick!;
+    const authorityEntity = primaryPreviewEntity(authorityTick.entities) ?? entity;
+    const authorityPlacement = spritePlacement({
+        xInt: number(authorityEntity.xInt ?? authorityEntity.x),
+        yInt: number(authorityEntity.yInt ?? authorityEntity.y),
+        zInt: number(authorityEntity.displayZ ?? authorityEntity.zInt ?? authorityEntity.z),
+        renderOffsetX: number(authorityEntity.renderOffsetX),
+        cameraX: authorityTick.cameraX,
+        centerX: number(frame.centerx),
+        centerY: number(frame.centery),
+        width,
+        facing: number(authorityEntity.facing),
+    });
+    const authorityDrawX = frame.state === 9997
+        ? Math.max(0, Math.min(714, authorityPlacement.x))
+        : authorityPlacement.x;
+    return buildOverlayGeometry(frame, {
+        left: authorityDrawX,
+        top: authorityPlacement.y,
+        width,
+        height,
+        mirror: authorityPlacement.mirror,
+    })
         .filter((item) => input.visibleOverlays.has(item.type));
 }
 
@@ -451,8 +475,9 @@ export function drawPreviewCanvas(input: PreviewRenderInput): readonly OverlayGe
     }
     drawSceneBackground(context, input, input.tick);
     const primary = primaryPreviewEntity(input.tick.entities);
-    const axisEntity = primary ?? input.tick.entities[0];
-    if (axisEntity !== undefined) drawAxes(context, input.canvas, input.tick, axisEntity);
+    const authorityTick = input.authorityTick ?? input.tick;
+    const axisEntity = primaryPreviewEntity(authorityTick.entities) ?? authorityTick.entities[0];
+    if (input.showAxes && axisEntity !== undefined) drawAxes(context, input.canvas, authorityTick, axisEntity);
     let geometry: readonly OverlayGeometry[] = [];
     const entities = sortPreviewEntities(input.tick.entities);
     const resourcesByOid = new Map((input.project.previewObjects ?? []).map((resource) => [resource.oid, resource]));
@@ -465,7 +490,7 @@ export function drawPreviewCanvas(input: PreviewRenderInput): readonly OverlayGe
     drawGeometry(context, geometry);
     if (input.draftGeometry !== undefined) drawDraftGeometry(context, input.draftGeometry);
     if (input.positionMode) {
-        drawPositionHandles(context, previewActorHitAreas(input.project, input.tick, input.runtimeFrame), input.selectedPositionSlot);
+        drawPositionHandles(context, previewActorHitAreas(input.project, authorityTick, input.runtimeFrame), input.selectedPositionSlot);
     }
     return geometry;
 }

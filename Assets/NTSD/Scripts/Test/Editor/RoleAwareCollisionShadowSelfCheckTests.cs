@@ -4669,26 +4669,21 @@ namespace NTSD.Test
                 {
                     for (int bodyIndex = 0; bodyIndex < frame.bodies.Count; bodyIndex++)
                     {
-                        BodyBox body = frame.bodies[bodyIndex];
-                        if (body == null)
-                        {
-                            builder.Append(" body[").Append(bodyIndex).Append("]=null");
-                            continue;
-                        }
+                        BattleBodyBoxValue body = frame.bodies[bodyIndex];
 
                         ResolveWorldX(
                             x,
                             frame.centerx,
-                            body.x,
-                            body.w,
+                            body.X,
+                            body.W,
                             left,
                             out int x1,
                             out int x2);
-                        int y1 = y - frame.centery + body.y;
-                        int y2 = y1 + body.h;
+                        int y1 = y - frame.centery + body.Y;
+                        int y2 = y1 + body.H;
                         builder.Append(" body[").Append(bodyIndex).Append("]={local=")
-                            .Append(body.x).Append(',').Append(body.y).Append(',')
-                            .Append(body.w).Append(',').Append(body.h)
+                            .Append(body.X).Append(',').Append(body.Y).Append(',')
+                            .Append(body.W).Append(',').Append(body.H)
                             .Append(",world=")
                             .Append(x1).Append(',').Append(y1).Append("..")
                             .Append(x2).Append(',').Append(y2)

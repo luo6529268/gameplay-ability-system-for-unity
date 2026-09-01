@@ -134,10 +134,12 @@ namespace NTSD.Animation.LF2Objects
                         else
                         {
                             bool front  = (attackerPos.x > _character.PS.x) == (_character.PS.dir == "right");
-                            var myCpoint = _character.CurrentFrame?.cpoint;
-                            tar = front
-                                ? (myCpoint?.fronthurtact ?? 0)
-                                : (myCpoint?.backhurtact  ?? 0);
+                            LF2FrameData currentFrame = _character.CurrentFrame;
+                            tar = currentFrame != null &&
+                                  currentFrame.TryGetPrimaryCatchPoint(
+                                      out BattleCatchPointValue myCpoint)
+                                ? (front ? myCpoint.Injury : myCpoint.Cover)
+                                : 0;
                         }
                         if (tar != 0) _character.ImmediateFrame(tar);
                     }
@@ -213,7 +215,7 @@ namespace NTSD.Animation.LF2Objects
                     var frameNow = _character.Frame?.D;
                     var futureFrame = _character.GetFrameDataById((_character.Frame?.N ?? 0) + 6);
                     int currentBdyX = (frameNow?.bodies != null && frameNow.bodies.Count > 0)
-                        ? frameNow.bodies[0].x
+                        ? frameNow.bodies[0].X
                         : 0;
 
                     if (futureFrame?.bodies != null &&

@@ -60,6 +60,65 @@ describe("preview renderer sprite ranges", () => {
         assert.equal(hitTestPreviewActor(areas, 400, 400), undefined);
     });
 
+    it("draws presentation sprites smoothly while keeping DAT overlays on the authority Tick", () => {
+        const drawCalls: unknown[][] = [];
+        const context = {
+            canvas: { width: 794, height: 550 },
+            clearRect() {}, fillRect() {}, fillText() {}, save() {}, restore() {},
+            setLineDash() {}, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {}, strokeRect() {},
+            drawImage(...args: unknown[]) { drawCalls.push(args); },
+            strokeStyle: "", fillStyle: "", lineWidth: 1,
+        } as unknown as CanvasRenderingContext2D;
+        const canvas = {
+            width: 794,
+            height: 550,
+            getContext: () => context,
+        } as unknown as HTMLCanvasElement;
+        const frame = {
+            frameId: 0, occurrence: 0, label: "standing", pic: 0, state: 0, wait: 1, next: 0,
+            dvx: 0, dvy: 0, dvz: 0, centerx: 10, centery: 20,
+            hit_Fa: 0, hit_Fj: 0, hit_Ua: 0, hit_Uj: 0, hit_Da: 0, hit_Dj: 0,
+            hit_ja: 0, hit_a: 0, hit_d: 0, hit_j: 0, mp: 0, vaction: 0, sound: "",
+            itrs: [], bdys: [{ x: 2, y: 3, w: 4, h: 5 }], opoints: [], wpoints: [], bpoints: [], cpoints: [],
+        } as Frame;
+        const project = {
+            frames: [frame],
+            ranges: [{ frameLo: 0, frameHi: 0, assetId: "p1", w: 40, h: 60, row: 1, col: 1 }],
+            assets: new Map<string, string>(),
+        };
+        const authorityEntity = {
+            slot: 0, oid: 2, frame: 0, pic: 0, facing: 0,
+            x: 100, y: 0, z: 200, xInt: 100, yInt: 0, zInt: 200, displayZ: 200,
+            renderOffsetX: 0, frameDelay: 0, hitStop: 0, link: 0,
+        };
+        const authorityTick = { tick: 1, cameraX: 0, entities: [authorityEntity] };
+        const presentationTick = {
+            tick: 1,
+            cameraX: 0,
+            entities: [{ ...authorityEntity, x: 120, xInt: 120 }],
+        };
+        const image = { complete: true, naturalWidth: 40, naturalHeight: 60, width: 40, height: 60 } as HTMLImageElement;
+        const keyed = { width: 40, height: 60 } as HTMLCanvasElement;
+
+        const geometry = drawPreviewCanvas({
+            canvas,
+            project,
+            tick: presentationTick,
+            authorityTick,
+            runtimeFrame: frame,
+            images: new Map([["p1", image]]),
+            colorKeyImages: new Map([["p1", keyed]]),
+            visibleOverlays: new Set(["bdy"]),
+            requestRender() {},
+        });
+
+        assert.deepEqual(drawCalls, [[keyed, 0, 0, 40, 60, 110, 180, 40, 60]]);
+        assert.deepEqual(geometry, [{
+            type: "bdy", index: 0, kind: "rect",
+            x1: 92, y1: 183, x2: 96, y2: 188, width: 4, height: 5,
+        }]);
+    });
+
     it("sorts scene entities by Native z_int while preserving equal-z slot order", () => {
         const entities = [
             { slot: 5, oid: 33, frame: 1, x: 0, y: 0, z: 0, zInt: 500 },

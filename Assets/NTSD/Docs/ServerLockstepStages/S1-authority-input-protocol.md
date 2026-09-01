@@ -81,12 +81,14 @@ Existing Server-only evidence includes:
 - target-tick dynamic human slot subset admission, accepted-future-input overlap rejection and AI-owned lock `FormalAiKernelRequired`.
 - tracker-recorded timeout witness to caller-explicit connection-wide ownership request and causal journal.
 - same-call earliest safe barrier selection over next tick, activation tail and relevant pending TargetTick successor.
+- GP-09 individual-departure admission is Server-focused ready: per-slot input participation is separate from ownership/liveness, accepted future input is preserved and Windows two-to-one submission passes. No Client/wire/AI/recovery action is included.
+- GP-09 full-duration witness is also Server-focused ready: it binds only the retained participation entry to caller monotonic time and does not alter input, ownership or AI.
 
 Most recent applicable package:
 
 ```text
-S2-SERVER-EARLIEST-SAFE-OWNERSHIP-BARRIER-001
-FOCUSED_TEST_PASS / SERVER_EARLIEST_SAFE_OWNERSHIP_BARRIER_READY
+S1-SERVER-INDIVIDUAL-DEPARTURE-ADMISSION-001
+FOCUSED_TEST_PASS / SERVER_INDIVIDUAL_DEPARTURE_ADMISSION_READY
 ```
 
 This is reusable preimplementation, not formal S1 closure.
@@ -147,3 +149,6 @@ S1 must hand off frozen message/value schema, canonical equality, sequence ident
 - 2026-08-29: Server-only target-tick ownership-aware human admission and AI-owned lock fail-closed passed; formal AI/frame/checksum, Client, clock/transport, recovery and phase status remain pending.
 - 2026-08-29: Server-only recorded timeout→connection-wide ownership causality/journal passed; automatic tick planner, formal AI, Client, production clock/transport, recovery and phase status remain pending.
 - 2026-08-29: Server-only earliest-safe ownership barrier planner passed without elapsed-time conversion or input mutation; formal AI, Client, production clock/transport, recovery and phase status remain pending.
+- 2026-08-30: GP-09 Server command contract closed; per-slot participation/Windows subset/accepted-input preservation are frozen and the first Server-only admission package was selected. Formal S1 status remains unchanged.
+- 2026-08-30: The selected individual-departure admission package passed test-first, accepted-input, Windows subset, idempotency/conflict, terminal, Debug/Release/full Server and no-network Host evidence. It does not close formal S1.
+- 2026-08-30: The slot-specific full-duration witness package passed without changing input or ownership. It is S2 preimplementation and does not close formal S1.

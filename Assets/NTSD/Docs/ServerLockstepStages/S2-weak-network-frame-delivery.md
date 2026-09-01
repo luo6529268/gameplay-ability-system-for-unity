@@ -80,6 +80,9 @@ Existing Server-only preimplementation packages cover:
 - same-call earliest-safe barrier selection over execution cursor, activation tail and relevant pending input successor.
 - Hosting-owned .NET 10 TimeProvider process-local monotonic millisecond adapter; suspend/transport evidence pending.
 - explicit versioned short-grace classification from the same last-seen timeline; 1,000 ms is a focused test candidate, while only the full timeout creates a witness.
+- GP-09 Server-focused admission now separates per-slot manual-departure participation from connection-wide liveness/timeout, preserves accepted input and stops later participation safely. The separate full-duration AI barrier remains gated.
+- GP-09 slot-specific full-duration witness is Server-focused ready at exact 29,999/30,000 using the existing versioned full timeout; it does not schedule ownership or execute AI.
+- GP-09 single-slot ownership request is Server-focused ready: only the witness slot transitions at the earliest-safe tick; other Windows slots/pending input remain, and AI-owned frame lock stops at `FormalAiKernelRequired`.
 
 Missing formal packages include:
 
@@ -112,6 +115,8 @@ Missing formal packages include:
 | Missing deadline | neutral, zero carry, no fabricated press | Server focused pass |
 | Ownership barrier schedule | atomic future human↔ServerAI owner journal | Server focused pass; timer/AI input/Client/recovery pending |
 | Connection grace classification | exact Healthy/Reconnecting/TimedOut boundary; no pre-timeout witness or ownership side effect | Server focused pass; production value/transport/Client pending |
+| Individual departure duration | recorded participation entry + caller monotonic receipt + immutable first full-duration witness | Server focused pass; ownership/AI/Client/recovery pending |
+| Individual departure ownership | recorded witness -> one earliest-safe slot activation + causal journal | Server focused pass; formal AI frame execution/Client/recovery pending |
 | GP-01 product contract | fixed logic + adaptive per-Client network protection | Confirmed; production numeric measurement pending |
 | Real Client consume | strict sequence/redundancy/gap/ACK | Pending/frozen |
 | Slow-client matrix | one blackhole/extreme jitter does not stop healthy worlds | Pending formal evidence |
@@ -159,3 +164,7 @@ S2 must hand off continuous authority history semantics, per-client confirmed/re
 - 2026-08-29: Hosting TimeProvider monotonic adapter passed frequency/floor/regression/System smoke without transport/timer/room action; authenticated heartbeat and OS/VM suspend evidence remain pending, S2 phase status unchanged.
 - 2026-08-29: Explicit versioned Healthy/Reconnecting/TimedOut classification passed exact 1,000/30,000 ms fixture boundaries and heartbeat recovery without pre-timeout witness, ownership, AI, input or Client effects; production grace remains measured and S2 phase status is unchanged.
 - 2026-08-29: Exit-gate reconciliation mapped ready/disorder/deadline/liveness evidence to the upstream S2 requirements. Bounded Server dequeue is focused-pass evidence, but production Client catch-up, formal slow-client worlds and OfflineLocal remain pending; no source or phase status changed.
+- 2026-08-30: GP-09 manual departure was separated from connection timeout. The selected first Server package does not implement the 30-second clock or AI ownership transition, so S2 remains NOT_VERIFIED.
+- 2026-08-30: The first GP-09 admission package passed Server-focused validation without liveness/clock/ownership/AI side effects. The 30-second slot witness, formal-AI barrier, Client and recovery remain pending; S2 status is unchanged.
+- 2026-08-30: The slot-specific full-duration witness package passed exact boundary and fail-closed cases without ownership/AI effects. Witness consumption, Client and recovery remain pending; S2 status is unchanged.
+- 2026-08-30: The single-slot ownership request package passed and preserves `FormalAiKernelRequired` no-progress at the barrier. Formal AI/state hash/frame commit, Client and recovery remain pending; S2 status is unchanged.

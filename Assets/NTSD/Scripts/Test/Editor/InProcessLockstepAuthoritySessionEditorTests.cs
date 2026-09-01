@@ -193,6 +193,60 @@ namespace NTSD.Test
             Assert.That(session.Clients[1].DiagnosticSnapshotCaptureCount, Is.Zero);
         }
 
+        [Test]
+        public void RealEntityWorldsConsumeEveryTickAndKeepTenDomainHashesAligned()
+        {
+            const int tickCount = 12;
+            LockstepStartBarrier barrier = CreateBarrier();
+            InProcessLockstepAuthoritySession session = CreateSession(barrier, tickCount);
+            LF2Character serverCharacter = RegisterTestCharacter(
+                session.Server, 50, 100, 1);
+            LF2Character clientCharacterA = RegisterTestCharacter(
+                session.Clients[0], 50, 100, 1);
+            LF2Character clientCharacterB = RegisterTestCharacter(
+                session.Clients[1], 50, 100, 1);
+
+            for (int tick = 1; tick <= tickCount; tick++)
+            {
+                FrameInputSet frame = Frame(tick);
+                Assert.That(session.TryAdvance(frame), Is.True, $"tick={tick}");
+                Assert.That(
+                    serverCharacter.Controller.InputBuffer.CurrentTickIndex,
+                    Is.EqualTo(tick),
+                    $"server input tick={tick}");
+                Assert.That(
+                    clientCharacterA.Controller.InputBuffer.CurrentTickIndex,
+                    Is.EqualTo(tick),
+                    $"client=1 input tick={tick}");
+                Assert.That(
+                    clientCharacterB.Controller.InputBuffer.CurrentTickIndex,
+                    Is.EqualTo(tick),
+                    $"client=2 input tick={tick}");
+                Assert.That(serverCharacter.Controller.InputBuffer.RejectedEventCount, Is.Zero);
+                Assert.That(clientCharacterA.Controller.InputBuffer.RejectedEventCount, Is.Zero);
+                Assert.That(clientCharacterB.Controller.InputBuffer.RejectedEventCount, Is.Zero);
+
+                BattleLockstepChecksumSnapshot serverSnapshot =
+                    session.Server.WorldForDiagnostics.CaptureLockstepChecksumSnapshot(
+                        tick,
+                        frame);
+                BattleLockstepChecksumSnapshot clientSnapshotA =
+                    session.Clients[0].WorldForDiagnostics.CaptureLockstepChecksumSnapshot(
+                        tick,
+                        frame);
+                BattleLockstepChecksumSnapshot clientSnapshotB =
+                    session.Clients[1].WorldForDiagnostics.CaptureLockstepChecksumSnapshot(
+                        tick,
+                        frame);
+                AssertTenDomainHashesEqual(serverSnapshot, clientSnapshotA, tick, 1);
+                AssertTenDomainHashesEqual(serverSnapshot, clientSnapshotB, tick, 2);
+            }
+
+            Assert.That(session.Server.DiagnosticSnapshotCaptureCount, Is.Zero);
+            Assert.That(session.Clients[0].DiagnosticSnapshotCaptureCount, Is.Zero);
+            Assert.That(session.Clients[1].DiagnosticSnapshotCaptureCount, Is.Zero);
+        }
+
         private static ulong[] RunScenario(int tickCount)
         {
             LockstepStartBarrier barrier = CreateBarrier();
@@ -220,6 +274,37 @@ namespace NTSD.Test
             Assert.That(session.Clients[0].DiagnosticSnapshotCaptureCount, Is.Zero);
             Assert.That(session.Clients[1].DiagnosticSnapshotCaptureCount, Is.Zero);
             return result;
+        }
+
+        private static void AssertTenDomainHashesEqual(
+            BattleLockstepChecksumSnapshot server,
+            BattleLockstepChecksumSnapshot client,
+            int tick,
+            int clientReplicaIndex)
+        {
+            string prefix = $"tick={tick} client={clientReplicaIndex}";
+            Assert.That(client.Schema, Is.EqualTo(server.Schema), $"{prefix} schema");
+            Assert.That(client.Tick, Is.EqualTo(server.Tick), $"{prefix} completed tick");
+            Assert.That(client.Hashes.Input, Is.EqualTo(server.Hashes.Input),
+                $"{prefix} domain=Input");
+            Assert.That(client.Hashes.Metadata, Is.EqualTo(server.Hashes.Metadata),
+                $"{prefix} domain=Metadata");
+            Assert.That(client.Hashes.Rng, Is.EqualTo(server.Hashes.Rng),
+                $"{prefix} domain=Rng");
+            Assert.That(client.Hashes.World, Is.EqualTo(server.Hashes.World),
+                $"{prefix} domain=World");
+            Assert.That(client.Hashes.Slots, Is.EqualTo(server.Hashes.Slots),
+                $"{prefix} domain=Slots");
+            Assert.That(client.Hashes.ARest, Is.EqualTo(server.Hashes.ARest),
+                $"{prefix} domain=ARest");
+            Assert.That(client.Hashes.VRest, Is.EqualTo(server.Hashes.VRest),
+                $"{prefix} domain=VRest");
+            Assert.That(client.Hashes.Stats, Is.EqualTo(server.Hashes.Stats),
+                $"{prefix} domain=Stats");
+            Assert.That(client.Hashes.Events, Is.EqualTo(server.Hashes.Events),
+                $"{prefix} domain=Events");
+            Assert.That(client.Hashes.Overall, Is.EqualTo(server.Hashes.Overall),
+                $"{prefix} domain=Overall");
         }
 
         private static LF2Character RegisterTestCharacter(

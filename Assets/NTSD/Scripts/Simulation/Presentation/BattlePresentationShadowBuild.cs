@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -409,7 +410,12 @@ namespace NTSD.Simulation.Presentation
             bool shadowVisible = true,
             Vector2 localOffsetPixels = default(Vector2),
             int frameId = -1,
-            object trustedResourceIdentity = null)
+            object trustedResourceIdentity = null,
+            bool showOverheadHealthBar = false,
+            int currentHealth = 0,
+            int recoverableHealth = 0,
+            int maximumHealth = 0,
+            float stableHealthAnchorHeightPixels = 0f)
         {
             Handle = handle;
             StableId = stableId;
@@ -449,6 +455,11 @@ namespace NTSD.Simulation.Presentation
             LocalOffsetPixels = localOffsetPixels;
             FrameId = frameId;
             TrustedResourceIdentity = trustedResourceIdentity;
+            ShowOverheadHealthBar = showOverheadHealthBar;
+            CurrentHealth = currentHealth;
+            RecoverableHealth = recoverableHealth;
+            MaximumHealth = maximumHealth;
+            StableHealthAnchorHeightPixels = stableHealthAnchorHeightPixels;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -489,6 +500,11 @@ namespace NTSD.Simulation.Presentation
         public bool ShadowVisible { get; }
         public Vector2 LocalOffsetPixels { get; }
         public int FrameId { get; }
+        public bool ShowOverheadHealthBar { get; }
+        public int CurrentHealth { get; }
+        public int RecoverableHealth { get; }
+        public int MaximumHealth { get; }
+        public float StableHealthAnchorHeightPixels { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattlePresentationEntitySnapshot WithResolvedSprite(
@@ -538,7 +554,12 @@ namespace NTSD.Simulation.Presentation
                 ShadowVisible,
                 LocalOffsetPixels,
                 FrameId,
-                trustedResourceIdentity);
+                trustedResourceIdentity,
+                ShowOverheadHealthBar,
+                CurrentHealth,
+                RecoverableHealth,
+                MaximumHealth,
+                StableHealthAnchorHeightPixels);
         }
 
         internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
@@ -582,7 +603,12 @@ namespace NTSD.Simulation.Presentation
                 ShadowVisible,
                 LocalOffsetPixels,
                 FrameId,
-                TrustedResourceIdentity);
+                TrustedResourceIdentity,
+                ShowOverheadHealthBar,
+                CurrentHealth,
+                RecoverableHealth,
+                MaximumHealth,
+                StableHealthAnchorHeightPixels);
         }
 
     }
@@ -605,7 +631,13 @@ namespace NTSD.Simulation.Presentation
             Vector2 pivot,
             Rect normalizedUv,
             bool flipX,
-            BattleSpriteValueDescriptor spriteDescriptor)
+            BattleSpriteValueDescriptor spriteDescriptor,
+            bool showOverheadHealthBar = false,
+            int currentHealth = 0,
+            int recoverableHealth = 0,
+            int maximumHealth = 0,
+            Vector2 stableHealthAnchorWorld = default(Vector2),
+            bool hasStableHealthAnchor = false)
             : this(
                 type,
                 handle,
@@ -622,7 +654,13 @@ namespace NTSD.Simulation.Presentation
                 pivot,
                 normalizedUv,
                 BattleSpriteRenderState.Default(flipX),
-                spriteDescriptor)
+                spriteDescriptor,
+                showOverheadHealthBar,
+                currentHealth,
+                recoverableHealth,
+                maximumHealth,
+                stableHealthAnchorWorld,
+                hasStableHealthAnchor)
         {
         }
 
@@ -643,7 +681,13 @@ namespace NTSD.Simulation.Presentation
             Rect normalizedUv,
             bool flipX,
             BattleSpriteValueDescriptor spriteDescriptor,
-            object trustedResourceIdentity)
+            object trustedResourceIdentity,
+            bool showOverheadHealthBar = false,
+            int currentHealth = 0,
+            int recoverableHealth = 0,
+            int maximumHealth = 0,
+            Vector2 stableHealthAnchorWorld = default(Vector2),
+            bool hasStableHealthAnchor = false)
             : this(
                 type,
                 handle,
@@ -661,7 +705,13 @@ namespace NTSD.Simulation.Presentation
                 normalizedUv,
                 BattleSpriteRenderState.Default(flipX),
                 spriteDescriptor,
-                trustedResourceIdentity)
+                trustedResourceIdentity,
+                showOverheadHealthBar,
+                currentHealth,
+                recoverableHealth,
+                maximumHealth,
+                stableHealthAnchorWorld,
+                hasStableHealthAnchor)
         {
         }
 
@@ -681,7 +731,13 @@ namespace NTSD.Simulation.Presentation
             Vector2 pivot,
             Rect normalizedUv,
             BattleSpriteRenderState renderState,
-            BattleSpriteValueDescriptor spriteDescriptor)
+            BattleSpriteValueDescriptor spriteDescriptor,
+            bool showOverheadHealthBar = false,
+            int currentHealth = 0,
+            int recoverableHealth = 0,
+            int maximumHealth = 0,
+            Vector2 stableHealthAnchorWorld = default(Vector2),
+            bool hasStableHealthAnchor = false)
             : this(
                 type,
                 handle,
@@ -699,7 +755,13 @@ namespace NTSD.Simulation.Presentation
                 normalizedUv,
                 renderState,
                 spriteDescriptor,
-                null)
+                null,
+                showOverheadHealthBar,
+                currentHealth,
+                recoverableHealth,
+                maximumHealth,
+                stableHealthAnchorWorld,
+                hasStableHealthAnchor)
         {
         }
 
@@ -720,7 +782,13 @@ namespace NTSD.Simulation.Presentation
             Rect normalizedUv,
             BattleSpriteRenderState renderState,
             BattleSpriteValueDescriptor spriteDescriptor,
-            object trustedResourceIdentity)
+            object trustedResourceIdentity,
+            bool showOverheadHealthBar = false,
+            int currentHealth = 0,
+            int recoverableHealth = 0,
+            int maximumHealth = 0,
+            Vector2 stableHealthAnchorWorld = default(Vector2),
+            bool hasStableHealthAnchor = false)
         {
             Type = type;
             Handle = handle;
@@ -739,6 +807,12 @@ namespace NTSD.Simulation.Presentation
             RenderState = renderState;
             SpriteDescriptor = spriteDescriptor;
             TrustedResourceIdentity = trustedResourceIdentity;
+            ShowOverheadHealthBar = showOverheadHealthBar;
+            CurrentHealth = currentHealth;
+            RecoverableHealth = recoverableHealth;
+            MaximumHealth = maximumHealth;
+            StableHealthAnchorWorld = stableHealthAnchorWorld;
+            HasStableHealthAnchor = hasStableHealthAnchor;
         }
 
         public BattleRenderCommandType Type { get; }
@@ -760,6 +834,12 @@ namespace NTSD.Simulation.Presentation
         public bool FlipX => RenderState.FlipX;
         public bool FlipY => RenderState.FlipY;
         public BattleSpriteValueDescriptor SpriteDescriptor { get; }
+        public bool ShowOverheadHealthBar { get; }
+        public int CurrentHealth { get; }
+        public int RecoverableHealth { get; }
+        public int MaximumHealth { get; }
+        public Vector2 StableHealthAnchorWorld { get; }
+        public bool HasStableHealthAnchor { get; }
         internal object TrustedResourceIdentity { get; }
     }
 
@@ -2099,6 +2179,12 @@ namespace NTSD.Simulation.Presentation
                         bool entityVisible = entitySprite?.EntityVisible ?? true;
                         bool shadowVisible = entitySprite?.ShadowVisible ?? true;
                         Vector2 localOffsetPixels = entitySprite?.LocalOffsetPixels ?? Vector2.zero;
+                        LF2Character healthCharacter = entity as LF2Character;
+                        bool showOverheadHealthBar = healthCharacter != null && runtime.HP3 > 0;
+                        float stableHealthAnchorHeightPixels = showOverheadHealthBar
+                            ? BattleHealthBarAnchor.ResolveStableCharacterHeightPixels(
+                                healthCharacter.FrameCache?.Wrapper?.characterData)
+                            : 0f;
 
                         frame.AddEntity(new BattlePresentationEntitySnapshot(
                             handle,
@@ -2141,7 +2227,12 @@ namespace NTSD.Simulation.Presentation
                             shadowVisible,
                             localOffsetPixels,
                             currentFrame?.frameId ?? -1,
-                            hasCatalogKey ? entry : null));
+                            hasCatalogKey ? entry : null,
+                            showOverheadHealthBar,
+                            runtime.HP,
+                            runtime.HPBound,
+                            runtime.HP3,
+                            stableHealthAnchorHeightPixels));
                         if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
                             frame.RequiresCatalogPublicationBinding = true;
                     }
@@ -2613,6 +2704,18 @@ namespace NTSD.Simulation.Presentation
                         pivotPixels.x,
                         pivotPixels.y,
                         0f);
+                    Vector3 stableHealthGroundWorld = viewportTransform.ScreenPixelToWorld(
+                        entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
+                        entity.DisplayZ + entity.YInt,
+                        0f);
+                    Vector2 stableHealthAnchorWorld = new Vector2(
+                        stableHealthGroundWorld.x,
+                        stableHealthGroundWorld.y +
+                        entity.StableHealthAnchorHeightPixels *
+                        NTSDRenderSpace.BattleVisualScale *
+                        NTSDRenderSpace.UnitsPerPixelY);
+                    bool hasStableHealthAnchor = entity.ShowOverheadHealthBar &&
+                                                 entity.StableHealthAnchorHeightPixels > 0f;
                     writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Entity,
                         entity.Handle,
@@ -2630,7 +2733,13 @@ namespace NTSD.Simulation.Presentation
                         resolvedNormalizedUv,
                         entity.FlipX,
                         resolvedDescriptor,
-                        resolvedIdentity));
+                        resolvedIdentity,
+                        entity.ShowOverheadHealthBar,
+                        entity.CurrentHealth,
+                        entity.RecoverableHealth,
+                        entity.MaximumHealth,
+                        stableHealthAnchorWorld,
+                        hasStableHealthAnchor));
                 }
                 if (collectCommandSectionTimings)
                 {

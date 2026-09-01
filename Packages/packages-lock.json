@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.ntsd.battle-kernel": {
+      "version": "file:../../NTSD_Server/packages/com.ntsd.battle-kernel",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.coplaydev.unity-mcp": {
       "version": "file:../../unity-mcp/MCPForUnity",
       "depth": 0,

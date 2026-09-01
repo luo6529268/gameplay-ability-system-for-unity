@@ -7,6 +7,8 @@
 > C++ release live authority：`J:\QQFile\NTSD2.4\ntsd_release` 中参与 release 构建并运行到 `ntsd_new.exe` 的 live path。  
 > `ntsd_release_C#` 仅用于历史移植意图、命名与交叉检查，不定义战斗规则。
 
+> **能力包粒度治理补充（2026-08-31）：** 本文件继续拥有跨阶段架构、不变量、阶段顺序和退回规则；执行粒度由 Server 侧 `GOVERNANCE-S0-S9-CAPABILITY-PACKAGE-CONSOLIDATION-001` 重整为"可观察能力级工作包"（每阶段约 3～5 个；S0 为内容闭合 → 内容模型集成 → 正式 Kernel 组装 → multi-world 退出证据）。字段/Frame/OID/路径级明细作为能力包内部验收矩阵或冻结证据保留，不再作为长期 Queue 节点；历史已完成包与证据是不可重做的 prerequisite evidence。验证采用三级层级：内部检查点通过≠能力包完成，能力包完成≠阶段 `VERIFIED`，S0 退出证据不完整时不得进入正式 S1 `VERIFIED`。本补充不改变本文任何阶段边界、进入门槛、退出证据或禁止项。
+
 ## 1. 本文的用途与不可突破边界
 
 本文是 S0～S9 的唯一详细设计合同。上位统一方案只保留总览、单机阶段和跨计划边界；本文件定义服务器阶段的每一步要解决什么问题、采用什么方案、失败时如何处置、以什么证据关闭。

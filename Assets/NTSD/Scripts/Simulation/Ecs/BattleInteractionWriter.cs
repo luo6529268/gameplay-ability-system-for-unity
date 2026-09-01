@@ -180,8 +180,8 @@ namespace NTSD.Simulation.Ecs
             LF2FrameData attackerFrame = attacker.Frame?.D;
             LF2FrameData victimFrame = victim.Frame?.D;
 
-            int attackerWact = attackerFrame?.cpoint?.x ?? 0;
-            int victimWact = victimFrame?.cpoint?.x ?? 0;
+            int attackerWact = attackerFrame?.PrimaryCatchPoint.X ?? 0;
+            int victimWact = victimFrame?.PrimaryCatchPoint.X ?? 0;
             int attackerCx = attackerFrame?.centerx ?? 0;
             int attackerCy = attackerFrame?.centery ?? 0;
             int victimCx = victimFrame?.centerx ?? 0;

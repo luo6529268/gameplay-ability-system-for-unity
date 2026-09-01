@@ -1,12 +1,240 @@
 # CODEX-CURRENT-HANDOFF
 
-> **当前授权/活跃包（2026-08-29）：** `S0-WITNESS-001 / COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING`。Current assemblies postdate witness source，fresh self-check于15:56:23Z为PASS；当前S0 fixture是7项、existing lockstep是9项。Computer Use未获Unity控制批准，需UI控制授权或用户手动运行。Scene/地图/背景用户改动、Input Actions、30 Hz、battle rules、transport与recovery不在范围。
+> **Ordered shutdown implementation active:** `BATTLE-RUNTIME-ORDERED-SHUTDOWN-001 / IN_PROGRESS / PRE_CODE / USER_APPROVED / RUNTIME_LIFECYCLE_ONLY`。用户批准按完整合同实施固定 11 阶段 `Running→Stopping→Stopped`；Change/Task/Ledger/State 已在 C# 前建立。当前范围只含 lifecycle、worker/spawn gate、publication/task/renderer/World/pool/boundary cleanup 和验证；禁止改变 Running battle pass、30Hz、checksum、Scene/DAT/Server/C++ 或顺手完成全量 Mono/Core 分层。
+
+> **Scene teardown fix verified:** `BATTLE-SCENE-TEARDOWN-SINGLETON-001 / VERIFIED / COMPILE_0 / FOCUSED_1_1_PASS / LIVE_TEARDOWN_PASS / CLEANUP_WARNING_0`。关闭 Scene 的 allocation unseal 已改用 factory/pool `TryGetInstance()`；正常 prepare/seal 仍可按需创建。真实 Play 中两者各1，退出后均0，目标 cleanup warning 0；Scene/战斗规则未改。整组 lifecycle fixture 另有一个既有无关 RestartPolicy expected5/actual1 失败，未包装为全组通过。
+
+> **Runtime sprite follow-up verified:** `BATTLE-SPRITE-GRID-SEPARATOR-001 / VERIFIED / COMPILE_0 / FOCUSED_29_29_PASS / LIVE_GREEN_SCAN_0 / PRESENTATION_ONLY`。根因是整 sheet 中不透明绿色网格 separator 会被中央图集上传并在 UV 边界暴露；现按 BMP source 自身像素拓扑清高覆盖率横/纵 separator alpha，避免同 BMP 因不同 DAT 声明产生冲突，禁止全局 green-key。真实 Play Mode 全图无长度 >=8 的匹配绿线，两名角色邻域匹配绿色像素均为0；Scene/战斗逻辑未改。
+
+> **Runtime presentation package verified:** `BATTLE-CENTRAL-RUNTIME-HEALTH-001 / VERIFIED / COMPILE_0 / RUNTIME_PREVIEW_14_14_PASS / CENTRAL_20_20_PASS / LIVE_STYLE_AND_STABLE_ANCHOR_PASS / PRESENTATION_ONLY`。真实 `LF2Character HP/HPBound/HP3` 已进入 immutable frame，central submission 双缓冲各持有一张 health mesh，RenderFeature 在 actors 后至多一次 draw；后一帧 HP 宽度更新已测。Play Mode 实际复用 Editor authoring 的120x10/-16样式，两个不同动画姿势的血条位置稳定。Scene/战斗规则/Server/lockstep未改。
+
+> **User-directed presentation follow-up:** `BATTLE-CENTRAL-EDITOR-PREVIEW-001 / FOCUSED_TEST_PASS / BMP-GRID-SEPARATOR-RECT-FIXED / PERSISTENT-SCENEVIEW-AUTHORING / GLOBAL-LEDGER-BLOCKED-BY-UNRELATED-RECORD / EDITOR-ONLY / PRESENTATION_ONLY`。Editor 示例/验证已改用正式左上 Rect；compile0、focused6/6、pixel637/70/green0、Scene dirty unchanged。全局 Ledger 仍受无关 Change Record 阻塞；正式runtime HP接线未改。
+
+> **Capability-package execution (2026-09-01, current for the Server S0～S9 roadmap):** CAP-S0-1 is the sole ACTIVE package. Checkpoints1/2/3 are focused green. Checkpoint4 generated the OPoint36 dual-SHA fixture and reproduced the A33 manifest, then stopped on fixture CS0029 before baseline capture, ParserV2 or A33；Server Task Appendix E.7 is the authority. `NO_NTSD / OLD_EXTRACTOR_NOT_RUN / FROZEN_AUTHORITY_ROWS_ONLY` remains permanent；formal marker false；S0 NOT_VERIFIED.
+
+> **CAP-S0-1 Client record:** `S0-FORMAL-CONTENT-CLOSURE-001 / IN_PROGRESS / ACTIVE / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED` exists in both repositories. Appendix E.7 is restart evidence；CAP-S0-1/S0 remain open.
+
+> **Queue selection (superseded 2026-08-31 by the capability consolidation above):** Queue0cu/0cx/0d1/0d5/0d6/0db/0df/0dg/0dk-a and parent0dk are VERIFIED/CLOSED. Queue0dk-b `CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001` was READY, then GATED by the runtime-safety incident, and is now SUPERSEDED into `S0-FORMAL-CONTENT-CLOSURE-001`. Formal marker/S0 unchanged.
+
+> **Parent0dk governance evidence:** coverage52/52 unique；six serial scalar/Itr/Bdy/OPoint/WPoint/topology child batches frozen；no Client resource/source/Unity action.
+
+> **Queue0dk-a verified evidence:** `CLIENT-CPP-FRAME-MULTIVALUE-PARSER-ALIGNMENT-001 / VERIFIED / CLOSED`；compile0、focused4/4、related287/287、fresh SelfCheck15:35:48、Server dual and validators PASS；no DAT/resource changed.
+
+> **Queue0dg verified evidence:** `CLIENT-FORMAL-KERNEL-CPOINT-VALUE-SEAM-001 / VERIFIED / CLOSED`；compile0、focused13/13、related295/295、fresh SelfCheck15:00:19、corpus、warmed0B、Server dual and validators PASS.
+
+> **Queue0df verified evidence:** `CLIENT-CPP-CPOINT-RESOLVED-HURT-ACTION-ALIGNMENT-001 / VERIFIED / CLOSED`；compile0、focused5/5、related238/238、fresh SelfCheck14:17:26、corpus、Server dual and validators PASS.
+
+> **Queue0db verified evidence:** `CLIENT-FORMAL-KERNEL-BPOINT-CATALOG-SEAM-001 / VERIFIED / CLOSED`；compile0、focused7/7、related78/78、fresh SelfCheck13:41:15、corpus、Server dual and validators PASS. No HUD runtime or battle-state field added.
+
+> **Queue0d6 verified evidence:** `CLIENT-FORMAL-KERNEL-WPOINT-VALUE-SEAM-001 / VERIFIED / CLOSED`；compile0、focused7/7、related239/239、fresh SelfCheck13:11:31、corpus、warmed0B、Server dual and validators PASS. Extra full1522 run had six recorded unrelated failures and is not labeled full-pass.
+
+> **Queue0d5 verified evidence:** test-first red；fresh compile0；focused job `63aea56535a140e1a03a02aba02d2ee5` 10/10；related job `113db6d11aea4d03b78170234810d0bb` 232/232；fresh SelfCheck 12:36:26；frozen WPoint corpus and Server dual configuration PASS. Only `WeaponPoint.kind` default plus focused/SelfCheck changed；converter/buffer production source stayed unchanged.
+
+> **Queue0cu `CLIENT-FORMAL-KERNEL-OPOINT-VALUE-SEAM-001` verified evidence / bridge correction:** fresh Unity compile0；official EditMode job `c1f48ca2ef7b4c4c9d1d395b19131ff2` 52/52 PASS；fresh SelfCheck 11:12:51 PASS；Server dual PASS。Fresh `6401 LISTENING` and framed handshake prove the user's Stdio panel was active；the earlier no-listener diagnosis is superseded. Queue0cu CLOSED；formal marker/S0 unchanged。
+
+> **Queue0cx `CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001` verified:** final Unity compile0；EditMode job `8a4bb5df745a44659ccae65e1824ff49` 212/212 PASS；fresh SelfCheck 11:52:09 PASS；frozen SHA/warmed0B/Server dual PASS。Queue0cx CLOSED；marker/S0 unchanged。
+
+> **Queue0d1 `CLIENT-CPP-ITR-PARSER-DEFAULTS-ALIGNMENT-001` verified:** fresh Unity compile0；focused6/6；EditMode `53db60de214d49c982be616e17518057` 212/212；SelfCheck12:09:45 PASS；corpus SHA/Server dual PASS。Queue0d1 CLOSED；marker/S0 unchanged.
+
+> **Formal-content Server consumer result:** future content values/validation/writers belong to shared Core；Unity and Server retain adapter I/O；Server must load before readiness and verify identity/selection/closure before world mutation. No parallel Server DTO/DAT parser or placeholder factory is lawful.
+
+> **Background/bundle contract results:** four-int background/ascending catalog and full bundle/selection/admission/OPoint closure are frozen；background corpus=38 LF/2941 bytes/SHA `B3AFCC...4074`；bundle corpus=32 LF/3510 bytes/SHA `408AD4...A9AB`。All are governance-closed/read-only。
+
+> **Queue0dp-c result:** Release has17 numeric backgrounds；Width/Z are simulation identity，perspective/shadow/layers are presentation。Client data.txt has0 backgrounds，single `Sunagakure` string map is unbound，Scene float derivation is not formal content。
+
+> **Queue0dp-b result:** Artifact/room-selection layers and preworld transitive admission are frozen. A complete Stage identity cannot omit release background width/Z/perspective content；producer/hash remain deferred.
+
+> **Queue0do-c result:** `ANALYSIS_COMPLETE / FULL_CATALOG_PRODUCTION_PARSER_PROJECTION_CLOSED / RESOURCE_PARSER_PRESENTATION_SCOPES_SEPARATED / CLIENT_GATES_FROZEN / GOVERNANCE_CLOSED / READ_ONLY`. Client/release entries are15,395/15,377 and last-wins IDs15,371/15,377；Queue0dk has a 52-OID exact field/block scope；Queue0dk-a records 241 common-Frame pair-token losses；309 sound differences are locator mappings. Old 977/three-item/312-sound claims are superseded.
+
+> **Queue0dp/0dp-a results:** Queue0dp froze immutable object/source-order catalog values, 18 exact binary64 default bits and writer/admission/exclusions. Queue0dp-a froze a 24 LF/4039-byte corpus with SHA `5ACC300E4D07149869884FFCA9DF03DE45411041809E2E2205D7D3076B2E1FE4`. Both are governance-closed/read-only.
+
+> **Queue0do result:** `GOVERNANCE-S0-FORMAL-CHARACTER-CONTENT-AUTHORITY-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_CHARACTER_OBJECT_GRAPH_MAPPED / RELEASE_CHARDATA_SCHEMA_CONFIRMED / EIGHTEEN_BINARY64_MOVEMENT_FIELDS_CONFIRMED / FOUR_HUNDRED_SEVENTEEN_WIDTH_FIRST_DIFFERENCES_CONFIRMED / OID_TYPE_CATALOG_BINDING_CONFIRMED / CATALOG_SOURCE_ORDER_BATTLE_SEMANTIC / FRAMESET_OWNER_CONFIRMED / WEAPON_SOUND_RESOURCE_DIFFERENCES_CONFIRMED / PRESENTATION_METADATA_EXCLUDED / SPRITE_COLLISION_ADAPTER_MISOWNERSHIP_CONFIRMED / CHARACTER_CONTRACT_SELECTED / CLIENT_GATES_RECORDED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Client/release catalog IDs/types/order and numeric text match across 137 objects；Client has 417 binary-width and 156 weapon-sound identity differences. Queue0dq/0dr/0ds are gated and unstarted.
+
+> **Queue0dm result:** `GOVERNANCE-S0-FRAME-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / STRUCTURE_CHECK_PASS / DUAL_DIGEST_PASS / FRAME_CLIENT_GATES_RECORDED / CHARACTER_CONTENT_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact corpus is 30 LF/4780 bytes, SHA `747C2754BE8E7E65E993A25C8BA1F1D5715D83FC27FE5470BCC7BEC42D922BEC`.
+
+> **Queue0dl result:** `GOVERNANCE-S0-FORMAL-FRAME-AUTHORITY-FIELD-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_FRAME_API_FROZEN / RELEASE_TWENTY_TWO_INT_SCHEMA_FROZEN / SOUND_AND_SIX_LIST_IDENTITY_FROZEN / PRESENCE_AND_EMPTY_FALLBACK_FROZEN / FRAME_ID_SORT_AND_DUPLICATE_REJECTION_FROZEN / SIGNED_SENTINEL_PRESERVATION_FROZEN / METADATA_AND_RUNTIME_STATE_EXCLUDED / CLIENT_RESOURCE_AND_POINT_DEPENDENCIES_FROZEN / FRAME_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact `BattleFrameValue`/`BattleFrameSetValue` and canonical writer contract frozen；Queue0dn remains gated.
+
+> **Queue0dj schema result / incidence superseded:** `GOVERNANCE-S0-FORMAL-FRAME-AUTHORITY-BOUNDARY-001 / ANALYSIS_COMPLETE / RELEASE_TWENTY_TWO_INT_PLUS_SOUND_SCHEMA_CONFIRMED / DEFAULT_AND_EMPTY_FALLBACK_MATCHED / SOURCE_ORDER_LAST_WINS_MATCHED / FRAME_VACTION_SCHEMA_GAP_CONFIRMED / CURRENT_CONTENT_INCIDENCE_SUPERSEDED_BY_QUEUE0DO_C / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Keep generic schema/lookup evidence；do not reuse the old 977/three-item incidence.
+
+> **Queue0dh result:** `GOVERNANCE-S0-FORMAL-WEAPON-STRENGTH-AUTHORITY-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_LEGACY_GRAPH_MAPPED / PRODUCTION_CALL_GRAPH_UNREACHABLE / CURRENT_312_WPOINT_ATTACKING_ZERO / RELEASE_SCHEMA_ABSENT / RELEASE_KIND5_ITR_OWNER_CONFIRMED / FORMAL_CONTENT_EXCLUDED / CLIENT_RETIREMENT_GATE_RECORDED / FRAME_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Seven blocks/28 entries are legacy-only; all 312 authored WPoint attacking values are zero; release owns kind-5 through holder-frame Itr. Queue0di Client retirement remains authorization-gated and unstarted.
+
+> **Queue0de result:** `GOVERNANCE-S0-CPOINT-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / CPOINT_CLIENT_GATES_RECORDED / WEAPON_STRENGTH_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact corpus is 16 LF/3700 bytes, SHA `7FDEA9EB056452FD204BA1302E46F6D042F7818CF3EECB4C6D112AD514C75E88`.
+
+> **Queue0dd result:** `GOVERNANCE-S0-FORMAL-CPOINT-AUTHORITY-FIELD-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_CPOINT_API_FROZEN / RELEASE_NINETEEN_SCALAR_SCHEMA_FROZEN / ZERO_DEFAULT_AND_SIGNED_PRESERVATION_FROZEN / ALIAS_RESOLUTION_AND_FINGERPRINT_FROZEN / ORDERED_LIST_AND_PRIMARY_FROZEN / RUNTIME_ENTITY_WRITER_BOUNDARY_FROZEN / CLIENT_CORRECTION_AND_SEAM_GATES_FROZEN / CPOINT_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Nineteen-scalar/list/alias/writer contract is frozen.
+
+> **Queue0dc result:** `GOVERNANCE-S0-FORMAL-CPOINT-VALUE-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_CPOINT_GRAPH_MAPPED / RELEASE_NINETEEN_SCALAR_SET_CONFIRMED / ALIAS_SOURCE_ORDER_MATCHED / UNITY_RESOLVED_HURT_CONSUMER_FIRST_DIFFERENCE_CONFIRMED / UNITY_SINGLETON_LAST_WINS_DIFFERENCE_CONFIRMED / RUNTIME_ENTITY_WRITER_OWNER_CONFIRMED / CURRENT_33_BLOCK_INCIDENCE_FROZEN / CPOINT_AUTHORITY_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Unity graph/current 33 blocks were mapped; parser aliases match release, but hit consumers need resolved injury/cover later.
+
+> **Queue0da result:** `GOVERNANCE-S0-BPOINT-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / BPOINT_CLIENT_SEAM_GATED / CPOINT_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact corpus is 13 LF/597 bytes, SHA `AD8B3E1DD4D020196183C2F2B8B76C1E27F5CFD8FBD938A48AA8DBA95FC81647`.
+
+> **Queue0d9 result:** `GOVERNANCE-S0-FORMAL-BPOINT-CATALOG-VALUE-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_BPOINT_API_FROZEN / TWO_SCALAR_SCHEMA_FROZEN / ORDERED_LIST_AND_PRIMARY_FROZEN / EMPTY_LIST_DISTINCT_FROM_ZERO_VALUE / CATALOG_WRITER_FROZEN / BATTLE_STATE_EXCLUSIONS_FROZEN / CLIENT_SEAM_FROZEN / BPOINT_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Two-scalar list/catalog writer and battle-state exclusions are frozen.
+
+> **Queue0d8 result:** `GOVERNANCE-S0-FORMAL-BPOINT-DOMAIN-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_BPOINT_GRAPH_MAPPED / RELEASE_TWO_SCALAR_SET_CONFIRMED / RENDERER_ONLY_LIVE_USE_CONFIRMED / BATTLE_STATE_AND_CHECKSUM_EXCLUDED / CATALOG_IDENTITY_INCLUDED / UNITY_SINGLETON_LAST_WINS_DIFFERENCE_CONFIRMED / CURRENT_DEPLOYED_BPOINT_ZERO / BPOINT_CATALOG_VALUE_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. BPoint is catalog identity plus optional Client presentation, never Server battle state; current Unity content has zero entries.
+
+> **Queue0d7 result:** `GOVERNANCE-S0-WPOINT-KIND5-FALLBACK-REACHABILITY-001 / ANALYSIS_COMPLETE / STATIC_PRODUCTION_CALL_GRAPH_UNREACHABLE / RUNNER_PREPROCESS_ALWAYS_APPLIED / DISABLED_SHADOW_DATA_ORIENTED_MODES_CLOSED / INVALID_PLAN_FALLBACK_REUSES_RUNNER / DIRECT_TEST_DIAGNOSTIC_ENTRY_RETAINED / WPOINT_EXTRAS_NOT_FORMAL / FUTURE_FAIL_CLOSED_REMOVAL_GATE_FROZEN / BPOINT_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. All current production modes and invalid-plan fallback preprocess kind-5 through the shared runner; direct internal test entry remains a later fail-closed cleanup gate.
+
+> **Queue0d4 result:** `GOVERNANCE-S0-WPOINT-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / WPOINT_CLIENT_GATES_RECORDED / KIND5_FALLBACK_AUDIT_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact corpus is 16 LF/1608 bytes, SHA `5A3B6B197BBEBA859ECCD4C4EE853CA8A655B3ABF378FE34E1FF7641DB95A926`.
+
+> **Queue0d3 result:** `GOVERNANCE-S0-FORMAL-WPOINT-AUTHORITY-FIELD-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_WPOINT_API_FROZEN / RELEASE_NINE_SCALAR_SCHEMA_FROZEN / ZERO_DEFAULT_FROZEN / SOURCE_ORDER_AND_PRIMARY_ENTRY_FROZEN / UNITY_EXTRAS_FAIL_CLOSED / EMPTY_PRIMARY_FALLBACK_FROZEN / CLIENT_GATES_FROZEN / WPOINT_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Nine-scalar API, full-list identity, primary-entry runtime and empty default are frozen.
+
+> **Queue0d2 result:** `GOVERNANCE-S0-FORMAL-WPOINT-VALUE-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_WPOINT_GRAPH_MAPPED / RELEASE_NINE_SCALAR_SET_CONFIRMED / KIND_DEFAULT_FIRST_DIFFERENCE_CONFIRMED / UNITY_EXTRAS_CLASSIFIED / FIRST_ENTRY_RUNTIME_OWNER_CONFIRMED / LEGACY_KIND5_FALLBACK_RISK_MAPPED / WPOINT_AUTHORITY_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Unity graph and current 312 WPoint blocks were mapped first; no implementation occurred.
+
+> **Queue0d0 result:** `GOVERNANCE-S0-ITR-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / ITR_CLIENT_CORRECTION_GATED / WPOINT_VALUE_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact corpus is 13 LF/3442 bytes, SHA `0F43B27514C3E26B4DBAC75C4CA7EF8AB2B994730BC5EEAE705DDDE2086516D1`.
+
+> **Queue0cz result:** `GOVERNANCE-S0-FORMAL-ITR-AUTHORITY-FIELD-CONTRACT-001 / ANALYSIS_COMPLETE / UNITY_CONSUMER_ORDER_FROZEN / IMMUTABLE_ITR_API_FROZEN / RELEASE_26_SCALAR_SCHEMA_FROZEN / ZWIDTH_DEFAULT_FROZEN / PAIR_AND_SECONDARY_FINGERPRINT_FROZEN / UNITY_EXTRAS_FAIL_CLOSED / MUTABLE_RUNTIME_PROJECTION_FROZEN / ITR_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Unity controls dependency/migration order; C++ release controls battle semantics rather than Server project order. Queue0d1 is a separate Client authorization gate.
+
+> **Queue0cy result:** `GOVERNANCE-S0-FORMAL-ITR-VALUE-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_ITR_GRAPH_MAPPED / ZWIDTH_DEFAULT_FIRST_DIFFERENCE_CONFIRMED / PAIR_ENCODING_FIRST_DIFFERENCE_CONFIRMED / UNITY_EXTRA_FIELDS_CLASSIFIED / KIND5_RUNTIME_COPY_MATCHED / ITR_AUTHORITY_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Unity content has 358 structurally closed Itr blocks plus one unclosed raw start in weapon4 Frame48；no implementation occurred.
+
+> **Queue0cw result:** `GOVERNANCE-S0-BDY-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / BDY_CLIENT_SEAM_GATED / ITR_VALUE_BOUNDARY_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Corpus is 10 LF/508 bytes, SHA `309F4F41AAF152DCCA352A2ABEE4DBD49E0B13221C6734E3849404B6B32EE650`; no code/build/Unity action occurred.
+
+> **Queue0cv result:** `GOVERNANCE-S0-FORMAL-BDY-VALUE-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_BDY_API_FROZEN / KIND_RAW_EXCLUDED / SOURCE_ORDER_AND_RAW_GEOMETRY_FROZEN / FULL_HEIGHT_SENTINEL_FROZEN / CLIENT_SEAM_SCOPE_FROZEN / BDY_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact Bdy X/Y/W/H and external geometry-resolver ownership are frozen; no source/build/Unity action occurred.
+
+> **Queue0ct result:** `GOVERNANCE-S0-OPOINT-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / OPOINT_CLIENT_SEAM_GATED / BDY_VALUE_CONTRACT_SELECTED / GOVERNANCE_CLOSED / NO_PRODUCTION_SOURCE_CHANGE / NO_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Corpus is 10 LF/852 bytes, SHA `2363910A2686D28D5FDE161C00C1777717408FD0736AEF3D5AB7A7CC57C7360E`; no code/build/Unity action occurred.
+
+> **Queue0cs result:** `GOVERNANCE-S0-FORMAL-OPOINT-VALUE-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_OPOINT_API_FROZEN / ORDER_AND_ALIAS_FROZEN / LEGACY_TASK_ADAPTER_FROZEN / INVALID_ENTRY_PRESERVATION_FROZEN / CLIENT_SEAM_SCOPE_FROZEN / OPOINT_CORPUS_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact value/API, compatibility/task conversion and later Client seam scope are frozen; no implementation was authorized or performed.
+
+> **Queue0cr result:** `GOVERNANCE-S0-FORMAL-POINT-VALUE-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_POINT_GRAPH_MAPPED / OPOINT_EIGHT_SCALAR_SEMANTIC_SET_CONFIRMED / UNITY_EXTRA_FIELDS_CLASSIFIED / OTHER_POINT_BLOCKERS_MAPPED / OPOINT_VALUE_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Unity actual point flow was mapped first; ObjectPoint was selected, other point families remain pending, and no source/build/Unity action occurred.
+
+> **Queue0cq result:** `CLIENT-FORMAL-KERNEL-STAGE-CONTAINER-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_STAGE_CONTAINER_OWNER_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / USER_STANDING_AUTHORIZED / UNITY_COMPILE_0 / PACKAGE_8_8 / STAGE_RELATED_11_11 / S0_LOCKSTEP_24_24 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Server Core now owns the single immutable source/GUID; Unity and direct/locked .NET 0.8.0 consumers passed. Adapter/runtime/hash/marker were unchanged.
+
+> **Stage-container cross-consumer result:** `GOVERNANCE-S0-STAGE-CONTAINER-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / STAGE_CONTAINER_SHARED_OWNER_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_PRODUCTION_SOURCE_CHANGE`. Ten lines/656 bytes and SHA `39816AB63F6BD54E04CE70A589B5CCB40A4D321DCCB9D50328D31B40CD774848`; no source/build/Unity action.
+
+> **Stage-container seam result:** `CLIENT-FORMAL-KERNEL-STAGE-CONTAINER-SEAM-001 / FOCUSED_TEST_PASS / STAGE_CONTAINER_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / TEST_FIRST_MISSING_SEAM_RED / UNITY_COMPILE_0 / FOCUSED_5_5 / RELATED_39_39 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Immutable world content, defensive copies and atomic projection are focused ready; mutable runtime/snapshot behavior remains separate and unchanged.
+
+> **Stage-container seam contract result:** `GOVERNANCE-S0-FORMAL-STAGE-CONTAINER-SEAM-CONTRACT-001 / ANALYSIS_COMPLETE / IMMUTABLE_CONTAINER_API_FROZEN / DEFENSIVE_COPY_AND_FAIL_CLOSED_FROZEN / SOURCE_ORDER_AND_COMMENT_CLASSIFICATION_FROZEN / STAGE_CONTAINER_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY`. Exact three-type BCL API, atomic projection, comment metadata and runtime/snapshot separation are frozen; next0co.
+
+> **Stage parser defaults result:** `CLIENT-CPP-STAGE-CAMPAIGN-PARSER-DEFAULTS-ALIGNMENT-001 / FOCUSED_TEST_PASS / STAGE_CAMPAIGN_PARSER_DEFAULTS_ALIGNED / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / TEST_FIRST_2_FAIL_2_PASS / UNITY_COMPILE_0 / FOCUSED_4_4 / RELATED_30_30 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Failed optional parses now preserve C++ initialized defaults `-1/1`; valid/order/duplicate behavior and all excluded systems are unchanged.
+
+> **Stage-container boundary result:** `GOVERNANCE-S0-FORMAL-STAGE-CONTAINER-BOUNDARY-001 / ANALYSIS_COMPLETE / UNITY_CONTENT_RUNTIME_SPLIT_MAPPED / ORDER_AND_DUPLICATE_BEHAVIOR_MAPPED / PARSER_DEFAULT_FIRST_DIFFERENCE_CONFIRMED / LOADER_DEFAULT_ALIGNMENT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_BUILD_OR_UNITY`. Static content is separate from loader/progression/wave buffers/snapshot. Unity failed `out` writes zero where C++ preserves initialized `-1/1`; next0cm selected before immutable containers.
+
+> **Shared stage-spawn value owner result:** `CLIENT-FORMAL-KERNEL-STAGE-SPAWN-VALUE-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_STAGE_SPAWN_VALUE_OWNER_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / PACKAGE_0_7_0_DIRECT_AND_LOCKED_ARTIFACT_PASS / UNITY_COMPILE_0 / UNITY_PACKAGE_7_7 / RELATED_27_27 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. One unchanged source/GUID is Server Core-owned; Unity still consumes it in loader→DTO→value→task/factory→world order. No adapter/gameplay/hash/marker changed.
+
+> **Stage-spawn cross-consumer result:** `GOVERNANCE-S0-STAGE-SPAWN-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / UNITY_ORDER_MAPPED / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / STAGE_SPAWN_SHARED_OWNER_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_PRODUCTION_SOURCE_CHANGE`. Fourteen lines/1269 bytes and SHA `EF0DE76F5DE89D3CE429E80D9F26CB2252DBE90EA77D80EB24A0A2F3F4C03591`; no Client run/source move.
+
+> **Stage-spawn value seam result:** `CLIENT-FORMAL-KERNEL-STAGE-SPAWN-VALUE-SEAM-001 / FOCUSED_TEST_PASS / STAGE_SPAWN_VALUE_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_4_4 / RELATED_23_23 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Eight immutable scalars and DTO/normal/reserve adapters are focused ready; warmed mapping is 0 B and mutable scratch is gone.
+
+> **Content model closure result:** `GOVERNANCE-S0-FORMAL-CONTENT-MODEL-CLOSURE-001 / ANALYSIS_COMPLETE / CONTENT_GRAPH_LAYERED / FULL_CATALOG_CLOSURE_SELECTED / ORDERED_MIGRATION_CUTS_FROZEN / STAGE_SPAWN_VALUE_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Full catalog plus transitive validation and ordered content cuts are frozen. The mutable Results reserve scratch is the first spawn-value blocker; Queue0ci selected.
+
+> **Content producer/binding result:** `GOVERNANCE-S0-FORMAL-CONTENT-PRODUCER-BINDING-BOUNDARY-001 / ANALYSIS_COMPLETE / PRODUCER_OWNERSHIP_MAPPED / NO_REAL_SERVER_ONLY_PRODUCER / PREWORLD_COMPARISON_POINT_DEFINED / CONTENT_MODEL_CLOSURE_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Server has no real five-domain producer; current test digests are fixtures only. Actual comparison belongs at the future formal factory before construction/allocation/RNG. Queue0ch selected.
+
+> **Server formal content identity value result:** `S0-SERVER-FORMAL-CONTENT-IDENTITY-VALUE-001 / FOCUSED_TEST_PASS / SERVER_FORMAL_CONTENT_IDENTITY_VALUE_READY / GOVERNANCE_CLOSED / SERVER_ONLY / CLIENT_INTEGRATION_REQUIRED / DEBUG_RELEASE_0_WARN_0_ERROR / SERVER_CHAIN_PASS / NO_NETWORK_HOST_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Server StartBarrier now requires domain/schema/sha256 rule/catalog/stage/build/world-factory values. Client remained untouched; no digest is yet bound to actual loaded content.
+
+> **Canonicalization contract result:** `GOVERNANCE-S0-FORMAL-CONTENT-CANONICALIZATION-CONTRACT-001 / ANALYSIS_COMPLETE / CANONICAL_IDENTITY_LAYERS_FROZEN / DUPLICATES_FAIL_CLOSED / SHA256_DOMAIN_VALUE_SELECTED / SERVER_IDENTITY_VALUE_PACKAGE_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Semantic manifest/order/normalization/version layers and verify-before-mutation are frozen; Queue0cf selected and subsequently Server-focused closed.
+
+> **Content/factory identity boundary result:** `GOVERNANCE-S0-FORMAL-CONTENT-FACTORY-IDENTITY-BOUNDARY-001 / ANALYSIS_COMPLETE / IDENTITY_TOKENS_UNBOUND / UNITY_BOOTSTRAP_ORDER_MAPPED / CANONICALIZATION_CONTRACT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Current Client/Server rule/catalog/stage values are unbound tokens; build and formal-factory identities are absent. The required order is resolve immutable Unity content → verify all identities → construct/mutate world. Queue0ce selected.
+
+> **World-bootstrap factory seam result:** `CLIENT-FORMAL-KERNEL-WORLD-BOOTSTRAP-FACTORY-SEAM-001 / FOCUSED_TEST_PASS / WORLD_BOOTSTRAP_FACTORY_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_4_4 / RELATED_114_114 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Exact current bootstrap behavior is explicit and Client-owned; it is not a shared formal factory and binds no content/stage/AI identity.
+
+> **Atomic-result boundary result:** `GOVERNANCE-S0-FORMAL-WORLD-ATOMIC-RESULT-BOUNDARY-001 / ANALYSIS_COMPLETE / TERMINAL_WORLD_DISCARD_BOUNDARY_DEFINED / IMMUTABLE_RESULT_DEFERRED / WORLD_BOOTSTRAP_FACTORY_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Failed S0 worlds are terminal/discarded and never retried; rollback remains S3/S5; final completed-result schema is premature; next0cc.
+
+> **Full-return commit seam result:** `CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001 / FOCUSED_TEST_PASS / FULL_RETURN_COMMIT_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_3_3 / RELATED_110_110 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Logic-only host publication now requires a complete tail return. Failed world rollback/discard, immutable result schema, complete shared world and marker remain pending.
+
+> **Formal snapshot/marker readiness result:** `GOVERNANCE-S0-FORMAL-SNAPSHOT-MARKER-READINESS-001 / ANALYSIS_COMPLETE / FORMAL_S0_PROOF_MATRIX_CLOSED / FULL_RETURN_COMMIT_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Shared foundations are not a complete world/tick. Existing Client snapshot is S3 foundation only; hidden tick early returns and separate mutable checksum/history writes mean no immutable completed-tick result exists. Formal AI/event/marker gates remain.
+
+> **Results reserve terminal integration result:** `CLIENT-CPP-RESULTS-RESERVE-TERMINAL-INTEGRATION-001 / FOCUSED_TEST_PASS / RESULTS_RESERVE_TERMINAL_INTEGRATION_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_4_4 / RELATED_103_103 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Persistent full-domain teams, mode4 reserve-before-guard and exact success/failure writes are focused ready; marker remains false.
+
+> **Results reserve terminal integration audit:** `GOVERNANCE-S0-RESULTS-RESERVE-TERMINAL-INTEGRATION-001 / ANALYSIS_COMPLETE / RESULTS_RESERVE_TERMINAL_INTEGRATION_SELECTED / GOVERNANCE_CLOSED / READ_ONLY`. Team0 is valid; two IDs persist in first-slot order; third teams are ignored; both alive pauses rather than resets; reserve success alone writes phase0/pending-1.
+
+> **Results reserve transaction seam result:** `CLIENT-CPP-RESULTS-RESERVE-TRANSACTION-SEAM-001 / FOCUSED_TEST_PASS / RESULTS_RESERVE_TRANSACTION_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_2_2 / RELATED_101_101 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Direct seam aligns slot20..399, no-RNG gates, one Z RNG, per-entry partial commit and rest-conflict fail-closed behavior. It remains unreachable from terminal observation.
+
+> **Results reserve boundary audit:** `GOVERNANCE-S0-RESULTS-RESERVE-TRANSACTION-BOUNDARY-001 / ANALYSIS_COMPLETE / RESULTS_RESERVE_TRANSACTION_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY`. C++ per-entry partial commit, slot/data/RNG/entity/rest/committed order and Client owner/gap matrix are closed. Current StageSpawn cannot be called directly because it consumes extra X RNG and hard-codes side2.
+
+> **Results activation-reset result:** `CLIENT-CPP-RESULTS-ACTIVATION-RESET-ALIGNMENT-001 / FOCUSED_TEST_PASS / RESULTS_ACTIVATION_RESET_ALIGNMENT_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_2_2 / RELATED_94_94 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Only the existing table reset followed by live-guard reset was added; test-first0/2, final2/2+94/94, fresh SelfCheck and Server dual-configuration evidence pass. Scan/reserve/schema/host action remain unchanged.
+
+> **Results terminal-alignment audit:** `GOVERNANCE-S0-RESULTS-TERMINAL-ALIGNMENT-SELECTION-001 / ANALYSIS_COMPLETE / RESULTS_ACTIVATION_RESET_ALIGNMENT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY`. Full-domain observation is coupled to the absent mode-4 reserve transaction; phase-11 table/live-guard reset is the first dependency-closed correction.
+
+> **Results outcome-host writer seam result:** `CLIENT-CPP-RESULTS-OUTCOME-HOST-WRITER-SEAM-001 / FOCUSED_TEST_PASS / RESULTS_OUTCOME_HOST_WRITER_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_2_2 / RELATED_92_92 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Dedicated terminal observer and Results navigation writers are fully regressed; behavior/fields/schema/reserve/marker remain frozen.
+
+> **Results outcome/host seam audit:** `GOVERNANCE-S0-RESULTS-OUTCOME-HOST-SEAM-SELECTION-001 / ANALYSIS_COMPLETE / RESULTS_OUTCOME_HOST_WRITER_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY`. Exact ownership/projection groups are mapped. C++ full-domain observation, reserve spawn and live-guard reset differences are explicit later gates.
+
+> **Results scene host-tick result:** `CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001 / FOCUSED_TEST_PASS / RESULTS_SCENE_HOST_TICK_ALIGNMENT_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / UNITY_COMPILE_0 / FOCUSED_3_3 / RELATED_90_90 / SELFCHECK_PASS / SERVER_DUAL_CONFIGURATION_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Test-first `0/3`; final focused `3/3`, related `90/90`, fresh SelfCheck and Server dual-configuration regressions pass. Results math/schema/package remain frozen.
+
+> **Results host/kernel audit:** `GOVERNANCE-S0-CUT-G-RESULTS-HOST-KERNEL-BOUNDARY-001 / ANALYSIS_COMPLETE / RESULTS_HOST_KERNEL_BOUNDARY_MAPPED / RESULTS_SCENE_HOST_TICK_ALIGNMENT_SELECTED / GOVERNANCE_CLOSED / READ_ONLY`. C++ host-global Results/full-tick order, Unity early-return first difference, reserve bridge and projection coupling are mapped.
+
+> **Roster/label shared-owner result:** `CLIENT-FORMAL-KERNEL-ROSTER-LABEL-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_ROSTER_LABEL_OWNER_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / PACKAGE_0_6_0_DIRECT_AND_LOCKED_ARTIFACT_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Single source/GUID、58-line exact corpus、direct+locked0.6.0、Unity compile0、11/11+87/87+SelfCheck and Server dual-configuration regressions pass.
+
+> **Roster/label shared-owner lifecycle anchor:** `CLIENT-FORMAL-KERNEL-ROSTER-LABEL-SHARED-OWNER-001` = `CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / SHARED_ROSTER_LABEL_OWNER_READY`.
+
+> **Roster/label contract:** 58 lines，SHA `F4DB5DA03345C08EC1854F67B2146EC47CE2E9EF22BF2290036AF11CABF89FD2`，dual digest pass；no Client source/build/Unity action。
+
+> **Roster/label bootstrap seam:** `CLIENT-FORMAL-KERNEL-ROSTER-LABEL-BOOTSTRAP-SEAM-001 / FOCUSED_TEST_PASS / ROSTER_LABEL_BOOTSTRAP_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / SOURCE_SEAM_ONLY / S0_NOT_VERIFIED`. Compile0、5/5、10/10、87/87 and fresh SelfCheck pass；package/results/root/marker unchanged。
+
+> **Roster/label seam lifecycle anchor:** `CLIENT-FORMAL-KERNEL-ROSTER-LABEL-BOOTSTRAP-SEAM-001` = `CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / ROSTER_LABEL_BOOTSTRAP_SEAM_READY`.
+
+> **Cut F boundary result:** `GOVERNANCE-S0-CUT-F-ROSTER-RESULTS-BOUNDARY-001 / ANALYSIS_COMPLETE / ROSTER_LABEL_BOOTSTRAP_SEAM_SELECTED / RESULTS_HOST_SPLIT_REQUIRED / GOVERNANCE_CLOSED / READ_ONLY`. Direct Client/C++ evidence mapped slot/label versus host-loop result state；no source/build/Unity action。
+
+> **Cut E shared-owner result:** `CLIENT-FORMAL-KERNEL-WORLD-SCALAR-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_WORLD_SCALAR_OWNER_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / PACKAGE_0_5_0_DIRECT_AND_LOCKED_ARTIFACT_PASS / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Single source/GUID、direct+locked0.5.0、compile0、10/10+83/83+SelfCheck and Server dual-config regressions pass.
+
+> **Cut E scalar contract:** `GOVERNANCE-S0-WORLD-SCALAR-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_DIGEST_PASS / GOVERNANCE_CLOSED / READ_ONLY`. 18 lines、SHA `1A1C2E...E554` and field order `9+10+4+8+22` pass；no Client source action。
+
+> **Cut E scalar seam:** `CLIENT-FORMAL-KERNEL-WORLD-SCALAR-SEAM-001 / FOCUSED_TEST_PASS / WORLD_SCALAR_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / S0_NOT_VERIFIED`. Unity compile0、focused5/5、related83/83 and fresh SelfCheck pass.
+
+> **Cut E scalar seam lifecycle anchor:** `CLIENT-FORMAL-KERNEL-WORLD-SCALAR-SEAM-001` = `CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / WORLD_SCALAR_SEAM_READY`.
+
+> **Cut E boundary audit:** `GOVERNANCE-S0-CUT-E-WORLD-CORE-BOUNDARY-001 / ANALYSIS_COMPLETE / WORLD_SCALAR_SEAM_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE`. Broad Runtime root、mutable content/catalog and entity moves were rejected from direct dependencies.
+
+> **Cut E scalar lifecycle anchor:** `CLIENT-FORMAL-KERNEL-WORLD-SCALAR-SHARED-OWNER-001` = `CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / SHARED_WORLD_SCALAR_OWNER_READY`.
+
+> **Cut D shared-owner result:** `CLIENT-FORMAL-KERNEL-REST-STATE-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_REST_STATE_OWNER_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. One RuntimeRestStore source/GUID is Server-owned at `0.4.0`; direct/locked artifact, Unity compile0、1/1+26/26+17/17+21/21、fresh SelfCheck and Server dual-configuration regressions pass.
+
+> **Cut D lifecycle anchor:** `CLIENT-FORMAL-KERNEL-REST-STATE-SHARED-OWNER-001` = `CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / SHARED_REST_STATE_OWNER_READY`.
+
+> **Client authorization policy:** `GOVERNANCE-S0-S9-STANDING-CLIENT-AUTHORIZATION-002` remains active. Queue-selected packages proceed after independent pre-change Task/Change；retained stops continue. Queue0dk-a `CLIENT-CPP-FRAME-MULTIVALUE-PARSER-ALIGNMENT-001` is READY.
+
+> **Goal metadata correction:** Goal `01a0324a-1bc3-7702-9787-b5e1ccff5111` was actually blocked before the current resumption audit. After G-24 closes, the executing session replaces/resumes it with the capability-level objective and G-22 standing authorization.
+
+> **Latest Cut D seam result:** `CLIENT-FORMAL-KERNEL-REST-STATE-SEAM-001 / FOCUSED_TEST_PASS / CUT_D_SEAM_READY / GOVERNANCE_CLOSED / CLIENT_INTEGRATION_REQUIRED / S0_NOT_VERIFIED`. Queue `0bf`已关闭；57-line digest/all hashes、dense/sparse order+warmed0B、Unity compile、related38/38（S0 8/8+lockstep9/9）、extra21/21、fresh SelfCheck与Server Release通过。Source move、package/version、snapshot schema/recovery、formal AI与marker仍冻结；后续shared-owner须新具名授权。
+
+> **Latest rest-vector result:** `GOVERNANCE-S0-REST-STATE-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_CORPUS_FROZEN / DUAL_GENERATOR_AND_DIGEST_PASS / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE / S0_NOT_VERIFIED`. 57 lines and SHA-256 `E10CF6D96104F69F574AA73503AFF9F03C0AD85633E66AE02054A435D86434E8` pass two generators, document extraction and the closed Client seam test. No ACTIVE/READY row remains; later source movement is separately gated.
+
+> **Latest Cut D audit:** `GOVERNANCE-S0-CUT-D-REST-CHECKSUM-PROJECTION-BOUNDARY-001 / ANALYSIS_COMPLETE / REST_CORE_BCL_ONLY / REVERSE_PROJECTION_DEPENDENCIES_CONFIRMED / SEAM_FIRST_SELECTED / GOVERNANCE_CLOSED / READ_ONLY / NO_SOURCE_CHANGE / S0_NOT_VERIFIED`. It selected vector-before-seam; both later prerequisites have now closed. RuntimeRestStore source movement remains separately gated.
+
+> **Cut C result:** `CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SHARED-OWNER-001 / FOCUSED_TEST_PASS / SHARED_SLOT_LIFECYCLE_OWNER_READY / GOVERNANCE_CLOSED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`. Queue `0bc`已关闭且全回归通过；后续Cut D boundary/vector/seam也已关闭。当前无READY项，rest source move仍未授权。
+
+> **Independent Tools result:** `WEB-PREVIEW-PRESENTATION-002 / RUNTIME_PENDING / BUILD_PASS / FOCUSED_TEST_PASS / PRESENTATION_ONLY`. DatSkillFlow 主预览已按 2.8 本地 render/presentation 参考接入30/60/120Hz、精确坐标与continuity gates，并分离authority overlay。build `20260830084617618-18ef901e469444d9b80e355a62838458`；focused23/23、unit315+1skip、nonbuild integration78/78、manifest/server25/25、Ledger PASS。DAT、Native CLI、server save、Unity Client、C++ battle和30Hz逻辑未改；localhost浏览器权限拒绝，E4待用户观察，不能标VERIFIED。Record：`docs/ai/CHANGE-RECORDS/WEB-PREVIEW-PRESENTATION-002.md`。
+
+> **Cut C seam prerequisite:** `CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SEAM-001 / FOCUSED_TEST_PASS / SLOT_LIFECYCLE_SEAM_READY / GOVERNANCE_CLOSED`. Queue `0bb`关闭了provisional claim/rest side effect/commit/rollback seam；随后独立授权的Queue `0bc`现已关闭shared-owner move。两者均未实现formal AI、snapshot/recovery、marker promotion或phase verification。
+
+> **Latest Server-only result:** `S2-SERVER-INDIVIDUAL-DEPARTURE-OWNERSHIP-REQUEST-001 / FOCUSED_TEST_PASS / SERVER_SINGLE_SLOT_OWNERSHIP_REQUEST_READY / ClientImpact=NONE`. One witness slot transitions safely; other Windows slot/pending input remain; AI-owned frame stops fail-closed. Client remained frozen.
+
+> **Latest Server governance prerequisite:** `GOVERNANCE-GP09-DEPARTURE-OWNERSHIP-REQUEST-SELECTION-001` selected Queue `2.10`; that Server source row has now closed at focused-test pass as recorded above. Client remains frozen; formal AI/frame advance/recovery/wire remain excluded.
+
+> **Latest Server-only result:** `S2-SERVER-INDIVIDUAL-DEPARTURE-WITNESS-001 / FOCUSED_TEST_PASS / SERVER_INDIVIDUAL_DEPARTURE_WITNESS_READY / ClientImpact=NONE`. Recorded-entry identity, caller monotonic admission time and stable full-duration witness pass. Client remained frozen; no timer/ownership/AI/recovery/wire/actor was implemented.
+
+> **Latest Server governance prerequisite:** `GOVERNANCE-GP09-INDIVIDUAL-DEPARTURE-WITNESS-SELECTION-001` selected the Server-only caller-timed witness; that source row has now closed at focused-test pass as recorded above. Client remains frozen; no AI/ownership/recovery/wire action is authorized.
+
+> **Latest Server-only result:** `S1-SERVER-INDIVIDUAL-DEPARTURE-ADMISSION-001 / FOCUSED_TEST_PASS / SERVER_INDIVIDUAL_DEPARTURE_ADMISSION_READY / ClientImpact=NONE`. Command/journal, per-slot participation, accepted-input-safe successor and Windows two-to-one admission pass. Client remained frozen; no 30-second AI, wire, recovery or actor was implemented.
+
+> **2026-08-30 GP-09 Server contract:** `GOVERNANCE-GP09-INDIVIDUAL-DEPARTURE-COMMAND-CONTRACT-001` selected the Server-only admission row; that row has now subsequently closed at focused-test pass as recorded above. Client remains frozen; 30-second AI, wire, recovery and actor are not included.
+
+> **2026-08-30 active governance package:** `GOVERNANCE-GP09-INDIVIDUAL-DEPARTURE-COMMAND-CONTRACT-001 / ANALYSIS_IN_PROGRESS / NO_SOURCE_CHANGE / PHASE_STATUS_UNCHANGED`. 只读冻结per-slot departure command与input-participation合同；不创建DTO，不改/编译/测试Client，不实现timer/AI/recovery/transport。
+
+> **2026-08-30 GP-09 one-shot audit result:** `GOVERNANCE-GP09-ORIGINAL-ONESHOT-CONSUMER-MAPPING-001 / ANALYSIS_COMPLETE / MASK_A_FE_AND_MASK_B_1E_CONSUMERS_MAPPED / OR_ONCE_FIXED_ORDER_CONFIRMED / GP09_EVIDENCE_COMPLETE / GOVERNANCE_CLOSED / NO_SOURCE_CHANGE`. 原版offsets 10/12是共享F1～F9/feature events；F4不是个人离场。未来room/session command仍需独立合同/实现；未改/编译/测试Client或改变阶段。
+
+> **2026-08-30 StageSpawn rest correction result:** `CLIENT-CPP-STAGE-SPAWN-REST-ALIGNMENT-001 / FOCUSED_TEST_PASS / STAGE_SPAWN_REST_ALIGNMENT_READY / GOVERNANCE_CLOSED / USER_AUTHORIZED / S0_NOT_VERIFIED`. 成功StageSpawn现按C++清ARest、VRest victim row和attacker column；冲突lease路径保持零mutation、lease有效、无pool leak、无成功allocation event。Unity compile `error CS=0`、focused `2/2`、fresh SelfCheck、S0 `8/8`和lockstep `9/9`通过；普通registration/pass未改，S0/S5/marker未晋升。
+
+> **2026-08-30 StageSpawn rest authority audit:** `GOVERNANCE-S0-STAGE-SPAWN-REST-ALIGNMENT-PREREQUISITE-001 / ANALYSIS_COMPLETE / CPP_CLEAR_ON_SUCCESS_AUTHORITY / UNITY_PRESERVE_MISMATCH_CONFIRMED / GOVERNANCE_CLOSED / NO_SOURCE_CHANGE`. 审计关闭时识别出`CLIENT-CPP-STAGE-SPAWN-REST-ALIGNMENT-001`门禁；该门禁随后已focused关闭。审计本身未改/运行Client，不能冒充后续实现证据。
+
+> **2026-08-30 Cut C golden-journal result:** `GOVERNANCE-S0-SLOT-LIFECYCLE-CROSS-CONSUMER-CONTRACT-001 / ANALYSIS_COMPLETE / GOLDEN_JOURNALS_FROZEN / DUAL_GENERATOR_AND_DIGEST_PASS / GOVERNANCE_CLOSED / NO_SOURCE_CHANGE`. PowerShell、JavaScript与document extraction均得到48行及SHA-256 `22F25272BCD5E4616AFB92B50A6E080E546B6AA53A11DAB96647387F1C4381B7`。后续StageSpawn authority audit也已关闭；Client correction/seam/source仍未授权。
+
+> **2026-08-30 Cut C identity audit result:** `GOVERNANCE-S0-CUT-C-SLOT-LIFECYCLE-IDENTITY-001 / ANALYSIS_COMPLETE / ALLOCATION_ORDER_MAPPED / FORMAL_ALLOCATION_EPOCH_DEFINED / CUT_C_SEAM_CLIENT_GATED / GOVERNANCE_CLOSED / NO_SOURCE_CHANGE`. Authority400 `0/20/50` ascending first-free order is mapped; C++ has no native generation; formal cross-runtime witness is `(slot, allocationEpoch)` and Unity Generation remains local lease safety. Subsequent vector and StageSpawn authority prerequisites are now closed; no Client source action was authorized.
+
+> **2026-08-30 FrameInput shared-owner result:** `CLIENT-FORMAL-KERNEL-FRAME-INPUT-SHARED-OWNER-001 / CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / SHARED_FRAME_INPUT_OWNER_READY / GOVERNANCE_CLOSED`. 单一source/GUID现由Server-owned `Runtime/Abstractions`持有；`0.2.0` direct/locked-artifact、Unity2/2+48/48+8/8+9/9+SelfCheck、Server Debug/Release和双Ledger通过。Marker仍false，S0/S5仍非VERIFIED。
+
+> **2026-08-30 FrameInput seam result:** `CLIENT-FORMAL-KERNEL-FRAME-INPUT-SEAM-001 / CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / FRAME_INPUT_SEAM_READY / GOVERNANCE_CLOSED`. Dual-repository Task/Change Records preceded all Client script edits. Public value/hash、Client capture、reusable preallocation与dense trace已分离；Unity compile0、seam4/4、related44/44、S0 8/8、existing9/9、fresh SelfCheck、warmed0B和Ledger通过。该seam包本身未移动source；后续shared-owner Cut B已按独立授权focused关闭。Cut C seam/source、formal AI与marker promotion仍分别受新门禁。
+
+> **2026-08-30 shared RNG owner result:** `CLIENT-FORMAL-KERNEL-DETERMINISTIC-RNG-SHARED-OWNER-001 / CLIENT_INTEGRATION_REQUIRED / FOCUSED_TEST_PASS / SHARED_RNG_OWNER_READY`. The single production source/GUID is now Server-owned and consumed by Unity/.NET. Frozen vectors, direct/artifact consumers, Unity1/1、S0 8/8、existing9/9、fresh SelfCheck和Server Debug/Release均通过。Formal marker仍false，S0/S5仍非VERIFIED；Cut B后来已由独立授权完成，Cut C及formal AI仍需各自新授权。
+
+> **最新源码包结果（2026-08-30）：** `S0-REAL-ENTITY-TEN-DOMAIN-CONTINUITY-001 / FOCUSED_TEST_PASS / CLIENT_TEST_ONLY / TEN_DOMAIN_CONTINUITY_READY / S0_NOT_VERIFIED`。MCP new1/1、S0 8/8、existing9/9、fresh self-check PASS、error CS0；只改一个Editor test文件，未改production runtime或Scene/资源。
+
+> **最近治理包（2026-08-30）：** Server `GOVERNANCE-S0-FORMAL-KERNEL-NEXT-PACKAGE-SELECTION-001 / ANALYSIS_COMPLETE / S0_TEST_PACKAGE_SELECTED / CLOSED`。完整shared Kernel源码因UnityEngine/profiling/presentation/LF2依赖与打包拓扑未闭合而非READY；已选择当前S0 test-only continuity包，S0/S5阶段状态不变。
+
+> **最新S0 Client包结果（2026-08-30）：** `S0-WITNESS-001 / FOCUSED_TEST_PASS / CLIENT_S0_WITNESS_READY / S0_NOT_VERIFIED`。Unity MCP连接唯一实例`gameplay-ability-system-for-unity@b1b02287`；S0 `7/7`与existing lockstep `9/9`均0 failed/skipped，fresh self-check为PASS，Console `error CS`为0。本轮未新增Client源码diff、未保存Scene；下一门槛是独立formal shared-Kernel/C++ domain mapping包。
 
 > 生成日期：2026-08-24  
-> 最后更新：2026-08-29
+> 最后更新：2026-08-30
 > 用途：将旧 Codex 任务 `01a02f58-c229-7830-a50b-7406c1d7d061` 最近三天有效事实迁移到当前持续目标；后续不依赖旧会话。  
 > 证据口径：本文件区分“已观察/已验证”“用户明确决定”“推断/待验证”。它不取代 C++ release 的 battle authority，也不把历史 self-check 写成完整 C++ 对齐证书。
-> 最近实测更新：2026-08-24，`S0-INPROC-AUTHORITY-001` 已取得 `FOCUSED_TEST_PASS / SELFCHECK_PASS / EXISTING_LOCKSTEP_PASS / WITNESS_IMPLEMENTATION_REQUIRED / RUNTIME_PENDING` 的 validation-only 证据；本更新不修改 Unity Client，也不把 S0 写成 `VERIFIED`。
+> 最近实测更新：2026-08-30，`S0-WITNESS-001` 已取得 `FOCUSED_TEST_PASS / CLIENT_S0_WITNESS_READY / S0_NOT_VERIFIED`；本轮通过MCP运行现有实现，没有新增Unity Client源码修改，也不把S0写成`VERIFIED`。
 
 ## 1. 当前结论
 
@@ -48,11 +276,11 @@
 - **最近完成的 Server 包是 `S2-SERVER-INMEMORY-SUBMISSION-DISORDER-001 / FOCUSED_TEST_PASS / SERVER_INBOUND_DISORDER_READY / CLIENT-PAUSED / S2-PREIMPLEMENTATION`**：它向既有redundancy ingress预编排投递或丢弃完整input windows的harness与聚焦fixtures已写入，覆盖inbound logical delay/drop/duplicate/reorder；Debug/Release各10项目`0 warnings / 0 errors`、BattleHost inbound-disorder checks、`SequentialSingleWriter` no-network local run、final Ledger `12 / 70`和scoped audit均通过。下一步仅可只读审计下一项Server-only包，先建新的Change Record再写源码；本包不能触发deadline/lock或选择`MissingInputPolicy`，不实现Client、packet/serialization/transport/retransmit/Jitter/weak-network runtime、snapshot/recovery、battle rules、数据库或公网，更不是S2 `VERIFIED`。
 - **最近完成的 Server 包是 `S2-SERVER-AUTHORITY-FRAME-GAP-001 / FOCUSED_TEST_PASS / SERVER_GAP_RESPONDER_READY / CLIENT-PAUSED / S2-PREIMPLEMENTATION`**：missing authority-frame request、从现有assembler locked history取得有界顺序切片的Server responder与聚焦fixtures已写入；Debug/Release各10项目`0 warnings / 0 errors`、Protocol gap-request与BattleHost gap-responder checks、`SequentialSingleWriter` no-network local run、final Ledger `11 / 68`和scoped audit均通过；它也不是S2 `VERIFIED`。
 - **最近完成的 Server 包是 `S2-SERVER-INPUT-REDUNDANCY-001 / FOCUSED_TEST_PASS / SERVER_INPUT_REDUNDANCY_READY / CLIENT-PAUSED / S2-PREIMPLEMENTATION`**：current+unconfirmed完整`InputSubmission` window、ordered ingress与聚焦测试已写入；首次`netstandard2.1` guard兼容性错误已受限修复，Debug/Release各10项目`0 warnings / 0 errors`、Protocol redundancy-window与BattleHost redundancy-ingress checks、`SequentialSingleWriter` no-network local run、final Ledger `10 / 64`和scoped audit均通过；它也不是S2 `VERIFIED`。
-- **当前 Server-only 范围与下一步**：不实现真实 Socket、数据库、正式 BattleKernel、Gateway、Matchmaker 或公网部署；也不应继续堆叠 TestKernel 来冒充 formal S0。最近完成源码包为`S2-SERVER-ACK-READY-GAP-TICK-RANGE-001 / FOCUSED_TEST_PASS / SERVER_ACK_READY_GAP_TICK_RANGE_READY / CLIENT-PAUSED / S2-CORRECTION`：`FrameAck`、gap request和non-empty ready range不再接受terminal `long.MaxValue`作为authority-frame fact，`ServerProgress`也只接受精确successor；terminal empty ready-range仍合法。Debug/Release `0/0`、focused/full Server tests、no-network `SequentialSingleWriter` run、declared-source audit与final Ledger`21 / 70`均通过。它不选择Client、transport、ACK/ready/gap retention、payload、policy、Kernel、snapshot或S2验证状态。当前没有活跃Server源码包；下一步仅可做前置审计或先建立新的独立Server Change Record。`CLIENT_INTEGRATION_REQUIRED` 仍是 formal S0 关闭门槛，但不是恢复任何 Client 动作的授权，也不是 S1/S0 `VERIFIED`。
+- **当前范围与下一步**：不实现真实Socket、数据库、Gateway、Matchmaker或公网，也不堆叠TestKernel。GP-09已focused推进到30秒witness和单slot ownership barrier；AI-owned frame正确停在`FormalAiKernelRequired`。Queue `0bb / CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SEAM-001`已focused关闭；Queue `0bc / CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SHARED-OWNER-001`需要新的具名授权，当前不得自动进入source move或formal AI。不得扩大成S0/S1/S2 VERIFIED。
 - **Server 侧没有隐藏的 S0 编码余量**：`NTSD.Battle.Kernel.Abstractions` 明确标记 formal battle kernel 尚未实现；新增 `IBattleKernel`、snapshot/restore 或共享 runtime adapter 是设计中的 S5 shared-Kernel/独立进程工作，不能用它替代当前 S0 Client 的十域 witness 缺口。
 - **已观察的当前环境事实**：`I:\GitHub\Unity_GAS\NTSD_Server` 已有独立 Git 仓库、`NTSD.Server.sln`、.NET 10 工程与 Server 自己的 Ledger/State/Handoff/Change Record；`dotnet --version` 在 `global.json` 下解析为 `10.0.400`。旧任务关于 sibling root 未热重载和 .NET 10 缺失的内容均是已解除的历史环境事实。
-- **当前没有 S0 bootstrap 的硬环境 blocker**。`CLIENT_INTEGRATION_REQUIRED` 已获 validation-only 批准：fresh assembly/Editor.log compile evidence、self-check PASS、S0 focused NUnit 5/5 PASS 与 existing lockstep fixture 9/9 PASS 已取得；用户现已明确授权 `S0-WITNESS-001` 的最小 Client runtime/test 实现范围。C++ full-trace 观察链路仍是独立未解边界。
-- **Unity 内的 S0 多 world 代码已取得 focused 验证，但仍未完成验收**：`S0-INPROC-AUTHORITY-001` 为 `FOCUSED_TEST_PASS / SELFCHECK_PASS / EXISTING_LOCKSTEP_PASS / WITNESS_IMPLEMENTATION_REQUIRED / RUNTIME_PENDING`。现有 Editor 于17:07:33完成 self-check `PASS`；用户 Test Runner 截图显示 S0 focused NUnit 5/5 pass / 0 fail，`BattleLockstepSessionEditorTests` 可见九项全绿。真实实体的 in-process multi-world journal 与十域 witness 仍待，且不得修改代码或把它标为 `VERIFIED`；跨进程/跨 runtime 一致性是后续 S5，而不是 S0 gate。现有 `BattleLockstepChecksumSnapshot` 可在 mismatch 后提供九个命名 hash 加 overall 的 structured diagnostic，但其分配型 capture 不能置入每 tick hot path，typed slot/generation witness 仍缺。
+- **当前没有 S0 bootstrap、Unity编译或TestRunner硬环境 blocker**。唯一Editor实例下fresh compile/self-check、RNG 1/1、S0 8/8和existing lockstep 9/9均通过。C++ full-trace观察链路与完整shared formal Kernel仍是独立未解边界。
+- **Unity S0 witness与RNG Cut A已完成focused验收，但阶段仍未VERIFIED**：真实test-only character的1 Server+2 Client world、连续journal、十named hashes、RNG/slot-generation typed first-difference已通过；`DeterministicRng`也已成为Server-owned UPM/.NET单一源码。仍缺完整formal Kernel的其余Cuts与C++ completed-tick/domain/event mapping；跨进程/跨runtime一致性仍属于S5。
 - **战斗规则唯一 authority 不变**：`J:\QQFile\NTSD2.4\ntsd_release` 中实际进入 `ntsd_new.exe` release build 的 C++ live path。Unity/C#、历史 C# release、旧 self-check、性能报告和旧 Play Mode 都只能用于实现、回归或定位，不能裁决规则。
 - **C++→Unity 重新对齐主计划没有取消，只是当前被服务器优先顺序覆盖**。R1 静态 source inventory 已完成；`R1-WP02` 的只读自动 full trace 仍 `BLOCKED`。`D-SCHED-009 + D-RENDER-002` 已取得 Unity joint S4 证据，但仍缺 C++ full trace，且 R07B、R07C、R08 未开始。
 - **HFR 不是当前实施主线**：`high-frame-rate-presentation-plan.md` 仍为 `PLANNED`，HFR-00～HFR-09 都未开始。战斗逻辑继续固定 **30 Hz**；60/120 Hz 仅能是 presentation sampling/interpolation，绝不能改变 DAT、tick、输入、碰撞、AI、opoint、RNG 或逻辑真值。
@@ -63,7 +291,7 @@
 - **S1 input-payload immutability boundary（2026-08-25，只读、非实现包）：** generic Server 的`ReadOnlyCollection`/record只保证collection structure；`InputSubmission<TInput>`、slot input、pending/locked/journal/ready owners与missing-policy结果都会直接保留opaque `TInput`，源码已明确将value/deep-copy semantics留给future formal input-contract owner。因此不能把“不可变frame”误写为payload deep immutability，也不能以reflection clone/default identity copy/JSON序列化自行解决。详见 Server [`S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md)。必须先在formal Kernel/S1输入范围定义canonical value、capture boundary、equality/hash/serialization、missing-policy关系与mutable-alias regression；本审计不修改任何Client或Server源码。
 
 - **S1 formal FrameInputSet shape boundary（2026-08-25，只读、非实现包）：** `ntsd_new.exe` release `Makefile`纳入`input_handler.cpp`与`game_tick.cpp`；live input basis是right/left/up/down/attack/jump/defend七个logical action，poll会从held state派生prev/rising edge/history/cooldown，AI则由world/input_phase/RNG在kernel内写入同一domain。SDL/Unity key binding、`InputHandler::snapshot()`、prev/history/cooldown/AI与post-`apply_input` state都不是raw Client intent。详见 Server [`S1-FORMAL-FRAME-INPUT-SHAPE-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S1-FORMAL-FRAME-INPUT-SHAPE-PREREQUISITE-001.md)。formal action value、capture/edge derivation、human/AI slot ownership、tick mapping与real-world replay仍待正式scope；本审计不修改任何Client或Server源码。
-- **Formal AI/state-hash Client gate（2026-08-29，已授权）：** 用户已授权必要Client源码并恢复S0～S9；当前先执行`S0-WITNESS-001` fresh validation。future `CLIENT-FORMAL-BATTLE-KERNEL-SHARED-OWNER-001`为`USER_AUTHORIZED / PACKAGE_NOT_STARTED`，仍须独立Task/Change；不能把AI放进Client submission、generic missing policy或复制Server实现。Scene/资源/Input Actions不在当前包。
+- **Formal AI/state-hash Client gate（2026-08-30）：** RNG Cut A、FrameInput seam和FrameInput shared-source Cut B均已focused关闭。Cut C～G、formal AI/state-hash与完整BattleKernel仍须后续各自独立Task/Change和必要授权；不能把AI放进Client submission、generic missing policy或复制Server实现。
 
 - **S5 single-writer room actor boundary（2026-08-25，只读、非实现包）：** 当前Server的`SequentialSingleWriter`只是`SequentialRoomExecutionBoundary`/`LocalBootstrapHost`输出的bootstrap metadata；没有运行中的room actor、mailbox、queue、scheduler或并发顺序证明，generic in-memory owners也未声明thread-safe。详见 Server [`S5-SINGLE-WRITER-ROOM-ACTOR-PREREQUISITE-001.md`](../../../../NTSD_Server/docs/ai/AUDITS/S5-SINGLE-WRITER-ROOM-ACTOR-PREREQUISITE-001.md)。不能以临时`lock`/queue决定input/deadline/advance/fault顺序；formal S5 Host必须先定义operation order、backpressure、lifecycle、commit与fault isolation。此审计不改Client或Server源码。
 
@@ -82,13 +310,13 @@
 ```text
 独立 Server bootstrap + generic authority-session TestKernel（Server-only 已完成）
     ↓
-CLIENT_INTEGRATION_REQUIRED（validation-only 已批准；focused NUnit 5/5 与 existing lockstep 9/9 已通过）
+CLIENT_INTEGRATION_REQUIRED（已批准；fresh S0 7/7 与 existing lockstep 9/9 已通过）
     ↓
-S0-WITNESS-001（用户授权 / CODE_WRITTEN；仅 checksum witness、first-difference、test-only real-entity multi-world；等待 Unity 编译）
+S0-WITNESS-001（FOCUSED_TEST_PASS / CLIENT_S0_WITNESS_READY；S0仍NOT_VERIFIED）
     ↓
 SERVER_CODE_READY / CLIENT_INTEGRATION_PENDING
     ↓
-只有用户重新批准后，恢复 Unity adapter、S0 同进程多 world 十域 checksum 验收；跨进程/跨 runtime 验收留待 S5
+下一步建立独立formal shared-Kernel/C++ mapping Task/Change；跨进程/跨runtime验收留待S5
 ```
 
 物理边界：
@@ -163,7 +391,7 @@ S0～S9 的含义不可混淆：S0～S5 先建立“能正确运行一局权威 
 
 | 主题 | 已观察事实 / 最新记录 | 不能据此声称 |
 |---|---|---|
-| Unity S0 多 world | 既有五个 S0 文件已读；fresh script assemblies 晚于其 source，Editor.log 无匹配 C# compile error，`BattleRuntimeSelfCheck` 于17:07:33 PASS，用户 Test Runner 截图为 S0 focused NUnit 5/5 pass / 0 fail，以及 existing lockstep fixture 9/9 pass；Record 为 `FOCUSED_TEST_PASS / SELFCHECK_PASS / EXISTING_LOCKSTEP_PASS / WITNESS_IMPLEMENTATION_REQUIRED / RUNTIME_PENDING`。现有 S0 fixture 是 48 tick logic-only / aggregate-hash evidence。 | 真实实体的 same-process server+two-client same-Kernel journal、十域 first-difference witness 或 S0 `VERIFIED`。跨进程/跨 runtime 一致性属于 S5。 |
+| Unity S0 多 world / shared RNG | Unity MCP fresh jobs：RNG 1/1、S0 fixture 8/8、existing lockstep 9/9，均0 failed/skipped；self-check PASS、`error CS` 0。真实test-only character三world、十named hashes、RNG/slot-generation首差与Server-owned single RNG source已通过focused范围。 | 完整shared formal Kernel、完整C++ completed-tick/domain/event mapping或S0 `VERIFIED`。跨进程/跨runtime一致性属于S5。 |
 | S0 syntax unblock | Record 追加说明：两处 switch 解析括号修正后，force-all 脚本刷新曾得到 Editor DLL 更新与 Console `error=0`。 | S0 自身所有 acceptance 或 runtime 测试已通过。 |
 | Server bootstrap | `S0-SERVER-BOOTSTRAP-001` 已在独立 Server Git 仓库达到 `FOCUSED_TEST_PASS / SERVER_CODE_READY / CLIENT_INTEGRATION_PENDING`：bootstrap 两次、Debug/Release build、四项自托管测试、架构边界、Ledger validator 和 no-network local run 均通过。 | formal BattleKernel、authority frames、transport、数据库、Unity 集成、跨端 checksum，或 S0 `VERIFIED`。 |
 | Server authority-session | `S0-SERVER-INMEMORY-AUTHORITY-001` 已达到 `FOCUSED_TEST_PASS / SERVER_TESTKERNEL_READY / CLIENT_INTEGRATION_REQUIRED`：generic frame/barrier/session、96 帧 TestKernel journal、Debug/Release build、四项 tests、no-network run、Ledger/static audit 均通过。 | formal NTSD BattleKernel、Unity multi-world、十域 checksum、S0 `VERIFIED` 或 S1。 |
@@ -244,15 +472,15 @@ S0～S9 的含义不可混淆：S0～S5 先建立“能正确运行一局权威 
 | 优先级 | 阻塞 | 已观察原因 | 影响范围 | 清除后的下一步 |
 |---:|---|---|---|---|
 | 已解除 | Server bootstrap 环境前置 | 当前 Server 根的 `global.json` 解析 `.NET SDK 10.0.400`；独立 Git/workspace 已存在。 | `S0-SERVER-BOOTSTRAP-001` 已不再被 SDK/目录/sandbox 阻塞。 | 后续 Server 扩展另建 Change Record；不自动扩大为 S0 battle verification。 |
-| 已解除 | Existing lockstep regression runner | 用户在现有 Editor 的 EditMode Test Runner 实际运行 `BattleLockstepSessionEditorTests`；筛选出的九项均通过。 | S0 focused NUnit 5/5 与 existing lockstep 9/9 已具会话证据。 | 下一步不再是运行该 fixture，而是取得 Client 源码修改授权后，为十域 witness 建立独立 Change Record。 |
+| 已解除 | Existing lockstep regression runner | Unity MCP final job `714ba0d70461400587887ea234ceb440`为9/9。 | RNG 1/1、S0 8/8与existing lockstep 9/9均具fresh MCP job证据。 | 不重复这些fixtures；按Queue进入下一具名formal shared-owner/C++ mapping包。 |
 | P1 | C++ release 自动 full trace 观察通道未解决 | `R1-WP02` 保持 `BLOCKED`；没有已确认的只读、可重复、覆盖 full schema 的观察方式。 | 不能取得 C++ full-trace/comparator 证书；不阻断已闭合的 C++ source contract 与最小 Unity work package。 | 仅在获得已有的无 authority 写入观察方式后再继续；严禁 instrumentation、hook、patch、注入、重建或新增 trace sink。 |
-| 已部分解除 | 当前 Unity fresh verification | fresh assemblies/Editor.log compile scan、`BattleRuntimeSelfCheck=PASS`、用户提供的 S0 focused NUnit 5/5 与 existing lockstep 9/9 截图已取得。 | 仍不能证明 formal multi-world witness、真实实体 runtime 或 C++/Server alignment。 | 取得 Client 源码修改授权后建立 witness 独立 Change Record；不直接修改现有 S0 文件。 |
+| 已部分解除 | 当前 Unity fresh verification | fresh assemblies、`BattleRuntimeSelfCheck=PASS`、MCP RNG 1/1、S0 8/8、existing 9/9、Console `error CS` 0已取得。 | 仍不能证明完整shared formal Kernel、完整C++ mapping或S0阶段VERIFIED。 | RNG Cut A已关闭；下一个Client Cut必须另建Task/Change并重新授权。 |
 | P2 | 工作树高度脏且治理文档本身未提交 | `git status` 显示大量脚本、资源、场景、工具和 Docs 修改/未跟踪项；`docs/ai/` 也处于未跟踪状态。 | broad build、提交、回滚和大范围 diff 很容易误触用户工作。 | 每次只按 Task/Record scoped diff；不 `reset`/`clean`/`restore`，不提交未审查文件。 |
 | P3 | Web cadence 最后视觉验收 | 自动/HTTP 证据齐全，但当前没有浏览器 Canvas 人工观察证据。 | 仅影响 `WEB-CADENCE-001` 的最终 runtime 级别，不影响 Server bootstrap。 | 用户或后续任务在实际浏览器选择有位移的技能，观察 30/60/120 三栏并记录结果。 |
 
 ## 7. 下一步执行顺序
 
-> **2026-08-29 优先更新：** 用户已授权必要Client源码并恢复S0～S9。当前最早包为Server `S0-FORMAL-MULTIWORLD-WITNESS-VALIDATION-001` / Client `S0-WITNESS-001`；先用现有Editor取得fresh compile、5/5、9/9和self-check。不要重做bootstrap、不要询问held-only、不要扩张到Scene/资源/Input Actions/transport/recovery。
+> **2026-08-30 优先更新：** FrameInput Cut B、Cut C identity/vectors、StageSpawn correction与`CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SEAM-001`均已focused关闭。当前无READY/ACTIVE源码包；Queue `0bc / CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SHARED-OWNER-001`须新的独立授权，仍不得扩张到formal AI、marker、Scene/资源/Input Actions/transport/recovery。
 
 > **2026-08-25 执行更新：** 下方 bootstrap 步骤是历史完成记录，**不得重做**。Client 冻结仍然有效，但不会暂停 Server-first 总目标；S1/S2 的 Server-only packages以及最近`S2-SERVER-ACK-READY-GAP-TICK-RANGE-001`已各自在独立 .NET 范围通过。当前没有活跃 Server source package：先阅读 `NTSD_Server/docs/ai/CURRENT-HANDOFF.md`、`STATE.md`、Ledger、最新`TASKS/CHANGE-RECORDS/S2-SERVER-ACK-READY-GAP-TICK-RANGE-001.md`以及`AUDITS/S1-SERVER-INPUT-PAYLOAD-IMMUTABILITY-PREREQUISITE-001.md`、`AUDITS/S1-CLIENT-SEQUENCE-RETENTION-PREREQUISITE-001.md`、`AUDITS/S3-AUTHORITY-HISTORY-RETENTION-PREREQUISITE-001.md`、`AUDITS/S5-KERNEL-ROOM-FAULT-BOUNDARY-PREREQUISITE-001.md`，随后只做前置审计或创建有明确缺口的新 Server-only Change Record。不得修改任何 Client 源码，也不得用 generic/TestKernel绕过formal Kernel、snapshot/recovery、transport或产品规则门槛。
 
@@ -284,10 +512,10 @@ S0～S9 的含义不可混淆：S0～S5 先建立“能正确运行一局权威 
    - 运行 Task Contract 指定的 `scripts/build.ps1 -Configuration Release`、`scripts/test.ps1 -Configuration Release` 和最小 `run-local`/health 验证；执行 Server 侧 Ledger validator 或等价检查。
    - 验收：Release build/test 为成功退出；无 `bin/obj/TestResults/logs/secrets` 被纳入 Git；状态最多可到 `SERVER_CODE_READY / CLIENT_INTEGRATION_PENDING`，不是 S0 `VERIFIED`。
 
-5. **CLIENT_INTEGRATION_REQUIRED 已建立，等待恢复 Client 工作的批准。**
+5. **CLIENT_INTEGRATION_REQUIRED 已建立，并由持续授权按 Queue 顺序执行。**
 
    - Server progress 与 Server Handoff 已列出 Client files、formal Kernel 共享边界、纯 Server TestKernel 的不足、预期 checksum/fixture、风险与回滚。
-   - 验收：得到用户新的明确批准后，才继续冻结的 `S0-INPROC-AUTHORITY-001` focused test、`BattleRuntimeSelfCheck`、同 journal 的 server + two-client world、十域 witness 和真实运行时验证；跨进程/跨 runtime checksum 另按 S5 处理。
+   - 验收：具名 Queue 包在独立事前 Task/Change 闭合后，可直接继续对应的 `S0-INPROC-AUTHORITY-001` focused test、`BattleRuntimeSelfCheck`、同 journal 的 server + two-client world、十域 witness 和真实运行时验证；跨进程/跨 runtime checksum 仍另按 S5 处理，且不得借此把 S0 标成 `VERIFIED`。
 
 6. **不要并行自动恢复非服务器主线。**
 

@@ -160,7 +160,7 @@ namespace NTSD.Animation
         /// C++ release 中没有 bdy 的帧不会参与身体命中判定。
         /// </summary>
         public System.Collections.Generic.List<BattleVolume> GetBodyVolumes(
-            System.Collections.Generic.List<BodyBox> bodies,
+            System.Collections.Generic.List<BattleBodyBoxValue> bodies,
             int centerx,
             int centery,
             float spriteWidthPx,
@@ -180,16 +180,16 @@ namespace NTSD.Animation
             bool facingLeft = dir == "left";
             foreach (var body in bodies)
             {
-                float localX = body.x;
+                float localX = body.X;
                 if (facingLeft)
                 {
-                    localX = spriteWidthPx - body.x - body.w;
+                    localX = spriteWidthPx - body.X - body.W;
                 }
 
                 result.Add(new BattleVolume(
                     originX, originY, originZ,
-                    localX, body.y,
-                    body.w, body.h,
+                    localX, body.Y,
+                    body.W, body.H,
                     NTSDGlobal.Default.Itr.ZWidth
                 ));
             }
@@ -202,7 +202,7 @@ namespace NTSD.Animation
         /// </summary>
         public void FillBodyVolumes(
             System.Collections.Generic.List<BattleVolume> dst,
-            System.Collections.Generic.List<BodyBox> bodies,
+            System.Collections.Generic.List<BattleBodyBoxValue> bodies,
             int centerx,
             int centery,
             float spriteWidthPx,
@@ -225,18 +225,17 @@ namespace NTSD.Animation
             for (int i = 0; i < bodies.Count; i++)
             {
                 var body = bodies[i];
-                if (body == null) continue;
 
-                float localX = body.x;
+                float localX = body.X;
                 if (facingLeft)
                 {
-                    localX = spriteWidthPx - body.x - body.w;
+                    localX = spriteWidthPx - body.X - body.W;
                 }
 
                 dst.Add(new BattleVolume(
                     originX, originY, originZ,
-                    localX, body.y,
-                    body.w, body.h,
+                    localX, body.Y,
+                    body.W, body.H,
                     zwidthPx
                 ));
             }
@@ -385,7 +384,7 @@ namespace NTSD.Animation
         /// 根据第一个 body box 计算 Unity 空间中的脚底占用矩形。
         /// 该矩形用于简单可走边界检测，不用于战斗重叠检测。
         /// </summary>
-        public Rect GetFootprintRect(System.Collections.Generic.List<BodyBox> bodies, int centerx, int centery)
+        public Rect GetFootprintRect(System.Collections.Generic.List<BattleBodyBoxValue> bodies, int centerx, int centery)
         {
             if (bodies == null || bodies.Count == 0)
             {
@@ -398,12 +397,12 @@ namespace NTSD.Animation
             // 朝右：left = ps.x - centerx + body.x
             // 朝左：left = ps.x + centerx - body.x - body.w
             double bodyLeftPx = dir == "left"
-                ? (x + centerx - body.x - body.w)
-                : (x - centerx + body.x);
+                ? (x + centerx - body.X - body.W)
+                : (x - centerx + body.X);
             float bodyWorldX = NTSDRenderSpace.GroundPixelToWorld((float)bodyLeftPx, (float)z).x;
-            float bodyWorldY = NTSDRenderSpace.ScreenPixelToWorld(0f, (float)(z + body.y - centery), 0f).y;
-            float bodyWidth = body.w / SimulationConstants.PIXELS_PER_UNIT;
-            float bodyHeight = body.h / SimulationConstants.PIXELS_PER_UNIT;
+            float bodyWorldY = NTSDRenderSpace.ScreenPixelToWorld(0f, (float)(z + body.Y - centery), 0f).y;
+            float bodyWidth = body.W / SimulationConstants.PIXELS_PER_UNIT;
+            float bodyHeight = body.H / SimulationConstants.PIXELS_PER_UNIT;
 
             return new Rect(bodyWorldX, bodyWorldY, bodyWidth, bodyHeight);
         }

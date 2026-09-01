@@ -2,17 +2,17 @@
 
 <!-- CHANGE-RECORD
 id: S0-WITNESS-001
-status: COMPILE_PASS
+status: FOCUSED_TEST_PASS
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessBattleKernelHost.cs
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessLockstepAuthoritySession.cs
 code-path: Assets/NTSD/Scripts/Simulation/Lockstep/InProcessLockstepChecksumWitness.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs
 authority: User authorization on 2026-08-24; Assets/NTSD/Docs/server-lockstep-s0-s9-design.md §5 S0; C++ release live path remains the only battle-rule authority.
-evidence: CODE-WRITTEN / USER-REAUTHORIZED-2026-08-29 / CLIENT-COMPILE-PASS / FRESH-SELFCHECK-PASS-2026-08-29T15-56-23Z / CURRENT-S0-7-AND-EXISTING-9-TESTRUNNER-PENDING
+evidence: CODE-WRITTEN / USER-REAUTHORIZED-2026-08-29 / CLIENT-COMPILE-PASS / FRESH-SELFCHECK-PASS-2026-08-29T15-56-23Z / MCP-S0-7-OF-7-PASS-JOB-2a52bf503c784bf3a4e8642a089b8838 / MCP-EXISTING-9-OF-9-PASS-JOB-6811ad1b4c56427bbcd085aa8f107d05 / ERROR-CS-0 / NO-NEW-SOURCE-DIFF / S0-NOT-VERIFIED
 -->
 
 > 创建日期：2026-08-24  
-> 状态：`COMPILE_PASS / FRESH_SELFCHECK_PASS / TEST_RUNNER_7_PLUS_9_PENDING`  
+> 状态：`FOCUSED_TEST_PASS / COMPILE_PASS / FRESH_SELFCHECK_PASS / EXISTING_LOCKSTEP_PASS / CLIENT_S0_WITNESS_READY / S0_NOT_VERIFIED`
 > 类型：S0 lockstep diagnostics / test-only validation adapter  
 > 前置记录：`S0-INPROC-AUTHORITY-001`
 
@@ -80,12 +80,17 @@ evidence: CODE-WRITTEN / USER-REAUTHORIZED-2026-08-29 / CLIENT-COMPILE-PASS / FR
 ## 8. 当前实际状态
 
 - 2026-08-29：用户重新授权必要的 Client 源码修改并恢复 S0～S9；本 Record 恢复为 active validation。首步只获取 fresh Unity compile、当前 focused 7/7、existing lockstep 9/9 与 self-check；若失败，仅在本 Record 四个既有源码文件内修复，其他 authored script/Scene/资源继续排除。
-- 2026-08-29 fresh结果：witness `.meta`存在，当前Assembly-CSharp/Editor DLL于本日重建且晚于witness源码，最近Editor.log无C# error；existing Editor request于`15:56:23Z`写入SelfCheck `PASS`。当前S0 fixture实际为7项（历史截图只含扩展前5项），existing lockstep为9项；Computer Use运行时未批准Unity控制，TestRunner仍pending。
+- 2026-08-29 fresh结果：witness `.meta`存在，当前Assembly-CSharp/Editor DLL于本日重建且晚于witness源码，最近Editor.log无C# error；existing Editor request于`15:56:23Z`写入SelfCheck `PASS`。当前S0 fixture实际为7项（历史截图只含扩展前5项），existing lockstep为9项。
+- 2026-08-30 MCP focused结果：连接唯一Unity实例`gameplay-ability-system-for-unity@b1b02287`；job `2a52bf503c784bf3a4e8642a089b8838`完成S0 `7/7 passed / 0 failed / 0 skipped`（1.7893356秒），job `6811ad1b4c56427bbcd085aa8f107d05`完成existing lockstep `9/9 passed / 0 failed / 0 skipped`（0.4938505秒）。MCP Console精确过滤`error CS`为0条。
+- 结果分类：正常路径未捕获diagnostic snapshot，RNG与slot/generation注入首差、首差锁存、真实test-only character三world连续journal均通过。本包达到`FOCUSED_TEST_PASS / CLIENT_S0_WITNESS_READY`；它不证明Server共享formal Kernel、完整C++ domain/event映射或S0阶段`VERIFIED`。
+- 本次恢复验证没有新增Client源码diff，也未保存Scene或修改资源、Input Actions、battle rules、30 Hz、transport、recovery。
+- Client Change Ledger关闭验证：`107 records / 0 governed code files in diff`通过；四个S0源码路径在本轮无新增diff。Server工作流/Ledger/matrix关闭验证分别为`28/ACTIVE0/READY0/GATED3/DEFERRED6`、`43/71`、`43/43 + formal 10/10`。
+- 2026-08-30下游Cut C非回退：`CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SHARED-OWNER-001`完成source/GUID单一owner迁移后，fresh S0 job `2c9d6470992d49af9b1f1e3c7fbf256f`仍为`8/8`，existing lockstep job `c5b50cb7332c40eb876ae21d9f72840e`仍为`9/9`，SelfCheck为PASS且C# compiler errors为0。该回归不改变本Record的`CLIENT_S0_WITNESS_READY / S0_NOT_VERIFIED`分类。
 
 - 已实际修改 `InProcessBattleKernelHost.cs`、`InProcessLockstepAuthoritySession.cs` 和 `InProcessLockstepAuthoritySessionEditorTests.cs`，并新增 `InProcessLockstepChecksumWitness.cs`。没有修改 `SimulationWorld`、`BattleParitySnapshot`、battle pass、Scene、资源、配置、网络或 Server 工程。
 - `InProcessBattleKernelHost` 的 structured snapshot capture 受 `currentTick` 边界检查保护，并仅由 first-mismatch branch 调用；其计数仅供 Editor fixture 确认一致 fast path 未走诊断 capture。
 - 新 witness 固定比较 Input → Metadata → Rng → World → Slots → ARest → VRest → Stats → Events → Overall；它从 mismatch-only structured snapshot 中保留 RNG state/call count、首个不同 slot/generation 与双方 snapshots。
-- S0 fixture新增 RNG witness、slot/generation reuse witness、real test-only character 的 1 server + 2 client 连续 journal 一致 case；尚未获得 Unity 编译或运行证据。
+- 历史初始状态（已解除）：S0 fixture新增 RNG witness、slot/generation reuse witness、real test-only character 的 1 server + 2 client 连续 journal 一致 case；写入当时尚未获得 Unity 编译或运行证据。
 - 静态编译尝试：首次 `dotnet build Assembly-CSharp-Editor.csproj --no-restore` 因受限用户目录的 `.NET` first-run sentinel 退出，未进入项目；随后使用进程级 `DOTNET_CLI_HOME` 重试。重试时生成的 `Assembly-CSharp.csproj` 尚未列入新增 `InProcessLockstepChecksumWitness.cs`，因而在两个已修改 InProcess 文件中报缺少该新类型的 `CS0246`。这只证明 Unity AssetDatabase 尚未导入新文件，**不是**对新 witness 源码的编译反证。
-- 当前单实例 Unity 观察：新增 `.cs` 尚无 Unity 生成的 `.meta`，`Assembly-CSharp.dll` / `Assembly-CSharp-Editor.dll` 时间均早于代码写入。没有启动第二个 Editor，也没有手改 `.csproj` 或 `.meta`。
-- 下一步：由当前已打开的 Unity Editor 执行一次普通 AssetDatabase Refresh/切回项目，使其导入新文件并生成 `.meta`；随后读取真实 Unity 编译结果，再运行本 S0 fixture、existing lockstep fixture 和 self-check，并如实记录结果。
+- 历史单实例 Unity 观察（已解除）：新增 `.cs` 当时尚无 Unity 生成的 `.meta`，`Assembly-CSharp.dll` / `Assembly-CSharp-Editor.dll` 时间早于代码写入；随后已由现有Editor正常导入和编译，没有手改generated `.csproj`。
+- 下一步：关闭本Change Record；由Server Queue选择后续具名formal shared-Kernel包。不得重跑本实现包或从focused pass推导S0 `VERIFIED`。

@@ -232,7 +232,11 @@ namespace NTSD.Animation.LF2Objects
             set => _heldDiagPrinted = value;
         }
 
-        internal void ApplyHeldWPointSync(LF2Entity holder, WeaponPoint holderWPoint, Vector3 holdpoint, WeaponPoint heldWPoint)
+        internal void ApplyHeldWPointSync(
+            LF2Entity holder,
+            BattleWeaponPointValue holderWPoint,
+            Vector3 holdpoint,
+            BattleWeaponPointValue heldWPoint)
         {
             _heldStateResolver.ApplyHeldWPointSync(holder, holderWPoint, holdpoint, heldWPoint);
         }
@@ -247,7 +251,10 @@ namespace NTSD.Animation.LF2Objects
             _releaseFlowResolver.ReleaseHeldWeaponForConsume(holder);
         }
 
-        internal WeaponAttackResult ProcessAttackInternal(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
+        internal WeaponAttackResult ProcessAttackInternal(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            LF2FrameData frame)
         {
             return ProcessAttack(holder, wpoint, frame);
         }
@@ -323,13 +330,19 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         protected virtual void OnDrinkConsumed() { }
 
-        protected virtual WeaponAttackResult ProcessAttack(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
+        protected virtual WeaponAttackResult ProcessAttack(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            LF2FrameData frame)
         {
             return default;
         }
 
         // 武器处于持有状态时，每帧同步和动作分发的主入口。
-        public virtual WeaponActResult Act(LF2Entity holder, WeaponPoint wpoint, Vector3 holdpoint)
+        public virtual WeaponActResult Act(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            Vector3 holdpoint)
         {
             return _heldStateResolver.Act(holder, wpoint, holdpoint);
         }
@@ -363,13 +376,15 @@ namespace NTSD.Animation.LF2Objects
         {
         }
 
-        protected void CoincideXYWithWPoint(Vector3 holdpoint, WeaponPoint heldFrameWpoint)
+        protected void CoincideXYWithWPoint(
+            Vector3 holdpoint,
+            BattleWeaponPointValue heldFrameWpoint)
         {
             var weaponFrame = Frame?.D;
             int wcx = weaponFrame?.centerx ?? 0;
             int wcy = weaponFrame?.centery ?? 0;
-            int wpx = heldFrameWpoint?.x ?? 0;
-            int wpy = heldFrameWpoint?.y ?? 0;
+            int wpx = heldFrameWpoint.X;
+            int wpy = heldFrameWpoint.Y;
 
             if (Runtime.Dir == "right")
                 Runtime.X = holdpoint.x + wcx - wpx;
@@ -616,7 +631,9 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // 供 LF2WeaponHeldStateResolver 调用受保护的 CoincideXYWithWPoint（:332）
-        internal void CoincideXYWithWPointInternal(Vector3 holdpoint, WeaponPoint heldFrameWpoint)
+        internal void CoincideXYWithWPointInternal(
+            Vector3 holdpoint,
+            BattleWeaponPointValue heldFrameWpoint)
             => CoincideXYWithWPoint(holdpoint, heldFrameWpoint);
 
         #region 交互分发（从 8101df55 恢复）

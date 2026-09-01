@@ -59,6 +59,7 @@ Package `FOCUSED_TEST_PASS` is not phase `VERIFIED`. A later-stage Server-only p
 
 ## 4. Single-source rules
 
+- **Capability-package granularity (2026-08-31, `GOVERNANCE-S0-S9-CAPABILITY-PACKAGE-CONSOLIDATION-001`):** stage work advances through roughly 3～5 observable-capability packages per phase (S0: content closure → content-model integration → formal kernel assembly → multiworld exit witness). Field/Frame/OID/path-level details live inside a capability package as acceptance matrices or frozen evidence, not as long-term queue rows; historical packages and evidence remain prerequisite evidence. Internal checkpoint pass ≠ capability close ≠ phase `VERIFIED`.
 - A user decision is recorded once in `DECISIONS/`; dossiers link its status and impact.
 - An external/C++ observation is recorded once in `AUDITS/`; dossiers do not promote inference to fact.
 - Task Contracts define planned package scope; Change Records define actual mutation/evidence.

@@ -139,7 +139,9 @@ namespace NTSD.Simulation
                 }
             }
 
-            if (!_runtimeRestStore.TryRestoreCanonicalStateFrom(snapshot.Rest))
+            if (!BattleWorldRestSnapshotModule.TryRestore(
+                    _runtimeRestStore,
+                    snapshot.Rest))
             {
                 failure = BattleStateSnapshotRestoreFailure.RestStateRestoreFailed;
                 return false;

@@ -19,6 +19,24 @@ namespace NTSD.Simulation
             string facingDir,
             int requiredRuntimeSlot = -1)
         {
+            BattleStageSpawnValue value = spawn.ToValue();
+            return CreateCold(
+                value,
+                spawnX,
+                spawnY,
+                spawnZ,
+                facingDir,
+                requiredRuntimeSlot);
+        }
+
+        public OPointCreateTask CreateCold(
+            in BattleStageSpawnValue spawn,
+            int spawnX,
+            int spawnY,
+            int spawnZ,
+            string facingDir,
+            int requiredRuntimeSlot = -1)
+        {
             var task = new OPointCreateTask();
             Configure(
                 task,
@@ -34,6 +52,26 @@ namespace NTSD.Simulation
         public void Configure(
             OPointCreateTask task,
             BattleStageSpawnData spawn,
+            int spawnX,
+            int spawnY,
+            int spawnZ,
+            string facingDir,
+            int requiredRuntimeSlot = -1)
+        {
+            BattleStageSpawnValue value = spawn.ToValue();
+            Configure(
+                task,
+                value,
+                spawnX,
+                spawnY,
+                spawnZ,
+                facingDir,
+                requiredRuntimeSlot);
+        }
+
+        public void Configure(
+            OPointCreateTask task,
+            in BattleStageSpawnValue spawn,
             int spawnX,
             int spawnY,
             int spawnZ,

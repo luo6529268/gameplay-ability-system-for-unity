@@ -37,8 +37,35 @@ function displayPosition(entity: PreviewEntity, axis: "x" | "y" | "z"): number {
     return finite(entity[integerKey] ?? entity[axis]);
 }
 
+function precisePosition(entity: PreviewEntity, axis: "x" | "y" | "z"): number {
+    return finite(entity[axis], displayPosition(entity, axis));
+}
+
 function displayZ(entity: PreviewEntity): number {
     return finite(entity.displayZ ?? entity.zInt ?? entity.z);
+}
+
+function velocity(entity: PreviewEntity, axis: "x" | "y" | "z"): number {
+    const value = entity.velocity;
+    if (typeof value !== "object" || value === null || Array.isArray(value)) return 0;
+    return finite((value as Record<string, unknown>)[axis]);
+}
+
+function relationMatches(previous: PreviewEntity, current: PreviewEntity): boolean {
+    return finite(previous.target, -1) === finite(current.target, -1)
+        && finite(previous.holder, -1) === finite(current.holder, -1)
+        && finite(previous.link, -1) === finite(current.link, -1);
+}
+
+function continuousAxis(
+    previousPosition: number,
+    currentPosition: number,
+    previousVelocity: number,
+    currentVelocity: number,
+): boolean {
+    const observedVelocity = Math.max(Math.abs(previousVelocity), Math.abs(currentVelocity));
+    const maximumContinuousDelta = Math.max(64, observedVelocity * 4 + 4);
+    return Math.abs(currentPosition - previousPosition) <= maximumContinuousDelta;
 }
 
 function interpolate(previous: number, current: number, alpha: number): number {
@@ -50,30 +77,40 @@ function interpolateEntity(
     current: PreviewEntity,
     alpha: number,
 ): PreviewEntity {
-    if (previous === undefined || lineageKey(previous) !== lineageKey(current)) {
+    if (previous === undefined
+        || lineageKey(previous) !== lineageKey(current)
+        || !relationMatches(previous, current)) {
         return current;
     }
 
-    const x = interpolate(displayPosition(previous, "x"), displayPosition(current, "x"), alpha);
-    const y = interpolate(displayPosition(previous, "y"), displayPosition(current, "y"), alpha);
-    const z = interpolate(displayPosition(previous, "z"), displayPosition(current, "z"), alpha);
-    const zDisplay = interpolate(displayZ(previous), displayZ(current), alpha);
-    const renderOffsetX = interpolate(
-        finite(previous.renderOffsetX),
-        finite(current.renderOffsetX),
-        alpha,
-    );
+    const previousX = precisePosition(previous, "x");
+    const previousY = precisePosition(previous, "y");
+    const previousZ = precisePosition(previous, "z");
+    const currentX = precisePosition(current, "x");
+    const currentY = precisePosition(current, "y");
+    const currentZ = precisePosition(current, "z");
+    if (!continuousAxis(previousX, currentX, velocity(previous, "x"), velocity(current, "x"))
+        || !continuousAxis(previousY, currentY, velocity(previous, "y"), velocity(current, "y"))
+        || !continuousAxis(previousZ, currentZ, velocity(previous, "z"), velocity(current, "z"))) {
+        return current;
+    }
+
+    const x = interpolate(previousX, currentX, alpha);
+    const y = interpolate(previousY, currentY, alpha);
+    const z = interpolate(previousZ, currentZ, alpha);
+    const deltaX = Math.round(x) - Math.round(currentX);
+    const deltaY = Math.round(y) - Math.round(currentY);
+    const deltaZ = Math.round(z) - Math.round(currentZ);
 
     return Object.freeze({
         ...current,
         x,
         y,
         z,
-        xInt: x,
-        yInt: y,
-        zInt: z,
-        displayZ: zDisplay,
-        renderOffsetX,
+        xInt: displayPosition(current, "x") + deltaX,
+        yInt: displayPosition(current, "y") + deltaY,
+        zInt: displayPosition(current, "z") + deltaZ,
+        displayZ: displayZ(current) + deltaZ,
     });
 }
 
@@ -82,8 +119,9 @@ function interpolateTick(
     current: PreviewTick,
     alpha: number,
 ): PreviewTick {
+    if (finite(previous.tick, -1) + 1 !== finite(current.tick, -1)) return current;
     const previousByLineage = new Map(previous.entities.map((entity) => [lineageKey(entity), entity]));
-    const cameraX = interpolate(finite(previous.cameraX), finite(current.cameraX), alpha);
+    const cameraX = Math.round(interpolate(finite(previous.cameraX), finite(current.cameraX), alpha));
     return Object.freeze({
         ...current,
         cameraX,
@@ -155,6 +193,69 @@ export function sampleRenderCadence(
         previousTickIndex,
         interpolationAlpha,
         presentationTick: interpolateTick(previous, current, interpolationAlpha),
+    });
+}
+
+/**
+ * Samples the main editor playback clock. 30 Hz remains discrete. Higher
+ * presentation rates use the current Native Tick's frame/lifecycle while
+ * moving its stable entities from the previous adjacent Tick toward their
+ * current precise positions. The caller controls how often this is sampled.
+ */
+export function samplePlaybackPresentation(
+    ticks: readonly PreviewTick[],
+    playbackMs: number,
+    rate: RenderCadenceRate,
+): RenderCadenceSample {
+    if (!isRenderCadenceRate(rate)) {
+        throw new RangeError(`Unsupported render cadence: ${rate}`);
+    }
+    if (!Number.isFinite(playbackMs) || playbackMs < 0) {
+        throw new RangeError("playbackMs must be a finite nonnegative number.");
+    }
+    if (ticks.length === 0) {
+        return Object.freeze({
+            rate,
+            displayTimeMs: 0,
+            sourceTickIndex: 0,
+            previousTickIndex: 0,
+            interpolationAlpha: 0,
+            presentationTick: undefined,
+        });
+    }
+
+    const lastTickIndex = ticks.length - 1;
+    const endMs = lastTickIndex * NATIVE_LOGIC_TICK_MS;
+    const displayTimeMs = clamp(playbackMs, 0, endMs);
+    if (rate === 30 || ticks.length === 1) {
+        return sampleDiscrete(ticks, displayTimeMs, rate);
+    }
+    if (displayTimeMs >= endMs) {
+        return Object.freeze({
+            rate,
+            displayTimeMs,
+            sourceTickIndex: lastTickIndex,
+            previousTickIndex: lastTickIndex,
+            interpolationAlpha: 1,
+            presentationTick: ticks[lastTickIndex],
+        });
+    }
+
+    const progress = displayTimeMs / NATIVE_LOGIC_TICK_MS;
+    const previousTickIndex = Math.floor(progress);
+    const sourceTickIndex = previousTickIndex + 1;
+    const interpolationAlpha = progress - previousTickIndex;
+    return Object.freeze({
+        rate,
+        displayTimeMs,
+        sourceTickIndex,
+        previousTickIndex,
+        interpolationAlpha,
+        presentationTick: interpolateTick(
+            ticks[previousTickIndex]!,
+            ticks[sourceTickIndex]!,
+            interpolationAlpha,
+        ),
     });
 }
 

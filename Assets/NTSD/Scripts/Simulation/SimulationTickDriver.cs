@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using MoreMountains.Tools;
 using NTSD.App;
 using NTSD.Animation;
@@ -90,7 +91,8 @@ namespace NTSD.Simulation
             new SimulationInputButtons[MaximumLocalPlayerSlots];
         private readonly bool[] previousSlotActive = new bool[MaximumLocalPlayerSlots];
         private readonly bool[] currentSlotActive = new bool[MaximumLocalPlayerSlots];
-        private readonly FrameInputSet capturedFrame = FrameInputSet.Empty(0);
+        private readonly FrameInputSet capturedFrame =
+            FrameInputSetPreallocation.CreateReusable();
         private SimulationWorld world;
         private bool canonicalFrameCaptured;
 
@@ -202,6 +204,10 @@ namespace NTSD.Simulation
         [SerializeField][MMReadOnly] private float timeAccumulator = 0f;
         [SerializeField][MMReadOnly] private int objectCount = 0;
         [SerializeField][MMReadOnly] private bool paused = true;
+        [SerializeField][MMReadOnly] private BattleRuntimeLifecycleState lifecycleState =
+            BattleRuntimeLifecycleState.Uninitialized;
+        [SerializeField][MMReadOnly] private BattleRuntimeShutdownStage shutdownStage =
+            BattleRuntimeShutdownStage.None;
         [SerializeField][MMReadOnly] private float renderAlpha = 0f;
         [SerializeField][MMReadOnly] private int backlogTickCount = 0;
         [SerializeField][MMReadOnly] private string lastFrameChecksum = string.Empty;
@@ -238,7 +244,7 @@ namespace NTSD.Simulation
         private readonly LocalSimulationFrameInputProvider _localFrameInputProvider =
             new LocalSimulationFrameInputProvider();
         private readonly FrameInputSet _emptyLastAppliedFrameInput =
-            FrameInputSet.Empty(0);
+            FrameInputSetPreallocation.CreateReusable();
         private readonly BattleFunctionKeyInputLatch _battleFunctionKeyInputLatch =
             new BattleFunctionKeyInputLatch();
         private ISimulationFrameInputProvider _frameInputProvider;
@@ -256,6 +262,10 @@ namespace NTSD.Simulation
         private long _rejectedLatePresentationComponentCreateCount;
         private readonly BattleRuntimeAllocationGate _allocationGate =
             new BattleRuntimeAllocationGate();
+        private readonly BattleRuntimeShutdownDiagnostics _shutdownDiagnostics =
+            new BattleRuntimeShutdownDiagnostics();
+        private LF2ObjectPointFactory _battleObjectPointFactory;
+        private LF2ObjectPool _battleObjectPool;
         private readonly BattleManagedMemoryBoundary _managedMemoryBoundary =
             new BattleManagedMemoryBoundary();
         private BattleManagedMemoryFrameBeginProbe _managedMemoryFrameBeginProbe;
@@ -265,11 +275,11 @@ namespace NTSD.Simulation
         private readonly SimulationPlayerInput[] _simulationWorkerSubmittedPlayers =
             new SimulationPlayerInput[MaximumSimulationWorkerPlayerSlots];
         private readonly FrameInputSet _simulationWorkerSubmittedFrameInput =
-            FrameInputSet.Empty(0);
+            FrameInputSetPreallocation.CreateReusable();
         private readonly SimulationPlayerInput[] _simulationWorkerCompletedPlayers =
             new SimulationPlayerInput[MaximumSimulationWorkerPlayerSlots];
         private readonly FrameInputSet _simulationWorkerCompletedFrameInput =
-            FrameInputSet.Empty(0);
+            FrameInputSetPreallocation.CreateReusable();
         private ISimulationFrameInputProvider _simulationWorkerSubmittedProvider;
         private bool _simulationWorkerTickInFlight;
         private bool _simulationWorkerPresentationAwaitingAcknowledgement;
@@ -284,6 +294,7 @@ namespace NTSD.Simulation
 
         protected override void OnSingletonAwake()
         {
+            EnterPreparingState();
             paused = startPaused;
             lockstepSettings ??= new LockstepSimulationSettings();
             lockstepSettings.Normalize();
@@ -300,6 +311,12 @@ namespace NTSD.Simulation
             _managedMemoryBoundary.BeginDriverUpdate();
             try
             {
+                if (lifecycleState != BattleRuntimeLifecycleState.Running)
+                {
+                    RefreshInspectorState();
+                    return;
+                }
+
                 TryCompleteDedicatedSimulationWorkerPresentationConsumption();
                 ConsumeDedicatedSimulationWorkerPublication();
                 TryCompleteDedicatedSimulationWorkerPresentationConsumption();
@@ -368,6 +385,9 @@ namespace NTSD.Simulation
             _managedMemoryBoundary.BeginPresentation();
             try
             {
+                if (lifecycleState != BattleRuntimeLifecycleState.Running)
+                    return;
+
                 ConsumeDedicatedSimulationWorkerPublication();
                 PauseForDedicatedSimulationWorkerFailure();
                 if (_world == null)
@@ -410,6 +430,10 @@ namespace NTSD.Simulation
 
         private bool CanAdvanceTick(int tickIndex)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return false;
+
             TryCompleteDedicatedSimulationWorkerPresentationConsumption();
             if (_simulationWorkerTickInFlight ||
                 _simulationWorkerPresentationAwaitingAcknowledgement)
@@ -888,13 +912,24 @@ namespace NTSD.Simulation
         public LockstepSimulationSettings Settings => lockstepSettings;
 
         public bool IsPaused => paused;
+        public BattleRuntimeLifecycleState LifecycleState => lifecycleState;
+        public BattleRuntimeShutdownStage ShutdownStageForDiagnostics => shutdownStage;
         public BattleRuntimeAllocationGate AllocationGate => _allocationGate;
         public BattleManagedMemoryBoundary ManagedMemoryBoundary =>
             _managedMemoryBoundary;
 
         public void SetPaused(bool value)
         {
+            if (!value &&
+                (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                 lifecycleState == BattleRuntimeLifecycleState.Stopped))
+            {
+                return;
+            }
+
             paused = value;
+            if (!value && lifecycleState == BattleRuntimeLifecycleState.Preparing)
+                lifecycleState = BattleRuntimeLifecycleState.Running;
         }
 
         /// <summary>
@@ -905,6 +940,14 @@ namespace NTSD.Simulation
         public bool TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
             bool buildPresentation = true)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+            {
+                _dedicatedSimulationWorkerLastSubmissionFailureReason =
+                    "battle-runtime-is-stopping-or-stopped";
+                return false;
+            }
+
             if (!paused)
             {
                 _dedicatedSimulationWorkerLastSubmissionFailureReason =
@@ -953,6 +996,10 @@ namespace NTSD.Simulation
 
         public void BeginBattleAllocationSeal()
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
+                return;
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                EnterPreparingState();
             if (_world == null)
                 return;
             if (_allocationGate.IsSealed && _world.RuntimeCapacity.IsSealed)
@@ -965,6 +1012,12 @@ namespace NTSD.Simulation
                 debugLogPerTick = false;
                 _formalBattleDiagnosticsSuppressedCount++;
             }
+
+            _world.BeginBattlePreparation();
+            _battleObjectPointFactory = LF2ObjectPointFactory.Instance;
+            _battleObjectPool = LF2ObjectPool.Instance;
+            _battleObjectPointFactory?.BeginBattlePreparation();
+            _battleObjectPool?.BeginBattlePreparation();
 
             int maximumBodyCount = 1;
             int maximumItrCount = 1;
@@ -1160,6 +1213,11 @@ namespace NTSD.Simulation
         public void EndBattleAllocationSeal()
         {
             StopDedicatedSimulationWorker(resetLogicOnlyMaterialization: false);
+            EndBattleAllocationSealAfterWorkerStopped();
+        }
+
+        private void EndBattleAllocationSealAfterWorkerStopped()
+        {
             _managedMemoryBoundary.CloseBattleWindow();
             _allocationGate.Unseal(_world);
             _world?.SetLogicOnlyEntityMaterialization(false);
@@ -1167,6 +1225,149 @@ namespace NTSD.Simulation
             _world?.UnsealRuntimeDataCatalog();
             _world?.Runtime?.EnsureStageSpawnBuffers().Unseal();
             BattleCentralRenderSystem.EndBattleCapacitySeal();
+        }
+
+        public BattleRuntimeShutdownReport ShutdownBattleRuntime()
+        {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopped);
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
+            {
+                return string.IsNullOrEmpty(_shutdownDiagnostics.FailureReason)
+                    ? BuildShutdownReport(
+                        _shutdownDiagnostics.CompletedStage >=
+                            BattleRuntimeShutdownStage.ObjectPoolQuiesced
+                            ? BattleRuntimeShutdownStatus.AwaitingRuntimeMapCleanup
+                            : BattleRuntimeShutdownStatus.AlreadyStopping)
+                    : BuildShutdownReport(BattleRuntimeShutdownStatus.Failed);
+            }
+
+            lifecycleState = BattleRuntimeLifecycleState.Stopping;
+            paused = true;
+            _battleFunctionKeyInputLatch.Clear();
+            _frameInputProvider?.Reset();
+            _localFrameInputProvider.Reset();
+            _shutdownDiagnostics.Reset();
+            CompleteShutdownStage(BattleRuntimeShutdownStage.TickAndInputClosed);
+
+            try
+            {
+                StopDedicatedSimulationWorker(resetLogicOnlyMaterialization: false);
+                if (_simulationWorker != null || _simulationWorkerTickInFlight ||
+                    _simulationWorkerPresentationAwaitingAcknowledgement)
+                {
+                    return FailShutdown(
+                        BattleRuntimeShutdownStage.TickAndInputClosed,
+                        "dedicated-simulation-worker-did-not-stop");
+                }
+                CompleteShutdownStage(BattleRuntimeShutdownStage.WorkerStopped);
+
+                _world?.BeginBattleShutdown();
+                _battleObjectPointFactory?.BeginBattleShutdown(_world);
+                _battleObjectPool?.BeginBattleShutdown();
+                CompleteShutdownStage(BattleRuntimeShutdownStage.SpawnIntakeClosed);
+
+                EndBattleAllocationSealAfterWorkerStopped();
+                CompleteShutdownStage(BattleRuntimeShutdownStage.AllocationUnsealed);
+
+                _publishedSoundEvents.Clear();
+                BattleCentralRenderSystem.ResetRuntime();
+                _world?.BattlePresentation.Reset();
+                CompleteShutdownStage(BattleRuntimeShutdownStage.PresentationCleared);
+
+                _shutdownDiagnostics.DiscardedObjectPointTasks +=
+                    _world?.DiscardPendingObjectPointTasks() ?? 0;
+                _shutdownDiagnostics.DiscardedObjectPointTasks +=
+                    _battleObjectPointFactory?.DiscardPendingTasks() ?? 0;
+                CompleteShutdownStage(
+                    BattleRuntimeShutdownStage.PendingObjectPointTasksDiscarded);
+
+                if (_battleObjectPool != null)
+                {
+                    if (!_battleObjectPool.ReleaseAllActiveForShutdown(
+                            out int returnedRenderers,
+                            out int returnedSpriteRenderers,
+                            out string poolReleaseFailure))
+                    {
+                        return FailShutdown(
+                            BattleRuntimeShutdownStage.PendingObjectPointTasksDiscarded,
+                            poolReleaseFailure);
+                    }
+                    _shutdownDiagnostics.ReturnedRenderers += returnedRenderers;
+                    _shutdownDiagnostics.ReturnedSpriteRenderers +=
+                        returnedSpriteRenderers;
+                }
+                else if (_world?.HasUnityPresentationBindingsForDedicatedWorker() == true)
+                {
+                    return FailShutdown(
+                        BattleRuntimeShutdownStage.PendingObjectPointTasksDiscarded,
+                        "unity-renderers-remained-without-an-object-pool-owner");
+                }
+                CompleteShutdownStage(BattleRuntimeShutdownStage.RenderersReturned);
+
+                if (_world != null &&
+                    !_world.TryShutdownAndClearLogicState(
+                        out _,
+                        out string worldCleanupFailure))
+                {
+                    return FailShutdown(
+                        BattleRuntimeShutdownStage.RenderersReturned,
+                        worldCleanupFailure);
+                }
+                CompleteShutdownStage(BattleRuntimeShutdownStage.WorldLogicCleared);
+
+                _world = null;
+                _localFrameInputProvider.BindWorld(null);
+                _battleTickSystem = null;
+                ResetLastAppliedFrameInput(_tickIndex);
+                CompleteShutdownStage(BattleRuntimeShutdownStage.WorldUnbound);
+
+                if (_battleObjectPool != null &&
+                    !_battleObjectPool.CompleteBattleQuiesce(
+                        out string poolQuiesceFailure))
+                {
+                    return FailShutdown(
+                        BattleRuntimeShutdownStage.WorldUnbound,
+                        poolQuiesceFailure);
+                }
+                CompleteShutdownStage(BattleRuntimeShutdownStage.ObjectPoolQuiesced);
+                return BuildShutdownReport(
+                    BattleRuntimeShutdownStatus.AwaitingRuntimeMapCleanup);
+            }
+            catch (Exception exception)
+            {
+                return FailShutdown(
+                    _shutdownDiagnostics.CompletedStage,
+                    exception.GetType().Name + ": " + exception.Message);
+            }
+        }
+
+        public BattleRuntimeShutdownReport CompleteBattleRuntimeShutdownAfterMapCleanup(
+            bool runtimeMapCleared)
+        {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopped);
+            if (lifecycleState != BattleRuntimeLifecycleState.Stopping ||
+                _shutdownDiagnostics.CompletedStage <
+                    BattleRuntimeShutdownStage.ObjectPoolQuiesced)
+            {
+                return FailShutdown(
+                    _shutdownDiagnostics.CompletedStage,
+                    "runtime-stages-1-through-10-have-not-completed");
+            }
+            if (!runtimeMapCleared)
+            {
+                return FailShutdown(
+                    BattleRuntimeShutdownStage.ObjectPoolQuiesced,
+                    "runtime-map-carrier-has-not-been-cleared");
+            }
+
+            CompleteShutdownStage(BattleRuntimeShutdownStage.RuntimeMapCleared);
+            _shutdownDiagnostics.ClearFailure();
+            lifecycleState = BattleRuntimeLifecycleState.Stopped;
+            _battleObjectPointFactory = null;
+            _battleObjectPool = null;
+            return BuildShutdownReport(BattleRuntimeShutdownStatus.Completed);
         }
 
         public void SetSoundPresentationSuppressedForDiagnostics(bool value)
@@ -1184,6 +1385,11 @@ namespace NTSD.Simulation
         {
             if (settings == null)
                 return;
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+            {
+                return;
+            }
 
             StopDedicatedSimulationWorker();
             lockstepSettings = settings;
@@ -1197,6 +1403,11 @@ namespace NTSD.Simulation
 
         public void ApplyMatchConfig(MatchConfig config)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
+                throw new InvalidOperationException(
+                    "A battle match cannot be prepared while runtime shutdown is in progress.");
+
+            EnterPreparingState();
             _battleFunctionKeyInputLatch.Clear();
             EndBattleAllocationSeal();
             _publishedSoundEvents.Clear();
@@ -1204,6 +1415,11 @@ namespace NTSD.Simulation
                 return;
 
             _world.ResetRuntimeState();
+            _world.BeginBattlePreparation();
+            _battleObjectPointFactory = LF2ObjectPointFactory.TryGetInstance();
+            _battleObjectPool = LF2ObjectPool.TryGetInstance();
+            _battleObjectPointFactory?.BeginBattlePreparation();
+            _battleObjectPool?.BeginBattlePreparation();
 
             BattleMatchRuntimeState matchState = _world.Runtime?.Match;
             if (matchState != null)
@@ -1229,7 +1445,14 @@ namespace NTSD.Simulation
 
             List<BattleStageCampaignData> stageCampaigns = BattleStageCampaignLoader.LoadFromFile(
                 config?.stageCampaignFilePath);
-            _world.ConfigureStageCampaigns(stageCampaigns, config?.stageSeriesId ?? 0, -1);
+            if (!_world.ConfigureStageCampaigns(
+                    stageCampaigns,
+                    config?.stageSeriesId ?? 0,
+                    -1))
+            {
+                throw new InvalidOperationException(
+                    "Stage campaign projection failed before battle bootstrap.");
+            }
 
             _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
         }
@@ -1263,11 +1486,18 @@ namespace NTSD.Simulation
         public void QueueBattleFunctionKeyCommandsForDiagnostics(
             BattleFunctionKeyCommand commands)
         {
+            if (lifecycleState != BattleRuntimeLifecycleState.Running)
+                return;
             _battleFunctionKeyInputLatch.QueueForDiagnostics(commands);
         }
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+            {
+                return;
+            }
             StopDedicatedSimulationWorker();
             _frameInputProvider = provider ??
                 (lockstepSettings.driveMode == SimulationDriveMode.LocalFreeRun &&
@@ -1301,6 +1531,9 @@ namespace NTSD.Simulation
             bool ignorePaused = false,
             bool buildPresentation = true)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return false;
             if (!ignorePaused && paused)
                 return false;
 
@@ -1317,6 +1550,9 @@ namespace NTSD.Simulation
 
         public bool StepOneTick(bool ignorePaused, bool buildPresentation)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return false;
             if (!ignorePaused && paused)
                 return false;
 
@@ -1331,6 +1567,12 @@ namespace NTSD.Simulation
             BattleStateSnapshotBuffer snapshot,
             out BattleStateSnapshotRestoreFailure failure)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+            {
+                failure = BattleStateSnapshotRestoreFailure.WorldConfigurationMismatch;
+                return false;
+            }
             StopDedicatedSimulationWorker();
             if (_world == null)
             {
@@ -1362,19 +1604,17 @@ namespace NTSD.Simulation
 
         public void UnbindWorld()
         {
-            EndBattleAllocationSeal();
-            _publishedSoundEvents.Clear();
-            if (_world != null)
-                BattleCentralRenderSystem.ResetRuntime();
-            _world?.BattlePresentation.Reset();
-            _world = null;
-            _localFrameInputProvider.BindWorld(null);
-            _battleTickSystem = null;
+            BattleRuntimeShutdownReport report = ShutdownBattleRuntime();
+            if (report.Status != BattleRuntimeShutdownStatus.Failed)
+                CompleteBattleRuntimeShutdownAfterMapCleanup(true);
         }
 
         public void RecreateWorld()
         {
-            EndBattleAllocationSeal();
+            BattleRuntimeShutdownReport shutdown = ShutdownBattleRuntime();
+            if (shutdown.Status == BattleRuntimeShutdownStatus.Failed)
+                throw new InvalidOperationException(shutdown.FailureReason);
+            CompleteBattleRuntimeShutdownAfterMapCleanup(true);
             CreateProductionWorld();
             ResetDriverStateAfterWorldCreation();
         }
@@ -1505,6 +1745,7 @@ namespace NTSD.Simulation
             BattlePresentationBackendMode presentationMode,
             BattleAiExecutionProfile aiExecutionProfile)
         {
+            EnterPreparingState();
             StopDedicatedSimulationWorker();
             BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
             var nextWorld = new SimulationWorld(
@@ -1523,6 +1764,49 @@ namespace NTSD.Simulation
             _aiExecutionProfile = aiExecutionProfile;
             effectiveAiExecutionProfile = aiExecutionProfile.ToString();
             _battleTickSystem = new NTSDBattleTickSystem(_world);
+        }
+
+        private void EnterPreparingState()
+        {
+            lifecycleState = BattleRuntimeLifecycleState.Preparing;
+            paused = true;
+            _shutdownDiagnostics.Reset();
+            shutdownStage = BattleRuntimeShutdownStage.None;
+            _battleObjectPointFactory = null;
+            _battleObjectPool = null;
+        }
+
+        private void CompleteShutdownStage(BattleRuntimeShutdownStage stage)
+        {
+            _shutdownDiagnostics.Complete(stage);
+            shutdownStage = _shutdownDiagnostics.CompletedStage;
+        }
+
+        private BattleRuntimeShutdownReport FailShutdown(
+            BattleRuntimeShutdownStage completedStage,
+            string failureReason)
+        {
+            _shutdownDiagnostics.Fail(completedStage, failureReason);
+            shutdownStage = _shutdownDiagnostics.CompletedStage;
+            lifecycleState = BattleRuntimeLifecycleState.Stopping;
+            paused = true;
+            return BuildShutdownReport(BattleRuntimeShutdownStatus.Failed);
+        }
+
+        private BattleRuntimeShutdownReport BuildShutdownReport(
+            BattleRuntimeShutdownStatus status)
+        {
+            return new BattleRuntimeShutdownReport(
+                status,
+                _shutdownDiagnostics.CompletedStage,
+                _shutdownDiagnostics.FailureReason,
+                _shutdownDiagnostics.DiscardedObjectPointTasks,
+                _shutdownDiagnostics.ReturnedRenderers,
+                _shutdownDiagnostics.ReturnedSpriteRenderers,
+                _world?.ObjectCount ?? 0,
+                _world?.ClaimedRuntimeSlotCountForDiagnostics ?? 0,
+                (_battleObjectPool?.ActiveObjectCountForAcceptance ?? 0) +
+                (_battleObjectPool?.ActiveSpriteCountForAcceptance ?? 0));
         }
 
         internal bool EnsureProductionConfigurationFromSources()
@@ -1618,12 +1902,9 @@ namespace NTSD.Simulation
 
         protected override void OnSingletonDestroyed()
         {
-            EndBattleAllocationSeal();
-            BattleCentralRenderSystem.ResetRuntime();
-            _world?.BattlePresentation.Reset();
-            _world = null;
-            _localFrameInputProvider.BindWorld(null);
-            _battleTickSystem = null;
+            BattleRuntimeShutdownReport report = ShutdownBattleRuntime();
+            if (report.RuntimeStagesCompleted)
+                CompleteBattleRuntimeShutdownAfterMapCleanup(true);
         }
     }
 }

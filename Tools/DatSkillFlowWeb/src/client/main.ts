@@ -56,6 +56,13 @@ import {
     type PreviewEntity,
     type PreviewTick,
 } from "./preview-renderer.js";
+import {
+    NATIVE_LOGIC_TICK_MS,
+    RENDER_CADENCE_RATES,
+    samplePlaybackPresentation,
+    type RenderCadenceRate,
+    type RenderCadenceSample,
+} from "./render-cadence-sampler.js";
 import { createLatestTaskScheduler } from "./latest-task-scheduler.js";
 import {
     clampPanelWidths,
@@ -193,7 +200,11 @@ let fieldDraft: FieldDraft | undefined;
 let tickIndex = 0;
 let playing = false;
 let zoom = 1;
-let timer: number | undefined;
+let presentationRate: RenderCadenceRate = 120;
+let playbackMs = 0;
+let presentationSample: RenderCadenceSample | undefined;
+let presentationFrameRequest: number | undefined;
+let lastPresentationMs = 0;
 let renderRequest: number | undefined;
 let stateToken = "";
 let tokenHeader = "x-dat-skill-flow-token";
@@ -774,6 +785,12 @@ function syncReadOnlyUi(): void {
             ? `${count} 个 Native Tick · 入口 ${actionStart} · 主体结束 ${progressEnd} · 尾迹 ${playbackEnd}`
             : `${count} 个 Native Tick · 入口 ${actionStart} · 主体尚未结束`);
     setText("preview-frame-count", String(playbackEnd));
+    const sample = playing ? presentationSample : undefined;
+    setText("presentation-readout", sample === undefined
+        ? "Native 30Hz · 离散 Tick"
+        : presentationRate === 30
+            ? "30Hz · 离散 Native snapshot"
+            : `${presentationRate}Hz 表现 · T${sample.previousTickIndex}→T${sample.sourceTickIndex} · α ${sample.interpolationAlpha.toFixed(2)}`);
     const rootEnded = progressEnd >= 0 && tickIndex >= progressEnd;
     setText("play-state", primary
         ? traceStatus === "entry-not-reached"
@@ -799,8 +816,7 @@ function activeScenePositions(): PreviewInitialPositions {
         ? { ...base, p1: interaction.draftPosition }
         : { ...base, p2: interaction.draftPosition };
 }
-function positionedPreviewTick(): NativeTick | undefined {
-    const tick = project?.nativeTicks[tickIndex];
+function positionedPreviewTick(tick: NativeTick | undefined = project?.nativeTicks[tickIndex]): NativeTick | undefined {
     if (!tick || !positionMode || tickIndex !== 0) return tick;
     const initial = activeScenePositions();
     return {
@@ -837,18 +853,23 @@ function syncPositionUi(): void {
 function update(): void { syncReadOnlyUi(); syncPositionUi(); requestPreviewRender(); }
 function drawPreview(): void {
     if (!canvas || !project) return;
-    const tick = positionedPreviewTick();
-    currentActorHitAreas = previewActorHitAreas(project, tick, currentRuntimeFrame());
+    const authorityTick = positionedPreviewTick();
+    const tick = playing && presentationSample?.presentationTick !== undefined
+        ? presentationSample.presentationTick
+        : authorityTick;
+    currentActorHitAreas = previewActorHitAreas(project, authorityTick, currentRuntimeFrame());
     currentGeometry = drawPreviewCanvas({
         canvas,
         project,
         tick,
+        authorityTick,
         runtimeFrame: currentRuntimeFrame(),
         images,
         colorKeyImages,
         visibleOverlays,
         draftGeometry: canvasDraftGeometry,
         positionMode,
+        showAxes: positionMode || canvasInteraction !== undefined || canvasDraftGeometry !== undefined,
         selectedPositionSlot: actorPositionInteraction?.slot,
         requestRender: requestPreviewRender,
     });
@@ -1403,7 +1424,10 @@ function renderTimelineSegments(_graph = currentFlow()): void {
         button.disabled = actionBusy.edit;
         button.addEventListener("click", () => {
             if (isSelectionLocked()) return;
+            if (playing) setPlaying(false);
             tickIndex = Math.max(0, Math.min(playbackEndIndex(), segment.startTick));
+            playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+            presentationSample = undefined;
             selectedFrameOccurrence = frame?.occurrence;
             selectedBlock = { type: "frame" };
             renderedFrameKey = "";
@@ -1623,21 +1647,73 @@ function commitPreview(intent: PreviewIntent, payload: Json): void {
     }) as ProjectState;
     scenePositions = partial.nativeInitial;
     tickIndex = 0;
+    playbackMs = 0;
+    presentationSample = undefined;
     render();
     void preloadPreviewObjectAssets(partial, images, requestPreviewRender).catch(() => undefined);
 }
 function step(): void {
+    if (playing) setPlaying(false);
     const last = playbackEndIndex();
-    if (tickIndex >= last && !loop?.checked) { playing = false; update(); return; }
+    if (tickIndex >= last && !loop?.checked) { update(); return; }
     tickIndex = tickIndex >= last ? 0 : tickIndex + 1;
+    playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+    presentationSample = undefined;
     update();
 }
-function schedule(): void { if (!playing || timer !== undefined) return; timer = window.setTimeout(() => { timer = undefined; step(); schedule(); }, 33); }
-function setPlaying(next: boolean): void {
-    playing = next;
-    if (!playing && timer !== undefined) { window.clearTimeout(timer); timer = undefined; }
+
+function requestPresentationFrame(): void {
+    if (playing && presentationFrameRequest === undefined) {
+        presentationFrameRequest = window.requestAnimationFrame(advancePresentation);
+    }
+}
+
+function advancePresentation(nowMs: number): void {
+    presentationFrameRequest = undefined;
+    if (!playing || !project) return;
+    const presentationIntervalMs = 1000 / presentationRate;
+    if (nowMs - lastPresentationMs + .25 < presentationIntervalMs) {
+        requestPresentationFrame();
+        return;
+    }
+
+    const elapsedMs = Math.min(100, Math.max(0, nowMs - lastPresentationMs));
+    lastPresentationMs = nowMs;
+    const playbackEnd = playbackEndIndex();
+    const playbackEndMs = playbackEnd * NATIVE_LOGIC_TICK_MS;
+    playbackMs += elapsedMs;
+    if (loop?.checked && playbackEndMs > 0 && playbackMs >= playbackEndMs) {
+        playbackMs %= playbackEndMs;
+    } else if (playbackMs >= playbackEndMs) {
+        playbackMs = playbackEndMs;
+    }
+
+    presentationSample = samplePlaybackPresentation(project.nativeTicks, playbackMs, presentationRate);
+    tickIndex = Math.min(playbackEnd, presentationSample.sourceTickIndex);
+    if (!loop?.checked && playbackMs >= playbackEndMs) {
+        playing = false;
+        presentationSample = undefined;
+    }
     update();
-    schedule();
+    requestPresentationFrame();
+}
+
+function setPlaying(next: boolean): void {
+    const last = playbackEndIndex();
+    if (next && tickIndex >= last) {
+        if (loop?.checked) tickIndex = 0;
+        else next = false;
+    }
+    playing = next;
+    playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+    presentationSample = undefined;
+    if (!playing && presentationFrameRequest !== undefined) {
+        window.cancelAnimationFrame(presentationFrameRequest);
+        presentationFrameRequest = undefined;
+    }
+    lastPresentationMs = performance.now();
+    update();
+    requestPresentationFrame();
 }
 function syncSaveState(): void {
     const dirty = project?.dirty === true, save = select<HTMLButtonElement>("save-project"), dirtyReadout = select<HTMLElement>("dirty-readout");
@@ -1736,6 +1812,8 @@ async function open(objectKey: string, oid: number): Promise<void> {
     if (packageSelect) packageSelect.value = project.packageId;
     loadedObjectKey = objectKey;
     tickIndex = 0;
+    playbackMs = 0;
+    presentationSample = undefined;
     selectedBlock = { type: "frame" };
     images.clear();
     colorKeyImages.clear();
@@ -1844,6 +1922,7 @@ async function start(): Promise<void> {
     }
 }
 async function selectFrame(frameId: number, occurrence: number, refreshPreview: boolean): Promise<void> {
+    if (playing) setPlaying(false);
     if (isSelectionLocked()) return;
     selectedFrameOccurrence = occurrence; selectedBlock = { type: "frame" }; renderedFrameKey = "";
     const frame = project?.frames.find((candidate) => candidate.occurrence === occurrence)
@@ -1914,6 +1993,7 @@ async function previewFrameWithinCompleteAction(frame: Frame, preferredIndex = s
     return true;
 }
 async function selectInternalStage(parent: SkillEntry, stage: SkillEntry): Promise<void> {
+    if (playing) setPlaying(false);
     if (!project || isSelectionLocked()) return;
     const frame = lastFrameForId(project.frames, stage.startFrame);
     if (frame === undefined) {
@@ -1982,6 +2062,7 @@ async function selectInternalStage(parent: SkillEntry, stage: SkillEntry): Promi
     render();
 }
 async function selectSkill(index: number): Promise<void> {
+    if (playing) setPlaying(false);
     if (isSelectionLocked()) return;
     const skill = skillState.skills[index];
     if (!skill || !project || skill.oid !== project.oid) return;
@@ -2225,12 +2306,43 @@ frameSelect?.addEventListener("change", () => {
     const frame = project?.frames.find((candidate) => candidate.occurrence === Number(frameSelect.value));
     if (frame) void selectFrame(frame.frameId, frame.occurrence, true).catch((error) => diagnostics!.textContent = errorText(error, "预览失败。"));
 });
-seek?.addEventListener("input", () => { tickIndex = Number(seek.value); update(); });
+seek?.addEventListener("input", () => {
+    if (playing) setPlaying(false);
+    tickIndex = Number(seek.value);
+    playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+    presentationSample = undefined;
+    update();
+});
 select("step-once")?.addEventListener("click", step);
-select("reset-timeline")?.addEventListener("click", () => { tickIndex = 0; update(); });
+select("reset-timeline")?.addEventListener("click", () => {
+    if (playing) setPlaying(false);
+    tickIndex = 0;
+    playbackMs = 0;
+    presentationSample = undefined;
+    update();
+});
 playButton?.addEventListener("click", () => setPlaying(!playing));
-select("step-back")?.addEventListener("click", () => { tickIndex = Math.max(0, tickIndex - 1); update(); });
-select("jump-end")?.addEventListener("click", () => { tickIndex = playbackEndIndex(); update(); });
+select("step-back")?.addEventListener("click", () => {
+    if (playing) setPlaying(false);
+    tickIndex = Math.max(0, tickIndex - 1);
+    playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+    presentationSample = undefined;
+    update();
+});
+select("jump-end")?.addEventListener("click", () => {
+    if (playing) setPlaying(false);
+    tickIndex = playbackEndIndex();
+    playbackMs = tickIndex * NATIVE_LOGIC_TICK_MS;
+    presentationSample = undefined;
+    update();
+});
+select<HTMLSelectElement>("presentation-rate")?.addEventListener("change", (event) => {
+    const rate = Number((event.currentTarget as HTMLSelectElement).value);
+    if (!RENDER_CADENCE_RATES.includes(rate as RenderCadenceRate)) return;
+    presentationRate = rate as RenderCadenceRate;
+    lastPresentationMs = performance.now();
+    update();
+});
 select("edit-skill")?.addEventListener("click", openSkillDialog);
 select("show-hidden-skills")?.addEventListener("change", renderSkillList);
 document.querySelectorAll<HTMLButtonElement>("[data-entry-tab]").forEach((button) => button.addEventListener("click", () => {

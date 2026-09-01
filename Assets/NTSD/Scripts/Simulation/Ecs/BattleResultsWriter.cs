@@ -15,22 +15,22 @@ namespace NTSD.Simulation.Ecs
             this.world = world;
         }
 
-        internal void RunActiveTick()
+        internal void RunActiveTick(FrameInputSet frameInput)
         {
             BattleRuntimeState battle = world.Runtime;
             BattleResultsRuntimeState results = battle?.Results;
             if (results == null || !results.IsActive)
                 return;
 
-            LF2Entity controller = ResolveController();
-            NTSDEntityRuntime input = controller?.Runtime;
-            bool goLeft = Pressed(input?.KeyLeft ?? 0, input?.PrevLeft ?? 0);
-            bool goRight = Pressed(input?.KeyRight ?? 0, input?.PrevRight ?? 0);
-            bool goUp = Pressed(input?.KeyUp ?? 0, input?.PrevUp ?? 0);
-            bool goDown = Pressed(input?.KeyDown ?? 0, input?.PrevDown ?? 0);
-            bool goAttack = Pressed(input?.KeyAttack ?? 0, input?.PrevAttack ?? 0);
-            bool goJump = Pressed(input?.KeyJump ?? 0, input?.PrevJump ?? 0);
-            bool goDefend = Pressed(input?.KeyDefend ?? 0, input?.PrevDefend ?? 0);
+            SimulationInputButtons pressed =
+                CollectP1P2PressedButtons(frameInput);
+            bool goLeft = Pressed(pressed, SimulationInputButtons.Left);
+            bool goRight = Pressed(pressed, SimulationInputButtons.Right);
+            bool goUp = Pressed(pressed, SimulationInputButtons.Up);
+            bool goDown = Pressed(pressed, SimulationInputButtons.Down);
+            bool goAttack = Pressed(pressed, SimulationInputButtons.Attack);
+            bool goJump = Pressed(pressed, SimulationInputButtons.Jump);
+            bool goDefend = Pressed(pressed, SimulationInputButtons.Defend);
 
             if (results.Phase == 201)
             {
@@ -68,130 +68,6 @@ namespace NTSD.Simulation.Ecs
 
             results.Timer++;
             world.SetMode2Request(0);
-        }
-
-        internal void UpdateSummaryActivation()
-        {
-            BattleRuntimeState battle = world.Runtime;
-            if (battle?.Match?.BattleGameModeId != 1)
-                return;
-
-            battle.Results ??= new BattleResultsRuntimeState();
-            BattleResultsRuntimeState results = battle.Results;
-            if (results.IsActive)
-                return;
-
-            BattleSlotRuntimeState[] rosterSlots = battle.Roster?.Slots;
-            if (rosterSlots == null)
-                return;
-
-            int firstTeamId = -1;
-            int secondTeamId = -1;
-            int firstTeamAlive = 0;
-            int secondTeamAlive = 0;
-            int teamCount = 0;
-            int slotCount = rosterSlots.Length < 8 ? rosterSlots.Length : 8;
-
-            for (int slotIndex = 0; slotIndex < slotCount; slotIndex++)
-            {
-                BattleSlotRuntimeState rosterSlot = rosterSlots[slotIndex];
-                if (rosterSlot == null)
-                    continue;
-
-                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(
-                    rosterSlot.RuntimeSlotIndex);
-                if (entity == null ||
-                    entity.GetCurrentDataObjectTypeForSimulation() !=
-                    (int)LF2ObjectType.Character)
-                {
-                    continue;
-                }
-
-                if (!rosterSlot.Active && !world.IsActiveForCurrentPassInternal(entity))
-                    continue;
-
-                int team = entity.RelationTeam != 0
-                    ? entity.RelationTeam
-                    : rosterSlot.Team;
-                if (team == 0)
-                    continue;
-
-                int bucket = -1;
-                if (teamCount > 0 && firstTeamId == team)
-                    bucket = 0;
-                else if (teamCount > 1 && secondTeamId == team)
-                    bucket = 1;
-                else if (teamCount == 0)
-                {
-                    firstTeamId = team;
-                    teamCount = 1;
-                    bucket = 0;
-                }
-                else if (teamCount == 1)
-                {
-                    secondTeamId = team;
-                    teamCount = 2;
-                    bucket = 1;
-                }
-
-                if (bucket < 0 ||
-                    !world.IsActiveForCurrentPassInternal(entity) ||
-                    entity.Health == null ||
-                    entity.Health.HP <= 0)
-                {
-                    continue;
-                }
-
-                if (bucket == 0)
-                    firstTeamAlive++;
-                else
-                    secondTeamAlive++;
-            }
-
-            if (firstTeamAlive > 0 && secondTeamAlive > 0)
-                results.HadBoth = true;
-
-            if (!results.HadBoth || teamCount < 2)
-                return;
-
-            results.EnsureTeamIds();
-            if (firstTeamAlive > 0 && secondTeamAlive > 0)
-            {
-                results.BattleEndPhase = 0;
-                results.PendingWinner = -2;
-                results.TeamCount = teamCount;
-                results.TeamIds[0] = firstTeamId;
-                results.TeamIds[1] = secondTeamId;
-                return;
-            }
-
-            int decidedWinner = firstTeamAlive > 0
-                ? 0
-                : secondTeamAlive > 0
-                    ? 1
-                    : -1;
-            if (results.BattleEndPhase == 0)
-            {
-                results.BattleEndPhase = 1;
-                results.PendingWinner = decidedWinner;
-            }
-            else
-            {
-                results.BattleEndPhase++;
-            }
-
-            results.TeamCount = teamCount;
-            results.TeamIds[0] = firstTeamId;
-            results.TeamIds[1] = secondTeamId;
-
-            if (results.BattleEndPhase >= 11)
-            {
-                results.ActivateSummary(
-                    results.PendingWinner,
-                    teamCount,
-                    firstTeamId,
-                    secondTeamId);
-            }
         }
 
         private void RunPhase210(
@@ -551,31 +427,32 @@ namespace NTSD.Simulation.Ecs
             }
         }
 
-        private LF2Entity ResolveController()
+        private static SimulationInputButtons CollectP1P2PressedButtons(
+            FrameInputSet frameInput)
         {
-            BattleSlotRuntimeState[] slots = world.Runtime?.Roster?.Slots;
-            if (slots == null)
-                return null;
+            // Alignment contract: CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001.
+            // C++ ORs P1/P2 host just-pressed edges after the world tick.
+            if (frameInput?.Players == null)
+                return SimulationInputButtons.None;
 
-            LF2Entity controller = ResolveRosterEntity(slots, 0);
-            return controller ?? ResolveRosterEntity(slots, 1);
+            SimulationInputButtons pressed = SimulationInputButtons.None;
+            for (int index = 0; index < frameInput.Players.Count; index++)
+            {
+                SimulationPlayerInput player = frameInput.Players[index];
+                if (player.PlayerSlot < 0 || player.PlayerSlot > 1)
+                    continue;
+
+                pressed |= player.PressedButtons;
+            }
+
+            return pressed;
         }
 
-        private LF2Entity ResolveRosterEntity(
-            BattleSlotRuntimeState[] slots,
-            int rosterIndex)
+        private static bool Pressed(
+            SimulationInputButtons pressed,
+            SimulationInputButtons button)
         {
-            if ((uint)rosterIndex >= (uint)slots.Length)
-                return null;
-            BattleSlotRuntimeState slot = slots[rosterIndex];
-            return slot == null
-                ? null
-                : world.FindEntityByRuntimeSlotForQuery(slot.RuntimeSlotIndex);
-        }
-
-        private static bool Pressed(byte current, byte previous)
-        {
-            return previous == 0 && current == 1;
+            return (pressed & button) != 0;
         }
     }
 }

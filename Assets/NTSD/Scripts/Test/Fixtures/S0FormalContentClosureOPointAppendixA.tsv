@@ -1,0 +1,39 @@
+# parent_projection_sha256=614822964144cf3e6a153f7bb9f85932c5e563d701c7cc2e14a0fb913bdacc43
+# opoint_subset_payload_sha256=8fc2c05670a497ab0f1a5a3c645c763b15ab168c620a67a3de780b7b65398567
+domain	oid	relative_path	frame_id	present	source_occurrence_count	selected_source_index	expected_count	child_ordinal	canonical_property_order	excluded_fields	expected_value_sequence	malformed_disposition
+OPOINT	51	chars/sasori.dat	246	1	1	194	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=303;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	51	chars/sasori.dat	256	1	1	204	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=303;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	51	chars/sasori.dat	292	1	1	237	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=303;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	51	chars/sasori.dat	374	1	1	306	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=303;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	57	chars/nckakuzu.dat	152	1	1	93	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=39;y=79;action=302;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	2	chars/naruto.dat	61	1	1	46	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=300;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	2	chars/naruto.dat	66	1	1	50	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=301;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	22	chars/shikamaru.dat	386	1	1	198	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=40;y=79;action=207;dvx=0;dvy=0;oid=462;facing=0	release-production-parser-projected
+OPOINT	15	chars/temari.dat	260	1	1	162	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=50;y=65;action=196;dvx=50;dvy=0;oid=204;facing=0	release-production-parser-projected
+OPOINT	15	chars/temari.dat	261	1	1	163	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=50;y=65;action=196;dvx=100;dvy=0;oid=204;facing=0	release-production-parser-projected
+OPOINT	15	chars/temari.dat	262	1	1	164	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=50;y=65;action=197;dvx=150;dvy=0;oid=204;facing=0	release-production-parser-projected
+OPOINT	15	chars/temari.dat	277	1	1	174	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=39;y=85;action=208;dvx=10;dvy=0;oid=204;facing=0	release-production-parser-projected
+OPOINT	9	chars/itachi.dat	121	1	1	95	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=218;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	9	chars/itachi.dat	295	1	1	239	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=218;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	9	chars/itachi.dat	333	1	1	266	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=39;y=79;action=220;dvx=15;dvy=-11;oid=220;facing=41	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	71	1	1	46	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=304;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	76	1	1	51	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=304;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	82	1	1	55	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=304;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	92	1	1	59	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=304;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	221	1	1	124	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=305;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	223	1	1	126	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=306;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	225	1	1	128	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=305;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	10	chars/deidara.dat	227	1	1	130	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=306;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	24	chars/hidan.dat	126	1	1	90	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=38;y=0;action=208;dvx=0;dvy=0;oid=446;facing=0	release-production-parser-projected
+OPOINT	25	chars/kakuzu.dat	123	1	1	72	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=43;y=81;action=302;dvx=0;dvy=0;oid=203;facing=0	release-production-parser-projected
+OPOINT	500	chars/heart.dat	48	1	1	42	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=24;y=27;action=0;dvx=0;dvy=0;oid=503;facing=0	release-production-parser-projected
+OPOINT	501	chars/heart2.dat	48	1	1	42	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=24;y=27;action=0;dvx=0;dvy=0;oid=504;facing=0	release-production-parser-projected
+OPOINT	502	chars/heart3.dat	48	1	1	42	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=24;y=27;action=0;dvx=0;dvy=0;oid=505;facing=0	release-production-parser-projected
+OPOINT	206	chars/clay_bird2.dat	134	1	1	79	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=190;y=100;action=130;dvx=0;dvy=0;oid=211;facing=0	release-production-parser-projected
+OPOINT	215	chars/frog.dat	11	1	1	11	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=3;x=65;y=60;action=55;dvx=0;dvy=0;oid=407;facing=0	release-production-parser-projected
+OPOINT	442	chars/gate.dat	60	1	1	49	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=30;y=79;action=300;dvx=0;dvy=0;oid=209;facing=0	release-production-parser-projected
+OPOINT	442	chars/gate.dat	61	1	1	50	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=30;y=79;action=300;dvx=0;dvy=0;oid=209;facing=0	release-production-parser-projected
+OPOINT	442	chars/gate.dat	70	1	1	51	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=30;y=79;action=300;dvx=0;dvy=0;oid=209;facing=0	release-production-parser-projected
+OPOINT	442	chars/gate.dat	71	1	1	52	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=30;y=79;action=300;dvx=0;dvy=0;oid=209;facing=0	release-production-parser-projected
+OPOINT	442	chars/gate.dat	72	1	1	53	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=30;y=79;action=300;dvx=0;dvy=0;oid=209;facing=0	release-production-parser-projected
+OPOINT	453	chars/earth_creature.dat	68	1	1	12	1	0	kind,x,y,action,dvx,dvy,oid,facing		kind=1;x=67;y=130;action=383;dvx=0;dvy=0;oid=30;facing=0	release-production-parser-projected

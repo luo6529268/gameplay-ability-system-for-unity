@@ -67,7 +67,8 @@ namespace NTSD.Simulation
                 if (trimmed.StartsWith("<stage>", StringComparison.Ordinal))
                 {
                     var stage = new BattleStageCampaignData();
-                    TryReadIntField(trimmed, "id", out stage.Id);
+                    if (TryReadIntField(trimmed, "id", out int stageId))
+                        stage.Id = stageId;
                     int commentIndex = trimmed.IndexOf('#');
                     if (commentIndex >= 0)
                         stage.Comment = trimmed.Substring(commentIndex + 1).Trim();
@@ -82,7 +83,8 @@ namespace NTSD.Simulation
                     if (currentStage == null)
                         continue;
                     var phase = new BattleStagePhaseData();
-                    TryReadIntField(trimmed, "bound", out phase.Bound);
+                    if (TryReadIntField(trimmed, "bound", out int phaseBound))
+                        phase.Bound = phaseBound;
                     currentStage.Phases.Add(phase);
                     currentPhase = phase;
                     continue;
@@ -105,15 +107,23 @@ namespace NTSD.Simulation
                     continue;
 
                 var spawn = new BattleStageSpawnData();
-                if (!TryReadIntField(trimmed, "id", out spawn.Id))
+                if (!TryReadIntField(trimmed, "id", out int spawnId))
                     continue;
-                TryReadIntField(trimmed, "act", out spawn.Act);
-                TryReadIntField(trimmed, "hp", out spawn.Hp);
-                TryReadIntField(trimmed, "times", out spawn.Times);
-                TryReadIntField(trimmed, "x", out spawn.X);
-                TryReadIntField(trimmed, "y", out spawn.Y);
-                TryReadDoubleField(trimmed, "ratio", out spawn.Ratio);
-                TryReadIntField(trimmed, "join", out spawn.Join);
+                spawn.Id = spawnId;
+                if (TryReadIntField(trimmed, "act", out int spawnAct))
+                    spawn.Act = spawnAct;
+                if (TryReadIntField(trimmed, "hp", out int spawnHp))
+                    spawn.Hp = spawnHp;
+                if (TryReadIntField(trimmed, "times", out int spawnTimes))
+                    spawn.Times = spawnTimes;
+                if (TryReadIntField(trimmed, "x", out int spawnX))
+                    spawn.X = spawnX;
+                if (TryReadIntField(trimmed, "y", out int spawnY))
+                    spawn.Y = spawnY;
+                if (TryReadDoubleField(trimmed, "ratio", out double spawnRatio))
+                    spawn.Ratio = spawnRatio;
+                if (TryReadIntField(trimmed, "join", out int spawnJoin))
+                    spawn.Join = spawnJoin;
                 currentPhase.Spawns.Add(spawn);
             }
 

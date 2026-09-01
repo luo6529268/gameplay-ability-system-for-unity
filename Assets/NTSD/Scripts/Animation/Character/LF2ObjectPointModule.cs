@@ -60,8 +60,9 @@ namespace NTSD.Animation
             bool hasList = frame.opoints != null && frame.opoints.Count > 0;
             if (!hasList && !frame.opoint.HasValue) return;
 
-            ObjectPoint firstOp = hasList ? frame.opoints[0] : frame.opoint.Value;
-            if (firstOp.kind <= 0 || animator.AttackingCounter != 0) return;
+            BattleObjectPointValue firstOp =
+                hasList ? frame.opoints[0] : frame.opoint.Value;
+            if (firstOp.Kind <= 0 || animator.AttackingCounter != 0) return;
 
             if (animator.HitStun != 0) return;
 
@@ -82,15 +83,17 @@ namespace NTSD.Animation
             }
         }
 
-        private void ProcessOneOpoint(LF2LivingObject animator, ObjectPoint op)
+        private void ProcessOneOpoint(
+            LF2LivingObject animator,
+            BattleObjectPointValue op)
         {
-            if (op.oid <= 0 || op.kind <= 0) return;
+            if (op.Oid <= 0 || op.Kind <= 0) return;
 
             var world = SimulationTickDriver.Instance?.World;
             if (world != null)
             {
                 int objectCount = world.ObjectCount;
-                int def = GameDataManager.Instance?.GetObjectById(op.oid)?.type ?? -1;
+                int def = GameDataManager.Instance?.GetObjectById(op.Oid)?.type ?? -1;
                 int limit = (def == 3 || def == 4) ? 250 : 500;
                 if (objectCount >= limit) return;
             }
@@ -102,9 +105,9 @@ namespace NTSD.Animation
                 animator.ShotCount += step + 1;
             }
 
-            if (op.facing > 10)
+            if (op.Facing > 10)
             {
-                int number = op.facing / 10;
+                int number = op.Facing / 10;
                 EnqueueMultipleTask(animator, op, number);
                 return;
             }
@@ -112,7 +115,9 @@ namespace NTSD.Animation
             EnqueueSingleTask(animator, op);
         }
 
-        private void EnqueueSingleTask(LF2LivingObject animator, ObjectPoint op)
+        private void EnqueueSingleTask(
+            LF2LivingObject animator,
+            BattleObjectPointValue op)
         {
             Vector3 pos = MakePoint(animator, op);
 
@@ -121,7 +126,7 @@ namespace NTSD.Animation
             var task = referencePool?.Fetch<OPointCreateTask>();
             if (task == null)
                 return;
-            task.opoint = op;
+            task.opoint = BattleObjectPointValueAdapter.ToLegacyTask(op);
             task.parent = animator;
             task.team = animator.Team;
             task.pos = pos;
@@ -132,7 +137,10 @@ namespace NTSD.Animation
             Factory.EnqueueCreateObject(task);
         }
 
-        private void EnqueueMultipleTask(LF2LivingObject animator, ObjectPoint op, int number)
+        private void EnqueueMultipleTask(
+            LF2LivingObject animator,
+            BattleObjectPointValue op,
+            int number)
         {
             Vector3 pos = MakePoint(animator, op);
 
@@ -141,7 +149,7 @@ namespace NTSD.Animation
             var task = referencePool?.Fetch<OPointCreateMultipleTask>();
             if (task == null)
                 return;
-            task.opoint = op;
+            task.opoint = BattleObjectPointValueAdapter.ToLegacyTask(op);
             task.parent = animator;
             task.team = animator.Team;
             task.pos = pos;
@@ -157,7 +165,9 @@ namespace NTSD.Animation
         /// 计算 opoint 生成点。C++ release 使用实体逻辑坐标和当前帧 center，不依赖渲染原点缓存。
         /// task.pos.y 仍按现有初始化约定传递 screenY（逻辑 y + z），初始化时会再减 task.z。
         /// </summary>
-        private Vector3 MakePoint(LF2LivingObject animator, ObjectPoint op)
+        private Vector3 MakePoint(
+            LF2LivingObject animator,
+            BattleObjectPointValue op)
         {
             var ps = animator.PS;
             var frame = animator.Frame?.D;
@@ -165,10 +175,10 @@ namespace NTSD.Animation
                 return Vector3.zero;
 
             double x = ps.dir == "right"
-                ? ps.x - frame.centerx + op.x
-                : ps.x + frame.centerx - op.x;
+                ? ps.x - frame.centerx + op.X
+                : ps.x + frame.centerx - op.X;
 
-            double logicalY = ps.y - frame.centery + op.y;
+            double logicalY = ps.y - frame.centery + op.Y;
             double screenY = logicalY + ps.z;
 
             return new Vector3((float)x, (float)screenY, (float)ps.z);

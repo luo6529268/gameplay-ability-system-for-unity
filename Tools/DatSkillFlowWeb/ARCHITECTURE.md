@@ -60,6 +60,15 @@ Loopback Server
 - slot 只用于当前快照定位；同一 slot 的 OID 变化先结束旧 lineage，再创建新 lineage，避免对象池复用混淆。
 - root 主体结束只停止主体进度；播放边界继续覆盖尚未完成的投射物。分身只在首个有效快照确认，不等待 AI 生命周期。
 
+### 主预览 presentation sampling
+
+- 主编辑器的 Native Trace 仍固定为 30Hz 离散 Tick；`30 / 60 / 120Hz` 只控制浏览器 presentation sampling，不生成新逻辑 Tick，也不修改 trace。
+- 60/120Hz 以 previous/current 相邻 Tick 为输入，current Tick 继续拥有 frame、pic、facing、spawn/despawn、hit、opoint、DAT wait 与生命周期；只计算 camera 和实体显示位置。
+- 实体必须保持同 lineage、同 holder/link/target 关系，且精确 `x/y/z` 位移不超过 `max(64, max(abs(previousVelocity), abs(currentVelocity)) * 4 + 4)`，否则 fail closed 到 current Tick 离散位置。
+- 插值 delta 从精确 `x/y/z` 计算，并统一应用到同一 presentation entity；shadow 与 sprite 读取同一个 sampled Tick。不得分别从最终像素、精灵轮廓或背景估算位置。
+- DAT overlay、坐标轴、站位拖动、几何编辑和 hit-test 使用独立的 authority Tick。表现插值不能改变或伪装碰撞/编辑真值；暂停和编辑状态不使用中间位置。
+- 主预览每个表现时刻只通过一次 `requestAnimationFrame` 请求绘制完整 Canvas；不先显示 current Tick 再覆盖中间帧。
+
 ### Browser ownership
 
 | 模块 | 职责 | 不拥有 |

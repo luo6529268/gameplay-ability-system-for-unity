@@ -19,6 +19,7 @@ namespace NTSD.Simulation
         private readonly LF2TaskRingBuffer taskQueue;
         private readonly LF2Entity[] spawnedBuffer;
         private int spawnedCount;
+        private bool acceptingSpawnRequests = true;
 
         internal BattleLogicObjectPointRuntime(
             SimulationWorld world,
@@ -42,15 +43,38 @@ namespace NTSD.Simulation
             get;
             private set;
         }
+        internal bool AcceptingSpawnRequestsForDiagnostics => acceptingSpawnRequests;
+        internal long ShutdownRejectedTaskCountForDiagnostics { get; private set; }
+        internal long ShutdownDiscardedTaskCountForDiagnostics { get; private set; }
+
+        internal void BeginBattlePreparation()
+        {
+            acceptingSpawnRequests = true;
+        }
+
+        internal void BeginBattleShutdown()
+        {
+            acceptingSpawnRequests = false;
+        }
 
         public void EnqueueCreateObject(OPointCreateTask task)
         {
+            if (!acceptingSpawnRequests)
+            {
+                RejectTaskDuringShutdown(task);
+                return;
+            }
             if (!taskQueue.TryEnqueue(task))
                 world.LogicReferencePool?.Recycle(task);
         }
 
         public void EnqueueCreateMultipleObjects(OPointCreateMultipleTask task)
         {
+            if (!acceptingSpawnRequests)
+            {
+                RejectTaskDuringShutdown(task);
+                return;
+            }
             if (!taskQueue.TryEnqueue(task))
                 world.LogicReferencePool?.Recycle(task);
         }
@@ -72,6 +96,12 @@ namespace NTSD.Simulation
 
         public void FlushTasks()
         {
+            if (!acceptingSpawnRequests)
+            {
+                DiscardPendingTasks();
+                return;
+            }
+
             int taskCount = taskQueue.Count;
             for (int index = 0; index < taskCount; index++)
             {
@@ -84,6 +114,11 @@ namespace NTSD.Simulation
 
         public LF2Entity CreateObjectImmediate(OPointCreateTask task)
         {
+            if (!acceptingSpawnRequests)
+            {
+                ShutdownRejectedTaskCountForDiagnostics++;
+                return null;
+            }
             return ProcessCreateObject(
                 task,
                 BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
@@ -114,6 +149,8 @@ namespace NTSD.Simulation
 
         public void ProcessOpointSpawnCoreForStructuralWriter(LF2Entity spawner)
         {
+            if (!acceptingSpawnRequests)
+                return;
             if (spawner?.PS == null || spawner.Runtime == null)
                 return;
 
@@ -126,11 +163,11 @@ namespace NTSD.Simulation
             if (!hasList && !hasSingle)
                 return;
 
-            ObjectPoint firstOpoint = hasList
+            BattleObjectPointValue firstOpoint = hasList
                 ? frame.opoints[0]
                 : frame.opoint.Value;
-            if (firstOpoint.kind <= 0 ||
-                firstOpoint.oid <= 0 ||
+            if (firstOpoint.Kind <= 0 ||
+                firstOpoint.Oid <= 0 ||
                 spawner.AttackingCounter != 0)
             {
                 return;
@@ -164,6 +201,8 @@ namespace NTSD.Simulation
         public LF2Entity MaterializeObjectForStructuralWriter(
             OPointCreateTask task)
         {
+            if (!acceptingSpawnRequests)
+                return null;
             LF2Entity entity = world.LogicEntityFactory.Create(
                 task,
                 out BattleLogicEntityCreationFailure failure);
@@ -175,6 +214,8 @@ namespace NTSD.Simulation
         public void MaterializeMultipleObjectsForStructuralWriter(
             OPointCreateMultipleTask task)
         {
+            if (!acceptingSpawnRequests)
+                return;
             if (task == null || task.number <= 0)
                 return;
 
@@ -206,17 +247,17 @@ namespace NTSD.Simulation
         private void ProcessOneLateOpoint(
             LF2Entity spawner,
             LF2FrameData frame,
-            ObjectPoint opoint)
+            BattleObjectPointValue opoint)
         {
-            if (opoint.kind <= 0 || opoint.oid <= 0)
+            if (opoint.Kind <= 0 || opoint.Oid <= 0)
                 return;
 
             int spawnCount = 1;
-            int facingMode = opoint.facing;
-            if (opoint.facing > 10)
+            int facingMode = opoint.Facing;
+            if (opoint.Facing > 10)
             {
-                spawnCount = opoint.facing / 10;
-                facingMode = opoint.facing % 10;
+                spawnCount = opoint.Facing / 10;
+                facingMode = opoint.Facing % 10;
             }
 
             for (int spawnIndex = 0; spawnIndex < spawnCount; spawnIndex++)
@@ -231,7 +272,8 @@ namespace NTSD.Simulation
                 if (task == null)
                     break;
 
-                ObjectPoint spawnOpoint = opoint;
+                ObjectPoint spawnOpoint =
+                    BattleObjectPointValueAdapter.ToLegacyTask(opoint);
                 spawnOpoint.facing = facingMode;
                 task.opoint = spawnOpoint;
                 task.parent = spawner;
@@ -252,7 +294,7 @@ namespace NTSD.Simulation
                 if (spawned == null)
                     continue;
 
-                if (opoint.kind != 2)
+                if (opoint.Kind != 2)
                     spawned.Runtime.HolderStableId = 0;
 
                 if (spawnCount > 1)
@@ -298,12 +340,12 @@ namespace NTSD.Simulation
             OPointCreateTask task,
             LF2Entity spawner,
             LF2FrameData frame,
-            ObjectPoint opoint)
+            BattleObjectPointValue opoint)
         {
             int spawnX = spawner.Runtime.Dir == "right"
-                ? spawner.Runtime.XInt - frame.centerx + opoint.x
-                : spawner.Runtime.XInt + frame.centerx - opoint.x;
-            int spawnY = spawner.Runtime.YInt - frame.centery + opoint.y;
+                ? spawner.Runtime.XInt - frame.centerx + opoint.X
+                : spawner.Runtime.XInt + frame.centerx - opoint.X;
+            int spawnY = spawner.Runtime.YInt - frame.centery + opoint.Y;
             double spawnZ = spawner.Runtime.Z + 1.0;
 
             task.z = (float)spawnZ;
@@ -355,6 +397,27 @@ namespace NTSD.Simulation
             for (int index = 0; index < spawnedCount; index++)
                 spawnedBuffer[index] = null;
             spawnedCount = 0;
+        }
+
+        internal int DiscardPendingTasks()
+        {
+            int discarded = 0;
+            while (taskQueue.TryDequeue(out LF2TaskBase task))
+            {
+                discarded++;
+                if (task is ILF2Recyclable recyclable)
+                    world.LogicReferencePool?.Recycle(recyclable);
+            }
+
+            ShutdownDiscardedTaskCountForDiagnostics += discarded;
+            return discarded;
+        }
+
+        private void RejectTaskDuringShutdown(LF2TaskBase task)
+        {
+            ShutdownRejectedTaskCountForDiagnostics++;
+            if (task is ILF2Recyclable recyclable)
+                world.LogicReferencePool?.Recycle(recyclable);
         }
 
         private void ApplyMultiSpawnExemptAndVrest()

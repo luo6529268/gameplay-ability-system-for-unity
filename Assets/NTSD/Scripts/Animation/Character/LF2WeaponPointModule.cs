@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
 
 namespace NTSD.Animation
 {
@@ -8,7 +9,10 @@ namespace NTSD.Animation
         /// <summary>
         /// 按当前帧的 wpoint 执行武器挂点与 weaponact 逻辑。
         /// </summary>
-        void UpdateWeaponPoints(LF2LivingObject animator, LF2FrameData frameData, List<WeaponPoint> weaponPoints);
+        void UpdateWeaponPoints(
+            LF2LivingObject animator,
+            LF2FrameData frameData,
+            IReadOnlyList<BattleWeaponPointValue> weaponPoints);
     }
 
     /// <summary>
@@ -36,7 +40,7 @@ namespace NTSD.Animation
             LF2FrameData frame = animator.Frame.D;
             if (frame == null) return;
 
-            var wpoints = frame.wpoints;
+            var wpoints = frame.FormalWeaponPoints;
             if (wpoints == null || wpoints.Count == 0) return;
 
             Factory?.UpdateWeaponPoints(animator, frame, wpoints);

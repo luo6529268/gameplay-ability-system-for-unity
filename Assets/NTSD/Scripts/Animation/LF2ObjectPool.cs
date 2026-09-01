@@ -28,12 +28,17 @@ namespace NTSD.Animation
         private Queue<GameObject> _availableObjects;
         private HashSet<GameObject> _activeObjects;
         private Dictionary<GameObject, float> _releaseTimeMap;
+        private HashSet<SpriteRenderer> _activeSprites;
+        private List<GameObject> _shutdownObjectScratch;
+        private List<SpriteRenderer> _shutdownSpriteScratch;
         private float _lastCheckTime;
 
         private Stack<SpriteRenderer> _spritePool;
         private Material _spriteDefaultSharedMaterial;
         private bool _runtimeStateInvalidationLogged;
         private bool _battleCapacitySealed;
+        private bool _acceptingRequests = true;
+        private bool _quiesced;
         private int _preparedObjectCapacity;
         private int _preparedSpriteCapacity;
         private long _rejectedObjectFetchCount;
@@ -49,6 +54,9 @@ namespace NTSD.Animation
         public int AvailableObjectCountForAcceptance => _availableObjects?.Count ?? 0;
         public int ActiveObjectCountForAcceptance => _activeObjects?.Count ?? 0;
         public bool IsRuntimeStateValidForAcceptance => HasValidRuntimeState();
+        public bool IsQuiescedForDiagnostics => _quiesced;
+        public bool AcceptingRequestsForDiagnostics => _acceptingRequests;
+        public int ActiveSpriteCountForAcceptance => _activeSprites?.Count ?? 0;
 
         // ========== 生命周期 ==========
 
@@ -61,6 +69,11 @@ namespace NTSD.Animation
             _activeObjects = new HashSet<GameObject>(DefaultBattlePoolCapacity);
             _releaseTimeMap = new Dictionary<GameObject, float>(DefaultBattlePoolCapacity);
             _spritePool = new Stack<SpriteRenderer>(32);
+            _activeSprites = new HashSet<SpriteRenderer>(32);
+            _shutdownObjectScratch = new List<GameObject>(DefaultBattlePoolCapacity);
+            _shutdownSpriteScratch = new List<SpriteRenderer>(32);
+            _acceptingRequests = true;
+            _quiesced = false;
             _runtimeStateInvalidationLogged = false;
 
             // 缓存 prefab 引用 - 延迟到 CreateNewObject 时再获取
@@ -139,6 +152,13 @@ namespace NTSD.Animation
         /// <summary>从池中获取对象（懒加载）</summary>
         public GameObject Get(out LF2ObjectRenderer EntityModel)
         {
+            if (!_acceptingRequests)
+            {
+                _rejectedObjectFetchCount++;
+                EntityModel = null;
+                return null;
+            }
+
             int maxPoolSize = Cfg?.PoolMaxSize ?? 200;
 
             GameObject go;
@@ -184,7 +204,7 @@ namespace NTSD.Animation
         /// </summary>
         public async UniTask PrewarmAsync(int count)
         {
-            if (_battleCapacitySealed || count <= 0)
+            if (!_acceptingRequests || _battleCapacitySealed || count <= 0)
                 return;
 
             BattleCentralPresentationMountRegistry.PrepareCapacity(
@@ -203,17 +223,19 @@ namespace NTSD.Animation
 
         public async UniTask PrepareCapacityAsync(int targetObjectCount, int targetSpriteCount)
         {
-            if (_battleCapacitySealed)
+            if (!_acceptingRequests || _battleCapacitySealed)
                 return;
 
             int normalizedObjectTarget = Mathf.Max(0, targetObjectCount);
             BattleCentralPresentationMountRegistry.PrepareCapacity(normalizedObjectTarget);
             int currentObjectCount = _availableObjects.Count + _activeObjects.Count;
+            _activeObjects.EnsureCapacity(normalizedObjectTarget);
+            _releaseTimeMap.EnsureCapacity(normalizedObjectTarget);
+            if (_shutdownObjectScratch.Capacity < normalizedObjectTarget)
+                _shutdownObjectScratch.Capacity = normalizedObjectTarget;
             int missingObjects = normalizedObjectTarget - currentObjectCount;
             if (missingObjects > 0)
             {
-                _activeObjects.EnsureCapacity(normalizedObjectTarget);
-                _releaseTimeMap.EnsureCapacity(normalizedObjectTarget);
                 for (int i = 0; i < missingObjects; i++)
                 {
                     CreateNewObject();
@@ -223,6 +245,9 @@ namespace NTSD.Animation
             }
 
             int normalizedSpriteTarget = Mathf.Max(0, targetSpriteCount);
+            _activeSprites.EnsureCapacity(normalizedSpriteTarget);
+            if (_shutdownSpriteScratch.Capacity < normalizedSpriteTarget)
+                _shutdownSpriteScratch.Capacity = normalizedSpriteTarget;
             int missingSprites = normalizedSpriteTarget - _spritePool.Count;
             for (int i = 0; i < missingSprites; i++)
             {
@@ -238,7 +263,7 @@ namespace NTSD.Animation
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         internal void PrepareObjectCapacityImmediateForDiagnostics(int targetObjectCount)
         {
-            if (_battleCapacitySealed)
+            if (!_acceptingRequests || _battleCapacitySealed)
             {
                 throw new System.InvalidOperationException(
                     "Cannot prepare diagnostic object capacity after the battle seal is active.");
@@ -248,6 +273,8 @@ namespace NTSD.Animation
             BattleCentralPresentationMountRegistry.PrepareCapacity(normalizedTarget);
             _activeObjects.EnsureCapacity(normalizedTarget);
             _releaseTimeMap.EnsureCapacity(normalizedTarget);
+            if (_shutdownObjectScratch.Capacity < normalizedTarget)
+                _shutdownObjectScratch.Capacity = normalizedTarget;
             while (_availableObjects.Count + _activeObjects.Count < normalizedTarget)
                 CreateNewObject();
             _preparedObjectCapacity = Mathf.Max(_preparedObjectCapacity, normalizedTarget);
@@ -312,7 +339,7 @@ namespace NTSD.Animation
                 return;
             }
 
-            if (_battleCapacitySealed)
+            if (_quiesced || _battleCapacitySealed)
                 return;
 
             int initialSize = Mathf.Max(Cfg?.PoolInitialSize ?? 0, _preparedObjectCapacity);
@@ -378,6 +405,12 @@ namespace NTSD.Animation
 
         public SpriteRenderer GetSprite()
         {
+            if (!_acceptingRequests)
+            {
+                _rejectedSpriteFetchCount++;
+                return null;
+            }
+
             SpriteRenderer sr;
             if (_spritePool.Count > 0)
             {
@@ -405,6 +438,7 @@ namespace NTSD.Animation
             CaptureOrApplySpriteDefaultMaterial(sr);
             LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
             sr.gameObject.SetActive(true);
+            _activeSprites.Add(sr);
             return sr;
         }
 
@@ -415,12 +449,111 @@ namespace NTSD.Animation
         public void ReleaseSprite(SpriteRenderer sr)
         {
             if (sr == null) return;
-            if (!sr.gameObject.activeSelf) return;  // 已归还过，防重复压栈
+            if (!_activeSprites.Remove(sr) && !sr.gameObject.activeSelf) return;
             sr.sprite = null;
             CaptureOrApplySpriteDefaultMaterial(sr);
             LF2ObjectRenderer.NormalizeSpriteRendererState(sr, _spriteDefaultSharedMaterial);
             sr.gameObject.SetActive(false);
             _spritePool.Push(sr);
+        }
+
+        public void BeginBattlePreparation()
+        {
+            _acceptingRequests = true;
+            _quiesced = false;
+            enabled = true;
+        }
+
+        public void BeginBattleShutdown()
+        {
+            _acceptingRequests = false;
+        }
+
+        public bool ReleaseAllActiveForShutdown(
+            out int returnedRenderers,
+            out int returnedSpriteRenderers,
+            out string failureReason)
+        {
+            returnedRenderers = 0;
+            returnedSpriteRenderers = 0;
+            failureReason = string.Empty;
+            if (!HasValidRuntimeState())
+            {
+                failureReason = "object-pool-runtime-state-is-invalid";
+                return false;
+            }
+
+            _shutdownObjectScratch.Clear();
+            foreach (GameObject activeObject in _activeObjects)
+                _shutdownObjectScratch.Add(activeObject);
+
+            for (int index = 0; index < _shutdownObjectScratch.Count; index++)
+            {
+                GameObject root = _shutdownObjectScratch[index];
+                if (root == null)
+                {
+                    _activeObjects.Remove(root);
+                    continue;
+                }
+
+                LF2ObjectRenderer renderer =
+                    root.GetComponentInChildren<LF2ObjectRenderer>(true);
+                LF2Entity entity = renderer?.LogicObject as LF2Entity;
+                BattleLogicReferencePool referencePool =
+                    entity?.RegisteredWorldForSimulation?.LogicReferencePool;
+                if (renderer != null)
+                {
+                    Release(renderer);
+                    referencePool?.Release(entity);
+                    returnedRenderers++;
+                    continue;
+                }
+
+                root.SetActive(false);
+                _activeObjects.Remove(root);
+                _availableObjects.Enqueue(root);
+            }
+            _shutdownObjectScratch.Clear();
+
+            _shutdownSpriteScratch.Clear();
+            foreach (SpriteRenderer activeSprite in _activeSprites)
+                _shutdownSpriteScratch.Add(activeSprite);
+            for (int index = 0; index < _shutdownSpriteScratch.Count; index++)
+            {
+                SpriteRenderer activeSprite = _shutdownSpriteScratch[index];
+                if (activeSprite == null)
+                {
+                    _activeSprites.Remove(activeSprite);
+                    continue;
+                }
+                ReleaseSprite(activeSprite);
+                returnedSpriteRenderers++;
+            }
+            _shutdownSpriteScratch.Clear();
+
+            if (_activeObjects.Count != 0 || _activeSprites.Count != 0)
+            {
+                failureReason = "active-pool-borrowers-remained-after-shutdown-release";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CompleteBattleQuiesce(out string failureReason)
+        {
+            if (_activeObjects?.Count != 0 || _activeSprites?.Count != 0)
+            {
+                failureReason = "pool-cannot-quiesce-with-active-borrowers";
+                return false;
+            }
+
+            _acceptingRequests = false;
+            _quiesced = true;
+            _releaseTimeMap?.Clear();
+            enabled = false;
+            failureReason = string.Empty;
+            return true;
         }
 
         public string GetPoolStatus()
@@ -435,7 +568,10 @@ namespace NTSD.Animation
             return _availableObjects != null &&
                    _activeObjects != null &&
                    _releaseTimeMap != null &&
-                   _spritePool != null;
+                   _spritePool != null &&
+                   _activeSprites != null &&
+                   _shutdownObjectScratch != null &&
+                   _shutdownSpriteScratch != null;
         }
 
         private static void NormalizeTransform(Transform target, bool resetScale = true)

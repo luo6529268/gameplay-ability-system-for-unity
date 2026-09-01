@@ -17,12 +17,14 @@ namespace NTSD.Simulation
                 int runtimeSlot,
                 bool claimed,
                 uint generation,
+                ulong allocationEpoch,
                 LF2Entity entity,
                 NTSDEntityRuntime rawRuntime)
             {
                 RuntimeSlot = runtimeSlot;
                 Claimed = claimed;
                 Generation = generation;
+                AllocationEpoch = allocationEpoch;
                 Entity = entity;
                 RawRuntime = rawRuntime;
             }
@@ -30,6 +32,7 @@ namespace NTSD.Simulation
             public int RuntimeSlot { get; }
             public bool Claimed { get; }
             public uint Generation { get; }
+            public ulong AllocationEpoch { get; }
             public LF2Entity Entity { get; }
             public NTSDEntityRuntime RawRuntime { get; }
         }
@@ -38,7 +41,6 @@ namespace NTSD.Simulation
         {
             public readonly NTSDEntityRuntime[] RawRuntimes = CreateRawRuntimes();
             public readonly LF2Entity[] Entities = new LF2Entity[PageSize];
-            public readonly uint[] Generations = new uint[PageSize];
 
             private static NTSDEntityRuntime[] CreateRawRuntimes()
             {
@@ -54,9 +56,8 @@ namespace NTSD.Simulation
             }
         }
 
-        private readonly RuntimeSlotAllocator allocator;
+        private readonly RuntimeSlotLifecycleState lifecycle;
         private Page[] pages;
-        private ulong occupancyEpoch = 1;
 
         public RuntimeSlotTable(int logicalCapacity, int stageStart = 20, int dynamicStart = 50)
         {
@@ -64,14 +65,17 @@ namespace NTSD.Simulation
                 throw new ArgumentOutOfRangeException(nameof(logicalCapacity));
 
             LogicalCapacity = logicalCapacity;
-            allocator = new RuntimeSlotAllocator(logicalCapacity, stageStart, dynamicStart);
+            lifecycle = new RuntimeSlotLifecycleState(
+                logicalCapacity,
+                stageStart,
+                dynamicStart);
             pages = new Page[(logicalCapacity + PageSize - 1) / PageSize];
         }
 
         public int LogicalCapacity { get; private set; }
-        public int ClaimedCount => allocator.ClaimedCount;
+        public int ClaimedCount => lifecycle.ClaimedCount;
         public int MaterializedPageCount { get; private set; }
-        public ulong OccupancyEpoch => occupancyEpoch;
+        public ulong OccupancyEpoch => lifecycle.OccupancyEpoch;
 
         public void PrepareAllPages()
         {
@@ -96,23 +100,22 @@ namespace NTSD.Simulation
             var grownPages = new Page[newPageCount];
             Array.Copy(pages, grownPages, pages.Length);
 
-            if (!allocator.GrowTo(newLogicalCapacity))
+            if (!lifecycle.GrowTo(newLogicalCapacity))
                 return false;
 
             pages = grownPages;
             LogicalCapacity = newLogicalCapacity;
-            AdvanceOccupancyEpoch();
             return true;
         }
 
         public bool IsAddressable(int slot)
         {
-            return slot >= 0 && slot < LogicalCapacity;
+            return lifecycle.IsAddressable(slot);
         }
 
         public bool IsClaimed(int slot)
         {
-            return allocator.IsClaimed(slot);
+            return lifecycle.IsClaimed(slot);
         }
 
         public ReadOnlySlotView GetReadOnlyView(int slot)
@@ -124,55 +127,138 @@ namespace NTSD.Simulation
             int pageOffset = slot % PageSize;
             return new ReadOnlySlotView(
                 slot,
-                allocator.IsClaimed(slot),
-                page?.Generations[pageOffset] ?? 0u,
+                lifecycle.IsClaimed(slot),
+                lifecycle.GetGeneration(slot),
+                lifecycle.GetAllocationEpoch(slot),
                 page?.Entities[pageOffset],
                 page?.RawRuntimes[pageOffset]);
         }
 
         public int PeekLowest(int startSlot, int endSlotExclusive)
         {
-            return allocator.PeekLowest(startSlot, endSlotExclusive);
+            return lifecycle.PeekLowest(startSlot, endSlotExclusive);
         }
 
         public bool TryClaim(int slot, LF2Entity entity, out RuntimeEntityHandle handle)
         {
             handle = RuntimeEntityHandle.Invalid;
-            if (entity == null || !allocator.ClaimRequired(slot))
+            if (!TryBeginClaim(
+                    slot,
+                    entity,
+                    out RuntimeSlotAllocationTicket ticket))
+            {
                 return false;
+            }
 
-            Page page = GetPage(slot, true);
-            int pageOffset = slot % PageSize;
-            page.Generations[pageOffset] = NextGeneration(
-                page.Generations[pageOffset]);
-            page.Entities[pageOffset] = entity;
-            handle = new RuntimeEntityHandle(
-                slot,
-                page.Generations[pageOffset]);
-            AdvanceOccupancyEpoch();
-            return true;
+            if (!TryCompleteRequiredSideEffect(ticket, true) ||
+                !TryCommitAllocation(ticket, out _))
+            {
+                TryRollbackAllocation(ticket, entity);
+                return false;
+            }
+
+            handle = ticket.Handle;
+            return handle.IsValid;
         }
 
         public int AllocateLowest(int startSlot, LF2Entity entity, out RuntimeEntityHandle handle)
         {
             handle = RuntimeEntityHandle.Invalid;
-            if (entity == null)
-                return -1;
-
-            int slot = allocator.AllocateLowest(startSlot);
+            int slot = BeginAllocateLowest(
+                startSlot,
+                entity,
+                out RuntimeSlotAllocationTicket ticket);
             if (slot < 0)
                 return -1;
 
-            Page page = GetPage(slot, true);
-            int pageOffset = slot % PageSize;
-            page.Generations[pageOffset] = NextGeneration(
-                page.Generations[pageOffset]);
-            page.Entities[pageOffset] = entity;
-            handle = new RuntimeEntityHandle(
-                slot,
-                page.Generations[pageOffset]);
-            AdvanceOccupancyEpoch();
+            if (!TryCompleteRequiredSideEffect(ticket, true) ||
+                !TryCommitAllocation(ticket, out _))
+            {
+                TryRollbackAllocation(ticket, entity);
+                return -1;
+            }
+
+            handle = ticket.Handle;
             return slot;
+        }
+
+        internal bool TryBeginClaim(
+            int slot,
+            LF2Entity entity,
+            out RuntimeSlotAllocationTicket ticket)
+        {
+            ticket = RuntimeSlotAllocationTicket.Invalid;
+            if (entity == null ||
+                !lifecycle.TryBeginClaimRequired(slot, out ticket))
+            {
+                return false;
+            }
+
+            Page page = GetPage(slot, true);
+            page.Entities[slot % PageSize] = entity;
+            return true;
+        }
+
+        internal int BeginAllocateLowest(
+            int startSlot,
+            LF2Entity entity,
+            out RuntimeSlotAllocationTicket ticket)
+        {
+            ticket = RuntimeSlotAllocationTicket.Invalid;
+            if (entity == null ||
+                !lifecycle.TryBeginAllocateLowest(startSlot, out ticket))
+            {
+                return -1;
+            }
+
+            int slot = ticket.Handle.Slot;
+            Page page = GetPage(slot, true);
+            page.Entities[slot % PageSize] = entity;
+            return slot;
+        }
+
+        internal bool TryCompleteRequiredSideEffect(
+            RuntimeSlotAllocationTicket ticket,
+            bool succeeded)
+        {
+            return lifecycle.TryCompleteRequiredSideEffect(ticket, succeeded);
+        }
+
+        internal bool TryCommitAllocation(
+            RuntimeSlotAllocationTicket ticket,
+            out RuntimeSlotAllocationIdentity identity)
+        {
+            return lifecycle.TryCommit(ticket, out identity);
+        }
+
+        internal bool TryRollbackAllocation(
+            RuntimeSlotAllocationTicket ticket,
+            LF2Entity expectedEntity)
+        {
+            if (expectedEntity == null ||
+                !ticket.IsValid ||
+                !IsAddressable(ticket.Handle.Slot))
+            {
+                return false;
+            }
+
+            int slot = ticket.Handle.Slot;
+            Page page = GetPage(slot, false);
+            int pageOffset = slot % PageSize;
+            if (page == null ||
+                !ReferenceEquals(page.Entities[pageOffset], expectedEntity) ||
+                !lifecycle.TryRollback(ticket))
+            {
+                return false;
+            }
+
+            page.Entities[pageOffset] = null;
+            return true;
+        }
+
+        public ulong GetAllocationEpoch(int slot)
+        {
+            return lifecycle.GetAllocationEpoch(slot);
         }
 
         public bool Release(RuntimeEntityHandle handle)
@@ -180,12 +266,14 @@ namespace NTSD.Simulation
             if (!TryGetMatchingSlot(handle, out Page page, out int pageOffset))
                 return false;
 
-            return ReleaseSlot(handle.Slot, page, pageOffset);
+            return ReleaseSlot(handle, page, pageOffset);
         }
 
         public bool Release(int slot, LF2Entity expectedEntity)
         {
-            if (expectedEntity == null || !IsAddressable(slot) || !allocator.IsClaimed(slot))
+            if (expectedEntity == null ||
+                !IsAddressable(slot) ||
+                !lifecycle.IsCommitted(slot))
                 return false;
 
             Page page = GetPage(slot, false);
@@ -196,14 +284,17 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            return ReleaseSlot(slot, page, pageOffset);
+            if (!lifecycle.TryGetCurrentHandle(slot, out RuntimeEntityHandle handle))
+                return false;
+
+            return ReleaseSlot(handle, page, pageOffset);
         }
 
         // World passes intentionally resolve the current occupant by slot. Long-lived
         // references must use RuntimeEntityHandle so generation checks still apply.
         public LF2Entity GetCurrentOccupant(int slot)
         {
-            if (!IsAddressable(slot) || !allocator.IsClaimed(slot))
+            if (!IsAddressable(slot) || !lifecycle.IsCommitted(slot))
                 return null;
 
             Page page = GetPage(slot, false);
@@ -224,7 +315,7 @@ namespace NTSD.Simulation
             handle = RuntimeEntityHandle.Invalid;
             if (expectedEntity == null ||
                 !IsAddressable(slot) ||
-                !allocator.IsClaimed(slot))
+                !lifecycle.IsClaimed(slot))
             {
                 return false;
             }
@@ -232,25 +323,23 @@ namespace NTSD.Simulation
             Page page = GetPage(slot, false);
             int pageOffset = slot % PageSize;
             if (page == null ||
-                page.Generations[pageOffset] == 0 ||
                 !ReferenceEquals(page.Entities[pageOffset], expectedEntity))
             {
                 return false;
             }
 
-            handle = new RuntimeEntityHandle(slot, page.Generations[pageOffset]);
-            return handle.IsValid;
+            return lifecycle.TryGetCurrentHandle(slot, out handle);
         }
 
-        private bool ReleaseSlot(int slot, Page page, int pageOffset)
+        private bool ReleaseSlot(
+            RuntimeEntityHandle handle,
+            Page page,
+            int pageOffset)
         {
-            if (!allocator.Release(slot))
+            if (!lifecycle.Release(handle))
                 return false;
 
             page.Entities[pageOffset] = null;
-            page.Generations[pageOffset] = NextGeneration(
-                page.Generations[pageOffset]);
-            AdvanceOccupancyEpoch();
             return true;
         }
 
@@ -275,7 +364,7 @@ namespace NTSD.Simulation
 
         public void Reset()
         {
-            allocator.Reset();
+            lifecycle.ResetFreshWorld();
             for (int pageIndex = 0; pageIndex < pages.Length; pageIndex++)
             {
                 Page page = pages[pageIndex];
@@ -290,11 +379,9 @@ namespace NTSD.Simulation
 
                     page.Entities[pageOffset] = null;
                     page.RawRuntimes[pageOffset].Reset();
-                    page.Generations[pageOffset] = NextGeneration(
-                        page.Generations[pageOffset]);
+                    lifecycle.InvalidateLocalLeaseForWorldReset(slot);
                 }
             }
-            AdvanceOccupancyEpoch();
         }
 
         internal bool TryRestoreSnapshotTopology(
@@ -320,7 +407,7 @@ namespace NTSD.Simulation
                 }
             }
 
-            allocator.Reset();
+            lifecycle.BeginTopologyRestore();
             for (int slot = 0; slot < LogicalCapacity; slot++)
             {
                 BattleRuntimeSlotSnapshot state = snapshot.GetSlot(slot);
@@ -330,11 +417,18 @@ namespace NTSD.Simulation
 
                 int pageOffset = slot % PageSize;
                 page.Entities[pageOffset] = null;
-                page.Generations[pageOffset] = state.Generation;
+                if (!lifecycle.SetLocalGenerationForTopologyRestore(
+                        slot,
+                        state.Generation))
+                {
+                    return false;
+                }
                 if (!state.Claimed)
                     continue;
 
-                if (!allocator.ClaimRequired(slot) ||
+                if (!lifecycle.TryRestoreCommittedClaim(
+                        slot,
+                        state.Generation) ||
                     !snapshot.TryGetLocalEntityShell(slot, out LF2Entity entity))
                 {
                     return false;
@@ -342,13 +436,13 @@ namespace NTSD.Simulation
                 page.Entities[pageOffset] = entity;
             }
 
-            AdvanceOccupancyEpoch();
-            return allocator.ClaimedCount == snapshot.ClaimedCount;
+            lifecycle.CompleteTopologyRestore();
+            return lifecycle.ClaimedCount == snapshot.ClaimedCount;
         }
 
         internal void ClearTopologyForSnapshotShellMaterialization()
         {
-            allocator.Reset();
+            lifecycle.BeginTopologyRestore();
             for (int pageIndex = 0; pageIndex < pages.Length; pageIndex++)
             {
                 Page page = pages[pageIndex];
@@ -363,7 +457,7 @@ namespace NTSD.Simulation
                     page.Entities[pageOffset] = null;
                 }
             }
-            AdvanceOccupancyEpoch();
+            lifecycle.CompleteTopologyRestore();
         }
 
         private bool TryGetMatchingSlot(
@@ -373,13 +467,18 @@ namespace NTSD.Simulation
         {
             page = null;
             pageOffset = -1;
-            if (!handle.IsValid || !IsAddressable(handle.Slot) || !allocator.IsClaimed(handle.Slot))
+            if (!handle.IsValid ||
+                !IsAddressable(handle.Slot) ||
+                !lifecycle.IsClaimed(handle.Slot))
                 return false;
 
             page = GetPage(handle.Slot, false);
             pageOffset = handle.Slot % PageSize;
             return page != null &&
-                   page.Generations[pageOffset] == handle.Generation &&
+                   lifecycle.TryGetCurrentHandle(
+                       handle.Slot,
+                       out RuntimeEntityHandle currentHandle) &&
+                   currentHandle == handle &&
                    page.Entities[pageOffset] != null;
         }
 
@@ -400,23 +499,10 @@ namespace NTSD.Simulation
             return page;
         }
 
-        private static uint NextGeneration(uint generation)
-        {
-            generation++;
-            return generation == 0 ? 1u : generation;
-        }
-
-        private void AdvanceOccupancyEpoch()
-        {
-            occupancyEpoch++;
-            if (occupancyEpoch == 0)
-                occupancyEpoch = 1;
-        }
-
 #if UNITY_INCLUDE_TESTS
         internal void SetOccupancyEpochForSelfCheck(ulong value)
         {
-            occupancyEpoch = value;
+            lifecycle.SetOccupancyEpochForSelfCheck(value);
         }
 #endif
     }

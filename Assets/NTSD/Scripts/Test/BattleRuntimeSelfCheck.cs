@@ -11,6 +11,7 @@ using NTSD.Game;
 using NTSD.Input;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
+using NTSD.Simulation.Lockstep;
 using NTSD.Simulation.Presentation;
 using NTSD.Simulation.Spatial;
 using UnityEngine;
@@ -61,6 +62,7 @@ namespace NTSD.Test
                 using var commonShadowVisuals = new TemporaryCommonShadowVisualConfig(
                     CharacterAnimtorManager.Instance);
                 BattleRuntimeSelfCheckCore.RunAllChecks();
+                CheckBattleRuntimeOrderedShutdownContracts();
                 CheckPerWorldPpModeOwnership();
                 CheckReferencePoolObjectIdPreserved();
                 CheckReferencePoolRejectsUnownedObjects();
@@ -123,6 +125,14 @@ namespace NTSD.Test
                 CheckReleaseTickMode2ResetFollowsEntityPostFrameTail();
                 CheckPreFrameXBoundsMatrix();
                 CheckRenderSpaceHorizontalOriginContracts();
+                CheckFormalObjectPointValueSeam();
+                CheckFormalBodyBoxValueSeam();
+                CheckItrParserDefaultsAlignment();
+                CheckFrameMultivalueParserAlignment();
+                CheckWPointDefaultAlignment();
+                CheckFormalWeaponPointValueSeam();
+                CheckFormalBloodPointCatalogSeam();
+                CheckFormalCatchPointValueSeam();
                 CheckQueuedObjectPointPassBoundaries();
                 CheckAudit7LateOpointPrecisionContracts();
                 CheckRuntimeSlotAllocatorAndProfileContracts();
@@ -156,6 +166,8 @@ namespace NTSD.Test
                 CheckFrameworkCooldownBeforeHumanInputOrder();
                 CheckReleaseTickCharacterInputPrecedesOid5152Maintenance();
                 CheckBattleStepGateSchedulerContracts();
+                CheckFormalKernelFullReturnCommitSeam();
+                CheckFormalKernelWorldBootstrapFactorySeam();
                 CheckNegativeLinkCharacterInputEligibility();
                  CheckDeadAiInputEligibility();
                  CheckCanonicalFramePacketPollContract();
@@ -167,6 +179,7 @@ namespace NTSD.Test
                 CheckAudit11N30Code100Broadcast();
                 CheckAudit7ResultsActiveGate();
                 CheckBattleResultsSlotAndRelationContracts();
+                CheckResultsReserveTerminalIntegrationContracts();
                 CheckTransitionEffectDoublePrecision();
                 CheckPhysicsMovementAndVerticalBoundaryContracts();
                 CheckSharedCharacterLandingNumericAndDamageBoundaries();
@@ -224,7 +237,9 @@ namespace NTSD.Test
                 CheckOid6DjaGuardComboHold();
                 CheckRandomWeaponDropAuthorityContract();
                 CheckStrictRuntimeSlotAndStageFactorContract();
-                CheckAudit7StageSpawnRestPreservation();
+                CheckStageSpawnValueSeamContracts();
+                CheckAudit7StageSpawnRestAlignment();
+                CheckResultsReserveTransactionSeamContracts();
                 CheckAudit7MatchAndRosterBootstrapContracts();
                 CheckStageWaveBootstrapAndSpawnContract();
                 CheckStageWaveImmediateSpawnAndAdvance();
@@ -410,7 +425,10 @@ namespace NTSD.Test
                    authorityTable.MaterializedPageCount == 2,
                 "runtime slot table must materialize a second page at slot 256");
             Expect(authorityTable.TryClaim(399, entity399, out RuntimeEntityHandle handle399) &&
-                   authorityTable.ClaimedCount == 3,
+                   authorityTable.ClaimedCount == 3 &&
+                   authorityTable.GetAllocationEpoch(255) == 1UL &&
+                   authorityTable.GetAllocationEpoch(256) == 1UL &&
+                   authorityTable.GetAllocationEpoch(399) == 1UL,
                 "runtime slot table must claim the final Authority400 slot");
             Expect(authorityTable.PeekLowest(255, 400) == 257 &&
                    !authorityTable.IsClaimed(257),
@@ -439,11 +457,13 @@ namespace NTSD.Test
 
             Expect(!authorityTable.Release(255, entity256) &&
                    ReferenceEquals(authorityTable.GetCurrentOccupant(255), entity255) &&
-                   authorityTable.ClaimedCount == 3,
+                   authorityTable.ClaimedCount == 3 &&
+                   authorityTable.GetAllocationEpoch(255) == 1UL,
                 "runtime slot table must reject a stale lifecycle release for a different occupant");
             Expect(authorityTable.Release(handle255) &&
                    authorityTable.ClaimedCount == 2 &&
-                   !authorityTable.TryResolve(handle255, out _),
+                   !authorityTable.TryResolve(handle255, out _) &&
+                   authorityTable.GetAllocationEpoch(255) == 1UL,
                 "released runtime entity handles must stop resolving");
 
             var replacement255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
@@ -456,18 +476,21 @@ namespace NTSD.Test
                    ReferenceEquals(replacementResolved, replacement255) &&
                    !authorityTable.TryResolve(handle255, out _) &&
                    !authorityTable.Release(255, entity255) &&
-                   ReferenceEquals(authorityTable.GetCurrentOccupant(255), replacement255),
+                   ReferenceEquals(authorityTable.GetCurrentOccupant(255), replacement255) &&
+                   authorityTable.GetAllocationEpoch(255) == 2UL,
                 "same-slot reuse must issue a new generation and keep the old handle invalid");
 
             authorityTable.Reset();
             Expect(authorityTable.ClaimedCount == 0 &&
                    authorityTable.MaterializedPageCount == 2 &&
-                   !authorityTable.TryResolve(replacementHandle, out _),
+                   !authorityTable.TryResolve(replacementHandle, out _) &&
+                   authorityTable.GetAllocationEpoch(255) == 0UL,
                 "runtime slot table reset must clear claims without losing lazy pages");
             var afterReset255 = new FlowSelfCheckEntity(LF2ObjectType.Character);
             Expect(authorityTable.TryClaim(255, afterReset255, out RuntimeEntityHandle afterResetHandle) &&
                    afterResetHandle != replacementHandle &&
-                   !authorityTable.TryResolve(replacementHandle, out _),
+                   !authorityTable.TryResolve(replacementHandle, out _) &&
+                   authorityTable.GetAllocationEpoch(255) == 1UL,
                 "runtime slot table reset must prevent old handles from becoming valid again");
 
             var growingTable = new RuntimeSlotTable(512, 20, 50);
@@ -1032,6 +1055,7 @@ namespace NTSD.Test
             string scriptsRoot = Path.Combine(Application.dataPath, "NTSD", "Scripts");
             string[] productionScripts = Directory.GetFiles(scriptsRoot, "*.cs", SearchOption.AllDirectories);
             int productionBindCallCount = 0;
+            int productionResetAndBindCallCount = 0;
             for (int i = 0; i < productionScripts.Length; i++)
             {
                 string path = productionScripts[i].Replace('\\', '/');
@@ -1075,9 +1099,28 @@ namespace NTSD.Test
                            System.Text.RegularExpressions.Regex.IsMatch(call, @",\s*false\s*\)$"),
                         $"B1.2 production Bind must be store-first and owned by the SimulationWorld lifecycle: {path}: {call}");
                 }
+
+                System.Text.RegularExpressions.MatchCollection resetAndBindCalls =
+                    System.Text.RegularExpressions.Regex.Matches(
+                        source,
+                        @"ItrRest(?:\?)?\.TryResetAndBind\s*\([^)]*\)",
+                        System.Text.RegularExpressions.RegexOptions.Singleline);
+                for (int callIndex = 0; callIndex < resetAndBindCalls.Count; callIndex++)
+                {
+                    productionResetAndBindCallCount++;
+                    string call = resetAndBindCalls[callIndex].Value;
+                    bool queryModuleOwner = path.EndsWith(
+                        "/SimulationQueryAndLinkModule.cs",
+                        StringComparison.Ordinal);
+                    Expect(queryModuleOwner && call.Contains(
+                               "restStore",
+                               StringComparison.Ordinal),
+                        $"B1.2 production TryResetAndBind must remain owned by the StageSpawn SimulationWorld lifecycle: {path}: {call}");
+                }
             }
-            Expect(productionBindCallCount == 4,
-                "B1.2 production binding must remain limited to ordinary reset/rebind, release rollback, StageSpawnAt restore, and snapshot restore");
+            Expect(productionBindCallCount == 3 &&
+                   productionResetAndBindCallCount == 1,
+                "B1.2 production binding must remain limited to ordinary/release/snapshot Bind owners plus one StageSpawn atomic reset-and-bind owner");
         }
 
         private static void CheckProductionRuntimeRestStoreLifecycleContracts()
@@ -1149,20 +1192,46 @@ namespace NTSD.Test
 
             var rollbackWorld = new SimulationWorld();
             RuntimeRestStore rollbackStore = rollbackWorld.RuntimeRestStoreForServices;
+            rollbackStore.SetARest(20, 7);
+            rollbackStore.SetVRest(20, 21, 9);
+            rollbackStore.SetVRest(21, 20, 11);
             Expect(rollbackStore.TryAcquireBinding(20, out RuntimeRestBindingHandle blockingLease),
                 "stage rollback fixture must reserve a conflicting store lease");
+            var rollbackEvents = new BattleParityStructuralEventBuffer(
+                rollbackWorld.RuntimeSlotCapacity);
+            rollbackWorld.SetStructuralEventSinkForDiagnostics(
+                rollbackEvents,
+                1,
+                "stage-rest-conflict");
             var rejectedStage = new FlowSelfCheckEntity(LF2ObjectType.Character);
             rejectedStage.SetRequiredRuntimeSlot(20);
             rejectedStage.Runtime.SpawnSemantic = (int)ReleaseSpawnSemantic.StageSpawnAt;
             rollbackWorld.Register(rejectedStage);
-            Expect(rejectedStage.Runtime.SlotIndex == 20 && !rejectedStage.ItrRest.IsBound &&
+            bool emittedSuccessfulAllocation = false;
+            for (int eventIndex = 0;
+                 eventIndex < rollbackEvents.Events.Count;
+                 eventIndex++)
+            {
+                if (string.Equals(
+                        rollbackEvents.Events[eventIndex].Action,
+                        "allocate",
+                        StringComparison.Ordinal))
+                {
+                    emittedSuccessfulAllocation = true;
+                    break;
+                }
+            }
+            Expect(rejectedStage.Runtime.SlotIndex == -1 && !rejectedStage.ItrRest.IsBound &&
                    !rollbackWorld.RestoreStageSpawnRestState(20, rejectedStage),
-                "StageSpawnAt registration must defer binding and surface a conflicting post-Initialize lease");
-            rollbackWorld.Unregister(rejectedStage);
-            Expect(rejectedStage.Runtime.SlotIndex == -1 &&
-                   rollbackWorld.ClaimedRuntimeSlotCountForServices == 0 &&
-                   rollbackWorld.ObjectCount == 0 && rollbackStore.IsBindingValid(blockingLease),
-                "failed StageSpawnAt binding must support complete slot/bucket rollback without stealing the existing lease");
+                "StageSpawnAt registration must reject a conflicting rest lease before publishing the occupant");
+            Expect(rollbackWorld.ClaimedRuntimeSlotCountForServices == 0 &&
+                   rollbackWorld.ObjectCount == 0 &&
+                   rollbackStore.IsBindingValid(blockingLease) &&
+                   rollbackStore.GetARest(20) == 7 &&
+                   rollbackStore.GetVRest(20, 21) == 9 &&
+                   rollbackStore.GetVRest(21, 20) == 11 &&
+                   !emittedSuccessfulAllocation,
+                "failed StageSpawnAt binding must preserve the foreign lease/rest state and publish no successful allocation epoch");
             rollbackStore.ReleaseBinding(blockingLease);
 
             var mismatchWorld = new SimulationWorld();
@@ -2604,7 +2673,7 @@ namespace NTSD.Test
             Expect(SimulationWorld.NormalizeTraceAssetCue("data/snddata_005.WAV") == "005.wav",
                 "parity event cue projection must remove the canonical snddata_ filename prefix");
 
-            Dictionary<int, FrameInputSet> denseTraceInputs = FrameInputSet.BuildDenseTraceTimeline(
+            Dictionary<int, FrameInputSet> denseTraceInputs = FrameInputDenseTraceBuilder.BuildTimeline(
                 4,
                 new[] { 2, 0 },
                 new[]
@@ -5150,6 +5219,37 @@ namespace NTSD.Test
                        ownerStressCount,
                 "1000 HitRecord owners must use one ordered cursor comparison per owner");
             ownerStressWorld.ResetRuntimeState();
+        }
+
+        private static void CheckBattleRuntimeOrderedShutdownContracts()
+        {
+            Expect(
+                (int)BattleRuntimeLifecycleState.Uninitialized == 0 &&
+                (int)BattleRuntimeLifecycleState.Preparing == 1 &&
+                (int)BattleRuntimeLifecycleState.Running == 2 &&
+                (int)BattleRuntimeLifecycleState.Stopping == 3 &&
+                (int)BattleRuntimeLifecycleState.Stopped == 4,
+                "ordered shutdown lifecycle state values must remain stable");
+            Expect(
+                (int)BattleRuntimeShutdownStage.TickAndInputClosed == 1 &&
+                (int)BattleRuntimeShutdownStage.WorkerStopped == 2 &&
+                (int)BattleRuntimeShutdownStage.SpawnIntakeClosed == 3 &&
+                (int)BattleRuntimeShutdownStage.AllocationUnsealed == 4 &&
+                (int)BattleRuntimeShutdownStage.PresentationCleared == 5 &&
+                (int)BattleRuntimeShutdownStage.PendingObjectPointTasksDiscarded == 6 &&
+                (int)BattleRuntimeShutdownStage.RenderersReturned == 7 &&
+                (int)BattleRuntimeShutdownStage.WorldLogicCleared == 8 &&
+                (int)BattleRuntimeShutdownStage.WorldUnbound == 9 &&
+                (int)BattleRuntimeShutdownStage.ObjectPoolQuiesced == 10 &&
+                (int)BattleRuntimeShutdownStage.RuntimeMapCleared == 11,
+                "ordered shutdown stages must preserve the approved dependency order");
+
+            var diagnostics = new BattleRuntimeShutdownDiagnostics();
+            diagnostics.Complete(BattleRuntimeShutdownStage.WorkerStopped);
+            diagnostics.Complete(BattleRuntimeShutdownStage.TickAndInputClosed);
+            Expect(
+                diagnostics.CompletedStage == BattleRuntimeShutdownStage.WorkerStopped,
+                "shutdown diagnostics must be monotonic and cannot regress stages");
         }
 
         private static void CheckHitRecordRenderDispatchWritebackContracts(
@@ -14511,6 +14611,8 @@ namespace NTSD.Test
             {
                 kind = 2,
                 hurtable = catcherHurtable,
+                injury = 230,
+                cover = 232,
                 fronthurtact = 230,
                 backhurtact = 232,
             };
@@ -15852,7 +15954,8 @@ namespace NTSD.Test
             Expect(abortCandidateCount == 2 && !redirectWouldAbort,
                 $"C-05 fixture must freeze two candidates and keep oid300 redirect abort clear; " +
                 $"count={abortCandidateCount}, redirectAbort={redirectWouldAbort}, " +
-                $"targetFrame={abortTarget.Frame?.N}, targetBdyX={abortTarget.Frame?.D?.bodies?[0]?.x}");
+                $"targetFrame={abortTarget.Frame?.N}, targetBdyX=" +
+                $"{(abortTarget.Frame?.D?.bodies != null && abortTarget.Frame.D.bodies.Count > 0 ? abortTarget.Frame.D.bodies[0].X : 0)}");
             abortAttacker.Interaction();
             abortWorld.EndCollisionCandidateConsumption();
             Expect(afterAbort.Health.HP < 100,
@@ -15862,7 +15965,12 @@ namespace NTSD.Test
                 $"afterVrest={afterAbort.ItrRest.GetVrest(abortAttacker.Runtime.SlotIndex)}");
 
             LF2FrameData redirectFrame = InteractionFrame(null);
-            redirectFrame.bodies[0].x = 1005;
+            BattleBodyBoxValue redirectBody = redirectFrame.bodies[0];
+            redirectFrame.bodies[0] = new BattleBodyBoxValue(
+                1005,
+                redirectBody.Y,
+                redirectBody.W,
+                redirectBody.H);
             LF2FrameData redirectFuture = Frame(6, LF2States.Standing, 1, 6, 0, 0);
             redirectFuture.bodies.Add(new BodyBox { kind = 0, x = 0, y = 0, w = 10, h = 10 });
             var redirectTarget = new SelfCheckCharacterDatShell();
@@ -15876,7 +15984,12 @@ namespace NTSD.Test
                     redirectTarget,
                     new InteractionArea { kind = 0 }),
                 "C-05: oid300 must arm candidate abort only when current/future bdy redirect data is present");
-            redirectFrame.bodies[0].x = 1000;
+            redirectBody = redirectFrame.bodies[0];
+            redirectFrame.bodies[0] = new BattleBodyBoxValue(
+                1000,
+                redirectBody.Y,
+                redirectBody.W,
+                redirectBody.H);
             Expect(!LF2HitResolveRuntimeData.ShouldAbortRemainingHitPairsAfterOid300Redirect(
                     redirectTarget,
                     new InteractionArea { kind = 0 }),
@@ -18030,6 +18143,8 @@ namespace NTSD.Test
                     data.frames[5].cpoint = new CatchPoint
                     {
                         kind = cpointKind,
+                        injury = 310,
+                        cover = 320,
                         fronthurtact = 230,
                         backhurtact = 232,
                     };
@@ -18059,11 +18174,11 @@ namespace NTSD.Test
                 }
 
                 Expect(RunCaughtCase("Front", sameFacing: false, reciprocal: true, cpointKind: 2,
-                           victimType: LF2ObjectType.SpecialAttack) == 230,
-                    "BATTLE-C30: caught-hurt facing mismatch must select fronthurtact");
+                           victimType: LF2ObjectType.SpecialAttack) == 310,
+                    "BATTLE-C30: caught-hurt facing mismatch must select resolved injury");
                 Expect(RunCaughtCase("Back", sameFacing: true, reciprocal: true, cpointKind: 2,
-                           victimType: LF2ObjectType.SpecialAttack) == 232,
-                    "BATTLE-C30: caught-hurt same facing must select backhurtact");
+                           victimType: LF2ObjectType.SpecialAttack) == 320,
+                    "BATTLE-C30: caught-hurt same facing must select resolved cover");
                 Expect(RunCaughtCase("Mismatch", sameFacing: false, reciprocal: false, cpointKind: 2,
                            victimType: LF2ObjectType.SpecialAttack) == 0,
                     "BATTLE-C30: caught-hurt must reject a non-reciprocal catcher/victim pair");
@@ -18078,7 +18193,7 @@ namespace NTSD.Test
                     victimType: LF2ObjectType.LightWeapon);
                 Expect((knockdownFrame == LF2StandardFrames.FallingBack ||
                         knockdownFrame == LF2StandardFrames.FallingFront) &&
-                       knockdownFrame != 230 && knockdownFrame != 232 &&
+                       knockdownFrame != 310 && knockdownFrame != 320 &&
                        lastCaughtFallCounter == 0,
                     "BATTLE-C30: pre-reset Fall80 must skip caught-hurt frame selection, preserve falling, and finally reset Fall");
             }
@@ -19406,6 +19521,443 @@ namespace NTSD.Test
             }
         }
 
+        private static void CheckFormalObjectPointValueSeam()
+        {
+            var legacy = new ObjectPoint
+            {
+                kind = 2,
+                x = -3,
+                y = 4,
+                action = 240,
+                dvx = -5,
+                dvy = 6,
+                oid = 999,
+                facing = 31,
+                objectId = 700,
+                dvz = 800,
+            };
+            BattleObjectPointValue value =
+                BattleObjectPointValueAdapter.FromLegacyTask(legacy);
+            ObjectPoint taskValue =
+                BattleObjectPointValueAdapter.ToLegacyTask(value);
+
+            Expect(value == new BattleObjectPointValue(
+                       2, -3, 4, 240, -5, 6, 999, 31) &&
+                   taskValue.kind == 2 &&
+                   taskValue.x == -3 &&
+                   taskValue.y == 4 &&
+                   taskValue.action == 240 &&
+                   taskValue.dvx == -5 &&
+                   taskValue.dvy == 6 &&
+                   taskValue.oid == 999 &&
+                   taskValue.facing == 31 &&
+                   taskValue.objectId == 0 &&
+                   taskValue.dvz == 0,
+                "formal OPoint adapter must preserve exactly eight release fields and discard legacy extras");
+
+            var first = new Lf2DatSubBlock { Name = "opoint" };
+            first.AddProperty(new Lf2DatProperty("kind", "1"));
+            first.AddProperty(new Lf2DatProperty("x", "10"));
+            first.AddProperty(new Lf2DatProperty("y", "20"));
+            first.AddProperty(new Lf2DatProperty("action", "30"));
+            first.AddProperty(new Lf2DatProperty("dvx", "40"));
+            first.AddProperty(new Lf2DatProperty("dvy", "50"));
+            first.AddProperty(new Lf2DatProperty("oid", "60"));
+            first.AddProperty(new Lf2DatProperty("facing", "31"));
+            first.AddProperty(new Lf2DatProperty("objectid", "700"));
+            first.AddProperty(new Lf2DatProperty("dvz", "800"));
+
+            var invalid = new Lf2DatSubBlock { Name = "opoint" };
+            invalid.AddProperty(new Lf2DatProperty("kind", "0"));
+            invalid.AddProperty(new Lf2DatProperty("oid", "0"));
+            invalid.AddProperty(new Lf2DatProperty("facing", "-1"));
+
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 1 };
+            frameBlock.SubBlocks.Add(first);
+            frameBlock.SubBlocks.Add(invalid);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.opoints != null &&
+                   frame.opoints.Count == 2 &&
+                   frame.opoint.HasValue &&
+                   frame.opoint.Value == frame.opoints[0] &&
+                   frame.opoints[0] == new BattleObjectPointValue(
+                       1, 10, 20, 30, 40, 50, 60, 31) &&
+                   frame.opoints[1] == new BattleObjectPointValue(
+                       0, 0, 0, 0, 0, 0, 0, -1),
+                "formal OPoint conversion must preserve source order, first alias and invalid entries without legacy extras");
+
+            var fixture = new LF2FrameData { opoint = legacy };
+            fixture.opoints.Add(legacy);
+            Expect(fixture.opoint.Value == value && fixture.opoints[0] == value,
+                "legacy test fixtures must project through the same immutable OPoint adapter");
+        }
+
+        private static void CheckFormalBodyBoxValueSeam()
+        {
+            var legacy = new BodyBox
+            {
+                kind = 17,
+                x = -101,
+                y = int.MinValue,
+                w = 900,
+                h = 0,
+            };
+            legacy.rawProperties["kind"] = "17";
+            legacy.rawProperties["custom"] = "drop";
+
+            BattleBodyBoxValue value =
+                BattleBodyBoxValueAdapter.FromLegacy(legacy);
+            BodyBox projected = BattleBodyBoxValueAdapter.ToLegacy(value);
+
+            Expect(value == new BattleBodyBoxValue(-101, int.MinValue, 900, 0) &&
+                   projected.kind == 0 &&
+                   projected.x == -101 &&
+                   projected.y == int.MinValue &&
+                   projected.w == 900 &&
+                   projected.h == 0 &&
+                   projected.rawProperties.Count == 0 &&
+                   value.Y == int.MinValue && value.X < -100 && value.W >= 900,
+                "formal Bdy adapter must preserve exactly four release fields, discard legacy extras and leave full-height classification external");
+
+            var first = new Lf2DatSubBlock { Name = "bdy" };
+            first.AddProperty(new Lf2DatProperty("kind", "9"));
+            first.AddProperty(new Lf2DatProperty("x", "5"));
+            first.AddProperty(new Lf2DatProperty("y", "6"));
+            first.AddProperty(new Lf2DatProperty("w", "7"));
+            first.AddProperty(new Lf2DatProperty("h", "8"));
+            first.AddProperty(new Lf2DatProperty("custom", "drop"));
+
+            var duplicate = new Lf2DatSubBlock { Name = "bdy" };
+            duplicate.AddProperty(new Lf2DatProperty("kind", "10"));
+            duplicate.AddProperty(new Lf2DatProperty("x", "5"));
+            duplicate.AddProperty(new Lf2DatProperty("y", "6"));
+            duplicate.AddProperty(new Lf2DatProperty("w", "7"));
+            duplicate.AddProperty(new Lf2DatProperty("h", "8"));
+
+            var rawNegative = new Lf2DatSubBlock { Name = "bdy" };
+            rawNegative.AddProperty(new Lf2DatProperty("x", "-10"));
+            rawNegative.AddProperty(new Lf2DatProperty("y", "20"));
+            rawNegative.AddProperty(new Lf2DatProperty("w", "0"));
+            rawNegative.AddProperty(new Lf2DatProperty("h", "-30"));
+
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 2 };
+            frameBlock.SubBlocks.Add(first);
+            frameBlock.SubBlocks.Add(duplicate);
+            frameBlock.SubBlocks.Add(rawNegative);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.bodies != null &&
+                   frame.bodies.Count == 3 &&
+                   frame.bodies[0] == new BattleBodyBoxValue(5, 6, 7, 8) &&
+                   frame.bodies[1] == frame.bodies[0] &&
+                   frame.bodies[2] == new BattleBodyBoxValue(-10, 20, 0, -30),
+                "formal Bdy conversion must preserve source order, duplicates and raw geometry without legacy extras");
+
+            var fixture = new LF2FrameData();
+            fixture.bodies.Add(legacy);
+            Expect(fixture.bodies[0] == value,
+                "legacy Bdy fixtures must project through the same immutable adapter");
+        }
+
+        private static void CheckItrParserDefaultsAlignment()
+        {
+            Expect(new InteractionArea().zwidth == 15,
+                "formal Itr DTO must use the release absent-tag zwidth default 15");
+
+            var defaults = new Lf2DatSubBlock { Name = "itr" };
+            defaults.AddProperty(new Lf2DatProperty("catchingact", "341"));
+            defaults.AddProperty(new Lf2DatProperty("caughtact", "130"));
+
+            var explicitZero = new Lf2DatSubBlock { Name = "itr" };
+            explicitZero.AddProperty(new Lf2DatProperty("zwidth", "0"));
+            explicitZero.AddProperty(new Lf2DatProperty("catchingact", "341 342"));
+            explicitZero.AddProperty(new Lf2DatProperty("caughtact", "130 131"));
+
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 3 };
+            frameBlock.SubBlocks.Add(defaults);
+            frameBlock.SubBlocks.Add(explicitZero);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.itrs.Count == 2 &&
+                   frame.itrs[0].zwidth == 15 &&
+                   frame.itrs[0].catchingact != null &&
+                   frame.itrs[0].catchingact.Length == 2 &&
+                   frame.itrs[0].catchingact[0] == 341 &&
+                   frame.itrs[0].catchingact[1] == 0 &&
+                   frame.itrs[0].caughtact != null &&
+                   frame.itrs[0].caughtact.Length == 2 &&
+                   frame.itrs[0].caughtact[0] == 130 &&
+                   frame.itrs[0].caughtact[1] == 0 &&
+                   frame.itrs[1].zwidth == 0 &&
+                   frame.itrs[1].catchingact[0] == 341 &&
+                   frame.itrs[1].catchingact[1] == 342 &&
+                   frame.itrs[1].caughtact[0] == 130 &&
+                   frame.itrs[1].caughtact[1] == 131,
+                "formal Itr conversion must distinguish absent/explicit zwidth and preserve release one/two-value pair defaults");
+        }
+
+        private static void CheckFrameMultivalueParserAlignment()
+        {
+            Lf2DatFile parsed = new Lf2DatParserV2().Parse(@"
+<frame> 85 pair
+itr:
+  catchingact: 100 101
+  caughtact: 200 201
+  catchingact2: -2147483649 +2147483648
+  caughtact2: 400
+  injury: 9
+itr_end:
+<frame_end>");
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(
+                parsed.Frames[0]);
+            InteractionArea itr = frame.itrs[0];
+
+            Expect(itr.catchingact[0] == 100 &&
+                   itr.catchingact[1] == 101 &&
+                   itr.caughtact[0] == 200 &&
+                   itr.caughtact[1] == 201 &&
+                   itr.catchingact2[0] == int.MinValue &&
+                   itr.catchingact2[1] == int.MaxValue &&
+                   itr.caughtact2[0] == 400 &&
+                   itr.caughtact2[1] == 0 &&
+                   itr.injury == 9,
+                "Frame multivalue parser must retain the optional second signed Itr action token without swallowing the following property");
+        }
+
+        private static void CheckWPointDefaultAlignment()
+        {
+            Expect(new WeaponPoint().kind == 0,
+                "formal WPoint DTO must use the release absent-tag Kind default 0");
+
+            var missingKind = new Lf2DatSubBlock { Name = "wpoint" };
+            missingKind.AddProperty(new Lf2DatProperty("x", "17"));
+
+            int[] explicitKinds = { 0, 1, 3, -7, int.MinValue, int.MaxValue };
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 73 };
+            frameBlock.SubBlocks.Add(missingKind);
+            for (int index = 0; index < explicitKinds.Length; index++)
+            {
+                var explicitKind = new Lf2DatSubBlock { Name = "wpoint" };
+                explicitKind.AddProperty(new Lf2DatProperty(
+                    "kind",
+                    explicitKinds[index].ToString(
+                        System.Globalization.CultureInfo.InvariantCulture)));
+                frameBlock.SubBlocks.Add(explicitKind);
+            }
+
+            LF2FrameData converted = Lf2DatConverter.ConvertToFrameData(frameBlock);
+            Expect(converted.wpoints.Count == explicitKinds.Length + 1 &&
+                   converted.wpoints[0].kind == 0 &&
+                   converted.wpoints[0].x == 17,
+                "formal WPoint conversion must retain the release default when kind is absent");
+            for (int index = 0; index < explicitKinds.Length; index++)
+            {
+                Expect(converted.wpoints[index + 1].kind == explicitKinds[index],
+                    "formal WPoint conversion must preserve every explicit signed kind");
+            }
+
+            var emptyFrame = new LF2FrameData();
+            var buffers = new SimulationBattleBufferModule(4);
+            Expect(emptyFrame.wpoints.Count == 0 &&
+                   buffers.DefaultHeldObjectWeaponPoint.Kind == 0 &&
+                   emptyFrame.wpoints.Count == 0,
+                "the empty-list WPoint fallback must be local, all-zero and must not mutate content");
+        }
+
+        private static void CheckFormalWeaponPointValueSeam()
+        {
+            var expected = new BattleWeaponPointValue(
+                1, 2, 3, 4, 5, 6, 7, 8, 9);
+            Expect(expected == new BattleWeaponPointValue(
+                       1, 2, 3, 4, 5, 6, 7, 8, 9) &&
+                   expected != new BattleWeaponPointValue(
+                       1, 2, 3, 4, 5, 6, 7, 8, 10) &&
+                   default(BattleWeaponPointValue) ==
+                       new BattleWeaponPointValue(0, 0, 0, 0, 0, 0, 0, 0, 0),
+                "formal WPoint value equality/default must include all nine release scalars");
+
+            var first = new Lf2DatSubBlock { Name = "wpoint" };
+            first.AddProperty(new Lf2DatProperty("kind", "1"));
+            first.AddProperty(new Lf2DatProperty("x", "2"));
+            first.AddProperty(new Lf2DatProperty("attacking", "4"));
+            var duplicate = new Lf2DatSubBlock { Name = "wpoint" };
+            duplicate.AddProperty(new Lf2DatProperty("kind", "1"));
+            duplicate.AddProperty(new Lf2DatProperty("x", "2"));
+            duplicate.AddProperty(new Lf2DatProperty("attacking", "4"));
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 44 };
+            frameBlock.SubBlocks.Add(first);
+            frameBlock.SubBlocks.Add(duplicate);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.FormalWeaponPoints.Count == 2 &&
+                   frame.FormalWeaponPoints[0] == frame.FormalWeaponPoints[1] &&
+                   frame.PrimaryWeaponPoint == frame.FormalWeaponPoints[0] &&
+                   frame.PrimaryWeaponPoint.Kind == 1 &&
+                   frame.PrimaryWeaponPoint.X == 2 &&
+                   frame.PrimaryWeaponPoint.Attacking == 4,
+                "formal WPoint frame seam must retain ordered duplicates and expose only the primary value");
+
+            var invalidBlock = new Lf2FrameBlock { FrameIndex = 45 };
+            var invalidWPoint = new Lf2DatSubBlock { Name = "wpoint" };
+            invalidWPoint.AddProperty(new Lf2DatProperty("injury", "0"));
+            invalidBlock.SubBlocks.Add(invalidWPoint);
+            bool rejected = false;
+            try
+            {
+                Lf2DatConverter.ConvertToFrameData(invalidBlock);
+            }
+            catch (InvalidOperationException)
+            {
+                rejected = true;
+            }
+
+            Expect(rejected,
+                "formal WPoint admission must reject explicit Unity-only or unknown properties before world mutation");
+        }
+
+        private static void CheckFormalBloodPointCatalogSeam()
+        {
+            var value = new BattleBloodPointValue(17, -29);
+            Expect(value == new BattleBloodPointValue(17, -29) &&
+                   value != new BattleBloodPointValue(18, -29) &&
+                   value != new BattleBloodPointValue(17, -28) &&
+                   default(BattleBloodPointValue) ==
+                       new BattleBloodPointValue(0, 0),
+                "formal BPoint value equality/default must include X and Y");
+
+            var first = new Lf2DatSubBlock { Name = "bpoint" };
+            first.AddProperty(new Lf2DatProperty("x", "1"));
+            first.AddProperty(new Lf2DatProperty("y", "2"));
+            var second = new Lf2DatSubBlock { Name = "bpoint" };
+            second.AddProperty(new Lf2DatProperty("x", "-3"));
+            second.AddProperty(new Lf2DatProperty("y", "-4"));
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 18 };
+            frameBlock.SubBlocks.Add(first);
+            frameBlock.SubBlocks.Add(second);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.BloodPoints.Count == 2 &&
+                   frame.BloodPoints[0] == new BattleBloodPointValue(1, 2) &&
+                   frame.BloodPoints[1] == new BattleBloodPointValue(-3, -4) &&
+                   frame.TryGetPrimaryBloodPoint(out BattleBloodPointValue primary) &&
+                   primary == frame.BloodPoints[0] &&
+                   frame.bpoint != null &&
+                   frame.bpoint.x == 1 &&
+                   frame.bpoint.y == 2,
+                "formal BPoint parser must retain source order and expose index zero as compatibility primary");
+
+            var scalars = new int[5];
+            int written = frame.BloodPoints.CopyCanonicalScalars(scalars, 0);
+            Expect(written == 5 &&
+                   scalars[0] == 2 &&
+                   scalars[1] == 1 &&
+                   scalars[2] == 2 &&
+                   scalars[3] == -3 &&
+                   scalars[4] == -4,
+                "formal BPoint catalog writer must emit count then source-ordered X/Y pairs");
+
+            LF2FrameData empty = Lf2DatConverter.ConvertToFrameData(
+                new Lf2FrameBlock { FrameIndex = 19 });
+            Expect(empty.BloodPoints.Count == 0 &&
+                   !empty.TryGetPrimaryBloodPoint(out _) &&
+                   empty.bpoint == null,
+                "formal BPoint empty list must remain distinct from one explicit zero value");
+
+            var invalidFrame = new Lf2FrameBlock { FrameIndex = 20 };
+            var invalidBPoint = new Lf2DatSubBlock { Name = "bpoint" };
+            invalidBPoint.AddProperty(new Lf2DatProperty("unknown", "0"));
+            invalidFrame.SubBlocks.Add(invalidBPoint);
+            bool rejected = false;
+            try
+            {
+                Lf2DatConverter.ConvertToFrameData(invalidFrame);
+            }
+            catch (InvalidOperationException)
+            {
+                rejected = true;
+            }
+
+            Expect(rejected,
+                "formal BPoint admission must reject every explicit unknown property before world construction");
+        }
+
+        private static void CheckFormalCatchPointValueSeam()
+        {
+            var value = new BattleCatchPointValue(
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15, 16, 17, 18, 19);
+            Expect(value == new BattleCatchPointValue(
+                       1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                       11, 12, 13, 14, 15, 16, 17, 18, 19) &&
+                   value != default,
+                "formal CPoint value equality must include all 19 release scalars");
+
+            var first = new Lf2DatSubBlock { Name = "cpoint" };
+            first.AddProperty(new Lf2DatProperty("kind", "1"));
+            first.AddProperty(new Lf2DatProperty("x", "2"));
+            first.AddProperty(new Lf2DatProperty("y", "3"));
+            first.AddProperty(new Lf2DatProperty("fronthurtact", "230"));
+            first.AddProperty(new Lf2DatProperty("injury", "310"));
+            var second = new Lf2DatSubBlock { Name = "cpoint" };
+            second.AddProperty(new Lf2DatProperty("kind", "2"));
+            second.AddProperty(new Lf2DatProperty("x", "99"));
+            var frameBlock = new Lf2FrameBlock { FrameIndex = 82 };
+            frameBlock.SubBlocks.Add(first);
+            frameBlock.SubBlocks.Add(second);
+            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+
+            Expect(frame.CatchPoints.Count == 2 &&
+                   frame.CatchPoints[0].Kind == 1 &&
+                   frame.CatchPoints[0].Injury == 310 &&
+                   frame.CatchPoints[0].FrontHurtAct == 230 &&
+                   frame.CatchPoints[1].Kind == 2 &&
+                   frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue primary) &&
+                   primary == frame.CatchPoints[0] &&
+                   frame.cpoint != null &&
+                   frame.cpoint.kind == 1,
+                "formal CPoint parser must retain every block in source order and expose index zero as primary");
+
+            var scalars = new int[39];
+            int written = frame.CatchPoints.CopyCanonicalScalars(scalars, 0);
+            Expect(written == 39 &&
+                   scalars[0] == 2 &&
+                   scalars[1] == 1 &&
+                   scalars[2] == 2 &&
+                   scalars[3] == 3 &&
+                   scalars[4] == 310 &&
+                   scalars[18] == 230 &&
+                   scalars[19] == 0 &&
+                   scalars[20] == 2 &&
+                   scalars[21] == 99,
+                "formal CPoint writer must emit count then 19 source-ordered scalars per entry");
+
+            LF2FrameData empty = Lf2DatConverter.ConvertToFrameData(
+                new Lf2FrameBlock { FrameIndex = 83 });
+            Expect(empty.CatchPoints.Count == 0 &&
+                   !empty.TryGetPrimaryCatchPoint(out _) &&
+                   empty.cpoint == null,
+                "formal CPoint empty list must remain distinct from one explicit all-zero value");
+
+            var invalidFrame = new Lf2FrameBlock { FrameIndex = 84 };
+            var invalidCPoint = new Lf2DatSubBlock { Name = "cpoint" };
+            invalidCPoint.AddProperty(new Lf2DatProperty("unknown", "0"));
+            invalidFrame.SubBlocks.Add(invalidCPoint);
+            bool rejected = false;
+            try
+            {
+                Lf2DatConverter.ConvertToFrameData(invalidFrame);
+            }
+            catch (InvalidOperationException)
+            {
+                rejected = true;
+            }
+
+            Expect(rejected,
+                "formal CPoint admission must reject every explicit unknown property before world construction");
+        }
+
         private static void CheckQueuedObjectPointPassBoundaries()
         {
             var oid999Wrappers = new Dictionary<int, LF2CharacterDataWrapper>
@@ -20304,16 +20856,16 @@ namespace NTSD.Test
                     {
                         for (int entryIndex = 0; entryIndex < frame.bodies.Count; entryIndex++)
                         {
-                            BodyBox body = frame.bodies[entryIndex];
+                            BattleBodyBoxValue body = frame.bodies[entryIndex];
                             bodyCount++;
-                            if (body == null || body.w <= 0 || body.h <= 0)
+                            if (body.W <= 0 || body.H <= 0)
                             {
                                 invalidBodyCount++;
-                                if (body != null && body.w > 0 && body.h < 0)
+                                if (body.W > 0 && body.H < 0)
                                 {
                                     negativeHeightPositiveWidthBodyCount++;
-                                    if (body.kind != 0 || body.x != 39 || body.y != -555 ||
-                                        body.w != 21 || body.h != -999)
+                                    if (body.X != 39 || body.Y != -555 ||
+                                        body.W != 21 || body.H != -999)
                                     {
                                         unexpectedNegativeHeightBodyCount++;
                                     }
@@ -20324,7 +20876,7 @@ namespace NTSD.Test
                                 }
                                 invalidGeometry.Add(
                                     $"oid={definition.id}/frame={frameId}/bdy={entryIndex}/" +
-                                    $"w={body?.w ?? 0}/h={body?.h ?? 0}");
+                                    $"w={body.W}/h={body.H}");
                             }
                         }
                     }
@@ -20364,13 +20916,10 @@ namespace NTSD.Test
                     {
                         for (int entryIndex = 0; entryIndex < frame.bodies.Count; entryIndex++)
                         {
-                            BodyBox body = frame.bodies[entryIndex];
-                            if (body != null)
-                            {
-                                oid999GatedValidBodyCount++;
-                                gatedGeometry.Add(
-                                    $"oid=999/frame={frameId}/bdy={entryIndex}/w={body.w}/h={body.h}");
-                            }
+                            BattleBodyBoxValue body = frame.bodies[entryIndex];
+                            oid999GatedValidBodyCount++;
+                            gatedGeometry.Add(
+                                $"oid=999/frame={frameId}/bdy={entryIndex}/w={body.W}/h={body.H}");
                         }
                     }
                 }
@@ -23646,6 +24195,85 @@ namespace NTSD.Test
                 "R3-INP-02: entry clear must remain distinct from F1 wait and return before RenderDispatch");
         }
 
+        private static void CheckFormalKernelFullReturnCommitSeam()
+        {
+            var identity = new LockstepSessionIdentity(
+                LockstepSessionIdentity.CurrentSchemaVersion,
+                sessionId: 0x51000003UL,
+                seed: 0x51A7u,
+                catalogFingerprint: 0xCA7A10UL,
+                stageFingerprint: 0x57A6EUL,
+                playerSlots: new[] { 1, 0 });
+            var barrier = new LockstepStartBarrier(
+                identity,
+                ruleFingerprint: 0xC0DE0001UL,
+                policyVersion: 1,
+                BattleRuntimeProfilePolicy.Create(BattleRuntimeProfile.Authority400));
+            var frame = new FrameInputSet(1, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Right),
+                new SimulationPlayerInput(1, SimulationInputButtons.Defend),
+            });
+
+            var fullReturn = new InProcessBattleKernelHost(barrier, 0, 2);
+            Expect(fullReturn.TryStepOneTick(frame) &&
+                   fullReturn.CurrentTick == 1 &&
+                   fullReturn.Journal.Count == 1 &&
+                   fullReturn.ChecksumHistory.Count == 1,
+                "CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001: a full tail return must publish exactly one completed host result");
+
+            var earlyReturn = new InProcessBattleKernelHost(barrier, 1, 2);
+            earlyReturn.WorldForDiagnostics.Runtime.Flow.BattleStepMode = 1;
+            Expect(!earlyReturn.TryStepOneTick(frame) &&
+                   earlyReturn.Status == InProcessBattleKernelHostStatus.Faulted &&
+                   earlyReturn.LastReason == LockstepProtocolReason.DriverRejectedFrame &&
+                   earlyReturn.CurrentTick == 0 &&
+                   earlyReturn.Journal.Count == 0 &&
+                   earlyReturn.FrameHistory.Count == 0 &&
+                   earlyReturn.ChecksumHistory.Count == 0 &&
+                   earlyReturn.LastInputHash == 0UL &&
+                   earlyReturn.LastStateChecksum == 0UL,
+                "CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001: a step-wait early return must fault terminally without publishing a completed host result");
+        }
+
+        private static void CheckFormalKernelWorldBootstrapFactorySeam()
+        {
+            var identity = new LockstepSessionIdentity(
+                LockstepSessionIdentity.CurrentSchemaVersion,
+                sessionId: 0x51000005UL,
+                seed: 0x51A7u,
+                catalogFingerprint: 0xCA7A10UL,
+                stageFingerprint: 0x57A6EUL,
+                playerSlots: new[] { 6, 3 });
+            var barrier = new LockstepStartBarrier(
+                identity,
+                ruleFingerprint: 0xC0DE0001UL,
+                policyVersion: 1,
+                BattleRuntimeProfilePolicy.Create(BattleRuntimeProfile.Authority400));
+
+            SimulationWorld world =
+                InProcessBattleWorldBootstrap.CreateWorldForBarrier(barrier);
+            InProcessBattleWorldBootstrap.PrepareWorldForHost(barrier, world);
+
+            BattleSlotRuntimeState slot3 = world.Runtime.Roster.Slots[3];
+            BattleSlotRuntimeState slot6 = world.Runtime.Roster.Slots[6];
+            Expect(world.RuntimeProfileForServices == barrier.WorldSettings.Profile &&
+                   world.MaxRuntimeSlotsForServices ==
+                       barrier.WorldSettings.InitialRuntimeSlotCapacity &&
+                   world.CollisionBroadphaseForServices ==
+                       barrier.WorldSettings.CollisionBroadphase &&
+                   world.UsesLogicOnlyEntityMaterialization &&
+                   world.Rng.State == identity.Seed &&
+                   world.Rng.CallCount == 0UL &&
+                   world.Runtime.Match.Seed == unchecked((int)identity.Seed) &&
+                   world.Runtime.Roster.ActiveSlotCount == 2 &&
+                   slot3.Active && slot3.IsHuman && slot3.Team == 4 &&
+                   slot3.InputId == 4 &&
+                   slot6.Active && slot6.IsHuman && slot6.Team == 7 &&
+                   slot6.InputId == 7,
+                "CLIENT-FORMAL-KERNEL-WORLD-BOOTSTRAP-FACTORY-SEAM-001: the extracted seam must preserve exact settings, logic-only, seed and canonical roster writes");
+        }
+
         private static void CheckNegativeLinkCharacterInputEligibility()
         {
             LF2FrameData root = Frame(0, LF2States.Standing, 100, 0, 39, 79);
@@ -25035,53 +25663,47 @@ namespace NTSD.Test
             world.SetStageSpawnWaveApplied(4);
             world.SetStageSpawnWaveDeferredEntryApplied(4);
             world.Runtime.Results.ActivateSummary(0, 2, 1, 2);
+            world.SetNeedClearInput(true);
 
-            int frameBefore = human.Frame.N;
-            int waitBefore = human.Trans.WaitCounter;
-            double xBefore = human.Runtime.X;
-            double yBefore = human.Runtime.Y;
-            double zBefore = human.Runtime.Z;
-            new NTSDBattleTickSystem(world).RunReleaseTick(12);
+            var resultHostFrame = new FrameInputSet(12, new[]
+            {
+                new SimulationPlayerInput(
+                    1,
+                    SimulationInputButtons.Attack,
+                    SimulationInputButtons.Attack),
+            });
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                12,
+                buildPresentation: false,
+                resultHostFrame);
 
             Expect(world.CurrentTickIndex == 12 && world.InputPhase == 1 &&
                    world.FrameMod12 == 0 && world.FrameToggle == 1 &&
-                   world.Runtime.Flow.HumanInputPolledExternally,
-                "BATTLE-AUDIT7-F6: results-active tick must still update the release header and observe human input");
-            Expect(human.Runtime.CdDefendLock == 2,
-                "BATTLE-AUDIT7-F6/R1: results-active human polling must decrement defend lock exactly once");
-            Expect(human.Frame.N == frameBefore && human.Trans.WaitCounter == waitBefore &&
-                   Nearly(human.Runtime.X, xBefore) && Nearly(human.Runtime.Y, yBefore) && Nearly(human.Runtime.Z, zBefore) &&
-                   human.Health.HP == 321 && human.Health.PP == 234,
-                "BATTLE-AUDIT7-F6: results-active tick must skip ordinary frame, movement, HP and PP passes");
-            Expect(human.ItrRest.Arest == 17 && human.ItrRest.GetVrest(3) == 19 &&
-                   world.StageProgression.WaveIdx == 4 && world.StageSpawnWaveApplied == 4 &&
-                   world.StageSpawnWaveDeferredEntryApplied == 4,
-                "BATTLE-AUDIT7-F6: results-active tick must skip rest, stage and opoint-producing passes");
-            Expect(human.HitConfirm2 == 1 && human.Runtime.TransientMp == 21 &&
-                   human.Runtime.TransientMp2 == 22 && human.Runtime.TransientMp3 == 23 &&
-                   human.Runtime.TransientMp4 == 24,
-                "BATTLE-AUDIT7-F6: results-active tick must skip late/post-tail carrier cleanup");
-            Expect(world.Runtime.Results.Phase == 200 && world.Runtime.Results.Winner == 0 &&
+                   !world.Runtime.Flow.HumanInputPolledExternally &&
+                   world.NeedClearInput,
+                "BATTLE-AUDIT7-F6: results-active tick must update the release header without polling battle-entity human input");
+            Expect(human.ItrRest.Arest == 16 && human.ItrRest.GetVrest(3) == 19,
+                "BATTLE-AUDIT7-F6: the full results-scene cooldown pass must advance ARest without fabricating an absent attacker VRest visit");
+            Expect(world.Runtime.Results.Phase == 202 && world.Runtime.Results.Winner == 0 &&
                    world.Runtime.Results.Timer == 1,
-                "BATTLE-AUDIT7-F6: active results state must advance exactly once through the dedicated results tick");
+                "BATTLE-AUDIT7-F6: P2 explicit pressed input must advance results exactly once after the full world tick");
         }
 
         private static void CheckBattleResultsSlotAndRelationContracts()
         {
             SimulationWorld activeWorld = CreateBattleResultsWorld();
-            FlowSelfCheckEntity inactiveRosterActiveEntity = RegisterBattleResultsEntity(
-                activeWorld, "InactiveRosterActiveEntity", runtimeSlot: 0, relationTeam: 11, hp: 100);
             FlowSelfCheckEntity slotSevenEntity = RegisterBattleResultsEntity(
                 activeWorld, "SlotSevenEntity", runtimeSlot: 7, relationTeam: 22, hp: 100);
-            BindBattleResultsRosterSlot(activeWorld, 0, inactiveRosterActiveEntity, active: false, rosterTeam: 101);
+            FlowSelfCheckEntity unrosteredSlotTwenty = RegisterBattleResultsEntity(
+                activeWorld, "UnrosteredSlotTwenty", runtimeSlot: 20, relationTeam: 11, hp: 100);
             BindBattleResultsRosterSlot(activeWorld, 7, slotSevenEntity, active: true, rosterTeam: 202);
 
             activeWorld.UpdateBattleResultsFlow();
             BattleResultsRuntimeState activeResults = activeWorld.Runtime.Results;
             Expect(activeResults.HadBoth && activeResults.BattleEndPhase == 0 &&
-                   activeResults.TeamCount == 2 && activeResults.TeamIds[0] == 11 && activeResults.TeamIds[1] == 22,
-                $"FW-RESULT-01: fixed slots 0..7 must include an active entity from an inactive roster slot, " +
-                $"and RelationTeam must override roster team; hadBoth={activeResults.HadBoth}, " +
+                   activeResults.TeamCount == 2 && activeResults.TeamIds[0] == 22 && activeResults.TeamIds[1] == 11 &&
+                   unrosteredSlotTwenty.Runtime.SlotIndex == 20,
+                $"FW-RESULT-01: Authority400 scan must include unrostered slot20 and retain first runtime-slot team order; hadBoth={activeResults.HadBoth}, " +
                 $"phase={activeResults.BattleEndPhase}, teams={activeResults.TeamCount}/" +
                 $"{activeResults.TeamIds[0]}/{activeResults.TeamIds[1]}");
 
@@ -25107,7 +25729,36 @@ namespace NTSD.Test
 
             CheckBattleResultsNonAliveCase("Dormant", makeFirstInactive: entity => entity.Runtime.OidMergeDormant = true);
             CheckBattleResultsNonAliveCase("ZeroHp", makeFirstInactive: entity => entity.Health.HP = 0);
+            CheckBattleResultsPersistentBucketAndPauseContracts();
             CheckBattleResultsActiveStateMachineContracts();
+        }
+
+        private static void CheckBattleResultsPersistentBucketAndPauseContracts()
+        {
+            SimulationWorld teamWorld = CreateBattleResultsWorld();
+            RegisterBattleResultsEntity(teamWorld, "TeamZero", 0, 0, 100);
+            RegisterBattleResultsEntity(teamWorld, "TeamOne", 1, 1, 100);
+            RegisterBattleResultsEntity(teamWorld, "IgnoredThird", 2, 2, 100);
+            teamWorld.UpdateBattleResultsFlow();
+            BattleResultsRuntimeState teamResults = teamWorld.Runtime.Results;
+            Expect(teamResults.HadBoth && teamResults.TeamCount == 2 &&
+                   teamResults.TeamIds[0] == 0 && teamResults.TeamIds[1] == 1,
+                "FW-RESULT-01: team0 must be valid and an unmatched third living team must be ignored after two persistent buckets");
+            teamResults.BattleEndPhase = 5;
+            teamResults.PendingWinner = 1;
+            teamWorld.UpdateBattleResultsFlow();
+            Expect(teamResults.BattleEndPhase == 5 && teamResults.PendingWinner == 1,
+                "FW-RESULT-01: both living buckets must pause an in-progress guard without resetting phase/pending");
+
+            var mode2World = new SimulationWorld();
+            mode2World.Runtime.Match.BattleGameModeId = 2;
+            RegisterBattleResultsEntity(mode2World, "Mode2First", 0, 3, 100);
+            RegisterBattleResultsEntity(mode2World, "Mode2Second", 1, 4, 100);
+            mode2World.UpdateBattleResultsFlow();
+            Expect(mode2World.Runtime.Results.HadBoth &&
+                   mode2World.Runtime.Results.TeamIds[0] == 3 &&
+                   mode2World.Runtime.Results.TeamIds[1] == 4,
+                "FW-RESULT-01: release terminal observation has no mode1-only gate");
         }
 
         private static void CheckBattleResultsActiveStateMachineContracts()
@@ -25122,75 +25773,76 @@ namespace NTSD.Test
             BattleResultsRuntimeState results = world.Runtime.Results;
 
             results.ActivateSummary(0, 2, 1, 2);
-            controller.Runtime.KeyAttack = 1;
-            controller.Runtime.PrevAttack = 0;
             world.PendingSounds.Clear();
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                1,
+                SimulationInputButtons.Attack));
             Expect(results.Phase == 202 && results.SettingsCursor == 2 &&
                    results.Timer == 1 && world.PendingSounds.Count == 1 &&
                    world.PendingSounds[0].Cue == "SFX_001",
                 "FW-RESULT-02: summary attack edge must enter settings and advance the results timer once");
 
-            controller.Runtime.PrevAttack = 1;
             world.PendingSounds.Clear();
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                2,
+                pressed: SimulationInputButtons.None,
+                held: SimulationInputButtons.Attack));
             Expect(results.Phase == 202 && results.Timer == 2 && world.PendingSounds.Count == 0,
                 "FW-RESULT-02: a held attack must not retrigger a results action without a new edge");
 
-            ClearBattleResultsInput(controller.Runtime);
             results.Phase = 201;
             world.PendingSounds.Clear();
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(3));
             Expect(results.Phase == 202 && results.SettingsCursor == 2 &&
                    world.PendingSounds.Count == 1 && world.PendingSounds[0].Cue == "SFX_004",
                 "FW-RESULT-02: phase 201 must enter authority settings phase 202");
 
-            ClearBattleResultsInput(controller.Runtime);
             results.Phase = 200;
             results.Cursor = 5;
-            controller.Runtime.KeyAttack = 1;
             world.PendingSounds.Clear();
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                4,
+                SimulationInputButtons.Attack));
             Expect(results.Phase == 210 && results.TableCursor == 10 &&
                    world.PendingSounds.Count == 1 && world.PendingSounds[0].Cue == "SFX_002",
                 "FW-RESULT-02: summary table action must snapshot and enter phase 210");
 
-            ClearBattleResultsInput(controller.Runtime);
-            controller.Runtime.KeyJump = 1;
             world.PendingSounds.Clear();
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                5,
+                SimulationInputButtons.Jump));
             Expect(results.Phase == 200 && world.PendingSounds.Count == 1 &&
                    world.PendingSounds[0].Cue == "SFX_006",
                 "FW-RESULT-02: phase 210 jump edge must restore the table and return to summary");
 
-            ClearBattleResultsInput(controller.Runtime);
             results.Phase = 202;
             results.SettingsCursor = 4;
             world.Runtime.Match.Difficulty = 0;
-            controller.Runtime.KeyAttack = 1;
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                6,
+                SimulationInputButtons.Attack));
             Expect(world.Runtime.Match.Difficulty == 2,
                 "FW-RESULT-02: settings difficulty action must wrap 0 to 2 after decrement");
 
-            ClearBattleResultsInput(controller.Runtime);
             results.Phase = 202;
             results.SettingsCursor = 3;
             world.Runtime.Match.StageIdx = 2;
             world.Runtime.Match.RuntimeStageCount = 3;
-            controller.Runtime.KeyAttack = 1;
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                7,
+                SimulationInputButtons.Attack));
             Expect(world.Runtime.Match.StageIdx == 0x64 && world.Runtime.Match.RandomStage == 1,
                 "FW-RESULT-02: final concrete stage must advance to the authority random-stage sentinel");
 
-            ClearBattleResultsInput(controller.Runtime);
             results.Phase = 202;
             results.SettingsCursor = 0;
             results.ResultMultiplier[0] = 150;
             results.ResultMultiplier[1] = 200;
             results.ResultRow1Values[0, 0] = 7;
             results.ResultRow2Values[0, 0] = 3;
-            controller.Runtime.KeyAttack = 1;
-            world.RunActiveBattleResultsTick();
+            world.RunActiveBattleResultsTick(CreateBattleResultsFrame(
+                8,
+                SimulationInputButtons.Attack));
             Expect(results.PendingHostAction == BattleResultsRuntimeState.HostActionRematch &&
                    controller.FallDamageDiv == 150 && second.FallDamageDiv == 200 &&
                    world.Runtime.ReserveCommittedTotal[0, 0] == 10 &&
@@ -25198,12 +25850,18 @@ namespace NTSD.Test
                 "FW-RESULT-02: rematch action must commit result rows, update fall damage and publish host intent");
         }
 
-        private static void ClearBattleResultsInput(NTSDEntityRuntime runtime)
+        private static FrameInputSet CreateBattleResultsFrame(
+            int tick,
+            SimulationInputButtons pressed = SimulationInputButtons.None,
+            SimulationInputButtons held = SimulationInputButtons.None)
         {
-            runtime.KeyLeft = runtime.KeyRight = runtime.KeyUp = runtime.KeyDown = 0;
-            runtime.KeyAttack = runtime.KeyJump = runtime.KeyDefend = 0;
-            runtime.PrevLeft = runtime.PrevRight = runtime.PrevUp = runtime.PrevDown = 0;
-            runtime.PrevAttack = runtime.PrevJump = runtime.PrevDefend = 0;
+            return new FrameInputSet(tick, new[]
+            {
+                new SimulationPlayerInput(
+                    0,
+                    held | pressed,
+                    pressed),
+            });
         }
 
         private static void CheckBattleResultsNonAliveCase(
@@ -25217,14 +25875,18 @@ namespace NTSD.Test
                 world, $"{label}Second", runtimeSlot: 1, relationTeam: 62, hp: 100);
             BindBattleResultsRosterSlot(world, 0, first, active: true, rosterTeam: 6);
             BindBattleResultsRosterSlot(world, 1, second, active: true, rosterTeam: 7);
+            world.UpdateBattleResultsFlow();
+            Expect(world.Runtime.Results.HadBoth &&
+                   world.Runtime.Results.TeamIds[0] == 61 &&
+                   world.Runtime.Results.TeamIds[1] == 62,
+                $"FW-RESULT-01: {label} fixture must first register both persistent living-team buckets");
             makeFirstInactive(first);
-            world.Runtime.Results.HadBoth = true;
 
             world.UpdateBattleResultsFlow();
             BattleResultsRuntimeState results = world.Runtime.Results;
             Expect(results.BattleEndPhase == 1 && results.PendingWinner == 1 &&
                    results.TeamCount == 2 && results.TeamIds[0] == 61 && results.TeamIds[1] == 62,
-                $"FW-RESULT-01: {label} entity must retain its eligible team bucket but not count as alive; " +
+                $"FW-RESULT-01: {label} entity must not count as alive while its previously registered team bucket persists; " +
                 $"phase={results.BattleEndPhase}, winner={results.PendingWinner}, " +
                 $"teams={results.TeamCount}/{results.TeamIds[0]}/{results.TeamIds[1]}");
         }
@@ -28261,10 +28923,12 @@ namespace NTSD.Test
                 "Naruto real standing DAT must map internal att-down-def to frame 271");
             LF2FrameData frame272Data = narutoWrapper.characterData.frames?.Find(frame => frame.frameId == 272);
             bool frame272SpawnsPoison98 =
-                (frame272Data?.opoints?.Exists(op => op.kind > 0 && op.oid == 205 && op.action == 98) ?? false) ||
+                (frame272Data?.opoints?.Exists(op =>
+                    op.Kind > 0 && op.Oid == 205 && op.Action == 98) ?? false) ||
                 (frame272Data?.opoint.HasValue == true &&
-                 frame272Data.opoint.Value.kind > 0 && frame272Data.opoint.Value.oid == 205 &&
-                 frame272Data.opoint.Value.action == 98);
+                 frame272Data.opoint.Value.Kind > 0 &&
+                 frame272Data.opoint.Value.Oid == 205 &&
+                 frame272Data.opoint.Value.Action == 98);
             Expect(frame272SpawnsPoison98,
                 "Naruto real frame 272 DAT must author oid205/action98 before same-tick late scanning advances it");
 
@@ -28398,12 +29062,12 @@ namespace NTSD.Test
                         if (tick < 24)
                         {
                             LF2FrameData entityFrame = entity.Frame?.D;
-                            ObjectPoint? entityOpoint = entityFrame?.opoint;
+                            BattleObjectPointValue? entityOpoint = entityFrame?.opoint;
                             tickEntities.Add(
                                 $"{slot}:{entity.ObjectId}/{entity.Frame?.N ?? -1}/{entity.GetType().Name}/" +
                                 $"atk{entity.AttackingCounter}/wait{entity.Trans?.Wait ?? -1}/" +
                                 $"wc{entity.Trans?.WaitCounter ?? -1}/next{entity.Trans?.Next ?? -1}/" +
-                                $"op{entityOpoint?.kind ?? -1}:{entityOpoint?.oid ?? -1}:{entityOpoint?.action ?? -1}");
+                                $"op{entityOpoint?.Kind ?? -1}:{entityOpoint?.Oid ?? -1}:{entityOpoint?.Action ?? -1}");
                         }
 
                         if (entity.ObjectId == 205)
@@ -28502,11 +29166,11 @@ namespace NTSD.Test
                     {
                         LF2FrameData currentNarutoData = naruto.Frame?.D;
                         int currentOpointCount = currentNarutoData?.opoints?.Count ?? 0;
-                        ObjectPoint? currentOpoint = currentNarutoData?.opoint;
+                        BattleObjectPointValue? currentOpoint = currentNarutoData?.opoint;
                         runtimeTrace.Add(
                             $"t{tick}:naruto={naruto.Frame.N}/D{currentNarutoData?.frameId.ToString() ?? "null"}/" +
                             $"atk{naruto.AttackingCounter}/delay{naruto.FrameDelay}/ops{currentOpointCount}/" +
-                            $"op{currentOpoint?.kind ?? -1}:{currentOpoint?.oid ?? -1}:{currentOpoint?.action ?? -1};" +
+                            $"op{currentOpoint?.Kind ?? -1}:{currentOpoint?.Oid ?? -1}:{currentOpoint?.Action ?? -1};" +
                             $"objects=[{string.Join(",", tickEntities)}]");
                     }
                 }
@@ -28575,10 +29239,12 @@ namespace NTSD.Test
             LF2FrameData ddaStart = narutoWrapper.characterData.frames?.Find(frame => frame.frameId == 285);
             LF2FrameData ddaSpawn = narutoWrapper.characterData.frames?.Find(frame => frame.frameId == 286);
             bool frame286SpawnsClone240 =
-                (ddaSpawn?.opoints?.Exists(op => op.kind > 0 && op.oid == 33 && op.action == 240) ?? false) ||
+                (ddaSpawn?.opoints?.Exists(op =>
+                    op.Kind > 0 && op.Oid == 33 && op.Action == 240) ?? false) ||
                 (ddaSpawn?.opoint.HasValue == true &&
-                 ddaSpawn.opoint.Value.kind > 0 && ddaSpawn.opoint.Value.oid == 33 &&
-                 ddaSpawn.opoint.Value.action == 240);
+                 ddaSpawn.opoint.Value.Kind > 0 &&
+                 ddaSpawn.opoint.Value.Oid == 33 &&
+                 ddaSpawn.opoint.Value.Action == 240);
             Expect(standing?.hit_Da == 285 && ddaStart != null && frame286SpawnsClone240,
                 "Naruto physical defend-down-attack authority chain must be hit_Da 285 -> frame286 oid33/action240");
 
@@ -29346,7 +30012,52 @@ namespace NTSD.Test
                     : null);
         }
 
-        private static void CheckAudit7StageSpawnRestPreservation()
+        private static void CheckStageSpawnValueSeamContracts()
+        {
+            var source = new BattleStageSpawnData
+            {
+                Id = 122,
+                Act = 7,
+                Hp = 345,
+                Times = 6,
+                X = -1000,
+                Y = -20,
+                Ratio = 1.75,
+                Join = 9,
+            };
+
+            BattleStageSpawnValue value = source.ToValue();
+            Expect(value.Id == source.Id &&
+                   value.Act == source.Act &&
+                   value.Hp == source.Hp &&
+                   value.Times == source.Times &&
+                   value.X == source.X &&
+                   value.Y == source.Y &&
+                   value.Ratio.Equals(source.Ratio) &&
+                   value.Join == source.Join,
+                "BATTLE-S0-STAGE-SPAWN-VALUE: DTO projection must preserve all eight scalars");
+
+            var task = new OPointCreateTask();
+            var configurator = new StageSpawnTaskConfigurator();
+            configurator.Configure(
+                task,
+                value,
+                spawnX: 101,
+                spawnY: -21,
+                spawnZ: 222,
+                facingDir: "left",
+                requiredRuntimeSlot: 37);
+            Expect(task.opoint.oid == value.Id &&
+                   task.opoint.action == value.Act &&
+                   task.opoint.x == 101 &&
+                   task.opoint.y == -21 &&
+                   task.z == 222 &&
+                   task.dir == "left" &&
+                   task.requiredRuntimeSlot == 37,
+                "BATTLE-S0-STAGE-SPAWN-VALUE: immutable value task mapping changed");
+        }
+
+        private static void CheckAudit7StageSpawnRestAlignment()
         {
             const int stageOid = 984;
             LF2CharacterDataWrapper stageWrapper = BuildStageSpawnWrapper(stageOid, "SelfCheck_Audit7StageRest");
@@ -29401,12 +30112,13 @@ namespace NTSD.Test
                     int stageSlot = (int)spawnMethod.Invoke(world, new object[] { spawn });
                     LF2Entity stageSpawn = world.FindEntityByRuntimeSlotForQuery(stageSlot);
                     Expect(stageSlot == 20 && stageSpawn is LF2Character &&
-                           stageSpawn.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt,
+                           stageSpawn.Runtime.SpawnSemantic == (int)ReleaseSpawnSemantic.StageSpawnAt &&
+                           world.RuntimeSlotTableForModules.GetAllocationEpoch(20) == 2UL,
                         "BATTLE-AUDIT7-F5: full stage character spawn/Initialize chain must reuse slot20 with StageSpawnAt semantic");
-                    Expect(stageSpawn.ItrRest.Arest == 7 &&
-                           stageSpawn.ItrRest.GetVrest(21) == 9 &&
-                           peer.ItrRest.GetVrest(20) == 11,
-                        "BATTLE-AUDIT7-F5: StageSpawnAt must preserve reused-slot ARest and both VRest directions through character Initialize");
+                    Expect(stageSpawn.ItrRest.Arest == 0 &&
+                           stageSpawn.ItrRest.GetVrest(21) == 0 &&
+                           peer.ItrRest.GetVrest(20) == 0,
+                        "BATTLE-AUDIT7-F5: StageSpawnAt must clear reused-slot ARest and both VRest directions before successful allocation");
 
                     world.Unregister(stageSpawn);
                     var ordinary = new DynamicCurrentDatSlotSelfCheckEntity(28022, 12, LF2ObjectType.Character);
@@ -29415,7 +30127,8 @@ namespace NTSD.Test
                     ordinary.ItrRest.SetVrest(21, 15);
                     world.Register(ordinary);
                     Expect(ordinary.Runtime.SlotIndex == 20 && ordinary.ItrRest.Arest == 0 &&
-                           ordinary.ItrRest.GetVrest(21) == 0 && peer.ItrRest.GetVrest(20) == 0,
+                           ordinary.ItrRest.GetVrest(21) == 0 && peer.ItrRest.GetVrest(20) == 0 &&
+                           world.RuntimeSlotTableForModules.GetAllocationEpoch(20) == 3UL,
                         "BATTLE-AUDIT7-F5: ordinary registration semantic must still clear occupant ARest and both VRest directions");
 
                     int rendererCountBeforeRejectedStage = GetObjectPoolActiveCount();
@@ -29427,23 +30140,51 @@ namespace NTSD.Test
                         stageWrappers);
                     rejectedStageWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
                     RuntimeRestStore rejectedStageStore = rejectedStageWorld.RuntimeRestStoreForServices;
+                    rejectedStageStore.SetARest(20, 17);
+                    rejectedStageStore.SetVRest(20, 21, 19);
+                    rejectedStageStore.SetVRest(21, 20, 23);
                     Expect(rejectedStageStore.TryAcquireBinding(
                                20,
                                out RuntimeRestBindingHandle rejectedStageLease),
                         "BATTLE-AUDIT7-F5: rejected StageSpawnAt fixture must reserve the target rest lease");
+                    var rejectedStageEvents = new BattleParityStructuralEventBuffer(
+                        rejectedStageWorld.RuntimeSlotCapacity);
+                    rejectedStageWorld.SetStructuralEventSinkForDiagnostics(
+                        rejectedStageEvents,
+                        1,
+                        "stage-rest-conflict");
                     using (new TemporarySimulationDriverWorld(rejectedStageWorld))
                     {
                         int rejectedStageSlot = (int)spawnMethod.Invoke(
                             rejectedStageWorld,
                             new object[] { spawn });
+                        bool rejectedStageAllocated = false;
+                        for (int eventIndex = 0;
+                             eventIndex < rejectedStageEvents.Events.Count;
+                             eventIndex++)
+                        {
+                            if (string.Equals(
+                                    rejectedStageEvents.Events[eventIndex].Action,
+                                    "allocate",
+                                    StringComparison.Ordinal))
+                            {
+                                rejectedStageAllocated = true;
+                                break;
+                            }
+                        }
                         Expect(rejectedStageSlot == -1 &&
                                rejectedStageWorld.FindEntityByRuntimeSlotIncludingPending(20) == null &&
                                rejectedStageWorld.ClaimedRuntimeSlotCountForServices == 0 &&
                                rejectedStageStore.IsBindingValid(rejectedStageLease) &&
+                               rejectedStageStore.GetARest(20) == 17 &&
+                               rejectedStageStore.GetVRest(20, 21) == 19 &&
+                               rejectedStageStore.GetVRest(21, 20) == 23 &&
+                               !rejectedStageAllocated &&
+                               rejectedStageWorld.RuntimeSlotTableForModules.GetAllocationEpoch(20) == 0UL &&
                                GetObjectPoolActiveCount() == rendererCountBeforeRejectedStage &&
                                LF2ReferencePool.Instance.ActiveCount == logicCountBeforeRejectedStage &&
                                Array.TrueForAll(rejectedStageWorld.KillStats, value => value == 0),
-                            "BATTLE-AUDIT7-F5: post-Initialize bind failure must fully return renderer/logic pools without death side effects");
+                            "BATTLE-AUDIT7-F5: conflicting StageSpawn rest lease must preserve state and return pools without allocation/death side effects");
                     }
                     rejectedStageStore.ReleaseBinding(rejectedStageLease);
                 }
@@ -29493,36 +30234,40 @@ namespace NTSD.Test
                     stageWrappers);
                 world.Runtime.Match.BattleGameModeId = 1;
                 world.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
-                world.StageCampaigns.Add(new BattleStageCampaignData
-                {
-                    Id = 9,
-                    Phases = new List<BattleStagePhaseData>
+                Expect(world.ConfigureStageCampaigns(
+                    new List<BattleStageCampaignData>
                     {
-                        new BattleStagePhaseData
+                        new BattleStageCampaignData
                         {
-                            Spawns = new List<BattleStageSpawnData>
+                            Id = 9,
+                            Phases = new List<BattleStagePhaseData>
                             {
-                                new BattleStageSpawnData
+                                new BattleStagePhaseData
                                 {
-                                    Id = stageOid,
-                                    Act = 0,
-                                    Hp = 321,
-                                    Times = 1,
-                                    X = 100,
-                                    Y = -20,
-                                    Ratio = 0.0,
+                                    Spawns = new List<BattleStageSpawnData>
+                                    {
+                                        new BattleStageSpawnData
+                                        {
+                                            Id = stageOid,
+                                            Act = 0,
+                                            Hp = 321,
+                                            Times = 1,
+                                            X = 100,
+                                            Y = -20,
+                                            Ratio = 0.0,
+                                        },
+                                    },
+                                },
+                                new BattleStagePhaseData
+                                {
+                                    Bound = 1400,
                                 },
                             },
                         },
-                        new BattleStagePhaseData
-                        {
-                            Bound = 1400,
-                        },
                     },
-                });
-                world.StageProgression.StageSeriesIdx = 9;
-                world.StageProgression.WaveIdx = 0;
-                world.SetStageProgressionValid(true);
+                    9,
+                    0),
+                    "stage immediate self-check campaign projection must succeed");
 
                 world.CurrentWaveStageTickAll();
 
@@ -29593,6 +30338,23 @@ namespace NTSD.Test
                    spawn.Times == 3 && spawn.X == -100 && spawn.Y == -20 &&
                    Nearly(spawn.Ratio, 1.5) && spawn.Join == 8,
                 "stage campaign parser must map all phase and spawn fields");
+
+            const string defaultRetentionText =
+                "<stage> #missing-id\n" +
+                "<phase>\n" +
+                "id: 206 hp: 100\n" +
+                "id: 207 times: invalid\n" +
+                "<phase_end>\n" +
+                "<stage_end>\n";
+            List<BattleStageCampaignData> defaultRetentionCampaigns =
+                BattleStageCampaignLoader.ParseText(defaultRetentionText);
+            Expect(defaultRetentionCampaigns.Count == 1 &&
+                   defaultRetentionCampaigns[0].Id == -1 &&
+                   defaultRetentionCampaigns[0].Phases.Count == 1 &&
+                   defaultRetentionCampaigns[0].Phases[0].Spawns.Count == 2 &&
+                   defaultRetentionCampaigns[0].Phases[0].Spawns[0].Times == 1 &&
+                   defaultRetentionCampaigns[0].Phases[0].Spawns[1].Times == 1,
+                "stage campaign parser must preserve C++ initialized defaults when optional fields are missing or invalid");
 
             string tempStagePath = Path.Combine(Application.temporaryCachePath, "ntsd_stage_campaign_self_check.dat");
             try
@@ -29898,31 +30660,35 @@ namespace NTSD.Test
                     BuildStageSpawnCharacterData("SelfCheck_StageFactor"));
                 factorCharacter.SetRuntimeSlotIndex(0);
                 world.Register(factorCharacter);
-                world.StageCampaigns.Add(new BattleStageCampaignData
-                {
-                    Id = 10,
-                    Phases = new List<BattleStagePhaseData>
+                Expect(world.ConfigureStageCampaigns(
+                    new List<BattleStageCampaignData>
                     {
-                        new BattleStagePhaseData
+                        new BattleStageCampaignData
                         {
-                            Spawns = new List<BattleStageSpawnData>
+                            Id = 10,
+                            Phases = new List<BattleStagePhaseData>
                             {
-                                new BattleStageSpawnData
+                                new BattleStagePhaseData
                                 {
-                                    Id = stageOid,
-                                    Act = 7,
-                                    Hp = 250,
-                                    Times = 2,
-                                    X = 200,
-                                    Ratio = 1.0,
+                                    Spawns = new List<BattleStageSpawnData>
+                                    {
+                                        new BattleStageSpawnData
+                                        {
+                                            Id = stageOid,
+                                            Act = 7,
+                                            Hp = 250,
+                                            Times = 2,
+                                            X = 200,
+                                            Ratio = 1.0,
+                                        },
+                                    },
                                 },
                             },
                         },
                     },
-                });
-                world.StageProgression.StageSeriesIdx = 10;
-                world.StageProgression.WaveIdx = 0;
-                world.SetStageProgressionValid(true);
+                    10,
+                    0),
+                    "positive stage self-check campaign projection must succeed");
 
                 world.CurrentWaveStageTickAll();
 
@@ -31106,6 +31872,340 @@ namespace NTSD.Test
             };
         }
 
+        private static void CheckResultsReserveTransactionSeamContracts()
+        {
+            Expect(BattleResultsReserveHostWriter.ReserveOidAt(0) == 30 &&
+                   BattleResultsReserveHostWriter.ReserveOidAt(10) == 123 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(36) == 250 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(37) == 200 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(33) == 150 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(34) == 100 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(30) == 50 &&
+                   BattleResultsReserveHostWriter.ReserveHpForOid(123) == 500,
+                "RESULT-RESERVE-01: fixed reserve OID/HP order must match C++ release-live");
+
+            var invalidGateWorld = new SimulationWorld();
+            BattleResultsRuntimeState invalidGateResults = invalidGateWorld.Runtime.Results;
+            invalidGateResults.ResultCommittedTotal[0, 0] = 1;
+            invalidGateResults.ResultCommittedHp[0, 0] = 1;
+            ulong invalidGateCalls = invalidGateWorld.Rng.CallCount;
+            Expect(!invalidGateWorld.TrySpawnBattleResultsReserveBeforeResults(
+                       invalidGateResults,
+                       0) &&
+                   invalidGateWorld.Rng.CallCount == invalidGateCalls &&
+                   invalidGateResults.ResultCommittedTotal[0, 0] == 1,
+                "RESULT-RESERVE-02: non-mode4 gate must not synchronize, draw RNG or decrement committed state");
+            invalidGateWorld.Runtime.Match.BattleGameModeId = 4;
+            Expect(!invalidGateWorld.TrySpawnBattleResultsReserveBeforeResults(
+                       invalidGateResults,
+                       -1) &&
+                   invalidGateWorld.Rng.CallCount == invalidGateCalls &&
+                   invalidGateResults.ResultCommittedTotal[0, 0] == 1,
+                "RESULT-RESERVE-02: invalid side gate must remain mutation-free");
+
+            var capacityWorld = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                50);
+            capacityWorld.Runtime.Match.BattleGameModeId = 4;
+            for (int slot = 20; slot < 50; slot++)
+            {
+                var occupied = new DynamicCurrentDatSlotSelfCheckEntity(
+                    36000 + slot,
+                    9,
+                    LF2ObjectType.Character);
+                occupied.SetRequiredRuntimeSlot(slot);
+                capacityWorld.Register(occupied);
+            }
+            BattleResultsRuntimeState capacityResults = capacityWorld.Runtime.Results;
+            capacityResults.ResultCommittedTotal[0, 0] = 1;
+            capacityResults.ResultCommittedHp[0, 0] = 1;
+            ulong capacityCalls = capacityWorld.Rng.CallCount;
+            Expect(!capacityWorld.TrySpawnBattleResultsReserveBeforeResults(
+                       capacityResults,
+                       0) &&
+                   capacityWorld.Rng.CallCount == capacityCalls &&
+                   capacityResults.ResultCommittedTotal[0, 0] == 1,
+                "RESULT-RESERVE-03: exhausted 20+ capacity must break before DAT lookup, RNG or commit");
+
+            const int unrelatedOid = 998;
+            LF2CharacterDataWrapper unrelatedWrapper =
+                BuildStageSpawnWrapper(unrelatedOid, "SelfCheck_ReserveMissingData");
+            var missingTypes = new Dictionary<int, int>
+            {
+                [unrelatedOid] = (int)LF2ObjectType.Character,
+            };
+            var missingWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [unrelatedOid] = unrelatedWrapper,
+            };
+            var missingResolver = new RuntimeCharacterConfigResolver(
+                oid => oid == unrelatedOid ? unrelatedWrapper : null);
+            var missingWorld = new SimulationWorld(missingResolver);
+            PrepareRuntimeDataCatalogForSelfCheck(
+                missingWorld,
+                missingTypes,
+                missingWrappers);
+            missingWorld.Runtime.Match.BattleGameModeId = 4;
+            BattleResultsRuntimeState missingResults = missingWorld.Runtime.Results;
+            missingResults.ResultCommittedTotal[0, 0] = 1;
+            missingResults.ResultCommittedHp[0, 0] = 1;
+            ulong missingCalls = missingWorld.Rng.CallCount;
+            Expect(!missingWorld.TrySpawnBattleResultsReserveBeforeResults(
+                       missingResults,
+                       0) &&
+                   missingWorld.Rng.CallCount == missingCalls &&
+                   missingResults.ResultCommittedTotal[0, 0] == 1 &&
+                   missingWorld.GetBattleResultsReserveMissingCount(0, 0) == 1,
+                "RESULT-RESERVE-04: missing fixed OID data must skip the column without RNG or decrement");
+
+            const int reserveOid = 30;
+            LF2CharacterDataWrapper reserveWrapper =
+                BuildStageSpawnWrapper(reserveOid, "SelfCheck_ReserveTransaction");
+            var reserveTypes = new Dictionary<int, int>
+            {
+                [reserveOid] = (int)LF2ObjectType.Character,
+            };
+            var reserveWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [reserveOid] = reserveWrapper,
+            };
+            var reserveResolver = new RuntimeCharacterConfigResolver(
+                oid => oid == reserveOid ? reserveWrapper : null);
+            try
+            {
+                using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
+                    reserveTypes,
+                    reserveWrappers);
+                using var objectPoolState = new TemporaryObjectPoolInitialization();
+                var successWorld = new SimulationWorld(reserveResolver);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    successWorld,
+                    reserveTypes,
+                    reserveWrappers);
+                successWorld.Runtime.Match.BattleGameModeId = 4;
+                successWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
+                successWorld.Rng.Seed(0x1234u);
+                var expectedRng = new DeterministicRng(0x1234u);
+                int expectedZ = 180 + expectedRng.NextInt(0, 170);
+                RuntimeRestStore successStore = successWorld.RuntimeRestStoreForServices;
+                successStore.SetARest(20, 7);
+                successStore.SetVRest(20, 21, 9);
+                successStore.SetVRest(21, 20, 11);
+                BattleResultsRuntimeState successResults = successWorld.Runtime.Results;
+                successResults.ResultCommittedTotal[0, 0] = 1;
+                successResults.ResultCommittedHp[0, 0] = 1;
+                successResults.ResultCommittedTotal[0, 1] = 1;
+                successResults.ResultCommittedHp[0, 1] = 1;
+
+                using (new TemporarySimulationDriverWorld(successWorld))
+                {
+                    bool spawned = successWorld.TrySpawnBattleResultsReserveBeforeResults(
+                        successResults,
+                        0);
+                    LF2Entity entity = successWorld.FindEntityByRuntimeSlotForQuery(20);
+                    Expect(spawned && entity is LF2Character &&
+                           LF2Entity.ResolveCurrentDataObjectId(entity) == reserveOid &&
+                           entity.Runtime.SlotIndex == 20 &&
+                           entity.Runtime.XInt == -100 &&
+                           entity.Runtime.YInt == -300 &&
+                           entity.Runtime.ZInt == expectedZ &&
+                           entity.Team == 0 && entity.Unk344 == 1 &&
+                           entity.RelationTeam == 1 && entity.HitStun == 20 &&
+                           entity.HolderCopySlot == 20 &&
+                           entity.Health.HP == 50 && entity.Health.HPBound == 50 &&
+                           entity.Health.HP3 == 50 && entity.Health.PP == 500,
+                        "RESULT-RESERVE-05: success must materialize the exact side0 character reserve contract in lowest slot20");
+                    Expect(successWorld.Rng.CallCount == 1 &&
+                           successResults.ResultCommittedTotal[0, 0] == 0 &&
+                           successResults.ResultCommittedTotal[0, 1] == 1 &&
+                           successWorld.Runtime.ReserveCommittedTotal[0, 0] == 0 &&
+                           successWorld.Runtime.ReserveCommittedHp[0, 0] == 1 &&
+                           successWorld.GetBattleResultsReserveLiveCount(0, 0) == 1 &&
+                           successWorld.GetBattleResultsReserveMissingCount(0, 0) == 0 &&
+                           successWorld.GetBattleResultsReserveMissingCount(0, 1) == 1,
+                        "RESULT-RESERVE-06: one success plus one missing-data column must retain per-entry partial commit and exactly one Z RNG");
+                    Expect(successStore.GetARest(20) == 0 &&
+                           successStore.GetVRest(20, 21) == 0 &&
+                           successStore.GetVRest(21, 20) == 0 &&
+                           successWorld.RuntimeSlotTableForModules.GetAllocationEpoch(20) == 1UL,
+                        "RESULT-RESERVE-07: success must clear ARest and both VRest directions before committing allocation");
+                    LF2ObjectPointFactory.ReleaseRejectedSpawn(entity.Renderer, entity);
+                }
+
+                var conflictWorld = new SimulationWorld(reserveResolver);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    conflictWorld,
+                    reserveTypes,
+                    reserveWrappers);
+                conflictWorld.Runtime.Match.BattleGameModeId = 4;
+                conflictWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
+                RuntimeRestStore conflictStore = conflictWorld.RuntimeRestStoreForServices;
+                conflictStore.SetARest(20, 17);
+                conflictStore.SetVRest(20, 21, 19);
+                conflictStore.SetVRest(21, 20, 23);
+                Expect(conflictStore.TryAcquireBinding(
+                           20,
+                           out RuntimeRestBindingHandle conflictLease),
+                    "RESULT-RESERVE-08: conflict fixture must own the slot20 rest lease");
+                BattleResultsRuntimeState conflictResults = conflictWorld.Runtime.Results;
+                conflictResults.ResultCommittedTotal[0, 0] = 1;
+                conflictResults.ResultCommittedHp[0, 0] = 1;
+                using (new TemporarySimulationDriverWorld(conflictWorld))
+                {
+                    bool spawned = conflictWorld.TrySpawnBattleResultsReserveBeforeResults(
+                        conflictResults,
+                        0);
+                    Expect(!spawned && conflictWorld.Rng.CallCount == 1 &&
+                           conflictResults.ResultCommittedTotal[0, 0] == 1 &&
+                           conflictWorld.FindEntityByRuntimeSlotIncludingPending(20) == null &&
+                           conflictWorld.RuntimeSlotTableForModules.GetAllocationEpoch(20) == 0UL &&
+                           conflictStore.IsBindingValid(conflictLease) &&
+                           conflictStore.GetARest(20) == 17 &&
+                           conflictStore.GetVRest(20, 21) == 19 &&
+                           conflictStore.GetVRest(21, 20) == 23,
+                        "RESULT-RESERVE-08: Client-only rest conflict must consume the post-preflight Z draw but fail closed without commit or lease mutation");
+                }
+                conflictStore.ReleaseBinding(conflictLease);
+            }
+            finally
+            {
+                reserveResolver.SetOverrideForSelfCheck(null);
+                missingResolver.SetOverrideForSelfCheck(null);
+            }
+        }
+
+        private static void RunResultsReserveTransactionSeamChecksForEditor()
+        {
+            using var singletonSceneObjects = new TemporarySingletonSceneObjectScope();
+            using var commonShadowVisuals = new TemporaryCommonShadowVisualConfig(
+                CharacterAnimtorManager.Instance);
+            CheckResultsReserveTransactionSeamContracts();
+        }
+
+        private static void CheckResultsReserveTerminalIntegrationContracts()
+        {
+            const int reserveOid = 30;
+            LF2CharacterDataWrapper reserveWrapper =
+                BuildStageSpawnWrapper(reserveOid, "SelfCheck_ReserveTerminalIntegration");
+            var reserveTypes = new Dictionary<int, int>
+            {
+                [reserveOid] = (int)LF2ObjectType.Character,
+            };
+            var reserveWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [reserveOid] = reserveWrapper,
+            };
+            var reserveResolver = new RuntimeCharacterConfigResolver(
+                oid => oid == reserveOid ? reserveWrapper : null);
+            try
+            {
+                using var runtimeConfigs = new TemporaryRuntimeObjectConfigs(
+                    reserveTypes,
+                    reserveWrappers);
+                using var objectPoolState = new TemporaryObjectPoolInitialization();
+                var successWorld = new SimulationWorld(reserveResolver);
+                PrepareRuntimeDataCatalogForSelfCheck(
+                    successWorld,
+                    reserveTypes,
+                    reserveWrappers);
+                successWorld.Runtime.Match.BattleGameModeId = 4;
+                successWorld.Runtime.Stage.SetSceneSnapshot(1000, 180, 350, 0, 0);
+                RegisterBattleResultsEntity(
+                    successWorld,
+                    "ReserveLivingOpponent",
+                    runtimeSlot: 1,
+                    relationTeam: 2,
+                    hp: 100);
+                BattleResultsRuntimeState successResults = successWorld.Runtime.Results;
+                successResults.HadBoth = true;
+                successResults.TeamCount = 2;
+                successResults.TeamIds[0] = 1;
+                successResults.TeamIds[1] = 2;
+                successResults.BattleEndPhase = 6;
+                successResults.PendingWinner = 1;
+                successResults.ResultCommittedTotal[0, 0] = 1;
+                successResults.ResultCommittedHp[0, 0] = 1;
+
+                using (new TemporarySimulationDriverWorld(successWorld))
+                {
+                    successWorld.UpdateBattleResultsFlow();
+                    LF2Entity reserve = successWorld.FindEntityByRuntimeSlotForQuery(20);
+                    Expect(reserve is LF2Character && reserve.RelationTeam == 1 &&
+                           successResults.BattleEndPhase == 0 &&
+                           successResults.PendingWinner == -1 &&
+                           successResults.ResultCommittedTotal[0, 0] == 0 &&
+                           successWorld.Rng.CallCount == 1,
+                        "RESULT-RESERVE-09: mode4 empty side must invoke reserve before guard and write phase0/pending-1 on success");
+                    successWorld.UpdateBattleResultsFlow();
+                    Expect(successResults.BattleEndPhase == 0 &&
+                           successResults.PendingWinner == -1 &&
+                           successWorld.Rng.CallCount == 1,
+                        "RESULT-RESERVE-09: next full-domain tick must observe the new reserve and pause guard without another draw");
+                    LF2ObjectPointFactory.ReleaseRejectedSpawn(reserve.Renderer, reserve);
+                }
+
+                const int unrelatedOid = 998;
+                LF2CharacterDataWrapper unrelatedWrapper =
+                    BuildStageSpawnWrapper(unrelatedOid, "SelfCheck_ReserveTerminalMissing");
+                var missingTypes = new Dictionary<int, int>
+                {
+                    [unrelatedOid] = (int)LF2ObjectType.Character,
+                };
+                var missingWrappers = new Dictionary<int, LF2CharacterDataWrapper>
+                {
+                    [unrelatedOid] = unrelatedWrapper,
+                };
+                var missingResolver = new RuntimeCharacterConfigResolver(
+                    oid => oid == unrelatedOid ? unrelatedWrapper : null);
+                try
+                {
+                    var failureWorld = new SimulationWorld(missingResolver);
+                    PrepareRuntimeDataCatalogForSelfCheck(
+                        failureWorld,
+                        missingTypes,
+                        missingWrappers);
+                    failureWorld.Runtime.Match.BattleGameModeId = 4;
+                    RegisterBattleResultsEntity(
+                        failureWorld,
+                        "ReserveFailureLivingOpponent",
+                        runtimeSlot: 1,
+                        relationTeam: 2,
+                        hp: 100);
+                    BattleResultsRuntimeState failureResults = failureWorld.Runtime.Results;
+                    failureResults.HadBoth = true;
+                    failureResults.TeamCount = 2;
+                    failureResults.TeamIds[0] = 1;
+                    failureResults.TeamIds[1] = 2;
+                    failureResults.ResultCommittedTotal[0, 0] = 1;
+                    failureResults.ResultCommittedHp[0, 0] = 1;
+
+                    failureWorld.UpdateBattleResultsFlow();
+                    Expect(failureResults.BattleEndPhase == 1 &&
+                           failureResults.PendingWinner == 1 &&
+                           failureResults.ResultCommittedTotal[0, 0] == 1 &&
+                           failureWorld.Rng.CallCount == 0,
+                        "RESULT-RESERVE-10: failed reserve must fall through to natural guard in the same tick without RNG or decrement");
+                }
+                finally
+                {
+                    missingResolver.SetOverrideForSelfCheck(null);
+                }
+            }
+            finally
+            {
+                reserveResolver.SetOverrideForSelfCheck(null);
+            }
+        }
+
+        private static void RunResultsReserveTerminalIntegrationChecksForEditor()
+        {
+            using var singletonSceneObjects = new TemporarySingletonSceneObjectScope();
+            using var commonShadowVisuals = new TemporaryCommonShadowVisualConfig(
+                CharacterAnimtorManager.Instance);
+            CheckBattleResultsSlotAndRelationContracts();
+            CheckResultsReserveTerminalIntegrationContracts();
+        }
+
         private static LF2CharacterData BuildCpointInvalidPreviousVictimFrames()
         {
             return new LF2CharacterData
@@ -31910,7 +33010,7 @@ namespace NTSD.Test
 
             protected override WeaponAttackResult ProcessAttack(
                 LF2Entity holder,
-                WeaponPoint wpoint,
+                BattleWeaponPointValue wpoint,
                 LF2FrameData frame)
             {
                 ProcessAttackCallCount++;
@@ -32910,11 +34010,21 @@ namespace NTSD.Test
             private readonly System.Reflection.FieldInfo activeField;
             private readonly System.Reflection.FieldInfo releaseMapField;
             private readonly System.Reflection.FieldInfo spritePoolField;
+            private readonly System.Reflection.FieldInfo activeSpritesField;
+            private readonly System.Reflection.FieldInfo shutdownObjectScratchField;
+            private readonly System.Reflection.FieldInfo shutdownSpriteScratchField;
+            private readonly System.Reflection.FieldInfo acceptingRequestsField;
+            private readonly System.Reflection.FieldInfo quiescedField;
             private readonly System.Reflection.FieldInfo cachedPrefabField;
             private readonly object originalAvailable;
             private readonly object originalActive;
             private readonly object originalReleaseMap;
             private readonly object originalSpritePool;
+            private readonly object originalActiveSprites;
+            private readonly object originalShutdownObjectScratch;
+            private readonly object originalShutdownSpriteScratch;
+            private readonly bool originalAcceptingRequests;
+            private readonly bool originalQuiesced;
             private readonly object originalCachedPrefab;
             private readonly bool ownsState;
 
@@ -32935,18 +34045,33 @@ namespace NTSD.Test
                 activeField = type.GetField("_activeObjects", flags);
                 releaseMapField = type.GetField("_releaseTimeMap", flags);
                 spritePoolField = type.GetField("_spritePool", flags);
+                activeSpritesField = type.GetField("_activeSprites", flags);
+                shutdownObjectScratchField = type.GetField("_shutdownObjectScratch", flags);
+                shutdownSpriteScratchField = type.GetField("_shutdownSpriteScratch", flags);
+                acceptingRequestsField = type.GetField("_acceptingRequests", flags);
+                quiescedField = type.GetField("_quiesced", flags);
                 cachedPrefabField = type.GetField("_cachedLF2ObjectPrefab", flags);
                 Expect(availableField != null && activeField != null && releaseMapField != null &&
-                       spritePoolField != null && cachedPrefabField != null,
+                       spritePoolField != null && activeSpritesField != null &&
+                       shutdownObjectScratchField != null && shutdownSpriteScratchField != null &&
+                       acceptingRequestsField != null && quiescedField != null &&
+                       cachedPrefabField != null,
                     "real opoint fixture LF2ObjectPool field contract changed");
 
                 originalAvailable = availableField.GetValue(pool);
                 originalActive = activeField.GetValue(pool);
                 originalReleaseMap = releaseMapField.GetValue(pool);
                 originalSpritePool = spritePoolField.GetValue(pool);
+                originalActiveSprites = activeSpritesField.GetValue(pool);
+                originalShutdownObjectScratch = shutdownObjectScratchField.GetValue(pool);
+                originalShutdownSpriteScratch = shutdownSpriteScratchField.GetValue(pool);
+                originalAcceptingRequests = (bool)acceptingRequestsField.GetValue(pool);
+                originalQuiesced = (bool)quiescedField.GetValue(pool);
                 originalCachedPrefab = cachedPrefabField.GetValue(pool);
                 ownsState = originalAvailable == null || originalActive == null ||
-                            originalReleaseMap == null || originalSpritePool == null;
+                            originalReleaseMap == null || originalSpritePool == null ||
+                            originalActiveSprites == null || originalShutdownObjectScratch == null ||
+                            originalShutdownSpriteScratch == null;
                 if (!ownsState)
                     return;
 
@@ -32954,6 +34079,11 @@ namespace NTSD.Test
                 activeField.SetValue(pool, new HashSet<GameObject>());
                 releaseMapField.SetValue(pool, new Dictionary<GameObject, float>());
                 spritePoolField.SetValue(pool, new Stack<SpriteRenderer>());
+                activeSpritesField.SetValue(pool, new HashSet<SpriteRenderer>());
+                shutdownObjectScratchField.SetValue(pool, new List<GameObject>());
+                shutdownSpriteScratchField.SetValue(pool, new List<SpriteRenderer>());
+                acceptingRequestsField.SetValue(pool, true);
+                quiescedField.SetValue(pool, false);
                 cachedPrefabField.SetValue(pool, null);
             }
 
@@ -32982,6 +34112,14 @@ namespace NTSD.Test
                                     objects.Add(spriteRenderer.gameObject);
                             }
                         }
+                        if (activeSpritesField.GetValue(pool) is HashSet<SpriteRenderer> activeSprites)
+                        {
+                            foreach (SpriteRenderer spriteRenderer in activeSprites)
+                            {
+                                if (spriteRenderer != null)
+                                    objects.Add(spriteRenderer.gameObject);
+                            }
+                        }
 
                         foreach (GameObject item in objects)
                         {
@@ -32995,6 +34133,11 @@ namespace NTSD.Test
                         activeField.SetValue(pool, originalActive);
                         releaseMapField.SetValue(pool, originalReleaseMap);
                         spritePoolField.SetValue(pool, originalSpritePool);
+                        activeSpritesField.SetValue(pool, originalActiveSprites);
+                        shutdownObjectScratchField.SetValue(pool, originalShutdownObjectScratch);
+                        shutdownSpriteScratchField.SetValue(pool, originalShutdownSpriteScratch);
+                        acceptingRequestsField.SetValue(pool, originalAcceptingRequests);
+                        quiescedField.SetValue(pool, originalQuiesced);
                         cachedPrefabField.SetValue(pool, originalCachedPrefab);
                     }
                 }

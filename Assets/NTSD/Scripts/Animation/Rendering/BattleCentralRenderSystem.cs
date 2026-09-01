@@ -60,12 +60,19 @@ namespace NTSD.Animation.Rendering
             new BattleDynamicMeshBackend(),
             new BattleDynamicMeshBackend(),
         };
+        private static readonly BattleHealthBarBatchBackend[] HealthBackends =
+        {
+            new BattleHealthBarBatchBackend(),
+            new BattleHealthBarBatchBackend(),
+        };
         private static readonly BattleCentralSubmission[] SlotSubmissions =
         {
-            new BattleCentralSubmission(Backends[0]),
-            new BattleCentralSubmission(Backends[1]),
+            new BattleCentralSubmission(Backends[0], HealthBackends[0]),
+            new BattleCentralSubmission(Backends[1], HealthBackends[1]),
         };
         private static readonly BattleDynamicMeshBackend EmptyBackend = new BattleDynamicMeshBackend();
+        private static readonly BattleHealthBarBatchBackend EmptyHealthBackend =
+            new BattleHealthBarBatchBackend();
         private static readonly BattleCatalogCentralResourceResolver CatalogResolver =
             new BattleCatalogCentralResourceResolver();
         private static readonly BattleCatalogCentralResourceResolver DiagnosticCatalogResolver =
@@ -78,6 +85,9 @@ namespace NTSD.Animation.Rendering
         private static BattleRenderFeature featureOwner;
         private static Material featureMaterial;
         private static Material featureArrayMaterial;
+        private static bool runtimeHealthBarsEnabled;
+        private static BattleHealthBarStyle runtimeHealthBarStyle =
+            BattleHealthBarStyle.Default;
         private static BattleRenderFeature observedFeatureOwner;
         private static ScriptableRenderer observedRenderer;
         private static Camera observedWorldCamera;
@@ -92,6 +102,7 @@ namespace NTSD.Animation.Rendering
         private static SimulationWorld publishedPlanWorld;
         private static int publishedPlanGeneration;
         private static BattleDynamicMeshBackend lastBuiltBackend = Backends[0];
+        private static BattleHealthBarBatchBackend lastBuiltHealthBackend = HealthBackends[0];
         private static CharacterAnimtorManager diagnosticCatalogManager;
         private static BattleSpriteCatalog diagnosticCatalog = BattleSpriteCatalog.Empty;
         private static int nextGeneration;
@@ -107,6 +118,7 @@ namespace NTSD.Animation.Rendering
         private static int materializationInProgress;
 
         public static BattleDynamicMeshBackend MeshBackend => lastBuiltBackend;
+        public static BattleHealthBarBatchBackend HealthMeshBackend => lastBuiltHealthBackend;
         public static BattleCentralRuntimeDiagnostics Diagnostics => RuntimeDiagnostics;
         public static BattlePixelFramePlan CurrentPixelFramePlan
         {
@@ -465,6 +477,7 @@ namespace NTSD.Animation.Rendering
             BattlePresentationPhaseDiagnostics presentationDiagnostics =
                 world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
             BattleCentralSubmission stagingSubmission = SlotSubmissions[backendIndex];
+            BattleHealthBarBatchBackend stagingHealthBackend = HealthBackends[backendIndex];
             BattlePresentationFrame buildFrame;
             try
             {
@@ -519,6 +532,7 @@ namespace NTSD.Animation.Rendering
             catch (Exception exception)
             {
                 stagingBackend.Clear();
+                stagingHealthBackend.Clear();
                 string reason =
                     $"Presentation snapshot materialization failed: {exception.GetType().Name}: {exception.Message}";
                 return mode == BattlePresentationBackendMode.CentralOnly
@@ -601,8 +615,13 @@ namespace NTSD.Animation.Rendering
                         drawMode,
                         detailDiagnostics,
                         presentationDiagnostics);
+                    stagingHealthBackend.BuildFromFrame(
+                        buildFrame,
+                        ResolveRuntimeHealthBarStyle(),
+                        runtimeHealthBarsEnabled);
                 }
                 lastBuiltBackend = stagingBackend;
+                lastBuiltHealthBackend = stagingHealthBackend;
                 lastAttemptedBuildDiagnostics = AttemptedBuildDiagnostics.Capture(
                     stagingBackend,
                     simulationTick);
@@ -610,6 +629,7 @@ namespace NTSD.Animation.Rendering
             catch (Exception exception)
             {
                 stagingBackend.Clear();
+                stagingHealthBackend.Clear();
                 string reason =
                     $"Central geometry build failed: {exception.GetType().Name}: {exception.Message}";
                 return mode == BattlePresentationBackendMode.CentralOnly
@@ -795,6 +815,7 @@ namespace NTSD.Animation.Rendering
             return submission != null && plan.IsValid &&
                    ReferenceEquals(plan.Submission, submission) &&
                    plan.Generation == lease.Generation && plan.TickIndex == lease.TickIndex &&
+                   submission.IsBackendBuildCurrent &&
                    ShouldUseCentralPixels(plan.World);
         }
 
@@ -841,7 +862,13 @@ namespace NTSD.Animation.Rendering
                 featureMaterial,
                 featureArrayMaterial);
             backend.Build(capturedFrame, CatalogResolver, drawMode);
+            BattleHealthBarBatchBackend healthBackend = HealthBackends[backendIndex];
+            healthBackend.BuildFromFrame(
+                capturedFrame,
+                ResolveRuntimeHealthBarStyle(),
+                runtimeHealthBarsEnabled);
             lastBuiltBackend = backend;
+            lastBuiltHealthBackend = healthBackend;
             lastAttemptedBuildDiagnostics = AttemptedBuildDiagnostics.Capture(backend, tickIndex);
             int generation = NextGeneration();
             submission.Publish(
@@ -949,6 +976,17 @@ namespace NTSD.Animation.Rendering
                 worldCamera,
                 camera != null ? camera.cameraType : CameraType.Game,
                 Application.isPlaying);
+        }
+
+        internal static bool TryGetEditorPreview(
+            Camera camera,
+            CameraRenderType renderType,
+            out BattleCentralEditorPreview preview)
+        {
+            return BattleCentralEditorPreview.TryGetActiveForCamera(
+                camera,
+                renderType,
+                out preview);
         }
 
         internal static bool CanRenderCamera(
@@ -1478,9 +1516,13 @@ namespace NTSD.Animation.Rendering
                 BattleCentralSubmission submission = SlotSubmissions[index];
                 submission.Retire();
                 if (submission.IsReusable)
+                {
                     Backends[index].Clear();
+                    HealthBackends[index].Clear();
+                }
             }
             lastBuiltBackend = Backends[0];
+            lastBuiltHealthBackend = HealthBackends[0];
             lastAttemptedBuildDiagnostics = default;
             requestedMode = BattlePresentationBackendMode.CentralOnly;
             ResetPerFrameDiagnostics(BattlePresentationBackendMode.CentralOnly, false);
@@ -1499,7 +1541,9 @@ namespace NTSD.Animation.Rendering
             {
                 ReleaseDiagnosticCatalogBinding();
                 EmptyBackend.Clear();
+                EmptyHealthBackend.Clear();
                 lastBuiltBackend = EmptyBackend;
+                lastBuiltHealthBackend = EmptyHealthBackend;
             }
             var plan = new BattlePixelFramePlan(
                 world,
@@ -1559,7 +1603,9 @@ namespace NTSD.Animation.Rendering
             if (submission == null)
             {
                 EmptyBackend.Clear();
+                EmptyHealthBackend.Clear();
                 lastBuiltBackend = EmptyBackend;
+                lastBuiltHealthBackend = EmptyHealthBackend;
             }
             return plan;
         }
@@ -1661,6 +1707,35 @@ namespace NTSD.Animation.Rendering
             reason = string.Empty;
             return true;
         }
+
+        private static BattleHealthBarStyle ResolveRuntimeHealthBarStyle()
+        {
+            return runtimeHealthBarStyle;
+        }
+
+        internal static void RefreshRuntimeHealthBarAuthoringSettings()
+        {
+            bool enabled = featureOwner != null && featureOwner.RuntimeHealthBarsEnabled;
+            BattleHealthBarStyle style = featureOwner != null
+                ? featureOwner.RuntimeHealthBarStyle
+                : BattleHealthBarStyle.Default;
+            if (BattleCentralEditorPreview.TryGetRuntimeHealthBarAuthoringSettings(
+                    out bool authoredEnabled,
+                    out BattleHealthBarStyle authoredStyle))
+            {
+                enabled &= authoredEnabled;
+                style = authoredStyle;
+            }
+
+            runtimeHealthBarsEnabled = enabled;
+            runtimeHealthBarStyle = style;
+        }
+
+#if UNITY_EDITOR
+        internal static bool RuntimeHealthBarsEnabledForSelfCheck => runtimeHealthBarsEnabled;
+        internal static BattleHealthBarStyle RuntimeHealthBarStyleForSelfCheck =>
+            runtimeHealthBarStyle;
+#endif
 
         private static string BuildOwnershipRefusalReason(BattleDynamicMeshBackend backend)
         {
@@ -1843,6 +1918,7 @@ namespace NTSD.Animation.Rendering
             observedUnityFrame = -1;
             RuntimeDiagnostics.FeatureAvailable = featureOwner != null;
             RuntimeDiagnostics.MaterialAvailable = featureMaterial != null;
+            RefreshRuntimeHealthBarAuthoringSettings();
         }
 
         private readonly struct FeatureRegistration

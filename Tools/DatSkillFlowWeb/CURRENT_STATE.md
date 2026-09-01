@@ -2,6 +2,16 @@
 
 > 这是会话恢复和上下文压缩后的首要读取文件。只记录当前有效状态，不记录完整历史。
 
+## 2026-08-30 主预览表现更新
+
+- 状态：`RUNTIME_PENDING`。主编辑器预览已增加 `30Hz 原始 / 60Hz 平滑 / 120Hz 平滑` 表现选择，默认 120Hz；30Hz battle/Native Tick、DAT wait、frame、输入、碰撞和对象生命周期均未改变。
+- 参考：Codex 会话 `019ff015-6f9c-7652-8c40-034b476b1c7a` 的 NTSD 2.8 本地 `render_snapshot` / `presentation_interpolation`。只移植表现合同，不移植 2.8 的 `0..998` Frame 范围或战斗规则。
+- 连续性：只对相邻 Tick、同 lineage、holder/link/target 连续且 velocity 支持位移的实体使用精确 `x/y/z` 表现 delta；传送、slot reuse、新生实体和关系切换保持离散。
+- 权威分离：sprite、shadow 与 camera 使用同一 presentation Tick；DAT overlay、站位拖动、几何编辑、Frame/pic/facing/lifecycle 继续使用 current Native authority Tick。暂停/编辑态始终显示离散 Tick。
+- 外观：Canvas 可在宽预览区放大到 1040px，增加场景边框/阴影与表现频率 HUD；坐标轴只在站位/几何编辑时显示。
+- 证据：build `20260830084617618-18ef901e469444d9b80e355a62838458`；focused `23/23`；全部 unit `315 passed / 0 failed / 1 skipped`；非构建 integration `78/78`；manifest/server integration `25/25`；Change Ledger validator PASS（114 records / 32 governed diffs）。
+- 未完成：浏览器 Canvas E4。当前会话的 localhost 浏览器权限此前被拒绝，本次未重试或绕过，因此不能声明实际 60/120Hz 视觉观感已通过。
+
 ## Snapshot
 
 - Updated: 2026-08-11

@@ -23,7 +23,7 @@ namespace NTSD.Simulation
             EntityScratch = new List<LF2Entity>();
             RegisteredObjectResetSet = new HashSet<ISimObject>(
                 Math.Max(128, runtimeCapacity));
-            DefaultHeldObjectWeaponPoint = new WeaponPoint();
+            DefaultHeldObjectWeaponPoint = default;
             Prepare(runtimeCapacity, runtimeCapacity);
         }
 
@@ -32,7 +32,7 @@ namespace NTSD.Simulation
         public List<LF2Entity> PendingSlotReleasedDestroy { get; }
         public List<LF2Entity> EntityScratch { get; }
         internal HashSet<ISimObject> RegisteredObjectResetSet { get; }
-        internal WeaponPoint DefaultHeldObjectWeaponPoint { get; }
+        internal BattleWeaponPointValue DefaultHeldObjectWeaponPoint { get; }
         public bool IsSealed => isSealed;
         public long RejectedSoundEventCount { get; private set; }
         internal bool CanQueueSoundWithoutRejection =>

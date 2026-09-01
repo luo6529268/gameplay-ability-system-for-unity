@@ -167,10 +167,68 @@ namespace NTSD.Simulation
             AppendMetadata(world, tickIndex);
             AppendWorld(world);
             AppendSlots(world);
-            world.RuntimeRestStoreForServices.AppendDeterministicChecksum(ref builder);
+            AppendRest(world.RuntimeRestStoreForServices, ref builder);
             AppendStats(world);
             AppendEvents(world.PendingSounds);
             return builder.Complete();
+        }
+
+        internal static ulong CaptureRestProjectionChecksum(RuntimeRestStore store)
+        {
+            if (store == null)
+                return 0UL;
+
+            var restBuilder = new BattleChecksum64Builder();
+            restBuilder.Reset();
+            AppendRest(store, ref restBuilder);
+            return restBuilder.Complete();
+        }
+
+        private static void AppendRest(
+            RuntimeRestStore store,
+            ref BattleChecksum64Builder target)
+        {
+            target.AddInt32(store.LogicalCapacity);
+            target.AddInt32(store.ARestEntryCount);
+            foreach (RuntimeRestStore.ARestEntry entry in
+                     store.EnumerateCanonicalARestEntries())
+            {
+                target.AddInt32(entry.AttackerSlot);
+                target.AddInt32(entry.Value);
+            }
+
+            target.AddInt32(store.VRestEntryCount);
+            target.AddInt32(store.VRestRowCount);
+            ulong unorderedEntries = 0UL;
+            foreach (RuntimeRestStore.VRestEntry entry in
+                     store.EnumerateCanonicalVRestEntries())
+            {
+                unorderedEntries ^= MixRestEntry(
+                    entry.VictimSlot,
+                    entry.AttackerSlot,
+                    entry.Value);
+            }
+
+            target.AddUInt64(unorderedEntries);
+        }
+
+        private static ulong MixRestEntry(
+            int victimSlot,
+            int attackerSlot,
+            int value)
+        {
+            unchecked
+            {
+                ulong mixed = (uint)victimSlot;
+                mixed = (mixed << 32) | (uint)attackerSlot;
+                mixed ^= (ulong)(uint)value * 0x9e3779b185ebca87UL;
+                mixed ^= mixed >> 30;
+                mixed *= 0xbf58476d1ce4e5b9UL;
+                mixed ^= mixed >> 27;
+                mixed *= 0x94d049bb133111ebUL;
+                mixed ^= mixed >> 31;
+                return mixed;
+            }
         }
 
         private void AppendInput(FrameInputSet frameInput, int tickIndex)

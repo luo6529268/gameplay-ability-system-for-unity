@@ -1,0 +1,263 @@
+/* dat-skill-flow-build:20260830080718852-b774088c08c54972a0fed27be0e38dcb */
+:root {
+    color-scheme: dark;
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: #0c1015;
+    color: #e8eef5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #0c1015;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+button,
+select {
+    min-height: 34px;
+    border: 1px solid #405064;
+    border-radius: 6px;
+    background: #17212d;
+    color: #e8eef5;
+}
+
+button {
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    border-color: #62b6ff;
+    background: #1d354f;
+}
+
+button:disabled,
+select:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.cadence-shell {
+    width: min(1880px, calc(100% - 32px));
+    margin: 22px auto 40px;
+}
+
+.cadence-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 18px;
+}
+
+.eyebrow {
+    margin: 0 0 5px;
+    color: #82d8c4;
+    font-size: .85rem;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 8px;
+    font-size: clamp(1.45rem, 2.6vw, 2.2rem);
+}
+
+.subtitle {
+    max-width: 1120px;
+    margin-bottom: 0;
+    color: #aeb9c7;
+    line-height: 1.6;
+}
+
+.readonly-badge {
+    flex: 0 0 auto;
+    margin-top: 8px;
+    padding: 6px 9px;
+    border: 1px solid #2b9680;
+    border-radius: 999px;
+    color: #8ff1d9;
+    background: #112b28;
+    font-weight: 700;
+    font-size: .75rem;
+    letter-spacing: .08em;
+}
+
+.cadence-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: end;
+    padding: 12px;
+    border: 1px solid #263546;
+    border-radius: 8px;
+    background: #111923;
+}
+
+.cadence-controls label {
+    display: grid;
+    gap: 4px;
+    color: #b8c5d3;
+    font-size: .8rem;
+}
+
+.cadence-controls select {
+    min-width: 150px;
+    padding: 5px 8px;
+}
+
+.cadence-controls label:nth-child(3) select {
+    min-width: 240px;
+}
+
+.cadence-controls .compact-label select {
+    min-width: 100px;
+}
+
+.cadence-controls .loop-label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    min-height: 34px;
+}
+
+.cadence-status,
+.cadence-summary {
+    min-height: 24px;
+    margin: 12px 0 0;
+    line-height: 1.5;
+}
+
+.cadence-status {
+    color: #9ab5d1;
+}
+
+.cadence-status[data-state="error"] {
+    color: #ffaaa5;
+}
+
+.cadence-summary {
+    color: #d7e5f2;
+}
+
+.cadence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.cadence-pane {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #35485c;
+    border-radius: 8px;
+    background: #101820;
+}
+
+.cadence-pane > header {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: baseline;
+    padding: 10px 12px;
+    border-bottom: 1px solid #263546;
+    background: #152231;
+}
+
+.cadence-pane h2 {
+    margin: 0;
+    color: #a9d6ff;
+    font-size: 1rem;
+}
+
+.cadence-pane header span {
+    color: #b3bfcb;
+    font-size: .75rem;
+    text-align: end;
+}
+
+.cadence-pane canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #0a1015;
+    image-rendering: pixelated;
+}
+
+.pane-readout {
+    min-height: 44px;
+    margin: 0;
+    padding: 9px 12px;
+    color: #cbd8e5;
+    font-family: Consolas, "Cascadia Mono", monospace;
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+.cadence-contract {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-left: 3px solid #4aa3ff;
+    background: #121c27;
+}
+
+.cadence-contract h2 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.cadence-contract ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #b9c7d5;
+    line-height: 1.55;
+}
+
+@media (max-width: 1220px) {
+    .cadence-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 780px) {
+    .cadence-shell {
+        width: min(100% - 20px, 1880px);
+        margin-top: 12px;
+    }
+
+    .cadence-header {
+        display: block;
+    }
+
+    .readonly-badge {
+        display: inline-block;
+    }
+
+    .cadence-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cadence-controls > * {
+        flex: 1 1 180px;
+    }
+
+    .cadence-controls select,
+    .cadence-controls label:nth-child(3) select {
+        width: 100%;
+        min-width: 0;
+    }
+}

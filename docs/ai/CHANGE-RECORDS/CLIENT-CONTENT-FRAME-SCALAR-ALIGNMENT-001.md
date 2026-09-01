@@ -1,0 +1,14 @@
+# CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001
+
+<!-- CHANGE-RECORD
+id: CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001
+status: PLANNED
+code-path: Assets/NTSD/Scripts/Test/Editor/FrameScalarResourceAlignmentEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+authority: G-22; Queue0do-c exact scalar rows; freshly compiled release DatParser::parse extractor.
+evidence: PLANNED / PRE_CHANGE_SCOPE_RECORDED / EXACT_38_AUTHORITY_ROWS_EXPANDED / RESOURCE_EDIT_NOT_STARTED / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED
+-->
+
+> Status: `PLANNED / PRE_CHANGE_SCOPE_RECORDED / EXACT_38_AUTHORITY_ROWS_EXPANDED / RESOURCE_EDIT_NOT_STARTED / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
+
+The Server Task is the complete contract. No 0dk-b resource/source/test changed.

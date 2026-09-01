@@ -1338,3 +1338,15 @@ R09最终验证：register68、reconciliation68、missing0、extra0、duplicate0
 
 因此当前目标允许表述为“用户批准范围内的正常战斗对齐与可取得Unity验收已完成”。仍禁止表述为
 “已经取得未修改C++ executable的full-trace动态认证”。
+
+## 9. 2026-08-30 formal Kernel Cut C shared-owner 旁证
+
+`CLIENT-FORMAL-KERNEL-SLOT-LIFECYCLE-SHARED-OWNER-001`已在独立Task/Change与用户具名授权范围内关闭为
+`FOCUSED_TEST_PASS / SHARED_SLOT_LIFECYCLE_OWNER_READY / S0_NOT_VERIFIED`。三份平台无关的slot allocator、
+entity handle和lifecycle state源码/GUID现由Server-owned shared package单一持有，Unity与.NET消费同一物理源码；
+`0.3.0` direct/locked artifact、Unity package与slot/lifecycle regressions、S0 witness、existing lockstep、
+fresh SelfCheck及Server回归均通过。
+
+该结果是shared ownership与非回退回归旁证，不改变本计划的C++ battle authority、30 Hz、Client adapter、
+RuntimeRestStore、战斗规则或R8证据等级，也不把S0/S5提升为`VERIFIED`。后续Cut D先做只读rest/checksum
+projection边界审计；任何Client源码移动仍需新的Task/Change和具名授权。

@@ -1153,7 +1153,9 @@ namespace NTSD.Animation.LF2Objects
             if (IsBlockedByReleaseLinkOrCaughtCpoint())
                 return false;
 
-            if (Frame?.D?.cpoint != null && Frame.D.cpoint.kind == 2)
+            if (Frame?.D != null &&
+                Frame.D.HasPrimaryCatchPoint &&
+                Frame.D.PrimaryCatchPoint.Kind == 2)
                 return false;
 
             ApplyDynamics();
@@ -1393,17 +1395,21 @@ namespace NTSD.Animation.LF2Objects
 
         public int caught_cpointkind()
         {
-            var cpoint = CurrentFrame?.cpoint;
-            return cpoint?.kind ?? 0;
+            return CurrentFrame != null &&
+                   CurrentFrame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue cpoint)
+                ? cpoint.Kind
+                : 0;
         }
 
         public bool caught_cpointhurtable()
         {
-            var cpoint = CurrentFrame?.cpoint;
-            if (cpoint == null)
+            if (CurrentFrame == null ||
+                !CurrentFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint))
                 return true;
 
-            return cpoint.hurtable != 0;
+            return cpoint.Hurtable != 0;
         }
 
         private bool State_Catching(string eventType, object eventData)
@@ -1691,17 +1697,23 @@ namespace NTSD.Animation.LF2Objects
             _weaponLinkResolver.RunWeaponSyncHeldStep10();
         }
 
-        public bool ReleaseHeldObjectByWPoint(WeaponPoint holderWPoint, out WeaponActResult result)
+        public bool ReleaseHeldObjectByWPoint(
+            BattleWeaponPointValue holderWPoint,
+            out WeaponActResult result)
         {
             return _weaponLinkResolver.ReleaseHeldObjectByWPoint(holderWPoint, out result);
         }
 
-        public bool ReleaseHeldObjectByWPoint(LF2Entity held, WeaponPoint holderWPoint, out WeaponActResult result)
+        public bool ReleaseHeldObjectByWPoint(
+            LF2Entity held,
+            BattleWeaponPointValue holderWPoint,
+            out WeaponActResult result)
         {
             return _weaponLinkResolver.ReleaseHeldObjectByWPoint(held, holderWPoint, out result);
         }
 
-        public bool DropHeldObjectByWPoint(WeaponPoint holderWPoint)
+        public bool DropHeldObjectByWPoint(
+            BattleWeaponPointValue holderWPoint)
         {
             return _weaponLinkResolver.DropHeldObjectByWPoint(holderWPoint);
         }

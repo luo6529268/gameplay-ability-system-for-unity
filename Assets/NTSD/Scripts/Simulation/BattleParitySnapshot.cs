@@ -20,7 +20,7 @@ namespace NTSD.Simulation
         public int SearchEndExclusive = -1;
         public string Before;
         public string After;
-        public int LifecycleEpoch;
+        public ulong LifecycleEpoch;
         public string SourceKind;
         public int BeforeLinkState;
         public int BeforeTargetSlot = -1;
@@ -81,13 +81,13 @@ namespace NTSD.Simulation
     }
 
     /// <summary>
-    /// Diagnostic-only structural event collector. Lifecycle epochs are derived from
-    /// observed allocations per slot; RuntimeSlotTable generations never cross the
-    /// Authority/Unity trace boundary.
+    /// Diagnostic-only structural event collector. Canonical allocation epochs are
+    /// supplied by the slot lifecycle owner; RuntimeSlotTable generations never cross
+    /// the Authority/Unity trace boundary.
     /// </summary>
     public sealed class BattleParityStructuralEventBuffer : IBattleParityStructuralEventSink
     {
-        private readonly int[] lifecycleEpochs;
+        private readonly int slotCapacity;
         private readonly List<BattleParityStructuralEvent> events =
             new List<BattleParityStructuralEvent>();
 
@@ -95,7 +95,7 @@ namespace NTSD.Simulation
         {
             if (slotCapacity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(slotCapacity));
-            lifecycleEpochs = new int[slotCapacity];
+            this.slotCapacity = slotCapacity;
         }
 
         public IReadOnlyList<BattleParityStructuralEvent> Events => events;
@@ -106,20 +106,13 @@ namespace NTSD.Simulation
                 return;
 
             int slot = structuralEvent.Slot;
-            if (slot >= lifecycleEpochs.Length)
+            if (slot >= slotCapacity)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(structuralEvent),
                     $"Structural event slot {slot} exceeds Authority400 capacity.");
             }
 
-            if (slot >= 0 &&
-                string.Equals(structuralEvent.Action, "allocate", StringComparison.Ordinal))
-            {
-                lifecycleEpochs[slot]++;
-            }
-
-            structuralEvent.LifecycleEpoch = slot >= 0 ? lifecycleEpochs[slot] : 0;
             events.Add(structuralEvent);
         }
 

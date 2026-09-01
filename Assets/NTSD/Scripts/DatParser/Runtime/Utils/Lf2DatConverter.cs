@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NTSD.Animation;
+using NTSD.Simulation;
 using UnityEngine;
 
 namespace NTSD.DatParser
@@ -24,6 +25,8 @@ namespace NTSD.DatParser
                 frameId = frameBlock.FrameIndex,
                 frameName = frameBlock.FrameName ?? ""
             };
+            var bloodPoints = new List<BattleBloodPointValue>();
+            var catchPoints = new List<BattleCatchPointValue>();
 
             // 转换基本属性
             foreach (var prop in frameBlock.Properties)
@@ -64,7 +67,8 @@ namespace NTSD.DatParser
                 switch (subName)
                 {
                     case "opoint":
-                        ObjectPoint objectPoint = ConvertToObjectPoint(subBlock);
+                        BattleObjectPointValue objectPoint =
+                            ConvertToObjectPoint(subBlock);
                         frameData.opoints.Add(objectPoint);
                         if (!frameData.opoint.HasValue)
                         {
@@ -73,11 +77,20 @@ namespace NTSD.DatParser
                         break;
 
                     case "bpoint":
-                        frameData.bpoint = ConvertToBloodPoint(subBlock);
+                        BloodPoint bloodPoint = ConvertToBloodPoint(subBlock);
+                        bloodPoints.Add(new BattleBloodPointValue(
+                            bloodPoint.x,
+                            bloodPoint.y));
+                        if (frameData.bpoint == null)
+                            frameData.bpoint = bloodPoint;
                         break;
 
                     case "cpoint":
-                        frameData.cpoint = ConvertToCatchPoint(subBlock);
+                        CatchPoint catchPoint = ConvertToCatchPoint(subBlock);
+                        catchPoints.Add(
+                            BattleCatchPointValueAdapter.FromLegacy(catchPoint));
+                        if (frameData.cpoint == null)
+                            frameData.cpoint = catchPoint;
                         break;
 
                     case "wpoint":
@@ -94,6 +107,10 @@ namespace NTSD.DatParser
                 }
             }
 
+            frameData.SealFormalWeaponPoints();
+            frameData.SealBloodPoints(bloodPoints);
+            frameData.SealCatchPoints(catchPoints);
+
             // 调试日志：显示转换后的帧数据摘要
             if (frameBlock.FrameIndex % 50 == 0) // 每 50 帧打印一次，避免日志过多
             {
@@ -109,28 +126,41 @@ namespace NTSD.DatParser
         /// <summary>
         /// 转换 ObjectPoint
         /// </summary>
-        private static ObjectPoint ConvertToObjectPoint(Lf2DatSubBlock subBlock)
+        private static BattleObjectPointValue ConvertToObjectPoint(
+            Lf2DatSubBlock subBlock)
         {
-            ObjectPoint opoint = new ObjectPoint();
+            int kind = 0;
+            int x = 0;
+            int y = 0;
+            int action = 0;
+            int dvx = 0;
+            int dvy = 0;
+            int oid = 0;
+            int facing = 0;
 
             foreach (var prop in subBlock.Properties)
             {
                 switch (prop.Key.ToLower())
                 {
-                    case "kind": opoint.kind = ParseInt(prop.Value); break;
-                    case "action": opoint.action = ParseInt(prop.Value); break;
-                    case "objectid": opoint.objectId = ParseInt(prop.Value); break;
-                    case "x": opoint.x = ParseInt(prop.Value); break;
-                    case "y": opoint.y = ParseInt(prop.Value); break;
-                    case "dvx": opoint.dvx = ParseInt(prop.Value); break;
-                    case "dvy": opoint.dvy = ParseInt(prop.Value); break;
-                    case "dvz": opoint.dvz = ParseInt(prop.Value); break;
-                    case "oid": opoint.oid = ParseInt(prop.Value); break;
-                    case "facing": opoint.facing = ParseInt(prop.Value); break;
+                    case "kind": kind = ParseInt(prop.Value); break;
+                    case "x": x = ParseInt(prop.Value); break;
+                    case "y": y = ParseInt(prop.Value); break;
+                    case "action": action = ParseInt(prop.Value); break;
+                    case "dvx": dvx = ParseInt(prop.Value); break;
+                    case "dvy": dvy = ParseInt(prop.Value); break;
+                    case "oid": oid = ParseInt(prop.Value); break;
+                    case "facing": facing = ParseInt(prop.Value); break;
                 }
             }
-
-            return opoint;
+            return new BattleObjectPointValue(
+                kind,
+                x,
+                y,
+                action,
+                dvx,
+                dvy,
+                oid,
+                facing);
         }
 
         /// <summary>
@@ -142,9 +172,15 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                string propertyName = prop.Key?.ToLowerInvariant();
+                if (propertyName != "x" && propertyName != "y")
+                {
+                    throw new InvalidOperationException(
+                        $"BPoint property '{prop.Key}' is outside the formal release contract.");
+                }
                 bpoint.rawProperties[prop.Key] = prop.Value;
 
-                switch (prop.Key.ToLower())
+                switch (propertyName)
                 {
                     case "x": bpoint.x = ParseInt(prop.Value); break;
                     case "y": bpoint.y = ParseInt(prop.Value); break;
@@ -163,9 +199,11 @@ namespace NTSD.DatParser
 
             foreach (var prop in subBlock.Properties)
             {
+                BattleCatchPointValueAdapter.ValidateFormalPropertyName(
+                    prop.Key);
                 cpoint.rawProperties[prop.Key] = prop.Value;
 
-                switch (prop.Key.ToLower())
+                switch (prop.Key.ToLowerInvariant())
                 {
                     case "kind": cpoint.kind = ParseInt(prop.Value); break;
                     case "x": cpoint.x = ParseInt(prop.Value); break;
@@ -204,34 +242,25 @@ namespace NTSD.DatParser
         /// </summary>
         private static WeaponPoint ConvertToWeaponPoint(Lf2DatSubBlock subBlock)
         {
-            WeaponPoint wpoint = new WeaponPoint();
+            var wpoint = new WeaponPoint();
 
             foreach (var prop in subBlock.Properties)
             {
+                BattleWeaponPointValueAdapter.ValidateFormalPropertyName(
+                    prop.Key);
                 wpoint.rawProperties[prop.Key] = prop.Value;
 
-                switch (prop.Key.ToLower())
+                switch (prop.Key.ToLowerInvariant())
                 {
                     case "kind": wpoint.kind = ParseInt(prop.Value); break;
                     case "x": wpoint.x = ParseInt(prop.Value); break;
                     case "y": wpoint.y = ParseInt(prop.Value); break;
-                    case "w": wpoint.w = ParseInt(prop.Value); break;
-                    case "h": wpoint.h = ParseInt(prop.Value); break;
                     case "weaponact": wpoint.weaponact = ParseInt(prop.Value); break;
                     case "attacking": wpoint.attacking = ParseInt(prop.Value); break;
                     case "cover": wpoint.cover = ParseInt(prop.Value); break;
                     case "dvx": wpoint.dvx = ParseInt(prop.Value); break;
                     case "dvy": wpoint.dvy = ParseInt(prop.Value); break;
                     case "dvz": wpoint.dvz = ParseInt(prop.Value); break;
-                    // C++ release 0x0042CA9F：wpoint[9..16] 对应 itr 的伤害字段
-                    case "injury": wpoint.injury = ParseInt(prop.Value); break;
-                    case "fall": wpoint.fall = ParseInt(prop.Value); break;
-                    case "vaction": wpoint.vaction = ParseInt(prop.Value); break;
-                    case "arest": wpoint.arest = ParseInt(prop.Value); break;
-                    case "vrest": wpoint.vrest = ParseInt(prop.Value); break;
-                    case "effect": wpoint.effect = ParseInt(prop.Value); break;
-                    case "kill": wpoint.kill = ParseInt(prop.Value); break;
-                    case "bdefend": wpoint.bdefend = ParseInt(prop.Value); break;
                 }
             }
 
@@ -241,25 +270,59 @@ namespace NTSD.DatParser
         /// <summary>
         /// 转换 BodyBox
         /// </summary>
-        private static BodyBox ConvertToBodyBox(Lf2DatSubBlock subBlock)
+        private static BattleBodyBoxValue ConvertToBodyBox(Lf2DatSubBlock subBlock)
         {
-            BodyBox body = new BodyBox();
+            int x = 0;
+            int y = 0;
+            int w = 0;
+            int h = 0;
 
-            foreach (var prop in subBlock.Properties)
+            for (int pass = 0; pass < 2; pass++)
             {
-                body.rawProperties[prop.Key] = prop.Value;
-
-                switch (prop.Key.ToLower())
+                bool exactPass = pass == 0;
+                foreach (var prop in subBlock.Properties)
                 {
-                    case "kind": body.kind = ParseInt(prop.Value); break;
-                    case "x": body.x = ParseInt(prop.Value); break;
-                    case "y": body.y = ParseInt(prop.Value); break;
-                    case "w": body.w = ParseInt(prop.Value); break;
-                    case "h": body.h = ParseInt(prop.Value); break;
+                    char propertyTag = ResolveReleaseBodyPropertyTag(
+                        prop.Key,
+                        out bool isExact);
+                    if (propertyTag == '\0' || isExact != exactPass)
+                        continue;
+
+                    switch (propertyTag)
+                    {
+                        case 'x': x = ParseInt(prop.Value); break;
+                        case 'y': y = ParseInt(prop.Value); break;
+                        case 'w': w = ParseInt(prop.Value); break;
+                        case 'h': h = ParseInt(prop.Value); break;
+                    }
                 }
             }
 
-            return body;
+            return new BattleBodyBoxValue(x, y, w, h);
+        }
+
+        private static char ResolveReleaseBodyPropertyTag(
+            string propertyName,
+            out bool isExact)
+        {
+            isExact = false;
+            if (string.IsNullOrEmpty(propertyName))
+                return '\0';
+
+            if (propertyName.Length == 1)
+            {
+                char exactTag = char.ToLowerInvariant(propertyName[0]);
+                if (exactTag == 'x' || exactTag == 'y' || exactTag == 'w' || exactTag == 'h')
+                {
+                    isExact = true;
+                    return exactTag;
+                }
+            }
+
+            char suffix = propertyName[propertyName.Length - 1];
+            return suffix == 'x' || suffix == 'y' || suffix == 'w' || suffix == 'h'
+                ? suffix
+                : '\0';
         }
 
         /// <summary>
@@ -364,7 +427,7 @@ namespace NTSD.DatParser
                 return null;
 
             int first = ParseInt(parts[0]);
-            int second = parts.Length > 1 ? ParseInt(parts[1]) : first;
+            int second = parts.Length > 1 ? ParseInt(parts[1]) : 0;
             return new[] { first, second };
         }
 

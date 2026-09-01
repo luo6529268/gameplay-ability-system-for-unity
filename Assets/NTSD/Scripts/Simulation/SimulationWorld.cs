@@ -40,6 +40,7 @@ namespace NTSD.Simulation
         private readonly SimulationBattleBufferModule battleBuffers;
         private readonly SimulationRuntimeCapacityModule runtimeCapacityModule;
         private readonly SimulationFrameInputModule frameInputModule;
+        private FrameInputSet currentAppliedFrameInput;
         private readonly SimulationObjectBucketRegistry objectBucketRegistry;
         private readonly StageSpawnTaskConfigurator stageSpawnTaskConfigurator;
         private readonly SimulationStageWaveModule stageWaveModule;
@@ -111,6 +112,8 @@ namespace NTSD.Simulation
         private readonly BattleCpointWriter battleCpointWriter;
         private readonly BattleDamageWriter battleDamageWriter;
         private readonly BattleStructuralWriter battleStructuralWriter;
+        private readonly BattleResultsReserveHostWriter battleResultsReserveHostWriter;
+        private readonly BattleResultsOutcomeHostWriter battleResultsOutcomeHostWriter;
         private readonly BattleResultsWriter battleResultsWriter;
         private readonly CharacterMechanics characterMechanics;
         private readonly SimulationDiagnosticsModule diagnosticsModule =
@@ -212,6 +215,23 @@ namespace NTSD.Simulation
             logicObjectPointRuntime;
         internal bool UsesLogicOnlyEntityMaterialization =>
             logicOnlyEntityMaterialization;
+
+        internal void BeginBattlePreparation()
+        {
+            battleStructuralWriter.BeginBattlePreparation();
+            logicObjectPointRuntime.BeginBattlePreparation();
+        }
+
+        internal void BeginBattleShutdown()
+        {
+            battleStructuralWriter.BeginBattleShutdown();
+            logicObjectPointRuntime.BeginBattleShutdown();
+        }
+
+        internal int DiscardPendingObjectPointTasks()
+        {
+            return logicObjectPointRuntime.DiscardPendingTasks();
+        }
 
         internal ILF2ObjectPointFactory ResolveObjectPointFactoryForSimulation()
         {
@@ -1344,12 +1364,29 @@ namespace NTSD.Simulation
 
         public void UpdateBattleResultsFlow()
         {
-            battleResultsWriter.UpdateSummaryActivation();
+            battleResultsOutcomeHostWriter.UpdateSummaryActivation();
         }
 
-        internal void RunActiveBattleResultsTick()
+        internal bool TrySpawnBattleResultsReserveBeforeResults(
+            BattleResultsRuntimeState results,
+            int side)
         {
-            battleResultsWriter.RunActiveTick();
+            return battleResultsReserveHostWriter.TrySpawnBeforeResults(results, side);
+        }
+
+        internal int GetBattleResultsReserveLiveCount(int side, int col)
+        {
+            return battleResultsReserveHostWriter.GetLiveCount(side, col);
+        }
+
+        internal int GetBattleResultsReserveMissingCount(int side, int col)
+        {
+            return battleResultsReserveHostWriter.GetMissingCount(side, col);
+        }
+
+        internal void RunActiveBattleResultsTick(FrameInputSet frameInput)
+        {
+            battleResultsWriter.RunActiveTick(frameInput);
         }
 
         internal void ResetUnityFixedWorldCameraStateForModule()
@@ -1384,12 +1421,23 @@ namespace NTSD.Simulation
             stageWaveModule.CurrentWaveStageTickAll();
         }
 
-        public void ConfigureStageCampaigns(
+        public bool ConfigureStageCampaigns(
             List<BattleStageCampaignData> campaigns,
             int stageSeriesIdx,
             int initialWaveIdx)
         {
-            stageWaveModule.ConfigureStageCampaigns(
+            return stageWaveModule.ConfigureStageCampaigns(
+                campaigns,
+                stageSeriesIdx,
+                initialWaveIdx);
+        }
+
+        public bool ConfigureStageCampaignValues(
+            BattleStageCampaignSet campaigns,
+            int stageSeriesIdx,
+            int initialWaveIdx)
+        {
+            return stageWaveModule.ConfigureStageCampaignValues(
                 campaigns,
                 stageSeriesIdx,
                 initialWaveIdx);
@@ -1409,7 +1457,9 @@ namespace NTSD.Simulation
 
         private int SpawnStageImmediateEntrySlot(BattleStageSpawnData spawn)
         {
-            return stageWaveModule.SpawnStageImmediateEntrySlot(spawn);
+            return spawn == null
+                ? -1
+                : stageWaveModule.SpawnStageImmediateEntrySlot(spawn.ToValue());
         }
 
         internal int FindFirstFreeRuntimeSlotForModule(
@@ -1417,6 +1467,19 @@ namespace NTSD.Simulation
             int endSlotExclusive)
         {
             return FindFirstFreeRuntimeSlot(startSlot, endSlotExclusive);
+        }
+
+        internal bool TrySpawnResultsReserveEntry(
+            int oid,
+            int side,
+            int hp,
+            int requiredRuntimeSlot)
+        {
+            return stageWaveModule.TrySpawnResultsReserveEntry(
+                oid,
+                side,
+                hp,
+                requiredRuntimeSlot);
         }
 
         internal static bool UsesStageCharacterInitSemantics(int dataObjectType)
@@ -1579,8 +1642,12 @@ namespace NTSD.Simulation
 
         public void ApplyFrameInputSet(FrameInputSet frameInput)
         {
+            currentAppliedFrameInput = frameInput;
             frameInputModule.ApplyFrameInputSet(frameInput);
         }
+
+        internal FrameInputSet CurrentAppliedFrameInputForResults =>
+            currentAppliedFrameInput;
 
         internal bool TryCaptureLocalFrameInput(
             int tickIndex,

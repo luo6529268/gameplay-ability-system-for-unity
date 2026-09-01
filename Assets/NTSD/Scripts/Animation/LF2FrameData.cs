@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using NTSD.Simulation;
 
 
 namespace NTSD.Animation
@@ -40,27 +41,101 @@ namespace NTSD.Animation
 
         [Header("武器点")]
         public List<WeaponPoint> wpoints = new List<WeaponPoint>();
+        private BattleWeaponPointValue[] formalWeaponPoints =
+            System.Array.Empty<BattleWeaponPointValue>();
+
+        public IReadOnlyList<BattleWeaponPointValue> FormalWeaponPoints =>
+            formalWeaponPoints;
+
+        public BattleWeaponPointValue PrimaryWeaponPoint =>
+            formalWeaponPoints.Length > 0
+                ? formalWeaponPoints[0]
+                : BattleWeaponPointValueAdapter.PrimaryFromLegacyOrDefault(
+                    wpoints);
+
+        internal void SealFormalWeaponPoints()
+        {
+            formalWeaponPoints =
+                BattleWeaponPointValueAdapter.CopyOrdered(wpoints);
+        }
 
         [Header("碰撞盒")]
-        public List<BodyBox> bodies = new List<BodyBox>();
+        public List<BattleBodyBoxValue> bodies =
+            new List<BattleBodyBoxValue>();
 
         [Header("交互区域")]
         public List<InteractionArea> itrs = new List<InteractionArea>();
 
         [Header("对象点")]
-        public ObjectPoint? opoint = null;
+        public BattleObjectPointValue? opoint = null;
 
         [Header("声音")]
         public string sound = "";
 
         [Header("血点")]
         public BloodPoint bpoint = null;
+        private BattleBloodPointCatalog bloodPoints =
+            BattleBloodPointCatalog.Empty;
+
+        public BattleBloodPointCatalog BloodPoints => bloodPoints;
+
+        public bool TryGetPrimaryBloodPoint(out BattleBloodPointValue value)
+        {
+            return bloodPoints.TryGetPrimary(out value);
+        }
+
+        internal void SealBloodPoints(
+            IReadOnlyList<BattleBloodPointValue> source)
+        {
+            bloodPoints = source == null || source.Count == 0
+                ? BattleBloodPointCatalog.Empty
+                : new BattleBloodPointCatalog(source);
+        }
 
         [Header("抓取点")]
         public CatchPoint cpoint = null;
+        private BattleCatchPointCatalog catchPoints =
+            BattleCatchPointCatalog.Empty;
+
+        public BattleCatchPointCatalog CatchPoints => catchPoints;
+
+        public bool HasPrimaryCatchPoint =>
+            catchPoints.Count > 0 || cpoint != null;
+
+        public BattleCatchPointValue PrimaryCatchPoint
+        {
+            get
+            {
+                TryGetPrimaryCatchPoint(out BattleCatchPointValue value);
+                return value;
+            }
+        }
+
+        public bool TryGetPrimaryCatchPoint(out BattleCatchPointValue value)
+        {
+            if (catchPoints.TryGetPrimary(out value))
+                return true;
+            if (cpoint == null)
+            {
+                value = default;
+                return false;
+            }
+
+            value = BattleCatchPointValueAdapter.FromLegacy(cpoint);
+            return true;
+        }
+
+        internal void SealCatchPoints(
+            IReadOnlyList<BattleCatchPointValue> source)
+        {
+            catchPoints = source == null || source.Count == 0
+                ? BattleCatchPointCatalog.Empty
+                : new BattleCatchPointCatalog(source);
+        }
 
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
-        public List<ObjectPoint> opoints = new List<ObjectPoint>();
+        public List<BattleObjectPointValue> opoints =
+            new List<BattleObjectPointValue>();
 
         #region 公开接口
 
@@ -165,7 +240,7 @@ namespace NTSD.Animation
     [System.Serializable]
     public class WeaponPoint
     {
-        public int kind = 1;
+        public int kind = 0;
         public int x = 0;
         public int y = 0;
         public int w = 0;
@@ -186,6 +261,14 @@ namespace NTSD.Animation
         public int kill = 0;
         public int bdefend = 0;
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
+
+        public static implicit operator BattleWeaponPointValue(
+            WeaponPoint source)
+        {
+            return source == null
+                ? default
+                : BattleWeaponPointValueAdapter.FromLegacy(source);
+        }
     }
 
     /// <summary>
@@ -215,7 +298,7 @@ namespace NTSD.Animation
         public int y = 0;
         public int w = 0;
         public int h = 0;
-        public int zwidth = 0;
+        public int zwidth = 15;
 
         // 击退速度字段；DAT 缺失时默认 0。
         public int dvx = 0;
@@ -315,6 +398,11 @@ namespace NTSD.Animation
         public int dvz;
         public int oid;
         public int facing;
+
+        public static implicit operator BattleObjectPointValue(ObjectPoint source)
+        {
+            return BattleObjectPointValueAdapter.FromLegacyTask(source);
+        }
     }
 
     /// <summary>

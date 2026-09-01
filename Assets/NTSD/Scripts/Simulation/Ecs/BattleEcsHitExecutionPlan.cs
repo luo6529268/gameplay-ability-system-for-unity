@@ -1868,7 +1868,7 @@ namespace NTSD.Simulation.Ecs
             LF2FrameData futureFrame = target.GetFrameDataById(currentFrameId + 6);
             return currentFrame?.bodies != null &&
                    currentFrame.bodies.Count > 0 &&
-                   currentFrame.bodies[0].x > 1000 &&
+                   currentFrame.bodies[0].X > 1000 &&
                    futureFrame?.bodies != null &&
                    futureFrame.bodies.Count > 0;
         }
@@ -4228,8 +4228,10 @@ namespace NTSD.Simulation.Ecs
 
             LF2FrameData previous2Frame =
                 target.GetFrameDataById(target.Runtime.PrevFrame2);
-            CatchPoint cpoint = previous2Frame?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
+            if (previous2Frame == null ||
+                !previous2Frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) ||
+                cpoint.Kind != 2)
                 return false;
 
             LF2Entity catcher = target.Match?.FindEntityByRuntimeSlotForQuery(
@@ -4240,9 +4242,9 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            hurtFrame = target.Dirh() != attacker.Dirh()
-                ? cpoint.fronthurtact
-                : cpoint.backhurtact;
+            hurtFrame = LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
+                cpoint,
+                target.Dirh() != attacker.Dirh());
             return hurtFrame != 0;
         }
 
@@ -4878,8 +4880,8 @@ namespace NTSD.Simulation.Ecs
             LF2FrameData attackerFrame = attacker.GetFrameDataById(catchingFrame);
             LF2FrameData targetFrame = target.GetFrameDataById(caughtFrame);
 
-            int attackerWAct = attackerFrame?.cpoint?.x ?? 0;
-            int targetWAct = targetFrame?.cpoint?.x ?? 0;
+            int attackerWAct = attackerFrame?.PrimaryCatchPoint.X ?? 0;
+            int targetWAct = targetFrame?.PrimaryCatchPoint.X ?? 0;
             int attackerCx = attackerFrame?.centerx ?? 0;
             int attackerCy = attackerFrame?.centery ?? 0;
             int targetCx = targetFrame?.centerx ?? 0;
@@ -5135,9 +5137,7 @@ namespace NTSD.Simulation.Ecs
                     holder.Runtime.TargetSlotIndex == attackerSlot)
                 {
                     int attackingItrIndex =
-                        holderFrame.wpoints != null && holderFrame.wpoints.Count > 0
-                            ? holderFrame.wpoints[0].attacking
-                            : 0;
+                        holderFrame.PrimaryWeaponPoint.Attacking;
                     int targetSlot = target.Runtime?.SlotIndex ?? -1;
                     if (attackingItrIndex > 0 &&
                         holderSlot != targetSlot &&

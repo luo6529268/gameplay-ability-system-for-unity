@@ -415,12 +415,15 @@ namespace NTSD.Animation.LF2Objects
 
         // 这是“角色手里拿着武器去打别人”的命中流程。
         // wpoint 会先被翻译成 itr，再通过场景查询命中角色并调用角色 Hit。
-        protected override WeaponAttackResult ProcessAttack(LF2Entity holder, WeaponPoint wpoint, LF2FrameData frame)
+        protected override WeaponAttackResult ProcessAttack(
+            LF2Entity holder,
+            BattleWeaponPointValue wpoint,
+            LF2FrameData frame)
         {
             WeaponAttackResult result = default;
-            if (wpoint.attacking <= 0) return result;
+            if (wpoint.Attacking <= 0) return result;
 
-            var entry = GetStrengthEntry(wpoint.attacking);
+            var entry = GetStrengthEntry(wpoint.Attacking);
             if (entry == null) return result;
 
             var sceneQuery = Match?.SceneQuery;

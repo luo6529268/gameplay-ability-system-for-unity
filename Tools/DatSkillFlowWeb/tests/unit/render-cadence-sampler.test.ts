@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import {
     NATIVE_LOGIC_TICK_MS,
     renderCadenceLoopDurationMs,
+    samplePlaybackPresentation,
     sampleRenderCadence,
 } from "../../src/client/render-cadence-sampler.js";
 import type { PreviewTick } from "../../src/client/preview-renderer.js";
@@ -12,7 +13,16 @@ function tick(
     index: number,
     x: number,
     frame: number,
-    options: { oid?: number; lineageId?: string; cameraX?: number } = {},
+    options: {
+        oid?: number;
+        lineageId?: string;
+        cameraX?: number;
+        preciseX?: number;
+        velocityX?: number;
+        target?: number;
+        holder?: number;
+        link?: number;
+    } = {},
 ): PreviewTick {
     return {
         tick: index,
@@ -24,15 +34,18 @@ function tick(
             frame,
             pic: frame,
             facing: 0,
-            x,
+            x: options.preciseX ?? x,
             y: 0,
             z: 500,
             xInt: x,
             yInt: 0,
             zInt: 500,
             displayZ: 500,
+            velocity: { x: options.velocityX ?? 0, y: 0, z: 0 },
             renderOffsetX: index * 2,
-            link: 0,
+            target: options.target ?? -1,
+            holder: options.holder ?? -1,
+            link: options.link ?? 0,
             hitStop: 0,
         }],
     };
@@ -87,5 +100,54 @@ describe("render cadence sampler", () => {
         assert.throws(() => sampleRenderCadence(trace, 1, 75 as never), /Unsupported/);
         assert.equal(renderCadenceLoopDurationMs(trace), 2 * NATIVE_LOGIC_TICK_MS);
         assert.equal(renderCadenceLoopDurationMs([]), NATIVE_LOGIC_TICK_MS);
+    });
+
+    it("samples main playback from precise positions and reaches the exact final Tick", () => {
+        const preciseTrace = [
+            tick(0, 100, 5, { preciseX: 100.9 }),
+            tick(1, 101, 6, { preciseX: 101.1 }),
+            tick(2, 110, 7, { preciseX: 110.1 }),
+        ];
+        const half = samplePlaybackPresentation(preciseTrace, NATIVE_LOGIC_TICK_MS / 2, 120);
+        assert.equal(half.previousTickIndex, 0);
+        assert.equal(half.sourceTickIndex, 1);
+        assert.equal(half.presentationTick?.entities[0]?.frame, 6);
+        assert.equal(half.presentationTick?.entities[0]?.xInt, 101);
+
+        const final = samplePlaybackPresentation(preciseTrace, NATIVE_LOGIC_TICK_MS * 2, 120);
+        assert.equal(final.sourceTickIndex, 2);
+        assert.equal(final.previousTickIndex, 2);
+        assert.equal(final.interpolationAlpha, 1);
+        assert.equal(final.presentationTick?.entities[0]?.xInt, 110);
+        assert.equal(final.presentationTick?.entities[0]?.frame, 7);
+    });
+
+    it("keeps relation changes, teleports, and non-adjacent Ticks discrete", () => {
+        const relationChange = samplePlaybackPresentation([
+            tick(0, 100, 5, { target: 1 }),
+            tick(1, 120, 6, { target: 2 }),
+        ], NATIVE_LOGIC_TICK_MS / 2, 120);
+        assert.equal(relationChange.presentationTick?.entities[0]?.xInt, 120);
+
+        const teleport = samplePlaybackPresentation([
+            tick(0, 100, 5),
+            tick(1, 900, 6),
+        ], NATIVE_LOGIC_TICK_MS / 2, 120);
+        assert.equal(teleport.presentationTick?.entities[0]?.xInt, 900);
+
+        const nonAdjacent = samplePlaybackPresentation([
+            tick(0, 100, 5),
+            { ...tick(2, 120, 6), tick: 2 },
+        ], NATIVE_LOGIC_TICK_MS / 2, 120);
+        assert.equal(nonAdjacent.presentationTick?.entities[0]?.xInt, 120);
+        assert.equal(nonAdjacent.presentationTick?.cameraX, 8);
+    });
+
+    it("allows large continuous movement when Native velocity supports it", () => {
+        const sample = samplePlaybackPresentation([
+            tick(0, 100, 5, { velocityX: 30 }),
+            tick(1, 200, 6, { velocityX: 30 }),
+        ], NATIVE_LOGIC_TICK_MS / 2, 120);
+        assert.equal(sample.presentationTick?.entities[0]?.xInt, 150);
     });
 });

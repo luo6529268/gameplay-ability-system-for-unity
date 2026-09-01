@@ -165,21 +165,24 @@ namespace NTSD.Animation.LF2Objects
         /// 按 C++ release AI_Process2 的 held-object pass 同步/释放当前持有对象。
         /// 武器仍复用 LF2WeaponBase.Act 的攻击细节；非武器 opoint kind=2 也会走同一释放规则。
         /// </summary>
-        public bool ReleaseHeldObjectByWPoint(WeaponPoint holderWPoint, out WeaponActResult result)
+        public bool ReleaseHeldObjectByWPoint(
+            BattleWeaponPointValue holderWPoint,
+            out WeaponActResult result)
         {
             return ReleaseHeldObjectByWPoint(GetHeldEntity(), holderWPoint, out result);
         }
 
-        public bool DropHeldObjectByWPoint(WeaponPoint holderWPoint)
+        public bool DropHeldObjectByWPoint(
+            BattleWeaponPointValue holderWPoint)
         {
             return DropHeldObjectByWPoint(GetHeldEntity(), holderWPoint);
         }
 
         private bool DropHeldObjectByWPoint(
             LF2Entity held,
-            WeaponPoint holderWPoint)
+            BattleWeaponPointValue holderWPoint)
         {
-            if (holderWPoint == null || held == null || held.PS == null)
+            if (held == null || held.PS == null)
                 return false;
 
             if (!ReferenceEquals(_character.HeldWeaponReferenceInternal, held))
@@ -194,10 +197,13 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>
         /// C++ release AI_Process2 遍历 link_state&lt;0 对象后，按 holder 当前 wpoint 同步/释放。
         /// </summary>
-        public bool ReleaseHeldObjectByWPoint(LF2Entity held, WeaponPoint holderWPoint, out WeaponActResult result)
+        public bool ReleaseHeldObjectByWPoint(
+            LF2Entity held,
+            BattleWeaponPointValue holderWPoint,
+            out WeaponActResult result)
         {
             result = default;
-            if (holderWPoint == null || held == null || held.PS == null)
+            if (held == null || held.PS == null)
                 return false;
 
             if (!ReferenceEquals(_character.HeldWeaponReferenceInternal, held))
@@ -205,7 +211,7 @@ namespace NTSD.Animation.LF2Objects
 
             Vector3 holdpoint = CalcHeldObjectPoint(holderWPoint);
 
-            if (holderWPoint.kind == 3)
+            if (holderWPoint.Kind == 3)
             {
                 return DropHeldObjectByWPoint(held, holderWPoint);
             }
@@ -226,7 +232,7 @@ namespace NTSD.Animation.LF2Objects
                 return true;
             }
 
-            if (holderWPoint.dvx != 0)
+            if (holderWPoint.Dvx != 0)
             {
                 int objType = held.ObjectType;
                 if (objType == 1 || objType == 4 || objType == 6)
@@ -251,7 +257,7 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        private Vector3 CalcHeldObjectPoint(WeaponPoint wpoint)
+        private Vector3 CalcHeldObjectPoint(BattleWeaponPointValue wpoint)
         {
             var frame = _character.Frame?.D;
             if (_character.PS == null || frame == null)
@@ -261,29 +267,32 @@ namespace NTSD.Animation.LF2Objects
             int holderY = _character.Runtime != null ? _character.Runtime.YInt : (int)_character.PS.y;
             int holderZ = _character.Runtime != null ? _character.Runtime.ZInt : (int)_character.PS.z;
             float x = _character.PS.dir == "right"
-                ? holderX - frame.centerx + wpoint.x
-                : holderX + frame.centerx - wpoint.x;
-            float y = holderY - frame.centery + wpoint.y;
+                ? holderX - frame.centerx + wpoint.X
+                : holderX + frame.centerx - wpoint.X;
+            float y = holderY - frame.centery + wpoint.Y;
             return new Vector3(x, y, holderZ);
         }
 
-        private void SyncHeldObjectFrameAndPosition(LF2Entity held, WeaponPoint holderWPoint, Vector3 holdpoint)
+        private void SyncHeldObjectFrameAndPosition(
+            LF2Entity held,
+            BattleWeaponPointValue holderWPoint,
+            Vector3 holdpoint)
         {
             if (held == null || held.PS == null)
                 return;
 
-            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.weaponact);
+            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);
             held.SwitchDir(_character.PS?.dir ?? held.PS.dir);
             held.FrameDelay = _character.FrameDelay;
 
             LF2FrameData heldFrame = held.Frame?.D;
             int heldCx = heldFrame?.centerx ?? 0;
             int heldCy = heldFrame?.centery ?? 0;
-            WeaponPoint heldWPoint = heldFrame?.wpoints != null && heldFrame.wpoints.Count > 0
-                ? heldFrame.wpoints[0]
-                : null;
-            int heldWpx = heldWPoint?.x ?? 0;
-            int heldWpy = heldWPoint?.y ?? 0;
+            BattleWeaponPointValue heldWPoint = heldFrame != null
+                ? heldFrame.PrimaryWeaponPoint
+                : default;
+            int heldWpx = heldWPoint.X;
+            int heldWpy = heldWPoint.Y;
 
             held.PS.x = held.PS.dir == "right"
                 ? holdpoint.x + heldCx - heldWpx
@@ -292,7 +301,7 @@ namespace NTSD.Animation.LF2Objects
             held.PS.z = _character.Runtime != null ? _character.Runtime.ZInt : (_character.PS?.z ?? held.PS.z);
             held.PS.zz = 0f;
 
-            int cover = holderWPoint.cover;
+            int cover = holderWPoint.Cover;
             if (cover == 0)
             {
                 held.PS.z += 1f;
@@ -307,17 +316,19 @@ namespace NTSD.Animation.LF2Objects
             held.Runtime.SyncIntegerPosition();
         }
 
-        private void ApplyHeldObjectThrowVelocity(LF2Entity held, WeaponPoint holderWPoint)
+        private void ApplyHeldObjectThrowVelocity(
+            LF2Entity held,
+            BattleWeaponPointValue holderWPoint)
         {
-            held.PS.vx = _character.PS?.dir == "left" ? -holderWPoint.dvx : holderWPoint.dvx;
-            held.PS.vy = holderWPoint.dvy;
+            held.PS.vx = _character.PS?.dir == "left" ? -holderWPoint.Dvx : holderWPoint.Dvx;
+            held.PS.vy = holderWPoint.Dvy;
 
             bool up = _character.Runtime.KeyUp != 0;
             bool down = _character.Runtime.KeyDown != 0;
             if (up && !down)
-                held.PS.vz = -holderWPoint.dvz;
+                held.PS.vz = -holderWPoint.Dvz;
             else if (!up && down)
-                held.PS.vz = holderWPoint.dvz;
+                held.PS.vz = holderWPoint.Dvz;
 
             held.PS.zz = 0f;
         }

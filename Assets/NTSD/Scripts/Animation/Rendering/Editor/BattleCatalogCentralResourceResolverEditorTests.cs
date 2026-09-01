@@ -867,6 +867,70 @@ namespace NTSD.Animation.Rendering.Editor
                 descriptor);
         }
 
+        private static BattleRenderCommand CreateTrustedCommandWithIdentity(
+            in BattleRenderCommand source,
+            object trustedResourceIdentity)
+        {
+            ConstructorInfo constructor = typeof(BattleRenderCommand).GetConstructor(
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                new[]
+                {
+                    typeof(BattleRenderCommandType),
+                    typeof(RuntimeEntityHandle),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(Vector3),
+                    typeof(Vector2),
+                    typeof(Vector2),
+                    typeof(Rect),
+                    typeof(BattleSpriteRenderState),
+                    typeof(BattleSpriteValueDescriptor),
+                    typeof(object),
+                    typeof(bool),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(Vector2),
+                    typeof(bool),
+                },
+                null);
+            Assert.That(constructor, Is.Not.Null);
+            return (BattleRenderCommand)constructor.Invoke(
+                new object[]
+                {
+                    source.Type,
+                    source.Handle,
+                    source.StableId,
+                    source.VisualDataId,
+                    source.EffectivePic,
+                    source.ZInt,
+                    source.RuntimeSlot,
+                    source.SortOrder,
+                    source.SortingLayerId,
+                    source.LocalSequence,
+                    source.Position,
+                    source.Size,
+                    source.Pivot,
+                    source.NormalizedUv,
+                    source.RenderState,
+                    source.SpriteDescriptor,
+                    trustedResourceIdentity,
+                    source.ShowOverheadHealthBar,
+                    source.CurrentHealth,
+                    source.RecoverableHealth,
+                    source.MaximumHealth,
+                    source.StableHealthAnchorWorld,
+                    source.HasStableHealthAnchor,
+                });
+        }
+
         private enum SignatureMutation
         {
             MissingLogicalKey,
@@ -1050,33 +1114,7 @@ namespace NTSD.Animation.Rendering.Editor
                 in BattleRenderCommand source,
                 BattleSpriteEntry entry)
             {
-                object boxedCommand = Activator.CreateInstance(
-                    typeof(BattleRenderCommand),
-                    BindingFlags.Instance | BindingFlags.NonPublic,
-                    null,
-                    new object[]
-                    {
-                        source.Type,
-                        source.Handle,
-                        source.StableId,
-                        source.VisualDataId,
-                        source.EffectivePic,
-                        source.ZInt,
-                        source.RuntimeSlot,
-                        source.SortOrder,
-                        source.SortingLayerId,
-                        source.LocalSequence,
-                        source.Position,
-                        source.Size,
-                        source.Pivot,
-                        source.NormalizedUv,
-                        source.RenderState,
-                        source.SpriteDescriptor,
-                        entry,
-                    },
-                    null);
-                Assert.That(boxedCommand, Is.Not.Null);
-                return (BattleRenderCommand)boxedCommand;
+                return CreateTrustedCommandWithIdentity(source, entry);
             }
 
             public BattleSpriteCatalog CreateInvalidBindingCatalog()
@@ -1387,33 +1425,7 @@ namespace NTSD.Animation.Rendering.Editor
                     5,
                     'C',
                     specialComBinding);
-                object boxedCommand = Activator.CreateInstance(
-                    typeof(BattleRenderCommand),
-                    BindingFlags.Instance | BindingFlags.NonPublic,
-                    null,
-                    new object[]
-                    {
-                        source.Type,
-                        source.Handle,
-                        source.StableId,
-                        source.VisualDataId,
-                        source.EffectivePic,
-                        source.ZInt,
-                        source.RuntimeSlot,
-                        source.SortOrder,
-                        source.SortingLayerId,
-                        source.LocalSequence,
-                        source.Position,
-                        source.Size,
-                        source.Pivot,
-                        source.NormalizedUv,
-                        source.RenderState,
-                        source.SpriteDescriptor,
-                        specialComBinding,
-                    },
-                    null);
-                Assert.That(boxedCommand, Is.Not.Null);
-                return (BattleRenderCommand)boxedCommand;
+                return CreateTrustedCommandWithIdentity(source, specialComBinding);
             }
 
             public void Dispose()

@@ -58,7 +58,7 @@ namespace NTSD.Animation.LF2Objects
             LF2FrameData futureFrame = victim.GetFrameDataById(currentFrameId + 6);
             return currentFrame?.bodies != null &&
                    currentFrame.bodies.Count > 0 &&
-                   currentFrame.bodies[0].x > 1000 &&
+                   currentFrame.bodies[0].X > 1000 &&
                    futureFrame?.bodies != null &&
                    futureFrame.bodies.Count > 0;
         }
@@ -215,8 +215,10 @@ namespace NTSD.Animation.LF2Objects
 
             LF2FrameData previousFrame = victim.GetFrameDataById(
                 victim.Runtime.PrevFrame2);
-            CatchPoint cpoint = previousFrame?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
+            if (previousFrame == null ||
+                !previousFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) ||
+                cpoint.Kind != 2)
                 return;
 
             int catcherSlot = victim.CatcherSlotIndex;
@@ -227,11 +229,30 @@ namespace NTSD.Animation.LF2Objects
             if (catcher == null || catcher.CaughtSlotIndex != victimSlot)
                 return;
 
-            int hurtFrame = victim.Dirh() != attacker.Dirh()
-                ? cpoint.fronthurtact
-                : cpoint.backhurtact;
+            int hurtFrame = ResolveCaughtVictimHurtAction(
+                cpoint,
+                victim.Dirh() != attacker.Dirh());
             if (hurtFrame != 0)
                 victim.DirectWriteRawFramePreserveWaitCounter(hurtFrame);
+        }
+
+        internal static int ResolveCaughtVictimHurtAction(
+            BattleCatchPointValue cpoint,
+            bool oppositeFacing)
+        {
+            return oppositeFacing ? cpoint.Injury : cpoint.Cover;
+        }
+
+        internal static int ResolveCaughtVictimHurtAction(
+            CatchPoint cpoint,
+            bool oppositeFacing)
+        {
+            if (cpoint == null)
+                return 0;
+
+            return ResolveCaughtVictimHurtAction(
+                BattleCatchPointValueAdapter.FromLegacy(cpoint),
+                oppositeFacing);
         }
 
         internal static LF2CharacterData ResolveCharacterData(LF2Entity entity)
@@ -505,7 +526,7 @@ namespace NTSD.Animation.LF2Objects
                     LF2FrameData frameNow = _victim.Frame?.D;
                     LF2FrameData futureFrame = _victim.GetFrameDataById((_victim.Frame?.N ?? 0) + 6);
                     int currentBodyX = (frameNow?.bodies != null && frameNow.bodies.Count > 0)
-                        ? frameNow.bodies[0].x
+                        ? frameNow.bodies[0].X
                         : 0;
 
                     if (futureFrame?.bodies != null &&
@@ -1026,8 +1047,11 @@ namespace NTSD.Animation.LF2Objects
             if (catcherEntity is LF2Character catcherCharacter)
                 return catcherCharacter.caught_cpointhurtable();
 
-            CatchPoint cpoint = catcherEntity.Frame?.D?.cpoint;
-            return cpoint == null || cpoint.hurtable != 0;
+            LF2FrameData frame = catcherEntity.Frame?.D;
+            return frame == null ||
+                   !frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue cpoint) ||
+                   cpoint.Hurtable != 0;
         }
 
         private static bool IsSameCatchPair(LF2Entity catcherEntity, LF2Entity attacker, LF2LivingObject victim)

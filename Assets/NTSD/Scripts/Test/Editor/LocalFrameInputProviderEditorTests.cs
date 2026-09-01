@@ -34,7 +34,7 @@ namespace NTSD.Test
             storage[1] = new SimulationPlayerInput(2, SimulationInputButtons.Attack);
             storage[2] = new SimulationPlayerInput(5, SimulationInputButtons.Jump);
             storage[3] = new SimulationPlayerInput(7, SimulationInputButtons.Defend);
-            var frame = FrameInputSet.Empty(0);
+            FrameInputSet frame = FrameInputSetPreallocation.CreateReusable();
 
             frame.ResetPreallocated(17, storage, 3);
 

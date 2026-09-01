@@ -33,6 +33,15 @@ namespace NTSD.DatParser
                 "rowing_distance",
             };
 
+        private static readonly HashSet<string> ItrTwoValuePropertyNames =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "catchingact",
+                "caughtact",
+                "catchingact2",
+                "caughtact2",
+            };
+
         /// <summary>
         /// 解析 dat 文件文本
         /// </summary>
@@ -221,6 +230,15 @@ namespace NTSD.DatParser
 
                     if (isSubBlock)
                     {
+                        if (IsBodySubBlock(stack.Peek()) &&
+                            !HasIndependentSubBlockEndBeforeBodyBoundary(
+                                tokens,
+                                i + 1,
+                                name))
+                        {
+                            continue;
+                        }
+
                         // 创建子块
                         Lf2DatSubBlock sub = new Lf2DatSubBlock { Name = name };
                         AddSubBlock(stack, sub);
@@ -235,6 +253,12 @@ namespace NTSD.DatParser
                             string key = name;
                             i++;
                             string value = tokens[i];
+                            if (ItrTwoValuePropertyNames.Contains(key) &&
+                                i + 1 < tokens.Length &&
+                                IsSignedDecimalToken(tokens[i + 1]))
+                            {
+                                value = value + " " + tokens[++i];
+                            }
 
                             // 添加属性
                             Lf2DatProperty prop = new Lf2DatProperty(key, value);
@@ -260,6 +284,75 @@ namespace NTSD.DatParser
             }
 
             return dat;
+        }
+
+        private static bool IsBodySubBlock(object value)
+        {
+            Lf2DatSubBlock subBlock = value as Lf2DatSubBlock;
+            return subBlock != null &&
+                   string.Equals(subBlock.Name, "bdy", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool HasIndependentSubBlockEndBeforeBodyBoundary(
+            string[] tokens,
+            int startIndex,
+            string subBlockName)
+        {
+            string expectedEnd = subBlockName + "_end";
+            for (int index = startIndex; index < tokens.Length; index++)
+            {
+                string token = tokens[index];
+                if (token.StartsWith("<") && token.EndsWith(">"))
+                {
+                    string tagName = token.Substring(1, token.Length - 2).Trim();
+                    if (string.Equals(tagName, "frame", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(tagName, "frame_end", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return false;
+                    }
+                }
+
+                if (!token.EndsWith(":"))
+                    continue;
+
+                string markerName = token.Substring(0, token.Length - 1).Trim();
+                if (string.Equals(
+                        markerName,
+                        expectedEnd,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                if (string.Equals(
+                        markerName,
+                        "bdy_end",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSignedDecimalToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                return false;
+
+            int index = token[0] == '+' || token[0] == '-' ? 1 : 0;
+            if (index == token.Length)
+                return false;
+
+            for (; index < token.Length; index++)
+            {
+                char value = token[index];
+                if (value < '0' || value > '9')
+                    return false;
+            }
+
+            return true;
         }
 
         private static bool TryParseSpriteFileRange(string token, out int startIndex, out int endIndex)

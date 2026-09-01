@@ -234,8 +234,9 @@ namespace NTSD.Animation
             runtime.Y += runtime.Vy;
 
             bool caughtGroundResolve = runtime.Y >= -0.0001 &&
-                                       ctx.frameData?.cpoint != null &&
-                                       ctx.frameData.cpoint.kind == 2;
+                                       ctx.frameData != null &&
+                                       ctx.frameData.HasPrimaryCatchPoint &&
+                                       ctx.frameData.PrimaryCatchPoint.Kind == 2;
             bool landed = !caughtGroundResolve &&
                           runtime.Y > 0.0001 &&
                           vyBeforeVerticalMove > 0.0001;

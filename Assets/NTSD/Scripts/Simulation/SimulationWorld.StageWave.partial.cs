@@ -20,7 +20,7 @@ namespace NTSD.Simulation
             this.world = world ?? throw new ArgumentNullException(nameof(world));
         }
 
-        private List<BattleStageCampaignData> StageCampaigns => world.StageCampaigns;
+        private BattleStageCampaignSet StageCampaigns => world.StageCampaigns;
         private BattleStageProgressionState StageProgression => world.StageProgression;
         private bool StageProgressionValid => world.StageProgressionValid;
         private int StageSpawnWaveApplied => world.StageSpawnWaveApplied;
@@ -73,41 +73,43 @@ namespace NTSD.Simulation
             ApplyCurrentWaveImmediateStageSpawns();
         }
 
-        internal void ConfigureStageCampaigns(
+        internal bool ConfigureStageCampaigns(
             List<BattleStageCampaignData> campaigns,
             int stageSeriesIdx,
             int initialWaveIdx)
         {
-            StageCampaigns?.Clear();
-            if (campaigns != null && StageCampaigns != null)
+            if (!BattleStageCampaignValueAdapter.TryProject(
+                    campaigns,
+                    out BattleStageCampaignSet values))
             {
-                for (int i = 0; i < campaigns.Count; i++)
-                {
-                    if (campaigns[i] != null)
-                        StageCampaigns.Add(campaigns[i]);
-                }
+                return false;
             }
 
-            if (StageProgression == null)
-                return;
+            return ConfigureStageCampaignValues(
+                values,
+                stageSeriesIdx,
+                initialWaveIdx);
+        }
+
+        internal bool ConfigureStageCampaignValues(
+            BattleStageCampaignSet campaigns,
+            int stageSeriesIdx,
+            int initialWaveIdx)
+        {
+            if (campaigns == null || StageProgression == null)
+                return false;
+
+            world.SetStageCampaigns(campaigns);
 
             StageProgression.StageSeriesIdx = stageSeriesIdx;
             StageProgression.WaveIdx = initialWaveIdx;
             StageProgression.Round = 0;
             StageProgression.RoundMax = 0;
-            bool hasStageSeries = false;
-            for (int i = 0; StageCampaigns != null && i < StageCampaigns.Count; i++)
-            {
-                BattleStageCampaignData stage = StageCampaigns[i];
-                if (stage != null && stage.Id == stageSeriesIdx && stage.Phases != null && stage.Phases.Count > 0)
-                {
-                    hasStageSeries = true;
-                    break;
-                }
-            }
+            BattleStageCampaignValue selected = StageCampaigns.FindFirstById(stageSeriesIdx);
+            bool hasStageSeries = selected != null && selected.Phases.Count > 0;
 
             SetStageProgressionValid(hasStageSeries);
-            if (StageCampaigns != null && StageCampaigns.Count > 0 && !hasStageSeries)
+            if (StageCampaigns.Count > 0 && !hasStageSeries)
             {
                 Debug.LogWarning(
                     $"[SimulationWorld] stage wave disabled; stage series {stageSeriesIdx} was not found in loaded campaigns");
@@ -116,9 +118,10 @@ namespace NTSD.Simulation
             SetStageSpawnWaveDeferredEntryApplied(-1);
             ResetStageSpawnRuntime();
 
-            BattleStagePhaseData phase = StageProgressionCurrentPhase();
+            BattleStagePhaseValue phase = StageProgressionCurrentPhase();
             if (phase != null && phase.Bound > 0)
                 Runtime?.Stage?.ApplyPhaseBound(phase.Bound);
+            return true;
         }
 
         internal bool StartInitialStageWave()
@@ -128,7 +131,7 @@ namespace NTSD.Simulation
             if (!StageProgressionAdvanceWave(false))
                 return false;
 
-            BattleStagePhaseData phase = StageProgressionCurrentPhase();
+            BattleStagePhaseValue phase = StageProgressionCurrentPhase();
             if (phase != null && phase.Bound > 0)
                 Runtime?.Stage?.ApplyPhaseBound(phase.Bound);
 
@@ -138,46 +141,37 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private BattleStagePhaseData StageProgressionCurrentPhase()
+        private BattleStagePhaseValue StageProgressionCurrentPhase()
         {
-            if (StageCampaigns == null || StageProgression == null)
+            if (StageProgression == null)
                 return null;
 
-            for (int i = 0; i < StageCampaigns.Count; i++)
-            {
-                BattleStageCampaignData stage = StageCampaigns[i];
-                if (stage == null || stage.Id != StageProgression.StageSeriesIdx)
-                    continue;
+            BattleStageCampaignValue stage = StageCampaigns.FindFirstById(
+                StageProgression.StageSeriesIdx);
+            if (stage == null)
+                return null;
 
-                int waveIdx = StageProgression.WaveIdx;
-                if (waveIdx < 0 || stage.Phases == null || waveIdx >= stage.Phases.Count)
-                    return null;
+            int waveIdx = StageProgression.WaveIdx;
+            if (waveIdx < 0 || waveIdx >= stage.Phases.Count)
+                return null;
 
-                return stage.Phases[waveIdx];
-            }
-
-            return null;
+            return stage.Phases[waveIdx];
         }
 
         private bool StageProgressionCanAdvanceWave(bool waveReady)
         {
-            if (StageCampaigns == null || StageProgression == null)
+            if (StageProgression == null)
                 return false;
 
-            for (int i = 0; i < StageCampaigns.Count; i++)
-            {
-                BattleStageCampaignData stage = StageCampaigns[i];
-                if (stage == null || stage.Id != StageProgression.StageSeriesIdx)
-                    continue;
+            BattleStageCampaignValue stage = StageCampaigns.FindFirstById(
+                StageProgression.StageSeriesIdx);
+            if (stage == null)
+                return false;
 
-                int phaseCount = stage.Phases?.Count ?? 0;
-                if (StageProgression.WaveIdx >= phaseCount - 1)
-                    return false;
+            if (StageProgression.WaveIdx >= stage.Phases.Count - 1)
+                return false;
 
-                return StageProgression.WaveIdx == -1 || waveReady;
-            }
-
-            return false;
+            return StageProgression.WaveIdx == -1 || waveReady;
         }
 
         private bool StageProgressionAdvanceWave(bool waveReady)
@@ -189,8 +183,8 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private static int StageSpawnEntryHp(BattleStageSpawnData spawn)
-            => spawn != null && spawn.Hp > 0 ? spawn.Hp : 500;
+        private static int StageSpawnEntryHp(in BattleStageSpawnValue spawn)
+            => spawn.Hp > 0 ? spawn.Hp : 500;
 
         internal int StageSpawnEntryFactor()
         {
@@ -222,12 +216,12 @@ namespace NTSD.Simulation
             Runtime?.EnsureStageSpawnBuffers().Recycle(StageSpawnRuntimeSlots);
         }
 
-        private void EnsureCurrentWavePositiveStageRuntime(BattleStagePhaseData phase, int factor)
+        private void EnsureCurrentWavePositiveStageRuntime(BattleStagePhaseValue phase, int factor)
         {
             if (phase == null || StageProgression == null)
                 return;
 
-            int spawnCount = phase.Spawns?.Count ?? 0;
+            int spawnCount = phase.Spawns.Count;
             if (StageSpawnRuntimeWave == StageProgression.WaveIdx &&
                 StageSpawnRuntimeTargetTotal?.Count == spawnCount &&
                 StageSpawnRuntimeEntryCount?.Count == spawnCount &&
@@ -253,8 +247,8 @@ namespace NTSD.Simulation
                 if (slots == null)
                     continue;
 
-                BattleStageSpawnData spawn = phase.Spawns[si];
-                if (spawn == null || spawn.Id < 0 || spawn.Ratio <= 0.0)
+                BattleStageSpawnValue spawn = phase.Spawns[si];
+                if (spawn.Id < 0 || spawn.Ratio <= 0.0)
                     continue;
 
                 int entryCount = (int)(factor * spawn.Ratio);
@@ -272,20 +266,20 @@ namespace NTSD.Simulation
             }
         }
 
-        private void RefillCurrentWavePositiveStageSpawns(BattleStagePhaseData phase)
+        private void RefillCurrentWavePositiveStageSpawns(BattleStagePhaseValue phase)
         {
             if (phase == null || StageProgression == null)
                 return;
 
             if (StageSpawnRuntimeWave != StageProgression.WaveIdx)
                 return;
-            if (StageSpawnRuntimeSlots == null || StageSpawnRuntimeSlots.Count != (phase.Spawns?.Count ?? 0))
+            if (StageSpawnRuntimeSlots == null || StageSpawnRuntimeSlots.Count != phase.Spawns.Count)
                 return;
 
             for (int si = 0; si < phase.Spawns.Count; si++)
             {
-                BattleStageSpawnData spawn = phase.Spawns[si];
-                if (spawn == null || spawn.Id < 0 || spawn.Ratio <= 0.0)
+                BattleStageSpawnValue spawn = phase.Spawns[si];
+                if (spawn.Id < 0 || spawn.Ratio <= 0.0)
                     continue;
 
                 int entryCount = StageSpawnRuntimeEntryCount[si];
@@ -322,15 +316,15 @@ namespace NTSD.Simulation
             }
         }
 
-        private bool CurrentWaveStageSpawnsCleared(BattleStagePhaseData phase)
+        private bool CurrentWaveStageSpawnsCleared(BattleStagePhaseValue phase)
         {
             if (phase?.Spawns == null)
                 return true;
 
             for (int si = 0; si < phase.Spawns.Count; si++)
             {
-                BattleStageSpawnData spawn = phase.Spawns[si];
-                if (spawn == null || spawn.Id < 0)
+                BattleStageSpawnValue spawn = phase.Spawns[si];
+                if (spawn.Id < 0)
                     continue;
 
                 world.GetAllEntities(entityScratch);
@@ -357,7 +351,7 @@ namespace NTSD.Simulation
             return true;
         }
 
-        private bool CurrentWaveStageSpawnProducersInitialized(BattleStagePhaseData phase)
+        private bool CurrentWaveStageSpawnProducersInitialized(BattleStagePhaseValue phase)
         {
             if (phase?.Spawns == null || StageProgression == null)
                 return true;
@@ -367,8 +361,8 @@ namespace NTSD.Simulation
 
             for (int si = 0; si < phase.Spawns.Count; si++)
             {
-                BattleStageSpawnData spawn = phase.Spawns[si];
-                if (spawn == null || spawn.Id < 0)
+                BattleStageSpawnValue spawn = phase.Spawns[si];
+                if (spawn.Id < 0)
                     continue;
 
                 if (spawn.Ratio > 0.0)
@@ -394,7 +388,7 @@ namespace NTSD.Simulation
             if (StageProgression == null || StageProgression.WaveIdx < 0)
                 return;
 
-            BattleStagePhaseData phase = StageProgressionCurrentPhase();
+            BattleStagePhaseValue phase = StageProgressionCurrentPhase();
             if (phase == null)
                 return;
             if (!CurrentWaveStageSpawnProducersInitialized(phase))
@@ -406,7 +400,7 @@ namespace NTSD.Simulation
             if (!StageProgressionAdvanceWave(true))
                 return;
 
-            BattleStagePhaseData nextPhase = StageProgressionCurrentPhase();
+            BattleStagePhaseValue nextPhase = StageProgressionCurrentPhase();
             if (nextPhase != null && nextPhase.Bound > 0)
                 Runtime?.Stage?.ApplyPhaseBound(nextPhase.Bound);
 
@@ -424,7 +418,7 @@ namespace NTSD.Simulation
             if (StageProgression == null || StageProgression.WaveIdx < 0)
                 return;
 
-            BattleStagePhaseData phase = StageProgressionCurrentPhase();
+            BattleStagePhaseValue phase = StageProgressionCurrentPhase();
             if (phase == null)
             {
                 ResetStageSpawnRuntime();
@@ -436,8 +430,8 @@ namespace NTSD.Simulation
                 bool spawnedAny = false;
                 for (int si = 0; si < phase.Spawns.Count; si++)
                 {
-                    BattleStageSpawnData spawn = phase.Spawns[si];
-                    if (spawn == null || spawn.Id < 0 || spawn.Ratio > 0.0)
+                    BattleStageSpawnValue spawn = phase.Spawns[si];
+                    if (spawn.Id < 0 || spawn.Ratio > 0.0)
                         continue;
 
                     if (SpawnStageImmediateEntrySlot(spawn) >= 0)
@@ -456,8 +450,8 @@ namespace NTSD.Simulation
                 bool deferredSeen = false;
                 for (int si = 0; si < phase.Spawns.Count; si++)
                 {
-                    BattleStageSpawnData spawn = phase.Spawns[si];
-                    if (spawn == null || spawn.Id < 0 || spawn.Ratio <= 0.0)
+                    BattleStageSpawnValue spawn = phase.Spawns[si];
+                    if (spawn.Id < 0 || spawn.Ratio <= 0.0)
                         continue;
 
                     deferredSeen = true;
@@ -483,10 +477,12 @@ namespace NTSD.Simulation
             RefillCurrentWavePositiveStageSpawns(phase);
         }
 
-        internal int SpawnStageImmediateEntrySlot(BattleStageSpawnData spawn)
+        internal int SpawnStageImmediateEntrySlot(in BattleStageSpawnValue spawn)
         {
-            if (spawn == null || spawn.Id < 0)
+            if (spawn.Id < 0)
                 return -1;
+
+            BattleStageSpawnValue spawnValue = spawn;
 
             int requiredRuntimeSlot = world.FindFirstFreeRuntimeSlotForModule(
                 20,
@@ -527,7 +523,7 @@ namespace NTSD.Simulation
             string facingDir = spawnX > (stageBound - 794) ? "left" : "right";
 
             LF2Entity entity = TrySpawnStageEntityWithFactory(
-                spawn,
+                spawnValue,
                 spawnX,
                 spawn.Y,
                 spawnZ,
@@ -537,7 +533,7 @@ namespace NTSD.Simulation
             if (entity == null && !IsStageRuntimeAllocationSealed())
             {
                 entity = TrySpawnStageCharacterDirect(
-                    spawn,
+                    spawnValue,
                     spawnX,
                     spawn.Y,
                     spawnZ,
@@ -573,6 +569,104 @@ namespace NTSD.Simulation
             return requiredRuntimeSlot;
         }
 
+        internal bool TrySpawnResultsReserveEntry(
+            int oid,
+            int side,
+            int hp,
+            int requiredRuntimeSlot)
+        {
+            if (oid < 0 || side < 0 || side >= 2 ||
+                requiredRuntimeSlot < 20 ||
+                requiredRuntimeSlot >= RuntimeSlotCapacity ||
+                requiredRuntimeSlot >= SimulationWorld.AuthorityRuntimeSlotCapacity)
+            {
+                return false;
+            }
+
+            LF2CharacterDataWrapper wrapper = RuntimeCharacterConfigs.Resolve(oid);
+            ObjectDefinition definition = RuntimeDataCatalog.GetObjectDefinition(oid);
+            if (wrapper?.characterData == null || definition == null)
+                return false;
+
+            BattleStageRuntimeState stage = Runtime?.Stage;
+            int stageWidth = stage?.BaseStageWidthPx ?? 800;
+            if (stageWidth <= 0)
+                stageWidth = 800;
+            int configuredZMin = stage?.ZMin ?? 180;
+            int configuredZMax = stage?.ZMax ?? (configuredZMin + 1);
+            int zMin = configuredZMin > 0 ? configuredZMin : 180;
+            int zMax = configuredZMax > zMin ? configuredZMax : zMin + 1;
+            int zRange = zMax - zMin;
+
+            bool usesCharacterInit = UsesStageCharacterInitSemantics(definition.type);
+            int spawnX = usesCharacterInit
+                ? side == 0 ? -100 : stageWidth + 100
+                : side == 0 ? 50 : stageWidth - 50;
+            int spawnY = -300;
+            int spawnZ = zMin + Rng.NextInt(0, zRange);
+            string facingDir = spawnX > stageWidth / 2 ? "left" : "right";
+
+            var spawnValue = new BattleStageSpawnValue(
+                id: oid,
+                act: 0,
+                hp: hp,
+                times: 1,
+                x: spawnX,
+                y: spawnY,
+                ratio: 0.0,
+                join: 0);
+
+            LF2Entity entity = TrySpawnStageEntityWithFactory(
+                spawnValue,
+                spawnX,
+                spawnY,
+                spawnZ,
+                facingDir,
+                hp,
+                requiredRuntimeSlot);
+            if (entity == null && !IsStageRuntimeAllocationSealed())
+            {
+                entity = TrySpawnStageCharacterDirect(
+                    spawnValue,
+                    spawnX,
+                    spawnY,
+                    spawnZ,
+                    facingDir,
+                    hp,
+                    requiredRuntimeSlot);
+            }
+            if (entity == null || entity.Runtime?.SlotIndex != requiredRuntimeSlot)
+                return false;
+
+            if (!world.RestoreStageSpawnRestState(requiredRuntimeSlot, entity))
+            {
+                LF2ObjectPointFactory.ReleaseRejectedSpawn(entity.Renderer, entity);
+                return false;
+            }
+
+            entity.SetPos(spawnX, spawnY, spawnZ);
+            entity.Runtime.SyncIntegerPosition();
+            entity.SwitchDir(facingDir);
+            entity.DirectWriteFrameImmediateWaitReset(0);
+            entity.FrameDelay = 0;
+            entity.OwnerId = -1;
+            entity.OwnerEntityIndex = -1;
+            entity.SpawnerEntityIndex = -1;
+            entity.Team = 0;
+            entity.Unk344 = side + 1;
+            entity.RelationTeam = usesCharacterInit ? side + 1 : 0;
+            entity.HitStun = usesCharacterInit ? 20 : 0;
+            entity.HolderCopySlot = requiredRuntimeSlot;
+            entity.Health.HP = hp;
+            entity.Health.HPBound = hp;
+            entity.Health.HP3 = hp;
+            entity.Health.PP = 500;
+            entity.Health.MaxPP = 500;
+            entity.Health.PPBound = 500;
+            entity.RefreshRuntimeSnapshot();
+            return true;
+        }
+
         internal static bool UsesStageCharacterInitSemantics(int dataObjectType)
         {
             return dataObjectType == (int)LF2ObjectType.Character ||
@@ -602,7 +696,7 @@ namespace NTSD.Simulation
         }
 
         private LF2Entity TrySpawnStageEntityWithFactory(
-            BattleStageSpawnData spawn,
+            in BattleStageSpawnValue spawn,
             int spawnX,
             int spawnY,
             int spawnZ,
@@ -653,7 +747,7 @@ namespace NTSD.Simulation
         }
 
         private LF2Entity TrySpawnStageCharacterDirect(
-            BattleStageSpawnData spawn,
+            in BattleStageSpawnValue spawn,
             int spawnX,
             int spawnY,
             int spawnZ,

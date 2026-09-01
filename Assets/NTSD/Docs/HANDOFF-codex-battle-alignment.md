@@ -4,6 +4,13 @@
 
 > **当前工作边界**：不废弃现有 Unity 架构或性能成果；按“C++ pass trace → Unity legacy/fallback 对照 → Unity fast path 对照 → 真实 Play Mode”逐模块收口。不得把 C++ 的 debug probe 当规则本身，但可用其观察 release live path。
 
+## 2026-09-01：BATTLE-RUNTIME-ORDERED-SHUTDOWN-001（代码与真实 teardown 通过，full SelfCheck 外部阻塞）
+
+- 已按 `Assets/NTSD/Docs/battle-runtime-ordered-shutdown-contract.md` 实现固定 11 阶段关闭事务：先关 tick/input、停 worker，再关 spawn、unseal、清 publication、discard OPoint、归还 renderer、清 World、unbind、quiesce pool，最后由 Bootstrap 清 runtime map/boundary 后进入 `Stopped`。
+- shutdown 只使用 preparation/seal 阶段捕获的 factory/pool owner，不在 Stopping 阶段解析或创建全局 singleton；Editor `ExitingPlayMode` 与 App Scene unload 复用同一 coordinator。
+- 新鲜证据：compile 0；focused `4/4`、worker `20/20`、W05 OPoint `8/8`、central latest frame `13/13`、singleton teardown `2/2`；真实 `NTSD_Battle` 两轮 Play/Stop 均 error/warning 0、cleanup warning 0、Scene `isDirty=false`、无 factory/pool/boundary runtime carrier。
+- 完整 SelfCheck 连续三次运行均在既有 Naruto DDA 240-247 throw-chain 断言失败；本 Change 不获准修改 Naruto 战斗规则，状态为 `BLOCKED` 而非 `VERIFIED`。详细文件、job ID、后置条件和恢复条件见 `docs/ai/CHANGE-RECORDS/BATTLE-RUNTIME-ORDERED-SHUTDOWN-001.md`。
+
 ## 2026-08-29：WORKER-UNITY-BOUNDARY-001（生产 Play 阻塞修复）
 
 - 用户真实 Play 堆栈确认 Dedicated Worker 在实体 late destroy/free 时经 `LF2Sprite.ApplyEntityRendererVisibility` 触发 `EnsureRunningOnMainThread`，Driver 随后按 fail-closed 合同暂停；这与已还原的 2.5D 实验无关。

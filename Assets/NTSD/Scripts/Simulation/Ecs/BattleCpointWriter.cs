@@ -17,8 +17,11 @@ namespace NTSD.Simulation.Ecs
                 return;
 
             LF2FrameData catcherFrame = attacker.GetCollisionFrameData();
-            CatchPoint cpoint = catcherFrame?.cpoint;
-            if (cpoint == null || cpoint.kind != 1 || attacker.FrameDelay < 0)
+            if (catcherFrame == null ||
+                !catcherFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) ||
+                cpoint.Kind != 1 ||
+                attacker.FrameDelay < 0)
                 return;
 
             LF2Entity victim = world?.FindEntityByRuntimeSlotForQuery(
@@ -34,8 +37,10 @@ namespace NTSD.Simulation.Ecs
             bool skipDecrease = false;
             bool useFallbackFrameForThrow = false;
             if (victim.CatcherSlotIndex != attacker.Runtime.SlotIndex ||
-                victimFrame?.cpoint == null ||
-                victimFrame.cpoint.kind != 2)
+                victimFrame == null ||
+                !victimFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue victimCpoint) ||
+                victimCpoint.Kind != 2)
             {
                 attacker.DirectWriteRawFramePreserveWaitCounter(0);
                 skipActions = true;
@@ -43,13 +48,13 @@ namespace NTSD.Simulation.Ecs
                 useFallbackFrameForThrow = true;
             }
 
-            if (!skipDecrease && cpoint.decrease > 0)
+            if (!skipDecrease && cpoint.Decrease > 0)
             {
-                attacker.Runtime.CaughtDuration -= cpoint.decrease;
+                attacker.Runtime.CaughtDuration -= cpoint.Decrease;
             }
-            else if (!skipDecrease && cpoint.decrease < 0)
+            else if (!skipDecrease && cpoint.Decrease < 0)
             {
-                attacker.Runtime.CaughtDuration += cpoint.decrease;
+                attacker.Runtime.CaughtDuration += cpoint.Decrease;
                 if (attacker.Runtime.CaughtDuration < 0)
                 {
                     attacker.DirectWriteRawFramePreserveWaitCounter(0);
@@ -70,7 +75,7 @@ namespace NTSD.Simulation.Ecs
             if (!skipActions)
                 RunActionSelection(attacker, victim, cpoint);
 
-            if (cpoint.throwvx != 0)
+            if (cpoint.ThrowVx != 0)
             {
                 LF2FrameData throwFrame = useFallbackFrameForThrow
                     ? attacker.Frame?.D
@@ -88,8 +93,11 @@ namespace NTSD.Simulation.Ecs
             if (entity?.Runtime == null)
                 return;
 
-            CatchPoint cpoint = entity.Frame?.D?.cpoint;
-            if (cpoint == null || cpoint.kind != 2)
+            LF2FrameData frame = entity.Frame?.D;
+            if (frame == null ||
+                !frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) ||
+                cpoint.Kind != 2)
                 return;
 
             bool valid = false;
@@ -98,8 +106,11 @@ namespace NTSD.Simulation.Ecs
             if (catcher != null &&
                 catcher.CaughtSlotIndex == entity.Runtime.SlotIndex)
             {
-                CatchPoint catcherCpoint = catcher.Frame?.D?.cpoint;
-                valid = catcherCpoint != null && catcherCpoint.kind == 1;
+                LF2FrameData catcherFrame = catcher.Frame?.D;
+                valid = catcherFrame != null &&
+                    catcherFrame.TryGetPrimaryCatchPoint(
+                        out BattleCatchPointValue catcherCpoint) &&
+                    catcherCpoint.Kind == 1;
             }
 
             if (valid)
@@ -120,10 +131,10 @@ namespace NTSD.Simulation.Ecs
                 return;
 
             LF2FrameData currentFrame = attacker.Frame?.D;
-            CatchPoint cpoint = currentFrame?.cpoint;
             if (currentFrame == null ||
-                cpoint == null ||
-                cpoint.kind != 1 ||
+                !currentFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue cpoint) ||
+                cpoint.Kind != 1 ||
                 currentFrame.state != LF2States.Catching)
             {
                 return;
@@ -138,7 +149,10 @@ namespace NTSD.Simulation.Ecs
             }
 
             LF2FrameData victimFrame = victim.Frame?.D;
-            if (victimFrame?.cpoint == null || victimFrame.cpoint.kind != 2)
+            if (victimFrame == null ||
+                !victimFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue victimCpoint) ||
+                victimCpoint.Kind != 2)
                 return;
 
             SyncCaughtByCpoint(world, attacker, victim, currentFrame, cpoint);
@@ -147,35 +161,35 @@ namespace NTSD.Simulation.Ecs
         private void RunActionSelection(
             LF2Entity attacker,
             LF2Entity victim,
-            CatchPoint cpoint)
+            BattleCatchPointValue cpoint)
         {
             bool attackReady = attacker.Runtime.KeyJump != 0 &&
                 attacker.Runtime.CdAttack > 0;
             bool jumpReady = attacker.Runtime.KeyDefend != 0 &&
                 attacker.Runtime.CdJump > 0;
 
-            if (attackReady && cpoint.aaction != 0)
+            if (attackReady && cpoint.Aaction != 0)
             {
                 bool directionAllowed =
                     (attacker.Runtime.KeyLeft == 0 &&
                      attacker.Runtime.KeyRight == 0) ||
-                    cpoint.taction == 0;
+                     cpoint.Taction == 0;
                 if (directionAllowed)
-                    ApplyAction(attacker, victim, cpoint.aaction);
+                    ApplyAction(attacker, victim, cpoint.Aaction);
             }
 
-            if (attackReady && cpoint.taction != 0)
+            if (attackReady && cpoint.Taction != 0)
             {
                 bool hasDirection = attacker.Runtime.KeyLeft != 0 ||
                     attacker.Runtime.KeyRight != 0 ||
                     attacker.Runtime.KeyUp != 0 ||
                     attacker.Runtime.KeyDown != 0;
                 if (hasDirection)
-                    ApplyAction(attacker, victim, cpoint.taction);
+                    ApplyAction(attacker, victim, cpoint.Taction);
             }
 
-            if (jumpReady && cpoint.jaction != 0)
-                ApplyAction(attacker, victim, cpoint.jaction);
+            if (jumpReady && cpoint.Jaction != 0)
+                ApplyAction(attacker, victim, cpoint.Jaction);
         }
 
         private void ApplyAction(
@@ -184,7 +198,7 @@ namespace NTSD.Simulation.Ecs
             int actionFrame)
         {
             attacker.ApplySignedCpointFrame(actionFrame);
-            int victimAction = attacker.Frame?.D?.cpoint?.vaction ?? 0;
+            int victimAction = attacker.Frame?.D?.PrimaryCatchPoint.Vaction ?? 0;
             victim.DirectWriteRawFramePreserveWaitCounter(victimAction);
             victim.AttackingCounter = 0;
             attacker.AttackingCounter = 0;
@@ -195,13 +209,13 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity victim,
             LF2FrameData catcherFrame,
-            CatchPoint cpoint)
+            BattleCatchPointValue cpoint)
         {
-            if ((cpoint.hurtable == 0 ||
-                 (victim.FrameDelay == 0 && cpoint.hurtable == 1)) &&
-                cpoint.vaction != 0)
+            if ((cpoint.Hurtable == 0 ||
+                 (victim.FrameDelay == 0 && cpoint.Hurtable == 1)) &&
+                cpoint.Vaction != 0)
             {
-                victim.DirectWriteRawFramePreserveWaitCounter(cpoint.vaction);
+                victim.DirectWriteRawFramePreserveWaitCounter(cpoint.Vaction);
             }
 
             if (victim.Frame?.N < 0)
@@ -211,7 +225,7 @@ namespace NTSD.Simulation.Ecs
                 victim.SetCpointRawFramePreserveWait(-victim.Frame.N);
             }
 
-            int injury = cpoint.injury;
+            int injury = cpoint.Injury;
             if (injury != 0 && attacker.AttackingCounter == 0)
                 ApplyHeldInjury(world, attacker, victim, injury);
 
@@ -286,16 +300,16 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity victim,
             LF2FrameData catcherFrame,
-            CatchPoint cpoint)
+            BattleCatchPointValue cpoint)
         {
             int dx = attacker.Runtime.Dir == "right"
-                ? attacker.Runtime.XInt - catcherFrame.centerx + cpoint.x
-                : catcherFrame.centerx - cpoint.x + attacker.Runtime.XInt;
-            int dy = attacker.Runtime.YInt - catcherFrame.centery + cpoint.y;
+                ? attacker.Runtime.XInt - catcherFrame.centerx + cpoint.X
+                : catcherFrame.centerx - cpoint.X + attacker.Runtime.XInt;
+            int dy = attacker.Runtime.YInt - catcherFrame.centery + cpoint.Y;
 
             LF2FrameData victimFrame = victim.Frame?.D;
-            int victimCpointX = victimFrame?.cpoint?.x ?? 0;
-            int victimCpointY = victimFrame?.cpoint?.y ?? 0;
+            int victimCpointX = victimFrame?.PrimaryCatchPoint.X ?? 0;
+            int victimCpointY = victimFrame?.PrimaryCatchPoint.Y ?? 0;
             int victimCenterX = victimFrame?.centerx ?? 0;
             int victimCenterY = victimFrame?.centery ?? 0;
 
@@ -305,8 +319,8 @@ namespace NTSD.Simulation.Ecs
             victim.Runtime.Y = victimCenterY - victimCpointY + dy;
             victim.Runtime.Z = attacker.Runtime.ZInt;
 
-            int coverDiv = cpoint.cover / 10;
-            int coverRem = cpoint.cover % 10;
+            int coverDiv = cpoint.Cover / 10;
+            int coverRem = cpoint.Cover % 10;
             if (coverRem != 0)
             {
                 victim.Runtime.Z += 1f;
@@ -333,7 +347,7 @@ namespace NTSD.Simulation.Ecs
         private void ApplyThrow(
             LF2Entity attacker,
             LF2Entity victim,
-            CatchPoint cpoint,
+            BattleCatchPointValue cpoint,
             LF2FrameData throwFrameSnapshot)
         {
             int sourceNextFrameId = throwFrameSnapshot?.next ?? 0;
@@ -342,14 +356,14 @@ namespace NTSD.Simulation.Ecs
                     ? attacker.FrameCache.GetFrameDataById(sourceNextFrameId)
                     : null;
 
-            if (cpoint.throwinjury == -1 &&
+            if (cpoint.ThrowInjury == -1 &&
                 attacker.HasStep10ThrowTransformVictimData(victim))
             {
                 attacker.ApplyCpointThrowTransformToSelfAndOwnedObjects(victim);
             }
 
-            if (cpoint.throwinjury > 0)
-                victim.WeaponCount = cpoint.throwinjury;
+            if (cpoint.ThrowInjury > 0)
+                victim.WeaponCount = cpoint.ThrowInjury;
 
             LF2FrameData throwFrame = throwFrameSnapshot ??
                 attacker.FrameCache?.GetFrameDataById(attacker.Frame?.N ?? 0) ??
@@ -357,10 +371,10 @@ namespace NTSD.Simulation.Ecs
 
             int centerX = throwFrame?.centerx ?? 0;
             int centerY = throwFrame?.centery ?? 0;
-            int y = attacker.Runtime.YInt - centerY + cpoint.y;
+            int y = attacker.Runtime.YInt - centerY + cpoint.Y;
             int x = attacker.Runtime.Dir == "right"
-                ? attacker.Runtime.XInt - centerX + cpoint.x
-                : centerX - cpoint.x + attacker.Runtime.XInt;
+                ? attacker.Runtime.XInt - centerX + cpoint.X
+                : centerX - cpoint.X + attacker.Runtime.XInt;
 
             victim.Runtime.X = x;
             victim.Runtime.Y = y;
@@ -373,25 +387,27 @@ namespace NTSD.Simulation.Ecs
             attacker.AttackingCounter = 0;
 
             victim.Runtime.Vx = attacker.Runtime.Dir == "right"
-                ? cpoint.throwvx
-                : -cpoint.throwvx;
-            victim.Runtime.Vy = cpoint.throwvy;
+                ? cpoint.ThrowVx
+                : -cpoint.ThrowVx;
+            victim.Runtime.Vy = cpoint.ThrowVy;
             victim.Runtime.Vz = 0f;
             if (attacker.Runtime.KeyUp != 0 && attacker.Runtime.KeyDown == 0)
-                victim.Runtime.Vz = -cpoint.throwvz;
+                victim.Runtime.Vz = -cpoint.ThrowVz;
             else if (attacker.Runtime.KeyUp == 0 && attacker.Runtime.KeyDown != 0)
-                victim.Runtime.Vz = cpoint.throwvz;
+                victim.Runtime.Vz = cpoint.ThrowVz;
 
-            victim.SetCpointRawFramePreserveWait(cpoint.vaction);
-            victim.SetCpointRawPrevFrame2(cpoint.vaction);
+            victim.SetCpointRawFramePreserveWait(cpoint.Vaction);
+            victim.SetCpointRawPrevFrame2(cpoint.Vaction);
         }
 
-        private void ApplyDirControl(LF2Entity attacker, CatchPoint cpoint)
+        private void ApplyDirControl(
+            LF2Entity attacker,
+            BattleCatchPointValue cpoint)
         {
             if (attacker.AttackingCounter != 2)
                 return;
 
-            if (cpoint.dircontrol == 1)
+            if (cpoint.DirControl == 1)
             {
                 if (attacker.Runtime.KeyRight != 0 &&
                     attacker.Runtime.KeyLeft == 0)
@@ -404,7 +420,7 @@ namespace NTSD.Simulation.Ecs
                     attacker.SwitchDir("left");
                 }
             }
-            else if (cpoint.dircontrol == -1)
+            else if (cpoint.DirControl == -1)
             {
                 if (attacker.Runtime.KeyRight != 0 &&
                     attacker.Runtime.KeyLeft == 0)
