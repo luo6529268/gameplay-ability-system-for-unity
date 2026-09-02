@@ -220,15 +220,15 @@ namespace NTSD.Animation.Rendering
                 new ProfilerMarker("NTSD.BattlePresentation.ExecuteCommandBuffer");
             private readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
             private BattleCentralSubmission.BattleCentralSubmissionLease submissionLease;
-            private Material healthMaterial;
+            private Material fallbackMaterial;
 
             public void Setup(
                 BattleCentralSubmission.BattleCentralSubmissionLease value,
-                Material valueHealthMaterial)
+                Material valueFallbackMaterial)
             {
                 submissionLease.Dispose();
                 submissionLease = value;
-                healthMaterial = valueHealthMaterial;
+                fallbackMaterial = valueFallbackMaterial;
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -245,6 +245,25 @@ namespace NTSD.Animation.Rendering
                     int drawCount = 0;
                     try
                     {
+                        BattleFootMarkerBatchBackend footMarkerBackend =
+                            lease.FootMarkerBackend;
+                        if (footMarkerBackend != null &&
+                            footMarkerBackend.ActiveMarkerCount > 0 &&
+                            footMarkerBackend.Mesh != null &&
+                            footMarkerBackend.Texture != null &&
+                            fallbackMaterial != null)
+                        {
+                            propertyBlock.Clear();
+                            propertyBlock.SetTexture(MainTexId, footMarkerBackend.Texture);
+                            commandBuffer.DrawMesh(
+                                footMarkerBackend.Mesh,
+                                Matrix4x4.identity,
+                                fallbackMaterial,
+                                0,
+                                0,
+                                propertyBlock);
+                            drawCount++;
+                        }
                         for (int index = 0; index < backend.SegmentCount; index++)
                         {
                             BattleCentralRenderSegment segment = backend.GetSegment(index);
@@ -266,14 +285,14 @@ namespace NTSD.Animation.Rendering
                         }
                         BattleHealthBarBatchBackend healthBackend = lease.HealthBackend;
                         if (healthBackend != null && healthBackend.ActiveBarCount > 0 &&
-                            healthBackend.Mesh != null && healthMaterial != null)
+                            healthBackend.Mesh != null && fallbackMaterial != null)
                         {
                             propertyBlock.Clear();
                             propertyBlock.SetTexture(MainTexId, Texture2D.whiteTexture);
                             commandBuffer.DrawMesh(
                                 healthBackend.Mesh,
                                 Matrix4x4.identity,
-                                healthMaterial,
+                                fallbackMaterial,
                                 0,
                                 0,
                                 propertyBlock);
@@ -318,7 +337,7 @@ namespace NTSD.Animation.Rendering
             {
                 submissionLease.Dispose();
                 submissionLease = default;
-                healthMaterial = null;
+                fallbackMaterial = null;
             }
         }
     }

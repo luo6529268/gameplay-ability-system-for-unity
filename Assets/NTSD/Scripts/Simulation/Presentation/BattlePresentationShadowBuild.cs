@@ -415,7 +415,8 @@ namespace NTSD.Simulation.Presentation
             int currentHealth = 0,
             int recoverableHealth = 0,
             int maximumHealth = 0,
-            float stableHealthAnchorHeightPixels = 0f)
+            float stableHealthAnchorHeightPixels = 0f,
+            bool showSelfFootMarker = false)
         {
             Handle = handle;
             StableId = stableId;
@@ -459,7 +460,8 @@ namespace NTSD.Simulation.Presentation
             CurrentHealth = currentHealth;
             RecoverableHealth = recoverableHealth;
             MaximumHealth = maximumHealth;
-            StableHealthAnchorHeightPixels = stableHealthAnchorHeightPixels;
+            StableCharacterHeightPixels = stableHealthAnchorHeightPixels;
+            ShowSelfFootMarker = showSelfFootMarker;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -504,7 +506,9 @@ namespace NTSD.Simulation.Presentation
         public int CurrentHealth { get; }
         public int RecoverableHealth { get; }
         public int MaximumHealth { get; }
-        public float StableHealthAnchorHeightPixels { get; }
+        public float StableCharacterHeightPixels { get; }
+        public float StableHealthAnchorHeightPixels => StableCharacterHeightPixels;
+        public bool ShowSelfFootMarker { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattlePresentationEntitySnapshot WithResolvedSprite(
@@ -559,7 +563,8 @@ namespace NTSD.Simulation.Presentation
                 CurrentHealth,
                 RecoverableHealth,
                 MaximumHealth,
-                StableHealthAnchorHeightPixels);
+                StableHealthAnchorHeightPixels,
+                ShowSelfFootMarker);
         }
 
         internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
@@ -608,7 +613,8 @@ namespace NTSD.Simulation.Presentation
                 CurrentHealth,
                 RecoverableHealth,
                 MaximumHealth,
-                StableHealthAnchorHeightPixels);
+                StableHealthAnchorHeightPixels,
+                ShowSelfFootMarker);
         }
 
     }
@@ -637,7 +643,11 @@ namespace NTSD.Simulation.Presentation
             int recoverableHealth = 0,
             int maximumHealth = 0,
             Vector2 stableHealthAnchorWorld = default(Vector2),
-            bool hasStableHealthAnchor = false)
+            bool hasStableHealthAnchor = false,
+            Vector2 stableFootAnchorWorld = default(Vector2),
+            bool hasStableFootAnchor = false,
+            bool showSelfFootMarker = false,
+            float footMarkerScale = 1f)
             : this(
                 type,
                 handle,
@@ -660,7 +670,11 @@ namespace NTSD.Simulation.Presentation
                 recoverableHealth,
                 maximumHealth,
                 stableHealthAnchorWorld,
-                hasStableHealthAnchor)
+                hasStableHealthAnchor,
+                stableFootAnchorWorld,
+                hasStableFootAnchor,
+                showSelfFootMarker,
+                footMarkerScale)
         {
         }
 
@@ -687,7 +701,11 @@ namespace NTSD.Simulation.Presentation
             int recoverableHealth = 0,
             int maximumHealth = 0,
             Vector2 stableHealthAnchorWorld = default(Vector2),
-            bool hasStableHealthAnchor = false)
+            bool hasStableHealthAnchor = false,
+            Vector2 stableFootAnchorWorld = default(Vector2),
+            bool hasStableFootAnchor = false,
+            bool showSelfFootMarker = false,
+            float footMarkerScale = 1f)
             : this(
                 type,
                 handle,
@@ -711,7 +729,11 @@ namespace NTSD.Simulation.Presentation
                 recoverableHealth,
                 maximumHealth,
                 stableHealthAnchorWorld,
-                hasStableHealthAnchor)
+                hasStableHealthAnchor,
+                stableFootAnchorWorld,
+                hasStableFootAnchor,
+                showSelfFootMarker,
+                footMarkerScale)
         {
         }
 
@@ -737,7 +759,11 @@ namespace NTSD.Simulation.Presentation
             int recoverableHealth = 0,
             int maximumHealth = 0,
             Vector2 stableHealthAnchorWorld = default(Vector2),
-            bool hasStableHealthAnchor = false)
+            bool hasStableHealthAnchor = false,
+            Vector2 stableFootAnchorWorld = default(Vector2),
+            bool hasStableFootAnchor = false,
+            bool showSelfFootMarker = false,
+            float footMarkerScale = 1f)
             : this(
                 type,
                 handle,
@@ -761,7 +787,11 @@ namespace NTSD.Simulation.Presentation
                 recoverableHealth,
                 maximumHealth,
                 stableHealthAnchorWorld,
-                hasStableHealthAnchor)
+                hasStableHealthAnchor,
+                stableFootAnchorWorld,
+                hasStableFootAnchor,
+                showSelfFootMarker,
+                footMarkerScale)
         {
         }
 
@@ -788,7 +818,11 @@ namespace NTSD.Simulation.Presentation
             int recoverableHealth = 0,
             int maximumHealth = 0,
             Vector2 stableHealthAnchorWorld = default(Vector2),
-            bool hasStableHealthAnchor = false)
+            bool hasStableHealthAnchor = false,
+            Vector2 stableFootAnchorWorld = default(Vector2),
+            bool hasStableFootAnchor = false,
+            bool showSelfFootMarker = false,
+            float footMarkerScale = 1f)
         {
             Type = type;
             Handle = handle;
@@ -813,6 +847,10 @@ namespace NTSD.Simulation.Presentation
             MaximumHealth = maximumHealth;
             StableHealthAnchorWorld = stableHealthAnchorWorld;
             HasStableHealthAnchor = hasStableHealthAnchor;
+            StableFootAnchorWorld = stableFootAnchorWorld;
+            HasStableFootAnchor = hasStableFootAnchor;
+            ShowSelfFootMarker = showSelfFootMarker;
+            FootMarkerScale = footMarkerScale > 0f ? footMarkerScale : 1f;
         }
 
         public BattleRenderCommandType Type { get; }
@@ -840,6 +878,10 @@ namespace NTSD.Simulation.Presentation
         public int MaximumHealth { get; }
         public Vector2 StableHealthAnchorWorld { get; }
         public bool HasStableHealthAnchor { get; }
+        public Vector2 StableFootAnchorWorld { get; }
+        public bool HasStableFootAnchor { get; }
+        public bool ShowSelfFootMarker { get; }
+        public float FootMarkerScale { get; }
         internal object TrustedResourceIdentity { get; }
     }
 
@@ -2181,7 +2223,10 @@ namespace NTSD.Simulation.Presentation
                         Vector2 localOffsetPixels = entitySprite?.LocalOffsetPixels ?? Vector2.zero;
                         LF2Character healthCharacter = entity as LF2Character;
                         bool showOverheadHealthBar = healthCharacter != null && runtime.HP3 > 0;
-                        float stableHealthAnchorHeightPixels = showOverheadHealthBar
+                        bool showSelfFootMarker = healthCharacter != null &&
+                                                  world.IsBoundActiveHumanRosterInputEntity(entity);
+                        float stableCharacterHeightPixels =
+                            showOverheadHealthBar || showSelfFootMarker
                             ? BattleHealthBarAnchor.ResolveStableCharacterHeightPixels(
                                 healthCharacter.FrameCache?.Wrapper?.characterData)
                             : 0f;
@@ -2232,7 +2277,8 @@ namespace NTSD.Simulation.Presentation
                             runtime.HP,
                             runtime.HPBound,
                             runtime.HP3,
-                            stableHealthAnchorHeightPixels));
+                            stableCharacterHeightPixels,
+                            showSelfFootMarker));
                         if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
                             frame.RequiresCatalogPublicationBinding = true;
                     }
@@ -2637,6 +2683,10 @@ namespace NTSD.Simulation.Presentation
                     rank,
                     entity.PresentationBaseOrder);
                 int localSequence = 0;
+                Vector3 stableGroundPosition = viewportTransform.ScreenPixelToWorld(
+                    entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
+                    entity.ZInt,
+                    0f);
 
                 long sectionStartedAt = collectCommandSectionTimings
                     ? System.Diagnostics.Stopwatch.GetTimestamp()
@@ -2648,10 +2698,6 @@ namespace NTSD.Simulation.Presentation
                                   LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop);
                 if (drawShadow)
                 {
-                    Vector3 shadowPosition = viewportTransform.ScreenPixelToWorld(
-                        entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
-                        entity.ZInt,
-                        0f);
                     writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Shadow,
                         entity.Handle,
@@ -2663,7 +2709,7 @@ namespace NTSD.Simulation.Presentation
                         baseOrder,
                         ObjectSortingLayerId,
                         localSequence++,
-                        shadowPosition,
+                        stableGroundPosition,
                         commonShadow.PixelSize,
                         commonShadow.Pivot,
                         commonShadow.NormalizedUv,
@@ -2739,7 +2785,14 @@ namespace NTSD.Simulation.Presentation
                         entity.RecoverableHealth,
                         entity.MaximumHealth,
                         stableHealthAnchorWorld,
-                        hasStableHealthAnchor));
+                        hasStableHealthAnchor,
+                        new Vector2(
+                            stableGroundPosition.x,
+                            stableGroundPosition.y),
+                        true,
+                        entity.ShowSelfFootMarker,
+                        BattleFootMarkerSizing.ResolveStableCharacterScale(
+                            entity.StableCharacterHeightPixels)));
                 }
                 if (collectCommandSectionTimings)
                 {

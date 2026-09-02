@@ -38,6 +38,7 @@ namespace NTSD.Animation.Rendering.Editor
                 null,
                 new object[] { entityCapacity });
             var meshBackend = new BattleDynamicMeshBackend();
+            var footMarkerBackend = new BattleFootMarkerBatchBackend();
             var healthBackend = new BattleHealthBarBatchBackend();
             ConstructorInfo submissionConstructor =
                 typeof(BattleCentralSubmission).GetConstructor(
@@ -46,12 +47,13 @@ namespace NTSD.Animation.Rendering.Editor
                     new[]
                     {
                         typeof(BattleDynamicMeshBackend),
+                        typeof(BattleFootMarkerBatchBackend),
                         typeof(BattleHealthBarBatchBackend),
                     },
                     null);
             Assert.That(submissionConstructor, Is.Not.Null);
             var submission = (BattleCentralSubmission)submissionConstructor.Invoke(
-                new object[] { meshBackend, healthBackend });
+                new object[] { meshBackend, footMarkerBackend, healthBackend });
             MethodInfo prepareCapacity = typeof(BattleCentralSubmission).GetMethod(
                 "PrepareCapacity",
                 BindingFlags.Instance | BindingFlags.NonPublic);
@@ -78,6 +80,7 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(captured.HitRecordCapacity, Is.GreaterThanOrEqualTo(hitRecordCapacity));
             Assert.That(captured.CommandCapacity, Is.GreaterThanOrEqualTo(commandCapacity));
             meshBackend.Dispose();
+            footMarkerBackend.Dispose();
             healthBackend.Dispose();
         }
 

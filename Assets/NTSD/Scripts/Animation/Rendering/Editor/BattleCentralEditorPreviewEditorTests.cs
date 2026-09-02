@@ -11,6 +11,9 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleCentralEditorPreviewEditorTests
     {
+        private const string CommonShadowPrefabPath =
+            "Assets/NTSD/Prefabs/Common/Shadow.prefab";
+
         [Test]
         public void HealthBatch_UsesThreeQuadsAndClampedWidths()
         {
@@ -210,6 +213,280 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void FootMarkerAsset_IsPointFilteredSpriteWithExpectedDimensions()
+        {
+            const string assetPath =
+                "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
+            Sprite marker = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+            var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+
+            Assert.That(marker, Is.Not.Null);
+            Assert.That(marker.rect.size, Is.EqualTo(new Vector2(128f, 48f)));
+            Assert.That(importer, Is.Not.Null);
+            Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite));
+            Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(importer.mipmapEnabled, Is.False);
+        }
+
+        [Test]
+        public void CommonShadowAsset_ProvidesTheProductionDescriptorBinding()
+        {
+            GameObject shadowPrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
+            BattleCommonShadowDescriptor descriptor =
+                shadowPrefab != null
+                    ? shadowPrefab.GetComponent<BattleCommonShadowDescriptor>()
+                    : null;
+
+            Assert.That(shadowPrefab, Is.Not.Null);
+            Assert.That(descriptor, Is.Not.Null);
+            Assert.That(descriptor.TryValidate(out string diagnostic), Is.True, diagnostic);
+            BattleCommonVisualCatalog catalog = BattleCommonVisualCatalog.Build(shadowPrefab);
+            Assert.That(catalog.IsShadowValid, Is.True, catalog.Diagnostic);
+            Assert.That(catalog.Shadow.Sprite, Is.SameAs(descriptor.Sprite));
+            Assert.That(catalog.Shadow.PixelSize, Is.EqualTo(descriptor.Sprite.rect.size));
+            Assert.That(
+                catalog.Shadow.RenderState.Color,
+                Is.EqualTo((Color32)descriptor.Color));
+        }
+
+        [Test]
+        public void PreviewController_BuildsCommonShadowFootMarkerActorAndHealthLayers()
+        {
+            GameObject previewObject = null;
+            Texture2D actorTexture = null;
+            Texture2D markerTexture = null;
+            Sprite actorSprite = null;
+            Sprite markerSprite = null;
+            Material material = null;
+            try
+            {
+                Shader shader = Shader.Find("NTSD/BattleCentralTransparent");
+                Assert.That(shader, Is.Not.Null);
+                material = new Material(shader)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                actorTexture = new Texture2D(8, 16, TextureFormat.RGBA32, false)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                markerTexture = new Texture2D(128, 48, TextureFormat.RGBA32, false)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                actorSprite = Sprite.Create(
+                    actorTexture,
+                    new Rect(0f, 0f, 8f, 16f),
+                    new Vector2(0.5f, 0f),
+                    100f);
+                markerSprite = Sprite.Create(
+                    markerTexture,
+                    new Rect(0f, 0f, 128f, 48f),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+                actorSprite.hideFlags = HideFlags.HideAndDontSave;
+                markerSprite.hideFlags = HideFlags.HideAndDontSave;
+
+                var actor = new BattleCentralEditorPreviewActor();
+                actor.ConfigureForSelfCheck(
+                    actorSprite,
+                    new Vector3(1f, 2f, 3f),
+                    25,
+                    75,
+                    100);
+                var markerStyle = new BattleFootMarkerStyle(
+                    64f,
+                    20f,
+                    new Vector2(3f, -4f),
+                    new Color32(255, 255, 255, 255));
+
+                previewObject = new GameObject("BattleCentralEditorPreview_FootMarker");
+                BattleCentralEditorPreview preview =
+                    previewObject.AddComponent<BattleCentralEditorPreview>();
+                preview.ConfigureForSelfCheck(
+                    material,
+                    actor,
+                    BattleHealthBarStyle.Default);
+                GameObject commonShadowPrefab =
+                    AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
+                preview.ConfigureCommonShadowForSelfCheck(commonShadowPrefab);
+                preview.ConfigureFootMarkerForSelfCheck(markerSprite, markerStyle);
+
+                Assert.That(preview.RebuildForSelfCheck(), Is.True);
+                Assert.That(preview.PreviewCommonShadowCount, Is.EqualTo(1));
+                Assert.That(preview.PreviewCommonShadowSegmentCount, Is.EqualTo(1));
+                Assert.That(preview.PreviewFootMarkerCount, Is.EqualTo(1));
+                Assert.That(preview.PreviewFootMarkerSegmentCount, Is.EqualTo(1));
+                Assert.That(
+                    preview.FootMarkerBackendForSelfCheck.ActiveChunkCount,
+                    Is.EqualTo(1));
+                Assert.That(
+                    preview.TryGetEditorLayout(
+                        0,
+                        out BattleCentralEditorPreviewLayout layout),
+                    Is.True);
+                Assert.That(layout.HasFootMarker, Is.True);
+                Assert.That(layout.HasCommonShadow, Is.True);
+                Assert.That(
+                    layout.FootMarkerBounds.size.x,
+                    Is.EqualTo(64f * NTSDRenderSpace.UnitsPerPixelX).Within(0.0001f));
+                Assert.That(
+                    layout.FootMarkerBounds.size.y,
+                    Is.EqualTo(20f * NTSDRenderSpace.UnitsPerPixelY).Within(0.0001f));
+                Assert.That(
+                    layout.FootMarkerBounds.center.x,
+                    Is.EqualTo(1f + 3f * NTSDRenderSpace.UnitsPerPixelX)
+                        .Within(0.0001f));
+                Assert.That(
+                    layout.FootMarkerBounds.center.y,
+                    Is.EqualTo(2f - 4f * NTSDRenderSpace.UnitsPerPixelY)
+                        .Within(0.0001f));
+
+                var commandBuffer = new CommandBuffer();
+                var propertyBlock = new MaterialPropertyBlock();
+                try
+                {
+                    Assert.That(
+                        preview.AppendDrawCommands(commandBuffer, propertyBlock),
+                        Is.EqualTo(4),
+                        "common shadow and FootSelf must be separate draws before actor and health");
+                }
+                finally
+                {
+                    commandBuffer.Release();
+                }
+            }
+            finally
+            {
+                if (previewObject != null)
+                    UnityEngine.Object.DestroyImmediate(previewObject);
+                if (actorSprite != null)
+                    UnityEngine.Object.DestroyImmediate(actorSprite);
+                if (markerSprite != null)
+                    UnityEngine.Object.DestroyImmediate(markerSprite);
+                if (actorTexture != null)
+                    UnityEngine.Object.DestroyImmediate(actorTexture);
+                if (markerTexture != null)
+                    UnityEngine.Object.DestroyImmediate(markerTexture);
+                if (material != null)
+                    UnityEngine.Object.DestroyImmediate(material);
+            }
+        }
+
+        [Test]
+        public void PreviewGroundVisuals_OneThousandActorsRemainTwoCentralDraws()
+        {
+            GameObject previewObject = null;
+            Texture2D actorTexture = null;
+            Texture2D markerTexture = null;
+            Sprite actorSprite = null;
+            Sprite markerSprite = null;
+            Material material = null;
+            try
+            {
+                Shader shader = Shader.Find("NTSD/BattleCentralTransparent");
+                Assert.That(shader, Is.Not.Null);
+                material = new Material(shader)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                actorTexture = new Texture2D(8, 16, TextureFormat.RGBA32, false)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                markerTexture = new Texture2D(128, 48, TextureFormat.RGBA32, false)
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                actorSprite = Sprite.Create(
+                    actorTexture,
+                    new Rect(0f, 0f, 8f, 16f),
+                    new Vector2(0.5f, 0f),
+                    100f);
+                markerSprite = Sprite.Create(
+                    markerTexture,
+                    new Rect(0f, 0f, 128f, 48f),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+                actorSprite.hideFlags = HideFlags.HideAndDontSave;
+                markerSprite.hideFlags = HideFlags.HideAndDontSave;
+
+                var actor = new BattleCentralEditorPreviewActor();
+                actor.ConfigureForSelfCheck(
+                    actorSprite,
+                    Vector3.zero,
+                    0,
+                    0,
+                    0);
+                var actors = new BattleCentralEditorPreviewActor[1000];
+                for (int index = 0; index < actors.Length; index++)
+                    actors[index] = actor;
+
+                previewObject = new GameObject("BattleCentralEditorPreview_FootMarker1000");
+                BattleCentralEditorPreview preview =
+                    previewObject.AddComponent<BattleCentralEditorPreview>();
+                preview.ConfigureForSelfCheck(
+                    material,
+                    actors,
+                    BattleHealthBarStyle.Default);
+                GameObject commonShadowPrefab =
+                    AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
+                preview.ConfigureCommonShadowForSelfCheck(commonShadowPrefab);
+                preview.ConfigureFootMarkerForSelfCheck(
+                    markerSprite,
+                    BattleFootMarkerStyle.Default);
+
+                Assert.That(preview.RebuildForSelfCheck(), Is.True);
+                Assert.That(preview.PreviewCommonShadowCount, Is.EqualTo(1000));
+                Assert.That(preview.PreviewCommonShadowSegmentCount, Is.EqualTo(1));
+                Assert.That(
+                    preview.CommonShadowBackendForSelfCheck.ActiveChunkCount,
+                    Is.EqualTo(1));
+                Assert.That(
+                    preview.CommonShadowBackendForSelfCheck.GetChunkActiveQuadCount(0),
+                    Is.EqualTo(1000));
+                Assert.That(preview.PreviewFootMarkerCount, Is.EqualTo(1000));
+                Assert.That(preview.PreviewFootMarkerSegmentCount, Is.EqualTo(1));
+                Assert.That(
+                    preview.FootMarkerBackendForSelfCheck.ActiveChunkCount,
+                    Is.EqualTo(1));
+                Assert.That(
+                    preview.FootMarkerBackendForSelfCheck.GetChunkActiveQuadCount(0),
+                    Is.EqualTo(1000));
+
+                var commandBuffer = new CommandBuffer();
+                var propertyBlock = new MaterialPropertyBlock();
+                try
+                {
+                    Assert.That(
+                        preview.AppendDrawCommands(commandBuffer, propertyBlock),
+                        Is.EqualTo(3),
+                        "1000 shadows and 1000 FootSelf markers must remain two draws plus actor");
+                }
+                finally
+                {
+                    commandBuffer.Release();
+                }
+            }
+            finally
+            {
+                if (previewObject != null)
+                    UnityEngine.Object.DestroyImmediate(previewObject);
+                if (actorSprite != null)
+                    UnityEngine.Object.DestroyImmediate(actorSprite);
+                if (markerSprite != null)
+                    UnityEngine.Object.DestroyImmediate(markerSprite);
+                if (actorTexture != null)
+                    UnityEngine.Object.DestroyImmediate(actorTexture);
+                if (markerTexture != null)
+                    UnityEngine.Object.DestroyImmediate(markerTexture);
+                if (material != null)
+                    UnityEngine.Object.DestroyImmediate(material);
+            }
+        }
+
+        [Test]
         public void PreviewCameraGate_IsEditModeOnlyAndWorldCameraScoped()
         {
             GameObject previewObject = null;
@@ -309,6 +586,10 @@ namespace NTSD.Animation.Rendering.Editor
             "NTSD/Battle Rendering/Validate Edit Mode Central Preview";
         private const string SourceTexturePath =
             "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
+        private const string FootMarkerPath =
+            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
+        private const string CommonShadowPrefabPath =
+            "Assets/NTSD/Prefabs/Common/Shadow.prefab";
         private const string MaterialPath =
             "Assets/NTSD/Materials/BattleCentralTransparent.mat";
         private const string OutputDirectory =
@@ -321,6 +602,8 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 status = "FAIL",
                 sourceTexturePath = SourceTexturePath,
+                footMarkerPath = FootMarkerPath,
+                commonShadowPrefabPath = CommonShadowPrefabPath,
             };
             string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
             string outputDirectory = Path.Combine(projectRoot, OutputDirectory);
@@ -356,6 +639,13 @@ namespace NTSD.Animation.Rendering.Editor
                 Material material = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
                 if (material == null)
                     throw new InvalidOperationException("The central material is unavailable.");
+                Sprite footMarker = AssetDatabase.LoadAssetAtPath<Sprite>(FootMarkerPath);
+                if (footMarker == null)
+                    throw new InvalidOperationException("The FootSelf marker sprite is unavailable.");
+                GameObject commonShadowPrefab =
+                    AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
+                if (commonShadowPrefab == null)
+                    throw new InvalidOperationException("The common Shadow prefab is unavailable.");
 
                 CharacterAnimtorManager manager = CharacterAnimtorManager.Instance;
                 LF2FrameData frame = manager?.GetFrameData(0, 0);
@@ -401,8 +691,16 @@ namespace NTSD.Animation.Rendering.Editor
                     report.usedProcessedSourceSheet = true;
                 }
                 preview.ConfigureForSelfCheck(material, actor, BattleHealthBarStyle.Default);
+                preview.ConfigureCommonShadowForSelfCheck(commonShadowPrefab);
+                preview.ConfigureFootMarkerForSelfCheck(
+                    footMarker,
+                    BattleFootMarkerStyle.Default);
                 report.controllerBuilt = preview.RebuildForSelfCheck();
                 report.actorCount = preview.PreviewActorCount;
+                report.commonShadowCount = preview.PreviewCommonShadowCount;
+                report.commonShadowSegmentCount = preview.PreviewCommonShadowSegmentCount;
+                report.footMarkerCount = preview.PreviewFootMarkerCount;
+                report.footMarkerSegmentCount = preview.PreviewFootMarkerSegmentCount;
                 report.healthBarCount = preview.PreviewHealthBarCount;
                 report.healthQuadCount = preview.PreviewHealthQuadCount;
                 validationScope =
@@ -465,6 +763,11 @@ namespace NTSD.Animation.Rendering.Editor
                         report.nonClearPixelCount++;
                     if (pixel.r > 80 && pixel.r > pixel.g + 40 && pixel.r > pixel.b + 40)
                         report.redDominantPixelCount++;
+                    if (pixel.r > 150 && pixel.g > 100 && pixel.b < 100 &&
+                        pixel.r >= pixel.g)
+                    {
+                        report.yellowDominantPixelCount++;
+                    }
                     if (pixel.g > 200 && pixel.r < 40 && pixel.b < 40)
                         report.greenSeparatorPixelCount++;
                 }
@@ -476,9 +779,14 @@ namespace NTSD.Animation.Rendering.Editor
                 report.sceneDirtyUnchanged =
                     UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty == sceneWasDirty;
                 report.status = report.controllerBuilt && report.actorCount == 1 &&
+                                report.commonShadowCount == 1 &&
+                                report.commonShadowSegmentCount == 1 &&
+                                report.footMarkerCount == 1 &&
+                                report.footMarkerSegmentCount == 1 &&
                                 report.healthBarCount == 1 && report.healthQuadCount == 3 &&
                                 report.nonClearPixelCount > 0 &&
                                 report.redDominantPixelCount > 0 &&
+                                report.yellowDominantPixelCount > 0 &&
                                 report.greenSeparatorPixelCount == 0 &&
                                 report.sceneDirtyUnchanged
                     ? "PASS"
@@ -513,8 +821,11 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 Debug.Log(
                     $"[BattleCentralEditorPreviewValidation] PASS: actors={report.actorCount}, " +
+                    $"shadow={report.commonShadowCount}/{report.commonShadowSegmentCount}, " +
+                    $"foot={report.footMarkerCount}/{report.footMarkerSegmentCount}, " +
                     $"health={report.healthBarCount}, pixels={report.nonClearPixelCount}, " +
                     $"red={report.redDominantPixelCount}, " +
+                    $"yellow={report.yellowDominantPixelCount}, " +
                     $"greenSeparator={report.greenSeparatorPixelCount}.");
             }
             else
@@ -585,13 +896,20 @@ namespace NTSD.Animation.Rendering.Editor
             public string status = string.Empty;
             public string message = string.Empty;
             public string sourceTexturePath = string.Empty;
+            public string footMarkerPath = string.Empty;
+            public string commonShadowPrefabPath = string.Empty;
             public string imagePath = string.Empty;
             public bool controllerBuilt;
             public int actorCount;
+            public int commonShadowCount;
+            public int commonShadowSegmentCount;
+            public int footMarkerCount;
+            public int footMarkerSegmentCount;
             public int healthBarCount;
             public int healthQuadCount;
             public int nonClearPixelCount;
             public int redDominantPixelCount;
+            public int yellowDominantPixelCount;
             public int greenSeparatorPixelCount;
             public bool sceneDirtyUnchanged;
             public bool usedCharacterManagerSprite;

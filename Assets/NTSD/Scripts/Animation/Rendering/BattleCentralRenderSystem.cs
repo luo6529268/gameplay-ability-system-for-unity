@@ -65,12 +65,25 @@ namespace NTSD.Animation.Rendering
             new BattleHealthBarBatchBackend(),
             new BattleHealthBarBatchBackend(),
         };
+        private static readonly BattleFootMarkerBatchBackend[] FootMarkerBackends =
+        {
+            new BattleFootMarkerBatchBackend(),
+            new BattleFootMarkerBatchBackend(),
+        };
         private static readonly BattleCentralSubmission[] SlotSubmissions =
         {
-            new BattleCentralSubmission(Backends[0], HealthBackends[0]),
-            new BattleCentralSubmission(Backends[1], HealthBackends[1]),
+            new BattleCentralSubmission(
+                Backends[0],
+                FootMarkerBackends[0],
+                HealthBackends[0]),
+            new BattleCentralSubmission(
+                Backends[1],
+                FootMarkerBackends[1],
+                HealthBackends[1]),
         };
         private static readonly BattleDynamicMeshBackend EmptyBackend = new BattleDynamicMeshBackend();
+        private static readonly BattleFootMarkerBatchBackend EmptyFootMarkerBackend =
+            new BattleFootMarkerBatchBackend();
         private static readonly BattleHealthBarBatchBackend EmptyHealthBackend =
             new BattleHealthBarBatchBackend();
         private static readonly BattleCatalogCentralResourceResolver CatalogResolver =
@@ -88,6 +101,10 @@ namespace NTSD.Animation.Rendering
         private static bool runtimeHealthBarsEnabled;
         private static BattleHealthBarStyle runtimeHealthBarStyle =
             BattleHealthBarStyle.Default;
+        private static bool runtimeFootMarkersEnabled;
+        private static Sprite runtimeFootMarkerSprite;
+        private static BattleFootMarkerStyle runtimeFootMarkerStyle =
+            BattleFootMarkerStyle.Default;
         private static BattleRenderFeature observedFeatureOwner;
         private static ScriptableRenderer observedRenderer;
         private static Camera observedWorldCamera;
@@ -102,6 +119,8 @@ namespace NTSD.Animation.Rendering
         private static SimulationWorld publishedPlanWorld;
         private static int publishedPlanGeneration;
         private static BattleDynamicMeshBackend lastBuiltBackend = Backends[0];
+        private static BattleFootMarkerBatchBackend lastBuiltFootMarkerBackend =
+            FootMarkerBackends[0];
         private static BattleHealthBarBatchBackend lastBuiltHealthBackend = HealthBackends[0];
         private static CharacterAnimtorManager diagnosticCatalogManager;
         private static BattleSpriteCatalog diagnosticCatalog = BattleSpriteCatalog.Empty;
@@ -118,6 +137,8 @@ namespace NTSD.Animation.Rendering
         private static int materializationInProgress;
 
         public static BattleDynamicMeshBackend MeshBackend => lastBuiltBackend;
+        public static BattleFootMarkerBatchBackend FootMarkerMeshBackend =>
+            lastBuiltFootMarkerBackend;
         public static BattleHealthBarBatchBackend HealthMeshBackend => lastBuiltHealthBackend;
         public static BattleCentralRuntimeDiagnostics Diagnostics => RuntimeDiagnostics;
         public static BattlePixelFramePlan CurrentPixelFramePlan
@@ -477,6 +498,8 @@ namespace NTSD.Animation.Rendering
             BattlePresentationPhaseDiagnostics presentationDiagnostics =
                 world.ActiveBattlePresentationPhaseDiagnosticsForDiagnostics;
             BattleCentralSubmission stagingSubmission = SlotSubmissions[backendIndex];
+            BattleFootMarkerBatchBackend stagingFootMarkerBackend =
+                FootMarkerBackends[backendIndex];
             BattleHealthBarBatchBackend stagingHealthBackend = HealthBackends[backendIndex];
             BattlePresentationFrame buildFrame;
             try
@@ -532,6 +555,7 @@ namespace NTSD.Animation.Rendering
             catch (Exception exception)
             {
                 stagingBackend.Clear();
+                stagingFootMarkerBackend.Clear();
                 stagingHealthBackend.Clear();
                 string reason =
                     $"Presentation snapshot materialization failed: {exception.GetType().Name}: {exception.Message}";
@@ -615,12 +639,18 @@ namespace NTSD.Animation.Rendering
                         drawMode,
                         detailDiagnostics,
                         presentationDiagnostics);
+                    stagingFootMarkerBackend.BuildFromFrame(
+                        buildFrame,
+                        runtimeFootMarkerSprite,
+                        runtimeFootMarkerStyle,
+                        runtimeFootMarkersEnabled);
                     stagingHealthBackend.BuildFromFrame(
                         buildFrame,
                         ResolveRuntimeHealthBarStyle(),
                         runtimeHealthBarsEnabled);
                 }
                 lastBuiltBackend = stagingBackend;
+                lastBuiltFootMarkerBackend = stagingFootMarkerBackend;
                 lastBuiltHealthBackend = stagingHealthBackend;
                 lastAttemptedBuildDiagnostics = AttemptedBuildDiagnostics.Capture(
                     stagingBackend,
@@ -629,6 +659,7 @@ namespace NTSD.Animation.Rendering
             catch (Exception exception)
             {
                 stagingBackend.Clear();
+                stagingFootMarkerBackend.Clear();
                 stagingHealthBackend.Clear();
                 string reason =
                     $"Central geometry build failed: {exception.GetType().Name}: {exception.Message}";
@@ -862,12 +893,20 @@ namespace NTSD.Animation.Rendering
                 featureMaterial,
                 featureArrayMaterial);
             backend.Build(capturedFrame, CatalogResolver, drawMode);
+            BattleFootMarkerBatchBackend footMarkerBackend =
+                FootMarkerBackends[backendIndex];
+            footMarkerBackend.BuildFromFrame(
+                capturedFrame,
+                runtimeFootMarkerSprite,
+                runtimeFootMarkerStyle,
+                runtimeFootMarkersEnabled);
             BattleHealthBarBatchBackend healthBackend = HealthBackends[backendIndex];
             healthBackend.BuildFromFrame(
                 capturedFrame,
                 ResolveRuntimeHealthBarStyle(),
                 runtimeHealthBarsEnabled);
             lastBuiltBackend = backend;
+            lastBuiltFootMarkerBackend = footMarkerBackend;
             lastBuiltHealthBackend = healthBackend;
             lastAttemptedBuildDiagnostics = AttemptedBuildDiagnostics.Capture(backend, tickIndex);
             int generation = NextGeneration();
@@ -1518,10 +1557,12 @@ namespace NTSD.Animation.Rendering
                 if (submission.IsReusable)
                 {
                     Backends[index].Clear();
+                    FootMarkerBackends[index].Clear();
                     HealthBackends[index].Clear();
                 }
             }
             lastBuiltBackend = Backends[0];
+            lastBuiltFootMarkerBackend = FootMarkerBackends[0];
             lastBuiltHealthBackend = HealthBackends[0];
             lastAttemptedBuildDiagnostics = default;
             requestedMode = BattlePresentationBackendMode.CentralOnly;
@@ -1541,8 +1582,10 @@ namespace NTSD.Animation.Rendering
             {
                 ReleaseDiagnosticCatalogBinding();
                 EmptyBackend.Clear();
+                EmptyFootMarkerBackend.Clear();
                 EmptyHealthBackend.Clear();
                 lastBuiltBackend = EmptyBackend;
+                lastBuiltFootMarkerBackend = EmptyFootMarkerBackend;
                 lastBuiltHealthBackend = EmptyHealthBackend;
             }
             var plan = new BattlePixelFramePlan(
@@ -1603,8 +1646,10 @@ namespace NTSD.Animation.Rendering
             if (submission == null)
             {
                 EmptyBackend.Clear();
+                EmptyFootMarkerBackend.Clear();
                 EmptyHealthBackend.Clear();
                 lastBuiltBackend = EmptyBackend;
+                lastBuiltFootMarkerBackend = EmptyFootMarkerBackend;
                 lastBuiltHealthBackend = EmptyHealthBackend;
             }
             return plan;
@@ -1731,10 +1776,40 @@ namespace NTSD.Animation.Rendering
             runtimeHealthBarStyle = style;
         }
 
+        internal static void RefreshRuntimeFootMarkerAuthoringSettings()
+        {
+            bool enabled = featureOwner != null;
+            Sprite sprite = null;
+            BattleFootMarkerStyle style = BattleFootMarkerStyle.Default;
+            if (BattleCentralEditorPreview.TryGetRuntimeFootMarkerAuthoringSettings(
+                    out bool authoredEnabled,
+                    out Sprite authoredSprite,
+                    out BattleFootMarkerStyle authoredStyle))
+            {
+                enabled &= authoredEnabled;
+                sprite = authoredSprite;
+                style = authoredStyle;
+            }
+            else
+            {
+                enabled = false;
+            }
+
+            runtimeFootMarkersEnabled = enabled && sprite != null;
+            runtimeFootMarkerSprite = sprite;
+            runtimeFootMarkerStyle = style;
+        }
+
 #if UNITY_EDITOR
         internal static bool RuntimeHealthBarsEnabledForSelfCheck => runtimeHealthBarsEnabled;
         internal static BattleHealthBarStyle RuntimeHealthBarStyleForSelfCheck =>
             runtimeHealthBarStyle;
+        internal static bool RuntimeFootMarkersEnabledForSelfCheck =>
+            runtimeFootMarkersEnabled;
+        internal static Sprite RuntimeFootMarkerSpriteForSelfCheck =>
+            runtimeFootMarkerSprite;
+        internal static BattleFootMarkerStyle RuntimeFootMarkerStyleForSelfCheck =>
+            runtimeFootMarkerStyle;
 #endif
 
         private static string BuildOwnershipRefusalReason(BattleDynamicMeshBackend backend)
@@ -1919,6 +1994,7 @@ namespace NTSD.Animation.Rendering
             RuntimeDiagnostics.FeatureAvailable = featureOwner != null;
             RuntimeDiagnostics.MaterialAvailable = featureMaterial != null;
             RefreshRuntimeHealthBarAuthoringSettings();
+            RefreshRuntimeFootMarkerAuthoringSettings();
         }
 
         private readonly struct FeatureRegistration

@@ -9,6 +9,10 @@ namespace NTSD.Animation.Rendering.Editor
     {
         private const string SampleSourcePath =
             "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
+        private const string FootMarkerPath =
+            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
+        private const string CommonShadowPrefabPath =
+            "Assets/NTSD/Prefabs/Common/Shadow.prefab";
 
         public override void OnInspectorGUI()
         {
@@ -28,7 +32,9 @@ namespace NTSD.Animation.Rendering.Editor
 
             EditorGUILayout.HelpBox(
                 "选中此组件后，可在 SceneView 拖动 Actor 0、Actor 1… 的位置手柄。" +
-                "青色框是 Sprite 边界，红色框是头顶血条范围；Inspector 中的 HP 和布局修改会实时刷新。",
+                "青色框是 Sprite 边界，灰色框是角色原有 Shadow，黄色框是新增 FootSelf，" +
+                "红色框是头顶血条；" +
+                "Actor 0 的 Foot Marker/HP Offset 手柄调整全部 Actor 的对应布局。",
                 MessageType.Info);
         }
 
@@ -41,6 +47,9 @@ namespace NTSD.Animation.Rendering.Editor
                 return;
             SerializedProperty healthOffsetProperty = serializedObject
                 .FindProperty("healthBarStyle")?
+                .FindPropertyRelative("offsetPixels");
+            SerializedProperty footMarkerOffsetProperty = serializedObject
+                .FindProperty("footMarkerStyle")?
                 .FindPropertyRelative("offsetPixels");
 
             for (int actorIndex = 0; actorIndex < actorsProperty.arraySize; actorIndex++)
@@ -105,6 +114,53 @@ namespace NTSD.Animation.Rendering.Editor
                 Handles.DrawLine(
                     layout.PivotWorldPosition + Vector3.down * handleSize * 0.5f,
                     layout.PivotWorldPosition + Vector3.up * handleSize * 0.5f);
+                if (layout.HasCommonShadow)
+                {
+                    Handles.color = new Color(0.55f, 0.55f, 0.55f, 1f);
+                    Handles.DrawWireCube(
+                        layout.CommonShadowBounds.center,
+                        layout.CommonShadowBounds.size);
+                }
+                if (layout.HasFootMarker)
+                {
+                    Handles.color = new Color(1f, 0.78f, 0.05f, 1f);
+                    Handles.DrawWireCube(
+                        layout.FootMarkerBounds.center,
+                        layout.FootMarkerBounds.size);
+                    if (actorIndex == 0 && footMarkerOffsetProperty != null)
+                    {
+                        Vector3 offsetHandlePosition = layout.FootMarkerBounds.center;
+                        Handles.Label(
+                            offsetHandlePosition + Vector3.down * handleSize,
+                            "Foot Marker Offset（全部 Actor）");
+                        EditorGUI.BeginChangeCheck();
+                        Vector3 nextOffsetHandlePosition = Handles.Slider2D(
+                            offsetHandlePosition,
+                            Vector3.forward,
+                            Vector3.right,
+                            Vector3.up,
+                            handleSize * 0.75f,
+                            Handles.SphereHandleCap,
+                            0f);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            Undo.RecordObject(preview, "Move Preview Foot Markers");
+                            Vector3 worldDelta =
+                                nextOffsetHandlePosition - offsetHandlePosition;
+                            Vector2 offsetPixels =
+                                footMarkerOffsetProperty.vector2Value;
+                            offsetPixels.x +=
+                                worldDelta.x / NTSDRenderSpace.UnitsPerPixelX;
+                            offsetPixels.y +=
+                                worldDelta.y / NTSDRenderSpace.UnitsPerPixelY;
+                            footMarkerOffsetProperty.vector2Value = offsetPixels;
+                            serializedObject.ApplyModifiedProperties();
+                            preview.RequestEditorPreviewRefresh();
+                            EditorUtility.SetDirty(preview);
+                            serializedObject.Update();
+                        }
+                    }
+                }
                 if (layout.HasHealthBar)
                 {
                     Handles.color = new Color(1f, 0.2f, 0.2f, 1f);
@@ -156,8 +212,40 @@ namespace NTSD.Animation.Rendering.Editor
                     $"[BattleCentralEditorPreview] Sample source is unavailable: {SampleSourcePath}");
                 return;
             }
+            Sprite footMarker = AssetDatabase.LoadAssetAtPath<Sprite>(FootMarkerPath);
+            if (footMarker == null)
+            {
+                Debug.LogWarning(
+                    $"[BattleCentralEditorPreview] Foot marker is unavailable: {FootMarkerPath}");
+            }
+            GameObject commonShadowPrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
+            if (commonShadowPrefab == null)
+            {
+                Debug.LogWarning(
+                    $"[BattleCentralEditorPreview] Common shadow is unavailable: " +
+                    CommonShadowPrefabPath);
+            }
 
             serializedObject.Update();
+            serializedObject.FindProperty("drawCommonShadows").boolValue =
+                commonShadowPrefab != null;
+            serializedObject.FindProperty("commonShadowPrefab").objectReferenceValue =
+                commonShadowPrefab;
+            serializedObject.FindProperty("drawFootMarkers").boolValue =
+                footMarker != null;
+            serializedObject.FindProperty("footMarkerSprite").objectReferenceValue =
+                footMarker;
+            SerializedProperty footMarkerStyleProperty =
+                serializedObject.FindProperty("footMarkerStyle");
+            BattleFootMarkerStyle footMarkerStyle = BattleFootMarkerStyle.Default;
+            footMarkerStyleProperty.FindPropertyRelative("widthPixels").floatValue =
+                footMarkerStyle.WidthPixels;
+            footMarkerStyleProperty.FindPropertyRelative("heightPixels").floatValue =
+                footMarkerStyle.HeightPixels;
+            footMarkerStyleProperty.FindPropertyRelative("offsetPixels").vector2Value =
+                footMarkerStyle.OffsetPixels;
+            footMarkerStyleProperty.FindPropertyRelative("tint").colorValue = Color.white;
             SerializedProperty actorsProperty = serializedObject.FindProperty("actors");
             if (actorsProperty.arraySize == 0)
                 actorsProperty.InsertArrayElementAtIndex(0);
@@ -175,6 +263,8 @@ namespace NTSD.Animation.Rendering.Editor
                 new Vector2(0.5f, 0f);
             actorProperty.FindPropertyRelative("anchor").objectReferenceValue = null;
             actorProperty.FindPropertyRelative("localPivotPosition").vector3Value = Vector3.zero;
+            actorProperty.FindPropertyRelative("showCommonShadow").boolValue = true;
+            actorProperty.FindPropertyRelative("showFootMarker").boolValue = true;
             actorProperty.FindPropertyRelative("showHealthBar").boolValue = true;
             actorProperty.FindPropertyRelative("currentHealth").intValue = 35;
             actorProperty.FindPropertyRelative("recoverableHealth").intValue = 75;
@@ -225,6 +315,10 @@ namespace NTSD.Animation.Rendering.Editor
                 }
 
                 Bounds actorBounds = layout.SpriteBounds;
+                if (layout.HasCommonShadow)
+                    actorBounds.Encapsulate(layout.CommonShadowBounds);
+                if (layout.HasFootMarker)
+                    actorBounds.Encapsulate(layout.FootMarkerBounds);
                 if (layout.HasHealthBar)
                     actorBounds.Encapsulate(layout.HealthBarBounds);
                 if (found)

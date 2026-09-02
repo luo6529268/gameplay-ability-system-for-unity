@@ -27,6 +27,8 @@ namespace NTSD.Animation.Rendering
         [SerializeField] private Vector3 localPivotPosition;
         [SerializeField] private bool flipX;
         [SerializeField] private Color32 tint = new Color32(255, 255, 255, 255);
+        [SerializeField] private bool showCommonShadow = true;
+        [SerializeField] private bool showFootMarker = true;
         [SerializeField] private bool showHealthBar = true;
         [SerializeField] private int currentHealth = 100;
         [SerializeField] private int recoverableHealth = 100;
@@ -44,6 +46,8 @@ namespace NTSD.Animation.Rendering
         public Vector3 LocalPivotPosition => localPivotPosition;
         public bool FlipX => flipX;
         public Color32 Tint => tint;
+        public bool ShowCommonShadow => showCommonShadow;
+        public bool ShowFootMarker => showFootMarker;
         public bool ShowHealthBar => showHealthBar;
         public int CurrentHealth => currentHealth;
         public int RecoverableHealth => recoverableHealth;
@@ -68,6 +72,8 @@ namespace NTSD.Animation.Rendering
             localPivotPosition = configuredLocalPivotPosition;
             flipX = false;
             tint = new Color32(255, 255, 255, 255);
+            showCommonShadow = true;
+            showFootMarker = true;
             showHealthBar = true;
             currentHealth = configuredCurrentHealth;
             recoverableHealth = configuredRecoverableHealth;
@@ -100,17 +106,29 @@ namespace NTSD.Animation.Rendering
         public BattleCentralEditorPreviewLayout(
             Vector3 pivotWorldPosition,
             Bounds spriteBounds,
+            bool hasCommonShadow,
+            Bounds commonShadowBounds,
+            bool hasFootMarker,
+            Bounds footMarkerBounds,
             bool hasHealthBar,
             Bounds healthBarBounds)
         {
             PivotWorldPosition = pivotWorldPosition;
             SpriteBounds = spriteBounds;
+            HasCommonShadow = hasCommonShadow;
+            CommonShadowBounds = commonShadowBounds;
+            HasFootMarker = hasFootMarker;
+            FootMarkerBounds = footMarkerBounds;
             HasHealthBar = hasHealthBar;
             HealthBarBounds = healthBarBounds;
         }
 
         public Vector3 PivotWorldPosition { get; }
         public Bounds SpriteBounds { get; }
+        public bool HasCommonShadow { get; }
+        public Bounds CommonShadowBounds { get; }
+        public bool HasFootMarker { get; }
+        public Bounds FootMarkerBounds { get; }
         public bool HasHealthBar { get; }
         public Bounds HealthBarBounds { get; }
     }
@@ -123,6 +141,10 @@ namespace NTSD.Animation.Rendering
     {
         private const string DefaultMaterialPath =
             "Assets/NTSD/Materials/BattleCentralTransparent.mat";
+        internal const string DefaultCommonShadowPrefabPath =
+            "Assets/NTSD/Prefabs/Common/Shadow.prefab";
+        internal const string DefaultFootMarkerPath =
+            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
         private static readonly List<BattleCentralEditorPreview> RegisteredPreviews =
@@ -143,30 +165,64 @@ namespace NTSD.Animation.Rendering
                 new BattleCentralEditorPreviewActor(),
             };
 
+        [Header("Foot Markers")]
+        [SerializeField] private bool drawFootMarkers = true;
+        [SerializeField] private Sprite footMarkerSprite;
+        [SerializeField] private BattleFootMarkerStyle footMarkerStyle = default;
+
+        [Header("Existing Common Shadows")]
+        [SerializeField] private bool drawCommonShadows = true;
+        [SerializeField] private GameObject commonShadowPrefab;
+
         [Header("Overhead Health Bars")]
         [SerializeField] private bool drawHealthBars = true;
         [SerializeField] private BattleHealthBarStyle healthBarStyle = default;
 
+        private readonly BattlePresentationFrame commonShadowFrame =
+            new BattlePresentationFrame();
+        private readonly BattlePresentationFrame footMarkerFrame =
+            new BattlePresentationFrame();
         private readonly BattlePresentationFrame previewFrame = new BattlePresentationFrame();
+        private readonly BattleDynamicMeshBackend commonShadowBackend =
+            new BattleDynamicMeshBackend();
+        private readonly BattleDynamicMeshBackend footMarkerBackend =
+            new BattleDynamicMeshBackend();
         private readonly BattleDynamicMeshBackend actorBackend = new BattleDynamicMeshBackend();
         private readonly BattleHealthBarBatchBackend healthBackend =
             new BattleHealthBarBatchBackend();
         private readonly PreviewResourceResolver resourceResolver = new PreviewResourceResolver();
+        private readonly PreviewCommonShadowResourceResolver commonShadowResourceResolver =
+            new PreviewCommonShadowResourceResolver();
+        private readonly PreviewFootMarkerResourceResolver footMarkerResourceResolver =
+            new PreviewFootMarkerResourceResolver();
         private BattleHealthBarInstance[] healthInstances =
             Array.Empty<BattleHealthBarInstance>();
         private Sprite[] resolvedSprites = Array.Empty<Sprite>();
         private OwnedSpriteCache[] ownedSpriteCaches = Array.Empty<OwnedSpriteCache>();
         private Material resolvedMaterial;
+        private BattleCommonVisualBinding resolvedCommonShadow;
         private int builtSignature;
         private bool hasBuiltSignature;
         private bool resourcesDisposed;
 
         public int PreviewActorCount => actorBackend.Diagnostics.ResolvedCommandCount;
+        public int PreviewCommonShadowCount =>
+            commonShadowBackend.Diagnostics.ResolvedCommandCount;
+        public int PreviewCommonShadowSegmentCount => commonShadowBackend.SegmentCount;
+        public int PreviewFootMarkerCount =>
+            footMarkerBackend.Diagnostics.ResolvedCommandCount;
+        public int PreviewFootMarkerSegmentCount => footMarkerBackend.SegmentCount;
         public int PreviewHealthBarCount => healthBackend.ActiveBarCount;
         public int PreviewHealthQuadCount => healthBackend.ActiveQuadCount;
 
         private void Reset()
         {
+            footMarkerStyle = BattleFootMarkerStyle.Default;
+#if UNITY_EDITOR
+            commonShadowPrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>(DefaultCommonShadowPrefabPath);
+            footMarkerSprite = AssetDatabase.LoadAssetAtPath<Sprite>(DefaultFootMarkerPath);
+#endif
             healthBarStyle = BattleHealthBarStyle.Default;
         }
 
@@ -179,7 +235,7 @@ namespace NTSD.Animation.Rendering
 #endif
             if (!RegisteredPreviews.Contains(this))
                 RegisteredPreviews.Add(this);
-            BattleCentralRenderSystem.RefreshRuntimeHealthBarAuthoringSettings();
+            RefreshRuntimeAuthoringSettings();
             InvalidateAndRepaint();
         }
 
@@ -197,16 +253,24 @@ namespace NTSD.Animation.Rendering
 
         private void OnValidate()
         {
+            if (footMarkerStyle.WidthPixels <= 0f || footMarkerStyle.HeightPixels <= 0f)
+                footMarkerStyle = BattleFootMarkerStyle.Default;
             if (healthBarStyle.WidthPixels <= 0f || healthBarStyle.HeightPixels <= 0f)
                 healthBarStyle = BattleHealthBarStyle.Default;
-            BattleCentralRenderSystem.RefreshRuntimeHealthBarAuthoringSettings();
+            RefreshRuntimeAuthoringSettings();
             InvalidateAndRepaint();
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void RefreshRuntimeHealthBarSettingsAfterSceneLoad()
+        private static void RefreshRuntimeAuthoringSettingsAfterSceneLoad()
+        {
+            RefreshRuntimeAuthoringSettings();
+        }
+
+        private static void RefreshRuntimeAuthoringSettings()
         {
             BattleCentralRenderSystem.RefreshRuntimeHealthBarAuthoringSettings();
+            BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
         }
 
         private void Update()
@@ -314,6 +378,64 @@ namespace NTSD.Animation.Rendering
             return true;
         }
 
+        internal static bool TryGetRuntimeFootMarkerAuthoringSettings(
+            out bool enabled,
+            out Sprite sprite,
+            out BattleFootMarkerStyle style)
+        {
+            enabled = false;
+            sprite = null;
+            style = BattleFootMarkerStyle.Default;
+#if UNITY_EDITOR
+            if (exclusiveValidationPreview != null)
+            {
+                sprite = exclusiveValidationPreview.ResolveFootMarkerSprite();
+                enabled = exclusiveValidationPreview.drawFootMarkers && sprite != null;
+                style = exclusiveValidationPreview.footMarkerStyle.WidthPixels > 0f &&
+                        exclusiveValidationPreview.footMarkerStyle.HeightPixels > 0f
+                    ? exclusiveValidationPreview.footMarkerStyle.Normalized()
+                    : BattleFootMarkerStyle.Default;
+                return true;
+            }
+#endif
+            BattleCentralEditorPreview[] previews =
+                Resources.FindObjectsOfTypeAll<BattleCentralEditorPreview>();
+            BattleCentralEditorPreview candidate = null;
+            bool candidateIsActive = false;
+            int candidateId = int.MaxValue;
+            for (int index = 0; index < previews.Length; index++)
+            {
+                BattleCentralEditorPreview preview = previews[index];
+                if (preview == null || preview.gameObject == null ||
+                    !preview.gameObject.scene.IsValid() || !preview.gameObject.scene.isLoaded ||
+                    (preview.hideFlags & HideFlags.HideInHierarchy) != 0)
+                {
+                    continue;
+                }
+
+                bool isActive = preview.isActiveAndEnabled;
+                int instanceId = preview.GetInstanceID();
+                if (candidate == null || isActive && !candidateIsActive ||
+                    isActive == candidateIsActive && instanceId < candidateId)
+                {
+                    candidate = preview;
+                    candidateIsActive = isActive;
+                    candidateId = instanceId;
+                }
+            }
+
+            if (candidate == null)
+                return false;
+
+            sprite = candidate.ResolveFootMarkerSprite();
+            enabled = candidate.drawFootMarkers && sprite != null;
+            style = candidate.footMarkerStyle.WidthPixels > 0f &&
+                    candidate.footMarkerStyle.HeightPixels > 0f
+                ? candidate.footMarkerStyle.Normalized()
+                : BattleFootMarkerStyle.Default;
+            return true;
+        }
+
         internal int AppendDrawCommands(
             CommandBuffer commandBuffer,
             MaterialPropertyBlock propertyBlock)
@@ -326,6 +448,46 @@ namespace NTSD.Animation.Rendering
                 return 0;
 
             int drawCount = 0;
+            for (int segmentIndex = 0;
+                 segmentIndex < commonShadowBackend.SegmentCount;
+                 segmentIndex++)
+            {
+                BattleCentralRenderSegment segment =
+                    commonShadowBackend.GetSegment(segmentIndex);
+                if (segment.Material == null || segment.Texture == null)
+                    continue;
+                propertyBlock.Clear();
+                propertyBlock.SetTexture(MainTexId, segment.Texture);
+                commandBuffer.DrawMesh(
+                    commonShadowBackend.GetChunkMesh(segment.ChunkIndex),
+                    Matrix4x4.identity,
+                    segment.Material,
+                    segment.SubMeshIndex,
+                    0,
+                    propertyBlock);
+                drawCount++;
+            }
+
+            for (int segmentIndex = 0;
+                 segmentIndex < footMarkerBackend.SegmentCount;
+                 segmentIndex++)
+            {
+                BattleCentralRenderSegment segment =
+                    footMarkerBackend.GetSegment(segmentIndex);
+                if (segment.Material == null || segment.Texture == null)
+                    continue;
+                propertyBlock.Clear();
+                propertyBlock.SetTexture(MainTexId, segment.Texture);
+                commandBuffer.DrawMesh(
+                    footMarkerBackend.GetChunkMesh(segment.ChunkIndex),
+                    Matrix4x4.identity,
+                    segment.Material,
+                    segment.SubMeshIndex,
+                    0,
+                    propertyBlock);
+                drawCount++;
+            }
+
             for (int segmentIndex = 0; segmentIndex < actorBackend.SegmentCount; segmentIndex++)
             {
                 BattleCentralRenderSegment segment = actorBackend.GetSegment(segmentIndex);
@@ -382,11 +544,45 @@ namespace NTSD.Animation.Rendering
             BattleCentralEditorPreviewActor actor,
             in BattleHealthBarStyle configuredStyle)
         {
+            ConfigureForSelfCheck(
+                configuredMaterial,
+                new[] { actor },
+                configuredStyle);
+        }
+
+        internal void ConfigureForSelfCheck(
+            Material configuredMaterial,
+            BattleCentralEditorPreviewActor[] configuredActors,
+            in BattleHealthBarStyle configuredStyle)
+        {
             material = configuredMaterial;
             actors.Clear();
-            actors.Add(actor);
+            if (configuredActors != null)
+                actors.AddRange(configuredActors);
+            drawCommonShadows = false;
+            commonShadowPrefab = null;
+            drawFootMarkers = false;
+            footMarkerSprite = null;
+            footMarkerStyle = BattleFootMarkerStyle.Default;
             healthBarStyle = configuredStyle;
             drawHealthBars = true;
+            InvalidateAndRepaint();
+        }
+
+        internal void ConfigureCommonShadowForSelfCheck(GameObject configuredPrefab)
+        {
+            commonShadowPrefab = configuredPrefab;
+            drawCommonShadows = configuredPrefab != null;
+            InvalidateAndRepaint();
+        }
+
+        internal void ConfigureFootMarkerForSelfCheck(
+            Sprite configuredSprite,
+            in BattleFootMarkerStyle configuredStyle)
+        {
+            footMarkerSprite = configuredSprite;
+            footMarkerStyle = configuredStyle;
+            drawFootMarkers = configuredSprite != null;
             InvalidateAndRepaint();
         }
 
@@ -419,6 +615,10 @@ namespace NTSD.Animation.Rendering
         }
 
         internal BattleHealthBarBatchBackend HealthBackendForSelfCheck => healthBackend;
+        internal BattleDynamicMeshBackend CommonShadowBackendForSelfCheck =>
+            commonShadowBackend;
+        internal BattleDynamicMeshBackend FootMarkerBackendForSelfCheck =>
+            footMarkerBackend;
 
 #if UNITY_EDITOR
         internal int EditorActorCount => actors?.Count ?? 0;
@@ -502,6 +702,46 @@ namespace NTSD.Animation.Rendering
                     position.z),
                 new Vector3(spriteWidth, spriteHeight, 0.001f));
 
+            BattleCommonVisualBinding commonShadow = resolvedCommonShadow;
+            bool hasCommonShadow = drawCommonShadows && actor.ShowCommonShadow &&
+                                   commonShadow != null;
+            Bounds commonShadowBounds = default;
+            if (hasCommonShadow)
+            {
+                float shadowWidth = commonShadow.PixelSize.x *
+                                    NTSDRenderSpace.UnitsPerPixelX *
+                                    NTSDRenderSpace.BattleVisualScale;
+                float shadowHeight = commonShadow.PixelSize.y *
+                                     NTSDRenderSpace.UnitsPerPixelY *
+                                     NTSDRenderSpace.BattleVisualScale;
+                float shadowLeft = position.x - commonShadow.Pivot.x * shadowWidth;
+                float shadowBottom = position.y - commonShadow.Pivot.y * shadowHeight;
+                commonShadowBounds = new Bounds(
+                    new Vector3(
+                        shadowLeft + shadowWidth * 0.5f,
+                        shadowBottom + shadowHeight * 0.5f,
+                        position.z),
+                    new Vector3(shadowWidth, shadowHeight, 0.001f));
+            }
+
+            Sprite markerSprite = ResolveFootMarkerSprite();
+            bool hasFootMarker = drawFootMarkers && actor.ShowFootMarker &&
+                                 markerSprite != null && markerSprite.texture != null;
+            Bounds footMarkerBounds = default;
+            if (hasFootMarker)
+            {
+                BattleFootMarkerStyle style = footMarkerStyle.Normalized();
+                float markerWidth = style.WidthPixels * NTSDRenderSpace.UnitsPerPixelX;
+                float markerHeight = style.HeightPixels * NTSDRenderSpace.UnitsPerPixelY;
+                Vector3 markerCenter = position + new Vector3(
+                    style.OffsetPixels.x * NTSDRenderSpace.UnitsPerPixelX,
+                    style.OffsetPixels.y * NTSDRenderSpace.UnitsPerPixelY,
+                    0f);
+                footMarkerBounds = new Bounds(
+                    markerCenter,
+                    new Vector3(markerWidth, markerHeight, 0.001f));
+            }
+
             bool hasHealthBar = drawHealthBars && actor.ShowHealthBar &&
                                 actor.MaximumHealth > 0;
             Bounds healthBounds = default;
@@ -527,6 +767,10 @@ namespace NTSD.Animation.Rendering
             layout = new BattleCentralEditorPreviewLayout(
                 position,
                 spriteBounds,
+                hasCommonShadow,
+                commonShadowBounds,
+                hasFootMarker,
+                footMarkerBounds,
                 hasHealthBar,
                 healthBounds);
             return true;
@@ -557,20 +801,39 @@ namespace NTSD.Animation.Rendering
                 hasBuiltSignature = true;
             }
 
-            return actorBackend.SegmentCount > 0 || healthBackend.ActiveBarCount > 0;
+            return commonShadowBackend.SegmentCount > 0 ||
+                   footMarkerBackend.SegmentCount > 0 ||
+                   actorBackend.SegmentCount > 0 ||
+                   healthBackend.ActiveBarCount > 0;
         }
 
         private void Rebuild(Material nextMaterial)
         {
             resolvedMaterial = nextMaterial;
+            commonShadowFrame.Reset(0);
+            footMarkerFrame.Reset(0);
             previewFrame.Reset(0);
             int actorCapacity = actors?.Count ?? 0;
+            commonShadowBackend.PrepareCapacity(actorCapacity);
+            footMarkerBackend.PrepareCapacity(actorCapacity);
             actorBackend.PrepareCapacity(actorCapacity);
             EnsureHealthInstanceCapacity(actorCapacity);
             EnsureResolvedSpriteCapacity(actorCapacity);
             EnsureOwnedSpriteCacheCapacity(actorCapacity);
             DisposeUnusedOwnedSpriteCaches(actorCapacity);
             int healthCount = 0;
+            BattleCommonVisualCatalog commonVisualCatalog = drawCommonShadows
+                ? BattleCommonVisualCatalog.Build(ResolveCommonShadowPrefab())
+                : BattleCommonVisualCatalog.Empty;
+            resolvedCommonShadow = commonVisualCatalog.IsShadowValid
+                ? commonVisualCatalog.Shadow
+                : null;
+            Sprite resolvedFootMarker = ResolveFootMarkerSprite();
+            BattleFootMarkerStyle normalizedFootMarkerStyle =
+                footMarkerStyle.Normalized();
+            Vector2 footMarkerBackendSize =
+                normalizedFootMarkerStyle.SizePixels /
+                NTSDRenderSpace.BattleVisualScale;
 
             for (int actorIndex = 0; actorIndex < actorCapacity; actorIndex++)
             {
@@ -588,6 +851,54 @@ namespace NTSD.Animation.Rendering
                     sprite.pivot.y / pixelSize.y);
                 Transform anchor = actor.Anchor != null ? actor.Anchor : transform;
                 Vector3 position = anchor.TransformPoint(actor.LocalPivotPosition);
+                if (drawCommonShadows && actor.ShowCommonShadow &&
+                    resolvedCommonShadow != null)
+                {
+                    commonShadowFrame.AddCommand(new BattleRenderCommand(
+                        BattleRenderCommandType.Shadow,
+                        RuntimeEntityHandle.Invalid,
+                        actorIndex + 1,
+                        -1,
+                        -1,
+                        Mathf.RoundToInt(position.z / NTSDRenderSpace.UnitsPerPixelY),
+                        actorIndex,
+                        actorIndex,
+                        0,
+                        actorIndex,
+                        position,
+                        resolvedCommonShadow.PixelSize,
+                        resolvedCommonShadow.Pivot,
+                        resolvedCommonShadow.NormalizedUv,
+                        resolvedCommonShadow.RenderState,
+                        default));
+                }
+                if (drawFootMarkers && actor.ShowFootMarker &&
+                    resolvedFootMarker != null && resolvedFootMarker.texture != null)
+                {
+                    Vector3 markerPosition = position + new Vector3(
+                        normalizedFootMarkerStyle.OffsetPixels.x *
+                        NTSDRenderSpace.UnitsPerPixelX,
+                        normalizedFootMarkerStyle.OffsetPixels.y *
+                        NTSDRenderSpace.UnitsPerPixelY,
+                        0f);
+                    footMarkerFrame.AddCommand(new BattleRenderCommand(
+                        BattleRenderCommandType.Entity,
+                        RuntimeEntityHandle.Invalid,
+                        actorIndex + 1,
+                        0,
+                        0,
+                        Mathf.RoundToInt(position.z / NTSDRenderSpace.UnitsPerPixelY),
+                        actorIndex,
+                        actorIndex,
+                        0,
+                        actorIndex,
+                        markerPosition,
+                        footMarkerBackendSize,
+                        new Vector2(0.5f, 0.5f),
+                        NormalizedUv(resolvedFootMarker),
+                        false,
+                        default));
+                }
                 previewFrame.AddCommand(new BattleRenderCommand(
                     BattleRenderCommandType.Entity,
                     RuntimeEntityHandle.Invalid,
@@ -619,6 +930,37 @@ namespace NTSD.Animation.Rendering
                     actor.CurrentHealth,
                     actor.RecoverableHealth,
                     actor.MaximumHealth);
+            }
+
+            commonShadowResourceResolver.Configure(resolvedCommonShadow, nextMaterial);
+            commonShadowFrame.CommandsMaterialized = true;
+            commonShadowBackend.Build(
+                commonShadowFrame,
+                commonShadowResourceResolver,
+                BattleCentralDrawMode.OrderedChunks);
+            for (int chunkIndex = 0;
+                 chunkIndex < commonShadowBackend.ActiveChunkCount;
+                 chunkIndex++)
+            {
+                commonShadowBackend.GetChunkMesh(chunkIndex).hideFlags =
+                    HideFlags.HideAndDontSave;
+            }
+
+            footMarkerResourceResolver.Configure(
+                resolvedFootMarker,
+                nextMaterial,
+                normalizedFootMarkerStyle);
+            footMarkerFrame.CommandsMaterialized = true;
+            footMarkerBackend.Build(
+                footMarkerFrame,
+                footMarkerResourceResolver,
+                BattleCentralDrawMode.OrderedChunks);
+            for (int chunkIndex = 0;
+                 chunkIndex < footMarkerBackend.ActiveChunkCount;
+                 chunkIndex++)
+            {
+                footMarkerBackend.GetChunkMesh(chunkIndex).hideFlags =
+                    HideFlags.HideAndDontSave;
             }
 
             resourceResolver.Configure(actors, resolvedSprites, nextMaterial);
@@ -657,6 +999,35 @@ namespace NTSD.Animation.Rendering
                 hash = hash * 31 + transform.localToWorldMatrix.GetHashCode();
                 hash = hash * 31 + previewInSceneView.GetHashCode();
                 hash = hash * 31 + previewInGameView.GetHashCode();
+                hash = hash * 31 + drawCommonShadows.GetHashCode();
+                GameObject resolvedShadowPrefab = ResolveCommonShadowPrefab();
+                hash = hash * 31 +
+                       (resolvedShadowPrefab != null ? resolvedShadowPrefab.GetInstanceID() : 0);
+                BattleCommonShadowDescriptor shadowDescriptor = resolvedShadowPrefab != null
+                    ? resolvedShadowPrefab.GetComponent<BattleCommonShadowDescriptor>()
+                    : null;
+                if (shadowDescriptor != null)
+                {
+                    hash = hash * 31 +
+                           (shadowDescriptor.Sprite != null
+                               ? shadowDescriptor.Sprite.GetInstanceID()
+                               : 0);
+                    hash = hash * 31 +
+                           (shadowDescriptor.Material != null
+                               ? shadowDescriptor.Material.GetInstanceID()
+                               : 0);
+                    hash = hash * 31 + shadowDescriptor.Color.GetHashCode();
+                    hash = hash * 31 + shadowDescriptor.FlipX.GetHashCode();
+                    hash = hash * 31 + shadowDescriptor.FlipY.GetHashCode();
+                }
+                hash = hash * 31 + drawFootMarkers.GetHashCode();
+                Sprite resolvedFootMarker = ResolveFootMarkerSprite();
+                hash = hash * 31 +
+                       (resolvedFootMarker != null ? resolvedFootMarker.GetInstanceID() : 0);
+                hash = hash * 31 + footMarkerStyle.WidthPixels.GetHashCode();
+                hash = hash * 31 + footMarkerStyle.HeightPixels.GetHashCode();
+                hash = hash * 31 + footMarkerStyle.OffsetPixels.GetHashCode();
+                hash = hash * 31 + footMarkerStyle.Tint.GetHashCode();
                 hash = hash * 31 + drawHealthBars.GetHashCode();
                 hash = hash * 31 + healthBarStyle.WidthPixels.GetHashCode();
                 hash = hash * 31 + healthBarStyle.HeightPixels.GetHashCode();
@@ -692,6 +1063,8 @@ namespace NTSD.Animation.Rendering
                     hash = hash * 31 + actor.LocalPivotPosition.GetHashCode();
                     hash = hash * 31 + actor.FlipX.GetHashCode();
                     hash = hash * 31 + actor.Tint.GetHashCode();
+                    hash = hash * 31 + actor.ShowCommonShadow.GetHashCode();
+                    hash = hash * 31 + actor.ShowFootMarker.GetHashCode();
                     hash = hash * 31 + actor.ShowHealthBar.GetHashCode();
                     hash = hash * 31 + actor.CurrentHealth;
                     hash = hash * 31 + actor.RecoverableHealth;
@@ -710,6 +1083,28 @@ namespace NTSD.Animation.Rendering
                 return material;
 #if UNITY_EDITOR
             return AssetDatabase.LoadAssetAtPath<Material>(DefaultMaterialPath);
+#else
+            return null;
+#endif
+        }
+
+        private Sprite ResolveFootMarkerSprite()
+        {
+            if (footMarkerSprite != null)
+                return footMarkerSprite;
+#if UNITY_EDITOR
+            return AssetDatabase.LoadAssetAtPath<Sprite>(DefaultFootMarkerPath);
+#else
+            return null;
+#endif
+        }
+
+        private GameObject ResolveCommonShadowPrefab()
+        {
+            if (commonShadowPrefab != null)
+                return commonShadowPrefab;
+#if UNITY_EDITOR
+            return AssetDatabase.LoadAssetAtPath<GameObject>(DefaultCommonShadowPrefabPath);
 #else
             return null;
 #endif
@@ -803,10 +1198,15 @@ namespace NTSD.Animation.Rendering
             if (resourcesDisposed)
                 return;
             resourcesDisposed = true;
+            commonShadowBackend.Dispose();
+            footMarkerBackend.Dispose();
             actorBackend.Dispose();
             healthBackend.Dispose();
             DisposeUnusedOwnedSpriteCaches(0);
+            commonShadowFrame.ReleasePublicationBinding();
+            footMarkerFrame.ReleasePublicationBinding();
             previewFrame.ReleasePublicationBinding();
+            resolvedCommonShadow = null;
             resolvedMaterial = null;
         }
 
@@ -857,6 +1257,84 @@ namespace NTSD.Animation.Rendering
             }
         }
 #endif
+
+        private sealed class PreviewCommonShadowResourceResolver :
+            IBattleCentralResourceResolver
+        {
+            private BattleCommonVisualBinding configuredBinding;
+            private Material configuredMaterial;
+
+            public void Configure(
+                BattleCommonVisualBinding binding,
+                Material material)
+            {
+                configuredBinding = binding;
+                configuredMaterial = material;
+            }
+
+            public BattleCentralResourceStatus Resolve(
+                in BattleRenderCommand command,
+                out BattleCentralResolvedResource resource)
+            {
+                resource = default;
+                if (configuredBinding == null || configuredBinding.Texture == null ||
+                    configuredMaterial == null)
+                {
+                    return BattleCentralResourceStatus.UnresolvedVisual;
+                }
+
+                resource = new BattleCentralResolvedResource(
+                    configuredBinding.Texture,
+                    configuredMaterial,
+                    configuredBinding.NormalizedUv,
+                    configuredBinding.PixelSize,
+                    configuredBinding.Pivot,
+                    configuredBinding.Color);
+                return BattleCentralResourceStatus.Resolved;
+            }
+        }
+
+        private sealed class PreviewFootMarkerResourceResolver :
+            IBattleCentralResourceResolver
+        {
+            private Sprite configuredSprite;
+            private Material configuredMaterial;
+            private BattleFootMarkerStyle configuredStyle;
+
+            public void Configure(
+                Sprite sprite,
+                Material material,
+                in BattleFootMarkerStyle style)
+            {
+                configuredSprite = sprite;
+                configuredMaterial = material;
+                configuredStyle = style;
+            }
+
+            public BattleCentralResourceStatus Resolve(
+                in BattleRenderCommand command,
+                out BattleCentralResolvedResource resource)
+            {
+                resource = default;
+                if (configuredSprite == null || configuredSprite.texture == null ||
+                    configuredMaterial == null)
+                {
+                    return BattleCentralResourceStatus.UnresolvedVisual;
+                }
+
+                Vector2 backendPixelSize =
+                    configuredStyle.SizePixels /
+                    NTSDRenderSpace.BattleVisualScale;
+                resource = new BattleCentralResolvedResource(
+                    configuredSprite.texture,
+                    configuredMaterial,
+                    NormalizedUv(configuredSprite),
+                    backendPixelSize,
+                    new Vector2(0.5f, 0.5f),
+                    configuredStyle.Tint);
+                return BattleCentralResourceStatus.Resolved;
+            }
+        }
 
         private sealed class PreviewResourceResolver : IBattleCentralResourceResolver
         {

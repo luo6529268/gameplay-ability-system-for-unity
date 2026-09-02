@@ -72,9 +72,12 @@ namespace NTSD.Animation.Rendering
 
         internal BattleCentralSubmission(
             BattleDynamicMeshBackend backend,
+            BattleFootMarkerBatchBackend footMarkerBackend,
             BattleHealthBarBatchBackend healthBackend)
         {
             Backend = backend ?? throw new ArgumentNullException(nameof(backend));
+            FootMarkerBackend = footMarkerBackend ??
+                                throw new ArgumentNullException(nameof(footMarkerBackend));
             HealthBackend = healthBackend ?? throw new ArgumentNullException(nameof(healthBackend));
         }
 
@@ -83,14 +86,19 @@ namespace NTSD.Animation.Rendering
         public int TickIndex { get; private set; }
         public int Generation { get; private set; }
         public BattleDynamicMeshBackend Backend { get; }
+        public BattleFootMarkerBatchBackend FootMarkerBackend { get; }
         public BattleHealthBarBatchBackend HealthBackend { get; }
         public int BackendMutationVersion { get; private set; }
+        public int FootMarkerBackendMutationVersion { get; private set; }
         public int HealthBackendMutationVersion { get; private set; }
         public int ReadLeaseCount => Volatile.Read(ref readLeaseCount);
         public bool IsRetired => Volatile.Read(ref retired) != 0;
         internal bool IsBackendBuildCurrent =>
             Backend != null && Backend.MutationVersion == BackendMutationVersion &&
             ReferenceEquals(Backend.BuiltFrame, CapturedFrame) &&
+            FootMarkerBackend != null &&
+            FootMarkerBackend.MutationVersion == FootMarkerBackendMutationVersion &&
+            ReferenceEquals(FootMarkerBackend.BuiltFrame, CapturedFrame) &&
             HealthBackend != null &&
             HealthBackend.MutationVersion == HealthBackendMutationVersion &&
             ReferenceEquals(HealthBackend.BuiltFrame, CapturedFrame);
@@ -123,6 +131,8 @@ namespace NTSD.Animation.Rendering
                 entityCapacity,
                 hitRecordCapacity,
                 commandCapacity);
+            FootMarkerBackend.PrepareCapacity(
+                Math.Min(entityCapacity, BattleFootMarkerBatchBackend.MaximumMarkersPerBatch));
             HealthBackend.PrepareCapacity(
                 Math.Min(entityCapacity, BattleHealthBarBatchBackend.MaximumBarsPerBatch));
         }
@@ -139,6 +149,7 @@ namespace NTSD.Animation.Rendering
                 throw new InvalidOperationException("Cannot publish into a leased central submission slot.");
             if (!ReferenceEquals(capturedFrame, frozenFrame) ||
                 !ReferenceEquals(Backend.BuiltFrame, frozenFrame) ||
+                !ReferenceEquals(FootMarkerBackend.BuiltFrame, frozenFrame) ||
                 !ReferenceEquals(HealthBackend.BuiltFrame, frozenFrame))
             {
                 throw new InvalidOperationException(
@@ -151,6 +162,7 @@ namespace NTSD.Animation.Rendering
             TickIndex = tickIndex;
             Generation = generation;
             BackendMutationVersion = Backend.MutationVersion;
+            FootMarkerBackendMutationVersion = FootMarkerBackend.MutationVersion;
             HealthBackendMutationVersion = HealthBackend.MutationVersion;
             catalogManager = manager;
             catalog = publishedCatalog ?? BattleSpriteCatalog.Empty;
@@ -264,6 +276,8 @@ namespace NTSD.Animation.Rendering
 
             public BattleCentralSubmission Submission => submission;
             public BattleDynamicMeshBackend Backend => IsValid ? submission.Backend : null;
+            public BattleFootMarkerBatchBackend FootMarkerBackend =>
+                IsValid ? submission.FootMarkerBackend : null;
             public BattleHealthBarBatchBackend HealthBackend =>
                 IsValid ? submission.HealthBackend : null;
             public int TickIndex => IsValid ? submission.TickIndex : -1;

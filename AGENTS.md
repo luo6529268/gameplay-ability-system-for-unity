@@ -7,9 +7,10 @@
 - Unity 版本：以项目当前 `ProjectSettings/ProjectVersion.txt` 为准
 - Unity 实现目录：`Assets/NTSD/Scripts/`
 - 当前工作范围：战斗场景与战斗 runtime
-- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.4\ntsd_release` 的正式 release live runtime
+- 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`；任何上下文压缩、交接或历史检索后必须先读该文件
+- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码
 - 唯一正式内容数值权威：Git 恢复并经 138-DAT manifest/normalized projection 冻结的 Unity `Assets/NTSD/Config` 现状
-- Unity 是实现目标；C++ release runtime 用于判定规则、顺序、字段和可观察行为；`ntsd_release_C#` 仅保留为历史移植辅助与交叉检查来源
+- Unity 是实现目标；NTSD 2.8-Logan 正式 release runtime 用于判定规则、顺序、字段和可观察行为；NTSD 2.4 release、`ntsd_release_C#` 及其旧对齐结论仅保留为历史迁移辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
 
@@ -18,49 +19,55 @@
 处理战斗逻辑时，按以下优先级判断：
 
 1. 用户在当前任务中的明确要求。
-2. `J:\QQFile\NTSD2.4\ntsd_release` 中实际参与 release 构建并运行到 `ntsd_new.exe` 的 C++ battle runtime 规则、逻辑顺序、状态变化与可观察战斗行为。
-3. Git 恢复并经正式 manifest/projection 冻结的 Unity `Assets/NTSD/Config` 现状，用于定义正式内容数值、内容结构与内容指纹；C++ release DAT 不再覆盖这些内容值。
-4. `J:\QQFile\NTSD2.4\ntsd_release_C#` 的正式 C# 行为，只能用于定位历史移植意图、命名和交叉检查；与 C++ release battle rule/live path 冲突时必须以 C++ 为准。
-5. Unity runtime 实现与测试用于验证规则实现和消费已冻结内容；不能反过来定义 C++ 战斗规则。
-6. 项目文档和历史记录只用于任务跟踪；与当前规则/内容 authority 合同冲突时必须更新文档，不能修改权威结论。
+2. 当前根目录正式 `NTSD2.8-Logan.exe` 的实际可观察战斗行为；正式 EXE 的精确身份以 `docs/ai/CURRENT-AUTHORITY.md` 的 SHA-256 为准。
+3. `source\README_SOURCE.md` 声明对应当前发行 EXE、并实际进入 `source\ntsd28_playable\scripts\build.ps1 -Target playable` 构建闭包的 C++ 源码。
+4. 正式启动参数及 `resources\runtime` 中被正式 EXE 实际消费的数据；但正式内容数值仍受下一项的 Direction B 合同约束。
+5. Git 恢复并经正式 manifest/projection 冻结的 Unity `Assets/NTSD/Config` 现状，用于定义正式内容数值、内容结构与内容指纹；新 release DAT 暂不覆盖这些内容值，除非用户另行改变内容权威。
+6. Unity runtime 实现与测试用于验证规则实现和消费已冻结内容；不能反过来定义当前发行战斗规则。
+7. NTSD 2.4 release、`ntsd_release_C#`、旧 trace、旧 self-check 和旧对齐结论，只能用于历史比较、命名定位和夹具回归；与当前权威冲突时无裁决权。
+8. 项目文档和历史记录只用于任务跟踪；与当前规则/内容 authority 合同冲突时必须更新文档，不能修改权威结论。
 
-只有 C++ release 的 live path 才能定义当前战斗规则与逻辑顺序；它不再定义正式内容数值。未参与 release 构建的实验代码、备份文件、debug probe、diagnostic、反汇编记录和旧对齐结论都不能作为规则 authority。用户没有明确要求历史比较时，不要以 C#、反汇编或旧实现补写 C++ 未确认的行为。不要因为 Unity 或 C# 现有行为更方便而偏离 C++ battle rules；也不要把 C++ 的统一 `Entity` 字段名称机械替换成并不存在的 Unity 类型、字段或方法。
+只有当前 NTSD 2.8-Logan 正式 EXE 和对应 playable live path 才能定义当前战斗规则与逻辑顺序；它暂不改变 Direction B 的正式内容数值权威。未参与 playable 构建的实验代码、备份文件、debug probe、diagnostic、候选 build、反汇编记录和旧对齐结论都不能作为规则 authority。用户没有明确要求历史比较时，不要以 NTSD 2.4、C#、反汇编或旧实现补写当前源码未确认的行为。源码重建输出不会自动覆盖根目录正式 EXE；候选 EXE 不得自动晋升为正式行为。不要因为 Unity 或旧实现更方便而偏离当前 battle rules；也不要把 C++ 的统一实体字段名称机械替换成并不存在的 Unity 类型、字段或方法。
 
 ### 2.2 Direction B 内容数值权威
 
-自 `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 起，正式内容值以 Git 恢复后的 Unity `Assets/NTSD/Config` 现状为准，并通过 138-DAT raw manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。C++ release DAT、193 行矩阵、Appendix A～F、0do/0do-c 审计只保留为历史诊断证据，不得再驱动 DAT token、结构、sound、WPoint 或 topology 修正。内容权威变化不放宽 C++ battle rule、pass order、30 Hz、state/lifecycle 或 observable behavior 对齐。
+自 `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 起，正式内容值以 Git 恢复后的 Unity `Assets/NTSD/Config` 现状为准，并通过 138-DAT raw manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。NTSD 2.4/2.8 release DAT、193 行矩阵、Appendix A～F、0do/0do-c 审计只保留为历史或新权威行为诊断证据，不得在用户未改变内容权威前驱动 DAT token、结构、sound、WPoint 或 topology 修正。内容权威变化不放宽当前 NTSD 2.8-Logan battle rule、pass order、33 ms 正常逻辑间隔、state/lifecycle 或 observable behavior 对齐。
 
-无法在权威 C++ release live path 中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 C++ release 一致。
+无法在当前权威 release live path 中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 NTSD 2.8-Logan 正式发行行为一致。
 
 ### 2.1 C# 工程的保留用途与边界
 
-`J:\QQFile\NTSD2.4\ntsd_release_C#` 不是当前 gameplay authority。它可以用于：
+NTSD 2.4 的 `ntsd_release_C#` 不是当前 gameplay authority。它可以用于：
 
 - 识别既有 Unity 移植的字段命名和历史意图；
 - 对照 C++ 已确认行为的第二实现；
 - 补充 C++ 源码中尚未读到的调用者线索；
 - 维护历史自检和已有回归夹具。
 
-它不得用于覆盖 C++ release 的 pass 顺序、输入时点、碰撞/命中结果、对象生命周期、镜头/render handoff 或最终可观察表现。历史文档中“C# 唯一权威”及 C++ 定向例外的表述均视为已废止的历史上下文。
+它不得用于覆盖当前 NTSD 2.8-Logan 的 pass 顺序、输入时点、碰撞/命中结果、对象生命周期、镜头/render handoff 或最终可观察表现。历史文档中“C# 唯一权威”以及 NTSD 2.4 C++ release 权威的表述均视为已废止的历史上下文。
 
-## 3. C++ release 战斗规则权威入口
+## 3. NTSD 2.8-Logan 战斗规则权威入口
 
 开始对齐前，先从与问题最接近的入口追踪实际调用链，不要根据方法名猜测语义。
 
 | 领域 | 权威入口 |
 |------|----------|
-| 战斗主循环与 pass 顺序 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\game_tick.cpp` 的 live `game_tick(...)` |
-| 帧推进、物理、opoint 与对象生命周期 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\frame_advance.cpp`、`physics.cpp` |
-| 碰撞候选、命中与对象交互 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\collision_collect.cpp`、`collision.cpp`、`hit.cpp` |
-| 武器、cpoint、持有/投掷 | `J:\QQFile\NTSD2.4\ntsd_release\src\entity\weapon.cpp`、`cpoint.cpp` |
-| 输入、组合键与 AI 输入链 | `J:\QQFile\NTSD2.4\ntsd_release\src\input\input_handler.cpp` |
-| 战斗 render handoff 与场景表现 | `J:\QQFile\NTSD2.4\ntsd_release\src\render\renderer.cpp` |
+| 正式 host 与每步调用 | `source\ntsd28_playable\src\game_session.cpp` 的 `GameSession28::step()` |
+| 战斗主循环与 pass 顺序 | `source\ntsd28_core\src\simulation\simulation_tick_driver.cpp` 的 `SimulationTickDriver28::step(...)` |
+| World、实体、关系与生命周期 | `source\ntsd28_core\src\simulation\battle_world.cpp` 的 `BattleWorld28` |
+| 帧推进与帧运动 | `source\ntsd28_core\src\simulation\frame_machine.cpp`、`frame_motion.cpp` |
+| 物理积分 | `source\ntsd28_core\src\simulation\physics_integrator.cpp` |
+| 碰撞候选、命中与对象交互 | `source\ntsd28_core\src\simulation\hit_candidates.cpp` 及 `battle_world.cpp` 的消费路径 |
+| 输入、组合键与 AI 输入链 | `source\ntsd28_core\src\simulation\input_routing.cpp`、`native_ai.cpp` |
+| 对象生成、OPoint 与生命周期尾部 | `source\ntsd28_core\src\simulation\object_spawning.cpp` 及 `battle_world.cpp` |
+| 逻辑 render handoff | `source\ntsd28_core\src\simulation\render_snapshot.cpp` |
+| 正式场景表现与插值 | `source\ntsd28_playable\src\d3d11_renderer.cpp`、`presentation_interpolation.cpp` |
 
 这些文件是定位入口，不代表只需要查看这四个文件。实现具体行为时，应继续追踪它们调用的数据模型、resolver、碰撞、对象生成、状态统计和实体生命周期代码，直到字段读写与调用顺序完整闭合。
 
 ### 对齐工作顺序
 
-1. 对战斗规则/逻辑顺序，在权威 C++ release live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `Makefile` 的 release 构建；对内容数值，读取已冻结 Unity content authority artifact，不以 release DAT 覆盖。
+1. 对战斗规则/逻辑顺序，在当前 NTSD 2.8-Logan playable live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `build.ps1 -Target playable` 的构建闭包；对内容数值，读取已冻结 Unity content authority artifact，不以 release DAT 覆盖。
 2. 记录完整前置条件、分支顺序、常量、状态写入、统计副作用和对象生命周期副作用。
 3. 在 Unity 中定位对应 pass、实体类型、runtime 字段与表现层接口。
 4. 先补齐数据契约，再整体移植行为；不得只搬局部扣血、位移或生成片段。
@@ -101,7 +108,7 @@
 - 对象池及资源异步加载
 - Inspector 配置与编辑器测试入口
 
-Unity 适配层不得改变权威 C++ release live path 的战斗结果：
+Unity 适配层不得改变当前 NTSD 2.8-Logan release live path 的战斗结果：
 
 - `Transform`、Animator、Unity Physics 和渲染帧状态都不能成为逻辑真相。
 - 逻辑实体位置、速度、朝向、帧号、HP/PP、link/holder/target 等必须由战斗 runtime 维护。
@@ -112,12 +119,12 @@ Unity 适配层不得改变权威 C++ release live path 的战斗结果：
 
 ## 6. 主循环与固定逻辑帧
 
-战斗 pass 顺序只能以权威 C++ release `game_tick.cpp` 的 live `game_tick(...)` 为准。C# `GameTick.cs` 只能作为历史移植辅助与交叉检查；旧文档中声称“主循环已经完全对齐”的结论不能代替重新核验。
+战斗 pass 顺序只能以当前权威 `simulation_tick_driver.cpp` 的 `SimulationTickDriver28::step(...)` 及其正式调用链为准。NTSD 2.4 `game_tick.cpp` 和 C# `GameTick.cs` 只能作为历史移植辅助与交叉检查；旧文档中声称“主循环已经完全对齐”的结论不能代替针对 NTSD 2.8-Logan 的重新核验。
 
 当前底层原则：
 
 - `SimulationTickDriver` 是 Unity 侧逻辑帧入口。
-- 固定逻辑频率为 30 Hz，即 `SimulationConstants.SIM_DT = 1f / 30f`。
+- 当前 NTSD 2.8-Logan 权威的正常逻辑间隔为 `33 ms`（`system.dat` 的 `fps_value: 33`），F5 快速模式为 `3 ms`（`fps_value_f5: 3`）。Unity 当前 `SimulationConstants.SIM_DT = 1f / 30f` 是待重新基线化的旧实现事实，不得再报告为已与新权威对齐；修改它必须另建独立 Change 并完成时序验收。
 - Unity 的 `Update`、`LateUpdate` 和 `FixedUpdate` 只是外层引擎回调，不定义战斗规则。
 - 本地自由运行可由 `Time.unscaledDeltaTime` 累积驱动，但单个逻辑 tick 内不得使用 `Time.deltaTime` 或 `Time.fixedDeltaTime` 决定规则结果。
 - `FixedUpdate()` 不直接推进战斗逻辑。
@@ -173,7 +180,7 @@ Stopped
 
 - 每个逻辑帧的输入必须是离散、可记录和可重放的数据。
 - 按下、按住、释放和组合键窗口必须分别映射，不能用渲染帧轮询替代逻辑帧边沿。
-- 输入消费顺序必须与权威 C++ release live path 一致，不能为了“更灵敏”而跨 pass 提前消费。
+- 输入消费顺序必须与当前 NTSD 2.8-Logan release live path 一致，不能为了“更灵敏”而跨 pass 提前消费。
 - 后续 `FrameInputSet` 应包含该 tick 所有玩家的输入。
 - `LocalFreeRun`、`LockstepBuffered` 和 `Manual` 模式应共享同一个逻辑 tick 入口。
 - 回放入口最终需要支持 `ResetWorld(seed)`、逐 tick 输入、状态快照与 checksum。
@@ -198,7 +205,7 @@ T8 的 stage 战斗逻辑和生产接线可以继续验证，但默认 `stage.da
 1. **编译**：Unity 脚本编译为 0 error。
 2. **自动自检**：`BattleRuntimeSelfCheck` 能实际运行并通过目标检查。
 3. **定向运行时验证**：在真实战斗场景复现对应角色、输入、对象生成、命中或状态序列。
-4. **权威对照**：同一场景的可观察结果与 C++ release live 调用链和字段变化一致。
+4. **权威对照**：同一场景的可观察结果与当前 NTSD 2.8-Logan 正式 EXE、release live 调用链和字段变化一致。
 
 必须区分以下状态：
 
@@ -246,7 +253,7 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 - 避免每帧分配；使用现有池、缓存和复用容器。
 - 结构化 DAT/配置数据使用现有 parser 与数据模型，不做脆弱的字符串拼接解析。
 - 只在复杂时序或不明显契约处写简短注释，不给自解释代码增加旁白。
-- 新增字段前先在权威 C++ release live path 中确认语义、默认值、重置时机和所有读写方；C# 仅可辅助定位历史命名与调用线索。
+- 新增字段前先在当前 NTSD 2.8-Logan release live path 中确认语义、默认值、重置时机和所有读写方；旧 C++/C# 仅可辅助定位历史命名与调用线索。
 - 修复共享战斗行为时添加或更新聚焦的 self-check；高风险跨 pass 改动需要更广验证。
 
 ## 12. NTSD 模块结构
@@ -279,6 +286,42 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 - `LF2Character.Hit.partial.cs`：命中与战斗逻辑。
 - 其他 partial 文件按职责扩展；修改前先搜索全部同名 partial，避免重复字段或遗漏调用链。
 
+### 12.1 Mono / 非 Mono 边界未来重构计划
+
+Simulation 的 Mono 生命周期层、非 Mono 确定性 Core、Presentation adapter 与未来
+asmdef 单向依赖方案，统一记录在：
+
+- `Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md`
+
+计划标识与当前状态：
+
+```text
+SIMULATION-MONO-BOUNDARY-REFACTOR-001
+DOCUMENTED
+IMPLEMENTATION_NOT_STARTED
+USER_HOLD
+```
+
+长期恢复规则：
+
+- 用户后续提到 Mono/非 Mono 分层、pure simulation core、Host/Core/Presentation
+  解耦、Renderer/Sprite 反向依赖、`SimulationTickDriver` 接口化或 Simulation asmdef 时，
+  必须先完整读取该计划，再检查当前代码现状；不得依赖聊天上下文或凭记忆重新发明方案。
+- 当前按 Core/Host/Runtime/Passes 等职责完成的物理目录整理，不等于 Mono/Core 边界已经
+  完成。现状仍有 Registry/World 到 Renderer/Sprite/MountRegistry 的反向依赖、
+  Lockstep 对具体 `SimulationTickDriver` 的依赖，以及 Runtime 内 managed-memory Mono
+  probes；不得把这些未实施项写成已完成事实。
+- 在用户再次明确批准实施前，只能维护或审阅方案，不得修改 C#、Scene、Prefab、asmdef、
+  ProjectSettings 或运行行为，也不得把本计划加入 active Change Ledger。
+- 获批后必须从计划的 B0 inventory/architecture guards 开始；修改任何脚本前另建 Task
+  Contract、Change Record 和准确 code-path 清单。禁止直接跳到 asmdef、批量 public 化、
+  一次性移除 Renderer，或把多个 seam 合并成大爆炸式重构。
+- 该计划不改变 NTSD 2.8-Logan 战斗规则权威、当前权威的 33 ms 正常逻辑间隔、有序关闭十一阶段合同或
+  `simulation-world-module-extraction-plan.md` 已建立的普通子模块所有权；发生冲突时先更新
+  文档并取得用户明确批准，不能在实现中临时重排。
+- 若该计划文件被重命名、移动、取代或拆分，必须在同一任务中同步更新本节的精确路径和
+  supersede 关系，保证上下文压缩后仍可唯一恢复。
+
 ### 禁止直接修改
 
 - `Assets/NTSD/Scripts/Gen/`：自动生成代码。
@@ -296,7 +339,7 @@ $env:UNITY_EXE = "C:\Program Files\Unity\Hub\Editor\2022.3.4f1c1\Editor\Unity.ex
 
 记录差异时至少写明：
 
-- 权威 C++ release 文件、类型、函数和 release build 参与性。
+- 当前权威 NTSD 2.8-Logan 文件、类型、函数和 playable release build 参与性。
 - Unity 对应文件、类型和方法。
 - 前置条件与可复现输入。
 - 预期结果、实际结果和差异。
@@ -328,9 +371,9 @@ package-local approval when it is selected by the upstream roadmap/Queue, has a
 named `CLIENT_INTEGRATION_REQUIRED` entry, and has an independent pre-change
 Task Contract and Change Record with invariants, validation and rollback.
 
-This standing authorization does not change C++ release battle authority or
+This standing authorization does not change NTSD 2.8-Logan release battle authority or
 phase exit evidence. New direction remains required for battle-rule changes
-without C++ evidence, fixed 30 Hz, Scene/Input Actions, undeclared resources,
+without current-authority evidence, the 33 ms normal logic interval, Scene/Input Actions, undeclared resources,
 `TargetTick`/`InputDelayFrames` semantics, transport/Socket, database/public
 network/control plane, snapshot/recovery policy, formal AI, S1 wire, formal
 marker promotion, destructive Git or external deployment. A local Client gate
@@ -367,7 +410,7 @@ The detailed decision and revocation contract is in the Server repository at
 
 交付战斗逻辑任务前逐项确认：
 
-- 权威依据来自 `ntsd_release` 的真实 release live 调用链；C++ debug probe 只可辅助观察，不能定义规则。
+- 权威依据来自 NTSD 2.8-Logan 正式 EXE 及对应 playable release live 调用链；debug probe 只可辅助观察，不能定义规则。
 - Unity 实现没有把表现状态当作逻辑真相。
 - 编译为 0 error。
 - 相关 `BattleRuntimeSelfCheck` 已实际运行并通过，或已诚实报告阻塞。
