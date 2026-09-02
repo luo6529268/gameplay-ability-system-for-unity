@@ -24,23 +24,23 @@ namespace NTSD.Test
             @"^SimulationWorld(?:\..+)?\.partial\.cs$",
             RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        private static readonly (string TypeName, string FileName)[]
+        private static readonly (string TypeName, string RelativePath)[]
             PhysicalModuleContracts =
             {
-                (nameof(SimulationRegistryModule), "SimulationRegistryModule.cs"),
-                (nameof(SimulationAiRuntime), "SimulationAiRuntime.cs"),
-                (nameof(SimulationAiInputModule), "SimulationAiInputModule.cs"),
-                (nameof(SimulationAiSensingModule), "SimulationAiSensingModule.cs"),
-                (nameof(SimulationAiDecisionModule), "SimulationAiDecisionModule.cs"),
-                (nameof(SimulationStageWaveModule), "SimulationStageWaveModule.cs"),
-                (nameof(SimulationStageRenderModule), "SimulationStageRenderModule.cs"),
-                (nameof(BattleOid5152RuntimeModule), "BattleOid5152RuntimeModule.cs"),
-                (nameof(BattleRespawnModule), "BattleRespawnModule.cs"),
-                (nameof(BattleEarlyFrameAdvanceModule), "BattleEarlyFrameAdvanceModule.cs"),
-                (nameof(BattleLateEntityLifecycleModule), "BattleLateEntityLifecycleModule.cs"),
-                (nameof(BattleInteractionPipeline), "BattleInteractionPipeline.cs"),
-                (nameof(BattleRandomWeaponDropModule), "BattleRandomWeaponDropModule.cs"),
-                (nameof(SimulationPassPipeline), "SimulationPassPipeline.cs"),
+                (nameof(SimulationRegistryModule), "Runtime/SimulationRegistryModule.cs"),
+                (nameof(SimulationAiRuntime), "Ai/Runtime/SimulationAiRuntime.cs"),
+                (nameof(SimulationAiInputModule), "Ai/Runtime/SimulationAiInputModule.cs"),
+                (nameof(SimulationAiSensingModule), "Ai/Runtime/SimulationAiSensingModule.cs"),
+                (nameof(SimulationAiDecisionModule), "Ai/Runtime/SimulationAiDecisionModule.cs"),
+                (nameof(SimulationStageWaveModule), "Stage/SimulationStageWaveModule.cs"),
+                (nameof(SimulationStageRenderModule), "Stage/SimulationStageRenderModule.cs"),
+                (nameof(BattleOid5152RuntimeModule), "Passes/Oid5152/BattleOid5152RuntimeModule.cs"),
+                (nameof(BattleRespawnModule), "Passes/Respawn/BattleRespawnModule.cs"),
+                (nameof(BattleEarlyFrameAdvanceModule), "Passes/EarlyFrameAdvance/BattleEarlyFrameAdvanceModule.cs"),
+                (nameof(BattleLateEntityLifecycleModule), "Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs"),
+                (nameof(BattleInteractionPipeline), "Passes/Interaction/BattleInteractionPipeline.cs"),
+                (nameof(BattleRandomWeaponDropModule), "Passes/RandomWeapon/BattleRandomWeaponDropModule.cs"),
+                (nameof(SimulationPassPipeline), "Core/SimulationPassPipeline.cs"),
             };
 
         [Test]
@@ -114,19 +114,24 @@ namespace NTSD.Test
                 "NTSD",
                 "Scripts",
                 "Simulation");
-            string worldPath = Path.Combine(simulationRoot, "SimulationWorld.cs");
+            string worldPath = Path.Combine(
+                simulationRoot,
+                "Core",
+                "SimulationWorld.cs");
             string worldSource = File.ReadAllText(worldPath);
 
             for (int index = 0; index < PhysicalModuleContracts.Length; index++)
             {
-                (string typeName, string fileName) = PhysicalModuleContracts[index];
-                string modulePath = Path.Combine(simulationRoot, fileName);
+                (string typeName, string relativePath) = PhysicalModuleContracts[index];
+                string modulePath = Path.Combine(
+                    simulationRoot,
+                    relativePath.Replace('/', Path.DirectorySeparatorChar));
                 Assert.That(File.Exists(modulePath), Is.True,
-                    $"Module {typeName} must have dedicated file {fileName}.");
+                    $"Module {typeName} must have dedicated file {relativePath}.");
 
                 string moduleSource = File.ReadAllText(modulePath);
                 StringAssert.Contains($"class {typeName}", moduleSource,
-                    $"Dedicated file {fileName} must declare {typeName}.");
+                    $"Dedicated file {relativePath} must declare {typeName}.");
                 Assert.That(
                     Regex.IsMatch(
                         worldSource,

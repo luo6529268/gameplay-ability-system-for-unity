@@ -190,8 +190,13 @@ namespace NTSD.EditorTools
                 "Simulation");
             string modulePath = Path.Combine(
                 simulationRoot,
+                "Passes",
+                "EarlyFrameAdvance",
                 "BattleEarlyFrameAdvanceModule.cs");
-            string worldPath = Path.Combine(simulationRoot, "SimulationWorld.cs");
+            string worldPath = Path.Combine(
+                simulationRoot,
+                "Core",
+                "SimulationWorld.cs");
             Require(File.Exists(modulePath),
                 "BattleEarlyFrameAdvanceModule must have a dedicated file.");
             Require(
@@ -298,35 +303,40 @@ namespace NTSD.EditorTools
                 historicalPartialFiles.Length == 0,
                 "SimulationWorld historical partial files must be removed.");
 
-            string worldPath = Path.Combine(simulationRoot, "SimulationWorld.cs");
+            string worldPath = Path.Combine(
+                simulationRoot,
+                "Core",
+                "SimulationWorld.cs");
             string worldSource = File.ReadAllText(worldPath);
             string[,] moduleContracts =
             {
-                { "SimulationRegistryModule", "SimulationRegistryModule.cs" },
-                { "SimulationAiRuntime", "SimulationAiRuntime.cs" },
-                { "SimulationAiInputModule", "SimulationAiInputModule.cs" },
-                { "SimulationAiSensingModule", "SimulationAiSensingModule.cs" },
-                { "SimulationAiDecisionModule", "SimulationAiDecisionModule.cs" },
-                { "SimulationStageWaveModule", "SimulationStageWaveModule.cs" },
-                { "SimulationStageRenderModule", "SimulationStageRenderModule.cs" },
-                { "BattleOid5152RuntimeModule", "BattleOid5152RuntimeModule.cs" },
-                { "BattleRespawnModule", "BattleRespawnModule.cs" },
-                { "BattleEarlyFrameAdvanceModule", "BattleEarlyFrameAdvanceModule.cs" },
-                { "BattleLateEntityLifecycleModule", "BattleLateEntityLifecycleModule.cs" },
-                { "BattleInteractionPipeline", "BattleInteractionPipeline.cs" },
-                { "BattleRandomWeaponDropModule", "BattleRandomWeaponDropModule.cs" },
-                { "SimulationPassPipeline", "SimulationPassPipeline.cs" },
+                { "SimulationRegistryModule", "Runtime/SimulationRegistryModule.cs" },
+                { "SimulationAiRuntime", "Ai/Runtime/SimulationAiRuntime.cs" },
+                { "SimulationAiInputModule", "Ai/Runtime/SimulationAiInputModule.cs" },
+                { "SimulationAiSensingModule", "Ai/Runtime/SimulationAiSensingModule.cs" },
+                { "SimulationAiDecisionModule", "Ai/Runtime/SimulationAiDecisionModule.cs" },
+                { "SimulationStageWaveModule", "Stage/SimulationStageWaveModule.cs" },
+                { "SimulationStageRenderModule", "Stage/SimulationStageRenderModule.cs" },
+                { "BattleOid5152RuntimeModule", "Passes/Oid5152/BattleOid5152RuntimeModule.cs" },
+                { "BattleRespawnModule", "Passes/Respawn/BattleRespawnModule.cs" },
+                { "BattleEarlyFrameAdvanceModule", "Passes/EarlyFrameAdvance/BattleEarlyFrameAdvanceModule.cs" },
+                { "BattleLateEntityLifecycleModule", "Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs" },
+                { "BattleInteractionPipeline", "Passes/Interaction/BattleInteractionPipeline.cs" },
+                { "BattleRandomWeaponDropModule", "Passes/RandomWeapon/BattleRandomWeaponDropModule.cs" },
+                { "SimulationPassPipeline", "Core/SimulationPassPipeline.cs" },
             };
             for (int index = 0; index < moduleContracts.GetLength(0); index++)
             {
                 string typeName = moduleContracts[index, 0];
-                string fileName = moduleContracts[index, 1];
-                string modulePath = Path.Combine(simulationRoot, fileName);
+                string relativePath = moduleContracts[index, 1];
+                string modulePath = Path.Combine(
+                    simulationRoot,
+                    relativePath.Replace('/', Path.DirectorySeparatorChar));
                 Require(File.Exists(modulePath),
-                    $"Module {typeName} must have dedicated file {fileName}.");
+                    $"Module {typeName} must have dedicated file {relativePath}.");
                 Require(
                     File.ReadAllText(modulePath).Contains("class " + typeName),
-                    $"Dedicated file {fileName} must declare {typeName}.");
+                    $"Dedicated file {relativePath} must declare {typeName}.");
                 Require(
                     !Regex.IsMatch(
                         worldSource,

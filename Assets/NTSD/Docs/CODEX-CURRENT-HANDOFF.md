@@ -1,5 +1,9 @@
 # CODEX-CURRENT-HANDOFF
 
+> **Direction B (2026-09-02, current):** Unity Git-restored current DAT is formal content-value authority；C++ release remains battle-rule/order authority. The external Simulation-directory CS2001 blocker is now cleared and Unity compile is clean, but this directory Change did not run Direction-B focused/normalized-projection/SelfCheck work. Those validations remain pending under its own Change；formal marker false；S0 NOT_VERIFIED.
+
+> **Simulation directory reorganization implementation complete, global governance externally blocked:** `SIMULATION-DIRECTORY-REORGANIZATION-001 / BLOCKED / IMPLEMENTATION_COMPLETE / UNITY_COMPILE_0 / MANIFEST_142_142 / GUID_142_142 / CONTENT_HASH_142_142 / ROOT_CS_0 / OLD_PATH_0 / PATH_MATRIX_BASELINE_PRESERVED / FULL_1585_EXECUTED_5_EXTERNAL / TWO_CLEAN_PLAY_STOP / SCENE_DIRTY_FALSE / GLOBAL_LEDGER_BLOCKED_EXTERNAL`。142个cs+meta已完成责任分层，7个源码路径读取者已精确更新；无namespace/API/logic/asmdef变化。fresh SelfCheck仍为既有central P4。全局validator只因任务外`CLIENT-CONTENT-FRAME-STRUCTURE-ALIGNMENT-001`缺code-path而exit1；不要顺手修改该记录。
+
 > **SimulationWorld extraction active:** `SIMULATION-WORLD-MODULE-EXTRACTION-001 / IN_PROGRESS / PARTIAL_0 / M1-M9_FOCUSED_PASS / M10_CODE_COMPLETE / FINAL_ACCEPTANCE_BLOCKED_EXTERNAL`。runtime/editor compile0；M10 AI 158/158、worker/checksum/shutdown/architecture 35/35、stale owner-path 3/3；两轮clean Play/Stop无目标cleanup warning且Scene不脏。full 1763被position38/package/static guard/并行S0 WPoint既有基线阻塞，fresh SelfCheck停在任务外central-render P4断言。World为6040行，超过2500报警线的剩余根职责已登记；不得报告整个计划完成。
 
 > **Ordered shutdown implementation active:** `BATTLE-RUNTIME-ORDERED-SHUTDOWN-001 / IN_PROGRESS / PRE_CODE / USER_APPROVED / RUNTIME_LIFECYCLE_ONLY`。用户批准按完整合同实施固定 11 阶段 `Running→Stopping→Stopped`；Change/Task/Ledger/State 已在 C# 前建立。当前范围只含 lifecycle、worker/spawn gate、publication/task/renderer/World/pool/boundary cleanup 和验证；禁止改变 Running battle pass、30Hz、checksum、Scene/DAT/Server/C++ 或顺手完成全量 Mono/Core 分层。
@@ -12,13 +16,13 @@
 
 > **User-directed presentation follow-up:** `BATTLE-CENTRAL-EDITOR-PREVIEW-001 / FOCUSED_TEST_PASS / BMP-GRID-SEPARATOR-RECT-FIXED / PERSISTENT-SCENEVIEW-AUTHORING / GLOBAL-LEDGER-BLOCKED-BY-UNRELATED-RECORD / EDITOR-ONLY / PRESENTATION_ONLY`。Editor 示例/验证已改用正式左上 Rect；compile0、focused6/6、pixel637/70/green0、Scene dirty unchanged。全局 Ledger 仍受无关 Change Record 阻塞；正式runtime HP接线未改。
 
-> **Capability-package execution (2026-09-01, current for the Server S0～S9 roadmap):** CAP-S0-1 is ACTIVE. Task F.8 narrowed the process policy；Task F.9 now records an unrelated production compile blocker: `SimulationWorld.cs(51,26)` cannot resolve `BattleOid5152RuntimeModule`. WPoint baseline/production/A37 remain absent；formal marker false；S0 NOT_VERIFIED.
+> **Capability-package execution (2026-09-02, current for the Server S0～S9 roadmap):** CAP-S0-1 remains ACTIVE but is stopped at Server Task F.12. The user accepted the `46460c36...` environment diagnosis and Goal comparison；the next pre-compile WPoint manifest was `3d07a4e...e6afb`, not frozen `afe65d17...cf89c26`, with exactly 11 Git-clean DAT mismatches. No Unity compile, WPoint baseline, ParserV2 WPoint, A37, replay or restore followed；formal marker false；S0 NOT_VERIFIED.
 
 > **Latest process gate:** at `2026-09-01 14:03:01 +08:00`, the user-authorized resume still found the same `NTSD_reconstructed` PID66860/start13:49:15. It stopped before MCP/compile/Unity/baseline；Server Task F.7 is current.
 
 > **External NTSD process:** final read-only audit observed `NTSD_reconstructed` PID 62268 from the separate `J:\QQFile\NTSD 2.4.1\...` tree, started 11:14:59. This task did not launch/use/terminate it；future CAP-S0-1 resumption must first recheck the zero-process precondition (Server Task F.4).
 
-> **CAP-S0-1 Client record:** `S0-FORMAL-CONTENT-CLOSURE-001 / IN_PROGRESS / ACTIVE / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED` exists in both repositories. Resume the same compile gate after the unrelated CS0246 clears；CAP-S0-1/S0 remain open.
+> **CAP-S0-1 Client record:** `S0-FORMAL-CONTENT-CLOSURE-001 / IN_PROGRESS / ACTIVE / WPOINT_MANIFEST_DRIFT_BLOCKED / CONFIG_DAT_HEAD_MATCH_OBSERVED_AGAIN / WPOINT_CURRENT_MANIFEST_3D07A4E1 / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED` exists in both repositories. Server Task F.12 owns the 11-file SHA table. Resume only after the user selects a governed recovery; do not promote current HEAD DATs to authority. CAP-S0-1/S0 remain open.
 
 > **Queue selection (superseded 2026-08-31 by the capability consolidation above):** Queue0cu/0cx/0d1/0d5/0d6/0db/0df/0dg/0dk-a and parent0dk are VERIFIED/CLOSED. Queue0dk-b `CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001` was READY, then GATED by the runtime-safety incident, and is now SUPERSEDED into `S0-FORMAL-CONTENT-CLOSURE-001`. Formal marker/S0 unchanged.
 

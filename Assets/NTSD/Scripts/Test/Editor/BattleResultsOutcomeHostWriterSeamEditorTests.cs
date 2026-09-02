@@ -17,14 +17,18 @@ namespace NTSD.Test
                 "NTSD",
                 "Scripts",
                 "Simulation");
-            string ecsPath = Path.Combine(simulationPath, "Ecs");
+            string ecsPath = Path.Combine(simulationPath, "Ecs", "Results");
             string outcomePath = Path.Combine(
                 ecsPath,
                 "BattleResultsOutcomeHostWriter.cs");
             string navigationPath = Path.Combine(ecsPath, "BattleResultsWriter.cs");
-            string worldPath = Path.Combine(simulationPath, "SimulationWorld.cs");
+            string worldPath = Path.Combine(
+                simulationPath,
+                "Core",
+                "SimulationWorld.cs");
             string registryPath = Path.Combine(
                 simulationPath,
+                "Core",
                 "SimulationWorld.cs");
 
             Assert.That(

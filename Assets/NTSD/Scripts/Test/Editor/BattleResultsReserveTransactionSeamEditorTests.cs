@@ -15,9 +15,9 @@ namespace NTSD.Test.Editor
         public void DedicatedReserveTransactionOwnerAndMaterializerExist()
         {
             const string writerPath =
-                "Assets/NTSD/Scripts/Simulation/Ecs/BattleResultsReserveHostWriter.cs";
+                "Assets/NTSD/Scripts/Simulation/Ecs/Results/BattleResultsReserveHostWriter.cs";
             const string stagePath =
-                "Assets/NTSD/Scripts/Simulation/SimulationStageWaveModule.cs";
+                "Assets/NTSD/Scripts/Simulation/Stage/SimulationStageWaveModule.cs";
 
             Assert.That(File.Exists(writerPath), Is.True,
                 "A dedicated reserve transaction owner must exist before terminal integration.");

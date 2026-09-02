@@ -1,7 +1,9 @@
 # Task Contract — S0-FORMAL-CONTENT-CLOSURE-001
 
-> Status: `IN_PROGRESS / ACTIVE / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
+> Status: `IN_PROGRESS / ACTIVE / MISSION_REDEFINED_BY_DIRECTION_B / FREEZE_UNITY_PRESENT_CONTENT_AUTHORITY / DIRECTION_A_SUPERSEDED / APPENDICES_HISTORICAL_ONLY / WPOINT_TOPOLOGY_SOUND_CHECKPOINTS_CANCELLED / CONFIG_RESTORE_AUTHORIZED / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
 > Queue: `CAP-S0-1 / ACTIVE`
+
+> **Direction B controls:** release-content matrices below are historical only. Active work freezes the Git-restored Unity 138-DAT current corpus; it must not replay release expected values. See the same-ID Direction-B Governance Task/Change.
 
 The complete capability contract, seven internal checkpoints, frozen authority
 sources, exact initial file scope, three-tier validation, invariants and rollback
@@ -264,3 +266,23 @@ That compile is now blocked by unrelated production source:
 Per the authorized semantic-stop rule, WPoint did not inspect/fix/bypass it and
 did not proceed to baseline, ParserV2 WPoint, A37 or tests. Server Task F.9 is
 the current restart authority.
+
+Read-only diagnosis now shows the external SimulationWorld work is present in
+clean commit `46460c36...`; line51 no longer references the module and the
+module/pipeline files are tracked. No compile retry was run because diagnosis is
+a user stop. Server Task F.10/F.11 records the Goal supersession decision,
+standing S0 authorization and Goal API/objective-copy limitation.
+
+The user accepted both the environment diagnosis and the Goal-objective
+comparison. Before the authorized compile retry, however, the mandatory WPoint
+24-file manifest gate returned
+`3d07a4e100b7f14179a0a2fe45ccb7225e4e5682475f61ec04ddddc6a7de6afb`
+instead of frozen
+`afe65d17a8d48d48953b54c89aa695019f52c41ca46e4b9ba10c59420cf89c26`.
+Fixture dual SHA still passed. Exactly 11 Git-clean resources differ:
+`deidara`, `hidan`, `kakuzu`, `kankuro`, `naruto`, `nckakuzu`, `rock_lee`,
+`sasori`, `shikamaru`, `temari` and `yamato`. Server Task F.12 is the complete
+per-file SHA evidence. This triggered the standing external-state/manifest
+drift stop before Unity compile. No baseline, ParserV2 WPoint edit, A37 DAT
+write, replay, restore or destructive Git action followed. Recovery choice now
+requires user direction; current HEAD values are not authority.

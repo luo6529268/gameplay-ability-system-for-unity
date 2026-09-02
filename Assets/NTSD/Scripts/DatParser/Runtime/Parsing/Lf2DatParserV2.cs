@@ -42,32 +42,6 @@ namespace NTSD.DatParser
                 "caughtact2",
             };
 
-        private static readonly HashSet<string> ReleaseNumericFramePropertyNames =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-            {
-                "pic",
-                "state",
-                "wait",
-                "next",
-                "dvx",
-                "dvy",
-                "dvz",
-                "centerx",
-                "centery",
-                "hit_Fa",
-                "hit_Fj",
-                "hit_Ua",
-                "hit_Uj",
-                "hit_Da",
-                "hit_Dj",
-                "hit_ja",
-                "hit_a",
-                "hit_d",
-                "hit_j",
-                "mp",
-                "vaction",
-            };
-
         /// <summary>
         /// 解析 dat 文件文本
         /// </summary>
@@ -256,15 +230,6 @@ namespace NTSD.DatParser
 
                     if (isSubBlock)
                     {
-                        if (IsBodySubBlock(stack.Peek()) &&
-                            !HasIndependentSubBlockEndBeforeBodyBoundary(
-                                tokens,
-                                i + 1,
-                                name))
-                        {
-                            continue;
-                        }
-
                         // 创建子块
                         Lf2DatSubBlock sub = new Lf2DatSubBlock { Name = name };
                         AddSubBlock(stack, sub);
@@ -277,21 +242,6 @@ namespace NTSD.DatParser
                         if (i + 1 < tokens.Length)
                         {
                             string key = name;
-                            if (ShouldPreserveObjectPointMarkerAfterMissingFrameNumber(
-                                    stack.Peek(),
-                                    key,
-                                    tokens[i + 1]))
-                            {
-                                // Alignment contract: S0-FORMAL-CONTENT-CLOSURE-001.
-                                // release read_int returns zero without consuming a
-                                // following marker; this is intentionally the OPoint-only
-                                // slice. WPoint remains deferred to checkpoint 5 review.
-                                AddProperty(
-                                    stack.Peek(),
-                                    new Lf2DatProperty(key, "0"));
-                                continue;
-                            }
-
                             i++;
                             string value = tokens[i];
                             if (ItrTwoValuePropertyNames.Contains(key) &&
@@ -325,69 +275,6 @@ namespace NTSD.DatParser
             }
 
             return dat;
-        }
-
-        private static bool ShouldPreserveObjectPointMarkerAfterMissingFrameNumber(
-            object owner,
-            string propertyName,
-            string nextToken)
-        {
-            return owner is Lf2FrameBlock &&
-                   ReleaseNumericFramePropertyNames.Contains(propertyName) &&
-                   string.Equals(
-                       nextToken,
-                       "opoint:",
-                       StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static bool IsBodySubBlock(object value)
-        {
-            Lf2DatSubBlock subBlock = value as Lf2DatSubBlock;
-            return subBlock != null &&
-                   string.Equals(subBlock.Name, "bdy", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static bool HasIndependentSubBlockEndBeforeBodyBoundary(
-            string[] tokens,
-            int startIndex,
-            string subBlockName)
-        {
-            string expectedEnd = subBlockName + "_end";
-            for (int index = startIndex; index < tokens.Length; index++)
-            {
-                string token = tokens[index];
-                if (token.StartsWith("<") && token.EndsWith(">"))
-                {
-                    string tagName = token.Substring(1, token.Length - 2).Trim();
-                    if (string.Equals(tagName, "frame", StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(tagName, "frame_end", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return false;
-                    }
-                }
-
-                if (!token.EndsWith(":"))
-                    continue;
-
-                string markerName = token.Substring(0, token.Length - 1).Trim();
-                if (string.Equals(
-                        markerName,
-                        expectedEnd,
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                if (string.Equals(
-                        markerName,
-                        "bdy_end",
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-
-            return false;
         }
 
         private static bool IsSignedDecimalToken(string token)

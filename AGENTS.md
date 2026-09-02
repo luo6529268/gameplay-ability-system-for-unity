@@ -7,7 +7,8 @@
 - Unity 版本：以项目当前 `ProjectSettings/ProjectVersion.txt` 为准
 - Unity 实现目录：`Assets/NTSD/Scripts/`
 - 当前工作范围：战斗场景与战斗 runtime
-- 唯一战斗逻辑权威：`J:\QQFile\NTSD2.4\ntsd_release` 的正式 release live runtime
+- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.4\ntsd_release` 的正式 release live runtime
+- 唯一正式内容数值权威：Git 恢复并经 138-DAT manifest/normalized projection 冻结的 Unity `Assets/NTSD/Config` 现状
 - Unity 是实现目标；C++ release runtime 用于判定规则、顺序、字段和可观察行为；`ntsd_release_C#` 仅保留为历史移植辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
@@ -17,12 +18,17 @@
 处理战斗逻辑时，按以下优先级判断：
 
 1. 用户在当前任务中的明确要求。
-2. `J:\QQFile\NTSD2.4\ntsd_release` 中实际参与 release 构建并运行到 `ntsd_new.exe` 的 C++ battle runtime 行为。
-3. `J:\QQFile\NTSD2.4\ntsd_release_C#` 的正式 C# 行为，只能用于定位历史移植意图、命名和交叉检查；与 C++ release live path 冲突时必须以 C++ 为准。
-4. Unity 当前实现与测试，只用于确认现状和验证移植结果，不能反过来定义权威行为。
-5. 项目文档和历史记录，只用于任务跟踪；与权威 C++ release 源码冲突时必须更新文档，不能修改权威结论。
+2. `J:\QQFile\NTSD2.4\ntsd_release` 中实际参与 release 构建并运行到 `ntsd_new.exe` 的 C++ battle runtime 规则、逻辑顺序、状态变化与可观察战斗行为。
+3. Git 恢复并经正式 manifest/projection 冻结的 Unity `Assets/NTSD/Config` 现状，用于定义正式内容数值、内容结构与内容指纹；C++ release DAT 不再覆盖这些内容值。
+4. `J:\QQFile\NTSD2.4\ntsd_release_C#` 的正式 C# 行为，只能用于定位历史移植意图、命名和交叉检查；与 C++ release battle rule/live path 冲突时必须以 C++ 为准。
+5. Unity runtime 实现与测试用于验证规则实现和消费已冻结内容；不能反过来定义 C++ 战斗规则。
+6. 项目文档和历史记录只用于任务跟踪；与当前规则/内容 authority 合同冲突时必须更新文档，不能修改权威结论。
 
-只有 C++ release 的 live path 才能定义当前战斗规则。未参与 release 构建的实验代码、备份文件、debug probe、diagnostic、反汇编记录和旧对齐结论都不能作为 authority。用户没有明确要求历史比较时，不要以 C#、反汇编或旧实现补写 C++ 未确认的行为。不要因为 Unity 或 C# 现有行为更方便而偏离 C++；也不要把 C++ 的统一 `Entity` 字段名称机械替换成并不存在的 Unity 类型、字段或方法。
+只有 C++ release 的 live path 才能定义当前战斗规则与逻辑顺序；它不再定义正式内容数值。未参与 release 构建的实验代码、备份文件、debug probe、diagnostic、反汇编记录和旧对齐结论都不能作为规则 authority。用户没有明确要求历史比较时，不要以 C#、反汇编或旧实现补写 C++ 未确认的行为。不要因为 Unity 或 C# 现有行为更方便而偏离 C++ battle rules；也不要把 C++ 的统一 `Entity` 字段名称机械替换成并不存在的 Unity 类型、字段或方法。
+
+### 2.2 Direction B 内容数值权威
+
+自 `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 起，正式内容值以 Git 恢复后的 Unity `Assets/NTSD/Config` 现状为准，并通过 138-DAT raw manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。C++ release DAT、193 行矩阵、Appendix A～F、0do/0do-c 审计只保留为历史诊断证据，不得再驱动 DAT token、结构、sound、WPoint 或 topology 修正。内容权威变化不放宽 C++ battle rule、pass order、30 Hz、state/lifecycle 或 observable behavior 对齐。
 
 无法在权威 C++ release live path 中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 C++ release 一致。
 
@@ -37,7 +43,7 @@
 
 它不得用于覆盖 C++ release 的 pass 顺序、输入时点、碰撞/命中结果、对象生命周期、镜头/render handoff 或最终可观察表现。历史文档中“C# 唯一权威”及 C++ 定向例外的表述均视为已废止的历史上下文。
 
-## 3. C++ release 权威入口
+## 3. C++ release 战斗规则权威入口
 
 开始对齐前，先从与问题最接近的入口追踪实际调用链，不要根据方法名猜测语义。
 
@@ -54,7 +60,7 @@
 
 ### 对齐工作顺序
 
-1. 在权威 C++ release live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `Makefile` 的 release 构建。
+1. 对战斗规则/逻辑顺序，在权威 C++ release live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `Makefile` 的 release 构建；对内容数值，读取已冻结 Unity content authority artifact，不以 release DAT 覆盖。
 2. 记录完整前置条件、分支顺序、常量、状态写入、统计副作用和对象生命周期副作用。
 3. 在 Unity 中定位对应 pass、实体类型、runtime 字段与表现层接口。
 4. 先补齐数据契约，再整体移植行为；不得只搬局部扣血、位移或生成片段。

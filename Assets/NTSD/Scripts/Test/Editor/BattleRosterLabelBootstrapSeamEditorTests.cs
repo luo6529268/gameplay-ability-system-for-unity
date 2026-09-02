@@ -24,8 +24,12 @@ namespace NTSD.Test
             string oldStatePath = Path.Combine(simulationPath, "BattleRosterLabelState.cs");
             string adapterPath = Path.Combine(
                 simulationPath,
+                "Runtime",
                 "BattleMatchConfigRuntimeAdapter.cs");
-            string mixedPath = Path.Combine(simulationPath, "BattleRuntimeState.cs");
+            string mixedPath = Path.Combine(
+                simulationPath,
+                "Runtime",
+                "BattleRuntimeState.cs");
 
             PackageInfo packageInfo = PackageInfo.FindForAssembly(typeof(BattleRosterRuntimeState).Assembly);
             Assert.That(packageInfo, Is.Not.Null);

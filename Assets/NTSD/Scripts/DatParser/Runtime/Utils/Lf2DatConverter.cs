@@ -277,52 +277,18 @@ namespace NTSD.DatParser
             int w = 0;
             int h = 0;
 
-            for (int pass = 0; pass < 2; pass++)
+            foreach (var prop in subBlock.Properties)
             {
-                bool exactPass = pass == 0;
-                foreach (var prop in subBlock.Properties)
+                switch (prop.Key.ToLowerInvariant())
                 {
-                    char propertyTag = ResolveReleaseBodyPropertyTag(
-                        prop.Key,
-                        out bool isExact);
-                    if (propertyTag == '\0' || isExact != exactPass)
-                        continue;
-
-                    switch (propertyTag)
-                    {
-                        case 'x': x = ParseInt(prop.Value); break;
-                        case 'y': y = ParseInt(prop.Value); break;
-                        case 'w': w = ParseInt(prop.Value); break;
-                        case 'h': h = ParseInt(prop.Value); break;
-                    }
+                    case "x": x = ParseInt(prop.Value); break;
+                    case "y": y = ParseInt(prop.Value); break;
+                    case "w": w = ParseInt(prop.Value); break;
+                    case "h": h = ParseInt(prop.Value); break;
                 }
             }
 
             return new BattleBodyBoxValue(x, y, w, h);
-        }
-
-        private static char ResolveReleaseBodyPropertyTag(
-            string propertyName,
-            out bool isExact)
-        {
-            isExact = false;
-            if (string.IsNullOrEmpty(propertyName))
-                return '\0';
-
-            if (propertyName.Length == 1)
-            {
-                char exactTag = char.ToLowerInvariant(propertyName[0]);
-                if (exactTag == 'x' || exactTag == 'y' || exactTag == 'w' || exactTag == 'h')
-                {
-                    isExact = true;
-                    return exactTag;
-                }
-            }
-
-            char suffix = propertyName[propertyName.Length - 1];
-            return suffix == 'x' || suffix == 'y' || suffix == 'w' || suffix == 'h'
-                ? suffix
-                : '\0';
         }
 
         /// <summary>

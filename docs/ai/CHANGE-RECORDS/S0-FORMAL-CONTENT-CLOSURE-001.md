@@ -1,5 +1,7 @@
 # S0-FORMAL-CONTENT-CLOSURE-001
 
+> **Direction B correction (2026-09-02):** all release-content expected values below are historical evidence only. Active rollback/cleanup and Unity-present authority freeze are owned by `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001`.
+
 <!-- CHANGE-RECORD
 id: S0-FORMAL-CONTENT-CLOSURE-001
 status: IN_PROGRESS
@@ -9,10 +11,10 @@ code-path: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
 code-path: Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs
 code-path: Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs
 authority: CAP-S0-1; G-22 standing authorization; frozen Frame/Character authority audits; Server same-ID Task/Change.
-evidence: IN_PROGRESS / ACTIVE / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED
+evidence: IN_PROGRESS / ACTIVE / MISSION_REDEFINED_BY_DIRECTION_B / DIRECTION_A_SUPERSEDED / HISTORICAL_APPENDICES_RETAINED / WPOINT_TOPOLOGY_SOUND_CANCELLED / CONFIG_RESTORE_AUTHORIZED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED
 -->
 
-> Status: `IN_PROGRESS / ACTIVE / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
+> Status: `IN_PROGRESS / ACTIVE / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_ENVIRONMENT_DIAGNOSIS_ACCEPTED / WPOINT_GOAL_COMPARISON_ACCEPTED / WPOINT_MANIFEST_DRIFT_BLOCKED / CONFIG_DAT_HEAD_MATCH_OBSERVED_AGAIN / WPOINT_CURRENT_MANIFEST_3D07A4E1 / WPOINT_FIXTURE_SHA_PASS / WPOINT_COMPILE_NOT_RUN_AFTER_RESUMPTION / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
 
 The Server same-ID Task/Change is the complete contract. Before this Client
 record, no CAP-S0-1 test, SelfCheck or resource edit occurred. The declared
@@ -191,3 +193,30 @@ ordinary Unity work resumes without acting on the external process.
 Current gate is Server Task F.9: unrelated `SimulationWorld.cs` production
 compile CS0246 blocks project compile. No WPoint baseline/production/DAT/test
 action followed.
+
+Server Task F.10 confirms the external commit now owns a clean module split;
+F.11 records old-goal G-23 supersession, new active goal creation, standing S0
+authorization and the verbatim-copy/API limitation. Fresh compile awaits user.
+
+## WPoint manifest drift after accepted resumption
+
+The user accepted F.10/F.11 and authorized the same compile gate. Before Unity
+compile, the exact 24-file preflight produced
+`3d07a4e100b7f14179a0a2fe45ccb7225e4e5682475f61ec04ddddc6a7de6afb`,
+not frozen
+`afe65d17a8d48d48953b54c89aa695019f52c41ca46e4b9ba10c59420cf89c26`.
+The WPoint fixture payload/file SHA remained exact. Eleven Git-clean target
+DATs differ: deidara, hidan, kakuzu, kankuro, naruto, nckakuzu, rock_lee,
+sasori, shikamaru, temari and yamato. Server Task F.12 owns the complete
+old/current per-file SHA table and proves the latest Config-affecting commit is
+still the older `68f4ccac...` from 2026-08-25.
+
+This is an unexplained external-state/manifest-drift stop, not authority for a
+new baseline. No compile, baseline, ParserV2 WPoint edit, A37 DAT write,
+restore, replay or destructive Git command followed. User direction is needed
+before selecting a recovery path.
+
+Post-writeback scoped `git diff --check` passed. The Client-wide Ledger
+validator still exits 1 only for the pre-existing unrelated
+`CLIENT-CONTENT-FRAME-STRUCTURE-ALIGNMENT-001` missing `code-path` metadata;
+this stop record introduced no new validator error.

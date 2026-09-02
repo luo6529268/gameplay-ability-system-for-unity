@@ -30,7 +30,10 @@ namespace NTSD.Test
                 "Scripts",
                 "Simulation");
             string oldOwnerPath = Path.Combine(simulationPath, "BattleWorldScalarState.cs");
-            string mixedPath = Path.Combine(simulationPath, "BattleRuntimeState.cs");
+            string mixedPath = Path.Combine(
+                simulationPath,
+                "Runtime",
+                "BattleRuntimeState.cs");
             PackageInfo packageInfo = PackageInfo.FindForAssembly(
                 typeof(BattleMatchRuntimeState).Assembly);
             Assert.That(packageInfo, Is.Not.Null);

@@ -12,7 +12,7 @@ namespace NTSD.Test.Editor
         public void OutcomeWriterUsesPersistentAuthorityDomainAndReserveBeforeGuard()
         {
             const string outcomePath =
-                "Assets/NTSD/Scripts/Simulation/Ecs/BattleResultsOutcomeHostWriter.cs";
+                "Assets/NTSD/Scripts/Simulation/Ecs/Results/BattleResultsOutcomeHostWriter.cs";
             string outcome = File.ReadAllText(outcomePath);
 
             Assert.That(outcome, Does.Not.Contain("BattleGameModeId != 1"));

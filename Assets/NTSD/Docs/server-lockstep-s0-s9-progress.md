@@ -1,5 +1,7 @@
 # NTSD S0～S9 服务器权威帧同步：进度、证据与问题台账
 
+> **Direction B（2026-09-02，当前有效）：** 用户正式决定 Unity Git 恢复后的现状 DAT 为内容数值权威；C++ release 继续定义 battle rules 与逻辑顺序。治理改写、Config HEAD等价证明、138-DAT raw manifest `d32b49d3...1a0346`、CAP parser seam回退与旧fixture清理已写入。当前Unity验证被并行`SIMULATION-DIRECTORY-REORGANIZATION-001`的旧路径CS2001阻塞，未修改该范围；normalized projection、focused回归与SelfCheck待compile恢复。CAP-S0-1使命仍为冻结Unity现状，WPoint/topology/sound检查点取消；CAP-S0-2消费Unity-present派生bundle。下方旧release-content/193行/Appendix A～F仅为superseded历史；formal marker false；S0 NOT_VERIFIED。
+
 > **能力包级计划重整与执行审计（2026-09-01，当前有效）：** CAP-S0-1是唯一ACTIVE包；checkpoint1/2均focused green。checkpoint3 B59只读parser-gate评审已冻结：release逐字符后缀/last-wins规则、zwidth49+dvx5+injury5、五个Frame48 inline恢复、ParserV2+Converter最窄seam、138-DAT精确B59审计、sasori A4+C1同包延后及一次final focused。未改源码/资源、未跑测试；等待实现授权。永久边界为`NO_NTSD / OLD_EXTRACTOR_NOT_RUN / FROZEN_AUTHORITY_ROWS_ONLY`。CAP-S0-2～4保持依赖GATED；formal marker false；S0 NOT_VERIFIED。
 
 > **当前Queue选择（2026-08-31，已被上条能力包重整取代）:** Queue0cu/0cx/0d1/0d5/0d6/0db/0df/0dg/0dk-a及parent0dk已VERIFIED/CLOSED。Queue0dk-b曾为READY后因外部`NTSD_reconstructed.exe`读访问崩溃报告转入GATED；该行现已SUPERSEDED并入`S0-FORMAL-CONTENT-CLOSURE-001`（GATED / IMPLEMENTATION_NOT_STARTED / RUNTIME_SAFETY_CLEARANCE_PENDING）；formal marker/S0不变。

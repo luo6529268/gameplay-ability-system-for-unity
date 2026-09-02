@@ -5,6 +5,7 @@
 > 上位总览：[unified-battle-lockstep-ecs-server-architecture-plan.md](unified-battle-lockstep-ecs-server-architecture-plan.md)。  
 > 进度、证据、阻塞与问题处置只写入：[server-lockstep-s0-s9-progress.md](server-lockstep-s0-s9-progress.md)。  
 > C++ release live authority：`J:\QQFile\NTSD2.4\ntsd_release` 中参与 release 构建并运行到 `ntsd_new.exe` 的 live path。  
+> **Direction B 内容 authority（2026-09-02，当前有效）：** C++ release live path 只定义战斗规则、逻辑顺序、状态变化与可观察行为；正式内容数值/结构/内容指纹由 Git 恢复后 Unity `Assets/NTSD/Config` 的 138-DAT manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。此前 release DAT 内容对齐、193 行矩阵、Appendix A～F 与 0do/0do-c 内容结论均作为历史证据保留但已被取代，不再驱动资源修正。CAP-S0-1 改为冻结 Unity 现状内容；CAP-S0-2 消费由该现状派生的 bundle。
 > `ntsd_release_C#` 仅用于历史移植意图、命名与交叉检查，不定义战斗规则。
 
 > **能力包粒度治理补充（2026-08-31）：** 本文件继续拥有跨阶段架构、不变量、阶段顺序和退回规则；执行粒度由 Server 侧 `GOVERNANCE-S0-S9-CAPABILITY-PACKAGE-CONSOLIDATION-001` 重整为"可观察能力级工作包"（每阶段约 3～5 个；S0 为内容闭合 → 内容模型集成 → 正式 Kernel 组装 → multi-world 退出证据）。字段/Frame/OID/路径级明细作为能力包内部验收矩阵或冻结证据保留，不再作为长期 Queue 节点；历史已完成包与证据是不可重做的 prerequisite evidence。验证采用三级层级：内部检查点通过≠能力包完成，能力包完成≠阶段 `VERIFIED`，S0 退出证据不完整时不得进入正式 S1 `VERIFIED`。本补充不改变本文任何阶段边界、进入门槛、退出证据或禁止项。
@@ -30,7 +31,7 @@
 | S8 | [`ServerLockstepStages/S8-control-plane-multi-room.md`](ServerLockstepStages/S8-control-plane-multi-room.md) |
 | S9 | [`ServerLockstepStages/S9-release-capacity-operations.md`](ServerLockstepStages/S9-release-capacity-operations.md) |
 
-服务器阶段的目标不是另写一套游戏，而是让同一套已经由 C++ release live runtime 约束的 C# `BattleKernel` 在 Unity Client 与独立 Server Host 上接受同一份 `FrameInputSet`、得到同一战斗结果。
+服务器阶段的目标不是另写一套游戏，而是让同一套由 C++ release battle rules/logic order 约束、并消费 Unity-present 冻结内容 bundle 的 C# `BattleKernel` 在 Unity Client 与独立 Server Host 上接受同一份 `FrameInputSet`、得到同一战斗结果。
 
 以下边界始终成立：
 
@@ -284,7 +285,7 @@ Disconnected
 **方案**：
 
 - 以显式内存 loopback 创建一个 server `BattleWorld` 与至少两个 client `BattleWorld`；
-- `StartBarrier` 固化 session identity、C++-aligned rule/catalog/stage fingerprint、seed、roster、canonical player slot 与 policy version；
+- `StartBarrier` 固化 session identity、C++-aligned rule fingerprint、Unity-present-derived catalog/stage/content fingerprint、seed、roster、canonical player slot 与 policy version；
 - 所有 world 只经 `StepOneTick(FrameInputSet)` 推进；每个 server tick 都生成完整不可变权威帧，包括空帧；
 - 只使用预编排输入脚本，不引入真实网络或墙钟调参。
 
@@ -464,7 +465,7 @@ NTSD_Server/scripts/publish.ps1   / publish.sh     生成部署产物
 
 ### 7.2 修复纪律
 
-- 战斗规则疑问先回到 C++ release live path 与同 tick trace；C# 与 Unity 现状不能裁决规则。
+- 战斗规则疑问先回到 C++ release live path 与同 tick trace；C# 与 Unity 现状不能裁决规则。内容值疑问读取已冻结 Unity-present content artifact；不得用 release DAT 历史矩阵覆盖当前内容。
 - 已锁定 authority frame、已确认 checksum witness 和原始网络包不得被测试修复覆盖或删除。
 - 先修拥有该状态的唯一 owner；不得在客户端、服务器、表现层各加一个补丁形成三套真相。
 - 代码改动前，按根 `AGENTS.md` 建立 `docs/ai/CHANGE-RECORDS/<ChangeId>.md` 与 Ledger 条目；脚本改动后运行 `Tools/Validate-ChangeLedger.ps1`，并在本文件对应阶段的进度条目中链接 Change ID。
