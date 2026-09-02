@@ -46,19 +46,13 @@ namespace NTSD.Test
             Invoke(world, "BuildAiInputSlotSnapshot");
             try
             {
-                FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                    "aiSoASensingRows",
-                    InstanceMembers);
-                FieldInfo epochField = typeof(SimulationWorld).GetField(
-                    "aiSoASensingSnapshotEpoch",
-                    InstanceMembers);
-                Assert.That(rowsField, Is.Not.Null);
-                Assert.That(epochField, Is.Not.Null);
-                var snapshot = rowsField.GetValue(world) as AiSensingSnapshot;
+                var snapshot = GetAiSoARows(world) as AiSensingSnapshot;
                 Assert.That(snapshot, Is.Not.Null);
                 Assert.That(
                     snapshot.CapturedOccupancyEpoch,
-                    Is.EqualTo((ulong)epochField.GetValue(world)));
+                    Is.EqualTo((ulong)GetAiSensingProperty(
+                        world,
+                        "SnapshotEpoch")));
                 Assert.That(snapshot.Included, Is.TypeOf<bool[]>());
                 Assert.That(snapshot.Generation, Is.TypeOf<uint[]>());
                 Assert.That(snapshot.Identity, Is.TypeOf<int[]>());
@@ -2294,11 +2288,7 @@ namespace NTSD.Test
             SimulationWorld world,
             int slot)
         {
-            FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                "aiSoASensingRows",
-                InstanceMembers);
-            Assert.That(rowsField, Is.Not.Null, "aiSoASensingRows");
-            object rows = rowsField.GetValue(world);
+            object rows = GetAiSoARows(world);
             Assert.That(rows, Is.Not.Null, "AiSoA rows must exist after snapshot build");
             FieldInfo generationField = rows.GetType().GetField(
                 "Generation",
@@ -2343,11 +2333,7 @@ namespace NTSD.Test
             string slotsFieldName,
             string countFieldName)
         {
-            FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                "aiSoASensingRows",
-                InstanceMembers);
-            Assert.That(rowsField, Is.Not.Null, "aiSoASensingRows");
-            object rows = rowsField.GetValue(world);
+            object rows = GetAiSoARows(world);
             Assert.That(rows, Is.Not.Null, "AiSoA rows must exist after snapshot build");
             Type rowsType = rows.GetType();
             FieldInfo slotsField = rowsType.GetField(slotsFieldName, InstanceMembers);
@@ -2363,20 +2349,17 @@ namespace NTSD.Test
 
         private static LF2Entity[] GetAiInputSlots(SimulationWorld world)
         {
-            FieldInfo field = typeof(SimulationWorld).GetField(
-                "aiInputSlots",
+            object input = GetAiRuntimeChild(world, "Input");
+            PropertyInfo slots = input.GetType().GetProperty(
+                "Slots",
                 InstanceMembers);
-            Assert.That(field, Is.Not.Null, "aiInputSlots");
-            return (LF2Entity[])field.GetValue(world);
+            Assert.That(slots, Is.Not.Null, "Input.Slots");
+            return (LF2Entity[])slots.GetValue(input);
         }
 
         private static bool[] GetAiSoAIncludedRows(SimulationWorld world)
         {
-            FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                "aiSoASensingRows",
-                InstanceMembers);
-            Assert.That(rowsField, Is.Not.Null, "aiSoASensingRows");
-            object rows = rowsField.GetValue(world);
+            object rows = GetAiSoARows(world);
             Assert.That(rows, Is.Not.Null, "AiSoA rows must exist after snapshot build");
             FieldInfo includedField = rows.GetType().GetField(
                 "Included",
@@ -2389,11 +2372,7 @@ namespace NTSD.Test
             SimulationWorld world,
             string roleName)
         {
-            FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                "aiSoASensingRows",
-                InstanceMembers);
-            Assert.That(rowsField, Is.Not.Null, "aiSoASensingRows");
-            object rows = rowsField.GetValue(world);
+            object rows = GetAiSoARows(world);
             Assert.That(rows, Is.Not.Null, "AiSoA rows must exist after snapshot build");
             Type rowsType = rows.GetType();
             FieldInfo slotsField = rowsType.GetField(
@@ -2511,11 +2490,7 @@ namespace NTSD.Test
             out int otherCount,
             out int otherMinHp)
         {
-            FieldInfo rowsField = typeof(SimulationWorld).GetField(
-                "aiSoASensingRows",
-                InstanceMembers);
-            Assert.That(rowsField, Is.Not.Null, "aiSoASensingRows");
-            object rows = rowsField.GetValue(world);
+            object rows = GetAiSoARows(world);
             Assert.That(rows, Is.Not.Null, "AiSoA rows must exist after snapshot build");
 
             MethodInfo method = typeof(SimulationWorld).GetMethod(
@@ -2559,8 +2534,58 @@ namespace NTSD.Test
             FieldInfo field = typeof(SimulationWorld).GetField(
                 fieldName,
                 InstanceMembers);
-            Assert.That(field, Is.Not.Null, fieldName);
-            return (bool)field.GetValue(world);
+            if (field != null)
+                return (bool)field.GetValue(world);
+
+            string sensingProperty = fieldName switch
+            {
+                "aiSoACandidateForceNearestFailureForSelfCheck" =>
+                    "CandidateForceNearestFailure",
+                "aiSoACandidateForceSpecialFailureForSelfCheck" =>
+                    "CandidateForceSpecialFailure",
+                "aiSoASensingSnapshotValid" => "SnapshotValid",
+                "aiSoASensingPassInvalidated" => "PassInvalidated",
+                _ => null,
+            };
+            Assert.That(sensingProperty, Is.Not.Null, fieldName);
+            return (bool)GetAiSensingProperty(world, sensingProperty);
+        }
+
+        private static object GetAiSoARows(SimulationWorld world)
+        {
+            object rows = GetAiSensingProperty(world, "Rows");
+            Assert.That(rows, Is.Not.Null,
+                "AiSoA rows must exist after snapshot build");
+            return rows;
+        }
+
+        private static object GetAiSensingProperty(
+            SimulationWorld world,
+            string propertyName)
+        {
+            object sensing = GetAiRuntimeChild(world, "Sensing");
+            PropertyInfo property = sensing.GetType().GetProperty(
+                propertyName,
+                InstanceMembers);
+            Assert.That(property, Is.Not.Null, $"Sensing.{propertyName}");
+            return property.GetValue(sensing);
+        }
+
+        private static object GetAiRuntimeChild(
+            SimulationWorld world,
+            string propertyName)
+        {
+            FieldInfo runtimeField = typeof(SimulationWorld).GetField(
+                "aiRuntime",
+                InstanceMembers);
+            Assert.That(runtimeField, Is.Not.Null, "aiRuntime");
+            object runtime = runtimeField.GetValue(world);
+            Assert.That(runtime, Is.Not.Null, "aiRuntime instance");
+            PropertyInfo property = runtime.GetType().GetProperty(
+                propertyName,
+                InstanceMembers);
+            Assert.That(property, Is.Not.Null, $"aiRuntime.{propertyName}");
+            return property.GetValue(runtime);
         }
 
         private sealed class EmptyController : ILF2Controller

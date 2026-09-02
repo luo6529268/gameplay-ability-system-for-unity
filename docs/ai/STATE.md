@@ -1,5 +1,7 @@
 # NTSD 长期项目状态
 
+> **2026-09-02 SimulationWorld M10 代码与定向运行时已完成、最终验收受外部基线阻塞：** `SIMULATION-WORLD-MODULE-EXTRACTION-001 / IN_PROGRESS / M1_15_15 / M2_11_11 / M3_67_67 / M4_242_242 / M5_24_24 / M6_29_29 / M7_112_112 / M8_110_110 / M9_212_PASS_PLUS_1_KNOWN_BASELINE / M10_COMPILE_0 / M10_AI_158_158 / M10_CONTRACT_35_35 / M10_STALE_PATH_3_3 / M10_TWO_CLEAN_PLAY_STOP / SCENE_DIRTY_FALSE / FINAL_ACCEPTANCE_BLOCKED_EXTERNAL`。full EditMode job `4d26dc2aaed44165807b5da87b4714cf` 完整执行1763项，但仍被position38、package 0.6.0/0.8.0、Blood/Catch static guard和并行S0 WPoint基线阻塞；fresh SelfCheck停在任务外central-render P4断言。`SimulationWorld.cs=6040`行，超过2500报警线的剩余根职责已在Change Record解释，partial与历史partial文件均为0。
+
 > **2026-09-01 Battle Runtime 有序关闭已写入、全量 SelfCheck 外部阻塞：** `BATTLE-RUNTIME-ORDERED-SHUTDOWN-001 / BLOCKED / COMPILE_0 / FOCUSED_4_4 / WORKER_20_20 / OPOINT_8_8 / CENTRAL_13_13 / SINGLETON_2_2 / LIVE_TWO_CYCLE_CLEAN`。固定 11 阶段 `Running→Stopping→Stopped` 事务、worker/spawn/publication/task/renderer/World/pool/boundary cleanup 与 Editor ExitingPlayMode bridge 已实现；最终代码真实两轮 Play/Stop 均 0 cleanup warning、Scene 不脏、rootCount 稳定为13、无 factory/pool/boundary runtime carrier。完整 SelfCheck 连续停在既有 Naruto DDA 240-247 throw-chain 断言，且全局 ledger validator 被两个无关旧 Record 阻断；按范围均未顺手修改，因此 Change 暂不记 VERIFIED。
 
 > **2026-08-31 Scene teardown singleton 重建：** `BATTLE-SCENE-TEARDOWN-SINGLETON-001 / VERIFIED / COMPILE_0 / FOCUSED_1_1_PASS / LIVE_TEARDOWN_PASS / CLEANUP_WARNING_0`。`SimulationTickDriver.OnSingletonDestroyed -> EndBattleAllocationSeal -> BattleRuntimeAllocationGate.Unseal` 原先在 factory/pool 已销毁时用创建型 `.Instance`；现仅 teardown lookup 改为 `TryGetInstance()`，正常 prepare/seal 不变。真实 Play 中两者各1，退出后均0，目标 cleanup warning 0；Scene 未保存。
@@ -8,7 +10,7 @@
 
 > **2026-08-31 Runtime 头顶 HP：** `BATTLE-CENTRAL-RUNTIME-HEALTH-001 / VERIFIED / COMPILE_0 / RUNTIME_PREVIEW_14_14_PASS / CENTRAL_20_20_PASS / LIVE_STYLE_AND_STABLE_ANCHOR_PASS / PRESENTATION_ONLY`。真实 `LF2Character HP/HPBound/HP3` 进入 immutable frame；每个 central submission slot 使用一张 health mesh，RenderFeature 在 actor segments 后至多追加一次 draw。Play Mode 已复用 Editor authoring 的120x10/-16样式，不同动画姿势的条位置稳定；删除 preview 后回退默认样式但仍渲染。不改战斗写入和30Hz tick。
 
-> **2026-09-01 CAP-S0-1 ACTIVE：** `S0-FORMAL-CONTENT-CLOSURE-001 / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / NO_NTSD / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`。Server Task Appendix E.7 是停报权威；fixture CS0029 待指示。
+> **2026-09-01 CAP-S0-1 ACTIVE：** `S0-FORMAL-CONTENT-CLOSURE-001 / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`。进程策略已缩窄；当前实际 blocker 是 `SimulationWorld.cs(51,26)` 找不到 `BattleOid5152RuntimeModule`。
 
 > **Superseded micro-record anchor：** `CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001` 保留为历史0dk-b Task/Change与安全事故记录；CAP-S0-1继承其38条矩阵但不重新打开该Change ID。
 

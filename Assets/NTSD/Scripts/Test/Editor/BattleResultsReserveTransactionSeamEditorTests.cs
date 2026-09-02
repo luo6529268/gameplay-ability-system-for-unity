@@ -17,7 +17,7 @@ namespace NTSD.Test.Editor
             const string writerPath =
                 "Assets/NTSD/Scripts/Simulation/Ecs/BattleResultsReserveHostWriter.cs";
             const string stagePath =
-                "Assets/NTSD/Scripts/Simulation/SimulationWorld.StageWave.partial.cs";
+                "Assets/NTSD/Scripts/Simulation/SimulationStageWaveModule.cs";
 
             Assert.That(File.Exists(writerPath), Is.True,
                 "A dedicated reserve transaction owner must exist before terminal integration.");

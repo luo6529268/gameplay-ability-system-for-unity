@@ -4,6 +4,44 @@
 
 > **当前工作边界**：不废弃现有 Unity 架构或性能成果；按“C++ pass trace → Unity legacy/fallback 对照 → Unity fast path 对照 → 真实 Play Mode”逐模块收口。不得把 C++ 的 debug probe 当规则本身，但可用其观察 release live path。
 
+## 2026-09-01：SIMULATION-WORLD-MODULE-EXTRACTION-001（用户批准、实施前）
+
+当前实施进度以 `docs/ai/CHANGE-RECORDS/SIMULATION-WORLD-MODULE-EXTRACTION-001.md`
+为准：M1～M9 已完成逐批 Unity 门禁，M10 代码清理和定向运行时已完成。最终
+runtime/editor compile均0 error；AI回归158/158、worker/checksum/shutdown/architecture
+合同35/35、三项陈旧owner-path测试3/3；两轮干净Play/Stop无目标cleanup warning，
+Scene `isDirty=false`。full EditMode job `4d26dc2aaed44165807b5da87b4714cf`
+完整执行1763项，但被position38、package version、Blood/Catch static guard和并行S0
+WPoint既有基线阻塞；fresh完整SelfCheck停在任务外central-render P4断言。
+`SimulationWorld.cs` 当前6040行，超过2500报警线的剩余根职责已在Change Record解释；
+partial声明与历史partial文件均为0。按计划M10保持`IN_PROGRESS`，不得报告整个计划完成。
+
+- 用户要求移除 `SimulationWorld` 以 partial 共享 private 状态的 God Object 实现，改成主 World 持有 Registry、AI、PassPipeline、Stage、Presentation 等普通 C# 子模块。
+- 完整设计、模块所有权、Phase 0～5、验证矩阵和回滚合同已写入 `Assets/NTSD/Docs/simulation-world-module-extraction-plan.md`；Change/Task/Ledger/STATE 已在任何 C# 修改前建立。
+- 当前基线：相关文件约22,727行，仍属于 World partial 的主体约20,130行，三个 AI partial 约13,412行。FrameInput、QueryAndLinks、StageWave、StageRender 已有 module 先例，继续沿用而非重建。
+- 本 Change 只做架构所有权迁移，禁止改变 C++ pass 顺序、30Hz、input/OPoint/slot/RNG/checksum/worker/shutdown，也不处理当前 Naruto DDA SelfCheck 阻塞。
+- 当前检查点已推进到 Phase2 Registry：架构 allowlist guard `2/2`；删除两个已空 FrameInput/QueryLink compatibility 文件；新增 Registry module 统一拥有 slots/rest/buckets；组合构造函数已移回主 World。compile0、slot5/5、query2/2、snapshot3/3、worker20/20、shutdown4/4。当前 partial allowlist仍为6，后续先完成 Registry 行为迁移，再进入 AI/Pass。
+- 后续检查点：Registry claim/release/register/unregister/deferred核心已迁，partial约1672→706行；AI aggregate和Input/Sensing/Decision子模块已建立并接管首批状态。AI input相关46/46、sensing12/12、worker20/20、shutdown4/4通过；decision 67/68，唯一position38与2026-08-24已登记独立基线一致。AI算法主体、PassPipeline和partial=0仍未完成。
+- 最新检查点：所有 `partial class SimulationWorld` 声明和
+  `SimulationWorld.*.partial.cs` 历史文件已清零，独立 AI types 与 Stage modules
+  已使用正常文件名；production `Assembly-CSharp` fresh build 为92 warning/0 error。
+  尚未抽离的算法体暂时机械合并在约19,439行普通 World 中，因此只完成 partial
+  硬边界，不代表 AI/Pass 模块抽离完成。fresh production/editor dotnet build
+  均为0 error；Unity Test Runner桌面自动化未获批准，最终 focused 尚未运行。
+  当前 Editor 消费完整 SelfCheck 请求后，在任务外
+  `CheckUnityBattleCameraRemainsDisabled` stale-camera 注入断言失败，未包装为通过。
+  Phase4a随后把 OID7/8↔51 的 timer/merge/split/HP gate 算法完整搬入独立
+  `BattleOid5152RuntimeModule`，World只保留public转发和4类internal capability；
+  Runtime/Editor build均0 error，OID focused因Test Runner UI不可控仍待运行。
+- 用户再次 Refresh 后，当前 Unity 已完成 M1 fresh focused：architecture `4/4`、
+  OID5152 `7/7`、Respawn `4/4`，合计 `15/15 PASS`，请求文件已消费。M1
+  停止条件已满足，现严格进入 M2，仅提取 `BattleEarlyFrameAdvanceModule`；后续批次
+  仍保持未完成。
+- M2 已把 Early teleport、state500/state501 handle/special、scratch 和 diagnostics
+  物理迁入独立模块，World只保留readonly引用、public façade与窄capability；隔离
+  Runtime/Editor完整编译均0 error。当前Unity尚未导入新物理文件，M2 request已放置；
+  用户再次Refresh后应自动运行architecture4+early6+flow1，`11/11`未绿不进入M3。
+
 ## 2026-09-01：BATTLE-RUNTIME-ORDERED-SHUTDOWN-001（代码与真实 teardown 通过，full SelfCheck 外部阻塞）
 
 - 已按 `Assets/NTSD/Docs/battle-runtime-ordered-shutdown-contract.md` 实现固定 11 阶段关闭事务：先关 tick/input、停 worker，再关 spawn、unseal、清 publication、discard OPoint、归还 renderer、清 World、unbind、quiesce pool，最后由 Bootstrap 清 runtime map/boundary 后进入 `Stopped`。

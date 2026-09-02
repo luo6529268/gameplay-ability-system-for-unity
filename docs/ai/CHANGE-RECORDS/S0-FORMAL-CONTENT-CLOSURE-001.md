@@ -9,10 +9,10 @@ code-path: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
 code-path: Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs
 code-path: Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs
 authority: CAP-S0-1; G-22 standing authorization; frozen Frame/Character authority audits; Server same-ID Task/Change.
-evidence: IN_PROGRESS / ACTIVE / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / NO_NTSD / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED
+evidence: IN_PROGRESS / ACTIVE / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED
 -->
 
-> Status: `IN_PROGRESS / ACTIVE / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / NO_NTSD / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
+> Status: `IN_PROGRESS / ACTIVE / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
 
 The Server same-ID Task/Change is the complete contract. Before this Client
 record, no CAP-S0-1 test, SelfCheck or resource edit occurred. The declared
@@ -156,3 +156,38 @@ WPoint must remain unchanged now and become a B candidate in WPoint36 review.
 Unity refresh stopped on fixture CS0029 at line 431 before baseline capture.
 Dual-SHA fixture and manifest gates passed; no ParserV2 or resource write began.
 Server Appendix E.7 owns the preserved failure evidence.
+
+The mechanical fixture correction compiled. The next manifest gate failed at
+`d0117e70...c6a2f`; seven A33 targets now match HEAD and Config DAT status is
+clean. No baseline, ParserV2 B1 or A33 apply ran. Server Appendix E.9 supersedes
+the earlier compile stop as the current gate.
+
+Direction-A replay then restored the exact scalar/Itr/Bdy governed state and
+all three focused gates. Checkpoint4 subsequently completed: baseline
+`60e7951e...4afc`; exact candidate `d3a61c47...3b2d7`; changed-set 11 files;
+compile zero; OPoint `36/36`, Bdy `55/55`, Itr `1/1`. Server Task E.11 owns the
+full job/hash evidence. No destructive Git command was used.
+
+Server Task Appendix F is the pre-change WPoint review: A35 rows/A37 same-name
+tokens over 24 files, B1 kisame read-int capture seam, C0, witness0. Current
+manifest is `afe65d17...89c26`. This amendment is read-only; no WPoint source,
+resource or fixture implementation has begun and explicit write approval is
+still required.
+
+The user authorized that exact combined package. Server Task F.5 declares all
+production/test/fixture/DAT paths and gates before code/resource work. Initial
+process gate passed at `2026-09-01 13:35:11 +08:00`, count zero. No WPoint
+source, fixture or DAT write had started at amendment creation.
+
+Current stop is Server Task F.6: generated fixture and initial compile exist,
+but baseline did not write. A one-line manifest-order correction remains
+uncompiled because the next pre-test gate found `NTSD_reconstructed` PID66860.
+ParserV2 WPoint and all A37 DATs remain unstarted.
+
+Server Task F.8 now supersedes only that over-broad external-process stop.
+Permanent no-launch/no-control/no-old-extractor/no-original-DAT rules remain;
+ordinary Unity work resumes without acting on the external process.
+
+Current gate is Server Task F.9: unrelated `SimulationWorld.cs` production
+compile CS0246 blocks project compile. No WPoint baseline/production/DAT/test
+action followed.

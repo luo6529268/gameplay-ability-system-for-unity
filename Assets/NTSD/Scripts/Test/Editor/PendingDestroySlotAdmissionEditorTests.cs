@@ -281,13 +281,12 @@ namespace NTSD.Test
             SimulationWorld world,
             int runtimeSlot)
         {
-            FieldInfo field = typeof(SimulationWorld).GetField(
-                "_runtimeSlots",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(field, Is.Not.Null);
-            var table = field.GetValue(world) as RuntimeSlotTable;
-            Assert.That(table, Is.Not.Null);
-            return table.GetReadOnlyView(runtimeSlot);
+            Assert.That(
+                world.TryGetRuntimeSlotReadOnlyViewForDiagnostics(
+                    runtimeSlot,
+                    out RuntimeSlotTable.ReadOnlySlotView view),
+                Is.True);
+            return view;
         }
 
         private sealed class SlotOccupant : LF2OtherObject

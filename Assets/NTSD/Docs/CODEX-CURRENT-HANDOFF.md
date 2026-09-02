@@ -1,5 +1,7 @@
 # CODEX-CURRENT-HANDOFF
 
+> **SimulationWorld extraction active:** `SIMULATION-WORLD-MODULE-EXTRACTION-001 / IN_PROGRESS / PARTIAL_0 / M1-M9_FOCUSED_PASS / M10_CODE_COMPLETE / FINAL_ACCEPTANCE_BLOCKED_EXTERNAL`。runtime/editor compile0；M10 AI 158/158、worker/checksum/shutdown/architecture 35/35、stale owner-path 3/3；两轮clean Play/Stop无目标cleanup warning且Scene不脏。full 1763被position38/package/static guard/并行S0 WPoint既有基线阻塞，fresh SelfCheck停在任务外central-render P4断言。World为6040行，超过2500报警线的剩余根职责已登记；不得报告整个计划完成。
+
 > **Ordered shutdown implementation active:** `BATTLE-RUNTIME-ORDERED-SHUTDOWN-001 / IN_PROGRESS / PRE_CODE / USER_APPROVED / RUNTIME_LIFECYCLE_ONLY`。用户批准按完整合同实施固定 11 阶段 `Running→Stopping→Stopped`；Change/Task/Ledger/State 已在 C# 前建立。当前范围只含 lifecycle、worker/spawn gate、publication/task/renderer/World/pool/boundary cleanup 和验证；禁止改变 Running battle pass、30Hz、checksum、Scene/DAT/Server/C++ 或顺手完成全量 Mono/Core 分层。
 
 > **Scene teardown fix verified:** `BATTLE-SCENE-TEARDOWN-SINGLETON-001 / VERIFIED / COMPILE_0 / FOCUSED_1_1_PASS / LIVE_TEARDOWN_PASS / CLEANUP_WARNING_0`。关闭 Scene 的 allocation unseal 已改用 factory/pool `TryGetInstance()`；正常 prepare/seal 仍可按需创建。真实 Play 中两者各1，退出后均0，目标 cleanup warning 0；Scene/战斗规则未改。整组 lifecycle fixture 另有一个既有无关 RestartPolicy expected5/actual1 失败，未包装为全组通过。
@@ -10,9 +12,13 @@
 
 > **User-directed presentation follow-up:** `BATTLE-CENTRAL-EDITOR-PREVIEW-001 / FOCUSED_TEST_PASS / BMP-GRID-SEPARATOR-RECT-FIXED / PERSISTENT-SCENEVIEW-AUTHORING / GLOBAL-LEDGER-BLOCKED-BY-UNRELATED-RECORD / EDITOR-ONLY / PRESENTATION_ONLY`。Editor 示例/验证已改用正式左上 Rect；compile0、focused6/6、pixel637/70/green0、Scene dirty unchanged。全局 Ledger 仍受无关 Change Record 阻塞；正式runtime HP接线未改。
 
-> **Capability-package execution (2026-09-01, current for the Server S0～S9 roadmap):** CAP-S0-1 is the sole ACTIVE package. Checkpoints1/2/3 are focused green. Checkpoint4 generated the OPoint36 dual-SHA fixture and reproduced the A33 manifest, then stopped on fixture CS0029 before baseline capture, ParserV2 or A33；Server Task Appendix E.7 is the authority. `NO_NTSD / OLD_EXTRACTOR_NOT_RUN / FROZEN_AUTHORITY_ROWS_ONLY` remains permanent；formal marker false；S0 NOT_VERIFIED.
+> **Capability-package execution (2026-09-01, current for the Server S0～S9 roadmap):** CAP-S0-1 is ACTIVE. Task F.8 narrowed the process policy；Task F.9 now records an unrelated production compile blocker: `SimulationWorld.cs(51,26)` cannot resolve `BattleOid5152RuntimeModule`. WPoint baseline/production/A37 remain absent；formal marker false；S0 NOT_VERIFIED.
 
-> **CAP-S0-1 Client record:** `S0-FORMAL-CONTENT-CLOSURE-001 / IN_PROGRESS / ACTIVE / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED` exists in both repositories. Appendix E.7 is restart evidence；CAP-S0-1/S0 remain open.
+> **Latest process gate:** at `2026-09-01 14:03:01 +08:00`, the user-authorized resume still found the same `NTSD_reconstructed` PID66860/start13:49:15. It stopped before MCP/compile/Unity/baseline；Server Task F.7 is current.
+
+> **External NTSD process:** final read-only audit observed `NTSD_reconstructed` PID 62268 from the separate `J:\QQFile\NTSD 2.4.1\...` tree, started 11:14:59. This task did not launch/use/terminate it；future CAP-S0-1 resumption must first recheck the zero-process precondition (Server Task F.4).
+
+> **CAP-S0-1 Client record:** `S0-FORMAL-CONTENT-CLOSURE-001 / IN_PROGRESS / ACTIVE / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED` exists in both repositories. Resume the same compile gate after the unrelated CS0246 clears；CAP-S0-1/S0 remain open.
 
 > **Queue selection (superseded 2026-08-31 by the capability consolidation above):** Queue0cu/0cx/0d1/0d5/0d6/0db/0df/0dg/0dk-a and parent0dk are VERIFIED/CLOSED. Queue0dk-b `CLIENT-CONTENT-FRAME-SCALAR-ALIGNMENT-001` was READY, then GATED by the runtime-safety incident, and is now SUPERSEDED into `S0-FORMAL-CONTENT-CLOSURE-001`. Formal marker/S0 unchanged.
 

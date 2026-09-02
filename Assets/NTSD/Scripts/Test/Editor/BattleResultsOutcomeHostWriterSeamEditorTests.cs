@@ -25,7 +25,7 @@ namespace NTSD.Test
             string worldPath = Path.Combine(simulationPath, "SimulationWorld.cs");
             string registryPath = Path.Combine(
                 simulationPath,
-                "SimulationWorld.Registry.partial.cs");
+                "SimulationWorld.cs");
 
             Assert.That(
                 File.Exists(outcomePath),

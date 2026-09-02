@@ -11,15 +11,7 @@ namespace NTSD.Test.Editor
     public sealed class BattleRuntimeStructureGuardEditorTests
     {
         private static readonly HashSet<string> RemainingSimulationWorldPartialFiles =
-            new HashSet<string>(StringComparer.Ordinal)
-            {
-                "SimulationWorld.AiDecisionShadow.partial.cs",
-                "SimulationWorld.AiInput.partial.cs",
-                "SimulationWorld.AiSoaShadow.partial.cs",
-                "SimulationWorld.cs",
-                "SimulationWorld.Passes.partial.cs",
-                "SimulationWorld.Registry.partial.cs",
-            };
+            new HashSet<string>(StringComparer.Ordinal);
 
         [Test]
         public void PartialDeclarations_AreLimitedToTheShrinkingMigrationAllowlist()
@@ -44,8 +36,8 @@ namespace NTSD.Test.Editor
             CollectionAssert.AreEquivalent(
                 RemainingSimulationWorldPartialFiles,
                 actualFiles,
-                "Do not add partial declarations. Remove an allowlist entry whenever a " +
-                "SimulationWorld responsibility is moved behind an owned module.");
+                "Do not reintroduce partial declarations after SimulationWorld " +
+                "responsibilities have moved behind owned modules.");
         }
 
         [Test]

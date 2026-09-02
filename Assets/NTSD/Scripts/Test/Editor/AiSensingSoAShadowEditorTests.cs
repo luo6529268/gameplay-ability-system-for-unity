@@ -734,10 +734,21 @@ namespace NTSD.Test
         {
             if (driftKind == DriftKind.Epoch)
             {
-                FieldInfo epoch = RequireField(
+                FieldInfo runtimeField = RequireField(
                     typeof(SimulationWorld),
-                    "aiSoASensingSnapshotEpoch");
-                epoch.SetValue(world, (ulong)epoch.GetValue(world) + 1UL);
+                    "aiRuntime");
+                object runtime = runtimeField.GetValue(world);
+                PropertyInfo sensingProperty = runtime.GetType().GetProperty(
+                    "Sensing",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(sensingProperty, Is.Not.Null);
+                object sensing = sensingProperty.GetValue(runtime);
+                PropertyInfo epochProperty = sensing.GetType().GetProperty(
+                    "SnapshotEpoch",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(epochProperty, Is.Not.Null);
+                ulong current = (ulong)epochProperty.GetValue(sensing);
+                epochProperty.SetValue(sensing, current + 1UL);
                 return;
             }
 
@@ -842,8 +853,58 @@ namespace NTSD.Test
         private static object GetField(object instance, string fieldName)
         {
             Assert.That(instance, Is.Not.Null, fieldName);
+            if (instance is SimulationWorld world)
+            {
+                string sensingProperty = fieldName switch
+                {
+                    "aiSoASensingRows" => "Rows",
+                    _ => null,
+                };
+                if (sensingProperty != null)
+                    return GetAiSensingProperty(world, sensingProperty);
+
+                if (fieldName == "aiSoASensingExpected")
+                    return GetAiSensingField(world, "expected");
+            }
+
             FieldInfo field = RequireField(instance.GetType(), fieldName);
             return field.GetValue(instance);
+        }
+
+        private static object GetAiSensingProperty(
+            SimulationWorld world,
+            string propertyName)
+        {
+            FieldInfo runtimeField = RequireField(
+                typeof(SimulationWorld),
+                "aiRuntime");
+            object runtime = runtimeField.GetValue(world);
+            PropertyInfo sensingProperty = runtime.GetType().GetProperty(
+                "Sensing",
+                InstanceMembers);
+            Assert.That(sensingProperty, Is.Not.Null, "aiRuntime.Sensing");
+            object sensing = sensingProperty.GetValue(runtime);
+            PropertyInfo property = sensing.GetType().GetProperty(
+                propertyName,
+                InstanceMembers);
+            Assert.That(property, Is.Not.Null, $"Sensing.{propertyName}");
+            return property.GetValue(sensing);
+        }
+
+        private static object GetAiSensingField(
+            SimulationWorld world,
+            string fieldName)
+        {
+            FieldInfo runtimeField = RequireField(
+                typeof(SimulationWorld),
+                "aiRuntime");
+            object runtime = runtimeField.GetValue(world);
+            PropertyInfo sensingProperty = runtime.GetType().GetProperty(
+                "Sensing",
+                InstanceMembers);
+            Assert.That(sensingProperty, Is.Not.Null, "aiRuntime.Sensing");
+            object sensing = sensingProperty.GetValue(runtime);
+            return RequireField(sensing.GetType(), fieldName).GetValue(sensing);
         }
 
         private static FieldInfo RequireField(Type type, string fieldName)

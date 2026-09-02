@@ -1004,9 +1004,7 @@ namespace NTSD.Test
             Assert.Throws<InvalidOperationException>(() =>
                 world.AiDecisionExecutionMode = AiDecisionExecutionMode.Legacy);
 
-            FieldInfo ticking = typeof(SimulationWorld).GetField("_ticking", InstanceMembers);
-            Assert.That(ticking, Is.Not.Null);
-            ticking.SetValue(world, true);
+            Invoke(world, "BeginDeferredEntityMutationPass");
             try
             {
                 Assert.Throws<InvalidOperationException>(() =>
@@ -1015,7 +1013,7 @@ namespace NTSD.Test
             }
             finally
             {
-                ticking.SetValue(world, false);
+                Invoke(world, "EndDeferredEntityMutationPass");
             }
 
             world.AiUnifiedSnapshotExecutionMode =

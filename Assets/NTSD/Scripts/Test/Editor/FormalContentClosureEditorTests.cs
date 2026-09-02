@@ -47,8 +47,27 @@ namespace NTSD.Test
             "Temp/CAP-S0-1/opoint-full-catalog-baseline.tsv";
         private const string OPointCatalogCandidateRelativePath =
             "Temp/CAP-S0-1/opoint-full-catalog-candidate.tsv";
+        private const string OPointCatalogBaselineSha256 =
+            "60e7951ecf2a7f0c9d11a6d80370ecdf16418845b36ee53faad85857dae34afc";
         private const string OPointResourceManifestSha256 =
             "20797a085278ebcd20dd5033220983b2b920f246277ef0d6305e02f4761f2ad0";
+        private const string WPointAuthorityRelativePath =
+            "Assets/NTSD/Scripts/Test/Fixtures/" +
+            "S0FormalContentClosureWPointAppendixA.tsv";
+        private const string WPointAuthorityParentSha256 =
+            "614822964144cf3e6a153f7bb9f85932c5e563d701c7cc2e14a0fb913bdacc43";
+        private const string WPointAuthorityPayloadSha256 =
+            "8490a58c187c81996b183e55a4f7681f32fa1a604c842d188715975432422268";
+        private const string WPointAuthorityFileSha256 =
+            "ff2af7da98f2681d6f8f53aff5aa671a35c6361a5e701023973b713a01cfd796";
+        private const string WPointCatalogBaselineRelativePath =
+            "Temp/CAP-S0-1/wpoint-full-catalog-baseline.tsv";
+        private const string WPointCatalogCandidateRelativePath =
+            "Temp/CAP-S0-1/wpoint-full-catalog-candidate.tsv";
+        private const string WPointCatalogBaselineSha256 =
+            "PENDING_FRESH_CAPTURE";
+        private const string WPointResourceManifestSha256 =
+            "afe65d17a8d48d48953b54c89aa695019f52c41ca46e4b9ba10c59420cf89c26";
         private const int DatHeaderLength = 123;
 
         private static readonly UTF8Encoding StrictUtf8 =
@@ -113,6 +132,82 @@ namespace NTSD.Test
             new ResourceIdentity(
                 "Assets/NTSD/Config/specialattack/earth_creature.dat",
                 "35ae8f8ce36ba34b630d9ceebe9eae34a8cd1de133b3b156b40fda48c187a6e2"),
+        };
+
+        private static readonly ResourceIdentity[] WPointA37ResourceIdentities =
+        {
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/deidara.dat",
+                "573b38fc66ab12d5bbb1cba5feec2b830f85ec398bc7ee7305276672219e8fd0"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/hidan.dat",
+                "a7434bc2bb0a59e14523a3a759ce21780ac86d8575478437eee42f16f29d51c2"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/jiroubou.dat",
+                "b3bad5141bf3f48fb581a7a7c6a8e87d20afa39c2b212b2822960f64420df2c4"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/kabuto.dat",
+                "e792e40c9c910606bc38c25337090fee2ae7d3c8f718e9a4333abc54d839ecb8"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/kakuzu.dat",
+                "5b3cb86508ef5b2b0ba971fd63f63055a5630e811c094cfaca2e4918cd44d013"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/kankuro.dat",
+                "dca3baa219fdc494b0a14a84d61efe3f618864bb4e7e446e6fa071caa8300ed9"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/kidomaru.dat",
+                "17a5ee9f046bdaa7d4e730e3b999f9dd9ebeeb72d223ce87ac1a56f5dfd71afa"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/kyubi.dat",
+                "0e982ac0096340411bdc7c7eabd1c659aab192e03731c5d1764c0a63e28bf4f7"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/naruto.dat",
+                "358a35aff567b4b1e3796d57a3883268d3d913964b86185f81cc79f8ff42f1d1"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/nckakuzu.dat",
+                "363ec0cd635e41da007c5df066544ba67b47d1ba072d4fdfd2596a55ed73b86e"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/pein.dat",
+                "1730bbec7cecc42b2170cd512938449b69f9eb916d3f0825185250cd9ac2ea9e"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/puppet_sasori.dat",
+                "7c3107a0cd6c36a63a76a99f5a8925bcca4b0d4b5e5ca9a767f5f60f85f7a5ba"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/reaper.dat",
+                "a19e84f1c4731a1a58e20dfeecffa94cc38f0e34ded09eb48ac2c23617a7dd7e"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/rock_lee.dat",
+                "2a1ff5b9e59694c7a472675d29744d9510db40167f4515eb5dc6688523619412"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/sakon.dat",
+                "986c27df3e84a37ed74c08640a60eff0480106c4bcde54ee68f7f26bb4770ad8"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/sasori.dat",
+                "2ee4b08f69aaae38a2e67cbabb5476afdb83fd70bd579ed4f4a8385f6f7ae638"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/sasuke_cs2.dat",
+                "06f9d7594a6c07e4ddb2434ce19fe628f747ecf0c8424089ee9e1556b4521bd8"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/sasuke.dat",
+                "5181a1dd25fecb093f89962324a47551401c5f30b736492d765a7a265dd55d0f"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/shikamaru.dat",
+                "ae75cc2a469a4cb7195adb38f65dbd06e63dd524fbc8f32c2eb59d8b21faec94"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/shino.dat",
+                "76258679656106d0d8ecc0cb10719d4b46c335f9fd6e08a342f663984da8221e"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/tayuya.dat",
+                "819d2ca1c3c644523051a279c7fb21bb053ae19a558286c0afff4e66e9beedd9"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/temari.dat",
+                "2203ee40a6361acd5ba74550d518294400891c96981e01c11971217f97940f80"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/tenten.dat",
+                "98d6f98f3ec7277fb503c61d7d73729fd3b5a8ab5f8c21b383ea58e920f6a969"),
+            new ResourceIdentity(
+                "Assets/NTSD/Config/Character/yamato.dat",
+                "fb851859737fea927d3ccd7c4ca1be66cbc745b310a66037e118236ae425cd8d"),
         };
 
         [Test]
@@ -336,6 +431,11 @@ namespace NTSD.Test
                 "Pre-change OPoint catalog baseline is missing.");
 
             string baseline = File.ReadAllText(baselinePath, Encoding.UTF8);
+            Assert.That(
+                GetSha256Hex(Encoding.UTF8.GetBytes(baseline)),
+                Is.EqualTo(OPointCatalogBaselineSha256),
+                "Pre-change OPoint catalog baseline changed.");
+            Assert.That(CountLines(baseline), Is.EqualTo(180190));
             string candidate = BuildFullCatalogProjection();
             AssertExactOPointCatalogDiff(baseline, candidate, authority);
             AssertKisame292WPointUnchanged(baseline, candidate);
@@ -428,11 +528,147 @@ namespace NTSD.Test
         public void OPointProductionProjectionMatchesFrozenAuthority(
             OPointExpectation expectation)
         {
-            Lf2FrameBlock frameBlock = LoadFrame(expectation.Row);
-            LF2FrameData frame = Lf2DatConverter.ConvertToFrameData(frameBlock);
+            LF2FrameData frame = LoadFrame(expectation.Row);
             Assert.That(frame.opoints.Count, Is.EqualTo(1), expectation.ToString());
             Assert.That(
                 FormatObjectPoint(frame.opoints[0]),
+                Is.EqualTo(expectation.ReleaseExpected),
+                expectation.ToString());
+        }
+
+        [Test]
+        [Category("WPointStructure")]
+        [Explicit("Captures the authorized pre-change 138-DAT WPoint projection baseline.")]
+        public void WPointFullCatalogProjectionBaselineDiagnostic()
+        {
+            WPointExpectation[] authority = LoadWPointExpectations();
+            Assert.That(authority.Length, Is.EqualTo(36));
+            AssertWPointResourceManifest();
+
+            string projection = BuildFullCatalogProjection();
+            string absolutePath = ResolveProjectPath(WPointCatalogBaselineRelativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
+            File.WriteAllText(absolutePath, projection, new UTF8Encoding(false));
+
+            Debug.Log(
+                $"WPOINT_CATALOG_BASELINE|files=138|rows={CountLines(projection)}|" +
+                $"sha256={GetSha256Hex(Encoding.UTF8.GetBytes(projection))}|" +
+                $"manifest={WPointResourceManifestSha256}|" +
+                $"path={WPointCatalogBaselineRelativePath}");
+        }
+
+        [Test]
+        [Category("WPointStructure")]
+        [Explicit("Validates the exact authorized A37 plus kisame B1 catalog delta.")]
+        public void WPointFullCatalogCandidateDiffDiagnostic()
+        {
+            WPointExpectation[] authority = LoadWPointExpectations();
+            string baselinePath = ResolveProjectPath(WPointCatalogBaselineRelativePath);
+            Assert.That(File.Exists(baselinePath), Is.True,
+                "Pre-change WPoint catalog baseline is missing.");
+
+            string baseline = File.ReadAllText(baselinePath, Encoding.UTF8);
+            Assert.That(
+                GetSha256Hex(Encoding.UTF8.GetBytes(baseline)),
+                Is.EqualTo(WPointCatalogBaselineSha256),
+                "Pre-change WPoint catalog baseline changed.");
+            string candidate = BuildFullCatalogProjection();
+            AssertExactWPointCatalogDiff(baseline, candidate, authority);
+
+            string candidatePath = ResolveProjectPath(WPointCatalogCandidateRelativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(candidatePath));
+            File.WriteAllText(candidatePath, candidate, new UTF8Encoding(false));
+            Debug.Log(
+                $"WPOINT_CATALOG_CANDIDATE_PASS|files=138|rows={CountLines(candidate)}|" +
+                $"sha256={GetSha256Hex(Encoding.UTF8.GetBytes(candidate))}|" +
+                "diff=A35-tuples/kisame-count-and-tuple/other0");
+        }
+
+        [Test]
+        [Category("WPointStructure")]
+        [Explicit("Applies only Appendix-F A37 tokens after every preflight gate passes.")]
+        public void WPointApplyA37Diagnostic()
+        {
+            WPointExpectation[] authority = LoadWPointExpectations();
+            AssertWPointResourceManifest();
+            Dictionary<string, ResourceIdentity> identities =
+                WPointA37ResourceIdentities.ToDictionary(
+                    value => value.RelativePath,
+                    StringComparer.Ordinal);
+            var plans = new List<ResourceWritePlan>();
+            int changedRows = 0;
+            int changedTokens = 0;
+
+            foreach (IGrouping<string, WPointExpectation> group in authority
+                         .Where(value => value.Row.ObjectId != 17)
+                         .GroupBy(value => value.Row.RelativePath, StringComparer.Ordinal)
+                         .OrderBy(value => value.Key, StringComparer.Ordinal))
+            {
+                Assert.That(identities.TryGetValue(
+                    group.Key,
+                    out ResourceIdentity identity), Is.True, group.Key);
+                string absolutePath = ResolveProjectPath(identity.RelativePath);
+                byte[] originalBytes = File.ReadAllBytes(absolutePath);
+                Assert.That(GetSha256Hex(originalBytes), Is.EqualTo(identity.BeforeSha256),
+                    $"Unexpected pre-apply hash for {identity.RelativePath}.");
+                DecodedResource decoded = DecodeResource(originalBytes, identity.RelativePath);
+                string patchedText = decoded.Text;
+
+                foreach (WPointExpectation expectation in group
+                             .OrderBy(value => value.Row.FrameId))
+                {
+                    int rowChanges = 0;
+                    patchedText = PatchWPointExpectation(
+                        patchedText,
+                        expectation,
+                        ref rowChanges);
+                    Assert.That(rowChanges, Is.GreaterThan(0), expectation.ToString());
+                    changedRows++;
+                    changedTokens += rowChanges;
+                }
+
+                byte[] patchedBytes = EncodeResource(originalBytes, decoded, patchedText);
+                Assert.That(patchedBytes.SequenceEqual(originalBytes), Is.False,
+                    $"Expected A37 changes in {identity.RelativePath}.");
+                plans.Add(new ResourceWritePlan(identity, absolutePath, patchedBytes));
+            }
+
+            Assert.That(changedRows, Is.EqualTo(35));
+            Assert.That(changedTokens, Is.EqualTo(37));
+            Assert.That(plans.Count, Is.EqualTo(24));
+            Assert.That(
+                plans.Select(value => value.Identity.RelativePath).OrderBy(value => value),
+                Is.EqualTo(identities.Keys.OrderBy(value => value)));
+
+            foreach (ResourceWritePlan plan in plans)
+            {
+                Assert.That(
+                    GetSha256Hex(File.ReadAllBytes(plan.AbsolutePath)),
+                    Is.EqualTo(plan.Identity.BeforeSha256));
+            }
+
+            foreach (ResourceWritePlan plan in plans)
+            {
+                File.WriteAllBytes(plan.AbsolutePath, plan.PatchedBytes);
+                Debug.Log(
+                    $"WPOINT_A37_APPLY|{plan.Identity.RelativePath}|" +
+                    $"before={plan.Identity.BeforeSha256}|" +
+                    $"after={GetSha256Hex(plan.PatchedBytes)}");
+            }
+        }
+
+        [TestCaseSource(nameof(WPointCases))]
+        [Category("WPointStructure")]
+        public void WPointProductionProjectionMatchesFrozenAuthority(
+            WPointExpectation expectation)
+        {
+            LF2FrameData frame = LoadFrame(expectation.Row);
+            Assert.That(
+                frame.FormalWeaponPoints.Count,
+                Is.EqualTo(1),
+                expectation.ToString());
+            Assert.That(
+                FormatWeaponPoint(frame.FormalWeaponPoints[0]),
                 Is.EqualTo(expectation.ReleaseExpected),
                 expectation.ToString());
         }
@@ -982,6 +1218,15 @@ namespace NTSD.Test
             }
         }
 
+        private static IEnumerable<TestCaseData> WPointCases()
+        {
+            foreach (WPointExpectation expectation in LoadWPointExpectations())
+            {
+                yield return new TestCaseData(expectation).SetName(
+                    $"WPoint_OID{expectation.Row.ObjectId}_Frame{expectation.Row.FrameId}");
+            }
+        }
+
         private static OPointExpectation[] LoadOPointExpectations()
         {
             string absolutePath = ResolveProjectPath(OPointAuthorityRelativePath);
@@ -1045,6 +1290,69 @@ namespace NTSD.Test
             return result.ToArray();
         }
 
+        private static WPointExpectation[] LoadWPointExpectations()
+        {
+            string absolutePath = ResolveProjectPath(WPointAuthorityRelativePath);
+            byte[] bytes = File.ReadAllBytes(absolutePath);
+            Assert.That(GetSha256Hex(bytes), Is.EqualTo(WPointAuthorityFileSha256),
+                "Appendix-A WPoint fixture file hash changed.");
+
+            string text = StrictUtf8.GetString(bytes);
+            int firstLineEnd = text.IndexOf('\n');
+            int secondLineEnd = text.IndexOf('\n', firstLineEnd + 1);
+            Assert.That(firstLineEnd, Is.GreaterThanOrEqualTo(0));
+            Assert.That(secondLineEnd, Is.GreaterThan(firstLineEnd));
+            Assert.That(
+                text.Substring(0, firstLineEnd).TrimEnd('\r'),
+                Is.EqualTo($"# parent_projection_sha256={WPointAuthorityParentSha256}"));
+            Assert.That(
+                text.Substring(firstLineEnd + 1, secondLineEnd - firstLineEnd - 1)
+                    .TrimEnd('\r'),
+                Is.EqualTo(
+                    $"# wpoint_subset_payload_sha256={WPointAuthorityPayloadSha256}"));
+
+            string payload = text.Substring(secondLineEnd + 1);
+            Assert.That(
+                GetSha256Hex(Encoding.UTF8.GetBytes(payload)),
+                Is.EqualTo(WPointAuthorityPayloadSha256),
+                "Appendix-A WPoint fixture payload hash changed.");
+
+            var result = new List<WPointExpectation>(36);
+            string[] lines = payload.Split('\n');
+            for (int lineIndex = 1; lineIndex < lines.Length; lineIndex++)
+            {
+                string line = lines[lineIndex].TrimEnd('\r');
+                if (line.Length == 0)
+                    continue;
+
+                string[] fields = line.Split('\t');
+                Assert.That(fields.Length, Is.EqualTo(13),
+                    $"Malformed WPoint authority row {lineIndex + 3}.");
+                Assert.That(fields[0], Is.EqualTo("WPOINT"));
+                Assert.That(fields[4], Is.EqualTo("1"));
+                Assert.That(fields[5], Is.EqualTo("1"));
+                Assert.That(fields[7], Is.EqualTo("1"));
+                Assert.That(fields[8], Is.EqualTo("0"));
+                Assert.That(
+                    fields[9],
+                    Is.EqualTo("kind,x,y,attacking,cover,weaponact,dvx,dvy,dvz"));
+
+                string clientPath = FindUniqueClientDatPath(
+                    Path.GetFileName(fields[2]));
+                var row = E(
+                    int.Parse(fields[1]),
+                    clientPath,
+                    int.Parse(fields[3]));
+                result.Add(new WPointExpectation(
+                    row,
+                    int.Parse(fields[6]),
+                    fields[11]));
+            }
+
+            Assert.That(result.Count, Is.EqualTo(36));
+            return result.ToArray();
+        }
+
         private static string FindUniqueClientDatPath(string fileName)
         {
             string configRoot = ResolveProjectPath("Assets/NTSD/Config");
@@ -1086,6 +1394,24 @@ namespace NTSD.Test
                 Is.EqualTo(OPointResourceManifestSha256));
         }
 
+        private static void AssertWPointResourceManifest()
+        {
+            string[] rows = WPointA37ResourceIdentities
+                .Select(value =>
+                {
+                    string actual = GetSha256Hex(
+                        File.ReadAllBytes(ResolveProjectPath(value.RelativePath)));
+                    Assert.That(actual, Is.EqualTo(value.BeforeSha256),
+                        $"WPoint A37 baseline drifted: {value.RelativePath}");
+                    return $"{value.RelativePath}|{actual}";
+                })
+                .ToArray();
+            string manifest = string.Join("\n", rows) + "\n";
+            Assert.That(
+                GetSha256Hex(Encoding.UTF8.GetBytes(manifest)),
+                Is.EqualTo(WPointResourceManifestSha256));
+        }
+
         private static string PatchOPointExpectation(
             string text,
             OPointExpectation expectation,
@@ -1120,6 +1446,59 @@ namespace NTSD.Test
 
                 Assert.That(values.Count, Is.EqualTo(1),
                     $"Ambiguous OPoint token {field.Key}: {expectation}");
+                int before = int.Parse(values[0].Groups["value"].Value);
+                int after = int.Parse(field.Value);
+                if (before == after)
+                    continue;
+
+                patchedPoint = ReplaceBodyValue(
+                    patchedPoint,
+                    field.Key,
+                    before,
+                    after);
+                changedTokens++;
+            }
+
+            string patchedFrame = frame.Value.Remove(points[0].Index, points[0].Length)
+                .Insert(points[0].Index, patchedPoint);
+            return text.Remove(frame.Index, frame.Length)
+                .Insert(frame.Index, patchedFrame);
+        }
+
+        private static string PatchWPointExpectation(
+            string text,
+            WPointExpectation expectation,
+            ref int changedTokens)
+        {
+            MatchCollection frames = Regex.Matches(
+                text,
+                @"(?ms)<frame>\s+" + expectation.Row.FrameId + @"\b.*?<frame_end>");
+            Assert.That(frames.Count, Is.GreaterThanOrEqualTo(1), expectation.ToString());
+            Match frame = frames[frames.Count - 1];
+            MatchCollection points = Regex.Matches(
+                frame.Value,
+                @"(?ms)(?<![A-Za-z0-9_])wpoint\s*:\s*.*?" +
+                @"(?<![A-Za-z0-9_])wpoint_end\s*:");
+            Assert.That(points.Count, Is.EqualTo(1), expectation.ToString());
+
+            string patchedPoint = points[0].Value;
+            Dictionary<string, string> expected =
+                ParseEvaluationFields(expectation.ReleaseExpected);
+            foreach (KeyValuePair<string, string> field in expected)
+            {
+                string pattern =
+                    @"(?<![A-Za-z0-9_])" + Regex.Escape(field.Key) +
+                    @":[ \t]+(?<value>-?\d+)(?![A-Za-z0-9_])";
+                MatchCollection values = Regex.Matches(patchedPoint, pattern);
+                if (values.Count == 0)
+                {
+                    Assert.That(field.Value, Is.EqualTo("0"),
+                        $"Missing non-default WPoint token {field.Key}: {expectation}");
+                    continue;
+                }
+
+                Assert.That(values.Count, Is.EqualTo(1),
+                    $"Ambiguous WPoint token {field.Key}: {expectation}");
                 int before = int.Parse(values[0].Groups["value"].Value);
                 int after = int.Parse(field.Value);
                 if (before == after)
@@ -1206,6 +1585,83 @@ namespace NTSD.Test
                 changedKeys,
                 Is.EqualTo(expectedKeys),
                 "OPoint candidate contains a non-A33/B1 projection difference. " +
+                $"Unexpected=[{string.Join(" | ", changedKeys.Except(expectedKeys))}]; " +
+                $"Missing=[{string.Join(" | ", expectedKeys.Except(changedKeys))}].");
+
+            foreach (KeyValuePair<string, string> expected in expectedChanges)
+            {
+                Assert.That(candidate.ContainsKey(expected.Key), Is.True, expected.Key);
+                Assert.That(candidate[expected.Key], Is.EqualTo(expected.Value), expected.Key);
+            }
+        }
+
+        private static void AssertExactWPointCatalogDiff(
+            string baselineText,
+            string candidateText,
+            IReadOnlyList<WPointExpectation> authority)
+        {
+            Dictionary<string, string> baseline = ParseProjection(baselineText);
+            Dictionary<string, string> candidate = ParseProjection(candidateText);
+            var expectedChanges = new Dictionary<string, string>(StringComparer.Ordinal);
+
+            foreach (WPointExpectation expectation in authority)
+            {
+                string relativePath = ToConfigRelativePath(expectation.Row.RelativePath);
+                string countKey = FindLastProjectionKey(
+                    baseline.Keys,
+                    relativePath,
+                    expectation.Row.FrameId,
+                    "WPOINT",
+                    -1,
+                    "count");
+                if (!string.Equals(baseline[countKey], "1", StringComparison.Ordinal))
+                    expectedChanges.Add(countKey, "1");
+
+                string[] countParts = countKey.Split('\t');
+                string tupleKey = string.Join("\t", new[]
+                {
+                    countParts[0],
+                    countParts[1],
+                    countParts[2],
+                    "WPOINT",
+                    "0",
+                    "tuple",
+                });
+                if (!baseline.TryGetValue(tupleKey, out string beforeTuple) ||
+                    !string.Equals(
+                        beforeTuple,
+                        expectation.ReleaseExpected,
+                        StringComparison.Ordinal))
+                {
+                    expectedChanges.Add(tupleKey, expectation.ReleaseExpected);
+                }
+            }
+
+            Assert.That(expectedChanges.Count, Is.EqualTo(37));
+            Assert.That(
+                expectedChanges.Keys.Count(value =>
+                    value.EndsWith("\tcount", StringComparison.Ordinal)),
+                Is.EqualTo(1));
+            Assert.That(
+                expectedChanges.Keys.Count(value =>
+                    value.EndsWith("\ttuple", StringComparison.Ordinal)),
+                Is.EqualTo(36));
+
+            string[] changedKeys = baseline.Keys
+                .Union(candidate.Keys, StringComparer.Ordinal)
+                .Where(key =>
+                    !baseline.TryGetValue(key, out string before) ||
+                    !candidate.TryGetValue(key, out string after) ||
+                    !string.Equals(before, after, StringComparison.Ordinal))
+                .OrderBy(key => key, StringComparer.Ordinal)
+                .ToArray();
+            string[] expectedKeys = expectedChanges.Keys
+                .OrderBy(key => key, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(
+                changedKeys,
+                Is.EqualTo(expectedKeys),
+                "WPoint candidate contains a non-A37/B1 projection difference. " +
                 $"Unexpected=[{string.Join(" | ", changedKeys.Except(expectedKeys))}]; " +
                 $"Missing=[{string.Join(" | ", expectedKeys.Except(changedKeys))}].");
 
@@ -1922,6 +2378,25 @@ namespace NTSD.Test
         public sealed class OPointExpectation
         {
             internal OPointExpectation(
+                ScalarExpectation row,
+                int selectedSourceIndex,
+                string releaseExpected)
+            {
+                Row = row;
+                SelectedSourceIndex = selectedSourceIndex;
+                ReleaseExpected = releaseExpected;
+            }
+
+            public ScalarExpectation Row { get; }
+            public int SelectedSourceIndex { get; }
+            public string ReleaseExpected { get; }
+
+            public override string ToString() => Row.ToString();
+        }
+
+        public sealed class WPointExpectation
+        {
+            internal WPointExpectation(
                 ScalarExpectation row,
                 int selectedSourceIndex,
                 string releaseExpected)

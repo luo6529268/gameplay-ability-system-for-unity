@@ -20679,9 +20679,7 @@ itr_end:
 
         private static int GetSimulationBucketCount(SimulationWorld world)
         {
-            object buckets = GetPrivateField(world, "_buckets");
-            var countProperty = buckets?.GetType().GetProperty("Count");
-            return countProperty?.GetValue(buckets) is int count ? count : -1;
+            return world?.ObjectBucketRegistryForSnapshotRestore?.Count ?? -1;
         }
 
         private static bool IsSimulationObjectRegistered(SimulationWorld world, ISimObject target)
@@ -20689,16 +20687,21 @@ itr_end:
             if (world == null || target == null)
                 return false;
 
-            object buckets = GetPrivateField(world, "_buckets");
-            if (buckets is not System.Collections.IEnumerable entries)
-                return false;
-
-            foreach (object entry in entries)
+            SimulationObjectBucketRegistry buckets =
+                world.ObjectBucketRegistryForSnapshotRestore;
+            for (int bucketIndex = 0;
+                 bucketIndex < buckets.OrderedCount;
+                 bucketIndex++)
             {
-                object bucket = entry?.GetType().GetProperty("Value")?.GetValue(entry);
-                object items = bucket?.GetType().GetField("items")?.GetValue(bucket);
-                if (items is System.Collections.IList list && list.Contains(target))
-                    return true;
+                List<ISimObject> items =
+                    buckets.GetOrderedBucket(bucketIndex).items;
+                for (int itemIndex = 0;
+                     itemIndex < items.Count;
+                     itemIndex++)
+                {
+                    if (ReferenceEquals(items[itemIndex], target))
+                        return true;
+                }
             }
 
             return false;
@@ -23419,11 +23422,13 @@ itr_end:
             resetWorld.Rng.NextRaw();
             resetWorld.AdvanceBattleFlowTick(17);
             resetWorld.QueueSound("SelfCheck_LC03", 12);
-            SetPrivateField(resetWorld, "_cameraX", 55);
-            SetPrivateField(resetWorld, "_cameraVel", 9);
-            SetPrivateField(resetWorld, "_ticking", true);
+            resetWorld.RestoreSnapshotOwnerScalars(
+                55,
+                9,
+                resetWorld.NextAutoStableIdForServices);
+            resetWorld.BeginDeferredEntityMutationPass();
             resetWorld.Unregister(pendingEntity);
-            SetPrivateField(resetWorld, "_ticking", false);
+            resetWorld.EndLateEntityMutationTickingForModule();
             resetWorld.ResetRuntimeState();
             List<ISimObject> pendingList =
                 resetWorld.BattleBuffersForServices.PendingUnregister;
@@ -23439,14 +23444,12 @@ itr_end:
             var replaySlot = new DynamicSlotSelfCheckEntity(0);
             resetWorld.Register(replaySlot);
             int replayStableB = replaySlot.StableId;
-            object resetCameraXValue = GetPrivateField(resetWorld, "_cameraX");
-            object resetCameraVelValue = GetPrivateField(resetWorld, "_cameraVel");
             Expect(objectCountAfterReset == 0 && resetEntity.ItrRest.Arest == 0 &&
                    !resetEntity.ItrRest.HasVrest(51) && pendingList.Count == 0 &&
                    pendingDestroyList.Count == 0 && resetWorld.CurrentTickIndex == 0 &&
                    resetWorld.PendingSounds.Count == 0 &&
-                   resetCameraXValue is int resetCameraX && resetCameraX == 0 &&
-                   resetCameraVelValue is int resetCameraVel && resetCameraVel == 0 &&
+                   resetWorld.ReleaseCameraX == 0 &&
+                   resetWorld.ReleaseCameraVelocityForServices == 0 &&
                    replayRawA == replayRawB && replayStableA == 100 && replayStableB == 100 &&
                    replaySlot.Runtime.SlotIndex == 50,
                 "LC-03: same-world reset must clear registry/slots/pending/rest/tick/camera/sound and replay RNG/stable ids");

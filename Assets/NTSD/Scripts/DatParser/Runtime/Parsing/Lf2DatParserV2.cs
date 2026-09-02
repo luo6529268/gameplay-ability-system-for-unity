@@ -42,6 +42,32 @@ namespace NTSD.DatParser
                 "caughtact2",
             };
 
+        private static readonly HashSet<string> ReleaseNumericFramePropertyNames =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "pic",
+                "state",
+                "wait",
+                "next",
+                "dvx",
+                "dvy",
+                "dvz",
+                "centerx",
+                "centery",
+                "hit_Fa",
+                "hit_Fj",
+                "hit_Ua",
+                "hit_Uj",
+                "hit_Da",
+                "hit_Dj",
+                "hit_ja",
+                "hit_a",
+                "hit_d",
+                "hit_j",
+                "mp",
+                "vaction",
+            };
+
         /// <summary>
         /// 解析 dat 文件文本
         /// </summary>
@@ -251,6 +277,21 @@ namespace NTSD.DatParser
                         if (i + 1 < tokens.Length)
                         {
                             string key = name;
+                            if (ShouldPreserveObjectPointMarkerAfterMissingFrameNumber(
+                                    stack.Peek(),
+                                    key,
+                                    tokens[i + 1]))
+                            {
+                                // Alignment contract: S0-FORMAL-CONTENT-CLOSURE-001.
+                                // release read_int returns zero without consuming a
+                                // following marker; this is intentionally the OPoint-only
+                                // slice. WPoint remains deferred to checkpoint 5 review.
+                                AddProperty(
+                                    stack.Peek(),
+                                    new Lf2DatProperty(key, "0"));
+                                continue;
+                            }
+
                             i++;
                             string value = tokens[i];
                             if (ItrTwoValuePropertyNames.Contains(key) &&
@@ -284,6 +325,19 @@ namespace NTSD.DatParser
             }
 
             return dat;
+        }
+
+        private static bool ShouldPreserveObjectPointMarkerAfterMissingFrameNumber(
+            object owner,
+            string propertyName,
+            string nextToken)
+        {
+            return owner is Lf2FrameBlock &&
+                   ReleaseNumericFramePropertyNames.Contains(propertyName) &&
+                   string.Equals(
+                       nextToken,
+                       "opoint:",
+                       StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsBodySubBlock(object value)

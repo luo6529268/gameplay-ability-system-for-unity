@@ -1,6 +1,6 @@
 # Task Contract — S0-FORMAL-CONTENT-CLOSURE-001
 
-> Status: `IN_PROGRESS / ACTIVE / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / INTERNAL_CHECKPOINT_3_BDY_FOCUSED_GREEN / INTERNAL_CHECKPOINT_4_OPOINT_FIXTURE_COMPILE_BLOCKED / OPOINT_FIXTURE_DUAL_SHA_PASS / OPOINT_MANIFEST_PASS / OPOINT_BASELINE_CAPTURE_NOT_RUN / OPOINT_B1_PARSERV2_EDIT_NOT_STARTED / OPOINT_A33_RESOURCE_EDIT_NOT_STARTED / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / NO_NTSD / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
+> Status: `IN_PROGRESS / ACTIVE / CLIENT_INTEGRATION_REQUIRED / STANDING_CLIENT_AUTHORIZED / CHECKPOINT3_REPLAY_COMPLETE / INTERNAL_CHECKPOINT_4_OPOINT_FOCUSED_GREEN / WPOINT_PROCESS_POLICY_NARROWED / WPOINT_COMPILE_BLOCKED_BY_UNRELATED_PRODUCTION_SOURCE / WPOINT_FIXTURE_CURRENT_COMPILE_UNCONFIRMED / WPOINT_BASELINE_NOT_CAPTURED / WPOINT_PRODUCTION_EDIT_NOT_STARTED / WPOINT_A37_RESOURCE_EDIT_NOT_STARTED / WPOINT_A35_ROWS_A37_TOKENS_B1_C0_WITNESS0 / FROZEN_AUTHORITY_ROWS_ONLY / OLD_EXTRACTOR_NOT_RUN / FORMAL_MARKER_FALSE / S0_NOT_VERIFIED`
 > Queue: `CAP-S0-1 / ACTIVE`
 
 The complete capability contract, seven internal checkpoints, frozen authority
@@ -211,3 +211,56 @@ production/resource write.
 Pre-change stopped on fixture CS0029 at line 431 before baseline capture. The
 fixture dual SHA and 11-file manifest passed; ParserV2 and A33 resources remain
 untouched. Server Appendix E.7 is the exact failure evidence.
+
+The authorized mechanical correction now compiles, but the A33 manifest gate
+stopped at `d0117e70...c6a2f`: seven targets and the current Config DAT tree now
+match Git HEAD rather than the frozen post-checkpoint3 content. No baseline,
+ParserV2 B1 or A33 apply ran. Server Appendix E.9 is current.
+
+Direction A then replayed the frozen scalar, Itr and Bdy artifacts in order.
+Scalar manifest `bfa23bf8...97d440d`, all nine Itr after hashes and all six Bdy
+after hashes reproduced; scalar `1/1`, Itr `1/1` and Bdy `55/55` passed. The
+OPoint pre-change manifest returned to `20797a08...f2ad0`.
+
+Checkpoint4 is now focused green. The 138-DAT baseline is 180,190 rows/SHA
+`60e7951e...4afc`; ParserV2 contains only the declared OPoint read-int seam;
+A33 changed exactly 11 resources/33 tokens. Candidate SHA
+`d3a61c47...3b2d7` contains exactly 31 A tuple changes plus Frog count/tuple
+and zero other projection differences. Unity compile is zero; OPoint
+`1aaeea7878db4ec3831380bb85f240ce` passed `36/36`, Bdy
+`3a37ff90173c4bff8af5e0ec39ac9239` passed `55/55`, and Itr
+`0984d253ceb04a8ca8f2de8fce29e3de` passed `1/1`.
+
+Server Task Appendix F now freezes WPoint36 read-only review at A35 rows/A37
+tokens, B1, C0, witness0. All A values are existing-isolation same-name tokens;
+their 24-file current-before manifest is `afe65d17...89c26`. B1 is kisame
+Frame292: empty Client `hit_j:` consumes `wpoint:`; the release read-int rule
+returns zero without consuming it. Full Client138 scan has only Frog OPoint and
+kisame WPoint hits; isolation47 has zero. No WPoint resource or production
+write is authorized or performed; checkpoint5 is review-frozen only.
+
+The user subsequently authorized the exact Appendix F combined implementation.
+Server Task F.5 is the pre-change amendment. Initial NTSD-family process gate
+passed at `2026-09-01 13:35:11 +08:00` with count zero. Declared scope is
+ParserV2, the existing formal-content fixture, one generated WPoint TSV/meta,
+and exactly 24 DAT / 35 selected rows / 37 tokens. No implementation or DAT
+write had started when this amendment was recorded.
+
+Pre-change subsequently stopped on the mandatory process gate. WPoint TSV/meta
+and fixture-only code exist; initial compile was zero. Baseline job
+`43756344538b4c29907c7ba85a132589` exposed a mechanical manifest-order issue
+before output; the one-line fix is not yet recompiled. At `13:50:17 +08:00`,
+`NTSD_reconstructed` PID66860 was nonzero, so no retry occurred. No baseline,
+WPoint ParserV2 change or A37 DAT write exists. Server Task F.6 is current.
+
+The user then narrowed the over-broad process gate. External NTSD-family
+processes no longer block ordinary Unity compile/tests/Config writes, while
+Codex launch/control/termination, old extractor and direct original-release DAT
+access remain permanently forbidden. Server Task F.8 is controlling; execution
+resumes from compile of the manifest-order correction.
+
+That compile is now blocked by unrelated production source:
+`SimulationWorld.cs(51,26)` cannot resolve `BattleOid5152RuntimeModule`.
+Per the authorized semantic-stop rule, WPoint did not inspect/fix/bypass it and
+did not proceed to baseline, ParserV2 WPoint, A37 or tests. Server Task F.9 is
+the current restart authority.
