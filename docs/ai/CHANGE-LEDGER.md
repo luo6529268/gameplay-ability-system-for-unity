@@ -1,5 +1,7 @@
 # NTSD 脚本改动审计账本
 
+> **CURRENT AUTHORITY / 2026-09-02：** 本账本中的历史 Change Record 不再能自行定义当前战斗权威。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`。依赖 NTSD 2.4、`ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 或旧 trace 的行为结论均为 `NTSD24_AUTHORITY_SUPERSEDED / REBASELINE_REQUIRED`；旧 R0～R8 明细已按用户要求审计并由用户从工作树删除。Ledger 行仅保留压缩历史，不再构成可继续执行的 Change Record 链；后续 NTSD 2.8-Logan 工作必须使用新 ID。本次没有脚本改动，因此不新增脚本 Change Ledger 行。
+
 > 建立日期：2026-08-21  
 > 目的：让每个项目自编写脚本改动都能在聊天上下文压缩、跨会话、跨提交或交接后恢复其来源、范围、证据、未关闭风险和回滚路径。  
 > 规则来源：根 `AGENTS.md` 的“13.1 脚本改动留痕与可恢复审计”。  

@@ -1,10 +1,12 @@
 # NTSD 30 Hz 战斗逻辑与 60/120 Hz 高帧率表现实施计划
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文仍保留 NTSD 2.4 旧权威路径，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
 > 状态：`PLANNED`（仅方案；尚未开始本计划的代码实施）  
 > 创建日期：2026-08-23  
 > 适用范围：`Assets/NTSD/Scripts/` 的战斗表现、URP 中央绘制、相机表现与显示帧率策略  
 > 战斗规则权威：`J:\QQFile\NTSD2.4\ntsd_release` 的 release live path  
-> 上位关联：`central-battle-render-system-plan.md`、`unified-battle-lockstep-ecs-server-architecture-plan.md`、`future-server-lockstep-architecture.md`  
+> 上位关联：`central-battle-render-system-plan.md`；旧统一战斗/未来 Server 备忘已废止，S0～S9 以 `server-lockstep-s0-s9-design.md` 和 `server-lockstep-s0-s9-progress.md` 为准。  
 > 不在本计划内：提高战斗逻辑频率、改变 DAT 时序、修改碰撞/AI/输入规则、实现服务器业务、T8 默认 `stage.dat` 部署、Android 真机认证。
 
 ---
@@ -797,4 +799,3 @@ CurrentFallbackReason
 - 尚未开始：HFR-00 至 HFR-09 的代码、测试、性能认证和真实 Play Mode 高帧率验收；
 - 本文不改变：任何战斗脚本、Shader、材质、Scene、ProjectSettings、DAT、资源或服务器代码；
 - 后续首个实现动作：只有在用户明确批准后，先创建 HFR-00 对应 Change Record，再从基线与功能门开始，不直接跳到 Shader 修改。
-

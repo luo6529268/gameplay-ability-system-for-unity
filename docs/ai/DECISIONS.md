@@ -1,8 +1,15 @@
 # NTSD 长期项目决策记录
 
-## D-001 — C++ release live path 是唯一行为权威
+> **CURRENT AUTHORITY / 2026-09-02：** `GOVERNANCE-NTSD28-LOGAN-AUTHORITY-MIGRATION-001`
+> 已由用户确认取代 D-001 的 NTSD 2.4 行为权威。任何恢复工作先读
+> `docs/ai/CURRENT-AUTHORITY.md`。D-001～D-018 中依赖旧 NTSD 2.4 release、
+> `ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 或旧对齐状态的部分均标记为
+> `NTSD24_AUTHORITY_SUPERSEDED / REBASELINE_REQUIRED`；它们可以保留历史事实，但不能驱动
+> 当前 Unity 实现或签发 NTSD 2.8-Logan 对齐结论。
 
-- **状态**：VERIFIED
+## D-001 — C++ release live path 是唯一行为权威（已被 D-019 取代）
+
+- **状态**：`SUPERSEDED BY D-019 / NTSD24_AUTHORITY_SUPERSEDED`
 - **日期**：2026-08-20
 - **决定**：战斗规则、pass 顺序、输入时点、碰撞/命中、CPoint/held/opoint、生命周期及 render handoff 的最终裁决，均来自 `J:\QQFile\NTSD2.4\ntsd_release` 中参与 `ntsd_new.exe` release 构建的 live path；主入口为 `src/entity/game_tick.cpp::game_tick(...)`。
 - **依据**：根 `AGENTS.md`、`Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md`；本机已读取 release `Makefile`，其 target 为 `ntsd_new.exe` 且列入相关 live 模块。
@@ -212,3 +219,33 @@
   `boundaryName` 和 `Name`；当前执行记录为 `MAPCFG-005`。
 - **影响**：D-016 的“两份独立资产”选择和 D-017 中“新增 Presentation Asset”的部分被本决定
   supersede；MAPCFG-001～004 的已执行验证保留为历史事实，当前资产数据合同由 MAPCFG-005 接管。
+
+## D-019 — NTSD 2.8-Logan 取代 NTSD 2.4 成为当前唯一战斗行为权威
+
+- **状态**：`USER_CONFIRMED / ACTIVE / DOCUMENT_MIGRATION`
+- **日期**：2026-09-02
+- **决定**：当前唯一战斗行为权威改为
+  `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为
+  `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75` 的正式
+  `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与当前发行 EXE 对应且进入
+  playable 构建闭包的源码。
+- **唯一恢复入口**：`docs/ai/CURRENT-AUTHORITY.md`。根 `AGENTS.md`、长期状态、当前 Handoff
+  和所有旧权威文档都必须链接该入口；上下文压缩后不得从旧 Change Record 恢复 NTSD 2.4 权威。
+- **当前源码主入口**：`source\ntsd28_playable\src\game_session.cpp::GameSession28::step()`，
+  `source\ntsd28_core\src\simulation\simulation_tick_driver.cpp::SimulationTickDriver28::step(...)`
+  和 `source\ntsd28_core\src\simulation\battle_world.cpp::BattleWorld28`。
+- **废止范围**：D-001 的旧根目录、`ntsd_new.exe`、`src/entity/game_tick.cpp::game_tick(...)`、
+  NTSD 2.4 C#、旧 Authority400/trace/对齐状态都只保留为历史证据。它们不能定义当前 pass、
+  timing、slot、RNG、字段、生命周期或可观察行为。
+- **重新基线**：当前权威包已观察到正常逻辑间隔 33 ms、F5 3 ms、1000 个物理 slot 和双 RNG 流；
+  因此旧“固定精确 30 Hz / 400-slot / 单 RNG / 已对齐”结论均为 `REBASELINE_REQUIRED`。
+  这些观察不代表 Unity 代码已修改或已对齐。
+- **内容边界**：本决定不自动推翻
+  `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001`；正式内容数值仍暂由 Unity
+  `Assets/NTSD/Config` 冻结现状定义。若要让新包 runtime 资源取代内容数值权威，必须取得用户
+  另行明确决定。
+- **写入边界**：本决定只授权文档和治理恢复入口迁移；不授权修改 C#、Scene、Prefab、DAT、
+  资源、ProjectSettings、服务器或权威 C++ 包。后续实现必须另建 Task/Change 并取得新权威证据。
+- **旧文档处置**：经用户要求复核，旧 C# authority、NTSD 2.4 C++ release、R0～R8/U0～U9
+  对齐 campaign 文档不再承担当前恢复或审计职责，并已由用户从工作树删除；Git 历史仅可用于
+  按需历史查阅，不能恢复旧 authority 或继续旧 Change。

@@ -1,5 +1,7 @@
 # Naruto DAT 技能流程播放器（网页原型）
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文仍保留 NTSD 2.4 旧权威路径，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
 在仓库根目录启动静态 HTTP 服务：
 
 ```powershell

@@ -1,13 +1,19 @@
 # CLAUDE.md
 
+> **CURRENT AUTHORITY / 2026-09-02：** 本文件的任何旧规则若与根 `AGENTS.md` 或
+> `docs/ai/CURRENT-AUTHORITY.md` 冲突，以后二者为准。NTSD 2.4 反汇编、伪 C、旧游戏目录、
+> `ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 和旧对齐结论全部是
+> `NTSD24_AUTHORITY_SUPERSEDED / REBASELINE_REQUIRED` 历史材料，不能驱动当前实现。
+
 ## Project Goal（项目目标）
 
 本项目的目标是：
 
 - 复刻 NTSD（Naruto The Setting Dawn）游戏的核心逻辑与行为表现
 - 通过对照分析，还原 NTSD 的真实实现方式：
-  1. NTSD 游戏反汇编 / 反编译文本（**唯一权威**）
-  2. NTSD 游戏原始目录结构与数据文本
+  1. NTSD 2.8-Logan 正式发行 EXE 的实际可观察行为（**唯一最高行为权威**）
+  2. 与正式 EXE 对应并进入 playable 构建闭包的 C++ 源码
+  3. 正式启动参数和被正式 EXE 消费的 runtime 资源
 - 推导并重建 NTSD 的：
   - 输入系统
   - 技能系统
@@ -21,35 +27,43 @@
 
 ## Core Authority Principle（最高优先级原则）
 
-**权威来源（唯一）**：
-1. `J:\QQFile\NTSD2.4\ntsd24_full_disasm.txt`（x86 反汇编，522 函数，**唯一权威**）
-2. `J:\QQFile\NTSD2.4\ntsd24_pseudoc.txt`（Hex-Rays 伪C，284 函数，仅供快速参考，细节以汇编为准）
-3. `J:\QQFile\NTSD 2.4.1 工具人亲测能玩/`（NTSD 游戏原始目录，数据文本）
+**当前权威来源（唯一恢复入口：`docs/ai/CURRENT-AUTHORITY.md`）**：
+
+1. `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\NTSD2.8-Logan.exe`
+   的正式发行行为；正式身份由 SHA-256
+   `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75` 固定。
+2. `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\README_SOURCE.md`
+   声明对应当前发行 EXE、且实际进入 playable 构建闭包的 C++ 源码。
+3. 正式启动参数及同一根目录的 `resources\runtime`。
+
+NTSD 2.4 反汇编、伪 C、旧 release/C#、原始目录和旧 trace 只可用于历史比较、命名线索或
+回归夹具。它们不是当前 authority；与 NTSD 2.8-Logan 冲突时必须舍弃旧结论。正式内容数值
+权威仍暂按根 `AGENTS.md` 的 Direction B 合同处理，本次权威迁移不自动覆盖 Unity Config。
 
 **对齐要求**：
-- **能对齐的直接对齐**：逻辑、常量、字段读取顺序等，尽量与反汇编一致。
+- **能对齐的直接对齐**：逻辑、常量、字段读取顺序等，尽量与当前 playable live source 和正式 EXE 一致。
 - **框架限制无法对齐时，只要求最终结果一致**：Unity 使用继承/组件/异步等不同于 C 结构体的架构，实现方式可以不同，但**运行时行为必须与反汇编等价**。
-- **不得引用 FLF 或任何第三方项目作为依据**：任何逻辑来源必须能在反汇编中找到对应代码段，否则标注"待确认"，不得实现。
+- **不得引用 FLF 或任何第三方项目作为依据**：任何逻辑来源必须能在当前权威 build closure 和正式行为中闭环，否则标注"待确认"，不得实现。
 
-若无法在反汇编中确认逻辑来源，**必须暂停实现并说明原因**，不得猜测或创造逻辑。
+若无法在当前权威中确认逻辑来源，**必须暂停实现并说明原因**，不得猜测或创造逻辑。
 
 ---
 
 ## Project Semantic Map（项目语义映射）
 
-### NTSD 反汇编 / 反编译文本
+### NTSD 2.4 反汇编 / 反编译文本（历史材料）
 - 路径：
   - `J:\QQFile\NTSD2.4\ntsd24_full_disasm.txt`
   - `J:\QQFile\NTSD2.4\ntsd24_pseudoc.txt`
-- 含义：从 `NTSD.exe` 中导出的反汇编与伪C文本，用于验证 NTSD 的**真实运行逻辑**
+- 含义：从旧 `NTSD.exe` 中导出的反汇编与伪C文本，只用于历史比较；不能验证当前 NTSD 2.8-Logan 的正式运行逻辑
 - 分析规则：
   - 仅基于文本进行静态分析
   - 不假设函数名、变量名一定正确
   - 细节以全反汇编为准，伪C仅作快速定位
 
-### NTSD 游戏目录（原始数据）
+### NTSD 2.4 游戏目录（历史材料）
 - 路径：`J:\QQFile\NTSD 2.4.1 工具人亲测能玩/`
-- 含义：NTSD 实际运行所使用的目录结构与数据文本
+- 含义：旧版本实际运行所使用的目录结构与数据文本；不是当前 gameplay authority，也不自动改变当前 Direction B 内容权威
 - 分析规则：
   - 优先理解目录组织方式、数据文本含义、配置与行为的映射关系
   - 跳过图片资源、视频、音频

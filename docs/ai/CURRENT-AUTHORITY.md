@@ -46,9 +46,9 @@
 | 碰撞候选与命中消费 | `source\ntsd28_core\src\simulation\hit_candidates.cpp` 及 `battle_world.cpp` 的消费路径 |
 | 输入路由与 AI | `source\ntsd28_core\src\simulation\input_routing.cpp`、`native_ai.cpp` |
 | 对象生成与 OPoint | `source\ntsd28_core\src\simulation\object_spawning.cpp` 及 `battle_world.cpp` 的 tick 尾部 |
-| 逻辑表现快照 | `source\ntsd28_core\src\simulation\render_snapshot.cpp` |
+| 逻辑表现快照 | `source\ntsd28_core\src\rendering\render_snapshot.cpp` |
 | 正式 D3D11 表现与插值 | `source\ntsd28_playable\src\d3d11_renderer.cpp`、`presentation_interpolation.cpp` |
-| 战斗流程与程序入口 | `source\ntsd28_playable\src\battle_flow.cpp`、`main.cpp` |
+| 战斗结果流程与程序入口 | `source\ntsd28_core\src\simulation\battle_flow.cpp`、`source\ntsd28_playable\src\main.cpp` |
 
 这些文件只是入口。处理具体行为时仍须沿调用链追到字段定义、读写者、前置条件、分支顺序、
 RNG、slot 生命周期和最终可观察副作用，并确认文件实际进入 playable 构建闭包。
@@ -81,8 +81,9 @@ handoff 和“已对齐”结论全部进入 `REBASELINE_REQUIRED`。在完成�
 - 基于上述旧权威形成的 Authority400、旧三方 trace、旧 Change Record、旧 Handoff、旧
   “VERIFIED / CLOSED / 已对齐”结论
 
-历史文档可以保留当时事实，但必须带 `NTSD24_AUTHORITY_SUPERSEDED` 标记，并链接回本文件。
-历史记录中的旧路径不得被解释为当前实施指令，不得因为上下文压缩、搜索命中或旧状态名而恢复。
+旧 C#/NTSD 2.4 C++ 对齐 campaign 文档已按用户要求完成审计并由用户从工作树删除。它们不属于
+当前恢复、决策、实现、验证或 Change continuation 的输入。Git 历史中的旧路径也不得被解释为
+当前实施指令，不得因为上下文压缩、搜索命中或旧状态名而恢复。
 
 ## 5. 本次迁移不自动决定的事项
 

@@ -1,5 +1,7 @@
 # S7 — Public Weak-Network Runtime and Long-Session Validation
 
+> **CURRENT_AUTHORITY_NOTICE（2026-09-02）：** 本文出现的 30 Hz/`1/30`、400-slot/Authority400、`ntsd_release` 或旧 `game_tick(...)` 只描述历史证据或当前 Unity 实现，不代表 NTSD 2.8-Logan 的现行权威合同。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前已观察权威基线为正常 33 ms、F5 3 ms、1000 物理 slot、双 RNG 流和新的 playable tick 入口，Unity 是否及如何迁移仍为 `REBASELINE_REQUIRED`。
+
 > Current status: `NOT_STARTED`
 > Formal phase status: `NOT_VERIFIED`
 > Public runtime authorization: `NOT_GRANTED_BY_THIS_DOSSIER`

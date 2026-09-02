@@ -1,5 +1,7 @@
 # 集中式战斗渲染系统方案
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文仍保留 NTSD 2.4 旧权威路径，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
 > **2026-08-20 表现权威迁移**：渲染重构不改变战斗真值，但其 render handoff、实体/阴影/hit-record 顺序、`x_int/y_int/z_int`、camera/perspective carrier 与最终可观察战斗画面，必须以 `J:\QQFile\NTSD2.4\ntsd_release\src\render\renderer.cpp` 和 live `game_tick(...)` handoff 为准。此前“C# authority”措辞只保留为历史记录；中央渲染 batching、Texture2DArray 和动态 Mesh 不得成为改变 C++ release 可观察表现的理由。
 
 ## 2026-08-10：可信资源缓存优化与当前证据边界

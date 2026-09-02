@@ -1,5 +1,9 @@
 # CODEX-CURRENT-HANDOFF
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文仍保留 NTSD 2.4 旧权威路径，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
+> **CURRENT AUTHORITY / MUST READ FIRST（2026-09-02 用户确认）：** 先读 `docs/ai/CURRENT-AUTHORITY.md`。当前唯一战斗行为权威是 `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 的正式 `NTSD2.8-Logan.exe`（SHA-256 `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75`）及其对应 playable 源码。NTSD 2.4、`ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 和此前 C++ 对齐完成状态已废止为当前裁决，全部 `REBASELINE_REQUIRED`。Direction B 内容数值权威暂不改变；本次只有文档迁移，没有 Unity runtime 修改。
+
 > **Runtime FootSelf code written, Unity runtime validation pending editor recovery:** `BATTLE-CENTRAL-RUNTIME-FOOTSELF-001 / CODE_WRITTEN / EXTERNAL_COMPILE_PASS / UNITY_COMPILE_PENDING / FOCUSED_PENDING / PLAY_RUNTIME_PENDING / PRESENTATION_ONLY`。human roster input binding判Self、稳定ground anchor、Preview 64×24/offset/tint、单Mesh/submesh与submission lease已接；FootSelf→原Shadow/actor→HP。dotnet compile0；当前Editor 6401 bridge timeout且ScriptAssemblies未fresh，退出Play/恢复bridge后继续Unity compile/focused/Play截图，勿启动第二实例。
 
 > **Existing Shadow + FootSelf central Editor preview ready:** `BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 / FOCUSED_TEST_PASS / EDITOR_PREVIEW_READY / USER_VISUAL_REVIEW_PENDING / RUNTIME_NOT_STARTED / PRESENTATION_ONLY / GLOBAL_LEDGER_BLOCKED_EXTERNAL`。正式common Shadow与新增FootSelf为独立central batch，顺序shadow→marker→actor→health；Shadow复用正式native size/Pivot，FootSelf支持128×48 size+offset authoring。compile0、focused10/10；1000 Shadow与1000 FootSelf各自单segment/单draw；offscreen shadow1/segment1、foot1/segment1、yellow75、green0、Scene clean。正式runtime own-player FootSelf snapshot/batching未接，等用户先确认视觉；global validator仅受任务外记录阻塞。
@@ -349,18 +353,14 @@ S0～S9 的含义不可混淆：S0～S5 先建立“能正确运行一局权威 
 
 | 优先级 | 文档 | 用途与阅读规则 |
 |---:|---|---|
-| 1 | `AGENTS.md` | 全项目安全、C++ authority、30 Hz、验证、Git、Change Record 和 Client 冻结边界。任何战斗规则先追 C++ release live path。 |
+| 1 | `AGENTS.md` 与 `docs/ai/CURRENT-AUTHORITY.md` | 全项目安全和 NTSD 2.8-Logan 当前 authority；正常 33 ms、F5 3 ms、1000 slot 与双 RNG 只是新权威已观察基线，Unity 仍待重新基线。 |
 | 2 | `Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md`（本文） | 当前主线、近三天用户决定、当前环境复核与可执行续接顺序；不替代行为 authority。 |
 | 3 | `Assets/NTSD/Docs/server-lockstep-s0-s9-progress.md` | S0～S9 当前进度、Resume Card、开放决策、问题台账。其“旧任务无法写 sibling root”的环境描述为历史记录；目录/权限以当前任务实测为准。 |
 | 4 | `Assets/NTSD/Docs/server-lockstep-s0-s9-design.md` | S0～S9 设计、输入/传输分层、single-slow-client 合同、修复流程与关闭标准。详细设计以它为准。 |
 | 5 | `docs/ai/STATE.md` | 全项目长期状态和活跃 Change ID；阅读其日期与覆盖语句。里面旧沙箱路径描述同样不能覆盖当前会话的实际 writable roots。 |
 | 6 | `I:\GitHub\Unity_GAS\NTSD_Server\docs\ai\CURRENT-HANDOFF.md`、`STATE.md`、`CHANGE-LEDGER.md` 与最新 `TASKS/CHANGE-RECORDS/S2-SERVER-READY-BUFFER-HORIZON-001.md` | 最近 Server-only 证据、formal Client gate、精确范围、命令与回滚合同。先读它们，不能凭旧 bootstrap 指令重做工程。 |
 | 7 | `docs/ai/CHANGE-RECORDS/S0-INPROC-AUTHORITY-001.md` 与 `docs/ai/CHANGE-LEDGER.md` | 冻结的 Unity S0 代码范围和治理总账；只读确认，不得在没有新批准时借此恢复 Unity 验证。 |
-| 8 | `Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md` | C++→Unity R1～R8 的当前执行顺序、证据分级与 R1-WP02 full-trace blocker。 |
-| 9 | `Assets/NTSD/Docs/HANDOFF-codex-battle-alignment.md` | 战斗对齐、性能、CentralOnly、容量和已做工作包的细节交接；其中的历史最终措辞受根 `AGENTS.md` 的 C++ authority override 约束。 |
-| 10 | `Assets/NTSD/Docs/csharp-vs-unity-battle-alignment.md` 与 `Assets/NTSD/Docs/BATTLE_RUNTIME_VERIFICATION.md` | 历史差异/测试索引和自检证据。可复用具体 regression，但不能仅凭这些文件宣称 C++ release 已对齐。 |
-| 11 | `Assets/NTSD/Docs/high-frame-rate-presentation-plan.md` | HFR 唯一实施计划。当前仅方案；除非用户明确恢复 HFR，不能从此文跳入 Shader/Mesh 修改。 |
-| 12 | `Assets/NTSD/Docs/unified-battle-lockstep-ecs-server-architecture-plan.md` | 架构总览与阶段依赖；S0～S9 的日常设计/进度分别以下表第 3、4 项为准。`future-server-lockstep-architecture.md` 仅作历史背景。 |
+| 8 | `Assets/NTSD/Docs/high-frame-rate-presentation-plan.md` | HFR 当前保留方案；恢复前必须先按 NTSD 2.8-Logan render/tick 合同重新盘点。 |
 
 ## 4. 最近 3 天有效上下文
 

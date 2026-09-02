@@ -60,7 +60,7 @@ NTSD 2.4 的 `ntsd_release_C#` 不是当前 gameplay authority。它可以用于
 | 碰撞候选、命中与对象交互 | `source\ntsd28_core\src\simulation\hit_candidates.cpp` 及 `battle_world.cpp` 的消费路径 |
 | 输入、组合键与 AI 输入链 | `source\ntsd28_core\src\simulation\input_routing.cpp`、`native_ai.cpp` |
 | 对象生成、OPoint 与生命周期尾部 | `source\ntsd28_core\src\simulation\object_spawning.cpp` 及 `battle_world.cpp` |
-| 逻辑 render handoff | `source\ntsd28_core\src\simulation\render_snapshot.cpp` |
+| 逻辑 render handoff | `source\ntsd28_core\src\rendering\render_snapshot.cpp` |
 | 正式场景表现与插值 | `source\ntsd28_playable\src\d3d11_renderer.cpp`、`presentation_interpolation.cpp` |
 
 这些文件是定位入口，不代表只需要查看这四个文件。实现具体行为时，应继续追踪它们调用的数据模型、resolver、碰撞、对象生成、状态统计和实体生命周期代码，直到字段读写与调用顺序完整闭合。
@@ -331,11 +331,16 @@ USER_HOLD
 
 ## 13. 文档与进度维护
 
-主要战斗对齐记录：
+当前战斗对齐恢复入口：
 
-- `Assets/NTSD/Docs/csharp-vs-unity-battle-alignment.md`
-- `Assets/NTSD/Docs/HANDOFF-codex-battle-alignment.md`
-- `Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md`
+- `docs/ai/CURRENT-AUTHORITY.md`
+- `Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md`
+- `docs/ai/STATE.md`
+- `docs/ai/DECISIONS.md`
+
+旧 C# authority、NTSD 2.4 C++ release 和 R0～R8/U0～U9 对齐 campaign 文档已经用户要求审计
+并由用户从工作树删除，不再是当前恢复入口。不得从 Git 历史恢复旧任务或旧对齐状态。新的
+NTSD 2.8-Logan 对齐计划应在用户给出新要求后另建，不得重新创建或继续旧计划正文。
 
 记录差异时至少写明：
 

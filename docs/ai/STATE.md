@@ -1,5 +1,9 @@
 # NTSD 长期项目状态
 
+> **2026-09-02 CURRENT AUTHORITY（用户确认）：** `GOVERNANCE-NTSD28-LOGAN-AUTHORITY-MIGRATION-001 / ACTIVE / DOCUMENT_MIGRATION / UNITY_REBASELINE_NOT_STARTED`。唯一恢复入口是 `docs/ai/CURRENT-AUTHORITY.md`；当前战斗行为权威为 `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 的正式 `NTSD2.8-Logan.exe`（SHA-256 `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75`）及其声明对应并进入 playable 构建闭包的源码。所有 NTSD 2.4、`ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 和旧 C++ 对齐状态均为 `NTSD24_AUTHORITY_SUPERSEDED / REBASELINE_REQUIRED`，不能驱动后续实现。当前内容数值 Authority Direction B 暂不改变；本次不修改运行代码。
+
+> **2026-09-02 旧对齐文档已删除：** 旧 C# authority、NTSD 2.4 C++ release、R0～R8 和 U0～U9 campaign 的 459 份 Markdown 及配套 39 份 Unity `.meta` 已完成审计，并由用户从工作树删除。下方旧状态只保留为压缩历史，不能据此恢复旧 Task/Change；Git 历史中的旧文件也不是当前输入。
+
 > **2026-09-02 Play Mode FootSelf代码已写、Unity运行验收待Editor恢复：** `BATTLE-CENTRAL-RUNTIME-FOOTSELF-001 / CODE_WRITTEN / EXTERNAL_COMPILE_PASS / UNITY_COMPILE_PENDING / FOCUSED_PENDING / PLAY_RUNTIME_PENDING / PRESENTATION_ONLY`。只给human roster input绑定角色显示FootSelf；稳定ground anchor、Preview 64×24/offset/tint复用、单Mesh/submesh、central submission lease与FootSelf→Shadow/actor→HP顺序已写，外部dotnet compile0。当前运行中的Editor 6401 bridge持续timeout且ScriptAssemblies未fresh，不能宣称Unity compile/测试/Play通过；退出当前Play后继续。
 
 > **2026-09-02 原Shadow与FootSelf中央Editor预览可用：** `BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 / FOCUSED_TEST_PASS / EDITOR_PREVIEW_READY / USER_VISUAL_REVIEW_PENDING / RUNTIME_NOT_STARTED / PRESENTATION_ONLY / GLOBAL_LEDGER_BLOCKED_EXTERNAL`。Preview把正式`GameConfig.ShadowPrefab`通用阴影与新增FootSelf作为两个独立dynamic-mesh batch，固定shadow→marker→actor→health；FootSelf默认128×48并提供Inspector size/offset、黄色bounds和全局Scene手柄，Shadow使用正式native size/Pivot与灰色bounds。Unity compile0、focused10/10；1000 Shadow与1000 FootSelf各自单segment/单draw；offscreen PASS为shadow1/segment1、foot1/segment1、yellow75、green0、Scene clean。正式Play Mode own-player选择和runtime FootSelf snapshot/batching未开始，等待用户视觉确认；global validator仅被任务外记录阻塞。

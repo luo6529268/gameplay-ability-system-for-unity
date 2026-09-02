@@ -1,5 +1,10 @@
 # Simulation Mono / 非 Mono 边界整理与重构计划
 
+> **2026-09-02 权威更新，不改变 USER_HOLD：** 后续若恢复本计划，必须先读
+> `docs/ai/CURRENT-AUTHORITY.md`，并按 NTSD 2.8-Logan 的 33 ms 正常逻辑间隔、1000 物理 slot、
+> 双 RNG 流和新 tick 入口重新盘点。本文及旧根规则中依赖 NTSD 2.4 或固定 30 Hz 的边界只保留为
+> 历史约束，不能驱动实现；本次仍不授权修改 C#、Scene、Prefab、asmdef 或运行行为。
+
 > 计划标识：`SIMULATION-MONO-BOUNDARY-REFACTOR-001`
 >
 > 创建日期：2026-09-02
@@ -674,4 +679,3 @@ USER_HOLD
 3. 建立 B0 Task/Change Record 和代码路径清单。
 4. 先写架构守卫并取得当前基线。
 5. 获得 B0 验证后，才选择 B1；不得直接跳到 asmdef 或大规模 Renderer 移除。
-

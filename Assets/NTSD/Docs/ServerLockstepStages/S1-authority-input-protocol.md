@@ -1,5 +1,7 @@
 # S1 — Authority Input Protocol and Frame Assembly
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文所称未限定版本的 “C++ release” 形成于旧 NTSD 2.4 权威期，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
 > Current status: `FORMAL_NOT_STARTED / SERVER_PREIMPLEMENTATION_EXISTS`
 > Formal phase status: `NOT_VERIFIED`
 > Status preserved from the total ledger on 2026-08-29.

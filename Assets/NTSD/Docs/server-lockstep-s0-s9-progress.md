@@ -1,5 +1,7 @@
 # NTSD S0～S9 服务器权威帧同步：进度、证据与问题台账
 
+> **NTSD24_AUTHORITY_SUPERSEDED（2026-09-02）：** 本文包含 NTSD 2.4、旧 `ntsd_new.exe`/`game_tick(...)`、固定 30 Hz 或 Authority400 等旧权威假设，仅作为历史证据；不得据此定义当前战斗规则、pass、timing、slot、RNG、字段、生命周期、表现或“已对齐”状态。任何恢复先读 `docs/ai/CURRENT-AUTHORITY.md`；当前权威是 NTSD 2.8-Logan 正式 EXE 及其对应 playable 源码，旧结论一律 `REBASELINE_REQUIRED`。
+
 > **Direction B（2026-09-02，当前有效）：** 用户正式决定 Unity Git 恢复后的现状 DAT 为内容数值权威；C++ release 继续定义 battle rules 与逻辑顺序。治理改写、Config HEAD等价证明、138-DAT raw manifest `d32b49d3...1a0346`、CAP parser seam回退与旧fixture清理已写入。当前Unity验证被并行`SIMULATION-DIRECTORY-REORGANIZATION-001`的旧路径CS2001阻塞，未修改该范围；normalized projection、focused回归与SelfCheck待compile恢复。CAP-S0-1使命仍为冻结Unity现状，WPoint/topology/sound检查点取消；CAP-S0-2消费Unity-present派生bundle。下方旧release-content/193行/Appendix A～F仅为superseded历史；formal marker false；S0 NOT_VERIFIED。
 
 > **能力包级计划重整与执行审计（2026-09-01，当前有效）：** CAP-S0-1是唯一ACTIVE包；checkpoint1/2均focused green。checkpoint3 B59只读parser-gate评审已冻结：release逐字符后缀/last-wins规则、zwidth49+dvx5+injury5、五个Frame48 inline恢复、ParserV2+Converter最窄seam、138-DAT精确B59审计、sasori A4+C1同包延后及一次final focused。未改源码/资源、未跑测试；等待实现授权。永久边界为`NO_NTSD / OLD_EXTRACTOR_NOT_RUN / FROZEN_AUTHORITY_ROWS_ONLY`。CAP-S0-2～4保持依赖GATED；formal marker false；S0 NOT_VERIFIED。
